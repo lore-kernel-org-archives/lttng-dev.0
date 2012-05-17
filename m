@@ -1,25 +1,16 @@
-From: John Steele Scott <toojays@toojays.net>
-Subject: UST "Tracepoint signature mismatch" with C99 bool.
-Date: Tue, 05 Jun 2012 08:49:53 +0930
-Message-ID: <jqjfqp$juc$1__42157.3619278663$1338852333$gmane$org@dough.gmane.org>
+From: Vanni Genua <vannigenua@gmail.com>
+Subject: ERROR while "making" lttng-ust-2.0.1
+Date: Thu, 17 May 2012 09:20:51 +0000
+Message-ID: <CAO8ONPz2H6QCWU1CU=QOPnk=sEXM=AsdGNi64Lgfg3xax=CuSQ__7802.88972096077$1338865790$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0709601859=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from plane.gmane.org ([80.91.229.3])
+Received: from mail-wg0-f54.google.com ([74.125.82.54])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <gcsld-lttng-dev@m.gmane.org>) id 1Sbge6-00026d-S8
-	for lttng-dev@lists.lttng.org; Mon, 04 Jun 2012 19:25:10 -0400
-Received: from list by plane.gmane.org with local (Exim 4.69)
-	(envelope-from <gcsld-lttng-dev@m.gmane.org>) id 1Sbgdz-0004g5-Tc
-	for lttng-dev@lists.lttng.org; Tue, 05 Jun 2012 01:25:06 +0200
-Received: from 146.174.200.100 ([146.174.200.100])
-	by main.gmane.org with esmtp (Gmexim 0.1 (Debian))
-	id 1AlnuQ-0007hv-00
-	for <lttng-dev@lists.lttng.org>; Tue, 05 Jun 2012 01:25:03 +0200
-Received: from toojays by 146.174.200.100 with local (Gmexim 0.1 (Debian))
-	id 1AlnuQ-0007hv-00
-	for <lttng-dev@lists.lttng.org>; Tue, 05 Jun 2012 01:25:03 +0200
+	(envelope-from <vannigenua@gmail.com>) id 1SUwtF-0005D5-8f
+	for lttng-dev@lists.lttng.org; Thu, 17 May 2012 05:20:58 -0400
+Received: by wgbfg15 with SMTP id fg15so1445319wgb.23
+	for <lttng-dev@lists.lttng.org>; Thu, 17 May 2012 02:20:51 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -31,52 +22,762 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-I originally sent this on the 22nd of May, but it looks like it got stuck in moderation since I'm not subscribed. Reposting via gmane.comp.sysutils.lttng.devel . . .
+--===============0709601859==
+Content-Type: multipart/alternative; boundary=f46d04430686b3b41804c037f38f
 
-I'm just getting started wiring my up to lttng-ust, and unfortunately
-ran into an issue with the first probe I tried, which used a C99 bool
-argument.
+--f46d04430686b3b41804c037f38f
+Content-Type: text/plain; charset=ISO-8859-1
 
-The problem can be seen by patching the demo test from lttng-ust as
-follows:
+Why do I get the following error?
 
---- a/tests/demo/ust_tests_demo3.h
-+++ b/tests/demo/ust_tests_demo3.h
-@@ -22,12 +22,14 @@ extern "C" {
-  * all copies or substantial portions of the Software.
-  */
- 
-+#include <stdbool.h>
-+
- #include <lttng/tracepoint.h>
- 
- TRACEPOINT_EVENT(ust_tests_demo3, done,
--	TP_ARGS(int, value),
-+	TP_ARGS(bool, value),
- 	TP_FIELDS(
--		ctf_integer(int, value, value)
-+		ctf_integer(bool, value, value)
- 	)
- )
+localhost lttng-ust-2.0.1 #
+make
 
-Then when the demo is run with LTTNG_UST_DEBUG=1, a warning is shown,
-like:
+make
+all-recursive
 
-liblttng_ust_tracepoint[3315/3315]: Warning: Tracepoint signature mismatch, not enabling one or more tracepoints. Ensure that the tracepoint probes prototypes match the application. (in set_tracepoint() at tracepoint.c:310)
-liblttng_ust_tracepoint[3315/3315]: Warning: Tracepoint "ust_tests_demo3:done" signatures: call: "_Bool, value" vs probe: "bool, value". (in set_tracepoint() at tracepoint.c:312)
+make[1]: Entering directory
+`/usr/src/lttng-ust-2.0.1'
 
-It seems that TP_ARGS does not perform preprocessor expansion on the
-"bool" type spec, while something underneath TP_FIELDS does. And since
-(at least on this Centos 6.2 box) stdbool.h uses a #define rather than a
-typedef to make bool equivalent to _Bool, liblttng detects a mismatch.
+Making all in
+.
 
-So in my tracepoint specifications, I need to remember to use the less
-attractive _Bool instead of bool.
+make[2]: Entering directory
+`/usr/src/lttng-ust-2.0.1'
 
-Perhaps it's worth having a special case for this where the trace/probe
-signatures are compared? On the other hand, I guess nobody complained
-until now? 
+make[2]: Leaving directory
+`/usr/src/lttng-ust-2.0.1'
 
-cheers,
+Making all in
+include
 
-John
+make[2]: Entering directory
+`/usr/src/lttng-ust-2.0.1/include'
+
+make[2]: Nothing to be done for
+`all'.
+
+make[2]: Leaving directory
+`/usr/src/lttng-ust-2.0.1/include'
+
+Making all in
+snprintf
+
+make[2]: Entering directory
+`/usr/src/lttng-ust-2.0.1/snprintf'
+
+make[2]: Nothing to be done for
+`all'.
+
+make[2]: Leaving directory
+`/usr/src/lttng-ust-2.0.1/snprintf'
+
+Making all in
+libringbuffer
+
+make[2]: Entering directory
+`/usr/src/lttng-ust-2.0.1/libringbuffer'
+
+  CC
+libringbuffer_la-ring_buffer_backend.lo
+
+  CC
+libringbuffer_la-ring_buffer_frontend.lo
+
+  CCLD   libringbuffer.la
+
+make[2]: Leaving directory
+`/usr/src/lttng-ust-2.0.1/libringbuffer'
+
+Making all in
+liblttng-ust-comm
+
+make[2]: Entering directory
+`/usr/src/lttng-ust-2.0.1/liblttng-ust-comm'
+
+make[2]: Nothing to be done for
+`all'.
+
+make[2]: Leaving directory
+`/usr/src/lttng-ust-2.0.1/liblttng-ust-comm'
+
+Making all in
+liblttng-ust
+
+make[2]: Entering directory
+`/usr/src/lttng-ust-2.0.1/liblttng-ust'
+
+  CC
+liblttng_ust_tracepoint_la-tracepoint.lo
+
+  CCLD   liblttng-ust-tracepoint.la
+
+  CC
+lttng-ust-comm.lo
+
+  CC
+lttng-ust-abi.lo
+
+  CC
+ltt-probes.lo
+
+cccd  CC
+lttng-probe-ust.lo
+
+  CC
+lttng-context-vtid.lo
+
+  CC
+lttng-context-vpid.lo
+
+  CC
+lttng-context-pthread-id.lo
+
+  CC
+lttng-context-procname.lo
+
+  CC
+ltt-context.lo
+
+  CC
+ltt-events.lo
+
+  CCLD   liblttng-ust-runtime.la
+
+  CC
+ust-core.lo
+
+  CC
+ltt-ring-buffer-client-discard.lo
+
+  CC
+ltt-ring-buffer-client-overwrite.lo
+
+  CC
+ltt-ring-buffer-metadata-client.lo
+
+  CCLD   liblttng-ust-support.la
+
+  CCLD   liblttng-ust.la
+
+copying selected object files to avoid basename
+conflicts...
+
+make[2]: Leaving directory
+`/usr/src/lttng-ust-2.0.1/liblttng-ust'
+
+Making all in
+liblttng-ust-ctl
+
+make[2]: Entering directory
+`/usr/src/lttng-ust-2.0.1/liblttng-ust-ctl'
+
+  CC
+ustctl.lo
+
+  CCLD   liblttng-ust-ctl.la
+
+make[2]: Leaving directory
+`/usr/src/lttng-ust-2.0.1/liblttng-ust-ctl'
+
+Making all in
+liblttng-ust-fork
+
+make[2]: Entering directory
+`/usr/src/lttng-ust-2.0.1/liblttng-ust-fork'
+
+  CCLD   liblttng-ust-fork.la
+
+make[2]: Leaving directory
+`/usr/src/lttng-ust-2.0.1/liblttng-ust-fork'
+
+Making all in
+liblttng-ust-libc-wrapper
+
+make[2]: Entering directory
+`/usr/src/lttng-ust-2.0.1/liblttng-ust-libc-wrapper'
+
+  CC
+lttng-ust-malloc.lo
+
+  CCLD   liblttng-ust-libc-wrapper.la
+
+make[2]: Leaving directory
+`/usr/src/lttng-ust-2.0.1/liblttng-ust-libc-wrapper'
+
+Making all in
+tools
+
+make[2]: Entering directory
+`/usr/src/lttng-ust-2.0.1/tools'
+
+make[2]: Nothing to be done for
+`all'.
+
+make[2]: Leaving directory
+`/usr/src/lttng-ust-2.0.1/tools'
+
+Making all in
+tests
+
+make[2]: Entering directory
+`/usr/src/lttng-ust-2.0.1/tests'
+
+Making all in
+.
+
+make[3]: Entering directory
+`/usr/src/lttng-ust-2.0.1/tests'
+
+make[3]: Nothing to be done for
+`all-am'.
+
+make[3]: Leaving directory
+`/usr/src/lttng-ust-2.0.1/tests'
+
+Making all in
+hello
+
+make[3]: Entering directory
+`/usr/src/lttng-ust-2.0.1/tests/hello'
+
+  CC
+tp.o
+
+  CCLD
+hello
+
+../../liblttng-ust/.libs/liblttng-ust.a(libringbuffer_la-shm.o): In
+function
+`shm_object_table_append':
+
+/usr/src/lttng-ust-2.0.1/libringbuffer/shm.c:108: warning: the use of
+`mktemp' is dangerous, better use
+`mkstemp'
+make[3]: Leaving directory
+`/usr/src/lttng-ust-2.0.1/tests/hello'
+
+Making all in
+hello-static-lib
+
+make[3]: Entering directory
+`/usr/src/lttng-ust-2.0.1/tests/hello-static-lib'
+
+  CC
+tp.lo
+
+  CCLD   liblttng-ust-provider-ust-test-hello.la
+
+  CCLD
+hello
+
+/usr/src/lttng-ust-2.0.1/liblttng-ust/.libs/liblttng-ust.a(libringbuffer_la-shm.o):
+In function `shm_object_table_append':
+/usr/src/lttng-ust-2.0.1/libringbuffer/shm.c:108: warning: the use of
+`mktemp' is dangerous, better use
+`mkstemp'
+make[3]: Leaving directory
+`/usr/src/lttng-ust-2.0.1/tests/hello-static-lib'
+
+Making all in
+fork
+
+make[3]: Entering directory
+`/usr/src/lttng-ust-2.0.1/tests/fork'
+
+  CC
+fork.o
+
+  CCLD
+fork
+
+../../liblttng-ust/.libs/liblttng-ust.a(libringbuffer_la-shm.o): In
+function
+`shm_object_table_append':
+
+/usr/src/lttng-ust-2.0.1/libringbuffer/shm.c:108: warning: the use of
+`mktemp' is dangerous, better use
+`mkstemp'
+  CC
+fork2.o
+
+  CCLD
+fork2
+
+../../liblttng-ust/.libs/liblttng-ust.a(libringbuffer_la-shm.o): In
+function
+`shm_object_table_append':
+
+/usr/src/lttng-ust-2.0.1/libringbuffer/shm.c:108: warning: the use of
+`mktemp' is dangerous, better use
+`mkstemp'
+make[3]: Leaving directory
+`/usr/src/lttng-ust-2.0.1/tests/fork'
+
+Making all in
+ust-basic-tracing
+
+make[3]: Entering directory
+`/usr/src/lttng-ust-2.0.1/tests/ust-basic-tracing'
+
+  CC
+ust-basic-tracing.o
+
+  CCLD
+ust-basic-tracing
+
+../../libringbuffer/.libs/libringbuffer.a(libringbuffer_la-shm.o): In
+function
+`shm_object_table_append':
+/usr/src/lttng-ust-2.0.1/libringbuffer/shm.c:108: warning: the use of
+`mktemp' is dangerous, better use
+`mkstemp'
+make[3]: Leaving directory
+`/usr/src/lttng-ust-2.0.1/tests/ust-basic-tracing'
+
+Making all in
+ust-multi-test
+
+make[3]: Entering directory
+`/usr/src/lttng-ust-2.0.1/tests/ust-multi-test'
+
+  CC
+ust-multi-test.o
+
+  CCLD
+ust-multi-test
+
+../../libringbuffer/.libs/libringbuffer.a(libringbuffer_la-shm.o): In
+function
+`shm_object_table_append':
+/usr/src/lttng-ust-2.0.1/libringbuffer/shm.c:108: warning: the use of
+`mktemp' is dangerous, better use
+`mkstemp'
+make[3]: Leaving directory
+`/usr/src/lttng-ust-2.0.1/tests/ust-multi-test'
+
+Making all in
+demo
+
+make[3]: Entering directory
+`/usr/src/lttng-ust-2.0.1/tests/demo'
+
+  CC
+tp.lo
+
+  CC
+tp2.lo
+
+  CCLD   liblttng-ust-provider-ust-tests-demo.la
+
+libtool: link: can not build a shared
+library
+
+libtool: link: See the libtool documentation for more
+information.
+
+libtool: link: Fatal configuration
+error.
+
+make[3]: *** [liblttng-ust-provider-ust-tests-demo.la] Error
+1
+
+make[3]: Leaving directory
+`/usr/src/lttng-ust-2.0.1/tests/demo'
+
+make[2]: *** [all-recursive] Error
+1
+
+make[2]: Leaving directory
+`/usr/src/lttng-ust-2.0.1/tests'
+
+make[1]: *** [all-recursive] Error
+1
+
+make[1]: Leaving directory
+`/usr/src/lttng-ust-2.0.1'
+
+make: *** [all] Error 2
+
+--f46d04430686b3b41804c037f38f
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: base64
+
+V2h5IGRvIEkgZ2V0IHRoZSBmb2xsb3dpbmcgZXJyb3I/PGJyPjxicj5sb2NhbGhvc3QgbHR0bmct
+dXN0LTIuMC4xICMgbWFrZaCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKAgPGJyPm1ha2WgIGFsbC1yZWN1cnNpdmWgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoCA8YnI+Cm1ha2VbMV06IEVudGVyaW5nIGRpcmVjdG9yeSBgL3Vzci9zcmMvbHR0
+bmctdXN0LTIuMC4xJiMzOTugoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKAgPGJyPk1ha2luZyBhbGwgaW4gLqCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoCA8YnI+Cm1ha2Vb
+Ml06IEVudGVyaW5nIGRpcmVjdG9yeSBgL3Vzci9zcmMvbHR0bmctdXN0LTIuMC4xJiMzOTugoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKAgPGJyPm1ha2VbMl06IExlYXZp
+bmcgZGlyZWN0b3J5IGAvdXNyL3NyYy9sdHRuZy11c3QtMi4wLjEmIzM5O6CgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKAgPGJyPgpNYWtpbmcgYWxsIGluIGluY2x1ZGWg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKAgPGJyPm1ha2VbMl06IEVudGVyaW5nIGRpcmVjdG9yeSBgL3Vzci9z
+cmMvbHR0bmctdXN0LTIuMC4xL2luY2x1ZGUmIzM5O6CgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKAgPGJyPgptYWtlWzJdOiBOb3RoaW5nIHRvIGJlIGRvbmUgZm9yIGBhbGwmIzM5Oy6g
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+IDxicj5tYWtlWzJdOiBMZWF2aW5nIGRpcmVjdG9yeSBgL3Vzci9zcmMvbHR0bmctdXN0LTIuMC4x
+L2luY2x1ZGUmIzM5O6CgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgIDxicj4KTWFr
+aW5nIGFsbCBpbiBzbnByaW50ZqCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgIDxicj5tYWtlWzJdOiBFbnRlcmlu
+ZyBkaXJlY3RvcnkgYC91c3Ivc3JjL2x0dG5nLXVzdC0yLjAuMS9zbnByaW50ZiYjMzk7oKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgIDxicj4KbWFrZVsyXTogTm90aGluZyB0byBiZSBk
+b25lIGZvciBgYWxsJiMzOTsuoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoCA8YnI+bWFrZVsyXTogTGVhdmluZyBkaXJlY3RvcnkgYC91c3Iv
+c3JjL2x0dG5nLXVzdC0yLjAuMS9zbnByaW50ZiYjMzk7oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoCA8YnI+Ck1ha2luZyBhbGwgaW4gbGlicmluZ2J1ZmZlcqCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoCA8
+YnI+bWFrZVsyXTogRW50ZXJpbmcgZGlyZWN0b3J5IGAvdXNyL3NyYy9sdHRuZy11c3QtMi4wLjEv
+bGlicmluZ2J1ZmZlciYjMzk7oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoCA8YnI+CqAgQ0Og
+oKCgIGxpYnJpbmdidWZmZXJfbGEtcmluZ19idWZmZXJfYmFja2VuZC5sb6CgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoCA8YnI+oCBDQ6CgoKAgbGlicmluZ2J1
+ZmZlcl9sYS1yaW5nX2J1ZmZlcl9mcm9udGVuZC5sb6CgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgIDxicj4KoCBDQ0xEoKAgPGEgaHJlZj0iaHR0cDovL2xpYnJp
+bmdidWZmZXIubGEiPmxpYnJpbmdidWZmZXIubGE8L2E+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKAgPGJyPm1ha2Vb
+Ml06IExlYXZpbmcgZGlyZWN0b3J5IGAvdXNyL3NyYy9sdHRuZy11c3QtMi4wLjEvbGlicmluZ2J1
+ZmZlciYjMzk7oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKAgPGJyPgpNYWtpbmcgYWxsIGlu
+IGxpYmx0dG5nLXVzdC1jb21toKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKAgPGJyPm1ha2VbMl06IEVudGVyaW5nIGRpcmVjdG9y
+eSBgL3Vzci9zcmMvbHR0bmctdXN0LTIuMC4xL2xpYmx0dG5nLXVzdC1jb21tJiMzOTugoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKAgPGJyPgptYWtlWzJdOiBOb3RoaW5nIHRvIGJlIGRvbmUgZm9yIGBh
+bGwmIzM5Oy6goKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgIDxicj5tYWtlWzJdOiBMZWF2aW5nIGRpcmVjdG9yeSBgL3Vzci9zcmMvbHR0bmct
+dXN0LTIuMC4xL2xpYmx0dG5nLXVzdC1jb21tJiMzOTugoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+IDxicj4KTWFraW5nIGFsbCBpbiBsaWJsdHRuZy11c3SgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgIDxicj5tYWtlWzJd
+OiBFbnRlcmluZyBkaXJlY3RvcnkgYC91c3Ivc3JjL2x0dG5nLXVzdC0yLjAuMS9saWJsdHRuZy11
+c3QmIzM5O6CgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgIDxicj4KoCBDQ6CgoKAgbGlibHR0
+bmdfdXN0X3RyYWNlcG9pbnRfbGEtdHJhY2Vwb2ludC5sb6CgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgIDxicj6gIENDTESgoCA8YSBocmVmPSJodHRwOi8vbGli
+bHR0bmctdXN0LXRyYWNlcG9pbnQubGEiPmxpYmx0dG5nLXVzdC10cmFjZXBvaW50LmxhPC9hPqCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKAgPGJyPgqgIENDoKCgoCBsdHRuZy11c3QtY29tbS5sb6CgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKAgPGJyPqAgQ0Og
+oKCgIGx0dG5nLXVzdC1hYmkubG+goKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoCA8YnI+CqAgQ0OgoKCgIGx0dC1wcm9i
+ZXMubG+goKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoCA8YnI+Y2NjZKAgQ0OgoKCgIGx0dG5nLXByb2JlLXVzdC5s
+b6CgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgIDxicj4KoCBDQ6CgoKAgbHR0bmctY29udGV4dC12dGlkLmxvoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgIDxi
+cj6gIENDoKCgoCBsdHRuZy1jb250ZXh0LXZwaWQubG+goKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKAgPGJyPgqgIENDoKCgoCBs
+dHRuZy1jb250ZXh0LXB0aHJlYWQtaWQubG+goKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKAgPGJyPqAgQ0OgoKCgIGx0dG5nLWNvbnRleHQt
+cHJvY25hbWUubG+goKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoCA8YnI+CqAgQ0OgoKCgIGx0dC1jb250ZXh0LmxvoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoCA8YnI+oCBDQ6CgoKAgbHR0LWV2ZW50cy5sb6CgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgIDxicj4KoCBD
+Q0xEoKAgPGEgaHJlZj0iaHR0cDovL2xpYmx0dG5nLXVzdC1ydW50aW1lLmxhIj5saWJsdHRuZy11
+c3QtcnVudGltZS5sYTwvYT6goKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgIDxicj6gIENDoKCgoCB1c3QtY29yZS5sb6CgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKAgPGJyPgqgIENDoKCgoCBsdHQtcmluZy1idWZmZXItY2xpZW50LWRpc2NhcmQu
+bG+goKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKAg
+PGJyPqAgQ0OgoKCgIGx0dC1yaW5nLWJ1ZmZlci1jbGllbnQtb3ZlcndyaXRlLmxvoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoCA8YnI+CqAgQ0OgoKCg
+IGx0dC1yaW5nLWJ1ZmZlci1tZXRhZGF0YS1jbGllbnQubG+goKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoCA8YnI+oCBDQ0xEoKAgPGEgaHJlZj0iaHR0
+cDovL2xpYmx0dG5nLXVzdC1zdXBwb3J0LmxhIj5saWJsdHRuZy11c3Qtc3VwcG9ydC5sYTwvYT6g
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgIDxicj4KoCBDQ0xEoKAgPGEgaHJlZj0iaHR0cDovL2xpYmx0dG5nLXVzdC5sYSI+bGli
+bHR0bmctdXN0LmxhPC9hPqCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoCA8YnI+Y29weWluZyBzZWxlY3RlZCBvYmpl
+Y3QgZmlsZXMgdG8gYXZvaWQgYmFzZW5hbWUgY29uZmxpY3RzLi4uoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgIDxicj4KbWFrZVsyXTogTGVhdmluZyBkaXJlY3RvcnkgYC91c3Iv
+c3JjL2x0dG5nLXVzdC0yLjAuMS9saWJsdHRuZy11c3QmIzM5O6CgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoCA8YnI+TWFraW5nIGFsbCBpbiBsaWJsdHRuZy11c3QtY3RsoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgIDxi
+cj4KbWFrZVsyXTogRW50ZXJpbmcgZGlyZWN0b3J5IGAvdXNyL3NyYy9sdHRuZy11c3QtMi4wLjEv
+bGlibHR0bmctdXN0LWN0bCYjMzk7oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoCA8YnI+oCBDQ6Cg
+oKAgdXN0Y3RsLmxvoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgIDxicj4KoCBDQ0xEoKAgPGEgaHJlZj0i
+aHR0cDovL2xpYmx0dG5nLXVzdC1jdGwubGEiPmxpYmx0dG5nLXVzdC1jdGwubGE8L2E+oKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKAgPGJyPm1ha2VbMl06IExlYXZpbmcgZGlyZWN0b3J5IGAvdXNyL3NyYy9sdHRuZy11c3Qt
+Mi4wLjEvbGlibHR0bmctdXN0LWN0bCYjMzk7oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKAgPGJy
+PgpNYWtpbmcgYWxsIGluIGxpYmx0dG5nLXVzdC1mb3JroKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKAgPGJyPm1ha2VbMl06IEVu
+dGVyaW5nIGRpcmVjdG9yeSBgL3Vzci9zcmMvbHR0bmctdXN0LTIuMC4xL2xpYmx0dG5nLXVzdC1m
+b3JrJiMzOTugoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKAgPGJyPgqgIENDTESgoCA8YSBocmVmPSJo
+dHRwOi8vbGlibHR0bmctdXN0LWZvcmsubGEiPmxpYmx0dG5nLXVzdC1mb3JrLmxhPC9hPqCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKAgPGJyPm1ha2VbMl06IExlYXZpbmcgZGlyZWN0b3J5IGAvdXNyL3NyYy9sdHRuZy11c3Qt
+Mi4wLjEvbGlibHR0bmctdXN0LWZvcmsmIzM5O6CgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKAgPGJy
+PgpNYWtpbmcgYWxsIGluIGxpYmx0dG5nLXVzdC1saWJjLXdyYXBwZXKgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKAgPGJyPm1ha2VbMl06IEVu
+dGVyaW5nIGRpcmVjdG9yeSBgL3Vzci9zcmMvbHR0bmctdXN0LTIuMC4xL2xpYmx0dG5nLXVzdC1s
+aWJjLXdyYXBwZXImIzM5O6CgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKAgPGJyPgqgIENDoKCgoCBsdHRuZy11c3Qt
+bWFsbG9jLmxvoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKAgPGJyPqAgQ0NMRKCgIDxhIGhyZWY9Imh0dHA6Ly9saWJsdHRu
+Zy11c3QtbGliYy13cmFwcGVyLmxhIj5saWJsdHRuZy11c3QtbGliYy13cmFwcGVyLmxhPC9hPqCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+IDxicj4KbWFrZVsyXTogTGVhdmluZyBkaXJlY3RvcnkgYC91c3Ivc3JjL2x0dG5nLXVzdC0yLjAu
+MS9saWJsdHRuZy11c3QtbGliYy13cmFwcGVyJiMzOTugoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoCA8YnI+TWFr
+aW5nIGFsbCBpbiB0b29sc6CgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgIDxicj4KbWFrZVsyXTogRW50ZXJp
+bmcgZGlyZWN0b3J5IGAvdXNyL3NyYy9sdHRuZy11c3QtMi4wLjEvdG9vbHMmIzM5O6CgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoCA8YnI+bWFrZVsyXTogTm90aGluZyB0byBiZSBk
+b25lIGZvciBgYWxsJiMzOTsuoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoCA8YnI+Cm1ha2VbMl06IExlYXZpbmcgZGlyZWN0b3J5IGAvdXNy
+L3NyYy9sdHRuZy11c3QtMi4wLjEvdG9vbHMmIzM5O6CgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKAgPGJyPk1ha2luZyBhbGwgaW4gdGVzdHOgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoCA8
+YnI+Cm1ha2VbMl06IEVudGVyaW5nIGRpcmVjdG9yeSBgL3Vzci9zcmMvbHR0bmctdXN0LTIuMC4x
+L3Rlc3RzJiMzOTugoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKAgPGJyPk1ha2lu
+ZyBhbGwgaW4gLqCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoCA8YnI+Cm1ha2VbM106IEVudGVyaW5n
+IGRpcmVjdG9yeSBgL3Vzci9zcmMvbHR0bmctdXN0LTIuMC4xL3Rlc3RzJiMzOTugoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKAgPGJyPm1ha2VbM106IE5vdGhpbmcgdG8gYmUgZG9u
+ZSBmb3IgYGFsbC1hbSYjMzk7LqCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKAgPGJyPgptYWtlWzNdOiBMZWF2aW5nIGRpcmVjdG9yeSBgL3Vzci9z
+cmMvbHR0bmctdXN0LTIuMC4xL3Rlc3RzJiMzOTugoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgIDxicj5NYWtpbmcgYWxsIGluIGhlbGxvoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKAgPGJy
+PgptYWtlWzNdOiBFbnRlcmluZyBkaXJlY3RvcnkgYC91c3Ivc3JjL2x0dG5nLXVzdC0yLjAuMS90
+ZXN0cy9oZWxsbyYjMzk7oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgIDxicj6gIENDoKCg
+oCB0cC5voKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKAgPGJyPgqgIENDTESgoCBoZWxsb6CgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKAgPGJyPi4uLy4uL2xpYmx0dG5nLXVzdC8ubGlicy9saWJsdHRu
+Zy11c3QuYShsaWJyaW5nYnVmZmVyX2xhLXNobS5vKTogSW4gZnVuY3Rpb24gYHNobV9vYmplY3Rf
+dGFibGVfYXBwZW5kJiMzOTs6oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKAgPGJyPgovdXNyL3NyYy9sdHRuZy11c3QtMi4wLjEvbGlicmluZ2J1ZmZlci9z
+aG0uYzoxMDg6IHdhcm5pbmc6IHRoZSB1c2Ugb2YgYG1rdGVtcCYjMzk7IGlzIGRhbmdlcm91cywg
+YmV0dGVyIHVzZSBgbWtzdGVtcCYjMzk7oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoCA8YnI+bWFrZVszXTogTGVhdmluZyBkaXJlY3RvcnkgYC91c3Ivc3JjL2x0dG5nLXVz
+dC0yLjAuMS90ZXN0cy9oZWxsbyYjMzk7oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoCA8
+YnI+Ck1ha2luZyBhbGwgaW4gaGVsbG8tc3RhdGljLWxpYqCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoCA8YnI+bWFrZVszXTog
+RW50ZXJpbmcgZGlyZWN0b3J5IGAvdXNyL3NyYy9sdHRuZy11c3QtMi4wLjEvdGVzdHMvaGVsbG8t
+c3RhdGljLWxpYiYjMzk7oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoCA8YnI+CqAgQ0OgoKCgIHRwLmxvoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoCA8YnI+oCBDQ0xEoKAgPGEgaHJlZj0iaHR0cDovL2xpYmx0
+dG5nLXVzdC1wcm92aWRlci11c3QtdGVzdC1oZWxsby5sYSI+bGlibHR0bmctdXN0LXByb3ZpZGVy
+LXVzdC10ZXN0LWhlbGxvLmxhPC9hPqCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoCA8YnI+CqAgQ0NMRKCgIGhlbGxvoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oCA8YnI+L3Vzci9zcmMvbHR0bmctdXN0LTIuMC4xL2xpYmx0dG5nLXVzdC8ubGlicy9saWJsdHRu
+Zy11c3QuYShsaWJyaW5nYnVmZmVyX2xhLXNobS5vKTogSW4gZnVuY3Rpb24gYHNobV9vYmplY3Rf
+dGFibGVfYXBwZW5kJiMzOTs6oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoCA8YnI+Ci91
+c3Ivc3JjL2x0dG5nLXVzdC0yLjAuMS9saWJyaW5nYnVmZmVyL3NobS5jOjEwODogd2FybmluZzog
+dGhlIHVzZSBvZiBgbWt0ZW1wJiMzOTsgaXMgZGFuZ2Vyb3VzLCBiZXR0ZXIgdXNlIGBta3N0ZW1w
+JiMzOTugoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgIDxicj5tYWtlWzNd
+OiBMZWF2aW5nIGRpcmVjdG9yeSBgL3Vzci9zcmMvbHR0bmctdXN0LTIuMC4xL3Rlc3RzL2hlbGxv
+LXN0YXRpYy1saWImIzM5O6CgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgIDxicj4KTWFraW5nIGFsbCBpbiBm
+b3JroKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgIDxicj5tYWtlWzNdOiBFbnRlcmluZyBkaXJlY3Rvcnkg
+YC91c3Ivc3JjL2x0dG5nLXVzdC0yLjAuMS90ZXN0cy9mb3JrJiMzOTugoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgIDxicj4KoCBDQ6CgoKAgZm9yay5voKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgIDxicj6gIENDTESgoCBmb3JroKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKAgPGJyPgouLi8u
+Li9saWJsdHRuZy11c3QvLmxpYnMvbGlibHR0bmctdXN0LmEobGlicmluZ2J1ZmZlcl9sYS1zaG0u
+byk6IEluIGZ1bmN0aW9uIGBzaG1fb2JqZWN0X3RhYmxlX2FwcGVuZCYjMzk7OqCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgIDxicj4vdXNyL3NyYy9sdHRu
+Zy11c3QtMi4wLjEvbGlicmluZ2J1ZmZlci9zaG0uYzoxMDg6IHdhcm5pbmc6IHRoZSB1c2Ugb2Yg
+YG1rdGVtcCYjMzk7IGlzIGRhbmdlcm91cywgYmV0dGVyIHVzZSBgbWtzdGVtcCYjMzk7oKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoCA8YnI+CqAgQ0OgoKCgIGZvcmsyLm+g
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoCA8YnI+oCBDQ0xEoKAgZm9yazKgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgIDxicj4KLi4vLi4vbGlibHR0bmctdXN0Ly5saWJzL2xpYmx0dG5nLXVzdC5hKGxp
+YnJpbmdidWZmZXJfbGEtc2htLm8pOiBJbiBmdW5jdGlvbiBgc2htX29iamVjdF90YWJsZV9hcHBl
+bmQmIzM5OzqgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oCA8YnI+L3Vzci9zcmMvbHR0bmctdXN0LTIuMC4xL2xpYnJpbmdidWZmZXIvc2htLmM6MTA4OiB3
+YXJuaW5nOiB0aGUgdXNlIG9mIGBta3RlbXAmIzM5OyBpcyBkYW5nZXJvdXMsIGJldHRlciB1c2Ug
+YG1rc3RlbXAmIzM5O6CgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKAgPGJy
+PgptYWtlWzNdOiBMZWF2aW5nIGRpcmVjdG9yeSBgL3Vzci9zcmMvbHR0bmctdXN0LTIuMC4xL3Rl
+c3RzL2ZvcmsmIzM5O6CgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgIDxicj5NYWtpbmcg
+YWxsIGluIHVzdC1iYXNpYy10cmFjaW5noKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKAgPGJyPgptYWtlWzNdOiBFbnRlcmluZyBk
+aXJlY3RvcnkgYC91c3Ivc3JjL2x0dG5nLXVzdC0yLjAuMS90ZXN0cy91c3QtYmFzaWMtdHJhY2lu
+ZyYjMzk7oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgIDxicj6gIENDoKCgoCB1c3QtYmFzaWMtdHJhY2luZy5v
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKAgPGJyPgqgIENDTESgoCB1c3QtYmFzaWMtdHJhY2luZ6CgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKAg
+PGJyPi4uLy4uL2xpYnJpbmdidWZmZXIvLmxpYnMvbGlicmluZ2J1ZmZlci5hKGxpYnJpbmdidWZm
+ZXJfbGEtc2htLm8pOiBJbiBmdW5jdGlvbiBgc2htX29iamVjdF90YWJsZV9hcHBlbmQmIzM5Ozqg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKAgPGJyPgovdXNy
+L3NyYy9sdHRuZy11c3QtMi4wLjEvbGlicmluZ2J1ZmZlci9zaG0uYzoxMDg6IHdhcm5pbmc6IHRo
+ZSB1c2Ugb2YgYG1rdGVtcCYjMzk7IGlzIGRhbmdlcm91cywgYmV0dGVyIHVzZSBgbWtzdGVtcCYj
+Mzk7oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoCA8YnI+bWFrZVszXTog
+TGVhdmluZyBkaXJlY3RvcnkgYC91c3Ivc3JjL2x0dG5nLXVzdC0yLjAuMS90ZXN0cy91c3QtYmFz
+aWMtdHJhY2luZyYjMzk7oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoCA8YnI+Ck1ha2luZyBhbGwgaW4gdXN0
+LW11bHRpLXRlc3SgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoCA8YnI+bWFrZVszXTogRW50ZXJpbmcgZGlyZWN0b3J5IGAv
+dXNyL3NyYy9sdHRuZy11c3QtMi4wLjEvdGVzdHMvdXN0LW11bHRpLXRlc3QmIzM5O6CgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoCA8YnI+CqAgQ0OgoKCgIHVzdC1tdWx0aS10ZXN0Lm+goKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oCA8YnI+oCBDQ0xEoKAgdXN0LW11bHRpLXRlc3SgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgIDxicj4KLi4vLi4v
+bGlicmluZ2J1ZmZlci8ubGlicy9saWJyaW5nYnVmZmVyLmEobGlicmluZ2J1ZmZlcl9sYS1zaG0u
+byk6IEluIGZ1bmN0aW9uIGBzaG1fb2JqZWN0X3RhYmxlX2FwcGVuZCYjMzk7OqCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoCA8YnI+L3Vzci9zcmMvbHR0bmct
+dXN0LTIuMC4xL2xpYnJpbmdidWZmZXIvc2htLmM6MTA4OiB3YXJuaW5nOiB0aGUgdXNlIG9mIGBt
+a3RlbXAmIzM5OyBpcyBkYW5nZXJvdXMsIGJldHRlciB1c2UgYG1rc3RlbXAmIzM5O6CgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKAgPGJyPgptYWtlWzNdOiBMZWF2aW5nIGRp
+cmVjdG9yeSBgL3Vzci9zcmMvbHR0bmctdXN0LTIuMC4xL3Rlc3RzL3VzdC1tdWx0aS10ZXN0JiMz
+OTugoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgIDxicj5NYWtpbmcgYWxsIGluIGRlbW+goKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKAgPGJyPgptYWtlWzNdOiBFbnRlcmluZyBkaXJlY3RvcnkgYC91c3Ivc3JjL2x0
+dG5nLXVzdC0yLjAuMS90ZXN0cy9kZW1vJiMzOTugoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgIDxicj6gIENDoKCgoCB0cC5sb6CgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKAgPGJyPgqgIEND
+oKCgoCB0cDIubG+goKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKAgPGJyPqAgQ0NMRKCgIDxhIGhyZWY9
+Imh0dHA6Ly9saWJsdHRuZy11c3QtcHJvdmlkZXItdXN0LXRlc3RzLWRlbW8ubGEiPmxpYmx0dG5n
+LXVzdC1wcm92aWRlci11c3QtdGVzdHMtZGVtby5sYTwvYT6goKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKAgPGJyPgpsaWJ0b29sOiBsaW5rOiBjYW4gbm90IGJ1
+aWxkIGEgc2hhcmVkIGxpYnJhcnmgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKAgPGJyPmxpYnRvb2w6IGxpbms6IFNlZSB0aGUgbGlidG9vbCBkb2N1bWVu
+dGF0aW9uIGZvciBtb3JlIGluZm9ybWF0aW9uLqCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oCA8YnI+CmxpYnRvb2w6IGxpbms6IEZhdGFsIGNvbmZpZ3VyYXRpb24gZXJyb3IuoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoCA8YnI+bWFrZVsz
+XTogKioqIFs8YSBocmVmPSJodHRwOi8vbGlibHR0bmctdXN0LXByb3ZpZGVyLXVzdC10ZXN0cy1k
+ZW1vLmxhIj5saWJsdHRuZy11c3QtcHJvdmlkZXItdXN0LXRlc3RzLWRlbW8ubGE8L2E+XSBFcnJv
+ciAxoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoCA8YnI+Cm1ha2VbM106IExlYXZp
+bmcgZGlyZWN0b3J5IGAvdXNyL3NyYy9sdHRuZy11c3QtMi4wLjEvdGVzdHMvZGVtbyYjMzk7oKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKAgPGJyPm1ha2VbMl06ICoqKiBbYWxsLXJlY3Vy
+c2l2ZV0gRXJyb3IgMaCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoCA8YnI+Cm1ha2VbMl06IExlYXZpbmcgZGlyZWN0b3J5IGAvdXNyL3Ny
+Yy9sdHRuZy11c3QtMi4wLjEvdGVzdHMmIzM5O6CgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKAgPGJyPm1ha2VbMV06ICoqKiBbYWxsLXJlY3Vyc2l2ZV0gRXJyb3IgMaCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoCA8YnI+
+Cm1ha2VbMV06IExlYXZpbmcgZGlyZWN0b3J5IGAvdXNyL3NyYy9sdHRuZy11c3QtMi4wLjEmIzM5
+O6CgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg
+oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKAgPGJyPm1ha2U6ICoq
+KiBbYWxsXSBFcnJvciAyoKCgoKCgoKCgoKCgIDxicj4K
+--f46d04430686b3b41804c037f38f--
+
+
+--===============0709601859==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0709601859==--
