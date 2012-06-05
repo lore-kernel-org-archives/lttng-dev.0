@@ -1,16 +1,21 @@
-From: Bill Trost <trost@cloud.rain.com>
-Subject: using --function/--probe
-Date: Sat, 02 Jun 2012 07:35:39 -0700
-Message-ID: <3551.1338647739__49255.0764502541$1338867577$gmane$org@cloud.rain.com>
+From: "Oestman, Fredrik" <Fredrik_Oestman@mentor.com>
+Subject: Re: Displaying graphical results
+Date: Tue, 5 Jun 2012 07:06:37 +0000
+Message-ID: <524C960C5DFC794E82BE548D825F05CF28344927__36158.907300751$1338880034$gmane$org@EU-MBX-01.mgc.mentorg.com>
+References: <CABnnsm_MJHGq_TcjZj5_4_2TmTDhQUPGeJAyd3HYn6V7bPFQaw@mail.gmail.com>
+	<524C960C5DFC794E82BE548D825F05CF283435F8@EU-MBX-01.mgc.mentorg.com>
+	<CABnnsm8x2PJi93O=yu49-LZ8D2WMZwCr2PZQGb5zL97SeKQdxg@mail.gmail.com>
+	<CABnnsm8mTJ4XGgV3XqJ-Qbp1QXOuGevrqL=7rgmPou-83pZ7tQ@mail.gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from sym.pathetech.com ([173.240.244.141])
-	by ltt.polymtl.ca with smtp (Exim 4.72)
-	(envelope-from <trost@cloud.rain.com>) id 1SapQK-0002P0-UM
-	for lttng-dev@lists.lttng.org; Sat, 02 Jun 2012 10:35:25 -0400
-Content-ID: <3549.1338647739.1@cloud.rain.com>
+Received: from relay1.mentorg.com ([192.94.38.131])
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <Fredrik_Oestman@mentor.com>) id 1Sbnqn-0005rp-LA
+	for lttng-dev@lists.lttng.org; Tue, 05 Jun 2012 03:06:45 -0400
+In-Reply-To: <CABnnsm8mTJ4XGgV3XqJ-Qbp1QXOuGevrqL=7rgmPou-83pZ7tQ@mail.gmail.com>
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,22 +24,19 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: tchak adim <montarcyber@gmail.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
+Hi Tchak,
 
-I'm trying to investigate a problem under Linux 2.6.39.4 involving
-kworker threads and am pretty much stymied. I've tried enabling
-various events using --function and --probe and it's been
-very hit or miss. Very often, "lttng enable-event" comes back
-with nothing more specific than "bad ioctl", but every once
-in a while I'll find a symbol I can add a probe point for.
 
-So: What does "--probe" mean? What does "--function" mean, and how does
-it differ from "--probe"? How do I determine what symbols are valid for
-each of these options? And, maybe as a worked example, how do I
-trace what work is being enqueued and run by the kworker threads?
+>For sourcery tool :
+>i didn't find the source code, i'm using an ordinary i386 machine running ubuntu 10.04. 
 
-Thanks,
-Bill
+I'm afraid it's not an open-source tool.
+
+
+Cheers,
+
+Fredrik
