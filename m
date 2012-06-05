@@ -1,19 +1,22 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: using --function/--probe
-Date: Tue, 5 Jun 2012 11:49:50 -0400
-Message-ID: <20120605154950.GA21955__13783.0902626321$1338911420$gmane$org@Krystal>
-References: <3551.1338647739@cloud.rain.com>
+From: tchak adim <montarcyber@gmail.com>
+Subject: Re: Displaying graphical results
+Date: Tue, 5 Jun 2012 12:56:55 -0400
+Message-ID: <CABnnsm-0geLCk4aLQB+BGVg2_QPvDVmtgKgX_je=bATOmS8Tyw__40228.4133517698$1338915449$gmane$org@mail.gmail.com>
+References: <CABnnsm_MJHGq_TcjZj5_4_2TmTDhQUPGeJAyd3HYn6V7bPFQaw@mail.gmail.com>
+	<524C960C5DFC794E82BE548D825F05CF283435F8@EU-MBX-01.mgc.mentorg.com>
+	<CABnnsm8x2PJi93O=yu49-LZ8D2WMZwCr2PZQGb5zL97SeKQdxg@mail.gmail.com>
+	<CABnnsm8mTJ4XGgV3XqJ-Qbp1QXOuGevrqL=7rgmPou-83pZ7tQ@mail.gmail.com>
+	<4FCE0C65.7010906@ericsson.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1756821402=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from mail-wi0-f182.google.com ([209.85.212.182])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1Sbw11-0001fM-Lf
-	for lttng-dev@lists.lttng.org; Tue, 05 Jun 2012 11:49:51 -0400
-Content-Disposition: inline
-In-Reply-To: <3551.1338647739@cloud.rain.com>
+	(envelope-from <montarcyber@gmail.com>) id 1Sbx41-0002AP-QX
+	for lttng-dev@lists.lttng.org; Tue, 05 Jun 2012 12:57:02 -0400
+Received: by wibhm6 with SMTP id hm6so3037538wib.5
+	for <lttng-dev@lists.lttng.org>; Tue, 05 Jun 2012 09:56:55 -0700 (PDT)
+In-Reply-To: <4FCE0C65.7010906@ericsson.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,64 +25,37 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Bill Trost <trost@cloud.rain.com>
-Cc: lttng-dev@lists.lttng.org
+To: Bernd Hufmann <Bernd.Hufmann@ericsson.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-* Bill Trost (trost@cloud.rain.com) wrote:
-> Hi,
-> 
-> I'm trying to investigate a problem under Linux 2.6.39.4 involving
-> kworker threads and am pretty much stymied. I've tried enabling
-> various events using --function and --probe and it's been
-> very hit or miss. Very often, "lttng enable-event" comes back
-> with nothing more specific than "bad ioctl", but every once
-> in a while I'll find a symbol I can add a probe point for.
-> 
-> So: What does "--probe" mean?
+--===============1756821402==
+Content-Type: multipart/alternative; boundary=0016e6dab151baddc404c1bc890d
 
---probe allows to put a kprobe (breakpoint) at a kernel text address or
-symbol.
+--0016e6dab151baddc404c1bc890d
+Content-Type: text/plain; charset=ISO-8859-1
 
-> What does "--function" mean,
+Thanks for all for your detailed responses .
 
---function allows to put a kretprobes at a function entry site (using
-its symbol name), which will trigger events at function entry return.
+Regards.
 
-> and how does
-> it differ from "--probe"? How do I determine what symbols are valid for
-> each of these options?
+--0016e6dab151baddc404c1bc890d
+Content-Type: text/html; charset=ISO-8859-1
 
-It entirely depends on which functions are blacklisted in the kernel
-(this is an attribute added to the functions specifically for kprobes).
-The keyword is "__kprobes".
+Thanks for all for your detailed responses .<br><br>Regards.<br>
 
-> And, maybe as a worked example, how do I
-> trace what work is being enqueued and run by the kworker threads?
+--0016e6dab151baddc404c1bc890d--
 
-For this level of details, I think kprobes/kretprobes will not currently
-allow you to fetch it. The two options we have are:
 
-- use static tracepoints. Is there a tracepoint that targets the
-  information you are looking for ? Try "lttng list -k".
-- or extend the dynamic probing to allow fetching variables from
-  debug information,
+--===============1756821402==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-Thanks,
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
-Mathieu
-
-> 
-> Thanks,
-> Bill
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+--===============1756821402==--
