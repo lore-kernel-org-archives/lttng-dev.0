@@ -1,26 +1,20 @@
-From: "Oestman, Fredrik" <Fredrik_Oestman@mentor.com>
-Subject: UST check pointer/de-reference order
-Date: Tue, 5 Jun 2012 08:19:29 +0000
-Message-ID: <524C960C5DFC794E82BE548D825F05CF28344978__35155.049005016$1338884410$gmane$org@EU-MBX-01.mgc.mentorg.com>
-References: <CABnnsm_MJHGq_TcjZj5_4_2TmTDhQUPGeJAyd3HYn6V7bPFQaw@mail.gmail.com>
-	<524C960C5DFC794E82BE548D825F05CF283435F8@EU-MBX-01.mgc.mentorg.com>
-	<CABnnsm8x2PJi93O=yu49-LZ8D2WMZwCr2PZQGb5zL97SeKQdxg@mail.gmail.com>
-	<CABnnsm8mTJ4XGgV3XqJ-Qbp1QXOuGevrqL=7rgmPou-83pZ7tQ@mail.gmail.com>
-	<524C960C5DFC794E82BE548D825F05CF28344927@EU-MBX-01.mgc.mentorg.com>
+From: Francis Giraldeau <francis.giraldeau@gmail.com>
+Subject: [PATCH 1/2] Makes write operation a parameter for
+	tp_memcpy macro
+Date: Tue,  5 Jun 2012 11:20:50 +0200
+Message-ID: <1338888051-20879-2-git-send-email-francis.giraldeau__20220.0484266088$1338888099$gmane$org@gmail.com>
+References: <1338888051-20879-1-git-send-email-francis.giraldeau@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from relay1.mentorg.com ([192.94.38.131])
+Received: from mail-lb0-f176.google.com ([209.85.217.176])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Fredrik_Oestman@mentor.com>) id 1SbozK-0006OU-B1
-	for lttng-dev@lists.lttng.org; Tue, 05 Jun 2012 04:19:38 -0400
-Received: from svr-orw-exc-10.mgc.mentorg.com ([147.34.98.58])
-	by relay1.mentorg.com with esmtp
-	id 1SbozE-0002PB-69 from Fredrik_Oestman@mentor.com
-	for lttng-dev@lists.lttng.org; Tue, 05 Jun 2012 01:19:32 -0700
-In-Reply-To: <524C960C5DFC794E82BE548D825F05CF28344927@EU-MBX-01.mgc.mentorg.com>
-Content-Language: en-US
+	(envelope-from <francis.giraldeau@gmail.com>) id 1Sbpwu-0006sO-O2
+	for lttng-dev@lists.lttng.org; Tue, 05 Jun 2012 05:21:13 -0400
+Received: by lboj14 with SMTP id j14so4970671lbo.35
+	for <lttng-dev@lists.lttng.org>; Tue, 05 Jun 2012 02:21:05 -0700 (PDT)
+In-Reply-To: <1338888051-20879-1-git-send-email-francis.giraldeau@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -29,125 +23,89 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-I stumbled across some code where pointers are de-referenced and then check=
-ed for NULL.
+Memcpy source can be either user-space or kernel-space. To avoid code
+duplication, this patch makes the operation a parameter to the macros.
+Available macros are thus:
 
-Cheers,
+* tp_memcpy:               kernel-space array copy
+* tp_memcpy_from_user:     user-space array copy
+* tp_memcpy_dyn:           kernel-space sequence copy
+* tp_memcpy_dyn_from_user: user-space sequence copy
 
-Fredrik =D6stman
+Those are TP_fast_assign macros that can be used with __dynamic_array
+macros in TP_STRUCT__entry in a TRACE_EVENT.
 
+Signed-off-by: Francis Giraldeau <francis.giraldeau@gmail.com>
+---
+ probes/lttng-events.h |   37 +++++++++++++++++++++++--------------
+ 1 file changed, 23 insertions(+), 14 deletions(-)
 
-diff --git a/liblttng-ust-ctl/ustctl.c b/liblttng-ust-ctl/ustctl.c
-index 9789413..80aed04 100644
---- a/liblttng-ust-ctl/ustctl.c
-+++ b/liblttng-ust-ctl/ustctl.c
-@@ -732,7 +732,7 @@ void ustctl_unmap_channel(struct lttng_ust_shm_handle *=
-handle)
- struct lttng_ust_lib_ring_buffer *ustctl_open_stream_read(struct lttng_ust=
-_shm_handle *handle,
- 	int cpu)
- {
--	struct channel *chan =3D handle->shadow_chan;
-+	struct channel *chan;
- 	int *shm_fd, *wait_fd;
- 	uint64_t *memory_map_size;
- 	struct lttng_ust_lib_ring_buffer *buf;
-@@ -741,6 +741,7 @@ struct lttng_ust_lib_ring_buffer *ustctl_open_stream_re=
-ad(struct lttng_ust_shm_h
- 	if (!handle)
- 		return NULL;
- =
-
-+	chan =3D handle->shadow_chan;
- 	buf =3D channel_get_ring_buffer(&chan->backend.config,
- 		chan, cpu, handle, &shm_fd, &wait_fd, &memory_map_size);
- 	if (!buf)
-@@ -784,11 +785,12 @@ int ustctl_get_mmap_len(struct lttng_ust_shm_handle *=
-handle,
- 		unsigned long *len)
- {
- 	unsigned long mmap_buf_len;
--	struct channel *chan =3D handle->shadow_chan;
-+	struct channel *chan;
- =
-
- 	if (!handle || !buf || !len)
- 		return -EINVAL;
- =
-
-+	chan =3D handle->shadow_chan;
- 	if (chan->backend.config.output !=3D RING_BUFFER_MMAP)
- 		return -EINVAL;
- 	mmap_buf_len =3D chan->backend.buf_size;
-@@ -805,11 +807,12 @@ int ustctl_get_max_subbuf_size(struct lttng_ust_shm_h=
-andle *handle,
- 		struct lttng_ust_lib_ring_buffer *buf,
- 		unsigned long *len)
- {
--	struct channel *chan =3D handle->shadow_chan;
-+	struct channel *chan;
- =
-
- 	if (!handle || !buf || !len)
- 		return -EINVAL;
- =
-
-+	chan =3D handle->shadow_chan;
- 	*len =3D chan->backend.subbuf_size;
- 	return 0;
- }
-@@ -823,12 +826,13 @@ int ustctl_get_max_subbuf_size(struct lttng_ust_shm_h=
-andle *handle,
- int ustctl_get_mmap_read_offset(struct lttng_ust_shm_handle *handle,
- 		struct lttng_ust_lib_ring_buffer *buf, unsigned long *off)
- {
--	struct channel *chan =3D handle->shadow_chan;
-+	struct channel *chan;
- 	unsigned long sb_bindex;
- =
-
- 	if (!handle || !buf || !off)
- 		return -EINVAL;
- =
-
-+	chan =3D handle->shadow_chan;
- 	if (chan->backend.config.output !=3D RING_BUFFER_MMAP)
- 		return -EINVAL;
- 	sb_bindex =3D subbuffer_id_get_index(&chan->backend.config,
-@@ -841,11 +845,12 @@ int ustctl_get_mmap_read_offset(struct lttng_ust_shm_=
-handle *handle,
- int ustctl_get_subbuf_size(struct lttng_ust_shm_handle *handle,
- 		struct lttng_ust_lib_ring_buffer *buf, unsigned long *len)
- {
--	struct channel *chan =3D handle->shadow_chan;
-+	struct channel *chan;
- =
-
- 	if (!handle || !buf || !len)
- 		return -EINVAL;
- =
-
-+	chan =3D handle->shadow_chan;
- 	*len =3D lib_ring_buffer_get_read_data_size(&chan->backend.config, buf,
- 		handle);
- 	return 0;
-@@ -855,11 +860,12 @@ int ustctl_get_subbuf_size(struct lttng_ust_shm_handl=
-e *handle,
- int ustctl_get_padded_subbuf_size(struct lttng_ust_shm_handle *handle,
- 		struct lttng_ust_lib_ring_buffer *buf, unsigned long *len)
- {
--	struct channel *chan =3D handle->shadow_chan;
-+	struct channel *chan;
- =
-
- 	if (!handle || !buf || !len)
- 		return -EINVAL;
- =
-
-+	chan =3D handle->shadow_chan;
- 	*len =3D lib_ring_buffer_get_read_data_size(&chan->backend.config, buf,
- 		handle);
- 	*len =3D PAGE_ALIGN(*len);
+diff --git a/probes/lttng-events.h b/probes/lttng-events.h
+index 05e17b9..492423a 100644
+--- a/probes/lttng-events.h
++++ b/probes/lttng-events.h
+@@ -523,17 +523,27 @@ __assign_##dest:							\
+ 	}								\
+ 	goto __end_field_##dest;
+ 
+-#undef tp_memcpy
+-#define tp_memcpy(dest, src, len)					\
++/* fixed length array memcpy */
++#undef tp_memcpy_gen
++#define tp_memcpy_gen(write_ops, dest, src, len)			\
+ __assign_##dest:							\
+ 	if (0)								\
+ 		(void) __typemap.dest;					\
+ 	lib_ring_buffer_align_ctx(&__ctx, lttng_alignof(__typemap.dest));	\
+-	__chan->ops->event_write(&__ctx, src, len);			\
++	__chan->ops->write_ops(&__ctx, src, len);			\
+ 	goto __end_field_##dest;
+ 
+-#undef tp_memcpy_dyn
+-#define tp_memcpy_dyn(dest, src)					\
++#undef tp_memcpy
++#define tp_memcpy(dest, src, len)					\
++	tp_memcpy_gen(event_write, dest, src, len)
++
++#undef tp_memcpy_from_user
++#define tp_memcpy_from_user(dest, src, len)				\
++	tp_memcpy_gen(event_write_from_user, dest, src, len)
++
++/* variable length sequence memcpy */
++#undef tp_memcpy_dyn_gen
++#define tp_memcpy_dyn_gen(write_ops, dest, src)				\
+ __assign_##dest##_1:							\
+ 	{								\
+ 		u32 __tmpl = __dynamic_len[__dynamic_len_idx];		\
+@@ -543,18 +553,17 @@ __assign_##dest##_1:							\
+ 	goto __end_field_##dest##_1;					\
+ __assign_##dest##_2:							\
+ 	lib_ring_buffer_align_ctx(&__ctx, lttng_alignof(__typemap.dest));	\
+-	__chan->ops->event_write(&__ctx, src,				\
++	__chan->ops->write_ops(&__ctx, src,				\
+ 		sizeof(__typemap.dest) * __get_dynamic_array_len(dest));\
+ 	goto __end_field_##dest##_2;
+ 
+-#undef tp_memcpy_from_user
+-#define tp_memcpy_from_user(dest, src, len)				\
+-	__assign_##dest:						\
+-	if (0)								\
+-		(void) __typemap.dest;					\
+-	lib_ring_buffer_align_ctx(&__ctx, lttng_alignof(__typemap.dest));	\
+-	__chan->ops->event_write_from_user(&__ctx, src, len);		\
+-	goto __end_field_##dest;
++#undef tp_memcpy_dyn
++#define tp_memcpy_dyn(dest, src)					\
++	tp_memcpy_dyn_gen(event_write, dest, src)
++
++#undef tp_memcpy_dyn_from_user
++#define tp_memcpy_dyn_from_user(dest, src)				\
++	tp_memcpy_dyn_gen(event_write_from_user, dest, src)
+ 
+ /*
+  * The string length including the final \0.
+-- 
+1.7.9.5
