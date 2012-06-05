@@ -1,19 +1,21 @@
 From: Francis Giraldeau <francis.giraldeau@gmail.com>
-Subject: [PATCH 2/2] Expose kernel tracer to user-space
-Date: Tue,  5 Jun 2012 11:20:51 +0200
-Message-ID: <1338888051-20879-3-git-send-email-francis.giraldeau__20584.0493356392$1338888099$gmane$org@gmail.com>
-References: <1338888051-20879-1-git-send-email-francis.giraldeau@gmail.com>
+Subject: Re: Displaying graphical results
+Date: Tue, 05 Jun 2012 11:27:14 +0200
+Message-ID: <4FCDD0F2.9020009__3045.10392384163$1338888469$gmane$org@gmail.com>
+References: <CABnnsm_MJHGq_TcjZj5_4_2TmTDhQUPGeJAyd3HYn6V7bPFQaw@mail.gmail.com>
+	<524C960C5DFC794E82BE548D825F05CF283435F8@EU-MBX-01.mgc.mentorg.com>
+	<CABnnsm8x2PJi93O=yu49-LZ8D2WMZwCr2PZQGb5zL97SeKQdxg@mail.gmail.com>
+	<CABnnsm8mTJ4XGgV3XqJ-Qbp1QXOuGevrqL=7rgmPou-83pZ7tQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1034435268=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail-lpp01m010-f48.google.com ([209.85.215.48])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <francis.giraldeau@gmail.com>) id 1Sbpww-0006sP-On
-	for lttng-dev@lists.lttng.org; Tue, 05 Jun 2012 05:21:14 -0400
-Received: by lagz14 with SMTP id z14so4789358lag.35
-	for <lttng-dev@lists.lttng.org>; Tue, 05 Jun 2012 02:21:08 -0700 (PDT)
-In-Reply-To: <1338888051-20879-1-git-send-email-francis.giraldeau@gmail.com>
+	(envelope-from <francis.giraldeau@gmail.com>) id 1Sbq2v-0006xW-L7
+	for lttng-dev@lists.lttng.org; Tue, 05 Jun 2012 05:27:26 -0400
+Received: by lagz14 with SMTP id z14so4792917lag.35
+	for <lttng-dev@lists.lttng.org>; Tue, 05 Jun 2012 02:27:19 -0700 (PDT)
+In-Reply-To: <CABnnsm8mTJ4XGgV3XqJ-Qbp1QXOuGevrqL=7rgmPou-83pZ7tQ@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,106 +24,138 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org >> \"lttng-dev@lists.lttng.org\"" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-By writing to the file /proc/lttng, a user-space application creates a
-kernel event. The event's payload is by default UTF-8 text, but any data
-can be written, up to 1024 bytes. Null-character is optional and is not
-enforced. The event uses sequence for space efficiency and to store any
-data as payload.
+Ceci est un message signC) cryptographiquement au format MIME.
 
-Signed-off-by: Francis Giraldeau <francis.giraldeau@gmail.com>
----
- instrumentation/events/lttng-module/lttng.h |   21 +++++++++++++++++++++
- lttng-abi.c                                 |   20 ++++++++++++++++++++
- lttng-abi.h                                 |    1 +
- 3 files changed, 42 insertions(+)
+--===============1034435268==
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha1; boundary="------------ms090406050207060107060802"
 
-diff --git a/instrumentation/events/lttng-module/lttng.h b/instrumentation/events/lttng-module/lttng.h
-index 6f3d6d1..cc36a8b 100644
---- a/instrumentation/events/lttng-module/lttng.h
-+++ b/instrumentation/events/lttng-module/lttng.h
-@@ -28,6 +28,27 @@ TRACE_EVENT(lttng_metadata,
- 	TP_printk("")
- )
- 
-+TRACE_EVENT(lttng_uevent,
-+
-+	TP_PROTO(const char *str, size_t len),
-+
-+	TP_ARGS(str, len),
-+
-+	/*
-+	 * Uses sequence to hold variable size data, by default considered
-+	 * as text. Null-terminal character is optional and is not enforced.
-+	 */
-+	TP_STRUCT__entry(
-+		__dynamic_array_text(char, text, len)
-+	),
-+
-+	TP_fast_assign(
-+		tp_memcpy_dyn_from_user(text, str)
-+	),
-+
-+	TP_printk("")
-+)
-+
- #endif /*  _TRACE_LTTNG_H */
- 
- /* This part must be outside protection */
-diff --git a/lttng-abi.c b/lttng-abi.c
-index 26a02ed..fa29e53 100644
---- a/lttng-abi.c
-+++ b/lttng-abi.c
-@@ -50,6 +50,10 @@
- #include "lttng-events.h"
- #include "lttng-tracer.h"
- 
-+/* include our own uevent tracepoint */
-+#include "instrumentation/events/lttng-module/lttng.h"
-+DEFINE_TRACE(lttng_uevent);
-+
- /*
-  * This is LTTng's own personal way to create a system call as an external
-  * module. We use ioctl() on /proc/lttng.
-@@ -252,9 +256,25 @@ long lttng_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
- 	}
- }
- 
-+/*
-+ * lttng_write_uevent - expose kernel tracer to user-space
-+ */
-+
-+static
-+ssize_t lttng_write_uevent(struct file *file, const char __user *user_buf,
-+		    size_t count, loff_t *fpos)
-+{
-+	if (count > LTTNG_UEVENT_SIZE)
-+		count = LTTNG_UEVENT_SIZE;
-+
-+	trace_lttng_uevent(user_buf, count);
-+	return count;
-+}
-+
- static const struct file_operations lttng_fops = {
- 	.owner = THIS_MODULE,
- 	.unlocked_ioctl = lttng_ioctl,
-+	.write = lttng_write_uevent,
- #ifdef CONFIG_COMPAT
- 	.compat_ioctl = lttng_ioctl,
- #endif
-diff --git a/lttng-abi.h b/lttng-abi.h
-index dc230d8..f99b037 100644
---- a/lttng-abi.h
-+++ b/lttng-abi.h
-@@ -26,6 +26,7 @@
- #include <linux/fs.h>
- 
- #define LTTNG_KERNEL_SYM_NAME_LEN	256
-+#define LTTNG_UEVENT_SIZE		1024
- 
- enum lttng_kernel_instrumentation {
- 	LTTNG_KERNEL_TRACEPOINT	= 0,
--- 
-1.7.9.5
+Ceci est un message signé cryptographiquement au format MIME.
+
+--------------ms090406050207060107060802
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+Le 2012-06-04 22:57, tchak adim a =E9crit :
+> for Eclipse tool :
+> i already follow the different steps to integrate the cft, lttng2
+> plugins as described in the link that u give it .
+> i don't konw how can i visualize the graphics of lttng kernel module
+> traces using eclipse , can u explain to me how ?
+
+You need to select the lttng perspective, then create an lttng project,
+import a trace trace and then it should show up. There are multiple
+views, the event view displays events in a table, and the control flow
+view shows process states according to time.
+
+Cheers,
+
+Francis
+
+
+--------------ms090406050207060107060802
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: Signature cryptographique S/MIME
+
+MIAGCSqGSIb3DQEHAqCAMIACAQExCzAJBgUrDgMCGgUAMIAGCSqGSIb3DQEHAQAAoIIMUjCC
+BVwwggREoAMCAQICEGWn7N/yOaERpG8kZX1Cua0wDQYJKoZIhvcNAQEFBQAwgd0xCzAJBgNV
+BAYTAlVTMRcwFQYDVQQKEw5WZXJpU2lnbiwgSW5jLjEfMB0GA1UECxMWVmVyaVNpZ24gVHJ1
+c3QgTmV0d29yazE7MDkGA1UECxMyVGVybXMgb2YgdXNlIGF0IGh0dHBzOi8vd3d3LnZlcmlz
+aWduLmNvbS9ycGEgKGMpMDkxHjAcBgNVBAsTFVBlcnNvbmEgTm90IFZhbGlkYXRlZDE3MDUG
+A1UEAxMuVmVyaVNpZ24gQ2xhc3MgMSBJbmRpdmlkdWFsIFN1YnNjcmliZXIgQ0EgLSBHMzAe
+Fw0xMjA1MjgwMDAwMDBaFw0xMzA1MjgyMzU5NTlaMIIBHzEXMBUGA1UEChMOVmVyaVNpZ24s
+IEluYy4xHzAdBgNVBAsTFlZlcmlTaWduIFRydXN0IE5ldHdvcmsxRjBEBgNVBAsTPXd3dy52
+ZXJpc2lnbi5jb20vcmVwb3NpdG9yeS9SUEEgSW5jb3JwLiBieSBSZWYuLExJQUIuTFREKGMp
+OTgxHjAcBgNVBAsTFVBlcnNvbmEgTm90IFZhbGlkYXRlZDEzMDEGA1UECxMqRGlnaXRhbCBJ
+RCBDbGFzcyAxIC0gTmV0c2NhcGUgRnVsbCBTZXJ2aWNlMRowGAYDVQQDFBFGcmFuY2lzIEdp
+cmFsZGVhdTEqMCgGCSqGSIb3DQEJARYbZnJhbmNpcy5naXJhbGRlYXVAZ21haWwuY29tMIIB
+IjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqiOFH8B8262aBX5FMSzvA38NY4ekw6W+
+zThHjeI46j7VFPXJbK0BM7yAMu4DmybyE8b5IB4oKcjRGdGC8GaMZdx0+Je0CxR/+M4hMB9s
+g3JhgXLQ9RYDJKn9k0JZ59pbYsh6OMtYPX3WDCyEXBg3xkd2JQ9YiY46IJSEhfbHHE9CwaYa
+f3Pbl3Bp5oi5PUADYu76ItNdHBHzBGBrkkYFaGoI5Mh27oBABvDW6QNuGvrTkkWOmFeJPNAu
+AS52izUNriCmkMGNbGON3dMM7cNk1uoNXyV7vnIP0pwTm+xA5CLkvjt+/sxynJYWXqexwcer
+X0VCw5Hbaqa3IxzJKB8BYwIDAQABo4HSMIHPMAkGA1UdEwQCMAAwRAYDVR0gBD0wOzA5Bgtg
+hkgBhvhFAQcXATAqMCgGCCsGAQUFBwIBFhxodHRwczovL3d3dy52ZXJpc2lnbi5jb20vcnBh
+MAsGA1UdDwQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwUAYDVR0fBEkw
+RzBFoEOgQYY/aHR0cDovL2luZGMxZGlnaXRhbGlkLWczLWNybC52ZXJpc2lnbi5jb20vSW5k
+QzFEaWdpdGFsSUQtRzMuY3JsMA0GCSqGSIb3DQEBBQUAA4IBAQAMYnv8qG3qSGJYAn+PhjGx
+lbmbaxqYyD0QVRq6g8tXrZtBUqNO29mce+olKu7lHsrEHpIKwMfArh3BpxPYVhKMAP6GaCAn
+jdr8LJ6TZHTLeVo4BLU7ZEPR6qCGxUhIodqzzWoet0cardf6Ub0OknxxAymgQ8+pIGJmxOOr
+ypWp+3ba6dPmY/MJeXIWq08V+P6912vL6I+cwrS6e7rud0XeR9KEEqn/EpuqDpp1mNj5QeRo
+73zkl8G1nBnYbr42r2jSzqxRvefsfimWm6XX2L2K9WKp6TvJhFejZ7aP234pRDx9Ep0unSH4
+LR2o5p6Ik5RQaG0xu1c74KgDTyzZVn2+MIIG7jCCBdagAwIBAgIQcRVmBUrkkSFN6bxE+azT
+3DANBgkqhkiG9w0BAQUFADCByjELMAkGA1UEBhMCVVMxFzAVBgNVBAoTDlZlcmlTaWduLCBJ
+bmMuMR8wHQYDVQQLExZWZXJpU2lnbiBUcnVzdCBOZXR3b3JrMTowOAYDVQQLEzEoYykgMTk5
+OSBWZXJpU2lnbiwgSW5jLiAtIEZvciBhdXRob3JpemVkIHVzZSBvbmx5MUUwQwYDVQQDEzxW
+ZXJpU2lnbiBDbGFzcyAxIFB1YmxpYyBQcmltYXJ5IENlcnRpZmljYXRpb24gQXV0aG9yaXR5
+IC0gRzMwHhcNMDkwNTAxMDAwMDAwWhcNMTkwNDMwMjM1OTU5WjCB3TELMAkGA1UEBhMCVVMx
+FzAVBgNVBAoTDlZlcmlTaWduLCBJbmMuMR8wHQYDVQQLExZWZXJpU2lnbiBUcnVzdCBOZXR3
+b3JrMTswOQYDVQQLEzJUZXJtcyBvZiB1c2UgYXQgaHR0cHM6Ly93d3cudmVyaXNpZ24uY29t
+L3JwYSAoYykwOTEeMBwGA1UECxMVUGVyc29uYSBOb3QgVmFsaWRhdGVkMTcwNQYDVQQDEy5W
+ZXJpU2lnbiBDbGFzcyAxIEluZGl2aWR1YWwgU3Vic2NyaWJlciBDQSAtIEczMIIBIjANBgkq
+hkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA7cRH3yooHXwGa7vXITLJbBOP6bGNQU4099oL42r6
+ZYggCxET6ZvgSU6Lb9UB0F8NR5GKWkx0Pj/GkQm7TDSejW6hglFi92l2WJYHr54UGAdPWr2f
+0jGyVBlzRmoZQhHsEnMhjfXcMM3l2VYKMcU2bSkUl70t2olHGYjYSwQ967Y8Zx50ABMN0Iba
+k2f4MwOuGjxraXj2wCyO4YM/d/mZ//6fUlrCtIcK2GypR8FUKWVDPkrAlh/Brfd3r2yxBF6+
+wbaULZeQLSfSux7pg2qE9sSyriMGZSalJ1grByK0b6ZiSBp38tVQJ5op05b7KPW6JHZi44xZ
+6/tu1ULEvkHH9QIDAQABo4ICuTCCArUwNAYIKwYBBQUHAQEEKDAmMCQGCCsGAQUFBzABhhho
+dHRwOi8vb2NzcC52ZXJpc2lnbi5jb20wEgYDVR0TAQH/BAgwBgEB/wIBADBwBgNVHSAEaTBn
+MGUGC2CGSAGG+EUBBxcBMFYwKAYIKwYBBQUHAgEWHGh0dHBzOi8vd3d3LnZlcmlzaWduLmNv
+bS9jcHMwKgYIKwYBBQUHAgIwHhocaHR0cHM6Ly93d3cudmVyaXNpZ24uY29tL3JwYTA0BgNV
+HR8ELTArMCmgJ6AlhiNodHRwOi8vY3JsLnZlcmlzaWduLmNvbS9wY2ExLWczLmNybDAOBgNV
+HQ8BAf8EBAMCAQYwbgYIKwYBBQUHAQwEYjBgoV6gXDBaMFgwVhYJaW1hZ2UvZ2lmMCEwHzAH
+BgUrDgMCGgQUS2u5KJYGDLvQUjibKaxLB4shBRgwJhYkaHR0cDovL2xvZ28udmVyaXNpZ24u
+Y29tL3ZzbG9nbzEuZ2lmMC4GA1UdEQQnMCWkIzAhMR8wHQYDVQQDExZQcml2YXRlTGFiZWw0
+LTIwNDgtMTE4MB0GA1UdDgQWBBR5R2EIQf04BKJL57XM9UP2SSsR+DCB8QYDVR0jBIHpMIHm
+oYHQpIHNMIHKMQswCQYDVQQGEwJVUzEXMBUGA1UEChMOVmVyaVNpZ24sIEluYy4xHzAdBgNV
+BAsTFlZlcmlTaWduIFRydXN0IE5ldHdvcmsxOjA4BgNVBAsTMShjKSAxOTk5IFZlcmlTaWdu
+LCBJbmMuIC0gRm9yIGF1dGhvcml6ZWQgdXNlIG9ubHkxRTBDBgNVBAMTPFZlcmlTaWduIENs
+YXNzIDEgUHVibGljIFByaW1hcnkgQ2VydGlmaWNhdGlvbiBBdXRob3JpdHkgLSBHM4IRAItb
+dVaEVIULAM+vOEjOsaQwDQYJKoZIhvcNAQEFBQADggEBADlNz0GZgbWpBbVSOOk5hIls5DSo
+WufYbAlMJBq6WaSHO3Mh8ZOBz79oY1pn/jWFK6HDXaNKwjoZ3TDWzE3v8dKBl8pUWkO/N4t6
+jhmND0OojPKvYLMVirOVnDzgnrMnmKQ1chfl/Cpdh9OKDcLRRSr4wPSsKpM61a4ScAjr+zvi
+d+zoK2Q1ds262uDRyxTWcVibvtU+fbbZ6CTFJGZMXZEfdrMXPn8NxiGJL7M3uKH/XLJtSd5l
+UkL7DojS7Uodv0vj+Mxy+kgOZY5JyNb4mZg7t5Q+MXEGh/psWVMu198r7V9jAKwV7QO4VRaM
+xmgD5yKocwuxvKDaUljdCg5/wYIxggTsMIIE6AIBATCB8jCB3TELMAkGA1UEBhMCVVMxFzAV
+BgNVBAoTDlZlcmlTaWduLCBJbmMuMR8wHQYDVQQLExZWZXJpU2lnbiBUcnVzdCBOZXR3b3Jr
+MTswOQYDVQQLEzJUZXJtcyBvZiB1c2UgYXQgaHR0cHM6Ly93d3cudmVyaXNpZ24uY29tL3Jw
+YSAoYykwOTEeMBwGA1UECxMVUGVyc29uYSBOb3QgVmFsaWRhdGVkMTcwNQYDVQQDEy5WZXJp
+U2lnbiBDbGFzcyAxIEluZGl2aWR1YWwgU3Vic2NyaWJlciBDQSAtIEczAhBlp+zf8jmhEaRv
+JGV9QrmtMAkGBSsOAwIaBQCgggLOMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZI
+hvcNAQkFMQ8XDTEyMDYwNTA5MjcxNFowIwYJKoZIhvcNAQkEMRYEFJklxrdKzRnawrZtxl9l
+jdC7/xImMF8GCSqGSIb3DQEJDzFSMFAwCwYJYIZIAWUDBAECMAoGCCqGSIb3DQMHMA4GCCqG
+SIb3DQMCAgIAgDANBggqhkiG9w0DAgIBQDAHBgUrDgMCBzANBggqhkiG9w0DAgIBKDCCAQMG
+CSsGAQQBgjcQBDGB9TCB8jCB3TELMAkGA1UEBhMCVVMxFzAVBgNVBAoTDlZlcmlTaWduLCBJ
+bmMuMR8wHQYDVQQLExZWZXJpU2lnbiBUcnVzdCBOZXR3b3JrMTswOQYDVQQLEzJUZXJtcyBv
+ZiB1c2UgYXQgaHR0cHM6Ly93d3cudmVyaXNpZ24uY29tL3JwYSAoYykwOTEeMBwGA1UECxMV
+UGVyc29uYSBOb3QgVmFsaWRhdGVkMTcwNQYDVQQDEy5WZXJpU2lnbiBDbGFzcyAxIEluZGl2
+aWR1YWwgU3Vic2NyaWJlciBDQSAtIEczAhBlp+zf8jmhEaRvJGV9QrmtMIIBBQYLKoZIhvcN
+AQkQAgsxgfWggfIwgd0xCzAJBgNVBAYTAlVTMRcwFQYDVQQKEw5WZXJpU2lnbiwgSW5jLjEf
+MB0GA1UECxMWVmVyaVNpZ24gVHJ1c3QgTmV0d29yazE7MDkGA1UECxMyVGVybXMgb2YgdXNl
+IGF0IGh0dHBzOi8vd3d3LnZlcmlzaWduLmNvbS9ycGEgKGMpMDkxHjAcBgNVBAsTFVBlcnNv
+bmEgTm90IFZhbGlkYXRlZDE3MDUGA1UEAxMuVmVyaVNpZ24gQ2xhc3MgMSBJbmRpdmlkdWFs
+IFN1YnNjcmliZXIgQ0EgLSBHMwIQZafs3/I5oRGkbyRlfUK5rTANBgkqhkiG9w0BAQEFAASC
+AQAXhp19+dxETg8OYU9U48QmQfXgaMcqgObdCym9bGOLL1W6fAQSqMQ34aXqanQPu/xzAUUQ
+2sq93sLnirdiu8ld67OMYm5B+39RxrUq+ZPbrtrP2NV2ey2kVFekOfR4ciOkn48+eI7NG0Yd
+dpAomlwa7JfzFocTIjIH7tTggI5hiUqS+IuSM1eCNCukGIV/CmAONthqmWfgy8xNkjzDbiX1
+Jbs3PDUkU1Z+k+9P6A1yEqgXHq8W2C5r5nuvGoJI2iHNyw89mj5VasMVGmFfe8OzD5rg8SNb
+Ai9pYmA0tZNnQiyDpNZo+HoTEJscziFcfZC1idcPy/ZxXMxvgv12RMnHAAAAAAAA
+--------------ms090406050207060107060802--
+
+
+--===============1034435268==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1034435268==--
