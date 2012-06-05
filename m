@@ -1,19 +1,17 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: UST "Tracepoint signature mismatch" with C99 bool.
-Date: Tue, 5 Jun 2012 13:14:18 -0400
-Message-ID: <20120605171418.GA22608__18407.2764277973$1338916488$gmane$org@Krystal>
-References: <jqjfqp$juc$1@dough.gmane.org>
+From: Francis Giraldeau <francis.giraldeau@gmail.com>
+Subject: [PATCH] Expose kernel tracer to user-space
+Date: Wed,  6 Jun 2012 01:24:14 +0200
+Message-ID: <1338938654-16515-1-git-send-email-francis.giraldeau__15647.5093951032$1338938704$gmane$org@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from mail-lpp01m010-f48.google.com ([209.85.215.48])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1SbxKl-0002PZ-U2
-	for lttng-dev@lists.lttng.org; Tue, 05 Jun 2012 13:14:19 -0400
-Content-Disposition: inline
-In-Reply-To: <jqjfqp$juc$1@dough.gmane.org>
+	(envelope-from <francis.giraldeau@gmail.com>) id 1Sc372-0005Bd-9N
+	for lttng-dev@lists.lttng.org; Tue, 05 Jun 2012 19:24:33 -0400
+Received: by lagz14 with SMTP id z14so5593899lag.35
+	for <lttng-dev@lists.lttng.org>; Tue, 05 Jun 2012 16:24:26 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,130 +20,271 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: John Steele Scott <toojays@toojays.net>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* John Steele Scott (toojays@toojays.net) wrote:
-> I originally sent this on the 22nd of May, but it looks like it got stuck in moderation since I'm not subscribed. Reposting via gmane.comp.sysutils.lttng.devel . . .
-> 
-> I'm just getting started wiring my up to lttng-ust, and unfortunately
-> ran into an issue with the first probe I tried, which used a C99 bool
-> argument.
+By writing to the file /proc/lttng, a user-space application creates a
+kernel event. The event's payload is by default UTF-8 text, but any data
+can be written, up to 1024 bytes. Null-character is optional and is not
+enforced. The event uses sequence for space efficiency and to store any
+data as payload.
 
-Fixed by commit:
+Update: split the probe code into it's own module and make it an optional
+feature of lttng-abi. The feature is enabled when the module is loaded. The
+lttng-abi module exports a register function and includes a wrapper for
+lttng_fops write. This is required since struct file_operations must be const.
+Since the module dependency is reversed, unloading the lttng-uevent module is
+done only when it's not used anymore. This is done with rwlock synchronisation.
+The synchronisation doesn't prevent starvation, but this situation is unlikely
+and can be prevented by stop active tracing sessions.
 
-commit 9eb061825ad8ebdf8c22d812eff0232d97d72cd2
-Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Date:   Tue Jun 5 13:08:54 2012 -0400
+Signed-off-by: Francis Giraldeau <francis.giraldeau@gmail.com>
+---
+ instrumentation/events/lttng-module/uevent.h |   33 +++++++++++++++
+ lttng-abi.c                                  |   42 +++++++++++++++++++
+ lttng-abi.h                                  |    3 ++
+ probes/Makefile                              |    2 +
+ probes/lttng-probe-uevent.c                  |   36 ++++++++++++++++
+ probes/lttng-uevent.c                        |   58 ++++++++++++++++++++++++++
+ 6 files changed, 174 insertions(+)
+ create mode 100644 instrumentation/events/lttng-module/uevent.h
+ create mode 100644 probes/lttng-probe-uevent.c
+ create mode 100644 probes/lttng-uevent.c
 
-    Fix: perform macro expansion on tracepoint signatures
-    
-    The problem can be seen by patching the demo test from lttng-ust as
-    follows:
-    
-    --- a/tests/demo/ust_tests_demo3.h
-    +++ b/tests/demo/ust_tests_demo3.h
-    @@ -22,12 +22,14 @@ extern "C" {
-      * all copies or substantial portions of the Software.
-      */
-    
-    +#include <stdbool.h>
-    +
-     #include <lttng/tracepoint.h>
-    
-     TRACEPOINT_EVENT(ust_tests_demo3, done,
-    -       TP_ARGS(int, value),
-    +       TP_ARGS(bool, value),
-            TP_FIELDS(
-    -               ctf_integer(int, value, value)
-    +               ctf_integer(bool, value, value)
-            )
-     )
-    
-    Then when the demo is run with LTTNG_UST_DEBUG=1, a warning is shown,
-    like:
-    
-    liblttng_ust_tracepoint[3315/3315]: Warning: Tracepoint signature mismatch, 
-    enabling one or more tracepoints. Ensure that the tracepoint probes prototyp
-    match the application. (in set_tracepoint() at tracepoint.c:310)
-    liblttng_ust_tracepoint[3315/3315]: Warning: Tracepoint "ust_tests_demo3:don
-    signatures: call: "_Bool, value" vs probe: "bool, value". (in set_tracepoint
-    at tracepoint.c:312)
-
-    It seems that TP_ARGS does not perform preprocessor expansion on the
-    "bool" type spec, while something underneath TP_FIELDS does. And since
-    (at least on this Centos 6.2 box) stdbool.h uses a #define rather than a
-    typedef to make bool equivalent to _Bool, liblttng detects a mismatch.
-    
-    Reported-by: John Steele Scott <toojays@toojays.net>
-    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-
-
-And tested by commit f121009f677db0f9444e0683e24315eed9c5973d
-
-(master branch commits).
-
-I'll immediately merge these into stable-2.0.
-
-Thanks!
-
-Mathieu
-
-
-> 
-> The problem can be seen by patching the demo test from lttng-ust as
-> follows:
-> 
-> --- a/tests/demo/ust_tests_demo3.h
-> +++ b/tests/demo/ust_tests_demo3.h
-> @@ -22,12 +22,14 @@ extern "C" {
->   * all copies or substantial portions of the Software.
->   */
->  
-> +#include <stdbool.h>
-> +
->  #include <lttng/tracepoint.h>
->  
->  TRACEPOINT_EVENT(ust_tests_demo3, done,
-> -	TP_ARGS(int, value),
-> +	TP_ARGS(bool, value),
->  	TP_FIELDS(
-> -		ctf_integer(int, value, value)
-> +		ctf_integer(bool, value, value)
->  	)
->  )
-> 
-> Then when the demo is run with LTTNG_UST_DEBUG=1, a warning is shown,
-> like:
-> 
-> liblttng_ust_tracepoint[3315/3315]: Warning: Tracepoint signature mismatch, not enabling one or more tracepoints. Ensure that the tracepoint probes prototypes match the application. (in set_tracepoint() at tracepoint.c:310)
-> liblttng_ust_tracepoint[3315/3315]: Warning: Tracepoint "ust_tests_demo3:done" signatures: call: "_Bool, value" vs probe: "bool, value". (in set_tracepoint() at tracepoint.c:312)
-> 
-> It seems that TP_ARGS does not perform preprocessor expansion on the
-> "bool" type spec, while something underneath TP_FIELDS does. And since
-> (at least on this Centos 6.2 box) stdbool.h uses a #define rather than a
-> typedef to make bool equivalent to _Bool, liblttng detects a mismatch.
-> 
-> So in my tracepoint specifications, I need to remember to use the less
-> attractive _Bool instead of bool.
-> 
-> Perhaps it's worth having a special case for this where the trace/probe
-> signatures are compared? On the other hand, I guess nobody complained
-> until now? 
-> 
-> cheers,
-> 
-> John
-> 
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
+diff --git a/instrumentation/events/lttng-module/uevent.h b/instrumentation/events/lttng-module/uevent.h
+new file mode 100644
+index 0000000..f67d901
+--- /dev/null
++++ b/instrumentation/events/lttng-module/uevent.h
+@@ -0,0 +1,33 @@
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM uevent
++
++#if !defined(UEVENT_H_) || defined(TRACE_HEADER_MULTI_READ)
++#define UEVENT_H_
++
++#include <linux/tracepoint.h>
++
++TRACE_EVENT(lttng_uevent,
++
++	TP_PROTO(const char *str, size_t len),
++
++	TP_ARGS(str, len),
++
++	/*
++	 * Uses sequence to hold variable size data, by default considered
++	 * as text. Null-terminal character is optional and is not enforced.
++	 */
++	TP_STRUCT__entry(
++		__dynamic_array_text(char, text, len)
++	),
++
++	TP_fast_assign(
++		tp_memcpy_dyn_from_user(text, str)
++	),
++
++	TP_printk("")
++)
++
++#endif /* UEVENT_H_ */
++
++/* This part must be outside protection */
++#include "../../../probes/define_trace.h"
+diff --git a/lttng-abi.c b/lttng-abi.c
+index 26a02ed..b8e6b57 100644
+--- a/lttng-abi.c
++++ b/lttng-abi.c
+@@ -51,6 +51,12 @@
+ #include "lttng-tracer.h"
+ 
+ /*
++ * Required data structures to support lttng-probe-uevent
++ */
++DEFINE_RWLOCK(uevent_rwlock);
++write_ops_t lttng_uevent_handler;
++
++/*
+  * This is LTTng's own personal way to create a system call as an external
+  * module. We use ioctl() on /proc/lttng.
+  */
+@@ -252,9 +258,45 @@ long lttng_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
+ 	}
+ }
+ 
++/*
++ * lttng_uevent_set_handler - set handler functions for uevent
++ *
++ * Access to handler code is protected with rwlock in order to
++ * prevent the optional module to be removed while in use.
++ */
++
++void lttng_uevent_set_handler(write_ops_t handler)
++{
++	write_lock(&uevent_rwlock);
++	lttng_uevent_handler = handler;
++	write_unlock(&uevent_rwlock);
++}
++EXPORT_SYMBOL_GPL(lttng_uevent_set_handler);
++
++/*
++ * lttng_write_uevent - expose kernel tracer to user-space
++ */
++
++static
++ssize_t lttng_write_uevent(struct file *file, const char __user *ubuf,
++		size_t count, loff_t *fpos)
++{
++	int ret;
++
++	read_lock(&uevent_rwlock);
++	if (unlikely(lttng_uevent_handler == NULL)) {
++		read_unlock(&uevent_rwlock);
++		return -ENOSYS;
++	}
++	ret = (*lttng_uevent_handler)(file, ubuf, count, fpos);
++	read_unlock(&uevent_rwlock);
++	return ret;
++}
++
+ static const struct file_operations lttng_fops = {
+ 	.owner = THIS_MODULE,
+ 	.unlocked_ioctl = lttng_ioctl,
++	.write = lttng_write_uevent,
+ #ifdef CONFIG_COMPAT
+ 	.compat_ioctl = lttng_ioctl,
+ #endif
+diff --git a/lttng-abi.h b/lttng-abi.h
+index dc230d8..f4a8c0c 100644
+--- a/lttng-abi.h
++++ b/lttng-abi.h
+@@ -27,6 +27,9 @@
+ 
+ #define LTTNG_KERNEL_SYM_NAME_LEN	256
+ 
++typedef	ssize_t (*write_ops_t) (struct file *, const char __user *, size_t, loff_t *);
++void lttng_uevent_set_handler(write_ops_t handler);
++
+ enum lttng_kernel_instrumentation {
+ 	LTTNG_KERNEL_TRACEPOINT	= 0,
+ 	LTTNG_KERNEL_KPROBE	= 1,
+diff --git a/probes/Makefile b/probes/Makefile
+index 698a9c9..a895e60 100644
+--- a/probes/Makefile
++++ b/probes/Makefile
+@@ -14,6 +14,8 @@ obj-m += lttng-probe-sched.o
+ obj-m += lttng-probe-irq.o
+ obj-m += lttng-probe-signal.o
+ obj-m += lttng-probe-timer.o
++obj-m += lttng-probe-uevent.o
++obj-m += lttng-uevent.o
+ 
+ obj-m += lttng-probe-statedump.o
+ 
+diff --git a/probes/lttng-probe-uevent.c b/probes/lttng-probe-uevent.c
+new file mode 100644
+index 0000000..90abb5e
+--- /dev/null
++++ b/probes/lttng-probe-uevent.c
+@@ -0,0 +1,36 @@
++/*
++ * probes/lttng-probe-uevent.c
++ *
++ * Expose kernel tracer to user-space through /proc/lttng
++ *
++ * Copyright (C) 2009-2012 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; only
++ * version 2.1 of the License.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
++ */
++
++#include <linux/module.h>
++
++/*
++ * Create lttng_uevent tracepoint probes.
++ */
++#define LTTNG_PACKAGE_BUILD
++#define CREATE_TRACE_POINTS
++#define TRACE_INCLUDE_PATH ../instrumentation/events/lttng-module
++
++#include "../instrumentation/events/lttng-module/uevent.h"
++
++MODULE_LICENSE("GPL and additional rights");
++MODULE_AUTHOR("Mathieu Desnoyers <mathieu.desnoyers@efficios.com>");
++MODULE_DESCRIPTION("LTTng uevent probes");
+diff --git a/probes/lttng-uevent.c b/probes/lttng-uevent.c
+new file mode 100644
+index 0000000..7b4bffc
+--- /dev/null
++++ b/probes/lttng-uevent.c
+@@ -0,0 +1,58 @@
++/*
++ * probes/lttng-uevent.c
++ *
++ * Expose kernel tracer to user-space through /proc/lttng
++ *
++ * Copyright (C) 2012 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; only
++ * version 2.1 of the License.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
++ */
++
++#include <linux/module.h>
++#include "../lttng-abi.h"
++
++/* include our own uevent tracepoint */
++#include "../instrumentation/events/lttng-module/uevent.h"
++DEFINE_TRACE(lttng_uevent);
++
++#define LTTNG_UEVENT_SIZE 1024
++
++ssize_t uevent_write_handler(struct file *file, const char __user *ubuf,
++		size_t count, loff_t *fpos)
++{
++	if (count > LTTNG_UEVENT_SIZE)
++		count = LTTNG_UEVENT_SIZE;
++
++	trace_lttng_uevent(ubuf, count);
++	return count;
++}
++
++static int __init lttng_probe_uevent_init(void)
++{
++	lttng_uevent_set_handler(uevent_write_handler);
++	return 0;
++}
++
++static void __exit lttng_probe_uevent_exit(void)
++{
++	lttng_uevent_set_handler(NULL);
++}
++
++module_init(lttng_probe_uevent_init);
++module_exit(lttng_probe_uevent_exit);
++
++MODULE_LICENSE("GPL and additional rights");
++MODULE_AUTHOR("Mathieu Desnoyers <mathieu.desnoyers@efficios.com>");
++MODULE_DESCRIPTION("LTTng kernel event from user-space");
 -- 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+1.7.9.5
