@@ -1,19 +1,16 @@
-From: Bill Trost <trost@cloud.rain.com>
-Subject: Re: using --function/--probe
-Date: Wed, 06 Jun 2012 07:48:17 -0700
-Message-ID: <19046.1338994097__5704.07114360041$1338995733$gmane$org@cloud.rain.com>
-References: <20120605154950.GA21955@Krystal><3551.1338647739@cloud.rain.com>
+From: Danny Serres <serres@live.ca>
+Subject: [lttng-tools PATCH] Move metset in channel_set_attr
+	after the null check
+Date: Wed,  6 Jun 2012 14:54:30 -0400
+Message-ID: <1339008870-4891-1-git-send-email-serres__15358.4463442259$1339010274$gmane$org@live.ca>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from sym.pathetech.com ([173.240.244.141])
-	by ltt.polymtl.ca with smtp (Exim 4.72)
-	(envelope-from <trost@cloud.rain.com>) id 1ScHWl-0003pt-Jh
-	for lttng-dev@lists.lttng.org; Wed, 06 Jun 2012 10:48:03 -0400
-In-reply-to: Your message of Tue, 05 Jun 2012 11:49:50 EDT.
-	<20120605154950.GA21955@Krystal>
-Content-ID: <19044.1338994097.1@cloud.rain.com>
+Received: from smtp.polymtl.ca ([132.207.4.11])
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <serres@live.ca>) id 1ScLNL-0005iQ-7U
+	for lttng-dev@lists.lttng.org; Wed, 06 Jun 2012 14:54:35 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,43 +19,33 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Mathieu wrote:
-    * Bill Trost (trost@cloud.rain.com) wrote:
-    > and how does it differ from "--probe"? How do I determine
-    > what symbols are valid for each of these options?
+Signed-off-by: Danny Serres <serres@live.ca>
+---
+ src/lib/lttng-ctl/lttng-ctl.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-    It entirely depends on which functions are blacklisted in the kernel
-    (this is an attribute added to the functions specifically for kprobes).
-    The keyword is "__kprobes".
-
-Is that the only basis? For example, I can add a dynamic tracepoint (of
-either flawor) for queue_work_on(), but not work __queue_work(), yet
-neither of those functions have any apparent annotation. Or does
-EXPORT_SYMBOL_GPL imply a probe point?
-
-    > ...how do I trace what work is being
-    > enqueued and run by the kworker threads?
-
-    For this level of details, I think kprobes/kretprobes will not
-    currently allow you to fetch it. The two options we have are:
-
-    - use static tracepoints. Is there a tracepoint that targets the
-      information you are looking for ? Try "lttng list -k".
-
-No, I've been capturing all kernel events and haven't seen
-anything resembling the kworker tracepoints of lttng 0.x.
-
-    - or extend the dynamic probing to allow fetching variables from
-      debug information,
-
-Hmm. Well, I did a bit more poking and got a bit closer -- at least now
-I know what dynamic points to use. (eg, "queue_work_on" and friends to
-see what is being queued). I take it that LTT can't capture function call
-arguments as a form of additional context? That would be an ideal
-bit of information in this case.
-
-Thanks again,
-Bill
+diff --git a/src/lib/lttng-ctl/lttng-ctl.c b/src/lib/lttng-ctl/lttng-ctl.c
+index 36069ef..356fb34 100644
+--- a/src/lib/lttng-ctl/lttng-ctl.c
++++ b/src/lib/lttng-ctl/lttng-ctl.c
+@@ -885,13 +885,13 @@ int lttng_calibrate(struct lttng_handle *handle,
+ void lttng_channel_set_default_attr(struct lttng_domain *domain,
+ 		struct lttng_channel_attr *attr)
+ {
+-	memset(attr, 0, sizeof(struct lttng_channel_attr));
+-
+ 	/* Safety check */
+ 	if (attr == NULL || domain == NULL) {
+ 		return;
+ 	}
+ 
++	memset(attr, 0, sizeof(struct lttng_channel_attr));
++
+ 	switch (domain->type) {
+ 	case LTTNG_DOMAIN_KERNEL:
+ 		attr->overwrite = DEFAULT_CHANNEL_OVERWRITE;
+-- 
+1.7.9.5
