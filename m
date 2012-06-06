@@ -1,18 +1,16 @@
 From: Francis Giraldeau <francis.giraldeau@gmail.com>
-Subject: Re: [PATCH] Expose kernel tracer to user-space
-Date: Wed, 06 Jun 2012 01:40:33 +0200
-Message-ID: <4FCE98F1.4020803__45183.08429183$1338939688$gmane$org@gmail.com>
-References: <1338938654-16515-1-git-send-email-francis.giraldeau@gmail.com>
+Subject: workload-kit: generating a standard trace set
+Date: Wed, 06 Jun 2012 13:08:23 +0200
+Message-ID: <4FCF3A27.60901__29349.560236051$1338980945$gmane$org@gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1233075674=="
+Content-Type: multipart/mixed; boundary="===============0703477700=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail-lpp01m010-f48.google.com ([209.85.215.48])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <francis.giraldeau@gmail.com>) id 1Sc3Mh-0005Iu-H9
-	for lttng-dev@lists.lttng.org; Tue, 05 Jun 2012 19:40:44 -0400
-Received: by lagz14 with SMTP id z14so5603616lag.35
-	for <lttng-dev@lists.lttng.org>; Tue, 05 Jun 2012 16:40:37 -0700 (PDT)
-In-Reply-To: <1338938654-16515-1-git-send-email-francis.giraldeau@gmail.com>
+	(envelope-from <francis.giraldeau@gmail.com>) id 1ScE6N-0002BQ-VY
+	for lttng-dev@lists.lttng.org; Wed, 06 Jun 2012 07:08:36 -0400
+Received: by lagz14 with SMTP id z14so5983422lag.35
+	for <lttng-dev@lists.lttng.org>; Wed, 06 Jun 2012 04:08:29 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -26,53 +24,49 @@ List-Id: lttng-dev@lists.lttng.org
 
 Ceci est un message signC) cryptographiquement au format MIME.
 
---===============1233075674==
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha1; boundary="------------ms000100050209080406080009"
+--===============0703477700==
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha1; boundary="------------ms090108070303020608020809"
 
 Ceci est un message signé cryptographiquement au format MIME.
 
---------------ms000100050209080406080009
+--------------ms090108070303020608020809
 Content-Type: text/plain; charset=ISO-8859-1
 Content-Transfer-Encoding: quoted-printable
 
-Le 2012-06-06 01:24, Francis Giraldeau a =E9crit :
-> By writing to the file /proc/lttng, a user-space application creates a
-> kernel event. The event's payload is by default UTF-8 text, but any dat=
-a
-> can be written, up to 1024 bytes. Null-character is optional and is not=
+Hi,
 
-> enforced. The event uses sequence for space efficiency and to store any=
+To validate trace analysis algorithms, some traces with known features
+are required. Then, a unit test can be made to check if the algorithm
+works well. For example, for the algorithm that recovers the CPU usage,
+a trace with an identifiable process that computes for a known amount of
+time is needed. The problem is that everyone has it's own set of traces,
+often made in ad-hoc fashion. In the past, such trace have been added to
+the source control system, but because of the large size and the binary
+nature of the files, it's not appropriate to do so. How can we share
+this trace set? How can we regenerate it on-demand?
 
-> data as payload.
->
-> Update: split the probe code into it's own module and make it an option=
-al
-> feature of lttng-abi. The feature is enabled when the module is loaded.=
- The
-> lttng-abi module exports a register function and includes a wrapper for=
+Here comes workload-kit! This project aims to be a collection of scripts
+and utilities to generate a comprehensive and standard trace set.
+Instead of storing traces in GIT, let's store the scripts and custom
+programs to regenerate them on-demand and automatically. We can thus
+generate the trace set on a daily basis for example.
 
-> lttng_fops write. This is required since struct file_operations must be=
- const.
-> Since the module dependency is reversed, unloading the lttng-uevent mod=
-ule is
-> done only when it's not used anymore. This is done with rwlock synchron=
-isation.
-> The synchronisation doesn't prevent starvation, but this situation is u=
-nlikely
-> and can be prevented by stop active tracing sessions.
+For those that are interested in this project, here are the URLs.
 
-One little gotcha: after modprobe lttng-uevent, the module
-lttng-probe-uevent must be loaded manually, otherwise lttng_uevent is
-not listed with "lttng list -k". Is there a way to make the probe load
-automatically when lttng-uevent is loaded?
+Code: https://github.com/giraldeau/workload-kit
+Releases: http://secretaire.dorsal.polymtl.ca/~fgiraldeau/workload-kit/
+Ubuntu package: https://launchpad.net/~francis-giraldeau/+archive/ppa
+
+It's pretty much the first announcement, so comments and suggestions are
+welcome. Contributions to expand trace use-cases that you need for your
+own testing are also welcome. See README for the more information.
 
 Cheers,
 
 Francis
 
 
-
---------------ms000100050209080406080009
+--------------ms090108070303020608020809
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -143,8 +137,8 @@ MTswOQYDVQQLEzJUZXJtcyBvZiB1c2UgYXQgaHR0cHM6Ly93d3cudmVyaXNpZ24uY29tL3Jw
 YSAoYykwOTEeMBwGA1UECxMVUGVyc29uYSBOb3QgVmFsaWRhdGVkMTcwNQYDVQQDEy5WZXJp
 U2lnbiBDbGFzcyAxIEluZGl2aWR1YWwgU3Vic2NyaWJlciBDQSAtIEczAhBlp+zf8jmhEaRv
 JGV9QrmtMAkGBSsOAwIaBQCgggLOMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZI
-hvcNAQkFMQ8XDTEyMDYwNTIzNDAzM1owIwYJKoZIhvcNAQkEMRYEFI6MqFrKOMxQjVnY5Qp9
-4JaQD5pvMF8GCSqGSIb3DQEJDzFSMFAwCwYJYIZIAWUDBAECMAoGCCqGSIb3DQMHMA4GCCqG
+hvcNAQkFMQ8XDTEyMDYwNjExMDgyM1owIwYJKoZIhvcNAQkEMRYEFF/fqRgltv7f8kGtMQqM
+CoUnyUIPMF8GCSqGSIb3DQEJDzFSMFAwCwYJYIZIAWUDBAECMAoGCCqGSIb3DQMHMA4GCCqG
 SIb3DQMCAgIAgDANBggqhkiG9w0DAgIBQDAHBgUrDgMCBzANBggqhkiG9w0DAgIBKDCCAQMG
 CSsGAQQBgjcQBDGB9TCB8jCB3TELMAkGA1UEBhMCVVMxFzAVBgNVBAoTDlZlcmlTaWduLCBJ
 bmMuMR8wHQYDVQQLExZWZXJpU2lnbiBUcnVzdCBOZXR3b3JrMTswOQYDVQQLEzJUZXJtcyBv
@@ -156,15 +150,15 @@ MB0GA1UECxMWVmVyaVNpZ24gVHJ1c3QgTmV0d29yazE7MDkGA1UECxMyVGVybXMgb2YgdXNl
 IGF0IGh0dHBzOi8vd3d3LnZlcmlzaWduLmNvbS9ycGEgKGMpMDkxHjAcBgNVBAsTFVBlcnNv
 bmEgTm90IFZhbGlkYXRlZDE3MDUGA1UEAxMuVmVyaVNpZ24gQ2xhc3MgMSBJbmRpdmlkdWFs
 IFN1YnNjcmliZXIgQ0EgLSBHMwIQZafs3/I5oRGkbyRlfUK5rTANBgkqhkiG9w0BAQEFAASC
-AQBCuezFvGQNDaB/ILeJiPVfotsT0y3mNzxw3NK1j1/O/sJLBfJcKbUiEBCFlsDorsOXZ91s
-q2LoT1rm3hTfrmlYYEIWDTGhpFffr9vZoenWkfbeh5LsUAc+4QyDI0p4iOhMlA04dTcc3EEA
-RctdAQMSjnWKKGafrNHsf1RAdR29ekafNbr/t0YGGX2O6EaEAPVDaw+JTTNZqDBuZzvg4Ycb
-MEphOUDwAA4F3pApAnFeWqf1mFUo+/P2KqsY6EThpcORF3yv3qDfzv2KQoJrQG17n22XP7xj
-nUjk/NSFIjc2G9I+5Il3Y/osJ0IyGEaw9I5KGwlEGUbC/9Vi2FqP1FI2AAAAAAAA
---------------ms000100050209080406080009--
+AQAMajVILJCO5hPsmAG/IbJzhI/1tz/z4o7Hg9kSg5HvdKvOATqrkcP76LSCOhdLpQwGuOjY
+1J30I/pLPvMTqkG8VmWFMRfwj/HxZ+7A7IvlxlRRA9R3rmhjxFob+W3lpTqXGiO+Dw+hSbwf
+OCMoU+O51UVFexmB69pFd6rH+SRHNWSLFxVhEiWIm+o+T7ZDpHi7yv/6Ud8ezUiF/0r206+6
+cz5gfZ6dKmBLeaoft8PA+/kTXsjXD+tT7Un5Bcftcl1aSgf9LIRfZ6swufRUXU+fhCLSL8Kp
+79hTocobj0sn8ZE37JflE7uiy3SfmrF+4cwTpiTiJYY87whwq02UqfynAAAAAAAA
+--------------ms090108070303020608020809--
 
 
---===============1233075674==
+--===============0703477700==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Disposition: inline
@@ -175,4 +169,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============1233075674==--
+--===============0703477700==--
