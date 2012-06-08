@@ -1,19 +1,20 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Lttng start failed
-Date: Fri, 8 Jun 2012 13:42:26 -0400
-Message-ID: <20120608174226.GA23339__40773.8109039657$1339177377$gmane$org@Krystal>
-References: <47D610AD9C485E458630BA38C324D3B60113FB00F9EA@EXGMBX01.sasken.com>
+From: Hollis Blanchard <hollis_blanchard@mentor.com>
+Subject: [RFC] [PATCH] -Werror=old-style-definition and UST
+	tracepoints
+Date: Fri, 8 Jun 2012 11:26:23 -0700
+Message-ID: <4FD243CF.60104__36666.024514898$1339180017$gmane$org@mentor.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="windows-1252"; Format="flowed"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1Sd3Cf-0002XD-KL
-	for lttng-dev@lists.lttng.org; Fri, 08 Jun 2012 13:42:29 -0400
-Content-Disposition: inline
-In-Reply-To: <47D610AD9C485E458630BA38C324D3B60113FB00F9EA@EXGMBX01.sasken.com>
+	(envelope-from <Hollis_Blanchard@mentor.com>) id 1Sd3tH-0002sy-QA
+	for lttng-dev@lists.lttng.org; Fri, 08 Jun 2012 14:26:31 -0400
+Received: from svr-orw-fem-01.mgc.mentorg.com ([147.34.98.93])
+	by relay1.mentorg.com with esmtp
+	id 1Sd3tA-0006yJ-OJ from Hollis_Blanchard@mentor.com
+	for lttng-dev@lists.lttng.org; Fri, 08 Jun 2012 11:26:24 -0700
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,70 +23,112 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Pavan Anumula <pavan.anumula@sasken.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Pavan Anumula (pavan.anumula@sasken.com) wrote:
-> Hi ,
-> 
-> I am new to LTTng usage, I am trying to use LTTng 2.0.1 and LTTng-modules-2.0.2  for ARM(omapL138), with Linux kernel 2.6.33 wit RT-29 patch on it.
-> 
-> After enabling all the kernel events I am facing the below errors. I loaded all the modules manually by insmod.
-> 
-> 
-> 
-> root@arago:~/lttng-traces# arm-none-linux-gnueabi-lttng create newsessiom
-> Session newsessiom created.
-> Traces will be written in /home/root/lttng-traces/newsessiom-20110325-154922
-> 
-> root@arago:~/lttng-traces# arm-none-linux-gnueabi-lttng enable-event -a --kernel
-> All kernel events are enabled in channel channel0
-> 
-> root@arago:~/lttng-traces# arm-none-linux-gnueabi-lttng start
-> LTTng: Failure to write metadata to buffers (timeout)
-> Error: Starting kernel trace failed
-> 
-> Please kindly help me on this.
+I've defined a tracepoint without arguments:
 
-I think you should look into the lttng-sessiond --help :
+    TRACEPOINT_EVENT(
 
-      --consumerd32-path PATH     Specify path for the 32-bit UST consumer daemon binary
-      --consumerd32-libdir PATH   Specify path for the 32-bit UST consumer daemon libraries
-      --consumerd64-path PATH     Specify path for the 64-bit UST consumer daemon binary
-      --consumerd64-libdir PATH   Specify path for the 64-bit UST consumer daemon libraries
+         qemu_tb_hash,
 
-options. My guess is that lttng-sessiond is not able to find the
-consumerd binary files, maybe due to a rename or because they have been
-moved after install.
+         flushall,
 
-One more thing that might help is to launch the lttng-sessiond with
-"-vvv" : it will provide verbose output and let us know where things
-fall apart.
+         TP_ARGS(void),
 
-Thanks,
+         TP_FIELDS()
 
-Mathieu
+    )
 
 
-> 
-> 
-> Thanks in advance,
-> Pavan
-> 
-> ________________________________
-> SASKEN BUSINESS DISCLAIMER: This message may contain confidential, proprietary or legally privileged information. In case you are not the original intended Recipient of the message, you must not, directly or indirectly, use, disclose, distribute, print, or copy any part of this message and you are requested to delete it and inform the sender. Any views expressed in this message are those of the individual sender unless otherwise stated. Nothing contained in this message shall be construed as an offer or acceptance of any offer by Sasken Communication Technologies Limited ("Sasken") unless sent with that express intent and with due authority of Sasken. Sasken has taken enough precautions to prevent the spread of viruses. However the company accepts no liability for any damage caused by an
- y virus transmitted by this email.
-> Read Disclaimer at http://www.sasken.com/extras/mail_disclaimer.html
+When I build (with -Werror=3Dold-style-definition), I get this error:
 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+    In file included from /home/hollisb/work/qemu.git/exec.c:59:0:
+
+    /home/hollisb/work/qemu.git/tracepoints.h:24:2: error: function declara=
+tion isn=92t a prototype [-Werror=3Dstrict-prototypes]
+
+    /home/hollisb/work/qemu.git/tracepoints.h: In function =91__tracepoint_=
+cb_qemu_tb_hash___flushall=92:
+
+    /home/hollisb/work/qemu.git/tracepoints.h:24:2: error: old-style functi=
+on definition [-Werror=3Dold-style-definition]
+
+    cc1: all warnings being treated as errors
 
 
--- 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+The preprocessed code looks like so:
+
+    extern struct
+
+    # 129 "/usr/local/include/lttng/tracepoint.h" 3
+
+                   tracepoint
+
+    # 24 "/home/hollisb/work/qemu.git/tracepoints.h"
+
+      __tracepoint_qemu_tb_hash___flushall
+
+    # 19 "/home/hollisb/work/qemu.git/tracepoints.h"
+
+      ; static __attribute__ (( always_inline )) __inline__ void
+
+      __tracepoint_cb_qemu_tb_hash___flushall
+
+    # 19 "/home/hollisb/work/qemu.git/tracepoints.h"
+
+      () { struct tracepoint_probe *__tp_probe; if (!tracepoint_dlopen.rcu_=
+read_lock_sym_bp) return; tracepoint_dlopen.rcu_read_lock_sym_bp(); __tp_pr=
+obe =3D ({ typeof(__tracepoint_qemu_tb_hash___flushall.probes) _________p1 =
+=3D ((typeof(__tracepoint_qemu_tb_hash___flushall.probes)) (tracepoint_dlop=
+en.rcu_dereference_sym_bp(((void *) (__tracepoint_qemu_tb_hash___flushall.p=
+robes))))); (_________p1); }); if (__builtin_expect(!!(!__tp_probe), 0)) go=
+to end; do { void *__tp_cb =3D __tp_probe->func; void *__tp_data =3D __tp_p=
+robe->data; ((void (*)(void *__tp_data)) (__tp_cb)) (__tp_data); } while ((=
+++__tp_probe)->func); end: tracepoint_dlopen.rcu_read_unlock_sym_bp(); } st=
+atic __attribute__ (( always_inline )) __inline__ void
+
+
+I believe the problem comes from -Werror=3Dold-style-definition not liking =
+
+that empty "()", i.e. tracepoint_cb_qemu_tb_hash___flushall() { ... }. =
+
+The following patch seems to work for me; is there a reason it isn't =
+
+already written this way?
+
+diff --git a/include/lttng/tracepoint.h b/include/lttng/tracepoint.h
+
+index 4b773bb..60d8c73 100644
+
+--- a/include/lttng/tracepoint.h
+
++++ b/include/lttng/tracepoint.h
+
+@@ -88,7 +88,7 @@ extern "C" {
+
+  #define _TP_EXDATA_VAR20(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t)      __=
+tp_data,b,d,f,h,j,l,n,p,r,t
+
+  =
+
+
+  /* _TP_EXPROTO* extract tuples of type, var */
+
+-#define _TP_EXPROTO0()
+
++#define _TP_EXPROTO0()                                         void
+
+  #define _TP_EXPROTO2(a,b)                                      a b
+
+  #define _TP_EXPROTO4(a,b,c,d)                                  a b,c d
+
+  #define _TP_EXPROTO6(a,b,c,d,e,f)                              a b,c d,e f
+
+
+If this is OK, I'm happy to resend as a proper patch.
+
+-- =
+
+Hollis Blanchard
+Mentor Graphics, Embedded Systems Division
