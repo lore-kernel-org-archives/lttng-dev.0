@@ -1,21 +1,25 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Lttng start failed
-Date: Sat, 9 Jun 2012 08:32:52 -0400
-Message-ID: <20120609123251.GA14280__32239.0248919421$1339245204$gmane$org@Krystal>
-References: <47D610AD9C485E458630BA38C324D3B60113FB00F9EA@EXGMBX01.sasken.com>
-	<20120608174226.GA23339@Krystal>
-	<47D610AD9C485E458630BA38C324D3B60113FB00FA00@EXGMBX01.sasken.com>
+From: John Steele Scott <toojays@toojays.net>
+Subject: lttng-ust with --std=c99 -pedantic
+Date: Sun, 10 Jun 2012 09:07:01 +0930
+Message-ID: <jr0mmu$efe$1__9565.88853518969$1339285070$gmane$org@dough.gmane.org>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="windows-1252"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from plane.gmane.org ([80.91.229.3])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1SdKqc-0002VS-Ei
-	for lttng-dev@lists.lttng.org; Sat, 09 Jun 2012 08:32:54 -0400
-Content-Disposition: inline
-In-Reply-To: <47D610AD9C485E458630BA38C324D3B60113FB00FA00@EXGMBX01.sasken.com>
+	(envelope-from <gcsld-lttng-dev@m.gmane.org>) id 1SdVDY-00075m-KP
+	for lttng-dev@lists.lttng.org; Sat, 09 Jun 2012 19:37:16 -0400
+Received: from list by plane.gmane.org with local (Exim 4.69)
+	(envelope-from <gcsld-lttng-dev@m.gmane.org>) id 1SdVDU-0005oc-9f
+	for lttng-dev@lists.lttng.org; Sun, 10 Jun 2012 01:37:12 +0200
+Received: from ppp121-45-127-134.lns20.adl6.internode.on.net ([121.45.127.134])
+	by main.gmane.org with esmtp (Gmexim 0.1 (Debian))
+	id 1AlnuQ-0007hv-00
+	for <lttng-dev@lists.lttng.org>; Sun, 10 Jun 2012 01:37:12 +0200
+Received: from toojays by ppp121-45-127-134.lns20.adl6.internode.on.net with
+	local (Gmexim 0.1 (Debian)) id 1AlnuQ-0007hv-00
+	for <lttng-dev@lists.lttng.org>; Sun, 10 Jun 2012 01:37:12 +0200
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,119 +28,95 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Pavan Anumula <pavan.anumula@sasken.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Pavan Anumula (pavan.anumula@sasken.com) wrote:
-> Hi Mathue,
-> 
-> Thanks for the quick reply,
-> 
-> After inserting lttng modules , I had given the command  "arm-none-linux-gnueabi-lttng-sessiond -vvv"  as you said, Below is the output where there are error messages. Please help me in resolving the issue, SO that I can catch kernel and user traces.
-> 
-> 
-> root@arago:/usr/lttng/modules# arm-none-linux-gnueabi-lttng-sessiond -d
-> root@arago:/usr/lttng/modules# arm-none-linux-gnueabi-lttng-sessiond -vvv
-> DEBUG3: Creating LTTng run directory: /var/run/lttng [in create_lttng_rundir() at main.c:4315]
-> DEBUG2: Kernel consumer err path: /var/run/lttng/kconsumerd/error [in main() at main.c:4543]
-> DEBUG2: Kernel consumer cmd path: /var/run/lttng/kconsumerd/command [in main() at main.c:4545]
-> DEBUG1: Client socket path /var/run/lttng/client-lttng-sessiond [in main() at main.c:4592]
-> DEBUG1: Application socket path /var/run/lttng/apps-lttng-sessiond [in main() at main.c:4593]
-> DEBUG1: LTTng run directory path: /var/run/lttng [in main() at main.c:4594]
-> DEBUG2: UST consumer 32 bits err path: /var/run/lttng/ustconsumerd32/error [in main() at main.c:4603]
-> DEBUG2: UST consumer 32 bits cmd path: /var/run/lttng/ustconsumerd32/command [in main() at main.c:4605]
-> DEBUG2: UST consumer 64 bits err path: /var/run/lttng/ustconsumerd64/error [in main() at main.c:4614]
-> DEBUG2: UST consumer 64 bits cmd path: /var/run/lttng/ustconsumerd64/command [in main() at main.c:4616]
-> Error: Already running daemon.
+I want to add lttng-ust tracepoints to a program which builds with "--std=
+=3Dc99 -pedantic". Right now this does not work.
 
-Please kill the lttng-sessiond that is already started (the one with
--d). Instead of that one, run the sessiond with:
+Using the demo program as an example, if you enable --std=3Dc99, the first =
+issue looks like:
 
-lttng-sessiond -vvv
+jscott@saaz:~/src/lttng-ust/tests/demo$ ccache gcc -std=3Dc99 -DHAVE_CONFIG=
+_H -I. -I../.. -I../../include/lttng  -I../../include -Wall -g -O2 -MT demo=
+.o -MD -MP -MF .deps/demo.Tpo -c -o demo.o demo.c
+In file included from demo.c:34:0:
+ust_tests_demo.h: In function =91__tracepoint_cb_ust_tests_demo___starting=
+=92:
+ust_tests_demo.h:27:23: warning: implicit declaration of function =91typeof=
+=92 [-Wimplicit-function-declaration]
+ust_tests_demo.h:27:218: error: expected =91;=92 before =91_________p1=92
+ust_tests_demo.h:27:395: error: =91_________p1=92 undeclared (first use in =
+this function)
+ust_tests_demo.h:27:395: note: each undeclared identifier is reported only =
+once for each function it appears in
+In file included from demo.c:34:0:
+ust_tests_demo.h: In function =91__tracepoint_cb_ust_tests_demo___done=92:
+ust_tests_demo.h:35:214: error: expected =91;=92 before =91_________p1=92
+ust_tests_demo.h:35:383: error: =91_________p1=92 undeclared (first use in =
+this function)
+In file included from demo.c:35:0:
+ust_tests_demo2.h: In function =91__tracepoint_cb_ust_tests_demo2___loop=92:
+ust_tests_demo2.h:27:299: error: expected =91;=92 before =91_________p1=92
+ust_tests_demo2.h:27:470: error: =91_________p1=92 undeclared (first use in=
+ this function)
+In file included from demo.c:36:0:
+ust_tests_demo3.h: In function =91__tracepoint_cb_ust_tests_demo3___done=92:
+ust_tests_demo3.h:27:215: error: expected =91;=92 before =91_________p1=92
+ust_tests_demo3.h:27:386: error: =91_________p1=92 undeclared (first use in=
+ this function)
 
-(don't run lttng-sessiond -d before)
+This can be easily resolved by using __typeof__() instead of typeof(). Then=
+ I can build with --std=3Dc99. But adding -pedantic still fails:
 
-Thanks,
+jscott@saaz:~/src/lttng-ust/tests/demo$ ccache gcc -std=3Dc99 -Dtypeof=3D__=
+typeof__ -pedantic -DHAVE_CONFIG_H -I. -I../.. -I../../include/lttng  -I../=
+../include -Wall -g -O2 -MT demo.o -MD -MP -MF .deps/demo.Tpo -c -o demo.o =
+demo.c
+In file included from ust_tests_demo.h:25:0,
+                 from demo.c:34:
+../../include/lttng/tracepoint.h: In function =91__tracepoints__init=92:
+../../include/lttng/tracepoint.h:251:4: warning: ISO C forbids conversion o=
+f object pointer to function pointer type [-pedantic]
+../../include/lttng/tracepoint.h:255:4: warning: ISO C forbids conversion o=
+f object pointer to function pointer type [-pedantic]
+../../include/lttng/tracepoint.h:260:4: warning: ISO C forbids conversion o=
+f object pointer to function pointer type [-pedantic]
+../../include/lttng/tracepoint.h:264:4: warning: ISO C forbids conversion o=
+f object pointer to function pointer type [-pedantic]
+../../include/lttng/tracepoint.h:268:4: warning: ISO C forbids conversion o=
+f object pointer to function pointer type [-pedantic]
+In file included from demo.c:34:0:
+ust_tests_demo.h: In function =91__tracepoint_cb_ust_tests_demo___starting=
+=92:
+ust_tests_demo.h:27:161: warning: ISO C forbids braced-groups within expres=
+sions [-pedantic]
+ust_tests_demo.h:27:549: warning: ISO C forbids conversion of object pointe=
+r to function pointer type [-pedantic]
+In file included from demo.c:34:0:
+ust_tests_demo.h: In function =91__tracepoint_cb_ust_tests_demo___done=92:
+ust_tests_demo.h:35:161: warning: ISO C forbids braced-groups within expres=
+sions [-pedantic]
+ust_tests_demo.h:35:537: warning: ISO C forbids conversion of object pointe=
+r to function pointer type [-pedantic]
+In file included from demo.c:35:0:
+ust_tests_demo2.h: In function =91__tracepoint_cb_ust_tests_demo2___loop=92:
+ust_tests_demo2.h:27:245: warning: ISO C forbids braced-groups within expre=
+ssions [-pedantic]
+ust_tests_demo2.h:27:624: warning: ISO C forbids conversion of object point=
+er to function pointer type [-pedantic]
+In file included from demo.c:36:0:
+ust_tests_demo3.h: In function =91__tracepoint_cb_ust_tests_demo3___done=92:
+ust_tests_demo3.h:27:161: warning: ISO C forbids braced-groups within expre=
+ssions [-pedantic]
+ust_tests_demo3.h:27:540: warning: ISO C forbids conversion of object point=
+er to function pointer type [-pedantic]
 
-Mathieu
+This is with 4.6.1-9ubuntu3 on Ubuntu 11.10, lttng-ust master 5a821c.
 
-> 
-> 
-> 
-> 
-> Thanks in advance,
-> Pavan
-> 
-> -----Original Message-----
-> From: Mathieu Desnoyers [mailto:mathieu.desnoyers@efficios.com] 
-> Sent: Friday, June 08, 2012 11:12 PM
-> To: Pavan Anumula
-> Cc: lttng-dev@lists.lttng.org
-> Subject: Re: [lttng-dev] Lttng start failed
-> 
-> * Pavan Anumula (pavan.anumula@sasken.com) wrote:
-> > Hi ,
-> > 
-> > I am new to LTTng usage, I am trying to use LTTng 2.0.1 and LTTng-modules-2.0.2  for ARM(omapL138), with Linux kernel 2.6.33 wit RT-29 patch on it.
-> > 
-> > After enabling all the kernel events I am facing the below errors. I loaded all the modules manually by insmod.
-> > 
-> > 
-> > 
-> > root@arago:~/lttng-traces# arm-none-linux-gnueabi-lttng create 
-> > newsessiom Session newsessiom created.
-> > Traces will be written in 
-> > /home/root/lttng-traces/newsessiom-20110325-154922
-> > 
-> > root@arago:~/lttng-traces# arm-none-linux-gnueabi-lttng enable-event 
-> > -a --kernel All kernel events are enabled in channel channel0
-> > 
-> > root@arago:~/lttng-traces# arm-none-linux-gnueabi-lttng start
-> > LTTng: Failure to write metadata to buffers (timeout)
-> > Error: Starting kernel trace failed
-> > 
-> > Please kindly help me on this.
-> 
-> I think you should look into the lttng-sessiond --help :
-> 
->       --consumerd32-path PATH     Specify path for the 32-bit UST consumer daemon binary
->       --consumerd32-libdir PATH   Specify path for the 32-bit UST consumer daemon libraries
->       --consumerd64-path PATH     Specify path for the 64-bit UST consumer daemon binary
->       --consumerd64-libdir PATH   Specify path for the 64-bit UST consumer daemon libraries
-> 
-> options. My guess is that lttng-sessiond is not able to find the consumerd binary files, maybe due to a rename or because they have been moved after install.
-> 
-> One more thing that might help is to launch the lttng-sessiond with "-vvv" : it will provide verbose output and let us know where things fall apart.
-> 
-> Thanks,
-> 
-> Mathieu
-> 
-> 
-> > 
-> > 
-> > Thanks in advance,
-> > Pavan
-> > 
-> > ________________________________
-> > SASKEN BUSINESS DISCLAIMER: This message may contain confidential, proprietary or legally privileged information. In case you are not the original intended Recipient of the message, you must not, directly or indirectly, use, disclose, distribute, print, or copy any part of this message and you are requested to delete it and inform the sender. Any views expressed in this message are those of the individual sender unless otherwise stated. Nothing contained in this message shall be construed as an offer or acceptance of any offer by Sasken Communication Technologies Limited ("Sasken") unless sent with that express intent and with due authority of Sasken. Sasken has taken enough precautions to prevent the spread of viruses. However the company accepts no liability for any damage caused by 
- any virus transmitted by this email.
-> > Read Disclaimer at http://www.sasken.com/extras/mail_disclaimer.html
-> 
-> > _______________________________________________
-> > lttng-dev mailing list
-> > lttng-dev@lists.lttng.org
-> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> 
-> 
-> --
-> Mathieu Desnoyers
-> Operating System Efficiency R&D Consultant EfficiOS Inc.
-> http://www.efficios.com
+Would it be particularly difficult to make the lttng-ust tracepoints compat=
+ible with programs built with -pedantic?
 
--- 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+cheers,
+
+John
