@@ -1,21 +1,18 @@
-From: "Burton, Michael" <mburton@ciena.com>
-Subject: Re: UST Hanging at Tracepoint
-Date: Mon, 11 Jun 2012 11:08:15 -0400
-Message-ID: <3F56B905CF2083408E8482044F20428AEF6A3108__47351.713726721$1339427366$gmane$org@ONWVEXCHMB01.ciena.com>
-References: <3F56B905CF2083408E8482044F20428AEF604D22@ONWVEXCHMB01.ciena.com>
-	<3F56B905CF2083408E8482044F20428AEF6A2DBB@ONWVEXCHMB01.ciena.com>
-	<20120609013854.GB10978@Krystal>
+From: David Goulet <dgoulet@efficios.com>
+Subject: Re: [Fix:lttng-tools-PATCH] Fix:Change the type of
+ enabled in lttng_event to a signed int
+Date: Mon, 11 Jun 2012 14:28:03 -0400
+Message-ID: <4FD638B3.6040200__40246.4626975872$1339439319$gmane$org@efficios.com>
+References: <1339165148-6653-1-git-send-email-danny.serres@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mx0a-00103a01.pphosted.com ([67.231.144.234])
+Received: from smtp.ini-tech.com ([213.239.202.151])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <prvs=15094c219e=mburton@ciena.com>)
-	id 1Se6EA-0007o8-2z
-	for lttng-dev@lists.lttng.org; Mon, 11 Jun 2012 11:08:22 -0400
-In-Reply-To: <20120609013854.GB10978@Krystal>
-Content-Language: en-US
+	(envelope-from <dgoulet@efficios.com>) id 1Se9LT-0000rq-Uq
+	for lttng-dev@lists.lttng.org; Mon, 11 Jun 2012 14:28:08 -0400
+In-Reply-To: <1339165148-6653-1-git-send-email-danny.serres@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,258 +21,44 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Danny Serres <danny.serres@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Here is the output from UST debug:
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-liblttng_ust_tracepoint[1022/1022]: just registered a tracepoints section from 0xb76f9e04 and having 1 tracepoints (in tracepoint_register_lib() at tracepoint.c:639)
-liblttng_ust_tracepoint[1022/1022]: registered tracepoint: lttng_ust:metadata (in tracepoint_register_lib() at tracepoint.c:644)
-libust[1022/1022]: LTT : ltt ring buffer client init
- (in ltt_ring_buffer_metadata_client_init() at ltt-ring-buffer-metadata-client.h:334)
-libust[1022/1022]: LTT : ltt ring buffer client init
- (in ltt_ring_buffer_client_overwrite_init() at ltt-ring-buffer-client.h:584)
-libust[1022/1022]: LTT : ltt ring buffer client init
- (in ltt_ring_buffer_client_discard_init() at ltt-ring-buffer-client.h:584)
-libust[1022/1024]: message received
- (in ust_listener_thread() at lttng-ust-comm.c:766)
-libust[1022/1024]: message successfully sent (in send_reply() at lttng-ust-comm.c:202)
-libust[1022/1024]: message received
- (in ust_listener_thread() at lttng-ust-comm.c:766)
-libust[1022/1024]: message successfully sent (in send_reply() at lttng-ust-comm.c:202)
-libust[1022/1024]: message received
- (in ust_listener_thread() at lttng-ust-comm.c:766)
-libust[1022/1024]: message successfully sent (in send_reply() at lttng-ust-comm.c:202)
-libust[1022/1024]: message received
- (in ust_listener_thread() at lttng-ust-comm.c:766)
-libust[1022/1024]: message successfully sent (in send_reply() at lttng-ust-comm.c:202)
-libust[1022/1024]: message received
- (in ust_listener_thread() at lttng-ust-comm.c:766)
-libust[1022/1024]: message successfully sent (in send_reply() at lttng-ust-comm.c:202)
-libust[1022/1023]: Info: sessiond not accepting connections to local apps socket (in ust_listener_thread() at lttng-ust-comm.c:699)
+Hey,
 
------Original Message-----
-From: Mathieu Desnoyers [mailto:mathieu.desnoyers@efficios.com]
-Sent: Friday, June 08, 2012 9:39 PM
-To: Burton, Michael
-Cc: lttng-dev@lists.lttng.org
-Subject: Re: [lttng-dev] UST Hanging at Tracepoint
+Merged upstream!
 
-* Burton, Michael (mburton@ciena.com) wrote:
-> For further insight, I've attached the strace from the hanging
-> program.  I also upgraded LTTng-UST to 2.0.3 and userspace-rcu to
-> 0.7.3.
-
-Haven't had time to look at it yet, but could you also provide the
-output of:
-
-LTTNG_UST_DEBUG=1 youprogname
-
-(starting your UST instrumented program with LTTNG_UST_DEBUG=1 env. var.
-set)
+I'm still considering if I "can" put it in the stable-2.0 branch since this
+basically change the lttng.h ABI ...
 
 Thanks!
+David
 
-Mathieu
+On 08/06/12 10:19 AM, Danny Serres wrote:
+> Signed-off-by: Danny Serres <danny.serres@efficios.com> --- 
+> include/lttng/lttng.h |    2 +- 1 file changed, 1 insertion(+), 1
+> deletion(-)
+> 
+> diff --git a/include/lttng/lttng.h b/include/lttng/lttng.h index
+> 3b1be61..c80e282 100644 --- a/include/lttng/lttng.h +++
+> b/include/lttng/lttng.h @@ -214,7 +214,7 @@ struct lttng_event { enum
+> lttng_loglevel_type loglevel_type; int loglevel;
+> 
+> -	uint32_t enabled; +	int32_t enabled;	/* Does not apply: -1 */ pid_t pid;
+> 
+> char padding[LTTNG_EVENT_PADDING1];
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.12 (GNU/Linux)
 
->
-> Michael
->
-> From: Burton, Michael [mailto:mburton@ciena.com]
-> Sent: Thursday, June 07, 2012 2:16 PM
-> To: lttng-dev@lists.lttng.org
-> Subject: [lttng-dev] UST Hanging at Tracepoint
->
-> I am working on getting LTTng 2.0 working in our 2.6.35 kernel.  I have kernel tracing working but I'm having problems with UST.
->
-> I have a program with a dynamic UST tracepoint.  When I run the program with all UST events enabled (lttng enable-event -a -u) the program hangs on the tracepoint.  The last line from the UST debug is:
->
-> libust[6184/6185]: Info: sessiond not accepting connections to local apps socket (in ust_listener_thread() at lttng-ust-comm.c:699)
->
-> Any insight into why this is happening?  I've attached the UST and lttng-sessiond debug generated by the program.
->
-> I am running the following:
-> lttng-modules-2.6.32 (found through this mailing list)
-> lttng-tools-2.0.1
-> lttng-ust-2.0.2
-> userspace-rcu-0.7.0
->
-> Thanks,
-> Michael
-
-Content-Description: strace_debug.txt
-> execve("/ciena/bin/idp", ["idp", "help"], [/* 11 vars */]) = 0
-> brk(0)                                  = 0x804e000
-> mmap2(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0xb783c000
-> access("/etc/ld.so.preload", R_OK)      = -1 ENOENT (No such file or directory)
-> open("/etc/ld.so.cache", O_RDONLY)      = 3
-> fstat64(3, {st_mode=S_IFREG|0644, st_size=17420, ...}) = 0
-> mmap2(NULL, 17420, PROT_READ, MAP_PRIVATE, 3, 0) = 0xb7837000
-> close(3)                                = 0
-> open("/usr/lib/liblttng-ust.so.0", O_RDONLY) = 3
-> read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0\220A\0\0004\0\0\0$"..., 512) = 512
-> fstat64(3, {st_mode=S_IFREG|0755, st_size=209876, ...}) = 0
-> mmap2(NULL, 212940, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb7803000
-> mmap2(0xb7832000, 20480, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x2e) = 0xb7832000
-> close(3)                                = 0
-> open("/usr/lib/liblttng-ust-ctl.so.0", O_RDONLY) = 3
-> read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0\200-\0\0004\0\0\0\274"..., 512) = 512
-> fstat64(3, {st_mode=S_IFREG|0755, st_size=140020, ...}) = 0
-> mmap2(NULL, 142828, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb77e0000
-> mmap2(0xb7802000, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x21) = 0xb7802000
-> close(3)                                = 0
-> open("/usr/lib/liblttng-ust-fork.so.0", O_RDONLY) = 3
-> read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0\0\5\0\0004\0\0\0X"..., 512) = 512
-> fstat64(3, {st_mode=S_IFREG|0755, st_size=3864, ...}) = 0
-> mmap2(NULL, 6820, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb77de000
-> mmap2(0xb77df000, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0) = 0xb77df000
-> close(3)                                = 0
-> open("/usr/lib/liblttng-ust-tracepoint.so.0", O_RDONLY) = 3
-> read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0\220\v\0\0004\0\0\0008"..., 512) = 512
-> fstat64(3, {st_mode=S_IFREG|0755, st_size=16632, ...}) = 0
-> mmap2(NULL, 19944, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb77d9000
-> mmap2(0xb77dd000, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x3) = 0xb77dd000
-> close(3)                                = 0
-> open("/usr/lib/liblttng-ust-libc-wrapper.so.0", O_RDONLY) = 3
-> read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0\360\t\0\0004\0\0\0\364"..., 512) = 512
-> fstat64(3, {st_mode=S_IFREG|0755, st_size=9300, ...}) = 0
-> mmap2(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0xb77d8000
-> mmap2(NULL, 12104, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb77d5000
-> mmap2(0xb77d7000, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x1) = 0xb77d7000
-> close(3)                                = 0
-> open("/usr/lib/liburcu.so.1", O_RDONLY) = 3
-> read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0`\22\0\0004\0\0\0\374"..., 512) = 512
-> fstat64(3, {st_mode=S_IFREG|0755, st_size=18188, ...}) = 0
-> mmap2(NULL, 17080, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb77d0000
-> mmap2(0xb77d4000, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x4) = 0xb77d4000
-> close(3)                                = 0
-> open("/usr/lib/liburcu-common.so.1", O_RDONLY) = 3
-> read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0\340\5\0\0004\0\0\0\34"..., 512) = 512
-> fstat64(3, {st_mode=S_IFREG|0755, st_size=5084, ...}) = 0
-> mmap2(NULL, 8032, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb77ce000
-> mmap2(0xb77cf000, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0) = 0xb77cf000
-> close(3)                                = 0
-> open("/usr/lib/liburcu-qsbr.so.1", O_RDONLY) = 3
-> read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0\360\22\0\0004\0\0\0\374"..., 512) = 512
-> fstat64(3, {st_mode=S_IFREG|0755, st_size=18188, ...}) = 0
-> mmap2(NULL, 17080, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb77c9000
-> mmap2(0xb77cd000, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x4) = 0xb77cd000
-> close(3)                                = 0
-> open("/usr/lib/liburcu-mb.so.1", O_RDONLY) = 3
-> read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0`\22\0\0004\0\0\0\374"..., 512) = 512
-> fstat64(3, {st_mode=S_IFREG|0755, st_size=18188, ...}) = 0
-> mmap2(NULL, 17080, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb77c4000
-> mmap2(0xb77c8000, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x4) = 0xb77c8000
-> close(3)                                = 0
-> open("/usr/lib/liburcu-signal.so.1", O_RDONLY) = 3
-> read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0`\23\0\0004\0\0\0\10"..., 512) = 512
-> fstat64(3, {st_mode=S_IFREG|0755, st_size=18712, ...}) = 0
-> mmap2(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0xb77c3000
-> mmap2(NULL, 21704, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb77bd000
-> mmap2(0xb77c2000, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x4) = 0xb77c2000
-> close(3)                                = 0
-> open("/usr/lib/liburcu-cds.so.1", O_RDONLY) = 3
-> read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0\300\f\0\0004\0\0\0t"..., 512) = 512
-> fstat64(3, {st_mode=S_IFREG|0755, st_size=26204, ...}) = 0
-> mmap2(NULL, 25004, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb77b6000
-> mmap2(0xb77bc000, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x6) = 0xb77bc000
-> close(3)                                = 0
-> open("/usr/lib/liburcu-bp.so.1", O_RDONLY) = 3
-> read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0\320\24\0\0004\0\0\0\360"..., 512) = 512
-> fstat64(3, {st_mode=S_IFREG|0755, st_size=19968, ...}) = 0
-> mmap2(NULL, 23128, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb77b0000
-> mmap2(0xb77b5000, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x4) = 0xb77b5000
-> close(3)                                = 0
-> open("/lib/libdl.so.2", O_RDONLY)       = 3
-> read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0 \n\0\0004\0\0\0<"..., 512) = 512
-> fstat64(3, {st_mode=S_IFREG|0755, st_size=9668, ...}) = 0
-> mmap2(NULL, 12408, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb77ac000
-> mmap2(0xb77ae000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x1) = 0xb77ae000
-> close(3)                                = 0
-> open("/lib/libuuid.so.1", O_RDONLY)     = 3
-> read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0@\r\0\0004\0\0\0\350"..., 512) = 512
-> fstat64(3, {st_mode=S_IFREG|0755, st_size=12872, ...}) = 0
-> mmap2(NULL, 15632, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb77a8000
-> mmap2(0xb77ab000, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x2) = 0xb77ab000
-> close(3)                                = 0
-> open("/lib/libc.so.6", O_RDONLY)        = 3
-> read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0\220n\1\0004\0\0\0L"..., 512) = 512
-> fstat64(3, {st_mode=S_IFREG|0755, st_size=1347780, ...}) = 0
-> mmap2(NULL, 1358120, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb765c000
-> mprotect(0xb77a1000, 4096, PROT_NONE)   = 0
-> mmap2(0xb77a2000, 12288, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x145) = 0xb77a2000
-> mmap2(0xb77a5000, 10536, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0xb77a5000
-> close(3)                                = 0
-> open("/lib/librt.so.1", O_RDONLY)       = 3
-> read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0p\30\0\0004\0\0\0\230"..., 512) = 512
-> mmap2(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0xb765b000
-> fstat64(3, {st_mode=S_IFREG|0755, st_size=30616, ...}) = 0
-> mmap2(NULL, 33364, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb7652000
-> mmap2(0xb7659000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x6) = 0xb7659000
-> close(3)                                = 0
-> open("/lib/libpthread.so.0", O_RDONLY)  = 3
-> read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0\360J\0\0004\0\0\0\354"..., 512) = 512
-> fstat64(3, {st_mode=S_IFREG|0755, st_size=88420, ...}) = 0
-> mmap2(NULL, 98828, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb7639000
-> mmap2(0xb764e000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x14) = 0xb764e000
-> mmap2(0xb7650000, 4620, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0xb7650000
-> close(3)                                = 0
-> mmap2(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0xb7638000
-> mmap2(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0xb7636000
-> set_thread_area({entry_number:-1 -> 6, base_addr:0xb7636d80, limit:1048575, seg_32bit:1, contents:0, read_exec_only:0, limit_in_pages:1, seg_not_present:0, useable:1}) = 0
-> mprotect(0xb764e000, 4096, PROT_READ)   = 0
-> mprotect(0xb7659000, 4096, PROT_READ)   = 0
-> mprotect(0xb77a2000, 8192, PROT_READ)   = 0
-> mprotect(0xb77ae000, 4096, PROT_READ)   = 0
-> mprotect(0xb785a000, 4096, PROT_READ)   = 0
-> munmap(0xb7837000, 17420)               = 0
-> set_tid_address(0xb7636de8)             = 3050
-> set_robust_list(0xb7636df0, 0xc)        = 0
-> futex(0xbfaaf560, FUTEX_WAKE_PRIVATE, 1) = 0
-> futex(0xbfaaf560, 0x189 /* FUTEX_??? */, 1, NULL, bfaaf570) = -1 EAGAIN (Resource temporarily unavailable)
-> rt_sigaction(SIGRTMIN, {0xb763d4f0, [], SA_SIGINFO}, NULL, 8) = 0
-> rt_sigaction(SIGRT_1, {0xb763d9c0, [], SA_RESTART|SA_SIGINFO}, NULL, 8) = 0
-> rt_sigprocmask(SIG_UNBLOCK, [RTMIN RT_1], NULL, 8) = 0
-> getrlimit(RLIMIT_STACK, {rlim_cur=8192*1024, rlim_max=RLIM_INFINITY}) = 0
-> uname({sys="Linux", node="5410", ...})  = 0
-> rt_sigaction(SIGUSR1, {0xb77bec0a, [], SA_RESTART|SA_SIGINFO}, NULL, 8) = 0
-> futex(0xb77af06c, FUTEX_WAKE_PRIVATE, 2147483647) = 0
-> brk(0)                                  = 0x804e000
-> brk(0x806f000)                          = 0x806f000
-> gettimeofday({1339187216, 880428}, NULL) = 0
-> open("/dev/urandom", O_RDONLY|O_LARGEFILE) = 3
-> fcntl64(3, F_GETFD)                     = 0
-> fcntl64(3, F_SETFD, FD_CLOEXEC)         = 0
-> getuid32()                              = 0
-> gettimeofday({1339187216, 889603}, NULL) = 0
-> gettimeofday({1339187216, 894471}, NULL) = 0
-> read(3, "\275\0051F\215\373\371\202\377kfb/\362\303N"..., 16) = 16
-> clock_gettime(CLOCK_REALTIME, {1339187216, 902329405}) = 0
-> getuid32()                              = 0
-> geteuid32()                             = 0
-> rt_sigprocmask(SIG_SETMASK, ~[RTMIN RT_1], [], 8) = 0
-> mmap2(NULL, 8388608, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_STACK, -1, 0) = 0xb6e36000
-> mprotect(0xb6e36000, 4096, PROT_NONE)   = 0
-> clone(child_stack=0xb7634d64, flags=CLONE_VM|CLONE_FS|CLONE_FILES|CLONE_SIGHAND|CLONE_THREAD|CLONE_SYSVSEM|CLONE_SETTLS|CLONE_PARENT_SETTID|CLONE_CHILD_CLEARTID|CLONE_DETACHED, parent_tidptr=0xb7635bd8, {entry_number:6, base_addr:0xb7635b70, limit:1048575, seg_32bit:1, contents:0, read_exec_only:0, limit_in_pages:1, seg_not_present:0, useable:1}, child_tidptr=0xb7635bd8) = 3051
-> mmap2(NULL, 8388608, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_STACK, -1, 0) = 0xb6636000
-> mprotect(0xb6636000, 4096, PROT_NONE)   = 0
-> clone(child_stack=0xb6e34d64, flags=CLONE_VM|CLONE_FS|CLONE_FILES|CLONE_SIGHAND|CLONE_THREAD|CLONE_SYSVSEM|CLONE_SETTLS|CLONE_PARENT_SETTID|CLONE_CHILD_CLEARTID|CLONE_DETACHED, parent_tidptr=0xb6e35bd8, {entry_number:6, base_addr:0xb6e35b70, limit:1048575, seg_32bit:1, contents:0, read_exec_only:0, limit_in_pages:1, seg_not_present:0, useable:1}, child_tidptr=0xb6e35bd8) = 3052
-> rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
-> gettimeofday({1339187216, 974869}, NULL) = 0
-> futex(0xb7836e30, FUTEX_WAIT_PRIVATE, 0, {2, 927460405}) = -1 ETIMEDOUT (Connection timed out)
-> gettid()                                = 3050
-> write(2, "libust[3050/3050]: Error: Timed o"..., 107libust[3050/3050]: Error: Timed out waiting for ltt-sessiond (in lttng_ust_init() at lttng-ust-comm.c:912)
-> ) = 107
-> futex(0xb7836e80, FUTEX_WAIT_PRIVATE, 2, NULL
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
-
---
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+iQEcBAEBAgAGBQJP1jiwAAoJEELoaioR9I02DmgIAI5JS3wQCwoBOIxKJz4GkA2+
+QC7AEtCRKfG6AGPi3MN7EGav+hCTHAxfGK3CWr3CDi/Vo7uE3ofZ6wI3HgTdF1aH
+rEZPho96hhvsdu5p33HGg1BHuKhteYKa/TukzURBRPlu0+ruDol0rFsJn/SXblTe
+WczjFTRku+EAmF55V+gXOwhZ0wazZ47lcKIIg5EZMuSQo5PsRh/OD+w5j+15+2QP
+nHCFzEWEevnKmfmlhSfi0voyvNlxLzmc9ppv0AWUYX5mbppL6aCjHVu+RUphAAL4
+R2D+C6ApRQOWnn+pFj3SALxas3sWuDHDCDCXSesjCWYT5wRoM6wY/ykgETC3Q+U=
+=sPTt
+-----END PGP SIGNATURE-----
