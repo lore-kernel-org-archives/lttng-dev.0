@@ -1,21 +1,19 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: UST Hanging at Tracepoint
-Date: Tue, 12 Jun 2012 10:13:44 -0400
-Message-ID: <20120612141344.GC13917__42123.1143329807$1339510465$gmane$org@Krystal>
-References: <3F56B905CF2083408E8482044F20428AEF604D22@ONWVEXCHMB01.ciena.com>
-	<3F56B905CF2083408E8482044F20428AEF78BC79@ONWVEXCHMB01.ciena.com>
-	<20120612140925.GB13917@Krystal>
+Subject: Re: lttng-ust with --std=c99 -pedantic
+Date: Tue, 12 Jun 2012 11:32:57 -0400
+Message-ID: <20120612153257.GB14189__37384.2848268852$1339515221$gmane$org@Krystal>
+References: <jr0mmu$efe$1@dough.gmane.org>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1SeRqs-0001hG-Pw
-	for lttng-dev@lists.lttng.org; Tue, 12 Jun 2012 10:13:46 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1SeT5Z-0002HE-Dd
+	for lttng-dev@lists.lttng.org; Tue, 12 Jun 2012 11:33:01 -0400
 Content-Disposition: inline
-In-Reply-To: <20120612140925.GB13917@Krystal>
+In-Reply-To: <jr0mmu$efe$1@dough.gmane.org>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,291 +22,131 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Burton, Michael" <mburton@ciena.com>, dgoulet@efficios.com
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: John Steele Scott <toojays@toojays.net>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Mathieu Desnoyers (mathieu.desnoyers@efficios.com) wrote:
-> Hi Michael,
-> 
-> Please note that you should be able to run UST with either (or both) of:
-> 
-> - root lttng-sessiond, for system-wide tracing
-> - per-user lttng-sessiond, for per-user tracing.
-> 
-> It is entirely normal that one of the two UST threads within the
-> application can't find an active sessiond if, for instance, you have
-> just a root (and no per-user) sessiond running.
-> 
-> So although I'm glad that you got things working, I fail to understand
-> your explanation: it should have worked fine with the root sessiond,
-> even if no ~/.lttng exists.
-> 
-> David, can you look into this ?
-
-hrm, further insight: is your program _really_ hang ? Try to make sure
-you put a fprintf(stderr, ".....") at the beginning of your main().
-Looking once more at your detailed UST output indicates that the
-per-user UST thread tells you that it cannot see any running sessiond.
-So yes, this thread blocks, but the thread talking to the root sessiond
-can very well be working fine, and your application might also be
-running fine. This should be double-checked.
-
-Thanks,
-
-Mathieu
-
-> 
-> Thanks,
-> 
-> Mathieu
-> 
-> * Burton, Michael (mburton@ciena.com) wrote:
-> > Mathieu,
-> > 
-> > I figured out the problem.  When we start sessiond on our system as root, the /.lttng/ folder is not created, along with its contents.  UST timed out since there was no sock_path.  I was able to get UST working once I got sessiond running.
-> > 
-> > Thanks.
-> > Michael
-> > 
-> > ________________________________________
-> > From: Mathieu Desnoyers [mathieu.desnoyers@efficios.com]
-> > Sent: 08 June 2012 21:38
-> > To: Burton, Michael
-> > Cc: lttng-dev@lists.lttng.org
-> > Subject: Re: [lttng-dev] UST Hanging at Tracepoint
-> > 
-> > * Burton, Michael (mburton@ciena.com) wrote:
-> > > For further insight, I've attached the strace from the hanging
-> > > program.  I also upgraded LTTng-UST to 2.0.3 and userspace-rcu to
-> > > 0.7.3.
-> > 
-> > Haven't had time to look at it yet, but could you also provide the
-> > output of:
-> > 
-> > LTTNG_UST_DEBUG=1 youprogname
-> > 
-> > (starting your UST instrumented program with LTTNG_UST_DEBUG=1 env. var.
-> > set)
-> > 
-> > Thanks!
-> > 
-> > Mathieu
-> > 
-> > >
-> > > Michael
-> > >
-> > > From: Burton, Michael [mailto:mburton@ciena.com]
-> > > Sent: Thursday, June 07, 2012 2:16 PM
-> > > To: lttng-dev@lists.lttng.org
-> > > Subject: [lttng-dev] UST Hanging at Tracepoint
-> > >
-> > > I am working on getting LTTng 2.0 working in our 2.6.35 kernel.  I have kernel tracing working but I'm having problems with UST.
-> > >
-> > > I have a program with a dynamic UST tracepoint.  When I run the program with all UST events enabled (lttng enable-event -a -u) the program hangs on the tracepoint.  The last line from the UST debug is:
-> > >
-> > > libust[6184/6185]: Info: sessiond not accepting connections to local apps socket (in ust_listener_thread() at lttng-ust-comm.c:699)
-> > >
-> > > Any insight into why this is happening?  I've attached the UST and lttng-sessiond debug generated by the program.
-> > >
-> > > I am running the following:
-> > > lttng-modules-2.6.32 (found through this mailing list)
-> > > lttng-tools-2.0.1
-> > > lttng-ust-2.0.2
-> > > userspace-rcu-0.7.0
-> > >
-> > > Thanks,
-> > > Michael
-> > 
-> > Content-Description: strace_debug.txt
-> > > execve("/ciena/bin/idp", ["idp", "help"], [/* 11 vars */]) = 0
-> > > brk(0)                                  = 0x804e000
-> > > mmap2(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0xb783c000
-> > > access("/etc/ld.so.preload", R_OK)      = -1 ENOENT (No such file or directory)
-> > > open("/etc/ld.so.cache", O_RDONLY)      = 3
-> > > fstat64(3, {st_mode=S_IFREG|0644, st_size=17420, ...}) = 0
-> > > mmap2(NULL, 17420, PROT_READ, MAP_PRIVATE, 3, 0) = 0xb7837000
-> > > close(3)                                = 0
-> > > open("/usr/lib/liblttng-ust.so.0", O_RDONLY) = 3
-> > > read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0\220A\0\0004\0\0\0$"..., 512) = 512
-> > > fstat64(3, {st_mode=S_IFREG|0755, st_size=209876, ...}) = 0
-> > > mmap2(NULL, 212940, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb7803000
-> > > mmap2(0xb7832000, 20480, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x2e) = 0xb7832000
-> > > close(3)                                = 0
-> > > open("/usr/lib/liblttng-ust-ctl.so.0", O_RDONLY) = 3
-> > > read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0\200-\0\0004\0\0\0\274"..., 512) = 512
-> > > fstat64(3, {st_mode=S_IFREG|0755, st_size=140020, ...}) = 0
-> > > mmap2(NULL, 142828, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb77e0000
-> > > mmap2(0xb7802000, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x21) = 0xb7802000
-> > > close(3)                                = 0
-> > > open("/usr/lib/liblttng-ust-fork.so.0", O_RDONLY) = 3
-> > > read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0\0\5\0\0004\0\0\0X"..., 512) = 512
-> > > fstat64(3, {st_mode=S_IFREG|0755, st_size=3864, ...}) = 0
-> > > mmap2(NULL, 6820, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb77de000
-> > > mmap2(0xb77df000, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0) = 0xb77df000
-> > > close(3)                                = 0
-> > > open("/usr/lib/liblttng-ust-tracepoint.so.0", O_RDONLY) = 3
-> > > read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0\220\v\0\0004\0\0\0008"..., 512) = 512
-> > > fstat64(3, {st_mode=S_IFREG|0755, st_size=16632, ...}) = 0
-> > > mmap2(NULL, 19944, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb77d9000
-> > > mmap2(0xb77dd000, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x3) = 0xb77dd000
-> > > close(3)                                = 0
-> > > open("/usr/lib/liblttng-ust-libc-wrapper.so.0", O_RDONLY) = 3
-> > > read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0\360\t\0\0004\0\0\0\364"..., 512) = 512
-> > > fstat64(3, {st_mode=S_IFREG|0755, st_size=9300, ...}) = 0
-> > > mmap2(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0xb77d8000
-> > > mmap2(NULL, 12104, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb77d5000
-> > > mmap2(0xb77d7000, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x1) = 0xb77d7000
-> > > close(3)                                = 0
-> > > open("/usr/lib/liburcu.so.1", O_RDONLY) = 3
-> > > read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0`\22\0\0004\0\0\0\374"..., 512) = 512
-> > > fstat64(3, {st_mode=S_IFREG|0755, st_size=18188, ...}) = 0
-> > > mmap2(NULL, 17080, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb77d0000
-> > > mmap2(0xb77d4000, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x4) = 0xb77d4000
-> > > close(3)                                = 0
-> > > open("/usr/lib/liburcu-common.so.1", O_RDONLY) = 3
-> > > read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0\340\5\0\0004\0\0\0\34"..., 512) = 512
-> > > fstat64(3, {st_mode=S_IFREG|0755, st_size=5084, ...}) = 0
-> > > mmap2(NULL, 8032, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb77ce000
-> > > mmap2(0xb77cf000, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0) = 0xb77cf000
-> > > close(3)                                = 0
-> > > open("/usr/lib/liburcu-qsbr.so.1", O_RDONLY) = 3
-> > > read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0\360\22\0\0004\0\0\0\374"..., 512) = 512
-> > > fstat64(3, {st_mode=S_IFREG|0755, st_size=18188, ...}) = 0
-> > > mmap2(NULL, 17080, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb77c9000
-> > > mmap2(0xb77cd000, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x4) = 0xb77cd000
-> > > close(3)                                = 0
-> > > open("/usr/lib/liburcu-mb.so.1", O_RDONLY) = 3
-> > > read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0`\22\0\0004\0\0\0\374"..., 512) = 512
-> > > fstat64(3, {st_mode=S_IFREG|0755, st_size=18188, ...}) = 0
-> > > mmap2(NULL, 17080, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb77c4000
-> > > mmap2(0xb77c8000, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x4) = 0xb77c8000
-> > > close(3)                                = 0
-> > > open("/usr/lib/liburcu-signal.so.1", O_RDONLY) = 3
-> > > read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0`\23\0\0004\0\0\0\10"..., 512) = 512
-> > > fstat64(3, {st_mode=S_IFREG|0755, st_size=18712, ...}) = 0
-> > > mmap2(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0xb77c3000
-> > > mmap2(NULL, 21704, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb77bd000
-> > > mmap2(0xb77c2000, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x4) = 0xb77c2000
-> > > close(3)                                = 0
-> > > open("/usr/lib/liburcu-cds.so.1", O_RDONLY) = 3
-> > > read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0\300\f\0\0004\0\0\0t"..., 512) = 512
-> > > fstat64(3, {st_mode=S_IFREG|0755, st_size=26204, ...}) = 0
-> > > mmap2(NULL, 25004, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb77b6000
-> > > mmap2(0xb77bc000, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x6) = 0xb77bc000
-> > > close(3)                                = 0
-> > > open("/usr/lib/liburcu-bp.so.1", O_RDONLY) = 3
-> > > read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0\320\24\0\0004\0\0\0\360"..., 512) = 512
-> > > fstat64(3, {st_mode=S_IFREG|0755, st_size=19968, ...}) = 0
-> > > mmap2(NULL, 23128, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb77b0000
-> > > mmap2(0xb77b5000, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x4) = 0xb77b5000
-> > > close(3)                                = 0
-> > > open("/lib/libdl.so.2", O_RDONLY)       = 3
-> > > read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0 \n\0\0004\0\0\0<"..., 512) = 512
-> > > fstat64(3, {st_mode=S_IFREG|0755, st_size=9668, ...}) = 0
-> > > mmap2(NULL, 12408, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb77ac000
-> > > mmap2(0xb77ae000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x1) = 0xb77ae000
-> > > close(3)                                = 0
-> > > open("/lib/libuuid.so.1", O_RDONLY)     = 3
-> > > read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0@\r\0\0004\0\0\0\350"..., 512) = 512
-> > > fstat64(3, {st_mode=S_IFREG|0755, st_size=12872, ...}) = 0
-> > > mmap2(NULL, 15632, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb77a8000
-> > > mmap2(0xb77ab000, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x2) = 0xb77ab000
-> > > close(3)                                = 0
-> > > open("/lib/libc.so.6", O_RDONLY)        = 3
-> > > read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0\220n\1\0004\0\0\0L"..., 512) = 512
-> > > fstat64(3, {st_mode=S_IFREG|0755, st_size=1347780, ...}) = 0
-> > > mmap2(NULL, 1358120, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb765c000
-> > > mprotect(0xb77a1000, 4096, PROT_NONE)   = 0
-> > > mmap2(0xb77a2000, 12288, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x145) = 0xb77a2000
-> > > mmap2(0xb77a5000, 10536, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0xb77a5000
-> > > close(3)                                = 0
-> > > open("/lib/librt.so.1", O_RDONLY)       = 3
-> > > read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0p\30\0\0004\0\0\0\230"..., 512) = 512
-> > > mmap2(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0xb765b000
-> > > fstat64(3, {st_mode=S_IFREG|0755, st_size=30616, ...}) = 0
-> > > mmap2(NULL, 33364, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb7652000
-> > > mmap2(0xb7659000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x6) = 0xb7659000
-> > > close(3)                                = 0
-> > > open("/lib/libpthread.so.0", O_RDONLY)  = 3
-> > > read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0\360J\0\0004\0\0\0\354"..., 512) = 512
-> > > fstat64(3, {st_mode=S_IFREG|0755, st_size=88420, ...}) = 0
-> > > mmap2(NULL, 98828, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb7639000
-> > > mmap2(0xb764e000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x14) = 0xb764e000
-> > > mmap2(0xb7650000, 4620, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0xb7650000
-> > > close(3)                                = 0
-> > > mmap2(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0xb7638000
-> > > mmap2(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0xb7636000
-> > > set_thread_area({entry_number:-1 -> 6, base_addr:0xb7636d80, limit:1048575, seg_32bit:1, contents:0, read_exec_only:0, limit_in_pages:1, seg_not_present:0, useable:1}) = 0
-> > > mprotect(0xb764e000, 4096, PROT_READ)   = 0
-> > > mprotect(0xb7659000, 4096, PROT_READ)   = 0
-> > > mprotect(0xb77a2000, 8192, PROT_READ)   = 0
-> > > mprotect(0xb77ae000, 4096, PROT_READ)   = 0
-> > > mprotect(0xb785a000, 4096, PROT_READ)   = 0
-> > > munmap(0xb7837000, 17420)               = 0
-> > > set_tid_address(0xb7636de8)             = 3050
-> > > set_robust_list(0xb7636df0, 0xc)        = 0
-> > > futex(0xbfaaf560, FUTEX_WAKE_PRIVATE, 1) = 0
-> > > futex(0xbfaaf560, 0x189 /* FUTEX_??? */, 1, NULL, bfaaf570) = -1 EAGAIN (Resource temporarily unavailable)
-> > > rt_sigaction(SIGRTMIN, {0xb763d4f0, [], SA_SIGINFO}, NULL, 8) = 0
-> > > rt_sigaction(SIGRT_1, {0xb763d9c0, [], SA_RESTART|SA_SIGINFO}, NULL, 8) = 0
-> > > rt_sigprocmask(SIG_UNBLOCK, [RTMIN RT_1], NULL, 8) = 0
-> > > getrlimit(RLIMIT_STACK, {rlim_cur=8192*1024, rlim_max=RLIM_INFINITY}) = 0
-> > > uname({sys="Linux", node="5410", ...})  = 0
-> > > rt_sigaction(SIGUSR1, {0xb77bec0a, [], SA_RESTART|SA_SIGINFO}, NULL, 8) = 0
-> > > futex(0xb77af06c, FUTEX_WAKE_PRIVATE, 2147483647) = 0
-> > > brk(0)                                  = 0x804e000
-> > > brk(0x806f000)                          = 0x806f000
-> > > gettimeofday({1339187216, 880428}, NULL) = 0
-> > > open("/dev/urandom", O_RDONLY|O_LARGEFILE) = 3
-> > > fcntl64(3, F_GETFD)                     = 0
-> > > fcntl64(3, F_SETFD, FD_CLOEXEC)         = 0
-> > > getuid32()                              = 0
-> > > gettimeofday({1339187216, 889603}, NULL) = 0
-> > > gettimeofday({1339187216, 894471}, NULL) = 0
-> > > read(3, "\275\0051F\215\373\371\202\377kfb/\362\303N"..., 16) = 16
-> > > clock_gettime(CLOCK_REALTIME, {1339187216, 902329405}) = 0
-> > > getuid32()                              = 0
-> > > geteuid32()                             = 0
-> > > rt_sigprocmask(SIG_SETMASK, ~[RTMIN RT_1], [], 8) = 0
-> > > mmap2(NULL, 8388608, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_STACK, -1, 0) = 0xb6e36000
-> > > mprotect(0xb6e36000, 4096, PROT_NONE)   = 0
-> > > clone(child_stack=0xb7634d64, flags=CLONE_VM|CLONE_FS|CLONE_FILES|CLONE_SIGHAND|CLONE_THREAD|CLONE_SYSVSEM|CLONE_SETTLS|CLONE_PARENT_SETTID|CLONE_CHILD_CLEARTID|CLONE_DETACHED, parent_tidptr=0xb7635bd8, {entry_number:6, base_addr:0xb7635b70, limit:1048575, seg_32bit:1, contents:0, read_exec_only:0, limit_in_pages:1, seg_not_present:0, useable:1}, child_tidptr=0xb7635bd8) = 3051
-> > > mmap2(NULL, 8388608, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_STACK, -1, 0) = 0xb6636000
-> > > mprotect(0xb6636000, 4096, PROT_NONE)   = 0
-> > > clone(child_stack=0xb6e34d64, flags=CLONE_VM|CLONE_FS|CLONE_FILES|CLONE_SIGHAND|CLONE_THREAD|CLONE_SYSVSEM|CLONE_SETTLS|CLONE_PARENT_SETTID|CLONE_CHILD_CLEARTID|CLONE_DETACHED, parent_tidptr=0xb6e35bd8, {entry_number:6, base_addr:0xb6e35b70, limit:1048575, seg_32bit:1, contents:0, read_exec_only:0, limit_in_pages:1, seg_not_present:0, useable:1}, child_tidptr=0xb6e35bd8) = 3052
-> > > rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
-> > > gettimeofday({1339187216, 974869}, NULL) = 0
-> > > futex(0xb7836e30, FUTEX_WAIT_PRIVATE, 0, {2, 927460405}) = -1 ETIMEDOUT (Connection timed out)
-> > > gettid()                                = 3050
-> > > write(2, "libust[3050/3050]: Error: Timed o"..., 107libust[3050/3050]: Error: Timed out waiting for ltt-sessiond (in lttng_ust_init() at lttng-ust-comm.c:912)
-> > > ) = 107
-> > > futex(0xb7836e80, FUTEX_WAIT_PRIVATE, 2, NULL
-> > > _______________________________________________
-> > > lttng-dev mailing list
-> > > lttng-dev@lists.lttng.org
-> > > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> > 
-> > 
-> > --
-> > Mathieu Desnoyers
-> > Operating System Efficiency R&D Consultant
-> > EfficiOS Inc.
-> > http://www.efficios.com
-> 
-> -- 
-> Mathieu Desnoyers
-> Operating System Efficiency R&D Consultant
-> EfficiOS Inc.
-> http://www.efficios.com
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+SGkgSm9obiwKCiogSm9obiBTdGVlbGUgU2NvdHQgKHRvb2pheXNAdG9vamF5cy5uZXQpIHdyb3Rl
+Ogo+IEkgd2FudCB0byBhZGQgbHR0bmctdXN0IHRyYWNlcG9pbnRzIHRvIGEgcHJvZ3JhbSB3aGlj
+aCBidWlsZHMgd2l0aCAiLS1zdGQ9Yzk5IC1wZWRhbnRpYyIuIFJpZ2h0IG5vdyB0aGlzIGRvZXMg
+bm90IHdvcmsuCj4gCj4gVXNpbmcgdGhlIGRlbW8gcHJvZ3JhbSBhcyBhbiBleGFtcGxlLCBpZiB5
+b3UgZW5hYmxlIC0tc3RkPWM5OSwgdGhlIGZpcnN0IGlzc3VlIGxvb2tzIGxpa2U6Cj4gCj4ganNj
+b3R0QHNhYXo6fi9zcmMvbHR0bmctdXN0L3Rlc3RzL2RlbW8kIGNjYWNoZSBnY2MgLXN0ZD1jOTkg
+LURIQVZFX0NPTkZJR19IIC1JLiAtSS4uLy4uIC1JLi4vLi4vaW5jbHVkZS9sdHRuZyAgLUkuLi8u
+Li9pbmNsdWRlIC1XYWxsIC1nIC1PMiAtTVQgZGVtby5vIC1NRCAtTVAgLU1GIC5kZXBzL2RlbW8u
+VHBvIC1jIC1vIGRlbW8ubyBkZW1vLmMKPiBJbiBmaWxlIGluY2x1ZGVkIGZyb20gZGVtby5jOjM0
+OjA6Cj4gdXN0X3Rlc3RzX2RlbW8uaDogSW4gZnVuY3Rpb24g4oCYX190cmFjZXBvaW50X2NiX3Vz
+dF90ZXN0c19kZW1vX19fc3RhcnRpbmfigJk6Cj4gdXN0X3Rlc3RzX2RlbW8uaDoyNzoyMzogd2Fy
+bmluZzogaW1wbGljaXQgZGVjbGFyYXRpb24gb2YgZnVuY3Rpb24g4oCYdHlwZW9m4oCZIFstV2lt
+cGxpY2l0LWZ1bmN0aW9uLWRlY2xhcmF0aW9uXQo+IHVzdF90ZXN0c19kZW1vLmg6Mjc6MjE4OiBl
+cnJvcjogZXhwZWN0ZWQg4oCYO+KAmSBiZWZvcmUg4oCYX19fX19fX19fcDHigJkKPiB1c3RfdGVz
+dHNfZGVtby5oOjI3OjM5NTogZXJyb3I6IOKAmF9fX19fX19fX3Ax4oCZIHVuZGVjbGFyZWQgKGZp
+cnN0IHVzZSBpbiB0aGlzIGZ1bmN0aW9uKQo+IHVzdF90ZXN0c19kZW1vLmg6Mjc6Mzk1OiBub3Rl
+OiBlYWNoIHVuZGVjbGFyZWQgaWRlbnRpZmllciBpcyByZXBvcnRlZCBvbmx5IG9uY2UgZm9yIGVh
+Y2ggZnVuY3Rpb24gaXQgYXBwZWFycyBpbgo+IEluIGZpbGUgaW5jbHVkZWQgZnJvbSBkZW1vLmM6
+MzQ6MDoKPiB1c3RfdGVzdHNfZGVtby5oOiBJbiBmdW5jdGlvbiDigJhfX3RyYWNlcG9pbnRfY2Jf
+dXN0X3Rlc3RzX2RlbW9fX19kb25l4oCZOgo+IHVzdF90ZXN0c19kZW1vLmg6MzU6MjE0OiBlcnJv
+cjogZXhwZWN0ZWQg4oCYO+KAmSBiZWZvcmUg4oCYX19fX19fX19fcDHigJkKPiB1c3RfdGVzdHNf
+ZGVtby5oOjM1OjM4MzogZXJyb3I6IOKAmF9fX19fX19fX3Ax4oCZIHVuZGVjbGFyZWQgKGZpcnN0
+IHVzZSBpbiB0aGlzIGZ1bmN0aW9uKQo+IEluIGZpbGUgaW5jbHVkZWQgZnJvbSBkZW1vLmM6MzU6
+MDoKPiB1c3RfdGVzdHNfZGVtbzIuaDogSW4gZnVuY3Rpb24g4oCYX190cmFjZXBvaW50X2NiX3Vz
+dF90ZXN0c19kZW1vMl9fX2xvb3DigJk6Cj4gdXN0X3Rlc3RzX2RlbW8yLmg6Mjc6Mjk5OiBlcnJv
+cjogZXhwZWN0ZWQg4oCYO+KAmSBiZWZvcmUg4oCYX19fX19fX19fcDHigJkKPiB1c3RfdGVzdHNf
+ZGVtbzIuaDoyNzo0NzA6IGVycm9yOiDigJhfX19fX19fX19wMeKAmSB1bmRlY2xhcmVkIChmaXJz
+dCB1c2UgaW4gdGhpcyBmdW5jdGlvbikKPiBJbiBmaWxlIGluY2x1ZGVkIGZyb20gZGVtby5jOjM2
+OjA6Cj4gdXN0X3Rlc3RzX2RlbW8zLmg6IEluIGZ1bmN0aW9uIOKAmF9fdHJhY2Vwb2ludF9jYl91
+c3RfdGVzdHNfZGVtbzNfX19kb25l4oCZOgo+IHVzdF90ZXN0c19kZW1vMy5oOjI3OjIxNTogZXJy
+b3I6IGV4cGVjdGVkIOKAmDvigJkgYmVmb3JlIOKAmF9fX19fX19fX3Ax4oCZCj4gdXN0X3Rlc3Rz
+X2RlbW8zLmg6Mjc6Mzg2OiBlcnJvcjog4oCYX19fX19fX19fcDHigJkgdW5kZWNsYXJlZCAoZmly
+c3QgdXNlIGluIHRoaXMgZnVuY3Rpb24pCj4gCj4gVGhpcyBjYW4gYmUgZWFzaWx5IHJlc29sdmVk
+IGJ5IHVzaW5nIF9fdHlwZW9mX18oKSBpbnN0ZWFkIG9mIHR5cGVvZigpLiBUaGVuIEkgY2FuIGJ1
+aWxkIHdpdGggLS1zdGQ9Yzk5LiBCdXQgYWRkaW5nIC1wZWRhbnRpYyBzdGlsbCBmYWlsczoKCkkg
+cHVzaGVkIGEgZml4IGZvciB0aGlzOgoKY29tbWl0IDY0MjNjMzEzNGJmMDdkNGE3ZGI1NmY2OWYy
+Yzc5YjU0MGE3OWM0ZjEKQXV0aG9yOiBNYXRoaWV1IERlc25veWVycyA8bWF0aGlldS5kZXNub3ll
+cnNAZWZmaWNpb3MuY29tPgpEYXRlOiAgIE1vbiBKdW4gMTEgMTA6MTU6MjUgMjAxMiAtMDQwMAoK
+ICAgIEZpeCBjOTkgY29tcGF0aWJpbGl0eTogdXNlIF9fdHlwZW9mX18gaW5zdGVhZCBvZiB0eXBl
+b2YgaW4gcHVibGljIGhlYWRlcnMKICAgIAogICAgUmVwb3J0ZWQtYnk6IEpvaG4gU3RlZWxlIFNj
+b3R0IDx0b29qYXlzQHRvb2pheXMubmV0PgogICAgU2lnbmVkLW9mZi1ieTogTWF0aGlldSBEZXNu
+b3llcnMgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4KCkkgYWxzbyBoYWQgaXNzdWVz
+IHdpdGggKHZvaWQpIGFyZyBwYXJhbWV0ZXJzIHdpdGggdHJhY2Vwb2ludHMsIHNvCnB1c2hlZDoK
+CmNvbW1pdCA0NDk1ZGQzOWMwNTczOWQwZmIyYmM0NjNiN2MwOTNkMjQ1OWNlMmI2CkF1dGhvcjog
+TWF0aGlldSBEZXNub3llcnMgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4KRGF0ZTog
+ICBUdWUgSnVuIDEyIDExOjIyOjQ2IDIwMTIgLTA0MDAKCiAgICBGaXg6IHN1cHBvcnQgLXN0ZD1j
+OTkgaW4gdHJhY2Vwb2ludCBtYWNyb3MKICAgIAogICAgU2lnbmVkLW9mZi1ieTogTWF0aGlldSBE
+ZXNub3llcnMgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4KCkkgaGFkIGFsc28gdG8g
+Zml4IHVzZXJzcGFjZSBSQ1UgbGlicmFyeSwgd2l0aDoKCgpjb21taXQgZTUxNTAwZWRiZDk5MTlj
+ZWU1M2JjODVjYmI0YjIyY2Q0Nzg2ZmM0MgpBdXRob3I6IE1hdGhpZXUgRGVzbm95ZXJzIDxtYXRo
+aWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+CkRhdGU6ICAgVHVlIEp1biAxMiAxMToyNDozMSAy
+MDEyIC0wNDAwCgogICAgRml4IGM5OSBjb21wYXRpYmlsaXR5OiB1c2UgX19hc21fXyBhbmQgX192
+b2xhdGlsZV9fIGluIHB1YmxpYyBoZWFkZXJzCiAgICAKICAgIFNpZ25lZC1vZmYtYnk6IE1hdGhp
+ZXUgRGVzbm95ZXJzIDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+Cgpjb21taXQgYmRm
+ZmE3M2FhMjA4YWQ1ZjFlNWIzYTNjYjZjYmY4NmFjNjk5NjU1OQpBdXRob3I6IE1hdGhpZXUgRGVz
+bm95ZXJzIDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+CkRhdGU6ICAgTW9uIEp1biAx
+MSAxMDoxNjozNSAyMDEyIC0wNDAwCgogICAgRml4IGM5OSBjb21wYXRpYmlsaXR5OiB1c2UgX190
+eXBlb2ZfXyBpbnN0ZWFkIG9mIHR5cGVvZiBpbiBwdWJsaWMgaGVhZGVycwogICAgCiAgICBSZXBv
+cnRlZC1ieTogSm9obiBTdGVlbGUgU2NvdHQgPHRvb2pheXNAdG9vamF5cy5uZXQ+CiAgICBTaWdu
+ZWQtb2ZmLWJ5OiBNYXRoaWV1IERlc25veWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3Mu
+Y29tPgoKCj4gCj4ganNjb3R0QHNhYXo6fi9zcmMvbHR0bmctdXN0L3Rlc3RzL2RlbW8kIGNjYWNo
+ZSBnY2MgLXN0ZD1jOTkgLUR0eXBlb2Y9X190eXBlb2ZfXyAtcGVkYW50aWMgLURIQVZFX0NPTkZJ
+R19IIC1JLiAtSS4uLy4uIC1JLi4vLi4vaW5jbHVkZS9sdHRuZyAgLUkuLi8uLi9pbmNsdWRlIC1X
+YWxsIC1nIC1PMiAtTVQgZGVtby5vIC1NRCAtTVAgLU1GIC5kZXBzL2RlbW8uVHBvIC1jIC1vIGRl
+bW8ubyBkZW1vLmMKPiBJbiBmaWxlIGluY2x1ZGVkIGZyb20gdXN0X3Rlc3RzX2RlbW8uaDoyNTow
+LAo+ICAgICAgICAgICAgICAgICAgZnJvbSBkZW1vLmM6MzQ6Cj4gLi4vLi4vaW5jbHVkZS9sdHRu
+Zy90cmFjZXBvaW50Lmg6IEluIGZ1bmN0aW9uIOKAmF9fdHJhY2Vwb2ludHNfX2luaXTigJk6Cj4g
+Li4vLi4vaW5jbHVkZS9sdHRuZy90cmFjZXBvaW50Lmg6MjUxOjQ6IHdhcm5pbmc6IElTTyBDIGZv
+cmJpZHMgY29udmVyc2lvbiBvZiBvYmplY3QgcG9pbnRlciB0byBmdW5jdGlvbiBwb2ludGVyIHR5
+cGUgWy1wZWRhbnRpY10KPiAuLi8uLi9pbmNsdWRlL2x0dG5nL3RyYWNlcG9pbnQuaDoyNTU6NDog
+d2FybmluZzogSVNPIEMgZm9yYmlkcyBjb252ZXJzaW9uIG9mIG9iamVjdCBwb2ludGVyIHRvIGZ1
+bmN0aW9uIHBvaW50ZXIgdHlwZSBbLXBlZGFudGljXQo+IC4uLy4uL2luY2x1ZGUvbHR0bmcvdHJh
+Y2Vwb2ludC5oOjI2MDo0OiB3YXJuaW5nOiBJU08gQyBmb3JiaWRzIGNvbnZlcnNpb24gb2Ygb2Jq
+ZWN0IHBvaW50ZXIgdG8gZnVuY3Rpb24gcG9pbnRlciB0eXBlIFstcGVkYW50aWNdCj4gLi4vLi4v
+aW5jbHVkZS9sdHRuZy90cmFjZXBvaW50Lmg6MjY0OjQ6IHdhcm5pbmc6IElTTyBDIGZvcmJpZHMg
+Y29udmVyc2lvbiBvZiBvYmplY3QgcG9pbnRlciB0byBmdW5jdGlvbiBwb2ludGVyIHR5cGUgWy1w
+ZWRhbnRpY10KPiAuLi8uLi9pbmNsdWRlL2x0dG5nL3RyYWNlcG9pbnQuaDoyNjg6NDogd2Fybmlu
+ZzogSVNPIEMgZm9yYmlkcyBjb252ZXJzaW9uIG9mIG9iamVjdCBwb2ludGVyIHRvIGZ1bmN0aW9u
+IHBvaW50ZXIgdHlwZSBbLXBlZGFudGljXQo+IEluIGZpbGUgaW5jbHVkZWQgZnJvbSBkZW1vLmM6
+MzQ6MDoKPiB1c3RfdGVzdHNfZGVtby5oOiBJbiBmdW5jdGlvbiDigJhfX3RyYWNlcG9pbnRfY2Jf
+dXN0X3Rlc3RzX2RlbW9fX19zdGFydGluZ+KAmToKPiB1c3RfdGVzdHNfZGVtby5oOjI3OjE2MTog
+d2FybmluZzogSVNPIEMgZm9yYmlkcyBicmFjZWQtZ3JvdXBzIHdpdGhpbiBleHByZXNzaW9ucyBb
+LXBlZGFudGljXQo+IHVzdF90ZXN0c19kZW1vLmg6Mjc6NTQ5OiB3YXJuaW5nOiBJU08gQyBmb3Ji
+aWRzIGNvbnZlcnNpb24gb2Ygb2JqZWN0IHBvaW50ZXIgdG8gZnVuY3Rpb24gcG9pbnRlciB0eXBl
+IFstcGVkYW50aWNdCj4gSW4gZmlsZSBpbmNsdWRlZCBmcm9tIGRlbW8uYzozNDowOgo+IHVzdF90
+ZXN0c19kZW1vLmg6IEluIGZ1bmN0aW9uIOKAmF9fdHJhY2Vwb2ludF9jYl91c3RfdGVzdHNfZGVt
+b19fX2RvbmXigJk6Cj4gdXN0X3Rlc3RzX2RlbW8uaDozNToxNjE6IHdhcm5pbmc6IElTTyBDIGZv
+cmJpZHMgYnJhY2VkLWdyb3VwcyB3aXRoaW4gZXhwcmVzc2lvbnMgWy1wZWRhbnRpY10KPiB1c3Rf
+dGVzdHNfZGVtby5oOjM1OjUzNzogd2FybmluZzogSVNPIEMgZm9yYmlkcyBjb252ZXJzaW9uIG9m
+IG9iamVjdCBwb2ludGVyIHRvIGZ1bmN0aW9uIHBvaW50ZXIgdHlwZSBbLXBlZGFudGljXQo+IElu
+IGZpbGUgaW5jbHVkZWQgZnJvbSBkZW1vLmM6MzU6MDoKPiB1c3RfdGVzdHNfZGVtbzIuaDogSW4g
+ZnVuY3Rpb24g4oCYX190cmFjZXBvaW50X2NiX3VzdF90ZXN0c19kZW1vMl9fX2xvb3DigJk6Cj4g
+dXN0X3Rlc3RzX2RlbW8yLmg6Mjc6MjQ1OiB3YXJuaW5nOiBJU08gQyBmb3JiaWRzIGJyYWNlZC1n
+cm91cHMgd2l0aGluIGV4cHJlc3Npb25zIFstcGVkYW50aWNdCj4gdXN0X3Rlc3RzX2RlbW8yLmg6
+Mjc6NjI0OiB3YXJuaW5nOiBJU08gQyBmb3JiaWRzIGNvbnZlcnNpb24gb2Ygb2JqZWN0IHBvaW50
+ZXIgdG8gZnVuY3Rpb24gcG9pbnRlciB0eXBlIFstcGVkYW50aWNdCj4gSW4gZmlsZSBpbmNsdWRl
+ZCBmcm9tIGRlbW8uYzozNjowOgo+IHVzdF90ZXN0c19kZW1vMy5oOiBJbiBmdW5jdGlvbiDigJhf
+X3RyYWNlcG9pbnRfY2JfdXN0X3Rlc3RzX2RlbW8zX19fZG9uZeKAmToKPiB1c3RfdGVzdHNfZGVt
+bzMuaDoyNzoxNjE6IHdhcm5pbmc6IElTTyBDIGZvcmJpZHMgYnJhY2VkLWdyb3VwcyB3aXRoaW4g
+ZXhwcmVzc2lvbnMgWy1wZWRhbnRpY10KPiB1c3RfdGVzdHNfZGVtbzMuaDoyNzo1NDA6IHdhcm5p
+bmc6IElTTyBDIGZvcmJpZHMgY29udmVyc2lvbiBvZiBvYmplY3QgcG9pbnRlciB0byBmdW5jdGlv
+biBwb2ludGVyIHR5cGUgWy1wZWRhbnRpY10KCkkgc2VlIHRoZXNlIHdhcm5pbmdzLCB0aGUgb25s
+eSB0aGluZyB0aGF0IGN1cnJlbnRseSBmYWlscyBpcyBkdWUgdG8KQllURV9PUkRFUiBhbmQgQklH
+X0VORElBTiBub3QgYmVpbmcgZGVmaW5lZC4gQnkgYWRkaW5nOgoKLURCWVRFX09SREVSPV9fQllU
+RV9PUkRFUiAtREJJR19FTkRJQU49X19CSUdfRU5ESUFOCgpteSB0ZXN0cy9oZWxsbyBwcm9ncmFt
+LCB3aXRoIGEgTWFrZWZpbGUuYW0gbW9kaWZpZWQgdG8gZG86CgpoZWxsb19DRkxBR1MgPSAtV2Vy
+cm9yPW9sZC1zdHlsZS1kZWZpbml0aW9uIC0tc3RkPWM5OSAtcGVkYW50aWMKCnByaW50cyBtYW55
+IHBlZGFudGljIHdhcm5pbmdzLCBhbmQgZmFpbHMgd2l0aDoKCi4vLi91c3RfdGVzdHNfaGVsbG8u
+aDo1NToxOiBlcnJvcjogemVybyBvciBuZWdhdGl2ZSBzaXplIGFycmF5IOKAmF9fZXZlbnRfZmll
+bGRzX19fdXN0X3Rlc3RzX2hlbGxvX19fdHB0ZXN0X3NpZ2hhbmRsZXLigJkKCndoaWNoIHNlZW1z
+IHRvIGJlIGNhdXNlZCBieSBteSBldmVudCB3aXRoIDAgZmllbGRzLCB3aGljaCB0cnkgdG8gY3Jl
+YXRlCmFuIGFycmF5IG9mIGxlbmd0aCAwLgoKSSdsbCBsb29rIGludG8gdGhpcyBvbmUuCgpUaGFu
+a3MsCgpNYXRoaWV1Cgo+IAo+IFRoaXMgaXMgd2l0aCA0LjYuMS05dWJ1bnR1MyBvbiBVYnVudHUg
+MTEuMTAsIGx0dG5nLXVzdCBtYXN0ZXIgNWE4MjFjLgo+IAo+IFdvdWxkIGl0IGJlIHBhcnRpY3Vs
+YXJseSBkaWZmaWN1bHQgdG8gbWFrZSB0aGUgbHR0bmctdXN0IHRyYWNlcG9pbnRzIGNvbXBhdGli
+bGUgd2l0aCBwcm9ncmFtcyBidWlsdCB3aXRoIC1wZWRhbnRpYz8KPiAKPiBjaGVlcnMsCj4gCj4g
+Sm9obgo+IAo+IAo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fCj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcK
+PiBodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1k
+ZXYKCi0tIApNYXRoaWV1IERlc25veWVycwpPcGVyYXRpbmcgU3lzdGVtIEVmZmljaWVuY3kgUiZE
+IENvbnN1bHRhbnQKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxp
+bmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcv
+Y2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
