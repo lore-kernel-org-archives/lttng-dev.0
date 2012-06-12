@@ -1,22 +1,21 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: Re: Lttng start failed
-Date: Tue, 12 Jun 2012 11:34:39 -0400
-Message-ID: <4FD7618F.8090407__25472.4099454053$1339515314$gmane$org@efficios.com>
-References: <47D610AD9C485E458630BA38C324D3B60113FB00F9EA@EXGMBX01.sasken.com>
-	<20120608174226.GA23339@Krystal>
-	<47D610AD9C485E458630BA38C324D3B60113FB00FA00@EXGMBX01.sasken.com>
-	<20120609123251.GA14280@Krystal>
-	<47D610AD9C485E458630BA38C324D3B60113FB0E22D1@EXGMBX01.sasken.com>
-	<20120612140548.GA13917@Krystal>
+From: "Burton, Michael" <mburton@ciena.com>
+Subject: Re: UST Hanging at Tracepoint
+Date: Tue, 12 Jun 2012 11:44:53 -0400
+Message-ID: <3F56B905CF2083408E8482044F20428AEF7A0AFE__28430.099951993$1339515940$gmane$org@ONWVEXCHMB01.ciena.com>
+References: <3F56B905CF2083408E8482044F20428AEF604D22@ONWVEXCHMB01.ciena.com>
+	<3F56B905CF2083408E8482044F20428AEF78BC79@ONWVEXCHMB01.ciena.com>
+	<20120612140925.GB13917@Krystal> <20120612141344.GC13917@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([213.239.202.151])
+Received: from mx0b-00103a01.pphosted.com ([67.231.152.227])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1SeT7E-0002It-3u
-	for lttng-dev@lists.lttng.org; Tue, 12 Jun 2012 11:34:44 -0400
-In-Reply-To: <20120612140548.GA13917@Krystal>
+	(envelope-from <prvs=15104ec490=mburton@ciena.com>)
+	id 1SeTH6-0002Of-Na
+	for lttng-dev@lists.lttng.org; Tue, 12 Jun 2012 11:44:56 -0400
+In-Reply-To: <20120612141344.GC13917@Krystal>
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -25,496 +24,300 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Pavan Anumula <pavan.anumula@sasken.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, "dgoulet@efficios.com" <dgoulet@efficios.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
+I put a fprintf at the beginning of main() and it never prints.
 
-Hi Pavan,
+-----Original Message-----
+From: Mathieu Desnoyers [mailto:mathieu.desnoyers@efficios.com]
+Sent: Tuesday, June 12, 2012 10:14 AM
+To: Burton, Michael; dgoulet@efficios.com
+Cc: lttng-dev@lists.lttng.org
+Subject: Re: [lttng-dev] UST Hanging at Tracepoint
 
-The output below is normal and should be working fine. However, the problem is
-that you have _NO_ debug message after the "lttng start". That command should
-at least produce 10+ lines of messages after this last line:
+* Mathieu Desnoyers (mathieu.desnoyers@efficios.com) wrote:
+> Hi Michael,
+>
+> Please note that you should be able to run UST with either (or both) of:
+>
+> - root lttng-sessiond, for system-wide tracing
+> - per-user lttng-sessiond, for per-user tracing.
+>
+> It is entirely normal that one of the two UST threads within the
+> application can't find an active sessiond if, for instance, you have
+> just a root (and no per-user) sessiond running.
+>
+> So although I'm glad that you got things working, I fail to understand
+> your explanation: it should have worked fine with the root sessiond,
+> even if no ~/.lttng exists.
+>
+> David, can you look into this ?
 
-"DEBUG1: Accepting application registration [in thread_registration_apps() at
-main.c:1423]"
+hrm, further insight: is your program _really_ hang ? Try to make sure
+you put a fprintf(stderr, ".....") at the beginning of your main().
+Looking once more at your detailed UST output indicates that the
+per-user UST thread tells you that it cannot see any running sessiond.
+So yes, this thread blocks, but the thread talking to the root sessiond
+can very well be working fine, and your application might also be
+running fine. This should be double-checked.
 
-Can you enlight me and tell me if by doing "lttng create newsessiom" and
-"lttng enable-event -a -k", you have output messages coming out of the session
-daemon in -vvv mode ?
+Thanks,
 
-If NOT, you are talking to another daemon! A quick "ps faux | grep
-lttng-sessiond" could help clear that question.
+Mathieu
 
-If only one daemon is running and stuck at the above debug message, the next
-step is to tell me on what the daemon is waiting on using either "strace -p"
-or "gdb" also. There is 6 threads so having the strace -p output for all of
-them would help me greatly.
-
-Thanks!
-David
-
-On 12/06/12 10:05 AM, Mathieu Desnoyers wrote:
-> * Pavan Anumula (pavan.anumula@sasken.com) wrote:
->> Hi Mathieu, Still I am unable to start tracing, And I am facing the same
->> start  errors. Please kindly help me on this. This time I loaded the
->> modules by modprobe( not with insmod as I did  before), Then I run the
->> command  " arm-none-linux-gnueabi-lttng-sessiond  -vvv " (before
->> arm-none-linux-gnueabi-lttng-sessiond  -d),
-> 
-> When using "arm-none-linux-gnueabi-lttng-sessiond  -vvv", you should _not_
-> run "arm-none-linux-gnueabi-lttng-sessiond  -d".
-> 
-> 
->> The below is the Output, And It got hanged overthere.
-> 
-> This is normal: the sessiond is waiting for applications to connect. It 
-> does not hang, it just waits.
-> 
-> David, can you follow up on this issue ? It seems to be sessiond-related.
-> 
+>
 > Thanks,
-> 
+>
 > Mathieu
-> 
-> 
->> Later when I started lttng start I am acing the same erros below: 
->> root@arago:~/lttng-traces# arm-none-linux-gnueabi-lttng start LTTng:
->> Failure to write metadata to buffers (timeout) Error: Starting kernel
->> trace failed
->> 
->> ************************************************************************************************
->>
->> 
-DEBUG3: Creating LTTng run directory: /var/run/lttng [in create_lttng_rundir()
-at main.c:4315]
->> DEBUG2: Kernel consumer err path: /var/run/lttng/kconsumerd/error [in
->> main() at main.c:4543] DEBUG2: Kernel consumer cmd path:
->> /var/run/lttng/kconsumerd/command [in main() at main.c:4545] DEBUG1:
->> Client socket path /var/run/lttng/client-lttng-sessiond [in main() at
->> main.c:4592] DEBUG1: Application socket path
->> /var/run/lttng/apps-lttng-sessiond [in main() at main.c:4593] DEBUG1:
->> LTTng run directory path: /var/run/lttng [in main() at main.c:4594] 
->> DEBUG2: UST consumer 32 bits err path:
->> /var/run/lttng/ustconsumerd32/error [in main() at main.c:4603] DEBUG2:
->> UST consumer 32 bits cmd path: /var/run/lttng/ustconsumerd32/command [in
->> main() at main.c:4605] DEBUG2: UST consumer 64 bits err path:
->> /var/run/lttng/ustconsumerd64/error [in main() at main.c:4614] DEBUG2:
->> UST consumer 64 bits cmd path: /var/run/lttng/ustconsumerd64/command [in
->> main() at main.c:4616] DEBUG3: Created hashtable size 4 at 0x4a080 of
->> type 1 [in lttng_ht_new() at hashtable.c:96] DEBUG3: Created hashtable
->> size 4 at 0x4a168 of type 1 [in lttng_ht_new() at hashtable.c:96] DEBUG2:
->> Creating consumer directory: /var/run/lttng/kconsumerd [in
->> set_consumer_sockets() at main.c:4357] DEBUG1: Modprobe successfully
->> lttng-tracer [in modprobe_lttng_control() at modprobe.c:163] DEBUG2:
->> Kernel tracer version validated (major version 2) [in
->> kernel_validate_version() at kernel.c:675] DEBUG1: Modprobe successfully
->> lttng-ftrace [in modprobe_lttng_data() at modprobe.c:199] DEBUG1:
->> Modprobe successfully lttng-kprobes [in modprobe_lttng_data() at
->> modprobe.c:199] DEBUG1: Modprobe successfully lttng-kretprobes [in
->> modprobe_lttng_data() at modprobe.c:199] DEBUG1: Modprobe successfully
->> lttng-lib-ring-buffer [in modprobe_lttng_data() at modprobe.c:199] 
->> DEBUG1: Modprobe successfully lttng-ring-buffer-client-discard [in
->> modprobe_lttng_data() at modprobe.c:199] DEBUG1: Modprobe successfully
->> lttng-ring-buffer-client-overwrite [in modprobe_lttng_data() at
->> modprobe.c:199] DEBUG1: Modprobe successfully
->> lttng-ring-buffer-metadata-client [in modprobe_lttng_data() at
->> modprobe.c:199] DEBUG1: Modprobe successfully
->> lttng-ring-buffer-client-mmap-discard [in modprobe_lttng_data() at
->> modprobe.c:199] DEBUG1: Modprobe successfully
->> lttng-ring-buffer-client-mmap-overwrite [in modprobe_lttng_data() at
->> modprobe.c:199] DEBUG1: Modprobe successfully
->> lttng-ring-buffer-metadata-mmap-client [in modprobe_lttng_data() at
->> modprobe.c:199] DEBUG1: Modprobe successfully lttng-probe-lttng [in
->> modprobe_lttng_data() at modprobe.c:199] DEBUG1: Modprobe successfully
->> lttng-types [in modprobe_lttng_data() at modprobe.c:199] DEBUG1: Modprobe
->> successfully lttng-probe-block [in modprobe_lttng_data() at
->> modprobe.c:199] DEBUG1: Modprobe successfully lttng-probe-irq [in
->> modprobe_lttng_data() at modprobe.c:199] DEBUG1: Modprobe successfully
->> lttng-probe-kvm [in modprobe_lttng_data() at modprobe.c:199] DEBUG1:
->> Modprobe successfully lttng-probe-sched [in modprobe_lttng_data() at
->> modprobe.c:199] DEBUG1: Modprobe successfully lttng-probe-signal [in
->> modprobe_lttng_data() at modprobe.c:199] DEBUG1: Modprobe successfully
->> lttng-probe-statedump [in modprobe_lttng_data() at modprobe.c:199] 
->> DEBUG1: Modprobe successfully lttng-probe-timer [in modprobe_lttng_data()
->> at modprobe.c:199] DEBUG1: Kernel tracer fd 6 [in init_kernel_tracer() at
->> main.c:1887] DEBUG2: Creating consumer directory:
->> /var/run/lttng/ustconsumerd64 [in set_consumer_sockets() at main.c:4357] 
->> DEBUG2: Creating consumer directory: /var/run/lttng/ustconsumerd32 [in
->> set_consumer_sockets() at main.c:4357] DEBUG1: Signal handler set for
->> SIGTERM, SIGPIPE and SIGINT [in set_signal_handler() at main.c:4449] 
->> DEBUG1: All permissions are set [in set_permissions() at main.c:4250] 
->> DEBUG1: poll set max size set to 65535 [in compat_poll_set_max_size() at
->> compat-poll.c:196] DEBUG1: [thread] Manage application started [in
->> thread_manage_apps() at main.c:1179] DEBUG1: fd 3 of 1 added to pollfd
->> [in compat_poll_add() at compat-poll.c:91] DEBUG1: fd 13 of 2 added to
->> pollfd [in compat_poll_add() at compat-poll.c:91] DEBUG1: Apps thread
->> polling on 2 fds [in thread_manage_apps() at main.c:1200] DEBUG1: Thread
->> manage kernel started [in thread_manage_kernel() at main.c:876] DEBUG1:
->> fd 3 of 1 added to pollfd [in compat_poll_add() at compat-poll.c:91] 
->> DEBUG1: fd 11 of 2 added to pollfd [in compat_poll_add() at
->> compat-poll.c:91] DEBUG1: Updating kernel poll set [in
->> update_kernel_poll() at main.c:748] DEBUG1: Thread kernel polling on 2
->> fds [in thread_manage_kernel() at main.c:905] DEBUG1: [thread] Manage
->> application registration started [in thread_registration_apps() at
->> main.c:1392] DEBUG1: fd 3 of 1 added to pollfd [in compat_poll_add() at
->> compat-poll.c:91] DEBUG1: fd 10 of 2 added to pollfd [in
->> compat_poll_add() at compat-poll.c:91] DEBUG1: Notifying applications of
->> session daemon state: 1 [in notify_ust_apps() at main.c:687] DEBUG1:
->> [thread] Dispatch UST command started [in
->> thread_dispatch_ust_registration() at main.c:1324] DEBUG1: Futex n to 1
->> prepare done [in futex_nto1_prepare() at futex.c:73] DEBUG1: Woken up but
->> nothing in the UST command queue [in thread_dispatch_ust_registration()
->> at main.c:1334] DEBUG1: [thread] Manage client started [in
->> thread_manage_clients() at main.c:3794] DEBUG1: fd 3 of 1 added to pollfd
->> [in compat_poll_add() at compat-poll.c:91] DEBUG1: fd 9 of 2 added to
->> pollfd [in compat_poll_add() at compat-poll.c:91] DEBUG1: Accepting
->> client command ... [in thread_manage_clients() at main.c:3826] DEBUG1:
->> Got the wait shm fd 15 [in get_wait_shm() at shm.c:117] DEBUG1: Futex
->> wait update active 1 [in futex_wait_update() at futex.c:62] DEBUG1:
->> Accepting application registration [in thread_registration_apps() at
->> main.c:1423] 
->> ********************************************************************************************************
->>
->> 
-Am I missing anything??
->> 
->> Thanks in Advance, Pavan
->> 
->> 
->> ________________________________________ From: Mathieu Desnoyers
->> [mathieu.desnoyers@efficios.com] Sent: Monday, June 11, 2012 7:24 PM To:
->> Pavan Anumula Cc: lttng-dev@lists.lttng.org Subject: Re: [lttng-dev]
->> Lttng start failed
->> 
->> * Pavan Anumula (pavan.anumula@sasken.com) wrote:
->>> Hi Mathieu,
->>> 
->>> Please find the info below as per your comments
->>> 
->>> 
->>> ########## Output of  command "arm-none-linux-gnueabi-lttng-sessiond
->>> -vvv " , After loading the modules #######
->>> 
->>> DEBUG3: Creating LTTng run directory: /var/run/lttng [in
->>> create_lttng_rundir() at main.c:4315] DEBUG2: Kernel consumer err path:
->>> /var/run/lttng/kconsumerd/error [in main() at main.c:4543] DEBUG2:
->>> Kernel consumer cmd path: /var/run/lttng/kconsumerd/command [in main()
->>> at main.c:4545] DEBUG1: Client socket path
->>> /var/run/lttng/client-lttng-sessiond [in main() at main.c:4592] DEBUG1:
->>> Application socket path /var/run/lttng/apps-lttng-sessiond [in main()
->>> at main.c:4593] DEBUG1: LTTng run directory path: /var/run/lttng [in
->>> main() at main.c:4594] DEBUG2: UST consumer 32 bits err path:
->>> /var/run/lttng/ustconsumerd32/error [in main() at main.c:4603] DEBUG2:
->>> UST consumer 32 bits cmd path: /var/run/lttng/ustconsumerd32/command
->>> [in main() at main.c:4605] DEBUG2: UST consumer 64 bits err path:
->>> /var/run/lttng/ustconsumerd64/error [in main() at main.c:4614] DEBUG2:
->>> UST consumer 64 bits cmd path: /var/run/lttng/ustconsumerd64/command
->>> [in main() at main.c:4616] DEBUG3: Created hashtable size 4 at 0x4a080
->>> of type 1 [in lttng_ht_new() at hashtable.c:96] DEBUG3: Created
->>> hashtable size 4 at 0x4a168 of type 1 [in lttng_ht_new() at
->>> hashtable.c:96] DEBUG2: Creating consumer directory:
->>> /var/run/lttng/kconsumerd [in set_consumer_sockets() at main.c:4357] 
->>> FATAL: Module lttng_tracer not found. Error: Unable to load module
->>> lttng-tracer
->> 
->> Hrm. You want to do kernel tracing, but modprobe cannot find the lttng 
->> kernel tracer modules. You might want to run depmod -a or something like 
->> that on your target, and ensure that modprobe works properly.
->> 
->> Thanks,
->> 
->> Mathieu
->> 
->>> DEBUG2: Kernel tracer version validated (major version 2) [in
->>> kernel_validate_version() at kernel.c:675] DEBUG1: Modprobe
->>> successfully lttng-ftrace [in modprobe_lttng_data() at modprobe.c:199] 
->>> DEBUG1: Modprobe successfully lttng-kprobes [in modprobe_lttng_data()
->>> at modprobe.c:199] DEBUG1: Modprobe successfully lttng-kretprobes [in
->>> modprobe_lttng_data() at modprobe.c:199] FATAL: Module
->>> lttng_lib_ring_buffer not found. Error: Unable to load module
->>> lttng-lib-ring-buffer FATAL: Module lttng_ring_buffer_client_discard
->>> not found. Error: Unable to load module
->>> lttng-ring-buffer-client-discard FATAL: Module
->>> lttng_ring_buffer_client_overwrite not found. Error: Unable to load
->>> module lttng-ring-buffer-client-overwrite FATAL: Module
->>> lttng_ring_buffer_metadata_client not found. Error: Unable to load
->>> module lttng-ring-buffer-metadata-client FATAL: Module
->>> lttng_ring_buffer_client_mmap_discard not found. Error: Unable to load
->>> module lttng-ring-buffer-client-mmap-discard FATAL: Module
->>> lttng_ring_buffer_client_mmap_overwrite not found. Error: Unable to
->>> load module lttng-ring-buffer-client-mmap-overwrite FATAL: Module
->>> lttng_ring_buffer_metadata_mmap_client not found. Error: Unable to load
->>> module lttng-ring-buffer-metadata-mmap-client FATAL: Module
->>> lttng_probe_lttng not found. Error: Unable to load module
->>> lttng-probe-lttng DEBUG1: Modprobe successfully lttng-types [in
->>> modprobe_lttng_data() at modprobe.c:199] DEBUG1: Modprobe successfully
->>> lttng-probe-block [in modprobe_lttng_data() at modprobe.c:199] DEBUG1:
->>> Modprobe successfully lttng-probe-irq [in modprobe_lttng_data() at
->>> modprobe.c:199] DEBUG1: Modprobe successfully lttng-probe-kvm [in
->>> modprobe_lttng_data() at modprobe.c:199] DEBUG1: Modprobe successfully
->>> lttng-probe-sched [in modprobe_lttng_data() at modprobe.c:199] DEBUG1:
->>> Modprobe successfully lttng-probe-signal [in modprobe_lttng_data() at
->>> modprobe.c:199] DEBUG1: Modprobe successfully lttng-probe-statedump [in
->>> modprobe_lttng_data() at modprobe.c:199] DEBUG1: Modprobe successfully
->>> lttng-probe-timer [in modprobe_lttng_data() at modprobe.c:199] DEBUG1:
->>> Kernel tracer fd 6 [in init_kernel_tracer() at main.c:1887] DEBUG2:
->>> Creating consumer directory: /var/run/lttng/ustconsumerd64 [in
->>> set_consumer_sockets() at main.c:4357] DEBUG2: Creating consumer
->>> directory: /var/run/lttng/ustconsumerd32 [in set_consumer_sockets() at
->>> main.c:4357] DEBUG1: Signal handler set for SIGTERM, SIGPIPE and SIGINT
->>> [in set_signal_handler() at main.c:4449] DEBUG1: All permissions are
->>> set [in set_permissions() at main.c:4250] DEBUG1: poll set max size set
->>> to 65535 [in compat_poll_set_max_size() at compat-poll.c:196] DEBUG1:
->>> [thread] Manage client started [in thread_manage_clients() at
->>> main.c:3794] DEBUG1: fd 3 of 1 added to pollfd [in compat_poll_add() at
->>> compat-poll.c:91] DEBUG1: fd 9 of 2 added to pollfd [in
->>> compat_poll_add() at compat-poll.c:91] DEBUG1: Accepting client command
->>> ... [in thread_manage_clients() at main.c:3826] DEBUG1: [thread]
->>> Dispatch UST command started [in thread_dispatch_ust_registration() at
->>> main.c:1324] DEBUG1: Futex n to 1 prepare done [in futex_nto1_prepare()
->>> at futex.c:73] DEBUG1: Woken up but nothing in the UST command queue
->>> [in thread_dispatch_ust_registration() at main.c:1334] DEBUG1: Thread
->>> manage kernel started [in thread_manage_kernel() at main.c:876] DEBUG1:
->>> fd 3 of 1 added to pollfd [in compat_poll_add() at compat-poll.c:91] 
->>> DEBUG1: fd 11 of 2 added to pollfd [in compat_poll_add() at
->>> compat-poll.c:91] DEBUG1: Updating kernel poll set [in
->>> update_kernel_poll() at main.c:748] DEBUG1: Thread kernel polling on 2
->>> fds [in thread_manage_kernel() at main.c:905] DEBUG1: [thread] Manage
->>> application started [in thread_manage_apps() at main.c:1179] DEBUG1: fd
->>> 3 of 1 added to pollfd [in compat_poll_add() at compat-poll.c:91] 
->>> DEBUG1: fd 13 of 2 added to pollfd [in compat_poll_add() at
->>> compat-poll.c:91] DEBUG1: Apps thread polling on 2 fds [in
->>> thread_manage_apps() at main.c:1200] DEBUG1: [thread] Manage
->>> application registration started [in thread_registration_apps() at
->>> main.c:1392] DEBUG1: fd 3 of 1 added to pollfd [in compat_poll_add() at
->>> compat-poll.c:91] DEBUG1: fd 10 of 2 added to pollfd [in
->>> compat_poll_add() at compat-poll.c:91] DEBUG1: Notifying applications
->>> of session daemon state: 1 [in notify_ust_apps() at main.c:687] DEBUG1:
->>> Got the wait shm fd 15 [in get_wait_shm() at shm.c:117] DEBUG1: Futex
->>> wait update active 1 [in futex_wait_update() at futex.c:62] DEBUG1:
->>> Accepting application registration [in thread_registration_apps() at
->>> main.c:1423]
->>> 
->>> 
->>> 
->>> #### Output of  command "arm-none-linux-gnueabi-lttng-sessiond -vvv "
->>> before loading the modules #############
->>> 
->>> DEBUG3: Creating LTTng run directory: /var/run/lttng [in
->>> create_lttng_rundir() at main.c:4315] DEBUG2: Kernel consumer err path:
->>> /var/run/lttng/kconsumerd/error [in main() at main.c:4543] DEBUG2:
->>> Kernel consumer cmd path: /var/run/lttng/kconsumerd/command [in main()
->>> at main.c:4545] DEBUG1: Client socket path
->>> /var/run/lttng/client-lttng-sessiond [in main() at main.c:4592] DEBUG1:
->>> Application socket path /var/run/lttng/apps-lttng-sessiond [in main()
->>> at main.c:4593] DEBUG1: LTTng run directory path: /var/run/lttng [in
->>> main() at main.c:4594] DEBUG2: UST consumer 32 bits err path:
->>> /var/run/lttng/ustconsumerd32/error [in main() at main.c:4603] DEBUG2:
->>> UST consumer 32 bits cmd path: /var/run/lttng/ustconsumerd32/command
->>> [in main() at main.c:4605] DEBUG2: UST consumer 64 bits err path:
->>> /var/run/lttng/ustconsumerd64/error [in main() at main.c:4614] DEBUG2:
->>> UST consumer 64 bits cmd path: /var/run/lttng/ustconsumerd64/command
->>> [in main() at main.c:4616] DEBUG3: Created hashtable size 4 at 0x4a080
->>> of type 1 [in lttng_ht_new() at hashtable.c:96] DEBUG3: Created
->>> hashtable size 4 at 0x4a168 of type 1 [in lttng_ht_new() at
->>> hashtable.c:96] DEBUG2: Creating consumer directory:
->>> /var/run/lttng/kconsumerd [in set_consumer_sockets() at main.c:4357] 
->>> FATAL: Module lttng_tracer not found. Error: Unable to load module
->>> lttng-tracer DEBUG1: Failed to open /proc/lttng [in
->>> init_kernel_tracer() at main.c:1871] Error: Unable to remove module
->>> lttng-tracer Warning: No kernel tracer available DEBUG2: Creating
->>> consumer directory: /var/run/lttng/ustconsumerd64 [in
->>> set_consumer_sockets() at main.c:4357] DEBUG2: Creating consumer
->>> directory: /var/run/lttng/ustconsumerd32 [in set_consumer_sockets() at
->>> main.c:4357] DEBUG1: Signal handler set for SIGTERM, SIGPIPE and SIGINT
->>> [in set_signal_handler() at main.c:4449] DEBUG1: All permissions are
->>> set [in set_permissions() at main.c:4250] DEBUG1: poll set max size set
->>> to 65535 [in compat_poll_set_max_size() at compat-poll.c:196] DEBUG1:
->>> [thread] Manage application started [in thread_manage_apps() at
->>> main.c:1179] DEBUG1: fd 3 of 1 added to pollfd [in compat_poll_add() at
->>> compat-poll.c:91] DEBUG1: fd 12 of 2 added to pollfd [in
->>> compat_poll_add() at compat-poll.c:91] DEBUG1: Apps thread polling on 2
->>> fds [in thread_manage_apps() at main.c:1200] DEBUG1: Thread manage
->>> kernel started [in thread_manage_kernel() at main.c:876] DEBUG1: fd 3
->>> of 1 added to pollfd [in compat_poll_add() at compat-poll.c:91] DEBUG1:
->>> fd 10 of 2 added to pollfd [in compat_poll_add() at compat-poll.c:91] 
->>> DEBUG1: Updating kernel poll set [in update_kernel_poll() at
->>> main.c:748] DEBUG1: Thread kernel polling on 2 fds [in
->>> thread_manage_kernel() at main.c:905] DEBUG1: [thread] Manage
->>> application registration started [in thread_registration_apps() at
->>> main.c:1392] DEBUG1: fd 3 of 1 added to pollfd [in compat_poll_add() at
->>> compat-poll.c:91] DEBUG1: fd 9 of 2 added to pollfd [in
->>> compat_poll_add() at compat-poll.c:91] DEBUG1: Notifying applications
->>> of session daemon state: 1 [in notify_ust_apps() at main.c:687] DEBUG1:
->>> [thread] Dispatch UST command started [in
->>> thread_dispatch_ust_registration() at main.c:1324] DEBUG1: Futex n to 1
->>> prepare done [in futex_nto1_prepare() at futex.c:73] DEBUG1: Woken up
->>> but nothing in the UST command queue [in
->>> thread_dispatch_ust_registration() at main.c:1334] DEBUG1: [thread]
->>> Manage client started [in thread_manage_clients() at main.c:3794] 
->>> DEBUG1: fd 3 of 1 added to pollfd [in compat_poll_add() at
->>> compat-poll.c:91] DEBUG1: fd 8 of 2 added to pollfd [in
->>> compat_poll_add() at compat-poll.c:91] DEBUG1: Accepting client command
->>> ... [in thread_manage_clients() at main.c:3826] DEBUG1: Got the wait
->>> shm fd 14 [in get_wait_shm() at shm.c:117] DEBUG1: Futex wait update
->>> active 1 [in futex_wait_update() at futex.c:62] DEBUG1: Accepting
->>> application registration [in thread_registration_apps() at
->>> main.c:1423]
->>> 
->>> 
->>> Regards, Pavan
->>> 
->>> -----Original Message----- From: Mathieu Desnoyers
->>> [mailto:mathieu.desnoyers@efficios.com] Sent: Saturday, June 09, 2012
->>> 6:03 PM To: Pavan Anumula Cc: lttng-dev@lists.lttng.org Subject: Re:
->>> [lttng-dev] Lttng start failed
->>> 
->>> * Pavan Anumula (pavan.anumula@sasken.com) wrote:
->>>> Hi Mathue,
->>>> 
->>>> Thanks for the quick reply,
->>>> 
->>>> After inserting lttng modules , I had given the command
->>>> "arm-none-linux-gnueabi-lttng-sessiond -vvv"  as you said, Below is
->>>> the output where there are error messages. Please help me in
->>>> resolving the issue, SO that I can catch kernel and user traces.
->>>> 
->>>> 
->>>> root@arago:/usr/lttng/modules# arm-none-linux-gnueabi-lttng-sessiond 
->>>> -d root@arago:/usr/lttng/modules# 
->>>> arm-none-linux-gnueabi-lttng-sessiond -vvv DEBUG3: Creating LTTng run
->>>> directory: /var/run/lttng [in create_lttng_rundir() at main.c:4315] 
->>>> DEBUG2: Kernel consumer err path: /var/run/lttng/kconsumerd/error
->>>> [in main() at main.c:4543] DEBUG2: Kernel consumer cmd path:
->>>> /var/run/lttng/kconsumerd/command [in main() at main.c:4545] DEBUG1:
->>>> Client socket path /var/run/lttng/client-lttng-sessiond [in main() at
->>>> main.c:4592] DEBUG1: Application socket path
->>>> /var/run/lttng/apps-lttng-sessiond [in main() at main.c:4593] DEBUG1:
->>>> LTTng run directory path: /var/run/lttng [in main() at main.c:4594] 
->>>> DEBUG2: UST consumer 32 bits err path: 
->>>> /var/run/lttng/ustconsumerd32/error [in main() at main.c:4603] 
->>>> DEBUG2: UST consumer 32 bits cmd path: 
->>>> /var/run/lttng/ustconsumerd32/command [in main() at main.c:4605] 
->>>> DEBUG2: UST consumer 64 bits err path: 
->>>> /var/run/lttng/ustconsumerd64/error [in main() at main.c:4614] 
->>>> DEBUG2: UST consumer 64 bits cmd path: 
->>>> /var/run/lttng/ustconsumerd64/command [in main() at main.c:4616] 
->>>> Error: Already running daemon.
->>> 
->>> Please kill the lttng-sessiond that is already started (the one with
->>> -d). Instead of that one, run the sessiond with:
->>> 
->>> lttng-sessiond -vvv
->>> 
->>> (don't run lttng-sessiond -d before)
->>> 
->>> Thanks,
->>> 
->>> Mathieu
->>> 
->>>> 
->>>> 
->>>> 
->>>> 
->>>> Thanks in advance, Pavan
->>>> 
->>>> -----Original Message----- From: Mathieu Desnoyers
->>>> [mailto:mathieu.desnoyers@efficios.com] Sent: Friday, June 08, 2012
->>>> 11:12 PM To: Pavan Anumula Cc: lttng-dev@lists.lttng.org Subject: Re:
->>>> [lttng-dev] Lttng start failed
->>>> 
->>>> * Pavan Anumula (pavan.anumula@sasken.com) wrote:
->>>>> Hi ,
->>>>> 
->>>>> I am new to LTTng usage, I am trying to use LTTng 2.0.1 and
->>>>> LTTng-modules-2.0.2  for ARM(omapL138), with Linux kernel 2.6.33
->>>>> wit RT-29 patch on it.
->>>>> 
->>>>> After enabling all the kernel events I am facing the below errors.
->>>>> I loaded all the modules manually by insmod.
->>>>> 
->>>>> 
->>>>> 
->>>>> root@arago:~/lttng-traces# arm-none-linux-gnueabi-lttng create 
->>>>> newsessiom Session newsessiom created. Traces will be written in 
->>>>> /home/root/lttng-traces/newsessiom-20110325-154922
->>>>> 
->>>>> root@arago:~/lttng-traces# arm-none-linux-gnueabi-lttng
->>>>> enable-event -a --kernel All kernel events are enabled in channel
->>>>> channel0
->>>>> 
->>>>> root@arago:~/lttng-traces# arm-none-linux-gnueabi-lttng start 
->>>>> LTTng: Failure to write metadata to buffers (timeout) Error:
->>>>> Starting kernel trace failed
->>>>> 
->>>>> Please kindly help me on this.
->>>> 
->>>> I think you should look into the lttng-sessiond --help :
->>>> 
->>>> --consumerd32-path PATH     Specify path for the 32-bit UST consumer
->>>> daemon binary --consumerd32-libdir PATH   Specify path for the 32-bit
->>>> UST consumer daemon libraries --consumerd64-path PATH     Specify
->>>> path for the 64-bit UST consumer daemon binary --consumerd64-libdir
->>>> PATH   Specify path for the 64-bit UST consumer daemon libraries
->>>> 
->>>> options. My guess is that lttng-sessiond is not able to find the
->>>> consumerd binary files, maybe due to a rename or because they have
->>>> been moved after install.
->>>> 
->>>> One more thing that might help is to launch the lttng-sessiond with
->>>> "-vvv" : it will provide verbose output and let us know where things
->>>> fall apart.
->>>> 
->>>> Thanks,
->>>> 
->>>> Mathieu
->>>> 
->>>> 
->>>>> 
->>>>> 
->>>>> Thanks in advance, Pavan
->>>>> 
->>>>> ________________________________ SASKEN BUSINESS DISCLAIMER: This
->>>>> message may contain confidential, proprietary or legally privileged
->>>>> information. In case you are not the original intended Recipient of
->>>>> the message, you must not, directly or indirectly, use, disclose,
->>>>> distribute, print, or copy any part of this message and you are
->>>>> requested to delete it and inform the sender. Any views expressed
->>>>> in this message are those of the individual sender unless otherwise
->>>>> stated. Nothing contained in this message shall be construed as an
->>>>> offer or acceptance of any offer by Sasken Communication
->>>>> Technologies Limited ("Sasken") unless sent with that express
->>>>> intent and with due authority of Sasken. Sasken has taken enough
->>>>> precautions to prevent the spread of viruses. However the company
->>>>> accepts no liability for any damage caused by any virus transmitted
->>>>> by this email. Read Disclaimer at
->>>>> http://www.sasken.com/extras/mail_disclaimer.html
->>>> 
->>>>> _______________________________________________ lttng-dev mailing
->>>>> list lttng-dev@lists.lttng.org 
->>>>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->>>> 
->>>> 
->>>> -- Mathieu Desnoyers Operating System Efficiency R&D Consultant
->>>> EfficiOS Inc. http://www.efficios.com
->>> 
->>> -- Mathieu Desnoyers Operating System Efficiency R&D Consultant
->>> EfficiOS Inc. http://www.efficios.com
->> 
->> -- Mathieu Desnoyers Operating System Efficiency R&D Consultant EfficiOS
->> Inc. http://www.efficios.com
-> 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.12 (GNU/Linux)
+>
+> * Burton, Michael (mburton@ciena.com) wrote:
+> > Mathieu,
+> >
+> > I figured out the problem.  When we start sessiond on our system as root, the /.lttng/ folder is not created, along with its contents.  UST timed out since there was no sock_path.  I was able to get UST working once I got sessiond running.
+> >
+> > Thanks.
+> > Michael
+> >
+> > ________________________________________
+> > From: Mathieu Desnoyers [mathieu.desnoyers@efficios.com]
+> > Sent: 08 June 2012 21:38
+> > To: Burton, Michael
+> > Cc: lttng-dev@lists.lttng.org
+> > Subject: Re: [lttng-dev] UST Hanging at Tracepoint
+> >
+> > * Burton, Michael (mburton@ciena.com) wrote:
+> > > For further insight, I've attached the strace from the hanging
+> > > program.  I also upgraded LTTng-UST to 2.0.3 and userspace-rcu to
+> > > 0.7.3.
+> >
+> > Haven't had time to look at it yet, but could you also provide the
+> > output of:
+> >
+> > LTTNG_UST_DEBUG=1 youprogname
+> >
+> > (starting your UST instrumented program with LTTNG_UST_DEBUG=1 env. var.
+> > set)
+> >
+> > Thanks!
+> >
+> > Mathieu
+> >
+> > >
+> > > Michael
+> > >
+> > > From: Burton, Michael [mailto:mburton@ciena.com]
+> > > Sent: Thursday, June 07, 2012 2:16 PM
+> > > To: lttng-dev@lists.lttng.org
+> > > Subject: [lttng-dev] UST Hanging at Tracepoint
+> > >
+> > > I am working on getting LTTng 2.0 working in our 2.6.35 kernel.  I have kernel tracing working but I'm having problems with UST.
+> > >
+> > > I have a program with a dynamic UST tracepoint.  When I run the program with all UST events enabled (lttng enable-event -a -u) the program hangs on the tracepoint.  The last line from the UST debug is:
+> > >
+> > > libust[6184/6185]: Info: sessiond not accepting connections to local apps socket (in ust_listener_thread() at lttng-ust-comm.c:699)
+> > >
+> > > Any insight into why this is happening?  I've attached the UST and lttng-sessiond debug generated by the program.
+> > >
+> > > I am running the following:
+> > > lttng-modules-2.6.32 (found through this mailing list)
+> > > lttng-tools-2.0.1
+> > > lttng-ust-2.0.2
+> > > userspace-rcu-0.7.0
+> > >
+> > > Thanks,
+> > > Michael
+> >
+> > Content-Description: strace_debug.txt
+> > > execve("/ciena/bin/idp", ["idp", "help"], [/* 11 vars */]) = 0
+> > > brk(0)                                  = 0x804e000
+> > > mmap2(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0xb783c000
+> > > access("/etc/ld.so.preload", R_OK)      = -1 ENOENT (No such file or directory)
+> > > open("/etc/ld.so.cache", O_RDONLY)      = 3
+> > > fstat64(3, {st_mode=S_IFREG|0644, st_size=17420, ...}) = 0
+> > > mmap2(NULL, 17420, PROT_READ, MAP_PRIVATE, 3, 0) = 0xb7837000
+> > > close(3)                                = 0
+> > > open("/usr/lib/liblttng-ust.so.0", O_RDONLY) = 3
+> > > read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0\220A\0\0004\0\0\0$"..., 512) = 512
+> > > fstat64(3, {st_mode=S_IFREG|0755, st_size=209876, ...}) = 0
+> > > mmap2(NULL, 212940, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb7803000
+> > > mmap2(0xb7832000, 20480, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x2e) = 0xb7832000
+> > > close(3)                                = 0
+> > > open("/usr/lib/liblttng-ust-ctl.so.0", O_RDONLY) = 3
+> > > read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0\200-\0\0004\0\0\0\274"..., 512) = 512
+> > > fstat64(3, {st_mode=S_IFREG|0755, st_size=140020, ...}) = 0
+> > > mmap2(NULL, 142828, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb77e0000
+> > > mmap2(0xb7802000, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x21) = 0xb7802000
+> > > close(3)                                = 0
+> > > open("/usr/lib/liblttng-ust-fork.so.0", O_RDONLY) = 3
+> > > read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0\0\5\0\0004\0\0\0X"..., 512) = 512
+> > > fstat64(3, {st_mode=S_IFREG|0755, st_size=3864, ...}) = 0
+> > > mmap2(NULL, 6820, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb77de000
+> > > mmap2(0xb77df000, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0) = 0xb77df000
+> > > close(3)                                = 0
+> > > open("/usr/lib/liblttng-ust-tracepoint.so.0", O_RDONLY) = 3
+> > > read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0\220\v\0\0004\0\0\0008"..., 512) = 512
+> > > fstat64(3, {st_mode=S_IFREG|0755, st_size=16632, ...}) = 0
+> > > mmap2(NULL, 19944, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb77d9000
+> > > mmap2(0xb77dd000, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x3) = 0xb77dd000
+> > > close(3)                                = 0
+> > > open("/usr/lib/liblttng-ust-libc-wrapper.so.0", O_RDONLY) = 3
+> > > read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0\360\t\0\0004\0\0\0\364"..., 512) = 512
+> > > fstat64(3, {st_mode=S_IFREG|0755, st_size=9300, ...}) = 0
+> > > mmap2(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0xb77d8000
+> > > mmap2(NULL, 12104, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb77d5000
+> > > mmap2(0xb77d7000, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x1) = 0xb77d7000
+> > > close(3)                                = 0
+> > > open("/usr/lib/liburcu.so.1", O_RDONLY) = 3
+> > > read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0`\22\0\0004\0\0\0\374"..., 512) = 512
+> > > fstat64(3, {st_mode=S_IFREG|0755, st_size=18188, ...}) = 0
+> > > mmap2(NULL, 17080, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb77d0000
+> > > mmap2(0xb77d4000, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x4) = 0xb77d4000
+> > > close(3)                                = 0
+> > > open("/usr/lib/liburcu-common.so.1", O_RDONLY) = 3
+> > > read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0\340\5\0\0004\0\0\0\34"..., 512) = 512
+> > > fstat64(3, {st_mode=S_IFREG|0755, st_size=5084, ...}) = 0
+> > > mmap2(NULL, 8032, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb77ce000
+> > > mmap2(0xb77cf000, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0) = 0xb77cf000
+> > > close(3)                                = 0
+> > > open("/usr/lib/liburcu-qsbr.so.1", O_RDONLY) = 3
+> > > read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0\360\22\0\0004\0\0\0\374"..., 512) = 512
+> > > fstat64(3, {st_mode=S_IFREG|0755, st_size=18188, ...}) = 0
+> > > mmap2(NULL, 17080, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb77c9000
+> > > mmap2(0xb77cd000, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x4) = 0xb77cd000
+> > > close(3)                                = 0
+> > > open("/usr/lib/liburcu-mb.so.1", O_RDONLY) = 3
+> > > read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0`\22\0\0004\0\0\0\374"..., 512) = 512
+> > > fstat64(3, {st_mode=S_IFREG|0755, st_size=18188, ...}) = 0
+> > > mmap2(NULL, 17080, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb77c4000
+> > > mmap2(0xb77c8000, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x4) = 0xb77c8000
+> > > close(3)                                = 0
+> > > open("/usr/lib/liburcu-signal.so.1", O_RDONLY) = 3
+> > > read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0`\23\0\0004\0\0\0\10"..., 512) = 512
+> > > fstat64(3, {st_mode=S_IFREG|0755, st_size=18712, ...}) = 0
+> > > mmap2(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0xb77c3000
+> > > mmap2(NULL, 21704, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb77bd000
+> > > mmap2(0xb77c2000, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x4) = 0xb77c2000
+> > > close(3)                                = 0
+> > > open("/usr/lib/liburcu-cds.so.1", O_RDONLY) = 3
+> > > read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0\300\f\0\0004\0\0\0t"..., 512) = 512
+> > > fstat64(3, {st_mode=S_IFREG|0755, st_size=26204, ...}) = 0
+> > > mmap2(NULL, 25004, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb77b6000
+> > > mmap2(0xb77bc000, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x6) = 0xb77bc000
+> > > close(3)                                = 0
+> > > open("/usr/lib/liburcu-bp.so.1", O_RDONLY) = 3
+> > > read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0\320\24\0\0004\0\0\0\360"..., 512) = 512
+> > > fstat64(3, {st_mode=S_IFREG|0755, st_size=19968, ...}) = 0
+> > > mmap2(NULL, 23128, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb77b0000
+> > > mmap2(0xb77b5000, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x4) = 0xb77b5000
+> > > close(3)                                = 0
+> > > open("/lib/libdl.so.2", O_RDONLY)       = 3
+> > > read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0 \n\0\0004\0\0\0<"..., 512) = 512
+> > > fstat64(3, {st_mode=S_IFREG|0755, st_size=9668, ...}) = 0
+> > > mmap2(NULL, 12408, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb77ac000
+> > > mmap2(0xb77ae000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x1) = 0xb77ae000
+> > > close(3)                                = 0
+> > > open("/lib/libuuid.so.1", O_RDONLY)     = 3
+> > > read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0@\r\0\0004\0\0\0\350"..., 512) = 512
+> > > fstat64(3, {st_mode=S_IFREG|0755, st_size=12872, ...}) = 0
+> > > mmap2(NULL, 15632, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb77a8000
+> > > mmap2(0xb77ab000, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x2) = 0xb77ab000
+> > > close(3)                                = 0
+> > > open("/lib/libc.so.6", O_RDONLY)        = 3
+> > > read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0\220n\1\0004\0\0\0L"..., 512) = 512
+> > > fstat64(3, {st_mode=S_IFREG|0755, st_size=1347780, ...}) = 0
+> > > mmap2(NULL, 1358120, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb765c000
+> > > mprotect(0xb77a1000, 4096, PROT_NONE)   = 0
+> > > mmap2(0xb77a2000, 12288, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x145) = 0xb77a2000
+> > > mmap2(0xb77a5000, 10536, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0xb77a5000
+> > > close(3)                                = 0
+> > > open("/lib/librt.so.1", O_RDONLY)       = 3
+> > > read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0p\30\0\0004\0\0\0\230"..., 512) = 512
+> > > mmap2(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0xb765b000
+> > > fstat64(3, {st_mode=S_IFREG|0755, st_size=30616, ...}) = 0
+> > > mmap2(NULL, 33364, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb7652000
+> > > mmap2(0xb7659000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x6) = 0xb7659000
+> > > close(3)                                = 0
+> > > open("/lib/libpthread.so.0", O_RDONLY)  = 3
+> > > read(3, "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0\3\0\1\0\0\0\360J\0\0004\0\0\0\354"..., 512) = 512
+> > > fstat64(3, {st_mode=S_IFREG|0755, st_size=88420, ...}) = 0
+> > > mmap2(NULL, 98828, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0xb7639000
+> > > mmap2(0xb764e000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x14) = 0xb764e000
+> > > mmap2(0xb7650000, 4620, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0xb7650000
+> > > close(3)                                = 0
+> > > mmap2(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0xb7638000
+> > > mmap2(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0xb7636000
+> > > set_thread_area({entry_number:-1 -> 6, base_addr:0xb7636d80, limit:1048575, seg_32bit:1, contents:0, read_exec_only:0, limit_in_pages:1, seg_not_present:0, useable:1}) = 0
+> > > mprotect(0xb764e000, 4096, PROT_READ)   = 0
+> > > mprotect(0xb7659000, 4096, PROT_READ)   = 0
+> > > mprotect(0xb77a2000, 8192, PROT_READ)   = 0
+> > > mprotect(0xb77ae000, 4096, PROT_READ)   = 0
+> > > mprotect(0xb785a000, 4096, PROT_READ)   = 0
+> > > munmap(0xb7837000, 17420)               = 0
+> > > set_tid_address(0xb7636de8)             = 3050
+> > > set_robust_list(0xb7636df0, 0xc)        = 0
+> > > futex(0xbfaaf560, FUTEX_WAKE_PRIVATE, 1) = 0
+> > > futex(0xbfaaf560, 0x189 /* FUTEX_??? */, 1, NULL, bfaaf570) = -1 EAGAIN (Resource temporarily unavailable)
+> > > rt_sigaction(SIGRTMIN, {0xb763d4f0, [], SA_SIGINFO}, NULL, 8) = 0
+> > > rt_sigaction(SIGRT_1, {0xb763d9c0, [], SA_RESTART|SA_SIGINFO}, NULL, 8) = 0
+> > > rt_sigprocmask(SIG_UNBLOCK, [RTMIN RT_1], NULL, 8) = 0
+> > > getrlimit(RLIMIT_STACK, {rlim_cur=8192*1024, rlim_max=RLIM_INFINITY}) = 0
+> > > uname({sys="Linux", node="5410", ...})  = 0
+> > > rt_sigaction(SIGUSR1, {0xb77bec0a, [], SA_RESTART|SA_SIGINFO}, NULL, 8) = 0
+> > > futex(0xb77af06c, FUTEX_WAKE_PRIVATE, 2147483647) = 0
+> > > brk(0)                                  = 0x804e000
+> > > brk(0x806f000)                          = 0x806f000
+> > > gettimeofday({1339187216, 880428}, NULL) = 0
+> > > open("/dev/urandom", O_RDONLY|O_LARGEFILE) = 3
+> > > fcntl64(3, F_GETFD)                     = 0
+> > > fcntl64(3, F_SETFD, FD_CLOEXEC)         = 0
+> > > getuid32()                              = 0
+> > > gettimeofday({1339187216, 889603}, NULL) = 0
+> > > gettimeofday({1339187216, 894471}, NULL) = 0
+> > > read(3, "\275\0051F\215\373\371\202\377kfb/\362\303N"..., 16) = 16
+> > > clock_gettime(CLOCK_REALTIME, {1339187216, 902329405}) = 0
+> > > getuid32()                              = 0
+> > > geteuid32()                             = 0
+> > > rt_sigprocmask(SIG_SETMASK, ~[RTMIN RT_1], [], 8) = 0
+> > > mmap2(NULL, 8388608, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_STACK, -1, 0) = 0xb6e36000
+> > > mprotect(0xb6e36000, 4096, PROT_NONE)   = 0
+> > > clone(child_stack=0xb7634d64, flags=CLONE_VM|CLONE_FS|CLONE_FILES|CLONE_SIGHAND|CLONE_THREAD|CLONE_SYSVSEM|CLONE_SETTLS|CLONE_PARENT_SETTID|CLONE_CHILD_CLEARTID|CLONE_DETACHED, parent_tidptr=0xb7635bd8, {entry_number:6, base_addr:0xb7635b70, limit:1048575, seg_32bit:1, contents:0, read_exec_only:0, limit_in_pages:1, seg_not_present:0, useable:1}, child_tidptr=0xb7635bd8) = 3051
+> > > mmap2(NULL, 8388608, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_STACK, -1, 0) = 0xb6636000
+> > > mprotect(0xb6636000, 4096, PROT_NONE)   = 0
+> > > clone(child_stack=0xb6e34d64, flags=CLONE_VM|CLONE_FS|CLONE_FILES|CLONE_SIGHAND|CLONE_THREAD|CLONE_SYSVSEM|CLONE_SETTLS|CLONE_PARENT_SETTID|CLONE_CHILD_CLEARTID|CLONE_DETACHED, parent_tidptr=0xb6e35bd8, {entry_number:6, base_addr:0xb6e35b70, limit:1048575, seg_32bit:1, contents:0, read_exec_only:0, limit_in_pages:1, seg_not_present:0, useable:1}, child_tidptr=0xb6e35bd8) = 3052
+> > > rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+> > > gettimeofday({1339187216, 974869}, NULL) = 0
+> > > futex(0xb7836e30, FUTEX_WAIT_PRIVATE, 0, {2, 927460405}) = -1 ETIMEDOUT (Connection timed out)
+> > > gettid()                                = 3050
+> > > write(2, "libust[3050/3050]: Error: Timed o"..., 107libust[3050/3050]: Error: Timed out waiting for ltt-sessiond (in lttng_ust_init() at lttng-ust-comm.c:912)
+> > > ) = 107
+> > > futex(0xb7836e80, FUTEX_WAIT_PRIVATE, 2, NULL
+> > > _______________________________________________
+> > > lttng-dev mailing list
+> > > lttng-dev@lists.lttng.org
+> > > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> >
+> >
+> > --
+> > Mathieu Desnoyers
+> > Operating System Efficiency R&D Consultant
+> > EfficiOS Inc.
+> > http://www.efficios.com
+>
+> --
+> Mathieu Desnoyers
+> Operating System Efficiency R&D Consultant
+> EfficiOS Inc.
+> http://www.efficios.com
+>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
-iQEcBAEBAgAGBQJP12GMAAoJEELoaioR9I02+q8IAKw/ot4BmP6xibXM/VnNaRdP
-60S1KEynFPxDmO9JS3u3x+r4UiDaGWrP4+rEfgAeUeMQcOj3ItHZLyNhp+F8A8+j
-Dj0q9YFNBLsANzHzAk9VsVlL/myYaeW7ysNGl1yxhL9Vc/Px3cmxaof79smxMGcQ
-dnMKf6Gk+eNL4IPrXQIxF0cvVK85PI2xaDA1SiiKQaULUiqUBebn2gtGr1l8oFTw
-FT1xryh4wRw4FUmqngw54SYPiYpZm1y/VUzTWB3Zs9hYPcvEum22wrhAaWNkoUkk
-ixBjE+HHIVRBzZatDymE35tI4+Ci6z9J3uRmJVC97x2qQz2F4nl5Yw3qRmm1PVM=
-=3VyT
------END PGP SIGNATURE-----
+--
+Mathieu Desnoyers
+Operating System Efficiency R&D Consultant
+EfficiOS Inc.
+http://www.efficios.com
