@@ -1,19 +1,22 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: lttng-ust with --std=c99 -pedantic
-Date: Tue, 12 Jun 2012 11:32:57 -0400
-Message-ID: <20120612153257.GB14189__37384.2848268852$1339515221$gmane$org@Krystal>
-References: <jr0mmu$efe$1@dough.gmane.org>
+From: David Goulet <dgoulet@efficios.com>
+Subject: Re: Lttng start failed
+Date: Tue, 12 Jun 2012 11:34:39 -0400
+Message-ID: <4FD7618F.8090407__25472.4099454053$1339515314$gmane$org@efficios.com>
+References: <47D610AD9C485E458630BA38C324D3B60113FB00F9EA@EXGMBX01.sasken.com>
+	<20120608174226.GA23339@Krystal>
+	<47D610AD9C485E458630BA38C324D3B60113FB00FA00@EXGMBX01.sasken.com>
+	<20120609123251.GA14280@Krystal>
+	<47D610AD9C485E458630BA38C324D3B60113FB0E22D1@EXGMBX01.sasken.com>
+	<20120612140548.GA13917@Krystal>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from smtp.ini-tech.com ([213.239.202.151])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1SeT5Z-0002HE-Dd
-	for lttng-dev@lists.lttng.org; Tue, 12 Jun 2012 11:33:01 -0400
-Content-Disposition: inline
-In-Reply-To: <jr0mmu$efe$1@dough.gmane.org>
+	(envelope-from <dgoulet@efficios.com>) id 1SeT7E-0002It-3u
+	for lttng-dev@lists.lttng.org; Tue, 12 Jun 2012 11:34:44 -0400
+In-Reply-To: <20120612140548.GA13917@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,131 +25,496 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: John Steele Scott <toojays@toojays.net>
-Cc: lttng-dev@lists.lttng.org
+To: Pavan Anumula <pavan.anumula@sasken.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-SGkgSm9obiwKCiogSm9obiBTdGVlbGUgU2NvdHQgKHRvb2pheXNAdG9vamF5cy5uZXQpIHdyb3Rl
-Ogo+IEkgd2FudCB0byBhZGQgbHR0bmctdXN0IHRyYWNlcG9pbnRzIHRvIGEgcHJvZ3JhbSB3aGlj
-aCBidWlsZHMgd2l0aCAiLS1zdGQ9Yzk5IC1wZWRhbnRpYyIuIFJpZ2h0IG5vdyB0aGlzIGRvZXMg
-bm90IHdvcmsuCj4gCj4gVXNpbmcgdGhlIGRlbW8gcHJvZ3JhbSBhcyBhbiBleGFtcGxlLCBpZiB5
-b3UgZW5hYmxlIC0tc3RkPWM5OSwgdGhlIGZpcnN0IGlzc3VlIGxvb2tzIGxpa2U6Cj4gCj4ganNj
-b3R0QHNhYXo6fi9zcmMvbHR0bmctdXN0L3Rlc3RzL2RlbW8kIGNjYWNoZSBnY2MgLXN0ZD1jOTkg
-LURIQVZFX0NPTkZJR19IIC1JLiAtSS4uLy4uIC1JLi4vLi4vaW5jbHVkZS9sdHRuZyAgLUkuLi8u
-Li9pbmNsdWRlIC1XYWxsIC1nIC1PMiAtTVQgZGVtby5vIC1NRCAtTVAgLU1GIC5kZXBzL2RlbW8u
-VHBvIC1jIC1vIGRlbW8ubyBkZW1vLmMKPiBJbiBmaWxlIGluY2x1ZGVkIGZyb20gZGVtby5jOjM0
-OjA6Cj4gdXN0X3Rlc3RzX2RlbW8uaDogSW4gZnVuY3Rpb24g4oCYX190cmFjZXBvaW50X2NiX3Vz
-dF90ZXN0c19kZW1vX19fc3RhcnRpbmfigJk6Cj4gdXN0X3Rlc3RzX2RlbW8uaDoyNzoyMzogd2Fy
-bmluZzogaW1wbGljaXQgZGVjbGFyYXRpb24gb2YgZnVuY3Rpb24g4oCYdHlwZW9m4oCZIFstV2lt
-cGxpY2l0LWZ1bmN0aW9uLWRlY2xhcmF0aW9uXQo+IHVzdF90ZXN0c19kZW1vLmg6Mjc6MjE4OiBl
-cnJvcjogZXhwZWN0ZWQg4oCYO+KAmSBiZWZvcmUg4oCYX19fX19fX19fcDHigJkKPiB1c3RfdGVz
-dHNfZGVtby5oOjI3OjM5NTogZXJyb3I6IOKAmF9fX19fX19fX3Ax4oCZIHVuZGVjbGFyZWQgKGZp
-cnN0IHVzZSBpbiB0aGlzIGZ1bmN0aW9uKQo+IHVzdF90ZXN0c19kZW1vLmg6Mjc6Mzk1OiBub3Rl
-OiBlYWNoIHVuZGVjbGFyZWQgaWRlbnRpZmllciBpcyByZXBvcnRlZCBvbmx5IG9uY2UgZm9yIGVh
-Y2ggZnVuY3Rpb24gaXQgYXBwZWFycyBpbgo+IEluIGZpbGUgaW5jbHVkZWQgZnJvbSBkZW1vLmM6
-MzQ6MDoKPiB1c3RfdGVzdHNfZGVtby5oOiBJbiBmdW5jdGlvbiDigJhfX3RyYWNlcG9pbnRfY2Jf
-dXN0X3Rlc3RzX2RlbW9fX19kb25l4oCZOgo+IHVzdF90ZXN0c19kZW1vLmg6MzU6MjE0OiBlcnJv
-cjogZXhwZWN0ZWQg4oCYO+KAmSBiZWZvcmUg4oCYX19fX19fX19fcDHigJkKPiB1c3RfdGVzdHNf
-ZGVtby5oOjM1OjM4MzogZXJyb3I6IOKAmF9fX19fX19fX3Ax4oCZIHVuZGVjbGFyZWQgKGZpcnN0
-IHVzZSBpbiB0aGlzIGZ1bmN0aW9uKQo+IEluIGZpbGUgaW5jbHVkZWQgZnJvbSBkZW1vLmM6MzU6
-MDoKPiB1c3RfdGVzdHNfZGVtbzIuaDogSW4gZnVuY3Rpb24g4oCYX190cmFjZXBvaW50X2NiX3Vz
-dF90ZXN0c19kZW1vMl9fX2xvb3DigJk6Cj4gdXN0X3Rlc3RzX2RlbW8yLmg6Mjc6Mjk5OiBlcnJv
-cjogZXhwZWN0ZWQg4oCYO+KAmSBiZWZvcmUg4oCYX19fX19fX19fcDHigJkKPiB1c3RfdGVzdHNf
-ZGVtbzIuaDoyNzo0NzA6IGVycm9yOiDigJhfX19fX19fX19wMeKAmSB1bmRlY2xhcmVkIChmaXJz
-dCB1c2UgaW4gdGhpcyBmdW5jdGlvbikKPiBJbiBmaWxlIGluY2x1ZGVkIGZyb20gZGVtby5jOjM2
-OjA6Cj4gdXN0X3Rlc3RzX2RlbW8zLmg6IEluIGZ1bmN0aW9uIOKAmF9fdHJhY2Vwb2ludF9jYl91
-c3RfdGVzdHNfZGVtbzNfX19kb25l4oCZOgo+IHVzdF90ZXN0c19kZW1vMy5oOjI3OjIxNTogZXJy
-b3I6IGV4cGVjdGVkIOKAmDvigJkgYmVmb3JlIOKAmF9fX19fX19fX3Ax4oCZCj4gdXN0X3Rlc3Rz
-X2RlbW8zLmg6Mjc6Mzg2OiBlcnJvcjog4oCYX19fX19fX19fcDHigJkgdW5kZWNsYXJlZCAoZmly
-c3QgdXNlIGluIHRoaXMgZnVuY3Rpb24pCj4gCj4gVGhpcyBjYW4gYmUgZWFzaWx5IHJlc29sdmVk
-IGJ5IHVzaW5nIF9fdHlwZW9mX18oKSBpbnN0ZWFkIG9mIHR5cGVvZigpLiBUaGVuIEkgY2FuIGJ1
-aWxkIHdpdGggLS1zdGQ9Yzk5LiBCdXQgYWRkaW5nIC1wZWRhbnRpYyBzdGlsbCBmYWlsczoKCkkg
-cHVzaGVkIGEgZml4IGZvciB0aGlzOgoKY29tbWl0IDY0MjNjMzEzNGJmMDdkNGE3ZGI1NmY2OWYy
-Yzc5YjU0MGE3OWM0ZjEKQXV0aG9yOiBNYXRoaWV1IERlc25veWVycyA8bWF0aGlldS5kZXNub3ll
-cnNAZWZmaWNpb3MuY29tPgpEYXRlOiAgIE1vbiBKdW4gMTEgMTA6MTU6MjUgMjAxMiAtMDQwMAoK
-ICAgIEZpeCBjOTkgY29tcGF0aWJpbGl0eTogdXNlIF9fdHlwZW9mX18gaW5zdGVhZCBvZiB0eXBl
-b2YgaW4gcHVibGljIGhlYWRlcnMKICAgIAogICAgUmVwb3J0ZWQtYnk6IEpvaG4gU3RlZWxlIFNj
-b3R0IDx0b29qYXlzQHRvb2pheXMubmV0PgogICAgU2lnbmVkLW9mZi1ieTogTWF0aGlldSBEZXNu
-b3llcnMgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4KCkkgYWxzbyBoYWQgaXNzdWVz
-IHdpdGggKHZvaWQpIGFyZyBwYXJhbWV0ZXJzIHdpdGggdHJhY2Vwb2ludHMsIHNvCnB1c2hlZDoK
-CmNvbW1pdCA0NDk1ZGQzOWMwNTczOWQwZmIyYmM0NjNiN2MwOTNkMjQ1OWNlMmI2CkF1dGhvcjog
-TWF0aGlldSBEZXNub3llcnMgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4KRGF0ZTog
-ICBUdWUgSnVuIDEyIDExOjIyOjQ2IDIwMTIgLTA0MDAKCiAgICBGaXg6IHN1cHBvcnQgLXN0ZD1j
-OTkgaW4gdHJhY2Vwb2ludCBtYWNyb3MKICAgIAogICAgU2lnbmVkLW9mZi1ieTogTWF0aGlldSBE
-ZXNub3llcnMgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4KCkkgaGFkIGFsc28gdG8g
-Zml4IHVzZXJzcGFjZSBSQ1UgbGlicmFyeSwgd2l0aDoKCgpjb21taXQgZTUxNTAwZWRiZDk5MTlj
-ZWU1M2JjODVjYmI0YjIyY2Q0Nzg2ZmM0MgpBdXRob3I6IE1hdGhpZXUgRGVzbm95ZXJzIDxtYXRo
-aWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+CkRhdGU6ICAgVHVlIEp1biAxMiAxMToyNDozMSAy
-MDEyIC0wNDAwCgogICAgRml4IGM5OSBjb21wYXRpYmlsaXR5OiB1c2UgX19hc21fXyBhbmQgX192
-b2xhdGlsZV9fIGluIHB1YmxpYyBoZWFkZXJzCiAgICAKICAgIFNpZ25lZC1vZmYtYnk6IE1hdGhp
-ZXUgRGVzbm95ZXJzIDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+Cgpjb21taXQgYmRm
-ZmE3M2FhMjA4YWQ1ZjFlNWIzYTNjYjZjYmY4NmFjNjk5NjU1OQpBdXRob3I6IE1hdGhpZXUgRGVz
-bm95ZXJzIDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+CkRhdGU6ICAgTW9uIEp1biAx
-MSAxMDoxNjozNSAyMDEyIC0wNDAwCgogICAgRml4IGM5OSBjb21wYXRpYmlsaXR5OiB1c2UgX190
-eXBlb2ZfXyBpbnN0ZWFkIG9mIHR5cGVvZiBpbiBwdWJsaWMgaGVhZGVycwogICAgCiAgICBSZXBv
-cnRlZC1ieTogSm9obiBTdGVlbGUgU2NvdHQgPHRvb2pheXNAdG9vamF5cy5uZXQ+CiAgICBTaWdu
-ZWQtb2ZmLWJ5OiBNYXRoaWV1IERlc25veWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3Mu
-Y29tPgoKCj4gCj4ganNjb3R0QHNhYXo6fi9zcmMvbHR0bmctdXN0L3Rlc3RzL2RlbW8kIGNjYWNo
-ZSBnY2MgLXN0ZD1jOTkgLUR0eXBlb2Y9X190eXBlb2ZfXyAtcGVkYW50aWMgLURIQVZFX0NPTkZJ
-R19IIC1JLiAtSS4uLy4uIC1JLi4vLi4vaW5jbHVkZS9sdHRuZyAgLUkuLi8uLi9pbmNsdWRlIC1X
-YWxsIC1nIC1PMiAtTVQgZGVtby5vIC1NRCAtTVAgLU1GIC5kZXBzL2RlbW8uVHBvIC1jIC1vIGRl
-bW8ubyBkZW1vLmMKPiBJbiBmaWxlIGluY2x1ZGVkIGZyb20gdXN0X3Rlc3RzX2RlbW8uaDoyNTow
-LAo+ICAgICAgICAgICAgICAgICAgZnJvbSBkZW1vLmM6MzQ6Cj4gLi4vLi4vaW5jbHVkZS9sdHRu
-Zy90cmFjZXBvaW50Lmg6IEluIGZ1bmN0aW9uIOKAmF9fdHJhY2Vwb2ludHNfX2luaXTigJk6Cj4g
-Li4vLi4vaW5jbHVkZS9sdHRuZy90cmFjZXBvaW50Lmg6MjUxOjQ6IHdhcm5pbmc6IElTTyBDIGZv
-cmJpZHMgY29udmVyc2lvbiBvZiBvYmplY3QgcG9pbnRlciB0byBmdW5jdGlvbiBwb2ludGVyIHR5
-cGUgWy1wZWRhbnRpY10KPiAuLi8uLi9pbmNsdWRlL2x0dG5nL3RyYWNlcG9pbnQuaDoyNTU6NDog
-d2FybmluZzogSVNPIEMgZm9yYmlkcyBjb252ZXJzaW9uIG9mIG9iamVjdCBwb2ludGVyIHRvIGZ1
-bmN0aW9uIHBvaW50ZXIgdHlwZSBbLXBlZGFudGljXQo+IC4uLy4uL2luY2x1ZGUvbHR0bmcvdHJh
-Y2Vwb2ludC5oOjI2MDo0OiB3YXJuaW5nOiBJU08gQyBmb3JiaWRzIGNvbnZlcnNpb24gb2Ygb2Jq
-ZWN0IHBvaW50ZXIgdG8gZnVuY3Rpb24gcG9pbnRlciB0eXBlIFstcGVkYW50aWNdCj4gLi4vLi4v
-aW5jbHVkZS9sdHRuZy90cmFjZXBvaW50Lmg6MjY0OjQ6IHdhcm5pbmc6IElTTyBDIGZvcmJpZHMg
-Y29udmVyc2lvbiBvZiBvYmplY3QgcG9pbnRlciB0byBmdW5jdGlvbiBwb2ludGVyIHR5cGUgWy1w
-ZWRhbnRpY10KPiAuLi8uLi9pbmNsdWRlL2x0dG5nL3RyYWNlcG9pbnQuaDoyNjg6NDogd2Fybmlu
-ZzogSVNPIEMgZm9yYmlkcyBjb252ZXJzaW9uIG9mIG9iamVjdCBwb2ludGVyIHRvIGZ1bmN0aW9u
-IHBvaW50ZXIgdHlwZSBbLXBlZGFudGljXQo+IEluIGZpbGUgaW5jbHVkZWQgZnJvbSBkZW1vLmM6
-MzQ6MDoKPiB1c3RfdGVzdHNfZGVtby5oOiBJbiBmdW5jdGlvbiDigJhfX3RyYWNlcG9pbnRfY2Jf
-dXN0X3Rlc3RzX2RlbW9fX19zdGFydGluZ+KAmToKPiB1c3RfdGVzdHNfZGVtby5oOjI3OjE2MTog
-d2FybmluZzogSVNPIEMgZm9yYmlkcyBicmFjZWQtZ3JvdXBzIHdpdGhpbiBleHByZXNzaW9ucyBb
-LXBlZGFudGljXQo+IHVzdF90ZXN0c19kZW1vLmg6Mjc6NTQ5OiB3YXJuaW5nOiBJU08gQyBmb3Ji
-aWRzIGNvbnZlcnNpb24gb2Ygb2JqZWN0IHBvaW50ZXIgdG8gZnVuY3Rpb24gcG9pbnRlciB0eXBl
-IFstcGVkYW50aWNdCj4gSW4gZmlsZSBpbmNsdWRlZCBmcm9tIGRlbW8uYzozNDowOgo+IHVzdF90
-ZXN0c19kZW1vLmg6IEluIGZ1bmN0aW9uIOKAmF9fdHJhY2Vwb2ludF9jYl91c3RfdGVzdHNfZGVt
-b19fX2RvbmXigJk6Cj4gdXN0X3Rlc3RzX2RlbW8uaDozNToxNjE6IHdhcm5pbmc6IElTTyBDIGZv
-cmJpZHMgYnJhY2VkLWdyb3VwcyB3aXRoaW4gZXhwcmVzc2lvbnMgWy1wZWRhbnRpY10KPiB1c3Rf
-dGVzdHNfZGVtby5oOjM1OjUzNzogd2FybmluZzogSVNPIEMgZm9yYmlkcyBjb252ZXJzaW9uIG9m
-IG9iamVjdCBwb2ludGVyIHRvIGZ1bmN0aW9uIHBvaW50ZXIgdHlwZSBbLXBlZGFudGljXQo+IElu
-IGZpbGUgaW5jbHVkZWQgZnJvbSBkZW1vLmM6MzU6MDoKPiB1c3RfdGVzdHNfZGVtbzIuaDogSW4g
-ZnVuY3Rpb24g4oCYX190cmFjZXBvaW50X2NiX3VzdF90ZXN0c19kZW1vMl9fX2xvb3DigJk6Cj4g
-dXN0X3Rlc3RzX2RlbW8yLmg6Mjc6MjQ1OiB3YXJuaW5nOiBJU08gQyBmb3JiaWRzIGJyYWNlZC1n
-cm91cHMgd2l0aGluIGV4cHJlc3Npb25zIFstcGVkYW50aWNdCj4gdXN0X3Rlc3RzX2RlbW8yLmg6
-Mjc6NjI0OiB3YXJuaW5nOiBJU08gQyBmb3JiaWRzIGNvbnZlcnNpb24gb2Ygb2JqZWN0IHBvaW50
-ZXIgdG8gZnVuY3Rpb24gcG9pbnRlciB0eXBlIFstcGVkYW50aWNdCj4gSW4gZmlsZSBpbmNsdWRl
-ZCBmcm9tIGRlbW8uYzozNjowOgo+IHVzdF90ZXN0c19kZW1vMy5oOiBJbiBmdW5jdGlvbiDigJhf
-X3RyYWNlcG9pbnRfY2JfdXN0X3Rlc3RzX2RlbW8zX19fZG9uZeKAmToKPiB1c3RfdGVzdHNfZGVt
-bzMuaDoyNzoxNjE6IHdhcm5pbmc6IElTTyBDIGZvcmJpZHMgYnJhY2VkLWdyb3VwcyB3aXRoaW4g
-ZXhwcmVzc2lvbnMgWy1wZWRhbnRpY10KPiB1c3RfdGVzdHNfZGVtbzMuaDoyNzo1NDA6IHdhcm5p
-bmc6IElTTyBDIGZvcmJpZHMgY29udmVyc2lvbiBvZiBvYmplY3QgcG9pbnRlciB0byBmdW5jdGlv
-biBwb2ludGVyIHR5cGUgWy1wZWRhbnRpY10KCkkgc2VlIHRoZXNlIHdhcm5pbmdzLCB0aGUgb25s
-eSB0aGluZyB0aGF0IGN1cnJlbnRseSBmYWlscyBpcyBkdWUgdG8KQllURV9PUkRFUiBhbmQgQklH
-X0VORElBTiBub3QgYmVpbmcgZGVmaW5lZC4gQnkgYWRkaW5nOgoKLURCWVRFX09SREVSPV9fQllU
-RV9PUkRFUiAtREJJR19FTkRJQU49X19CSUdfRU5ESUFOCgpteSB0ZXN0cy9oZWxsbyBwcm9ncmFt
-LCB3aXRoIGEgTWFrZWZpbGUuYW0gbW9kaWZpZWQgdG8gZG86CgpoZWxsb19DRkxBR1MgPSAtV2Vy
-cm9yPW9sZC1zdHlsZS1kZWZpbml0aW9uIC0tc3RkPWM5OSAtcGVkYW50aWMKCnByaW50cyBtYW55
-IHBlZGFudGljIHdhcm5pbmdzLCBhbmQgZmFpbHMgd2l0aDoKCi4vLi91c3RfdGVzdHNfaGVsbG8u
-aDo1NToxOiBlcnJvcjogemVybyBvciBuZWdhdGl2ZSBzaXplIGFycmF5IOKAmF9fZXZlbnRfZmll
-bGRzX19fdXN0X3Rlc3RzX2hlbGxvX19fdHB0ZXN0X3NpZ2hhbmRsZXLigJkKCndoaWNoIHNlZW1z
-IHRvIGJlIGNhdXNlZCBieSBteSBldmVudCB3aXRoIDAgZmllbGRzLCB3aGljaCB0cnkgdG8gY3Jl
-YXRlCmFuIGFycmF5IG9mIGxlbmd0aCAwLgoKSSdsbCBsb29rIGludG8gdGhpcyBvbmUuCgpUaGFu
-a3MsCgpNYXRoaWV1Cgo+IAo+IFRoaXMgaXMgd2l0aCA0LjYuMS05dWJ1bnR1MyBvbiBVYnVudHUg
-MTEuMTAsIGx0dG5nLXVzdCBtYXN0ZXIgNWE4MjFjLgo+IAo+IFdvdWxkIGl0IGJlIHBhcnRpY3Vs
-YXJseSBkaWZmaWN1bHQgdG8gbWFrZSB0aGUgbHR0bmctdXN0IHRyYWNlcG9pbnRzIGNvbXBhdGli
-bGUgd2l0aCBwcm9ncmFtcyBidWlsdCB3aXRoIC1wZWRhbnRpYz8KPiAKPiBjaGVlcnMsCj4gCj4g
-Sm9obgo+IAo+IAo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fCj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcK
-PiBodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1k
-ZXYKCi0tIApNYXRoaWV1IERlc25veWVycwpPcGVyYXRpbmcgU3lzdGVtIEVmZmljaWVuY3kgUiZE
-IENvbnN1bHRhbnQKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxp
-bmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcv
-Y2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+Hi Pavan,
+
+The output below is normal and should be working fine. However, the problem is
+that you have _NO_ debug message after the "lttng start". That command should
+at least produce 10+ lines of messages after this last line:
+
+"DEBUG1: Accepting application registration [in thread_registration_apps() at
+main.c:1423]"
+
+Can you enlight me and tell me if by doing "lttng create newsessiom" and
+"lttng enable-event -a -k", you have output messages coming out of the session
+daemon in -vvv mode ?
+
+If NOT, you are talking to another daemon! A quick "ps faux | grep
+lttng-sessiond" could help clear that question.
+
+If only one daemon is running and stuck at the above debug message, the next
+step is to tell me on what the daemon is waiting on using either "strace -p"
+or "gdb" also. There is 6 threads so having the strace -p output for all of
+them would help me greatly.
+
+Thanks!
+David
+
+On 12/06/12 10:05 AM, Mathieu Desnoyers wrote:
+> * Pavan Anumula (pavan.anumula@sasken.com) wrote:
+>> Hi Mathieu, Still I am unable to start tracing, And I am facing the same
+>> start  errors. Please kindly help me on this. This time I loaded the
+>> modules by modprobe( not with insmod as I did  before), Then I run the
+>> command  " arm-none-linux-gnueabi-lttng-sessiond  -vvv " (before
+>> arm-none-linux-gnueabi-lttng-sessiond  -d),
+> 
+> When using "arm-none-linux-gnueabi-lttng-sessiond  -vvv", you should _not_
+> run "arm-none-linux-gnueabi-lttng-sessiond  -d".
+> 
+> 
+>> The below is the Output, And It got hanged overthere.
+> 
+> This is normal: the sessiond is waiting for applications to connect. It 
+> does not hang, it just waits.
+> 
+> David, can you follow up on this issue ? It seems to be sessiond-related.
+> 
+> Thanks,
+> 
+> Mathieu
+> 
+> 
+>> Later when I started lttng start I am acing the same erros below: 
+>> root@arago:~/lttng-traces# arm-none-linux-gnueabi-lttng start LTTng:
+>> Failure to write metadata to buffers (timeout) Error: Starting kernel
+>> trace failed
+>> 
+>> ************************************************************************************************
+>>
+>> 
+DEBUG3: Creating LTTng run directory: /var/run/lttng [in create_lttng_rundir()
+at main.c:4315]
+>> DEBUG2: Kernel consumer err path: /var/run/lttng/kconsumerd/error [in
+>> main() at main.c:4543] DEBUG2: Kernel consumer cmd path:
+>> /var/run/lttng/kconsumerd/command [in main() at main.c:4545] DEBUG1:
+>> Client socket path /var/run/lttng/client-lttng-sessiond [in main() at
+>> main.c:4592] DEBUG1: Application socket path
+>> /var/run/lttng/apps-lttng-sessiond [in main() at main.c:4593] DEBUG1:
+>> LTTng run directory path: /var/run/lttng [in main() at main.c:4594] 
+>> DEBUG2: UST consumer 32 bits err path:
+>> /var/run/lttng/ustconsumerd32/error [in main() at main.c:4603] DEBUG2:
+>> UST consumer 32 bits cmd path: /var/run/lttng/ustconsumerd32/command [in
+>> main() at main.c:4605] DEBUG2: UST consumer 64 bits err path:
+>> /var/run/lttng/ustconsumerd64/error [in main() at main.c:4614] DEBUG2:
+>> UST consumer 64 bits cmd path: /var/run/lttng/ustconsumerd64/command [in
+>> main() at main.c:4616] DEBUG3: Created hashtable size 4 at 0x4a080 of
+>> type 1 [in lttng_ht_new() at hashtable.c:96] DEBUG3: Created hashtable
+>> size 4 at 0x4a168 of type 1 [in lttng_ht_new() at hashtable.c:96] DEBUG2:
+>> Creating consumer directory: /var/run/lttng/kconsumerd [in
+>> set_consumer_sockets() at main.c:4357] DEBUG1: Modprobe successfully
+>> lttng-tracer [in modprobe_lttng_control() at modprobe.c:163] DEBUG2:
+>> Kernel tracer version validated (major version 2) [in
+>> kernel_validate_version() at kernel.c:675] DEBUG1: Modprobe successfully
+>> lttng-ftrace [in modprobe_lttng_data() at modprobe.c:199] DEBUG1:
+>> Modprobe successfully lttng-kprobes [in modprobe_lttng_data() at
+>> modprobe.c:199] DEBUG1: Modprobe successfully lttng-kretprobes [in
+>> modprobe_lttng_data() at modprobe.c:199] DEBUG1: Modprobe successfully
+>> lttng-lib-ring-buffer [in modprobe_lttng_data() at modprobe.c:199] 
+>> DEBUG1: Modprobe successfully lttng-ring-buffer-client-discard [in
+>> modprobe_lttng_data() at modprobe.c:199] DEBUG1: Modprobe successfully
+>> lttng-ring-buffer-client-overwrite [in modprobe_lttng_data() at
+>> modprobe.c:199] DEBUG1: Modprobe successfully
+>> lttng-ring-buffer-metadata-client [in modprobe_lttng_data() at
+>> modprobe.c:199] DEBUG1: Modprobe successfully
+>> lttng-ring-buffer-client-mmap-discard [in modprobe_lttng_data() at
+>> modprobe.c:199] DEBUG1: Modprobe successfully
+>> lttng-ring-buffer-client-mmap-overwrite [in modprobe_lttng_data() at
+>> modprobe.c:199] DEBUG1: Modprobe successfully
+>> lttng-ring-buffer-metadata-mmap-client [in modprobe_lttng_data() at
+>> modprobe.c:199] DEBUG1: Modprobe successfully lttng-probe-lttng [in
+>> modprobe_lttng_data() at modprobe.c:199] DEBUG1: Modprobe successfully
+>> lttng-types [in modprobe_lttng_data() at modprobe.c:199] DEBUG1: Modprobe
+>> successfully lttng-probe-block [in modprobe_lttng_data() at
+>> modprobe.c:199] DEBUG1: Modprobe successfully lttng-probe-irq [in
+>> modprobe_lttng_data() at modprobe.c:199] DEBUG1: Modprobe successfully
+>> lttng-probe-kvm [in modprobe_lttng_data() at modprobe.c:199] DEBUG1:
+>> Modprobe successfully lttng-probe-sched [in modprobe_lttng_data() at
+>> modprobe.c:199] DEBUG1: Modprobe successfully lttng-probe-signal [in
+>> modprobe_lttng_data() at modprobe.c:199] DEBUG1: Modprobe successfully
+>> lttng-probe-statedump [in modprobe_lttng_data() at modprobe.c:199] 
+>> DEBUG1: Modprobe successfully lttng-probe-timer [in modprobe_lttng_data()
+>> at modprobe.c:199] DEBUG1: Kernel tracer fd 6 [in init_kernel_tracer() at
+>> main.c:1887] DEBUG2: Creating consumer directory:
+>> /var/run/lttng/ustconsumerd64 [in set_consumer_sockets() at main.c:4357] 
+>> DEBUG2: Creating consumer directory: /var/run/lttng/ustconsumerd32 [in
+>> set_consumer_sockets() at main.c:4357] DEBUG1: Signal handler set for
+>> SIGTERM, SIGPIPE and SIGINT [in set_signal_handler() at main.c:4449] 
+>> DEBUG1: All permissions are set [in set_permissions() at main.c:4250] 
+>> DEBUG1: poll set max size set to 65535 [in compat_poll_set_max_size() at
+>> compat-poll.c:196] DEBUG1: [thread] Manage application started [in
+>> thread_manage_apps() at main.c:1179] DEBUG1: fd 3 of 1 added to pollfd
+>> [in compat_poll_add() at compat-poll.c:91] DEBUG1: fd 13 of 2 added to
+>> pollfd [in compat_poll_add() at compat-poll.c:91] DEBUG1: Apps thread
+>> polling on 2 fds [in thread_manage_apps() at main.c:1200] DEBUG1: Thread
+>> manage kernel started [in thread_manage_kernel() at main.c:876] DEBUG1:
+>> fd 3 of 1 added to pollfd [in compat_poll_add() at compat-poll.c:91] 
+>> DEBUG1: fd 11 of 2 added to pollfd [in compat_poll_add() at
+>> compat-poll.c:91] DEBUG1: Updating kernel poll set [in
+>> update_kernel_poll() at main.c:748] DEBUG1: Thread kernel polling on 2
+>> fds [in thread_manage_kernel() at main.c:905] DEBUG1: [thread] Manage
+>> application registration started [in thread_registration_apps() at
+>> main.c:1392] DEBUG1: fd 3 of 1 added to pollfd [in compat_poll_add() at
+>> compat-poll.c:91] DEBUG1: fd 10 of 2 added to pollfd [in
+>> compat_poll_add() at compat-poll.c:91] DEBUG1: Notifying applications of
+>> session daemon state: 1 [in notify_ust_apps() at main.c:687] DEBUG1:
+>> [thread] Dispatch UST command started [in
+>> thread_dispatch_ust_registration() at main.c:1324] DEBUG1: Futex n to 1
+>> prepare done [in futex_nto1_prepare() at futex.c:73] DEBUG1: Woken up but
+>> nothing in the UST command queue [in thread_dispatch_ust_registration()
+>> at main.c:1334] DEBUG1: [thread] Manage client started [in
+>> thread_manage_clients() at main.c:3794] DEBUG1: fd 3 of 1 added to pollfd
+>> [in compat_poll_add() at compat-poll.c:91] DEBUG1: fd 9 of 2 added to
+>> pollfd [in compat_poll_add() at compat-poll.c:91] DEBUG1: Accepting
+>> client command ... [in thread_manage_clients() at main.c:3826] DEBUG1:
+>> Got the wait shm fd 15 [in get_wait_shm() at shm.c:117] DEBUG1: Futex
+>> wait update active 1 [in futex_wait_update() at futex.c:62] DEBUG1:
+>> Accepting application registration [in thread_registration_apps() at
+>> main.c:1423] 
+>> ********************************************************************************************************
+>>
+>> 
+Am I missing anything??
+>> 
+>> Thanks in Advance, Pavan
+>> 
+>> 
+>> ________________________________________ From: Mathieu Desnoyers
+>> [mathieu.desnoyers@efficios.com] Sent: Monday, June 11, 2012 7:24 PM To:
+>> Pavan Anumula Cc: lttng-dev@lists.lttng.org Subject: Re: [lttng-dev]
+>> Lttng start failed
+>> 
+>> * Pavan Anumula (pavan.anumula@sasken.com) wrote:
+>>> Hi Mathieu,
+>>> 
+>>> Please find the info below as per your comments
+>>> 
+>>> 
+>>> ########## Output of  command "arm-none-linux-gnueabi-lttng-sessiond
+>>> -vvv " , After loading the modules #######
+>>> 
+>>> DEBUG3: Creating LTTng run directory: /var/run/lttng [in
+>>> create_lttng_rundir() at main.c:4315] DEBUG2: Kernel consumer err path:
+>>> /var/run/lttng/kconsumerd/error [in main() at main.c:4543] DEBUG2:
+>>> Kernel consumer cmd path: /var/run/lttng/kconsumerd/command [in main()
+>>> at main.c:4545] DEBUG1: Client socket path
+>>> /var/run/lttng/client-lttng-sessiond [in main() at main.c:4592] DEBUG1:
+>>> Application socket path /var/run/lttng/apps-lttng-sessiond [in main()
+>>> at main.c:4593] DEBUG1: LTTng run directory path: /var/run/lttng [in
+>>> main() at main.c:4594] DEBUG2: UST consumer 32 bits err path:
+>>> /var/run/lttng/ustconsumerd32/error [in main() at main.c:4603] DEBUG2:
+>>> UST consumer 32 bits cmd path: /var/run/lttng/ustconsumerd32/command
+>>> [in main() at main.c:4605] DEBUG2: UST consumer 64 bits err path:
+>>> /var/run/lttng/ustconsumerd64/error [in main() at main.c:4614] DEBUG2:
+>>> UST consumer 64 bits cmd path: /var/run/lttng/ustconsumerd64/command
+>>> [in main() at main.c:4616] DEBUG3: Created hashtable size 4 at 0x4a080
+>>> of type 1 [in lttng_ht_new() at hashtable.c:96] DEBUG3: Created
+>>> hashtable size 4 at 0x4a168 of type 1 [in lttng_ht_new() at
+>>> hashtable.c:96] DEBUG2: Creating consumer directory:
+>>> /var/run/lttng/kconsumerd [in set_consumer_sockets() at main.c:4357] 
+>>> FATAL: Module lttng_tracer not found. Error: Unable to load module
+>>> lttng-tracer
+>> 
+>> Hrm. You want to do kernel tracing, but modprobe cannot find the lttng 
+>> kernel tracer modules. You might want to run depmod -a or something like 
+>> that on your target, and ensure that modprobe works properly.
+>> 
+>> Thanks,
+>> 
+>> Mathieu
+>> 
+>>> DEBUG2: Kernel tracer version validated (major version 2) [in
+>>> kernel_validate_version() at kernel.c:675] DEBUG1: Modprobe
+>>> successfully lttng-ftrace [in modprobe_lttng_data() at modprobe.c:199] 
+>>> DEBUG1: Modprobe successfully lttng-kprobes [in modprobe_lttng_data()
+>>> at modprobe.c:199] DEBUG1: Modprobe successfully lttng-kretprobes [in
+>>> modprobe_lttng_data() at modprobe.c:199] FATAL: Module
+>>> lttng_lib_ring_buffer not found. Error: Unable to load module
+>>> lttng-lib-ring-buffer FATAL: Module lttng_ring_buffer_client_discard
+>>> not found. Error: Unable to load module
+>>> lttng-ring-buffer-client-discard FATAL: Module
+>>> lttng_ring_buffer_client_overwrite not found. Error: Unable to load
+>>> module lttng-ring-buffer-client-overwrite FATAL: Module
+>>> lttng_ring_buffer_metadata_client not found. Error: Unable to load
+>>> module lttng-ring-buffer-metadata-client FATAL: Module
+>>> lttng_ring_buffer_client_mmap_discard not found. Error: Unable to load
+>>> module lttng-ring-buffer-client-mmap-discard FATAL: Module
+>>> lttng_ring_buffer_client_mmap_overwrite not found. Error: Unable to
+>>> load module lttng-ring-buffer-client-mmap-overwrite FATAL: Module
+>>> lttng_ring_buffer_metadata_mmap_client not found. Error: Unable to load
+>>> module lttng-ring-buffer-metadata-mmap-client FATAL: Module
+>>> lttng_probe_lttng not found. Error: Unable to load module
+>>> lttng-probe-lttng DEBUG1: Modprobe successfully lttng-types [in
+>>> modprobe_lttng_data() at modprobe.c:199] DEBUG1: Modprobe successfully
+>>> lttng-probe-block [in modprobe_lttng_data() at modprobe.c:199] DEBUG1:
+>>> Modprobe successfully lttng-probe-irq [in modprobe_lttng_data() at
+>>> modprobe.c:199] DEBUG1: Modprobe successfully lttng-probe-kvm [in
+>>> modprobe_lttng_data() at modprobe.c:199] DEBUG1: Modprobe successfully
+>>> lttng-probe-sched [in modprobe_lttng_data() at modprobe.c:199] DEBUG1:
+>>> Modprobe successfully lttng-probe-signal [in modprobe_lttng_data() at
+>>> modprobe.c:199] DEBUG1: Modprobe successfully lttng-probe-statedump [in
+>>> modprobe_lttng_data() at modprobe.c:199] DEBUG1: Modprobe successfully
+>>> lttng-probe-timer [in modprobe_lttng_data() at modprobe.c:199] DEBUG1:
+>>> Kernel tracer fd 6 [in init_kernel_tracer() at main.c:1887] DEBUG2:
+>>> Creating consumer directory: /var/run/lttng/ustconsumerd64 [in
+>>> set_consumer_sockets() at main.c:4357] DEBUG2: Creating consumer
+>>> directory: /var/run/lttng/ustconsumerd32 [in set_consumer_sockets() at
+>>> main.c:4357] DEBUG1: Signal handler set for SIGTERM, SIGPIPE and SIGINT
+>>> [in set_signal_handler() at main.c:4449] DEBUG1: All permissions are
+>>> set [in set_permissions() at main.c:4250] DEBUG1: poll set max size set
+>>> to 65535 [in compat_poll_set_max_size() at compat-poll.c:196] DEBUG1:
+>>> [thread] Manage client started [in thread_manage_clients() at
+>>> main.c:3794] DEBUG1: fd 3 of 1 added to pollfd [in compat_poll_add() at
+>>> compat-poll.c:91] DEBUG1: fd 9 of 2 added to pollfd [in
+>>> compat_poll_add() at compat-poll.c:91] DEBUG1: Accepting client command
+>>> ... [in thread_manage_clients() at main.c:3826] DEBUG1: [thread]
+>>> Dispatch UST command started [in thread_dispatch_ust_registration() at
+>>> main.c:1324] DEBUG1: Futex n to 1 prepare done [in futex_nto1_prepare()
+>>> at futex.c:73] DEBUG1: Woken up but nothing in the UST command queue
+>>> [in thread_dispatch_ust_registration() at main.c:1334] DEBUG1: Thread
+>>> manage kernel started [in thread_manage_kernel() at main.c:876] DEBUG1:
+>>> fd 3 of 1 added to pollfd [in compat_poll_add() at compat-poll.c:91] 
+>>> DEBUG1: fd 11 of 2 added to pollfd [in compat_poll_add() at
+>>> compat-poll.c:91] DEBUG1: Updating kernel poll set [in
+>>> update_kernel_poll() at main.c:748] DEBUG1: Thread kernel polling on 2
+>>> fds [in thread_manage_kernel() at main.c:905] DEBUG1: [thread] Manage
+>>> application started [in thread_manage_apps() at main.c:1179] DEBUG1: fd
+>>> 3 of 1 added to pollfd [in compat_poll_add() at compat-poll.c:91] 
+>>> DEBUG1: fd 13 of 2 added to pollfd [in compat_poll_add() at
+>>> compat-poll.c:91] DEBUG1: Apps thread polling on 2 fds [in
+>>> thread_manage_apps() at main.c:1200] DEBUG1: [thread] Manage
+>>> application registration started [in thread_registration_apps() at
+>>> main.c:1392] DEBUG1: fd 3 of 1 added to pollfd [in compat_poll_add() at
+>>> compat-poll.c:91] DEBUG1: fd 10 of 2 added to pollfd [in
+>>> compat_poll_add() at compat-poll.c:91] DEBUG1: Notifying applications
+>>> of session daemon state: 1 [in notify_ust_apps() at main.c:687] DEBUG1:
+>>> Got the wait shm fd 15 [in get_wait_shm() at shm.c:117] DEBUG1: Futex
+>>> wait update active 1 [in futex_wait_update() at futex.c:62] DEBUG1:
+>>> Accepting application registration [in thread_registration_apps() at
+>>> main.c:1423]
+>>> 
+>>> 
+>>> 
+>>> #### Output of  command "arm-none-linux-gnueabi-lttng-sessiond -vvv "
+>>> before loading the modules #############
+>>> 
+>>> DEBUG3: Creating LTTng run directory: /var/run/lttng [in
+>>> create_lttng_rundir() at main.c:4315] DEBUG2: Kernel consumer err path:
+>>> /var/run/lttng/kconsumerd/error [in main() at main.c:4543] DEBUG2:
+>>> Kernel consumer cmd path: /var/run/lttng/kconsumerd/command [in main()
+>>> at main.c:4545] DEBUG1: Client socket path
+>>> /var/run/lttng/client-lttng-sessiond [in main() at main.c:4592] DEBUG1:
+>>> Application socket path /var/run/lttng/apps-lttng-sessiond [in main()
+>>> at main.c:4593] DEBUG1: LTTng run directory path: /var/run/lttng [in
+>>> main() at main.c:4594] DEBUG2: UST consumer 32 bits err path:
+>>> /var/run/lttng/ustconsumerd32/error [in main() at main.c:4603] DEBUG2:
+>>> UST consumer 32 bits cmd path: /var/run/lttng/ustconsumerd32/command
+>>> [in main() at main.c:4605] DEBUG2: UST consumer 64 bits err path:
+>>> /var/run/lttng/ustconsumerd64/error [in main() at main.c:4614] DEBUG2:
+>>> UST consumer 64 bits cmd path: /var/run/lttng/ustconsumerd64/command
+>>> [in main() at main.c:4616] DEBUG3: Created hashtable size 4 at 0x4a080
+>>> of type 1 [in lttng_ht_new() at hashtable.c:96] DEBUG3: Created
+>>> hashtable size 4 at 0x4a168 of type 1 [in lttng_ht_new() at
+>>> hashtable.c:96] DEBUG2: Creating consumer directory:
+>>> /var/run/lttng/kconsumerd [in set_consumer_sockets() at main.c:4357] 
+>>> FATAL: Module lttng_tracer not found. Error: Unable to load module
+>>> lttng-tracer DEBUG1: Failed to open /proc/lttng [in
+>>> init_kernel_tracer() at main.c:1871] Error: Unable to remove module
+>>> lttng-tracer Warning: No kernel tracer available DEBUG2: Creating
+>>> consumer directory: /var/run/lttng/ustconsumerd64 [in
+>>> set_consumer_sockets() at main.c:4357] DEBUG2: Creating consumer
+>>> directory: /var/run/lttng/ustconsumerd32 [in set_consumer_sockets() at
+>>> main.c:4357] DEBUG1: Signal handler set for SIGTERM, SIGPIPE and SIGINT
+>>> [in set_signal_handler() at main.c:4449] DEBUG1: All permissions are
+>>> set [in set_permissions() at main.c:4250] DEBUG1: poll set max size set
+>>> to 65535 [in compat_poll_set_max_size() at compat-poll.c:196] DEBUG1:
+>>> [thread] Manage application started [in thread_manage_apps() at
+>>> main.c:1179] DEBUG1: fd 3 of 1 added to pollfd [in compat_poll_add() at
+>>> compat-poll.c:91] DEBUG1: fd 12 of 2 added to pollfd [in
+>>> compat_poll_add() at compat-poll.c:91] DEBUG1: Apps thread polling on 2
+>>> fds [in thread_manage_apps() at main.c:1200] DEBUG1: Thread manage
+>>> kernel started [in thread_manage_kernel() at main.c:876] DEBUG1: fd 3
+>>> of 1 added to pollfd [in compat_poll_add() at compat-poll.c:91] DEBUG1:
+>>> fd 10 of 2 added to pollfd [in compat_poll_add() at compat-poll.c:91] 
+>>> DEBUG1: Updating kernel poll set [in update_kernel_poll() at
+>>> main.c:748] DEBUG1: Thread kernel polling on 2 fds [in
+>>> thread_manage_kernel() at main.c:905] DEBUG1: [thread] Manage
+>>> application registration started [in thread_registration_apps() at
+>>> main.c:1392] DEBUG1: fd 3 of 1 added to pollfd [in compat_poll_add() at
+>>> compat-poll.c:91] DEBUG1: fd 9 of 2 added to pollfd [in
+>>> compat_poll_add() at compat-poll.c:91] DEBUG1: Notifying applications
+>>> of session daemon state: 1 [in notify_ust_apps() at main.c:687] DEBUG1:
+>>> [thread] Dispatch UST command started [in
+>>> thread_dispatch_ust_registration() at main.c:1324] DEBUG1: Futex n to 1
+>>> prepare done [in futex_nto1_prepare() at futex.c:73] DEBUG1: Woken up
+>>> but nothing in the UST command queue [in
+>>> thread_dispatch_ust_registration() at main.c:1334] DEBUG1: [thread]
+>>> Manage client started [in thread_manage_clients() at main.c:3794] 
+>>> DEBUG1: fd 3 of 1 added to pollfd [in compat_poll_add() at
+>>> compat-poll.c:91] DEBUG1: fd 8 of 2 added to pollfd [in
+>>> compat_poll_add() at compat-poll.c:91] DEBUG1: Accepting client command
+>>> ... [in thread_manage_clients() at main.c:3826] DEBUG1: Got the wait
+>>> shm fd 14 [in get_wait_shm() at shm.c:117] DEBUG1: Futex wait update
+>>> active 1 [in futex_wait_update() at futex.c:62] DEBUG1: Accepting
+>>> application registration [in thread_registration_apps() at
+>>> main.c:1423]
+>>> 
+>>> 
+>>> Regards, Pavan
+>>> 
+>>> -----Original Message----- From: Mathieu Desnoyers
+>>> [mailto:mathieu.desnoyers@efficios.com] Sent: Saturday, June 09, 2012
+>>> 6:03 PM To: Pavan Anumula Cc: lttng-dev@lists.lttng.org Subject: Re:
+>>> [lttng-dev] Lttng start failed
+>>> 
+>>> * Pavan Anumula (pavan.anumula@sasken.com) wrote:
+>>>> Hi Mathue,
+>>>> 
+>>>> Thanks for the quick reply,
+>>>> 
+>>>> After inserting lttng modules , I had given the command
+>>>> "arm-none-linux-gnueabi-lttng-sessiond -vvv"  as you said, Below is
+>>>> the output where there are error messages. Please help me in
+>>>> resolving the issue, SO that I can catch kernel and user traces.
+>>>> 
+>>>> 
+>>>> root@arago:/usr/lttng/modules# arm-none-linux-gnueabi-lttng-sessiond 
+>>>> -d root@arago:/usr/lttng/modules# 
+>>>> arm-none-linux-gnueabi-lttng-sessiond -vvv DEBUG3: Creating LTTng run
+>>>> directory: /var/run/lttng [in create_lttng_rundir() at main.c:4315] 
+>>>> DEBUG2: Kernel consumer err path: /var/run/lttng/kconsumerd/error
+>>>> [in main() at main.c:4543] DEBUG2: Kernel consumer cmd path:
+>>>> /var/run/lttng/kconsumerd/command [in main() at main.c:4545] DEBUG1:
+>>>> Client socket path /var/run/lttng/client-lttng-sessiond [in main() at
+>>>> main.c:4592] DEBUG1: Application socket path
+>>>> /var/run/lttng/apps-lttng-sessiond [in main() at main.c:4593] DEBUG1:
+>>>> LTTng run directory path: /var/run/lttng [in main() at main.c:4594] 
+>>>> DEBUG2: UST consumer 32 bits err path: 
+>>>> /var/run/lttng/ustconsumerd32/error [in main() at main.c:4603] 
+>>>> DEBUG2: UST consumer 32 bits cmd path: 
+>>>> /var/run/lttng/ustconsumerd32/command [in main() at main.c:4605] 
+>>>> DEBUG2: UST consumer 64 bits err path: 
+>>>> /var/run/lttng/ustconsumerd64/error [in main() at main.c:4614] 
+>>>> DEBUG2: UST consumer 64 bits cmd path: 
+>>>> /var/run/lttng/ustconsumerd64/command [in main() at main.c:4616] 
+>>>> Error: Already running daemon.
+>>> 
+>>> Please kill the lttng-sessiond that is already started (the one with
+>>> -d). Instead of that one, run the sessiond with:
+>>> 
+>>> lttng-sessiond -vvv
+>>> 
+>>> (don't run lttng-sessiond -d before)
+>>> 
+>>> Thanks,
+>>> 
+>>> Mathieu
+>>> 
+>>>> 
+>>>> 
+>>>> 
+>>>> 
+>>>> Thanks in advance, Pavan
+>>>> 
+>>>> -----Original Message----- From: Mathieu Desnoyers
+>>>> [mailto:mathieu.desnoyers@efficios.com] Sent: Friday, June 08, 2012
+>>>> 11:12 PM To: Pavan Anumula Cc: lttng-dev@lists.lttng.org Subject: Re:
+>>>> [lttng-dev] Lttng start failed
+>>>> 
+>>>> * Pavan Anumula (pavan.anumula@sasken.com) wrote:
+>>>>> Hi ,
+>>>>> 
+>>>>> I am new to LTTng usage, I am trying to use LTTng 2.0.1 and
+>>>>> LTTng-modules-2.0.2  for ARM(omapL138), with Linux kernel 2.6.33
+>>>>> wit RT-29 patch on it.
+>>>>> 
+>>>>> After enabling all the kernel events I am facing the below errors.
+>>>>> I loaded all the modules manually by insmod.
+>>>>> 
+>>>>> 
+>>>>> 
+>>>>> root@arago:~/lttng-traces# arm-none-linux-gnueabi-lttng create 
+>>>>> newsessiom Session newsessiom created. Traces will be written in 
+>>>>> /home/root/lttng-traces/newsessiom-20110325-154922
+>>>>> 
+>>>>> root@arago:~/lttng-traces# arm-none-linux-gnueabi-lttng
+>>>>> enable-event -a --kernel All kernel events are enabled in channel
+>>>>> channel0
+>>>>> 
+>>>>> root@arago:~/lttng-traces# arm-none-linux-gnueabi-lttng start 
+>>>>> LTTng: Failure to write metadata to buffers (timeout) Error:
+>>>>> Starting kernel trace failed
+>>>>> 
+>>>>> Please kindly help me on this.
+>>>> 
+>>>> I think you should look into the lttng-sessiond --help :
+>>>> 
+>>>> --consumerd32-path PATH     Specify path for the 32-bit UST consumer
+>>>> daemon binary --consumerd32-libdir PATH   Specify path for the 32-bit
+>>>> UST consumer daemon libraries --consumerd64-path PATH     Specify
+>>>> path for the 64-bit UST consumer daemon binary --consumerd64-libdir
+>>>> PATH   Specify path for the 64-bit UST consumer daemon libraries
+>>>> 
+>>>> options. My guess is that lttng-sessiond is not able to find the
+>>>> consumerd binary files, maybe due to a rename or because they have
+>>>> been moved after install.
+>>>> 
+>>>> One more thing that might help is to launch the lttng-sessiond with
+>>>> "-vvv" : it will provide verbose output and let us know where things
+>>>> fall apart.
+>>>> 
+>>>> Thanks,
+>>>> 
+>>>> Mathieu
+>>>> 
+>>>> 
+>>>>> 
+>>>>> 
+>>>>> Thanks in advance, Pavan
+>>>>> 
+>>>>> ________________________________ SASKEN BUSINESS DISCLAIMER: This
+>>>>> message may contain confidential, proprietary or legally privileged
+>>>>> information. In case you are not the original intended Recipient of
+>>>>> the message, you must not, directly or indirectly, use, disclose,
+>>>>> distribute, print, or copy any part of this message and you are
+>>>>> requested to delete it and inform the sender. Any views expressed
+>>>>> in this message are those of the individual sender unless otherwise
+>>>>> stated. Nothing contained in this message shall be construed as an
+>>>>> offer or acceptance of any offer by Sasken Communication
+>>>>> Technologies Limited ("Sasken") unless sent with that express
+>>>>> intent and with due authority of Sasken. Sasken has taken enough
+>>>>> precautions to prevent the spread of viruses. However the company
+>>>>> accepts no liability for any damage caused by any virus transmitted
+>>>>> by this email. Read Disclaimer at
+>>>>> http://www.sasken.com/extras/mail_disclaimer.html
+>>>> 
+>>>>> _______________________________________________ lttng-dev mailing
+>>>>> list lttng-dev@lists.lttng.org 
+>>>>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>>>> 
+>>>> 
+>>>> -- Mathieu Desnoyers Operating System Efficiency R&D Consultant
+>>>> EfficiOS Inc. http://www.efficios.com
+>>> 
+>>> -- Mathieu Desnoyers Operating System Efficiency R&D Consultant
+>>> EfficiOS Inc. http://www.efficios.com
+>> 
+>> -- Mathieu Desnoyers Operating System Efficiency R&D Consultant EfficiOS
+>> Inc. http://www.efficios.com
+> 
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.12 (GNU/Linux)
+
+iQEcBAEBAgAGBQJP12GMAAoJEELoaioR9I02+q8IAKw/ot4BmP6xibXM/VnNaRdP
+60S1KEynFPxDmO9JS3u3x+r4UiDaGWrP4+rEfgAeUeMQcOj3ItHZLyNhp+F8A8+j
+Dj0q9YFNBLsANzHzAk9VsVlL/myYaeW7ysNGl1yxhL9Vc/Px3cmxaof79smxMGcQ
+dnMKf6Gk+eNL4IPrXQIxF0cvVK85PI2xaDA1SiiKQaULUiqUBebn2gtGr1l8oFTw
+FT1xryh4wRw4FUmqngw54SYPiYpZm1y/VUzTWB3Zs9hYPcvEum22wrhAaWNkoUkk
+ixBjE+HHIVRBzZatDymE35tI4+Ci6z9J3uRmJVC97x2qQz2F4nl5Yw3qRmm1PVM=
+=3VyT
+-----END PGP SIGNATURE-----
