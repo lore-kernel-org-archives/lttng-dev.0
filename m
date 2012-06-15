@@ -1,21 +1,20 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Prerequsites for adding perf context
-Date: Fri, 15 Jun 2012 11:13:42 -0400
-Message-ID: <20120615151342.GB28295__43930.1183716909$1339773248$gmane$org@Krystal>
+From: Alexandre Montplaisir <alexandre.montplaisir@polymtl.ca>
+Subject: Re: lttng - ubuntu 11.10 - problem
+Date: Fri, 15 Jun 2012 11:32:02 -0400
+Message-ID: <4FDB5572.7000209__14220.4498559751$1339774359$gmane$org@polymtl.ca>
 References: <1339746088.90723.YahooMailNeo@web161201.mail.bf1.yahoo.com>
-	<4FDAEF5C.9030102@gmail.com>
-	<524C960C5DFC794E82BE548D825F05CF283461BF@EU-MBX-01.mgc.mentorg.com>
+	<4FDAEF5C.9030102@gmail.com> <4FDB34C8.7000505@polymtl.ca>
+	<20120615151234.GA28295@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from ironport2-out.teksavvy.com ([206.248.154.182])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1SfYDX-0001Zu-Am
-	for lttng-dev@lists.lttng.org; Fri, 15 Jun 2012 11:13:43 -0400
-Content-Disposition: inline
-In-Reply-To: <524C960C5DFC794E82BE548D825F05CF283461BF@EU-MBX-01.mgc.mentorg.com>
+	(envelope-from <alexandre.montplaisir@polymtl.ca>)
+	id 1SfYVM-0001io-Hj
+	for lttng-dev@lists.lttng.org; Fri, 15 Jun 2012 11:32:08 -0400
+In-Reply-To: <20120615151234.GA28295@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,52 +23,36 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Oestman, Fredrik" <Fredrik_Oestman@mentor.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, bapi_mvit2004@yahoo.com
 List-Id: lttng-dev@lists.lttng.org
 
-* Oestman, Fredrik (Fredrik_Oestman@mentor.com) wrote:
+On 12-06-15 11:12 AM, Mathieu Desnoyers wrote:
+> * David Goulet (david.goulet@polymtl.ca) wrote:
 > Hi,
-> =
+>
+> In order to trace the kernel, you need the LTTng kernel modules
+> available in
+> the package "lttng-modules-dkms". So make sure you have these three
+> packages
+> installed:
+>
+> # sudo apt-get install lttng-tools lttng-modules-dkms babeltrace
+>
+> > hopefully lttng-modules-dkms issues "depmod -a" after the make
+> > modules_install ?
 
-> =
+Yeah it does, it runs it once at the end after all modules have been
+compiled.
 
-> What exactly is needed on a system for
-> =
+In Somanath's original email, there are two sessiond running, one as
+root and one as the user. I'm curious as to how the user one got
+started, perhaps the commands weren't executed as root somehow?
 
-> # lttng add-context -k -t perf:<something>
-> =
 
-> to work? Does perf have to be installed?
-> =
-
-> I have hw perfevents, but not perf, and get
-> =
-
-> hw perfevents: unable to reserve pmu
-
-CONFIG_PERF_EVENTS. And what version of kernel do you use ?
-
-> =
-
-> =
-
-> cheers,
-> =
-
-> Fredrik =D6stman
-> =
-
-> =
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
+Cheers,
 -- =
 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+Alexandre Montplaisir
+DORSAL lab,
+=C9cole Polytechnique de Montr=E9al
