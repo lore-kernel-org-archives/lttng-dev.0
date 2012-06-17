@@ -1,98 +1,73 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: LPC2012 Tracing Summit, August 30th, 2012 (was: [CFP] Tracing
-	Micro-conference at LPC2012 (August 28-30, San Diego))
-Date: Sat, 16 Jun 2012 17:14:55 -0400
-Message-ID: <20120616211455.GA10257@Krystal>
-References: <20120515234826.GA10967@Krystal>
+From: Lars <lars@grandepotatis.se>
+Subject: LTTng-UST alternative to LD_PRELOAD
+Date: Sun, 17 Jun 2012 17:08:23 +0200
+Message-ID: <1339945703.2599.21.camel__39691.0668154762$1339947405$gmane$org@DellE5500>
+Reply-To: lars@grandepotatis.se
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Return-path: <linux-kernel-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <20120515234826.GA10967@Krystal>
-Sender: linux-kernel-owner@vger.kernel.org
-To: tiwg@multicore-association.org, lttng-dev@lists.lttng.org, linux-kernel@vger.kernel.org
-Cc: Dominique Toupin <dominique.toupin@ericsson.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail14.surf-town.net ([212.97.132.54]
+	helo=mailgw13.surf-town.net) by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <lars@grandepotatis.se>) id 1SgH5N-0005ip-5v
+	for lttng-dev@lists.lttng.org; Sun, 17 Jun 2012 11:08:17 -0400
+Received: from localhost (localhost [127.0.0.1])
+	by mailgw13.surf-town.net (Postfix) with ESMTP id ADEAA404EA
+	for <lttng-dev@lists.lttng.org>; Sun, 17 Jun 2012 17:08:15 +0200 (CEST)
+Received: from mailgw13.surf-town.net ([127.0.0.1])
+	by localhost (mailgw13.surf-town.net [127.0.0.1]) (amavisd-new,
+	port 10024)
+	with LMTP id TfriU47lSTUj for <lttng-dev@lists.lttng.org>;
+	Sun, 17 Jun 2012 17:08:10 +0200 (CEST)
+Received: from [192.168.1.101] (90-231-55-174-no23.tbcn.telia.com
+	[90.231.55.174])
+	by mailgw13.surf-town.net (Postfix) with ESMTPSA id 5AD3240837
+	for <lttng-dev@lists.lttng.org>; Sun, 17 Jun 2012 17:08:10 +0200 (CEST)
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
 
-Due to the high interest shown in the event, the Linux Plumbers Tracing
-Micro-Conference will be held as a full day Tracing Summit on August
-30th. Please refer to the
+Hello,
 
-  http://tracingsummit.org/wiki/TracingSummit2012
+I have recently started to use LTTng-UST and am using LD_PRELOAD
+to make it possilbe to execute instrumented code on systems without
+LTTng-UST installed.
 
-page for details.
+To define LD_PRELOAD however affects too much. For instance all
+forked processes also get the library loaded. This can be fixed by
+removing the library from the LD_PRELOAD variable early in the main
+function. This looks odd and required some explaining in comments.
 
-There has been some back and forth recently on the exact date (28th or
-30th), and between co-location with either LinuxCon or Plumbers (for
-full day room availability). We have been trying to avoid major schedule
-conflicts with co-located events. Sorry about that. So just to clear
-things up: the Tracing Summit will be held within the Linux Plumbers
-Conference 2012. Registration to Linux Plumbers Conference is required
-for attendees and speakers. It will be possible to cancel LinuxCon
-registration if some of you only registered to LinuxCon for the Tracing
-Summit add-on. If you wish to do so, please contact the Linux
-Foundation.
+Also, in my case, the instrumented program is started with a "wrapper"
+program which I can not alter. This wrapper also gets the library
+loaded.
 
-Thanks!
+As an alternative to using LD_PRELOAD I would like to use an explicit
+function, like;
 
-Mathieu
+  int traceload(char const* library_path);
 
-* Mathieu Desnoyers (mathieu.desnoyers@efficios.com) wrote:
-> Hi,
-> 
-> We are organizing a tracing micro-conference taking place in San Diego,
-> within Linux Plumbers Conference 2012. The micro-conference is planned
-> to be held somewhere between August 28 and 30, in San Diego, CA.
-> 
-> If you are interested to present, please don't hesitate to get in touch
-> with us quickly (ideally within this week, or next week), since
-> deadlines are approaching.
-> 
-> Our intent is to gather people involved in development and users of
-> tracing tools and trace analysis tools to allow discussing the latest
-> developments, allow users to express their needs, and generally ensure
-> that developers and end users understand each other.
-> 
-> We are welcoming presentations from both end users and developers, on
-> topics covering, but not limited to:
-> 
-> - Trace collection and extraction,
-> - Trace filtering,
-> - Trace aggregation,
-> - Trace formats,
-> - Tracing multi-core systems,
-> - Trace abstraction,
-> - Trace modeling,
-> - Automated trace analysis (e.g. dependency analysis),
-> - Tracing large clusters and distributed systems,
-> - Hardware-level tracing (e.g. DSP, GPU, bare-metal),
-> - Trace visualisation,
-> - Interaction between debugging and tracing,
-> - Tracing remote control,
-> - Analysis of large trace datasets.
-> 
-> It can cover both recently available technologies and ongoing work.
-> 
-> If you are interested to present, please get in touch with Dominique
-> Toupin or myself. The micro-conference wiki can be accessed at:
-> http://wiki.linuxplumbersconf.org/2012:tracing
-> 
-> Feedback is welcome!
-> 
-> Thank you,
-> 
-> Dominique Toupin & Mathieu Desnoyers
-> 
-> -- 
-> Mathieu Desnoyers
-> Operating System Efficiency R&D Consultant
-> EfficiOS Inc.
-> http://www.efficios.com
+that is called early in main (instead of the LD_PRELOAD environment
+manipulation) and loads the library with dlopen if it exists.
 
--- 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+I have already tried this (of course) and it almost works already.
+The tracepoints becomes visible but I get no trace data written.
+So I think a really small modification is needed.
+
+Is anything like this planned?
+
+Or can anybody give me a hint on what is missing?
+
+I checked the mailing list a couple of months back but did not
+find anything.
+
+Best Regards,
+Lars Ekman
