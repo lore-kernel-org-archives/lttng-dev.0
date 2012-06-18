@@ -1,15 +1,20 @@
-From: somanath sahoo <bapi_mvit2004@yahoo.com>
-Subject: Re: lttng - ubuntu 11.10 - problem
-Date: Sun, 17 Jun 2012 23:59:41 -0700 (PDT)
-Message-ID: <1340002781.5676.YahooMailNeo__38029.4770039201$1340002818$gmane$org@web161206.mail.bf1.yahoo.com>
-Reply-To: somanath sahoo <bapi_mvit2004@yahoo.com>
+From: John Steele Scott <toojays@toojays.net>
+Subject: Re: lttng-ust with --std=c99 -pedantic
+Date: Mon, 18 Jun 2012 21:40:42 +0930
+Message-ID: <4FDF1AC2.3070009__18563.3418070667$1340023885$gmane$org@toojays.net>
+References: <jr0mmu$efe$1@dough.gmane.org> <20120612153257.GB14189@Krystal>
+	<20120612155539.GA15859@Krystal>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1852497578=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from nm15.bullet.mail.bf1.yahoo.com ([98.139.212.174])
-	by ltt.polymtl.ca with smtp (Exim 4.72)
-	(envelope-from <bapi_mvit2004@yahoo.com>) id 1SgVwB-00040o-TM
-	for lttng-dev@lists.lttng.org; Mon, 18 Jun 2012 02:59:48 -0400
+Received: from mail-pz0-f48.google.com ([209.85.210.48])
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <toojays@toojays.net>) id 1SganE-0006iR-L4
+	for lttng-dev@lists.lttng.org; Mon, 18 Jun 2012 08:10:52 -0400
+Received: by dadz8 with SMTP id z8so8250017dad.35
+	for <lttng-dev@lists.lttng.org>; Mon, 18 Jun 2012 05:10:46 -0700 (PDT)
+In-Reply-To: <20120612155539.GA15859@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -18,220 +23,154 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============1852497578==
-Content-Type: multipart/alternative; boundary="1938299484-191015705-1340002781=:5676"
-
---1938299484-191015705-1340002781=:5676
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-Hi,=0A=0AI have tried to reinstall lttng-tools,=C2=A0 lttng-modules-dkms=C2=
-=A0 and babeltrace. =0A=0A=0Athe reinstallation of lttng-tools and babeltra=
-ce has been successful. But reinstallation of lttng-modules-dkms has been f=
-ailing. the log is provided below=0A=0A-------------------------start of lo=
-g--------------=0A=0A# apt-get install --reinstall lttng-modules-dkms=0ARea=
-ding package lists... Done=0ABuilding dependency tree=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 =0AReading state information... Done=0A0 upgraded, 0 newly =
-installed, 1 reinstalled, 0 to remove and 0 not upgraded.=0ANeed to get 0 B=
-/198 kB of archives.=0AAfter this operation, 0 B of additional disk space w=
-ill be used.=0A(Reading database ... 199394 files and directories currently=
- installed.)=0APreparing to replace lttng-modules-dkms 2.0.0-0ubuntu2~oneir=
-ic1 (using .../lttng-modules-dkms_2.0.0-0ubuntu2~oneiric1_all.deb) ...=0A=
-=0A------------------------------=0ADeleting module version: 2.0.0=0Acomple=
-tely from the DKMS tree.=0A------------------------------=0ADone.=0AUnpacki=
-ng replacement lttng-modules-dkms ...=0ASetting up lttng-modules-dkms (2.0.=
-0-0ubuntu2~oneiric1) ...=0ALoading new lttng-modules-2.0.0 DKMS files...=0A=
-Building only for 3.0.0-21-generic=0ABuilding initial module for 3.0.0-21-g=
-eneric=0AError! Bad return status for module build on kernel: 3.0.0-21-gene=
-ric (i686)=0AConsult /var/lib/dkms/lttng-modules/2.0.0/build/make.log for m=
-ore information.=0A=0A------------------------------ END OF LOG -----------=
---------------=0A=0AThe content of make.log is provided below : =0A=0A=0ADK=
-MS make.log for lttng-modules-2.0.0 for kernel 3.0.0-21-generic (i686)=0AMo=
-n Jun 18 12:05:51 IST 2012=0Amake: Entering directory `/usr/src/linux-heade=
-rs-3.0.0-21-generic'=0A=C2=A0 CC [M]=C2=A0 /var/lib/dkms/lttng-modules/2.0.=
-0/build/lttng-ring-buffer-client-discard.o=0A=C2=A0 CC [M]=C2=A0 /var/lib/d=
-kms/lttng-modules/2.0.0/build/lttng-ring-buffer-client-overwrite.o=0A=C2=A0=
- CC [M]=C2=A0 /var/lib/dkms/lttng-modules/2.0.0/build/lttng-ring-buffer-met=
-adata-client.o=0A=C2=A0 CC [M]=C2=A0 /var/lib/dkms/lttng-modules/2.0.0/buil=
-d/lttng-ring-buffer-client-mmap-discard.o=0A=C2=A0 CC [M]=C2=A0 /var/lib/dk=
-ms/lttng-modules/2.0.0/build/lttng-ring-buffer-client-mmap-overwrite.o=0A=
-=C2=A0 CC [M]=C2=A0 /var/lib/dkms/lttng-modules/2.0.0/build/lttng-ring-buff=
-er-metadata-mmap-client.o=0A=C2=A0 CC [M]=C2=A0 /var/lib/dkms/lttng-modules=
-/2.0.0/build/lttng-statedump-impl.o=0A=C2=A0 CC [M]=C2=A0 /var/lib/dkms/ltt=
-ng-modules/2.0.0/build/wrapper/irqdesc.o=0A=C2=A0 CC [M]=C2=A0 /var/lib/dkm=
-s/lttng-modules/2.0.0/build/lttng-events.o=0A=C2=A0 CC [M]=C2=A0 /var/lib/d=
-kms/lttng-modules/2.0.0/build/lttng-abi.o=0A=C2=A0 CC [M]=C2=A0 /var/lib/dk=
-ms/lttng-modules/2.0.0/build/lttng-probes.o=0A=C2=A0 CC [M]=C2=A0 /var/lib/=
-dkms/lttng-modules/2.0.0/build/lttng-context.o=0A=C2=A0 CC [M]=C2=A0 /var/l=
-ib/dkms/lttng-modules/2.0.0/build/lttng-context-pid.o=0A=C2=A0 CC [M]=C2=A0=
- /var/lib/dkms/lttng-modules/2.0.0/build/lttng-context-procname.o=0A=C2=A0 =
-CC [M]=C2=A0 /var/lib/dkms/lttng-modules/2.0.0/build/lttng-context-prio.o=
-=0A=C2=A0 CC [M]=C2=A0 /var/lib/dkms/lttng-modules/2.0.0/build/lttng-contex=
-t-nice.o=0A=C2=A0 CC [M]=C2=A0 /var/lib/dkms/lttng-modules/2.0.0/build/lttn=
-g-context-vpid.o=0A=C2=A0 CC [M]=C2=A0 /var/lib/dkms/lttng-modules/2.0.0/bu=
-ild/lttng-context-tid.o=0A=C2=A0 CC [M]=C2=A0 /var/lib/dkms/lttng-modules/2=
-.0.0/build/lttng-context-vtid.o=0A=C2=A0 CC [M]=C2=A0 /var/lib/dkms/lttng-m=
-odules/2.0.0/build/lttng-context-ppid.o=0A=C2=A0 CC [M]=C2=A0 /var/lib/dkms=
-/lttng-modules/2.0.0/build/lttng-context-vppid.o=0A=C2=A0 CC [M]=C2=A0 /var=
-/lib/dkms/lttng-modules/2.0.0/build/lttng-calibrate.o=0A=C2=A0 CC [M]=C2=A0=
- /var/lib/dkms/lttng-modules/2.0.0/build/wrapper/random.o=0A=C2=A0 CC [M]=
-=C2=A0 /var/lib/dkms/lttng-modules/2.0.0/build/lttng-syscalls.o=0A/var/lib/=
-dkms/lttng-modules/2.0.0/build/lttng-syscalls.c:32:38: error: macro "is_com=
-pat_task" passed 1 arguments, but takes just 0=0A/var/lib/dkms/lttng-module=
-s/2.0.0/build/lttng-syscalls.c:33:1: error: expected =E2=80=98=3D=E2=80=99,=
- =E2=80=98,=E2=80=99, =E2=80=98;=E2=80=99, =E2=80=98asm=E2=80=99 or =E2=80=
-=98__attribute__=E2=80=99 before =E2=80=98{=E2=80=99 token=0Amake[1]: *** [=
-/var/lib/dkms/lttng-modules/2.0.0/build/lttng-syscalls.o] Error 1=0Amake: *=
-** [_module_/var/lib/dkms/lttng-modules/2.0.0/build] Error 2=0Amake: Leavin=
-g directory `/usr/src/linux-headers-3.0.0-21-generic'=0A=0A----------------=
---------- End of make.log -----------------=0A=0AAs per the compilation err=
-ors in the file lttng-syscalls.c, i dont think these errors are valids. It =
-may be due to somethings else.=0A=0A=0AKindly guide how to come over this r=
-einstallation problem of "lttng-modules-dkms" and please let me know if i n=
-eed to do any other alternatives.=0A=0A=0A=0A=0AThanks & Regards,=0ASomanat=
-h=0A=0A=0A------------------------------=0A=0AMessage: 3=0ADate: Fri, 15 Ju=
-n 2012 09:12:40 -0400=0AFrom: David Goulet <david.goulet@polymtl.ca>=0ATo: =
-Francis Giraldeau <francis.giraldeau@gmail.com>=0ACc: "lttng-dev@lists.lttn=
-g.org" <lttng-dev@lists.lttng.org>=0ASubject: Re: [lttng-dev] lttng - ubunt=
-u 11.10 - problem=0AMessage-ID: <4FDB34C8.7000505@polymtl.ca>=0AContent-Typ=
-e: text/plain; charset=3DISO-8859-1=0A=0A-----BEGIN PGP SIGNED MESSAGE-----=
-=0AHash: SHA1=0A=0AHi,=0A=0AIn order to trace the kernel, you need the LTTn=
-g kernel modules available in=0Athe package "lttng-modules-dkms". So make s=
-ure you have these three packages=0Ainstalled:=0A=0A# sudo apt-get install =
-lttng-tools lttng-modules-dkms babeltrace=0A=0AThe error message you got in=
-dicates that there is simply no LTTng modules=0Aloaded. Please make sure th=
-ey are loaded and if the problem persist, let us know!=0A=0AThanks!=0ADavid=
-=0A=0AOn 15/06/12 04:16 AM, Francis Giraldeau wrote:=0A> Le 2012-06-15 09:4=
-1, somanath sahoo a ?crit :=0A>> Hi,=0A>> =0A>> As i am new to lttng usage,=
- I have followed the instructions from =0A>> <https://launchpad.net/~lttng/=
-+archive/ppa> in order to install the lttng=0A>> tool set in my ubuntu 11.1=
-0. After successful installation, i followed=0A>> the getting started link =
-on lttng.org <http://lttng.org/quickstart> in=0A>> "root mode".=0A> =0A> Yo=
-u may verify if kernel modules are loaded correctly. If not, then there=0A>=
- may be a problem while the installation.=0A> =0A> lsmod | grep lttng=0A> =
-=0A> If not, you may try to load them and see if any error message occurs:=
-=0A> =0A> sudo modprobe lttng_tracer=0A> =0A> Francis=0A> =0A> 
---1938299484-191015705-1340002781=:5676
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-<html><body><div style=3D"color:#000; background-color:#fff; font-family:ti=
-mes new roman, new york, times, serif;font-size:12pt"><div>Hi,</div><div><b=
-r></div><div>I have tried to reinstall lttng-tools,&nbsp; lttng-modules-dkm=
-s&nbsp; and babeltrace. <br></div><div><br></div><div>the reinstallation of=
- lttng-tools and babeltrace has been successful. But reinstallation of lttn=
-g-modules-dkms has been failing. the log is provided below</div><div><br></=
-div><div>-------------------------start of log--------------</div><div><br>=
-</div><div># apt-get install --reinstall lttng-modules-dkms<br>Reading pack=
-age lists... Done<br>Building dependency tree&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp; <br>Reading state information... Done<br>0 upgraded, 0 newly install=
-ed, 1 reinstalled, 0 to remove and 0 not upgraded.<br>Need to get 0 B/198 k=
-B of archives.<br>After this operation, 0 B of additional disk space will b=
-e used.<br>(Reading database ... 199394 files and directories
- currently installed.)<br>Preparing to replace lttng-modules-dkms 2.0.0-0ub=
-untu2~oneiric1 (using .../lttng-modules-dkms_2.0.0-0ubuntu2~oneiric1_all.de=
-b) ...<br><br>------------------------------<br>Deleting module version: 2.=
-0.0<br>completely from the DKMS tree.<br>------------------------------<br>=
-Done.<br>Unpacking replacement lttng-modules-dkms ...<br>Setting up lttng-m=
-odules-dkms (2.0.0-0ubuntu2~oneiric1) ...<br>Loading new lttng-modules-2.0.=
-0 DKMS files...<br>Building only for 3.0.0-21-generic<br>Building initial m=
-odule for 3.0.0-21-generic<br>Error! Bad return status for module build on =
-kernel: 3.0.0-21-generic (i686)<br>Consult /var/lib/dkms/lttng-modules/2.0.=
-0/build/make.log for more information.</div><div><br></div><div>-----------=
-------------------- END OF LOG -------------------------</div><div><br></di=
-v><div>The content of make.log is provided below : <br></div><div><br></div=
-><div>DKMS make.log for lttng-modules-2.0.0 for kernel
- 3.0.0-21-generic (i686)<br>Mon Jun 18 12:05:51 IST 2012<br>make: Entering =
-directory `/usr/src/linux-headers-3.0.0-21-generic'<br>&nbsp; CC [M]&nbsp; =
-/var/lib/dkms/lttng-modules/2.0.0/build/lttng-ring-buffer-client-discard.o<=
-br>&nbsp; CC [M]&nbsp; /var/lib/dkms/lttng-modules/2.0.0/build/lttng-ring-b=
-uffer-client-overwrite.o<br>&nbsp; CC [M]&nbsp; /var/lib/dkms/lttng-modules=
-/2.0.0/build/lttng-ring-buffer-metadata-client.o<br>&nbsp; CC [M]&nbsp; /va=
-r/lib/dkms/lttng-modules/2.0.0/build/lttng-ring-buffer-client-mmap-discard.=
-o<br>&nbsp; CC [M]&nbsp; /var/lib/dkms/lttng-modules/2.0.0/build/lttng-ring=
--buffer-client-mmap-overwrite.o<br>&nbsp; CC [M]&nbsp; /var/lib/dkms/lttng-=
-modules/2.0.0/build/lttng-ring-buffer-metadata-mmap-client.o<br>&nbsp; CC [=
-M]&nbsp; /var/lib/dkms/lttng-modules/2.0.0/build/lttng-statedump-impl.o<br>=
-&nbsp; CC [M]&nbsp; /var/lib/dkms/lttng-modules/2.0.0/build/wrapper/irqdesc=
-.o<br>&nbsp; CC [M]&nbsp;
- /var/lib/dkms/lttng-modules/2.0.0/build/lttng-events.o<br>&nbsp; CC [M]&nb=
-sp; /var/lib/dkms/lttng-modules/2.0.0/build/lttng-abi.o<br>&nbsp; CC [M]&nb=
-sp; /var/lib/dkms/lttng-modules/2.0.0/build/lttng-probes.o<br>&nbsp; CC [M]=
-&nbsp; /var/lib/dkms/lttng-modules/2.0.0/build/lttng-context.o<br>&nbsp; CC=
- [M]&nbsp; /var/lib/dkms/lttng-modules/2.0.0/build/lttng-context-pid.o<br>&=
-nbsp; CC [M]&nbsp; /var/lib/dkms/lttng-modules/2.0.0/build/lttng-context-pr=
-ocname.o<br>&nbsp; CC [M]&nbsp; /var/lib/dkms/lttng-modules/2.0.0/build/ltt=
-ng-context-prio.o<br>&nbsp; CC [M]&nbsp; /var/lib/dkms/lttng-modules/2.0.0/=
-build/lttng-context-nice.o<br>&nbsp; CC [M]&nbsp; /var/lib/dkms/lttng-modul=
-es/2.0.0/build/lttng-context-vpid.o<br>&nbsp; CC [M]&nbsp; /var/lib/dkms/lt=
-tng-modules/2.0.0/build/lttng-context-tid.o<br>&nbsp; CC [M]&nbsp; /var/lib=
-/dkms/lttng-modules/2.0.0/build/lttng-context-vtid.o<br>&nbsp; CC [M]&nbsp;
- /var/lib/dkms/lttng-modules/2.0.0/build/lttng-context-ppid.o<br>&nbsp; CC =
-[M]&nbsp; /var/lib/dkms/lttng-modules/2.0.0/build/lttng-context-vppid.o<br>=
-&nbsp; CC [M]&nbsp; /var/lib/dkms/lttng-modules/2.0.0/build/lttng-calibrate=
-.o<br>&nbsp; CC [M]&nbsp; /var/lib/dkms/lttng-modules/2.0.0/build/wrapper/r=
-andom.o<br>&nbsp; CC [M]&nbsp; /var/lib/dkms/lttng-modules/2.0.0/build/lttn=
-g-syscalls.o<br>/var/lib/dkms/lttng-modules/2.0.0/build/lttng-syscalls.c:32=
-:38: error: macro "is_compat_task" passed 1 arguments, but takes just 0<br>=
-/var/lib/dkms/lttng-modules/2.0.0/build/lttng-syscalls.c:33:1: error: expec=
-ted =E2=80=98=3D=E2=80=99, =E2=80=98,=E2=80=99, =E2=80=98;=E2=80=99, =E2=80=
-=98asm=E2=80=99 or =E2=80=98__attribute__=E2=80=99 before =E2=80=98{=E2=80=
-=99 token<br>make[1]: *** [/var/lib/dkms/lttng-modules/2.0.0/build/lttng-sy=
-scalls.o] Error 1<br>make: *** [_module_/var/lib/dkms/lttng-modules/2.0.0/b=
-uild] Error 2<br>make: Leaving directory `/usr/src/linux-headers-3.0.0-21-g=
-eneric'</div><div><br></div><div>------------------------- End of
- make.log -----------------</div><div><br></div><div>As per the compilation=
- errors in the file lttng-syscalls.c, i dont think these errors are valids.=
- It may be due to somethings else.<br></div><div><br></div><div>Kindly guid=
-e how to come over this reinstallation problem of "lttng-modules-dkms" and =
-please let me know if i need to do any other alternatives.<br></div><div><b=
-r></div><div><br></div><div><br></div><div>Thanks &amp; Regards,<br>Somanat=
-h<br></div><div><br></div><div>------------------------------<br><br>Messag=
-e: 3<br>Date: Fri, 15 Jun 2012 09:12:40 -0400<br>From: David Goulet &lt;<a =
-href=3D"mailto:david.goulet@polymtl.ca">david.goulet@polymtl.ca</a>&gt;<br>=
-To: Francis Giraldeau &lt;<a href=3D"mailto:francis.giraldeau@gmail.com">fr=
-ancis.giraldeau@gmail.com</a>&gt;<br>Cc: "<a href=3D"mailto:lttng-dev@lists=
-.lttng.org">lttng-dev@lists.lttng.org</a>" &lt;<a href=3D"mailto:lttng-dev@=
-lists.lttng.org">lttng-dev@lists.lttng.org</a>&gt;<br>Subject: Re:
- [lttng-dev] lttng - ubuntu 11.10 - problem<br>Message-ID: &lt;<a href=3D"m=
-ailto:4FDB34C8.7000505@polymtl.ca">4FDB34C8.7000505@polymtl.ca</a>&gt;<br>C=
-ontent-Type: text/plain; charset=3DISO-8859-1<br><br>-----BEGIN PGP SIGNED =
-MESSAGE-----<br>Hash: SHA1<br><br>Hi,<br><br>In order to trace the kernel, =
-you need the LTTng kernel modules available in<br>the package "lttng-module=
-s-dkms". So make sure you have these three packages<br>installed:<br><br># =
-sudo apt-get install lttng-tools lttng-modules-dkms babeltrace<br><br>The e=
-rror message you got indicates that there is simply no LTTng modules<br>loa=
-ded. Please make sure they are loaded and if the problem persist, let us kn=
-ow!<br><br>Thanks!<br>David<br><br>On 15/06/12 04:16 AM, Francis Giraldeau =
-wrote:<br>&gt; Le 2012-06-15 09:41, somanath sahoo a ?crit :<br>&gt;&gt; Hi=
-,<br>&gt;&gt; <br>&gt;&gt; As i am new to lttng usage, I have followed the =
-instructions from <br>&gt;&gt; &lt;<a
- href=3D"https://launchpad.net/%7Elttng/+archive/ppa" target=3D"_blank">htt=
-ps://launchpad.net/~lttng/+archive/ppa</a>&gt; in order to install the lttn=
-g<br>&gt;&gt; tool set in my ubuntu 11.10. After successful installation, i=
- followed<br>&gt;&gt; the getting started link on lttng.org &lt;<a href=3D"=
-http://lttng.org/quickstart" target=3D"_blank">http://lttng.org/quickstart<=
-/a>&gt; in<br>&gt;&gt; "root mode".<br>&gt; <br>&gt; You may verify if kern=
-el modules are loaded correctly. If not, then there<br>&gt; may be a proble=
-m while the installation.<br>&gt; <br>&gt; lsmod | grep lttng<br>&gt; <br>&=
-gt; If not, you may try to load them and see if any error message occurs:<b=
-r>&gt; <br>&gt; sudo modprobe lttng_tracer<br>&gt; <br>&gt; Francis<br>&gt;=
- <br>&gt; </div></div></body></html>
---1938299484-191015705-1340002781=:5676--
-
-
---===============1852497578==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1852497578==--
+T24gMTMvMDYvMTIgMDE6MjUsIE1hdGhpZXUgRGVzbm95ZXJzIHdyb3RlOgo+ICogTWF0aGlldSBE
+ZXNub3llcnMgKG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbSkgd3JvdGU6Cj4+IEhpIEpv
+aG4sCj4+Cj4+ICogSm9obiBTdGVlbGUgU2NvdHQgKHRvb2pheXNAdG9vamF5cy5uZXQpIHdyb3Rl
+Ogo+Pj4gSSB3YW50IHRvIGFkZCBsdHRuZy11c3QgdHJhY2Vwb2ludHMgdG8gYSBwcm9ncmFtIHdo
+aWNoIGJ1aWxkcyB3aXRoICItLXN0ZD1jOTkgLXBlZGFudGljIi4gUmlnaHQgbm93IHRoaXMgZG9l
+cyBub3Qgd29yay4KPj4+Cj4+PiBVc2luZyB0aGUgZGVtbyBwcm9ncmFtIGFzIGFuIGV4YW1wbGUs
+IGlmIHlvdSBlbmFibGUgLS1zdGQ9Yzk5LCB0aGUgZmlyc3QgaXNzdWUgbG9va3MgbGlrZToKPj4+
+Cj4+PiBqc2NvdHRAc2Fhejp+L3NyYy9sdHRuZy11c3QvdGVzdHMvZGVtbyQgY2NhY2hlIGdjYyAt
+c3RkPWM5OSAtREhBVkVfQ09ORklHX0ggLUkuIC1JLi4vLi4gLUkuLi8uLi9pbmNsdWRlL2x0dG5n
+ICAtSS4uLy4uL2luY2x1ZGUgLVdhbGwgLWcgLU8yIC1NVCBkZW1vLm8gLU1EIC1NUCAtTUYgLmRl
+cHMvZGVtby5UcG8gLWMgLW8gZGVtby5vIGRlbW8uYwo+Pj4gSW4gZmlsZSBpbmNsdWRlZCBmcm9t
+IGRlbW8uYzozNDowOgo+Pj4gdXN0X3Rlc3RzX2RlbW8uaDogSW4gZnVuY3Rpb24g4oCYX190cmFj
+ZXBvaW50X2NiX3VzdF90ZXN0c19kZW1vX19fc3RhcnRpbmfigJk6Cj4+PiB1c3RfdGVzdHNfZGVt
+by5oOjI3OjIzOiB3YXJuaW5nOiBpbXBsaWNpdCBkZWNsYXJhdGlvbiBvZiBmdW5jdGlvbiDigJh0
+eXBlb2bigJkgWy1XaW1wbGljaXQtZnVuY3Rpb24tZGVjbGFyYXRpb25dCj4+PiB1c3RfdGVzdHNf
+ZGVtby5oOjI3OjIxODogZXJyb3I6IGV4cGVjdGVkIOKAmDvigJkgYmVmb3JlIOKAmF9fX19fX19f
+X3Ax4oCZCj4+PiB1c3RfdGVzdHNfZGVtby5oOjI3OjM5NTogZXJyb3I6IOKAmF9fX19fX19fX3Ax
+4oCZIHVuZGVjbGFyZWQgKGZpcnN0IHVzZSBpbiB0aGlzIGZ1bmN0aW9uKQo+Pj4gdXN0X3Rlc3Rz
+X2RlbW8uaDoyNzozOTU6IG5vdGU6IGVhY2ggdW5kZWNsYXJlZCBpZGVudGlmaWVyIGlzIHJlcG9y
+dGVkIG9ubHkgb25jZSBmb3IgZWFjaCBmdW5jdGlvbiBpdCBhcHBlYXJzIGluCj4+PiBJbiBmaWxl
+IGluY2x1ZGVkIGZyb20gZGVtby5jOjM0OjA6Cj4+PiB1c3RfdGVzdHNfZGVtby5oOiBJbiBmdW5j
+dGlvbiDigJhfX3RyYWNlcG9pbnRfY2JfdXN0X3Rlc3RzX2RlbW9fX19kb25l4oCZOgo+Pj4gdXN0
+X3Rlc3RzX2RlbW8uaDozNToyMTQ6IGVycm9yOiBleHBlY3RlZCDigJg74oCZIGJlZm9yZSDigJhf
+X19fX19fX19wMeKAmQo+Pj4gdXN0X3Rlc3RzX2RlbW8uaDozNTozODM6IGVycm9yOiDigJhfX19f
+X19fX19wMeKAmSB1bmRlY2xhcmVkIChmaXJzdCB1c2UgaW4gdGhpcyBmdW5jdGlvbikKPj4+IElu
+IGZpbGUgaW5jbHVkZWQgZnJvbSBkZW1vLmM6MzU6MDoKPj4+IHVzdF90ZXN0c19kZW1vMi5oOiBJ
+biBmdW5jdGlvbiDigJhfX3RyYWNlcG9pbnRfY2JfdXN0X3Rlc3RzX2RlbW8yX19fbG9vcOKAmToK
+Pj4+IHVzdF90ZXN0c19kZW1vMi5oOjI3OjI5OTogZXJyb3I6IGV4cGVjdGVkIOKAmDvigJkgYmVm
+b3JlIOKAmF9fX19fX19fX3Ax4oCZCj4+PiB1c3RfdGVzdHNfZGVtbzIuaDoyNzo0NzA6IGVycm9y
+OiDigJhfX19fX19fX19wMeKAmSB1bmRlY2xhcmVkIChmaXJzdCB1c2UgaW4gdGhpcyBmdW5jdGlv
+bikKPj4+IEluIGZpbGUgaW5jbHVkZWQgZnJvbSBkZW1vLmM6MzY6MDoKPj4+IHVzdF90ZXN0c19k
+ZW1vMy5oOiBJbiBmdW5jdGlvbiDigJhfX3RyYWNlcG9pbnRfY2JfdXN0X3Rlc3RzX2RlbW8zX19f
+ZG9uZeKAmToKPj4+IHVzdF90ZXN0c19kZW1vMy5oOjI3OjIxNTogZXJyb3I6IGV4cGVjdGVkIOKA
+mDvigJkgYmVmb3JlIOKAmF9fX19fX19fX3Ax4oCZCj4+PiB1c3RfdGVzdHNfZGVtbzMuaDoyNzoz
+ODY6IGVycm9yOiDigJhfX19fX19fX19wMeKAmSB1bmRlY2xhcmVkIChmaXJzdCB1c2UgaW4gdGhp
+cyBmdW5jdGlvbikKPj4+Cj4+PiBUaGlzIGNhbiBiZSBlYXNpbHkgcmVzb2x2ZWQgYnkgdXNpbmcg
+X190eXBlb2ZfXygpIGluc3RlYWQgb2YgdHlwZW9mKCkuIFRoZW4gSSBjYW4gYnVpbGQgd2l0aCAt
+LXN0ZD1jOTkuIEJ1dCBhZGRpbmcgLXBlZGFudGljIHN0aWxsIGZhaWxzOgo+PiBJIHB1c2hlZCBh
+IGZpeCBmb3IgdGhpczoKPj4KPj4gY29tbWl0IDY0MjNjMzEzNGJmMDdkNGE3ZGI1NmY2OWYyYzc5
+YjU0MGE3OWM0ZjEKPj4gQXV0aG9yOiBNYXRoaWV1IERlc25veWVycyA8bWF0aGlldS5kZXNub3ll
+cnNAZWZmaWNpb3MuY29tPgo+PiBEYXRlOiAgIE1vbiBKdW4gMTEgMTA6MTU6MjUgMjAxMiAtMDQw
+MAo+Pgo+PiAgICAgRml4IGM5OSBjb21wYXRpYmlsaXR5OiB1c2UgX190eXBlb2ZfXyBpbnN0ZWFk
+IG9mIHR5cGVvZiBpbiBwdWJsaWMgaGVhZGVycwo+PiAgICAgCj4+ICAgICBSZXBvcnRlZC1ieTog
+Sm9obiBTdGVlbGUgU2NvdHQgPHRvb2pheXNAdG9vamF5cy5uZXQ+Cj4+ICAgICBTaWduZWQtb2Zm
+LWJ5OiBNYXRoaWV1IERlc25veWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPgo+
+Pgo+PiBJIGFsc28gaGFkIGlzc3VlcyB3aXRoICh2b2lkKSBhcmcgcGFyYW1ldGVycyB3aXRoIHRy
+YWNlcG9pbnRzLCBzbwo+PiBwdXNoZWQ6Cj4+Cj4+IGNvbW1pdCA0NDk1ZGQzOWMwNTczOWQwZmIy
+YmM0NjNiN2MwOTNkMjQ1OWNlMmI2Cj4+IEF1dGhvcjogTWF0aGlldSBEZXNub3llcnMgPG1hdGhp
+ZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4KPj4gRGF0ZTogICBUdWUgSnVuIDEyIDExOjIyOjQ2
+IDIwMTIgLTA0MDAKPj4KPj4gICAgIEZpeDogc3VwcG9ydCAtc3RkPWM5OSBpbiB0cmFjZXBvaW50
+IG1hY3Jvcwo+PiAgICAgCj4+ICAgICBTaWduZWQtb2ZmLWJ5OiBNYXRoaWV1IERlc25veWVycyA8
+bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPgo+Pgo+PiBJIGhhZCBhbHNvIHRvIGZpeCB1
+c2Vyc3BhY2UgUkNVIGxpYnJhcnksIHdpdGg6Cj4+Cj4+Cj4+IGNvbW1pdCBlNTE1MDBlZGJkOTkx
+OWNlZTUzYmM4NWNiYjRiMjJjZDQ3ODZmYzQyCj4+IEF1dGhvcjogTWF0aGlldSBEZXNub3llcnMg
+PG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4KPj4gRGF0ZTogICBUdWUgSnVuIDEyIDEx
+OjI0OjMxIDIwMTIgLTA0MDAKPj4KPj4gICAgIEZpeCBjOTkgY29tcGF0aWJpbGl0eTogdXNlIF9f
+YXNtX18gYW5kIF9fdm9sYXRpbGVfXyBpbiBwdWJsaWMgaGVhZGVycwo+PiAgICAgCj4+ICAgICBT
+aWduZWQtb2ZmLWJ5OiBNYXRoaWV1IERlc25veWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNp
+b3MuY29tPgo+Pgo+PiBjb21taXQgYmRmZmE3M2FhMjA4YWQ1ZjFlNWIzYTNjYjZjYmY4NmFjNjk5
+NjU1OQo+PiBBdXRob3I6IE1hdGhpZXUgRGVzbm95ZXJzIDxtYXRoaWV1LmRlc25veWVyc0BlZmZp
+Y2lvcy5jb20+Cj4+IERhdGU6ICAgTW9uIEp1biAxMSAxMDoxNjozNSAyMDEyIC0wNDAwCj4+Cj4+
+ICAgICBGaXggYzk5IGNvbXBhdGliaWxpdHk6IHVzZSBfX3R5cGVvZl9fIGluc3RlYWQgb2YgdHlw
+ZW9mIGluIHB1YmxpYyBoZWFkZXJzCj4+ICAgICAKPj4gICAgIFJlcG9ydGVkLWJ5OiBKb2huIFN0
+ZWVsZSBTY290dCA8dG9vamF5c0B0b29qYXlzLm5ldD4KPj4gICAgIFNpZ25lZC1vZmYtYnk6IE1h
+dGhpZXUgRGVzbm95ZXJzIDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+Cj4+Cj4+Cj4+
+PiBqc2NvdHRAc2Fhejp+L3NyYy9sdHRuZy11c3QvdGVzdHMvZGVtbyQgY2NhY2hlIGdjYyAtc3Rk
+PWM5OSAtRHR5cGVvZj1fX3R5cGVvZl9fIC1wZWRhbnRpYyAtREhBVkVfQ09ORklHX0ggLUkuIC1J
+Li4vLi4gLUkuLi8uLi9pbmNsdWRlL2x0dG5nICAtSS4uLy4uL2luY2x1ZGUgLVdhbGwgLWcgLU8y
+IC1NVCBkZW1vLm8gLU1EIC1NUCAtTUYgLmRlcHMvZGVtby5UcG8gLWMgLW8gZGVtby5vIGRlbW8u
+Ywo+Pj4gSW4gZmlsZSBpbmNsdWRlZCBmcm9tIHVzdF90ZXN0c19kZW1vLmg6MjU6MCwKPj4+ICAg
+ICAgICAgICAgICAgICAgZnJvbSBkZW1vLmM6MzQ6Cj4+PiAuLi8uLi9pbmNsdWRlL2x0dG5nL3Ry
+YWNlcG9pbnQuaDogSW4gZnVuY3Rpb24g4oCYX190cmFjZXBvaW50c19faW5pdOKAmToKPj4+IC4u
+Ly4uL2luY2x1ZGUvbHR0bmcvdHJhY2Vwb2ludC5oOjI1MTo0OiB3YXJuaW5nOiBJU08gQyBmb3Ji
+aWRzIGNvbnZlcnNpb24gb2Ygb2JqZWN0IHBvaW50ZXIgdG8gZnVuY3Rpb24gcG9pbnRlciB0eXBl
+IFstcGVkYW50aWNdCj4+PiAuLi8uLi9pbmNsdWRlL2x0dG5nL3RyYWNlcG9pbnQuaDoyNTU6NDog
+d2FybmluZzogSVNPIEMgZm9yYmlkcyBjb252ZXJzaW9uIG9mIG9iamVjdCBwb2ludGVyIHRvIGZ1
+bmN0aW9uIHBvaW50ZXIgdHlwZSBbLXBlZGFudGljXQo+Pj4gLi4vLi4vaW5jbHVkZS9sdHRuZy90
+cmFjZXBvaW50Lmg6MjYwOjQ6IHdhcm5pbmc6IElTTyBDIGZvcmJpZHMgY29udmVyc2lvbiBvZiBv
+YmplY3QgcG9pbnRlciB0byBmdW5jdGlvbiBwb2ludGVyIHR5cGUgWy1wZWRhbnRpY10KPj4+IC4u
+Ly4uL2luY2x1ZGUvbHR0bmcvdHJhY2Vwb2ludC5oOjI2NDo0OiB3YXJuaW5nOiBJU08gQyBmb3Ji
+aWRzIGNvbnZlcnNpb24gb2Ygb2JqZWN0IHBvaW50ZXIgdG8gZnVuY3Rpb24gcG9pbnRlciB0eXBl
+IFstcGVkYW50aWNdCj4+PiAuLi8uLi9pbmNsdWRlL2x0dG5nL3RyYWNlcG9pbnQuaDoyNjg6NDog
+d2FybmluZzogSVNPIEMgZm9yYmlkcyBjb252ZXJzaW9uIG9mIG9iamVjdCBwb2ludGVyIHRvIGZ1
+bmN0aW9uIHBvaW50ZXIgdHlwZSBbLXBlZGFudGljXQo+Pj4gSW4gZmlsZSBpbmNsdWRlZCBmcm9t
+IGRlbW8uYzozNDowOgo+Pj4gdXN0X3Rlc3RzX2RlbW8uaDogSW4gZnVuY3Rpb24g4oCYX190cmFj
+ZXBvaW50X2NiX3VzdF90ZXN0c19kZW1vX19fc3RhcnRpbmfigJk6Cj4+PiB1c3RfdGVzdHNfZGVt
+by5oOjI3OjE2MTogd2FybmluZzogSVNPIEMgZm9yYmlkcyBicmFjZWQtZ3JvdXBzIHdpdGhpbiBl
+eHByZXNzaW9ucyBbLXBlZGFudGljXQo+Pj4gdXN0X3Rlc3RzX2RlbW8uaDoyNzo1NDk6IHdhcm5p
+bmc6IElTTyBDIGZvcmJpZHMgY29udmVyc2lvbiBvZiBvYmplY3QgcG9pbnRlciB0byBmdW5jdGlv
+biBwb2ludGVyIHR5cGUgWy1wZWRhbnRpY10KPj4+IEluIGZpbGUgaW5jbHVkZWQgZnJvbSBkZW1v
+LmM6MzQ6MDoKPj4+IHVzdF90ZXN0c19kZW1vLmg6IEluIGZ1bmN0aW9uIOKAmF9fdHJhY2Vwb2lu
+dF9jYl91c3RfdGVzdHNfZGVtb19fX2RvbmXigJk6Cj4+PiB1c3RfdGVzdHNfZGVtby5oOjM1OjE2
+MTogd2FybmluZzogSVNPIEMgZm9yYmlkcyBicmFjZWQtZ3JvdXBzIHdpdGhpbiBleHByZXNzaW9u
+cyBbLXBlZGFudGljXQo+Pj4gdXN0X3Rlc3RzX2RlbW8uaDozNTo1Mzc6IHdhcm5pbmc6IElTTyBD
+IGZvcmJpZHMgY29udmVyc2lvbiBvZiBvYmplY3QgcG9pbnRlciB0byBmdW5jdGlvbiBwb2ludGVy
+IHR5cGUgWy1wZWRhbnRpY10KPj4+IEluIGZpbGUgaW5jbHVkZWQgZnJvbSBkZW1vLmM6MzU6MDoK
+Pj4+IHVzdF90ZXN0c19kZW1vMi5oOiBJbiBmdW5jdGlvbiDigJhfX3RyYWNlcG9pbnRfY2JfdXN0
+X3Rlc3RzX2RlbW8yX19fbG9vcOKAmToKPj4+IHVzdF90ZXN0c19kZW1vMi5oOjI3OjI0NTogd2Fy
+bmluZzogSVNPIEMgZm9yYmlkcyBicmFjZWQtZ3JvdXBzIHdpdGhpbiBleHByZXNzaW9ucyBbLXBl
+ZGFudGljXQo+Pj4gdXN0X3Rlc3RzX2RlbW8yLmg6Mjc6NjI0OiB3YXJuaW5nOiBJU08gQyBmb3Ji
+aWRzIGNvbnZlcnNpb24gb2Ygb2JqZWN0IHBvaW50ZXIgdG8gZnVuY3Rpb24gcG9pbnRlciB0eXBl
+IFstcGVkYW50aWNdCj4+PiBJbiBmaWxlIGluY2x1ZGVkIGZyb20gZGVtby5jOjM2OjA6Cj4+PiB1
+c3RfdGVzdHNfZGVtbzMuaDogSW4gZnVuY3Rpb24g4oCYX190cmFjZXBvaW50X2NiX3VzdF90ZXN0
+c19kZW1vM19fX2RvbmXigJk6Cj4+PiB1c3RfdGVzdHNfZGVtbzMuaDoyNzoxNjE6IHdhcm5pbmc6
+IElTTyBDIGZvcmJpZHMgYnJhY2VkLWdyb3VwcyB3aXRoaW4gZXhwcmVzc2lvbnMgWy1wZWRhbnRp
+Y10KPj4+IHVzdF90ZXN0c19kZW1vMy5oOjI3OjU0MDogd2FybmluZzogSVNPIEMgZm9yYmlkcyBj
+b252ZXJzaW9uIG9mIG9iamVjdCBwb2ludGVyIHRvIGZ1bmN0aW9uIHBvaW50ZXIgdHlwZSBbLXBl
+ZGFudGljXQo+PiBJIHNlZSB0aGVzZSB3YXJuaW5ncywgdGhlIG9ubHkgdGhpbmcgdGhhdCBjdXJy
+ZW50bHkgZmFpbHMgaXMgZHVlIHRvCj4+IEJZVEVfT1JERVIgYW5kIEJJR19FTkRJQU4gbm90IGJl
+aW5nIGRlZmluZWQuIEJ5IGFkZGluZzoKPj4KPj4gLURCWVRFX09SREVSPV9fQllURV9PUkRFUiAt
+REJJR19FTkRJQU49X19CSUdfRU5ESUFOCj4+Cj4+IG15IHRlc3RzL2hlbGxvIHByb2dyYW0sIHdp
+dGggYSBNYWtlZmlsZS5hbSBtb2RpZmllZCB0byBkbzoKPj4KPj4gaGVsbG9fQ0ZMQUdTID0gLVdl
+cnJvcj1vbGQtc3R5bGUtZGVmaW5pdGlvbiAtLXN0ZD1jOTkgLXBlZGFudGljCj4+Cj4+IHByaW50
+cyBtYW55IHBlZGFudGljIHdhcm5pbmdzLCBhbmQgZmFpbHMgd2l0aDoKPj4KPj4gLi8uL3VzdF90
+ZXN0c19oZWxsby5oOjU1OjE6IGVycm9yOiB6ZXJvIG9yIG5lZ2F0aXZlIHNpemUgYXJyYXkg4oCY
+X19ldmVudF9maWVsZHNfX191c3RfdGVzdHNfaGVsbG9fX190cHRlc3Rfc2lnaGFuZGxlcuKAmQo+
+Pgo+PiB3aGljaCBzZWVtcyB0byBiZSBjYXVzZWQgYnkgbXkgZXZlbnQgd2l0aCAwIGZpZWxkcywg
+d2hpY2ggdHJ5IHRvIGNyZWF0ZQo+PiBhbiBhcnJheSBvZiBsZW5ndGggMC4KPj4KPj4gSSdsbCBs
+b29rIGludG8gdGhpcyBvbmUuCj4gUGxlYXNlIHRyeSBhZ2FpbiB3aXRoIGx0dG5nLXVzdCBtYXN0
+ZXIgSEVBRCwgdXNlcnNwYWNlLXJjdSBtYXN0ZXIgSEVBRCwKPiBhbmQgbGV0IG1lIGtub3cgaWYg
+eW91IGV4cGVyaWVuY2UgcHJvYmxlbXMgY29tcGlsaW5nIHlvdXIgaW5zdHJ1bWVudGVkCj4gYXBw
+bGljYXRpb24gd2l0aCAtLXN0ZD1jOTkgLXBlZGFudGljLiBQbGVhc2Ugbm90ZSB0aGF0IHRoZSBw
+cm9iZSBvYmplY3QKPiAoZS5nLiB0cC5jIGluIHRoZSB0ZXN0cy9oZWxsbyBwcm9ncmFtKSBuZWVk
+cyB0byBiZSBjb21waWxlZCB3aXRoIGdudQo+IGV4dGVuc2lvbnMsIHNvIHlvdSBzaG91bGQgbm90
+IHVzZSAtLXN0ZD1jOTkgZm9yIHRoaXMgc3BlY2lmaWMgb2JqZWN0LgoKTWF0aGlldSwKClRoYW5r
+cyBmb3IgeW91ciByZXBseSwgc29ycnkgaXQgaGFzIHRha2VuIG1lIHNvIGxvbmcgdG8gcmVzcG9u
+ZC4KCkkgY2FuIG5vdyBidWlsZCB0aGlzIGFwcGxpY2F0aW9uIHdpdGggdXNlcnNwYWNlIHRyYWNp
+bmcuIEkgd2FzIGFjdHVhbGx5IGFibGUgdG8gY29tcGlsZSB0aGUgcHJvYmUgb2JqZWN0IHdpdGgg
+LS1zdGQ9Yzk5IGFzIHdlbGwgKHRoaXMgdGltZSBvbiBDZW50b3MgNi4yLCBkaWRuJ3QgdHJ5IHll
+dCBvbiBVYnVudHUpLiBXb3VsZCB5b3UgZXhwZWN0IGFueSBwcm9ibGVtcyBmcm9tIHRoaXM/IEkg
+b25seSBoYXZlIGEgc2luZ2xlIHRyYWNlcG9pbnQgaW4gdGhpcyBhcHAsIGJ1dCBpdCBkb2VzIHNl
+ZW0gdG8gd29yay4KClRoZSB0aGluZyBJIGZvcmdvdCB0byBtZW50aW9uIGlzOiBva2F5LCBJIGNh
+biBidWlsZCBub3cgd2l0aCAtcGVkYW50aWMsIGJ1dCBJIGNhbid0IGJ1aWxkIHdpdGggIi1wZWRh
+bnRpYyAtV2Vycm9yIi4gVGhpcyBhcHBsaWNhdGlvbiBidWlsZHMgd2l0aCAiLS1zdGQ9Yzk5IC1w
+ZWRhbnRpYyAtV2Vycm9yIiAoYW1vbmcgbWFueSBvdGhlciBmbGFncykuIEkgY2FuIG9mIGNvdXJz
+ZSByZW1vdmUgLVdlcnJvciBmb3IgbXkgdGVzdHMsIGJ1dCBpbiB0aGUgbG9uZ2VyIHRlcm0gSSB3
+b3VsZCBsaWtlIHRvIHNlZSBsdHRuZy11c3QgZW5hYmxlZCBpbiBvdXIgcmVndWxhciBidWlsZCwg
+YW5kIGRpc2FibGluZyAtV2Vycm9yIGZvciB0aGF0IGlzIG5vdCBzb21ldGhpbmcgd2Ugd2FudCB0
+byBkby4gSWYgSSBvbmx5IGhhZCB0byBkaXNhYmxlIGl0IGZvciB0aGUgdHJhY2UgcHJvdmlkZXIs
+IEkgY291bGQgbmVnb3RpYXRlIHRoYXQsIGJ1dCBkaXNhYmxpbmcgaXQgZm9yIGFueSBtb2R1bGUg
+d2hpY2ggdXNlcyB0cmFjZXBvaW50cyBpcyB1bmRlc2lyYWJsZS4KCkkgaGF2ZW4ndCB5ZXQgbG9v
+a2VkIGF0IGhvdyBkaWZmaWN1bHQgaXQgd291bGQgYmUgZG8gZWxpbWluYXRlIHRoZXNlIHBlZGFu
+dGljIHdhcm5pbmdzLiBEbyB5b3UgaGF2ZSBhIGZlZWwgZm9yIHdoYXQgaXMgaW52b2x2ZWQ/IFBy
+ZXByb2Nlc3NvciB0cmlja3Mgd2FycCBteSBtaW5kLiA6KAoKY2hlZXJzLAoKSm9obgoKX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxp
+bmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcv
+Y2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
