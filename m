@@ -1,19 +1,29 @@
-From: Alexandre Montplaisir <alexandre.montplaisir@polymtl.ca>
-Subject: Re: lttng - ubuntu 11.10 - problem
-Date: Mon, 18 Jun 2012 10:35:07 -0400
-Message-ID: <4FDF3C9B.3020204__11396.6885641732$1340030465$gmane$org@polymtl.ca>
-References: <1340002781.5676.YahooMailNeo@web161206.mail.bf1.yahoo.com>
-	<20120618134251.GA6865@Krystal>
+From: <Zheng.Chang@emc.com>
+Subject: Some questions about Lttng
+Date: Mon, 18 Jun 2012 23:50:04 -0400
+Message-ID: <6539770C71C3814BB0BFC2DBEBD105087948C2__32350.9197020487$1340077860$gmane$org@CORPUSMX30B.corp.emc.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============1409930861=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from ironport2-out.teksavvy.com ([206.248.154.182])
-	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <alexandre.montplaisir@polymtl.ca>)
-	id 1Sgd2u-0007u8-Tu
-	for lttng-dev@lists.lttng.org; Mon, 18 Jun 2012 10:35:13 -0400
-In-Reply-To: <20120618134251.GA6865@Krystal>
+Received: from hop-nat-141.emc.com ([168.159.213.141]
+	helo=mexforward.lss.emc.com) by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <Zheng.Chang@emc.com>) id 1SgpSW-0005Jp-Ad
+	for lttng-dev@lists.lttng.org; Mon, 18 Jun 2012 23:50:28 -0400
+Received: from hop04-l1d11-si01.isus.emc.com (HOP04-L1D11-SI01.isus.emc.com
+	[10.254.111.54])
+	by mexforward.lss.emc.com (Switch-3.4.3/Switch-3.4.3) with ESMTP id
+	q5J3oMYC022740
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-SHA bits=256 verify=NO)
+	for <lttng-dev@lists.lttng.org>; Mon, 18 Jun 2012 23:50:22 -0400
+Received: from mailhub.lss.emc.com (mailhub.lss.emc.com [10.254.221.251]) by
+	hop04-l1d11-si01.isus.emc.com (RSA Interceptor) for
+	<lttng-dev@lists.lttng.org>; Mon, 18 Jun 2012 23:50:09 -0400
+Received: from corpussmtp3.corp.emc.com (corpussmtp3.corp.emc.com
+	[10.254.169.196])
+	by mailhub.lss.emc.com (Switch-3.4.3/Switch-3.4.3) with ESMTP id
+	q5J3o7h8032613
+	for <lttng-dev@lists.lttng.org>; Mon, 18 Jun 2012 23:50:08 -0400
+Content-class: urn:content-classes:message
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,70 +32,225 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, somanath sahoo <bapi_mvit2004@yahoo.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-T24gMTItMDYtMTggMDk6NDIgQU0sIE1hdGhpZXUgRGVzbm95ZXJzIHdyb3RlOgo+ICogc29tYW5h
-dGggc2Fob28gKGJhcGlfbXZpdDIwMDRAeWFob28uY29tKSB3cm90ZToKPj4gSGksCj4+Cj4+IEkg
-aGF2ZSB0cmllZCB0byByZWluc3RhbGwgbHR0bmctdG9vbHMsICBsdHRuZy1tb2R1bGVzLWRrbXMg
-IGFuZCBiYWJlbHRyYWNlLiAKPj4KPj4KPj4gdGhlIHJlaW5zdGFsbGF0aW9uIG9mIGx0dG5nLXRv
-b2xzIGFuZCBiYWJlbHRyYWNlIGhhcyBiZWVuIHN1Y2Nlc3NmdWwuIEJ1dCByZWluc3RhbGxhdGlv
-biBvZiBsdHRuZy1tb2R1bGVzLWRrbXMgaGFzIGJlZW4gZmFpbGluZy4gdGhlIGxvZyBpcyBwcm92
-aWRlZCBiZWxvdwo+Pgo+IFsuLi5dCj4+IFRoZSBjb250ZW50IG9mIG1ha2UubG9nIGlzIHByb3Zp
-ZGVkIGJlbG93IDogCj4+Cj4+Cj4+IERLTVMgbWFrZS5sb2cgZm9yIGx0dG5nLW1vZHVsZXMtMi4w
-LjAgZm9yIGtlcm5lbCAzLjAuMC0yMS1nZW5lcmljIChpNjg2KQo+PiBNb24gSnVuIDE4IDEyOjA1
-OjUxIElTVCAyMDEyCj4+IG1ha2U6IEVudGVyaW5nIGRpcmVjdG9yeSBgL3Vzci9zcmMvbGludXgt
-aGVhZGVycy0zLjAuMC0yMS1nZW5lcmljJwo+PiAgIENDIFtNXSAgL3Zhci9saWIvZGttcy9sdHRu
-Zy1tb2R1bGVzLzIuMC4wL2J1aWxkL2x0dG5nLXJpbmctYnVmZmVyLWNsaWVudC1kaXNjYXJkLm8K
-Pj4gICBDQyBbTV0gIC92YXIvbGliL2RrbXMvbHR0bmctbW9kdWxlcy8yLjAuMC9idWlsZC9sdHRu
-Zy1yaW5nLWJ1ZmZlci1jbGllbnQtb3ZlcndyaXRlLm8KPj4gICBDQyBbTV0gIC92YXIvbGliL2Rr
-bXMvbHR0bmctbW9kdWxlcy8yLjAuMC9idWlsZC9sdHRuZy1yaW5nLWJ1ZmZlci1tZXRhZGF0YS1j
-bGllbnQubwo+PiAgIENDIFtNXSAgL3Zhci9saWIvZGttcy9sdHRuZy1tb2R1bGVzLzIuMC4wL2J1
-aWxkL2x0dG5nLXJpbmctYnVmZmVyLWNsaWVudC1tbWFwLWRpc2NhcmQubwo+PiAgIENDIFtNXSAg
-L3Zhci9saWIvZGttcy9sdHRuZy1tb2R1bGVzLzIuMC4wL2J1aWxkL2x0dG5nLXJpbmctYnVmZmVy
-LWNsaWVudC1tbWFwLW92ZXJ3cml0ZS5vCj4+ICAgQ0MgW01dICAvdmFyL2xpYi9ka21zL2x0dG5n
-LW1vZHVsZXMvMi4wLjAvYnVpbGQvbHR0bmctcmluZy1idWZmZXItbWV0YWRhdGEtbW1hcC1jbGll
-bnQubwo+PiAgIENDIFtNXSAgL3Zhci9saWIvZGttcy9sdHRuZy1tb2R1bGVzLzIuMC4wL2J1aWxk
-L2x0dG5nLXN0YXRlZHVtcC1pbXBsLm8KPj4gICBDQyBbTV0gIC92YXIvbGliL2RrbXMvbHR0bmct
-bW9kdWxlcy8yLjAuMC9idWlsZC93cmFwcGVyL2lycWRlc2Mubwo+PiAgIENDIFtNXSAgL3Zhci9s
-aWIvZGttcy9sdHRuZy1tb2R1bGVzLzIuMC4wL2J1aWxkL2x0dG5nLWV2ZW50cy5vCj4+ICAgQ0Mg
-W01dICAvdmFyL2xpYi9ka21zL2x0dG5nLW1vZHVsZXMvMi4wLjAvYnVpbGQvbHR0bmctYWJpLm8K
-Pj4gICBDQyBbTV0gIC92YXIvbGliL2RrbXMvbHR0bmctbW9kdWxlcy8yLjAuMC9idWlsZC9sdHRu
-Zy1wcm9iZXMubwo+PiAgIENDIFtNXSAgL3Zhci9saWIvZGttcy9sdHRuZy1tb2R1bGVzLzIuMC4w
-L2J1aWxkL2x0dG5nLWNvbnRleHQubwo+PiAgIENDIFtNXSAgL3Zhci9saWIvZGttcy9sdHRuZy1t
-b2R1bGVzLzIuMC4wL2J1aWxkL2x0dG5nLWNvbnRleHQtcGlkLm8KPj4gICBDQyBbTV0gIC92YXIv
-bGliL2RrbXMvbHR0bmctbW9kdWxlcy8yLjAuMC9idWlsZC9sdHRuZy1jb250ZXh0LXByb2NuYW1l
-Lm8KPj4gICBDQyBbTV0gIC92YXIvbGliL2RrbXMvbHR0bmctbW9kdWxlcy8yLjAuMC9idWlsZC9s
-dHRuZy1jb250ZXh0LXByaW8ubwo+PiAgIENDIFtNXSAgL3Zhci9saWIvZGttcy9sdHRuZy1tb2R1
-bGVzLzIuMC4wL2J1aWxkL2x0dG5nLWNvbnRleHQtbmljZS5vCj4+ICAgQ0MgW01dICAvdmFyL2xp
-Yi9ka21zL2x0dG5nLW1vZHVsZXMvMi4wLjAvYnVpbGQvbHR0bmctY29udGV4dC12cGlkLm8KPj4g
-ICBDQyBbTV0gIC92YXIvbGliL2RrbXMvbHR0bmctbW9kdWxlcy8yLjAuMC9idWlsZC9sdHRuZy1j
-b250ZXh0LXRpZC5vCj4+ICAgQ0MgW01dICAvdmFyL2xpYi9ka21zL2x0dG5nLW1vZHVsZXMvMi4w
-LjAvYnVpbGQvbHR0bmctY29udGV4dC12dGlkLm8KPj4gICBDQyBbTV0gIC92YXIvbGliL2RrbXMv
-bHR0bmctbW9kdWxlcy8yLjAuMC9idWlsZC9sdHRuZy1jb250ZXh0LXBwaWQubwo+PiAgIENDIFtN
-XSAgL3Zhci9saWIvZGttcy9sdHRuZy1tb2R1bGVzLzIuMC4wL2J1aWxkL2x0dG5nLWNvbnRleHQt
-dnBwaWQubwo+PiAgIENDIFtNXSAgL3Zhci9saWIvZGttcy9sdHRuZy1tb2R1bGVzLzIuMC4wL2J1
-aWxkL2x0dG5nLWNhbGlicmF0ZS5vCj4+ICAgQ0MgW01dICAvdmFyL2xpYi9ka21zL2x0dG5nLW1v
-ZHVsZXMvMi4wLjAvYnVpbGQvd3JhcHBlci9yYW5kb20ubwo+PiAgIENDIFtNXSAgL3Zhci9saWIv
-ZGttcy9sdHRuZy1tb2R1bGVzLzIuMC4wL2J1aWxkL2x0dG5nLXN5c2NhbGxzLm8KPj4gL3Zhci9s
-aWIvZGttcy9sdHRuZy1tb2R1bGVzLzIuMC4wL2J1aWxkL2x0dG5nLXN5c2NhbGxzLmM6MzI6Mzg6
-IGVycm9yOiBtYWNybyAiaXNfY29tcGF0X3Rhc2siIHBhc3NlZCAxIGFyZ3VtZW50cywgYnV0IHRh
-a2VzIGp1c3QgMAo+PiAvdmFyL2xpYi9ka21zL2x0dG5nLW1vZHVsZXMvMi4wLjAvYnVpbGQvbHR0
-bmctc3lzY2FsbHMuYzozMzoxOiBlcnJvcjogZXhwZWN0ZWQg4oCYPeKAmSwg4oCYLOKAmSwg4oCY
-O+KAmSwg4oCYYXNt4oCZIG9yIOKAmF9fYXR0cmlidXRlX1/igJkgYmVmb3JlIOKAmHvigJkgdG9r
-ZW4KPj4gbWFrZVsxXTogKioqIFsvdmFyL2xpYi9ka21zL2x0dG5nLW1vZHVsZXMvMi4wLjAvYnVp
-bGQvbHR0bmctc3lzY2FsbHMub10gRXJyb3IgMQo+PiBtYWtlOiAqKiogW19tb2R1bGVfL3Zhci9s
-aWIvZGttcy9sdHRuZy1tb2R1bGVzLzIuMC4wL2J1aWxkXSBFcnJvciAyCj4+IG1ha2U6IExlYXZp
-bmcgZGlyZWN0b3J5IGAvdXNyL3NyYy9saW51eC1oZWFkZXJzLTMuMC4wLTIxLWdlbmVyaWMnCj4g
-SXQgbG9va3MgbGlrZSB0aGUgbHR0bmctbW9kdWxlcyBES01TIHBhY2thZ2UgaXMgb3V0IG9mIGRh
-dGUgKDIuMC4wKS4KPiBBbGV4LCBjYW4geW91IHVwZGF0ZSBpdCA/CgpZZWFoLCB3ZSBzdG9wcGVk
-IGJvdGhlcmluZyBhYm91dCB0aGUgT25laXJpYyBwYWNrYWdlcyBzaW5jZSBQcmVjaXNlIGNhbWUK
-b3V0IHdpdGggbHR0bmctbW9kdWxlcyBpbmNsdWRlZCA7KQoKU3RpbGwgaXQncyBzdHJhbmdlLCBi
-ZWNhdXNlIDIuMC4wIHVzZWQgdG8gaW5zdGFsbCBmaW5lIG9uIE9uZWlyaWMuLi4KSSdsbCB0cnkg
-dG8gZmluZCBzb21lIHRpbWUgdG9kYXkgdG8gcHVzaCBhbiB1cGRhdGUsIGFuZCBzZWUgaWYgaXQg
-aGVscHMuCgoKQ2hlZXJzLAoKLS0gCkFsZXhhbmRyZSBNb250cGxhaXNpcgpET1JTQUwgbGFiLArD
-iWNvbGUgUG9seXRlY2huaXF1ZSBkZSBNb250csOpYWwKCgpfX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRl
-dkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4v
-bGlzdGluZm8vbHR0bmctZGV2Cg==
+This is a multi-part message in MIME format.
+
+--===============1409930861==
+Content-class: urn:content-classes:message
+Content-Type: multipart/alternative;
+	boundary="----_=_NextPart_001_01CD4DCE.9DD35F95"
+
+This is a multi-part message in MIME format.
+
+------_=_NextPart_001_01CD4DCE.9DD35F95
+Content-Type: text/plain;
+	charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+Hi folks,
+
+=20
+
+I'm studying how to use Lttng now. I built a kernel which version is
+2.6.38 and ran with lttng 2.0.
+
+I got some confused when I started to use it. Here are my questions:
+
+=20
+
+1. I didn't see kernel patches for kernel 3.x. Does it mean kernel 3.x
+support it already?=20
+
+2. I tried to do something like, dump the arguments of system call, or
+dump a backtrace in a specified function. But the output of lttng is
+very limited. Is there a way to do that with lttng?
+
+3. I looked into some UST examples and found here are three header
+files:  tracepoint.h, tracepoint-event.h and ust-tracepoint-event.h.
+They have some duplicated macro definitions like TRACEPOINT_EVENT.
+
+And the examples includes all of these three header files despite no
+conflict here. Could someone help to explain the intention?
+
+4. Once I defined a tracepoint in my code, seems some initializations
+would register default probe into the hook point.  How to disable the
+default probe and  register my self-defined probes?
+
+5. Does lttng-ust support dynamic traceing like kprobe?
+
+=20
+
+I'm a newbie of lttng. Any help will be appreciated.
+
+=20
+
+Thanks
+
+Zheng
+
+=20
+
+=20
+
+
+------_=_NextPart_001_01CD4DCE.9DD35F95
+Content-Type: text/html;
+	charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+<html xmlns:v=3D"urn:schemas-microsoft-com:vml" =
+xmlns:o=3D"urn:schemas-microsoft-com:office:office" =
+xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
+xmlns:x=3D"urn:schemas-microsoft-com:office:excel" =
+xmlns:p=3D"urn:schemas-microsoft-com:office:powerpoint" =
+xmlns:a=3D"urn:schemas-microsoft-com:office:access" =
+xmlns:dt=3D"uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" =
+xmlns:s=3D"uuid:BDC6E3F0-6DA3-11d1-A2A3-00AA00C14882" =
+xmlns:rs=3D"urn:schemas-microsoft-com:rowset" xmlns:z=3D"#RowsetSchema" =
+xmlns:b=3D"urn:schemas-microsoft-com:office:publisher" =
+xmlns:ss=3D"urn:schemas-microsoft-com:office:spreadsheet" =
+xmlns:c=3D"urn:schemas-microsoft-com:office:component:spreadsheet" =
+xmlns:odc=3D"urn:schemas-microsoft-com:office:odc" =
+xmlns:oa=3D"urn:schemas-microsoft-com:office:activation" =
+xmlns:html=3D"http://www.w3.org/TR/REC-html40" =
+xmlns:q=3D"http://schemas.xmlsoap.org/soap/envelope/" =
+xmlns:rtc=3D"http://microsoft.com/officenet/conferencing" =
+xmlns:D=3D"DAV:" xmlns:Repl=3D"http://schemas.microsoft.com/repl/" =
+xmlns:mt=3D"http://schemas.microsoft.com/sharepoint/soap/meetings/" =
+xmlns:x2=3D"http://schemas.microsoft.com/office/excel/2003/xml" =
+xmlns:ppda=3D"http://www.passport.com/NameSpace.xsd" =
+xmlns:ois=3D"http://schemas.microsoft.com/sharepoint/soap/ois/" =
+xmlns:dir=3D"http://schemas.microsoft.com/sharepoint/soap/directory/" =
+xmlns:ds=3D"http://www.w3.org/2000/09/xmldsig#" =
+xmlns:dsp=3D"http://schemas.microsoft.com/sharepoint/dsp" =
+xmlns:udc=3D"http://schemas.microsoft.com/data/udc" =
+xmlns:xsd=3D"http://www.w3.org/2001/XMLSchema" =
+xmlns:sub=3D"http://schemas.microsoft.com/sharepoint/soap/2002/1/alerts/"=
+ xmlns:ec=3D"http://www.w3.org/2001/04/xmlenc#" =
+xmlns:sp=3D"http://schemas.microsoft.com/sharepoint/" =
+xmlns:sps=3D"http://schemas.microsoft.com/sharepoint/soap/" =
+xmlns:xsi=3D"http://www.w3.org/2001/XMLSchema-instance" =
+xmlns:udcs=3D"http://schemas.microsoft.com/data/udc/soap" =
+xmlns:udcxf=3D"http://schemas.microsoft.com/data/udc/xmlfile" =
+xmlns:udcp2p=3D"http://schemas.microsoft.com/data/udc/parttopart" =
+xmlns:wf=3D"http://schemas.microsoft.com/sharepoint/soap/workflow/" =
+xmlns:dsss=3D"http://schemas.microsoft.com/office/2006/digsig-setup" =
+xmlns:dssi=3D"http://schemas.microsoft.com/office/2006/digsig" =
+xmlns:mdssi=3D"http://schemas.openxmlformats.org/package/2006/digital-sig=
+nature" =
+xmlns:mver=3D"http://schemas.openxmlformats.org/markup-compatibility/2006=
+" xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" =
+xmlns:mrels=3D"http://schemas.openxmlformats.org/package/2006/relationshi=
+ps" xmlns:spwp=3D"http://microsoft.com/sharepoint/webpartpages" =
+xmlns:ex12t=3D"http://schemas.microsoft.com/exchange/services/2006/types"=
+ =
+xmlns:ex12m=3D"http://schemas.microsoft.com/exchange/services/2006/messag=
+es" =
+xmlns:pptsl=3D"http://schemas.microsoft.com/sharepoint/soap/SlideLibrary/=
+" =
+xmlns:spsl=3D"http://microsoft.com/webservices/SharePointPortalServer/Pub=
+lishedLinksService" xmlns:Z=3D"urn:schemas-microsoft-com:" =
+xmlns:st=3D"&#1;" xmlns=3D"http://www.w3.org/TR/REC-html40"><head><meta =
+http-equiv=3DContent-Type content=3D"text/html; =
+charset=3Dus-ascii"><meta name=3DGenerator content=3D"Microsoft Word 12 =
+(filtered medium)"><style><!--
+/* Font Definitions */
+@font-face
+	{font-family:SimSun;
+	panose-1:2 1 6 0 3 1 1 1 1 1;}
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+@font-face
+	{font-family:"\@SimSun";
+	panose-1:2 1 6 0 3 1 1 1 1 1;}
+/* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0in;
+	margin-bottom:.0001pt;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+a:link, span.MsoHyperlink
+	{mso-style-priority:99;
+	color:blue;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{mso-style-priority:99;
+	color:purple;
+	text-decoration:underline;}
+p.MsoListParagraph, li.MsoListParagraph, div.MsoListParagraph
+	{mso-style-priority:34;
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.5in;
+	margin-bottom:.0001pt;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+span.EmailStyle18
+	{mso-style-type:personal-compose;
+	font-family:"Calibri","sans-serif";
+	color:windowtext;}
+.MsoChpDefault
+	{mso-style-type:export-only;
+	font-size:10.0pt;}
+@page WordSection1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.0in 1.0in 1.0in;}
+div.WordSection1
+	{page:WordSection1;}
+--></style><!--[if gte mso 9]><xml>
+<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
+</xml><![endif]--><!--[if gte mso 9]><xml>
+<o:shapelayout v:ext=3D"edit">
+<o:idmap v:ext=3D"edit" data=3D"1" />
+</o:shapelayout></xml><![endif]--></head><body lang=3DEN-US link=3Dblue =
+vlink=3Dpurple><div class=3DWordSection1><p class=3DMsoNormal>Hi =
+folks,<o:p></o:p></p><p class=3DMsoNormal><o:p>&nbsp;</o:p></p><p =
+class=3DMsoNormal>I&#8217;m studying how to use Lttng now. I built a =
+kernel which version is 2.6.38 and ran with lttng 2.0.<o:p></o:p></p><p =
+class=3DMsoNormal>I got some confused when I started to use it. Here are =
+my questions:<o:p></o:p></p><p class=3DMsoNormal><o:p>&nbsp;</o:p></p><p =
+class=3DMsoNormal>1. I didn&#8217;t see kernel patches for kernel 3.x. =
+Does it mean kernel 3.x support it already? <o:p></o:p></p><p =
+class=3DMsoNormal>2. I tried to do something like, dump the arguments of =
+system call, or dump a backtrace in a specified function. But the output =
+of lttng is very limited. Is there a way to do that with =
+lttng?<o:p></o:p></p><p class=3DMsoNormal>3. I looked into some UST =
+examples and found here are three header files:&nbsp; tracepoint.h, =
+tracepoint-event.h and ust-tracepoint-event.h. They have some duplicated =
+macro definitions like TRACEPOINT_EVENT.<o:p></o:p></p><p =
+class=3DMsoNormal>And the examples includes all of these three header =
+files despite no conflict here. Could someone help to explain the =
+intention?<o:p></o:p></p><p class=3DMsoNormal>4. Once I defined a =
+tracepoint in my code, seems some initializations would register default =
+probe into the hook point.&nbsp; How to disable the default probe =
+and&nbsp; register my self-defined probes?<o:p></o:p></p><p =
+class=3DMsoNormal>5. Does lttng-ust support dynamic traceing like =
+kprobe?<o:p></o:p></p><p class=3DMsoNormal><o:p>&nbsp;</o:p></p><p =
+class=3DMsoNormal>I&#8217;m a newbie of lttng. Any help will be =
+appreciated.<o:p></o:p></p><p class=3DMsoNormal><o:p>&nbsp;</o:p></p><p =
+class=3DMsoNormal>Thanks<o:p></o:p></p><p =
+class=3DMsoNormal>Zheng<o:p></o:p></p><p =
+class=3DMsoNormal><o:p>&nbsp;</o:p></p><p =
+class=3DMsoNormal><o:p>&nbsp;</o:p></p></div></body></html>
+------_=_NextPart_001_01CD4DCE.9DD35F95--
+
+
+--===============1409930861==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1409930861==--
