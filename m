@@ -1,20 +1,21 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Some questions about Lttng
-Date: Wed, 20 Jun 2012 09:03:38 -0400
-Message-ID: <20120620130338.GA25746__8285.39019353247$1340197772$gmane$org@Krystal>
-References: <20120619163655.GC6743@Krystal>
-	<6539770C71C3814BB0BFC2DBEBD105087FC418@CORPUSMX30B.corp.emc.com>
+From: John Steele Scott <toojays@toojays.net>
+Subject: Re: lttng-ust with --std=c99 -pedantic
+Date: Wed, 20 Jun 2012 22:40:12 +0930
+Message-ID: <4FE1CBB4.7040007__31261.9363576689$1340197852$gmane$org@toojays.net>
+References: <jr0mmu$efe$1@dough.gmane.org> <20120612153257.GB14189@Krystal>
+	<20120612155539.GA15859@Krystal> <4FDF1AC2.3070009@toojays.net>
+	<20120618141156.GB6865@Krystal> <20120619174518.GB8776@Krystal>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from mail-pz0-f48.google.com ([209.85.210.48])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1ShKZQ-0004Gd-OU
-	for lttng-dev@lists.lttng.org; Wed, 20 Jun 2012 09:03:40 -0400
-Content-Disposition: inline
-In-Reply-To: <6539770C71C3814BB0BFC2DBEBD105087FC418@CORPUSMX30B.corp.emc.com>
+	(envelope-from <toojays@toojays.net>) id 1ShKfu-0004L0-9m
+	for lttng-dev@lists.lttng.org; Wed, 20 Jun 2012 09:10:22 -0400
+Received: by dadz8 with SMTP id z8so11930617dad.35
+	for <lttng-dev@lists.lttng.org>; Wed, 20 Jun 2012 06:10:16 -0700 (PDT)
+In-Reply-To: <20120619174518.GB8776@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,230 +24,119 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Zheng.Chang@emc.com
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Zheng.Chang@emc.com (Zheng.Chang@emc.com) wrote:
-> =
-
-> > -----Original Message-----
-> > From: Mathieu Desnoyers [mailto:mathieu.desnoyers@efficios.com] =
-
-> > Sent: Wednesday, June 20, 2012 0:37 AM
-> > To: Francis Giraldeau
-> > Cc: lttng-dev@lists.lttng.org
-> > Subject: Re: [lttng-dev] Some questions about Lttng
-> =
-
-> > * Francis Giraldeau (francis.giraldeau@gmail.com) wrote:
-> > > Le 2012-06-19 05:50, Zheng.Chang@emc.com a =E9crit :
-> > > >
-> > > > Hi folks,
-> > > >
-> > > >  =
-
-> > > >
-> > > > I'm studying how to use Lttng now. I built a kernel which version is
-> > > > 2.6.38 and ran with lttng 2.0.
-> > > >
-> > > > I got some confused when I started to use it. Here are my questions:
-> > > >
-> > > >  =
-
-> > > >
-> > > > 1. I didn't see kernel patches for kernel 3.x. Does it mean kernel =
-3.x
-> > > > support it already?
-> > > >
-> > > =
-
-> > > You don't need a kernel patch with lttng 2.0, only modules are requir=
-ed.
-> > > It uses the tracepoints already present in the kernel, and trace syst=
-em
-> > > calls, and uses perf performance counters and kprobes.
-> > > =
-
-> > > > 2. I tried to do something like, dump the arguments of system call,=
- or
-> > > > dump a backtrace in a specified function. But the output of lttng is
-> > > > very limited. Is there a way to do that with lttng?
-> > > >
-> > > =
-
-> > > If system calls are enabled, arguments are supposed to be dumped (opt=
-ion
-> > > --syscall to lttng enable-event). If it's not the case, then are you
-> > > sure you are using lttng 2.0 and not 0.12? ;) Because the older versi=
-on
-> > > has a different behavior. One additional note: few system calls do not
-> > > have all their arguments decoded in lttng 2, but there are only a few.
-> =
-
-> > There is no backtrace dump feature in lttng 2.0.
-> =
-
-> > Arguments of system calls are almost all there on x86 32/64 and ARM.
-> > What architecture are you using ?
-> =
-
-> =
-
-> My tsetbed is x86 32bit and lttng's version is 2.0.1. You're right. I can=
- see the arguments now.
-> =
-
-> =
-
-> > > =
-
-> > > > 3. I looked into some UST examples and found here are three header
-> > > > files:  tracepoint.h, tracepoint-event.h and ust-tracepoint-event.h.
-> > > > They have some duplicated macro definitions like TRACEPOINT_EVENT.
-> > > >
-> > > =
-
-> > > The macros are quite complicated. Some includes files are included mo=
-re
-> > > than once to generate various portion of the tracepoint code. So, my
-> > > advice here is to take a working example and adapt it to your needs.
-> =
-
-> > Good advice.
-> =
-
-> > > =
-
-> > > > And the examples includes all of these three header files despite no
-> > > > conflict here. Could someone help to explain the intention?
-> > > >
-> > > > 4. Once I defined a tracepoint in my code, seems some initializatio=
-ns
-> > > > would register default probe into the hook point.  How to disable t=
-he
-> > > > default probe and  register my self-defined probes?
-> > > >
-> > > =
-
-> > > You mean, call a custom function when tracepoint is executed? Maybe
-> > > somebody else has an answer, but AFAIK this is not possible. But you
-> > > could make a wrapper to your tracepoint and then call your additional
-> > > function there.
-> =
-
-> > Yep, not possible. You'd have to wrap the tracepoint.
-> =
-
-> > > =
-
-> > > > 5. Does lttng-ust support dynamic traceing like kprobe?
-> > > >
-> > > =
-
-> > > AFAIK, the kernel tracer supports kprobe, but not UST. Maybe somebody
-> > > else can confirm/infirm the dynamic tracepoint feature in user-space?
-> =
-
-> > This is correct.
-> =
-
-> > Thanks,
-> =
-
-> > Mathieu
-> =
-
-> > > =
-
-> > > You can use a feature of GCC to regiter callback on function entry and
-> > > exit, but since it executes for all functions, then the overhead is v=
-ery
-> > > high. You can have a look here:
-> > > =
-
-> > > https://github.com/giraldeau/workload-kit/blob/master/ust/cyg.c
-> > > =
-
-> > > Cheers,
-> > > =
-
-> > > Francis
-> =
-
-> =
-
-> And here are some subsequent questions about lttng:
-> =
-
-> 6. Does lttng-ust support marker? Marker is easier to be compatible
-> with the APIs like printf if we don't care its performance issue.
-
-Not currently. We plan to implement a "tracepoint_printf" (or
-trace_printf, not sure yet) that will behave similarly to the Linux
-Kernel Markers (back in the early lttng 0.x days). This will definitely
-fulfill your use-case, but it's just not there yet.
-
-> 7. What's supposed to show with 'lttng list -u'? It's empty now. Is
-> that possible to show the events defined in an application?
-
-List of tracepoints in _currently running_ _registered_ applications
-only. An application registers when linked with liblttng-ust.
-
-> 8. What does disable-event command of lttng do? With the
-> example(hello) provided by lttng-ust, I enabled all events with '-a
-> -u' and then disabled them again.  I launched the example with gdb and
-> dumped the tracepoint's structure and then found its state was active.
-> It's supposed to be inactive here, right?
-
-Can you provide the detail of commands you launched, and the result of
-gdb printout ? Please run "hello" with LTTNG_UST_DEBUG=3D1 env. var set.
-
-> BTW: I didn't see any trace generated here with view command.
-
-That is after the disable, right ?
-
-Also, did you do a lttng start at some point in your test ?
-
-Thanks,
-
-Mathieu
-
-> =
-
-> Thanks all for your useful info!
-> =
-
-> Best regards
-> Zheng
-> =
-
-> > > _______________________________________________
-> > > lttng-dev mailing list
-> > > lttng-dev@lists.lttng.org
-> > > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> =
-
-> =
-
-> > -- =
-
-> > Mathieu Desnoyers
-> > Operating System Efficiency R&D Consultant
-> > EfficiOS Inc.
-> > http://www.efficios.com
-> =
-
-> > _______________________________________________
-> > lttng-dev mailing list
-> > lttng-dev@lists.lttng.org
-> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> =
-
-
--- =
-
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+T24gMjAvMDYvMTIgMDM6MTUsIE1hdGhpZXUgRGVzbm95ZXJzIHdyb3RlOgo+ICogTWF0aGlldSBE
+ZXNub3llcnMgKG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbSkgd3JvdGU6Cj4+ICogSm9o
+biBTdGVlbGUgU2NvdHQgKHRvb2pheXNAdG9vamF5cy5uZXQpIHdyb3RlOgo+PgpzbmlwIHNuaXAK
+Pj4+IFRoZSB0aGluZyBJIGZvcmdvdCB0byBtZW50aW9uIGlzOiBva2F5LCBJIGNhbiBidWlsZCBu
+b3cgd2l0aAo+Pj4gLXBlZGFudGljLCBidXQgSSBjYW4ndCBidWlsZCB3aXRoICItcGVkYW50aWMg
+LVdlcnJvciIuIFRoaXMKPj4+IGFwcGxpY2F0aW9uIGJ1aWxkcyB3aXRoICItLXN0ZD1jOTkgLXBl
+ZGFudGljIC1XZXJyb3IiIChhbW9uZyBtYW55Cj4+PiBvdGhlciBmbGFncykuIEkgY2FuIG9mIGNv
+dXJzZSByZW1vdmUgLVdlcnJvciBmb3IgbXkgdGVzdHMsIGJ1dCBpbiB0aGUKPj4+IGxvbmdlciB0
+ZXJtIEkgd291bGQgbGlrZSB0byBzZWUgbHR0bmctdXN0IGVuYWJsZWQgaW4gb3VyIHJlZ3VsYXIK
+Pj4+IGJ1aWxkLCBhbmQgZGlzYWJsaW5nIC1XZXJyb3IgZm9yIHRoYXQgaXMgbm90IHNvbWV0aGlu
+ZyB3ZSB3YW50IHRvIGRvLgo+Pj4gSWYgSSBvbmx5IGhhZCB0byBkaXNhYmxlIGl0IGZvciB0aGUg
+dHJhY2UgcHJvdmlkZXIsIEkgY291bGQgbmVnb3RpYXRlCj4+PiB0aGF0LCBidXQgZGlzYWJsaW5n
+IGl0IGZvciBhbnkgbW9kdWxlIHdoaWNoIHVzZXMgdHJhY2Vwb2ludHMgaXMKPj4+IHVuZGVzaXJh
+YmxlLgo+Pj4KPj4+IEkgaGF2ZW4ndCB5ZXQgbG9va2VkIGF0IGhvdyBkaWZmaWN1bHQgaXQgd291
+bGQgYmUgZG8gZWxpbWluYXRlIHRoZXNlCj4+PiBwZWRhbnRpYyB3YXJuaW5ncy4gRG8geW91IGhh
+dmUgYSBmZWVsIGZvciB3aGF0IGlzIGludm9sdmVkPwo+Pj4gUHJlcHJvY2Vzc29yIHRyaWNrcyB3
+YXJwIG15IG1pbmQuIDooCj4+IEkgZG9uJ3QgdGhpbmsgd2UnbGwgd2FudCB0byBtYWtlIHRoZSBs
+dHRuZyBwcm9iZSBtb2R1bGUgYnVpbGQgdW5kZXIKPj4gLS1zdGQ9Yzk5IC1wZWRhbmRpYyAtV2Vy
+cm9yLCBidXQgSSB0aGluayB3ZSBzaG91bGQgZm9jdXMgb24gbWFraW5nIHN1cmUKPj4gdGhlIHRy
+YWNlcG9pbnQgcGFydCB0aGF0IGlzIGJ1aWx0IHdpdGhpbiB0aGUgYXBwbGljYXRpb24gKHdpdGgK
+Pj4gVFJBQ0VQT0lOVF9DUkVBVEVfUFJPQkVTIF9ub3RfIGRlZmluZWQpIGJ1aWxkcyBmaW5lIGlu
+IC0tc3RkPWM5OQo+PiAtcGVkYW50aWMuCj4+Cj4+IEN1cnJlbnRseSwgYnVpbGRpbmcgYSBzaW1w
+bGUgdGVzdCBwcm9ncmFtIHdpdGggdHJhY2Vwb2ludHMgdW5kZXIKPj4gLS1zdGQ9Yzk5IC1wZWRh
+bnRpYyBnZXRzIG1lOgo+Pgo+Pgo+PiBJbiBmaWxlIGluY2x1ZGVkIGZyb20gdXN0X3Rlc3RzX2hl
+bGxvLmg6MjU6MCwKPj4gICAgICAgICAgICAgICAgICBmcm9tIGhlbGxvLmM6MzQ6Cj4+IC4uLy4u
+L2luY2x1ZGUvbHR0bmcvdHJhY2Vwb2ludC5oOiBJbiBmdW5jdGlvbiDigJhfX3RyYWNlcG9pbnRz
+X19pbml04oCZOgo+PiAuLi8uLi9pbmNsdWRlL2x0dG5nL3RyYWNlcG9pbnQuaDoyNjE6Mzogd2Fy
+bmluZzogSVNPIEMgZm9yYmlkcyBjb252ZXJzaW9uIG9mIG9iamVjdCBwb2ludGVyIHRvIGZ1bmN0
+aW9uIHBvaW50ZXIgdHlwZSBbLXBlZGFudGljXQo+PiAuLi8uLi9pbmNsdWRlL2x0dG5nL3RyYWNl
+cG9pbnQuaDoyNjU6Mzogd2FybmluZzogSVNPIEMgZm9yYmlkcyBjb252ZXJzaW9uIG9mIG9iamVj
+dCBwb2ludGVyIHRvIGZ1bmN0aW9uIHBvaW50ZXIgdHlwZSBbLXBlZGFudGljXQo+PiAuLi8uLi9p
+bmNsdWRlL2x0dG5nL3RyYWNlcG9pbnQuaDoyNzA6Mzogd2FybmluZzogSVNPIEMgZm9yYmlkcyBj
+b252ZXJzaW9uIG9mIG9iamVjdCBwb2ludGVyIHRvIGZ1bmN0aW9uIHBvaW50ZXIgdHlwZSBbLXBl
+ZGFudGljXQo+PiAuLi8uLi9pbmNsdWRlL2x0dG5nL3RyYWNlcG9pbnQuaDoyNzQ6Mzogd2Fybmlu
+ZzogSVNPIEMgZm9yYmlkcyBjb252ZXJzaW9uIG9mIG9iamVjdCBwb2ludGVyIHRvIGZ1bmN0aW9u
+IHBvaW50ZXIgdHlwZSBbLXBlZGFudGljXQo+PiAuLi8uLi9pbmNsdWRlL2x0dG5nL3RyYWNlcG9p
+bnQuaDoyNzg6Mzogd2FybmluZzogSVNPIEMgZm9yYmlkcyBjb252ZXJzaW9uIG9mIG9iamVjdCBw
+b2ludGVyIHRvIGZ1bmN0aW9uIHBvaW50ZXIgdHlwZSBbLXBlZGFudGljXQo+Pgo+PiAtLS0+IHNl
+ZSBpbmNsdWRlL2x0dG5nL3RyYWNlcG9pbnQuaCBfX3RyYWNlcG9pbnRzX19pbml0KCk6Cj4+IC0t
+LS0+IFRoaXMgaXMgY2F1c2VkIGJ5IHVzZSBvZiBkbHN5bSgpIHRvIGxvb2t1cCBhIGZ1bmN0aW9u
+IHBvaW50ZXIgZnJvbQo+PiAgICAgICBhIHN5bWJvbC4gZGxzeW0oKSByZXR1cm5zICJ2b2lkICoi
+LCBhbmQgd2UgY2FzdCBpdCBpbnRvIGZ1bmN0aW9uCj4+ICAgICAgIHBvaW50ZXIgdHlwZS4gSWRl
+YXMgb24gaG93IHRvIG1ha2UgdGhpcyBjOTkgcGVkYW50aWMgY29tcGxpYW50IGFyZQo+PiAgICAg
+ICB3ZWxjb21lLgoKSSBmb3VuZCB0aGlzIHdhcm5pbmcgZGlzY3Vzc2VkIGluIGEgR0NDIGJ1ZyBy
+ZXBvcnQuIEpha3ViIEplbGluZWsncyBzdWdnZXN0aW9uIGF0IGh0dHA6Ly9nY2MuZ251Lm9yZy9i
+dWd6aWxsYS9zaG93X2J1Zy5jZ2k/aWQ9NDUyODkjYzYgKGxvYWQgdGhlIHJlc3VsdCBvZiBkbHN5
+bSBpbnRvIGEgdm9pZCAqLCB0aGVuIG1lbWNweSB0byB0aGUgZnVuY3Rpb24gcG9pbnRlciksIGRv
+ZXMgbWFrZSB0aGVzZSBnbyBhd2F5ICh1c2luZyBHQ0MgNC40LjYgb24gQ2VudG9zIDYuMikuCgo+
+Pgo+PiAtLS0tLS0tLS0tLS0tLS0tLS0KPj4KPj4gSW4gZmlsZSBpbmNsdWRlZCBmcm9tIGhlbGxv
+LmM6MzQ6MDoKPj4gdXN0X3Rlc3RzX2hlbGxvLmg6IEluIGZ1bmN0aW9uIOKAmF9fdHJhY2Vwb2lu
+dF9jYl91c3RfdGVzdHNfaGVsbG9fX190cHRlc3TigJk6Cj4+IHVzdF90ZXN0c19oZWxsby5oOjI4
+OjE6IHdhcm5pbmc6IElTTyBDIGZvcmJpZHMgYnJhY2VkLWdyb3VwcyB3aXRoaW4gZXhwcmVzc2lv
+bnMgWy1wZWRhbnRpY10KPj4gdXN0X3Rlc3RzX2hlbGxvLmg6Mjg6MTogd2FybmluZzogSVNPIEMg
+Zm9yYmlkcyBjb252ZXJzaW9uIG9mIG9iamVjdCBwb2ludGVyIHRvIGZ1bmN0aW9uIHBvaW50ZXIg
+dHlwZSBbLXBlZGFudGljXQo+PiB1c3RfdGVzdHNfaGVsbG8uaDogSW4gZnVuY3Rpb24g4oCYX190
+cmFjZXBvaW50X2NiX3VzdF90ZXN0c19oZWxsb19fX3RwdGVzdF9zaWdoYW5kbGVy4oCZOgo+PiB1
+c3RfdGVzdHNfaGVsbG8uaDo1MjoxOiB3YXJuaW5nOiBJU08gQyBmb3JiaWRzIGJyYWNlZC1ncm91
+cHMgd2l0aGluIGV4cHJlc3Npb25zIFstcGVkYW50aWNdCj4+IHVzdF90ZXN0c19oZWxsby5oOjUy
+OjE6IHdhcm5pbmc6IElTTyBDIGZvcmJpZHMgY29udmVyc2lvbiBvZiBvYmplY3QgcG9pbnRlciB0
+byBmdW5jdGlvbiBwb2ludGVyIHR5cGUgWy1wZWRhbnRpY10KPj4KPj4gLS0tPiBzZWUgaW5jbHVk
+ZS9sdHRuZy90cmFjZXBvaW50LmggCj4+Cj4+ICNkZWZpbmUgX0RFQ0xBUkVfVFJBQ0VQT0lOVChf
+cHJvdmlkZXIsIF9uYW1lLCAuLi4pICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICBcCj4+IGV4dGVybiBzdHJ1Y3QgdHJhY2Vwb2ludCBfX3RyYWNlcG9pbnRfIyNfcHJvdmlkZXIj
+I19fXyMjX25hbWU7ICAgICAgICAgICAgICAgICAgICAgICAgICBcCj4+IHN0YXRpYyBpbmxpbmUg
+dm9pZCBfX3RyYWNlcG9pbnRfY2JfIyNfcHJvdmlkZXIjI19fXyMjX25hbWUoX1RQX0FSR1NfUFJP
+VE8oX19WQV9BUkdTX18pKSBcCj4+IFsuLi5dCj4+Cj4+IC0tLS0+IHRoaXMgaXMgY2F1c2VkIGJ5
+IHVzZSBvZiAidHBfcmN1X2RlcmVmZXJlbmNlX2JwKCkiLCB3aGljaCBpcwo+PiBkZWZpbmVkIGlu
+IGluY2x1ZGUvbHR0bmcvdHJhY2Vwb2ludC1yY3UuaCAoaW4gdGhlICNlbHNlIGNsYXVzZSkgOgo+
+Pgo+PiAjZGVmaW5lIHRwX3JjdV9kZXJlZmVyZW5jZV9icChwKSAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgIFwKPj4gICAgICAgICAoeyAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcCj4+ICAg
+ICAgICAgICAgICAgICBfX3R5cGVvZl9fKHApIF9fX19fX19fX3AxID0gVVJDVV9GT1JDRV9DQVNU
+KF9fdHlwZW9mX18ocCksICAgXAo+PiAgICAgICAgICAgICAgICAgICAgICAgICB0cmFjZXBvaW50
+X2Rsb3Blbi5yY3VfZGVyZWZlcmVuY2Vfc3ltX2JwKFVSQ1VfRk9SQ0VfQ0FTVCh2b2lkICosIHAp
+KSk7IFwKPj4gICAgICAgICAgICAgICAgIChfX19fX19fX19wMSk7ICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcCj4+ICAgICAgICAgfSkKPj4KPj4gRm9yIHRo
+aXMgb25lLCB3ZSBzaG91bGQgYmUgYWJsZSB0byBjaGFuZ2UgaXQgaW50byBhIHNpbmdsZS1leHBy
+ZXNzaW9uCj4+IGFuZCByZW1vdmUgdGhlIGJyYWNlZC1ncm91cHMsIHNpbmNlIHdlIGFyZSBqdXN0
+IHJlYWxseSBldmFsdWF0aW5nIGEKPj4gc2luZ2xlIGV4cHJlc3Npb24gaGVyZS4gRml4ZWQgYnkg
+dGhlIGZvbGxvd2luZyBjb21taXQgaW4gbHR0bmctdXN0Cj4+IG1hc3RlcjoKPj4KPj4gY29tbWl0
+IGE0ZWFmOGVhYmU4MjliZThmN2Q3NDMyZmZhZjgzMjkxYTA2OGIwZWQKPj4gQXV0aG9yOiBNYXRo
+aWV1IERlc25veWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPgo+PiBEYXRlOiAg
+IE1vbiBKdW4gMTggMTA6MTA6MzYgMjAxMiAtMDQwMAo+Pgo+PiAgICAgRml4IGM5OSBjb21wYXRp
+YmlsaXR5OiB0cF9yY3VfZGVyZWZlcmVuY2VfYnAoKSBzaG91bGQgbm90IHVzZSBicmFjZWQtZ3Jv
+dXBzIHdpdGhpbiBleHByZXNzaW9ucwo+Pgo+PiAtLS0tLS0tLS0tLS0tLS0tLS0KPj4KPj4gaGVs
+bG8uYzogSW4gZnVuY3Rpb24g4oCYaW50aGFuZGxlcuKAmToKPj4gaGVsbG8uYzozOTo0Nzogd2Fy
+bmluZzogSVNPIEM5OSByZXF1aXJlcyByZXN0IGFyZ3VtZW50cyB0byBiZSB1c2VkIFtlbmFibGVk
+IGJ5IGRlZmF1bHRdCj4+IC0tLT4gc2VlIGluY2x1ZGUvbHR0bmcvdHJhY2Vwb2ludC5oICB0cmFj
+ZXBvaW50KCkgbWFjcm8uCj4+IC0tLS0+IHRoaXMgaXMgY2F1c2VkIGJ5IG5vdCBwYXNzaW5nIGFu
+eSBhcmd1bWVudCB0byB0aGUgdHJhY2Vwb2ludC4KPj4gSWRlYXMgb24gaG93IHRvIGZpeCB0aGlz
+IGFyZSB3ZWxjb21lLCBhcyBJIGRvbid0IHNlZSBhbnkgd2F5IHRvIGRvIGl0IGluCj4+IEM5OS1w
+ZWRhbnRpYy4KPiBJIHRoaW5rIEkgZm91bmQgYSB3YXkgdG8gZml4IHRoZSBsYXN0IHBlZGFudGlj
+IHdhcm5pbmdzLiBDYW4geW91IHRyeQo+IHdpdGggdGhpcyBtYXN0ZXIgYnJhbmNoIGNvbW1pdCA/
+Cj4KPgo+IGNvbW1pdCBmYmRlYjVlY2I4ZmY5YjdkNzNhNzJkZTlmYzY2ZDA3Zjc3OTdkOTNmCj4g
+QXV0aG9yOiBNYXRoaWV1IERlc25veWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29t
+Pgo+IERhdGU6ICAgVHVlIEp1biAxOSAxMzo0NTowNSAyMDEyIC0wNDAwCj4KPiAgICAgRml4IEM5
+OSBzdHJpY3QgY29tcGF0aWJpbGl0eTogZG9uJ3QgdXNlIHZvaWQgKiBmb3IgZnVuY3Rpb24gcG9p
+bnRlcnMKPiAgICAgCj4gICAgIGNvbXBpbGluZyBwdWJsaWMgaGVhZGVycyB3aXRoIC0tc3RkPXg5
+OSAtcGVkYW50aWMgc2hvd3M6Cj4gICAgIAo+ICAgICB3YXJuaW5nOiBJU08gQyBmb3JiaWRzIGNv
+bnZlcnNpb24gb2Ygb2JqZWN0IHBvaW50ZXIgdG8gZnVuY3Rpb24gcG9pbnRlciB0eXBlCj4gICAg
+IAo+ICAgICBVc2UgInZvaWQgKCpmdW5jKSh2b2lkKSIgdG8gcmVwcmVzZW50IGEgZ2VuZXJpYyBm
+dW5jdGlvbiBwb2ludGVyIHJhdGhlcgo+ICAgICB0aGFuICJ2b2lkICoiLgo+ICAgICAKPiAgICAg
+U2lnbmVkLW9mZi1ieTogTWF0aGlldSBEZXNub3llcnMgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmlj
+aW9zLmNvbT4KPgoKVW5mb3J0dW5hdGVseSwgdGhpcyBpc24ndCBzdWZmaWNpZW50IHRvIGZpeCB0
+aGVzZSB3YXJuaW5ncyBvbiBDZW50b3MgNi4yLiBIb3dldmVyLCBJIGNhbiBub3cgbWFrZSB0aGUg
+d2FybmluZ3MgZ28gYXdheSBieSB1c2luZyBkbHN5bSttZW1jcHkgKGluc3RlYWQgb2YgZGxzeW0r
+Y2FzdCksIGFzIG1lbnRpb25lZCBhYm92ZS4gSSBoYXZlbid0IGhhZCBhIGNoYW5jZSB0byBhY3R1
+YWxseSB1c2UgdGhlIHJlc3VsdGluZyBiaW5hcnkgeWV0LCBidXQgSSBkb24ndCBzZWUgd2h5IGl0
+IHNob3VsZG4ndCB3b3JrLgoKVGhhbmtzLAoKSm9obgoKX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZA
+bGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xp
+c3RpbmZvL2x0dG5nLWRldgo=
