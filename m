@@ -1,19 +1,18 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH] Expose kernel tracer to user-space
-Date: Tue, 26 Jun 2012 02:40:16 -0400
-Message-ID: <20120626064016.GD11952__14524.7961082079$1340692843$gmane$org@Krystal>
-References: <1338938654-16515-1-git-send-email-francis.giraldeau@gmail.com>
+From: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
+Subject: Re: [UST PATCH] Add a multi-thread version of the
+ 'hello' test program
+Date: Tue, 26 Jun 2012 03:11:30 -0400
+Message-ID: <4FE960A2.7080109__26010.8055700131$1340694725$gmane$org@voxpopuli.im>
+References: <1340667760-28686-1-git-send-email-alexmonthy@voxpopuli.im>
+	<20120626060356.GC11445@Krystal>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="------------090105060705000506090500"
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from ironport2-out.teksavvy.com ([206.248.154.182])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1SjPRi-0006MC-HZ
-	for lttng-dev@lists.lttng.org; Tue, 26 Jun 2012 02:40:18 -0400
-Content-Disposition: inline
-In-Reply-To: <1338938654-16515-1-git-send-email-francis.giraldeau@gmail.com>
+	(envelope-from <alexmonthy@voxpopuli.im>) id 1SjPw1-0006c3-1m
+	for lttng-dev@lists.lttng.org; Tue, 26 Jun 2012 03:11:37 -0400
+In-Reply-To: <20120626060356.GC11445@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,325 +21,146 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Francis Giraldeau <francis.giraldeau@gmail.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Francis Giraldeau (francis.giraldeau@gmail.com) wrote:
-> By writing to the file /proc/lttng, a user-space application creates a
-> kernel event. The event's payload is by default UTF-8 text, but any data
-> can be written, up to 1024 bytes. Null-character is optional and is not
-> enforced. The event uses sequence for space efficiency and to store any
-> data as payload.
-> 
-> Update: split the probe code into it's own module and make it an optional
-> feature of lttng-abi. The feature is enabled when the module is loaded. The
-> lttng-abi module exports a register function and includes a wrapper for
-> lttng_fops write. This is required since struct file_operations must be const.
-> Since the module dependency is reversed, unloading the lttng-uevent module is
-> done only when it's not used anymore. This is done with rwlock synchronisation.
-> The synchronisation doesn't prevent starvation, but this situation is unlikely
-> and can be prevented by stop active tracing sessions.
-> 
-> Signed-off-by: Francis Giraldeau <francis.giraldeau@gmail.com>
-> ---
->  instrumentation/events/lttng-module/uevent.h |   33 +++++++++++++++
->  lttng-abi.c                                  |   42 +++++++++++++++++++
->  lttng-abi.h                                  |    3 ++
->  probes/Makefile                              |    2 +
->  probes/lttng-probe-uevent.c                  |   36 ++++++++++++++++
->  probes/lttng-uevent.c                        |   58 ++++++++++++++++++++++++++
->  6 files changed, 174 insertions(+)
->  create mode 100644 instrumentation/events/lttng-module/uevent.h
->  create mode 100644 probes/lttng-probe-uevent.c
->  create mode 100644 probes/lttng-uevent.c
-> 
-> diff --git a/instrumentation/events/lttng-module/uevent.h b/instrumentation/events/lttng-module/uevent.h
-> new file mode 100644
-> index 0000000..f67d901
-> --- /dev/null
-> +++ b/instrumentation/events/lttng-module/uevent.h
-> @@ -0,0 +1,33 @@
-> +#undef TRACE_SYSTEM
-> +#define TRACE_SYSTEM uevent
-> +
-> +#if !defined(UEVENT_H_) || defined(TRACE_HEADER_MULTI_READ)
-> +#define UEVENT_H_
-> +
-> +#include <linux/tracepoint.h>
-> +
-> +TRACE_EVENT(lttng_uevent,
-> +
-> +	TP_PROTO(const char *str, size_t len),
-> +
-> +	TP_ARGS(str, len),
-> +
-> +	/*
-> +	 * Uses sequence to hold variable size data, by default considered
-> +	 * as text. Null-terminal character is optional and is not enforced.
-> +	 */
-> +	TP_STRUCT__entry(
-> +		__dynamic_array_text(char, text, len)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		tp_memcpy_dyn_from_user(text, str)
-> +	),
-> +
-> +	TP_printk("")
-> +)
-> +
-> +#endif /* UEVENT_H_ */
-> +
-> +/* This part must be outside protection */
-> +#include "../../../probes/define_trace.h"
-> diff --git a/lttng-abi.c b/lttng-abi.c
-> index 26a02ed..b8e6b57 100644
-> --- a/lttng-abi.c
-> +++ b/lttng-abi.c
-> @@ -51,6 +51,12 @@
->  #include "lttng-tracer.h"
->  
->  /*
-> + * Required data structures to support lttng-probe-uevent
-> + */
-> +DEFINE_RWLOCK(uevent_rwlock);
+This is a multi-part message in MIME format.
+--------------090105060705000506090500
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
 
-Not required.
+On 12-06-26 02:03 AM, Mathieu Desnoyers wrote:
+> * Alexandre Montplaisir (alexmonthy@voxpopuli.im) wrote:
+>> [...]
+>> diff --git a/tests/hello-mt/README b/tests/hello-mt/README
+>> new file mode 100644
+>> index 0000000..0584dca
+>> --- /dev/null
+>> +++ b/tests/hello-mt/README
+>> @@ -0,0 +1,11 @@
+>> +This is a multi-threaded version of the "hello" test program. It uses OpenMP for
+>> +parallelization, and as such requires at least GCC 4.2.
+> Hrm. This adds a dependency on gcc 4.2. The entire project will fail to
+> build because of this test on other compiler, older gcc, right ? We
+> should have a configure.ac check that tests openmp availability. So I
+> won't merge this for now.
 
-> +write_ops_t lttng_uevent_handler;
+Staying up late, aren't we? ;)
 
-this should be static.
+Oh ok, I thought we said the other day that GCC 4.2 was old enough to
+not be worth testing for. In any case, here's a patch to check for
+OpenMP at configure time (goes on top of the previous one).
 
-> +
-> +/*
->   * This is LTTng's own personal way to create a system call as an external
->   * module. We use ioctl() on /proc/lttng.
->   */
-> @@ -252,9 +258,45 @@ long lttng_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
->  	}
->  }
->  
-> +/*
-> + * lttng_uevent_set_handler - set handler functions for uevent
-> + *
-> + * Access to handler code is protected with rwlock in order to
-> + * prevent the optional module to be removed while in use.
-> + */
-> +
-> +void lttng_uevent_set_handler(write_ops_t handler)
-> +{
-> +	write_lock(&uevent_rwlock);
+Two caveats however:
+- Since the main part of the project doesn't use OpenMP, I don't think
+we want to turn the "-fopenmp" CFLAG on for the whole thing. So I just
+hard-coded "-fopenmp" for this test only. I don't know if any other
+compiler uses some other flag to turn on the OpenMP support, but we only
+support GCC anyway, don't we?
 
-write lock not necessary.
-
-if (!lttng_uevent_set_handler)
-  release refcount in prior handler's module.
-
-then:
-take a refcount on the module that contains the handler address.
-(explicit)
-
-> +	lttng_uevent_handler = handler;
-
-Just declare the lttng_uevent_handler as "volatile".
-
-> +	write_unlock(&uevent_rwlock);
-> +}
-> +EXPORT_SYMBOL_GPL(lttng_uevent_set_handler);
-> +
-> +/*
-> + * lttng_write_uevent - expose kernel tracer to user-space
-> + */
-> +
-> +static
-> +ssize_t lttng_write_uevent(struct file *file, const char __user *ubuf,
-> +		size_t count, loff_t *fpos)
-> +{
-> +	int ret;
-> +
-> +	read_lock(&uevent_rwlock);
-> +	if (unlikely(lttng_uevent_handler == NULL)) {
-> +		read_unlock(&uevent_rwlock);
-> +		return -ENOSYS;
-
-instead of read_lock, please do:
-
-write_ops_t uev_handler;
-
-uev_handler = ACCESS_ONCE(lttng_uevent_handler);
-if (!uev_handler)
-  return -ENOSYS;
-return uev_handler(file, ubuf, count, fpos);
-
-Thanks,
-
-Mathieu
+- The autoconf macro requires Autoconf 2.62. Current Debian stable has
+2.67, I don't know if it's a big problem.
 
 
-> +	}
-> +	ret = (*lttng_uevent_handler)(file, ubuf, count, fpos);
-> +	read_unlock(&uevent_rwlock);
-> +	return ret;
-> +}
-> +
->  static const struct file_operations lttng_fops = {
->  	.owner = THIS_MODULE,
+Good night,
+Alex
 
-The THIS_MODULE owner protects the module that contains lttng-abi.c from
-unloading when the handling is running. (keeps a refcount) However, it
-does not protect the handler probe module from unloading. This is why we
-need a refcount.
+>
+> Thanks,
+>
+> Mathieu
+>
+>
 
->  	.unlocked_ioctl = lttng_ioctl,
-> +	.write = lttng_write_uevent,
->  #ifdef CONFIG_COMPAT
->  	.compat_ioctl = lttng_ioctl,
->  #endif
-> diff --git a/lttng-abi.h b/lttng-abi.h
-> index dc230d8..f4a8c0c 100644
-> --- a/lttng-abi.h
-> +++ b/lttng-abi.h
-> @@ -27,6 +27,9 @@
->  
->  #define LTTNG_KERNEL_SYM_NAME_LEN	256
->  
-> +typedef	ssize_t (*write_ops_t) (struct file *, const char __user *, size_t, loff_t *);
-> +void lttng_uevent_set_handler(write_ops_t handler);
-> +
->  enum lttng_kernel_instrumentation {
->  	LTTNG_KERNEL_TRACEPOINT	= 0,
->  	LTTNG_KERNEL_KPROBE	= 1,
-> diff --git a/probes/Makefile b/probes/Makefile
-> index 698a9c9..a895e60 100644
-> --- a/probes/Makefile
-> +++ b/probes/Makefile
-> @@ -14,6 +14,8 @@ obj-m += lttng-probe-sched.o
->  obj-m += lttng-probe-irq.o
->  obj-m += lttng-probe-signal.o
->  obj-m += lttng-probe-timer.o
-> +obj-m += lttng-probe-uevent.o
-> +obj-m += lttng-uevent.o
->  
->  obj-m += lttng-probe-statedump.o
->  
-> diff --git a/probes/lttng-probe-uevent.c b/probes/lttng-probe-uevent.c
-> new file mode 100644
-> index 0000000..90abb5e
-> --- /dev/null
-> +++ b/probes/lttng-probe-uevent.c
-> @@ -0,0 +1,36 @@
-> +/*
-> + * probes/lttng-probe-uevent.c
-> + *
-> + * Expose kernel tracer to user-space through /proc/lttng
-> + *
-> + * Copyright (C) 2009-2012 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> + *
-> + * This library is free software; you can redistribute it and/or
-> + * modify it under the terms of the GNU Lesser General Public
-> + * License as published by the Free Software Foundation; only
-> + * version 2.1 of the License.
-> + *
-> + * This library is distributed in the hope that it will be useful,
-> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
-> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-> + * Lesser General Public License for more details.
-> + *
-> + * You should have received a copy of the GNU Lesser General Public
-> + * License along with this library; if not, write to the Free Software
-> + * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
-> + */
-> +
-> +#include <linux/module.h>
-> +
-> +/*
-> + * Create lttng_uevent tracepoint probes.
-> + */
-> +#define LTTNG_PACKAGE_BUILD
-> +#define CREATE_TRACE_POINTS
-> +#define TRACE_INCLUDE_PATH ../instrumentation/events/lttng-module
-> +
-> +#include "../instrumentation/events/lttng-module/uevent.h"
-> +
-> +MODULE_LICENSE("GPL and additional rights");
-> +MODULE_AUTHOR("Mathieu Desnoyers <mathieu.desnoyers@efficios.com>");
-> +MODULE_DESCRIPTION("LTTng uevent probes");
-> diff --git a/probes/lttng-uevent.c b/probes/lttng-uevent.c
-> new file mode 100644
-> index 0000000..7b4bffc
-> --- /dev/null
-> +++ b/probes/lttng-uevent.c
-> @@ -0,0 +1,58 @@
-> +/*
-> + * probes/lttng-uevent.c
-> + *
-> + * Expose kernel tracer to user-space through /proc/lttng
-> + *
-> + * Copyright (C) 2012 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> + *
-> + * This library is free software; you can redistribute it and/or
-> + * modify it under the terms of the GNU Lesser General Public
-> + * License as published by the Free Software Foundation; only
-> + * version 2.1 of the License.
-> + *
-> + * This library is distributed in the hope that it will be useful,
-> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
-> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-> + * Lesser General Public License for more details.
-> + *
-> + * You should have received a copy of the GNU Lesser General Public
-> + * License along with this library; if not, write to the Free Software
-> + * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
-> + */
-> +
-> +#include <linux/module.h>
-> +#include "../lttng-abi.h"
-> +
-> +/* include our own uevent tracepoint */
-> +#include "../instrumentation/events/lttng-module/uevent.h"
-> +DEFINE_TRACE(lttng_uevent);
-> +
-> +#define LTTNG_UEVENT_SIZE 1024
-> +
-> +ssize_t uevent_write_handler(struct file *file, const char __user *ubuf,
-> +		size_t count, loff_t *fpos)
-> +{
-> +	if (count > LTTNG_UEVENT_SIZE)
-> +		count = LTTNG_UEVENT_SIZE;
-> +
-> +	trace_lttng_uevent(ubuf, count);
-> +	return count;
-> +}
-> +
-> +static int __init lttng_probe_uevent_init(void)
-> +{
-> +	lttng_uevent_set_handler(uevent_write_handler);
-> +	return 0;
-> +}
-> +
-> +static void __exit lttng_probe_uevent_exit(void)
-> +{
-> +	lttng_uevent_set_handler(NULL);
-> +}
-> +
-> +module_init(lttng_probe_uevent_init);
-> +module_exit(lttng_probe_uevent_exit);
-> +
-> +MODULE_LICENSE("GPL and additional rights");
-> +MODULE_AUTHOR("Mathieu Desnoyers <mathieu.desnoyers@efficios.com>");
-> +MODULE_DESCRIPTION("LTTng kernel event from user-space");
-> -- 
-> 1.7.9.5
-> 
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
+--------------090105060705000506090500
+Content-Type: text/x-patch;
+ name="0001-Only-build-the-hello-mt-test-if-OpenMP-is-available.patch"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename*0="0001-Only-build-the-hello-mt-test-if-OpenMP-is-available.pat";
+ filename*1="ch"
+
+From 496a74a33dc47b61c37b14e0fb0ad5bdeacaf03b Mon Sep 17 00:00:00 2001
+From: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
+Date: Tue, 26 Jun 2012 02:56:19 -0400
+Subject: [UST PATCH] Only build the hello-mt test if OpenMP is available
+
+Since this test is the only part in the whole tree that uses
+OpenMP, we'll simply set the CFLAG manually for this test
+rather than using it project-wide.
+
+Signed-off-by: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
+---
+ README                     |    2 +-
+ configure.ac               |   10 ++++++++++
+ tests/hello-mt/Makefile.am |    4 ++++
+ 3 files changed, 15 insertions(+), 1 deletion(-)
+
+diff --git a/README b/README
+index 52aebd8..b9df1e6 100644
+--- a/README
++++ b/README
+@@ -30,7 +30,7 @@ This source tree is based on the autotools suite from GNU to simplify
+ portability. Here are some things you should have on your system in order to
+ compile the git repository tree :
+ 
+-- GNU autotools (automake >=1.10, autoconf >=2.50, autoheader >=2.50)
++- GNU autotools (automake >=1.10, autoconf >=2.62, autoheader >=2.62)
+   (make sure your system wide "automake" points to a recent version!)
+ - GNU Libtool >=2.2
+   (for more information, go to http://www.gnu.org/software/autoconf/)
+diff --git a/configure.ac b/configure.ac
+index 0a50ed0..1924d0b 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -271,6 +271,16 @@ AS_IF([test "x$with_sdt" = "xyes"],[
+ 	])
+ ])
+ 
++#Check for OpenMP, if available we will build the test that uses it
++AC_OPENMP()
++AS_IF([ test "x$ac_cv_prog_c_openmp" != "xunsupported" && test "x$ac_cv_prog_c_openmp" != "x"],[
++	openmp_available=yes
++],[
++	openmp_available=no
++])
++AM_CONDITIONAL([BUILD_OPENMP_TEST], [test "x$openmp_available" = "xyes"])
++
++
+ #currently disabled.
+ 	#tests/hello2/Makefile
+ 	#tests/basic/Makefile
+diff --git a/tests/hello-mt/Makefile.am b/tests/hello-mt/Makefile.am
+index 4b7e16d..98ecc6f 100644
+--- a/tests/hello-mt/Makefile.am
++++ b/tests/hello-mt/Makefile.am
+@@ -1,3 +1,5 @@
++if BUILD_OPENMP_TEST
++
+ AM_CPPFLAGS = -I$(top_srcdir)/include -Wsystem-headers
+ AM_CFLAGS = -fopenmp
+ 
+@@ -11,3 +13,5 @@ endif
+ if LTTNG_UST_BUILD_WITH_LIBC_DL
+ hello_LDADD += -lc
+ endif
++
++endif
 -- 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+1.7.10.4
+
+
+--------------090105060705000506090500
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--------------090105060705000506090500--
