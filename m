@@ -1,17 +1,25 @@
-From: Yannick Brosseau <yannick.brosseau@gmail.com>
-Subject: Update on fedora packaging
-Date: Tue, 26 Jun 2012 13:39:45 -0400
-Message-ID: <4FE9F3E1.5070906__45627.1443320022$1340732424$gmane$org@gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [RELEASE] LTTng modules 2.0.4
+Date: Wed, 27 Jun 2012 02:47:16 -0400
+Message-ID: <20120627064716.GA6207__12273.1531541378$1340779668$gmane$org@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-yw0-f50.google.com ([209.85.213.50])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <yannick.brosseau@gmail.com>) id 1SjZk1-0003FR-EJ
-	for lttng-dev@lists.lttng.org; Tue, 26 Jun 2012 13:39:53 -0400
-Received: by yhjj63 with SMTP id j63so231246yhj.37
-	for <lttng-dev@lists.lttng.org>; Tue, 26 Jun 2012 10:39:47 -0700 (PDT)
+	(envelope-from <compudj@mail.openrapids.net>) id 1Sjm21-0000hC-UH
+	for lttng-dev@lists.lttng.org; Wed, 27 Jun 2012 02:47:17 -0400
+Received: from localhost (localhost [127.0.0.1])
+	by blackscsi.openrapids.net (Postfix) with ESMTP id 6DBCC140D7C
+	for <lttng-dev@lists.lttng.org>; Wed, 27 Jun 2012 02:47:17 -0400 (EDT)
+Received: from blackscsi.openrapids.net ([127.0.0.1])
+	by localhost (blackscsi.openrapids.net [127.0.0.1]) (amavisd-new,
+	port 10024)
+	with ESMTP id q4EebisxODdp for <lttng-dev@lists.lttng.org>;
+	Wed, 27 Jun 2012 02:47:16 -0400 (EDT)
+Content-Disposition: inline
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,21 +31,21 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi all,
+The LTTng modules provide Linux kernel tracing capability to the LTTng
+2.0 tracer toolset.
 
-A small progress update on the packaging of LTTng for Fedora.
+Changelog:
+2012-06-27 LTTng modules 2.0.4
+        * LTTng: probe-statedump: add #include <linux/sched.h>
+        * fix: signal_generate event should print utf8 for comm field
 
-Latest Userspace RCU package is in the testing-update queue for Fedora
-17 (and in available in rawhide)
-(https://admin.fedoraproject.org/updates/FEDORA-2012-9686/userspace-rcu-0.7.3-1.fc17)
+Project website: http://lttng.org
+Download link: http://lttng.org/download
+(please refer to the README files for installation instructions and
+lttng-tools doc/quickstart.txt for usage information)
 
-LTTng-UST is now in rawhide. I will push in F17 when URCU get out of the
-testing queue.
-
-LTTng-tools is pending a Review Request
-(https://bugzilla.redhat.com/show_bug.cgi?id=834481)
-
-My plan is to package babeltrace when it reaches 1.0 and lttv when the
-initial LTTng 2.0 support is finished.
-
-Yannicl
+-- 
+Mathieu Desnoyers
+Operating System Efficiency R&D Consultant
+EfficiOS Inc.
+http://www.efficios.com
