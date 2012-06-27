@@ -1,18 +1,21 @@
-From: "Woegerer, Paul" <Paul_Woegerer@mentor.com>
-Subject: [PATCH] tracepoint event exclusion
-Date: Wed, 27 Jun 2012 16:08:14 +0200
-Message-ID: <4FEB13CE.1010206__47155.7720019065$1340806099$gmane$org@mentor.com>
+From: Gerhard Mack <gmack@innerfire.net>
+Subject: Re: [RELEASE] Userspace RCU 0.7.3
+Date: Wed, 27 Jun 2012 10:36:21 -0400 (EDT)
+Message-ID: <alpine.DEB.2.02.1206271033210.25860__44897.5587766201$1340808200$gmane$org@mtl.rackplans.net>
+References: <20120601180533.GA15522@Krystal>
+	<alpine.DEB.2.02.1206040932580.2583@mtl.rackplans.net>
+	<20120604155143.GA24551@Krystal>
+	<alpine.DEB.2.02.1206270608320.25860@mtl.rackplans.net>
+	<20120627133523.GA13831@Krystal>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="------------060108080706020303040007"
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from relay1.mentorg.com ([192.94.38.131])
+Received: from rackplans.net ([209.44.101.17] helo=mtl.rackplans.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Paul_Woegerer@mentor.com>) id 1SjsuL-0004Dn-PS
-	for lttng-dev@lists.lttng.org; Wed, 27 Jun 2012 10:07:49 -0400
-Received: from svr-orw-exc-10.mgc.mentorg.com ([147.34.98.58])
-	by relay1.mentorg.com with esmtp
-	id 1SjsuE-00058R-Vu from Paul_Woegerer@mentor.com
-	for lttng-dev@lists.lttng.org; Wed, 27 Jun 2012 07:07:43 -0700
+	(envelope-from <gmack@innerfire.net>) id 1SjtLx-0004RR-OZ
+	for lttng-dev@lists.lttng.org; Wed, 27 Jun 2012 10:36:21 -0400
+In-Reply-To: <20120627133523.GA13831@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,136 +24,159 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev@lists.lttng.org, Alexandre Montplaisir <alexandre.montplaisir@polymtl.ca>
 List-Id: lttng-dev@lists.lttng.org
 
---------------060108080706020303040007
-Content-Type: text/plain; charset="ISO-8859-1"; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-MIME-Autoconverted: from 8bit to quoted-printable by smtp.polymtl.ca id q5RE7pKa019456
-
-Hi,
-
-In order to support situations where a user wants generally all=20
-tracepoints enabled but specific tracepoints to be suppressed during a=20
-trace session, I created a small patch that allows us to do the following=
-:
-
-...
-lttng enable-event -u -c met_tools -a
-lttng enable-event -u -c met_tools --tracepoint '!met_func:*'
-lttng enable-event -u -c met_tools --tracepoint '!met_call:*'
-...
-
-This has the effect that all tracepoints get recorded except for=20
-tracepoints that match met_func:* or met_call:*.
-
-If you think this feature is useful for others we would be happy to see=20
-this patch merged into trunk.
-
-Thanks,
-Paul
-
---=20
-Paul Woegerer | SW Development Engineer
-Mentor Embedded(tm) | Prinz Eugen Stra=DFe 72/2/4, Vienna, 1040 Austria
-P 43.1.535991320
-Nucleus=AE | Linux=AE | Android(tm) | Services | UI | Multi-OS
-
-Android is a trademark of Google Inc. Use of this trademark is subject to=
- Google Permissions.
-Linux is the registered trademark of Linus Torvalds in the U.S. and other=
- countries.
 
 
---------------060108080706020303040007
-Content-Type: text/x-patch; name="event_exclusion.patch"
-Content-Disposition: attachment; filename="event_exclusion.patch"
-Content-Transfer-Encoding: 7bit
+Yes, it looks like it does.  Sorry for the noise it looks like it picked 
+up debian''s 6.7.2 rather than the newer version.
 
-From 74602f6f4ea4b1d7faa01f76542f62b496b94091 Mon Sep 17 00:00:00 2001
-From: Paul Woegerer <paul_woegerer@mentor.com>
-Date: Wed, 27 Jun 2012 15:21:30 +0200
-Subject: [PATCH] Added excluding/filtering of events with !NAME
-
----
- liblttng-ust/ltt-events.c |   33 +++++++++++++++++++++++++++++++--
- 1 file changed, 31 insertions(+), 2 deletions(-)
-
-diff --git a/liblttng-ust/ltt-events.c b/liblttng-ust/ltt-events.c
-index 0fdfd2f..b663312 100644
---- a/liblttng-ust/ltt-events.c
-+++ b/liblttng-ust/ltt-events.c
-@@ -150,11 +150,32 @@ struct wildcard_entry *match_wildcard(const struct lttng_event_desc *desc)
- 	struct wildcard_entry *e;
- 
- 	cds_list_for_each_entry(e, &wildcard_list, list) {
-+	    size_t len = strlen(e->name);
-+	    if (len < 1 || e->name[0] != '!')
-+		continue;
-+
-+	    DBG("Filter %s against wildcard_entry %s\n", desc->name, e->name);
-+
-+	    /* Compare exclusion wildcards excluding initial '!' and final '*' */
-+	    if (!strncmp(desc->name, e->name + 1, len - 2))
-+	    {
-+		DBG("Exclude %s due to exclusion wildcard_entry %s\n", desc->name, e->name);
-+		return NULL; /* exclusion wildcard matched */
-+	    }
-+	}
-+
-+	cds_list_for_each_entry(e, &wildcard_list, list) {
-+	    size_t len = strlen(e->name);
-+	    if (len > 0 && e->name[0] == '!')
-+		continue;
-+
-+	    DBG("Match %s against wildcard_entry %s\n", desc->name, e->name);
-+
- 		/* If only contain '*' */
--		if (strlen(e->name) == 1)
-+		if (len == 1)
- 			goto possible_match;
- 		/* Compare excluding final '*' */
--		if (!strncmp(desc->name, e->name, strlen(e->name) - 1))
-+		if (!strncmp(desc->name, e->name, len - 1))
- 			goto possible_match;
- 		continue;	/* goto next, no match */
- 	possible_match:
-@@ -507,6 +528,13 @@ int ltt_event_create(struct ltt_channel *chan,
- 	struct ltt_event *event;
- 	int ret = 0;
- 
-+	if (strlen(event_param->name) > 0 && event_param->name[0] == '!')
-+	{
-+	    struct session_wildcard *sw = NULL;
-+	    ltt_wildcard_create(chan, event_param, &sw );
-+	    goto filter;
-+	}
-+
- 	if (chan->used_event_id == -1U) {
- 		ret = -ENOMEM;
- 		goto full;
-@@ -607,6 +635,7 @@ cache_error:
- no_loglevel_match:
- exist:
- full:
-+filter:
- 	return ret;
- }
- 
--- 
-1.7.10.4
+	Gerhard
 
 
---------------060108080706020303040007
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Disposition: inline
-Content-Transfer-Encoding: 7bit
+On Wed, 27 Jun 2012, Mathieu Desnoyers wrote:
 
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> Date: Wed, 27 Jun 2012 09:35:24 -0400
+> From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> To: Gerhard Mack <gmack@innerfire.net>
+> Cc: Alexandre Montplaisir <alexandre.montplaisir@polymtl.ca>,
+>     lttng-dev@lists.lttng.org
+> Subject: Re: [RELEASE] Userspace RCU 0.7.3
+> 
+> * Gerhard Mack (gmack@innerfire.net) wrote:
+> > 
+> > Just a heads up, I had to add the following to get it working with code 
+> > compiled with the gcc flag "-std=c99"
+> > 
+> > #ifndef asm
+> > #define asm  __asm
+> > #endif 
+> 
+> Normally, in userspace rcu git master HEAD, you have this commit
+> already:
+> 
+> commit e51500edbd9919cee53bc85cbb4b22cd4786fc42
+> Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> Date:   Tue Jun 12 11:24:31 2012 -0400
+> 
+>     Fix c99 compatibility: use __asm__ and __volatile__ in public headers
+>     
+>     Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> 
+> Does it fix it for you ?
+> 
+> Thanks,
+> 
+> Mathieu
+> 
+> > 
+> > 	Gerhard
+> > 
+> > On Mon, 4 Jun 2012, Mathieu Desnoyers wrote:
+> > 
+> > > Date: Mon, 4 Jun 2012 11:51:43 -0400
+> > > From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> > > To: Gerhard Mack <gmack@innerfire.net>,
+> > >     Alexandre Montplaisir <alexandre.montplaisir@polymtl.ca>
+> > > Cc: lttng-dev@lists.lttng.org
+> > > Subject: Re: [RELEASE] Userspace RCU 0.7.3
+> > > 
+> > > * Gerhard Mack (gmack@innerfire.net) wrote:
+> > > > 
+> > > > Are there any online examples of how to use this library?  I can't seem to 
+> > > > find any.
+> > > 
+> > > The perfbook from Paul McKenney now uses userspace RCU in its examples
+> > > (http://kernel.org/pub/linux/kernel/people/paulmck/perfbook/perfbook.html)
+> > > 
+> > > Also, you will find various small programs in the source tree of the
+> > > userspace-rcu packages under tests/ that act as test programs, and also
+> > > show how to use the library. (in the git tree:
+> > > http://git.lttng.org/?p=userspace-rcu.git;a=tree;f=tests;hb=HEAD)
+> > > 
+> > > I guess setting up a tutorial HTML page from the test content would be
+> > > valuable, we just have not had the time to do it at this point. Maybe
+> > > setting up links to that documentation on the lttng.org/urcu web page
+> > > would be a good start though.
+> > > 
+> > > Alexandre, when you find a minute, can you look into this ?
+> > > 
+> > > Thanks!
+> > > 
+> > > Mathieu
+> > > 
+> > > 
+> > > > 
+> > > > 	Gerhard
+> > > > 
+> > > > 
+> > > > 
+> > > > On Fri, 1 Jun 2012, Mathieu Desnoyers wrote:
+> > > > 
+> > > > > Date: Fri, 1 Jun 2012 14:05:33 -0400
+> > > > > From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> > > > > To: linux-kernel@vger.kernel.org, lttng-dev@lists.lttng.org,
+> > > > >     rp@svcs.cs.pdx.edu
+> > > > > Cc: Paul E. McKenney <paulmck@linux.vnet.ibm.com>,
+> > > > >     Lai Jiangshan <laijs@cn.fujitsu.com>,
+> > > > >     Stephen Hemminger <shemminger@vyatta.com>
+> > > > > Subject: [RELEASE] Userspace RCU 0.7.3
+> > > > > 
+> > > > > liburcu is a LGPLv2.1 userspace RCU (read-copy-update) library. This
+> > > > > data synchronization library provides read-side access which scales
+> > > > > linearly with the number of cores. It does so by allowing multiples
+> > > > > copies of a given data structure to live at the same time, and by
+> > > > > monitoring the data structure accesses to detect grace periods after
+> > > > > which memory reclamation is possible.
+> > > > > 
+> > > > > liburcu-cds provides efficient data structures based on RCU and
+> > > > > lock-free algorithms. Those structures include hash tables, queues,
+> > > > > stacks, and doubly-linked lists.
+> > > > > 
+> > > > > This is a minor compatibility-related release, fixing build issues with
+> > > > > FreeBSD and NetBSD. On Linux, only the test_perthreadlock fix could
+> > > > > change the result of make check (which could previously fail due to
+> > > > > non-initialized mutexes), but it does not impact anything installed on
+> > > > > the system.
+> > > > > 
+> > > > > Changelog:
+> > > > > 2012-06-01 Userspace RCU 0.7.3
+> > > > >         * Fix tests: make dist lib dependency
+> > > > >         * Update README for OS supported, tests dependency
+> > > > >         * Add CodingStyle to tarball
+> > > > >         * Add coding style document
+> > > > >         * Test fix: test_perthreadlock uninitialized mutex
+> > > > >         * tests: support FreeBSD short "time" args
+> > > > >         * freebsd 8.2 fix: define MAP_ANONYMOUS for compatibility
+> > > > > 
+> > > > > Project website: http://lttng.org/urcu
+> > > > > Download link: http://lttng.org/files/urcu/
+> > > > > 
+> > > > > 
+> > > > 
+> > > > --
+> > > > Gerhard Mack
+> > > > 
+> > > > gmack@innerfire.net
+> > > > 
+> > > > <>< As a computer, I find your faith in technology amusing.
+> > > 
+> > > 
+> > 
+> > --
+> > Gerhard Mack
+> > 
+> > gmack@innerfire.net
+> > 
+> > <>< As a computer, I find your faith in technology amusing.
+> 
+> 
 
---------------060108080706020303040007--
+--
+Gerhard Mack
+
+gmack@innerfire.net
+
+<>< As a computer, I find your faith in technology amusing.
