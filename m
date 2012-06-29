@@ -1,20 +1,19 @@
-From: "Brosseau, Yannick" <yannick.brosseau@gmail.com>
-Subject: Re: Query about LTTng 2.0 Debian packages
-Date: Thu, 28 Jun 2012 22:51:31 -0400
-Message-ID: <CAEzWAeK+hFJr7xY_JF5MLH4YVfOHYq_OxgnLOsm7cUvUtsDjUA__1078.81527296758$1340938321$gmane$org@mail.gmail.com>
-References: <20120621012622.GA1387@Krystal> <20120621191452.GA18195@quintessa>
-	<20120629015815.GA22800@quintessa>
+From: "Woegerer, Paul" <Paul_Woegerer@mentor.com>
+Subject: notrace missing in lttng-ust
+Date: Fri, 29 Jun 2012 10:28:08 +0200
+Message-ID: <4FED6718.1000205__8399.26982666857$1340958509$gmane$org@mentor.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Type: text/plain; charset="iso-8859-1"; Format="flowed"
 Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ob0-f176.google.com ([209.85.214.176])
+Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <yannick.brosseau@gmail.com>) id 1SkRJ3-0003mE-BZ
-	for lttng-dev@lists.lttng.org; Thu, 28 Jun 2012 22:51:37 -0400
-Received: by obbwd18 with SMTP id wd18so4965301obb.35
-	for <lttng-dev@lists.lttng.org>; Thu, 28 Jun 2012 19:51:31 -0700 (PDT)
-In-Reply-To: <20120629015815.GA22800@quintessa>
+	(envelope-from <Paul_Woegerer@mentor.com>) id 1SkWYa-0006OO-TX
+	for lttng-dev@lists.lttng.org; Fri, 29 Jun 2012 04:28:00 -0400
+Received: from svr-orw-fem-01.mgc.mentorg.com ([147.34.98.93])
+	by relay1.mentorg.com with esmtp
+	id 1SkWYU-0002nV-E9 from Paul_Woegerer@mentor.com
+	for lttng-dev@lists.lttng.org; Fri, 29 Jun 2012 01:27:54 -0700
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -26,50 +25,94 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On Thu, Jun 28, 2012 at 9:58 PM, Jon Bernard <jbernard@debian.org> wrote:
-> * Jon Bernard <jbernard@debian.org> wrote:
->> * Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
->> > Hi Jon,
->> >
->> > I wanted to get in touch with you regarding LTTng 2.0 Debian packages.
->> > Is there anything we can do to help you getting those packages into
->> > Debian ? They have been out for a while now, and even Ubuntu picked th=
-em
->> > up. I understand that you are probably busy, hence my offer for help.
->>
->> I've just uploaded another package I've been working on and LTTng 2.0 pa=
-ckages
->> are next on my list. Give me a few days to get things sorted, I'll post =
-an
->> update next week with my status.
->
-> Is the 2.0 series indented to replace the existing UST, or should they be=
- able
-> to exist side-by-side? =A0I'm inclined to think the new packages should r=
-eplace
-> the old ones, and thus prevent a user from having both installed at the s=
-ame
-> time, but wanted to check first.
+Hi Mathieu,
 
-Yes, the 2.0 should replace the old 0.x ones. The new lttng-ust
-replace the old ust. Also you can replace the old lttctl with the new
-lttng-tools.
+libust 0.x uses notrace (__attribute__((no_instrument_function)) for all =
 
-> URCU is updated and I'm looking at UST/CTL now. I'll file ITPs for babelt=
-race
-> and modules in the morning.
->
-> --
-> Jon
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+functions that are involved in event emitting.
 
+For example:
+./libust/marker.c:122:notrace void __ust_marker_empty_function(const =
 
+struct ust_marker *mdata,
+./libust/marker.c:137:notrace void ust_marker_probe_cb(const struct =
+
+ust_marker *mdata,
+./libust/marker.c:197:static notrace void =
+
+ust_marker_probe_cb_noarg(const struct ust_marker *mdata,
+
+I just realized that this is no more the case for lttng-ust.
+Was it a conscious decision not to use notrace for LTTng 2.0 lttng-ust, =
+
+or is it just missing ?
+
+I would like to have notrace also in lttng-ust, at least for the =
+
+_DECLARE_TRACEPOINT macro in tracepoint.h.
+Like this for example:
+
+diff --git a/include/lttng/tracepoint.h b/include/lttng/tracepoint.h
+index 5bab476..71665dc 100644
+--- a/include/lttng/tracepoint.h
++++ b/include/lttng/tracepoint.h
+@@ -137,6 +137,7 @@ extern "C" {
+
+  #define _DECLARE_TRACEPOINT(_provider, _name, ...)     \
+  extern struct tracepoint __tracepoint_##_provider##___##_name;         =
+
+     \
++static inline void =
+
+__tracepoint_cb_##_provider##___##_name(_TP_ARGS_PROTO(__VA_ARGS__)) =
+
+__attribute__ ((no_instrument_function));    \
+  static inline void =
+
+__tracepoint_cb_##_provider##___##_name(_TP_ARGS_PROTO(__VA_ARGS__)) \
+  {                                            \
+      struct tracepoint_probe *__tp_probe;                        \
+@@ -158,12 +159,16 @@ end:     \
+      tp_rcu_read_unlock_bp();                            \
+  }                                            \
+  static inline void __tracepoint_register_##_provider##___##_name(char =
+
+*name,        \
++        void (*func)(void), void *data) __attribute__ =
+
+((no_instrument_function));    \
++static inline void __tracepoint_register_##_provider##___##_name(char =
+
+*name,        \
+          void (*func)(void), void *data) \
+  {                                            \
+      __tracepoint_probe_register(name, func, data,     \
+          __tracepoint_##_provider##___##_name.signature); \
+  }                                            \
+  static inline void =
+
+__tracepoint_unregister_##_provider##___##_name(char *name,        \
++        void (*func)(void), void *data) __attribute__ =
+
+((no_instrument_function));    \
++static inline void __tracepoint_unregister_##_provider##___##_name(char =
+
+*name,        \
+          void (*func)(void), void *data) \
+  {                                            \
+      __tracepoint_probe_unregister(name, func, data); \
+
+Greetings,
+Paul
 
 -- =
 
-Yannick Brosseau
-yannickbrosseau.com
+Paul Woegerer | SW Development Engineer
+Mentor Embedded(tm) | Prinz Eugen Stra=DFe 72/2/4, Vienna, 1040 Austria
+P 43.1.535991320
+Nucleus=AE | Linux=AE | Android(tm) | Services | UI | Multi-OS
+
+Android is a trademark of Google Inc. Use of this trademark is subject to G=
+oogle Permissions.
+Linux is the registered trademark of Linus Torvalds in the U.S. and other c=
+ountries.
