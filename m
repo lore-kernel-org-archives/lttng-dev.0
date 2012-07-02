@@ -1,17 +1,17 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [babeltrace] FTS does not support large files on 32-bit
-Date: Sat, 30 Jun 2012 14:53:35 -0400
-Message-ID: <20120630185335.GA31235__39893.9561368481$1341082441$gmane$org@Krystal>
+From: Francis Giraldeau <francis.giraldeau@gmail.com>
+Subject: [PATCH] Expose kernel tracer to user-space (version 5)
+Date: Mon,  2 Jul 2012 15:47:27 +0200
+Message-ID: <1341236847-16300-1-git-send-email-francis.giraldeau__11023.311809595$1341236924$gmane$org@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from mail-lb0-f176.google.com ([209.85.217.176])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1Sl2nY-0004iJ-Ob
-	for lttng-dev@lists.lttng.org; Sat, 30 Jun 2012 14:53:36 -0400
-Content-Disposition: inline
+	(envelope-from <francis.giraldeau@gmail.com>) id 1Slgyi-0006eQ-13
+	for lttng-dev@lists.lttng.org; Mon, 02 Jul 2012 09:47:49 -0400
+Received: by lboj14 with SMTP id j14so8873760lbo.35
+	for <lttng-dev@lists.lttng.org>; Mon, 02 Jul 2012 06:47:41 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,48 +20,272 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Yannick Brosseau <yannick.brosseau@gmail.com>, jdesfossez@efficios.com
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Yannick,
+By writing to the file /proc/lttng, a user-space application creates a
+kernel event. The event's payload is by default UTF-8 text, but any data
+can be written, up to 1024 bytes. Null-character is optional and is not
+enforced. The event uses sequence for space efficiency and to store any
+data as payload.
 
-The babeltrace commit:
+The feature is enabled when both lttng-uevent and lttng-probe-uevent are
+loaded. The lttng-abi module exports a register function and includes a wrapper
+for lttng_fops write. This is required since struct file_operations must be
+const.
 
-commit 6cba487f031260536d6a77acde888c8b1a876fcf
-Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Date:   Fri Feb 10 12:01:01 2012 -0500
+Module unload must be prevented while lttng-uevent is being used.
+rcu_synchronized() is call on module unload, and thus rcu_read_lock() can be
+used to force waiting until the critical section is over.
 
-    babeltrace lib cleanup, folded with open/remove trace functions
-    
-    Folded patch from Yannick Brosseau <yannick.brosseau@gmail.com>, along
-    with various updates and cleanups, related to babeltrace lib.
-    
-    Original changelog from Yannick Brosseau:
-        Move the trace_collection into its own file.
-        Port the converter to uses the new functions
-    
-    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Signed-off-by: Francis Giraldeau <francis.giraldeau@gmail.com>
+---
+ instrumentation/events/lttng-module/uevent.h |   33 +++++++++++++++
+ lttng-abi.c                                  |   42 +++++++++++++++++++
+ lttng-abi.h                                  |    4 ++
+ probes/Makefile                              |    2 +
+ probes/lttng-probe-uevent.c                  |   36 ++++++++++++++++
+ probes/lttng-uevent.c                        |   58 ++++++++++++++++++++++++++
+ 6 files changed, 175 insertions(+)
+ create mode 100644 instrumentation/events/lttng-module/uevent.h
+ create mode 100644 probes/lttng-probe-uevent.c
+ create mode 100644 probes/lttng-uevent.c
 
-Introduces fts(3) as a replacement for ftw(3). However, it seems that
-FTS does not support large files (LFS), which I need to turn on in
-babeltrace. fts.h shows why:
-
-/* The fts interface is incompatible with the LFS interface which
-   transparently uses the 64-bit file access functions.  */
-#ifdef __USE_FILE_OFFSET64
-# error "<fts.h> cannot be used with -D_FILE_OFFSET_BITS==64"
-#endif
-
-We should therefore go back to FTW to support large files on 32-bit. Is
-there any reason why we moved from ftw to fts ?
-
-Thanks,
-
-Mathieu
-
+diff --git a/instrumentation/events/lttng-module/uevent.h b/instrumentation/events/lttng-module/uevent.h
+new file mode 100644
+index 0000000..f67d901
+--- /dev/null
++++ b/instrumentation/events/lttng-module/uevent.h
+@@ -0,0 +1,33 @@
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM uevent
++
++#if !defined(UEVENT_H_) || defined(TRACE_HEADER_MULTI_READ)
++#define UEVENT_H_
++
++#include <linux/tracepoint.h>
++
++TRACE_EVENT(lttng_uevent,
++
++	TP_PROTO(const char *str, size_t len),
++
++	TP_ARGS(str, len),
++
++	/*
++	 * Uses sequence to hold variable size data, by default considered
++	 * as text. Null-terminal character is optional and is not enforced.
++	 */
++	TP_STRUCT__entry(
++		__dynamic_array_text(char, text, len)
++	),
++
++	TP_fast_assign(
++		tp_memcpy_dyn_from_user(text, str)
++	),
++
++	TP_printk("")
++)
++
++#endif /* UEVENT_H_ */
++
++/* This part must be outside protection */
++#include "../../../probes/define_trace.h"
+diff --git a/lttng-abi.c b/lttng-abi.c
+index 26a02ed..0de79ab 100644
+--- a/lttng-abi.c
++++ b/lttng-abi.c
+@@ -51,6 +51,11 @@
+ #include "lttng-tracer.h"
+ 
+ /*
++ * Required data structure to support lttng-probe-uevent
++ */
++static write_ops_t lttng_uevent_handler;
++
++/*
+  * This is LTTng's own personal way to create a system call as an external
+  * module. We use ioctl() on /proc/lttng.
+  */
+@@ -252,9 +257,46 @@ long lttng_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
+ 	}
+ }
+ 
++/*
++ * lttng_uevent_set_handler - set handler functions for uevent
++ */
++
++void lttng_uevent_set_handler(write_ops_t handler)
++{
++	lttng_uevent_handler = handler;
++}
++EXPORT_SYMBOL_GPL(lttng_uevent_set_handler);
++
++/*
++ * lttng_write_uevent - expose kernel tracer to user-space
++ *
++ * The handler function is protected with rcu_read_lock() to prevent the
++ * module to be unloaded while the tracepoint is being used. It assumes that
++ * rcu_synchronize() is called on module unload.
++ */
++
++static
++ssize_t lttng_write_uevent(struct file *file, const char __user *ubuf,
++		size_t count, loff_t *fpos)
++{
++	int ret;
++	write_ops_t handler;
++
++	rcu_read_lock();
++	handler = rcu_dereference(lttng_uevent_handler);
++	if (unlikely(handler == NULL)) {
++		rcu_read_unlock();
++		return -ENOSYS;
++	}
++	ret = handler(file, ubuf, count, fpos);
++	rcu_read_unlock();
++	return ret;
++}
++
+ static const struct file_operations lttng_fops = {
+ 	.owner = THIS_MODULE,
+ 	.unlocked_ioctl = lttng_ioctl,
++	.write = lttng_write_uevent,
+ #ifdef CONFIG_COMPAT
+ 	.compat_ioctl = lttng_ioctl,
+ #endif
+diff --git a/lttng-abi.h b/lttng-abi.h
+index dc230d8..1f3847c 100644
+--- a/lttng-abi.h
++++ b/lttng-abi.h
+@@ -27,6 +27,10 @@
+ 
+ #define LTTNG_KERNEL_SYM_NAME_LEN	256
+ 
++typedef ssize_t (*write_ops_t) (struct file *, const char __user *, size_t,
++		loff_t *);
++void lttng_uevent_set_handler(write_ops_t handler);
++
+ enum lttng_kernel_instrumentation {
+ 	LTTNG_KERNEL_TRACEPOINT	= 0,
+ 	LTTNG_KERNEL_KPROBE	= 1,
+diff --git a/probes/Makefile b/probes/Makefile
+index 698a9c9..a895e60 100644
+--- a/probes/Makefile
++++ b/probes/Makefile
+@@ -14,6 +14,8 @@ obj-m += lttng-probe-sched.o
+ obj-m += lttng-probe-irq.o
+ obj-m += lttng-probe-signal.o
+ obj-m += lttng-probe-timer.o
++obj-m += lttng-probe-uevent.o
++obj-m += lttng-uevent.o
+ 
+ obj-m += lttng-probe-statedump.o
+ 
+diff --git a/probes/lttng-probe-uevent.c b/probes/lttng-probe-uevent.c
+new file mode 100644
+index 0000000..90abb5e
+--- /dev/null
++++ b/probes/lttng-probe-uevent.c
+@@ -0,0 +1,36 @@
++/*
++ * probes/lttng-probe-uevent.c
++ *
++ * Expose kernel tracer to user-space through /proc/lttng
++ *
++ * Copyright (C) 2009-2012 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; only
++ * version 2.1 of the License.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
++ */
++
++#include <linux/module.h>
++
++/*
++ * Create lttng_uevent tracepoint probes.
++ */
++#define LTTNG_PACKAGE_BUILD
++#define CREATE_TRACE_POINTS
++#define TRACE_INCLUDE_PATH ../instrumentation/events/lttng-module
++
++#include "../instrumentation/events/lttng-module/uevent.h"
++
++MODULE_LICENSE("GPL and additional rights");
++MODULE_AUTHOR("Mathieu Desnoyers <mathieu.desnoyers@efficios.com>");
++MODULE_DESCRIPTION("LTTng uevent probes");
+diff --git a/probes/lttng-uevent.c b/probes/lttng-uevent.c
+new file mode 100644
+index 0000000..7b4bffc
+--- /dev/null
++++ b/probes/lttng-uevent.c
+@@ -0,0 +1,58 @@
++/*
++ * probes/lttng-uevent.c
++ *
++ * Expose kernel tracer to user-space through /proc/lttng
++ *
++ * Copyright (C) 2012 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; only
++ * version 2.1 of the License.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
++ */
++
++#include <linux/module.h>
++#include "../lttng-abi.h"
++
++/* include our own uevent tracepoint */
++#include "../instrumentation/events/lttng-module/uevent.h"
++DEFINE_TRACE(lttng_uevent);
++
++#define LTTNG_UEVENT_SIZE 1024
++
++ssize_t uevent_write_handler(struct file *file, const char __user *ubuf,
++		size_t count, loff_t *fpos)
++{
++	if (count > LTTNG_UEVENT_SIZE)
++		count = LTTNG_UEVENT_SIZE;
++
++	trace_lttng_uevent(ubuf, count);
++	return count;
++}
++
++static int __init lttng_probe_uevent_init(void)
++{
++	lttng_uevent_set_handler(uevent_write_handler);
++	return 0;
++}
++
++static void __exit lttng_probe_uevent_exit(void)
++{
++	lttng_uevent_set_handler(NULL);
++}
++
++module_init(lttng_probe_uevent_init);
++module_exit(lttng_probe_uevent_exit);
++
++MODULE_LICENSE("GPL and additional rights");
++MODULE_AUTHOR("Mathieu Desnoyers <mathieu.desnoyers@efficios.com>");
++MODULE_DESCRIPTION("LTTng kernel event from user-space");
 -- 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+1.7.9.5
