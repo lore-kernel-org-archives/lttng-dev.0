@@ -1,20 +1,20 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH] Expose kernel tracer to user-space	(version
-	6)
-Date: Mon, 2 Jul 2012 18:23:40 -0400
-Message-ID: <20120702222340.GA1702__36637.3638310053$1341267871$gmane$org@Krystal>
+From: Francis Giraldeau <francis.giraldeau@gmail.com>
+Subject: Re: [PATCH] Expose kernel tracer to user-space (version
+ 6)
+Date: Tue, 03 Jul 2012 08:19:51 +0200
+Message-ID: <4FF28F07.6000901__48213.1606004716$1341296468$gmane$org@gmail.com>
 References: <1341266778-13735-1-git-send-email-francis.giraldeau@gmail.com>
+	<20120702222340.GA1702@Krystal>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0197343154=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from mail-lb0-f176.google.com ([209.85.217.176])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1Slp1y-00024n-GD
-	for lttng-dev@lists.lttng.org; Mon, 02 Jul 2012 18:23:42 -0400
-Content-Disposition: inline
-In-Reply-To: <1341266778-13735-1-git-send-email-francis.giraldeau@gmail.com>
+	(envelope-from <francis.giraldeau@gmail.com>) id 1SlwT2-0005ee-QM
+	for lttng-dev@lists.lttng.org; Tue, 03 Jul 2012 02:20:09 -0400
+Received: by lboj14 with SMTP id j14so10066576lbo.35
+	for <lttng-dev@lists.lttng.org>; Mon, 02 Jul 2012 23:20:02 -0700 (PDT)
+In-Reply-To: <20120702222340.GA1702@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,206 +23,151 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Francis Giraldeau <francis.giraldeau@gmail.com>
-Cc: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-* Francis Giraldeau (francis.giraldeau@gmail.com) wrote:
-> By writing to the file /proc/lttng_uevent, a user-space application creates a
-> kernel event. The event's payload is by default UTF-8 text, but any data can be
-> written, up to 1024 bytes. Null-character is optional and is not enforced.
+Ceci est un message signC) cryptographiquement au format MIME.
 
-The 1024 byte limit is removed now, right ?
+--===============0197343154==
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha1; boundary="------------ms030402020007070509050705"
 
-> The
-> event uses sequence for space efficiency and to store any data as payload.
-> 
-> The feature is enabled when the module lttng-uevent is loaded. The module can
-> be removed if no tracing sessions with lttng_uevent enabled is active.
-> 
-> Signed-off-by: Francis Giraldeau <francis.giraldeau@gmail.com>
-> ---
->  instrumentation/events/lttng-module/uevent.h |   33 +++++++++
->  probes/Makefile                              |    1 +
->  probes/lttng-uevent.c                        |   97 ++++++++++++++++++++++++++
->  3 files changed, 131 insertions(+)
->  create mode 100644 instrumentation/events/lttng-module/uevent.h
->  create mode 100644 probes/lttng-uevent.c
-> 
-> diff --git a/instrumentation/events/lttng-module/uevent.h b/instrumentation/events/lttng-module/uevent.h
-> new file mode 100644
-> index 0000000..f67d901
-> --- /dev/null
-> +++ b/instrumentation/events/lttng-module/uevent.h
-> @@ -0,0 +1,33 @@
-> +#undef TRACE_SYSTEM
-> +#define TRACE_SYSTEM uevent
-> +
-> +#if !defined(UEVENT_H_) || defined(TRACE_HEADER_MULTI_READ)
-> +#define UEVENT_H_
-> +
-> +#include <linux/tracepoint.h>
-> +
-> +TRACE_EVENT(lttng_uevent,
-> +
-> +	TP_PROTO(const char *str, size_t len),
-> +
-> +	TP_ARGS(str, len),
-> +
-> +	/*
-> +	 * Uses sequence to hold variable size data, by default considered
-> +	 * as text. Null-terminal character is optional and is not enforced.
-> +	 */
-> +	TP_STRUCT__entry(
-> +		__dynamic_array_text(char, text, len)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		tp_memcpy_dyn_from_user(text, str)
-> +	),
-> +
-> +	TP_printk("")
-> +)
-> +
-> +#endif /* UEVENT_H_ */
-> +
-> +/* This part must be outside protection */
-> +#include "../../../probes/define_trace.h"
-> diff --git a/probes/Makefile b/probes/Makefile
-> index 698a9c9..3003535 100644
-> --- a/probes/Makefile
-> +++ b/probes/Makefile
-> @@ -14,6 +14,7 @@ obj-m += lttng-probe-sched.o
->  obj-m += lttng-probe-irq.o
->  obj-m += lttng-probe-signal.o
->  obj-m += lttng-probe-timer.o
-> +obj-m += lttng-uevent.o
->  
->  obj-m += lttng-probe-statedump.o
->  
-> diff --git a/probes/lttng-uevent.c b/probes/lttng-uevent.c
-> new file mode 100644
-> index 0000000..96fb233
-> --- /dev/null
-> +++ b/probes/lttng-uevent.c
-> @@ -0,0 +1,97 @@
-> +/*
-> + * probes/lttng-uevent.c
-> + *
-> + * Expose kernel tracer to user-space through /proc/lttng
-> + *
-> + * Copyright (C) 2009-2012 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Ceci est un message signé cryptographiquement au format MIME.
 
-you might want to add your own copyright in here too.
+--------------ms030402020007070509050705
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
 
-the rest looks good. I look forward to see the updated version.
+Le 2012-07-03 00:23, Mathieu Desnoyers a =E9crit :
+> * Francis Giraldeau (francis.giraldeau@gmail.com) wrote:
+>> By writing to the file /proc/lttng_uevent, a user-space application cr=
+eates a
+>> kernel event. The event's payload is by default UTF-8 text, but any da=
+ta can be
+>> written, up to 1024 bytes. Null-character is optional and is not enfor=
+ced.
+>=20
+> The 1024 byte limit is removed now, right ?
 
-Thanks,
+Exactly.
 
-Mathieu
+>> + * Expose kernel tracer to user-space through /proc/lttng
 
-> + *
-> + * This library is free software; you can redistribute it and/or
-> + * modify it under the terms of the GNU Lesser General Public
-> + * License as published by the Free Software Foundation; only
-> + * version 2.1 of the License.
-> + *
-> + * This library is distributed in the hope that it will be useful,
-> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
-> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-> + * Lesser General Public License for more details.
-> + *
-> + * You should have received a copy of the GNU Lesser General Public
-> + * License along with this library; if not, write to the Free Software
-> + * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
-> + */
-> +
-> +#include <linux/module.h>
-> +#include <linux/proc_fs.h>
-> +
-> +/*
-> + * Create lttng_uevent tracepoint probes.
-> + */
-> +
-> +#define TP_MODULE_NOAUTOLOAD
-> +#define LTTNG_PACKAGE_BUILD
-> +#define CREATE_TRACE_POINTS
-> +#define TRACE_INCLUDE_PATH ../instrumentation/events/lttng-module
-> +#include "../instrumentation/events/lttng-module/uevent.h"
-> +
-> +#define LTTNG_UEVENT_FILE "lttng_uevent"
-> +
-> +/**
-> + * lttng_uevent_write - write user-space data into kernel trace
-> + * @file: file pointer
-> + * @user_buf: user string
-> + * @count: length to copy
-> + * @ppos: unused
-> + *
-> + * Copy count bytes into a trace event "lttng_uevent".
-> + *
-> + * Returns the number of bytes copied from the source.
-> + * Notice that there is no guarantee that the event is
-> + * actually written in a trace. This can occur in 3
-> + * situations:
-> + *
-> + *   * Buffer overrun
-> + *   * No trace session are active
-> + *   * The data size is greater than a sub-buffer
-> + */
-> +
-> +ssize_t lttng_uevent_write(struct file *file, const char __user *ubuf,
-> +		size_t count, loff_t *fpos)
-> +{
-> +	trace_lttng_uevent(ubuf, count);
-> +	return count;
-> +}
-> +
-> +static const struct file_operations uev_ops = {
-> +	.owner = THIS_MODULE,
-> +	.write = lttng_uevent_write
-> +};
-> +
-> +static int __init lttng_uevent_init(void)
-> +{
-> +	struct proc_dir_entry *uev_file;
-> +
-> +	uev_file = create_proc_entry(LTTNG_UEVENT_FILE, 0444, NULL);
-> +	if (!uev_file)
-> +		return -ENOENT;
-> +	uev_file->proc_fops = &uev_ops;
-> +	uev_file->mode = S_IFREG | S_IWUGO;
-> +	uev_file->uid = 0;
-> +	uev_file->gid = 0;
-> +	/* register manually the probe */
-> +	__lttng_events_init__uevent();
-> +	return 0;
-> +}
-> +
-> +static void __exit lttng_uevent_exit(void)
-> +{
-> +	/* unregister manually the probe */
-> +	__lttng_events_exit__uevent();
-> +	remove_proc_entry(LTTNG_UEVENT_FILE, NULL);
-> +}
-> +
-> +module_init(lttng_uevent_init);
-> +module_exit(lttng_uevent_exit);
-> +
-> +MODULE_LICENSE("GPL and additional rights");
-> +MODULE_AUTHOR("Francis Giraldeau <francis.giraldeau@gmail.com>");
-> +MODULE_DESCRIPTION("Append custom events to kernel trace from user-space");
-> -- 
-> 1.7.9.5
-> 
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+I just saw a typo here, we should read "through /proc/lttng_uevent"
 
--- 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+>> + * Copyright (C) 2009-2012 Mathieu Desnoyers <mathieu.desnoyers@effic=
+ios.com>
+>=20
+> you might want to add your own copyright in here too.
+
+I transfer you the copyright.
+
+Thanks!
+
+Francis
+
+
+--------------ms030402020007070509050705
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: Signature cryptographique S/MIME
+
+MIAGCSqGSIb3DQEHAqCAMIACAQExCzAJBgUrDgMCGgUAMIAGCSqGSIb3DQEHAQAAoIIMUjCC
+BVwwggREoAMCAQICEGWn7N/yOaERpG8kZX1Cua0wDQYJKoZIhvcNAQEFBQAwgd0xCzAJBgNV
+BAYTAlVTMRcwFQYDVQQKEw5WZXJpU2lnbiwgSW5jLjEfMB0GA1UECxMWVmVyaVNpZ24gVHJ1
+c3QgTmV0d29yazE7MDkGA1UECxMyVGVybXMgb2YgdXNlIGF0IGh0dHBzOi8vd3d3LnZlcmlz
+aWduLmNvbS9ycGEgKGMpMDkxHjAcBgNVBAsTFVBlcnNvbmEgTm90IFZhbGlkYXRlZDE3MDUG
+A1UEAxMuVmVyaVNpZ24gQ2xhc3MgMSBJbmRpdmlkdWFsIFN1YnNjcmliZXIgQ0EgLSBHMzAe
+Fw0xMjA1MjgwMDAwMDBaFw0xMzA1MjgyMzU5NTlaMIIBHzEXMBUGA1UEChMOVmVyaVNpZ24s
+IEluYy4xHzAdBgNVBAsTFlZlcmlTaWduIFRydXN0IE5ldHdvcmsxRjBEBgNVBAsTPXd3dy52
+ZXJpc2lnbi5jb20vcmVwb3NpdG9yeS9SUEEgSW5jb3JwLiBieSBSZWYuLExJQUIuTFREKGMp
+OTgxHjAcBgNVBAsTFVBlcnNvbmEgTm90IFZhbGlkYXRlZDEzMDEGA1UECxMqRGlnaXRhbCBJ
+RCBDbGFzcyAxIC0gTmV0c2NhcGUgRnVsbCBTZXJ2aWNlMRowGAYDVQQDFBFGcmFuY2lzIEdp
+cmFsZGVhdTEqMCgGCSqGSIb3DQEJARYbZnJhbmNpcy5naXJhbGRlYXVAZ21haWwuY29tMIIB
+IjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqiOFH8B8262aBX5FMSzvA38NY4ekw6W+
+zThHjeI46j7VFPXJbK0BM7yAMu4DmybyE8b5IB4oKcjRGdGC8GaMZdx0+Je0CxR/+M4hMB9s
+g3JhgXLQ9RYDJKn9k0JZ59pbYsh6OMtYPX3WDCyEXBg3xkd2JQ9YiY46IJSEhfbHHE9CwaYa
+f3Pbl3Bp5oi5PUADYu76ItNdHBHzBGBrkkYFaGoI5Mh27oBABvDW6QNuGvrTkkWOmFeJPNAu
+AS52izUNriCmkMGNbGON3dMM7cNk1uoNXyV7vnIP0pwTm+xA5CLkvjt+/sxynJYWXqexwcer
+X0VCw5Hbaqa3IxzJKB8BYwIDAQABo4HSMIHPMAkGA1UdEwQCMAAwRAYDVR0gBD0wOzA5Bgtg
+hkgBhvhFAQcXATAqMCgGCCsGAQUFBwIBFhxodHRwczovL3d3dy52ZXJpc2lnbi5jb20vcnBh
+MAsGA1UdDwQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwUAYDVR0fBEkw
+RzBFoEOgQYY/aHR0cDovL2luZGMxZGlnaXRhbGlkLWczLWNybC52ZXJpc2lnbi5jb20vSW5k
+QzFEaWdpdGFsSUQtRzMuY3JsMA0GCSqGSIb3DQEBBQUAA4IBAQAMYnv8qG3qSGJYAn+PhjGx
+lbmbaxqYyD0QVRq6g8tXrZtBUqNO29mce+olKu7lHsrEHpIKwMfArh3BpxPYVhKMAP6GaCAn
+jdr8LJ6TZHTLeVo4BLU7ZEPR6qCGxUhIodqzzWoet0cardf6Ub0OknxxAymgQ8+pIGJmxOOr
+ypWp+3ba6dPmY/MJeXIWq08V+P6912vL6I+cwrS6e7rud0XeR9KEEqn/EpuqDpp1mNj5QeRo
+73zkl8G1nBnYbr42r2jSzqxRvefsfimWm6XX2L2K9WKp6TvJhFejZ7aP234pRDx9Ep0unSH4
+LR2o5p6Ik5RQaG0xu1c74KgDTyzZVn2+MIIG7jCCBdagAwIBAgIQcRVmBUrkkSFN6bxE+azT
+3DANBgkqhkiG9w0BAQUFADCByjELMAkGA1UEBhMCVVMxFzAVBgNVBAoTDlZlcmlTaWduLCBJ
+bmMuMR8wHQYDVQQLExZWZXJpU2lnbiBUcnVzdCBOZXR3b3JrMTowOAYDVQQLEzEoYykgMTk5
+OSBWZXJpU2lnbiwgSW5jLiAtIEZvciBhdXRob3JpemVkIHVzZSBvbmx5MUUwQwYDVQQDEzxW
+ZXJpU2lnbiBDbGFzcyAxIFB1YmxpYyBQcmltYXJ5IENlcnRpZmljYXRpb24gQXV0aG9yaXR5
+IC0gRzMwHhcNMDkwNTAxMDAwMDAwWhcNMTkwNDMwMjM1OTU5WjCB3TELMAkGA1UEBhMCVVMx
+FzAVBgNVBAoTDlZlcmlTaWduLCBJbmMuMR8wHQYDVQQLExZWZXJpU2lnbiBUcnVzdCBOZXR3
+b3JrMTswOQYDVQQLEzJUZXJtcyBvZiB1c2UgYXQgaHR0cHM6Ly93d3cudmVyaXNpZ24uY29t
+L3JwYSAoYykwOTEeMBwGA1UECxMVUGVyc29uYSBOb3QgVmFsaWRhdGVkMTcwNQYDVQQDEy5W
+ZXJpU2lnbiBDbGFzcyAxIEluZGl2aWR1YWwgU3Vic2NyaWJlciBDQSAtIEczMIIBIjANBgkq
+hkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA7cRH3yooHXwGa7vXITLJbBOP6bGNQU4099oL42r6
+ZYggCxET6ZvgSU6Lb9UB0F8NR5GKWkx0Pj/GkQm7TDSejW6hglFi92l2WJYHr54UGAdPWr2f
+0jGyVBlzRmoZQhHsEnMhjfXcMM3l2VYKMcU2bSkUl70t2olHGYjYSwQ967Y8Zx50ABMN0Iba
+k2f4MwOuGjxraXj2wCyO4YM/d/mZ//6fUlrCtIcK2GypR8FUKWVDPkrAlh/Brfd3r2yxBF6+
+wbaULZeQLSfSux7pg2qE9sSyriMGZSalJ1grByK0b6ZiSBp38tVQJ5op05b7KPW6JHZi44xZ
+6/tu1ULEvkHH9QIDAQABo4ICuTCCArUwNAYIKwYBBQUHAQEEKDAmMCQGCCsGAQUFBzABhhho
+dHRwOi8vb2NzcC52ZXJpc2lnbi5jb20wEgYDVR0TAQH/BAgwBgEB/wIBADBwBgNVHSAEaTBn
+MGUGC2CGSAGG+EUBBxcBMFYwKAYIKwYBBQUHAgEWHGh0dHBzOi8vd3d3LnZlcmlzaWduLmNv
+bS9jcHMwKgYIKwYBBQUHAgIwHhocaHR0cHM6Ly93d3cudmVyaXNpZ24uY29tL3JwYTA0BgNV
+HR8ELTArMCmgJ6AlhiNodHRwOi8vY3JsLnZlcmlzaWduLmNvbS9wY2ExLWczLmNybDAOBgNV
+HQ8BAf8EBAMCAQYwbgYIKwYBBQUHAQwEYjBgoV6gXDBaMFgwVhYJaW1hZ2UvZ2lmMCEwHzAH
+BgUrDgMCGgQUS2u5KJYGDLvQUjibKaxLB4shBRgwJhYkaHR0cDovL2xvZ28udmVyaXNpZ24u
+Y29tL3ZzbG9nbzEuZ2lmMC4GA1UdEQQnMCWkIzAhMR8wHQYDVQQDExZQcml2YXRlTGFiZWw0
+LTIwNDgtMTE4MB0GA1UdDgQWBBR5R2EIQf04BKJL57XM9UP2SSsR+DCB8QYDVR0jBIHpMIHm
+oYHQpIHNMIHKMQswCQYDVQQGEwJVUzEXMBUGA1UEChMOVmVyaVNpZ24sIEluYy4xHzAdBgNV
+BAsTFlZlcmlTaWduIFRydXN0IE5ldHdvcmsxOjA4BgNVBAsTMShjKSAxOTk5IFZlcmlTaWdu
+LCBJbmMuIC0gRm9yIGF1dGhvcml6ZWQgdXNlIG9ubHkxRTBDBgNVBAMTPFZlcmlTaWduIENs
+YXNzIDEgUHVibGljIFByaW1hcnkgQ2VydGlmaWNhdGlvbiBBdXRob3JpdHkgLSBHM4IRAItb
+dVaEVIULAM+vOEjOsaQwDQYJKoZIhvcNAQEFBQADggEBADlNz0GZgbWpBbVSOOk5hIls5DSo
+WufYbAlMJBq6WaSHO3Mh8ZOBz79oY1pn/jWFK6HDXaNKwjoZ3TDWzE3v8dKBl8pUWkO/N4t6
+jhmND0OojPKvYLMVirOVnDzgnrMnmKQ1chfl/Cpdh9OKDcLRRSr4wPSsKpM61a4ScAjr+zvi
+d+zoK2Q1ds262uDRyxTWcVibvtU+fbbZ6CTFJGZMXZEfdrMXPn8NxiGJL7M3uKH/XLJtSd5l
+UkL7DojS7Uodv0vj+Mxy+kgOZY5JyNb4mZg7t5Q+MXEGh/psWVMu198r7V9jAKwV7QO4VRaM
+xmgD5yKocwuxvKDaUljdCg5/wYIxggT5MIIE9QIBATCB8jCB3TELMAkGA1UEBhMCVVMxFzAV
+BgNVBAoTDlZlcmlTaWduLCBJbmMuMR8wHQYDVQQLExZWZXJpU2lnbiBUcnVzdCBOZXR3b3Jr
+MTswOQYDVQQLEzJUZXJtcyBvZiB1c2UgYXQgaHR0cHM6Ly93d3cudmVyaXNpZ24uY29tL3Jw
+YSAoYykwOTEeMBwGA1UECxMVUGVyc29uYSBOb3QgVmFsaWRhdGVkMTcwNQYDVQQDEy5WZXJp
+U2lnbiBDbGFzcyAxIEluZGl2aWR1YWwgU3Vic2NyaWJlciBDQSAtIEczAhBlp+zf8jmhEaRv
+JGV9QrmtMAkGBSsOAwIaBQCgggLbMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZI
+hvcNAQkFMQ8XDTEyMDcwMzA2MTk1MVowIwYJKoZIhvcNAQkEMRYEFKzUAb+lldtgwLLnw3SW
+4Eei9OofMGwGCSqGSIb3DQEJDzFfMF0wCwYJYIZIAWUDBAEqMAsGCWCGSAFlAwQBAjAKBggq
+hkiG9w0DBzAOBggqhkiG9w0DAgICAIAwDQYIKoZIhvcNAwICAUAwBwYFKw4DAgcwDQYIKoZI
+hvcNAwICASgwggEDBgkrBgEEAYI3EAQxgfUwgfIwgd0xCzAJBgNVBAYTAlVTMRcwFQYDVQQK
+Ew5WZXJpU2lnbiwgSW5jLjEfMB0GA1UECxMWVmVyaVNpZ24gVHJ1c3QgTmV0d29yazE7MDkG
+A1UECxMyVGVybXMgb2YgdXNlIGF0IGh0dHBzOi8vd3d3LnZlcmlzaWduLmNvbS9ycGEgKGMp
+MDkxHjAcBgNVBAsTFVBlcnNvbmEgTm90IFZhbGlkYXRlZDE3MDUGA1UEAxMuVmVyaVNpZ24g
+Q2xhc3MgMSBJbmRpdmlkdWFsIFN1YnNjcmliZXIgQ0EgLSBHMwIQZafs3/I5oRGkbyRlfUK5
+rTCCAQUGCyqGSIb3DQEJEAILMYH1oIHyMIHdMQswCQYDVQQGEwJVUzEXMBUGA1UEChMOVmVy
+aVNpZ24sIEluYy4xHzAdBgNVBAsTFlZlcmlTaWduIFRydXN0IE5ldHdvcmsxOzA5BgNVBAsT
+MlRlcm1zIG9mIHVzZSBhdCBodHRwczovL3d3dy52ZXJpc2lnbi5jb20vcnBhIChjKTA5MR4w
+HAYDVQQLExVQZXJzb25hIE5vdCBWYWxpZGF0ZWQxNzA1BgNVBAMTLlZlcmlTaWduIENsYXNz
+IDEgSW5kaXZpZHVhbCBTdWJzY3JpYmVyIENBIC0gRzMCEGWn7N/yOaERpG8kZX1Cua0wDQYJ
+KoZIhvcNAQEBBQAEggEAhJpvSl1jdnash/Nsba8GRD8naJEZhhU6uK1qObr7OaR7WkvitvE+
+ZOycPeifdPhx9pu6D2FBqRWoyTwarpy7y95eJbMpD63sWMGNmELimNx5ZAwAfu/qoixkDEE7
+rfs+5p5dERjv5/faMo9tM+Xwfy7dCsMRHt1+WplVg0sSLpuQCH6dj2X2KV0AS4dQZtk3jtcx
+EJ9SROIlWclIOCFddPU9sc12k1CnYFyw1LYGZZ0QzHDAAv+JuovFzSGqlmu0TeU5mwJFuvqp
+JHRkO5G+b0k8xPX2sUAucDpM/L9MRCaTuCarE15aZpJXn+7+nXH1IPIEn54j0pkZsA68ecQh
+igAAAAAAAA==
+--------------ms030402020007070509050705--
+
+
+--===============0197343154==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0197343154==--
