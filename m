@@ -1,19 +1,18 @@
-From: Bernd Hufmann <bhufmann@gmail.com>
-Subject: Re: lttng_2.0-eclipse-juno : Connection to a Remote
- Host : Unable to list kernel events
-Date: Wed, 4 Jul 2012 08:48:01 -0400
-Message-ID: <CAG5-hcMDzStCrHp0GpZNZTZfVHZ7+2xDuytSsnZnZmCgpA3Lsw__23998.3947053135$1341406115$gmane$org@mail.gmail.com>
-References: <1341389386.5657.YahooMailNeo@web140904.mail.bf1.yahoo.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [RFC PATCH lttng-tools] Fix mmap for large subbuffers
+	and handle	EINTR
+Date: Wed, 4 Jul 2012 12:10:09 -0400
+Message-ID: <20120704161009.GA27758__1743.64616764269$1341418247$gmane$org@Krystal>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0380344475=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-yx0-f176.google.com ([209.85.213.176])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <bhufmann@gmail.com>) id 1SmP03-0002p8-QL
-	for lttng-dev@lists.lttng.org; Wed, 04 Jul 2012 08:48:08 -0400
-Received: by yenl5 with SMTP id l5so7321900yen.35
-	for <lttng-dev@lists.lttng.org>; Wed, 04 Jul 2012 05:48:02 -0700 (PDT)
-In-Reply-To: <1341389386.5657.YahooMailNeo@web140904.mail.bf1.yahoo.com>
+	(envelope-from <compudj@mail.openrapids.net>) id 1SmS9b-0004Q2-KX
+	for lttng-dev@lists.lttng.org; Wed, 04 Jul 2012 12:10:11 -0400
+Content-Disposition: inline
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,141 +21,257 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: somanath sahoo <bapi_mvit2004@yahoo.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: dgoulet@efficios.com, jdesfossez@efficios.com, christian.babeux@efficios.com
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============0380344475==
-Content-Type: multipart/alternative; boundary=14dae934044505357a04c4007189
+With large subbuffer (packet) size, if write() returns before copying
+the entire packet for mmap buffers, the consumerd restarts the write
+infinitely, which is not good at all.
 
---14dae934044505357a04c4007189
-Content-Type: text/plain; charset=ISO-8859-1
+This affects both lttng-ust (in default mmap mode) and lttng-kernel (but
+only for mmap buffers, which is not the default).
 
-Hi,
-to be able to trace the kernel the global session daemon has to be running,
-that means it has to be running as root. To start the global session daemon
-login to your node and then execute sudo lttng list -k
-Then you are able to trace the kernel and UST using your user login.
-However you have to make sure that your user id is part of the user group
-tracing.
-Once this is setup the tracer control with Eclipse should work, too.
+This issue would show up with large subbuffer size.
 
-Best Regards
-Bernd
-On 2012-07-04 4:10 AM, "somanath sahoo" <bapi_mvit2004@yahoo.com> wrote:
+We need to handle this case, as well as EINTR errors (which need to
+restart write).
 
-> Hi,
->
-> I am running eclipse c/c++ juno in ubuntu 12.04 which is running inside
-> Virtualbox VM.
->
->
-> Issue : Tree node of remote host is not being created in the cotrol view
-> panel of eclipse while i am successfully connected to remote host (in this
-> case my ubuntu 12.04).
->
-> I am to trying use "lttng tracer control" feature of eclipse juno by
-> following this link --
-> http://wiki.eclipse.org/index.php/Linux_Tools_Project/LTTng2/User_Guide#LTTng_Tracer_Control
->
-> Error description : when eclipse is successfully connected to remote host,
-> then eclipse is trying to run "lttng list -k" to listing the kernel event
-> and its getting failed.
->                               But whereas i am able to run lttng commands
-> in my remote host (in ubuntu 12.04) successfully.
->
-> The error message from eclipse is provided below -
->
-> ----
-> List sessions failed
-> Command failed! Command:  lttng list -k
-> Return Value: 79
-> Error: Unable to list kernel events
->
-> ------
-> I have attached screenshot of this error. please find the attachment.
->
-> Please guide me to resolve this problem.
->
->
-> Thanks & Regards,
-> Somanath
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
->
+Also fixing the return value of mmap read functions, which were
+returning the amount of data written by the last invocation of write()
+rather than the total number of bytes written. splice use had the same
+issue.
 
---14dae934044505357a04c4007189
-Content-Type: text/html; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
+Also now consider a write() that returns more bytes than requested as an
+error.
 
-<p>Hi,<br>
-to be able to trace the kernel the global session daemon has to be running,=
- that means it has to be running as root. To start the global session daemo=
-n login to your node and then execute sudo lttng list -k<br>
-Then you are able to trace the kernel and UST using your user login. Howeve=
-r you have to make sure that your user id is part of the user group tracing=
-.<br>
-Once this is setup the tracer control with Eclipse should work, too.</p>
-<p>Best Regards<br>
-Bernd</p>
-<div class=3D"gmail_quote">On 2012-07-04 4:10 AM, &quot;somanath sahoo&quot=
-; &lt;<a href=3D"mailto:bapi_mvit2004@yahoo.com">bapi_mvit2004@yahoo.com</a=
->&gt; wrote:<br type=3D"attribution"><blockquote class=3D"gmail_quote" styl=
-e=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex">
-<div><div style=3D"font-size:12pt;font-family:times new roman,new york,time=
-s,serif"><div>Hi,</div><div><br></div><div>I am running eclipse c/c++ juno =
-in ubuntu 12.04 which is running inside Virtualbox VM. <br></div><div><br>
-</div><div><br></div><div>Issue : Tree node of remote host is not being cre=
-ated in the cotrol view panel of eclipse while i am successfully connected =
-to remote host (in this case my ubuntu 12.04). <br></div><div><br></div>
-<div>I am to trying use &quot;<span style=3D"font-weight:bold">lttng tracer=
- control&quot; </span><span>feature of eclipse juno by following this link =
--- <span style=3D"font-weight:bold"><a href=3D"http://wiki.eclipse.org/inde=
-x.php/Linux_Tools_Project/LTTng2/User_Guide#LTTng_Tracer_Control" target=3D=
-"_blank">http://wiki.eclipse.org/index.php/Linux_Tools_Project/LTTng2/User_=
-Guide#LTTng_Tracer_Control</a></span></span></div>
-<div><span><br> </span></div><div>Error description : when eclipse is succe=
-ssfully connected to remote host, then eclipse is trying to run &quot;lttng=
- list -k&quot; to listing the kernel event and its
- getting failed.</div><div><span>=A0=A0=A0 </span><span>=A0=A0=A0 </span><s=
-pan>=A0=A0=A0 </span><span>=A0=A0=A0 </span><span>=A0=A0=A0 </span><span>=
-=A0=A0=A0 </span><span>=A0=A0=A0 </span><span>=A0 </span>But whereas i am a=
-ble to run lttng commands in my remote host (in ubuntu 12.04) successfully.=
-</div>
-<div><br></div><div>The error message from eclipse is provided below - <br>=
-</div><div><br></div><div>----<br></div><div>List sessions failed<br>Comman=
-d failed! Command:=A0 lttng list -k<br>Return Value: 79<br>Error: Unable to=
- list kernel events</div>
-<div><br></div><div>------<br></div><div>I have attached <span style=3D"fon=
-t-weight:bold">screenshot of this error</span>. please find the attachment.=
-</div><div><br></div><div>Please guide me to resolve this
- problem.</div><div><br></div><div><br></div><div>Thanks &amp; Regards,<br>=
-Somanath<br></div></div></div><br>_________________________________________=
-______<br>
-lttng-dev mailing list<br>
-<a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a><=
-br>
-<a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" targe=
-t=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><=
-br>
-<br></blockquote></div>
+Moreover, assigning error = ret after failed splice and write was a
+mistake: error is holding the actual error value. ret just holds -1.
 
---14dae934044505357a04c4007189--
+This needs testing. Feedback is welcome.
 
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+---
+diff --git a/src/common/kernel-consumer/kernel-consumer.c b/src/common/kernel-consumer/kernel-consumer.c
+index bbc31f8..eca710d 100644
+--- a/src/common/kernel-consumer/kernel-consumer.c
++++ b/src/common/kernel-consumer/kernel-consumer.c
+@@ -49,7 +49,7 @@ ssize_t lttng_kconsumer_on_read_subbuffer_mmap(
+ 		struct lttng_consumer_stream *stream, unsigned long len)
+ {
+ 	unsigned long mmap_offset;
+-	ssize_t ret = 0;
++	ssize_t ret = 0, written = 0;
+ 	off_t orig_offset = stream->out_fd_offset;
+ 	int fd = stream->wait_fd;
+ 	int outfd = stream->out_fd;
+@@ -64,25 +64,34 @@ ssize_t lttng_kconsumer_on_read_subbuffer_mmap(
+ 
+ 	while (len > 0) {
+ 		ret = write(outfd, stream->mmap_base + mmap_offset, len);
+-		if (ret >= len) {
+-			len = 0;
+-		} else if (ret < 0) {
+-			errno = -ret;
++		if (ret < 0) {
++			if (errno == EINTR) {
++				/* restart the interrupted system call */
++				continue;
++			} else {
++				perror("Error in file write");
++				if (written == 0) {
++					written = ret;
++				}
++				goto end;
++			}
++		} else if (ret > len) {
+ 			perror("Error in file write");
++			written += ret;
+ 			goto end;
++		} else {
++			len -= ret;
++			mmap_offset += ret;
+ 		}
+ 		/* This won't block, but will start writeout asynchronously */
+ 		lttng_sync_file_range(outfd, stream->out_fd_offset, ret,
+ 				SYNC_FILE_RANGE_WRITE);
+ 		stream->out_fd_offset += ret;
++		written += ret;
+ 	}
+-
+ 	lttng_consumer_sync_trace_file(stream, orig_offset);
+-
+-	goto end;
+-
+ end:
+-	return ret;
++	return written;
+ }
+ 
+ /*
+@@ -94,7 +103,7 @@ ssize_t lttng_kconsumer_on_read_subbuffer_splice(
+ 		struct lttng_consumer_local_data *ctx,
+ 		struct lttng_consumer_stream *stream, unsigned long len)
+ {
+-	ssize_t ret = 0;
++	ssize_t ret = 0, written = 0;
+ 	loff_t offset = 0;
+ 	off_t orig_offset = stream->out_fd_offset;
+ 	int fd = stream->wait_fd;
+@@ -107,8 +116,11 @@ ssize_t lttng_kconsumer_on_read_subbuffer_splice(
+ 				SPLICE_F_MOVE | SPLICE_F_MORE);
+ 		DBG("splice chan to pipe ret %zd", ret);
+ 		if (ret < 0) {
+-			errno = -ret;
+ 			perror("Error in relay splice");
++			if (written == 0) {
++				written = ret;
++			}
++			ret = errno;
+ 			goto splice_error;
+ 		}
+ 
+@@ -116,8 +128,18 @@ ssize_t lttng_kconsumer_on_read_subbuffer_splice(
+ 				SPLICE_F_MOVE | SPLICE_F_MORE);
+ 		DBG("splice pipe to file %zd", ret);
+ 		if (ret < 0) {
+-			errno = -ret;
+ 			perror("Error in file splice");
++			if (written == 0) {
++				written = ret;
++			}
++			ret = errno;
++			goto splice_error;
++		}
++		if (ret > len) {
++			errno = EINVAL;
++			perror("Wrote more data than requested");
++			written += ret;
++			ret = errno;
+ 			goto splice_error;
+ 		}
+ 		len -= ret;
+@@ -125,6 +147,7 @@ ssize_t lttng_kconsumer_on_read_subbuffer_splice(
+ 		lttng_sync_file_range(outfd, stream->out_fd_offset, ret,
+ 				SYNC_FILE_RANGE_WRITE);
+ 		stream->out_fd_offset += ret;
++		written += ret;
+ 	}
+ 	lttng_consumer_sync_trace_file(stream, orig_offset);
+ 
+@@ -132,7 +155,7 @@ ssize_t lttng_kconsumer_on_read_subbuffer_splice(
+ 
+ splice_error:
+ 	/* send the appropriate error description to sessiond */
+-	switch(ret) {
++	switch (ret) {
+ 	case EBADF:
+ 		lttng_consumer_send_error(ctx, CONSUMERD_SPLICE_EBADF);
+ 		break;
+@@ -148,7 +171,7 @@ splice_error:
+ 	}
+ 
+ end:
+-	return ret;
++	return written;
+ }
+ 
+ /*
+@@ -351,13 +374,14 @@ ssize_t lttng_kconsumer_read_subbuffer(struct lttng_consumer_stream *stream,
+ 
+ 			/* splice the subbuffer to the tracefile */
+ 			ret = lttng_consumer_on_read_subbuffer_splice(ctx, stream, len);
+-			if (ret < 0) {
++			if (ret != len) {
+ 				/*
+ 				 * display the error but continue processing to try
+ 				 * to release the subbuffer
+ 				 */
+ 				ERR("Error splicing to tracefile");
+ 			}
++
+ 			break;
+ 		case LTTNG_EVENT_MMAP:
+ 			/* read the used subbuffer size */
+@@ -369,7 +393,7 @@ ssize_t lttng_kconsumer_read_subbuffer(struct lttng_consumer_stream *stream,
+ 			}
+ 			/* write the subbuffer to the tracefile */
+ 			ret = lttng_consumer_on_read_subbuffer_mmap(ctx, stream, len);
+-			if (ret < 0) {
++			if (ret != len) {
+ 				/*
+ 				 * display the error but continue processing to try
+ 				 * to release the subbuffer
+diff --git a/src/common/ust-consumer/ust-consumer.c b/src/common/ust-consumer/ust-consumer.c
+index 2b55fd4..4db39d8 100644
+--- a/src/common/ust-consumer/ust-consumer.c
++++ b/src/common/ust-consumer/ust-consumer.c
+@@ -49,7 +49,7 @@ ssize_t lttng_ustconsumer_on_read_subbuffer_mmap(
+ 		struct lttng_consumer_stream *stream, unsigned long len)
+ {
+ 	unsigned long mmap_offset;
+-	long ret = 0;
++	long ret = 0, written = 0;
+ 	off_t orig_offset = stream->out_fd_offset;
+ 	int outfd = stream->out_fd;
+ 
+@@ -63,25 +63,34 @@ ssize_t lttng_ustconsumer_on_read_subbuffer_mmap(
+ 	}
+ 	while (len > 0) {
+ 		ret = write(outfd, stream->mmap_base + mmap_offset, len);
+-		if (ret >= len) {
+-			len = 0;
+-		} else if (ret < 0) {
+-			errno = -ret;
+-			PERROR("Error in file write");
++		if (ret < 0) {
++			if (errno == EINTR) {
++				/* restart the interrupted system call */
++				continue;
++			} else {
++				perror("Error in file write");
++				if (written == 0) {
++					written = ret;
++				}
++				goto end;
++			}
++		} else if (ret > len) {
++			perror("Error in file write");
++			written += ret;
+ 			goto end;
++		} else {
++			len -= ret;
++			mmap_offset += ret;
+ 		}
+ 		/* This won't block, but will start writeout asynchronously */
+ 		lttng_sync_file_range(outfd, stream->out_fd_offset, ret,
+ 				SYNC_FILE_RANGE_WRITE);
+ 		stream->out_fd_offset += ret;
++		written += ret;
+ 	}
+-
+ 	lttng_consumer_sync_trace_file(stream, orig_offset);
+-
+-	goto end;
+-
+ end:
+-	return ret;
++	return written;
+ }
+ 
+ /*
+@@ -384,7 +393,7 @@ int lttng_ustconsumer_read_subbuffer(struct lttng_consumer_stream *stream,
+ 	assert(err == 0);
+ 	/* write the subbuffer to the tracefile */
+ 	ret = lttng_consumer_on_read_subbuffer_mmap(ctx, stream, len);
+-	if (ret < 0) {
++	if (ret != len) {
+ 		/*
+ 		 * display the error but continue processing to try
+ 		 * to release the subbuffer
 
---===============0380344475==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0380344475==--
+-- 
+Mathieu Desnoyers
+Operating System Efficiency R&D Consultant
+EfficiOS Inc.
+http://www.efficios.com
