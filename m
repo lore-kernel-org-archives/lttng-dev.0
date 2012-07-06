@@ -1,21 +1,20 @@
-From: somanath sahoo <bapi_mvit2004@yahoo.com>
-Subject: Re: lttng_2.0-eclipse-juno : Connection to a Remote
-	Host : Unable to list kernel events
-Date: Fri, 6 Jul 2012 02:29:21 -0700 (PDT)
-Message-ID: <1341566961.89582.YahooMailNeo__33041.60065386$1341567000$gmane$org@web140903.mail.bf1.yahoo.com>
-References: <1341389386.5657.YahooMailNeo@web140904.mail.bf1.yahoo.com>
-	<CAG5-hcMDzStCrHp0GpZNZTZfVHZ7+2xDuytSsnZnZmCgpA3Lsw@mail.gmail.com>
-	<1341467127.80260.YahooMailNeo@web140905.mail.bf1.yahoo.com>
-	<4FF5A4D1.7080708@voxpopuli.im>
-Reply-To: somanath sahoo <bapi_mvit2004@yahoo.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [RFC PATCH lttng-tools] Fix mmap for
+	large	subbuffers and handle EINTR
+Date: Fri, 6 Jul 2012 09:31:29 -0400
+Message-ID: <20120706133129.GA16033__15394.5582140752$1341581524$gmane$org@Krystal>
+References: <20120704161009.GA27758@Krystal> <4FF5AB61.4040205@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1307528136=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from nm28.bullet.mail.bf1.yahoo.com ([98.139.212.187])
-	by ltt.polymtl.ca with smtp (Exim 4.72)
-	(envelope-from <bapi_mvit2004@yahoo.com>) id 1Sn4qt-0005tD-ND
-	for lttng-dev@lists.lttng.org; Fri, 06 Jul 2012 05:29:30 -0400
-In-Reply-To: <4FF5A4D1.7080708@voxpopuli.im>
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <compudj@mail.openrapids.net>) id 1Sn8d9-0007rE-AZ
+	for lttng-dev@lists.lttng.org; Fri, 06 Jul 2012 09:31:31 -0400
+Content-Disposition: inline
+In-Reply-To: <4FF5AB61.4040205@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,72 +23,105 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: David Goulet <dgoulet@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============1307528136==
-Content-Type: multipart/alternative; boundary="2048499531-1920443446-1341566961=:89582"
+* David Goulet (dgoulet@efficios.com) wrote:
+> -----BEGIN PGP SIGNED MESSAGE-----
+> Hash: SHA1
+> 
+> Comments below.
+> 
+> On 04/07/12 12:10 PM, Mathieu Desnoyers wrote:
+> > With large subbuffer (packet) size, if write() returns before copying the
+> > entire packet for mmap buffers, the consumerd restarts the write 
+> > infinitely, which is not good at all.
+> > 
+> > This affects both lttng-ust (in default mmap mode) and lttng-kernel (but 
+> > only for mmap buffers, which is not the default).
+> > 
+> > This issue would show up with large subbuffer size.
+> > 
+> > We need to handle this case, as well as EINTR errors (which need to restart
+> > write).
+> > 
+> > Also fixing the return value of mmap read functions, which were returning
+> > the amount of data written by the last invocation of write() rather than
+> > the total number of bytes written. splice use had the same issue.
+> > 
+> > Also now consider a write() that returns more bytes than requested as an 
+> > error.
+> > 
+> > Moreover, assigning error = ret after failed splice and write was a 
+> > mistake: error is holding the actual error value. ret just holds -1.
+> > 
+> > This needs testing. Feedback is welcome.
+> > 
+> > Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com> --- diff
+> > --git a/src/common/kernel-consumer/kernel-consumer.c
+> > b/src/common/kernel-consumer/kernel-consumer.c index bbc31f8..eca710d
+> > 100644 --- a/src/common/kernel-consumer/kernel-consumer.c +++
+> > b/src/common/kernel-consumer/kernel-consumer.c @@ -49,7 +49,7 @@ ssize_t
+> > lttng_kconsumer_on_read_subbuffer_mmap( struct lttng_consumer_stream
+> > *stream, unsigned long len) { unsigned long mmap_offset; -	ssize_t ret =
+> > 0; +	ssize_t ret = 0, written = 0; off_t orig_offset =
+> > stream->out_fd_offset; int fd = stream->wait_fd; int outfd =
+> > stream->out_fd; @@ -64,25 +64,34 @@ ssize_t
+> > lttng_kconsumer_on_read_subbuffer_mmap(
+> 
+> Just before going into the while() loop, there is a call to
+> kernctl_get_mmap_read_offset() and, on failure, it goes to the "end:" label
+> without setting "written" to a negative value.
 
---2048499531-1920443446-1341566961=:89582
-Content-Type: text/plain; charset=us-ascii
+OK, fixed.
 
-Hi Alex,
+> 
+> > 
+> > while (len > 0) { ret = write(outfd, stream->mmap_base + mmap_offset,
+> > len); -		if (ret >= len) { -			len = 0; -		} else if (ret < 0) { -			errno
+> > = -ret; +		if (ret < 0) { +			if (errno == EINTR) { +				/* restart the
+> > interrupted system call */ +				continue; +			} else { +				perror("Error
+> > in file write"); +				if (written == 0) { +					written = ret; +				} +
+> > goto end; +			} +		} else if (ret > len) { perror("Error in file write"); +
+> > written += ret; goto end;
+> 
+> I'm not sure this case is very useful... write() can not possibly return more
+> than "len" (the size_t count argument). If it does, I'm pretty sure the whole
+> Linux system will not go very well... hehe. The same applies for splice(),
+> checking is ret > len is basically safe guarding the syscall which I don't
+> think is necessary.
 
-your reponse is much more appeciated.
+Better safe than sorry ;) Especially for splice(), given that we
+implement our own splice actor, it's better to check for even the
+assumed kernel behavior.
 
+> 
+> However, according to the man page write(2), a return value of 0 coupled with
+> a regular file can return an error status:
+> 
+>        If  count  is  zero  and  fd refers to a regular file, then write() may
+>        return a failure status if one of the errors below is detected.  If  no
+>        errors  are  detected,  0  will  be  returned without causing any other
+>        effect.  If count is zero and fd refers to a file other than a  regular
+>        file, the results are not specified.
+> 
+> We might want to add a zero/errno check instead.
 
-my user id was not present in tracing group in /etc/group.
+Done.
 
-Now eclipse-remote-control is working great after addition of my user id into the tracing group.
+> 
+> For testing, I can tell you that this patch fixes mmap network streaming (soon
+> to be merged upstream) where the old code did not worked.
 
-Thanks.
+Great! Will post the updated version in a jiffy.
 
+Thanks,
 
+Mathieu
 
-Warm Regards,
-Somanath
-
-
-
-________________________________
- From: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
-To: somanath sahoo <bapi_mvit2004@yahoo.com> 
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org> 
-Sent: Thursday, July 5, 2012 7:59 PM
-Subject: Re: [lttng-dev] lttng_2.0-eclipse-juno : Connection to a Remote Host : Unable to list kernel events
- 
-On 12-07-05 01:45 AM, somanath sahoo wrote:
-> However i want to know how to make sure my user id present in the tracing group ? is there any command to list or include the users into the "tracing" group ? please enlightened on this.
-
-You can use
-
-$ cat /etc/group | grep tracing
-
-It will list the users that are in the tracing group.
-
-
-Cheers,
-Alex
---2048499531-1920443446-1341566961=:89582
-Content-Type: text/html; charset=us-ascii
-
-<html><body><div style="color:#000; background-color:#fff; font-family:times new roman, new york, times, serif;font-size:12pt"><div><span>Hi Alex,</span></div><div><br></div><div>your reponse is much more appeciated.<br><span></span></div><div><br><span></span></div><div><span>my user id was not present in tracing group in /etc/group.</span></div><div><span> <br></span></div><div><span>Now eclipse-remote-control is working great after addition of my user id into the tracing group.</span></div><div><br><span></span></div><div>Thanks.<br></div><div><br></div><div><br><span></span><span>Warm Regards,</span></div><div><span>Somanath</span></div><div><br></div>  <div style="font-family: times new roman, new york, times, serif; font-size: 12pt;"> <div style="font-family: times new roman, new yor
- k, times, serif; font-size: 12pt;"> <div dir="ltr"> <font face="Arial" size="2"> <hr size="1">  <b><span style="font-weight:bold;">From:</span></b> Alexandre
- Montplaisir &lt;alexmonthy@voxpopuli.im&gt;<br> <b><span style="font-weight: bold;">To:</span></b> somanath sahoo &lt;bapi_mvit2004@yahoo.com&gt; <br><b><span style="font-weight: bold;">Cc:</span></b> "lttng-dev@lists.lttng.org" &lt;lttng-dev@lists.lttng.org&gt; <br> <b><span style="font-weight: bold;">Sent:</span></b> Thursday, July 5, 2012 7:59 PM<br> <b><span style="font-weight: bold;">Subject:</span></b> Re: [lttng-dev] lttng_2.0-eclipse-juno : Connection to a Remote Host : Unable to list kernel events<br> </font> </div> <br>On 12-07-05 01:45 AM, somanath sahoo wrote:<br>&gt; However i want to know how to make sure my user id present in the tracing group ? is there any command to list or include the users into the "tracing" group ? please enlightened on this.<br><br>You can use<br><br
- >$ cat /etc/group | grep tracing<br><br>It will list the users that are in the tracing group.<br><br><br>Cheers,<br>Alex<br><br><br> </div> </div>  </div></body></html>
---2048499531-1920443446-1341566961=:89582--
-
-
---===============1307528136==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1307528136==--
+-- 
+Mathieu Desnoyers
+Operating System Efficiency R&D Consultant
+EfficiOS Inc.
+http://www.efficios.com
