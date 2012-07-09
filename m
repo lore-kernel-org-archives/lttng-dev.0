@@ -1,18 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH lttng-tools] Fix mmap write() for large
-	subbuffers and	handle EINTR (v2)
-Date: Fri, 6 Jul 2012 10:13:05 -0400
-Message-ID: <20120706141305.GA16494__38910.0486449481$1341584017$gmane$org@Krystal>
+From: somanath sahoo <bapi_mvit2004@yahoo.com>
+Subject: [video/audio link query] lttng2.0 presesntation at con
+	foo 2012
+Date: Mon, 9 Jul 2012 04:37:36 -0700 (PDT)
+Message-ID: <1341833856.69448.YahooMailNeo__37305.056237574$1341833891$gmane$org@web140905.mail.bf1.yahoo.com>
+Reply-To: somanath sahoo <bapi_mvit2004@yahoo.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1429129937=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
-	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1Sn9HP-0008Cp-JP
-	for lttng-dev@lists.lttng.org; Fri, 06 Jul 2012 10:13:07 -0400
-Content-Disposition: inline
+Received: from nm8-vm0.bullet.mail.bf1.yahoo.com ([98.139.213.95])
+	by ltt.polymtl.ca with smtp (Exim 4.72)
+	(envelope-from <bapi_mvit2004@yahoo.com>) id 1SoCHe-0005Fb-DS
+	for lttng-dev@lists.lttng.org; Mon, 09 Jul 2012 07:37:42 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,264 +19,53 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: dgoulet@efficios.com
-Cc: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-With large subbuffer (packet) size, if write() returns before copying the
-entire packet for mmap buffers, the consumerd restarts the write
-infinitely, which is not good at all.
+--===============1429129937==
+Content-Type: multipart/alternative; boundary="661806066-1742825632-1341833856=:69448"
 
-This affects both lttng-ust (in default mmap mode) and lttng-kernel (but
-only for mmap buffers, which is not the default).
+--661806066-1742825632-1341833856=:69448
+Content-Type: text/plain; charset=us-ascii
 
-This issue would show up with large subbuffer size.
+Hi,
 
-We need to handle this case, as well as EINTR errors (which need to restart
-write).
+Does anyone have the audio or video link for this lttng2.0 presesntation at con foo 2012. The presentation link is given below
 
-Also fixing the return value of mmap read functions, which were returning
-the amount of data written by the last invocation of write() rather than
-the total number of bytes written. splice use had the same issue.
 
-Also now consider a write() that returns more bytes than requested as an
-error.
+link -- http://www.dorsal.polymtl.ca/blog/yannick-brosseau/presenting-lttng-20-confoo-web-techno-conference
 
-Moreover, assigning error = ret after failed splice and write was a
-mistake: error is holding the actual error value. ret just holds -1.
 
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
----
-diff --git a/src/common/kernel-consumer/kernel-consumer.c b/src/common/kernel-consumer/kernel-consumer.c
-index bbc31f8..3c96873 100644
---- a/src/common/kernel-consumer/kernel-consumer.c
-+++ b/src/common/kernel-consumer/kernel-consumer.c
-@@ -49,7 +49,7 @@ ssize_t lttng_kconsumer_on_read_subbuffer_mmap(
- 		struct lttng_consumer_stream *stream, unsigned long len)
- {
- 	unsigned long mmap_offset;
--	ssize_t ret = 0;
-+	ssize_t ret = 0, written = 0;
- 	off_t orig_offset = stream->out_fd_offset;
- 	int fd = stream->wait_fd;
- 	int outfd = stream->out_fd;
-@@ -59,30 +59,40 @@ ssize_t lttng_kconsumer_on_read_subbuffer_mmap(
- 	if (ret != 0) {
- 		errno = -ret;
- 		perror("kernctl_get_mmap_read_offset");
-+		written = ret;
- 		goto end;
- 	}
- 
- 	while (len > 0) {
- 		ret = write(outfd, stream->mmap_base + mmap_offset, len);
--		if (ret >= len) {
--			len = 0;
--		} else if (ret < 0) {
--			errno = -ret;
-+		if (ret < 0) {
-+			if (errno == EINTR) {
-+				/* restart the interrupted system call */
-+				continue;
-+			} else {
-+				perror("Error in file write");
-+				if (written == 0) {
-+					written = ret;
-+				}
-+				goto end;
-+			}
-+		} else if (ret > len) {
- 			perror("Error in file write");
-+			written += ret;
- 			goto end;
-+		} else {
-+			len -= ret;
-+			mmap_offset += ret;
- 		}
- 		/* This won't block, but will start writeout asynchronously */
- 		lttng_sync_file_range(outfd, stream->out_fd_offset, ret,
- 				SYNC_FILE_RANGE_WRITE);
- 		stream->out_fd_offset += ret;
-+		written += ret;
- 	}
--
- 	lttng_consumer_sync_trace_file(stream, orig_offset);
--
--	goto end;
--
- end:
--	return ret;
-+	return written;
- }
- 
- /*
-@@ -94,7 +104,7 @@ ssize_t lttng_kconsumer_on_read_subbuffer_splice(
- 		struct lttng_consumer_local_data *ctx,
- 		struct lttng_consumer_stream *stream, unsigned long len)
- {
--	ssize_t ret = 0;
-+	ssize_t ret = 0, written = 0;
- 	loff_t offset = 0;
- 	off_t orig_offset = stream->out_fd_offset;
- 	int fd = stream->wait_fd;
-@@ -107,8 +117,11 @@ ssize_t lttng_kconsumer_on_read_subbuffer_splice(
- 				SPLICE_F_MOVE | SPLICE_F_MORE);
- 		DBG("splice chan to pipe ret %zd", ret);
- 		if (ret < 0) {
--			errno = -ret;
- 			perror("Error in relay splice");
-+			if (written == 0) {
-+				written = ret;
-+			}
-+			ret = errno;
- 			goto splice_error;
- 		}
- 
-@@ -116,8 +129,18 @@ ssize_t lttng_kconsumer_on_read_subbuffer_splice(
- 				SPLICE_F_MOVE | SPLICE_F_MORE);
- 		DBG("splice pipe to file %zd", ret);
- 		if (ret < 0) {
--			errno = -ret;
- 			perror("Error in file splice");
-+			if (written == 0) {
-+				written = ret;
-+			}
-+			ret = errno;
-+			goto splice_error;
-+		}
-+		if (ret > len) {
-+			errno = EINVAL;
-+			perror("Wrote more data than requested");
-+			written += ret;
-+			ret = errno;
- 			goto splice_error;
- 		}
- 		len -= ret;
-@@ -125,6 +148,7 @@ ssize_t lttng_kconsumer_on_read_subbuffer_splice(
- 		lttng_sync_file_range(outfd, stream->out_fd_offset, ret,
- 				SYNC_FILE_RANGE_WRITE);
- 		stream->out_fd_offset += ret;
-+		written += ret;
- 	}
- 	lttng_consumer_sync_trace_file(stream, orig_offset);
- 
-@@ -132,7 +156,7 @@ ssize_t lttng_kconsumer_on_read_subbuffer_splice(
- 
- splice_error:
- 	/* send the appropriate error description to sessiond */
--	switch(ret) {
-+	switch (ret) {
- 	case EBADF:
- 		lttng_consumer_send_error(ctx, CONSUMERD_SPLICE_EBADF);
- 		break;
-@@ -148,7 +172,7 @@ splice_error:
- 	}
- 
- end:
--	return ret;
-+	return written;
- }
- 
- /*
-@@ -351,13 +375,14 @@ ssize_t lttng_kconsumer_read_subbuffer(struct lttng_consumer_stream *stream,
- 
- 			/* splice the subbuffer to the tracefile */
- 			ret = lttng_consumer_on_read_subbuffer_splice(ctx, stream, len);
--			if (ret < 0) {
-+			if (ret != len) {
- 				/*
- 				 * display the error but continue processing to try
- 				 * to release the subbuffer
- 				 */
- 				ERR("Error splicing to tracefile");
- 			}
-+
- 			break;
- 		case LTTNG_EVENT_MMAP:
- 			/* read the used subbuffer size */
-@@ -369,7 +394,7 @@ ssize_t lttng_kconsumer_read_subbuffer(struct lttng_consumer_stream *stream,
- 			}
- 			/* write the subbuffer to the tracefile */
- 			ret = lttng_consumer_on_read_subbuffer_mmap(ctx, stream, len);
--			if (ret < 0) {
-+			if (ret != len) {
- 				/*
- 				 * display the error but continue processing to try
- 				 * to release the subbuffer
-diff --git a/src/common/ust-consumer/ust-consumer.c b/src/common/ust-consumer/ust-consumer.c
-index 2b55fd4..47c0d46 100644
---- a/src/common/ust-consumer/ust-consumer.c
-+++ b/src/common/ust-consumer/ust-consumer.c
-@@ -49,7 +49,7 @@ ssize_t lttng_ustconsumer_on_read_subbuffer_mmap(
- 		struct lttng_consumer_stream *stream, unsigned long len)
- {
- 	unsigned long mmap_offset;
--	long ret = 0;
-+	long ret = 0, written = 0;
- 	off_t orig_offset = stream->out_fd_offset;
- 	int outfd = stream->out_fd;
- 
-@@ -59,29 +59,39 @@ ssize_t lttng_ustconsumer_on_read_subbuffer_mmap(
- 	if (ret != 0) {
- 		errno = -ret;
- 		PERROR("ustctl_get_mmap_read_offset");
-+		written = ret;
- 		goto end;
- 	}
- 	while (len > 0) {
- 		ret = write(outfd, stream->mmap_base + mmap_offset, len);
--		if (ret >= len) {
--			len = 0;
--		} else if (ret < 0) {
--			errno = -ret;
-+		if (ret < 0) {
-+			if (errno == EINTR) {
-+				/* restart the interrupted system call */
-+				continue;
-+			} else {
-+				PERROR("Error in file write");
-+				if (written == 0) {
-+					written = ret;
-+				}
-+				goto end;
-+			}
-+		} else if (ret > len) {
- 			PERROR("Error in file write");
-+			written += ret;
- 			goto end;
-+		} else {
-+			len -= ret;
-+			mmap_offset += ret;
- 		}
- 		/* This won't block, but will start writeout asynchronously */
- 		lttng_sync_file_range(outfd, stream->out_fd_offset, ret,
- 				SYNC_FILE_RANGE_WRITE);
- 		stream->out_fd_offset += ret;
-+		written += ret;
- 	}
--
- 	lttng_consumer_sync_trace_file(stream, orig_offset);
--
--	goto end;
--
- end:
--	return ret;
-+	return written;
- }
- 
- /*
-@@ -384,7 +394,7 @@ int lttng_ustconsumer_read_subbuffer(struct lttng_consumer_stream *stream,
- 	assert(err == 0);
- 	/* write the subbuffer to the tracefile */
- 	ret = lttng_consumer_on_read_subbuffer_mmap(ctx, stream, len);
--	if (ret < 0) {
-+	if (ret != len) {
- 		/*
- 		 * display the error but continue processing to try
- 		 * to release the subbuffer
+I dont find any video or audio link of this above presentation. 
 
--- 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+
+Please let me know if anyone have any knowledge on this or any lttng2.0 related video or audio link.
+
+Any help will be appreciated.
+
+
+
+
+Best Regards,
+Somanath
+
+--661806066-1742825632-1341833856=:69448
+Content-Type: text/html; charset=us-ascii
+
+<html><body><div style="color:#000; background-color:#fff; font-family:times new roman, new york, times, serif;font-size:12pt"><div>Hi,</div><div><br></div><div>Does anyone have the audio or video link for this lttng2.0 presesntation at con foo 2012. The presentation link is given below<br></div><div><br></div><div>link -- http://www.dorsal.polymtl.ca/blog/yannick-brosseau/presenting-lttng-20-confoo-web-techno-conference</div><div><br></div><div><br></div><div>I dont find any video or audio link of this above presentation. <br></div><div><br></div><div>Please let me know if anyone have any knowledge on this or <span style="font-weight: bold;">any lttng2.0 related video or audio link</span>.</div><div><br></div><div>Any help will be appreciated.<br></div><div><br></div><div><br></div><div><
+ br></div><div>Best Regards,</div><div>Somanath</div></div></body></html>
+--661806066-1742825632-1341833856=:69448--
+
+
+--===============1429129937==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1429129937==--
