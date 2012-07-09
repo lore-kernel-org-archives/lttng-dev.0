@@ -1,16 +1,20 @@
-From: somanath sahoo <bapi_mvit2004@yahoo.com>
-Subject: [video/audio link query] lttng2.0 presesntation at con
-	foo 2012
-Date: Mon, 9 Jul 2012 04:37:36 -0700 (PDT)
-Message-ID: <1341833856.69448.YahooMailNeo__37305.056237574$1341833891$gmane$org@web140905.mail.bf1.yahoo.com>
-Reply-To: somanath sahoo <bapi_mvit2004@yahoo.com>
+From: "Oestman, Fredrik" <Fredrik_Oestman@mentor.com>
+Subject: LTTng-UST 2.0 mutex usage
+Date: Mon, 9 Jul 2012 12:00:46 +0000
+Message-ID: <524C960C5DFC794E82BE548D825F05CF2834A6E5__12198.5044134364$1341835278$gmane$org@EU-MBX-01.mgc.mentorg.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1429129937=="
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from nm8-vm0.bullet.mail.bf1.yahoo.com ([98.139.213.95])
-	by ltt.polymtl.ca with smtp (Exim 4.72)
-	(envelope-from <bapi_mvit2004@yahoo.com>) id 1SoCHe-0005Fb-DS
-	for lttng-dev@lists.lttng.org; Mon, 09 Jul 2012 07:37:42 -0400
+Received: from relay1.mentorg.com ([192.94.38.131])
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <Fredrik_Oestman@mentor.com>) id 1SoCe7-0005RN-5m
+	for lttng-dev@lists.lttng.org; Mon, 09 Jul 2012 08:00:55 -0400
+Received: from svr-orw-exc-10.mgc.mentorg.com ([147.34.98.58])
+	by relay1.mentorg.com with esmtp
+	id 1SoCe0-0000Nh-BF from Fredrik_Oestman@mentor.com
+	for lttng-dev@lists.lttng.org; Mon, 09 Jul 2012 05:00:48 -0700
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,50 +26,27 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============1429129937==
-Content-Type: multipart/alternative; boundary="661806066-1742825632-1341833856=:69448"
-
---661806066-1742825632-1341833856=:69448
-Content-Type: text/plain; charset=us-ascii
-
 Hi,
 
-Does anyone have the audio or video link for this lttng2.0 presesntation at con foo 2012. The presentation link is given below
+
+We're experimenting with tracing calls to the pthreads library using a LD_P=
+RELOAD-ed interposer library, which is instrumented with UST tracepoints. I=
+n the startup phase, before the application has been called, probes are bei=
+ng registered, and one by one the tracepoints start emitting events. So som=
+e of the pthreads mutex motions of UST itself are being traced along.
+
+What would be a good way of avoiding emitting events before the application=
+ itself has started, specifically events related to UST mutexes? The ust-ct=
+l library appears to have a function ustctl_register_done(), is that useful=
+? (Is there an API documentation?) Or would it be better to find out which =
+mutexes belong to UST and filter them out?
+
+By controlling our interposer library from within the application we can av=
+oid the problem, but we'd rather do without recompiling the application, si=
+nce it sort of would defeat the reason for using LD_PRELOAD in the first pl=
+ace.
 
 
-link -- http://www.dorsal.polymtl.ca/blog/yannick-brosseau/presenting-lttng-20-confoo-web-techno-conference
+Cheers,
 
-
-I dont find any video or audio link of this above presentation. 
-
-
-Please let me know if anyone have any knowledge on this or any lttng2.0 related video or audio link.
-
-Any help will be appreciated.
-
-
-
-
-Best Regards,
-Somanath
-
---661806066-1742825632-1341833856=:69448
-Content-Type: text/html; charset=us-ascii
-
-<html><body><div style="color:#000; background-color:#fff; font-family:times new roman, new york, times, serif;font-size:12pt"><div>Hi,</div><div><br></div><div>Does anyone have the audio or video link for this lttng2.0 presesntation at con foo 2012. The presentation link is given below<br></div><div><br></div><div>link -- http://www.dorsal.polymtl.ca/blog/yannick-brosseau/presenting-lttng-20-confoo-web-techno-conference</div><div><br></div><div><br></div><div>I dont find any video or audio link of this above presentation. <br></div><div><br></div><div>Please let me know if anyone have any knowledge on this or <span style="font-weight: bold;">any lttng2.0 related video or audio link</span>.</div><div><br></div><div>Any help will be appreciated.<br></div><div><br></div><div><br></div><div><
- br></div><div>Best Regards,</div><div>Somanath</div></div></body></html>
---661806066-1742825632-1341833856=:69448--
-
-
---===============1429129937==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1429129937==--
+Fredrik =D6stman
