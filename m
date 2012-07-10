@@ -1,19 +1,18 @@
-From: somanath sahoo <bapi_mvit2004@yahoo.com>
-Subject: Re: [video/audio link query] lttng2.0 presesntation at
-	con foo 2012
-Date: Mon, 9 Jul 2012 08:08:37 -0700 (PDT)
-Message-ID: <1341846517.28869.YahooMailNeo__44168.2900688194$1341846551$gmane$org@web140901.mail.bf1.yahoo.com>
-References: <1341833856.69448.YahooMailNeo@web140905.mail.bf1.yahoo.com>
-	<4FFAD7EF.901@gmail.com>
-Reply-To: somanath sahoo <bapi_mvit2004@yahoo.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [RFC PATCH lttng-tools] kernel consumer should empty
+	the input	splice pipe
+Date: Mon, 9 Jul 2012 20:09:31 -0400
+Message-ID: <20120710000931.GA28343__14799.4364066564$1341879001$gmane$org@Krystal>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1365898111=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from nm38-vm0.bullet.mail.bf1.yahoo.com ([72.30.239.16])
-	by ltt.polymtl.ca with smtp (Exim 4.72)
-	(envelope-from <bapi_mvit2004@yahoo.com>) id 1SoFZr-0006qo-KE
-	for lttng-dev@lists.lttng.org; Mon, 09 Jul 2012 11:08:44 -0400
-In-Reply-To: <4FFAD7EF.901@gmail.com>
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <compudj@mail.openrapids.net>) id 1SoO1F-0002PI-Jn
+	for lttng-dev@lists.lttng.org; Mon, 09 Jul 2012 20:09:33 -0400
+Content-Disposition: inline
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,110 +21,80 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Yannick Brosseau <yannick.brosseau@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: dgoulet@efficios.com, jdesfossez@efficios.com
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============1365898111==
-Content-Type: multipart/alternative; boundary="178851755-493497089-1341846517=:28869"
+When the splice pipe output cannot push all the data placed into the
+pipe by the first splice call, we should continue writing data out to
+the output file descriptor until we reach the amount of data that was
+placed into the pipe.
 
---178851755-493497089-1341846517=:28869
-Content-Type: text/plain; charset=us-ascii
+This is probably the cause of the network streaming issues currently
+encountered.
 
+Testing is welcome.
 
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+---
+diff --git a/src/common/kernel-consumer/kernel-consumer.c b/src/common/kernel-consumer/kernel-consumer.c
+index bbc31f8..cc16f9f 100644
+--- a/src/common/kernel-consumer/kernel-consumer.c
++++ b/src/common/kernel-consumer/kernel-consumer.c
+@@ -101,6 +101,8 @@ ssize_t lttng_kconsumer_on_read_subbuffer_splice(
+ 	int outfd = stream->out_fd;
+ 
+ 	while (len > 0) {
++		ssize_t tosplice;
++
+ 		DBG("splice chan to pipe offset %lu (fd : %d)",
+ 				(unsigned long)offset, fd);
+ 		ret = splice(fd, &offset, ctx->consumer_thread_pipe[1], NULL, len,
+@@ -111,20 +113,28 @@ ssize_t lttng_kconsumer_on_read_subbuffer_splice(
+ 			perror("Error in relay splice");
+ 			goto splice_error;
+ 		}
+-
+-		ret = splice(ctx->consumer_thread_pipe[0], NULL, outfd, NULL, ret,
+-				SPLICE_F_MOVE | SPLICE_F_MORE);
+-		DBG("splice pipe to file %zd", ret);
+-		if (ret < 0) {
+-			errno = -ret;
+-			perror("Error in file splice");
+-			goto splice_error;
++		tosplice = ret;
++		len -= tosplice;
++
++		while (tosplice > 0) {
++			ret = splice(ctx->consumer_thread_pipe[0], NULL, outfd,
++					NULL, tosplice,
++					SPLICE_F_MOVE | SPLICE_F_MORE);
++			DBG("splice pipe to file %zd", ret);
++			if (ret < 0) {
++				errno = -ret;
++				perror("Error in file splice");
++				goto splice_error;
++			}
++			tosplice -= ret;
++			/*
++			 * This won't block, but will start writeout
++			 * asynchronously.
++			 */
++			lttng_sync_file_range(outfd, stream->out_fd_offset, ret,
++					SYNC_FILE_RANGE_WRITE);
++			stream->out_fd_offset += ret;
+ 		}
+-		len -= ret;
+-		/* This won't block, but will start writeout asynchronously */
+-		lttng_sync_file_range(outfd, stream->out_fd_offset, ret,
+-				SYNC_FILE_RANGE_WRITE);
+-		stream->out_fd_offset += ret;
+ 	}
+ 	lttng_consumer_sync_trace_file(stream, orig_offset);
+ 
 
-Hi,
->
->
->Does anyone have the audio or video link for this lttng2.0 presesntation at con foo 2012. The presentation link is given below
->
->
->
->link --
-http://www.dorsal.polymtl.ca/blog/yannick-brosseau/presenting-lttng-20-confoo-web-techno-conference
->
->
->
->
->I dont find any video or audio link of this above presentation. 
->
->
->
->Please let me know if anyone have any knowledge on this or any lttng2.0 related video or audio link.
->
->
->Any help will be appreciated.
->
->
-Hi,
-
-I am sorry, but there was no video or audio recording of this
-    conference. 
-I don't think we have any video of a LTTng 2.0 presentation. 
-
-Hi Yannick,
-
-Thanks for your response. I have the pdf version of that presentation. As it was very nicely done, i was just curious to watch the video version.
-
-
-Best Regards,
-Somanath
---178851755-493497089-1341846517=:28869
-Content-Type: text/html; charset=us-ascii
-
-<html><body><div style="color:#000; background-color:#fff; font-family:times new roman, new york, times, serif;font-size:12pt"><div><span><br></span></div><div style="font-family: times new roman, new york, times, serif; font-size: 12pt;"><div style="font-family: times new roman, new york, times, serif; font-size: 12pt;"><div id="yiv403215479"><div><blockquote type="cite">
-      <div style="color:#000;background-color:#fff;font-family:times new roman, new york, times, serif;font-size:12pt;">
-        <div>Hi,</div>
-        <div><br>
-        </div>
-        <div>Does anyone have the audio or video link for this lttng2.0
-          presesntation at con foo 2012. The presentation link is given
-          below<br>
-        </div>
-        <div><br>
-        </div>
-        <div>link --
-http://www.dorsal.polymtl.ca/blog/yannick-brosseau/presenting-lttng-20-confoo-web-techno-conference</div>
-        <div><br>
-        </div>
-        <div><br>
-        </div>
-        <div>I dont find any video or audio link of this above
-          presentation. <br>
-        </div>
-        <div><br>
-        </div>
-        <div>Please let me know if anyone have any knowledge on this or
-          <span style="font-weight:bold;">any lttng2.0 related video or
-            audio link</span>.</div>
-        <div><br>
-        </div>
-        <div>Any help will be appreciated.<br>
-        </div>
-        <br>
-      </div>
-    </blockquote>
-    Hi,<br>
-    <br>
-    I am sorry, but there was no video or audio recording of this
-    conference. <br>
-    I don't think we have any video of a LTTng 2.0 presentation. <br>
-    <br>
-  </div>
-
-</div>Hi Yannick,<br><br>Thanks for your response. I have the pdf version of that presentation. As it was very nicely done, i was just curious to watch the video version.<br><br><br>Best Regards,<br>Somanath<br><br>&nbsp;<br><br> </div> </div>  </div></body></html>
---178851755-493497089-1341846517=:28869--
-
-
---===============1365898111==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1365898111==--
+-- 
+Mathieu Desnoyers
+Operating System Efficiency R&D Consultant
+EfficiOS Inc.
+http://www.efficios.com
