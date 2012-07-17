@@ -1,17 +1,20 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: Re: lttng 2.0
-Date: Tue, 17 Jul 2012 13:00:27 -0400
-Message-ID: <50059A2B.2010903__11690.5330018655$1342544462$gmane$org@efficios.com>
-References: <CABnnsm9ZTvoC2XpEcYgCjbjp=h1cb+eSUF1pK1bvXXVjHF7L+w@mail.gmail.com>
+From: =?ISO-8859-1?Q?S=E9bastien_Barth=E9l=E9my?= <barthelemy@crans.org>
+Subject: Re: UST in flight recorder mode
+Date: Tue, 17 Jul 2012 19:01:58 +0200
+Message-ID: <CAPkDDd4Y_a+_F1BtwYLdJt6KzXzfHRZrgqE5bbJKLvaNLnzYQg__35531.2703214169$1342544575$gmane$org@mail.gmail.com>
+References: <CAPkDDd7U_jje2_sSgdZyN+GVC8Cvh9hiUefgXhUTKUpAHeRa5w@mail.gmail.com>
+	<20120717145456.GA21849@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([213.239.202.151])
+Received: from mail-pb0-f48.google.com ([209.85.160.48])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1SrB8R-0000Yk-9i
-	for lttng-dev@lists.lttng.org; Tue, 17 Jul 2012 13:00:31 -0400
-In-Reply-To: <CABnnsm9ZTvoC2XpEcYgCjbjp=h1cb+eSUF1pK1bvXXVjHF7L+w@mail.gmail.com>
+	(envelope-from <sebastien.barthelemy@gmail.com>) id 1SrB9w-0000Zs-M7
+	for lttng-dev@lists.lttng.org; Tue, 17 Jul 2012 13:02:04 -0400
+Received: by pbbrq8 with SMTP id rq8so1235669pbb.35
+	for <lttng-dev@lists.lttng.org>; Tue, 17 Jul 2012 10:01:58 -0700 (PDT)
+In-Reply-To: <20120717145456.GA21849@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,43 +23,12 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: tchak adim <montarcyber@gmail.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA512
+On Tue, Jul 17, 2012 at 4:54 PM, Mathieu Desnoyers
+<mathieu.desnoyers@efficios.com> wrote:
+> Hoping this helps,
 
-Hi,
-
-# lttng create mysession
-# lttng enable-event -k --syscall -a
-# lttng start
-(tracing).
-
-Enjoy!
-David
-
-tchak adim:
-> Hi ,
-> 
-> 
-> Using LTTng 2.0 , How can i generate just system call kernel
-> traces using command line ?
-> 
-> Thanks in advance !
-> 
-> Regards.
-> 
-> 
-> This body part will be downloaded on demand.
------BEGIN PGP SIGNATURE-----
-
-iQEcBAEBCgAGBQJQBZooAAoJEELoaioR9I02QcIH/jGctW79JGeq1ll0p0KrrlC9
-h4NzMGqN/vPxRC4yUc7ShqeRyj/v2xSfcZGkRHnfhIwlyGSfujoPv3moMqVldWhH
-Y3BzfI9DEcHmq2d4KwynYIMPj53ePT4YR+9V3i3NiU+eUqLyqxJ2DBNuzs0qTNUb
-u/CUA97SsI3h7Ia8M1dS7eqBP97d9TiE0xx/yFkY6rZl7Pou+Uz/g6dx/U3PdooE
-uOyjJkyHwYzoexoee+dcOqyvaKQgL/LkKetDrOoYlRT1N52clk4kMvWsrBkyRFTM
-H9w+NDqDja0eX73XSXWq5HO5PMhQNIsigGbzif0I7tsXO/GTgqw3tT1Fc/WTEhI=
-=7oYV
------END PGP SIGNATURE-----
+Sure, thank you for the clarifications.
