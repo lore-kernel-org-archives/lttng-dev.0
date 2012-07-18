@@ -1,18 +1,17 @@
 From: David Goulet <dgoulet@efficios.com>
-Subject: Re: [RFC PATCH lttng-tools] relayd pipes and error
-	handling
-Date: Wed, 18 Jul 2012 11:54:59 -0400
-Message-ID: <5006DC53.1040709__16691.6775786833$1342626931$gmane$org@efficios.com>
-References: <CAGDH53nAXuZB20+LdogwiYZdiCrqEdZhSZZH9f4i28_wA8nJtg@mail.gmail.com>
+Subject: Re: [PATCH lttng-tools] relayd fix missing option --help
+Date: Wed, 18 Jul 2012 11:57:16 -0400
+Message-ID: <5006DCDC.2040304__10119.6234733381$1342627072$gmane$org@efficios.com>
+References: <CAGDH53ktFTHBeFDHQ+6uQSNsLeFVF+7QYD-RPjzdDVMjQUUkJA@mail.gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from smtp.ini-tech.com ([213.239.202.151])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1SrWad-0002YD-0T
-	for lttng-dev@lists.lttng.org; Wed, 18 Jul 2012 11:55:03 -0400
-In-Reply-To: <CAGDH53nAXuZB20+LdogwiYZdiCrqEdZhSZZH9f4i28_wA8nJtg@mail.gmail.com>
+	(envelope-from <dgoulet@efficios.com>) id 1SrWcp-0002Zg-2N
+	for lttng-dev@lists.lttng.org; Wed, 18 Jul 2012 11:57:19 -0400
+In-Reply-To: <CAGDH53ktFTHBeFDHQ+6uQSNsLeFVF+7QYD-RPjzdDVMjQUUkJA@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -28,77 +27,34 @@ List-Id: lttng-dev@lists.lttng.org
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA512
 
-I'm pretty OK with that.
+Hmmm... this patch does not apply with "git am"...
 
-I have utils_* function for that in lttng-sessiond/ ... I think I'm
-going to move them to common/ since they are pretty useful for the
-complete code tree.
+I'll probably simply merge it my self since it's pretty trivial ;)
 
 Cheers!
 David
 
 Christian Babeux:
-> Hi,
-> 
-> The current relayd employ two set of pipes for command relaying
-> and thread quit signalling. The relay_cmd_pipe pipes are never
-> closed. Also, the thread_quit_pipe pipes are not closed in some
-> error cases (fail to parse args, fail to daemonize, etc.). Here is
-> a proposed way to cleanup and handle error cases.
-> 
-> Thoughts?
-> 
-> Thanks,
-> 
-> Christian
-> 
-> Fix: relayd relay_cmd_pipe/thread_quit_pipe should be closed on
-> exit/error.
+> Fix missing getopt_long option for --help in relayd.
 > 
 > diff --git a/src/bin/lttng-relayd/main.c
-> b/src/bin/lttng-relayd/main.c index acc6ca8..55452b3 100644 ---
+> b/src/bin/lttng-relayd/main.c index 338341d..acc6ca8 100644 ---
 > a/src/bin/lttng-relayd/main.c +++ b/src/bin/lttng-relayd/main.c @@
-> -231,14 +231,26 @@ void cleanup(void)
-> 
-> DBG("Cleaning up");
-> 
-> +       /* Close thread quit pipes */ for (i = 0; i < 2; i++) { if
-> (thread_quit_pipe[i] >= 0) { ret = close(thread_quit_pipe[i]); if
-> (ret) { -                               PERROR("close"); +
-> PERROR("close quit pipe"); } } } + +       /* Close relay cmd pipes
-> */ +       for (i = 0; i < 2; i++) { +               if
-> (relay_cmd_pipe[i] >= 0) { +                       ret =
-> close(relay_cmd_pipe[i]); +                       if (ret) { +
-> PERROR("close cmd pipe"); +                       } +
-> } +       } + }
-> 
-> /* @@ -1479,7 +1491,7 @@ int main(int argc, char **argv) /* Parse
-> arguments */ progname = argv[0]; if ((ret = parse_args(argc, argv)
-> < 0)) { -               goto error; +               goto exit; }
-> 
-> if ((ret = set_signal_handler()) < 0) { @@ -1491,7 +1503,7 @@ int
-> main(int argc, char **argv) ret = daemon(0, 0); if (ret < 0) { 
-> PERROR("daemon"); -                       goto error; +
-> goto exit; } }
-> 
-> @@ -1502,7 +1514,7 @@ int main(int argc, char **argv) if
-> (control_uri->port < 1024 || data_uri->port < 1024) { ERR("Need to
-> be root to use ports < 1024"); ret = -1; -
-> goto error; +                       goto exit; } }
-> 
-> @@ -1567,6 +1579,7 @@ exit: if (!ret) { exit(EXIT_SUCCESS); } + 
-> error: exit(EXIT_FAILURE); }
+> -120,6 +120,7 @@ int parse_args(int argc, char **argv) {
+> "data-port", 1, 0, 'D' }, { "daemonize", 0, 0, 'd' }, { "output",
+> 1, 0, 'o' }, +              { "help", 0, 0, 'h' }, { "verbose", 0,
+> 0, 'v' }, { NULL, 0, 0, 0 } };
 > 
 > _______________________________________________ lttng-dev mailing
 > list lttng-dev@lists.lttng.org 
 > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 -----BEGIN PGP SIGNATURE-----
 
-iQEcBAEBCgAGBQJQBtxQAAoJEELoaioR9I02hjoH/RKfCg0r4nq5AnKDpxJIQEaC
-Cy0QUmLZ812prSDaHgoPBL8ItJ4XiLGmFxwj+F0RXP9sT2QuOsiHYRc3aKk1+X5u
-RMnIuqx4ZdkakeGkTtZMr3ujmy/vOj9NOMuZsigV9z7g/jL5uXzfL0eJcW9kJLQ3
-cNEtdO519q9hInoxpRBkRQtJya1LHoT66oc5AK8TWMBCLjHzvTvvqWNSEBEOfQqH
-b7CulD3x6//DvnlVImA3zFNB2YXLvY6bL3XnU9I/DIEENjG1uAP+9/h+IzWRMNcS
-F0bttSrK9faUqBedMB81hadx0uLjpQxnIB9oFR2NEW/W1J3HAwwVN5YntZFo+lw=
-=BfP8
+iQEcBAEBCgAGBQJQBtzcAAoJEELoaioR9I02n/wIAKk2PgjPtiM5MkWUqcUECXMp
+STwxHFCltUVqV9JSM+11qKN5OTPHELp9N/GvHuJFhB9CrdSn+dN9hBrzec7/eqlX
+nQEMgFQV8gyshZg3HjjrTghYxGcnhxYyZx8Kjq0KlGngSOoAoNh5/fOrlrg2e8+H
+t/TCxFyGy1RbrJ9kMm5Ta4c4/FLJN34ajtiuFSX/bXjCAF+zEpXtHCBfUDV5fF/a
+nK+dVTfy/Bo65JtDUNptQmHzz6lffakNiZEqmynkPXG+i9eVsRB8/tSn8bx/EfVo
+HCaWLfz69UQMl378+b8gZLi45hSR/76WENabXVjE9F8t8a9gYmPwvlWNTYwteVE=
+=No56
 -----END PGP SIGNATURE-----
