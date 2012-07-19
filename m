@@ -1,19 +1,30 @@
-From: "Oestman, Fredrik" <Fredrik_Oestman@mentor.com>
-Subject: Re: [babeltrace] FTS does not support large files
-	on	32-bit
-Date: Thu, 19 Jul 2012 09:30:54 +0000
-Message-ID: <524C960C5DFC794E82BE548D825F05CF56CB608F__25692.7309827462$1342690301$gmane$org@EU-MBX-04.mgc.mentorg.com>
-References: <20120630185335.GA31235@Krystal> <4FF4A996.8040606@gmail.com>
+From: changz <zheng.chang@emc.com>
+Subject: Question about zero metadata
+Date: Thu, 19 Jul 2012 17:33:31 +0800
+Message-ID: <5007D46B.3060205__23279.1575174362$1342690458$gmane$org@emc.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from relay1.mentorg.com ([192.94.38.131])
-	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Fredrik_Oestman@mentor.com>) id 1Srn4Y-0001wy-D5
-	for lttng-dev@lists.lttng.org; Thu, 19 Jul 2012 05:31:02 -0400
-In-Reply-To: <4FF4A996.8040606@gmail.com>
-Content-Language: en-US
+Received: from hop-nat-141.emc.com ([168.159.213.141]
+	helo=mexforward.lss.emc.com) by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <Zheng.Chang@emc.com>) id 1Srn7P-0001ye-Cz
+	for lttng-dev@lists.lttng.org; Thu, 19 Jul 2012 05:33:59 -0400
+Received: from hop04-l1d11-si03.isus.emc.com (HOP04-L1D11-SI03.isus.emc.com
+	[10.254.111.23])
+	by mexforward.lss.emc.com (Switch-3.4.3/Switch-3.4.3) with ESMTP id
+	q6J9XqVZ001236
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-SHA bits=256 verify=NO)
+	for <lttng-dev@lists.lttng.org>; Thu, 19 Jul 2012 05:33:52 -0400
+Received: from mailhub.lss.emc.com (mailhubhoprd04.lss.emc.com
+	[10.254.222.226]) by hop04-l1d11-si03.isus.emc.com (RSA
+	Interceptor) for <lttng-dev@lists.lttng.org>;
+	Thu, 19 Jul 2012 05:33:35 -0400
+Received: from corpussmtp4.corp.emc.com (corpussmtp4.corp.emc.com
+	[10.254.169.197])
+	by mailhub.lss.emc.com (Switch-3.4.3/Switch-3.4.3) with ESMTP id
+	q6J9XZQM022628
+	for <lttng-dev@lists.lttng.org>; Thu, 19 Jul 2012 05:33:35 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,26 +33,19 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Yannick Brosseau <yannick.brosseau@gmail.com>, "jdesfossez@efficios.com" <jdesfossez@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Yannick and Julien,
+Hi all,
 
+I tried to generate one event and view the trace at run-time. It didn't 
+work because metadata was zero.
+And then I found metadata couldn't be dumped to disk when sub-buffer 
+were not filled(i.e. consumer daemon didn't read data from ring-buffer).
+And seems no timer to flush it because I waited for very long time. Once 
+I stopped lttng or the application, metadata got ready at once.
 
-Yannick Brosseau wrote:
-> FTS does not use callbacks, which makes it easier to use.
-> Also since it was supposed to be part of the babeltrace API, not having
-> to manage a callbacks looked better.
-> =
+My lttng version is 2.01. Is this a known issue?
 
-> Might had other reasons at the time, but now I don't see any more.
-
-Are you making any progress in supplying large file support in babeltrace?
-
-Would it be helpful if I filed a bug report?
-
-
-Cheers,
-
-Fredrik =D6stman
+Thanks
+Zheng
