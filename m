@@ -1,19 +1,10 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: When is tracepoint registration finished?
-Date: Fri, 20 Jul 2012 14:21:02 -0400
-Message-ID: <20120720182101.GD20073__12992.1559863307$1342808490$gmane$org@Krystal>
-References: <524C960C5DFC794E82BE548D825F05CF56CB1DF1@EU-MBX-04.mgc.mentorg.com>
+From: srikanth krishnakar <skrishnakar@gmail.com>
+Subject: Need inputs on LTTng for ARM Linux-3.0.15
+Date: Fri, 20 Jul 2012 23:51:19 +0530
+Message-ID: <CALDxG5j7VUTmSf6AYYg_+tTtzi3AbDGwGtCbuO-PPyDJUDkB-A__17161.566441837$1342808516$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/mixed; boundary="===============1838559447=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
-	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1SsHp1-0000Aw-Kq
-	for lttng-dev@lists.lttng.org; Fri, 20 Jul 2012 14:21:03 -0400
-Content-Disposition: inline
-In-Reply-To: <524C960C5DFC794E82BE548D825F05CF56CB1DF1@EU-MBX-04.mgc.mentorg.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,59 +13,67 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Oestman, Fredrik" <Fredrik_Oestman@mentor.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: ltt-dev <ltt-dev@lists.casi.polymtl.ca>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@polymtl.ca>
 List-Id: lttng-dev@lists.lttng.org
 
-* Oestman, Fredrik (Fredrik_Oestman@mentor.com) wrote:
-> Hi,
-> =
+--===============1838559447==
+Content-Type: multipart/alternative; boundary=000e0cdfc8366c3e3604c546f6a1
 
-> Is there any way to know from within the instrumented application when
-> tracepoint registration is finished?
+--000e0cdfc8366c3e3604c546f6a1
+Content-Type: text/plain; charset=ISO-8859-1
 
-No.
+Hello Mathieu,
 
-> =
+I am working on LTTng integration for *Linux-3.0.15* *ARM v7 Freescale
+i.MX6 SabreLite* target. I previously integrated lttng-modules into kernel
+with while I was working on Linux-2.6.38.
 
-> We have instrumented clib functions, which are used by LTTng and start
-> producing trace events before all tracepoint registration is finished.
+Now I would like to know is there any repository that you are maintaining
+to restore kernel patches for Linux kernel 3.x series ? If yes is there any
+documentation on using those patches against 3.x kernel Or should I go with
+building and installing lttng-modules-2.0.x as my only option ?
 
-Yep, this is because the events are triggered before the constructor
-that registers the tracepoint probes gets called.
+You inputs are appreciated !
 
-> On ARM, this messes up LTTng UST and faulty events are recorded.
+Thanks in Advance !
 
-What do you mean by faulty events ?
+-- 
+"The Good You Do, The Best You GET"
 
-> On all architectures, we trace function calls we aren't interested in.
+Regards
+Srikanth Krishnakar
+**********************
 
-Well, if you trace _all_ function calls, then you get all function calls
-;) Not just those of your application, but also those of library
-constructors.
+--000e0cdfc8366c3e3604c546f6a1
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
 
-Thanks,
+Hello Mathieu,<br><br>I am working on LTTng integration for <b style=3D"col=
+or:rgb(51,51,255)">Linux-3.0.15</b><span style=3D"color:rgb(51,51,255)"> </=
+span><b style=3D"color:rgb(51,51,255)">ARM v7 Freescale i.MX6 SabreLite</b>=
+ target. I previously integrated lttng-modules into kernel with while I was=
+ working on Linux-2.6.38.<br>
+<br>Now I would like to know is there any repository that you are maintaini=
+ng to restore kernel patches for Linux kernel 3.x series ? If yes is there =
+any documentation on using those patches against 3.x kernel Or should I go =
+with building and installing lttng-modules-2.0.x as my only option ? <br>
+<br>You inputs are appreciated !<br><br clear=3D"all">Thanks in Advance !<b=
+r><br>-- <br>&quot;The Good You Do, The Best You GET&quot;<br><br>Regards<b=
+r>Srikanth Krishnakar<br>**********************<br>
 
-Mathieu
+--000e0cdfc8366c3e3604c546f6a1--
 
-> =
 
-> Cheers,
-> =
+--===============1838559447==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-> Fredrik =D6stman
-> =
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
-> =
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- =
-
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+--===============1838559447==--
