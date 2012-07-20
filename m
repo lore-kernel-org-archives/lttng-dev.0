@@ -1,31 +1,17 @@
-From: <Bingfeng.Zhao@emc.com>
+From: "Woegerer, Paul" <Paul_Woegerer@mentor.com>
 Subject: Re: some questions on lttng
-Date: Thu, 19 Jul 2012 22:10:26 -0400
-Message-ID: <4B3E7C3D6AE874479212F4D6AE0AFD1F02C7FF0805__20598.4914945022$1342750291$gmane$org@MX28A.corp.emc.com>
+Date: Fri, 20 Jul 2012 08:39:14 +0200
+Message-ID: <5008FD12.4040803__26851.2133196511$1342766380$gmane$org@mentor.com>
 References: <4B3E7C3D6AE874479212F4D6AE0AFD1F02C7FF0741@MX28A.corp.emc.com>
+	<4B3E7C3D6AE874479212F4D6AE0AFD1F02C7FF0805@MX28A.corp.emc.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1644715584=="
+Content-Type: multipart/mixed; boundary="===============0472601471=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from hop-nat-141.emc.com ([168.159.213.141]
-	helo=mexforward.lss.emc.com) by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Bingfeng.Zhao@emc.com>) id 1Ss2g5-00011V-2U
-	for lttng-dev@lists.lttng.org; Thu, 19 Jul 2012 22:10:49 -0400
-Received: from hop04-l1d11-si02.isus.emc.com (HOP04-L1D11-SI02.isus.emc.com
-	[10.254.111.55])
-	by mexforward.lss.emc.com (Switch-3.4.3/Switch-3.4.3) with ESMTP id
-	q6K2AgVT029404
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-SHA bits=256 verify=NO)
-	for <lttng-dev@lists.lttng.org>; Thu, 19 Jul 2012 22:10:43 -0400
-Received: from mailhub.lss.emc.com (mailhubhoprd01.lss.emc.com
-	[10.254.221.251]) by hop04-l1d11-si02.isus.emc.com (RSA
-	Interceptor) for <lttng-dev@lists.lttng.org>;
-	Thu, 19 Jul 2012 22:10:30 -0400
-Received: from mxhub30.corp.emc.com (mxhub30.corp.emc.com [128.222.70.170])
-	by mailhub.lss.emc.com (Switch-3.4.3/Switch-3.4.3) with ESMTP id
-	q6K2AS66011603
-	for <lttng-dev@lists.lttng.org>; Thu, 19 Jul 2012 22:10:28 -0400
-In-Reply-To: <4B3E7C3D6AE874479212F4D6AE0AFD1F02C7FF0741@MX28A.corp.emc.com>
-Content-Language: en-US
+Received: from relay1.mentorg.com ([192.94.38.131])
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <Paul_Woegerer@mentor.com>) id 1Ss6re-00032T-CH
+	for lttng-dev@lists.lttng.org; Fri, 20 Jul 2012 02:39:02 -0400
+In-Reply-To: <4B3E7C3D6AE874479212F4D6AE0AFD1F02C7FF0805@MX28A.corp.emc.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -34,58 +20,83 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Bingfeng.Zhao@emc.com
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============1644715584==
-Content-Language: en-US
+--===============0472601471==
 Content-Type: multipart/alternative;
-	boundary="_000_4B3E7C3D6AE874479212F4D6AE0AFD1F02C7FF0805MX28Acorpemcc_"
+	boundary="------------040902000803050700000909"
 
---_000_4B3E7C3D6AE874479212F4D6AE0AFD1F02C7FF0805MX28Acorpemcc_
-Content-Type: text/plain; charset="us-ascii"
+--------------040902000803050700000909
+Content-Type: text/plain; charset="ISO-8859-1"; format=flowed
 Content-Transfer-Encoding: quoted-printable
+X-MIME-Autoconverted: from 8bit to quoted-printable by smtp.polymtl.ca id q6K6d4Z6021743
 
-Anyone can answer our questions? Mathieu?
+On 07/20/2012 04:10 AM, Bingfeng.Zhao@emc.com wrote:
+>
+> Anyone can answer our questions? Mathieu?
+>
+> *From:*Bingfeng.Zhao@emc.com [mailto:Bingfeng.Zhao@emc.com]
+> *Sent:* Wednesday, July 18, 2012 5:54 PM
+> *To:* lttng-dev@lists.lttng.org
+> *Subject:* [lttng-dev] some questions on lttng
+>
+> Hello the dev list,
+>
+> We encounter some basic questions when try to adapt the LTTNG in our=20
+> poject.
+>
+> 1.When the trace is enabled and all are well configurated, we get=20
+> trace messages collected under the session folder. The question is=20
+> whether it is possible that some traces will lost when the trace=20
+> messages are huge. How will LTTNG do if the consumer deamon cannot=20
+> fast enough to copy the trace message from trace buffer?
+>
 
-From: Bingfeng.Zhao@emc.com [mailto:Bingfeng.Zhao@emc.com]
-Sent: Wednesday, July 18, 2012 5:54 PM
-To: lttng-dev@lists.lttng.org
-Subject: [lttng-dev] some questions on lttng
+I had similar concerns ...
 
-Hello the dev list,
-We encounter some basic questions when try to adapt the LTTNG in our poject=
-.
+http://lists.lttng.org/pipermail/lttng-dev/2012-April/017869.html
+http://lists.lttng.org/pipermail/lttng-dev/2012-April/017835.html
 
-1.   When the trace is enabled and all are well configurated, we get trace =
-messages collected under the session folder. The question is whether it is =
-possible that some traces will lost when the trace messages are huge. How w=
-ill LTTNG do if the consumer deamon cannot fast enough to copy the trace me=
-ssage from trace buffer?
+AFAIK, there is no solution for this issue yet.
 
-2.   For user space trace, currectly seems we cannot set the flush interval=
-. How can we control the flush internal for UST? If no, is there hardcoded =
-or random flash interval? Or there is no time based flush mechanism at all =
-for UST?
+--
+Paul
 
-3.   For a severe kernel panic can we extrace buffered trace messages from =
-LTTNG internal buffer in full memory core dump file? Is there tools on this=
- we can leverage?
+--=20
+Paul Woegerer | SW Development Engineer
+Mentor Embedded(tm) | Prinz Eugen Stra=DFe 72/2/4, Vienna, 1040 Austria
+P 43.1.535991320
+Nucleus=AE | Linux=AE | Android(tm) | Services | UI | Multi-OS
 
-Thank you,
-- Bingfeng
+Android is a trademark of Google Inc. Use of this trademark is subject to=
+ Google Permissions.
+Linux is the registered trademark of Linus Torvalds in the U.S. and other=
+ countries.
 
 
---_000_4B3E7C3D6AE874479212F4D6AE0AFD1F02C7FF0805MX28Acorpemcc_
-Content-Type: text/html; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+--------------040902000803050700000909
+Content-Type: text/html; charset="ISO-8859-1"
+Content-Transfer-Encoding: 7bit
 
-<html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-micr=
-osoft-com:office:office" xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
-xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http:=
-//www.w3.org/TR/REC-html40"><head><META HTTP-EQUIV=3D"Content-Type" CONTENT=
-=3D"text/html; charset=3Dus-ascii"><meta name=3DGenerator content=3D"Micros=
-oft Word 14 (filtered medium)"><style><!--
+<html>
+  <head>
+    <meta content="text/html; charset=ISO-8859-1"
+      http-equiv="Content-Type">
+  </head>
+  <body bgcolor="#FFFFFF" text="#000000">
+    <div class="moz-cite-prefix">On 07/20/2012 04:10 AM,
+      <a class="moz-txt-link-abbreviated" href="mailto:Bingfeng.Zhao@emc.com">Bingfeng.Zhao@emc.com</a> wrote:<br>
+    </div>
+    <blockquote
+      cite="mid:4B3E7C3D6AE874479212F4D6AE0AFD1F02C7FF0805@MX28A.corp.emc.com"
+      type="cite">
+      <meta http-equiv="Content-Type" content="text/html;
+        charset=ISO-8859-1">
+      <meta name="Generator" content="Microsoft Word 14 (filtered
+        medium)">
+      <style><!--
 /* Font Definitions */
 @font-face
 	{font-family:SimSun;
@@ -148,8 +159,7 @@ div.WordSection1
 @list l0
 	{mso-list-id:1136877096;
 	mso-list-type:hybrid;
-	mso-list-template-ids:1808583752 67698703 67698713 67698715 67698703 67698=
-713 67698715 67698703 67698713 67698715;}
+	mso-list-template-ids:1808583752 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
 @list l0:level1
 	{mso-level-tab-stop:none;
 	mso-level-number-position:left;
@@ -197,68 +207,87 @@ ol
 ul
 	{margin-bottom:0in;}
 --></style><!--[if gte mso 9]><xml>
-<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
+<o:shapedefaults v:ext="edit" spidmax="1026" />
 </xml><![endif]--><!--[if gte mso 9]><xml>
-<o:shapelayout v:ext=3D"edit">
-<o:idmap v:ext=3D"edit" data=3D"1" />
-</o:shapelayout></xml><![endif]--></head><body lang=3DEN-US link=3Dblue vli=
-nk=3Dpurple><div class=3DWordSection1><p class=3DMsoNormal><span style=3D'f=
-ont-family:"Verdana","sans-serif";color:#1F497D'>Anyone can answer our ques=
-tions? Mathieu?<o:p></o:p></span></p><p class=3DMsoNormal><span style=3D'fo=
-nt-family:"Verdana","sans-serif";color:#1F497D'><o:p>&nbsp;</o:p></span></p=
-><div><div style=3D'border:none;border-top:solid #B5C4DF 1.0pt;padding:3.0p=
-t 0in 0in 0in'><p class=3DMsoNormal><b><span style=3D'font-size:10.0pt;font=
--family:"Tahoma","sans-serif"'>From:</span></b><span style=3D'font-size:10.=
-0pt;font-family:"Tahoma","sans-serif"'> Bingfeng.Zhao@emc.com [mailto:Bingf=
-eng.Zhao@emc.com] <br><b>Sent:</b> Wednesday, July 18, 2012 5:54 PM<br><b>T=
-o:</b> lttng-dev@lists.lttng.org<br><b>Subject:</b> [lttng-dev] some questi=
-ons on lttng<o:p></o:p></span></p></div></div><p class=3DMsoNormal><o:p>&nb=
-sp;</o:p></p><p class=3DMsoNormal><span style=3D'font-family:"Verdana","san=
-s-serif"'>Hello the dev list,<o:p></o:p></span></p><p class=3DMsoNormal><sp=
-an style=3D'font-family:"Verdana","sans-serif"'>We encounter some basic que=
-stions when try to adapt the LTTNG in our poject. <o:p></o:p></span></p><p =
-class=3DMsoListParagraph style=3D'text-indent:-.25in;mso-list:l0 level1 lfo=
-2'><![if !supportLists]><span style=3D'font-family:"Verdana","sans-serif"'>=
-<span style=3D'mso-list:Ignore'>1.<span style=3D'font:7.0pt "Times New Roma=
-n"'>&nbsp;&nbsp; </span></span></span><![endif]><span style=3D'font-family:=
-"Verdana","sans-serif"'>When the trace is enabled and all are well configur=
-ated, we get trace messages collected under the session folder. The questio=
-n is whether it is possible that some traces will lost when the trace messa=
-ges are huge. How will LTTNG do if the consumer deamon cannot fast enough t=
-o copy the trace message from trace buffer?<o:p></o:p></span></p><p class=
-=3DMsoListParagraph style=3D'text-indent:-.25in;mso-list:l0 level1 lfo2'><!=
-[if !supportLists]><span style=3D'font-family:"Verdana","sans-serif"'><span=
- style=3D'mso-list:Ignore'>2.<span style=3D'font:7.0pt "Times New Roman"'>&=
-nbsp;&nbsp; </span></span></span><![endif]><span style=3D'font-family:"Verd=
-ana","sans-serif"'>For user space trace, currectly seems we cannot set the =
-flush interval. How can we control the flush internal for UST? If no, is th=
-ere hardcoded or random flash interval? Or there is no time based flush mec=
-hanism at all for UST?<o:p></o:p></span></p><p class=3DMsoListParagraph sty=
-le=3D'text-indent:-.25in;mso-list:l0 level1 lfo2'><![if !supportLists]><spa=
-n style=3D'font-family:"Verdana","sans-serif"'><span style=3D'mso-list:Igno=
-re'>3.<span style=3D'font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></sp=
-an></span><![endif]><span style=3D'font-family:"Verdana","sans-serif"'>For =
-a severe kernel panic can we extrace buffered trace messages from LTTNG int=
-ernal buffer in full memory core dump file? Is there tools on this we can l=
-everage?<o:p></o:p></span></p><p class=3DMsoNormal><span style=3D'font-fami=
-ly:"Verdana","sans-serif"'><o:p>&nbsp;</o:p></span></p><p class=3DMsoNormal=
-><span style=3D'font-family:"Verdana","sans-serif"'>Thank you,<o:p></o:p></=
-span></p><p class=3DMsoNormal><span style=3D'font-family:"Verdana","sans-se=
-rif"'>- Bingfeng<o:p></o:p></span></p><p class=3DMsoNormal><o:p>&nbsp;</o:p=
-></p></div></body></html>=
+<o:shapelayout v:ext="edit">
+<o:idmap v:ext="edit" data="1" />
+</o:shapelayout></xml><![endif]-->
+      <div class="WordSection1">
+        <p class="MsoNormal"><span
+style="font-family:&quot;Verdana&quot;,&quot;sans-serif&quot;;color:#1F497D">Anyone
+            can answer our questions? Mathieu?<o:p></o:p></span></p>
+        <p class="MsoNormal"><span
+style="font-family:&quot;Verdana&quot;,&quot;sans-serif&quot;;color:#1F497D"><o:p>&nbsp;</o:p></span></p>
+        <div>
+          <div style="border:none;border-top:solid #B5C4DF
+            1.0pt;padding:3.0pt 0in 0in 0in">
+            <p class="MsoNormal"><b><span
+style="font-size:10.0pt;font-family:&quot;Tahoma&quot;,&quot;sans-serif&quot;">From:</span></b><span
+style="font-size:10.0pt;font-family:&quot;Tahoma&quot;,&quot;sans-serif&quot;">
+                <a class="moz-txt-link-abbreviated" href="mailto:Bingfeng.Zhao@emc.com">Bingfeng.Zhao@emc.com</a> [<a class="moz-txt-link-freetext" href="mailto:Bingfeng.Zhao@emc.com">mailto:Bingfeng.Zhao@emc.com</a>] <br>
+                <b>Sent:</b> Wednesday, July 18, 2012 5:54 PM<br>
+                <b>To:</b> <a class="moz-txt-link-abbreviated" href="mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a><br>
+                <b>Subject:</b> [lttng-dev] some questions on lttng<o:p></o:p></span></p>
+          </div>
+        </div>
+        <p class="MsoNormal"><o:p>&nbsp;</o:p></p>
+        <p class="MsoNormal"><span
+            style="font-family:&quot;Verdana&quot;,&quot;sans-serif&quot;">Hello
+            the dev list,<o:p></o:p></span></p>
+        <p class="MsoNormal"><span
+            style="font-family:&quot;Verdana&quot;,&quot;sans-serif&quot;">We
+            encounter some basic questions when try to adapt the LTTNG
+            in our poject. <o:p></o:p></span></p>
+        <p class="MsoListParagraph" style="text-indent: -0.25in;"><!--[if !supportLists]--><span
+style="font-family:&quot;Verdana&quot;,&quot;sans-serif&quot;"><span
+              style="mso-list:Ignore">1.<span style="font:7.0pt
+                &quot;Times New Roman&quot;">&nbsp;&nbsp; </span></span></span><!--[endif]--><span
+            style="font-family:
+            &quot;Verdana&quot;,&quot;sans-serif&quot;;">When the trace
+            is enabled and all are well configurated, we get trace
+            messages collected under the session folder. The question is
+            whether it is possible that some traces will lost when the
+            trace messages are huge. How will LTTNG do if the consumer
+            deamon cannot fast enough to copy the trace message from
+            trace buffer?</span></p>
+      </div>
+    </blockquote>
+    <br>
+    I had similar concerns ...<br>
+    <br>
+    <a class="moz-txt-link-freetext"
+      href="http://lists.lttng.org/pipermail/lttng-dev/2012-April/017869.html">http://lists.lttng.org/pipermail/lttng-dev/2012-April/017869.html</a><br>
+    <a class="moz-txt-link-freetext"
+      href="http://lists.lttng.org/pipermail/lttng-dev/2012-April/017835.html">http://lists.lttng.org/pipermail/lttng-dev/2012-April/017835.html</a><br>
+    <br>
+    AFAIK, there is no solution for this issue yet.<br>
+    <br>
+    --<br>
+    Paul<br>
+    <br>
+    <pre class="moz-signature" cols="72">-- 
+Paul Woegerer | SW Development Engineer
+Mentor Embedded(tm) | Prinz Eugen Stra&szlig;e 72/2/4, Vienna, 1040 Austria
+P 43.1.535991320
+Nucleus&reg; | Linux&reg; | Android(tm) | Services | UI | Multi-OS
 
---_000_4B3E7C3D6AE874479212F4D6AE0AFD1F02C7FF0805MX28Acorpemcc_--
+Android is a trademark of Google Inc. Use of this trademark is subject to Google Permissions. 
+Linux is the registered trademark of Linus Torvalds in the U.S. and other countries.</pre>
+  </body>
+</html>
+
+--------------040902000803050700000909--
 
 
---===============1644715584==
+--===============0472601471==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
 
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============1644715584==--
+--===============0472601471==--
