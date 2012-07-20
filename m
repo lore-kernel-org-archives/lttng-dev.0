@@ -1,8 +1,10 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: LTTng-UST alternative to LD_PRELOAD
-Date: Fri, 20 Jul 2012 14:13:21 -0400
-Message-ID: <20120720181321.GB20073__4759.97812250188$1342808033$gmane$org@Krystal>
-References: <1339945703.2599.21.camel@DellE5500>
+Subject: Re: [RFC PATCH lttng-tools] relayd pipes and
+	error	handling
+Date: Fri, 20 Jul 2012 14:15:11 -0400
+Message-ID: <20120720181511.GC20073__19654.0698096671$1342808131$gmane$org@Krystal>
+References: <CAGDH53nAXuZB20+LdogwiYZdiCrqEdZhSZZH9f4i28_wA8nJtg@mail.gmail.com>
+	<5006DC53.1040709@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -10,10 +12,10 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1SsHhb-00005V-35
-	for lttng-dev@lists.lttng.org; Fri, 20 Jul 2012 14:13:23 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1SsHjM-00007i-Rg
+	for lttng-dev@lists.lttng.org; Fri, 20 Jul 2012 14:15:12 -0400
 Content-Disposition: inline
-In-Reply-To: <1339945703.2599.21.camel@DellE5500>
+In-Reply-To: <5006DC53.1040709@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,78 +24,92 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Lars <lars@grandepotatis.se>
+To: David Goulet <dgoulet@efficios.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Lars (lars@grandepotatis.se) wrote:
+* David Goulet (dgoulet@efficios.com) wrote:
+> -----BEGIN PGP SIGNED MESSAGE-----
+> Hash: SHA512
 > 
-> Hello,
+> I'm pretty OK with that.
 > 
-> I have recently started to use LTTng-UST and am using LD_PRELOAD
-> to make it possilbe to execute instrumented code on systems without
-> LTTng-UST installed.
-> 
-> To define LD_PRELOAD however affects too much. For instance all
-> forked processes also get the library loaded. This can be fixed by
-> removing the library from the LD_PRELOAD variable early in the main
-> function. This looks odd and required some explaining in comments.
+> I have utils_* function for that in lttng-sessiond/ ... I think I'm
+> going to move them to common/ since they are pretty useful for the
+> complete code tree.
 
-good point. LD_PRELOAD was originally the only way we allowed lttng-ust
-to be loaded, because during the rc phase of the lttng-ust 2.0
-development, we had issues with dlopening liblttng-ust. This has been
-fixed within the rc stages though, so we could go for a dlopen approach
-now.
+since this was a RFC patch, does Christian need to resend it, after
+update ?
 
 > 
-> Also, in my case, the instrumented program is started with a "wrapper"
-> program which I can not alter. This wrapper also gets the library
-> loaded.
+> Cheers!
+> David
 > 
-> As an alternative to using LD_PRELOAD I would like to use an explicit
-> function, like;
+> Christian Babeux:
+> > Hi,
+> > 
+> > The current relayd employ two set of pipes for command relaying
+> > and thread quit signalling. The relay_cmd_pipe pipes are never
+> > closed. Also, the thread_quit_pipe pipes are not closed in some
+> > error cases (fail to parse args, fail to daemonize, etc.). Here is
+> > a proposed way to cleanup and handle error cases.
+> > 
+> > Thoughts?
+> > 
+> > Thanks,
+> > 
+> > Christian
+> > 
+> > Fix: relayd relay_cmd_pipe/thread_quit_pipe should be closed on
+> > exit/error.
+> > 
+> > diff --git a/src/bin/lttng-relayd/main.c
+> > b/src/bin/lttng-relayd/main.c index acc6ca8..55452b3 100644 ---
+> > a/src/bin/lttng-relayd/main.c +++ b/src/bin/lttng-relayd/main.c @@
+> > -231,14 +231,26 @@ void cleanup(void)
+> > 
+> > DBG("Cleaning up");
+> > 
+> > +       /* Close thread quit pipes */ for (i = 0; i < 2; i++) { if
+> > (thread_quit_pipe[i] >= 0) { ret = close(thread_quit_pipe[i]); if
+> > (ret) { -                               PERROR("close"); +
+> > PERROR("close quit pipe"); } } } + +       /* Close relay cmd pipes
+> > */ +       for (i = 0; i < 2; i++) { +               if
+> > (relay_cmd_pipe[i] >= 0) { +                       ret =
+> > close(relay_cmd_pipe[i]); +                       if (ret) { +
+> > PERROR("close cmd pipe"); +                       } +
+> > } +       } + }
+> > 
+> > /* @@ -1479,7 +1491,7 @@ int main(int argc, char **argv) /* Parse
+> > arguments */ progname = argv[0]; if ((ret = parse_args(argc, argv)
+> > < 0)) { -               goto error; +               goto exit; }
+> > 
+> > if ((ret = set_signal_handler()) < 0) { @@ -1491,7 +1503,7 @@ int
+> > main(int argc, char **argv) ret = daemon(0, 0); if (ret < 0) { 
+> > PERROR("daemon"); -                       goto error; +
+> > goto exit; } }
+> > 
+> > @@ -1502,7 +1514,7 @@ int main(int argc, char **argv) if
+> > (control_uri->port < 1024 || data_uri->port < 1024) { ERR("Need to
+> > be root to use ports < 1024"); ret = -1; -
+> > goto error; +                       goto exit; } }
+> > 
+> > @@ -1567,6 +1579,7 @@ exit: if (!ret) { exit(EXIT_SUCCESS); } + 
+> > error: exit(EXIT_FAILURE); }
+> > 
+> > _______________________________________________ lttng-dev mailing
+> > list lttng-dev@lists.lttng.org 
+> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> -----BEGIN PGP SIGNATURE-----
 > 
->   int traceload(char const* library_path);
-
-or maybe:
-
-int lttng_ust_dlopen(const char *library_path);
-
-?
-
-> that is called early in main (instead of the LD_PRELOAD environment
-> manipulation) and loads the library with dlopen if it exists.
-
-yep, makes sense.
-
-> 
-> I have already tried this (of course) and it almost works already.
-> The tracepoints becomes visible but I get no trace data written.
-> So I think a really small modification is needed.
-> 
-> Is anything like this planned?
-
-if you can provide a patch, I'd be glad to review & merge it.
-
-> 
-> Or can anybody give me a hint on what is missing?
-
-Try running your app with the env. var LTTNG_UST_DEBUG=1  set. It might
-provide helpful info. If you still have problems, please post your patch
-as RFC along with specific test programs so we can look at the behavior.
-
-Thanks,
-
-Mathieu
-
-> 
-> I checked the mailing list a couple of months back but did not
-> find anything.
-> 
-> Best Regards,
-> Lars Ekman
-> 
-> 
+> iQEcBAEBCgAGBQJQBtxQAAoJEELoaioR9I02hjoH/RKfCg0r4nq5AnKDpxJIQEaC
+> Cy0QUmLZ812prSDaHgoPBL8ItJ4XiLGmFxwj+F0RXP9sT2QuOsiHYRc3aKk1+X5u
+> RMnIuqx4ZdkakeGkTtZMr3ujmy/vOj9NOMuZsigV9z7g/jL5uXzfL0eJcW9kJLQ3
+> cNEtdO519q9hInoxpRBkRQtJya1LHoT66oc5AK8TWMBCLjHzvTvvqWNSEBEOfQqH
+> b7CulD3x6//DvnlVImA3zFNB2YXLvY6bL3XnU9I/DIEENjG1uAP+9/h+IzWRMNcS
+> F0bttSrK9faUqBedMB81hadx0uLjpQxnIB9oFR2NEW/W1J3HAwwVN5YntZFo+lw=
+> =BfP8
+> -----END PGP SIGNATURE-----
 > 
 > _______________________________________________
 > lttng-dev mailing list
