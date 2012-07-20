@@ -1,17 +1,15 @@
-From: "Woegerer, Paul" <Paul_Woegerer@mentor.com>
-Subject: Re: some questions on lttng
-Date: Fri, 20 Jul 2012 08:39:14 +0200
-Message-ID: <5008FD12.4040803__26851.2133196511$1342766380$gmane$org@mentor.com>
-References: <4B3E7C3D6AE874479212F4D6AE0AFD1F02C7FF0741@MX28A.corp.emc.com>
-	<4B3E7C3D6AE874479212F4D6AE0AFD1F02C7FF0805@MX28A.corp.emc.com>
+From: "Alawneh, Luay" <Luay.Alawneh@nuance.com>
+Subject: LTTng
+Date: Fri, 20 Jul 2012 14:08:33 +0000
+Message-ID: <C3E76F4DB674C24BA475182F42DDE8B54E5ACE__14031.006061896$1342793809$gmane$org@SOM-EXCH02.nuance.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0472601471=="
+Content-Type: multipart/mixed; boundary="===============1636225366=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from relay1.mentorg.com ([192.94.38.131])
+Received: from som-mx-a.nuance.com ([198.71.66.80])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Paul_Woegerer@mentor.com>) id 1Ss6re-00032T-CH
-	for lttng-dev@lists.lttng.org; Fri, 20 Jul 2012 02:39:02 -0400
-In-Reply-To: <4B3E7C3D6AE874479212F4D6AE0AFD1F02C7FF0805@MX28A.corp.emc.com>
+	(envelope-from <Luay.Alawneh@nuance.com>) id 1SsDsn-0006bg-Sd
+	for lttng-dev@lists.lttng.org; Fri, 20 Jul 2012 10:08:41 -0400
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,274 +18,132 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Bingfeng.Zhao@emc.com
-Cc: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0472601471==
+--===============1636225366==
+Content-Language: en-US
 Content-Type: multipart/alternative;
-	boundary="------------040902000803050700000909"
+	boundary="_000_C3E76F4DB674C24BA475182F42DDE8B54E5ACESOMEXCH02nuanceco_"
 
---------------040902000803050700000909
-Content-Type: text/plain; charset="ISO-8859-1"; format=flowed
+--_000_C3E76F4DB674C24BA475182F42DDE8B54E5ACESOMEXCH02nuanceco_
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
-X-MIME-Autoconverted: from 8bit to quoted-printable by smtp.polymtl.ca id q6K6d4Z6021743
 
-On 07/20/2012 04:10 AM, Bingfeng.Zhao@emc.com wrote:
+Hi,
+
+I am reading about LTTng and I would like to know if it can replace Log4c f=
+or logging user space events in the production environment. In addition to =
+the method enter/exit events we also use Log4c to log many other events to =
+indicate errors and other useful information.
+
+To summarize, I would like to know if LTTng can be used in a production env=
+ironment for logging different types of events. We are planning to replace =
+Log4c with another logging framework to improve the performance by reducing=
+ the time spent in logging.
+
+Thanks,
+
+Luay Alawneh
+Nuance Communications
+
+
+--_000_C3E76F4DB674C24BA475182F42DDE8B54E5ACESOMEXCH02nuanceco_
+Content-Type: text/html; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+<html xmlns:o=3D"urn:schemas-microsoft-com:office:office" xmlns:w=3D"urn:sc=
+hemas-microsoft-com:office:word" xmlns=3D"http://www.w3.org/TR/REC-html40">
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
 >
-> Anyone can answer our questions? Mathieu?
->
-> *From:*Bingfeng.Zhao@emc.com [mailto:Bingfeng.Zhao@emc.com]
-> *Sent:* Wednesday, July 18, 2012 5:54 PM
-> *To:* lttng-dev@lists.lttng.org
-> *Subject:* [lttng-dev] some questions on lttng
->
-> Hello the dev list,
->
-> We encounter some basic questions when try to adapt the LTTNG in our=20
-> poject.
->
-> 1.When the trace is enabled and all are well configurated, we get=20
-> trace messages collected under the session folder. The question is=20
-> whether it is possible that some traces will lost when the trace=20
-> messages are huge. How will LTTNG do if the consumer deamon cannot=20
-> fast enough to copy the trace message from trace buffer?
->
-
-I had similar concerns ...
-
-http://lists.lttng.org/pipermail/lttng-dev/2012-April/017869.html
-http://lists.lttng.org/pipermail/lttng-dev/2012-April/017835.html
-
-AFAIK, there is no solution for this issue yet.
-
---
-Paul
-
---=20
-Paul Woegerer | SW Development Engineer
-Mentor Embedded(tm) | Prinz Eugen Stra=DFe 72/2/4, Vienna, 1040 Austria
-P 43.1.535991320
-Nucleus=AE | Linux=AE | Android(tm) | Services | UI | Multi-OS
-
-Android is a trademark of Google Inc. Use of this trademark is subject to=
- Google Permissions.
-Linux is the registered trademark of Linus Torvalds in the U.S. and other=
- countries.
-
-
---------------040902000803050700000909
-Content-Type: text/html; charset="ISO-8859-1"
-Content-Transfer-Encoding: 7bit
-
-<html>
-  <head>
-    <meta content="text/html; charset=ISO-8859-1"
-      http-equiv="Content-Type">
-  </head>
-  <body bgcolor="#FFFFFF" text="#000000">
-    <div class="moz-cite-prefix">On 07/20/2012 04:10 AM,
-      <a class="moz-txt-link-abbreviated" href="mailto:Bingfeng.Zhao@emc.com">Bingfeng.Zhao@emc.com</a> wrote:<br>
-    </div>
-    <blockquote
-      cite="mid:4B3E7C3D6AE874479212F4D6AE0AFD1F02C7FF0805@MX28A.corp.emc.com"
-      type="cite">
-      <meta http-equiv="Content-Type" content="text/html;
-        charset=ISO-8859-1">
-      <meta name="Generator" content="Microsoft Word 14 (filtered
-        medium)">
-      <style><!--
-/* Font Definitions */
-@font-face
-	{font-family:SimSun;
-	panose-1:2 1 6 0 3 1 1 1 1 1;}
-@font-face
-	{font-family:SimSun;
-	panose-1:2 1 6 0 3 1 1 1 1 1;}
-@font-face
-	{font-family:Calibri;
-	panose-1:2 15 5 2 2 2 4 3 2 4;}
-@font-face
-	{font-family:Tahoma;
-	panose-1:2 11 6 4 3 5 4 4 2 4;}
-@font-face
-	{font-family:Verdana;
-	panose-1:2 11 6 4 3 5 4 4 2 4;}
-@font-face
-	{font-family:SimSun;
-	panose-1:2 1 6 0 3 1 1 1 1 1;}
-/* Style Definitions */
-p.MsoNormal, li.MsoNormal, div.MsoNormal
-	{margin:0in;
+<meta name=3D"Generator" content=3D"Microsoft Word 11 (filtered medium)">
+<style>
+<!--
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0cm;
 	margin-bottom:.0001pt;
-	font-size:11.0pt;
-	font-family:"Calibri","sans-serif";}
+	font-size:12.0pt;
+	font-family:"Times New Roman";}
 a:link, span.MsoHyperlink
-	{mso-style-priority:99;
-	color:blue;
+	{color:blue;
 	text-decoration:underline;}
 a:visited, span.MsoHyperlinkFollowed
-	{mso-style-priority:99;
-	color:purple;
+	{color:purple;
 	text-decoration:underline;}
-p.MsoListParagraph, li.MsoListParagraph, div.MsoListParagraph
-	{mso-style-priority:34;
-	margin-top:0in;
-	margin-right:0in;
-	margin-bottom:0in;
-	margin-left:.5in;
-	margin-bottom:.0001pt;
-	font-size:11.0pt;
-	font-family:"Calibri","sans-serif";}
-span.EmailStyle18
-	{mso-style-type:personal;
-	font-family:"Verdana","sans-serif";
+span.EmailStyle17
+	{mso-style-type:personal-compose;
+	font-family:Arial;
 	color:windowtext;}
-span.EmailStyle19
-	{mso-style-type:personal-reply;
-	font-family:"Verdana","sans-serif";
-	color:#1F497D;}
-.MsoChpDefault
-	{mso-style-type:export-only;
-	font-size:10.0pt;}
-@page WordSection1
-	{size:8.5in 11.0in;
-	margin:1.0in 1.25in 1.0in 1.25in;}
-div.WordSection1
-	{page:WordSection1;}
-/* List Definitions */
-@list l0
-	{mso-list-id:1136877096;
-	mso-list-type:hybrid;
-	mso-list-template-ids:1808583752 67698703 67698713 67698715 67698703 67698713 67698715 67698703 67698713 67698715;}
-@list l0:level1
-	{mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l0:level2
-	{mso-level-number-format:alpha-lower;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l0:level3
-	{mso-level-number-format:roman-lower;
-	mso-level-tab-stop:none;
-	mso-level-number-position:right;
-	text-indent:-9.0pt;}
-@list l0:level4
-	{mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l0:level5
-	{mso-level-number-format:alpha-lower;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l0:level6
-	{mso-level-number-format:roman-lower;
-	mso-level-tab-stop:none;
-	mso-level-number-position:right;
-	text-indent:-9.0pt;}
-@list l0:level7
-	{mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l0:level8
-	{mso-level-number-format:alpha-lower;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l0:level9
-	{mso-level-number-format:roman-lower;
-	mso-level-tab-stop:none;
-	mso-level-number-position:right;
-	text-indent:-9.0pt;}
-ol
-	{margin-bottom:0in;}
-ul
-	{margin-bottom:0in;}
---></style><!--[if gte mso 9]><xml>
-<o:shapedefaults v:ext="edit" spidmax="1026" />
-</xml><![endif]--><!--[if gte mso 9]><xml>
-<o:shapelayout v:ext="edit">
-<o:idmap v:ext="edit" data="1" />
-</o:shapelayout></xml><![endif]-->
-      <div class="WordSection1">
-        <p class="MsoNormal"><span
-style="font-family:&quot;Verdana&quot;,&quot;sans-serif&quot;;color:#1F497D">Anyone
-            can answer our questions? Mathieu?<o:p></o:p></span></p>
-        <p class="MsoNormal"><span
-style="font-family:&quot;Verdana&quot;,&quot;sans-serif&quot;;color:#1F497D"><o:p>&nbsp;</o:p></span></p>
-        <div>
-          <div style="border:none;border-top:solid #B5C4DF
-            1.0pt;padding:3.0pt 0in 0in 0in">
-            <p class="MsoNormal"><b><span
-style="font-size:10.0pt;font-family:&quot;Tahoma&quot;,&quot;sans-serif&quot;">From:</span></b><span
-style="font-size:10.0pt;font-family:&quot;Tahoma&quot;,&quot;sans-serif&quot;">
-                <a class="moz-txt-link-abbreviated" href="mailto:Bingfeng.Zhao@emc.com">Bingfeng.Zhao@emc.com</a> [<a class="moz-txt-link-freetext" href="mailto:Bingfeng.Zhao@emc.com">mailto:Bingfeng.Zhao@emc.com</a>] <br>
-                <b>Sent:</b> Wednesday, July 18, 2012 5:54 PM<br>
-                <b>To:</b> <a class="moz-txt-link-abbreviated" href="mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a><br>
-                <b>Subject:</b> [lttng-dev] some questions on lttng<o:p></o:p></span></p>
-          </div>
-        </div>
-        <p class="MsoNormal"><o:p>&nbsp;</o:p></p>
-        <p class="MsoNormal"><span
-            style="font-family:&quot;Verdana&quot;,&quot;sans-serif&quot;">Hello
-            the dev list,<o:p></o:p></span></p>
-        <p class="MsoNormal"><span
-            style="font-family:&quot;Verdana&quot;,&quot;sans-serif&quot;">We
-            encounter some basic questions when try to adapt the LTTNG
-            in our poject. <o:p></o:p></span></p>
-        <p class="MsoListParagraph" style="text-indent: -0.25in;"><!--[if !supportLists]--><span
-style="font-family:&quot;Verdana&quot;,&quot;sans-serif&quot;"><span
-              style="mso-list:Ignore">1.<span style="font:7.0pt
-                &quot;Times New Roman&quot;">&nbsp;&nbsp; </span></span></span><!--[endif]--><span
-            style="font-family:
-            &quot;Verdana&quot;,&quot;sans-serif&quot;;">When the trace
-            is enabled and all are well configurated, we get trace
-            messages collected under the session folder. The question is
-            whether it is possible that some traces will lost when the
-            trace messages are huge. How will LTTNG do if the consumer
-            deamon cannot fast enough to copy the trace message from
-            trace buffer?</span></p>
-      </div>
-    </blockquote>
-    <br>
-    I had similar concerns ...<br>
-    <br>
-    <a class="moz-txt-link-freetext"
-      href="http://lists.lttng.org/pipermail/lttng-dev/2012-April/017869.html">http://lists.lttng.org/pipermail/lttng-dev/2012-April/017869.html</a><br>
-    <a class="moz-txt-link-freetext"
-      href="http://lists.lttng.org/pipermail/lttng-dev/2012-April/017835.html">http://lists.lttng.org/pipermail/lttng-dev/2012-April/017835.html</a><br>
-    <br>
-    AFAIK, there is no solution for this issue yet.<br>
-    <br>
-    --<br>
-    Paul<br>
-    <br>
-    <pre class="moz-signature" cols="72">-- 
-Paul Woegerer | SW Development Engineer
-Mentor Embedded(tm) | Prinz Eugen Stra&szlig;e 72/2/4, Vienna, 1040 Austria
-P 43.1.535991320
-Nucleus&reg; | Linux&reg; | Android(tm) | Services | UI | Multi-OS
-
-Android is a trademark of Google Inc. Use of this trademark is subject to Google Permissions. 
-Linux is the registered trademark of Linus Torvalds in the U.S. and other countries.</pre>
-  </body>
+@page Section1
+	{size:612.0pt 792.0pt;
+	margin:72.0pt 90.0pt 72.0pt 90.0pt;}
+div.Section1
+	{page:Section1;}
+-->
+</style>
+</head>
+<body lang=3D"EN-US" link=3D"blue" vlink=3D"purple">
+<div class=3D"Section1">
+<p class=3D"MsoNormal"><font size=3D"2" face=3D"Arial"><span style=3D"font-=
+size:10.0pt;
+font-family:Arial">Hi,<o:p></o:p></span></font></p>
+<p class=3D"MsoNormal"><font size=3D"2" face=3D"Arial"><span style=3D"font-=
+size:10.0pt;
+font-family:Arial"><o:p>&nbsp;</o:p></span></font></p>
+<p class=3D"MsoNormal"><font size=3D"2" face=3D"Arial"><span style=3D"font-=
+size:10.0pt;
+font-family:Arial">I am reading about LTTng and I would like to know if it =
+can replace Log4c for logging user space events in the production environme=
+nt. In addition to the method
+ enter/exit events we also use Log4c to log many other events to indicate e=
+rrors and other useful information.
+<o:p></o:p></span></font></p>
+<p class=3D"MsoNormal"><font size=3D"2" face=3D"Arial"><span style=3D"font-=
+size:10.0pt;
+font-family:Arial"><o:p>&nbsp;</o:p></span></font></p>
+<p class=3D"MsoNormal"><font size=3D"2" face=3D"Arial"><span style=3D"font-=
+size:10.0pt;
+font-family:Arial">To summarize, I would like to know if LTTng can be used =
+in a production environment for logging different types of events. We are p=
+lanning to replace Log4c with
+ another logging framework to improve the performance by reducing the time =
+spent in logging.<o:p></o:p></span></font></p>
+<p class=3D"MsoNormal"><font size=3D"2" face=3D"Arial"><span style=3D"font-=
+size:10.0pt;
+font-family:Arial"><o:p>&nbsp;</o:p></span></font></p>
+<p class=3D"MsoNormal"><font size=3D"2" face=3D"Arial"><span style=3D"font-=
+size:10.0pt;
+font-family:Arial">Thanks,<o:p></o:p></span></font></p>
+<p class=3D"MsoNormal"><font size=3D"2" face=3D"Arial"><span style=3D"font-=
+size:10.0pt;
+font-family:Arial"><o:p>&nbsp;</o:p></span></font></p>
+<p class=3D"MsoNormal"><font size=3D"2" face=3D"Arial"><span style=3D"font-=
+size:10.0pt;
+font-family:Arial">Luay Alawneh<o:p></o:p></span></font></p>
+<p class=3D"MsoNormal"><font size=3D"2" face=3D"Arial"><span style=3D"font-=
+size:10.0pt;
+font-family:Arial">Nuance Communications<o:p></o:p></span></font></p>
+<p class=3D"MsoNormal"><font size=3D"2" face=3D"Arial"><span style=3D"font-=
+size:10.0pt;
+font-family:Arial"><o:p>&nbsp;</o:p></span></font></p>
+</div>
+</body>
 </html>
 
---------------040902000803050700000909--
+--_000_C3E76F4DB674C24BA475182F42DDE8B54E5ACESOMEXCH02nuanceco_--
 
 
---===============0472601471==
+--===============1636225366==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
-Content-Disposition: inline
 Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============0472601471==--
+--===============1636225366==--
