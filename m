@@ -1,17 +1,17 @@
 From: David Goulet <dgoulet@efficios.com>
-Subject: Re: Question about zero metadata
-Date: Fri, 20 Jul 2012 10:28:32 -0400
-Message-ID: <50096B10.9030808__39304.9506973059$1342794552$gmane$org@efficios.com>
-References: <5007D46B.3060205@emc.com>
+Subject: Re: LTTng
+Date: Fri, 20 Jul 2012 10:56:14 -0400
+Message-ID: <5009718E.8020308__47356.8303430968$1342796275$gmane$org@efficios.com>
+References: <C3E76F4DB674C24BA475182F42DDE8B54E5ACE@SOM-EXCH02.nuance.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from smtp.ini-tech.com ([213.239.202.151])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1SsEC4-0006mB-QQ
-	for lttng-dev@lists.lttng.org; Fri, 20 Jul 2012 10:28:36 -0400
-In-Reply-To: <5007D46B.3060205@emc.com>
+	(envelope-from <dgoulet@efficios.com>) id 1SsEcq-0006zS-W1
+	for lttng-dev@lists.lttng.org; Fri, 20 Jul 2012 10:56:17 -0400
+In-Reply-To: <C3E76F4DB674C24BA475182F42DDE8B54E5ACE@SOM-EXCH02.nuance.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,50 +20,84 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: changz <zheng.chang@emc.com>
-Cc: lttng-dev@lists.lttng.org
+To: "Alawneh, Luay" <Luay.Alawneh@nuance.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA512
 
-Hi Zheng,
+Hi Luay,
 
-In order to be able to read the trace, you have to stop the session
-(lttng stop) and a flush is automatically done in the background.
+I am not aware of any Log4c --> LTTng transition work done up to this
+day...
 
-However, reading a trace while it is being created (live reading) is
-on the roadmap for LTTng 2.2 or later.
+One thing I can say is that user space tracing using LTTng will
+certainly improve speed and scalability performance.
 
-So, for now, you need to start/stop the tracing session.
+The event LOGLEVEL feature is pretty interesting for that where you
+can only enable a certain loglevel facility for a trace (exactly like
+the syslog facilities). You can refer to the lttng-ust(3) man page for
+more information.
 
-Thanks!
+Moreover, you can also couple kernel traces to your user space traces
+which can give you way more information :).
+
+I guess that if now one replies to this thread describing their
+experience with log4c vs lttng, you guys will be the first to try a
+transition and we will be more than happy to help you with any bugs or
+difficulties you'll encounter :)
+
+Moreover, if you are able to come up with some sort of scripts/recipe
+for that, it will be the kind of documentation or tool that could
+benefit big time the community! :)
+
+Feel free to ask on the mailing list any concerns/questions/comments
+you have.
+
+Cheers!
 David
 
-changz:
-> Hi all,
+Alawneh, Luay:
+> Hi,
 > 
-> I tried to generate one event and view the trace at run-time. It
-> didn't work because metadata was zero. And then I found metadata
-> couldn't be dumped to disk when sub-buffer were not filled(i.e.
-> consumer daemon didn't read data from ring-buffer). And seems no
-> timer to flush it because I waited for very long time. Once I
-> stopped lttng or the application, metadata got ready at once.
 > 
-> My lttng version is 2.01. Is this a known issue?
 > 
-> Thanks Zheng
+> I am reading about LTTng and I would like to know if it can
+> replace Log4c for logging user space events in the production
+> environment. In addition to the method enter/exit events we also
+> use Log4c to log many other events to indicate errors and other
+> useful information.
 > 
-> _______________________________________________ lttng-dev mailing
-> list lttng-dev@lists.lttng.org 
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> 
+> 
+> To summarize, I would like to know if LTTng can be used in a
+> production environment for logging different types of events. We
+> are planning to replace Log4c with another logging framework to
+> improve the performance by reducing the time spent in logging.
+> 
+> 
+> 
+> Thanks,
+> 
+> 
+> 
+> Luay Alawneh
+> 
+> Nuance Communications
+> 
+> 
+> 
+> 
+> 
+> This body part will be downloaded on demand.
 -----BEGIN PGP SIGNATURE-----
 
-iQEcBAEBCgAGBQJQCWsMAAoJEELoaioR9I02DFwH/A6mGfvwOqshhqCspYAsdBev
-ZmJ0PsT5q6JqmJcbwasMdH9CgEUBb9Kx+H9Jr8cJNfZLq6mk/sNLvz3CUy1HUsKF
-TsAnXImbFs00+mFTE8rn296SXkzfz9boB1ROU9OqDfLJvdNZYSdivCadSBDS9dap
-5rrXT5ktILb2h9UoupUqpW9sGZwANmCPuVNnIM2AYBvKFbtqoqWhQldWr8Qg87D3
-JdkK+5OFDficGpGUOXhcEoDFzit95TzDYqE6aN7k8TW8H1RrcQ1TPf2bFfO20PZF
-T6XFVzkbzmUWvzbVfAIiRC0YtmyTojTn+45htkRF6VVPWQivxVrMq50XUXuzsyo=
-=/52f
+iQEcBAEBCgAGBQJQCXGLAAoJEELoaioR9I02u0YH/3MGDZJuzI6iTh4oVvXGeoAl
+NkKjNOU6c/vrsPbys+sNnlczg8CyezT6nL8DOeLkhg/HBAS6JtJngULOwBaSiNV3
+J4/SD6Y/Fa96oJnOR5pLUBVdLxrkdOhPvwEiUd2L1DIugrZKJ8pTxs28lX59ltq+
+3s59b20pJw9hNEHeDRc7MUY5fEa6t0FNYONsnYqUEEyLeZwYydHz1offgTG2dAhC
+FzUCsG1Xzq2TT5PkA/M9ZNu3YQlDJOOzPOY/9A+O9rI5993iAab/lZ/jaDAgZZ0j
+4JpHzJGjaqF0XuY+3FpfoPC/DFqBBEjnzXzBTUQahmX7KjzqmdxQIwBiiiloMHg=
+=Z97t
 -----END PGP SIGNATURE-----
