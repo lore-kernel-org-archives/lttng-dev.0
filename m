@@ -1,8 +1,9 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: LTTng
-Date: Fri, 20 Jul 2012 13:02:33 -0400
-Message-ID: <20120720170233.GA18851__5249.01593239537$1342803782$gmane$org@Krystal>
-References: <C3E76F4DB674C24BA475182F42DDE8B54E5ACE@SOM-EXCH02.nuance.com>
+Subject: Re: some questions on lttng
+Date: Fri, 20 Jul 2012 13:26:18 -0400
+Message-ID: <20120720172618.GA19112__10823.7079963603$1342805214$gmane$org@Krystal>
+References: <4B3E7C3D6AE874479212F4D6AE0AFD1F02C7FF0741@MX28A.corp.emc.com>
+	<4B3E7C3D6AE874479212F4D6AE0AFD1F02C7FF0805@MX28A.corp.emc.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -10,10 +11,10 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1SsGb5-0007wC-Eb
-	for lttng-dev@lists.lttng.org; Fri, 20 Jul 2012 13:02:35 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1SsGy4-00086Y-V8
+	for lttng-dev@lists.lttng.org; Fri, 20 Jul 2012 13:26:21 -0400
 Content-Disposition: inline
-In-Reply-To: <C3E76F4DB674C24BA475182F42DDE8B54E5ACE@SOM-EXCH02.nuance.com>
+In-Reply-To: <4B3E7C3D6AE874479212F4D6AE0AFD1F02C7FF0805@MX28A.corp.emc.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,35 +23,98 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Alawneh, Luay" <Luay.Alawneh@nuance.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Bingfeng.Zhao@emc.com, tglx@linutronix.de
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-One small detail to keep in mind at this point: only the "discard" and
-"overwrite" modes are implemented for handling buffer condition. If you
-need to ensure that events are _never_ discarded, even with
-high-throughput scenarios, we might need to implement a "blocking" mode,
-which makes the application wait until there is space free in the buffer
-before it continues. It would probably make more sense for logging.
+* Bingfeng.Zhao@emc.com (Bingfeng.Zhao@emc.com) wrote:
+> Anyone can answer our questions? Mathieu?
 
-Other than this detail, LTTng-UST would be a good fit for low-overhead
-logging.
+sorry for the slow reply, I've been swamped in filtering implementation
+lately,
 
-Thanks,
+> 
+> From: Bingfeng.Zhao@emc.com [mailto:Bingfeng.Zhao@emc.com]
+> Sent: Wednesday, July 18, 2012 5:54 PM
+> To: lttng-dev@lists.lttng.org
+> Subject: [lttng-dev] some questions on lttng
+> 
+> Hello the dev list,
+> We encounter some basic questions when try to adapt the LTTNG in our poject.
+> 
+> 1.   When the trace is enabled and all are well configurated, we get
+> trace messages collected under the session folder. The question is
+> whether it is possible that some traces will lost when the trace
+> messages are huge. How will LTTNG do if the consumer deamon cannot
+> fast enough to copy the trace message from trace buffer?
+
+There are currently two ways to configure the channels: discard and
+overwrite mode.
+
+In discard mode, upon buffer full condition, events are discarded, and
+we keep track of the number of events discarded in the packet headers,
+so the trace viewer can print warnings about discarded events within a
+specific time-frame.
+
+In overwrite mode, upon buffer full condition, the oldest subbuffer
+(packet) is overwritten. We will soon add a sequence counter to the
+packet header, so the trace viewer can show when a packet is missing in
+the stream (either due to being overwritten by the tracer or due to UDP
+packet loss in network streaming).
+
+If the message (event) is too large to fit within a packet, it is
+discarded, incrementing the event discarded counter accordingly (so the
+viewer can show this information from the packet header).
+
+It would be interesting to implement a "blocking" mode that makes the
+application block if buffer is full. This makes the tracer much more
+intrusive, and if something goes wrong in the session daemon or consumer
+daemon, the app hangs, but it might be interesting for logging purposes,
+if you care about _never_ losing an event. I would recommend to use this
+kind of feature in debugging setups, not in production, at the
+beginning, since it would make the sessiond/consumerd critical (if they
+die, the application hangs. I don't want to see this happen in
+production).
+
+> 
+> 2.   For user space trace, currectly seems we cannot set the flush
+> interval. How can we control the flush internal for UST? If no, is
+> there hardcoded or random flash interval? Or there is no time based
+> flush mechanism at all for UST?
+
+The flush interval will only be useful for live streaming, which is not
+supported yet. Currently, UST does a subbuffer switch (flush) each time
+the subbuffer cannot hold the next event to write. I plan to implement
+this periodic flush at the consumer daemon level, so it will be less
+intrusive within the application. Adding timers to a traced application
+without its knowledge would likely be a nightware waiting to happen.
+
+> 
+> 3.   For a severe kernel panic can we extrace buffered trace messages
+> from LTTNG internal buffer in full memory core dump file? Is there
+> tools on this we can leverage?
+
+Not yet, but it's a feature we look forward to see coming. At some point
+in the past, I remember there was a patch to lcrash that was supporting
+extraction of lttng 0.x buffers from a crashed kernel image. However,
+LTTng 2.0 data structure layout is quite different, so this work would
+have to be redone. I'm aware that Thomas Gleixner is working on
+"Shrinking core dump on the fly" (see the Tracing Summit schedule at
+http://tracingsummit.org/wiki/TracingSummit2012). Maybe he has a few
+words to say on this, and some recommendations.
+
+One related thing that would be interesting to implement is a
+libringbuffer backend that uses video card memory buffers that survive
+reboots. Given that lttng libringbuffer is very modular, it should be
+straightforward to implement.
+
+Thanks!
 
 Mathieu
 
-* Alawneh, Luay (Luay.Alawneh@nuance.com) wrote:
-> Hi,
 > 
-> I am reading about LTTng and I would like to know if it can replace Log4c for logging user space events in the production environment. In addition to the method enter/exit events we also use Log4c to log many other events to indicate errors and other useful information.
-> 
-> To summarize, I would like to know if LTTng can be used in a production environment for logging different types of events. We are planning to replace Log4c with another logging framework to improve the performance by reducing the time spent in logging.
-> 
-> Thanks,
-> 
-> Luay Alawneh
-> Nuance Communications
+> Thank you,
+> - Bingfeng
 > 
 
 > _______________________________________________
