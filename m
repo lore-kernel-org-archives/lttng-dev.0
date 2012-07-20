@@ -1,21 +1,19 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [babeltrace] FTS does not support large files
-	on	32-bit
-Date: Fri, 20 Jul 2012 14:07:30 -0400
-Message-ID: <20120720180730.GA20073__46360.2218813778$1342807676$gmane$org@Krystal>
-References: <20120630185335.GA31235@Krystal> <4FF4A996.8040606@gmail.com>
-	<524C960C5DFC794E82BE548D825F05CF56CB608F@EU-MBX-04.mgc.mentorg.com>
+Subject: Re: LTTng-UST alternative to LD_PRELOAD
+Date: Fri, 20 Jul 2012 14:13:21 -0400
+Message-ID: <20120720181321.GB20073__4759.97812250188$1342808033$gmane$org@Krystal>
+References: <1339945703.2599.21.camel@DellE5500>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1SsHbw-0008TP-Nd
-	for lttng-dev@lists.lttng.org; Fri, 20 Jul 2012 14:07:32 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1SsHhb-00005V-35
+	for lttng-dev@lists.lttng.org; Fri, 20 Jul 2012 14:13:23 -0400
 Content-Disposition: inline
-In-Reply-To: <524C960C5DFC794E82BE548D825F05CF56CB608F@EU-MBX-04.mgc.mentorg.com>
+In-Reply-To: <1339945703.2599.21.camel@DellE5500>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,57 +22,85 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Oestman, Fredrik" <Fredrik_Oestman@mentor.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, "jdesfossez@efficios.com" <jdesfossez@efficios.com>
+To: Lars <lars@grandepotatis.se>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Oestman, Fredrik (Fredrik_Oestman@mentor.com) wrote:
-> Hi Yannick and Julien,
-> =
+* Lars (lars@grandepotatis.se) wrote:
+> 
+> Hello,
+> 
+> I have recently started to use LTTng-UST and am using LD_PRELOAD
+> to make it possilbe to execute instrumented code on systems without
+> LTTng-UST installed.
+> 
+> To define LD_PRELOAD however affects too much. For instance all
+> forked processes also get the library loaded. This can be fixed by
+> removing the library from the LD_PRELOAD variable early in the main
+> function. This looks odd and required some explaining in comments.
 
-> =
+good point. LD_PRELOAD was originally the only way we allowed lttng-ust
+to be loaded, because during the rc phase of the lttng-ust 2.0
+development, we had issues with dlopening liblttng-ust. This has been
+fixed within the rc stages though, so we could go for a dlopen approach
+now.
 
-> Yannick Brosseau wrote:
-> > FTS does not use callbacks, which makes it easier to use.
-> > Also since it was supposed to be part of the babeltrace API, not having
-> > to manage a callbacks looked better.
-> > =
+> 
+> Also, in my case, the instrumented program is started with a "wrapper"
+> program which I can not alter. This wrapper also gets the library
+> loaded.
+> 
+> As an alternative to using LD_PRELOAD I would like to use an explicit
+> function, like;
+> 
+>   int traceload(char const* library_path);
 
-> > Might had other reasons at the time, but now I don't see any more.
-> =
+or maybe:
 
-> Are you making any progress in supplying large file support in babeltrace?
-> =
+int lttng_ust_dlopen(const char *library_path);
 
-> Would it be helpful if I filed a bug report?
+?
 
-Julien was on vacation last week. Hopefully he will make progress on
-this issue within the next week. Adding a bug entry would be helpful to
-track this issue, yes.
+> that is called early in main (instead of the LD_PRELOAD environment
+> manipulation) and loads the library with dlopen if it exists.
+
+yep, makes sense.
+
+> 
+> I have already tried this (of course) and it almost works already.
+> The tracepoints becomes visible but I get no trace data written.
+> So I think a really small modification is needed.
+> 
+> Is anything like this planned?
+
+if you can provide a patch, I'd be glad to review & merge it.
+
+> 
+> Or can anybody give me a hint on what is missing?
+
+Try running your app with the env. var LTTNG_UST_DEBUG=1  set. It might
+provide helpful info. If you still have problems, please post your patch
+as RFC along with specific test programs so we can look at the behavior.
 
 Thanks,
 
 Mathieu
 
-> =
-
-> =
-
-> Cheers,
-> =
-
-> Fredrik =D6stman
-> =
-
-> =
-
+> 
+> I checked the mailing list a couple of months back but did not
+> find anything.
+> 
+> Best Regards,
+> Lars Ekman
+> 
+> 
+> 
 > _______________________________________________
 > lttng-dev mailing list
 > lttng-dev@lists.lttng.org
 > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
--- =
-
+-- 
 Mathieu Desnoyers
 Operating System Efficiency R&D Consultant
 EfficiOS Inc.
