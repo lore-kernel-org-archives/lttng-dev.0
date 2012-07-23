@@ -1,18 +1,22 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: Re: [PATCH lttng-tools] Fix: relayd
- relay_cmd_pipe/thread_quit_pipe should be closed on exit/error.
-Date: Mon, 23 Jul 2012 07:48:43 -0400
-Message-ID: <500D3A1B.3000101__8854.70438884131$1343044151$gmane$org@efficios.com>
-References: <1342812407-5225-1-git-send-email-christian.babeux@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: some questions on lttng
+Date: Mon, 23 Jul 2012 10:13:31 -0400
+Message-ID: <20120723141331.GA1932__1465.85516999966$1343052869$gmane$org@Krystal>
+References: <4B3E7C3D6AE874479212F4D6AE0AFD1F02C7FF0741@MX28A.corp.emc.com>
+	<4B3E7C3D6AE874479212F4D6AE0AFD1F02C7FF0805@MX28A.corp.emc.com>
+	<20120720172618.GA19112@Krystal>
+	<4B3E7C3D6AE874479212F4D6AE0AFD1F02C7FF08D3@MX28A.corp.emc.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([213.239.202.151])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1StH84-0003qo-OM
-	for lttng-dev@lists.lttng.org; Mon, 23 Jul 2012 07:48:48 -0400
-In-Reply-To: <1342812407-5225-1-git-send-email-christian.babeux@efficios.com>
+	(envelope-from <compudj@mail.openrapids.net>) id 1StJO9-0004wZ-29
+	for lttng-dev@lists.lttng.org; Mon, 23 Jul 2012 10:13:33 -0400
+Content-Disposition: inline
+In-Reply-To: <4B3E7C3D6AE874479212F4D6AE0AFD1F02C7FF08D3@MX28A.corp.emc.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,88 +25,107 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Christian Babeux <christian.babeux@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: Bingfeng.Zhao@emc.com
+Cc: tglx@linutronix.de, lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA512
+* Bingfeng.Zhao@emc.com (Bingfeng.Zhao@emc.com) wrote:
+> 
+> 
+> > -----Original Message-----
+> > From: Mathieu Desnoyers [mailto:mathieu.desnoyers@efficios.com]
+> > Sent: Saturday, July 21, 2012 1:26 AM
+> > To: Zhao, Bingfeng; tglx@linutronix.de
+> > Cc: lttng-dev@lists.lttng.org
+> > Subject: Re: [lttng-dev] some questions on lttng
+> > 
+> > * Bingfeng.Zhao@emc.com (Bingfeng.Zhao@emc.com) wrote:
+> > > Anyone can answer our questions? Mathieu?
+> > 
+> > sorry for the slow reply, I've been swamped in filtering implementation lately,
+> > 
+> > >
+> > > From: Bingfeng.Zhao@emc.com [mailto:Bingfeng.Zhao@emc.com]
+> > > Sent: Wednesday, July 18, 2012 5:54 PM
+> > > To: lttng-dev@lists.lttng.org
+> > > Subject: [lttng-dev] some questions on lttng
+> > >
+> > > Hello the dev list,
+> > > We encounter some basic questions when try to adapt the LTTNG in our poject.
+> > >
+> > > 1.   When the trace is enabled and all are well configurated, we get
+> > > trace messages collected under the session folder. The question is
+> > > whether it is possible that some traces will lost when the trace
+> > > messages are huge. How will LTTNG do if the consumer deamon cannot
+> > > fast enough to copy the trace message from trace buffer?
+> > 
+> > There are currently two ways to configure the channels: discard and overwrite
+> > mode.
+> > 
+> > In discard mode, upon buffer full condition, events are discarded, and we keep
+> > track of the number of events discarded in the packet headers, so the trace viewer
+> > can print warnings about discarded events within a specific time-frame.
+> > 
+> > In overwrite mode, upon buffer full condition, the oldest subbuffer
+> > (packet) is overwritten. We will soon add a sequence counter to the packet header,
+> > so the trace viewer can show when a packet is missing in the stream (either due to
+> > being overwritten by the tracer or due to UDP packet loss in network streaming).
+> > 
+> > If the message (event) is too large to fit within a packet, it is discarded,
+> > incrementing the event discarded counter accordingly (so the viewer can show this
+> > information from the packet header).
+> > 
+> > It would be interesting to implement a "blocking" mode that makes the application
+> > block if buffer is full. This makes the tracer much more intrusive, and if something
+> > goes wrong in the session daemon or consumer daemon, the app hangs, but it
+> > might be interesting for logging purposes, if you care about _never_ losing an
+> > event. I would recommend to use this kind of feature in debugging setups, not in
+> > production, at the beginning, since it would make the sessiond/consumerd critical
+> > (if they die, the application hangs. I don't want to see this happen in production).
+> > 
+> Thanks for the explanation, I got you point. However I'm at a
+> different scenario.  Normally the trace is off by default, that is
+> there is no session created and started.  The trace call definitely
+> should not block anything. Ideally it should not trigger at all and I
+> believe that is what lttng does now.
 
-Merged!
+Indeed.
 
-Christian Babeux:
-> Use the utils functions found in common/utils.h on pipes
-> operations (open/close).
 > 
-> Signed-off-by: Christian Babeux <christian.babeux@efficios.com> 
-> --- src/bin/lttng-relayd/main.c | 57
-> +++++++++++---------------------------------- 1 file changed, 14
-> insertions(+), 43 deletions(-)
-> 
-> diff --git a/src/bin/lttng-relayd/main.c
-> b/src/bin/lttng-relayd/main.c index bdefd16..795a694 100644 ---
-> a/src/bin/lttng-relayd/main.c +++ b/src/bin/lttng-relayd/main.c @@
-> -49,6 +49,7 @@ #include <common/hashtable/hashtable.h> #include
-> <common/sessiond-comm/relayd.h> #include <common/uri.h> +#include
-> <common/utils.h>
-> 
-> #include "lttng-relayd.h"
-> 
-> @@ -228,18 +229,13 @@ exit: static void cleanup(void) { -	int i,
-> ret; - DBG("Cleaning up");
-> 
-> -	for (i = 0; i < 2; i++) { -		if (thread_quit_pipe[i] >= 0) { -
-> ret = close(thread_quit_pipe[i]); -			if (ret) { -
-> PERROR("close"); -			} -		} -	} +	/* Close thread quit pipes */ +
-> utils_close_pipe(thread_quit_pipe); + +	/* Close relay cmd pipes
-> */ +	utils_close_pipe(relay_cmd_pipe); }
-> 
-> /* @@ -351,23 +347,10 @@ int set_signal_handler(void) static int
-> init_thread_quit_pipe(void) { -	int ret, i; - -	ret =
-> pipe(thread_quit_pipe); -	if (ret < 0) { -		PERROR("thread quit
-> pipe"); -		goto error; -	} +	int ret;
-> 
-> -	for (i = 0; i < 2; i++) { -		ret = fcntl(thread_quit_pipe[i],
-> F_SETFD, FD_CLOEXEC); -		if (ret < 0) { -			PERROR("fcntl"); -
-> goto error; -		} -	} +	ret =
-> utils_create_pipe_cloexec(thread_quit_pipe);
-> 
-> -error: return ret; }
-> 
-> @@ -1444,23 +1427,10 @@ error_poll_create: */ static int
-> create_relay_cmd_pipe(void) { -	int ret, i; - -	ret =
-> pipe(relay_cmd_pipe); -	if (ret < 0) { -		PERROR("relay cmd
-> pipe"); -		goto error; -	} +	int ret;
-> 
-> -	for (i = 0; i < 2; i++) { -		ret = fcntl(relay_cmd_pipe[i],
-> F_SETFD, FD_CLOEXEC); -		if (ret < 0) { -			PERROR("fcntl
-> relay_cmd_pipe"); -			goto error; -		} -	} +	ret =
-> utils_create_pipe_cloexec(relay_cmd_pipe);
-> 
-> -error: return ret; }
-> 
-> @@ -1480,7 +1450,7 @@ int main(int argc, char **argv) /* Parse
-> arguments */ progname = argv[0]; if ((ret = parse_args(argc, argv)
-> < 0)) { -		goto error; +		goto exit; }
-> 
-> if ((ret = set_signal_handler()) < 0) { @@ -1492,7 +1462,7 @@ int
-> main(int argc, char **argv) ret = daemon(0, 0); if (ret < 0) { 
-> PERROR("daemon"); -			goto error; +			goto exit; } }
-> 
-> @@ -1503,7 +1473,7 @@ int main(int argc, char **argv) if
-> (control_uri->port < 1024 || data_uri->port < 1024) { ERR("Need to
-> be root to use ports < 1024"); ret = -1; -			goto error; +			goto
-> exit; } }
-> 
-> @@ -1568,6 +1538,7 @@ exit: if (!ret) { exit(EXIT_SUCCESS); } + 
-> error: exit(EXIT_FAILURE); }
------BEGIN PGP SIGNATURE-----
+> If I find something wrong, I would like enable the trace at once and
+> try to figure out what happen.
 
-iQEcBAEBCgAGBQJQDToYAAoJEELoaioR9I02uocIAKNkQl6WB+UiH6Frtt/StpqX
-OK2POSZMxBs6HYtC9hGsbRB7CSyotGlo61gys17S2u4MZSdfRspkXu0Kw2qLw44m
-WVJicHALQdqgBkGISwKtmNzo0GUb8Pi1Sg+ruJ+47VClBheCa0V0S0RfdSCN/TfH
-lNEEaTHFHxV/YJy8Z3UOAoMuARVzNs6lyktLRHHHFilXuF/hIYlje37YZ0n/CVHq
-Kk6Xs7nbCh2TnJer46jnhGKO+ykhgZ/Nr75CvtBHK5pcziopJXsKUoVmZM16NBMU
-PhEZuEMz6l5n8D64z9x0dRBQLw0A4q8f8lem/iW9QH9R0TrDIIgCMKs+bb2cyFc=
-=+OBV
------END PGP SIGNATURE-----
+Yes, but it would be a shame if the tracer, when enabled to diagnose
+the issue you are encountering, modify the system behavior too much
+(e.g. by blocking the application), and thus makes the problem disappear
+under tracing, or worse, triggers other problems.
+
+> At this time, (possible) lost event
+> will make the trouble shooting much difficult (example for those rare
+> race condition issues) as you cannot reason about what you collected
+> if there are some messages lost. So all the meaning of static trace
+> may lost and such scenario is not rare in production.
+
+The LTTng kernel and UST tracers provide information about events
+discarded in the packet headers which help the user understand where the
+events have been dropped, and what to do about it (increase their buffer
+size for the next time they trace this workload). That should be
+sufficient to reproduce issues with a fixed, preallocated amount of
+resources, without changing the behavior of the traced system too much
+(without blocking). I think minimizing the impact of a running tracer
+(no blocking, no system slowdown, no possible application hang due to
+tracer bug) outweight the downside of having to gather another run
+of trace for the rare cases where events were discarded.
+
+Thoughts ?
+
+Thanks,
+
+Mathieu
+
+
+-- 
+Mathieu Desnoyers
+Operating System Efficiency R&D Consultant
+EfficiOS Inc.
+http://www.efficios.com
