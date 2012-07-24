@@ -1,18 +1,19 @@
 From: tarek slaymia <tarek.slaymia@gmail.com>
-Subject: Re: security over LTTng
-Date: Mon, 23 Jul 2012 15:12:49 -0400
-Message-ID: <CAP7TvLcHETG9FheMT2X9fGVODvrMxpmAzTDAxAMyGM1ET3Pc2A__23953.9651004181$1343070805$gmane$org@mail.gmail.com>
+Subject: Fwd: security over LTTng
+Date: Tue, 24 Jul 2012 11:23:53 -0400
+Message-ID: <CAP7TvLfOjSYe_buLS70bLqe_kX1ccMNuDFqx+DvcDprM2xzcTg__13611.6404588849$1343143470$gmane$org@mail.gmail.com>
 References: <CAP7TvLc1XWm_rr=uAne-K25x_mmob5MJeqR+STZ53KUgsAuoQQ@mail.gmail.com>
+	<CAP7TvLcHETG9FheMT2X9fGVODvrMxpmAzTDAxAMyGM1ET3Pc2A@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0585010123=="
+Content-Type: multipart/mixed; boundary="===============0791763289=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-yx0-f176.google.com ([209.85.213.176])
+Received: from mail-yw0-f48.google.com ([209.85.213.48])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <tarek.slaymia@gmail.com>) id 1StO3r-0007FN-AU
-	for lttng-dev@lists.lttng.org; Mon, 23 Jul 2012 15:12:55 -0400
-Received: by yenl5 with SMTP id l5so6859048yen.35
-	for <lttng-dev@lists.lttng.org>; Mon, 23 Jul 2012 12:12:49 -0700 (PDT)
-In-Reply-To: <CAP7TvLc1XWm_rr=uAne-K25x_mmob5MJeqR+STZ53KUgsAuoQQ@mail.gmail.com>
+	(envelope-from <tarek.slaymia@gmail.com>) id 1Stgxr-0007uO-FI
+	for lttng-dev@lists.lttng.org; Tue, 24 Jul 2012 11:23:59 -0400
+Received: by yhfq46 with SMTP id q46so7912509yhf.35
+	for <lttng-dev@lists.lttng.org>; Tue, 24 Jul 2012 08:23:53 -0700 (PDT)
+In-Reply-To: <CAP7TvLcHETG9FheMT2X9fGVODvrMxpmAzTDAxAMyGM1ET3Pc2A@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,40 +25,24 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============0585010123==
-Content-Type: multipart/alternative; boundary=14dae93410db1b9f8404c58408cd
+--===============0791763289==
+Content-Type: multipart/alternative; boundary=bcaec5186bf63dba5a04c594f35d
 
---14dae93410db1b9f8404c58408cd
+--bcaec5186bf63dba5a04c594f35d
 Content-Type: text/plain; charset=ISO-8859-1
 
-Hey all,
+Anyone can answer me please ?
+thank you .
 
-I'm student , i interested on security field .
-I have seen some works talking about pattern abstraction of LTTng traces in
-order to minimise their size and their easily interpretation .
-Other works talk about security pattern using these abstracting traces to
-detect host-based or network intrusion .
-
-Did LTTV or TMF eclipse plugin implements theses type of patterns ?
-Did you invest in security field in your development of LTTng , TMF plugin
-or any other tool ?
-
-
-Best Regards.
-
---14dae93410db1b9f8404c58408cd
+--bcaec5186bf63dba5a04c594f35d
 Content-Type: text/html; charset=ISO-8859-1
 
-Hey all,<br><br>I&#39;m student , i interested on security field .<br>I 
-have seen some works talking about pattern abstraction of LTTng traces 
-in order to minimise their size and their easily interpretation .<br>Other works talk about security pattern using these abstracting traces to detect host-based or network intrusion .<br>
+Anyone can answer me please ?<br>thank you .<br>
 
-<br>Did LTTV or TMF eclipse plugin implements theses type of patterns ?<br>Did you invest in security field in your development of LTTng , TMF plugin or any other tool ?<br><br><br>Best Regards.
-
---14dae93410db1b9f8404c58408cd--
+--bcaec5186bf63dba5a04c594f35d--
 
 
---===============0585010123==
+--===============0791763289==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -68,4 +53,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============0585010123==--
+--===============0791763289==--
