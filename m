@@ -1,7 +1,7 @@
 From: David Goulet <dgoulet@efficios.com>
 Subject: Re: [PATCH lttng-tools] Fix: health check and time
-Date: Tue, 24 Jul 2012 12:20:14 -0400
-Message-ID: <500ECB3E.80405__15570.2701923021$1343146836$gmane$org@efficios.com>
+Date: Tue, 24 Jul 2012 13:32:12 -0400
+Message-ID: <500EDC1C.1030803__33997.1859743402$1343151165$gmane$org@efficios.com>
 References: <20120723191204.GA12711@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,8 +9,8 @@ Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from smtp.ini-tech.com ([213.239.202.151])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1SthqK-0008MD-Qy
-	for lttng-dev@lists.lttng.org; Tue, 24 Jul 2012 12:20:17 -0400
+	(envelope-from <dgoulet@efficios.com>) id 1Stixz-0000Sv-BB
+	for lttng-dev@lists.lttng.org; Tue, 24 Jul 2012 13:32:15 -0400
 In-Reply-To: <20120723191204.GA12711@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -27,69 +27,15 @@ List-Id: lttng-dev@lists.lttng.org
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA512
 
-Merged!
+I've just notice something here during testing.
 
-Thanks
+Refer to the comment below.
 
-Mathieu Desnoyers:
-> I notice that currently, the health check code does not have a
-> notion of "time flow": therefore, two consecutive calls to
-> lttng_health_check() might end up returning a bad state (0) just
-> because there was too little time between the invocations.
-> 
-> However, the lttng.h documentation states:
-> 
-> /* * Check session daemon health for a specific component. * *
-> Return 0 if health is OK or 1 if BAD. A returned value of -1
-> indicate that * the control library was not able to connect to the
-> session daemon health * socket. * * Any other positive value is an
-> lttcomm error which can be translate with * lttng_strerror(). */ 
-> extern int lttng_health_check(enum lttng_health_component c);
-> 
-> Therefore, the user would expect that handling the time flow in
-> between the invocation is dealth with internally, which is what I
-> remember we agreed on.
-> 
-> So we would need to add some time information to the "last"
-> snapshot, so we can do a time delta between the current and last
-> snapshot to figure out if we need to report the thread as stalled
-> or not.
-> 
-> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com> 
-> CC: David Goulet <dgoulet@efficios.com> --- diff --git
-> a/src/bin/lttng-sessiond/health.c
-> b/src/bin/lttng-sessiond/health.c index d7d25cf..cbda651 100644 ---
-> a/src/bin/lttng-sessiond/health.c +++
-> b/src/bin/lttng-sessiond/health.c @@ -20,12 +20,58 @@ #include
-> <inttypes.h> #include <stdio.h> #include <stdlib.h> +#include
-> <time.h>
-> 
-> #include <common/error.h>
-> 
-> #include "health.h"
-> 
-> /* + * If a thread stalls for this amount of time, it will be
-> considered + * bogus (bad health). + */ +#define
-> HEALTH_CHECK_DELTA_S	20 +#define HEALTH_CHECK_DELTA_NS	0 + +static
-> const struct timespec time_delta = { +	.tv_sec =
-> HEALTH_CHECK_DELTA_S, +	.tv_nsec = HEALTH_CHECK_DELTA_NS, +}; + 
-> +static +void time_diff(const struct timespec *time_a, const struct
-> timespec *time_b, +		struct timespec *res) +{ +	if (time_a->tv_nsec
-> - time_b->tv_nsec < 0) { +		res->tv_sec = time_a->tv_sec -
-> time_b->tv_sec - 1; +		res->tv_nsec = 1000000000L + time_a->tv_sec
-> - time_b->tv_sec; +	} else { +		res->tv_sec = time_a->tv_sec -
-> time_b->tv_sec; +		res->tv_nsec = time_a->tv_sec - time_b->tv_sec; 
-> +	} +} + +/* + * Return true if time_a - time_b > diff, else
-> false. + */ +static +int time_diff_gt(const struct timespec
-> *time_a, const struct timespec *time_b, +		const struct timespec
-> *diff) +{ +	struct timespec res; + +	time_diff(time_a, time_b,
-> &res); +	time_diff(&res, diff, &res); +	if (res.tv_sec > 0) { +
-> return 1; +	} +	if (res.tv_sec == 0 && res.tv_nsec > 0) { +		return
-> 1; +	} +	return 0; +} + +/* * Check health of a specific health
-> state counter. * * Return 0 if health is bad or else 1. @@ -33,28
-> +79,55 @@ int health_check_state(struct health_state *state) { 
-> unsigned long current, last; -	int ret = 1; +	struct timespec
-> current_time; +	int retval = 1, ret;
+> +/* * Check health of a specific health state counter. * * Return 0
+> if health is bad or else 1. @@ -33,28 +79,55 @@ int
+> health_check_state(struct health_state *state) { unsigned long
+> current, last; -	int ret = 1; +	struct timespec current_time; +	int
+> retval = 1, ret;
 > 
 > assert(state);
 > 
@@ -117,8 +63,19 @@ Mathieu Desnoyers:
 > memcpy(&state->last_time, &current_time, sizeof(current_time)); +	}
 > else { +		if (time_diff_gt(&current_time, &state->last_time,
 > &time_delta)) { +			if (current == last &&
-> !HEALTH_IS_IN_POLL(current)) { +				/* error */ +				retval = 0; +
-> } +			/* update last counter and last sample time */ +
+> !HEALTH_IS_IN_POLL(current)) { +				/* error */ +				retval = 0;
+
+I think this should "goto end" and NOT followed by an update to the
+last counter and time since this makes two health_check return
+respectively BAD and OK.
+
+Considering two health check made by let say two applications or/and
+users, the second one will indicate a good health which is not true.
+
+Cheers!
+David
+
+> +			} +			/* update last counter and last sample time */ +
 > state->last = current; +			memcpy(&state->last_time, &current_time,
 > sizeof(current_time)); +		} }
 > 
@@ -150,11 +107,11 @@ Mathieu Desnoyers:
 > 
 -----BEGIN PGP SIGNATURE-----
 
-iQEcBAEBCgAGBQJQDss+AAoJEELoaioR9I02KGUH/R6EkV8c59V0VEbzvrJ+dYNv
-ThlZxdbxmPqT3w7PCr+1suZ1S3itQ3+R2zx+IxCMdz4rUFinypRG2Y/CmaXRkh+G
-aROxwB50z01cWMR94qblGzsY7j0LGUeQSOSFdDNeRqJkZCi4ROZaDszQ3XQu/iUM
-MLKcEQL1ER/wZdKwH3S2oTztuhlXEEG6QgdEbyclIWhzAc2WT+Nc34c3rwdCn3HZ
-tvtLy89PAmm7YGZby4GJZ/l5JNL9y+wNEXUXVFm5G02WkccJPQr7ZMKletSnRgqx
-F2GqXLJ6H9nDc8y7KvsXaSWHVB2d854rZ2gbXBvReBz8FrxWjXa42TTFPY4uByY=
-=57O1
+iQEcBAEBCgAGBQJQDtwXAAoJEELoaioR9I02lDAIAIbNRBj+dB2/mn1RSM22j6hI
+fnXckqmHkmdKqsw4UZUHGjrhFqlluwBggXjgQG9KEqZXdCrmv0x5+zam4cqMfHuU
+Cu0d8qiqgjnYFtxvftI7FWR7lxOZu3r8r4OtNi27XcyAmKh76+eZc/izLOa8bUOh
+keDnY0HYvxL5J4TBECrFdH+GzpMCtwE1zoc0uzp4YaQcXg+83We+KfPg8kCKJK/f
+epxVRjsQzz44j1Rr+OcgTfGubAAxT6Tf+ziNu8U7GxFSwciJizVapqbGnj1V6SGs
+BRj53xvqrW+DtIROWb/PIDKfddfkjhtWyou1CbkLHUxMEOEKTVnpFuIWSHQEoZk=
+=roW8
 -----END PGP SIGNATURE-----
