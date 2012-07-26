@@ -1,29 +1,17 @@
-From: changz <zheng.chang@emc.com>
-Subject: Question about lttng daemons
-Date: Thu, 26 Jul 2012 16:28:24 +0800
-Message-ID: <5010FFA8.9000706__49385.1008745425$1343291350$gmane$org@emc.com>
+From: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
+Subject: Re: Question about lttng daemons
+Date: Thu, 26 Jul 2012 10:41:18 -0400
+Message-ID: <5011570E.3060200__32520.7695518204$1343313759$gmane$org@voxpopuli.im>
+References: <5010FFA8.9000706@emc.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from hop-nat-141.emc.com ([168.159.213.141]
-	helo=mexforward.lss.emc.com) by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Zheng.Chang@emc.com>) id 1SuJR7-00011D-1a
-	for lttng-dev@lists.lttng.org; Thu, 26 Jul 2012 04:28:45 -0400
-Received: from hop04-l1d11-si03.isus.emc.com (HOP04-L1D11-SI03.isus.emc.com
-	[10.254.111.23])
-	by mexforward.lss.emc.com (Switch-3.4.3/Switch-3.4.3) with ESMTP id
-	q6Q8Sc4X026436
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-SHA bits=256 verify=NO)
-	for <lttng-dev@lists.lttng.org>; Thu, 26 Jul 2012 04:28:38 -0400
-Received: from mailhub.lss.emc.com (mailhub.lss.emc.com [10.254.221.145]) by
-	hop04-l1d11-si03.isus.emc.com (RSA Interceptor) for
-	<lttng-dev@lists.lttng.org>; Thu, 26 Jul 2012 04:28:28 -0400
-Received: from corpussmtp4.corp.emc.com (corpussmtp4.corp.emc.com
-	[10.254.169.197])
-	by mailhub.lss.emc.com (Switch-3.4.3/Switch-3.4.3) with ESMTP id
-	q6Q8SRlr002765
-	for <lttng-dev@lists.lttng.org>; Thu, 26 Jul 2012 04:28:28 -0400
+Received: from ironport2-out.teksavvy.com ([206.248.154.182])
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <alexmonthy@voxpopuli.im>) id 1SuPG2-0003xv-Bi
+	for lttng-dev@lists.lttng.org; Thu, 26 Jul 2012 10:41:42 -0400
+In-Reply-To: <5010FFA8.9000706@emc.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -32,16 +20,45 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: changz <zheng.chang@emc.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi all,
+Hi,
 
-Is that possible to launch lttng daemons as a system service? i.e. we 
-can start/stop/restart it like the services under /etc/init.d.
-Another concern is if here is a way to recover or continue the dataflow 
-once the daemons get crashed.
-I hope some vital trace info can be still kept even if daemon crashes.
+I can answer your first question ;)
 
-BR
-zheng
+
+On 12-07-26 04:28 AM, changz wrote:
+> Hi all,
+>
+> Is that possible to launch lttng daemons as a system service? i.e. we
+> can start/stop/restart it like the services under /etc/init.d.
+
+Absolutely. Note that you only need to auto-start the lttng-sessiond.
+The consumerd daemons get started automatically by the sessiond when
+trace sessions are created. This is a nice way to start a root session
+daemon at boot time, which then allows users in the "tracing" group to
+use the kernel tracer without being root themselves.
+
+We don't ship an example in the source tree, since this is usually
+distro-specific, but for reference you can look at the Upstart script
+that is available in the Ubuntu package:
+http://bazaar.launchpad.net/~ubuntu-branches/ubuntu/quantal/lttng-tools/quantal/view/head:/debian/lttng-tools.lttng-sessiond.upstart
+
+
+Alex
+
+> Another concern is if here is a way to recover or continue the
+> dataflow once the daemons get crashed.
+> I hope some vital trace info can be still kept even if daemon crashes.
+>
+> BR
+> zheng
+>
+>
+>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
