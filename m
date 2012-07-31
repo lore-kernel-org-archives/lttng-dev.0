@@ -1,19 +1,17 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: lttng-ust, libtool and cross-compilation
-Date: Mon, 30 Jul 2012 12:07:00 -0400
-Message-ID: <20120730160700.GA11557__45737.0079275735$1343664445$gmane$org@Krystal>
-References: <CAGDH53n-_vt5_9j_WNgVueF7FdzWcmc8yz0ZC4e=jKMqV8t5ZQ@mail.gmail.com>
+From: Rui Han <r.han@umiami.edu>
+Subject: how to get the sockaddr struct from its pointer in
+	kernel tracing
+Date: Mon, 30 Jul 2012 23:22:24 -0400
+Message-ID: <CABy43G-atS7UTMYnjTBv_dnZa6jE7fb2TTF2VZ6X66JLoaASww__6394.14911061085$1343704978$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0518549037=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from mail-ob0-f176.google.com ([209.85.214.176])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1SvsUo-0004U6-Na
-	for lttng-dev@lists.lttng.org; Mon, 30 Jul 2012 12:07:02 -0400
-Content-Disposition: inline
-In-Reply-To: <CAGDH53n-_vt5_9j_WNgVueF7FdzWcmc8yz0ZC4e=jKMqV8t5ZQ@mail.gmail.com>
+	(envelope-from <iurnah@gmail.com>) id 1Sw32V-0000rC-5m
+	for lttng-dev@lists.lttng.org; Mon, 30 Jul 2012 23:22:31 -0400
+Received: by obbtb18 with SMTP id tb18so12722563obb.35
+	for <lttng-dev@lists.lttng.org>; Mon, 30 Jul 2012 20:22:24 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,97 +20,51 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Christian Babeux <christian.babeux@efficios.com>
-Cc: lttng-dev@lists.lttng.org, Julien Desfossez <jdesfossez@efficios.com>, David Goulet <dgoulet@efficios.com>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Christian Babeux (christian.babeux@efficios.com) wrote:
-> Hi all,
-> 
-> When cross-compiling lttng-ust, some users might encounter an issue
-> regarding missing libraries like this one:
-> 
-> /usr/lib/gcc/powerpc-linux-gnu/4.4.5/../../../../powerpc-linux-gnu/bin/ld:
-> warning: liblttng-ust-tracepoint.so.0, needed by
-> ../../liblttng-ust/.libs/liblttng-ust.so, not found (try using -rpath
-> or -rpath-link)
-> ../../liblttng-ust/.libs/liblttng-ust.so: undefined reference to
-> `init_tracepoint'
-> ../../liblttng-ust/.libs/liblttng-ust.so: undefined reference to
-> `__tracepoint_probe_unregister'
-> ../../liblttng-ust/.libs/liblttng-ust.so: undefined reference to
-> `__tracepoint_probe_register'
-> ../../liblttng-ust/.libs/liblttng-ust.so: undefined reference to
-> `exit_tracepoint'
-> 
-> After some digging, this issue seems to appear only in cross-compilation
-> setup, especially on Debian based system.
-> 
-> The lttng-ust libraries dependencies can be summarized as follow:
-> 
-> +-----------------+ -> liblttng-ust-tracepoint.so -> liburcu-bp.so
-> | liblttng-ust.so | -> liblttng-ust-runtime.so
-> +-----------------+ -> liblttng-ust-support.so    -> libringbuffer.so
-> 
-> The problem arise when linking libraries with indirect libraries dependencies.
-> Other project have had this issue in the past [1].
-> 
-> This "bug" is caused by an upstream modification in the libtool package
-> on Debian system [2]. The libtool "link_all_deplibs" flag is set to "no"
-> by default on linux targets (AFAIK, other distros set it to unknown).
-> 
-> This has the unfortunate consequence of breaking cross-compilation
-> builds because gnu-ld doesn't use rpath on cross-compilation targets.
-> Hence the undefined reference errors messages.
-> 
-> Here are some possible ways to handle this problematic situation:
-> 
-> 1 - Cook our own libtool.m4 in the lttng-ust tree with the
->     libtool link_all_deplibs flag set to 'unknown'.
-> 
->     Pro: No action required on the user side.
->     Con: Additional work for the maintainer to ensure that the proper
-> 	 libtool.m4 is present in sources packages. Additionnal maintenance.
-> 
-> 2 - Add explicit dependencies to indirect libraries in the appropriates
->     Makefile.am (such as the ones found in tests/{hello, hello.cxx, fork}).
-> 
->     Pro: No action required on the user side.
->     Con: Tedious.
-> 
-> 3 - Add a configure flag to detect bogus version of libtool and automagically
->     fix it.
-> 
->     Pro: Less maintenance.
->     Con: Require user interaction when cross-compiling.
+--===============0518549037==
+Content-Type: multipart/alternative; boundary=bcaec54c527cdf259f04c617af41
 
-could we do a variant of (3) ? We could automagically change the
-link_all_deplibs flag in our libtool.m4 in configure, and add a
-"--disable-libtool-cross-compile-fixup" (or something shorter) to
-disable running that script.
+--bcaec54c527cdf259f04c617af41
+Content-Type: text/plain; charset=ISO-8859-1
 
-So typically it will require no interaction from users, except when they
-"know what they are doing" and want to explicitely disable our
-work-around.
+Hi,
 
-Thoughts ?
+In the sys_connect and sys_bind kernel tracing, a pointer to the socdaddr
+struct has been dumped. (i.e. the second argument in sys_bind: { cpu_id = 0
+}, { fd = 39, umyaddr = 0x7FE18E3D0B80, addrlen = 0xC }). What if I want to
+access the struct for the IP and port number related to the socket? Is
+there an easy way to do this? Please give me some hints. Thank you very
+much.
 
-Mathieu
+Regards,
+Rui
 
-> 
-> Other components of LTTng might be affected be the same issue.
-> 
-> Any thoughts or additional input is quite welcome!
-> 
-> Thanks,
-> 
-> Christian
-> 
-> [1] - https://lists.isc.org/pipermail/bind10-dev/2011-August/002535.html
-> [2] - http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=297726
+--bcaec54c527cdf259f04c617af41
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
 
--- 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+Hi,<div><br></div><div>In the sys_connect and sys_bind kernel tracing, a po=
+inter to the socdaddr struct has been dumped. (i.e. the second argument in =
+sys_bind: { cpu_id =3D 0 }, { fd =3D 39, umyaddr =3D 0x7FE18E3D0B80, addrle=
+n =3D 0xC }). What if I want to access the struct for the IP and port numbe=
+r related to the socket? Is there an easy way to do this? Please give me so=
+me hints. Thank you very much.</div>
+<div><br></div><div>Regards,</div><div>Rui=A0</div>
+
+--bcaec54c527cdf259f04c617af41--
+
+
+--===============0518549037==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0518549037==--
