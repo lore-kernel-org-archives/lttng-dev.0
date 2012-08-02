@@ -1,20 +1,18 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH] Fix: unresolvable dependencies
-	to	liblttng-ust-tracepoint when cross-compiling.
-Date: Thu, 2 Aug 2012 09:00:14 -0400
-Message-ID: <20120802130014.GA29924__42171.8683596284$1343912441$gmane$org@Krystal>
-References: <1343909189-1338-1-git-send-email-hhi08001@student.mdh.se>
+From: Yannick Brosseau <yannick.brosseau@gmail.com>
+Subject: Re: [RFC] LTTng address API proposal
+Date: Thu, 02 Aug 2012 09:13:30 -0400
+Message-ID: <501A7CFA.8000005__23920.9925327033$1343913246$gmane$org@gmail.com>
+References: <50180418.5020904@polymtl.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0200649592=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from mail-vc0-f176.google.com ([209.85.220.176])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1Swv0i-000296-H4
-	for lttng-dev@lists.lttng.org; Thu, 02 Aug 2012 09:00:16 -0400
-Content-Disposition: inline
-In-Reply-To: <1343909189-1338-1-git-send-email-hhi08001@student.mdh.se>
+	(envelope-from <yannick.brosseau@gmail.com>) id 1SwvDe-0002Fa-8b
+	for lttng-dev@lists.lttng.org; Thu, 02 Aug 2012 09:13:38 -0400
+Received: by vcbfl11 with SMTP id fl11so9709709vcb.35
+	for <lttng-dev@lists.lttng.org>; Thu, 02 Aug 2012 06:13:32 -0700 (PDT)
+In-Reply-To: <50180418.5020904@polymtl.ca>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,94 +21,151 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Henrik Hautakoski <hhi08001@student.mdh.se>
-Cc: daniel.flemstrom@mdh.se, lttng-dev@lists.lttng.org, skn07007@student.mdh.se, alf.larsson@ericsson.com
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Henrik Hautakoski (hhi08001@student.mdh.se) wrote:
-> Original patch by Christian Babeux that did not apply cleanly on upstream.
+This is a multi-part message in MIME format.
+--===============0200649592==
+Content-Type: multipart/alternative;
+ boundary="------------030202090201020309080708"
 
-I will wait for the proper fix from Christian, which is to fix the
-libtool m4 file in the tree. Fix should be coming soon.
+This is a multi-part message in MIME format.
+--------------030202090201020309080708
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
 
-Thanks,
 
-Mathieu
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-> 
-> Co-author: Stefan Karlsson <skn07007@student.mdh.se>
-> Signed-off-by: Henrik Hautakoski <hhi08001@student.mdh.se>
-> ---
->  tests/fork/Makefile.am      |   12 ++++++++----
->  tests/hello.cxx/Makefile.am |    4 +++-
->  tests/hello/Makefile.am     |    4 +++-
->  3 files changed, 14 insertions(+), 6 deletions(-)
-> 
-> diff --git a/tests/fork/Makefile.am b/tests/fork/Makefile.am
-> index 0a649c7..b5830d7 100644
-> --- a/tests/fork/Makefile.am
-> +++ b/tests/fork/Makefile.am
-> @@ -2,11 +2,15 @@ AM_CPPFLAGS = -I$(top_srcdir)/include -Wsystem-headers
->  
->  noinst_PROGRAMS = fork fork2
->  fork_SOURCES = fork.c ust_tests_fork.h
-> -fork_LDADD = $(top_builddir)/liblttng-ust/liblttng-ust.la \
-> -		$(top_builddir)/liblttng-ust-fork/liblttng-ust-fork.la
-> +fork_LDADD = \
-> +	$(top_builddir)/liblttng-ust/liblttng-ust.la \
-> +	$(top_builddir)/liblttng-ust/liblttng-ust-tracepoint.la \
-> +	$(top_builddir)/liblttng-ust-fork/liblttng-ust-fork.la
->  fork2_SOURCES = fork2.c
-> -fork2_LDADD = $(top_builddir)/liblttng-ust/liblttng-ust.la \
-> -		$(top_builddir)/liblttng-ust-fork/liblttng-ust-fork.la
-> +fork2_LDADD = \
-> +	$(top_builddir)/liblttng-ust/liblttng-ust.la \
-> +	$(top_builddir)/liblttng-ust/liblttng-ust-tracepoint.la \	
-> +	$(top_builddir)/liblttng-ust-fork/liblttng-ust-fork.la
->  
->  if LTTNG_UST_BUILD_WITH_LIBDL
->  fork_LDADD += -ldl
-> diff --git a/tests/hello.cxx/Makefile.am b/tests/hello.cxx/Makefile.am
-> index f56f431..ea034df 100644
-> --- a/tests/hello.cxx/Makefile.am
-> +++ b/tests/hello.cxx/Makefile.am
-> @@ -2,7 +2,9 @@ AM_CPPFLAGS = -I$(top_srcdir)/include -Wsystem-headers
->  
->  noinst_PROGRAMS = hello
->  hello_SOURCES = hello.cpp tp.c ust_tests_hello.h
-> -hello_LDADD = $(top_builddir)/liblttng-ust/liblttng-ust.la
-> +hello_LDADD = \
-> +	$(top_builddir)/liblttng-ust/liblttng-ust.la \
-> +	$(top_builddir)/liblttng-ust/liblttng-ust-tracepoint.la
->  
->  if LTTNG_UST_BUILD_WITH_LIBDL
->  hello_LDADD += -ldl
-> diff --git a/tests/hello/Makefile.am b/tests/hello/Makefile.am
-> index 0c4c311..c00ce8b 100644
-> --- a/tests/hello/Makefile.am
-> +++ b/tests/hello/Makefile.am
-> @@ -2,7 +2,9 @@ AM_CPPFLAGS = -I$(top_srcdir)/include -Wsystem-headers
->  
->  noinst_PROGRAMS = hello
->  hello_SOURCES = hello.c tp.c ust_tests_hello.h
-> -hello_LDADD = $(top_builddir)/liblttng-ust/liblttng-ust.la
-> +hello_LDADD = \
-> +	$(top_builddir)/liblttng-ust/liblttng-ust.la \
-> +	$(top_builddir)/liblttng-ust/liblttng-ust-tracepoint.la
->  hello_CFLAGS = -Werror=old-style-definition
->  
->  if LTTNG_UST_BUILD_WITH_LIBDL
-> -- 
-> 1.7.0.4
-> 
-> 
+On 2012-07-31 12:13, David Goulet wrote:
+> This follows the discussion on IRC #lttng which aims at removing the
+lttng_uri
+> structure from the public API.
+>
+> Cheers!
+> David
+
+> --> lttng_create_session_addr(const char *name, const char *addr,
+
+Why not lttng_create_session_url ?
+
+> PROTO://[HOST|IP][:PORT][/PATH]
+>
+> Examples:
+>
+> * net://myhostname
+> * net://myhostname:9888
+> * net://myhostname/foo/bar
+> * net://X.X.X.X:9888/foo/bar
+
+
+You should put the list of protocol available. Now it seems that we
+cannot do file://
+
+
+> lttng_set_consumer_addr(struct lttng_handle *handle,
+                const char *addr);
+
+
+Can we have examples for the set_consumer addr ?
+
+>
+>
 > _______________________________________________
 > lttng-dev mailing list
 > lttng-dev@lists.lttng.org
 > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
--- 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.12 (GNU/Linux)
+Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
+
+iEYEARECAAYFAlAafOIACgkQFQrZ7GzHX2oKTQCeMZWzl27WI+qEkvik1TorHxtM
+RcQAoKZ6wsqNkfNb2WX3jj0Yc2TcPRZ3
+=5pn9
+-----END PGP SIGNATURE-----
+
+
+--------------030202090201020309080708
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
+
+<html>
+  <head>
+    <meta content="text/html; charset=ISO-8859-1"
+      http-equiv="Content-Type">
+  </head>
+  <body bgcolor="#FFFFFF" text="#000000">
+    <br>
+    -----BEGIN PGP SIGNED MESSAGE-----<br>
+    Hash: SHA1<br>
+    <br>
+    On 2012-07-31 12:13, David Goulet wrote:<br>
+    <span style="white-space: pre;">&gt; This follows the discussion on
+      IRC #lttng which aims at removing the lttng_uri<br>
+      &gt; structure from the public API.<br>
+      &gt;<br>
+      &gt; Cheers!<br>
+      &gt; David<br>
+      <br>
+      &gt; --&gt; lttng_create_session_addr(const char *name, const char
+      *addr,</span><br>
+    <br>
+    Why not lttng_create_session_url ?<br>
+    <br>
+    <span style="white-space: pre;">&gt; PROTO://[HOST|IP][:PORT][/PATH]<br>
+      &gt; <br>
+      &gt; Examples:<br>
+      &gt;<br>
+      &gt; * <a class="moz-txt-link-freetext" href="net://myhostname">net://myhostname</a><br>
+      &gt; * <a class="moz-txt-link-freetext" href="net://myhostname:9888">net://myhostname:9888</a><br>
+      &gt; * <a class="moz-txt-link-freetext" href="net://myhostname/foo/bar">net://myhostname/foo/bar</a><br>
+      &gt; * <a class="moz-txt-link-freetext" href="net://X.X.X.X:9888/foo/bar">net://X.X.X.X:9888/foo/bar</a></span><br>
+    <br>
+    <br>
+    You should put the list of protocol available. Now it seems that we
+    cannot do <a class="moz-txt-link-freetext" href="file://">file://</a><br>
+    <br>
+    <br>
+    <span style="white-space: pre;">&gt; lttng_set_consumer_addr(struct
+      lttng_handle *handle,</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const char *addr);<br>
+    <br>
+    <br>
+    Can we have examples for the set_consumer addr ?<br>
+    <br>
+    <span style="white-space: pre;">&gt;<br>
+      &gt;<br>
+      &gt; _______________________________________________<br>
+      &gt; lttng-dev mailing list<br>
+      &gt; <a class="moz-txt-link-abbreviated" href="mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a><br>
+      &gt; <a class="moz-txt-link-freetext" href="http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a></span><br>
+    <br>
+    -----BEGIN PGP SIGNATURE-----<br>
+    Version: GnuPG v1.4.12 (GNU/Linux)<br>
+    Comment: Using GnuPG with Mozilla - <a class="moz-txt-link-freetext" href="http://enigmail.mozdev.org/">http://enigmail.mozdev.org/</a><br>
+    <br>
+    iEYEARECAAYFAlAafOIACgkQFQrZ7GzHX2oKTQCeMZWzl27WI+qEkvik1TorHxtM<br>
+    RcQAoKZ6wsqNkfNb2WX3jj0Yc2TcPRZ3<br>
+    =5pn9<br>
+    -----END PGP SIGNATURE-----<br>
+    <br>
+  </body>
+</html>
+
+--------------030202090201020309080708--
+
+
+--===============0200649592==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0200649592==--
