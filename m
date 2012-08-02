@@ -1,17 +1,18 @@
-From: David Goulet <david.goulet@polymtl.ca>
-Subject: Re: [RFC] LTTng address API proposal
-Date: Thu, 02 Aug 2012 13:57:19 -0400
-Message-ID: <501ABF7F.7000603__35818.2674892761$1343930271$gmane$org@polymtl.ca>
-References: <50180418.5020904@polymtl.ca> <501A7CFA.8000005@gmail.com>
+From: Christian Babeux <christian.babeux@efficios.com>
+Subject: [PATCH lttng-ust] Fix: Libtool fails to find dependent
+	libraries when cross-compiling lttng-ust
+Date: Thu,  2 Aug 2012 16:53:56 -0400
+Message-ID: <1343940836-21773-1-git-send-email-christian.babeux__12442.3734764152$1343940989$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([213.239.202.151])
+Received: from mail-vb0-f48.google.com ([209.85.212.48])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <david.goulet@polymtl.ca>) id 1SwzeF-0004Jn-9Y
-	for lttng-dev@lists.lttng.org; Thu, 02 Aug 2012 13:57:23 -0400
-In-Reply-To: <501A7CFA.8000005@gmail.com>
+	(envelope-from <christian.babeux@0x80.ca>) id 1Sx2Qw-0005bg-Sa
+	for lttng-dev@lists.lttng.org; Thu, 02 Aug 2012 16:55:51 -0400
+Received: by vbjk17 with SMTP id k17so10482868vbj.35
+	for <lttng-dev@lists.lttng.org>; Thu, 02 Aug 2012 13:55:45 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,80 +21,73 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Yannick Brosseau <yannick.brosseau@gmail.com>
+To: mathieu.desnoyers@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
+This problem arise when cross compiling and linking libraries with
+indirect libraries dependencies (such as liblttng-ust). This "bug" is
+caused by an upstream modification in the libtool package on Debian
+system. The libtool "link_all_deplibs" flag is set to "no" by default
+on linux targets (AFAIK, other distros set it to "unknown").
 
+The chosen solution is to detect such cases via the configure script
+and automagically patch the libtool.m4 by forcing the "link_all_deplibs"
+to "unknown".
 
+This fixup can be disabled with the appropriate configure flag:
 
-On 02/08/12 09:13 AM, Yannick Brosseau wrote:
-> 
-> On 2012-07-31 12:13, David Goulet wrote:
->> This follows the discussion on IRC #lttng which aims at removing the
-> lttng_uri
->> structure from the public API.
-> 
->> Cheers! David
-> 
->> --> lttng_create_session_addr(const char *name, const char *addr,
-> 
-> Why not lttng_create_session_url ?
+./configure --disable-libtool-linkdep-fixup
 
-No idea lol... you prefer that, I'm not against.
+Sample configure output on affected systems:
 
-> 
->> PROTO://[HOST|IP][:PORT][/PATH]
-> 
->> Examples:
-> 
->> * net://myhostname * net://myhostname:9888 * net://myhostname/foo/bar *
->> net://X.X.X.X:9888/foo/bar
-> 
-> 
-> You should put the list of protocol available. Now it seems that we cannot
-> do file://
+checking for occurence(s) of link_all_deplibs = no in
+	 ./config/libtool.m4... 3
+configure: WARNING: the detected libtool will not link all
+ 	   dependencies, forcing link_all_deplibs = unknown
 
-The protocols are listed in doc/proposals/0003-network.consumer.txt. However,
-I might move them in that one so we can clearly define the URL string format.
+Fixes: #321
 
-> 
-> 
->> lttng_set_consumer_addr(struct lttng_handle *handle,
-> const char *addr);
-> 
-> 
-> Can we have examples for the set_consumer addr ?
+Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
+---
+ configure.ac | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-Ofc.
-
-David
-
-> 
-> 
-> 
->> _______________________________________________ lttng-dev mailing list 
->> lttng-dev@lists.lttng.org 
->> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> 
-> 
-> 
-> 
-> 
-> 
-> _______________________________________________ lttng-dev mailing list 
-> lttng-dev@lists.lttng.org 
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.12 (GNU/Linux)
-
-iQEcBAEBAgAGBQJQGr9/AAoJEELoaioR9I02NSQH/iaf4/+vBwxkkW6+KuZiRW2o
-p/KkZssf1yWQPtxyspxr2JAueykKCH+PtIiB2s2QLDxWCYqOt7gSPI2XlTjdem4I
-e+N6h25zVpKvlV+rzW6Aw/sbNXRyX9Pw9ldkHYxIkNJjx67Y2ZnBGa9lxdAx7t/U
-LE+RMrzy9+lwdodZhx5MVJxs1JyVNmU+i+dbIsQlAPdNwUWTebxKP3JVwHz/OwwH
-46++EnyFLPIeqvvVPCGJFOaBkBimMCDl0BFm+yviVWZXQKnYl44mnI41RFWa+JVF
-t1BLqkxExM7FzvnXuxUbBgbhRlRLlrXhRBFlNLK9kVSpPBBm49Y0g94tsB+hEjY=
-=t6Xs
------END PGP SIGNATURE-----
+diff --git a/configure.ac b/configure.ac
+index 4d40f75..8a93896 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -39,6 +39,31 @@ version_description="New type of beer, 100% from Quebec, flavored with sapin bea
+ AC_DEFINE_UNQUOTED([VERSION_NAME], ["$version_name"], [UST version name])
+ AC_DEFINE_UNQUOTED([VERSION_DESCRIPTION], ["$version_description"], [UST version description])
+ 
++AC_PROG_GREP
++# libtool link_all_deplibs fixup. See http://bugs.lttng.org/issues/321.
++AC_ARG_ENABLE(libtool-linkdep-fixup,
++	AS_HELP_STRING([--disable-libtool-linkdep-fixup],
++			[disable the libtool fixup for linking all dependent libraries (link_all_deplibs)]),
++	libtool_fixup=$enableval,
++	libtool_fixup=yes)
++
++AS_IF([test "x$libtool_fixup" = "xyes"],
++	    [
++	    libtool_m4="$srcdir/config/libtool.m4"
++	    libtool_flag_pattern=".*link_all_deplibs,.*\$1)"
++	    AC_MSG_CHECKING([for occurence(s) of link_all_deplibs = no in $libtool_m4])
++	    libtool_flag_pattern_count=$(grep -c "$libtool_flag_pattern=no" $libtool_m4)
++	    AS_IF([test $libtool_flag_pattern_count -ne 0],
++	    [
++		  AC_MSG_RESULT([$libtool_flag_pattern_count])
++		  AC_MSG_WARN([the detected libtool will not link all dependencies, forcing link_all_deplibs = unknown])
++		  sed -i "s/\($libtool_flag_pattern\)=no/\1=unknown/g" $libtool_m4
++		  ],
++		  [
++		  AC_MSG_RESULT([none])
++		  ])
++	    ])
++
+ # Checks for programs.
+ AC_PROG_CC
+ AC_PROG_CXX
+-- 
+1.7.11.3
