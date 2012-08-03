@@ -1,19 +1,19 @@
 From: Christian Babeux <christian.babeux@efficios.com>
-Subject: [PATCH lttng-tools 1/2] Fix: Libtool fails to find
-	dependent libraries when cross-compiling lttng-tools
-Date: Fri,  3 Aug 2012 16:31:27 -0400
-Message-ID: <e54a3e0eee9d87417e44f1de7f0d445d0e27476f.1344025572.git.christian.babeux__3937.51529413766$1344025965$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools 2/2] Fix: Missing libs dependencies
+	in configure check for lttng-ust-ctl
+Date: Fri,  3 Aug 2012 16:31:28 -0400
+Message-ID: <884d75d90550f85492dfcaac2b0088f78ced542b.1344025572.git.christian.babeux__15379.529403481$1344025977$gmane$org@efficios.com>
 References: <cover.1344025572.git.christian.babeux@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-gg0-f176.google.com ([209.85.161.176])
+Received: from mail-yx0-f176.google.com ([209.85.213.176])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <christian.babeux@0x80.ca>) id 1SxOXm-0007oS-42
-	for lttng-dev@lists.lttng.org; Fri, 03 Aug 2012 16:32:22 -0400
-Received: by mail-gg0-f176.google.com with SMTP id s6so1586555ggc.35
-	for <lttng-dev@lists.lttng.org>; Fri, 03 Aug 2012 13:32:22 -0700 (PDT)
+	(envelope-from <christian.babeux@0x80.ca>) id 1SxOY3-0007qE-6h
+	for lttng-dev@lists.lttng.org; Fri, 03 Aug 2012 16:32:39 -0400
+Received: by yenl5 with SMTP id l5so1587724yen.35
+	for <lttng-dev@lists.lttng.org>; Fri, 03 Aug 2012 13:32:32 -0700 (PDT)
 In-Reply-To: <cover.1344025572.git.christian.babeux@efficios.com>
 In-Reply-To: <cover.1344025572.git.christian.babeux@efficios.com>
 References: <cover.1344025572.git.christian.babeux@efficios.com>
@@ -29,67 +29,48 @@ To: dgoulet@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-This problem arise when cross compiling and linking libraries with
-indirect libraries dependencies (such as liblttng-ust). This "bug" is
-caused by an upstream modification in the libtool package on Debian
-system. The libtool "link_all_deplibs" flag is set to "no" by default
-on linux targets (AFAIK, other distros set it to "unknown").
+The lttng-ust-ctl library depends on liburcu-{common,bp,cds}.
+The AC_CHECK_LIBRARY macro can't automatically resolve dependents
+libraries (ala libtool), so any additionnals dependencies must
+be manually specified.
 
-The chosen solution is to detect such cases via the configure script
-and automagically patch the libtool.m4 by forcing the "link_all_deplibs"
-to "unknown".
-
-This fixup can be disabled with the appropriate configure flag:
-
-./configure --disable-libtool-linkdep-fixup
-
-Sample configure output on affected systems:
-
-checking for occurence(s) of link_all_deplibs = no in
-	 ./config/libtool.m4... 3
-configure: WARNING: the detected libtool will not link all
- 	   dependencies, forcing link_all_deplibs = unknown
+Also, the AC_CHECK_LIB action-if-found case for the lttng-ust-ctl
+check is modified to have a similar behavior as the default action,
+which is to define HAVE_LIBxxx and append -lxxx to $LIBS, *except*
+for the later step. This is to ensure that any future addition of
+AC_CHECK_LIB after the one for lttng-ust-ctl will not need to append
+the liburcu dependencies or fail unexpectedly.
 
 Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
 ---
- configure.ac | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+ configure.ac | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
 diff --git a/configure.ac b/configure.ac
-index 17e6b67..3a023cd 100644
+index 3a023cd..e4b9eb1 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -14,6 +14,31 @@ AC_DEFINE_UNQUOTED([VERSION_DESCRIPTION], ["$version_description"], "")
+@@ -138,13 +138,16 @@ AC_ARG_ENABLE(lttng-ust,
+ 	lttng_ust_support=$enableval, lttng_ust_support=yes)
  
- AC_CONFIG_HEADERS([include/config.h])
+ AS_IF([test "x$lttng_ust_support" = "xyes"], [
+-	AC_CHECK_LIB([lttng-ust-ctl], [ustctl_create_session], [],
+-		[AC_MSG_ERROR([Cannot find LTTng-UST. Use [LDFLAGS]=-Ldir to specify its location, or specify --disable-lttng-ust to build lttng-tools without LTTng-UST support.])]
++	AC_CHECK_LIB([lttng-ust-ctl], [ustctl_create_session],
++		[
++			AC_DEFINE([HAVE_LIBLTTNG_UST_CTL], [1], [has LTTng-UST control support])
++			lttng_ust_ctl_found=yes
++		],
++		[AC_MSG_ERROR([Cannot find LTTng-UST. Use [LDFLAGS]=-Ldir to specify its location, or specify --disable-lttng-ust to build lttng-tools without LTTng-UST support.])],
++		[-lurcu-common -lurcu-bp -lurcu-cds]
+ 	)
+ ])
+-
+-AM_CONDITIONAL([HAVE_LIBLTTNG_UST_CTL], [ test "x$ac_cv_lib_lttng_ust_ctl_ustctl_create_session" = "xyes" ])
+-
++AM_CONDITIONAL([HAVE_LIBLTTNG_UST_CTL], [test "x$lttng_ust_ctl_found" = xyes])
+ AC_CHECK_FUNCS([sched_getcpu sysconf])
  
-+AC_PROG_GREP
-+# libtool link_all_deplibs fixup. See http://bugs.lttng.org/issues/321.
-+AC_ARG_ENABLE(libtool-linkdep-fixup,
-+	AS_HELP_STRING([--disable-libtool-linkdep-fixup],
-+			[disable the libtool fixup for linking all dependent libraries (link_all_deplibs)]),
-+	libtool_fixup=$enableval,
-+	libtool_fixup=yes)
-+
-+AS_IF([test "x$libtool_fixup" = "xyes"],
-+	    [
-+	    libtool_m4="$srcdir/config/libtool.m4"
-+	    libtool_flag_pattern=".*link_all_deplibs\s*,\s*\$1\s*)"
-+	    AC_MSG_CHECKING([for occurence(s) of link_all_deplibs = no in $libtool_m4])
-+	    libtool_flag_pattern_count=$(grep -c "$libtool_flag_pattern\s*=\s*no" $libtool_m4)
-+	    AS_IF([test $libtool_flag_pattern_count -ne 0],
-+	    [
-+		  AC_MSG_RESULT([$libtool_flag_pattern_count])
-+		  AC_MSG_WARN([the detected libtool will not link all dependencies, forcing link_all_deplibs = unknown])
-+		  sed -i "s/\($libtool_flag_pattern\)\s*=\s*no/\1=unknown/g" $libtool_m4
-+		  ],
-+		  [
-+		  AC_MSG_RESULT([none])
-+		  ])
-+	    ])
-+
- AC_CHECK_HEADERS([ \
- 	sys/types.h unistd.h fcntl.h string.h pthread.h limits.h \
- 	signal.h stdlib.h sys/un.h sys/socket.h stdlib.h stdio.h \
+ # check for dlopen
 -- 
 1.7.11.3
