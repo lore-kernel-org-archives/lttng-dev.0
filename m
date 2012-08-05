@@ -1,8 +1,8 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: ERROR: No buffer space available
-Date: Sun, 5 Aug 2012 13:03:10 -0400
-Message-ID: <20120805170310.GA22267__40298.9252158024$1344186221$gmane$org@Krystal>
-References: <CABy43G8ANPh0ZM_3y5hHAQdsDYjt+UbZMsdJDeZxFHWRizXngQ@mail.gmail.com>
+Subject: Re: Babeltrace API timestamp manipulation changes
+Date: Sun, 5 Aug 2012 13:46:35 -0400
+Message-ID: <20120805174635.GA22981__31569.1291857094$1344188819$gmane$org@Krystal>
+References: <501C2627.6060401@efficios.com> <501C2D32.5090907@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -10,10 +10,10 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1Sy4ER-0002VO-AU
-	for lttng-dev@lists.lttng.org; Sun, 05 Aug 2012 13:03:11 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1Sy4uT-0002o5-Bs
+	for lttng-dev@lists.lttng.org; Sun, 05 Aug 2012 13:46:37 -0400
 Content-Disposition: inline
-In-Reply-To: <CABy43G8ANPh0ZM_3y5hHAQdsDYjt+UbZMsdJDeZxFHWRizXngQ@mail.gmail.com>
+In-Reply-To: <501C2D32.5090907@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,75 +22,50 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Rui Han <r.han@umiami.edu>
+To: Yannick Brosseau <yannick.brosseau@gmail.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Rui Han (r.han@umiami.edu) wrote:
-> Hi,
-> 
-> I try to modified the lttng2.0 source code for my research. For example, I
-> try to log the "comm" for the write system call, I add the following filed
-> in the file x86-64-syscalls-3.0.4_pointers.h located at the path
-> lttng-modules-2.0.3/instrumentation/syscalls/headers. I modify the
-> TRACE_EVENTS() macro from the original one:
-> 
-> #ifndef OVERRIDE_64_sys_write
-> SC_TRACE_EVENT(sys_write,
-> TP_PROTO(unsigned int fd, const char * buf, size_t count),
-> TP_ARGS(fd, buf, count),
-> TP_STRUCT__entry(__field(unsigned int, fd) __field_hex(const char *, buf)
-> __field(size_t, count)),
-> TP_fast_assign(tp_assign(fd, fd) tp_assign(buf, buf) tp_assign(count,
-> count)),
-> TP_printk()
-> )
-> #endif
-> 
-> to the following one:
-> 
-> #ifndef OVERRIDE_64_sys_write
-> SC_TRACE_EVENT(sys_write,
-> TP_PROTO(unsigned int fd, const char * buf, size_t count, struct
-> task_struct *p),
-> TP_ARGS(fd, buf, count, p),
-> TP_STRUCT__entry( __field(unsigned int, fd) __field_hex(const char *,
-> buf) __field(size_t,
-> count) __array_text(char, comm, TASK_COMM_LEN)),
-> TP_fast_assign( tp_assign(fd, fd) tp_assign(buf, buf) tp_assign(count,
-> 2064) tp_memcpy(comm,
-> p->comm, TASK_COMM_LEN)),
-> TP_printk()
-> )
-> #endif
-> 
-> I add one argument *p and one filed "comm"  for the macro. It was able to
-> be compiled, however, after reload the lttng modules, It will show the
-> following error messages when I start lttng.
-> 
-> PERROR: ioctl start session: No buffer space available [in
-> kernel_start_session() at kernel.c:397]
-> Error: Starting kernel trace failed
+* Yannick Brosseau (yannick.brosseau@gmail.com) wrote:
+> On 2012-08-03 15:27, Julien Desfossez wrote:
+> > Hi,
+> >
+> > Previously, the Babeltrace API forced the user to manipulate "raw
+> > timestamps" to seek, to get the timestamp begin and end of a trace, etc.
+> >
+> > This raw timestamp represented the cycle value scaled with the frequency
+> > but did not meant anything to the user and was likely to cause problem
+> > when dealing with traces recorded with different clock sources.
+> >
+> > The new patches commited in Babeltrace today removed the notion of the
+> > raw clock-source all over the code, and now the users can manipulate
+> > real timestamps (with the timezone offset applied) or cycle values if
+> > they want more fine-grained control on a specific trace.
+> >
+> > This means some API changes :
+> > - the "seek_time" member of the bt_iter_pos structure now takes real
+> > timestamp (with the offset applied)
+> > - the functions "bt_ctf_get_timestamp_raw" is removed
+> > - the funtion "bt_ctf_get_timestamp" is replaced by
+> > "bt_ctf_get_real_timestamp"
+> > - the function "bt_ctf_get_cycles_timestamp" is added
+> >
+> Why not simply calling them
+> bt_ctf_get_timestamp and bt_ctf_get_cycles  ?
 
-I don't see how modifying the system call tracing macro would trigger
-this error at start. Try restarting lttng-sessiond. Try unloading the
-lttng modules, and, maybe, as last resort, rebooting your system.
+Yes, it makes sense. Julien, any thoughts on this ?
 
 Thanks,
 
 Mathieu
 
 > 
-> It won't work. Please help me out with this. My next step is try to add
-> extra fields in the sys_connect macros to enable the logging of the
-> connected IP/port from the socket. Is this method right? what are other
-> possible solutions in order to logging the details of the socket
-> information?
+> Yannick
 > 
-> Thank you very much.
-> 
-> Regards,
-> Rui
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
 -- 
 Mathieu Desnoyers
