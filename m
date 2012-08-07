@@ -1,25 +1,19 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: [RFC] LTTng address API proposal v2
-Date: Tue, 07 Aug 2012 12:10:06 -0400
-Message-ID: <50213DDE.8070709__31779.5882271186$1344355832$gmane$org@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [RFC] LTTng address API proposal v2
+Date: Tue, 7 Aug 2012 12:25:29 -0400
+Message-ID: <20120807162529.GA31399__37974.885691847$1344356756$gmane$org@Krystal>
+References: <50213DDE.8070709@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="------------060900080602090605080208"
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([213.239.202.151])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1SymMD-0006gH-4M
-	for lttng-dev@lists.lttng.org; Tue, 07 Aug 2012 12:10:09 -0400
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by smtp.ini-tech.com (Postfix) with ESMTP id 378F4187204
-	for <lttng-dev@lists.lttng.org>; Tue,  7 Aug 2012 12:11:12 -0400 (EDT)
-Received: from smtp.ini-tech.com ([127.0.0.1])
-	by localhost (smtp.ini-tech.com [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id f0AICu24j60G for <lttng-dev@lists.lttng.org>;
-	Tue,  7 Aug 2012 12:11:11 -0400 (EDT)
-Received: from 127.0.0.1 (cable-13.246.173-198.electronicbox.net
-	[173.246.13.198])
-	by smtp.ini-tech.com (Postfix) with ESMTPSA id 2E772187030
-	for <lttng-dev@lists.lttng.org>; Tue,  7 Aug 2012 12:11:11 -0400 (EDT)
+	(envelope-from <compudj@mail.openrapids.net>) id 1Symb4-0006nW-W9
+	for lttng-dev@lists.lttng.org; Tue, 07 Aug 2012 12:25:31 -0400
+Content-Disposition: inline
+In-Reply-To: <50213DDE.8070709@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -28,127 +22,173 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: David Goulet <dgoulet@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-This is a multi-part message in MIME format.
---------------060900080602090605080208
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+* David Goulet (dgoulet@efficios.com) wrote:
+> -----BEGIN PGP SIGNED MESSAGE-----
+> Hash: SHA512
+> 
+> Here is the second and updated version after Yannick comments.
+> 
+>     - v0.2: 07/08/0212
+>         * Change lttng_create_session_addr to lttng_create_session_url
+>         * Describe URL string format
+>         * Add set_consumer_url examples
+>         * Add the HOP option to the set_consumer_url function
+> 
+> Cheers!
+> David
+> -----BEGIN PGP SIGNATURE-----
+> 
+> iQEcBAEBCgAGBQJQIT3aAAoJEELoaioR9I02vqIH/1YeAlh+ogt1wvRv3bkExZB6
+> vywtNVUVx/ys7KgaqkRolvGmbBKZEMPTwXaiGXDSfbij9hgkLvpjNhc26c9b443r
+> 9GJ603Jn+PPEa/vOMBPY8sqxGKyKLoSL400sXNLhPo2t18+neWOLDhgcfXd4VIT7
+> FgmOQzUQZsImFNGJUTNSFKD7m/NM73F7pM8VG1OjXfOfNAb1KtoV6QYSApoAayQ+
+> g2XdPgsAkDQssh82xLQ0Ousg3Cpk72e/jyroUNNnT8Dy7rSTXLsLz7indBzfFoAw
+> cIzTwREbarYT7cEbNnH0oFRxUK/94MEPjeWd2cSNJxsaidYj9mD07ST9UWfputU=
+> =GYy5
+> -----END PGP SIGNATURE-----
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA512
+> RFC - LTTng address API proposal
+> 
+> Author: David Goulet <david.goulet@efficios.com>
+> 
+> Contributors:
+>     * Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> 	* Yannick Brosseau <yannick.brosseau@polymtl.ca>
+> 
+> Version:
+>     - v0.1: 31/07/2012
+>         * Initial proposal
+> 	- v0.2: 07/08/0212
+> 		* Change lttng_create_session_addr to lttng_create_session_url
+> 		* Describe URL string format
+> 		* Add set_consumer_url examples
+> 		* Add the HOP option to the set_consumer_url function
+> 
+> Introduction
+> -----------------
+> 
+> This document proposes the use of string URLs to the command line interface and
+> API which will deprecate a function and propose new ones.
+> 
+> The purpose of this proposal is to support network streaming using URL string
+> format that you can find in proposal doc/proposals/0003-network.consumer.txt,
+> remove the lttng_uri structure from the API and integrate the URL string to the
+> API.
+> 
+> API
+> -----------------
+> 
+> In order not to expose the new lttng_uri structure used to identify trace
+> location for lttng consumer, the public API will only use string address where
+> it will be converted in a lttng_uri and sent to the session daemon.
+> 
+> [*] Create session:
+> 
+> With the introduction of the enable-consumer command used for network streaming,
+> the create session command has been modified so the user could define a consumer
+> location either on the network or local with the command. This change deprecates
+> the old API function and adds a new one.
+> 
+> Current and will be deprecated:
+> --> lttng_create_session(const char *name, const char *path);
+> 
+> Proposed:
+> --> lttng_create_session_url(const char *name, const char *url,
+> 								int enable_consumer);
+> 
+> The _name_ argument is the session name and _url_ is a string representing the
+> URL specified by the user which is define like so:
+> 
+> PROTO://[HOSTNAME|IP][:PORT][/PATH]
+> 
+> The proto supported at this stage are (6 means IPv6):
+> 
+> 	* net, net6, tcp, tcp6, file
+> 
+> The PATH section is the destination path on the _remote_ host where the trace
+> data will be written. For example:
+> 
+> 	* net://hostname/foo/bar
+> 
+> Results in writing the trace data in $USER/lttng-traces/foo/bar where
+> "$USER/lttng-traces" is the default output directory set by the lttng-relayd.
+> It is possible to change this option.
+> 
+> The <net(6)> protocol has a special case where the user can input two ports
+> respectively being the control and data port.
+> 
+> 	* net://[HOSTNAME|IP][:CTRL_PORT][:DATA_PORT][/PATH]
+> 
+> Finally, the enable_consumer option will disable the use of the consumer for
 
-Here is the second and updated version after Yannick comments.
+enable_consumer option will disable -> this is backwards. We could say
+"allows controlling if enabled/disabled".
 
-    - v0.2: 07/08/0212
-        * Change lttng_create_session_addr to lttng_create_session_url
-        * Describe URL string format
-        * Add set_consumer_url examples
-        * Add the HOP option to the set_consumer_url function
+> the tracing session. This will be useful with the upcoming snapshot feature.
+> The motivation behind this flag is to offer the same options as the
+> enable-consumer command where you can only set the URI for the consumer and not
+> enable it.
+> 
+> Note that the hop feature CAN NOT be used with this function call since only
+> one URL can be define here.
 
-Cheers!
-David
------BEGIN PGP SIGNATURE-----
+define -> defined
 
-iQEcBAEBCgAGBQJQIT3aAAoJEELoaioR9I02vqIH/1YeAlh+ogt1wvRv3bkExZB6
-vywtNVUVx/ys7KgaqkRolvGmbBKZEMPTwXaiGXDSfbij9hgkLvpjNhc26c9b443r
-9GJ603Jn+PPEa/vOMBPY8sqxGKyKLoSL400sXNLhPo2t18+neWOLDhgcfXd4VIT7
-FgmOQzUQZsImFNGJUTNSFKD7m/NM73F7pM8VG1OjXfOfNAb1KtoV6QYSApoAayQ+
-g2XdPgsAkDQssh82xLQ0Ousg3Cpk72e/jyroUNNnT8Dy7rSTXLsLz7indBzfFoAw
-cIzTwREbarYT7cEbNnH0oFRxUK/94MEPjeWd2cSNJxsaidYj9mD07ST9UWfputU=
-=GYy5
------END PGP SIGNATURE-----
+I wonder if the url arg to lttng_create_session_url could be a
+"url_list" ? (comma separated) this would enable specifying hops+dest
+with create session.
 
---------------060900080602090605080208
-Content-Type: text/plain;
- name="0004-lttng-address-api.txt"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment;
- filename="0004-lttng-address-api.txt"
+Thanks,
 
-UkZDIC0gTFRUbmcgYWRkcmVzcyBBUEkgcHJvcG9zYWwKCkF1dGhvcjogRGF2aWQgR291bGV0
-IDxkYXZpZC5nb3VsZXRAZWZmaWNpb3MuY29tPgoKQ29udHJpYnV0b3JzOgogICAgKiBNYXRo
-aWV1IERlc25veWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPgoJKiBZYW5u
-aWNrIEJyb3NzZWF1IDx5YW5uaWNrLmJyb3NzZWF1QHBvbHltdGwuY2E+CgpWZXJzaW9uOgog
-ICAgLSB2MC4xOiAzMS8wNy8yMDEyCiAgICAgICAgKiBJbml0aWFsIHByb3Bvc2FsCgktIHYw
-LjI6IDA3LzA4LzAyMTIKCQkqIENoYW5nZSBsdHRuZ19jcmVhdGVfc2Vzc2lvbl9hZGRyIHRv
-IGx0dG5nX2NyZWF0ZV9zZXNzaW9uX3VybAoJCSogRGVzY3JpYmUgVVJMIHN0cmluZyBmb3Jt
-YXQKCQkqIEFkZCBzZXRfY29uc3VtZXJfdXJsIGV4YW1wbGVzCgkJKiBBZGQgdGhlIEhPUCBv
-cHRpb24gdG8gdGhlIHNldF9jb25zdW1lcl91cmwgZnVuY3Rpb24KCkludHJvZHVjdGlvbgot
-LS0tLS0tLS0tLS0tLS0tLQoKVGhpcyBkb2N1bWVudCBwcm9wb3NlcyB0aGUgdXNlIG9mIHN0
-cmluZyBVUkxzIHRvIHRoZSBjb21tYW5kIGxpbmUgaW50ZXJmYWNlIGFuZApBUEkgd2hpY2gg
-d2lsbCBkZXByZWNhdGUgYSBmdW5jdGlvbiBhbmQgcHJvcG9zZSBuZXcgb25lcy4KClRoZSBw
-dXJwb3NlIG9mIHRoaXMgcHJvcG9zYWwgaXMgdG8gc3VwcG9ydCBuZXR3b3JrIHN0cmVhbWlu
-ZyB1c2luZyBVUkwgc3RyaW5nCmZvcm1hdCB0aGF0IHlvdSBjYW4gZmluZCBpbiBwcm9wb3Nh
-bCBkb2MvcHJvcG9zYWxzLzAwMDMtbmV0d29yay5jb25zdW1lci50eHQsCnJlbW92ZSB0aGUg
-bHR0bmdfdXJpIHN0cnVjdHVyZSBmcm9tIHRoZSBBUEkgYW5kIGludGVncmF0ZSB0aGUgVVJM
-IHN0cmluZyB0byB0aGUKQVBJLgoKQVBJCi0tLS0tLS0tLS0tLS0tLS0tCgpJbiBvcmRlciBu
-b3QgdG8gZXhwb3NlIHRoZSBuZXcgbHR0bmdfdXJpIHN0cnVjdHVyZSB1c2VkIHRvIGlkZW50
-aWZ5IHRyYWNlCmxvY2F0aW9uIGZvciBsdHRuZyBjb25zdW1lciwgdGhlIHB1YmxpYyBBUEkg
-d2lsbCBvbmx5IHVzZSBzdHJpbmcgYWRkcmVzcyB3aGVyZQppdCB3aWxsIGJlIGNvbnZlcnRl
-ZCBpbiBhIGx0dG5nX3VyaSBhbmQgc2VudCB0byB0aGUgc2Vzc2lvbiBkYWVtb24uCgpbKl0g
-Q3JlYXRlIHNlc3Npb246CgpXaXRoIHRoZSBpbnRyb2R1Y3Rpb24gb2YgdGhlIGVuYWJsZS1j
-b25zdW1lciBjb21tYW5kIHVzZWQgZm9yIG5ldHdvcmsgc3RyZWFtaW5nLAp0aGUgY3JlYXRl
-IHNlc3Npb24gY29tbWFuZCBoYXMgYmVlbiBtb2RpZmllZCBzbyB0aGUgdXNlciBjb3VsZCBk
-ZWZpbmUgYSBjb25zdW1lcgpsb2NhdGlvbiBlaXRoZXIgb24gdGhlIG5ldHdvcmsgb3IgbG9j
-YWwgd2l0aCB0aGUgY29tbWFuZC4gVGhpcyBjaGFuZ2UgZGVwcmVjYXRlcwp0aGUgb2xkIEFQ
-SSBmdW5jdGlvbiBhbmQgYWRkcyBhIG5ldyBvbmUuCgpDdXJyZW50IGFuZCB3aWxsIGJlIGRl
-cHJlY2F0ZWQ6Ci0tPiBsdHRuZ19jcmVhdGVfc2Vzc2lvbihjb25zdCBjaGFyICpuYW1lLCBj
-b25zdCBjaGFyICpwYXRoKTsKClByb3Bvc2VkOgotLT4gbHR0bmdfY3JlYXRlX3Nlc3Npb25f
-dXJsKGNvbnN0IGNoYXIgKm5hbWUsIGNvbnN0IGNoYXIgKnVybCwKCQkJCQkJCQlpbnQgZW5h
-YmxlX2NvbnN1bWVyKTsKClRoZSBfbmFtZV8gYXJndW1lbnQgaXMgdGhlIHNlc3Npb24gbmFt
-ZSBhbmQgX3VybF8gaXMgYSBzdHJpbmcgcmVwcmVzZW50aW5nIHRoZQpVUkwgc3BlY2lmaWVk
-IGJ5IHRoZSB1c2VyIHdoaWNoIGlzIGRlZmluZSBsaWtlIHNvOgoKUFJPVE86Ly9bSE9TVE5B
-TUV8SVBdWzpQT1JUXVsvUEFUSF0KClRoZSBwcm90byBzdXBwb3J0ZWQgYXQgdGhpcyBzdGFn
-ZSBhcmUgKDYgbWVhbnMgSVB2Nik6CgoJKiBuZXQsIG5ldDYsIHRjcCwgdGNwNiwgZmlsZQoK
-VGhlIFBBVEggc2VjdGlvbiBpcyB0aGUgZGVzdGluYXRpb24gcGF0aCBvbiB0aGUgX3JlbW90
-ZV8gaG9zdCB3aGVyZSB0aGUgdHJhY2UKZGF0YSB3aWxsIGJlIHdyaXR0ZW4uIEZvciBleGFt
-cGxlOgoKCSogbmV0Oi8vaG9zdG5hbWUvZm9vL2JhcgoKUmVzdWx0cyBpbiB3cml0aW5nIHRo
-ZSB0cmFjZSBkYXRhIGluICRVU0VSL2x0dG5nLXRyYWNlcy9mb28vYmFyIHdoZXJlCiIkVVNF
-Ui9sdHRuZy10cmFjZXMiIGlzIHRoZSBkZWZhdWx0IG91dHB1dCBkaXJlY3Rvcnkgc2V0IGJ5
-IHRoZSBsdHRuZy1yZWxheWQuCkl0IGlzIHBvc3NpYmxlIHRvIGNoYW5nZSB0aGlzIG9wdGlv
-bi4KClRoZSA8bmV0KDYpPiBwcm90b2NvbCBoYXMgYSBzcGVjaWFsIGNhc2Ugd2hlcmUgdGhl
-IHVzZXIgY2FuIGlucHV0IHR3byBwb3J0cwpyZXNwZWN0aXZlbHkgYmVpbmcgdGhlIGNvbnRy
-b2wgYW5kIGRhdGEgcG9ydC4KCgkqIG5ldDovL1tIT1NUTkFNRXxJUF1bOkNUUkxfUE9SVF1b
-OkRBVEFfUE9SVF1bL1BBVEhdCgpGaW5hbGx5LCB0aGUgZW5hYmxlX2NvbnN1bWVyIG9wdGlv
-biB3aWxsIGRpc2FibGUgdGhlIHVzZSBvZiB0aGUgY29uc3VtZXIgZm9yCnRoZSB0cmFjaW5n
-IHNlc3Npb24uIFRoaXMgd2lsbCBiZSB1c2VmdWwgd2l0aCB0aGUgdXBjb21pbmcgc25hcHNo
-b3QgZmVhdHVyZS4KVGhlIG1vdGl2YXRpb24gYmVoaW5kIHRoaXMgZmxhZyBpcyB0byBvZmZl
-ciB0aGUgc2FtZSBvcHRpb25zIGFzIHRoZQplbmFibGUtY29uc3VtZXIgY29tbWFuZCB3aGVy
-ZSB5b3UgY2FuIG9ubHkgc2V0IHRoZSBVUkkgZm9yIHRoZSBjb25zdW1lciBhbmQgbm90CmVu
-YWJsZSBpdC4KCk5vdGUgdGhhdCB0aGUgaG9wIGZlYXR1cmUgQ0FOIE5PVCBiZSB1c2VkIHdp
-dGggdGhpcyBmdW5jdGlvbiBjYWxsIHNpbmNlIG9ubHkKb25lIFVSTCBjYW4gYmUgZGVmaW5l
-IGhlcmUuCgpbKl0gQ29uc3VtZXI6CgpUaGUgMi4yKyByb2FkbWFwIHdpbGwgaW1wbGVtZW50
-IHRoZSBjb25jZXB0IG9mIGhvcCBmb3IgbmV0d29yayBzdHJlYW1pbmcuIFRoaXMKaG9wIGlz
-IGJhc2ljYWxseSBhIHByb3h5IGRhZW1vbiB3aGljaCB3aWxsIHJlbGF5IHRoZSBpbmZvcm1h
-dGlvbiB0byBhIGZpbmFsCmRlc3RpbmF0aW9uLiBJdCBpcyBwb3NzaWJsZSB0byBkZWZpbmUg
-YXMgbWFueSBob3BzIGFzIHlvdSB3YW50IGJ1dCBvbmNlIHRoZQpmaW5hbCBkZXN0aW5hdGlv
-biBpcyBzZXQsIGl0J3Mgbm90IHBvc3NpYmxlIGFueW1vcmUuCgpDdXJyZW50IGFuZCB3aWxs
-IGJlIGRlcHJlY2F0ZWQ6Ci0tPiBsdHRuZ19zZXRfY29uc3VtZXJfdXJpKC4uLikKClByb3Bv
-c2VkOgotLT4gbHR0bmdfc2V0X2NvbnN1bWVyX3VybChzdHJ1Y3QgbHR0bmdfaGFuZGxlICpo
-YW5kbGUsCgkJCQljb25zdCBjaGFyICp1cmwsIGVudW0gbHR0bmdfdXJsX3R5cGUgdHlwZSk7
-CgpGb3IgYm90aCBmdW5jdGlvbnMgKGNvbnN1bWVyIGFuZCBjcmVhdGUpLCB0aGUgX3VybF8g
-d2lsbCBiZSBwYXJzZWQgaW50byBhCmx0dG5nX3VyaSBpbiB0aGUgbGlibHR0bmctY3RsIGFu
-ZCBzZW50IHRvIHRoZSBzZXNzaW9uIGRhZW1vbi4KClRoZSBfdHlwZV8gYXJndW1lbnQgaXMg
-dGhlIFVSTCB0eXBlIHdoZXJlIHRoZSBwb3NzaWJpbGl0aWVzIGFyZToKCmVudW0gbHR0bmdf
-dXJsX3R5cGUgewoJTFRUTkdfVVJMX0RTVCwJCS8qIEZpbmFsIGRlc3RpbmF0aW9uICovCglM
-VFROR19VUkxfSE9QLAkJLyogSE9QIGRlc3RpbmF0aW9uICovCn07CgpFeGFtcGxlOgoKCXNl
-dF9jb25zdW1lcl91cmwoaGFuZGxlLCAibmV0Oi8vNDIuNDIuNDIuMiIsIExUVE5HX1VSTF9I
-T1ApOwoJc2V0X2NvbnN1bWVyX3VybChoYW5kbGUsICJuZXQ6Ly80Mi40Mi40Mi4zIiwgTFRU
-TkdfVVJMX0hPUCk7CglzZXRfY29uc3VtZXJfdXJsKGhhbmRsZSwgIm5ldDovLzQyLjQyLjQy
-LjQyIiwgTFRUTkdfVVJMX0RTVCk7CgoKV2l0aCBhbGwgdGhpcywgdGhlIGx0dG5nX3VyaSBk
-YXRhIHN0cnVjdHVyZSB3aWxsIG5vdCBiZSBleHBvc2VkIHRvIHRoZSBwdWJsaWMKQVBJIGFu
-ZCB0aGUgdXNlciBjb21tYW5kIGxpbmUgaW50ZXJmYWNlLgo=
---------------060900080602090605080208
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+Mathieu
 
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> 
+> [*] Consumer:
+> 
+> The 2.2+ roadmap will implement the concept of hop for network streaming. This
+> hop is basically a proxy daemon which will relay the information to a final
+> destination. It is possible to define as many hops as you want but once the
+> final destination is set, it's not possible anymore.
+> 
+> Current and will be deprecated:
+> --> lttng_set_consumer_uri(...)
+> 
+> Proposed:
+> --> lttng_set_consumer_url(struct lttng_handle *handle,
+> 				const char *url, enum lttng_url_type type);
+> 
+> For both functions (consumer and create), the _url_ will be parsed into a
+> lttng_uri in the liblttng-ctl and sent to the session daemon.
+> 
+> The _type_ argument is the URL type where the possibilities are:
+> 
+> enum lttng_url_type {
+> 	LTTNG_URL_DST,		/* Final destination */
+> 	LTTNG_URL_HOP,		/* HOP destination */
+> };
+> 
+> Example:
+> 
+> 	set_consumer_url(handle, "net://42.42.42.2", LTTNG_URL_HOP);
+> 	set_consumer_url(handle, "net://42.42.42.3", LTTNG_URL_HOP);
+> 	set_consumer_url(handle, "net://42.42.42.42", LTTNG_URL_DST);
+> 
+> 
+> With all this, the lttng_uri data structure will not be exposed to the public
+> API and the user command line interface.
 
---------------060900080602090605080208--
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+
+-- 
+Mathieu Desnoyers
+Operating System Efficiency R&D Consultant
+EfficiOS Inc.
+http://www.efficios.com
