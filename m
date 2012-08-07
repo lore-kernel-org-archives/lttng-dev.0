@@ -1,19 +1,15 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Babeltrace API timestamp manipulation changes
-Date: Sun, 5 Aug 2012 13:46:35 -0400
-Message-ID: <20120805174635.GA22981__31569.1291857094$1344188819$gmane$org@Krystal>
-References: <501C2627.6060401@efficios.com> <501C2D32.5090907@gmail.com>
+From: Lai Jiangshan <laijs@cn.fujitsu.com>
+Subject: urcu rfc: privatize urcu/futex.h
+Date: Tue, 07 Aug 2012 17:12:31 +0800
+Message-ID: <5020DBFF.3020702__5311.42393961108$1344332632$gmane$org@cn.fujitsu.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from [222.73.24.84] (helo=song.cn.fujitsu.com)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1Sy4uT-0002o5-Bs
-	for lttng-dev@lists.lttng.org; Sun, 05 Aug 2012 13:46:37 -0400
-Content-Disposition: inline
-In-Reply-To: <501C2D32.5090907@gmail.com>
+	(envelope-from <laijs@cn.fujitsu.com>) id 1SygJs-0003Vw-2H
+	for lttng-dev@lists.lttng.org; Tue, 07 Aug 2012 05:43:20 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,53 +18,34 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Yannick Brosseau <yannick.brosseau@gmail.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-* Yannick Brosseau (yannick.brosseau@gmail.com) wrote:
-> On 2012-08-03 15:27, Julien Desfossez wrote:
-> > Hi,
-> >
-> > Previously, the Babeltrace API forced the user to manipulate "raw
-> > timestamps" to seek, to get the timestamp begin and end of a trace, etc.
-> >
-> > This raw timestamp represented the cycle value scaled with the frequency
-> > but did not meant anything to the user and was likely to cause problem
-> > when dealing with traces recorded with different clock sources.
-> >
-> > The new patches commited in Babeltrace today removed the notion of the
-> > raw clock-source all over the code, and now the users can manipulate
-> > real timestamps (with the timezone offset applied) or cycle values if
-> > they want more fine-grained control on a specific trace.
-> >
-> > This means some API changes :
-> > - the "seek_time" member of the bt_iter_pos structure now takes real
-> > timestamp (with the offset applied)
-> > - the functions "bt_ctf_get_timestamp_raw" is removed
-> > - the funtion "bt_ctf_get_timestamp" is replaced by
-> > "bt_ctf_get_real_timestamp"
-> > - the function "bt_ctf_get_cycles_timestamp" is added
-> >
-> Why not simply calling them
-> bt_ctf_get_timestamp and bt_ctf_get_cycles  ?
+futex.h is in urcu/, it means it can be used by users out of the library.
 
-Yes, it makes sense. Julien, any thoughts on this ?
+But
+
+If the user's system has futex, he should use #include <linux/futex.h>.
+If the user's system don't have futex, it is not good that if the user use this compat_futex.
+
+Because the compat_futex_async()'s behavior is different from the futex in linux.
+If the caller don't change the value of @uaddr, the futex(FUTEX_WAKE) in linux can
+also wake a thread, but compat_futex_async() don't.
+(I guess no one use this behavior, but if there are someone, we give them a wrong thing)
+
+So I suggest urcu/futex.h becomes a private thing for urcu.
+
+Alternative implements(only describe the alternative FUTEX_WAIT):
+1) Like compat_futex_noasync(), but use mutex_lock_signal_save() + pthread_cond_wait().
+Problem: the thread can't handle the signal when waiting on pthread_cond_wait().
+(* mutex_lock_signal_save() is implemented in compat_arch_x86.c)
+
+2) Like the linux kernel, use use mutex_lock_signal_save() + hash table
+	+ sleeping (use poll() + restore signal mask)
+Problem: very complex
 
 Thanks,
+Lai.
 
-Mathieu
-
-> 
-> Yannick
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+(today I found a old patchset in my private tree, tried to rebase it and suddenly notice
+this urcu/futex.h but the patchset has nothing related with urcu/futex.h).
