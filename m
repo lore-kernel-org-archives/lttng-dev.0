@@ -1,21 +1,25 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [BABELTRACE PATCH] API cleanup name get_timestamp
-	and	get_cycles
-Date: Tue, 7 Aug 2012 11:50:14 -0400
-Message-ID: <20120807155014.GA31008__17445.5566834242$1344354640$gmane$org@Krystal>
-References: <20120805174635.GA22981@Krystal>
-	<1344352549-32224-1-git-send-email-jdesfossez@efficios.com>
+From: David Goulet <dgoulet@efficios.com>
+Subject: [RFC] LTTng address API proposal v2
+Date: Tue, 07 Aug 2012 12:10:06 -0400
+Message-ID: <50213DDE.8070709__31779.5882271186$1344355832$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="------------060900080602090605080208"
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from smtp.ini-tech.com ([213.239.202.151])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1Sym2x-0006V5-Ex
-	for lttng-dev@lists.lttng.org; Tue, 07 Aug 2012 11:50:15 -0400
-Content-Disposition: inline
-In-Reply-To: <1344352549-32224-1-git-send-email-jdesfossez@efficios.com>
+	(envelope-from <dgoulet@efficios.com>) id 1SymMD-0006gH-4M
+	for lttng-dev@lists.lttng.org; Tue, 07 Aug 2012 12:10:09 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by smtp.ini-tech.com (Postfix) with ESMTP id 378F4187204
+	for <lttng-dev@lists.lttng.org>; Tue,  7 Aug 2012 12:11:12 -0400 (EDT)
+Received: from smtp.ini-tech.com ([127.0.0.1])
+	by localhost (smtp.ini-tech.com [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id f0AICu24j60G for <lttng-dev@lists.lttng.org>;
+	Tue,  7 Aug 2012 12:11:11 -0400 (EDT)
+Received: from 127.0.0.1 (cable-13.246.173-198.electronicbox.net
+	[173.246.13.198])
+	by smtp.ini-tech.com (Postfix) with ESMTPSA id 2E772187030
+	for <lttng-dev@lists.lttng.org>; Tue,  7 Aug 2012 12:11:11 -0400 (EDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,78 +28,127 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Julien Desfossez <jdesfossez@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-* Julien Desfossez (jdesfossez@efficios.com) wrote:
-> Rename bt_ctf_get_cycles_timestamp to bt_ctf_get_cycles,
-> and bt_ctf_get_real_timestamp to bt_ctf_get_timestamp.
+This is a multi-part message in MIME format.
+--------------060900080602090605080208
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-merged, thanks!
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
 
-Mathieu
+Here is the second and updated version after Yannick comments.
 
-> 
-> Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
-> ---
->  formats/ctf/events.c            |    4 ++--
->  include/babeltrace/ctf/events.h |    8 ++++----
->  2 files changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/formats/ctf/events.c b/formats/ctf/events.c
-> index 06419a1..9693413 100644
-> --- a/formats/ctf/events.c
-> +++ b/formats/ctf/events.c
-> @@ -281,7 +281,7 @@ int bt_ctf_event_get_handle_id(const struct bt_ctf_event *ctf_event)
->  	return ret;
->  }
->  
-> -uint64_t bt_ctf_get_real_timestamp(const struct bt_ctf_event *ctf_event)
-> +uint64_t bt_ctf_get_timestamp(const struct bt_ctf_event *ctf_event)
->  {
->  	struct ctf_event_definition *event = ctf_event->parent;
->  	if (event && event->stream->has_timestamp)
-> @@ -290,7 +290,7 @@ uint64_t bt_ctf_get_real_timestamp(const struct bt_ctf_event *ctf_event)
->  		return -1ULL;
->  }
->  
-> -uint64_t bt_ctf_get_cycles_timestamp(const struct bt_ctf_event *ctf_event)
-> +uint64_t bt_ctf_get_cycles(const struct bt_ctf_event *ctf_event)
->  {
->  	struct ctf_event_definition *event = ctf_event->parent;
->  	if (event && event->stream->has_timestamp)
-> diff --git a/include/babeltrace/ctf/events.h b/include/babeltrace/ctf/events.h
-> index 419c4c8..4232feb 100644
-> --- a/include/babeltrace/ctf/events.h
-> +++ b/include/babeltrace/ctf/events.h
-> @@ -90,16 +90,16 @@ const struct definition *bt_ctf_get_top_level_scope(const struct bt_ctf_event *e
->  const char *bt_ctf_event_name(const struct bt_ctf_event *event);
->  
->  /*
-> - * bt_ctf_get_cycles_timestamp: returns the timestamp of the event as written
-> + * bt_ctf_get_cycles: returns the timestamp of the event as written
->   * in the packet (in cycles) or -1ULL on error.
->   */
-> -uint64_t bt_ctf_get_cycles_timestamp(const struct bt_ctf_event *event);
-> +uint64_t bt_ctf_get_cycles(const struct bt_ctf_event *event);
->  
->  /*
-> - * bt_ctf_get_real_timestamp: returns the timestamp of the event offsetted
-> + * bt_ctf_get_timestamp: returns the timestamp of the event offsetted
->   * with the system clock source (in ns) or -1ULL on error
->   */
-> -uint64_t bt_ctf_get_real_timestamp(const struct bt_ctf_event *event);
-> +uint64_t bt_ctf_get_timestamp(const struct bt_ctf_event *event);
->  
->  /*
->   * bt_ctf_get_field_list: set list pointer to an array of definition
-> -- 
-> 1.7.10.4
-> 
+    - v0.2: 07/08/0212
+        * Change lttng_create_session_addr to lttng_create_session_url
+        * Describe URL string format
+        * Add set_consumer_url examples
+        * Add the HOP option to the set_consumer_url function
 
--- 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+Cheers!
+David
+-----BEGIN PGP SIGNATURE-----
+
+iQEcBAEBCgAGBQJQIT3aAAoJEELoaioR9I02vqIH/1YeAlh+ogt1wvRv3bkExZB6
+vywtNVUVx/ys7KgaqkRolvGmbBKZEMPTwXaiGXDSfbij9hgkLvpjNhc26c9b443r
+9GJ603Jn+PPEa/vOMBPY8sqxGKyKLoSL400sXNLhPo2t18+neWOLDhgcfXd4VIT7
+FgmOQzUQZsImFNGJUTNSFKD7m/NM73F7pM8VG1OjXfOfNAb1KtoV6QYSApoAayQ+
+g2XdPgsAkDQssh82xLQ0Ousg3Cpk72e/jyroUNNnT8Dy7rSTXLsLz7indBzfFoAw
+cIzTwREbarYT7cEbNnH0oFRxUK/94MEPjeWd2cSNJxsaidYj9mD07ST9UWfputU=
+=GYy5
+-----END PGP SIGNATURE-----
+
+--------------060900080602090605080208
+Content-Type: text/plain;
+ name="0004-lttng-address-api.txt"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="0004-lttng-address-api.txt"
+
+UkZDIC0gTFRUbmcgYWRkcmVzcyBBUEkgcHJvcG9zYWwKCkF1dGhvcjogRGF2aWQgR291bGV0
+IDxkYXZpZC5nb3VsZXRAZWZmaWNpb3MuY29tPgoKQ29udHJpYnV0b3JzOgogICAgKiBNYXRo
+aWV1IERlc25veWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPgoJKiBZYW5u
+aWNrIEJyb3NzZWF1IDx5YW5uaWNrLmJyb3NzZWF1QHBvbHltdGwuY2E+CgpWZXJzaW9uOgog
+ICAgLSB2MC4xOiAzMS8wNy8yMDEyCiAgICAgICAgKiBJbml0aWFsIHByb3Bvc2FsCgktIHYw
+LjI6IDA3LzA4LzAyMTIKCQkqIENoYW5nZSBsdHRuZ19jcmVhdGVfc2Vzc2lvbl9hZGRyIHRv
+IGx0dG5nX2NyZWF0ZV9zZXNzaW9uX3VybAoJCSogRGVzY3JpYmUgVVJMIHN0cmluZyBmb3Jt
+YXQKCQkqIEFkZCBzZXRfY29uc3VtZXJfdXJsIGV4YW1wbGVzCgkJKiBBZGQgdGhlIEhPUCBv
+cHRpb24gdG8gdGhlIHNldF9jb25zdW1lcl91cmwgZnVuY3Rpb24KCkludHJvZHVjdGlvbgot
+LS0tLS0tLS0tLS0tLS0tLQoKVGhpcyBkb2N1bWVudCBwcm9wb3NlcyB0aGUgdXNlIG9mIHN0
+cmluZyBVUkxzIHRvIHRoZSBjb21tYW5kIGxpbmUgaW50ZXJmYWNlIGFuZApBUEkgd2hpY2gg
+d2lsbCBkZXByZWNhdGUgYSBmdW5jdGlvbiBhbmQgcHJvcG9zZSBuZXcgb25lcy4KClRoZSBw
+dXJwb3NlIG9mIHRoaXMgcHJvcG9zYWwgaXMgdG8gc3VwcG9ydCBuZXR3b3JrIHN0cmVhbWlu
+ZyB1c2luZyBVUkwgc3RyaW5nCmZvcm1hdCB0aGF0IHlvdSBjYW4gZmluZCBpbiBwcm9wb3Nh
+bCBkb2MvcHJvcG9zYWxzLzAwMDMtbmV0d29yay5jb25zdW1lci50eHQsCnJlbW92ZSB0aGUg
+bHR0bmdfdXJpIHN0cnVjdHVyZSBmcm9tIHRoZSBBUEkgYW5kIGludGVncmF0ZSB0aGUgVVJM
+IHN0cmluZyB0byB0aGUKQVBJLgoKQVBJCi0tLS0tLS0tLS0tLS0tLS0tCgpJbiBvcmRlciBu
+b3QgdG8gZXhwb3NlIHRoZSBuZXcgbHR0bmdfdXJpIHN0cnVjdHVyZSB1c2VkIHRvIGlkZW50
+aWZ5IHRyYWNlCmxvY2F0aW9uIGZvciBsdHRuZyBjb25zdW1lciwgdGhlIHB1YmxpYyBBUEkg
+d2lsbCBvbmx5IHVzZSBzdHJpbmcgYWRkcmVzcyB3aGVyZQppdCB3aWxsIGJlIGNvbnZlcnRl
+ZCBpbiBhIGx0dG5nX3VyaSBhbmQgc2VudCB0byB0aGUgc2Vzc2lvbiBkYWVtb24uCgpbKl0g
+Q3JlYXRlIHNlc3Npb246CgpXaXRoIHRoZSBpbnRyb2R1Y3Rpb24gb2YgdGhlIGVuYWJsZS1j
+b25zdW1lciBjb21tYW5kIHVzZWQgZm9yIG5ldHdvcmsgc3RyZWFtaW5nLAp0aGUgY3JlYXRl
+IHNlc3Npb24gY29tbWFuZCBoYXMgYmVlbiBtb2RpZmllZCBzbyB0aGUgdXNlciBjb3VsZCBk
+ZWZpbmUgYSBjb25zdW1lcgpsb2NhdGlvbiBlaXRoZXIgb24gdGhlIG5ldHdvcmsgb3IgbG9j
+YWwgd2l0aCB0aGUgY29tbWFuZC4gVGhpcyBjaGFuZ2UgZGVwcmVjYXRlcwp0aGUgb2xkIEFQ
+SSBmdW5jdGlvbiBhbmQgYWRkcyBhIG5ldyBvbmUuCgpDdXJyZW50IGFuZCB3aWxsIGJlIGRl
+cHJlY2F0ZWQ6Ci0tPiBsdHRuZ19jcmVhdGVfc2Vzc2lvbihjb25zdCBjaGFyICpuYW1lLCBj
+b25zdCBjaGFyICpwYXRoKTsKClByb3Bvc2VkOgotLT4gbHR0bmdfY3JlYXRlX3Nlc3Npb25f
+dXJsKGNvbnN0IGNoYXIgKm5hbWUsIGNvbnN0IGNoYXIgKnVybCwKCQkJCQkJCQlpbnQgZW5h
+YmxlX2NvbnN1bWVyKTsKClRoZSBfbmFtZV8gYXJndW1lbnQgaXMgdGhlIHNlc3Npb24gbmFt
+ZSBhbmQgX3VybF8gaXMgYSBzdHJpbmcgcmVwcmVzZW50aW5nIHRoZQpVUkwgc3BlY2lmaWVk
+IGJ5IHRoZSB1c2VyIHdoaWNoIGlzIGRlZmluZSBsaWtlIHNvOgoKUFJPVE86Ly9bSE9TVE5B
+TUV8SVBdWzpQT1JUXVsvUEFUSF0KClRoZSBwcm90byBzdXBwb3J0ZWQgYXQgdGhpcyBzdGFn
+ZSBhcmUgKDYgbWVhbnMgSVB2Nik6CgoJKiBuZXQsIG5ldDYsIHRjcCwgdGNwNiwgZmlsZQoK
+VGhlIFBBVEggc2VjdGlvbiBpcyB0aGUgZGVzdGluYXRpb24gcGF0aCBvbiB0aGUgX3JlbW90
+ZV8gaG9zdCB3aGVyZSB0aGUgdHJhY2UKZGF0YSB3aWxsIGJlIHdyaXR0ZW4uIEZvciBleGFt
+cGxlOgoKCSogbmV0Oi8vaG9zdG5hbWUvZm9vL2JhcgoKUmVzdWx0cyBpbiB3cml0aW5nIHRo
+ZSB0cmFjZSBkYXRhIGluICRVU0VSL2x0dG5nLXRyYWNlcy9mb28vYmFyIHdoZXJlCiIkVVNF
+Ui9sdHRuZy10cmFjZXMiIGlzIHRoZSBkZWZhdWx0IG91dHB1dCBkaXJlY3Rvcnkgc2V0IGJ5
+IHRoZSBsdHRuZy1yZWxheWQuCkl0IGlzIHBvc3NpYmxlIHRvIGNoYW5nZSB0aGlzIG9wdGlv
+bi4KClRoZSA8bmV0KDYpPiBwcm90b2NvbCBoYXMgYSBzcGVjaWFsIGNhc2Ugd2hlcmUgdGhl
+IHVzZXIgY2FuIGlucHV0IHR3byBwb3J0cwpyZXNwZWN0aXZlbHkgYmVpbmcgdGhlIGNvbnRy
+b2wgYW5kIGRhdGEgcG9ydC4KCgkqIG5ldDovL1tIT1NUTkFNRXxJUF1bOkNUUkxfUE9SVF1b
+OkRBVEFfUE9SVF1bL1BBVEhdCgpGaW5hbGx5LCB0aGUgZW5hYmxlX2NvbnN1bWVyIG9wdGlv
+biB3aWxsIGRpc2FibGUgdGhlIHVzZSBvZiB0aGUgY29uc3VtZXIgZm9yCnRoZSB0cmFjaW5n
+IHNlc3Npb24uIFRoaXMgd2lsbCBiZSB1c2VmdWwgd2l0aCB0aGUgdXBjb21pbmcgc25hcHNo
+b3QgZmVhdHVyZS4KVGhlIG1vdGl2YXRpb24gYmVoaW5kIHRoaXMgZmxhZyBpcyB0byBvZmZl
+ciB0aGUgc2FtZSBvcHRpb25zIGFzIHRoZQplbmFibGUtY29uc3VtZXIgY29tbWFuZCB3aGVy
+ZSB5b3UgY2FuIG9ubHkgc2V0IHRoZSBVUkkgZm9yIHRoZSBjb25zdW1lciBhbmQgbm90CmVu
+YWJsZSBpdC4KCk5vdGUgdGhhdCB0aGUgaG9wIGZlYXR1cmUgQ0FOIE5PVCBiZSB1c2VkIHdp
+dGggdGhpcyBmdW5jdGlvbiBjYWxsIHNpbmNlIG9ubHkKb25lIFVSTCBjYW4gYmUgZGVmaW5l
+IGhlcmUuCgpbKl0gQ29uc3VtZXI6CgpUaGUgMi4yKyByb2FkbWFwIHdpbGwgaW1wbGVtZW50
+IHRoZSBjb25jZXB0IG9mIGhvcCBmb3IgbmV0d29yayBzdHJlYW1pbmcuIFRoaXMKaG9wIGlz
+IGJhc2ljYWxseSBhIHByb3h5IGRhZW1vbiB3aGljaCB3aWxsIHJlbGF5IHRoZSBpbmZvcm1h
+dGlvbiB0byBhIGZpbmFsCmRlc3RpbmF0aW9uLiBJdCBpcyBwb3NzaWJsZSB0byBkZWZpbmUg
+YXMgbWFueSBob3BzIGFzIHlvdSB3YW50IGJ1dCBvbmNlIHRoZQpmaW5hbCBkZXN0aW5hdGlv
+biBpcyBzZXQsIGl0J3Mgbm90IHBvc3NpYmxlIGFueW1vcmUuCgpDdXJyZW50IGFuZCB3aWxs
+IGJlIGRlcHJlY2F0ZWQ6Ci0tPiBsdHRuZ19zZXRfY29uc3VtZXJfdXJpKC4uLikKClByb3Bv
+c2VkOgotLT4gbHR0bmdfc2V0X2NvbnN1bWVyX3VybChzdHJ1Y3QgbHR0bmdfaGFuZGxlICpo
+YW5kbGUsCgkJCQljb25zdCBjaGFyICp1cmwsIGVudW0gbHR0bmdfdXJsX3R5cGUgdHlwZSk7
+CgpGb3IgYm90aCBmdW5jdGlvbnMgKGNvbnN1bWVyIGFuZCBjcmVhdGUpLCB0aGUgX3VybF8g
+d2lsbCBiZSBwYXJzZWQgaW50byBhCmx0dG5nX3VyaSBpbiB0aGUgbGlibHR0bmctY3RsIGFu
+ZCBzZW50IHRvIHRoZSBzZXNzaW9uIGRhZW1vbi4KClRoZSBfdHlwZV8gYXJndW1lbnQgaXMg
+dGhlIFVSTCB0eXBlIHdoZXJlIHRoZSBwb3NzaWJpbGl0aWVzIGFyZToKCmVudW0gbHR0bmdf
+dXJsX3R5cGUgewoJTFRUTkdfVVJMX0RTVCwJCS8qIEZpbmFsIGRlc3RpbmF0aW9uICovCglM
+VFROR19VUkxfSE9QLAkJLyogSE9QIGRlc3RpbmF0aW9uICovCn07CgpFeGFtcGxlOgoKCXNl
+dF9jb25zdW1lcl91cmwoaGFuZGxlLCAibmV0Oi8vNDIuNDIuNDIuMiIsIExUVE5HX1VSTF9I
+T1ApOwoJc2V0X2NvbnN1bWVyX3VybChoYW5kbGUsICJuZXQ6Ly80Mi40Mi40Mi4zIiwgTFRU
+TkdfVVJMX0hPUCk7CglzZXRfY29uc3VtZXJfdXJsKGhhbmRsZSwgIm5ldDovLzQyLjQyLjQy
+LjQyIiwgTFRUTkdfVVJMX0RTVCk7CgoKV2l0aCBhbGwgdGhpcywgdGhlIGx0dG5nX3VyaSBk
+YXRhIHN0cnVjdHVyZSB3aWxsIG5vdCBiZSBleHBvc2VkIHRvIHRoZSBwdWJsaWMKQVBJIGFu
+ZCB0aGUgdXNlciBjb21tYW5kIGxpbmUgaW50ZXJmYWNlLgo=
+--------------060900080602090605080208
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--------------060900080602090605080208--
