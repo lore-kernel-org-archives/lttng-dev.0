@@ -1,19 +1,18 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH] urcu: fix compat_futex_noasync()
-Date: Thu, 9 Aug 2012 10:20:48 -0400
-Message-ID: <20120809142048.GA9211__28219.4363572218$1344522075$gmane$org@Krystal>
-References: <5021BEE4.6090907@cn.fujitsu.com>
+From: David Goulet <dgoulet@efficios.com>
+Subject: Re: [lttng-tools PATCH] lttng-tools python module v2
+Date: Thu, 09 Aug 2012 10:22:14 -0400
+Message-ID: <5023C796.2030205__10813.177660066$1344522172$gmane$org@efficios.com>
+References: <1344452188-7579-1-git-send-email-danny.serres@efficios.com>
+	<5022CF9F.9090500@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from smtp.ini-tech.com ([213.239.202.151])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1SzTbV-0002ht-TS
-	for lttng-dev@lists.lttng.org; Thu, 09 Aug 2012 10:20:50 -0400
-Content-Disposition: inline
-In-Reply-To: <5021BEE4.6090907@cn.fujitsu.com>
+	(envelope-from <dgoulet@efficios.com>) id 1SzTcx-0002jN-H6
+	for lttng-dev@lists.lttng.org; Thu, 09 Aug 2012 10:22:19 -0400
+In-Reply-To: <5022CF9F.9090500@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,62 +21,50 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Lai Jiangshan <laijs@cn.fujitsu.com>
-Cc: lttng-dev@lists.lttng.org, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
+To: Yannick Brosseau <yannick.brosseau@gmail.com>
+Cc: Danny Serres <danny.serres@efficios.com>, lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Lai Jiangshan (laijs@cn.fujitsu.com) wrote:
-> This patch fix two critical problems:
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+
+Yannick Brosseau:
+> On 2012-08-08 14:56, Danny Serres wrote:
+>> The lttng-tools Python module can be used to directly control the
+>> lttng-tools API inside Python, using 'import lttng'.
+>> 
+>> Therefore, it becomes possible to create a trace, add events, 
+>> start/stop tracing, destroy a session and so on from within
+>> Python.
+>> 
+>> The module does not include URI-related functions.
+>> 
+>> SWIG >= 2.0 is used to create the wrapper and its 'warning md
+>> variable unused' bug is patched in Makefile.am.
+>> 
 > 
-> 1) compat_futex_cond is not bound to any @uaddr, it services all @uaddr,
->    if you wakeup only one thread(pthread_cond_signal), the @uaddr of
->    this waking thread and the @uaddr of the woken-up thread may be different.
->    the the woken-up thread will very probably go to sleep again
->    because his own condition is not true.
+> But I don't think that stuff in "extra" should be in the build
+> system.
+
+Indeed. It should not.
+
+Is it possible to create the Makefile on "configure" but not building
+the bindings with "make" ?
+
+David
+
 > 
->    *And* this waking thread(FUTEX_WAKE) wake up NOTHING.
-> 
-> 2) If the caller want to wake up all waiting threads, he will use INT_MAX for @val.
->    and 
-> 		for (i = 0; i < INT_MAX; i++)
-> 			pthread_cond_signal(&compat_futex_cond);
->    becomes almost infinity loop.
-> 
-> Signed-off-by: Lai Jiangshan <laijs@cn.fujitsu.com>
+> _______________________________________________ lttng-dev mailing
+> list lttng-dev@lists.lttng.org 
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+-----BEGIN PGP SIGNATURE-----
 
-Good catch !
-
-Merged, thanks!
-
-Mathieu
-
-> ---
-> diff --git a/compat_futex.c b/compat_futex.c
-> index 04de596..bb928e6 100644
-> --- a/compat_futex.c
-> +++ b/compat_futex.c
-> @@ -43,7 +43,7 @@ static pthread_cond_t compat_futex_cond = PTHREAD_COND_INITIALIZER;
->  int compat_futex_noasync(int32_t *uaddr, int op, int32_t val,
->  	const struct timespec *timeout, int32_t *uaddr2, int32_t val3)
->  {
-> -	int ret, i, gret = 0;
-> +	int ret, gret = 0;
->  
->  	/*
->  	 * Check if NULL. Don't let users expect that they are taken into
-> @@ -67,8 +67,7 @@ int compat_futex_noasync(int32_t *uaddr, int op, int32_t val,
->  		pthread_cond_wait(&compat_futex_cond, &compat_futex_lock);
->  		break;
->  	case FUTEX_WAKE:
-> -		for (i = 0; i < val; i++)
-> -			pthread_cond_signal(&compat_futex_cond);
-> +		pthread_cond_broadcast(&compat_futex_cond);
->  		break;
->  	default:
->  		gret = -EINVAL;
-
--- 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+iQEcBAEBCgAGBQJQI8eTAAoJEELoaioR9I02H24H/iepIFDK0qRvL1pU4S0H2EQx
+iMhDNGF/CLzG/FnOWEyZgoNR6lhc1lSUjaFs6FL56VcVueBuCW07rsTJDu2NgCYz
+TsHO29KAR3qrk+ymwSR53TeK2qXt8gr5AXYbc8mK0/DBWWQAxrmJXKSOy8qQ2tmV
+O0OBWVayDRWttusOknZgabAZF7JBitsoIQ2ZRNRlNtqIUxlbdsQlliujEpzjBu8b
+iCuZ/ZXxZ/oeClF1Pnoh64+yziHTfsBVFEbee4CpnBiRBn/6CsxEOF/ZscgWWkOl
+DOUWxj739xHcbtEtWBDo8iu6eqtOCuqVi4RKPqtmk4mqme8Tj7fTQg6YIJ+SZbU=
+=wKL0
+-----END PGP SIGNATURE-----
