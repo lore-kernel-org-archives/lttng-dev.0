@@ -1,10 +1,10 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-tools 2/2] Fix: Missing
-	libs	dependencies in configure check for lttng-ust-ctl
-Date: Thu, 9 Aug 2012 09:46:21 -0400
-Message-ID: <20120809134621.GG8382__37490.8146834516$1344520006$gmane$org@Krystal>
-References: <cover.1344025572.git.christian.babeux@efficios.com>
-	<884d75d90550f85492dfcaac2b0088f78ced542b.1344025572.git.christian.babeux@efficios.com>
+Subject: Re: ERROR: No buffer space available
+Date: Thu, 9 Aug 2012 09:50:38 -0400
+Message-ID: <20120809135038.GI8382__49093.204495921$1344520270$gmane$org@Krystal>
+References: <CABy43G8ANPh0ZM_3y5hHAQdsDYjt+UbZMsdJDeZxFHWRizXngQ@mail.gmail.com>
+	<9ac1de00b4084e6a84dbdd60eced4477@UMEX001.cgcent.miami.edu>
+	<CABy43G87ySLp3emScGbqt07cADpkNXR-kjcYkUZjUO83R5D0Hg@mail.gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -12,10 +12,10 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1SzT4B-0002MF-4r
-	for lttng-dev@lists.lttng.org; Thu, 09 Aug 2012 09:46:23 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1SzT8K-0002Oh-G1
+	for lttng-dev@lists.lttng.org; Thu, 09 Aug 2012 09:50:40 -0400
 Content-Disposition: inline
-In-Reply-To: <884d75d90550f85492dfcaac2b0088f78ced542b.1344025572.git.christian.babeux@efficios.com>
+In-Reply-To: <CABy43G87ySLp3emScGbqt07cADpkNXR-kjcYkUZjUO83R5D0Hg@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,86 +24,112 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Christian Babeux <christian.babeux@efficios.com>
-Cc: lttng-dev@lists.lttng.org, dgoulet@efficios.com
+To: Rui Han <r.han@umiami.edu>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Christian Babeux (christian.babeux@efficios.com) wrote:
-> The lttng-ust-ctl library depends on liburcu-{common,bp,cds}.
-> The AC_CHECK_LIBRARY macro can't automatically resolve dependents
-> libraries (ala libtool), so any additionnals dependencies must
-> be manually specified.
-> 
-> Also, the AC_CHECK_LIB action-if-found case for the lttng-ust-ctl
-> check is modified to have a similar behavior as the default action,
-> which is to define HAVE_LIBxxx and append -lxxx to $LIBS, *except*
-> for the later step. This is to ensure that any future addition of
-> AC_CHECK_LIB after the one for lttng-ust-ctl will not need to append
-> the liburcu dependencies or fail unexpectedly.
+CCing lttng-dev, as other people might want to help.
 
-not sure I understand why all the changes you are doing are needed. What
-happens if you just do:
-
--             [AC_MSG_ERROR([Cannot find LTTng-UST. Use [LDFLAGS]=-Ldir to specify its location, or specify --disable-lttng-ust to build lttng-tools without LTTng-UST support.])]
-+             [AC_MSG_ERROR([Cannot find LTTng-UST. Use [LDFLAGS]=-Ldir to specify its location, or specify --disable-lttng-ust to build lttng-tools without LTTng-UST support.])],
-+             [-lurcu-common -lurcu-bp -lurcu-cds]
-
-?
-
-> 
-> Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
-> ---
->  configure.ac | 13 ++++++++-----
->  1 file changed, 8 insertions(+), 5 deletions(-)
-> 
-> diff --git a/configure.ac b/configure.ac
-> index 3a023cd..e4b9eb1 100644
-> --- a/configure.ac
-> +++ b/configure.ac
-> @@ -138,13 +138,16 @@ AC_ARG_ENABLE(lttng-ust,
->  	lttng_ust_support=$enableval, lttng_ust_support=yes)
->  
->  AS_IF([test "x$lttng_ust_support" = "xyes"], [
-> -	AC_CHECK_LIB([lttng-ust-ctl], [ustctl_create_session], [],
-> -		[AC_MSG_ERROR([Cannot find LTTng-UST. Use [LDFLAGS]=-Ldir to specify its location, or specify --disable-lttng-ust to build lttng-tools without LTTng-UST support.])]
-> +	AC_CHECK_LIB([lttng-ust-ctl], [ustctl_create_session],
-> +		[
-> +			AC_DEFINE([HAVE_LIBLTTNG_UST_CTL], [1], [has LTTng-UST control support])
-
-wasn't HAVE_LIBLTTNG_UST_CTL already defined by the AM_CONDITIONAL below ?
-
-> +			lttng_ust_ctl_found=yes
-
-why are you adding this ?
-
-> +		],
-> +		[AC_MSG_ERROR([Cannot find LTTng-UST. Use [LDFLAGS]=-Ldir to specify its location, or specify --disable-lttng-ust to build lttng-tools without LTTng-UST support.])],
-> +		[-lurcu-common -lurcu-bp -lurcu-cds]
->  	)
->  ])
-> -
-> -AM_CONDITIONAL([HAVE_LIBLTTNG_UST_CTL], [ test "x$ac_cv_lib_lttng_ust_ctl_ustctl_create_session" = "xyes" ])
-> -
-> +AM_CONDITIONAL([HAVE_LIBLTTNG_UST_CTL], [test "x$lttng_ust_ctl_found" = xyes])
-
-why are you changing this line ?
+Please be aware that the TRACE_EVENT LTTng implementation is slightly
+different from the mainline kernel implementation, so the documentation
+you refer to is not a perfect fit.
 
 Thanks,
 
 Mathieu
 
-
->  AC_CHECK_FUNCS([sched_getcpu sysconf])
->  
->  # check for dlopen
-> -- 
-> 1.7.11.3
+* Rui Han (r.han@umiami.edu) wrote:
+> Hi Mathieu,
 > 
+> I did reboot the system. I am wondering if it is because the header file
+> need to be modified. I am not quite understand how the headers worked. I
+> read the article at http://lwn.net/Articles/383362/, but I am not
+> completely understand the essence of the discussion about the header. Could
+> you give me some hint that I can understand lttng and debug the code to get
+> what I wanted?
 > 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> Thank you very much.
+> 
+> Regards,
+> Rui
+> 
+> On Sun, Aug 5, 2012 at 1:03 PM, Mathieu Desnoyers <
+> mathieu.desnoyers@efficios.com> wrote:
+> 
+> > * Rui Han (r.han@umiami.edu) wrote:
+> > > Hi,
+> > >
+> > > I try to modified the lttng2.0 source code for my research. For example,
+> > I
+> > > try to log the "comm" for the write system call, I add the following
+> > filed
+> > > in the file x86-64-syscalls-3.0.4_pointers.h located at the path
+> > > lttng-modules-2.0.3/instrumentation/syscalls/headers. I modify the
+> > > TRACE_EVENTS() macro from the original one:
+> > >
+> > > #ifndef OVERRIDE_64_sys_write
+> > > SC_TRACE_EVENT(sys_write,
+> > > TP_PROTO(unsigned int fd, const char * buf, size_t count),
+> > > TP_ARGS(fd, buf, count),
+> > > TP_STRUCT__entry(__field(unsigned int, fd) __field_hex(const char *, buf)
+> > > __field(size_t, count)),
+> > > TP_fast_assign(tp_assign(fd, fd) tp_assign(buf, buf) tp_assign(count,
+> > > count)),
+> > > TP_printk()
+> > > )
+> > > #endif
+> > >
+> > > to the following one:
+> > >
+> > > #ifndef OVERRIDE_64_sys_write
+> > > SC_TRACE_EVENT(sys_write,
+> > > TP_PROTO(unsigned int fd, const char * buf, size_t count, struct
+> > > task_struct *p),
+> > > TP_ARGS(fd, buf, count, p),
+> > > TP_STRUCT__entry( __field(unsigned int, fd) __field_hex(const char *,
+> > > buf) __field(size_t,
+> > > count) __array_text(char, comm, TASK_COMM_LEN)),
+> > > TP_fast_assign( tp_assign(fd, fd) tp_assign(buf, buf) tp_assign(count,
+> > > 2064) tp_memcpy(comm,
+> > > p->comm, TASK_COMM_LEN)),
+> > > TP_printk()
+> > > )
+> > > #endif
+> > >
+> > > I add one argument *p and one filed "comm"  for the macro. It was able to
+> > > be compiled, however, after reload the lttng modules, It will show the
+> > > following error messages when I start lttng.
+> > >
+> > > PERROR: ioctl start session: No buffer space available [in
+> > > kernel_start_session() at kernel.c:397]
+> > > Error: Starting kernel trace failed
+> >
+> > I don't see how modifying the system call tracing macro would trigger
+> > this error at start. Try restarting lttng-sessiond. Try unloading the
+> > lttng modules, and, maybe, as last resort, rebooting your system.
+> >
+> > Thanks,
+> >
+> > Mathieu
+> >
+> > >
+> > > It won't work. Please help me out with this. My next step is try to add
+> > > extra fields in the sys_connect macros to enable the logging of the
+> > > connected IP/port from the socket. Is this method right? what are other
+> > > possible solutions in order to logging the details of the socket
+> > > information?
+> > >
+> > > Thank you very much.
+> > >
+> > > Regards,
+> > > Rui
+> >
+> > --
+> > Mathieu Desnoyers
+> > Operating System Efficiency R&D Consultant
+> > EfficiOS Inc.
+> > http://www.efficios.com
+> >
 
 -- 
 Mathieu Desnoyers
