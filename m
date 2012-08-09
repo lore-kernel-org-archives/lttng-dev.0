@@ -1,18 +1,19 @@
-From: David Goulet <david.goulet@polymtl.ca>
-Subject: Re: [PATCH lttng-tools 0/2] Configure fixes for
-	cross-compilation
-Date: Thu, 09 Aug 2012 10:01:36 -0400
-Message-ID: <5023C2C0.5050000__49352.124965708$1344520952$gmane$org@polymtl.ca>
-References: <cover.1344025572.git.christian.babeux@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: Uprobe and extractor for coredump
+Date: Thu, 9 Aug 2012 10:02:40 -0400
+Message-ID: <20120809140240.GB8937__38100.6270334639$1344520985$gmane$org@Krystal>
+References: <6539770C71C3814BB0BFC2DBEBD10508CC6967@CORPUSMX30B.corp.emc.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([213.239.202.151])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <david.goulet@polymtl.ca>) id 1SzTJ0-0002VW-6z
-	for lttng-dev@lists.lttng.org; Thu, 09 Aug 2012 10:01:42 -0400
-In-Reply-To: <cover.1344025572.git.christian.babeux@efficios.com>
+	(envelope-from <compudj@mail.openrapids.net>) id 1SzTJx-0002Wl-LP
+	for lttng-dev@lists.lttng.org; Thu, 09 Aug 2012 10:02:41 -0400
+Content-Disposition: inline
+In-Reply-To: <6539770C71C3814BB0BFC2DBEBD10508CC6967@CORPUSMX30B.corp.emc.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,54 +22,69 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Christian Babeux <christian.babeux@efficios.com>
-Cc: lttng-dev@lists.lttng.org, dgoulet@efficios.com
+To: "Chang, Zheng" <Zheng.Chang@emc.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA512
+* Chang, Zheng (Zheng.Chang@emc.com) wrote:
+> Hi,
+> 
+>  
+> 
+> Recently Linus merged uprobe into kernel mainline and perf has supported
+> user-space dynamic tracing now.
+> 
+> Is there any plan or motion on this with LTTng?
 
-Merged!
+this would certainly be a nice feature! If you want to work on adding
+support within lttng-modules and lttng-tools to enable tracing of
+userspace through uprobes, it would certainly be welcome!
 
-Christian Babeux:
-> Hi all,
 > 
-> Here are a few fixes to the configure.ac script to accomodate 
-> cross-compilation of lttng-tools.
+> I did some research on buffer management of LTTng. And I'm trying to
+> figure out a way to extract trace info from coredump.
 > 
-> Patch 1:
+> Here is an immature idea about the extractor:
 > 
-> Same fix that was merged in lttng-ust to fix libtool.m4 on target 
-> where link_all_deplibs = no.
+> -          Resolve the addresses of necessary symbols from coredump with
+> binary format library/tool
 > 
-> Patch 2:
+> -          Restructure the data structures
 > 
-> Fix an issue encountered when cross-compiling. The configure
-> script simply fails saying it cannot find the lttng-ust-ctl library
-> even thought the proper "-L/path/to/ust" is specified in $LDFLAGS. 
-> The AC_CHECK_LIB test fails because it can't find the libraries
-> that liblttng-ust-ctl depends on. The fix is to specify the
-> dependents libraries (liburcu-{common,bp,cds}) in the
-> other-lib-case of AC_CHECK_LIB.
+> -          Following the data structures, dump the buffer data page by
+> page
 > 
-> Thanks,
+>  
 > 
-> Christian
-> 
-> Christian Babeux (2): Fix: Libtool fails to find dependent
-> libraries when cross-compiling lttng-tools Fix: Missing libs
-> dependencies in configure check for lttng-ust-ctl
-> 
-> configure.ac | 38 +++++++++++++++++++++++++++++++++----- 1 file
-> changed, 33 insertions(+), 5 deletions(-)
-> 
------BEGIN PGP SIGNATURE-----
+> Any good ideas or suggestions or concerns?
 
-iQEcBAEBCgAGBQJQI8K9AAoJEELoaioR9I02GYoIALy1oupw5BbMgfNV5i/gyPrf
-3ywUW+s0/Ltl+H4L6hOUq4daUTyUpt+Tla9bBNiP+HXkRX7rxjMnePjN2lk8QJR6
-4lW1fWD7IlUNwQkVzKNZh+fv3xu4QyIiWd9zaEmMWIFwibaAcV8yzaI4ZkdrkHXX
-r+b2nVeGScx2kamwj5B/CWXr+FLovsstGEdKUy2KmJZ7A9eLg4G4Eyn8R3U7Sn5m
-X3t04liPawiZ6g8NTVQiw+O2vBs6ngdklj5DTQ1v4vLb/a2IwPPEnHjrznV1Np6A
-T1ONQex+063MYdxp6a0948pXx2X1jBEgeESphoew/Go15LQqgkUBFZHTye3kKdI=
-=GgYi
------END PGP SIGNATURE-----
+One main thing I want us to be careful about: if we do that, we need
+some kind of versioning information in the tracer that can be checked by
+the core dumper, so we can do changes internally without breaking the
+code dump.
+
+Thoughts ?
+
+Thanks,
+
+Mathieu
+
+> 
+>  
+> 
+> BR
+> 
+> Zheng
+> 
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+
+-- 
+Mathieu Desnoyers
+Operating System Efficiency R&D Consultant
+EfficiOS Inc.
+http://www.efficios.com
