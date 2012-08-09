@@ -1,20 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [Babeltrace-patch] Add BT_SEEK_LAST type to
-	bt_iter_pos.
-Date: Thu, 9 Aug 2012 16:40:45 -0400
-Message-ID: <20120809204045.GA15109__32498.4421175488$1344544877$gmane$org@Krystal>
-References: <1344542423-31441-1-git-send-email-francis.deslauriers@polymtl.ca>
+From: Danny Serres <danny.serres@efficios.com>
+Subject: =?utf-8?q?=5Bbabeltrace_PATCH=5D_API_documentation_fi?=
+	=?utf-8?b?bGXigI8=?=
+Date: Thu,  9 Aug 2012 17:39:38 -0400
+Message-ID: <1344548378-22039-1-git-send-email-danny.serres__39093.7997414314$1344548411$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from smtp.polymtl.ca ([132.207.4.11])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1SzZXD-0005hn-C4
-	for lttng-dev@lists.lttng.org; Thu, 09 Aug 2012 16:40:47 -0400
-Content-Disposition: inline
-In-Reply-To: <1344542423-31441-1-git-send-email-francis.deslauriers@polymtl.ca>
+	(envelope-from <danny.serres@efficios.com>) id 1SzaSG-00068L-17
+	for lttng-dev@lists.lttng.org; Thu, 09 Aug 2012 17:39:44 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,323 +19,179 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Francis Deslauriers <francis.deslauriers@polymtl.ca>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
+Cc: Danny Serres <danny.serres@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-* Francis Deslauriers (francis.deslauriers@polymtl.ca) wrote:
-> Signed-off-by: Francis Deslauriers <francis.deslauriers@polymtl.ca>
-> ---
->  include/babeltrace/iterator.h |    1 +
->  lib/iterator.c                |  199 ++++++++++++++++++++++++++++++++++++++++-
->  2 files changed, 199 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/babeltrace/iterator.h b/include/babeltrace/iterator.h
-> index aa6470e..c8edbd1 100644
-> --- a/include/babeltrace/iterator.h
-> +++ b/include/babeltrace/iterator.h
-> @@ -48,6 +48,7 @@ struct bt_iter_pos {
->  		BT_SEEK_CUR,
->  		BT_SEEK_BEGIN,
->  		BT_SEEK_END,
-> +		BT_SEEK_LAST
-
-please add comma to last entry. This is a coding style I always follow
-to make automated regexps easier.
-
->  	} type;
->  	union {
->  		uint64_t seek_time;
-> diff --git a/lib/iterator.c b/lib/iterator.c
-> index bcb77d8..5125afb 100644
-> --- a/lib/iterator.c
-> +++ b/lib/iterator.c
-> @@ -3,7 +3,7 @@
->   *
->   * Babeltrace Library
->   *
-> - * Copyright 2010-2011 EfficiOS Inc. and Linux Foundation
-> +/ * Copyright 2010-2011 EfficiOS Inc. and Linux Foundation
-
-This seems wrong.
-
->   *
->   * Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
->   *
-> @@ -186,7 +186,185 @@ static int seek_ctf_trace_by_timestamp(struct ctf_trace *tin,
->  
->  	return found ? 0 : EOF;
->  }
-> +int seek_last_element_ctf_file_stream(struct trace_collection *tc,
-> +		struct ctf_file_stream **cfs, int max_packet,
-> +		int max_stream_id, int max_stream_class_id,
-> +		int max_trace_descriptor_id, uint64_t max_timestamp)
-> +{
-> +	int ret;
-> +	struct trace_descriptor *max_td_read;
-> +	struct ctf_trace *max_tin;
-> +	struct ctf_stream_declaration *max_stream_class;
-> +	struct ctf_stream_definition *max_stream;
-> +	struct ctf_stream_pos *max_stream_pos;
-> +
-> +	/* get the targeted trace descriptor */
-> +	max_td_read = g_ptr_array_index(tc->array,
-> +					max_trace_descriptor_id);
-> +	max_tin = container_of(max_td_read,
-> +				struct ctf_trace, parent);
-> +	/* get targeted stream class */
-> +	max_stream_class = g_ptr_array_index(max_tin->streams,
-> +						max_stream_class_id);
-> +	/* get targeted stream */
-> +	max_stream = g_ptr_array_index(max_stream_class->streams,
-> +					max_stream_id);
-
-One comment by line might be a bit much. I prefer to comment the
-important things that must not be forgotten in the code, and sometimes,
-if needed, a commend about what the function does before the function.
-
-> +	*cfs = container_of(max_stream,
-> +				struct ctf_file_stream, parent);
-> +	max_stream_pos = &(*cfs)->pos;
-> +	/* we seek to the last packet of the stream.*/
-
-ah, this comment (above) is slightly more relevant.
-
-> +	max_stream_pos->packet_seek(&max_stream_pos->parent,
-> +				max_packet,
-> +				SEEK_SET);
-> +	/*
-> +	* iterate over all the event until we reach on that
-
-all the event -> every event
-
-on that his.. -> an event such that its ...
-
-> +	* his timestamp correspond with the max saved previously.
-> +	*/
-> +	do {
-> +		ret = stream_read_event(*cfs);
-> +	} while ((*cfs)->parent.real_timestamp != max_timestamp && ret == 0);
-> +
-> +	/* We insert the stream in the heap.*/
-
-in -> into
-
-missing space before */
-
-> +	return ret;
-> +}
-
-missing whiteline.
-
-please use checkpatch.pl provided in the linux kernel scripts against
-your patch to identify style errors.
-
-> +int find_last_event(struct ctf_file_stream *cfs,
-> +		uint64_t *timestamp_end,
-> +		int *packet)
-> +{
-> +	int ret = 0;
-> +	int count = 0;
-> +	int event_read = 0;
-
-put all integers on the same line.
-
-int ret = 0, count = 0, ......
-
-> +	uint64_t tmp = 0;
-> +	int i;
-> +	struct ctf_stream_pos *stream_pos;
-> +	stream_pos = &cfs->pos;
-
-missing whiteline after variable declarations.
-
-> +	/*
-> +	 * we start by the last packet as the current one.
-> +	 * If the current one is empty we go back one packet if possible.
-> +	 */
-> +	i = stream_pos->packet_real_index->len;
-> +	/*
-> +	 * Check if we have iterated on all the packets.
-> +	 * If we are not short on packets, we check what
-> +	 * made us leave the reading event loop.
-> +	 */
-> +	while (i >= 1 &&  count == 0) {
-
-what a strangely-looking loop construct. Please use a straightforward
-for () loop.
-
-> +		i--;
-> +		stream_pos->packet_seek(&stream_pos->parent, i, SEEK_SET);
-> +		count = 0;
-> +		/* read each event until we reach the end of the packet */
-> +		do {
-> +			tmp = cfs->parent.real_timestamp;
-> +			ret = stream_read_event(cfs);
-> +			if (ret == 0) {
-> +				count++;
-> +			}
-> +		} while (ret == 0);
-> +
-> +		/*Error*/
-
-missing spaces around /*  */
-
-> +		if (ret > 0) {
-> +			goto end;
-> +		}
-> +		event_read += count;
-> +	}
-> +	*packet = i;
-> +	*timestamp_end = tmp;
-> +
-> +	/* Check if we read at least one event on the stream */
-> +	if (event_read <= 1) {
-> +		ret = 1;
-> +		goto end;
-> +	}
-> +	ret = 0;
-> +
-> +end:
-> +	return ret;
-> +}
->  
-> +int find_max_timestamp_ctf_file_stream(
-> +		struct ctf_stream_declaration *stream_class, int *max_stream_id,
-> +		int *packet, uint64_t *max_timestamp, int *new_max)
-> +{
-> +	struct ctf_file_stream *cfs;
-> +	int i;
-> +	int max_packet = 0;
-> +	int ret = 0;
-> +	int error = 1;
-
-please combine those int into the same line.
-
-> +	uint64_t savedtime;
-> +	
-> +	for (i = 0; i < stream_class->streams->len; i++) {
-> +		struct ctf_stream_definition *stream;
-> +		stream = g_ptr_array_index(
-> +				stream_class->streams, i);
-> +		if (!stream)
-> +			continue;
-> +		cfs = container_of(stream, struct ctf_file_stream, parent);
-> +		ret = find_last_event(cfs, &savedtime, &max_packet);
-> +		/* Can return either EOF, 0, or error (> 0). */
-> +		if (ret == 0 && savedtime >= *max_timestamp) {
-> +			*new_max = 1;
-> +			*max_stream_id = i;
-> +			*packet = max_packet;
-> +			*max_timestamp = savedtime;
-> +		}
-> +		error = error & ret;
-> +	}
-> +	return error ;
-
-extra space.
-
-> +}
-> +
-> +int seek_last_ctf_file_stream(struct trace_collection *tc,
-> +		struct ctf_file_stream **cfs)
-> +{
-> +	int i, j;
-> +	int ret;
-> +	int found = 0;
-> +	int new_max_found;
-> +	uint64_t max_timestamp = 0;
-> +	int max_packet;
-> +	int max_stream_id;
-> +	int max_stream_class_id;
-> +	int max_trace_descriptor_id;
-
-combine int.
-
-missing whileline.
-
-I look forward to see the next round.
-
-Thanks,
-
-Mathieu
-
-> +	/* For each trace in the trace_collection*/
-> +	for (i = 0; i < tc->array->len; i++) {
-> +		struct ctf_trace *tin;
-> +		struct trace_descriptor *td_read;
-> +		td_read = g_ptr_array_index(tc->array, i);
-> +		if (!td_read)
-> +			continue;
-> +		tin = container_of(td_read, struct ctf_trace, parent);
-> +		/* For each stream_class in the trace*/
-> +		for (j = 0; j < tin->streams->len; j++) {
-> +			struct ctf_stream_declaration *stream_class;
-> +
-> +			stream_class = g_ptr_array_index(tin->streams, j);
-> +			if (!stream_class)
-> +				continue;
-> +			/* For each file_stream in the stream_class */
-> +			new_max_found = 0;
-> +			ret = find_max_timestamp_ctf_file_stream(stream_class,
-> +					&max_stream_id, &max_packet,
-> +					&max_timestamp, &new_max_found);
-> +			if (!ret && new_max_found) {
-> +				found = 1;
-> +				max_trace_descriptor_id = i;
-> +				max_stream_class_id = j;
-> +			}
-> +		}
-> +	}
-> +	/*
-> +	 * Now we know in which trace, stream_class and stream is the
-> +	 * last event of the trace_collection.
-> +	 * We can seek to this targeted event.
-> +	 */
-> +	if (!found) {
-> +		ret = -1;
-> +	} else {
-> +		ret = seek_last_element_ctf_file_stream(tc, cfs, max_packet,
-> +				max_stream_id, max_stream_class_id,
-> +				max_trace_descriptor_id, max_timestamp);
-> +	}
-> +	return ret;
-> +}
->  int bt_iter_set_pos(struct bt_iter *iter, const struct bt_iter_pos *iter_pos)
->  {
->  	struct trace_collection *tc;
-> @@ -326,6 +504,25 @@ int bt_iter_set_pos(struct bt_iter *iter, const struct bt_iter_pos *iter_pos)
->  			}
->  		}
->  		break;
-> +	case BT_SEEK_LAST:
-> +	{
-> +		struct ctf_file_stream *cfs;
-> +		tc = iter->ctx->tc;
-> +
-> +		ret = seek_last_ctf_file_stream(tc, &cfs);
-> +		if (ret < 0)
-> +			goto error;
-> +		/* remove all stream from the heap*/
-> +		heap_free(iter->stream_heap);
-> +		/* Create a new empty heap*/
-> +		ret = heap_init(iter->stream_heap, 0, stream_compare);
-> +		if (ret < 0)
-> +			goto error;
-> +		/* Insert the stream that contains the last event. */
-> +		heap_insert(iter->stream_heap, cfs);
-> +
-> +		return 0;
-> +	}
->  	default:
->  		/* not implemented */
->  		return -EINVAL;
-> -- 
-> 1.7.9.5
-> 
-
--- 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+U2lnbmVkLW9mZi1ieTogRGFubnkgU2VycmVzIDxkYW5ueS5zZXJyZXNAZWZmaWNpb3MuY29tPgot
+LS0KIGRvYy9BUEkudHh0IHwgIDIzNyArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysr
+KysrKysrKysrKysrKysrKysrKysrKysrKwogMSBmaWxlIGNoYW5nZWQsIDIzNyBpbnNlcnRpb25z
+KCspCiBjcmVhdGUgbW9kZSAxMDA2NDQgZG9jL0FQSS50eHQKCmRpZmYgLS1naXQgYS9kb2MvQVBJ
+LnR4dCBiL2RvYy9BUEkudHh0Cm5ldyBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDAwMDAwMDAuLjhj
+YjdlMzEKLS0tIC9kZXYvbnVsbAorKysgYi9kb2MvQVBJLnR4dApAQCAtMCwwICsxLDIzNyBAQAor
+QmFiZWx0cmFjZSBBUEkgZG9jdW1lbnRhdGlvbgorCitCYWJlbHRyYWNlIGlzIGEgdHJhY2Ugdmll
+d2VyIGFuZCBjb252ZXJ0ZXIgcmVhZGluZyBhbmQgd3JpdGluZyB0aGUKK0NvbW1vbiBUcmFjZSBG
+b3JtYXQgKENURikuICBJdHMgbWFpbiB1c2UgaXMgdG8gcHJldHR5LXByaW50IENURiB0cmFjZXMK
+K2ludG8gYSBodW1hbi1yZWFkYWJsZSB0ZXh0IG91dHB1dC4KKworVGhpcyBkb2N1bWVudCBkZXNj
+cmliZXMgdGhlIG1haW4gY29uY2VwdHMgdG8gdXNlIHRoZSBsaWJiYWJlbHRyYWNlLAord2hpY2gg
+ZXhwb3NlcyB0aGUgQmFiZWx0cmFjZSB0cmFjZSByZWFkaW5nIGNhcGFiaWxpdHkuCisKKworVE9E
+TzogYWRkIGV4cGxhbmF0aW9uIGZvciBlYWNoIHNjb3BlIChsaW5lIDExNikKKworCitURVJNSU5P
+TE9HWQorwq/Cr8Kvwq/Cr8Kvwq/Cr8Kvwq/Cr8Kvwq/Cr8KvCisKKyogQSAiY2FsbGJhY2siIGlz
+IGEgcmVmZXJlbmNlIHRvIGEgcGllY2Ugb2YgZXhlY3V0YWJsZSBjb2RlIChzdWNoIGFzIGEKKyAg
+ZnVuY3Rpb24pIHRoYXQgaXMgcGFzc2VkIGFzIGFuIGFyZ3VtZW50IHRvIGFub3RoZXIgcGllY2Ug
+b2YgY29kZQorICAobGlrZSBhbm90aGVyIGZ1bmN0aW9uKS4KKworKiBBICJjb250ZXh0IiBpcyBh
+IHN0cnVjdHVyZSB0aGF0IHJlcHJlc2VudHMgYW4gb2JqZWN0IGluIHdoaWNoIGEgdHJhY2UKKyAg
+Y29sbGVjdGlvbiBpcyBvcGVubmVkLgorCisqIEFuICJpdGVyYXRvciIgaXMgYSBzdHJ1Y3R1cmUg
+dGhhdCBlbmFibGVzIHRoZSB1c2VyIHRvIHRyYXZlcnNlIGEgdHJhY2UuCisKKyogQSAidHJhY2Ug
+aGFuZGxlIiBpcyBhIHVuaXF1ZSBpZGVudGlmaWVyIHJlcHJlc2VudGluZyBhIHRyYWNlIGZpbGUu
+CisgIEl0IGFsbG93cyB0aGUgdXNlciB0byBtYW5pcHVsYXRlIGEgdHJhY2UgZmlsZSBkaXJlY3Rs
+eS4KKworCisKK1VTQUdFCivCr8Kvwq/Cr8Kvwq/Cr8Kvwq/Cr8Kvwq/Cr8Kvwq8KKworQ29udGV4
+dDoKKworSW4gb3JkZXIgdG8gdXNlIGxpYmJhYmVsdHJhY2UgdG8gcmVhZCBhIHRyYWNlLCB0aGUg
+Zmlyc3Qgc3RlcCBpcyB0byBjcmVhdGUgYQorY29udGV4dCBzdHJ1Y3R1cmUgYW5kIHRvIGFkZCBh
+IHRyYWNlIHRvIGl0LiAgVGhpcyBpcyBkb25lIHVzaW5nIHRoZQorYnRfY29udGV4dF9jcmVhdGUo
+KSBhbmQgYnRfY29udGV4dF9hZGRfdHJhY2UoKSBmdW5jdGlvbnMuIEFzIGxvbmcgYXMgdGhpcwor
+Y29udGV4dCBzdHJ1Y3R1cmUgaXMgYWxsb2NhdGVkLCB0aGUgdHJhY2UgY29sbGVjdGlvbiBpcyBv
+cGVuLgorCitUaGUgY29udGV4dCBjYW4gYmUgZGVzdHJveWVkIGJ5IGNhbGxpbmcgb25lIG1vcmUg
+YnRfY29udGV4dF9wdXQoKQordGhhbiBidF9jb250ZXh0X2dldCgpLCBmdW5jdGlvbnMgd2hpY2gg
+cmVzcGVjdGl2ZWx5IGRlY3JlbWVudCBhbmQgaW5jcmVtZW50Cit0aGUgcmVmY291bnQgb2YgdGhl
+IGNvbnRleHQuICBUaGVzZSBmdW5jdGlvbnMgZW5zdXJlcyB0aGF0IHRoZSBjb250ZXh0IHdvbid0
+CitiZSBkZXN0cm95ZWQgd2hlbiBpdCBpcyBpbiB1c2UuCisKK09uY2UgYSB0cmFjZSBpcyBhZGRl
+ZCB0byB0aGUgY29udGV4dCwgaXQgY2FuIGJlIHJlYWQgYW5kIHNlZWtlZCB1c2luZyBpdGVyYXRv
+cnMKK29yIGNhbGxiYWNrcy4KKworCitJdGVyYXRvcjoKKworQW4gaXRlcmF0b3IgY2FuIGJlIGNy
+ZWF0ZWQgdXNpbmcgdGhlIGJ0X2l0ZXJfY3JlYXRlKCkgZnVuY3Rpb24uCitBcyBmb3Igbm93LCBv
+bmx5IGN0ZiBpdGVyYXRvciBhcmUgc3VwcG9ydGVkLiAgVGhlc2UgYXJlIHVzZWQgdG8gdHJhdmVy
+c2UgYSBjdGYtCitmb3JtYXR0ZWQgdHJhY2UuICBTdWNoIGl0ZXJhdG9yIGNhbiBiZSBjcmVhdGVk
+IHdpdGggYnRfY3RmX2l0ZXJfY3JlYXRlKCkuCisKK1doaWxlIGNyZWF0aW5nIGFuIGl0ZXJhdG9y
+LCBhIGJlZ2luIGFuZCBhbiBlbmQgcG9zaXRpb24gbWF5IGJlIHNwZWNpZmllZC4KK1RvIGRvIHNv
+LCBvbmUgb3IgdHdvIHN0cnVjdCBidF9pdGVyX3BvcyBtdXN0IGJlIHBhc3NlZC4gIFN1Y2ggc3Ry
+dWN0IGhhdmUgMgorYXR0cmlidXRlczogdHlwZSBhbmQgdS4gICJ0eXBlIiBpcyB0aGUgc2VlayB0
+eXBlLCBjYW4gYmUgZWl0aGVyOgorCUJUX1NFRUtfVElNRQorCUJUX1NFRUtfUkVTVE9SRQorCUJU
+X1NFRUtfQ1VSCisJQlRfU0VFS19CRUdJTgorCUJUX1NFRUtfRU5ECithbmQgInUiIGlzIGEgdW5p
+b24gb2YgdGhlIHNlZWsgdGltZSAoaWYgdXNpbmcgQlRfU0VFS19USU1FKSBhbmQgdGhlIHJlc3Rv
+cmUKK3Bvc2l0aW9uIChpZiB1c2luZyBCVF9TRUVLX1JFU1RPUkUpLgorCitPbmNlIHRoZSBpdGVy
+YXRvciBpcyBjcmVhdGVkLCB2YXJpb3VzIGZ1bmN0aW9ucyBiZWNvbWUgYXZhaWxhYmxlLiAgV2Ug
+aGF2ZQorYnRfY3RmX2l0ZXJfcmVhZF9ldmVudCgpIHdoaWNoIHJldHVybnMgdGhlIGN0ZiBldmVu
+dCBvZiB0aGUgdHJhY2Ugd2hlcmUgdGhlCitpdGVyYXRvciBpcyBzZXQuICBUaGVyZSBpcyBhbHNv
+IGJ0X2N0Zl9pdGVyX2Rlc3Ryb3koKSB3aGljaCBmcmVlIHRoZSBpdGVyYXRvci4KK05vdGUgdGhh
+dCBvbmx5IG9uZSBpdGVyYXRvciBjYW4gYmUgY3JlYXRlZCBhZ2FpbnN0IGEgY29udGV4dCBhdCB0
+aGUgc2FtZSB0aW1lLgorSWYgbW9yZSB0aGFuIG9uZSBpdGVyYXRvciBpcyBiZWluZyBjcmVhdGVk
+IGZvciB0aGUgc2FtZSBjb250ZXh0LCB0aGUgc2Vjb25kCitjcmVhdGlvbiB3aWxsIHJldHVybiBO
+VUxMLiBUaGUgcHJldmlvdXMgaXRlcmF0b3IgbXVzdCBiZSBkZXN0cm95ZWQgYmVmb3JlCitjcmVh
+dGlvbiBvZiB0aGUgbmV3IGl0ZXJhdG9yLiAgSW4gdGhlIGZ1dHVyZSwgY3JlYXRpb24gb2YgbXVs
+dGlwbGVzIGl0ZXJhdG9ycword2lsbCBwcm9iYWJseSBiZSBhbGxvd2VkLgorCitGaW5hbGx5LCB3
+ZSBoYXZlIHRoZSBidF9jdGZfZ2V0X2l0ZXIoKSBmdW5jdGlvbiB3aGljaCByZXR1cm5zIGEgc3Ry
+dWN0IGJ0X2l0ZXIKK3dpdGggd2hpY2ggdGhlIGl0ZXJhdG9yIGNhbiBiZSBtb3ZlZCB1c2luZyBv
+bmUgb2YgdGhlc2UgZnVuY3Rpb25zOgorCWJ0X2l0ZXJfbmV4dCgpLAkJd2hpY2ggbW92ZXMgdGhl
+IHBvc2l0aW9uIHRvIHRoZSBuZXh0IGV2ZW50CisJYnRfaXRlcl9zZXRfcG9zKCksIAl3aGljaCBt
+b3ZlcyB0aGUgcG9zaXRpb24gdG8gdGhlIHNwZWNpZmllZCBvbmUKKworVG8gZ2V0IHRoZSBjdXJy
+ZW50IHBvc2l0aW9uIChzdHJ1Y3QgYnRfaXRlcl9wb3MpIG9mIHRoZSBpdGVyYXRvciwgdGhlIGZ1
+bmN0aW9uCitidF9pdGVyX2dldF9wb3MoKSBjYW4gYmUgdXNlZC4gIFRvIGdldCBhbiBhcmJpdHJh
+cnkgcG9zaXRpb24gYmFzZWQgb24gYQorc3BlY2lmaWMgdGltZSwgYnRfaXRldF9jcmVhdGVfdGlt
+ZV9wb3MoKSBpcyB0aGUgZnVuY3Rpb24gdG8gdXNlLiAgVGhlIHBvc2l0aW9uCityZXR1cm5lZCBi
+eSBvbmUgb2YgdGhlc2UgdHdvIGZ1bmN0aW9ucyBtdXN0IGJlIGZyZWVkIHdpdGggYnRfaXRlcl9m
+cmVlX3BvcygpCithZnRlciB1c2UuCisKKworQ1RGIEV2ZW50OgorCitBIENURiBldmVudCBpcyB1
+c3VhbGx5IG9idGFpbmVkIGZyb20gYW4gaXRlcmF0b3IgdmlhIHRoZQorYnRfY3RmX2l0ZXJfcmVh
+ZF9ldmVudCgpIGZ1bmN0aW9uLCB3aGljaCByZXR1cm5zIGEgc3RydWN0IGJ0X2N0Zl9ldmVudC4g
+IEhhdmluZwordGhlIGV2ZW50LCB3ZSBjYW4gY29sbGVjdCBpdHMgZGF0YToKKwkqIGJ0X2N0Zl9l
+dmVudF9uYW1lKCkgd2lsbCByZXR1cm4gdGhlIG5hbWUgb2YgdGhlIGV2ZW50OworCSogYnRfY3Rm
+X2dldF90aW1lc3RhbXAoKSB3aWxsIHJldHVybiB0aGUgdGltZXN0YW1wIG9mIHRoZSBldmVudAor
+CQlvZmZzZXR0ZWQgd2l0aCB0aGUgc3lzdGVtIGNsb2NrIHNvdXJjZSAoaW4gbnMpOworCSogYnRf
+Y3RmX2dldF9jeWNsZXMgd2lsbCByZXR1cm4gdGhlIHRpbWVzdGFtcCBvZiB0aGUgZXZlbnQgYXMg
+d3JpdHRlbgorCQlpbiB0aGUgcGFja2V0IChpbiBjeWNsZXMpLgorCitUbyBhY2Nlc3MgdGhlIGV2
+ZW50IGZpZWxkcyB3aGljaCBjb250YWluIHZhcmlvdXMgaW5mb3JtYXRpb24sIHRoZSBmaXJzdCBz
+dGVwIGlzCit0byBvYnRhaW4gYSBzY29wZSBkZWZpbml0aW9uIGZvciB0aGUgZGVzaXJlZCBmaWVs
+ZC4gIFRoaXMgY2FuIGJlIGRvbmUgdXNpbmcgdGhlCitidF9jdGZfZ2V0X3RvcF9sZXZlbF9zY29w
+ZSgpIGZ1bmN0aW9uLiAgVGhpcyBmdW5jdGlvbiBwcm92aWRlcyB0aGUgbWFwcGluZworYmV0d2Vl
+biB0aGUgZW51bSBhbmQgdGhlIGFjdHVhbCBkZWZpbml0aW9uIG9mIHRvcC1sZXZlbCBzY29wZXMg
+YW5kIHJldHVybnMKK2EgZGVmaW5pdGlvbiBvZiB0aGUgdG9wLWxldmVsIHNjb3BlLgorVG9wLWxl
+dmVsIHNjb3BlcyBhcmUgZGVmaW5lZCBpbiB0aGUgYnRfY3RmX3Njb3BlIGVudW06CisJQlRfVFJB
+Q0VfUEFDS0VUX0hFQURFUgkJPSAwLAorCUJUX1NUUkVBTV9QQUNLRVRfQ09OVEVYVCAgICAgICAg
+PSAxLAorCUJUX1NUUkVBTV9FVkVOVF9IRUFERVIgICAgICAgICAgPSAyLAorCUJUX1NUUkVBTV9F
+VkVOVF9DT05URVhUICAgICAgICAgPSAzLAorCUJUX0VWRU5UX0NPTlRFWFQgICAgICAgICAgICAg
+ICAgPSA0LAorCUJUX0VWRU5UX0ZJRUxEUyAgICAgICAgICAgICAgICAgPSA1LgorCisKK0luIG9y
+ZGVyIHRvIGdldCBhIGZpZWxkIG9yIGEgZmllbGQgbGlzdCwgdGhlIHVzZXIgbmVlZHMgdG8gcGFz
+cyBhIHNjb3BlIGFzCithcmd1bWVudCwgdGhpcyBzY29wZSBjYW4gYmUgYSB0b3AtbGV2ZWwgc2Nv
+cGUgb3IgYSBzY29wZSByZWxhdGl2ZSB0byBhbgorYXJiaXRyYXJ5IGZpZWxkLgorCitUbyBnZXQg
+YSBmaWVsZCBsaXN0LCB0aGUgYnRfY3RmX2dldF9maWVsZF9saXN0KCkgZnVuY3Rpb24gaXMgdG8g
+YmUgdXNlZC4KK1RvIGdldCB0aGUgZGVmaW5pdGlvbiBvZiBhIHNwZWNpZmljIGZpZWxkLCB0aGUg
+YXBwcm9wcmlhdGUgZnVuY3Rpb24gd291bGQgYmUKK2J0X2N0Zl9nZXRfZmllbGQoKS4KKworT25j
+ZSB0aGUgZmllbGQgaXMgb2J0YWluZWQsIHdlIGNhbiBvYnRhaW4gaXRzIG5hbWUgYW5kIHR5cGUg
+dXNpbmcgdGhlCitidF9jdGZfZmllbGRfbmFtZSgpIGFuZCBidF9jdGZfZmllbGRfdHlwZSgpIGZ1
+bmN0aW9ucyByZXNwZWN0aXZlbHkuICBUaGUKK3Bvc3NpYmxlIHR5cGVzIGFyZSBkZWZpbmVkIGlu
+IHRoZSBjdGZfdHlwZV9pZCBlbnVtOgorCUNURl9UWVBFX1VOS05PV04gPSAwLAorCUNURl9UWVBF
+X0lOVEVHRVIsCisJQ1RGX1RZUEVfRkxPQVQsCisJQ1RGX1RZUEVfRU5VTSwKKwlDVEZfVFlQRV9T
+VFJJTkcsCisJQ1RGX1RZUEVfU1RSVUNULAorCUNURl9UWVBFX1VOVEFHR0VEX1ZBUklBTlQsCisJ
+Q1RGX1RZUEVfVkFSSUFOVCwKKwlDVEZfVFlQRV9BUlJBWSwKKwlDVEZfVFlQRV9TRVFVRU5DRSwK
+KwlOUl9DVEZfVFlQRVMuCisKK0RlcGVuZGluZyBvbiB0aGUgZmllbGQgdHlwZSwgd2UgY2FuIGdl
+dCBkYXRhIG9uIGl0cyB2YWx1ZSB1c2luZyB0aGUgYXBwcm9wcmlhdGUKK2Z1bmN0aW9uOgorCSog
+YnRfY3RmX2dldF9pbmRleCgpCQlyZXR1cm4gdGhlIGVsZW1lbnQgYXQgdGhlIGluZGV4CisJCQkJ
+CXBvc2l0aW9uIG9mIGFuIGFycmF5IG9mIGEgc2VxdWVuY2U7CisKKwkqIGJ0X2N0Zl9nZXRfYXJy
+YXlfbGVuKCkJcmV0dXJuIHRoZSBsZW4gb2YgYW4gYXJyYXk7CisKKwkqIGJ0X2N0Zl9nZXRfaW50
+X3NpZ25lZG5lc3MoKSAJcmV0dXJuIHRoZSBzaWduZWRuZXNzIG9mIGFuIGludGVnZXI7CisKKwkq
+IGJ0X2N0Zl9nZXRfaW50X2Jhc2UoKQkJcmV0dXJuIHRoZSBiYXNlIG9mIGFuIGludGVnZXI7CisK
+KwkqIGJ0X2N0Zl9nZXRfaW50X2J5dGVfb3JkZXIoKSAJcmV0dXJuIHRoZSBieXRlIG9yZGVyIG9m
+IGFuIGludGVnZXI7CisKKwkqIGJ0X2N0Zl9nZXRfaW50X2xlbigpCQlyZXR1cm4gdGhlIHNpemUg
+aW4gYml0cyBvZiBhbiBpbnRlZ2VyOworCisJKiBidF9jdGZfZ2V0X2VuY29kaW5nKCkJCXJldHVy
+biB0aGUgZW5jb2Rpbmcgb2YgYW4gaW50IG9yIGEKKwkJCQkJc3RyaW5nIGRlZmluZWQgaW4gdGhl
+CisJCQkJCWN0Zl9zdHJpbmdfZW5jb2RpbmcgZW51bToKKwkJCQkJCUNURl9TVFJJTkdfTk9ORSA9
+IDAsCisJCQkJCQlDVEZfU1RSSU5HX1VURjgsCisJCQkJCQlDVEZfU1RSSU5HX0FTQ0lJLAorCQkJ
+CQkJQ1RGX1NUUklOR19VTktOT1dOLgorCitUbyBvYnRhaW4gdGhlIHZhbHVlIGFzc29jaWF0ZWQg
+d2l0aCBhIGZpZWxkLCB0aGUgYXBwcm9wcmlhdGUgZnVuY3Rpb24gb2YgdGhlc2UKK2lzIHRvIGJl
+IHVzZWQ6CisKKwkqIGJ0X2N0Zl9nZXRfdWludDY0KCk7CisJKiBidF9jdGZfZ2V0X2ludDY0KCk7
+CisJKiBidF9jdGZfZ2V0X2NoYXJfYXJyYXkoKTsKKwkqIGJ0X2N0Zl9nZXRfc3RyaW5nKCkuCisK
+K0lmIHRoZSBmaWVsZCBkb2VzIG5vdCBleGlzdCBvciBpcyBub3Qgb2YgdGhlIHR5cGUgcmVxdWVz
+dGVkLCB0aGUgdmFsdWUgcmV0dXJuZWQKK3dpdGggdGhlc2UgZm91ciBmdW5jdGlvbnMgaXMgdW5k
+ZWZpbmVkLiBUbyBjaGVjayBpZiBhbiBlcnJvciBvY2N1cmVkLCB1c2UgdGhlCitidF9jdGZfZmll
+bGRfZ2V0X2Vycm9yKCkgZnVuY3Rpb24gYWZ0ZXIgYWNjZXNzaW5nIGEgZmllbGQuICBJZiBubyBl
+cnJvciBvY2N1cmVkLAordGhlIGZ1bmN0aW9uIHdpbGwgcmV0dXJuIDAuCisKK0l0IGlzIGFsc28g
+cG9zc2libGUgdG8gYWNjZXNzIHRoZSBkZWNsYXJhdGlvbiBmaWVsZHMsIHRoZSBzYW1lIHdheSBh
+cyB0aGUKK2RlZmluaXRpb24gb25lcy4gIGJ0X2N0Zl9nZXRfZXZlbnRfZGVjbF9saXN0KCkgc2V0
+cyBhIGxpc3QgdG8gYW4gYXJyYXkgb2YKK2J0X2N0Zl9ldmVudF9kZWNsIHBvaW50ZXJzIGFuZCBi
+dF9jdGZfZ2V0X2V2ZW50X2RlY2xfZmllbGRzKCkgc2V0cyBhIGxpc3QgdG8gYW4KK2FycmF5IG9m
+IGJ0X2N0Zl9maWVsZF9kZWNsIHBvaW50ZXJzLiAgRnJvbSB0aGUgZmlyc3QgdHlwZSwgdGhlIG5h
+bWUgb2YgdGhlCitldmVudCBjYW4gYmUgb2J0YWluZWQgd2l0aCBidF9jdGZfZ2V0X2RlY2xfZXZl
+bnRfbmFtZSgpLiAgRm9yIHRoZSBzZWNvbmQgdHlwZSwKK3RoZSBmaWVsZCBkZWNsIG5hbWUgaXMg
+b2J0YWluZWQgd2l0aCBidF9jdGZfZ2V0X2RlY2xfZmllbGRfbmFtZSgpLgorCisKK0NhbGxiYWNr
+OgorCitUaGUgb3RoZXIgYWx0ZXJuYXRpdmUgdG8gcmVhZGluZyBhIHRyYWNlIGlzIHdpdGggdGhl
+IHVzZSBvZiBjYWxsYmFja3MuICBUaGlzIGlzCitkb25lIHdpdGggdGhlIGJ0X2N0Zl9pdGVyX2Fk
+ZF9jYWxsYmFjaygpIGZ1bmN0aW9uLiAgSXQgc3RpbGwgcmVxdWlyZXMgYSB2YWxpZAorY3RmIGl0
+ZXJhdG9yIGFzIHRoZSBmaXJzdCBhcmd1bWVudC4gIEhlcmUgYXJlIGFsbCBhcmd1bWVudHM6CisK
+KwlAaXRlcjogdHJhY2UgY29sbGVjdGlvbiBpdGVyYXRvciAoaW5wdXQpCisJQGV2ZW50OiBldmVu
+dCB0byB0YXJnZXQuIDAgZm9yIGFsbCBldmVudHMuCisJQHByaXZhdGVfZGF0YTogcHJpdmF0ZSBk
+YXRhIHBvaW50ZXIgdG8gcGFzcyB0byB0aGUgY2FsbGJhY2sKKwlAZmxhZ3M6IHNwZWNpZmljIGZs
+YWdzIGNvbnRyb2xsaW5nIHRoZSBiZWhhdmlvciBvZiB0aGlzIGNhbGxiYWNrCisJCShvcidkKS4K
+KwlAY2FsbGJhY2s6IGZ1bmN0aW9uIHBvaW50ZXIgdG8gY2FsbAorCUBkZXBlbmRzOiBzdHJ1Y3Qg
+YnRfZGVwZW5kZW5jeSBkZXRhaWxpbmcgdGhlIHJlcXVpcmVkIGNvbXB1dGF0aW9uCisJCXJlc3Vs
+dHMuICBFbmRzIHdpdGggMC4KKwlAd2Vha19kZXBlbmRzOiBzdHJ1Y3QgYnRfZGVwZW5kZW5jeSBk
+ZXRhaWxpbmcgdGhlIG9wdGlvbmFsIGNvbXB1dGF0aW9uCisJCXJlc3VsdHMgdGhhdCBjYW4gYmUg
+b3B0aW9uYWxseSBjb25zdW1lZCBieSB0aGlzCisJCWNhbGxiYWNrLgorCUBwcm92aWRlczogc3Ry
+dWN0IGJ0X2RlcGVuZGVuY3kgZGV0YWlsaW5nIHRoZSBjb21wdXRhdGlvbiByZXN1bHRzCisJCXBy
+b3ZpZGVkIGJ5IHRoaXMgY2FsbGJhY2suCisJCUVuZHMgd2l0aCAwLgorCisiZGVwZW5kcyIsICJ3
+ZWFrX2RlcGVuZHMiIGFuZCAicHJvdmlkZXMiIG1lbW9yeSBpcyBoYW5kbGVkIGJ5IHRoZSBiYWJl
+bHRyYWNlCitsaWJyYXJ5IGFmdGVyIHRoaXMgY2FsbCBzdWNjZWVkcyBvciBmYWlscy4gVGhlc2Ug
+b2JqZWN0cyBjYW4gc3RpbGwgYmUgdXNlZCBieQordGhlIGNhbGxlciB1bnRpbCB0aGUgYmFiZWx0
+cmFjZSBpdGVyYXRvciBpcyBkZXN0cm95ZWQsIGJ1dCB0aGV5IGJlbG9uZyB0byB0aGUKK2JhYmVs
+dHJhY2UgbGlicmFyeS4KKworTm90ZTogdGhlIGRlcGVuZGVuY3kgZ3JhcGggaXMgY2FsY3VsYXRl
+ZCB3aGVuIGJ0X2N0Zl9pdGVyX3JlYWRfZXZlbnQoKSBpcworZXhlY3V0ZWQgYWZ0ZXIgYSBidF9j
+dGZfaXRlcl9hZGRfY2FsbGJhY2soKS4gQmV3YXJlIHRoYXQgaXQgaXMgdmFsaWQgdG8KK2NyZWF0
+ZS9hZGQgY2FsbGJhY2tzL3JlYWQvYWRkIG1vcmUgY2FsbGJhY2tzL3JlYWQgc29tZSBtb3JlLgor
+CitUaGUgY2FsbGJhY2sgZnVuY3Rpb24gcGFzc2VkIHRvIGJ0X2N0Zl9pdGVyX2FkZF9jYWxsYmFj
+aygpIG11c3QgcmV0dXJuIGEKK2J0X2NiX3JldCB2YWx1ZToKKwlCVF9DQl9PSwkJPSAwLAorCUJU
+X0NCX09LX1NUT1AJCT0gMSwKKwlCVF9DQl9FUlJPUl9TVE9QCT0gMiwKKwlCVF9DQl9FUlJPUl9D
+T05USU5VRQk9IDMuCisKKworVHJhY2UgaGFuZGxlOgorCitXaGVuIGEgdHJhY2UgaXMgYWRkZWQg
+dG8gYSBjb250ZXh0LCBidF9jb250ZXh0X2FkZF90cmFjZSgpIHJldHVybnMgYSB0cmFjZQoraGFu
+ZGxlIGlkLiAgVGhpcyBpZCBpcyBhc3NvY2lhdGVkIHdpdGggaXRzIGNvcnJlc3BvbmRpbmcgdHJh
+Y2UgaGFuZGxlLiAgV2l0aAordGhhdCBpZCwgaXQgaXMgcG9zc2libGUgdG8gbWFuaXB1bGF0ZSBk
+aXJlY3RseSB0aGUgdHJhY2UgZmlsZS4KKworCSogYnRfdHJhY2VfaGFuZGxlX2dldF9wYXRoKCkK
+KwkJLT4gcmV0dXJucyB0aGUgcGF0aCBvZiB0aGUgdHJhY2UgaGFuZGxlCShwYXRoIHRvIHRoZSB0
+cmFjZSkuCisKKwkqIGJ0X3RyYWNlX2hhbmRsZV9nZXRfdGltZXN0YW1wX2JlZ2luKCkKKwkqIGJ0
+X3RyYWNlX2hhbmRsZV9nZXRfdGltZXN0YW1wX2VuZCgpCisJCS0+IHJldHVybiB0aGUgY3JlYXRp
+b24vZGVzdHJ1Y3Rpb24gdGltZXN0YW1wcyAoaW4gbnMgb3IgY3ljbGVzCisJCQlkZXBlbmRpbmcg
+b24gdGhlIHR5cGUgc3BlY2lmaWVkKSBvZiB0aGUgYnVmZmVycyBvZiBhCisJCQl0cmFjZS4KKwor
+CSogYnRfY3RmX2V2ZW50X2dldF9oYW5kbGVfaWQoKQorCQktPiByZXR1cm5zIHRoZSBoYW5kbGUg
+aWQgYXNzb2NpYXRlZCB3aXRoIGFuIGV2ZW50LgorCisKK0ZvciBtb3JlIGluZm9ybWF0aW9uIG9u
+IENURiwgc2VlIHRoZSBDVEYgZG9jdW1lbnRhdGlvbiAoZ2l0Oi8vZ2l0LmVmZmljaW9zLmNvbS9j
+dGYuZ2l0KS4KLS0gCjEuNy45LjUKCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRu
+Zy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0
+bmctZGV2Cg==
