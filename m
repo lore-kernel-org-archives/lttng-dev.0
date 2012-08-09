@@ -1,10 +1,8 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH 2/2] urcu: add notice to URCU_TLS() for it
-	is not	async-signal-safe
-Date: Thu, 9 Aug 2012 10:14:17 -0400
-Message-ID: <20120809141417.GC9064__23458.6024460897$1344521686$gmane$org@Krystal>
-References: <1344414673-14714-1-git-send-email-laijs@cn.fujitsu.com>
-	<1344414673-14714-2-git-send-email-laijs@cn.fujitsu.com>
+Subject: Re: [PATCH] urcu: fix compat_futex_noasync()
+Date: Thu, 9 Aug 2012 10:20:48 -0400
+Message-ID: <20120809142048.GA9211__28219.4363572218$1344522075$gmane$org@Krystal>
+References: <5021BEE4.6090907@cn.fujitsu.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -12,10 +10,10 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1SzTVC-0002eQ-Cm
-	for lttng-dev@lists.lttng.org; Thu, 09 Aug 2012 10:14:18 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1SzTbV-0002ht-TS
+	for lttng-dev@lists.lttng.org; Thu, 09 Aug 2012 10:20:50 -0400
 Content-Disposition: inline
-In-Reply-To: <1344414673-14714-2-git-send-email-laijs@cn.fujitsu.com>
+In-Reply-To: <5021BEE4.6090907@cn.fujitsu.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -25,55 +23,58 @@ List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 To: Lai Jiangshan <laijs@cn.fujitsu.com>
-Cc: lttng-dev@lists.lttng.org, eag0628@gmail.com
+Cc: lttng-dev@lists.lttng.org, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
 List-Id: lttng-dev@lists.lttng.org
 
 * Lai Jiangshan (laijs@cn.fujitsu.com) wrote:
-> Signed-off-by: Lai Jiangshan <laijs@cn.fujitsu.com>
-> ---
->  urcu/tls-compat.h |   14 ++++++++++++++
->  1 files changed, 14 insertions(+), 0 deletions(-)
+> This patch fix two critical problems:
 > 
-> diff --git a/urcu/tls-compat.h b/urcu/tls-compat.h
-> index 192a536..b7bf363 100644
-> --- a/urcu/tls-compat.h
-> +++ b/urcu/tls-compat.h
-> @@ -59,6 +59,20 @@ extern "C" {
->  
->  #else /* #ifndef CONFIG_RCU_TLS */
->  
-> +/*
-> + * NOTE: URCU_TLS() is NOT async-signal-safe, you can't use it
-> + * inside any function which can be called from signal handler.
-> + *
-> + * But if pthread_getspecific() is async-signal-safe in your
-> + * platform, you can make URCU_TLS() async-signal-safe via:
-> + * ensuring the first call to URCU_TLS() of a given TLS variable of
-> + * all threads is called earliest from a non-signal handler function.
-> + *
-> + * Exmaple: In any thread, the first call of URCU_TLS(rcu_reader)
-> + * is called from rcu_register_thread(), so we can ensure all later
-> + * URCU_TLS(rcu_reader) in any thread is async-signal-safe.
+> 1) compat_futex_cond is not bound to any @uaddr, it services all @uaddr,
+>    if you wakeup only one thread(pthread_cond_signal), the @uaddr of
+>    this waking thread and the @uaddr of the woken-up thread may be different.
+>    the the woken-up thread will very probably go to sleep again
+>    because his own condition is not true.
+> 
+>    *And* this waking thread(FUTEX_WAKE) wake up NOTHING.
+> 
+> 2) If the caller want to wake up all waiting threads, he will use INT_MAX for @val.
+>    and 
+> 		for (i = 0; i < INT_MAX; i++)
+> 			pthread_cond_signal(&compat_futex_cond);
+>    becomes almost infinity loop.
+> 
+> Signed-off-by: Lai Jiangshan <laijs@cn.fujitsu.com>
 
-Hrm. We could also just block all signals within type *__tls_access_ ##
-name(void)  (in tls-compat.h) and make sure it is async-signal-safe I
-guess ? I would prefer that solution: it would make the code more robust
-for a rarely taken performance hit.
+Good catch !
 
-Thoughts ?
-
-Thanks,
+Merged, thanks!
 
 Mathieu
 
-> + */
-> +
->  # include <pthread.h>
+> ---
+> diff --git a/compat_futex.c b/compat_futex.c
+> index 04de596..bb928e6 100644
+> --- a/compat_futex.c
+> +++ b/compat_futex.c
+> @@ -43,7 +43,7 @@ static pthread_cond_t compat_futex_cond = PTHREAD_COND_INITIALIZER;
+>  int compat_futex_noasync(int32_t *uaddr, int op, int32_t val,
+>  	const struct timespec *timeout, int32_t *uaddr2, int32_t val3)
+>  {
+> -	int ret, i, gret = 0;
+> +	int ret, gret = 0;
 >  
->  struct urcu_tls {
-> -- 
-> 1.7.4.4
-> 
+>  	/*
+>  	 * Check if NULL. Don't let users expect that they are taken into
+> @@ -67,8 +67,7 @@ int compat_futex_noasync(int32_t *uaddr, int op, int32_t val,
+>  		pthread_cond_wait(&compat_futex_cond, &compat_futex_lock);
+>  		break;
+>  	case FUTEX_WAKE:
+> -		for (i = 0; i < val; i++)
+> -			pthread_cond_signal(&compat_futex_cond);
+> +		pthread_cond_broadcast(&compat_futex_cond);
+>  		break;
+>  	default:
+>  		gret = -EINVAL;
 
 -- 
 Mathieu Desnoyers
