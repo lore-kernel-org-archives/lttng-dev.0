@@ -1,17 +1,20 @@
 From: Christian Babeux <christian.babeux@efficios.com>
-Subject: [PATCH lttng-tools 0/2] relayd IPv6 fixes
-Date: Fri, 10 Aug 2012 13:22:50 -0400
-Message-ID: <1344619372-21976-1-git-send-email-christian.babeux__24992.1252871447$1344619433$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools 1/2] Fix: Off by one in
+	lttcomm_sock_domain enum
+Date: Fri, 10 Aug 2012 13:22:51 -0400
+Message-ID: <1344619372-21976-2-git-send-email-christian.babeux__23766.3425891244$1344619433$gmane$org@efficios.com>
+References: <1344619372-21976-1-git-send-email-christian.babeux@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-gh0-f176.google.com ([209.85.160.176])
+Received: from mail-gg0-f176.google.com ([209.85.161.176])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <christian.babeux@0x80.ca>) id 1Szsvd-0006i0-JQ
-	for lttng-dev@lists.lttng.org; Fri, 10 Aug 2012 13:23:17 -0400
-Received: by ghbz10 with SMTP id z10so2138544ghb.35
-	for <lttng-dev@lists.lttng.org>; Fri, 10 Aug 2012 10:23:12 -0700 (PDT)
+	(envelope-from <christian.babeux@0x80.ca>) id 1Szsvn-0006ij-Eg
+	for lttng-dev@lists.lttng.org; Fri, 10 Aug 2012 13:23:27 -0400
+Received: by ggke5 with SMTP id e5so862991ggk.35
+	for <lttng-dev@lists.lttng.org>; Fri, 10 Aug 2012 10:23:20 -0700 (PDT)
+In-Reply-To: <1344619372-21976-1-git-send-email-christian.babeux@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,28 +27,28 @@ To: dgoulet@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi all,
+     The wrong value is used to lookup the socket creation
+     function in net_families causing a segfault when using IPv6.
 
-Here are a few fixes to IPv6 support in relayd.
-
-When trying to start the relayd using an IPv6 address, the relayd
-simply segfaulted. The first patch fix this issue. 
-
-The second patch fix a wrong domain value used in the socket()
-call for the IPv6 socket causing a "Address family not supported 
-by protocol" error when calling bind().
-
-Thanks,
-
-Christian
-
-Christian Babeux (2):
-  Fix: Off by one in lttcomm_sock_domain enum
-  Fix: Wrong domain used when initializing IPv6 sockets
-
- src/common/sessiond-comm/inet6.c         | 2 +-
+Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
+---
  src/common/sessiond-comm/sessiond-comm.h | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/src/common/sessiond-comm/sessiond-comm.h b/src/common/sessiond-comm/sessiond-comm.h
+index aebe30c..8d1400c 100644
+--- a/src/common/sessiond-comm/sessiond-comm.h
++++ b/src/common/sessiond-comm/sessiond-comm.h
+@@ -208,8 +208,8 @@ enum lttcomm_sock_proto {
+  * Index in the net_families array below. Please keep in sync!
+  */
+ enum lttcomm_sock_domain {
+-	LTTCOMM_INET      = 1,
+-	LTTCOMM_INET6     = 2,
++	LTTCOMM_INET      = 0,
++	LTTCOMM_INET6     = 1,
+ };
+ 
+ struct lttcomm_sockaddr {
 -- 
 1.7.11.4
