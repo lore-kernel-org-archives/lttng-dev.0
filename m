@@ -1,16 +1,15 @@
 From: Danny Serres <danny.serres@efficios.com>
-Subject: =?utf-8?q?=5Bbabeltrace_PATCH=5D_API_documentation_fi?=
-	=?utf-8?q?le_v2?=
-Date: Fri, 10 Aug 2012 13:25:23 -0400
-Message-ID: <1344619524-4481-1-git-send-email-danny.serres__7115.98801794953$1344619549$gmane$org@efficios.com>
+Subject: [lttng-ust PATCH] Python module
+Date: Fri, 10 Aug 2012 13:42:35 -0400
+Message-ID: <1344620555-4776-1-git-send-email-danny.serres__30608.6109522314$1344620599$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from smtp.polymtl.ca ([132.207.4.11])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <danny.serres@efficios.com>) id 1Szsxi-0006le-4a
-	for lttng-dev@lists.lttng.org; Fri, 10 Aug 2012 13:25:26 -0400
+	(envelope-from <danny.serres@efficios.com>) id 1SztEL-0006tY-F6
+	for lttng-dev@lists.lttng.org; Fri, 10 Aug 2012 13:42:37 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,191 +22,459 @@ To: lttng-dev@lists.lttng.org
 Cc: Danny Serres <danny.serres@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-U2lnbmVkLW9mZi1ieTogRGFubnkgU2VycmVzIDxkYW5ueS5zZXJyZXNAZWZmaWNpb3MuY29tPgot
-LS0KIGRvYy9BUEkudHh0IHwgIDI1NyArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysr
-KysrKysrKysrKysrKysrKysrKysrKysrKwogMSBmaWxlIGNoYW5nZWQsIDI1NyBpbnNlcnRpb25z
-KCspCiBjcmVhdGUgbW9kZSAxMDA2NDQgZG9jL0FQSS50eHQKCmRpZmYgLS1naXQgYS9kb2MvQVBJ
-LnR4dCBiL2RvYy9BUEkudHh0Cm5ldyBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDAwMDAwMDAuLjQ2
-ODhhNzUKLS0tIC9kZXYvbnVsbAorKysgYi9kb2MvQVBJLnR4dApAQCAtMCwwICsxLDI1NyBAQAor
-QmFiZWx0cmFjZSBBUEkgZG9jdW1lbnRhdGlvbgorCitCYWJlbHRyYWNlIGlzIGEgdHJhY2Ugdmll
-d2VyIGFuZCBjb252ZXJ0ZXIgcmVhZGluZyBhbmQgd3JpdGluZyB0aGUKK0NvbW1vbiBUcmFjZSBG
-b3JtYXQgKENURikuICBJdHMgbWFpbiB1c2UgaXMgdG8gcHJldHR5LXByaW50IENURiB0cmFjZXMK
-K2ludG8gYSBodW1hbi1yZWFkYWJsZSB0ZXh0IG91dHB1dC4KKworQmFiZWx0cmFjZSBwcm92aWRl
-cyB0cmFjZSByZWFkIGFuZCB3cml0ZSBsaWJyYXJpZXMsIGFzIHdlbGwgYXMgYSB0cmFjZQorY29u
-dmVydGVyLiBBIHBsdWdpbiBjYW4gYmUgY3JlYXRlZCBmb3IgYW55IHRyYWNlIGZvcm1hdCB0byBh
-bGxvdyBpdHMKK2NvbnZlcnNpb24gdG8vZnJvbSBhbm90aGVyIHRyYWNlIGZvcm1hdC4KKworVGhl
-IG1haW4gZm9ybWF0IGV4cGVjdGVkIHRvIGJlIGNvbnZlcnRlZCB0by9mcm9tIGlzIHRoZSBDb21t
-b24gVHJhY2UKK0Zvcm1hdCAoQ1RGKS4gVGhlIGxhdGVzdCB2ZXJzaW9uIG9mIHRoZSBDVEYgc3Bl
-Y2lmaWNhdGlvbiBjYW4gYmUgZm91bmQgYXQ6CisJZ2l0IHRyZWU6ICAgZ2l0Oi8vZ2l0LmVmZmlj
-aW9zLmNvbS9jdGYuZ2l0CisJZ2l0d2ViOiAgICAgaHR0cDovL2dpdC5lZmZpY2lvcy5jb20vP3A9
-Y3RmLmdpdAorCitUaGlzIGRvY3VtZW50IGRlc2NyaWJlcyB0aGUgbWFpbiBjb25jZXB0cyB0byB1
-c2UgdGhlIGxpYmJhYmVsdHJhY2UsCit3aGljaCBleHBvc2VzIHRoZSBCYWJlbHRyYWNlIHRyYWNl
-IHJlYWRpbmcgY2FwYWJpbGl0eS4KKworCitURVJNSU5PTE9HWQorwq/Cr8Kvwq/Cr8Kvwq/Cr8Kv
-wq/Cr8Kvwq/Cr8KvCisKKyogQSAiY2FsbGJhY2siIGlzIGEgcmVmZXJlbmNlIHRvIGEgcGllY2Ug
-b2YgZXhlY3V0YWJsZSBjb2RlIChzdWNoIGFzIGEKKyAgZnVuY3Rpb24pIHRoYXQgaXMgcGFzc2Vk
-IGFzIGFuIGFyZ3VtZW50IHRvIGFub3RoZXIgcGllY2Ugb2YgY29kZQorICAobGlrZSBhbm90aGVy
-IGZ1bmN0aW9uKS4KKworKiBBICJjb250ZXh0IiBpcyBhIHN0cnVjdHVyZSB0aGF0IHJlcHJlc2Vu
-dHMgYW4gb2JqZWN0IGluIHdoaWNoIGEgdHJhY2UKKyAgY29sbGVjdGlvbiBpcyBvcGVuZWQuCisK
-KyogQW4gIml0ZXJhdG9yIiBpcyBhIHN0cnVjdHVyZSB0aGF0IGVuYWJsZXMgdGhlIHVzZXIgdG8g
-dHJhdmVyc2UgYSB0cmFjZS4KKworKiBBICJ0cmFjZSBoYW5kbGUiIGlzIGEgdW5pcXVlIGlkZW50
-aWZpZXIgcmVwcmVzZW50aW5nIGEgdHJhY2UgZmlsZS4KKyAgSXQgYWxsb3dzIHRoZSB1c2VyIHRv
-IG1hbmlwdWxhdGUgYSB0cmFjZSBkaXJlY3RseS4KKworCisKK1VTQUdFCivCr8Kvwq/Cr8Kvwq/C
-r8Kvwq/Cr8Kvwq/Cr8Kvwq8KKworQ29udGV4dDoKKworSW4gb3JkZXIgdG8gdXNlIGxpYmJhYmVs
-dHJhY2UgdG8gcmVhZCBhIHRyYWNlLCB0aGUgZmlyc3Qgc3RlcCBpcyB0byBjcmVhdGUgYQorY29u
-dGV4dCBzdHJ1Y3R1cmUgYW5kIHRvIGFkZCBhIHRyYWNlIHRvIGl0LiAgVGhpcyBpcyBkb25lIHVz
-aW5nIHRoZQorYnRfY29udGV4dF9jcmVhdGUoKSBhbmQgYnRfY29udGV4dF9hZGRfdHJhY2UoKSBm
-dW5jdGlvbnMuIEFzIGxvbmcgYXMgdGhpcworY29udGV4dCBzdHJ1Y3R1cmUgaXMgYWxsb2NhdGVk
-LCB0aGUgdHJhY2UgaXMgb3BlbiBhbmQgdmFsaWQuCisKK1RoZSBjb250ZXh0IGNhbiBiZSBkZXN0
-cm95ZWQgYnkgY2FsbGluZyBvbmUgbW9yZSBidF9jb250ZXh0X3B1dCgpCit0aGFuIGJ0X2NvbnRl
-eHRfZ2V0KCksIGZ1bmN0aW9ucyB3aGljaCByZXNwZWN0aXZlbHkgZGVjcmVtZW50IGFuZCBpbmNy
-ZW1lbnQKK3RoZSByZWZjb3VudCBvZiB0aGUgY29udGV4dC4gIFRoZXNlIGZ1bmN0aW9ucyBlbnN1
-cmVzIHRoYXQgdGhlIGNvbnRleHQgd29uJ3QKK2JlIGRlc3Ryb3llZCB3aGVuIGl0IGlzIGluIHVz
-ZS4KKworT25jZSBhIHRyYWNlIGlzIGFkZGVkIHRvIHRoZSBjb250ZXh0LCBpdCBjYW4gYmUgcmVh
-ZCBhbmQgc2Vla2VkIHVzaW5nIGl0ZXJhdG9ycworYW5kIGNhbGxiYWNrcy4KKworCitJdGVyYXRv
-cjoKKworQW4gaXRlcmF0b3IgY2FuIGJlIGNyZWF0ZWQgdXNpbmcgdGhlIGJ0X2l0ZXJfY3JlYXRl
-KCkgZnVuY3Rpb24uCitBcyBmb3Igbm93LCBvbmx5IGN0ZiBpdGVyYXRvciBhcmUgc3VwcG9ydGVk
-LiAgVGhlc2UgYXJlIHVzZWQgdG8gdHJhdmVyc2UgYSBjdGYtCitmb3JtYXR0ZWQgdHJhY2UuICBT
-dWNoIGl0ZXJhdG9yIGNhbiBiZSBjcmVhdGVkIHdpdGggYnRfY3RmX2l0ZXJfY3JlYXRlKCkuCisK
-K1doaWxlIGNyZWF0aW5nIGFuIGl0ZXJhdG9yLCBhIGJlZ2luIGFuZCBhbiBlbmQgcG9zaXRpb24g
-bWF5IGJlIHNwZWNpZmllZC4KK1RvIGRvIHNvLCBvbmUgb3IgdHdvIHN0cnVjdCBidF9pdGVyX3Bv
-cyBtdXN0IGJlIHBhc3NlZC4gIFN1Y2ggc3RydWN0IGhhdmUgMgorYXR0cmlidXRlczogdHlwZSBh
-bmQgdS4gICJ0eXBlIiBpcyB0aGUgc2VlayB0eXBlLCBjYW4gYmUgZWl0aGVyOgorCUJUX1NFRUtf
-VElNRQorCUJUX1NFRUtfUkVTVE9SRQorCUJUX1NFRUtfQ1VSCisJQlRfU0VFS19CRUdJTgorCUJU
-X1NFRUtfRU5ECithbmQgInUiIGlzIGEgdW5pb24gb2YgdGhlIHNlZWsgdGltZSAoaWYgdXNpbmcg
-QlRfU0VFS19USU1FKSBhbmQgdGhlIHJlc3RvcmUKK3Bvc2l0aW9uIChpZiB1c2luZyBCVF9TRUVL
-X1JFU1RPUkUpLgorCitPbmNlIHRoZSBpdGVyYXRvciBpcyBjcmVhdGVkLCB2YXJpb3VzIGZ1bmN0
-aW9ucyBiZWNvbWUgYXZhaWxhYmxlLiAgV2UgaGF2ZQorYnRfY3RmX2l0ZXJfcmVhZF9ldmVudCgp
-IHdoaWNoIHJldHVybnMgdGhlIGN0ZiBldmVudCBvZiB0aGUgdHJhY2Ugd2hlcmUgdGhlCitpdGVy
-YXRvciBpcyBzZXQuICBUaGVyZSBpcyBhbHNvIGJ0X2N0Zl9pdGVyX2Rlc3Ryb3koKSB3aGljaCBm
-cmVlIHRoZSBpdGVyYXRvci4KK05vdGUgdGhhdCBvbmx5IG9uZSBpdGVyYXRvciBjYW4gYmUgY3Jl
-YXRlZCBhZ2FpbnN0IGEgY29udGV4dCBhdCB0aGUgc2FtZSB0aW1lLgorSWYgbW9yZSB0aGFuIG9u
-ZSBpdGVyYXRvciBpcyBiZWluZyBjcmVhdGVkIGZvciB0aGUgc2FtZSBjb250ZXh0LCB0aGUgc2Vj
-b25kCitjcmVhdGlvbiB3aWxsIHJldHVybiBOVUxMLiBUaGUgcHJldmlvdXMgaXRlcmF0b3IgbXVz
-dCBiZSBkZXN0cm95ZWQgYmVmb3JlCitjcmVhdGlvbiBvZiB0aGUgbmV3IGl0ZXJhdG9yLiAgSW4g
-dGhlIGZ1dHVyZSwgY3JlYXRpb24gb2YgbXVsdGlwbGVzIGl0ZXJhdG9ycword2lsbCBwcm9iYWJs
-eSBiZSBhbGxvd2VkLgorCitGaW5hbGx5LCB3ZSBoYXZlIHRoZSBidF9jdGZfZ2V0X2l0ZXIoKSBm
-dW5jdGlvbiB3aGljaCByZXR1cm5zIGEgc3RydWN0IGJ0X2l0ZXIKK3dpdGggd2hpY2ggdGhlIGl0
-ZXJhdG9yIGNhbiBiZSBtb3ZlZCB1c2luZyBvbmUgb2YgdGhlc2UgZnVuY3Rpb25zOgorCWJ0X2l0
-ZXJfbmV4dCgpLAkJd2hpY2ggbW92ZXMgdGhlIHBvc2l0aW9uIHRvIHRoZSBuZXh0IGV2ZW50CisJ
-YnRfaXRlcl9zZXRfcG9zKCksIAl3aGljaCBtb3ZlcyB0aGUgcG9zaXRpb24gdG8gdGhlIHNwZWNp
-ZmllZCBvbmUKKworVG8gZ2V0IHRoZSBjdXJyZW50IHBvc2l0aW9uIChzdHJ1Y3QgYnRfaXRlcl9w
-b3MpIG9mIHRoZSBpdGVyYXRvciwgdGhlIGZ1bmN0aW9uCitidF9pdGVyX2dldF9wb3MoKSBjYW4g
-YmUgdXNlZC4gIFRvIGdldCBhbiBhcmJpdHJhcnkgcG9zaXRpb24gYmFzZWQgb24gYQorc3BlY2lm
-aWMgdGltZSwgYnRfaXRldF9jcmVhdGVfdGltZV9wb3MoKSBpcyB0aGUgZnVuY3Rpb24gdG8gdXNl
-LiAgVGhlIHBvc2l0aW9uCityZXR1cm5lZCBieSBvbmUgb2YgdGhlc2UgdHdvIGZ1bmN0aW9ucyBt
-dXN0IGJlIGZyZWVkIHdpdGggYnRfaXRlcl9mcmVlX3BvcygpCithZnRlciB1c2UuCisKKworQ1RG
-IEV2ZW50OgorCitBIENURiBldmVudCBpcyB1c3VhbGx5IG9idGFpbmVkIGZyb20gYW4gaXRlcmF0
-b3IgdmlhIHRoZQorYnRfY3RmX2l0ZXJfcmVhZF9ldmVudCgpIGZ1bmN0aW9uLCB3aGljaCByZXR1
-cm5zIGEgc3RydWN0IGJ0X2N0Zl9ldmVudC4gIEhhdmluZwordGhlIGV2ZW50LCB3ZSBjYW4gY29s
-bGVjdCBpdHMgZGF0YToKKwkqIGJ0X2N0Zl9ldmVudF9uYW1lKCkgd2lsbCByZXR1cm4gdGhlIG5h
-bWUgb2YgdGhlIGV2ZW50OworCSogYnRfY3RmX2dldF90aW1lc3RhbXAoKSB3aWxsIHJldHVybiB0
-aGUgdGltZXN0YW1wIG9mIHRoZSBldmVudAorCQlvZmZzZXR0ZWQgd2l0aCB0aGUgc3lzdGVtIGNs
-b2NrIHNvdXJjZSAoaW4gbnMpOworCSogYnRfY3RmX2dldF9jeWNsZXMgd2lsbCByZXR1cm4gdGhl
-IHRpbWVzdGFtcCBvZiB0aGUgZXZlbnQgYXMgd3JpdHRlbgorCQlpbiB0aGUgcGFja2V0IChpbiBj
-eWNsZXMpLgorCitUbyBhY2Nlc3MgdGhlIGV2ZW50IGZpZWxkcyB3aGljaCBjb250YWluIHZhcmlv
-dXMgaW5mb3JtYXRpb24sIHRoZSBmaXJzdCBzdGVwIGlzCit0byBvYnRhaW4gYSBzY29wZSBkZWZp
-bml0aW9uIGZvciB0aGUgZGVzaXJlZCBmaWVsZC4gIFRoaXMgY2FuIGJlIGRvbmUgdXNpbmcgdGhl
-CitidF9jdGZfZ2V0X3RvcF9sZXZlbF9zY29wZSgpIGZ1bmN0aW9uLiAgVGhpcyBmdW5jdGlvbiBw
-cm92aWRlcyB0aGUgbWFwcGluZworYmV0d2VlbiB0aGUgZW51bSBhbmQgdGhlIGFjdHVhbCBkZWZp
-bml0aW9uIG9mIHRvcC1sZXZlbCBzY29wZXMgYW5kIHJldHVybnMKK2EgZGVmaW5pdGlvbiBvZiB0
-aGUgdG9wLWxldmVsIHNjb3BlLgorVG9wLWxldmVsIHNjb3BlcyBhcmUgZGVmaW5lZCBpbiB0aGUg
-YnRfY3RmX3Njb3BlIGVudW06CisJQlRfVFJBQ0VfUEFDS0VUX0hFQURFUgkJPSAwLAorCUJUX1NU
-UkVBTV9QQUNLRVRfQ09OVEVYVCAgICAgICAgPSAxLAorCUJUX1NUUkVBTV9FVkVOVF9IRUFERVIg
-ICAgICAgICAgPSAyLAorCUJUX1NUUkVBTV9FVkVOVF9DT05URVhUICAgICAgICAgPSAzLAorCUJU
-X0VWRU5UX0NPTlRFWFQgICAgICAgICAgICAgICAgPSA0LAorCUJUX0VWRU5UX0ZJRUxEUyAgICAg
-ICAgICAgICAgICAgPSA1LgorCisKK0luIG9yZGVyIHRvIGdldCBhIGZpZWxkIG9yIGEgZmllbGQg
-bGlzdCwgdGhlIHVzZXIgbmVlZHMgdG8gcGFzcyBhIHNjb3BlIGFzCithcmd1bWVudCwgdGhpcyBz
-Y29wZSBjYW4gYmUgYSB0b3AtbGV2ZWwgc2NvcGUgb3IgYSBzY29wZSByZWxhdGl2ZSB0byBhbgor
-YXJiaXRyYXJ5IGZpZWxkLgorCitGb3IgbW9yZSBpbmZvcm1hdGlvbiBvbiBlYWNoIHNjb3BlLCBz
-ZWUgdGhlIENURiBzcGVjaWZpY2F0aW9ucy4KKworVG8gZ2V0IGEgZmllbGQgbGlzdCwgdGhlIGJ0
-X2N0Zl9nZXRfZmllbGRfbGlzdCgpIGZ1bmN0aW9uIGlzIHRvIGJlIHVzZWQuCitUbyBnZXQgdGhl
-IGRlZmluaXRpb24gb2YgYSBzcGVjaWZpYyBmaWVsZCwgdGhlIGFwcHJvcHJpYXRlIGZ1bmN0aW9u
-IHdvdWxkIGJlCitidF9jdGZfZ2V0X2ZpZWxkKCkuCisKK09uY2UgdGhlIGZpZWxkIGlzIG9idGFp
-bmVkLCB3ZSBjYW4gb2J0YWluIGl0cyBuYW1lIGFuZCB0eXBlIHVzaW5nIHRoZQorYnRfY3RmX2Zp
-ZWxkX25hbWUoKSBhbmQgYnRfY3RmX2ZpZWxkX3R5cGUoKSBmdW5jdGlvbnMgcmVzcGVjdGl2ZWx5
-LiAgVGhlCitwb3NzaWJsZSB0eXBlcyBhcmUgZGVmaW5lZCBpbiB0aGUgY3RmX3R5cGVfaWQgZW51
-bToKKwlDVEZfVFlQRV9VTktOT1dOID0gMCwKKwlDVEZfVFlQRV9JTlRFR0VSLAorCUNURl9UWVBF
-X0ZMT0FULAorCUNURl9UWVBFX0VOVU0sCisJQ1RGX1RZUEVfU1RSSU5HLAorCUNURl9UWVBFX1NU
-UlVDVCwKKwlDVEZfVFlQRV9VTlRBR0dFRF9WQVJJQU5ULAorCUNURl9UWVBFX1ZBUklBTlQsCisJ
-Q1RGX1RZUEVfQVJSQVksCisJQ1RGX1RZUEVfU0VRVUVOQ0UsCisJTlJfQ1RGX1RZUEVTLgorCitE
-ZXBlbmRpbmcgb24gdGhlIGZpZWxkIHR5cGUsIHdlIGNhbiBnZXQgZGF0YSBvbiBpdHMgdmFsdWUg
-dXNpbmcgdGhlIGFwcHJvcHJpYXRlCitmdW5jdGlvbjoKKwkqIGJ0X2N0Zl9nZXRfaW5kZXgoKQkJ
-cmV0dXJuIHRoZSBlbGVtZW50IGF0IHRoZSBpbmRleAorCQkJCQlwb3NpdGlvbiBvZiBhbiBhcnJh
-eSBvZiBhIHNlcXVlbmNlOworCisJKiBidF9jdGZfZ2V0X2FycmF5X2xlbigpCXJldHVybiB0aGUg
-bGVuIG9mIGFuIGFycmF5OworCisJKiBidF9jdGZfZ2V0X2ludF9zaWduZWRuZXNzKCkgCXJldHVy
-biB0aGUgc2lnbmVkbmVzcyBvZiBhbiBpbnRlZ2VyOworCisJKiBidF9jdGZfZ2V0X2ludF9iYXNl
-KCkJCXJldHVybiB0aGUgYmFzZSBvZiBhbiBpbnRlZ2VyOworCisJKiBidF9jdGZfZ2V0X2ludF9i
-eXRlX29yZGVyKCkgCXJldHVybiB0aGUgYnl0ZSBvcmRlciBvZiBhbiBpbnRlZ2VyOworCisJKiBi
-dF9jdGZfZ2V0X2ludF9sZW4oKQkJcmV0dXJuIHRoZSBzaXplIGluIGJpdHMgb2YgYW4gaW50ZWdl
-cjsKKworCSogYnRfY3RmX2dldF9lbmNvZGluZygpCQlyZXR1cm4gdGhlIGVuY29kaW5nIG9mIGFu
-IGludCBvciBhCisJCQkJCXN0cmluZyBkZWZpbmVkIGluIHRoZQorCQkJCQljdGZfc3RyaW5nX2Vu
-Y29kaW5nIGVudW06CisJCQkJCQlDVEZfU1RSSU5HX05PTkUgPSAwLAorCQkJCQkJQ1RGX1NUUklO
-R19VVEY4LAorCQkJCQkJQ1RGX1NUUklOR19BU0NJSSwKKwkJCQkJCUNURl9TVFJJTkdfVU5LTk9X
-Ti4KKworVG8gb2J0YWluIHRoZSB2YWx1ZSBhc3NvY2lhdGVkIHdpdGggYSBmaWVsZCwgdGhlIGFw
-cHJvcHJpYXRlIGZ1bmN0aW9uIG9mIHRoZXNlCitpcyB0byBiZSB1c2VkOgorCisJKiBidF9jdGZf
-Z2V0X3VpbnQ2NCgpOworCSogYnRfY3RmX2dldF9pbnQ2NCgpOworCSogYnRfY3RmX2dldF9jaGFy
-X2FycmF5KCk7CisJKiBidF9jdGZfZ2V0X3N0cmluZygpLgorCitJZiB0aGUgZmllbGQgZG9lcyBu
-b3QgZXhpc3Qgb3IgaXMgbm90IG9mIHRoZSB0eXBlIHJlcXVlc3RlZCwgdGhlIHZhbHVlIHJldHVy
-bmVkCit3aXRoIHRoZXNlIGZvdXIgZnVuY3Rpb25zIGlzIHVuZGVmaW5lZC4gVG8gY2hlY2sgaWYg
-YW4gZXJyb3Igb2NjdXJlZCwgdXNlIHRoZQorYnRfY3RmX2ZpZWxkX2dldF9lcnJvcigpIGZ1bmN0
-aW9uIGFmdGVyIGFjY2Vzc2luZyBhIGZpZWxkLiAgSWYgbm8gZXJyb3IKK29jY3VyZWQsIHRoZSBm
-dW5jdGlvbiB3aWxsIHJldHVybiAwLgorCitJdCBpcyBhbHNvIHBvc3NpYmxlIHRvIGFjY2VzcyB0
-aGUgZGVjbGFyYXRpb24gZmllbGRzLCB0aGUgc2FtZSB3YXkgYXMgdGhlCitkZWZpbml0aW9uIG9u
-ZXMuICBidF9jdGZfZ2V0X2V2ZW50X2RlY2xfbGlzdCgpIHNldHMgYSBsaXN0IHRvIGFuIGFycmF5
-IG9mCitidF9jdGZfZXZlbnRfZGVjbCBwb2ludGVycyBhbmQgYnRfY3RmX2dldF9ldmVudF9kZWNs
-X2ZpZWxkcygpIHNldHMgYSBsaXN0IHRvIGFuCithcnJheSBvZiBidF9jdGZfZmllbGRfZGVjbCBw
-b2ludGVycy4gIEZyb20gdGhlIGZpcnN0IHR5cGUsIHRoZSBuYW1lIG9mIHRoZQorZXZlbnQgY2Fu
-IGJlIG9idGFpbmVkIHdpdGggYnRfY3RmX2dldF9kZWNsX2V2ZW50X25hbWUoKS4gIEZvciB0aGUg
-c2Vjb25kIHR5cGUsCit0aGUgZmllbGQgZGVjbCBuYW1lIGlzIG9idGFpbmVkIHdpdGggYnRfY3Rm
-X2dldF9kZWNsX2ZpZWxkX25hbWUoKS4KKworVGhlIGRlY2xhcmF0aW9uIGZ1bmN0aW9ucyBhbGxv
-dyB0aGUgdXNlciB0byBsaXN0IHRoZSBldmVudHMsIGZpZWxkcyBhbmQKK2NvbnRleHRzIGZpZWxk
-cyBlbmFibGVkIGluIHRoZSB0cmFjZSBvbmNlIGl0IGlzIG9wZW5lZCwgd2hlcmVhcyB0aGUgZGVm
-aW5pdGlvbgorZnVuY3Rpb25zIGFwcGx5IG9uIHRoZSBjdXJyZW50IGV2ZW50IGJlaW5nIHJlYWQu
-CisKKworQ2FsbGJhY2s6CisKK1RoZSBpdGVyYXRvciBhbGxvdyB0aGUgdXNlciB0byByZWFkIHRo
-ZSB0cmFjZSwgaW4gb3JkZXIgdG8gYWNjZXNzIHRoZSBldmVudHMKK2FuZCBmaWVsZHMsIHRoZSB1
-c2VyIGNhbiBlaXRoZXIgY2FsbCB0aGUgZnVuY3Rpb25zIGxpc3RlZCBwcmV2aW91c2x5IG9uIGVh
-Y2gKK2V2ZW50LCBvciByZWdpc3RlciBjYWxsYmFja3MgZnVuY3Rpb25zIHRoYXQgYXJlIGNhbGxl
-ZCB3aGVuIHNwZWNpZmljIChvciBhbGwpCitldmVudHMgYXJlIHJlYWQuCisKK1RoZSBvdGhlciBh
-bHRlcm5hdGl2ZSB0byByZWFkaW5nIGEgdHJhY2UgaXMgd2l0aCB0aGUgdXNlIG9mIGNhbGxiYWNr
-cy4gIFRoaXMgaXMKK2RvbmUgd2l0aCB0aGUgYnRfY3RmX2l0ZXJfYWRkX2NhbGxiYWNrKCkgZnVu
-Y3Rpb24uICBJdCBzdGlsbCByZXF1aXJlcyBhIHZhbGlkCitjdGYgaXRlcmF0b3IgYXMgdGhlIGZp
-cnN0IGFyZ3VtZW50LiAgSGVyZSBhcmUgYWxsIGFyZ3VtZW50czoKKworCUBpdGVyOiB0cmFjZSBj
-b2xsZWN0aW9uIGl0ZXJhdG9yIChpbnB1dCkKKwlAZXZlbnQ6IGV2ZW50IHRvIHRhcmdldC4gMCBm
-b3IgYWxsIGV2ZW50cy4KKwlAcHJpdmF0ZV9kYXRhOiBwcml2YXRlIGRhdGEgcG9pbnRlciB0byBw
-YXNzIHRvIHRoZSBjYWxsYmFjaworCUBmbGFnczogc3BlY2lmaWMgZmxhZ3MgY29udHJvbGxpbmcg
-dGhlIGJlaGF2aW9yIG9mIHRoaXMgY2FsbGJhY2sKKwkJKG9yJ2QpLgorCUBjYWxsYmFjazogZnVu
-Y3Rpb24gcG9pbnRlciB0byBjYWxsCisJQGRlcGVuZHM6IHN0cnVjdCBidF9kZXBlbmRlbmN5IGRl
-dGFpbGluZyB0aGUgcmVxdWlyZWQgY29tcHV0YXRpb24KKwkJcmVzdWx0cy4gIEVuZHMgd2l0aCAw
-LgorCUB3ZWFrX2RlcGVuZHM6IHN0cnVjdCBidF9kZXBlbmRlbmN5IGRldGFpbGluZyB0aGUgb3B0
-aW9uYWwgY29tcHV0YXRpb24KKwkJcmVzdWx0cyB0aGF0IGNhbiBiZSBvcHRpb25hbGx5IGNvbnN1
-bWVkIGJ5IHRoaXMKKwkJY2FsbGJhY2suCisJQHByb3ZpZGVzOiBzdHJ1Y3QgYnRfZGVwZW5kZW5j
-eSBkZXRhaWxpbmcgdGhlIGNvbXB1dGF0aW9uIHJlc3VsdHMKKwkJcHJvdmlkZWQgYnkgdGhpcyBj
-YWxsYmFjay4KKwkJRW5kcyB3aXRoIDAuCisKKyJkZXBlbmRzIiwgIndlYWtfZGVwZW5kcyIgYW5k
-ICJwcm92aWRlcyIgbWVtb3J5IGlzIGhhbmRsZWQgYnkgdGhlIGJhYmVsdHJhY2UKK2xpYnJhcnkg
-YWZ0ZXIgdGhpcyBjYWxsIHN1Y2NlZWRzIG9yIGZhaWxzLiBUaGVzZSBvYmplY3RzIGNhbiBzdGls
-bCBiZSB1c2VkIGJ5Cit0aGUgY2FsbGVyIHVudGlsIHRoZSBiYWJlbHRyYWNlIGl0ZXJhdG9yIGlz
-IGRlc3Ryb3llZCwgYnV0IHRoZXkgYmVsb25nIHRvIHRoZQorYmFiZWx0cmFjZSBsaWJyYXJ5Lgor
-CitOb3RlOiB0aGUgZGVwZW5kZW5jeSBncmFwaCBpcyBjYWxjdWxhdGVkIHdoZW4gYnRfY3RmX2l0
-ZXJfcmVhZF9ldmVudCgpIGlzCitleGVjdXRlZCBhZnRlciBhIGJ0X2N0Zl9pdGVyX2FkZF9jYWxs
-YmFjaygpLiBCZXdhcmUgdGhhdCBpdCBpcyB2YWxpZCB0bworY3JlYXRlL2FkZCBjYWxsYmFja3Mv
-cmVhZC9hZGQgbW9yZSBjYWxsYmFja3MvcmVhZCBzb21lIG1vcmUuCisKK0FzIG9mIG5vdyB0aGUg
-ZmxhZ3MgYW5kIGRlcGVuZGVuY2llcyBhcmUgbm90IHVzZWQsIHRoZSBjYWxsYmFja3MgYXJlCitw
-cm9jZXNzZWQgaW4gRklGTyBvcmRlci4KKworVGhlIGNhbGxiYWNrIGZ1bmN0aW9uIHBhc3NlZCB0
-byBidF9jdGZfaXRlcl9hZGRfY2FsbGJhY2soKSBtdXN0IHJldHVybiBhCitidF9jYl9yZXQgdmFs
-dWU6CisJQlRfQ0JfT0sJCT0gMCwKKwlCVF9DQl9PS19TVE9QCQk9IDEsCisJQlRfQ0JfRVJST1Jf
-U1RPUAk9IDIsCisJQlRfQ0JfRVJST1JfQ09OVElOVUUJPSAzLgorCisKK1RyYWNlIGhhbmRsZToK
-KworV2hlbiBhIHRyYWNlIGlzIGFkZGVkIHRvIGEgY29udGV4dCwgYnRfY29udGV4dF9hZGRfdHJh
-Y2UoKSByZXR1cm5zIGEgdHJhY2UKK2hhbmRsZSBpZC4gIFRoaXMgaWQgaXMgYXNzb2NpYXRlZCB3
-aXRoIGl0cyBjb3JyZXNwb25kaW5nIHRyYWNlIGhhbmRsZS4gIFdpdGgKK3RoYXQgaWQsIGl0IGlz
-IHBvc3NpYmxlIHRvIG1hbmlwdWxhdGUgZGlyZWN0bHkgdGhlIHRyYWNlLgorCisJKiBidF90cmFj
-ZV9oYW5kbGVfZ2V0X3BhdGgoKQorCQktPiByZXR1cm5zIHRoZSBwYXRoIG9mIHRoZSB0cmFjZSBo
-YW5kbGUJKHBhdGggdG8gdGhlIHRyYWNlKS4KKworCSogYnRfdHJhY2VfaGFuZGxlX2dldF90aW1l
-c3RhbXBfYmVnaW4oKQorCSogYnRfdHJhY2VfaGFuZGxlX2dldF90aW1lc3RhbXBfZW5kKCkKKwkJ
-LT4gcmV0dXJuIHRoZSBjcmVhdGlvbi9kZXN0cnVjdGlvbiB0aW1lc3RhbXBzIChpbiBucyBvciBj
-eWNsZXMKKwkJCWRlcGVuZGluZyBvbiB0aGUgdHlwZSBzcGVjaWZpZWQpIG9mIHRoZSBidWZmZXJz
-IG9mIGEKKwkJCXRyYWNlLgorCisJKiBidF9jdGZfZXZlbnRfZ2V0X2hhbmRsZV9pZCgpCisJCS0+
-IHJldHVybnMgdGhlIGhhbmRsZSBpZCBhc3NvY2lhdGVkIHdpdGggYW4gZXZlbnQuCisKKworRm9y
-IG1vcmUgaW5mb3JtYXRpb24gb24gQ1RGLCBzZWUgdGhlIENURiBkb2N1bWVudGF0aW9uLgotLSAK
-MS43LjkuNQoKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-Cmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8v
-bGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+Proof of concept:
+A simple library to create tracepoints and allow
+tracing in Python programs.
+
+To build, configure with Python:
+  ./configure --with-python
+
+To use, import the module in Python:
+  import lttngust
+
+Signed-off-by: Danny Serres <danny.serres@efficios.com>
+---
+ Makefile.am                     |    4 +
+ README                          |    4 +
+ configure.ac                    |   31 ++++++
+ liblttng-ust-python/Makefile.am |   13 +++
+ liblttng-ust-python/README      |    8 ++
+ liblttng-ust-python/lttngust.c  |  198 +++++++++++++++++++++++++++++++++++++++
+ liblttng-ust-python/lttngust.h  |  103 ++++++++++++++++++++
+ 7 files changed, 361 insertions(+)
+ create mode 100644 liblttng-ust-python/Makefile.am
+ create mode 100644 liblttng-ust-python/README
+ create mode 100644 liblttng-ust-python/lttngust.c
+ create mode 100644 liblttng-ust-python/lttngust.h
+
+diff --git a/Makefile.am b/Makefile.am
+index e61735d..d43aeab 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -13,6 +13,10 @@ if BUILD_JNI_INTERFACE
+ SUBDIRS += liblttng-ust-java
+ endif
+ 
++if USE_PYTHON
++SUBDIRS += liblttng-ust-python
++endif
++
+ #temporarily disabled
+ # liblttng-ust-malloc
+ 
+diff --git a/README b/README
+index 55c72df..c9a455d 100644
+--- a/README
++++ b/README
+@@ -170,3 +170,7 @@ PACKAGE CONTENTS:
+   - liblttng-ust-java
+     A simple library that uses JNI to allow tracing in java programs.
+     See liblttng-ust-java/README for build instructions.
++
++  - liblttng-ust-python
++    A simple library to allow tracing in Python programs.
++    See liblttng-ust-python/README for build instructions.
+diff --git a/configure.ac b/configure.ac
+index 4d40f75..e85bd0d 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -144,6 +144,33 @@ AC_CHECK_LIB([urcu-bp], [synchronize_rcu_bp], [], [AC_MSG_ERROR([Cannot find lib
+ AC_CHECK_LIB([urcu-bp], [call_rcu_bp], [], [AC_MSG_ERROR([liburcu 0.6 or newer is needed, please update your version or use [LDFLAGS]=-Ldir to specify the right location.])])
+ 
+ 
++# For Python
++AC_ARG_WITH([python],
++              [AS_HELP_STRING([--with-python],
++                              [compile with Python bindings])],
++              [enable_python=yes], [enable_python=no])
++
++AM_CONDITIONAL([USE_PYTHON], [test "x${enable_python:-yes}" = xyes])
++
++if test "x${enable_python:-yes}" = xyes; then
++  AM_PATH_PYTHON
++
++  AC_ARG_VAR([PYTHON_INCLUDE], [Include flags for python, bypassing python-config])
++  AC_ARG_VAR([PYTHON_CONFIG], [Path to python-config])
++  AS_IF([test -z "$PYTHON_INCLUDE"], [
++    AS_IF([test -z "$PYTHON_CONFIG"], [
++      AC_PATH_PROGS([PYTHON_CONFIG],
++                    [python$PYTHON_VERSION-config python-config],
++                    [no],
++                    [`dirname $PYTHON`])
++      AS_IF([test "$PYTHON_CONFIG" = no], [AC_MSG_ERROR([cannot find python-config for $PYTHON.])])
++    ])
++    AC_MSG_CHECKING([python include flags])
++    PYTHON_INCLUDE=`$PYTHON_CONFIG --includes`
++    AC_MSG_RESULT([$PYTHON_INCLUDE])
++  ])
++fi
++
+ # Check for various supplementary host information (beyond the
+ # triplet) which might affect the library format choices.  E.g., we
+ # can be building with `i686-unknown-linux-gnu-gcc -m64'
+@@ -300,6 +327,7 @@ AC_CONFIG_FILES([
+ 	liblttng-ust-fork/Makefile
+ 	liblttng-ust-java/Makefile
+ 	liblttng-ust-libc-wrapper/Makefile
++	liblttng-ust-python/Makefile
+ 	tools/Makefile
+ 	tests/Makefile
+ 	tests/hello/Makefile
+@@ -327,6 +355,9 @@ AS_ECHO()
+ AS_ECHO_N("Java support (JNI): ")
+ AS_IF([test "x$jni_interface" = "xyes"], [AS_ECHO("Enabled")], [AS_ECHO("Disabled")])
+ 
++AS_ECHO_N("Python support:     ")
++AS_IF([test "x$enable_python" = "xyes"], [AS_ECHO("Enabled")], [AS_ECHO("Disabled")])
++
+ AS_ECHO_N("sdt.h integration:  ")
+ AS_IF([test "x$with_sdt" = "xyes"], [AS_ECHO("Enabled")], [AS_ECHO("Disabled")])
+ 
+diff --git a/liblttng-ust-python/Makefile.am b/liblttng-ust-python/Makefile.am
+new file mode 100644
+index 0000000..993e0b9
+--- /dev/null
++++ b/liblttng-ust-python/Makefile.am
+@@ -0,0 +1,13 @@
++AM_CFLAGS = -I$(PYTHON_INCLUDE) -I$(top_srcdir)/include/
++
++pyexec_LTLIBRARIES = lttngust.la
++
++MAINTAINERCLEANFILES = lttngust.c
++
++lttngust_la_SOURCES = lttngust.c
++
++lttngust_la_LDFLAGS = -module
++
++lttngust_la_CFLAGS = $(AM_CFLAGS)
++
++lttngust_la_LIBADD = -lc -L$(top_builddir)/liblttng-ust/.libs ../liblttng-ust/liblttng-ust.la
+diff --git a/liblttng-ust-python/README b/liblttng-ust-python/README
+new file mode 100644
+index 0000000..405ef62
+--- /dev/null
++++ b/liblttng-ust-python/README
+@@ -0,0 +1,8 @@
++This directory contains a simple API for instrumenting Python applications.
++
++Configuration to build this library:
++
++	./configure --with-python
++
++After building, you can use the generated module in a
++Python project ('import lttngust').
+diff --git a/liblttng-ust-python/lttngust.c b/liblttng-ust-python/lttngust.c
+new file mode 100644
+index 0000000..39ecb1d
+--- /dev/null
++++ b/liblttng-ust-python/lttngust.c
+@@ -0,0 +1,198 @@
++#define TRACEPOINT_DEFINE
++#define TRACEPOINT_CREATE_PROBES
++
++#include <Python.h>
++#include "lttngust.h"
++
++/* Tracepoint with int value */
++static PyObject *
++lttngust_tracepointInt(PyObject *self, PyObject *args)
++{
++	const char *name;
++	int val;
++
++	if (!PyArg_ParseTuple(args, "si", &name, &val))
++		return NULL;
++	tracepoint(lttngust_python, int_event, name, val);
++
++	Py_INCREF(Py_None);
++	return Py_None;
++}
++
++/* Tracepoint with long value */
++static PyObject *
++lttngust_tracepointLong(PyObject *self, PyObject *args)
++{
++	const char *name;
++	long val;
++
++	if (!PyArg_ParseTuple(args, "sl", &name, &val))
++		return NULL;
++	tracepoint(lttngust_python, long_event, name, val);
++
++	Py_INCREF(Py_None);
++	return Py_None;
++}
++
++/* Tracepoint with string value */
++static PyObject *
++lttngust_tracepointString(PyObject *self, PyObject *args)
++{
++	const char *name;
++	const char *val;
++
++	if (!PyArg_ParseTuple(args, "ss", &name, &val))
++		return NULL;
++	tracepoint(lttngust_python, string_event, name, val);
++
++	Py_INCREF(Py_None);
++	return Py_None;
++}
++
++/* Tracepoint with double value */
++static PyObject *
++lttngust_tracepointDouble(PyObject *self, PyObject *args)
++{
++	const char *name;
++	double val;
++
++	if (!PyArg_ParseTuple(args, "sd", &name, &val))
++		return NULL;
++	tracepoint(lttngust_python, double_event, name, val);
++
++	Py_INCREF(Py_None);
++	return Py_None;
++}
++
++/* Tracepoint with complex object value */
++static PyObject *
++lttngust_tracepointComplex(PyObject *self, PyObject *args)
++{
++	const char *name;
++	Py_complex complex;
++	char val[256];
++
++	if (!PyArg_ParseTuple(args, "sD", &name, &complex))
++		return NULL;
++	sprintf(val, "%g+%gj", complex.real, complex.imag);
++	tracepoint(lttngust_python, complex_event, name, val);
++
++	Py_INCREF(Py_None);
++	return Py_None;
++}
++
++/* Tracepoint with bool(object) value */
++static PyObject *
++lttngust_tracepointBool(PyObject *self, PyObject *args)
++{
++	const char *name;
++	PyObject *obj;
++	char *val;
++
++
++	if (!PyArg_ParseTuple(args, "sO", &name, &obj))
++		return NULL;
++
++	if (PyObject_IsTrue(obj))
++		val = "True";
++	else
++		val = "False";
++
++	tracepoint(lttngust_python, bool_event, name, val);
++
++	Py_INCREF(Py_None);
++	return Py_None;
++}
++
++/* Tracepoint with repr(object) value */
++static PyObject *
++lttngust_tracepointRepr(PyObject *self, PyObject *args)
++{
++	const char *name;
++	PyObject *obj;
++	const char *repr;
++
++	if (!PyArg_ParseTuple(args, "sO", &name, &obj))
++		return NULL;
++
++	repr = PyString_AsString(PyObject_Repr(obj));
++	tracepoint(lttngust_python, obj_repr, name, repr);
++
++	Py_INCREF(Py_None);
++	return Py_None;
++}
++
++/* Tracepoint with message, loglevel TRACE_INFO */
++static PyObject *
++lttngust_tracepointMessage(PyObject *self, PyObject *args)
++{
++	const char *text;
++
++	if (!PyArg_ParseTuple(args, "s", &text))
++		return NULL;
++	tracepoint(lttngust_python, message, text);
++
++	Py_INCREF(Py_None);
++	return Py_None;
++}
++
++/* Tracepoint with warning, loglevel TRACE_WARNING */
++static PyObject *
++lttngust_tracepointWarning(PyObject *self, PyObject *args)
++{
++	const char *text;
++
++	if (!PyArg_ParseTuple(args, "s", &text))
++		return NULL;
++	tracepoint(lttngust_python, warning, text);
++
++	Py_INCREF(Py_None);
++	return Py_None;
++}
++
++
++/* Definition of Python methods */
++static PyMethodDef UstMethods[] = {
++
++	{"tracepointInt",  lttngust_tracepointInt, METH_VARARGS,
++		"tracepointInt(name, value)\n\nTracepoint with Int value."},
++
++	{"tracepointLong",  lttngust_tracepointLong, METH_VARARGS,
++		"tracepointLong(name, value)\n\nTracepoint with Long value."},
++
++	{"tracepointDouble",  lttngust_tracepointDouble, METH_VARARGS,
++		"tracepointDouble(name, value)\n\n"
++		"Tracepoint with Double value."},
++
++	{"tracepointComplex",  lttngust_tracepointComplex, METH_VARARGS,
++		"tracepointComplex(name, complex_number)\n\n"
++		"Tracepoint with Complex number value."},
++
++	{"tracepointString",  lttngust_tracepointString, METH_VARARGS,
++		"tracepointString(name, value)\n\n"
++		"Tracepoint with String value."},
++
++	{"tracepointBool",  lttngust_tracepointBool, METH_VARARGS,
++		"tracepointBool(name, object)\n\n"
++		"Tracepoint with Object value, uses bool()."},
++
++	{"tracepointRepr",  lttngust_tracepointRepr, METH_VARARGS,
++		"tracepointRepr(name, object)\n\n"
++		"Tracepoint with Object value, uses repr()."},
++
++	{"tracepointMessage",  lttngust_tracepointMessage, METH_VARARGS,
++		"tracepointMessage(text)\n\nTracepoint with string info."},
++
++	{"tracepointWarning",  lttngust_tracepointWarning, METH_VARARGS,
++		"tracepointWarning(text)\n\nTracepoint with string warning."},
++
++	{NULL, NULL, 0, NULL}        /* Sentinel */
++};
++
++
++/* Init module */
++PyMODINIT_FUNC
++initlttngust(void)
++{
++	(void) Py_InitModule("lttngust", UstMethods);
++}
+diff --git a/liblttng-ust-python/lttngust.h b/liblttng-ust-python/lttngust.h
+new file mode 100644
+index 0000000..f668ee1
+--- /dev/null
++++ b/liblttng-ust-python/lttngust.h
+@@ -0,0 +1,103 @@
++#undef TRACEPOINT_PROVIDER
++#define TRACEPOINT_PROVIDER lttngust_python
++
++#undef TRACEPOINT_INCLUDE_FILE
++#define TRACEPOINT_INCLUDE_FILE ./lttngust.h
++
++#ifdef __cplusplus
++extern "C"{
++#endif /* __cplusplus */
++
++#if !defined(_lttngust_H) || defined(TRACEPOINT_HEADER_MULTI_READ)
++#define _lttngust_H
++
++#include <lttng/tracepoint.h>
++
++/* Tracepoint with int value */
++TRACEPOINT_EVENT(lttngust_python, int_event,
++	TP_ARGS(const char *, name, int, val),
++	TP_FIELDS(
++		ctf_string(name, name)
++		ctf_integer(int, value, val)
++	)
++)
++
++/* Tracepoint with long value */
++TRACEPOINT_EVENT(lttngust_python, long_event,
++	TP_ARGS(const char *, name, long, val),
++	TP_FIELDS(
++		ctf_string(name, name)
++		ctf_integer(int, value, val)
++	)
++)
++
++/* Tracepoint with string value */
++TRACEPOINT_EVENT(lttngust_python, string_event,
++	TP_ARGS(const char *, name, const char *, val),
++	TP_FIELDS(
++		ctf_string(name, name)
++		ctf_string(value, val)
++	)
++)
++
++/* Tracepoint with double value */
++TRACEPOINT_EVENT(lttngust_python, double_event,
++	TP_ARGS(const char *, name, double, val),
++	TP_FIELDS(
++		ctf_string(name, name)
++		ctf_float(double, value, val)
++	)
++)
++
++/* Tracepoint with complex object value */
++TRACEPOINT_EVENT(lttngust_python, complex_event,
++	TP_ARGS(const char *, name, char *, val),
++	TP_FIELDS(
++		ctf_string(name, name)
++		ctf_string(value, val)
++	)
++)
++
++/* Tracepoint with bool(object) value */
++TRACEPOINT_EVENT(lttngust_python, bool_event,
++	TP_ARGS(const char *, name, char *, val),
++	TP_FIELDS(
++		ctf_string(name, name)
++		ctf_string(value, val)
++	)
++)
++
++/* Tracepoint with repr(object) value */
++TRACEPOINT_EVENT(lttngust_python, obj_repr,
++	TP_ARGS(const char *, name, const char *, repr),
++	TP_FIELDS(
++		ctf_string(name, name)
++		ctf_string(repr, repr)
++	)
++)
++
++/* Tracepoint with message, loglevel TRACE_INFO */
++TRACEPOINT_EVENT(lttngust_python, message,
++	TP_ARGS(const char *, text),
++	TP_FIELDS(
++		ctf_string(message, text)
++	)
++)
++TRACEPOINT_LOGLEVEL(lttngust_python, message, TRACE_INFO)
++
++/* Tracepoint with warning, loglevel TRACE_WARNING */
++TRACEPOINT_EVENT(lttngust_python, warning,
++	TP_ARGS(const char *, text),
++	TP_FIELDS(
++		ctf_string(message, text)
++	)
++)
++TRACEPOINT_LOGLEVEL(lttngust_python, warning, TRACE_WARNING)
++
++#endif /* _lttngust_H */
++
++#include <lttng/tracepoint-event.h>
++
++#ifdef __cplusplus
++}
++#endif /* __cplusplus */
+-- 
+1.7.9.5
