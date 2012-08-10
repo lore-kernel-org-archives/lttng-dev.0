@@ -1,9 +1,9 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [babeltrace PATCH] Remove trace-collection.h
-	from	include_headers
-Date: Fri, 10 Aug 2012 17:34:24 -0400
-Message-ID: <20120810213424.GA601__25782.6836118058$1344634502$gmane$org@Krystal>
-References: <1344537779-19779-1-git-send-email-danny.serres@efficios.com>
+Subject: Re: [BABELTRACE PATCH] Fix: safety checks for opening
+	mmap traces
+Date: Fri, 10 Aug 2012 17:37:18 -0400
+Message-ID: <20120810213717.GB601__34907.0838340141$1344634666$gmane$org@Krystal>
+References: <1344634355-10923-1-git-send-email-jdesfossez@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -11,10 +11,10 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1Szwqg-0000Cv-0c
-	for lttng-dev@lists.lttng.org; Fri, 10 Aug 2012 17:34:26 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1SzwtT-0000FJ-BF
+	for lttng-dev@lists.lttng.org; Fri, 10 Aug 2012 17:37:19 -0400
 Content-Disposition: inline
-In-Reply-To: <1344537779-19779-1-git-send-email-danny.serres@efficios.com>
+In-Reply-To: <1344634355-10923-1-git-send-email-jdesfossez@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,48 +23,80 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Danny Serres <danny.serres@efficios.com>
+To: Julien Desfossez <jdesfossez@efficios.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
+
+* Julien Desfossez (jdesfossez@efficios.com) wrote:
+> When adding a mmap trace in the context, we don't have any tracefile and
+> index, some safety checks were missing in the path handling and
+> timestamp manipulation.
+> 
+> Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
 
 merged, thanks!
 
 Mathieu
 
-* Danny Serres (danny.serres@efficios.com) wrote:
-> Signed-off-by: Danny Serres <danny.serres@efficios.com>
 > ---
->  include/Makefile.am |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  formats/ctf/ctf.c |    9 +++++++++
+>  lib/context.c     |    6 ++++--
+>  2 files changed, 13 insertions(+), 2 deletions(-)
 > 
-> diff --git a/include/Makefile.am b/include/Makefile.am
-> index f7488da..79247a0 100644
-> --- a/include/Makefile.am
-> +++ b/include/Makefile.am
-> @@ -3,7 +3,6 @@ babeltraceinclude_HEADERS = \
->  	babeltrace/format.h \
->  	babeltrace/context.h \
->  	babeltrace/iterator.h \
-> -	babeltrace/trace-collection.h \
->  	babeltrace/trace-handle.h \
->  	babeltrace/list.h \
->  	babeltrace/clock-types.h
-> @@ -21,6 +20,7 @@ noinst_HEADERS = \
->  	babeltrace/context-internal.h \
->  	babeltrace/iterator-internal.h \
->  	babeltrace/prio_heap.h \
-> +	babeltrace/trace-collection.h \
->  	babeltrace/types.h \
->  	babeltrace/ctf-ir/metadata.h \
->  	babeltrace/ctf/events-internal.h \
+> diff --git a/formats/ctf/ctf.c b/formats/ctf/ctf.c
+> index f33fa33..69917f7 100644
+> --- a/formats/ctf/ctf.c
+> +++ b/formats/ctf/ctf.c
+> @@ -167,6 +167,9 @@ uint64_t ctf_timestamp_begin(struct trace_descriptor *descriptor,
+>  			if (!stream_pos->packet_real_index)
+>  				goto error;
+>  
+> +			if (stream_pos->packet_real_index->len <= 0)
+> +				continue;
+> +
+>  			if (type == BT_CLOCK_REAL) {
+>  				index = &g_array_index(stream_pos->packet_real_index,
+>  						struct packet_index,
+> @@ -225,6 +228,9 @@ uint64_t ctf_timestamp_end(struct trace_descriptor *descriptor,
+>  			if (!stream_pos->packet_real_index)
+>  				goto error;
+>  
+> +			if (stream_pos->packet_real_index->len <= 0)
+> +				continue;
+> +
+>  			if (type == BT_CLOCK_REAL) {
+>  				index = &g_array_index(stream_pos->packet_real_index,
+>  						struct packet_index,
+> @@ -1845,6 +1851,9 @@ int ctf_convert_index_timestamp(struct trace_descriptor *tdp)
+>  			stream_pos->packet_real_index = g_array_new(FALSE, TRUE,
+>  					sizeof(struct packet_index));
+>  
+> +			if (!stream_pos->packet_cycles_index)
+> +				continue;
+> +
+>  			for (k = 0; k < stream_pos->packet_cycles_index->len; k++) {
+>  				struct packet_index *index;
+>  				struct packet_index new_index;
+> diff --git a/lib/context.c b/lib/context.c
+> index 373944c..e2c1739 100644
+> --- a/lib/context.c
+> +++ b/lib/context.c
+> @@ -104,8 +104,10 @@ int bt_context_add_trace(struct bt_context *ctx, const char *path,
+>  	}
+>  	handle->format = fmt;
+>  	handle->td = td;
+> -	strncpy(handle->path, path, PATH_MAX);
+> -	handle->path[PATH_MAX - 1] = '\0';
+> +	if (path) {
+> +		strncpy(handle->path, path, PATH_MAX);
+> +		handle->path[PATH_MAX - 1] = '\0';
+> +	}
+>  
+>  	if (fmt->set_handle)
+>  		fmt->set_handle(td, handle);
 > -- 
-> 1.7.9.5
+> 1.7.10.4
 > 
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
 -- 
 Mathieu Desnoyers
