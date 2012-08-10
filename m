@@ -1,42 +1,20 @@
-From: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
-Subject: Re: [PATCH 2/2] urcu: add notice to URCU_TLS() for
-	it	is not async-signal-safe
-Date: Fri, 10 Aug 2012 11:23:05 -0700
-Message-ID: <20120810182305.GH2371__16598.1517792263$1344623051$gmane$org@linux.vnet.ibm.com>
-References: <1344414673-14714-1-git-send-email-laijs@cn.fujitsu.com>
-	<1344414673-14714-2-git-send-email-laijs@cn.fujitsu.com>
-	<20120809141417.GC9064@Krystal>
-	<CACvQF53CY6UuoZzDzT-VE25wAyaNa_r=0vsOdTVzVF6dmScH1g@mail.gmail.com>
-	<20120809200211.GA14409@Krystal> <50247E96.9080909@cn.fujitsu.com>
-	<20120810141615.GA27969@Krystal>
-Reply-To: paulmck@linux.vnet.ibm.com
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH 2/2] urcu: new wfqueue implementation
+Date: Fri, 10 Aug 2012 14:28:40 -0400
+Message-ID: <20120810182840.GA31156__41462.3003955514$1344623358$gmane$org@Krystal>
+References: <1344501986-23151-1-git-send-email-laijs@cn.fujitsu.com>
+	<1344501986-23151-2-git-send-email-laijs@cn.fujitsu.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from e32.co.us.ibm.com ([32.97.110.150])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <paulmck@linux.vnet.ibm.com>) id 1Sztrp-0007CH-Fl
-	for lttng-dev@lists.lttng.org; Fri, 10 Aug 2012 14:23:25 -0400
-Received: from /spool/local
-	by e32.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only!
-	Violators will be prosecuted
-	for <lttng-dev@lists.lttng.org> from <paulmck@linux.vnet.ibm.com>;
-	Fri, 10 Aug 2012 12:23:19 -0600
-Received: from d03relay03.boulder.ibm.com (d03relay03.boulder.ibm.com
-	[9.17.195.228])
-	by d03dlp03.boulder.ibm.com (Postfix) with ESMTP id 1EBAD19D803E
-	for <lttng-dev@lists.lttng.org>; Fri, 10 Aug 2012 18:23:10 +0000 (WET)
-Received: from d03av01.boulder.ibm.com (d03av01.boulder.ibm.com [9.17.195.167])
-	by d03relay03.boulder.ibm.com (8.13.8/8.13.8/NCO v10.0) with ESMTP id
-	q7AIN7q5114846
-	for <lttng-dev@lists.lttng.org>; Fri, 10 Aug 2012 12:23:12 -0600
-Received: from d03av01.boulder.ibm.com (loopback [127.0.0.1])
-	by d03av01.boulder.ibm.com (8.14.4/8.13.1/NCO v10.0 AVout) with ESMTP
-	id q7AIN6Lh028000
-	for <lttng-dev@lists.lttng.org>; Fri, 10 Aug 2012 12:23:07 -0600
+	(envelope-from <compudj@mail.openrapids.net>) id 1Sztwx-0007FM-3H
+	for lttng-dev@lists.lttng.org; Fri, 10 Aug 2012 14:28:43 -0400
 Content-Disposition: inline
-In-Reply-To: <20120810141615.GA27969@Krystal>
+In-Reply-To: <1344501986-23151-2-git-send-email-laijs@cn.fujitsu.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -45,113 +23,513 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Lai Jiangshan <eag0628@gmail.com>, Roland McGrath <roland@hack.frob.com>, iant@google.com, lttng-dev@lists.lttng.org, Stephen Hemminger <shemminger@vyatta.com>
+To: Lai Jiangshan <laijs@cn.fujitsu.com>
+Cc: Lai Jiangshan <eag0628@gmail.com>, lttng-dev@lists.lttng.org, Paul McKenney <paulmck@linux.vnet.ibm.com>
 List-Id: lttng-dev@lists.lttng.org
 
-On Fri, Aug 10, 2012 at 10:16:15AM -0400, Mathieu Desnoyers wrote:
-> (for the records: this discussion is about userspace RCU tls-compat.h,
-> which uses TLS on systems supporting it, and fall back to
-> pthread_key_create/getspecific/setspecific if not. The culprit of the
-> issue is that we want to allow reading the tls-compat variable from
-> signal handlers, and thus async-signal-safety of pthread_key_* and TLS.
+* Lai Jiangshan (laijs@cn.fujitsu.com) wrote:
+> Some guys would be surprised by this fact:
+> There are already TWO implementations of wfqueue in urcu.
 > 
-> The code we refer to is:
-> http://git.lttng.org/?p=userspace-rcu.git;a=blob;f=urcu/tls-compat.h;h=192a53609fb5f6bc445f98fdd6bc26918126687e;hb=HEAD)
+> The first one is in urcu/static/wfqueue.h:
+> 1) enqueue: exchange the tail and then update previous->next
+> 2) dequeue: wait for first node's next pointer and them shift, a dummy node
+> 	is introduced to avoid the queue->tail become NULL when shift.
 > 
-> * Lai Jiangshan (laijs@cn.fujitsu.com) wrote:
-> > On 08/10/2012 04:02 AM, Mathieu Desnoyers wrote:
-> > > Looking at the result of a quick google search:
-> > > 
-> > > http://curl.haxx.se/mail/lib-2006-09/0224.html
-> > > http://www.slamb.org/projects/sigsafe/api/patternref.html
-> > > 
-> > > "Additionally, it makes the same assumption as all other methods for
-> > > handling thread-directed signals (with the exception of kevent(2)
-> > > handling), that pthread_getspecific(2) is async signal-safe. This is not
-> > > guaranteed by SUSv3."
-> > > 
-> > > and
-> > > 
-> > > https://groups.google.com/forum/?fromgroups#!topic/comp.os.linux.development/nZfmndKbzJw[1-25]
-> > > 
-> > > it looks like using pthread_getspecific from a signal handler is not
-> > > always safe, mainly due to possible use of sigaltstack. So disabling
-> > > signals works for the "pthread_key_create" part, but we still have an
-> > > issue with pthread_getspecific.
-> > > 
-> > > Ideas are welcome on how to best deal with this issue.
-> > 
-> > What's the problem with disabling signals + pthread_getspecific()?
-> > Waht's the problem with disabling signals + __tls_access_ ## name()?
+> The second one shares some code with the first one, and the left code
+> are spreading in urcu-call-rcu-impl.h:
+> 1) enqueue: share with the first one
+> 2) no dequeue operation: and no shift, so it don't need dummy node,
+> 	Although the dummy node is queued when initialization, but it is removed
+> 	after the first dequeue_all operation in call_rcu_thread().
+> 	call_rcu_data_free() forgets to handle the dummy node if it is not removed.
+> 3)dequeue_all: record the old head and tail, and queue->head become the special
+> 	tail node.(atomic record the tail and change the tail).
 > 
-> * pthread_key_* fallback
+> The second implementation's code are spreading, bad for review, and it is not
+> tested by tests/test_urcu_wfq.
 > 
-> Disabling signals would allow us to be reentrant with respect to
-> signals, which actually solves part of the problem (reentrancy) for the
-> pthread_key_create part (protected by lock).
+> So we need a better implementation avoid the dummy node dancing and can service
+> both generic wfqueue APIs and dequeue_all API for call rcu.
 > 
-> Disabling signals, AFAIU, (and if we disregard the SUSv3 standard for a
-> minute) should not be strictly required around the pthread_getspecific
-> call on most architectures (no lock taken). We should carefully review
-> the implementations for each architecture we support if we want to
-> assume this though. If the getspecific returns NULL. we should disable
-> signals and call pthread_getspecific again with signals disabled, and
-> then call pthread_setspecific if necessary, before re-enabling signals.
-> The benefit of not _always_ disabling signals around
-> pthread_getspecific() is significant gain in performance in the common
-> case: the entire hot path of rcu_read_lock/unlock all happens in
-> userspace, without any system call, and uses tls-compat variables.
-> 
-> The other part of the problem with pthread_getspecific and signal
-> handlers is that it does not seem to be SUSv3-compliant to use
-> pthread_getspecific() from within a signal handler. One example that can
-> lead to problems is if the signal handler is setup with sigaltstack(2).
-> 
-> We might want to simply document this limitation:
-> 
-> "RCU read-side critical sections can be used in signals handlers, except
-> those setup with sigaltstack(2)."
+> The new implementation:
+> 1) enqueue: share with the first one/original implementation.
+> 2) dequeue: shift when node count >= 2, cmpxchg when node count = 1.
+> 	no dummy node, save memory.
+> 3) dequeue_all: simply set queue->head.next to NULL, xchg the tail
+> 	and return the old head.next.
 
-Seems to me to be a reasonable limitation.  Easier to relax limitations
-than to add new ones!
+Hi Lai,
 
-> * TLS
+Your approach is very interesting! It is indeed good for testing and
+maintenance if we can keep all the queue code within the API.
+
+I am concerned about the following scenario in your new implementation,
+I would like to know your thoughts on this. It could happen on
+architectures reordering loads (DEC Alpha, AMD64, IA64, PA-RISC, POWER,
+SPARC RMO, x86 TSO, and x86 OOStore):
+
+init state: list is empty
+
+CPU 0                                              CPU 1
+
+___cds_wfq_append_list() (append newtail)
+  oldtail = uatomic_xchg(&q->tail, newtail); (A)
+  CMM_STORE_SHARED(oldtail->next, head); (B)
+
+                                                    (B) is observable by cpu 1, but not (A) yet
+
+                                                    ___cds_wfq_dequeue_blocking()
+                                                        _cds_wfq_empty(q)
+                                                            return q->head.next == NULL
+                                                                    && CMM_LOAD_SHARED(q->tail) == &q->head;
+                                                                 -> false (q->tail != &q->head)
+                                                        node = ___cds_wfq_node_sync_next(&q->head);
+                                                           -> node is newtail
+                                                        if ((next = CMM_LOAD_SHARED(node->next)) == NULL) {
+                                                           -> taken, newtail->next is indeed NULL
+                                                           * (see note below)
+                                                           if (CMM_LOAD_SHARED(q->tail) == node) {
+                                                              -> not taken, since q->tail still appears as &q->head
+                                                           }
+                                                           next = ___cds_wfq_node_sync_next(node);
+                                                             -> endless loop if no other enqueue is performed. (BUG)
+                                                        }
+
+                                                    (A) is observable by cpu 1
+
+* note: I think we should add a cmm_smp_rmb() here to fix this issue. It
+  would force CPU 1 to necessarily see store (A) if store (B) is seen.
+  This would be matching the full memory barrier implied after 
+  uatomic_xchg().
+
+Thanks,
+
+Mathieu
+
 > 
-> Userspace RCU always touch the TLS variables from thread context (from
-> within rcu_register_thread()) before they are allowed to be touched by
-> signal handlers nested over threads. This ensures that issues with lazy
-> binding and dynamic linker lock are not encountered
-
-s/ensures that/avoids/
-s/and dynamic/and the dynamic/
-s/ are not encountered//
-
-> (ref. http://sourceware.org/ml/libc-alpha/2012-06/msg00372.html).
-
-And stop here.
-
->                                                                   I did
-> the same within my LTTng-UST use of TLS variables: they are touched by a
-> constructor once so we don't run into deadlocks between UST lock and the
-> libc lock protecting dynamic linking (recursive mutex also taken around
-> the constructor calls, within which we needed to take the UST lock, thus
-> causing deadlocks).
+> More implementation details are in the code.
+> tests/test_urcu_wfq will be update in future for testing new APIs.
 > 
 > 
-> Feedback is welcome,
-
-Looks good!
-
-							Thanx, Paul
-
-> Thanks,
+> Signed-off-by: Lai Jiangshan <laijs@cn.fujitsu.com>
+> ---
+>  urcu-call-rcu-impl.h  |   50 ++++++++++--------------
+>  urcu/static/wfqueue.h |  104 ++++++++++++++++++++++++++++++++++++------------
+>  urcu/wfqueue.h        |   25 ++++++++++--
+>  wfqueue.c             |   29 ++++++++++++++
+>  4 files changed, 149 insertions(+), 59 deletions(-)
 > 
-> Mathieu
-> 
+> diff --git a/urcu-call-rcu-impl.h b/urcu-call-rcu-impl.h
+> index 13b24ff..dbfb410 100644
+> --- a/urcu-call-rcu-impl.h
+> +++ b/urcu-call-rcu-impl.h
+> @@ -221,7 +221,7 @@ static void *call_rcu_thread(void *arg)
+>  {
+>  	unsigned long cbcount;
+>  	struct cds_wfq_node *cbs;
+> -	struct cds_wfq_node **cbs_tail;
+> +	struct cds_wfq_node *cbs_tail;
+>  	struct call_rcu_data *crdp = (struct call_rcu_data *)arg;
+>  	struct rcu_head *rhp;
+>  	int rt = !!(uatomic_read(&crdp->flags) & URCU_CALL_RCU_RT);
+> @@ -243,24 +243,18 @@ static void *call_rcu_thread(void *arg)
+>  		cmm_smp_mb();
+>  	}
+>  	for (;;) {
+> -		if (&crdp->cbs.head != _CMM_LOAD_SHARED(crdp->cbs.tail)) {
+> -			while ((cbs = _CMM_LOAD_SHARED(crdp->cbs.head)) == NULL)
+> -				poll(NULL, 0, 1);
+> -			_CMM_STORE_SHARED(crdp->cbs.head, NULL);
+> -			cbs_tail = (struct cds_wfq_node **)
+> -				uatomic_xchg(&crdp->cbs.tail, &crdp->cbs.head);
+> +		cbs = __cds_wfq_dequeue_all_blocking(&crdp->cbs, &cbs_tail);
+> +		if (cbs) {
+>  			synchronize_rcu();
+>  			cbcount = 0;
+>  			do {
+> -				while (cbs->next == NULL &&
+> -				       &cbs->next != cbs_tail)
+> -				       	poll(NULL, 0, 1);
+> -				if (cbs == &crdp->cbs.dummy) {
+> -					cbs = cbs->next;
+> -					continue;
+> -				}
+>  				rhp = (struct rcu_head *)cbs;
+> -				cbs = cbs->next;
+> +
+> +				if (cbs != cbs_tail)
+> +					cbs = __cds_wfq_node_sync_next(cbs);
+> +				else
+> +					cbs = NULL;
+> +
+>  				rhp->func(rhp);
+>  				cbcount++;
+>  			} while (cbs != NULL);
+> @@ -270,8 +264,7 @@ static void *call_rcu_thread(void *arg)
+>  			break;
+>  		rcu_thread_offline();
+>  		if (!rt) {
+> -			if (&crdp->cbs.head
+> -			    == _CMM_LOAD_SHARED(crdp->cbs.tail)) {
+> +			if (cds_wfq_empty(&crdp->cbs)) {
+>  				call_rcu_wait(crdp);
+>  				poll(NULL, 0, 10);
+>  				uatomic_dec(&crdp->futex);
+> @@ -625,32 +618,31 @@ void call_rcu(struct rcu_head *head,
+>   */
+>  void call_rcu_data_free(struct call_rcu_data *crdp)
+>  {
+> -	struct cds_wfq_node *cbs;
+> -	struct cds_wfq_node **cbs_tail;
+> -	struct cds_wfq_node **cbs_endprev;
+> +	struct cds_wfq_node *head, *tail;
+>  
+>  	if (crdp == NULL || crdp == default_call_rcu_data) {
+>  		return;
+>  	}
+> +
+>  	if ((uatomic_read(&crdp->flags) & URCU_CALL_RCU_STOPPED) == 0) {
+>  		uatomic_or(&crdp->flags, URCU_CALL_RCU_STOP);
+>  		wake_call_rcu_thread(crdp);
+>  		while ((uatomic_read(&crdp->flags) & URCU_CALL_RCU_STOPPED) == 0)
+>  			poll(NULL, 0, 1);
+>  	}
+> -	if (&crdp->cbs.head != _CMM_LOAD_SHARED(crdp->cbs.tail)) {
+> -		while ((cbs = _CMM_LOAD_SHARED(crdp->cbs.head)) == NULL)
+> -			poll(NULL, 0, 1);
+> -		_CMM_STORE_SHARED(crdp->cbs.head, NULL);
+> -		cbs_tail = (struct cds_wfq_node **)
+> -			uatomic_xchg(&crdp->cbs.tail, &crdp->cbs.head);
+> +
+> +	if (!cds_wfq_empty(&crdp->cbs)) {
+> +		head = __cds_wfq_dequeue_all_blocking(&crdp->cbs, &tail);
+> +		assert(head);
+> +
+>  		/* Create default call rcu data if need be */
+>  		(void) get_default_call_rcu_data();
+> -		cbs_endprev = (struct cds_wfq_node **)
+> -			uatomic_xchg(&default_call_rcu_data, cbs_tail);
+> -		*cbs_endprev = cbs;
+> +
+> +		__cds_wfq_append_list(&default_call_rcu_data->cbs, head, tail);
+> +
+>  		uatomic_add(&default_call_rcu_data->qlen,
+>  			    uatomic_read(&crdp->qlen));
+> +
+>  		wake_call_rcu_thread(default_call_rcu_data);
+>  	}
+>  
+> diff --git a/urcu/static/wfqueue.h b/urcu/static/wfqueue.h
+> index 636e1af..15ea9fc 100644
+> --- a/urcu/static/wfqueue.h
+> +++ b/urcu/static/wfqueue.h
+> @@ -10,6 +10,7 @@
+>   * dynamically with the userspace rcu library.
+>   *
+>   * Copyright 2010 - Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> + * Copyright 2011-2012 - Lai Jiangshan <laijs@cn.fujitsu.com>
+>   *
+>   * This library is free software; you can redistribute it and/or
+>   * modify it under the terms of the GNU Lesser General Public
+> @@ -29,6 +30,7 @@
+>  #include <pthread.h>
+>  #include <assert.h>
+>  #include <poll.h>
+> +#include <stdbool.h>
+>  #include <urcu/compiler.h>
+>  #include <urcu/uatomic.h>
+>  
+> @@ -38,8 +40,6 @@ extern "C" {
+>  
+>  /*
+>   * Queue with wait-free enqueue/blocking dequeue.
+> - * This implementation adds a dummy head node when the queue is empty to ensure
+> - * we can always update the queue locklessly.
+>   *
+>   * Inspired from half-wait-free/half-blocking queue implementation done by
+>   * Paul E. McKenney.
+> @@ -57,31 +57,43 @@ static inline void _cds_wfq_init(struct cds_wfq_queue *q)
+>  {
+>  	int ret;
+>  
+> -	_cds_wfq_node_init(&q->dummy);
+>  	/* Set queue head and tail */
+> -	q->head = &q->dummy;
+> -	q->tail = &q->dummy.next;
+> +	_cds_wfq_node_init(&q->head);
+> +	q->tail = &q->head;
+>  	ret = pthread_mutex_init(&q->lock, NULL);
+>  	assert(!ret);
+>  }
+>  
+> -static inline void _cds_wfq_enqueue(struct cds_wfq_queue *q,
+> -				    struct cds_wfq_node *node)
+> +static inline bool _cds_wfq_empty(struct cds_wfq_queue *q)
+>  {
+> -	struct cds_wfq_node **old_tail;
+> +	/*
+> +	 * Queue is empty if no node is pointed by q->head.next nor q->tail.
+> +	 */
+> +	return q->head.next == NULL && CMM_LOAD_SHARED(q->tail) == &q->head;
+> +}
+>  
+> +static inline void ___cds_wfq_append_list(struct cds_wfq_queue *q,
+> +		struct cds_wfq_node *head, struct cds_wfq_node *tail)
+> +{
+>  	/*
+>  	 * uatomic_xchg() implicit memory barrier orders earlier stores to data
+>  	 * structure containing node and setting node->next to NULL before
+>  	 * publication.
+>  	 */
+> -	old_tail = uatomic_xchg(&q->tail, &node->next);
+> +	tail = uatomic_xchg(&q->tail, tail);
+> +
+>  	/*
+> -	 * At this point, dequeuers see a NULL old_tail->next, which indicates
+> +	 * At this point, dequeuers see a NULL tail->next, which indicates
+>  	 * that the queue is being appended to. The following store will append
+>  	 * "node" to the queue from a dequeuer perspective.
+>  	 */
+> -	CMM_STORE_SHARED(*old_tail, node);
+> +	CMM_STORE_SHARED(tail->next, head);
+> +}
+> +
+> +static inline void _cds_wfq_enqueue(struct cds_wfq_queue *q,
+> +				    struct cds_wfq_node *node)
+> +{
+> +	___cds_wfq_append_list(q, node, node);
+>  }
+>  
+>  /*
+> @@ -120,27 +132,46 @@ ___cds_wfq_dequeue_blocking(struct cds_wfq_queue *q)
+>  {
+>  	struct cds_wfq_node *node, *next;
+>  
+> -	/*
+> -	 * Queue is empty if it only contains the dummy node.
+> -	 */
+> -	if (q->head == &q->dummy && CMM_LOAD_SHARED(q->tail) == &q->dummy.next)
+> +	if (_cds_wfq_empty(q))
+>  		return NULL;
+> -	node = q->head;
+>  
+> -	next = ___cds_wfq_node_sync_next(node);
+> +	node = ___cds_wfq_node_sync_next(&q->head);
+> +
+> +	if ((next = CMM_LOAD_SHARED(node->next)) == NULL) {
+> +		if (CMM_LOAD_SHARED(q->tail) == node) {
+> +			/*
+> +			 * @node is the only node in the queue.
+> +			 * Try to move the tail to &q->head
+> +			 */
+> +			_cds_wfq_node_init(&q->head);
+> +			if (uatomic_cmpxchg(&q->tail, node, &q->head) == node)
+> +				return node;
+> +		}
+> +		next = ___cds_wfq_node_sync_next(node);
+> +	}
+>  
+>  	/*
+>  	 * Move queue head forward.
+>  	 */
+> -	q->head = next;
+> -	/*
+> -	 * Requeue dummy node if we just dequeued it.
+> -	 */
+> -	if (node == &q->dummy) {
+> -		_cds_wfq_node_init(node);
+> -		_cds_wfq_enqueue(q, node);
+> -		return ___cds_wfq_dequeue_blocking(q);
+> -	}
+> +	q->head.next = next;
+> +
+> +	return node;
+> +}
+> +
+> +/* dequeue all nodes, the nodes are not synchronized for the next pointer */
+> +static inline struct cds_wfq_node *
+> +___cds_wfq_dequeue_all_blocking(struct cds_wfq_queue *q,
+> +		struct cds_wfq_node **tail)
+> +{
+> +	struct cds_wfq_node *node;
+> +
+> +	if (_cds_wfq_empty(q))
+> +		return NULL;
+> +
+> +	node = ___cds_wfq_node_sync_next(&q->head);
+> +	_cds_wfq_node_init(&q->head);
+> +	*tail = uatomic_xchg(&q->tail, &q->head);
+> +
+>  	return node;
+>  }
+>  
+> @@ -158,6 +189,27 @@ _cds_wfq_dequeue_blocking(struct cds_wfq_queue *q)
+>  	return retnode;
+>  }
+>  
+> +static inline struct cds_wfq_node *
+> +_cds_wfq_dequeue_all_blocking(struct cds_wfq_queue *q,
+> +		struct cds_wfq_node **tail)
+> +{
+> +	struct cds_wfq_node *node, *next;
+> +	int ret;
+> +
+> +	ret = pthread_mutex_lock(&q->lock);
+> +	assert(!ret);
+> +	node = ___cds_wfq_dequeue_all_blocking(q, tail);
+> +	ret = pthread_mutex_unlock(&q->lock);
+> +	assert(!ret);
+> +
+> +	/* synchronize all nodes' next pointer */
+> +	next = node;
+> +	while (next != *tail)
+> +		next = ___cds_wfq_node_sync_next(next);
+> +
+> +	return node;
+> +}
+> +
+>  #ifdef __cplusplus
+>  }
+>  #endif
+> diff --git a/urcu/wfqueue.h b/urcu/wfqueue.h
+> index 03a73f1..985f540 100644
+> --- a/urcu/wfqueue.h
+> +++ b/urcu/wfqueue.h
+> @@ -7,6 +7,7 @@
+>   * Userspace RCU library - Queue with Wait-Free Enqueue/Blocking Dequeue
+>   *
+>   * Copyright 2010 - Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> + * Copyright 2011-2012 - Lai Jiangshan <laijs@cn.fujitsu.com>
+>   *
+>   * This library is free software; you can redistribute it and/or
+>   * modify it under the terms of the GNU Lesser General Public
+> @@ -25,6 +26,7 @@
+>  
+>  #include <pthread.h>
+>  #include <assert.h>
+> +#include <stdbool.h>
+>  #include <urcu/compiler.h>
+>  
+>  #ifdef __cplusplus
+> @@ -33,8 +35,6 @@ extern "C" {
+>  
+>  /*
+>   * Queue with wait-free enqueue/blocking dequeue.
+> - * This implementation adds a dummy head node when the queue is empty to ensure
+> - * we can always update the queue locklessly.
+>   *
+>   * Inspired from half-wait-free/half-blocking queue implementation done by
+>   * Paul E. McKenney.
+> @@ -45,8 +45,7 @@ struct cds_wfq_node {
+>  };
+>  
+>  struct cds_wfq_queue {
+> -	struct cds_wfq_node *head, **tail;
+> -	struct cds_wfq_node dummy;	/* Dummy node */
+> +	struct cds_wfq_node head, *tail;
+>  	pthread_mutex_t lock;
+>  };
+>  
+> @@ -56,18 +55,36 @@ struct cds_wfq_queue {
+>  
+>  #define cds_wfq_node_init		_cds_wfq_node_init
+>  #define cds_wfq_init		_cds_wfq_init
+> +#define cds_wfq_empty		_cds_wfq_empty
+> +#define __cds_wfq_append_list	___cds_wfq_append_list
+>  #define cds_wfq_enqueue		_cds_wfq_enqueue
+>  #define __cds_wfq_dequeue_blocking	___cds_wfq_dequeue_blocking
+>  #define cds_wfq_dequeue_blocking	_cds_wfq_dequeue_blocking
+> +#define __cds_wfq_node_sync_next	___cds_wfq_node_sync_next
+> +#define __cds_wfq_dequeue_all_blocking	___cds_wfq_dequeue_all_blocking
+> +#define cds_wfq_dequeue_all_blocking	_cds_wfq_dequeue_all_blocking
+>  
+>  #else /* !_LGPL_SOURCE */
+>  
+>  extern void cds_wfq_node_init(struct cds_wfq_node *node);
+>  extern void cds_wfq_init(struct cds_wfq_queue *q);
+> +extern bool cds_wfq_empty(struct cds_wfq_queue *q);
+> +/* __cds_wfq_append_list: caller ensures mutual exclusion between dequeues */
+> +extern void __cds_wfq_append_list(struct cds_wfq_queue *q,
+> +		struct cds_wfq_node *head, struct cds_wfq_node *tail);
+>  extern void cds_wfq_enqueue(struct cds_wfq_queue *q, struct cds_wfq_node *node);
+>  /* __cds_wfq_dequeue_blocking: caller ensures mutual exclusion between dequeues */
+>  extern struct cds_wfq_node *__cds_wfq_dequeue_blocking(struct cds_wfq_queue *q);
+>  extern struct cds_wfq_node *cds_wfq_dequeue_blocking(struct cds_wfq_queue *q);
+> +extern struct cds_wfq_node *__cds_wfq_node_sync_next(struct cds_wfq_node *node);
+> +/*
+> + * __cds_wfq_dequeue_all_blocking: caller ensures mutual exclusion between
+> + * dequeues, and need synchronize next pointer berfore use it.
+> + */
+> +extern struct cds_wfq_node *__cds_wfq_dequeue_all_blocking(
+> +		struct cds_wfq_queue *q, struct cds_wfq_node **tail);
+> +extern struct cds_wfq_node *cds_wfq_dequeue_all_blocking(
+> +		struct cds_wfq_queue *q, struct cds_wfq_node **tail);
+>  
+>  #endif /* !_LGPL_SOURCE */
+>  
+> diff --git a/wfqueue.c b/wfqueue.c
+> index 3337171..28a7b58 100644
+> --- a/wfqueue.c
+> +++ b/wfqueue.c
+> @@ -4,6 +4,7 @@
+>   * Userspace RCU library - Queue with Wait-Free Enqueue/Blocking Dequeue
+>   *
+>   * Copyright 2010 - Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> + * Copyright 2011-2012 - Lai Jiangshan <laijs@cn.fujitsu.com>
+>   *
+>   * This library is free software; you can redistribute it and/or
+>   * modify it under the terms of the GNU Lesser General Public
+> @@ -38,6 +39,17 @@ void cds_wfq_init(struct cds_wfq_queue *q)
+>  	_cds_wfq_init(q);
+>  }
+>  
+> +bool cds_wfq_empty(struct cds_wfq_queue *q)
+> +{
+> +	return _cds_wfq_empty(q);
+> +}
+> +
+> +void __cds_wfq_append_list(struct cds_wfq_queue *q,
+> +		struct cds_wfq_node *head, struct cds_wfq_node *tail)
+> +{
+> +	return ___cds_wfq_append_list(q, head, tail);
+> +}
+> +
+>  void cds_wfq_enqueue(struct cds_wfq_queue *q, struct cds_wfq_node *node)
+>  {
+>  	_cds_wfq_enqueue(q, node);
+> @@ -52,3 +64,20 @@ struct cds_wfq_node *cds_wfq_dequeue_blocking(struct cds_wfq_queue *q)
+>  {
+>  	return _cds_wfq_dequeue_blocking(q);
+>  }
+> +
+> +struct cds_wfq_node *__cds_wfq_node_sync_next(struct cds_wfq_node *node)
+> +{
+> +	return ___cds_wfq_node_sync_next(node);
+> +}
+> +
+> +struct cds_wfq_node *__cds_wfq_dequeue_all_blocking(
+> +		struct cds_wfq_queue *q, struct cds_wfq_node **tail)
+> +{
+> +	return ___cds_wfq_dequeue_all_blocking(q, tail);
+> +}
+> +
+> +struct cds_wfq_node *cds_wfq_dequeue_all_blocking(
+> +		struct cds_wfq_queue *q, struct cds_wfq_node **tail)
+> +{
+> +	return _cds_wfq_dequeue_all_blocking(q, tail);
+> +}
 > -- 
-> Mathieu Desnoyers
-> Operating System Efficiency R&D Consultant
-> EfficiOS Inc.
-> http://www.efficios.com
+> 1.7.7
 > 
+> 
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- 
+Mathieu Desnoyers
+Operating System Efficiency R&D Consultant
+EfficiOS Inc.
+http://www.efficios.com
