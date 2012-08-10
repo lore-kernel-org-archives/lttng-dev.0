@@ -1,16 +1,18 @@
-From: Paul Barrette <paulbarrette@gmail.com>
-Subject: qemuarm: Session dameon died (exit status 0)
-Date: Fri, 10 Aug 2012 10:02:16 -0400
-Message-ID: <CAKe51+3mCaia8a--vH8KVbtA+kkzGsKx2=C0-K1qEvNY42wRkQ__31900.8549712182$1344608853$gmane$org@mail.gmail.com>
+From: Yannick Brosseau <yannick.brosseau@gmail.com>
+Subject: Re: qemuarm: Session dameon died (exit status 0)
+Date: Fri, 10 Aug 2012 10:31:20 -0400
+Message-ID: <50251B38.8040205__27185.7614316561$1344609113$gmane$org@gmail.com>
+References: <CAKe51+3mCaia8a--vH8KVbtA+kkzGsKx2=C0-K1qEvNY42wRkQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0613693642=="
+Content-Type: multipart/mixed; boundary="===============1956354245=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wg0-f54.google.com ([74.125.82.54])
+Received: from mail-gh0-f176.google.com ([209.85.160.176])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <paulbarrette@gmail.com>) id 1SzpnD-00059h-5B
-	for lttng-dev@lists.lttng.org; Fri, 10 Aug 2012 10:02:23 -0400
-Received: by wgx1 with SMTP id 1so1176927wgx.23
-	for <lttng-dev@lists.lttng.org>; Fri, 10 Aug 2012 07:02:17 -0700 (PDT)
+	(envelope-from <yannick.brosseau@gmail.com>) id 1SzqFM-0005Nb-BB
+	for lttng-dev@lists.lttng.org; Fri, 10 Aug 2012 10:31:28 -0400
+Received: by ghbz10 with SMTP id z10so1884331ghb.35
+	for <lttng-dev@lists.lttng.org>; Fri, 10 Aug 2012 07:31:22 -0700 (PDT)
+In-Reply-To: <CAKe51+3mCaia8a--vH8KVbtA+kkzGsKx2=C0-K1qEvNY42wRkQ@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,66 +21,133 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Paul Barrette <paulbarrette@gmail.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============0613693642==
-Content-Type: multipart/alternative; boundary=f46d041825daafb28a04c6e9ca72
+This is a multi-part message in MIME format.
+--===============1956354245==
+Content-Type: multipart/alternative;
+ boundary="------------080508090508020906090009"
 
---f46d041825daafb28a04c6e9ca72
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+This is a multi-part message in MIME format.
+--------------080508090508020906090009
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
 
-Hi all,
-lttng-modules 2.0.4
-lttng-tools 2.0.4
-linux kernel 3.4.x
+Hi,
 
-I am running  qemuarm and seeing the following issue when running "lttng
-create":
-Error: Session daemon died (exit status 0)
+Can you try to start the lttng-sessiond manually and see if there is
+error message (with full logging enabled: lttng-sessiond -vvv)
 
-Is there a patch I am missing for arm?
+Yannick
 
-Thanks
-Pb
-
---=20
---
-Paul Barrette
-Linked In Profile <http://ca.linkedin.com/pub/paul-barrette/11/b42/a96>
-http://sitarplayer.net
-=C5=90
- \\=3D^%
- (*)---(*)
-^^~~^~~~^^^~~^
-
---f46d041825daafb28a04c6e9ca72
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-Hi all,<div>lttng-modules 2.0.4</div><div>lttng-tools 2.0.4</div><div>linux=
- kernel 3.4.x</div><div><br></div><div>I am running =C2=A0qemuarm and seein=
-g the following issue when running &quot;lttng create&quot;:</div><div>Erro=
-r: Session daemon died (exit status 0)</div>
-<div><br></div><div>Is there a patch I am missing for arm?</div><div><br></=
-div><div>Thanks</div><div>Pb<br clear=3D"all"><div><br></div>-- <br>--<br>P=
-aul Barrette<br><a href=3D"http://ca.linkedin.com/pub/paul-barrette/11/b42/=
-a96" target=3D"_blank">Linked In Profile</a><br>
-<a href=3D"http://sitarplayer.net" target=3D"_blank">http://sitarplayer.net=
-</a><br><font face=3D"verdana"><font color=3D"black"><font>=C5=90</font></f=
-ont></font>  <br>
-
-<font face=3D"verdana"><font color=3D"black"><font>=C2=A0\\=3D^%  <br>=C2=
-=A0(*)---(*)</font></font></font> <br>
- <font face=3D"courier new">^^~~^~~~^^^~~^</font><div style=3D"text-align:l=
-eft"><br></div><br>
-</div>
-
---f46d041825daafb28a04c6e9ca72--
+On 2012-08-10 10:02, Paul Barrette wrote:
+> Hi all,
+> lttng-modules 2.0.4
+> lttng-tools 2.0.4
+> linux kernel 3.4.x
+>
+> I am running  qemuarm and seeing the following issue when running
+> "lttng create":
+> Error: Session daemon died (exit status 0)
+>
+> Is there a patch I am missing for arm?
+>
+> Thanks
+> Pb
+>
+> -- 
+> --
+> Paul Barrette
+> Linked In Profile <http://ca.linkedin.com/pub/paul-barrette/11/b42/a96>
+> http://sitarplayer.net
+> O"
+>  \\=^%
+>  (*)---(*)
+> ^^~~^~~~^^^~~^
+>
+>
+>
+>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
 
---===============0613693642==
+--------------080508090508020906090009
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
+
+<html>
+  <head>
+    <meta content="text/html; charset=ISO-8859-1"
+      http-equiv="Content-Type">
+  </head>
+  <body bgcolor="#FFFFFF" text="#000000">
+    Hi,<br>
+    <br>
+    Can you try to start the lttng-sessiond manually and see if there is
+    error message (with full logging enabled: lttng-sessiond -vvv)<br>
+    <br>
+    Yannick<br>
+    <br>
+    On 2012-08-10 10:02, Paul Barrette wrote:
+    <blockquote
+cite="mid:CAKe51+3mCaia8a--vH8KVbtA+kkzGsKx2=C0-K1qEvNY42wRkQ@mail.gmail.com"
+      type="cite">Hi all,
+      <div>lttng-modules 2.0.4</div>
+      <div>lttng-tools 2.0.4</div>
+      <div>linux kernel 3.4.x</div>
+      <div><br>
+      </div>
+      <div>I am running &nbsp;qemuarm and seeing the following issue when
+        running "lttng create":</div>
+      <div>Error: Session daemon died (exit status 0)</div>
+      <div><br>
+      </div>
+      <div>Is there a patch I am missing for arm?</div>
+      <div><br>
+      </div>
+      <div>Thanks</div>
+      <div>Pb<br clear="all">
+        <div><br>
+        </div>
+        -- <br>
+        --<br>
+        Paul Barrette<br>
+        <a moz-do-not-send="true"
+          href="http://ca.linkedin.com/pub/paul-barrette/11/b42/a96"
+          target="_blank">Linked In Profile</a><br>
+        <a moz-do-not-send="true" href="http://sitarplayer.net"
+          target="_blank">http://sitarplayer.net</a><br>
+        <font face="verdana"><font color="black"><font>&#336;</font></font></font>
+        <br>
+        <font face="verdana"><font color="black"><font>&nbsp;\\=^% <br>
+              &nbsp;(*)---(*)</font></font></font> <br>
+        <font face="courier new">^^~~^~~~^^^~~^</font>
+        <div style="text-align:left"><br>
+        </div>
+        <br>
+      </div>
+      <br>
+      <fieldset class="mimeAttachmentHeader"></fieldset>
+      <br>
+      <pre wrap="">_______________________________________________
+lttng-dev mailing list
+<a class="moz-txt-link-abbreviated" href="mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a>
+<a class="moz-txt-link-freetext" href="http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a>
+</pre>
+    </blockquote>
+    <br>
+  </body>
+</html>
+
+--------------080508090508020906090009--
+
+
+--===============1956354245==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -89,4 +158,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============0613693642==--
+--===============1956354245==--
