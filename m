@@ -1,22 +1,19 @@
-From: Karim Yaghmour <karim.yaghmour@opersys.com>
-Subject: Re: LTTng / Android questions
-Date: Sun, 12 Aug 2012 16:08:59 -0400
-Message-ID: <50280D5B.6070100__12533.1871481196$1344802179$gmane$org@opersys.com>
-References: <DB3D54B734896D4E8E7126869751E3AE284D15F4@ORSMSX102.amr.corp.intel.com>
-	<20120724182031.GB2285@Krystal>
-	<DB3D54B734896D4E8E7126869751E3AE284E87EF@ORSMSX101.amr.corp.intel.com>
-	<20120802215250.GB29960@Krystal>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: LTTng: problem with lttng-sessiond.
+Date: Mon, 13 Aug 2012 09:22:31 -0400
+Message-ID: <20120813132231.GA24219__6561.69721992246$1344864187$gmane$org@Krystal>
+References: <CAGya9Mk5cmdugqkqguS1jUhWw7P-XVz+2S0YWiUys6547J6gyg@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qa0-f41.google.com ([209.85.216.41])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <karim.yaghmour@opersys.com>) id 1T0eTD-0003gj-CJ
-	for lttng-dev@lists.lttng.org; Sun, 12 Aug 2012 16:09:07 -0400
-Received: by qafk30 with SMTP id k30so2136896qaf.14
-	for <lttng-dev@lists.lttng.org>; Sun, 12 Aug 2012 13:09:01 -0700 (PDT)
-In-Reply-To: <20120802215250.GB29960@Krystal>
+	(envelope-from <compudj@mail.openrapids.net>) id 1T0ubK-00033O-Ft
+	for lttng-dev@lists.lttng.org; Mon, 13 Aug 2012 09:22:34 -0400
+Content-Disposition: inline
+In-Reply-To: <CAGya9Mk5cmdugqkqguS1jUhWw7P-XVz+2S0YWiUys6547J6gyg@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -25,114 +22,66 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: "Glossop, Kent" <kent.glossop@intel.com>, lttng-dev@lists.lttng.org
+To: Henrik Hautakoski <henrik@fiktivkod.org>, dgoulet@efficios.com, lttng-dev@lists.lttng.org
+Cc: Stefan Karlsson S12 <skn07007@student.mdh.se>
 List-Id: lttng-dev@lists.lttng.org
 
-
-Hi Mathieu,
-
-Apologies for the delayed response, I was in Bangalore for a few weeks 
-with limited bandwidth (time-wise.)
-
-I haven't had the chance to try getting LTTng 2.0 to work on Android. 
-The most up-to-date pointer I would've had was the Ericsson work which 
-was pointed to in a later email in this thread. I remain, however, 
-interested in any work in this direction, please keep me posted.
+CCing David Goulet, maintainer of lttng-tools. He will look into your
+issue.
 
 Thanks,
 
--- 
-Karim Yaghmour
-CEO - Opersys inc. / www.opersys.com
-http://twitter.com/karimyaghmour
+Mathieu
 
-On 12-08-02 05:52 PM, Mathieu Desnoyers wrote:
-> Hi Karim,
->
-> Any word of advice about building LTTng 2.0 on Android ? See the
-> question below.
->
-> Thanks,
->
-> Mathieu
->
-> * Glossop, Kent (kent.glossop@intel.com) wrote:
->> Thanks.
->>
->> I've been trying to understand how to do the lttng cross build for
->> Android.  Is there a particular approach that you would expect people
->> to most naturally use (e.g. if I were to write up a "how-to")?
->> It seems like one approach is to use a full Android build area, adding
->> the lttng components to the "external" directory, requiring Android.mk
->> files.  If the files aren't generated automatically, this adds
->> maintenance.  (There is a tool called androgenizer that can be used
->> assist, but that seems undesirable to include for a "general"
->> solution.)  Another approach would be to build some of components with
->> options to configure, in conjunction with an Android build (or NDK?)
->> area.  Would you view one of these (or something else), a "preferred"
->> way?
->>
->> Thanks,
->> Kent
->>
->> -----Original Message-----
->> From: Mathieu Desnoyers [mailto:mathieu.desnoyers@efficios.com]
->> Sent: Tuesday, July 24, 2012 2:21 PM
->> To: Glossop, Kent
->> Cc: christian.babeux@efficios.com
->> Subject: Re: LTTng / Android questions
->>
->> Hi Kent,
->>
->> It should work, theoretically. Testing would be welcome. We did port of the lttng tools (except for the kernel tracer) to NetBSD/FreeBSD recently, where we had to circumvent lack of TLS support, so this requirement on the glibc is now gone from the 2.0 lttng series.
->>
->> If Android kernel is close enough to mainline, lttng-modules should work too.
->>
->> I'm CCing christian, who is currently looking at the embedded aspect of the continuous integration heterogenous cluster we are currently building.
->>
->> Thanks,
->>
->> Mathieu
->>
->>
->> * Glossop, Kent (kent.glossop@intel.com) wrote:
->>> Mathieu,
->>>
->>> I'm interested in LTTng for Android.  If you have time, a few
->>> questions...  (Let me know if this would be better posted to
->>> lttng-dev.)
->>>
->>>  From what I can tell from previous postings to lttng-dev and other places:
->>>
->>> -          People apparently used a previous version with a 2.x kernel with some changes and building it in
->>>
->>> -          There was/is an issue with glibc vs. bionic for lttng's use of shared memory
->>>
->>> -          Back in Feb. there was a demo done of LTTng on Android done using a copy of glibc
->>>
->>> -          There are at least some changes being made that mention Android (e.g. a TLS change that mentioned Android about 2 months ago)
->>>
->>> What I'm interested in:
->>>
->>> -          Are there directions somewhere for building LTTng for use with Android?  (e.g. how to configure component and reference an Android build area rather than things for the native host?)
->>>
->>> -          How much is expected to work on Android?
->>>
->>> -          Is glibc still needed?
->>>
->>> -          Are there people actively working on Android support (if it doesn't already work)?
->>>
->>> -          Do you have a rough idea what might be involved for an Android x86 version beyond arm?
->>>
->>> Ideally, I would like to be able to install a minimal set of pieces, preferably on to a stock phone, collect LTTng traces, and use the viewer on linux (or maybe even windows if linux-tools works there.)  Then, to do that with x86 Android in addition to arm...
->>>
->>> Thanks,
->>> Kent Glossop, Intel
->>>
->>
->> --
->> Mathieu Desnoyers
->> Operating System Efficiency R&D Consultant EfficiOS Inc.
->> http://www.efficios.com
->
+* Henrik Hautakoski (henrik@fiktivkod.org) wrote:
+> Hi, We have some problems with spawning a session daemon. running the
+> command "lttng-sessiond --vvv --no-kernel" and
+> get "Illegal instruction" See output:
+> 
+> DEBUG3: Creating LTTng run directory: /var/run/lttng [in
+> create_lttng_rundir() at main.c:5323]
+> DEBUG2: Kernel consumer err path: /var/run/lttng/kconsumerd/error [in
+> main() at main.c:5571]
+> DEBUG2: Kernel consumer cmd path: /var/run/lttng/kconsumerd/command
+> [in main() at main.c:5573]
+> DEBUG1: Client socket path /var/run/lttng/client-lttng-sessiond [in
+> main() at main.c:5626]
+> DEBUG1: Application socket path /var/run/lttng/apps-lttng-sessiond [in
+> main() at main.c:5627]
+> DEBUG1: LTTng run directory path: /var/run/lttng [in main() at main.c:5628]
+> DEBUG2: UST consumer 32 bits err path:
+> /var/run/lttng/ustconsumerd32/error [in main() at main.c:5637]
+> DEBUG2: UST consumer 32 bits cmd path:
+> /var/run/lttng/ustconsumerd32/command [in main() at main.c:5639]
+> DEBUG2: UST consumer 64 bits err path:
+> /var/run/lttng/ustconsumerd64/error [in main() at main.c:5648]
+> DEBUG2: UST consumer 64 bits cmd path:
+> /var/run/lttng/ustconsumerd64/command [in main() at main.c:5650]
+> DEBUG3: Created hashtable size 4 at 0x10064080 of type 1 [in
+> lttng_ht_new() at hashtable.c:96]
+> DEBUG3: Created hashtable size 4 at 0x10064168 of type 1 [in
+> lttng_ht_new() at hashtable.c:96]
+> DEBUG2: Creating consumer directory: /var/run/lttng/kconsumerd [in
+> set_consumer_sockets() at main.c:5365]
+> DEBUG2: Creating consumer directory: /var/run/lttng/ustconsumerd64 [in
+> set_consumer_sockets() at main.c:5365]
+> DEBUG2: Creating consumer directory: /var/run/lttng/ustconsumerd32 [in
+> set_consumer_sockets() at main.c:5365]
+> DEBUG1: Signal handler set for SIGTERM, SIGPIPE and SIGINT [in
+> set_signal_handler() at main.c:5457]
+> DEBUG1: All permissions are set [in set_permissions() at main.c:5310]
+> DEBUG1: epoll set max size is 180337 [in compat_epoll_set_max_size()
+> at compat-epoll.c:224]
+> Illegal instruction
+> 
+> What to do? :P
+> 
+> -- 
+> Henrik Hautakoski
+> henrik@fiktivkod.org
+
+-- 
+Mathieu Desnoyers
+Operating System Efficiency R&D Consultant
+EfficiOS Inc.
+http://www.efficios.com
