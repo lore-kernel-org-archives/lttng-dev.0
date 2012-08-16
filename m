@@ -1,18 +1,27 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: Re: [PATCH lttng-tools 1/2] Fix: Invalid free on
- session_name when destroying session
-Date: Thu, 16 Aug 2012 16:12:46 -0400
-Message-ID: <502D543E.8080209__8936.45862020112$1345147993$gmane$org@efficios.com>
-References: <1345048771-18936-1-git-send-email-christian.babeux@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [RFC PATCH] wfqueue: expand API,
+	simplify implementation, small performance boost
+Date: Thu, 16 Aug 2012 17:02:57 -0400
+Message-ID: <20120816210257.GA3331__1663.65268310091$1345151003$gmane$org@Krystal>
+References: <20120812145000.GA32747@Krystal>
+	<CACvQF52366ewREnRrDgi+xUBVQ6_ifWjoDv==nHik8FbCnMugA@mail.gmail.com>
+	<20120813201219.GA27637@Krystal>
+	<CACvQF51tWXaTdm9jCC=0S2XA+BdzJmR0W2sFVZAuVVZiWX8jAA@mail.gmail.com>
+	<20120814222724.GA9751@Krystal>
+	<CACvQF51LxhB+H8X9MqmDTS4xmGUyttTMNk66=NLvqsBkw00qXg@mail.gmail.com>
+	<20120815125209.GA11737@Krystal>
+	<CACvQF52Z-wyz=LPOjZyJpfhHdF8cAtr8A5bWABM=3A95=q8Egg@mail.gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([213.239.202.151])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1T26Qz-00058s-2k
-	for lttng-dev@lists.lttng.org; Thu, 16 Aug 2012 16:12:49 -0400
-In-Reply-To: <1345048771-18936-1-git-send-email-christian.babeux@efficios.com>
+	(envelope-from <compudj@mail.openrapids.net>) id 1T27DX-0005Xn-Bv
+	for lttng-dev@lists.lttng.org; Thu, 16 Aug 2012 17:02:59 -0400
+Content-Disposition: inline
+In-Reply-To: <CACvQF52Z-wyz=LPOjZyJpfhHdF8cAtr8A5bWABM=3A95=q8Egg@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,63 +30,66 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Christian Babeux <christian.babeux@efficios.com>
-Cc: lttng-dev@lists.lttng.org, dgoulet@efficios.com
+To: Lai Jiangshan <eag0628@gmail.com>
+Cc: lttng-dev@lists.lttng.org, Paul McKenney <paulmck@linux.vnet.ibm.com>, rp@svcs.cs.pdx.edu
 List-Id: lttng-dev@lists.lttng.org
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA512
+* Lai Jiangshan (eag0628@gmail.com) wrote:
+> >>
+> >> Is it false sharing?
+> >> Access to q->head.next and access to q->tail have the same performance
+> >> because they are in the same cache line.
+> >
+> > Yes! you are right! And a quick benchmark confirms it:
+> >
+> > with head and tail on same cache line:
+> >
+> > SUMMARY /home/compudj/doc/userspace-rcu/tests/.libs/lt-test_urcu_wfq testdur   10 nr_enqueuers   1 wdelay      0 nr_dequeuers   1 rdur      0 nr_enqueues    100833595 nr_dequeues     88647134 successful enqueues 100833595 successful dequeues     88646898 end_dequeues 12186697 nr_ops 189480729
+> >
+> > with a 256 bytes padding between head and tail, keeping the mutex on the
+> > "head" cache line:
+> >
+> > SUMMARY /home/compudj/doc/userspace-rcu/tests/.libs/lt-test_urcu_wfq testdur   10 nr_enqueuers   1 wdelay      0 nr_dequeuers   1 rdur      0 nr_enqueues    228992829 nr_dequeues    228921791 successful enqueues 228992829 successful dequeues    228921367 end_dequeues 71462 nr_ops 457914620
+> >
+> > enqueue: 127% speedup
+> > dequeue: 158% speedup
+> >
+> > That is indeed a _really_ huge difference. However, to get this, we
+> > would have to increase the size of struct cds_wfq_queue beyond its
+> > current size, which would break API compatibility. Any idea on how to
+> > best do this without causing incompatibility would be welcome.
+> >
+> 
+> choice 1) two set of APIs?(cache-line-opt and none-cache-line-opt),
+> many users don't need the cache-line-opt.
+> choice 2) Just break the compatibility for NONE-LGPL. I think
+> NONE-LGPL-user of it is rare. And current version of urcu <1.0, I
+> don't like too much burden when <1.0.
 
-Everything is merged and upstream!
+Hi Lai,
+
+Keeping backward compatibility for a while, and gradually deprecating
+APIs, is very important for userspace RCU in my opinion: failure to
+provide this is the first thing that will discourage users from using
+the library. It is also the first thing that will turn away package
+maintainers, and distributions, from this project.
+
+I sent 2 patches that implement a compatibility ABI and the new ABI in a
+way that will let us continue development on wfqueue without having to
+have legacy code in our way: I plan to move all the legacy ABI to
+wfqueue0.c, and have a fresh start in terms of ABI for the new wfqueue.
+That way, we can eventually remove the wfqueue v0 ABI when we decide to
+bump the library version number (and break compatibility).
+
+Feedback is welcome,
 
 Thanks!
 
-Christian Babeux:
-> The session_name should not be free(3) if the user has specified a
-> session name on the command line. Also, the caller is responsible
-> to free the allocated string when calling get_session_name(). 
-> Handle both cases gracefully.
-> 
-> Signed-off-by: Christian Babeux <christian.babeux@efficios.com> 
-> --- src/bin/lttng/commands/destroy.c | 27
-> ++++++++++++++++----------- 1 file changed, 16 insertions(+), 11
-> deletions(-)
-> 
-> diff --git a/src/bin/lttng/commands/destroy.c
-> b/src/bin/lttng/commands/destroy.c index 5b69cb5..7b7ea0e 100644 
-> --- a/src/bin/lttng/commands/destroy.c +++
-> b/src/bin/lttng/commands/destroy.c @@ -28,6 +28,7 @@
-> 
-> #include <common/sessiond-comm/sessiond-comm.h>
-> 
-> +static char *opt_session_name; static int opt_destroy_all;
-> 
-> enum { @@ -156,28 +157,32 @@ int cmd_destroy(int argc, const char
-> **argv) goto end; }
-> 
-> -	session_name = (char *) poptGetArg(pc); - -	/* -	 * ignore
-> session name in case all -	 * sessions are to be destroyed -	 */ +
-> /* Ignore session name in case all sessions are to be destroyed */ 
-> if (opt_destroy_all) { ret = destroy_all_sessions(); goto end; } -
-> if (session_name == NULL) { -		ret =
-> get_default_session_name(&session_name); -		if (ret < 0 ||
-> session_name == NULL) { + +	opt_session_name = (char *)
-> poptGetArg(pc); + +	if (opt_session_name == NULL) { +		/* No
-> session name specified, lookup default */ +		session_name =
-> get_session_name(); +		if (session_name == NULL) { +			ret =
-> CMD_ERROR; goto end; } +	} else { +		session_name =
-> opt_session_name; } + ret = destroy_session(session_name);
-> 
-> end: -	poptFreeContext(pc); -	if (session_name != NULL) { +	if
-> (opt_session_name == NULL) { free(session_name); } + +
-> poptFreeContext(pc); return ret; }
------BEGIN PGP SIGNATURE-----
+Mathieu
 
-iQEcBAEBCgAGBQJQLVQ7AAoJEELoaioR9I02GWcIAJPV/bC2X+P3UaCRi/4Xf8yC
-KJ7vbGRBFPX9iFZP2bgwBfBKY9xLOqK3spOPotirKTUhuLaJooEqq42t4xsnw4nk
-GzQrQ8G9vzfr+ZLQvECMvYSyJF524RdK7xowiB8lmTKaYTcH3+HEFpmCWG7UzuWX
-Q/Rcs8VTxj34zgL1s1nczO/Vpn9TehXi6rEvy9iluOrkYecwql/zpI4zEd9lE5bb
-FTdbrAyFvDgFSJw3YudqalgC7IIMaaoLZj3MraLl0IRI31m2po1ofK3RtUfjWquT
-Igmm0Hr3by5fRwp8h6I8t7tC03WlalMX1DpC5x0LhgxwdMuzB6f5Fx4afNA811c=
-=EmBV
------END PGP SIGNATURE-----
+
+-- 
+Mathieu Desnoyers
+Operating System Efficiency R&D Consultant
+EfficiOS Inc.
+http://www.efficios.com
