@@ -1,28 +1,18 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [RFC PATCH] wfqueue: expand API,
-	simplify implementation, small performance boost
-Date: Thu, 16 Aug 2012 17:11:55 -0400
-Message-ID: <20120816211155.GA3487__29233.7169558325$1345151539$gmane$org@Krystal>
-References: <20120812145000.GA32747@Krystal>
-	<CACvQF52366ewREnRrDgi+xUBVQ6_ifWjoDv==nHik8FbCnMugA@mail.gmail.com>
-	<20120813201219.GA27637@Krystal>
-	<CACvQF51tWXaTdm9jCC=0S2XA+BdzJmR0W2sFVZAuVVZiWX8jAA@mail.gmail.com>
-	<20120814222724.GA9751@Krystal>
-	<CACvQF51LxhB+H8X9MqmDTS4xmGUyttTMNk66=NLvqsBkw00qXg@mail.gmail.com>
-	<20120815125209.GA11737@Krystal>
-	<CACvQF52Z-wyz=LPOjZyJpfhHdF8cAtr8A5bWABM=3A95=q8Egg@mail.gmail.com>
-	<CACvQF53D1u4FYcY9ab5J6XRi0E4Z+5mM++DgpVR+Vumqvr15wQ@mail.gmail.com>
+From: Julien Desfossez <jdesfossez@efficios.com>
+Subject: [BABELTRACE PATCH v2] Add BT_SEEK_LAST type to
+	bt_iter_pos
+Date: Thu, 16 Aug 2012 17:48:07 -0400
+Message-ID: <1345153687-15832-1-git-send-email-jdesfossez__4965.6413183131$1345153733$gmane$org@efficios.com>
+References: <1345140842-21819-1-git-send-email-francis.deslauriers@polymtl.ca>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from smtp.ini-tech.com ([213.239.202.151])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1T27MC-0005cO-QD
-	for lttng-dev@lists.lttng.org; Thu, 16 Aug 2012 17:11:56 -0400
-Content-Disposition: inline
-In-Reply-To: <CACvQF53D1u4FYcY9ab5J6XRi0E4Z+5mM++DgpVR+Vumqvr15wQ@mail.gmail.com>
+	(envelope-from <jdesfossez@efficios.com>) id 1T27vZ-0005rx-5O
+	for lttng-dev@lists.lttng.org; Thu, 16 Aug 2012 17:48:29 -0400
+In-Reply-To: <1345140842-21819-1-git-send-email-francis.deslauriers@polymtl.ca>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -31,80 +21,255 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Lai Jiangshan <eag0628@gmail.com>
-Cc: lttng-dev@lists.lttng.org, Paul McKenney <paulmck@linux.vnet.ibm.com>, rp@svcs.cs.pdx.edu
+To: mathieu.desnoyers@efficios.com
+Cc: lttng-dev@lists.lttng.org, Julien Desfossez <jdesfossez@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-* Lai Jiangshan (eag0628@gmail.com) wrote:
-> We need the smallest patch at first, all other things left in disscussion.
-> no free_each(), simple changes.
+From: Francis Deslauriers <francis.deslauriers@polymtl.ca>
 
-I guess you mean for_each().
+Signed-off-by: Francis Deslauriers <francis.deslauriers@polymtl.ca>
+Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
+---
+ include/babeltrace/iterator.h |    1 +
+ lib/iterator.c                |  207 +++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 208 insertions(+)
 
-If we limit ourself to the versions where the user is doing the locking,
-I don't think there were any issues left.
-
-In the version I provided (in the last series of 2 patches), I took care
-of all issues that were raised in our email discussion.
-
-I prefer to introduce these new API members all in one go, mainly because
-I really don't want to add new API members (exposed through the public API)
-and then remove them afterward when we notice that they expose too many
-details. I think the current splice, dequeue, next, and first API
-members allow any user to do the kind of use-case that call_rcu is
-doing: this lets us achieve your original goal of not duplicating the
-code everywhere.
-
-If you still notice issues with __cds_wfq_for_each_blocking() and
-__cds_wfq_for_each_blocking_safe() in the last patch, please let me
-know,
-
-Thanks !
-
-Mathieu
-
-> 
-> thanks,
-> Lai
-> 
-> On Thu, Aug 16, 2012 at 10:08 AM, Lai Jiangshan <eag0628@gmail.com> wrote:
-> >>>
-> >>> Is it false sharing?
-> >>> Access to q->head.next and access to q->tail have the same performance
-> >>> because they are in the same cache line.
-> >>
-> >> Yes! you are right! And a quick benchmark confirms it:
-> >>
-> >> with head and tail on same cache line:
-> >>
-> >> SUMMARY /home/compudj/doc/userspace-rcu/tests/.libs/lt-test_urcu_wfq testdur   10 nr_enqueuers   1 wdelay      0 nr_dequeuers   1 rdur      0 nr_enqueues    100833595 nr_dequeues     88647134 successful enqueues 100833595 successful dequeues     88646898 end_dequeues 12186697 nr_ops 189480729
-> >>
-> >> with a 256 bytes padding between head and tail, keeping the mutex on the
-> >> "head" cache line:
-> >>
-> >> SUMMARY /home/compudj/doc/userspace-rcu/tests/.libs/lt-test_urcu_wfq testdur   10 nr_enqueuers   1 wdelay      0 nr_dequeuers   1 rdur      0 nr_enqueues    228992829 nr_dequeues    228921791 successful enqueues 228992829 successful dequeues    228921367 end_dequeues 71462 nr_ops 457914620
-> >>
-> >> enqueue: 127% speedup
-> >> dequeue: 158% speedup
-> >>
-> >> That is indeed a _really_ huge difference. However, to get this, we
-> >> would have to increase the size of struct cds_wfq_queue beyond its
-> >> current size, which would break API compatibility. Any idea on how to
-> >> best do this without causing incompatibility would be welcome.
-> >>
-> >
-> > choice 1) two set of APIs?(cache-line-opt and none-cache-line-opt),
-> > many users don't need the cache-line-opt.
-> > choice 2) Just break the compatibility for NONE-LGPL. I think
-> > NONE-LGPL-user of it is rare. And current version of urcu <1.0, I
-> > don't like too much burden when <1.0.
-> >
-> >
-> > thanks,
-> > Lai
-
+diff --git a/include/babeltrace/iterator.h b/include/babeltrace/iterator.h
+index aa6470e..c8edbd1 100644
+--- a/include/babeltrace/iterator.h
++++ b/include/babeltrace/iterator.h
+@@ -48,6 +48,7 @@ struct bt_iter_pos {
+ 		BT_SEEK_CUR,
+ 		BT_SEEK_BEGIN,
+ 		BT_SEEK_END,
++		BT_SEEK_LAST
+ 	} type;
+ 	union {
+ 		uint64_t seek_time;
+diff --git a/lib/iterator.c b/lib/iterator.c
+index f5f413e..16b54bc 100644
+--- a/lib/iterator.c
++++ b/lib/iterator.c
+@@ -187,6 +187,193 @@ static int seek_ctf_trace_by_timestamp(struct ctf_trace *tin,
+ 	return found ? 0 : EOF;
+ }
+ 
++int seek_last_element_ctf_file_stream(struct trace_collection *tc,
++		struct ctf_file_stream **cfs, int max_packet,
++		int max_stream_id, int max_stream_class_id,
++		int max_trace_descriptor_id, uint64_t max_timestamp)
++{
++	struct trace_descriptor *max_td_read;
++	struct ctf_trace *max_tin;
++	struct ctf_stream_declaration *max_stream_class;
++	struct ctf_stream_definition *max_stream;
++	struct ctf_stream_pos *max_stream_pos;
++	int ret;
++
++	if (!tc)
++		return -EINVAL;
++
++	/* get the targeted trace descriptor */
++	max_td_read = g_ptr_array_index(tc->array, max_trace_descriptor_id);
++	max_tin = container_of(max_td_read, struct ctf_trace, parent);
++
++	/* get targeted stream class */
++	max_stream_class = g_ptr_array_index(max_tin->streams,
++						max_stream_class_id);
++	/* get targeted stream */
++	max_stream = g_ptr_array_index(max_stream_class->streams,
++					max_stream_id);
++	*cfs = container_of(max_stream, struct ctf_file_stream, parent);
++	max_stream_pos = &(*cfs)->pos;
++
++	/* we seek to the last packet of the stream. */
++	max_stream_pos->packet_seek(&max_stream_pos->parent,
++			max_packet, SEEK_SET);
++	/*
++	 * iterate over all the event until we reach on that
++	 * his timestamp correspond with the max saved previously.
++	 */
++	do {
++		ret = stream_read_event(*cfs);
++	} while ((*cfs)->parent.real_timestamp != max_timestamp && ret == 0);
++
++	/* insert the stream in the heap */
++	return ret;
++}
++
++int find_last_event(struct ctf_file_stream *cfs, uint64_t *timestamp_end,
++		int *packet)
++{
++	struct ctf_stream_pos *stream_pos;
++	uint64_t tmp = 0;
++	int ret = 0;
++	int count = 0;
++	int event_read = 0;
++	int i;
++
++	if (!cfs)
++		return -EINVAL;
++
++	stream_pos = &cfs->pos;
++	/*
++	 * we start by the last packet as the current one.
++	 * If the current one is empty we go back one packet if possible.
++	 */
++	for (i = stream_pos->packet_real_index->len - 1; i >= 0; i--) {
++		stream_pos->packet_seek(&stream_pos->parent, i, SEEK_SET);
++		count = 0;
++		/* read each event until we reach the end of the packet */
++		do {
++			tmp = cfs->parent.real_timestamp;
++			ret = stream_read_event(cfs);
++			count++;
++		} while (ret == 0);
++
++		if (count > 1)
++			event_read = 1;
++		/*
++		 * Check if we have read at least one event before
++		 * reaching the end of file.
++		 */
++		if (ret == EOF && count > 1) {
++			*timestamp_end = tmp;
++			*packet = i;
++			break;
++		}
++		/* Error */
++		else if (ret > 0) {
++			return ret;
++		}
++	}
++
++	/* Check if we read at least one event on the stream */
++	if (!event_read) {
++		return 1;
++	}
++	return 0;
++}
++
++int find_max_timestamp_ctf_file_stream(
++		struct ctf_stream_declaration *stream_class, int *max_stream_id,
++		int *packet, uint64_t *max_timestamp, int *new_max)
++{
++	struct ctf_file_stream *cfs;
++	uint64_t savedtime;
++	int i;
++	int max_packet = 0;
++	int ret = 0;
++	int error = 1;
++
++	for (i = 0; i < stream_class->streams->len; i++) {
++		struct ctf_stream_definition *stream;
++
++		stream = g_ptr_array_index(stream_class->streams, i);
++		if (!stream)
++			continue;
++		cfs = container_of(stream, struct ctf_file_stream, parent);
++		ret = find_last_event(cfs, &savedtime, &max_packet);
++		/* Can return either EOF, 0, or error (> 0). */
++		if (ret == 0 && savedtime >= *max_timestamp) {
++			*new_max = 1;
++			*max_stream_id = i;
++			*packet = max_packet;
++			*max_timestamp = savedtime;
++		}
++		error = error & ret;
++	}
++
++	return error;
++}
++
++int seek_last_ctf_file_stream(struct trace_collection *tc,
++				struct ctf_file_stream **cfs)
++{
++	uint64_t max_timestamp = 0;
++	int i, j;
++	int ret;
++	int found = 0;
++	int new_max_found;
++	int max_packet;
++	int max_stream_id;
++	int max_stream_class_id;
++	int max_trace_descriptor_id;
++
++	if (!tc)
++		return -EINVAL;
++
++	/* For each trace in the trace_collection */
++	for (i = 0; i < tc->array->len; i++) {
++		struct ctf_trace *tin;
++		struct trace_descriptor *td_read;
++
++		td_read = g_ptr_array_index(tc->array, i);
++		if (!td_read)
++			continue;
++		tin = container_of(td_read, struct ctf_trace, parent);
++		/* For each stream_class in the trace */
++		for (j = 0; j < tin->streams->len; j++) {
++			struct ctf_stream_declaration *stream_class;
++
++			stream_class = g_ptr_array_index(tin->streams, j);
++			if (!stream_class)
++				continue;
++			/* For each file_stream in the stream_class */
++			new_max_found = 0;
++			ret = find_max_timestamp_ctf_file_stream(stream_class,
++					&max_stream_id, &max_packet,
++					&max_timestamp, &new_max_found);
++			if (!ret && new_max_found) {
++				found = 1;
++				max_trace_descriptor_id = i;
++				max_stream_class_id = j;
++			}
++		}
++	}
++	/*
++	 * Now we know in which trace, stream_class and stream is the
++	 * last event of the trace_collection.
++	 * We can seek to this targeted event.
++	 */
++	if (!found) {
++		ret = -1;
++	} else {
++		ret = seek_last_element_ctf_file_stream(tc, cfs, max_packet,
++				max_stream_id, max_stream_class_id,
++				max_trace_descriptor_id, max_timestamp);
++	}
++
++	return ret;
++}
++
+ int bt_iter_set_pos(struct bt_iter *iter, const struct bt_iter_pos *iter_pos)
+ {
+ 	struct trace_collection *tc;
+@@ -329,6 +516,26 @@ int bt_iter_set_pos(struct bt_iter *iter, const struct bt_iter_pos *iter_pos)
+ 			}
+ 		}
+ 		break;
++	case BT_SEEK_LAST:
++	{
++		struct ctf_file_stream *cfs;
++
++		tc = iter->ctx->tc;
++		ret = seek_last_ctf_file_stream(tc, &cfs);
++		if (ret < 0)
++			goto error;
++
++		/* remove all stream from the heap*/
++		heap_free(iter->stream_heap);
++		/* Create a new empty heap*/
++		ret = heap_init(iter->stream_heap, 0, stream_compare);
++		if (ret < 0)
++			goto error;
++		/*Insert the stream that contains the last event.*/
++		heap_insert(iter->stream_heap, cfs);
++
++		return 0;
++	}
+ 	default:
+ 		/* not implemented */
+ 		return -EINVAL;
 -- 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+1.7.10.4
