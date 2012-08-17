@@ -1,18 +1,18 @@
-From: Julien Desfossez <jdesfossez@efficios.com>
-Subject: [BABELTRACE PATCH v3] Add BT_SEEK_LAST type to
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [BABELTRACE PATCH v4] Add BT_SEEK_LAST type to
 	bt_iter_pos
-Date: Thu, 16 Aug 2012 19:31:26 -0400
-Message-ID: <1345159886-21597-1-git-send-email-jdesfossez__43566.5418430746$1345159924$gmane$org@efficios.com>
-References: <1345153687-15832-1-git-send-email-jdesfossez@efficios.com>
+Date: Thu, 16 Aug 2012 21:30:36 -0400
+Message-ID: <20120817013036.GB6294__37259.4289984137$1345167064$gmane$org@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([213.239.202.151])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jdesfossez@efficios.com>) id 1T29XP-0006dl-Ni
-	for lttng-dev@lists.lttng.org; Thu, 16 Aug 2012 19:31:40 -0400
-In-Reply-To: <1345153687-15832-1-git-send-email-jdesfossez@efficios.com>
+	(envelope-from <compudj@mail.openrapids.net>) id 1T2BOY-0007W8-1C
+	for lttng-dev@lists.lttng.org; Thu, 16 Aug 2012 21:30:38 -0400
+Content-Disposition: inline
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,24 +21,39 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: mathieu.desnoyers@efficios.com
-Cc: lttng-dev@lists.lttng.org, Julien Desfossez <jdesfossez@efficios.com>
+To: francis.deslauriers@polymtl.ca, Julien Desfossez <jdesfossez@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-From: Francis Deslauriers <francis.deslauriers@polymtl.ca>
+Inspired from patch by Francis Deslauriers and Julien Desfossez.
 
-Signed-off-by: Francis Deslauriers <francis.deslauriers@polymtl.ca>
-Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
+Comments are welcome. I left a FIXME as question.
+
+Not tested.
+
+Not-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- include/babeltrace/iterator.h |    1 +
- lib/iterator.c                |  192 +++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 193 insertions(+)
-
 diff --git a/include/babeltrace/iterator.h b/include/babeltrace/iterator.h
-index aa6470e..c13055d 100644
+index aa6470e..98504a5 100644
 --- a/include/babeltrace/iterator.h
 +++ b/include/babeltrace/iterator.h
-@@ -48,6 +48,7 @@ struct bt_iter_pos {
+@@ -40,6 +40,15 @@ struct bt_saved_pos;
+  *   is expressed in nanoseconds
+  * - restore is a position saved with bt_iter_get_pos, it is used with
+  *   BT_SEEK_RESTORE.
++ *
++ * Note about BT_SEEK_LAST: if many events happen to be at the last
++ * timestamp, it is implementation-defined which event will be the last,
++ * and the order of events with the same timestamp may not be the same
++ * as normal iteration on the trace. Therefore, it is recommended to
++ * only use BT_SEEK_LAST to get the timestamp of the last event(s) in
++ * the trace.
++ * FIXME: should we name it BT_SEEK_LAST_TIMESTAMP instead, if we ever
++ * want to keep BT_SEEK_LAST for the last event in iteration order ?
+  */
+ struct bt_iter_pos {
+ 	enum {
+@@ -48,6 +57,7 @@ struct bt_iter_pos {
  		BT_SEEK_CUR,
  		BT_SEEK_BEGIN,
  		BT_SEEK_END,
@@ -47,148 +62,132 @@ index aa6470e..c13055d 100644
  	union {
  		uint64_t seek_time;
 diff --git a/lib/iterator.c b/lib/iterator.c
-index f5f413e..b7ab2b5 100644
+index 2dbd77c..b305f16 100644
 --- a/lib/iterator.c
 +++ b/lib/iterator.c
-@@ -187,6 +187,179 @@ static int seek_ctf_trace_by_timestamp(struct ctf_trace *tin,
+@@ -103,6 +103,10 @@ void bt_iter_free_pos(struct bt_iter_pos *iter_pos)
+  *
+  * Return 0 if the seek succeded, EOF if we didn't find any packet
+  * containing the timestamp, or a positive integer for error.
++ *
++ * TODO: this should be turned into a binary search! It is currently
++ * doing a linear search in the packets. This is a O(n) operation on a
++ * very frequent code path.
+  */
+ static int seek_file_stream_by_timestamp(struct ctf_file_stream *cfs,
+ 		uint64_t timestamp)
+@@ -187,6 +191,148 @@ static int seek_ctf_trace_by_timestamp(struct ctf_trace *tin,
  	return found ? 0 : EOF;
  }
  
-+static int seek_last_element_ctf_file_stream(struct trace_collection *tc,
-+		struct ctf_file_stream **cfs, int max_packet,
-+		int max_stream_id, int max_stream_class_id,
-+		int max_trace_descriptor_id, uint64_t max_timestamp)
++/*
++ * Find timestamp of last event in the stream.
++ *
++ * Return value: 0 if OK, positive error value on error, EOF if no
++ * events were found.
++ */
++static int find_max_timestamp_ctf_file_stream(struct ctf_file_stream *cfs,
++		uint64_t *timestamp_end)
 +{
-+	int ret;
-+	struct trace_descriptor *max_td_read;
-+	struct ctf_trace *max_tin;
-+	struct ctf_stream_declaration *max_stream_class;
-+	struct ctf_stream_definition *max_stream;
-+	struct ctf_stream_pos *max_stream_pos;
-+
-+	max_td_read = g_ptr_array_index(tc->array,
-+					max_trace_descriptor_id);
-+	max_tin = container_of(max_td_read,
-+				struct ctf_trace, parent);
-+	max_stream_class = g_ptr_array_index(max_tin->streams,
-+						max_stream_class_id);
-+	max_stream = g_ptr_array_index(max_stream_class->streams,
-+					max_stream_id);
-+	*cfs = container_of(max_stream,
-+				struct ctf_file_stream, parent);
-+	max_stream_pos = &(*cfs)->pos;
-+	/* we seek to the last packet of the stream. */
-+	max_stream_pos->packet_seek(&max_stream_pos->parent,
-+			max_packet, SEEK_SET);
-+	/*
-+	 * iterate over every event until we reach on an event that
-+	 * its timestamp correspond with the max saved previously.
-+	 */
-+	do {
-+		ret = stream_read_event(*cfs);
-+	} while ((*cfs)->parent.real_timestamp != max_timestamp && ret == 0);
-+
-+	/* Return > 0 if error, 0 if ok or EOF */
-+	return ret;
-+}
-+
-+static int find_last_event(struct ctf_file_stream *cfs,
-+		uint64_t *timestamp_end, int *packet)
-+{
-+	int ret = 0, count = 0, event_read = 0, i;
-+	uint64_t tmp = 0;
++	int ret, count = 0, i;
++	uint64_t timestamp = 0;
 +	struct ctf_stream_pos *stream_pos;
 +
 +	stream_pos = &cfs->pos;
 +	/*
-+	 * we start by the last packet as the current one.
-+	 * If the current one is empty we go back one packet if possible.
-+	 * Check if we have iterated on all the packets.
-+	 * If we are not short on packets, we check what
-+	 * made us leave the reading event loop.
++	 * We start by the last packet, and iterate backwards until we
++	 * either find at least one event, or we reach the first packet
++	 * (some packets can be empty).
 +	 */
-+	for (i = stream_pos->packet_real_index->len - 1; i >= 0 && count == 0; i--) {
++	for (i = stream_pos->packet_real_index->len - 1; i >= 0; i--) {
 +		stream_pos->packet_seek(&stream_pos->parent, i, SEEK_SET);
 +		count = 0;
-+		/* read each event until we reach the end of the packet */
++		/* read each event until we reach the end of the stream */
 +		do {
-+			tmp = cfs->parent.real_timestamp;
 +			ret = stream_read_event(cfs);
 +			if (ret == 0) {
 +				count++;
++				timestamp = cfs->parent.real_timestamp;
 +			}
 +		} while (ret == 0);
 +
 +		/* Error */
-+		if (ret > 0) {
++		if (ret > 0)
 +			goto end;
-+		}
-+		event_read += count;
-+		if (!count) {
++		assert(ret == EOF);
++		if (count)
 +			break;
-+		}
 +	}
-+	*packet = i;
-+	*timestamp_end = tmp;
 +
-+	/* Check if we read one or less element and return error if so */
-+	if (event_read <= 1) {
-+		ret = 1;
-+		goto end;
++	if (count) {
++		*timestamp_end = timestamp;
++		ret = 0;
++	} else {
++		/* Return EOF if no events were found */
++		ret = EOF;
 +	}
-+	ret = 0;
-+
 +end:
 +	return ret;
 +}
 +
-+static int find_max_timestamp_ctf_file_stream(
-+		struct ctf_stream_declaration *stream_class, int *max_stream_id,
-+		int *packet, uint64_t *max_timestamp, int *new_max)
++/*
++ * Find the stream within a stream class that contains the event with
++ * the largest timestamp, and save that timestamp.
++ *
++ * Return 0 if OK, EOF if no events were found in the streams, or
++ * positive value on error.
++ */
++static int find_max_timestamp_ctf_stream_class(
++		struct ctf_stream_declaration *stream_class,
++		struct ctf_file_stream **cfsp,
++		uint64_t *max_timestamp)
 +{
-+	struct ctf_file_stream *cfs;
-+	int max_packet = 0, ret = 0, error = 1, i;
-+	uint64_t savedtime;
++	int ret = EOF, i;
 +
 +	for (i = 0; i < stream_class->streams->len; i++) {
 +		struct ctf_stream_definition *stream;
++		struct ctf_file_stream *cfs;
++		uint64_t current_max_ts = 0;
 +
 +		stream = g_ptr_array_index(stream_class->streams, i);
 +		if (!stream)
 +			continue;
 +		cfs = container_of(stream, struct ctf_file_stream, parent);
-+		ret = find_last_event(cfs, &savedtime, &max_packet);
-+		/* Can return either EOF, 0, or error (> 0). */
-+		if (ret == 0 && savedtime >= *max_timestamp) {
-+			*new_max = 1;
-+			*max_stream_id = i;
-+			*packet = max_packet;
-+			*max_timestamp = savedtime;
++		ret = find_max_timestamp_ctf_file_stream(cfs, &current_max_ts);
++		if (ret == EOF)
++			continue;
++		if (ret != 0)
++			break;
++		if (current_max_ts >= *max_timestamp) {
++			*max_timestamp = current_max_ts;
++			*cfsp = cfs;
 +		}
-+		/*
-+		 * if one of the return values is equal to 0 than
-+		 * error equals 0
-+		 */
-+		error = error & ret;
 +	}
-+	return error;
++	assert(ret >= 0 || ret == EOF);
++	return ret;
 +}
 +
-+static int seek_last_ctf_file_stream(struct trace_collection *tc,
-+		struct ctf_file_stream **cfs)
++/*
++ * seek_last_ctf_trace_collection: seek trace collection to last event.
++ *
++ * Return 0 if OK, EOF if no events were found, or positive error value
++ * on error.
++ */
++static int seek_last_ctf_trace_collection(struct trace_collection *tc,
++		struct ctf_file_stream **cfsp)
 +{
-+	int i, j, ret, new_max_found, max_packet, max_stream_id,
-+			max_stream_class_id, max_trace_descriptor_id;
++	int i, j, ret;
 +	int found = 0;
 +	uint64_t max_timestamp = 0;
 +
 +	if (!tc)
-+		return -EINVAL;
++		return 1;
 +
 +	/* For each trace in the trace_collection */
 +	for (i = 0; i < tc->array->len; i++) {
 +		struct ctf_trace *tin;
 +		struct trace_descriptor *td_read;
++
 +		td_read = g_ptr_array_index(tc->array, i);
 +		if (!td_read)
 +			continue;
@@ -200,37 +199,33 @@ index f5f413e..b7ab2b5 100644
 +			stream_class = g_ptr_array_index(tin->streams, j);
 +			if (!stream_class)
 +				continue;
-+			/* For each file_stream in the stream_class */
-+			new_max_found = 0;
-+			ret = find_max_timestamp_ctf_file_stream(stream_class,
-+					&max_stream_id, &max_packet,
-+					&max_timestamp, &new_max_found);
-+			if (!ret && new_max_found) {
++			ret = find_max_timestamp_ctf_stream_class(stream_class,
++					cfsp, &max_timestamp);
++			if (ret > 0)
++				goto end;
++			if (ret == 0)
 +				found = 1;
-+				max_trace_descriptor_id = i;
-+				max_stream_class_id = j;
-+			}
++			assert(ret == EOF || ret == 0);
 +		}
 +	}
 +	/*
-+	 * Now we know in which trace, stream_class and stream is the
-+	 * last event of the trace_collection.
-+	 * We can seek to this targeted event.
++	 * Now we know in which file stream the last event is located,
++	 * and we know its timestamp.
 +	 */
 +	if (!found) {
-+		ret = -1;
++		ret = EOF;
 +	} else {
-+		ret = seek_last_element_ctf_file_stream(tc, cfs, max_packet,
-+				max_stream_id, max_stream_class_id,
-+				max_trace_descriptor_id, max_timestamp);
++		ret = seek_file_stream_by_timestamp(*cfsp, max_timestamp);
++		assert(ret == 0);
 +	}
++end:
 +	return ret;
 +}
 +
  int bt_iter_set_pos(struct bt_iter *iter, const struct bt_iter_pos *iter_pos)
  {
  	struct trace_collection *tc;
-@@ -329,6 +502,25 @@ int bt_iter_set_pos(struct bt_iter *iter, const struct bt_iter_pos *iter_pos)
+@@ -332,6 +478,25 @@ int bt_iter_set_pos(struct bt_iter *iter, const struct bt_iter_pos *iter_pos)
  			}
  		}
  		break;
@@ -239,22 +234,25 @@ index f5f413e..b7ab2b5 100644
 +		struct ctf_file_stream *cfs;
 +
 +		tc = iter->ctx->tc;
-+		ret = seek_last_ctf_file_stream(tc, &cfs);
-+		if (ret < 0)
++		ret = seek_last_ctf_trace_collection(tc, &cfs);
++		if (ret != 0)
 +			goto error;
-+		/* remove all stream from the heap */
++		/* remove all streams from the heap */
 +		heap_free(iter->stream_heap);
 +		/* Create a new empty heap */
 +		ret = heap_init(iter->stream_heap, 0, stream_compare);
 +		if (ret < 0)
 +			goto error;
 +		/* Insert the stream that contains the last event */
-+		heap_insert(iter->stream_heap, cfs);
-+
-+		return 0;
++		ret = heap_insert(iter->stream_heap, cfs);
++		if (ret)
++			goto error;
 +	}
  	default:
  		/* not implemented */
  		return -EINVAL;
 -- 
-1.7.10.4
+Mathieu Desnoyers
+Operating System Efficiency R&D Consultant
+EfficiOS Inc.
+http://www.efficios.com
