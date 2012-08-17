@@ -1,29 +1,18 @@
-From: Lai Jiangshan <eag0628@gmail.com>
-Subject: Re: [RFC PATCH] wfqueue: expand API,
- simplify implementation, small performance boost
-Date: Fri, 17 Aug 2012 09:57:34 +0800
-Message-ID: <CACvQF50Z60FxHOHa_s_AC309knr6cozZjEtrYFpwyYaRg0uSLw__3173.48286412216$1345168684$gmane$org@mail.gmail.com>
-References: <20120812145000.GA32747@Krystal>
-	<CACvQF52366ewREnRrDgi+xUBVQ6_ifWjoDv==nHik8FbCnMugA@mail.gmail.com>
-	<20120813201219.GA27637@Krystal>
-	<CACvQF51tWXaTdm9jCC=0S2XA+BdzJmR0W2sFVZAuVVZiWX8jAA@mail.gmail.com>
-	<20120814222724.GA9751@Krystal>
-	<CACvQF51LxhB+H8X9MqmDTS4xmGUyttTMNk66=NLvqsBkw00qXg@mail.gmail.com>
-	<20120815125209.GA11737@Krystal>
-	<CACvQF52Z-wyz=LPOjZyJpfhHdF8cAtr8A5bWABM=3A95=q8Egg@mail.gmail.com>
-	<CACvQF53D1u4FYcY9ab5J6XRi0E4Z+5mM++DgpVR+Vumqvr15wQ@mail.gmail.com>
-	<20120816211155.GA3487@Krystal>
+From: Julien Desfossez <jdesfossez@efficios.com>
+Subject: Re: [BABELTRACE PATCH v4] Add BT_SEEK_LAST type to
+	bt_iter_pos
+Date: Thu, 16 Aug 2012 22:36:10 -0400
+Message-ID: <502DAE1A.8020303__40917.8029666238$1345171005$gmane$org@efficios.com>
+References: <20120817013036.GB6294@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qa0-f48.google.com ([209.85.216.48])
+Received: from fukushima.klipix.org ([93.20.26.243])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <eag0628@gmail.com>) id 1T2Boi-0007hs-M7
-	for lttng-dev@lists.lttng.org; Thu, 16 Aug 2012 21:57:41 -0400
-Received: by qady1 with SMTP id y1so1340239qad.14
-	for <lttng-dev@lists.lttng.org>; Thu, 16 Aug 2012 18:57:35 -0700 (PDT)
-In-Reply-To: <20120816211155.GA3487@Krystal>
+	(envelope-from <jdesfossez@efficios.com>) id 1T2CQA-00080T-6X
+	for lttng-dev@lists.lttng.org; Thu, 16 Aug 2012 22:36:22 -0400
+In-Reply-To: <20120817013036.GB6294@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -33,121 +22,239 @@ List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev@lists.lttng.org, Paul McKenney <paulmck@linux.vnet.ibm.com>, rp@svcs.cs.pdx.edu
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Patches are sent? I'm in vacation, I can't recieve them.
-
-__cds_wfq_for_each_blocking_safe() sounds like we can
-delete any node in for_each(), it breaks the mantics of QUEUE.
-and the users and we don't know how to delete a node. for_each_safe()
-is just a special things for call_rcu_thread() which destroy all
-node in a tmp queue.
-
-so I prefer to use sync_next() in the call_rcu_thread() as my original patch
-now, it is also very simple. the for_each_safe() sugar is not required
-in call_rcu_thread().
-
-=====
-I think we need dequeue_all() API.
-splice() = dequeue_all() + enqueue(list).
-dequeue_all(): 1 xchg()
-enqueue(): 1 xchg()
-splice(): 2 xchg()
-
-And if no dequeue_all(), the users have to use splice()+tmp instead,
-not straightly.
-So it is worth to have dequeue_all().
-=====
-
-the first smallest patch can be:
-equeue(),sync_next(),dequeue(),dequeue_all(),splice().
-
-Leave all the other things in future patches.
-
-Thanks,
-Lai.
-
-"other things" list in my view:
-What memroy barrier should be add to dequeue()?
-for_each() APIs and mantics.
-cache-line-opt queue or current(none-cache-line-opt) or both and
-related compatibility thing.
 
 
+On 16/08/12 09:30 PM, Mathieu Desnoyers wrote:
+> Inspired from patch by Francis Deslauriers and Julien Desfossez.
+> 
+> Comments are welcome. I left a FIXME as question.
+> 
+> Not tested.
+I tested it, it is working, just need to add the "break" missing I added
+in comments below.
 
-On Fri, Aug 17, 2012 at 5:11 AM, Mathieu Desnoyers
-<mathieu.desnoyers@efficios.com> wrote:
-> * Lai Jiangshan (eag0628@gmail.com) wrote:
->> We need the smallest patch at first, all other things left in disscussion.
->> no free_each(), simple changes.
->
-> I guess you mean for_each().
->
-> If we limit ourself to the versions where the user is doing the locking,
-> I don't think there were any issues left.
->
-> In the version I provided (in the last series of 2 patches), I took care
-> of all issues that were raised in our email discussion.
->
-> I prefer to introduce these new API members all in one go, mainly because
-> I really don't want to add new API members (exposed through the public API)
-> and then remove them afterward when we notice that they expose too many
-> details. I think the current splice, dequeue, next, and first API
-> members allow any user to do the kind of use-case that call_rcu is
-> doing: this lets us achieve your original goal of not duplicating the
-> code everywhere.
->
-> If you still notice issues with __cds_wfq_for_each_blocking() and
-> __cds_wfq_for_each_blocking_safe() in the last patch, please let me
-> know,
->
-> Thanks !
->
-> Mathieu
->
->>
->> thanks,
->> Lai
->>
->> On Thu, Aug 16, 2012 at 10:08 AM, Lai Jiangshan <eag0628@gmail.com> wrote:
->> >>>
->> >>> Is it false sharing?
->> >>> Access to q->head.next and access to q->tail have the same performance
->> >>> because they are in the same cache line.
->> >>
->> >> Yes! you are right! And a quick benchmark confirms it:
->> >>
->> >> with head and tail on same cache line:
->> >>
->> >> SUMMARY /home/compudj/doc/userspace-rcu/tests/.libs/lt-test_urcu_wfq testdur   10 nr_enqueuers   1 wdelay      0 nr_dequeuers   1 rdur      0 nr_enqueues    100833595 nr_dequeues     88647134 successful enqueues 100833595 successful dequeues     88646898 end_dequeues 12186697 nr_ops 189480729
->> >>
->> >> with a 256 bytes padding between head and tail, keeping the mutex on the
->> >> "head" cache line:
->> >>
->> >> SUMMARY /home/compudj/doc/userspace-rcu/tests/.libs/lt-test_urcu_wfq testdur   10 nr_enqueuers   1 wdelay      0 nr_dequeuers   1 rdur      0 nr_enqueues    228992829 nr_dequeues    228921791 successful enqueues 228992829 successful dequeues    228921367 end_dequeues 71462 nr_ops 457914620
->> >>
->> >> enqueue: 127% speedup
->> >> dequeue: 158% speedup
->> >>
->> >> That is indeed a _really_ huge difference. However, to get this, we
->> >> would have to increase the size of struct cds_wfq_queue beyond its
->> >> current size, which would break API compatibility. Any idea on how to
->> >> best do this without causing incompatibility would be welcome.
->> >>
->> >
->> > choice 1) two set of APIs?(cache-line-opt and none-cache-line-opt),
->> > many users don't need the cache-line-opt.
->> > choice 2) Just break the compatibility for NONE-LGPL. I think
->> > NONE-LGPL-user of it is rare. And current version of urcu <1.0, I
->> > don't like too much burden when <1.0.
->> >
->> >
->> > thanks,
->> > Lai
->
-> --
-> Mathieu Desnoyers
-> Operating System Efficiency R&D Consultant
-> EfficiOS Inc.
-> http://www.efficios.com
+> 
+> Not-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> ---
+> diff --git a/include/babeltrace/iterator.h b/include/babeltrace/iterator.h
+> index aa6470e..98504a5 100644
+> --- a/include/babeltrace/iterator.h
+> +++ b/include/babeltrace/iterator.h
+> @@ -40,6 +40,15 @@ struct bt_saved_pos;
+>   *   is expressed in nanoseconds
+>   * - restore is a position saved with bt_iter_get_pos, it is used with
+>   *   BT_SEEK_RESTORE.
+> + *
+> + * Note about BT_SEEK_LAST: if many events happen to be at the last
+> + * timestamp, it is implementation-defined which event will be the last,
+> + * and the order of events with the same timestamp may not be the same
+> + * as normal iteration on the trace. Therefore, it is recommended to
+> + * only use BT_SEEK_LAST to get the timestamp of the last event(s) in
+> + * the trace.
+> + * FIXME: should we name it BT_SEEK_LAST_TIMESTAMP instead, if we ever
+> + * want to keep BT_SEEK_LAST for the last event in iteration order ?
+>   */
+>  struct bt_iter_pos {
+>  	enum {
+> @@ -48,6 +57,7 @@ struct bt_iter_pos {
+>  		BT_SEEK_CUR,
+>  		BT_SEEK_BEGIN,
+>  		BT_SEEK_END,
+> +		BT_SEEK_LAST,
+>  	} type;
+>  	union {
+>  		uint64_t seek_time;
+> diff --git a/lib/iterator.c b/lib/iterator.c
+> index 2dbd77c..b305f16 100644
+> --- a/lib/iterator.c
+> +++ b/lib/iterator.c
+> @@ -103,6 +103,10 @@ void bt_iter_free_pos(struct bt_iter_pos *iter_pos)
+>   *
+>   * Return 0 if the seek succeded, EOF if we didn't find any packet
+>   * containing the timestamp, or a positive integer for error.
+> + *
+> + * TODO: this should be turned into a binary search! It is currently
+> + * doing a linear search in the packets. This is a O(n) operation on a
+> + * very frequent code path.
+>   */
+>  static int seek_file_stream_by_timestamp(struct ctf_file_stream *cfs,
+>  		uint64_t timestamp)
+> @@ -187,6 +191,148 @@ static int seek_ctf_trace_by_timestamp(struct ctf_trace *tin,
+>  	return found ? 0 : EOF;
+>  }
+>  
+> +/*
+> + * Find timestamp of last event in the stream.
+> + *
+> + * Return value: 0 if OK, positive error value on error, EOF if no
+> + * events were found.
+> + */
+> +static int find_max_timestamp_ctf_file_stream(struct ctf_file_stream *cfs,
+> +		uint64_t *timestamp_end)
+> +{
+> +	int ret, count = 0, i;
+> +	uint64_t timestamp = 0;
+> +	struct ctf_stream_pos *stream_pos;
+> +
+> +	stream_pos = &cfs->pos;
+> +	/*
+> +	 * We start by the last packet, and iterate backwards until we
+> +	 * either find at least one event, or we reach the first packet
+> +	 * (some packets can be empty).
+> +	 */
+> +	for (i = stream_pos->packet_real_index->len - 1; i >= 0; i--) {
+> +		stream_pos->packet_seek(&stream_pos->parent, i, SEEK_SET);
+> +		count = 0;
+> +		/* read each event until we reach the end of the stream */
+> +		do {
+> +			ret = stream_read_event(cfs);
+> +			if (ret == 0) {
+> +				count++;
+> +				timestamp = cfs->parent.real_timestamp;
+> +			}
+> +		} while (ret == 0);
+> +
+> +		/* Error */
+> +		if (ret > 0)
+> +			goto end;
+> +		assert(ret == EOF);
+> +		if (count)
+> +			break;
+> +	}
+> +
+> +	if (count) {
+> +		*timestamp_end = timestamp;
+> +		ret = 0;
+> +	} else {
+> +		/* Return EOF if no events were found */
+> +		ret = EOF;
+> +	}
+> +end:
+> +	return ret;
+> +}
+> +
+> +/*
+> + * Find the stream within a stream class that contains the event with
+> + * the largest timestamp, and save that timestamp.
+> + *
+> + * Return 0 if OK, EOF if no events were found in the streams, or
+> + * positive value on error.
+> + */
+> +static int find_max_timestamp_ctf_stream_class(
+> +		struct ctf_stream_declaration *stream_class,
+> +		struct ctf_file_stream **cfsp,
+> +		uint64_t *max_timestamp)
+> +{
+> +	int ret = EOF, i;
+> +
+> +	for (i = 0; i < stream_class->streams->len; i++) {
+> +		struct ctf_stream_definition *stream;
+> +		struct ctf_file_stream *cfs;
+> +		uint64_t current_max_ts = 0;
+> +
+> +		stream = g_ptr_array_index(stream_class->streams, i);
+> +		if (!stream)
+> +			continue;
+> +		cfs = container_of(stream, struct ctf_file_stream, parent);
+> +		ret = find_max_timestamp_ctf_file_stream(cfs, &current_max_ts);
+> +		if (ret == EOF)
+> +			continue;
+> +		if (ret != 0)
+> +			break;
+> +		if (current_max_ts >= *max_timestamp) {
+> +			*max_timestamp = current_max_ts;
+> +			*cfsp = cfs;
+> +		}
+> +	}
+> +	assert(ret >= 0 || ret == EOF);
+> +	return ret;
+> +}
+> +
+> +/*
+> + * seek_last_ctf_trace_collection: seek trace collection to last event.
+> + *
+> + * Return 0 if OK, EOF if no events were found, or positive error value
+> + * on error.
+> + */
+> +static int seek_last_ctf_trace_collection(struct trace_collection *tc,
+> +		struct ctf_file_stream **cfsp)
+> +{
+> +	int i, j, ret;
+> +	int found = 0;
+> +	uint64_t max_timestamp = 0;
+> +
+> +	if (!tc)
+> +		return 1;
+> +
+> +	/* For each trace in the trace_collection */
+> +	for (i = 0; i < tc->array->len; i++) {
+> +		struct ctf_trace *tin;
+> +		struct trace_descriptor *td_read;
+> +
+> +		td_read = g_ptr_array_index(tc->array, i);
+> +		if (!td_read)
+> +			continue;
+> +		tin = container_of(td_read, struct ctf_trace, parent);
+> +		/* For each stream_class in the trace */
+> +		for (j = 0; j < tin->streams->len; j++) {
+> +			struct ctf_stream_declaration *stream_class;
+> +
+> +			stream_class = g_ptr_array_index(tin->streams, j);
+> +			if (!stream_class)
+> +				continue;
+> +			ret = find_max_timestamp_ctf_stream_class(stream_class,
+> +					cfsp, &max_timestamp);
+> +			if (ret > 0)
+> +				goto end;
+> +			if (ret == 0)
+> +				found = 1;
+> +			assert(ret == EOF || ret == 0);
+> +		}
+> +	}
+> +	/*
+> +	 * Now we know in which file stream the last event is located,
+> +	 * and we know its timestamp.
+> +	 */
+> +	if (!found) {
+> +		ret = EOF;
+> +	} else {
+> +		ret = seek_file_stream_by_timestamp(*cfsp, max_timestamp);
+> +		assert(ret == 0);
+> +	}
+> +end:
+> +	return ret;
+> +}
+> +
+>  int bt_iter_set_pos(struct bt_iter *iter, const struct bt_iter_pos *iter_pos)
+>  {
+>  	struct trace_collection *tc;
+> @@ -332,6 +478,25 @@ int bt_iter_set_pos(struct bt_iter *iter, const struct bt_iter_pos *iter_pos)
+>  			}
+>  		}
+>  		break;
+> +	case BT_SEEK_LAST:
+> +	{
+> +		struct ctf_file_stream *cfs;
+> +
+> +		tc = iter->ctx->tc;
+> +		ret = seek_last_ctf_trace_collection(tc, &cfs);
+> +		if (ret != 0)
+> +			goto error;
+> +		/* remove all streams from the heap */
+> +		heap_free(iter->stream_heap);
+> +		/* Create a new empty heap */
+> +		ret = heap_init(iter->stream_heap, 0, stream_compare);
+> +		if (ret < 0)
+> +			goto error;
+> +		/* Insert the stream that contains the last event */
+> +		ret = heap_insert(iter->stream_heap, cfs);
+> +		if (ret)
+> +			goto error;
+break or return missing here.
+> +	}
+>  	default:
+>  		/* not implemented */
+>  		return -EINVAL;
