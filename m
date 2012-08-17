@@ -1,18 +1,26 @@
 From: David Goulet <dgoulet@efficios.com>
-Subject: Re: More LTTng problems
-Date: Fri, 17 Aug 2012 11:15:46 -0400
-Message-ID: <502E6022.60208__26433.3335952417$1345216580$gmane$org@efficios.com>
-References: <CAGya9MmuQi2U6sneqEPwWUrF=1rNNA-zE9yrfneGZ6QBZhBeTg@mail.gmail.com>
-	<20120817150806.GA15919@Krystal>
+Subject: [RELEASE] LTTng-tools 2.1.0-rc1
+Date: Fri, 17 Aug 2012 16:11:58 -0400
+Message-ID: <502EA58E.2060003__33222.0292454169$1345234349$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from smtp.ini-tech.com ([213.239.202.151])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1T2OH7-0005XI-OG
-	for lttng-dev@lists.lttng.org; Fri, 17 Aug 2012 11:15:49 -0400
-In-Reply-To: <20120817150806.GA15919@Krystal>
+	(envelope-from <dgoulet@efficios.com>) id 1T2Stk-0007hB-J7
+	for lttng-dev@lists.lttng.org; Fri, 17 Aug 2012 16:12:00 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by smtp.ini-tech.com (Postfix) with ESMTP id C430418720D
+	for <lttng-dev@lists.lttng.org>; Fri, 17 Aug 2012 16:13:26 -0400 (EDT)
+Received: from smtp.ini-tech.com ([127.0.0.1])
+	by localhost (smtp.ini-tech.com [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 36TlDQf8At7Q for <lttng-dev@lists.lttng.org>;
+	Fri, 17 Aug 2012 16:13:26 -0400 (EDT)
+Received: from 127.0.0.1 (cable-13.246.173-198.electronicbox.net
+	[173.246.13.198])
+	by smtp.ini-tech.com (Postfix) with ESMTPSA id E3807186CA9
+	for <lttng-dev@lists.lttng.org>; Fri, 17 Aug 2012 16:13:25 -0400 (EDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,58 +29,49 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: =?ISO-8859-1?Q?Daniel_Fle?= =?ISO-8859-1?Q?mstr=F6m?= <daniel.flemstrom@mdh.se>, lttng-dev@lists.lttng.org, Stefan Karlsson S12 <skn07007@student.mdh.se>, dgoulet@efficios.com
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA512
 
-Hi,
+Greetings everyone (including LTTng elves),
 
-Actually, this error means that a problem occurred *during* the 32 bit
-consumer spawning process... It seems the binary was found but failed
-to exec it.
+The lttng-tools project provides a session daemon (lttng-sessiond)
+that acts as a tracing registry, the "lttng" command line for tracing
+control, a lttng-ctl library for tracing control and a lttng-relayd
+for network streaming.
 
-Running the session daemon (lttng-sessiond) with options "-vvv
-- --verbose-consumer" will help us pin down the problem.
+This is the first release candidate for lttng-tools 2.1 which brings
+two exciting new features, network streaming and filtering support.
 
-Send me back the output, I'll be able to tell you what's going on (and
-also the series of command you guys did before the enable-event).
+It's the combination of a lot of work from the LTTng team so please,
+to help us improve our tools, report any bugs or misbehaving
+feature(s) that you may encounter through this mailing list or the bug
+tracker (https://bugs.lttng.org).
 
-Last thing, make sure the lttng-consumerd did not segfault (dmesg) or
-any other lttng-tools component.
+- From now on, lttng-tools is in feature freeze mode unless an *IMMENSE*
+show stopper is found.
 
-Thanks!
+2012-08-17 lttng-tools 2.1.0-rc1
+    * Feature: Network Streaming
+    * Add the lttng-relayd binary for network streaming
+    * Support user space tracer filtering
+    * Multiple fixes
+
+Project website: http://lttng.org/lttng2.0
+Download link:
+http://lttng.org/files/lttng-tools/lttng-tools-2.1.0-rc1.tar.bz2
+
+Cheers!
 David
-
-Mathieu Desnoyers:
-> It looks like you did not build a 32-bit consumer. I'm ccing David 
-> Goulet, maintainer of lttng-tools.
-> 
-> Thanks,
-> 
-> Mathieu
-> 
-> * Henrik Hautakoski (henrik@fiktivkod.org) wrote:
->> Hi. got lttng working now. but when given the following command,
->> we get an error.
->> 
->> $ lttng enable-event -a -u Error: Events: 32-bit UST consumer
->> start failed (channel channel0, session mysession)
->> 
->> Could not find any information about this error massage. do you
->> have any ideas?
->> 
->> -- Henrik Hautakoski henrik@fiktivkod.org
-> 
 -----BEGIN PGP SIGNATURE-----
 
-iQEcBAEBCgAGBQJQLmAfAAoJEELoaioR9I02rqEH/2w2QXXmpLE0iEYnl2FMrfYq
-5e6p0TH1Qb4NSKvyAuSOfFJYWpNXjAKKDC/ajUuEH5PZiFtPZqiNK/jQQcTwns9t
-dwZb1WSLm4Ue5z7jRV3yk8Gae/IaFQqbS5l3tTdKkE7rFOVO9Iew5+BPORHtBYA3
-Bvmx9CcwxeOVizKMab5Y0JK9RbuFcnurUV33tUI9DAisloutrItm84GdKyE5wZ92
-mXaneN+a0PhI68GsAmBq7dJMdjo+XABurr8oVL/kdWvUo8T1Sn298b5ki+se4zLL
-kIfAXv7x+5K8tp6jnXznG6COsjbxf7Zt3nXouyled+oKr7muhGBDi5ul1r3W9IM=
-=p8bq
+iQEcBAEBCgAGBQJQLqWLAAoJEELoaioR9I023WUH+gNuU+NL0gZInlFbFiqGG5n8
+DyvtZaUOtHr7ZoSU2cmEcNfgxzOj0jTt5lGPm7EaU7X5OUiQCiu8gz5kKsL0h5PW
+UPZ7DbGHxv8JQQCt/Ac6cydlOjbRT1fB/5GXGT+OX+g/Xzp+Utb6vrTCWCC0RvSO
+01U2NK2+IWTuRTol7ykK1WWqTStQSKPZ6ncdYjgq1FJu2gakQA4RnhblMbXWCuP9
+EZPxafSaH19mHlhDiDmtdTl7hcWTPAd0u+qNoq7kmh+stcNSn2zjv/bNldbNfaHI
+m0kfl8NferiyRpyeD4CgNtFE5W4jm29NId7IRI14/Ow8psZegF8SNlAL76Puqo8=
+=PU4p
 -----END PGP SIGNATURE-----
