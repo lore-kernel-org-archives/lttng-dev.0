@@ -1,19 +1,20 @@
-From: Henrik Hautakoski <henrik@fiktivkod.org>
-Subject: Re: More LTTng problems
-Date: Mon, 20 Aug 2012 15:14:56 +0200
-Message-ID: <CAGya9MmT494LQVy_UfR_50i64-_29bZx+eeSv96Fy+9NzZvJgQ__36346.0507397123$1345468531$gmane$org@mail.gmail.com>
-References: <CAGya9MmuQi2U6sneqEPwWUrF=1rNNA-zE9yrfneGZ6QBZhBeTg@mail.gmail.com>
-	<20120817150806.GA15919@Krystal> <502E6022.60208@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [RFC URCU PATCH] wfqueue: ABI v1,
+	simplify implementation, 2.3x to 2.6x performance boost
+Date: Mon, 20 Aug 2012 09:16:42 -0400
+Message-ID: <20120820131642.GA551__29912.1337746785$1345468634$gmane$org@Krystal>
+References: <20120815213107.GB17224@Krystal> <5032054D.7050508@cn.fujitsu.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary=bcaec51d29facb699f04c7b24b0a
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-vc0-f176.google.com ([209.85.220.176])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <henrik@fiktivkod.org>) id 1T3Ros-0002RV-I5
-	for lttng-dev@lists.lttng.org; Mon, 20 Aug 2012 09:15:03 -0400
-Received: by vcbfl11 with SMTP id fl11so6248359vcb.35
-	for <lttng-dev@lists.lttng.org>; Mon, 20 Aug 2012 06:14:56 -0700 (PDT)
-In-Reply-To: <502E6022.60208@efficios.com>
+	(envelope-from <compudj@mail.openrapids.net>) id 1T3RqX-0002T6-Jh
+	for lttng-dev@lists.lttng.org; Mon, 20 Aug 2012 09:16:45 -0400
+Content-Disposition: inline
+In-Reply-To: <5032054D.7050508@cn.fujitsu.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,315 +23,709 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: David Goulet <dgoulet@efficios.com>
-Cc: =?UTF-8?Q?Daniel_Flemstr=C3=B6m?= <daniel.flemstrom@mdh.se>, lttng-dev@lists.lttng.org, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Stefan Karlsson S12 <skn07007@student.mdh.se>
+To: Lai Jiangshan <laijs@cn.fujitsu.com>
+Cc: lttng-dev@lists.lttng.org, Paul McKenney <paulmck@linux.vnet.ibm.com>, rp@svcs.cs.pdx.edu
 List-Id: lttng-dev@lists.lttng.org
 
---bcaec51d29facb699f04c7b24b0a
-Content-Type: text/plain; charset=UTF-8
+* Lai Jiangshan (laijs@cn.fujitsu.com) wrote:
+> On 08/16/2012 05:31 AM, Mathieu Desnoyers wrote:
+> > This work is derived from the patch from Lai Jiangshan submitted as
+> > "urcu: new wfqueue implementation"
+> > (http://lists.lttng.org/pipermail/lttng-dev/2012-August/018379.html)
+> > 
+> 
 
-Ok so I attached the output from lttng-sessiond (it's large).
+Hi Lai,
 
-the commands was:
+> Hi, Mathieu
+> 
+> please add this part to your patch.
+> 
+> Changes(item5 has alternative):
+> 
+> 1) Reorder the head and the tail in struct cds_wfq_queue
+>    Reason: wfq is enqueue-preference
 
-# lttng-sessiond --vvv --no-kernel --verbose-consumer
+Is this a technical improvement over the original order ? Both cache
+lines are aligned, so it should not matter which one comes first. So I'm
+not sure why we should favor one order vs the other.
 
-# lttng list -u
+> 2) Reorder the code of ___cds_wfq_next_blocking()
+>    Reason: short code, better readability
 
-# lttng create mysession
+Yes, I agree with this change. Can you extract it into a separate patch ?
 
-# lttng enable-event -a -u
+> 
+> 3) Add cds_wfq_dequeue_[un]lock
+>    Reason: the fields of struct cds_wfq_queue are not exposed to users of lib,
+> 	but some APIs needs to have this lock held. Add this locking function
+> 	to allow the users use such APIs
 
-Nothing shows up in dmesg.
+I agree with this change too. You can put it into the same patch as (2).
 
-On Fri, Aug 17, 2012 at 5:15 PM, David Goulet <dgoulet@efficios.com> wrote:
-> -----BEGIN PGP SIGNED MESSAGE-----
-> Hash: SHA512
->
-> Hi,
->
-> Actually, this error means that a problem occurred *during* the 32 bit
-> consumer spawning process... It seems the binary was found but failed
-> to exec it.
->
-> Running the session daemon (lttng-sessiond) with options "-vvv
-> - --verbose-consumer" will help us pin down the problem.
->
-> Send me back the output, I'll be able to tell you what's going on (and
-> also the series of command you guys did before the enable-event).
->
-> Last thing, make sure the lttng-consumerd did not segfault (dmesg) or
-> any other lttng-tools component.
->
-> Thanks!
-> David
->
-> Mathieu Desnoyers:
->> It looks like you did not build a 32-bit consumer. I'm ccing David
->> Goulet, maintainer of lttng-tools.
->>
->> Thanks,
->>
->> Mathieu
->>
->> * Henrik Hautakoski (henrik@fiktivkod.org) wrote:
->>> Hi. got lttng working now. but when given the following command,
->>> we get an error.
->>>
->>> $ lttng enable-event -a -u Error: Events: 32-bit UST consumer
->>> start failed (channel channel0, session mysession)
->>>
->>> Could not find any information about this error massage. do you
->>> have any ideas?
->>>
->>> -- Henrik Hautakoski henrik@fiktivkod.org
->>
-> -----BEGIN PGP SIGNATURE-----
->
-> iQEcBAEBCgAGBQJQLmAfAAoJEELoaioR9I02rqEH/2w2QXXmpLE0iEYnl2FMrfYq
-> 5e6p0TH1Qb4NSKvyAuSOfFJYWpNXjAKKDC/ajUuEH5PZiFtPZqiNK/jQQcTwns9t
-> dwZb1WSLm4Ue5z7jRV3yk8Gae/IaFQqbS5l3tTdKkE7rFOVO9Iew5+BPORHtBYA3
-> Bvmx9CcwxeOVizKMab5Y0JK9RbuFcnurUV33tUI9DAisloutrItm84GdKyE5wZ92
-> mXaneN+a0PhI68GsAmBq7dJMdjo+XABurr8oVL/kdWvUo8T1Sn298b5ki+se4zLL
-> kIfAXv7x+5K8tp6jnXznG6COsjbxf7Zt3nXouyled+oKr7muhGBDi5ul1r3W9IM=
-> =p8bq
-> -----END PGP SIGNATURE-----
+> 
+> 4) Add cds_wfq_node_sync_next(), cds_wfq_dequeue_all_blocking()
+>    Reason: helper for for_each_*
+
+Points 4-5-6-7 will need more discussion.
+
+I don't like exposing "cds_wfq_node_sync_next()", which should remain an
+internal implementation detail not exposed to queue users.  The
+"get_first"/"get_next" API, as well as the dequeue, are providing an
+abstraction that hide the node synchronization, which makes it harder
+for the user to make mistakes. Given that the fast-path of
+cds_wfq_node_sync_next is just a pointer load and test, I don't think
+that skipping this the second time we iterate on the same queue would
+bring any significant performance improvement, but exposing sync_next
+adds in API complexity, which I would like to avoid.
+
+About cds_wfq_dequeue_all_blocking(): the "cds_wfq_splice()" I
+introduced performs the same action as "cds_wfq_dequeue_all_blocking()",
+but ensures that we can splice lists multiple times (rather than only
+once), which is a very neat side-effect. Let's imagine a use-case like
+Tree RCU, where each CPU produce a queue of call_rcu callbacks, and we
+need to merge pairs of queues together recursively until we reach the
+tree root: by doing splice() at each level of the tree, we can combine
+the queues into a single queue without ever needing to do an iteration
+on each node: no node synchronization is needed until we actually need
+to traverse the queue at the root node level.
+
+The cost of exposing dequeue_all is that we need to expose sync_next
+(more complexity for the user). As you exposed in your earlier email,
+the gain we get by exposing dequeue_all separately from splice is that
+dequeue_all is 1 xchg() operation, while splice is 2 xchg() operations.
+However, given that this operation is typically amortized over many
+nodes makes performance optimization a less compelling argument than
+simplicity of use.
+
+> 
+> 5) Add more for_each_*, which default semantic is dequeuing
+>    Reason: __cds_wfq_for_each_blocking_undequeue is enough for undequeuing loops
+> 	don't need to add more.
+> 	looping and dequeuing are the most probable use-cases.
+> 	dequeuing for_each_* make the queue like a pipe. make it act as a channel.(GO language)
+>    Alternative: rename these dequeuing __cds_wfq_for_each*() to __cds_wfq_dequeue_for_each*
+
+I notice, in the iterators you added, the presence of
+"cds_wfq_for_each_blocking_nobreak", and
+"cds_wfq_for_each_blocking_nobreak_internal", which document that this
+special flavor is needed for loops that do not have a "break" statement.
+That seems to be very much error-prone and counter-intuitive for users,
+and I would like to avoid that.
+
+The "internal" flavor, along with "sync_next" are then used in the
+call_rcu code, since they are needed to get the best performance
+possible. I don't like to use special, internal APIs for call_rcu: the
+original motivation for refactoring the wfqueue code was testability,
+and I would really like to make sure that the APIs we use internally are
+also exposed to the outside world, mainly for testability, and also
+because if we need to directly access internal interfaces to have good
+performance, it means we did a poor job at exporting APIs that allow to
+do the same kind of highly-efficient use of the queue. Exposing an API
+with the "internal" keyword in it clearly discourages users from using
+it.
 
 
+> 
+> 6) Remove __cds_wfq_for_each_blocking_safe
+>    Reason: its semantic is not clear, hard to define a well-defined semantic to it.
+> 	when we use it, we have to delete none or delete all nodes, even when we delete all nodes,
+> 	struct cds_wfq_queue still becomes stale while looping or after loop.
+
+The typical use-case I envision is:
+
+- enqueue many nodes to queue A
+
+- then, a dequeuer thread splice the content of queue A into its temporary
+  queue T (which head is local on its stack).
+
+- now, the thread is free to iterate on queue T, as many times as it
+  likes, and it does not need to change the structure of the queue while
+  iterating on it (read-only operation, without side-effect). The last
+  time it iterates on queue T, it needs to use the _safe iteration and
+  free the nodes.
+
+- after the nodes have been deleted, the queue T can be simply discarded
+  (if on stack, function return will do so; if dynamically allocated,
+  can be simply reinitialized to an empty queue, or freed).
+
+As you certainly noticed, we can iterate both on a queue being
+concurrently enqueued to, and on a queue that has been spliced into.
+Being able to use iterators and dequeue on any queue (initial enqueue,
+or queue spliced to) is a feature: we can therefore postpone the
+"sync_next" synchronization to the moment where loop iteration is really
+needed (lazy synchronization), which keeps optimal locality of reference
+of synchronization vs node data access.
+
+> 
+> 7) Rename old __cds_wfq_for_each_blocking() to __cds_wfq_for_each_blocking_undequeue()
+>    Reason: the default semantic of the other for_each_* is dequeuing.
+
+I'm not convinced that "__cds_wfq_for_each_blocking_nobreak",
+"__cds_wfq_for_each_blocking_nobreak_internal", and sync_next APIs are
+improvements over the API I propose. For call_rcu, this turns
+
+cds_wfq_enqueue()
+cds_wfq_splice_blocking()
+__cds_wfq_for_each_blocking_safe() for iteration
+
+into:
+
+cds_wfq_enqueue()
+__cds_wfq_dequeue_all_blocking()
+__cds_wfq_for_each_blocking_nobreak_internal() for iteration
+
+Maybe we could do some documentation improvement to
+"__cds_wfq_for_each_blocking(_safe)", __cds_wfq_first_blocking(),
+__cds_wfq_next_blocking() API members I proposed. Maybe I did not
+document them well enough ?
+
+Thanks,
+
+Mathieu
+
+
+> 
+> 
+> ---
+>  urcu-call-rcu-impl.h  |   13 +---
+>  urcu/static/wfqueue.h |  131 ++++++++++++++++++++++++++++--------------
+>  urcu/wfqueue.h        |  154 ++++++++++++++++++++++++++++++++++++--------------
+>  wfqueue.c             |   27 ++++++++
+>  4 files changed, 233 insertions(+), 92 deletions(-)
+> 
+> diff --git a/urcu-call-rcu-impl.h b/urcu-call-rcu-impl.h
+> index d8537d0..061c2d4 100644
+> --- a/urcu-call-rcu-impl.h
+> +++ b/urcu-call-rcu-impl.h
+> @@ -241,16 +241,15 @@ static void *call_rcu_thread(void *arg)
+>  		cmm_smp_mb();
+>  	}
+>  	for (;;) {
+> -		struct cds_wfq_queue cbs_tmp;
+> -		struct cds_wfq_node *cbs, *tmp_cbs;
+> +		while (!cds_wfq_empty(&crdp->cbs)) {
+> +			struct cds_wfq_node *cbs, *next, *tail;
+>  
+> -		cds_wfq_init(&cbs_tmp);
+> -		__cds_wfq_splice_blocking(&cbs_tmp, &crdp->cbs);
+> -		if (!cds_wfq_empty(&cbs_tmp)) {
+> +			next = __cds_wfq_dequeue_all_blocking(&crdp->cbs, &tail);
+>  			synchronize_rcu();
+>  			cbcount = 0;
+> -			__cds_wfq_for_each_blocking_safe(&cbs_tmp,
+> -					cbs, tmp_cbs) {
+> +
+> +			__cds_wfq_for_each_blocking_nobreak_internal(
+> +					next, cbs, next, tail) {
+>  				struct rcu_head *rhp;
+>  
+>  				rhp = caa_container_of(cbs,
+> diff --git a/urcu/static/wfqueue.h b/urcu/static/wfqueue.h
+> index 52e452d..e5a01ec 100644
+> --- a/urcu/static/wfqueue.h
+> +++ b/urcu/static/wfqueue.h
+> @@ -84,6 +84,22 @@ static inline bool _cds_wfq_empty(struct cds_wfq_queue *q)
+>  		&& CMM_LOAD_SHARED(q->enqueue.tail) == &q->dequeue.head;
+>  }
+>  
+> +static inline void _cds_wfq_dequeue_lock(struct cds_wfq_queue *q)
+> +{
+> +	int ret;
+> +
+> +	ret = pthread_mutex_lock(&q->dequeue.lock);
+> +	assert(!ret);
+> +}
+> +
+> +static inline void _cds_wfq_dequeue_unlock(struct cds_wfq_queue *q)
+> +{
+> +	int ret;
+> +
+> +	ret = pthread_mutex_unlock(&q->dequeue.lock);
+> +	assert(!ret);
+> +}
+> +
+>  static inline void ___cds_wfq_append(struct cds_wfq_queue *q,
+>  		struct cds_wfq_node *new_head,
+>  		struct cds_wfq_node *new_tail)
+> @@ -139,30 +155,33 @@ ___cds_wfq_node_sync_next(struct cds_wfq_node *node)
+>  	return next;
+>  }
+>  
+> +static inline struct cds_wfq_node *
+> +_cds_wfq_node_sync_next(struct cds_wfq_node *node)
+> +{
+> +	struct cds_wfq_node *next = ___cds_wfq_node_sync_next(node);
+> +
+> +	/* Load node->next before loading next's content */
+> +	cmm_smp_read_barrier_depends();
+> +	return next;
+> +}
+> +
+>  /*
+>   * ___cds_wfq_first_blocking: get first node of a queue, without dequeuing.
+>   *
+> - * Mutual exclusion with "dequeue" and "splice" operations must be ensured
+> - * by the caller.
+> + * Should be called with cds_wfq_dequeue_lock() held.
+>   */
+>  static inline struct cds_wfq_node *
+>  ___cds_wfq_first_blocking(struct cds_wfq_queue *q)
+>  {
+> -	struct cds_wfq_node *node;
+> -
+>  	if (_cds_wfq_empty(q))
+>  		return NULL;
+> -	node = ___cds_wfq_node_sync_next(&q->dequeue.head);
+> -	/* Load q->head.next before loading node's content */
+> -	cmm_smp_read_barrier_depends();
+> -	return node;
+> +	return _cds_wfq_node_sync_next(&q->dequeue.head);
+>  }
+>  
+>  /*
+>   * ___cds_wfq_next_blocking: get next node of a queue, without dequeuing.
+>   *
+> - * Mutual exclusion with "dequeue" and "splice" operations must be ensured
+> - * by the caller.
+> + * Should be called with cds_wfq_dequeue_lock() held.
+>   */
+>  static inline struct cds_wfq_node *
+>  ___cds_wfq_next_blocking(struct cds_wfq_queue *q, struct cds_wfq_node *node)
+> @@ -175,16 +194,13 @@ ___cds_wfq_next_blocking(struct cds_wfq_queue *q, struct cds_wfq_node *node)
+>  	 * node->next as a common case to ensure that iteration on nodes
+>  	 * do not frequently access enqueuer's q->tail cache line.
+>  	 */
+> -	if ((next = CMM_LOAD_SHARED(node->next)) != NULL) {
+> -		/* Load node->next before loading next's content */
+> -		cmm_smp_read_barrier_depends();
+> -		return next;
+> +	if ((next = CMM_LOAD_SHARED(node->next)) == NULL) {
+> +		/* Load node->next before q->tail */
+> +		cmm_smp_rmb();
+> +		if (CMM_LOAD_SHARED(q->enqueue.tail) == node)
+> +			return NULL;
+> +		next = ___cds_wfq_node_sync_next(node);
+>  	}
+> -	/* Load node->next before q->tail */
+> -	cmm_smp_rmb();
+> -	if (CMM_LOAD_SHARED(q->enqueue.tail) == node)
+> -		return NULL;
+> -	next = ___cds_wfq_node_sync_next(node);
+>  	/* Load node->next before loading next's content */
+>  	cmm_smp_read_barrier_depends();
+>  	return next;
+> @@ -199,6 +215,8 @@ ___cds_wfq_next_blocking(struct cds_wfq_queue *q, struct cds_wfq_node *node)
+>   * list could cause dequeue to busy-loop needlessly while waiting for another
+>   * thread to be scheduled. The queue appears empty until tail->next is set by
+>   * enqueue.
+> + *
+> + * Should be called with cds_wfq_dequeue_lock() held.
+>   */
+>  static inline struct cds_wfq_node *
+>  ___cds_wfq_dequeue_blocking(struct cds_wfq_queue *q)
+> @@ -243,12 +261,41 @@ ___cds_wfq_dequeue_blocking(struct cds_wfq_queue *q)
+>  }
+>  
+>  /*
+> + * ___cds_wfq_dequeue_all_blocking: dequeue all nodes
+> + *
+> + * Dequeue all nodes from @q.
+> + * Returns the head of the dequeued nodes which tail is saved in @ret_tail.
+> + * Should be called with cds_wfq_dequeue_lock() held.
+> + */
+> +static inline struct cds_wfq_node *
+> +___cds_wfq_dequeue_all_blocking(struct cds_wfq_queue *q,
+> +		struct cds_wfq_node **ret_tail)
+> +{
+> +	struct cds_wfq_node *head;
+> +
+> +	if (_cds_wfq_empty(q))
+> +		return NULL;
+> +
+> +	head = ___cds_wfq_node_sync_next(&q->dequeue.head);
+> +	_cds_wfq_node_init(&q->dequeue.head);
+> +
+> +	/*
+> +	 * Memory barrier implied before uatomic_xchg() orders store to
+> +	 * q->dequeue.head before store to q->enqueue.tail. This is required
+> +	 * by concurrent enqueue on q, which exchanges the tail before
+> +	 * updating the previous tail's next pointer.
+> +	 */
+> +	*ret_tail = uatomic_xchg(&q->enqueue.tail, &q->dequeue.head);
+> +
+> +	return head;
+> +}
+> +
+> +/*
+>   * ___cds_wfq_splice_blocking: enqueue all src_q nodes at the end of dest_q.
+>   *
+>   * Dequeue all nodes from src_q.
+>   * dest_q must be already initialized.
+> - * caller ensures mutual exclusion of dequeue and splice operations on
+> - * src_q.
+> + * Should be called with cds_wfq_dequeue_lock() held.
+>   */
+>  static inline void
+>  ___cds_wfq_splice_blocking(struct cds_wfq_queue *dest_q,
+> @@ -256,20 +303,9 @@ ___cds_wfq_splice_blocking(struct cds_wfq_queue *dest_q,
+>  {
+>  	struct cds_wfq_node *head, *tail;
+>  
+> -	if (_cds_wfq_empty(src_q))
+> +	if ((head = ___cds_wfq_dequeue_all_blocking(src_q, &tail)) == NULL)
+>  		return;
+>  
+> -	head = ___cds_wfq_node_sync_next(&src_q->dequeue.head);
+> -	_cds_wfq_node_init(&src_q->dequeue.head);
+> -
+> -	/*
+> -	 * Memory barrier implied before uatomic_xchg() orders store to
+> -	 * src_q->head before store to src_q->tail. This is required by
+> -	 * concurrent enqueue on src_q, which exchanges the tail before
+> -	 * updating the previous tail's next pointer.
+> -	 */
+> -	tail = uatomic_xchg(&src_q->enqueue.tail, &src_q->dequeue.head);
+> -
+>  	/*
+>  	 * Append the spliced content of src_q into dest_q. Does not
+>  	 * require mutual exclusion on dest_q (wait-free).
+> @@ -282,27 +318,34 @@ static inline struct cds_wfq_node *
+>  _cds_wfq_dequeue_blocking(struct cds_wfq_queue *q)
+>  {
+>  	struct cds_wfq_node *retval;
+> -	int ret;
+>  
+> -	ret = pthread_mutex_lock(&q->dequeue.lock);
+> -	assert(!ret);
+> +	_cds_wfq_dequeue_lock(q);
+>  	retval = ___cds_wfq_dequeue_blocking(q);
+> -	ret = pthread_mutex_unlock(&q->dequeue.lock);
+> -	assert(!ret);
+> +	_cds_wfq_dequeue_unlock(q);
+> +
+>  	return retval;
+>  }
+>  
+> +static inline struct cds_wfq_node *
+> +_cds_wfq_dequeue_all_blocking(struct cds_wfq_queue *q,
+> +		struct cds_wfq_node **ret_tail)
+> +{
+> +	struct cds_wfq_node *head;
+> +
+> +	_cds_wfq_dequeue_lock(q);
+> +	head = _cds_wfq_dequeue_all_blocking(q, ret_tail);
+> +	_cds_wfq_dequeue_unlock(q);
+> +
+> +	return head;
+> +}
+> +
+>  static inline void
+>  _cds_wfq_splice_blocking(struct cds_wfq_queue *dest_q,
+>  		struct cds_wfq_queue *src_q)
+>  {
+> -	int ret;
+> -
+> -	ret = pthread_mutex_lock(&src_q->dequeue.lock);
+> -	assert(!ret);
+> +	_cds_wfq_dequeue_lock(src_q);
+>  	___cds_wfq_splice_blocking(dest_q, src_q);
+> -	ret = pthread_mutex_unlock(&src_q->dequeue.lock);
+> -	assert(!ret);
+> +	_cds_wfq_dequeue_unlock(src_q);
+>  }
+>  
+>  #ifdef __cplusplus
+> diff --git a/urcu/wfqueue.h b/urcu/wfqueue.h
+> index 446c94c..a3627ac 100644
+> --- a/urcu/wfqueue.h
+> +++ b/urcu/wfqueue.h
+> @@ -47,12 +47,12 @@ struct cds_wfq_node {
+>  
+>  struct cds_wfq_queue {
+>  	struct {
+> +		struct cds_wfq_node *tail;
+> +	} __attribute__((aligned((CAA_CACHE_LINE_SIZE)))) enqueue;
+> +	struct {
+>  		struct cds_wfq_node head;
+>  		pthread_mutex_t lock;
+>  	} __attribute__((aligned((CAA_CACHE_LINE_SIZE)))) dequeue;
+> -	struct {
+> -		struct cds_wfq_node *tail;
+> -	} __attribute__((aligned((CAA_CACHE_LINE_SIZE)))) enqueue;
+>  };
+>  
+>  #ifdef _LGPL_SOURCE
+> @@ -62,71 +62,97 @@ struct cds_wfq_queue {
+>  #define cds_wfq_node_init		_cds_wfq_node_init
+>  #define cds_wfq_init			_cds_wfq_init
+>  #define cds_wfq_empty			_cds_wfq_empty
+> +
+> +/* Locking */
+> +#define cds_wfq_dequeue_lock		_cds_wfq_dequeue_lock
+> +#define cds_wfq_dequeue_unlock		_cds_wfq_dequeue_unlock
+> +
+>  #define cds_wfq_enqueue			_cds_wfq_enqueue
+>  
+> +/*
+> + * Helpers for for_each_*:
+> + * 	cds_wfq_node_sync_next()
+> + * 	cds_wfq_dequeue_all_blocking()
+> + * 	__cds_wfq_dequeue_all_blocking()
+> + * 	__cds_wfq_first_blocking()
+> + * 	__cds_wfq_next_blocking()
+> + */
+> +#define cds_wfq_node_sync_next		_cds_wfq_node_sync_next
+> +
+>  /* Locking performed within cds_wfq calls. */
+>  #define cds_wfq_dequeue_blocking	_cds_wfq_dequeue_blocking
+> +#define cds_wfq_dequeue_all_blocking	_cds_wfq_dequeue_all_blocking
+>  #define cds_wfq_splice_blocking		_cds_wfq_splice_blocking
+> -#define cds_wfq_first_blocking		_cds_wfq_first_blocking
+> -#define cds_wfq_next_blocking		_cds_wfq_next_blocking
+>  
+> -/* Locking ensured by caller */
+> +/* Locking ensured by caller(called with cds_wfq_dequeue_lock() held) */
+>  #define __cds_wfq_dequeue_blocking	___cds_wfq_dequeue_blocking
+> +#define __cds_wfq_dequeue_all_blocking	___cds_wfq_dequeue_all_blocking
+>  #define __cds_wfq_splice_blocking	___cds_wfq_splice_blocking
+>  #define __cds_wfq_first_blocking	___cds_wfq_first_blocking
+>  #define __cds_wfq_next_blocking		___cds_wfq_next_blocking
+>  
+>  #else /* !_LGPL_SOURCE */
+>  
+> +/* !_LGPL_SOURCE wrappers */
+> +
+>  extern void cds_wfq_node_init_1(struct cds_wfq_node *node);
+>  extern void cds_wfq_init_1(struct cds_wfq_queue *q);
+>  extern bool cds_wfq_empty_1(struct cds_wfq_queue *q);
+> +
+> +extern void cds_wfq_dequeue_lock_1(struct cds_wfq_queue *q);
+> +extern void cds_wfq_dequeue_unlock_1(struct cds_wfq_queue *q);
+> +
+>  extern void cds_wfq_enqueue_1(struct cds_wfq_queue *q, struct cds_wfq_node *node);
+>  
+> +extern struct cds_wfq_node *cds_wfq_node_sync_next_1(struct cds_wfq_node *node);
+> +
+>  /* Locking performed within cds_wfq calls. */
+>  extern struct cds_wfq_node *cds_wfq_dequeue_blocking_1(struct cds_wfq_queue *q);
+> +extern struct cds_wfq_node *cds_wfq_dequeue_all_blocking_1(struct cds_wfq_queue *q,
+> +		struct cds_wfq_node **ret_tail);
+>  extern void cds_wfq_splice_blocking_1(struct cds_wfq_queue *dest_q,
+>  		struct cds_wfq_queue *src_q);
+>  
+> -/*
+> - * __cds_wfq_dequeue_blocking: caller ensures mutual exclusion of dequeue
+> - * and splice operations.
+> - */
+> +/* The following functions shouled be called with cds_wfq_dequeue_lock() held */
+>  extern struct cds_wfq_node *__cds_wfq_dequeue_blocking_1(struct cds_wfq_queue *q);
+> -
+> -/*
+> - * __cds_wfq_splice_blocking: caller ensures mutual exclusion of dequeue and
+> - * splice operations on src_q. dest_q must be already initialized.
+> - */
+> +extern struct cds_wfq_node *__cds_wfq_dequeue_all_blocking_1(struct cds_wfq_queue *q,
+> +		struct cds_wfq_node **ret_tail);
+>  extern void __cds_wfq_splice_blocking_1(struct cds_wfq_queue *dest_q,
+>  		struct cds_wfq_queue *src_q);
+> -
+> -/*
+> - * __cds_wfq_first_blocking: mutual exclusion with "dequeue" and
+> - * "splice" operations must be ensured by the caller.
+> - */
+>  extern struct cds_wfq_node *__cds_wfq_first_blocking_1(struct cds_wfq_queue *q);
+> -
+> -/*
+> - * __cds_wfq_next_blocking: mutual exclusion with "dequeue" and "splice"
+> - * operations must be ensured by the caller.
+> - */
+>  extern struct cds_wfq_node *__cds_wfq_next_blocking_1(struct cds_wfq_queue *q,
+>  		struct cds_wfq_node *node);
+>  
+> +/* !_LGPL_SOURCE APIs */
+> +
+>  #define cds_wfq_node_init		cds_wfq_node_init_1
+>  #define cds_wfq_init			cds_wfq_init_1
+>  #define cds_wfq_empty			cds_wfq_empty_1
+> +
+> +/* Locking */
+> +#define cds_wfq_dequeue_lock		cds_wfq_dequeue_lock_1
+> +#define cds_wfq_dequeue_unlock		cds_wfq_dequeue_unlock_1
+> +
+>  #define cds_wfq_enqueue			cds_wfq_enqueue_1
+>  
+> +/*
+> + * Helpers for for_each_*:
+> + * 	cds_wfq_node_sync_next()
+> + * 	cds_wfq_dequeue_all_blocking()
+> + * 	__cds_wfq_dequeue_all_blocking()
+> + * 	__cds_wfq_first_blocking()
+> + * 	__cds_wfq_next_blocking()
+> + */
+> +#define cds_wfq_node_sync_next		cds_wfq_node_sync_next_1
+> +
+>  /* Locking performed within cds_wfq calls. */
+>  #define cds_wfq_dequeue_blocking	cds_wfq_dequeue_blocking_1
+> +#define cds_wfq_dequeue_all_blocking	cds_wfq_dequeue_all_blocking_1
+>  #define cds_wfq_splice_blocking		cds_wfq_splice_blocking_1
+> -#define cds_wfq_first_blocking		cds_wfq_first_blocking_1
+> -#define cds_wfq_next_blocking		cds_wfq_next_blocking_1
+>  
+> -/* Locking ensured by caller */
+> +/* Locking ensured by caller(called with cds_wfq_dequeue_lock() held) */
+>  #define __cds_wfq_dequeue_blocking	__cds_wfq_dequeue_blocking_1
+> +#define __cds_wfq_dequeue_all_blocking	__cds_wfq_dequeue_all_blocking_1
+>  #define __cds_wfq_splice_blocking	__cds_wfq_splice_blocking_1
+>  #define __cds_wfq_first_blocking	__cds_wfq_first_blocking_1
+>  #define __cds_wfq_next_blocking		__cds_wfq_next_blocking_1
+> @@ -134,29 +160,75 @@ extern struct cds_wfq_node *__cds_wfq_next_blocking_1(struct cds_wfq_queue *q,
+>  #endif /* !_LGPL_SOURCE */
+>  
+>  /*
+> - * __cds_wfq_for_each_blocking: Iterate over all nodes in a queue,
+> + * for_each_* routines: Iterate over all nodes in a queue and dequeue
+> + * the travlled nodes(except __cds_wfq_for_each_blocking_undequeue).
+> + *
+> + * All nodes which are un-dequeued && enqueued before the for_each_*
+> + * will be travelled.
+> + *
+> + * Nodes which are enqueued after the for_each_* started MAY or may NOT
+> + * be travelled.
+> + */
+> +
+> +/*
+> + * __cds_wfq_for_each_blocking_undequeue: Iterate over all nodes in a queue,
+>   * without dequeuing them.
+>   *
+> - * Mutual exclusion with "dequeue" and "splice" operations must be
+> - * ensured by the caller.
+> + * Should be called with cds_wfq_dequeue_lock() held.
+>   */
+> -#define __cds_wfq_for_each_blocking(q, node)		\
+> +#define __cds_wfq_for_each_blocking_undequeue(q, node)	\
+>  	for (node = __cds_wfq_first_blocking(q);	\
+>  		node != NULL;				\
+>  		node = __cds_wfq_next_blocking(q, node))
+>  
+> +#define __cds_wfq_for_each_blocking_nobreak_internal(all, node, next, tail)		\
+> +	for (node = all,								\
+> +		next = ((node && node != tail) ? cds_wfq_node_sync_next(node) : NULL);	\
+> +		node != NULL;								\
+> +		node = next,								\
+> +		next = ((node && node != tail) ? cds_wfq_node_sync_next(node) : NULL))
+> +
+>  /*
+> - * __cds_wfq_for_each_blocking_safe: Iterate over all nodes in a queue,
+> - * without dequeuing them. Safe against deletion.
+> + * __cds_wfq_for_each_blocking_nobreak: Iterate over all nodes in a queue,
+> + * and dequeue them.
+>   *
+> - * Mutual exclusion with "dequeue" and "splice" operations must be
+> - * ensured by the caller.
+> + * Should not use "break;" or other statement to leave the control flow
+> + * from the loop body, otherwise it causes un-travelled nodes leak.
+> + *
+> + * Should be called with cds_wfq_dequeue_lock() held.
+> + */
+> +#define __cds_wfq_for_each_blocking_nobreak(q, node, next, tail)		\
+> +	__cds_wfq_for_each_blocking_nobreak_internal(				\
+> +		__cds_wfq_dequeue_all_blocking(q, &tail), node, next, tail)
+> +
+> +/*
+> + * cds_wfq_for_each_blocking_nobreak: Iterate over all nodes in a queue,
+> + * and dequeue them.
+> + *
+> + * Should not use "break;" or other statement to leave the control flow
+> + * from the loop body, otherwise it causes un-travelled nodes leak.
+> + */
+> +#define cds_wfq_for_each_blocking_nobreak(q, node, next, tail)			\
+> +	__cds_wfq_for_each_blocking_nobreak_internal(				\
+> +		cds_wfq_dequeue_all_blocking(q, &tail), node, next, tail)
+> +
+> +/*
+> + * __cds_wfq_for_each_blocking: Iterate over all nodes in a queue,
+> + * and dequeue them.
+> + *
+> + * Should be called with cds_wfq_dequeue_lock() held.
+> + */
+> +#define __cds_wfq_for_each_blocking(q, node)					\
+> +	for (node = __cds_wfq_dequeue_blocking(q); node;			\
+> +		node = __cds_wfq_dequeue_blocking(q))
+> +
+> +/*
+> + * cds_wfq_for_each_blocking: Iterate over all nodes in a queue,
+> + * and dequeue them.
+>   */
+> -#define __cds_wfq_for_each_blocking_safe(q, node, n)			       \
+> -	for (node = __cds_wfq_first_blocking(q),			       \
+> -			n = (node ? __cds_wfq_next_blocking(q, node) : NULL);  \
+> -		node != NULL;						       \
+> -		node = n, n = (node ? __cds_wfq_next_blocking(q, node) : NULL))
+> +#define cds_wfq_for_each_blocking(q, node)					\
+> +	for (node = cds_wfq_dequeue_blocking(q); node;				\
+> +		node = cds_wfq_dequeue_blocking(q))
+>  
+>  #ifdef __cplusplus
+>  }
+> diff --git a/wfqueue.c b/wfqueue.c
+> index b5fba7b..eee1fd8 100644
+> --- a/wfqueue.c
+> +++ b/wfqueue.c
+> @@ -44,16 +44,37 @@ bool cds_wfq_empty_1(struct cds_wfq_queue *q)
+>  	return _cds_wfq_empty(q);
+>  }
+>  
+> +void cds_wfq_dequeue_lock_1(struct cds_wfq_queue *q)
+> +{
+> +	cds_wfq_dequeue_lock(q);
+> +}
+> +
+> +void cds_wfq_dequeue_unlock_1(struct cds_wfq_queue *q)
+> +{
+> +	cds_wfq_dequeue_unlock(q);
+> +}
+> +
+>  void cds_wfq_enqueue_1(struct cds_wfq_queue *q, struct cds_wfq_node *node)
+>  {
+>  	_cds_wfq_enqueue(q, node);
+>  }
+>  
+> +struct cds_wfq_node *cds_wfq_node_sync_next_1(struct cds_wfq_node *node)
+> +{
+> +	return _cds_wfq_node_sync_next(node);
+> +}
+> +
+>  struct cds_wfq_node *cds_wfq_dequeue_blocking_1(struct cds_wfq_queue *q)
+>  {
+>  	return _cds_wfq_dequeue_blocking(q);
+>  }
+>  
+> +struct cds_wfq_node *cds_wfq_dequeue_all_blocking_1(struct cds_wfq_queue *q,
+> +		struct cds_wfq_node **ret_tail)
+> +{
+> +	return _cds_wfq_dequeue_all_blocking(q, ret_tail);
+> +}
+> +
+>  void cds_wfq_splice_blocking_1(struct cds_wfq_queue *dest_q,
+>  		struct cds_wfq_queue *src_q)
+>  {
+> @@ -65,6 +86,12 @@ struct cds_wfq_node *__cds_wfq_dequeue_blocking_1(struct cds_wfq_queue *q)
+>  	return ___cds_wfq_dequeue_blocking(q);
+>  }
+>  
+> +struct cds_wfq_node *__cds_wfq_dequeue_all_blocking_1(struct cds_wfq_queue *q,
+> +		struct cds_wfq_node **ret_tail)
+> +{
+> +	return ___cds_wfq_dequeue_all_blocking(q, ret_tail);
+> +}
+> +
+>  void __cds_wfq_splice_blocking_1(struct cds_wfq_queue *dest_q,
+>  		struct cds_wfq_queue *src_q)
+>  {
 
 -- 
-Henrik Hautakoski
-henrik@fiktivkod.org
-
---bcaec51d29facb699f04c7b24b0a
-Content-Type: application/octet-stream; name=lttng-consumerd-dump
-Content-Disposition: attachment; filename=lttng-consumerd-dump
-Content-Transfer-Encoding: base64
-X-Attachment-Id: f_h63kvcxd0
-
-LXNoLTMuMiMgbHR0bmctc2Vzc2lvbmQgLXZ2diAtLW5vLWtlcm5lbCAtLXZlcmJvc2UtY29uc3Vt
-ZXIKREVCVUczOiBDcmVhdGluZyBMVFRuZyBydW4gZGlyZWN0b3J5OiAvdmFyL3J1bi9sdHRuZyBb
-aW4gY3JlYXRlX2x0dG5nX3J1bmRpcigpIGF0IG1haW4uYzo1NTQ5XQpERUJVRzI6IEtlcm5lbCBj
-b25zdW1lciBlcnIgcGF0aDogL3Zhci9ydW4vbHR0bmcva2NvbnN1bWVyZC9lcnJvciBbaW4gbWFp
-bigpIGF0IG1haW4uYzo1Nzk3XQpERUJVRzI6IEtlcm5lbCBjb25zdW1lciBjbWQgcGF0aDogL3Zh
-ci9ydW4vbHR0bmcva2NvbnN1bWVyZC9jb21tYW5kIFtpbiBtYWluKCkgYXQgbWFpbi5jOjU3OTld
-CkRFQlVHMTogQ2xpZW50IHNvY2tldCBwYXRoIC92YXIvcnVuL2x0dG5nL2NsaWVudC1sdHRuZy1z
-ZXNzaW9uZCBbaW4gbWFpbigpIGF0IG1haW4uYzo1ODUyXQpERUJVRzE6IEFwcGxpY2F0aW9uIHNv
-Y2tldCBwYXRoIC92YXIvcnVuL2x0dG5nL2FwcHMtbHR0bmctc2Vzc2lvbmQgW2luIG1haW4oKSBh
-dCBtYWluLmM6NTg1M10KREVCVUcxOiBMVFRuZyBydW4gZGlyZWN0b3J5IHBhdGg6IC92YXIvcnVu
-L2x0dG5nIFtpbiBtYWluKCkgYXQgbWFpbi5jOjU4NTRdCkRFQlVHMjogVVNUIGNvbnN1bWVyIDMy
-IGJpdHMgZXJyIHBhdGg6IC92YXIvcnVuL2x0dG5nL3VzdGNvbnN1bWVyZDMyL2Vycm9yIFtpbiBt
-YWluKCkgYXQgbWFpbi5jOjU4NjNdCkRFQlVHMjogVVNUIGNvbnN1bWVyIDMyIGJpdHMgY21kIHBh
-dGg6IC92YXIvcnVuL2x0dG5nL3VzdGNvbnN1bWVyZDMyL2NvbW1hbmQgW2luIG1haW4oKSBhdCBt
-YWluLmM6NTg2NV0KREVCVUcyOiBVU1QgY29uc3VtZXIgNjQgYml0cyBlcnIgcGF0aDogL3Zhci9y
-dW4vbHR0bmcvdXN0Y29uc3VtZXJkNjQvZXJyb3IgW2luIG1haW4oKSBhdCBtYWluLmM6NTg3NF0K
-REVCVUcyOiBVU1QgY29uc3VtZXIgNjQgYml0cyBjbWQgcGF0aDogL3Zhci9ydW4vbHR0bmcvdXN0
-Y29uc3VtZXJkNjQvY29tbWFuZCBbaW4gbWFpbigpIGF0IG1haW4uYzo1ODc2XQpERUJVRzM6IENy
-ZWF0ZWQgaGFzaHRhYmxlIHNpemUgNCBhdCAweDEwMDUxMDgwIG9mIHR5cGUgMSBbaW4gbHR0bmdf
-aHRfbmV3KCkgYXQgaGFzaHRhYmxlLmM6OTZdCkRFQlVHMzogQ3JlYXRlZCBoYXNodGFibGUgc2l6
-ZSA0IGF0IDB4MTAwNTExNjggb2YgdHlwZSAxIFtpbiBsdHRuZ19odF9uZXcoKSBhdCBoYXNodGFi
-bGUuYzo5Nl0KREVCVUcyOiBDcmVhdGluZyBjb25zdW1lciBkaXJlY3Rvcnk6IC92YXIvcnVuL2x0
-dG5nL2tjb25zdW1lcmQgW2luIHNldF9jb25zdW1lcl9zb2NrZXRzKCkgYXQgbWFpbi5jOjU1OTFd
-CkRFQlVHMjogQ3JlYXRpbmcgY29uc3VtZXIgZGlyZWN0b3J5OiAvdmFyL3J1bi9sdHRuZy91c3Rj
-b25zdW1lcmQ2NCBbaW4gc2V0X2NvbnN1bWVyX3NvY2tldHMoKSBhdCBtYWluLmM6NTU5MV0KREVC
-VUcyOiBDcmVhdGluZyBjb25zdW1lciBkaXJlY3Rvcnk6IC92YXIvcnVuL2x0dG5nL3VzdGNvbnN1
-bWVyZDMyIFtpbiBzZXRfY29uc3VtZXJfc29ja2V0cygpIGF0IG1haW4uYzo1NTkxXQpERUJVRzE6
-IFNpZ25hbCBoYW5kbGVyIHNldCBmb3IgU0lHVEVSTSwgU0lHUElQRSBhbmQgU0lHSU5UIFtpbiBz
-ZXRfc2lnbmFsX2hhbmRsZXIoKSBhdCBtYWluLmM6NTY4M10KV2FybmluZzogTm8gdHJhY2luZyBn
-cm91cCBkZXRlY3RlZApERUJVRzE6IGVwb2xsIHNldCBtYXggc2l6ZSBpcyAxNzM5MjggW2luIGNv
-bXBhdF9lcG9sbF9zZXRfbWF4X3NpemUoKSBhdCBjb21wYXQtZXBvbGwuYzoyMjRdCkRFQlVHMTog
-W3RocmVhZF0gTWFuYWdlIGhlYWx0aCBjaGVjayBzdGFydGVkIFtpbiB0aHJlYWRfbWFuYWdlX2hl
-YWx0aCgpIGF0IG1haW4uYzo0ODYxXQpERUJVRzE6IFt0aHJlYWRdIE1hbmFnZSBjbGllbnQgc3Rh
-cnRlZCBbaW4gdGhyZWFkX21hbmFnZV9jbGllbnRzKCkgYXQgbWFpbi5jOjUwNDNdCkRFQlVHMTog
-W3RocmVhZF0gRGlzcGF0Y2ggVVNUIGNvbW1hbmQgc3RhcnRlZCBbaW4gdGhyZWFkX2Rpc3BhdGNo
-X3VzdF9yZWdpc3RyYXRpb24oKSBhdCBtYWluLmM6MTMwOF0KREVCVUcxOiBbdGhyZWFkXSBNYW5h
-Z2UgYXBwbGljYXRpb24gcmVnaXN0cmF0aW9uIHN0YXJ0ZWQgW2luIHRocmVhZF9yZWdpc3RyYXRp
-b25fYXBwcygpIGF0IG1haW4uYzoxMzc2XQpERUJVRzE6IEZ1dGV4IG4gdG8gMSBwcmVwYXJlIGRv
-bmUgW2luIGZ1dGV4X250bzFfcHJlcGFyZSgpIGF0IGZ1dGV4LmM6NzNdCkRFQlVHMTogQWNjZXB0
-aW5nIGNsaWVudCBjb21tYW5kIC4uLiBbaW4gdGhyZWFkX21hbmFnZV9jbGllbnRzKCkgYXQgbWFp
-bi5jOjUwNzldCkRFQlVHMTogV29rZW4gdXAgYnV0IG5vdGhpbmcgaW4gdGhlIFVTVCBjb21tYW5k
-IHF1ZXVlIFtpbiB0aHJlYWRfZGlzcGF0Y2hfdXN0X3JlZ2lzdHJhdGlvbigpIGF0IG1haW4uYzox
-MzE4XQpERUJVRzE6IFt0aHJlYWRdIE1hbmFnZSBhcHBsaWNhdGlvbiBzdGFydGVkIFtpbiB0aHJl
-YWRfbWFuYWdlX2FwcHMoKSBhdCBtYWluLmM6MTEzOF0KREVCVUcxOiBIZWFsdGggY2hlY2sgcmVh
-ZHkgW2luIHRocmVhZF9tYW5hZ2VfaGVhbHRoKCkgYXQgbWFpbi5jOjQ4OTRdCkRFQlVHMTogTm90
-aWZ5aW5nIGFwcGxpY2F0aW9ucyBvZiBzZXNzaW9uIGRhZW1vbiBzdGF0ZTogMSBbaW4gbm90aWZ5
-X3VzdF9hcHBzKCkgYXQgbWFpbi5jOjU5Nl0KREVCVUcxOiBUaHJlYWQgbWFuYWdlIGtlcm5lbCBz
-dGFydGVkIFtpbiB0aHJlYWRfbWFuYWdlX2tlcm5lbCgpIGF0IG1haW4uYzo3OTJdCkRFQlVHMTog
-QXBwcyB0aHJlYWQgcG9sbGluZyBvbiAyIGZkcyBbaW4gdGhyZWFkX21hbmFnZV9hcHBzKCkgYXQg
-bWFpbi5jOjExNjNdCkRFQlVHMTogVXBkYXRpbmcga2VybmVsIHBvbGwgc2V0IFtpbiB1cGRhdGVf
-a2VybmVsX3BvbGwoKSBhdCBtYWluLmM6NjU3XQpERUJVRzE6IFRocmVhZCBrZXJuZWwgcG9sbGlu
-ZyBvbiAyIGZkcyBbaW4gdGhyZWFkX21hbmFnZV9rZXJuZWwoKSBhdCBtYWluLmM6ODI1XQpERUJV
-RzE6IEdvdCB0aGUgd2FpdCBzaG0gZmQgMjAgW2luIGdldF93YWl0X3NobSgpIGF0IHNobS5jOjEx
-N10KREVCVUcxOiBGdXRleCB3YWl0IHVwZGF0ZSBhY3RpdmUgMSBbaW4gZnV0ZXhfd2FpdF91cGRh
-dGUoKSBhdCBmdXRleC5jOjYyXQpERUJVRzE6IEFjY2VwdGluZyBhcHBsaWNhdGlvbiByZWdpc3Ry
-YXRpb24gW2luIHRocmVhZF9yZWdpc3RyYXRpb25fYXBwcygpIGF0IG1haW4uYzoxNDA3XQpERUJV
-RzE6IFdhaXQgZm9yIGNsaWVudCByZXNwb25zZSBbaW4gdGhyZWFkX21hbmFnZV9jbGllbnRzKCkg
-YXQgbWFpbi5jOjUxMjFdCkRFQlVHMTogUmVjZWl2aW5nIGRhdGEgZnJvbSBjbGllbnQgLi4uIFtp
-biB0aHJlYWRfbWFuYWdlX2NsaWVudHMoKSBhdCBtYWluLmM6NTE2MF0KREVCVUcxOiBOb3RoaW5n
-IHJlY3YoKSBmcm9tIGNsaWVudC4uLiBjb250aW51aW5nIFtpbiB0aHJlYWRfbWFuYWdlX2NsaWVu
-dHMoKSBhdCBtYWluLmM6NTE2NF0KREVCVUcxOiBDbGVhbiBjb21tYW5kIGNvbnRleHQgc3RydWN0
-dXJlIFtpbiBjbGVhbl9jb21tYW5kX2N0eCgpIGF0IG1haW4uYzo1NzZdCkRFQlVHMTogQWNjZXB0
-aW5nIGNsaWVudCBjb21tYW5kIC4uLiBbaW4gdGhyZWFkX21hbmFnZV9jbGllbnRzKCkgYXQgbWFp
-bi5jOjUwNzldCkRFQlVHMTogV2FpdCBmb3IgY2xpZW50IHJlc3BvbnNlIFtpbiB0aHJlYWRfbWFu
-YWdlX2NsaWVudHMoKSBhdCBtYWluLmM6NTEyMV0KREVCVUcxOiBSZWNlaXZpbmcgZGF0YSBmcm9t
-IGNsaWVudCAuLi4gW2luIHRocmVhZF9tYW5hZ2VfY2xpZW50cygpIGF0IG1haW4uYzo1MTYwXQpE
-RUJVRzE6IFByb2Nlc3NpbmcgY2xpZW50IGNvbW1hbmQgOSBbaW4gcHJvY2Vzc19jbGllbnRfbXNn
-KCkgYXQgbWFpbi5jOjQyMDVdCkRFQlVHMjogVHJ5aW5nIHRvIGZpbmQgc2Vzc2lvbiBieSBuYW1l
-IG15c2Vzc2lvbiBbaW4gc2Vzc2lvbl9maW5kX2J5X25hbWUoKSBhdCBzZXNzaW9uLmM6MTIyXQpE
-RUJVRzM6IENyZWF0ZWQgaGFzaHRhYmxlIHNpemUgNCBhdCAweDEwMDVjNzYwIG9mIHR5cGUgMSBb
-aW4gbHR0bmdfaHRfbmV3KCkgYXQgaGFzaHRhYmxlLmM6OTZdCkRFQlVHMjogQ29uc3VtZXIgc3Vi
-ZGlyIHNldCB0byBteXNlc3Npb24tMTk3MDAxMDQtMDAwMTMxIFtpbiBjbWRfY3JlYXRlX3Nlc3Np
-b25fdXJpKCkgYXQgbWFpbi5jOjM0NTJdCkRFQlVHMzogbWtkaXIoKSByZWN1cnNpdmUgL3Jvb3Qv
-bHR0bmctdHJhY2VzL215c2Vzc2lvbi0xOTcwMDEwNC0wMDAxMzEgd2l0aCBtb2RlIDUwNCBmb3Ig
-dWlkIDAgYW5kIGdpZCAwIFtpbiBydW5fYXNfbWtkaXJfcmVjdXJzaXZlKCkgYXQgcnVuYXMuYzoz
-NDFdCkRFQlVHMTogVXNpbmcgcnVuX2FzX2Nsb25lIFtpbiBydW5fYXMoKSBhdCBydW5hcy5jOjMy
-NV0KREVCVUcxOiBUcmFjaW5nIHNlc3Npb24gbXlzZXNzaW9uIGNyZWF0ZWQgaW4gL3Jvb3QvbHR0
-bmctdHJhY2VzL215c2Vzc2lvbi0xOTcwMDEwNC0wMDAxMzEgd2l0aCBJRCAwIGJ5IFVJRCAwIEdJ
-RCAwIFtpbiBzZXNzaW9uX2NyZWF0ZSgpIGF0IHNlc3Npb24uYzoyMjddCkRFQlVHMjogVHJ5aW5n
-IHRvIGZpbmQgc2Vzc2lvbiBieSBuYW1lIG15c2Vzc2lvbiBbaW4gc2Vzc2lvbl9maW5kX2J5X25h
-bWUoKSBhdCBzZXNzaW9uLmM6MTIyXQpERUJVRzE6IFNlbmRpbmcgcmVzcG9uc2UgKHNpemU6IDE2
-LCByZXRjb2RlOiBTdWNjZXNzKSBbaW4gdGhyZWFkX21hbmFnZV9jbGllbnRzKCkgYXQgbWFpbi5j
-OjUyMTFdCkRFQlVHMTogQ2xlYW4gY29tbWFuZCBjb250ZXh0IHN0cnVjdHVyZSBbaW4gY2xlYW5f
-Y29tbWFuZF9jdHgoKSBhdCBtYWluLmM6NTc2XQpERUJVRzE6IEFjY2VwdGluZyBjbGllbnQgY29t
-bWFuZCAuLi4gW2luIHRocmVhZF9tYW5hZ2VfY2xpZW50cygpIGF0IG1haW4uYzo1MDc5XQpERUJV
-RzE6IFdhaXQgZm9yIGNsaWVudCByZXNwb25zZSBbaW4gdGhyZWFkX21hbmFnZV9jbGllbnRzKCkg
-YXQgbWFpbi5jOjUxMjFdCkRFQlVHMTogUmVjZWl2aW5nIGRhdGEgZnJvbSBjbGllbnQgLi4uIFtp
-biB0aHJlYWRfbWFuYWdlX2NsaWVudHMoKSBhdCBtYWluLmM6NTE2MF0KREVCVUcxOiBOb3RoaW5n
-IHJlY3YoKSBmcm9tIGNsaWVudC4uLiBjb250aW51aW5nIFtpbiB0aHJlYWRfbWFuYWdlX2NsaWVu
-dHMoKSBhdCBtYWluLmM6NTE2NF0KREVCVUcxOiBDbGVhbiBjb21tYW5kIGNvbnRleHQgc3RydWN0
-dXJlIFtpbiBjbGVhbl9jb21tYW5kX2N0eCgpIGF0IG1haW4uYzo1NzZdCkRFQlVHMTogQWNjZXB0
-aW5nIGNsaWVudCBjb21tYW5kIC4uLiBbaW4gdGhyZWFkX21hbmFnZV9jbGllbnRzKCkgYXQgbWFp
-bi5jOjUwNzldCkRFQlVHMTogV2FpdCBmb3IgY2xpZW50IHJlc3BvbnNlIFtpbiB0aHJlYWRfbWFu
-YWdlX2NsaWVudHMoKSBhdCBtYWluLmM6NTEyMV0KREVCVUcxOiBSZWNlaXZpbmcgZGF0YSBmcm9t
-IGNsaWVudCAuLi4gW2luIHRocmVhZF9tYW5hZ2VfY2xpZW50cygpIGF0IG1haW4uYzo1MTYwXQpE
-RUJVRzE6IFByb2Nlc3NpbmcgY2xpZW50IGNvbW1hbmQgNiBbaW4gcHJvY2Vzc19jbGllbnRfbXNn
-KCkgYXQgbWFpbi5jOjQyMDVdCkRFQlVHMTogR2V0dGluZyBzZXNzaW9uIG15c2Vzc2lvbiBieSBu
-YW1lIFtpbiBwcm9jZXNzX2NsaWVudF9tc2coKSBhdCBtYWluLmM6NDI2Nl0KREVCVUcyOiBUcnlp
-bmcgdG8gZmluZCBzZXNzaW9uIGJ5IG5hbWUgbXlzZXNzaW9uIFtpbiBzZXNzaW9uX2ZpbmRfYnlf
-bmFtZSgpIGF0IHNlc3Npb24uYzoxMjJdCkRFQlVHMTogQ3JlYXRpbmcgVVNUIHNlc3Npb24gW2lu
-IGNyZWF0ZV91c3Rfc2Vzc2lvbigpIGF0IG1haW4uYzoyMjQ1XQpERUJVRzM6IENyZWF0ZWQgaGFz
-aHRhYmxlIHNpemUgNCBhdCAweDEwMDVlOWY4IG9mIHR5cGUgMSBbaW4gbHR0bmdfaHRfbmV3KCkg
-YXQgaGFzaHRhYmxlLmM6OTZdCkRFQlVHMzogQ3JlYXRlZCBoYXNodGFibGUgc2l6ZSA0IGF0IDB4
-MTAwNWViMTggb2YgdHlwZSAxIFtpbiBsdHRuZ19odF9uZXcoKSBhdCBoYXNodGFibGUuYzo5Nl0K
-REVCVUczOiBDcmVhdGVkIGhhc2h0YWJsZSBzaXplIDQgYXQgMHgxMDA1ZWMzOCBvZiB0eXBlIDAg
-W2luIGx0dG5nX2h0X25ldygpIGF0IGhhc2h0YWJsZS5jOjk2XQpERUJVRzM6IENyZWF0ZWQgaGFz
-aHRhYmxlIHNpemUgNCBhdCAweDEwMDYzZGMwIG9mIHR5cGUgMSBbaW4gbHR0bmdfaHRfbmV3KCkg
-YXQgaGFzaHRhYmxlLmM6OTZdCkRFQlVHMjogVVNUIHRyYWNlIHNlc3Npb24gY3JlYXRlIHN1Y2Nl
-c3NmdWwgW2luIHRyYWNlX3VzdF9jcmVhdGVfc2Vzc2lvbigpIGF0IHRyYWNlLXVzdC5jOjEzOV0K
-REVCVUczOiBta2RpcigpIHJlY3Vyc2l2ZSAvcm9vdC9sdHRuZy10cmFjZXMvbXlzZXNzaW9uLTE5
-NzAwMTA0LTAwMDEzMS91c3Qgd2l0aCBtb2RlIDUwNCBmb3IgdWlkIDAgYW5kIGdpZCAwIFtpbiBy
-dW5fYXNfbWtkaXJfcmVjdXJzaXZlKCkgYXQgcnVuYXMuYzozNDFdCkRFQlVHMTogVXNpbmcgcnVu
-X2FzX2Nsb25lIFtpbiBydW5fYXMoKSBhdCBydW5hcy5jOjMyNV0KREVCVUczOiBDb3B5aW5nIHRy
-YWNpbmcgc2Vzc2lvbiBjb25zdW1lciBvdXRwdXQgaW4gVVNUIHNlc3Npb24gW2luIGNvcHlfc2Vz
-c2lvbl9jb25zdW1lcigpIGF0IG1haW4uYzoyMTk2XQpERUJVRzM6IENyZWF0ZWQgaGFzaHRhYmxl
-IHNpemUgNCBhdCAweDEwMDY4ZjQ4IG9mIHR5cGUgMSBbaW4gbHR0bmdfaHRfbmV3KCkgYXQgaGFz
-aHRhYmxlLmM6OTZdCkRFQlVHMzogQ3JlYXRlZCBoYXNodGFibGUgc2l6ZSA0IGF0IDB4MTAwNjkw
-Njggb2YgdHlwZSAxIFtpbiBsdHRuZ19odF9uZXcoKSBhdCBoYXNodGFibGUuYzo5Nl0KREVCVUcz
-OiBDb3B5IHNlc3Npb24gY29uc3VtZXIgc3ViZGlyIG15c2Vzc2lvbi0xOTcwMDEwNC0wMDAxMzEv
-dXN0IFtpbiBjb3B5X3Nlc3Npb25fY29uc3VtZXIoKSBhdCBtYWluLmM6MjIxMF0KREVCVUcxOiBT
-cGF3bmluZyBjb25zdW1lcmQgW2luIHNwYXduX2NvbnN1bWVyZCgpIGF0IG1haW4uYzoxNjU4XQpE
-RUJVRzI6IENvbnN1bWVyIHBpZCA2MjggW2luIHN0YXJ0X2NvbnN1bWVyZCgpIGF0IG1haW4uYzox
-ODI5XQpERUJVRzI6IFNwYXduaW5nIGNvbnN1bWVyIGNvbnRyb2wgdGhyZWFkIFtpbiBzdGFydF9j
-b25zdW1lcmQoKSBhdCBtYWluLmM6MTgzMl0KREVCVUcxOiBbdGhyZWFkXSBNYW5hZ2UgY29uc3Vt
-ZXIgc3RhcnRlZCBbaW4gdGhyZWFkX21hbmFnZV9jb25zdW1lcigpIGF0IG1haW4uYzo5MTNdCkRF
-QlVHMTogVXNpbmcgMzItYml0IFVTVCBjb25zdW1lciBhdDogL29wdC94Y29tcGlsZS9wb3dlcnBj
-LWU1MDAtbGludXgtZ251LWx0dG5nL2xpYi9sdHRuZy9saWJleGVjL2x0dG5nLWNvbnN1bWVyZCBb
-aW4gc3Bhd25fY29uc3VtZXJkKCkgYXQgbWFpbi5jOjE3NzZdCkVycm9yOiBTcGF3bmluZyBjb25z
-dW1lcmQgZmFpbGVkCkRFQlVHMTogU2VuZGluZyByZXNwb25zZSAoc2l6ZTogMTYsIHJldGNvZGU6
-IDMyLWJpdCBVU1QgY29uc3VtZXIgc3RhcnQgZmFpbGVkKSBbaW4gdGhyZWFkX21hbmFnZV9jbGll
-bnRzKCkgYXQgbWFpbi5jOjUyMTFdCkRFQlVHMTogQ2xlYW4gY29tbWFuZCBjb250ZXh0IHN0cnVj
-dHVyZSBbaW4gY2xlYW5fY29tbWFuZF9jdHgoKSBhdCBtYWluLmM6NTc2XQpERUJVRzE6IEFjY2Vw
-dGluZyBjbGllbnQgY29tbWFuZCAuLi4gW2luIHRocmVhZF9tYW5hZ2VfY2xpZW50cygpIGF0IG1h
-aW4uYzo1MDc5XQpeQ0RFQlVHMTogU0lHSU5UIGNhdWdodCBbaW4gc2lnaGFuZGxlcigpIGF0IG1h
-aW4uYzo1NjM4XQpERUJVRzE6IFRlcm1pbmF0aW5nIGFsbCB0aHJlYWRzIFtpbiBzdG9wX3RocmVh
-ZHMoKSBhdCBtYWluLmM6NDgxXQpERUJVRzE6IFNJR0lOVCBjYXVnaHQgW2luIHNpZ2hhbmRsZXIo
-KSBhdCBtYWluLmM6NTYzOF0KREVCVUcxOiBGdXRleCBuIHRvIDEgd2FrZSBkb25lIFtpbiBmdXRl
-eF9udG8xX3dha2UoKSBhdCBmdXRleC5jOjEwMF0KREVCVUcxOiBIZWFsdGggY2hlY2sgdGhyZWFk
-IGR5aW5nIFtpbiB0aHJlYWRfbWFuYWdlX2hlYWx0aCgpIGF0IG1haW4uYzo1MDEwXQpERUJVRzE6
-IENsaWVudCB0aHJlYWQgZHlpbmcgW2luIHRocmVhZF9tYW5hZ2VfY2xpZW50cygpIGF0IG1haW4u
-Yzo1MjM3XQpERUJVRzE6IEFwcGxpY2F0aW9uIGNvbW11bmljYXRpb24gYXBwcyB0aHJlYWQgY2xl
-YW51cCBjb21wbGV0ZSBbaW4gdGhyZWFkX21hbmFnZV9hcHBzKCkgYXQgbWFpbi5jOjEyOTJdCkRF
-QlVHMTogQ2xlYW4gY29tbWFuZCBjb250ZXh0IHN0cnVjdHVyZSBbaW4gY2xlYW5fY29tbWFuZF9j
-dHgoKSBhdCBtYWluLmM6NTc2XQpERUJVRzE6IFRlcm1pbmF0aW5nIGFsbCB0aHJlYWRzIFtpbiBz
-dG9wX3RocmVhZHMoKSBhdCBtYWluLmM6NDgxXQpERUJVRzE6IE5vdGlmeWluZyBhcHBsaWNhdGlv
-bnMgb2Ygc2Vzc2lvbiBkYWVtb24gc3RhdGU6IDAgW2luIG5vdGlmeV91c3RfYXBwcygpIGF0IG1h
-aW4uYzo1OTZdCkRFQlVHMTogS2VybmVsIHRocmVhZCBkeWluZyBbaW4gdGhyZWFkX21hbmFnZV9r
-ZXJuZWwoKSBhdCBtYWluLmM6ODk4XQpERUJVRzE6IGNvbnN1bWVyIHRocmVhZCBjbGVhbnVwIGNv
-bXBsZXRlZCBbaW4gdGhyZWFkX21hbmFnZV9jb25zdW1lcigpIGF0IG1haW4uYzoxMTIzXQpERUJV
-RzE6IEZ1dGV4IG4gdG8gMSB3YWtlIGRvbmUgW2luIGZ1dGV4X250bzFfd2FrZSgpIGF0IGZ1dGV4
-LmM6MTAwXQpERUJVRzE6IEZ1dGV4IG4gdG8gMSB3YWl0IGRvbmUgW2luIGZ1dGV4X250bzFfd2Fp
-dCgpIGF0IGZ1dGV4LmM6ODddCkRFQlVHMTogRGlzcGF0Y2ggdGhyZWFkIGR5aW5nIFtpbiB0aHJl
-YWRfZGlzcGF0Y2hfdXN0X3JlZ2lzdHJhdGlvbigpIGF0IG1haW4uYzoxMzU4XQpERUJVRzE6IEdv
-dCB0aGUgd2FpdCBzaG0gZmQgNyBbaW4gZ2V0X3dhaXRfc2htKCkgYXQgc2htLmM6MTE3XQpERUJV
-RzE6IEZ1dGV4IHdhaXQgdXBkYXRlIGFjdGl2ZSAwIFtpbiBmdXRleF93YWl0X3VwZGF0ZSgpIGF0
-IGZ1dGV4LmM6NjJdCkRFQlVHMTogVVNUIFJlZ2lzdHJhdGlvbiB0aHJlYWQgY2xlYW51cCBjb21w
-bGV0ZSBbaW4gdGhyZWFkX3JlZ2lzdHJhdGlvbl9hcHBzKCkgYXQgbWFpbi5jOjE1NDldCl5DREVC
-VUcxOiBTSUdJTlQgY2F1Z2h0IFtpbiBzaWdoYW5kbGVyKCkgYXQgbWFpbi5jOjU2MzhdCkRFQlVH
-MTogVGVybWluYXRpbmcgYWxsIHRocmVhZHMgW2luIHN0b3BfdGhyZWFkcygpIGF0IG1haW4uYzo0
-ODFdCkRFQlVHMTogRnV0ZXggbiB0byAxIHdha2UgZG9uZSBbaW4gZnV0ZXhfbnRvMV93YWtlKCkg
-YXQgZnV0ZXguYzoxMDBdCl5DREVCVUcxOiBTSUdJTlQgY2F1Z2h0IFtpbiBzaWdoYW5kbGVyKCkg
-YXQgbWFpbi5jOjU2MzhdCkRFQlVHMTogVGVybWluYXRpbmcgYWxsIHRocmVhZHMgW2luIHN0b3Bf
-dGhyZWFkcygpIGF0IG1haW4uYzo0ODFdCkRFQlVHMTogRnV0ZXggbiB0byAxIHdha2UgZG9uZSBb
-aW4gZnV0ZXhfbnRvMV93YWtlKCkgYXQgZnV0ZXguYzoxMDBdCkVycm9yOiBUaGUgY29uc3VtZXIg
-dGhyZWFkIHdhcyBuZXZlciByZWFkeS4gS2lsbGluZyBpdApERUJVRzI6IFRyYWNlIFVTVCBjaGFu
-bmVsIGNoYW5uZWwwIG5vdCBmb3VuZCBieSBuYW1lIFtpbiB0cmFjZV91c3RfZmluZF9jaGFubmVs
-X2J5X25hbWUoKSBhdCB0cmFjZS11c3QuYzo1Ml0KREVCVUczOiBDcmVhdGVkIGhhc2h0YWJsZSBz
-aXplIDQgYXQgMHgxMDA2YTcwMCBvZiB0eXBlIDAgW2luIGx0dG5nX2h0X25ldygpIGF0IGhhc2h0
-YWJsZS5jOjk2XQpERUJVRzM6IENyZWF0ZWQgaGFzaHRhYmxlIHNpemUgNCBhdCAweDEwMDZhN2Q4
-IG9mIHR5cGUgMSBbaW4gbHR0bmdfaHRfbmV3KCkgYXQgaGFzaHRhYmxlLmM6OTZdCkRFQlVHMjog
-VHJhY2UgVVNUIGNoYW5uZWwgY2hhbm5lbDAgY3JlYXRlZCBbaW4gdHJhY2VfdXN0X2NyZWF0ZV9j
-aGFubmVsKCkgYXQgdHJhY2UtdXN0LmM6MjAxXQpERUJVRzI6IENoYW5uZWwgY2hhbm5lbDAgYmVp
-bmcgY3JlYXRlZCBpbiBVU1QgZ2xvYmFsIGRvbWFpbiBbaW4gY2hhbm5lbF91c3RfY3JlYXRlKCkg
-YXQgY2hhbm5lbC5jOjI2N10KREVCVUcyOiBVU1QgYXBwIGFkZGluZyBjaGFubmVsIGNoYW5uZWww
-IHRvIGdsb2JhbCBkb21haW4gZm9yIHNlc3Npb24gaWQgMCBbaW4gdXN0X2FwcF9jcmVhdGVfY2hh
-bm5lbF9nbGIoKSBhdCB1c3QtYXBwLmM6MTk4NF0KREVCVUcyOiBDaGFubmVsIGNoYW5uZWwwIGNy
-ZWF0ZWQgc3VjY2Vzc2Z1bGx5IFtpbiBjaGFubmVsX3VzdF9jcmVhdGUoKSBhdCBjaGFubmVsLmM6
-MjkyXQpERUJVRzI6IFRyYWNlIFVTVCBjaGFubmVsIGNoYW5uZWwwIGZvdW5kIGJ5IG5hbWUgW2lu
-IHRyYWNlX3VzdF9maW5kX2NoYW5uZWxfYnlfbmFtZSgpIGF0IHRyYWNlLXVzdC5jOjQ3XQpERUJV
-RzI6IFRyYWNlIFVTVCBldmVudCBOT1QgZm91bmQgYnkgbmFtZSAqIFtpbiB0cmFjZV91c3RfZmlu
-ZF9ldmVudF9ieV9uYW1lKCkgYXQgdHJhY2UtdXN0LmM6NzldCkRFQlVHMzogQ3JlYXRlZCBoYXNo
-dGFibGUgc2l6ZSA0IGF0IDB4MTAwNjkyMjAgb2YgdHlwZSAxIFtpbiBsdHRuZ19odF9uZXcoKSBh
-dCBoYXNodGFibGUuYzo5Nl0KREVCVUcyOiBUcmFjZSBVU1QgZXZlbnQgKiwgbG9nbGV2ZWwgKDAs
-LTEpIGNyZWF0ZWQgW2luIHRyYWNlX3VzdF9jcmVhdGVfZXZlbnQoKSBhdCB0cmFjZS11c3QuYzoy
-ODBdCkRFQlVHMTogVVNUIGFwcCBjcmVhdGluZyBldmVudCAqIGZvciBhbGwgYXBwcyBmb3Igc2Vz
-c2lvbiBpZCAwIFtpbiB1c3RfYXBwX2NyZWF0ZV9ldmVudF9nbGIoKSBhdCB1c3QtYXBwLmM6MjEw
-OF0KREVCVUcxOiBFdmVudCBVU1QgKiBjcmVhdGVkIGluIGNoYW5uZWwgY2hhbm5lbDAgW2luIGV2
-ZW50X3VzdF9lbmFibGVfdHJhY2Vwb2ludCgpIGF0IGV2ZW50LmM6NDg2XQpERUJVRzE6IFNlbmRp
-bmcgcmVzcG9uc2UgKHNpemU6IDE2LCByZXRjb2RlOiBTdWNjZXNzKSBbaW4gdGhyZWFkX21hbmFn
-ZV9jbGllbnRzKCkgYXQgbWFpbi5jOjUyMTFdCkRFQlVHMTogU0lHUElQRSBjYXVnaHQgW2luIHNp
-Z2hhbmRsZXIoKSBhdCBtYWluLmM6NTYzNV0KUEVSUk9SOiBzZW5kbXNnOiBCcm9rZW4gcGlwZSBb
-aW4gbHR0Y29tbV9zZW5kX3VuaXhfc29jaygpIGF0IHVuaXguYzoxOThdCkVycm9yOiBGYWlsZWQg
-dG8gc2VuZCBkYXRhIGJhY2sgdG8gY2xpZW50CkRFQlVHMTogQ2xlYW4gY29tbWFuZCBjb250ZXh0
-IHN0cnVjdHVyZSBbaW4gY2xlYW5fY29tbWFuZF9jdHgoKSBhdCBtYWluLmM6NTc2XQpERUJVRzE6
-IEFjY2VwdGluZyBjbGllbnQgY29tbWFuZCAuLi4gW2luIHRocmVhZF9tYW5hZ2VfY2xpZW50cygp
-IGF0IG1haW4uYzo1MDc5XQpERUJVRzE6IENsaWVudCB0aHJlYWQgZHlpbmcgW2luIHRocmVhZF9t
-YW5hZ2VfY2xpZW50cygpIGF0IG1haW4uYzo1MjM3XQpERUJVRzE6IENsZWFuIGNvbW1hbmQgY29u
-dGV4dCBzdHJ1Y3R1cmUgW2luIGNsZWFuX2NvbW1hbmRfY3R4KCkgYXQgbWFpbi5jOjU3Nl0KREVC
-VUcxOiBDbGVhbmluZyB1cCBbaW4gY2xlYW51cCgpIGF0IG1haW4uYzo1MDFdCkRFQlVHMTogUmVt
-b3ZpbmcgL3Zhci9ydW4vbHR0bmcgZGlyZWN0b3J5IFtpbiBjbGVhbnVwKCkgYXQgbWFpbi5jOjUw
-M10KREVCVUcxOiBDbGVhbmluZyB1cCBhbGwgc2Vzc2lvbnMgW2luIGNsZWFudXAoKSBhdCBtYWlu
-LmM6NTE2XQpERUJVRzM6IE5vIGtlcm5lbCBzZXNzaW9uIHdoZW4gdGVhcmluZyBkb3duIHNlc3Np
-b24gW2luIHRlYXJkb3duX2tlcm5lbF9zZXNzaW9uKCkgYXQgbWFpbi5jOjM4MF0KREVCVUcxOiBU
-ZWFyaW5nIGRvd24gVVNUIHNlc3Npb24ocykgW2luIHRlYXJkb3duX3VzdF9zZXNzaW9uKCkgYXQg
-bWFpbi5jOjQ0M10KREVCVUcxOiBEZXN0cm95IGFsbCBVU1QgdHJhY2VzIFtpbiB1c3RfYXBwX2Rl
-c3Ryb3lfdHJhY2VfYWxsKCkgYXQgdXN0LWFwcC5jOjI0ODZdCkRFQlVHMjogVHJhY2UgVVNUIGRl
-c3Ryb3kgc2Vzc2lvbiAwIFtpbiB0cmFjZV91c3RfZGVzdHJveV9zZXNzaW9uKCkgYXQgdHJhY2Ut
-dXN0LmM6NTcwXQpERUJVRzE6IENsb3NpbmcgYWxsIFVTVCBzb2NrZXRzIFtpbiBjbGVhbnVwKCkg
-YXQgbWFpbi5jOjUzMV0KREVCVUcyOiBUcmFjZSBkZXN0cm95IFVTVCBjaGFubmVsIGNoYW5uZWww
-IFtpbiB0cmFjZV91c3RfZGVzdHJveV9jaGFubmVsKCkgYXQgdHJhY2UtdXN0LmM6NDUzXQpERUJV
-RzI6IFVTVCBhcHAgY2xlYW5pbmcgcmVnaXN0ZXJlZCBhcHBzIGhhc2ggdGFibGUgW2luIHVzdF9h
-cHBfY2xlYW5fbGlzdCgpIGF0IHVzdC1hcHAuYzoxNzAxXQpERUJVRzE6ICoqKiBhc3NlcnQgZmFp
-bGVkIDotKSAqKiogPT0+IE1hdHRoZXcsIEJFRVQgZHJpdmVuIGRldmVsb3BtZW50IHdvcmtzISBb
-aW4gY2xlYW51cCgpIGF0IG1haW4uYzo1NTJdCgo=
---bcaec51d29facb699f04c7b24b0a
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---bcaec51d29facb699f04c7b24b0a--
+Mathieu Desnoyers
+Operating System Efficiency R&D Consultant
+EfficiOS Inc.
+http://www.efficios.com
