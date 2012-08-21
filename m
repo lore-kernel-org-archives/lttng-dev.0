@@ -1,21 +1,17 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [RFC URCU PATCH] wfqueue: ABI v1,
-	simplify implementation, 2.3x to 2.6x performance boost
-Date: Mon, 20 Aug 2012 21:03:51 -0400
-Message-ID: <20120821010351.GA7472__43964.1223558739$1345511064$gmane$org@Krystal>
-References: <20120815213107.GB17224@Krystal> <5032054D.7050508@cn.fujitsu.com>
-	<20120820131642.GA551@Krystal> <5032D254.7040207@cn.fujitsu.com>
+From: Hui Zhu <teawater@gmail.com>
+Subject: [Question] the return of babeltrace's bt_context_create
+Date: Tue, 21 Aug 2012 10:17:58 +0800
+Message-ID: <CANFwon3dYkyqf4K+gCZ35-eEvVwNRP56pYOF0wwkHDPY-FxyDg__49078.6428018056$1345515549$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from mail-vc0-f176.google.com ([209.85.220.176])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1T3csr-0007hl-2b
-	for lttng-dev@lists.lttng.org; Mon, 20 Aug 2012 21:03:53 -0400
-Content-Disposition: inline
-In-Reply-To: <5032D254.7040207@cn.fujitsu.com>
+	(envelope-from <teawater@gmail.com>) id 1T3e3I-0008Ha-5s
+	for lttng-dev@lists.lttng.org; Mon, 20 Aug 2012 22:18:44 -0400
+Received: by vcbfl11 with SMTP id fl11so7234222vcb.35
+	for <lttng-dev@lists.lttng.org>; Mon, 20 Aug 2012 19:18:38 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,91 +20,22 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Lai Jiangshan <laijs@cn.fujitsu.com>
-Cc: lttng-dev@lists.lttng.org, Paul McKenney <paulmck@linux.vnet.ibm.com>, rp@svcs.cs.pdx.edu
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Lai Jiangshan (laijs@cn.fujitsu.com) wrote:
-> On 08/20/2012 09:16 PM, Mathieu Desnoyers wrote:
-> > * Lai Jiangshan (laijs@cn.fujitsu.com) wrote:
-> >> On 08/16/2012 05:31 AM, Mathieu Desnoyers wrote:
-> >>> This work is derived from the patch from Lai Jiangshan submitted as
-> >>> "urcu: new wfqueue implementation"
-> >>> (http://lists.lttng.org/pipermail/lttng-dev/2012-August/018379.html)
-> >>>
-> >>
-> > 
-> > Hi Lai,
-> > 
-> >> Hi, Mathieu
-> >>
-> >> please add this part to your patch.
-> >>
-> >> Changes(item5 has alternative):
-> >>
-> >> 1) Reorder the head and the tail in struct cds_wfq_queue
-> >>    Reason: wfq is enqueue-preference
-> > 
-> > Is this a technical improvement over the original order ? Both cache
-> > lines are aligned, so it should not matter which one comes first. So I'm
-> > not sure why we should favor one order vs the other.
-> 
-> struct astruct {
-> 	int foo; /* field offset = 0 */
-> 	int bar; /* field offset = 4 */
-> };
-> 
-> Access to p->foo and access to p->bar are different in CPU instruction.
-> Access to p->bar will need to add a offset to p. (the addition may cost a very small time)
-> instructions will be probably longer than the instructions access to p->foo.
-> 
-> If the code of access to p->bar is significant more than the code of access to p->foo,
-> we should swap p->bar and p->foo field's order to shorten the total instruction size
-> to reduce footprint.
-> 
-> Our enqueue is inline function, when this inline function is expanded in every call site,
-> the code of access to the tail will much significant, so we need to put the tail at first.
-> 
+Hi,
 
-Very good point! I'm pulling this change too.
+The comments of this function said:
+Returns an allocated context on success and NULL on error
 
-> 
-> 
-> > 
-> >> 2) Reorder the code of ___cds_wfq_next_blocking()
-> >>    Reason: short code, better readability
-> > 
-> > Yes, I agree with this change. Can you extract it into a separate patch ?
-> 
-> You merge it into your patch which ___cds_wfq_next_blocking() is introduced.
-> 
+But when babeltrace use this function, it didn't check the return
+value of bt_context_create:
+	ctx = bt_context_create();
 
-OK. done,
+	ret = bt_context_add_traces_recursive(ctx, opt_input_path,
+			opt_input_format, NULL);
 
-> > 
-> >>
-> >> 3) Add cds_wfq_dequeue_[un]lock
-> >>    Reason: the fields of struct cds_wfq_queue are not exposed to users of lib,
-> >> 	but some APIs needs to have this lock held. Add this locking function
-> >> 	to allow the users use such APIs
-> > 
-> > I agree with this change too. You can put it into the same patch as (2).
-> 
-> You merge it into your patch.
+Could you tell me why?  Thanks a lot.
 
-OK, done too.
-
-The current version (volatile branch) is at 
-
-git://git.dorsal.polymtl.ca/~compudj/userspace-rcu
-branch: urcu/wfqueue-volatile
-
-Thanks!
-
-Mathieu
-
--- 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+Best,
+Hui
