@@ -1,9 +1,8 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH] Fix trace-collection.h: No such file
-	or	directory that build code with libbabeltrace
-Date: Thu, 23 Aug 2012 08:08:38 -0400
-Message-ID: <20120823120838.GA23356__26898.3394875706$1345723750$gmane$org@Krystal>
-References: <CANFwon3m1K3KRobkOk-4FSAaoFk8u1ixqVmtB284k-hVRGUXtQ@mail.gmail.com>
+Subject: Re: [babeltrace] About the type read and write
+Date: Thu, 23 Aug 2012 08:27:54 -0400
+Message-ID: <20120823122754.GA23841__47318.3995615274$1345724903$gmane$org@Krystal>
+References: <CANFwon1jpk3PYYd-ufUSCgKf693vApFgt5UbyOFnPczYTrSZcQ@mail.gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -11,10 +10,10 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1T4WDH-0001FF-Tv
-	for lttng-dev@lists.lttng.org; Thu, 23 Aug 2012 08:08:39 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1T4WVw-0001OF-1Y
+	for lttng-dev@lists.lttng.org; Thu, 23 Aug 2012 08:27:56 -0400
 Content-Disposition: inline
-In-Reply-To: <CANFwon3m1K3KRobkOk-4FSAaoFk8u1ixqVmtB284k-hVRGUXtQ@mail.gmail.com>
+In-Reply-To: <CANFwon1jpk3PYYd-ufUSCgKf693vApFgt5UbyOFnPczYTrSZcQ@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,42 +22,47 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Hui Zhu <teawater@gmail.com>
+To: Hui Zhu <teawater@gmail.com>, jdesfossez@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
-
-merged, thanks!
-
-Mathieu
 
 * Hui Zhu (teawater@gmail.com) wrote:
 > Hi,
 > 
-> After I install the babeltrace and try to build a code, I got this:
-> gcc -Wall  -g 1.c -lbabeltrace -lbabeltrace-ctf
-> In file included from 1.c:11:0:
-> /usr/local/include/babeltrace/babeltrace.h:23:41: fatal error:
-> babeltrace/trace-collection.h: No such file or directory
-> compilation terminated.
+> I just tried to use libbabeltrace to read and write the CTF file.  But
+> I cannot find the api to read some type of CTF for example
+> CTF_TYPE_ENUM, CTF_TYPE_STRUCT.
+
+AFAIU, the API bt_ctf_get_field_list allows to get the list of
+definitions from a struct, variant, array, or sequence (any compound
+type). Julien, I think the header documentation of this function should
+really be updated, can you look into that ?
+
+Indeed, I also cannot see any API to get the enum string from the field.
+Julien, can we add it ?
+
+> And I cannot find the api file to write to the CTF file. (I check the
+> code of babeltrace-log and found that it use the function that is not
+> API)
+
+Currently, babeltrace only does CTF-to-text and text-log-to-CTF
+conversions. As you noticed, it does not expose API to write into all
+CTF types at this stage.
+
+There is a prototype I am aware of that does just that (write custom CTF
+files): Javeltrace. See the post here
+http://lists.lttng.org/pipermail/lttng-dev/2012-August/018393.html for
+details.
+
+Thanks,
+
+Mathieu
+
 > 
-> I check the code,looks most of function of trace-collection.h is
-> covered by context.h.
-> 
-> So I post a patch for it.  Wish you like it.
+> Could you help me with it?
 > 
 > Thanks,
 > Hui
-> 
-> --- a/include/babeltrace/babeltrace.h
-> +++ b/include/babeltrace/babeltrace.h
-> @@ -20,7 +20,6 @@
->  #include <babeltrace/context.h>
->  #include <babeltrace/format.h>
->  #include <babeltrace/iterator.h>
-> -#include <babeltrace/trace-collection.h>
->  #include <babeltrace/trace-handle.h>
-> 
->  #endif /* _BABELTRACE_H */
 > 
 > _______________________________________________
 > lttng-dev mailing list
