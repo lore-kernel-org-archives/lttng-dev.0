@@ -1,46 +1,54 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] Userspace RCU 0.7.4
-Date: Mon, 27 Aug 2012 08:21:11 -0400
-Message-ID: <20120827122111.GA1935@Krystal>
+Subject: [RELEASE] LTTng-UST 2.0.5
+Date: Mon, 27 Aug 2012 08:27:10 -0400
+Message-ID: <20120827122710.GA2172__28663.6396930136$1346070460$gmane$org@Krystal>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Return-path: <linux-kernel-owner@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <compudj@mail.openrapids.net>) id 1T5yPQ-0001th-SD
+	for lttng-dev@lists.lttng.org; Mon, 27 Aug 2012 08:27:12 -0400
+Received: from localhost (localhost [127.0.0.1])
+	by blackscsi.openrapids.net (Postfix) with ESMTP id B987914021C
+	for <lttng-dev@lists.lttng.org>; Mon, 27 Aug 2012 08:27:12 -0400 (EDT)
+Received: from blackscsi.openrapids.net ([127.0.0.1])
+	by localhost (blackscsi.openrapids.net [127.0.0.1]) (amavisd-new,
+	port 10024)
+	with ESMTP id wY-6tGuZ0d7d for <lttng-dev@lists.lttng.org>;
+	Mon, 27 Aug 2012 08:27:10 -0400 (EDT)
 Content-Disposition: inline
-Sender: linux-kernel-owner@vger.kernel.org
-To: linux-kernel@vger.kernel.org, lttng-dev@lists.lttng.org, rp@svcs.cs.pdx.edu
-Cc: Ralf Baechle <ralf@linux-mips.org>, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Lai Jiangshan <laijs@cn.fujitsu.com>, Stephen Hemminger <shemminger@vyatta.com>
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-liburcu is a LGPLv2.1 userspace RCU (read-copy-update) library. This
-data synchronization library provides read-side access which scales
-linearly with the number of cores. It does so by allowing multiples
-copies of a given data structure to live at the same time, and by
-monitoring the data structure accesses to detect grace periods after
-which memory reclamation is possible.
-
-liburcu-cds provides efficient data structures based on RCU and
-lock-free algorithms. Those structures include hash tables, queues,
-stacks, and doubly-linked lists.
-
-The main change in this version is the added support for MIPS,
-contributed by Ralf Baechle.
+LTTng-UST, the Linux Trace Toolkit Next Generation Userspace Tracer, is
+port of the low-overhead tracing capabilities of the LTTng kernel tracer
+to user-space. The library "liblttng-ust" enables tracing of
+applications and libraries.
 
 Changelog:
-2012-08-27 Userspace RCU 0.7.4
-        * rculfhash API documentation: document destroy RCU read-lock constraint
-        * Fix: rculfhash should be offline while waiting for resize to complete
-        * Add missing entry to gitignore
-        * urcu: move busy-wait code and name it ___cds_wfq_node_sync_next()
-        * urcu: fix compat_futex_noasync()
-        * urcu: add hint to DEFINE_URCU_TLS() for compound types
-        * Fix: CAA_BUILD_BUG_ON should refer to CAA_BUILD_BUG_ON_ZERO
-        * Add MIPS support
-        * Compatibility: remove bash-ismsm from test scripts
-        * Fix inappropriate lib behavior: don't call exit()
-        * Fix: re-enable compatibility with autoconf < 2.64
-        * Fix c99 compatibility: use __asm__ and __volatile__ in public headers
+2012-08-27 lttng-ust 2.0.5
+        * Fix: threads should be created in DETACHED state
+        * Fix UST SIGPIPE handling
+        * Fix: Libtool fails to find dependent libraries when cross-compiling lttng-ust
+        * Fix: remove unused texinfo dep from configure.ac
+        * Fix C99 strict compatibility: don't use void * for function pointers
+        * Fix c99 compatibility: tp_rcu_dereference_bp() should not use braced-groups within expressions
         * Fix c99 compatibility: use __typeof__ instead of typeof in public headers
-        * warning fix: tests urcutorture for NetBSD 5
+
+Project website: http://lttng.org
+Download link: http://lttng.org/download
+(please refer to the README file for installation instructions)
 
 -- 
 Mathieu Desnoyers
