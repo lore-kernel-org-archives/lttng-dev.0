@@ -1,21 +1,15 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-tools 3/3] Fix: Generation of bytecode
-	longer	than 32768 bytes fails
-Date: Mon, 27 Aug 2012 15:17:35 -0400
-Message-ID: <20120827191735.GC7122__30771.7777243399$1346095078$gmane$org@Krystal>
-References: <1346093301-25274-1-git-send-email-christian.babeux@efficios.com>
-	<1346093301-25274-4-git-send-email-christian.babeux@efficios.com>
+From: Salman Rafiq <salman.rafiq@esk.fraunhofer.de>
+Subject: kernel Tracer Clock
+Date: Tue, 28 Aug 2012 12:44:55 +0200
+Message-ID: <E537659DE2B2C54EBD9FC9180F05988039032BBC89__3683.31936556405$1346150738$gmane$org@zulu.esk.fraunhofer.de>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0441166160=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from mx-relay02-haj2.antispameurope.com ([83.246.65.202])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1T64oa-00052q-MX
-	for lttng-dev@lists.lttng.org; Mon, 27 Aug 2012 15:17:36 -0400
-Content-Disposition: inline
-In-Reply-To: <1346093301-25274-4-git-send-email-christian.babeux@efficios.com>
+	(envelope-from <salman.rafiq@esk.fraunhofer.de>) id 1T6JIC-0003gf-Ed
+	for lttng-dev@lists.lttng.org; Tue, 28 Aug 2012 06:45:08 -0400
+Content-Language: de-DE
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,106 +18,166 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Christian Babeux <christian.babeux@efficios.com>
-Cc: lttng-dev@lists.lttng.org, dgoulet@efficios.com
+To: "mathieu.desnoyers@efficios.com" <mathieu.desnoyers@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-* Christian Babeux (christian.babeux@efficios.com) wrote:
-> The bytecode buffer length field is currently limited to a uint16_t.
-> A larger buffer, lttng_filter_bytecode_alloc, is the underlying storage
-> for the bytecode.
-> 
-> The current allocation policy dictate that the alloc buffer size must be
-> doubled everytime the bytecode size plus padding exceeds its capacity.
-> 
-> A problem arise when generating bytecode larger than 32768 bytes.
-> 
-> e.g.:
-> 
-> Legend
-> * required_len: new bytecode len
-> * old_len: current alloc_len
-> * new_len: new alloc_len
-> 
-> src/bin/lttng/lttng enable-event event:bla -s foo -u --filter "`perl -e 'print "intfield" . " && 1" x2730'`"
-> UST event ust_tests_hello:tptest created in channel channel0
-> [debug liblttng-ctl] Generating IR... [debug liblttng-ctl] done
-> [debug liblttng-ctl] Validating IR... [debug liblttng-ctl] done
-> [debug liblttng-ctl] Generating bytecode... required_len = 11, old_len = 4, new_len = 16
-> required_len = 7, old_len = 4, new_len = 8
-> required_len = 16, old_len = 8, new_len = 16
-> required_len = 19, old_len = 16, new_len = 32
-> required_len = 40, old_len = 32, new_len = 64
-> required_len = 67, old_len = 64, new_len = 128
-> required_len = 136, old_len = 128, new_len = 256
-> required_len = 259, old_len = 256, new_len = 512
-> required_len = 520, old_len = 512, new_len = 1024
-> required_len = 1027, old_len = 1024, new_len = 2048
-> required_len = 2056, old_len = 2048, new_len = 4096
-> required_len = 4099, old_len = 4096, new_len = 8192
-> required_len = 8200, old_len = 8192, new_len = 16384
-> required_len = 16387, old_len = 16384, new_len = 32768
-> required_len = 32776, old_len = 32768, new_len = 65536 <-- Overflow 16-bits
-> Generate bytecode error
-> Error: Error setting filter
-> 
-> The last new_len exceed the range of 16-bits values. In order to support
-> the largest bytecode length (65535), the underlying alloc buffer len must
-> be able to store more than 65535. Fix this by using a uint32_t for alloc_len.
-> 
-> Also, add a check to ensure that a bytecode longer than LTTNG_FILTER_MAX_LEN
-> (65535) bytes can't be generated.
-> 
-> Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
+--===============0441166160==
+Content-Language: de-DE
+Content-Type: multipart/alternative;
+	boundary="_000_E537659DE2B2C54EBD9FC9180F05988039032BBC89zulueskfraunh_"
 
-Acked-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+--_000_E537659DE2B2C54EBD9FC9180F05988039032BBC89zulueskfraunh_
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-> ---
->  src/lib/lttng-ctl/filter/filter-bytecode.h                  | 2 +-
->  src/lib/lttng-ctl/filter/filter-visitor-generate-bytecode.c | 5 +++--
->  2 files changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/src/lib/lttng-ctl/filter/filter-bytecode.h b/src/lib/lttng-ctl/filter/filter-bytecode.h
-> index 5d2559d..d364ee2 100644
-> --- a/src/lib/lttng-ctl/filter/filter-bytecode.h
-> +++ b/src/lib/lttng-ctl/filter/filter-bytecode.h
-> @@ -176,7 +176,7 @@ struct return_op {
->  } __attribute__((packed));
->  
->  struct lttng_filter_bytecode_alloc {
-> -	uint16_t alloc_len;
-> +	uint32_t alloc_len;
->  	struct lttng_filter_bytecode b;
->  };
->  
-> diff --git a/src/lib/lttng-ctl/filter/filter-visitor-generate-bytecode.c b/src/lib/lttng-ctl/filter/filter-visitor-generate-bytecode.c
-> index 71da21c..98f8375 100644
-> --- a/src/lib/lttng-ctl/filter/filter-visitor-generate-bytecode.c
-> +++ b/src/lib/lttng-ctl/filter/filter-visitor-generate-bytecode.c
-> @@ -95,14 +95,15 @@ int32_t bytecode_reserve(struct lttng_filter_bytecode_alloc **fb, uint32_t align
->  	int32_t ret;
->  	uint32_t padding = offset_align((*fb)->b.len, align);
->  
-> +	if ((*fb)->b.len + padding + len > LTTNG_FILTER_MAX_LEN)
-> +		return -EINVAL;
-> +
->  	if ((*fb)->b.len + padding + len > (*fb)->alloc_len) {
->  		uint32_t new_len =
->  			max_t(uint32_t, 1U << get_count_order((*fb)->b.len + padding + len),
->  				(*fb)->alloc_len << 1);
->  		uint32_t old_len = (*fb)->alloc_len;
->  
-> -		if (new_len > 0xFFFF)
-> -			return -EINVAL;
->  		*fb = realloc(*fb, sizeof(struct lttng_filter_bytecode_alloc) + new_len);
->  		if (!*fb)
->  			return -ENOMEM;
-> -- 
-> 1.7.11.4
-> 
+Hi Mathieu,
 
--- 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+By looking into traces generated using kernel tracer, I see the frequency i=
+n metadata file to be default.
+I would like to know if there is a way to change default clock frequency (1=
+e9 Hz) for the tracer to current Core clock frequency? using lttng command =
+line tool or any other way?
+
+Thanks.
+
+Best Regards,
+Salman
+
+--
+Salman Rafiq
+Industrial Communication
+Fraunhofer-Einrichtung f=FCr Systeme der Kommunikationstechnik ESK
+
+Hansastra=DFe 32 | 80686 M=FCnchen
+Telefon, Fax:  +49 89 547088-356 | +49 89 547088-66-356
+E-Mail:   salman.rafiq@esk.fraunhofer.de<http://www.esk.fraunhofer.de/>
+
+Internet:
+http://www.esk.fraunhofer.de<http://www.esk.fraunhofer.de/>
+http://www.facebook.com/FraunhoferESK
+http://www.twitter.com/FraunhoferESK
+
+
+--_000_E537659DE2B2C54EBD9FC9180F05988039032BBC89zulueskfraunh_
+Content-Type: text/html; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+<html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-micr=
+osoft-com:office:office" xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
+xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http:=
+//www.w3.org/TR/REC-html40"><head><meta http-equiv=3DContent-Type content=
+=3D"text/html; charset=3Diso-8859-1"><meta name=3DGenerator content=3D"Micr=
+osoft Word 14 (filtered medium)"><style><!--
+/* Font Definitions */
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+@font-face
+	{font-family:"Frutiger LT Com 45 Light";
+	panose-1:2 11 3 3 3 5 4 2 2 4;}
+/* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0cm;
+	margin-bottom:.0001pt;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";
+	mso-fareast-language:EN-US;}
+a:link, span.MsoHyperlink
+	{mso-style-priority:99;
+	color:blue;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{mso-style-priority:99;
+	color:purple;
+	text-decoration:underline;}
+span.E-MailFormatvorlage17
+	{mso-style-type:personal-compose;
+	font-family:"Calibri","sans-serif";
+	color:windowtext;}
+.MsoChpDefault
+	{mso-style-type:export-only;
+	font-family:"Calibri","sans-serif";
+	mso-fareast-language:EN-US;}
+@page WordSection1
+	{size:612.0pt 792.0pt;
+	margin:70.85pt 70.85pt 2.0cm 70.85pt;}
+div.WordSection1
+	{page:WordSection1;}
+--></style><!--[if gte mso 9]><xml>
+<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
+</xml><![endif]--><!--[if gte mso 9]><xml>
+<o:shapelayout v:ext=3D"edit">
+<o:idmap v:ext=3D"edit" data=3D"1" />
+</o:shapelayout></xml><![endif]--></head><body lang=3DDE link=3Dblue vlink=
+=3Dpurple><div class=3DWordSection1><p class=3DMsoNormal>Hi Mathieu,<o:p></=
+o:p></p><p class=3DMsoNormal><o:p>&nbsp;</o:p></p><p class=3DMsoNormal><spa=
+n lang=3DEN-US>By looking into traces generated using kernel tracer, I see =
+the frequency in metadata file to be default.<o:p></o:p></span></p><p class=
+=3DMsoNormal><span lang=3DEN-US>I would like to know if there is a way to c=
+hange default clock frequency (1e9 Hz) for the tracer to current Core clock=
+ frequency? using lttng command line tool or any other way?<o:p></o:p></spa=
+n></p><p class=3DMsoNormal><span lang=3DEN-US><o:p>&nbsp;</o:p></span></p><=
+p class=3DMsoNormal><span lang=3DEN-US>Thanks.<o:p></o:p></span></p><p clas=
+s=3DMsoNormal><span lang=3DEN-US><o:p>&nbsp;</o:p></span></p><p class=3DMso=
+Normal><span lang=3DEN-US>Best Regards,<o:p></o:p></span></p><p class=3DMso=
+Normal><span lang=3DEN-US>Salman <o:p></o:p></span></p><p class=3DMsoNormal=
+><span lang=3DEN-US><o:p>&nbsp;</o:p></span></p><p class=3DMsoNormal><span =
+style=3D'font-family:"Frutiger LT Com 45 Light","sans-serif";color:#1F497D;=
+mso-fareast-language:DE'>--<o:p></o:p></span></p><p class=3DMsoNormal><span=
+ style=3D'font-family:"Frutiger LT Com 45 Light","sans-serif";color:#1F497D=
+;mso-fareast-language:DE'>Salman Rafiq<o:p></o:p></span></p><p class=3DMsoN=
+ormal><span style=3D'font-family:"Frutiger LT Com 45 Light","sans-serif";co=
+lor:#1F497D;mso-fareast-language:DE'>Industrial Communication<o:p></o:p></s=
+pan></p><p class=3DMsoNormal><span style=3D'font-family:"Frutiger LT Com 45=
+ Light","sans-serif";color:#1F497D;mso-fareast-language:DE'>Fraunhofer-Einr=
+ichtung f=FCr Systeme der Kommunikationstechnik ESK<o:p></o:p></span></p><p=
+ class=3DMsoNormal><span style=3D'font-family:"Frutiger LT Com 45 Light","s=
+ans-serif";color:#1F497D;mso-fareast-language:DE'><o:p>&nbsp;</o:p></span><=
+/p><p class=3DMsoNormal><span style=3D'font-size:9.0pt;font-family:"Frutige=
+r LT Com 45 Light","sans-serif";color:#1F497D;mso-fareast-language:DE'>Hans=
+astra=DFe 32 | 80686 M=FCnchen<o:p></o:p></span></p><p class=3DMsoNormal><s=
+pan style=3D'font-size:9.0pt;font-family:"Frutiger LT Com 45 Light","sans-s=
+erif";color:#1F497D;mso-fareast-language:DE'>Telefon, Fax:&nbsp; +49 89 547=
+088-356 | +49 89 547088-66-356<o:p></o:p></span></p><p class=3DMsoNormal><s=
+pan style=3D'font-size:9.0pt;font-family:"Frutiger LT Com 45 Light","sans-s=
+erif";color:#1F497D;mso-fareast-language:DE'>E-Mail:&nbsp;&nbsp; </span><sp=
+an style=3D'font-size:9.0pt;font-family:"Frutiger LT Com 45 Light","sans-se=
+rif";color:black;mso-fareast-language:DE'><a href=3D"http://www.esk.fraunho=
+fer.de/"><span style=3D'color:blue'>salman.rafiq@esk.fraunhofer.de</span></=
+a></span><span style=3D'font-size:9.0pt;font-family:"Frutiger LT Com 45 Lig=
+ht","sans-serif";color:#1F497D;mso-fareast-language:DE'><o:p></o:p></span><=
+/p><p class=3DMsoNormal><span style=3D'font-size:9.0pt;font-family:"Frutige=
+r LT Com 45 Light","sans-serif";color:#1F497D;mso-fareast-language:DE'>&nbs=
+p; <o:p></o:p></span></p><p class=3DMsoNormal><span style=3D'font-size:9.0p=
+t;font-family:"Frutiger LT Com 45 Light","sans-serif";color:#1F497D;mso-far=
+east-language:DE'>Internet: <o:p></o:p></span></p><p class=3DMsoNormal><spa=
+n style=3D'font-size:9.0pt;font-family:"Frutiger LT Com 45 Light","sans-ser=
+if";color:black;mso-fareast-language:DE'><a href=3D"http://www.esk.fraunhof=
+er.de/"><span style=3D'color:blue'>http://www.esk.fraunhofer.de</span></a><=
+/span><span style=3D'font-size:9.0pt;font-family:"Frutiger LT Com 45 Light"=
+,"sans-serif";color:#1F497D;mso-fareast-language:DE'><o:p></o:p></span></p>=
+<p class=3DMsoNormal><span style=3D'font-size:9.0pt;font-family:"Frutiger L=
+T Com 45 Light","sans-serif";color:black;mso-fareast-language:DE'><a href=
+=3D"http://www.facebook.com/FraunhoferESK"><span style=3D'color:blue'>http:=
+//www.facebook.com/FraunhoferESK</span></a><br><a href=3D"http://www.twitte=
+r.com/FraunhoferESK"><span style=3D'color:blue'>http://www.twitter.com/Frau=
+nhoferESK</span></a></span><span style=3D'font-size:9.0pt;color:#1F497D;mso=
+-fareast-language:DE'><o:p></o:p></span></p><p class=3DMsoNormal><o:p>&nbsp=
+;</o:p></p></div></body></html>=
+
+--_000_E537659DE2B2C54EBD9FC9180F05988039032BBC89zulueskfraunh_--
+
+
+--===============0441166160==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0441166160==--
