@@ -1,20 +1,21 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH] fix timestamps on architectures
-	without	CONFIG_KTIME_SCALAR
-Date: Thu, 6 Sep 2012 10:27:27 -0400
-Message-ID: <20120906142726.GJ3630__31143.4570503936$1346941670$gmane$org@Krystal>
-References: <1346340992-27307-1-git-send-email-gerlando.falauto@keymile.com>
+From: Christian Babeux <christian.babeux@efficios.com>
+Subject: [PATCH v3 lttng-tools] Fix: Accept bytecode of length
+	65536 bytes
+Date: Thu,  6 Sep 2012 13:40:19 -0400
+Message-ID: <1346953219-9001-2-git-send-email-christian.babeux__30285.2047644139$1346953274$gmane$org@efficios.com>
+References: <1346093301-25274-1-git-send-email-christian.babeux@efficios.com>
+	<1346953219-9001-1-git-send-email-christian.babeux@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from mail-vb0-f48.google.com ([209.85.212.48])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1T9d3I-0005LJ-KC
-	for lttng-dev@lists.lttng.org; Thu, 06 Sep 2012 10:27:28 -0400
-Content-Disposition: inline
-In-Reply-To: <1346340992-27307-1-git-send-email-gerlando.falauto@keymile.com>
+	(envelope-from <christian.babeux@0x80.ca>) id 1T9g4O-0006m3-HZ
+	for lttng-dev@lists.lttng.org; Thu, 06 Sep 2012 13:40:48 -0400
+Received: by vbme21 with SMTP id e21so2197544vbm.35
+	for <lttng-dev@lists.lttng.org>; Thu, 06 Sep 2012 10:40:43 -0700 (PDT)
+In-Reply-To: <1346953219-9001-1-git-send-email-christian.babeux@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,57 +24,100 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Gerlando Falauto <gerlando.falauto@keymile.com>
-Cc: lttng-dev@lists.lttng.org
+To: mathieu.desnoyers@efficios.com
+Cc: lttng-dev@lists.lttng.org, dgoulet@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-* Gerlando Falauto (gerlando.falauto@keymile.com) wrote:
-> trace_clock_monotonic_wrapper() should return a u64 representing the
-> number of nanoseconds since system startup.
-> ktime_get() provides that value directly within its .tv64 field only
-> on those architectures defining CONFIG_KTIME_SCALAR, whereas in all
-> other cases (e.g. PowerPC) a ktime_to_ns() conversion (which
-> translates back to .tv64 when CONFIG_KTIME_SCALAR is defined)
-> becomes necessary.
+In order to support the filter bytecode maximum length (65536 bytes),
+the lttng_ust_filter_bytecode len field type must be able to
+hold more than a uint16_t. Change the field type to a uint32_t.
 
-merged!
+Also, since the relocation table is located at the end of the actual
+bytecode, the reloc_table_offset (reloc_offset in ust-abi) field must
+support offset values larger than 65535. Change the field type to a
+uint32_t. This change will allow support of relocation table appended
+to larger bytecode without breaking the ABI if the need arise in the
+future.
 
-Will make its way into stable-2.0 too.
+Both changes currently breaks the filter ABI, but this should be a
+reasonable compromise since the filtering feature has not been
+released yet.
 
-Thanks!
+Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
+---
+ src/bin/lttng-sessiond/lttng-ust-abi.h                      | 6 +++---
+ src/bin/lttng-sessiond/main.c                               | 2 +-
+ src/common/sessiond-comm/sessiond-comm.h                    | 6 +++---
+ src/lib/lttng-ctl/filter/filter-visitor-generate-bytecode.c | 2 +-
+ 4 files changed, 8 insertions(+), 8 deletions(-)
 
-Mathieu
-
-> 
-> Signed-off-by: Gerlando Falauto <gerlando.falauto@keymile.com>
-> ---
->  wrapper/trace-clock.h |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/wrapper/trace-clock.h b/wrapper/trace-clock.h
-> index 6ea9e81..bced61c 100644
-> --- a/wrapper/trace-clock.h
-> +++ b/wrapper/trace-clock.h
-> @@ -46,7 +46,7 @@ static inline u64 trace_clock_monotonic_wrapper(void)
->  		return (u64) -EIO;
->  
->  	ktime = ktime_get();
-> -	return (u64) ktime.tv64;
-> +	return ktime_to_ns(ktime);
->  }
->  
->  static inline u32 trace_clock_read32(void)
-> -- 
-> 1.7.10.1
-> 
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
+diff --git a/src/bin/lttng-sessiond/lttng-ust-abi.h b/src/bin/lttng-sessiond/lttng-ust-abi.h
+index d8b10c2..504c060 100644
+--- a/src/bin/lttng-sessiond/lttng-ust-abi.h
++++ b/src/bin/lttng-sessiond/lttng-ust-abi.h
+@@ -168,10 +168,10 @@ struct lttng_ust_calibrate {
+ 	} u;
+ };
+ 
+-#define FILTER_BYTECODE_MAX_LEN		65535
++#define FILTER_BYTECODE_MAX_LEN		65536
+ struct lttng_ust_filter_bytecode {
+-	uint16_t len;
+-	uint16_t reloc_offset;
++	uint32_t len;
++	uint32_t reloc_offset;
+ 	char data[0];
+ };
+ 
+diff --git a/src/bin/lttng-sessiond/main.c b/src/bin/lttng-sessiond/main.c
+index 318da74..730ac65 100644
+--- a/src/bin/lttng-sessiond/main.c
++++ b/src/bin/lttng-sessiond/main.c
+@@ -2659,7 +2659,7 @@ skip_domain:
+ 	{
+ 		struct lttng_filter_bytecode *bytecode;
+ 
+-		if (cmd_ctx->lsm->u.filter.bytecode_len > 65336) {
++		if (cmd_ctx->lsm->u.filter.bytecode_len > LTTNG_FILTER_MAX_LEN) {
+ 			ret = LTTNG_ERR_FILTER_INVAL;
+ 			goto error;
+ 		}
+diff --git a/src/common/sessiond-comm/sessiond-comm.h b/src/common/sessiond-comm/sessiond-comm.h
+index 32ce384..62205f4 100644
+--- a/src/common/sessiond-comm/sessiond-comm.h
++++ b/src/common/sessiond-comm/sessiond-comm.h
+@@ -208,7 +208,7 @@ struct lttcomm_session_msg {
+ 	} u;
+ };
+ 
+-#define LTTNG_FILTER_MAX_LEN	65336
++#define LTTNG_FILTER_MAX_LEN	65536
+ 
+ /*
+  * Filter bytecode data. The reloc table is located at the end of the
+@@ -216,8 +216,8 @@ struct lttcomm_session_msg {
+  * starts at reloc_table_offset.
+  */
+ struct lttng_filter_bytecode {
+-	uint16_t len;	/* len of data */
+-	uint16_t reloc_table_offset;
++	uint32_t len;	/* len of data */
++	uint32_t reloc_table_offset;
+ 	char data[0];
+ };
+ 
+diff --git a/src/lib/lttng-ctl/filter/filter-visitor-generate-bytecode.c b/src/lib/lttng-ctl/filter/filter-visitor-generate-bytecode.c
+index 98f8375..332a387 100644
+--- a/src/lib/lttng-ctl/filter/filter-visitor-generate-bytecode.c
++++ b/src/lib/lttng-ctl/filter/filter-visitor-generate-bytecode.c
+@@ -239,7 +239,7 @@ int visit_node_load(struct filter_parser_ctx *ctx, struct ir_op *node)
+ 		uint32_t insn_len = sizeof(struct load_op)
+ 			+ sizeof(struct field_ref);
+ 		struct field_ref ref_offset;
+-		uint16_t reloc_offset;
++		uint32_t reloc_offset;
+ 
+ 		insn = calloc(insn_len, 1);
+ 		if (!insn)
 -- 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+1.7.11.4
