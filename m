@@ -1,10 +1,10 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH v3 lttng-ust] Fix: Filter ABI changes to
-	support	FILTER_BYTECODE_MAX_LEN (65536)
-Date: Thu, 6 Sep 2012 17:05:34 -0400
-Message-ID: <20120906210534.GA10606__47067.200279753$1346965561$gmane$org@Krystal>
-References: <1346799744-23032-1-git-send-email-christian.babeux@efficios.com>
-	<1346955191-15984-1-git-send-email-christian.babeux@efficios.com>
+Subject: Re: [PATCH] fix timestamps on architectures
+	without	CONFIG_KTIME_SCALAR
+Date: Thu, 6 Sep 2012 17:07:08 -0400
+Message-ID: <20120906210708.GB10606__36256.704995367$1346965653$gmane$org@Krystal>
+References: <1346340992-27307-1-git-send-email-gerlando.falauto@keymile.com>
+	<20120906142726.GJ3630@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -12,10 +12,10 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1T9jGZ-0008LA-LC
-	for lttng-dev@lists.lttng.org; Thu, 06 Sep 2012 17:05:35 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1T9jI5-0008Mw-Ae
+	for lttng-dev@lists.lttng.org; Thu, 06 Sep 2012 17:07:09 -0400
 Content-Disposition: inline
-In-Reply-To: <1346955191-15984-1-git-send-email-christian.babeux@efficios.com>
+In-Reply-To: <20120906142726.GJ3630@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,88 +24,76 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Christian Babeux <christian.babeux@efficios.com>
+To: Gerlando Falauto <gerlando.falauto@keymile.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Christian Babeux (christian.babeux@efficios.com) wrote:
-> In order to support the filter bytecode maximum length (65536 bytes),
-> the lttng_ust_filter_bytecode len field type must be able to
-> hold more than a uint16_t. Change the field type to a uint32_t.
+* Mathieu Desnoyers (mathieu.desnoyers@efficios.com) wrote:
+> * Gerlando Falauto (gerlando.falauto@keymile.com) wrote:
+> > trace_clock_monotonic_wrapper() should return a u64 representing the
+> > number of nanoseconds since system startup.
+> > ktime_get() provides that value directly within its .tv64 field only
+> > on those architectures defining CONFIG_KTIME_SCALAR, whereas in all
+> > other cases (e.g. PowerPC) a ktime_to_ns() conversion (which
+> > translates back to .tv64 when CONFIG_KTIME_SCALAR is defined)
+> > becomes necessary.
 > 
-> Also, since the relocation table is located at the end of the actual
-> bytecode, the reloc_table_offset (reloc_offset in ust-abi) field must
-> support offset values larger than 65535. Change the field type to a
-> uint32_t. This change will allow support of relocation table appended
-> to larger bytecode without breaking the ABI if the need arise in the
-> future.
+> merged!
 > 
-> Both changes currently breaks the filter ABI, but this should be a
-> reasonable compromise since the filtering feature has not been
-> released yet.
+> Will make its way into stable-2.0 too.
 
-merged, thanks!
+I did manage to mess the "From" of the patch in my merge though. I
+forgot to attribute the commit to you as the author. Sorry about that !
+
+You still appear in the signed-off-by lines though.
+
+Thanks,
+
+Mathieu
 
 > 
-> Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
-> ---
->  include/lttng/ust-abi.h       | 4 ++--
->  include/ust-comm.h            | 4 ++--
->  liblttng-ust/lttng-ust-comm.c | 8 ++++++++
->  3 files changed, 12 insertions(+), 4 deletions(-)
+> Thanks!
 > 
-> diff --git a/include/lttng/ust-abi.h b/include/lttng/ust-abi.h
-> index 0489e89..91639a7 100644
-> --- a/include/lttng/ust-abi.h
-> +++ b/include/lttng/ust-abi.h
-> @@ -174,8 +174,8 @@ struct lttng_ust_calibrate {
->  
->  #define FILTER_BYTECODE_MAX_LEN		65536
->  struct lttng_ust_filter_bytecode {
-> -	uint16_t len;
-> -	uint16_t reloc_offset;
-> +	uint32_t len;
-> +	uint32_t reloc_offset;
->  	char data[0];
->  };
->  
-> diff --git a/include/ust-comm.h b/include/ust-comm.h
-> index b09fcca..4a3e4ce 100644
-> --- a/include/ust-comm.h
-> +++ b/include/ust-comm.h
-> @@ -132,8 +132,8 @@ struct ustcomm_ust_msg {
->  		struct lttng_ust_tracer_version version;
->  		struct lttng_ust_tracepoint_iter tracepoint;
->  		struct {
-> -			uint16_t data_size;	/* following filter data */
-> -			uint16_t reloc_offset;
-> +			uint32_t data_size;	/* following filter data */
-> +			uint32_t reloc_offset;
->  		} filter;
->  	} u;
->  };
-> diff --git a/liblttng-ust/lttng-ust-comm.c b/liblttng-ust/lttng-ust-comm.c
-> index 842876f..be64acd 100644
-> --- a/liblttng-ust/lttng-ust-comm.c
-> +++ b/liblttng-ust/lttng-ust-comm.c
-> @@ -293,6 +293,14 @@ int handle_message(struct sock_info *sock_info,
->  			ret = -EINVAL;
->  			goto error;
->  		}
-> +
-> +		if (lum->u.filter.reloc_offset > lum->u.filter.data_size - 1) {
-> +			ERR("Filter reloc offset %u is not within data\n",
-> +				lum->u.filter.reloc_offset);
-> +			ret = -EINVAL;
-> +			goto error;
-> +		}
-> +
->  		bytecode = zmalloc(sizeof(*bytecode) + lum->u.filter.data_size);
->  		if (!bytecode) {
->  			ret = -ENOMEM;
+> Mathieu
+> 
+> > 
+> > Signed-off-by: Gerlando Falauto <gerlando.falauto@keymile.com>
+> > ---
+> >  wrapper/trace-clock.h |    2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/wrapper/trace-clock.h b/wrapper/trace-clock.h
+> > index 6ea9e81..bced61c 100644
+> > --- a/wrapper/trace-clock.h
+> > +++ b/wrapper/trace-clock.h
+> > @@ -46,7 +46,7 @@ static inline u64 trace_clock_monotonic_wrapper(void)
+> >  		return (u64) -EIO;
+> >  
+> >  	ktime = ktime_get();
+> > -	return (u64) ktime.tv64;
+> > +	return ktime_to_ns(ktime);
+> >  }
+> >  
+> >  static inline u32 trace_clock_read32(void)
+> > -- 
+> > 1.7.10.1
+> > 
+> > 
+> > _______________________________________________
+> > lttng-dev mailing list
+> > lttng-dev@lists.lttng.org
+> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> 
 > -- 
-> 1.7.11.4
+> Mathieu Desnoyers
+> Operating System Efficiency R&D Consultant
+> EfficiOS Inc.
+> http://www.efficios.com
 > 
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
 -- 
 Mathieu Desnoyers
