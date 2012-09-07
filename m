@@ -1,10 +1,11 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH 2/2] urcu: add notice to URCU_TLS() for
-	it	is not async-signal-safe
-Date: Thu, 6 Sep 2012 19:07:25 -0400
-Message-ID: <20120906230725.GA11601__43281.027270905$1346972879$gmane$org@Krystal>
-References: <1344414673-14714-1-git-send-email-laijs@cn.fujitsu.com>
-	<1344414673-14714-2-git-send-email-laijs@cn.fujitsu.com>
+Subject: Re: [PATCH] Ensure that read-side functions meet
+	10-line LGPL	criterion
+Date: Thu, 6 Sep 2012 21:20:43 -0400
+Message-ID: <20120907012042.GA12803__19774.67433685$1346980886$gmane$org@Krystal>
+References: <20120902005911.GA26326@linux.vnet.ibm.com>
+	<20120903180300.GA14133@Krystal>
+	<20120904221323.GO2593@linux.vnet.ibm.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -12,10 +13,10 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1T9lAV-0000nH-Vq
-	for lttng-dev@lists.lttng.org; Thu, 06 Sep 2012 19:07:27 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1T9nFV-0001kK-La
+	for lttng-dev@lists.lttng.org; Thu, 06 Sep 2012 21:20:45 -0400
 Content-Disposition: inline
-In-Reply-To: <1344414673-14714-2-git-send-email-laijs@cn.fujitsu.com>
+In-Reply-To: <20120904221323.GO2593@linux.vnet.ibm.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,60 +25,449 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Lai Jiangshan <laijs@cn.fujitsu.com>
-Cc: lttng-dev@lists.lttng.org, eag0628@gmail.com
+To: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
+Cc: lttng-dev@lists.lttng.org, eag0628@gmail.com, rp@svcs.cs.pdx.edu
 List-Id: lttng-dev@lists.lttng.org
 
-* Lai Jiangshan (laijs@cn.fujitsu.com) wrote:
-> Signed-off-by: Lai Jiangshan <laijs@cn.fujitsu.com>
+* Paul E. McKenney (paulmck@linux.vnet.ibm.com) wrote:
+> On Mon, Sep 03, 2012 at 02:03:00PM -0400, Mathieu Desnoyers wrote:
+> > * Paul E. McKenney (paulmck@linux.vnet.ibm.com) wrote:
+> > > This commit ensures that all read-side functions meet the 10-line LGPL
+> > > criterion that permits them to be expanded directly into non-LGPL code,
+> > > without function-call instructions.  It also documents this as the intent.
+> > > 
+> > > Signed-off-by: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
+> > > 
+> > > diff --git a/urcu/static/urcu-bp.h b/urcu/static/urcu-bp.h
+> > > index e7b2eda..881b4a4 100644
+> > > --- a/urcu/static/urcu-bp.h
+> > > +++ b/urcu/static/urcu-bp.h
+> > > @@ -6,8 +6,8 @@
+> > >   *
+> > >   * Userspace RCU header.
+> > >   *
+> > > - * TO BE INCLUDED ONLY IN LGPL-COMPATIBLE CODE. See urcu.h for linking
+> > > - * dynamically with the userspace rcu library.
+> > > + * TO BE INCLUDED ONLY IN CODE THAT IS TO BE RECOMPILED ON EACH LIBURCU
+> > > + * RELEASE. See urcu.h for linking dynamically with the userspace rcu library.
+> > >   *
+> > >   * Copyright (c) 2009 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> > >   * Copyright (c) 2009 Paul E. McKenney, IBM Corporation.
+> > > @@ -162,32 +162,48 @@ static inline int rcu_old_gp_ongoing(long *value)
+> > >  		 ((v ^ rcu_gp_ctr) & RCU_GP_CTR_PHASE);
+> > >  }
+> > >  
+> > > +/*
+> > > + * Helper for _rcu_read_lock().  The format of rcu_gp_ctr (as well as
+> > > + * the per-thread rcu_reader.ctr) has the upper bits containing a count of
+> > > + * _rcu_read_lock() nesting, and a lower-order bit that contains either zero
+> > > + * or RCU_GP_CTR_PHASE.  The smp_mb_slave() ensures that the accesses in
+> > > + * _rcu_read_lock() happen before the subsequent read-side critical section.
+> > > + */
+> > > +static inline void _rcu_read_lock_help(unsigned long tmp)
+> > 
+> > could we rename the "_rcu_read_lock_help" to "_rcu_read_lock_update" ?
+> > 
+> > I think it would fit better the role of this function in the algorithm.
+> > 
+> > As Josh pointed out, "directloy" -> "directly" below,
+> > 
+> > The rest looks good. I'll wait for an updated version.
+> 
+> Here you go!
 
-Finally, I'm merging this patch, and I won't go for the signal-disabling
-implementation, mainly because we have the same kind of behavior with
-the TLS fixup for TLS variables in DSO. So this comment apply both to
-the TLS and pthread getspecific implementation of the URCU_TLS, so I'm
-moving it slightly higher in the header file.
+Merged as:
+
+commit a5a9f428a238e790d6c97299bc214b5cca815cd7
+Author: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
+Date:   Thu Sep 6 21:15:53 2012 -0400
+
+    Ensure that read-side functions meet 10-line LGPL criterion
+    
+    This commit ensures that all read-side functions meet the 10-line LGPL
+    criterion that permits them to be expanded directly into non-LGPL code,
+    without function-call instructions.  It also documents this as the
+    intent.
+    
+    [ paulmck: Spelling fixes called out by Josh Triplett and name
+    change called out by Mathieu Desnoyers (_rcu_read_lock_help() ->
+    _rcu_read_lock_update(). ]
+    
+    [ Mathieu Desnoyers: _rcu_read_unlock_help renamed to
+      _rcu_read_unlock_update_and_wakeup, and spelling fix for
+      preced -> precede. ]
+    
+    Signed-off-by: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
+    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 
 Thanks!
 
+Now we should possibly find another #define than _LGPL_SOURCE to let
+non-lgpl code specify that they want to use the inline versions ? E.g.
+_URCU_INLINE maybe ?
+
+Thanks,
+
 Mathieu
 
-> ---
->  urcu/tls-compat.h |   14 ++++++++++++++
->  1 files changed, 14 insertions(+), 0 deletions(-)
 > 
-> diff --git a/urcu/tls-compat.h b/urcu/tls-compat.h
-> index 192a536..b7bf363 100644
-> --- a/urcu/tls-compat.h
-> +++ b/urcu/tls-compat.h
-> @@ -59,6 +59,20 @@ extern "C" {
->  
->  #else /* #ifndef CONFIG_RCU_TLS */
+> 							Thanx, Paul
+> 
+> ------------------------------------------------------------------------
+> 
+> Ensure that read-side functions meet 10-line LGPL criterion
+> 
+> This commit ensures that all read-side functions meet the 10-line LGPL
+> criterion that permits them to be expanded directly into non-LGPL code,
+> without function-call instructions.  It also documents this as the intent.
+> 
+> [ paulmck: Spelling fixes called out by Josh Triplett and name
+> change called out by Mathieu Desnoyers (_rcu_read_lock_help() ->
+> _rcu_read_lock_update(). ]
+> 
+> Signed-off-by: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
+> 
+> diff --git a/urcu/static/urcu-bp.h b/urcu/static/urcu-bp.h
+> index e7b2eda..a2f7368 100644
+> --- a/urcu/static/urcu-bp.h
+> +++ b/urcu/static/urcu-bp.h
+> @@ -6,8 +6,8 @@
+>   *
+>   * Userspace RCU header.
+>   *
+> - * TO BE INCLUDED ONLY IN LGPL-COMPATIBLE CODE. See urcu.h for linking
+> - * dynamically with the userspace rcu library.
+> + * TO BE INCLUDED ONLY IN CODE THAT IS TO BE RECOMPILED ON EACH LIBURCU
+> + * RELEASE. See urcu.h for linking dynamically with the userspace rcu library.
+>   *
+>   * Copyright (c) 2009 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+>   * Copyright (c) 2009 Paul E. McKenney, IBM Corporation.
+> @@ -162,32 +162,48 @@ static inline int rcu_old_gp_ongoing(long *value)
+>  		 ((v ^ rcu_gp_ctr) & RCU_GP_CTR_PHASE);
+>  }
 >  
 > +/*
-> + * NOTE: URCU_TLS() is NOT async-signal-safe, you can't use it
-> + * inside any function which can be called from signal handler.
-> + *
-> + * But if pthread_getspecific() is async-signal-safe in your
-> + * platform, you can make URCU_TLS() async-signal-safe via:
-> + * ensuring the first call to URCU_TLS() of a given TLS variable of
-> + * all threads is called earliest from a non-signal handler function.
-> + *
-> + * Exmaple: In any thread, the first call of URCU_TLS(rcu_reader)
-> + * is called from rcu_register_thread(), so we can ensure all later
-> + * URCU_TLS(rcu_reader) in any thread is async-signal-safe.
+> + * Helper for _rcu_read_lock().  The format of rcu_gp_ctr (as well as
+> + * the per-thread rcu_reader.ctr) has the upper bits containing a count of
+> + * _rcu_read_lock() nesting, and a lower-order bit that contains either zero
+> + * or RCU_GP_CTR_PHASE.  The smp_mb_slave() ensures that the accesses in
+> + * _rcu_read_lock() happen before the subsequent read-side critical section.
 > + */
+> +static inline void _rcu_read_lock_update(unsigned long tmp)
+> +{
+> +	if (caa_likely(!(tmp & RCU_GP_CTR_NEST_MASK))) {
+> +		_CMM_STORE_SHARED(URCU_TLS(rcu_reader)->ctr, _CMM_LOAD_SHARED(rcu_gp_ctr));
+> +		cmm_smp_mb();
+> +	} else
+> +		_CMM_STORE_SHARED(URCU_TLS(rcu_reader)->ctr, tmp + RCU_GP_COUNT);
+> +}
 > +
->  # include <pthread.h>
+> +/*
+> + * Enter an RCU read-side critical section.
+> + *
+> + * The first cmm_barrier() call ensures that the compiler does not reorder
+> + * the body of _rcu_read_lock() with a mutex.
+> + *
+> + * This function and its helper are both less than 10 lines long.  The
+> + * intent is that this function meets the 10-line criterion in LGPL,
+> + * allowing this function to be invoked directly from non-LGPL code.
+> + */
+>  static inline void _rcu_read_lock(void)
+>  {
+>  	long tmp;
 >  
->  struct urcu_tls {
-> -- 
-> 1.7.4.4
+> -	/* Check if registered */
+>  	if (caa_unlikely(!URCU_TLS(rcu_reader)))
+> -		rcu_bp_register();
+> -
+> +		rcu_bp_register(); /* If not yet registered. */
+>  	cmm_barrier();	/* Ensure the compiler does not reorder us with mutex */
+>  	tmp = URCU_TLS(rcu_reader)->ctr;
+> -	/*
+> -	 * rcu_gp_ctr is
+> -	 *   RCU_GP_COUNT | (~RCU_GP_CTR_PHASE or RCU_GP_CTR_PHASE)
+> -	 */
+> -	if (caa_likely(!(tmp & RCU_GP_CTR_NEST_MASK))) {
+> -		_CMM_STORE_SHARED(URCU_TLS(rcu_reader)->ctr, _CMM_LOAD_SHARED(rcu_gp_ctr));
+> -		/*
+> -		 * Set active readers count for outermost nesting level before
+> -		 * accessing the pointer.
+> -		 */
+> -		cmm_smp_mb();
+> -	} else {
+> -		_CMM_STORE_SHARED(URCU_TLS(rcu_reader)->ctr, tmp + RCU_GP_COUNT);
+> -	}
+> +	_rcu_read_lock_update(tmp);
+>  }
+>  
+> +/*
+> + * Exit an RCU read-side critical section.  This function is less than
+> + * 10 lines of code, and is intended to be usable by non-LGPL code, as
+> + * called out in LGPL.
+> + */
+>  static inline void _rcu_read_unlock(void)
+>  {
+>  	/*
+> diff --git a/urcu/static/urcu-pointer.h b/urcu/static/urcu-pointer.h
+> index 48dc5bf..4361156 100644
+> --- a/urcu/static/urcu-pointer.h
+> +++ b/urcu/static/urcu-pointer.h
+> @@ -6,8 +6,8 @@
+>   *
+>   * Userspace RCU header. Operations on pointers.
+>   *
+> - * TO BE INCLUDED ONLY IN LGPL-COMPATIBLE CODE. See urcu-pointer.h for
+> - * linking dynamically with the userspace rcu library.
+> + * TO BE INCLUDED ONLY IN CODE THAT IS TO BE RECOMPILED ON EACH LIBURCU
+> + * RELEASE. See urcu.h for linking dynamically with the userspace rcu library.
+>   *
+>   * Copyright (c) 2009 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+>   * Copyright (c) 2009 Paul E. McKenney, IBM Corporation.
+> @@ -59,8 +59,11 @@ extern "C" {
+>   * addition to forthcoming C++ standard.
+>   *
+>   * Should match rcu_assign_pointer() or rcu_xchg_pointer().
+> + *
+> + * This macro is less than 10 lines long.  The intent is that this macro
+> + * meets the 10-line criterion in LGPL, allowing this function to be
+> + * expanded directly in non-LGPL code.
+>   */
+> -
+>  #define _rcu_dereference(p)     ({					\
+>  				__typeof__(p) _________p1 = CMM_LOAD_SHARED(p); \
+>  				cmm_smp_read_barrier_depends();		\
+> @@ -73,8 +76,11 @@ extern "C" {
+>   * data structure, which can be safely freed after waiting for a quiescent state
+>   * using synchronize_rcu(). If fails (unexpected value), returns old (which
+>   * should not be freed !).
+> + *
+> + * This macro is less than 10 lines long.  The intent is that this macro
+> + * meets the 10-line criterion in LGPL, allowing this function to be
+> + * expanded directly in non-LGPL code.
+>   */
+> -
+>  #define _rcu_cmpxchg_pointer(p, old, _new)				\
+>  	({								\
+>  		__typeof__(*p) _________pold = (old);			\
+> @@ -89,8 +95,11 @@ extern "C" {
+>   * _rcu_xchg_pointer - same as rcu_assign_pointer, but returns the previous
+>   * pointer to the data structure, which can be safely freed after waiting for a
+>   * quiescent state using synchronize_rcu().
+> + *
+> + * This macro is less than 10 lines long.  The intent is that this macro
+> + * meets the 10-line criterion in LGPL, allowing this function to be
+> + * expanded directly in non-LGPL code.
+>   */
+> -
+>  #define _rcu_xchg_pointer(p, v)				\
+>  	({						\
+>  		__typeof__(*p) _________pv = (v);	\
+> @@ -121,8 +130,11 @@ extern "C" {
+>   * data structure before its publication.
+>   *
+>   * Should match rcu_dereference_pointer().
+> + *
+> + * This macro is less than 10 lines long.  The intent is that this macro
+> + * meets the 10-line criterion in LGPL, allowing this function to be
+> + * expanded directly in non-LGPL code.
+>   */
+> -
+>  #define _rcu_assign_pointer(p, v)	_rcu_set_pointer(&(p), v)
+>  
+>  #ifdef __cplusplus 
+> diff --git a/urcu/static/urcu-qsbr.h b/urcu/static/urcu-qsbr.h
+> index 22908a4..5580092 100644
+> --- a/urcu/static/urcu-qsbr.h
+> +++ b/urcu/static/urcu-qsbr.h
+> @@ -6,8 +6,8 @@
+>   *
+>   * Userspace RCU QSBR header.
+>   *
+> - * TO BE INCLUDED ONLY IN LGPL-COMPATIBLE CODE. See urcu-qsbr.h for linking
+> - * dynamically with the userspace rcu QSBR library.
+> + * TO BE INCLUDED ONLY IN CODE THAT IS TO BE RECOMPILED ON EACH LIBURCU
+> + * RELEASE. See urcu.h for linking dynamically with the userspace rcu library.
+>   *
+>   * Copyright (c) 2009 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+>   * Copyright (c) 2009 Paul E. McKenney, IBM Corporation.
+> @@ -157,15 +157,36 @@ static inline int rcu_gp_ongoing(unsigned long *ctr)
+>  	return v && (v != rcu_gp_ctr);
+>  }
+>  
+> +/*
+> + * Enter an RCU read-side critical section.
+> + *
+> + * This function is less than 10 lines long.  The intent is that this
+> + * function meets the 10-line criterion for LGPL, allowing this function
+> + * to be invoked directly from non-LGPL code.
+> + */
+>  static inline void _rcu_read_lock(void)
+>  {
+>  	rcu_assert(URCU_TLS(rcu_reader).ctr);
+>  }
+>  
+> +/*
+> + * Exit an RCU read-side critical section.
+> + *
+> + * This function is less than 10 lines long.  The intent is that this
+> + * function meets the 10-line criterion for LGPL, allowing this function
+> + * to be invoked directly from non-LGPL code.
+> + */
+>  static inline void _rcu_read_unlock(void)
+>  {
+>  }
+>  
+> +/*
+> + * Inform RCU of a quiescent state.
+> + *
+> + * This function is less than 10 lines long.  The intent is that this
+> + * function meets the 10-line criterion for LGPL, allowing this function
+> + * to be invoked directly from non-LGPL code.
+> + */
+>  static inline void _rcu_quiescent_state(void)
+>  {
+>  	cmm_smp_mb();
+> @@ -175,6 +196,14 @@ static inline void _rcu_quiescent_state(void)
+>  	cmm_smp_mb();
+>  }
+>  
+> +/*
+> + * Take a thread offline, prohibiting it from entering further RCU
+> + * read-side critical sections.
+> + *
+> + * This function is less than 10 lines long.  The intent is that this
+> + * function meets the 10-line criterion for LGPL, allowing this function
+> + * to be invoked directly from non-LGPL code.
+> + */
+>  static inline void _rcu_thread_offline(void)
+>  {
+>  	cmm_smp_mb();
+> @@ -184,6 +213,14 @@ static inline void _rcu_thread_offline(void)
+>  	cmm_barrier();	/* Ensure the compiler does not reorder us with mutex */
+>  }
+>  
+> +/*
+> + * Bring a thread online, allowing it to once again enter RCU
+> + * read-side critical sections.
+> + *
+> + * This function is less than 10 lines long.  The intent is that this
+> + * function meets the 10-line criterion for LGPL, allowing this function
+> + * to be invoked directly from non-LGPL code.
+> + */
+>  static inline void _rcu_thread_online(void)
+>  {
+>  	cmm_barrier();	/* Ensure the compiler does not reorder us with mutex */
+> diff --git a/urcu/static/urcu.h b/urcu/static/urcu.h
+> index f27f8b6..f211dab 100644
+> --- a/urcu/static/urcu.h
+> +++ b/urcu/static/urcu.h
+> @@ -6,8 +6,8 @@
+>   *
+>   * Userspace RCU header.
+>   *
+> - * TO BE INCLUDED ONLY IN LGPL-COMPATIBLE CODE. See urcu.h for linking
+> - * dynamically with the userspace rcu library.
+> + * TO BE INCLUDED ONLY IN CODE THAT IS TO BE RECOMPILED ON EACH LIBURCU
+> + * RELEASE. See urcu.h for linking dynamically with the userspace rcu library.
+>   *
+>   * Copyright (c) 2009 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+>   * Copyright (c) 2009 Paul E. McKenney, IBM Corporation.
+> @@ -252,46 +252,71 @@ static inline int rcu_gp_ongoing(unsigned long *ctr)
+>  		 ((v ^ rcu_gp_ctr) & RCU_GP_CTR_PHASE);
+>  }
+>  
+> -static inline void _rcu_read_lock(void)
+> +/*
+> + * Helper for _rcu_read_lock().  The format of rcu_gp_ctr (as well as
+> + * the per-thread rcu_reader.ctr) has the upper bits containing a count of
+> + * _rcu_read_lock() nesting, and a lower-order bit that contains either zero
+> + * or RCU_GP_CTR_PHASE.  The smp_mb_slave() ensures that the accesses in
+> + * _rcu_read_lock() happen before the subsequent read-side critical section.
+> + */
+> +static inline void _rcu_read_lock_update(unsigned long tmp)
+>  {
+> -	unsigned long tmp;
+> -
+> -	cmm_barrier();	/* Ensure the compiler does not reorder us with mutex */
+> -	tmp = URCU_TLS(rcu_reader).ctr;
+> -	/*
+> -	 * rcu_gp_ctr is
+> -	 *   RCU_GP_COUNT | (~RCU_GP_CTR_PHASE or RCU_GP_CTR_PHASE)
+> -	 */
+>  	if (caa_likely(!(tmp & RCU_GP_CTR_NEST_MASK))) {
+>  		_CMM_STORE_SHARED(URCU_TLS(rcu_reader).ctr, _CMM_LOAD_SHARED(rcu_gp_ctr));
+> -		/*
+> -		 * Set active readers count for outermost nesting level before
+> -		 * accessing the pointer. See smp_mb_master().
+> -		 */
+>  		smp_mb_slave(RCU_MB_GROUP);
+> -	} else {
+> +	} else
+>  		_CMM_STORE_SHARED(URCU_TLS(rcu_reader).ctr, tmp + RCU_GP_COUNT);
+> -	}
+>  }
+>  
+> -static inline void _rcu_read_unlock(void)
+> +/*
+> + * Enter an RCU read-side critical section.
+> + *
+> + * The first cmm_barrier() call ensures that the compiler does not reorder
+> + * the body of _rcu_read_lock() with a mutex.
+> + *
+> + * This function and its helper are both less than 10 lines long.  The
+> + * intent is that this function meets the 10-line criterion in LGPL,
+> + * allowing this function to be invoked directly from non-LGPL code.
+> + */
+> +static inline void _rcu_read_lock(void)
+>  {
+>  	unsigned long tmp;
+>  
+> +	cmm_barrier();
+>  	tmp = URCU_TLS(rcu_reader).ctr;
+> -	/*
+> -	 * Finish using rcu before decrementing the pointer.
+> -	 * See smp_mb_master().
+> -	 */
+> +	_rcu_read_lock_update(tmp);
+> +}
+> +
+> +/*
+> + * This is a helper function for _rcu_read_unlock().
+> + *
+> + * The first smp_mb_slave() call ensures that the critical section is
+> + * seen to preced the store to rcu_reader.ctr.
+> + * The second smp_mb_slave() call ensures that we write to rcu_reader.ctr
+> + * before reading the update-side futex.
+> + */
+> +static inline void _rcu_read_unlock_help(unsigned long tmp)
+> +{
+>  	if (caa_likely((tmp & RCU_GP_CTR_NEST_MASK) == RCU_GP_COUNT)) {
+>  		smp_mb_slave(RCU_MB_GROUP);
+>  		_CMM_STORE_SHARED(URCU_TLS(rcu_reader).ctr, URCU_TLS(rcu_reader).ctr - RCU_GP_COUNT);
+> -		/* write URCU_TLS(rcu_reader).ctr before read futex */
+>  		smp_mb_slave(RCU_MB_GROUP);
+>  		wake_up_gp();
+> -	} else {
+> +	} else
+>  		_CMM_STORE_SHARED(URCU_TLS(rcu_reader).ctr, URCU_TLS(rcu_reader).ctr - RCU_GP_COUNT);
+> -	}
+> +}
+> +
+> +/*
+> + * Exit an RCU read-side crtical section.  Both this function and its
+> + * helper are smaller than 10 lines of code, and are intended to be
+> + * usable by non-LGPL code, as called out in LGPL.
+> + */
+> +static inline void _rcu_read_unlock(void)
+> +{
+> +	unsigned long tmp;
+> +
+> +	tmp = URCU_TLS(rcu_reader).ctr;
+> +	_rcu_read_unlock_help(tmp);
+>  	cmm_barrier();	/* Ensure the compiler does not reorder us with mutex */
+>  }
+>  
 > 
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
 -- 
 Mathieu Desnoyers
