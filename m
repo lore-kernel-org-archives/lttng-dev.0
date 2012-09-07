@@ -1,18 +1,18 @@
-From: Hui Zhu <teawater@gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Subject: Re: [PATCH/babeltrace] Fix babeltrace-log crash
-Date: Fri, 7 Sep 2012 15:47:02 +0800
-Message-ID: <CANFwon02V_Ov65gydgBuO5PhvNLFqwg++oYpwscLHuOLDXTGcQ__20207.5255489492$1347004092$gmane$org@mail.gmail.com>
+Date: Fri, 7 Sep 2012 08:37:48 -0400
+Message-ID: <20120907123748.GB22241__6632.76594500548$1347021510$gmane$org@Krystal>
 References: <CANFwon2TVvTO9NLVcFfTMJphLCoXp1p1F_Gfgioez+2xLnoBpw@mail.gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-vb0-f48.google.com ([209.85.212.48])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <teawater@gmail.com>) id 1T9tI5-0004me-61
-	for lttng-dev@lists.lttng.org; Fri, 07 Sep 2012 03:47:49 -0400
-Received: by vbme21 with SMTP id e21so3411194vbm.35
-	for <lttng-dev@lists.lttng.org>; Fri, 07 Sep 2012 00:47:43 -0700 (PDT)
+	(envelope-from <compudj@mail.openrapids.net>) id 1T9xok-0007AO-7t
+	for lttng-dev@lists.lttng.org; Fri, 07 Sep 2012 08:37:50 -0400
+Content-Disposition: inline
 In-Reply-To: <CANFwon2TVvTO9NLVcFfTMJphLCoXp1p1F_Gfgioez+2xLnoBpw@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -22,21 +22,15 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Hui Zhu <teawater@gmail.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Looks it cannot be init in ctf_init_pos.
-
-So move init to trace_text.
-
-Thanks,
-Hui
-
-On Fri, Sep 7, 2012 at 3:40 PM, Hui Zhu <teawater@gmail.com> wrote:
+* Hui Zhu (teawater@gmail.com) wrote:
 > Hi,
->
+> 
 > Got a crash with babeltrace-log.
->
+> 
 > #0  0x00007ffff744504c in free () from /lib/x86_64-linux-gnu/libc.so.6
 > #1  0x00007ffff7ba6fc9 in munmap_align (mma=0x7ffff7ffe620) at
 > ../../../babeltrace/include/babeltrace/mmap-align.h:78
@@ -50,32 +44,61 @@ On Fri, Sep 7, 2012 at 3:40 PM, Hui Zhu <teawater@gmail.com> wrote:
 >     at ../../babeltrace/converter/babeltrace-log.c:233
 > #5  main (argc=<optimized out>, argv=<optimized out>) at
 > ../../babeltrace/converter/babeltrace-log.c:342
->
+> 
 > This issue because pos is used before it init.  This patch init it in
 > function ctf_init_pos.
->
+
+Merged as:
+
+
+commit 36741bea2b53007c29ac0391ee9086722e00653a
+Author: Hui Zhu <teawater@gmail.com>
+Date:   Fri Sep 7 08:36:28 2012 -0400
+
+    Fix babeltrace-log uninitialized memory
+    
+    Got a crash with babeltrace-log.
+    
+    ../../../babeltrace/include/babeltrace/mmap-align.h:78
+    index=0, whence=0)
+        at ../../../babeltrace/formats/ctf/ctf.c:623
+        at ../../../babeltrace/formats/ctf/ctf.c:576
+    <_IO_2_1_stdin_>)
+        at ../../babeltrace/converter/babeltrace-log.c:233
+    ../../babeltrace/converter/babeltrace-log.c:342
+    
+    This issue because pos is used before it init.  This patch init it in
+    function ctf_init_pos.
+    
+    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+
+Thanks!
+
+Mathieu
+
+
+> 
 > Thanks,
 > Hui
->
+> 
 > --- a/formats/ctf/ctf.c
 > +++ b/formats/ctf/ctf.c
 > @@ -550,6 +550,7 @@ error:
->
+> 
 >  void ctf_init_pos(struct ctf_stream_pos *pos, int fd, int open_flags)
 >  {
-> +       memset(pos, 0, sizeof(*pos));
->         pos->fd = fd;
->         if (fd >= 0) {
->                 pos->packet_cycles_index = g_array_new(FALSE, TRUE,
+> +	memset(pos, 0, sizeof(*pos));
+>  	pos->fd = fd;
+>  	if (fd >= 0) {
+>  		pos->packet_cycles_index = g_array_new(FALSE, TRUE,
+> 
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
-
---- a/converter/babeltrace-log.c
-+++ b/converter/babeltrace-log.c
-@@ -230,6 +230,7 @@ void trace_text(FILE *input, int output)
- 	char *line = NULL, *nl;
- 	size_t linesize;
-
-+	memset(&pos, 0, sizeof(pos));
- 	ctf_init_pos(&pos, output, O_RDWR);
-
- 	write_packet_header(&pos, s_uuid);
+-- 
+Mathieu Desnoyers
+Operating System Efficiency R&D Consultant
+EfficiOS Inc.
+http://www.efficios.com
