@@ -1,16 +1,17 @@
-From: =?GB2312?B?v9zP/urN?= <kxhdyx@gmail.com>
-Subject: Can LTTng use across multiple system?
-Date: Mon, 10 Sep 2012 10:14:41 +0800
-Message-ID: <CAH3R=oft5_Nkvej28OPK9wiunPPJFJGE_p+KTYzWgL+Cz0V1NA__39849.0710802891$1347243319$gmane$org@mail.gmail.com>
+From: Carlos de Sa <desa.carlos@gmail.com>
+Subject: Trace files not getting generated
+Date: Mon, 10 Sep 2012 12:12:32 +0530
+Message-ID: <CAOvs79-D41oE5n+zhQ-Xgc+_zpriKTJNjbYdLq3_-MTic0jJ4A__3574.75222922421$1347259388$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0142090937=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-vb0-f48.google.com ([209.85.212.48])
+Received: from mail-vc0-f176.google.com ([209.85.220.176])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <kxhdyx@gmail.com>) id 1TAtWR-0000OS-0G
-	for lttng-dev@lists.lttng.org; Sun, 09 Sep 2012 22:14:47 -0400
-Received: by vbme21 with SMTP id e21so2604578vbm.35
-	for <lttng-dev@lists.lttng.org>; Sun, 09 Sep 2012 19:14:41 -0700 (PDT)
+	(envelope-from <desa.carlos@gmail.com>) id 1TAxhe-0002PT-IO
+	for lttng-dev@lists.lttng.org; Mon, 10 Sep 2012 02:42:38 -0400
+Received: by vcbfl11 with SMTP id fl11so1182481vcb.35
+	for <lttng-dev@lists.lttng.org>; Sun, 09 Sep 2012 23:42:32 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,42 +23,50 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============0142090937==
-Content-Type: multipart/alternative; boundary=bcaec51d2e4432dcbf04c94f858e
+Hi,
 
---bcaec51d2e4432dcbf04c94f858e
-Content-Type: text/plain; charset=ISO-8859-1
+I've been trying to get kernel tracing working on a TI AM355X EVM
+using the standard arago 05.05 toolchain, kernel & ti-sdk filesystem;
+but seem to have some buffer issues. Any help on this would be much
+appreciated.
 
-I saw this :Tracing across multiple systems is also possible.
-Now i want to deploy LTTng on a cluster system(such as 4 machines,one is
-the control machine,and this on also can collect all other 3 machines trace
-results),but i can't find any documentation about that.
-Are there any suggestions for me?
-Thanks all.
+After starting a trace session I ran a few programs - the graphics
+package apps and standard demo apps. After stopping all seems to be
+fine but when I destroy the session it generates a warning. And the
+session dir (session2-20120727-122650) is empty as can be seen below -
 
---bcaec51d2e4432dcbf04c94f858e
-Content-Type: text/html; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
+root@am335x-evm:~/lttng-traces# arm-arago-linux-gnueabi-lttng enable-event sched
+_switch,sched_wakeup -k
+kernel event sched_switch created in channel channel0
+kernel event sched_wakeup created in channel channel0
+root@am335x-evm:~/lttng-traces# arm-arago-linux-gnueabi-lttng add-context -k -e
+sched_switch -t pid
+kernel context pid added to event sched_switch
+root@am335x-evm:~/lttng-traces# arm-arago-linux-gnueabi-lttng start
+Tracing started for session session2
+root@am335x-evm:~/lttng-traces# arm-arago-linux-gnueabi-lttng stop
+Tracing stopped for session session2
+root@am335x-evm:~/lttng-traces# ls
+session1-20120727-122409  session2-20120727-122650
+root@am335x-evm:~/lttng-traces# ls session2-20120727-122650/kernel/
+root@am335x-evm:~/lttng-traces# ls session2-20120727-122650/kernel/
+root@am335x-evm:~/lttng-traces# arm-arago-linux-gnueabi-lttng destroy
+[ 1049.263275] ring buffer relay-discard, cpu 0: records were lost. Caused by:
+[ 1049.263275]   [ 21949 buffer full, 0 nest buffer wrap-around, 0
+event too big ]
+Session session2 destroyed at /home/root
+root@am335x-evm:~# ls lttng-traces/session2-20120727-122650/kernel/
+root@am335x-evm:~# ls lttng-traces/session2-20120727-122650/
 
-<div>I saw this :Tracing across multiple systems is also possible.</div><di=
-v>Now i want to deploy LTTng on a cluster system(such as 4 machines,one is =
-the control machine,and this on also can collect all other 3 machines trace=
- results),but i can&#39;t find any documentation about that.</div>
-<div>Are there any suggestions for me?</div><div>Thanks all.</div><div><br>=
-</div>
+Any idea whats going wrong? Fyi I also have debugfs enabled and
+mounted. And sessiond when run with -vvv option does not show any
+errors.
 
---bcaec51d2e4432dcbf04c94f858e--
+Previously when enabling all traces (enable-event -a -k) I got the
+error at "LTTng: Failure to write metadata to buffers (timeout)" when
+starting. I thought this may have been a kernel buffer issue due to
+enabling all possible events. But the above log does not show the same
+issue so thought this case of only a few events should have worked.
 
-
---===============0142090937==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0142090937==--
+Regards,
+Carlos
