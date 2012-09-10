@@ -1,17 +1,19 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: Re: lttng command line user-friendliness
-Date: Mon, 10 Sep 2012 11:00:18 -0400
-Message-ID: <504E0082.9040502__38495.0939369903$1347289260$gmane$org@efficios.com>
-References: <504DCE2E.7020000@mentor.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [commit for review] Fix recent filter regressions
+Date: Mon, 10 Sep 2012 11:08:55 -0400
+Message-ID: <20120910150855.GC15712__46928.4767787487$1347289785$gmane$org@Krystal>
+References: <20120910145431.GA15712@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([213.239.202.151])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1TB5TM-0006ao-5o
-	for lttng-dev@lists.lttng.org; Mon, 10 Sep 2012 11:00:24 -0400
-In-Reply-To: <504DCE2E.7020000@mentor.com>
+	(envelope-from <compudj@mail.openrapids.net>) id 1TB5bd-0006ev-D4
+	for lttng-dev@lists.lttng.org; Mon, 10 Sep 2012 11:08:57 -0400
+Content-Disposition: inline
+In-Reply-To: <20120910145431.GA15712@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,111 +22,112 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Woegerer, Paul" <Paul_Woegerer@mentor.com>
-Cc: lttng-dev@lists.lttng.org
+To: christian.babeux@efficios.com
+Cc: lttng-dev@lists.lttng.org, dgoulet@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA512
-
-Hi Paul,
-
-Woegerer, Paul:
-> As much as I like the lttng command line tool (that we have since 
-> LTTng2) I still see people (who are not yet familiar with lttng) 
-> struggle with the simple fact that it takes more than one command
-> to actually get something traced.
+* Mathieu Desnoyers (mathieu.desnoyers@efficios.com) wrote:
+> Hi!
 > 
-> Issuing a sequence of commands like:
-> 
-> lttng create lttng enable-event -u -a lttng start 
-> my_foobar_traced_application 1 2 3 lttng stop lttng destroy
-> 
+> Please review this patch from my pull queue for lttng-tools. As soon as
+> we get your Acked-by, David will pull it.
 
-Small note here that the "destroy" is not needed. The stop forces a
-subbuffer switch meaning that the current data collected is written to
-the trace files.
+As per our private irc discussion, how about the following update ?
 
-> seems to be perceived as complicated compared to:
-> 
-> perf record -- my_foobar_traced_application 1 2 3
-> 
-> My argument usually is that providing detailed settings as options
-> (like perf) does not scale as well as the lttng approach (if you
-> have more things to configure). On the other hand most users just
-> want something like the above. Also arguing that they should write
-> a shell-script that encodes their use case generally causes
-> irritation ("... please understand, I do not want to write a
-> shell-script I just want to do simple tracing of my executable
-> ...").
-> 
-> What about adding something similar to "perf record" to lower the 
-> barrier for such users. For example:
-> 
-> lttng record [--session-name <name>] [--session-template 
-> <session_template_file>]  -- <command> [<options>]
-> 
-> Where the optional session_template_file may only contain 
-> "enable-channel, enable-event and add-context" commands. If omitted
-> the following could be the (trivial) default session template:
-> 
-> enable-event -u -a
-> 
-> 
-> Would this make sense for others as well ? Any alternative
-> suggestions ?
+commit aa06477c0d844bb5b68c8f8070fd0cae3a80de52
+Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Date:   Mon Sep 10 10:45:41 2012 -0400
 
-This totally makes sense and is also something we are looking to do
-for a long time.
+    Fix filter: fix recent regressions
+    
+    Fix:
+    commit d93c4f1ffcffa73102e3299276f2f83951a68c36
+    Author: Christian Babeux <christian.babeux@efficios.com>
+    Date:   Thu Sep 6 13:40:19 2012 -0400
+    
+        Fix: Accept bytecode of length 65536 bytes
+    
+    Broke the filter: it changed the reloc table format, without knowledge
+    of UST, and without good reason: it should stay { uint16_t, string } --
+    it does not need a uint32_t offset. Add a check for the value returned
+    by bytecode_get_len() when populating the reloc table.
+    
+    Fix:
+    commit 5ddb0a08c5c3ca917b025032b864d78e53c7c68a
+    Author: Christian Babeux <christian.babeux@efficios.com>
+    Date:   Mon Aug 27 14:48:21 2012 -0400
+    
+        Fix: Generation of bytecode longer than 32768 bytes fails
+    
+    Mixed the concepts of "len" and "alloc_len". It was therefore not
+    checking the bounds correctly, and was not zeroing the memory range
+    expected to be zeroed, causing out-of-bound array access.
+    
+    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 
-We were thinking of a "lttng trace [...]" command that would wrap the
-session creation, enabling all events for a domain (kernel or/and user
-space) and start the trace by outputting either the trace live like
-strace or at an output destination. For the live tracing, it's our
-next step right NOW so the next 2.2 version *should* have this and
-would make total sense also to have this command!
+diff --git a/src/lib/lttng-ctl/filter/filter-visitor-generate-bytecode.c b/src/lib/lttng-ctl/filter/filter-visitor-generate-bytecode.c
+index 332a387..8d44f4b 100644
+--- a/src/lib/lttng-ctl/filter/filter-visitor-generate-bytecode.c
++++ b/src/lib/lttng-ctl/filter/filter-visitor-generate-bytecode.c
+@@ -94,21 +94,21 @@ int32_t bytecode_reserve(struct lttng_filter_bytecode_alloc **fb, uint32_t align
+ {
+ 	int32_t ret;
+ 	uint32_t padding = offset_align((*fb)->b.len, align);
++	uint32_t new_len = (*fb)->b.len + padding + len;
++	uint32_t new_alloc_len = sizeof(struct lttng_filter_bytecode) + new_len;
++	uint32_t old_alloc_len = (*fb)->alloc_len;
+ 
+-	if ((*fb)->b.len + padding + len > LTTNG_FILTER_MAX_LEN)
++	if (new_len > LTTNG_FILTER_MAX_LEN)
+ 		return -EINVAL;
+ 
+-	if ((*fb)->b.len + padding + len > (*fb)->alloc_len) {
+-		uint32_t new_len =
+-			max_t(uint32_t, 1U << get_count_order((*fb)->b.len + padding + len),
+-				(*fb)->alloc_len << 1);
+-		uint32_t old_len = (*fb)->alloc_len;
+-
+-		*fb = realloc(*fb, sizeof(struct lttng_filter_bytecode_alloc) + new_len);
++	if (new_alloc_len > old_alloc_len) {
++		new_alloc_len =
++			max_t(uint32_t, 1U << get_count_order(new_alloc_len), old_alloc_len << 1);
++		*fb = realloc(*fb, new_alloc_len);
+ 		if (!*fb)
+ 			return -ENOMEM;
+-		memset(&(*fb)->b.data[old_len], 0, new_len - old_len);
+-		(*fb)->alloc_len = new_len;
++		memset(&((char *) *fb)[old_alloc_len], 0, new_alloc_len - old_alloc_len);
++		(*fb)->alloc_len = new_alloc_len;
+ 	}
+ 	(*fb)->b.len += padding;
+ 	ret = (*fb)->b.len;
+@@ -239,7 +239,8 @@ int visit_node_load(struct filter_parser_ctx *ctx, struct ir_op *node)
+ 		uint32_t insn_len = sizeof(struct load_op)
+ 			+ sizeof(struct field_ref);
+ 		struct field_ref ref_offset;
+-		uint32_t reloc_offset;
++		uint32_t reloc_offset_u32;
++		uint16_t reloc_offset;
+ 
+ 		insn = calloc(insn_len, 1);
+ 		if (!insn)
+@@ -248,7 +249,12 @@ int visit_node_load(struct filter_parser_ctx *ctx, struct ir_op *node)
+ 		ref_offset.offset = (uint16_t) -1U;
+ 		memcpy(insn->data, &ref_offset, sizeof(ref_offset));
+ 		/* reloc_offset points to struct load_op */
+-		reloc_offset = bytecode_get_len(&ctx->bytecode->b);
++		reloc_offset_u32 = bytecode_get_len(&ctx->bytecode->b);
++		if (reloc_offset_u32 > LTTNG_FILTER_MAX_LEN - 1) {
++			free(insn);
++			return -EINVAL;
++		}
++		reloc_offset = (uint16_t) reloc_offset_u32;
+ 		ret = bytecode_push(&ctx->bytecode, insn, 1, insn_len);
+ 		if (ret) {
+ 			free(insn);
 
-To be honest, we have almost everything (on the technical side) to
-create this command (except the live tracing), we just don't have it
-now because of a priority/time issue :).
-
-I would however encourage everyone on this list who is willing to
-continue this thread in order to come up with a small RFC for the command.
-
-RFC/Discussion:
-
-lttng record [--session-name <name>] [--session-template
-<session_template_file>]  -- <command> [<options>]
-
-Either "trace" or "record", I guess it's a simple aesthetic choice
-here :).
-
-With more options here to set either a custom destination or live
-trace. What's the default? (no opts given). I would personally go for
-a default one being to record in the session default trace files and
-add a "-l" for the live.
-
-	-o, --output=DST
-	-l, --live
-
-Add a domain option where nothing enables kernel AND ust or else the
-command can take either -u or -k.
-
-Please, contribute to this, no bad ideas, only bad answers! :)
-
-Cheers and thanks Paul for comment!
-David
-
-> 
-> Thanks, Paul
-> 
------BEGIN PGP SIGNATURE-----
-
-iQEcBAEBCgAGBQJQTgB+AAoJEELoaioR9I02zzoIAMd+nG8KLZnmHiFQU9Tcqq9Q
-N+jLVU/JjMuzjpQluD+1Xe3O9yLDu/mEqGAddYBQ5RnkHS7DveFwfY697nESqJPR
-qV0Y3ajbIC30WMrnweZSypsj9xAv33ZzFn4C/DuYIylicqpcX8mxcMgLzI9duoRQ
-/kxOqIeBLvl5C/pFSR55vki3fxhHPg67f2S9TgFDiBEPmaL0UkxpfOaB3G86Bj8z
-Kp7oKCCbQzv0R3J4BlcNRNUXKTClo3Qjb/ZyWGgFwwErZJoADcd+osvIU9raA7MY
-yEEExx5t4OMjEyrb3eqJgihH+xMx6eW1275vz2TV4ayBIg1YuJrIzUY/zgVkYn0=
-=f6QB
------END PGP SIGNATURE-----
+-- 
+Mathieu Desnoyers
+Operating System Efficiency R&D Consultant
+EfficiOS Inc.
+http://www.efficios.com
