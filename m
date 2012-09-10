@@ -1,19 +1,16 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: Re: [PATCH v3 lttng-tools] Filter allocation and large
- bytecode fixes
-Date: Fri, 07 Sep 2012 13:37:14 -0400
-Message-ID: <504A30CA.7020209__23009.8525564701$1347039477$gmane$org@efficios.com>
-References: <1346093301-25274-1-git-send-email-christian.babeux@efficios.com>
-	<1346953219-9001-1-git-send-email-christian.babeux@efficios.com>
+From: =?GB2312?B?v9zP/urN?= <kxhdyx@gmail.com>
+Subject: Can LTTng use across multiple system?
+Date: Mon, 10 Sep 2012 10:14:41 +0800
+Message-ID: <CAH3R=oft5_Nkvej28OPK9wiunPPJFJGE_p+KTYzWgL+Cz0V1NA__39849.0710802891$1347243319$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0142090937=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([213.239.202.151])
+Received: from mail-vb0-f48.google.com ([209.85.212.48])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1TA2UZ-0000zE-Gl
-	for lttng-dev@lists.lttng.org; Fri, 07 Sep 2012 13:37:19 -0400
-In-Reply-To: <1346953219-9001-1-git-send-email-christian.babeux@efficios.com>
+	(envelope-from <kxhdyx@gmail.com>) id 1TAtWR-0000OS-0G
+	for lttng-dev@lists.lttng.org; Sun, 09 Sep 2012 22:14:47 -0400
+Received: by vbme21 with SMTP id e21so2604578vbm.35
+	for <lttng-dev@lists.lttng.org>; Sun, 09 Sep 2012 19:14:41 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,53 +19,45 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Christian Babeux <christian.babeux@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA512
+--===============0142090937==
+Content-Type: multipart/alternative; boundary=bcaec51d2e4432dcbf04c94f858e
 
-Merged!
+--bcaec51d2e4432dcbf04c94f858e
+Content-Type: text/plain; charset=ISO-8859-1
 
-Christian Babeux:
-> Previous iteration of patch 2/3 was missing a typo fix in the 
-> LTTNG_FILTER_MAX_LEN define.
-> 
-> Also, Mathieu suggested that we put a check on the
-> reloc_table_offset in the sessiond to check its bounds when
-> receiving the LTTNG_SET_FILTER command. This is not necessary
-> because the reloc_table_offset does not exist in the filter struct
-> of the lttcomm_session_msg union.
-> 
-> Changelog v3:
-> 
-> 1/3 - Already merged. 2/3 - Add missing typo fix in
-> LTTNG_FILTER_MAX_LEN define. 3/3 - Already merged.
-> 
-> Changelog v2:
-> 
-> 1/3 - Already merged. 2/3 - Respin. Support 65536 bytes bytecode
-> len + filter ABI changes. 3/3 - Already merged.
-> 
-> Thanks,
-> 
-> Christian Babeux (1): Fix: Accept bytecode of length 65536 bytes
-> 
-> src/bin/lttng-sessiond/lttng-ust-abi.h                      | 6
-> +++--- src/bin/lttng-sessiond/main.c
-> | 2 +- src/common/sessiond-comm/sessiond-comm.h
-> | 6 +++--- 
-> src/lib/lttng-ctl/filter/filter-visitor-generate-bytecode.c | 2 +- 
-> 4 files changed, 8 insertions(+), 8 deletions(-)
-> 
------BEGIN PGP SIGNATURE-----
+I saw this :Tracing across multiple systems is also possible.
+Now i want to deploy LTTng on a cluster system(such as 4 machines,one is
+the control machine,and this on also can collect all other 3 machines trace
+results),but i can't find any documentation about that.
+Are there any suggestions for me?
+Thanks all.
 
-iQEcBAEBCgAGBQJQSjDAAAoJEELoaioR9I02atsIAIQtPFOgFQrc4akLIbZTqIOi
-AjdzJXkD8HPd4tpYdmLfSLZWi/Ia4rwl2quhWv/+PHOrt5ykBzBApTpjYGzc86oL
-2m5ucrK4BFT9sMKU/hLm5eJ2+KVMjTL31Ek9LRt96YmmF2a2QMk/vfAEAJ6VA8XT
-3IVfnT9bDNMn/WdwZRP5Dseob38xlumTMN4x/giz4BxBZDM8T4LV+fziFNSdwDvv
-ZWros1eSeznUU3uCZ1/85YqYb/CK09LbDv0bD5e+Hv9t4j/WadwyVV/BAuBOh+9m
-zBdoZtoxx+Fx6jrGJCNtyeV4/cEDNHfyaVW51ZAyaW4yS7yygQmlvIbs0OJ/SMc=
-=F7Wm
------END PGP SIGNATURE-----
+--bcaec51d2e4432dcbf04c94f858e
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+<div>I saw this :Tracing across multiple systems is also possible.</div><di=
+v>Now i want to deploy LTTng on a cluster system(such as 4 machines,one is =
+the control machine,and this on also can collect all other 3 machines trace=
+ results),but i can&#39;t find any documentation about that.</div>
+<div>Are there any suggestions for me?</div><div>Thanks all.</div><div><br>=
+</div>
+
+--bcaec51d2e4432dcbf04c94f858e--
+
+
+--===============0142090937==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0142090937==--
