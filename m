@@ -1,17 +1,17 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [commit for review] Fix recent filter regressions
-Date: Mon, 10 Sep 2012 10:54:31 -0400
-Message-ID: <20120910145431.GA15712__3826.54962963915$1347288904$gmane$org@Krystal>
+From: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
+Subject: Re: lttng command line user-friendliness
+Date: Mon, 10 Sep 2012 10:58:33 -0400
+Message-ID: <504E0019.905__41408.5583798171$1347289149$gmane$org@voxpopuli.im>
+References: <504DCE2E.7020000@mentor.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from ironport2-out.teksavvy.com ([206.248.154.182])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1TB5Ng-0006UT-Hj
-	for lttng-dev@lists.lttng.org; Mon, 10 Sep 2012 10:54:32 -0400
-Content-Disposition: inline
+	(envelope-from <alexmonthy@voxpopuli.im>) id 1TB5Rj-0006Wh-LZ
+	for lttng-dev@lists.lttng.org; Mon, 10 Sep 2012 10:58:43 -0400
+In-Reply-To: <504DCE2E.7020000@mentor.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,108 +20,66 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: christian.babeux@efficios.com
-Cc: lttng-dev@lists.lttng.org, dgoulet@efficios.com
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi!
++1, Like, etc.
 
-Please review this patch from my pull queue for lttng-tools. As soon as
-we get your Acked-by, David will pull it.
+The following bug was opened some time ago: http://bugs.lttng.org/issues/15
 
-Thanks,
+From what is said in the bug, it will require both the flight-recorder
+mode in the tracer, and the live-trace-reading feature in Babeltrace.
+Those are not implemented yet, but they shouldn't be too far around from
+what I can tell (2.2 maybe?).
 
-Mathieu
 
-commit 0efe3e86f1143393016e1ab7623827c06c466e9f
-Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Date:   Mon Sep 10 10:45:41 2012 -0400
+Cheers,
+Alexandre
 
-    Fix filter: fix recent regressions
-    
-    Fix:
-    commit d93c4f1ffcffa73102e3299276f2f83951a68c36
-    Author: Christian Babeux <christian.babeux@efficios.com>
-    Date:   Thu Sep 6 13:40:19 2012 -0400
-    
-        Fix: Accept bytecode of length 65536 bytes
-    
-    Broke the filter: it changed the reloc table format, without knowledge
-    of UST, and without good reason: it should stay { uint16_t, string } --
-    it does not need a uint32_t offset. Add a check for the value returned
-    by bytecode_get_len() when populating the reloc table.
-    
-    Fix:
-    commit 5ddb0a08c5c3ca917b025032b864d78e53c7c68a
-    Author: Christian Babeux <christian.babeux@efficios.com>
-    Date:   Mon Aug 27 14:48:21 2012 -0400
-    
-        Fix: Generation of bytecode longer than 32768 bytes fails
-    
-    Mixed the concepts of "len" and "alloc_len". It was therefore not
-    checking the bounds correctly, and was not zeroing the memory range
-    expected to be zeroed, causing out-of-bound array access.
-    
-    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 
-diff --git a/src/lib/lttng-ctl/filter/filter-visitor-generate-bytecode.c b/src/lib/lttng-ctl/filter/filter-visitor-generate-bytecode.c
-index 332a387..0d65585 100644
---- a/src/lib/lttng-ctl/filter/filter-visitor-generate-bytecode.c
-+++ b/src/lib/lttng-ctl/filter/filter-visitor-generate-bytecode.c
-@@ -94,21 +94,21 @@ int32_t bytecode_reserve(struct lttng_filter_bytecode_alloc **fb, uint32_t align
- {
- 	int32_t ret;
- 	uint32_t padding = offset_align((*fb)->b.len, align);
-+	uint32_t new_len = (*fb)->b.len + padding + len;
-+	uint32_t new_alloc_len = sizeof(struct lttng_filter_bytecode) + new_len;
-+	uint32_t old_alloc_len = (*fb)->alloc_len;
- 
--	if ((*fb)->b.len + padding + len > LTTNG_FILTER_MAX_LEN)
-+	if (new_len > LTTNG_FILTER_MAX_LEN)
- 		return -EINVAL;
- 
--	if ((*fb)->b.len + padding + len > (*fb)->alloc_len) {
--		uint32_t new_len =
--			max_t(uint32_t, 1U << get_count_order((*fb)->b.len + padding + len),
--				(*fb)->alloc_len << 1);
--		uint32_t old_len = (*fb)->alloc_len;
--
--		*fb = realloc(*fb, sizeof(struct lttng_filter_bytecode_alloc) + new_len);
-+	if (new_alloc_len > old_alloc_len) {
-+		new_alloc_len =
-+			max_t(uint32_t, 1U << get_count_order(new_alloc_len), old_alloc_len << 1);
-+		*fb = realloc(*fb, new_alloc_len);
- 		if (!*fb)
- 			return -ENOMEM;
--		memset(&(*fb)->b.data[old_len], 0, new_len - old_len);
--		(*fb)->alloc_len = new_len;
-+		memset(&((char *) *fb)[old_alloc_len], 0, new_alloc_len - old_alloc_len);
-+		(*fb)->alloc_len = new_alloc_len;
- 	}
- 	(*fb)->b.len += padding;
- 	ret = (*fb)->b.len;
-@@ -239,7 +239,7 @@ int visit_node_load(struct filter_parser_ctx *ctx, struct ir_op *node)
- 		uint32_t insn_len = sizeof(struct load_op)
- 			+ sizeof(struct field_ref);
- 		struct field_ref ref_offset;
--		uint32_t reloc_offset;
-+		uint16_t reloc_offset;
- 
- 		insn = calloc(insn_len, 1);
- 		if (!insn)
-@@ -249,6 +249,9 @@ int visit_node_load(struct filter_parser_ctx *ctx, struct ir_op *node)
- 		memcpy(insn->data, &ref_offset, sizeof(ref_offset));
- 		/* reloc_offset points to struct load_op */
- 		reloc_offset = bytecode_get_len(&ctx->bytecode->b);
-+		if (reloc_offset > LTTNG_FILTER_MAX_LEN - 1) {
-+			return -EINVAL;
-+		}
- 		ret = bytecode_push(&ctx->bytecode, insn, 1, insn_len);
- 		if (ret) {
- 			free(insn);
 
--- 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+On 12-09-10 07:25 AM, Woegerer, Paul wrote:
+> As much as I like the lttng command line tool (that we have since
+> LTTng2) I still see people (who are not yet familiar with lttng)
+> struggle with the simple fact that it takes more than one command to
+> actually get something traced.
+>
+> Issuing a sequence of commands like:
+>
+> lttng create
+> lttng enable-event -u -a
+> lttng start
+> my_foobar_traced_application 1 2 3
+> lttng stop
+> lttng destroy
+>
+> seems to be perceived as complicated compared to:
+>
+> perf record -- my_foobar_traced_application 1 2 3
+>
+> My argument usually is that providing detailed settings as options
+> (like perf) does not scale as well as the lttng approach (if you have
+> more things to configure). On the other hand most users just want
+> something like the above. Also arguing that they should write a
+> shell-script that encodes their use case generally causes irritation
+> ("... please understand, I do not want to write a shell-script I just
+> want to do simple tracing of my executable ...").
+>
+> What about adding something similar to "perf record" to lower the
+> barrier for such users. For example:
+>
+> lttng record [--session-name <name>] [--session-template
+> <session_template_file>]  -- <command> [<options>]
+>
+> Where the optional session_template_file may only contain
+> "enable-channel, enable-event and add-context" commands. If omitted
+> the following could be the (trivial) default session template:
+>
+> enable-event -u -a
+>
+>
+> Would this make sense for others as well ? Any alternative suggestions ?
+>
+> Thanks,
+> Paul
+>
