@@ -1,17 +1,19 @@
-From: Carlos de Sa <desa.carlos@gmail.com>
-Subject: Trace files not getting generated
-Date: Mon, 10 Sep 2012 12:12:32 +0530
-Message-ID: <CAOvs79-D41oE5n+zhQ-Xgc+_zpriKTJNjbYdLq3_-MTic0jJ4A__3574.75222922421$1347259388$gmane$org@mail.gmail.com>
+From: "Woegerer, Paul" <Paul_Woegerer@mentor.com>
+Subject: lttng command line user-friendliness
+Date: Mon, 10 Sep 2012 13:25:34 +0200
+Message-ID: <504DCE2E.7020000__40969.0637876794$1347276329$gmane$org@mentor.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"; Format="flowed"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-vc0-f176.google.com ([209.85.220.176])
+Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <desa.carlos@gmail.com>) id 1TAxhe-0002PT-IO
-	for lttng-dev@lists.lttng.org; Mon, 10 Sep 2012 02:42:38 -0400
-Received: by vcbfl11 with SMTP id fl11so1182481vcb.35
-	for <lttng-dev@lists.lttng.org>; Sun, 09 Sep 2012 23:42:32 -0700 (PDT)
+	(envelope-from <Paul_Woegerer@mentor.com>) id 1TB26l-0004oL-6o
+	for lttng-dev@lists.lttng.org; Mon, 10 Sep 2012 07:24:51 -0400
+Received: from svr-orw-fem-01.mgc.mentorg.com ([147.34.98.93])
+	by relay1.mentorg.com with esmtp
+	id 1TB26e-0005Gg-Ue from Paul_Woegerer@mentor.com
+	for lttng-dev@lists.lttng.org; Mon, 10 Sep 2012 04:24:44 -0700
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,50 +25,72 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
+As much as I like the lttng command line tool (that we have since =
 
-I've been trying to get kernel tracing working on a TI AM355X EVM
-using the standard arago 05.05 toolchain, kernel & ti-sdk filesystem;
-but seem to have some buffer issues. Any help on this would be much
-appreciated.
+LTTng2) I still see people (who are not yet familiar with lttng) =
 
-After starting a trace session I ran a few programs - the graphics
-package apps and standard demo apps. After stopping all seems to be
-fine but when I destroy the session it generates a warning. And the
-session dir (session2-20120727-122650) is empty as can be seen below -
+struggle with the simple fact that it takes more than one command to =
 
-root@am335x-evm:~/lttng-traces# arm-arago-linux-gnueabi-lttng enable-event sched
-_switch,sched_wakeup -k
-kernel event sched_switch created in channel channel0
-kernel event sched_wakeup created in channel channel0
-root@am335x-evm:~/lttng-traces# arm-arago-linux-gnueabi-lttng add-context -k -e
-sched_switch -t pid
-kernel context pid added to event sched_switch
-root@am335x-evm:~/lttng-traces# arm-arago-linux-gnueabi-lttng start
-Tracing started for session session2
-root@am335x-evm:~/lttng-traces# arm-arago-linux-gnueabi-lttng stop
-Tracing stopped for session session2
-root@am335x-evm:~/lttng-traces# ls
-session1-20120727-122409  session2-20120727-122650
-root@am335x-evm:~/lttng-traces# ls session2-20120727-122650/kernel/
-root@am335x-evm:~/lttng-traces# ls session2-20120727-122650/kernel/
-root@am335x-evm:~/lttng-traces# arm-arago-linux-gnueabi-lttng destroy
-[ 1049.263275] ring buffer relay-discard, cpu 0: records were lost. Caused by:
-[ 1049.263275]   [ 21949 buffer full, 0 nest buffer wrap-around, 0
-event too big ]
-Session session2 destroyed at /home/root
-root@am335x-evm:~# ls lttng-traces/session2-20120727-122650/kernel/
-root@am335x-evm:~# ls lttng-traces/session2-20120727-122650/
+actually get something traced.
 
-Any idea whats going wrong? Fyi I also have debugfs enabled and
-mounted. And sessiond when run with -vvv option does not show any
-errors.
+Issuing a sequence of commands like:
 
-Previously when enabling all traces (enable-event -a -k) I got the
-error at "LTTng: Failure to write metadata to buffers (timeout)" when
-starting. I thought this may have been a kernel buffer issue due to
-enabling all possible events. But the above log does not show the same
-issue so thought this case of only a few events should have worked.
+lttng create
+lttng enable-event -u -a
+lttng start
+my_foobar_traced_application 1 2 3
+lttng stop
+lttng destroy
 
-Regards,
-Carlos
+seems to be perceived as complicated compared to:
+
+perf record -- my_foobar_traced_application 1 2 3
+
+My argument usually is that providing detailed settings as options (like =
+
+perf) does not scale as well as the lttng approach (if you have more =
+
+things to configure). On the other hand most users just want something =
+
+like the above. Also arguing that they should write a shell-script that =
+
+encodes their use case generally causes irritation ("... please =
+
+understand, I do not want to write a shell-script I just want to do =
+
+simple tracing of my executable ...").
+
+What about adding something similar to "perf record" to lower the =
+
+barrier for such users. For example:
+
+lttng record [--session-name <name>] [--session-template =
+
+<session_template_file>]  -- <command> [<options>]
+
+Where the optional session_template_file may only contain =
+
+"enable-channel, enable-event and add-context" commands. If omitted the =
+
+following could be the (trivial) default session template:
+
+enable-event -u -a
+
+
+Would this make sense for others as well ? Any alternative suggestions ?
+
+Thanks,
+Paul
+
+-- =
+
+Paul Woegerer | SW Development Engineer
+http://go.mentor.com/sourceryanalyzer
+
+Mentor Embedded(tm) | Prinz Eugen Stra=DFe 72/2/4, Vienna, 1040 Austria
+Nucleus=AE | Linux=AE | Android(tm) | Services | UI | Multi-OS
+
+Android is a trademark of Google Inc. Use of this trademark is subject to G=
+oogle Permissions.
+Linux is the registered trademark of Linus Torvalds in the U.S. and other c=
+ountries.wwwhich		=
