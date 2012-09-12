@@ -1,20 +1,15 @@
-From: Christian Babeux <christian.babeux@efficios.com>
-Subject: Re: [PATCH RFC lttng-tools] Testpoint mechanism
-Date: Tue, 11 Sep 2012 22:26:10 -0400
-Message-ID: <CAGDH53nroLAnBhDYqLNLNwC-_82qoGqKTzVhG1G9di7TsEv0bA__2509.91528523645$1347416812$gmane$org@mail.gmail.com>
-References: <1347396978-4661-1-git-send-email-christian.babeux@efficios.com>
-	<CAEzWAeK5rh5Qb4421bkjhfsFHwYpeuRk1_SEwtpXjbUoWoCAnw@mail.gmail.com>
+From: =?ISO-8859-1?Q?Hans_Nordeb=E4ck?= <hans.nordeback@ericsson.com>
+Subject: Problem to get lttng work with a daemon application
+Date: Wed, 12 Sep 2012 13:44:19 +0200
+Message-ID: <50507593.5030206__49686.1379514032$1347450291$gmane$org@ericsson.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-lb0-f176.google.com ([209.85.217.176])
+Received: from mailgw2.ericsson.se ([193.180.251.37])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <christian.babeux@0x80.ca>) id 1TBcee-0005y9-QG
-	for lttng-dev@lists.lttng.org; Tue, 11 Sep 2012 22:26:16 -0400
-Received: by lboi15 with SMTP id i15so975890lbo.35
-	for <lttng-dev@lists.lttng.org>; Tue, 11 Sep 2012 19:26:10 -0700 (PDT)
-In-Reply-To: <CAEzWAeK5rh5Qb4421bkjhfsFHwYpeuRk1_SEwtpXjbUoWoCAnw@mail.gmail.com>
+	(envelope-from <hans.nordeback@ericsson.com>) id 1TBlMj-00026x-BF
+	for lttng-dev@lists.lttng.org; Wed, 12 Sep 2012 07:44:21 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,37 +18,52 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Brosseau, Yannick" <yannick.brosseau@gmail.com>
-Cc: lttng-dev@lists.lttng.org, mathieu.desnoyers@efficios.com, David Goulet <dgoulet@efficios.com>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Yannick,
+Hi, I've just started using lttng and run it in Ubuntu 12.04 in VirtualBox.
 
->
-> I'm not sure I understand the goal of this feature. Can you explain more?
->
+I have run the sample applications without any problem, but I have 
+problems to get a daemon application work.
 
-This testpoint mechanism is not a LTTng "feature" per se. Think of it
-has a  facility to inject code in order to test different portions of
-the LTTng codebase.
+I have added tracepoint support in the same way as for the sample 
+applications and do the following:
 
-Maybe an example will make things more clear:
+1) The lttng-sessiond (version 2.0.1) is started (with 
+--verbose--verbose-consumer).
+2) I start the daemon application with one tracepoint implemented.
+3) I can see that the lttng-sessiond gets called regarding this tracepoint:
 
-In the lttng-sessiond, we could add testpoints to some of the threads.
-The testpoints could trigger a pthread_exit().
-This could be useful to verify that the new health check feature is
-working and properly mark the thread that exited as
-in "bad health". Without this mechanism, writing tests for that
-particular feature would be a lot harder.
+DEBUG1: App registered with pid:18421 ppid:18419 uid:0 gid:0 sock:18 
+name:osafamfnd (version 2.0) [in ust_app_register() at ust-app.c:1365]
 
-Another example would be to randomly add delays in different threads
-in order to find race conditions in the codebase.
+4) I run, strace -f lttng -v list -u, and can see that it "hangs" in 
+recvmsg:
+write(2, "DEBUG1: Getting UST tracing even"..., 81DEBUG1: Getting UST 
+tracing events [in list_ust_events() at     commands/list.c:253]
+) = 81
+getuid()                                = 0
+socket(PF_FILE, SOCK_STREAM, 0)         = 3
+connect(3, {sa_family=AF_FILE, 
+path="/var/run/lttng/client-lttng-sessiond"}, 110) = 0
+geteuid()                               = 0
+getegid()                               = 0
+sendmsg(3, {msg_name(0)=NULL, 
+msg_iov(1)=[{"\16\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 
+8784}], msg_controllen=28, {cmsg_len=28, cmsg_level=SOL_SOCKET, 
+cmsg_type=SCM_CREDENTIALS{pid=28878, uid=0, gid=0}}, msg_flags=0}, 0) = 8784
+recvmsg(3,
 
-This mechanism is only triggered when the LTTNG_TESTPOINT_ENABLE env.
-var. is set and a proper library is preloaded with the testpoints
-symbols (e.g.: LD_PRELOAD=mytestlib.so lttng-sessiond &). The only way
-to use this facility is to link against the new libtestpoint.
+5) the lttng-sessiond outputs only the following and hangs as long as 
+the daemon application is running.
+DEBUG1: Processing client command 14 [in process_client_msg() at 
+main.c:3309]
 
-I hope this make more sense now :).
+6) The only difference between sample app logs and daemon app logs is 
+that the pid and ppid seen at DEBUG1: App registered. In the daemon case 
+in this run it is pid 18421 ppid 18419 but when I print it in the 
+function calling tracepoint
+it is pid 18430. I don't know if that is related to the problem. Any 
+help on this would be appreciated.
 
-Christian
+/Thanks Hans
