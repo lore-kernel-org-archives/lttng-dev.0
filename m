@@ -1,21 +1,20 @@
-From: Bernd Hufmann <Bernd.Hufmann@ericsson.com>
-Subject: Re: list configured filters in LTTng Tools 2.1
-Date: Thu, 13 Sep 2012 08:42:22 -0400
-Message-ID: <5051D4AE.8040201__21985.5516720147$1347540185$gmane$org@ericsson.com>
-References: <5050CD26.6020707@ericsson.com> <20120912191400.GA31291@Krystal>
+From: =?iso-8859-1?Q?Hans_Nordeb=E4ck?= <hans.nordeback@ericsson.com>
+Subject: Re: Problem to get lttng work with a daemon application
+Date: Thu, 13 Sep 2012 15:07:56 +0200
+Message-ID: <1CE40C84E5A3A646A4386DE2A97629A95E724B1ECE__33353.7101549611$1347541715$gmane$org@ESESSCMS0361.eemea.ericsson.se>
+References: <50507593.5030206@ericsson.com> <20120912124150.GB26893@Krystal>
+	<1CE40C84E5A3A646A4386DE2A97629A95E724B1A53@ESESSCMS0361.eemea.ericsson.se>
+	<20120912135154.GB28079@Krystal>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from imr4.ericy.com ([198.24.6.9])
+Received: from mailgw2.ericsson.se ([193.180.251.37])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <bernd.hufmann@ericsson.com>) id 1TC8kc-0005GJ-8A
-	for lttng-dev@lists.lttng.org; Thu, 13 Sep 2012 08:42:34 -0400
-Received: from eusaamw0711.eamcs.ericsson.se ([147.117.20.178])
-	by imr4.ericy.com (8.14.3/8.14.3/Debian-9.1ubuntu1) with ESMTP id
-	q8DCkisk021554
-	for <lttng-dev@lists.lttng.org>; Thu, 13 Sep 2012 07:46:46 -0500
-In-Reply-To: <20120912191400.GA31291@Krystal>
+	(envelope-from <hans.nordeback@ericsson.com>) id 1TC99D-0005U8-Kx
+	for lttng-dev@lists.lttng.org; Thu, 13 Sep 2012 09:07:59 -0400
+In-Reply-To: <20120912135154.GB28079@Krystal>
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,46 +23,156 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Mathieu
+Hi Mathieu, I have installed lttng-ust 2.0.5 and lttng-tools 2.0.4, I run a=
+ gdb session and realized what =
 
-Thanks for the info. I've opened a feature request (#334).
+the problem is. I noticed that lttng threads are created before main via __=
+attribute__(constructor),
+and the problem with the daemon is that the lttng threads "disappears" afte=
+r "daemonizing" the daemon,
+causing recvmsg in ustcomm_recv_unix_sock to hang. I removed the __attribut=
+e__(constructor) and called
+lttng_ust_init explicitly, it works, but I have to search for a more genera=
+l solution./Thanks Hans   =
 
-Best Regards
-Bernd
 
-On 09/12/2012 03:14 PM, Mathieu Desnoyers wrote:
-> * Bernd Hufmann (Bernd.Hufmann@ericsson.com) wrote:
->> Hello
->>
->> I configured a filter for UST events (lttng enable event -u ust*
->> --filter 'signal==10101') and I want to retrieve that information
->> afterwards. I used "lttng list mySession" and it only shows [with
->> filters]. Is it possible to retrieve the actual filter expression? If
->> not, it would be good to add this possibility.
-> We could. Please add a feature request on the bugs.lttng.org bugtracker
-> against the lttng-tools project.
->
+-----Original Message-----
+From: Mathieu Desnoyers [mailto:mathieu.desnoyers@efficios.com] =
+
+Sent: den 12 september 2012 15:52
+To: Hans Nordeb=E4ck
+Cc: lttng-dev@lists.lttng.org
+Subject: Re: [lttng-dev] Problem to get lttng work with a daemon application
+
+* Hans Nordeb=E4ck (hans.nordeback@ericsson.com) wrote:
+> Hi Mathieu, I upgraded to version 2.0.4, but it did not solve the =
+
+> problem./Thanks Hans
+
+Hi Hans,
+
+Please provide the version numbers you use for both lttng-tools and lttng-u=
+st. The lttng.org website lists the latest lttng-ust as 2.0.5, which leads =
+me to think you might have forgotten to upgrade it.
+
+Don't forget to restart your test application (just to be sure, rebuild it =
+against the new lttng-ust). Also make sure you kill all lttng-sessiond that=
+ might still be active.
+
+Thanks,
+
+Mathieu
+
+> =
+
+> -----Original Message-----
+> From: Mathieu Desnoyers [mailto:mathieu.desnoyers@efficios.com]
+> Sent: den 12 september 2012 14:42
+> To: Hans Nordeb=E4ck
+> Cc: lttng-dev@lists.lttng.org
+> Subject: Re: [lttng-dev] Problem to get lttng work with a daemon =
+
+> application
+> =
+
+> * Hans Nordeb=E4ck (hans.nordeback@ericsson.com) wrote:
+> > Hi, I've just started using lttng and run it in Ubuntu 12.04 in Virtual=
+Box.
+> >
+> > I have run the sample applications without any problem, but I have =
+
+> > problems to get a daemon application work.
+> >
+> > I have added tracepoint support in the same way as for the sample =
+
+> > applications and do the following:
+> >
+> > 1) The lttng-sessiond (version 2.0.1) is started (with
+> =
+
+> 2.0.1 is old. Please upgrade to the latest versions of the 2.0.x series f=
+or both lttng-tools and lttng-ust and try again.
+> =
+
 > Thanks,
->
+> =
+
 > Mathieu
->
->> Best Regards
->> Bernd
->>
->>
->> -- 
->> This Communication is Confidential. We only send and receive email on
->> the basis of the terms set out at www.ericsson.com/email_disclaimer
->>
->> _______________________________________________
->> lttng-dev mailing list
->> lttng-dev@lists.lttng.org
->> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> =
 
+> > --verbose--verbose-consumer).
+> > 2) I start the daemon application with one tracepoint implemented.
+> > 3) I can see that the lttng-sessiond gets called regarding this tracepo=
+int:
+> >
+> > DEBUG1: App registered with pid:18421 ppid:18419 uid:0 gid:0 sock:18 =
 
--- 
-This Communication is Confidential. We only send and receive email on 
-the basis of the terms set out at www.ericsson.com/email_disclaimer
+> > name:osafamfnd (version 2.0) [in ust_app_register() at =
+
+> > ust-app.c:1365]
+> >
+> > 4) I run, strace -f lttng -v list -u, and can see that it "hangs" in
+> > recvmsg:
+> > write(2, "DEBUG1: Getting UST tracing even"..., 81DEBUG1: Getting UST  =
+
+> > tracing events [in list_ust_events() at     commands/list.c:253]
+> > ) =3D 81
+> > getuid()                                =3D 0
+> > socket(PF_FILE, SOCK_STREAM, 0)         =3D 3
+> > connect(3, {sa_family=3DAF_FILE,
+> > path=3D"/var/run/lttng/client-lttng-sessiond"}, 110) =3D 0
+> > geteuid()                               =3D 0
+> > getegid()                               =3D 0
+> > sendmsg(3, {msg_name(0)=3DNULL,
+> > msg_iov(1)=3D[{"\16\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\
+> > 0\ 0\0\0\0\0"..., 8784}], msg_controllen=3D28, {cmsg_len=3D28, =
+
+> > cmsg_level=3DSOL_SOCKET, cmsg_type=3DSCM_CREDENTIALS{pid=3D28878, uid=
+=3D0, =
+
+> > gid=3D0}}, msg_flags=3D0}, 0) =3D
+> > 8784
+> > recvmsg(3,
+> >
+> > 5) the lttng-sessiond outputs only the following and hangs as long =
+
+> > as the daemon application is running.
+> > DEBUG1: Processing client command 14 [in process_client_msg() at =
+
+> > main.c:3309]
+> >
+> > 6) The only difference between sample app logs and daemon app logs =
+
+> > is that the pid and ppid seen at DEBUG1: App registered. In the =
+
+> > daemon case in this run it is pid 18421 ppid 18419 but when I print =
+
+> > it in the function calling tracepoint it is pid 18430. I don't know =
+
+> > if that is related to the problem. Any help on this would be appreciate=
+d.
+> >
+> > /Thanks Hans
+> >
+> >
+> >
+> >
+> > _______________________________________________
+> > lttng-dev mailing list
+> > lttng-dev@lists.lttng.org
+> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> =
+
+> --
+> Mathieu Desnoyers
+> Operating System Efficiency R&D Consultant EfficiOS Inc.
+> http://www.efficios.com
+
+--
+Mathieu Desnoyers
+Operating System Efficiency R&D Consultant EfficiOS Inc.
+http://www.efficios.com
