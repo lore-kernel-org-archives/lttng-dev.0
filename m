@@ -1,18 +1,18 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: Re: [PATCH lttng-tools] Fix: Mismatch of field name
- between latest lttng-ust abi and lttng-tools
-Date: Mon, 17 Sep 2012 17:36:53 -0400
-Message-ID: <505797F5.4010206__10796.224702108$1347917840$gmane$org@efficios.com>
-References: <1347917523-9848-1-git-send-email-christian.babeux@efficios.com>
+From: changz <zheng.chang@emc.com>
+Subject: Re: Deaklock in liblttng-ust
+Date: Tue, 18 Sep 2012 11:57:34 +0800
+Message-ID: <5057F12E.2090209__14971.8032371768$1347940755$gmane$org@emc.com>
+References: <6539770C71C3814BB0BFC2DBEBD1050801062B20@CORPUSMX30B.corp.emc.com>
+	<20120913113739.GA27777@Krystal> <5052AC26.5050904@emc.com>
+	<20120917133324.GC4256@Krystal>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1539278952=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([213.239.202.151])
-	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1TDizw-0005Jf-EY
-	for lttng-dev@lists.lttng.org; Mon, 17 Sep 2012 17:36:56 -0400
-In-Reply-To: <1347917523-9848-1-git-send-email-christian.babeux@efficios.com>
+Received: from hop-nat-141.emc.com ([168.159.213.141]
+	helo=mexforward.lss.emc.com) by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <Zheng.Chang@emc.com>) id 1TDoxP-0007yp-Bx
+	for lttng-dev@lists.lttng.org; Mon, 17 Sep 2012 23:58:43 -0400
+In-Reply-To: <20120917133324.GC4256@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,76 +21,162 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Christian Babeux <christian.babeux@efficios.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA512
+This is a multi-part message in MIME format.
+--===============1539278952==
+Content-Type: multipart/alternative;
+ boundary="------------030806020303090607030408"
 
-Merged!
+This is a multi-part message in MIME format.
+--------------030806020303090607030408
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Thanks!
-David
+On 9/17/2012 21:33 PM, Mathieu Desnoyers wrote:
+> * changz (zheng.chang@emc.com) wrote:
+>> ......
+>>
+>> The child process calls _fini when it calls API exit. It gets hung and
+>> meanwhile the parent is waiting for its termination.
+>> I think the whole life-cycle of the process should be considered. The
+>> parent's waiting in critical region is dangerous.
+>> Is it possible to refine the critical region with smaller fineness?
+>>
+>> What do you think?
+> Hrm, yes you're right. I'm looking into it.
+>
+> The main issue is that get_wait_shm() bypass the fork() wrapper (with
+> lttng_ust_nest_count), which is responsible for holding the UST mutex
+> across fork(). Therefore, when exiting the context of the child process,
+> we execute the destructor, which try to grab the UST mutex, which might
+> be in pretty much any state.
+>
+> Given that we don't want this process to try to register to
+> lttng-sessiond (because this is internal to lttng-ust), we might want to
+> let it skip the destructor execution. This would actually be the easiest
+> way out.
+>
+> Does the follow patch fix the issue for you ?
+>
+> diff --git a/liblttng-ust/lttng-ust-comm.c b/liblttng-ust/lttng-ust-comm.c
+> index be64acd..596fd7d 100644
+> --- a/liblttng-ust/lttng-ust-comm.c
+> +++ b/liblttng-ust/lttng-ust-comm.c
+> @@ -616,9 +616,9 @@ int get_wait_shm(struct sock_info *sock_info, size_t mmap_size)
+>   			ret = ftruncate(wait_shm_fd, mmap_size);
+>   			if (ret) {
+>   				PERROR("ftruncate");
+> -				exit(EXIT_FAILURE);
+> +				_exit(EXIT_FAILURE);
+>   			}
+> -			exit(EXIT_SUCCESS);
+> +			_exit(EXIT_SUCCESS);
+>   		}
+>   		/*
+>   		 * For local shm, we need to have rw access to accept
+Yes, it works.
+Just a reminder, here arefour callings of exit in child's path in my git 
+repository.
 
-Christian Babeux:
-> The "written" field of the lttng_event_field and
-> lttng_ust_field_iter structures has been renamed to "nowrite" in
-> the upstream version of lttng-ust.
-> 
-> Signed-off-by: Christian Babeux <christian.babeux@efficios.com> 
-> --- include/lttng/lttng.h                  | 2 +- 
-> src/bin/lttng-sessiond/lttng-ust-abi.h | 2 +- 
-> src/bin/lttng-sessiond/ust-app.c       | 2 +- 
-> src/bin/lttng/commands/list.c          | 2 +- 4 files changed, 4
-> insertions(+), 4 deletions(-)
-> 
-> diff --git a/include/lttng/lttng.h b/include/lttng/lttng.h index
-> d066728..f92ccb6 100644 --- a/include/lttng/lttng.h +++
-> b/include/lttng/lttng.h @@ -261,7 +261,7 @@ struct
-> lttng_event_field { enum lttng_event_field_type type; char
-> padding[LTTNG_EVENT_FIELD_PADDING]; struct lttng_event event; -	int
-> written; +	int nowrite; };
-> 
-> /* diff --git a/src/bin/lttng-sessiond/lttng-ust-abi.h
-> b/src/bin/lttng-sessiond/lttng-ust-abi.h index 91639a7..c9be4bd
-> 100644 --- a/src/bin/lttng-sessiond/lttng-ust-abi.h +++
-> b/src/bin/lttng-sessiond/lttng-ust-abi.h @@ -105,7 +105,7 @@ struct
-> lttng_ust_field_iter { char field_name[LTTNG_UST_SYM_NAME_LEN]; 
-> enum lttng_ust_field_type type; int loglevel;				/* event loglevel
-> */ -	int written; +	int nowrite; char
-> padding[LTTNG_UST_FIELD_ITER_PADDING]; };
-> 
-> diff --git a/src/bin/lttng-sessiond/ust-app.c
-> b/src/bin/lttng-sessiond/ust-app.c index 81b1f41..3202cd4 100644 
-> --- a/src/bin/lttng-sessiond/ust-app.c +++
-> b/src/bin/lttng-sessiond/ust-app.c @@ -1667,7 +1667,7 @@ int
-> ust_app_list_event_fields(struct lttng_event_field **fields)
-> 
-> memcpy(tmp[count].field_name, uiter.field_name,
-> LTTNG_UST_SYM_NAME_LEN); tmp[count].type = uiter.type; -
-> tmp[count].written = uiter.written; +			tmp[count].nowrite =
-> uiter.nowrite;
-> 
-> memcpy(tmp[count].event.name, uiter.event_name,
-> LTTNG_UST_SYM_NAME_LEN); tmp[count].event.loglevel =
-> uiter.loglevel; diff --git a/src/bin/lttng/commands/list.c
-> b/src/bin/lttng/commands/list.c index eced2b7..0467cc6 100644 ---
-> a/src/bin/lttng/commands/list.c +++
-> b/src/bin/lttng/commands/list.c @@ -281,7 +281,7 @@ static void
-> print_event_field(struct lttng_event_field *field) return; } 
-> MSG("%sfield: %s (%s)%s", indent8, field->field_name, -
-> field_type(field), field->written ? "" : " [no write]"); +
-> field_type(field), field->nowrite ? "" : " [no write]"); }
-> 
-> /*
------BEGIN PGP SIGNATURE-----
+Thanks & BR
+-Zheng
 
-iQEcBAEBCgAGBQJQV5fsAAoJEELoaioR9I02wi4H/j5LXn7GnA4X32/d18RVjLqK
-M64WEz4R1htj3lPC0pM04eCffUQ+qv416aGpFhWwZ9z/4bt0C8xUh1h2zMs046y/
-cbjsS5OMWXdPBWcjiBC8kzzLIBC61on0qCT7jYQk3k0NkoJ6YG+w3OOYhxwlMAfR
-Cxpwbd6iPizJ1d5dOy5GomXr3WqDYwxmIvHsjLoP4TLgdIxwP/9XG/1yYUzSafZP
-RisgbHMy91IsTMDrYKr7LwoSI4HoiHLqqGPnblHfhFjyzm1rtQfKxQcPa487Mn1S
-SZOjfaOyUSQg4TyR7CHvuQGmYJihRkIqquphWYf64Ry2glsp8EycfWMxJSHXEWQ=
-=hrT3
------END PGP SIGNATURE-----
+
+
+
+--------------030806020303090607030408
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
+
+<html>
+  <head>
+    <meta content="text/html; charset=ISO-8859-1"
+      http-equiv="Content-Type">
+  </head>
+  <body bgcolor="#FFFFFF" text="#000000">
+    <div class="moz-cite-prefix">On 9/17/2012 21:33 PM, Mathieu
+      Desnoyers wrote:<br>
+    </div>
+    <blockquote cite="mid:20120917133324.GC4256@Krystal" type="cite">
+      <pre wrap="">* changz (<a class="moz-txt-link-abbreviated" href="mailto:zheng.chang@emc.com">zheng.chang@emc.com</a>) wrote:
+</pre>
+      <blockquote type="cite">
+        <pre wrap="">......
+
+The child process calls _fini when it calls API exit. It gets hung and  
+meanwhile the parent is waiting for its termination.
+I think the whole life-cycle of the process should be considered. The  
+parent's waiting in critical region is dangerous.
+Is it possible to refine the critical region with smaller fineness?
+
+What do you think?
+</pre>
+      </blockquote>
+      <pre wrap="">
+Hrm, yes you're right. I'm looking into it.
+
+The main issue is that get_wait_shm() bypass the fork() wrapper (with
+lttng_ust_nest_count), which is responsible for holding the UST mutex
+across fork(). Therefore, when exiting the context of the child process,
+we execute the destructor, which try to grab the UST mutex, which might
+be in pretty much any state.
+
+Given that we don't want this process to try to register to
+lttng-sessiond (because this is internal to lttng-ust), we might want to
+let it skip the destructor execution. This would actually be the easiest
+way out.
+
+Does the follow patch fix the issue for you ?
+
+diff --git a/liblttng-ust/lttng-ust-comm.c b/liblttng-ust/lttng-ust-comm.c
+index be64acd..596fd7d 100644
+--- a/liblttng-ust/lttng-ust-comm.c
++++ b/liblttng-ust/lttng-ust-comm.c
+@@ -616,9 +616,9 @@ int get_wait_shm(struct sock_info *sock_info, size_t mmap_size)
+ 			ret = ftruncate(wait_shm_fd, mmap_size);
+ 			if (ret) {
+ 				PERROR("ftruncate");
+-				exit(EXIT_FAILURE);
++				_exit(EXIT_FAILURE);
+ 			}
+-			exit(EXIT_SUCCESS);
++			_exit(EXIT_SUCCESS);
+ 		}
+ 		/*
+ 		 * For local shm, we need to have rw access to accept
+</pre>
+    </blockquote>
+    Yes, it works. <br>
+    Just a reminder, here are<big> four</big> callings of exit in
+    child's path in my git repository.<br>
+    <br>
+    Thanks &amp; BR<br>
+    -Zheng<br>
+    <br>
+    <blockquote cite="mid:20120917133324.GC4256@Krystal" type="cite">
+      <pre wrap="">
+</pre>
+    </blockquote>
+    <br>
+    <br>
+  </body>
+</html>
+
+--------------030806020303090607030408--
+
+
+--===============1539278952==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1539278952==--
