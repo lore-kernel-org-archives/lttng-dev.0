@@ -1,20 +1,18 @@
 From: Christian Babeux <christian.babeux@efficios.com>
-Subject: [PATCH lttng-tools 2/4] Tests: Add helper functions for
-	printing status and test banner
-Date: Thu, 20 Sep 2012 18:05:18 -0400
-Message-ID: <1348178720-24610-2-git-send-email-christian.babeux__25938.160197302$1348178766$gmane$org@efficios.com>
-References: <1348178720-24610-1-git-send-email-christian.babeux@efficios.com>
+Subject: [PATCH lttng-tools 1/4] Tests: Add a check for color
+	support when printing status
+Date: Thu, 20 Sep 2012 18:05:17 -0400
+Message-ID: <1348178720-24610-1-git-send-email-christian.babeux__29591.9311851778$1348178766$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qa0-f48.google.com ([209.85.216.48])
+Received: from mail-qc0-f176.google.com ([209.85.216.176])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <christian.babeux@0x80.ca>) id 1TEosP-0004XY-Ke
-	for lttng-dev@lists.lttng.org; Thu, 20 Sep 2012 18:05:41 -0400
-Received: by qady1 with SMTP id y1so945083qad.14
-	for <lttng-dev@lists.lttng.org>; Thu, 20 Sep 2012 15:05:35 -0700 (PDT)
-In-Reply-To: <1348178720-24610-1-git-send-email-christian.babeux@efficios.com>
+	(envelope-from <christian.babeux@0x80.ca>) id 1TEosI-0004XT-Lx
+	for lttng-dev@lists.lttng.org; Thu, 20 Sep 2012 18:05:34 -0400
+Received: by qcsc21 with SMTP id c21so2633842qcs.35
+	for <lttng-dev@lists.lttng.org>; Thu, 20 Sep 2012 15:05:28 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -27,78 +25,54 @@ To: dgoulet@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Add three new printing functions:
+When printing the status of test is OK or FAIL, check if stdout is
+attached to a terminal device. This way the output is not cluttered
+with useless escape characters. Some use cases where we don't want
+colors:
 
-print_ok: Print the OK status with optional color support.
-print_fail: Print the FAIL status with optional color support.
-print_test_banner: Print a test banner of the test description.
+$ ./sometest | less
 
-e.g.:
-   	   sometest.sh:
-	   TEST_DESC="A really useful test"
-   	   [...]
-	   source $TESTDIR/utils.sh
-	   print_test_banner
-	   [...]
-	   print_ok
-	   print_fail
-	   [...]
-
-	   $ ./sometest.sh
-	   ----------------------
-	    A really useful test
-	   ----------------------
-	   OK
-	   FAIL
+$ ./sometest > a.log
 
 Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
 ---
- tests/utils.sh | 33 +++++++++++++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ tests/utils.h | 22 ++++++++++++++++++++--
+ 1 file changed, 20 insertions(+), 2 deletions(-)
 
-diff --git a/tests/utils.sh b/tests/utils.sh
-index 42b18e3..2670de3 100644
---- a/tests/utils.sh
-+++ b/tests/utils.sh
-@@ -25,6 +25,39 @@ KERNEL_MAJOR_VERSION=2
- KERNEL_MINOR_VERSION=6
- KERNEL_PATCHLEVEL_VERSION=27
+diff --git a/tests/utils.h b/tests/utils.h
+index 7650865..34c8bd6 100644
+--- a/tests/utils.h
++++ b/tests/utils.h
+@@ -16,10 +16,28 @@
+  */
  
-+function print_ok ()
-+{
-+	# Check if we are a terminal
-+	if [ -t 1 ]; then
-+		echo -e "\e[1;32mOK\e[0m"
-+	else
-+		echo -e "OK"
-+	fi
-+}
+ #include <stdio.h>
++#include <unistd.h>
+ 
+ #define BRIGHT 1
+ #define GREEN 32
+ #define RED 31
+ 
+-#define PRINT_OK() printf("%c[%d;%dmOK%c[%dm\n", 0x1B, BRIGHT, GREEN, 0x1B, 0);
+-#define PRINT_FAIL() printf("%c[%d;%dmFAIL%c[%dm\n", 0x1B, BRIGHT, RED, 0x1B, 0);
++#define PRINT_OK()							\
++do {									\
++	/* Check for color support */					\
++	if (isatty(fileno(stdout))) {					\
++		printf("%c[%d;%dmOK%c[%dm\n", 0x1B, BRIGHT, GREEN, 0x1B, 0); \
++	} else {							\
++		printf("OK\n");					\
++	}								\
++} while (0)
 +
-+function print_fail ()
-+{
-+	# Check if we are a terminal
-+	if [ -t 1 ]; then
-+		echo -e "\e[1;31mFAIL\e[0m"
-+	else
-+		echo -e "FAIL"
-+	fi
-+}
-+
-+function print_test_banner ()
-+{
-+	# Rely on the global TEST_DESC to be set
-+	if [ -n "$TEST_DESC" ]; then
-+		count=$((${#TEST_DESC}+2))
-+		str=$(printf "%${count}s");
-+		echo -e "\n"
-+		echo -e ${str// /-}
-+		echo -e " $TEST_DESC "
-+		echo -e ${str// /-}
-+	fi
-+}
-+
- function validate_kernel_version ()
- {
- 	kern_version=($(uname -r | awk -F. '{ printf("%d.%d.%d\n",$1,$2,$3); }' | tr '.' '\n'))
++#define PRINT_FAIL() \
++do {									\
++	/* Check for color support */					\
++	if (isatty(fileno(stdout))) {					\
++		printf("%c[%d;%dmFAIL%c[%dm\n", 0x1B, BRIGHT, RED, 0x1B, 0); \
++	} else {							\
++		printf("FAIL\n");					\
++	}								\
++} while (0)
 -- 
 1.7.12
