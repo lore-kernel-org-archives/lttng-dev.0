@@ -1,22 +1,17 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-tools 2/4] Tests: Add helper	functions
-	for printing status and test banner
-Date: Thu, 20 Sep 2012 22:23:28 -0400
-Message-ID: <20120921022328.GF22861__22655.2619519227$1348194234$gmane$org@Krystal>
-References: <1348178720-24610-1-git-send-email-christian.babeux@efficios.com>
-	<1348178720-24610-2-git-send-email-christian.babeux@efficios.com>
-	<20120921022014.GD22861@Krystal>
+From: David Goulet <dgoulet@efficios.com>
+Subject: Re: Segmentation fault in LTTng Tools 2.1
+Date: Fri, 21 Sep 2012 10:32:34 -0400
+Message-ID: <505C7A82.9040709__17687.5839395963$1348237997$gmane$org@efficios.com>
+References: <505AFF7F.2020002@ericsson.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from smtp.ini-tech.com ([213.239.202.151])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1TEstt-0006RW-MW
-	for lttng-dev@lists.lttng.org; Thu, 20 Sep 2012 22:23:29 -0400
-Content-Disposition: inline
-In-Reply-To: <20120921022014.GD22861@Krystal>
+	(envelope-from <dgoulet@efficios.com>) id 1TF4HW-0003lF-8X
+	for lttng-dev@lists.lttng.org; Fri, 21 Sep 2012 10:32:38 -0400
+In-Reply-To: <505AFF7F.2020002@ericsson.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -25,127 +20,57 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Christian Babeux <christian.babeux@efficios.com>
-Cc: lttng-dev@lists.lttng.org, dgoulet@efficios.com
+To: Bernd Hufmann <Bernd.Hufmann@ericsson.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-* Mathieu Desnoyers (mathieu.desnoyers@efficios.com) wrote:
-> * Christian Babeux (christian.babeux@efficios.com) wrote:
-> > Add three new printing functions:
-> > 
-> > print_ok: Print the OK status with optional color support.
-> > print_fail: Print the FAIL status with optional color support.
-> > print_test_banner: Print a test banner of the test description.
-> > 
-> > e.g.:
-> >    	   sometest.sh:
-> > 	   TEST_DESC="A really useful test"
-> >    	   [...]
-> > 	   source $TESTDIR/utils.sh
-> > 	   print_test_banner
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
 
-oh, wait...
+Hi Bernd,
 
-could print_test_banner take the string (or variable) to print as
-parameter ? e.g.
+Confirmed!
 
-print_test_banner($TEST_DESC)
+I've created a bug:
 
-So some typical use-cases could simply pass the banner string as
-parameter.. ?
+https://bugs.lttng.org/issues/350
 
-Thanks,
+Thanks for reporting it!
+David
 
-Mathieu
-
-> > 	   [...]
-> > 	   print_ok
-> > 	   print_fail
-> > 	   [...]
-> > 
-> > 	   $ ./sometest.sh
-> > 	   ----------------------
-> > 	    A really useful test
-> > 	   ----------------------
-> > 	   OK
-> > 	   FAIL
-> > 
-> > Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
+Bernd Hufmann:
+> Hello
 > 
-> Looks good to me!
+> I get a Segmentation Fault for the following command: lttng -vvv
+> create -C tcp://192.168.56.1 -D tcp://192.168.56.1 mySession
 > 
-> Acked-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> The core dump gives the following stack back trace:
 > 
-> > ---
-> >  tests/utils.sh | 33 +++++++++++++++++++++++++++++++++
-> >  1 file changed, 33 insertions(+)
-> > 
-> > diff --git a/tests/utils.sh b/tests/utils.sh
-> > index 42b18e3..2670de3 100644
-> > --- a/tests/utils.sh
-> > +++ b/tests/utils.sh
-> > @@ -25,6 +25,39 @@ KERNEL_MAJOR_VERSION=2
-> >  KERNEL_MINOR_VERSION=6
-> >  KERNEL_PATCHLEVEL_VERSION=27
-> >  
-> > +function print_ok ()
-> > +{
-> > +	# Check if we are a terminal
-> > +	if [ -t 1 ]; then
-> > +		echo -e "\e[1;32mOK\e[0m"
-> > +	else
-> > +		echo -e "OK"
-> > +	fi
-> > +}
-> > +
-> > +function print_fail ()
-> > +{
-> > +	# Check if we are a terminal
-> > +	if [ -t 1 ]; then
-> > +		echo -e "\e[1;31mFAIL\e[0m"
-> > +	else
-> > +		echo -e "FAIL"
-> > +	fi
-> > +}
-> > +
-> > +function print_test_banner ()
-> > +{
-> > +	# Rely on the global TEST_DESC to be set
-> > +	if [ -n "$TEST_DESC" ]; then
-> > +		count=$((${#TEST_DESC}+2))
-> > +		str=$(printf "%${count}s");
-> > +		echo -e "\n"
-> > +		echo -e ${str// /-}
-> > +		echo -e " $TEST_DESC "
-> > +		echo -e ${str// /-}
-> > +	fi
-> > +}
-> > +
-> >  function validate_kernel_version ()
-> >  {
-> >  	kern_version=($(uname -r | awk -F. '{ printf("%d.%d.%d\n",$1,$2,$3); }' | tr '.' '\n'))
-> > -- 
-> > 1.7.12
-> > 
-> > 
-> > _______________________________________________
-> > lttng-dev mailing list
-> > lttng-dev@lists.lttng.org
-> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> Core was generated by `lttng -vvv create -C tcp://192.168.56.1 -D 
+> tcp://192.168.56.1 mySession'. Program terminated with signal 11,
+> Segmentation fault. #0  _lttng_create_session_ext (name=<optimized
+> out>, url=0x0, datetime=0xbfa417dc "20120919-194400") at
+> lttng-ctl.c:1546 1546        if (uris[0].dtype != LTTNG_DST_PATH
+> && strlen(uris[0].subdir) == 0) {
 > 
-> -- 
-> Mathieu Desnoyers
-> Operating System Efficiency R&D Consultant
-> EfficiOS Inc.
-> http://www.efficios.com
+> LTTng Tools version: v2.1.0-rc3
 > 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> I attached the core dump file:
+> 
+> Could someone please look into this error?
+> 
+> Thanks Bernd
+> 
+> 
+> 
+> This body part will be downloaded on demand.
+-----BEGIN PGP SIGNATURE-----
 
--- 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+iQEcBAEBCgAGBQJQXHp/AAoJEELoaioR9I02f8QH/jq949pzhET+IM375drR52IO
+gasGkwsT+gsLQTfWGjhJ9qXHjuoBJlLn3ouuEAH1dZFSetUAjDoLyZEmE6L2nVMD
+s7B01joR7wM5LeNrjDalrL20kzhtPINEoiun+3Rneo+KJj8tQF/3Tb3RrTqlo+nz
+hlFSAJU5XRdTVSJsUgxErCLqKrizbDcqCVdnezUfP4aoSEssgdh0gNHg3ATH7T35
+bSPwBzVzBYATP9N729RkscGv9iE/Lcu7XmG8TyCPQU84s4d4X3EOAik3FgNOAU54
+zHGCLRDtIwV16l96ZcFjTwMvPZH3MdE8Ft7rPRYK6luO47dIc2Gy4zsabPGbydg=
+=TIlu
+-----END PGP SIGNATURE-----
