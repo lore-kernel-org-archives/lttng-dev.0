@@ -1,20 +1,20 @@
 From: Christian Babeux <christian.babeux@efficios.com>
-Subject: [PATCH v2 lttng-tools 2/4] Tests: Add helper functions
-	for printing status and test banner
-Date: Mon, 24 Sep 2012 12:11:45 -0400
-Message-ID: <1348503107-3830-3-git-send-email-christian.babeux__33426.6330035918$1348503159$gmane$org@efficios.com>
+Subject: [PATCH v2 lttng-tools 3/4] Tests: Cleanup redundant
+	code and use printing helper functions
+Date: Mon, 24 Sep 2012 12:11:46 -0400
+Message-ID: <1348503107-3830-4-git-send-email-christian.babeux__10627.3846621209$1348503166$gmane$org@efficios.com>
 References: <1348178720-24610-1-git-send-email-christian.babeux@efficios.com>
 	<1348503107-3830-1-git-send-email-christian.babeux@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-vb0-f48.google.com ([209.85.212.48])
+Received: from mail-vc0-f176.google.com ([209.85.220.176])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <christian.babeux@0x80.ca>) id 1TGBGT-00031u-G9
-	for lttng-dev@lists.lttng.org; Mon, 24 Sep 2012 12:12:09 -0400
-Received: by mail-vb0-f48.google.com with SMTP id e21so7755995vbm.35
-	for <lttng-dev@lists.lttng.org>; Mon, 24 Sep 2012 09:12:09 -0700 (PDT)
+	(envelope-from <christian.babeux@0x80.ca>) id 1TGBGZ-00031I-Py
+	for lttng-dev@lists.lttng.org; Mon, 24 Sep 2012 12:12:16 -0400
+Received: by mail-vc0-f176.google.com with SMTP id gb22so8030492vcb.35
+	for <lttng-dev@lists.lttng.org>; Mon, 24 Sep 2012 09:12:15 -0700 (PDT)
 In-Reply-To: <1348503107-3830-1-git-send-email-christian.babeux@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -28,77 +28,587 @@ To: dgoulet@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Add three new printing functions:
-
-print_ok: Print the OK status with optional color support.
-print_fail: Print the FAIL status with optional color support.
-print_test_banner: Print a test banner of the test description.
-
-e.g.:
-   	   sometest.sh:
-	   TEST_DESC="A really useful test"
-   	   [...]
-	   source $TESTDIR/utils.sh
-	   print_test_banner
-	   [...]
-	   print_ok
-	   print_fail
-	   [...]
-
-	   $ ./sometest.sh
-	   ----------------------
-	    A really useful test
-	   ----------------------
-	   OK
-	   FAIL
 
 Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
 ---
- tests/utils.sh | 32 ++++++++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+ tests/kernel/run-kernel-tests.sh    |  7 +++--
+ tests/tools/streaming/run-kernel    | 13 ++++----
+ tests/tools/streaming/run-ust       |  5 ++--
+ tests/tools/streaming/uri_switch    |  6 ++--
+ tests/ust/before-after/run          | 14 ++++-----
+ tests/ust/high-throughput/run       |  9 +++---
+ tests/ust/low-throughput/run        |  9 +++---
+ tests/ust/multi-session/run         | 13 ++++----
+ tests/ust/nprocesses/run            |  7 ++---
+ tests/ust/nprocesses/ust-nprocesses |  7 +++--
+ tests/ust/run-ust-global-tests.sh   |  6 ++--
+ tests/utils.sh                      | 60 +++++++++++++++++++------------------
+ 12 files changed, 76 insertions(+), 80 deletions(-)
 
+diff --git a/tests/kernel/run-kernel-tests.sh b/tests/kernel/run-kernel-tests.sh
+index f872be5..f89cd7b 100755
+--- a/tests/kernel/run-kernel-tests.sh
++++ b/tests/kernel/run-kernel-tests.sh
+@@ -46,9 +46,10 @@ function check_lttng_modules ()
+ 	fi
+ }
+ 
+-echo -e "\n---------------------"
+-echo -e "Testing Kernel tracer"
+-echo -e "---------------------"
++
++TEST_DESC="Testing Kernel tracer"
++
++print_test_banner "$TEST_DESC"
+ 
+ # Detect lttng-modules installed
+ check_lttng_modules
+diff --git a/tests/tools/streaming/run-kernel b/tests/tools/streaming/run-kernel
+index 73a99de..b87be13 100755
+--- a/tests/tools/streaming/run-kernel
++++ b/tests/tools/streaming/run-kernel
+@@ -14,6 +14,7 @@
+ # You should have received a copy of the GNU Lesser General Public License
+ # along with this library; if not, write to the Free Software Foundation, Inc.,
+ # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
++TEST_DESC="Streaming - Kernel tracing"
+ 
+ CURDIR=$(dirname $0)/
+ TESTDIR=$CURDIR/../..
+@@ -25,9 +26,7 @@ TRACE_PATH=$(mktemp -d)
+ 
+ source $TESTDIR/utils.sh
+ 
+-echo -e "\n---------------------------"
+-echo -e " Streaming - Kernel tracing "
+-echo -e "----------------------------"
++print_test_banner "$TEST_DESC"
+ 
+ if [ "$(id -u)" != "0" ]; then
+ 	echo "This test must be running as root. Aborting"
+@@ -50,10 +49,10 @@ function lttng_create_session
+ 	# Create session with default path
+ 	$TESTDIR/../src/bin/lttng/$LTTNG_BIN create $SESSION_NAME >/dev/null 2>&1
+ 	if [ $? -eq 1 ]; then
+-		echo -e '\e[1;31mFAILED\e[0m'
++		print_fail
+ 		return 1
+ 	else
+-		echo -e "\e[1;32mOK\e[0m"
++		print_ok
+ 	fi
+ }
+ 
+@@ -63,10 +62,10 @@ function lttng_enable_consumer_localhost
+ 	# Create session with default path
+ 	$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-consumer -k net://localhost >/dev/null 2>&1
+ 	if [ $? -eq 1 ]; then
+-		echo -e '\e[1;31mFAILED\e[0m'
++		print_fail
+ 		return 1
+ 	else
+-		echo -e "\e[1;32mOK\e[0m"
++		print_ok
+ 	fi
+ }
+ 
+diff --git a/tests/tools/streaming/run-ust b/tests/tools/streaming/run-ust
+index 0149918..1c415cc 100755
+--- a/tests/tools/streaming/run-ust
++++ b/tests/tools/streaming/run-ust
+@@ -14,6 +14,7 @@
+ # You should have received a copy of the GNU Lesser General Public License
+ # along with this library; if not, write to the Free Software Foundation, Inc.,
+ # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
++TEST_DESC="Streaming - User space tracing"
+ 
+ CURDIR=$(dirname $0)/
+ TESTDIR=$CURDIR/../..
+@@ -26,9 +27,7 @@ TRACE_PATH=$(mktemp -d)
+ 
+ source $TESTDIR/utils.sh
+ 
+-echo -e "\n-------------------------------"
+-echo -e " Streaming - User space tracing "
+-echo -e "--------------------------------"
++print_test_banner "$TEST_DESC"
+ 
+ if [ ! -x "$CURDIR/$BIN_NAME" ]; then
+ 	echo -e "No UST nevents binary detected. Passing."
+diff --git a/tests/tools/streaming/uri_switch b/tests/tools/streaming/uri_switch
+index a6b1582..cb0979e 100755
+--- a/tests/tools/streaming/uri_switch
++++ b/tests/tools/streaming/uri_switch
+@@ -15,6 +15,7 @@
+ # You should have received a copy of the GNU Lesser General Public License
+ # along with this library; if not, write to the Free Software Foundation, Inc.,
+ # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
++TEST_DESC="Streaming - URI switching"
+ 
+ CURDIR=$(dirname $0)/
+ TESTDIR=$CURDIR/../..
+@@ -27,10 +28,7 @@ TRACE_PATH=$(mktemp -d)
+ 
+ source $TESTDIR/utils.sh
+ 
+-echo -e "\n"
+-echo -e "---------------------------"
+-echo -e " Streaming - URI switching "
+-echo -e "---------------------------"
++print_test_banner "$TEST_DESC"
+ 
+ if [ ! -x "$CURDIR/$BIN_NAME" ]; then
+ 	echo -e "No UST nevents binary detected. Skipping."
+diff --git a/tests/ust/before-after/run b/tests/ust/before-after/run
+index 9b16528..56046b4 100755
+--- a/tests/ust/before-after/run
++++ b/tests/ust/before-after/run
+@@ -14,6 +14,7 @@
+ # You should have received a copy of the GNU Lesser General Public License
+ # along with this library; if not, write to the Free Software Foundation, Inc.,
+ # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
++TEST_DESC="UST tracer - Start tracing before and after execution"
+ 
+ CURDIR=$(dirname $0)/
+ TESTDIR=$CURDIR/../..
+@@ -23,9 +24,7 @@ EVENT_NAME="ust_gen_nevents:tptest"
+ 
+ source $TESTDIR/utils.sh
+ 
+-echo -e "\n----------------------------------------------------"
+-echo -e "UST tracer - Star tracing before and after execution"
+-echo -e "----------------------------------------------------"
++print_test_banner "$TEST_DESC"
+ 
+ if [ ! -x "$CURDIR/gen-nevents" ]; then
+ 	echo -e "No UST nevents binary detected. Passing."
+@@ -44,7 +43,8 @@ test_before_apps() {
+ 	# Start test
+ 	echo -n "Starting application... "
+ 	./$CURDIR/gen-nevents $NR_ITER
+-	echo -e "Ended \e[1;32mOK\e[0m"
++	echo -e "Ended "
++	print_ok
+ 	stop_tracing $SESSION_NAME
+ 	destroy_lttng_session $SESSION_NAME
+ 
+@@ -58,7 +58,7 @@ test_after_apps() {
+ 
+ 	echo -n "Starting application... "
+ 	./$CURDIR/gen-nevents 100 &
+-	echo -e "\e[1;32mOK\e[0m"
++	print_ok
+ 
+ 	# BEFORE application is spawned
+ 	create_lttng_session $SESSION_NAME $TRACE_PATH
+@@ -74,11 +74,11 @@ test_after_apps() {
+ 	out=$(babeltrace $TRACE_PATH | grep $EVENT_NAME | wc -l)
+ 	if [ $out -eq 0 ]; then
+ 		echo -n "No event found. Suppose to have at least one... "
+-		echo -e "\e[1;31mFAILED\e[0m"
++		print_fail
+ 		out=1
+ 	else
+ 		echo -n "Found $out event(s). Coherent... "
+-		echo -e "\e[1;32mOK\e[0m"
++		print_ok
+ 		out=0
+ 	fi
+ 
+diff --git a/tests/ust/high-throughput/run b/tests/ust/high-throughput/run
+index de3111d..f86a17a 100755
+--- a/tests/ust/high-throughput/run
++++ b/tests/ust/high-throughput/run
+@@ -14,6 +14,7 @@
+ # You should have received a copy of the GNU Lesser General Public License
+ # along with this library; if not, write to the Free Software Foundation, Inc.,
+ # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
++TEST_DESC="UST tracer - Testing high events throughput"
+ 
+ CURDIR=$(dirname $0)/
+ TESTDIR=$CURDIR/../..
+@@ -24,9 +25,7 @@ EVENT_NAME="tp:tptest"
+ 
+ source $TESTDIR/utils.sh
+ 
+-echo -e "\n-------------------------------------------"
+-echo -e "UST tracer - Testing high events throughput"
+-echo -e "-------------------------------------------"
++print_test_banner "$TEST_DESC"
+ 
+ if [ ! -x "$CURDIR/$BIN_NAME" ]; then
+ 	echo -e "No UST nevents binary detected. Passing."
+@@ -81,11 +80,11 @@ let wanted=$NR_ITER*1000000
+ 
+ if [ $wanted -ne $total ]; then
+ 	echo -n "Expected $wanted. Dropped $dropped. Recorded $traced. Total $total... "
+-	echo -e "\e[1;31mFAILED\e[0m"
++	print_fail
+ 	out=1
+ else
+ 	echo -n "Expected $wanted. Dropped $dropped. Recorded $traced. Total $total... "
+-	echo -e "\e[1;32mOK\e[0m"
++	print_ok
+ 	out=0
+ fi
+ 
+diff --git a/tests/ust/low-throughput/run b/tests/ust/low-throughput/run
+index 3f2d1b7..219a641 100755
+--- a/tests/ust/low-throughput/run
++++ b/tests/ust/low-throughput/run
+@@ -14,6 +14,7 @@
+ # You should have received a copy of the GNU Lesser General Public License
+ # along with this library; if not, write to the Free Software Foundation, Inc.,
+ # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
++TEST_DESC="UST tracer - Testing low events throughput"
+ 
+ CURDIR=$(dirname $0)/
+ TESTDIR=$CURDIR/../..
+@@ -23,9 +24,7 @@ EVENT_NAME="tp:slow"
+ 
+ source $TESTDIR/utils.sh
+ 
+-echo -e "\n-------------------------------------------"
+-echo -e "UST tracer - Testing low events throughput"
+-echo -e "-------------------------------------------"
++print_test_banner "$TEST_DESC"
+ 
+ if [ ! -x "$CURDIR/$BIN_NAME" ]; then
+ 	echo -e "No UST nevents binary detected. Passing."
+@@ -92,9 +91,9 @@ done
+ 
+ if [ $out -eq 0 ]; then
+ 	echo -n "Trace is coherent... "
+-	echo -e "\e[1;32mOK\e[0m"
++	print_ok
+ else
+-	echo -e "\e[1;31mFAILED\e[0m"
++	print_fail
+ fi
+ 
+ rm -rf $TRACE_PATH
+diff --git a/tests/ust/multi-session/run b/tests/ust/multi-session/run
+index f6dab7c..ce3d12b 100755
+--- a/tests/ust/multi-session/run
++++ b/tests/ust/multi-session/run
+@@ -14,6 +14,7 @@
+ # You should have received a copy of the GNU Lesser General Public License
+ # along with this library; if not, write to the Free Software Foundation, Inc.,
+ # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
++TEST_DESC="UST tracer - Multi-session"
+ 
+ CURDIR=$(dirname $0)/
+ TESTDIR=$CURDIR/../..
+@@ -23,9 +24,7 @@ EVENT_NAME="ust_gen_nevents:tptest"
+ 
+ source $TESTDIR/utils.sh
+ 
+-echo -e "\n--------------------------"
+-echo -e "UST tracer - Multi-session"
+-echo -e "--------------------------"
++print_test_banner "$TEST_DESC"
+ 
+ if [ ! -x "$CURDIR/gen-nevents" ]; then
+ 	echo -e "No UST nevents binary detected. Passing."
+@@ -46,7 +45,7 @@ test_multi_session() {
+ 
+ 	echo -n "Starting application generating $NR_ITER events... "
+ 	./$CURDIR/gen-nevents $NR_ITER &
+-	echo -e "\e[1;32mOK\e[0m"
++	print_ok
+ 
+ 	# At least hit one event
+ 	echo -n "Waiting for events to record "
+@@ -54,7 +53,7 @@ test_multi_session() {
+ 		echo -n "."
+ 		sleep 0.1
+ 	done
+-	echo -e "\e[1;32m OK\e[0m"
++	print_ok
+ 
+ 	for i in `seq 0 3`; do
+ 		stop_tracing "$SESSION_NAME-$i"
+@@ -62,11 +61,11 @@ test_multi_session() {
+ 		out=$(babeltrace "$TRACE_PATH/$i" | grep "$EVENT_NAMEi$i" | wc -l)
+ 		if [ $out -ne $NR_ITER ]; then
+ 			echo -n "No event found. Suppose to have at least one... "
+-			echo -e "\e[1;31mFAILED\e[0m"
++			print_fail
+ 			out=1
+ 		else
+ 			echo -n "Found $out event(s) for $SESSION_NAME-$i. Coherent... "
+-			echo -e "\e[1;32mOK\e[0m"
++			print_ok
+ 			out=0
+ 		fi
+ 	done
+diff --git a/tests/ust/nprocesses/run b/tests/ust/nprocesses/run
+index 7513fe1..25ca413 100755
+--- a/tests/ust/nprocesses/run
++++ b/tests/ust/nprocesses/run
+@@ -14,17 +14,16 @@
+ # You should have received a copy of the GNU Lesser General Public License
+ # along with this library; if not, write to the Free Software Foundation, Inc.,
+ # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
++NR_ITER=100
++TEST_DESC="UST tracer - Generate $NR_ITER process"
+ 
+ CURDIR=$(dirname $0)/
+ TESTDIR=$CURDIR/../..
+-NR_ITER=100
+ TEST_BIN_NAME="gen-events-time"
+ 
+ source $TESTDIR/utils.sh
+ 
+-echo -e "\n-------------------------------------"
+-echo -e "UST tracer - Generate $NR_ITER process"
+-echo -e "---------------------------------------"
++print_test_banner "$TEST_DESC"
+ 
+ if [ ! -x "$CURDIR/$TEST_BIN_NAME" ]; then
+ 	echo -e "No UST $TEST_BIN_NAME binary detected. Passing."
+diff --git a/tests/ust/nprocesses/ust-nprocesses b/tests/ust/nprocesses/ust-nprocesses
+index eab6d39..7355057 100755
+--- a/tests/ust/nprocesses/ust-nprocesses
++++ b/tests/ust/nprocesses/ust-nprocesses
+@@ -41,9 +41,10 @@ sleep 3
+ listing=$($TESTDIR/../src/bin/lttng/$LTTNG_BIN list -u)
+ reg_app_count=$(echo -n $listing | sed "s/$TEST_BIN_NAME/$TEST_BIN_NAME\n/g" | grep "$TEST_BIN_NAME" | wc -l)
+ if [ "$reg_app_count" -ne "$NR_ITER" ]; then
+-	echo -e "$reg_app_count apps listed. Expected $NR_ITER \e[1;31mFAILED\e[0m"
++	echo -e "$reg_app_count apps listed. Expected $NR_ITER "
++	print_fail
+ else
+-	echo -e "\e[1;32mOK\e[0m"
++	print_ok
+ fi
+ 
+ TRACE_PATH=$(mktemp -d)
+@@ -64,5 +65,5 @@ rm -rf $TRACE_PATH
+ 
+ echo -e -n "Killing all spawned applications..."
+ killall -q $TEST_BIN_NAME >/dev/null 2>&1 &
+-echo -e "\e[1;32mOK\e[0m"
++print_ok
+ exit 0
+diff --git a/tests/ust/run-ust-global-tests.sh b/tests/ust/run-ust-global-tests.sh
+index 969e217..57c5170 100755
+--- a/tests/ust/run-ust-global-tests.sh
++++ b/tests/ust/run-ust-global-tests.sh
+@@ -35,9 +35,9 @@ function start_tests ()
+ 	rm -rf $tmpdir
+ }
+ 
+-echo -e "\n-------------------------------------------"
+-echo -e "UST tracer - Global domain (LTTNG_DOMAIN_UST)"
+-echo -e "---------------------------------------------"
++TEST_DESC="UST tracer - Global domain (LTTNG_DOMAIN_UST)"
++
++print_test_banner "$TEST_DESC"
+ 
+ start_tests
+ 
 diff --git a/tests/utils.sh b/tests/utils.sh
-index 42b18e3..8fcb0da 100644
+index 8fcb0da..281ca35 100644
 --- a/tests/utils.sh
 +++ b/tests/utils.sh
-@@ -25,6 +25,38 @@ KERNEL_MAJOR_VERSION=2
- KERNEL_MINOR_VERSION=6
- KERNEL_PATCHLEVEL_VERSION=27
+@@ -98,10 +98,10 @@ function spawn_sessiond ()
+ 		$DIR/../src/bin/lttng-sessiond/$SESSIOND_BIN --daemonize --quiet --consumerd32-path="$DIR/../src/bin/lttng-consumerd/lttng-consumerd" --consumerd64-path="$DIR/../src/bin/lttng-consumerd/lttng-consumerd"
+ 		#$DIR/../src/bin/lttng-sessiond/$SESSIOND_BIN --consumerd32-path="$DIR/../src/bin/lttng-consumerd/lttng-consumerd" --consumerd64-path="$DIR/../src/bin/lttng-consumerd/lttng-consumerd" --verbose-consumer >>/tmp/sessiond.log 2>&1 &
+ 		if [ $? -eq 1 ]; then
+-			echo -e "\e[1;31mFAILED\e[0m"
++		        print_fail
+ 			return 1
+ 		else
+-			echo -e "\e[1;32mOK\e[0m"
++		        print_ok
+ 		fi
+ 	fi
  
-+function print_ok ()
-+{
-+	# Check if we are a terminal
-+	if [ -t 1 ]; then
-+		echo -e "\e[1;32mOK\e[0m"
-+	else
-+		echo -e "OK"
-+	fi
-+}
-+
-+function print_fail ()
-+{
-+	# Check if we are a terminal
-+	if [ -t 1 ]; then
-+		echo -e "\e[1;31mFAIL\e[0m"
-+	else
-+		echo -e "FAIL"
-+	fi
-+}
-+
-+function print_test_banner ()
-+{
-+	desc="$1"
-+
-+	count=$((${#desc}+2))
-+	str=$(printf "%${count}s");
-+	echo -e "\n"
-+	echo -e ${str// /-}
-+	echo -e " $desc "
-+	echo -e ${str// /-}
-+}
-+
- function validate_kernel_version ()
- {
- 	kern_version=($(uname -r | awk -F. '{ printf("%d.%d.%d\n",$1,$2,$3); }' | tr '.' '\n'))
+@@ -121,10 +121,10 @@ function lttng_enable_kernel_event
+ 	echo -n "Enabling kernel event $event_name for session $sess_name"
+ 	$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-event $event_name -s $sess_name -k >/dev/null 2>&1
+ 	if [ $? -eq 1 ]; then
+-		echo -e '\e[1;31mFAILED\e[0m'
++		print_fail
+ 		return 1
+ 	else
+-		echo -e "\e[1;32mOK\e[0m"
++	        print_ok
+ 	fi
+ }
+ 
+@@ -140,13 +140,13 @@ function lttng_start_relayd
+ 		$DIR/../src/bin/lttng-relayd/$RELAYD_BIN $opt >/dev/null 2>&1 &
+ 		#$DIR/../src/bin/lttng-relayd/$RELAYD_BIN $opt -vvv >>/tmp/relayd.log 2>&1 &
+ 		if [ $? -eq 1 ]; then
+-			echo -e "\e[1;31mFAILED\e[0m"
++		        print_fail
+ 			return 1
+ 		else
+-			echo -e "\e[1;32mOK\e[0m"
++			print_ok
+ 		fi
+ 	else
+-		echo -e "\e[1;32mOK\e[0m"
++		print_ok
+ 	fi
+ }
+ 
+@@ -157,7 +157,7 @@ function lttng_stop_relayd
+ 	echo -e -n "Killing lttng-relayd (pid: $PID_RELAYD)... "
+ 	kill $PID_RELAYD >/dev/null 2>&1
+ 	if [ $? -eq 1 ]; then
+-		echo -e "\e[1;31mFAILED\e[0m"
++		print_fail
+ 		return 1
+ 	else
+ 		out=1
+@@ -165,7 +165,7 @@ function lttng_stop_relayd
+ 			out=$(pidof lt-$RELAYD_BIN)
+ 			sleep 0.5
+ 		done
+-		echo -e "\e[1;32mOK\e[0m"
++		print_ok
+ 		return 0
+ 	fi
+ }
+@@ -204,7 +204,7 @@ function stop_sessiond ()
+ 	echo -e -n "Killing session daemon... "
+ 	kill $PID_SESSIOND >/dev/null 2>&1
+ 	if [ $? -eq 1 ]; then
+-		echo -e "\e[1;31mFAILED\e[0m"
++		print_fail
+ 		return 1
+ 	else
+ 		out=1
+@@ -212,7 +212,7 @@ function stop_sessiond ()
+ 			out=$(pidof lt-$SESSIOND_BIN)
+ 			sleep 0.5
+ 		done
+-		echo -e "\e[1;32mOK\e[0m"
++		print_ok
+ 	fi
+ }
+ 
+@@ -224,10 +224,10 @@ function create_lttng_session ()
+ 	echo -n "Creating lttng session $sess_name in $trace_path "
+ 	$TESTDIR/../src/bin/lttng/$LTTNG_BIN create $sess_name -o $trace_path >/dev/null 2>&1
+ 	if [ $? -eq 1 ]; then
+-		echo -e "\e[1;31mFAILED\e[0m"
++		print_fail
+ 		return 1
+ 	else
+-		echo -e "\e[1;32mOK\e[0m"
++		print_ok
+ 	fi
+ }
+ 
+@@ -239,10 +239,10 @@ function enable_lttng_channel()
+ 	echo -n "Enabling lttng channel $channel_name for session $sess_name"
+ 	$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-channel $channel_name -s $sess_name >/dev/null 2>&1
+ 	if [ $? -eq 1 ]; then
+-		echo -e "\e[1;31mFAILED\e[0m"
++		print_fail
+ 		return 1
+ 	else
+-		echo -e "\e[1;32mOK\e[0m"
++		print_ok
+ 	fi
+ }
+ 
+@@ -254,10 +254,10 @@ function disable_lttng_channel()
+ 	echo -n "Disabling lttng channel $channel_name for session $sess_name"
+ 	$TESTDIR/../src/bin/lttng/$LTTNG_BIN disable-channel $channel_name -s $sess_name >/dev/null 2>&1
+ 	if [ $? -eq 1 ]; then
+-		echo -e "\e[1;31mFAILED\e[0m"
++	        print_fail
+ 		return 1
+ 	else
+-		echo -e "\e[1;32mOK\e[0m"
++	        print_ok
+ 	fi
+ }
+ 
+@@ -269,10 +269,10 @@ function enable_ust_lttng_event ()
+ 	echo -n "Enabling lttng event $event_name for session $sess_name "
+ 	$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-event $event_name -s $sess_name -u >/dev/null 2>&1
+ 	if [ $? -eq 1 ]; then
+-		echo -e '\e[1;31mFAILED\e[0m'
++		print_fail
+ 		return 1
+ 	else
+-		echo -e "\e[1;32mOK\e[0m"
++		print_ok
+ 	fi
+ }
+ 
+@@ -283,10 +283,10 @@ function start_tracing ()
+ 	echo -n "Start lttng tracing for session $sess_name "
+ 	$TESTDIR/../src/bin/lttng/$LTTNG_BIN start $sess_name >/dev/null 2>&1
+ 	if [ $? -eq 1 ]; then
+-		echo -e '\e[1;31mFAILED\e[0m'
++		print_fail
+ 		return 1
+ 	else
+-		echo -e "\e[1;32mOK\e[0m"
++	        print_ok
+ 	fi
+ }
+ 
+@@ -297,10 +297,10 @@ function stop_tracing ()
+ 	echo -n "Stop lttng tracing for session $sess_name "
+ 	$TESTDIR/../src/bin/lttng/$LTTNG_BIN stop $sess_name >/dev/null 2>&1
+ 	if [ $? -eq 1 ]; then
+-		echo -e '\e[1;31mFAILED\e[0m'
++		print_fail
+ 		return 1
+ 	else
+-		echo -e "\e[1;32mOK\e[0m"
++	        print_ok
+ 	fi
+ }
+ 
+@@ -311,10 +311,10 @@ function destroy_lttng_session ()
+ 	echo -n "Destroy lttng session $sess_name "
+ 	$TESTDIR/../src/bin/lttng/$LTTNG_BIN destroy $sess_name >/dev/null 2>&1
+ 	if [ $? -eq 1 ]; then
+-		echo -e '\e[1;31mFAILED\e[0m'
++		print_fail
+ 		return 1
+ 	else
+-		echo -e "\e[1;32mOK\e[0m"
++	        print_ok
+ 	fi
+ }
+ 
+@@ -334,10 +334,12 @@ function trace_matches ()
+ 
+ 	count=$($BABELTRACE_BIN $trace_path | grep $event_name | wc -l)
+ 	if [ "$count" -ne "$nr_iter" ]; then
+-		echo -e "$count found in trace \e[1;31mFAILED\e[0m"
++		echo -e "$count found in trace "
++		print_fail
+ 		return 1
+ 	else
+-		echo -e "Trace is coherent \e[1;32mOK\e[0m"
++		echo -e "Trace is coherent "
++		print_ok
+ 		return 0
+ 	fi
+ }
+@@ -356,10 +358,10 @@ function validate_trace
+ 	echo -n "Validating trace for event $event_name... "
+ 	traced=$($BABELTRACE_BIN $trace_path 2>/dev/null | grep $event_name | wc -l)
+ 	if [ $traced -eq 0 ]; then
+-		echo -e "\e[1;31mFAILED\e[0m"
++		print_fail
+ 		return 1
+ 	else
+-		echo -e "\e[1;32mOK\e[0m"
++		print_ok
+ 		return 0
+ 	fi
+ }
 -- 
 1.7.12
