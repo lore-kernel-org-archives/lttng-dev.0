@@ -1,18 +1,19 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: Re: [PATCH v2 lttng-tools 0/4] Tests cleanup
-Date: Mon, 24 Sep 2012 16:44:01 -0400
-Message-ID: <5060C611.3050507__38513.9778293253$1348519474$gmane$org@efficios.com>
-References: <1348178720-24610-1-git-send-email-christian.babeux@efficios.com>
-	<1348503107-3830-1-git-send-email-christian.babeux@efficios.com>
+From: Matthew Khouzam <matthew.khouzam@ericsson.com>
+Subject: CTF model.emf.uri precision
+Date: Mon, 24 Sep 2012 16:52:28 -0400
+Message-ID: <5060C80C.4030600__7241.00534939698$1348520006$gmane$org@ericsson.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([213.239.202.151])
+Received: from imr3.ericy.com ([198.24.6.13])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1TGFVe-00056K-AB
-	for lttng-dev@lists.lttng.org; Mon, 24 Sep 2012 16:44:06 -0400
-In-Reply-To: <1348503107-3830-1-git-send-email-christian.babeux@efficios.com>
+	(envelope-from <matthew.khouzam@ericsson.com>) id 1TGFeD-0005AX-1t
+	for lttng-dev@lists.lttng.org; Mon, 24 Sep 2012 16:52:57 -0400
+Received: from eusaamw0707.eamcs.ericsson.se ([147.117.20.32])
+	by imr3.ericy.com (8.13.8/8.13.8) with ESMTP id q8OKqoYK013736
+	(version=TLSv1/SSLv3 cipher=AES128-SHA bits=128 verify=FAIL)
+	for <lttng-dev@lists.lttng.org>; Mon, 24 Sep 2012 15:52:50 -0500
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,63 +22,18 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Christian Babeux <christian.babeux@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA512
+Hi tracing paladins,
+I was going over the most recent CTF specs. I am curious, at the line:
+1176   "model.emf.uri = "string";" this looks like a reference to
+something from eclipse modeling framework.
+http://download.eclipse.org/modeling/emf/emf/javadoc/2.7.0/org/eclipse/emf/common/util/URI.html
 
-Hoy!
+Is this part of the CTF specification? Shouldn't this be called
+model.uri or model_uri to respect the naming convention?
 
-I fixed a SMALL issue in two "echo" statements that were missing a "-n".
+I hope someone could clarify this.
 
-Everything is working good and merged!
-
-Thanks!
-David
-
-Christian Babeux:
-> Hi all,
-> 
-> Here a brief changelog for the tests cleanup patches.
-> 
-> v2 Changelog:
-> 
-> 1/4: Use STDOUT_FILENO define instead of fileno(stdout). 2/4:
-> print_test_banner now accept a string parameter instead of relying
-> on the global TEST_DESC. 3/4: print_test_banner now requires a
-> string argument. Pass TEST_DESC string. 4/4: No changes
-> 
-> Thanks,
-> 
-> Christian Babeux (4): Tests: Add a check for color support when
-> printing status Tests: Add helper functions for printing status and
-> test banner Tests: Cleanup redundant code and use printing helper
-> functions Tests: Rename helper functions to have consistent names
-> 
-> tests/kernel/run-kernel-tests.sh    |  13 ++--- 
-> tests/tools/streaming/run-kernel    |  29 +++++----- 
-> tests/tools/streaming/run-ust       |  21 ++++---- 
-> tests/tools/streaming/uri_switch    |  30 +++++------ 
-> tests/ust/before-after/run          |  30 +++++------ 
-> tests/ust/high-throughput/run       |  17 +++--- 
-> tests/ust/low-throughput/run        |  17 +++--- 
-> tests/ust/multi-session/run         |  23 ++++---- 
-> tests/ust/nprocesses/run            |  11 ++-- 
-> tests/ust/nprocesses/ust-nprocesses |  11 ++-- 
-> tests/ust/run-ust-global-tests.sh   |  12 ++--- tests/utils.h
-> |  22 +++++++- tests/utils.sh                      | 104
-> ++++++++++++++++++++++++------------ 13 files changed, 193
-> insertions(+), 147 deletions(-)
-> 
------BEGIN PGP SIGNATURE-----
-
-iQEcBAEBCgAGBQJQYMYOAAoJEELoaioR9I02qRYH/3L1ATAiQQUamHUsgp4hJr0K
-f2qWrdQmRMvUg1qs2jsflj2S08isCyhdRnjBvYCisRxoJDhrMSCffFWVg9bdpXxj
-/5cuzhXYgQB/nImugUF3VzOIraxkLTLbK7SQlUBFvvlNdYI/ytn0WFyVC6/wWlsr
-kkWkeR/Ja1hiWNEOrT+Q8JL2ogUQfiamnBmqNl05P3SXRKB9WOPdO/mmbjbrJnTf
-oa+9lZAtPMDh33My5d4USecm/HgQWtFVlNi1sGWPmRmP+Ym+ziHs/wEiGWhBhg9u
-ZEFmVQPULjgdZwmjFbfLIVk8M9D/N3hY2RLlXg4F8wlOq5iqn4496DNDOtjNlRI=
-=uXpJ
------END PGP SIGNATURE-----
+Matthew
