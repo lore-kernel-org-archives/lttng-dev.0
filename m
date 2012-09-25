@@ -1,18 +1,19 @@
-From: Christian Babeux <christian.babeux@efficios.com>
-Subject: [PATCH lttng-tools] Tests: Add high throughput with
-	bandwidth limits test
-Date: Tue, 25 Sep 2012 12:06:38 -0400
-Message-ID: <1348589198-16331-1-git-send-email-christian.babeux__12583.5074148656$1348589249$gmane$org@efficios.com>
+From: Yannick Brosseau <yannick.brosseau@gmail.com>
+Subject: Re: CTF model.emf.uri precision
+Date: Tue, 25 Sep 2012 14:20:54 -0400
+Message-ID: <5061F606.5000504__8778.70909539542$1348597294$gmane$org@gmail.com>
+References: <5060C80C.4030600@ericsson.com> <20120925022530.GA12625@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qc0-f176.google.com ([209.85.216.176])
+Received: from mail-ie0-f176.google.com ([209.85.223.176])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <christian.babeux@0x80.ca>) id 1TGXez-0005dp-Qy
-	for lttng-dev@lists.lttng.org; Tue, 25 Sep 2012 12:06:58 -0400
-Received: by qcon41 with SMTP id n41so3608637qco.35
-	for <lttng-dev@lists.lttng.org>; Tue, 25 Sep 2012 09:06:52 -0700 (PDT)
+	(envelope-from <yannick.brosseau@gmail.com>) id 1TGZkj-0006cf-TC
+	for lttng-dev@lists.lttng.org; Tue, 25 Sep 2012 14:21:01 -0400
+Received: by ieak11 with SMTP id k11so7513905iea.35
+	for <lttng-dev@lists.lttng.org>; Tue, 25 Sep 2012 11:20:56 -0700 (PDT)
+In-Reply-To: <20120925022530.GA12625@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,236 +22,30 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: dgoulet@efficios.com
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-This test is used to stress the new streaming feature with
-high throughput in a bandwidth limited use case.
+On 2012-09-24 22:25, Mathieu Desnoyers wrote:
+> * Matthew Khouzam (matthew.khouzam@ericsson.com) wrote:
+>> Hi tracing paladins,
+>> I was going over the most recent CTF specs. I am curious, at the line:
+>> 1176   "model.emf.uri = "string";" this looks like a reference to
+>> something from eclipse modeling framework.
+>> http://download.eclipse.org/modeling/emf/emf/javadoc/2.7.0/org/eclipse/emf/common/util/URI.html
+>>
+>> Is this part of the CTF specification? Shouldn't this be called
+>> model.uri or model_uri to respect the naming convention?
+> if we only call it model.uri, and come up with other model URIs that we
+> want to encode in the future (not emf-related), then we would be
+> stucked, wouldn't we ?
+>
+> What is the benefit of removing the "emf" part ?
+>
+I don't see the benifit of having the "emf". From what I see, its just
+an URI, so there is no real link to that an EMF. We could put any kind
+of model there?!?.
 
-The bandwidth limitation is done via the tc (traffic control)
-kernel utility. Root permissions are needed to set bandwidth limits.
-Limits are set on the loopback interface (lo).
+Also, why not just having a generic way to add a constant string to the
+event?
 
-The test cycle through bandwidth limits from 3200kbits to 50kbits.
-There are currently two known limitations/issues:
-
-- The tests fails when the lttng stop commands is issued
-  right after the traced applications are done executing.
-
-- Setting a bandwidth limit on the control port of the relayd
-  will trigger a timeout in the sessiond.
-
-Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
----
- tests/tools/streaming/high_through_limits | 185 ++++++++++++++++++++++++++++++
- tests/tools/streaming/runall              |   2 +-
- 2 files changed, 186 insertions(+), 1 deletion(-)
- create mode 100755 tests/tools/streaming/high_through_limits
-
-diff --git a/tests/tools/streaming/high_through_limits b/tests/tools/streaming/high_through_limits
-new file mode 100755
-index 0000000..0f0a4eb
---- /dev/null
-+++ b/tests/tools/streaming/high_through_limits
-@@ -0,0 +1,185 @@
-+#!/bin/bash
-+#
-+# Copyright (C) - 2012 Christian Babeux <christian.babeux@efficios.com>
-+#                      David Goulet <dgoulet@efficios.com>
-+#
-+# This library is free software; you can redistribute it and/or modify it under
-+# the terms of the GNU Lesser General Public License as published by the Free
-+# Software Foundation; version 2.1 of the License.
-+#
-+# This library is distributed in the hope that it will be useful, but WITHOUT
-+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-+# FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
-+# details.
-+#
-+# You should have received a copy of the GNU Lesser General Public License
-+# along with this library; if not, write to the Free Software Foundation, Inc.,
-+# 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
-+TEST_DESC="Streaming - High throughput with bandwith limits"
-+
-+CURDIR=$(dirname $0)/
-+TESTDIR=$CURDIR/../..
-+NR_APP_ITER=10
-+NR_ITER=1000000
-+BIN_NAME="gen-ust-events"
-+SESSION_NAME="high-throughput"
-+EVENT_NAME="tp:tptest"
-+SESSIOND_CTRL_PORT=5342
-+SESSIOND_DATA_PORT=5343
-+DEFAULT_IF="lo"
-+
-+TRACE_PATH=$(mktemp -d)
-+
-+source $TESTDIR/utils.sh
-+
-+print_test_banner "$TEST_DESC"
-+
-+if [ ! -x "$CURDIR/$BIN_NAME" ]; then
-+	echo -e "No UST nevents binary detected. Passing."
-+	exit 0
-+fi
-+
-+if [ "$(id -u)" != "0" ]; then
-+	echo "This test must be running as root to set bandwith limits. Aborting"
-+	# Exit status 0 so the tests can continue
-+	exit 0
-+fi
-+
-+function set_bw_limit
-+{
-+	limit=$1
-+	echo -n "Setting bandwith limits to ${limit}kbits... "
-+	tc qdisc add dev $DEFAULT_IF root handle 1: htb default 15 >/dev/null 2>&1
-+	tc class add dev $DEFAULT_IF parent 1: classid 1:1 htb rate ${limit}kbit ceil ${limit}kbit >/dev/null 2>&1
-+
-+	# FIXME: Timeout when setting limits on ctrl port.
-+	#tc filter add dev $DEFAULT_IF parent 1: protocol ip u32 match ip dport $SESSIOND_CTRL_PORT 0xffff flowid 1:1 >/dev/null 2>&1
-+
-+	tc filter add dev $DEFAULT_IF parent 1: protocol ip u32 match ip dport $SESSIOND_DATA_PORT 0xffff flowid 1:1 >/dev/null 2>&1
-+	print_ok
-+}
-+
-+function reset_bw_limit
-+{
-+	echo -n "Resetting bandwith limits... "
-+	tc qdisc del dev $DEFAULT_IF root >/dev/null 2>&1
-+	print_ok
-+}
-+
-+function create_lttng_session_with_uri
-+{
-+	sess_name=$1
-+	uri=$2
-+	# Create session with custom URI
-+	$TESTDIR/../src/bin/lttng/$LTTNG_BIN create -U $uri $sess_name >/dev/null 2>&1
-+}
-+
-+function enable_lttng_consumer
-+{
-+	uri=$1
-+	# Create session with custom URI
-+	$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-consumer -u $uri >/dev/null 2>&1
-+}
-+
-+function run_apps
-+{
-+	for i in `seq 1 $NR_APP_ITER`; do
-+		./$CURDIR/$BIN_NAME $NR_ITER & >/dev/null 2>&1
-+	done
-+}
-+
-+function wait_apps
-+{
-+	echo "Waiting for applications to end"
-+	while [ -n "$(pidof $BIN_NAME)" ]; do
-+		echo -n "."
-+		sleep 1
-+	done
-+	echo ""
-+}
-+
-+function test_high_throughput
-+{
-+	NETWORK_URI="net://localhost"
-+	create_lttng_session_with_uri $SESSION_NAME $NETWORK_URI
-+	enable_lttng_consumer $NETWORK_URI
-+	enable_ust_lttng_event $SESSION_NAME $EVENT_NAME
-+	start_lttng_tracing $SESSION_NAME
-+	run_apps
-+	wait_apps
-+
-+	# FIXME: Should not be necessary...
-+	#echo "Sleeping..."
-+	#sleep 180
-+
-+	stop_lttng_tracing $SESSION_NAME
-+	destroy_lttng_session $SESSION_NAME
-+	validate_event_count
-+}
-+
-+function validate_event_count
-+{
-+
-+	TEMP_FILE=$(mktemp)
-+	TEMP_FILE_2=$(mktemp)
-+
-+	traced=$(babeltrace $TRACE_PATH 2>/dev/null | wc -l)
-+	babeltrace $TRACE_PATH >/dev/null 2>$TEMP_FILE_2
-+
-+	cat $TEMP_FILE_2 | cut -f4 -d " " >$TEMP_FILE
-+
-+	dropped=0
-+	while read line;
-+	do
-+		let dropped=$dropped+$line
-+	done < $TEMP_FILE
-+
-+	let total=$dropped+$traced
-+	let wanted=$NR_APP_ITER*$NR_ITER
-+
-+	rm -rf $TRACE_PATH
-+	rm $TEMP_FILE $TEMP_FILE_2
-+
-+	if [ $wanted -ne $total ]; then
-+		echo -n "Expected $wanted. Dropped $dropped. Recorded $traced. Total $total... "
-+		print_fail
-+		return 1
-+	else
-+		echo -n "Expected $wanted. Dropped $dropped. Recorded $traced. Total $total... "
-+		print_ok
-+		return 0
-+	fi
-+}
-+
-+function interrupt_cleanup()
-+{
-+	echo -en "\n*** Exiting ***\n"
-+	stop_lttng_relayd
-+	stop_lttng_sessiond
-+	reset_bw_limit
-+	exit 1
-+}
-+
-+# Catch sigint and try to cleanup limits
-+trap interrupt_cleanup SIGINT
-+
-+BW_LIMITS=(3200 1600 800 400 200 100 50 25)
-+for BW in ${BW_LIMITS[@]};
-+do
-+	echo ""
-+	echo -e "=== Testing high-throughput with bandwith limit set to ${BW}kbits"
-+	set_bw_limit $BW
-+
-+	start_lttng_sessiond
-+	start_lttng_relayd "-o $TRACE_PATH"
-+	test_high_throughput
-+	result=$?
-+	stop_lttng_relayd
-+	stop_lttng_sessiond
-+	reset_bw_limit
-+
-+	if [ $result -ne 0 ]; then
-+		exit 1
-+	fi
-+done
-+
-diff --git a/tests/tools/streaming/runall b/tests/tools/streaming/runall
-index 6dffd78..a93dcfa 100755
---- a/tests/tools/streaming/runall
-+++ b/tests/tools/streaming/runall
-@@ -2,7 +2,7 @@
- 
- DIR=$(dirname $0)
- 
--tests=( $DIR/unit_tests $DIR/uri_switch $DIR/run-kernel $DIR/run-ust )
-+tests=( $DIR/unit_tests $DIR/uri_switch $DIR/high_through_limits $DIR/run-kernel $DIR/run-ust )
- exit_code=0
- 
- function start_tests ()
--- 
-1.7.12
+Yannick
