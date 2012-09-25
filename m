@@ -1,19 +1,19 @@
-From: Matthew Khouzam <matthew.khouzam@ericsson.com>
-Subject: CTF model.emf.uri precision
-Date: Mon, 24 Sep 2012 16:52:28 -0400
-Message-ID: <5060C80C.4030600__7241.00534939698$1348520006$gmane$org@ericsson.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: CTF model.emf.uri precision
+Date: Mon, 24 Sep 2012 22:25:30 -0400
+Message-ID: <20120925022530.GA12625__39986.6727916107$1348539966$gmane$org@Krystal>
+References: <5060C80C.4030600@ericsson.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from imr3.ericy.com ([198.24.6.13])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <matthew.khouzam@ericsson.com>) id 1TGFeD-0005AX-1t
-	for lttng-dev@lists.lttng.org; Mon, 24 Sep 2012 16:52:57 -0400
-Received: from eusaamw0707.eamcs.ericsson.se ([147.117.20.32])
-	by imr3.ericy.com (8.13.8/8.13.8) with ESMTP id q8OKqoYK013736
-	(version=TLSv1/SSLv3 cipher=AES128-SHA bits=128 verify=FAIL)
-	for <lttng-dev@lists.lttng.org>; Mon, 24 Sep 2012 15:52:50 -0500
+	(envelope-from <compudj@mail.openrapids.net>) id 1TGKq4-0007bv-Rb
+	for lttng-dev@lists.lttng.org; Mon, 24 Sep 2012 22:25:32 -0400
+Content-Disposition: inline
+In-Reply-To: <5060C80C.4030600@ericsson.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,18 +22,42 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Matthew Khouzam <matthew.khouzam@ericsson.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi tracing paladins,
-I was going over the most recent CTF specs. I am curious, at the line:
-1176   "model.emf.uri = "string";" this looks like a reference to
-something from eclipse modeling framework.
-http://download.eclipse.org/modeling/emf/emf/javadoc/2.7.0/org/eclipse/emf/common/util/URI.html
+* Matthew Khouzam (matthew.khouzam@ericsson.com) wrote:
+> Hi tracing paladins,
+> I was going over the most recent CTF specs. I am curious, at the line:
+> 1176   "model.emf.uri = "string";" this looks like a reference to
+> something from eclipse modeling framework.
+> http://download.eclipse.org/modeling/emf/emf/javadoc/2.7.0/org/eclipse/emf/common/util/URI.html
+> 
+> Is this part of the CTF specification? Shouldn't this be called
+> model.uri or model_uri to respect the naming convention?
 
-Is this part of the CTF specification? Shouldn't this be called
-model.uri or model_uri to respect the naming convention?
+if we only call it model.uri, and come up with other model URIs that we
+want to encode in the future (not emf-related), then we would be
+stucked, wouldn't we ?
 
-I hope someone could clarify this.
+What is the benefit of removing the "emf" part ?
 
-Matthew
+Thanks,
+
+Mathieu
+
+> 
+> I hope someone could clarify this.
+> 
+> Matthew
+> 
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- 
+Mathieu Desnoyers
+Operating System Efficiency R&D Consultant
+EfficiOS Inc.
+http://www.efficios.com
