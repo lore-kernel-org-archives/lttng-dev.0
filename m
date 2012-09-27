@@ -1,18 +1,20 @@
 From: Christian Babeux <christian.babeux@efficios.com>
-Subject: [PATCH lttng-tools 1/5] Add testpoints in
-	lttng-sessiond to instrument every threads
-Date: Thu, 27 Sep 2012 14:23:15 -0400
-Message-ID: <1348770199-1618-1-git-send-email-christian.babeux__44428.2814780765$1348770252$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools 3/5] Tests: Add health check thread
+	exit test
+Date: Thu, 27 Sep 2012 14:23:17 -0400
+Message-ID: <1348770199-1618-3-git-send-email-christian.babeux__23857.6826792725$1348770252$gmane$org@efficios.com>
+References: <1348770199-1618-1-git-send-email-christian.babeux@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail-qc0-f176.google.com ([209.85.216.176])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <christian.babeux@0x80.ca>) id 1THIkG-0003Ln-Ff
-	for lttng-dev@lists.lttng.org; Thu, 27 Sep 2012 14:23:32 -0400
-Received: by qcon41 with SMTP id n41so1937882qco.35
-	for <lttng-dev@lists.lttng.org>; Thu, 27 Sep 2012 11:23:26 -0700 (PDT)
+	(envelope-from <christian.babeux@0x80.ca>) id 1THIkS-0003Ln-DY
+	for lttng-dev@lists.lttng.org; Thu, 27 Sep 2012 14:23:44 -0400
+Received: by mail-qc0-f176.google.com with SMTP id n41so1937882qco.35
+	for <lttng-dev@lists.lttng.org>; Thu, 27 Sep 2012 11:23:44 -0700 (PDT)
+In-Reply-To: <1348770199-1618-1-git-send-email-christian.babeux@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -25,144 +27,240 @@ To: dgoulet@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-This commit adds 8 new testpoints in the lttng-sessiond binary.
-These testpoints rely on the testpoints infrastructure introduced
-recently.
+This test trigger a failure in a specified thread using the
+recently introduced testpoint mechanism. The testpoints behavior
+is implemented in health_exit.c. The testpoint code simply calls
+pthread_exit(3) and effectively "kill" the thread without affecting
+the other threads behavior.
 
-Testpoints:
+The test select the thread to be "killed" by enabling a specific
+environment variable.
 
-thread_manage_clients
-thread_manage_clients_before_loop
-thread_registration_apps
-thread_manage_apps
-thread_manage_apps_before_loop
-thread_manage_kernel
-thread_manage_kernel_before_loop
-thread_manage_consumer
-
-The thread_<thread_name> testpoints are placed directly at the thread
-start and they can be used to trigger failure in <thread_name>.
-
-The thread_<thread_name>_before_loop testpoints are placed
-directly before the main processing loop of the thread and thus can be
-used to stall the processing of the thread.
+With this test we ensure that each thread can be succesfully terminated
+and that the health check feature properly detect a failure.
 
 Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
 ---
- src/bin/lttng-sessiond/Makefile.am |  3 ++-
- src/bin/lttng-sessiond/main.c      | 28 ++++++++++++++++++++++++++++
- 2 files changed, 30 insertions(+), 1 deletion(-)
+ tests/tools/health/Makefile.am        |   6 ++
+ tests/tools/health/health_exit.c      |  80 ++++++++++++++++++++++++++
+ tests/tools/health/health_thread_exit | 105 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 191 insertions(+)
+ create mode 100644 tests/tools/health/health_exit.c
+ create mode 100755 tests/tools/health/health_thread_exit
 
-diff --git a/src/bin/lttng-sessiond/Makefile.am b/src/bin/lttng-sessiond/Makefile.am
-index 73be023..733818e 100644
---- a/src/bin/lttng-sessiond/Makefile.am
-+++ b/src/bin/lttng-sessiond/Makefile.am
-@@ -38,7 +38,8 @@ lttng_sessiond_LDADD = -lrt -lurcu-common -lurcu \
- 		$(top_builddir)/src/common/hashtable/libhashtable.la \
- 		$(top_builddir)/src/common/libcommon.la \
- 		$(top_builddir)/src/common/compat/libcompat.la \
--		$(top_builddir)/src/common/relayd/librelayd.la
-+		$(top_builddir)/src/common/relayd/librelayd.la \
-+		$(top_builddir)/src/common/testpoint/libtestpoint.la
+diff --git a/tests/tools/health/Makefile.am b/tests/tools/health/Makefile.am
+index 09573db..0a3f6c5 100644
+--- a/tests/tools/health/Makefile.am
++++ b/tests/tools/health/Makefile.am
+@@ -10,6 +10,12 @@ endif
  
- if HAVE_LIBLTTNG_UST_CTL
- lttng_sessiond_LDADD += -llttng-ust-ctl
-diff --git a/src/bin/lttng-sessiond/main.c b/src/bin/lttng-sessiond/main.c
-index 730ac65..6e93cf0 100644
---- a/src/bin/lttng-sessiond/main.c
-+++ b/src/bin/lttng-sessiond/main.c
-@@ -45,6 +45,7 @@
- #include <common/futex.h>
- #include <common/relayd/relayd.h>
- #include <common/utils.h>
-+#include <common/testpoint/testpoint.h>
+ UTILS=
  
- #include "lttng-sessiond.h"
- #include "channel.h"
-@@ -65,6 +66,16 @@
- 
- #define CONSUMERD_FILE	"lttng-consumerd"
- 
-+/* Testpoints, internal use only */
-+TESTPOINT_DECL(thread_manage_clients);
-+TESTPOINT_DECL(thread_manage_clients_before_loop);
-+TESTPOINT_DECL(thread_registration_apps);
-+TESTPOINT_DECL(thread_manage_apps);
-+TESTPOINT_DECL(thread_manage_apps_before_loop);
-+TESTPOINT_DECL(thread_manage_kernel);
-+TESTPOINT_DECL(thread_manage_kernel_before_loop);
-+TESTPOINT_DECL(thread_manage_consumer);
++lib_LTLIBRARIES=libhealthexit.la
 +
- /* Const values */
- const char default_home_dir[] = DEFAULT_HOME_DIR;
- const char default_tracing_group[] = DEFAULT_TRACING_GROUP;
-@@ -680,8 +691,12 @@ static void *thread_manage_kernel(void *data)
- 
- 	DBG("Thread manage kernel started");
- 
-+	testpoint(thread_manage_kernel);
++# Health thread exit ld_preloaded test lib
++libhealthexit_la_SOURCES=health_exit.c
++libhealthexit_la_LDFLAGS= -module
 +
- 	health_code_update(&health_thread_kernel);
+ noinst_PROGRAMS = health_check
  
-+	testpoint(thread_manage_kernel_before_loop);
+ health_check_SOURCES = health_check.c $(UTILS)
+diff --git a/tests/tools/health/health_exit.c b/tests/tools/health/health_exit.c
+new file mode 100644
+index 0000000..c2382f2
+--- /dev/null
++++ b/tests/tools/health/health_exit.c
+@@ -0,0 +1,80 @@
++/*
++ * Copyright (C) 2012 - Christian Babeux <christian.babeux@efficios.com>
++ *
++ * This program is free software; you can redistribute it and/or modify it
++ * under the terms of the GNU General Public License, version 2 only, as
++ * published by the Free Software Foundation.
++ *
++ * This program is distributed in the hope that it will be useful, but WITHOUT
++ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
++ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
++ * more details.
++ *
++ * You should have received a copy of the GNU General Public License along with
++ * this program; if not, write to the Free Software Foundation, Inc., 51
++ * Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
++ */
 +
- 	ret = create_thread_poll_set(&events, 2);
- 	if (ret < 0) {
- 		goto error_poll_create;
-@@ -829,6 +844,9 @@ static void *thread_manage_consumer(void *data)
- 	/* Inifinite blocking call, waiting for transmission */
- restart:
- 	health_poll_update(&consumer_data->health);
++#include <stdlib.h>
++#include <string.h>
++#include <pthread.h>
 +
-+	testpoint(thread_manage_consumer);
++/*
++ * Check if the specified environment variable is set.
++ * Return 1 if set, otherwise 0.
++ */
++int check_env_var(const char *env)
++{
++	if (env) {
++		if (getenv(env) != NULL && (strncmp(env_val, "1", 1) == 0)) {
++			return 1;
++		}
++	}
 +
- 	ret = lttng_poll_wait(&events, -1);
- 	health_poll_update(&consumer_data->health);
- 	if (ret < 0) {
-@@ -1026,6 +1044,8 @@ static void *thread_manage_apps(void *data)
- 
- 	DBG("[thread] Manage application started");
- 
-+	testpoint(thread_manage_apps);
++	return 0;
++}
 +
- 	rcu_register_thread();
- 	rcu_thread_online();
- 
-@@ -1041,6 +1061,8 @@ static void *thread_manage_apps(void *data)
- 		goto error;
- 	}
- 
-+	testpoint(thread_manage_apps_before_loop);
++void __testpoint_thread_manage_clients(void)
++{
++	const char *var = "LTTNG_THREAD_MANAGE_CLIENTS_EXIT";
 +
- 	health_code_update(&health_thread_app_manage);
- 
- 	while (1) {
-@@ -1264,6 +1286,8 @@ static void *thread_registration_apps(void *data)
- 
- 	DBG("[thread] Manage application registration started");
- 
-+	testpoint(thread_registration_apps);
++	if (check_env_var(var)) {
++		pthread_exit(NULL);
++	}
++}
 +
- 	ret = lttcomm_listen_unix_sock(apps_sock);
- 	if (ret < 0) {
- 		goto error_listen;
-@@ -2912,6 +2936,8 @@ static void *thread_manage_clients(void *data)
- 
- 	DBG("[thread] Manage client started");
- 
-+	testpoint(thread_manage_clients);
++void __testpoint_thread_registration_apps(void)
++{
++	const char *var = "LTTNG_THREAD_REG_APPS_EXIT";
 +
- 	rcu_register_thread();
- 
- 	health_code_update(&health_thread_cmd);
-@@ -2943,6 +2969,8 @@ static void *thread_manage_clients(void *data)
- 		kill(ppid, SIGUSR1);
- 	}
- 
-+	testpoint(thread_manage_clients_before_loop);
++	if (check_env_var(var)) {
++		pthread_exit(NULL);
++	}
++}
 +
- 	health_code_update(&health_thread_cmd);
- 
- 	while (1) {
++void __testpoint_thread_manage_apps(void)
++{
++	const char *var = "LTTNG_THREAD_MANAGE_APPS_EXIT";
++
++	if (check_env_var(var)) {
++		pthread_exit(NULL);
++	}
++}
++
++void __testpoint_thread_manage_kernel(void)
++{
++	const char *var = "LTTNG_THREAD_MANAGE_KERNEL_EXIT";
++
++	if (check_env_var(var)) {
++		pthread_exit(NULL);
++	}
++}
++
++void __testpoint_thread_manage_consumer(void)
++{
++	const char *var = "LTTNG_THREAD_MANAGE_CONSUMER_EXIT";
++
++	if (check_env_var(var)) {
++		pthread_exit(NULL);
++	}
++}
+diff --git a/tests/tools/health/health_thread_exit b/tests/tools/health/health_thread_exit
+new file mode 100755
+index 0000000..dab6b64
+--- /dev/null
++++ b/tests/tools/health/health_thread_exit
+@@ -0,0 +1,105 @@
++#!/bin/bash
++#
++# Copyright (C) - 2012 Christian Babeux <christian.babeux@efficios.com>
++#
++# This program is free software; you can redistribute it and/or modify it
++# under the terms of the GNU General Public License, version 2 only, as
++# published by the Free Software Foundation.
++#
++# This program is distributed in the hope that it will be useful, but WITHOUT
++# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
++# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
++# more details.
++#
++# You should have received a copy of the GNU General Public License along with
++# this program; if not, write to the Free Software Foundation, Inc., 51
++# Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
++
++TEST_DESC="Health check - Thread exit"
++
++CURDIR=$(dirname $0)/
++TESTDIR=$CURDIR/../..
++LTTNG_BIN="lttng"
++SESSION_NAME="health_thread_exit"
++EVENT_NAME="bogus"
++HEALTH_CHECK_BIN="health_check"
++SESSIOND_PRELOAD=".libs/libhealthexit.so"
++
++source $TESTDIR/utils.sh
++
++print_test_banner "$TEST_DESC"
++
++if [ ! -f "$SESSIOND_PRELOAD" ]; then
++	echo -e "libhealthexit.so not available for this test. Skipping."
++	exit 0
++fi
++
++function test_thread_exit
++{
++	test_thread_exit_name="$1"
++	test_thread_exit_code="$2"
++
++	echo ""
++	echo -e "=== Testing health failure with ${test_thread_exit_name}"
++
++	# Activate testpoints
++	export LTTNG_TESTPOINT_ENABLE=1
++
++	# Activate specific thread exit
++	export ${test_thread_exit_name}_EXIT=1
++
++	# Spawn sessiond with preload healthexit lib
++	export LD_PRELOAD="$CURDIR/$SESSIOND_PRELOAD"
++	start_lttng_sessiond
++
++	# Cleanup some env. var.
++	unset LD_PRELOAD
++	unset ${test_thread_exit_name}_EXIT
++
++	# Check initial health status
++	$CURDIR/$HEALTH_CHECK_BIN &> /dev/null
++
++	echo -n "Validating thread ${test_thread_exit_name} failure... "
++
++	# Wait
++	sleep 25
++
++	# Check health status, exit code should indicate failure
++	$CURDIR/$HEALTH_CHECK_BIN &> /dev/null
++
++	health_check_exit_code=$?
++
++	if [ $health_check_exit_code -eq $test_thread_exit_code ]; then
++		print_ok
++		stop_lttng_sessiond
++	else
++		print_fail
++		echo -e "Health returned: $health_check_exit_code\n"
++
++		stop_lttng_sessiond
++		return 1
++	fi
++}
++
++THREAD=("LTTNG_THREAD_MANAGE_CLIENTS"
++	"LTTNG_THREAD_MANAGE_APPS"
++	"LTTNG_THREAD_REG_APPS"
++	"LTTNG_THREAD_MANAGE_KERNEL")
++
++# Exit code value to indicate specific thread failure
++EXIT_CODE=(1 2 4 8)
++
++THREAD_COUNT=${#THREAD[@]}
++i=0
++while [ "$i" -lt "$THREAD_COUNT" ]; do
++	test_thread_exit "${THREAD[$i]}" "${EXIT_CODE[$i]}"
++
++	if [ $? -eq 1 ]; then
++		exit 1
++	fi
++
++	let "i++"
++done
++
++# Special case manage consumer, need to spawn consumer via commands.
++#"LTTNG_THREAD_MANAGE_CONSUMER"
 -- 
 1.7.12
