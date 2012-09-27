@@ -1,18 +1,21 @@
-From: Christian Babeux <christian.babeux@efficios.com>
-Subject: [PATCH lttng-tools 5/5] Tests: Add health check tests
-	to configure
-Date: Thu, 27 Sep 2012 14:25:21 -0400
-Message-ID: <1348770321-1670-1-git-send-email-christian.babeux__26490.6776989394$1348770430$gmane$org@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH lttng-tools 2/5] Tests: Add a health
+	check	utility program
+Date: Thu, 27 Sep 2012 15:45:38 -0400
+Message-ID: <20120927194538.GB1827__42632.5532528155$1348775171$gmane$org@Krystal>
+References: <1348770199-1618-1-git-send-email-christian.babeux@efficios.com>
+	<1348770199-1618-2-git-send-email-christian.babeux@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qc0-f176.google.com ([209.85.216.176])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <christian.babeux@0x80.ca>) id 1THImI-0003QC-S8
-	for lttng-dev@lists.lttng.org; Thu, 27 Sep 2012 14:25:38 -0400
-Received: by qcon41 with SMTP id n41so1940182qco.35
-	for <lttng-dev@lists.lttng.org>; Thu, 27 Sep 2012 11:25:33 -0700 (PDT)
+	(envelope-from <compudj@mail.openrapids.net>) id 1THK1k-00043h-2X
+	for lttng-dev@lists.lttng.org; Thu, 27 Sep 2012 15:45:40 -0400
+Content-Disposition: inline
+In-Reply-To: <1348770199-1618-2-git-send-email-christian.babeux@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,76 +24,154 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: dgoulet@efficios.com
-Cc: lttng-dev@lists.lttng.org
+To: Christian Babeux <christian.babeux@efficios.com>
+Cc: lttng-dev@lists.lttng.org, dgoulet@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-Add health folder to top-level tests Makefile.am.
-Also add a runall script to run all health check tests.
+* Christian Babeux (christian.babeux@efficios.com) wrote:
+> The health_check program is a simple utility to query the health
+> status of the different threads of the sessiond.
 
-Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
----
- configure.ac              |  1 +
- tests/tools/Makefile.am   |  2 +-
- tests/tools/health/runall | 28 ++++++++++++++++++++++++++++
- 3 files changed, 30 insertions(+), 1 deletion(-)
- create mode 100755 tests/tools/health/runall
+do we want to call it lttng-health-check and install it in the system ?
 
-diff --git a/configure.ac b/configure.ac
-index 36c137b..713daa9 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -288,6 +288,7 @@ AC_CONFIG_FILES([
- 	tests/kernel/Makefile
- 	tests/tools/Makefile
- 	tests/tools/streaming/Makefile
-+	tests/tools/health/Makefile
- 	tests/ust/Makefile
- 	tests/ust/nprocesses/Makefile
- 	tests/ust/high-throughput/Makefile
-diff --git a/tests/tools/Makefile.am b/tests/tools/Makefile.am
-index 3d25900..faa836c 100644
---- a/tests/tools/Makefile.am
-+++ b/tests/tools/Makefile.am
-@@ -1,4 +1,4 @@
--SUBDIRS = streaming
-+SUBDIRS = streaming health
- 
- AM_CFLAGS = -g -Wall -I../
- AM_LDFLAGS = -lurcu -lurcu-cds
-diff --git a/tests/tools/health/runall b/tests/tools/health/runall
-new file mode 100755
-index 0000000..c22e353
---- /dev/null
-+++ b/tests/tools/health/runall
-@@ -0,0 +1,28 @@
-+#!/bin/bash
-+
-+DIR=$(dirname $0)
-+
-+tests=( $DIR/health_thread_exit $DIR/health_thread_stall )
-+exit_code=0
-+
-+function start_tests ()
-+{
-+	for bin in ${tests[@]};
-+	do
-+		if [ ! -e $bin ]; then
-+			echo -e "$bin not found, passing"
-+			continue
-+		fi
-+
-+		./$bin
-+		# Test must return 0 to pass.
-+		if [ $? -ne 0 ]; then
-+			exit_code=1
-+			break
-+		fi
-+	done
-+}
-+
-+start_tests
-+
-+exit $exit_code
+Mathieu
+
+> 
+> Sample output:
+> 
+> > ./health_check
+> Health check cmd: 0
+> Health check app. manage: 0
+> Health check app. registration: 0
+> Health check kernel: 0
+> Health check consumer: 0
+> 
+> The return code is encoded to indicate which thread has failed.
+> 
+> Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
+> ---
+>  tests/tools/health/Makefile.am    | 20 +++++++++++
+>  tests/tools/health/health_check.c | 73 +++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 93 insertions(+)
+>  create mode 100644 tests/tools/health/Makefile.am
+>  create mode 100644 tests/tools/health/health_check.c
+> 
+> diff --git a/tests/tools/health/Makefile.am b/tests/tools/health/Makefile.am
+> new file mode 100644
+> index 0000000..09573db
+> --- /dev/null
+> +++ b/tests/tools/health/Makefile.am
+> @@ -0,0 +1,20 @@
+> +AM_CFLAGS = -I. -O2 -g -I../../../include
+> +AM_LDFLAGS =
+> +
+> +if LTTNG_TOOLS_BUILD_WITH_LIBDL
+> +AM_LDFLAGS += -ldl
+> +endif
+> +if LTTNG_TOOLS_BUILD_WITH_LIBC_DL
+> +AM_LDFLAGS += -lc
+> +endif
+> +
+> +UTILS=
+> +
+> +noinst_PROGRAMS = health_check
+> +
+> +health_check_SOURCES = health_check.c $(UTILS)
+> +health_check_LDADD = $(top_builddir)/src/lib/lttng-ctl/liblttng-ctl.la \
+> +		     $(top_builddir)/src/common/libcommon.la
+> +
+> +noinst_SCRIPTS =
+> +EXTRA_DIST =
+> diff --git a/tests/tools/health/health_check.c b/tests/tools/health/health_check.c
+> new file mode 100644
+> index 0000000..3eef110
+> --- /dev/null
+> +++ b/tests/tools/health/health_check.c
+> @@ -0,0 +1,73 @@
+> +/*
+> + * Copyright (C) 2012 - Christian Babeux <christian.babeux@efficios.com>
+> + *
+> + * This program is free software; you can redistribute it and/or modify it
+> + * under the terms of the GNU General Public License, version 2 only, as
+> + * published by the Free Software Foundation.
+> + *
+> + * This program is distributed in the hope that it will be useful, but WITHOUT
+> + * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+> + * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+> + * more details.
+> + *
+> + * You should have received a copy of the GNU General Public License along with
+> + * this program; if not, write to the Free Software Foundation, Inc., 51
+> + * Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+> + */
+> +
+> +#include <stdio.h>
+> +
+> +#include "lttng/lttng.h"
+> +
+> +#define HEALTH_CMD_FAIL     (1 << 0)
+> +#define HEALTH_APP_MNG_FAIL (1 << 1)
+> +#define HEALTH_APP_REG_FAIL (1 << 2)
+> +#define HEALTH_KERNEL_FAIL  (1 << 3)
+> +#define HEALTH_CSMR_FAIL    (1 << 4)
+> +
+> +int main(int argc, char *argv[])
+> +{
+> +	int health = -1;
+> +	int status = 0;
+> +
+> +	/* Command thread */
+> +	health = lttng_health_check(LTTNG_HEALTH_CMD);
+> +	printf("Health check cmd: %d\n", health);
+> +
+> +	if (health) {
+> +		status |= HEALTH_CMD_FAIL;
+> +	}
+> +
+> +	/* App manage thread */
+> +	health = lttng_health_check(LTTNG_HEALTH_APP_MANAGE);
+> +	printf("Health check app. manage: %d\n", health);
+> +
+> +	if (health) {
+> +		status |= HEALTH_APP_MNG_FAIL;
+> +	}
+> +	/* App registration thread */
+> +	health = lttng_health_check(LTTNG_HEALTH_APP_REG);
+> +	printf("Health check app. registration: %d\n", health);
+> +
+> +	if (health) {
+> +		status |= HEALTH_APP_REG_FAIL;
+> +	}
+> +
+> +	/* Kernel thread */
+> +	health = lttng_health_check(LTTNG_HEALTH_KERNEL);
+> +	printf("Health check kernel: %d\n", health);
+> +
+> +	if (health) {
+> +		status |= HEALTH_KERNEL_FAIL;
+> +	}
+> +
+> +	/* Consumer thread */
+> +	health = lttng_health_check(LTTNG_HEALTH_CONSUMER);
+> +	printf("Health check consumer: %d\n", health);
+> +
+> +	if (health) {
+> +		status |= HEALTH_CSMR_FAIL;
+> +	}
+> +
+> +	return status;
+> +}
+> -- 
+> 1.7.12
+> 
+> 
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
 -- 
-1.7.12
+Mathieu Desnoyers
+Operating System Efficiency R&D Consultant
+EfficiOS Inc.
+http://www.efficios.com
