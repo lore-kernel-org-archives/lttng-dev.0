@@ -1,18 +1,20 @@
-From: Paul Chavent <paul.chavent@fnac.net>
-Subject: Re: Wich interface to use for lttng ust
-Date: Mon, 01 Oct 2012 22:27:09 +0200
-Message-ID: <5069FC9D.1070303__13210.0519528196$1349124781$gmane$org@fnac.net>
-References: <14773128.185971349080793918.JavaMail.www@wsfrf1114>
-	<20121001145925.GC13423@Krystal>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [LTTNG-TOOLS PATCH v4] ABI with support for compat
+	32/64 bits
+Date: Mon, 1 Oct 2012 17:27:16 -0400
+Message-ID: <20121001212716.GB22077__36888.5239972316$1349126879$gmane$org@Krystal>
+References: <1349124140-3224-1-git-send-email-jdesfossez@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp5-g21.free.fr ([212.27.42.5])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <paul.chavent@fnac.net>) id 1TIma6-0001QS-1K
-	for lttng-dev@lists.lttng.org; Mon, 01 Oct 2012 16:27:10 -0400
-In-Reply-To: <20121001145925.GC13423@Krystal>
+	(envelope-from <compudj@mail.openrapids.net>) id 1TInWK-0001wg-0d
+	for lttng-dev@lists.lttng.org; Mon, 01 Oct 2012 17:27:20 -0400
+Content-Disposition: inline
+In-Reply-To: <1349124140-3224-1-git-send-email-jdesfossez@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,44 +23,42 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: Julien Desfossez <jdesfossez@efficios.com>
+Cc: lttng-dev@lists.lttng.org, dgoulet@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-Thanks.
+* Julien Desfossez (jdesfossez@efficios.com) wrote:
+[...]
+> +#define LTTNG_KERNEL_CHANNEL_PADDING1 LTTNG_SYMBOL_NAME_LEN + 32
+> +struct lttng_kernel_channel {
+> +	uint64_t subbuf_size;               /* bytes */
+> +	uint64_t num_subbuf;                /* power of 2 */
+> +	unsigned int switch_timer_interval; /* usec */
+> +	unsigned int read_timer_interval;   /* usec */
 
-On 10/01/2012 04:59 PM, Mathieu Desnoyers wrote:
-> * paul.chavent@fnac.net (paul.chavent@fnac.net) wrote:
->> Hi.
->>
->> I would like to try lttng user space traces. I've found two documentations :
->>   - manual : http://lttng.org/files/ust/manual/ust.html
->>   - man page : http://lttng.org/files/doc/man-pages/man3/lttng-ust.3.html
->>
->> Is there any "prefered" choice for reference ?
->
-> lttng-ust(3).
->
->> Should/Can i use
->> ust_marker, tracepoint ?
->
-> ust_marker do not exist anymore.
->
-> Alexandre, can you remove the old
-> http://lttng.org/files/ust/manual/ust.html 0.x manpage ? Or make sure
-> you move it somewhere that clearly states it is outdated ?
->
-> Thanks,
->
-> Mathieu
->
->>
->> Thank for your replies.
->>
->> Paul.
->>
->> _______________________________________________
->> lttng-dev mailing list
->> lttng-dev@lists.lttng.org
->> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
+->
+
+> +	int overwrite;                      /* 1: overwrite, 0: discard */
+> +	enum lttng_event_output output;     /* splice, mmap */
+
+field order mismatch with lttng-modules. Please re-review all structures
+between modules and tools headers.
+
+Thanks,
+
+Mathieu
+
+> +
+> +	char padding[LTTNG_KERNEL_CHANNEL_PADDING1];
+> +}__attribute__((packed));
+>  
+>  #endif /* _LTTNG_KERNEL_H */
+> -- 
+> 1.7.9.5
+> 
+
+-- 
+Mathieu Desnoyers
+Operating System Efficiency R&D Consultant
+EfficiOS Inc.
+http://www.efficios.com
