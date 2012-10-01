@@ -1,16 +1,20 @@
-From: Julien Desfossez <jdesfossez@efficios.com>
-Subject: [LTTNG-TOOLS PATCH v3] ABI with support for compat
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [LTTNG-TOOLS PATCH v3] ABI with support for compat
 	32/64 bits
-Date: Mon,  1 Oct 2012 16:21:48 -0400
-Message-ID: <1349122908-22553-1-git-send-email-jdesfossez__26091.2165781066$1349122966$gmane$org@efficios.com>
+Date: Mon, 1 Oct 2012 16:36:59 -0400
+Message-ID: <20121001203659.GA22077__41676.3954832733$1349123871$gmane$org@Krystal>
+References: <1349122908-22553-1-git-send-email-jdesfossez@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([213.239.202.151])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jdesfossez@efficios.com>) id 1TImV5-0001Mh-M7
-	for lttng-dev@lists.lttng.org; Mon, 01 Oct 2012 16:22:00 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1TImjf-0001VD-2y
+	for lttng-dev@lists.lttng.org; Mon, 01 Oct 2012 16:37:03 -0400
+Content-Disposition: inline
+In-Reply-To: <1349122908-22553-1-git-send-email-jdesfossez@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,381 +23,754 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: mathieu.desnoyers@efficios.com, dgoulet@efficios.com
-Cc: lttng-dev@lists.lttng.org, Julien Desfossez <jdesfossez@efficios.com>
+To: Julien Desfossez <jdesfossez@efficios.com>
+Cc: lttng-dev@lists.lttng.org, dgoulet@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-VGhlIGN1cnJlbnQgQUJJIGRvZXMgbm90IHdvcmsgZm9yIGNvbXBhdCAzMi82NCBiaXRzLgpUaGlz
-IHBhdGNoIG1vdmVzIHRoZSBjdXJyZW50IEFCSSBhcyBvbGQtYWJpIGFuZCBwcm92aWRlcyBhIG5l
-dyBBQkkgaW4Kd2hpY2ggYWxsIHRoZSBzdHJ1Y3R1cmVzIGV4Y2hhbmdlZCBiZXR3ZWVuIHVzZXIg
-YW5kIGtlcm5lbC1zcGFjZSBhcmUKcGFja2VkLiBBbHNvIHRoaXMgbmV3IEFCSSBtb3ZlcyB0aGUg
-ImludCBvdmVyd3JpdGUiIG1lbWJlciBvZiB0aGUKc3RydWN0IGx0dG5nX2tlcm5lbF9jaGFubmVs
-IHRvIHJlbW92ZSB0aGUgYWxpZ25tZW50IGFkZGVkIGJ5IHRoZQpjb21waWxlci4KCkEgcGF0Y2gg
-Zm9yIGx0dG5nLW1vZHVsZXMgaGFzIGJlZW4gZGV2ZWxvcGVkIGluIHBhcmFsbGVsIHRvIHRoaXMg
-b25lCnRvIHN1cHBvcnQgdGhlIG5ldyBBQkkuIFRoZXNlIDIgcGF0Y2hlcyBoYXZlIGJlZW4gdGVz
-dGVkIGluIGFsbApwb3NzaWJsZSBjb25maWd1cmF0aW9ucyAoYXBwbGllZCBvciBub3QpIG9uIDY0
-LWJpdCBhbmQgMzItYml0IGtlcm5lbHMKKHdpdGggQ09ORklHX0NPTVBBVCkgYW5kIGEgdXNlci1z
-cGFjZSBpbiAzMiBhbmQgNjQtYml0LgoKSGVyZSBhcmUgdGhlIHJlc3VsdHMgb2YgdGhlIHRlc3Rz
-IDoKayA2NCBjb21wYXQgICAgIHzCoHUgMzIgY29tcGF0ICAgICB8IE9LCmsgNjQgY29tcGF0ICAg
-ICB8IHUgNjQgY29tcGF0ICAgICB8IE9LCmsgNjQgY29tcGF0ICAgICB8IHUgMzIgbm9uLWNvbXBh
-dCB8IEtPCmsgNjQgY29tcGF0ICAgICB8IHUgNjQgbm9uLWNvbXBhdCB8IE9LCgprIDY0IG5vbi1j
-b21wYXQgfCB1IDY0IGNvbXBhdCAgICAgfCBPSwprIDY0IG5vbi1jb21wYXQgfCB1IDMyIGNvbXBh
-dCAgICAgfCBLTwprIDY0IG5vbi1jb21wYXQgfCB1IDY0IG5vbi1jb21wYXQgfCBPSwprIDY0IG5v
-bi1jb21wYXQgfCB1IDMyIG5vbi1jb21wYXQgfCBLTwoKayAzMiBjb21wYXQgICAgIHwgdSBjb21w
-YXQgICAgICAgIHwgT0sKayAzMiBjb21wYXQgICAgIHwgdSBub24tY29tcGF0ICAgIHwgT0sKCmsg
-MzIgbm9uLWNvbXBhdCB8IHUgY29tcGF0ICAgICAgICB8IE9LCmsgMzIgbm9uLWNvbXBhdCB8IHUg
-bm9uLWNvbXBhdCAgICB8IE9LCgpUaGUgcmVzdWx0cyBhcmUgYXMgZXhwZWN0ZWQgOgotIG9uIDMy
-LWJpdCB1c2VyLXNwYWNlIGFuZCBrZXJuZWwsIGV2ZXJ5IGNvbmZpZ3VyYXRpb24gd29ya3MuCi0g
-b24gNjQtYml0IHVzZXItc3BhY2UgYW5kIGtlcm5lbCwgZXZlcnkgY29uZmlndXJhdGlvbiB3b3Jr
-cy4KLSB3aXRoIDMyLWJpdCB1c2VyLXNwYWNlIG9uIGEgNjQtYml0IGtlcm5lbCB0aGUgb25seSBj
-b25maWd1cmF0aW9uCiAgd2hlcmUgaXQgd29ya3MgaXMgd2hlbiB0aGUgY29tcGF0IHBhdGNoIGlz
-IGFwcGxpZWQgZXZlcnl3aGVyZS4KClNpZ25lZC1vZmYtYnk6IEp1bGllbiBEZXNmb3NzZXogPGpk
-ZXNmb3NzZXpAZWZmaWNpb3MuY29tPgotLS0KIHNyYy9iaW4vbHR0bmctc2Vzc2lvbmQvdHJhY2Ut
-a2VybmVsLmggfCAgICAxICsKIHNyYy9jb21tb24va2VybmVsLWN0bC9rZXJuZWwtY3RsLmMgICAg
-fCAgMjEwICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrLS0tLQogc3JjL2NvbW1vbi9rZXJu
-ZWwtY3RsL2tlcm5lbC1jdGwuaCAgICB8ICAgIDEgKwogc3JjL2NvbW1vbi9rZXJuZWwtY3RsL2tl
-cm5lbC1pb2N0bC5oICB8ICAgNzQgKysrKysrKystLS0tCiBzcmMvY29tbW9uL2x0dG5nLWtlcm5l
-bC1vbGQuaCAgICAgICAgIHwgIDExNyArKysrKysrKysrKysrKysrKysKIHNyYy9jb21tb24vbHR0
-bmcta2VybmVsLmggICAgICAgICAgICAgfCAgIDMxICsrKy0tCiA2IGZpbGVzIGNoYW5nZWQsIDM4
-NSBpbnNlcnRpb25zKCspLCA0OSBkZWxldGlvbnMoLSkKIGNyZWF0ZSBtb2RlIDEwMDY0NCBzcmMv
-Y29tbW9uL2x0dG5nLWtlcm5lbC1vbGQuaAoKZGlmZiAtLWdpdCBhL3NyYy9iaW4vbHR0bmctc2Vz
-c2lvbmQvdHJhY2Uta2VybmVsLmggYi9zcmMvYmluL2x0dG5nLXNlc3Npb25kL3RyYWNlLWtlcm5l
-bC5oCmluZGV4IGYwNGQ5ZTcuLmM4NmNjMjcgMTAwNjQ0Ci0tLSBhL3NyYy9iaW4vbHR0bmctc2Vz
-c2lvbmQvdHJhY2Uta2VybmVsLmgKKysrIGIvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC90cmFjZS1r
-ZXJuZWwuaApAQCAtMjIsNiArMjIsNyBAQAogCiAjaW5jbHVkZSA8bHR0bmcvbHR0bmcuaD4KICNp
-bmNsdWRlIDxjb21tb24vbHR0bmcta2VybmVsLmg+CisjaW5jbHVkZSA8Y29tbW9uL2x0dG5nLWtl
-cm5lbC1vbGQuaD4KIAogI2luY2x1ZGUgImNvbnN1bWVyLmgiCiAKZGlmZiAtLWdpdCBhL3NyYy9j
-b21tb24va2VybmVsLWN0bC9rZXJuZWwtY3RsLmMgYi9zcmMvY29tbW9uL2tlcm5lbC1jdGwva2Vy
-bmVsLWN0bC5jCmluZGV4IDEzOTZjZDkuLmFiMjlkZDAgMTAwNjQ0Ci0tLSBhL3NyYy9jb21tb24v
-a2VybmVsLWN0bC9rZXJuZWwtY3RsLmMKKysrIGIvc3JjL2NvbW1vbi9rZXJuZWwtY3RsL2tlcm5l
-bC1jdGwuYwpAQCAtMTgsMzggKzE4LDE2MyBAQAogCiAjZGVmaW5lIF9fVVNFX0xJTlVYX0lPQ1RM
-X0RFRlMKICNpbmNsdWRlIDxzeXMvaW9jdGwuaD4KKyNpbmNsdWRlIDxzdHJpbmcuaD4KIAogI2lu
-Y2x1ZGUgImtlcm5lbC1jdGwuaCIKICNpbmNsdWRlICJrZXJuZWwtaW9jdGwuaCIKIAorLyoKKyAq
-IFRoaXMgZmxhZyBpbmRpY2F0ZXMgd2hldGhlciBsdHRuZy10b29scyBtdXN0IHVzZSB0aGUgbmV3
-IG9yIHRoZSBvbGQga2VybmVsCisgKiBBQkkgKHdpdGhvdXQgY29tcGF0IHN1cHBvcnQgZm9yIDMy
-LzY0IGJpdHMpLgorICovCitzdGF0aWMgaW50IGx0dG5nX2tlcm5lbF91c2Vfb2xkX2FiaSA9IC0x
-OworCitzdGF0aWMgaW5saW5lIGludCBjb21wYXRfaW9jdGxfbm9fYXJnKGludCBmZCwgdW5zaWdu
-ZWQgbG9uZyBvbGRuYW1lLAorCQl1bnNpZ25lZCBsb25nIG5ld25hbWUpCit7CisJaW50IHJldDsK
-KworCWlmIChsdHRuZ19rZXJuZWxfdXNlX29sZF9hYmkgPT0gLTEpIHsKKwkJcmV0ID0gaW9jdGwo
-ZmQsIG5ld25hbWUpOworCQlpZiAoIXJldCkgeworCQkJbHR0bmdfa2VybmVsX3VzZV9vbGRfYWJp
-ID0gMDsKKwkJCWdvdG8gZW5kOworCQl9CisJCWx0dG5nX2tlcm5lbF91c2Vfb2xkX2FiaSA9IDE7
-CisJfQorCWlmIChsdHRuZ19rZXJuZWxfdXNlX29sZF9hYmkpIHsKKwkJcmV0ID0gaW9jdGwoZmQs
-IG9sZG5hbWUpOworCX0gZWxzZSB7CisJCXJldCA9IGlvY3RsKGZkLCBuZXduYW1lKTsKKwl9CisK
-K2VuZDoKKwlyZXR1cm4gcmV0OworfQorCiBpbnQga2VybmN0bF9jcmVhdGVfc2Vzc2lvbihpbnQg
-ZmQpCiB7Ci0JcmV0dXJuIGlvY3RsKGZkLCBMVFROR19LRVJORUxfU0VTU0lPTik7CisJcmV0dXJu
-IGNvbXBhdF9pb2N0bF9ub19hcmcoZmQsIExUVE5HX0tFUk5FTF9PTERfU0VTU0lPTiwKKwkJCUxU
-VE5HX0tFUk5FTF9TRVNTSU9OKTsKIH0KIAogLyogb3BlbiB0aGUgbWV0YWRhdGEgZ2xvYmFsIGNo
-YW5uZWwgKi8KIGludCBrZXJuY3RsX29wZW5fbWV0YWRhdGEoaW50IGZkLCBzdHJ1Y3QgbHR0bmdf
-Y2hhbm5lbF9hdHRyICpjaG9wcykKIHsKLQlyZXR1cm4gaW9jdGwoZmQsIExUVE5HX0tFUk5FTF9N
-RVRBREFUQSwgY2hvcHMpOworCXN0cnVjdCBsdHRuZ19rZXJuZWxfb2xkX2NoYW5uZWwgb2xkX2No
-YW5uZWw7CisJc3RydWN0IGx0dG5nX2tlcm5lbF9jaGFubmVsIGNoYW5uZWw7CisKKwlpZiAobHR0
-bmdfa2VybmVsX3VzZV9vbGRfYWJpKSB7CisJCW9sZF9jaGFubmVsLm92ZXJ3cml0ZSA9IGNob3Bz
-LT5vdmVyd3JpdGU7CisJCW9sZF9jaGFubmVsLnN1YmJ1Zl9zaXplID0gY2hvcHMtPnN1YmJ1Zl9z
-aXplOworCQlvbGRfY2hhbm5lbC5udW1fc3ViYnVmID0gY2hvcHMtPm51bV9zdWJidWY7CisJCW9s
-ZF9jaGFubmVsLnN3aXRjaF90aW1lcl9pbnRlcnZhbCA9IGNob3BzLT5zd2l0Y2hfdGltZXJfaW50
-ZXJ2YWw7CisJCW9sZF9jaGFubmVsLnJlYWRfdGltZXJfaW50ZXJ2YWwgPSBjaG9wcy0+cmVhZF90
-aW1lcl9pbnRlcnZhbDsKKwkJb2xkX2NoYW5uZWwub3V0cHV0ID0gY2hvcHMtPm91dHB1dDsKKwkJ
-bWVtY3B5KG9sZF9jaGFubmVsLnBhZGRpbmcsIGNob3BzLT5wYWRkaW5nLCBzaXplb2YoY2hvcHMt
-PnBhZGRpbmcpKTsKKworCQlyZXR1cm4gaW9jdGwoZmQsIExUVE5HX0tFUk5FTF9PTERfTUVUQURB
-VEEsICZvbGRfY2hhbm5lbCk7CisJfQorCisJY2hhbm5lbC5vdmVyd3JpdGUgPSBjaG9wcy0+b3Zl
-cndyaXRlOworCWNoYW5uZWwuc3ViYnVmX3NpemUgPSBjaG9wcy0+c3ViYnVmX3NpemU7CisJY2hh
-bm5lbC5udW1fc3ViYnVmID0gY2hvcHMtPm51bV9zdWJidWY7CisJY2hhbm5lbC5zd2l0Y2hfdGlt
-ZXJfaW50ZXJ2YWwgPSBjaG9wcy0+c3dpdGNoX3RpbWVyX2ludGVydmFsOworCWNoYW5uZWwucmVh
-ZF90aW1lcl9pbnRlcnZhbCA9IGNob3BzLT5yZWFkX3RpbWVyX2ludGVydmFsOworCWNoYW5uZWwu
-b3V0cHV0ID0gY2hvcHMtPm91dHB1dDsKKwltZW1jcHkoY2hhbm5lbC5wYWRkaW5nLCBjaG9wcy0+
-cGFkZGluZywgc2l6ZW9mKGNob3BzLT5wYWRkaW5nKSk7CisKKwlyZXR1cm4gaW9jdGwoZmQsIExU
-VE5HX0tFUk5FTF9NRVRBREFUQSwgJmNoYW5uZWwpOwogfQogCiBpbnQga2VybmN0bF9jcmVhdGVf
-Y2hhbm5lbChpbnQgZmQsIHN0cnVjdCBsdHRuZ19jaGFubmVsX2F0dHIgKmNob3BzKQogewotCXJl
-dHVybiBpb2N0bChmZCwgTFRUTkdfS0VSTkVMX0NIQU5ORUwsIGNob3BzKTsKKwlzdHJ1Y3QgbHR0
-bmdfa2VybmVsX29sZF9jaGFubmVsIG9sZF9jaGFubmVsOworCXN0cnVjdCBsdHRuZ19rZXJuZWxf
-Y2hhbm5lbCBjaGFubmVsOworCisJaWYgKGx0dG5nX2tlcm5lbF91c2Vfb2xkX2FiaSkgeworCQlv
-bGRfY2hhbm5lbC5vdmVyd3JpdGUgPSBjaG9wcy0+b3ZlcndyaXRlOworCQlvbGRfY2hhbm5lbC5z
-dWJidWZfc2l6ZSA9IGNob3BzLT5zdWJidWZfc2l6ZTsKKwkJb2xkX2NoYW5uZWwubnVtX3N1YmJ1
-ZiA9IGNob3BzLT5udW1fc3ViYnVmOworCQlvbGRfY2hhbm5lbC5zd2l0Y2hfdGltZXJfaW50ZXJ2
-YWwgPSBjaG9wcy0+c3dpdGNoX3RpbWVyX2ludGVydmFsOworCQlvbGRfY2hhbm5lbC5yZWFkX3Rp
-bWVyX2ludGVydmFsID0gY2hvcHMtPnJlYWRfdGltZXJfaW50ZXJ2YWw7CisJCW9sZF9jaGFubmVs
-Lm91dHB1dCA9IGNob3BzLT5vdXRwdXQ7CisJCW1lbWNweShvbGRfY2hhbm5lbC5wYWRkaW5nLCBj
-aG9wcy0+cGFkZGluZywgc2l6ZW9mKGNob3BzLT5wYWRkaW5nKSk7CisKKwkJcmV0dXJuIGlvY3Rs
-KGZkLCBMVFROR19LRVJORUxfT0xEX0NIQU5ORUwsICZvbGRfY2hhbm5lbCk7CisJfQorCisJY2hh
-bm5lbC5vdmVyd3JpdGUgPSBjaG9wcy0+b3ZlcndyaXRlOworCWNoYW5uZWwuc3ViYnVmX3NpemUg
-PSBjaG9wcy0+c3ViYnVmX3NpemU7CisJY2hhbm5lbC5udW1fc3ViYnVmID0gY2hvcHMtPm51bV9z
-dWJidWY7CisJY2hhbm5lbC5zd2l0Y2hfdGltZXJfaW50ZXJ2YWwgPSBjaG9wcy0+c3dpdGNoX3Rp
-bWVyX2ludGVydmFsOworCWNoYW5uZWwucmVhZF90aW1lcl9pbnRlcnZhbCA9IGNob3BzLT5yZWFk
-X3RpbWVyX2ludGVydmFsOworCWNoYW5uZWwub3V0cHV0ID0gY2hvcHMtPm91dHB1dDsKKwltZW1j
-cHkoY2hhbm5lbC5wYWRkaW5nLCBjaG9wcy0+cGFkZGluZywgc2l6ZW9mKGNob3BzLT5wYWRkaW5n
-KSk7CisKKwlyZXR1cm4gaW9jdGwoZmQsIExUVE5HX0tFUk5FTF9DSEFOTkVMLCAmY2hhbm5lbCk7
-CiB9CiAKIGludCBrZXJuY3RsX2NyZWF0ZV9zdHJlYW0oaW50IGZkKQogewotCXJldHVybiBpb2N0
-bChmZCwgTFRUTkdfS0VSTkVMX1NUUkVBTSk7CisJcmV0dXJuIGNvbXBhdF9pb2N0bF9ub19hcmco
-ZmQsIExUVE5HX0tFUk5FTF9PTERfU1RSRUFNLAorCQkJTFRUTkdfS0VSTkVMX1NUUkVBTSk7CiB9
-CiAKIGludCBrZXJuY3RsX2NyZWF0ZV9ldmVudChpbnQgZmQsIHN0cnVjdCBsdHRuZ19rZXJuZWxf
-ZXZlbnQgKmV2KQogeworCWlmIChsdHRuZ19rZXJuZWxfdXNlX29sZF9hYmkpIHsKKwkJc3RydWN0
-IGx0dG5nX2tlcm5lbF9ldmVudCBvbGRfZXZlbnQ7CisKKwkJbWVtY3B5KG9sZF9ldmVudC5uYW1l
-LCBldi0+bmFtZSwgc2l6ZW9mKG9sZF9ldmVudC5uYW1lKSk7CisJCW9sZF9ldmVudC5pbnN0cnVt
-ZW50YXRpb24gPSBldi0+aW5zdHJ1bWVudGF0aW9uOworCQlzd2l0Y2ggKGV2LT5pbnN0cnVtZW50
-YXRpb24pIHsKKwkJY2FzZSBMVFROR19LRVJORUxfS1BST0JFOgorCQkJb2xkX2V2ZW50LnUua3By
-b2JlLmFkZHIgPSBldi0+dS5rcHJvYmUuYWRkcjsKKwkJCW9sZF9ldmVudC51Lmtwcm9iZS5vZmZz
-ZXQgPSBldi0+dS5rcHJvYmUub2Zmc2V0OworCQkJbWVtY3B5KG9sZF9ldmVudC51Lmtwcm9iZS5z
-eW1ib2xfbmFtZSwKKwkJCQlldi0+dS5rcHJvYmUuc3ltYm9sX25hbWUsCisJCQkJc2l6ZW9mKG9s
-ZF9ldmVudC51Lmtwcm9iZS5zeW1ib2xfbmFtZSkpOworCQkJYnJlYWs7CisJCWNhc2UgTFRUTkdf
-S0VSTkVMX0tSRVRQUk9CRToKKwkJCW9sZF9ldmVudC51LmtyZXRwcm9iZS5hZGRyID0gZXYtPnUu
-a3JldHByb2JlLmFkZHI7CisJCQlvbGRfZXZlbnQudS5rcmV0cHJvYmUub2Zmc2V0ID0gZXYtPnUu
-a3JldHByb2JlLm9mZnNldDsKKwkJCW1lbWNweShvbGRfZXZlbnQudS5rcmV0cHJvYmUuc3ltYm9s
-X25hbWUsCisJCQkJZXYtPnUua3JldHByb2JlLnN5bWJvbF9uYW1lLAorCQkJCXNpemVvZihvbGRf
-ZXZlbnQudS5rcmV0cHJvYmUuc3ltYm9sX25hbWUpKTsKKwkJCWJyZWFrOworCQljYXNlIExUVE5H
-X0tFUk5FTF9GVU5DVElPTjoKKwkJCW1lbWNweShvbGRfZXZlbnQudS5mdHJhY2Uuc3ltYm9sX25h
-bWUsCisJCQkJCWV2LT51LmZ0cmFjZS5zeW1ib2xfbmFtZSwKKwkJCQkJc2l6ZW9mKG9sZF9ldmVu
-dC51LmZ0cmFjZS5zeW1ib2xfbmFtZSkpOworCQkJYnJlYWs7CisJCWRlZmF1bHQ6CisJCQlicmVh
-azsKKwkJfQorCisJCXJldHVybiBpb2N0bChmZCwgTFRUTkdfS0VSTkVMX09MRF9FVkVOVCwgJm9s
-ZF9ldmVudCk7CisJfQogCXJldHVybiBpb2N0bChmZCwgTFRUTkdfS0VSTkVMX0VWRU5ULCBldik7
-CiB9CiAKIGludCBrZXJuY3RsX2FkZF9jb250ZXh0KGludCBmZCwgc3RydWN0IGx0dG5nX2tlcm5l
-bF9jb250ZXh0ICpjdHgpCiB7CisJaWYgKGx0dG5nX2tlcm5lbF91c2Vfb2xkX2FiaSkgeworCQlz
-dHJ1Y3QgbHR0bmdfa2VybmVsX29sZF9jb250ZXh0IG9sZF9jdHg7CisKKwkJb2xkX2N0eC5jdHgg
-PSBjdHgtPmN0eDsKKwkJLyogb25seSB0eXBlIHRoYXQgdXNlcyB0aGUgdW5pb24gKi8KKwkJaWYg
-KGN0eC0+Y3R4ID09IExUVE5HX0tFUk5FTF9DT05URVhUX1BFUkZfQ09VTlRFUikgeworCQkJb2xk
-X2N0eC51LnBlcmZfY291bnRlci50eXBlID0KKwkJCQljdHgtPnUucGVyZl9jb3VudGVyLnR5cGU7
-CisJCQlvbGRfY3R4LnUucGVyZl9jb3VudGVyLmNvbmZpZyA9CisJCQkJY3R4LT51LnBlcmZfY291
-bnRlci5jb25maWc7CisJCQltZW1jcHkob2xkX2N0eC51LnBlcmZfY291bnRlci5uYW1lLAorCQkJ
-CWN0eC0+dS5wZXJmX2NvdW50ZXIubmFtZSwKKwkJCQlzaXplb2Yob2xkX2N0eC51LnBlcmZfY291
-bnRlci5uYW1lKSk7CisJCX0KKwkJcmV0dXJuIGlvY3RsKGZkLCBMVFROR19LRVJORUxfT0xEX0NP
-TlRFWFQsICZvbGRfY3R4KTsKKwl9CiAJcmV0dXJuIGlvY3RsKGZkLCBMVFROR19LRVJORUxfQ09O
-VEVYVCwgY3R4KTsKIH0KIApAQCAtNTcsNDQgKzE4Miw5NiBAQCBpbnQga2VybmN0bF9hZGRfY29u
-dGV4dChpbnQgZmQsIHN0cnVjdCBsdHRuZ19rZXJuZWxfY29udGV4dCAqY3R4KQogLyogRW5hYmxl
-IGV2ZW50LCBjaGFubmVsIGFuZCBzZXNzaW9uIGlvY3RsICovCiBpbnQga2VybmN0bF9lbmFibGUo
-aW50IGZkKQogewotCXJldHVybiBpb2N0bChmZCwgTFRUTkdfS0VSTkVMX0VOQUJMRSk7CisJcmV0
-dXJuIGNvbXBhdF9pb2N0bF9ub19hcmcoZmQsIExUVE5HX0tFUk5FTF9PTERfRU5BQkxFLAorCQkJ
-TFRUTkdfS0VSTkVMX0VOQUJMRSk7CiB9CiAKIC8qIERpc2FibGUgZXZlbnQsIGNoYW5uZWwgYW5k
-IHNlc3Npb24gaW9jdGwgKi8KIGludCBrZXJuY3RsX2Rpc2FibGUoaW50IGZkKQogewotCXJldHVy
-biBpb2N0bChmZCwgTFRUTkdfS0VSTkVMX0RJU0FCTEUpOworCXJldHVybiBjb21wYXRfaW9jdGxf
-bm9fYXJnKGZkLCBMVFROR19LRVJORUxfT0xEX0RJU0FCTEUsCisJCQlMVFROR19LRVJORUxfRElT
-QUJMRSk7CiB9CiAKIGludCBrZXJuY3RsX3N0YXJ0X3Nlc3Npb24oaW50IGZkKQogewotCXJldHVy
-biBpb2N0bChmZCwgTFRUTkdfS0VSTkVMX1NFU1NJT05fU1RBUlQpOworCXJldHVybiBjb21wYXRf
-aW9jdGxfbm9fYXJnKGZkLCBMVFROR19LRVJORUxfT0xEX1NFU1NJT05fU1RBUlQsCisJCQlMVFRO
-R19LRVJORUxfU0VTU0lPTl9TVEFSVCk7CiB9CiAKIGludCBrZXJuY3RsX3N0b3Bfc2Vzc2lvbihp
-bnQgZmQpCiB7Ci0JcmV0dXJuIGlvY3RsKGZkLCBMVFROR19LRVJORUxfU0VTU0lPTl9TVE9QKTsK
-KwlyZXR1cm4gY29tcGF0X2lvY3RsX25vX2FyZyhmZCwgTFRUTkdfS0VSTkVMX09MRF9TRVNTSU9O
-X1NUT1AsCisJCQlMVFROR19LRVJORUxfU0VTU0lPTl9TVE9QKTsKIH0KIAotCiBpbnQga2VybmN0
-bF90cmFjZXBvaW50X2xpc3QoaW50IGZkKQogewotCXJldHVybiBpb2N0bChmZCwgTFRUTkdfS0VS
-TkVMX1RSQUNFUE9JTlRfTElTVCk7CisJcmV0dXJuIGNvbXBhdF9pb2N0bF9ub19hcmcoZmQsIExU
-VE5HX0tFUk5FTF9PTERfVFJBQ0VQT0lOVF9MSVNULAorCQkJTFRUTkdfS0VSTkVMX1RSQUNFUE9J
-TlRfTElTVCk7CiB9CiAKIGludCBrZXJuY3RsX3RyYWNlcl92ZXJzaW9uKGludCBmZCwgc3RydWN0
-IGx0dG5nX2tlcm5lbF90cmFjZXJfdmVyc2lvbiAqdikKIHsKLQlyZXR1cm4gaW9jdGwoZmQsIExU
-VE5HX0tFUk5FTF9UUkFDRVJfVkVSU0lPTiwgdik7CisJaW50IHJldDsKKworCWlmIChsdHRuZ19r
-ZXJuZWxfdXNlX29sZF9hYmkgPT0gLTEpIHsKKwkJcmV0ID0gaW9jdGwoZmQsIExUVE5HX0tFUk5F
-TF9UUkFDRVJfVkVSU0lPTiwgdik7CisJCWlmICghcmV0KSB7CisJCQlsdHRuZ19rZXJuZWxfdXNl
-X29sZF9hYmkgPSAwOworCQkJZ290byBlbmQ7CisJCX0KKwkJbHR0bmdfa2VybmVsX3VzZV9vbGRf
-YWJpID0gMTsKKwl9CisJaWYgKGx0dG5nX2tlcm5lbF91c2Vfb2xkX2FiaSkgeworCQlzdHJ1Y3Qg
-bHR0bmdfa2VybmVsX29sZF90cmFjZXJfdmVyc2lvbiBvbGRfdjsKKworCQlyZXQgPSBpb2N0bChm
-ZCwgTFRUTkdfS0VSTkVMX09MRF9UUkFDRVJfVkVSU0lPTiwgJm9sZF92KTsKKwkJaWYgKHJldCkK
-KwkJCWdvdG8gZW5kOworCQl2LT5tYWpvciA9IG9sZF92Lm1ham9yOworCQl2LT5taW5vciA9IG9s
-ZF92Lm1pbm9yOworCQl2LT5wYXRjaGxldmVsID0gb2xkX3YucGF0Y2hsZXZlbDsKKwl9IGVsc2Ug
-eworCQlyZXQgPSBpb2N0bChmZCwgTFRUTkdfS0VSTkVMX1RSQUNFUl9WRVJTSU9OLCB2KTsKKwl9
-CisKK2VuZDoKKwlyZXR1cm4gcmV0OwogfQogCiBpbnQga2VybmN0bF93YWl0X3F1aWVzY2VudChp
-bnQgZmQpCiB7Ci0JcmV0dXJuIGlvY3RsKGZkLCBMVFROR19LRVJORUxfV0FJVF9RVUlFU0NFTlQp
-OworCXJldHVybiBjb21wYXRfaW9jdGxfbm9fYXJnKGZkLCBMVFROR19LRVJORUxfT0xEX1dBSVRf
-UVVJRVNDRU5ULAorCQkJTFRUTkdfS0VSTkVMX1dBSVRfUVVJRVNDRU5UKTsKIH0KIAogaW50IGtl
-cm5jdGxfY2FsaWJyYXRlKGludCBmZCwgc3RydWN0IGx0dG5nX2tlcm5lbF9jYWxpYnJhdGUgKmNh
-bGlicmF0ZSkKIHsKLQlyZXR1cm4gaW9jdGwoZmQsIExUVE5HX0tFUk5FTF9DQUxJQlJBVEUsIGNh
-bGlicmF0ZSk7CisJaW50IHJldDsKKworCWlmIChsdHRuZ19rZXJuZWxfdXNlX29sZF9hYmkgPT0g
-LTEpIHsKKwkJcmV0ID0gaW9jdGwoZmQsIExUVE5HX0tFUk5FTF9DQUxJQlJBVEUsIGNhbGlicmF0
-ZSk7CisJCWlmICghcmV0KSB7CisJCQlsdHRuZ19rZXJuZWxfdXNlX29sZF9hYmkgPSAwOworCQkJ
-Z290byBlbmQ7CisJCX0KKwkJbHR0bmdfa2VybmVsX3VzZV9vbGRfYWJpID0gMTsKKwl9CisJaWYg
-KGx0dG5nX2tlcm5lbF91c2Vfb2xkX2FiaSkgeworCQlzdHJ1Y3QgbHR0bmdfa2VybmVsX29sZF9j
-YWxpYnJhdGUgb2xkX2NhbGlicmF0ZTsKKworCQlvbGRfY2FsaWJyYXRlLnR5cGUgPSBjYWxpYnJh
-dGUtPnR5cGU7CisJCXJldCA9IGlvY3RsKGZkLCBMVFROR19LRVJORUxfT0xEX0NBTElCUkFURSwg
-Jm9sZF9jYWxpYnJhdGUpOworCQlpZiAocmV0KQorCQkJZ290byBlbmQ7CisJCWNhbGlicmF0ZS0+
-dHlwZSA9IG9sZF9jYWxpYnJhdGUudHlwZTsKKwl9IGVsc2UgeworCQlyZXQgPSBpb2N0bChmZCwg
-TFRUTkdfS0VSTkVMX0NBTElCUkFURSwgY2FsaWJyYXRlKTsKKwl9CisKK2VuZDoKKwlyZXR1cm4g
-cmV0OwogfQogCiAKQEAgLTE5MywxMCArMzcwLDMgQEAgaW50IGtlcm5jdGxfc2V0X3N0cmVhbV9p
-ZChpbnQgZmQsIHVuc2lnbmVkIGxvbmcgKnN0cmVhbV9pZCkKIHsKIAlyZXR1cm4gaW9jdGwoZmQs
-IFJJTkdfQlVGRkVSX1NFVF9TVFJFQU1fSUQsIHN0cmVhbV9pZCk7CiB9Ci0KLS8qIEdldCB0aGUg
-b2Zmc2V0IG9mIHRoZSBzdHJlYW1faWQgaW4gdGhlIHBhY2tldCBoZWFkZXIgKi8KLWludCBrZXJu
-Y3RsX2dldF9uZXRfc3RyZWFtX2lkX29mZnNldChpbnQgZmQsIHVuc2lnbmVkIGxvbmcgKm9mZnNl
-dCkKLXsKLQlyZXR1cm4gaW9jdGwoZmQsIExUVE5HX0tFUk5FTF9TVFJFQU1fSURfT0ZGU0VULCBv
-ZmZzZXQpOwotCi19CmRpZmYgLS1naXQgYS9zcmMvY29tbW9uL2tlcm5lbC1jdGwva2VybmVsLWN0
-bC5oIGIvc3JjL2NvbW1vbi9rZXJuZWwtY3RsL2tlcm5lbC1jdGwuaAppbmRleCAxODcxMmQ5Li44
-NWEzYTE4IDEwMDY0NAotLS0gYS9zcmMvY29tbW9uL2tlcm5lbC1jdGwva2VybmVsLWN0bC5oCisr
-KyBiL3NyYy9jb21tb24va2VybmVsLWN0bC9rZXJuZWwtY3RsLmgKQEAgLTIxLDYgKzIxLDcgQEAK
-IAogI2luY2x1ZGUgPGx0dG5nL2x0dG5nLmg+CiAjaW5jbHVkZSA8Y29tbW9uL2x0dG5nLWtlcm5l
-bC5oPgorI2luY2x1ZGUgPGNvbW1vbi9sdHRuZy1rZXJuZWwtb2xkLmg+CiAKIGludCBrZXJuY3Rs
-X2NyZWF0ZV9zZXNzaW9uKGludCBmZCk7CiBpbnQga2VybmN0bF9vcGVuX21ldGFkYXRhKGludCBm
-ZCwgc3RydWN0IGx0dG5nX2NoYW5uZWxfYXR0ciAqY2hvcHMpOwpkaWZmIC0tZ2l0IGEvc3JjL2Nv
-bW1vbi9rZXJuZWwtY3RsL2tlcm5lbC1pb2N0bC5oIGIvc3JjL2NvbW1vbi9rZXJuZWwtY3RsL2tl
-cm5lbC1pb2N0bC5oCmluZGV4IDM1OTQyYmUuLjFkMzQyMjIgMTAwNjQ0Ci0tLSBhL3NyYy9jb21t
-b24va2VybmVsLWN0bC9rZXJuZWwtaW9jdGwuaAorKysgYi9zcmMvY29tbW9uL2tlcm5lbC1jdGwv
-a2VybmVsLWlvY3RsLmgKQEAgLTQ5LDM3ICs0OSw2OSBAQAogLyogbWFwIHN0cmVhbSB0byBzdHJl
-YW0gaWQgZm9yIG5ldHdvcmsgc3RyZWFtaW5nICovCiAjZGVmaW5lIFJJTkdfQlVGRkVSX1NFVF9T
-VFJFQU1fSUQgICAgICAgICAgIF9JT1coMHhGNiwgMHgwRCwgdW5zaWduZWQgbG9uZykKIAorLyog
-T2xkIEFCSSAod2l0aG91dCBzdXBwb3J0IGZvciAzMi82NCBiaXRzIGNvbXBhdCkgKi8KKy8qIExU
-VG5nIGZpbGUgZGVzY3JpcHRvciBpb2N0bCAqLworI2RlZmluZSBMVFROR19LRVJORUxfT0xEX1NF
-U1NJT04gICAgICAgICAgICAgICAgX0lPKDB4RjYsIDB4NDApCisjZGVmaW5lIExUVE5HX0tFUk5F
-TF9PTERfVFJBQ0VSX1ZFUlNJT04gICAgICAgICBcCisJCV9JT1IoMHhGNiwgMHg0MSwgc3RydWN0
-IGx0dG5nX2tlcm5lbF9vbGRfdHJhY2VyX3ZlcnNpb24pCisjZGVmaW5lIExUVE5HX0tFUk5FTF9P
-TERfVFJBQ0VQT0lOVF9MSVNUICAgICAgICBfSU8oMHhGNiwgMHg0MikKKyNkZWZpbmUgTFRUTkdf
-S0VSTkVMX09MRF9XQUlUX1FVSUVTQ0VOVCAgICAgICAgIF9JTygweEY2LCAweDQzKQorI2RlZmlu
-ZSBMVFROR19LRVJORUxfT0xEX0NBTElCUkFURQkJXAorCV9JT1dSKDB4RjYsIDB4NDQsIHN0cnVj
-dCBsdHRuZ19rZXJuZWxfb2xkX2NhbGlicmF0ZSkKKworLyogU2Vzc2lvbiBGRCBpb2N0bCAqLwor
-I2RlZmluZSBMVFROR19LRVJORUxfT0xEX01FVEFEQVRBICAgICAgICAgICAgICAgXAorCQlfSU9X
-KDB4RjYsIDB4NTAsIHN0cnVjdCBsdHRuZ19rZXJuZWxfb2xkX2NoYW5uZWwpCisjZGVmaW5lIExU
-VE5HX0tFUk5FTF9PTERfQ0hBTk5FTCAgICAgICAgICAgICAgICBcCisJCV9JT1coMHhGNiwgMHg1
-MSwgc3RydWN0IGx0dG5nX2tlcm5lbF9vbGRfY2hhbm5lbCkKKyNkZWZpbmUgTFRUTkdfS0VSTkVM
-X09MRF9TRVNTSU9OX1NUQVJUICAgICAgICAgIF9JTygweEY2LCAweDUyKQorI2RlZmluZSBMVFRO
-R19LRVJORUxfT0xEX1NFU1NJT05fU1RPUCAgICAgICAgICAgX0lPKDB4RjYsIDB4NTMpCisKKy8q
-IENoYW5uZWwgRkQgaW9jdGwgKi8KKyNkZWZpbmUgTFRUTkdfS0VSTkVMX09MRF9TVFJFQU0gICAg
-ICAgICAgICAgICAgIF9JTygweEY2LCAweDYwKQorI2RlZmluZSBMVFROR19LRVJORUxfT0xEX0VW
-RU5UICAgICAgICAgICAgICAgICAgXAorCQlfSU9XKDB4RjYsIDB4NjEsIHN0cnVjdCBsdHRuZ19r
-ZXJuZWxfb2xkX2V2ZW50KQorI2RlZmluZSBMVFROR19LRVJORUxfT0xEX1NUUkVBTV9JRF9PRkZT
-RVQgICAgICAgXAorCQlfSU9SKDB4RjYsIDB4NjIsIHVuc2lnbmVkIGxvbmcpCiAKKy8qIEV2ZW50
-IGFuZCBDaGFubmVsIEZEIGlvY3RsICovCisjZGVmaW5lIExUVE5HX0tFUk5FTF9PTERfQ09OVEVY
-VCAgICAgICAgICAgICAgICBcCisJCV9JT1coMHhGNiwgMHg3MCwgc3RydWN0IGx0dG5nX2tlcm5l
-bF9vbGRfY29udGV4dCkKKworLyogRXZlbnQsIENoYW5uZWwgYW5kIFNlc3Npb24gaW9jdGwgKi8K
-KyNkZWZpbmUgTFRUTkdfS0VSTkVMX09MRF9FTkFCTEUgICAgICAgICAgICAgICAgIF9JTygweEY2
-LCAweDgwKQorI2RlZmluZSBMVFROR19LRVJORUxfT0xEX0RJU0FCTEUgICAgICAgICAgICAgICAg
-X0lPKDB4RjYsIDB4ODEpCisKKworLyogTmV3IEFCSSAod2l0aCBzdXBvcnQgZm9yIDMyLzY0IGJp
-dHMgY29tcGF0KSAqLwogLyogTFRUbmcgZmlsZSBkZXNjcmlwdG9yIGlvY3RsICovCi0jZGVmaW5l
-IExUVE5HX0tFUk5FTF9TRVNTSU9OICAgICAgICAgICAgICAgIF9JTygweEY2LCAweDQwKQotI2Rl
-ZmluZSBMVFROR19LRVJORUxfVFJBQ0VSX1ZFUlNJT04gICAgICAgICBcCi0JCV9JT1IoMHhGNiwg
-MHg0MSwgc3RydWN0IGx0dG5nX2tlcm5lbF90cmFjZXJfdmVyc2lvbikKLSNkZWZpbmUgTFRUTkdf
-S0VSTkVMX1RSQUNFUE9JTlRfTElTVCAgICAgICAgX0lPKDB4RjYsIDB4NDIpCi0jZGVmaW5lIExU
-VE5HX0tFUk5FTF9XQUlUX1FVSUVTQ0VOVCAgICAgICAgIF9JTygweEY2LCAweDQzKQorI2RlZmlu
-ZSBMVFROR19LRVJORUxfU0VTU0lPTgkJCV9JTygweEY2LCAweDQ1KQorI2RlZmluZSBMVFROR19L
-RVJORUxfVFJBQ0VSX1ZFUlNJT04JCVwKKwlfSU9SKDB4RjYsIDB4NDYsIHN0cnVjdCBsdHRuZ19r
-ZXJuZWxfdHJhY2VyX3ZlcnNpb24pCisjZGVmaW5lIExUVE5HX0tFUk5FTF9UUkFDRVBPSU5UX0xJ
-U1QJCV9JTygweEY2LCAweDQ3KQorI2RlZmluZSBMVFROR19LRVJORUxfV0FJVF9RVUlFU0NFTlQJ
-CV9JTygweEY2LCAweDQ4KQogI2RlZmluZSBMVFROR19LRVJORUxfQ0FMSUJSQVRFCQkJXAotCV9J
-T1dSKDB4RjYsIDB4NDQsIHN0cnVjdCBsdHRuZ19rZXJuZWxfY2FsaWJyYXRlKQorCV9JT1dSKDB4
-RjYsIDB4NDksIHN0cnVjdCBsdHRuZ19rZXJuZWxfY2FsaWJyYXRlKQogCiAvKiBTZXNzaW9uIEZE
-IGlvY3RsICovCi0jZGVmaW5lIExUVE5HX0tFUk5FTF9NRVRBREFUQSAgICAgICAgICAgICAgIFwK
-LQkJX0lPVygweEY2LCAweDUwLCBzdHJ1Y3QgbHR0bmdfY2hhbm5lbF9hdHRyKQotI2RlZmluZSBM
-VFROR19LRVJORUxfQ0hBTk5FTCAgICAgICAgICAgICAgICBcCi0JCV9JT1coMHhGNiwgMHg1MSwg
-c3RydWN0IGx0dG5nX2NoYW5uZWxfYXR0cikKLSNkZWZpbmUgTFRUTkdfS0VSTkVMX1NFU1NJT05f
-U1RBUlQgICAgICAgICAgX0lPKDB4RjYsIDB4NTIpCi0jZGVmaW5lIExUVE5HX0tFUk5FTF9TRVNT
-SU9OX1NUT1AgICAgICAgICAgIF9JTygweEY2LCAweDUzKQorI2RlZmluZSBMVFROR19LRVJORUxf
-TUVUQURBVEEJCQlcCisJX0lPVygweEY2LCAweDU0LCBzdHJ1Y3QgbHR0bmdfa2VybmVsX2NoYW5u
-ZWwpCisjZGVmaW5lIExUVE5HX0tFUk5FTF9DSEFOTkVMCQkJXAorCV9JT1coMHhGNiwgMHg1NSwg
-c3RydWN0IGx0dG5nX2tlcm5lbF9jaGFubmVsKQorI2RlZmluZSBMVFROR19LRVJORUxfU0VTU0lP
-Tl9TVEFSVAkJX0lPKDB4RjYsIDB4NTYpCisjZGVmaW5lIExUVE5HX0tFUk5FTF9TRVNTSU9OX1NU
-T1AJCV9JTygweEY2LCAweDU3KQogCiAvKiBDaGFubmVsIEZEIGlvY3RsICovCi0jZGVmaW5lIExU
-VE5HX0tFUk5FTF9TVFJFQU0gICAgICAgICAgICAgICAgIF9JTygweEY2LCAweDYwKQotI2RlZmlu
-ZSBMVFROR19LRVJORUxfRVZFTlQgICAgICAgICAgICAgICAgICBcCi0JCV9JT1coMHhGNiwgMHg2
-MSwgc3RydWN0IGx0dG5nX2tlcm5lbF9ldmVudCkKLSNkZWZpbmUgTFRUTkdfS0VSTkVMX1NUUkVB
-TV9JRF9PRkZTRVQgICAgICAgXAotCQlfSU9SKDB4RjYsIDB4NjIsIHVuc2lnbmVkIGxvbmcpCisj
-ZGVmaW5lIExUVE5HX0tFUk5FTF9TVFJFQU0JCQlfSU8oMHhGNiwgMHg2MikKKyNkZWZpbmUgTFRU
-TkdfS0VSTkVMX0VWRU5UCQkJXAorCV9JT1coMHhGNiwgMHg2Mywgc3RydWN0IGx0dG5nX2tlcm5l
-bF9ldmVudCkKIAogLyogRXZlbnQgYW5kIENoYW5uZWwgRkQgaW9jdGwgKi8KLSNkZWZpbmUgTFRU
-TkdfS0VSTkVMX0NPTlRFWFQgICAgICAgICAgICAgICAgXAotCQlfSU9XKDB4RjYsIDB4NzAsIHN0
-cnVjdCBsdHRuZ19rZXJuZWxfY29udGV4dCkKKyNkZWZpbmUgTFRUTkdfS0VSTkVMX0NPTlRFWFQJ
-CQlcCisJX0lPVygweEY2LCAweDcxLCBzdHJ1Y3QgbHR0bmdfa2VybmVsX2NvbnRleHQpCiAKIC8q
-IEV2ZW50LCBDaGFubmVsIGFuZCBTZXNzaW9uIGlvY3RsICovCi0jZGVmaW5lIExUVE5HX0tFUk5F
-TF9FTkFCTEUgICAgICAgICAgICAgICAgIF9JTygweEY2LCAweDgwKQotI2RlZmluZSBMVFROR19L
-RVJORUxfRElTQUJMRSAgICAgICAgICAgICAgICBfSU8oMHhGNiwgMHg4MSkKKyNkZWZpbmUgTFRU
-TkdfS0VSTkVMX0VOQUJMRQkJCV9JTygweEY2LCAweDgyKQorI2RlZmluZSBMVFROR19LRVJORUxf
-RElTQUJMRQkJCV9JTygweEY2LCAweDgzKQogCiAjZW5kaWYgLyogX0xUVF9LRVJORUxfSU9DVExf
-SCAqLwpkaWZmIC0tZ2l0IGEvc3JjL2NvbW1vbi9sdHRuZy1rZXJuZWwtb2xkLmggYi9zcmMvY29t
-bW9uL2x0dG5nLWtlcm5lbC1vbGQuaApuZXcgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAwMDAwMDAw
-Li4wNTc5NzUxCi0tLSAvZGV2L251bGwKKysrIGIvc3JjL2NvbW1vbi9sdHRuZy1rZXJuZWwtb2xk
-LmgKQEAgLTAsMCArMSwxMTcgQEAKKy8qCisgKiBDb3B5cmlnaHQgKEMpIDIwMTEgLSBKdWxpZW4g
-RGVzZm9zc2V6IDxqdWxpZW4uZGVzZm9zc2V6QHBvbHltdGwuY2E+CisgKiAgICAgICAgICAgICAg
-ICAgICAgICBNYXRoaWV1IERlc25veWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29t
-PgorICogICAgICAgICAgICAgICAgICAgICAgRGF2aWQgR291bGV0IDxkYXZpZC5nb3VsZXRAcG9s
-eW10bC5jYT4KKyAqCisgKiBUaGlzIHByb2dyYW0gaXMgZnJlZSBzb2Z0d2FyZTsgeW91IGNhbiBy
-ZWRpc3RyaWJ1dGUgaXQgYW5kL29yIG1vZGlmeQorICogaXQgdW5kZXIgdGhlIHRlcm1zIG9mIHRo
-ZSBHTlUgR2VuZXJhbCBQdWJsaWMgTGljZW5zZSwgdmVyc2lvbiAyIG9ubHksCisgKiBhcyBwdWJs
-aXNoZWQgYnkgdGhlIEZyZWUgU29mdHdhcmUgRm91bmRhdGlvbi4KKyAqCisgKiBUaGlzIHByb2dy
-YW0gaXMgZGlzdHJpYnV0ZWQgaW4gdGhlIGhvcGUgdGhhdCBpdCB3aWxsIGJlIHVzZWZ1bCwgYnV0
-IFdJVEhPVVQKKyAqIEFOWSBXQVJSQU5UWTsgd2l0aG91dCBldmVuIHRoZSBpbXBsaWVkIHdhcnJh
-bnR5IG9mIE1FUkNIQU5UQUJJTElUWSBvcgorICogRklUTkVTUyBGT1IgQSBQQVJUSUNVTEFSIFBV
-UlBPU0UuIFNlZSB0aGUgR05VIEdlbmVyYWwgUHVibGljIExpY2Vuc2UgZm9yCisgKiBtb3JlIGRl
-dGFpbHMuCisgKgorICogWW91IHNob3VsZCBoYXZlIHJlY2VpdmVkIGEgY29weSBvZiB0aGUgR05V
-IEdlbmVyYWwgUHVibGljIExpY2Vuc2UgYWxvbmcKKyAqIHdpdGggdGhpcyBwcm9ncmFtOyBpZiBu
-b3QsIHdyaXRlIHRvIHRoZSBGcmVlIFNvZnR3YXJlIEZvdW5kYXRpb24sIEluYy4sCisgKiA1MSBG
-cmFua2xpbiBTdHJlZXQsIEZpZnRoIEZsb29yLCBCb3N0b24sIE1BIDAyMTEwLTEzMDEgVVNBLgor
-ICovCisKKyNpZm5kZWYgX0xUVE5HX0tFUk5FTF9PTERfSAorI2RlZmluZSBfTFRUTkdfS0VSTkVM
-X09MRF9ICisKKyNpbmNsdWRlIDxzdGRpbnQuaD4KKyNpbmNsdWRlIDxjb21tb24vbHR0bmcta2Vy
-bmVsLmg+CisKKyNkZWZpbmUgTFRUTkdfS0VSTkVMX09MRF9TWU1fTkFNRV9MRU4gIDI1NgorCisv
-KgorICogTFRUbmcgRGVidWdGUyBBQkkgc3RydWN0dXJlcy4KKyAqCisgKiBUaGlzIGlzIHRoZSBr
-ZXJuZWwgQUJJIGNvcGllZCBmcm9tIGx0dG5nLW1vZHVsZXMgdHJlZS4KKyAqLworCisvKiBQZXJm
-IGNvdW50ZXIgYXR0cmlidXRlcyAqLworc3RydWN0IGx0dG5nX2tlcm5lbF9vbGRfcGVyZl9jb3Vu
-dGVyX2N0eCB7CisJdWludDMyX3QgdHlwZTsKKwl1aW50NjRfdCBjb25maWc7CisJY2hhciBuYW1l
-W0xUVE5HX0tFUk5FTF9PTERfU1lNX05BTUVfTEVOXTsKK307CisKKy8qIEV2ZW50L0NoYW5uZWwg
-Y29udGV4dCAqLworI2RlZmluZSBMVFROR19LRVJORUxfT0xEX0NPTlRFWFRfUEFERElORzEgIDE2
-CisjZGVmaW5lIExUVE5HX0tFUk5FTF9PTERfQ09OVEVYVF9QQURESU5HMiAgTFRUTkdfS0VSTkVM
-X09MRF9TWU1fTkFNRV9MRU4gKyAzMgorc3RydWN0IGx0dG5nX2tlcm5lbF9vbGRfY29udGV4dCB7
-CisJZW51bSBsdHRuZ19rZXJuZWxfY29udGV4dF90eXBlIGN0eDsKKwljaGFyIHBhZGRpbmdbTFRU
-TkdfS0VSTkVMX09MRF9DT05URVhUX1BBRERJTkcxXTsKKworCXVuaW9uIHsKKwkJc3RydWN0IGx0
-dG5nX2tlcm5lbF9vbGRfcGVyZl9jb3VudGVyX2N0eCBwZXJmX2NvdW50ZXI7CisJCWNoYXIgcGFk
-ZGluZ1tMVFROR19LRVJORUxfT0xEX0NPTlRFWFRfUEFERElORzJdOworCX0gdTsKK307CisKK3N0
-cnVjdCBsdHRuZ19rZXJuZWxfb2xkX2tyZXRwcm9iZSB7CisJdWludDY0X3QgYWRkcjsKKworCXVp
-bnQ2NF90IG9mZnNldDsKKwljaGFyIHN5bWJvbF9uYW1lW0xUVE5HX0tFUk5FTF9PTERfU1lNX05B
-TUVfTEVOXTsKK307CisKKy8qCisgKiBFaXRoZXIgYWRkciBpcyB1c2VkLCBvciBzeW1ib2xfbmFt
-ZSBhbmQgb2Zmc2V0LgorICovCitzdHJ1Y3QgbHR0bmdfa2VybmVsX29sZF9rcHJvYmUgeworCXVp
-bnQ2NF90IGFkZHI7CisKKwl1aW50NjRfdCBvZmZzZXQ7CisJY2hhciBzeW1ib2xfbmFtZVtMVFRO
-R19LRVJORUxfT0xEX1NZTV9OQU1FX0xFTl07Cit9OworCisvKiBGdW5jdGlvbiB0cmFjZXIgKi8K
-K3N0cnVjdCBsdHRuZ19rZXJuZWxfb2xkX2Z1bmN0aW9uIHsKKwljaGFyIHN5bWJvbF9uYW1lW0xU
-VE5HX0tFUk5FTF9PTERfU1lNX05BTUVfTEVOXTsKK307CisKKyNkZWZpbmUgTFRUTkdfS0VSTkVM
-X09MRF9FVkVOVF9QQURESU5HMSAgICAxNgorI2RlZmluZSBMVFROR19LRVJORUxfT0xEX0VWRU5U
-X1BBRERJTkcyICAgIExUVE5HX0tFUk5FTF9PTERfU1lNX05BTUVfTEVOICsgMzIKK3N0cnVjdCBs
-dHRuZ19rZXJuZWxfb2xkX2V2ZW50IHsKKwljaGFyIG5hbWVbTFRUTkdfS0VSTkVMX09MRF9TWU1f
-TkFNRV9MRU5dOworCWVudW0gbHR0bmdfa2VybmVsX2luc3RydW1lbnRhdGlvbiBpbnN0cnVtZW50
-YXRpb247CisJY2hhciBwYWRkaW5nW0xUVE5HX0tFUk5FTF9PTERfRVZFTlRfUEFERElORzFdOwor
-CisJLyogUGVyIGluc3RydW1lbnRhdGlvbiB0eXBlIGNvbmZpZ3VyYXRpb24gKi8KKwl1bmlvbiB7
-CisJCXN0cnVjdCBsdHRuZ19rZXJuZWxfb2xkX2tyZXRwcm9iZSBrcmV0cHJvYmU7CisJCXN0cnVj
-dCBsdHRuZ19rZXJuZWxfb2xkX2twcm9iZSBrcHJvYmU7CisJCXN0cnVjdCBsdHRuZ19rZXJuZWxf
-b2xkX2Z1bmN0aW9uIGZ0cmFjZTsKKwkJY2hhciBwYWRkaW5nW0xUVE5HX0tFUk5FTF9PTERfRVZF
-TlRfUEFERElORzJdOworCX0gdTsKK307CisKK3N0cnVjdCBsdHRuZ19rZXJuZWxfb2xkX3RyYWNl
-cl92ZXJzaW9uIHsKKwl1aW50MzJfdCBtYWpvcjsKKwl1aW50MzJfdCBtaW5vcjsKKwl1aW50MzJf
-dCBwYXRjaGxldmVsOworfTsKKworc3RydWN0IGx0dG5nX2tlcm5lbF9vbGRfY2FsaWJyYXRlIHsK
-KwllbnVtIGx0dG5nX2tlcm5lbF9jYWxpYnJhdGVfdHlwZSB0eXBlOwkvKiB0eXBlIChpbnB1dCkg
-Ki8KK307CisKKy8qCisgKiBrZXJuZWwgY2hhbm5lbAorICovCisjZGVmaW5lIExUVE5HX0tFUk5F
-TF9PTERfQ0hBTk5FTF9QQURESU5HMSBMVFROR19TWU1CT0xfTkFNRV9MRU4gKyAzMgorc3RydWN0
-IGx0dG5nX2tlcm5lbF9vbGRfY2hhbm5lbCB7CisJaW50IG92ZXJ3cml0ZTsgICAgICAgICAgICAg
-ICAgICAgICAgLyogMTogb3ZlcndyaXRlLCAwOiBkaXNjYXJkICovCisJdWludDY0X3Qgc3ViYnVm
-X3NpemU7ICAgICAgICAgICAgICAgLyogYnl0ZXMgKi8KKwl1aW50NjRfdCBudW1fc3ViYnVmOyAg
-ICAgICAgICAgICAgICAvKiBwb3dlciBvZiAyICovCisJdW5zaWduZWQgaW50IHN3aXRjaF90aW1l
-cl9pbnRlcnZhbDsgLyogdXNlYyAqLworCXVuc2lnbmVkIGludCByZWFkX3RpbWVyX2ludGVydmFs
-OyAgIC8qIHVzZWMgKi8KKwllbnVtIGx0dG5nX2V2ZW50X291dHB1dCBvdXRwdXQ7ICAgICAvKiBz
-cGxpY2UsIG1tYXAgKi8KKworCWNoYXIgcGFkZGluZ1tMVFROR19LRVJORUxfT0xEX0NIQU5ORUxf
-UEFERElORzFdOworfTsKKworI2VuZGlmIC8qIF9MVFROR19LRVJORUxfT0xEX0ggKi8KZGlmZiAt
-LWdpdCBhL3NyYy9jb21tb24vbHR0bmcta2VybmVsLmggYi9zcmMvY29tbW9uL2x0dG5nLWtlcm5l
-bC5oCmluZGV4IGRiZWI2YWEuLmFjODgxYmYgMTAwNjQ0Ci0tLSBhL3NyYy9jb21tb24vbHR0bmct
-a2VybmVsLmgKKysrIGIvc3JjL2NvbW1vbi9sdHRuZy1rZXJuZWwuaApAQCAtNTksNyArNTksNyBA
-QCBzdHJ1Y3QgbHR0bmdfa2VybmVsX3BlcmZfY291bnRlcl9jdHggewogCXVpbnQzMl90IHR5cGU7
-CiAJdWludDY0X3QgY29uZmlnOwogCWNoYXIgbmFtZVtMVFROR19LRVJORUxfU1lNX05BTUVfTEVO
-XTsKLX07Cit9X19hdHRyaWJ1dGVfXygocGFja2VkKSk7CiAKIC8qIEV2ZW50L0NoYW5uZWwgY29u
-dGV4dCAqLwogI2RlZmluZSBMVFROR19LRVJORUxfQ09OVEVYVF9QQURESU5HMSAgMTYKQEAgLTcy
-LDE0ICs3MiwxNCBAQCBzdHJ1Y3QgbHR0bmdfa2VybmVsX2NvbnRleHQgewogCQlzdHJ1Y3QgbHR0
-bmdfa2VybmVsX3BlcmZfY291bnRlcl9jdHggcGVyZl9jb3VudGVyOwogCQljaGFyIHBhZGRpbmdb
-TFRUTkdfS0VSTkVMX0NPTlRFWFRfUEFERElORzJdOwogCX0gdTsKLX07Cit9X19hdHRyaWJ1dGVf
-XygocGFja2VkKSk7CiAKIHN0cnVjdCBsdHRuZ19rZXJuZWxfa3JldHByb2JlIHsKIAl1aW50NjRf
-dCBhZGRyOwogCiAJdWludDY0X3Qgb2Zmc2V0OwogCWNoYXIgc3ltYm9sX25hbWVbTFRUTkdfS0VS
-TkVMX1NZTV9OQU1FX0xFTl07Ci19OworfV9fYXR0cmlidXRlX18oKHBhY2tlZCkpOwogCiAvKgog
-ICogRWl0aGVyIGFkZHIgaXMgdXNlZCwgb3Igc3ltYm9sX25hbWUgYW5kIG9mZnNldC4KQEAgLTg5
-LDEyICs4OSwxMiBAQCBzdHJ1Y3QgbHR0bmdfa2VybmVsX2twcm9iZSB7CiAKIAl1aW50NjRfdCBv
-ZmZzZXQ7CiAJY2hhciBzeW1ib2xfbmFtZVtMVFROR19LRVJORUxfU1lNX05BTUVfTEVOXTsKLX07
-Cit9X19hdHRyaWJ1dGVfXygocGFja2VkKSk7CiAKIC8qIEZ1bmN0aW9uIHRyYWNlciAqLwogc3Ry
-dWN0IGx0dG5nX2tlcm5lbF9mdW5jdGlvbiB7CiAJY2hhciBzeW1ib2xfbmFtZVtMVFROR19LRVJO
-RUxfU1lNX05BTUVfTEVOXTsKLX07Cit9X19hdHRyaWJ1dGVfXygocGFja2VkKSk7CiAKICNkZWZp
-bmUgTFRUTkdfS0VSTkVMX0VWRU5UX1BBRERJTkcxICAgIDE2CiAjZGVmaW5lIExUVE5HX0tFUk5F
-TF9FVkVOVF9QQURESU5HMiAgICBMVFROR19LRVJORUxfU1lNX05BTUVfTEVOICsgMzIKQEAgLTEx
-MCwxMyArMTEwLDEzIEBAIHN0cnVjdCBsdHRuZ19rZXJuZWxfZXZlbnQgewogCQlzdHJ1Y3QgbHR0
-bmdfa2VybmVsX2Z1bmN0aW9uIGZ0cmFjZTsKIAkJY2hhciBwYWRkaW5nW0xUVE5HX0tFUk5FTF9F
-VkVOVF9QQURESU5HMl07CiAJfSB1OwotfTsKK31fX2F0dHJpYnV0ZV9fKChwYWNrZWQpKTsKIAog
-c3RydWN0IGx0dG5nX2tlcm5lbF90cmFjZXJfdmVyc2lvbiB7CiAJdWludDMyX3QgbWFqb3I7CiAJ
-dWludDMyX3QgbWlub3I7CiAJdWludDMyX3QgcGF0Y2hsZXZlbDsKLX07Cit9X19hdHRyaWJ1dGVf
-XygocGFja2VkKSk7CiAKIGVudW0gbHR0bmdfa2VybmVsX2NhbGlicmF0ZV90eXBlIHsKIAlMVFRO
-R19LRVJORUxfQ0FMSUJSQVRFX0tSRVRQUk9CRSwKQEAgLTEyNCw2ICsxMjQsMjEgQEAgZW51bSBs
-dHRuZ19rZXJuZWxfY2FsaWJyYXRlX3R5cGUgewogCiBzdHJ1Y3QgbHR0bmdfa2VybmVsX2NhbGli
-cmF0ZSB7CiAJZW51bSBsdHRuZ19rZXJuZWxfY2FsaWJyYXRlX3R5cGUgdHlwZTsJLyogdHlwZSAo
-aW5wdXQpICovCi19OworfV9fYXR0cmlidXRlX18oKHBhY2tlZCkpOworCisvKgorICoga2VybmVs
-IGNoYW5uZWwKKyAqLworI2RlZmluZSBMVFROR19LRVJORUxfQ0hBTk5FTF9QQURESU5HMSBMVFRO
-R19TWU1CT0xfTkFNRV9MRU4gKyAzMgorc3RydWN0IGx0dG5nX2tlcm5lbF9jaGFubmVsIHsKKwl1
-aW50NjRfdCBzdWJidWZfc2l6ZTsgICAgICAgICAgICAgICAvKiBieXRlcyAqLworCXVpbnQ2NF90
-IG51bV9zdWJidWY7ICAgICAgICAgICAgICAgIC8qIHBvd2VyIG9mIDIgKi8KKwl1bnNpZ25lZCBp
-bnQgc3dpdGNoX3RpbWVyX2ludGVydmFsOyAvKiB1c2VjICovCisJdW5zaWduZWQgaW50IHJlYWRf
-dGltZXJfaW50ZXJ2YWw7ICAgLyogdXNlYyAqLworCWludCBvdmVyd3JpdGU7ICAgICAgICAgICAg
-ICAgICAgICAgIC8qIDE6IG92ZXJ3cml0ZSwgMDogZGlzY2FyZCAqLworCWVudW0gbHR0bmdfZXZl
-bnRfb3V0cHV0IG91dHB1dDsgICAgIC8qIHNwbGljZSwgbW1hcCAqLworCisJY2hhciBwYWRkaW5n
-W0xUVE5HX0tFUk5FTF9DSEFOTkVMX1BBRERJTkcxXTsKK31fX2F0dHJpYnV0ZV9fKChwYWNrZWQp
-KTsKIAogI2VuZGlmIC8qIF9MVFROR19LRVJORUxfSCAqLwotLSAKMS43LjkuNQoKCl9fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5n
-IGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2Nn
-aS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+* Julien Desfossez (jdesfossez@efficios.com) wrote:
+> The current ABI does not work for compat 32/64 bits.
+> This patch moves the current ABI as old-abi and provides a new ABI in
+> which all the structures exchanged between user and kernel-space are
+> packed. Also this new ABI moves the "int overwrite" member of the
+> struct lttng_kernel_channel to remove the alignment added by the
+> compiler.
+> =
+
+> A patch for lttng-modules has been developed in parallel to this one
+> to support the new ABI. These 2 patches have been tested in all
+> possible configurations (applied or not) on 64-bit and 32-bit kernels
+> (with CONFIG_COMPAT) and a user-space in 32 and 64-bit.
+> =
+
+> Here are the results of the tests :
+> k 64 compat     |=A0u 32 compat     | OK
+> k 64 compat     | u 64 compat     | OK
+> k 64 compat     | u 32 non-compat | KO
+> k 64 compat     | u 64 non-compat | OK
+> =
+
+> k 64 non-compat | u 64 compat     | OK
+> k 64 non-compat | u 32 compat     | KO
+> k 64 non-compat | u 64 non-compat | OK
+> k 64 non-compat | u 32 non-compat | KO
+> =
+
+> k 32 compat     | u compat        | OK
+> k 32 compat     | u non-compat    | OK
+> =
+
+> k 32 non-compat | u compat        | OK
+> k 32 non-compat | u non-compat    | OK
+> =
+
+> The results are as expected :
+> - on 32-bit user-space and kernel, every configuration works.
+> - on 64-bit user-space and kernel, every configuration works.
+> - with 32-bit user-space on a 64-bit kernel the only configuration
+>   where it works is when the compat patch is applied everywhere.
+> =
+
+> Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
+> ---
+>  src/bin/lttng-sessiond/trace-kernel.h |    1 +
+>  src/common/kernel-ctl/kernel-ctl.c    |  210 +++++++++++++++++++++++++++=
+++----
+>  src/common/kernel-ctl/kernel-ctl.h    |    1 +
+>  src/common/kernel-ctl/kernel-ioctl.h  |   74 ++++++++----
+>  src/common/lttng-kernel-old.h         |  117 ++++++++++++++++++
+>  src/common/lttng-kernel.h             |   31 +++--
+>  6 files changed, 385 insertions(+), 49 deletions(-)
+>  create mode 100644 src/common/lttng-kernel-old.h
+> =
+
+> diff --git a/src/bin/lttng-sessiond/trace-kernel.h b/src/bin/lttng-sessio=
+nd/trace-kernel.h
+> index f04d9e7..c86cc27 100644
+> --- a/src/bin/lttng-sessiond/trace-kernel.h
+> +++ b/src/bin/lttng-sessiond/trace-kernel.h
+> @@ -22,6 +22,7 @@
+>  =
+
+>  #include <lttng/lttng.h>
+>  #include <common/lttng-kernel.h>
+> +#include <common/lttng-kernel-old.h>
+>  =
+
+>  #include "consumer.h"
+>  =
+
+> diff --git a/src/common/kernel-ctl/kernel-ctl.c b/src/common/kernel-ctl/k=
+ernel-ctl.c
+> index 1396cd9..ab29dd0 100644
+> --- a/src/common/kernel-ctl/kernel-ctl.c
+> +++ b/src/common/kernel-ctl/kernel-ctl.c
+> @@ -18,38 +18,163 @@
+>  =
+
+>  #define __USE_LINUX_IOCTL_DEFS
+>  #include <sys/ioctl.h>
+> +#include <string.h>
+>  =
+
+>  #include "kernel-ctl.h"
+>  #include "kernel-ioctl.h"
+>  =
+
+> +/*
+> + * This flag indicates whether lttng-tools must use the new or the old k=
+ernel
+> + * ABI (without compat support for 32/64 bits).
+> + */
+> +static int lttng_kernel_use_old_abi =3D -1;
+> +
+> +static inline int compat_ioctl_no_arg(int fd, unsigned long oldname,
+> +		unsigned long newname)
+> +{
+> +	int ret;
+> +
+> +	if (lttng_kernel_use_old_abi =3D=3D -1) {
+> +		ret =3D ioctl(fd, newname);
+> +		if (!ret) {
+> +			lttng_kernel_use_old_abi =3D 0;
+> +			goto end;
+> +		}
+> +		lttng_kernel_use_old_abi =3D 1;
+> +	}
+> +	if (lttng_kernel_use_old_abi) {
+> +		ret =3D ioctl(fd, oldname);
+> +	} else {
+> +		ret =3D ioctl(fd, newname);
+> +	}
+> +
+> +end:
+> +	return ret;
+> +}
+> +
+>  int kernctl_create_session(int fd)
+>  {
+> -	return ioctl(fd, LTTNG_KERNEL_SESSION);
+> +	return compat_ioctl_no_arg(fd, LTTNG_KERNEL_OLD_SESSION,
+> +			LTTNG_KERNEL_SESSION);
+>  }
+>  =
+
+>  /* open the metadata global channel */
+>  int kernctl_open_metadata(int fd, struct lttng_channel_attr *chops)
+>  {
+> -	return ioctl(fd, LTTNG_KERNEL_METADATA, chops);
+> +	struct lttng_kernel_old_channel old_channel;
+> +	struct lttng_kernel_channel channel;
+> +
+> +	if (lttng_kernel_use_old_abi) {
+> +		old_channel.overwrite =3D chops->overwrite;
+> +		old_channel.subbuf_size =3D chops->subbuf_size;
+> +		old_channel.num_subbuf =3D chops->num_subbuf;
+> +		old_channel.switch_timer_interval =3D chops->switch_timer_interval;
+> +		old_channel.read_timer_interval =3D chops->read_timer_interval;
+> +		old_channel.output =3D chops->output;
+> +		memcpy(old_channel.padding, chops->padding, sizeof(chops->padding));
+> +
+> +		return ioctl(fd, LTTNG_KERNEL_OLD_METADATA, &old_channel);
+> +	}
+> +
+> +	channel.overwrite =3D chops->overwrite;
+> +	channel.subbuf_size =3D chops->subbuf_size;
+> +	channel.num_subbuf =3D chops->num_subbuf;
+> +	channel.switch_timer_interval =3D chops->switch_timer_interval;
+> +	channel.read_timer_interval =3D chops->read_timer_interval;
+> +	channel.output =3D chops->output;
+> +	memcpy(channel.padding, chops->padding, sizeof(chops->padding));
+> +
+> +	return ioctl(fd, LTTNG_KERNEL_METADATA, &channel);
+>  }
+>  =
+
+>  int kernctl_create_channel(int fd, struct lttng_channel_attr *chops)
+>  {
+> -	return ioctl(fd, LTTNG_KERNEL_CHANNEL, chops);
+> +	struct lttng_kernel_old_channel old_channel;
+> +	struct lttng_kernel_channel channel;
+> +
+> +	if (lttng_kernel_use_old_abi) {
+> +		old_channel.overwrite =3D chops->overwrite;
+> +		old_channel.subbuf_size =3D chops->subbuf_size;
+> +		old_channel.num_subbuf =3D chops->num_subbuf;
+> +		old_channel.switch_timer_interval =3D chops->switch_timer_interval;
+> +		old_channel.read_timer_interval =3D chops->read_timer_interval;
+> +		old_channel.output =3D chops->output;
+> +		memcpy(old_channel.padding, chops->padding, sizeof(chops->padding));
+> +
+> +		return ioctl(fd, LTTNG_KERNEL_OLD_CHANNEL, &old_channel);
+> +	}
+> +
+> +	channel.overwrite =3D chops->overwrite;
+> +	channel.subbuf_size =3D chops->subbuf_size;
+> +	channel.num_subbuf =3D chops->num_subbuf;
+> +	channel.switch_timer_interval =3D chops->switch_timer_interval;
+> +	channel.read_timer_interval =3D chops->read_timer_interval;
+> +	channel.output =3D chops->output;
+> +	memcpy(channel.padding, chops->padding, sizeof(chops->padding));
+> +
+> +	return ioctl(fd, LTTNG_KERNEL_CHANNEL, &channel);
+>  }
+>  =
+
+>  int kernctl_create_stream(int fd)
+>  {
+> -	return ioctl(fd, LTTNG_KERNEL_STREAM);
+> +	return compat_ioctl_no_arg(fd, LTTNG_KERNEL_OLD_STREAM,
+> +			LTTNG_KERNEL_STREAM);
+>  }
+>  =
+
+>  int kernctl_create_event(int fd, struct lttng_kernel_event *ev)
+>  {
+> +	if (lttng_kernel_use_old_abi) {
+> +		struct lttng_kernel_event old_event;
+> +
+> +		memcpy(old_event.name, ev->name, sizeof(old_event.name));
+> +		old_event.instrumentation =3D ev->instrumentation;
+> +		switch (ev->instrumentation) {
+> +		case LTTNG_KERNEL_KPROBE:
+> +			old_event.u.kprobe.addr =3D ev->u.kprobe.addr;
+> +			old_event.u.kprobe.offset =3D ev->u.kprobe.offset;
+> +			memcpy(old_event.u.kprobe.symbol_name,
+> +				ev->u.kprobe.symbol_name,
+> +				sizeof(old_event.u.kprobe.symbol_name));
+> +			break;
+> +		case LTTNG_KERNEL_KRETPROBE:
+> +			old_event.u.kretprobe.addr =3D ev->u.kretprobe.addr;
+> +			old_event.u.kretprobe.offset =3D ev->u.kretprobe.offset;
+> +			memcpy(old_event.u.kretprobe.symbol_name,
+> +				ev->u.kretprobe.symbol_name,
+> +				sizeof(old_event.u.kretprobe.symbol_name));
+> +			break;
+> +		case LTTNG_KERNEL_FUNCTION:
+> +			memcpy(old_event.u.ftrace.symbol_name,
+> +					ev->u.ftrace.symbol_name,
+> +					sizeof(old_event.u.ftrace.symbol_name));
+> +			break;
+> +		default:
+> +			break;
+> +		}
+> +
+> +		return ioctl(fd, LTTNG_KERNEL_OLD_EVENT, &old_event);
+> +	}
+>  	return ioctl(fd, LTTNG_KERNEL_EVENT, ev);
+>  }
+>  =
+
+>  int kernctl_add_context(int fd, struct lttng_kernel_context *ctx)
+>  {
+> +	if (lttng_kernel_use_old_abi) {
+> +		struct lttng_kernel_old_context old_ctx;
+> +
+> +		old_ctx.ctx =3D ctx->ctx;
+> +		/* only type that uses the union */
+> +		if (ctx->ctx =3D=3D LTTNG_KERNEL_CONTEXT_PERF_COUNTER) {
+> +			old_ctx.u.perf_counter.type =3D
+> +				ctx->u.perf_counter.type;
+> +			old_ctx.u.perf_counter.config =3D
+> +				ctx->u.perf_counter.config;
+> +			memcpy(old_ctx.u.perf_counter.name,
+> +				ctx->u.perf_counter.name,
+> +				sizeof(old_ctx.u.perf_counter.name));
+> +		}
+> +		return ioctl(fd, LTTNG_KERNEL_OLD_CONTEXT, &old_ctx);
+> +	}
+>  	return ioctl(fd, LTTNG_KERNEL_CONTEXT, ctx);
+>  }
+>  =
+
+> @@ -57,44 +182,96 @@ int kernctl_add_context(int fd, struct lttng_kernel_=
+context *ctx)
+>  /* Enable event, channel and session ioctl */
+>  int kernctl_enable(int fd)
+>  {
+> -	return ioctl(fd, LTTNG_KERNEL_ENABLE);
+> +	return compat_ioctl_no_arg(fd, LTTNG_KERNEL_OLD_ENABLE,
+> +			LTTNG_KERNEL_ENABLE);
+>  }
+>  =
+
+>  /* Disable event, channel and session ioctl */
+>  int kernctl_disable(int fd)
+>  {
+> -	return ioctl(fd, LTTNG_KERNEL_DISABLE);
+> +	return compat_ioctl_no_arg(fd, LTTNG_KERNEL_OLD_DISABLE,
+> +			LTTNG_KERNEL_DISABLE);
+>  }
+>  =
+
+>  int kernctl_start_session(int fd)
+>  {
+> -	return ioctl(fd, LTTNG_KERNEL_SESSION_START);
+> +	return compat_ioctl_no_arg(fd, LTTNG_KERNEL_OLD_SESSION_START,
+> +			LTTNG_KERNEL_SESSION_START);
+>  }
+>  =
+
+>  int kernctl_stop_session(int fd)
+>  {
+> -	return ioctl(fd, LTTNG_KERNEL_SESSION_STOP);
+> +	return compat_ioctl_no_arg(fd, LTTNG_KERNEL_OLD_SESSION_STOP,
+> +			LTTNG_KERNEL_SESSION_STOP);
+>  }
+>  =
+
+> -
+>  int kernctl_tracepoint_list(int fd)
+>  {
+> -	return ioctl(fd, LTTNG_KERNEL_TRACEPOINT_LIST);
+> +	return compat_ioctl_no_arg(fd, LTTNG_KERNEL_OLD_TRACEPOINT_LIST,
+> +			LTTNG_KERNEL_TRACEPOINT_LIST);
+>  }
+>  =
+
+>  int kernctl_tracer_version(int fd, struct lttng_kernel_tracer_version *v)
+>  {
+> -	return ioctl(fd, LTTNG_KERNEL_TRACER_VERSION, v);
+> +	int ret;
+> +
+> +	if (lttng_kernel_use_old_abi =3D=3D -1) {
+> +		ret =3D ioctl(fd, LTTNG_KERNEL_TRACER_VERSION, v);
+> +		if (!ret) {
+> +			lttng_kernel_use_old_abi =3D 0;
+> +			goto end;
+> +		}
+> +		lttng_kernel_use_old_abi =3D 1;
+> +	}
+> +	if (lttng_kernel_use_old_abi) {
+> +		struct lttng_kernel_old_tracer_version old_v;
+> +
+> +		ret =3D ioctl(fd, LTTNG_KERNEL_OLD_TRACER_VERSION, &old_v);
+> +		if (ret)
+> +			goto end;
+> +		v->major =3D old_v.major;
+> +		v->minor =3D old_v.minor;
+> +		v->patchlevel =3D old_v.patchlevel;
+> +	} else {
+> +		ret =3D ioctl(fd, LTTNG_KERNEL_TRACER_VERSION, v);
+> +	}
+> +
+> +end:
+> +	return ret;
+>  }
+>  =
+
+>  int kernctl_wait_quiescent(int fd)
+>  {
+> -	return ioctl(fd, LTTNG_KERNEL_WAIT_QUIESCENT);
+> +	return compat_ioctl_no_arg(fd, LTTNG_KERNEL_OLD_WAIT_QUIESCENT,
+> +			LTTNG_KERNEL_WAIT_QUIESCENT);
+>  }
+>  =
+
+>  int kernctl_calibrate(int fd, struct lttng_kernel_calibrate *calibrate)
+>  {
+> -	return ioctl(fd, LTTNG_KERNEL_CALIBRATE, calibrate);
+> +	int ret;
+> +
+> +	if (lttng_kernel_use_old_abi =3D=3D -1) {
+> +		ret =3D ioctl(fd, LTTNG_KERNEL_CALIBRATE, calibrate);
+> +		if (!ret) {
+> +			lttng_kernel_use_old_abi =3D 0;
+> +			goto end;
+> +		}
+> +		lttng_kernel_use_old_abi =3D 1;
+> +	}
+> +	if (lttng_kernel_use_old_abi) {
+> +		struct lttng_kernel_old_calibrate old_calibrate;
+> +
+> +		old_calibrate.type =3D calibrate->type;
+> +		ret =3D ioctl(fd, LTTNG_KERNEL_OLD_CALIBRATE, &old_calibrate);
+> +		if (ret)
+> +			goto end;
+> +		calibrate->type =3D old_calibrate.type;
+> +	} else {
+> +		ret =3D ioctl(fd, LTTNG_KERNEL_CALIBRATE, calibrate);
+> +	}
+> +
+> +end:
+> +	return ret;
+>  }
+>  =
+
+>  =
+
+> @@ -193,10 +370,3 @@ int kernctl_set_stream_id(int fd, unsigned long *str=
+eam_id)
+>  {
+>  	return ioctl(fd, RING_BUFFER_SET_STREAM_ID, stream_id);
+>  }
+> -
+> -/* Get the offset of the stream_id in the packet header */
+> -int kernctl_get_net_stream_id_offset(int fd, unsigned long *offset)
+> -{
+> -	return ioctl(fd, LTTNG_KERNEL_STREAM_ID_OFFSET, offset);
+> -
+> -}
+> diff --git a/src/common/kernel-ctl/kernel-ctl.h b/src/common/kernel-ctl/k=
+ernel-ctl.h
+> index 18712d9..85a3a18 100644
+> --- a/src/common/kernel-ctl/kernel-ctl.h
+> +++ b/src/common/kernel-ctl/kernel-ctl.h
+> @@ -21,6 +21,7 @@
+>  =
+
+>  #include <lttng/lttng.h>
+>  #include <common/lttng-kernel.h>
+> +#include <common/lttng-kernel-old.h>
+>  =
+
+>  int kernctl_create_session(int fd);
+>  int kernctl_open_metadata(int fd, struct lttng_channel_attr *chops);
+> diff --git a/src/common/kernel-ctl/kernel-ioctl.h b/src/common/kernel-ctl=
+/kernel-ioctl.h
+> index 35942be..1d34222 100644
+> --- a/src/common/kernel-ctl/kernel-ioctl.h
+> +++ b/src/common/kernel-ctl/kernel-ioctl.h
+> @@ -49,37 +49,69 @@
+>  /* map stream to stream id for network streaming */
+>  #define RING_BUFFER_SET_STREAM_ID           _IOW(0xF6, 0x0D, unsigned lo=
+ng)
+>  =
+
+> +/* Old ABI (without support for 32/64 bits compat) */
+> +/* LTTng file descriptor ioctl */
+> +#define LTTNG_KERNEL_OLD_SESSION                _IO(0xF6, 0x40)
+> +#define LTTNG_KERNEL_OLD_TRACER_VERSION         \
+> +		_IOR(0xF6, 0x41, struct lttng_kernel_old_tracer_version)
+> +#define LTTNG_KERNEL_OLD_TRACEPOINT_LIST        _IO(0xF6, 0x42)
+> +#define LTTNG_KERNEL_OLD_WAIT_QUIESCENT         _IO(0xF6, 0x43)
+> +#define LTTNG_KERNEL_OLD_CALIBRATE		\
+> +	_IOWR(0xF6, 0x44, struct lttng_kernel_old_calibrate)
+> +
+> +/* Session FD ioctl */
+> +#define LTTNG_KERNEL_OLD_METADATA               \
+> +		_IOW(0xF6, 0x50, struct lttng_kernel_old_channel)
+> +#define LTTNG_KERNEL_OLD_CHANNEL                \
+> +		_IOW(0xF6, 0x51, struct lttng_kernel_old_channel)
+> +#define LTTNG_KERNEL_OLD_SESSION_START          _IO(0xF6, 0x52)
+> +#define LTTNG_KERNEL_OLD_SESSION_STOP           _IO(0xF6, 0x53)
+> +
+> +/* Channel FD ioctl */
+> +#define LTTNG_KERNEL_OLD_STREAM                 _IO(0xF6, 0x60)
+> +#define LTTNG_KERNEL_OLD_EVENT                  \
+> +		_IOW(0xF6, 0x61, struct lttng_kernel_old_event)
+> +#define LTTNG_KERNEL_OLD_STREAM_ID_OFFSET       \
+> +		_IOR(0xF6, 0x62, unsigned long)
+>  =
+
+> +/* Event and Channel FD ioctl */
+> +#define LTTNG_KERNEL_OLD_CONTEXT                \
+> +		_IOW(0xF6, 0x70, struct lttng_kernel_old_context)
+> +
+> +/* Event, Channel and Session ioctl */
+> +#define LTTNG_KERNEL_OLD_ENABLE                 _IO(0xF6, 0x80)
+> +#define LTTNG_KERNEL_OLD_DISABLE                _IO(0xF6, 0x81)
+> +
+> +
+> +/* New ABI (with suport for 32/64 bits compat) */
+>  /* LTTng file descriptor ioctl */
+> -#define LTTNG_KERNEL_SESSION                _IO(0xF6, 0x40)
+> -#define LTTNG_KERNEL_TRACER_VERSION         \
+> -		_IOR(0xF6, 0x41, struct lttng_kernel_tracer_version)
+> -#define LTTNG_KERNEL_TRACEPOINT_LIST        _IO(0xF6, 0x42)
+> -#define LTTNG_KERNEL_WAIT_QUIESCENT         _IO(0xF6, 0x43)
+> +#define LTTNG_KERNEL_SESSION			_IO(0xF6, 0x45)
+> +#define LTTNG_KERNEL_TRACER_VERSION		\
+> +	_IOR(0xF6, 0x46, struct lttng_kernel_tracer_version)
+> +#define LTTNG_KERNEL_TRACEPOINT_LIST		_IO(0xF6, 0x47)
+> +#define LTTNG_KERNEL_WAIT_QUIESCENT		_IO(0xF6, 0x48)
+>  #define LTTNG_KERNEL_CALIBRATE			\
+> -	_IOWR(0xF6, 0x44, struct lttng_kernel_calibrate)
+> +	_IOWR(0xF6, 0x49, struct lttng_kernel_calibrate)
+>  =
+
+>  /* Session FD ioctl */
+> -#define LTTNG_KERNEL_METADATA               \
+> -		_IOW(0xF6, 0x50, struct lttng_channel_attr)
+> -#define LTTNG_KERNEL_CHANNEL                \
+> -		_IOW(0xF6, 0x51, struct lttng_channel_attr)
+> -#define LTTNG_KERNEL_SESSION_START          _IO(0xF6, 0x52)
+> -#define LTTNG_KERNEL_SESSION_STOP           _IO(0xF6, 0x53)
+> +#define LTTNG_KERNEL_METADATA			\
+> +	_IOW(0xF6, 0x54, struct lttng_kernel_channel)
+> +#define LTTNG_KERNEL_CHANNEL			\
+> +	_IOW(0xF6, 0x55, struct lttng_kernel_channel)
+> +#define LTTNG_KERNEL_SESSION_START		_IO(0xF6, 0x56)
+> +#define LTTNG_KERNEL_SESSION_STOP		_IO(0xF6, 0x57)
+>  =
+
+>  /* Channel FD ioctl */
+> -#define LTTNG_KERNEL_STREAM                 _IO(0xF6, 0x60)
+> -#define LTTNG_KERNEL_EVENT                  \
+> -		_IOW(0xF6, 0x61, struct lttng_kernel_event)
+> -#define LTTNG_KERNEL_STREAM_ID_OFFSET       \
+> -		_IOR(0xF6, 0x62, unsigned long)
+> +#define LTTNG_KERNEL_STREAM			_IO(0xF6, 0x62)
+> +#define LTTNG_KERNEL_EVENT			\
+> +	_IOW(0xF6, 0x63, struct lttng_kernel_event)
+>  =
+
+>  /* Event and Channel FD ioctl */
+> -#define LTTNG_KERNEL_CONTEXT                \
+> -		_IOW(0xF6, 0x70, struct lttng_kernel_context)
+> +#define LTTNG_KERNEL_CONTEXT			\
+> +	_IOW(0xF6, 0x71, struct lttng_kernel_context)
+>  =
+
+>  /* Event, Channel and Session ioctl */
+> -#define LTTNG_KERNEL_ENABLE                 _IO(0xF6, 0x80)
+> -#define LTTNG_KERNEL_DISABLE                _IO(0xF6, 0x81)
+> +#define LTTNG_KERNEL_ENABLE			_IO(0xF6, 0x82)
+> +#define LTTNG_KERNEL_DISABLE			_IO(0xF6, 0x83)
+>  =
+
+>  #endif /* _LTT_KERNEL_IOCTL_H */
+> diff --git a/src/common/lttng-kernel-old.h b/src/common/lttng-kernel-old.h
+> new file mode 100644
+> index 0000000..0579751
+> --- /dev/null
+> +++ b/src/common/lttng-kernel-old.h
+> @@ -0,0 +1,117 @@
+> +/*
+> + * Copyright (C) 2011 - Julien Desfossez <julien.desfossez@polymtl.ca>
+> + *                      Mathieu Desnoyers <mathieu.desnoyers@efficios.co=
+m>
+> + *                      David Goulet <david.goulet@polymtl.ca>
+> + *
+> + * This program is free software; you can redistribute it and/or modify
+> + * it under the terms of the GNU General Public License, version 2 only,
+> + * as published by the Free Software Foundation.
+> + *
+> + * This program is distributed in the hope that it will be useful, but W=
+ITHOUT
+> + * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+> + * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License =
+for
+> + * more details.
+> + *
+> + * You should have received a copy of the GNU General Public License alo=
+ng
+> + * with this program; if not, write to the Free Software Foundation, Inc=
+.,
+> + * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+> + */
+> +
+> +#ifndef _LTTNG_KERNEL_OLD_H
+> +#define _LTTNG_KERNEL_OLD_H
+> +
+> +#include <stdint.h>
+> +#include <common/lttng-kernel.h>
+> +
+> +#define LTTNG_KERNEL_OLD_SYM_NAME_LEN  256
+
+no need for LTTNG_KERNEL_OLD_SYM_NAME_LEN. please use
+LTTNG_KERNEL_SYM_NAME_LEN like the lttng-modules header implementation.
+
+Thanks,
+
+Mathieu
+
+> +
+> +/*
+> + * LTTng DebugFS ABI structures.
+> + *
+> + * This is the kernel ABI copied from lttng-modules tree.
+> + */
+> +
+> +/* Perf counter attributes */
+> +struct lttng_kernel_old_perf_counter_ctx {
+> +	uint32_t type;
+> +	uint64_t config;
+> +	char name[LTTNG_KERNEL_OLD_SYM_NAME_LEN];
+> +};
+> +
+> +/* Event/Channel context */
+> +#define LTTNG_KERNEL_OLD_CONTEXT_PADDING1  16
+> +#define LTTNG_KERNEL_OLD_CONTEXT_PADDING2  LTTNG_KERNEL_OLD_SYM_NAME_LEN=
+ + 32
+> +struct lttng_kernel_old_context {
+> +	enum lttng_kernel_context_type ctx;
+> +	char padding[LTTNG_KERNEL_OLD_CONTEXT_PADDING1];
+> +
+> +	union {
+> +		struct lttng_kernel_old_perf_counter_ctx perf_counter;
+> +		char padding[LTTNG_KERNEL_OLD_CONTEXT_PADDING2];
+> +	} u;
+> +};
+> +
+> +struct lttng_kernel_old_kretprobe {
+> +	uint64_t addr;
+> +
+> +	uint64_t offset;
+> +	char symbol_name[LTTNG_KERNEL_OLD_SYM_NAME_LEN];
+> +};
+> +
+> +/*
+> + * Either addr is used, or symbol_name and offset.
+> + */
+> +struct lttng_kernel_old_kprobe {
+> +	uint64_t addr;
+> +
+> +	uint64_t offset;
+> +	char symbol_name[LTTNG_KERNEL_OLD_SYM_NAME_LEN];
+> +};
+> +
+> +/* Function tracer */
+> +struct lttng_kernel_old_function {
+> +	char symbol_name[LTTNG_KERNEL_OLD_SYM_NAME_LEN];
+> +};
+> +
+> +#define LTTNG_KERNEL_OLD_EVENT_PADDING1    16
+> +#define LTTNG_KERNEL_OLD_EVENT_PADDING2    LTTNG_KERNEL_OLD_SYM_NAME_LEN=
+ + 32
+> +struct lttng_kernel_old_event {
+> +	char name[LTTNG_KERNEL_OLD_SYM_NAME_LEN];
+> +	enum lttng_kernel_instrumentation instrumentation;
+> +	char padding[LTTNG_KERNEL_OLD_EVENT_PADDING1];
+> +
+> +	/* Per instrumentation type configuration */
+> +	union {
+> +		struct lttng_kernel_old_kretprobe kretprobe;
+> +		struct lttng_kernel_old_kprobe kprobe;
+> +		struct lttng_kernel_old_function ftrace;
+> +		char padding[LTTNG_KERNEL_OLD_EVENT_PADDING2];
+> +	} u;
+> +};
+> +
+> +struct lttng_kernel_old_tracer_version {
+> +	uint32_t major;
+> +	uint32_t minor;
+> +	uint32_t patchlevel;
+> +};
+> +
+> +struct lttng_kernel_old_calibrate {
+> +	enum lttng_kernel_calibrate_type type;	/* type (input) */
+> +};
+> +
+> +/*
+> + * kernel channel
+> + */
+> +#define LTTNG_KERNEL_OLD_CHANNEL_PADDING1 LTTNG_SYMBOL_NAME_LEN + 32
+> +struct lttng_kernel_old_channel {
+> +	int overwrite;                      /* 1: overwrite, 0: discard */
+> +	uint64_t subbuf_size;               /* bytes */
+> +	uint64_t num_subbuf;                /* power of 2 */
+> +	unsigned int switch_timer_interval; /* usec */
+> +	unsigned int read_timer_interval;   /* usec */
+> +	enum lttng_event_output output;     /* splice, mmap */
+> +
+> +	char padding[LTTNG_KERNEL_OLD_CHANNEL_PADDING1];
+> +};
+> +
+> +#endif /* _LTTNG_KERNEL_OLD_H */
+> diff --git a/src/common/lttng-kernel.h b/src/common/lttng-kernel.h
+> index dbeb6aa..ac881bf 100644
+> --- a/src/common/lttng-kernel.h
+> +++ b/src/common/lttng-kernel.h
+> @@ -59,7 +59,7 @@ struct lttng_kernel_perf_counter_ctx {
+>  	uint32_t type;
+>  	uint64_t config;
+>  	char name[LTTNG_KERNEL_SYM_NAME_LEN];
+> -};
+> +}__attribute__((packed));
+>  =
+
+>  /* Event/Channel context */
+>  #define LTTNG_KERNEL_CONTEXT_PADDING1  16
+> @@ -72,14 +72,14 @@ struct lttng_kernel_context {
+>  		struct lttng_kernel_perf_counter_ctx perf_counter;
+>  		char padding[LTTNG_KERNEL_CONTEXT_PADDING2];
+>  	} u;
+> -};
+> +}__attribute__((packed));
+>  =
+
+>  struct lttng_kernel_kretprobe {
+>  	uint64_t addr;
+>  =
+
+>  	uint64_t offset;
+>  	char symbol_name[LTTNG_KERNEL_SYM_NAME_LEN];
+> -};
+> +}__attribute__((packed));
+>  =
+
+>  /*
+>   * Either addr is used, or symbol_name and offset.
+> @@ -89,12 +89,12 @@ struct lttng_kernel_kprobe {
+>  =
+
+>  	uint64_t offset;
+>  	char symbol_name[LTTNG_KERNEL_SYM_NAME_LEN];
+> -};
+> +}__attribute__((packed));
+>  =
+
+>  /* Function tracer */
+>  struct lttng_kernel_function {
+>  	char symbol_name[LTTNG_KERNEL_SYM_NAME_LEN];
+> -};
+> +}__attribute__((packed));
+>  =
+
+>  #define LTTNG_KERNEL_EVENT_PADDING1    16
+>  #define LTTNG_KERNEL_EVENT_PADDING2    LTTNG_KERNEL_SYM_NAME_LEN + 32
+> @@ -110,13 +110,13 @@ struct lttng_kernel_event {
+>  		struct lttng_kernel_function ftrace;
+>  		char padding[LTTNG_KERNEL_EVENT_PADDING2];
+>  	} u;
+> -};
+> +}__attribute__((packed));
+>  =
+
+>  struct lttng_kernel_tracer_version {
+>  	uint32_t major;
+>  	uint32_t minor;
+>  	uint32_t patchlevel;
+> -};
+> +}__attribute__((packed));
+>  =
+
+>  enum lttng_kernel_calibrate_type {
+>  	LTTNG_KERNEL_CALIBRATE_KRETPROBE,
+> @@ -124,6 +124,21 @@ enum lttng_kernel_calibrate_type {
+>  =
+
+>  struct lttng_kernel_calibrate {
+>  	enum lttng_kernel_calibrate_type type;	/* type (input) */
+> -};
+> +}__attribute__((packed));
+> +
+> +/*
+> + * kernel channel
+> + */
+> +#define LTTNG_KERNEL_CHANNEL_PADDING1 LTTNG_SYMBOL_NAME_LEN + 32
+> +struct lttng_kernel_channel {
+> +	uint64_t subbuf_size;               /* bytes */
+> +	uint64_t num_subbuf;                /* power of 2 */
+> +	unsigned int switch_timer_interval; /* usec */
+> +	unsigned int read_timer_interval;   /* usec */
+> +	int overwrite;                      /* 1: overwrite, 0: discard */
+> +	enum lttng_event_output output;     /* splice, mmap */
+> +
+> +	char padding[LTTNG_KERNEL_CHANNEL_PADDING1];
+> +}__attribute__((packed));
+>  =
+
+>  #endif /* _LTTNG_KERNEL_H */
+> -- =
+
+> 1.7.9.5
+> =
+
+
+-- =
+
+Mathieu Desnoyers
+Operating System Efficiency R&D Consultant
+EfficiOS Inc.
+http://www.efficios.com
