@@ -1,18 +1,19 @@
 From: Francis Giraldeau <francis.giraldeau@gmail.com>
-Subject: Re: UST app and lttng-tools compatibility
-Date: Sun, 30 Sep 2012 23:42:23 -0400
-Message-ID: <5069111F.1080604__27820.1968795203$1349063009$gmane$org@gmail.com>
-References: <50670C5A.4060800@gmail.com> <20120929182800.GA19994@Krystal>
+Subject: Re: notrace missing in lttng-ust
+Date: Mon, 01 Oct 2012 00:06:01 -0400
+Message-ID: <506916A9.2050308__31017.5178609372$1349064422$gmane$org@gmail.com>
+References: <4FED6718.1000205@mentor.com> <20120630181600.GB30747@Krystal>
+	<4FF2A31D.9020100@mentor.com> <20120717141301.GA21204@Krystal>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0123741093=="
+Content-Type: multipart/mixed; boundary="===============0193498455=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qc0-f176.google.com ([209.85.216.176])
+Received: from mail-qa0-f41.google.com ([209.85.216.41])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <francis.giraldeau@gmail.com>) id 1TIWu8-0000yi-GO
-	for lttng-dev@lists.lttng.org; Sun, 30 Sep 2012 23:42:49 -0400
-Received: by qcon41 with SMTP id n41so4541276qco.35
-	for <lttng-dev@lists.lttng.org>; Sun, 30 Sep 2012 20:42:42 -0700 (PDT)
-In-Reply-To: <20120929182800.GA19994@Krystal>
+	(envelope-from <francis.giraldeau@gmail.com>) id 1TIXH6-0001C3-1o
+	for lttng-dev@lists.lttng.org; Mon, 01 Oct 2012 00:06:32 -0400
+Received: by mail-qa0-f41.google.com with SMTP id p27so1518624qat.14
+	for <lttng-dev@lists.lttng.org>; Sun, 30 Sep 2012 21:06:26 -0700 (PDT)
+In-Reply-To: <20120717141301.GA21204@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,100 +22,72 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
 Ceci est un message signC) cryptographiquement au format MIME.
 
---===============0123741093==
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha1; boundary="------------ms060302030803040109080000"
+--===============0193498455==
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha1; boundary="------------ms000903010801070606050500"
 
 Ceci est un message signé cryptographiquement au format MIME.
 
---------------ms060302030803040109080000
+--------------ms000903010801070606050500
 Content-Type: text/plain; charset=ISO-8859-1
 Content-Transfer-Encoding: quoted-printable
 
-Le 2012-09-29 14:28, Mathieu Desnoyers a =E9crit :
-> * Francis Giraldeau (francis.giraldeau@gmail.com) wrote:
->> Hi,
+Le 2012-07-17 10:13, Mathieu Desnoyers a =E9crit :
+> * Woegerer, Paul (Paul_Woegerer@mentor.com) wrote:
+>> Hi Mathieu,
 >>
->> I wanted to share my lttng-ust 2.1 update experience, maybe it will sa=
-ve
->> time for others.
->>
->> I updated lttng-ust recently. After this change, the app would not
->> produce a trace anymore. No error message is displayed by the traced a=
-pp
->> to indicate that something is wrong. Even when setting LTTNG_DEBUG_UST=
-
->> to the app's environment variable, there is no error message. The debu=
-g
->> output suggests that probes are registered and everything is fine, whi=
-le
->> it's not.
->>
->> By running lttng-sessiond with -vvv --verbose-consumer, I finally got
->> this message:
->>
->> DEBUG2: UST app PID 8112 is not compatible with major version 3
->> (supporting <=3D 2) [in ust_app_validate_version() at ust-app.c:2633]
->>
->> Updating lttng-tools to 2.1 solved the issue. Seems that it's mandator=
-y
->> to update lttng-tools to support latest lttng-ust. It may be obvious f=
-or
->> developers, but it should be clear for users that they must upgrade bo=
-th.
->>
->> IMHO, It would be nice if the app side log could tell if the
->> session/consumer refused the registration.
+>> here is the revised patch that makes tracepoint.h and =20
+>> ust-tracepoint-event.h robust against -finstrument-functions.
 >=20
-> I agree we should do better.
->=20
-> Regarding lttng-tools, I think changing this DBG2 message to a WARN
-> message would help, so sessiond would show the warning, except in the
-> case where it is started with "-d".
-
-Excellent idea.
-
-> On the application side, this is a bit tricky. It has no way to find ou=
+> I think we want to make the notrace always active. I don't see the poin=
 t
-> that it has been rejected by the sessiond. The application registers at=
+> in letting UST lib be compiled with those tracing stubs in place.
 
-> startup, and then the sessiond keeps the connexion active, but flags it=
+I just hit a case where it would have been useful to profile lttng-ust
+itself.
 
-> as incompatible internally. The reason we do that is because we don't
-> want the application to retry endlessly.
+When generating events in a tight loop, the average time to execute a
+simple tracepoint is about 280ns on my machine. But the problem is that
+once in a while (once out of a million execution) the latency bump to a
+blazing 100us. I agree, it's still fast, but nonetheless the maximum is
+~350 times more than the average, which is strange.
 
-Could the registration process block until the sessiond returns some
-status? I understand that in commercial setup, the application should
-not be prevented to start and run normally if tracing is not available
-or misconfigured. But for developers, some env var like
-"LTTNG_ABORT_ON_ERROR" could help to diagnose this king of problem.
+I tried many profiling tools (perf, valgrind, etc.) and none was
+providing good results. It's no point to use lttng-ust itself (are
+tracepoints reentrants?). So, I decided to try -finstrument-functions
+stuff with a small pre-allocated ringbuffer to get the lowest latency
+possible. Well, it turns out that I was getting no results for the
+tracepoint, because function instrumentation is disabled.
 
-> Moreover, I cannot change the code for the existing 2.0 UST libs, so
-> adding a new message is not possible.
+I tried to re-enable it, but then the instrumented app fails with this
+error message:
 
-Of course! ;)
+/usr/local/include/lttng/ust-tracepoint-event.h:646:
+__lttng_events_init__npt: Assertion `!ret' failed.
 
-> One thing we have in mind for 2.2 or 2.3 is to add syslog support withi=
-n
-> the sessiond. This would provide a nice centralized place to look at
-> those logs.
+I confess that I didn't look deeply into this problem, but it's quite
+strange that the init fails in the case function instrumentation is
+enabled. Could it be related to the dlopen() done at registration? Maybe
+somebody has an idea, because I saw screenshots of similar profiling
+previously on the ML ;) Here is the configuration options to lttng-ust
+(the profiling library is miniprof[1]):
 
-I think it would be great. It's a bit less hidden, but certainly address
-concerns for production, and still can be used by developers. An error
-message is better than no one! ;)
+=2E/configure CFLAGS=3D"-finstrument-functions" LIBS=3D"-lminiprof"
+LDFLAGS=3D"-L/usr/local/lib -Wl,-E"
 
 Cheers,
 
 Francis
 
+[1] https://github.com/giraldeau/miniprof
 
 
-
---------------ms060302030803040109080000
+--------------ms000903010801070606050500
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -185,8 +158,8 @@ MTswOQYDVQQLEzJUZXJtcyBvZiB1c2UgYXQgaHR0cHM6Ly93d3cudmVyaXNpZ24uY29tL3Jw
 YSAoYykwOTEeMBwGA1UECxMVUGVyc29uYSBOb3QgVmFsaWRhdGVkMTcwNQYDVQQDEy5WZXJp
 U2lnbiBDbGFzcyAxIEluZGl2aWR1YWwgU3Vic2NyaWJlciBDQSAtIEczAhBlp+zf8jmhEaRv
 JGV9QrmtMAkGBSsOAwIaBQCgggLbMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZI
-hvcNAQkFMQ8XDTEyMTAwMTAzNDIyM1owIwYJKoZIhvcNAQkEMRYEFJe0uXZj5GwwI791b3ic
-BEIbTsQlMGwGCSqGSIb3DQEJDzFfMF0wCwYJYIZIAWUDBAEqMAsGCWCGSAFlAwQBAjAKBggq
+hvcNAQkFMQ8XDTEyMTAwMTA0MDYwMVowIwYJKoZIhvcNAQkEMRYEFAR9t/aSrGMi10o5g2ct
+MJGVGNsvMGwGCSqGSIb3DQEJDzFfMF0wCwYJYIZIAWUDBAEqMAsGCWCGSAFlAwQBAjAKBggq
 hkiG9w0DBzAOBggqhkiG9w0DAgICAIAwDQYIKoZIhvcNAwICAUAwBwYFKw4DAgcwDQYIKoZI
 hvcNAwICASgwggEDBgkrBgEEAYI3EAQxgfUwgfIwgd0xCzAJBgNVBAYTAlVTMRcwFQYDVQQK
 Ew5WZXJpU2lnbiwgSW5jLjEfMB0GA1UECxMWVmVyaVNpZ24gVHJ1c3QgTmV0d29yazE7MDkG
@@ -198,16 +171,16 @@ aVNpZ24sIEluYy4xHzAdBgNVBAsTFlZlcmlTaWduIFRydXN0IE5ldHdvcmsxOzA5BgNVBAsT
 MlRlcm1zIG9mIHVzZSBhdCBodHRwczovL3d3dy52ZXJpc2lnbi5jb20vcnBhIChjKTA5MR4w
 HAYDVQQLExVQZXJzb25hIE5vdCBWYWxpZGF0ZWQxNzA1BgNVBAMTLlZlcmlTaWduIENsYXNz
 IDEgSW5kaXZpZHVhbCBTdWJzY3JpYmVyIENBIC0gRzMCEGWn7N/yOaERpG8kZX1Cua0wDQYJ
-KoZIhvcNAQEBBQAEggEAjcAusx1CYI9DSKZk8PNURGVsTPOR3d8q1ZAOMiFEvxeMA2JEVmwn
-frSveTtCLnPTL6TeAC3fw0BZG+Z6r6X+HyHGNp8FRGnn5lLLa2BS2cx0tvNyC72ywgHsMRbh
-qyA/OlDq19tyi+H8qOs7qSAQ/F0gxkUfWwkul3XCIQMKLkoHcnRdMLrUYcfLREeZ76c5BBoh
-xZdUPdbAdRNrPBjuPuxnrXvOo8lXfWIo/qJ1mLXEWSNnWFF1u2ZMPq32CAF8kDesKBPgmFdY
-dJxXcqFEBTOBUdzEdSsprWyDSkXWwe/m1TLAs8ps7rb3+Ze7hH/6obIpBlRy4o+7swzQP49C
-lgAAAAAAAA==
---------------ms060302030803040109080000--
+KoZIhvcNAQEBBQAEggEAlXWOSPDVqKCae9pEZp4UAv00/cRNmZF2DY5GYXxX2bjqAhsIAOpo
+8fLyVrict3BrrlkduzZ45RRg3XC7l/EI/oB9ge4Cn3LvK2RA049w6HDW+FrvLTJfd7oO/3IB
+dJ/nRMKwx5bH49XaSs5rWUAOqpa6YWfUX/BHgW6K1wuJO2AIVhUvyGUxuw+zI/CL6XradJXy
+G3F7kREkcAc45vvM0KAxPBdFK7rDqBg8xM4RNTL1IOuzikhHOscPvUCUGZFWe0LI70QY10ZE
+auAq0XDbEjw4jc8PttQrZz9EWPCYL0IYt7bWP8qt0duwIoZJAXRcgGI56uI3dKDI3vn76W6i
+CQAAAAAAAA==
+--------------ms000903010801070606050500--
 
 
---===============0123741093==
+--===============0193498455==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Disposition: inline
@@ -218,4 +191,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============0123741093==--
+--===============0193498455==--
