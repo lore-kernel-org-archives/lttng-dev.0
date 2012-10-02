@@ -1,20 +1,19 @@
-From: Christian Babeux <christian.babeux@efficios.com>
-Subject: [PATCH v2 lttng-tools 5/5] Tests: Add health check
-	tests to configure
-Date: Tue,  2 Oct 2012 14:20:04 -0400
-Message-ID: <1349202004-10115-1-git-send-email-christian.babeux__22916.1858013414$1349202093$gmane$org@efficios.com>
-References: <1348770321-1670-1-git-send-email-christian.babeux@efficios.com>
+From: Bernd Hufmann <Bernd.Hufmann@ericsson.com>
+Subject: lttng destroy fails
+Date: Tue, 2 Oct 2012 14:47:23 -0400
+Message-ID: <506B36BB.4040808__6762.3975257904$1349203713$gmane$org@ericsson.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qc0-f176.google.com ([209.85.216.176])
+Received: from imr4.ericy.com ([198.24.6.9])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <christian.babeux@0x80.ca>) id 1TJ750-0004BB-Er
-	for lttng-dev@lists.lttng.org; Tue, 02 Oct 2012 14:20:26 -0400
-Received: by qcon41 with SMTP id n41so6349443qco.35
-	for <lttng-dev@lists.lttng.org>; Tue, 02 Oct 2012 11:20:21 -0700 (PDT)
-In-Reply-To: <1348770321-1670-1-git-send-email-christian.babeux@efficios.com>
+	(envelope-from <bernd.hufmann@ericsson.com>) id 1TJ7VJ-0004PM-Dz
+	for lttng-dev@lists.lttng.org; Tue, 02 Oct 2012 14:47:37 -0400
+Received: from eusaamw0707.eamcs.ericsson.se ([147.117.20.32])
+	by imr4.ericy.com (8.14.3/8.14.3/Debian-9.1ubuntu1) with ESMTP id
+	q92IsgjS029218
+	for <lttng-dev@lists.lttng.org>; Tue, 2 Oct 2012 13:54:44 -0500
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,76 +22,29 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: dgoulet@efficios.com
-Cc: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Add health folder to top-level tests Makefile.am.
-Also add a runall script to run all health check tests.
+Hello
 
-Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
----
- configure.ac              |  1 +
- tests/tools/Makefile.am   |  2 +-
- tests/tools/health/runall | 28 ++++++++++++++++++++++++++++
- 3 files changed, 30 insertions(+), 1 deletion(-)
- create mode 100755 tests/tools/health/runall
+I noticed a minor issue when executing the following command sequence:
 
-diff --git a/configure.ac b/configure.ac
-index 36c137b..713daa9 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -288,6 +288,7 @@ AC_CONFIG_FILES([
- 	tests/kernel/Makefile
- 	tests/tools/Makefile
- 	tests/tools/streaming/Makefile
-+	tests/tools/health/Makefile
- 	tests/ust/Makefile
- 	tests/ust/nprocesses/Makefile
- 	tests/ust/high-throughput/Makefile
-diff --git a/tests/tools/Makefile.am b/tests/tools/Makefile.am
-index 3d25900..faa836c 100644
---- a/tests/tools/Makefile.am
-+++ b/tests/tools/Makefile.am
-@@ -1,4 +1,4 @@
--SUBDIRS = streaming
-+SUBDIRS = streaming health
- 
- AM_CFLAGS = -g -Wall -I../
- AM_LDFLAGS = -lurcu -lurcu-cds
-diff --git a/tests/tools/health/runall b/tests/tools/health/runall
-new file mode 100755
-index 0000000..c22e353
---- /dev/null
-+++ b/tests/tools/health/runall
-@@ -0,0 +1,28 @@
-+#!/bin/bash
-+
-+DIR=$(dirname $0)
-+
-+tests=( $DIR/health_thread_exit $DIR/health_thread_stall )
-+exit_code=0
-+
-+function start_tests ()
-+{
-+	for bin in ${tests[@]};
-+	do
-+		if [ ! -e $bin ]; then
-+			echo -e "$bin not found, passing"
-+			continue
-+		fi
-+
-+		./$bin
-+		# Test must return 0 to pass.
-+		if [ $? -ne 0 ]; then
-+			exit_code=1
-+			break
-+		fi
-+	done
-+}
-+
-+start_tests
-+
-+exit $exit_code
+ > lttng create auto
+Session auto created.
+Traces will be written in /home/bernd/lttng-traces/auto-20121002-144207
+ > lttng destroy
+Warning: Session name auto not found
+
+The session is sill around after that. I think the problem is that in 
+the file .lttngrc the wrong session name is stored. In the file .lttngrc 
+the session name "auto" is stored but the actual name is 
+"auto-20121002-144207".
+
+BTW, I'm using lttng-tools 2.1 RC4.
+
+BR,
+Bernd
+
 -- 
-1.7.12.1
+This Communication is Confidential. We only send and receive email on 
+the basis of the terms set out at www.ericsson.com/email_disclaimer
