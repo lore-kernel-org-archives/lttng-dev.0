@@ -1,8 +1,7 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [URCU PATCH 1/3] wfcqueue: implement
-	concurrency-efficient queue
-Date: Tue, 2 Oct 2012 10:14:44 -0400
-Message-ID: <20121002141444.GB4057__30437.5968444676$1349187367$gmane$org@Krystal>
+Subject: [URCU PATCH 2/3] wfcqueue test
+Date: Tue, 2 Oct 2012 10:15:42 -0400
+Message-ID: <20121002141542.GC4057__45382.492154795$1349187388$gmane$org@Krystal>
 References: <20121002141307.GA4057@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,8 +10,8 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1TJ3FI-0001zz-2o
-	for lttng-dev@lists.lttng.org; Tue, 02 Oct 2012 10:14:48 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1TJ3GD-00021H-10
+	for lttng-dev@lists.lttng.org; Tue, 02 Oct 2012 10:15:45 -0400
 Content-Disposition: inline
 In-Reply-To: <20121002141307.GA4057@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
@@ -26,914 +25,460 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: Paul McKenney <paulmck@linux.vnet.ibm.com>, Lai Jiangshan <eag0628@gmail.com>, rp@svcs.cs.pdx.edu, lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-This new API simplify the wfqueue implementation, and brings a 2.3x to
-2.6x performance boost due to the ability to eliminate false-sharing
-between enqueue and dequeue.
-
-This work is derived from the patch from Lai Jiangshan submitted as
-"urcu: new wfqueue implementation"
-(http://lists.lttng.org/pipermail/lttng-dev/2012-August/018379.html)
-
-Its changelog:
-
-> Some guys would be surprised by this fact:
-> There are already TWO implementations of wfqueue in urcu.
->
-> The first one is in urcu/static/wfqueue.h:
-> 1) enqueue: exchange the tail and then update previous->next
-> 2) dequeue: wait for first node's next pointer and them shift, a dummy node
-> 	is introduced to avoid the queue->tail become NULL when shift.
->
-> The second one shares some code with the first one, and the left code
-> are spreading in urcu-call-rcu-impl.h:
-> 1) enqueue: share with the first one
-> 2) no dequeue operation: and no shift, so it don't need dummy node,
-> 	Although the dummy node is queued when initialization, but it is removed
-> 	after the first dequeue_all operation in call_rcu_thread().
-> 	call_rcu_data_free() forgets to handle the dummy node if it is not removed.
-> 3)dequeue_all: record the old head and tail, and queue->head become the special
-> 	tail node.(atomic record the tail and change the tail).
->
-> The second implementation's code are spreading, bad for review, and it is not
-> tested by tests/test_urcu_wfq.
->
-> So we need a better implementation avoid the dummy node dancing and can service
-> both generic wfqueue APIs and dequeue_all API for call rcu.
->
-> The new implementation:
-> 1) enqueue: share with the first one/original implementation.
-> 2) dequeue: shift when node count >= 2, cmpxchg when node count = 1.
-> 	no dummy node, save memory.
-> 3) dequeue_all: simply set queue->head.next to NULL, xchg the tail
-> 	and return the old head.next.
->
-> More implementation details are in the code.
-> tests/test_urcu_wfq will be update in future for testing new APIs.
-
-The patch proposed by Lai brings a very interesting simplification to
-the single-node handling (which is kept here), and moves all queue
-handling code away from call_rcu implementation, back into the wfqueue
-code. This has the benefit to allow testing enhancements.
-
-I modified it so the API does not expose implementation details to the
-user (e.g. ___cds_wfq_node_sync_next). I added a "splice" operation and
-a for loop iterator which should allow wfqueue users to use the list
-very efficiently both from LGPL/GPL code and from non-LGPL-compatible
-code.
-
-I also changed the API so the queue head and tail are now two separate
-structures: it allows the queue user to place these as they like, either
-on different cache lines (to eliminate false-sharing), or close one to
-another (on same cache-line) in case a queue is spliced onto the stack
-and not concurrently accessed.
-
-Benchmarks performed on Intel(R) Core(TM) i7-3520M CPU @ 2.90GHz
-(dual-core, with hyperthreading)
-
-Benchmark invoked:
-for a in $(seq 1 10); do ./test_urcu_wfq 1 1 10 -a 0 -a 2; done
-
-(using cpu number 0 and 2, which should correspond to two cores of my
-Intel 2-core/hyperthread processor)
-
-Before patch:
-
-testdur   10 nr_enqueuers   1 wdelay      0 nr_dequeuers   1 rdur      0 nr_enqueues     97274297 nr_dequeues     80745742 successful enqueues     97274297 successful dequeues     80745321 end_dequeues 16528976 nr_ops    178020039
-testdur   10 nr_enqueuers   1 wdelay      0 nr_dequeuers   1 rdur      0 nr_enqueues     92300568 nr_dequeues     75019529 successful enqueues     92300568 successful dequeues     74973237 end_dequeues 17327331 nr_ops    167320097
-testdur   10 nr_enqueuers   1 wdelay      0 nr_dequeuers   1 rdur      0 nr_enqueues     93516443 nr_dequeues     75846726 successful enqueues     93516443 successful dequeues     75826578 end_dequeues 17689865 nr_ops    169363169
-testdur   10 nr_enqueuers   1 wdelay      0 nr_dequeuers   1 rdur      0 nr_enqueues     94160362 nr_dequeues     77967638 successful enqueues     94160362 successful dequeues     77967638 end_dequeues 16192724 nr_ops    172128000
-testdur   10 nr_enqueuers   1 wdelay      0 nr_dequeuers   1 rdur      0 nr_enqueues     97491956 nr_dequeues     81001191 successful enqueues     97491956 successful dequeues     81000247 end_dequeues 16491709 nr_ops    178493147
-testdur   10 nr_enqueuers   1 wdelay      0 nr_dequeuers   1 rdur      0 nr_enqueues     94101298 nr_dequeues     75650510 successful enqueues     94101298 successful dequeues     75649318 end_dequeues 18451980 nr_ops    169751808
-testdur   10 nr_enqueuers   1 wdelay      0 nr_dequeuers   1 rdur      0 nr_enqueues     94742803 nr_dequeues     75402105 successful enqueues     94742803 successful dequeues     75341859 end_dequeues 19400944 nr_ops    170144908
-testdur   10 nr_enqueuers   1 wdelay      0 nr_dequeuers   1 rdur      0 nr_enqueues     92198835 nr_dequeues     75037877 successful enqueues     92198835 successful dequeues     75027605 end_dequeues 17171230 nr_ops    167236712
-testdur   10 nr_enqueuers   1 wdelay      0 nr_dequeuers   1 rdur      0 nr_enqueues     94159560 nr_dequeues     77895972 successful enqueues     94159560 successful dequeues     77858442 end_dequeues 16301118 nr_ops    172055532
-testdur   10 nr_enqueuers   1 wdelay      0 nr_dequeuers   1 rdur      0 nr_enqueues     96059399 nr_dequeues     80115442 successful enqueues     96059399 successful dequeues     80066843 end_dequeues 15992556 nr_ops    176174841
-
-After patch:
-
-testdur   10 nr_enqueuers   1 wdelay      0 nr_dequeuers   1 rdur      0 nr_enqueues    221229322 nr_dequeues    210645491 successful enqueues    221229322 successful dequeues    210645088 end_dequeues 10584234 nr_ops    431874813
-testdur   10 nr_enqueuers   1 wdelay      0 nr_dequeuers   1 rdur      0 nr_enqueues    219803943 nr_dequeues    210377337 successful enqueues    219803943 successful dequeues    210368680 end_dequeues 9435263 nr_ops    430181280
-testdur   10 nr_enqueuers   1 wdelay      0 nr_dequeuers   1 rdur      0 nr_enqueues    237006358 nr_dequeues    237035340 successful enqueues    237006358 successful dequeues    236997050 end_dequeues 9308 nr_ops    474041698
-testdur   10 nr_enqueuers   1 wdelay      0 nr_dequeuers   1 rdur      0 nr_enqueues    235822443 nr_dequeues    235815942 successful enqueues    235822443 successful dequeues    235814020 end_dequeues 8423 nr_ops    471638385
-testdur   10 nr_enqueuers   1 wdelay      0 nr_dequeuers   1 rdur      0 nr_enqueues    235825567 nr_dequeues    235811803 successful enqueues    235825567 successful dequeues    235810526 end_dequeues 15041 nr_ops    471637370
-testdur   10 nr_enqueuers   1 wdelay      0 nr_dequeuers   1 rdur      0 nr_enqueues    221974953 nr_dequeues    210938190 successful enqueues    221974953 successful dequeues    210938190 end_dequeues 11036763 nr_ops    432913143
-testdur   10 nr_enqueuers   1 wdelay      0 nr_dequeuers   1 rdur      0 nr_enqueues    237994492 nr_dequeues    237938119 successful enqueues    237994492 successful dequeues    237930648 end_dequeues 63844 nr_ops    475932611
-testdur   10 nr_enqueuers   1 wdelay      0 nr_dequeuers   1 rdur      0 nr_enqueues    220634365 nr_dequeues    210491382 successful enqueues    220634365 successful dequeues    210490995 end_dequeues 10143370 nr_ops    431125747
-testdur   10 nr_enqueuers   1 wdelay      0 nr_dequeuers   1 rdur      0 nr_enqueues    237388065 nr_dequeues    237401251 successful enqueues    237388065 successful dequeues    237380295 end_dequeues 7770 nr_ops    474789316
-testdur   10 nr_enqueuers   1 wdelay      0 nr_dequeuers   1 rdur      0 nr_enqueues    221201436 nr_dequeues    210831162 successful enqueues    221201436 successful dequeues    210831162 end_dequeues 10370274 nr_ops    432032598
-
-Summary: Both enqueue and dequeue speed increase: around 2.3x speedup
-for enqueue, and around 2.6x for dequeue.
-
-We can verify that:
-   successful enqueues - successful dequeues = end_dequeues
-
-For all runs (ensures correctness: no lost node).
-
-CC: Lai Jiangshan <laijs@cn.fujitsu.com>
-CC: Paul McKenney <paulmck@linux.vnet.ibm.com>
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
-diff --git a/Makefile.am b/Makefile.am
-index 2396fcf..ffdca9a 100644
---- a/Makefile.am
-+++ b/Makefile.am
-@@ -16,7 +16,7 @@ nobase_dist_include_HEADERS = urcu/compiler.h urcu/hlist.h urcu/list.h \
- 		urcu/uatomic/generic.h urcu/arch/generic.h urcu/wfstack.h \
- 		urcu/wfqueue.h urcu/rculfstack.h urcu/rculfqueue.h \
- 		urcu/ref.h urcu/cds.h urcu/urcu_ref.h urcu/urcu-futex.h \
--		urcu/uatomic_arch.h urcu/rculfhash.h \
-+		urcu/uatomic_arch.h urcu/rculfhash.h urcu/wfcqueue.h \
- 		$(top_srcdir)/urcu/map/*.h \
- 		$(top_srcdir)/urcu/static/*.h \
- 		urcu/tls-compat.h
-@@ -53,7 +53,7 @@ lib_LTLIBRARIES = liburcu-common.la \
- # liburcu-common contains wait-free queues (needed by call_rcu) as well
- # as futex fallbacks.
- #
--liburcu_common_la_SOURCES = wfqueue.c wfstack.c $(COMPAT)
-+liburcu_common_la_SOURCES = wfqueue.c wfcqueue.c wfstack.c $(COMPAT)
+diff --git a/tests/Makefile.am b/tests/Makefile.am
+index 7d5ea82..81718bb 100644
+--- a/tests/Makefile.am
++++ b/tests/Makefile.am
+@@ -14,7 +14,9 @@ noinst_PROGRAMS = test_urcu test_urcu_dynamic_link test_urcu_timing \
+         test_uatomic test_urcu_assign test_urcu_assign_dynamic_link \
+         test_urcu_bp test_urcu_bp_dynamic_link test_cycles_per_loop \
+ 	test_urcu_lfq test_urcu_wfq test_urcu_lfs test_urcu_wfs \
++	test_urcu_wfcq \
+ 	test_urcu_wfq_dynlink test_urcu_wfs_dynlink \
++	test_urcu_wfcq_dynlink \
+ 	test_urcu_lfq_dynlink test_urcu_lfs_dynlink test_urcu_hash
+ noinst_HEADERS = rcutorture.h
  
- liburcu_la_SOURCES = urcu.c urcu-pointer.c $(COMPAT)
- liburcu_la_LIBADD = liburcu-common.la
-diff --git a/urcu/static/wfcqueue.h b/urcu/static/wfcqueue.h
-new file mode 100644
-index 0000000..a989984
---- /dev/null
-+++ b/urcu/static/wfcqueue.h
-@@ -0,0 +1,380 @@
-+#ifndef _URCU_WFCQUEUE_STATIC_H
-+#define _URCU_WFCQUEUE_STATIC_H
+@@ -169,6 +171,13 @@ test_urcu_wfq_dynlink_SOURCES = test_urcu_wfq.c
+ test_urcu_wfq_dynlink_CFLAGS = -DDYNAMIC_LINK_TEST $(AM_CFLAGS)
+ test_urcu_wfq_dynlink_LDADD = $(URCU_COMMON_LIB)
+ 
++test_urcu_wfcq_SOURCES = test_urcu_wfcq.c $(COMPAT)
++test_urcu_wfcq_LDADD = $(URCU_COMMON_LIB)
 +
++test_urcu_wfcq_dynlink_SOURCES = test_urcu_wfcq.c
++test_urcu_wfcq_dynlink_CFLAGS = -DDYNAMIC_LINK_TEST $(AM_CFLAGS)
++test_urcu_wfcq_dynlink_LDADD = $(URCU_COMMON_LIB)
++
+ test_urcu_lfs_SOURCES = test_urcu_lfs.c $(URCU)
+ test_urcu_lfs_LDADD = $(URCU_CDS_LIB)
+ 
+diff --git a/tests/test_urcu_wfcq.c b/tests/test_urcu_wfcq.c
+new file mode 100644
+index 0000000..3141268
+--- /dev/null
++++ b/tests/test_urcu_wfcq.c
+@@ -0,0 +1,418 @@
 +/*
-+ * wfcqueue-static.h
++ * test_urcu_wfcq.c
 + *
-+ * Userspace RCU library - Concurrent Queue with Wait-Free Enqueue/Blocking Dequeue
++ * Userspace RCU library - example RCU-based lock-free concurrent queue
 + *
-+ * TO BE INCLUDED ONLY IN LGPL-COMPATIBLE CODE. See wfcqueue.h for linking
-+ * dynamically with the userspace rcu library.
++ * Copyright February 2010 - Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
++ * Copyright February 2010 - Paolo Bonzini <pbonzini@redhat.com>
 + *
-+ * Copyright 2010-2012 - Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-+ * Copyright 2011-2012 - Lai Jiangshan <laijs@cn.fujitsu.com>
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
 + *
-+ * This library is free software; you can redistribute it and/or
-+ * modify it under the terms of the GNU Lesser General Public
-+ * License as published by the Free Software Foundation; either
-+ * version 2.1 of the License, or (at your option) any later version.
-+ *
-+ * This library is distributed in the hope that it will be useful,
++ * This program is distributed in the hope that it will be useful,
 + * but WITHOUT ANY WARRANTY; without even the implied warranty of
-+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-+ * Lesser General Public License for more details.
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
 + *
-+ * You should have received a copy of the GNU Lesser General Public
-+ * License along with this library; if not, write to the Free Software
-+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
++ * You should have received a copy of the GNU General Public License along
++ * with this program; if not, write to the Free Software Foundation, Inc.,
++ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 + */
 +
++#define _GNU_SOURCE
++#include "../config.h"
++#include <stdio.h>
 +#include <pthread.h>
-+#include <assert.h>
-+#include <poll.h>
++#include <stdlib.h>
++#include <stdint.h>
 +#include <stdbool.h>
-+#include <urcu/compiler.h>
-+#include <urcu/uatomic.h>
++#include <string.h>
++#include <sys/types.h>
++#include <sys/wait.h>
++#include <unistd.h>
++#include <stdio.h>
++#include <assert.h>
++#include <sched.h>
++#include <errno.h>
 +
-+#ifdef __cplusplus
-+extern "C" {
++#include <urcu/arch.h>
++#include <urcu/tls-compat.h>
++
++#ifdef __linux__
++#include <syscall.h>
 +#endif
 +
-+/*
-+ * Concurrent queue with wait-free enqueue/blocking dequeue.
-+ *
-+ * Inspired from half-wait-free/half-blocking queue implementation done by
-+ * Paul E. McKenney.
-+ *
-+ * Mutual exclusion of __cds_wfcq_* API
-+ *
-+ * Unless otherwise stated, the caller must ensure mutual exclusion of
-+ * queue update operations "dequeue" and "splice" (for source queue).
-+ * Queue read operations "first" and "next" need to be protected against
-+ * concurrent "dequeue" and "splice" (for source queue) by the caller.
-+ * "enqueue", "splice" (for destination queue), and "empty" are the only
-+ * operations that can be used without any mutual exclusion.
-+ * Mutual exclusion can be ensured by holding cds_wfcq_dequeue_lock().
-+ *
-+ * For convenience, cds_wfcq_dequeue_blocking() and
-+ * cds_wfcq_splice_blocking() hold the dequeue lock.
-+ */
++/* hardcoded number of CPUs */
++#define NR_CPUS 16384
 +
-+#define WFCQ_ADAPT_ATTEMPTS		10	/* Retry if being set */
-+#define WFCQ_WAIT			10	/* Wait 10 ms if being set */
-+
-+/*
-+ * cds_wfcq_node_init: initialize wait-free queue node.
-+ */
-+static inline void _cds_wfcq_node_init(struct cds_wfcq_node *node)
++#if defined(_syscall0)
++_syscall0(pid_t, gettid)
++#elif defined(__NR_gettid)
++static inline pid_t gettid(void)
 +{
-+	node->next = NULL;
++	return syscall(__NR_gettid);
++}
++#else
++#warning "use pid as tid"
++static inline pid_t gettid(void)
++{
++	return getpid();
++}
++#endif
++
++#ifndef DYNAMIC_LINK_TEST
++#define _LGPL_SOURCE
++#endif
++#include <urcu.h>
++#include <urcu/wfcqueue.h>
++
++static volatile int test_go, test_stop;
++
++static unsigned long rduration;
++
++static unsigned long duration;
++
++/* read-side C.S. duration, in loops */
++static unsigned long wdelay;
++
++static inline void loop_sleep(unsigned long l)
++{
++	while(l-- != 0)
++		caa_cpu_relax();
 +}
 +
-+/*
-+ * cds_wfcq_init: initialize wait-free queue.
-+ */
-+static inline void _cds_wfcq_init(struct cds_wfcq_head *head,
-+		struct cds_wfcq_tail *tail)
++static int verbose_mode;
++
++#define printf_verbose(fmt, args...)		\
++	do {					\
++		if (verbose_mode)		\
++			printf(fmt, args);	\
++	} while (0)
++
++static unsigned int cpu_affinities[NR_CPUS];
++static unsigned int next_aff = 0;
++static int use_affinity = 0;
++
++pthread_mutex_t affinity_mutex = PTHREAD_MUTEX_INITIALIZER;
++
++#ifndef HAVE_CPU_SET_T
++typedef unsigned long cpu_set_t;
++# define CPU_ZERO(cpuset) do { *(cpuset) = 0; } while(0)
++# define CPU_SET(cpu, cpuset) do { *(cpuset) |= (1UL << (cpu)); } while(0)
++#endif
++
++static void set_affinity(void)
 +{
++	cpu_set_t mask;
++	int cpu;
 +	int ret;
 +
-+	/* Set queue head and tail */
-+	_cds_wfcq_node_init(&head->node);
-+	tail->p = &head->node;
-+	ret = pthread_mutex_init(&head->lock, NULL);
-+	assert(!ret);
-+}
++	if (!use_affinity)
++		return;
 +
-+/*
-+ * cds_wfcq_empty: return whether wait-free queue is empty.
-+ *
-+ * No memory barrier is issued. No mutual exclusion is required.
-+ */
-+static inline bool _cds_wfcq_empty(struct cds_wfcq_head *head,
-+		struct cds_wfcq_tail *tail)
-+{
-+	/*
-+	 * Queue is empty if no node is pointed by head->node.next nor
-+	 * tail->p. Even though the tail->p check is sufficient to find
-+	 * out of the queue is empty, we first check head->node.next as a
-+	 * common case to ensure that dequeuers do not frequently access
-+	 * enqueuer's tail->p cache line.
-+	 */
-+	return CMM_LOAD_SHARED(head->node.next) == NULL
-+		&& CMM_LOAD_SHARED(tail->p) == &head->node;
-+}
-+
-+static inline void _cds_wfcq_dequeue_lock(struct cds_wfcq_head *head,
-+		struct cds_wfcq_tail *tail)
-+{
-+	int ret;
-+
-+	ret = pthread_mutex_lock(&head->lock);
-+	assert(!ret);
-+}
-+
-+static inline void _cds_wfcq_dequeue_unlock(struct cds_wfcq_head *head,
-+		struct cds_wfcq_tail *tail)
-+{
-+	int ret;
-+
-+	ret = pthread_mutex_unlock(&head->lock);
-+	assert(!ret);
-+}
-+
-+static inline void ___cds_wfcq_append(struct cds_wfcq_head *head,
-+		struct cds_wfcq_tail *tail,
-+		struct cds_wfcq_node *new_head,
-+		struct cds_wfcq_node *new_tail)
-+{
-+	struct cds_wfcq_node *old_tail;
-+
-+	/*
-+	 * Implicit memory barrier before uatomic_xchg() orders earlier
-+	 * stores to data structure containing node and setting
-+	 * node->next to NULL before publication.
-+	 */
-+	old_tail = uatomic_xchg(&tail->p, new_tail);
-+
-+	/*
-+	 * Implicit memory barrier after uatomic_xchg() orders store to
-+	 * q->tail before store to old_tail->next.
-+	 *
-+	 * At this point, dequeuers see a NULL tail->p->next, which
-+	 * indicates that the queue is being appended to. The following
-+	 * store will append "node" to the queue from a dequeuer
-+	 * perspective.
-+	 */
-+	CMM_STORE_SHARED(old_tail->next, new_head);
-+}
-+
-+/*
-+ * cds_wfcq_enqueue: enqueue a node into a wait-free queue.
-+ *
-+ * Issues a full memory barrier before enqueue. No mutual exclusion is
-+ * required.
-+ */
-+static inline void _cds_wfcq_enqueue(struct cds_wfcq_head *head,
-+		struct cds_wfcq_tail *tail,
-+		struct cds_wfcq_node *new_tail)
-+{
-+	___cds_wfcq_append(head, tail, new_tail, new_tail);
-+}
-+
-+/*
-+ * Waiting for enqueuer to complete enqueue and return the next node.
-+ */
-+static inline struct cds_wfcq_node *
-+___cds_wfcq_node_sync_next(struct cds_wfcq_node *node)
-+{
-+	struct cds_wfcq_node *next;
-+	int attempt = 0;
-+
-+	/*
-+	 * Adaptative busy-looping waiting for enqueuer to complete enqueue.
-+	 */
-+	while ((next = CMM_LOAD_SHARED(node->next)) == NULL) {
-+		if (++attempt >= WFCQ_ADAPT_ATTEMPTS) {
-+			poll(NULL, 0, WFCQ_WAIT);	/* Wait for 10ms */
-+			attempt = 0;
-+		} else {
-+			caa_cpu_relax();
-+		}
++#if HAVE_SCHED_SETAFFINITY
++	ret = pthread_mutex_lock(&affinity_mutex);
++	if (ret) {
++		perror("Error in pthread mutex lock");
++		exit(-1);
++	}
++	cpu = cpu_affinities[next_aff++];
++	ret = pthread_mutex_unlock(&affinity_mutex);
++	if (ret) {
++		perror("Error in pthread mutex unlock");
++		exit(-1);
 +	}
 +
-+	return next;
++	CPU_ZERO(&mask);
++	CPU_SET(cpu, &mask);
++#if SCHED_SETAFFINITY_ARGS == 2
++	sched_setaffinity(0, &mask);
++#else
++	sched_setaffinity(0, sizeof(mask), &mask);
++#endif
++#endif /* HAVE_SCHED_SETAFFINITY */
 +}
 +
 +/*
-+ * __cds_wfcq_first_blocking: get first node of a queue, without dequeuing.
-+ *
-+ * Content written into the node before enqueue is guaranteed to be
-+ * consistent, but no other memory ordering is ensured.
-+ * Should be called with cds_wfcq_dequeue_lock() held.
++ * returns 0 if test should end.
 + */
-+static inline struct cds_wfcq_node *
-+___cds_wfcq_first_blocking(struct cds_wfcq_head *head,
-+		struct cds_wfcq_tail *tail)
++static int test_duration_dequeue(void)
++{
++	return !test_stop;
++}
++
++static int test_duration_enqueue(void)
++{
++	return !test_stop;
++}
++
++static DEFINE_URCU_TLS(unsigned long long, nr_dequeues);
++static DEFINE_URCU_TLS(unsigned long long, nr_enqueues);
++
++static DEFINE_URCU_TLS(unsigned long long, nr_successful_dequeues);
++static DEFINE_URCU_TLS(unsigned long long, nr_successful_enqueues);
++
++static unsigned int nr_enqueuers;
++static unsigned int nr_dequeuers;
++
++static struct cds_wfcq_head __attribute__((aligned(CAA_CACHE_LINE_SIZE))) head;
++static struct cds_wfcq_tail __attribute__((aligned(CAA_CACHE_LINE_SIZE))) tail;
++
++void *thr_enqueuer(void *_count)
++{
++	unsigned long long *count = _count;
++
++	printf_verbose("thread_begin %s, thread id : %lx, tid %lu\n",
++			"enqueuer", pthread_self(), (unsigned long)gettid());
++
++	set_affinity();
++
++	while (!test_go)
++	{
++	}
++	cmm_smp_mb();
++
++	for (;;) {
++		struct cds_wfcq_node *node = malloc(sizeof(*node));
++		if (!node)
++			goto fail;
++		cds_wfcq_node_init(node);
++		cds_wfcq_enqueue(&head, &tail, node);
++		URCU_TLS(nr_successful_enqueues)++;
++
++		if (caa_unlikely(wdelay))
++			loop_sleep(wdelay);
++fail:
++		URCU_TLS(nr_enqueues)++;
++		if (caa_unlikely(!test_duration_enqueue()))
++			break;
++	}
++
++	count[0] = URCU_TLS(nr_enqueues);
++	count[1] = URCU_TLS(nr_successful_enqueues);
++	printf_verbose("enqueuer thread_end, thread id : %lx, tid %lu, "
++		       "enqueues %llu successful_enqueues %llu\n",
++		       pthread_self(), (unsigned long)gettid(),
++		       URCU_TLS(nr_enqueues), URCU_TLS(nr_successful_enqueues));
++	return ((void*)1);
++
++}
++
++void *thr_dequeuer(void *_count)
++{
++	unsigned long long *count = _count;
++
++	printf_verbose("thread_begin %s, thread id : %lx, tid %lu\n",
++			"dequeuer", pthread_self(), (unsigned long)gettid());
++
++	set_affinity();
++
++	while (!test_go)
++	{
++	}
++	cmm_smp_mb();
++
++	for (;;) {
++		struct cds_wfcq_node *node =
++			cds_wfcq_dequeue_blocking(&head, &tail);
++
++		if (node) {
++			free(node);
++			URCU_TLS(nr_successful_dequeues)++;
++		}
++
++		URCU_TLS(nr_dequeues)++;
++		if (caa_unlikely(!test_duration_dequeue()))
++			break;
++		if (caa_unlikely(rduration))
++			loop_sleep(rduration);
++	}
++
++	printf_verbose("dequeuer thread_end, thread id : %lx, tid %lu, "
++		       "dequeues %llu, successful_dequeues %llu\n",
++		       pthread_self(), (unsigned long)gettid(),
++		       URCU_TLS(nr_dequeues), URCU_TLS(nr_successful_dequeues));
++	count[0] = URCU_TLS(nr_dequeues);
++	count[1] = URCU_TLS(nr_successful_dequeues);
++	return ((void*)2);
++}
++
++void test_end(unsigned long long *nr_dequeues)
 +{
 +	struct cds_wfcq_node *node;
 +
-+	if (_cds_wfcq_empty(head, tail))
-+		return NULL;
-+	node = ___cds_wfcq_node_sync_next(&head->node);
-+	/* Load head->node.next before loading node's content */
-+	cmm_smp_read_barrier_depends();
-+	return node;
++	do {
++		node = cds_wfcq_dequeue_blocking(&head, &tail);
++		if (node) {
++			free(node);
++			(*nr_dequeues)++;
++		}
++	} while (node);
 +}
 +
-+/*
-+ * __cds_wfcq_next_blocking: get next node of a queue, without dequeuing.
-+ *
-+ * Content written into the node before enqueue is guaranteed to be
-+ * consistent, but no other memory ordering is ensured.
-+ * Should be called with cds_wfcq_dequeue_lock() held.
-+ */
-+static inline struct cds_wfcq_node *
-+___cds_wfcq_next_blocking(struct cds_wfcq_head *head,
-+		struct cds_wfcq_tail *tail,
-+		struct cds_wfcq_node *node)
++void show_usage(int argc, char **argv)
 +{
-+	struct cds_wfcq_node *next;
-+
-+	/*
-+	 * Even though the following tail->p check is sufficient to find
-+	 * out if we reached the end of the queue, we first check
-+	 * node->next as a common case to ensure that iteration on nodes
-+	 * do not frequently access enqueuer's tail->p cache line.
-+	 */
-+	if ((next = CMM_LOAD_SHARED(node->next)) == NULL) {
-+		/* Load node->next before tail->p */
-+		cmm_smp_rmb();
-+		if (CMM_LOAD_SHARED(tail->p) == node)
-+			return NULL;
-+		next = ___cds_wfcq_node_sync_next(node);
-+	}
-+	/* Load node->next before loading next's content */
-+	cmm_smp_read_barrier_depends();
-+	return next;
++	printf("Usage : %s nr_dequeuers nr_enqueuers duration (s)", argv[0]);
++	printf(" [-d delay] (enqueuer period (in loops))");
++	printf(" [-c duration] (dequeuer period (in loops))");
++	printf(" [-v] (verbose output)");
++	printf(" [-a cpu#] [-a cpu#]... (affinity)");
++	printf("\n");
 +}
 +
-+/*
-+ * __cds_wfcq_dequeue_blocking: dequeue a node from the queue.
-+ *
-+ * No need to go on a waitqueue here, as there is no possible state in which the
-+ * list could cause dequeue to busy-loop needlessly while waiting for another
-+ * thread to be scheduled. The queue appears empty until tail->next is set by
-+ * enqueue.
-+ *
-+ * Content written into the node before enqueue is guaranteed to be
-+ * consistent, but no other memory ordering is ensured.
-+ * It is valid to reuse and free a dequeued node immediately.
-+ * Should be called with cds_wfcq_dequeue_lock() held.
-+ */
-+static inline struct cds_wfcq_node *
-+___cds_wfcq_dequeue_blocking(struct cds_wfcq_head *head,
-+		struct cds_wfcq_tail *tail)
++int main(int argc, char **argv)
 +{
-+	struct cds_wfcq_node *node, *next;
++	int err;
++	pthread_t *tid_enqueuer, *tid_dequeuer;
++	void *tret;
++	unsigned long long *count_enqueuer, *count_dequeuer;
++	unsigned long long tot_enqueues = 0, tot_dequeues = 0;
++	unsigned long long tot_successful_enqueues = 0,
++			   tot_successful_dequeues = 0;
++	unsigned long long end_dequeues = 0;
++	int i, a;
 +
-+	if (_cds_wfcq_empty(head, tail))
-+		return NULL;
-+
-+	node = ___cds_wfcq_node_sync_next(&head->node);
-+
-+	if ((next = CMM_LOAD_SHARED(node->next)) == NULL) {
-+		/*
-+		 * @node is probably the only node in the queue.
-+		 * Try to move the tail to &q->head.
-+		 * q->head.next is set to NULL here, and stays
-+		 * NULL if the cmpxchg succeeds. Should the
-+		 * cmpxchg fail due to a concurrent enqueue, the
-+		 * q->head.next will be set to the next node.
-+		 * The implicit memory barrier before
-+		 * uatomic_cmpxchg() orders load node->next
-+		 * before loading q->tail.
-+		 * The implicit memory barrier before uatomic_cmpxchg
-+		 * orders load q->head.next before loading node's
-+		 * content.
-+		 */
-+		_cds_wfcq_node_init(&head->node);
-+		if (uatomic_cmpxchg(&tail->p, node, &head->node) == node)
-+			return node;
-+		next = ___cds_wfcq_node_sync_next(node);
++	if (argc < 4) {
++		show_usage(argc, argv);
++		return -1;
 +	}
 +
-+	/*
-+	 * Move queue head forward.
-+	 */
-+	head->node.next = next;
++	err = sscanf(argv[1], "%u", &nr_dequeuers);
++	if (err != 1) {
++		show_usage(argc, argv);
++		return -1;
++	}
 +
-+	/* Load q->head.next before loading node's content */
-+	cmm_smp_read_barrier_depends();
-+	return node;
++	err = sscanf(argv[2], "%u", &nr_enqueuers);
++	if (err != 1) {
++		show_usage(argc, argv);
++		return -1;
++	}
++	
++	err = sscanf(argv[3], "%lu", &duration);
++	if (err != 1) {
++		show_usage(argc, argv);
++		return -1;
++	}
++
++	for (i = 4; i < argc; i++) {
++		if (argv[i][0] != '-')
++			continue;
++		switch (argv[i][1]) {
++		case 'a':
++			if (argc < i + 2) {
++				show_usage(argc, argv);
++				return -1;
++			}
++			a = atoi(argv[++i]);
++			cpu_affinities[next_aff++] = a;
++			use_affinity = 1;
++			printf_verbose("Adding CPU %d affinity\n", a);
++			break;
++		case 'c':
++			if (argc < i + 2) {
++				show_usage(argc, argv);
++				return -1;
++			}
++			rduration = atol(argv[++i]);
++			break;
++		case 'd':
++			if (argc < i + 2) {
++				show_usage(argc, argv);
++				return -1;
++			}
++			wdelay = atol(argv[++i]);
++			break;
++		case 'v':
++			verbose_mode = 1;
++			break;
++		}
++	}
++
++	printf_verbose("running test for %lu seconds, %u enqueuers, "
++		       "%u dequeuers.\n",
++		       duration, nr_enqueuers, nr_dequeuers);
++	printf_verbose("Writer delay : %lu loops.\n", rduration);
++	printf_verbose("Reader duration : %lu loops.\n", wdelay);
++	printf_verbose("thread %-6s, thread id : %lx, tid %lu\n",
++			"main", pthread_self(), (unsigned long)gettid());
++
++	tid_enqueuer = malloc(sizeof(*tid_enqueuer) * nr_enqueuers);
++	tid_dequeuer = malloc(sizeof(*tid_dequeuer) * nr_dequeuers);
++	count_enqueuer = malloc(2 * sizeof(*count_enqueuer) * nr_enqueuers);
++	count_dequeuer = malloc(2 * sizeof(*count_dequeuer) * nr_dequeuers);
++	cds_wfcq_init(&head, &tail);
++
++	next_aff = 0;
++
++	for (i = 0; i < nr_enqueuers; i++) {
++		err = pthread_create(&tid_enqueuer[i], NULL, thr_enqueuer,
++				     &count_enqueuer[2 * i]);
++		if (err != 0)
++			exit(1);
++	}
++	for (i = 0; i < nr_dequeuers; i++) {
++		err = pthread_create(&tid_dequeuer[i], NULL, thr_dequeuer,
++				     &count_dequeuer[2 * i]);
++		if (err != 0)
++			exit(1);
++	}
++
++	cmm_smp_mb();
++
++	test_go = 1;
++
++	for (i = 0; i < duration; i++) {
++		sleep(1);
++		if (verbose_mode)
++			write (1, ".", 1);
++	}
++
++	test_stop = 1;
++
++	for (i = 0; i < nr_enqueuers; i++) {
++		err = pthread_join(tid_enqueuer[i], &tret);
++		if (err != 0)
++			exit(1);
++		tot_enqueues += count_enqueuer[2 * i];
++		tot_successful_enqueues += count_enqueuer[2 * i + 1];
++	}
++	for (i = 0; i < nr_dequeuers; i++) {
++		err = pthread_join(tid_dequeuer[i], &tret);
++		if (err != 0)
++			exit(1);
++		tot_dequeues += count_dequeuer[2 * i];
++		tot_successful_dequeues += count_dequeuer[2 * i + 1];
++	}
++	
++	test_end(&end_dequeues);
++
++	printf_verbose("total number of enqueues : %llu, dequeues %llu\n",
++		       tot_enqueues, tot_dequeues);
++	printf_verbose("total number of successful enqueues : %llu, "
++		       "successful dequeues %llu\n",
++		       tot_successful_enqueues, tot_successful_dequeues);
++	printf("SUMMARY %-25s testdur %4lu nr_enqueuers %3u wdelay %6lu "
++		"nr_dequeuers %3u "
++		"rdur %6lu nr_enqueues %12llu nr_dequeues %12llu "
++		"successful enqueues %12llu successful dequeues %12llu "
++		"end_dequeues %llu nr_ops %12llu\n",
++		argv[0], duration, nr_enqueuers, wdelay,
++		nr_dequeuers, rduration, tot_enqueues, tot_dequeues,
++		tot_successful_enqueues,
++		tot_successful_dequeues, end_dequeues,
++		tot_enqueues + tot_dequeues);
++	if (tot_successful_enqueues != tot_successful_dequeues + end_dequeues)
++		printf("WARNING! Discrepancy between nr succ. enqueues %llu vs "
++		       "succ. dequeues + end dequeues %llu.\n",
++		       tot_successful_enqueues,
++		       tot_successful_dequeues + end_dequeues);
++
++	free(count_enqueuer);
++	free(count_dequeuer);
++	free(tid_enqueuer);
++	free(tid_dequeuer);
++	return 0;
 +}
-+
-+/*
-+ * __cds_wfcq_splice_blocking: enqueue all src_q nodes at the end of dest_q.
-+ *
-+ * Dequeue all nodes from src_q.
-+ * dest_q must be already initialized.
-+ * Should be called with cds_wfcq_dequeue_lock() held on src_q.
-+ */
-+static inline void
-+___cds_wfcq_splice_blocking(
-+		struct cds_wfcq_head *dest_q_head,
-+		struct cds_wfcq_tail *dest_q_tail,
-+		struct cds_wfcq_head *src_q_head,
-+		struct cds_wfcq_tail *src_q_tail)
-+{
-+	struct cds_wfcq_node *head, *tail;
-+
-+	if (_cds_wfcq_empty(src_q_head, src_q_tail))
-+		return;
-+
-+	head = ___cds_wfcq_node_sync_next(&src_q_head->node);
-+	_cds_wfcq_node_init(&src_q_head->node);
-+
-+	/*
-+	 * Memory barrier implied before uatomic_xchg() orders store to
-+	 * src_q->head before store to src_q->tail. This is required by
-+	 * concurrent enqueue on src_q, which exchanges the tail before
-+	 * updating the previous tail's next pointer.
-+	 */
-+	tail = uatomic_xchg(&src_q_tail->p, &src_q_head->node);
-+
-+	/*
-+	 * Append the spliced content of src_q into dest_q. Does not
-+	 * require mutual exclusion on dest_q (wait-free).
-+	 */
-+	___cds_wfcq_append(dest_q_head, dest_q_tail, head, tail);
-+}
-+
-+/*
-+ * cds_wfcq_dequeue_blocking: dequeue a node from a wait-free queue.
-+ *
-+ * Content written into the node before enqueue is guaranteed to be
-+ * consistent, but no other memory ordering is ensured.
-+ * Mutual exlusion with (and only with) cds_wfcq_splice_blocking is
-+ * ensured.
-+ * It is valid to reuse and free a dequeued node immediately.
-+ */
-+static inline struct cds_wfcq_node *
-+_cds_wfcq_dequeue_blocking(struct cds_wfcq_head *head,
-+		struct cds_wfcq_tail *tail)
-+{
-+	struct cds_wfcq_node *retval;
-+
-+	_cds_wfcq_dequeue_lock(head, tail);
-+	retval = ___cds_wfcq_dequeue_blocking(head, tail);
-+	_cds_wfcq_dequeue_unlock(head, tail);
-+	return retval;
-+}
-+
-+/*
-+ * cds_wfcq_splice_blocking: enqueue all src_q nodes at the end of dest_q.
-+ *
-+ * Dequeue all nodes from src_q.
-+ * dest_q must be already initialized.
-+ * Content written into the node before enqueue is guaranteed to be
-+ * consistent, but no other memory ordering is ensured.
-+ * Mutual exlusion with (and only with) cds_wfcq_dequeue_blocking is
-+ * ensured.
-+ */
-+static inline void
-+_cds_wfcq_splice_blocking(
-+		struct cds_wfcq_head *dest_q_head,
-+		struct cds_wfcq_tail *dest_q_tail,
-+		struct cds_wfcq_head *src_q_head,
-+		struct cds_wfcq_tail *src_q_tail)
-+{
-+	_cds_wfcq_dequeue_lock(src_q_head, src_q_tail);
-+	___cds_wfcq_splice_blocking(dest_q_head, dest_q_tail,
-+			src_q_head, src_q_tail);
-+	_cds_wfcq_dequeue_unlock(src_q_head, src_q_tail);
-+}
-+
-+#ifdef __cplusplus
-+}
-+#endif
-+
-+#endif /* _URCU_WFCQUEUE_STATIC_H */
-diff --git a/urcu/wfcqueue.h b/urcu/wfcqueue.h
-new file mode 100644
-index 0000000..5576cbf
---- /dev/null
-+++ b/urcu/wfcqueue.h
-@@ -0,0 +1,263 @@
-+#ifndef _URCU_WFCQUEUE_H
-+#define _URCU_WFCQUEUE_H
-+
-+/*
-+ * wfcqueue.h
-+ *
-+ * Userspace RCU library - Concurrent Queue with Wait-Free Enqueue/Blocking Dequeue
-+ *
-+ * Copyright 2010-2012 - Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-+ * Copyright 2011-2012 - Lai Jiangshan <laijs@cn.fujitsu.com>
-+ *
-+ * This library is free software; you can redistribute it and/or
-+ * modify it under the terms of the GNU Lesser General Public
-+ * License as published by the Free Software Foundation; either
-+ * version 2.1 of the License, or (at your option) any later version.
-+ *
-+ * This library is distributed in the hope that it will be useful,
-+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
-+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-+ * Lesser General Public License for more details.
-+ *
-+ * You should have received a copy of the GNU Lesser General Public
-+ * License along with this library; if not, write to the Free Software
-+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
-+ */
-+
-+#include <pthread.h>
-+#include <assert.h>
-+#include <stdbool.h>
-+#include <urcu/compiler.h>
-+#include <urcu/arch.h>
-+
-+#ifdef __cplusplus
-+extern "C" {
-+#endif
-+
-+/*
-+ * Concurrent queue with wait-free enqueue/blocking dequeue.
-+ *
-+ * Inspired from half-wait-free/half-blocking queue implementation done by
-+ * Paul E. McKenney.
-+ */
-+
-+struct cds_wfcq_node {
-+	struct cds_wfcq_node *next;
-+};
-+
-+/*
-+ * Do not put head and tail on the same cache-line if concurrent
-+ * enqueue/dequeue are expected from many CPUs. This eliminates
-+ * false-sharing between enqueue and dequeue.
-+ */
-+struct cds_wfcq_head {
-+	struct cds_wfcq_node node;
-+	pthread_mutex_t lock;
-+};
-+
-+struct cds_wfcq_tail {
-+	struct cds_wfcq_node *p;
-+};
-+
-+#ifdef _LGPL_SOURCE
-+
-+#include <urcu/static/wfcqueue.h>
-+
-+#define cds_wfcq_node_init		_cds_wfcq_node_init
-+#define cds_wfcq_init			_cds_wfcq_init
-+#define cds_wfcq_empty			_cds_wfcq_empty
-+#define cds_wfcq_enqueue		_cds_wfcq_enqueue
-+
-+/* Dequeue locking */
-+#define cds_wfcq_dequeue_lock		_cds_wfcq_dequeue_lock
-+#define cds_wfcq_dequeue_unlock		_cds_wfcq_dequeue_unlock
-+
-+/* Locking performed within cds_wfcq calls. */
-+#define cds_wfcq_dequeue_blocking	_cds_wfcq_dequeue_blocking
-+#define cds_wfcq_splice_blocking	_cds_wfcq_splice_blocking
-+#define cds_wfcq_first_blocking		_cds_wfcq_first_blocking
-+#define cds_wfcq_next_blocking		_cds_wfcq_next_blocking
-+
-+/* Locking ensured by caller by holding cds_wfcq_dequeue_lock() */
-+#define __cds_wfcq_dequeue_blocking	___cds_wfcq_dequeue_blocking
-+#define __cds_wfcq_splice_blocking	___cds_wfcq_splice_blocking
-+#define __cds_wfcq_first_blocking	___cds_wfcq_first_blocking
-+#define __cds_wfcq_next_blocking	___cds_wfcq_next_blocking
-+
-+#else /* !_LGPL_SOURCE */
-+
-+/*
-+ * Mutual exclusion of cds_wfcq_* / __cds_wfcq_* API
-+ *
-+ * Unless otherwise stated, the caller must ensure mutual exclusion of
-+ * queue update operations "dequeue" and "splice" (for source queue).
-+ * Queue read operations "first" and "next" need to be protected against
-+ * concurrent "dequeue" and "splice" (for source queue) by the caller.
-+ * "enqueue", "splice" (for destination queue), and "empty" are the only
-+ * operations that can be used without any mutual exclusion.
-+ * Mutual exclusion can be ensured by holding cds_wfcq_dequeue_lock().
-+ *
-+ * For convenience, cds_wfcq_dequeue_blocking() and
-+ * cds_wfcq_splice_blocking() hold the dequeue lock.
-+ */
-+
-+/*
-+ * cds_wfcq_node_init: initialize wait-free queue node.
-+ */
-+extern void cds_wfcq_node_init(struct cds_wfcq_node *node);
-+
-+/*
-+ * cds_wfcq_init: initialize wait-free queue.
-+ */
-+extern void cds_wfcq_init(struct cds_wfcq_head *head,
-+		struct cds_wfcq_tail *tail);
-+
-+/*
-+ * cds_wfcq_empty: return whether wait-free queue is empty.
-+ *
-+ * No memory barrier is issued. No mutual exclusion is required.
-+ */
-+extern bool cds_wfcq_empty(struct cds_wfcq_head *head,
-+		struct cds_wfcq_tail *tail);
-+
-+/*
-+ * cds_wfcq_dequeue_lock: take the dequeue mutual exclusion lock.
-+ */
-+extern void cds_wfcq_dequeue_lock(struct cds_wfcq_head *head,
-+		struct cds_wfcq_tail *tail);
-+
-+/*
-+ * cds_wfcq_dequeue_unlock: release the dequeue mutual exclusion lock.
-+ */
-+extern void cds_wfcq_dequeue_unlock(struct cds_wfcq_head *head,
-+		struct cds_wfcq_tail *tail);
-+
-+/*
-+ * cds_wfcq_enqueue: enqueue a node into a wait-free queue.
-+ *
-+ * Issues a full memory barrier before enqueue. No mutual exclusion is
-+ * required.
-+ */
-+extern void cds_wfcq_enqueue(struct cds_wfcq_head *head,
-+		struct cds_wfcq_tail *tail,
-+		struct cds_wfcq_node *node);
-+
-+/*
-+ * cds_wfcq_dequeue_blocking: dequeue a node from a wait-free queue.
-+ *
-+ * Content written into the node before enqueue is guaranteed to be
-+ * consistent, but no other memory ordering is ensured.
-+ * It is valid to reuse and free a dequeued node immediately.
-+ * Mutual exlusion with dequeuers is ensured internally.
-+ */
-+extern struct cds_wfcq_node *cds_wfcq_dequeue_blocking(
-+		struct cds_wfcq_head *head,
-+		struct cds_wfcq_tail *tail);
-+
-+/*
-+ * cds_wfcq_splice_blocking: enqueue all src_q nodes at the end of dest_q.
-+ *
-+ * Dequeue all nodes from src_q.
-+ * dest_q must be already initialized.
-+ * Content written into the node before enqueue is guaranteed to be
-+ * consistent, but no other memory ordering is ensured.
-+ * Mutual exlusion with dequeuers is ensured internally.
-+ */
-+extern void cds_wfcq_splice_blocking(
-+		struct cds_wfcq_head *dest_q_head,
-+		struct cds_wfcq_tail *dest_q_tail,
-+		struct cds_wfcq_head *src_q_head,
-+		struct cds_wfcq_tail *src_q_tail);
-+
-+/*
-+ * __cds_wfcq_dequeue_blocking:
-+ *
-+ * Content written into the node before enqueue is guaranteed to be
-+ * consistent, but no other memory ordering is ensured.
-+ * It is valid to reuse and free a dequeued node immediately.
-+ * Should be called with cds_wfcq_dequeue_lock() held.
-+ */
-+extern struct cds_wfcq_node *__cds_wfcq_dequeue_blocking(
-+		struct cds_wfcq_head *head,
-+		struct cds_wfcq_tail *tail);
-+
-+/*
-+ * __cds_wfcq_splice_blocking: enqueue all src_q nodes at the end of dest_q.
-+ *
-+ * Dequeue all nodes from src_q.
-+ * dest_q must be already initialized.
-+ * Content written into the node before enqueue is guaranteed to be
-+ * consistent, but no other memory ordering is ensured.
-+ * Should be called with cds_wfcq_dequeue_lock() held.
-+ */
-+extern void __cds_wfcq_splice_blocking(
-+		struct cds_wfcq_head *dest_q_head,
-+		struct cds_wfcq_tail *dest_q_tail,
-+		struct cds_wfcq_head *src_q_head,
-+		struct cds_wfcq_tail *src_q_tail);
-+
-+/*
-+ * __cds_wfcq_first_blocking: get first node of a queue, without dequeuing.
-+ *
-+ * Content written into the node before enqueue is guaranteed to be
-+ * consistent, but no other memory ordering is ensured.
-+ * Should be called with cds_wfcq_dequeue_lock() held.
-+ */
-+extern struct cds_wfcq_node *__cds_wfcq_first_blocking(
-+		struct cds_wfcq_head *head,
-+		struct cds_wfcq_tail *tail);
-+
-+/*
-+ * __cds_wfcq_next_blocking: get next node of a queue, without dequeuing.
-+ *
-+ * Content written into the node before enqueue is guaranteed to be
-+ * consistent, but no other memory ordering is ensured.
-+ * Should be called with cds_wfcq_dequeue_lock() held.
-+ */
-+extern struct cds_wfcq_node *__cds_wfcq_next_blocking(
-+		struct cds_wfcq_head *head,
-+		struct cds_wfcq_tail *tail,
-+		struct cds_wfcq_node *node);
-+
-+#endif /* !_LGPL_SOURCE */
-+
-+/*
-+ * __cds_wfcq_for_each_blocking: Iterate over all nodes in a queue,
-+ * without dequeuing them.
-+ * @head: head of the queue (struct cds_wfcq_head pointer).
-+ * @tail: tail of the queue (struct cds_wfcq_tail pointer).
-+ * @node: iterator on the queue (struct cds_wfcq_node pointer).
-+ *
-+ * Content written into each node before enqueue is guaranteed to be
-+ * consistent, but no other memory ordering is ensured.
-+ * Should be called with cds_wfcq_dequeue_lock() held.
-+ */
-+#define __cds_wfcq_for_each_blocking(head, tail, node)		\
-+	for (node = __cds_wfcq_first_blocking(head, tail);	\
-+		node != NULL;					\
-+		node = __cds_wfcq_next_blocking(head, tail, node))
-+
-+/*
-+ * __cds_wfcq_for_each_blocking_safe: Iterate over all nodes in a queue,
-+ * without dequeuing them. Safe against deletion.
-+ * @head: head of the queue (struct cds_wfcq_head pointer).
-+ * @tail: tail of the queue (struct cds_wfcq_tail pointer).
-+ * @node: iterator on the queue (struct cds_wfcq_node pointer).
-+ * @n: struct cds_wfcq_node pointer holding the next pointer (used
-+ *     internally).
-+ *
-+ * Content written into each node before enqueue is guaranteed to be
-+ * consistent, but no other memory ordering is ensured.
-+ * Should be called with cds_wfcq_dequeue_lock() held.
-+ */
-+#define __cds_wfcq_for_each_blocking_safe(head, tail, node, n)		       \
-+	for (node = __cds_wfcq_first_blocking(head, tail),		       \
-+			n = (node ? __cds_wfcq_next_blocking(head, tail, node) : NULL); \
-+		node != NULL;						       \
-+		node = n, n = (node ? __cds_wfcq_next_blocking(head, tail, node) : NULL))
-+
-+#ifdef __cplusplus
-+}
-+#endif
-+
-+#endif /* _URCU_WFCQUEUE_H */
-diff --git a/wfcqueue.c b/wfcqueue.c
-new file mode 100644
-index 0000000..1fa27ac
---- /dev/null
-+++ b/wfcqueue.c
-@@ -0,0 +1,116 @@
-+/*
-+ * wfcqueue.c
-+ *
-+ * Userspace RCU library - Concurrent queue with Wait-Free Enqueue/Blocking Dequeue
-+ *
-+ * Copyright 2010-2012 - Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-+ * Copyright 2011-2012 - Lai Jiangshan <laijs@cn.fujitsu.com>
-+ *
-+ * This library is free software; you can redistribute it and/or
-+ * modify it under the terms of the GNU Lesser General Public
-+ * License as published by the Free Software Foundation; either
-+ * version 2.1 of the License, or (at your option) any later version.
-+ *
-+ * This library is distributed in the hope that it will be useful,
-+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
-+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-+ * Lesser General Public License for more details.
-+ *
-+ * You should have received a copy of the GNU Lesser General Public
-+ * License along with this library; if not, write to the Free Software
-+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
-+ */
-+
-+/* Do not #define _LGPL_SOURCE to ensure we can emit the wrapper symbols */
-+#include "urcu/wfcqueue.h"
-+#include "urcu/static/wfcqueue.h"
-+
-+/*
-+ * library wrappers to be used by non-LGPL compatible source code.
-+ */
-+
-+void cds_wfcq_node_init(struct cds_wfcq_node *node)
-+{
-+	_cds_wfcq_node_init(node);
-+}
-+
-+void cds_wfcq_init(struct cds_wfcq_head *head,
-+		struct cds_wfcq_tail *tail)
-+{
-+	_cds_wfcq_init(head, tail);
-+}
-+
-+bool cds_wfcq_empty(struct cds_wfcq_head *head,
-+		struct cds_wfcq_tail *tail)
-+
-+{
-+	return _cds_wfcq_empty(head, tail);
-+}
-+
-+void cds_wfcq_enqueue(struct cds_wfcq_head *head,
-+		struct cds_wfcq_tail *tail,
-+		struct cds_wfcq_node *node)
-+{
-+	_cds_wfcq_enqueue(head, tail, node);
-+}
-+
-+void cds_wfcq_dequeue_lock(struct cds_wfcq_head *head,
-+		struct cds_wfcq_tail *tail)
-+{
-+	cds_wfcq_dequeue_lock(head, tail);
-+}
-+
-+void cds_wfcq_dequeue_unlock(struct cds_wfcq_head *head,
-+		struct cds_wfcq_tail *tail)
-+{
-+	cds_wfcq_dequeue_unlock(head, tail);
-+}
-+
-+struct cds_wfcq_node *cds_wfcq_dequeue_blocking(
-+		struct cds_wfcq_head *head,
-+		struct cds_wfcq_tail *tail)
-+{
-+	return _cds_wfcq_dequeue_blocking(head, tail);
-+}
-+
-+void cds_wfcq_splice_blocking(
-+		struct cds_wfcq_head *dest_q_head,
-+		struct cds_wfcq_tail *dest_q_tail,
-+		struct cds_wfcq_head *src_q_head,
-+		struct cds_wfcq_tail *src_q_tail)
-+{
-+	_cds_wfcq_splice_blocking(dest_q_head, dest_q_tail,
-+				src_q_head, src_q_tail);
-+}
-+
-+struct cds_wfcq_node *__cds_wfcq_dequeue_blocking(
-+		struct cds_wfcq_head *head,
-+		struct cds_wfcq_tail *tail)
-+{
-+	return ___cds_wfcq_dequeue_blocking(head, tail);
-+}
-+
-+void __cds_wfcq_splice_blocking(
-+		struct cds_wfcq_head *dest_q_head,
-+		struct cds_wfcq_tail *dest_q_tail,
-+		struct cds_wfcq_head *src_q_head,
-+		struct cds_wfcq_tail *src_q_tail)
-+{
-+	___cds_wfcq_splice_blocking(dest_q_head, dest_q_tail,
-+				src_q_head, src_q_tail);
-+}
-+
-+struct cds_wfcq_node *__cds_wfcq_first_blocking(
-+		struct cds_wfcq_head *head,
-+		struct cds_wfcq_tail *tail)
-+{
-+	return ___cds_wfcq_first_blocking(head, tail);
-+}
-+
-+struct cds_wfcq_node *__cds_wfcq_next_blocking(
-+		struct cds_wfcq_head *head,
-+		struct cds_wfcq_tail *tail,
-+		struct cds_wfcq_node *node)
-+{
-+	return ___cds_wfcq_next_blocking(head, tail, node);
-+}
-
 -- 
 Mathieu Desnoyers
 Operating System Efficiency R&D Consultant
