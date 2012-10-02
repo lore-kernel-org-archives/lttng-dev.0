@@ -1,20 +1,20 @@
 From: Christian Babeux <christian.babeux@efficios.com>
-Subject: [PATCH v2 lttng-tools 1/5] Add testpoints in
-	lttng-sessiond to instrument every threads
-Date: Tue,  2 Oct 2012 14:18:29 -0400
-Message-ID: <1349201909-9906-1-git-send-email-christian.babeux__8820.12055158175$1349202002$gmane$org@efficios.com>
-References: <1348770199-1618-1-git-send-email-christian.babeux@efficios.com>
+Subject: [PATCH v2 lttng-tools 2/5] Tests: Add a health check
+	utility program
+Date: Tue,  2 Oct 2012 14:19:19 -0400
+Message-ID: <1349201959-9989-1-git-send-email-christian.babeux__37810.4802490727$1349202041$gmane$org@efficios.com>
+References: <1348770199-1618-2-git-send-email-christian.babeux@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qa0-f48.google.com ([209.85.216.48])
+Received: from mail-qc0-f176.google.com ([209.85.216.176])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <christian.babeux@0x80.ca>) id 1TJ73T-00048Z-HU
-	for lttng-dev@lists.lttng.org; Tue, 02 Oct 2012 14:18:51 -0400
-Received: by qadc11 with SMTP id c11so917728qad.14
-	for <lttng-dev@lists.lttng.org>; Tue, 02 Oct 2012 11:18:46 -0700 (PDT)
-In-Reply-To: <1348770199-1618-1-git-send-email-christian.babeux@efficios.com>
+	(envelope-from <christian.babeux@0x80.ca>) id 1TJ74H-00049v-Bh
+	for lttng-dev@lists.lttng.org; Tue, 02 Oct 2012 14:19:41 -0400
+Received: by qcon41 with SMTP id n41so6348594qco.35
+	for <lttng-dev@lists.lttng.org>; Tue, 02 Oct 2012 11:19:36 -0700 (PDT)
+In-Reply-To: <1348770199-1618-2-git-send-email-christian.babeux@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -27,144 +27,132 @@ To: dgoulet@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-This commit adds 8 new testpoints in the lttng-sessiond binary.
-These testpoints rely on the testpoints infrastructure introduced
-recently.
+The health_check program is a simple utility to query the health
+status of the different threads of the sessiond.
 
-Testpoints:
+Sample output:
 
-thread_manage_clients
-thread_manage_clients_before_loop
-thread_registration_apps
-thread_manage_apps
-thread_manage_apps_before_loop
-thread_manage_kernel
-thread_manage_kernel_before_loop
-thread_manage_consumer
+> ./health_check
+Health check cmd: 0
+Health check app. manage: 0
+Health check app. registration: 0
+Health check kernel: 0
+Health check consumer: 0
 
-The thread_<thread_name> testpoints are placed directly at the thread
-start and they can be used to trigger failure in <thread_name>.
-
-The thread_<thread_name>_before_loop testpoints are placed
-directly before the main processing loop of the thread and thus can be
-used to stall the processing of the thread.
+The return code is encoded to indicate which thread has failed.
 
 Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
 ---
- src/bin/lttng-sessiond/Makefile.am |  3 ++-
- src/bin/lttng-sessiond/main.c      | 28 ++++++++++++++++++++++++++++
- 2 files changed, 30 insertions(+), 1 deletion(-)
+ tests/tools/health/Makefile.am    | 20 +++++++++++
+ tests/tools/health/health_check.c | 73 +++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 93 insertions(+)
+ create mode 100644 tests/tools/health/Makefile.am
+ create mode 100644 tests/tools/health/health_check.c
 
-diff --git a/src/bin/lttng-sessiond/Makefile.am b/src/bin/lttng-sessiond/Makefile.am
-index 73be023..733818e 100644
---- a/src/bin/lttng-sessiond/Makefile.am
-+++ b/src/bin/lttng-sessiond/Makefile.am
-@@ -38,7 +38,8 @@ lttng_sessiond_LDADD = -lrt -lurcu-common -lurcu \
- 		$(top_builddir)/src/common/hashtable/libhashtable.la \
- 		$(top_builddir)/src/common/libcommon.la \
- 		$(top_builddir)/src/common/compat/libcompat.la \
--		$(top_builddir)/src/common/relayd/librelayd.la
-+		$(top_builddir)/src/common/relayd/librelayd.la \
-+		$(top_builddir)/src/common/testpoint/libtestpoint.la
- 
- if HAVE_LIBLTTNG_UST_CTL
- lttng_sessiond_LDADD += -llttng-ust-ctl
-diff --git a/src/bin/lttng-sessiond/main.c b/src/bin/lttng-sessiond/main.c
-index 730ac65..6e93cf0 100644
---- a/src/bin/lttng-sessiond/main.c
-+++ b/src/bin/lttng-sessiond/main.c
-@@ -45,6 +45,7 @@
- #include <common/futex.h>
- #include <common/relayd/relayd.h>
- #include <common/utils.h>
-+#include <common/testpoint/testpoint.h>
- 
- #include "lttng-sessiond.h"
- #include "channel.h"
-@@ -65,6 +66,16 @@
- 
- #define CONSUMERD_FILE	"lttng-consumerd"
- 
-+/* Testpoints, internal use only */
-+TESTPOINT_DECL(thread_manage_clients);
-+TESTPOINT_DECL(thread_manage_clients_before_loop);
-+TESTPOINT_DECL(thread_registration_apps);
-+TESTPOINT_DECL(thread_manage_apps);
-+TESTPOINT_DECL(thread_manage_apps_before_loop);
-+TESTPOINT_DECL(thread_manage_kernel);
-+TESTPOINT_DECL(thread_manage_kernel_before_loop);
-+TESTPOINT_DECL(thread_manage_consumer);
+diff --git a/tests/tools/health/Makefile.am b/tests/tools/health/Makefile.am
+new file mode 100644
+index 0000000..09573db
+--- /dev/null
++++ b/tests/tools/health/Makefile.am
+@@ -0,0 +1,20 @@
++AM_CFLAGS = -I. -O2 -g -I../../../include
++AM_LDFLAGS =
 +
- /* Const values */
- const char default_home_dir[] = DEFAULT_HOME_DIR;
- const char default_tracing_group[] = DEFAULT_TRACING_GROUP;
-@@ -680,8 +691,12 @@ static void *thread_manage_kernel(void *data)
- 
- 	DBG("Thread manage kernel started");
- 
-+	testpoint(thread_manage_kernel);
++if LTTNG_TOOLS_BUILD_WITH_LIBDL
++AM_LDFLAGS += -ldl
++endif
++if LTTNG_TOOLS_BUILD_WITH_LIBC_DL
++AM_LDFLAGS += -lc
++endif
 +
- 	health_code_update(&health_thread_kernel);
- 
-+	testpoint(thread_manage_kernel_before_loop);
++UTILS=
 +
- 	ret = create_thread_poll_set(&events, 2);
- 	if (ret < 0) {
- 		goto error_poll_create;
-@@ -829,6 +844,9 @@ static void *thread_manage_consumer(void *data)
- 	/* Inifinite blocking call, waiting for transmission */
- restart:
- 	health_poll_update(&consumer_data->health);
++noinst_PROGRAMS = health_check
 +
-+	testpoint(thread_manage_consumer);
++health_check_SOURCES = health_check.c $(UTILS)
++health_check_LDADD = $(top_builddir)/src/lib/lttng-ctl/liblttng-ctl.la \
++		     $(top_builddir)/src/common/libcommon.la
 +
- 	ret = lttng_poll_wait(&events, -1);
- 	health_poll_update(&consumer_data->health);
- 	if (ret < 0) {
-@@ -1026,6 +1044,8 @@ static void *thread_manage_apps(void *data)
- 
- 	DBG("[thread] Manage application started");
- 
-+	testpoint(thread_manage_apps);
++noinst_SCRIPTS =
++EXTRA_DIST =
+diff --git a/tests/tools/health/health_check.c b/tests/tools/health/health_check.c
+new file mode 100644
+index 0000000..3eef110
+--- /dev/null
++++ b/tests/tools/health/health_check.c
+@@ -0,0 +1,73 @@
++/*
++ * Copyright (C) 2012 - Christian Babeux <christian.babeux@efficios.com>
++ *
++ * This program is free software; you can redistribute it and/or modify it
++ * under the terms of the GNU General Public License, version 2 only, as
++ * published by the Free Software Foundation.
++ *
++ * This program is distributed in the hope that it will be useful, but WITHOUT
++ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
++ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
++ * more details.
++ *
++ * You should have received a copy of the GNU General Public License along with
++ * this program; if not, write to the Free Software Foundation, Inc., 51
++ * Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
++ */
 +
- 	rcu_register_thread();
- 	rcu_thread_online();
- 
-@@ -1041,6 +1061,8 @@ static void *thread_manage_apps(void *data)
- 		goto error;
- 	}
- 
-+	testpoint(thread_manage_apps_before_loop);
++#include <stdio.h>
 +
- 	health_code_update(&health_thread_app_manage);
- 
- 	while (1) {
-@@ -1264,6 +1286,8 @@ static void *thread_registration_apps(void *data)
- 
- 	DBG("[thread] Manage application registration started");
- 
-+	testpoint(thread_registration_apps);
++#include "lttng/lttng.h"
 +
- 	ret = lttcomm_listen_unix_sock(apps_sock);
- 	if (ret < 0) {
- 		goto error_listen;
-@@ -2912,6 +2936,8 @@ static void *thread_manage_clients(void *data)
- 
- 	DBG("[thread] Manage client started");
- 
-+	testpoint(thread_manage_clients);
++#define HEALTH_CMD_FAIL     (1 << 0)
++#define HEALTH_APP_MNG_FAIL (1 << 1)
++#define HEALTH_APP_REG_FAIL (1 << 2)
++#define HEALTH_KERNEL_FAIL  (1 << 3)
++#define HEALTH_CSMR_FAIL    (1 << 4)
 +
- 	rcu_register_thread();
- 
- 	health_code_update(&health_thread_cmd);
-@@ -2943,6 +2969,8 @@ static void *thread_manage_clients(void *data)
- 		kill(ppid, SIGUSR1);
- 	}
- 
-+	testpoint(thread_manage_clients_before_loop);
++int main(int argc, char *argv[])
++{
++	int health = -1;
++	int status = 0;
 +
- 	health_code_update(&health_thread_cmd);
- 
- 	while (1) {
++	/* Command thread */
++	health = lttng_health_check(LTTNG_HEALTH_CMD);
++	printf("Health check cmd: %d\n", health);
++
++	if (health) {
++		status |= HEALTH_CMD_FAIL;
++	}
++
++	/* App manage thread */
++	health = lttng_health_check(LTTNG_HEALTH_APP_MANAGE);
++	printf("Health check app. manage: %d\n", health);
++
++	if (health) {
++		status |= HEALTH_APP_MNG_FAIL;
++	}
++	/* App registration thread */
++	health = lttng_health_check(LTTNG_HEALTH_APP_REG);
++	printf("Health check app. registration: %d\n", health);
++
++	if (health) {
++		status |= HEALTH_APP_REG_FAIL;
++	}
++
++	/* Kernel thread */
++	health = lttng_health_check(LTTNG_HEALTH_KERNEL);
++	printf("Health check kernel: %d\n", health);
++
++	if (health) {
++		status |= HEALTH_KERNEL_FAIL;
++	}
++
++	/* Consumer thread */
++	health = lttng_health_check(LTTNG_HEALTH_CONSUMER);
++	printf("Health check consumer: %d\n", health);
++
++	if (health) {
++		status |= HEALTH_CSMR_FAIL;
++	}
++
++	return status;
++}
 -- 
 1.7.12.1
