@@ -1,7 +1,8 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [URCU PATCH 2/3] wfcqueue test
-Date: Tue, 2 Oct 2012 10:15:42 -0400
-Message-ID: <20121002141542.GC4057__45382.492154795$1349187388$gmane$org@Krystal>
+Subject: [URCU PATCH 3/3] call_rcu: use wfcqueue,
+	eliminate false-sharing
+Date: Tue, 2 Oct 2012 10:16:38 -0400
+Message-ID: <20121002141638.GD4057__92.4923610456929$1349187479$gmane$org@Krystal>
 References: <20121002141307.GA4057@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,8 +11,8 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1TJ3GD-00021H-10
-	for lttng-dev@lists.lttng.org; Tue, 02 Oct 2012 10:15:45 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1TJ3H6-00022b-K3
+	for lttng-dev@lists.lttng.org; Tue, 02 Oct 2012 10:16:40 -0400
 Content-Disposition: inline
 In-Reply-To: <20121002141307.GA4057@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
@@ -25,460 +26,217 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: Paul McKenney <paulmck@linux.vnet.ibm.com>, Lai Jiangshan <eag0628@gmail.com>, rp@svcs.cs.pdx.edu, lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
+Eliminate false-sharing between call_rcu (enqueuer) and worker threads
+on the queue head and tail.
+
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
 diff --git a/tests/Makefile.am b/tests/Makefile.am
-index 7d5ea82..81718bb 100644
+index 81718bb..c92bbe6 100644
 --- a/tests/Makefile.am
 +++ b/tests/Makefile.am
-@@ -14,7 +14,9 @@ noinst_PROGRAMS = test_urcu test_urcu_dynamic_link test_urcu_timing \
-         test_uatomic test_urcu_assign test_urcu_assign_dynamic_link \
-         test_urcu_bp test_urcu_bp_dynamic_link test_cycles_per_loop \
- 	test_urcu_lfq test_urcu_wfq test_urcu_lfs test_urcu_wfs \
-+	test_urcu_wfcq \
- 	test_urcu_wfq_dynlink test_urcu_wfs_dynlink \
-+	test_urcu_wfcq_dynlink \
- 	test_urcu_lfq_dynlink test_urcu_lfs_dynlink test_urcu_hash
- noinst_HEADERS = rcutorture.h
+@@ -30,14 +30,14 @@ if COMPAT_FUTEX
+ COMPAT+=$(top_srcdir)/compat_futex.c
+ endif
  
-@@ -169,6 +171,13 @@ test_urcu_wfq_dynlink_SOURCES = test_urcu_wfq.c
- test_urcu_wfq_dynlink_CFLAGS = -DDYNAMIC_LINK_TEST $(AM_CFLAGS)
- test_urcu_wfq_dynlink_LDADD = $(URCU_COMMON_LIB)
+-URCU=$(top_srcdir)/urcu.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfqueue.c $(COMPAT)
+-URCU_QSBR=$(top_srcdir)/urcu-qsbr.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfqueue.c $(COMPAT)
++URCU=$(top_srcdir)/urcu.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfcqueue.c $(COMPAT)
++URCU_QSBR=$(top_srcdir)/urcu-qsbr.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfcqueue.c $(COMPAT)
+ # URCU_MB uses urcu.c but -DRCU_MB must be defined
+-URCU_MB=$(top_srcdir)/urcu.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfqueue.c $(COMPAT)
++URCU_MB=$(top_srcdir)/urcu.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfcqueue.c $(COMPAT)
+ # URCU_SIGNAL uses urcu.c but -DRCU_SIGNAL must be defined
+-URCU_SIGNAL=$(top_srcdir)/urcu.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfqueue.c $(COMPAT)
+-URCU_BP=$(top_srcdir)/urcu-bp.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfqueue.c $(COMPAT)
+-URCU_DEFER=$(top_srcdir)/urcu.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfqueue.c $(COMPAT)
++URCU_SIGNAL=$(top_srcdir)/urcu.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfcqueue.c $(COMPAT)
++URCU_BP=$(top_srcdir)/urcu-bp.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfcqueue.c $(COMPAT)
++URCU_DEFER=$(top_srcdir)/urcu.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfcqueue.c $(COMPAT)
  
-+test_urcu_wfcq_SOURCES = test_urcu_wfcq.c $(COMPAT)
-+test_urcu_wfcq_LDADD = $(URCU_COMMON_LIB)
-+
-+test_urcu_wfcq_dynlink_SOURCES = test_urcu_wfcq.c
-+test_urcu_wfcq_dynlink_CFLAGS = -DDYNAMIC_LINK_TEST $(AM_CFLAGS)
-+test_urcu_wfcq_dynlink_LDADD = $(URCU_COMMON_LIB)
-+
- test_urcu_lfs_SOURCES = test_urcu_lfs.c $(URCU)
- test_urcu_lfs_LDADD = $(URCU_CDS_LIB)
+ URCU_COMMON_LIB=$(top_builddir)/liburcu-common.la
+ URCU_LIB=$(top_builddir)/liburcu.la
+diff --git a/urcu-call-rcu-impl.h b/urcu-call-rcu-impl.h
+index 13b24ff..cf65992 100644
+--- a/urcu-call-rcu-impl.h
++++ b/urcu-call-rcu-impl.h
+@@ -21,6 +21,7 @@
+  */
  
-diff --git a/tests/test_urcu_wfcq.c b/tests/test_urcu_wfcq.c
-new file mode 100644
-index 0000000..3141268
---- /dev/null
-+++ b/tests/test_urcu_wfcq.c
-@@ -0,0 +1,418 @@
-+/*
-+ * test_urcu_wfcq.c
-+ *
-+ * Userspace RCU library - example RCU-based lock-free concurrent queue
-+ *
-+ * Copyright February 2010 - Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-+ * Copyright February 2010 - Paolo Bonzini <pbonzini@redhat.com>
-+ *
-+ * This program is free software; you can redistribute it and/or modify
-+ * it under the terms of the GNU General Public License as published by
-+ * the Free Software Foundation; either version 2 of the License, or
-+ * (at your option) any later version.
-+ *
-+ * This program is distributed in the hope that it will be useful,
-+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
-+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-+ * GNU General Public License for more details.
-+ *
-+ * You should have received a copy of the GNU General Public License along
-+ * with this program; if not, write to the Free Software Foundation, Inc.,
-+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-+ */
-+
-+#define _GNU_SOURCE
-+#include "../config.h"
-+#include <stdio.h>
-+#include <pthread.h>
-+#include <stdlib.h>
-+#include <stdint.h>
-+#include <stdbool.h>
-+#include <string.h>
-+#include <sys/types.h>
-+#include <sys/wait.h>
-+#include <unistd.h>
-+#include <stdio.h>
-+#include <assert.h>
-+#include <sched.h>
-+#include <errno.h>
-+
-+#include <urcu/arch.h>
-+#include <urcu/tls-compat.h>
-+
-+#ifdef __linux__
-+#include <syscall.h>
-+#endif
-+
-+/* hardcoded number of CPUs */
-+#define NR_CPUS 16384
-+
-+#if defined(_syscall0)
-+_syscall0(pid_t, gettid)
-+#elif defined(__NR_gettid)
-+static inline pid_t gettid(void)
-+{
-+	return syscall(__NR_gettid);
-+}
-+#else
-+#warning "use pid as tid"
-+static inline pid_t gettid(void)
-+{
-+	return getpid();
-+}
-+#endif
-+
-+#ifndef DYNAMIC_LINK_TEST
+ #define _GNU_SOURCE
 +#define _LGPL_SOURCE
-+#endif
-+#include <urcu.h>
+ #include <stdio.h>
+ #include <pthread.h>
+ #include <signal.h>
+@@ -35,7 +36,7 @@
+ #include <sched.h>
+ 
+ #include "config.h"
+-#include "urcu/wfqueue.h"
++#include "urcu/wfcqueue.h"
+ #include "urcu-call-rcu.h"
+ #include "urcu-pointer.h"
+ #include "urcu/list.h"
+@@ -46,7 +47,14 @@
+ /* Data structure that identifies a call_rcu thread. */
+ 
+ struct call_rcu_data {
+-	struct cds_wfq_queue cbs;
++	/*
++	 * Align the tail on cache line size to eliminate false-sharing
++	 * with head.
++	 */
++	struct cds_wfcq_tail __attribute__((aligned(CAA_CACHE_LINE_SIZE))) cbs_tail;
++	/* Alignment on cache line size will add padding here */
++
++	struct cds_wfcq_head cbs_head;
+ 	unsigned long flags;
+ 	int32_t futex;
+ 	unsigned long qlen; /* maintained for debugging. */
+@@ -220,10 +228,7 @@ static void call_rcu_wake_up(struct call_rcu_data *crdp)
+ static void *call_rcu_thread(void *arg)
+ {
+ 	unsigned long cbcount;
+-	struct cds_wfq_node *cbs;
+-	struct cds_wfq_node **cbs_tail;
+-	struct call_rcu_data *crdp = (struct call_rcu_data *)arg;
+-	struct rcu_head *rhp;
++	struct call_rcu_data *crdp = (struct call_rcu_data *) arg;
+ 	int rt = !!(uatomic_read(&crdp->flags) & URCU_CALL_RCU_RT);
+ 	int ret;
+ 
+@@ -243,35 +248,33 @@ static void *call_rcu_thread(void *arg)
+ 		cmm_smp_mb();
+ 	}
+ 	for (;;) {
+-		if (&crdp->cbs.head != _CMM_LOAD_SHARED(crdp->cbs.tail)) {
+-			while ((cbs = _CMM_LOAD_SHARED(crdp->cbs.head)) == NULL)
+-				poll(NULL, 0, 1);
+-			_CMM_STORE_SHARED(crdp->cbs.head, NULL);
+-			cbs_tail = (struct cds_wfq_node **)
+-				uatomic_xchg(&crdp->cbs.tail, &crdp->cbs.head);
++		struct cds_wfcq_head cbs_tmp_head;
++		struct cds_wfcq_tail cbs_tmp_tail;
++		struct cds_wfcq_node *cbs, *cbs_tmp_n;
++
++		cds_wfcq_init(&cbs_tmp_head, &cbs_tmp_tail);
++		__cds_wfcq_splice_blocking(&cbs_tmp_head, &cbs_tmp_tail,
++			&crdp->cbs_head, &crdp->cbs_tail);
++		if (!cds_wfcq_empty(&cbs_tmp_head, &cbs_tmp_tail)) {
+ 			synchronize_rcu();
+ 			cbcount = 0;
+-			do {
+-				while (cbs->next == NULL &&
+-				       &cbs->next != cbs_tail)
+-				       	poll(NULL, 0, 1);
+-				if (cbs == &crdp->cbs.dummy) {
+-					cbs = cbs->next;
+-					continue;
+-				}
+-				rhp = (struct rcu_head *)cbs;
+-				cbs = cbs->next;
++			__cds_wfcq_for_each_blocking_safe(&cbs_tmp_head,
++					&cbs_tmp_tail, cbs, cbs_tmp_n) {
++				struct rcu_head *rhp;
++
++				rhp = caa_container_of(cbs,
++					struct rcu_head, next);
+ 				rhp->func(rhp);
+ 				cbcount++;
+-			} while (cbs != NULL);
++			}
+ 			uatomic_sub(&crdp->qlen, cbcount);
+ 		}
+ 		if (uatomic_read(&crdp->flags) & URCU_CALL_RCU_STOP)
+ 			break;
+ 		rcu_thread_offline();
+ 		if (!rt) {
+-			if (&crdp->cbs.head
+-			    == _CMM_LOAD_SHARED(crdp->cbs.tail)) {
++			if (cds_wfcq_empty(&crdp->cbs_head,
++					&crdp->cbs_tail)) {
+ 				call_rcu_wait(crdp);
+ 				poll(NULL, 0, 10);
+ 				uatomic_dec(&crdp->futex);
+@@ -317,7 +320,7 @@ static void call_rcu_data_init(struct call_rcu_data **crdpp,
+ 	if (crdp == NULL)
+ 		urcu_die(errno);
+ 	memset(crdp, '\0', sizeof(*crdp));
+-	cds_wfq_init(&crdp->cbs);
++	cds_wfcq_init(&crdp->cbs_head, &crdp->cbs_tail);
+ 	crdp->qlen = 0;
+ 	crdp->futex = 0;
+ 	crdp->flags = flags;
+@@ -590,12 +593,12 @@ void call_rcu(struct rcu_head *head,
+ {
+ 	struct call_rcu_data *crdp;
+ 
+-	cds_wfq_node_init(&head->next);
++	cds_wfcq_node_init(&head->next);
+ 	head->func = func;
+ 	/* Holding rcu read-side lock across use of per-cpu crdp */
+ 	rcu_read_lock();
+ 	crdp = get_call_rcu_data();
+-	cds_wfq_enqueue(&crdp->cbs, &head->next);
++	cds_wfcq_enqueue(&crdp->cbs_head, &crdp->cbs_tail, &head->next);
+ 	uatomic_inc(&crdp->qlen);
+ 	wake_call_rcu_thread(crdp);
+ 	rcu_read_unlock();
+@@ -625,10 +628,6 @@ void call_rcu(struct rcu_head *head,
+  */
+ void call_rcu_data_free(struct call_rcu_data *crdp)
+ {
+-	struct cds_wfq_node *cbs;
+-	struct cds_wfq_node **cbs_tail;
+-	struct cds_wfq_node **cbs_endprev;
+-
+ 	if (crdp == NULL || crdp == default_call_rcu_data) {
+ 		return;
+ 	}
+@@ -638,17 +637,12 @@ void call_rcu_data_free(struct call_rcu_data *crdp)
+ 		while ((uatomic_read(&crdp->flags) & URCU_CALL_RCU_STOPPED) == 0)
+ 			poll(NULL, 0, 1);
+ 	}
+-	if (&crdp->cbs.head != _CMM_LOAD_SHARED(crdp->cbs.tail)) {
+-		while ((cbs = _CMM_LOAD_SHARED(crdp->cbs.head)) == NULL)
+-			poll(NULL, 0, 1);
+-		_CMM_STORE_SHARED(crdp->cbs.head, NULL);
+-		cbs_tail = (struct cds_wfq_node **)
+-			uatomic_xchg(&crdp->cbs.tail, &crdp->cbs.head);
++	if (!cds_wfcq_empty(&crdp->cbs_head, &crdp->cbs_tail)) {
+ 		/* Create default call rcu data if need be */
+ 		(void) get_default_call_rcu_data();
+-		cbs_endprev = (struct cds_wfq_node **)
+-			uatomic_xchg(&default_call_rcu_data, cbs_tail);
+-		*cbs_endprev = cbs;
++		__cds_wfcq_splice_blocking(&default_call_rcu_data->cbs_head,
++			&default_call_rcu_data->cbs_tail,
++			&crdp->cbs_head, &crdp->cbs_tail);
+ 		uatomic_add(&default_call_rcu_data->qlen,
+ 			    uatomic_read(&crdp->qlen));
+ 		wake_call_rcu_thread(default_call_rcu_data);
+diff --git a/urcu-call-rcu.h b/urcu-call-rcu.h
+index f7eac8d..1dad0e2 100644
+--- a/urcu-call-rcu.h
++++ b/urcu-call-rcu.h
+@@ -32,7 +32,7 @@
+ #include <stdlib.h>
+ #include <pthread.h>
+ 
+-#include <urcu/wfqueue.h>
 +#include <urcu/wfcqueue.h>
-+
-+static volatile int test_go, test_stop;
-+
-+static unsigned long rduration;
-+
-+static unsigned long duration;
-+
-+/* read-side C.S. duration, in loops */
-+static unsigned long wdelay;
-+
-+static inline void loop_sleep(unsigned long l)
-+{
-+	while(l-- != 0)
-+		caa_cpu_relax();
-+}
-+
-+static int verbose_mode;
-+
-+#define printf_verbose(fmt, args...)		\
-+	do {					\
-+		if (verbose_mode)		\
-+			printf(fmt, args);	\
-+	} while (0)
-+
-+static unsigned int cpu_affinities[NR_CPUS];
-+static unsigned int next_aff = 0;
-+static int use_affinity = 0;
-+
-+pthread_mutex_t affinity_mutex = PTHREAD_MUTEX_INITIALIZER;
-+
-+#ifndef HAVE_CPU_SET_T
-+typedef unsigned long cpu_set_t;
-+# define CPU_ZERO(cpuset) do { *(cpuset) = 0; } while(0)
-+# define CPU_SET(cpu, cpuset) do { *(cpuset) |= (1UL << (cpu)); } while(0)
-+#endif
-+
-+static void set_affinity(void)
-+{
-+	cpu_set_t mask;
-+	int cpu;
-+	int ret;
-+
-+	if (!use_affinity)
-+		return;
-+
-+#if HAVE_SCHED_SETAFFINITY
-+	ret = pthread_mutex_lock(&affinity_mutex);
-+	if (ret) {
-+		perror("Error in pthread mutex lock");
-+		exit(-1);
-+	}
-+	cpu = cpu_affinities[next_aff++];
-+	ret = pthread_mutex_unlock(&affinity_mutex);
-+	if (ret) {
-+		perror("Error in pthread mutex unlock");
-+		exit(-1);
-+	}
-+
-+	CPU_ZERO(&mask);
-+	CPU_SET(cpu, &mask);
-+#if SCHED_SETAFFINITY_ARGS == 2
-+	sched_setaffinity(0, &mask);
-+#else
-+	sched_setaffinity(0, sizeof(mask), &mask);
-+#endif
-+#endif /* HAVE_SCHED_SETAFFINITY */
-+}
-+
-+/*
-+ * returns 0 if test should end.
-+ */
-+static int test_duration_dequeue(void)
-+{
-+	return !test_stop;
-+}
-+
-+static int test_duration_enqueue(void)
-+{
-+	return !test_stop;
-+}
-+
-+static DEFINE_URCU_TLS(unsigned long long, nr_dequeues);
-+static DEFINE_URCU_TLS(unsigned long long, nr_enqueues);
-+
-+static DEFINE_URCU_TLS(unsigned long long, nr_successful_dequeues);
-+static DEFINE_URCU_TLS(unsigned long long, nr_successful_enqueues);
-+
-+static unsigned int nr_enqueuers;
-+static unsigned int nr_dequeuers;
-+
-+static struct cds_wfcq_head __attribute__((aligned(CAA_CACHE_LINE_SIZE))) head;
-+static struct cds_wfcq_tail __attribute__((aligned(CAA_CACHE_LINE_SIZE))) tail;
-+
-+void *thr_enqueuer(void *_count)
-+{
-+	unsigned long long *count = _count;
-+
-+	printf_verbose("thread_begin %s, thread id : %lx, tid %lu\n",
-+			"enqueuer", pthread_self(), (unsigned long)gettid());
-+
-+	set_affinity();
-+
-+	while (!test_go)
-+	{
-+	}
-+	cmm_smp_mb();
-+
-+	for (;;) {
-+		struct cds_wfcq_node *node = malloc(sizeof(*node));
-+		if (!node)
-+			goto fail;
-+		cds_wfcq_node_init(node);
-+		cds_wfcq_enqueue(&head, &tail, node);
-+		URCU_TLS(nr_successful_enqueues)++;
-+
-+		if (caa_unlikely(wdelay))
-+			loop_sleep(wdelay);
-+fail:
-+		URCU_TLS(nr_enqueues)++;
-+		if (caa_unlikely(!test_duration_enqueue()))
-+			break;
-+	}
-+
-+	count[0] = URCU_TLS(nr_enqueues);
-+	count[1] = URCU_TLS(nr_successful_enqueues);
-+	printf_verbose("enqueuer thread_end, thread id : %lx, tid %lu, "
-+		       "enqueues %llu successful_enqueues %llu\n",
-+		       pthread_self(), (unsigned long)gettid(),
-+		       URCU_TLS(nr_enqueues), URCU_TLS(nr_successful_enqueues));
-+	return ((void*)1);
-+
-+}
-+
-+void *thr_dequeuer(void *_count)
-+{
-+	unsigned long long *count = _count;
-+
-+	printf_verbose("thread_begin %s, thread id : %lx, tid %lu\n",
-+			"dequeuer", pthread_self(), (unsigned long)gettid());
-+
-+	set_affinity();
-+
-+	while (!test_go)
-+	{
-+	}
-+	cmm_smp_mb();
-+
-+	for (;;) {
-+		struct cds_wfcq_node *node =
-+			cds_wfcq_dequeue_blocking(&head, &tail);
-+
-+		if (node) {
-+			free(node);
-+			URCU_TLS(nr_successful_dequeues)++;
-+		}
-+
-+		URCU_TLS(nr_dequeues)++;
-+		if (caa_unlikely(!test_duration_dequeue()))
-+			break;
-+		if (caa_unlikely(rduration))
-+			loop_sleep(rduration);
-+	}
-+
-+	printf_verbose("dequeuer thread_end, thread id : %lx, tid %lu, "
-+		       "dequeues %llu, successful_dequeues %llu\n",
-+		       pthread_self(), (unsigned long)gettid(),
-+		       URCU_TLS(nr_dequeues), URCU_TLS(nr_successful_dequeues));
-+	count[0] = URCU_TLS(nr_dequeues);
-+	count[1] = URCU_TLS(nr_successful_dequeues);
-+	return ((void*)2);
-+}
-+
-+void test_end(unsigned long long *nr_dequeues)
-+{
-+	struct cds_wfcq_node *node;
-+
-+	do {
-+		node = cds_wfcq_dequeue_blocking(&head, &tail);
-+		if (node) {
-+			free(node);
-+			(*nr_dequeues)++;
-+		}
-+	} while (node);
-+}
-+
-+void show_usage(int argc, char **argv)
-+{
-+	printf("Usage : %s nr_dequeuers nr_enqueuers duration (s)", argv[0]);
-+	printf(" [-d delay] (enqueuer period (in loops))");
-+	printf(" [-c duration] (dequeuer period (in loops))");
-+	printf(" [-v] (verbose output)");
-+	printf(" [-a cpu#] [-a cpu#]... (affinity)");
-+	printf("\n");
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	int err;
-+	pthread_t *tid_enqueuer, *tid_dequeuer;
-+	void *tret;
-+	unsigned long long *count_enqueuer, *count_dequeuer;
-+	unsigned long long tot_enqueues = 0, tot_dequeues = 0;
-+	unsigned long long tot_successful_enqueues = 0,
-+			   tot_successful_dequeues = 0;
-+	unsigned long long end_dequeues = 0;
-+	int i, a;
-+
-+	if (argc < 4) {
-+		show_usage(argc, argv);
-+		return -1;
-+	}
-+
-+	err = sscanf(argv[1], "%u", &nr_dequeuers);
-+	if (err != 1) {
-+		show_usage(argc, argv);
-+		return -1;
-+	}
-+
-+	err = sscanf(argv[2], "%u", &nr_enqueuers);
-+	if (err != 1) {
-+		show_usage(argc, argv);
-+		return -1;
-+	}
-+	
-+	err = sscanf(argv[3], "%lu", &duration);
-+	if (err != 1) {
-+		show_usage(argc, argv);
-+		return -1;
-+	}
-+
-+	for (i = 4; i < argc; i++) {
-+		if (argv[i][0] != '-')
-+			continue;
-+		switch (argv[i][1]) {
-+		case 'a':
-+			if (argc < i + 2) {
-+				show_usage(argc, argv);
-+				return -1;
-+			}
-+			a = atoi(argv[++i]);
-+			cpu_affinities[next_aff++] = a;
-+			use_affinity = 1;
-+			printf_verbose("Adding CPU %d affinity\n", a);
-+			break;
-+		case 'c':
-+			if (argc < i + 2) {
-+				show_usage(argc, argv);
-+				return -1;
-+			}
-+			rduration = atol(argv[++i]);
-+			break;
-+		case 'd':
-+			if (argc < i + 2) {
-+				show_usage(argc, argv);
-+				return -1;
-+			}
-+			wdelay = atol(argv[++i]);
-+			break;
-+		case 'v':
-+			verbose_mode = 1;
-+			break;
-+		}
-+	}
-+
-+	printf_verbose("running test for %lu seconds, %u enqueuers, "
-+		       "%u dequeuers.\n",
-+		       duration, nr_enqueuers, nr_dequeuers);
-+	printf_verbose("Writer delay : %lu loops.\n", rduration);
-+	printf_verbose("Reader duration : %lu loops.\n", wdelay);
-+	printf_verbose("thread %-6s, thread id : %lx, tid %lu\n",
-+			"main", pthread_self(), (unsigned long)gettid());
-+
-+	tid_enqueuer = malloc(sizeof(*tid_enqueuer) * nr_enqueuers);
-+	tid_dequeuer = malloc(sizeof(*tid_dequeuer) * nr_dequeuers);
-+	count_enqueuer = malloc(2 * sizeof(*count_enqueuer) * nr_enqueuers);
-+	count_dequeuer = malloc(2 * sizeof(*count_dequeuer) * nr_dequeuers);
-+	cds_wfcq_init(&head, &tail);
-+
-+	next_aff = 0;
-+
-+	for (i = 0; i < nr_enqueuers; i++) {
-+		err = pthread_create(&tid_enqueuer[i], NULL, thr_enqueuer,
-+				     &count_enqueuer[2 * i]);
-+		if (err != 0)
-+			exit(1);
-+	}
-+	for (i = 0; i < nr_dequeuers; i++) {
-+		err = pthread_create(&tid_dequeuer[i], NULL, thr_dequeuer,
-+				     &count_dequeuer[2 * i]);
-+		if (err != 0)
-+			exit(1);
-+	}
-+
-+	cmm_smp_mb();
-+
-+	test_go = 1;
-+
-+	for (i = 0; i < duration; i++) {
-+		sleep(1);
-+		if (verbose_mode)
-+			write (1, ".", 1);
-+	}
-+
-+	test_stop = 1;
-+
-+	for (i = 0; i < nr_enqueuers; i++) {
-+		err = pthread_join(tid_enqueuer[i], &tret);
-+		if (err != 0)
-+			exit(1);
-+		tot_enqueues += count_enqueuer[2 * i];
-+		tot_successful_enqueues += count_enqueuer[2 * i + 1];
-+	}
-+	for (i = 0; i < nr_dequeuers; i++) {
-+		err = pthread_join(tid_dequeuer[i], &tret);
-+		if (err != 0)
-+			exit(1);
-+		tot_dequeues += count_dequeuer[2 * i];
-+		tot_successful_dequeues += count_dequeuer[2 * i + 1];
-+	}
-+	
-+	test_end(&end_dequeues);
-+
-+	printf_verbose("total number of enqueues : %llu, dequeues %llu\n",
-+		       tot_enqueues, tot_dequeues);
-+	printf_verbose("total number of successful enqueues : %llu, "
-+		       "successful dequeues %llu\n",
-+		       tot_successful_enqueues, tot_successful_dequeues);
-+	printf("SUMMARY %-25s testdur %4lu nr_enqueuers %3u wdelay %6lu "
-+		"nr_dequeuers %3u "
-+		"rdur %6lu nr_enqueues %12llu nr_dequeues %12llu "
-+		"successful enqueues %12llu successful dequeues %12llu "
-+		"end_dequeues %llu nr_ops %12llu\n",
-+		argv[0], duration, nr_enqueuers, wdelay,
-+		nr_dequeuers, rduration, tot_enqueues, tot_dequeues,
-+		tot_successful_enqueues,
-+		tot_successful_dequeues, end_dequeues,
-+		tot_enqueues + tot_dequeues);
-+	if (tot_successful_enqueues != tot_successful_dequeues + end_dequeues)
-+		printf("WARNING! Discrepancy between nr succ. enqueues %llu vs "
-+		       "succ. dequeues + end dequeues %llu.\n",
-+		       tot_successful_enqueues,
-+		       tot_successful_dequeues + end_dequeues);
-+
-+	free(count_enqueuer);
-+	free(count_dequeuer);
-+	free(tid_enqueuer);
-+	free(tid_dequeuer);
-+	return 0;
-+}
+ 
+ #ifdef __cplusplus
+ extern "C" {
+@@ -55,7 +55,7 @@ struct call_rcu_data;
+  */
+ 
+ struct rcu_head {
+-	struct cds_wfq_node next;
++	struct cds_wfcq_node next;
+ 	void (*func)(struct rcu_head *head);
+ };
+ 
 -- 
 Mathieu Desnoyers
 Operating System Efficiency R&D Consultant
