@@ -1,22 +1,19 @@
-From: paul.chavent@fnac.net
-Subject: Build out of src tree.
-Date: Tue,  2 Oct 2012 09:37:07 +0200 (CEST)
-Message-ID: <1551710.192371349163427925.JavaMail.www__5608.46950761533$1349195600$gmane$org@wsfrf1114>
-Reply-To: paul.chavent@fnac.net
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: Build out of src tree.
+Date: Tue, 2 Oct 2012 12:47:33 -0400
+Message-ID: <20121002164733.GA5877__24218.643437098$1349196511$gmane$org@Krystal>
+References: <1551710.192371349163427925.JavaMail.www@wsfrf1114>
 Mime-Version: 1.0
-Content-Type: multipart/mixed;
-	boundary="----=_Part_8558_29877052.1349163427923"
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp11.services.sfr.fr ([93.17.128.28])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <paul.chavent@fnac.net>) id 1TIx2Z-0006sQ-Fz
-	for lttng-dev@lists.lttng.org; Tue, 02 Oct 2012 03:37:15 -0400
-Received: from filter.sfr.fr (localhost [127.0.0.1])
-	by msfrf1103.sfr.fr (SMTP Server) with ESMTP id EB5FB7000149
-	for <lttng-dev@lists.lttng.org>; Tue,  2 Oct 2012 09:37:07 +0200 (CEST)
-Received: from wsfrf1114 (wsfrf1114 [10.18.24.28])
-	by msfrf1103.sfr.fr (SMTP Server) with ESMTP id E46037000097
-	for <lttng-dev@lists.lttng.org>; Tue,  2 Oct 2012 09:37:07 +0200 (CEST)
+	(envelope-from <compudj@mail.openrapids.net>) id 1TJ5dB-0003IB-F8
+	for lttng-dev@lists.lttng.org; Tue, 02 Oct 2012 12:47:37 -0400
+Content-Disposition: inline
+In-Reply-To: <1551710.192371349163427925.JavaMail.www@wsfrf1114>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -25,315 +22,459 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: paul.chavent@fnac.net, dgoulet@efficios.com
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-------=_Part_8558_29877052.1349163427923
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
+* paul.chavent@fnac.net (paul.chavent@fnac.net) wrote:
+> I used to build my packages out of src tree. As it's not
+> straightforward for lttng-tools and lttng-ust, i would like to submit
+> those two patches.
 
-I used to build my packages out of src tree. As it's not straightforward for lttng-tools and lttng-ust, i would like to submit those two patches.
+I just merged your UST patch into master and stable-2.0.
 
-Regards.
+David, I recommend you do the same for the lttng-tools. (please consider
+this as my acked-by).
 
-Paul.
+Thanks!
+
+Mathieu
+
+> 
+> Regards.
+> 
+> Paul.
+> 
+
+> From dbcdad58a675fb19125411f713700ce633919173 Mon Sep 17 00:00:00 2001
+> From: Paul Chavent <paul.chavent@onera.fr>
+> Date: Tue, 2 Oct 2012 09:30:31 +0200
+> Subject: [PATCH] Build out of src tree.
+> 
+> ---
+>  liblttng-ust-ctl/Makefile.am          |    2 +-
+>  liblttng-ust-libc-wrapper/Makefile.am |    2 +-
+>  liblttng-ust/Makefile.am              |    2 +-
+>  libringbuffer/Makefile.am             |    4 ++--
+>  tests/demo/Makefile.am                |    2 +-
+>  tests/fork/Makefile.am                |    2 +-
+>  tests/hello-static-lib/Makefile.am    |    2 +-
+>  tests/hello.cxx/Makefile.am           |    2 +-
+>  tests/hello/Makefile.am               |    2 +-
+>  tests/ust-basic-tracing/Makefile.am   |    2 +-
+>  tests/ust-multi-test/Makefile.am      |    2 +-
+>  11 files changed, 12 insertions(+), 12 deletions(-)
+> 
+> diff --git a/liblttng-ust-ctl/Makefile.am b/liblttng-ust-ctl/Makefile.am
+> index 4e341be..1a57fef 100644
+> --- a/liblttng-ust-ctl/Makefile.am
+> +++ b/liblttng-ust-ctl/Makefile.am
+> @@ -1,4 +1,4 @@
+> -AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/liblttng-ust-comm
+> +AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/liblttng-ust-comm -I$(top_builddir)/include
+>  AM_CFLAGS = -fno-strict-aliasing
+>  
+>  lib_LTLIBRARIES = liblttng-ust-ctl.la
+> diff --git a/liblttng-ust-libc-wrapper/Makefile.am b/liblttng-ust-libc-wrapper/Makefile.am
+> index 5b3f7f0..4fdcedb 100644
+> --- a/liblttng-ust-libc-wrapper/Makefile.am
+> +++ b/liblttng-ust-libc-wrapper/Makefile.am
+> @@ -1,4 +1,4 @@
+> -AM_CPPFLAGS = -I$(top_srcdir)/include
+> +AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_builddir)/include
+>  AM_CFLAGS = -fno-strict-aliasing
+>  
+>  lib_LTLIBRARIES = liblttng-ust-libc-wrapper.la
+> diff --git a/liblttng-ust/Makefile.am b/liblttng-ust/Makefile.am
+> index aeb5092..dff8b6e 100644
+> --- a/liblttng-ust/Makefile.am
+> +++ b/liblttng-ust/Makefile.am
+> @@ -1,4 +1,4 @@
+> -AM_CPPFLAGS = -I$(top_srcdir)/include
+> +AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_builddir)/include
+>  AM_CFLAGS = -fno-strict-aliasing
+>  
+>  noinst_LTLIBRARIES = liblttng-ust-runtime.la liblttng-ust-support.la
+> diff --git a/libringbuffer/Makefile.am b/libringbuffer/Makefile.am
+> index b5b0ebd..271c8be 100644
+> --- a/libringbuffer/Makefile.am
+> +++ b/libringbuffer/Makefile.am
+> @@ -1,4 +1,4 @@
+> -AM_CPPFLAGS = -I$(top_srcdir)/include
+> +AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_builddir)/include
+>  AM_CFLAGS = -fno-strict-aliasing
+>  
+>  noinst_LTLIBRARIES = libringbuffer.la
+> @@ -12,7 +12,7 @@ libringbuffer_la_SOURCES = \
+>  	backend.h backend_internal.h backend_types.h \
+>  	frontend_api.h frontend.h frontend_internal.h frontend_types.h \
+>  	nohz.h vatomic.h tlsfixup.h
+> -	
+> +
+>  libringbuffer_la_LIBADD = \
+>  	-lpthread \
+>  	-lrt
+> diff --git a/tests/demo/Makefile.am b/tests/demo/Makefile.am
+> index e4570ff..0e43255 100644
+> --- a/tests/demo/Makefile.am
+> +++ b/tests/demo/Makefile.am
+> @@ -1,6 +1,6 @@
+>  # -Wsystem-headers is needed to print warnings in the tracepoint
+>  # description file.
+> -AM_CPPFLAGS = -I$(top_srcdir)/include -Wsystem-headers
+> +AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_builddir)/include -Wsystem-headers
+>  
+>  # Set LIBS to nothing so the application does not link on useless
+>  # libraries.
+> diff --git a/tests/fork/Makefile.am b/tests/fork/Makefile.am
+> index 0a649c7..a893366 100644
+> --- a/tests/fork/Makefile.am
+> +++ b/tests/fork/Makefile.am
+> @@ -1,4 +1,4 @@
+> -AM_CPPFLAGS = -I$(top_srcdir)/include -Wsystem-headers
+> +AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_builddir)/include -Wsystem-headers
+>  
+>  noinst_PROGRAMS = fork fork2
+>  fork_SOURCES = fork.c ust_tests_fork.h
+> diff --git a/tests/hello-static-lib/Makefile.am b/tests/hello-static-lib/Makefile.am
+> index 6633489..6ae9463 100644
+> --- a/tests/hello-static-lib/Makefile.am
+> +++ b/tests/hello-static-lib/Makefile.am
+> @@ -1,4 +1,4 @@
+> -AM_CPPFLAGS = -I$(top_srcdir)/include -Wsystem-headers
+> +AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_builddir)/include -Wsystem-headers
+>  
+>  noinst_LTLIBRARIES = liblttng-ust-provider-ust-test-hello.la
+>  liblttng_ust_provider_ust_test_hello_la_SOURCES = \
+> diff --git a/tests/hello.cxx/Makefile.am b/tests/hello.cxx/Makefile.am
+> index f56f431..4eace0e 100644
+> --- a/tests/hello.cxx/Makefile.am
+> +++ b/tests/hello.cxx/Makefile.am
+> @@ -1,4 +1,4 @@
+> -AM_CPPFLAGS = -I$(top_srcdir)/include -Wsystem-headers
+> +AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_builddir)/include -Wsystem-headers
+>  
+>  noinst_PROGRAMS = hello
+>  hello_SOURCES = hello.cpp tp.c ust_tests_hello.h
+> diff --git a/tests/hello/Makefile.am b/tests/hello/Makefile.am
+> index 0c4c311..1ee7f8d 100644
+> --- a/tests/hello/Makefile.am
+> +++ b/tests/hello/Makefile.am
+> @@ -1,4 +1,4 @@
+> -AM_CPPFLAGS = -I$(top_srcdir)/include -Wsystem-headers
+> +AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_builddir)/include -Wsystem-headers
+>  
+>  noinst_PROGRAMS = hello
+>  hello_SOURCES = hello.c tp.c ust_tests_hello.h
+> diff --git a/tests/ust-basic-tracing/Makefile.am b/tests/ust-basic-tracing/Makefile.am
+> index 0a0a2f0..175adc8 100644
+> --- a/tests/ust-basic-tracing/Makefile.am
+> +++ b/tests/ust-basic-tracing/Makefile.am
+> @@ -1,4 +1,4 @@
+> -AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/libust
+> +AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_builddir)/include -I$(top_srcdir)/libust 
+>  
+>  noinst_PROGRAMS = ust-basic-tracing
+>  ust_basic_tracing_SOURCES = ust-basic-tracing.c
+> diff --git a/tests/ust-multi-test/Makefile.am b/tests/ust-multi-test/Makefile.am
+> index c1d39d9..69c7cc9 100644
+> --- a/tests/ust-multi-test/Makefile.am
+> +++ b/tests/ust-multi-test/Makefile.am
+> @@ -1,4 +1,4 @@
+> -AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/libust
+> +AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_builddir)/include -I$(top_srcdir)/libust
+>  
+>  noinst_PROGRAMS = ust-multi-test
+>  ust_multi_test_SOURCES = ust-multi-test.c
+> -- 
+> 1.7.9.5
+> 
+
+> From 3425bde2827d245cb427c989786fdc10bb235b9f Mon Sep 17 00:00:00 2001
+> From: Paul Chavent <paul.chavent@onera.fr>
+> Date: Tue, 2 Oct 2012 09:30:02 +0200
+> Subject: [PATCH] Build out of src tree.
+> 
+> ---
+>  src/bin/lttng-consumerd/Makefile.am    |    2 +-
+>  src/bin/lttng-relayd/Makefile.am       |    3 ++-
+>  src/bin/lttng-sessiond/Makefile.am     |    5 +++--
+>  src/bin/lttng/Makefile.am              |    3 ++-
+>  src/common/Makefile.am                 |    2 +-
+>  src/common/compat/Makefile.am          |    2 +-
+>  src/common/hashtable/Makefile.am       |    2 +-
+>  src/common/kernel-consumer/Makefile.am |    2 ++
+>  src/common/kernel-ctl/Makefile.am      |    2 +-
+>  src/common/relayd/Makefile.am          |    2 ++
+>  src/common/sessiond-comm/Makefile.am   |    2 ++
+>  src/common/ust-consumer/Makefile.am    |    3 +++
+>  src/lib/lttng-ctl/Makefile.am          |    2 ++
+>  src/lib/lttng-ctl/filter/Makefile.am   |    2 ++
+>  tests/kernel/Makefile.am               |    2 +-
+>  tests/tools/Makefile.am                |    2 +-
+>  tests/tools/streaming/Makefile.am      |    2 +-
+>  tests/ust/Makefile.am                  |    2 +-
+>  tests/ust/before-after/Makefile.am     |    2 +-
+>  tests/ust/high-throughput/Makefile.am  |    2 +-
+>  tests/ust/low-throughput/Makefile.am   |    2 +-
+>  tests/ust/multi-session/Makefile.am    |    2 +-
+>  tests/ust/nprocesses/Makefile.am       |    2 +-
+>  23 files changed, 34 insertions(+), 18 deletions(-)
+> 
+> diff --git a/src/bin/lttng-consumerd/Makefile.am b/src/bin/lttng-consumerd/Makefile.am
+> index 89ae059..a395c0b 100644
+> --- a/src/bin/lttng-consumerd/Makefile.am
+> +++ b/src/bin/lttng-consumerd/Makefile.am
+> @@ -1,4 +1,4 @@
+> -AM_CPPFLAGS =
+> +AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src
+>  
+>  lttnglibexec_PROGRAMS = lttng-consumerd
+>  
+> diff --git a/src/bin/lttng-relayd/Makefile.am b/src/bin/lttng-relayd/Makefile.am
+> index cb625e5..1f3cde4 100644
+> --- a/src/bin/lttng-relayd/Makefile.am
+> +++ b/src/bin/lttng-relayd/Makefile.am
+> @@ -1,4 +1,5 @@
+> -AM_CPPFLAGS = -DINSTALL_BIN_PATH=\""$(lttnglibexecdir)"\" \
+> +AM_CPPFLAGS =   -I$(top_srcdir)/include -I$(top_srcdir)/src \
+> +		-DINSTALL_BIN_PATH=\""$(lttnglibexecdir)"\" \
+>  			  -DINSTALL_LIB_PATH=\""$(libdir)"\"
+>  
+>  AM_CFLAGS = -fno-strict-aliasing
+> diff --git a/src/bin/lttng-sessiond/Makefile.am b/src/bin/lttng-sessiond/Makefile.am
+> index 73be023..b1859d6 100644
+> --- a/src/bin/lttng-sessiond/Makefile.am
+> +++ b/src/bin/lttng-sessiond/Makefile.am
+> @@ -1,5 +1,6 @@
+> -AM_CPPFLAGS = -DINSTALL_BIN_PATH=\""$(lttnglibexecdir)"\" \
+> -			  -DINSTALL_LIB_PATH=\""$(libdir)"\"
+> +AM_CPPFLAGS =   -I$(top_srcdir)/include -I$(top_srcdir)/src \
+> +		-DINSTALL_BIN_PATH=\""$(lttnglibexecdir)"\" \
+> +		-DINSTALL_LIB_PATH=\""$(libdir)"\"
+>  
+>  AM_CFLAGS = -fno-strict-aliasing
+>  
+> diff --git a/src/bin/lttng/Makefile.am b/src/bin/lttng/Makefile.am
+> index 0381aa6..fe7991b 100644
+> --- a/src/bin/lttng/Makefile.am
+> +++ b/src/bin/lttng/Makefile.am
+> @@ -1,4 +1,5 @@
+> -AM_CPPFLAGS = -DINSTALL_BIN_PATH=\""$(bindir)"\"
+> +AM_CPPFLAGS =     -I$(top_srcdir)/include -I$(top_srcdir)/src \
+> +	  	  -DINSTALL_BIN_PATH=\""$(bindir)"\"
+>  
+>  bin_PROGRAMS = lttng
+>  
+> diff --git a/src/common/Makefile.am b/src/common/Makefile.am
+> index ca48153..5850041 100644
+> --- a/src/common/Makefile.am
+> +++ b/src/common/Makefile.am
+> @@ -1,4 +1,4 @@
+> -AM_CPPFLAGS =
+> +AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src
+>  
+>  SUBDIRS = compat hashtable kernel-ctl sessiond-comm relayd kernel-consumer ust-consumer
+>  
+> diff --git a/src/common/compat/Makefile.am b/src/common/compat/Makefile.am
+> index 91cd3bd..2d83282 100644
+> --- a/src/common/compat/Makefile.am
+> +++ b/src/common/compat/Makefile.am
+> @@ -1,4 +1,4 @@
+> -AM_CPPFLAGS = -I$(top_srcdir)/include
+> +AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src
+>  
+>  noinst_LTLIBRARIES = libcompat.la
+>  
+> diff --git a/src/common/hashtable/Makefile.am b/src/common/hashtable/Makefile.am
+> index 7a2b835..62e22c1 100644
+> --- a/src/common/hashtable/Makefile.am
+> +++ b/src/common/hashtable/Makefile.am
+> @@ -1,4 +1,4 @@
+> -AM_CPPFLAGS = -I$(top_srcdir)/include
+> +AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src
+>  
+>  noinst_LTLIBRARIES = libhashtable.la
+>  
+> diff --git a/src/common/kernel-consumer/Makefile.am b/src/common/kernel-consumer/Makefile.am
+> index 008041e..ed5462a 100644
+> --- a/src/common/kernel-consumer/Makefile.am
+> +++ b/src/common/kernel-consumer/Makefile.am
+> @@ -1,3 +1,5 @@
+> +AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src
+> +
+>  # Kernel consumer library
+>  noinst_LTLIBRARIES = libkernel-consumer.la
+>  
+> diff --git a/src/common/kernel-ctl/Makefile.am b/src/common/kernel-ctl/Makefile.am
+> index a56a021..ab057dd 100644
+> --- a/src/common/kernel-ctl/Makefile.am
+> +++ b/src/common/kernel-ctl/Makefile.am
+> @@ -1,4 +1,4 @@
+> -AM_CPPFLAGS = -I$(top_srcdir)/include
+> +AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src
+>  
+>  noinst_LTLIBRARIES = libkernel-ctl.la
+>  
+> diff --git a/src/common/relayd/Makefile.am b/src/common/relayd/Makefile.am
+> index 84eee1b..274da87 100644
+> --- a/src/common/relayd/Makefile.am
+> +++ b/src/common/relayd/Makefile.am
+> @@ -1,3 +1,5 @@
+> +AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src
+> +
+>  # Relayd library
+>  noinst_LTLIBRARIES = librelayd.la
+>  
+> diff --git a/src/common/sessiond-comm/Makefile.am b/src/common/sessiond-comm/Makefile.am
+> index 2a70d54..24063f8 100644
+> --- a/src/common/sessiond-comm/Makefile.am
+> +++ b/src/common/sessiond-comm/Makefile.am
+> @@ -1,3 +1,5 @@
+> +AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src
+> +
+>  # Session daemon communication lib
+>  noinst_LTLIBRARIES = libsessiond-comm.la
+>  
+> diff --git a/src/common/ust-consumer/Makefile.am b/src/common/ust-consumer/Makefile.am
+> index c79c4a5..ab8d38a 100644
+> --- a/src/common/ust-consumer/Makefile.am
+> +++ b/src/common/ust-consumer/Makefile.am
+> @@ -1,4 +1,7 @@
+>  if HAVE_LIBLTTNG_UST_CTL
+> +
+> +AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src
+> +
+>  noinst_LTLIBRARIES = libust-consumer.la
+>  
+>  libust_consumer_la_SOURCES = ust-consumer.c ust-consumer.h
+> diff --git a/src/lib/lttng-ctl/Makefile.am b/src/lib/lttng-ctl/Makefile.am
+> index f1b4b50..2681bdd 100644
+> --- a/src/lib/lttng-ctl/Makefile.am
+> +++ b/src/lib/lttng-ctl/Makefile.am
+> @@ -1,3 +1,5 @@
+> +AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src -I$(builddir)
+> +
+>  SUBDIRS = filter
+>  
+>  lib_LTLIBRARIES = liblttng-ctl.la
+> diff --git a/src/lib/lttng-ctl/filter/Makefile.am b/src/lib/lttng-ctl/filter/Makefile.am
+> index 45ed418..28ff90a 100644
+> --- a/src/lib/lttng-ctl/filter/Makefile.am
+> +++ b/src/lib/lttng-ctl/filter/Makefile.am
+> @@ -1,3 +1,5 @@
+> +AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src -I$(srcdir) -I$(builddir) 
+> +
+>  noinst_PROGRAMS = filter-grammar-test
+>  noinst_LTLIBRARIES = libfilter.la
+>  noinst_HEADERS = filter-ast.h
+> diff --git a/tests/kernel/Makefile.am b/tests/kernel/Makefile.am
+> index 2992afb..8872af4 100644
+> --- a/tests/kernel/Makefile.am
+> +++ b/tests/kernel/Makefile.am
+> @@ -1,4 +1,4 @@
+> -AM_CFLAGS = -g -Wall -I../
+> +AM_CFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src -I$(top_srcdir)/tests -g -Wall
+>  AM_LDFLAGS = -lurcu -lurcu-cds
+>  
+>  EXTRA_DIST = runall.sh run-kernel-tests.sh
+> diff --git a/tests/tools/Makefile.am b/tests/tools/Makefile.am
+> index 3d25900..c0477e5 100644
+> --- a/tests/tools/Makefile.am
+> +++ b/tests/tools/Makefile.am
+> @@ -1,6 +1,6 @@
+>  SUBDIRS = streaming
+>  
+> -AM_CFLAGS = -g -Wall -I../
+> +AM_CFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src -I$(top_srcdir)/tests -g -Wall
+>  AM_LDFLAGS = -lurcu -lurcu-cds
+>  
+>  EXTRA_DIST = runall.sh
+> diff --git a/tests/tools/streaming/Makefile.am b/tests/tools/streaming/Makefile.am
+> index f7a3c9d..3ff8ef0 100644
+> --- a/tests/tools/streaming/Makefile.am
+> +++ b/tests/tools/streaming/Makefile.am
+> @@ -1,4 +1,4 @@
+> -AM_CFLAGS = -I. -O2 -g -I../../
+> +AM_CFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src -I$(top_srcdir)/tests -I$(srcdir) -O2 -g
+>  AM_LDFLAGS =
+>  
+>  if LTTNG_TOOLS_BUILD_WITH_LIBDL
+> diff --git a/tests/ust/Makefile.am b/tests/ust/Makefile.am
+> index 146bff2..387842d 100644
+> --- a/tests/ust/Makefile.am
+> +++ b/tests/ust/Makefile.am
+> @@ -1,7 +1,7 @@
+>  if HAVE_LIBLTTNG_UST_CTL
+>  SUBDIRS = nprocesses high-throughput low-throughput before-after multi-session
+>  
+> -AM_CFLAGS = -g -Wall -I../
+> +AM_CFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/tests -I$(top_srcdir)/src -g -Wall 
+>  AM_LDFLAGS = -lurcu -lurcu-cds
+>  
+>  EXTRA_DIST = runall.sh run-ust-global-tests.sh
+> diff --git a/tests/ust/before-after/Makefile.am b/tests/ust/before-after/Makefile.am
+> index 29652dc..d197d72 100644
+> --- a/tests/ust/before-after/Makefile.am
+> +++ b/tests/ust/before-after/Makefile.am
+> @@ -1,4 +1,4 @@
+> -AM_CFLAGS = -I. -O2
+> +AM_CFLAGS = -I$(srcdir) -O2
+>  AM_LDFLAGS = -llttng-ust
+>  
+>  if LTTNG_TOOLS_BUILD_WITH_LIBDL
+> diff --git a/tests/ust/high-throughput/Makefile.am b/tests/ust/high-throughput/Makefile.am
+> index 01d5ad2..cff8fe4 100644
+> --- a/tests/ust/high-throughput/Makefile.am
+> +++ b/tests/ust/high-throughput/Makefile.am
+> @@ -1,4 +1,4 @@
+> -AM_CFLAGS = -I. -O2
+> +AM_CFLAGS = -I$(srcdir) -O2
+>  AM_LDFLAGS = -llttng-ust
+>  
+>  if LTTNG_TOOLS_BUILD_WITH_LIBDL
+> diff --git a/tests/ust/low-throughput/Makefile.am b/tests/ust/low-throughput/Makefile.am
+> index aefdf53..a1df9f5 100644
+> --- a/tests/ust/low-throughput/Makefile.am
+> +++ b/tests/ust/low-throughput/Makefile.am
+> @@ -1,4 +1,4 @@
+> -AM_CFLAGS = -I. -O2
+> +AM_CFLAGS = -I$(srcdir) -O2
+>  AM_LDFLAGS = -llttng-ust
+>  
+>  if LTTNG_TOOLS_BUILD_WITH_LIBDL
+> diff --git a/tests/ust/multi-session/Makefile.am b/tests/ust/multi-session/Makefile.am
+> index 29652dc..d197d72 100644
+> --- a/tests/ust/multi-session/Makefile.am
+> +++ b/tests/ust/multi-session/Makefile.am
+> @@ -1,4 +1,4 @@
+> -AM_CFLAGS = -I. -O2
+> +AM_CFLAGS = -I$(srcdir) -O2
+>  AM_LDFLAGS = -llttng-ust
+>  
+>  if LTTNG_TOOLS_BUILD_WITH_LIBDL
+> diff --git a/tests/ust/nprocesses/Makefile.am b/tests/ust/nprocesses/Makefile.am
+> index d3fdcbd..20beea0 100644
+> --- a/tests/ust/nprocesses/Makefile.am
+> +++ b/tests/ust/nprocesses/Makefile.am
+> @@ -1,4 +1,4 @@
+> -AM_CFLAGS = -I. -O2
+> +AM_CFLAGS = -I$(srcdir) -O2
+>  AM_LDFLAGS = -llttng-ust
+>  
+>  if LTTNG_TOOLS_BUILD_WITH_LIBDL
+> -- 
+> 1.7.9.5
+> 
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
 
-------=_Part_8558_29877052.1349163427923
-Content-Type: text/x-patch;
-	name=lttng-ust-git-0001-Build-out-of-src-tree.patch
-content-transfer-encoding: base64
-Content-Disposition: attachment; size=7914;
-	filename=lttng-ust-git-0001-Build-out-of-src-tree.patch
-
-RnJvbSBkYmNkYWQ1OGE2NzVmYjE5MTI1NDExZjcxMzcwMGNlNjMzOTE5MTczIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBQYXVsIENoYXZlbnQgPHBhdWwuY2hhdmVudEBvbmVyYS5mcj4K
-RGF0ZTogVHVlLCAyIE9jdCAyMDEyIDA5OjMwOjMxICswMjAwClN1YmplY3Q6IFtQQVRDSF0gQnVp
-bGQgb3V0IG9mIHNyYyB0cmVlLgoKLS0tCiBsaWJsdHRuZy11c3QtY3RsL01ha2VmaWxlLmFtICAg
-ICAgICAgIHwgICAgMiArLQogbGlibHR0bmctdXN0LWxpYmMtd3JhcHBlci9NYWtlZmlsZS5hbSB8
-ICAgIDIgKy0KIGxpYmx0dG5nLXVzdC9NYWtlZmlsZS5hbSAgICAgICAgICAgICAgfCAgICAyICst
-CiBsaWJyaW5nYnVmZmVyL01ha2VmaWxlLmFtICAgICAgICAgICAgIHwgICAgNCArKy0tCiB0ZXN0
-cy9kZW1vL01ha2VmaWxlLmFtICAgICAgICAgICAgICAgIHwgICAgMiArLQogdGVzdHMvZm9yay9N
-YWtlZmlsZS5hbSAgICAgICAgICAgICAgICB8ICAgIDIgKy0KIHRlc3RzL2hlbGxvLXN0YXRpYy1s
-aWIvTWFrZWZpbGUuYW0gICAgfCAgICAyICstCiB0ZXN0cy9oZWxsby5jeHgvTWFrZWZpbGUuYW0g
-ICAgICAgICAgIHwgICAgMiArLQogdGVzdHMvaGVsbG8vTWFrZWZpbGUuYW0gICAgICAgICAgICAg
-ICB8ICAgIDIgKy0KIHRlc3RzL3VzdC1iYXNpYy10cmFjaW5nL01ha2VmaWxlLmFtICAgfCAgICAy
-ICstCiB0ZXN0cy91c3QtbXVsdGktdGVzdC9NYWtlZmlsZS5hbSAgICAgIHwgICAgMiArLQogMTEg
-ZmlsZXMgY2hhbmdlZCwgMTIgaW5zZXJ0aW9ucygrKSwgMTIgZGVsZXRpb25zKC0pCgpkaWZmIC0t
-Z2l0IGEvbGlibHR0bmctdXN0LWN0bC9NYWtlZmlsZS5hbSBiL2xpYmx0dG5nLXVzdC1jdGwvTWFr
-ZWZpbGUuYW0KaW5kZXggNGUzNDFiZS4uMWE1N2ZlZiAxMDA2NDQKLS0tIGEvbGlibHR0bmctdXN0
-LWN0bC9NYWtlZmlsZS5hbQorKysgYi9saWJsdHRuZy11c3QtY3RsL01ha2VmaWxlLmFtCkBAIC0x
-LDQgKzEsNCBAQAotQU1fQ1BQRkxBR1MgPSAtSSQodG9wX3NyY2RpcikvaW5jbHVkZSAtSSQodG9w
-X3NyY2RpcikvbGlibHR0bmctdXN0LWNvbW0KK0FNX0NQUEZMQUdTID0gLUkkKHRvcF9zcmNkaXIp
-L2luY2x1ZGUgLUkkKHRvcF9zcmNkaXIpL2xpYmx0dG5nLXVzdC1jb21tIC1JJCh0b3BfYnVpbGRk
-aXIpL2luY2x1ZGUKIEFNX0NGTEFHUyA9IC1mbm8tc3RyaWN0LWFsaWFzaW5nCiAKIGxpYl9MVExJ
-QlJBUklFUyA9IGxpYmx0dG5nLXVzdC1jdGwubGEKZGlmZiAtLWdpdCBhL2xpYmx0dG5nLXVzdC1s
-aWJjLXdyYXBwZXIvTWFrZWZpbGUuYW0gYi9saWJsdHRuZy11c3QtbGliYy13cmFwcGVyL01ha2Vm
-aWxlLmFtCmluZGV4IDViM2Y3ZjAuLjRmZGNlZGIgMTAwNjQ0Ci0tLSBhL2xpYmx0dG5nLXVzdC1s
-aWJjLXdyYXBwZXIvTWFrZWZpbGUuYW0KKysrIGIvbGlibHR0bmctdXN0LWxpYmMtd3JhcHBlci9N
-YWtlZmlsZS5hbQpAQCAtMSw0ICsxLDQgQEAKLUFNX0NQUEZMQUdTID0gLUkkKHRvcF9zcmNkaXIp
-L2luY2x1ZGUKK0FNX0NQUEZMQUdTID0gLUkkKHRvcF9zcmNkaXIpL2luY2x1ZGUgLUkkKHRvcF9i
-dWlsZGRpcikvaW5jbHVkZQogQU1fQ0ZMQUdTID0gLWZuby1zdHJpY3QtYWxpYXNpbmcKIAogbGli
-X0xUTElCUkFSSUVTID0gbGlibHR0bmctdXN0LWxpYmMtd3JhcHBlci5sYQpkaWZmIC0tZ2l0IGEv
-bGlibHR0bmctdXN0L01ha2VmaWxlLmFtIGIvbGlibHR0bmctdXN0L01ha2VmaWxlLmFtCmluZGV4
-IGFlYjUwOTIuLmRmZjhiNmUgMTAwNjQ0Ci0tLSBhL2xpYmx0dG5nLXVzdC9NYWtlZmlsZS5hbQor
-KysgYi9saWJsdHRuZy11c3QvTWFrZWZpbGUuYW0KQEAgLTEsNCArMSw0IEBACi1BTV9DUFBGTEFH
-UyA9IC1JJCh0b3Bfc3JjZGlyKS9pbmNsdWRlCitBTV9DUFBGTEFHUyA9IC1JJCh0b3Bfc3JjZGly
-KS9pbmNsdWRlIC1JJCh0b3BfYnVpbGRkaXIpL2luY2x1ZGUKIEFNX0NGTEFHUyA9IC1mbm8tc3Ry
-aWN0LWFsaWFzaW5nCiAKIG5vaW5zdF9MVExJQlJBUklFUyA9IGxpYmx0dG5nLXVzdC1ydW50aW1l
-LmxhIGxpYmx0dG5nLXVzdC1zdXBwb3J0LmxhCmRpZmYgLS1naXQgYS9saWJyaW5nYnVmZmVyL01h
-a2VmaWxlLmFtIGIvbGlicmluZ2J1ZmZlci9NYWtlZmlsZS5hbQppbmRleCBiNWIwZWJkLi4yNzFj
-OGJlIDEwMDY0NAotLS0gYS9saWJyaW5nYnVmZmVyL01ha2VmaWxlLmFtCisrKyBiL2xpYnJpbmdi
-dWZmZXIvTWFrZWZpbGUuYW0KQEAgLTEsNCArMSw0IEBACi1BTV9DUFBGTEFHUyA9IC1JJCh0b3Bf
-c3JjZGlyKS9pbmNsdWRlCitBTV9DUFBGTEFHUyA9IC1JJCh0b3Bfc3JjZGlyKS9pbmNsdWRlIC1J
-JCh0b3BfYnVpbGRkaXIpL2luY2x1ZGUKIEFNX0NGTEFHUyA9IC1mbm8tc3RyaWN0LWFsaWFzaW5n
-CiAKIG5vaW5zdF9MVExJQlJBUklFUyA9IGxpYnJpbmdidWZmZXIubGEKQEAgLTEyLDcgKzEyLDcg
-QEAgbGlicmluZ2J1ZmZlcl9sYV9TT1VSQ0VTID0gXAogCWJhY2tlbmQuaCBiYWNrZW5kX2ludGVy
-bmFsLmggYmFja2VuZF90eXBlcy5oIFwKIAlmcm9udGVuZF9hcGkuaCBmcm9udGVuZC5oIGZyb250
-ZW5kX2ludGVybmFsLmggZnJvbnRlbmRfdHlwZXMuaCBcCiAJbm9oei5oIHZhdG9taWMuaCB0bHNm
-aXh1cC5oCi0JCisKIGxpYnJpbmdidWZmZXJfbGFfTElCQUREID0gXAogCS1scHRocmVhZCBcCiAJ
-LWxydApkaWZmIC0tZ2l0IGEvdGVzdHMvZGVtby9NYWtlZmlsZS5hbSBiL3Rlc3RzL2RlbW8vTWFr
-ZWZpbGUuYW0KaW5kZXggZTQ1NzBmZi4uMGU0MzI1NSAxMDA2NDQKLS0tIGEvdGVzdHMvZGVtby9N
-YWtlZmlsZS5hbQorKysgYi90ZXN0cy9kZW1vL01ha2VmaWxlLmFtCkBAIC0xLDYgKzEsNiBAQAog
-IyAtV3N5c3RlbS1oZWFkZXJzIGlzIG5lZWRlZCB0byBwcmludCB3YXJuaW5ncyBpbiB0aGUgdHJh
-Y2Vwb2ludAogIyBkZXNjcmlwdGlvbiBmaWxlLgotQU1fQ1BQRkxBR1MgPSAtSSQodG9wX3NyY2Rp
-cikvaW5jbHVkZSAtV3N5c3RlbS1oZWFkZXJzCitBTV9DUFBGTEFHUyA9IC1JJCh0b3Bfc3JjZGly
-KS9pbmNsdWRlIC1JJCh0b3BfYnVpbGRkaXIpL2luY2x1ZGUgLVdzeXN0ZW0taGVhZGVycwogCiAj
-IFNldCBMSUJTIHRvIG5vdGhpbmcgc28gdGhlIGFwcGxpY2F0aW9uIGRvZXMgbm90IGxpbmsgb24g
-dXNlbGVzcwogIyBsaWJyYXJpZXMuCmRpZmYgLS1naXQgYS90ZXN0cy9mb3JrL01ha2VmaWxlLmFt
-IGIvdGVzdHMvZm9yay9NYWtlZmlsZS5hbQppbmRleCAwYTY0OWM3Li5hODkzMzY2IDEwMDY0NAot
-LS0gYS90ZXN0cy9mb3JrL01ha2VmaWxlLmFtCisrKyBiL3Rlc3RzL2ZvcmsvTWFrZWZpbGUuYW0K
-QEAgLTEsNCArMSw0IEBACi1BTV9DUFBGTEFHUyA9IC1JJCh0b3Bfc3JjZGlyKS9pbmNsdWRlIC1X
-c3lzdGVtLWhlYWRlcnMKK0FNX0NQUEZMQUdTID0gLUkkKHRvcF9zcmNkaXIpL2luY2x1ZGUgLUkk
-KHRvcF9idWlsZGRpcikvaW5jbHVkZSAtV3N5c3RlbS1oZWFkZXJzCiAKIG5vaW5zdF9QUk9HUkFN
-UyA9IGZvcmsgZm9yazIKIGZvcmtfU09VUkNFUyA9IGZvcmsuYyB1c3RfdGVzdHNfZm9yay5oCmRp
-ZmYgLS1naXQgYS90ZXN0cy9oZWxsby1zdGF0aWMtbGliL01ha2VmaWxlLmFtIGIvdGVzdHMvaGVs
-bG8tc3RhdGljLWxpYi9NYWtlZmlsZS5hbQppbmRleCA2NjMzNDg5Li42YWU5NDYzIDEwMDY0NAot
-LS0gYS90ZXN0cy9oZWxsby1zdGF0aWMtbGliL01ha2VmaWxlLmFtCisrKyBiL3Rlc3RzL2hlbGxv
-LXN0YXRpYy1saWIvTWFrZWZpbGUuYW0KQEAgLTEsNCArMSw0IEBACi1BTV9DUFBGTEFHUyA9IC1J
-JCh0b3Bfc3JjZGlyKS9pbmNsdWRlIC1Xc3lzdGVtLWhlYWRlcnMKK0FNX0NQUEZMQUdTID0gLUkk
-KHRvcF9zcmNkaXIpL2luY2x1ZGUgLUkkKHRvcF9idWlsZGRpcikvaW5jbHVkZSAtV3N5c3RlbS1o
-ZWFkZXJzCiAKIG5vaW5zdF9MVExJQlJBUklFUyA9IGxpYmx0dG5nLXVzdC1wcm92aWRlci11c3Qt
-dGVzdC1oZWxsby5sYQogbGlibHR0bmdfdXN0X3Byb3ZpZGVyX3VzdF90ZXN0X2hlbGxvX2xhX1NP
-VVJDRVMgPSBcCmRpZmYgLS1naXQgYS90ZXN0cy9oZWxsby5jeHgvTWFrZWZpbGUuYW0gYi90ZXN0
-cy9oZWxsby5jeHgvTWFrZWZpbGUuYW0KaW5kZXggZjU2ZjQzMS4uNGVhY2UwZSAxMDA2NDQKLS0t
-IGEvdGVzdHMvaGVsbG8uY3h4L01ha2VmaWxlLmFtCisrKyBiL3Rlc3RzL2hlbGxvLmN4eC9NYWtl
-ZmlsZS5hbQpAQCAtMSw0ICsxLDQgQEAKLUFNX0NQUEZMQUdTID0gLUkkKHRvcF9zcmNkaXIpL2lu
-Y2x1ZGUgLVdzeXN0ZW0taGVhZGVycworQU1fQ1BQRkxBR1MgPSAtSSQodG9wX3NyY2RpcikvaW5j
-bHVkZSAtSSQodG9wX2J1aWxkZGlyKS9pbmNsdWRlIC1Xc3lzdGVtLWhlYWRlcnMKIAogbm9pbnN0
-X1BST0dSQU1TID0gaGVsbG8KIGhlbGxvX1NPVVJDRVMgPSBoZWxsby5jcHAgdHAuYyB1c3RfdGVz
-dHNfaGVsbG8uaApkaWZmIC0tZ2l0IGEvdGVzdHMvaGVsbG8vTWFrZWZpbGUuYW0gYi90ZXN0cy9o
-ZWxsby9NYWtlZmlsZS5hbQppbmRleCAwYzRjMzExLi4xZWU3ZjhkIDEwMDY0NAotLS0gYS90ZXN0
-cy9oZWxsby9NYWtlZmlsZS5hbQorKysgYi90ZXN0cy9oZWxsby9NYWtlZmlsZS5hbQpAQCAtMSw0
-ICsxLDQgQEAKLUFNX0NQUEZMQUdTID0gLUkkKHRvcF9zcmNkaXIpL2luY2x1ZGUgLVdzeXN0ZW0t
-aGVhZGVycworQU1fQ1BQRkxBR1MgPSAtSSQodG9wX3NyY2RpcikvaW5jbHVkZSAtSSQodG9wX2J1
-aWxkZGlyKS9pbmNsdWRlIC1Xc3lzdGVtLWhlYWRlcnMKIAogbm9pbnN0X1BST0dSQU1TID0gaGVs
-bG8KIGhlbGxvX1NPVVJDRVMgPSBoZWxsby5jIHRwLmMgdXN0X3Rlc3RzX2hlbGxvLmgKZGlmZiAt
-LWdpdCBhL3Rlc3RzL3VzdC1iYXNpYy10cmFjaW5nL01ha2VmaWxlLmFtIGIvdGVzdHMvdXN0LWJh
-c2ljLXRyYWNpbmcvTWFrZWZpbGUuYW0KaW5kZXggMGEwYTJmMC4uMTc1YWRjOCAxMDA2NDQKLS0t
-IGEvdGVzdHMvdXN0LWJhc2ljLXRyYWNpbmcvTWFrZWZpbGUuYW0KKysrIGIvdGVzdHMvdXN0LWJh
-c2ljLXRyYWNpbmcvTWFrZWZpbGUuYW0KQEAgLTEsNCArMSw0IEBACi1BTV9DUFBGTEFHUyA9IC1J
-JCh0b3Bfc3JjZGlyKS9pbmNsdWRlIC1JJCh0b3Bfc3JjZGlyKS9saWJ1c3QKK0FNX0NQUEZMQUdT
-ID0gLUkkKHRvcF9zcmNkaXIpL2luY2x1ZGUgLUkkKHRvcF9idWlsZGRpcikvaW5jbHVkZSAtSSQo
-dG9wX3NyY2RpcikvbGlidXN0IAogCiBub2luc3RfUFJPR1JBTVMgPSB1c3QtYmFzaWMtdHJhY2lu
-ZwogdXN0X2Jhc2ljX3RyYWNpbmdfU09VUkNFUyA9IHVzdC1iYXNpYy10cmFjaW5nLmMKZGlmZiAt
-LWdpdCBhL3Rlc3RzL3VzdC1tdWx0aS10ZXN0L01ha2VmaWxlLmFtIGIvdGVzdHMvdXN0LW11bHRp
-LXRlc3QvTWFrZWZpbGUuYW0KaW5kZXggYzFkMzlkOS4uNjljN2NjOSAxMDA2NDQKLS0tIGEvdGVz
-dHMvdXN0LW11bHRpLXRlc3QvTWFrZWZpbGUuYW0KKysrIGIvdGVzdHMvdXN0LW11bHRpLXRlc3Qv
-TWFrZWZpbGUuYW0KQEAgLTEsNCArMSw0IEBACi1BTV9DUFBGTEFHUyA9IC1JJCh0b3Bfc3JjZGly
-KS9pbmNsdWRlIC1JJCh0b3Bfc3JjZGlyKS9saWJ1c3QKK0FNX0NQUEZMQUdTID0gLUkkKHRvcF9z
-cmNkaXIpL2luY2x1ZGUgLUkkKHRvcF9idWlsZGRpcikvaW5jbHVkZSAtSSQodG9wX3NyY2Rpcikv
-bGlidXN0CiAKIG5vaW5zdF9QUk9HUkFNUyA9IHVzdC1tdWx0aS10ZXN0CiB1c3RfbXVsdGlfdGVz
-dF9TT1VSQ0VTID0gdXN0LW11bHRpLXRlc3QuYwotLSAKMS43LjkuNQoK
-------=_Part_8558_29877052.1349163427923
-Content-Type: text/x-patch;
-	name=lttng-tools-git-0001-Build-out-of-src-tree.patch
-content-transfer-encoding: base64
-Content-Disposition: attachment; size=13678;
-	filename=lttng-tools-git-0001-Build-out-of-src-tree.patch
-
-RnJvbSAzNDI1YmRlMjgyN2QyNDVjYjQyN2M5ODk3ODZmZGMxMGJiMjM1YjlmIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBQYXVsIENoYXZlbnQgPHBhdWwuY2hhdmVudEBvbmVyYS5mcj4K
-RGF0ZTogVHVlLCAyIE9jdCAyMDEyIDA5OjMwOjAyICswMjAwClN1YmplY3Q6IFtQQVRDSF0gQnVp
-bGQgb3V0IG9mIHNyYyB0cmVlLgoKLS0tCiBzcmMvYmluL2x0dG5nLWNvbnN1bWVyZC9NYWtlZmls
-ZS5hbSAgICB8ICAgIDIgKy0KIHNyYy9iaW4vbHR0bmctcmVsYXlkL01ha2VmaWxlLmFtICAgICAg
-IHwgICAgMyArKy0KIHNyYy9iaW4vbHR0bmctc2Vzc2lvbmQvTWFrZWZpbGUuYW0gICAgIHwgICAg
-NSArKystLQogc3JjL2Jpbi9sdHRuZy9NYWtlZmlsZS5hbSAgICAgICAgICAgICAgfCAgICAzICsr
-LQogc3JjL2NvbW1vbi9NYWtlZmlsZS5hbSAgICAgICAgICAgICAgICAgfCAgICAyICstCiBzcmMv
-Y29tbW9uL2NvbXBhdC9NYWtlZmlsZS5hbSAgICAgICAgICB8ICAgIDIgKy0KIHNyYy9jb21tb24v
-aGFzaHRhYmxlL01ha2VmaWxlLmFtICAgICAgIHwgICAgMiArLQogc3JjL2NvbW1vbi9rZXJuZWwt
-Y29uc3VtZXIvTWFrZWZpbGUuYW0gfCAgICAyICsrCiBzcmMvY29tbW9uL2tlcm5lbC1jdGwvTWFr
-ZWZpbGUuYW0gICAgICB8ICAgIDIgKy0KIHNyYy9jb21tb24vcmVsYXlkL01ha2VmaWxlLmFtICAg
-ICAgICAgIHwgICAgMiArKwogc3JjL2NvbW1vbi9zZXNzaW9uZC1jb21tL01ha2VmaWxlLmFtICAg
-fCAgICAyICsrCiBzcmMvY29tbW9uL3VzdC1jb25zdW1lci9NYWtlZmlsZS5hbSAgICB8ICAgIDMg
-KysrCiBzcmMvbGliL2x0dG5nLWN0bC9NYWtlZmlsZS5hbSAgICAgICAgICB8ICAgIDIgKysKIHNy
-Yy9saWIvbHR0bmctY3RsL2ZpbHRlci9NYWtlZmlsZS5hbSAgIHwgICAgMiArKwogdGVzdHMva2Vy
-bmVsL01ha2VmaWxlLmFtICAgICAgICAgICAgICAgfCAgICAyICstCiB0ZXN0cy90b29scy9NYWtl
-ZmlsZS5hbSAgICAgICAgICAgICAgICB8ICAgIDIgKy0KIHRlc3RzL3Rvb2xzL3N0cmVhbWluZy9N
-YWtlZmlsZS5hbSAgICAgIHwgICAgMiArLQogdGVzdHMvdXN0L01ha2VmaWxlLmFtICAgICAgICAg
-ICAgICAgICAgfCAgICAyICstCiB0ZXN0cy91c3QvYmVmb3JlLWFmdGVyL01ha2VmaWxlLmFtICAg
-ICB8ICAgIDIgKy0KIHRlc3RzL3VzdC9oaWdoLXRocm91Z2hwdXQvTWFrZWZpbGUuYW0gIHwgICAg
-MiArLQogdGVzdHMvdXN0L2xvdy10aHJvdWdocHV0L01ha2VmaWxlLmFtICAgfCAgICAyICstCiB0
-ZXN0cy91c3QvbXVsdGktc2Vzc2lvbi9NYWtlZmlsZS5hbSAgICB8ICAgIDIgKy0KIHRlc3RzL3Vz
-dC9ucHJvY2Vzc2VzL01ha2VmaWxlLmFtICAgICAgIHwgICAgMiArLQogMjMgZmlsZXMgY2hhbmdl
-ZCwgMzQgaW5zZXJ0aW9ucygrKSwgMTggZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvc3JjL2Jp
-bi9sdHRuZy1jb25zdW1lcmQvTWFrZWZpbGUuYW0gYi9zcmMvYmluL2x0dG5nLWNvbnN1bWVyZC9N
-YWtlZmlsZS5hbQppbmRleCA4OWFlMDU5Li5hMzk1YzBiIDEwMDY0NAotLS0gYS9zcmMvYmluL2x0
-dG5nLWNvbnN1bWVyZC9NYWtlZmlsZS5hbQorKysgYi9zcmMvYmluL2x0dG5nLWNvbnN1bWVyZC9N
-YWtlZmlsZS5hbQpAQCAtMSw0ICsxLDQgQEAKLUFNX0NQUEZMQUdTID0KK0FNX0NQUEZMQUdTID0g
-LUkkKHRvcF9zcmNkaXIpL2luY2x1ZGUgLUkkKHRvcF9zcmNkaXIpL3NyYwogCiBsdHRuZ2xpYmV4
-ZWNfUFJPR1JBTVMgPSBsdHRuZy1jb25zdW1lcmQKIApkaWZmIC0tZ2l0IGEvc3JjL2Jpbi9sdHRu
-Zy1yZWxheWQvTWFrZWZpbGUuYW0gYi9zcmMvYmluL2x0dG5nLXJlbGF5ZC9NYWtlZmlsZS5hbQpp
-bmRleCBjYjYyNWU1Li4xZjNjZGU0IDEwMDY0NAotLS0gYS9zcmMvYmluL2x0dG5nLXJlbGF5ZC9N
-YWtlZmlsZS5hbQorKysgYi9zcmMvYmluL2x0dG5nLXJlbGF5ZC9NYWtlZmlsZS5hbQpAQCAtMSw0
-ICsxLDUgQEAKLUFNX0NQUEZMQUdTID0gLURJTlNUQUxMX0JJTl9QQVRIPVwiIiQobHR0bmdsaWJl
-eGVjZGlyKSJcIiBcCitBTV9DUFBGTEFHUyA9ICAgLUkkKHRvcF9zcmNkaXIpL2luY2x1ZGUgLUkk
-KHRvcF9zcmNkaXIpL3NyYyBcCisJCS1ESU5TVEFMTF9CSU5fUEFUSD1cIiIkKGx0dG5nbGliZXhl
-Y2RpcikiXCIgXAogCQkJICAtRElOU1RBTExfTElCX1BBVEg9XCIiJChsaWJkaXIpIlwiCiAKIEFN
-X0NGTEFHUyA9IC1mbm8tc3RyaWN0LWFsaWFzaW5nCmRpZmYgLS1naXQgYS9zcmMvYmluL2x0dG5n
-LXNlc3Npb25kL01ha2VmaWxlLmFtIGIvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9NYWtlZmlsZS5h
-bQppbmRleCA3M2JlMDIzLi5iMTg1OWQ2IDEwMDY0NAotLS0gYS9zcmMvYmluL2x0dG5nLXNlc3Np
-b25kL01ha2VmaWxlLmFtCisrKyBiL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvTWFrZWZpbGUuYW0K
-QEAgLTEsNSArMSw2IEBACi1BTV9DUFBGTEFHUyA9IC1ESU5TVEFMTF9CSU5fUEFUSD1cIiIkKGx0
-dG5nbGliZXhlY2RpcikiXCIgXAotCQkJICAtRElOU1RBTExfTElCX1BBVEg9XCIiJChsaWJkaXIp
-IlwiCitBTV9DUFBGTEFHUyA9ICAgLUkkKHRvcF9zcmNkaXIpL2luY2x1ZGUgLUkkKHRvcF9zcmNk
-aXIpL3NyYyBcCisJCS1ESU5TVEFMTF9CSU5fUEFUSD1cIiIkKGx0dG5nbGliZXhlY2RpcikiXCIg
-XAorCQktRElOU1RBTExfTElCX1BBVEg9XCIiJChsaWJkaXIpIlwiCiAKIEFNX0NGTEFHUyA9IC1m
-bm8tc3RyaWN0LWFsaWFzaW5nCiAKZGlmZiAtLWdpdCBhL3NyYy9iaW4vbHR0bmcvTWFrZWZpbGUu
-YW0gYi9zcmMvYmluL2x0dG5nL01ha2VmaWxlLmFtCmluZGV4IDAzODFhYTYuLmZlNzk5MWIgMTAw
-NjQ0Ci0tLSBhL3NyYy9iaW4vbHR0bmcvTWFrZWZpbGUuYW0KKysrIGIvc3JjL2Jpbi9sdHRuZy9N
-YWtlZmlsZS5hbQpAQCAtMSw0ICsxLDUgQEAKLUFNX0NQUEZMQUdTID0gLURJTlNUQUxMX0JJTl9Q
-QVRIPVwiIiQoYmluZGlyKSJcIgorQU1fQ1BQRkxBR1MgPSAgICAgLUkkKHRvcF9zcmNkaXIpL2lu
-Y2x1ZGUgLUkkKHRvcF9zcmNkaXIpL3NyYyBcCisJICAJICAtRElOU1RBTExfQklOX1BBVEg9XCIi
-JChiaW5kaXIpIlwiCiAKIGJpbl9QUk9HUkFNUyA9IGx0dG5nCiAKZGlmZiAtLWdpdCBhL3NyYy9j
-b21tb24vTWFrZWZpbGUuYW0gYi9zcmMvY29tbW9uL01ha2VmaWxlLmFtCmluZGV4IGNhNDgxNTMu
-LjU4NTAwNDEgMTAwNjQ0Ci0tLSBhL3NyYy9jb21tb24vTWFrZWZpbGUuYW0KKysrIGIvc3JjL2Nv
-bW1vbi9NYWtlZmlsZS5hbQpAQCAtMSw0ICsxLDQgQEAKLUFNX0NQUEZMQUdTID0KK0FNX0NQUEZM
-QUdTID0gLUkkKHRvcF9zcmNkaXIpL2luY2x1ZGUgLUkkKHRvcF9zcmNkaXIpL3NyYwogCiBTVUJE
-SVJTID0gY29tcGF0IGhhc2h0YWJsZSBrZXJuZWwtY3RsIHNlc3Npb25kLWNvbW0gcmVsYXlkIGtl
-cm5lbC1jb25zdW1lciB1c3QtY29uc3VtZXIKIApkaWZmIC0tZ2l0IGEvc3JjL2NvbW1vbi9jb21w
-YXQvTWFrZWZpbGUuYW0gYi9zcmMvY29tbW9uL2NvbXBhdC9NYWtlZmlsZS5hbQppbmRleCA5MWNk
-M2JkLi4yZDgzMjgyIDEwMDY0NAotLS0gYS9zcmMvY29tbW9uL2NvbXBhdC9NYWtlZmlsZS5hbQor
-KysgYi9zcmMvY29tbW9uL2NvbXBhdC9NYWtlZmlsZS5hbQpAQCAtMSw0ICsxLDQgQEAKLUFNX0NQ
-UEZMQUdTID0gLUkkKHRvcF9zcmNkaXIpL2luY2x1ZGUKK0FNX0NQUEZMQUdTID0gLUkkKHRvcF9z
-cmNkaXIpL2luY2x1ZGUgLUkkKHRvcF9zcmNkaXIpL3NyYwogCiBub2luc3RfTFRMSUJSQVJJRVMg
-PSBsaWJjb21wYXQubGEKIApkaWZmIC0tZ2l0IGEvc3JjL2NvbW1vbi9oYXNodGFibGUvTWFrZWZp
-bGUuYW0gYi9zcmMvY29tbW9uL2hhc2h0YWJsZS9NYWtlZmlsZS5hbQppbmRleCA3YTJiODM1Li42
-MmUyMmMxIDEwMDY0NAotLS0gYS9zcmMvY29tbW9uL2hhc2h0YWJsZS9NYWtlZmlsZS5hbQorKysg
-Yi9zcmMvY29tbW9uL2hhc2h0YWJsZS9NYWtlZmlsZS5hbQpAQCAtMSw0ICsxLDQgQEAKLUFNX0NQ
-UEZMQUdTID0gLUkkKHRvcF9zcmNkaXIpL2luY2x1ZGUKK0FNX0NQUEZMQUdTID0gLUkkKHRvcF9z
-cmNkaXIpL2luY2x1ZGUgLUkkKHRvcF9zcmNkaXIpL3NyYwogCiBub2luc3RfTFRMSUJSQVJJRVMg
-PSBsaWJoYXNodGFibGUubGEKIApkaWZmIC0tZ2l0IGEvc3JjL2NvbW1vbi9rZXJuZWwtY29uc3Vt
-ZXIvTWFrZWZpbGUuYW0gYi9zcmMvY29tbW9uL2tlcm5lbC1jb25zdW1lci9NYWtlZmlsZS5hbQpp
-bmRleCAwMDgwNDFlLi5lZDU0NjJhIDEwMDY0NAotLS0gYS9zcmMvY29tbW9uL2tlcm5lbC1jb25z
-dW1lci9NYWtlZmlsZS5hbQorKysgYi9zcmMvY29tbW9uL2tlcm5lbC1jb25zdW1lci9NYWtlZmls
-ZS5hbQpAQCAtMSwzICsxLDUgQEAKK0FNX0NQUEZMQUdTID0gLUkkKHRvcF9zcmNkaXIpL2luY2x1
-ZGUgLUkkKHRvcF9zcmNkaXIpL3NyYworCiAjIEtlcm5lbCBjb25zdW1lciBsaWJyYXJ5CiBub2lu
-c3RfTFRMSUJSQVJJRVMgPSBsaWJrZXJuZWwtY29uc3VtZXIubGEKIApkaWZmIC0tZ2l0IGEvc3Jj
-L2NvbW1vbi9rZXJuZWwtY3RsL01ha2VmaWxlLmFtIGIvc3JjL2NvbW1vbi9rZXJuZWwtY3RsL01h
-a2VmaWxlLmFtCmluZGV4IGE1NmEwMjEuLmFiMDU3ZGQgMTAwNjQ0Ci0tLSBhL3NyYy9jb21tb24v
-a2VybmVsLWN0bC9NYWtlZmlsZS5hbQorKysgYi9zcmMvY29tbW9uL2tlcm5lbC1jdGwvTWFrZWZp
-bGUuYW0KQEAgLTEsNCArMSw0IEBACi1BTV9DUFBGTEFHUyA9IC1JJCh0b3Bfc3JjZGlyKS9pbmNs
-dWRlCitBTV9DUFBGTEFHUyA9IC1JJCh0b3Bfc3JjZGlyKS9pbmNsdWRlIC1JJCh0b3Bfc3JjZGly
-KS9zcmMKIAogbm9pbnN0X0xUTElCUkFSSUVTID0gbGlia2VybmVsLWN0bC5sYQogCmRpZmYgLS1n
-aXQgYS9zcmMvY29tbW9uL3JlbGF5ZC9NYWtlZmlsZS5hbSBiL3NyYy9jb21tb24vcmVsYXlkL01h
-a2VmaWxlLmFtCmluZGV4IDg0ZWVlMWIuLjI3NGRhODcgMTAwNjQ0Ci0tLSBhL3NyYy9jb21tb24v
-cmVsYXlkL01ha2VmaWxlLmFtCisrKyBiL3NyYy9jb21tb24vcmVsYXlkL01ha2VmaWxlLmFtCkBA
-IC0xLDMgKzEsNSBAQAorQU1fQ1BQRkxBR1MgPSAtSSQodG9wX3NyY2RpcikvaW5jbHVkZSAtSSQo
-dG9wX3NyY2Rpcikvc3JjCisKICMgUmVsYXlkIGxpYnJhcnkKIG5vaW5zdF9MVExJQlJBUklFUyA9
-IGxpYnJlbGF5ZC5sYQogCmRpZmYgLS1naXQgYS9zcmMvY29tbW9uL3Nlc3Npb25kLWNvbW0vTWFr
-ZWZpbGUuYW0gYi9zcmMvY29tbW9uL3Nlc3Npb25kLWNvbW0vTWFrZWZpbGUuYW0KaW5kZXggMmE3
-MGQ1NC4uMjQwNjNmOCAxMDA2NDQKLS0tIGEvc3JjL2NvbW1vbi9zZXNzaW9uZC1jb21tL01ha2Vm
-aWxlLmFtCisrKyBiL3NyYy9jb21tb24vc2Vzc2lvbmQtY29tbS9NYWtlZmlsZS5hbQpAQCAtMSwz
-ICsxLDUgQEAKK0FNX0NQUEZMQUdTID0gLUkkKHRvcF9zcmNkaXIpL2luY2x1ZGUgLUkkKHRvcF9z
-cmNkaXIpL3NyYworCiAjIFNlc3Npb24gZGFlbW9uIGNvbW11bmljYXRpb24gbGliCiBub2luc3Rf
-TFRMSUJSQVJJRVMgPSBsaWJzZXNzaW9uZC1jb21tLmxhCiAKZGlmZiAtLWdpdCBhL3NyYy9jb21t
-b24vdXN0LWNvbnN1bWVyL01ha2VmaWxlLmFtIGIvc3JjL2NvbW1vbi91c3QtY29uc3VtZXIvTWFr
-ZWZpbGUuYW0KaW5kZXggYzc5YzRhNS4uYWI4ZDM4YSAxMDA2NDQKLS0tIGEvc3JjL2NvbW1vbi91
-c3QtY29uc3VtZXIvTWFrZWZpbGUuYW0KKysrIGIvc3JjL2NvbW1vbi91c3QtY29uc3VtZXIvTWFr
-ZWZpbGUuYW0KQEAgLTEsNCArMSw3IEBACiBpZiBIQVZFX0xJQkxUVE5HX1VTVF9DVEwKKworQU1f
-Q1BQRkxBR1MgPSAtSSQodG9wX3NyY2RpcikvaW5jbHVkZSAtSSQodG9wX3NyY2Rpcikvc3JjCisK
-IG5vaW5zdF9MVExJQlJBUklFUyA9IGxpYnVzdC1jb25zdW1lci5sYQogCiBsaWJ1c3RfY29uc3Vt
-ZXJfbGFfU09VUkNFUyA9IHVzdC1jb25zdW1lci5jIHVzdC1jb25zdW1lci5oCmRpZmYgLS1naXQg
-YS9zcmMvbGliL2x0dG5nLWN0bC9NYWtlZmlsZS5hbSBiL3NyYy9saWIvbHR0bmctY3RsL01ha2Vm
-aWxlLmFtCmluZGV4IGYxYjRiNTAuLjI2ODFiZGQgMTAwNjQ0Ci0tLSBhL3NyYy9saWIvbHR0bmct
-Y3RsL01ha2VmaWxlLmFtCisrKyBiL3NyYy9saWIvbHR0bmctY3RsL01ha2VmaWxlLmFtCkBAIC0x
-LDMgKzEsNSBAQAorQU1fQ1BQRkxBR1MgPSAtSSQodG9wX3NyY2RpcikvaW5jbHVkZSAtSSQodG9w
-X3NyY2Rpcikvc3JjIC1JJChidWlsZGRpcikKKwogU1VCRElSUyA9IGZpbHRlcgogCiBsaWJfTFRM
-SUJSQVJJRVMgPSBsaWJsdHRuZy1jdGwubGEKZGlmZiAtLWdpdCBhL3NyYy9saWIvbHR0bmctY3Rs
-L2ZpbHRlci9NYWtlZmlsZS5hbSBiL3NyYy9saWIvbHR0bmctY3RsL2ZpbHRlci9NYWtlZmlsZS5h
-bQppbmRleCA0NWVkNDE4Li4yOGZmOTBhIDEwMDY0NAotLS0gYS9zcmMvbGliL2x0dG5nLWN0bC9m
-aWx0ZXIvTWFrZWZpbGUuYW0KKysrIGIvc3JjL2xpYi9sdHRuZy1jdGwvZmlsdGVyL01ha2VmaWxl
-LmFtCkBAIC0xLDMgKzEsNSBAQAorQU1fQ1BQRkxBR1MgPSAtSSQodG9wX3NyY2RpcikvaW5jbHVk
-ZSAtSSQodG9wX3NyY2Rpcikvc3JjIC1JJChzcmNkaXIpIC1JJChidWlsZGRpcikgCisKIG5vaW5z
-dF9QUk9HUkFNUyA9IGZpbHRlci1ncmFtbWFyLXRlc3QKIG5vaW5zdF9MVExJQlJBUklFUyA9IGxp
-YmZpbHRlci5sYQogbm9pbnN0X0hFQURFUlMgPSBmaWx0ZXItYXN0LmgKZGlmZiAtLWdpdCBhL3Rl
-c3RzL2tlcm5lbC9NYWtlZmlsZS5hbSBiL3Rlc3RzL2tlcm5lbC9NYWtlZmlsZS5hbQppbmRleCAy
-OTkyYWZiLi44ODcyYWY0IDEwMDY0NAotLS0gYS90ZXN0cy9rZXJuZWwvTWFrZWZpbGUuYW0KKysr
-IGIvdGVzdHMva2VybmVsL01ha2VmaWxlLmFtCkBAIC0xLDQgKzEsNCBAQAotQU1fQ0ZMQUdTID0g
-LWcgLVdhbGwgLUkuLi8KK0FNX0NGTEFHUyA9IC1JJCh0b3Bfc3JjZGlyKS9pbmNsdWRlIC1JJCh0
-b3Bfc3JjZGlyKS9zcmMgLUkkKHRvcF9zcmNkaXIpL3Rlc3RzIC1nIC1XYWxsCiBBTV9MREZMQUdT
-ID0gLWx1cmN1IC1sdXJjdS1jZHMKIAogRVhUUkFfRElTVCA9IHJ1bmFsbC5zaCBydW4ta2VybmVs
-LXRlc3RzLnNoCmRpZmYgLS1naXQgYS90ZXN0cy90b29scy9NYWtlZmlsZS5hbSBiL3Rlc3RzL3Rv
-b2xzL01ha2VmaWxlLmFtCmluZGV4IDNkMjU5MDAuLmMwNDc3ZTUgMTAwNjQ0Ci0tLSBhL3Rlc3Rz
-L3Rvb2xzL01ha2VmaWxlLmFtCisrKyBiL3Rlc3RzL3Rvb2xzL01ha2VmaWxlLmFtCkBAIC0xLDYg
-KzEsNiBAQAogU1VCRElSUyA9IHN0cmVhbWluZwogCi1BTV9DRkxBR1MgPSAtZyAtV2FsbCAtSS4u
-LworQU1fQ0ZMQUdTID0gLUkkKHRvcF9zcmNkaXIpL2luY2x1ZGUgLUkkKHRvcF9zcmNkaXIpL3Ny
-YyAtSSQodG9wX3NyY2RpcikvdGVzdHMgLWcgLVdhbGwKIEFNX0xERkxBR1MgPSAtbHVyY3UgLWx1
-cmN1LWNkcwogCiBFWFRSQV9ESVNUID0gcnVuYWxsLnNoCmRpZmYgLS1naXQgYS90ZXN0cy90b29s
-cy9zdHJlYW1pbmcvTWFrZWZpbGUuYW0gYi90ZXN0cy90b29scy9zdHJlYW1pbmcvTWFrZWZpbGUu
-YW0KaW5kZXggZjdhM2M5ZC4uM2ZmOGVmMCAxMDA2NDQKLS0tIGEvdGVzdHMvdG9vbHMvc3RyZWFt
-aW5nL01ha2VmaWxlLmFtCisrKyBiL3Rlc3RzL3Rvb2xzL3N0cmVhbWluZy9NYWtlZmlsZS5hbQpA
-QCAtMSw0ICsxLDQgQEAKLUFNX0NGTEFHUyA9IC1JLiAtTzIgLWcgLUkuLi8uLi8KK0FNX0NGTEFH
-UyA9IC1JJCh0b3Bfc3JjZGlyKS9pbmNsdWRlIC1JJCh0b3Bfc3JjZGlyKS9zcmMgLUkkKHRvcF9z
-cmNkaXIpL3Rlc3RzIC1JJChzcmNkaXIpIC1PMiAtZwogQU1fTERGTEFHUyA9CiAKIGlmIExUVE5H
-X1RPT0xTX0JVSUxEX1dJVEhfTElCREwKZGlmZiAtLWdpdCBhL3Rlc3RzL3VzdC9NYWtlZmlsZS5h
-bSBiL3Rlc3RzL3VzdC9NYWtlZmlsZS5hbQppbmRleCAxNDZiZmYyLi4zODc4NDJkIDEwMDY0NAot
-LS0gYS90ZXN0cy91c3QvTWFrZWZpbGUuYW0KKysrIGIvdGVzdHMvdXN0L01ha2VmaWxlLmFtCkBA
-IC0xLDcgKzEsNyBAQAogaWYgSEFWRV9MSUJMVFROR19VU1RfQ1RMCiBTVUJESVJTID0gbnByb2Nl
-c3NlcyBoaWdoLXRocm91Z2hwdXQgbG93LXRocm91Z2hwdXQgYmVmb3JlLWFmdGVyIG11bHRpLXNl
-c3Npb24KIAotQU1fQ0ZMQUdTID0gLWcgLVdhbGwgLUkuLi8KK0FNX0NGTEFHUyA9IC1JJCh0b3Bf
-c3JjZGlyKS9pbmNsdWRlIC1JJCh0b3Bfc3JjZGlyKS90ZXN0cyAtSSQodG9wX3NyY2Rpcikvc3Jj
-IC1nIC1XYWxsIAogQU1fTERGTEFHUyA9IC1sdXJjdSAtbHVyY3UtY2RzCiAKIEVYVFJBX0RJU1Qg
-PSBydW5hbGwuc2ggcnVuLXVzdC1nbG9iYWwtdGVzdHMuc2gKZGlmZiAtLWdpdCBhL3Rlc3RzL3Vz
-dC9iZWZvcmUtYWZ0ZXIvTWFrZWZpbGUuYW0gYi90ZXN0cy91c3QvYmVmb3JlLWFmdGVyL01ha2Vm
-aWxlLmFtCmluZGV4IDI5NjUyZGMuLmQxOTdkNzIgMTAwNjQ0Ci0tLSBhL3Rlc3RzL3VzdC9iZWZv
-cmUtYWZ0ZXIvTWFrZWZpbGUuYW0KKysrIGIvdGVzdHMvdXN0L2JlZm9yZS1hZnRlci9NYWtlZmls
-ZS5hbQpAQCAtMSw0ICsxLDQgQEAKLUFNX0NGTEFHUyA9IC1JLiAtTzIKK0FNX0NGTEFHUyA9IC1J
-JChzcmNkaXIpIC1PMgogQU1fTERGTEFHUyA9IC1sbHR0bmctdXN0CiAKIGlmIExUVE5HX1RPT0xT
-X0JVSUxEX1dJVEhfTElCREwKZGlmZiAtLWdpdCBhL3Rlc3RzL3VzdC9oaWdoLXRocm91Z2hwdXQv
-TWFrZWZpbGUuYW0gYi90ZXN0cy91c3QvaGlnaC10aHJvdWdocHV0L01ha2VmaWxlLmFtCmluZGV4
-IDAxZDVhZDIuLmNmZjhmZTQgMTAwNjQ0Ci0tLSBhL3Rlc3RzL3VzdC9oaWdoLXRocm91Z2hwdXQv
-TWFrZWZpbGUuYW0KKysrIGIvdGVzdHMvdXN0L2hpZ2gtdGhyb3VnaHB1dC9NYWtlZmlsZS5hbQpA
-QCAtMSw0ICsxLDQgQEAKLUFNX0NGTEFHUyA9IC1JLiAtTzIKK0FNX0NGTEFHUyA9IC1JJChzcmNk
-aXIpIC1PMgogQU1fTERGTEFHUyA9IC1sbHR0bmctdXN0CiAKIGlmIExUVE5HX1RPT0xTX0JVSUxE
-X1dJVEhfTElCREwKZGlmZiAtLWdpdCBhL3Rlc3RzL3VzdC9sb3ctdGhyb3VnaHB1dC9NYWtlZmls
-ZS5hbSBiL3Rlc3RzL3VzdC9sb3ctdGhyb3VnaHB1dC9NYWtlZmlsZS5hbQppbmRleCBhZWZkZjUz
-Li5hMWRmOWY1IDEwMDY0NAotLS0gYS90ZXN0cy91c3QvbG93LXRocm91Z2hwdXQvTWFrZWZpbGUu
-YW0KKysrIGIvdGVzdHMvdXN0L2xvdy10aHJvdWdocHV0L01ha2VmaWxlLmFtCkBAIC0xLDQgKzEs
-NCBAQAotQU1fQ0ZMQUdTID0gLUkuIC1PMgorQU1fQ0ZMQUdTID0gLUkkKHNyY2RpcikgLU8yCiBB
-TV9MREZMQUdTID0gLWxsdHRuZy11c3QKIAogaWYgTFRUTkdfVE9PTFNfQlVJTERfV0lUSF9MSUJE
-TApkaWZmIC0tZ2l0IGEvdGVzdHMvdXN0L211bHRpLXNlc3Npb24vTWFrZWZpbGUuYW0gYi90ZXN0
-cy91c3QvbXVsdGktc2Vzc2lvbi9NYWtlZmlsZS5hbQppbmRleCAyOTY1MmRjLi5kMTk3ZDcyIDEw
-MDY0NAotLS0gYS90ZXN0cy91c3QvbXVsdGktc2Vzc2lvbi9NYWtlZmlsZS5hbQorKysgYi90ZXN0
-cy91c3QvbXVsdGktc2Vzc2lvbi9NYWtlZmlsZS5hbQpAQCAtMSw0ICsxLDQgQEAKLUFNX0NGTEFH
-UyA9IC1JLiAtTzIKK0FNX0NGTEFHUyA9IC1JJChzcmNkaXIpIC1PMgogQU1fTERGTEFHUyA9IC1s
-bHR0bmctdXN0CiAKIGlmIExUVE5HX1RPT0xTX0JVSUxEX1dJVEhfTElCREwKZGlmZiAtLWdpdCBh
-L3Rlc3RzL3VzdC9ucHJvY2Vzc2VzL01ha2VmaWxlLmFtIGIvdGVzdHMvdXN0L25wcm9jZXNzZXMv
-TWFrZWZpbGUuYW0KaW5kZXggZDNmZGNiZC4uMjBiZWVhMCAxMDA2NDQKLS0tIGEvdGVzdHMvdXN0
-L25wcm9jZXNzZXMvTWFrZWZpbGUuYW0KKysrIGIvdGVzdHMvdXN0L25wcm9jZXNzZXMvTWFrZWZp
-bGUuYW0KQEAgLTEsNCArMSw0IEBACi1BTV9DRkxBR1MgPSAtSS4gLU8yCitBTV9DRkxBR1MgPSAt
-SSQoc3JjZGlyKSAtTzIKIEFNX0xERkxBR1MgPSAtbGx0dG5nLXVzdAogCiBpZiBMVFROR19UT09M
-U19CVUlMRF9XSVRIX0xJQkRMCi0tIAoxLjcuOS41Cgo=
-------=_Part_8558_29877052.1349163427923
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
-------=_Part_8558_29877052.1349163427923--
+-- 
+Mathieu Desnoyers
+Operating System Efficiency R&D Consultant
+EfficiOS Inc.
+http://www.efficios.com
