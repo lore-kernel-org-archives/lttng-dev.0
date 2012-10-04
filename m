@@ -1,18 +1,20 @@
-From: eamcs/eedbhu <Bernd.Hufmann@ericsson.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Subject: Re: Viewing userspace apps traces
-Date: Thu, 4 Oct 2012 09:40:00 -0400
-Message-ID: <506D91B0.2070708__40305.5113544271$1349391592$gmane$org@ericsson.com>
+Date: Thu, 4 Oct 2012 10:29:28 -0400
+Message-ID: <20121004142928.GA3766__46501.5940987088$1349391623$gmane$org@Krystal>
 References: <506B4A21.6080309@fnac.net> <506B4EA4.8050407@voxpopuli.im>
-	<506BD225.3030906@fnac.net> <506D0581.3030400@polymtl.ca>
+	<524C960C5DFC794E82BE548D825F05CF5BC6F694@EU-MBX-01.mgc.mentorg.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from imr3.ericy.com ([198.24.6.13])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <bernd.hufmann@ericsson.com>) id 1TJlf0-0000s8-PQ
-	for lttng-dev@lists.lttng.org; Thu, 04 Oct 2012 09:40:18 -0400
-In-Reply-To: <506D0581.3030400@polymtl.ca>
+	(envelope-from <compudj@mail.openrapids.net>) id 1TJmQd-0001Hj-GS
+	for lttng-dev@lists.lttng.org; Thu, 04 Oct 2012 10:29:31 -0400
+Content-Disposition: inline
+In-Reply-To: <524C960C5DFC794E82BE548D825F05CF5BC6F694@EU-MBX-01.mgc.mentorg.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,86 +23,46 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Alexandre Montplaisir <alexandre.montplaisir@polymtl.ca>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Linux Tools developer discussions <linuxtools-dev@eclipse.org>
+To: "Oestman, Fredrik" <Fredrik_Oestman@mentor.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Paul
+* Oestman, Fredrik (Fredrik_Oestman@mentor.com) wrote:
+> Alexandre Montplaisir wrote:
+> > As for graphical views, like timegraphs, it's not easy to have a general
+> > view that can work with any UST trace. Each application defines its own
+> > event types, so we have no guarantee for any given event type to be the=
+re.
+> =
 
-The Eclipse Linux Tools release v1.1.1 (which is also included in the 
-CDT EPP Juno SR1 release) contains an update that displays CTF context 
-information in the events table.
-So you should be able to see the context information.
+> Maybe this doesn't really help you, but our commercial tool can do just t=
+hat.
+> =
 
-Best Regards
-Bernd
+> Cheers,
+> =
 
+> Fredrik =D6stman
+> =
 
-On 10/03/2012 11:41 PM, Alexandre Montplaisir wrote:
-> Sorry for the late reply, I had to update/rebase some of the stuff first...
->
-> (Cross-posting linuxtools-dev, as it might interest some people who
-> follow that list too. This is about extending TMF to implement a
-> graphical view for a specific UST trace type.)
->
->
-> On 12-10-03 01:50 AM, Paul Chavent wrote:
->> [...]
->>
->> On 10/02/2012 10:29 PM, Alexandre Montplaisir wrote:
->>> [...]
->>>
->>> What would you like see in your "timeline representation" exactly? Maybe
->>> we could give you some pointers as to how to implement such a view.
->>> (We're currently working on making it easy to extend the framework to
->>> implement new views, so this could be a good exercise!)
->> I would like to see, eg, one line per tid, and on each line, the value
->> of one context or argument value.
->>
->> I'm ready to follow an exercise for extending the framework !
-> Ok good! We don't have a nice tutorial ready yet, as most parts are
-> still working their way upstream. But if you want to dig into it and try
-> it out now, you can:
->
-> 1 - Set up the development environment for TMF:
-> http://wiki.eclipse.org/Linux_Tools_Project/LTTng_Eclipse_Plug-in_Development_Environement_Setup
->
-> 2 - Checkout the "lttng-kepler" branch in the git. This is where the
-> latest development happens.
->
-> 3 - Apply those two patches, in that order:
-> https://git.eclipse.org/r/#/c/7747/
-> https://git.eclipse.org/r/#/c/7748/
-> (you can copy-paste the "cherry-pick" command shown on the page)
->
-> 4 - Download the example program and view from:
-> git://git.dorsal.polymtl.ca/~alexmont/ust-example.git
->
-> Now at this point you should be able to import and build the example
-> plugins (ust.example.core and ust.example.ui) and the TMF/LTTng ones in
-> the same workspace.
->
-> You can try it to make sure it works correctly : take a UST trace of the
-> "myprog" program, and then load it into TMF, and show the "Example ->
-> Connections" view. It should display the yellow and green rectangles
-> corresponding to the states that were defined.
->
->
-> After that, it shouldn't be too hard (famous last words...) to rework
-> the ust.example.* code to fit your application. The points of interest
-> will be (before renames):
->
-> MyUstTraceInput, line 85+: This is where you assign your trace events to
-> states
-> ConnectionsPresentationProvider, line 31-34: This is where you assign
-> the colors to each state in the view
-> and same file, lines 64-68 and 81-85 : This is where you assign the
-> trace's states to the ones in the view.
-> (one place is for the actual colored rectangle, the other is for the
-> tooltips, iirc).
->
->
-> If you have any question or problem, please let me know!
->
-> Good luck ;)
->
+> http://go.mentor.com/sourceryanalyzer/
+
+Hi Fredrik,
+
+Hinting at this tool in this context (discussion of an open source
+viewer implementation) on lttng-dev (an open source project mailing
+list) can only mean that you seem to be willing to contribute views to
+the open source project. That would be very welcome indeed. What are
+Mentor's plans in contributing to the open source viewer efforts of the
+LTTng project ?
+
+Thank you,
+
+Mathieu
+
+-- =
+
+Mathieu Desnoyers
+Operating System Efficiency R&D Consultant
+EfficiOS Inc.
+http://www.efficios.com
