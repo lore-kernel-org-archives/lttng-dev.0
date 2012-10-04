@@ -1,16 +1,18 @@
-From: Rui Han <iurnah@gmail.com>
-Subject: about sys_read, count argument,
-Date: Thu, 4 Oct 2012 13:58:32 -0400
-Message-ID: <CABy43G9uUmeLvkwUnhScMfAVyFsOy4eVsw0KfgRxMuNZ=mEZng__37128.8469796584$1349390815$gmane$org@mail.gmail.com>
+From: eamcs/eedbhu <Bernd.Hufmann@ericsson.com>
+Subject: Re: Viewing userspace apps traces
+Date: Thu, 4 Oct 2012 09:40:00 -0400
+Message-ID: <506D91B0.2070708__40305.5113544271$1349391592$gmane$org@ericsson.com>
+References: <506B4A21.6080309@fnac.net> <506B4EA4.8050407@voxpopuli.im>
+	<506BD225.3030906@fnac.net> <506D0581.3030400@polymtl.ca>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0994483093=="
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-pa0-f48.google.com ([209.85.220.48])
+Received: from imr3.ericy.com ([198.24.6.13])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <iurnah@gmail.com>) id 1TJph0-0002yX-9X
-	for lttng-dev@lists.lttng.org; Thu, 04 Oct 2012 13:58:38 -0400
-Received: by mail-pa0-f48.google.com with SMTP id kp12so943512pab.35
-	for <lttng-dev@lists.lttng.org>; Thu, 04 Oct 2012 10:58:32 -0700 (PDT)
+	(envelope-from <bernd.hufmann@ericsson.com>) id 1TJlf0-0000s8-PQ
+	for lttng-dev@lists.lttng.org; Thu, 04 Oct 2012 09:40:18 -0400
+In-Reply-To: <506D0581.3030400@polymtl.ca>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,51 +21,86 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Alexandre Montplaisir <alexandre.montplaisir@polymtl.ca>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Linux Tools developer discussions <linuxtools-dev@eclipse.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0994483093==
-Content-Type: multipart/alternative; boundary=047d7b2ee47fe070d204cb3f8052
+Hi Paul
 
---047d7b2ee47fe070d204cb3f8052
-Content-Type: text/plain; charset=ISO-8859-1
+The Eclipse Linux Tools release v1.1.1 (which is also included in the 
+CDT EPP Juno SR1 release) contains an update that displays CTF context 
+information in the events table.
+So you should be able to see the context information.
 
-Hi all,
+Best Regards
+Bernd
 
-I did a trace about a pdf reader process in my virtual machine, I found
-count argument in some of sys_read are extremely large, one of them have
-the value of "7161056817779312906". This cannot be true. I need to know
-exactly how many bytes have been read and write from the system calls.
-Anyone who know what happens here?
 
-Thank you very much.
-
-Rui
-
---047d7b2ee47fe070d204cb3f8052
-Content-Type: text/html; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
-
-Hi all,<div><br></div><div>I did a trace about a pdf reader process in my v=
-irtual machine, I found count argument in some of=A0sys_read are=A0extremel=
-y large, one of them have the value of &quot;7161056817779312906&quot;.=A0T=
-his cannot be true.=A0I need to know exactly how many bytes have been read =
-and write from the system calls. Anyone who know what happens here?=A0</div=
+On 10/03/2012 11:41 PM, Alexandre Montplaisir wrote:
+> Sorry for the late reply, I had to update/rebase some of the stuff first...
 >
-<div><br></div><div>Thank you very much.</div><div><br></div><div>Rui</div>
-
---047d7b2ee47fe070d204cb3f8052--
-
-
---===============0994483093==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0994483093==--
+> (Cross-posting linuxtools-dev, as it might interest some people who
+> follow that list too. This is about extending TMF to implement a
+> graphical view for a specific UST trace type.)
+>
+>
+> On 12-10-03 01:50 AM, Paul Chavent wrote:
+>> [...]
+>>
+>> On 10/02/2012 10:29 PM, Alexandre Montplaisir wrote:
+>>> [...]
+>>>
+>>> What would you like see in your "timeline representation" exactly? Maybe
+>>> we could give you some pointers as to how to implement such a view.
+>>> (We're currently working on making it easy to extend the framework to
+>>> implement new views, so this could be a good exercise!)
+>> I would like to see, eg, one line per tid, and on each line, the value
+>> of one context or argument value.
+>>
+>> I'm ready to follow an exercise for extending the framework !
+> Ok good! We don't have a nice tutorial ready yet, as most parts are
+> still working their way upstream. But if you want to dig into it and try
+> it out now, you can:
+>
+> 1 - Set up the development environment for TMF:
+> http://wiki.eclipse.org/Linux_Tools_Project/LTTng_Eclipse_Plug-in_Development_Environement_Setup
+>
+> 2 - Checkout the "lttng-kepler" branch in the git. This is where the
+> latest development happens.
+>
+> 3 - Apply those two patches, in that order:
+> https://git.eclipse.org/r/#/c/7747/
+> https://git.eclipse.org/r/#/c/7748/
+> (you can copy-paste the "cherry-pick" command shown on the page)
+>
+> 4 - Download the example program and view from:
+> git://git.dorsal.polymtl.ca/~alexmont/ust-example.git
+>
+> Now at this point you should be able to import and build the example
+> plugins (ust.example.core and ust.example.ui) and the TMF/LTTng ones in
+> the same workspace.
+>
+> You can try it to make sure it works correctly : take a UST trace of the
+> "myprog" program, and then load it into TMF, and show the "Example ->
+> Connections" view. It should display the yellow and green rectangles
+> corresponding to the states that were defined.
+>
+>
+> After that, it shouldn't be too hard (famous last words...) to rework
+> the ust.example.* code to fit your application. The points of interest
+> will be (before renames):
+>
+> MyUstTraceInput, line 85+: This is where you assign your trace events to
+> states
+> ConnectionsPresentationProvider, line 31-34: This is where you assign
+> the colors to each state in the view
+> and same file, lines 64-68 and 81-85 : This is where you assign the
+> trace's states to the ones in the view.
+> (one place is for the actual colored rectangle, the other is for the
+> tooltips, iirc).
+>
+>
+> If you have any question or problem, please let me know!
+>
+> Good luck ;)
+>
