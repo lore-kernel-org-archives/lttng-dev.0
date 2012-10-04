@@ -1,18 +1,19 @@
-From: Francis Giraldeau <francis.giraldeau@gmail.com>
-Subject: Re: about sys_read, count argument,
-Date: Thu, 04 Oct 2012 16:38:52 -0400
-Message-ID: <506DF3DC.50508__48265.3502062478$1349388653$gmane$org@gmail.com>
-References: <CABy43G9uUmeLvkwUnhScMfAVyFsOy4eVsw0KfgRxMuNZ=mEZng@mail.gmail.com>
+From: Paul Chavent <paul.chavent@fnac.net>
+Subject: Re: Viewing userspace apps traces
+Date: Thu, 04 Oct 2012 22:39:11 +0200
+Message-ID: <506DF3EF.9070201__712.492134380405$1349388860$gmane$org@fnac.net>
+References: <506B4A21.6080309@fnac.net> <506B4EA4.8050407@voxpopuli.im>
+	<506BD225.3030906@fnac.net> <506D0581.3030400@polymtl.ca>
+	<506D91B0.2070708@ericsson.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0477263715=="
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ia0-f176.google.com ([209.85.210.176])
+Received: from smtp5-g21.free.fr ([212.27.42.5])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <francis.giraldeau@gmail.com>) id 1TJsCf-0004Jt-K8
-	for lttng-dev@lists.lttng.org; Thu, 04 Oct 2012 16:39:30 -0400
-Received: by mail-ia0-f176.google.com with SMTP id h11so469485iae.35
-	for <lttng-dev@lists.lttng.org>; Thu, 04 Oct 2012 13:39:24 -0700 (PDT)
-In-Reply-To: <CABy43G9uUmeLvkwUnhScMfAVyFsOy4eVsw0KfgRxMuNZ=mEZng@mail.gmail.com>
+	(envelope-from <paul.chavent@fnac.net>) id 1TJsC8-0004I9-Sq
+	for lttng-dev@lists.lttng.org; Thu, 04 Oct 2012 16:38:57 -0400
+In-Reply-To: <506D91B0.2070708@ericsson.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,142 +22,122 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Rui Han <iurnah@gmail.com>, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: eamcs/eedbhu <Bernd.Hufmann@ericsson.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Linux Tools developer discussions <linuxtools-dev@eclipse.org>, Alexandre Montplaisir <alexandre.montplaisir@polymtl.ca>
 List-Id: lttng-dev@lists.lttng.org
 
-Ceci est un message signC) cryptographiquement au format MIME.
+Hi,
 
---===============0477263715==
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha1; boundary="------------ms020408070105040109020806"
+I've follow this link (http://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/juno/SR1/eclipse-cpp-juno-SR1-linux-gtk-x86_64.tar.gz) to download the Eclipse env.
 
-Ceci est un message signé cryptographiquement au format MIME.
+Here is the version notes i can give you :
+**************
+Eclipse
+Version: Juno Release
+Build id: 20120614-1722
 
---------------ms020408070105040109020806
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
+Eclipse Linux Tools LTTng ... 1.0.0.201206130106
+**************
 
-Le 2012-10-04 13:58, Rui Han a =E9crit :
->=20
-> I did a trace about a pdf reader process in my virtual machine, I found=
+Then i've got my traces with :
 
-> count argument in some of sys_read are extremely large, one of them hav=
-e
-> the value of "7161056817779312906". This cannot be true. I need to know=
+lttng create
+lttng enable-event -u -a
+lttng add-context -u -t vpid -t vtid
+lttng start
+...
+lttng stop
+lttng destroy
 
-> exactly how many bytes have been read and write from the system calls.
-> Anyone who know what happens here?=20
-
-The return value of the following exit_syscall event for this thread
-indicates the read size.
-
-Cheers,
-
-Francis
+Here is a sample of the traces :
+http://paul.chavent.free.fr/tmp/sample_traces.tar.bz2
 
 
+I can open the traces in eclipse (i see the "Events" panel), but i can't see the events ordered by pid/tid in the "Time Chart" panel, neither "Control Flow", nor "Ressources" ...)
 
---------------ms020408070105040109020806
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: Signature cryptographique S/MIME
+Is it possible to have the traces displayed sorted by tid for instance ?
 
-MIAGCSqGSIb3DQEHAqCAMIACAQExCzAJBgUrDgMCGgUAMIAGCSqGSIb3DQEHAQAAoIIMUjCC
-BVwwggREoAMCAQICEGWn7N/yOaERpG8kZX1Cua0wDQYJKoZIhvcNAQEFBQAwgd0xCzAJBgNV
-BAYTAlVTMRcwFQYDVQQKEw5WZXJpU2lnbiwgSW5jLjEfMB0GA1UECxMWVmVyaVNpZ24gVHJ1
-c3QgTmV0d29yazE7MDkGA1UECxMyVGVybXMgb2YgdXNlIGF0IGh0dHBzOi8vd3d3LnZlcmlz
-aWduLmNvbS9ycGEgKGMpMDkxHjAcBgNVBAsTFVBlcnNvbmEgTm90IFZhbGlkYXRlZDE3MDUG
-A1UEAxMuVmVyaVNpZ24gQ2xhc3MgMSBJbmRpdmlkdWFsIFN1YnNjcmliZXIgQ0EgLSBHMzAe
-Fw0xMjA1MjgwMDAwMDBaFw0xMzA1MjgyMzU5NTlaMIIBHzEXMBUGA1UEChMOVmVyaVNpZ24s
-IEluYy4xHzAdBgNVBAsTFlZlcmlTaWduIFRydXN0IE5ldHdvcmsxRjBEBgNVBAsTPXd3dy52
-ZXJpc2lnbi5jb20vcmVwb3NpdG9yeS9SUEEgSW5jb3JwLiBieSBSZWYuLExJQUIuTFREKGMp
-OTgxHjAcBgNVBAsTFVBlcnNvbmEgTm90IFZhbGlkYXRlZDEzMDEGA1UECxMqRGlnaXRhbCBJ
-RCBDbGFzcyAxIC0gTmV0c2NhcGUgRnVsbCBTZXJ2aWNlMRowGAYDVQQDFBFGcmFuY2lzIEdp
-cmFsZGVhdTEqMCgGCSqGSIb3DQEJARYbZnJhbmNpcy5naXJhbGRlYXVAZ21haWwuY29tMIIB
-IjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqiOFH8B8262aBX5FMSzvA38NY4ekw6W+
-zThHjeI46j7VFPXJbK0BM7yAMu4DmybyE8b5IB4oKcjRGdGC8GaMZdx0+Je0CxR/+M4hMB9s
-g3JhgXLQ9RYDJKn9k0JZ59pbYsh6OMtYPX3WDCyEXBg3xkd2JQ9YiY46IJSEhfbHHE9CwaYa
-f3Pbl3Bp5oi5PUADYu76ItNdHBHzBGBrkkYFaGoI5Mh27oBABvDW6QNuGvrTkkWOmFeJPNAu
-AS52izUNriCmkMGNbGON3dMM7cNk1uoNXyV7vnIP0pwTm+xA5CLkvjt+/sxynJYWXqexwcer
-X0VCw5Hbaqa3IxzJKB8BYwIDAQABo4HSMIHPMAkGA1UdEwQCMAAwRAYDVR0gBD0wOzA5Bgtg
-hkgBhvhFAQcXATAqMCgGCCsGAQUFBwIBFhxodHRwczovL3d3dy52ZXJpc2lnbi5jb20vcnBh
-MAsGA1UdDwQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwUAYDVR0fBEkw
-RzBFoEOgQYY/aHR0cDovL2luZGMxZGlnaXRhbGlkLWczLWNybC52ZXJpc2lnbi5jb20vSW5k
-QzFEaWdpdGFsSUQtRzMuY3JsMA0GCSqGSIb3DQEBBQUAA4IBAQAMYnv8qG3qSGJYAn+PhjGx
-lbmbaxqYyD0QVRq6g8tXrZtBUqNO29mce+olKu7lHsrEHpIKwMfArh3BpxPYVhKMAP6GaCAn
-jdr8LJ6TZHTLeVo4BLU7ZEPR6qCGxUhIodqzzWoet0cardf6Ub0OknxxAymgQ8+pIGJmxOOr
-ypWp+3ba6dPmY/MJeXIWq08V+P6912vL6I+cwrS6e7rud0XeR9KEEqn/EpuqDpp1mNj5QeRo
-73zkl8G1nBnYbr42r2jSzqxRvefsfimWm6XX2L2K9WKp6TvJhFejZ7aP234pRDx9Ep0unSH4
-LR2o5p6Ik5RQaG0xu1c74KgDTyzZVn2+MIIG7jCCBdagAwIBAgIQcRVmBUrkkSFN6bxE+azT
-3DANBgkqhkiG9w0BAQUFADCByjELMAkGA1UEBhMCVVMxFzAVBgNVBAoTDlZlcmlTaWduLCBJ
-bmMuMR8wHQYDVQQLExZWZXJpU2lnbiBUcnVzdCBOZXR3b3JrMTowOAYDVQQLEzEoYykgMTk5
-OSBWZXJpU2lnbiwgSW5jLiAtIEZvciBhdXRob3JpemVkIHVzZSBvbmx5MUUwQwYDVQQDEzxW
-ZXJpU2lnbiBDbGFzcyAxIFB1YmxpYyBQcmltYXJ5IENlcnRpZmljYXRpb24gQXV0aG9yaXR5
-IC0gRzMwHhcNMDkwNTAxMDAwMDAwWhcNMTkwNDMwMjM1OTU5WjCB3TELMAkGA1UEBhMCVVMx
-FzAVBgNVBAoTDlZlcmlTaWduLCBJbmMuMR8wHQYDVQQLExZWZXJpU2lnbiBUcnVzdCBOZXR3
-b3JrMTswOQYDVQQLEzJUZXJtcyBvZiB1c2UgYXQgaHR0cHM6Ly93d3cudmVyaXNpZ24uY29t
-L3JwYSAoYykwOTEeMBwGA1UECxMVUGVyc29uYSBOb3QgVmFsaWRhdGVkMTcwNQYDVQQDEy5W
-ZXJpU2lnbiBDbGFzcyAxIEluZGl2aWR1YWwgU3Vic2NyaWJlciBDQSAtIEczMIIBIjANBgkq
-hkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA7cRH3yooHXwGa7vXITLJbBOP6bGNQU4099oL42r6
-ZYggCxET6ZvgSU6Lb9UB0F8NR5GKWkx0Pj/GkQm7TDSejW6hglFi92l2WJYHr54UGAdPWr2f
-0jGyVBlzRmoZQhHsEnMhjfXcMM3l2VYKMcU2bSkUl70t2olHGYjYSwQ967Y8Zx50ABMN0Iba
-k2f4MwOuGjxraXj2wCyO4YM/d/mZ//6fUlrCtIcK2GypR8FUKWVDPkrAlh/Brfd3r2yxBF6+
-wbaULZeQLSfSux7pg2qE9sSyriMGZSalJ1grByK0b6ZiSBp38tVQJ5op05b7KPW6JHZi44xZ
-6/tu1ULEvkHH9QIDAQABo4ICuTCCArUwNAYIKwYBBQUHAQEEKDAmMCQGCCsGAQUFBzABhhho
-dHRwOi8vb2NzcC52ZXJpc2lnbi5jb20wEgYDVR0TAQH/BAgwBgEB/wIBADBwBgNVHSAEaTBn
-MGUGC2CGSAGG+EUBBxcBMFYwKAYIKwYBBQUHAgEWHGh0dHBzOi8vd3d3LnZlcmlzaWduLmNv
-bS9jcHMwKgYIKwYBBQUHAgIwHhocaHR0cHM6Ly93d3cudmVyaXNpZ24uY29tL3JwYTA0BgNV
-HR8ELTArMCmgJ6AlhiNodHRwOi8vY3JsLnZlcmlzaWduLmNvbS9wY2ExLWczLmNybDAOBgNV
-HQ8BAf8EBAMCAQYwbgYIKwYBBQUHAQwEYjBgoV6gXDBaMFgwVhYJaW1hZ2UvZ2lmMCEwHzAH
-BgUrDgMCGgQUS2u5KJYGDLvQUjibKaxLB4shBRgwJhYkaHR0cDovL2xvZ28udmVyaXNpZ24u
-Y29tL3ZzbG9nbzEuZ2lmMC4GA1UdEQQnMCWkIzAhMR8wHQYDVQQDExZQcml2YXRlTGFiZWw0
-LTIwNDgtMTE4MB0GA1UdDgQWBBR5R2EIQf04BKJL57XM9UP2SSsR+DCB8QYDVR0jBIHpMIHm
-oYHQpIHNMIHKMQswCQYDVQQGEwJVUzEXMBUGA1UEChMOVmVyaVNpZ24sIEluYy4xHzAdBgNV
-BAsTFlZlcmlTaWduIFRydXN0IE5ldHdvcmsxOjA4BgNVBAsTMShjKSAxOTk5IFZlcmlTaWdu
-LCBJbmMuIC0gRm9yIGF1dGhvcml6ZWQgdXNlIG9ubHkxRTBDBgNVBAMTPFZlcmlTaWduIENs
-YXNzIDEgUHVibGljIFByaW1hcnkgQ2VydGlmaWNhdGlvbiBBdXRob3JpdHkgLSBHM4IRAItb
-dVaEVIULAM+vOEjOsaQwDQYJKoZIhvcNAQEFBQADggEBADlNz0GZgbWpBbVSOOk5hIls5DSo
-WufYbAlMJBq6WaSHO3Mh8ZOBz79oY1pn/jWFK6HDXaNKwjoZ3TDWzE3v8dKBl8pUWkO/N4t6
-jhmND0OojPKvYLMVirOVnDzgnrMnmKQ1chfl/Cpdh9OKDcLRRSr4wPSsKpM61a4ScAjr+zvi
-d+zoK2Q1ds262uDRyxTWcVibvtU+fbbZ6CTFJGZMXZEfdrMXPn8NxiGJL7M3uKH/XLJtSd5l
-UkL7DojS7Uodv0vj+Mxy+kgOZY5JyNb4mZg7t5Q+MXEGh/psWVMu198r7V9jAKwV7QO4VRaM
-xmgD5yKocwuxvKDaUljdCg5/wYIxggT5MIIE9QIBATCB8jCB3TELMAkGA1UEBhMCVVMxFzAV
-BgNVBAoTDlZlcmlTaWduLCBJbmMuMR8wHQYDVQQLExZWZXJpU2lnbiBUcnVzdCBOZXR3b3Jr
-MTswOQYDVQQLEzJUZXJtcyBvZiB1c2UgYXQgaHR0cHM6Ly93d3cudmVyaXNpZ24uY29tL3Jw
-YSAoYykwOTEeMBwGA1UECxMVUGVyc29uYSBOb3QgVmFsaWRhdGVkMTcwNQYDVQQDEy5WZXJp
-U2lnbiBDbGFzcyAxIEluZGl2aWR1YWwgU3Vic2NyaWJlciBDQSAtIEczAhBlp+zf8jmhEaRv
-JGV9QrmtMAkGBSsOAwIaBQCgggLbMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZI
-hvcNAQkFMQ8XDTEyMTAwNDIwMzg1MlowIwYJKoZIhvcNAQkEMRYEFJL535fZdtsWJ4PA7k94
-sWXfUqQLMGwGCSqGSIb3DQEJDzFfMF0wCwYJYIZIAWUDBAEqMAsGCWCGSAFlAwQBAjAKBggq
-hkiG9w0DBzAOBggqhkiG9w0DAgICAIAwDQYIKoZIhvcNAwICAUAwBwYFKw4DAgcwDQYIKoZI
-hvcNAwICASgwggEDBgkrBgEEAYI3EAQxgfUwgfIwgd0xCzAJBgNVBAYTAlVTMRcwFQYDVQQK
-Ew5WZXJpU2lnbiwgSW5jLjEfMB0GA1UECxMWVmVyaVNpZ24gVHJ1c3QgTmV0d29yazE7MDkG
-A1UECxMyVGVybXMgb2YgdXNlIGF0IGh0dHBzOi8vd3d3LnZlcmlzaWduLmNvbS9ycGEgKGMp
-MDkxHjAcBgNVBAsTFVBlcnNvbmEgTm90IFZhbGlkYXRlZDE3MDUGA1UEAxMuVmVyaVNpZ24g
-Q2xhc3MgMSBJbmRpdmlkdWFsIFN1YnNjcmliZXIgQ0EgLSBHMwIQZafs3/I5oRGkbyRlfUK5
-rTCCAQUGCyqGSIb3DQEJEAILMYH1oIHyMIHdMQswCQYDVQQGEwJVUzEXMBUGA1UEChMOVmVy
-aVNpZ24sIEluYy4xHzAdBgNVBAsTFlZlcmlTaWduIFRydXN0IE5ldHdvcmsxOzA5BgNVBAsT
-MlRlcm1zIG9mIHVzZSBhdCBodHRwczovL3d3dy52ZXJpc2lnbi5jb20vcnBhIChjKTA5MR4w
-HAYDVQQLExVQZXJzb25hIE5vdCBWYWxpZGF0ZWQxNzA1BgNVBAMTLlZlcmlTaWduIENsYXNz
-IDEgSW5kaXZpZHVhbCBTdWJzY3JpYmVyIENBIC0gRzMCEGWn7N/yOaERpG8kZX1Cua0wDQYJ
-KoZIhvcNAQEBBQAEggEALwiwO+WaTMHEWGs90SwSSvo7cL0RvQtuI6DNuuQZVhf8rPVOgfba
-DZ0kvjfAoXmFsYIHIqZPbzPrVgQKNt7/OVAFNfNxLV2gUq1OTHA+kCFkAI4W0zYBX3NvR3DG
-pdzfosCRf90fL0Dr/uFoQNio4Q5/D79QY5tfzZbpy5fJOaR04WA6jhWBi57IFYtB+C+YHqnG
-pVNePeymWFcCxbCbco+zEt7Vze0+1tivMM797U+F5PhhWCbV4YfswBdL+HMTyZaKcKWpRwNh
-+CytFbcUcpoYJJdmF+pS4vHVGjGkwkgayNdt0f4cykiiFgc6AQ2FNLOVIyjuf0raULIg3ala
-jAAAAAAAAA==
---------------ms020408070105040109020806--
+Thanks.
+
+Paul.
 
 
---===============0477263715==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Disposition: inline
-Content-Transfer-Encoding: 7bit
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0477263715==--
+On 10/04/2012 03:40 PM, eamcs/eedbhu wrote:
+> Hi Paul
+>
+> The Eclipse Linux Tools release v1.1.1 (which is also included in the CDT EPP Juno SR1 release) contains an update that displays CTF context information in the events table.
+> So you should be able to see the context information.
+>
+> Best Regards
+> Bernd
+>
+>
+> On 10/03/2012 11:41 PM, Alexandre Montplaisir wrote:
+>> Sorry for the late reply, I had to update/rebase some of the stuff first...
+>>
+>> (Cross-posting linuxtools-dev, as it might interest some people who
+>> follow that list too. This is about extending TMF to implement a
+>> graphical view for a specific UST trace type.)
+>>
+>>
+>> On 12-10-03 01:50 AM, Paul Chavent wrote:
+>>> [...]
+>>>
+>>> On 10/02/2012 10:29 PM, Alexandre Montplaisir wrote:
+>>>> [...]
+>>>>
+>>>> What would you like see in your "timeline representation" exactly? Maybe
+>>>> we could give you some pointers as to how to implement such a view.
+>>>> (We're currently working on making it easy to extend the framework to
+>>>> implement new views, so this could be a good exercise!)
+>>> I would like to see, eg, one line per tid, and on each line, the value
+>>> of one context or argument value.
+>>>
+>>> I'm ready to follow an exercise for extending the framework !
+>> Ok good! We don't have a nice tutorial ready yet, as most parts are
+>> still working their way upstream. But if you want to dig into it and try
+>> it out now, you can:
+>>
+>> 1 - Set up the development environment for TMF:
+>> http://wiki.eclipse.org/Linux_Tools_Project/LTTng_Eclipse_Plug-in_Development_Environement_Setup
+>>
+>> 2 - Checkout the "lttng-kepler" branch in the git. This is where the
+>> latest development happens.
+>>
+>> 3 - Apply those two patches, in that order:
+>> https://git.eclipse.org/r/#/c/7747/
+>> https://git.eclipse.org/r/#/c/7748/
+>> (you can copy-paste the "cherry-pick" command shown on the page)
+>>
+>> 4 - Download the example program and view from:
+>> git://git.dorsal.polymtl.ca/~alexmont/ust-example.git
+>>
+>> Now at this point you should be able to import and build the example
+>> plugins (ust.example.core and ust.example.ui) and the TMF/LTTng ones in
+>> the same workspace.
+>>
+>> You can try it to make sure it works correctly : take a UST trace of the
+>> "myprog" program, and then load it into TMF, and show the "Example ->
+>> Connections" view. It should display the yellow and green rectangles
+>> corresponding to the states that were defined.
+>>
+>>
+>> After that, it shouldn't be too hard (famous last words...) to rework
+>> the ust.example.* code to fit your application. The points of interest
+>> will be (before renames):
+>>
+>> MyUstTraceInput, line 85+: This is where you assign your trace events to
+>> states
+>> ConnectionsPresentationProvider, line 31-34: This is where you assign
+>> the colors to each state in the view
+>> and same file, lines 64-68 and 81-85 : This is where you assign the
+>> trace's states to the ones in the view.
+>> (one place is for the actual colored rectangle, the other is for the
+>> tooltips, iirc).
+>>
+>>
+>> If you have any question or problem, please let me know!
+>>
+>> Good luck ;)
+>>
+>
