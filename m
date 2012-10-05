@@ -1,35 +1,18 @@
-From: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
-Subject: Re: [rp] [URCU PATCH 0/3] wait-free concurrent queues
-	(wfcqueue)
-Date: Thu, 4 Oct 2012 11:51:20 -0700
-Message-ID: <20121004185120.GA23484__30945.3761940405$1349392274$gmane$org@linux.vnet.ibm.com>
-References: <20121002141307.GA4057@Krystal>
-	<20121003182846.GN2527@linux.vnet.ibm.com>
-	<20121003210436.GB25090@Krystal>
-Reply-To: paulmck@linux.vnet.ibm.com
+From: eamcs/eedbhu <Bernd.Hufmann@ericsson.com>
+Subject: Re: LTTng Tools 2.1 streaming commands
+Date: Fri, 5 Oct 2012 07:44:24 -0400
+Message-ID: <506EC818.7050708__30181.5963969149$1349437508$gmane$org@ericsson.com>
+References: <4CB817F8B8860343821834C09BFBA7A6E183805D4D@EUSAACMS0702.eamcs.ericsson.se>
+	<506C837B.5070402@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from e4.ny.us.ibm.com ([32.97.182.144])
+Received: from imr3.ericy.com ([198.24.6.13])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <paulmck@linux.vnet.ibm.com>) id 1TJqWH-0003Op-LA
-	for lttng-dev@lists.lttng.org; Thu, 04 Oct 2012 14:51:37 -0400
-Received: from /spool/local
-	by e4.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only!
-	Violators will be prosecuted
-	for <lttng-dev@lists.lttng.org> from <paulmck@linux.vnet.ibm.com>;
-	Thu, 4 Oct 2012 14:51:31 -0400
-Received: from d03av01.boulder.ibm.com (d03av01.boulder.ibm.com [9.17.195.167])
-	by d01relay04.pok.ibm.com (8.13.8/8.13.8/NCO v10.0) with ESMTP id
-	q94IpSrE180664
-	for <lttng-dev@lists.lttng.org>; Thu, 4 Oct 2012 14:51:28 -0400
-Received: from d03av01.boulder.ibm.com (loopback [127.0.0.1])
-	by d03av01.boulder.ibm.com (8.14.4/8.13.1/NCO v10.0 AVout) with ESMTP
-	id q94IpPou017045
-	for <lttng-dev@lists.lttng.org>; Thu, 4 Oct 2012 12:51:28 -0600
-Content-Disposition: inline
-In-Reply-To: <20121003210436.GB25090@Krystal>
+	(envelope-from <bernd.hufmann@ericsson.com>) id 1TK6KY-0003Qr-Tg
+	for lttng-dev@lists.lttng.org; Fri, 05 Oct 2012 07:44:35 -0400
+In-Reply-To: <506C837B.5070402@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -38,63 +21,115 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev@lists.lttng.org, Lai Jiangshan <eag0628@gmail.com>, rp@svcs.cs.pdx.edu
+To: David Goulet <dgoulet@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-On Wed, Oct 03, 2012 at 05:04:36PM -0400, Mathieu Desnoyers wrote:
-> * Paul E. McKenney (paulmck@linux.vnet.ibm.com) wrote:
-> > On Tue, Oct 02, 2012 at 10:13:07AM -0400, Mathieu Desnoyers wrote:
-> > > Implement wait-free concurrent queues, with a new API different from
-> > > wfqueue.h, which is already provided by Userspace RCU. The advantage of
-> > > splitting the head and tail objects of the queue into different
-> > > arguments is to allow these to sit on different cache-lines, thus
-> > > eliminating false-sharing, leading to a 2.3x speed increase.
-> > > 
-> > > This API also introduces a "splice" operation, which moves all nodes
-> > > from one queue into another, and postpones the synchronization to either
-> > > dequeue or iteration on the list. The splice operation does not need to
-> > > touch every single node of the queue it moves them from. Moreover, the
-> > > splice operation only needs to ensure mutual exclusion with other
-> > > dequeuers, iterations, and splice operations from the list it splices
-> > > from, but acts as a simple enqueuer on the list it splices into (no
-> > > mutual exclusion needed for that list).
-> > > 
-> > > Feedback is welcome,
-> > 
-> > These look sane to me, though I must confess that the tail pointer
-> > referencing the node rather than the node's next pointer did throw
-> > me for a bit.  ;-)
-> 
-> Yes, this was originally introduced with Lai's original patch to
-> wfqueue, which I think is a nice simplification: it's pretty much the
-> same thing to use the last node address as tail rather than the address
-> of its first member (its next pointer address (_not_ value)). It ends up
-> being the same address in this case, but more interestingly, we don't
-> have to use a struct cds_wfcq_node ** type: a simple struct
-> cds_wfcq_node *  suffice.
-> 
-> Thanks Paul, I will therefore merge these 3 patches with your Acked-by.
+Hi David
 
-Good point -- just confirming:
+thanks for the detailed explanation.
 
-Acked-by: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
+I'm not debating the purpose of the command or that a 2 step approach is 
+supported for enabling the consumer. As you described it makes sense to 
+have this possibility.
 
-> Lai, you are welcome to provide improvements to this code against the
-> master branch. I will gladly consider any change you propose.
-> 
-> Thanks!
-> 
-> Mathieu
-> 
-> -- 
-> Mathieu Desnoyers
-> Operating System Efficiency R&D Consultant
-> EfficiOS Inc.
-> http://www.efficios.com
-> 
-> _______________________________________________
-> rp mailing list
-> rp@svcs.cs.pdx.edu
-> http://svcs.cs.pdx.edu/mailman/listinfo/rp
-> 
+However I'm debating mainly the name of the command "enable-consumer". 
+The command suggests that the consumer will be enabled when executing 
+the command. I foresee that a lot of users expect that the consumer is 
+enabled after the command execution. I think, a different name would 
+improve the user experience.
+
+Best Regards
+Bernd
+
+On 10/03/2012 02:27 PM, David Goulet wrote:
+> Hi Bernd,
+>
+> The enable-consumer, by default, always enable a consumer. We added the
+> "extended options" such as the -U/-C/-D/-e to control each part of the
+> API. So let say,
+>
+> $ lttng enable-consumer -k net://localhost
+>
+> This command does two API calls underneath which are
+> lttng_set_consumer_uri and lttng_enable_consumer.
+>
+> However, the set_consumer_uri can be arbitrary long because it has to
+> connect to the relayd (if remote) and set the session. It adds "unknown"
+> latency to the command. So, for someone willing to control the full time
+> window of the streaming setup using the API, it is divided in two calls.
+>
+> This is why we added the extended options so the command line UI could
+> also be controlled on a per API call basis.
+>
+> Is it clear enough?
+>
+> Reply continues below:
+>
+> Bernd Hufmann:
+>> Hello
+>>
+>> For the support of LTTng Tools 2.1 in Eclipse, I'm currently trying to
+>> understand how to use the configuration for network streaming with the
+>> updated "lttng create"-command and new "enable-consumer"-command.
+>>
+>> a) lttng enable-consumer
+>> I find this command confusing because this command does not always
+>> enables the consumer, even if the command name implieeees so. The enabling
+>> actually depends on how the command is executed.
+>> Examples:
+>>
+>>    * "lttng enable-consumer -k -U net://<remote_addr>" or "lttng
+>>      enable-consumer -k -C tcp://<remote_addr>  -D tcp://<remote_addr>"
+>>      don't enable the consumer. You need to either add option --enable or
+>>      execute subsequently "lttng enable-consumer --enable"
+>>    * lttng enable-consumer -k net://<remote_addr>  does enable the
+>>      consumer. I took me a while to figure out the difference to the
+>>      example above: The option -U is omitted.
+>>
+>>
+>> What the command actually provides, is 2 features: A way to configure
+>> streaming (e.g. remote_addr) and a way to enable the consumer. Would it
+>> be better to name it to "lttng configure-consumer"? Also, remove the
+>> support of the possibility to not specify -U, -C or -D. The following
+>> variants of this command should be enough:
+>> lttng configure-consumer -k -U<remote_addr>  [--enable]
+>> lttng configure-consumer -k -C<remote_addr>  -D<remote_addr>  [--enable]
+>> lttng configure-consumer -k --enable
+>> lttng configure-consumer -u -U<remote_addr>  [--enable]
+>> lttng configure-consumer -u -C<remote_addr>  -D<remote_addr>  [--enable]
+>> lttng configure-consumer -u --enable
+>>
+>> Please let me know what you think.
+>>
+>> b) lttng create [-U<remote_addr>] | [-C<remote_addr>  -D<remote_addr>]
+>> [--no-consumer] [--disable-consumer]
+>>
+>>    * Are options --no-consumer or --disable-consumer only applicable for
+>>      streaming?
+> No, also for local consumer.
+>
+>>    * I'm not sure what is the purpose of the options --no-consumer or
+>>      --disable-consumer. Could you please explain the use cases for using
+>>      --no-consumer or --disable-consumer?
+> This basically disable the consumer for a tracing session. It's not very
+> useful for now but for upcoming snapshots and live tracing, it will make
+> way more sense! :).
+>
+> Again, same idea, the API can control the consumer "state"
+> (enable/disable), so we added these options for the UI.
+>
+> Cheers!
+> David
+>
+>>
+>> Thanks
+>> Bernd
+>>
+>> This Communication is Confidential. We only send and receive email on
+>> the basis of the terms set out at _www.ericsson.com/email_disclaimer_
+>>
+>>
+>>
+>>
+>> This body part will be downloaded on demand.
