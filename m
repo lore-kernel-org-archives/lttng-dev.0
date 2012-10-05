@@ -1,182 +1,158 @@
-From: Bernd Hufmann <bhufmann-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
-Subject: Re: [lttng-dev] Viewing userspace apps traces
-Date: Fri, 5 Oct 2012 08:15:10 -0400
-Message-ID: <CAG5-hcNmq06bR7b2n0yOziuUYQinHnUa7RaZDXhaL5c_QQOX-w@mail.gmail.com>
-References: <506B4A21.6080309@fnac.net> <506B4EA4.8050407@voxpopuli.im>
-	<506BD225.3030906@fnac.net> <506D0581.3030400@polymtl.ca>
-	<506D91B0.2070708@ericsson.com> <506DF3EF.9070201@fnac.net>
-Reply-To: Linux Tools developer discussions <linuxtools-dev-j9T/66MeVpFAfugRpC6u6w@public.gmane.org>
+From: David Goulet <dgoulet@efficios.com>
+Subject: Re: LTTng Tools 2.1 streaming commands
+Date: Fri, 05 Oct 2012 09:13:37 -0400
+Message-ID: <506EDD01.60704__23112.2368750677$1349443080$gmane$org@efficios.com>
+References: <4CB817F8B8860343821834C09BFBA7A6E183805D4D@EUSAACMS0702.eamcs.ericsson.se>
+	<506C837B.5070402@efficios.com> <506EC818.7050708@ericsson.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Return-path: <linuxtools-dev-bounces-j9T/66MeVpFAfugRpC6u6w@public.gmane.org>
-In-Reply-To: <506DF3EF.9070201-oNGEd6G4ga4@public.gmane.org>
-List-Unsubscribe: <https://dev.eclipse.org/mailman/options/linuxtools-dev>,
-	<mailto:linuxtools-dev-request-j9T/66MeVpFAfugRpC6u6w@public.gmane.org?subject=unsubscribe>
-List-Archive: <https://dev.eclipse.org/mailman/private/linuxtools-dev>
-List-Post: <mailto:linuxtools-dev-j9T/66MeVpFAfugRpC6u6w@public.gmane.org>
-List-Help: <mailto:linuxtools-dev-request-j9T/66MeVpFAfugRpC6u6w@public.gmane.org?subject=help>
-List-Subscribe: <https://dev.eclipse.org/mailman/listinfo/linuxtools-dev>,
-	<mailto:linuxtools-dev-request-j9T/66MeVpFAfugRpC6u6w@public.gmane.org?subject=subscribe>
-Errors-To: linuxtools-dev-bounces-j9T/66MeVpFAfugRpC6u6w@public.gmane.org
-Sender: linuxtools-dev-bounces-j9T/66MeVpFAfugRpC6u6w@public.gmane.org
-To: Paul Chavent <paul.chavent-oNGEd6G4ga4@public.gmane.org>
-Cc: "lttng-dev-bnB2LGs2QVJ+nrgayQ7rhA@public.gmane.org" <lttng-dev-bnB2LGs2QVJ+nrgayQ7rhA@public.gmane.org>, Linux Tools developer discussions <linuxtools-dev-j9T/66MeVpFAfugRpC6u6w@public.gmane.org>
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from smtp.ini-tech.com ([213.239.202.151])
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <dgoulet@efficios.com>) id 1TK7in-0004CP-6J
+	for lttng-dev@lists.lttng.org; Fri, 05 Oct 2012 09:13:41 -0400
+In-Reply-To: <506EC818.7050708@ericsson.com>
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+To: eamcs/eedbhu <Bernd.Hufmann@ericsson.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Paul
+Right.
 
-I was trying your trace with the Eclipse Juno SR1 CDT EPP and you're
-right the context information is not displayed in the Events Table
-(I'm not talking about the Time Graph and its table).
-I was verifying the commits and the commit that added the support for
-displaying of context information in the Events Table is in the
-release. As well as the example trace with context
-information I generated and tested with works. However, it was a
-Kernel trace with context information and not a UST trace.
+I guess this discussion can continue and we can come up with a community
+consensus.
 
-So, that needs to be investigated on our side (Eclipse developer) why
-the context information is not shown for the UST trace. We'll let you
-know.
+This is a matter of UI naming so it should be decided now before we
+release stable since for the complete 2.x cycle we'll have to support this.
 
-Best Regard
-Bernd
+Anyone wants to ship in here?
 
-On Thu, Oct 4, 2012 at 4:39 PM, Paul Chavent <paul.chavent-oNGEd6G4ga4@public.gmane.org> wrote:
-> Hi,
->
-> I've follow this link
-> (http://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/juno/SR1/eclipse-cpp-juno-SR1-linux-gtk-x86_64.tar.gz)
-> to download the Eclipse env.
->
-> Here is the version notes i can give you :
-> **************
-> Eclipse
-> Version: Juno Release
-> Build id: 20120614-1722
->
-> Eclipse Linux Tools LTTng ... 1.0.0.201206130106
-> **************
->
-> Then i've got my traces with :
->
-> lttng create
-> lttng enable-event -u -a
-> lttng add-context -u -t vpid -t vtid
-> lttng start
-> ...
-> lttng stop
-> lttng destroy
->
-> Here is a sample of the traces :
-> http://paul.chavent.free.fr/tmp/sample_traces.tar.bz2
->
->
-> I can open the traces in eclipse (i see the "Events" panel), but i can't see
-> the events ordered by pid/tid in the "Time Chart" panel, neither "Control
-> Flow", nor "Ressources" ...)
->
-> Is it possible to have the traces displayed sorted by tid for instance ?
->
-> Thanks.
->
-> Paul.
->
->
->
-> On 10/04/2012 03:40 PM, eamcs/eedbhu wrote:
+Thanks!
+David
+
+eamcs/eedbhu:
+> Hi David
+> 
+> thanks for the detailed explanation.
+> 
+> I'm not debating the purpose of the command or that a 2 step approach is
+> supported for enabling the consumer. As you described it makes sense to
+> have this possibility.
+> 
+> However I'm debating mainly the name of the command "enable-consumer".
+> The command suggests that the consumer will be enabled when executing
+> the command. I foresee that a lot of users expect that the consumer is
+> enabled after the command execution. I think, a different name would
+> improve the user experience.
+> 
+> Best Regards
+> Bernd
+> 
+> On 10/03/2012 02:27 PM, David Goulet wrote:
+>> Hi Bernd,
 >>
->> Hi Paul
+>> The enable-consumer, by default, always enable a consumer. We added the
+>> "extended options" such as the -U/-C/-D/-e to control each part of the
+>> API. So let say,
 >>
->> The Eclipse Linux Tools release v1.1.1 (which is also included in the CDT
->> EPP Juno SR1 release) contains an update that displays CTF context
->> information in the events table.
->> So you should be able to see the context information.
+>> $ lttng enable-consumer -k net://localhost
 >>
->> Best Regards
->> Bernd
+>> This command does two API calls underneath which are
+>> lttng_set_consumer_uri and lttng_enable_consumer.
 >>
+>> However, the set_consumer_uri can be arbitrary long because it has to
+>> connect to the relayd (if remote) and set the session. It adds "unknown"
+>> latency to the command. So, for someone willing to control the full time
+>> window of the streaming setup using the API, it is divided in two calls.
 >>
->> On 10/03/2012 11:41 PM, Alexandre Montplaisir wrote:
->>>
->>> Sorry for the late reply, I had to update/rebase some of the stuff
->>> first...
->>>
->>> (Cross-posting linuxtools-dev, as it might interest some people who
->>> follow that list too. This is about extending TMF to implement a
->>> graphical view for a specific UST trace type.)
->>>
->>>
->>> On 12-10-03 01:50 AM, Paul Chavent wrote:
->>>>
->>>> [...]
->>>>
->>>> On 10/02/2012 10:29 PM, Alexandre Montplaisir wrote:
->>>>>
->>>>> [...]
->>>>>
->>>>> What would you like see in your "timeline representation" exactly?
->>>>> Maybe
->>>>> we could give you some pointers as to how to implement such a view.
->>>>> (We're currently working on making it easy to extend the framework to
->>>>> implement new views, so this could be a good exercise!)
->>>>
->>>> I would like to see, eg, one line per tid, and on each line, the value
->>>> of one context or argument value.
->>>>
->>>> I'm ready to follow an exercise for extending the framework !
->>>
->>> Ok good! We don't have a nice tutorial ready yet, as most parts are
->>> still working their way upstream. But if you want to dig into it and try
->>> it out now, you can:
->>>
->>> 1 - Set up the development environment for TMF:
->>>
->>> http://wiki.eclipse.org/Linux_Tools_Project/LTTng_Eclipse_Plug-in_Development_Environement_Setup
->>>
->>> 2 - Checkout the "lttng-kepler" branch in the git. This is where the
->>> latest development happens.
->>>
->>> 3 - Apply those two patches, in that order:
->>> https://git.eclipse.org/r/#/c/7747/
->>> https://git.eclipse.org/r/#/c/7748/
->>> (you can copy-paste the "cherry-pick" command shown on the page)
->>>
->>> 4 - Download the example program and view from:
->>> git://git.dorsal.polymtl.ca/~alexmont/ust-example.git
->>>
->>> Now at this point you should be able to import and build the example
->>> plugins (ust.example.core and ust.example.ui) and the TMF/LTTng ones in
->>> the same workspace.
->>>
->>> You can try it to make sure it works correctly : take a UST trace of the
->>> "myprog" program, and then load it into TMF, and show the "Example ->
->>> Connections" view. It should display the yellow and green rectangles
->>> corresponding to the states that were defined.
->>>
->>>
->>> After that, it shouldn't be too hard (famous last words...) to rework
->>> the ust.example.* code to fit your application. The points of interest
->>> will be (before renames):
->>>
->>> MyUstTraceInput, line 85+: This is where you assign your trace events to
->>> states
->>> ConnectionsPresentationProvider, line 31-34: This is where you assign
->>> the colors to each state in the view
->>> and same file, lines 64-68 and 81-85 : This is where you assign the
->>> trace's states to the ones in the view.
->>> (one place is for the actual colored rectangle, the other is for the
->>> tooltips, iirc).
->>>
->>>
->>> If you have any question or problem, please let me know!
->>>
->>> Good luck ;)
->>>
+>> This is why we added the extended options so the command line UI could
+>> also be controlled on a per API call basis.
 >>
->
->
+>> Is it clear enough?
+>>
+>> Reply continues below:
+>>
+>> Bernd Hufmann:
+>>> Hello
+>>>
+>>> For the support of LTTng Tools 2.1 in Eclipse, I'm currently trying to
+>>> understand how to use the configuration for network streaming with the
+>>> updated "lttng create"-command and new "enable-consumer"-command.
+>>>
+>>> a) lttng enable-consumer
+>>> I find this command confusing because this command does not always
+>>> enables the consumer, even if the command name implieeees so. The
+>>> enabling
+>>> actually depends on how the command is executed.
+>>> Examples:
+>>>
+>>>    * "lttng enable-consumer -k -U net://<remote_addr>" or "lttng
+>>>      enable-consumer -k -C tcp://<remote_addr>  -D tcp://<remote_addr>"
+>>>      don't enable the consumer. You need to either add option
+>>> --enable or
+>>>      execute subsequently "lttng enable-consumer --enable"
+>>>    * lttng enable-consumer -k net://<remote_addr>  does enable the
+>>>      consumer. I took me a while to figure out the difference to the
+>>>      example above: The option -U is omitted.
+>>>
+>>>
+>>> What the command actually provides, is 2 features: A way to configure
+>>> streaming (e.g. remote_addr) and a way to enable the consumer. Would it
+>>> be better to name it to "lttng configure-consumer"? Also, remove the
+>>> support of the possibility to not specify -U, -C or -D. The following
+>>> variants of this command should be enough:
+>>> lttng configure-consumer -k -U<remote_addr>  [--enable]
+>>> lttng configure-consumer -k -C<remote_addr>  -D<remote_addr>  [--enable]
+>>> lttng configure-consumer -k --enable
+>>> lttng configure-consumer -u -U<remote_addr>  [--enable]
+>>> lttng configure-consumer -u -C<remote_addr>  -D<remote_addr>  [--enable]
+>>> lttng configure-consumer -u --enable
+>>>
+>>> Please let me know what you think.
+>>>
+>>> b) lttng create [-U<remote_addr>] | [-C<remote_addr>  -D<remote_addr>]
+>>> [--no-consumer] [--disable-consumer]
+>>>
+>>>    * Are options --no-consumer or --disable-consumer only applicable for
+>>>      streaming?
+>> No, also for local consumer.
+>>
+>>>    * I'm not sure what is the purpose of the options --no-consumer or
+>>>      --disable-consumer. Could you please explain the use cases for
+>>> using
+>>>      --no-consumer or --disable-consumer?
+>> This basically disable the consumer for a tracing session. It's not very
+>> useful for now but for upcoming snapshots and live tracing, it will make
+>> way more sense! :).
+>>
+>> Again, same idea, the API can control the consumer "state"
+>> (enable/disable), so we added these options for the UI.
+>>
+>> Cheers!
+>> David
+>>
+>>>
+>>> Thanks
+>>> Bernd
+>>>
+>>> This Communication is Confidential. We only send and receive email on
+>>> the basis of the terms set out at _www.ericsson.com/email_disclaimer_
+>>>
+>>>
+>>>
+>>>
+>>> This body part will be downloaded on demand.
+> 
+> 
 > _______________________________________________
 > lttng-dev mailing list
-> lttng-dev-bnB2LGs2QVJ+nrgayQ7rhA@public.gmane.org
+> lttng-dev@lists.lttng.org
 > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
