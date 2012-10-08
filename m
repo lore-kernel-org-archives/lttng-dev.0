@@ -1,38 +1,20 @@
-From: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
-Subject: Re: [URCU PATCH 3/3] call_rcu: use wfcqueue,
- eliminate false-sharing
-Date: Mon, 8 Oct 2012 08:10:19 -0700
-Message-ID: <20121008151019.GA2453__24880.531410645$1349709084$gmane$org@linux.vnet.ibm.com>
-References: <20121002141307.GA4057@Krystal> <20121002141638.GD4057@Krystal>
-	<507243E9.8010604@cn.fujitsu.com> <20121008144916.GA29352@Krystal>
-Reply-To: paulmck@linux.vnet.ibm.com
+From: Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [URCU PATCH 1/3] wfcqueue: implement
+	concurrency-efficient queue
+Date: Mon, 08 Oct 2012 17:47:10 +0200
+Message-ID: <5072F57E.4020308__42814.256475731$1349711272$gmane$org@redhat.com>
+References: <20121002141307.GA4057@Krystal> <20121002141444.GB4057@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from e38.co.us.ibm.com ([32.97.110.159])
+Received: from mail-pa0-f48.google.com ([209.85.220.48])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <paulmck@linux.vnet.ibm.com>) id 1TLEyr-00050i-Ci
-	for lttng-dev@lists.lttng.org; Mon, 08 Oct 2012 11:10:53 -0400
-Received: from /spool/local
-	by e38.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only!
-	Violators will be prosecuted
-	for <lttng-dev@lists.lttng.org> from <paulmck@linux.vnet.ibm.com>;
-	Mon, 8 Oct 2012 09:10:46 -0600
-Received: from d03relay04.boulder.ibm.com (d03relay04.boulder.ibm.com
-	[9.17.195.106])
-	by d03dlp01.boulder.ibm.com (Postfix) with ESMTP id 62D631FF0060
-	for <lttng-dev@lists.lttng.org>; Mon,  8 Oct 2012 09:10:33 -0600 (MDT)
-Received: from d03av01.boulder.ibm.com (d03av01.boulder.ibm.com [9.17.195.167])
-	by d03relay04.boulder.ibm.com (8.13.8/8.13.8/NCO v10.0) with ESMTP id
-	q98FAZdK113704
-	for <lttng-dev@lists.lttng.org>; Mon, 8 Oct 2012 09:10:36 -0600
-Received: from d03av01.boulder.ibm.com (loopback [127.0.0.1])
-	by d03av01.boulder.ibm.com (8.14.4/8.13.1/NCO v10.0 AVout) with ESMTP
-	id q98FALqb028183
-	for <lttng-dev@lists.lttng.org>; Mon, 8 Oct 2012 09:10:25 -0600
-Content-Disposition: inline
-In-Reply-To: <20121008144916.GA29352@Krystal>
+	(envelope-from <paolo.bonzini@gmail.com>) id 1TLFYB-0005IL-TS
+	for lttng-dev@lists.lttng.org; Mon, 08 Oct 2012 11:47:24 -0400
+Received: by mail-pa0-f48.google.com with SMTP id kp12so5305461pab.35
+	for <lttng-dev@lists.lttng.org>; Mon, 08 Oct 2012 08:47:18 -0700 (PDT)
+In-Reply-To: <20121002141444.GB4057@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -42,151 +24,34 @@ List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: rp@svcs.cs.pdx.edu, lttng-dev@lists.lttng.org, Lai Jiangshan <eag0628@gmail.com>
+Cc: Lai Jiangshan <eag0628@gmail.com>, lttng-dev@lists.lttng.org, Paul McKenney <paulmck@linux.vnet.ibm.com>, rp@svcs.cs.pdx.edu
 List-Id: lttng-dev@lists.lttng.org
 
-On Mon, Oct 08, 2012 at 10:49:16AM -0400, Mathieu Desnoyers wrote:
-> * Lai Jiangshan (laijs@cn.fujitsu.com) wrote:
-> > On 10/02/2012 10:16 PM, Mathieu Desnoyers wrote:
-> > > Eliminate false-sharing between call_rcu (enqueuer) and worker threads
-> > > on the queue head and tail.
-> > > 
-> > > Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> > > ---
-> > > diff --git a/tests/Makefile.am b/tests/Makefile.am
-> > > index 81718bb..c92bbe6 100644
-> > > --- a/tests/Makefile.am
-> > > +++ b/tests/Makefile.am
-> > > @@ -30,14 +30,14 @@ if COMPAT_FUTEX
-> > >  COMPAT+=$(top_srcdir)/compat_futex.c
-> > >  endif
-> > >  
-> > > -URCU=$(top_srcdir)/urcu.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfqueue.c $(COMPAT)
-> > > -URCU_QSBR=$(top_srcdir)/urcu-qsbr.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfqueue.c $(COMPAT)
-> > > +URCU=$(top_srcdir)/urcu.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfcqueue.c $(COMPAT)
-> > > +URCU_QSBR=$(top_srcdir)/urcu-qsbr.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfcqueue.c $(COMPAT)
-> > >  # URCU_MB uses urcu.c but -DRCU_MB must be defined
-> > > -URCU_MB=$(top_srcdir)/urcu.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfqueue.c $(COMPAT)
-> > > +URCU_MB=$(top_srcdir)/urcu.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfcqueue.c $(COMPAT)
-> > >  # URCU_SIGNAL uses urcu.c but -DRCU_SIGNAL must be defined
-> > > -URCU_SIGNAL=$(top_srcdir)/urcu.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfqueue.c $(COMPAT)
-> > > -URCU_BP=$(top_srcdir)/urcu-bp.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfqueue.c $(COMPAT)
-> > > -URCU_DEFER=$(top_srcdir)/urcu.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfqueue.c $(COMPAT)
-> > > +URCU_SIGNAL=$(top_srcdir)/urcu.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfcqueue.c $(COMPAT)
-> > > +URCU_BP=$(top_srcdir)/urcu-bp.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfcqueue.c $(COMPAT)
-> > > +URCU_DEFER=$(top_srcdir)/urcu.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfcqueue.c $(COMPAT)
-> > >  
-> > >  URCU_COMMON_LIB=$(top_builddir)/liburcu-common.la
-> > >  URCU_LIB=$(top_builddir)/liburcu.la
-> > > diff --git a/urcu-call-rcu-impl.h b/urcu-call-rcu-impl.h
-> > > index 13b24ff..cf65992 100644
-> > > --- a/urcu-call-rcu-impl.h
-> > > +++ b/urcu-call-rcu-impl.h
-> > > @@ -21,6 +21,7 @@
-> > >   */
-> > >  
-> > >  #define _GNU_SOURCE
-> > > +#define _LGPL_SOURCE
-> > >  #include <stdio.h>
-> > >  #include <pthread.h>
-> > >  #include <signal.h>
-> > > @@ -35,7 +36,7 @@
-> > >  #include <sched.h>
-> > >  
-> > >  #include "config.h"
-> > > -#include "urcu/wfqueue.h"
-> > > +#include "urcu/wfcqueue.h"
-> > >  #include "urcu-call-rcu.h"
-> > >  #include "urcu-pointer.h"
-> > >  #include "urcu/list.h"
-> > > @@ -46,7 +47,14 @@
-> > >  /* Data structure that identifies a call_rcu thread. */
-> > >  
-> > >  struct call_rcu_data {
-> > > -	struct cds_wfq_queue cbs;
-> > > +	/*
-> > > +	 * Align the tail on cache line size to eliminate false-sharing
-> > > +	 * with head.
-> > > +	 */
-> > > +	struct cds_wfcq_tail __attribute__((aligned(CAA_CACHE_LINE_SIZE))) cbs_tail;
-> > > +	/* Alignment on cache line size will add padding here */
-> > > +
-> > > +	struct cds_wfcq_head cbs_head;
-> > 
-> > 
-> > wrong here. In this code, cbs_tail and cbs_head are in the same cache line.
-> > 
-> > ---
-> > 
-> > struct call_rcu_data {
-> > 	struct cds_wfcq_tail cbs_tail;
-> > 	struct cds_wfcq_head __attribute__((aligned(CAA_CACHE_LINE_SIZE))) cbs_head;
-> > 	/* other fields, can move some fields up to use the room between tail and head */
-> > };
-> > 
-> > # cat test.c
-> > 
-> > struct a {
-> > 	int __attribute__((aligned(64))) i;
-> > 	int j;
-> > };
-> > struct b {
-> > 	int i;
-> > 	int __attribute__((aligned(64))) j;
-> > };
-> > 
-> > void main(void)
-> > {
-> > 	printf("%d,%d\n", sizeof(struct a), sizeof(struct b));
-> > }
-> > 
-> > # ./a.out
-> > 64,128
-> > 
-> 
-> Good point! While we are there, I notice that the "qlen" count, kept for
-> debugging, is causing false-sharing too. I wonder if we should split
-> this counter in two counters: nr_enqueue and nr_dequeue, which would sit
-> in two different cache lines ? It's mainly Paul who cares about this
-> counter. Thoughts ?
+Il 02/10/2012 16:14, Mathieu Desnoyers ha scritto:
+> +/*
+> + * Concurrent queue with wait-free enqueue/blocking dequeue.
+> + *
+> + * Inspired from half-wait-free/half-blocking queue implementation done by
+> + * Paul E. McKenney.
+> + *
+> + * Mutual exclusion of __cds_wfcq_* API
+> + *
+> + * Unless otherwise stated, the caller must ensure mutual exclusion of
+> + * queue update operations "dequeue" and "splice" (for source queue).
+> + * Queue read operations "first" and "next" need to be protected against
+> + * concurrent "dequeue" and "splice" (for source queue) by the caller.
+> + * "enqueue", "splice" (for destination queue), and "empty" are the only
+> + * operations that can be used without any mutual exclusion.
+> + * Mutual exclusion can be ensured by holding cds_wfcq_dequeue_lock().
+> + *
+> + * For convenience, cds_wfcq_dequeue_blocking() and
+> + * cds_wfcq_splice_blocking() hold the dequeue lock.
+> + */
 
-Works for me, as long as nr_enqueue and nr_dequeue are both unsigned long
-to avoid issues with overflow.
+Hi,
 
-							Thanx, Paul
+can you add a for-like macro for iteration?  Iteration does not require
+holding the lock and assumes that you are the sole user of the data
+structure, which is useful together with splice.
 
-> Here is the fix to the problem you noticed above:
-> 
-> commit b9f893b69fbc31baea418794938f4eb74cc4923a
-> Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> Date:   Mon Oct 8 10:44:38 2012 -0400
-> 
->     Fix urcu-call-rcu-impl.h: false-sharing
->     
->     > >  struct call_rcu_data {
->     > > -   struct cds_wfq_queue cbs;
->     > > +   /*
->     > > +    * Align the tail on cache line size to eliminate false-sharing
->     > > +    * with head.
->     > > +    */
->     > > +   struct cds_wfcq_tail __attribute__((aligned(CAA_CACHE_LINE_SIZE))) cbs_tail;
->     > > +   /* Alignment on cache line size will add padding here */
->     > > +
->     > > +   struct cds_wfcq_head cbs_head;
->     >
->     >
->     > wrong here. In this code, cbs_tail and cbs_head are in the same cache line.
->     
->     Reported-by: Lai Jiangshan <laijs@cn.fujitsu.com>
->     Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> 
-> Thanks!
-> 
-> Mathieu
-> 
-> -- 
-> Mathieu Desnoyers
-> Operating System Efficiency R&D Consultant
-> EfficiOS Inc.
-> http://www.efficios.com
-> 
+Paolo
