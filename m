@@ -1,22 +1,20 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [URCU PATCH 1/3] wfcqueue: implement
-	concurrency-efficient	queue
-Date: Mon, 8 Oct 2012 14:10:39 -0400
-Message-ID: <20121008181039.GA4558__31700.0582501807$1349719879$gmane$org@Krystal>
-References: <20121002141307.GA4057@Krystal> <20121002141444.GB4057@Krystal>
-	<5072F57E.4020308@redhat.com> <20121008161544.GB30083@Krystal>
-	<5073004B.2050400@redhat.com>
+From: "McDermott, Andrew" <Andrew.McDermott@windriver.com>
+Subject: status of lttng top
+Date: Mon, 8 Oct 2012 21:57:23 +0000
+Message-ID: <7F632A9222059A42AF70FCB7965774AA20627EAB__11927.8698847213$1349733481$gmane$org@ALA-MBB.corp.ad.wrs.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1390147836=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from mail1.windriver.com ([147.11.146.13])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1TLHmr-0006Va-4r
-	for lttng-dev@lists.lttng.org; Mon, 08 Oct 2012 14:10:41 -0400
-Content-Disposition: inline
-In-Reply-To: <5073004B.2050400@redhat.com>
+	(envelope-from <Andrew.McDermott@windriver.com>) id 1TLLKM-0008Lb-3z
+	for lttng-dev@lists.lttng.org; Mon, 08 Oct 2012 17:57:30 -0400
+Received: from ALA-HCB.corp.ad.wrs.com (ala-hcb.corp.ad.wrs.com
+	[147.11.189.41])
+	by mail1.windriver.com (8.14.5/8.14.3) with ESMTP id q98LvNG0016385
+	(version=TLSv1/SSLv3 cipher=AES128-SHA bits=128 verify=FAIL)
+	for <lttng-dev@lists.lttng.org>; Mon, 8 Oct 2012 14:57:23 -0700 (PDT)
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -25,64 +23,63 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Paul McKenney <paulmck@linux.vnet.ibm.com>, lttng-dev@lists.lttng.org, Lai Jiangshan <eag0628@gmail.com>, rp@svcs.cs.pdx.edu
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-* Paolo Bonzini (pbonzini@redhat.com) wrote:
-> Il 08/10/2012 18:15, Mathieu Desnoyers ha scritto:
-> > Hi Paolo,
-> > 
-> > We actually already have those, they are just not described in this
-> > comment. I will fix this right away. By the way, you will notice the
-> > wording:
-> > 
-> > + * Queue read operations "first" and "next", which are used by
-> > + * "for_each" iterations, need to be protected against concurrent
-> > + * "dequeue" and "splice" (for source queue) by the caller.
-> > 
-> > Being the only one iterating on a queue with local head/tail after a
-> > splice operation is one way to provide mutual exclusion. Holding a lock
-> > is not the only way to achieve mutual exclusion.
-> 
-> Uh, I was confused by the _blocking suffix.  But when used together with
-> splice you know it is not blocking---only the splice will block.
+--===============1390147836==
+Content-Language: en-US
+Content-Type: multipart/alternative;
+	boundary="_000_7F632A9222059A42AF70FCB7965774AA20627EABALAMBBcorpadwrs_"
 
-Well, in this case, the "blocking" can be understood as busy-waiting
-(and actual blocking that invokes the OS happens if busy-waiting for long
-periods only).
+--_000_7F632A9222059A42AF70FCB7965774AA20627EABALAMBBcorpadwrs_
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 
-for_each iteration can indeed busy-wait: ___cds_wfcq_first_blocking()
-and ___cds_wfcq_next_blocking() can both call
-___cds_wfcq_node_sync_next(), which busy-waits if it encounters a NULL
-next pointer that is not located in the tail node.
+I was wondering what the status of lttng top was.  I'm happy to add the dai=
+ly Ubuntu PPA and try it that way, or equally building from source.  But, b=
+efore I tread that route, are there any gotchas to be aware of. Is it still=
+ considered work-in-progress, etc.
 
-Seen through the use-case of splice to local queue + for_each, here is
-what happens:
+Thanks.
 
-- splice moves the content of the queue into a "local" queue. However,
-  it does _not_ issue a ___cds_wfcq_node_sync_next() on each node: no
-  traversal is performed.
 
-- then, within the for_each iteration, we perform the
-  ___cds_wfcq_node_sync_next() synchronization as we iterate on the
-  local queue.
+--_000_7F632A9222059A42AF70FCB7965774AA20627EABALAMBBcorpadwrs_
+Content-Type: text/html; charset="us-ascii"
+Content-ID: <09F6D210C3FFA944B750DC0739111DBD@local>
+Content-Transfer-Encoding: quoted-printable
 
-This ensures that the synchronization performed for each node is only
-performed lazily, only when those nodes are actually traversed. This
-approach has the advantage of increasing the locality of reference, and
-also to diminish the odds that this synchronization actually needs to be
-executed uselessly by postponing it to the point where it is actually
-needed.
+<html>
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
+>
+</head>
+<body style=3D"word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-lin=
+e-break: after-white-space; ">
+<div>I was wondering what the status of lttng top was. &nbsp;I'm happy to a=
+dd the daily Ubuntu PPA and try it that way, or equally building from sourc=
+e. &nbsp;But, before I tread that route, are there any gotchas to be aware =
+of. Is it still considered work-in-progress,
+ etc.</div>
+<div><br>
+</div>
+<div>Thanks.</div>
+<div><br>
+</div>
+</body>
+</html>
 
-Does it make more sense ?
+--_000_7F632A9222059A42AF70FCB7965774AA20627EABALAMBBcorpadwrs_--
 
-Thanks,
 
-Mathieu
+--===============1390147836==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
--- 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1390147836==--
