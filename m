@@ -1,18 +1,19 @@
 From: Lai Jiangshan <laijs@cn.fujitsu.com>
-Subject: Re: [URCU PATCH 3/3] call_rcu: use wfcqueue,
- eliminate false-sharing
-Date: Mon, 08 Oct 2012 11:09:29 +0800
-Message-ID: <507243E9.8010604__4062.94041681594$1349665684$gmane$org@cn.fujitsu.com>
-References: <20121002141307.GA4057@Krystal> <20121002141638.GD4057@Krystal>
+Subject: Re: [rp] [URCU PATCH 0/3] wait-free concurrent queues
+ (wfcqueue)
+Date: Mon, 08 Oct 2012 11:33:47 +0800
+Message-ID: <5072499B.1050301__47757.0672323511$1349667120$gmane$org@cn.fujitsu.com>
+References: <20121002141307.GA4057@Krystal>	<20121003182846.GN2527@linux.vnet.ibm.com>
+	<20121003210436.GB25090@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from [222.73.24.84] (helo=song.cn.fujitsu.com)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <laijs@cn.fujitsu.com>) id 1TL3gb-0007C0-7o
-	for lttng-dev@lists.lttng.org; Sun, 07 Oct 2012 23:07:19 -0400
-In-Reply-To: <20121002141638.GD4057@Krystal>
+	(envelope-from <laijs@cn.fujitsu.com>) id 1TL442-0007Oo-L0
+	for lttng-dev@lists.lttng.org; Sun, 07 Oct 2012 23:31:31 -0400
+In-Reply-To: <20121003210436.GB25090@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,250 +23,51 @@ List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Lai Jiangshan <eag0628@gmail.com>, lttng-dev@lists.lttng.org, Paul McKenney <paulmck@linux.vnet.ibm.com>, rp@svcs.cs.pdx.edu
+Cc: Lai Jiangshan <eag0628@gmail.com>, lttng-dev@lists.lttng.org, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, rp@svcs.cs.pdx.edu
 List-Id: lttng-dev@lists.lttng.org
 
-On 10/02/2012 10:16 PM, Mathieu Desnoyers wrote:
-> Eliminate false-sharing between call_rcu (enqueuer) and worker threads
-> on the queue head and tail.
+On 10/04/2012 05:04 AM, Mathieu Desnoyers wrote:
+> * Paul E. McKenney (paulmck@linux.vnet.ibm.com) wrote:
+>> On Tue, Oct 02, 2012 at 10:13:07AM -0400, Mathieu Desnoyers wrote:
+>>> Implement wait-free concurrent queues, with a new API different from
+>>> wfqueue.h, which is already provided by Userspace RCU. The advantage of
+>>> splitting the head and tail objects of the queue into different
+>>> arguments is to allow these to sit on different cache-lines, thus
+>>> eliminating false-sharing, leading to a 2.3x speed increase.
+>>>
+>>> This API also introduces a "splice" operation, which moves all nodes
+>>> from one queue into another, and postpones the synchronization to either
+>>> dequeue or iteration on the list. The splice operation does not need to
+>>> touch every single node of the queue it moves them from. Moreover, the
+>>> splice operation only needs to ensure mutual exclusion with other
+>>> dequeuers, iterations, and splice operations from the list it splices
+>>> from, but acts as a simple enqueuer on the list it splices into (no
+>>> mutual exclusion needed for that list).
+>>>
+>>> Feedback is welcome,
+>>
+>> These look sane to me, though I must confess that the tail pointer
+>> referencing the node rather than the node's next pointer did throw
+>> me for a bit.  ;-)
 > 
-> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> ---
-> diff --git a/tests/Makefile.am b/tests/Makefile.am
-> index 81718bb..c92bbe6 100644
-> --- a/tests/Makefile.am
-> +++ b/tests/Makefile.am
-> @@ -30,14 +30,14 @@ if COMPAT_FUTEX
->  COMPAT+=$(top_srcdir)/compat_futex.c
->  endif
->  
-> -URCU=$(top_srcdir)/urcu.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfqueue.c $(COMPAT)
-> -URCU_QSBR=$(top_srcdir)/urcu-qsbr.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfqueue.c $(COMPAT)
-> +URCU=$(top_srcdir)/urcu.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfcqueue.c $(COMPAT)
-> +URCU_QSBR=$(top_srcdir)/urcu-qsbr.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfcqueue.c $(COMPAT)
->  # URCU_MB uses urcu.c but -DRCU_MB must be defined
-> -URCU_MB=$(top_srcdir)/urcu.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfqueue.c $(COMPAT)
-> +URCU_MB=$(top_srcdir)/urcu.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfcqueue.c $(COMPAT)
->  # URCU_SIGNAL uses urcu.c but -DRCU_SIGNAL must be defined
-> -URCU_SIGNAL=$(top_srcdir)/urcu.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfqueue.c $(COMPAT)
-> -URCU_BP=$(top_srcdir)/urcu-bp.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfqueue.c $(COMPAT)
-> -URCU_DEFER=$(top_srcdir)/urcu.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfqueue.c $(COMPAT)
-> +URCU_SIGNAL=$(top_srcdir)/urcu.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfcqueue.c $(COMPAT)
-> +URCU_BP=$(top_srcdir)/urcu-bp.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfcqueue.c $(COMPAT)
-> +URCU_DEFER=$(top_srcdir)/urcu.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfcqueue.c $(COMPAT)
->  
->  URCU_COMMON_LIB=$(top_builddir)/liburcu-common.la
->  URCU_LIB=$(top_builddir)/liburcu.la
-> diff --git a/urcu-call-rcu-impl.h b/urcu-call-rcu-impl.h
-> index 13b24ff..cf65992 100644
-> --- a/urcu-call-rcu-impl.h
-> +++ b/urcu-call-rcu-impl.h
-> @@ -21,6 +21,7 @@
->   */
->  
->  #define _GNU_SOURCE
-> +#define _LGPL_SOURCE
->  #include <stdio.h>
->  #include <pthread.h>
->  #include <signal.h>
-> @@ -35,7 +36,7 @@
->  #include <sched.h>
->  
->  #include "config.h"
-> -#include "urcu/wfqueue.h"
-> +#include "urcu/wfcqueue.h"
->  #include "urcu-call-rcu.h"
->  #include "urcu-pointer.h"
->  #include "urcu/list.h"
-> @@ -46,7 +47,14 @@
->  /* Data structure that identifies a call_rcu thread. */
->  
->  struct call_rcu_data {
-> -	struct cds_wfq_queue cbs;
-> +	/*
-> +	 * Align the tail on cache line size to eliminate false-sharing
-> +	 * with head.
-> +	 */
-> +	struct cds_wfcq_tail __attribute__((aligned(CAA_CACHE_LINE_SIZE))) cbs_tail;
-> +	/* Alignment on cache line size will add padding here */
-> +
-> +	struct cds_wfcq_head cbs_head;
+> Yes, this was originally introduced with Lai's original patch to
+> wfqueue, which I think is a nice simplification: it's pretty much the
+> same thing to use the last node address as tail rather than the address
+> of its first member (its next pointer address (_not_ value)). It ends up
+> being the same address in this case, but more interestingly, we don't
+> have to use a struct cds_wfcq_node ** type: a simple struct
+> cds_wfcq_node *  suffice.
+> 
+> Thanks Paul, I will therefore merge these 3 patches with your Acked-by.
+> 
+> Lai, you are welcome to provide improvements to this code against the
+> master branch. I will gladly consider any change you propose.
+> 
 
+I did not remember that there is any improvement idea not included.
+The patchset is OK for me.
 
-wrong here. In this code, cbs_tail and cbs_head are in the same cache line.
+I think you can reimplement wfqueue via wfcqueue without cacheline opt.
 
----
-
-struct call_rcu_data {
-	struct cds_wfcq_tail cbs_tail;
-	struct cds_wfcq_head __attribute__((aligned(CAA_CACHE_LINE_SIZE))) cbs_head;
-	/* other fields, can move some fields up to use the room between tail and head */
-};
-
-# cat test.c
-
-struct a {
-	int __attribute__((aligned(64))) i;
-	int j;
-};
-struct b {
-	int i;
-	int __attribute__((aligned(64))) j;
-};
-
-void main(void)
-{
-	printf("%d,%d\n", sizeof(struct a), sizeof(struct b));
-}
-
-# ./a.out
-64,128
-
-
->  	unsigned long flags;
->  	int32_t futex;
->  	unsigned long qlen; /* maintained for debugging. */
-> @@ -220,10 +228,7 @@ static void call_rcu_wake_up(struct call_rcu_data *crdp)
->  static void *call_rcu_thread(void *arg)
->  {
->  	unsigned long cbcount;
-> -	struct cds_wfq_node *cbs;
-> -	struct cds_wfq_node **cbs_tail;
-> -	struct call_rcu_data *crdp = (struct call_rcu_data *)arg;
-> -	struct rcu_head *rhp;
-> +	struct call_rcu_data *crdp = (struct call_rcu_data *) arg;
->  	int rt = !!(uatomic_read(&crdp->flags) & URCU_CALL_RCU_RT);
->  	int ret;
->  
-> @@ -243,35 +248,33 @@ static void *call_rcu_thread(void *arg)
->  		cmm_smp_mb();
->  	}
->  	for (;;) {
-> -		if (&crdp->cbs.head != _CMM_LOAD_SHARED(crdp->cbs.tail)) {
-> -			while ((cbs = _CMM_LOAD_SHARED(crdp->cbs.head)) == NULL)
-> -				poll(NULL, 0, 1);
-> -			_CMM_STORE_SHARED(crdp->cbs.head, NULL);
-> -			cbs_tail = (struct cds_wfq_node **)
-> -				uatomic_xchg(&crdp->cbs.tail, &crdp->cbs.head);
-> +		struct cds_wfcq_head cbs_tmp_head;
-> +		struct cds_wfcq_tail cbs_tmp_tail;
-> +		struct cds_wfcq_node *cbs, *cbs_tmp_n;
-> +
-> +		cds_wfcq_init(&cbs_tmp_head, &cbs_tmp_tail);
-> +		__cds_wfcq_splice_blocking(&cbs_tmp_head, &cbs_tmp_tail,
-> +			&crdp->cbs_head, &crdp->cbs_tail);
-> +		if (!cds_wfcq_empty(&cbs_tmp_head, &cbs_tmp_tail)) {
->  			synchronize_rcu();
->  			cbcount = 0;
-> -			do {
-> -				while (cbs->next == NULL &&
-> -				       &cbs->next != cbs_tail)
-> -				       	poll(NULL, 0, 1);
-> -				if (cbs == &crdp->cbs.dummy) {
-> -					cbs = cbs->next;
-> -					continue;
-> -				}
-> -				rhp = (struct rcu_head *)cbs;
-> -				cbs = cbs->next;
-> +			__cds_wfcq_for_each_blocking_safe(&cbs_tmp_head,
-> +					&cbs_tmp_tail, cbs, cbs_tmp_n) {
-> +				struct rcu_head *rhp;
-> +
-> +				rhp = caa_container_of(cbs,
-> +					struct rcu_head, next);
->  				rhp->func(rhp);
->  				cbcount++;
-> -			} while (cbs != NULL);
-> +			}
->  			uatomic_sub(&crdp->qlen, cbcount);
->  		}
->  		if (uatomic_read(&crdp->flags) & URCU_CALL_RCU_STOP)
->  			break;
->  		rcu_thread_offline();
->  		if (!rt) {
-> -			if (&crdp->cbs.head
-> -			    == _CMM_LOAD_SHARED(crdp->cbs.tail)) {
-> +			if (cds_wfcq_empty(&crdp->cbs_head,
-> +					&crdp->cbs_tail)) {
->  				call_rcu_wait(crdp);
->  				poll(NULL, 0, 10);
->  				uatomic_dec(&crdp->futex);
-> @@ -317,7 +320,7 @@ static void call_rcu_data_init(struct call_rcu_data **crdpp,
->  	if (crdp == NULL)
->  		urcu_die(errno);
->  	memset(crdp, '\0', sizeof(*crdp));
-> -	cds_wfq_init(&crdp->cbs);
-> +	cds_wfcq_init(&crdp->cbs_head, &crdp->cbs_tail);
->  	crdp->qlen = 0;
->  	crdp->futex = 0;
->  	crdp->flags = flags;
-> @@ -590,12 +593,12 @@ void call_rcu(struct rcu_head *head,
->  {
->  	struct call_rcu_data *crdp;
->  
-> -	cds_wfq_node_init(&head->next);
-> +	cds_wfcq_node_init(&head->next);
->  	head->func = func;
->  	/* Holding rcu read-side lock across use of per-cpu crdp */
->  	rcu_read_lock();
->  	crdp = get_call_rcu_data();
-> -	cds_wfq_enqueue(&crdp->cbs, &head->next);
-> +	cds_wfcq_enqueue(&crdp->cbs_head, &crdp->cbs_tail, &head->next);
->  	uatomic_inc(&crdp->qlen);
->  	wake_call_rcu_thread(crdp);
->  	rcu_read_unlock();
-> @@ -625,10 +628,6 @@ void call_rcu(struct rcu_head *head,
->   */
->  void call_rcu_data_free(struct call_rcu_data *crdp)
->  {
-> -	struct cds_wfq_node *cbs;
-> -	struct cds_wfq_node **cbs_tail;
-> -	struct cds_wfq_node **cbs_endprev;
-> -
->  	if (crdp == NULL || crdp == default_call_rcu_data) {
->  		return;
->  	}
-> @@ -638,17 +637,12 @@ void call_rcu_data_free(struct call_rcu_data *crdp)
->  		while ((uatomic_read(&crdp->flags) & URCU_CALL_RCU_STOPPED) == 0)
->  			poll(NULL, 0, 1);
->  	}
-> -	if (&crdp->cbs.head != _CMM_LOAD_SHARED(crdp->cbs.tail)) {
-> -		while ((cbs = _CMM_LOAD_SHARED(crdp->cbs.head)) == NULL)
-> -			poll(NULL, 0, 1);
-> -		_CMM_STORE_SHARED(crdp->cbs.head, NULL);
-> -		cbs_tail = (struct cds_wfq_node **)
-> -			uatomic_xchg(&crdp->cbs.tail, &crdp->cbs.head);
-> +	if (!cds_wfcq_empty(&crdp->cbs_head, &crdp->cbs_tail)) {
->  		/* Create default call rcu data if need be */
->  		(void) get_default_call_rcu_data();
-> -		cbs_endprev = (struct cds_wfq_node **)
-> -			uatomic_xchg(&default_call_rcu_data, cbs_tail);
-> -		*cbs_endprev = cbs;
-> +		__cds_wfcq_splice_blocking(&default_call_rcu_data->cbs_head,
-> +			&default_call_rcu_data->cbs_tail,
-> +			&crdp->cbs_head, &crdp->cbs_tail);
->  		uatomic_add(&default_call_rcu_data->qlen,
->  			    uatomic_read(&crdp->qlen));
->  		wake_call_rcu_thread(default_call_rcu_data);
-> diff --git a/urcu-call-rcu.h b/urcu-call-rcu.h
-> index f7eac8d..1dad0e2 100644
-> --- a/urcu-call-rcu.h
-> +++ b/urcu-call-rcu.h
-> @@ -32,7 +32,7 @@
->  #include <stdlib.h>
->  #include <pthread.h>
->  
-> -#include <urcu/wfqueue.h>
-> +#include <urcu/wfcqueue.h>
->  
->  #ifdef __cplusplus
->  extern "C" {
-> @@ -55,7 +55,7 @@ struct call_rcu_data;
->   */
->  
->  struct rcu_head {
-> -	struct cds_wfq_node next;
-> +	struct cds_wfcq_node next;
->  	void (*func)(struct rcu_head *head);
->  };
->  
+Thanks,
+Lai
