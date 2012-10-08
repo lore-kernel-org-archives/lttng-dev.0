@@ -1,20 +1,18 @@
-From: Paul Chavent <paul.chavent@fnac.net>
-Subject: Re: Viewing userspace apps traces
-Date: Fri, 05 Oct 2012 21:29:10 +0200
-Message-ID: <506F3506.1010708__46671.4036804207$1349465366$gmane$org@fnac.net>
-References: <506B4A21.6080309@fnac.net> <506B4EA4.8050407@voxpopuli.im>
-	<506BD225.3030906@fnac.net> <506D0581.3030400@polymtl.ca>
-	<506D91B0.2070708@ericsson.com> <506DF3EF.9070201@fnac.net>
-	<CAG5-hcNmq06bR7b2n0yOziuUYQinHnUa7RaZDXhaL5c_QQOX-w@mail.gmail.com>
+From: Lai Jiangshan <laijs@cn.fujitsu.com>
+Subject: Re: [URCU PATCH 3/3] call_rcu: use wfcqueue,
+ eliminate false-sharing
+Date: Mon, 08 Oct 2012 11:09:29 +0800
+Message-ID: <507243E9.8010604__4062.94041681594$1349665684$gmane$org@cn.fujitsu.com>
+References: <20121002141307.GA4057@Krystal> <20121002141638.GD4057@Krystal>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp5-g21.free.fr ([212.27.42.5])
+Received: from [222.73.24.84] (helo=song.cn.fujitsu.com)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <paul.chavent@fnac.net>) id 1TKDZr-0007EA-4t
-	for lttng-dev@lists.lttng.org; Fri, 05 Oct 2012 15:28:51 -0400
-In-Reply-To: <CAG5-hcNmq06bR7b2n0yOziuUYQinHnUa7RaZDXhaL5c_QQOX-w@mail.gmail.com>
+	(envelope-from <laijs@cn.fujitsu.com>) id 1TL3gb-0007C0-7o
+	for lttng-dev@lists.lttng.org; Sun, 07 Oct 2012 23:07:19 -0400
+In-Reply-To: <20121002141638.GD4057@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,167 +21,251 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Bernd Hufmann <bhufmann@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Linux Tools developer discussions <linuxtools-dev@eclipse.org>, Alexandre Montplaisir <alexandre.montplaisir@polymtl.ca>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Lai Jiangshan <eag0628@gmail.com>, lttng-dev@lists.lttng.org, Paul McKenney <paulmck@linux.vnet.ibm.com>, rp@svcs.cs.pdx.edu
 List-Id: lttng-dev@lists.lttng.org
 
-Thank you very much for handling this point.
+On 10/02/2012 10:16 PM, Mathieu Desnoyers wrote:
+> Eliminate false-sharing between call_rcu (enqueuer) and worker threads
+> on the queue head and tail.
+> 
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> ---
+> diff --git a/tests/Makefile.am b/tests/Makefile.am
+> index 81718bb..c92bbe6 100644
+> --- a/tests/Makefile.am
+> +++ b/tests/Makefile.am
+> @@ -30,14 +30,14 @@ if COMPAT_FUTEX
+>  COMPAT+=$(top_srcdir)/compat_futex.c
+>  endif
+>  
+> -URCU=$(top_srcdir)/urcu.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfqueue.c $(COMPAT)
+> -URCU_QSBR=$(top_srcdir)/urcu-qsbr.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfqueue.c $(COMPAT)
+> +URCU=$(top_srcdir)/urcu.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfcqueue.c $(COMPAT)
+> +URCU_QSBR=$(top_srcdir)/urcu-qsbr.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfcqueue.c $(COMPAT)
+>  # URCU_MB uses urcu.c but -DRCU_MB must be defined
+> -URCU_MB=$(top_srcdir)/urcu.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfqueue.c $(COMPAT)
+> +URCU_MB=$(top_srcdir)/urcu.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfcqueue.c $(COMPAT)
+>  # URCU_SIGNAL uses urcu.c but -DRCU_SIGNAL must be defined
+> -URCU_SIGNAL=$(top_srcdir)/urcu.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfqueue.c $(COMPAT)
+> -URCU_BP=$(top_srcdir)/urcu-bp.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfqueue.c $(COMPAT)
+> -URCU_DEFER=$(top_srcdir)/urcu.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfqueue.c $(COMPAT)
+> +URCU_SIGNAL=$(top_srcdir)/urcu.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfcqueue.c $(COMPAT)
+> +URCU_BP=$(top_srcdir)/urcu-bp.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfcqueue.c $(COMPAT)
+> +URCU_DEFER=$(top_srcdir)/urcu.c $(top_srcdir)/urcu-pointer.c $(top_srcdir)/wfcqueue.c $(COMPAT)
+>  
+>  URCU_COMMON_LIB=$(top_builddir)/liburcu-common.la
+>  URCU_LIB=$(top_builddir)/liburcu.la
+> diff --git a/urcu-call-rcu-impl.h b/urcu-call-rcu-impl.h
+> index 13b24ff..cf65992 100644
+> --- a/urcu-call-rcu-impl.h
+> +++ b/urcu-call-rcu-impl.h
+> @@ -21,6 +21,7 @@
+>   */
+>  
+>  #define _GNU_SOURCE
+> +#define _LGPL_SOURCE
+>  #include <stdio.h>
+>  #include <pthread.h>
+>  #include <signal.h>
+> @@ -35,7 +36,7 @@
+>  #include <sched.h>
+>  
+>  #include "config.h"
+> -#include "urcu/wfqueue.h"
+> +#include "urcu/wfcqueue.h"
+>  #include "urcu-call-rcu.h"
+>  #include "urcu-pointer.h"
+>  #include "urcu/list.h"
+> @@ -46,7 +47,14 @@
+>  /* Data structure that identifies a call_rcu thread. */
+>  
+>  struct call_rcu_data {
+> -	struct cds_wfq_queue cbs;
+> +	/*
+> +	 * Align the tail on cache line size to eliminate false-sharing
+> +	 * with head.
+> +	 */
+> +	struct cds_wfcq_tail __attribute__((aligned(CAA_CACHE_LINE_SIZE))) cbs_tail;
+> +	/* Alignment on cache line size will add padding here */
+> +
+> +	struct cds_wfcq_head cbs_head;
 
-On 10/05/2012 02:15 PM, Bernd Hufmann wrote:
-> Hi Paul
->
-> I was trying your trace with the Eclipse Juno SR1 CDT EPP and you're
-> right the context information is not displayed in the Events Table
-> (I'm not talking about the Time Graph and its table).
-> I was verifying the commits and the commit that added the support for
-> displaying of context information in the Events Table is in the
-> release. As well as the example trace with context
-> information I generated and tested with works. However, it was a
-> Kernel trace with context information and not a UST trace.
->
-> So, that needs to be investigated on our side (Eclipse developer) why
-> the context information is not shown for the UST trace. We'll let you
-> know.
->
-> Best Regard
-> Bernd
->
-> On Thu, Oct 4, 2012 at 4:39 PM, Paul Chavent <paul.chavent@fnac.net> wrote:
->> Hi,
->>
->> I've follow this link
->> (http://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/juno/SR1/eclipse-cpp-juno-SR1-linux-gtk-x86_64.tar.gz)
->> to download the Eclipse env.
->>
->> Here is the version notes i can give you :
->> **************
->> Eclipse
->> Version: Juno Release
->> Build id: 20120614-1722
->>
->> Eclipse Linux Tools LTTng ... 1.0.0.201206130106
->> **************
->>
->> Then i've got my traces with :
->>
->> lttng create
->> lttng enable-event -u -a
->> lttng add-context -u -t vpid -t vtid
->> lttng start
->> ...
->> lttng stop
->> lttng destroy
->>
->> Here is a sample of the traces :
->> http://paul.chavent.free.fr/tmp/sample_traces.tar.bz2
->>
->>
->> I can open the traces in eclipse (i see the "Events" panel), but i can't see
->> the events ordered by pid/tid in the "Time Chart" panel, neither "Control
->> Flow", nor "Ressources" ...)
->>
->> Is it possible to have the traces displayed sorted by tid for instance ?
->>
->> Thanks.
->>
->> Paul.
->>
->>
->>
->> On 10/04/2012 03:40 PM, eamcs/eedbhu wrote:
->>>
->>> Hi Paul
->>>
->>> The Eclipse Linux Tools release v1.1.1 (which is also included in the CDT
->>> EPP Juno SR1 release) contains an update that displays CTF context
->>> information in the events table.
->>> So you should be able to see the context information.
->>>
->>> Best Regards
->>> Bernd
->>>
->>>
->>> On 10/03/2012 11:41 PM, Alexandre Montplaisir wrote:
->>>>
->>>> Sorry for the late reply, I had to update/rebase some of the stuff
->>>> first...
->>>>
->>>> (Cross-posting linuxtools-dev, as it might interest some people who
->>>> follow that list too. This is about extending TMF to implement a
->>>> graphical view for a specific UST trace type.)
->>>>
->>>>
->>>> On 12-10-03 01:50 AM, Paul Chavent wrote:
->>>>>
->>>>> [...]
->>>>>
->>>>> On 10/02/2012 10:29 PM, Alexandre Montplaisir wrote:
->>>>>>
->>>>>> [...]
->>>>>>
->>>>>> What would you like see in your "timeline representation" exactly?
->>>>>> Maybe
->>>>>> we could give you some pointers as to how to implement such a view.
->>>>>> (We're currently working on making it easy to extend the framework to
->>>>>> implement new views, so this could be a good exercise!)
->>>>>
->>>>> I would like to see, eg, one line per tid, and on each line, the value
->>>>> of one context or argument value.
->>>>>
->>>>> I'm ready to follow an exercise for extending the framework !
->>>>
->>>> Ok good! We don't have a nice tutorial ready yet, as most parts are
->>>> still working their way upstream. But if you want to dig into it and try
->>>> it out now, you can:
->>>>
->>>> 1 - Set up the development environment for TMF:
->>>>
->>>> http://wiki.eclipse.org/Linux_Tools_Project/LTTng_Eclipse_Plug-in_Development_Environement_Setup
->>>>
->>>> 2 - Checkout the "lttng-kepler" branch in the git. This is where the
->>>> latest development happens.
->>>>
->>>> 3 - Apply those two patches, in that order:
->>>> https://git.eclipse.org/r/#/c/7747/
->>>> https://git.eclipse.org/r/#/c/7748/
->>>> (you can copy-paste the "cherry-pick" command shown on the page)
->>>>
->>>> 4 - Download the example program and view from:
->>>> git://git.dorsal.polymtl.ca/~alexmont/ust-example.git
->>>>
->>>> Now at this point you should be able to import and build the example
->>>> plugins (ust.example.core and ust.example.ui) and the TMF/LTTng ones in
->>>> the same workspace.
->>>>
->>>> You can try it to make sure it works correctly : take a UST trace of the
->>>> "myprog" program, and then load it into TMF, and show the "Example ->
->>>> Connections" view. It should display the yellow and green rectangles
->>>> corresponding to the states that were defined.
->>>>
->>>>
->>>> After that, it shouldn't be too hard (famous last words...) to rework
->>>> the ust.example.* code to fit your application. The points of interest
->>>> will be (before renames):
->>>>
->>>> MyUstTraceInput, line 85+: This is where you assign your trace events to
->>>> states
->>>> ConnectionsPresentationProvider, line 31-34: This is where you assign
->>>> the colors to each state in the view
->>>> and same file, lines 64-68 and 81-85 : This is where you assign the
->>>> trace's states to the ones in the view.
->>>> (one place is for the actual colored rectangle, the other is for the
->>>> tooltips, iirc).
->>>>
->>>>
->>>> If you have any question or problem, please let me know!
->>>>
->>>> Good luck ;)
->>>>
->>>
->>
->>
->> _______________________________________________
->> lttng-dev mailing list
->> lttng-dev@lists.lttng.org
->> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
+
+wrong here. In this code, cbs_tail and cbs_head are in the same cache line.
+
+---
+
+struct call_rcu_data {
+	struct cds_wfcq_tail cbs_tail;
+	struct cds_wfcq_head __attribute__((aligned(CAA_CACHE_LINE_SIZE))) cbs_head;
+	/* other fields, can move some fields up to use the room between tail and head */
+};
+
+# cat test.c
+
+struct a {
+	int __attribute__((aligned(64))) i;
+	int j;
+};
+struct b {
+	int i;
+	int __attribute__((aligned(64))) j;
+};
+
+void main(void)
+{
+	printf("%d,%d\n", sizeof(struct a), sizeof(struct b));
+}
+
+# ./a.out
+64,128
+
+
+>  	unsigned long flags;
+>  	int32_t futex;
+>  	unsigned long qlen; /* maintained for debugging. */
+> @@ -220,10 +228,7 @@ static void call_rcu_wake_up(struct call_rcu_data *crdp)
+>  static void *call_rcu_thread(void *arg)
+>  {
+>  	unsigned long cbcount;
+> -	struct cds_wfq_node *cbs;
+> -	struct cds_wfq_node **cbs_tail;
+> -	struct call_rcu_data *crdp = (struct call_rcu_data *)arg;
+> -	struct rcu_head *rhp;
+> +	struct call_rcu_data *crdp = (struct call_rcu_data *) arg;
+>  	int rt = !!(uatomic_read(&crdp->flags) & URCU_CALL_RCU_RT);
+>  	int ret;
+>  
+> @@ -243,35 +248,33 @@ static void *call_rcu_thread(void *arg)
+>  		cmm_smp_mb();
+>  	}
+>  	for (;;) {
+> -		if (&crdp->cbs.head != _CMM_LOAD_SHARED(crdp->cbs.tail)) {
+> -			while ((cbs = _CMM_LOAD_SHARED(crdp->cbs.head)) == NULL)
+> -				poll(NULL, 0, 1);
+> -			_CMM_STORE_SHARED(crdp->cbs.head, NULL);
+> -			cbs_tail = (struct cds_wfq_node **)
+> -				uatomic_xchg(&crdp->cbs.tail, &crdp->cbs.head);
+> +		struct cds_wfcq_head cbs_tmp_head;
+> +		struct cds_wfcq_tail cbs_tmp_tail;
+> +		struct cds_wfcq_node *cbs, *cbs_tmp_n;
+> +
+> +		cds_wfcq_init(&cbs_tmp_head, &cbs_tmp_tail);
+> +		__cds_wfcq_splice_blocking(&cbs_tmp_head, &cbs_tmp_tail,
+> +			&crdp->cbs_head, &crdp->cbs_tail);
+> +		if (!cds_wfcq_empty(&cbs_tmp_head, &cbs_tmp_tail)) {
+>  			synchronize_rcu();
+>  			cbcount = 0;
+> -			do {
+> -				while (cbs->next == NULL &&
+> -				       &cbs->next != cbs_tail)
+> -				       	poll(NULL, 0, 1);
+> -				if (cbs == &crdp->cbs.dummy) {
+> -					cbs = cbs->next;
+> -					continue;
+> -				}
+> -				rhp = (struct rcu_head *)cbs;
+> -				cbs = cbs->next;
+> +			__cds_wfcq_for_each_blocking_safe(&cbs_tmp_head,
+> +					&cbs_tmp_tail, cbs, cbs_tmp_n) {
+> +				struct rcu_head *rhp;
+> +
+> +				rhp = caa_container_of(cbs,
+> +					struct rcu_head, next);
+>  				rhp->func(rhp);
+>  				cbcount++;
+> -			} while (cbs != NULL);
+> +			}
+>  			uatomic_sub(&crdp->qlen, cbcount);
+>  		}
+>  		if (uatomic_read(&crdp->flags) & URCU_CALL_RCU_STOP)
+>  			break;
+>  		rcu_thread_offline();
+>  		if (!rt) {
+> -			if (&crdp->cbs.head
+> -			    == _CMM_LOAD_SHARED(crdp->cbs.tail)) {
+> +			if (cds_wfcq_empty(&crdp->cbs_head,
+> +					&crdp->cbs_tail)) {
+>  				call_rcu_wait(crdp);
+>  				poll(NULL, 0, 10);
+>  				uatomic_dec(&crdp->futex);
+> @@ -317,7 +320,7 @@ static void call_rcu_data_init(struct call_rcu_data **crdpp,
+>  	if (crdp == NULL)
+>  		urcu_die(errno);
+>  	memset(crdp, '\0', sizeof(*crdp));
+> -	cds_wfq_init(&crdp->cbs);
+> +	cds_wfcq_init(&crdp->cbs_head, &crdp->cbs_tail);
+>  	crdp->qlen = 0;
+>  	crdp->futex = 0;
+>  	crdp->flags = flags;
+> @@ -590,12 +593,12 @@ void call_rcu(struct rcu_head *head,
+>  {
+>  	struct call_rcu_data *crdp;
+>  
+> -	cds_wfq_node_init(&head->next);
+> +	cds_wfcq_node_init(&head->next);
+>  	head->func = func;
+>  	/* Holding rcu read-side lock across use of per-cpu crdp */
+>  	rcu_read_lock();
+>  	crdp = get_call_rcu_data();
+> -	cds_wfq_enqueue(&crdp->cbs, &head->next);
+> +	cds_wfcq_enqueue(&crdp->cbs_head, &crdp->cbs_tail, &head->next);
+>  	uatomic_inc(&crdp->qlen);
+>  	wake_call_rcu_thread(crdp);
+>  	rcu_read_unlock();
+> @@ -625,10 +628,6 @@ void call_rcu(struct rcu_head *head,
+>   */
+>  void call_rcu_data_free(struct call_rcu_data *crdp)
+>  {
+> -	struct cds_wfq_node *cbs;
+> -	struct cds_wfq_node **cbs_tail;
+> -	struct cds_wfq_node **cbs_endprev;
+> -
+>  	if (crdp == NULL || crdp == default_call_rcu_data) {
+>  		return;
+>  	}
+> @@ -638,17 +637,12 @@ void call_rcu_data_free(struct call_rcu_data *crdp)
+>  		while ((uatomic_read(&crdp->flags) & URCU_CALL_RCU_STOPPED) == 0)
+>  			poll(NULL, 0, 1);
+>  	}
+> -	if (&crdp->cbs.head != _CMM_LOAD_SHARED(crdp->cbs.tail)) {
+> -		while ((cbs = _CMM_LOAD_SHARED(crdp->cbs.head)) == NULL)
+> -			poll(NULL, 0, 1);
+> -		_CMM_STORE_SHARED(crdp->cbs.head, NULL);
+> -		cbs_tail = (struct cds_wfq_node **)
+> -			uatomic_xchg(&crdp->cbs.tail, &crdp->cbs.head);
+> +	if (!cds_wfcq_empty(&crdp->cbs_head, &crdp->cbs_tail)) {
+>  		/* Create default call rcu data if need be */
+>  		(void) get_default_call_rcu_data();
+> -		cbs_endprev = (struct cds_wfq_node **)
+> -			uatomic_xchg(&default_call_rcu_data, cbs_tail);
+> -		*cbs_endprev = cbs;
+> +		__cds_wfcq_splice_blocking(&default_call_rcu_data->cbs_head,
+> +			&default_call_rcu_data->cbs_tail,
+> +			&crdp->cbs_head, &crdp->cbs_tail);
+>  		uatomic_add(&default_call_rcu_data->qlen,
+>  			    uatomic_read(&crdp->qlen));
+>  		wake_call_rcu_thread(default_call_rcu_data);
+> diff --git a/urcu-call-rcu.h b/urcu-call-rcu.h
+> index f7eac8d..1dad0e2 100644
+> --- a/urcu-call-rcu.h
+> +++ b/urcu-call-rcu.h
+> @@ -32,7 +32,7 @@
+>  #include <stdlib.h>
+>  #include <pthread.h>
+>  
+> -#include <urcu/wfqueue.h>
+> +#include <urcu/wfcqueue.h>
+>  
+>  #ifdef __cplusplus
+>  extern "C" {
+> @@ -55,7 +55,7 @@ struct call_rcu_data;
+>   */
+>  
+>  struct rcu_head {
+> -	struct cds_wfq_node next;
+> +	struct cds_wfcq_node next;
+>  	void (*func)(struct rcu_head *head);
+>  };
+>  
