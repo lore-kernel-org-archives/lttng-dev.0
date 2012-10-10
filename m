@@ -1,15 +1,15 @@
 From: Lai Jiangshan <laijs@cn.fujitsu.com>
-Subject: [RFC] re-document rculfstack and even rename it
-Date: Wed, 10 Oct 2012 15:52:08 +0800
-Message-ID: <50752928.3050006__3821.36402554369$1349855426$gmane$org@cn.fujitsu.com>
+Subject: rculfstack bug
+Date: Wed, 10 Oct 2012 18:13:43 +0800
+Message-ID: <50754A57.1080104__49698.9764310003$1349863919$gmane$org@cn.fujitsu.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from [222.73.24.84] (helo=song.cn.fujitsu.com)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <laijs@cn.fujitsu.com>) id 1TLr37-0000bF-0d
-	for lttng-dev@lists.lttng.org; Wed, 10 Oct 2012 03:49:49 -0400
+	(envelope-from <laijs@cn.fujitsu.com>) id 1TLtG5-0001nY-PY
+	for lttng-dev@lists.lttng.org; Wed, 10 Oct 2012 06:11:23 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -18,27 +18,208 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Mathieu Desnoyers <mathieu.desnoyers@polymtl.ca>, lttng-dev@lists.lttng.org
+To: Mathieu Desnoyers <mathieu.desnoyers@polymtl.ca>, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-rculfstack is not really require RCU-only.
+test code:
+./tests/test_urcu_lfs 100 10 10
 
-1) cds_lfs_push_rcu() don't need any lock, don't need RCU nor other locks.
+bug produce rate > 60%
 
-2) cds_lfs_pop_rcu() don't only one of the following synchronization(not only RCU):
-	A) use rcu_read_lock() to protect cds_lfs_pop_rcu() and use synchronize_rcu()
-           or call_rcu() to free the popped node. (current comments said we need this
-           synchronization, and thus we named this struct with rcu prefix. But actually,
-	   the followings are OK, and are more popular/friendly)
-	B) use mutexs/locks to protect cds_lfs_pop_rcu(), we can free to free/modify the
-	   popped node any time, we don't need any synchronization when free them.
-	C) only ONE thread can call cds_lfs_pop_rcu(). (multi-providers-single customer)
-	D) others, like read-write locks.
+{{{
+I didn't see any bug when "./tests/test_urcu_lfs 10 10 10" Or "./tests/test_urcu_lfs 100 100 10"
+But I just test it about 5 times
+}}}
 
-I consider B) and C) are more popular. In linux kernel,
-kernel/task_work.c uses a hybird ways of B) and C).
+4cores*1threads: Intel(R) Core(TM) i5 CPU         760
+RCU_MB (no time to test for other rcu type)
+test commit: 768fba83676f49eb73fd1d8ad452016a84c5ec2a
 
-I suggest to rename it, Or document B) and C) at least.
+I didn't see any bug when "./tests/test_urcu_mb 10 100 10"
 
-Thanks,
-Lai
+Sorry, I tried, but I failed to find out the root cause currently.
+
+*** glibc detected *** /home/laijs/work/userspace-rcu/tests/.libs/lt-test_urcu_lfs: double free or corruption (out): 0x00007f20955dfbb0 ***
+======= Backtrace: =========
+/lib64/libc.so.6[0x37ee676d63]
+/home/laijs/work/userspace-rcu/tests/.libs/lt-test_urcu_lfs[0x4024f5]
+/lib64/libpthread.so.0[0x37eda06ccb]
+/lib64/libc.so.6(clone+0x6d)[0x37ee6e0c2d]
+======= Memory map: ========
+00400000-00405000 r-xp 00000000 08:08 6031723                            /home/laijs/work/userspace-rcu/tests/.libs/lt-test_urcu_lfs
+00605000-00606000 rw-p 00005000 08:08 6031723                            /home/laijs/work/userspace-rcu/tests/.libs/lt-test_urcu_lfs
+00606000-00616000 rw-p 00000000 00:00 0 
+00e9c000-03482000 rw-p 00000000 00:00 0                                  [heap]
+37ed600000-37ed61f000 r-xp 00000000 08:01 1507421                        /lib64/ld-2.13.so
+37ed81e000-37ed81f000 r--p 0001e000 08:01 1507421                        /lib64/ld-2.13.so
+37ed81f000-37ed820000 rw-p 0001f000 08:01 1507421                        /lib64/ld-2.13.so
+37ed820000-37ed821000 rw-p 00000000 00:00 0 
+37eda00000-37eda17000 r-xp 00000000 08:01 1507427                        /lib64/libpthread-2.13.so
+37eda17000-37edc16000 ---p 00017000 08:01 1507427                        /lib64/libpthread-2.13.so
+37edc16000-37edc17000 r--p 00016000 08:01 1507427                        /lib64/libpthread-2.13.so
+37edc17000-37edc18000 rw-p 00017000 08:01 1507427                        /lib64/libpthread-2.13.so
+37edc18000-37edc1c000 rw-p 00000000 00:00 0 
+37ee600000-37ee791000 r-xp 00000000 08:01 1507423                        /lib64/libc-2.13.so
+37ee791000-37ee991000 ---p 00191000 08:01 1507423                        /lib64/libc-2.13.so
+37ee991000-37ee995000 r--p 00191000 08:01 1507423                        /lib64/libc-2.13.so
+37ee995000-37ee996000 rw-p 00195000 08:01 1507423                        /lib64/libc-2.13.so
+37ee996000-37ee99c000 rw-p 00000000 00:00 0 
+37f0e00000-37f0e15000 r-xp 00000000 08:01 1507437                        /lib64/libgcc_s-4.5.1-20100924.so.1
+37f0e15000-37f1014000 ---p 00015000 08:01 1507437                        /lib64/libgcc_s-4.5.1-20100924.so.1
+37f1014000-37f1015000 rw-p 00014000 08:01 1507437                        /lib64/libgcc_s-4.5.1-20100924.so.1
+7f1ee4000000-7f1ee4029000 rw-p 00000000 00:00 0 
+7f1ee4029000-7f1ee8000000 ---p 00000000 00:00 0 
+7f1eec000000-7f1eee039000 rw-p 00000000 00:00 0 
+7f1eee039000-7f1ef0000000 ---p 00000000 00:00 0 
+7f1ef4000000-7f1ef4029000 rw-p 00000000 00:00 0 
+7f1ef4029000-7f1ef8000000 ---p 00000000 00:00 0 
+7f1efc000000-7f1efc029000 rw-p 00000000 00:00 0 
+7f1efc029000-7f1f00000000 ---p 00000000 00:00 0 
+7f1f04000000-7f1f060b8000 rw-p 00000000 00:00 0 
+7f1f060b8000-7f1f08000000 ---p 00000000 00:00 0 
+7f1f0c000000-7f1f0c029000 rw-p 00000000 00:00 0 
+7f1f0c029000-7f1f10000000 ---p 00000000 00:00 0 
+7f1f14000000-7f1f14029000 rw-p 00000000 00:00 0 
+7f1f14029000-7f1f18000000 ---p 00000000 00:00 0 
+7f1f1c000000-7f1f1c029000 rw-p 00000000 00:00 0 
+7f1f1c029000-7f1f20000000 ---p 00000000 00:00 0 
+7f1f24000000-7f1f24029000 rw-p 00000000 00:00 0 
+7f1f24029000-7f1f28000000 ---p 00000000 00:00 0 
+7f1f2c000000-7f1f2c029000 rw-p 00000000 00:00 0 
+7f1f2c029000-7f1f30000000 ---p 00000000 00:00 0 
+7f1f34000000-7f1f34029000 rw-p 00000000 00:00 0 
+7f1f34029000-7f1f38000000 ---p 00000000 00:00 0 
+7f1f3c000000-7f1f3c029000 rw-p 00000000 00:00 0 
+7f1f3c029000-7f1f40000000 ---p 00000000 00:00 0 
+7f1f44000000-7f1f44029000 rw-p 00000000 00:00 0 
+7f1f44029000-7f1f48000000 ---p 00000000 00:00 0 
+7f1f4c000000-7f1f4c029000 rw-p 00000000 00:00 0 
+7f1f4c029000-7f1f50000000 ---p 00000000 00:00 0 
+7f1f54000000-7f1f54029000 rw-p 00000000 00:00 0 
+7f1f54029000-7f1f58000000 ---p 00000000 00:00 0 
+7f1f5c000000-7f1f5c029000 rw-p 00000000 00:00 0 
+7f1f5c029000-7f1f60000000 ---p 00000000 00:00 0 
+7f1f64000000-7f1f64029000 rw-p 00000000 00:00 0 
+7f1f64029000-7f1f68000000 ---p 00000000 00:00 0 
+7f1f6c000000-7f1f6c029000 rw-p 00000000 00:00 0 
+7f1f6c029000-7f1f70000000 ---p 00000000 00:00 0 
+7f1f74000000-7f1f74029000 rw-p 00000000 00:00 0 
+7f1f74029000-7f1f78000000 ---p 00000000 00:00 0 
+7f1f7c000000-7f1f7c029000 rw-p 00000000 00:00 0 
+7f1f7c029000-7f1f80000000 ---p 00000000 00:00 0 
+7f1f84000000-7f1f84029000 rw-p 00000000 00:00 0 
+7f1f84029000-7f1f88000000 ---p 00000000 00:00 0 
+7f1f8c000000-7f1f8c029000 rw-p 00000000 00:00 0 
+7f1f8c029000-7f1f90000000 ---p 00000000 00:00 0 
+7f1f94000000-7f1f94029000 rw-p 00000000 00:00 0 
+7f1f94029000-7f1f98000000 ---p 00000000 00:00 0 
+7f1f9c000000-7f1f9c029000 rw-p 00000000 00:00 0 
+7f1f9c029000-7f1fa0000000 ---p 00000000 00:00 0 
+7f1fa4000000-7f1fa60ac000 rw-p 00000000 00:00 0 
+7f1fa60ac000-7f1fa8000000 ---p 00000000 00:00 0 
+7f1fac000000-7f1fac029000 rw-p 00000000 00:00 0 
+7f1fac029000-7f1fb0000000 ---p 00000000 00:00 0 
+7f1fb4000000-7f1fb4029000 rw-p 00000000 00:00 0 
+7f1fb4029000-7f1fb8000000 ---p 00000000 00:00 0 
+7f1fbc000000-7f1fbc029000 rw-p 00000000 00:00 0 
+7f1fbc029000-7f1fc0000000 ---p 00000000 00:00 0 
+7f1fc4000000-7f1fc4029000 rw-p 00000000 00:00 0 
+7f1fc4029000-7f1fc8000000 ---p 00000000 00:00 0 
+7f1fcc000000-7f1fce0a1000 rw-p 00000000 00:00 0 
+7f1fce0a1000-7f1fd0000000 ---p 00000000 00:00 0 
+7f1fd4000000-7f1fd4029000 rw-p 00000000 00:00 0 
+7f1fd4029000-7f1fd8000000 ---p 00000000 00:00 0 
+7f1fdc000000-7f1fde06b000 rw-p 00000000 00:00 0 
+7f1fde06b000-7f1fe0000000 ---p 00000000 00:00 0 
+7f1fe4000000-7f1fe4029000 rw-p 00000000 00:00 0 
+7f1fe4029000-7f1fe8000000 ---p 00000000 00:00 0 
+7f1fec000000-7f1fede38000 rw-p 00000000 00:00 0 
+7f1fede38000-7f1ff0000000 ---p 00000000 00:00 0 
+7f1ff4000000-7f1ff4029000 rw-p 00000000 00:00 0 
+7f1ff4029000-7f1ff8000000 ---p 00000000 00:00 0 
+7f1ffc000000-7f1ffc029000 rw-p 00000000 00:00 0 
+7f1ffc029000-7f2000000000 ---p 00000000 00:00 0 
+7f2004000000-7f20060c6000 rw-p 00000000 00:00 0 
+7f20060c6000-7f2008000000 ---p 00000000 00:00 0 
+7f200c000000-7f200c029000 rw-p 00000000 00:00 0 
+7f200c029000-7f2010000000 ---p 00000000 00:00 0 
+7f2014000000-7f2014029000 rw-p 00000000 00:00 0 
+7f2014029000-7f2018000000 ---p 00000000 00:00 0 
+7f201c000000-7f201c029000 rw-p 00000000 00:00 0 
+7f201c029000-7f2020000000 ---p 00000000 00:00 0 
+7f2024000000-7f2024029000 rw-p 00000000 00:00 0 
+7f2024029000-7f2028000000 ---p 00000000 00:00 0 
+7f202c000000-7f202c029000 rw-p 00000000 00:00 0 
+7f202c029000-7f2030000000 ---p 00000000 00:00 0 
+7f2034000000-7f2034029000 rw-p 00000000 00:00 0 
+7f2034029000-7f2038000000 ---p 00000000 00:00 0 
+7f203c000000-7f203c029000 rw-p 00000000 00:00 0 
+7f203c029000-7f2040000000 ---p 00000000 00:00 0 
+7f2044000000-7f2044029000 rw-p 00000000 00:00 0 
+7f2044029000-7f2048000000 ---p 00000000 00:00 0 
+7f204c000000-7f204c029000 rw-p 00000000 00:00 0 
+7f204c029000-7f2050000000 ---p 00000000 00:00 0 
+7f2054000000-7f2054029000 rw-p 00000000 00:00 0 
+7f2054029000-7f2058000000 ---p 00000000 00:00 0 
+7f205c000000-7f205c029000 rw-p 00000000 00:00 0 
+7f205c029000-7f2060000000 ---p 00000000 00:00 0 
+7f2064000000-7f2064029000 rw-p 00000000 00:00 0 
+7f2064029000-7f2068000000 ---p 00000000 00:00 0 
+7f206c000000-7f206c029000 rw-p 00000000 00:00 0 
+7f206c029000-7f2070000000 ---p 00000000 00:00 0 
+7f2074000000-7f2074029000 rw-p 00000000 00:00 0 
+7f2074029000-7f2078000000 ---p 00000000 00:00 0 
+7f207c000000-7f207e0bc000 rw-p 00000000 00:00 0 
+7f207e0bc000-7f2080000000 ---p 00000000 00:00 0 
+7f2084000000-7f2084029000 rw-p 00000000 00:00 0 
+7f2084029000-7f2088000000 ---p 00000000 00:00 0 
+7f208c000000-7f208c029000 rw-p 00000000 00:00 0 
+7f208c029000-7f2090000000 ---p 00000000 00:00 0 
+7f2094000000-7f20960c6000 rw-p 00000000 00:00 0 
+7f20960c6000-7f2098000000 ---p 00000000 00:00 0 
+7f209c000000-7f209c029000 rw-p 00000000 00:00 0 
+7f209c029000-7f20a0000000 ---p 00000000 00:00 0 
+7f20a4000000-7f20a4029000 rw-p 00000000 00:00 0 
+7f20a4029000-7f20a8000000 ---p 00000000 00:00 0 
+7f20ac000000-7f20ac029000 rw-p 00000000 00:00 0 
+7f20ac029000-7f20b0000000 ---p 00000000 00:00 0 
+7f20b4000000-7f20b4029000 rw-p 00000000 00:00 0 
+7f20b4029000-7f20b8000000 ---p 00000000 00:00 0 
+7f20bc000000-7f20bc029000 rw-p 00000000 00:00 0 
+7f20bc029000-7f20c0000000 ---p 00000000 00:00 0 
+7f20c4000000-7f20c4029000 rw-p 00000000 00:00 0 
+7f20c4029000-7f20c8000000 ---p 00000000 00:00 0 
+7f20c8ffa000-7f20c8ffb000 ---p 00000000 00:00 0 
+7f20c8ffb000-7f20c97fb000 rw-p 00000000 00:00 0                          [stack:10274]
+7f20c97fb000-7f20c97fc000 ---p 00000000 00:00 0 
+7f20c97fc000-7f20c9ffc000 rw-p 00000000 00:00 0 
+7f20c9ffc000-7f20c9ffd000 ---p 00000000 00:00 0 
+7f20c9ffd000-7f20ca7fd000 rw-p 00000000 00:00 0 
+7f20ca7fd000-7f20ca7fe000 ---p 00000000 00:00 0 
+7f20ca7fe000-7f20caffe000 rw-p 00000000 00:00 0 
+7f20cc000000-7f20cc029000 rw-p 00000000 00:00 0 
+7f20cc029000-7f20d0000000 ---p 00000000 00:00 0 
+7f20d4000000-7f20d4029000 rw-p 00000000 00:00 0 
+7f20d4029000-7f20d8000000 ---p 00000000 00:00 0 
+7f20dc000000-7f20dc029000 rw-p 00000000 00:00 0 
+7f20dc029000-7f20e0000000 ---p 00000000 00:00 0 
+7f210d9dd000-7f210d9de000 ---p 00000000 00:00 0 
+7f210d9de000-7f210e1de000 rw-p 00000000 00:00 0                          [stack:10160]
+7f210e1de000-7f210e1df000 ---p 00000000 00:00 0 
+7f210e1df000-7f210e9df000 rw-p 00000000 00:00 0                          [stack:10159]
+7f210e9df000-7f210e9e0000 ---p 00000000 00:00 0 
+7f210e9e0000-7f210f1e0000 rw-p 00000000 00:00 0 
+7f210f1e0000-7f210f1e1000 ---p 00000000 00:00 0 
+7f210f1e1000-7f210f9e4000 rw-p 00000000 00:00 0 
+7f210fa00000-7f210fa01000 rw-p 00000000 00:00 0 
+7f210fa01000-7f210fa02000 r-xp 00000000 08:08 6029369                    /home/laijs/work/userspace-rcu/.libs/liburcu-common.so.1.0.0
+7f210fa02000-7f210fc02000 ---p 00001000 08:08 6029369                    /home/laijs/work/userspace-rcu/.libs/liburcu-common.so.1.0.0
+7f210fc02000-7f210fc03000 rw-p 00001000 08:08 6029369                    /home/laijs/work/userspace-rcu/.libs/liburcu-common.so.1.0.0
+7f210fc03000-7f210fc04000 rw-p 00000000 00:00 0 
+7f210fc04000-7f210fc0a000 r-xp 00000000 08:08 6029586                    /home/laijs/work/userspace-rcu/.libs/liburcu-cds.so.1.0.0
+7f210fc0a000-7f210fe09000 ---p 00006000 08:08 6029586                    /home/laijs/work/userspace-rcu/.libs/liburcu-cds.so.1.0.0
+7f210fe09000-7f210fe0a000 rw-p 00005000 08:08 6029586                    /home/laijs/work/userspace-rcu/.libs/liburcu-cds.so.1.0.0
+7f210fe0a000-7f210fe0b000 rw-p 00000000 00:00 0 
+7fff7c648000-7fff7c669000 rw-p 00000000 00:00 0                          [stack]
+7fff7c715000-7fff7c716000 r-xp 00000000 00:00 0                          [vdso]
+ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]
