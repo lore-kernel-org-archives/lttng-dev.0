@@ -1,22 +1,21 @@
-From: Matthew Khouzam <matthew.khouzam@ericsson.com>
-Subject: Re: LTTng Tools 2.1 streaming commands
-Date: Tue, 9 Oct 2012 17:18:30 -0400
-Message-ID: <507494A6.5090207__7479.52962196923$1349817588$gmane$org@ericsson.com>
-References: <4CB817F8B8860343821834C09BFBA7A6E183805D4D@EUSAACMS0702.eamcs.ericsson.se>
-	<50747625.2010109@efficios.com>
+From: Lai Jiangshan <laijs@cn.fujitsu.com>
+Subject: Re: [rp] [URCU PATCH 0/3] wait-free concurrent queues
+ (wfcqueue)
+Date: Wed, 10 Oct 2012 10:53:30 +0800
+Message-ID: <5074E32A.70305__26459.5985333019$1349837508$gmane$org@cn.fujitsu.com>
+References: <20121002141307.GA4057@Krystal>
+	<20121003182846.GN2527@linux.vnet.ibm.com>
+	<20121003210436.GB25090@Krystal> <5072499B.1050301@cn.fujitsu.com>
+	<20121008150729.GB29352@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from imr4.ericy.com ([198.24.6.9])
+Received: from [222.73.24.84] (helo=song.cn.fujitsu.com)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <matthew.khouzam@ericsson.com>) id 1TLhCu-0003oe-S4
-	for lttng-dev@lists.lttng.org; Tue, 09 Oct 2012 17:19:17 -0400
-Received: from eusaamw0707.eamcs.ericsson.se ([147.117.20.32])
-	by imr4.ericy.com (8.14.3/8.14.3/Debian-9.1ubuntu1) with ESMTP id
-	q99LJuGf030476
-	for <lttng-dev@lists.lttng.org>; Tue, 9 Oct 2012 16:19:58 -0500
-In-Reply-To: <50747625.2010109@efficios.com>
+	(envelope-from <laijs@cn.fujitsu.com>) id 1TLmO9-0006T6-BO
+	for lttng-dev@lists.lttng.org; Tue, 09 Oct 2012 22:51:15 -0400
+In-Reply-To: <20121008150729.GB29352@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -25,85 +24,159 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Lai Jiangshan <eag0628@gmail.com>, lttng-dev@lists.lttng.org, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, rp@svcs.cs.pdx.edu
 List-Id: lttng-dev@lists.lttng.org
 
-I actually like this suggestion, it is less ambiguous...
-the last thing we want is for an enable-xyz to disable-xyz... Unless we
-want to frustrate the users.
+On 10/08/2012 11:07 PM, Mathieu Desnoyers wrote:
+> * Lai Jiangshan (laijs@cn.fujitsu.com) wrote:
+>> On 10/04/2012 05:04 AM, Mathieu Desnoyers wrote:
+>>> * Paul E. McKenney (paulmck@linux.vnet.ibm.com) wrote:
+>>>> On Tue, Oct 02, 2012 at 10:13:07AM -0400, Mathieu Desnoyers wrote:
+>>>>> Implement wait-free concurrent queues, with a new API different from
+>>>>> wfqueue.h, which is already provided by Userspace RCU. The advantage of
+>>>>> splitting the head and tail objects of the queue into different
+>>>>> arguments is to allow these to sit on different cache-lines, thus
+>>>>> eliminating false-sharing, leading to a 2.3x speed increase.
+>>>>>
+>>>>> This API also introduces a "splice" operation, which moves all nodes
+>>>>> from one queue into another, and postpones the synchronization to either
+>>>>> dequeue or iteration on the list. The splice operation does not need to
+>>>>> touch every single node of the queue it moves them from. Moreover, the
+>>>>> splice operation only needs to ensure mutual exclusion with other
+>>>>> dequeuers, iterations, and splice operations from the list it splices
+>>>>> from, but acts as a simple enqueuer on the list it splices into (no
+>>>>> mutual exclusion needed for that list).
+>>>>>
+>>>>> Feedback is welcome,
+>>>>
+>>>> These look sane to me, though I must confess that the tail pointer
+>>>> referencing the node rather than the node's next pointer did throw
+>>>> me for a bit.  ;-)
+>>>
+>>> Yes, this was originally introduced with Lai's original patch to
+>>> wfqueue, which I think is a nice simplification: it's pretty much the
+>>> same thing to use the last node address as tail rather than the address
+>>> of its first member (its next pointer address (_not_ value)). It ends up
+>>> being the same address in this case, but more interestingly, we don't
+>>> have to use a struct cds_wfcq_node ** type: a simple struct
+>>> cds_wfcq_node *  suffice.
+>>>
+>>> Thanks Paul, I will therefore merge these 3 patches with your Acked-by.
+>>>
+>>> Lai, you are welcome to provide improvements to this code against the
+>>> master branch. I will gladly consider any change you propose.
+>>>
+>>
+>> I did not remember that there is any improvement idea not included.
+>> The patchset is OK for me.
+> 
+> Great! Would you be OK if I commit the following patch ? Let me know if
+> you want me to put your signed-off-by on this (I can even put your email
+> as From if you like):
+> 
+> 
+> wfcqueue: update credits in patch documentation
+> 
+> Give credits to those responsible for the design and implementation of
+> commit 8ad4ce587f001ae026d5560ac509c2e48986130b, "wfcqueue: implement
+> concurrency-efficient queue", which happened through rounds of email and
+> patch exchanges.
+> 
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> ---
+> diff --git a/urcu/static/wfcqueue.h b/urcu/static/wfcqueue.h
+> index a989984..153143d 100644
+> --- a/urcu/static/wfcqueue.h
+> +++ b/urcu/static/wfcqueue.h
+> @@ -41,8 +41,10 @@ extern "C" {
+>  /*
+>   * Concurrent queue with wait-free enqueue/blocking dequeue.
+>   *
+> - * Inspired from half-wait-free/half-blocking queue implementation done by
+> - * Paul E. McKenney.
+> + * This queue has been designed and implemented collaboratively by
+> + * Mathieu Desnoyers and Lai Jiangshan. Inspired from
+> + * half-wait-free/half-blocking queue implementation done by Paul E.
+> + * McKenney.
+>   *
+>   * Mutual exclusion of __cds_wfcq_* API
+>   *
+> diff --git a/urcu/wfcqueue.h b/urcu/wfcqueue.h
+> index 5576cbf..940dc7d 100644
+> --- a/urcu/wfcqueue.h
+> +++ b/urcu/wfcqueue.h
+> @@ -37,8 +37,10 @@ extern "C" {
+>  /*
+>   * Concurrent queue with wait-free enqueue/blocking dequeue.
+>   *
+> - * Inspired from half-wait-free/half-blocking queue implementation done by
+> - * Paul E. McKenney.
+> + * This queue has been designed and implemented collaboratively by
+> + * Mathieu Desnoyers and Lai Jiangshan. Inspired from
+> + * half-wait-free/half-blocking queue implementation done by Paul E.
+> + * McKenney.
+>   */
+>  
+>  struct cds_wfcq_node {
+> 
+> 
+>> I think you can reimplement wfqueue via wfcqueue without cacheline opt.
+> 
+> Hrm, semantically this can indeed be done, but I fear that we might not
+> be strictly ABI-compatible with the old wfqueue. So I would be tempted
+> to leave the old wfqueue implementation as-is, and maybe deprecate it at
+> some point. Thoughts ?
+> 
 
-Cheers,
-Matthew
+All APIs is not changed, they are forwarded to wfcqueue APIs in implementation,
+so ABI of APIs is compatible. The only thing is struct cds_wfq_queue:
+
+struct cds_wfq_queue {
+	struct cds_wfq_node *head, **tail;
+	struct cds_wfq_node dummy;	/* Dummy node */
+	pthread_mutex_t lock;
+};
 
 
-On 12-10-09 03:08 PM, David Goulet wrote:
-> After talking a bit about this issue with other LTTng devs, it turns out
-> that it makes more sense to have a "set-consumer" command and remove
-> enable/disable-consumer from the cmd UI.
->
-> I'll send a proposal on lttng-dev in the next days and please, everyone,
-> feel free to give feedbacks on this.
->
-> Thanks!
-> David
->
-> Bernd Hufmann:
->> Hello
->>  
->> For the support of LTTng Tools 2.1 in Eclipse, I'm currently trying to
->> understand how to use the configuration for network streaming with the
->> updated "lttng create"-command and new "enable-consumer"-command.
->>  
->> a) lttng enable-consumer
->> I find this command confusing because this command does not always
->> enables the consumer, even if the command name implies so. The enabling
->> actually depends on how the command is executed.
->> Examples:
->>
->>   * "lttng enable-consumer -k -U net://<remote_addr>" or "lttng
->>     enable-consumer -k -C tcp://<remote_addr> -D tcp://<remote_addr>"
->>     don't enable the consumer. You need to either add option --enable or
->>     execute subsequently "lttng enable-consumer --enable"
->>   * lttng enable-consumer -k net://<remote_addr> does enable the
->>     consumer. I took me a while to figure out the difference to the
->>     example above: The option -U is omitted.
->>
->>  
->> What the command actually provides, is 2 features: A way to configure
->> streaming (e.g. remote_addr) and a way to enable the consumer. Would it
->> be better to name it to "lttng configure-consumer"? Also, remove the
->> support of the possibility to not specify -U, -C or -D. The following
->> variants of this command should be enough:
->> lttng configure-consumer -k -U <remote_addr> [--enable]
->> lttng configure-consumer -k -C <remote_addr> -D <remote_addr> [--enable]
->> lttng configure-consumer -k --enable
->> lttng configure-consumer -u -U <remote_addr> [--enable]
->> lttng configure-consumer -u -C <remote_addr> -D <remote_addr> [--enable]
->> lttng configure-consumer -u --enable
->>  
->> Please let me know what you think.
->>  
->> b) lttng create [-U <remote_addr>] | [-C <remote_addr> -D <remote_addr>]
->> [--no-consumer] [--disable-consumer]
->>
->>   * Are options --no-consumer or --disable-consumer only applicable for
->>     streaming?
->>   * I'm not sure what is the purpose of the options --no-consumer or
->>     --disable-consumer. Could you please explain the use cases for using
->>     --no-consumer or --disable-consumer? 
->>
->>  
->> Thanks
->> Bernd
->>  
->> This Communication is Confidential. We only send and receive email on
->> the basis of the terms set out at _www.ericsson.com/email_disclaimer_
->>  
->>  
->>
->>
->> This body part will be downloaded on demand.
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+We can redefine it as:
+
+#define cds_wfq_node cds_wfcq_node
+
+struct cds_wfq_queue {
+	union {
+		struct cds_wfq_node *head; /* make bug-user who wrongly directly access to ->head happy */
+		struct cds_wfcq_node *__pad; /* not used in new implement */
+	};
+	union {
+		struct cds_wfq_node **tail;  /* make bug-user who wrongly directly access to ->tail happy */
+		struct cds_wfcq_tail real_tail;
+	};
+	union {
+		struct {
+			struct cds_wfq_node dummy;	/* Dummy node */
+			pthread_mutex_t lock;
+		}
+		struct cds_wfcq_head real_head;
+	};
+}
+
+static inline void _cds_wfq_init(struct cds_wfq_queue *q)
+{
+	q->head = &q->dummy; /* make bug-user who wrongly directly access to ->head happy */
+	_cds_wfcq_init(&q->real_head, &q->real_tail);
+}
+
+after this change, struct cds_wfq_queue is not changed.
+Even bug-user wrongly directly access to struct cds_wfq_queue by old-view,
+the queue is compatible:
+	head->dummy node->real node->real node....
+	tail->real tail node(or dummy node)
+
+the only different is that: dummy node is always the first node by old-view.
+
+
+And if we deprecate struct cds_wfq_queue, I think we should provide a new default wfqueue to users.
+
+Thanks,
+Lai
