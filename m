@@ -1,10 +1,12 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [URCU PATCH 1/3] wfcqueue:
-	implement	concurrency-efficient queue
-Date: Wed, 10 Oct 2012 00:50:12 -0400
-Message-ID: <20121010045012.GA32082__3637.36314834586$1349844650$gmane$org@Krystal>
-References: <20121002141307.GA4057@Krystal> <20121002141444.GB4057@Krystal>
-	<5074E3F5.3080005@cn.fujitsu.com>
+Subject: Re: [rp] [URCU PATCH 0/3] wait-free concurrent
+	queues	(wfcqueue)
+Date: Wed, 10 Oct 2012 00:59:11 -0400
+Message-ID: <20121010045911.GB32082__31486.9724018083$1349845182$gmane$org@Krystal>
+References: <20121002141307.GA4057@Krystal>
+	<20121003182846.GN2527@linux.vnet.ibm.com>
+	<20121003210436.GB25090@Krystal> <5072499B.1050301@cn.fujitsu.com>
+	<20121008150729.GB29352@Krystal> <5074E32A.70305@cn.fujitsu.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -12,10 +14,10 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1TLoFK-0007QM-Pe
-	for lttng-dev@lists.lttng.org; Wed, 10 Oct 2012 00:50:14 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1TLoO1-0007VJ-FT
+	for lttng-dev@lists.lttng.org; Wed, 10 Oct 2012 00:59:13 -0400
 Content-Disposition: inline
-In-Reply-To: <5074E3F5.3080005@cn.fujitsu.com>
+In-Reply-To: <5074E32A.70305@cn.fujitsu.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -25,90 +27,177 @@ List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 To: Lai Jiangshan <laijs@cn.fujitsu.com>
-Cc: Lai Jiangshan <eag0628@gmail.com>, lttng-dev@lists.lttng.org, Paul McKenney <paulmck@linux.vnet.ibm.com>, rp@svcs.cs.pdx.edu
+Cc: Lai Jiangshan <eag0628@gmail.com>, lttng-dev@lists.lttng.org, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, rp@svcs.cs.pdx.edu
 List-Id: lttng-dev@lists.lttng.org
 
 * Lai Jiangshan (laijs@cn.fujitsu.com) wrote:
-> On 10/02/2012 10:14 PM, Mathieu Desnoyers wrote:
-[...]
-> > --- /dev/null
+> On 10/08/2012 11:07 PM, Mathieu Desnoyers wrote:
+> > * Lai Jiangshan (laijs@cn.fujitsu.com) wrote:
+> >> On 10/04/2012 05:04 AM, Mathieu Desnoyers wrote:
+> >>> * Paul E. McKenney (paulmck@linux.vnet.ibm.com) wrote:
+> >>>> On Tue, Oct 02, 2012 at 10:13:07AM -0400, Mathieu Desnoyers wrote:
+> >>>>> Implement wait-free concurrent queues, with a new API different from
+> >>>>> wfqueue.h, which is already provided by Userspace RCU. The advantage of
+> >>>>> splitting the head and tail objects of the queue into different
+> >>>>> arguments is to allow these to sit on different cache-lines, thus
+> >>>>> eliminating false-sharing, leading to a 2.3x speed increase.
+> >>>>>
+> >>>>> This API also introduces a "splice" operation, which moves all nodes
+> >>>>> from one queue into another, and postpones the synchronization to either
+> >>>>> dequeue or iteration on the list. The splice operation does not need to
+> >>>>> touch every single node of the queue it moves them from. Moreover, the
+> >>>>> splice operation only needs to ensure mutual exclusion with other
+> >>>>> dequeuers, iterations, and splice operations from the list it splices
+> >>>>> from, but acts as a simple enqueuer on the list it splices into (no
+> >>>>> mutual exclusion needed for that list).
+> >>>>>
+> >>>>> Feedback is welcome,
+> >>>>
+> >>>> These look sane to me, though I must confess that the tail pointer
+> >>>> referencing the node rather than the node's next pointer did throw
+> >>>> me for a bit.  ;-)
+> >>>
+> >>> Yes, this was originally introduced with Lai's original patch to
+> >>> wfqueue, which I think is a nice simplification: it's pretty much the
+> >>> same thing to use the last node address as tail rather than the address
+> >>> of its first member (its next pointer address (_not_ value)). It ends up
+> >>> being the same address in this case, but more interestingly, we don't
+> >>> have to use a struct cds_wfcq_node ** type: a simple struct
+> >>> cds_wfcq_node *  suffice.
+> >>>
+> >>> Thanks Paul, I will therefore merge these 3 patches with your Acked-by.
+> >>>
+> >>> Lai, you are welcome to provide improvements to this code against the
+> >>> master branch. I will gladly consider any change you propose.
+> >>>
+> >>
+> >> I did not remember that there is any improvement idea not included.
+> >> The patchset is OK for me.
+> > 
+> > Great! Would you be OK if I commit the following patch ? Let me know if
+> > you want me to put your signed-off-by on this (I can even put your email
+> > as From if you like):
+> > 
+> > 
+> > wfcqueue: update credits in patch documentation
+> > 
+> > Give credits to those responsible for the design and implementation of
+> > commit 8ad4ce587f001ae026d5560ac509c2e48986130b, "wfcqueue: implement
+> > concurrency-efficient queue", which happened through rounds of email and
+> > patch exchanges.
+> > 
+> > Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+
+Hi Lai,
+
+Are you OK with this credits patch ?
+
+> > ---
+> > diff --git a/urcu/static/wfcqueue.h b/urcu/static/wfcqueue.h
+> > index a989984..153143d 100644
+> > --- a/urcu/static/wfcqueue.h
+> > +++ b/urcu/static/wfcqueue.h
+> > @@ -41,8 +41,10 @@ extern "C" {
+> >  /*
+> >   * Concurrent queue with wait-free enqueue/blocking dequeue.
+> >   *
+> > - * Inspired from half-wait-free/half-blocking queue implementation done by
+> > - * Paul E. McKenney.
+> > + * This queue has been designed and implemented collaboratively by
+> > + * Mathieu Desnoyers and Lai Jiangshan. Inspired from
+> > + * half-wait-free/half-blocking queue implementation done by Paul E.
+> > + * McKenney.
+> >   *
+> >   * Mutual exclusion of __cds_wfcq_* API
+> >   *
+> > diff --git a/urcu/wfcqueue.h b/urcu/wfcqueue.h
+> > index 5576cbf..940dc7d 100644
+> > --- a/urcu/wfcqueue.h
 > > +++ b/urcu/wfcqueue.h
-> > @@ -0,0 +1,263 @@
-> > +#ifndef _URCU_WFCQUEUE_H
-> > +#define _URCU_WFCQUEUE_H
-> > +
-> > +/*
-> > + * wfcqueue.h
-> > + *
-> > + * Userspace RCU library - Concurrent Queue with Wait-Free Enqueue/Blocking Dequeue
-> > + *
-> > + * Copyright 2010-2012 - Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> > + * Copyright 2011-2012 - Lai Jiangshan <laijs@cn.fujitsu.com>
-> > + *
-> > + * This library is free software; you can redistribute it and/or
-> > + * modify it under the terms of the GNU Lesser General Public
-> > + * License as published by the Free Software Foundation; either
-> > + * version 2.1 of the License, or (at your option) any later version.
-> > + *
-> > + * This library is distributed in the hope that it will be useful,
-> > + * but WITHOUT ANY WARRANTY; without even the implied warranty of
-> > + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-> > + * Lesser General Public License for more details.
-> > + *
-> > + * You should have received a copy of the GNU Lesser General Public
-> > + * License along with this library; if not, write to the Free Software
-> > + * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
-> > + */
-> > +
-> > +#include <pthread.h>
-> > +#include <assert.h>
-> > +#include <stdbool.h>
-> > +#include <urcu/compiler.h>
-> > +#include <urcu/arch.h>
-> > +
-> > +#ifdef __cplusplus
-> > +extern "C" {
-> > +#endif
-> > +
-> > +/*
-> > + * Concurrent queue with wait-free enqueue/blocking dequeue.
-> > + *
-> > + * Inspired from half-wait-free/half-blocking queue implementation done by
-> > + * Paul E. McKenney.
-> > + */
-> > +
-> > +struct cds_wfcq_node {
-> > +	struct cds_wfcq_node *next;
-> > +};
-> > +
-> > +/*
-> > + * Do not put head and tail on the same cache-line if concurrent
-> > + * enqueue/dequeue are expected from many CPUs. This eliminates
-> > + * false-sharing between enqueue and dequeue.
-> > + */
-> > +struct cds_wfcq_head {
-> > +	struct cds_wfcq_node node;
-> > +	pthread_mutex_t lock;
-> > +};
-> > +
-> > +struct cds_wfcq_tail {
-> > +	struct cds_wfcq_node *p;
-> > +};
+> > @@ -37,8 +37,10 @@ extern "C" {
+> >  /*
+> >   * Concurrent queue with wait-free enqueue/blocking dequeue.
+> >   *
+> > - * Inspired from half-wait-free/half-blocking queue implementation done by
+> > - * Paul E. McKenney.
+> > + * This queue has been designed and implemented collaboratively by
+> > + * Mathieu Desnoyers and Lai Jiangshan. Inspired from
+> > + * half-wait-free/half-blocking queue implementation done by Paul E.
+> > + * McKenney.
+> >   */
+> >  
+> >  struct cds_wfcq_node {
+> > 
+> > 
+> >> I think you can reimplement wfqueue via wfcqueue without cacheline opt.
+> > 
+> > Hrm, semantically this can indeed be done, but I fear that we might not
+> > be strictly ABI-compatible with the old wfqueue. So I would be tempted
+> > to leave the old wfqueue implementation as-is, and maybe deprecate it at
+> > some point. Thoughts ?
+> > 
 > 
-> Why use "p" here?
-
-For lack of imagination. ;)  Do you have something better to propose ?
-
+> All APIs is not changed, they are forwarded to wfcqueue APIs in implementation,
+> so ABI of APIs is compatible. The only thing is struct cds_wfq_queue:
 > 
-> I don't see the commits in the public git-tree. Or you forgot to update the
-> tree and make "http" address happy.
+> struct cds_wfq_queue {
+> 	struct cds_wfq_node *head, **tail;
+> 	struct cds_wfq_node dummy;	/* Dummy node */
+> 	pthread_mutex_t lock;
+> };
+> 
+> 
+> We can redefine it as:
+> 
+> #define cds_wfq_node cds_wfcq_node
+> 
+> struct cds_wfq_queue {
+> 	union {
+> 		struct cds_wfq_node *head; /* make bug-user who wrongly directly access to ->head happy */
+> 		struct cds_wfcq_node *__pad; /* not used in new implement */
+> 	};
+> 	union {
+> 		struct cds_wfq_node **tail;  /* make bug-user who wrongly directly access to ->tail happy */
+> 		struct cds_wfcq_tail real_tail;
+> 	};
+> 	union {
+> 		struct {
+> 			struct cds_wfq_node dummy;	/* Dummy node */
+> 			pthread_mutex_t lock;
+> 		}
+> 		struct cds_wfcq_head real_head;
+> 	};
+> }
+> 
+> static inline void _cds_wfq_init(struct cds_wfq_queue *q)
+> {
+> 	q->head = &q->dummy; /* make bug-user who wrongly directly access to ->head happy */
+> 	_cds_wfcq_init(&q->real_head, &q->real_tail);
+> }
+> 
+> after this change, struct cds_wfq_queue is not changed.
+> Even bug-user wrongly directly access to struct cds_wfq_queue by old-view,
+> the queue is compatible:
+> 	head->dummy node->real node->real node....
+> 	tail->real tail node(or dummy node)
+> 
+> the only different is that: dummy node is always the first node by old-view.
+> 
+> 
+> And if we deprecate struct cds_wfq_queue, I think we should provide a
+> new default wfqueue to users.
 
-I have pushed those into the userspace RCU master branch a couple of
-days after posting them to the mailing lists. I just synchronized my
-urcu/wfcqueue volatile dev branch, but I expect to drop it soon, since
-it's now merged back into master.
+I guess the objective is nice, but I'm wondering if your mapping of
+wfqueue onto wfcqueue covers scenarios where we have objects that
+uses both the old and new view statically linked into the same program ?
 
-Thanks!
+My ABI concern is not just about queue users directly accessing the
+fields of the queue, but also about binary-level compatibility of mixed
+old-new queues.
+
+Thoughts ?
+
+Thanks,
 
 Mathieu
 
