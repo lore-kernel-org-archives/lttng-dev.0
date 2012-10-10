@@ -1,32 +1,26 @@
-From: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
-Subject: Re: [RFC] re-document rculfstack and even rename it
-Date: Wed, 10 Oct 2012 07:59:59 -0700
-Message-ID: <20121010145959.GA2495__35025.6773912863$1349883931$gmane$org@linux.vnet.ibm.com>
-References: <50752928.3050006@cn.fujitsu.com>
-Reply-To: paulmck@linux.vnet.ibm.com
+From: David Goulet <dgoulet@efficios.com>
+Subject: [RFC] Changes to the stop command
+Date: Wed, 10 Oct 2012 13:11:53 -0400
+Message-ID: <5075AC59.3050704__31078.7519942552$1349889148$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from e3.ny.us.ibm.com ([32.97.182.143])
+Received: from smtp.ini-tech.com ([213.239.202.151])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <paulmck@linux.vnet.ibm.com>) id 1TLySy-0004qz-Kw
-	for lttng-dev@lists.lttng.org; Wed, 10 Oct 2012 11:45:00 -0400
-Received: from /spool/local
-	by e3.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only!
-	Violators will be prosecuted
-	for <lttng-dev@lists.lttng.org> from <paulmck@linux.vnet.ibm.com>;
-	Wed, 10 Oct 2012 11:44:53 -0400
-Received: from d03av01.boulder.ibm.com (d03av01.boulder.ibm.com [9.17.195.167])
-	by d01relay07.pok.ibm.com (8.13.8/8.13.8/NCO v10.0) with ESMTP id
-	q9AFGDlJ6225986
-	for <lttng-dev@lists.lttng.org>; Wed, 10 Oct 2012 11:42:09 -0400
-Received: from d03av01.boulder.ibm.com (loopback [127.0.0.1])
-	by d03av01.boulder.ibm.com (8.14.4/8.13.1/NCO v10.0 AVout) with ESMTP
-	id q9AF7NbH019334
-	for <lttng-dev@lists.lttng.org>; Wed, 10 Oct 2012 09:07:23 -0600
-Content-Disposition: inline
-In-Reply-To: <50752928.3050006@cn.fujitsu.com>
+	(envelope-from <dgoulet@efficios.com>) id 1TLzp6-0005bs-WF
+	for lttng-dev@lists.lttng.org; Wed, 10 Oct 2012 13:11:57 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by smtp.ini-tech.com (Postfix) with ESMTP id A068F1872CC
+	for <lttng-dev@lists.lttng.org>; Wed, 10 Oct 2012 13:12:25 -0400 (EDT)
+Received: from smtp.ini-tech.com ([127.0.0.1])
+	by localhost (smtp.ini-tech.com [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id jNl0yYq1J49E for <lttng-dev@lists.lttng.org>;
+	Wed, 10 Oct 2012 13:12:25 -0400 (EDT)
+Received: from 127.0.0.1 (cable-13.246.173-198.electronicbox.net
+	[173.246.13.198])
+	by smtp.ini-tech.com (Postfix) with ESMTPSA id D299718724F
+	for <lttng-dev@lists.lttng.org>; Wed, 10 Oct 2012 13:12:24 -0400 (EDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -35,30 +29,51 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Lai Jiangshan <laijs@cn.fujitsu.com>
-Cc: lttng-dev@lists.lttng.org, Mathieu Desnoyers <mathieu.desnoyers@polymtl.ca>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-On Wed, Oct 10, 2012 at 03:52:08PM +0800, Lai Jiangshan wrote:
-> rculfstack is not really require RCU-only.
-> 
-> 1) cds_lfs_push_rcu() don't need any lock, don't need RCU nor other locks.
-> 
-> 2) cds_lfs_pop_rcu() don't only one of the following synchronization(not only RCU):
-> 	A) use rcu_read_lock() to protect cds_lfs_pop_rcu() and use synchronize_rcu()
->            or call_rcu() to free the popped node. (current comments said we need this
->            synchronization, and thus we named this struct with rcu prefix. But actually,
-> 	   the followings are OK, and are more popular/friendly)
-> 	B) use mutexs/locks to protect cds_lfs_pop_rcu(), we can free to free/modify the
-> 	   popped node any time, we don't need any synchronization when free them.
-> 	C) only ONE thread can call cds_lfs_pop_rcu(). (multi-providers-single customer)
-> 	D) others, like read-write locks.
-> 
-> I consider B) and C) are more popular. In linux kernel,
-> kernel/task_work.c uses a hybird ways of B) and C).
-> 
-> I suggest to rename it, Or document B) and C) at least.
+Hi everyone,
 
-Good timing -- stacks and queues are next on my list for documentation.  ;-)
+We discovered a week ago a "broken guarantee" which is that when a
+session is stopped by either using the lttng command or the API call
+lttng_stop_session the traced data MUST be ready to be read.
 
-							Thanx, Paul
+However, we don't offer that at all for now for both local storage and
+network streaming. The stop command/call simply does _not_ wait for that
+state.
+
+Here is the proposal to fix this issue before the 2.1 stable release.
+Let's add a new API call (extending it) that probes the session daemon
+for the trace files state (still writing, no more data, closed, ...).
+
+Ex: lttng_data_state(handle)
+
+This will bring a change to the default behavior of the stop command.
+From now on, it will wait by default until the data is available to read
+(for both network and local). This will however be done on the client
+side in order to avoid blocking the session daemon client command sub
+system for an unknown amount of time.
+
+The way I propose we proceed is to use the new API call (mention above)
+on the liblttng-ctl side when a stop is done that requires it to wait.
+Unfortunately, there is no clean way to do that other than an active
+loop polling the session daemon...
+
+The "no wait" use case of the stop command will also be added with a
+lttng_stop_session_no_wait or something like that.
+
+In a nutshell:
+
+(new) lttng_data_state(handle) --> name is NOT final, please chip in for
+ideas! :)
+(new) lttng_stop_session_no_wait(session_name) --> naming NOT final.
+
+(changes) lttng stop (and lttng_stop_session) will now wait for the data
+to be available so babeltrace could be use right after for instance. A
+--no-wait will be added as well to the UI command.
+
+I would like everyone opinion on that because this is an important issue
+that _MUST_ be fixed in 2.1 stable or at least in the 2.1.x series.
+
+Thanks a lot!
+David
