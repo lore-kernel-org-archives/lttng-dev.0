@@ -1,18 +1,19 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: Re: How can I know what events we can enable by
-	enable-events
-Date: Thu, 11 Oct 2012 09:48:16 -0400
-Message-ID: <5076CE20.7060506__49364.0323439196$1349963333$gmane$org@efficios.com>
-References: <CABXOkq1XRqkrX3qFzLeFfKYexcbRnER=_JkugA5WrqKnAO6j5w@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: sched_process_exec
+Date: Thu, 11 Oct 2012 10:58:55 -0400
+Message-ID: <20121011145855.GA11726__30880.7755624459$1349967565$gmane$org@Krystal>
+References: <50769060.7070309@mentor.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([213.239.202.151])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1TMJ7c-0007lF-88
-	for lttng-dev@lists.lttng.org; Thu, 11 Oct 2012 09:48:20 -0400
-In-Reply-To: <CABXOkq1XRqkrX3qFzLeFfKYexcbRnER=_JkugA5WrqKnAO6j5w@mail.gmail.com>
+	(envelope-from <compudj@mail.openrapids.net>) id 1TMKDx-0008LP-B2
+	for lttng-dev@lists.lttng.org; Thu, 11 Oct 2012 10:58:57 -0400
+Content-Disposition: inline
+In-Reply-To: <50769060.7070309@mentor.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,15 +22,112 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?UTF-8?B?5YiY5YWJ5Lqa?= <dut.ac.lgy@gmail.com>
+To: "Woegerer, Paul" <Paul_Woegerer@mentor.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-SGksCgpVc2UgdGhpcyBjb21tYW5kIHdpdGggeW91ciBzZXNzaW9uIG5hbWU6CgokIGx0dG5nIGxp
-c3QgbXlzZXNzaW9uX25hbWUKClJlZmVyIHRvIG1hbiBsdHRuZygxKSBmb3IgbW9yZSBpbmZvLgoK
-RW5qb3khCkRhdmlkCgrliJjlhYnkupo6Cj4gSG93IGNhbiBJIGtub3cgaG93IG1hbnkgZXZlbnRz
-IHdlIGNhbiBlbmFibGUgYW5kIHdoYXQgdGhleSBhcmU/IFRoYW5rcyEKPiAKPiAKPiBUaGlzIGJv
-ZHkgcGFydCB3aWxsIGJlIGRvd25sb2FkZWQgb24gZGVtYW5kLgoKX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRu
-Zy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWls
-bWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+* Woegerer, Paul (Paul_Woegerer@mentor.com) wrote:
+> Hi,
+>
+> Is there a reason why instrumentation/events/lttng-module/sched.h does  =
+
+> not include TRACE_EVENT(sched_process_exec) ?
+>
+> The patch below adds the missing tracepoint definition (tested with  =
+
+> kernel 3.4.6-2.10).
+
+Hi Paul,
+
+The only reason is because it appeared in a later kernel than the one
+used when generating the lttng-modules trace event instrumentation.
+
+A couple a details to fix before I can merge this patch though:
+
+Please also update instrumentation/events/mainline/sched.h to add the
+original mainline TRACE_EVENT, so we can keep the files in sync.
+
+>
+> diff --git a/instrumentation/events/lttng-module/sched.h  =
+
+> b/instrumentation/events/lttng-module/sched.h
+> index b68616e..ef791ac 100644
+> --- a/instrumentation/events/lttng-module/sched.h
+> +++ b/instrumentation/events/lttng-module/sched.h
+> @@ -314,6 +314,32 @@ TRACE_EVENT(sched_process_fork,
+>  )
+>
+>  /*
+> + * Tracepoint for exec:
+> + */
+> +TRACE_EVENT(sched_process_exec,
+> +
+> +       TP_PROTO(struct task_struct *p, pid_t old_pid,
+> +                struct linux_binprm *bprm),
+> +
+> +       TP_ARGS(p, old_pid, bprm),
+> +
+> +       TP_STRUCT__entry(
+> +               __string(       filename,       bprm->filename  )
+> +               __field(        pid_t,          pid             )
+> +               __field(        pid_t,          old_pid         )
+> +       ),
+> +
+> +       TP_fast_assign(
+> +               tp_strcpy(filename, bprm->filename);
+
+Please remove the ";" above.
+
+> +               tp_assign(pid, p->pid)
+> +               tp_assign(old_pid, old_pid)
+> +       ),
+> +
+> +       TP_printk("filename=3D%s pid=3D%d old_pid=3D%d", __get_str(filena=
+me),
+> +                 __entry->pid, __entry->old_pid)
+> +)
+> +
+> +/*
+>   * XXX the below sched_stat tracepoints only apply to  =
+
+> SCHED_OTHER/BATCH/IDLE
+
+A newline has been added by your mail client, which causes the patch to
+not apply correctly.
+
+Hints on how to configure mail clients for sending patches can be looked
+up in the Linux kernel tree, under Documentation/email-clients.txt
+
+Thanks!
+
+Mathieu
+
+>   *     adding sched_stat support to SCHED_FIFO/RR would be welcome.
+>   */
+>
+> -- =
+
+> Paul Woegerer | SW Development Engineer
+> http://go.mentor.com/sourceryanalyzer
+>
+> Mentor Embedded(tm) | Prinz Eugen Stra=DFe 72/2/4, Vienna, 1040 Austria
+> Nucleus=AE | Linux=AE | Android(tm) | Services | UI | Multi-OS
+>
+> Android is a trademark of Google Inc. Use of this trademark is subject to=
+ Google Permissions.
+> Linux is the registered trademark of Linus Torvalds in the U.S. and other=
+ countries.
+>
+>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+
+-- =
+
+Mathieu Desnoyers
+Operating System Efficiency R&D Consultant
+EfficiOS Inc.
+http://www.efficios.com
