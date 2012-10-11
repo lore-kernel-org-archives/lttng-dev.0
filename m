@@ -1,17 +1,18 @@
-From: =?GB2312?B?wfW54tHH?= <dut.ac.lgy@gmail.com>
-Subject: How can I know what events we can enable by
+From: David Goulet <dgoulet@efficios.com>
+Subject: Re: How can I know what events we can enable by
 	enable-events
-Date: Thu, 11 Oct 2012 21:46:03 +0800
-Message-ID: <CABXOkq1XRqkrX3qFzLeFfKYexcbRnER=_JkugA5WrqKnAO6j5w__3384.60428542948$1349963204$gmane$org@mail.gmail.com>
+Date: Thu, 11 Oct 2012 09:48:16 -0400
+Message-ID: <5076CE20.7060506__49364.0323439196$1349963333$gmane$org@efficios.com>
+References: <CABXOkq1XRqkrX3qFzLeFfKYexcbRnER=_JkugA5WrqKnAO6j5w@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1602318024=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ob0-f176.google.com ([209.85.214.176])
+Received: from smtp.ini-tech.com ([213.239.202.151])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dut.ac.lgy@gmail.com>) id 1TMJ5U-0007jh-Qm
-	for lttng-dev@lists.lttng.org; Thu, 11 Oct 2012 09:46:08 -0400
-Received: by mail-ob0-f176.google.com with SMTP id x4so2042002obh.35
-	for <lttng-dev@lists.lttng.org>; Thu, 11 Oct 2012 06:46:03 -0700 (PDT)
+	(envelope-from <dgoulet@efficios.com>) id 1TMJ7c-0007lF-88
+	for lttng-dev@lists.lttng.org; Thu, 11 Oct 2012 09:48:20 -0400
+In-Reply-To: <CABXOkq1XRqkrX3qFzLeFfKYexcbRnER=_JkugA5WrqKnAO6j5w@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,34 +21,15 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: =?UTF-8?B?5YiY5YWJ5Lqa?= <dut.ac.lgy@gmail.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============1602318024==
-Content-Type: multipart/alternative; boundary=f46d044481d9cf6b2604cbc8cab0
-
---f46d044481d9cf6b2604cbc8cab0
-Content-Type: text/plain; charset=ISO-8859-1
-
-How can I know how many events we can enable and what they are? Thanks!
-
---f46d044481d9cf6b2604cbc8cab0
-Content-Type: text/html; charset=ISO-8859-1
-
-How can I know how many events we can enable and what they are? Thanks!
-
---f46d044481d9cf6b2604cbc8cab0--
-
-
---===============1602318024==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1602318024==--
+SGksCgpVc2UgdGhpcyBjb21tYW5kIHdpdGggeW91ciBzZXNzaW9uIG5hbWU6CgokIGx0dG5nIGxp
+c3QgbXlzZXNzaW9uX25hbWUKClJlZmVyIHRvIG1hbiBsdHRuZygxKSBmb3IgbW9yZSBpbmZvLgoK
+RW5qb3khCkRhdmlkCgrliJjlhYnkupo6Cj4gSG93IGNhbiBJIGtub3cgaG93IG1hbnkgZXZlbnRz
+IHdlIGNhbiBlbmFibGUgYW5kIHdoYXQgdGhleSBhcmU/IFRoYW5rcyEKPiAKPiAKPiBUaGlzIGJv
+ZHkgcGFydCB3aWxsIGJlIGRvd25sb2FkZWQgb24gZGVtYW5kLgoKX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRu
+Zy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWls
+bWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
