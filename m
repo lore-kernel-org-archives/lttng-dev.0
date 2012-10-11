@@ -1,23 +1,17 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: rculfstack bug
-Date: Thu, 11 Oct 2012 11:27:08 -0400
-Message-ID: <20121011152708.GB11726__14600.3324808136$1349969262$gmane$org@Krystal>
-References: <50754A57.1080104@cn.fujitsu.com> <20121010114215.GA11307@Krystal>
-	<20121010150207.GB2495@linux.vnet.ibm.com>
-	<20121010150751.GB20761@Krystal> <20121010175304.GA25511@Krystal>
-	<20121010195007.GG2495@linux.vnet.ibm.com>
-	<50762155.3080804@cn.fujitsu.com>
+From: "Woegerer, Paul" <Paul_Woegerer@mentor.com>
+Subject: Re: sched_process_exec
+Date: Thu, 11 Oct 2012 17:28:29 +0200
+Message-ID: <5076E59D.3010003__8868.90325132317$1349969298$gmane$org@mentor.com>
+References: <50769060.7070309@mentor.com> <20121011145855.GA11726@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1TMKfG-0000AI-0O
-	for lttng-dev@lists.lttng.org; Thu, 11 Oct 2012 11:27:10 -0400
-Content-Disposition: inline
-In-Reply-To: <50762155.3080804@cn.fujitsu.com>
+	(envelope-from <Paul_Woegerer@mentor.com>) id 1TMKft-0000B5-Tm
+	for lttng-dev@lists.lttng.org; Thu, 11 Oct 2012 11:27:50 -0400
+In-Reply-To: <20121011145855.GA11726@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -26,160 +20,93 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Lai Jiangshan <laijs@cn.fujitsu.com>
-Cc: lttng-dev@lists.lttng.org, paulmck@linux.vnet.ibm.com
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Lai Jiangshan (laijs@cn.fujitsu.com) wrote:
-> On 10/11/2012 03:50 AM, Paul E. McKenney wrote:
-> > On Wed, Oct 10, 2012 at 01:53:04PM -0400, Mathieu Desnoyers wrote:
-> >> * Mathieu Desnoyers (mathieu.desnoyers@efficios.com) wrote:
-> >>> * Paul E. McKenney (paulmck@linux.vnet.ibm.com) wrote:
-> >>>> On Wed, Oct 10, 2012 at 07:42:15AM -0400, Mathieu Desnoyers wrote:
-> >>>>> * Lai Jiangshan (laijs@cn.fujitsu.com) wrote:
-> >>>>>> test code:
-> >>>>>> ./tests/test_urcu_lfs 100 10 10
-> >>>>>>
-> >>>>>> bug produce rate > 60%
-> >>>>>>
-> >>>>>> {{{
-> >>>>>> I didn't see any bug when "./tests/test_urcu_lfs 10 10 10" Or "./tests/test_urcu_lfs 100 100 10"
-> >>>>>> But I just test it about 5 times
-> >>>>>> }}}
-> >>>>>>
-> >>>>>> 4cores*1threads: Intel(R) Core(TM) i5 CPU         760
-> >>>>>> RCU_MB (no time to test for other rcu type)
-> >>>>>> test commit: 768fba83676f49eb73fd1d8ad452016a84c5ec2a
-> >>>>>>
-> >>>>>> I didn't see any bug when "./tests/test_urcu_mb 10 100 10"
-> >>>>>>
-> >>>>>> Sorry, I tried, but I failed to find out the root cause currently.
-> >>>>>
-> >>>>> I think I managed to narrow down the issue:
-> >>>>>
-> >>>>> 1) the master branch does not reproduce it, but commit
-> >>>>>    768fba83676f49eb73fd1d8ad452016a84c5ec2a repdroduces it about 50% of the
-> >>>>>    time.
-> >>>>>
-> >>>>> 2) the main change between 768fba83676f49eb73fd1d8ad452016a84c5ec2a and
-> >>>>>    current master (f94061a3df4c9eab9ac869a19e4228de54771fcb) is call_rcu
-> >>>>>    moving to wfcqueue.
-> >>>>>
-> >>>>> 3) the bug always arise, for me, at the end of the 10 seconds.
-> >>>>>    However, it might be simply due to the fact that most of the memory
-> >>>>>    get freed at the end of program execution.
-> >>>>>
-> >>>>> 4) I've been able to get a backtrace, and it looks like we have some
-> >>>>>    call_rcu callback-invokation threads still working while
-> >>>>>    call_rcu_data_free() is invoked. In the backtrace, call_rcu_data_free()
-> >>>>>    is nicely waiting for the next thread to stop, and during that time,
-> >>>>>    two callback-invokation threads are invoking callbacks (and one of
-> >>>>>    them triggers the segfault).
-> >>>>
-> >>>> Do any of the callbacks reference __thread variables from some other
-> >>>> thread?  If so, those threads must refrain from exiting until after
-> >>>> such callbacks complete.
-> >>>
-> >>> The callback is a simple caa_container_of + free, usual stuff, nothing
-> >>> fancy.
-> >>
-> >> Here is the fix: the bug was in call rcu. It is not required for master,
-> >> because we fixed it while moving to wfcqueue.
-> >>
-> >> We were erroneously writing to the head field of the default
-> >> call_rcu_data rather than tail.
-> > 
-> > Ouch!!!  I have no idea why that would have passed my testing.  :-(
+On 10/11/2012 04:58 PM, Mathieu Desnoyers wrote:
+> A couple a details to fix before I can merge this patch though:
 > 
-> It's one of the reasons that I rewrite wfqueue and introduce delete_all()
-> (Mathieu uses splice instead) to replace open code of wfqueue in
-> urcu-call-rcu-impl.h.
+> Please also update instrumentation/events/mainline/sched.h to add the
+> original mainline TRACE_EVENT, so we can keep the files in sync.
 
-Yes, you did an excellent call on this one. We had the bug fixed in the
-master branch before it was discovered, which is always nice :)
+Ok, reconfigured Thunderbird, removed semicolon, updated mainline:
 
-> 
-> > 
-> >> I wonder if we should simply do a new release with call_rcu using
-> >> wfcqueue and tell people to upgrade, or if we should somehow create a
-> >> stable branch with this fix.
-> >>
-> >> Thoughts ?
-> > 
-> > Under what conditions does this bug appear?  It is necessary to not just
-> > use call_rcu(), but also to explicitly call call_rcu_data_free(), right?
-> > 
-> > My guess is that a stable branch would be good -- there will be other
-> > bugs, after all.  :-/
-> > 
-> > 							Thanx, Paul
-> > 
-> >> Thanks,
-> >>
-> >> Mathieu
-> >>
-> >> ---
-> >> diff --git a/urcu-call-rcu-impl.h b/urcu-call-rcu-impl.h
-> >> index 13b24ff..b205229 100644
-> >> --- a/urcu-call-rcu-impl.h
-> >> +++ b/urcu-call-rcu-impl.h
-> >> @@ -647,8 +647,9 @@ void call_rcu_data_free(struct call_rcu_data *crdp)
-> >>  		/* Create default call rcu data if need be */
-> >>  		(void) get_default_call_rcu_data();
-> >>  		cbs_endprev = (struct cds_wfq_node **)
-> >> -			uatomic_xchg(&default_call_rcu_data, cbs_tail);
-> >> -		*cbs_endprev = cbs;
-> >> +			uatomic_xchg(&default_call_rcu_data->cbs.tail,
-> >> +					cbs_tail);
-> >> +		_CMM_STORE_SHARED(*cbs_endprev, cbs);
-> >>  		uatomic_add(&default_call_rcu_data->qlen,
-> >>  			    uatomic_read(&crdp->qlen));
-> >>  		wake_call_rcu_thread(default_call_rcu_data);
-> >>
-> >>
-> >>>
-> >>> Thanks,
-> >>>
-> >>> Mathieu
-> >>>
-> >>>>
-> >>>> 							Thanx, Paul
-> >>>>
-> >>>>> So I expect that commit 
-> >>>>>
-> >>>>> commit 5161f31e09ce33dd79afad8d08a2372fbf1c4fbe
-> >>>>> Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> >>>>> Date:   Tue Sep 25 10:50:49 2012 -0500
-> >>>>>
-> >>>>>     call_rcu: use wfcqueue, eliminate false-sharing
-> >>>>>     
-> >>>>>     Eliminate false-sharing between call_rcu (enqueuer) and worker threads
-> >>>>>     on the queue head and tail.
-> >>>>>     
-> 
-> I think the changelog of this commit is too short.
+diff --git a/instrumentation/events/lttng-module/sched.h
+b/instrumentation/events/lttng-module/sched.h
+index b68616e..23e4955 100644
+--- a/instrumentation/events/lttng-module/sched.h
++++ b/instrumentation/events/lttng-module/sched.h
+@@ -314,6 +314,32 @@ TRACE_EVENT(sched_process_fork,
+ )
 
-Yes, unfortunately, it's already in the master branch, and rewriting
-history is something mere mortals are not allowed to do. ;-)
+ /*
++ * Tracepoint for exec:
++ */
++TRACE_EVENT(sched_process_exec,
++
++	TP_PROTO(struct task_struct *p, pid_t old_pid,
++		 struct linux_binprm *bprm),
++
++	TP_ARGS(p, old_pid, bprm),
++
++	TP_STRUCT__entry(
++		__string(	filename,	bprm->filename	)
++		__field(	pid_t,		pid		)
++		__field(	pid_t,		old_pid		)
++	),
++
++	TP_fast_assign(
++		tp_strcpy(filename, bprm->filename)
++		tp_assign(pid, p->pid)
++		tp_assign(old_pid, old_pid)
++	),
++
++	TP_printk("filename=%s pid=%d old_pid=%d", __get_str(filename),
++		  __entry->pid, __entry->old_pid)
++)
++
++/*
+  * XXX the below sched_stat tracepoints only apply to
+SCHED_OTHER/BATCH/IDLE
+  *     adding sched_stat support to SCHED_FIFO/RR would be welcome.
+  */
+diff --git a/instrumentation/events/mainline/sched.h
+b/instrumentation/events/mainline/sched.h
+index f633478..6700ecc 100644
+--- a/instrumentation/events/mainline/sched.h
++++ b/instrumentation/events/mainline/sched.h
+@@ -275,6 +275,32 @@ TRACE_EVENT(sched_process_fork,
+ );
 
-There are a couple of patches that I have pending that did not receive
-any negative feedback at this point. I will move things forwards
-cautiously to ensure we have a consistent master branch, and create
-stable branches for 0.6 and 0.7. Review of these commits will be welcome
-before we do a 0.8 release (with the new wfcqueue). We'll be able to
-proceed to further changes as separate commits.
-
-Thanks!
-
-Mathieu
-
-
-> 
-> Thanks,
-> Lai
-
--- 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+ /*
++ * Tracepoint for exec:
++ */
++TRACE_EVENT(sched_process_exec,
++
++	TP_PROTO(struct task_struct *p, pid_t old_pid,
++		 struct linux_binprm *bprm),
++
++	TP_ARGS(p, old_pid, bprm),
++
++	TP_STRUCT__entry(
++		__string(	filename,	bprm->filename	)
++		__field(	pid_t,		pid		)
++		__field(	pid_t,		old_pid		)
++	),
++
++	TP_fast_assign(
++		__assign_str(filename, bprm->filename);
++		__entry->pid		= p->pid;
++		__entry->old_pid	= old_pid;
++	),
++
++	TP_printk("filename=%s pid=%d old_pid=%d", __get_str(filename),
++		  __entry->pid, __entry->old_pid)
++);
++
++/*
+  * XXX the below sched_stat tracepoints only apply to
+SCHED_OTHER/BATCH/IDLE
+  *     adding sched_stat support to SCHED_FIFO/RR would be welcome.
+  */
