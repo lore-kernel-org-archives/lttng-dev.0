@@ -1,133 +1,41 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: sched_process_exec
-Date: Thu, 11 Oct 2012 12:07:29 -0400
-Message-ID: <20121011160729.GA29181__33832.6241392226$1349971690$gmane$org@Krystal>
-References: <50769060.7070309@mentor.com> <20121011145855.GA11726@Krystal>
-	<5076E59D.3010003@mentor.com>
+Subject: [RELEASE] Userspace RCU 0.6.8
+Date: Thu, 11 Oct 2012 12:23:09 -0400
+Message-ID: <20121011162309.GA30801@Krystal>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
-	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1TMLII-0000XR-G0
-	for lttng-dev@lists.lttng.org; Thu, 11 Oct 2012 12:07:30 -0400
+Content-Type: text/plain; charset=us-ascii
+Return-path: <linux-kernel-owner@vger.kernel.org>
 Content-Disposition: inline
-In-Reply-To: <5076E59D.3010003@mentor.com>
-List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
-	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
-	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Woegerer, Paul" <Paul_Woegerer@mentor.com>
-Cc: lttng-dev@lists.lttng.org
+Sender: linux-kernel-owner@vger.kernel.org
+To: linux-kernel@vger.kernel.org, lttng-dev@lists.lttng.org, rp@svcs.cs.pdx.edu
+Cc: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Lai Jiangshan <laijs@cn.fujitsu.com>, Stephen Hemminger <shemminger@vyatta.com>
 List-Id: lttng-dev@lists.lttng.org
 
-* Woegerer, Paul (Paul_Woegerer@mentor.com) wrote:
-> On 10/11/2012 04:58 PM, Mathieu Desnoyers wrote:
-> > A couple a details to fix before I can merge this patch though:
-> > 
-> > Please also update instrumentation/events/mainline/sched.h to add the
-> > original mainline TRACE_EVENT, so we can keep the files in sync.
-> 
-> Ok, reconfigured Thunderbird, removed semicolon, updated mainline:
+liburcu is a LGPLv2.1 userspace RCU (read-copy-update) library. This
+data synchronization library provides read-side access which scales
+linearly with the number of cores. It does so by allowing multiples
+copies of a given data structure to live at the same time, and by
+monitoring the data structure accesses to detect grace periods after
+which memory reclamation is possible.
 
-Still an issue:
+liburcu-cds provides efficient data structures based on RCU and
+lock-free algorithms. Those structures include hash tables, queues,
+stacks, and doubly-linked lists.
 
-compudj@thinkos:~/work/lttng-modules$ patch -p1 < ~/.swp
-patching file instrumentation/events/lttng-module/sched.h
-patch: **** malformed patch at line 45: SCHED_OTHER/BATCH/IDLE
+We are going forward with a stable-0.6 branch to push important fixes to
+the old 0.6.x series. Please note that the current 0.7.x branch has a
+different fix for this issue, which will be released shortly into 0.7.5.
 
-it seems to be an issue with line-wrapping of your mail client.
+Please note that the bug below occurs very rarely, only when invoking
+call_rcu_data_free() for per-cpu or per-thread callback-invokation
+threads (typically before application exit).
 
-Thanks,
+Changelog:
+2012-09-11 Userspace RCU 0.6.8
+        * Fix: call_rcu list corruption on teardown
 
-Mathieu
-
-> 
-> diff --git a/instrumentation/events/lttng-module/sched.h
-> b/instrumentation/events/lttng-module/sched.h
-> index b68616e..23e4955 100644
-> --- a/instrumentation/events/lttng-module/sched.h
-> +++ b/instrumentation/events/lttng-module/sched.h
-> @@ -314,6 +314,32 @@ TRACE_EVENT(sched_process_fork,
->  )
-> 
->  /*
-> + * Tracepoint for exec:
-> + */
-> +TRACE_EVENT(sched_process_exec,
-> +
-> +	TP_PROTO(struct task_struct *p, pid_t old_pid,
-> +		 struct linux_binprm *bprm),
-> +
-> +	TP_ARGS(p, old_pid, bprm),
-> +
-> +	TP_STRUCT__entry(
-> +		__string(	filename,	bprm->filename	)
-> +		__field(	pid_t,		pid		)
-> +		__field(	pid_t,		old_pid		)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		tp_strcpy(filename, bprm->filename)
-> +		tp_assign(pid, p->pid)
-> +		tp_assign(old_pid, old_pid)
-> +	),
-> +
-> +	TP_printk("filename=%s pid=%d old_pid=%d", __get_str(filename),
-> +		  __entry->pid, __entry->old_pid)
-> +)
-> +
-> +/*
->   * XXX the below sched_stat tracepoints only apply to
-> SCHED_OTHER/BATCH/IDLE
->   *     adding sched_stat support to SCHED_FIFO/RR would be welcome.
->   */
-> diff --git a/instrumentation/events/mainline/sched.h
-> b/instrumentation/events/mainline/sched.h
-> index f633478..6700ecc 100644
-> --- a/instrumentation/events/mainline/sched.h
-> +++ b/instrumentation/events/mainline/sched.h
-> @@ -275,6 +275,32 @@ TRACE_EVENT(sched_process_fork,
->  );
-> 
->  /*
-> + * Tracepoint for exec:
-> + */
-> +TRACE_EVENT(sched_process_exec,
-> +
-> +	TP_PROTO(struct task_struct *p, pid_t old_pid,
-> +		 struct linux_binprm *bprm),
-> +
-> +	TP_ARGS(p, old_pid, bprm),
-> +
-> +	TP_STRUCT__entry(
-> +		__string(	filename,	bprm->filename	)
-> +		__field(	pid_t,		pid		)
-> +		__field(	pid_t,		old_pid		)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__assign_str(filename, bprm->filename);
-> +		__entry->pid		= p->pid;
-> +		__entry->old_pid	= old_pid;
-> +	),
-> +
-> +	TP_printk("filename=%s pid=%d old_pid=%d", __get_str(filename),
-> +		  __entry->pid, __entry->old_pid)
-> +);
-> +
-> +/*
->   * XXX the below sched_stat tracepoints only apply to
-> SCHED_OTHER/BATCH/IDLE
->   *     adding sched_stat support to SCHED_FIFO/RR would be welcome.
->   */
-> 
+Project website: http://lttng.org/urcu
+Download link: http://lttng.org/files/urcu/
 
 -- 
 Mathieu Desnoyers
