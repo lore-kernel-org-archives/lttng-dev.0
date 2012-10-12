@@ -1,68 +1,50 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Amount of trace folders created for the same tool
-Date: Fri, 12 Oct 2012 07:01:12 -0400
-Message-ID: <20121012110112.GB14821__41090.6453188092$1350039705$gmane$org@Krystal>
-References: <6539770C71C3814BB0BFC2DBEBD105080137BE38@CORPUSMX30B.corp.emc.com>
+Subject: [RELEASE] Userspace RCU 0.7.5
+Date: Fri, 12 Oct 2012 07:18:35 -0400
+Message-ID: <20121012111835.GA15280@Krystal>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
-	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1TMczR-0001ff-G8
-	for lttng-dev@lists.lttng.org; Fri, 12 Oct 2012 07:01:13 -0400
+Content-Type: text/plain; charset=us-ascii
+Return-path: <linux-kernel-owner@vger.kernel.org>
 Content-Disposition: inline
-In-Reply-To: <6539770C71C3814BB0BFC2DBEBD105080137BE38@CORPUSMX30B.corp.emc.com>
-List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
-	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
-	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Chang, Zheng" <Zheng.Chang@emc.com>
-Cc: lttng-dev@lists.lttng.org
+Sender: linux-kernel-owner@vger.kernel.org
+To: linux-kernel@vger.kernel.org, lttng-dev@lists.lttng.org, rp@svcs.cs.pdx.edu
+Cc: Stephen Hemminger <shemminger@vyatta.com>, Lai Jiangshan <laijs@cn.fujitsu.com>, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
 List-Id: lttng-dev@lists.lttng.org
 
-* Chang, Zheng (Zheng.Chang@emc.com) wrote:
-> Hi,
-> 
->  
-> 
-> I have a command line tool that calls tracepoint to generate trace.
-> 
-> But it quits once the process is done. So Lttng will create different
-> folders for it because its pid gets changed every time.
-> 
-> This tool gets called hundreds times per day and I'm confused by how to
-> manage these trace info.
-> 
->  
-> 
-> Is there a way or feature to avoid this case? 
+liburcu is a LGPLv2.1 userspace RCU (read-copy-update) library. This
+data synchronization library provides read-side access which scales
+linearly with the number of cores. It does so by allowing multiples
+copies of a given data structure to live at the same time, and by
+monitoring the data structure accesses to detect grace periods after
+which memory reclamation is possible.
 
-Not yet, but we're working on "global, per user" UST buffers for LTTng
-2.2. This will solve your issue.
+liburcu-cds provides efficient data structures based on RCU and
+lock-free algorithms. Those structures include hash tables, queues,
+stacks, and doubly-linked lists.
 
-Thanks,
+This is the start of a stable-0.7 branch to push important fixes. The
+master branch development will continue and eventually result in a 0.8.0
+release.
 
-Mathieu
+Please note that the bug "call_rcu list corruption on teardown" occurs
+very rarely, only when invoking call_rcu_data_free() for per-cpu or
+per-thread callback-invocation threads (typically before application
+exit). The fix for this corruption bug is the same as the fix used in
+the stable-0.6 branch. This fix is not needed in the master branch,
+because the issue had been already fixed by moving call_rcu to the new
+wfcqueue API.
 
-> 
->  
-> 
-> Thanks
-> 
-> -Zheng
-> 
+Changelog:
+2012-10-12 Userspace RCU 0.7.5
+        * Fix: call_rcu list corruption on teardown
+        * Ensure that read-side functions meet 10-line LGPL criterion
+        * tls-compat.h: document sigaltstack(2) limitation
+        * urcu: add notice to URCU_TLS() for it is not strictly async-signal-safe
+        * Document sigaltstack(2) limitation
+        * Documentation: update LICENSE file
 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
+Project website: http://lttng.org/urcu
+Download link: http://lttng.org/files/urcu/
 
 -- 
 Mathieu Desnoyers
