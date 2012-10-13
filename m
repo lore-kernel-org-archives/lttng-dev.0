@@ -1,7 +1,8 @@
 From: Lai Jiangshan <laijs@cn.fujitsu.com>
-Subject: [PATCH 3/4] test: test for the proper pointer
-Date: Sun, 14 Oct 2012 00:08:33 +0800
-Message-ID: <1350144514-4132-3-git-send-email-laijs__564.786283257668$1350144571$gmane$org@cn.fujitsu.com>
+Subject: [PATCH 2/4] test: remove rcu_defer_register_thread()
+	from test_urcu_lfs
+Date: Sun, 14 Oct 2012 00:08:32 +0800
+Message-ID: <1350144514-4132-2-git-send-email-laijs__14688.3522662849$1350144571$gmane$org@cn.fujitsu.com>
 References: <1350144514-4132-1-git-send-email-laijs@cn.fujitsu.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,8 +10,8 @@ Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from [222.73.24.84] (helo=song.cn.fujitsu.com)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <laijs@cn.fujitsu.com>) id 1TN4Go-0006Yf-Qm
-	for lttng-dev@lists.lttng.org; Sat, 13 Oct 2012 12:08:59 -0400
+	(envelope-from <laijs@cn.fujitsu.com>) id 1TN4Gq-0006Yf-AZ
+	for lttng-dev@lists.lttng.org; Sat, 13 Oct 2012 12:09:00 -0400
 In-Reply-To: <1350144514-4132-1-git-send-email-laijs@cn.fujitsu.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -24,36 +25,52 @@ To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Paul McKenney <paulmck@l
 Cc: lttng-dev@lists.lttng.org, Lai Jiangshan <eag0628@gmail.com>
 List-Id: lttng-dev@lists.lttng.org
 
-We should use "if (qnode)" instead of "if (node)" in case of
-the struct cds_lfq_node_rcu is not the first field of struct node.
+test_urcu_lfs has already switch to call_rcu(), rcu_defer_register_thread()
+is unneeded.
 
 Signed-off-by: Lai Jiangshan <laijs@cn.fujitsu.com>
 ---
- tests/test_urcu_lfq.c |    7 ++++---
- 1 files changed, 4 insertions(+), 3 deletions(-)
+ tests/test_urcu_lfs.c |    8 --------
+ 1 files changed, 0 insertions(+), 8 deletions(-)
 
-diff --git a/tests/test_urcu_lfq.c b/tests/test_urcu_lfq.c
-index 66ddd41..0fcbf55 100644
---- a/tests/test_urcu_lfq.c
-+++ b/tests/test_urcu_lfq.c
-@@ -243,14 +243,15 @@ void *thr_dequeuer(void *_count)
+diff --git a/tests/test_urcu_lfs.c b/tests/test_urcu_lfs.c
+index 681b654..f5d7d4b 100644
+--- a/tests/test_urcu_lfs.c
++++ b/tests/test_urcu_lfs.c
+@@ -67,7 +67,6 @@ static inline pid_t gettid(void)
+ #endif
+ #include <urcu.h>
+ #include <urcu/cds.h>
+-#include <urcu-defer.h>
  
- 	for (;;) {
- 		struct cds_lfq_node_rcu *qnode;
--		struct test *node;
+ static volatile int test_go, test_stop;
  
- 		rcu_read_lock();
- 		qnode = cds_lfq_dequeue_rcu(&q);
--		node = caa_container_of(qnode, struct test, list);
- 		rcu_read_unlock();
+@@ -221,18 +220,12 @@ void free_node_cb(struct rcu_head *head)
+ void *thr_dequeuer(void *_count)
+ {
+ 	unsigned long long *count = _count;
+-	int ret;
  
--		if (node) {
-+		if (qnode) {
-+			struct test *node;
-+
-+			node = caa_container_of(qnode, struct test, list);
- 			call_rcu(&node->rcu, free_node_cb);
- 			URCU_TLS(nr_successful_dequeues)++;
- 		}
+ 	printf_verbose("thread_begin %s, thread id : %lx, tid %lu\n",
+ 			"dequeuer", pthread_self(), (unsigned long)gettid());
+ 
+ 	set_affinity();
+ 
+-	ret = rcu_defer_register_thread();
+-	if (ret) {
+-		printf("Error in rcu_defer_register_thread\n");
+-		exit(-1);
+-	}
+ 	rcu_register_thread();
+ 
+ 	while (!test_go)
+@@ -261,7 +254,6 @@ void *thr_dequeuer(void *_count)
+ 	}
+ 
+ 	rcu_unregister_thread();
+-	rcu_defer_unregister_thread();
+ 
+ 	printf_verbose("dequeuer thread_end, thread id : %lx, tid %lu, "
+ 		       "dequeues %llu, successful_dequeues %llu\n",
 -- 
 1.7.7.6
