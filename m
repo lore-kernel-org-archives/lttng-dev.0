@@ -1,21 +1,15 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-tools 4/4] Change the metadata
-	hash	table node
-Date: Sat, 13 Oct 2012 12:00:35 -0400
-Message-ID: <20121013160035.GD29985__36.8048939437315$1350144062$gmane$org@Krystal>
-References: <1350052235-12198-1-git-send-email-dgoulet@efficios.com>
-	<1350052235-12198-4-git-send-email-dgoulet@efficios.com>
+From: Lai Jiangshan <laijs@cn.fujitsu.com>
+Subject: [PATCH 1/4] test: test for the proper pointer
+Date: Sun, 14 Oct 2012 00:08:31 +0800
+Message-ID: <1350144514-4132-1-git-send-email-laijs__42791.5704706267$1350144565$gmane$org@cn.fujitsu.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from [222.73.24.84] (helo=song.cn.fujitsu.com)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1TN48i-0006Ua-5t
-	for lttng-dev@lists.lttng.org; Sat, 13 Oct 2012 12:00:36 -0400
-Content-Disposition: inline
-In-Reply-To: <1350052235-12198-4-git-send-email-dgoulet@efficios.com>
+	(envelope-from <laijs@cn.fujitsu.com>) id 1TN4Gn-0006Yf-6S
+	for lttng-dev@lists.lttng.org; Sat, 13 Oct 2012 12:08:57 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,135 +18,39 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: David Goulet <dgoulet@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Paul McKenney <paulmck@linux.vnet.ibm.com>
+Cc: lttng-dev@lists.lttng.org, Lai Jiangshan <eag0628@gmail.com>
 List-Id: lttng-dev@lists.lttng.org
 
-* David Goulet (dgoulet@efficios.com) wrote:
-> Remove the use of the "waitfd_node" for metadata and index the "node" by
-> wait fd during stream allocation only for metadata stream.
-> 
-> This was done so the waitfd node could be used later on for the hash
-> table indexing stream by session id the traced data check command (soon
-> to be implemented).
+We should use "if (snode)" instead of "if (node)" in case of
+the struct cds_lfs_node_rcu is not the first field of struct node.
 
-this last changelog paragraph, being using "was" (past) is confusing me.
-Is it what you are now doing (present) or what was there before that you
-are changing ?
+Signed-off-by: Lai Jiangshan <laijs@cn.fujitsu.com>
+---
+ tests/test_urcu_lfs.c |    7 ++++---
+ 1 files changed, 4 insertions(+), 3 deletions(-)
 
-Thanks,
-
-Mathieu
-
-> 
-> Signed-off-by: David Goulet <dgoulet@efficios.com>
-> ---
->  src/common/consumer.c |   36 +++++++++++++++++-------------------
->  1 file changed, 17 insertions(+), 19 deletions(-)
-> 
-> diff --git a/src/common/consumer.c b/src/common/consumer.c
-> index 1fb9960..0c1a812 100644
-> --- a/src/common/consumer.c
-> +++ b/src/common/consumer.c
-> @@ -172,17 +172,6 @@ void consumer_free_stream(struct rcu_head *head)
->  	free(stream);
->  }
->  
-> -static
-> -void consumer_free_metadata_stream(struct rcu_head *head)
-> -{
-> -	struct lttng_ht_node_ulong *node =
-> -		caa_container_of(head, struct lttng_ht_node_ulong, head);
-> -	struct lttng_consumer_stream *stream =
-> -		caa_container_of(node, struct lttng_consumer_stream, waitfd_node);
-> -
-> -	free(stream);
-> -}
-> -
->  /*
->   * RCU protected relayd socket pair free.
->   */
-> @@ -417,8 +406,17 @@ struct lttng_consumer_stream *consumer_allocate_stream(
->  	stream->metadata_flag = metadata_flag;
->  	strncpy(stream->path_name, path_name, sizeof(stream->path_name));
->  	stream->path_name[sizeof(stream->path_name) - 1] = '\0';
-> -	lttng_ht_node_init_ulong(&stream->waitfd_node, stream->wait_fd);
-> -	lttng_ht_node_init_ulong(&stream->node, stream->key);
-> +
-> +	/*
-> +	 * Index differently the metadata node because the thread is using an
-> +	 * internal hash table to match streams in the metadata_ht to the epoll set
-> +	 * file descriptor.
-> +	 */
-> +	if (metadata_flag) {
-> +		lttng_ht_node_init_ulong(&stream->node, stream->wait_fd);
-> +	} else {
-> +		lttng_ht_node_init_ulong(&stream->node, stream->key);
-> +	}
->  
->  	/*
->  	 * The cpu number is needed before using any ustctl_* actions. Ignored for
-> @@ -1578,11 +1576,11 @@ static void destroy_stream_ht(struct lttng_ht *ht)
->  	}
->  
->  	rcu_read_lock();
-> -	cds_lfht_for_each_entry(ht->ht, &iter.iter, stream, waitfd_node.node) {
-> +	cds_lfht_for_each_entry(ht->ht, &iter.iter, stream, node.node) {
->  		ret = lttng_ht_del(ht, &iter);
->  		assert(!ret);
->  
-> -		call_rcu(&stream->waitfd_node.head, consumer_free_metadata_stream);
-> +		call_rcu(&stream->node.head, consumer_free_stream);
->  	}
->  	rcu_read_unlock();
->  
-> @@ -1636,7 +1634,7 @@ void consumer_del_metadata_stream(struct lttng_consumer_stream *stream,
->  	}
->  
->  	rcu_read_lock();
-> -	iter.iter.node = &stream->waitfd_node.node;
-> +	iter.iter.node = &stream->node.node;
->  	ret = lttng_ht_del(ht, &iter);
->  	assert(!ret);
->  	rcu_read_unlock();
-> @@ -1707,7 +1705,7 @@ end:
->  	}
->  
->  free_stream:
-> -	call_rcu(&stream->waitfd_node.head, consumer_free_metadata_stream);
-> +	call_rcu(&stream->node.head, consumer_free_stream);
->  }
->  
->  /*
-> @@ -1756,7 +1754,7 @@ static int consumer_add_metadata_stream(struct lttng_consumer_stream *stream,
->  	/* Steal stream identifier to avoid having streams with the same key */
->  	consumer_steal_stream_key(stream->key, ht);
->  
-> -	lttng_ht_add_unique_ulong(ht, &stream->waitfd_node);
-> +	lttng_ht_add_unique_ulong(ht, &stream->node);
->  	rcu_read_unlock();
->  
->  	pthread_mutex_unlock(&consumer_data.lock);
-> @@ -1881,7 +1879,7 @@ restart:
->  			assert(node);
->  
->  			stream = caa_container_of(node, struct lttng_consumer_stream,
-> -					waitfd_node);
-> +					node);
->  
->  			/* Check for error event */
->  			if (revents & (LPOLLERR | LPOLLHUP)) {
-> -- 
-> 1.7.10.4
-> 
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
+diff --git a/tests/test_urcu_lfs.c b/tests/test_urcu_lfs.c
+index 88bf65d..681b654 100644
+--- a/tests/test_urcu_lfs.c
++++ b/tests/test_urcu_lfs.c
+@@ -242,13 +242,14 @@ void *thr_dequeuer(void *_count)
+ 
+ 	for (;;) {
+ 		struct cds_lfs_node_rcu *snode;
+-		struct test *node;
+ 
+ 		rcu_read_lock();
+ 		snode = cds_lfs_pop_rcu(&s);
+-		node = caa_container_of(snode, struct test, list);
+ 		rcu_read_unlock();
+-		if (node) {
++		if (snode) {
++			struct test *node;
++
++			node = caa_container_of(snode, struct test, list);
+ 			call_rcu(&node->rcu, free_node_cb);
+ 			URCU_TLS(nr_successful_dequeues)++;
+ 		}
 -- 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+1.7.7.6
