@@ -1,8 +1,7 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RFC] Feedback on 2 development branches: wfstack and
-	lfstack
-Date: Sat, 13 Oct 2012 14:12:31 -0400
-Message-ID: <20121013181231.GA32276__45647.2686645158$1350151988$gmane$org@Krystal>
+Subject: urcu stack and queues updates and documentation
+Date: Sun, 14 Oct 2012 13:53:32 -0400
+Message-ID: <20121014175332.GA2947__16703.6473787904$1350237248$gmane$org@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -10,8 +9,8 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1TN6CO-0007WY-Ts
-	for lttng-dev@lists.lttng.org; Sat, 13 Oct 2012 14:12:32 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1TNSNa-0000zv-MT
+	for lttng-dev@lists.lttng.org; Sun, 14 Oct 2012 13:53:34 -0400
 Content-Disposition: inline
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -21,46 +20,43 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Lai Jiangshan <laijs@cn.fujitsu.com>
-Cc: Paul McKenney <paulmck@linux.vnet.ibm.com>, lttng-dev@lists.lttng.org, Lai Jiangshan <eag0628@gmail.com>
+To: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi!
+Hi Paul!
 
-I started modifying the stack APIs to reflect the changes we did for
-wfcqueue, and also add pop_all() and iterators.
+I know you are currently looking at documentation of urcu data
+structures. I did quite a bit of work in that area these past days. Here
+is my plan:
 
-The volatile dev branches are available at:
+1) I would like to deprecate, at some point, rculfqueue, wfqueue, and
+   rculfstack.
 
-http://git.dorsal.polymtl.ca/~compudj?p=userspace-rcu;a=shortlog;h=refs/heads/urcu/lfstack
-or 
+2) For wfqueue, we replace it by wfcqueue, currently in the urcu master
+   branch.
+
+3) For rculfstack, we replace it by lfstack available here (volatile
+   branch):
+
 git://git.dorsal.polymtl.ca/~compudj/userspace-rcu
 branch: urcu/lfstack
 
-http://git.dorsal.polymtl.ca/~compudj?p=userspace-rcu;a=shortlog;h=refs/heads/urcu/wfstack
-or
+4) I did documentation improvements (and implemented pop_all as well as
+   empty, and iterators) for wfstack here (volatile branch too):
+
 git://git.dorsal.polymtl.ca/~compudj/userspace-rcu
 branch: urcu/wfstack
 
-Sorry for not sending patches, I'm a bit time-constrained this weekend.
-I am sending these links right away for review, because I think it might
-be good to pull these commits into the master branch before we proceed
-to other changes. And I want to minimize the amount of duplicated effort
-between Lai and myself.
+5) The last one to look into would be rculfqueue. I'd really like to
+   create a lfcqueue derived from wfcqueue if possible. It's the next
+   item on my todo list this weekend.
 
-One of my next step will be to document the wfstack and lfstack APIs
-more thoroughly (similarly to what we did for wfcqueue).
-
-Then, my following step will be to see if I can implement a lfcqueue
-API, derived from wfcqueue, but with lock-free enqueue semantic (a mix
-of wfcqueue and rculfqueue).
-
-Feedback is welcome!
+Thoughts ?
 
 Thanks,
 
 Mathieu
-
 
 -- 
 Mathieu Desnoyers
