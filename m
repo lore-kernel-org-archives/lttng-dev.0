@@ -1,18 +1,20 @@
 From: Christian Babeux <christian.babeux@efficios.com>
-Subject: [PATCH lttng-tools 1/5] Tests: Add an unsupported
-	operators filtering test
-Date: Tue, 16 Oct 2012 14:33:19 -0400
-Message-ID: <1350412403-9974-1-git-send-email-christian.babeux__38085.5711563074$1350412454$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools 2/5] Tests: Add a test for invalid
+	filters
+Date: Tue, 16 Oct 2012 14:33:20 -0400
+Message-ID: <1350412403-9974-2-git-send-email-christian.babeux__37162.1756734841$1350412456$gmane$org@efficios.com>
+References: <1350412403-9974-1-git-send-email-christian.babeux@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qa0-f41.google.com ([209.85.216.41])
+Received: from mail-qc0-f176.google.com ([209.85.216.176])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <christian.babeux@0x80.ca>) id 1TOBxP-0006dB-Mc
-	for lttng-dev@lists.lttng.org; Tue, 16 Oct 2012 14:33:36 -0400
-Received: by mail-qa0-f41.google.com with SMTP id c4so212075qae.14
-	for <lttng-dev@lists.lttng.org>; Tue, 16 Oct 2012 11:33:30 -0700 (PDT)
+	(envelope-from <christian.babeux@0x80.ca>) id 1TOBxX-0006dS-My
+	for lttng-dev@lists.lttng.org; Tue, 16 Oct 2012 14:33:44 -0400
+Received: by mail-qc0-f176.google.com with SMTP id n41so6175539qco.35
+	for <lttng-dev@lists.lttng.org>; Tue, 16 Oct 2012 11:33:38 -0700 (PDT)
+In-Reply-To: <1350412403-9974-1-git-send-email-christian.babeux@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -25,32 +27,32 @@ To: dgoulet@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-This test validate that filters with unsupported operators are
-correctly flagged and that an enable event with these filters
-properly fails.
+This test validate that an invalid filter (unmatched parenthesis,
+field dereferences, unsupported ops, etc.) are correctly flagged
+as such.
 
 Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
 ---
- tests/tools/filtering/Makefile.am     |   2 +
- tests/tools/filtering/unsupported-ops | 114 ++++++++++++++++++++++++++++++++++
- 2 files changed, 116 insertions(+)
- create mode 100644 tests/tools/filtering/Makefile.am
- create mode 100755 tests/tools/filtering/unsupported-ops
+ tests/tools/filtering/Makefile.am     |   4 +-
+ tests/tools/filtering/invalid-filters | 135 ++++++++++++++++++++++++++++++++++
+ 2 files changed, 137 insertions(+), 2 deletions(-)
+ create mode 100755 tests/tools/filtering/invalid-filters
 
 diff --git a/tests/tools/filtering/Makefile.am b/tests/tools/filtering/Makefile.am
-new file mode 100644
-index 0000000..62f7099
---- /dev/null
+index 62f7099..5f3423a 100644
+--- a/tests/tools/filtering/Makefile.am
 +++ b/tests/tools/filtering/Makefile.am
-@@ -0,0 +1,2 @@
-+noinst_SCRIPTS = unsupported-ops
-+EXTRA_DIST = unsupported-ops
-diff --git a/tests/tools/filtering/unsupported-ops b/tests/tools/filtering/unsupported-ops
+@@ -1,2 +1,2 @@
+-noinst_SCRIPTS = unsupported-ops
+-EXTRA_DIST = unsupported-ops
++noinst_SCRIPTS = unsupported-ops invalid-filters
++EXTRA_DIST = unsupported-ops invalid-filters
+diff --git a/tests/tools/filtering/invalid-filters b/tests/tools/filtering/invalid-filters
 new file mode 100755
-index 0000000..8b743f4
+index 0000000..d0777e5
 --- /dev/null
-+++ b/tests/tools/filtering/unsupported-ops
-@@ -0,0 +1,114 @@
++++ b/tests/tools/filtering/invalid-filters
+@@ -0,0 +1,135 @@
 +#!/bin/bash
 +#
 +# Copyright (C) - 2012 Christian Babeux <christian.babeux@efficios.com>
@@ -68,29 +70,28 @@ index 0000000..8b743f4
 +# this program; if not, write to the Free Software Foundation, Inc., 51
 +# Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 +
-+TEST_DESC="Filtering - Unsupported operators"
++TEST_DESC="Filtering - Invalid filters"
 +
 +CURDIR=$(dirname $0)/
 +TESTDIR=$CURDIR/../..
 +LTTNG_BIN="lttng"
-+SESSION_NAME="filter-unsupported-ops"
++SESSION_NAME="filter-invalid"
 +EVENT_NAME="bogus"
-+ENABLE_EVENT_STDERR="/tmp/unsupported-ops-enable"
++ENABLE_EVENT_STDERR="/tmp/invalid-filters-stderr"
 +TRACE_PATH=$(mktemp -d)
 +
 +source $TESTDIR/utils.sh
 +
 +print_test_banner "$TEST_DESC"
 +
-+function enable_ust_lttng_event_filter_unsupported
++function enable_ust_lttng_event_filter
 +{
-+	sess_name=$1
-+	event_name=$2
-+	filter=$3
++	sess_name="$1"
++	event_name="$2"
++	filter="$3"
++	echo -n "Enabling lttng event with filtering and invalid filter "
 +
-+	echo -n "Enabling lttng event with filtering and unsupported operator "
-+	enable_cmd="$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-event"
-+	$enable_cmd $event_name -s $sess_name -u --filter "$filter" 2> $ENABLE_EVENT_STDERR 1> /dev/null
++	$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-event $event_name -s $sess_name -u --filter "$filter" 2> $ENABLE_EVENT_STDERR 1> /dev/null
 +
 +	# Enable must fail
 +	if [ $? -eq 0 ]; then
@@ -102,67 +103,89 @@ index 0000000..8b743f4
 +	fi
 +}
 +
-+function test_unsupported_op
++function test_invalid_filter
 +{
-+	test_op_str=$1
-+	test_op_tkn=$2
++	test_invalid_filter="$1"
 +
 +	echo ""
-+	echo -e "=== Testing filter expression with unsupported operator $test_op_str ($test_op_tkn)"
++	echo -e "=== Testing filter expression with invalid filter"
++	echo -e "Filter: $test_invalid_filter"
 +
 +	# Create session
 +	create_lttng_session $SESSION_NAME $TRACE_PATH
 +
-+	# Create filter
-+	if [ "$test_op_str" == "UNARY_BIN_NOT" ]; then
-+		TEST_FILTER="${test_op_tkn}1"
-+	else
-+		TEST_FILTER="intfield $test_op_tkn 1"
-+	fi
-+
 +	# Apply filter
-+	enable_ust_lttng_event_filter_unsupported $SESSION_NAME $EVENT_NAME "$TEST_FILTER"
-+
-+	# Test stderr for unsupported operator
-+	echo -n "Unsupported operator test $test_op_str ($test_op_tkn) "
-+	grep -i -q "not[[:space:]]\+supported" $ENABLE_EVENT_STDERR
-+
-+	if [ $? -eq 1 ]; then
-+		print_fail
-+		return 1
-+	else
-+		print_ok
-+	fi
++	enable_ust_lttng_event_filter $SESSION_NAME $EVENT_NAME "$test_invalid_filter"
 +
 +	# Destroy session
 +	destroy_lttng_session $SESSION_NAME
-+	return 0
 +}
 +
-+# Unsupported operators
-+OP_STR=("MUL" "DIV" "MOD" "PLUS" "MINUS" "LSHIFT" "RSHIFT"
-+	"BIN_AND" "BIN_OR" "BIN_XOR" "UNARY_BIN_NOT")
++function test_bytecode_limit
++{
++	# Current bytecode limitation is 65536 bytes long.
++	# Generate a huge bytecode with some perl-fu
++	BYTECODE_LIMIT=`perl -e 'print "intfield" . " && 1" x5460'`
 +
-+OP_TKN=("*" "/" "%" "+" "-" "<<" ">>" "&" "|" "^" "~")
++	echo ""
++	echo -e "=== Testing filter bytecode limits (64KiB)"
 +
-+OP_COUNT=${#OP_STR[@]}
-+i=0
++	# Create session
++	create_lttng_session $SESSION_NAME $TRACE_PATH
++
++	# Apply filter
++	enable_ust_lttng_event_filter $SESSION_NAME $EVENT_NAME "$BYTECODE_LIMIT"
++
++	# Destroy session
++	destroy_lttng_session $SESSION_NAME
++}
++
++IFS=$'\n'
++INVALID_FILTERS=(
++		# Unsupported ops
++		"intfield*1"
++		"intfield/1"
++		"intfield+1"
++		"intfield-1"
++		"intfield>>1"
++		"intfield<<1"
++		"intfield&1"
++		"intfield|1"
++		"intfield^1"
++		"~intfield"
++		"1+11111-3333+1"
++		"(1+2)*(55*666)"
++		"1+2*55*666"
++		"asdf + 1 > 1"
++		"asdfas < 2332 || asdf + 1 > 1"
++		"!+-+++-------+++++++++++-----!!--!44+1"
++		"aaa||(gg)+(333----1)"
++		"1+1"
++		# Unmatched parenthesis
++		"((((((((((((((intfield)))))))))))))"
++		'0 || ("abc" != "def")) && (3 < 4)'
++		# Field dereference
++		"a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a"
++		"a->"
++		"a-->a"
++		"a->a"
++		"a.b.c->d.e.f+1"
++		"!a.f.d"
++		"asdf.asdfsd.sadf < 4"
++		"asdfasdf->asdfasdf < 2"
++		)
 +
 +start_lttng_sessiond
-+
-+while [ "$i" -lt "$OP_COUNT" ]; do
-+	test_unsupported_op "${OP_STR[$i]}" "${OP_TKN[$i]}"
-+
-+	if [ $? -eq 1 ]; then
-+		exit 1
-+	fi
-+
-+	let "i++"
++for FILTER in ${INVALID_FILTERS[@]};
++do
++	test_invalid_filter "$FILTER"
 +done
 +
++test_bytecode_limit
++
++unset IFS
 +stop_lttng_sessiond
 +
-+# Cleanup
 +rm -f $ENABLE_EVENT_STDERR
 +rm -rf $TRACE_PATH
 -- 
