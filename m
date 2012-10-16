@@ -1,19 +1,19 @@
 From: Christian Babeux <christian.babeux@efficios.com>
-Subject: [PATCH lttng-tools 2/5] Tests: Add a test for invalid
-	filters
-Date: Tue, 16 Oct 2012 14:33:20 -0400
-Message-ID: <1350412403-9974-2-git-send-email-christian.babeux__37162.1756734841$1350412456$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools 3/5] Tests: Add a trace statistics
+	utility
+Date: Tue, 16 Oct 2012 14:33:21 -0400
+Message-ID: <1350412403-9974-3-git-send-email-christian.babeux__4306.27984828806$1350412466$gmane$org@efficios.com>
 References: <1350412403-9974-1-git-send-email-christian.babeux@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qc0-f176.google.com ([209.85.216.176])
+Received: from mail-qa0-f48.google.com ([209.85.216.48])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <christian.babeux@0x80.ca>) id 1TOBxX-0006dS-My
-	for lttng-dev@lists.lttng.org; Tue, 16 Oct 2012 14:33:44 -0400
-Received: by mail-qc0-f176.google.com with SMTP id n41so6175539qco.35
-	for <lttng-dev@lists.lttng.org>; Tue, 16 Oct 2012 11:33:38 -0700 (PDT)
+	(envelope-from <christian.babeux@0x80.ca>) id 1TOBxe-0006e3-Ov
+	for lttng-dev@lists.lttng.org; Tue, 16 Oct 2012 14:33:51 -0400
+Received: by mail-qa0-f48.google.com with SMTP id c11so230657qad.14
+	for <lttng-dev@lists.lttng.org>; Tue, 16 Oct 2012 11:33:45 -0700 (PDT)
 In-Reply-To: <1350412403-9974-1-git-send-email-christian.babeux@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -27,34 +27,63 @@ To: dgoulet@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-This test validate that an invalid filter (unmatched parenthesis,
-field dereferences, unsupported ops, etc.) are correctly flagged
-as such.
+The babelstats script output statistics on fields values for
+a particular tracepoint. At the moment, the script only show
+minimum and maximum value for each fields of a particular
+tracepoint.
+
+The trace must be in the babeltrace text format. It can be
+passed via stdin.
+
+The script output this format:
+field_name min max
+
+Sample usage:
+
+> babeltrace sometracedir | babelstats.pl --tracepoint tp:tptest
+
+_seqfield1_length 4 4
+seqfield2 "test" "test"
+stringfield2 "\*" "\*"
+floatfield 2222 2222
+netintfieldhex 0x0 0x63
+_seqfield2_length 4 4
+longfield 0 99
+netintfield 0 99
+intfield2 0x0 0x63
+intfield 0 99
+stringfield "test" "test"
+doublefield 2 2
+arrfield2 "test" "test"
+
+Use case:
+This script could be useful to validate that fields values
+are within some predefined expected ranges.
 
 Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
 ---
- tests/tools/filtering/Makefile.am     |   4 +-
- tests/tools/filtering/invalid-filters | 135 ++++++++++++++++++++++++++++++++++
- 2 files changed, 137 insertions(+), 2 deletions(-)
- create mode 100755 tests/tools/filtering/invalid-filters
+ tests/tools/filtering/Makefile.am   |   4 +-
+ tests/tools/filtering/babelstats.pl | 174 ++++++++++++++++++++++++++++++++++++
+ 2 files changed, 176 insertions(+), 2 deletions(-)
+ create mode 100755 tests/tools/filtering/babelstats.pl
 
 diff --git a/tests/tools/filtering/Makefile.am b/tests/tools/filtering/Makefile.am
-index 62f7099..5f3423a 100644
+index 5f3423a..df99e27 100644
 --- a/tests/tools/filtering/Makefile.am
 +++ b/tests/tools/filtering/Makefile.am
 @@ -1,2 +1,2 @@
--noinst_SCRIPTS = unsupported-ops
--EXTRA_DIST = unsupported-ops
-+noinst_SCRIPTS = unsupported-ops invalid-filters
-+EXTRA_DIST = unsupported-ops invalid-filters
-diff --git a/tests/tools/filtering/invalid-filters b/tests/tools/filtering/invalid-filters
+-noinst_SCRIPTS = unsupported-ops invalid-filters
+-EXTRA_DIST = unsupported-ops invalid-filters
++noinst_SCRIPTS = unsupported-ops invalid-filters babelstats.pl
++EXTRA_DIST = unsupported-ops invalid-filters babelstats.pl
+diff --git a/tests/tools/filtering/babelstats.pl b/tests/tools/filtering/babelstats.pl
 new file mode 100755
-index 0000000..d0777e5
+index 0000000..d8d4dd0
 --- /dev/null
-+++ b/tests/tools/filtering/invalid-filters
-@@ -0,0 +1,135 @@
-+#!/bin/bash
-+#
++++ b/tests/tools/filtering/babelstats.pl
+@@ -0,0 +1,174 @@
++#!/usr/bin/perl
++
 +# Copyright (C) - 2012 Christian Babeux <christian.babeux@efficios.com>
 +#
 +# This program is free software; you can redistribute it and/or modify it
@@ -70,123 +99,162 @@ index 0000000..d0777e5
 +# this program; if not, write to the Free Software Foundation, Inc., 51
 +# Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 +
-+TEST_DESC="Filtering - Invalid filters"
++use strict;
++use warnings;
 +
-+CURDIR=$(dirname $0)/
-+TESTDIR=$CURDIR/../..
-+LTTNG_BIN="lttng"
-+SESSION_NAME="filter-invalid"
-+EVENT_NAME="bogus"
-+ENABLE_EVENT_STDERR="/tmp/invalid-filters-stderr"
-+TRACE_PATH=$(mktemp -d)
++use Getopt::Long;
 +
-+source $TESTDIR/utils.sh
++my $opt_tracepoint;
 +
-+print_test_banner "$TEST_DESC"
++GetOptions('tracepoint=s' => \$opt_tracepoint)
++	or die("Invalid command-line option\n");
 +
-+function enable_ust_lttng_event_filter
++defined($opt_tracepoint)
++	or die("Missing tracepoint, use --tracepoint <name>");
++
++# Parse an array string.
++# The format is as follow: [ [index] = value, ... ]
++sub parse_array
 +{
-+	sess_name="$1"
-+	event_name="$2"
-+	filter="$3"
-+	echo -n "Enabling lttng event with filtering and invalid filter "
++	my ($arr_str) = @_;
++	my @array = ();
 +
-+	$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-event $event_name -s $sess_name -u --filter "$filter" 2> $ENABLE_EVENT_STDERR 1> /dev/null
++	# Strip leading and ending brackets, remove whitespace
++	$arr_str =~ s/^\[//;
++	$arr_str =~ s/\]$//;
++	$arr_str =~ s/\s//g;
 +
-+	# Enable must fail
-+	if [ $? -eq 0 ]; then
-+		print_fail
-+		return 1
-+	else
-+		print_ok
-+		return 0
-+	fi
++	my @entries = split(',', $arr_str);
++
++	foreach my $entry (@entries) {
++		if ($entry =~ /^\[(\d+)\]=(\d+)$/) {
++			my $index = $1;
++			my $value = $2;
++			splice @array, $index, 0, $value;
++		}
++	}
++
++	return \@array;
 +}
 +
-+function test_invalid_filter
++# Parse fields values.
++# Format can either be a name = array or a name = value pair.
++sub parse_fields
 +{
-+	test_invalid_filter="$1"
++	my ($fields_str) = @_;
++	my %fields_hash;
 +
-+	echo ""
-+	echo -e "=== Testing filter expression with invalid filter"
-+	echo -e "Filter: $test_invalid_filter"
++	my $field_name = '[\w\d_]+';
++	my $field_value = '[\w\d_\\\*"]+';
++	my $array = '\[(?:\s\[\d+\]\s=\s\d+,)*\s\[\d+\]\s=\s\d+\s\]';
 +
-+	# Create session
-+	create_lttng_session $SESSION_NAME $TRACE_PATH
++	# Split the various fields
++	my @fields = ($fields_str =~ /$field_name\s=\s(?:$array|$field_value)/g);
 +
-+	# Apply filter
-+	enable_ust_lttng_event_filter $SESSION_NAME $EVENT_NAME "$test_invalid_filter"
++	foreach my $field (@fields) {
++		if ($field =~ /($field_name)\s=\s($array)/) {
++			my $name  = $1;
++			my $value = parse_array($2);
++			$fields_hash{$name} = $value;
++		}
 +
-+	# Destroy session
-+	destroy_lttng_session $SESSION_NAME
++		if ($field =~ /($field_name)\s=\s($field_value)/) {
++			my $name  = $1;
++			my $value = $2;
++			$fields_hash{$name} = $value;
++		}
++	}
++
++	return \%fields_hash;
 +}
 +
-+function test_bytecode_limit
++# Using an event array, merge all the fields
++# of a particular tracepoint.
++sub merge_fields
 +{
-+	# Current bytecode limitation is 65536 bytes long.
-+	# Generate a huge bytecode with some perl-fu
-+	BYTECODE_LIMIT=`perl -e 'print "intfield" . " && 1" x5460'`
++	my ($events_ref) = @_;
++	my %merged;
 +
-+	echo ""
-+	echo -e "=== Testing filter bytecode limits (64KiB)"
++	foreach my $event (@{$events_ref}) {
++		my $tp_provider = $event->{'tp_provider'};
++		my $tp_name     = $event->{'tp_name'};
++		my $tracepoint  = "$tp_provider:$tp_name";
 +
-+	# Create session
-+	create_lttng_session $SESSION_NAME $TRACE_PATH
++		foreach my $key (keys %{$event->{'fields'}}) {
++			my $val = $event->{'fields'}->{$key};
 +
-+	# Apply filter
-+	enable_ust_lttng_event_filter $SESSION_NAME $EVENT_NAME "$BYTECODE_LIMIT"
++			# TODO: Merge of array is not implemented.
++			next if (ref($val) eq 'ARRAY');
++			$merged{$tracepoint}{$key}{$val} = undef;
++		}
++	}
 +
-+	# Destroy session
-+	destroy_lttng_session $SESSION_NAME
++	return \%merged;
 +}
 +
-+IFS=$'\n'
-+INVALID_FILTERS=(
-+		# Unsupported ops
-+		"intfield*1"
-+		"intfield/1"
-+		"intfield+1"
-+		"intfield-1"
-+		"intfield>>1"
-+		"intfield<<1"
-+		"intfield&1"
-+		"intfield|1"
-+		"intfield^1"
-+		"~intfield"
-+		"1+11111-3333+1"
-+		"(1+2)*(55*666)"
-+		"1+2*55*666"
-+		"asdf + 1 > 1"
-+		"asdfas < 2332 || asdf + 1 > 1"
-+		"!+-+++-------+++++++++++-----!!--!44+1"
-+		"aaa||(gg)+(333----1)"
-+		"1+1"
-+		# Unmatched parenthesis
-+		"((((((((((((((intfield)))))))))))))"
-+		'0 || ("abc" != "def")) && (3 < 4)'
-+		# Field dereference
-+		"a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a"
-+		"a->"
-+		"a-->a"
-+		"a->a"
-+		"a.b.c->d.e.f+1"
-+		"!a.f.d"
-+		"asdf.asdfsd.sadf < 4"
-+		"asdfasdf->asdfasdf < 2"
-+		)
++# Print the minimum and maximum of each fields
++# for a particular tracepoint.
++sub print_fields_stats
++{
++	my ($merged_ref, $tracepoint) = @_;
 +
-+start_lttng_sessiond
-+for FILTER in ${INVALID_FILTERS[@]};
-+do
-+	test_invalid_filter "$FILTER"
-+done
++	return unless ($tracepoint && exists $merged_ref->{$tracepoint});
 +
-+test_bytecode_limit
++	foreach my $field (keys %{$merged_ref->{$tracepoint}}) {
++		my @sorted;
++		my @val = keys ($merged_ref->{$tracepoint}->{$field});
 +
-+unset IFS
-+stop_lttng_sessiond
++		if ($val[0] =~ /^\d+$/) {
++			# Sort numerically
++			@sorted = sort { $a <=> $b } @val;
++		} elsif ($val[0] =~ /^0x[\da-f]+$/i) {
++			# Convert the hex values and sort numerically
++			@sorted = sort { hex($a) <=> hex($b) } @val;
++		} else {
++			# Fallback, alphabetical sort
++			@sorted = sort { lc($a) cmp lc($b) } @val;
++		}
 +
-+rm -f $ENABLE_EVENT_STDERR
-+rm -rf $TRACE_PATH
++		my $min = $sorted[0];
++		my $max = $sorted[-1];
++
++		print "$field $min $max\n";
++	}
++}
++
++my @events;
++
++while (<>)
++{
++	my $timestamp   = '\[(.*)\]';
++	my $elapsed     = '\((.*)\)';
++	my $hostname    = '.*';
++	my $pname       = '.*';
++	my $pid         = '\d+';
++	my $tp_provider = '.*';
++	my $tp_name     = '.*';
++	my $cpu_info    = '{\scpu_id\s=\s(\d+)\s\}';
++	my $fields      = '{(.*)}';
++
++	# Parse babeltrace text output format
++	if (/$timestamp\s$elapsed\s($hostname):($pname):($pid)\s($tp_provider):($tp_name):\s$cpu_info,\s$fields/) {
++		my %event_hash;
++
++		$event_hash{'timestamp'}   = $1;
++		$event_hash{'elapsed'}     = $2;
++		$event_hash{'hostname'}    = $3;
++		$event_hash{'pname'}       = $4;
++		$event_hash{'pid'}         = $5;
++		$event_hash{'tp_provider'} = $6;
++		$event_hash{'tp_name'}     = $7;
++		$event_hash{'cpu_id'}      = $8;
++		$event_hash{'fields'}      = parse_fields($9);
++
++		push @events, \%event_hash;
++	}
++}
++
++my %merged_fields = %{merge_fields(\@{events})};
++print_fields_stats(\%merged_fields, $opt_tracepoint);
 -- 
 1.7.12.2
