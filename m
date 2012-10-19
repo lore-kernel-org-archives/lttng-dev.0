@@ -1,20 +1,19 @@
-From: "Oestman, Fredrik" <Fredrik_Oestman@mentor.com>
-Subject: Flight-recorder mode
-Date: Fri, 19 Oct 2012 08:07:41 +0000
-Message-ID: <524C960C5DFC794E82BE548D825F05CF5BC75AB2__35707.4360283606$1350634103$gmane$org@EU-MBX-01.mgc.mentorg.com>
+From: =?UTF-8?B?0JTQtdC90LjRgSDQpNC10LTQvtGC0L7Qsg==?= <fedotov.d.a@mail.ru>
+Subject: =?utf-8?q?LTTng_tracing_linux_modules?=
+Date: Sat, 20 Oct 2012 01:10:25 +0400
+Message-ID: <1350681025.129060780__15552.6748662398$1350737169$gmane$org@f219.mail.ru>
+Reply-To: =?UTF-8?B?0JTQtdC90LjRgSDQpNC10LTQvtGC0L7Qsg==?=
+	<fedotov.d.a@mail.ru>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/mixed; boundary="===============1184140893=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from relay1.mentorg.com ([192.94.38.131])
+Received: from f219.mail.ru ([94.100.178.210])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Fredrik_Oestman@mentor.com>) id 1TP7cU-00020Q-1V
-	for lttng-dev@lists.lttng.org; Fri, 19 Oct 2012 04:07:50 -0400
-Received: from svr-orw-exc-10.mgc.mentorg.com ([147.34.98.58])
-	by relay1.mentorg.com with esmtp
-	id 1TP7cO-0000OX-1C from Fredrik_Oestman@mentor.com
-	for lttng-dev@lists.lttng.org; Fri, 19 Oct 2012 01:07:44 -0700
-Content-Language: en-US
+	(envelope-from <fedotov.d.a@mail.ru>) id 1TPJpv-0007zO-Sm
+	for lttng-dev@lists.lttng.org; Fri, 19 Oct 2012 17:10:32 -0400
+Received: from mail by f219.mail.ru with local (envelope-from
+	<fedotov.d.a@mail.ru>) id 1TPJpp-0007gS-KE
+	for lttng-dev@lists.lttng.org; Sat, 20 Oct 2012 01:10:25 +0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,29 +22,52 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
+
+--===============1184140893==
+Content-Type: multipart/alternative;
+	boundary="--ALT--DlThKMIr1350681025"
 
 
-We use LTTng 2.0 with a limited file system on the target to receive the tr=
-ace logs:
+----ALT--DlThKMIr1350681025
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: base64
 
-  Extract of fstab file:
-  tmpfs        /dev/shm    tmpfs  size=3D64M,mode=3D777,noauto            0=
-   0
+SGkhClBsZWFzZSBoZWxwIG1lLiAKSSBzZWFyY2hlZCB0aGUgd2hvbGUgR29vZ2xlIGFuZCBjb3Vs
+ZCBub3QganVzdCDCoGZpbmQgaW5mb3JtYXRpb24gb24gaG93IHRvIGFkZCB0byBteSBvd24ga2Vy
+bmVsIHRyYWNpbmcgdHJhY2VfZXZlbnRzIHRvIHRoZSBMVFRuZyB0cmFjZS4KSSBhbSB1c2luZyBv
+cGVuU1VTRSBkaXN0cmlidXRpdmUgMTIuMSwgdmFuaWxhIExpbnV4IGtlcm5lbCAzLjQuMTEgKyBy
+dCBwYXRjaCBhbmQgTFRUbmcgMi4wLgoKQ291bGQgeW91IGdpdmUgbWUgc29tZSBpbmZvcm1hdGlv
+biBvbiBob3cgY2FuIGkgYWRkIExUVG5nIGV2ZW50cyBmcm9tIG15IG1vZHVsZS4KClAuUy4gU29y
+cnkgZm9yIG15wqBFbmdsaXNoLsKgCsKg
 
-When tmpfs is full, trace logs are corrupted. Since it is very difficult to=
- control the tracing to avoid this, we would need a real flight-recorder mo=
-de where the files on the disk have a pre-defined (maximum) size and where =
-either discard or overwrite mode can be applied.
+----ALT--DlThKMIr1350681025
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: base64
 
-Is there such a thing or some other solution to the problem?
+CjxIVE1MPjxCT0RZPkhpITxicj5QbGVhc2UgaGVscCBtZS4gPGJyPkkgc2VhcmNoZWQgdGhlIHdo
+b2xlIEdvb2dsZSBhbmQgY291bGQgbm90IGp1c3QgJm5ic3A7ZmluZCBpbmZvcm1hdGlvbiBvbiBo
+b3cgdG8gYWRkIHRvIG15IG93biBrZXJuZWwgdHJhY2luZyB0cmFjZV9ldmVudHMgdG8gdGhlIExU
+VG5nIHRyYWNlLjxicj5JIGFtIHVzaW5nIG9wZW5TVVNFIGRpc3RyaWJ1dGl2ZSAxMi4xLCB2YW5p
+bGEgTGludXgga2VybmVsIDMuNC4xMSArIHJ0IHBhdGNoIGFuZCBMVFRuZyAyLjAuPGJyPjxicj5D
+b3VsZCB5b3UgZ2l2ZSBtZSBzb21lIGluZm9ybWF0aW9uIG9uIGhvdyBjYW4gaSBhZGQgTFRUbmcg
+ZXZlbnRzIGZyb20gbXkgbW9kdWxlLjxicj48YnI+UC5TLiBTb3JyeSBmb3IgbXkmbmJzcDtFbmds
+aXNoLiZuYnNwOzxicj4mbmJzcDs8L0JPRFk+PC9IVE1MPgo=
+
+----ALT--DlThKMIr1350681025--
 
 
-Cheers,
+--===============1184140893==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-Fredrik =D6stman
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
-http://go.mentor.com/sourceryanalyzer/
+--===============1184140893==--
