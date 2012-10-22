@@ -1,28 +1,19 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: [RELEASE] LTTng-tools 2.1.0-rc5
-Date: Mon, 22 Oct 2012 13:06:12 -0400
-Message-ID: <50857D04.10705__2301.72023079849$1350925615$gmane$org@efficios.com>
-References: <502EA58E.2060003@efficios.com>
+From: Julien Desfossez <jdesfossez@efficios.com>
+Subject: Re: status of lttng top
+Date: Mon, 22 Oct 2012 14:10:01 -0400
+Message-ID: <50858BF9.705__26451.1202964515$1350929447$gmane$org@efficios.com>
+References: <7F632A9222059A42AF70FCB7965774AA20627EAB@ALA-MBB.corp.ad.wrs.com>
+	<507389DE.4000204@efficios.com>
+	<7F632A9222059A42AF70FCB7965774AA20854D6F@ALA-MBB.corp.ad.wrs.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([213.239.202.151])
+Received: from fukushima.klipix.org ([93.20.26.243])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1TQLSC-00051e-D9
-	for lttng-dev@lists.lttng.org; Mon, 22 Oct 2012 13:06:16 -0400
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by smtp.ini-tech.com (Postfix) with ESMTP id C12D61872FD
-	for <lttng-dev@lists.lttng.org>; Mon, 22 Oct 2012 13:06:21 -0400 (EDT)
-Received: from smtp.ini-tech.com ([127.0.0.1])
-	by localhost (smtp.ini-tech.com [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id xJZ7H_z6gX80 for <lttng-dev@lists.lttng.org>;
-	Mon, 22 Oct 2012 13:06:21 -0400 (EDT)
-Received: from 127.0.0.1 (cable-13.246.173-198.electronicbox.net
-	[173.246.13.198])
-	by smtp.ini-tech.com (Postfix) with ESMTPSA id A8668187251
-	for <lttng-dev@lists.lttng.org>; Mon, 22 Oct 2012 13:06:20 -0400 (EDT)
-In-Reply-To: <502EA58E.2060003@efficios.com>
+	(envelope-from <jdesfossez@efficios.com>) id 1TQMS3-0005V5-4B
+	for lttng-dev@lists.lttng.org; Mon, 22 Oct 2012 14:10:11 -0400
+In-Reply-To: <7F632A9222059A42AF70FCB7965774AA20854D6F@ALA-MBB.corp.ad.wrs.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -31,106 +22,43 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: "McDermott, Andrew" <Andrew.McDermott@windriver.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Greetings everyone (including LTTng elves),
+Hi Andrew,
 
-The lttng-tools project provides a session daemon (lttng-sessiond)
-that acts as a tracing registry, the "lttng" command line for tracing
-control, a lttng-ctl library for tracing control and a lttng-relayd
-for network streaming.
+On 22/10/12 07:00 AM, McDermott, Andrew wrote:
+> 
+> Hi,
+> 
+>> LTTngTop is still work in progress and will remain that way for a long
+>> time, but the version in the PPA (or in the master branch in git) is
+>> perfectly usable for offline traces (traces recorded and replayed
+>> through LTTngTop).
+>>
+>> The "live" branch is more experimental and requires patches in both
+>> Babeltrace and Lttng-tools (all documented in the README-LIVE file), but
+>> it worked at the time of Plumbers, I didn't have much time since then to
+>> rebase the branches.
+>>
+>> I am waiting for the release of Lttng-tools 2.1 (currently in RC) before
+>> merging those patches. After these patches are integrated, LTTngTop will
+>> be able to work live without any modifications, so directly reading
+>> traces in memory shared with the tracer.
+> 
+> Thanks for this info.
+> 
+> Right now my interest is with the live streaming; we have a use case
+> where the live streaming is really the only practical solution.
+> 
+> Very roughly, would you expect the RC series to conclude this year, or
+> (early) next year?
 
-This release candidate version contains a lot of fixes and especially
-one that fix the lttng_stop_tracing() behavior by adding a new call to
-the API (lttng.h).
+Just to clarify, are you interested in live network trace reading or
+live in-memory reading ?
+The patches I was talking about are for in-memory trace reading.
 
-Here goes. The lttng_stop_tracing() API call, once it returns, there was
-suppose to be a guarantee that the tracing data is available for
-processing i.e. that any viewer/reader could parse the trace files
-without any problem or missing data. We've fixed that with a new API
-call, lttng_data_available(). It returns 1 if the data is ready to be
-read for a tracing session (for every domain) or else 0. We've added
-this call to lttng_stop_tracing() in order for this call to return
-*only* if the condition is true (1). It changes the old behavior since
-now the stop tracing call can wait an arbitrary amount of time.
+Thanks,
 
-Note that, for now, lttng_data_available is called every 2usec on the
-client side (liblttng-ctl). So, this call does NOT block nor makes the
-session daemon wait for data availability.
-
-We've also added the lttng_stop_tracing_no_wait() that behaves *exactly*
-like lttng_stop_tracing() but will NOT wait for data availability.
-
-This is of course integrated in lttng command line and works for both
-local consumer (on the file system) or network streaming. For the lttng
-UI to _not_ wait when stopping a session, the --no-wait option was added
-to "lttng stop".
-
-Here is an example of the expected output of the command line. Each dot
-"." is a 2usec period of time.
-
-$ lttng stop mysession
-Waiting for data availability....
-Tracing stopped for session mysession
-
-We know that this is a big addition to the RC process of lttng-tools but
-the data availability on stop tracing is a *very* important aspect of
-the lttng tool chain hence fixing it before the stable version
-especially with the network streaming support.
-
-Apart from that, here is the ChangeLog for 2.1.0-rc5 which contains a
-lot of fixes and tests.
-
-2012-10-22 lttng-tools 2.1.0-rc5
-        * Fix: Remove network stream ID ABI calls
-        * Tests: Add filtering tests
-        * Wait for data availability when stopping a session
-        * Relayd data available command support
-        * Lib lttng-ctl data available command support
-        * Consumer daemon data available command support
-        * Add data structure for the data available command
-        * Change the metadata hash table node
-        * Make stream hash tables global to the consumer
-        * Move add data stream to the data thread
-        * Rename consumer threads and spawn them in daemon
-        * Fix: relayd close stream command was not working
-        * Fix: Relayd and consumerd socket leaks
-        * Fix: Missing -ENODATA handling in the consumer
-        * Fix: Empty metadata buffer(s) on HUP|ERR
-        * ABI with support for compat 32/64 bits
-        * Fix: Stream allocation and insertion consistency
-        * Fix: output number of bytes written by relayd
-        * Add hash table argument to helper functions
-        * Fix: Add missing call rcu and read side lock
-        * Tests: Fix LD_PRELOAD library lookup path for health tests
-        * Fix: Add arbitrary wait period for kernel streaming test
-        * Fix coding style and add/change debug statements
-        * Fix: Build out of src tree
-        * Tests: Add health check tests to configure
-        * Tests: Add health check thread stall test
-        * Tests: Add health check thread exit test
-        * Tests: Add a health check utility program
-        * Add testpoints in lttng-sessiond for each threads
-        * New testpoint mechanism to instrument binaries for testing
-        * Fix: off-by-one in comm proto between lttng-ctl and sessiond
-        * Fix: Metadata stream leak when received in consumer
-        * Fix: consumer_allocate_stream error handling
-        * Fix: consumer should await for initial streams
-        * Fix: Missing rcu read side lock in consumer
-
-Please feel free to email the list about any questions/comments
-concerning this release.
-
-Project website: http://lttng.org/lttng2.0
-Download link:
-http://lttng.org/files/lttng-tools/lttng-tools-2.1.0-rc5.tar.bz2 (for
-the PGP signature, same file with .asc appended)
-
-Cheers!
-David
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+Julien
