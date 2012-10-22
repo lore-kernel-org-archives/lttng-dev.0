@@ -1,8 +1,7 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: RFC : design notes for remote traces live reading
-Date: Sat, 20 Oct 2012 18:54:42 -0400
-Message-ID: <20121020225442.GA5020__49626.4265304946$1350773718$gmane$org@Krystal>
-References: <50830BA3.6000508@efficios.com>
+Subject: [PATCH] urcu wfcqueue: introduce nonblocking API
+Date: Sun, 21 Oct 2012 22:30:49 -0400
+Message-ID: <20121022023049.GA9653__8155.14302016727$1350873090$gmane$org@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -10,10 +9,9 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1TPhwL-0002Y2-1L
-	for lttng-dev@lists.lttng.org; Sat, 20 Oct 2012 18:54:45 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1TQ7n1-0006Ln-WF
+	for lttng-dev@lists.lttng.org; Sun, 21 Oct 2012 22:30:52 -0400
 Content-Disposition: inline
-In-Reply-To: <50830BA3.6000508@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,166 +20,484 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Julien Desfossez <jdesfossez@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
+Cc: Lai Jiangshan <eag0628@gmail.com>, lttng-dev@lists.lttng.org, rp@svcs.cs.pdx.edu
 List-Id: lttng-dev@lists.lttng.org
 
-* Julien Desfossez (jdesfossez@efficios.com) wrote:
-> In order to achieve live reading of streamed traces, we need :
-> - the index generation while tracing
-> - index streaming
-> - synchronization of streams
-> - cooperating viewers
-> 
-> This RFC addresses each of these points with the anticipated design,
-> implementation is on its way, so quick feedbacks greatly appreciated !
-> 
-> * Index generation
-> The index associates a trace packet with an offset inside the tracefile.
-> While tracing, when a packet is ready to be written, we can ask the ring
-> buffer to provide us the information required to produce the index
-> (data_offset,
+Introduce nonblocking API in wfcqueue, allowing RT threads to try to
+dequeue, splice, or iterate on spliced queues without blocking: the
+caller needs to handle CDS_WFCQ_WOULDBLOCK return value (or nonzero
+return value for splice).
 
-Is data_offset just the header size ? Do we really want that in the
-on-disk index ? It can be easily computed from the metadata, I'm not
-sure we want to duplicate this information.
-
-> packet_size, content_size, timestamp_begin, timestamp_end,
-> events_discarded, events_discarded_len,
-
-events_discarded_len is also known from metadata.
-
-> stream_id).
-
-Maybe you could detail the exact layout of an element in the index as a
-packed C structure and provide it in the next round of this RFC so we
-know exactly which types and what contend you plan.
-
-> 
-> * Index streaming
-> The index is mandatory for live reading since we use it for the streams
-> synchronization. We absolutely need to receive the index, so we send it
-> on the control port (TCP-only), but most of the information related to
-> the index is only relevant if we receive the associated data packet. So
-> the proposed protocol is the following :
-> - with each data packet, send the data_offset, packet_size, content_size
-
-what is data_offset ?
-
-> (all uint64_t) along with the already in place information (stream id
-> and sequence number)
-> - after sending a data packet, the consumer sends on the control port a
-> new message (RELAYD_SEND_INDEX) with timestamp_begin, timestamp_end,
-> events_discarded, events_discarded_len, stream_id, the sequence number,
-
-do we need events_discarded_len ?
-
-> (all uint64_t), and the relayd stream id of the tracefile
-> - when the relay receives a data packet it looks if it already received
-> an index corresponding to this stream and sequence number, if yes it
-> completes the index structure and writes the index on disk, otherwise it
-> creates an index structure in memory with the information it can fill
-> and stores it in a hash table waiting for the corresponding index packet
-> to arrive
-> - the same concept applies when the relay receives an index packet.
-
-Yep. We could possibly describe this as a 2-way merge point between data
-and index, performed through lookups (by what key ?) in a hash table.
-
-> 
-> This two-part remote index generation allows us to determine if we lost
-> packets because of the network, limit the number of bytes sent on the
-> control port and make sure we still have an index for each packet with
-> its timestamps and the number of events lost so the viewer knows if we
-> lost events because of the tracer or the network.
-> 
-> Design question : since the lookup is always based on two factors
-> (relayd stream_id and sequence number), do we want to create a hash
-> table for each stream on the relay ?
-
-Nope. A single hash table can be used. The hash function takes both
-stream ID and seq num (e.g. with a xor), and the compare function
-compares with both.
-
-> We have to consider that at some point, we might have to reorder trace
-> packets (when we support UDP) before writing them to disk, so we will
-> need a similar structure to temporarily store out-of-order packets.
-
-I don't think it will be necessary for UDP: UDP datagrams, AFAIK, arrive
-ordered at the receiver application, even if they are made of many
-actual IP packets. Basically, we can simply send each entire trace
-packet as one single UDP datagram.
-
-> Also the hash table storing the indexes needs an expiration mechanism
-> (based on timing or number of packets).
-
-Upon addition into the hash table, we could use a separate data
-structure to keep track of expiration timers. When an entry is removed
-from the hash table, we remove its associated timer entry. It does not
-need to sit in the same data structure. Maybe a linked list, or maybe a
-red black tree, would be more appropriate to keep track of these
-expiration times. A periodical timer could perform the discard of
-packets when they reach their timeout.
-
-> 
-> * Synchronization of streams
-> Already discussed in an earlier RFC, summary :
-> - at a predefined rate, the consumer sends a synchronization packet that
-> contains the last sequence number that can be safely read by the viewer
-> for each stream of the session, it happens as soon as possible when all
-> streams are generating data, and also time-based to cover the case with
-> streams not generating any data.
-
-Note: if the consumer has not sent any data whatsoever (on any stream)
-since the last synchronization beacon, it can skip sending the next
-beacon. This is a nice power consumption optimisation.
-
-> - the relay receives this packet, ensures all data packets and indexes
-> are commited on disk (and sync'ed) and updates the synchronization with
-> the viewers (discussed just below)
-> 
-> * Cooperating viewers
-> The viewers need to be aware that they are reading streamed data and
-> play nicely with the synchronization algorithms in place. The proposed
-> approach is using fcntl(2) "Advisory locking" to lock specific portions
-> of the tracefiles. The viewers will have to test and make sure they are
-> respecting the locks when they are switching packets.
-> So in summary :
-> - when the relay is ready to let the viewers access the data, it adds a
-> new write lock on the region that cannot be safely read and removes the
-> previous one
-> - when a viewer needs to switch packet, it tests for the presence of a
-> lock on the region of the file it needs to access, if there is no lock
-> it can safely read the data, otherwise it blocks until the lock is removed.
-> - when a data packet is lost on the network, an index is written, but
-> the offset in the tracefile is set to an invalid value (-1) so the
-> reader knows the data was lost in transit.
-> - the viewers need also to be adapted to read on-disk indexes, support
-> metadata updates, respect the locking.
-
-How do you expect to deal with streams coming during tracing ? How is
-the viewer expected to be told a new stream needs to be read, and how
-is the file creation / advisory locking vs file open (read) / advisory
-locking expected to be handled ?
-
-> 
-> Not addressed here but mandatory : the metadata must be completely
-> streamed before streaming trace data that correspond to this new metadata.
-
-Yes. We might want to think a little more about what happens when we
-stream partially complete metadata that cuts it somewhere where it
-cannot be parsed.. ?
-
-Thanks!
-
-Mathieu
-
-> 
-> Feedbacks, questions and improvement ideas welcome !
-> 
-> Thanks,
-> 
-> Julien
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+CC: Paul McKenney <paulmck@linux.vnet.ibm.com>
+CC: Lai Jiangshan <laijs@cn.fujitsu.com>
+---
+diff --git a/urcu/static/wfcqueue.h b/urcu/static/wfcqueue.h
+index 4a9003e..120a598 100644
+--- a/urcu/static/wfcqueue.h
++++ b/urcu/static/wfcqueue.h
+@@ -2,7 +2,7 @@
+ #define _URCU_WFCQUEUE_STATIC_H
+ 
+ /*
+- * wfcqueue-static.h
++ * urcu/static/wfcqueue.h
+  *
+  * Userspace RCU library - Concurrent Queue with Wait-Free Enqueue/Blocking Dequeue
+  *
+@@ -171,7 +171,7 @@ static inline void _cds_wfcq_enqueue(struct cds_wfcq_head *head,
+  * Waiting for enqueuer to complete enqueue and return the next node.
+  */
+ static inline struct cds_wfcq_node *
+-___cds_wfcq_node_sync_next(struct cds_wfcq_node *node)
++___cds_wfcq_node_sync_next(struct cds_wfcq_node *node, int blocking)
+ {
+ 	struct cds_wfcq_node *next;
+ 	int attempt = 0;
+@@ -180,6 +180,8 @@ ___cds_wfcq_node_sync_next(struct cds_wfcq_node *node)
+ 	 * Adaptative busy-looping waiting for enqueuer to complete enqueue.
+ 	 */
+ 	while ((next = CMM_LOAD_SHARED(node->next)) == NULL) {
++		if (!blocking)
++			return CDS_WFCQ_WOULDBLOCK;
+ 		if (++attempt >= WFCQ_ADAPT_ATTEMPTS) {
+ 			poll(NULL, 0, WFCQ_WAIT);	/* Wait for 10ms */
+ 			attempt = 0;
+@@ -191,34 +193,23 @@ ___cds_wfcq_node_sync_next(struct cds_wfcq_node *node)
+ 	return next;
+ }
+ 
+-/*
+- * __cds_wfcq_first_blocking: get first node of a queue, without dequeuing.
+- *
+- * Content written into the node before enqueue is guaranteed to be
+- * consistent, but no other memory ordering is ensured.
+- * Dequeue/splice/iteration mutual exclusion should be ensured by the
+- * caller.
+- *
+- * Used by for-like iteration macros in urcu/wfqueue.h:
+- * __cds_wfcq_for_each_blocking()
+- * __cds_wfcq_for_each_blocking_safe()
+- */
+ static inline struct cds_wfcq_node *
+-___cds_wfcq_first_blocking(struct cds_wfcq_head *head,
+-		struct cds_wfcq_tail *tail)
++___cds_wfcq_first(struct cds_wfcq_head *head,
++		struct cds_wfcq_tail *tail,
++		int blocking)
+ {
+ 	struct cds_wfcq_node *node;
+ 
+ 	if (_cds_wfcq_empty(head, tail))
+ 		return NULL;
+-	node = ___cds_wfcq_node_sync_next(&head->node);
++	node = ___cds_wfcq_node_sync_next(&head->node, blocking);
+ 	/* Load head->node.next before loading node's content */
+ 	cmm_smp_read_barrier_depends();
+ 	return node;
+ }
+ 
+ /*
+- * __cds_wfcq_next_blocking: get next node of a queue, without dequeuing.
++ * __cds_wfcq_first_blocking: get first node of a queue, without dequeuing.
+  *
+  * Content written into the node before enqueue is guaranteed to be
+  * consistent, but no other memory ordering is ensured.
+@@ -230,9 +221,31 @@ ___cds_wfcq_first_blocking(struct cds_wfcq_head *head,
+  * __cds_wfcq_for_each_blocking_safe()
+  */
+ static inline struct cds_wfcq_node *
+-___cds_wfcq_next_blocking(struct cds_wfcq_head *head,
++___cds_wfcq_first_blocking(struct cds_wfcq_head *head,
++		struct cds_wfcq_tail *tail)
++{
++	return ___cds_wfcq_first(head, tail, 1);
++}
++
++
++/*
++ * __cds_wfcq_first_nonblocking: get first node of a queue, without dequeuing.
++ *
++ * Same as __cds_wfcq_first_blocking, but returns CDS_WFCQ_WOULDBLOCK if
++ * it needs to block.
++ */
++static inline struct cds_wfcq_node *
++___cds_wfcq_first_nonblocking(struct cds_wfcq_head *head,
++		struct cds_wfcq_tail *tail)
++{
++	return ___cds_wfcq_first(head, tail, 0);
++}
++
++static inline struct cds_wfcq_node *
++___cds_wfcq_next(struct cds_wfcq_head *head,
+ 		struct cds_wfcq_tail *tail,
+-		struct cds_wfcq_node *node)
++		struct cds_wfcq_node *node,
++		int blocking)
+ {
+ 	struct cds_wfcq_node *next;
+ 
+@@ -247,7 +260,7 @@ ___cds_wfcq_next_blocking(struct cds_wfcq_head *head,
+ 		cmm_smp_rmb();
+ 		if (CMM_LOAD_SHARED(tail->p) == node)
+ 			return NULL;
+-		next = ___cds_wfcq_node_sync_next(node);
++		next = ___cds_wfcq_node_sync_next(node, blocking);
+ 	}
+ 	/* Load node->next before loading next's content */
+ 	cmm_smp_read_barrier_depends();
+@@ -255,24 +268,50 @@ ___cds_wfcq_next_blocking(struct cds_wfcq_head *head,
+ }
+ 
+ /*
+- * __cds_wfcq_dequeue_blocking: dequeue a node from the queue.
++ * __cds_wfcq_next_blocking: get next node of a queue, without dequeuing.
+  *
+  * Content written into the node before enqueue is guaranteed to be
+  * consistent, but no other memory ordering is ensured.
+- * It is valid to reuse and free a dequeued node immediately.
+  * Dequeue/splice/iteration mutual exclusion should be ensured by the
+  * caller.
++ *
++ * Used by for-like iteration macros in urcu/wfqueue.h:
++ * __cds_wfcq_for_each_blocking()
++ * __cds_wfcq_for_each_blocking_safe()
+  */
+ static inline struct cds_wfcq_node *
+-___cds_wfcq_dequeue_blocking(struct cds_wfcq_head *head,
+-		struct cds_wfcq_tail *tail)
++___cds_wfcq_next_blocking(struct cds_wfcq_head *head,
++		struct cds_wfcq_tail *tail,
++		struct cds_wfcq_node *node)
++{
++	return ___cds_wfcq_next(head, tail, node, 1);
++}
++
++/*
++ * __cds_wfcq_next_blocking: get next node of a queue, without dequeuing.
++ *
++ * Same as __cds_wfcq_next_blocking, but returns CDS_WFCQ_WOULDBLOCK if
++ * it needs to block.
++ */
++static inline struct cds_wfcq_node *
++___cds_wfcq_next_nonblocking(struct cds_wfcq_head *head,
++		struct cds_wfcq_tail *tail,
++		struct cds_wfcq_node *node)
++{
++	return ___cds_wfcq_next(head, tail, node, 0);
++}
++
++static inline struct cds_wfcq_node *
++___cds_wfcq_dequeue(struct cds_wfcq_head *head,
++		struct cds_wfcq_tail *tail,
++		int blocking)
+ {
+ 	struct cds_wfcq_node *node, *next;
+ 
+ 	if (_cds_wfcq_empty(head, tail))
+ 		return NULL;
+ 
+-	node = ___cds_wfcq_node_sync_next(&head->node);
++	node = ___cds_wfcq_node_sync_next(&head->node, blocking);
+ 
+ 	if ((next = CMM_LOAD_SHARED(node->next)) == NULL) {
+ 		/*
+@@ -292,7 +331,7 @@ ___cds_wfcq_dequeue_blocking(struct cds_wfcq_head *head,
+ 		_cds_wfcq_node_init(&head->node);
+ 		if (uatomic_cmpxchg(&tail->p, node, &head->node) == node)
+ 			return node;
+-		next = ___cds_wfcq_node_sync_next(node);
++		next = ___cds_wfcq_node_sync_next(node, blocking);
+ 	}
+ 
+ 	/*
+@@ -306,26 +345,50 @@ ___cds_wfcq_dequeue_blocking(struct cds_wfcq_head *head,
+ }
+ 
+ /*
+- * __cds_wfcq_splice_blocking: enqueue all src_q nodes at the end of dest_q.
++ * __cds_wfcq_dequeue_blocking: dequeue a node from the queue.
+  *
+- * Dequeue all nodes from src_q.
+- * dest_q must be already initialized.
+- * Dequeue/splice/iteration mutual exclusion for src_q should be ensured
+- * by the caller.
++ * Content written into the node before enqueue is guaranteed to be
++ * consistent, but no other memory ordering is ensured.
++ * It is valid to reuse and free a dequeued node immediately.
++ * Dequeue/splice/iteration mutual exclusion should be ensured by the
++ * caller.
+  */
+-static inline void
+-___cds_wfcq_splice_blocking(
++static inline struct cds_wfcq_node *
++___cds_wfcq_dequeue_blocking(struct cds_wfcq_head *head,
++		struct cds_wfcq_tail *tail)
++{
++	return ___cds_wfcq_dequeue(head, tail, 1);
++}
++
++/*
++ * __cds_wfcq_dequeue_nonblocking: dequeue a node from a wait-free queue.
++ *
++ * Same as __cds_wfcq_dequeue_blocking, but returns CDS_WFCQ_WOULDBLOCK
++ * if it needs to block.
++ */
++static inline struct cds_wfcq_node *
++___cds_wfcq_dequeue_nonblocking(struct cds_wfcq_head *head,
++		struct cds_wfcq_tail *tail)
++{
++	return ___cds_wfcq_dequeue(head, tail, 0);
++}
++
++static inline int
++___cds_wfcq_splice(
+ 		struct cds_wfcq_head *dest_q_head,
+ 		struct cds_wfcq_tail *dest_q_tail,
+ 		struct cds_wfcq_head *src_q_head,
+-		struct cds_wfcq_tail *src_q_tail)
++		struct cds_wfcq_tail *src_q_tail,
++		int blocking)
+ {
+ 	struct cds_wfcq_node *head, *tail;
+ 
+ 	if (_cds_wfcq_empty(src_q_head, src_q_tail))
+-		return;
++		return 0;
+ 
+-	head = ___cds_wfcq_node_sync_next(&src_q_head->node);
++	head = ___cds_wfcq_node_sync_next(&src_q_head->node, blocking);
++	if (head == CDS_WFCQ_WOULDBLOCK)
++		return -1;
+ 	_cds_wfcq_node_init(&src_q_head->node);
+ 
+ 	/*
+@@ -341,6 +404,44 @@ ___cds_wfcq_splice_blocking(
+ 	 * require mutual exclusion on dest_q (wait-free).
+ 	 */
+ 	___cds_wfcq_append(dest_q_head, dest_q_tail, head, tail);
++	return 0;
++}
++
++
++/*
++ * __cds_wfcq_splice_blocking: enqueue all src_q nodes at the end of dest_q.
++ *
++ * Dequeue all nodes from src_q.
++ * dest_q must be already initialized.
++ * Dequeue/splice/iteration mutual exclusion for src_q should be ensured
++ * by the caller.
++ */
++static inline void
++___cds_wfcq_splice_blocking(
++		struct cds_wfcq_head *dest_q_head,
++		struct cds_wfcq_tail *dest_q_tail,
++		struct cds_wfcq_head *src_q_head,
++		struct cds_wfcq_tail *src_q_tail)
++{
++	(void) ___cds_wfcq_splice(dest_q_head, dest_q_tail,
++		src_q_head, src_q_tail, 1);
++}
++
++/*
++ * __cds_wfcq_splice_nonblocking: enqueue all src_q nodes at the end of dest_q.
++ *
++ * Same as __cds_wfcq_splice_blocking, but returns nonzero if it needs to
++ * block.
++ */
++static inline int
++___cds_wfcq_splice_nonblocking(
++		struct cds_wfcq_head *dest_q_head,
++		struct cds_wfcq_tail *dest_q_tail,
++		struct cds_wfcq_head *src_q_head,
++		struct cds_wfcq_tail *src_q_tail)
++{
++	return ___cds_wfcq_splice(dest_q_head, dest_q_tail,
++		src_q_head, src_q_tail, 0);
+ }
+ 
+ /*
+diff --git a/urcu/wfcqueue.h b/urcu/wfcqueue.h
+index ba2f2ed..fe2862e 100644
+--- a/urcu/wfcqueue.h
++++ b/urcu/wfcqueue.h
+@@ -2,7 +2,7 @@
+ #define _URCU_WFCQUEUE_H
+ 
+ /*
+- * wfcqueue.h
++ * urcu/wfcqueue.h
+  *
+  * Userspace RCU library - Concurrent Queue with Wait-Free Enqueue/Blocking Dequeue
+  *
+@@ -43,6 +43,8 @@ extern "C" {
+  * McKenney.
+  */
+ 
++#define CDS_WFCQ_WOULDBLOCK	((void *) -1UL)
++
+ struct cds_wfcq_node {
+ 	struct cds_wfcq_node *next;
+ };
+@@ -86,6 +88,16 @@ struct cds_wfcq_tail {
+ #define __cds_wfcq_first_blocking	___cds_wfcq_first_blocking
+ #define __cds_wfcq_next_blocking	___cds_wfcq_next_blocking
+ 
++/*
++ * Locking ensured by caller by holding cds_wfcq_dequeue_lock().
++ * Non-blocking: deque, first, next return CDS_WFCQ_WOULDBLOCK if they
++ * need to block. splice returns nonzero if it needs to block.
++ */
++#define __cds_wfcq_dequeue_nonblocking	___cds_wfcq_dequeue_nonblocking
++#define __cds_wfcq_splice_nonblocking	___cds_wfcq_splice_nonblocking
++#define __cds_wfcq_first_nonblocking	___cds_wfcq_first_nonblocking
++#define __cds_wfcq_next_nonblocking	___cds_wfcq_next_nonblocking
++
+ #else /* !_LGPL_SOURCE */
+ 
+ /*
+@@ -179,7 +191,7 @@ extern void cds_wfcq_splice_blocking(
+ 		struct cds_wfcq_tail *src_q_tail);
+ 
+ /*
+- * __cds_wfcq_dequeue_blocking:
++ * __cds_wfcq_dequeue_blocking: dequeue a node from a wait-free queue.
+  *
+  * Content written into the node before enqueue is guaranteed to be
+  * consistent, but no other memory ordering is ensured.
+@@ -192,6 +204,16 @@ extern struct cds_wfcq_node *__cds_wfcq_dequeue_blocking(
+ 		struct cds_wfcq_tail *tail);
+ 
+ /*
++ * __cds_wfcq_dequeue_nonblocking: dequeue a node from a wait-free queue.
++ *
++ * Same as __cds_wfcq_dequeue_blocking, but returns CDS_WFCQ_WOULDBLOCK
++ * if it needs to block.
++ */
++extern struct cds_wfcq_node *__cds_wfcq_dequeue_nonblocking(
++		struct cds_wfcq_head *head,
++		struct cds_wfcq_tail *tail);
++
++/*
+  * __cds_wfcq_splice_blocking: enqueue all src_q nodes at the end of dest_q.
+  *
+  * Dequeue all nodes from src_q.
+@@ -208,6 +230,18 @@ extern void __cds_wfcq_splice_blocking(
+ 		struct cds_wfcq_tail *src_q_tail);
+ 
+ /*
++ * __cds_wfcq_splice_nonblocking: enqueue all src_q nodes at the end of dest_q.
++ *
++ * Same as __cds_wfcq_splice_blocking, but returns nonzero if it needs to
++ * block.
++ */
++extern int __cds_wfcq_splice_nonblocking(
++		struct cds_wfcq_head *dest_q_head,
++		struct cds_wfcq_tail *dest_q_tail,
++		struct cds_wfcq_head *src_q_head,
++		struct cds_wfcq_tail *src_q_tail);
++
++/*
+  * __cds_wfcq_first_blocking: get first node of a queue, without dequeuing.
+  *
+  * Content written into the node before enqueue is guaranteed to be
+@@ -224,6 +258,16 @@ extern struct cds_wfcq_node *__cds_wfcq_first_blocking(
+ 		struct cds_wfcq_tail *tail);
+ 
+ /*
++ * __cds_wfcq_first_nonblocking: get first node of a queue, without dequeuing.
++ *
++ * Same as __cds_wfcq_first_blocking, but returns CDS_WFCQ_WOULDBLOCK if
++ * it needs to block.
++ */
++extern struct cds_wfcq_node *__cds_wfcq_first_nonblocking(
++		struct cds_wfcq_head *head,
++		struct cds_wfcq_tail *tail);
++
++/*
+  * __cds_wfcq_next_blocking: get next node of a queue, without dequeuing.
+  *
+  * Content written into the node before enqueue is guaranteed to be
+@@ -240,6 +284,17 @@ extern struct cds_wfcq_node *__cds_wfcq_next_blocking(
+ 		struct cds_wfcq_tail *tail,
+ 		struct cds_wfcq_node *node);
+ 
++/*
++ * __cds_wfcq_next_blocking: get next node of a queue, without dequeuing.
++ *
++ * Same as __cds_wfcq_next_blocking, but returns CDS_WFCQ_WOULDBLOCK if
++ * it needs to block.
++ */
++extern struct cds_wfcq_node *__cds_wfcq_next_nonblocking(
++		struct cds_wfcq_head *head,
++		struct cds_wfcq_tail *tail,
++		struct cds_wfcq_node *node);
++
+ #endif /* !_LGPL_SOURCE */
+ 
+ /*
+diff --git a/wfcqueue.c b/wfcqueue.c
+index 1fa27ac..3474ee0 100644
+--- a/wfcqueue.c
++++ b/wfcqueue.c
+@@ -90,6 +90,13 @@ struct cds_wfcq_node *__cds_wfcq_dequeue_blocking(
+ 	return ___cds_wfcq_dequeue_blocking(head, tail);
+ }
+ 
++struct cds_wfcq_node *__cds_wfcq_dequeue_nonblocking(
++		struct cds_wfcq_head *head,
++		struct cds_wfcq_tail *tail)
++{
++	return ___cds_wfcq_dequeue_nonblocking(head, tail);
++}
++
+ void __cds_wfcq_splice_blocking(
+ 		struct cds_wfcq_head *dest_q_head,
+ 		struct cds_wfcq_tail *dest_q_tail,
+@@ -100,6 +107,16 @@ void __cds_wfcq_splice_blocking(
+ 				src_q_head, src_q_tail);
+ }
+ 
++int __cds_wfcq_splice_nonblocking(
++		struct cds_wfcq_head *dest_q_head,
++		struct cds_wfcq_tail *dest_q_tail,
++		struct cds_wfcq_head *src_q_head,
++		struct cds_wfcq_tail *src_q_tail)
++{
++	return ___cds_wfcq_splice_nonblocking(dest_q_head, dest_q_tail,
++				src_q_head, src_q_tail);
++}
++
+ struct cds_wfcq_node *__cds_wfcq_first_blocking(
+ 		struct cds_wfcq_head *head,
+ 		struct cds_wfcq_tail *tail)
+@@ -107,6 +124,13 @@ struct cds_wfcq_node *__cds_wfcq_first_blocking(
+ 	return ___cds_wfcq_first_blocking(head, tail);
+ }
+ 
++struct cds_wfcq_node *__cds_wfcq_first_nonblocking(
++		struct cds_wfcq_head *head,
++		struct cds_wfcq_tail *tail)
++{
++	return ___cds_wfcq_first_nonblocking(head, tail);
++}
++
+ struct cds_wfcq_node *__cds_wfcq_next_blocking(
+ 		struct cds_wfcq_head *head,
+ 		struct cds_wfcq_tail *tail,
+@@ -114,3 +138,11 @@ struct cds_wfcq_node *__cds_wfcq_next_blocking(
+ {
+ 	return ___cds_wfcq_next_blocking(head, tail, node);
+ }
++
++struct cds_wfcq_node *__cds_wfcq_next_nonblocking(
++		struct cds_wfcq_head *head,
++		struct cds_wfcq_tail *tail,
++		struct cds_wfcq_node *node)
++{
++	return ___cds_wfcq_next_nonblocking(head, tail, node);
++}
 
 -- 
 Mathieu Desnoyers
