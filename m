@@ -1,21 +1,28 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: RFC : design notes for remote traces live reading
-Date: Mon, 22 Oct 2012 11:57:39 -0400
-Message-ID: <20121022155739.GA3205__34164.0744278722$1350921491$gmane$org@Krystal>
-References: <50830BA3.6000508@efficios.com> <20121020225442.GA5020@Krystal>
-	<5085639D.4030004@efficios.com> <20121022153802.GA3432@Krystal>
-	<50856AFA.4040706@efficios.com>
+From: David Goulet <dgoulet@efficios.com>
+Subject: [RELEASE] LTTng-tools 2.1.0-rc5
+Date: Mon, 22 Oct 2012 13:06:12 -0400
+Message-ID: <50857D04.10705__2301.72023079849$1350925615$gmane$org@efficios.com>
+References: <502EA58E.2060003@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from smtp.ini-tech.com ([213.239.202.151])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1TQKNp-0004Oq-8C
-	for lttng-dev@lists.lttng.org; Mon, 22 Oct 2012 11:57:41 -0400
-Content-Disposition: inline
-In-Reply-To: <50856AFA.4040706@efficios.com>
+	(envelope-from <dgoulet@efficios.com>) id 1TQLSC-00051e-D9
+	for lttng-dev@lists.lttng.org; Mon, 22 Oct 2012 13:06:16 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by smtp.ini-tech.com (Postfix) with ESMTP id C12D61872FD
+	for <lttng-dev@lists.lttng.org>; Mon, 22 Oct 2012 13:06:21 -0400 (EDT)
+Received: from smtp.ini-tech.com ([127.0.0.1])
+	by localhost (smtp.ini-tech.com [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id xJZ7H_z6gX80 for <lttng-dev@lists.lttng.org>;
+	Mon, 22 Oct 2012 13:06:21 -0400 (EDT)
+Received: from 127.0.0.1 (cable-13.246.173-198.electronicbox.net
+	[173.246.13.198])
+	by smtp.ini-tech.com (Postfix) with ESMTPSA id A8668187251
+	for <lttng-dev@lists.lttng.org>; Mon, 22 Oct 2012 13:06:20 -0400 (EDT)
+In-Reply-To: <502EA58E.2060003@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,123 +31,106 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: David Goulet <dgoulet@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Julien Desfossez <jdesfossez@efficios.com>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-* David Goulet (dgoulet@efficios.com) wrote:
- [...]
-> > 
-> >>
-> >>>
-> >>>>
-> >>>> * Synchronization of streams
-> >>>> Already discussed in an earlier RFC, summary :
-> >>>> - at a predefined rate, the consumer sends a synchronization packet that
-> >>>> contains the last sequence number that can be safely read by the viewer
-> >>>> for each stream of the session, it happens as soon as possible when all
-> >>>> streams are generating data, and also time-based to cover the case with
-> >>>> streams not generating any data.
-> >>>
-> >>> Note: if the consumer has not sent any data whatsoever (on any stream)
-> >>> since the last synchronization beacon, it can skip sending the next
-> >>> beacon. This is a nice power consumption optimisation.
-> >>>
-> >>>> - the relay receives this packet, ensures all data packets and indexes
-> >>>> are commited on disk (and sync'ed) and updates the synchronization with
-> >>>> the viewers (discussed just below)
-> >>>>
-> >>>> * Cooperating viewers
-> >>>> The viewers need to be aware that they are reading streamed data and
-> >>>> play nicely with the synchronization algorithms in place. The proposed
-> >>>> approach is using fcntl(2) "Advisory locking" to lock specific portions
-> >>>> of the tracefiles. The viewers will have to test and make sure they are
-> >>>> respecting the locks when they are switching packets.
-> >>>> So in summary :
-> >>>> - when the relay is ready to let the viewers access the data, it adds a
-> >>>> new write lock on the region that cannot be safely read and removes the
-> >>>> previous one
-> >>>> - when a viewer needs to switch packet, it tests for the presence of a
-> >>>> lock on the region of the file it needs to access, if there is no lock
-> >>>> it can safely read the data, otherwise it blocks until the lock is removed.
-> >>>> - when a data packet is lost on the network, an index is written, but
-> >>>> the offset in the tracefile is set to an invalid value (-1) so the
-> >>>> reader knows the data was lost in transit.
-> >>>> - the viewers need also to be adapted to read on-disk indexes, support
-> >>>> metadata updates, respect the locking.
-> >>>
-> >>> How do you expect to deal with streams coming during tracing ? How is
-> >>> the viewer expected to be told a new stream needs to be read, and how
-> >>> is the file creation / advisory locking vs file open (read) / advisory
-> >>> locking expected to be handled ?
-> >>>
-> >>>>
-> >>>> Not addressed here but mandatory : the metadata must be completely
-> >>>> streamed before streaming trace data that correspond to this new metadata.
-> >>>
-> >>> Yes. We might want to think a little more about what happens when we
-> >>> stream partially complete metadata that cuts it somewhere where it
-> >>> cannot be parsed.. ?
-> >>
-> >> Of what I've experienced so far, there are times where the metadata is
-> >> simply sent *only* when the stop command is done which uses a flush
-> >> buffer operation and, since the trace throughput was so low so buffers
-> >> don't get filled up.
-> >>
-> >> Considering this *strong* requirement that the metadata needs to be
-> >> streamed completely, can we think of a ustctl/kernctl that forces the
-> >> metadata extraction?
-> > 
-> > Not sure what you mean. We can simply flush the metadata buffer. Or we
-> > could decide to change the way we grab metadata altogether so it becomes
-> > more synchronous with the application. However, this might be an issue
-> > with application crash dump.
-> 
-> Flush buffer can do the trick indeed for most of the use cases. But what
-> happens here if new metadata comes in (after start tracing) and the app
-> is very low throughput ? Don't we need the tracer to immediately notify
-> the consumer that there is new metadata available?
+Greetings everyone (including LTTng elves),
 
-Well the idea is that the periodical flush will apply to metadata too,
-not just data channels. And we'll make sure to send metadata before data
-when both are ready.
+The lttng-tools project provides a session daemon (lttng-sessiond)
+that acts as a tracing registry, the "lttng" command line for tracing
+control, a lttng-ctl library for tracing control and a lttng-relayd
+for network streaming.
 
-Mathieu
+This release candidate version contains a lot of fixes and especially
+one that fix the lttng_stop_tracing() behavior by adding a new call to
+the API (lttng.h).
 
-> 
-> Thanks!
-> David
-> 
-> > 
-> > Thanks,
-> > 
-> > Mathieu
-> > 
-> >>
-> >> And this will be especially useful for new metadata added during
-> >> tracing! (Not sure how we can deal with that on the session daemon since
-> >> we have no idea but the tracer knows so maybe it could wake up the
-> >> stream fd whenever there is metadata available?).
-> >>
-> >> Cheers!
-> >> David
-> >>
-> >>>
-> >>> Thanks!
-> >>>
-> >>> Mathieu
-> >>>
-> >>>>
-> >>>> Feedbacks, questions and improvement ideas welcome !
-> >>>>
-> >>>> Thanks,
-> >>>>
-> >>>> Julien
-> >>>
-> > 
+Here goes. The lttng_stop_tracing() API call, once it returns, there was
+suppose to be a guarantee that the tracing data is available for
+processing i.e. that any viewer/reader could parse the trace files
+without any problem or missing data. We've fixed that with a new API
+call, lttng_data_available(). It returns 1 if the data is ready to be
+read for a tracing session (for every domain) or else 0. We've added
+this call to lttng_stop_tracing() in order for this call to return
+*only* if the condition is true (1). It changes the old behavior since
+now the stop tracing call can wait an arbitrary amount of time.
 
--- 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+Note that, for now, lttng_data_available is called every 2usec on the
+client side (liblttng-ctl). So, this call does NOT block nor makes the
+session daemon wait for data availability.
+
+We've also added the lttng_stop_tracing_no_wait() that behaves *exactly*
+like lttng_stop_tracing() but will NOT wait for data availability.
+
+This is of course integrated in lttng command line and works for both
+local consumer (on the file system) or network streaming. For the lttng
+UI to _not_ wait when stopping a session, the --no-wait option was added
+to "lttng stop".
+
+Here is an example of the expected output of the command line. Each dot
+"." is a 2usec period of time.
+
+$ lttng stop mysession
+Waiting for data availability....
+Tracing stopped for session mysession
+
+We know that this is a big addition to the RC process of lttng-tools but
+the data availability on stop tracing is a *very* important aspect of
+the lttng tool chain hence fixing it before the stable version
+especially with the network streaming support.
+
+Apart from that, here is the ChangeLog for 2.1.0-rc5 which contains a
+lot of fixes and tests.
+
+2012-10-22 lttng-tools 2.1.0-rc5
+        * Fix: Remove network stream ID ABI calls
+        * Tests: Add filtering tests
+        * Wait for data availability when stopping a session
+        * Relayd data available command support
+        * Lib lttng-ctl data available command support
+        * Consumer daemon data available command support
+        * Add data structure for the data available command
+        * Change the metadata hash table node
+        * Make stream hash tables global to the consumer
+        * Move add data stream to the data thread
+        * Rename consumer threads and spawn them in daemon
+        * Fix: relayd close stream command was not working
+        * Fix: Relayd and consumerd socket leaks
+        * Fix: Missing -ENODATA handling in the consumer
+        * Fix: Empty metadata buffer(s) on HUP|ERR
+        * ABI with support for compat 32/64 bits
+        * Fix: Stream allocation and insertion consistency
+        * Fix: output number of bytes written by relayd
+        * Add hash table argument to helper functions
+        * Fix: Add missing call rcu and read side lock
+        * Tests: Fix LD_PRELOAD library lookup path for health tests
+        * Fix: Add arbitrary wait period for kernel streaming test
+        * Fix coding style and add/change debug statements
+        * Fix: Build out of src tree
+        * Tests: Add health check tests to configure
+        * Tests: Add health check thread stall test
+        * Tests: Add health check thread exit test
+        * Tests: Add a health check utility program
+        * Add testpoints in lttng-sessiond for each threads
+        * New testpoint mechanism to instrument binaries for testing
+        * Fix: off-by-one in comm proto between lttng-ctl and sessiond
+        * Fix: Metadata stream leak when received in consumer
+        * Fix: consumer_allocate_stream error handling
+        * Fix: consumer should await for initial streams
+        * Fix: Missing rcu read side lock in consumer
+
+Please feel free to email the list about any questions/comments
+concerning this release.
+
+Project website: http://lttng.org/lttng2.0
+Download link:
+http://lttng.org/files/lttng-tools/lttng-tools-2.1.0-rc5.tar.bz2 (for
+the PGP signature, same file with .asc appended)
+
+Cheers!
+David
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
