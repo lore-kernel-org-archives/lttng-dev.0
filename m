@@ -1,18 +1,20 @@
-From: Christian Babeux <christian.babeux@efficios.com>
-Subject: [PATCH lttng-ust] Fix: Fix self-assign warning on
-	struct ustfork_clone_info init
-Date: Tue, 23 Oct 2012 15:37:20 -0400
-Message-ID: <1351021040-18587-1-git-send-email-christian.babeux__31769.2722579979$1351021084$gmane$org@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH lttng-tools] Fix: Possible memory leaks	when
+	creating filter IR root node
+Date: Tue, 23 Oct 2012 15:57:27 -0400
+Message-ID: <20121023195727.GA30217__44985.3921462365$1351022279$gmane$org@Krystal>
+References: <1351020977-18412-1-git-send-email-christian.babeux@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f176.google.com ([209.85.223.176])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <christian.babeux@0x80.ca>) id 1TQkI9-0000UH-LM
-	for lttng-dev@lists.lttng.org; Tue, 23 Oct 2012 15:37:33 -0400
-Received: by mail-ie0-f176.google.com with SMTP id k11so6764727iea.35
-	for <lttng-dev@lists.lttng.org>; Tue, 23 Oct 2012 12:37:28 -0700 (PDT)
+	(envelope-from <compudj@mail.openrapids.net>) id 1TQkbQ-0000eK-Lh
+	for lttng-dev@lists.lttng.org; Tue, 23 Oct 2012 15:57:28 -0400
+Content-Disposition: inline
+In-Reply-To: <1351020977-18412-1-git-send-email-christian.babeux@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,33 +23,47 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: mathieu.desnoyers@efficios.com
+To: Christian Babeux <christian.babeux@efficios.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Use the proper field designator syntax (C99) to initialize the
-ustfork_clone_info struct.
+* Christian Babeux (christian.babeux@efficios.com) wrote:
+> 
+> Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
 
-Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
----
- liblttng-ust-fork/ustfork.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
- mode change 100644 => 100755 liblttng-ust-fork/ustfork.c
+Acked-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 
-diff --git a/liblttng-ust-fork/ustfork.c b/liblttng-ust-fork/ustfork.c
-old mode 100644
-new mode 100755
-index 13f77cf..34f674c
---- a/liblttng-ust-fork/ustfork.c
-+++ b/liblttng-ust-fork/ustfork.c
-@@ -139,7 +139,7 @@ int clone(int (*fn)(void *), void *child_stack, int flags, void *arg, ...)
- 				tls, ctid);
- 	} else {
- 		/* Creating a real process, we need to intervene. */
--		struct ustfork_clone_info info = { fn = fn, arg = arg };
-+		struct ustfork_clone_info info = { .fn = fn, .arg = arg };
- 
- 		ust_before_fork(&info.sigset);
- 		retval = plibc_func(clone_fn, child_stack, flags, &info,
+> ---
+>  src/lib/lttng-ctl/filter/filter-visitor-generate-ir.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/src/lib/lttng-ctl/filter/filter-visitor-generate-ir.c b/src/lib/lttng-ctl/filter/filter-visitor-generate-ir.c
+> index eec78fc..84122c9 100644
+> --- a/src/lib/lttng-ctl/filter/filter-visitor-generate-ir.c
+> +++ b/src/lib/lttng-ctl/filter/filter-visitor-generate-ir.c
+> @@ -46,9 +46,11 @@ struct ir_op *make_op_root(struct ir_op *child, enum ir_side side)
+>  	case IR_DATA_UNKNOWN:
+>  	default:
+>  		fprintf(stderr, "[error] Unknown root child data type\n");
+> +		free(op);
+>  		return NULL;
+>  	case IR_DATA_STRING:
+>  		fprintf(stderr, "[error] String cannot be root data type\n");
+> +		free(op);
+>  		return NULL;
+>  	case IR_DATA_NUMERIC:
+>  	case IR_DATA_FIELD_REF:
+> -- 
+> 1.7.12.2
+> 
+> 
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
 -- 
-1.7.12.2
+Mathieu Desnoyers
+Operating System Efficiency R&D Consultant
+EfficiOS Inc.
+http://www.efficios.com
