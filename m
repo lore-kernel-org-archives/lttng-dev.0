@@ -1,8 +1,8 @@
 From: David OShea <David.OShea@quantum.com>
-Subject: libust "Error: Error opening shm" every ~4 seconds if
- HOME variable is not set
-Date: Sun, 28 Oct 2012 22:22:05 +0000
-Message-ID: <20998D40D9A2B7499CA5A3A2666CB1EB19F843E3__43633.0644916326$1351462966$gmane$org@ZURMSG1.QUANTUM.com>
+Subject: 'add-context --userspace' must be preceded by
+ 'enable-channel' or 'enable-event'
+Date: Sun, 28 Oct 2012 23:05:53 +0000
+Message-ID: <20998D40D9A2B7499CA5A3A2666CB1EB19F843FE__36830.2911207595$1351465597$gmane$org@ZURMSG1.QUANTUM.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -10,16 +10,16 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mx0b-000ceb01.pphosted.com ([67.231.152.126])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
 	(envelope-from <prvs=764885204e=david.oshea@quantum.com>)
-	id 1TSbFC-0005hC-5c
-	for lttng-dev@lists.lttng.org; Sun, 28 Oct 2012 18:22:10 -0400
-Received: from pps.filterd (m0001151 [127.0.0.1])
+	id 1TSbvf-00061Z-Cr
+	for lttng-dev@lists.lttng.org; Sun, 28 Oct 2012 19:06:03 -0400
+Received: from pps.filterd (m0001158 [127.0.0.1])
 	by mx0b-000ceb01.pphosted.com (8.14.5/8.14.5) with SMTP id
-	q9SMM9A6021449
-	for <lttng-dev@lists.lttng.org>; Sun, 28 Oct 2012 15:22:09 -0700
+	q9SN63d3015089
+	for <lttng-dev@lists.lttng.org>; Sun, 28 Oct 2012 16:06:03 -0700
 Received: from ppoxedge2.quantum.com ([146.174.252.28])
-	by mx0b-000ceb01.pphosted.com with ESMTP id 18807famn5-1
+	by mx0b-000ceb01.pphosted.com with ESMTP id 187yyptpjj-1
 	(version=TLSv1/SSLv3 cipher=AES128-SHA bits=128 verify=NOT)
-	for <lttng-dev@lists.lttng.org>; Sun, 28 Oct 2012 15:22:09 -0700
+	for <lttng-dev@lists.lttng.org>; Sun, 28 Oct 2012 16:06:02 -0700
 Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -34,28 +34,88 @@ List-Id: lttng-dev@lists.lttng.org
 
 Hi all,
 
-I have an application that works as expected when I run it from a shell, but when I start it as a daemon from an init script, it outputs a message like this every 4 or 5 seconds:
+As I mentioned briefly in my thread "Wrong procname for userspace trace of app with different thread names", I found that I had to do an 'enable-channel' step to get UST context such as the thread name to actually appear in the trace.
 
-libust[15229/15231]: Error: Error opening shm  (in get_wait_shm() at lttng-ust-comm.c:480)
+From further investigation, it appears that if I perform 'enable-event' before 'add-context', that also makes the context appear.  Here are three sequences of commands where I'm enabling the same UST context (vpid, vtid and procname) and same UST events (all) each time, but only the first sequence includes 'enable-channel', and I switched around the order of 'add-context' and 'enable-event' in the second and third.  Note that in the second command sequence, the second set of curly braces - those containing the context - is missing from the 'lttng view' output.
 
-I did a little debugging to try and work out what was going on.  I didn't actually end up seeing get_wait_shm() being called, but I noticed that ust_listener_thread() was entering the block of code containing:
+Good: 'enable-channel' before 'add-context':
 
-DBG("Info: sessiond not accepting connections to %s apps socket", sock_info->name);
+"""
+# lttng create
+Session auto-20121029-085910 created.
+Traces will be written in /root/lttng-traces/auto-20121029-085910
+# lttng enable-channel channel0 --userspace
+UST channel channel0 enabled for session auto-20121029-085910
+# lttng add-context --userspace -t vpid -t vtid -t procname
+UST context procname added to all channels
+UST context vtid added to all channels
+UST context vpid added to all channels
+# lttng enable-event --userspace --all
+All UST events are enabled in channel channel0
+# lttng start
+Tracing started for session auto-20121029-085910
+# lttng stop
+Tracing stopped for session auto-20121029-085910
+# lttng view
+Trace directory: /root/lttng-traces/auto-20121029-085910
 
-It appeared that this was because the sock_path was empty.  From looking at sock_info, the wait_shm_path is also empty as shown below, as confirmed in the error message above where "Error opening shm" was meant to be followed by the path that was being opened but instead is just followed by two spaces:
+[09:00:34.022479500] (+?.?????????) mydaemon:13811 daemon:start: { cpu_id = 1 }, { procname = "mythread.9", vtid = 13993, vpid = 13811 }, { myvar = 999 }
+[...]
+# lttng destroy
+Session auto-20121029-085910 destroyed at /root
+"""
 
-(gdb) p * (struct sock_info *) arg
-$7 = {name = 0x2b2721bd8b48 "local", ust_listener = 1110300992, root_handle = -1, constructor_sem_posted = 1, allowed = 1, global = 0, sock_path = '\000' <repeats 4095 times>, socket = -1, wait_shm_path = '\000' <repeats 4095 times>, wait_shm_mmap = 0x0}
+Bad: 'add-context' before 'enable-event':
 
-setup_local_apps() appears to not fill in the sock_path and wait_shm_path if the HOME environment variable is not set, which is the case for my daemon.  Looking back, I can see that this message appeared during my application's startup:
+"""
+# lttng create
+Session auto-20121029-090142 created.
+Traces will be written in /root/lttng-traces/auto-20121029-090142
+# lttng add-context --userspace -t vpid -t vtid -t procname
+UST context procname added to all channels
+UST context vtid added to all channels
+UST context vpid added to all channels
+# lttng enable-event --userspace --all
+All UST events are enabled in channel channel0
+# lttng start
+Tracing started for session auto-20121029-090142
+# lttng stop
+Tracing stopped for session auto-20121029-090142
+# lttng view
+Trace directory: /root/lttng-traces/auto-20121029-090142
 
-libust[15229/15229]: Error: Error setting up to local apps (in lttng_ust_init() at lttng-ust-comm.c:895)
+[09:02:11.520300500] (+?.?????????) mydaemon:13811 daemon:start: { cpu_id = 0 }, { myvar = 999 }
+[...]
+# lttng destroy
+Session auto-20121029-090142 destroyed at /root
+"""
 
-which is the indicator that setup_local_apps() failed.
+Good: 'add-context' AFTER 'enable-event':
 
-I assume that lttng-ust is attempting to connect to a per-user session daemon, but can't since HOME is not set.  In my case, the application is running as root and connecting to the global session daemon, so I don't mind that it can't connect to a per-user session daemon.  It would be nice if I didn't have to get all of those error messages, although I can certainly ignore them for now and could consider working around them by just making sure HOME is set to something :)
+"""
+# lttng create
+Session auto-20121029-090738 created.
+Traces will be written in /root/lttng-traces/auto-20121029-090738
+# lttng enable-event --userspace --all
+All UST events are enabled in channel channel0
+# lttng add-context --userspace -t vpid -t vtid -t procname
+UST context procname added to all channels
+UST context vtid added to all channels
+UST context vpid added to all channels
+# lttng start
+Tracing started for session auto-20121029-090738
+# lttng stop
+Tracing stopped for session auto-20121029-090738
+# lttng view
+Trace directory: /root/lttng-traces/auto-20121029-090738
 
-I'm using lttng-ust-2.0.5 which I have patched with commit 009745db "Cache the procname per-thread rather than per-process to take into account that prctl() can be used to set thread names."
+[09:08:04.670574000] (+?.?????????) mydaemon:13811 daemon:start: { cpu_id = 1 }, { procname = "mythread.9", vtid = 13993, vpid = 13811 }, { myvar = 999 }
+[...]
+# lttng destroy
+Session auto-20121029-090738 destroyed at /root
+"""
+
+I am using lttng-ust-2.0.5 which I have patched with commit 009745db "Cache the procname per-thread rather than per-process to take into account that prctl() can be used to set thread names.", lttng-tools-2.0.4 and babeltrace-1.0.0.rc5.
 
 Thanks in advance,
 David
