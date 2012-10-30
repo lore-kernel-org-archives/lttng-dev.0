@@ -1,20 +1,40 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: 'add-context --userspace' must be preceded
-	by	'enable-channel' or 'enable-event'
-Date: Mon, 29 Oct 2012 21:48:45 -0400
-Message-ID: <20121030014845.GB26711__727.373889140104$1351561756$gmane$org@Krystal>
-References: <20998D40D9A2B7499CA5A3A2666CB1EB19F843FE@ZURMSG1.QUANTUM.com>
+From: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
+Subject: Fw: Re: [PATCH v2] epoll: Support for disabling items,
+ and a self-test app.
+Date: Mon, 29 Oct 2012 19:26:19 -0700
+Message-ID: <20121030022619.GK3027__19953.7574350417$1351564055$gmane$org@linux.vnet.ibm.com>
+Reply-To: paulmck@linux.vnet.ibm.com
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from e34.co.us.ibm.com ([32.97.110.152])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1TT0wg-00012b-MV
-	for lttng-dev@lists.lttng.org; Mon, 29 Oct 2012 21:48:46 -0400
+	(envelope-from <paulmck@linux.vnet.ibm.com>) id 1TT1Xi-0001LR-A4
+	for lttng-dev@lists.lttng.org; Mon, 29 Oct 2012 22:27:02 -0400
+Received: from /spool/local
+	by e34.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only!
+	Violators will be prosecuted
+	for <lttng-dev@lists.lttng.org> from <paulmck@linux.vnet.ibm.com>;
+	Mon, 29 Oct 2012 20:26:55 -0600
+Received: from d03relay04.boulder.ibm.com (d03relay04.boulder.ibm.com
+	[9.17.195.106])
+	by d03dlp03.boulder.ibm.com (Postfix) with ESMTP id 8EEB619D8036
+	for <lttng-dev@lists.lttng.org>; Mon, 29 Oct 2012 20:26:21 -0600 (MDT)
+Received: from d03av01.boulder.ibm.com (d03av01.boulder.ibm.com [9.17.195.167])
+	by d03relay04.boulder.ibm.com (8.13.8/8.13.8/NCO v10.0) with ESMTP id
+	q9U2QLpS226434
+	for <lttng-dev@lists.lttng.org>; Mon, 29 Oct 2012 20:26:21 -0600
+Received: from d03av01.boulder.ibm.com (loopback [127.0.0.1])
+	by d03av01.boulder.ibm.com (8.14.4/8.13.1/NCO v10.0 AVout) with ESMTP
+	id q9U2QLeC019128
+	for <lttng-dev@lists.lttng.org>; Mon, 29 Oct 2012 20:26:21 -0600
+Received: from paulmck-ThinkPad-W500 (sig-9-49-157-159.mts.ibm.com
+	[9.49.157.159])
+	by d03av01.boulder.ibm.com (8.14.4/8.13.1/NCO v10.0 AVin) with ESMTP id
+	q9U2QKA5019105
+	for <lttng-dev@lists.lttng.org>; Mon, 29 Oct 2012 20:26:20 -0600
 Content-Disposition: inline
-In-Reply-To: <20998D40D9A2B7499CA5A3A2666CB1EB19F843FE@ZURMSG1.QUANTUM.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,132 +43,356 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: David OShea <David.OShea@quantum.com>, dgoulet@efficios.com
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* David OShea (David.OShea@quantum.com) wrote:
-> Hi all,
-> 
-> As I mentioned briefly in my thread "Wrong procname for userspace
-> trace of app with different thread names", I found that I had to do an
-> 'enable-channel' step to get UST context such as the thread name to
-> actually appear in the trace.
-> 
-> From further investigation, it appears that if I perform
-> 'enable-event' before 'add-context', that also makes the context
-> appear.  Here are three sequences of commands where I'm enabling the
-> same UST context (vpid, vtid and procname) and same UST events (all)
-> each time, but only the first sequence includes 'enable-channel', and
-> I switched around the order of 'add-context' and 'enable-event' in the
-> second and third.  Note that in the second command sequence, the
-> second set of curly braces - those containing the context - is missing
-> from the 'lttng view' output.
+FYI, userspace RCU proposed to solve an issue with epoll.
 
-If I understand correctly, the two use-cases where you issue
-"add-context" prior to enable-event and prior to enable-channel are
-behaving as if they are failing (those contexts don't appear in the
-trace), but you don't get any error message. David (David Goulet, in
-CC), any clue on why lttng-tools behaves that way, and how can we fix
-this ?
+							Thanx, Paul
 
-Thanks,
+----- Forwarded message from Matt Helsley <matthltc@linux.vnet.ibm.com> -----
 
-Mathieu
+Date: Fri, 26 Oct 2012 14:52:42 -0700
+From: Matt Helsley <matthltc@linux.vnet.ibm.com>
+To: "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>
+Cc: "Paton J. Lewis" <palewis@adobe.com>, Alexander Viro
+	<viro@zeniv.linux.org.uk>, Andrew Morton <akpm@linux-foundation.org>,
+	Jason Baron <jbaron@redhat.com>, "linux-fsdevel@vger.kernel.org"
+	<linux-fsdevel@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, Paul Holland <pholland@adobe.com>,
+	Davide Libenzi <davidel@xmailserver.org>, "libc-alpha@sourceware.org"
+	<libc-alpha@sourceware.org>, Linux API <linux-api@vger.kernel.org>,
+	Paul McKenney <paulmck@us.ibm.com>
+Subject: Re: [PATCH v2] epoll: Support for disabling items, and a self-test
+	app.
 
+On Thu, Oct 25, 2012 at 12:23:24PM +0200, Michael Kerrisk (man-pages) wrote:
+> Hi Pat,
 > 
-> Good: 'enable-channel' before 'add-context':
 > 
-> """
-> # lttng create
-> Session auto-20121029-085910 created.
-> Traces will be written in /root/lttng-traces/auto-20121029-085910
-> # lttng enable-channel channel0 --userspace
-> UST channel channel0 enabled for session auto-20121029-085910
-> # lttng add-context --userspace -t vpid -t vtid -t procname
-> UST context procname added to all channels
-> UST context vtid added to all channels
-> UST context vpid added to all channels
-> # lttng enable-event --userspace --all
-> All UST events are enabled in channel channel0
-> # lttng start
-> Tracing started for session auto-20121029-085910
-> # lttng stop
-> Tracing stopped for session auto-20121029-085910
-> # lttng view
-> Trace directory: /root/lttng-traces/auto-20121029-085910
+> >> I suppose that I have a concern that goes in the other direction. Is
+> >> there not some other solution possible that doesn't require the use of
+> >> EPOLLONESHOT? It seems overly restrictive to require that the caller
+> >> must employ this flag, and imposes the burden that the caller must
+> >> re-enable monitoring after each event.
+> >>
+> >> Does a solution like the following (with no requirement for EPOLLONESHOT)
+> >> work?
+> >>
+> >> 0. Implement an epoll_ctl() operation EPOLL_CTL_XXX
+> >>    where the name XXX might be chosen based on the decision
+> >>    in 4(a).
+> >> 1. EPOLL_CTL_XXX employs a private flag, EPOLLUSED, in the
+> >>    per-fd events mask in the ready list. By default,
+> >>    that flag is off.
+> >> 2. epoll_wait() always clears the EPOLLUSED flag if a
+> >>    file descriptor is found to be ready.
+> >> 3. If an epoll_ctl(EPOLL_CTL_XXX) discovers that the EPOLLUSED
+> >>    flag is NOT set, then
+> >>         a) it sets the EPOLLUSED flag
+> >>         b) It disables I/O events (as per EPOLL_CTL_DISABLE)
+> >>            (I'm not 100% sure if this is necesary).
+> >>         c) it returns EBUSY to the caller
+> >> 4. If an epoll_ctl(EPOLL_CTL_XXX) discovers that the EPOLLUSED
+> >>    flag IS set, then it
+> >>         a) either deletes the fd or disables events for the fd
+> >>            (the choice here is a matter of design taste, I think;
+> >>            deletion has the virtue of simplicity; disabling provides
+> >>            the option to re-enable the fd later, if desired)
+> >>         b) returns 0 to the caller.
+> >>
+> >> All of the above with suitable locking around the user-space cache.
+> >>
+> >> Cheers,
+> >>
+> >> Michael
+> >
+> >
+> > I don't believe that proposal will solve the problem. Consider the case
+> > where a worker thread has just executed epoll_wait and is about to execute
+> > the next line of code (which will access the data associated with the fd
+> > receiving the event). If the deletion thread manages to call
+> > epoll_ctl(EPOLL_CTL_XXX) for that fd twice in a row before the worker thread
+> > is able to execute the next statement, then the deletion thread will
+> > mistakenly conclude that it is safe to destroy the data that the worker
+> > thread is about to access.
 > 
-> [09:00:34.022479500] (+?.?????????) mydaemon:13811 daemon:start: { cpu_id = 1 }, { procname = "mythread.9", vtid = 13993, vpid = 13811 }, { myvar = 999 }
-> [...]
-> # lttng destroy
-> Session auto-20121029-085910 destroyed at /root
-> """
+> Okay -- I had the idea there might be a hole in my proposal ;-).
 > 
-> Bad: 'add-context' before 'enable-event':
+> By the way, have you been reading the comments in the two LWN articles
+> on EPOLL_CTL_DISABLE?
+> https://lwn.net/Articles/520012/
+> http://lwn.net/SubscriberLink/520198/fd81ba0ecb1858a2/
 > 
-> """
-> # lttng create
-> Session auto-20121029-090142 created.
-> Traces will be written in /root/lttng-traces/auto-20121029-090142
-> # lttng add-context --userspace -t vpid -t vtid -t procname
-> UST context procname added to all channels
-> UST context vtid added to all channels
-> UST context vpid added to all channels
-> # lttng enable-event --userspace --all
-> All UST events are enabled in channel channel0
-> # lttng start
-> Tracing started for session auto-20121029-090142
-> # lttng stop
-> Tracing stopped for session auto-20121029-090142
-> # lttng view
-> Trace directory: /root/lttng-traces/auto-20121029-090142
-> 
-> [09:02:11.520300500] (+?.?????????) mydaemon:13811 daemon:start: { cpu_id = 0 }, { myvar = 999 }
-> [...]
-> # lttng destroy
-> Session auto-20121029-090142 destroyed at /root
-> """
-> 
-> Good: 'add-context' AFTER 'enable-event':
-> 
-> """
-> # lttng create
-> Session auto-20121029-090738 created.
-> Traces will be written in /root/lttng-traces/auto-20121029-090738
-> # lttng enable-event --userspace --all
-> All UST events are enabled in channel channel0
-> # lttng add-context --userspace -t vpid -t vtid -t procname
-> UST context procname added to all channels
-> UST context vtid added to all channels
-> UST context vpid added to all channels
-> # lttng start
-> Tracing started for session auto-20121029-090738
-> # lttng stop
-> Tracing stopped for session auto-20121029-090738
-> # lttng view
-> Trace directory: /root/lttng-traces/auto-20121029-090738
-> 
-> [09:08:04.670574000] (+?.?????????) mydaemon:13811 daemon:start: { cpu_id = 1 }, { procname = "mythread.9", vtid = 13993, vpid = 13811 }, { myvar = 999 }
-> [...]
-> # lttng destroy
-> Session auto-20121029-090738 destroyed at /root
-> """
-> 
-> I am using lttng-ust-2.0.5 which I have patched with commit 009745db "Cache the procname per-thread rather than per-process to take into account that prctl() can be used to set thread names.", lttng-tools-2.0.4 and babeltrace-1.0.0.rc5.
-> 
-> Thanks in advance,
-> David
-> 
-> ----------------------------------------------------------------------
-> The information contained in this transmission may be confidential. Any disclosure, copying, or further distribution of confidential information is not permitted unless such privilege is explicitly granted in writing by Quantum. Quantum reserves the right to have electronic communications, including email and attachments, sent across its networks filtered through anti virus and spam software programs and retain such messages in order to comply with applicable data security and retention requirements. Quantum is not responsible for the proper and complete transmission of the substance of this communication or for any delay in its receipt.
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> There's some interesting proposals there--some suggesting that an
+> entirely user-space solution might be possible. I haven't looked
+> deeply into the ideas though.
 
--- 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+Yeah, I became quite interested so I wrote a crude epoll + urcu test.
+Since it's RCU review to ensure I've not made any serious mistakes could
+be quite helpful:
+
+#define _LGPL_SOURCE 1
+#define _GNU_SOURCE 1
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+#include <pthread.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <time.h>
+
+#include <sys/epoll.h>
+
+/*
+ * Locking Voodoo:
+ *
+ * The globabls prefixed by _ require special care because they will be
+ * accessed from multiple threads.
+ *
+ * The precise locking scheme we use varies whether READERS_USE_MUTEX is defined
+ * When we're using userspace RCU the mutex only gets acquired for writes
+ *     to _-prefixed globals. Reads are done inside RCU read side critical
+ *     sections.
+ * Otherwise the epmutex covers reads and writes to them all and the test
+ * is not very scalable.
+ */
+static pthread_mutex_t epmutex = PTHREAD_MUTEX_INITIALIZER;
+static int _p[2]; /* Send dummy data from one thread to another */
+static int _epfd; /* Threads wait to read/write on epfd */
+static int _nepitems = 0;
+
+#ifdef READERS_USE_MUTEX
+#define init_lock() do {} while(0)
+#define init_thread() do {} while(0)
+#define read_lock pthread_mutex_lock
+#define read_unlock pthread_mutex_unlock
+#define fini_thread() do {} while(0)
+/* Because readers use the mutex synchronize_rcu() is a no-op */
+#define synchronize_rcu() do {} while(0)
+#else
+#include <urcu.h>
+#define init_lock rcu_init
+#define init_thread rcu_register_thread
+#define read_lock(m) rcu_read_lock()
+#define read_unlock(m) rcu_read_unlock()
+#define fini_thread() do { rcu_unregister_thread(); } while(0)
+#endif
+#define write_lock pthread_mutex_lock
+#define write_unlock pthread_mutex_unlock
+
+/* We send this data through the pipe. */
+static const char *data = "test";
+const size_t dlen = 5;
+
+static inline int harmless_errno(void)
+{
+	return ((errno == EWOULDBLOCK) || (errno == EAGAIN) || (errno == EINTR));
+}
+
+static void* thread_main(void *thread_nr)
+{
+	struct epoll_event ev;
+	int rc = 0;
+	char buffer[dlen];
+	unsigned long long _niterations = 0;
+
+	init_thread();
+	while (!rc) {
+		read_lock(&epmutex);
+		if (_nepitems < 1) {
+			read_unlock(&epmutex);
+			break;
+		}
+		rc = epoll_wait(_epfd, &ev, 1, 1);
+		if (rc < 1) {
+			read_unlock(&epmutex);
+			if (rc == 0)
+				continue;
+			if (harmless_errno()) {
+				rc = 0;
+				continue;
+			}
+			break;
+		}
+
+		if (ev.events & EPOLLOUT) {
+			rc = write(_p[1], data, dlen);
+			read_unlock(&epmutex);
+			if (rc < 0) {
+				if (harmless_errno()) {
+					rc = 0;
+					continue;
+				}
+				break;
+			}
+			rc = 0;
+		} else if (ev.events & EPOLLIN) {
+			rc = read(_p[0], buffer, dlen);
+			read_unlock(&epmutex);
+			if (rc < 0) {
+				if (harmless_errno()) {
+					rc = 0;
+					continue;
+				}
+				break;
+			}
+			rc = 0;
+		} else
+			read_unlock(&epmutex);
+		_niterations++;
+	}
+	fini_thread();
+	return (void *)_niterations;
+}
+
+/* Some sample numbers from varying MAX_THREADS on my laptop:
+ * With a global mutex:
+ * 1 core for the main thread
+ * 1 core for epoll_wait()'ing threads
+ * The mutex doesn't scale -- increasing the number of threads despite
+ * having more real cores just causes performance to go down.
+ * 7 threads,  213432.128160 iterations per second
+ * 3 threads,  606560.183997 iterations per second
+ * 2 threads, 1346006.413404 iterations per second
+ * 1 thread , 2148936.348793 iterations per second
+ *
+ * With URCU:
+ * 1 core for the main thread which spins reading niterations.
+ * N-1 cores for the epoll_wait()'ing threads.
+ * "Hyperthreading" doesn't help here -- I've got 4 cores:
+ * 7 threads, 1537304.965009 iterations per second
+ * 4 threads, 1912846.753203 iterations per second
+ * 3 threads, 2278639.336464 iterations per second
+ * 2 threads, 1928805.899146 iterations per second
+ * 1 thread , 2007198.066327 iterations per second
+ */
+#define MAX_THREADS 3
+
+int main (int argc, char **argv)
+{
+	struct timespec before, req, after;
+	unsigned long long niterations = 0;
+	pthread_t threads[MAX_THREADS];
+	struct epoll_event ev;
+	int nthreads = 0, rc;
+
+	init_lock();
+
+	/* Since we haven't made the threads yet we can safely use _ globals */
+	rc = pipe2(_p, O_NONBLOCK);
+	if (rc < 0)
+		goto error;
+
+	_epfd = epoll_create1(EPOLL_CLOEXEC);
+	if (_epfd < 0)
+		goto error;
+
+	/* Monitor the pipe via epoll */
+	ev.events = EPOLLIN;
+	ev.data.u32 = 0; /* index in _p[] */
+	rc = epoll_ctl(_epfd, EPOLL_CTL_ADD, _p[0], &ev);
+	if (rc < 0)
+		goto error;
+	_nepitems++;
+	printf("Added fd %d to epoll set %d\n", _p[0], _epfd);
+	ev.events = EPOLLOUT;
+	ev.data.u32 = 1;
+	rc = epoll_ctl(_epfd, EPOLL_CTL_ADD, _p[1], &ev);
+	if (rc < 0)
+		goto error;
+	_nepitems++;
+	printf("Added fd %d to epoll set %d\n", _p[1], _epfd);
+	fflush(stdout);
+
+	/* 
+	 * After the first pthread_create() we can't safely use _ globals
+	 * without adhering to the locking scheme. pthread_create() should
+	 * also imply some thorough memory barriers so all our previous
+	 * modifications to the _ globals should be visible after this point.
+	 */
+	for (rc = 0; nthreads < MAX_THREADS; nthreads++) {
+		rc = pthread_create(&threads[nthreads], NULL, &thread_main,
+				    (void *)(long)nthreads);
+		if (rc < 0)
+			goto error;
+	}
+
+	/* Wait for our child threads to do some "work" */
+	req.tv_sec = 30;
+	rc = clock_gettime(CLOCK_MONOTONIC_RAW, &before);
+	rc = nanosleep(&req, NULL);
+	rc = clock_gettime(CLOCK_MONOTONIC_RAW, &after);
+
+	/* 
+	 * Modify the epoll interest set. This can leave stale
+	 * data in other threads because they may have done an
+	 * epoll_wait() with RCU read lock held instead of the
+	 * epmutex.
+	 */
+	write_lock(&epmutex);
+	rc = epoll_ctl(_epfd, EPOLL_CTL_DEL, _p[0], &ev);
+	if (rc == 0) {
+		_nepitems--;
+		printf("Removed fd %d from epoll set %d\n", _p[0], _epfd);
+		rc = epoll_ctl(_epfd, EPOLL_CTL_DEL, _p[1], &ev);
+		if (rc == 0) {
+			printf("Removed fd %d from epoll set %d\n", _p[1], _epfd);
+			_nepitems--;
+		}
+	}
+	write_unlock(&epmutex);
+	if (rc < 0)
+		goto error;
+
+	/*
+	 * Wait until the stale data are no longer in use.
+	 * We could use call_rcu() here too, but let's keep the test simple.
+	 */
+	printf("synchronize_rcu()\n");
+	fflush(stdout);
+	synchronize_rcu();
+
+	printf("closing fds\n");
+	fflush(stdout);
+
+	/* Clean up the stale data */
+	close(_p[0]);
+	close(_p[1]);
+	close(_epfd);
+	
+	printf("closed fds (%d, %d, %d)\n", _p[0], _p[1], _epfd);
+	fflush(stdout);
+
+	/*
+	 * Test is done. Join all the threads so that we give time for
+	 * races to show up.
+	 */
+	niterations = 0;
+	for (; nthreads > 0; nthreads--) {
+		unsigned long long thread_iterations;
+
+		rc = pthread_join(threads[nthreads - 1],
+				  (void *)&thread_iterations);
+		niterations += thread_iterations;
+	}
+
+	after.tv_sec -= before.tv_sec;
+	after.tv_nsec -= before.tv_nsec;
+	if (after.tv_nsec < 0) {
+		--after.tv_sec;
+		after.tv_nsec += 1000000000;
+	}
+	printf("%f iterations per second\n", (double)niterations/((double)after.tv_sec + (double)after.tv_nsec/1000000000.0));
+	exit(EXIT_SUCCESS);
+error:
+	/* This is trashy testcase code -- it doesn't do full cleanup! */
+	for (; nthreads > 0; nthreads--)
+		rc = pthread_cancel(threads[nthreads - 1]);
+	exit(EXIT_FAILURE);
+}
+
+
+----- End forwarded message -----
