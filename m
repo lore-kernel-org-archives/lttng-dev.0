@@ -1,18 +1,18 @@
-From: Christian Babeux <christian.babeux@efficios.com>
-Subject: [PATCH lttng-tools] Tests: Add filtering tests for
-	uncovered cases
-Date: Wed, 31 Oct 2012 09:00:45 -0400
-Message-ID: <1351688445-18551-1-git-send-email-christian.babeux__42875.2148677178$1351688528$gmane$org@efficios.com>
+From: Julien Desfossez <jdesfossez@efficios.com>
+Subject: RFC live trace reading use-cases
+Date: Wed, 31 Oct 2012 15:09:18 -0400
+Message-ID: <5091775E.5040609__1183.2794094973$1351710598$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ia0-f176.google.com ([209.85.210.176])
+Received: from fukushima.klipix.org ([93.20.26.243])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <christian.babeux@0x80.ca>) id 1TTXuv-0000im-2e
-	for lttng-dev@lists.lttng.org; Wed, 31 Oct 2012 09:01:09 -0400
-Received: by mail-ia0-f176.google.com with SMTP id h11so1120396iae.35
-	for <lttng-dev@lists.lttng.org>; Wed, 31 Oct 2012 06:01:03 -0700 (PDT)
+	(envelope-from <jdesfossez@efficios.com>) id 1TTdfJ-0003Sb-Hi
+	for lttng-dev@lists.lttng.org; Wed, 31 Oct 2012 15:09:25 -0400
+Received: from [132.207.72.34] (dyn34.dorsal.polymtl.ca [132.207.72.34])
+	by fukushima.klipix.org (Postfix) with ESMTPSA id DF9D2120515
+	for <lttng-dev@lists.lttng.org>; Wed, 31 Oct 2012 20:09:19 +0100 (CET)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,77 +21,51 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: dgoulet@efficios.com
-Cc: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-While investigating the code coverage of the filtering feature,
-a couple of possible tests cases were uncovered:
+Hi,
 
-Error tests:
-* Strings can't be IR root node
-* Unary ! not allowed on string type
-* Comparison with string type not allowed
-* Logical operator not allowed with string types
-* Nesting of binary operator not allowed
+We are currently working on defining a design for live trace reading and
+before commiting to one, we would like to have a list of all the
+relevant use-cases we have to take into account.
 
-Valid tests:
-* Cover all left/right operands permutations with
-  fields ref. and numeric values.
+Just to clarify, live trace reading means displaying/analyzing a trace
+while it is being recorded by a tracer.
 
-Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
----
- tests/tools/filtering/invalid-filters | 15 +++++++++++++++
- tests/tools/filtering/valid-filters   |  4 ++++
- 2 files changed, 19 insertions(+)
+Here are the use-cases I have collected so far :
+- reading a trace from the disk of the machine that is currently being
+traced;
+- reading a trace from a remote machine on the disk of the machine
+running lttng-relayd (receiving the trace on the network);
+- reading the trace directly from the memory of the local tracer (mmap
+shared buffers);
+- reading the trace from the memory of a lttng-relayd daemon receiving
+the trace from the network but never writing it to disk.
 
-diff --git a/tests/tools/filtering/invalid-filters b/tests/tools/filtering/invalid-filters
-index d0777e5..b653705 100755
---- a/tests/tools/filtering/invalid-filters
-+++ b/tests/tools/filtering/invalid-filters
-@@ -118,6 +118,21 @@ INVALID_FILTERS=(
- 		"!a.f.d"
- 		"asdf.asdfsd.sadf < 4"
- 		"asdfasdf->asdfasdf < 2"
-+		# String can't be root node
-+		"\"somestring\""
-+		# Unary op on string not allowed
-+		"!\"somestring\""
-+		# Comparison with string type not allowed
-+		"\"somestring\" > 42"
-+		"\"somestring\" > 42.0"
-+		"42 > \"somestring\""
-+		"42.0 > \"somestring\""
-+		# Logical operator with string type not allowed
-+		"\"somestring\" || 1"
-+		"1 || \"somestring\""
-+		# Nesting of binary operator not allowed
-+		"1 | (1 | (1 | 1))"
-+		"1 > (1 > (1 > 1))"
- 		)
- 
- start_lttng_sessiond
-diff --git a/tests/tools/filtering/valid-filters b/tests/tools/filtering/valid-filters
-index b48b6ed..d32a60d 100755
---- a/tests/tools/filtering/valid-filters
-+++ b/tests/tools/filtering/valid-filters
-@@ -361,6 +361,8 @@ FILTERS=("intfield"                                                     #1
- 	 "intfield < 0x2"                                               #24
- 	 "intfield < 02"                                                #25
- 	 "stringfield2 == \"\\\*\""                                     #26
-+	 "1.0 || intfield || 1.0"                                       #27
-+	 "1 < intfield"                                                 #28
- )
- 
- VALIDATOR=("validator_intfield"                     #1
-@@ -389,6 +391,8 @@ VALIDATOR=("validator_intfield"                     #1
- 	   "validator_intfield_lt"                  #24
- 	   "validator_intfield_lt"                  #25
- 	   "validator_true_statement"               #26
-+	   "validator_true_statement"               #27
-+	   "validator_intfield_gt"                  #28
- )
- 
- FILTER_COUNT=${#FILTERS[@]}
--- 
-1.8.0
+In all these cases, the tracing session might be a new one or a session
+already started. If the session is already started we could want to
+"attach" the viewer to it and read the data either from the beginning or
+from "now".
+
+Of course we want to keep the privilege separation and make sure the
+viewer is allowed to read the trace.
+
+We at least want to support the C/C++ and Java viewers and for the
+remote use-cases we might have to support viewers running on Windows as
+well.
+So we need an interface between the consumerd/relayd that will be common
+to all these possible viewers.
+
+I will not discuss here the early solutions we have right now to avoid
+influencing the decision, I am just interested in collecting the
+use-cases first.
+
+If you have other use-cases that you think might be interesting to
+support, please send them as soon as possible.
+We are in brainstorm mode, after that phase we will decide the use-cases
+we want to support/prioritize.
+
+Thanks,
+
+Julien
