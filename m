@@ -1,20 +1,18 @@
 From: David Goulet <dgoulet@efficios.com>
-Subject: Re: 'add-context --userspace' must be preceded by
- 'enable-channel' or 'enable-event'
-Date: Fri, 02 Nov 2012 11:12:35 -0400
-Message-ID: <5093E2E3.7090601__33984.3439906419$1351869196$gmane$org@efficios.com>
-References: <20998D40D9A2B7499CA5A3A2666CB1EB19F843FE@ZURMSG1.QUANTUM.com>
-	<20121030014845.GB26711@Krystal> <509039ED.6020203@efficios.com>
-	<20998D40D9A2B7499CA5A3A2666CB1EB19F8515D@ZURMSG1.QUANTUM.com>
+Subject: Re: [PATCH lttng-tools] Tests: Add filtering tests for
+ uncovered cases
+Date: Fri, 02 Nov 2012 11:17:29 -0400
+Message-ID: <5093E409.3070708__13994.60290927$1351869486$gmane$org@efficios.com>
+References: <1351688445-18551-1-git-send-email-christian.babeux@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from smtp.ini-tech.com ([213.239.202.151])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1TUIvH-0006XU-B8
-	for lttng-dev@lists.lttng.org; Fri, 02 Nov 2012 11:12:39 -0400
-In-Reply-To: <20998D40D9A2B7499CA5A3A2666CB1EB19F8515D@ZURMSG1.QUANTUM.com>
+	(envelope-from <dgoulet@efficios.com>) id 1TUJ00-0006aL-Kj
+	for lttng-dev@lists.lttng.org; Fri, 02 Nov 2012 11:17:32 -0400
+In-Reply-To: <1351688445-18551-1-git-send-email-christian.babeux@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,76 +21,78 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: David OShea <David.OShea@quantum.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Christian Babeux <christian.babeux@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi David,
+Merged! Thanks
 
-Yes you are right. I've opened a bug for that. You might want to
-subscribe to it :).
-
-https://bugs.lttng.org/issues/391
-
-Thanks a lot!
-David
-
-David OShea:
-> Hi David, Mathieu,
+Christian Babeux:
+> While investigating the code coverage of the filtering feature,
+> a couple of possible tests cases were uncovered:
 > 
->> -----Original Message-----
->> From: David Goulet [mailto:dgoulet@efficios.com]
->> Sent: Wednesday, 31 October 2012 7:05 AM
->> To: Mathieu Desnoyers
->> Cc: David OShea; lttng-dev@lists.lttng.org
->> Subject: Re: [lttng-dev] 'add-context --userspace' must be preceded by
->> 'enable-channel' or 'enable-event'
-> [...]
->> Mathieu Desnoyers:
->>> If I understand correctly, the two use-cases where you issue
->>> "add-context" prior to enable-event and prior to enable-channel are
->>> behaving as if they are failing (those contexts don't appear in the
->>> trace), but you don't get any error message. David (David Goulet, in
->>> CC), any clue on why lttng-tools behaves that way, and how can we fix
->>> this ?
+> Error tests:
+> * Strings can't be IR root node
+> * Unary ! not allowed on string type
+> * Comparison with string type not allowed
+> * Logical operator not allowed with string types
+> * Nesting of binary operator not allowed
 > 
-> This is not quite correct: I don't have a use case where I 'add-context' prior to 'enable-channel'.  The only case that fails is when I do an 'add-context' immediately after 'create'.  Things work properly if I do an 'enable-channel' or 'enable-event' before the 'add-context'.
+> Valid tests:
+> * Cover all left/right operands permutations with
+>   fields ref. and numeric values.
 > 
->>>> Bad: 'add-context' before 'enable-event':
->>>>
->>>> """
->>>> # lttng create
->>>> Session auto-20121029-090142 created.
->>>> Traces will be written in /root/lttng-traces/auto-20121029-090142
->>>> # lttng add-context --userspace -t vpid -t vtid -t procname
->>>> UST context procname added to all channels
->>>> UST context vtid added to all channels
->>>> UST context vpid added to all channels
->>>> # lttng enable-event --userspace --all
->>
->> The context is added to "channel0" here which is the default one
->> created
->> automatically.
->>
->> The lttng-tools session daemon do add the contexts to the channel on
->> the
->> tracer side (ustctl_add_context) so Mathieu we might want to check if
->> the UST tracer do behave correctly by adding the context to all events
->> of a channel. (Note here that -a -u was used hence the "*" event).
->>
->> I also do confirm that lttng-tools is doing the right ustctl call on
->> channel0 here.
+> Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
+> ---
+>  tests/tools/filtering/invalid-filters | 15 +++++++++++++++
+>  tests/tools/filtering/valid-filters   |  4 ++++
+>  2 files changed, 19 insertions(+)
 > 
-> I took a quick look at the source for lttng-tools 2.0.4 and 2.1.0-rc4, and it looks to me like in the case above, the default channel "channel0" is not actually created by 'add-context'.
-> 
-> In lttng_enable_event(), if no channel name was specified, it uses DEFAULT_CHANNEL_NAME, then in cmd_enable_event_all() (I'm considering the case of enabling all events, which is what I do), in case LTTNG_DOMAIN_UST, if the specified channel doesn't exist, it will create it.  This seems to be why doing the 'enable-event' first works.
-> 
-> On the other hand, in lttng_add_context(), if no channel name is specified, no channel name is passed to the server, then in cmd_add_context(), context_ust_add() is called, and in that function, if no channel name is specified, it adds the context to every channel.  However, my understanding is that at this point there are no channels created.
-> 
-> Apologies if I have missed anything here!
-> 
-> Regards,
-> David
-> 
-> ----------------------------------------------------------------------
-> The information contained in this transmission may be confidential. Any disclosure, copying, or further distribution of confidential information is not permitted unless such privilege is explicitly granted in writing by Quantum. Quantum reserves the right to have electronic communications, including email and attachments, sent across its networks filtered through anti virus and spam software programs and retain such messages in order to comply with applicable data security and retention requirements. Quantum is not responsible for the proper and complete transmission of the substance of this communication or for any delay in its receipt.
+> diff --git a/tests/tools/filtering/invalid-filters b/tests/tools/filtering/invalid-filters
+> index d0777e5..b653705 100755
+> --- a/tests/tools/filtering/invalid-filters
+> +++ b/tests/tools/filtering/invalid-filters
+> @@ -118,6 +118,21 @@ INVALID_FILTERS=(
+>  		"!a.f.d"
+>  		"asdf.asdfsd.sadf < 4"
+>  		"asdfasdf->asdfasdf < 2"
+> +		# String can't be root node
+> +		"\"somestring\""
+> +		# Unary op on string not allowed
+> +		"!\"somestring\""
+> +		# Comparison with string type not allowed
+> +		"\"somestring\" > 42"
+> +		"\"somestring\" > 42.0"
+> +		"42 > \"somestring\""
+> +		"42.0 > \"somestring\""
+> +		# Logical operator with string type not allowed
+> +		"\"somestring\" || 1"
+> +		"1 || \"somestring\""
+> +		# Nesting of binary operator not allowed
+> +		"1 | (1 | (1 | 1))"
+> +		"1 > (1 > (1 > 1))"
+>  		)
+>  
+>  start_lttng_sessiond
+> diff --git a/tests/tools/filtering/valid-filters b/tests/tools/filtering/valid-filters
+> index b48b6ed..d32a60d 100755
+> --- a/tests/tools/filtering/valid-filters
+> +++ b/tests/tools/filtering/valid-filters
+> @@ -361,6 +361,8 @@ FILTERS=("intfield"                                                     #1
+>  	 "intfield < 0x2"                                               #24
+>  	 "intfield < 02"                                                #25
+>  	 "stringfield2 == \"\\\*\""                                     #26
+> +	 "1.0 || intfield || 1.0"                                       #27
+> +	 "1 < intfield"                                                 #28
+>  )
+>  
+>  VALIDATOR=("validator_intfield"                     #1
+> @@ -389,6 +391,8 @@ VALIDATOR=("validator_intfield"                     #1
+>  	   "validator_intfield_lt"                  #24
+>  	   "validator_intfield_lt"                  #25
+>  	   "validator_true_statement"               #26
+> +	   "validator_true_statement"               #27
+> +	   "validator_intfield_gt"                  #28
+>  )
+>  
+>  FILTER_COUNT=${#FILTERS[@]}
