@@ -1,18 +1,26 @@
 From: David Goulet <dgoulet@efficios.com>
-Subject: Re: [PATCH lttng-tools] Tests: Add filtering tests for
- uncovered cases
-Date: Fri, 02 Nov 2012 11:17:29 -0400
-Message-ID: <5093E409.3070708__13994.60290927$1351869486$gmane$org@efficios.com>
-References: <1351688445-18551-1-git-send-email-christian.babeux@efficios.com>
+Subject: [RELEASE] LTTng-tools 2.1.0-rc6
+Date: Fri, 02 Nov 2012 11:55:03 -0400
+Message-ID: <5093ECD7.5080805__10560.0308198065$1351871748$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from smtp.ini-tech.com ([213.239.202.151])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1TUJ00-0006aL-Kj
-	for lttng-dev@lists.lttng.org; Fri, 02 Nov 2012 11:17:32 -0400
-In-Reply-To: <1351688445-18551-1-git-send-email-christian.babeux@efficios.com>
+	(envelope-from <dgoulet@efficios.com>) id 1TUJaL-0006tq-MK
+	for lttng-dev@lists.lttng.org; Fri, 02 Nov 2012 11:55:05 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by smtp.ini-tech.com (Postfix) with ESMTP id B0577187342
+	for <lttng-dev@lists.lttng.org>; Fri,  2 Nov 2012 11:55:36 -0400 (EDT)
+Received: from smtp.ini-tech.com ([127.0.0.1])
+	by localhost (smtp.ini-tech.com [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id QTgxkLgVukp8 for <lttng-dev@lists.lttng.org>;
+	Fri,  2 Nov 2012 11:55:36 -0400 (EDT)
+Received: from 127.0.0.1 (cable-13.246.173-198.electronicbox.net
+	[173.246.13.198])
+	by smtp.ini-tech.com (Postfix) with ESMTPSA id BF8C418733E
+	for <lttng-dev@lists.lttng.org>; Fri,  2 Nov 2012 11:55:35 -0400 (EDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,78 +29,70 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Christian Babeux <christian.babeux@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Merged! Thanks
+Greetings everyone (including LTTng elves),
 
-Christian Babeux:
-> While investigating the code coverage of the filtering feature,
-> a couple of possible tests cases were uncovered:
-> 
-> Error tests:
-> * Strings can't be IR root node
-> * Unary ! not allowed on string type
-> * Comparison with string type not allowed
-> * Logical operator not allowed with string types
-> * Nesting of binary operator not allowed
-> 
-> Valid tests:
-> * Cover all left/right operands permutations with
->   fields ref. and numeric values.
-> 
-> Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
-> ---
->  tests/tools/filtering/invalid-filters | 15 +++++++++++++++
->  tests/tools/filtering/valid-filters   |  4 ++++
->  2 files changed, 19 insertions(+)
-> 
-> diff --git a/tests/tools/filtering/invalid-filters b/tests/tools/filtering/invalid-filters
-> index d0777e5..b653705 100755
-> --- a/tests/tools/filtering/invalid-filters
-> +++ b/tests/tools/filtering/invalid-filters
-> @@ -118,6 +118,21 @@ INVALID_FILTERS=(
->  		"!a.f.d"
->  		"asdf.asdfsd.sadf < 4"
->  		"asdfasdf->asdfasdf < 2"
-> +		# String can't be root node
-> +		"\"somestring\""
-> +		# Unary op on string not allowed
-> +		"!\"somestring\""
-> +		# Comparison with string type not allowed
-> +		"\"somestring\" > 42"
-> +		"\"somestring\" > 42.0"
-> +		"42 > \"somestring\""
-> +		"42.0 > \"somestring\""
-> +		# Logical operator with string type not allowed
-> +		"\"somestring\" || 1"
-> +		"1 || \"somestring\""
-> +		# Nesting of binary operator not allowed
-> +		"1 | (1 | (1 | 1))"
-> +		"1 > (1 > (1 > 1))"
->  		)
->  
->  start_lttng_sessiond
-> diff --git a/tests/tools/filtering/valid-filters b/tests/tools/filtering/valid-filters
-> index b48b6ed..d32a60d 100755
-> --- a/tests/tools/filtering/valid-filters
-> +++ b/tests/tools/filtering/valid-filters
-> @@ -361,6 +361,8 @@ FILTERS=("intfield"                                                     #1
->  	 "intfield < 0x2"                                               #24
->  	 "intfield < 02"                                                #25
->  	 "stringfield2 == \"\\\*\""                                     #26
-> +	 "1.0 || intfield || 1.0"                                       #27
-> +	 "1 < intfield"                                                 #28
->  )
->  
->  VALIDATOR=("validator_intfield"                     #1
-> @@ -389,6 +391,8 @@ VALIDATOR=("validator_intfield"                     #1
->  	   "validator_intfield_lt"                  #24
->  	   "validator_intfield_lt"                  #25
->  	   "validator_true_statement"               #26
-> +	   "validator_true_statement"               #27
-> +	   "validator_intfield_gt"                  #28
->  )
->  
->  FILTER_COUNT=${#FILTERS[@]}
+The lttng-tools project provides a session daemon (lttng-sessiond)
+that acts as a tracing registry, the "lttng" command line for tracing
+control, a lttng-ctl library for tracing control and a lttng-relayd
+for network streaming.
+
+The biggest changes was the lttng_data_available() API call renamed to
+lttng_data_pending() with the returned code semantic changed. In a
+nutshell, if data_pending returns 0, it means that all data was
+extracted from the buffers of the tracing session hence the trace is
+_ready_ to be read. Else, a value of 1 means that data is still pending
+for the tracing session so the trace is not readable.
+
+Apart from that, 30+ fixes got in mostly fixing memory leaks. Here is
+the ChangeLog:
+
+2012-11-02 lttng-tools 2.1.0-rc6
+	* Tests: Add filtering tests for uncovered cases
+	* Fix: Sync issue when deleting a data stream
+	* Rename data_available to data_pending
+	* Fix: consumer health state
+	* Fix: Add the ACCOUNTING flag to ht creation and set bucket size to 0
+	* Fix: Bad return error code handling
+	* Fix: Use after free() of the rundir string
+	* Fix: Cleanup UST app session on ustctl create session error
+	* Fix: add missing pthread_join in sessiond
+	* Fix: free running directory string
+	* Fix: UST app clean list node usage
+	* Add liblttng-ctl destructor to cleanup memory
+	* Fix: Cleanup URIs on teardown
+	* Fix: relayd memleaks
+	* Fix: Memory leaks of allocated URIs
+	* Fix: consumer output memory leak on creation
+	* Fix: missing addrlen initialization before accept(2)
+	* Fix: relayd trace file padding memleak
+	* Fix: Remove useless consumer subdir string concatenation
+	* Fix: lttng create allocated path memleak
+	* Fix: Cppcheck memleakOnRealloc mistake
+	* Fix: Synchronization issue for data available command
+	* Fix: consumer relayd cleanup on disconnect
+	* Fix: Handle the unary bitwise negation operator (~) in the XML printer
+	* Fix: Possible memory leaks when creating filter IR root node
+	* Fix: Delete stream on write error in consumer
+	* Fix: Error handling when sending relayd sockets to consumer
+	* Add stream lock comment for nesting
+	* Fix: Mutex and RCU lock nesting in consumer
+	* Fix: Uninitialized ret code
+	* Fix: Remove bad condition and fix overflow issue
+	* Fix: consumerd pthread error flow
+	* Fix: Set a single return point and mutex unlock
+	* Fix: Remove useless NULL and zero assignment
+	* Fix: segfault on create session with two URLs
+
+Please feel free to email the list about any questions/comments
+concerning this release.
+
+Project website: http://lttng.org/lttng2.0
+Download link:
+http://lttng.org/files/lttng-tools/lttng-tools-2.1.0-rc6.tar.bz2 (for
+the PGP signature, same file with .asc appended)
+
+Cheers!
+David
