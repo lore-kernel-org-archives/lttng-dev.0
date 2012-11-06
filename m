@@ -1,21 +1,19 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH v2 lttng-tools] Fix: Do not install
-	health	tests helper libraries
-Date: Tue, 6 Nov 2012 13:43:22 -0500
-Message-ID: <20121106184322.GA8453__37293.8055698343$1352227435$gmane$org@Krystal>
+From: David Goulet <dgoulet@efficios.com>
+Subject: Re: [PATCH lttng-tools] Fix: Do not install health
+ tests helper libraries
+Date: Tue, 06 Nov 2012 14:56:19 -0500
+Message-ID: <50996B63.2020602__30521.3657477454$1352231815$gmane$org@efficios.com>
 References: <1352150413-16685-1-git-send-email-christian.babeux@efficios.com>
-	<1352226725-27207-1-git-send-email-christian.babeux@efficios.com>
+	<20121105221103.GB13619@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from smtp.ini-tech.com ([213.239.202.151])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1TVo7P-0000vl-UT
-	for lttng-dev@lists.lttng.org; Tue, 06 Nov 2012 13:43:24 -0500
-Content-Disposition: inline
-In-Reply-To: <1352226725-27207-1-git-send-email-christian.babeux@efficios.com>
+	(envelope-from <dgoulet@efficios.com>) id 1TVpG2-0001UC-Kx
+	for lttng-dev@lists.lttng.org; Tue, 06 Nov 2012 14:56:22 -0500
+In-Reply-To: <20121105221103.GB13619@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,102 +22,56 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Christian Babeux <christian.babeux@efficios.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Christian Babeux (christian.babeux@efficios.com) wrote:
-> The libraries libhealthexit and libhealthstall should not be
-> installed on the user system. They are only useful for the
-> health check tests.
-> 
-> Furthermore, when adding libraries to noinst_LTLIBRARIES,
-> libtool will only build these as static libraries (see [1] for a
-> workaround). This is fine for most use cases, but for the health
-> tests, we _must_ have shared libraries (the nature of the tests
-> require LD_PRELOAD), hence we force the build of a shared object.
-> 
-> Forcing shared object has the unfortunate side-effect of breaking
-> builds where configure was invoked with "--disable-shared" flag.
-> Instead of failing badly, detect this flag and skip the health
-> tests altogether.
-> 
-> noinst shared libs:
-> [1] - https://lists.gnu.org/archive/html/libtool/2008-06/msg00082.html
-> 
-> Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
+Merged!
 
-Acked-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Thanks!
+David
 
-> ---
->  configure.ac                   |  2 ++
->  tests/tools/health/Makefile.am | 20 ++++++++++++--------
->  2 files changed, 14 insertions(+), 8 deletions(-)
+Mathieu Desnoyers:
+> * Christian Babeux (christian.babeux@efficios.com) wrote:
+>> The libraries libhealthexit and libhealthstall should not be
+>> installed on the user system. They are only useful for the
+>> health check tests.
+>>
+>> Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
 > 
-> diff --git a/configure.ac b/configure.ac
-> index 72daf7e..a3120fc 100644
-> --- a/configure.ac
-> +++ b/configure.ac
-> @@ -39,6 +39,8 @@ AS_IF([test "x$libtool_fixup" = "xyes"],
->  		  ])
->  	    ])
->  
-> +AM_CONDITIONAL([NO_SHARED], [test x$enable_shared = xno])
-> +
->  AC_CHECK_HEADERS([ \
->  	sys/types.h unistd.h fcntl.h string.h pthread.h limits.h \
->  	signal.h stdlib.h sys/un.h sys/socket.h stdlib.h stdio.h \
-> diff --git a/tests/tools/health/Makefile.am b/tests/tools/health/Makefile.am
-> index 9fab582..f1a5d91 100644
-> --- a/tests/tools/health/Makefile.am
-> +++ b/tests/tools/health/Makefile.am
-> @@ -8,23 +8,27 @@ if LTTNG_TOOLS_BUILD_WITH_LIBC_DL
->  AM_LDFLAGS += -lc
->  endif
->  
-> -UTILS=
-> -
-> -lib_LTLIBRARIES=libhealthexit.la libhealthstall.la
-> +if NO_SHARED
-> +# Do not build this test if shared libraries support was
-> +# explicitly disabled.
-> +else
-> +# In order to test the health check feature, the libhealth* libs
-> +# must be built as .so to be able to LD_PRELOAD them.
-> +FORCE_SHARED_LIB_OPTIONS = -module -shared -avoid-version \
-> +			   -rpath $(abs_builddir)
->  
->  # Health thread exit ld_preloaded test lib
->  libhealthexit_la_SOURCES=health_exit.c
-> -libhealthexit_la_LDFLAGS= -module
-> +libhealthexit_la_LDFLAGS= $(FORCE_SHARED_LIB_OPTIONS)
->  
->  # Health thread stall ld_preloaded test lib
->  libhealthstall_la_SOURCES=health_stall.c
-> -libhealthstall_la_LDFLAGS= -module
-> +libhealthstall_la_LDFLAGS= $(FORCE_SHARED_LIB_OPTIONS)
->  
->  noinst_PROGRAMS = health_check
-> +noinst_LTLIBRARIES = libhealthexit.la libhealthstall.la
->  
->  health_check_SOURCES = health_check.c $(UTILS)
->  health_check_LDADD = $(top_builddir)/src/lib/lttng-ctl/liblttng-ctl.la \
->  		     $(top_builddir)/src/common/libcommon.la
-> -
-> -noinst_SCRIPTS =
-> -EXTRA_DIST =
-> +endif
-> -- 
-> 1.8.0
+> Acked-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 > 
+>> ---
+>>  tests/tools/health/Makefile.am | 3 +--
+>>  1 file changed, 1 insertion(+), 2 deletions(-)
+>>
+>> diff --git a/tests/tools/health/Makefile.am b/tests/tools/health/Makefile.am
+>> index 9fab582..d1d4919 100644
+>> --- a/tests/tools/health/Makefile.am
+>> +++ b/tests/tools/health/Makefile.am
+>> @@ -10,8 +10,6 @@ endif
+>>  
+>>  UTILS=
+>>  
+>> -lib_LTLIBRARIES=libhealthexit.la libhealthstall.la
+>> -
+>>  # Health thread exit ld_preloaded test lib
+>>  libhealthexit_la_SOURCES=health_exit.c
+>>  libhealthexit_la_LDFLAGS= -module
+>> @@ -21,6 +19,7 @@ libhealthstall_la_SOURCES=health_stall.c
+>>  libhealthstall_la_LDFLAGS= -module
+>>  
+>>  noinst_PROGRAMS = health_check
+>> +noinst_LTLIBRARIES = libhealthexit.la libhealthstall.la
+>>  
+>>  health_check_SOURCES = health_check.c $(UTILS)
+>>  health_check_LDADD = $(top_builddir)/src/lib/lttng-ctl/liblttng-ctl.la \
+>> -- 
+>> 1.8.0
+>>
+>>
+>> _______________________________________________
+>> lttng-dev mailing list
+>> lttng-dev@lists.lttng.org
+>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 > 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
