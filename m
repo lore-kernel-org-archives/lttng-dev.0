@@ -1,19 +1,20 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Offering to help
-Date: Wed, 7 Nov 2012 12:33:55 -0500
-Message-ID: <20121107173355.GA28974__30480.7669985623$1352309679$gmane$org@Krystal>
-References: <CAPxpLYbAs1ZX9n-YkNLDZ+jnEeBzW4aBnhtQQ4qB+XrQVvcKzg@mail.gmail.com>
+Subject: Re: Fix filter: pointer to string, not string,
+	should	be on stack -- query
+Date: Wed, 7 Nov 2012 13:34:00 -0500
+Message-ID: <20121107183400.GA29766__19330.2750507884$1352313282$gmane$org@Krystal>
+References: <509A0F80.1070308@quantum.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1TW9Vk-0002vb-UU
-	for lttng-dev@lists.lttng.org; Wed, 07 Nov 2012 12:33:56 -0500
+	(envelope-from <compudj@mail.openrapids.net>) id 1TWARt-0003O5-QH
+	for lttng-dev@lists.lttng.org; Wed, 07 Nov 2012 13:34:02 -0500
 Content-Disposition: inline
-In-Reply-To: <CAPxpLYbAs1ZX9n-YkNLDZ+jnEeBzW4aBnhtQQ4qB+XrQVvcKzg@mail.gmail.com>
+In-Reply-To: <509A0F80.1070308@quantum.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,52 +23,88 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: David Brown <dafidbrown@gmail.com>
-Cc: lttng-dev@lists.lttng.org
+To: David Bryant <david.bryant@quantum.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi David!
-
-Glad to see you are interested in helping us :) I see you are on oftc
-#lttng, which is indeed the right first step.
-
-We have plently of things to work on in this project in all your areas
-of expertise. One that come up to my mind, and have been bugging me for
-a while, is that we lack a sort of "quickstart guide" for lttng 2.x. A
-new user has only manpages (and --help) to refer to, but there is no
-comprehensive document that get people up and running quickly. Is this
-something you would be interested to contribute ? Proposing it on
-lttng-dev should help you get feedback.
-
-Other than that, a second step would be to look at the bug tracker:
-bugs.lttng.org , especially the "feature requests" and some low priority
-bugs that are sitting there. If anything catch your interest, it could
-be a nice way to dig into the project.
-
-Thanks!
-
-Mathieu
-
-* David Brown (dafidbrown@gmail.com) wrote:
-> Hello folks,
-> 
-> I am interested in some of the problems that the LTTNG tool can be
-> used to address.  I have some time available, many years experience in
-> vaguely related areas and am willing to take direction.
-> 
-> If my help as a developer, tester, or documenter would be appreciated,
-> please respond.
-> 
-> regards,
-> Dave Brown
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+KiBEYXZpZCBCcnlhbnQgKGRhdmlkLmJyeWFudEBxdWFudHVtLmNvbSkgd3JvdGU6Cj4gSGksCj4K
+PiBJJ20gdHJ5aW5nIHRvIHVuZGVyc3RhbmQgdGhlIGZvbGxvd2luZyBjaGFuZ2VzZXQ6Cj4KCkhl
+bGxvICEKClBsZWFzZSB1cHN0cmVhbSBsdHRuZy11c3QgbWFzdGVyIGJyYW5jaCBIRUFELCB3aGlj
+aCBpbmNsdWRlcyB0aGlzCmNvbW1pdDoKCmNvbW1pdCBjNDI2MWIwYWVjYWYyODFmYzFjZWQ0Yzdh
+Zjk2YjFmZjZkMjYwMGQ3CkF1dGhvcjogTWF0aGlldSBEZXNub3llcnMgPG1hdGhpZXUuZGVzbm95
+ZXJzQGVmZmljaW9zLmNvbT4KRGF0ZTogICBXZWQgTm92IDcgMTM6MjQ6NTggMjAxMiAtMDUwMAoK
+ICAgIEZpeDogcmUtYWxsb3cgbm9uLWx2YWx1ZSBzdHJpbmcsIHNlcXVlbmNlLCBhcnJheSBwYXJh
+bWV0ZXJzCiAgICAKICAgIElzc3VlIGludHJvZHVjZWQgYnkgdXBzdHJlYW0gY29tbWl0OgogICAg
+CiAgICAgIGNvbW1pdCAyN2Y0YjYwOTRmMzk5ZjJmZTIzMWI1ODgwMWRjZTk4Y2JkMjFiYWE5CiAg
+ICAgIEF1dGhvcjogTWF0aGlldSBEZXNub3llcnMgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9z
+LmNvbT4KICAgICAgRGF0ZTogVHVlIFNlcCA0IDEyOjE3OjA3IDIwMTIgLTA0MDAKICAgIAogICAg
+ICBGaXggZmlsdGVyOiBwb2ludGVyIHRvIHN0cmluZywgbm90IHN0cmluZywgc2hvdWxkIGJlIG9u
+IHN0YWNrCiAgICAKICAgICAgRml4ZXMgIzMyOQogICAgCiAgICBSZXBvcnRlZC1ieTogRGF2aWQg
+QnJ5YW50IDxkYXZpZC5icnlhbnRAcXVhbnR1bS5jb20+CiAgICBTaWduZWQtb2ZmLWJ5OiBNYXRo
+aWV1IERlc25veWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPgoKUGxlYXNlIGxl
+dCBtZSBrbm93IGlmIGl0IGhlbHBzLAoKVGhhbmtzLAoKTWF0aGlldQoKPiBjb21taXQgMjdmNGI2
+MDk0ZjM5OWYyZmUyMzFiNTg4MDFkY2U5OGNiZDIxYmFhOQo+IEF1dGhvcjogTWF0aGlldSBEZXNu
+b3llcnMgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4KPiBEYXRlOiBUdWUgU2VwIDQg
+MTI6MTc6MDcgMjAxMiAtMDQwMAo+Cj4gRml4IGZpbHRlcjogcG9pbnRlciB0byBzdHJpbmcsIG5v
+dCBzdHJpbmcsIHNob3VsZCBiZSBvbiBzdGFjawo+Cj4gRml4ZXMgIzMyOQo+Cj4gU2lnbmVkLW9m
+Zi1ieTogTWF0aGlldSBEZXNub3llcnMgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4K
+Pgo+IEJ1ZyBsaW5rOiBodHRwczovL2J1Z3MubHR0bmcub3JnL2lzc3Vlcy8zMjkKPgo+IFRoZSBw
+YXRjaCBmb3JjZXMgdGhlIGN0Zl9zdHJpbmcoKSBhcmd1bWVudCB0byBiZSBhbiBsdmFsdWUuIEl0
+IGFwcGVhcnMgIAo+IHRvIGJlIGluIHN1cHBvcnQgb2YgdHJhY2Vwb2ludCBmaWx0ZXJpbmcgb2Yg
+dGhlIHNvcnQ6Cj4KPiBsdHRuZyBlbmFibGUtZXZlbnQgdXN0X3Rlc3RzX2RlbW8yOmxvb3AgLXUg
+LS1maWx0ZXIgJ3N0cmluZ2ZpZWxkPT0idGV4dCInCj4KPiBCZWNhdXNlIHRoZSBhcmd1bWVudCBt
+dXN0IGJlIGFuIGx2YWx1ZSB0aGUgZXhhbXBsZXMvZWFzeS11c3Qgd29uJ3QgIAo+IGNvbXBpbGUg
+KGFueW1vcmUpIHdpdGggdGhlIGZvbGxvd2luZyBwYXRjaDoKPgo+IGRpZmYgLXUgLS1yZWN1cnNp
+dmUgZWFzeS11c3Qvc2FtcGxlX2NvbXBvbmVudF9wcm92aWRlci5oICAKPiBlYXN5LXVzdC1yZXBy
+b2R1Y2Uvc2FtcGxlX2NvbXBvbmVudF9wcm92aWRlci5oCj4gLS0tIGVhc3ktdXN0L3NhbXBsZV9j
+b21wb25lbnRfcHJvdmlkZXIuaCAyMDEyLTExLTA3IDE3OjAwOjA5Ljg3OTI5OTU2NSArMTAzMAo+
+ICsrKyBlYXN5LXVzdC1yZXByb2R1Y2Uvc2FtcGxlX2NvbXBvbmVudF9wcm92aWRlci5oIDIwMTIt
+MTEtMDcgIAo+IDE2OjU3OjAyLjEyMTY0Nzg3MSArMTAzMAo+IEBAIC02MSw2ICs2MSwxMSBAQAo+
+ICovCj4gI2luY2x1ZGUgPGx0dG5nL3RyYWNlcG9pbnQuaD4KPgo+ICsjaWZuZGVmIFNFRV9PTkNF
+Cj4gKyNkZWZpbmUgU0VFX09OQ0UKPiArc3RhdGljIGlubGluZSBjaGFyICogZWNobyhjaGFyICog
+YykgeyByZXR1cm4gYzsgfQo+ICsjZW5kaWYKPiArCj4gLyoKPiAqIFRoZSBmb2xsb3dpbmcgdHJh
+Y2Vwb2ludCBldmVudCB3cml0ZXMgYSBtZXNzYWdlIChjIHN0cmluZykgaW50byB0aGUKPiAqIGZp
+ZWxkIG1lc3NhZ2Ugb2YgdGhlIHRyYWNlIGV2ZW50IG1lc3NhZ2UgaW4gdGhlIHByb3ZpZGVyCj4g
+QEAgLTEwMCw3ICsxMDUsNyBAQAo+ICogVGhlIGN0Zl9zdHJpbmcgbWFjcm8gdGFrZXMgYSBjIHN0
+cmluZyBhbmQgd3JpdGVzIGl0IGludG8gYSBmaWVsZAo+ICogbmFtZWQgIm1lc3NhZ2UiCj4gKi8K
+PiAtIGN0Zl9zdHJpbmcobWVzc2FnZSwgdGV4dCkKPiArIGN0Zl9zdHJpbmcobWVzc2FnZSwgZWNo
+byh0ZXh0KSkKPiApCj4gKQo+IC8qCj4KPiBDb21waWxhdGlvbiByZXN1bHRzIGluOgo+Cj4gJCBt
+YWtlCj4gZ2NjIC1JL2hvbWUvZGJyeWFudC9sb2NhbDUvaW5jbHVkZSAtSS4gLWMgLW8gc2FtcGxl
+Lm8gc2FtcGxlLmMKPiBnY2MgLUkvaG9tZS9kYnJ5YW50L2xvY2FsNS9pbmNsdWRlIC1JLiAtYyAt
+byB0cC5vIHRwLmMKPiBJbiBmaWxlIGluY2x1ZGVkIGZyb20gIAo+IC9ob21lL2RicnlhbnQvbG9j
+YWw1L2luY2x1ZGUvbHR0bmcvdXN0LXRyYWNlcG9pbnQtZXZlbnQuaDozMzg6MCwKPiBmcm9tIC9o
+b21lL2RicnlhbnQvbG9jYWw1L2luY2x1ZGUvbHR0bmcvdHJhY2Vwb2ludC1ldmVudC5oOjQxLAo+
+IGZyb20gc2FtcGxlX2NvbXBvbmVudF9wcm92aWRlci5oOjE0MCwKPiBmcm9tIHRwLmM6MjU6Cj4g
+Li8uL3NhbXBsZV9jb21wb25lbnRfcHJvdmlkZXIuaDogSW4gZnVuY3Rpb24gIAo+IOKAmF9fZXZl
+bnRfcHJlcGFyZV9maWx0ZXJfc3RhY2tfX3NhbXBsZV9jb21wb25lbnRfX19tZXNzYWdl4oCZOgo+
+IC4vLi9zYW1wbGVfY29tcG9uZW50X3Byb3ZpZGVyLmg6NzY6MTogZXJyb3I6IGx2YWx1ZSByZXF1
+aXJlZCBhcyB1bmFyeSAgCj4g4oCYJuKAmSBvcGVyYW5kCj4gbWFrZTogKioqIFt0cC5vXSBFcnJv
+ciAxCj4KPiBJJ20gdHJ5aW5nIHRvIG1ha2Ugc2Vuc2Ugb2YgYWxsIHRoaXMuIEkndmUgYmVlbiBw
+YXNzaW5nICAKPiBnZW5lcmF0ZWQtb24tdGhlLWZseSBydmFsdWVzIHRocm91Z2ggY3RmX3N0cmlu
+ZygpIHVzaW5nIHYyLjAuNSB3aXRoIG5vICAKPiAobm90aWNlYWJsZSkgcHJvYmxlbXMuIE5vdyBJ
+IGNhbid0LiBTaG91bGQgSSBuZXZlciBoYXZlIGJlZW4gZG9pbmcgdGhhdCwgIAo+IG9yIGhhcyB0
+aGlzIGNoYW5nZSBoYWQgYW4gdW5pbnRlbmRlZCBjb25zZXF1ZW5jZT8gQWRtaXR0ZWRseSBJIGhh
+dmVuJ3QgIAo+IGJlZW4gZmlsdGVyaW5nIHRyYWNlcG9pbnRzIG9uIHRleHQgY3JpdGVyaWEgYW5k
+IGFtIG5vdCBjb25zaWRlcmluZyAgCj4gdGhpbmdzIGZyb20gdGhhdCBhbmdsZS4gU2hvdWxkIGN0
+Zl9zdHJpbmcoKSBhcmd1bWVudHMgYWx3YXlzIGJlIHN0cmluZyAgCj4gbGl0ZXJhbHM/IQo+Cj4g
+VGhhbmtzLAo+IERhdmUKPgo+IC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KPiBUaGUgaW5mb3JtYXRpb24gY29udGFp
+bmVkIGluIHRoaXMgdHJhbnNtaXNzaW9uIG1heSBiZSBjb25maWRlbnRpYWwuIEFueSBkaXNjbG9z
+dXJlLCBjb3B5aW5nLCBvciBmdXJ0aGVyIGRpc3RyaWJ1dGlvbiBvZiBjb25maWRlbnRpYWwgaW5m
+b3JtYXRpb24gaXMgbm90IHBlcm1pdHRlZCB1bmxlc3Mgc3VjaCBwcml2aWxlZ2UgaXMgZXhwbGlj
+aXRseSBncmFudGVkIGluIHdyaXRpbmcgYnkgUXVhbnR1bS4gUXVhbnR1bSByZXNlcnZlcyB0aGUg
+cmlnaHQgdG8gaGF2ZSBlbGVjdHJvbmljIGNvbW11bmljYXRpb25zLCBpbmNsdWRpbmcgZW1haWwg
+YW5kIGF0dGFjaG1lbnRzLCBzZW50IGFjcm9zcyBpdHMgbmV0d29ya3MgZmlsdGVyZWQgdGhyb3Vn
+aCBhbnRpIHZpcnVzIGFuZCBzcGFtIHNvZnR3YXJlIHByb2dyYW1zIGFuZCByZXRhaW4gc3VjaCBt
+ZXNzYWdlcyBpbiBvcmRlciB0byBjb21wbHkgd2l0aCBhcHBsaWNhYmxlIGRhdGEgc2VjdXJpdHkg
+YW5kIHJldGVudGlvbiByZXF1aXJlbWVudHMuIFF1YW50dW0gaXMgbm90IHJlc3BvbnNpYmxlIGZv
+ciB0aGUgcHJvcGVyIGFuZCBjb21wbGV0ZSB0cmFuc21pc3Npb24gb2YgdGhlIHN1YnN0YW5jZSBv
+ZiB0aGlzIGNvbW11bmljYXRpb24gb3IgZm9yIGFueSBkZWxheSBpbiBpdHMgcmVjZWlwdC4KPgo+
+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gbHR0bmct
+ZGV2IG1haWxpbmcgbGlzdAo+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBodHRwOi8vbGlz
+dHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKCi0tIApNYXRo
+aWV1IERlc25veWVycwpPcGVyYXRpbmcgU3lzdGVtIEVmZmljaWVuY3kgUiZEIENvbnN1bHRhbnQK
+RWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRu
+Zy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWls
+bWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
