@@ -1,27 +1,21 @@
-From: Luis <luis@cs.umu.se>
-Subject: Measure network usage
-Date: Fri, 09 Nov 2012 13:15:24 +0100
-Message-ID: <509CF3DC.7010700__8016.51269798658$1352472164$gmane$org@cs.umu.se>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [urcu commit] Fix TLS detection: test with linker,
+	add	--disable-compiler-tls
+Date: Fri, 9 Nov 2012 10:29:10 -0500
+Message-ID: <20121109152910.GA6675__1880.22578736327$1352474989$gmane$org@Krystal>
+References: <20121109025418.GA26014@Krystal>
+	<CACgotOQhzheqKiAjTVqNPQOobEybq=6ny2cT3WBhFeCtZi1xeA@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.cs.umu.se ([130.239.40.25] ident=postfix)
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <luis@cs.umu.se>) id 1TWnUe-0005dc-7w
-	for lttng-dev@lists.lttng.org; Fri, 09 Nov 2012 07:15:28 -0500
-Received: from localhost (localhost [127.0.0.1])
-	by amavisd-new (Postfix) with ESMTP id C28B3CA
-	for <lttng-dev@lists.lttng.org>; Fri,  9 Nov 2012 13:15:26 +0100 (MET)
-Received: from mail.cs.umu.se ([127.0.0.1])
-	by localhost (mimmi.cs.umu.se [127.0.0.1]) (amavisd-new, port 10024)
-	with LMTP id rtVGqVPkUYCM for <lttng-dev@lists.lttng.org>;
-	Fri,  9 Nov 2012 13:15:25 +0100 (MET)
-Received: from [130.239.59.83] (luis-laptop.cs.umu.se [130.239.59.83])
-	(using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-	(No client certificate requested) (Authenticated sender: luis)
-	by mail.cs.umu.se (Postfix) with ESMTPSA id 4B86BC9
-	for <lttng-dev@lists.lttng.org>; Fri,  9 Nov 2012 13:15:25 +0100 (MET)
+	(envelope-from <compudj@mail.openrapids.net>) id 1TWqW8-00072M-2l
+	for lttng-dev@lists.lttng.org; Fri, 09 Nov 2012 10:29:12 -0500
+Content-Disposition: inline
+In-Reply-To: <CACgotOQhzheqKiAjTVqNPQOobEybq=6ny2cT3WBhFeCtZi1xeA@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -30,13 +24,48 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Marek =?utf-8?Q?Vavru=C5=A1a?= <marek.vavrusa@nic.cz>
+Cc: lttng-dev@lists.lttng.org, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Jim Reid <jim@rfc1035.com>
 List-Id: lttng-dev@lists.lttng.org
 
-Hello!
-
-I would like to know how can I measure the network usage of an 
-application (when and during how much time) by using LTTng software!
-
-Thank you,
-Luis
+KiBNYXJlayBWYXZydcWhYSAobWFyZWsudmF2cnVzYUBuaWMuY3opIHdyb3RlOgo+IE5pY2UsIEkg
+Y2FuIGNvbmZpcm0gaXQgY29tcGlsZXMgb24gT1NYMTAuOCB3aXRoIGRlZmF1bHQgZ2NjIGFuZAo+
+IGF1dG9kaXNhYmxlcyBfX3RocmVhZCBjb3JyZWN0bHkuCj4gSXQgYWxzbyBidWlsZHMgd2l0aCBj
+bGFuZywgX190aHJlYWQgZW5hYmxlZC9kaXNhYmxlZC4KCkV4Y2VsbGVudCBuZXdzIQoKPiBGb3Ig
+YmFja3BvcnRlZCAwLjcsIGkgdGhpbmsgdGhlIHBhdGNoIGZvciBNQVBfQU5PTllNT1VTIGNvbXBh
+dGliaWxpdHkgbmVlZHMKPiB0byBiZSBiYWNrcG9ydGVkIGFzIHdlbGwgKGlmIGl0J3Mgbm90IGFs
+cmVhZHkpLgoKSWYgeW91IG1lYW4gdGhpcyBwYXRjaDoKCmNvbW1pdCAwZDBjZjkzZjc0YWRmMDM2
+N2IzZjlkMDA3MzUxOTg0ZTkxZDZlOTFmCkF1dGhvcjogTWF0aGlldSBEZXNub3llcnMgPG1hdGhp
+ZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4KRGF0ZTogICBTYXQgTWF5IDI2IDExOjAwOjE2IDIw
+MTIgLTA0MDAKCiAgICBmcmVlYnNkIDguMiBmaXg6IGRlZmluZSBNQVBfQU5PTllNT1VTIGZvciBj
+b21wYXRpYmlsaXR5CiAgICAKICAgIFNpZ25lZC1vZmYtYnk6IE1hdGhpZXUgRGVzbm95ZXJzIDxt
+YXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+CgpJdCB3YXMgbWVyZ2VkIGJldHdlZW4gMC43
+LjIgYW5kIDAuNy4zLCBzbyBpdCdzIHBhcnQgb2YgYm90aCBzdGFibGUtMC43CmFuZCBtYXN0ZXIg
+YnJhbmNoZXMuCgpIb3BlZnVsbHkgSSdtIG5vdCBtaXNzaW5nIGFub3RoZXIgb25lLgoKVGhhbmtz
+IQoKTWF0aGlldQoKCj4gR3JlYXQgd29yaywgdGhhbmtzIQo+IAo+IE1hcmVrCj4gCj4gT24gOSBO
+b3ZlbWJlciAyMDEyIDAzOjU0LCBNYXRoaWV1IERlc25veWVycwo+IDxtYXRoaWV1LmRlc25veWVy
+c0BlZmZpY2lvcy5jb20+d3JvdGU6Cj4gCj4gPiBUaGUgZm9sbG93aW5nIGNvbW1pdCBpcyBub3cg
+aW4gdGhlIHVzZXJzcGFjZSBSQ1UgbWFzdGVyIGJyYW5jaAo+ID4gKGJhY2twb3J0ZWQgdG8gc3Rh
+YmxlLTAuNyBicmFuY2ggdG9vKS4gSXQgc2hvdWxkIGZpeCBUTFMgZGV0ZWN0aW9uIG9uCj4gPiBi
+b3RoIE5ldEJTRCA8PSA1LjEsIGFuZCBvbiBEYXJ3aW4sIGFuZCBhZGRzIGEgLS1kaXNhYmxlLWNv
+bXBpbGVyLXRscwo+ID4gZmxhZyB0byBmb3JjZSB1c2luZyB0aGUgcHRocmVhZF9nZXRzcGVjaWZp
+YyBmYWxsYmFjay4KPiA+Cj4gPgo+ID4gY29tbWl0IDc1NDc4YjMyZmZlNTNiMGQ4YjVlNjg3ZDlj
+ZjdlYmRkNzdhMDg1ZGUKPiA+IEF1dGhvcjogTWF0aGlldSBEZXNub3llcnMgPG1hdGhpZXUuZGVz
+bm95ZXJzQGVmZmljaW9zLmNvbT4KPiA+IERhdGU6ICAgVGh1IE5vdiA4IDIxOjQ1OjA0IDIwMTIg
+LTA1MDAKPiA+Cj4gPiAgICAgRml4IFRMUyBkZXRlY3Rpb246IHRlc3Qgd2l0aCBsaW5rZXIsIGFk
+ZCAtLWRpc2FibGUtY29tcGlsZXItdGxzCj4gPgo+ID4gICAgIE5ldEJTRCA1LjEgYW5kIG9sZGVy
+LCBhcyB3ZWxsIGFzIERhcndpbiwgc3VjY2VlZCB0byBjb21waWxlIGNvZGUKPiA+ICAgICBjb250
+YWluaW5nIFRMUywgYnV0IGNhbm5vdCBsaW5rIGl0LiBUZXN0IHdpdGggbGlua2VyIGluIGFkZGl0
+aW9uIHRvCj4gPiAgICAgY29tcGlsZXIgZm9yIFRMUyBzdXBwb3J0Lgo+ID4KPiA+ICAgICBBbHNv
+IGFkZCBhIC0tZGlzYWJsZS1jb21waWxlci10bHMgY29uZmlndXJlIG9wdGlvbiB0byBhbGxvdyB1
+c2VycyB0bwo+ID4gICAgIGZvcmNlIHVzaW5nIHRoZSBwdGhyZWFkIGdldHNwZWNpZmljIGZhbGwg
+YmFjay4KPiA+Cj4gPiAgICAgRml4ZXMgIzI4OAo+ID4KPiA+ICAgICBTaWduZWQtb2ZmLWJ5OiBN
+YXRoaWV1IERlc25veWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPgo+ID4KPiA+
+IEZlZWRiYWNrIGlzIHdlbGNvbWUhCj4gPgo+ID4gVGhhbmtzLAo+ID4KPiA+IE1hdGhpZXUKPiA+
+Cj4gPiAtLQo+ID4gTWF0aGlldSBEZXNub3llcnMKPiA+IE9wZXJhdGluZyBTeXN0ZW0gRWZmaWNp
+ZW5jeSBSJkQgQ29uc3VsdGFudAo+ID4gRWZmaWNpT1MgSW5jLgo+ID4gaHR0cDovL3d3dy5lZmZp
+Y2lvcy5jb20KPiA+CgotLSAKTWF0aGlldSBEZXNub3llcnMKT3BlcmF0aW5nIFN5c3RlbSBFZmZp
+Y2llbmN5IFImRCBDb25zdWx0YW50CkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5j
+b20KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5n
+LWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMu
+bHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
