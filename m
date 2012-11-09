@@ -1,9 +1,9 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-ust] Add compilation support for
-	the	TileGX architecture.
-Date: Fri, 9 Nov 2012 10:57:31 -0500
-Message-ID: <20121109155731.GB8094__25104.7135367573$1352476686$gmane$org@Krystal>
-References: <1352443711-8662-1-git-send-email-simon.marchi@polymtl.ca>
+Subject: Re: [PATCH urcu] Add compilation support for the	TileGX
+	architecture.
+Date: Fri, 9 Nov 2012 10:58:46 -0500
+Message-ID: <20121109155846.GC8094__25799.0391845398$1352476777$gmane$org@Krystal>
+References: <1352443614-8272-1-git-send-email-simon.marchi@polymtl.ca>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -11,10 +11,10 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1TWqxc-0007GL-4e
-	for lttng-dev@lists.lttng.org; Fri, 09 Nov 2012 10:57:36 -0500
+	(envelope-from <compudj@mail.openrapids.net>) id 1TWqyl-0007Hg-6p
+	for lttng-dev@lists.lttng.org; Fri, 09 Nov 2012 10:58:47 -0500
 Content-Disposition: inline
-In-Reply-To: <1352443711-8662-1-git-send-email-simon.marchi@polymtl.ca>
+In-Reply-To: <1352443614-8272-1-git-send-email-simon.marchi@polymtl.ca>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -27,7 +27,7 @@ To: Simon Marchi <simon.marchi@polymtl.ca>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-First detail: please remove dot from subject end of line.
+should remove dot from EOL too.
 
 * Simon Marchi (simon.marchi@polymtl.ca) wrote:
 > Signed-off-by: Simon Marchi <simon.marchi@polymtl.ca>
@@ -36,28 +36,26 @@ First detail: please remove dot from subject end of line.
 >  1 files changed, 1 insertions(+), 0 deletions(-)
 > 
 > diff --git a/configure.ac b/configure.ac
-> index 7f12f23..97a9f65 100644
+> index 1d04062..a4ef8c9 100644
 > --- a/configure.ac
 > +++ b/configure.ac
-> @@ -213,6 +213,7 @@ changequote([,])dnl
->          armv5) LIBFORMAT="elf32-littlearm"; NO_UNALIGNED_ACCESS=1 ;;
->  	arm) LIBFORMAT="elf32-littlearm"; NO_UNALIGNED_ACCESS=1 ;;
->  	mips*) LIBFORMAT=""; NO_UNALIGNED_ACCESS=1;;
-> +	tile) LIBFORMAT="elf64-tilegx-le"; NO_UNALIGNED_ACCESS=1;;
+> @@ -77,6 +77,7 @@ AS_CASE([$host_cpu],
+>  	[ia64], [ARCHTYPE="gcc"],
+>  	[arm*], [ARCHTYPE="arm"],
+>  	[mips*], [ARCHTYPE="mips"],
+> +	[tile], [ARCHTYPE="gcc"],
 
-Not sure how this works, but I think there exists other "tile" flavors
-out there besides the tilegx. Will they appear as "tile" from an
-autotools point of view and then break when we specify their libformat
-as elf64-tilegx-le ? Are there any way to distinguish between flavors ?
-Please ask advice to Tilera if needed.
+So I guess you are adding support for the Tile architecture, not just
+the TileGX. Can you resumbit after updating the patch subject to reflect
+this ?
 
 Thanks,
 
 Mathieu
 
->  	*) AC_MSG_ERROR([unable to detect library format (unsupported architecture ($host_cpu)?)]) ;;
->  esac
->  AC_SUBST(LIBFORMAT)
+>  	[ARCHTYPE="unknown"]
+>  )
+>  
 > -- 
 > 1.7.1
 > 
