@@ -1,18 +1,15 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [urcu commit] Fix TLS detection: test with linker,
-	add	--disable-compiler-tls
-Date: Thu, 8 Nov 2012 21:54:18 -0500
-Message-ID: <20121109025418.GA26014__42883.7590305649$1352429698$gmane$org@Krystal>
+From: Simon Marchi <simon.marchi@polymtl.ca>
+Subject: [PATCH 1/3] Add default subbuf sizes getter functions.
+Date: Fri,  9 Nov 2012 01:39:06 -0500
+Message-ID: <1352443148-7135-1-git-send-email-simon.marchi__30230.1397234716$1352443188$gmane$org@polymtl.ca>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from smtp.polymtl.ca ([132.207.4.11])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1TWejb-00017q-Mu
-	for lttng-dev@lists.lttng.org; Thu, 08 Nov 2012 21:54:19 -0500
-Content-Disposition: inline
+	(envelope-from <simon.marchi@polymtl.ca>) id 1TWiFE-0002rl-J9
+	for lttng-dev@lists.lttng.org; Fri, 09 Nov 2012 01:39:12 -0500
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,41 +18,157 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Marek =?utf-8?Q?Vavru=C5=A1a?= <marek.vavrusa@nic.cz>
-Cc: lttng-dev@lists.lttng.org, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Jim Reid <jim@rfc1035.com>
+To: lttng-dev@lists.lttng.org
+Cc: Simon Marchi <simon.marchi@polymtl.ca>
 List-Id: lttng-dev@lists.lttng.org
 
-The following commit is now in the userspace RCU master branch
-(backported to stable-0.7 branch too). It should fix TLS detection on
-both NetBSD <= 5.1, and on Darwin, and adds a --disable-compiler-tls
-flag to force using the pthread_getspecific fallback.
+This patch adds src/common/defaults.c file. It contains functions to
+retrieve defaults subbuf sizes based on the architecture page size.
 
+Signed-off-by: Simon Marchi <simon.marchi@polymtl.ca>
+---
+ src/common/Makefile.am |    2 +-
+ src/common/defaults.c  |   86 ++++++++++++++++++++++++++++++++++++++++++++++++
+ src/common/defaults.h  |    7 ++++
+ 3 files changed, 94 insertions(+), 1 deletions(-)
+ create mode 100644 src/common/defaults.c
 
-commit 75478b32ffe53b0d8b5e687d9cf7ebdd77a085de
-Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Date:   Thu Nov 8 21:45:04 2012 -0500
-
-    Fix TLS detection: test with linker, add --disable-compiler-tls
-    
-    NetBSD 5.1 and older, as well as Darwin, succeed to compile code
-    containing TLS, but cannot link it. Test with linker in addition to
-    compiler for TLS support.
-    
-    Also add a --disable-compiler-tls configure option to allow users to
-    force using the pthread getspecific fall back.
-    
-    Fixes #288
-    
-    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-
-Feedback is welcome!
-
-Thanks,
-
-Mathieu
-
+diff --git a/src/common/Makefile.am b/src/common/Makefile.am
+index b43b376..f91259c 100644
+--- a/src/common/Makefile.am
++++ b/src/common/Makefile.am
+@@ -12,7 +12,7 @@ noinst_HEADERS = lttng-kernel.h defaults.h macros.h error.h futex.h \
+ noinst_LTLIBRARIES = libcommon.la
+ 
+ libcommon_la_SOURCES = error.h error.c utils.c utils.h runas.c runas.h \
+-                       common.h futex.c futex.h uri.c uri.h
++                       common.h futex.c futex.h uri.c uri.h defaults.c
+ 
+ # Consumer library
+ noinst_LTLIBRARIES += libconsumer.la
+diff --git a/src/common/defaults.c b/src/common/defaults.c
+new file mode 100644
+index 0000000..48d6605
+--- /dev/null
++++ b/src/common/defaults.c
+@@ -0,0 +1,86 @@
++/*
++ * Copyright (C) 2012 - Simon Marchi <simon.marchi@polymtl.ca>
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License, version 2 only,
++ * as published by the Free Software Foundation.
++ *
++ * This program is distributed in the hope that it will be useful, but WITHOUT
++ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
++ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
++ * more details.
++ *
++ * You should have received a copy of the GNU General Public License along
++ * with this program; if not, write to the Free Software Foundation, Inc.,
++ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
++ */
++
++#include <stddef.h>
++#include <unistd.h>
++
++#include "defaults.h"
++
++static size_t default_channel_subbuf_size;
++static size_t default_metadata_subbuf_size;
++static size_t default_kernel_channel_subbuf_size;
++static size_t default_ust_channel_subbuf_size;
++
++static void __attribute__((constructor)) init_defaults(void)
++{
++	default_kernel_channel_subbuf_size = DEFAULT_KERNEL_CHANNEL_SUBBUF_SIZE; 
++	
++	long page_size = sysconf(_SC_PAGESIZE);
++	if (page_size > 0) {
++		default_channel_subbuf_size = page_size;
++		default_metadata_subbuf_size = page_size;
++		default_ust_channel_subbuf_size = page_size;
++	} else {
++		default_channel_subbuf_size = 4096;
++		default_metadata_subbuf_size = 4096;
++		default_ust_channel_subbuf_size = 4096;
++	}
++}
++
++/*
++ * Returns the default subbuf size.
++ *
++ * This function depends on a value that is set at constructor time, so it is
++ * unsafe to call it from another constructor.
++ */
++size_t get_default_channel_subbuf_size(void)
++{
++	return default_channel_subbuf_size;
++}
++
++/*
++ * Returns the default metadata subbuf size.
++ *
++ * This function depends on a value that is set at constructor time, so it is
++ * unsafe to call it from another constructor.
++ */
++size_t get_default_metadata_subbuf_size(void)
++{
++	return default_metadata_subbuf_size;
++}
++
++/*
++ * Returns the default subbuf size for the kernel domain.
++ *
++ * This function depends on a value that is set at constructor time, so it is
++ * unsafe to call it from another constructor.
++ */
++size_t get_default_kernel_channel_subbuf_size(void)
++{
++	return default_kernel_channel_subbuf_size;
++}
++
++/*
++ * Returns the default subbuf size for the UST domain.
++ *
++ * This function depends on a value that is set at constructor time, so it is
++ * unsafe to call it from another constructor.
++ */
++size_t get_default_ust_channel_subbuf_size(void)
++{
++	return default_ust_channel_subbuf_size;
++}
+diff --git a/src/common/defaults.h b/src/common/defaults.h
+index 0c0b6ac..efff43e 100644
+--- a/src/common/defaults.h
++++ b/src/common/defaults.h
+@@ -109,6 +109,9 @@
+ #define DEFAULT_METADATA_SUBBUF_SIZE    4096
+ #define DEFAULT_METADATA_SUBBUF_NUM     2
+ 
++size_t get_default_channel_subbuf_size(void);
++size_t get_default_metadata_subbuf_size(void);
++
+ /* Kernel has different defaults */
+ 
+ /* DEFAULT_KERNEL_CHANNEL_SUBBUF_SIZE must always be a power of 2 */
+@@ -121,6 +124,8 @@
+ /* See lttng-kernel.h enum lttng_kernel_output for channel output */
+ #define DEFAULT_KERNEL_CHANNEL_OUTPUT       LTTNG_EVENT_SPLICE
+ 
++size_t get_default_kernel_channel_subbuf_size(void);
++
+ /* User space defaults */
+ 
+ /* Must be a power of 2 */
+@@ -130,6 +135,8 @@
+ /* See lttng-ust.h enum lttng_ust_output */
+ #define DEFAULT_UST_CHANNEL_OUTPUT          LTTNG_EVENT_MMAP
+ 
++size_t get_default_ust_channel_subbuf_size(void);
++
+ /*
+  * Default timeout value for the sem_timedwait() call. Blocking forever is not
+  * wanted so a timeout is used to control the data flow and not freeze the
 -- 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+1.7.1
