@@ -1,21 +1,22 @@
-From: Simon Marchi <simon.marchi@polymtl.ca>
-Subject: Re: [PATCH 2/2] Use the new functions for default
-	subbuf sizes.
-Date: Sun, 11 Nov 2012 20:36:33 -0800
-Message-ID: <CAFXXi0=xiHpZCrd+cP0-6E4tcnRDVTKcRwRjo6vH8TwpLmoQRA__40946.1514479064$1352695089$gmane$org@mail.gmail.com>
-References: <1352694514-25027-1-git-send-email-simon.marchi@polymtl.ca>
-	<1352694514-25027-2-git-send-email-simon.marchi@polymtl.ca>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH 1/3] Add default subbuf sizes
+	getter	functions.
+Date: Sun, 11 Nov 2012 23:54:32 -0500
+Message-ID: <20121112045432.GA20210__11425.4568740309$1352696108$gmane$org@Krystal>
+References: <1352443148-7135-1-git-send-email-simon.marchi@polymtl.ca>
+	<509D26D3.4070609@efficios.com>
+	<CAFXXi0n6BWh=RF+vY_GXK2+Y=s8ZmJyqEH=Y_3D9DdyQztAyUQ@mail.gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-pa0-f48.google.com ([209.85.220.48])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <thundersim@gmail.com>) id 1TXlll-00088T-8F
-	for lttng-dev@lists.lttng.org; Sun, 11 Nov 2012 23:37:09 -0500
-Received: by mail-pa0-f48.google.com with SMTP id kp12so4079205pab.35
-	for <lttng-dev@lists.lttng.org>; Sun, 11 Nov 2012 20:37:03 -0800 (PST)
-In-Reply-To: <1352694514-25027-2-git-send-email-simon.marchi@polymtl.ca>
+	(envelope-from <compudj@mail.openrapids.net>) id 1TXm2d-0008GV-MM
+	for lttng-dev@lists.lttng.org; Sun, 11 Nov 2012 23:54:35 -0500
+Content-Disposition: inline
+In-Reply-To: <CAFXXi0n6BWh=RF+vY_GXK2+Y=s8ZmJyqEH=Y_3D9DdyQztAyUQ@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,158 +25,221 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Simon Marchi <simon.marchi@polymtl.ca>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Forgot to remove the dot at the end of the title...
+* Simon Marchi (simon.marchi@polymtl.ca) wrote:
+> Hi David,
+> 
+> I just sent my v2 for this patch. I changed the logic so that it still
+> uses the DEFAULT_*_SUBBUF_SIZE defines, but check that it is >= page
+> size. It should answer your first two comments/questions.
+> 
+> I don't think it would help to put these inline, since they are only
+> called in slow paths.
 
-On Sun, Nov 11, 2012 at 8:28 PM, Simon Marchi <simon.marchi@polymtl.ca> wrote:
-> Use the functions added by the previous commit. All the occurences of
-> the previous defines were replaced.
->
-> Signed-off-by: Simon Marchi <simon.marchi@polymtl.ca>
-> ---
->  src/bin/lttng-sessiond/channel.c         |    4 ++--
->  src/bin/lttng-sessiond/trace-kernel.c    |    2 +-
->  src/bin/lttng-sessiond/trace-ust.c       |    2 +-
->  src/bin/lttng/commands/enable_channels.c |    6 +++---
->  src/lib/lttng-ctl/lttng-ctl.c            |    4 ++--
->  tests/tools/Makefile.am                  |    2 +-
->  tests/tools/test_kernel_data_trace.c     |    2 +-
->  tests/tools/test_ust_data_trace.c        |    2 +-
->  8 files changed, 12 insertions(+), 12 deletions(-)
->
-> diff --git a/src/bin/lttng-sessiond/channel.c b/src/bin/lttng-sessiond/channel.c
-> index 8b9adfb..a942ff5 100644
-> --- a/src/bin/lttng-sessiond/channel.c
-> +++ b/src/bin/lttng-sessiond/channel.c
-> @@ -54,7 +54,7 @@ struct lttng_channel *channel_new_default_attr(int dom)
->
->         switch (dom) {
->         case LTTNG_DOMAIN_KERNEL:
-> -               chan->attr.subbuf_size = DEFAULT_KERNEL_CHANNEL_SUBBUF_SIZE;
-> +               chan->attr.subbuf_size = default_get_kernel_channel_subbuf_size();
->                 chan->attr.num_subbuf = DEFAULT_KERNEL_CHANNEL_SUBBUF_NUM;
->                 chan->attr.output = DEFAULT_KERNEL_CHANNEL_OUTPUT;
->                 break;
-> @@ -64,7 +64,7 @@ struct lttng_channel *channel_new_default_attr(int dom)
->         case LTTNG_DOMAIN_UST_PID_FOLLOW_CHILDREN:
->         case LTTNG_DOMAIN_UST_EXEC_NAME:
->  #endif
-> -               chan->attr.subbuf_size = DEFAULT_UST_CHANNEL_SUBBUF_SIZE;
-> +               chan->attr.subbuf_size = default_get_ust_channel_subbuf_size();
->                 chan->attr.num_subbuf = DEFAULT_UST_CHANNEL_SUBBUF_NUM;
->                 chan->attr.output = DEFAULT_UST_CHANNEL_OUTPUT;
->                 break;
-> diff --git a/src/bin/lttng-sessiond/trace-kernel.c b/src/bin/lttng-sessiond/trace-kernel.c
-> index 7748b89..4d2870a 100644
-> --- a/src/bin/lttng-sessiond/trace-kernel.c
-> +++ b/src/bin/lttng-sessiond/trace-kernel.c
-> @@ -272,7 +272,7 @@ struct ltt_kernel_metadata *trace_kernel_create_metadata(void)
->
->         /* Set default attributes */
->         chan->attr.overwrite = DEFAULT_CHANNEL_OVERWRITE;
-> -       chan->attr.subbuf_size = DEFAULT_METADATA_SUBBUF_SIZE;
-> +       chan->attr.subbuf_size = default_get_metadata_subbuf_size();
->         chan->attr.num_subbuf = DEFAULT_METADATA_SUBBUF_NUM;
->         chan->attr.switch_timer_interval = DEFAULT_CHANNEL_SWITCH_TIMER;
->         chan->attr.read_timer_interval = DEFAULT_CHANNEL_READ_TIMER;
-> diff --git a/src/bin/lttng-sessiond/trace-ust.c b/src/bin/lttng-sessiond/trace-ust.c
-> index 864a4b0..2dcc7c2 100644
-> --- a/src/bin/lttng-sessiond/trace-ust.c
-> +++ b/src/bin/lttng-sessiond/trace-ust.c
-> @@ -311,7 +311,7 @@ struct ltt_ust_metadata *trace_ust_create_metadata(char *path)
->
->         /* Set default attributes */
->         lum->attr.overwrite = DEFAULT_CHANNEL_OVERWRITE;
-> -       lum->attr.subbuf_size = DEFAULT_METADATA_SUBBUF_SIZE;
-> +       lum->attr.subbuf_size = default_get_metadata_subbuf_size();
->         lum->attr.num_subbuf = DEFAULT_METADATA_SUBBUF_NUM;
->         lum->attr.switch_timer_interval = DEFAULT_CHANNEL_SWITCH_TIMER;
->         lum->attr.read_timer_interval = DEFAULT_CHANNEL_READ_TIMER;
-> diff --git a/src/bin/lttng/commands/enable_channels.c b/src/bin/lttng/commands/enable_channels.c
-> index 1857477..d9a3b02 100644
-> --- a/src/bin/lttng/commands/enable_channels.c
-> +++ b/src/bin/lttng/commands/enable_channels.c
-> @@ -101,9 +101,9 @@ static void usage(FILE *ofp)
->         fprintf(ofp, "      --overwrite          Flight recorder mode%s\n",
->                 DEFAULT_CHANNEL_OVERWRITE ? " (default)" : "");
->         fprintf(ofp, "      --subbuf-size SIZE   Subbuffer size in bytes\n");
-> -       fprintf(ofp, "                               (default: %u, kernel default: %u)\n",
-> -               DEFAULT_CHANNEL_SUBBUF_SIZE,
-> -               DEFAULT_KERNEL_CHANNEL_SUBBUF_SIZE);
-> +       fprintf(ofp, "                               (default: %zu, kernel default: %zu)\n",
-> +               default_get_channel_subbuf_size(),
-> +               default_get_kernel_channel_subbuf_size());
->         fprintf(ofp, "                               Needs to be a power of 2 for\n");
->          fprintf(ofp, "                               kernel and ust tracers\n");
->         fprintf(ofp, "      --num-subbuf NUM     Number of subbufers\n");
-> diff --git a/src/lib/lttng-ctl/lttng-ctl.c b/src/lib/lttng-ctl/lttng-ctl.c
-> index 46338fb..20bb8c6 100644
-> --- a/src/lib/lttng-ctl/lttng-ctl.c
-> +++ b/src/lib/lttng-ctl/lttng-ctl.c
-> @@ -1344,7 +1344,7 @@ void lttng_channel_set_default_attr(struct lttng_domain *domain,
->                 attr->switch_timer_interval = DEFAULT_CHANNEL_SWITCH_TIMER;
->                 attr->read_timer_interval = DEFAULT_CHANNEL_READ_TIMER;
->
-> -               attr->subbuf_size = DEFAULT_KERNEL_CHANNEL_SUBBUF_SIZE;
-> +               attr->subbuf_size = default_get_kernel_channel_subbuf_size();
->                 attr->num_subbuf = DEFAULT_KERNEL_CHANNEL_SUBBUF_NUM;
->                 attr->output = DEFAULT_KERNEL_CHANNEL_OUTPUT;
->                 break;
-> @@ -1358,7 +1358,7 @@ void lttng_channel_set_default_attr(struct lttng_domain *domain,
->                 attr->switch_timer_interval = DEFAULT_CHANNEL_SWITCH_TIMER;
->                 attr->read_timer_interval = DEFAULT_CHANNEL_READ_TIMER;
->
-> -               attr->subbuf_size = DEFAULT_UST_CHANNEL_SUBBUF_SIZE;
-> +               attr->subbuf_size = default_get_ust_channel_subbuf_size();
->                 attr->num_subbuf = DEFAULT_UST_CHANNEL_SUBBUF_NUM;
->                 attr->output = DEFAULT_UST_CHANNEL_OUTPUT;
->                 break;
-> diff --git a/tests/tools/Makefile.am b/tests/tools/Makefile.am
-> index cd7ff32..4fe494c 100644
-> --- a/tests/tools/Makefile.am
-> +++ b/tests/tools/Makefile.am
-> @@ -27,7 +27,7 @@ test_sessions_LDADD = $(COMMON) $(HASHTABLE) $(SESSIOND_COMM)
->
->  # Kernel trace data unit tests
->  test_kernel_data_trace_SOURCES = test_kernel_data_trace.c $(UTILS) $(KERN_DATA_TRACE)
-> -test_kernel_data_trace_LDADD = $(SESSIOND_COMM) $(HASHTABLE)
-> +test_kernel_data_trace_LDADD = $(COMMON) $(SESSIOND_COMM) $(HASHTABLE)
->
->  if HAVE_LIBLTTNG_UST_CTL
->  noinst_PROGRAMS += test_ust_data_trace
-> diff --git a/tests/tools/test_kernel_data_trace.c b/tests/tools/test_kernel_data_trace.c
-> index c49d7ce..1edd20d 100644
-> --- a/tests/tools/test_kernel_data_trace.c
-> +++ b/tests/tools/test_kernel_data_trace.c
-> @@ -99,7 +99,7 @@ static void create_kernel_metadata(void)
->         assert(kern->metadata->conf->attr.overwrite
->                         == DEFAULT_CHANNEL_OVERWRITE);
->         assert(kern->metadata->conf->attr.subbuf_size
-> -                       == DEFAULT_METADATA_SUBBUF_SIZE);
-> +                       == default_get_metadata_subbuf_size());
->         assert(kern->metadata->conf->attr.num_subbuf
->                         == DEFAULT_METADATA_SUBBUF_NUM);
->         assert(kern->metadata->conf->attr.switch_timer_interval
-> diff --git a/tests/tools/test_ust_data_trace.c b/tests/tools/test_ust_data_trace.c
-> index 459520d..69a73b2 100644
-> --- a/tests/tools/test_ust_data_trace.c
-> +++ b/tests/tools/test_ust_data_trace.c
-> @@ -107,7 +107,7 @@ static void create_ust_metadata(void)
->         assert(metadata->attr.overwrite
->                         == DEFAULT_CHANNEL_OVERWRITE);
->         assert(metadata->attr.subbuf_size
-> -                       == DEFAULT_METADATA_SUBBUF_SIZE);
-> +                       == default_get_metadata_subbuf_size());
->         assert(metadata->attr.num_subbuf
->                         == DEFAULT_METADATA_SUBBUF_NUM);
->         assert(metadata->attr.switch_timer_interval
-> --
-> 1.7.1
->
->
+Even though those are slow paths, adding a symbol and function call just
+to fetch a variable seems overkill. I agree with David: those should be
+made static inline.
+
+Thanks,
+
+Mathieu
+
+> 
+> Simon
+> 
+> > Hi Simon,
+> >
+> > Can you please rename the get_default_* function family to default_get_*
+> > in order to respect the name spacing of files.
+> >
+> > Comment below:
+> >
+> > Simon Marchi:
+> >> This patch adds src/common/defaults.c file. It contains functions to
+> >> retrieve defaults subbuf sizes based on the architecture page size.
+> >>
+> >> Signed-off-by: Simon Marchi <simon.marchi@polymtl.ca>
+> >> ---
+> >>  src/common/Makefile.am |    2 +-
+> >>  src/common/defaults.c  |   86 ++++++++++++++++++++++++++++++++++++++++++++++++
+> >>  src/common/defaults.h  |    7 ++++
+> >>  3 files changed, 94 insertions(+), 1 deletions(-)
+> >>  create mode 100644 src/common/defaults.c
+> >>
+> >> diff --git a/src/common/Makefile.am b/src/common/Makefile.am
+> >> index b43b376..f91259c 100644
+> >> --- a/src/common/Makefile.am
+> >> +++ b/src/common/Makefile.am
+> >> @@ -12,7 +12,7 @@ noinst_HEADERS = lttng-kernel.h defaults.h macros.h error.h futex.h \
+> >>  noinst_LTLIBRARIES = libcommon.la
+> >>
+> >>  libcommon_la_SOURCES = error.h error.c utils.c utils.h runas.c runas.h \
+> >> -                       common.h futex.c futex.h uri.c uri.h
+> >> +                       common.h futex.c futex.h uri.c uri.h defaults.c
+> >>
+> >>  # Consumer library
+> >>  noinst_LTLIBRARIES += libconsumer.la
+> >> diff --git a/src/common/defaults.c b/src/common/defaults.c
+> >> new file mode 100644
+> >> index 0000000..48d6605
+> >> --- /dev/null
+> >> +++ b/src/common/defaults.c
+> >> @@ -0,0 +1,86 @@
+> >> +/*
+> >> + * Copyright (C) 2012 - Simon Marchi <simon.marchi@polymtl.ca>
+> >> + *
+> >> + * This program is free software; you can redistribute it and/or modify
+> >> + * it under the terms of the GNU General Public License, version 2 only,
+> >> + * as published by the Free Software Foundation.
+> >> + *
+> >> + * This program is distributed in the hope that it will be useful, but WITHOUT
+> >> + * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+> >> + * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+> >> + * more details.
+> >> + *
+> >> + * You should have received a copy of the GNU General Public License along
+> >> + * with this program; if not, write to the Free Software Foundation, Inc.,
+> >> + * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+> >> + */
+> >> +
+> >> +#include <stddef.h>
+> >> +#include <unistd.h>
+> >> +
+> >> +#include "defaults.h"
+> >> +
+> >> +static size_t default_channel_subbuf_size;
+> >> +static size_t default_metadata_subbuf_size;
+> >> +static size_t default_kernel_channel_subbuf_size;
+> >> +static size_t default_ust_channel_subbuf_size;
+> >> +
+> >> +static void __attribute__((constructor)) init_defaults(void)
+> >> +{
+> >> +     default_kernel_channel_subbuf_size = DEFAULT_KERNEL_CHANNEL_SUBBUF_SIZE;
+> >
+> > Why is the kernel getting a default value and not a page size ?
+> >
+> >> +
+> >> +     long page_size = sysconf(_SC_PAGESIZE);
+> >> +     if (page_size > 0) {
+> >> +             default_channel_subbuf_size = page_size;
+> >> +             default_metadata_subbuf_size = page_size;
+> >> +             default_ust_channel_subbuf_size = page_size;
+> >> +     } else {
+> >> +             default_channel_subbuf_size = 4096;
+> >> +             default_metadata_subbuf_size = 4096;
+> >> +             default_ust_channel_subbuf_size = 4096;
+> >
+> > Should we use a default value for this 4096 size here with a
+> > DEFINE_*_SUBBUF_SIZE or... ?
+> >
+> > Seems a bit odd that the kernel got a default define value but not UST
+> > and metadata.
+> >
+> >> +     }
+> >> +}
+> >> +
+> >> +/*
+> >> + * Returns the default subbuf size.
+> >> + *
+> >> + * This function depends on a value that is set at constructor time, so it is
+> >> + * unsafe to call it from another constructor.
+> >> + */
+> >> +size_t get_default_channel_subbuf_size(void)
+> >> +{
+> >> +     return default_channel_subbuf_size;
+> >> +}
+> >> +
+> >> +/*
+> >> + * Returns the default metadata subbuf size.
+> >> + *
+> >> + * This function depends on a value that is set at constructor time, so it is
+> >> + * unsafe to call it from another constructor.
+> >> + */
+> >> +size_t get_default_metadata_subbuf_size(void)
+> >> +{
+> >> +     return default_metadata_subbuf_size;
+> >> +}
+> >> +
+> >> +/*
+> >> + * Returns the default subbuf size for the kernel domain.
+> >> + *
+> >> + * This function depends on a value that is set at constructor time, so it is
+> >> + * unsafe to call it from another constructor.
+> >> + */
+> >> +size_t get_default_kernel_channel_subbuf_size(void)
+> >> +{
+> >> +     return default_kernel_channel_subbuf_size;
+> >> +}
+> >> +
+> >> +/*
+> >> + * Returns the default subbuf size for the UST domain.
+> >> + *
+> >> + * This function depends on a value that is set at constructor time, so it is
+> >> + * unsafe to call it from another constructor.
+> >> + */
+> >> +size_t get_default_ust_channel_subbuf_size(void)
+> >> +{
+> >> +     return default_ust_channel_subbuf_size;
+> >> +}
+> >
+> > I'm wondering if all these functions should be static inline in the
+> > default.h...
+> >
+> > Thoughts?
+> >
+> > Otherwise, the patch looks good!
+> >
+> > Thanks
+> > David
+> >
+> >> diff --git a/src/common/defaults.h b/src/common/defaults.h
+> >> index 0c0b6ac..efff43e 100644
+> >> --- a/src/common/defaults.h
+> >> +++ b/src/common/defaults.h
+> >> @@ -109,6 +109,9 @@
+> >>  #define DEFAULT_METADATA_SUBBUF_SIZE    4096
+> >>  #define DEFAULT_METADATA_SUBBUF_NUM     2
+> >>
+> >> +size_t get_default_channel_subbuf_size(void);
+> >> +size_t get_default_metadata_subbuf_size(void);
+> >> +
+> >>  /* Kernel has different defaults */
+> >>
+> >>  /* DEFAULT_KERNEL_CHANNEL_SUBBUF_SIZE must always be a power of 2 */
+> >> @@ -121,6 +124,8 @@
+> >>  /* See lttng-kernel.h enum lttng_kernel_output for channel output */
+> >>  #define DEFAULT_KERNEL_CHANNEL_OUTPUT       LTTNG_EVENT_SPLICE
+> >>
+> >> +size_t get_default_kernel_channel_subbuf_size(void);
+> >> +
+> >>  /* User space defaults */
+> >>
+> >>  /* Must be a power of 2 */
+> >> @@ -130,6 +135,8 @@
+> >>  /* See lttng-ust.h enum lttng_ust_output */
+> >>  #define DEFAULT_UST_CHANNEL_OUTPUT          LTTNG_EVENT_MMAP
+> >>
+> >> +size_t get_default_ust_channel_subbuf_size(void);
+> >> +
+> >>  /*
+> >>   * Default timeout value for the sem_timedwait() call. Blocking forever is not
+> >>   * wanted so a timeout is used to control the data flow and not freeze the
+> >
+> > _______________________________________________
+> > lttng-dev mailing list
+> > lttng-dev@lists.lttng.org
+> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> 
 > _______________________________________________
 > lttng-dev mailing list
 > lttng-dev@lists.lttng.org
 > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- 
+Mathieu Desnoyers
+Operating System Efficiency R&D Consultant
+EfficiOS Inc.
+http://www.efficios.com
