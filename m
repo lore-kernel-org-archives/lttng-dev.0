@@ -1,19 +1,19 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: Alexandre Montplaisir <alexandre.montplaisir@polymtl.ca>
 Subject: Re: Broken links on lttng.org
-Date: Wed, 14 Nov 2012 10:43:58 -0500
-Message-ID: <20121114154358.GA32183__14570.1597248719$1352907883$gmane$org@Krystal>
+Date: Wed, 14 Nov 2012 11:03:27 -0500
+Message-ID: <50A3C0CF.6010408__10678.9870224477$1352909050$gmane$org@polymtl.ca>
 References: <20998D40D9A2B7499CA5A3A2666CB1EB19F86D7E@ZURMSG1.QUANTUM.com>
+	<20121114154358.GA32183@Krystal>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from ironport2-out.teksavvy.com ([206.248.154.182])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1TYf8F-0001jd-IU
-	for lttng-dev@lists.lttng.org; Wed, 14 Nov 2012 10:44:03 -0500
-Content-Disposition: inline
-In-Reply-To: <20998D40D9A2B7499CA5A3A2666CB1EB19F86D7E@ZURMSG1.QUANTUM.com>
+	(envelope-from <alexandre.montplaisir@polymtl.ca>)
+	id 1TYfR8-0001uA-FO
+	for lttng-dev@lists.lttng.org; Wed, 14 Nov 2012 11:03:34 -0500
+In-Reply-To: <20121114154358.GA32183@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,38 +22,44 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: David OShea <David.OShea@quantum.com>, christian.babeux@efficios.com, alexandre.montplaisir@polymtl.ca
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Yannick Brosseau <yannick.brosseau@gmail.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi David,
+On 12-11-14 10:43 AM, Mathieu Desnoyers wrote:
+> Hi David,
+>
+> Thanks for reporting, forwaring to Christian and Alexandre.
+>
+> Mathieu
+>
+> * David OShea (David.OShea@quantum.com) wrote:
+>> Hi all,
+>>
+>> I noticed that a number of things were broken on the website in the last=
+ few weeks:
+>>
+>> 1. At http://lttng.org/documentation, the five man page links at the top=
+ are broken (return "Page not found").  I haven't tried other links on that=
+ page.
 
-Thanks for reporting, forwaring to Christian and Alexandre.
+Hmm, a symlink got deleted at some point...
+Fixed. Thanks for letting us know!
 
-Mathieu
+>>
+>> 2. http://lttng.org/tracingwiki/index.php/ is now broken ("Page not foun=
+d").  I can't remember what used to be in that wiki, or how I found it, but=
+ I seem to remember it being useful :)
 
-* David OShea (David.OShea@quantum.com) wrote:
-> Hi all,
-> 
-> I noticed that a number of things were broken on the website in the last few weeks:
-> 
-> 1. At http://lttng.org/documentation, the five man page links at the top are broken (return "Page not found").  I haven't tried other links on that page.
-> 
-> 2. http://lttng.org/tracingwiki/index.php/ is now broken ("Page not found").  I can't remember what used to be in that wiki, or how I found it, but I seem to remember it being useful :)
-> 
-> Thanks in advance,
-> David
-> 
-> ----------------------------------------------------------------------
-> The information contained in this transmission may be confidential. Any disclosure, copying, or further distribution of confidential information is not permitted unless such privilege is explicitly granted in writing by Quantum. Quantum reserves the right to have electronic communications, including email and attachments, sent across its networks filtered through anti virus and spam software programs and retain such messages in order to comply with applicable data security and retention requirements. Quantum is not responsible for the proper and complete transmission of the substance of this communication or for any delay in its receipt.
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+That wiki got removed since it was sorely unmaintained, but the idea was
+to migrate any existing/useful information to the lttng.org website itself.
+Yannick, do you know what happened to it?
 
--- 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+
+Cheers,
+
+-- =
+
+Alexandre Montplaisir
+DORSAL lab,
+=C9cole Polytechnique de Montr=E9al
