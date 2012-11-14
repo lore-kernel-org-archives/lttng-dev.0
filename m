@@ -1,19 +1,19 @@
-From: Alexandre Montplaisir <alexandre.montplaisir@polymtl.ca>
-Subject: Re: Broken links on lttng.org
-Date: Wed, 14 Nov 2012 11:03:27 -0500
-Message-ID: <50A3C0CF.6010408__10678.9870224477$1352909050$gmane$org@polymtl.ca>
-References: <20998D40D9A2B7499CA5A3A2666CB1EB19F86D7E@ZURMSG1.QUANTUM.com>
-	<20121114154358.GA32183@Krystal>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH lttng-tools] Enable additional kernel probes
+Date: Wed, 14 Nov 2012 11:07:58 -0500
+Message-ID: <20121114160758.GB32677__42062.9533160993$1352909310$gmane$org@Krystal>
+References: <50A394DF.70607@mentor.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from ironport2-out.teksavvy.com ([206.248.154.182])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <alexandre.montplaisir@polymtl.ca>)
-	id 1TYfR8-0001uA-FO
-	for lttng-dev@lists.lttng.org; Wed, 14 Nov 2012 11:03:34 -0500
-In-Reply-To: <20121114154358.GA32183@Krystal>
+	(envelope-from <compudj@mail.openrapids.net>) id 1TYfVQ-0001y0-0T
+	for lttng-dev@lists.lttng.org; Wed, 14 Nov 2012 11:08:00 -0500
+Content-Disposition: inline
+In-Reply-To: <50A394DF.70607@mentor.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,44 +22,95 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Yannick Brosseau <yannick.brosseau@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: "Woegerer, Paul" <Paul_Woegerer@mentor.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On 12-11-14 10:43 AM, Mathieu Desnoyers wrote:
-> Hi David,
->
-> Thanks for reporting, forwaring to Christian and Alexandre.
->
-> Mathieu
->
-> * David OShea (David.OShea@quantum.com) wrote:
->> Hi all,
->>
->> I noticed that a number of things were broken on the website in the last=
- few weeks:
->>
->> 1. At http://lttng.org/documentation, the five man page links at the top=
- are broken (return "Page not found").  I haven't tried other links on that=
- page.
+* Woegerer, Paul (Paul_Woegerer@mentor.com) wrote:
+> To enable the extra kernel probes (see related thread: http://lists.lttng=
+.org/pipermail/lttng-dev/2012-November/019046.html) the following patch is =
+required for lttng-tools:
+> =
 
-Hmm, a symlink got deleted at some point...
-Fixed. Thanks for letting us know!
+> From fbf7bdae4af6d082ce71bc0976628e5d24a515fc Mon Sep 17 00:00:00 2001
+> From: Paul Woegerer <paul_woegerer@mentor.com>
+> Date: Wed, 14 Nov 2012 13:49:45 +0100
+> Subject: [PATCH] Add additional kernel probes to module list.
 
->>
->> 2. http://lttng.org/tracingwiki/index.php/ is now broken ("Page not foun=
-d").  I can't remember what used to be in that wiki, or how I found it, but=
- I seem to remember it being useful :)
+Acked-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 
-That wiki got removed since it was sorely unmaintained, but the idea was
-to migrate any existing/useful information to the lttng.org website itself.
-Yannick, do you know what happened to it?
+> =
 
+> ---
+>  src/bin/lttng-sessiond/modprobe.c |   17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+> =
 
-Cheers,
+> diff --git a/src/bin/lttng-sessiond/modprobe.c b/src/bin/lttng-sessiond/m=
+odprobe.c
+> index b3f2e57..f38d393 100644
+> --- a/src/bin/lttng-sessiond/modprobe.c
+> +++ b/src/bin/lttng-sessiond/modprobe.c
+> @@ -44,13 +44,30 @@ const struct kern_modules_param kern_modules_list[] =
+=3D {
+>  	{ "lttng-ring-buffer-metadata-mmap-client", 1 },
+>  	{ "lttng-probe-lttng", 1 },
+>  	{ "lttng-types", 0 },
+> +	{ "lttng-probe-asoc", 0 },
+>  	{ "lttng-probe-block", 0 },
+> +	{ "lttng-probe-ext3", 0 },
+> +	{ "lttng-probe-gpio", 0 },
+>  	{ "lttng-probe-irq", 0 },
+> +	{ "lttng-probe-jbd", 0 },
+> +	{ "lttng-probe-jbd2", 0 },
+> +	{ "lttng-probe-kmem", 0 },
+>  	{ "lttng-probe-kvm", 0 },
+> +	{ "lttng-probe-lock", 0 },
+> +	{ "lttng-probe-modules", 0 },
+> +	{ "lttng-probe-napi", 0 },
+> +	{ "lttng-probe-net", 0 },
+> +	{ "lttng-probe-power", 0 },
+> +	{ "lttng-probe-regulator", 0 },
+>  	{ "lttng-probe-sched", 0 },
+> +	{ "lttng-probe-scsi", 0 },
+>  	{ "lttng-probe-signal", 0 },
+> +	{ "lttng-probe-skb", 0 },
+> +	{ "lttng-probe-sock", 0 },
+>  	{ "lttng-probe-statedump", 0 },
+>  	{ "lttng-probe-timer", 0 },
+> +	{ "lttng-probe-udp", 0 },
+> +	{ "lttng-probe-vmscan", 0 },
+>  };
+>  =
+
+>  /*
+> -- =
+
+> 1.7.10.4
+> =
+
+> =
+
+> =
+
+> -- =
+
+> Paul Woegerer | SW Development Engineer
+> http://go.mentor.com/sourceryanalyzer
+> =
+
+> Mentor Embedded(tm) | Prinz Eugen Stra=DFe 72/2/4, Vienna, 1040 Austria
+> Nucleus=AE | Linux=AE | Android(tm) | Services | UI | Multi-OS
+> =
+
+> Android is a trademark of Google Inc. Use of this trademark is subject to=
+ Google Permissions.
+> Linux is the registered trademark of Linus Torvalds in the U.S. and other=
+ countries.
 
 -- =
 
-Alexandre Montplaisir
-DORSAL lab,
-=C9cole Polytechnique de Montr=E9al
+Mathieu Desnoyers
+Operating System Efficiency R&D Consultant
+EfficiOS Inc.
+http://www.efficios.com
