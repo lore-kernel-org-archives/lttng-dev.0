@@ -1,8 +1,8 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Subject: Re: [PATCH urcu v2] runtests: Make path of time
 	binary	configurable
-Date: Thu, 15 Nov 2012 09:10:01 -0500
-Message-ID: <20121115141001.GA31720__7653.25188772312$1352988638$gmane$org@Krystal>
+Date: Thu, 15 Nov 2012 09:32:18 -0500
+Message-ID: <20121115143218.GA2543__6329.99203303388$1352989975$gmane$org@Krystal>
 References: <1352988119-2312-1-git-send-email-simon.marchi@polymtl.ca>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,8 +11,8 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1TZ08p-0003la-O8
-	for lttng-dev@lists.lttng.org; Thu, 15 Nov 2012 09:10:03 -0500
+	(envelope-from <compudj@mail.openrapids.net>) id 1TZ0UO-0003wf-FC
+	for lttng-dev@lists.lttng.org; Thu, 15 Nov 2012 09:32:20 -0500
 Content-Disposition: inline
 In-Reply-To: <1352988119-2312-1-git-send-email-simon.marchi@polymtl.ca>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
@@ -38,15 +38,32 @@ List-Id: lttng-dev@lists.lttng.org
 > 
 > Signed-off-by: Simon Marchi <simon.marchi@polymtl.ca>
 
-I have a problem when running make check from userspace rcu tree root
-with this patch applied:
+Merged with edit:
 
-Executing batch RCU test
-./runtests-batch.sh: 3: ./runtests-batch.sh: source: not found
+commit fce9a534217cc39db50bb546f2521cc4321df197
+Author: Simon Marchi <simon.marchi@polymtl.ca>
+Date:   Thu Nov 15 09:29:42 2012 -0500
 
-Thoughts ?
+    runtests: Make path of time binary configurable
+    
+    I work on a platform that does not come with a time program. This patch
+    makes it possible to specify the path of the time binary or not use it
+    if none is available.
+    
+    If the URCU_TEST_TIME_BIN environment variable exists and is executable,
+    it is used. Otherwise it tries with /usr/bin/time, the most common
+    location. If it is not there, the tests are ran without timing info.
+    
+    [ Edit by Mathieu Desnoyers: use "." instead of "source" (no bash-ism),
+      edit commit about check for emptiness vs definition to match the code. ]
+    
+    Signed-off-by: Simon Marchi <simon.marchi@polymtl.ca>
+    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+
+Thanks,
 
 Mathieu
+
 
 > ---
 > 
