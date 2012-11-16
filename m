@@ -1,19 +1,20 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH] wfcqueue: Fix lock and unlock functions
-Date: Thu, 15 Nov 2012 22:08:19 -0500
-Message-ID: <20121116030819.GB21972__4312.70795311338$1353035353$gmane$org@Krystal>
-References: <20121116002412.GA32432@linux.vnet.ibm.com>
+From: "Woegerer, Paul" <Paul_Woegerer@mentor.com>
+Subject: "No space left on device" results in corrupt trace data
+	set
+Date: Fri, 16 Nov 2012 16:02:57 +0100
+Message-ID: <50A655A1.6040804__41489.1651984819$1353078169$gmane$org@mentor.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1TZCI0-00010p-LC
-	for lttng-dev@lists.lttng.org; Thu, 15 Nov 2012 22:08:20 -0500
-Content-Disposition: inline
-In-Reply-To: <20121116002412.GA32432@linux.vnet.ibm.com>
+	(envelope-from <Paul_Woegerer@mentor.com>) id 1TZNQd-0006Vw-Ik
+	for lttng-dev@lists.lttng.org; Fri, 16 Nov 2012 10:01:59 -0500
+Received: from svr-orw-exc-10.mgc.mentorg.com ([147.34.98.58])
+	by relay1.mentorg.com with esmtp
+	id 1TZNQX-00062V-88 from Paul_Woegerer@mentor.com
+	for lttng-dev@lists.lttng.org; Fri, 16 Nov 2012 07:01:53 -0800
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,49 +23,51 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
-Cc: eag0628@gmail.com, lttng-dev@lists.lttng.org, rp@svcs.cs.pdx.edu
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Paul E. McKenney (paulmck@linux.vnet.ibm.com) wrote:
-> The current implementation of cds_wfcq_dequeue_lock() and
-> cds_wfcq_dequeue_unlock() entails mutually assured recursion.
-> Redirect to _cds_wfcq_dequeue_lock() and _cds_wfcq_dequeue_unlock(),
-> respectively.
-> 
-> Signed-off-by: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
+Hi,
 
-Good catch !!
+embedded users sometimes have to trace to tmpfs (e.g. streaming in not
+an option due to missing network connectivity).
 
-Merged, thanks!
+Ramdisks of 16M to 128M size are created and as long as the ram disk
+does not get full, tracing works fine. Unfortunately if the disk gets
+full things fall apart:
 
-Mathieu
+PERROR: Error in file write: No space left on device [in
+lttng_consumer_on_read_subbuffer_mmap() at consumer.c:1367]
 
-> 
-> diff --git a/wfcqueue.c b/wfcqueue.c
-> index 3474ee0..90b810e 100644
-> --- a/wfcqueue.c
-> +++ b/wfcqueue.c
-> @@ -57,13 +57,13 @@ void cds_wfcq_enqueue(struct cds_wfcq_head *head,
->  void cds_wfcq_dequeue_lock(struct cds_wfcq_head *head,
->  		struct cds_wfcq_tail *tail)
->  {
-> -	cds_wfcq_dequeue_lock(head, tail);
-> +	_cds_wfcq_dequeue_lock(head, tail);
->  }
->  
->  void cds_wfcq_dequeue_unlock(struct cds_wfcq_head *head,
->  		struct cds_wfcq_tail *tail)
->  {
-> -	cds_wfcq_dequeue_unlock(head, tail);
-> +	_cds_wfcq_dequeue_unlock(head, tail);
->  }
->  
->  struct cds_wfcq_node *cds_wfcq_dequeue_blocking(
-> 
+The consumer daemon will not be able to write the metadata channel and
+therefore the trace data set will be unusable (cannot be read with
+babeltrace).
 
--- 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+-rwxrwxrwx 1 testuser users        0 Nov 16 11:22 metadata
+-rwxrwxrwx 1 testuser users 15728640 Nov 16 11:22 myevents_0
+-rwxrwxrwx 1 testuser users     4096 Nov 16 11:22 myevents_1
+
+Is it possible to somehow reserve the file size (fallocate) for metadata
+so that in case the disk gets full at least the metadata gets written
+and the resulting trace set is readable with babeltrace ?
+
+I wonder if that is possible at all. The consumer daemon doesn't know
+upfront how much would need to be reserved for metadata, right ?
+
+Any ideas ?
+
+Thanks,
+Paul
+
+
+-- =
+
+Paul Woegerer | SW Development Engineer
+http://go.mentor.com/sourceryanalyzer
+
+Mentor Embedded(tm) | Prinz Eugen Stra=DFe 72/2/4, Vienna, 1040 Austria
+Nucleus=AE | Linux=AE | Android(tm) | Services | UI | Multi-OS
+
+Android is a trademark of Google Inc. Use of this trademark is subject
+to Google Permissions.
+Linux is the registered trademark of Linus Torvalds in the U.S. and
+other countries.
