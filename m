@@ -1,8 +1,8 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH 8/8] urcu-qsbr: batch concurrent
-	synchronize_rcu()
-Date: Sat, 17 Nov 2012 11:16:47 -0500
-Message-ID: <1353169007-31389-9-git-send-email-mathieu.desnoyers__42547.0791793943$1353169125$gmane$org@efficios.com>
+Subject: [PATCH 6/8] urcu-bp: move quiescent threads to separate
+	list
+Date: Sat, 17 Nov 2012 11:16:45 -0500
+Message-ID: <1353169007-31389-7-git-send-email-mathieu.desnoyers__33247.2504502677$1353170742$gmane$org@efficios.com>
 References: <1353169007-31389-1-git-send-email-mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,8 +11,8 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <mathieu.desnoyers@efficios.com>) id 1TZl5p-0000xJ-1x
-	for lttng-dev@lists.lttng.org; Sat, 17 Nov 2012 11:18:05 -0500
+	(envelope-from <mathieu.desnoyers@efficios.com>) id 1TZl5e-0000tr-2v
+	for lttng-dev@lists.lttng.org; Sat, 17 Nov 2012 11:17:54 -0500
 In-Reply-To: <1353169007-31389-1-git-send-email-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -26,234 +26,200 @@ To: lttng-dev@lists.lttng.org, rp@svcs.cs.pdx.edu, "Paul E . McKenney" <paulmck@
 Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
+Accelerate 2-phase grace period by not having to iterate twice on
+threads not within RCU read-side critical section.
+
 CC: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
 CC: Lai Jiangshan <laijs@cn.fujitsu.com>
 CC: Alan Stern <stern@rowland.harvard.edu>
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- urcu-qsbr.c |  151 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 151 insertions(+)
+ urcu-bp.c             |   46 +++++++++++++++++++++++++++++++++++-----------
+ urcu.c                |    2 +-
+ urcu/static/urcu-bp.h |   29 +++++++++++++++++++----------
+ 3 files changed, 55 insertions(+), 22 deletions(-)
 
-diff --git a/urcu-qsbr.c b/urcu-qsbr.c
-index 5b341b5..7f747ed 100644
---- a/urcu-qsbr.c
-+++ b/urcu-qsbr.c
-@@ -36,6 +36,7 @@
- #include <poll.h>
+diff --git a/urcu-bp.c b/urcu-bp.c
+index 4b3cf01..f99c0e5 100644
+--- a/urcu-bp.c
++++ b/urcu-bp.c
+@@ -115,7 +115,7 @@ DEFINE_URCU_TLS(unsigned int, rcu_rand_yield);
+  * Also has a RCU_GP_COUNT of 1, to accelerate the reader fast path.
+  * Written to only by writer with mutex taken. Read by both writer and readers.
+  */
+-long rcu_gp_ctr = RCU_GP_COUNT;
++unsigned long rcu_gp_ctr = RCU_GP_COUNT;
  
- #include "urcu/wfcqueue.h"
-+#include "urcu/wfstack.h"
- #include "urcu/map/urcu-qsbr.h"
- #define BUILD_QSBR_LIB
- #include "urcu/static/urcu-qsbr.h"
-@@ -78,6 +79,35 @@ DEFINE_URCU_TLS(unsigned int, rcu_rand_yield);
- 
- static CDS_LIST_HEAD(registry);
- 
-+/*
-+ * Number of busy-loop attempts before waiting on futex for grace period
-+ * batching.
-+ */
-+#define RCU_AWAKE_ATTEMPTS 1000
-+
-+enum adapt_wakeup_state {
-+	/* AWAKE_WAITING is compared directly (futex compares it). */
-+	AWAKE_WAITING =		0,
-+	/* non-zero are used as masks. */
-+	AWAKE_WAKEUP =		(1 << 0),
-+	AWAKE_AWAKENED =	(1 << 1),
-+	AWAKE_TEARDOWN =	(1 << 2),
-+};
-+
-+struct gp_waiters_thread {
-+	struct cds_wfs_node node;
-+	int32_t wait_futex;
-+};
-+
-+/*
-+ * Stack keeping threads awaiting to wait for a grace period. Contains
-+ * struct gp_waiters_thread objects.
-+ */
-+static struct cds_wfs_stack gp_waiters = {
-+	.head = CDS_WFS_END,
-+	.lock = PTHREAD_MUTEX_INITIALIZER,
-+};
-+
- static void mutex_lock(pthread_mutex_t *mutex)
- {
- 	int ret;
-@@ -116,6 +146,58 @@ static void wait_gp(void)
- 		      NULL, NULL, 0);
+ /*
+  * Pointer to registry elements. Written to only by each individual reader. Read
+@@ -164,9 +164,10 @@ static void mutex_unlock(pthread_mutex_t *mutex)
+ 		urcu_die(ret);
  }
  
-+/*
-+ * Note: urcu_adaptative_wake_up needs "value" to stay allocated
-+ * throughout its execution. In this scheme, the waiter owns the futex
-+ * memory, and we only allow it to free this memory when it receives the
-+ * AWAKE_TEARDOWN flag.
-+ */
-+static void urcu_adaptative_wake_up(int32_t *value)
-+{
-+	cmm_smp_mb();
-+	assert(uatomic_read(value) == AWAKE_WAITING);
-+	uatomic_set(value, AWAKE_WAKEUP);
-+	if (!(uatomic_read(value) & AWAKE_AWAKENED))
-+		futex_noasync(value, FUTEX_WAKE, 1, NULL, NULL, 0);
-+	/* Allow teardown of "value" memory. */
-+	uatomic_or(value, AWAKE_TEARDOWN);
-+}
-+
-+/*
-+ * Caller must initialize "value" to AWAKE_WAITING before passing its
-+ * memory to waker thread.
-+ */
-+static void urcu_adaptative_busy_wait(int32_t *value)
-+{
-+	unsigned int i;
-+
-+	/* Load and test condition before read futex */
-+	cmm_smp_rmb();
-+	for (i = 0; i < RCU_AWAKE_ATTEMPTS; i++) {
-+		if (uatomic_read(value) != AWAKE_WAITING)
-+			goto skip_futex_wait;
-+		caa_cpu_relax();
-+	}
-+	futex_noasync(value, FUTEX_WAIT, AWAKE_WAITING, NULL, NULL, 0);
-+skip_futex_wait:
-+
-+	/* Tell waker thread than we are awakened. */
-+	uatomic_or(value, AWAKE_AWAKENED);
+-static void wait_for_readers(void)
++static void wait_for_readers(struct cds_list_head *input_readers,
++			struct cds_list_head *cur_snap_readers,
++			struct cds_list_head *qsreaders)
+ {
+-	CDS_LIST_HEAD(qsreaders);
+ 	int wait_loops = 0;
+ 	struct rcu_reader *index, *tmp;
+ 
+@@ -177,12 +178,30 @@ static void wait_for_readers(void)
+ 	 */
+ 	for (;;) {
+ 		wait_loops++;
+-		cds_list_for_each_entry_safe(index, tmp, &registry, node) {
+-			if (!rcu_old_gp_ongoing(&index->ctr))
+-				cds_list_move(&index->node, &qsreaders);
++		cds_list_for_each_entry_safe(index, tmp, input_readers, node) {
++			switch (rcu_reader_state(&index->ctr)) {
++			case RCU_READER_ACTIVE_CURRENT:
++				if (cur_snap_readers) {
++					cds_list_move(&index->node,
++						cur_snap_readers);
++					break;
++				}
++				/* Fall-through */
++			case RCU_READER_INACTIVE:
++				cds_list_move(&index->node, qsreaders);
++				break;
++			case RCU_READER_ACTIVE_OLD:
++				/*
++				 * Old snapshot. Leaving node in
++				 * input_readers will make us busy-loop
++				 * until the snapshot becomes current or
++				 * the reader becomes inactive.
++				 */
++				break;
++			}
+ 		}
+ 
+-		if (cds_list_empty(&registry)) {
++		if (cds_list_empty(input_readers)) {
+ 			break;
+ 		} else {
+ 			if (wait_loops == RCU_QS_ACTIVE_ATTEMPTS)
+@@ -191,12 +210,12 @@ static void wait_for_readers(void)
+ 				caa_cpu_relax();
+ 		}
+ 	}
+-	/* put back the reader list in the registry */
+-	cds_list_splice(&qsreaders, &registry);
+ }
+ 
+ void synchronize_rcu(void)
+ {
++	CDS_LIST_HEAD(cur_snap_readers);
++	CDS_LIST_HEAD(qsreaders);
+ 	sigset_t newmask, oldmask;
+ 	int ret;
+ 
+@@ -221,7 +240,7 @@ void synchronize_rcu(void)
+ 	/*
+ 	 * Wait for readers to observe original parity or be quiescent.
+ 	 */
+-	wait_for_readers();
++	wait_for_readers(&registry, &cur_snap_readers, &qsreaders);
+ 
+ 	/*
+ 	 * Adding a cmm_smp_mb() which is _not_ formally required, but makes the
+@@ -250,7 +269,12 @@ void synchronize_rcu(void)
+ 	/*
+ 	 * Wait for readers to observe new parity or be quiescent.
+ 	 */
+-	wait_for_readers();
++	wait_for_readers(&cur_snap_readers, NULL, &qsreaders);
 +
 +	/*
-+	 * Wait until waker thread lets us know it's ok to tear down
-+	 * memory allocated for value.
++	 * Put quiescent reader list back into registry.
 +	 */
-+	for (i = 0; i < RCU_AWAKE_ATTEMPTS; i++) {
-+		if (uatomic_read(value) & AWAKE_TEARDOWN)
-+			break;
-+		caa_cpu_relax();
-+	}
-+	while (!(uatomic_read(value) & AWAKE_TEARDOWN))
-+		poll(NULL, 0, 10);
-+	assert(uatomic_read(value) & AWAKE_TEARDOWN);
-+}
-+
- static void wait_for_readers(struct cds_list_head *input_readers,
- 			struct cds_list_head *cur_snap_readers,
- 			struct cds_list_head *qsreaders)
-@@ -198,6 +280,9 @@ void synchronize_rcu(void)
- 	CDS_LIST_HEAD(cur_snap_readers);
- 	CDS_LIST_HEAD(qsreaders);
- 	unsigned long was_online;
-+	struct gp_waiters_thread gp_waiters_thread;
-+	struct cds_wfs_head *gp_waiters_head;
-+	struct cds_wfs_node *waiters_iter, *waiters_iter_n;
++	cds_list_splice(&qsreaders, &registry);
  
- 	was_online = URCU_TLS(rcu_reader).ctr;
- 
-@@ -214,8 +299,26 @@ void synchronize_rcu(void)
- 	else
- 		cmm_smp_mb();
- 
-+	/*
-+	 * Add ourself to gp_waiters stack of threads awaiting to wait
-+	 * for a grace period. Proceed to perform the grace period only
-+	 * if we are the first thread added into the stack.
-+	 */
-+	cds_wfs_node_init(&gp_waiters_thread.node);
-+	gp_waiters_thread.wait_futex = AWAKE_WAITING;
-+	if (cds_wfs_push(&gp_waiters, &gp_waiters_node) != 0) {
-+		/* Not first in stack: will be awakened by another thread. */
-+		urcu_adaptative_busy_wait(&gp_waiters_thread.wait_futex);
-+		goto gp_end;
-+	}
-+
- 	mutex_lock(&rcu_gp_lock);
- 
-+	/*
-+	 * Pop all waiters into our local stack head.
-+	 */
-+	gp_waiters_head = __cds_wfs_pop_all(&gp_waiters);
-+
- 	if (cds_list_empty(&registry))
- 		goto out;
- 
-@@ -272,6 +375,19 @@ void synchronize_rcu(void)
- out:
- 	mutex_unlock(&rcu_gp_lock);
- 
-+	/* Wake all waiters in our stack head, excluding ourself. */
-+	cds_wfs_for_each_blocking_safe(gp_waiters_head, waiters_iter,
-+				waiters_iter_n) {
-+		struct gp_waiters_thread *wt;
-+
-+		wt = caa_container_of(waiters_iter,
-+				struct gp_waiters_thread, node);
-+		if (wt == &gp_waiters_thread)
-+			continue;
-+		urcu_adaptative_wake_up(&wt->wait_futex);
-+	}
-+
-+gp_end:
  	/*
  	 * Finish waiting for reader threads before letting the old ptr being
- 	 * freed.
-@@ -286,6 +402,9 @@ void synchronize_rcu(void)
+diff --git a/urcu.c b/urcu.c
+index c692db9..e6ff0f3 100644
+--- a/urcu.c
++++ b/urcu.c
+@@ -361,7 +361,7 @@ void synchronize_rcu(void)
+ 	/*
+ 	 * Wait for readers to observe new parity or be quiescent.
+ 	 */
+-	wait_for_readers(&registry, NULL, &qsreaders);
++	wait_for_readers(&cur_snap_readers, NULL, &qsreaders);
+ 
+ 	/*
+ 	 * Put quiescent reader list back into registry.
+diff --git a/urcu/static/urcu-bp.h b/urcu/static/urcu-bp.h
+index c52a688..c7f5326 100644
+--- a/urcu/static/urcu-bp.h
++++ b/urcu/static/urcu-bp.h
+@@ -58,6 +58,12 @@ extern "C" {
+ #define rcu_assert(args...)
+ #endif
+ 
++enum rcu_state {
++	RCU_READER_ACTIVE_CURRENT,
++	RCU_READER_ACTIVE_OLD,
++	RCU_READER_INACTIVE,
++};
++
+ #ifdef DEBUG_YIELD
+ #include <sched.h>
+ #include <time.h>
+@@ -129,11 +135,11 @@ extern void rcu_bp_register(void);
+  * Using a int rather than a char to eliminate false register dependencies
+  * causing stalls on some architectures.
+  */
+-extern long rcu_gp_ctr;
++extern unsigned long rcu_gp_ctr;
+ 
+ struct rcu_reader {
+ 	/* Data used by both reader and synchronize_rcu() */
+-	long ctr;
++	unsigned long ctr;
+ 	/* Data used for registry */
+ 	struct cds_list_head node __attribute__((aligned(CAA_CACHE_LINE_SIZE)));
+ 	pthread_t tid;
+@@ -147,19 +153,22 @@ struct rcu_reader {
+  */
+ extern DECLARE_URCU_TLS(struct rcu_reader *, rcu_reader);
+ 
+-static inline int rcu_old_gp_ongoing(long *value)
++static inline enum rcu_state rcu_reader_state(unsigned long *ctr)
  {
- 	CDS_LIST_HEAD(qsreaders);
- 	unsigned long was_online;
-+	struct gp_waiters_thread gp_waiters_thread;
-+	struct cds_wfs_head *gp_waiters_head;
-+	struct cds_wfs_node *waiters_iter, *waiters_iter_n;
+-	long v;
++	unsigned long v;
  
- 	was_online = URCU_TLS(rcu_reader).ctr;
+-	if (value == NULL)
+-		return 0;
++	if (ctr == NULL)
++		return RCU_READER_INACTIVE;
+ 	/*
+ 	 * Make sure both tests below are done on the same version of *value
+ 	 * to insure consistency.
+ 	 */
+-	v = CMM_LOAD_SHARED(*value);
+-	return (v & RCU_GP_CTR_NEST_MASK) &&
+-		 ((v ^ rcu_gp_ctr) & RCU_GP_CTR_PHASE);
++	v = CMM_LOAD_SHARED(*ctr);
++	if (!(v & RCU_GP_CTR_NEST_MASK))
++		return RCU_READER_INACTIVE;
++	if (!((v ^ rcu_gp_ctr) & RCU_GP_CTR_PHASE))
++		return RCU_READER_ACTIVE_CURRENT;
++	return RCU_READER_ACTIVE_OLD;
+ }
  
-@@ -299,7 +418,26 @@ void synchronize_rcu(void)
- 	else
- 		cmm_smp_mb();
+ /*
+@@ -190,7 +199,7 @@ static inline void _rcu_read_lock_update(unsigned long tmp)
+  */
+ static inline void _rcu_read_lock(void)
+ {
+-	long tmp;
++	unsigned long tmp;
  
-+	/*
-+	 * Add ourself to gp_waiters stack of threads awaiting to wait
-+	 * for a grace period. Proceed to perform the grace period only
-+	 * if we are the first thread added into the stack.
-+	 */
-+	cds_wfs_node_init(&gp_waiters_thread.node);
-+	gp_waiters_thread.wait_futex = AWAKE_WAITING;
-+	if (cds_wfs_push(&gp_waiters, &gp_waiters_thread.node) != 0) {
-+		/* Not first in stack: will be awakened by another thread. */
-+		urcu_adaptative_busy_wait(&gp_waiters_thread.wait_futex);
-+		goto gp_end;
-+	}
-+
- 	mutex_lock(&rcu_gp_lock);
-+
-+	/*
-+	 * Pop all waiters into our local stack head.
-+	 */
-+	gp_waiters_head = __cds_wfs_pop_all(&gp_waiters);
-+
- 	if (cds_list_empty(&registry))
- 		goto out;
- 
-@@ -334,6 +472,19 @@ void synchronize_rcu(void)
- out:
- 	mutex_unlock(&rcu_gp_lock);
- 
-+	/* Wake all waiters in our stack head, excluding ourself. */
-+	cds_wfs_for_each_blocking_safe(gp_waiters_head, waiters_iter,
-+				waiters_iter_n) {
-+		struct gp_waiters_thread *wt;
-+
-+		wt = caa_container_of(waiters_iter,
-+				struct gp_waiters_thread, node);
-+		if (wt == &gp_waiters_thread)
-+			continue;
-+		urcu_adaptative_wake_up(&wt->wait_futex);
-+	}
-+
-+gp_end:
- 	if (was_online)
- 		rcu_thread_online();
- 	else
+ 	if (caa_unlikely(!URCU_TLS(rcu_reader)))
+ 		rcu_bp_register(); /* If not yet registered. */
 -- 
 1.7.10.4
