@@ -1,8 +1,8 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH 4/8] urcu-qsbr: move offline threads to separate
-	list
-Date: Sat, 17 Nov 2012 11:16:43 -0500
-Message-ID: <1353169007-31389-5-git-send-email-mathieu.desnoyers__26465.159309055$1353169114$gmane$org@efficios.com>
+Subject: [PATCH 5/8] urcu-mb/signal/membarrier: move quiescent
+	threads to separate list
+Date: Sat, 17 Nov 2012 11:16:44 -0500
+Message-ID: <1353169007-31389-6-git-send-email-mathieu.desnoyers__11371.6671978638$1353169116$gmane$org@efficios.com>
 References: <1353169007-31389-1-git-send-email-mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,8 +11,8 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <mathieu.desnoyers@efficios.com>) id 1TZl5b-0000st-AG
-	for lttng-dev@lists.lttng.org; Sat, 17 Nov 2012 11:17:51 -0500
+	(envelope-from <mathieu.desnoyers@efficios.com>) id 1TZl5c-0000tE-Od
+	for lttng-dev@lists.lttng.org; Sat, 17 Nov 2012 11:17:52 -0500
 In-Reply-To: <1353169007-31389-1-git-send-email-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -26,23 +26,23 @@ To: lttng-dev@lists.lttng.org, rp@svcs.cs.pdx.edu, "Paul E . McKenney" <paulmck@
 Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-Accelerate 2-phase grace period by not having to iterate on offline
-threads twice.
+Accelerate 2-phase grace period by not having to iterate twice on
+threads not nested within a RCU read-side lock.
 
 CC: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
 CC: Lai Jiangshan <laijs@cn.fujitsu.com>
 CC: Alan Stern <stern@rowland.harvard.edu>
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- urcu-qsbr.c             |   54 ++++++++++++++++++++++++++++++++++++-----------
- urcu/static/urcu-qsbr.h |   14 ++++++++++--
- 2 files changed, 54 insertions(+), 14 deletions(-)
+ urcu.c             |   47 ++++++++++++++++++++++++++++++++++++-----------
+ urcu/static/urcu.h |   15 ++++++++++++---
+ 2 files changed, 48 insertions(+), 14 deletions(-)
 
-diff --git a/urcu-qsbr.c b/urcu-qsbr.c
-index eb167d1..5b341b5 100644
---- a/urcu-qsbr.c
-+++ b/urcu-qsbr.c
-@@ -116,9 +116,10 @@ static void wait_gp(void)
+diff --git a/urcu.c b/urcu.c
+index 2d5c510..c692db9 100644
+--- a/urcu.c
++++ b/urcu.c
+@@ -215,9 +215,10 @@ static void wait_gp(void)
  		      NULL, NULL, 0);
  }
  
@@ -55,17 +55,10 @@ index eb167d1..5b341b5 100644
  	int wait_loops = 0;
  	struct rcu_reader *index, *tmp;
  
-@@ -136,18 +137,36 @@ static void wait_for_readers(void)
- 			 * reads them in the opposite order).
- 			 */
- 			cmm_smp_wmb();
--			cds_list_for_each_entry(index, &registry, node) {
-+			cds_list_for_each_entry(index, input_readers, node) {
- 				_CMM_STORE_SHARED(index->waiting, 1);
- 			}
- 			/* Write futex before read reader_gp */
- 			cmm_smp_mb();
+@@ -234,13 +235,31 @@ static void wait_for_readers(void)
+ 			smp_mb_master(RCU_MB_GROUP);
  		}
+ 
 -		cds_list_for_each_entry_safe(index, tmp, &registry, node) {
 -			if (!rcu_gp_ongoing(&index->ctr))
 -				cds_list_move(&index->node, &qsreaders);
@@ -92,30 +85,38 @@ index eb167d1..5b341b5 100644
 +			}
  		}
  
+ #ifndef HAS_INCOHERENT_CACHES
 -		if (cds_list_empty(&registry)) {
 +		if (cds_list_empty(input_readers)) {
- 			if (wait_loops >= RCU_QS_ACTIVE_ATTEMPTS) {
+ 			if (wait_loops == RCU_QS_ACTIVE_ATTEMPTS) {
  				/* Read reader_gp before write futex */
- 				cmm_smp_mb();
-@@ -166,8 +185,6 @@ static void wait_for_readers(void)
- 			}
+ 				smp_mb_master(RCU_MB_GROUP);
+@@ -259,7 +278,7 @@ static void wait_for_readers(void)
+ 		 * URCU_TLS(rcu_reader).ctr update to memory if we wait
+ 		 * for too long.
+ 		 */
+-		if (cds_list_empty(&registry)) {
++		if (cds_list_empty(input_readers)) {
+ 			if (wait_loops == RCU_QS_ACTIVE_ATTEMPTS) {
+ 				/* Read reader_gp before write futex */
+ 				smp_mb_master(RCU_MB_GROUP);
+@@ -281,12 +300,13 @@ static void wait_for_readers(void)
  		}
+ #endif /* #else #ifndef HAS_INCOHERENT_CACHES */
  	}
 -	/* put back the reader list in the registry */
 -	cds_list_splice(&qsreaders, &registry);
  }
  
- /*
-@@ -178,6 +195,8 @@ static void wait_for_readers(void)
- #if (CAA_BITS_PER_LONG < 64)
  void synchronize_rcu(void)
  {
 +	CDS_LIST_HEAD(cur_snap_readers);
 +	CDS_LIST_HEAD(qsreaders);
- 	unsigned long was_online;
++
+ 	mutex_lock(&rcu_gp_lock);
  
- 	was_online = URCU_TLS(rcu_reader).ctr;
-@@ -203,7 +222,7 @@ void synchronize_rcu(void)
+ 	if (cds_list_empty(&registry))
+@@ -301,7 +321,7 @@ void synchronize_rcu(void)
  	/*
  	 * Wait for readers to observe original parity or be quiescent.
  	 */
@@ -123,32 +124,10 @@ index eb167d1..5b341b5 100644
 +	wait_for_readers(&registry, &cur_snap_readers, &qsreaders);
  
  	/*
- 	 * Must finish waiting for quiescent state for original parity
-@@ -244,7 +263,12 @@ void synchronize_rcu(void)
+ 	 * Must finish waiting for quiescent state for original parity before
+@@ -341,7 +361,12 @@ void synchronize_rcu(void)
  	/*
  	 * Wait for readers to observe new parity or be quiescent.
- 	 */
--	wait_for_readers();
-+	wait_for_readers(&cur_snap_readers, NULL, &qsreaders);
-+
-+	/*
-+	 * Put quiescent reader list back into registry.
-+	 */
-+	cds_list_splice(&qsreaders, &registry);
- out:
- 	mutex_unlock(&rcu_gp_lock);
- 
-@@ -260,6 +284,7 @@ out:
- #else /* !(CAA_BITS_PER_LONG < 64) */
- void synchronize_rcu(void)
- {
-+	CDS_LIST_HEAD(qsreaders);
- 	unsigned long was_online;
- 
- 	was_online = URCU_TLS(rcu_reader).ctr;
-@@ -300,7 +325,12 @@ void synchronize_rcu(void)
- 	/*
- 	 * Wait for readers to observe new count of be quiescent.
  	 */
 -	wait_for_readers();
 +	wait_for_readers(&registry, NULL, &qsreaders);
@@ -157,15 +136,15 @@ index eb167d1..5b341b5 100644
 +	 * Put quiescent reader list back into registry.
 +	 */
 +	cds_list_splice(&qsreaders, &registry);
- out:
- 	mutex_unlock(&rcu_gp_lock);
  
-diff --git a/urcu/static/urcu-qsbr.h b/urcu/static/urcu-qsbr.h
-index f314956..f6e5580 100644
---- a/urcu/static/urcu-qsbr.h
-+++ b/urcu/static/urcu-qsbr.h
-@@ -62,6 +62,12 @@ extern "C" {
- #define rcu_assert(args...)
+ 	/* Finish waiting for reader threads before letting the old ptr being
+ 	 * freed. Must be done within rcu_gp_lock because it iterates on reader
+diff --git a/urcu/static/urcu.h b/urcu/static/urcu.h
+index f32f300..973826a 100644
+--- a/urcu/static/urcu.h
++++ b/urcu/static/urcu.h
+@@ -96,6 +96,12 @@ extern "C" {
+ #define SIGRCU SIGUSR1
  #endif
  
 +enum rcu_state {
@@ -174,10 +153,10 @@ index f314956..f6e5580 100644
 +	RCU_READER_INACTIVE,
 +};
 +
- #ifdef DEBUG_YIELD
- #include <sched.h>
- #include <time.h>
-@@ -149,12 +155,16 @@ static inline void wake_up_gp(void)
+ #ifdef DEBUG_RCU
+ #define rcu_assert(args...)	assert(args)
+ #else
+@@ -239,7 +245,7 @@ static inline void wake_up_gp(void)
  	}
  }
  
@@ -186,11 +165,15 @@ index f314956..f6e5580 100644
  {
  	unsigned long v;
  
+@@ -248,8 +254,11 @@ static inline int rcu_gp_ongoing(unsigned long *ctr)
+ 	 * to insure consistency.
+ 	 */
  	v = CMM_LOAD_SHARED(*ctr);
--	return v && (v != rcu_gp_ctr);
-+	if (!v)
+-	return (v & RCU_GP_CTR_NEST_MASK) &&
+-		 ((v ^ rcu_gp_ctr) & RCU_GP_CTR_PHASE);
++	if (!(v & RCU_GP_CTR_NEST_MASK))
 +		return RCU_READER_INACTIVE;
-+	if (v == rcu_gp_ctr)
++	if (!((v ^ rcu_gp_ctr) & RCU_GP_CTR_PHASE))
 +		return RCU_READER_ACTIVE_CURRENT;
 +	return RCU_READER_ACTIVE_OLD;
  }
