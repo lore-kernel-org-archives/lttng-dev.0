@@ -1,9 +1,7 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH 6/8] urcu-bp: move quiescent threads to separate
-	list
-Date: Sat, 17 Nov 2012 11:16:45 -0500
-Message-ID: <1353169007-31389-7-git-send-email-mathieu.desnoyers__33247.2504502677$1353170742$gmane$org@efficios.com>
-References: <1353169007-31389-1-git-send-email-mathieu.desnoyers@efficios.com>
+Subject: [PATCH] wfcqueue: enqueue and splice return queue state
+Date: Sun, 18 Nov 2012 10:40:41 -0500
+Message-ID: <20121118154041.GA29968__21658.0807268203$1353253285$gmane$org@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -11,9 +9,9 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <mathieu.desnoyers@efficios.com>) id 1TZl5e-0000tr-2v
-	for lttng-dev@lists.lttng.org; Sat, 17 Nov 2012 11:17:54 -0500
-In-Reply-To: <1353169007-31389-1-git-send-email-mathieu.desnoyers@efficios.com>
+	(envelope-from <compudj@mail.openrapids.net>) id 1Ta6zD-0002md-Eu
+	for lttng-dev@lists.lttng.org; Sun, 18 Nov 2012 10:40:43 -0500
+Content-Disposition: inline
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,204 +20,294 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org, rp@svcs.cs.pdx.edu, "Paul E . McKenney" <paulmck@linux.vnet.ibm.com>, Lai Jiangshan <laijs@cn.fujitsu.com>, Alan Stern <stern@rowland.harvard.edu>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: lttng-dev@lists.lttng.org, rp@svcs.cs.pdx.edu
+Cc: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
 List-Id: lttng-dev@lists.lttng.org
 
-Accelerate 2-phase grace period by not having to iterate twice on
-threads not within RCU read-side critical section.
+enqueue can return whether the queue was empty or not prior to enqueue.
 
+splice can return this information about destination queue too, but
+there are more cases to handle, because we don't touch the destination
+queue if the source queue was empty, and in the nonblocking case, we
+return that we would need to block on the source queue.
+
+The destination queue state is sampled atomically with enqueue/splice to
+destination operations.
+
+Knowing this state is useful when "ownership" on a batch of queue items
+can be assigned to those enqueuing the first items, e.g. to implement
+wait/wakeup schemes.
+
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 CC: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
 CC: Lai Jiangshan <laijs@cn.fujitsu.com>
-CC: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- urcu-bp.c             |   46 +++++++++++++++++++++++++++++++++++-----------
- urcu.c                |    2 +-
- urcu/static/urcu-bp.h |   29 +++++++++++++++++++----------
- 3 files changed, 55 insertions(+), 22 deletions(-)
-
-diff --git a/urcu-bp.c b/urcu-bp.c
-index 4b3cf01..f99c0e5 100644
---- a/urcu-bp.c
-+++ b/urcu-bp.c
-@@ -115,7 +115,7 @@ DEFINE_URCU_TLS(unsigned int, rcu_rand_yield);
-  * Also has a RCU_GP_COUNT of 1, to accelerate the reader fast path.
-  * Written to only by writer with mutex taken. Read by both writer and readers.
-  */
--long rcu_gp_ctr = RCU_GP_COUNT;
-+unsigned long rcu_gp_ctr = RCU_GP_COUNT;
+diff --git a/urcu/static/wfcqueue.h b/urcu/static/wfcqueue.h
+index 8733771..b386950 100644
+--- a/urcu/static/wfcqueue.h
++++ b/urcu/static/wfcqueue.h
+@@ -128,7 +128,7 @@ static inline void _cds_wfcq_dequeue_unlock(struct cds_wfcq_head *head,
+ 	assert(!ret);
+ }
+ 
+-static inline void ___cds_wfcq_append(struct cds_wfcq_head *head,
++static inline bool ___cds_wfcq_append(struct cds_wfcq_head *head,
+ 		struct cds_wfcq_tail *tail,
+ 		struct cds_wfcq_node *new_head,
+ 		struct cds_wfcq_node *new_tail)
+@@ -152,6 +152,11 @@ static inline void ___cds_wfcq_append(struct cds_wfcq_head *head,
+ 	 * perspective.
+ 	 */
+ 	CMM_STORE_SHARED(old_tail->next, new_head);
++	/*
++	 * Return false if queue was empty prior to adding the node,
++	 * else return true.
++	 */
++	return old_tail != &head->node;
+ }
  
  /*
-  * Pointer to registry elements. Written to only by each individual reader. Read
-@@ -164,9 +164,10 @@ static void mutex_unlock(pthread_mutex_t *mutex)
- 		urcu_die(ret);
+@@ -159,12 +164,15 @@ static inline void ___cds_wfcq_append(struct cds_wfcq_head *head,
+  *
+  * Issues a full memory barrier before enqueue. No mutual exclusion is
+  * required.
++ *
++ * Returns false if the queue was empty prior to adding the node.
++ * Returns true otherwise.
+  */
+-static inline void _cds_wfcq_enqueue(struct cds_wfcq_head *head,
++static inline bool _cds_wfcq_enqueue(struct cds_wfcq_head *head,
+ 		struct cds_wfcq_tail *tail,
+ 		struct cds_wfcq_node *new_tail)
+ {
+-	___cds_wfcq_append(head, tail, new_tail, new_tail);
++	return ___cds_wfcq_append(head, tail, new_tail, new_tail);
  }
  
--static void wait_for_readers(void)
-+static void wait_for_readers(struct cds_list_head *input_readers,
-+			struct cds_list_head *cur_snap_readers,
-+			struct cds_list_head *qsreaders)
- {
--	CDS_LIST_HEAD(qsreaders);
- 	int wait_loops = 0;
- 	struct rcu_reader *index, *tmp;
- 
-@@ -177,12 +178,30 @@ static void wait_for_readers(void)
- 	 */
- 	for (;;) {
- 		wait_loops++;
--		cds_list_for_each_entry_safe(index, tmp, &registry, node) {
--			if (!rcu_old_gp_ongoing(&index->ctr))
--				cds_list_move(&index->node, &qsreaders);
-+		cds_list_for_each_entry_safe(index, tmp, input_readers, node) {
-+			switch (rcu_reader_state(&index->ctr)) {
-+			case RCU_READER_ACTIVE_CURRENT:
-+				if (cur_snap_readers) {
-+					cds_list_move(&index->node,
-+						cur_snap_readers);
-+					break;
-+				}
-+				/* Fall-through */
-+			case RCU_READER_INACTIVE:
-+				cds_list_move(&index->node, qsreaders);
-+				break;
-+			case RCU_READER_ACTIVE_OLD:
-+				/*
-+				 * Old snapshot. Leaving node in
-+				 * input_readers will make us busy-loop
-+				 * until the snapshot becomes current or
-+				 * the reader becomes inactive.
-+				 */
-+				break;
-+			}
- 		}
- 
--		if (cds_list_empty(&registry)) {
-+		if (cds_list_empty(input_readers)) {
- 			break;
- 		} else {
- 			if (wait_loops == RCU_QS_ACTIVE_ATTEMPTS)
-@@ -191,12 +210,12 @@ static void wait_for_readers(void)
- 				caa_cpu_relax();
- 		}
- 	}
--	/* put back the reader list in the registry */
--	cds_list_splice(&qsreaders, &registry);
+ /*
+@@ -373,7 +381,7 @@ ___cds_wfcq_dequeue_nonblocking(struct cds_wfcq_head *head,
+ 	return ___cds_wfcq_dequeue(head, tail, 0);
  }
  
- void synchronize_rcu(void)
+-static inline int
++static inline enum cds_wfcq_ret
+ ___cds_wfcq_splice(
+ 		struct cds_wfcq_head *dest_q_head,
+ 		struct cds_wfcq_tail *dest_q_tail,
+@@ -384,11 +392,11 @@ ___cds_wfcq_splice(
+ 	struct cds_wfcq_node *head, *tail;
+ 
+ 	if (_cds_wfcq_empty(src_q_head, src_q_tail))
+-		return 0;
++		return CDS_WFCQ_RET_SRC_EMPTY;
+ 
+ 	head = ___cds_wfcq_node_sync_next(&src_q_head->node, blocking);
+ 	if (head == CDS_WFCQ_WOULDBLOCK)
+-		return -1;
++		return CDS_WFCQ_RET_WOULDBLOCK;
+ 	_cds_wfcq_node_init(&src_q_head->node);
+ 
+ 	/*
+@@ -403,8 +411,10 @@ ___cds_wfcq_splice(
+ 	 * Append the spliced content of src_q into dest_q. Does not
+ 	 * require mutual exclusion on dest_q (wait-free).
+ 	 */
+-	___cds_wfcq_append(dest_q_head, dest_q_tail, head, tail);
+-	return 0;
++	if (___cds_wfcq_append(dest_q_head, dest_q_tail, head, tail))
++		return CDS_WFCQ_RET_DEST_NON_EMPTY;
++	else
++		return CDS_WFCQ_RET_DEST_EMPTY;
+ }
+ 
+ 
+@@ -415,25 +425,27 @@ ___cds_wfcq_splice(
+  * dest_q must be already initialized.
+  * Dequeue/splice/iteration mutual exclusion for src_q should be ensured
+  * by the caller.
++ * Returns enum cds_wfcq_ret which indicates the state of the src or
++ * dest queue. Never returns CDS_WFCQ_RET_WOULDBLOCK.
+  */
+-static inline void
++static inline enum cds_wfcq_ret
+ ___cds_wfcq_splice_blocking(
+ 		struct cds_wfcq_head *dest_q_head,
+ 		struct cds_wfcq_tail *dest_q_tail,
+ 		struct cds_wfcq_head *src_q_head,
+ 		struct cds_wfcq_tail *src_q_tail)
  {
-+	CDS_LIST_HEAD(cur_snap_readers);
-+	CDS_LIST_HEAD(qsreaders);
- 	sigset_t newmask, oldmask;
- 	int ret;
+-	(void) ___cds_wfcq_splice(dest_q_head, dest_q_tail,
++	return ___cds_wfcq_splice(dest_q_head, dest_q_tail,
+ 		src_q_head, src_q_tail, 1);
+ }
  
-@@ -221,7 +240,7 @@ void synchronize_rcu(void)
- 	/*
- 	 * Wait for readers to observe original parity or be quiescent.
- 	 */
--	wait_for_readers();
-+	wait_for_readers(&registry, &cur_snap_readers, &qsreaders);
- 
- 	/*
- 	 * Adding a cmm_smp_mb() which is _not_ formally required, but makes the
-@@ -250,7 +269,12 @@ void synchronize_rcu(void)
- 	/*
- 	 * Wait for readers to observe new parity or be quiescent.
- 	 */
--	wait_for_readers();
-+	wait_for_readers(&cur_snap_readers, NULL, &qsreaders);
+ /*
+  * __cds_wfcq_splice_nonblocking: enqueue all src_q nodes at the end of dest_q.
+  *
+- * Same as __cds_wfcq_splice_blocking, but returns nonzero if it needs to
+- * block.
++ * Same as __cds_wfcq_splice_blocking, but returns
++ * CDS_WFCQ_RET_WOULDBLOCK if it needs to block.
+  */
+-static inline int
++static inline enum cds_wfcq_ret
+ ___cds_wfcq_splice_nonblocking(
+ 		struct cds_wfcq_head *dest_q_head,
+ 		struct cds_wfcq_tail *dest_q_tail,
+@@ -474,18 +486,23 @@ _cds_wfcq_dequeue_blocking(struct cds_wfcq_head *head,
+  * consistent, but no other memory ordering is ensured.
+  * Mutual exlusion with cds_wfcq_dequeue_blocking and dequeue lock is
+  * ensured.
++ * Returns enum cds_wfcq_ret which indicates the state of the src or
++ * dest queue. Never returns CDS_WFCQ_RET_WOULDBLOCK.
+  */
+-static inline void
++static inline enum cds_wfcq_ret
+ _cds_wfcq_splice_blocking(
+ 		struct cds_wfcq_head *dest_q_head,
+ 		struct cds_wfcq_tail *dest_q_tail,
+ 		struct cds_wfcq_head *src_q_head,
+ 		struct cds_wfcq_tail *src_q_tail)
+ {
++	enum cds_wfcq_ret ret;
 +
-+	/*
-+	 * Put quiescent reader list back into registry.
-+	 */
-+	cds_list_splice(&qsreaders, &registry);
+ 	_cds_wfcq_dequeue_lock(src_q_head, src_q_tail);
+-	___cds_wfcq_splice_blocking(dest_q_head, dest_q_tail,
++	ret = ___cds_wfcq_splice_blocking(dest_q_head, dest_q_tail,
+ 			src_q_head, src_q_tail);
+ 	_cds_wfcq_dequeue_unlock(src_q_head, src_q_tail);
++	return ret;
+ }
  
- 	/*
- 	 * Finish waiting for reader threads before letting the old ptr being
-diff --git a/urcu.c b/urcu.c
-index c692db9..e6ff0f3 100644
---- a/urcu.c
-+++ b/urcu.c
-@@ -361,7 +361,7 @@ void synchronize_rcu(void)
- 	/*
- 	 * Wait for readers to observe new parity or be quiescent.
- 	 */
--	wait_for_readers(&registry, NULL, &qsreaders);
-+	wait_for_readers(&cur_snap_readers, NULL, &qsreaders);
+ #ifdef __cplusplus
+diff --git a/urcu/wfcqueue.h b/urcu/wfcqueue.h
+index fe2862e..ddf6b87 100644
+--- a/urcu/wfcqueue.h
++++ b/urcu/wfcqueue.h
+@@ -45,6 +45,13 @@ extern "C" {
  
- 	/*
- 	 * Put quiescent reader list back into registry.
-diff --git a/urcu/static/urcu-bp.h b/urcu/static/urcu-bp.h
-index c52a688..c7f5326 100644
---- a/urcu/static/urcu-bp.h
-+++ b/urcu/static/urcu-bp.h
-@@ -58,6 +58,12 @@ extern "C" {
- #define rcu_assert(args...)
- #endif
+ #define CDS_WFCQ_WOULDBLOCK	((void *) -1UL)
  
-+enum rcu_state {
-+	RCU_READER_ACTIVE_CURRENT,
-+	RCU_READER_ACTIVE_OLD,
-+	RCU_READER_INACTIVE,
++enum cds_wfcq_ret {
++	CDS_WFCQ_RET_WOULDBLOCK = 	-1,
++	CDS_WFCQ_RET_DEST_EMPTY =	0,
++	CDS_WFCQ_RET_DEST_NON_EMPTY =	1,
++	CDS_WFCQ_RET_SRC_EMPTY = 	2,
 +};
 +
- #ifdef DEBUG_YIELD
- #include <sched.h>
- #include <time.h>
-@@ -129,11 +135,11 @@ extern void rcu_bp_register(void);
-  * Using a int rather than a char to eliminate false register dependencies
-  * causing stalls on some architectures.
+ struct cds_wfcq_node {
+ 	struct cds_wfcq_node *next;
+ };
+@@ -156,8 +163,11 @@ extern void cds_wfcq_dequeue_unlock(struct cds_wfcq_head *head,
+  *
+  * Issues a full memory barrier before enqueue. No mutual exclusion is
+  * required.
++ *
++ * Returns false if the queue was empty prior to adding the node.
++ * Returns true otherwise.
   */
--extern long rcu_gp_ctr;
-+extern unsigned long rcu_gp_ctr;
+-extern void cds_wfcq_enqueue(struct cds_wfcq_head *head,
++extern bool cds_wfcq_enqueue(struct cds_wfcq_head *head,
+ 		struct cds_wfcq_tail *tail,
+ 		struct cds_wfcq_node *node);
  
- struct rcu_reader {
- 	/* Data used by both reader and synchronize_rcu() */
--	long ctr;
-+	unsigned long ctr;
- 	/* Data used for registry */
- 	struct cds_list_head node __attribute__((aligned(CAA_CACHE_LINE_SIZE)));
- 	pthread_t tid;
-@@ -147,19 +153,22 @@ struct rcu_reader {
+@@ -183,8 +193,11 @@ extern struct cds_wfcq_node *cds_wfcq_dequeue_blocking(
+  * consistent, but no other memory ordering is ensured.
+  * Mutual exlusion with cds_wfcq_dequeue_blocking and dequeue lock is
+  * ensured.
++ *
++ * Returns enum cds_wfcq_ret which indicates the state of the src or
++ * dest queue. Cannot block.
   */
- extern DECLARE_URCU_TLS(struct rcu_reader *, rcu_reader);
- 
--static inline int rcu_old_gp_ongoing(long *value)
-+static inline enum rcu_state rcu_reader_state(unsigned long *ctr)
- {
--	long v;
-+	unsigned long v;
- 
--	if (value == NULL)
--		return 0;
-+	if (ctr == NULL)
-+		return RCU_READER_INACTIVE;
- 	/*
- 	 * Make sure both tests below are done on the same version of *value
- 	 * to insure consistency.
- 	 */
--	v = CMM_LOAD_SHARED(*value);
--	return (v & RCU_GP_CTR_NEST_MASK) &&
--		 ((v ^ rcu_gp_ctr) & RCU_GP_CTR_PHASE);
-+	v = CMM_LOAD_SHARED(*ctr);
-+	if (!(v & RCU_GP_CTR_NEST_MASK))
-+		return RCU_READER_INACTIVE;
-+	if (!((v ^ rcu_gp_ctr) & RCU_GP_CTR_PHASE))
-+		return RCU_READER_ACTIVE_CURRENT;
-+	return RCU_READER_ACTIVE_OLD;
+-extern void cds_wfcq_splice_blocking(
++extern enum cds_wfcq_ret cds_wfcq_splice_blocking(
+ 		struct cds_wfcq_head *dest_q_head,
+ 		struct cds_wfcq_tail *dest_q_tail,
+ 		struct cds_wfcq_head *src_q_head,
+@@ -222,8 +235,11 @@ extern struct cds_wfcq_node *__cds_wfcq_dequeue_nonblocking(
+  * consistent, but no other memory ordering is ensured.
+  * Dequeue/splice/iteration mutual exclusion for src_q should be ensured
+  * by the caller.
++ *
++ * Returns enum cds_wfcq_ret which indicates the state of the src or
++ * dest queue. Cannot block.
+  */
+-extern void __cds_wfcq_splice_blocking(
++extern enum cds_wfcq_ret __cds_wfcq_splice_blocking(
+ 		struct cds_wfcq_head *dest_q_head,
+ 		struct cds_wfcq_tail *dest_q_tail,
+ 		struct cds_wfcq_head *src_q_head,
+@@ -232,10 +248,10 @@ extern void __cds_wfcq_splice_blocking(
+ /*
+  * __cds_wfcq_splice_nonblocking: enqueue all src_q nodes at the end of dest_q.
+  *
+- * Same as __cds_wfcq_splice_blocking, but returns nonzero if it needs to
+- * block.
++ * Same as __cds_wfcq_splice_blocking, but returns
++ * CDS_WFCQ_RET_WOULDBLOCK if it needs to block.
+  */
+-extern int __cds_wfcq_splice_nonblocking(
++extern enum cds_wfcq_ret __cds_wfcq_splice_nonblocking(
+ 		struct cds_wfcq_head *dest_q_head,
+ 		struct cds_wfcq_tail *dest_q_tail,
+ 		struct cds_wfcq_head *src_q_head,
+diff --git a/wfcqueue.c b/wfcqueue.c
+index 90b810e..207df95 100644
+--- a/wfcqueue.c
++++ b/wfcqueue.c
+@@ -47,11 +47,11 @@ bool cds_wfcq_empty(struct cds_wfcq_head *head,
+ 	return _cds_wfcq_empty(head, tail);
  }
  
- /*
-@@ -190,7 +199,7 @@ static inline void _rcu_read_lock_update(unsigned long tmp)
-  */
- static inline void _rcu_read_lock(void)
+-void cds_wfcq_enqueue(struct cds_wfcq_head *head,
++bool cds_wfcq_enqueue(struct cds_wfcq_head *head,
+ 		struct cds_wfcq_tail *tail,
+ 		struct cds_wfcq_node *node)
  {
--	long tmp;
-+	unsigned long tmp;
+-	_cds_wfcq_enqueue(head, tail, node);
++	return _cds_wfcq_enqueue(head, tail, node);
+ }
  
- 	if (caa_unlikely(!URCU_TLS(rcu_reader)))
- 		rcu_bp_register(); /* If not yet registered. */
+ void cds_wfcq_dequeue_lock(struct cds_wfcq_head *head,
+@@ -73,13 +73,13 @@ struct cds_wfcq_node *cds_wfcq_dequeue_blocking(
+ 	return _cds_wfcq_dequeue_blocking(head, tail);
+ }
+ 
+-void cds_wfcq_splice_blocking(
++enum cds_wfcq_ret cds_wfcq_splice_blocking(
+ 		struct cds_wfcq_head *dest_q_head,
+ 		struct cds_wfcq_tail *dest_q_tail,
+ 		struct cds_wfcq_head *src_q_head,
+ 		struct cds_wfcq_tail *src_q_tail)
+ {
+-	_cds_wfcq_splice_blocking(dest_q_head, dest_q_tail,
++	return _cds_wfcq_splice_blocking(dest_q_head, dest_q_tail,
+ 				src_q_head, src_q_tail);
+ }
+ 
+@@ -97,17 +97,17 @@ struct cds_wfcq_node *__cds_wfcq_dequeue_nonblocking(
+ 	return ___cds_wfcq_dequeue_nonblocking(head, tail);
+ }
+ 
+-void __cds_wfcq_splice_blocking(
++enum cds_wfcq_ret __cds_wfcq_splice_blocking(
+ 		struct cds_wfcq_head *dest_q_head,
+ 		struct cds_wfcq_tail *dest_q_tail,
+ 		struct cds_wfcq_head *src_q_head,
+ 		struct cds_wfcq_tail *src_q_tail)
+ {
+-	___cds_wfcq_splice_blocking(dest_q_head, dest_q_tail,
++	return ___cds_wfcq_splice_blocking(dest_q_head, dest_q_tail,
+ 				src_q_head, src_q_tail);
+ }
+ 
+-int __cds_wfcq_splice_nonblocking(
++enum cds_wfcq_ret __cds_wfcq_splice_nonblocking(
+ 		struct cds_wfcq_head *dest_q_head,
+ 		struct cds_wfcq_tail *dest_q_tail,
+ 		struct cds_wfcq_head *src_q_head,
 -- 
-1.7.10.4
+Mathieu Desnoyers
+Operating System Efficiency R&D Consultant
+EfficiOS Inc.
+http://www.efficios.com
