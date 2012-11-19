@@ -1,36 +1,20 @@
-From: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
-Subject: Re: userspace rcu flavor improvements
-Date: Mon, 19 Nov 2012 08:23:07 -0800
-Message-ID: <20121119162307.GE2829__42876.9860569902$1353342296$gmane$org@linux.vnet.ibm.com>
-References: <1353169007-31389-1-git-send-email-mathieu.desnoyers@efficios.com>
-	<50A9E532.6000706@cn.fujitsu.com>
-Reply-To: paulmck@linux.vnet.ibm.com
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: TRACEPOINT_PROVIDER mismatch check
+	in	ust-tracepoint-event.h needs -Wsystem-headers
+Date: Mon, 19 Nov 2012 11:26:18 -0500
+Message-ID: <20121119162618.GA17428__28238.0888741047$1353342477$gmane$org@Krystal>
+References: <20998D40D9A2B7499CA5A3A2666CB1EB19F87106@ZURMSG1.QUANTUM.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from e9.ny.us.ibm.com ([32.97.182.139])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <paulmck@linux.vnet.ibm.com>) id 1TaU8h-0005ck-BL
-	for lttng-dev@lists.lttng.org; Mon, 19 Nov 2012 11:24:03 -0500
-Received: from /spool/local
-	by e9.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only!
-	Violators will be prosecuted
-	for <lttng-dev@lists.lttng.org> from <paulmck@linux.vnet.ibm.com>;
-	Mon, 19 Nov 2012 11:23:55 -0500
-Received: from d01relay04.pok.ibm.com (d01relay04.pok.ibm.com [9.56.227.236])
-	by d01dlp02.pok.ibm.com (Postfix) with ESMTP id 324216E8075
-	for <lttng-dev@lists.lttng.org>; Mon, 19 Nov 2012 11:23:47 -0500 (EST)
-Received: from d03av02.boulder.ibm.com (d03av02.boulder.ibm.com [9.17.195.168])
-	by d01relay04.pok.ibm.com (8.13.8/8.13.8/NCO v10.0) with ESMTP id
-	qAJGNkZX192040
-	for <lttng-dev@lists.lttng.org>; Mon, 19 Nov 2012 11:23:47 -0500
-Received: from d03av02.boulder.ibm.com (loopback [127.0.0.1])
-	by d03av02.boulder.ibm.com (8.14.4/8.13.1/NCO v10.0 AVout) with ESMTP
-	id qAJGNc5o029231
-	for <lttng-dev@lists.lttng.org>; Mon, 19 Nov 2012 09:23:39 -0700
+	(envelope-from <compudj@mail.openrapids.net>) id 1TaUAu-0005f4-6G
+	for lttng-dev@lists.lttng.org; Mon, 19 Nov 2012 11:26:20 -0500
 Content-Disposition: inline
-In-Reply-To: <50A9E532.6000706@cn.fujitsu.com>
+In-Reply-To: <20998D40D9A2B7499CA5A3A2666CB1EB19F87106@ZURMSG1.QUANTUM.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -39,44 +23,91 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Lai Jiangshan <laijs@cn.fujitsu.com>
-Cc: Alan Stern <stern@rowland.harvard.edu>, lttng-dev@lists.lttng.org, rp@svcs.cs.pdx.edu, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: David OShea <David.OShea@quantum.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-On Mon, Nov 19, 2012 at 03:52:18PM +0800, Lai Jiangshan wrote:
-> On 11/18/2012 12:16 AM, Mathieu Desnoyers wrote:
-> > Here are a couple of improvements for all userspace RCU flavors. Many
-> > thanks to Alan Stern for his suggestions.
+* David OShea (David.OShea@quantum.com) wrote:
+> Hi all,
 > 
-> It makes urcu like SRCU. (sync_rcu = check zero + flip + check zero)
-> If I have time, I may port more SRCU code to urcu.
-
-I am sure that this is obvious to everyone, but I cannot help restating
-it.  There is one important difference between user code and kernel code,
-though.  In the kernel, we track by CPU, so one of SRCU's big jobs is
-to track multiple tasks using the same CPU.  This opens the possibility
-of preemption, which is one of the things that complicates SRCU's design.
-
-In contrast, user-mode RCU tracks tasks without multiplexing.  This
-allows simplifications that are similar to those that could be achieved
-in the kernel if we were willing to disable preemption across the entire
-SRCU read-side critical section.
-
-So although I am all for user-mode RCU taking advantage of any technology
-we have at hand, we do need to be careful to avoid needless complexity.
-
-> > Patch 8/8 is only done for qsbr so far, and proposed as RFC. I'd like to
-> > try and benchmark other approaches to concurrent grace periods too.
-
-The concurrent grace periods are the big win, in my opinion.  ;-)
-
-							Thanx, Paul
-
-> > Feedback is welcome,
-> > 
-> > Thanks,
-> > 
-> > Mathieu
-> > 
-> > 
+> I noticed that ust-tracepoint-event.h includes:
 > 
+> """
+> /*
+>  * Stage 0 of tracepoint event generation.
+>  *
+>  * Check that each TRACEPOINT_EVENT provider argument match the
+>  * TRACEPOINT_PROVIDER by creating dummy callbacks.
+>  */
+> """
+> 
+> If I ask GCC to output the preprocessor's output, I can see that the
+> checks are behaving as expected - creating calls to functions whose
+> names include the TRACEPOINT_EVENTs' provider arguments, and defining
+> a function whose name includes the TRACEPOINT_PROVIDER value.
+> However, because I have installed the LTTng header files - they are in
+> /usr/include/lttng - GCC (I'm using version 4.3.3) does not actually
+> output any warnings regarding the calls to undefined functions because
+> they are made in a "system header file".  If I pass -Wsystem-headers
+> to GCC, then it does output warnings when I have a TRACEPOINT_PROVIDER
+> mismatch, but I also get lots of warnings about unused parameters due
+> to the way the tracepoint definitions work.
+> 
+> From some experimentation, it looks like enabling -Wsystem-headers,
+> even if only for the trace provider .c file, would probably result in
+> us getting lots of spurious warnings due to various Linux system
+> header files too, so we don't really want to enable that.
+
+We had to enable -Wsystem-headers in UST tests/hello and tests/demo
+Makefile.am. Indeed, it should be documented. And yes, we see some
+warnings in Linux system headers about missing prototypes. I think we
+should report these to distro and/or Linux kernel upstream.
+
+> I'm not sure if there is any way you could "fix" this so that
+> -Wsystem-headers isn't required, but perhaps it would at least be
+> worth documenting that this flag could be used - but perhaps not
+> recommend it - to enable those checks to occur.
+
+I have not found any way to show those warnings from UST system headers
+without -Wsystem-headers. We have the following scenario:
+
+probe C file
+  -> includes ust probe description file
+     -> includes tracepoint-event.h (system header)
+        -> includes ust probe description file
+        -> includes ust-tracepoint-event.h (system header) [1]
+           For each stage:
+             -> undef/define macros
+             -> includes ust probe description file
+
+Since the actual functions are created by the compiler in the scope of
+ust-tracepoint-event.h [1] (a system header), the warnings are inhibited
+unless we specify -Wsystem-headers.
+
+When we build within the UST tree, since the build fetches the headers
+locally from the tree, we see those warnings even without
+-Wsystem-headers.
+
+So I guess documenting this would be the right way to do it, unless
+anyone has a better idea ?
+
+Thanks,
+
+Mathieu
+
+
+> This was seen with lttng-ust-2.0.5 patched with commit 009745db "Cache
+> the procname per-thread rather than per-process to take into account
+> that prctl() can be used to set thread names." and commit e699eda
+> "don't spawn per-user thread if HOME is not set".
+> 
+> Thanks,
+> David
+> 
+[...]
+
+-- 
+Mathieu Desnoyers
+Operating System Efficiency R&D Consultant
+EfficiOS Inc.
+http://www.efficios.com
