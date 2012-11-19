@@ -1,21 +1,22 @@
-From: "McDermott, Andrew" <Andrew.McDermott@windriver.com>
-Subject: latest version of LTTng UST on Ubuntu 12.04
-Date: Mon, 19 Nov 2012 13:54:27 +0000
-Message-ID: <7F632A9222059A42AF70FCB7965774AA20987947__5358.51985118843$1353333314$gmane$org@ALA-MBB.corp.ad.wrs.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH 5/8] urcu-mb/signal/membarrier: move
+	quiescent threads	to separate list
+Date: Mon, 19 Nov 2012 10:16:53 -0500
+Message-ID: <20121119151653.GA16248__46261.5047269084$1353338254$gmane$org@Krystal>
+References: <1353169007-31389-1-git-send-email-mathieu.desnoyers@efficios.com>
+	<1353169007-31389-6-git-send-email-mathieu.desnoyers@efficios.com>
+	<50A9DCD2.7000009@cn.fujitsu.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.windriver.com ([147.11.1.11])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Andrew.McDermott@windriver.com>) id 1TaRo2-0004Pu-9D
-	for lttng-dev@lists.lttng.org; Mon, 19 Nov 2012 08:54:34 -0500
-Received: from ALA-HCA.corp.ad.wrs.com (ala-hca.corp.ad.wrs.com
-	[147.11.189.40])
-	by mail.windriver.com (8.14.5/8.14.3) with ESMTP id qAJDsS09012346
-	(version=TLSv1/SSLv3 cipher=AES128-SHA bits=128 verify=FAIL)
-	for <lttng-dev@lists.lttng.org>; Mon, 19 Nov 2012 05:54:28 -0800 (PST)
-Content-Language: en-US
+	(envelope-from <compudj@mail.openrapids.net>) id 1TaT5i-000535-RG
+	for lttng-dev@lists.lttng.org; Mon, 19 Nov 2012 10:16:54 -0500
+Content-Disposition: inline
+In-Reply-To: <50A9DCD2.7000009@cn.fujitsu.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,22 +25,47 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Lai Jiangshan <laijs@cn.fujitsu.com>
+Cc: "Paul E . McKenney" <paulmck@linux.vnet.ibm.com>, lttng-dev@lists.lttng.org, rp@svcs.cs.pdx.edu, Alan Stern <stern@rowland.harvard.edu>
 List-Id: lttng-dev@lists.lttng.org
 
+* Lai Jiangshan (laijs@cn.fujitsu.com) wrote:
+> On 11/18/2012 12:16 AM, Mathieu Desnoyers wrote:
+> > Accelerate 2-phase grace period by not having to iterate twice on
+> > threads not nested within a RCU read-side lock.
+> 
+> You almost gain nothing.
+> The first wait_for_readers() waits none very likely.
 
-How often are the LTTng UST packages for Ubuntu updated?
+I agree with you that the speedup will probably be small, but as we
+start having more and more readers, most of which are outside of RCU
+read-side critical sections, iterating only once, rather than twice, on
+the list of readers seems to be a saving worth doing.
 
-Having done a fresh install I see the version reported as:
+Actually, when I implemented grace periods based on list move/splicing,
+it was my original intent to only touch threads as many times as we
+needed to observe them become quiescent. The "move quiescent threads to
+separate list" patches are completing that modification.
 
-  $ lttng version
-  lttng version 2.0.1 - Annedd'ale
+> 
+> > @@ -341,7 +361,12 @@ void synchronize_rcu(void)
+> >  	/*
+> >  	 * Wait for readers to observe new parity or be quiescent.
+> >  	 */
+> > -	wait_for_readers();
+> > +	wait_for_readers(&registry, NULL, &qsreaders);
+> 
+> wait_for_readers(&cur_snap_readers, NULL, &qsreaders);
 
-but looking at the git repo I see there is v2.0.4 tag.  Are these
-updates only available if built from source?  In general I was trying to
-avoid the daily development versions from:
+Good catch, fixed in my dev branch.
 
-  https://launchpad.net/~lttng/+archive/daily.
+Thanks!
+
+Mathieu
+
 
 -- 
-andy
+Mathieu Desnoyers
+Operating System Efficiency R&D Consultant
+EfficiOS Inc.
+http://www.efficios.com
