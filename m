@@ -1,21 +1,17 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: userspace rcu flavor improvements
-Date: Mon, 19 Nov 2012 12:05:19 -0500
-Message-ID: <20121119170519.GB17428__6532.66398371688$1353344757$gmane$org@Krystal>
-References: <1353169007-31389-1-git-send-email-mathieu.desnoyers@efficios.com>
-	<50A9E532.6000706@cn.fujitsu.com>
-	<20121119162307.GE2829@linux.vnet.ibm.com>
+From: =?ISO-8859-1?Q?St=E9phane_Graber?= <stgraber@ubuntu.com>
+Subject: Re: latest version of LTTng UST on Ubuntu 12.04
+Date: Mon, 19 Nov 2012 12:51:19 -0500
+Message-ID: <50AA7197.4080508__17755.2149551504$1353347822$gmane$org@ubuntu.com>
+References: <7F632A9222059A42AF70FCB7965774AA20987947@ALA-MBB.corp.ad.wrs.com>
+	<20121119151752.GB16248@Krystal>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1873404405=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from vorash.stgraber.org ([176.9.111.221] helo=smtpout.stgraber.org)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1TaUmf-0005yT-Eu
-	for lttng-dev@lists.lttng.org; Mon, 19 Nov 2012 12:05:21 -0500
-Content-Disposition: inline
-In-Reply-To: <20121119162307.GE2829@linux.vnet.ibm.com>
+	(envelope-from <stgraber@ubuntu.com>) id 1TaVVD-0006JO-F6
+	for lttng-dev@lists.lttng.org; Mon, 19 Nov 2012 12:51:23 -0500
+In-Reply-To: <20121119151752.GB16248@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,114 +20,159 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
-Cc: lttng-dev@lists.lttng.org, rp@svcs.cs.pdx.edu, Alan Stern <stern@rowland.harvard.edu>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, "McDermott,
+	Andrew" <Andrew.McDermott@windriver.com>
 List-Id: lttng-dev@lists.lttng.org
 
-* Paul E. McKenney (paulmck@linux.vnet.ibm.com) wrote:
-> On Mon, Nov 19, 2012 at 03:52:18PM +0800, Lai Jiangshan wrote:
-> > On 11/18/2012 12:16 AM, Mathieu Desnoyers wrote:
-> > > Here are a couple of improvements for all userspace RCU flavors. Many
-> > > thanks to Alan Stern for his suggestions.
-> > 
-> > It makes urcu like SRCU. (sync_rcu = check zero + flip + check zero)
-> > If I have time, I may port more SRCU code to urcu.
-> 
-> I am sure that this is obvious to everyone, but I cannot help restating
-> it.  There is one important difference between user code and kernel code,
-> though.  In the kernel, we track by CPU, so one of SRCU's big jobs is
-> to track multiple tasks using the same CPU.  This opens the possibility
-> of preemption, which is one of the things that complicates SRCU's design.
-> 
-> In contrast, user-mode RCU tracks tasks without multiplexing.  This
-> allows simplifications that are similar to those that could be achieved
-> in the kernel if we were willing to disable preemption across the entire
-> SRCU read-side critical section.
-> 
-> So although I am all for user-mode RCU taking advantage of any technology
-> we have at hand, we do need to be careful to avoid needless complexity.
+This is an OpenPGP/MIME signed message (RFC 2440 and 3156)
+--===============1873404405==
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="------------enig987352B2EF16D33F12EAD4A0"
 
-Very good point! Indeed, when considering modifications to URCU, I will
-be considering all of those elements:
+This is an OpenPGP/MIME signed message (RFC 2440 and 3156)
+--------------enig987352B2EF16D33F12EAD4A0
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
 
-- Added complexity (verification cost),
-+ Speedup,
-+ Lower latency,
-+ Better scalability,
-+ Lower power consumption,
+Hi,
 
-So yes, I'm all for improving URCU synchronisation, but I might be
-reluctant to pull modifications that increase complexity significantly
-without very significant benefits.
+Sorry, I've been terribly busy lately.
 
-> 
-> > > Patch 8/8 is only done for qsbr so far, and proposed as RFC. I'd like to
-> > > try and benchmark other approaches to concurrent grace periods too.
-> 
-> The concurrent grace periods are the big win, in my opinion.  ;-)
+Ubuntu has a pretty strict policy of only accepting bugfixes in the
+-updates pocket post-release.
 
-I've done some basic benchmarking on the approach taken by patch 8/8,
-and it leads to very interesting scalability improvement and speedups,
-e.g., on a 24-core AMD, with a write-heavy scenario (4 readers threads,
-20 updater threads, each updater using synchronize_rcu()):
+For LTTng, the 2.0.x series is supposed to be feature stable so should
+in theory be fine to push to the -updates pocket. However for that to
+happen, someone needs to grab all the lttng releases from 2.0.1 and
+check and justify every changelog entry.
 
-* Serialized grace periods :
-./test_urcu_qsbr 4 20 20
-SUMMARY ./test_urcu_qsbr          testdur   20 nr_readers   4 rdur      0 wdur      0 nr_writers  20 wdelay      0 nr_reads  20251412728 nr_writes      1826331 nr_ops  20253239059
+My plan was to spend some time doing that once babeltrace 1.0 is
+released which I now see actually happened recently.
 
-* Batched grace periods :
-./test_urcu_qsbr 4 20 20
-SUMMARY ./test_urcu_qsbr          testdur   20 nr_readers   4 rdur      0 wdur      0 nr_writers  20 wdelay      0 nr_reads  15141994746 nr_writes      9382515 nr_ops  15151377261
+We also need to keep in mind that we can't push something to 12.04
+that's more recent than what we have in 12.10 as we need to keep a
+working upgrade path between 12.04 and 12.10.
 
-For a 9382515/1826331 = 5.13 speedup
+So looking at the latest releases, I think we'd want:
+ - lttng-tools - 2.0.4
+ - lttng-modules - 2.0.5
+ - lttng-ust - 2.0.5
+ - liburcu - 0.7.5
+ - babeltrace - 1.0.0
 
-Of course, we can see that readers have slowed down, probably due to
-increased update traffic, given there is no change to the read-side code
-whatsoever.
+That'd mean the following stable release updates for Ubuntu 12.10:
+ - lttng-tools 2.0.3 =3D> 2.0.4
+ - lttng-modules 2.0.4 =3D> 2.0.5
+ - ust 2.0.4 =3D> 2.0.5 (the package changed name between 12.04 and 12.10=
+)
+ - liburcu 0.7.3 =3D> 0.7.5
+ - babeltrace 1.0.0~rc4 =3D> 1.0.0
 
-Now let's see the penality of managing the stack for single-updater.
-With 4 readers, single updater:
+And then the following stable release updates for Ubuntu 12.04 LTS:
+ - lttng-tools 2.0.1 =3D> 2.0.4
+ - lttng-modules 2.0.2 =3D> 2.0.5
+ - lttng-ust 2.0.2 =3D> 2.0.5
+ - liburcu 0.6.7 =3D> 0.7.5
+ - babeltrace 1.0.0~rc1 =3D> 1.0.0
 
-* Serialized grace periods :
-./test_urcu_qsbr 4 1 20
-SUMMARY ./test_urcu_qsbr          testdur   20 nr_readers   4 rdur      0 wdur      0 nr_writers   1 wdelay      0 nr_reads  19240784755 nr_writes      2130839 nr_ops  19242915594
+As everyone of those would be a version change, they'd all need to come
+along with a detailed test plan on all 5 supported architectures (amd64,
+i386, powerpc, armel, armhf) detailing how upstart (lttng) is ensuring
+that no regression has happened.
+The libraries will also need to be ABI compatible as rebuilding all
+reverse-dependencies isn't an option post-release.
 
-* Batched grace periods :
-./test_urcu_qsbr 4 1 20
-SUMMARY ./test_urcu_qsbr          testdur   20 nr_readers   4 rdur      0 wdur      0 nr_writers   1 wdelay      0 nr_reads  19160162768 nr_writes      2253068 nr_ops  1916241583
+I'd expect that work, assuming lttng upstream's current test plans are
+accepted by the Ubuntu Technical Board to be of sufficient quality to
+guarantee a regression-free update, to take a good dozen of hours to
+prepare followed by reactive work for the month following to get those
+into the updates pocket.
 
-2253068 vs 2137036 -> a couple of runs show that this difference is lost
-in the noise for single updater.
+I don't think I'll realistically have the time to do that work anytime
+soon as lttng isn't a package officially supported by Canonical and so
+doesn't fall in my day job activities.
 
-So given that implementing a real "concurrent" approach for grace
-periods would take a while and adds a lot of complexity, I am tempted to
-merge the batching approach given it does not add complexity to the
-synchronization algorithm, and already shows interesting speedup.
-Moreover, we can easily remove batching if it appears not to be needed
-in the future.
+An alternative would be to get lttng into the backports pocket of Ubuntu
+12.04, the process for that is quite a bit easier as it doesn't required
+Technical Board approval or the strict testing process but will be less
+visible to the users as they'll have to explicitly pull it from the
+backports pocket (by using apt-get install lttng-tools=3D2.0.4 for exampl=
+e).
 
-Thoughts ?
+Hope this clarifies the current situation a little.
 
-Thanks,
+On 11/19/2012 10:17 AM, Mathieu Desnoyers wrote:
+> Let's ask St=E9phane Graber, our Ubuntu packager.
+>=20
+> Thanks,
+>=20
+> Mathieu
+>=20
+> * McDermott, Andrew (Andrew.McDermott@windriver.com) wrote:
+>>
+>> How often are the LTTng UST packages for Ubuntu updated?
+>>
+>> Having done a fresh install I see the version reported as:
+>>
+>>   $ lttng version
+>>   lttng version 2.0.1 - Annedd'ale
+>>
+>> but looking at the git repo I see there is v2.0.4 tag.  Are these
+>> updates only available if built from source?  In general I was trying =
+to
+>> avoid the daily development versions from:
+>>
+>>   https://launchpad.net/~lttng/+archive/daily.
+>>
+>> --=20
+>> andy
 
-Mathieu
 
 
-> 
-> 							Thanx, Paul
-> 
-> > > Feedback is welcome,
-> > > 
-> > > Thanks,
-> > > 
-> > > Mathieu
-> > > 
-> > > 
-> > 
-> 
+--=20
+St=E9phane Graber
+Ubuntu developer
+http://www.ubuntu.com
 
--- 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+
+--------------enig987352B2EF16D33F12EAD4A0
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.11 (GNU/Linux)
+Comment: Using GnuPG with undefined - http://www.enigmail.net/
+
+iQIcBAEBCgAGBQJQqnGXAAoJEMY4l01keS1niAgQAL5R4kQcBCfPDrGSf80pwMIm
+HwZA0gZ/dWONVB0VS5wzCmBpBgvOD4NShxl7fLr5wG1HUpAWqNiGO7+NC1jLkFOu
+DMcZSk1J+InuZpgbpcuB3ccyLGCjZMs6y6NY6Xvv7t1MPT6cvqRvO6XwU0ERYfep
+y8JxJGaoVtPp2siVCeE3aVS8F09kUP0aWTzOF1S14mZ+SfRnKvrd2FKJGWXGV6Mj
+ak0gggXEfcHIdBqHqbiPkD0fSeLoV/m7pxfFxpmQkIsM8gdHk2UfRsrZoSMvdZSM
+SY2xirIY5kB0IJ1+zPHSasYB2lkdRSd7pmIoYVOf8UtschMUdpOdVXf8DXqOQJ44
+CGG5b2GkaNDVJPbVBjsMxp218gvd34JmbxrM8oO/ILFHd+HJXTRMKQZLc3tPz3lb
+MZuaXnXXoZskR965o8MuIJqqnUvGWaY9VH3v5SYlIjfFa5m4U9E1c/VQqNojC+E+
+5LHzZLr7K0ShSlRJhDOpSAwh30c/t9+3ilOzLRUh8XzmcZtF7mCBIA+0u8k8PZUJ
+5qNlHWBx26UFRR1W4mk1Roj+jEUgtLsaDgPBQcIXvWKmJG+C1/sRsGGodGX2C8h9
+Th7am7so8AYL1zGoylZmCiLgz71SJSB+oY5+8aJuKUM4JlLBcj8ysPYiOIZk04lN
+wQo64TUubBK34EH3b8c/
+=Fx//
+-----END PGP SIGNATURE-----
+
+--------------enig987352B2EF16D33F12EAD4A0--
+
+
+--===============1873404405==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1873404405==--
