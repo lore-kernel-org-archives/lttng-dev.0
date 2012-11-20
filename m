@@ -1,8 +1,7 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH 11/16] urcu-mb/signal/membarrier: move quiescent
-	threads to separate list
-Date: Tue, 20 Nov 2012 14:40:24 -0500
-Message-ID: <1353440429-19223-12-git-send-email-mathieu.desnoyers__14528.000917244$1353442855$gmane$org@efficios.com>
+Subject: [PATCH 07/16] urcu-qsbr: improve 2-phase wait scheme
+Date: Tue, 20 Nov 2012 14:40:20 -0500
+Message-ID: <1353440429-19223-8-git-send-email-mathieu.desnoyers__40763.9168588959$1353442965$gmane$org@efficios.com>
 References: <1353440429-19223-1-git-send-email-mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,8 +10,8 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <mathieu.desnoyers@efficios.com>) id 1TathS-0001OI-IY
-	for lttng-dev@lists.lttng.org; Tue, 20 Nov 2012 14:41:38 -0500
+	(envelope-from <mathieu.desnoyers@efficios.com>) id 1TathM-0001M2-1Y
+	for lttng-dev@lists.lttng.org; Tue, 20 Nov 2012 14:41:32 -0500
 In-Reply-To: <1353440429-19223-1-git-send-email-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -26,158 +25,160 @@ To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, "Paul E. McKenney" <paul
 Cc: lttng-dev@lists.lttng.org, rp@svcs.cs.pdx.edu
 List-Id: lttng-dev@lists.lttng.org
 
-Accelerate 2-phase grace period by not having to iterate twice on
-threads not nested within a RCU read-side lock.
+In the single-bit, 2-phase grace period scheme, all we need to do is to
+observe each reader going through a quiescent state while we are in the
+grace period.
 
+We therefore only need to perform one global counter update, surrounded
+by 2 iterations on readers to observe change in their snapshot.
+
+We can therefore remove the first counter update (prior to the first
+iteration on readers): it was useless and was only slowing down the
+grace period.
+
+Suggested-by: Alan Stern <stern@rowland.harvard.edu>
 CC: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
 CC: Lai Jiangshan <laijs@cn.fujitsu.com>
-CC: Alan Stern <stern@rowland.harvard.edu>
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- urcu.c             |   47 ++++++++++++++++++++++++++++++++++++-----------
- urcu/static/urcu.h |   15 ++++++++++++---
- 2 files changed, 48 insertions(+), 14 deletions(-)
+ urcu-qsbr.c |   92 ++++++++++++++++++++++++++++++++++++-----------------------
+ 1 file changed, 56 insertions(+), 36 deletions(-)
 
-diff --git a/urcu.c b/urcu.c
-index 2d5c510..e6ff0f3 100644
---- a/urcu.c
-+++ b/urcu.c
-@@ -215,9 +215,10 @@ static void wait_gp(void)
+diff --git a/urcu-qsbr.c b/urcu-qsbr.c
+index c6a1b18..eb167d1 100644
+--- a/urcu-qsbr.c
++++ b/urcu-qsbr.c
+@@ -116,38 +116,16 @@ static void wait_gp(void)
  		      NULL, NULL, 0);
  }
  
--static void wait_for_readers(void)
-+static void wait_for_readers(struct cds_list_head *input_readers,
-+			struct cds_list_head *cur_snap_readers,
-+			struct cds_list_head *qsreaders)
+-static void update_counter_and_wait(void)
++static void wait_for_readers(void)
  {
--	CDS_LIST_HEAD(qsreaders);
+ 	CDS_LIST_HEAD(qsreaders);
  	int wait_loops = 0;
  	struct rcu_reader *index, *tmp;
  
-@@ -234,13 +235,31 @@ static void wait_for_readers(void)
- 			smp_mb_master(RCU_MB_GROUP);
- 		}
+-#if (CAA_BITS_PER_LONG < 64)
+-	/* Switch parity: 0 -> 1, 1 -> 0 */
+-	CMM_STORE_SHARED(rcu_gp_ctr, rcu_gp_ctr ^ RCU_GP_CTR);
+-#else	/* !(CAA_BITS_PER_LONG < 64) */
+-	/* Increment current G.P. */
+-	CMM_STORE_SHARED(rcu_gp_ctr, rcu_gp_ctr + RCU_GP_CTR);
+-#endif	/* !(CAA_BITS_PER_LONG < 64) */
+-
+-	/*
+-	 * Must commit rcu_gp_ctr update to memory before waiting for
+-	 * quiescent state. Failure to do so could result in the writer
+-	 * waiting forever while new readers are always accessing data
+-	 * (no progress). Enforce compiler-order of store to rcu_gp_ctr
+-	 * before load URCU_TLS(rcu_reader).ctr.
+-	 */
+-	cmm_barrier();
+-
+-	/*
+-	 * Adding a cmm_smp_mb() which is _not_ formally required, but makes the
+-	 * model easier to understand. It does not have a big performance impact
+-	 * anyway, given this is the write-side.
+-	 */
+-	cmm_smp_mb();
+-
+ 	/*
+-	 * Wait for each thread rcu_reader_qs_gp count to become 0.
++	 * Wait for each thread URCU_TLS(rcu_reader).ctr to either
++	 * indicate quiescence (offline), or for them to observe the
++	 * current rcu_gp_ctr value.
+ 	 */
+ 	for (;;) {
+ 		wait_loops++;
+@@ -223,17 +201,17 @@ void synchronize_rcu(void)
+ 		goto out;
  
--		cds_list_for_each_entry_safe(index, tmp, &registry, node) {
--			if (!rcu_gp_ongoing(&index->ctr))
--				cds_list_move(&index->node, &qsreaders);
-+		cds_list_for_each_entry_safe(index, tmp, input_readers, node) {
-+			switch (rcu_reader_state(&index->ctr)) {
-+			case RCU_READER_ACTIVE_CURRENT:
-+				if (cur_snap_readers) {
-+					cds_list_move(&index->node,
-+						cur_snap_readers);
-+					break;
-+				}
-+				/* Fall-through */
-+			case RCU_READER_INACTIVE:
-+				cds_list_move(&index->node, qsreaders);
-+				break;
-+			case RCU_READER_ACTIVE_OLD:
-+				/*
-+				 * Old snapshot. Leaving node in
-+				 * input_readers will make us busy-loop
-+				 * until the snapshot becomes current or
-+				 * the reader becomes inactive.
-+				 */
-+				break;
-+			}
- 		}
+ 	/*
+-	 * Wait for previous parity to be empty of readers.
++	 * Wait for readers to observe original parity or be quiescent.
+ 	 */
+-	update_counter_and_wait();	/* 0 -> 1, wait readers in parity 0 */
++	wait_for_readers();
  
- #ifndef HAS_INCOHERENT_CACHES
--		if (cds_list_empty(&registry)) {
-+		if (cds_list_empty(input_readers)) {
- 			if (wait_loops == RCU_QS_ACTIVE_ATTEMPTS) {
- 				/* Read reader_gp before write futex */
- 				smp_mb_master(RCU_MB_GROUP);
-@@ -259,7 +278,7 @@ static void wait_for_readers(void)
- 		 * URCU_TLS(rcu_reader).ctr update to memory if we wait
- 		 * for too long.
- 		 */
--		if (cds_list_empty(&registry)) {
-+		if (cds_list_empty(input_readers)) {
- 			if (wait_loops == RCU_QS_ACTIVE_ATTEMPTS) {
- 				/* Read reader_gp before write futex */
- 				smp_mb_master(RCU_MB_GROUP);
-@@ -281,12 +300,13 @@ static void wait_for_readers(void)
- 		}
- #endif /* #else #ifndef HAS_INCOHERENT_CACHES */
- 	}
--	/* put back the reader list in the registry */
--	cds_list_splice(&qsreaders, &registry);
- }
+ 	/*
+-	 * Must finish waiting for quiescent state for parity 0 before
+-	 * committing next rcu_gp_ctr update to memory. Failure to
+-	 * do so could result in the writer waiting forever while new
++	 * Must finish waiting for quiescent state for original parity
++	 * before committing next rcu_gp_ctr update to memory. Failure
++	 * to do so could result in the writer waiting forever while new
+ 	 * readers are always accessing data (no progress).  Enforce
+-	 * compiler-order of load URCU_TLS(rcu_reader).ctr before store to
+-	 * rcu_gp_ctr.
++	 * compiler-order of load URCU_TLS(rcu_reader).ctr before store
++	 * to rcu_gp_ctr.
+ 	 */
+ 	cmm_barrier();
  
- void synchronize_rcu(void)
- {
-+	CDS_LIST_HEAD(cur_snap_readers);
-+	CDS_LIST_HEAD(qsreaders);
+@@ -244,10 +222,29 @@ void synchronize_rcu(void)
+ 	 */
+ 	cmm_smp_mb();
+ 
++	/* Switch parity: 0 -> 1, 1 -> 0 */
++	CMM_STORE_SHARED(rcu_gp_ctr, rcu_gp_ctr ^ RCU_GP_CTR);
 +
- 	mutex_lock(&rcu_gp_lock);
- 
- 	if (cds_list_empty(&registry))
-@@ -301,7 +321,7 @@ void synchronize_rcu(void)
  	/*
- 	 * Wait for readers to observe original parity or be quiescent.
+-	 * Wait for previous parity to be empty of readers.
++	 * Must commit rcu_gp_ctr update to memory before waiting for
++	 * quiescent state. Failure to do so could result in the writer
++	 * waiting forever while new readers are always accessing data
++	 * (no progress). Enforce compiler-order of store to rcu_gp_ctr
++	 * before load URCU_TLS(rcu_reader).ctr.
  	 */
--	wait_for_readers();
-+	wait_for_readers(&registry, &cur_snap_readers, &qsreaders);
- 
- 	/*
- 	 * Must finish waiting for quiescent state for original parity before
-@@ -341,7 +361,12 @@ void synchronize_rcu(void)
- 	/*
- 	 * Wait for readers to observe new parity or be quiescent.
- 	 */
--	wait_for_readers();
-+	wait_for_readers(&cur_snap_readers, NULL, &qsreaders);
+-	update_counter_and_wait();	/* 1 -> 0, wait readers in parity 1 */
++	cmm_barrier();
 +
 +	/*
-+	 * Put quiescent reader list back into registry.
++	 * Adding a cmm_smp_mb() which is _not_ formally required, but makes the
++	 * model easier to understand. It does not have a big performance impact
++	 * anyway, given this is the write-side.
 +	 */
-+	cds_list_splice(&qsreaders, &registry);
- 
- 	/* Finish waiting for reader threads before letting the old ptr being
- 	 * freed. Must be done within rcu_gp_lock because it iterates on reader
-diff --git a/urcu/static/urcu.h b/urcu/static/urcu.h
-index f32f300..973826a 100644
---- a/urcu/static/urcu.h
-+++ b/urcu/static/urcu.h
-@@ -96,6 +96,12 @@ extern "C" {
- #define SIGRCU SIGUSR1
- #endif
- 
-+enum rcu_state {
-+	RCU_READER_ACTIVE_CURRENT,
-+	RCU_READER_ACTIVE_OLD,
-+	RCU_READER_INACTIVE,
-+};
++	cmm_smp_mb();
 +
- #ifdef DEBUG_RCU
- #define rcu_assert(args...)	assert(args)
- #else
-@@ -239,7 +245,7 @@ static inline void wake_up_gp(void)
- 	}
- }
++	/*
++	 * Wait for readers to observe new parity or be quiescent.
++	 */
++	wait_for_readers();
+ out:
+ 	mutex_unlock(&rcu_gp_lock);
  
--static inline int rcu_gp_ongoing(unsigned long *ctr)
-+static inline enum rcu_state rcu_reader_state(unsigned long *ctr)
- {
- 	unsigned long v;
+@@ -280,7 +277,30 @@ void synchronize_rcu(void)
+ 	mutex_lock(&rcu_gp_lock);
+ 	if (cds_list_empty(&registry))
+ 		goto out;
+-	update_counter_and_wait();
++
++	/* Increment current G.P. */
++	CMM_STORE_SHARED(rcu_gp_ctr, rcu_gp_ctr + RCU_GP_CTR);
++
++	/*
++	 * Must commit rcu_gp_ctr update to memory before waiting for
++	 * quiescent state. Failure to do so could result in the writer
++	 * waiting forever while new readers are always accessing data
++	 * (no progress). Enforce compiler-order of store to rcu_gp_ctr
++	 * before load URCU_TLS(rcu_reader).ctr.
++	 */
++	cmm_barrier();
++
++	/*
++	 * Adding a cmm_smp_mb() which is _not_ formally required, but makes the
++	 * model easier to understand. It does not have a big performance impact
++	 * anyway, given this is the write-side.
++	 */
++	cmm_smp_mb();
++
++	/*
++	 * Wait for readers to observe new count of be quiescent.
++	 */
++	wait_for_readers();
+ out:
+ 	mutex_unlock(&rcu_gp_lock);
  
-@@ -248,8 +254,11 @@ static inline int rcu_gp_ongoing(unsigned long *ctr)
- 	 * to insure consistency.
- 	 */
- 	v = CMM_LOAD_SHARED(*ctr);
--	return (v & RCU_GP_CTR_NEST_MASK) &&
--		 ((v ^ rcu_gp_ctr) & RCU_GP_CTR_PHASE);
-+	if (!(v & RCU_GP_CTR_NEST_MASK))
-+		return RCU_READER_INACTIVE;
-+	if (!((v ^ rcu_gp_ctr) & RCU_GP_CTR_PHASE))
-+		return RCU_READER_ACTIVE_CURRENT;
-+	return RCU_READER_ACTIVE_OLD;
- }
- 
- /*
 -- 
 1.7.10.4
