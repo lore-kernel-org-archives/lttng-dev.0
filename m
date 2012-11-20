@@ -1,17 +1,21 @@
-From: =?ISO-8859-1?Q?St=E9phane_Graber?= <stgraber@ubuntu.com>
+From: "McDermott, Andrew" <Andrew.McDermott@windriver.com>
 Subject: Re: latest version of LTTng UST on Ubuntu 12.04
-Date: Mon, 19 Nov 2012 12:51:19 -0500
-Message-ID: <50AA7197.4080508__17755.2149551504$1353347822$gmane$org@ubuntu.com>
+Date: Tue, 20 Nov 2012 11:22:56 +0000
+Message-ID: <7F632A9222059A42AF70FCB7965774AA2098823E__16994.8795148686$1353410629$gmane$org@ALA-MBB.corp.ad.wrs.com>
 References: <7F632A9222059A42AF70FCB7965774AA20987947@ALA-MBB.corp.ad.wrs.com>
-	<20121119151752.GB16248@Krystal>
+	<20121119151752.GB16248@Krystal> <50AA7197.4080508@ubuntu.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1873404405=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from vorash.stgraber.org ([176.9.111.221] helo=smtpout.stgraber.org)
+Received: from mail.windriver.com ([147.11.1.11])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <stgraber@ubuntu.com>) id 1TaVVD-0006JO-F6
-	for lttng-dev@lists.lttng.org; Mon, 19 Nov 2012 12:51:23 -0500
-In-Reply-To: <20121119151752.GB16248@Krystal>
+	(envelope-from <Andrew.McDermott@windriver.com>) id 1Talv1-0005jq-50
+	for lttng-dev@lists.lttng.org; Tue, 20 Nov 2012 06:23:07 -0500
+In-Reply-To: <50AA7197.4080508@ubuntu.com> (=?utf-8?Q?=22St=C3=A9phane?=
+	Graber"'s message of	"Mon, 19 Nov 2012 12:51:19 -0500")
+Content-Language: en-US
+Content-ID: <4F0E589F0A33EA479A5C901129770838@local>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,159 +24,75 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, "McDermott,
-	Andrew" <Andrew.McDermott@windriver.com>
+To: =?utf-8?B?U3TDqXBoYW5lIEdyYWJlcg==?= <stgraber@ubuntu.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-This is an OpenPGP/MIME signed message (RFC 2440 and 3156)
---===============1873404405==
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="------------enig987352B2EF16D33F12EAD4A0"
-
-This is an OpenPGP/MIME signed message (RFC 2440 and 3156)
---------------enig987352B2EF16D33F12EAD4A0
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-
-Sorry, I've been terribly busy lately.
-
-Ubuntu has a pretty strict policy of only accepting bugfixes in the
--updates pocket post-release.
-
-For LTTng, the 2.0.x series is supposed to be feature stable so should
-in theory be fine to push to the -updates pocket. However for that to
-happen, someone needs to grab all the lttng releases from 2.0.1 and
-check and justify every changelog entry.
-
-My plan was to spend some time doing that once babeltrace 1.0 is
-released which I now see actually happened recently.
-
-We also need to keep in mind that we can't push something to 12.04
-that's more recent than what we have in 12.10 as we need to keep a
-working upgrade path between 12.04 and 12.10.
-
-So looking at the latest releases, I think we'd want:
- - lttng-tools - 2.0.4
- - lttng-modules - 2.0.5
- - lttng-ust - 2.0.5
- - liburcu - 0.7.5
- - babeltrace - 1.0.0
-
-That'd mean the following stable release updates for Ubuntu 12.10:
- - lttng-tools 2.0.3 =3D> 2.0.4
- - lttng-modules 2.0.4 =3D> 2.0.5
- - ust 2.0.4 =3D> 2.0.5 (the package changed name between 12.04 and 12.10=
-)
- - liburcu 0.7.3 =3D> 0.7.5
- - babeltrace 1.0.0~rc4 =3D> 1.0.0
-
-And then the following stable release updates for Ubuntu 12.04 LTS:
- - lttng-tools 2.0.1 =3D> 2.0.4
- - lttng-modules 2.0.2 =3D> 2.0.5
- - lttng-ust 2.0.2 =3D> 2.0.5
- - liburcu 0.6.7 =3D> 0.7.5
- - babeltrace 1.0.0~rc1 =3D> 1.0.0
-
-As everyone of those would be a version change, they'd all need to come
-along with a detailed test plan on all 5 supported architectures (amd64,
-i386, powerpc, armel, armhf) detailing how upstart (lttng) is ensuring
-that no regression has happened.
-The libraries will also need to be ABI compatible as rebuilding all
-reverse-dependencies isn't an option post-release.
-
-I'd expect that work, assuming lttng upstream's current test plans are
-accepted by the Ubuntu Technical Board to be of sufficient quality to
-guarantee a regression-free update, to take a good dozen of hours to
-prepare followed by reactive work for the month following to get those
-into the updates pocket.
-
-I don't think I'll realistically have the time to do that work anytime
-soon as lttng isn't a package officially supported by Canonical and so
-doesn't fall in my day job activities.
-
-An alternative would be to get lttng into the backports pocket of Ubuntu
-12.04, the process for that is quite a bit easier as it doesn't required
-Technical Board approval or the strict testing process but will be less
-visible to the users as they'll have to explicitly pull it from the
-backports pocket (by using apt-get install lttng-tools=3D2.0.4 for exampl=
-e).
-
-Hope this clarifies the current situation a little.
-
-On 11/19/2012 10:17 AM, Mathieu Desnoyers wrote:
-> Let's ask St=E9phane Graber, our Ubuntu packager.
->=20
-> Thanks,
->=20
-> Mathieu
->=20
-> * McDermott, Andrew (Andrew.McDermott@windriver.com) wrote:
->>
->> How often are the LTTng UST packages for Ubuntu updated?
->>
->> Having done a fresh install I see the version reported as:
->>
->>   $ lttng version
->>   lttng version 2.0.1 - Annedd'ale
->>
->> but looking at the git repo I see there is v2.0.4 tag.  Are these
->> updates only available if built from source?  In general I was trying =
-to
->> avoid the daily development versions from:
->>
->>   https://launchpad.net/~lttng/+archive/daily.
->>
->> --=20
->> andy
-
-
-
---=20
-St=E9phane Graber
-Ubuntu developer
-http://www.ubuntu.com
-
-
---------------enig987352B2EF16D33F12EAD4A0
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.11 (GNU/Linux)
-Comment: Using GnuPG with undefined - http://www.enigmail.net/
-
-iQIcBAEBCgAGBQJQqnGXAAoJEMY4l01keS1niAgQAL5R4kQcBCfPDrGSf80pwMIm
-HwZA0gZ/dWONVB0VS5wzCmBpBgvOD4NShxl7fLr5wG1HUpAWqNiGO7+NC1jLkFOu
-DMcZSk1J+InuZpgbpcuB3ccyLGCjZMs6y6NY6Xvv7t1MPT6cvqRvO6XwU0ERYfep
-y8JxJGaoVtPp2siVCeE3aVS8F09kUP0aWTzOF1S14mZ+SfRnKvrd2FKJGWXGV6Mj
-ak0gggXEfcHIdBqHqbiPkD0fSeLoV/m7pxfFxpmQkIsM8gdHk2UfRsrZoSMvdZSM
-SY2xirIY5kB0IJ1+zPHSasYB2lkdRSd7pmIoYVOf8UtschMUdpOdVXf8DXqOQJ44
-CGG5b2GkaNDVJPbVBjsMxp218gvd34JmbxrM8oO/ILFHd+HJXTRMKQZLc3tPz3lb
-MZuaXnXXoZskR965o8MuIJqqnUvGWaY9VH3v5SYlIjfFa5m4U9E1c/VQqNojC+E+
-5LHzZLr7K0ShSlRJhDOpSAwh30c/t9+3ilOzLRUh8XzmcZtF7mCBIA+0u8k8PZUJ
-5qNlHWBx26UFRR1W4mk1Roj+jEUgtLsaDgPBQcIXvWKmJG+C1/sRsGGodGX2C8h9
-Th7am7so8AYL1zGoylZmCiLgz71SJSB+oY5+8aJuKUM4JlLBcj8ysPYiOIZk04lN
-wQo64TUubBK34EH3b8c/
-=Fx//
------END PGP SIGNATURE-----
-
---------------enig987352B2EF16D33F12EAD4A0--
-
-
---===============1873404405==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1873404405==--
+DQpTdMOpcGhhbmUgR3JhYmVyIDxzdGdyYWJlckB1YnVudHUuY29tPiB3cml0ZXM6DQoNCj4gSGks
+DQo+DQo+IFNvcnJ5LCBJJ3ZlIGJlZW4gdGVycmlibHkgYnVzeSBsYXRlbHkuDQo+DQo+IFVidW50
+dSBoYXMgYSBwcmV0dHkgc3RyaWN0IHBvbGljeSBvZiBvbmx5IGFjY2VwdGluZyBidWdmaXhlcyBp
+biB0aGUNCj4gLXVwZGF0ZXMgcG9ja2V0IHBvc3QtcmVsZWFzZS4NCj4NCj4gRm9yIExUVG5nLCB0
+aGUgMi4wLnggc2VyaWVzIGlzIHN1cHBvc2VkIHRvIGJlIGZlYXR1cmUgc3RhYmxlIHNvIHNob3Vs
+ZA0KPiBpbiB0aGVvcnkgYmUgZmluZSB0byBwdXNoIHRvIHRoZSAtdXBkYXRlcyBwb2NrZXQuIEhv
+d2V2ZXIgZm9yIHRoYXQgdG8NCj4gaGFwcGVuLCBzb21lb25lIG5lZWRzIHRvIGdyYWIgYWxsIHRo
+ZSBsdHRuZyByZWxlYXNlcyBmcm9tIDIuMC4xIGFuZA0KPiBjaGVjayBhbmQganVzdGlmeSBldmVy
+eSBjaGFuZ2Vsb2cgZW50cnkuDQo+DQo+IE15IHBsYW4gd2FzIHRvIHNwZW5kIHNvbWUgdGltZSBk
+b2luZyB0aGF0IG9uY2UgYmFiZWx0cmFjZSAxLjAgaXMNCj4gcmVsZWFzZWQgd2hpY2ggSSBub3cg
+c2VlIGFjdHVhbGx5IGhhcHBlbmVkIHJlY2VudGx5Lg0KPg0KPiBXZSBhbHNvIG5lZWQgdG8ga2Vl
+cCBpbiBtaW5kIHRoYXQgd2UgY2FuJ3QgcHVzaCBzb21ldGhpbmcgdG8gMTIuMDQNCj4gdGhhdCdz
+IG1vcmUgcmVjZW50IHRoYW4gd2hhdCB3ZSBoYXZlIGluIDEyLjEwIGFzIHdlIG5lZWQgdG8ga2Vl
+cCBhDQo+IHdvcmtpbmcgdXBncmFkZSBwYXRoIGJldHdlZW4gMTIuMDQgYW5kIDEyLjEwLg0KPg0K
+PiBTbyBsb29raW5nIGF0IHRoZSBsYXRlc3QgcmVsZWFzZXMsIEkgdGhpbmsgd2UnZCB3YW50Og0K
+PiAgLSBsdHRuZy10b29scyAtIDIuMC40DQo+ICAtIGx0dG5nLW1vZHVsZXMgLSAyLjAuNQ0KPiAg
+LSBsdHRuZy11c3QgLSAyLjAuNQ0KPiAgLSBsaWJ1cmN1IC0gMC43LjUNCj4gIC0gYmFiZWx0cmFj
+ZSAtIDEuMC4wDQo+DQo+IFRoYXQnZCBtZWFuIHRoZSBmb2xsb3dpbmcgc3RhYmxlIHJlbGVhc2Ug
+dXBkYXRlcyBmb3IgVWJ1bnR1IDEyLjEwOg0KPiAgLSBsdHRuZy10b29scyAyLjAuMyA9PiAyLjAu
+NA0KPiAgLSBsdHRuZy1tb2R1bGVzIDIuMC40ID0+IDIuMC41DQo+ICAtIHVzdCAyLjAuNCA9PiAy
+LjAuNSAodGhlIHBhY2thZ2UgY2hhbmdlZCBuYW1lIGJldHdlZW4gMTIuMDQgYW5kIDEyLjEwKQ0K
+PiAgLSBsaWJ1cmN1IDAuNy4zID0+IDAuNy41DQo+ICAtIGJhYmVsdHJhY2UgMS4wLjB+cmM0ID0+
+IDEuMC4wDQo+DQo+IEFuZCB0aGVuIHRoZSBmb2xsb3dpbmcgc3RhYmxlIHJlbGVhc2UgdXBkYXRl
+cyBmb3IgVWJ1bnR1IDEyLjA0IExUUzoNCj4gIC0gbHR0bmctdG9vbHMgMi4wLjEgPT4gMi4wLjQN
+Cj4gIC0gbHR0bmctbW9kdWxlcyAyLjAuMiA9PiAyLjAuNQ0KPiAgLSBsdHRuZy11c3QgMi4wLjIg
+PT4gMi4wLjUNCj4gIC0gbGlidXJjdSAwLjYuNyA9PiAwLjcuNQ0KPiAgLSBiYWJlbHRyYWNlIDEu
+MC4wfnJjMSA9PiAxLjAuMA0KPg0KPiBBcyBldmVyeW9uZSBvZiB0aG9zZSB3b3VsZCBiZSBhIHZl
+cnNpb24gY2hhbmdlLCB0aGV5J2QgYWxsIG5lZWQgdG8gY29tZQ0KPiBhbG9uZyB3aXRoIGEgZGV0
+YWlsZWQgdGVzdCBwbGFuIG9uIGFsbCA1IHN1cHBvcnRlZCBhcmNoaXRlY3R1cmVzIChhbWQ2NCwN
+Cj4gaTM4NiwgcG93ZXJwYywgYXJtZWwsIGFybWhmKSBkZXRhaWxpbmcgaG93IHVwc3RhcnQgKGx0
+dG5nKSBpcyBlbnN1cmluZw0KPiB0aGF0IG5vIHJlZ3Jlc3Npb24gaGFzIGhhcHBlbmVkLg0KPiBU
+aGUgbGlicmFyaWVzIHdpbGwgYWxzbyBuZWVkIHRvIGJlIEFCSSBjb21wYXRpYmxlIGFzIHJlYnVp
+bGRpbmcgYWxsDQo+IHJldmVyc2UtZGVwZW5kZW5jaWVzIGlzbid0IGFuIG9wdGlvbiBwb3N0LXJl
+bGVhc2UuDQo+DQo+IEknZCBleHBlY3QgdGhhdCB3b3JrLCBhc3N1bWluZyBsdHRuZyB1cHN0cmVh
+bSdzIGN1cnJlbnQgdGVzdCBwbGFucyBhcmUNCj4gYWNjZXB0ZWQgYnkgdGhlIFVidW50dSBUZWNo
+bmljYWwgQm9hcmQgdG8gYmUgb2Ygc3VmZmljaWVudCBxdWFsaXR5IHRvDQo+IGd1YXJhbnRlZSBh
+IHJlZ3Jlc3Npb24tZnJlZSB1cGRhdGUsIHRvIHRha2UgYSBnb29kIGRvemVuIG9mIGhvdXJzIHRv
+DQo+IHByZXBhcmUgZm9sbG93ZWQgYnkgcmVhY3RpdmUgd29yayBmb3IgdGhlIG1vbnRoIGZvbGxv
+d2luZyB0byBnZXQgdGhvc2UNCj4gaW50byB0aGUgdXBkYXRlcyBwb2NrZXQuDQo+DQo+IEkgZG9u
+J3QgdGhpbmsgSSdsbCByZWFsaXN0aWNhbGx5IGhhdmUgdGhlIHRpbWUgdG8gZG8gdGhhdCB3b3Jr
+IGFueXRpbWUNCj4gc29vbiBhcyBsdHRuZyBpc24ndCBhIHBhY2thZ2Ugb2ZmaWNpYWxseSBzdXBw
+b3J0ZWQgYnkgQ2Fub25pY2FsIGFuZCBzbw0KPiBkb2Vzbid0IGZhbGwgaW4gbXkgZGF5IGpvYiBh
+Y3Rpdml0aWVzLg0KPg0KPiBBbiBhbHRlcm5hdGl2ZSB3b3VsZCBiZSB0byBnZXQgbHR0bmcgaW50
+byB0aGUgYmFja3BvcnRzIHBvY2tldCBvZiBVYnVudHUNCj4gMTIuMDQsIHRoZSBwcm9jZXNzIGZv
+ciB0aGF0IGlzIHF1aXRlIGEgYml0IGVhc2llciBhcyBpdCBkb2Vzbid0IHJlcXVpcmVkDQo+IFRl
+Y2huaWNhbCBCb2FyZCBhcHByb3ZhbCBvciB0aGUgc3RyaWN0IHRlc3RpbmcgcHJvY2VzcyBidXQg
+d2lsbCBiZSBsZXNzDQo+IHZpc2libGUgdG8gdGhlIHVzZXJzIGFzIHRoZXknbGwgaGF2ZSB0byBl
+eHBsaWNpdGx5IHB1bGwgaXQgZnJvbSB0aGUNCj4gYmFja3BvcnRzIHBvY2tldCAoYnkgdXNpbmcg
+YXB0LWdldCBpbnN0YWxsIGx0dG5nLXRvb2xzPTIuMC40IGZvciBleGFtcGxlKS4NCj4NCj4gSG9w
+ZSB0aGlzIGNsYXJpZmllcyB0aGUgY3VycmVudCBzaXR1YXRpb24gYSBsaXR0bGUuDQoNCkl0IGNl
+cnRhaW5seSBkb2VzLiAgTWFueSB0aGFua3MgZm9yIHRoZSBkZXRhaWxlZCByZXBseS4gIEkgdGhp
+bmsgZm9yIG5vdw0KSSB3aWxsIGJ1aWxkIGZyb20gc291cmNlIC0gYW5kIHByZXR0eSBtdWNoIHRo
+b3NlIHZlcnNpb25zIHlvdSBoYXZlDQphbHJlYWR5IGhpZ2hsaWdodGVkLg0KDQo+DQo+IE9uIDEx
+LzE5LzIwMTIgMTA6MTcgQU0sIE1hdGhpZXUgRGVzbm95ZXJzIHdyb3RlOg0KPj4gTGV0J3MgYXNr
+IFN0w6lwaGFuZSBHcmFiZXIsIG91ciBVYnVudHUgcGFja2FnZXIuDQo+PiANCj4+IFRoYW5rcywN
+Cj4+IA0KPj4gTWF0aGlldQ0KPj4gDQo+PiAqIE1jRGVybW90dCwgQW5kcmV3IChBbmRyZXcuTWNE
+ZXJtb3R0QHdpbmRyaXZlci5jb20pIHdyb3RlOg0KPj4+DQo+Pj4gSG93IG9mdGVuIGFyZSB0aGUg
+TFRUbmcgVVNUIHBhY2thZ2VzIGZvciBVYnVudHUgdXBkYXRlZD8NCj4+Pg0KPj4+IEhhdmluZyBk
+b25lIGEgZnJlc2ggaW5zdGFsbCBJIHNlZSB0aGUgdmVyc2lvbiByZXBvcnRlZCBhczoNCj4+Pg0K
+Pj4+ICAgJCBsdHRuZyB2ZXJzaW9uDQo+Pj4gICBsdHRuZyB2ZXJzaW9uIDIuMC4xIC0gQW5uZWRk
+J2FsZQ0KPj4+DQo+Pj4gYnV0IGxvb2tpbmcgYXQgdGhlIGdpdCByZXBvIEkgc2VlIHRoZXJlIGlz
+IHYyLjAuNCB0YWcuICBBcmUgdGhlc2UNCj4+PiB1cGRhdGVzIG9ubHkgYXZhaWxhYmxlIGlmIGJ1
+aWx0IGZyb20gc291cmNlPyAgSW4gZ2VuZXJhbCBJIHdhcyB0cnlpbmcgdG8NCj4+PiBhdm9pZCB0
+aGUgZGFpbHkgZGV2ZWxvcG1lbnQgdmVyc2lvbnMgZnJvbToNCj4+Pg0KPj4+ICAgaHR0cHM6Ly9s
+YXVuY2hwYWQubmV0L35sdHRuZy8rYXJjaGl2ZS9kYWlseS4NCj4+Pg0KPj4+IC0tIA0KPj4+IGFu
+ZHkKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmct
+ZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5s
+dHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
