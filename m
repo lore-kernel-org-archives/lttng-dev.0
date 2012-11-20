@@ -1,8 +1,8 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH 08/16] urcu-mb/signal/membarrier: improve
-	2-phase wait scheme
-Date: Tue, 20 Nov 2012 14:40:21 -0500
-Message-ID: <1353440429-19223-9-git-send-email-mathieu.desnoyers__47394.1910466694$1353442678$gmane$org@efficios.com>
+Subject: [PATCH 15/16] urcu-wait: move wait code into separate
+	file
+Date: Tue, 20 Nov 2012 14:40:28 -0500
+Message-ID: <1353440429-19223-16-git-send-email-mathieu.desnoyers__17926.2007041418$1353442696$gmane$org@efficios.com>
 References: <1353440429-19223-1-git-send-email-mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,8 +11,8 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <mathieu.desnoyers@efficios.com>) id 1TathQ-0001NQ-2f
-	for lttng-dev@lists.lttng.org; Tue, 20 Nov 2012 14:41:36 -0500
+	(envelope-from <mathieu.desnoyers@efficios.com>) id 1TathU-0001PC-Ut
+	for lttng-dev@lists.lttng.org; Tue, 20 Nov 2012 14:41:40 -0500
 In-Reply-To: <1353440429-19223-1-git-send-email-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -26,114 +26,280 @@ To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, "Paul E. McKenney" <paul
 Cc: lttng-dev@lists.lttng.org, rp@svcs.cs.pdx.edu
 List-Id: lttng-dev@lists.lttng.org
 
-In the single-bit, 2-phase grace period scheme, all we need to do is to
-observe each reader going through a quiescent state while we are in the
-grace period.
-
-We therefore only need to perform one global counter update, surrounded
-by 2 iterations on readers to observe change in their snapshot.
-
-We can therefore remove the first counter update (prior to the first
-iteration on readers): it was useless and was only slowing down the
-grace period.
-
-CC: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
-CC: Lai Jiangshan <laijs@cn.fujitsu.com>
-CC: Alan Stern <stern@rowland.harvard.edu>
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- urcu.c |   54 ++++++++++++++++++++++++++++--------------------------
- 1 file changed, 28 insertions(+), 26 deletions(-)
+ Makefile.am |    2 +-
+ urcu-qsbr.c |   82 +++++----------------------------------------
+ urcu-wait.h |  107 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 116 insertions(+), 75 deletions(-)
+ create mode 100644 urcu-wait.h
 
-diff --git a/urcu.c b/urcu.c
-index c421846..2d5c510 100644
---- a/urcu.c
-+++ b/urcu.c
-@@ -215,33 +215,16 @@ static void wait_gp(void)
+diff --git a/Makefile.am b/Makefile.am
+index 195b89a..0a4d357 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -23,7 +23,7 @@ nobase_dist_include_HEADERS = urcu/compiler.h urcu/hlist.h urcu/list.h \
+ 		urcu/tls-compat.h
+ nobase_nodist_include_HEADERS = urcu/arch.h urcu/uatomic.h urcu/config.h
+ 
+-dist_noinst_HEADERS = urcu-die.h
++dist_noinst_HEADERS = urcu-die.h urcu-wait.h
+ 
+ EXTRA_DIST = $(top_srcdir)/urcu/arch/*.h $(top_srcdir)/urcu/uatomic/*.h \
+ 		gpl-2.0.txt lgpl-2.1.txt lgpl-relicensing.txt \
+diff --git a/urcu-qsbr.c b/urcu-qsbr.c
+index 7f747ed..d691389 100644
+--- a/urcu-qsbr.c
++++ b/urcu-qsbr.c
+@@ -44,6 +44,7 @@
+ #include "urcu/tls-compat.h"
+ 
+ #include "urcu-die.h"
++#include "urcu-wait.h"
+ 
+ /* Do not #define _LGPL_SOURCE to ensure we can emit the wrapper symbols */
+ #undef _LGPL_SOURCE
+@@ -79,24 +80,9 @@ DEFINE_URCU_TLS(unsigned int, rcu_rand_yield);
+ 
+ static CDS_LIST_HEAD(registry);
+ 
+-/*
+- * Number of busy-loop attempts before waiting on futex for grace period
+- * batching.
+- */
+-#define RCU_AWAKE_ATTEMPTS 1000
+-
+-enum adapt_wakeup_state {
+-	/* AWAKE_WAITING is compared directly (futex compares it). */
+-	AWAKE_WAITING =		0,
+-	/* non-zero are used as masks. */
+-	AWAKE_WAKEUP =		(1 << 0),
+-	AWAKE_AWAKENED =	(1 << 1),
+-	AWAKE_TEARDOWN =	(1 << 2),
+-};
+-
+ struct gp_waiters_thread {
+ 	struct cds_wfs_node node;
+-	int32_t wait_futex;
++	struct urcu_wait wait;
+ };
+ 
+ /*
+@@ -146,58 +132,6 @@ static void wait_gp(void)
  		      NULL, NULL, 0);
  }
  
--static void update_counter_and_wait(void)
-+static void wait_for_readers(void)
- {
- 	CDS_LIST_HEAD(qsreaders);
- 	int wait_loops = 0;
- 	struct rcu_reader *index, *tmp;
- 
--	/* Switch parity: 0 -> 1, 1 -> 0 */
--	CMM_STORE_SHARED(rcu_gp_ctr, rcu_gp_ctr ^ RCU_GP_CTR_PHASE);
--
--	/*
--	 * Must commit rcu_gp_ctr update to memory before waiting for quiescent
--	 * state. Failure to do so could result in the writer waiting forever
--	 * while new readers are always accessing data (no progress). Enforce
--	 * compiler-order of store to rcu_gp_ctr before load rcu_reader ctr.
--	 */
--	cmm_barrier();
--
--	/*
--	 *
--	 * Adding a cmm_smp_mb() which is _not_ formally required, but makes the
--	 * model easier to understand. It does not have a big performance impact
--	 * anyway, given this is the write-side.
--	 */
+-/*
+- * Note: urcu_adaptative_wake_up needs "value" to stay allocated
+- * throughout its execution. In this scheme, the waiter owns the futex
+- * memory, and we only allow it to free this memory when it receives the
+- * AWAKE_TEARDOWN flag.
+- */
+-static void urcu_adaptative_wake_up(int32_t *value)
+-{
 -	cmm_smp_mb();
+-	assert(uatomic_read(value) == AWAKE_WAITING);
+-	uatomic_set(value, AWAKE_WAKEUP);
+-	if (!(uatomic_read(value) & AWAKE_AWAKENED))
+-		futex_noasync(value, FUTEX_WAKE, 1, NULL, NULL, 0);
+-	/* Allow teardown of "value" memory. */
+-	uatomic_or(value, AWAKE_TEARDOWN);
+-}
 -
- 	/*
--	 * Wait for each thread URCU_TLS(rcu_reader).ctr count to become 0.
-+	 * Wait for each thread URCU_TLS(rcu_reader).ctr to either
-+	 * indicate quiescence (not nested), or observe the current
-+	 * rcu_gp_ctr value.
+-/*
+- * Caller must initialize "value" to AWAKE_WAITING before passing its
+- * memory to waker thread.
+- */
+-static void urcu_adaptative_busy_wait(int32_t *value)
+-{
+-	unsigned int i;
+-
+-	/* Load and test condition before read futex */
+-	cmm_smp_rmb();
+-	for (i = 0; i < RCU_AWAKE_ATTEMPTS; i++) {
+-		if (uatomic_read(value) != AWAKE_WAITING)
+-			goto skip_futex_wait;
+-		caa_cpu_relax();
+-	}
+-	futex_noasync(value, FUTEX_WAIT, AWAKE_WAITING, NULL, NULL, 0);
+-skip_futex_wait:
+-
+-	/* Tell waker thread than we are awakened. */
+-	uatomic_or(value, AWAKE_AWAKENED);
+-
+-	/*
+-	 * Wait until waker thread lets us know it's ok to tear down
+-	 * memory allocated for value.
+-	 */
+-	for (i = 0; i < RCU_AWAKE_ATTEMPTS; i++) {
+-		if (uatomic_read(value) & AWAKE_TEARDOWN)
+-			break;
+-		caa_cpu_relax();
+-	}
+-	while (!(uatomic_read(value) & AWAKE_TEARDOWN))
+-		poll(NULL, 0, 10);
+-	assert(uatomic_read(value) & AWAKE_TEARDOWN);
+-}
+-
+ static void wait_for_readers(struct cds_list_head *input_readers,
+ 			struct cds_list_head *cur_snap_readers,
+ 			struct cds_list_head *qsreaders)
+@@ -305,10 +239,10 @@ void synchronize_rcu(void)
+ 	 * if we are the first thread added into the stack.
  	 */
- 	for (;;) {
- 		wait_loops++;
-@@ -316,12 +299,12 @@ void synchronize_rcu(void)
- 	smp_mb_master(RCU_MB_GROUP);
+ 	cds_wfs_node_init(&gp_waiters_thread.node);
+-	gp_waiters_thread.wait_futex = AWAKE_WAITING;
++	urcu_wait_init(&gp_waiters_thread.wait);
+ 	if (cds_wfs_push(&gp_waiters, &gp_waiters_node) != 0) {
+ 		/* Not first in stack: will be awakened by another thread. */
+-		urcu_adaptative_busy_wait(&gp_waiters_thread.wait_futex);
++		urcu_adaptative_busy_wait(&gp_waiters_thread.wait);
+ 		goto gp_end;
+ 	}
  
- 	/*
--	 * Wait for previous parity to be empty of readers.
-+	 * Wait for readers to observe original parity or be quiescent.
+@@ -384,7 +318,7 @@ out:
+ 				struct gp_waiters_thread, node);
+ 		if (wt == &gp_waiters_thread)
+ 			continue;
+-		urcu_adaptative_wake_up(&wt->wait_futex);
++		urcu_adaptative_wake_up(&wt->wait);
+ 	}
+ 
+ gp_end:
+@@ -424,10 +358,10 @@ void synchronize_rcu(void)
+ 	 * if we are the first thread added into the stack.
  	 */
--	update_counter_and_wait();	/* 0 -> 1, wait readers in parity 0 */
-+	wait_for_readers();
+ 	cds_wfs_node_init(&gp_waiters_thread.node);
+-	gp_waiters_thread.wait_futex = AWAKE_WAITING;
++	urcu_wait_init(&gp_waiters_thread.wait);
+ 	if (cds_wfs_push(&gp_waiters, &gp_waiters_thread.node) != 0) {
+ 		/* Not first in stack: will be awakened by another thread. */
+-		urcu_adaptative_busy_wait(&gp_waiters_thread.wait_futex);
++		urcu_adaptative_busy_wait(&gp_waiters_thread.wait);
+ 		goto gp_end;
+ 	}
  
- 	/*
--	 * Must finish waiting for quiescent state for parity 0 before
-+	 * Must finish waiting for quiescent state for original parity before
- 	 * committing next rcu_gp_ctr update to memory. Failure to do so could
- 	 * result in the writer waiting forever while new readers are always
- 	 * accessing data (no progress).  Enforce compiler-order of load
-@@ -336,10 +319,29 @@ void synchronize_rcu(void)
- 	 */
- 	cmm_smp_mb();
+@@ -481,7 +415,7 @@ out:
+ 				struct gp_waiters_thread, node);
+ 		if (wt == &gp_waiters_thread)
+ 			continue;
+-		urcu_adaptative_wake_up(&wt->wait_futex);
++		urcu_adaptative_wake_up(&wt->wait);
+ 	}
  
-+	/* Switch parity: 0 -> 1, 1 -> 0 */
-+	CMM_STORE_SHARED(rcu_gp_ctr, rcu_gp_ctr ^ RCU_GP_CTR_PHASE);
+ gp_end:
+diff --git a/urcu-wait.h b/urcu-wait.h
+new file mode 100644
+index 0000000..13f26cc
+--- /dev/null
++++ b/urcu-wait.h
+@@ -0,0 +1,107 @@
++#ifndef _URCU_WAIT_H
++#define _URCU_WAIT_H
 +
-+	/*
-+	 * Must commit rcu_gp_ctr update to memory before waiting for quiescent
-+	 * state. Failure to do so could result in the writer waiting forever
-+	 * while new readers are always accessing data (no progress). Enforce
-+	 * compiler-order of store to rcu_gp_ctr before load rcu_reader ctr.
-+	 */
-+	cmm_barrier();
++/*
++ * urcu-wait.h
++ *
++ * Userspace RCU library wait/wakeup management
++ *
++ * Copyright (c) 2012 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
++ */
 +
-+	/*
-+	 *
-+	 * Adding a cmm_smp_mb() which is _not_ formally required, but makes the
-+	 * model easier to understand. It does not have a big performance impact
-+	 * anyway, given this is the write-side.
-+	 */
++#include <urcu/uatomic.h>
++
++/*
++ * Number of busy-loop attempts before waiting on futex for grace period
++ * batching.
++ */
++#define URCU_WAIT_ATTEMPTS 1000
++
++enum urcu_wait_state {
++	/* URCU_WAIT_WAITING is compared directly (futex compares it). */
++	URCU_WAIT_WAITING =	0,
++	/* non-zero are used as masks. */
++	URCU_WAIT_WAKEUP =	(1 << 0),
++	URCU_WAIT_AWAKENED =	(1 << 1),
++	URCU_WAIT_TEARDOWN =	(1 << 2),
++};
++
++struct urcu_wait {
++	int32_t futex;
++};
++
++static inline
++void urcu_wait_init(struct urcu_wait *wait)
++{
++	wait->futex = URCU_WAIT_WAITING;
++}
++
++/*
++ * Note: urcu_adaptative_wake_up needs "value" to stay allocated
++ * throughout its execution. In this scheme, the waiter owns the futex
++ * memory, and we only allow it to free this memory when it receives the
++ * URCU_WAIT_TEARDOWN flag.
++ */
++static inline
++void urcu_adaptative_wake_up(struct urcu_wait *wait)
++{
 +	cmm_smp_mb();
++	assert(uatomic_read(&wait->futex) == URCU_WAIT_WAITING);
++	uatomic_set(&wait->futex, URCU_WAIT_WAKEUP);
++	if (!(uatomic_read(&wait->futex) & URCU_WAIT_AWAKENED))
++		futex_noasync(&wait->futex, FUTEX_WAKE, 1, NULL, NULL, 0);
++	/* Allow teardown of struct urcu_wait memory. */
++	uatomic_or(&wait->futex, URCU_WAIT_TEARDOWN);
++}
 +
- 	/*
--	 * Wait for previous parity to be empty of readers.
-+	 * Wait for readers to observe new parity or be quiescent.
- 	 */
--	update_counter_and_wait();	/* 1 -> 0, wait readers in parity 1 */
-+	wait_for_readers();
- 
- 	/* Finish waiting for reader threads before letting the old ptr being
- 	 * freed. Must be done within rcu_gp_lock because it iterates on reader
++/*
++ * Caller must initialize "value" to URCU_WAIT_WAITING before passing its
++ * memory to waker thread.
++ */
++static void urcu_adaptative_busy_wait(struct urcu_wait *wait)
++{
++	unsigned int i;
++
++	/* Load and test condition before read futex */
++	cmm_smp_rmb();
++	for (i = 0; i < URCU_WAIT_ATTEMPTS; i++) {
++		if (uatomic_read(&wait->futex) != URCU_WAIT_WAITING)
++			goto skip_futex_wait;
++		caa_cpu_relax();
++	}
++	futex_noasync(&wait->futex, FUTEX_WAIT,
++		URCU_WAIT_WAITING, NULL, NULL, 0);
++skip_futex_wait:
++
++	/* Tell waker thread than we are awakened. */
++	uatomic_or(&wait->futex, URCU_WAIT_AWAKENED);
++
++	/*
++	 * Wait until waker thread lets us know it's ok to tear down
++	 * memory allocated for struct urcu_wait.
++	 */
++	for (i = 0; i < URCU_WAIT_ATTEMPTS; i++) {
++		if (uatomic_read(&wait->futex) & URCU_WAIT_TEARDOWN)
++			break;
++		caa_cpu_relax();
++	}
++	while (!(uatomic_read(&wait->futex) & URCU_WAIT_TEARDOWN))
++		poll(NULL, 0, 10);
++	assert(uatomic_read(&wait->futex) & URCU_WAIT_TEARDOWN);
++}
++
++#endif /* _URCU_WAIT_H */
 -- 
 1.7.10.4
