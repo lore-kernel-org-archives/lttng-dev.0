@@ -1,21 +1,16 @@
-From: "McDermott, Andrew" <Andrew.McDermott@windriver.com>
-Subject: Re: latest version of LTTng UST on Ubuntu 12.04
-Date: Tue, 20 Nov 2012 11:36:30 +0000
-Message-ID: <7F632A9222059A42AF70FCB7965774AA2098824E__1906.97824950821$1353411432$gmane$org@ALA-MBB.corp.ad.wrs.com>
-References: <7F632A9222059A42AF70FCB7965774AA20987947@ALA-MBB.corp.ad.wrs.com>
-	<20121119151752.GB16248@Krystal>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [URCU pull request review] urcu improvements
+Date: Tue, 20 Nov 2012 14:40:13 -0500
+Message-ID: <1353440429-19223-1-git-send-email-mathieu.desnoyers__46527.7177900591$1353440524$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.windriver.com ([147.11.1.11])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Andrew.McDermott@windriver.com>) id 1Tam85-00065g-RS
-	for lttng-dev@lists.lttng.org; Tue, 20 Nov 2012 06:36:38 -0500
-In-Reply-To: <20121119151752.GB16248@Krystal> (Mathieu Desnoyers's message
-	of	"Mon, 19 Nov 2012 10:17:52 -0500")
-Content-Language: en-US
-Content-ID: <55BD781CF035E9478501D515C637AF38@local>
+	(envelope-from <mathieu.desnoyers@efficios.com>) id 1Tath1-0001K9-Sv
+	for lttng-dev@lists.lttng.org; Tue, 20 Nov 2012 14:41:11 -0500
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,50 +19,54 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, =?utf-8?B?U3TDqXBoYW5lIEdyYWJlcg==?= <stgraber@ubuntu.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Lai Jiangshan <laijs@cn.fujitsu.com>, Alan Stern <stern@rowland.harvard.edu>
+Cc: lttng-dev@lists.lttng.org, rp@svcs.cs.pdx.edu
 List-Id: lttng-dev@lists.lttng.org
 
-DQpIaSwNCg0KPiBMZXQncyBhc2sgU3TDqXBoYW5lIEdyYWJlciwgb3VyIFVidW50dSBwYWNrYWdl
-ci4NCg0KVGhlIHJlYXNvbiBJIHdhcyBhc2tpbmcgaXMgYmVjYXVzZSBJIGdldCBkaWZmZXJlbnQg
-YmVoYXZpb3VyIGJldHdlZW4NCkZlZG9yYSAxNiBhbmQgVWJ1bnR1IDEyLjA0Lg0KDQpJIGhhdmUg
-YSBzaW1wbGUgcHJvZ3JhbSB0aGF0IHVzZXMgYSBmZXcgdHJhY2Vwb2ludHMgdG8gbG9nICJoZWxs
-byB3b3JsZCINCmFuZCBhIGZldyBzY2FsYXIgdmFsdWVzLg0KDQpJIHJ1biB0aGF0IGFzOg0KDQog
-IGx0dG5nIGNyZWF0ZSAtbyAvdG1wL3VzdC1kZW1vLiQkDQogIGx0dG5nIGVuYWJsZS1ldmVudCAt
-dSAtYQ0KICBsdHRuZyBzdGFydA0KICBzdWRvIExUVE5HX1VTVF9ERUJVRz0xIC4vdXN0LXRyYWNl
-ZGVtbw0KICBsdHRuZyBzdG9wDQogIHNsZWVwIDEuNTANCiAgbHR0bmcgZGVzdHJveQ0KICBiYWJl
-bHRyYWNlIC90bXAvdXN0LWRlbW8uJCQNCg0KYW5kIG9uIFVidW50dSBJIHNlZSBiYWJsZXRyYWNl
-IGxpc3QgbXkgZXZlbnRzIG9uIGNvbXBsZXRpb24uDQoNCk9uIEZlZG9yYSAxNiwgYnVpbGRpbmcg
-ZnJvbSBzb3VyY2VbMV0sIEkgZG9uJ3QgZ2V0IGFueSBldmVudHMgcmVjb3JkZWQNCnVubGVzcyBJ
-IGFkZCB0aGUgJ3RyYWNpbmcnIGdyb3VwIGFuZCBlbnN1cmUgdGhhdCB0aGVyZSBpcyBhDQpsdHRu
-Zy1zZXNzaW9uZCBydW5uaW5nIGFzIHJvb3QuICBUaGlzIGlzIG5vdCB0cnVlIG9uIFVidW50dS4N
-Cg0KTm90ZTogdGhlICdzdWRvJyBpcyBkZWxpYmVyYXRlIGJ1dCBpdHMgcHJlc2VuY2UgKG9yIGFi
-c2VuY2UpIG1ha2VzIG5vDQpkaWZmZXJlbmNlIG9uIEZlZG9yYS4gIE9uIEZlZG9yYSBJIHNlZSBu
-byB0cmFjZSBjcmVhdGVkIGF0IGFsbC4gIEFkZGluZw0KYSBwYXVzZSB0byBteSBwcm9ncmFtIGFu
-ZCBydW5uaW5nIGBsdHRuZyBsaXN0IC11JyBpbiBhbm90aGVyIHNoZWxsIGxpc3RzDQpubyBhY3Rp
-dmUgdHJhY2Vwb2ludHMuDQoNClNvIEkgd2FzIHdvbmRlcmluZyBpcyB0aGVyZSBzdWJ0bGUgZGlm
-ZmVyZW5jZSBpbiB0aGUgc2VjdXJpdHkgcG9saWN5IG9uDQpGZWRvcmEgdGhhdCB3b3VsZCBjYXVz
-ZSB0aGlzIGJlaGF2aW91cj8gIE9yIHBlcmhhcHMgc29tZXRoaW5nIGVsc2UNCmVudGlyZWx5Pw0K
-DQpbMV0gdGhlIHNvdXJjZSBzZXQgSSBhbSBidWlsZCBvbiBGZWRvcmEgaXM6DQoNCiAgdXNlcnNw
-YWNlLXJjdSAtLSB2MC42LjgNCiAgbHR0bmctdXN0ICAgICAtLSB2Mi4wLjUNCiAgbHR0bmctdG9v
-bHMgICAtLSB2Mi4wLjQNCiAgYmFiZWx0cmFjZSAgICAtLSB2MS4wLjANCg0KSSB0cmllZCBidWls
-ZGluZyBmcm9tICdtYXN0ZXInIGZvciBhbGwgb2YgdGhvc2UgbW9kdWxlcyB0b2RheSBidXQgdGhh
-dA0KbWFkZSBubyBkaWZmZXJlbmNlIGFuZCB0aGF0IG1ha2VzIG1lIHdvbmRlciBpZiBpdCBpcyBt
-b3JlIG9mIGEgcGxhdGZvcm0NCmlzc3VlIGFzIG9wcG9zZWQgdG8gYW4gTFRUbmcgaXNzdWUuDQoN
-Ci0tIGFuZHkNCg0KPg0KPiBUaGFua3MsDQo+DQo+IE1hdGhpZXUNCj4NCj4gKiBNY0Rlcm1vdHQs
-IEFuZHJldyAoQW5kcmV3Lk1jRGVybW90dEB3aW5kcml2ZXIuY29tKSB3cm90ZToNCj4+IA0KPj4g
-SG93IG9mdGVuIGFyZSB0aGUgTFRUbmcgVVNUIHBhY2thZ2VzIGZvciBVYnVudHUgdXBkYXRlZD8N
-Cj4+IA0KPj4gSGF2aW5nIGRvbmUgYSBmcmVzaCBpbnN0YWxsIEkgc2VlIHRoZSB2ZXJzaW9uIHJl
-cG9ydGVkIGFzOg0KPj4gDQo+PiAgICQgbHR0bmcgdmVyc2lvbg0KPj4gICBsdHRuZyB2ZXJzaW9u
-IDIuMC4xIC0gQW5uZWRkJ2FsZQ0KPj4gDQo+PiBidXQgbG9va2luZyBhdCB0aGUgZ2l0IHJlcG8g
-SSBzZWUgdGhlcmUgaXMgdjIuMC40IHRhZy4gIEFyZSB0aGVzZQ0KPj4gdXBkYXRlcyBvbmx5IGF2
-YWlsYWJsZSBpZiBidWlsdCBmcm9tIHNvdXJjZT8gIEluIGdlbmVyYWwgSSB3YXMgdHJ5aW5nIHRv
-DQo+PiBhdm9pZCB0aGUgZGFpbHkgZGV2ZWxvcG1lbnQgdmVyc2lvbnMgZnJvbToNCj4+IA0KPj4g
-ICBodHRwczovL2xhdW5jaHBhZC5uZXQvfmx0dG5nLythcmNoaXZlL2RhaWx5Lg0KPj4gDQo+PiAt
-LSANCj4+IGFuZHkNCj4+IA0KPj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX18NCj4+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QNCj4+IGx0dG5nLWRldkBsaXN0
-cy5sdHRuZy5vcmcNCj4+IGh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xp
-c3RpbmZvL2x0dG5nLWRldgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcK
-aHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2
-Cg==
+Here is a pull request to myself for my recent work on wfcqueue and urcu
+flavors into the userspace RCU master branch.
+
+Please let me know if you see any immediate show stoppers.
+
+List of changes:
+
+[PATCH 01/16] Fix: wfcqueue nonblocking dequeue
+[PATCH 02/16] wfcqueue: enqueue and splice return queue state
+[PATCH 03/16] test wfcqueue: add tests for queue state return value
+[PATCH 04/16] urcu-call-rcu: use wait-free splice return value
+[PATCH 05/16] wfcqueue: document empty criterion
+[PATCH 06/16] wfcqueue: implement mutex-free splice
+[PATCH 07/16] urcu-qsbr: improve 2-phase wait scheme
+[PATCH 08/16] urcu-mb/signal/membarrier: improve 2-phase wait scheme
+[PATCH 09/16] urcu-bp: improve 2-phase wait scheme
+[PATCH 10/16] urcu-qsbr: move offline threads to separate list
+[PATCH 11/16] urcu-mb/signal/membarrier: move quiescent threads to
+[PATCH 12/16] urcu-bp: move quiescent threads to separate list
+[PATCH 13/16] tests: use standard malloc/free for synchronize_rcu()
+[PATCH 14/16] urcu-qsbr: batch concurrent synchronize_rcu()
+[PATCH 15/16] urcu-wait: move wait code into separate file
+[PATCH 16/16] urcu-wait: move queue management code into urcu-wait.h
+
+diffstat:
+
+ Makefile.am             |    2 
+ tests/test_urcu.c       |   60 ++------------
+ tests/test_urcu_bp.c    |   59 ++------------
+ tests/test_urcu_qsbr.c  |   61 ++-------------
+ tests/test_urcu_wfcq.c  |  131 +++++++++++++++++++++++++-------
+ urcu-bp.c               |   88 ++++++++++++++-------
+ urcu-call-rcu-impl.h    |    9 +-
+ urcu-qsbr.c             |  193 ++++++++++++++++++++++++++++++++++++------------
+ urcu-wait.h             |  184 +++++++++++++++++++++++++++++++++++++++++++++
+ urcu.c                  |   95 +++++++++++++++--------
+ urcu/static/urcu-bp.h   |   29 ++++---
+ urcu/static/urcu-qsbr.h |   14 ++-
+ urcu/static/urcu.h      |   15 ++-
+ urcu/static/wfcqueue.h  |  133 +++++++++++++++++++++++++--------
+ urcu/wfcqueue.h         |   62 +++++++++++----
+ wfcqueue.c              |   16 +--
+ 16 files changed, 786 insertions(+), 365 deletions(-)
+
+Thanks,
+
+Mathieu
