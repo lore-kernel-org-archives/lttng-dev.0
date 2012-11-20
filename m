@@ -1,7 +1,8 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH 05/16] wfcqueue: document empty criterion
-Date: Tue, 20 Nov 2012 14:40:18 -0500
-Message-ID: <1353440429-19223-6-git-send-email-mathieu.desnoyers__12651.5293879949$1353442758$gmane$org@efficios.com>
+Subject: [PATCH 11/16] urcu-mb/signal/membarrier: move quiescent
+	threads to separate list
+Date: Tue, 20 Nov 2012 14:40:24 -0500
+Message-ID: <1353440429-19223-12-git-send-email-mathieu.desnoyers__14528.000917244$1353442855$gmane$org@efficios.com>
 References: <1353440429-19223-1-git-send-email-mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,8 +11,8 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <mathieu.desnoyers@efficios.com>) id 1TathK-0001Lx-7h
-	for lttng-dev@lists.lttng.org; Tue, 20 Nov 2012 14:41:30 -0500
+	(envelope-from <mathieu.desnoyers@efficios.com>) id 1TathS-0001OI-IY
+	for lttng-dev@lists.lttng.org; Tue, 20 Nov 2012 14:41:38 -0500
 In-Reply-To: <1353440429-19223-1-git-send-email-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -25,28 +26,158 @@ To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, "Paul E. McKenney" <paul
 Cc: lttng-dev@lists.lttng.org, rp@svcs.cs.pdx.edu
 List-Id: lttng-dev@lists.lttng.org
 
+Accelerate 2-phase grace period by not having to iterate twice on
+threads not nested within a RCU read-side lock.
+
+CC: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
+CC: Lai Jiangshan <laijs@cn.fujitsu.com>
+CC: Alan Stern <stern@rowland.harvard.edu>
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- urcu/static/wfcqueue.h |    7 +++++++
- 1 file changed, 7 insertions(+)
+ urcu.c             |   47 ++++++++++++++++++++++++++++++++++++-----------
+ urcu/static/urcu.h |   15 ++++++++++++---
+ 2 files changed, 48 insertions(+), 14 deletions(-)
 
-diff --git a/urcu/static/wfcqueue.h b/urcu/static/wfcqueue.h
-index 1200227..8774c03 100644
---- a/urcu/static/wfcqueue.h
-+++ b/urcu/static/wfcqueue.h
-@@ -95,6 +95,13 @@ static inline void _cds_wfcq_init(struct cds_wfcq_head *head,
-  * cds_wfcq_empty: return whether wait-free queue is empty.
-  *
-  * No memory barrier is issued. No mutual exclusion is required.
-+ *
-+ * We perform the test on head->node.next to check if the queue is
-+ * possibly empty, but we confirm this by checking if the tail pointer
-+ * points to the head node because the tail pointer is the linearisation
-+ * point of the enqueuers. Just checking the head next pointer could
-+ * make a queue appear empty if an enqueuer is preempted for a long time
-+ * between xchg() and setting the previous node's next pointer.
-  */
- static inline bool _cds_wfcq_empty(struct cds_wfcq_head *head,
- 		struct cds_wfcq_tail *tail)
+diff --git a/urcu.c b/urcu.c
+index 2d5c510..e6ff0f3 100644
+--- a/urcu.c
++++ b/urcu.c
+@@ -215,9 +215,10 @@ static void wait_gp(void)
+ 		      NULL, NULL, 0);
+ }
+ 
+-static void wait_for_readers(void)
++static void wait_for_readers(struct cds_list_head *input_readers,
++			struct cds_list_head *cur_snap_readers,
++			struct cds_list_head *qsreaders)
+ {
+-	CDS_LIST_HEAD(qsreaders);
+ 	int wait_loops = 0;
+ 	struct rcu_reader *index, *tmp;
+ 
+@@ -234,13 +235,31 @@ static void wait_for_readers(void)
+ 			smp_mb_master(RCU_MB_GROUP);
+ 		}
+ 
+-		cds_list_for_each_entry_safe(index, tmp, &registry, node) {
+-			if (!rcu_gp_ongoing(&index->ctr))
+-				cds_list_move(&index->node, &qsreaders);
++		cds_list_for_each_entry_safe(index, tmp, input_readers, node) {
++			switch (rcu_reader_state(&index->ctr)) {
++			case RCU_READER_ACTIVE_CURRENT:
++				if (cur_snap_readers) {
++					cds_list_move(&index->node,
++						cur_snap_readers);
++					break;
++				}
++				/* Fall-through */
++			case RCU_READER_INACTIVE:
++				cds_list_move(&index->node, qsreaders);
++				break;
++			case RCU_READER_ACTIVE_OLD:
++				/*
++				 * Old snapshot. Leaving node in
++				 * input_readers will make us busy-loop
++				 * until the snapshot becomes current or
++				 * the reader becomes inactive.
++				 */
++				break;
++			}
+ 		}
+ 
+ #ifndef HAS_INCOHERENT_CACHES
+-		if (cds_list_empty(&registry)) {
++		if (cds_list_empty(input_readers)) {
+ 			if (wait_loops == RCU_QS_ACTIVE_ATTEMPTS) {
+ 				/* Read reader_gp before write futex */
+ 				smp_mb_master(RCU_MB_GROUP);
+@@ -259,7 +278,7 @@ static void wait_for_readers(void)
+ 		 * URCU_TLS(rcu_reader).ctr update to memory if we wait
+ 		 * for too long.
+ 		 */
+-		if (cds_list_empty(&registry)) {
++		if (cds_list_empty(input_readers)) {
+ 			if (wait_loops == RCU_QS_ACTIVE_ATTEMPTS) {
+ 				/* Read reader_gp before write futex */
+ 				smp_mb_master(RCU_MB_GROUP);
+@@ -281,12 +300,13 @@ static void wait_for_readers(void)
+ 		}
+ #endif /* #else #ifndef HAS_INCOHERENT_CACHES */
+ 	}
+-	/* put back the reader list in the registry */
+-	cds_list_splice(&qsreaders, &registry);
+ }
+ 
+ void synchronize_rcu(void)
+ {
++	CDS_LIST_HEAD(cur_snap_readers);
++	CDS_LIST_HEAD(qsreaders);
++
+ 	mutex_lock(&rcu_gp_lock);
+ 
+ 	if (cds_list_empty(&registry))
+@@ -301,7 +321,7 @@ void synchronize_rcu(void)
+ 	/*
+ 	 * Wait for readers to observe original parity or be quiescent.
+ 	 */
+-	wait_for_readers();
++	wait_for_readers(&registry, &cur_snap_readers, &qsreaders);
+ 
+ 	/*
+ 	 * Must finish waiting for quiescent state for original parity before
+@@ -341,7 +361,12 @@ void synchronize_rcu(void)
+ 	/*
+ 	 * Wait for readers to observe new parity or be quiescent.
+ 	 */
+-	wait_for_readers();
++	wait_for_readers(&cur_snap_readers, NULL, &qsreaders);
++
++	/*
++	 * Put quiescent reader list back into registry.
++	 */
++	cds_list_splice(&qsreaders, &registry);
+ 
+ 	/* Finish waiting for reader threads before letting the old ptr being
+ 	 * freed. Must be done within rcu_gp_lock because it iterates on reader
+diff --git a/urcu/static/urcu.h b/urcu/static/urcu.h
+index f32f300..973826a 100644
+--- a/urcu/static/urcu.h
++++ b/urcu/static/urcu.h
+@@ -96,6 +96,12 @@ extern "C" {
+ #define SIGRCU SIGUSR1
+ #endif
+ 
++enum rcu_state {
++	RCU_READER_ACTIVE_CURRENT,
++	RCU_READER_ACTIVE_OLD,
++	RCU_READER_INACTIVE,
++};
++
+ #ifdef DEBUG_RCU
+ #define rcu_assert(args...)	assert(args)
+ #else
+@@ -239,7 +245,7 @@ static inline void wake_up_gp(void)
+ 	}
+ }
+ 
+-static inline int rcu_gp_ongoing(unsigned long *ctr)
++static inline enum rcu_state rcu_reader_state(unsigned long *ctr)
+ {
+ 	unsigned long v;
+ 
+@@ -248,8 +254,11 @@ static inline int rcu_gp_ongoing(unsigned long *ctr)
+ 	 * to insure consistency.
+ 	 */
+ 	v = CMM_LOAD_SHARED(*ctr);
+-	return (v & RCU_GP_CTR_NEST_MASK) &&
+-		 ((v ^ rcu_gp_ctr) & RCU_GP_CTR_PHASE);
++	if (!(v & RCU_GP_CTR_NEST_MASK))
++		return RCU_READER_INACTIVE;
++	if (!((v ^ rcu_gp_ctr) & RCU_GP_CTR_PHASE))
++		return RCU_READER_ACTIVE_CURRENT;
++	return RCU_READER_ACTIVE_OLD;
+ }
+ 
+ /*
 -- 
 1.7.10.4
