@@ -1,25 +1,26 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] LTTng-UST 2.1.0-rc2
-Date: Thu, 22 Nov 2012 14:13:08 -0500
-Message-ID: <20121122191308.GA18632__17056.9990216338$1353611653$gmane$org@Krystal>
+From: David Goulet <dgoulet@efficios.com>
+Subject: [RELEASE] LTTng-tools 2.1.0-rc8
+Date: Thu, 22 Nov 2012 14:36:36 -0500
+Message-ID: <50AE7EC4.8010809__4515.11617652631$1353613065$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from smtp.ini-tech.com ([213.239.202.151])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1TbcCz-00076e-Tg
-	for lttng-dev@lists.lttng.org; Thu, 22 Nov 2012 14:13:09 -0500
-Received: from localhost (localhost [127.0.0.1])
-	by blackscsi.openrapids.net (Postfix) with ESMTP id A65FD1404BA
-	for <lttng-dev@lists.lttng.org>; Thu, 22 Nov 2012 14:13:09 -0500 (EST)
-Received: from blackscsi.openrapids.net ([127.0.0.1])
-	by localhost (blackscsi.openrapids.net [127.0.0.1]) (amavisd-new,
-	port 10024)
-	with ESMTP id vwZQm7gwfrV7 for <lttng-dev@lists.lttng.org>;
-	Thu, 22 Nov 2012 14:13:08 -0500 (EST)
-Content-Disposition: inline
+	(envelope-from <dgoulet@efficios.com>) id 1TbcZl-0007Hm-8Q
+	for lttng-dev@lists.lttng.org; Thu, 22 Nov 2012 14:36:41 -0500
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by smtp.ini-tech.com (Postfix) with ESMTP id 1A4101873A5
+	for <lttng-dev@lists.lttng.org>; Thu, 22 Nov 2012 14:37:55 -0500 (EST)
+Received: from smtp.ini-tech.com ([127.0.0.1])
+	by localhost (smtp.ini-tech.com [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id TtbZdozekeE6 for <lttng-dev@lists.lttng.org>;
+	Thu, 22 Nov 2012 14:37:54 -0500 (EST)
+Received: from 127.0.0.1 (cable-13.246.173-198.electronicbox.net
+	[173.246.13.198])
+	by smtp.ini-tech.com (Postfix) with ESMTPSA id 1EFC31873A3
+	for <lttng-dev@lists.lttng.org>; Thu, 22 Nov 2012 14:37:54 -0500 (EST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -28,84 +29,81 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-LTTng-UST, the Linux Trace Toolkit Next Generation Userspace Tracer, is
-port of the low-overhead tracing capabilities of the LTTng kernel tracer
-to user-space. The library "liblttng-ust" enables tracing of
-applications and libraries.
+Greetings everyone (including LTTng elves),
 
-You will need to upgrade lttng-tools to 2.1.0-rc8 to use this release.
+The lttng-tools project provides a session daemon (lttng-sessiond)
+that acts as a tracing registry, the "lttng" command line for tracing
+control, a lttng-ctl library for tracing control and a lttng-relayd
+for network streaming.
 
-Noteworthy changes: we had to change the ABI for filters, so we send
-along a sequence number used to order their execution. This will enable
-us to handle future bytecode side-effects in a pre-defined order. This
-ABI has been introduced in 2.1.0-rc1, so we did not break any stable
-release ABI.
+Ok so here is what happened. The lttng-ust tracer RC2 now supports
+enabling different filters and/or loglevels for the same event which had
+to be supported in lttng-tools before releasing the stable version.
 
-Other noteworthy change: UST now supports having the same event enabled
-multiple times, and overlapping wildcards, overlapping wildcards&event,
-without unexpected behaviors (e.g. before these changes, UST would be
-logging the same event twice into the trace if enabled by two
-wildcards).
+That said, the lttng_set_event_filter() changed to
+lttng_enable_event_with_filter(). This is due to the fact that, now with
+lttng-ust, we need to keep track of events by the name/filter/loglevel
+triplet rather than the event name only. For that, we needed a call that
+passes these three attributes at once. The original lttng_enable_event
+is still available but sets the filter to NULL.
 
-Many lines of code were touched by this RC, mainly due to a cleanup
-patch: "Cleanup: add lttng_/lttng-/LTTNG_ prefixes". It does not modify
-any behavior, and is a cleanup-only patch.
+Now, the lttng_disable_event() still only takes an event name which will
+disable *all* events by that name regardless of the filter or/and loglevel.
 
-Changelog:
+Note that this is *not* an API breakage. We only changed the filter call
+introduce in the 2.1 development cycle.
 
-2012-11-22 lttng-ust 2.1.0-rc2
-        * filter interpreter cleanup: use uint64_t for retval
-        * Fix: filter linking can dereference NULL pointer on alloc failure
-        * Cleanup: remove whitespaces and EOL in tests
-        * Filter: use only single lower bit of filter return value
-        * Fix: filter: var len array at end of external structure
-        * Fix: filter link fail handling
-        * Fix: add missing seqnum field to filter
-        * filters: perform union rather than intersection
-        * Implement support for overlapping wildcard/events
-        * Cleanup: add lttng_/lttng-/LTTNG_ prefixes
-        * filter: add seqnum field to filter command
-        * Filter iteration: iterate on list of filters
-        * document that tracepoint names should ideally not be re-used
-        * Remove LIBFORMAT config declaration, unused
-        * Add libc errno translation layer to UST error code
-        * Fix: add const qualifier for filter local void *
-        * Fix: re-allow non-lvalue string, sequence, array parameters
-        * Tear down handles associated with a closed sessiond socket
-        * Distinguish UST return codes from transport return codes
-        * Fix: Conditionally disable tests requiring shared libs support
-        * Cleanup: don't spawn per-user thread if HOME is not set
-        * Manpage: document supported UST contexts
-        * Fix: procname context semantic
-        * Fix: Fix self-assign warning on struct ustfork_clone_info init
-        * Fix: memcpy of string is larger than source
-        * Implement liblttng-ust-fork daemon() override test
-        * liblttng-ust-fork: override daemon() call
-        * ustfork: set errno to ENOSYS if symbol lookup fails
-        * Fix: be quiet on filter linker error
-        * Build out of src tree
-        * Fix: filter bytecode specializer stack leak
-        * Fix: reloc offset validation error out on filters with no reloc table
-        * Perform calculation on bit size in 64-bit
-        * Use uint64_t for packet header content size and packet size
-        * Fix: manpage typo "-lllttng-ust" -> "-llttng-ust"
-        * Fix: BSD getprogname null pointer dereference
-        * Add support for model.emf.uri event info
-        * Filter error message cleanup
-        * Manpage update: document use in daemons
-        * Fix: get_wait_shm() ust mutex deadlock (add 2 missing exit calls)
-        * Fix: get_wait_shm() ust mutex deadlock
-        * Fix: add events with 0 field to field list
+Also, the -e, --event from the lttng add-context command was removed
+since lttng-ust does not support this feature (adding a context to an
+event). Still, adding a context to a channel is now the only possible
+option.
 
-Project website: http://lttng.org
-Download link: http://lttng.org/download
-(please refer to the README file for installation instructions)
+In a nutshell, with lttng-tools RC8 you are able to do things like that:
 
--- 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+$ lttng enable-event ust* -u --loglevel TRACE_CRIT
+$ lttng enable-event ust* -u --loglevel-only TRACE_DEBUG
+
+Which will record every ust* wildcard event of TRACE_CRIT level and
+DEBUG only.
+
+Same concept for filters:
+
+$ lttng enable-event ust* -u --filter "intfield < 3"
+$ lttng enable-event ust-test* -u --filter "intfield > 15"
+
+Here is the full Changelog.
+
+2012-11-22 lttng-tools 2.1.0-rc8
+    * Fix: Uninit. variable in lttng view
+    * Add already enabled UST event error code
+    * lttng.h API update: set filter becomes enable event with filter
+    * Change the UST event hash table match function
+    * Pass lttng_event struct to the set_filter API call
+    * Adding context to an event is no longer possible
+    * Add UST overlap tests
+    * Add filter sequence number to UST
+    * Fix: Typo from a previous patch in an assert()
+    * Fix: Warn if session is running with lttng view
+    * Fix: Add bash requirement to README for make check
+    * Fix: add the notion of domain to lttng.1 man page
+    * Enable additional kernel probes
+    * Update CodingStyle
+    * Use the new functions for default subbuf sizes
+    * Add default subbuf sizes getter functions
+    * Add max() and min() macro in common
+
+Please feel free to email the list about any questions/comments
+concerning this release.
+
+Using it is testing it!
+
+Project website: http://lttng.org/lttng2.0
+Download link:
+http://lttng.org/files/lttng-tools/lttng-tools-2.1.0-rc8.tar.bz2 (for
+the PGP signature, same file with .asc appended)
+
+Cheers!
+David
