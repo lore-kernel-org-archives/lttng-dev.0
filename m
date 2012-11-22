@@ -1,19 +1,20 @@
 From: Lai Jiangshan <laijs@cn.fujitsu.com>
-Subject: Re: [PATCH 06/16] wfcqueue: implement mutex-free splice
-Date: Thu, 22 Nov 2012 16:50:55 +0800
-Message-ID: <50ADE76F.7090006__11522.3677400083$1353574150$gmane$org@cn.fujitsu.com>
+Subject: Re: [PATCH 14/16] urcu-qsbr: batch concurrent
+	synchronize_rcu()
+Date: Thu, 22 Nov 2012 17:04:47 +0800
+Message-ID: <50ADEAAF.1010703__26562.5992710286$1353574957$gmane$org@cn.fujitsu.com>
 References: <1353440429-19223-1-git-send-email-mathieu.desnoyers@efficios.com>
-	<1353440429-19223-7-git-send-email-mathieu.desnoyers@efficios.com>
-	<50AC93E0.1050204@cn.fujitsu.com> <20121121151823.GB21518@Krystal>
+	<1353440429-19223-15-git-send-email-mathieu.desnoyers@efficios.com>
+	<50AC8F56.6040109@cn.fujitsu.com> <20121121183304.GA25932@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from [222.73.24.84] (helo=song.cn.fujitsu.com)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <laijs@cn.fujitsu.com>) id 1TbSS4-00021t-Nw
-	for lttng-dev@lists.lttng.org; Thu, 22 Nov 2012 03:48:06 -0500
-In-Reply-To: <20121121151823.GB21518@Krystal>
+	(envelope-from <laijs@cn.fujitsu.com>) id 1TbSfU-0002Ad-7k
+	for lttng-dev@lists.lttng.org; Thu, 22 Nov 2012 04:01:57 -0500
+In-Reply-To: <20121121183304.GA25932@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -26,199 +27,31 @@ To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: lttng-dev@lists.lttng.org, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Alan Stern <stern@rowland.harvard.edu>, rp@svcs.cs.pdx.edu
 List-Id: lttng-dev@lists.lttng.org
 
-On 11/21/2012 11:18 PM, Mathieu Desnoyers wrote:
+On 11/22/2012 02:33 AM, Mathieu Desnoyers wrote:
 > * Lai Jiangshan (laijs@cn.fujitsu.com) wrote:
->> On 11/21/2012 03:40 AM, Mathieu Desnoyers wrote:
->>> A carefully crafted splice operation does not need to use an external
->>> mutex to synchronize against other splice operations.
->>>
->>> The trick is atomically exchange the head next pointer with
->>> NULL. If the pointer we replaced was NULL, it means the queue was
->>> possibly empty. If head next was not NULL, by setting head to NULL, we
->>> ensure that concurrent splice operations are going to see an empty
->>> queue, even if concurrent enqueue operations move tail further. This
->>> means that as long as we are within splice, after setting head to NULL,
->>> but before moving tail back to head, concurrent splice operations will
->>> always see an empty queue, therefore acting as mutual exclusion.
->>>
->>> If exchange returns a NULL head, we confirm that it was indeed empty by
->>> checking if the tail pointer points to the head node, busy-waiting if
->>> necessary.
->>>
->>> Then the last step is to move the tail pointer to head. At that point,
->>> enqueuers are going to start enqueuing at head again, and other splice
->>> operations will be able to proceed.
->>>
->>> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
->>> ---
->>>  urcu/static/wfcqueue.h |   68 ++++++++++++++++++++++++++++++++++++------------
->>>  urcu/wfcqueue.h        |   40 ++++++++++++++++++----------
->>>  wfcqueue.c             |    2 +-
->>>  3 files changed, 79 insertions(+), 31 deletions(-)
->>>
->>> diff --git a/urcu/static/wfcqueue.h b/urcu/static/wfcqueue.h
->>> index 8774c03..4b2de50 100644
->>> --- a/urcu/static/wfcqueue.h
->>> +++ b/urcu/static/wfcqueue.h
->>> @@ -46,15 +46,30 @@ extern "C" {
->>>   * half-wait-free/half-blocking queue implementation done by Paul E.
->>>   * McKenney.
->>>   *
->>> - * Mutual exclusion of __cds_wfcq_* API
->>> - *
->>> - * Unless otherwise stated, the caller must ensure mutual exclusion of
->>> - * queue update operations "dequeue" and "splice" (for source queue).
->>> - * Queue read operations "first" and "next", which are used by
->>> - * "for_each" iterations, need to be protected against concurrent
->>> - * "dequeue" and "splice" (for source queue) by the caller.
->>> - * "enqueue", "splice" (for destination queue), and "empty" are the only
->>> - * operations that can be used without any mutual exclusion.
->>> + * Mutual exclusion of cds_wfcq_* / __cds_wfcq_* API
->>> + *
->>> + * Synchronization table:
->>> + *
->>> + * External synchronization techniques described in the API below is
->>> + * required between pairs marked with "X". No external synchronization
->>> + * required between pairs marked with "-".
->>> + *
->>> + * Legend:
->>> + * [1] cds_wfcq_enqueue
->>> + * [2] __cds_wfcq_splice (destination queue)
->>> + * [3] __cds_wfcq_dequeue
->>> + * [4] __cds_wfcq_splice (source queue)
->>> + * [5] __cds_wfcq_first
->>> + * [6] __cds_wfcq_next
->>> + *
->>> + *     [1] [2] [3] [4] [5] [6]
->>> + * [1]  -   -   -   -   -   -
->>> + * [2]  -   -   -   -   -   -
->>> + * [3]  -   -   X   X   X   X
->>> + * [4]  -   -   X   -   X   X
->>> + * [5]  -   -   X   X   -   -
->>> + * [6]  -   -   X   X   -   -
->>> + *
->>>   * Mutual exclusion can be ensured by holding cds_wfcq_dequeue_lock().
->>>   *
->>>   * For convenience, cds_wfcq_dequeue_blocking() and
->>> @@ -399,6 +414,16 @@ ___cds_wfcq_dequeue_nonblocking(struct cds_wfcq_head *head,
->>>  	return ___cds_wfcq_dequeue(head, tail, 0);
->>>  }
->>>  
->>> +/*
->>> + * __cds_wfcq_splice: enqueue all src_q nodes at the end of dest_q.
->>> + *
->>> + * Dequeue all nodes from src_q.
->>> + * dest_q must be already initialized.
->>> + * Mutual exclusion for src_q should be ensured by the caller as
->>> + * specified in the "Synchronisation table".
->>> + * Returns enum cds_wfcq_ret which indicates the state of the src or
->>> + * dest queue.
->>> + */
->>>  static inline enum cds_wfcq_ret
->>>  ___cds_wfcq_splice(
->>>  		struct cds_wfcq_head *dest_q_head,
->>> @@ -408,14 +433,26 @@ ___cds_wfcq_splice(
->>>  		int blocking)
->>>  {
->>>  	struct cds_wfcq_node *head, *tail;
->>> +	int attempt = 0;
->>
->> +again:
->>
->>>  
->>>  	if (_cds_wfcq_empty(src_q_head, src_q_tail))
->>>  		return CDS_WFCQ_RET_SRC_EMPTY;
->>>  
->>> -	head = ___cds_wfcq_node_sync_next(&src_q_head->node, blocking);
->>> -	if (head == CDS_WFCQ_WOULDBLOCK)
->>> -		return CDS_WFCQ_RET_WOULDBLOCK;
->>> -	_cds_wfcq_node_init(&src_q_head->node);
->>> +	for (;;) {
->>> +		head = uatomic_xchg(&src_q_head->node.next, NULL);
->>> +		if (head)
->>> +			break;	/* non-empty */
->>> +		if (CMM_LOAD_SHARED(src_q_tail->p) == &src_q_head->node)
->>> +			return CDS_WFCQ_RET_SRC_EMPTY;
->>> +		if (!blocking)
->>> +			return CDS_WFCQ_RET_WOULDBLOCK;
->>> +		if (++attempt >= WFCQ_ADAPT_ATTEMPTS) {
->>> +			poll(NULL, 0, WFCQ_WAIT);	/* Wait for 10ms */
->>> +			attempt = 0;
->>> +		} else {
->>> +			caa_cpu_relax();
->>> +		}
->>> +	}
->>
->>
->> Is it OK:
->>
->> -	_cds_wfcq_node_init(&src_q_head->node);
->> +	head = uatomic_xchg(&src_q_head->node.next, NULL);
->> +	if (!head)
->> +		goto again;
+>> Could you delay 14~16 for 40 days if I don't implement it in 40 days?
 > 
-> You are right that we can simplify the code a bit by re-using
-> _cds_wfcq_empty() to test validate emptiness of the source queue, rather
-> than open-code it.
+> I'm curious to know more about the changes you are planning. Is that
+> another way to implement grace periods that would allow multiple threads
+> to execute synchronize_rcu() concurrently ?
+
+synchronize_rcu()s in this implement share coarse-grain step(1 GP)
+to achieve concurrence. My implement will use fine-grain step(1 check or 1 flip)
+like SRCU. and call_rcu() is also considered in this implement to avoid
+unneeded wait.
+
 > 
-> The only issue here is that the busy-loop (goto again) will not invoke
-> caa_cpu_relax(), nor do adaptative waiting like
-> ___cds_wfcq_node_sync_next() normally does. 
+> Please note that changes in these algorithms will need to go through
+> very strict review/validation/verification. So I expect that if it takes
+> 40 days to implement, we can plan at least 3-4 months of validation work.
 
-Don't need, it will re-enter ___cds_wfcq_node_sync_next() to do it.
+I means I don't have time. If I can't steal some time from the late 40 days,
+this code is OK for me.
 
-> Also, it does not check for
-> blocking/non-blocking caller. 
-
-we can add code to check it.
-
-but:
-
-for () {
-	see src_q_head->node.next is not NULL
-	xchg fail
-}
-
-Is this a kind of blocking?
-
-
-> Also, whenever possible, I like to have
-> for () or do/while constructs in place to make it clear that we can loop.
-> So a modification of your proposal would look like:
 > 
-> /* Return 1 if nonblocking and needs to block, 0 otherwise */
-> static inline
-> bool ___cds_wfcq_busy_wait(int *attempt, int blocking)
-> {
->         if (!blocking)
->                 return 1;
->         if (+attempt >= WFCQ_ADAPT_ATTEMPTS) {
->                 poll(NULL, 0, WFCQ_WAIT);       /* Wait for 10ms */
->                 attempt = 0;
->         } else {
->                 caa_cpu_relax();
->         }
->         return 0;
-> }
-> 
-> [...]
-> 
->         struct cds_wfcq_node *head, *tail;
->         int attempt = 0;
-> 
->         for (;;) {
->                 if (_cds_wfcq_empty(src_q_head, src_q_tail))
->                         return CDS_WFCQ_RET_SRC_EMPTY;
->                 head = uatomic_xchg(&src_q_head->node.next, NULL);
->                 if (head)
->                         break;
->                 if (___cds_wfcq_busy_wait(&attempt, blocking))
->                         return CDS_WFCQ_RET_WOULDBLOCK;
-
-			  return _cds_wfcq_empty(src_q_head, src_q_tail) ? CDS_WFCQ_RET_SRC_EMPTY : CDS_WFCQ_RET_WOULDBLOCK
-
->         }
-> 
+> With that in mind, would it make sense to merge the batching approach in
+> the meantime ? The advantage of the batching approach is that it does
+> not touch the core of the synchronization algorithm.
 > 
 > Thoughts ?
 > 
@@ -226,106 +59,281 @@ Is this a kind of blocking?
 > 
 > Mathieu
 > 
-> 
 >>
+>> On 11/21/2012 03:40 AM, Mathieu Desnoyers wrote:
+>>> Here are benchmarks on batching of synchronize_rcu(), and it leads to
+>>> very interesting scalability improvement and speedups, e.g., on a
+>>> 24-core AMD, with a write-heavy scenario (4 readers threads, 20 updater
+>>> threads, each updater using synchronize_rcu()):
+>>>
+>>> * Serialized grace periods :
+>>>
+>>> ./test_urcu_qsbr 4 20 20
+>>> SUMMARY ./test_urcu_qsbr          testdur   20 nr_readers   4
+>>> rdur      0 wdur      0 nr_writers  20 wdelay      0
+>>> nr_reads  20251412728 nr_writes      1826331 nr_ops  20253239059
+>>>
+>>> * Batched grace periods :
+>>>
+>>> ./test_urcu_qsbr 4 20 20
+>>> SUMMARY ./test_urcu_qsbr          testdur   20 nr_readers   4
+>>> rdur      0 wdur      0 nr_writers  20 wdelay      0
+>>> nr_reads  15141994746 nr_writes      9382515 nr_ops  15151377261
+>>>
+>>> For a 9382515/1826331 = 5.13 speedup for 20 updaters.
+>>>
+>>> Of course, we can see that readers have slowed down, probably due to
+>>> increased update traffic, given there is no change to the read-side code
+>>> whatsoever.
+>>>
+>>> Now let's see the penality of managing the stack for single-updater.
+>>> With 4 readers, single updater:
+>>>
+>>> * Serialized grace periods :
+>>>
+>>> ./test_urcu_qsbr 4 1 20
+>>> SUMMARY ./test_urcu_qsbr          testdur   20 nr_readers   4
+>>> rdur      0 wdur      0 nr_writers   1 wdelay      0
+>>> nr_reads  19240784755 nr_writes      2130839 nr_ops  19242915594
+>>>
+>>> * Batched grace periods :
+>>>
+>>> ./test_urcu_qsbr 4 1 20
+>>> SUMMARY ./test_urcu_qsbr          testdur   20 nr_readers   4
+>>> rdur      0 wdur      0 nr_writers   1 wdelay      0
+>>> nr_reads  19160162768 nr_writes      2253068 nr_ops  1916241583
+>>>
+>>> 2253068 vs 2137036 -> a couple of runs show that this difference lost in
+>>> the noise for single updater.
+>>>
+>>> CC: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
+>>> CC: Lai Jiangshan <laijs@cn.fujitsu.com>
+>>> CC: Alan Stern <stern@rowland.harvard.edu>
+>>> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+>>> ---
+>>>  urcu-qsbr.c |  151 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+>>>  1 file changed, 151 insertions(+)
+>>>
+>>> diff --git a/urcu-qsbr.c b/urcu-qsbr.c
+>>> index 5b341b5..7f747ed 100644
+>>> --- a/urcu-qsbr.c
+>>> +++ b/urcu-qsbr.c
+>>> @@ -36,6 +36,7 @@
+>>>  #include <poll.h>
 >>>  
->>>  	/*
->>>  	 * Memory barrier implied before uatomic_xchg() orders store to
->>> @@ -435,14 +472,13 @@ ___cds_wfcq_splice(
->>>  		return CDS_WFCQ_RET_DEST_EMPTY;
+>>>  #include "urcu/wfcqueue.h"
+>>> +#include "urcu/wfstack.h"
+>>>  #include "urcu/map/urcu-qsbr.h"
+>>>  #define BUILD_QSBR_LIB
+>>>  #include "urcu/static/urcu-qsbr.h"
+>>> @@ -78,6 +79,35 @@ DEFINE_URCU_TLS(unsigned int, rcu_rand_yield);
+>>>  
+>>>  static CDS_LIST_HEAD(registry);
+>>>  
+>>> +/*
+>>> + * Number of busy-loop attempts before waiting on futex for grace period
+>>> + * batching.
+>>> + */
+>>> +#define RCU_AWAKE_ATTEMPTS 1000
+>>> +
+>>> +enum adapt_wakeup_state {
+>>> +	/* AWAKE_WAITING is compared directly (futex compares it). */
+>>> +	AWAKE_WAITING =		0,
+>>> +	/* non-zero are used as masks. */
+>>> +	AWAKE_WAKEUP =		(1 << 0),
+>>> +	AWAKE_AWAKENED =	(1 << 1),
+>>> +	AWAKE_TEARDOWN =	(1 << 2),
+>>> +};
+>>> +
+>>> +struct gp_waiters_thread {
+>>> +	struct cds_wfs_node node;
+>>> +	int32_t wait_futex;
+>>> +};
+>>> +
+>>> +/*
+>>> + * Stack keeping threads awaiting to wait for a grace period. Contains
+>>> + * struct gp_waiters_thread objects.
+>>> + */
+>>> +static struct cds_wfs_stack gp_waiters = {
+>>> +	.head = CDS_WFS_END,
+>>> +	.lock = PTHREAD_MUTEX_INITIALIZER,
+>>> +};
+>>> +
+>>>  static void mutex_lock(pthread_mutex_t *mutex)
+>>>  {
+>>>  	int ret;
+>>> @@ -116,6 +146,58 @@ static void wait_gp(void)
+>>>  		      NULL, NULL, 0);
 >>>  }
 >>>  
->>> -
->>>  /*
->>>   * __cds_wfcq_splice_blocking: enqueue all src_q nodes at the end of dest_q.
->>>   *
->>>   * Dequeue all nodes from src_q.
->>>   * dest_q must be already initialized.
->>> - * Dequeue/splice/iteration mutual exclusion for src_q should be ensured
->>> - * by the caller.
->>> + * Mutual exclusion for src_q should be ensured by the caller as
->>> + * specified in the "Synchronisation table".
->>>   * Returns enum cds_wfcq_ret which indicates the state of the src or
->>>   * dest queue. Never returns CDS_WFCQ_RET_WOULDBLOCK.
->>>   */
->>> diff --git a/urcu/wfcqueue.h b/urcu/wfcqueue.h
->>> index ddf6b87..d9ec534 100644
->>> --- a/urcu/wfcqueue.h
->>> +++ b/urcu/wfcqueue.h
->>> @@ -46,7 +46,7 @@ extern "C" {
->>>  #define CDS_WFCQ_WOULDBLOCK	((void *) -1UL)
+>>> +/*
+>>> + * Note: urcu_adaptative_wake_up needs "value" to stay allocated
+>>> + * throughout its execution. In this scheme, the waiter owns the futex
+>>> + * memory, and we only allow it to free this memory when it receives the
+>>> + * AWAKE_TEARDOWN flag.
+>>> + */
+>>> +static void urcu_adaptative_wake_up(int32_t *value)
+>>> +{
+>>> +	cmm_smp_mb();
+>>> +	assert(uatomic_read(value) == AWAKE_WAITING);
+>>> +	uatomic_set(value, AWAKE_WAKEUP);
+>>> +	if (!(uatomic_read(value) & AWAKE_AWAKENED))
+>>> +		futex_noasync(value, FUTEX_WAKE, 1, NULL, NULL, 0);
+>>> +	/* Allow teardown of "value" memory. */
+>>> +	uatomic_or(value, AWAKE_TEARDOWN);
+>>> +}
+>>> +
+>>> +/*
+>>> + * Caller must initialize "value" to AWAKE_WAITING before passing its
+>>> + * memory to waker thread.
+>>> + */
+>>> +static void urcu_adaptative_busy_wait(int32_t *value)
+>>> +{
+>>> +	unsigned int i;
+>>> +
+>>> +	/* Load and test condition before read futex */
+>>> +	cmm_smp_rmb();
+>>> +	for (i = 0; i < RCU_AWAKE_ATTEMPTS; i++) {
+>>> +		if (uatomic_read(value) != AWAKE_WAITING)
+>>> +			goto skip_futex_wait;
+>>> +		caa_cpu_relax();
+>>> +	}
+>>> +	futex_noasync(value, FUTEX_WAIT, AWAKE_WAITING, NULL, NULL, 0);
+>>> +skip_futex_wait:
+>>> +
+>>> +	/* Tell waker thread than we are awakened. */
+>>> +	uatomic_or(value, AWAKE_AWAKENED);
+>>> +
+>>> +	/*
+>>> +	 * Wait until waker thread lets us know it's ok to tear down
+>>> +	 * memory allocated for value.
+>>> +	 */
+>>> +	for (i = 0; i < RCU_AWAKE_ATTEMPTS; i++) {
+>>> +		if (uatomic_read(value) & AWAKE_TEARDOWN)
+>>> +			break;
+>>> +		caa_cpu_relax();
+>>> +	}
+>>> +	while (!(uatomic_read(value) & AWAKE_TEARDOWN))
+>>> +		poll(NULL, 0, 10);
+>>> +	assert(uatomic_read(value) & AWAKE_TEARDOWN);
+>>> +}
+>>> +
+>>>  static void wait_for_readers(struct cds_list_head *input_readers,
+>>>  			struct cds_list_head *cur_snap_readers,
+>>>  			struct cds_list_head *qsreaders)
+>>> @@ -198,6 +280,9 @@ void synchronize_rcu(void)
+>>>  	CDS_LIST_HEAD(cur_snap_readers);
+>>>  	CDS_LIST_HEAD(qsreaders);
+>>>  	unsigned long was_online;
+>>> +	struct gp_waiters_thread gp_waiters_thread;
+>>> +	struct cds_wfs_head *gp_waiters_head;
+>>> +	struct cds_wfs_node *waiters_iter, *waiters_iter_n;
 >>>  
->>>  enum cds_wfcq_ret {
->>> -	CDS_WFCQ_RET_WOULDBLOCK = 	-1,
->>> +	CDS_WFCQ_RET_WOULDBLOCK =	-1,
->>>  	CDS_WFCQ_RET_DEST_EMPTY =	0,
->>>  	CDS_WFCQ_RET_DEST_NON_EMPTY =	1,
->>>  	CDS_WFCQ_RET_SRC_EMPTY = 	2,
->>> @@ -110,13 +110,28 @@ struct cds_wfcq_tail {
->>>  /*
->>>   * Mutual exclusion of cds_wfcq_* / __cds_wfcq_* API
->>>   *
->>> - * Unless otherwise stated, the caller must ensure mutual exclusion of
->>> - * queue update operations "dequeue" and "splice" (for source queue).
->>> - * Queue read operations "first" and "next", which are used by
->>> - * "for_each" iterations, need to be protected against concurrent
->>> - * "dequeue" and "splice" (for source queue) by the caller.
->>> - * "enqueue", "splice" (for destination queue), and "empty" are the only
->>> - * operations that can be used without any mutual exclusion.
->>> + * Synchronization table:
->>> + *
->>> + * External synchronization techniques described in the API below is
->>> + * required between pairs marked with "X". No external synchronization
->>> + * required between pairs marked with "-".
->>> + *
->>> + * Legend:
->>> + * [1] cds_wfcq_enqueue
->>> + * [2] __cds_wfcq_splice (destination queue)
->>> + * [3] __cds_wfcq_dequeue
->>> + * [4] __cds_wfcq_splice (source queue)
->>> + * [5] __cds_wfcq_first
->>> + * [6] __cds_wfcq_next
->>> + *
->>> + *     [1] [2] [3] [4] [5] [6]
->>> + * [1]  -   -   -   -   -   -
->>> + * [2]  -   -   -   -   -   -
->>> + * [3]  -   -   X   X   X   X
->>> + * [4]  -   -   X   -   X   X
->>> + * [5]  -   -   X   X   -   -
->>> + * [6]  -   -   X   X   -   -
->>> + *
->>>   * Mutual exclusion can be ensured by holding cds_wfcq_dequeue_lock().
->>>   *
->>>   * For convenience, cds_wfcq_dequeue_blocking() and
->>> @@ -231,13 +246,10 @@ extern struct cds_wfcq_node *__cds_wfcq_dequeue_nonblocking(
->>>   *
->>>   * Dequeue all nodes from src_q.
->>>   * dest_q must be already initialized.
->>> - * Content written into the node before enqueue is guaranteed to be
->>> - * consistent, but no other memory ordering is ensured.
->>> - * Dequeue/splice/iteration mutual exclusion for src_q should be ensured
->>> - * by the caller.
->>> - *
->>> + * Mutual exclusion for src_q should be ensured by the caller as
->>> + * specified in the "Synchronisation table".
->>>   * Returns enum cds_wfcq_ret which indicates the state of the src or
->>> - * dest queue. Cannot block.
->>> + * dest queue. Never returns CDS_WFCQ_RET_WOULDBLOCK.
->>>   */
->>>  extern enum cds_wfcq_ret __cds_wfcq_splice_blocking(
->>>  		struct cds_wfcq_head *dest_q_head,
->>> diff --git a/wfcqueue.c b/wfcqueue.c
->>> index 207df95..ab0eb93 100644
->>> --- a/wfcqueue.c
->>> +++ b/wfcqueue.c
->>> @@ -1,7 +1,7 @@
->>>  /*
->>>   * wfcqueue.c
->>>   *
->>> - * Userspace RCU library - Concurrent queue with Wait-Free Enqueue/Blocking Dequeue
->>> + * Userspace RCU library - Concurrent Queue with Wait-Free Enqueue/Blocking Dequeue
->>>   *
->>>   * Copyright 2010-2012 - Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
->>>   * Copyright 2011-2012 - Lai Jiangshan <laijs@cn.fujitsu.com>
+>>>  	was_online = URCU_TLS(rcu_reader).ctr;
+>>>  
+>>> @@ -214,8 +299,26 @@ void synchronize_rcu(void)
+>>>  	else
+>>>  		cmm_smp_mb();
+>>>  
+>>> +	/*
+>>> +	 * Add ourself to gp_waiters stack of threads awaiting to wait
+>>> +	 * for a grace period. Proceed to perform the grace period only
+>>> +	 * if we are the first thread added into the stack.
+>>> +	 */
+>>> +	cds_wfs_node_init(&gp_waiters_thread.node);
+>>> +	gp_waiters_thread.wait_futex = AWAKE_WAITING;
+>>> +	if (cds_wfs_push(&gp_waiters, &gp_waiters_node) != 0) {
+>>> +		/* Not first in stack: will be awakened by another thread. */
+>>> +		urcu_adaptative_busy_wait(&gp_waiters_thread.wait_futex);
+>>> +		goto gp_end;
+>>> +	}
+>>> +
+>>>  	mutex_lock(&rcu_gp_lock);
+>>>  
+>>> +	/*
+>>> +	 * Pop all waiters into our local stack head.
+>>> +	 */
+>>> +	gp_waiters_head = __cds_wfs_pop_all(&gp_waiters);
+>>> +
+>>>  	if (cds_list_empty(&registry))
+>>>  		goto out;
+>>>  
+>>> @@ -272,6 +375,19 @@ void synchronize_rcu(void)
+>>>  out:
+>>>  	mutex_unlock(&rcu_gp_lock);
+>>>  
+>>> +	/* Wake all waiters in our stack head, excluding ourself. */
+>>> +	cds_wfs_for_each_blocking_safe(gp_waiters_head, waiters_iter,
+>>> +				waiters_iter_n) {
+>>> +		struct gp_waiters_thread *wt;
+>>> +
+>>> +		wt = caa_container_of(waiters_iter,
+>>> +				struct gp_waiters_thread, node);
+>>> +		if (wt == &gp_waiters_thread)
+>>> +			continue;
+>>> +		urcu_adaptative_wake_up(&wt->wait_futex);
+>>> +	}
+>>> +
+>>> +gp_end:
+>>>  	/*
+>>>  	 * Finish waiting for reader threads before letting the old ptr being
+>>>  	 * freed.
+>>> @@ -286,6 +402,9 @@ void synchronize_rcu(void)
+>>>  {
+>>>  	CDS_LIST_HEAD(qsreaders);
+>>>  	unsigned long was_online;
+>>> +	struct gp_waiters_thread gp_waiters_thread;
+>>> +	struct cds_wfs_head *gp_waiters_head;
+>>> +	struct cds_wfs_node *waiters_iter, *waiters_iter_n;
+>>>  
+>>>  	was_online = URCU_TLS(rcu_reader).ctr;
+>>>  
+>>> @@ -299,7 +418,26 @@ void synchronize_rcu(void)
+>>>  	else
+>>>  		cmm_smp_mb();
+>>>  
+>>> +	/*
+>>> +	 * Add ourself to gp_waiters stack of threads awaiting to wait
+>>> +	 * for a grace period. Proceed to perform the grace period only
+>>> +	 * if we are the first thread added into the stack.
+>>> +	 */
+>>> +	cds_wfs_node_init(&gp_waiters_thread.node);
+>>> +	gp_waiters_thread.wait_futex = AWAKE_WAITING;
+>>> +	if (cds_wfs_push(&gp_waiters, &gp_waiters_thread.node) != 0) {
+>>> +		/* Not first in stack: will be awakened by another thread. */
+>>> +		urcu_adaptative_busy_wait(&gp_waiters_thread.wait_futex);
+>>> +		goto gp_end;
+>>> +	}
+>>> +
+>>>  	mutex_lock(&rcu_gp_lock);
+>>> +
+>>> +	/*
+>>> +	 * Pop all waiters into our local stack head.
+>>> +	 */
+>>> +	gp_waiters_head = __cds_wfs_pop_all(&gp_waiters);
+>>> +
+>>>  	if (cds_list_empty(&registry))
+>>>  		goto out;
+>>>  
+>>> @@ -334,6 +472,19 @@ void synchronize_rcu(void)
+>>>  out:
+>>>  	mutex_unlock(&rcu_gp_lock);
+>>>  
+>>> +	/* Wake all waiters in our stack head, excluding ourself. */
+>>> +	cds_wfs_for_each_blocking_safe(gp_waiters_head, waiters_iter,
+>>> +				waiters_iter_n) {
+>>> +		struct gp_waiters_thread *wt;
+>>> +
+>>> +		wt = caa_container_of(waiters_iter,
+>>> +				struct gp_waiters_thread, node);
+>>> +		if (wt == &gp_waiters_thread)
+>>> +			continue;
+>>> +		urcu_adaptative_wake_up(&wt->wait_futex);
+>>> +	}
+>>> +
+>>> +gp_end:
+>>>  	if (was_online)
+>>>  		rcu_thread_online();
+>>>  	else
 >>
 > 
