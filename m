@@ -1,20 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-modules] Add
-	file:	lttng-kernel-version.h
-Date: Fri, 23 Nov 2012 15:06:55 -0500
-Message-ID: <20121123200655.GA11335__10695.9597360857$1353701249$gmane$org@Krystal>
-References: <1353700865-32009-1-git-send-email-simon.marchi@polymtl.ca>
+From: Simon Marchi <simon.marchi@polymtl.ca>
+Subject: [PATCH lttng-modules] Fix compilation for 3.0 kernels
+	that are named 2.6.40
+Date: Fri, 23 Nov 2012 17:54:40 -0500
+Message-ID: <1353711280-8395-1-git-send-email-simon.marchi__33233.5697523833$1353711321$gmane$org@polymtl.ca>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from smtp.polymtl.ca ([132.207.4.11])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1TbzWb-0001MK-Dv
-	for lttng-dev@lists.lttng.org; Fri, 23 Nov 2012 15:06:57 -0500
-Content-Disposition: inline
-In-Reply-To: <1353700865-32009-1-git-send-email-simon.marchi@polymtl.ca>
+	(envelope-from <simon.marchi@polymtl.ca>) id 1Tc28w-0002XJ-VW
+	for lttng-dev@lists.lttng.org; Fri, 23 Nov 2012 17:54:43 -0500
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,81 +19,47 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Simon Marchi <simon.marchi@polymtl.ca>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
+Cc: Simon Marchi <simon.marchi@polymtl.ca>
 List-Id: lttng-dev@lists.lttng.org
 
-* Simon Marchi (simon.marchi@polymtl.ca) wrote:
-> It contains a macro to help checking for kernel version ranges.
+Since some distro released the 3.0 kernel as 2.6.40, it might be useful
+to adjust some checks to treat 2.6.40 kernels as 3.0.
 
-Merged with small cosmetic changes,
+Signed-off-by: Simon Marchi <simon.marchi@polymtl.ca>
+---
+ instrumentation/events/lttng-module/net.h |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-Oh damn, I forgot the --author. Sorry, it appears From: me.
-
-Thanks,
-
-Mathieu
-
-> 
-> Signed-off-by: Simon Marchi <simon.marchi@polymtl.ca>
-> ---
->  lttng-kernel-version.h |   36 ++++++++++++++++++++++++++++++++++++
->  1 files changed, 36 insertions(+), 0 deletions(-)
->  create mode 100644 lttng-kernel-version.h
-> 
-> diff --git a/lttng-kernel-version.h b/lttng-kernel-version.h
-> new file mode 100644
-> index 0000000..cb5c4dd
-> --- /dev/null
-> +++ b/lttng-kernel-version.h
-> @@ -0,0 +1,36 @@
-> +#ifndef _LTTNG_KERNEL_VERSION_H
-> +#define _LTTNG_KERNEL_VERSION_H
-> +
-> +/*
-> + * lttng-events.h
-> + *
-> + * Contains helpers to check more complex kernel version conditions.
-> + *
-> + * Copyright (C) 2012 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> + *
-> + * This library is free software; you can redistribute it and/or
-> + * modify it under the terms of the GNU Lesser General Public
-> + * License as published by the Free Software Foundation; only
-> + * version 2.1 of the License.
-> + *
-> + * This library is distributed in the hope that it will be useful,
-> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
-> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-> + * Lesser General Public License for more details.
-> + *
-> + * You should have received a copy of the GNU Lesser General Public
-> + * License along with this library; if not, write to the Free Software
-> + * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
-> + */
-> +
-> +#include <linux/version.h>
-> +
-> +/*
-> + * This macro checks if the kernel version is between the two specified
-> + * versions.
-> + */
-> +#define LTTNG_KERNEL_RANGE(a_low, b_low, c_low, a_high, b_high, c_high) \
-> +	(LINUX_VERSION_CODE >= KERNEL_VERSION(a_low, b_low, c_low) && \
-> +	 LINUX_VERSION_CODE <= KERNEL_VERSION(a_high, b_high, c_high))
-> +
-> +#endif /* _LTTNG_KERNEL_VERSION_H */
-> -- 
-> 1.7.1
-> 
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
+diff --git a/instrumentation/events/lttng-module/net.h b/instrumentation/events/lttng-module/net.h
+index a444b07..e552cf7 100644
+--- a/instrumentation/events/lttng-module/net.h
++++ b/instrumentation/events/lttng-module/net.h
+@@ -12,7 +12,7 @@
+ 
+ TRACE_EVENT(net_dev_xmit,
+ 
+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,0,0))
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,40))
+ 	TP_PROTO(struct sk_buff *skb,
+ 		 int rc,
+ 		 struct net_device *dev,
+@@ -30,14 +30,14 @@ TRACE_EVENT(net_dev_xmit,
+ 		__field(	void *,		skbaddr		)
+ 		__field(	unsigned int,	len		)
+ 		__field(	int,		rc		)
+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,0,0))
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,40))
+ 		__string(	name,		dev->name	)
+ #else
+ 		__string(	name,		skb->dev->name	)
+ #endif
+ 	),
+ 
+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,0,0))
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,40))
+ 	TP_fast_assign(
+ 		tp_assign(skbaddr, skb)
+ 		tp_assign(len, skb_len)
 -- 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+1.7.1
