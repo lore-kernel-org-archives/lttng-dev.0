@@ -1,7 +1,8 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] LTTng-UST 2.0.6
-Date: Mon, 26 Nov 2012 15:47:50 -0500
-Message-ID: <20121126204749.GA31733__22801.960577681$1353963050$gmane$org@Krystal>
+Subject: [PATCH lttng-tools] Clarify empty string/NULL filter
+	errors
+Date: Mon, 26 Nov 2012 15:58:08 -0500
+Message-ID: <20121126205808.GA32010__11015.5409820893$1353963640$gmane$org@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -9,16 +10,8 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1Td5aq-0008Ce-5q
-	for lttng-dev@lists.lttng.org; Mon, 26 Nov 2012 15:47:52 -0500
-Received: from localhost (localhost [127.0.0.1])
-	by blackscsi.openrapids.net (Postfix) with ESMTP id D6EE8140003
-	for <lttng-dev@lists.lttng.org>; Mon, 26 Nov 2012 15:47:51 -0500 (EST)
-Received: from blackscsi.openrapids.net ([127.0.0.1])
-	by localhost (blackscsi.openrapids.net [127.0.0.1]) (amavisd-new,
-	port 10024)
-	with ESMTP id 1sLe1SqDsNuD for <lttng-dev@lists.lttng.org>;
-	Mon, 26 Nov 2012 15:47:50 -0500 (EST)
+	(envelope-from <compudj@mail.openrapids.net>) id 1Td5kn-0008I2-Jd
+	for lttng-dev@lists.lttng.org; Mon, 26 Nov 2012 15:58:09 -0500
 Content-Disposition: inline
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -28,31 +21,68 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: dgoulet@efficios.com
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-LTTng-UST, the Linux Trace Toolkit Next Generation Userspace Tracer, is
-port of the low-overhead tracing capabilities of the LTTng kernel tracer
-to user-space. The library "liblttng-ust" enables tracing of
-applications and libraries.
-
-Changelog:
-2012-11-26 lttng-ust 2.0.6
-        * Print probe provider mismatch error even without -Wsystem-headers
-        * Fix: Conditionally disable tests requiring shared libs support
-        * Cleanup: don't spawn per-user thread if HOME is not set
-        * Fix: Fix self-assign warning on struct ustfork_clone_info init
-        * Fix: memcpy of string is larger than source
-        * liblttng-ust-fork: override daemon() call
-        * Build out of src tree
-        * Fix: manpage typo "-lllttng-ust" -> "-llttng-ust"
-        * Manpage update: document use in daemons
-        * Fix: get_wait_shm() ust mutex deadlock (add 2 missing exit calls)
-        * Fix: get_wait_shm() ust mutex deadlock
-
-Project website: http://lttng.org
-Download link: http://lttng.org/download
-(please refer to the README file for installation instructions)
+Reported-by: Jesus Garcia <jesus.garcia@ericsson.com>
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+---
+diff --git a/include/lttng/lttng.h b/include/lttng/lttng.h
+index c6fc605..515e07c 100644
+--- a/include/lttng/lttng.h
++++ b/include/lttng/lttng.h
+@@ -516,6 +516,8 @@ extern int lttng_enable_event(struct lttng_handle *handle,
+  * If event_name is NULL, all events are enabled with that filter.
+  * If channel_name is NULL, the default channel is used (channel0) and created
+  * if not found.
++ * If filter_expression is NULL, an event without associated filter is
++ * created.
+  */
+ extern int lttng_enable_event_with_filter(struct lttng_handle *handle,
+ 		struct lttng_event *event, const char *channel_name,
+diff --git a/src/bin/lttng-sessiond/main.c b/src/bin/lttng-sessiond/main.c
+index df47606..d5cfc0e 100644
+--- a/src/bin/lttng-sessiond/main.c
++++ b/src/bin/lttng-sessiond/main.c
+@@ -2853,6 +2853,10 @@ skip_domain:
+ 			ret = LTTNG_ERR_FILTER_INVAL;
+ 			goto error;
+ 		}
++		if (cmd_ctx->lsm->u.enable.bytecode_len == 0) {
++			ret = LTTNG_ERR_FILTER_INVAL;
++			goto error;
++		}
+ 		bytecode = zmalloc(cmd_ctx->lsm->u.enable.bytecode_len);
+ 		if (!bytecode) {
+ 			ret = LTTNG_ERR_FILTER_NOMEM;
+diff --git a/src/lib/lttng-ctl/lttng-ctl.c b/src/lib/lttng-ctl/lttng-ctl.c
+index 6238d9a..96351bd 100644
+--- a/src/lib/lttng-ctl/lttng-ctl.c
++++ b/src/lib/lttng-ctl/lttng-ctl.c
+@@ -841,8 +841,20 @@ int lttng_enable_event_with_filter(struct lttng_handle *handle,
+ 	FILE *fmem;
+ 	int ret = 0;
+ 
+-	/* Safety check. */
+-	if (handle == NULL || !filter_expression) {
++	if (!filter_expression) {
++		/*
++		 * Fall back to normal event enabling if no filter
++		 * specified.
++		 */
++		return lttng_enable_event(handle, event, channel_name);
++	}
++
++	/*
++	 * Empty filter string will always be rejected by the parser
++	 * anyway, so treat this corner-case early to eliminate
++	 * lttng_fmemopen error for 0-byte allocation.
++	 */
++	if (handle == NULL || filter_expression[0] == '\0') {
+ 		return -LTTNG_ERR_INVALID;
+ 	}
+ 
 
 -- 
 Mathieu Desnoyers
