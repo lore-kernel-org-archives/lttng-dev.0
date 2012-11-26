@@ -1,9 +1,9 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Subject: Re: [PATCH] urcu-mb/signal/membarrier: batch
 	concurrent	synchronize_rcu()
-Date: Mon, 26 Nov 2012 09:57:35 -0500
-Message-ID: <20121126145735.GA26198__29022.5726239898$1353941898$gmane$org@Krystal>
-References: <20121126032220.GA19034@Krystal> <20121126033217.GA19396@Krystal>
+Date: Mon, 26 Nov 2012 15:01:46 -0500
+Message-ID: <20121126200146.GA30509__20123.5202177942$1353960832$gmane$org@Krystal>
+References: <20121126032220.GA19034@Krystal> <50B2E8FB.4000906@cn.fujitsu.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -11,10 +11,10 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1Td07t-0005X5-UX
-	for lttng-dev@lists.lttng.org; Mon, 26 Nov 2012 09:57:37 -0500
+	(envelope-from <compudj@mail.openrapids.net>) id 1Td4sG-0007n6-JE
+	for lttng-dev@lists.lttng.org; Mon, 26 Nov 2012 15:01:48 -0500
 Content-Disposition: inline
-In-Reply-To: <20121126033217.GA19396@Krystal>
+In-Reply-To: <50B2E8FB.4000906@cn.fujitsu.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,188 +23,139 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Lai Jiangshan <laijs@cn.fujitsu.com>, Alan Stern <stern@rowland.harvard.edu>
-Cc: lttng-dev@lists.lttng.org, rp@svcs.cs.pdx.edu
+To: Lai Jiangshan <laijs@cn.fujitsu.com>
+Cc: lttng-dev@lists.lttng.org, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Alan Stern <stern@rowland.harvard.edu>, rp@svcs.cs.pdx.edu
 List-Id: lttng-dev@lists.lttng.org
 
-* Mathieu Desnoyers (mathieu.desnoyers@efficios.com) wrote:
-> * Mathieu Desnoyers (mathieu.desnoyers@efficios.com) wrote:
-> > Here are benchmarks on batching of synchronize_rcu(), and it leads to
-> > very interesting scalability improvement and speedups, e.g., on a
-> > 24-core AMD, with a write-heavy scenario (4 readers threads, 20 updater
-> > threads, each updater using synchronize_rcu()):
-> > 
-> > * Serialized grace periods:
-> > ./test_urcu 4 20 20
-> > SUMMARY ./test_urcu               testdur   20 nr_readers   4
-> > rdur       0 wdur      0 nr_writers  20 wdelay      0
-> > nr_reads    714598368 nr_writes      5032889 nr_ops    719631257
-> > 
-> > * Batched grace periods:
-> > 
-> > ./test_urcu 4 20 20
-> > SUMMARY ./test_urcu               testdur   20 nr_readers   4
-> > rdur       0 wdur      0 nr_writers  20 wdelay      0
-> > nr_reads    611848168 nr_writes      9877965 nr_ops    621726133
-> > 
-> > For a 9877965/5032889 = 1.96 speedup for 20 updaters.
-> > 
-> > Of course, we can see that readers have slowed down, probably due to
-> > increased update traffic, given there is no change to the read-side code
-> > whatsoever.
-> > 
-> > Now let's see the penality of managing the stack for single-updater.
-> > With 4 readers, single updater:
-> > 
-> > * Serialized grace periods :
-> > 
-> > ./test_urcu 4 1 20
-> > SUMMARY ./test_urcu               testdur   20 nr_readers   4
-> > rdur       0 wdur      0 nr_writers   1 wdelay      0
-> > nr_reads    241959144 nr_writes     11146189 nr_ops    253105333
-> > SUMMARY ./test_urcu               testdur   20 nr_readers   4
-> > rdur       0 wdur      0 nr_writers   1 wdelay      0
-> > nr_reads    257131080 nr_writes     12310537 nr_ops    269441617
-> > SUMMARY ./test_urcu               testdur   20 nr_readers   4
-> > rdur       0 wdur      0 nr_writers   1 wdelay      0
-> > nr_reads    259973359 nr_writes     12203025 nr_ops    272176384
-> > 
-> > * Batched grace periods :
-> > 
-> > SUMMARY ./test_urcu               testdur   20 nr_readers   4
-> > rdur       0 wdur      0 nr_writers   1 wdelay      0
-> > nr_reads    298926555 nr_writes     14018748 nr_ops    312945303
-> > SUMMARY ./test_urcu               testdur   20 nr_readers   4
-> > rdur       0 wdur      0 nr_writers   1 wdelay      0
-> > nr_reads    272411290 nr_writes     12832166 nr_ops    285243456
-> > SUMMARY ./test_urcu               testdur   20 nr_readers   4
-> > rdur       0 wdur      0 nr_writers   1 wdelay      0
-> > nr_reads    267511858 nr_writes     12822026 nr_ops    280333884
-> > 
-> > Serialized vs batched seems to similar, batched possibly even slightly
-> > faster, but this is probably caused by NUMA affinity.
-> > 
-> > CC: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
-> > CC: Lai Jiangshan <laijs@cn.fujitsu.com>
-> > CC: Alan Stern <stern@rowland.harvard.edu>
-> > Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> > ---
-> > diff --git a/urcu.c b/urcu.c
-> > index e6ff0f3..836bad9 100644
-> > --- a/urcu.c
-> > +++ b/urcu.c
-> > @@ -43,6 +43,7 @@
-> >  #include "urcu/tls-compat.h"
-> >  
-> >  #include "urcu-die.h"
-> > +#include "urcu-wait.h"
-> >  
-> >  /* Do not #define _LGPL_SOURCE to ensure we can emit the wrapper symbols */
-> >  #undef _LGPL_SOURCE
-> > @@ -106,6 +107,12 @@ DEFINE_URCU_TLS(unsigned int, rcu_rand_yield);
-> >  
-> >  static CDS_LIST_HEAD(registry);
-> >  
-> > +/*
-> > + * Queue keeping threads awaiting to wait for a grace period. Contains
-> > + * struct gp_waiters_thread objects.
-> > + */
-> > +static DEFINE_URCU_WAIT_QUEUE(gp_waiters);
-> > +
-> >  static void mutex_lock(pthread_mutex_t *mutex)
-> >  {
-> >  	int ret;
-> > @@ -306,9 +313,31 @@ void synchronize_rcu(void)
-> >  {
-> >  	CDS_LIST_HEAD(cur_snap_readers);
-> >  	CDS_LIST_HEAD(qsreaders);
-> > +	DEFINE_URCU_WAIT_NODE(wait, URCU_WAIT_WAITING);
-> > +	struct urcu_waiters waiters;
-> > +
-> > +	/*
-> > +	 * Add ourself to gp_waiters queue of threads awaiting to wait
-> > +	 * for a grace period. Proceed to perform the grace period only
-> > +	 * if we are the first thread added into the queue.
-> > +	 */
-> > +	if (urcu_wait_add(&gp_waiters, &wait) != 0) {
-> 
-> Actually, we're missing a memory barrier right here. Here is what I'm
-> adding right away:
-> 
-> +               /* Order previous memory accesses before grace period. */
-> +               cmm_smp_mb();
+Hi Lai,
 
-Now that I come to think of it, the barrier is needed before
-urcu_wait_add() rather than after. It's the action on the wait queue
-(move operation) that order us before the start of the grace period. So
-instead of adding this barrier, I'm going to document that there is an
-implicit memory barrier before urcu_wait_add(), and document this
-barrier in the urcu_wait_add API.
+Here are the raw results you asked for. I only did a single run for
+each, and did not specify any CPU affinity, so please keep in mind that
+results can vary due to NUMA access effects. But the trend is clear:
+when we have 3 or more updaters, batching is quite effective. With 1-2
+updaters, the results vary between a small speedup for batching (for 1
+updater) to a small slowdown for batching (2 updaters). I don't have
+good explanation for the 1-updater speedups, except maybe that accessing
+a mutex cache-line with a xchg() first might speed things up, but this
+is really just a guess.
 
-I will also document an implicit memory barrier after urcu_move_waiters,
-which orders the queue moving memory access prior to the beginning of
-the grace period.
+Thoughts ?
 
-Thanks,
+* Serialized synchronize_rcu() -- test_urcu (mb)
 
-Mathieu
+./test_urcu 4 1 20
+SUMMARY ./test_urcu               testdur   20 nr_readers   4 rdur      0 wdur      0 nr_writers   1 wdelay      0 nr_reads    222512859 nr_writes     10723654 nr_ops    233236513
+./test_urcu 4 20 20
+SUMMARY ./test_urcu               testdur   20 nr_readers   4 rdur      0 wdur      0 nr_writers  20 wdelay      0 nr_reads    722096653 nr_writes      5012429 nr_ops    727109082
+./test_urcu 12 12 20
+SUMMARY ./test_urcu               testdur   20 nr_readers  12 rdur      0 wdur      0 nr_writers  12 wdelay      0 nr_reads   1822868768 nr_writes      2300787 nr_ops   1825169555
+./test_urcu 16 8 20
+SUMMARY ./test_urcu               testdur   20 nr_readers  16 rdur      0 wdur      0 nr_writers   8 wdelay      0 nr_reads   2355908375 nr_writes      1604850 nr_ops   2357513225
+./test_urcu 20 4 20
+SUMMARY ./test_urcu               testdur   20 nr_readers  20 rdur      0 wdur      0 nr_writers   4 wdelay      0 nr_reads   3003457459 nr_writes      1074828 nr_ops   3004532287
+./test_urcu 20 3 20
+SUMMARY ./test_urcu               testdur   20 nr_readers  20 rdur      0 wdur      0 nr_writers   3 wdelay      0 nr_reads   2956972543 nr_writes      1036556 nr_ops   2958009099
+./test_urcu 20 2 20
+SUMMARY ./test_urcu               testdur   20 nr_readers  20 rdur      0 wdur      0 nr_writers   2 wdelay      0 nr_reads   2890178860 nr_writes      1030095 nr_ops   2891208955
+./test_urcu 20 1 20
+SUMMARY ./test_urcu               testdur   20 nr_readers  20 rdur      0 wdur      0 nr_writers   1 wdelay      0 nr_reads   3017482290 nr_writes       783420 nr_ops   3018265710
 
-> 
-> Thanks,
-> 
-> Mathieu
-> 
-> 
-> > +		/* Not first in queue: will be awakened by another thread. */
-> > +		urcu_adaptative_busy_wait(&wait);
-> > +		/* Order following memory accesses after grace period. */
-> > +		cmm_smp_mb();
-> > +		return;
-> > +	}
-> > +	/* We won't need to wake ourself up */
-> > +	urcu_wait_set_state(&wait, URCU_WAIT_RUNNING);
-> >  
-> >  	mutex_lock(&rcu_gp_lock);
-> >  
-> > +	/*
-> > +	 * Move all waiters into our local queue.
-> > +	 */
-> > +	urcu_move_waiters(&waiters, &gp_waiters);
-> > +
-> >  	if (cds_list_empty(&registry))
-> >  		goto out;
-> >  
-> > @@ -374,6 +403,13 @@ void synchronize_rcu(void)
-> >  	smp_mb_master(RCU_MB_GROUP);
-> >  out:
-> >  	mutex_unlock(&rcu_gp_lock);
-> > +
-> > +	/*
-> > +	 * Wakeup waiters only after we have completed the grace period
-> > +	 * and have ensured the memory barriers at the end of the grace
-> > +	 * period have been issued.
-> > +	 */
-> > +	urcu_wake_all_waiters(&waiters);
-> >  }
-> >  
-> >  /*
-> > 
-> > -- 
-> > Mathieu Desnoyers
-> > Operating System Efficiency R&D Consultant
-> > EfficiOS Inc.
-> > http://www.efficios.com
-> > 
-> > _______________________________________________
-> > lttng-dev mailing list
-> > lttng-dev@lists.lttng.org
-> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> 
-> -- 
-> Mathieu Desnoyers
-> Operating System Efficiency R&D Consultant
-> EfficiOS Inc.
-> http://www.efficios.com
+* Batched synchronize_rcu() -- test_urcu (mb)
+
+./test_urcu 4 1 20
+SUMMARY ./test_urcu               testdur   20 nr_readers   4 rdur      0 wdur      0 nr_writers   1 wdelay      0 nr_reads    271476751 nr_writes     12858885 nr_ops    284335636
+./test_urcu 4 20 20
+SUMMARY ./test_urcu               testdur   20 nr_readers   4 rdur      0 wdur      0 nr_writers  20 wdelay      0 nr_reads    608488583 nr_writes     10080610 nr_ops    618569193
+./test_urcu 12 12 20
+SUMMARY ./test_urcu               testdur   20 nr_readers  12 rdur      0 wdur      0 nr_writers  12 wdelay      0 nr_reads   1260044362 nr_writes      7957711 nr_ops   1268002073
+./test_urcu 16 8 20
+SUMMARY ./test_urcu               testdur   20 nr_readers  16 rdur      0 wdur      0 nr_writers   8 wdelay      0 nr_reads   2048890674 nr_writes      5440985 nr_ops   2054331659
+./test_urcu 20 4 20
+SUMMARY ./test_urcu               testdur   20 nr_readers  20 rdur      0 wdur      0 nr_writers   4 wdelay      0 nr_reads   2819267217 nr_writes      3093008 nr_ops   2822360225
+./test_urcu 20 3 20
+SUMMARY ./test_urcu               testdur   20 nr_readers  20 rdur      0 wdur      0 nr_writers   3 wdelay      0 nr_reads   3067795320 nr_writes      2817760 nr_ops   3070613080
+./test_urcu 20 2 20
+SUMMARY ./test_urcu               testdur   20 nr_readers  20 rdur      0 wdur      0 nr_writers   2 wdelay      0 nr_reads   3116770603 nr_writes      2404242 nr_ops   3119174845
+./test_urcu 20 1 20
+SUMMARY ./test_urcu               testdur   20 nr_readers  20 rdur      0 wdur      0 nr_writers   1 wdelay      0 nr_reads   2238534130 nr_writes      3737588 nr_ops   2242271718
+
+
+* Serialized synchronize_rcu() -- test_urcu_signal
+
+./test_urcu_signal 4 1 20
+SUMMARY ./test_urcu_signal        testdur   20 nr_readers   4 rdur      0 wdur      0 nr_writers   1 wdelay      0 nr_reads  16063309841 nr_writes         9217 nr_ops  16063319058
+./test_urcu_signal 4 20 20
+SUMMARY ./test_urcu_signal        testdur   20 nr_readers   4 rdur      0 wdur      0 nr_writers  20 wdelay      0 nr_reads  16065183739 nr_writes         9182 nr_ops  16065192921
+./test_urcu_signal 12 12 20
+SUMMARY ./test_urcu_signal        testdur   20 nr_readers  12 rdur      0 wdur      0 nr_writers  12 wdelay      0 nr_reads  48028512672 nr_writes         8890 nr_ops  48028521562
+./test_urcu_signal 16 8 20
+SUMMARY ./test_urcu_signal        testdur   20 nr_readers  16 rdur      0 wdur      0 nr_writers   8 wdelay      0 nr_reads  64001589198 nr_writes         8756 nr_ops  64001597954
+./test_urcu_signal 20 4 20
+SUMMARY ./test_urcu_signal        testdur   20 nr_readers  20 rdur      0 wdur      0 nr_writers   4 wdelay      0 nr_reads  79907434070 nr_writes         9068 nr_ops  79907443138
+./test_urcu_signal 20 3 20
+SUMMARY ./test_urcu_signal        testdur   20 nr_readers  20 rdur      0 wdur      0 nr_writers   3 wdelay      0 nr_reads  79987250839 nr_writes         8589 nr_ops  79987259428
+./test_urcu_signal 20 2 20
+SUMMARY ./test_urcu_signal        testdur   20 nr_readers  20 rdur      0 wdur      0 nr_writers   2 wdelay      0 nr_reads  79749947176 nr_writes         8596 nr_ops  79749955772
+./test_urcu_signal 20 1 20
+SUMMARY ./test_urcu_signal        testdur   20 nr_readers  20 rdur      0 wdur      0 nr_writers   1 wdelay      0 nr_reads  79751023090 nr_writes         8624 nr_ops  79751031714
+
+* Batched synchronize_rcu() -- test_urcu_signal
+
+./test_urcu_signal 4 1 20
+SUMMARY ./test_urcu_signal        testdur   20 nr_readers   4 rdur      0 wdur      0 nr_writers   1 wdelay      0 nr_reads  15739087241 nr_writes         9218 nr_ops  15739096459
+./test_urcu_signal 4 20 20
+SUMMARY ./test_urcu_signal        testdur   20 nr_readers   4 rdur      0 wdur      0 nr_writers  20 wdelay      0 nr_reads  15662135806 nr_writes        94833 nr_ops  15662230639
+./test_urcu_signal 12 12 20
+SUMMARY ./test_urcu_signal        testdur   20 nr_readers  12 rdur      0 wdur      0 nr_writers  12 wdelay      0 nr_reads  46634363289 nr_writes        56903 nr_ops  46634420192
+./test_urcu_signal 16 8 20
+SUMMARY ./test_urcu_signal        testdur   20 nr_readers  16 rdur      0 wdur      0 nr_writers   8 wdelay      0 nr_reads  62263951759 nr_writes        39058 nr_ops  62263990817
+./test_urcu_signal 20 4 20
+SUMMARY ./test_urcu_signal        testdur   20 nr_readers  20 rdur      0 wdur      0 nr_writers   4 wdelay      0 nr_reads  77799768623 nr_writes        21065 nr_ops  77799789688
+./test_urcu_signal 20 3 20
+SUMMARY ./test_urcu_signal        testdur   20 nr_readers  20 rdur      0 wdur      0 nr_writers   3 wdelay      0 nr_reads  76408008440 nr_writes        17026 nr_ops  76408025466
+./test_urcu_signal 20 2 20
+SUMMARY ./test_urcu_signal        testdur   20 nr_readers  20 rdur      0 wdur      0 nr_writers   2 wdelay      0 nr_reads  77868927424 nr_writes        12630 nr_ops  77868940054
+./test_urcu_signal 20 1 20
+SUMMARY ./test_urcu_signal        testdur   20 nr_readers  20 rdur      0 wdur      0 nr_writers   1 wdelay      0 nr_reads  77293186844 nr_writes         8680 nr_ops  77293195524
+
+
+* Serialized synchronize_rcu() -- test_urcu_qsbr
+
+./test_urcu_qsbr 4 1 20
+SUMMARY ./test_urcu_qsbr          testdur   20 nr_readers   4 rdur      0 wdur      0 nr_writers   1 wdelay      0 nr_reads  18841016559 nr_writes      1857130 nr_ops  18842873689
+./test_urcu_qsbr 4 20 20
+SUMMARY ./test_urcu_qsbr          testdur   20 nr_readers   4 rdur      0 wdur      0 nr_writers  20 wdelay      0 nr_reads  20272811733 nr_writes      1837027 nr_ops  20274648760
+./test_urcu_qsbr 12 12 20
+SUMMARY ./test_urcu_qsbr          testdur   20 nr_readers  12 rdur      0 wdur      0 nr_writers  12 wdelay      0 nr_reads  60343516643 nr_writes      2353685 nr_ops  60345870328
+./test_urcu_qsbr 16 8 20
+SUMMARY ./test_urcu_qsbr          testdur   20 nr_readers  16 rdur      0 wdur      0 nr_writers   8 wdelay      0 nr_reads  78202711840 nr_writes      2326331 nr_ops  78205038171
+./test_urcu_qsbr 20 4 20
+SUMMARY ./test_urcu_qsbr          testdur   20 nr_readers  20 rdur      0 wdur      0 nr_writers   4 wdelay      0 nr_reads  94553396003 nr_writes      2238396 nr_ops  94555634399
+./test_urcu_qsbr 20 3 20
+SUMMARY ./test_urcu_qsbr          testdur   20 nr_readers  20 rdur      0 wdur      0 nr_writers   3 wdelay      0 nr_reads  95004708661 nr_writes      2165966 nr_ops  95006874627
+./test_urcu_qsbr 20 2 20
+SUMMARY ./test_urcu_qsbr          testdur   20 nr_readers  20 rdur      0 wdur      0 nr_writers   2 wdelay      0 nr_reads  95386506198 nr_writes      2194352 nr_ops  95388700550
+./test_urcu_qsbr 20 1 20
+SUMMARY ./test_urcu_qsbr          testdur   20 nr_readers  20 rdur      0 wdur      0 nr_writers   1 wdelay      0 nr_reads  84705972017 nr_writes      2609595 nr_ops  84708581612
+
+* Batched synchronize_rcu() -- test_urcu_qsbr
+
+./test_urcu_qsbr 4 1 20
+SUMMARY ./test_urcu_qsbr          testdur   20 nr_readers   4 rdur      0 wdur      0 nr_writers   1 wdelay      0 nr_reads  19154850714 nr_writes      2238834 nr_ops  19157089548
+./test_urcu_qsbr 4 20 20
+SUMMARY ./test_urcu_qsbr          testdur   20 nr_readers   4 rdur      0 wdur      0 nr_writers  20 wdelay      0 nr_reads  15114131760 nr_writes      9370255 nr_ops  15123502015
+./test_urcu_qsbr 12 12 20
+SUMMARY ./test_urcu_qsbr          testdur   20 nr_readers  12 rdur      0 wdur      0 nr_writers  12 wdelay      0 nr_reads  45541854970 nr_writes      5786496 nr_ops  45547641466
+./test_urcu_qsbr 16 8 20
+SUMMARY ./test_urcu_qsbr          testdur   20 nr_readers  16 rdur      0 wdur      0 nr_writers   8 wdelay      0 nr_reads  66217337547 nr_writes      4257427 nr_ops  66221594974
+./test_urcu_qsbr 20 4 20
+SUMMARY ./test_urcu_qsbr          testdur   20 nr_readers  20 rdur      0 wdur      0 nr_writers   4 wdelay      0 nr_reads  95048642908 nr_writes      2416266 nr_ops  95051059174
+./test_urcu_qsbr 20 3 20
+SUMMARY ./test_urcu_qsbr          testdur   20 nr_readers  20 rdur      0 wdur      0 nr_writers   3 wdelay      0 nr_reads  96679609928 nr_writes      2211168 nr_ops  96681821096
+./test_urcu_qsbr 20 2 20
+SUMMARY ./test_urcu_qsbr          testdur   20 nr_readers  20 rdur      0 wdur      0 nr_writers   2 wdelay      0 nr_reads  92166219811 nr_writes      1968725 nr_ops  92168188536
+./test_urcu_qsbr 20 1 20
+SUMMARY ./test_urcu_qsbr          testdur   20 nr_readers  20 rdur      0 wdur      0 nr_writers   1 wdelay      0 nr_reads  87986181951 nr_writes      3278737 nr_ops  87989460688
 
 -- 
 Mathieu Desnoyers
