@@ -1,19 +1,17 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: Lai Jiangshan <laijs@cn.fujitsu.com>
 Subject: Re: [PATCH] urcu-mb/signal/membarrier: batch
 	concurrent	synchronize_rcu()
-Date: Sun, 25 Nov 2012 22:32:17 -0500
-Message-ID: <20121126033217.GA19396__14752.0355218605$1353900774$gmane$org@Krystal>
+Date: Mon, 26 Nov 2012 11:47:06 +0800
+Message-ID: <50B2E63A.3020000__45863.7484153316$1353901491$gmane$org@cn.fujitsu.com>
 References: <20121126032220.GA19034@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from [222.73.24.84] (helo=song.cn.fujitsu.com)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1TcpQi-00006i-7S
-	for lttng-dev@lists.lttng.org; Sun, 25 Nov 2012 22:32:20 -0500
-Content-Disposition: inline
+	(envelope-from <laijs@cn.fujitsu.com>) id 1TcpcF-0000CT-Sj
+	for lttng-dev@lists.lttng.org; Sun, 25 Nov 2012 22:44:16 -0500
 In-Reply-To: <20121126032220.GA19034@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -23,11 +21,17 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Lai Jiangshan <laijs@cn.fujitsu.com>, Alan Stern <stern@rowland.harvard.edu>
-Cc: lttng-dev@lists.lttng.org, rp@svcs.cs.pdx.edu
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev@lists.lttng.org, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Alan Stern <stern@rowland.harvard.edu>, rp@svcs.cs.pdx.edu
 List-Id: lttng-dev@lists.lttng.org
 
-* Mathieu Desnoyers (mathieu.desnoyers@efficios.com) wrote:
+I'm also interesting in the result of:
+./test_urcu 12 12 20
+./test_urcu 16 8 20
+./test_urcu 20 4 20
+
+
+On 11/26/2012 11:22 AM, Mathieu Desnoyers wrote:
 > Here are benchmarks on batching of synchronize_rcu(), and it leads to
 > very interesting scalability improvement and speedups, e.g., on a
 > 24-core AMD, with a write-heavy scenario (4 readers threads, 20 updater
@@ -126,18 +130,6 @@ List-Id: lttng-dev@lists.lttng.org
 > +	 * if we are the first thread added into the queue.
 > +	 */
 > +	if (urcu_wait_add(&gp_waiters, &wait) != 0) {
-
-Actually, we're missing a memory barrier right here. Here is what I'm
-adding right away:
-
-+               /* Order previous memory accesses before grace period. */
-+               cmm_smp_mb();
-
-Thanks,
-
-Mathieu
-
-
 > +		/* Not first in queue: will be awakened by another thread. */
 > +		urcu_adaptative_busy_wait(&wait);
 > +		/* Order following memory accesses after grace period. */
@@ -172,19 +164,3 @@ Mathieu
 >  
 >  /*
 > 
-> -- 
-> Mathieu Desnoyers
-> Operating System Efficiency R&D Consultant
-> EfficiOS Inc.
-> http://www.efficios.com
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
