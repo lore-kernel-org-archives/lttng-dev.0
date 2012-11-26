@@ -1,8 +1,8 @@
 From: Lai Jiangshan <laijs@cn.fujitsu.com>
 Subject: Re: [PATCH] urcu-mb/signal/membarrier: batch
 	concurrent	synchronize_rcu()
-Date: Mon, 26 Nov 2012 11:47:06 +0800
-Message-ID: <50B2E63A.3020000__45863.7484153316$1353901491$gmane$org@cn.fujitsu.com>
+Date: Mon, 26 Nov 2012 11:58:51 +0800
+Message-ID: <50B2E8FB.4000906__17747.6787045181$1353902189$gmane$org@cn.fujitsu.com>
 References: <20121126032220.GA19034@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,8 +10,8 @@ Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from [222.73.24.84] (helo=song.cn.fujitsu.com)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <laijs@cn.fujitsu.com>) id 1TcpcF-0000CT-Sj
-	for lttng-dev@lists.lttng.org; Sun, 25 Nov 2012 22:44:16 -0500
+	(envelope-from <laijs@cn.fujitsu.com>) id 1TcpnW-0000I2-So
+	for lttng-dev@lists.lttng.org; Sun, 25 Nov 2012 22:55:55 -0500
 In-Reply-To: <20121126032220.GA19034@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -24,12 +24,6 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: lttng-dev@lists.lttng.org, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Alan Stern <stern@rowland.harvard.edu>, rp@svcs.cs.pdx.edu
 List-Id: lttng-dev@lists.lttng.org
-
-I'm also interesting in the result of:
-./test_urcu 12 12 20
-./test_urcu 16 8 20
-./test_urcu 20 4 20
-
 
 On 11/26/2012 11:22 AM, Mathieu Desnoyers wrote:
 > Here are benchmarks on batching of synchronize_rcu(), and it leads to
@@ -51,6 +45,10 @@ On 11/26/2012 11:22 AM, Mathieu Desnoyers wrote:
 > nr_reads    611848168 nr_writes      9877965 nr_ops    621726133
 > 
 > For a 9877965/5032889 = 1.96 speedup for 20 updaters.
+
+I guess it is the result of RCU_MB,
+(if it does, could you test RCU_SIGNAL, it may speedup more)
+
 > 
 > Of course, we can see that readers have slowed down, probably due to
 > increased update traffic, given there is no change to the read-side code
