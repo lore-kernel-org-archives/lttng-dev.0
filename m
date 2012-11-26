@@ -1,12 +1,7 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: TRACEPOINT_PROVIDER mismatch check
-	in	ust-tracepoint-event.h needs -Wsystem-headers
-Date: Mon, 26 Nov 2012 15:35:58 -0500
-Message-ID: <20121126203558.GA31535__35069.4717643366$1353962415$gmane$org@Krystal>
-References: <20998D40D9A2B7499CA5A3A2666CB1EB19F87106@ZURMSG1.QUANTUM.com>
-	<20121119162618.GA17428@Krystal>
-	<20998D40D9A2B7499CA5A3A2666CB1EB19F87B5C@ZURMSG1.QUANTUM.com>
-	<20121126201659.GB30509@Krystal> <20121126202836.GA30838@Krystal>
+Subject: [RELEASE] LTTng-UST 2.0.6
+Date: Mon, 26 Nov 2012 15:47:50 -0500
+Message-ID: <20121126204749.GA31733__22801.960577681$1353963050$gmane$org@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -14,10 +9,17 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1Td5PM-000864-O4
-	for lttng-dev@lists.lttng.org; Mon, 26 Nov 2012 15:36:01 -0500
+	(envelope-from <compudj@mail.openrapids.net>) id 1Td5aq-0008Ce-5q
+	for lttng-dev@lists.lttng.org; Mon, 26 Nov 2012 15:47:52 -0500
+Received: from localhost (localhost [127.0.0.1])
+	by blackscsi.openrapids.net (Postfix) with ESMTP id D6EE8140003
+	for <lttng-dev@lists.lttng.org>; Mon, 26 Nov 2012 15:47:51 -0500 (EST)
+Received: from blackscsi.openrapids.net ([127.0.0.1])
+	by localhost (blackscsi.openrapids.net [127.0.0.1]) (amavisd-new,
+	port 10024)
+	with ESMTP id 1sLe1SqDsNuD for <lttng-dev@lists.lttng.org>;
+	Mon, 26 Nov 2012 15:47:50 -0500 (EST)
 Content-Disposition: inline
-In-Reply-To: <20121126202836.GA30838@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -26,159 +28,31 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: David OShea <David.OShea@quantum.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Mathieu Desnoyers (mathieu.desnoyers@efficios.com) wrote:
-> * Mathieu Desnoyers (mathieu.desnoyers@efficios.com) wrote:
-> > * David OShea (David.OShea@quantum.com) wrote:
-> > > Hi Mathieu,
-> > > 
-> > > Thanks for the response and apologies for the delay in mine, please see below:
-> > > 
-> > > > -----Original Message-----
-> > > > From: Mathieu Desnoyers [mailto:mathieu.desnoyers@efficios.com]
-> > > > Sent: Tuesday, 20 November 2012 2:56 AM
-> > > > To: David OShea
-> > > > Cc: lttng-dev@lists.lttng.org
-> > > > Subject: Re: [lttng-dev] TRACEPOINT_PROVIDER mismatch check in ust-
-> > > > tracepoint-event.h needs -Wsystem-headers
-> > > [...]
-> > > > > I'm not sure if there is any way you could "fix" this so that
-> > > > > -Wsystem-headers isn't required, but perhaps it would at least be
-> > > > > worth documenting that this flag could be used - but perhaps not
-> > > > > recommend it - to enable those checks to occur.
-> > > > 
-> > > > I have not found any way to show those warnings from UST system headers
-> > > > without -Wsystem-headers. We have the following scenario:
-> > > > 
-> > > > probe C file
-> > > >   -> includes ust probe description file
-> > > >      -> includes tracepoint-event.h (system header)
-> > > >         -> includes ust probe description file
-> > > >         -> includes ust-tracepoint-event.h (system header) [1]
-> > > >            For each stage:
-> > > >              -> undef/define macros
-> > > >              -> includes ust probe description file
-> > > > 
-> > > > Since the actual functions are created by the compiler in the scope of
-> > > > ust-tracepoint-event.h [1] (a system header), the warnings are
-> > > > inhibited
-> > > > unless we specify -Wsystem-headers.
-> > > [...]
-> > > > So I guess documenting this would be the right way to do it, unless
-> > > > anyone has a better idea ?
-> > > 
-> > > I don't know much about the macros in ust-tracepoint-event.h, so this
-> > > might not make any sense, but could you have the
-> > > __tracepoint_provider_check_##TRACEPOINT_PROVIDER() function actually
-> > > get called from the __lttng_events_init__##TRACEPOINT_PROVIDER()
-> > > (constructor) function?  I assume this would mean you'd get link-time
-> > > errors if you have a provider name mismatch.  It would also mean a lot
-> > > of useless calls to empty functions at startup, but I assume that
-> > > really shouldn't take too long.  Perhaps this checking could be a
-> > > compile-time option, so that if you're concerned about the startup
-> > > time impact you can disable it, or perhaps the functions could be
-> > > marked as inline?
-> > 
-> > That makes sense!
-> > 
-> > Can you try the following patch and let me know if it fixes your
-> > problem?
-> 
-> hrm, actually, even without the patch, I get:
-> 
-> sample.o:(__tracepoints+0x18): undefined reference to `__tracepoint_provider_sadfasdmple_component'
-> 
-> if I try to compile a tracepoint with an incorrect provider name. So the
-> patch would not be needed. I'm using gcc 4.7.2 (Debian 4.7.2-4).
-> 
-> Maybe the fact that you don't get any linker error is because of
-> specific behavior wrt unused attribute of your gcc 4.3.3 ?
+LTTng-UST, the Linux Trace Toolkit Next Generation Userspace Tracer, is
+port of the low-overhead tracing capabilities of the LTTng kernel tracer
+to user-space. The library "liblttng-ust" enables tracing of
+applications and libraries.
 
-Ah, but indeed, the linking error, only in the application, is not very
-verbose. If I install the patch into my system, I get:
+Changelog:
+2012-11-26 lttng-ust 2.0.6
+        * Print probe provider mismatch error even without -Wsystem-headers
+        * Fix: Conditionally disable tests requiring shared libs support
+        * Cleanup: don't spawn per-user thread if HOME is not set
+        * Fix: Fix self-assign warning on struct ustfork_clone_info init
+        * Fix: memcpy of string is larger than source
+        * liblttng-ust-fork: override daemon() call
+        * Build out of src tree
+        * Fix: manpage typo "-lllttng-ust" -> "-llttng-ust"
+        * Manpage update: document use in daemons
+        * Fix: get_wait_shm() ust mutex deadlock (add 2 missing exit calls)
+        * Fix: get_wait_shm() ust mutex deadlock
 
-sample.o:(__tracepoints+0x18): undefined reference to `__tracepoint_provider_sadfasdmple_component'
-tp.o: In function `__lttng_events_init__sample_component':
-tp.c:(.text.startup+0x7): undefined reference to `__tracepoint_provider_mismatch_sadfasdmple_component'
-tp.c:(.text.startup+0xe): undefined reference to `__tracepoint_provider_mismatch_sadfasdmple_component'
-collect2: ld returned 1 exit status
-
-So yes, I think I'll pull this patch into master and stable-2.0. Thanks!
-
-Mathieu
-
-> 
-> Thanks,
-> 
-> Mathieu
-> 
-> > 
-> > Thanks,
-> > 
-> > Mathieu
-> > 
-> > commit f26441658685b281756ccbc8f74d70b9f2e6dad5
-> > Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> > Date:   Mon Nov 26 15:14:24 2012 -0500
-> > 
-> >     Print probe provider mismatch error even without -Wsystem-headers
-> >     
-> >     Suggested-by: David OShea <David.OShea@quantum.com>
-> >     Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> > 
-> > diff --git a/include/lttng/ust-tracepoint-event.h b/include/lttng/ust-tracepoint-event.h
-> > index 8f804d6..c341e04 100644
-> > --- a/include/lttng/ust-tracepoint-event.h
-> > +++ b/include/lttng/ust-tracepoint-event.h
-> > @@ -72,7 +72,7 @@ void _TP_COMBINE_TOKENS(__tracepoint_provider_mismatch_, TRACEPOINT_PROVIDER)(vo
-> >  #define TRACEPOINT_EVENT_INSTANCE(_provider, _template, _name, _args)	\
-> >  	__tracepoint_provider_mismatch_##_provider();
-> >  
-> > -static __attribute__((unused))
-> > +static inline
-> >  void _TP_COMBINE_TOKENS(__tracepoint_provider_check_, TRACEPOINT_PROVIDER)(void)
-> >  {
-> >  #include TRACEPOINT_INCLUDE
-> > @@ -655,6 +655,15 @@ _TP_COMBINE_TOKENS(__lttng_events_init__, TRACEPOINT_PROVIDER)(void)
-> >  {
-> >  	int ret;
-> >  
-> > +	/*
-> > +	 * __tracepoint_provider_check_ ## TRACEPOINT_PROVIDER() is a
-> > +	 * static inline function that ensures every probe PROVIDER
-> > +	 * argument match the provider within which they appear. It
-> > +	 * calls empty static inline functions, and therefore has no
-> > +	 * runtime effect. However, if it detects an error, a linker
-> > +	 * error will appear.
-> > +	 */
-> > +	_TP_COMBINE_TOKENS(__tracepoint_provider_check_, TRACEPOINT_PROVIDER)();
-> >  	ret = lttng_probe_register(&_TP_COMBINE_TOKENS(__probe_desc___, TRACEPOINT_PROVIDER));
-> >  	assert(!ret);
-> >  }
-> > -- 
-> > Mathieu Desnoyers
-> > Operating System Efficiency R&D Consultant
-> > EfficiOS Inc.
-> > http://www.efficios.com
-> > 
-> > _______________________________________________
-> > lttng-dev mailing list
-> > lttng-dev@lists.lttng.org
-> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> 
-> -- 
-> Mathieu Desnoyers
-> Operating System Efficiency R&D Consultant
-> EfficiOS Inc.
-> http://www.efficios.com
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+Project website: http://lttng.org
+Download link: http://lttng.org/download
+(please refer to the README file for installation instructions)
 
 -- 
 Mathieu Desnoyers
