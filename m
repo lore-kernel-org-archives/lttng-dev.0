@@ -1,20 +1,20 @@
 From: Andrew Gabbasov <andrew_gabbasov@mentor.com>
-Subject: [PATCH lttng-modules] Make upper bound of kernel
-	version checking macro exclusive
-Date: Tue, 27 Nov 2012 06:21:53 -0600
-Message-ID: <1354018913-14211-1-git-send-email-andrew_gabbasov__40539.8945360959$1354018968$gmane$org@mentor.com>
+Subject: [PATCH lttng-modules] Update using of kernel version
+	checking macro to new range
+Date: Tue, 27 Nov 2012 06:22:26 -0600
+Message-ID: <1354018946-14252-1-git-send-email-andrew_gabbasov__39765.2026302696$1354018995$gmane$org@mentor.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Andrew_Gabbasov@mentor.com>) id 1TdKB0-000716-Ss
-	for lttng-dev@lists.lttng.org; Tue, 27 Nov 2012 07:22:10 -0500
+	(envelope-from <Andrew_Gabbasov@mentor.com>) id 1TdKBT-00071w-J4
+	for lttng-dev@lists.lttng.org; Tue, 27 Nov 2012 07:22:39 -0500
 Received: from svr-orw-exc-10.mgc.mentorg.com ([147.34.98.58])
 	by relay1.mentorg.com with esmtp
-	id 1TdKAu-0005Iy-PT from Andrew_Gabbasov@mentor.com
-	for lttng-dev@lists.lttng.org; Tue, 27 Nov 2012 04:22:04 -0800
+	id 1TdKBO-0005Kj-3e from Andrew_Gabbasov@mentor.com
+	for lttng-dev@lists.lttng.org; Tue, 27 Nov 2012 04:22:34 -0800
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -26,31 +26,25 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-It's more usable to have the upper limit exclusive. It helps to avoid
-hardcoding of stable branch highest version number, i.e. having a range
-from 3.1.0 up to 3.2.0 (exclusively) gives us all 3.1.x versions.
-
 Signed-off-by: Andrew Gabbasov <andrew_gabbasov@mentor.com>
 ---
- lttng-kernel-version.h |    4 ++--
+ probes/lttng-probe-vmscan.c |    4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/lttng-kernel-version.h b/lttng-kernel-version.h
-index 280a398..0eb56b3 100644
---- a/lttng-kernel-version.h
-+++ b/lttng-kernel-version.h
-@@ -27,10 +27,10 @@
+diff --git a/probes/lttng-probe-vmscan.c b/probes/lttng-probe-vmscan.c
+index 0205c7e..4f5739c 100644
+--- a/probes/lttng-probe-vmscan.c
++++ b/probes/lttng-probe-vmscan.c
+@@ -39,8 +39,8 @@
+ #define CREATE_TRACE_POINTS
+ #define TRACE_INCLUDE_PATH ../instrumentation/events/lttng-module
  
- /*
-  * This macro checks if the kernel version is between the two specified
-- * versions (inclusive).
-+ * versions (lower limit inclusive, upper limit exclusive).
-  */
- #define LTTNG_KERNEL_RANGE(a_low, b_low, c_low, a_high, b_high, c_high) \
- 	(LINUX_VERSION_CODE >= KERNEL_VERSION(a_low, b_low, c_low) && \
--	 LINUX_VERSION_CODE <= KERNEL_VERSION(a_high, b_high, c_high))
-+	 LINUX_VERSION_CODE < KERNEL_VERSION(a_high, b_high, c_high))
+-#if (LINUX_VERSION_CODE <= KERNEL_VERSION(3,0,38)) || \
+-	LTTNG_KERNEL_RANGE(3,1,0, 3,1,10)
++#if ((LINUX_VERSION_CODE <= KERNEL_VERSION(3,0,38)) || \
++	LTTNG_KERNEL_RANGE(3,1,0, 3,2,0))
+ typedef int isolate_mode_t;
+ #endif
  
- #endif /* _LTTNG_KERNEL_VERSION_H */
 -- 
 1.7.10.4
