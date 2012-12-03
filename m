@@ -1,8 +1,8 @@
-From: David Goulet <dgoulet@ev0ke.net>
+From: David Goulet <dgoulet@efficios.com>
 Subject: Re: Segmentation fault in lttng-sessiond which is fixed
  in master
-Date: Mon, 03 Dec 2012 11:09:19 -0500
-Message-ID: <50BCCEAF.1030004__27538.8037473478$1354551017$gmane$org@ev0ke.net>
+Date: Mon, 03 Dec 2012 14:41:14 -0500
+Message-ID: <50BD005A.70303__38408.2126118757$1354563719$gmane$org@efficios.com>
 References: <20998D40D9A2B7499CA5A3A2666CB1EB19F88254@ZURMSG1.QUANTUM.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,8 +10,8 @@ Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from smtp.ini-tech.com ([213.239.202.151])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@ev0ke.net>) id 1TfYaB-00071H-Rg
-	for lttng-dev@lists.lttng.org; Mon, 03 Dec 2012 11:09:24 -0500
+	(envelope-from <dgoulet@efficios.com>) id 1TfbtI-00007e-1o
+	for lttng-dev@lists.lttng.org; Mon, 03 Dec 2012 14:41:20 -0500
 In-Reply-To: <20998D40D9A2B7499CA5A3A2666CB1EB19F88254@ZURMSG1.QUANTUM.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -25,13 +25,28 @@ To: David OShea <David.OShea@quantum.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi David,
+Follow up. Just pushed a fix.
 
-Yes, it was fixed and cleaned up not long ago in 2.1.
+Please ping me if any problem occurs!
 
-I'll make sure to port the fix here.
+commit df3f5eb071e2af70de8a207ac41ea3cd5c1d44c3
+Author: David Goulet <dgoulet@efficios.com>
+Date:   Mon Dec 3 14:34:45 2012 -0500
 
-Comments below:
+    Fix: Delete UST app session on ustctl create error
+
+    This has been updated in upstream master (see commit:
+    0f83395d5e0e927fdab025eae023e68e9021af26).
+
+    There was also a check missing at one of the callsite.
+
+    http://lists.lttng.org/pipermail/lttng-dev/2012-December/019208.html
+
+    Reported-by: David OShea <David.OShea@quantum.com>
+    Signed-off-by: David Goulet <dgoulet@efficios.com>
+
+Thanks!
+David
 
 David OShea:
 > Hi all,
@@ -84,16 +99,7 @@ David OShea:
 > 
 > 1. Why is this error handling code being reached - what does the comment /* This means that the tracer is gone... */ mean - does it mean lttng-ust in a user process connected to the session daemon but the process went away or something like that?
 > 
-
-Yes this is basically it. Tracer malfunction or the process is gone.
-
 > 2. Should the above commit be merged into the stable branch?  I'm not concerned either way as I'll probably just apply the patch to 2.0.4 when I get a chance.
-
-It will be.
-
-Thanks!
-David
-
 > 
 > Thanks!
 > David
