@@ -1,10 +1,8 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-tools] Link test utilities
-	against	urcu-bp
-Date: Mon, 3 Dec 2012 09:03:04 -0500
-Message-ID: <20121203140304.GA3546__3330.67891556329$1354543437$gmane$org@Krystal>
-References: <20121128151359.GA2051@quintessa> <50B64AB6.6080904@efficios.com>
-	<20121128210845.GA30284@quintessa>
+Subject: Re: Test if tracepoint is enabled
+Date: Mon, 3 Dec 2012 09:34:21 -0500
+Message-ID: <20121203143421.GA4458__37530.005144845$1354545299$gmane$org@Krystal>
+References: <50B43D06.7020709@quantum.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -12,10 +10,10 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1TfWbx-00060K-Lu
-	for lttng-dev@lists.lttng.org; Mon, 03 Dec 2012 09:03:05 -0500
+	(envelope-from <compudj@mail.openrapids.net>) id 1TfX6E-0006GW-DR
+	for lttng-dev@lists.lttng.org; Mon, 03 Dec 2012 09:34:22 -0500
 Content-Disposition: inline
-In-Reply-To: <20121128210845.GA30284@quintessa>
+In-Reply-To: <50B43D06.7020709@quantum.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,74 +22,76 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: David Bryant <david.bryant@quantum.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-* Jon Bernard (jbernard@debian.org) wrote:
-> * David Goulet <dgoulet@efficios.com> wrote:
-> > Hi Jon,
-> > 
-> > Can you enlighten us on what setup are you using?
-> > 
-> > This symbol is used by lttng-ust which is linked with -lurcu-bp so
-> > lttng-tools should not have an issue here.
-> > 
-> > Are you cross-compiling ?
-> 
-> Nothing unusual, I'm building lttng-tools (version 2.1.8~rc8) from source
-> against URCU version 0.7.5 and UST version 2.1.0~rc2.  During compilation
-> (configure with no additional parameters), I see the following:
-> 
->     make[3]: Entering directory `tests/tools/streaming'
->     CC     unit_tests.o
->     CCLD   unit_tests
->     CC     gen-ust-events.o
->     CC     tp.o
->     CCLD   gen-ust-events
->     /usr/bin/ld: tp.o: undefined reference to symbol 'rcu_dereference_sym'
-> 
-> This link error occurs on each of the gen-events targets as there is no explicit
-> link against urcu-bp.  I must have something different, as I'm sure you'd have
-> noticed this earlier.  What additional information might you need?
+* David Bryant (david.bryant@quantum.com) wrote:
+> Hi all,
+>
+> Is it feasible to have an officially supported way of determining if a  
+> tracepoint is currently enabled?
+>
+> In my code I would like to test if the tracepoint is enabled, and if it  
+> isn't, avoid doing expensive setup work.
+>
+> I've been doing the following:
+>
+>   if  
+> (__builtin_expect(!!(__tracepoint_sample_component___message.state), 0)) 
+> {
+>       /* setup work */
+>       tracepoint(sample_component, message);
+>       /* cleanup work */
+>   }
+>
+> But it's weak for two reasons:
+>
+>  * The 'state' attribute goes true when the tracepoint is enabled, but
+>    stays true after the tracepoint is disabled. It only goes false when
+>    the session is destroyed.
+>  * It uses a private / unofficial API
+>
+> What I'd like is an official API that correctly evaluates whether a  
+> tracepoint is enabled or not?
+>
+> Is this possible?
 
-Hi Jon,
+Something like:
 
-It looks like something we already fixed in lttng-ust, but maybe the fix
-needs to be ported to tools also.
+   tracepoint_cond(provider, name, cond, ...)
 
-See lttng-ust:
+might do it.
 
-commit faebb41808b9deda5ef5dfea0c035077407e7f9f
-Author: Christian Babeux <christian.babeux@efficios.com>
-Date:   Thu Aug 2 18:55:11 2012 -0400
+Where "cond" would be an expression (could be a statement-expression),
+e.g.:
 
-    Fix: Libtool fails to find dependent libraries when cross-compiling lttng-ust
-    
-    This problem arise when cross compiling and linking libraries with
-    indirect libraries dependencies (such as liblttng-ust). This "bug" is
-    caused by an upstream modification in the libtool package on Debian
-    system. The libtool "link_all_deplibs" flag is set to "no" by default
-    on linux targets (AFAIK, other distros set it to "unknown").
-    
-    The chosen solution is to detect such cases via the configure script
-    and automagically patch the libtool.m4 by forcing the "link_all_deplibs"
-    to "unknown".
-    
-    This fixup can be disabled with the appropriate configure flag:
-    
-    ./configure --disable-libtool-linkdep-fixup
-    
-    Sample configure output on affected systems:
-    
-    checking for occurence(s) of link_all_deplibs = no in
-             ./config/libtool.m4... 3
-    configure: WARNING: the detected libtool will not link all
-               dependencies, forcing link_all_deplibs = unknown
-    
-    Fixes: #321
-    
-    Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
-    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+tracepoint_cond(myprovider, myevent,
+        ({
+                a = something;
+                z = other;
+                a == z;
+        }),
+        a, z);
+
+So we could, in addition to perform some setup, also evaluate a
+condition before calling the tracepoint. The macro might look like
+(without the '\' at EOL):
+
+#define tracepoint_cond(provider, name, cond, ...)
+        do {
+                if (caa_unlikely(__tracepoint_##provider##___##name.state)) {
+                        if (cond)
+                                __tracepoint_cb_##provider##___##name(__VA_ARGS__);
+                }
+        } while (0)
+
+So in your case, a statement-expression that evaluates to "true" would
+be fine.
+
+Note that adding support for STAP_PROBEV in there might be a bit less
+straightforward, because STAP_PROBEV don't depend on the tracepoint
+state.
 
 Thoughts ?
 
@@ -100,16 +100,18 @@ Thanks,
 Mathieu
 
 
-> 
-> Cheers
-> 
-> -- 
-> Jon
-> 
+>
+> Thanks,
+> Dave
+>
+> ----------------------------------------------------------------------
+> The information contained in this transmission may be confidential. Any disclosure, copying, or further distribution of confidential information is not permitted unless such privilege is explicitly granted in writing by Quantum. Quantum reserves the right to have electronic communications, including email and attachments, sent across its networks filtered through anti virus and spam software programs and retain such messages in order to comply with applicable data security and retention requirements. Quantum is not responsible for the proper and complete transmission of the substance of this communication or for any delay in its receipt.
+
 > _______________________________________________
 > lttng-dev mailing list
 > lttng-dev@lists.lttng.org
 > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
 
 -- 
 Mathieu Desnoyers
