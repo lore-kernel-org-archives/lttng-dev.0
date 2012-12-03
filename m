@@ -1,26 +1,21 @@
-From: David OShea <David.OShea@quantum.com>
-Subject: Segmentation fault in lttng-sessiond which is fixed in
-	master
-Date: Mon, 3 Dec 2012 04:39:55 +0000
-Message-ID: <20998D40D9A2B7499CA5A3A2666CB1EB19F88254__38812.6803598881$1354509644$gmane$org@ZURMSG1.QUANTUM.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH lttng-modules] Update kernel probes to
+	more	detailed match to kernel versions
+Date: Mon, 3 Dec 2012 08:55:13 -0500
+Message-ID: <20121203135513.GA3426__26481.1151697815$1354542954$gmane$org@Krystal>
+References: <20121128155032.GA9266@Krystal>
+	<6C5EA58090A5ED459815C4D04C2B466F8C566A47@EU-MBX-01.mgc.mentorg.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mx0a-000ceb01.pphosted.com ([67.231.144.126])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <prvs=86843c8789=david.oshea@quantum.com>)
-	id 1TfNp2-0001Nh-VX
-	for lttng-dev@lists.lttng.org; Sun, 02 Dec 2012 23:40:01 -0500
-Received: from pps.filterd (m0030277 [127.0.0.1])
-	by mx0a-000ceb01.pphosted.com (8.14.5/8.14.5) with SMTP id
-	qB34bWHN007820
-	for <lttng-dev@lists.lttng.org>; Sun, 2 Dec 2012 20:39:59 -0800
-Received: from ppoxedge2.quantum.com ([146.174.252.28])
-	by mx0a-000ceb01.pphosted.com with ESMTP id 190ctm0r10-1
-	(version=TLSv1/SSLv3 cipher=AES128-SHA bits=128 verify=NOT)
-	for <lttng-dev@lists.lttng.org>; Sun, 02 Dec 2012 20:39:59 -0800
-Content-Language: en-US
+	(envelope-from <compudj@mail.openrapids.net>) id 1TfWUN-0005v0-JG
+	for lttng-dev@lists.lttng.org; Mon, 03 Dec 2012 08:55:15 -0500
+Content-Disposition: inline
+In-Reply-To: <6C5EA58090A5ED459815C4D04C2B466F8C566A47@EU-MBX-01.mgc.mentorg.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -29,63 +24,107 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: "Gabbasov, Andrew" <Andrew_Gabbasov@mentor.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi all,
+* Gabbasov, Andrew (Andrew_Gabbasov@mentor.com) wrote:
+> Hi Mathieu,
+> 
+> > * Andrew Gabbasov (andrew_gabbasov@mentor.com) wrote:
+> > > We have added some more ifdef's to kernel probes to more closely match
+> > > the kernel tracepoints for different kernel versions. The changes cover
+> > > kernel versions from 2.6.38 up to 3.7. We did not track the earlier
+> > > versions, and they are filtered out in probes Makefile.
+> > >
+> > > ext3 probe was modified to use #include <../fs/ext3/ext3.h> instead of
+> > > copying this include from kernel source to lttng-modules source.
+> > > Using such includes (there will be more similar in other probes)
+> > > imposes a restriction to use the full kernel source for building
+> > > lttng-modules rather than having just kernel "include" directory,
+> > > but it looks like full source is required anyway, at least with respect
+> > > to Makefiles structure. May be it is worth mentioning somewhere
+> > > in the documentation.
+> > >
+> > > The code was verified to compile with latest versions in all stable
+> > > branches from 2.6.38.x to 3.6.x and 3.7-rc7.
+> > 
+> > I get this build failure on 3.5 with this patch:
+> > 
+> >   CC [M]  /home/compudj/work/lttng-modules/probes/lttng-probe-ext3.o
+> > /home/compudj/work/lttng-modules/probes/lttng-probe-ext3.c:30:29: fatal
+> > error: ../fs/ext3/ext3.h: No such file or directory
+> > compilation terminated.
+> > 
+> > can you look into it and submit a revised patch ?
+> 
+> You must be using kernel headers for building lttng-modules
+> (linux-headers package or something like that), right? This is what I
+> was writing about: since ext3.h is not available in kernel's "include"
+> directory, and in order to avoid duplicating this file in
+> lttng-modules sources, we have to use that <../> based reference, and
+> this requires having full kernel source for building. The same issue
+> will later be with btrfs and ext4 probes: their necessary include
+> files are also not available in kernel headers. 
+> 
+> Trying to duplicate these header files to lttng-modules source seems
+> to be not a good idea, especially if we need to add many ifdef's to
+> them to track different kernel versions. We can try to insert some
+> checks to the Makefile and skip building those probes if we do not
+> have full kernel sources (actually if we do not have necessary include
+> files). Or to declare having full kernel source as a requirement for
+> building lttng-modules. What do you think?
 
-I'm using lttng-tools-2.0.4.  I got a segmentation fault in lttng-sessiond with this stack trace:
+The user experience should be that if lttng-modules is built against
+linux-headers packages, the build should work fine, even if it means
+some extra features are disabled.
 
-"""
-#0  delete_ust_app_session (sock=-1, ua_sess=0xffffffffffffffff) at ust-app.c:147
-#1  0x000000000040cab5 in create_ust_app_session (usess=0x148adc10, app=0x148c0ef0) at ust-app.c:914
-#2  0x000000000040db14 in ust_app_global_update (usess=0x148adc10, sock=187) at ust-app.c:2309
-#3  0x0000000000412c96 in update_ust_app (app_sock=<optimized out>) at main.c:855
-#4  thread_manage_apps (data=<optimized out>) at main.c:1257
-#5  0x00002b872bffb617 in start_thread () from /lib64/libpthread.so.0
-#6  0x00002b872c2e3c2d in clone () from /lib64/libc.so.6
-#7  0x0000000000000000 in ?? ()
-"""
+And we don't want local copies of kernel headers, because then we could
+trigger runtime bugs if the headers don't match between the kernel
+version and local version.
 
-It looks like in create_ust_app_session() this code must have executed:
+> 
+> > Also, although the README file states that we support only 3.6.38+, we
+> > happen to also have support for kernels down to 2.6.32 with the patches
+> > in the linux-patches/ directory applied to the appropriate kernel
+> > versions. So it would be good that the instrumentation compiles for
+> > those older kernels too. I promise we won't go further back than 2.6.32
+> > though.
+> 
+> We'll try to add the ifdef's for earlier version down to 2.6.32 to the
+> probes, although the additional amount of conditions makes the code
+> overcomplicated ;-)
 
-"""
-	if (ua_sess->handle == -1) {
-		ret = ustctl_create_session(app->sock);
-		if (ret < 0) {
-			ERR("Creating session for app pid %d", app->pid);
-			/* This means that the tracer is gone... */
-			ua_sess = (void*) -1UL;
-			goto error;
-"""
+Indeed, but I never said supporting various kernels was easy ;)
 
-as this is the location of the call to delete_ust_app_session():
+I don't care immensely if older kernels have less features: in some
+cases, it can be just OK to disable an entire tracepoint probe for older
+kernels. I just want the build to work fine for those.
 
-"""
-error:
-	delete_ust_app_session(-1, ua_sess);
-"""
+By the way, we're planning to go for a 2.1 release in a matter of days.
+At that point, I'll have to decide if we keep the recent instrumentation
+commits introduced after the start of the -rc cycle in this release (if
+mature enough), or if we should branch before those for the 2.1 release
+if they need more testing (and keep these instrumentation extensions for
+2.2). Any thoughts on this ?
 
-I see that in git master, this seems to have been fixed by:
+Thanks,
 
-"""
-commit 0f83395d5e0e927fdab025eae023e68e9021af26
-Author: David Goulet <dgoulet@efficios.com>
-Date:   Mon Oct 29 14:49:50 2012 -0400
+Mathieu
 
-    Fix: Cleanup UST app session on ustctl create session error
-"""
+> 
+> > Thanks,
+> > 
+> > Mathieu
+> 
+> Thanks.
+> 
+> Best regards,
+> Andrew Gabbasov
+> 
 
-which ensures that ua_sess is not set to -1 until after delete_ust_app_session() is called.
-
-I have two queries about this:
-
-1. Why is this error handling code being reached - what does the comment /* This means that the tracer is gone... */ mean - does it mean lttng-ust in a user process connected to the session daemon but the process went away or something like that?
-
-2. Should the above commit be merged into the stable branch?  I'm not concerned either way as I'll probably just apply the patch to 2.0.4 when I get a chance.
-
-Thanks!
-David
-
-----------------------------------------------------------------------
-The information contained in this transmission may be confidential. Any disclosure, copying, or further distribution of confidential information is not permitted unless such privilege is explicitly granted in writing by Quantum. Quantum reserves the right to have electronic communications, including email and attachments, sent across its networks filtered through anti virus and spam software programs and retain such messages in order to comply with applicable data security and retention requirements. Quantum is not responsible for the proper and complete transmission of the substance of this communication or for any delay in its receipt.
+-- 
+Mathieu Desnoyers
+Operating System Efficiency R&D Consultant
+EfficiOS Inc.
+http://www.efficios.com
