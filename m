@@ -1,20 +1,26 @@
-From: "Woegerer, Paul" <Paul_Woegerer@mentor.com>
-Subject: Re: "No space left on device" results in corrupt trace
- data set
-Date: Thu, 29 Nov 2012 10:21:42 +0100
-Message-ID: <50B72926.9060900__25154.0989768275$1354180916$gmane$org@mentor.com>
-References: <50A655A1.6040804@mentor.com> <50A65BC4.3020708@efficios.com>
-	<20121116153029.GB23798@Krystal> <50A65E22.3040203@mentor.com>
-	<50A661B4.10009@polymtl.ca>
+From: David OShea <David.OShea@quantum.com>
+Subject: Segmentation fault in lttng-sessiond which is fixed in
+	master
+Date: Mon, 3 Dec 2012 04:39:55 +0000
+Message-ID: <20998D40D9A2B7499CA5A3A2666CB1EB19F88254__38812.6803598881$1354509644$gmane$org@ZURMSG1.QUANTUM.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from relay1.mentorg.com ([192.94.38.131])
+Received: from mx0a-000ceb01.pphosted.com ([67.231.144.126])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Paul_Woegerer@mentor.com>) id 1Te0J4-0002qz-7K
-	for lttng-dev@lists.lttng.org; Thu, 29 Nov 2012 04:21:18 -0500
-In-Reply-To: <50A661B4.10009@polymtl.ca>
+	(envelope-from <prvs=86843c8789=david.oshea@quantum.com>)
+	id 1TfNp2-0001Nh-VX
+	for lttng-dev@lists.lttng.org; Sun, 02 Dec 2012 23:40:01 -0500
+Received: from pps.filterd (m0030277 [127.0.0.1])
+	by mx0a-000ceb01.pphosted.com (8.14.5/8.14.5) with SMTP id
+	qB34bWHN007820
+	for <lttng-dev@lists.lttng.org>; Sun, 2 Dec 2012 20:39:59 -0800
+Received: from ppoxedge2.quantum.com ([146.174.252.28])
+	by mx0a-000ceb01.pphosted.com with ESMTP id 190ctm0r10-1
+	(version=TLSv1/SSLv3 cipher=AES128-SHA bits=128 verify=NOT)
+	for <lttng-dev@lists.lttng.org>; Sun, 02 Dec 2012 20:39:59 -0800
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,45 +29,63 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Julien Desfossez <julien.desfossez@polymtl.ca>
-Cc: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-On 11/16/2012 04:54 PM, Julien Desfossez wrote:
->> Does that mean that the live tracing feature that currently lives in the
->> lttngtop-live branch will go into lttng-tools and babeltrace any time so=
-on ?
-> =
+Hi all,
 
-> The main change of lttng-tools 2.2 is the live tracing feature.
-> The way it is implemented in the lttngtop-live branch is more a
-> proof-of-concept, we will be starting the clean implementation
-> discussions here as soon as we have lttng-tools 2.1 released (which
-> should be around the end of this month).
+I'm using lttng-tools-2.0.4.  I got a segmentation fault in lttng-sessiond with this stack trace:
 
-Hi Julien,
+"""
+#0  delete_ust_app_session (sock=-1, ua_sess=0xffffffffffffffff) at ust-app.c:147
+#1  0x000000000040cab5 in create_ust_app_session (usess=0x148adc10, app=0x148c0ef0) at ust-app.c:914
+#2  0x000000000040db14 in ust_app_global_update (usess=0x148adc10, sock=187) at ust-app.c:2309
+#3  0x0000000000412c96 in update_ust_app (app_sock=<optimized out>) at main.c:855
+#4  thread_manage_apps (data=<optimized out>) at main.c:1257
+#5  0x00002b872bffb617 in start_thread () from /lib64/libpthread.so.0
+#6  0x00002b872c2e3c2d in clone () from /lib64/libc.so.6
+#7  0x0000000000000000 in ?? ()
+"""
 
-I looked for "live tracing" related commits in the git repos but could
-find anything. There is also no RFC yet under:
-http://git.lttng.org/?p=3Dlttng-tools.git;a=3Dtree;f=3Ddoc/proposals;hb=3DH=
-EAD
+It looks like in create_ust_app_session() this code must have executed:
 
-Does development happen on some branch that I missed or did it simply
-not start yet.
+"""
+	if (ua_sess->handle == -1) {
+		ret = ustctl_create_session(app->sock);
+		if (ret < 0) {
+			ERR("Creating session for app pid %d", app->pid);
+			/* This means that the tracer is gone... */
+			ua_sess = (void*) -1UL;
+			goto error;
+"""
 
-Thanks,
-Paul
+as this is the location of the call to delete_ust_app_session():
 
+"""
+error:
+	delete_ust_app_session(-1, ua_sess);
+"""
 
--- =
+I see that in git master, this seems to have been fixed by:
 
-Paul Woegerer | SW Development Engineer
-http://go.mentor.com/sourceryanalyzer
+"""
+commit 0f83395d5e0e927fdab025eae023e68e9021af26
+Author: David Goulet <dgoulet@efficios.com>
+Date:   Mon Oct 29 14:49:50 2012 -0400
 
-Mentor Embedded(tm) | Prinz Eugen Stra=DFe 72/2/4, Vienna, 1040 Austria
-Nucleus=AE | Linux=AE | Android(tm) | Services | UI | Multi-OS
+    Fix: Cleanup UST app session on ustctl create session error
+"""
 
-Android is a trademark of Google Inc. Use of this trademark is subject
-to Google Permissions.
-Linux is the registered trademark of Linus Torvalds in the U.S. and
-other countries.
+which ensures that ua_sess is not set to -1 until after delete_ust_app_session() is called.
+
+I have two queries about this:
+
+1. Why is this error handling code being reached - what does the comment /* This means that the tracer is gone... */ mean - does it mean lttng-ust in a user process connected to the session daemon but the process went away or something like that?
+
+2. Should the above commit be merged into the stable branch?  I'm not concerned either way as I'll probably just apply the patch to 2.0.4 when I get a chance.
+
+Thanks!
+David
+
+----------------------------------------------------------------------
+The information contained in this transmission may be confidential. Any disclosure, copying, or further distribution of confidential information is not permitted unless such privilege is explicitly granted in writing by Quantum. Quantum reserves the right to have electronic communications, including email and attachments, sent across its networks filtered through anti virus and spam software programs and retain such messages in order to comply with applicable data security and retention requirements. Quantum is not responsible for the proper and complete transmission of the substance of this communication or for any delay in its receipt.
