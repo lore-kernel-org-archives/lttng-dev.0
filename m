@@ -1,76 +1,137 @@
-From: Hui Zhu <teawater@gmail.com>
-Subject: Request change name of function lookup_enum in libbabeltrace to make GDB use this lib
-Date: Wed, 5 Dec 2012 19:37:18 +0800
-Message-ID: <CANFwon2s-eJoCrhzJmxhoGx9G2NeOAFf-FDFk1SoxD1OhPxWsg@mail.gmail.com>
+From: "Gabbasov, Andrew" <Andrew_Gabbasov@mentor.com>
+Subject: Re: [PATCH lttng-modules] Update kernel probes to
+	more	detailed match to kernel versions
+Date: Wed, 5 Dec 2012 11:39:52 +0000
+Message-ID: <6C5EA58090A5ED459815C4D04C2B466F8C567BBB__2573.81626074693$1354707636$gmane$org@EU-MBX-01.mgc.mentorg.com>
+References: <20121128155032.GA9266@Krystal>
+	<6C5EA58090A5ED459815C4D04C2B466F8C566A47@EU-MBX-01.mgc.mentorg.com>,
+	<20121203135513.GA3426@Krystal>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-1
-Return-path: <gdb-return-41616-gdb-gdb=m.gmane.org@sourceware.org>
-List-Unsubscribe: <mailto:gdb-unsubscribe-gdb-gdb=m.gmane.org@sourceware.org>
-List-Subscribe: <mailto:gdb-subscribe@sourceware.org>
-List-Archive: <http://sourceware.org/ml/gdb/>
-List-Post: <mailto:gdb@sourceware.org>
-List-Help: <mailto:gdb-help@sourceware.org>, <http://sourceware.org/ml/#faqs>
-Sender: gdb-owner@sourceware.org
-To: lttng-dev <lttng-dev@lists.lttng.org>
-Cc: gdb@sourceware.org, Tom Tromey <tromey@redhat.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from relay1.mentorg.com ([192.94.38.131])
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <Andrew_Gabbasov@mentor.com>) id 1TgDKb-0003ij-Qo
+	for lttng-dev@lists.lttng.org; Wed, 05 Dec 2012 06:40:02 -0500
+In-Reply-To: <20121203135513.GA3426@Krystal>
+Content-Language: en-US
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
+Hi Mathieu,
 
-I am working on add CTF support to GDB.  You can see my patch review threads in:
-http://sourceware.org/ml/gdb-patches/2012-11/msg00552.html
-http://sourceware.org/ml/gdb-patches/2012-11/msg00554.html
-http://sourceware.org/ml/gdb-patches/2012-11/msg00553.html
-http://sourceware.org/ml/gdb-patches/2012-11/msg00555.html
-http://sourceware.org/ml/gdb-patches/2012-11/msg00556.html
+> * Gabbasov, Andrew (Andrew_Gabbasov@mentor.com) wrote:
+> > Hi Mathieu,
+> >
+> > > * Andrew Gabbasov (andrew_gabbasov@mentor.com) wrote:
+> > > > We have added some more ifdef's to kernel probes to more closely match
+> > > > the kernel tracepoints for different kernel versions. The changes cover
+> > > > kernel versions from 2.6.38 up to 3.7. We did not track the earlier
+> > > > versions, and they are filtered out in probes Makefile.
+> > > >
+> > > > ext3 probe was modified to use #include <../fs/ext3/ext3.h> instead of
+> > > > copying this include from kernel source to lttng-modules source.
+> > > > Using such includes (there will be more similar in other probes)
+> > > > imposes a restriction to use the full kernel source for building
+> > > > lttng-modules rather than having just kernel "include" directory,
+> > > > but it looks like full source is required anyway, at least with respect
+> > > > to Makefiles structure. May be it is worth mentioning somewhere
+> > > > in the documentation.
+> > > >
+> > > > The code was verified to compile with latest versions in all stable
+> > > > branches from 2.6.38.x to 3.6.x and 3.7-rc7.
+> > >
+> > > I get this build failure on 3.5 with this patch:
+> > >
+> > >   CC [M]  /home/compudj/work/lttng-modules/probes/lttng-probe-ext3.o
+> > > /home/compudj/work/lttng-modules/probes/lttng-probe-ext3.c:30:29: fatal
+> > > error: ../fs/ext3/ext3.h: No such file or directory
+> > > compilation terminated.
+> > >
+> > > can you look into it and submit a revised patch ?
+> >
+> > You must be using kernel headers for building lttng-modules
+> > (linux-headers package or something like that), right? This is what I
+> > was writing about: since ext3.h is not available in kernel's "include"
+> > directory, and in order to avoid duplicating this file in
+> > lttng-modules sources, we have to use that <../> based reference, and
+> > this requires having full kernel source for building. The same issue
+> > will later be with btrfs and ext4 probes: their necessary include
+> > files are also not available in kernel headers.
+> >
+> > Trying to duplicate these header files to lttng-modules source seems
+> > to be not a good idea, especially if we need to add many ifdef's to
+> > them to track different kernel versions. We can try to insert some
+> > checks to the Makefile and skip building those probes if we do not
+> > have full kernel sources (actually if we do not have necessary include
+> > files). Or to declare having full kernel source as a requirement for
+> > building lttng-modules. What do you think?
+> 
+> The user experience should be that if lttng-modules is built against
+> linux-headers packages, the build should work fine, even if it means
+> some extra features are disabled.
+> 
+> And we don't want local copies of kernel headers, because then we could
+> trigger runtime bugs if the headers don't match between the kernel
+> version and local version.
 
-To make GDB support CTF read, I use libbabeltrace with GDB.  You can
-see the patch in
-http://sourceware.org/ml/gdb-patches/2012-11/msg00555.html.
-I have a issue is  libbabeltrace have a function called lookup_enum
-that is same with a GDB function.
-I change the function name of GDB to handle this issue in my patch.
+OK, then I'm inserting the checks to Makefile, that build such probes if the full
+kernel source is available and to skip them if not.
 
-But Tom said let libbabeltrace to change function name is better.
-So I send this mail to ask do you mind change the function name of
-lookup_enum?   If you can change the function name that will be really
-helpful for us.  Thanks a lot.
-And I post a patch about change the function name in libbabeltrace.
+> 
+> >
+> > > Also, although the README file states that we support only 3.6.38+, we
+> > > happen to also have support for kernels down to 2.6.32 with the patches
+> > > in the linux-patches/ directory applied to the appropriate kernel
+> > > versions. So it would be good that the instrumentation compiles for
+> > > those older kernels too. I promise we won't go further back than 2.6.32
+> > > though.
+> >
+> > We'll try to add the ifdef's for earlier version down to 2.6.32 to the
+> > probes, although the additional amount of conditions makes the code
+> > overcomplicated ;-)
+> 
+> Indeed, but I never said supporting various kernels was easy ;)
+> 
+> I don't care immensely if older kernels have less features: in some
+> cases, it can be just OK to disable an entire tracepoint probe for older
+> kernels. I just want the build to work fine for those.
 
-Thanks,
-Hui
+Understood, updated probes (as well as some additional ones) will be
+sent soon.
 
---- a/formats/ctf/ctf.c
-+++ b/formats/ctf/ctf.c
-@@ -423,7 +423,7 @@ int ctf_read_event(struct stream_pos *pp
- 		} else {
- 			struct definition_enum *enum_definition;
+> By the way, we're planning to go for a 2.1 release in a matter of days.
+> At that point, I'll have to decide if we keep the recent instrumentation
+> commits introduced after the start of the -rc cycle in this release (if
+> mature enough), or if we should branch before those for the 2.1 release
+> if they need more testing (and keep these instrumentation extensions for
+> 2.2). Any thoughts on this ?
 
--			enum_definition = lookup_enum(&stream->stream_event_header->p, "id", FALSE);
-+			enum_definition = ctf_lookup_enum(&stream->stream_event_header->p,
-"id", FALSE);
- 			if (enum_definition) {
- 				id = enum_definition->integer->value._unsigned;
- 			}
---- a/include/babeltrace/types.h
-+++ b/include/babeltrace/types.h
-@@ -513,7 +513,7 @@ struct definition *lookup_definition(con
- struct definition_integer *lookup_integer(const struct definition *definition,
- 					  const char *field_name,
- 					  int signedness);
--struct definition_enum *lookup_enum(const struct definition *definition,
-+struct definition_enum *ctf_lookup_enum(const struct definition *definition,
- 				    const char *field_name,
- 				    int signedness);
- struct definition *lookup_variant(const struct definition *definition,
---- a/types/types.c
-+++ b/types/types.c
-@@ -634,7 +634,7 @@ struct definition_integer *lookup_intege
- 	return lookup_integer;
- }
+I believe, it would be desirable to make more thorough testing of new
+instrumentations. On our side the testing was not too extensive, and was
+done for ARM platform only. Although the probes are mostly replicating
+the kernel's tracepoints, it would be reasonable to keep the commits
+in a branch for some time so that more people in the community could
+make some testing.
 
--struct definition_enum *lookup_enum(const struct definition *definition,
-+struct definition_enum *ctf_lookup_enum(const struct definition *definition,
- 				    const char *field_name,
- 				    int signedness)
- {
+Also, a side note: the "lock" probe seems to be not working. It causes
+kernel hang when trying to perform 'lttng start' at least on arm platform).
+We suspect that it may be caused by some kind of locks recursion or
+deadlocks (since tracing engine use locks too and they may be tried
+to trace again). There is no solution or even more detailed analysis
+so far, so I'll disable building of "lock" probe in the next update.
+
+Thanks.
+
+Best regards,
+Andrew
