@@ -1,10 +1,8 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Test if tracepoint is enabled
-Date: Wed, 5 Dec 2012 05:19:19 -0500
-Message-ID: <20121205101919.GA29447__19562.2606239796$1354702800$gmane$org@Krystal>
-References: <50B43D06.7020709@quantum.com> <20121203143421.GA4458@Krystal>
-	<50BD3499.3000509@quantum.com> <20121204140244.GA5298@Krystal>
-	<50BE8FF9.5010807@quantum.com>
+Subject: Re: [URCU pull request review] urcu improvements
+Date: Wed, 5 Dec 2012 06:16:57 -0500
+Message-ID: <20121205111657.GA31225__32838.0112573088$1354706260$gmane$org@Krystal>
+References: <1353440429-19223-1-git-send-email-mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -12,10 +10,10 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1TgC4X-0002nj-NG
-	for lttng-dev@lists.lttng.org; Wed, 05 Dec 2012 05:19:21 -0500
+	(envelope-from <compudj@mail.openrapids.net>) id 1TgCyI-0003G0-V9
+	for lttng-dev@lists.lttng.org; Wed, 05 Dec 2012 06:16:58 -0500
 Content-Disposition: inline
-In-Reply-To: <50BE8FF9.5010807@quantum.com>
+In-Reply-To: <1353440429-19223-1-git-send-email-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,137 +22,67 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: David Bryant <david.bryant@quantum.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Lai Jiangshan <laijs@cn.fujitsu.com>, Alan Stern <stern@rowland.harvard.edu>
+Cc: lttng-dev@lists.lttng.org, rp@svcs.cs.pdx.edu
 List-Id: lttng-dev@lists.lttng.org
 
-* David Bryant (david.bryant@quantum.com) wrote:
-> On 05/12/12 00:32, Mathieu Desnoyers wrote:
->> Hrm. So what you would like is something like:
->>
->> int tracepoint_get_state(provider, name);
->>
->> So you could use it for your setup and cleanup. However, let's see the
->> possible use of this construct:
->>
->> 1 - this construct would be OK:
->>
->> if (tracepoint_get_state(myprovider, myname)) {
->>          setup();
->>          tracepoint(myprovider, myname, args...);
->>          cleanup();
->> }
->>
->> but we see that the state test would happen twice, which is somewhat
->> inefficient.
->>
->> But the actual problem comes from this construct, which is _not_ OK, and
->> racy:
->>
->> 2 -
->>
->> if (tracepoint_get_state(myprovider, myname))
->>          setup();
->> tracepoint(myprovider, myname, args...);
->> if (tracepoint_get_state(myprovider, myname))
->>          cleanup();
->>
->> The problem is that users would expect that some synchronization
->> magically happen when enabling/disabling tracepoints, but it's not the
->> case. So we could very well end up executing just the cleanup, or just
->> the tracepoint, or 2 of the 3, if we hit the tracepoint while it is
->> being enabled/disabled.
->>
->> Providing this level of deep access into the tracepoint structures seems
->> error-prone (as shown by construct #2), and inefficient (as shown by the
->> 2 tests performed by construct #1).
->>
->> This is why I am tempted to introduce a tracepoint_cond() or something
->> similar, to ensure that no racy construct can be created, and ensure
->> that we only test the tracepoint state once per site.
->>
->> Thoughts ?
-> This construct avoids the inefficiency of checking tracepoint state twice:
->
-> if (tracepoint_get_state(myprovider, myname) {
->     setup();
->     tracepoint_force(myprovider, myname, args...);
->     cleanup();
-> }
->
-> ie, tracepoint_force() doesn't re-check the state. However, it relies on  
-> the user adhering to the pattern. tracepoint_force() could also be  
-> misused, violating the state of enabled/disabled tracepoints.
->
-> I take your point about the user being easily misled. It's not obvious  
-> enough that tracepoints are enabled/disabled asynchronously and we  
-> should only provide safe constructs that are compatible with that model.
->
-> So, building on your example:
->
-> #define tracepoint_cond(provider, name, pre, post, ...) \
->     do { \
->         if (caa_unlikely(__tracepoint_##provider##___##name.state)) { \
->             pre \
->             __tracepoint_cb_##provider##___##name(__VA_ARGS__); \
->             post \
->         } \
->     } \
->     while (0)
->
-> And a contrived example:
->
-> #include <stdio.h>
-> #include <stdlib.h>
->
-> int main() {
->     char * a;
->     tracepoint_cond(provider, name,
->                     { printf("pre\n");  a = malloc(16); },
->                     { printf("post\n"); free(a);        }
->                    );
->     return 0;
-> }
->
-> This is ok. But more work with the macro handling would be required to  
-> get the pre/post code fragments through as parameters. The example only  
-> compiles because its pre/post arguments don't contain any commas.
->
-> What do you think?
+* Mathieu Desnoyers (mathieu.desnoyers@efficios.com) wrote:
+> Here is a pull request to myself for my recent work on wfcqueue and urcu
+> flavors into the userspace RCU master branch.
+> 
+> Please let me know if you see any immediate show stoppers.
 
-I'm not sure what parameters would cause issues with commas. If they are
-between parenthesis or brackets, it should be fine. Do you have an
-example perhaps ?
-
-While we are there, it would be good to make the "pre" handler test a
-condition. For your use-case, you would just have to pass a pre :
-
- { printf("pre\n");  a = malloc(16); 1; }
-
-So we could do:
-
-   if (pre)
-        __tracepoint_cb_##provider##___##name(__VA_ARGS__);
-   (post)
-
-and therefore support not only to setup something, but also to add an
-extra check on whether tracing should be skipped or not. If someone
-passes "1" as end of the compound statement, it will always evaluate to
-1, and therefore the compiler will remove any extra branch in -O2.
-
-One question stands though: how would we integrate this with sdt.h
-STAP_PROVEV() ?
+FYI, after small modifications to answer the comments, I pulled these
+changes into master.
 
 Thanks,
 
 Mathieu
 
->
+> 
+> List of changes:
+> 
+> [PATCH 01/16] Fix: wfcqueue nonblocking dequeue
+> [PATCH 02/16] wfcqueue: enqueue and splice return queue state
+> [PATCH 03/16] test wfcqueue: add tests for queue state return value
+> [PATCH 04/16] urcu-call-rcu: use wait-free splice return value
+> [PATCH 05/16] wfcqueue: document empty criterion
+> [PATCH 06/16] wfcqueue: implement mutex-free splice
+> [PATCH 07/16] urcu-qsbr: improve 2-phase wait scheme
+> [PATCH 08/16] urcu-mb/signal/membarrier: improve 2-phase wait scheme
+> [PATCH 09/16] urcu-bp: improve 2-phase wait scheme
+> [PATCH 10/16] urcu-qsbr: move offline threads to separate list
+> [PATCH 11/16] urcu-mb/signal/membarrier: move quiescent threads to
+> [PATCH 12/16] urcu-bp: move quiescent threads to separate list
+> [PATCH 13/16] tests: use standard malloc/free for synchronize_rcu()
+> [PATCH 14/16] urcu-qsbr: batch concurrent synchronize_rcu()
+> [PATCH 15/16] urcu-wait: move wait code into separate file
+> [PATCH 16/16] urcu-wait: move queue management code into urcu-wait.h
+> 
+> diffstat:
+> 
+>  Makefile.am             |    2 
+>  tests/test_urcu.c       |   60 ++------------
+>  tests/test_urcu_bp.c    |   59 ++------------
+>  tests/test_urcu_qsbr.c  |   61 ++-------------
+>  tests/test_urcu_wfcq.c  |  131 +++++++++++++++++++++++++-------
+>  urcu-bp.c               |   88 ++++++++++++++-------
+>  urcu-call-rcu-impl.h    |    9 +-
+>  urcu-qsbr.c             |  193 ++++++++++++++++++++++++++++++++++++------------
+>  urcu-wait.h             |  184 +++++++++++++++++++++++++++++++++++++++++++++
+>  urcu.c                  |   95 +++++++++++++++--------
+>  urcu/static/urcu-bp.h   |   29 ++++---
+>  urcu/static/urcu-qsbr.h |   14 ++-
+>  urcu/static/urcu.h      |   15 ++-
+>  urcu/static/wfcqueue.h  |  133 +++++++++++++++++++++++++--------
+>  urcu/wfcqueue.h         |   62 +++++++++++----
+>  wfcqueue.c              |   16 +--
+>  16 files changed, 786 insertions(+), 365 deletions(-)
+> 
 > Thanks,
-> Dave
->
-> ----------------------------------------------------------------------
-> The information contained in this transmission may be confidential. Any disclosure, copying, or further distribution of confidential information is not permitted unless such privilege is explicitly granted in writing by Quantum. Quantum reserves the right to have electronic communications, including email and attachments, sent across its networks filtered through anti virus and spam software programs and retain such messages in order to comply with applicable data security and retention requirements. Quantum is not responsible for the proper and complete transmission of the substance of this communication or for any delay in its receipt.
+> 
+> Mathieu
+> 
 
 -- 
 Mathieu Desnoyers
