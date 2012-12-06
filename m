@@ -1,21 +1,32 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [lttng-dev] Request change name of function lookup_enum in	libbabeltrace to make GDB use this lib
+Subject: Re: Request change name of function lookup_enum
+	in	libbabeltrace to make GDB use this lib
 Date: Thu, 6 Dec 2012 11:24:59 -0500
-Message-ID: <20121206162459.GB17469__10652.2126742222$1354811145$gmane$org@Krystal>
-References: <CANFwon2s-eJoCrhzJmxhoGx9G2NeOAFf-FDFk1SoxD1OhPxWsg@mail.gmail.com> <20121205120845.GA31696@Krystal> <50C0C06A.40207@redhat.com> <50C0C5C1.4070101@redhat.com>
+Message-ID: <20121206162459.GB17469__26059.5042295337$1354811146$gmane$org@Krystal>
+References: <CANFwon2s-eJoCrhzJmxhoGx9G2NeOAFf-FDFk1SoxD1OhPxWsg@mail.gmail.com>
+	<20121205120845.GA31696@Krystal> <50C0C06A.40207@redhat.com>
+	<50C0C5C1.4070101@redhat.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Return-path: <gdb-return-41626-gdb-gdb=m.gmane.org@sourceware.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <compudj@mail.openrapids.net>) id 1TgeFw-0000DA-Vu
+	for lttng-dev@lists.lttng.org; Thu, 06 Dec 2012 11:25:01 -0500
 Content-Disposition: inline
 In-Reply-To: <50C0C5C1.4070101@redhat.com>
-List-Unsubscribe: <mailto:gdb-unsubscribe-gdb-gdb=m.gmane.org@sourceware.org>
-List-Subscribe: <mailto:gdb-subscribe@sourceware.org>
-List-Archive: <http://sourceware.org/ml/gdb/>
-List-Post: <mailto:gdb@sourceware.org>
-List-Help: <mailto:gdb-help@sourceware.org>, <http://sourceware.org/ml/#faqs>
-Sender: gdb-owner@sourceware.org
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
 To: Pedro Alves <palves@redhat.com>, Julien Desfossez <jdesfossez@efficios.com>
-Cc: Hui Zhu <teawater@gmail.com>, lttng-dev <lttng-dev@lists.lttng.org>, Tom Tromey <tromey@redhat.com>, gdb@sourceware.org
+Cc: Tom Tromey <tromey@redhat.com>, gdb@sourceware.org, lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
 * Pedro Alves (palves@redhat.com) wrote:
