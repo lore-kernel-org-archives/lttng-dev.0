@@ -1,20 +1,17 @@
-From: David Bryant <david.bryant@quantum.com>
-Subject: Re: Test if tracepoint is enabled
-Date: Thu, 6 Dec 2012 11:49:16 +1030
-Message-ID: <50BFF294.50508__6682.38890725679$1354756817$gmane$org@quantum.com>
-References: <50B43D06.7020709@quantum.com> <20121203143421.GA4458@Krystal>
-	<50BD3499.3000509@quantum.com> <20121204140244.GA5298@Krystal>
-	<50BE8FF9.5010807@quantum.com> <20121205101919.GA29447@Krystal>
+From: Lai Jiangshan <laijs@cn.fujitsu.com>
+Subject: Re: [URCU pull request review] urcu improvements
+Date: Thu, 06 Dec 2012 11:59:14 +0800
+Message-ID: <50C01812.7060400__32799.8403613039$1354769716$gmane$org@cn.fujitsu.com>
+References: <1353440429-19223-1-git-send-email-mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mx0a-000ceb01.pphosted.com ([67.231.144.126])
+Received: from [222.73.24.84] (helo=song.cn.fujitsu.com)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <prvs=868715a0b4=david.bryant@quantum.com>)
-	id 1TgQ7i-0001T0-Lo
-	for lttng-dev@lists.lttng.org; Wed, 05 Dec 2012 20:19:34 -0500
-In-Reply-To: <20121205101919.GA29447@Krystal>
+	(envelope-from <laijs@cn.fujitsu.com>) id 1TgTTp-000320-6K
+	for lttng-dev@lists.lttng.org; Wed, 05 Dec 2012 23:54:37 -0500
+In-Reply-To: <1353440429-19223-1-git-send-email-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,144 +21,61 @@ List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+Cc: lttng-dev@lists.lttng.org, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Alan Stern <stern@rowland.harvard.edu>, rp@svcs.cs.pdx.edu
 List-Id: lttng-dev@lists.lttng.org
 
-On 05/12/12 20:49, Mathieu Desnoyers wrote:
-> * David Bryant (david.bryant@quantum.com) wrote:
->> So, building on your example:
->>
->> #define tracepoint_cond(provider, name, pre, post, ...) \
->>      do { \
->>          if (caa_unlikely(__tracepoint_##provider##___##name.state)) { \
->>              pre \
->>              __tracepoint_cb_##provider##___##name(__VA_ARGS__); \
->>              post \
->>          } \
->>      } \
->>      while (0)
->>
->> And a contrived example:
->>
->> #include <stdio.h>
->> #include <stdlib.h>
->>
->> int main() {
->>      char * a;
->>      tracepoint_cond(provider, name,
->>                      { printf("pre\n");  a = malloc(16); },
->>                      { printf("post\n"); free(a);        }
->>                     );
->>      return 0;
->> }
->>
->> This is ok. But more work with the macro handling would be required to
->> get the pre/post code fragments through as parameters. The example only
->> compiles because its pre/post arguments don't contain any commas.
->>
->> What do you think?
-> I'm not sure what parameters would cause issues with commas. If they are
-> between parenthesis or brackets, it should be fine. Do you have an
-> example perhaps ?
-Ok, I've just learnt what 'statement-expressions' are 
-(http://gcc.gnu.org/onlinedocs/gcc/Statement-Exprs.html). Would this be 
-the first use of these in lttng-ust? If so, I'm wary of making lttng-ust 
-dependent on this gcc extension. Would it be dependent on this? It is up 
-to the user to decide what to pass to the macro, but the macro may 
-impose constraints by way of how the arguments are employed within the 
-macro...
-
-As it happens, we compile with -pedantic which won't allow 
-statement-expressions. (As an aside, -pedantic doesn't like tracepoint 
-that don't take any arguments because it expects the "..." to have at 
-least one argument).
-
-My example above (that doesn't use statement-expressions - I removed the 
-round brackets) compiles correctly. But it you introduce a comma then 
-the compiler seems to interpret this as an argument separator. So this 
-works:
-
-   #include <stdio.h>
-   #include <stdlib.h>
-
-   #define tracepoint_cond(provider, name, cond, pre, post, ...) \
-       do { \
-           if (caa_unlikely(__tracepoint_##provider##___##name.state)) { \
-               if (cond) { \
-                   pre \
-__tracepoint_cb_##provider##___##name(__VA_ARGS__); \
-                   post \
-               } \
-           } \
-       } \
-       while (0)
-
-   int main() {
-       int i = 1, j = 1;
-
-       char * a;
-       tracepoint_cond(provider, name,
-                       i == j,  /* condition */
-                       {   /* pre */
-                       a = malloc(16);
-                       memset(a, 0, 16);
-                       },
-                       {   /* post */
-                       free(a);
-                       int dummy1;
-                       },
-                       a
-                      );
-       return 0;
-   }
-
-But changing tracepoint_cond to this breaks it:
-
-       tracepoint_cond(provider, name,
-                       i == j,  /* condition */
-                       {   /* pre */
-                       a = malloc(16);
-                       memset(a, 0, 16);
-                       },
-                       {   /* post */
-                       free(a);
-                       int dummy1, dummy2;  /* XXX */
-                       },
-                       a
-                      );
-
-Examining the pre-processed code reveals that the comma causes dummy2 to 
-become a subsequent argument to the macro and land in the "..." region, 
-and hell breaks loose.
-
-Do you think we could come up with a scheme that doesn't impose the use 
-of statement-expressions, but supports them if they are provided? In my 
-example, I simply provide 'i == j' as the condition, but a 
-statement-expression would also work. Are we conflating separate ideas - 
-the idea of user conditions and the idea of setup/cleanup?
-
-> While we are there, it would be good to make the "pre" handler test a
-> condition. For your use-case, you would just have to pass a pre :
->
->   { printf("pre\n");  a = malloc(16); 1; }
->
-> So we could do:
->
->     if (pre)
->          __tracepoint_cb_##provider##___##name(__VA_ARGS__);
->     (post)
->
-> and therefore support not only to setup something, but also to add an
-> extra check on whether tracing should be skipped or not. If someone
-> passes "1" as end of the compound statement, it will always evaluate to
-> 1, and therefore the compiler will remove any extra branch in -O2.
->
-> One question stands though: how would we integrate this with sdt.h
-> STAP_PROVEV() ?
-I'm yet to look at this.
+ACK for the whole patchset.
 
 Thanks,
-Dave
+Lai
 
-----------------------------------------------------------------------
-The information contained in this transmission may be confidential. Any disclosure, copying, or further distribution of confidential information is not permitted unless such privilege is explicitly granted in writing by Quantum. Quantum reserves the right to have electronic communications, including email and attachments, sent across its networks filtered through anti virus and spam software programs and retain such messages in order to comply with applicable data security and retention requirements. Quantum is not responsible for the proper and complete transmission of the substance of this communication or for any delay in its receipt.
+On 11/21/2012 03:40 AM, Mathieu Desnoyers wrote:
+> Here is a pull request to myself for my recent work on wfcqueue and urcu
+> flavors into the userspace RCU master branch.
+> 
+> Please let me know if you see any immediate show stoppers.
+> 
+> List of changes:
+> 
+> [PATCH 01/16] Fix: wfcqueue nonblocking dequeue
+> [PATCH 02/16] wfcqueue: enqueue and splice return queue state
+> [PATCH 03/16] test wfcqueue: add tests for queue state return value
+> [PATCH 04/16] urcu-call-rcu: use wait-free splice return value
+> [PATCH 05/16] wfcqueue: document empty criterion
+> [PATCH 06/16] wfcqueue: implement mutex-free splice
+> [PATCH 07/16] urcu-qsbr: improve 2-phase wait scheme
+> [PATCH 08/16] urcu-mb/signal/membarrier: improve 2-phase wait scheme
+> [PATCH 09/16] urcu-bp: improve 2-phase wait scheme
+> [PATCH 10/16] urcu-qsbr: move offline threads to separate list
+> [PATCH 11/16] urcu-mb/signal/membarrier: move quiescent threads to
+> [PATCH 12/16] urcu-bp: move quiescent threads to separate list
+> [PATCH 13/16] tests: use standard malloc/free for synchronize_rcu()
+> [PATCH 14/16] urcu-qsbr: batch concurrent synchronize_rcu()
+> [PATCH 15/16] urcu-wait: move wait code into separate file
+> [PATCH 16/16] urcu-wait: move queue management code into urcu-wait.h
+> 
+> diffstat:
+> 
+>  Makefile.am             |    2 
+>  tests/test_urcu.c       |   60 ++------------
+>  tests/test_urcu_bp.c    |   59 ++------------
+>  tests/test_urcu_qsbr.c  |   61 ++-------------
+>  tests/test_urcu_wfcq.c  |  131 +++++++++++++++++++++++++-------
+>  urcu-bp.c               |   88 ++++++++++++++-------
+>  urcu-call-rcu-impl.h    |    9 +-
+>  urcu-qsbr.c             |  193 ++++++++++++++++++++++++++++++++++++------------
+>  urcu-wait.h             |  184 +++++++++++++++++++++++++++++++++++++++++++++
+>  urcu.c                  |   95 +++++++++++++++--------
+>  urcu/static/urcu-bp.h   |   29 ++++---
+>  urcu/static/urcu-qsbr.h |   14 ++-
+>  urcu/static/urcu.h      |   15 ++-
+>  urcu/static/wfcqueue.h  |  133 +++++++++++++++++++++++++--------
+>  urcu/wfcqueue.h         |   62 +++++++++++----
+>  wfcqueue.c              |   16 +--
+>  16 files changed, 786 insertions(+), 365 deletions(-)
+> 
+> Thanks,
+> 
+> Mathieu
+> 
+> 
