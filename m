@@ -1,17 +1,20 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH] urcu: avoid false sharing for rcu_gp_ctr
-Date: Fri, 7 Dec 2012 12:22:52 -0500
-Message-ID: <20121207172252.GA12525__28123.0023749687$1354901020$gmane$org@Krystal>
-References: <50C19575.2070802@cn.fujitsu.com> <20121207163234.GB11975@Krystal>
-	<CACvQF50Y2wC3t=VMJ==574aHVvod+ipGA1K5hR97r_dRbcegkw@mail.gmail.com>
-	<20121207165748.GA12338@Krystal>
-	<CACvQF50V_9T6T3j4AwbdBuEiHHbcxdNGgP1WF5T4OHpXZyMgEA@mail.gmail.com>
+From: Lai Jiangshan <eag0628@gmail.com>
+Subject: Re: [PATCH 1/3] urcu: avoid "expression result unused"
+ from clang
+Date: Sat, 8 Dec 2012 01:27:27 +0800
+Message-ID: <CACvQF53+x_PDd+aOtM0k2wN0BJZXRMkB3pjXxfvsV=HkdknM=Q__18505.4909823977$1354901302$gmane$org@mail.gmail.com>
+References: <1354872295-32371-1-git-send-email-laijs@cn.fujitsu.com>
+	<20121207165848.GB12338@Krystal>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1386670246=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Content-Disposition: inline
-In-Reply-To: <CACvQF50V_9T6T3j4AwbdBuEiHHbcxdNGgP1WF5T4OHpXZyMgEA@mail.gmail.com>
+Received: from mail-ob0-f176.google.com ([209.85.214.176])
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <eag0628@gmail.com>) id 1Th1i1-0003Mx-KG
+	for lttng-dev@lists.lttng.org; Fri, 07 Dec 2012 12:27:33 -0500
+Received: by mail-ob0-f176.google.com with SMTP id un3so715369obb.35
+	for <lttng-dev@lists.lttng.org>; Fri, 07 Dec 2012 09:27:27 -0800 (PST)
+In-Reply-To: <20121207165848.GB12338@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,218 +23,199 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Lai Jiangshan <eag0628@gmail.com>
-Cc: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, "ltt-dev@lists.casi.polymtl.ca" <ltt-dev@lists.casi.polymtl.ca>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-* Lai Jiangshan (eag0628@gmail.com) wrote:
-> On Saturday, December 8, 2012, Mathieu Desnoyers wrote:
-> 
-> > * Lai Jiangshan (eag0628@gmail.com <javascript:;>) wrote:
-> > > we can define rcu_gp_ctr and registry with aligned attribute, but it is
-> > not
-> > > reliable way
-> > >
-> > > We need only this:
-> > > unsigned long rcu_gp_ctr __attribute((aligned and padded(don't put other
-> > > var next to it except the futex)))
+--===============1386670246==
+Content-Type: multipart/alternative; boundary=e89a8ff1c6ca93779d04d0468759
+
+--e89a8ff1c6ca93779d04d0468759
+Content-Type: text/plain; charset=ISO-8859-1
+
+On Saturday, December 8, 2012, Mathieu Desnoyers wrote:
+
+> * Lai Jiangshan (laijs@cn.fujitsu.com <javascript:;>) wrote:
+> > The last expression result is unused and clang will complain.
+> > The trick in the patch supresses the complaint
+>
+> Hrm, but with this patch, gcc complains:
+>
+> rculfhash.c:1921:3: warning: variable '_w' set but not used
+> [-Wunused-but-set-variable]
+>
+> using
+>
+> gcc version 4.7.2 (Debian 4.7.2-4)
+
+
+Ouch, my gcc is too old
+
+
+
+>
+> Thoughts ?
+>
+> Thanks,
+>
+> Mathieu
+>
 > >
-> > In which situation would this be unreliable ?
-> 
-> 
-> 
-> int a;
-> int b __attribute__((aligned));
-> int c;
-> 
-> b and c will be in the same line, even we define c as aligned too, the
-> compiler/linker may put a next to b, thus a and b in the same line
-
-So if our goal is to have rcu_gp_ctr and rcu_gp_futex on the same cache
-line, which is different from that of the registry, we could do:
-
-typeA rcu_gp_ctr __attribute__((aligned(...)));
-typeB rcu_gp_futex;
-typeC registry __attribute__((aligned(...)));
-
-I would expect the compiler won't typically reorder rcu_gp_futex and
-registry. But I guess there is no guarantee it is going to be always
-true given by the C99 standard.
-
-I guess this is a case where we could bump the library version number
-and do things properly.
-
-Let's think a bit more about it, anyone else has comments on this ?
-
-Thanks,
-
-Mathieu
-
-> 
-> 
+> > Signed-off-by: Lai Jiangshan <laijs@cn.fujitsu.com <javascript:;>>
+> > ---
+> >  urcu/system.h        |    5 ++++-
+> >  2 files changed, 4 insertions(+), 1 deletions(-)
 > >
-> > Thanks,
+> > diff --git a/urcu/system.h b/urcu/system.h
+> > index 2a45f22..6b7b0af 100644
+> > --- a/urcu/system.h
+> > +++ b/urcu/system.h
+> > @@ -46,12 +46,15 @@
+> >  /*
+> >   * Store v into x, where x is located in shared memory. Performs the
+> >   * required cache flush after writing. Returns v.
+> > + * "_w" here avoids the warning from clang:
+> > + *   warning: expression result unused [-Wunused-value]
+> >   */
+> >  #define CMM_STORE_SHARED(x, v)               \
+> >       ({                              \
+> >               __typeof__(x) _v = _CMM_STORE_SHARED(x, v);     \
+> > +             __typeof__(x) _w;       \
+> >               cmm_smp_wmc();          \
+> > -             _v;                     \
+> > +             _w = _v;                \
+> >       })
 > >
-> > Mathieu
-> >
-> > >
-> > > On Saturday, December 8, 2012, Mathieu Desnoyers wrote:
-> > >
-> > > > * Lai Jiangshan (laijs@cn.fujitsu.com <javascript:;> <javascript:;>)
-> > wrote:
-> > > > > @rcu_gp_ctr and @registry share the same cache line, it causes
-> > > > > false sharing and slowdown both of the read site and update site.
-> > > > >
-> > > > > Fix: Use different cache line for them.
-> > > > >
-> > > > > Although rcu_gp_futex is updated less than rcu_gp_ctr, but
-> > > > > they always be accessed at almost the same time, so we also move
-> > > > rcu_gp_futex
-> > > > > to the cacheline of rcu_gp_ctr to reduce the cacheline-usage or
-> > > > cache-missing
-> > > > > of read site.
-> > > >
-> > > > Hi Lai,
-> > > >
-> > > > I agree on the goal: placing registry and rcu_gp_ctr on different
-> > > > cache-lines. And yes, it makes sense to put rcu_gp_ctr and rcu_gp_futex
-> > > > on the same cache-line. I agree that the next patch is fine too
-> > (keeping
-> > > > qsbr and other urcu similar). This is indeed what I try to ensure
-> > > > myself.
-> > > >
-> > > > I'm just concerned that this patch seems to break ABI compability for
-> > > > liburcu: the read-side, within applications, would have to be
-> > > > recompiled. So I guess we should decide if we do this change in a way
-> > > > that does not break the ABI (e.g. not introducing a structure), or if
-> > we
-> > > > choose to bump the library version number.
-> > > >
-> > > > Thoughts ?
-> > > >
-> > > > Thanks,
-> > > >
-> > > > Mathieu
-> > > >
-> > > > >
-> > > > >
-> > > > > test: (4X6=24 CPUs)
-> > > > >
-> > > > > Before patch:
-> > > > >
-> > > > > [root@localhost userspace-rcu]# ./tests/test_urcu_mb 20 1 20
-> > > > > SUMMARY ./tests/test_urcu_mb      testdur   20 nr_readers  20 rdur
-> > > >  0 wdur      0 nr_writers   1 wdelay      0 nr_reads   2100285330
-> > nr_writes
-> > > >      3390219 nr_ops   2103675549
-> > > > > [root@localhost userspace-rcu]# ./tests/test_urcu_mb 20 1 20
-> > > > > SUMMARY ./tests/test_urcu_mb      testdur   20 nr_readers  20 rdur
-> > > >  0 wdur      0 nr_writers   1 wdelay      0 nr_reads   1619868562
-> > nr_writes
-> > > >      3529478 nr_ops   1623398040
-> > > > > [root@localhost userspace-rcu]# ./tests/test_urcu_mb 20 1 20
-> > > > > SUMMARY ./tests/test_urcu_mb      testdur   20 nr_readers  20 rdur
-> > > >  0 wdur      0 nr_writers   1 wdelay      0 nr_reads   1949067038
-> > nr_writes
-> > > >      3469334 nr_ops   1952536372
-> > > > >
-> > > > >
-> > > > > after patch:
-> > > > >
-> > > > > [root@localhost userspace-rcu]# ./tests/test_urcu_mb 20 1 20
-> > > > > SUMMARY ./tests/test_urcu_mb      testdur   20 nr_readers  20 rdur
-> > > >  0 wdur      0 nr_writers   1 wdelay      0 nr_reads   3380191848
-> > nr_writes
-> > > >      4903248 nr_ops   3385095096
-> > > > > [root@localhost userspace-rcu]# ./tests/test_urcu_mb 20 1 20
-> > > > > SUMMARY ./tests/test_urcu_mb      testdur   20 nr_readers  20 rdur
-> > > >  0 wdur      0 nr_writers   1 wdelay      0 nr_reads   3397637486
-> > nr_writes
-> > > >      4129809 nr_ops   3401767295
-> > > > >
-> > > > > Singed-by: Lai Jiangshan <laijs@cn.fujitsu.com <javascript:;><javascript:;>>
-> > > > > ---
-> > > > > diff --git a/urcu.c b/urcu.c
-> > > > > index 15def09..436d71c 100644
-> > > > > --- a/urcu.c
-> > > > > +++ b/urcu.c
-> > > > > @@ -83,16 +83,7 @@ void __attribute__((destructor)) rcu_exit(void);
-> > > > >  #endif
-> > > > >
-> > > > >  static pthread_mutex_t rcu_gp_lock = PTHREAD_MUTEX_INITIALIZER;
-> > > > > -
-> > > > > -int32_t rcu_gp_futex;
-> > > > > -
-> > > > > -/*
-> > > > > - * Global grace period counter.
-> > > > > - * Contains the current RCU_GP_CTR_PHASE.
-> > > > > - * Also has a RCU_GP_COUNT of 1, to accelerate the reader fast path.
-> > > > > - * Written to only by writer with mutex taken. Read by both writer
-> > and
-> > > > readers.
-> > > > > - */
-> > > > > -unsigned long rcu_gp_ctr = RCU_GP_COUNT;
-> > > > > +struct urcu_gp rcu_gp = { .ctr = RCU_GP_COUNT };
-> > > > >
-> > > > >  /*
-> > > > >   * Written to only by each individual reader. Read by both the
-> > reader
-> > > > and the
-> > > > > @@ -217,8 +208,8 @@ static void wait_gp(void)
-> > > > >  {
-> > > > >       /* Read reader_gp before read futex */
-> > > > >       smp_mb_master(RCU_MB_GROUP);
-> > > > > -     if (uatomic_read(&rcu_gp_futex) == -1)
-> > > > > -             futex_async(&rcu_gp_futex, FUTEX_WAIT, -1,
-> > > > > +     if (uatomic_read(&rcu_gp.futex) == -1)
-> > > > > +             futex_async(&rcu_gp.futex, FUTEX_WAIT, -1,
-> > > > >                     NULL, NULL, 0);
-> > > > >  }
-> > > > >
-> > > > > @@ -232,12 +223,12 @@ static void wait_for_readers(struct
-> > cds_list_head
-> > > > *input_readers,
-> > > > >       /*
-> > > > >        * Wait for each thread URCU_TLS(rcu_reader).ctr to either
-> > > > >        * indicate quiescence (not nested), or observe the current
-> > > > > -      * rcu_gp_ctr value.
-> > > > > +      * rcu_gp.ctr value.
-> > > > >        */
-> > > > >       for (;;) {
-> > > > >               wait_loops++;
-> > > > >               if (wait_loops == RCU_QS_ACTIVE_ATTEMPTS) {
-> > > > > -                     uatomic_dec(&rcu_gp_futex);
-> > > > > +                     uatomic_dec(&rcu_gp.futex);
-> > > > >                       /* Write futex before read reader_gp */
-> > > > >                       smp_mb_master(RCU_MB_GROUP);
-> > > > >               }
-> > > > > @@ -270,7 +261,7 @@ static void wait_for_readers(struct cds_list_head
-> > > > *input_readers,
-> > > > >                       if (wait_loops == RCU_QS_ACTIVE_ATTEMPTS) {
-> > > > >                               /* Read reader_gp before write futex */
-> > > > >                               smp_mb_master(RCU_MB_GROUP);
-> > > > > -                             uatomic_set(&rcu_gp_futex, 0);
-> > > > > +                             uatomic_set(&rcu_gp.futex, 0);
-> > > > >                       }
-> > > > >                       break;
-> > > > >               } else {
-> > > > > @@ -289,7 +280,7 @@ static void wait_for_readers(struct cds_list_head
-> > > > *input_readers,
-> > > > >                       if (wait_loops == RCU_QS_ACTIVE_ATTEMPTS) {
-> > > > >                               /* Read reader_gp before write futex */
-> > > > >                             > > lttng-dev@lists.lttng.org<javascript:;><javascript:;>
-> > > > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> > > >
-> >
+> >  #endif /* _URCU_SYSTEM_H */
 > > --
-> > Mathieu Desnoyers
-> > Operating System Efficiency R&D Consultant
-> > EfficiOS Inc.
-> > http://www.efficios.com
+> > 1.7.4.4
 > >
+> >
+> > _______________________________________________
+> > lttng-dev mailing list
+> > lttng-dev@lists.lttng.org <javascript:;>
+> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>
+>
+> --
+> Mathieu Desnoyers
+> Operating System Efficiency R&D Consultant
+> EfficiOS Inc.
+> http://www.efficios.com
+>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org <javascript:;>
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>
 
--- 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+--e89a8ff1c6ca93779d04d0468759
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+<br><br>On Saturday, December 8, 2012, Mathieu Desnoyers  wrote:<br><blockq=
+uote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc =
+solid;padding-left:1ex">* Lai Jiangshan (<a href=3D"javascript:;" onclick=
+=3D"_e(event, &#39;cvml&#39;, &#39;laijs@cn.fujitsu.com&#39;)">laijs@cn.fuj=
+itsu.com</a>) wrote:<br>
+
+&gt; The last expression result is unused and clang will complain.<br>
+&gt; The trick in the patch supresses the complaint<br>
+<br>
+Hrm, but with this patch, gcc complains:<br>
+<br>
+rculfhash.c:1921:3: warning: variable &#39;_w&#39; set but not used<br>
+[-Wunused-but-set-variable]<br>
+<br>
+using<br>
+<br>
+gcc version 4.7.2 (Debian 4.7.2-4)</blockquote><div><br></div><div>Ouch, my=
+ gcc is too old<span></span></div><br><div>=A0</div><blockquote class=3D"gm=
+ail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-le=
+ft:1ex">
+
+<br>
+Thoughts ?<br>
+<br>
+Thanks,<br>
+<br>
+Mathieu<br>
+<br>
+&gt;<br>
+&gt; Signed-off-by: Lai Jiangshan &lt;<a href=3D"javascript:;" onclick=3D"_=
+e(event, &#39;cvml&#39;, &#39;laijs@cn.fujitsu.com&#39;)">laijs@cn.fujitsu.=
+com</a>&gt;<br>
+&gt; ---<br>
+&gt; =A0urcu/system.h =A0 =A0 =A0 =A0| =A0 =A05 ++++-<br>
+&gt; =A02 files changed, 4 insertions(+), 1 deletions(-)<br>
+&gt;<br>
+&gt; diff --git a/urcu/system.h b/urcu/system.h<br>
+&gt; index 2a45f22..6b7b0af 100644<br>
+&gt; --- a/urcu/system.h<br>
+&gt; +++ b/urcu/system.h<br>
+&gt; @@ -46,12 +46,15 @@<br>
+&gt; =A0/*<br>
+&gt; =A0 * Store v into x, where x is located in shared memory. Performs th=
+e<br>
+&gt; =A0 * required cache flush after writing. Returns v.<br>
+&gt; + * &quot;_w&quot; here avoids the warning from clang:<br>
+&gt; + * =A0 warning: expression result unused [-Wunused-value]<br>
+&gt; =A0 */<br>
+&gt; =A0#define CMM_STORE_SHARED(x, v) =A0 =A0 =A0 =A0 =A0 =A0 =A0 \<br>
+&gt; =A0 =A0 =A0 ({ =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0=
+ =A0\<br>
+&gt; =A0 =A0 =A0 =A0 =A0 =A0 =A0 __typeof__(x) _v =3D _CMM_STORE_SHARED(x, =
+v); =A0 =A0 \<br>
+&gt; + =A0 =A0 =A0 =A0 =A0 =A0 __typeof__(x) _w; =A0 =A0 =A0 \<br>
+&gt; =A0 =A0 =A0 =A0 =A0 =A0 =A0 cmm_smp_wmc(); =A0 =A0 =A0 =A0 =A0\<br>
+&gt; - =A0 =A0 =A0 =A0 =A0 =A0 _v; =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =
+\<br>
+&gt; + =A0 =A0 =A0 =A0 =A0 =A0 _w =3D _v; =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0\<=
+br>
+&gt; =A0 =A0 =A0 })<br>
+&gt;<br>
+&gt; =A0#endif /* _URCU_SYSTEM_H */<br>
+&gt; --<br>
+&gt; 1.7.4.4<br>
+&gt;<br>
+&gt;<br>
+&gt; _______________________________________________<br>
+&gt; lttng-dev mailing list<br>
+&gt; <a href=3D"javascript:;" onclick=3D"_e(event, &#39;cvml&#39;, &#39;ltt=
+ng-dev@lists.lttng.org&#39;)">lttng-dev@lists.lttng.org</a><br>
+&gt; <a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" =
+target=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev=
+</a><br>
+<br>
+<br>
+--<br>
+Mathieu Desnoyers<br>
+Operating System Efficiency R&amp;D Consultant<br>
+EfficiOS Inc.<br>
+<a href=3D"http://www.efficios.com" target=3D"_blank">http://www.efficios.c=
+om</a><br>
+<br>
+_______________________________________________<br>
+lttng-dev mailing list<br>
+<a href=3D"javascript:;" onclick=3D"_e(event, &#39;cvml&#39;, &#39;lttng-de=
+v@lists.lttng.org&#39;)">lttng-dev@lists.lttng.org</a><br>
+<a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" targe=
+t=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><=
+br>
+</blockquote>
+
+--e89a8ff1c6ca93779d04d0468759--
+
+
+--===============1386670246==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1386670246==--
