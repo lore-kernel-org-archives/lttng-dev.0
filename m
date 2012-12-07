@@ -1,20 +1,11 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH urcu] wfstack: implement nonblocking pop	and
-	next
-Date: Thu, 6 Dec 2012 16:06:20 -0500
-Message-ID: <20121206210620.GA20971__16924.0255411298$1354828027$gmane$org@Krystal>
-References: <20121205144431.GA1241@Krystal>
+From: Lai Jiangshan <laijs@cn.fujitsu.com>
+Subject: [PATCH] urcu: avoid false sharing for rcu_gp_ctr
+Date: Fri, 07 Dec 2012 15:06:29 +0800
+Message-ID: <50C19575.2070802__23986.7469099865$1354864048$gmane$org@cn.fujitsu.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
-	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1TgieE-0002LX-2I
-	for lttng-dev@lists.lttng.org; Thu, 06 Dec 2012 16:06:22 -0500
-Content-Disposition: inline
-In-Reply-To: <20121205144431.GA1241@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,240 +14,210 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Lai Jiangshan <laijs@cn.fujitsu.com>, Alan Stern <stern@rowland.harvard.edu>
-Cc: lttng-dev@lists.lttng.org, rp@svcs.cs.pdx.edu
+To: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, ltt-dev@lists.casi.polymtl.ca
 List-Id: lttng-dev@lists.lttng.org
 
-* Mathieu Desnoyers (mathieu.desnoyers@efficios.com) wrote:
-> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+@rcu_gp_ctr and @registry share the same cache line, it causes
+false sharing and slowdown both of the read site and update site.
 
-I'll merge this patch into master, let me know if anything seems broken
-and I'll do the appropriate follow-up.
+Fix: Use different cache line for them.
 
-Thanks,
+Although rcu_gp_futex is updated less than rcu_gp_ctr, but
+they always be accessed at almost the same time, so we also move rcu_gp_futex
+to the cacheline of rcu_gp_ctr to reduce the cacheline-usage or cache-missing
+of read site.
 
-Mathieu
 
-> ---
-> diff --git a/urcu/static/wfstack.h b/urcu/static/wfstack.h
-> index 018a121..9bc9519 100644
-> --- a/urcu/static/wfstack.h
-> +++ b/urcu/static/wfstack.h
-> @@ -137,7 +137,7 @@ int _cds_wfs_push(struct cds_wfs_stack *s, struct cds_wfs_node *node)
->   * Waiting for push to complete enqueue and return the next node.
->   */
->  static inline struct cds_wfs_node *
-> -___cds_wfs_node_sync_next(struct cds_wfs_node *node)
-> +___cds_wfs_node_sync_next(struct cds_wfs_node *node, int blocking)
->  {
->  	struct cds_wfs_node *next;
->  	int attempt = 0;
-> @@ -146,6 +146,8 @@ ___cds_wfs_node_sync_next(struct cds_wfs_node *node)
->  	 * Adaptative busy-looping waiting for push to complete.
->  	 */
->  	while ((next = CMM_LOAD_SHARED(node->next)) == NULL) {
-> +		if (!blocking)
-> +			return CDS_WFS_WOULDBLOCK;
->  		if (++attempt >= CDS_WFS_ADAPT_ATTEMPTS) {
->  			poll(NULL, 0, CDS_WFS_WAIT);	/* Wait for 10ms */
->  			attempt = 0;
-> @@ -157,6 +159,29 @@ ___cds_wfs_node_sync_next(struct cds_wfs_node *node)
->  	return next;
->  }
->  
-> +static inline
-> +struct cds_wfs_node *
-> +___cds_wfs_pop(struct cds_wfs_stack *s, int blocking)
-> +{
-> +	struct cds_wfs_head *head, *new_head;
-> +	struct cds_wfs_node *next;
-> +
-> +	for (;;) {
-> +		head = CMM_LOAD_SHARED(s->head);
-> +		if (___cds_wfs_end(head))
-> +			return NULL;
-> +		next = ___cds_wfs_node_sync_next(&head->node, blocking);
-> +		if (!blocking && next == CDS_WFS_WOULDBLOCK)
-> +			return CDS_WFS_WOULDBLOCK;
-> +		new_head = caa_container_of(next, struct cds_wfs_head, node);
-> +		if (uatomic_cmpxchg(&s->head, head, new_head) == head)
-> +			return &head->node;
-> +		if (!blocking)
-> +			return CDS_WFS_WOULDBLOCK;
-> +		/* busy-loop if head changed under us */
-> +	}
-> +}
-> +
->  /*
->   * __cds_wfs_pop_blocking: pop a node from the stack.
->   *
-> @@ -177,19 +202,20 @@ static inline
->  struct cds_wfs_node *
->  ___cds_wfs_pop_blocking(struct cds_wfs_stack *s)
->  {
-> -	struct cds_wfs_head *head, *new_head;
-> -	struct cds_wfs_node *next;
-> +	return ___cds_wfs_pop(s, 1);
-> +}
->  
-> -	for (;;) {
-> -		head = CMM_LOAD_SHARED(s->head);
-> -		if (___cds_wfs_end(head))
-> -			return NULL;
-> -		next = ___cds_wfs_node_sync_next(&head->node);
-> -		new_head = caa_container_of(next, struct cds_wfs_head, node);
-> -		if (uatomic_cmpxchg(&s->head, head, new_head) == head)
-> -			return &head->node;
-> -		/* busy-loop if head changed under us */
-> -	}
-> +/*
-> + * __cds_wfs_pop_nonblocking: pop a node from the stack.
-> + *
-> + * Same as __cds_wfs_pop_blocking, but returns CDS_WFS_WOULDBLOCK if
-> + * it needs to block.
-> + */
-> +static inline
-> +struct cds_wfs_node *
-> +___cds_wfs_pop_nonblocking(struct cds_wfs_stack *s)
-> +{
-> +	return ___cds_wfs_pop(s, 0);
->  }
->  
->  /*
-> @@ -303,6 +329,22 @@ _cds_wfs_first(struct cds_wfs_head *head)
->  	return &head->node;
->  }
->  
-> +static inline struct cds_wfs_node *
-> +___cds_wfs_next(struct cds_wfs_node *node, int blocking)
-> +{
-> +	struct cds_wfs_node *next;
-> +
-> +	next = ___cds_wfs_node_sync_next(node, blocking);
-> +	/*
-> +	 * CDS_WFS_WOULDBLOCK != CSD_WFS_END, so we can check for end
-> +	 * even if ___cds_wfs_node_sync_next returns CDS_WFS_WOULDBLOCK,
-> +	 * and still return CDS_WFS_WOULDBLOCK.
-> +	 */
-> +	if (___cds_wfs_end(next))
-> +		return NULL;
-> +	return next;
-> +}
-> +
->  /*
->   * cds_wfs_next_blocking: get next node of a popped stack.
->   *
-> @@ -319,12 +361,20 @@ _cds_wfs_first(struct cds_wfs_head *head)
->  static inline struct cds_wfs_node *
->  _cds_wfs_next_blocking(struct cds_wfs_node *node)
->  {
-> -	struct cds_wfs_node *next;
-> +	return ___cds_wfs_next(node, 1);
-> +}
->  
-> -	next = ___cds_wfs_node_sync_next(node);
-> -	if (___cds_wfs_end(next))
-> -		return NULL;
-> -	return next;
-> +
-> +/*
-> + * cds_wfs_next_nonblocking: get next node of a popped stack.
-> + *
-> + * Same as cds_wfs_next_blocking, but returns CDS_WFS_WOULDBLOCK if it
-> + * needs to block.
-> + */
-> +static inline struct cds_wfs_node *
-> +_cds_wfs_next_nonblocking(struct cds_wfs_node *node)
-> +{
-> +	return ___cds_wfs_next(node, 0);
->  }
->  
->  #ifdef __cplusplus
-> diff --git a/urcu/wfstack.h b/urcu/wfstack.h
-> index 0e435ba..03fee8f 100644
-> --- a/urcu/wfstack.h
-> +++ b/urcu/wfstack.h
-> @@ -58,6 +58,8 @@ extern "C" {
->   * synchronization.
->   */
->  
-> +#define CDS_WFS_WOULDBLOCK	((void *) -1UL)
-> +
->  /*
->   * struct cds_wfs_node is returned by __cds_wfs_pop, and also used as
->   * iterator on stack. It is not safe to dereference the node next
-> @@ -184,6 +186,14 @@ extern struct cds_wfs_node *cds_wfs_first(struct cds_wfs_head *head);
->  extern struct cds_wfs_node *cds_wfs_next_blocking(struct cds_wfs_node *node);
->  
->  /*
-> + * cds_wfs_next_nonblocking: get next node of a popped stack.
-> + *
-> + * Same as cds_wfs_next_blocking, but returns CDS_WFS_WOULDBLOCK if it
-> + * needs to block.
-> + */
-> +extern struct cds_wfs_node *cds_wfs_next_nonblocking(struct cds_wfs_node *node);
-> +
-> +/*
->   * cds_wfs_pop_lock: lock stack pop-protection mutex.
->   */
->  extern void cds_wfs_pop_lock(struct cds_wfs_stack *s);
-> @@ -212,6 +222,14 @@ extern void cds_wfs_pop_unlock(struct cds_wfs_stack *s);
->  extern struct cds_wfs_node *__cds_wfs_pop_blocking(struct cds_wfs_stack *s);
->  
->  /*
-> + * __cds_wfs_pop_nonblocking: pop a node from the stack.
-> + *
-> + * Same as __cds_wfs_pop_blocking, but returns CDS_WFS_WOULDBLOCK if
-> + * it needs to block.
-> + */
-> +extern struct cds_wfs_node *__cds_wfs_pop_nonblocking(struct cds_wfs_stack *s);
-> +
-> +/*
->   * __cds_wfs_pop_all: pop all nodes from a stack.
->   *
->   * __cds_wfs_pop_all does not require any synchronization with other
-> diff --git a/wfstack.c b/wfstack.c
-> index f0bae57..4ccb6b9 100644
-> --- a/wfstack.c
-> +++ b/wfstack.c
-> @@ -68,6 +68,11 @@ struct cds_wfs_node *cds_wfs_next_blocking(struct cds_wfs_node *node)
->  	return _cds_wfs_next_blocking(node);
->  }
->  
-> +struct cds_wfs_node *cds_wfs_next_nonblocking(struct cds_wfs_node *node)
-> +{
-> +	return _cds_wfs_next_nonblocking(node);
-> +}
-> +
->  void cds_wfs_pop_lock(struct cds_wfs_stack *s)
->  {
->  	_cds_wfs_pop_lock(s);
-> @@ -83,6 +88,11 @@ struct cds_wfs_node *__cds_wfs_pop_blocking(struct cds_wfs_stack *s)
->  	return ___cds_wfs_pop_blocking(s);
->  }
->  
-> +struct cds_wfs_node *__cds_wfs_pop_nonblocking(struct cds_wfs_stack *s)
-> +{
-> +	return ___cds_wfs_pop_nonblocking(s);
-> +}
-> +
->  struct cds_wfs_head *__cds_wfs_pop_all(struct cds_wfs_stack *s)
->  {
->  	return ___cds_wfs_pop_all(s);
-> 
-> -- 
-> Mathieu Desnoyers
-> Operating System Efficiency R&D Consultant
-> EfficiOS Inc.
-> http://www.efficios.com
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+test: (4X6=24 CPUs)
 
--- 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+Before patch:
+
+[root@localhost userspace-rcu]# ./tests/test_urcu_mb 20 1 20
+SUMMARY ./tests/test_urcu_mb      testdur   20 nr_readers  20 rdur      0 wdur      0 nr_writers   1 wdelay      0 nr_reads   2100285330 nr_writes      3390219 nr_ops   2103675549
+[root@localhost userspace-rcu]# ./tests/test_urcu_mb 20 1 20
+SUMMARY ./tests/test_urcu_mb      testdur   20 nr_readers  20 rdur      0 wdur      0 nr_writers   1 wdelay      0 nr_reads   1619868562 nr_writes      3529478 nr_ops   1623398040
+[root@localhost userspace-rcu]# ./tests/test_urcu_mb 20 1 20
+SUMMARY ./tests/test_urcu_mb      testdur   20 nr_readers  20 rdur      0 wdur      0 nr_writers   1 wdelay      0 nr_reads   1949067038 nr_writes      3469334 nr_ops   1952536372
+
+
+after patch:
+
+[root@localhost userspace-rcu]# ./tests/test_urcu_mb 20 1 20
+SUMMARY ./tests/test_urcu_mb      testdur   20 nr_readers  20 rdur      0 wdur      0 nr_writers   1 wdelay      0 nr_reads   3380191848 nr_writes      4903248 nr_ops   3385095096
+[root@localhost userspace-rcu]# ./tests/test_urcu_mb 20 1 20
+SUMMARY ./tests/test_urcu_mb      testdur   20 nr_readers  20 rdur      0 wdur      0 nr_writers   1 wdelay      0 nr_reads   3397637486 nr_writes      4129809 nr_ops   3401767295
+
+Singed-by: Lai Jiangshan <laijs@cn.fujitsu.com>
+---
+diff --git a/urcu.c b/urcu.c
+index 15def09..436d71c 100644
+--- a/urcu.c
++++ b/urcu.c
+@@ -83,16 +83,7 @@ void __attribute__((destructor)) rcu_exit(void);
+ #endif
+ 
+ static pthread_mutex_t rcu_gp_lock = PTHREAD_MUTEX_INITIALIZER;
+-
+-int32_t rcu_gp_futex;
+-
+-/*
+- * Global grace period counter.
+- * Contains the current RCU_GP_CTR_PHASE.
+- * Also has a RCU_GP_COUNT of 1, to accelerate the reader fast path.
+- * Written to only by writer with mutex taken. Read by both writer and readers.
+- */
+-unsigned long rcu_gp_ctr = RCU_GP_COUNT;
++struct urcu_gp rcu_gp = { .ctr = RCU_GP_COUNT };
+ 
+ /*
+  * Written to only by each individual reader. Read by both the reader and the
+@@ -217,8 +208,8 @@ static void wait_gp(void)
+ {
+ 	/* Read reader_gp before read futex */
+ 	smp_mb_master(RCU_MB_GROUP);
+-	if (uatomic_read(&rcu_gp_futex) == -1)
+-		futex_async(&rcu_gp_futex, FUTEX_WAIT, -1,
++	if (uatomic_read(&rcu_gp.futex) == -1)
++		futex_async(&rcu_gp.futex, FUTEX_WAIT, -1,
+ 		      NULL, NULL, 0);
+ }
+ 
+@@ -232,12 +223,12 @@ static void wait_for_readers(struct cds_list_head *input_readers,
+ 	/*
+ 	 * Wait for each thread URCU_TLS(rcu_reader).ctr to either
+ 	 * indicate quiescence (not nested), or observe the current
+-	 * rcu_gp_ctr value.
++	 * rcu_gp.ctr value.
+ 	 */
+ 	for (;;) {
+ 		wait_loops++;
+ 		if (wait_loops == RCU_QS_ACTIVE_ATTEMPTS) {
+-			uatomic_dec(&rcu_gp_futex);
++			uatomic_dec(&rcu_gp.futex);
+ 			/* Write futex before read reader_gp */
+ 			smp_mb_master(RCU_MB_GROUP);
+ 		}
+@@ -270,7 +261,7 @@ static void wait_for_readers(struct cds_list_head *input_readers,
+ 			if (wait_loops == RCU_QS_ACTIVE_ATTEMPTS) {
+ 				/* Read reader_gp before write futex */
+ 				smp_mb_master(RCU_MB_GROUP);
+-				uatomic_set(&rcu_gp_futex, 0);
++				uatomic_set(&rcu_gp.futex, 0);
+ 			}
+ 			break;
+ 		} else {
+@@ -289,7 +280,7 @@ static void wait_for_readers(struct cds_list_head *input_readers,
+ 			if (wait_loops == RCU_QS_ACTIVE_ATTEMPTS) {
+ 				/* Read reader_gp before write futex */
+ 				smp_mb_master(RCU_MB_GROUP);
+-				uatomic_set(&rcu_gp_futex, 0);
++				uatomic_set(&rcu_gp.futex, 0);
+ 			}
+ 			break;
+ 		} else {
+@@ -357,10 +348,10 @@ void synchronize_rcu(void)
+ 
+ 	/*
+ 	 * Must finish waiting for quiescent state for original parity before
+-	 * committing next rcu_gp_ctr update to memory. Failure to do so could
++	 * committing next rcu_gp.ctr update to memory. Failure to do so could
+ 	 * result in the writer waiting forever while new readers are always
+ 	 * accessing data (no progress).  Enforce compiler-order of load
+-	 * URCU_TLS(rcu_reader).ctr before store to rcu_gp_ctr.
++	 * URCU_TLS(rcu_reader).ctr before store to rcu_gp.ctr.
+ 	 */
+ 	cmm_barrier();
+ 
+@@ -372,13 +363,13 @@ void synchronize_rcu(void)
+ 	cmm_smp_mb();
+ 
+ 	/* Switch parity: 0 -> 1, 1 -> 0 */
+-	CMM_STORE_SHARED(rcu_gp_ctr, rcu_gp_ctr ^ RCU_GP_CTR_PHASE);
++	CMM_STORE_SHARED(rcu_gp.ctr, rcu_gp.ctr ^ RCU_GP_CTR_PHASE);
+ 
+ 	/*
+-	 * Must commit rcu_gp_ctr update to memory before waiting for quiescent
++	 * Must commit rcu_gp.ctr update to memory before waiting for quiescent
+ 	 * state. Failure to do so could result in the writer waiting forever
+ 	 * while new readers are always accessing data (no progress). Enforce
+-	 * compiler-order of store to rcu_gp_ctr before load rcu_reader ctr.
++	 * compiler-order of store to rcu_gp.ctr before load rcu_reader ctr.
+ 	 */
+ 	cmm_barrier();
+ 
+diff --git a/urcu/static/urcu.h b/urcu/static/urcu.h
+index 973826a..0dd733e 100644
+--- a/urcu/static/urcu.h
++++ b/urcu/static/urcu.h
+@@ -213,12 +213,20 @@ static inline void smp_mb_slave(int group)
+ #define RCU_GP_CTR_PHASE	(1UL << (sizeof(unsigned long) << 2))
+ #define RCU_GP_CTR_NEST_MASK	(RCU_GP_CTR_PHASE - 1)
+ 
+-/*
+- * Global quiescent period counter with low-order bits unused.
+- * Using a int rather than a char to eliminate false register dependencies
+- * causing stalls on some architectures.
+- */
+-extern unsigned long rcu_gp_ctr;
++struct urcu_gp {
++	/*
++	 * Global grace period counter.
++	 * Contains the current RCU_GP_CTR_PHASE.
++	 * Also has a RCU_GP_COUNT of 1, to accelerate the reader fast path.
++	 * Written to only by writer with mutex taken.
++	 * Read by both writer and readers.
++	 */
++	unsigned long ctr;
++
++	int32_t futex;
++} __attribute__((aligned(CAA_CACHE_LINE_SIZE)));
++
++extern struct urcu_gp rcu_gp;
+ 
+ struct rcu_reader {
+ 	/* Data used by both reader and synchronize_rcu() */
+@@ -231,16 +239,14 @@ struct rcu_reader {
+ 
+ extern DECLARE_URCU_TLS(struct rcu_reader, rcu_reader);
+ 
+-extern int32_t rcu_gp_futex;
+-
+ /*
+  * Wake-up waiting synchronize_rcu(). Called from many concurrent threads.
+  */
+ static inline void wake_up_gp(void)
+ {
+-	if (caa_unlikely(uatomic_read(&rcu_gp_futex) == -1)) {
+-		uatomic_set(&rcu_gp_futex, 0);
+-		futex_async(&rcu_gp_futex, FUTEX_WAKE, 1,
++	if (caa_unlikely(uatomic_read(&rcu_gp.futex) == -1)) {
++		uatomic_set(&rcu_gp.futex, 0);
++		futex_async(&rcu_gp.futex, FUTEX_WAKE, 1,
+ 		      NULL, NULL, 0);
+ 	}
+ }
+@@ -256,13 +262,13 @@ static inline enum rcu_state rcu_reader_state(unsigned long *ctr)
+ 	v = CMM_LOAD_SHARED(*ctr);
+ 	if (!(v & RCU_GP_CTR_NEST_MASK))
+ 		return RCU_READER_INACTIVE;
+-	if (!((v ^ rcu_gp_ctr) & RCU_GP_CTR_PHASE))
++	if (!((v ^ rcu_gp.ctr) & RCU_GP_CTR_PHASE))
+ 		return RCU_READER_ACTIVE_CURRENT;
+ 	return RCU_READER_ACTIVE_OLD;
+ }
+ 
+ /*
+- * Helper for _rcu_read_lock().  The format of rcu_gp_ctr (as well as
++ * Helper for _rcu_read_lock().  The format of rcu_gp.ctr (as well as
+  * the per-thread rcu_reader.ctr) has the upper bits containing a count of
+  * _rcu_read_lock() nesting, and a lower-order bit that contains either zero
+  * or RCU_GP_CTR_PHASE.  The smp_mb_slave() ensures that the accesses in
+@@ -271,7 +277,7 @@ static inline enum rcu_state rcu_reader_state(unsigned long *ctr)
+ static inline void _rcu_read_lock_update(unsigned long tmp)
+ {
+ 	if (caa_likely(!(tmp & RCU_GP_CTR_NEST_MASK))) {
+-		_CMM_STORE_SHARED(URCU_TLS(rcu_reader).ctr, _CMM_LOAD_SHARED(rcu_gp_ctr));
++		_CMM_STORE_SHARED(URCU_TLS(rcu_reader).ctr, _CMM_LOAD_SHARED(rcu_gp.ctr));
+ 		smp_mb_slave(RCU_MB_GROUP);
+ 	} else
+ 		_CMM_STORE_SHARED(URCU_TLS(rcu_reader).ctr, tmp + RCU_GP_COUNT);
