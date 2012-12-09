@@ -1,20 +1,20 @@
 From: Andrew Gabbasov <andrew_gabbasov@mentor.com>
-Subject: [PATCH v2 lttng-modules] Update kernel probes to more
-	detailed match to kernel versions
-Date: Sun,  9 Dec 2012 09:18:15 -0600
-Message-ID: <1355066295-4367-1-git-send-email-andrew_gabbasov__44589.836538262$1355066356$gmane$org@mentor.com>
+Subject: [PATCH lttng-modules] Add new kernel probes
+	instrumentation
+Date: Sun,  9 Dec 2012 09:19:47 -0600
+Message-ID: <1355066387-4408-1-git-send-email-andrew_gabbasov__202.990687876259$1355066472$gmane$org@mentor.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Andrew_Gabbasov@mentor.com>) id 1ThieD-0006nl-BA
-	for lttng-dev@lists.lttng.org; Sun, 09 Dec 2012 10:18:29 -0500
+	(envelope-from <Andrew_Gabbasov@mentor.com>) id 1Thifg-0006pC-W7
+	for lttng-dev@lists.lttng.org; Sun, 09 Dec 2012 10:20:01 -0500
 Received: from svr-orw-fem-01.mgc.mentorg.com ([147.34.98.93])
 	by relay1.mentorg.com with esmtp
-	id 1Thie7-0007Wx-MT from Andrew_Gabbasov@mentor.com
-	for lttng-dev@lists.lttng.org; Sun, 09 Dec 2012 07:18:23 -0800
+	id 1Thifb-0007ak-Ar from Andrew_Gabbasov@mentor.com
+	for lttng-dev@lists.lttng.org; Sun, 09 Dec 2012 07:19:55 -0800
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -26,4398 +26,11648 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Some ifdef's are added to kernel probes instrumentation to make them
-more close to original tracepoints in different kernel versions.
-Supported kernel version are from 2.6.32 to 3.7.
+Add kernel probes for btrfs, compaction, ext4, printk, random, rcu,
+regmap, rpm, sunrpc, workqueue, writeback.
 
 Signed-off-by: Andrew Gabbasov <andrew_gabbasov@mentor.com>
 ---
- instrumentation/events/lttng-module/asoc.h   |   82 ++
- instrumentation/events/lttng-module/block.h  |  110 ++-
- instrumentation/events/lttng-module/ext3.h   |    6 +
- instrumentation/events/lttng-module/jbd.h    |   22 +
- instrumentation/events/lttng-module/jbd2.h   |   42 +
- instrumentation/events/lttng-module/kmem.h   |   25 +-
- instrumentation/events/lttng-module/kvm.h    |   19 +
- instrumentation/events/lttng-module/lock.h   |  121 +++
- instrumentation/events/lttng-module/module.h |   23 +
- instrumentation/events/lttng-module/power.h  |   99 +-
- instrumentation/events/lttng-module/sched.h  |   84 ++
- instrumentation/events/lttng-module/scsi.h   |   37 +
- instrumentation/events/lttng-module/signal.h |    2 +
- instrumentation/events/lttng-module/skb.h    |    5 +
- instrumentation/events/lttng-module/vmscan.h |  123 ++-
- instrumentation/events/mainline/asoc.h       |   80 ++
- instrumentation/events/mainline/block.h      |   20 +-
- instrumentation/events/mainline/ext3.h       |    4 +-
- instrumentation/events/mainline/fs_ext3.h    | 1323 --------------------------
- instrumentation/events/mainline/jbd.h        |   39 +-
- instrumentation/events/mainline/jbd2.h       |   29 +-
- instrumentation/events/mainline/kmem.h       |    8 +-
- instrumentation/events/mainline/power.h      |   37 +-
- instrumentation/events/mainline/sched.h      |   17 +-
- instrumentation/events/mainline/signal.h     |   85 +-
- instrumentation/events/mainline/vmscan.h     |  136 +--
- probes/Makefile                              |   43 +-
- probes/lttng-probe-asoc.c                    |    4 +-
- probes/lttng-probe-block.c                   |    2 +
- probes/lttng-probe-ext3.c                    |   10 +-
- probes/lttng-probe-irq.c                     |    3 +-
- probes/lttng-probe-jbd.c                     |    3 +-
- probes/lttng-probe-jbd2.c                    |    4 +-
- probes/lttng-probe-kmem.c                    |    4 +-
- probes/lttng-probe-kvm.c                     |    2 +
- probes/lttng-probe-lock.c                    |    9 +-
- probes/lttng-probe-module.c                  |    4 +-
- probes/lttng-probe-napi.c                    |    2 +
- probes/lttng-probe-power.c                   |    4 +-
- probes/lttng-probe-sched.c                   |    3 +-
- probes/lttng-probe-scsi.c                    |    2 +-
- probes/lttng-probe-skb.c                     |    4 +-
- probes/lttng-probe-timer.c                   |    3 +-
- probes/lttng-probe-vmscan.c                  |    8 +-
- 44 files changed, 1074 insertions(+), 1618 deletions(-)
- delete mode 100644 instrumentation/events/mainline/fs_ext3.h
+ instrumentation/events/lttng-module/btrfs.h      | 1005 +++++++++
+ instrumentation/events/lttng-module/compaction.h |   74 +
+ instrumentation/events/lttng-module/ext4.h       | 2398 ++++++++++++++++++++++
+ instrumentation/events/lttng-module/printk.h     |   64 +
+ instrumentation/events/lttng-module/random.h     |  134 ++
+ instrumentation/events/lttng-module/rcu.h        |  721 +++++++
+ instrumentation/events/lttng-module/regmap.h     |  188 ++
+ instrumentation/events/lttng-module/rpm.h        |  101 +
+ instrumentation/events/lttng-module/sunrpc.h     |  177 ++
+ instrumentation/events/lttng-module/workqueue.h  |  316 +++
+ instrumentation/events/lttng-module/writeback.h  |  673 ++++++
+ instrumentation/events/mainline/btrfs.h          |  918 +++++++++
+ instrumentation/events/mainline/compaction.h     |   74 +
+ instrumentation/events/mainline/ext4.h           | 2061 +++++++++++++++++++
+ instrumentation/events/mainline/printk.h         |   41 +
+ instrumentation/events/mainline/random.h         |  134 ++
+ instrumentation/events/mainline/rcu.h            |  618 ++++++
+ instrumentation/events/mainline/regmap.h         |  181 ++
+ instrumentation/events/mainline/rpm.h            |  100 +
+ instrumentation/events/mainline/sunrpc.h         |  177 ++
+ instrumentation/events/mainline/workqueue.h      |  121 ++
+ instrumentation/events/mainline/writeback.h      |  492 +++++
+ probes/Makefile                                  |   73 +
+ probes/lttng-probe-btrfs.c                       |   48 +
+ probes/lttng-probe-compaction.c                  |   43 +
+ probes/lttng-probe-ext4.c                        |   50 +
+ probes/lttng-probe-printk.c                      |   43 +
+ probes/lttng-probe-random.c                      |   43 +
+ probes/lttng-probe-rcu.c                         |   44 +
+ probes/lttng-probe-regmap.c                      |   44 +
+ probes/lttng-probe-rpm.c                         |   44 +
+ probes/lttng-probe-sunrpc.c                      |   43 +
+ probes/lttng-probe-workqueue.c                   |   48 +
+ probes/lttng-probe-writeback.c                   |   69 +
+ 34 files changed, 11360 insertions(+)
+ create mode 100644 instrumentation/events/lttng-module/btrfs.h
+ create mode 100644 instrumentation/events/lttng-module/compaction.h
+ create mode 100644 instrumentation/events/lttng-module/ext4.h
+ create mode 100644 instrumentation/events/lttng-module/printk.h
+ create mode 100644 instrumentation/events/lttng-module/random.h
+ create mode 100644 instrumentation/events/lttng-module/rcu.h
+ create mode 100644 instrumentation/events/lttng-module/regmap.h
+ create mode 100644 instrumentation/events/lttng-module/rpm.h
+ create mode 100644 instrumentation/events/lttng-module/sunrpc.h
+ create mode 100644 instrumentation/events/lttng-module/workqueue.h
+ create mode 100644 instrumentation/events/lttng-module/writeback.h
+ create mode 100644 instrumentation/events/mainline/btrfs.h
+ create mode 100644 instrumentation/events/mainline/compaction.h
+ create mode 100644 instrumentation/events/mainline/ext4.h
+ create mode 100644 instrumentation/events/mainline/printk.h
+ create mode 100644 instrumentation/events/mainline/random.h
+ create mode 100644 instrumentation/events/mainline/rcu.h
+ create mode 100644 instrumentation/events/mainline/regmap.h
+ create mode 100644 instrumentation/events/mainline/rpm.h
+ create mode 100644 instrumentation/events/mainline/sunrpc.h
+ create mode 100644 instrumentation/events/mainline/workqueue.h
+ create mode 100644 instrumentation/events/mainline/writeback.h
+ create mode 100644 probes/lttng-probe-btrfs.c
+ create mode 100644 probes/lttng-probe-compaction.c
+ create mode 100644 probes/lttng-probe-ext4.c
+ create mode 100644 probes/lttng-probe-printk.c
+ create mode 100644 probes/lttng-probe-random.c
+ create mode 100644 probes/lttng-probe-rcu.c
+ create mode 100644 probes/lttng-probe-regmap.c
+ create mode 100644 probes/lttng-probe-rpm.c
+ create mode 100644 probes/lttng-probe-sunrpc.c
+ create mode 100644 probes/lttng-probe-workqueue.c
+ create mode 100644 probes/lttng-probe-writeback.c
 
-diff --git a/instrumentation/events/lttng-module/asoc.h b/instrumentation/events/lttng-module/asoc.h
-index 6ffc923..672bea4 100644
---- a/instrumentation/events/lttng-module/asoc.h
-+++ b/instrumentation/events/lttng-module/asoc.h
-@@ -8,6 +8,8 @@
- #include <linux/tracepoint.h>
- #include <linux/version.h>
- 
-+#define DAPM_DIRECT "(direct)"
+diff --git a/instrumentation/events/lttng-module/btrfs.h b/instrumentation/events/lttng-module/btrfs.h
+new file mode 100644
+index 0000000..b0ff3c6
+--- /dev/null
++++ b/instrumentation/events/lttng-module/btrfs.h
+@@ -0,0 +1,1005 @@
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM btrfs
 +
- #ifndef _TRACE_ASOC_DEF
- #define _TRACE_ASOC_DEF
- struct snd_soc_jack;
-@@ -251,6 +253,86 @@ TRACE_EVENT(snd_soc_dapm_walk_done,
- )
- #endif
- 
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,5,0))
-+TRACE_EVENT(snd_soc_dapm_output_path,
++#if !defined(_TRACE_BTRFS_H) || defined(TRACE_HEADER_MULTI_READ)
++#define _TRACE_BTRFS_H
 +
-+	TP_PROTO(struct snd_soc_dapm_widget *widget,
-+		struct snd_soc_dapm_path *path),
++#include <linux/writeback.h>
++#include <linux/tracepoint.h>
++#include <trace/events/gfpflags.h>
++#include <linux/version.h>
 +
-+	TP_ARGS(widget, path),
++#ifndef _TRACE_BTRFS_DEF_
++#define _TRACE_BTRFS_DEF_
++struct btrfs_root;
++struct btrfs_fs_info;
++struct btrfs_inode;
++struct extent_map;
++struct btrfs_ordered_extent;
++struct btrfs_delayed_ref_node;
++struct btrfs_delayed_tree_ref;
++struct btrfs_delayed_data_ref;
++struct btrfs_delayed_ref_head;
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,3,0))
++struct btrfs_block_group_cache;
++struct btrfs_free_cluster;
++#endif
++struct map_lookup;
++struct extent_buffer;
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,4,0))
++struct extent_state;
++#endif
++#endif
++
++#define show_ref_type(type)						\
++	__print_symbolic(type,						\
++		{ BTRFS_TREE_BLOCK_REF_KEY, 	"TREE_BLOCK_REF" },	\
++		{ BTRFS_EXTENT_DATA_REF_KEY, 	"EXTENT_DATA_REF" },	\
++		{ BTRFS_EXTENT_REF_V0_KEY, 	"EXTENT_REF_V0" },	\
++		{ BTRFS_SHARED_BLOCK_REF_KEY, 	"SHARED_BLOCK_REF" },	\
++		{ BTRFS_SHARED_DATA_REF_KEY, 	"SHARED_DATA_REF" })
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,0,0))
++#define __show_root_type(obj)						\
++	__print_symbolic_u64(obj,					\
++		{ BTRFS_ROOT_TREE_OBJECTID, 	"ROOT_TREE"	},	\
++		{ BTRFS_EXTENT_TREE_OBJECTID, 	"EXTENT_TREE"	},	\
++		{ BTRFS_CHUNK_TREE_OBJECTID, 	"CHUNK_TREE"	},	\
++		{ BTRFS_DEV_TREE_OBJECTID, 	"DEV_TREE"	},	\
++		{ BTRFS_FS_TREE_OBJECTID, 	"FS_TREE"	},	\
++		{ BTRFS_ROOT_TREE_DIR_OBJECTID, "ROOT_TREE_DIR"	},	\
++		{ BTRFS_CSUM_TREE_OBJECTID, 	"CSUM_TREE"	},	\
++		{ BTRFS_TREE_LOG_OBJECTID,	"TREE_LOG"	},	\
++		{ BTRFS_TREE_RELOC_OBJECTID,	"TREE_RELOC"	},	\
++		{ BTRFS_DATA_RELOC_TREE_OBJECTID, "DATA_RELOC_TREE" })
++#else
++#define __show_root_type(obj)						\
++	__print_symbolic(obj,					\
++		{ BTRFS_ROOT_TREE_OBJECTID, 	"ROOT_TREE"	},	\
++		{ BTRFS_EXTENT_TREE_OBJECTID, 	"EXTENT_TREE"	},	\
++		{ BTRFS_CHUNK_TREE_OBJECTID, 	"CHUNK_TREE"	},	\
++		{ BTRFS_DEV_TREE_OBJECTID, 	"DEV_TREE"	},	\
++		{ BTRFS_FS_TREE_OBJECTID, 	"FS_TREE"	},	\
++		{ BTRFS_ROOT_TREE_DIR_OBJECTID, "ROOT_TREE_DIR"	},	\
++		{ BTRFS_CSUM_TREE_OBJECTID, 	"CSUM_TREE"	},	\
++		{ BTRFS_TREE_LOG_OBJECTID,	"TREE_LOG"	},	\
++		{ BTRFS_TREE_RELOC_OBJECTID,	"TREE_RELOC"	},	\
++		{ BTRFS_DATA_RELOC_TREE_OBJECTID, "DATA_RELOC_TREE" })
++#endif
++
++#define show_root_type(obj)						\
++	obj, ((obj >= BTRFS_DATA_RELOC_TREE_OBJECTID) ||		\
++	      (obj <= BTRFS_CSUM_TREE_OBJECTID )) ? __show_root_type(obj) : "-"
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,3,0))
++
++#define BTRFS_GROUP_FLAGS	\
++	{ BTRFS_BLOCK_GROUP_DATA,	"DATA"}, \
++	{ BTRFS_BLOCK_GROUP_SYSTEM,	"SYSTEM"}, \
++	{ BTRFS_BLOCK_GROUP_METADATA,	"METADATA"}, \
++	{ BTRFS_BLOCK_GROUP_RAID0,	"RAID0"}, \
++	{ BTRFS_BLOCK_GROUP_RAID1,	"RAID1"}, \
++	{ BTRFS_BLOCK_GROUP_DUP,	"DUP"}, \
++	{ BTRFS_BLOCK_GROUP_RAID10,	"RAID10"}
++
++#define BTRFS_UUID_SIZE 16
++
++#endif
++
++TRACE_EVENT(btrfs_transaction_commit,
++
++	TP_PROTO(struct btrfs_root *root),
++
++	TP_ARGS(root),
 +
 +	TP_STRUCT__entry(
-+		__string(	wname,	widget->name		)
-+		__string(	pname,	path->name ? path->name : DAPM_DIRECT)
-+		__string(	psname,	path->sink->name	)
-+		__field(	int,	path_sink		)
-+		__field(	int,	path_connect		)
++		__field(	u64,  generation		)
++		__field(	u64,  root_objectid		)
 +	),
 +
 +	TP_fast_assign(
-+		tp_strcpy(wname, widget->name)
-+		tp_strcpy(pname, path->name ? path->name : DAPM_DIRECT)
-+		tp_strcpy(psname, path->sink->name)
-+		tp_assign(path_connect, path->connect)
-+		tp_assign(path_sink, (long)path->sink)
++		tp_assign(generation, root->fs_info->generation)
++		tp_assign(root_objectid, root->root_key.objectid)
 +	),
 +
-+	TP_printk("%c%s -> %s -> %s\n",
-+		(int) __entry->path_sink &&
-+		(int) __entry->path_connect ? '*' : ' ',
-+		__get_str(wname), __get_str(pname), __get_str(psname))
++	TP_printk("root = %llu(%s), gen = %llu",
++		  show_root_type(__entry->root_objectid),
++		  (unsigned long long)__entry->generation)
 +)
 +
-+TRACE_EVENT(snd_soc_dapm_input_path,
++DECLARE_EVENT_CLASS(btrfs__inode,
 +
-+	TP_PROTO(struct snd_soc_dapm_widget *widget,
-+		struct snd_soc_dapm_path *path),
++	TP_PROTO(struct inode *inode),
 +
-+	TP_ARGS(widget, path),
++	TP_ARGS(inode),
 +
 +	TP_STRUCT__entry(
-+		__string(	wname,	widget->name		)
-+		__string(	pname,	path->name ? path->name : DAPM_DIRECT)
-+		__string(	psname,	path->source->name	)
-+		__field(	int,	path_source		)
-+		__field(	int,	path_connect		)
++		__field(	ino_t,  ino			)
++		__field(	blkcnt_t,  blocks		)
++		__field(	u64,  disk_i_size		)
++		__field(	u64,  generation		)
++		__field(	u64,  last_trans		)
++		__field(	u64,  logged_trans		)
++		__field(	u64,  root_objectid		)
 +	),
 +
 +	TP_fast_assign(
-+		tp_strcpy(wname, widget->name)
-+		tp_strcpy(pname, path->name ? path->name : DAPM_DIRECT)
-+		tp_strcpy(psname, path->source->name)
-+		tp_assign(path_connect, path->connect)
-+		tp_assign(path_source, (long)path->source)
++		tp_assign(ino, inode->i_ino)
++		tp_assign(blocks, inode->i_blocks)
++		tp_assign(disk_i_size, BTRFS_I(inode)->disk_i_size)
++		tp_assign(generation, BTRFS_I(inode)->generation)
++		tp_assign(last_trans, BTRFS_I(inode)->last_trans)
++		tp_assign(logged_trans, BTRFS_I(inode)->logged_trans)
++		tp_assign(root_objectid,
++				BTRFS_I(inode)->root->root_key.objectid)
 +	),
 +
-+	TP_printk("%c%s <- %s <- %s\n",
-+		(int) __entry->path_source &&
-+		(int) __entry->path_connect ? '*' : ' ',
-+		__get_str(wname), __get_str(pname), __get_str(psname))
++	TP_printk("root = %llu(%s), gen = %llu, ino = %lu, blocks = %llu, "
++		  "disk_i_size = %llu, last_trans = %llu, logged_trans = %llu",
++		  show_root_type(__entry->root_objectid),
++		  (unsigned long long)__entry->generation,
++		  (unsigned long)__entry->ino,
++		  (unsigned long long)__entry->blocks,
++		  (unsigned long long)__entry->disk_i_size,
++		  (unsigned long long)__entry->last_trans,
++		  (unsigned long long)__entry->logged_trans)
 +)
 +
-+TRACE_EVENT(snd_soc_dapm_connected,
++DEFINE_EVENT(btrfs__inode, btrfs_inode_new,
 +
-+	TP_PROTO(int paths, int stream),
++	TP_PROTO(struct inode *inode),
 +
-+	TP_ARGS(paths, stream),
++	TP_ARGS(inode)
++)
++
++DEFINE_EVENT(btrfs__inode, btrfs_inode_request,
++
++	TP_PROTO(struct inode *inode),
++
++	TP_ARGS(inode)
++)
++
++DEFINE_EVENT(btrfs__inode, btrfs_inode_evict,
++
++	TP_PROTO(struct inode *inode),
++
++	TP_ARGS(inode)
++)
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,0,0))
++#define __show_map_type(type)						\
++	__print_symbolic_u64(type,					\
++		{ EXTENT_MAP_LAST_BYTE, "LAST_BYTE" 	},		\
++		{ EXTENT_MAP_HOLE, 	"HOLE" 		},		\
++		{ EXTENT_MAP_INLINE, 	"INLINE" 	},		\
++		{ EXTENT_MAP_DELALLOC,	"DELALLOC" 	})
++#else
++#define __show_map_type(type)						\
++	__print_symbolic(type,					\
++		{ EXTENT_MAP_LAST_BYTE, "LAST_BYTE" 	},		\
++		{ EXTENT_MAP_HOLE, 	"HOLE" 		},		\
++		{ EXTENT_MAP_INLINE, 	"INLINE" 	},		\
++		{ EXTENT_MAP_DELALLOC,	"DELALLOC" 	})
++#endif
++
++#define show_map_type(type)			\
++	type, (type >= EXTENT_MAP_LAST_BYTE) ? "-" :  __show_map_type(type)
++
++#define show_map_flags(flag)						\
++	__print_flags(flag, "|",					\
++		{ EXTENT_FLAG_PINNED, 		"PINNED" 	},	\
++		{ EXTENT_FLAG_COMPRESSED, 	"COMPRESSED" 	},	\
++		{ EXTENT_FLAG_VACANCY, 		"VACANCY" 	},	\
++		{ EXTENT_FLAG_PREALLOC, 	"PREALLOC" 	})
++
++TRACE_EVENT(btrfs_get_extent,
++
++	TP_PROTO(struct btrfs_root *root, struct extent_map *map),
++
++	TP_ARGS(root, map),
 +
 +	TP_STRUCT__entry(
-+		__field(	int,	paths		)
-+		__field(	int,	stream		)
++		__field(	u64,  root_objectid	)
++		__field(	u64,  start		)
++		__field(	u64,  len		)
++		__field(	u64,  orig_start	)
++		__field(	u64,  block_start	)
++		__field(	u64,  block_len		)
++		__field(	unsigned long,  flags	)
++		__field(	int,  refs		)
++		__field(	unsigned int,  compress_type	)
 +	),
 +
 +	TP_fast_assign(
-+		tp_assign(paths, paths)
-+		tp_assign(stream, stream)
++		tp_assign(root_objectid, root->root_key.objectid)
++		tp_assign(start, map->start)
++		tp_assign(len, map->len)
++		tp_assign(orig_start, map->orig_start)
++		tp_assign(block_start, map->block_start)
++		tp_assign(block_len, map->block_len)
++		tp_assign(flags, map->flags)
++		tp_assign(refs, atomic_read(&map->refs))
++		tp_assign(compress_type, map->compress_type)
 +	),
 +
-+	TP_printk("%s: found %d paths\n",
-+		__entry->stream ? "capture" : "playback", __entry->paths)
++	TP_printk("root = %llu(%s), start = %llu, len = %llu, "
++		  "orig_start = %llu, block_start = %llu(%s), "
++		  "block_len = %llu, flags = %s, refs = %u, "
++		  "compress_type = %u",
++		  show_root_type(__entry->root_objectid),
++		  (unsigned long long)__entry->start,
++		  (unsigned long long)__entry->len,
++		  (unsigned long long)__entry->orig_start,
++		  show_map_type(__entry->block_start),
++		  (unsigned long long)__entry->block_len,
++		  show_map_flags(__entry->flags),
++		  __entry->refs, __entry->compress_type)
++)
++
++#define show_ordered_flags(flags)					\
++	__print_symbolic(flags,					\
++		{ BTRFS_ORDERED_IO_DONE, 	"IO_DONE" 	},	\
++		{ BTRFS_ORDERED_COMPLETE, 	"COMPLETE" 	},	\
++		{ BTRFS_ORDERED_NOCOW, 		"NOCOW" 	},	\
++		{ BTRFS_ORDERED_COMPRESSED, 	"COMPRESSED" 	},	\
++		{ BTRFS_ORDERED_PREALLOC, 	"PREALLOC" 	},	\
++		{ BTRFS_ORDERED_DIRECT, 	"DIRECT" 	})
++
++DECLARE_EVENT_CLASS(btrfs__ordered_extent,
++
++	TP_PROTO(struct inode *inode, struct btrfs_ordered_extent *ordered),
++
++	TP_ARGS(inode, ordered),
++
++	TP_STRUCT__entry(
++		__field(	ino_t,  ino		)
++		__field(	u64,  file_offset	)
++		__field(	u64,  start		)
++		__field(	u64,  len		)
++		__field(	u64,  disk_len		)
++		__field(	u64,  bytes_left	)
++		__field(	unsigned long,  flags	)
++		__field(	int,  compress_type	)
++		__field(	int,  refs		)
++		__field(	u64,  root_objectid	)
++	),
++
++	TP_fast_assign(
++		tp_assign(ino, inode->i_ino)
++		tp_assign(file_offset, ordered->file_offset)
++		tp_assign(start, ordered->start)
++		tp_assign(len, ordered->len)
++		tp_assign(disk_len, ordered->disk_len)
++		tp_assign(bytes_left, ordered->bytes_left)
++		tp_assign(flags, ordered->flags)
++		tp_assign(compress_type, ordered->compress_type)
++		tp_assign(refs, atomic_read(&ordered->refs))
++		tp_assign(root_objectid,
++				BTRFS_I(inode)->root->root_key.objectid)
++	),
++
++	TP_printk("root = %llu(%s), ino = %llu, file_offset = %llu, "
++		  "start = %llu, len = %llu, disk_len = %llu, "
++		  "bytes_left = %llu, flags = %s, compress_type = %d, "
++		  "refs = %d",
++		  show_root_type(__entry->root_objectid),
++		  (unsigned long long)__entry->ino,
++		  (unsigned long long)__entry->file_offset,
++		  (unsigned long long)__entry->start,
++		  (unsigned long long)__entry->len,
++		  (unsigned long long)__entry->disk_len,
++		  (unsigned long long)__entry->bytes_left,
++		  show_ordered_flags(__entry->flags),
++		  __entry->compress_type, __entry->refs)
++)
++
++DEFINE_EVENT(btrfs__ordered_extent, btrfs_ordered_extent_add,
++
++	TP_PROTO(struct inode *inode, struct btrfs_ordered_extent *ordered),
++
++	TP_ARGS(inode, ordered)
++)
++
++DEFINE_EVENT(btrfs__ordered_extent, btrfs_ordered_extent_remove,
++
++	TP_PROTO(struct inode *inode, struct btrfs_ordered_extent *ordered),
++
++	TP_ARGS(inode, ordered)
++)
++
++DEFINE_EVENT(btrfs__ordered_extent, btrfs_ordered_extent_start,
++
++	TP_PROTO(struct inode *inode, struct btrfs_ordered_extent *ordered),
++
++	TP_ARGS(inode, ordered)
++)
++
++DEFINE_EVENT(btrfs__ordered_extent, btrfs_ordered_extent_put,
++
++	TP_PROTO(struct inode *inode, struct btrfs_ordered_extent *ordered),
++
++	TP_ARGS(inode, ordered)
++)
++
++DECLARE_EVENT_CLASS(btrfs__writepage,
++
++	TP_PROTO(struct page *page, struct inode *inode,
++		 struct writeback_control *wbc),
++
++	TP_ARGS(page, inode, wbc),
++
++	TP_STRUCT__entry(
++		__field(	ino_t,  ino			)
++		__field(	pgoff_t,  index			)
++		__field(	long,   nr_to_write		)
++		__field(	long,   pages_skipped		)
++		__field(	loff_t, range_start		)
++		__field(	loff_t, range_end		)
++#if (LINUX_VERSION_CODE < KERNEL_VERSION(3,1,0))
++		__field(	char,   nonblocking		)
++#endif
++		__field(	char,   for_kupdate		)
++		__field(	char,   for_reclaim		)
++		__field(	char,   range_cyclic		)
++		__field(	pgoff_t,  writeback_index	)
++		__field(	u64,    root_objectid		)
++	),
++
++	TP_fast_assign(
++		tp_assign(ino, inode->i_ino)
++		tp_assign(index, page->index)
++		tp_assign(nr_to_write, wbc->nr_to_write)
++		tp_assign(pages_skipped, wbc->pages_skipped)
++		tp_assign(range_start, wbc->range_start)
++		tp_assign(range_end, wbc->range_end)
++#if (LINUX_VERSION_CODE < KERNEL_VERSION(3,1,0))
++		tp_assign(nonblocking, wbc->nonblocking)
++#endif
++		tp_assign(for_kupdate, wbc->for_kupdate)
++		tp_assign(for_reclaim, wbc->for_reclaim)
++		tp_assign(range_cyclic, wbc->range_cyclic)
++		tp_assign(writeback_index, inode->i_mapping->writeback_index)
++		tp_assign(root_objectid,
++				 BTRFS_I(inode)->root->root_key.objectid)
++	),
++
++#if (LINUX_VERSION_CODE < KERNEL_VERSION(3,1,0))
++	TP_printk("root = %llu(%s), ino = %lu, page_index = %lu, "
++		  "nr_to_write = %ld, pages_skipped = %ld, range_start = %llu, "
++		  "range_end = %llu, nonblocking = %d, for_kupdate = %d, "
++		  "for_reclaim = %d, range_cyclic = %d, writeback_index = %lu",
++		  show_root_type(__entry->root_objectid),
++		  (unsigned long)__entry->ino, __entry->index,
++		  __entry->nr_to_write, __entry->pages_skipped,
++		  __entry->range_start, __entry->range_end,
++		  __entry->nonblocking, __entry->for_kupdate,
++		  __entry->for_reclaim, __entry->range_cyclic,
++		  (unsigned long)__entry->writeback_index)
++#else
++	TP_printk("root = %llu(%s), ino = %lu, page_index = %lu, "
++		  "nr_to_write = %ld, pages_skipped = %ld, range_start = %llu, "
++		  "range_end = %llu, for_kupdate = %d, "
++		  "for_reclaim = %d, range_cyclic = %d, writeback_index = %lu",
++		  show_root_type(__entry->root_objectid),
++		  (unsigned long)__entry->ino, __entry->index,
++		  __entry->nr_to_write, __entry->pages_skipped,
++		  __entry->range_start, __entry->range_end,
++		  __entry->for_kupdate,
++		  __entry->for_reclaim, __entry->range_cyclic,
++		  (unsigned long)__entry->writeback_index)
++#endif
++)
++
++DEFINE_EVENT(btrfs__writepage, __extent_writepage,
++
++	TP_PROTO(struct page *page, struct inode *inode,
++		 struct writeback_control *wbc),
++
++	TP_ARGS(page, inode, wbc)
++)
++
++TRACE_EVENT(btrfs_writepage_end_io_hook,
++
++	TP_PROTO(struct page *page, u64 start, u64 end, int uptodate),
++
++	TP_ARGS(page, start, end, uptodate),
++
++	TP_STRUCT__entry(
++		__field(	ino_t,	 ino		)
++		__field(	pgoff_t, index		)
++		__field(	u64,	 start		)
++		__field(	u64,	 end		)
++		__field(	int,	 uptodate	)
++		__field(	u64,    root_objectid	)
++	),
++
++	TP_fast_assign(
++		tp_assign(ino, page->mapping->host->i_ino)
++		tp_assign(index, page->index)
++		tp_assign(start, start)
++		tp_assign(end, end)
++		tp_assign(uptodate, uptodate)
++		tp_assign(root_objectid,
++			 BTRFS_I(page->mapping->host)->root->root_key.objectid)
++	),
++
++	TP_printk("root = %llu(%s), ino = %lu, page_index = %lu, start = %llu, "
++		  "end = %llu, uptodate = %d",
++		  show_root_type(__entry->root_objectid),
++		  (unsigned long)__entry->ino, (unsigned long)__entry->index,
++		  (unsigned long long)__entry->start,
++		  (unsigned long long)__entry->end, __entry->uptodate)
++)
++
++TRACE_EVENT(btrfs_sync_file,
++
++	TP_PROTO(struct file *file, int datasync),
++
++	TP_ARGS(file, datasync),
++
++	TP_STRUCT__entry(
++		__field(	ino_t,  ino		)
++		__field(	ino_t,  parent		)
++		__field(	int,    datasync	)
++		__field(	u64,    root_objectid	)
++	),
++
++	TP_fast_assign(
++		tp_assign(ino, file->f_path.dentry->d_inode->i_ino)
++		tp_assign(parent, file->f_path.dentry->d_parent->d_inode->i_ino)
++		tp_assign(datasync, datasync)
++		tp_assign(root_objectid,
++			BTRFS_I(file->f_path.dentry->d_inode)->root->root_key.objectid)
++	),
++
++	TP_printk("root = %llu(%s), ino = %ld, parent = %ld, datasync = %d",
++		  show_root_type(__entry->root_objectid),
++		  (unsigned long)__entry->ino, (unsigned long)__entry->parent,
++		  __entry->datasync)
++)
++
++TRACE_EVENT(btrfs_sync_fs,
++
++	TP_PROTO(int wait),
++
++	TP_ARGS(wait),
++
++	TP_STRUCT__entry(
++		__field(	int,  wait		)
++	),
++
++	TP_fast_assign(
++		tp_assign(wait, wait)
++	),
++
++	TP_printk("wait = %d", __entry->wait)
++)
++
++#define show_ref_action(action)						\
++	__print_symbolic(action,					\
++		{ BTRFS_ADD_DELAYED_REF,    "ADD_DELAYED_REF" },	\
++		{ BTRFS_DROP_DELAYED_REF,   "DROP_DELAYED_REF" },	\
++		{ BTRFS_ADD_DELAYED_EXTENT, "ADD_DELAYED_EXTENT" }, 	\
++		{ BTRFS_UPDATE_DELAYED_HEAD, "UPDATE_DELAYED_HEAD" })
++			
++
++TRACE_EVENT(btrfs_delayed_tree_ref,
++
++	TP_PROTO(struct btrfs_delayed_ref_node *ref,
++		 struct btrfs_delayed_tree_ref *full_ref,
++		 int action),
++
++	TP_ARGS(ref, full_ref, action),
++
++	TP_STRUCT__entry(
++		__field(	u64,  bytenr		)
++		__field(	u64,  num_bytes		)
++		__field(	int,  action		) 
++		__field(	u64,  parent		)
++		__field(	u64,  ref_root		)
++		__field(	int,  level		)
++		__field(	int,  type		)
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,7,0))
++		__field(	u64,  seq		)
++#endif
++	),
++
++	TP_fast_assign(
++		tp_assign(bytenr, ref->bytenr)
++		tp_assign(num_bytes, ref->num_bytes)
++		tp_assign(action, action)
++		tp_assign(parent, full_ref->parent)
++		tp_assign(ref_root, full_ref->root)
++		tp_assign(level, full_ref->level)
++		tp_assign(type, ref->type)
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,7,0))
++		tp_assign(seq, ref->seq)
++#endif
++	),
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,7,0))
++	TP_printk("bytenr = %llu, num_bytes = %llu, action = %s, "
++		  "parent = %llu(%s), ref_root = %llu(%s), level = %d, "
++		  "type = %s, seq = %llu",
++#else
++	TP_printk("bytenr = %llu, num_bytes = %llu, action = %s, "
++		  "parent = %llu(%s), ref_root = %llu(%s), level = %d, "
++		  "type = %s",
++#endif
++		  (unsigned long long)__entry->bytenr,
++		  (unsigned long long)__entry->num_bytes,
++		  show_ref_action(__entry->action),
++		  show_root_type(__entry->parent),
++		  show_root_type(__entry->ref_root),
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,7,0))
++		  __entry->level, show_ref_type(__entry->type),
++		  (unsigned long long)__entry->seq)
++#else
++		  __entry->level, show_ref_type(__entry->type))
++#endif
++)
++
++TRACE_EVENT(btrfs_delayed_data_ref,
++
++	TP_PROTO(struct btrfs_delayed_ref_node *ref,
++		 struct btrfs_delayed_data_ref *full_ref,
++		 int action),
++
++	TP_ARGS(ref, full_ref, action),
++
++	TP_STRUCT__entry(
++		__field(	u64,  bytenr		)
++		__field(	u64,  num_bytes		)
++		__field(	int,  action		) 
++		__field(	u64,  parent		)
++		__field(	u64,  ref_root		)
++		__field(	u64,  owner		)
++		__field(	u64,  offset		)
++		__field(	int,  type		)
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,7,0))
++		__field(	u64,  seq		)
++#endif
++	),
++
++	TP_fast_assign(
++		tp_assign(bytenr, ref->bytenr)
++		tp_assign(num_bytes, ref->num_bytes)
++		tp_assign(action, action)
++		tp_assign(parent, full_ref->parent)
++		tp_assign(ref_root, full_ref->root)
++		tp_assign(owner, full_ref->objectid)
++		tp_assign(offset, full_ref->offset)
++		tp_assign(type, ref->type)
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,7,0))
++		tp_assign(seq, ref->seq)
++#endif
++	),
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,7,0))
++	TP_printk("bytenr = %llu, num_bytes = %llu, action = %s, "
++		  "parent = %llu(%s), ref_root = %llu(%s), owner = %llu, "
++		  "offset = %llu, type = %s, seq = %llu",
++#else
++	TP_printk("bytenr = %llu, num_bytes = %llu, action = %s, "
++		  "parent = %llu(%s), ref_root = %llu(%s), owner = %llu, "
++		  "offset = %llu, type = %s",
++#endif
++		  (unsigned long long)__entry->bytenr,
++		  (unsigned long long)__entry->num_bytes,
++		  show_ref_action(__entry->action),
++		  show_root_type(__entry->parent),
++		  show_root_type(__entry->ref_root),
++		  (unsigned long long)__entry->owner,
++		  (unsigned long long)__entry->offset,
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,7,0))
++		  show_ref_type(__entry->type),
++		  (unsigned long long)__entry->seq)
++#else
++		  show_ref_type(__entry->type))
++#endif
++)
++
++TRACE_EVENT(btrfs_delayed_ref_head,
++
++	TP_PROTO(struct btrfs_delayed_ref_node *ref,
++		 struct btrfs_delayed_ref_head *head_ref,
++		 int action),
++
++	TP_ARGS(ref, head_ref, action),
++
++	TP_STRUCT__entry(
++		__field(	u64,  bytenr		)
++		__field(	u64,  num_bytes		)
++		__field(	int,  action		) 
++		__field(	int,  is_data		)
++	),
++
++	TP_fast_assign(
++		tp_assign(bytenr, ref->bytenr)
++		tp_assign(num_bytes, ref->num_bytes)
++		tp_assign(action, action)
++		tp_assign(is_data, head_ref->is_data)
++	),
++
++	TP_printk("bytenr = %llu, num_bytes = %llu, action = %s, is_data = %d",
++		  (unsigned long long)__entry->bytenr,
++		  (unsigned long long)__entry->num_bytes,
++		  show_ref_action(__entry->action),
++		  __entry->is_data)
++)
++
++#define show_chunk_type(type)					\
++	__print_flags(type, "|",				\
++		{ BTRFS_BLOCK_GROUP_DATA, 	"DATA"	},	\
++		{ BTRFS_BLOCK_GROUP_SYSTEM, 	"SYSTEM"},	\
++		{ BTRFS_BLOCK_GROUP_METADATA, 	"METADATA"},	\
++		{ BTRFS_BLOCK_GROUP_RAID0, 	"RAID0" },	\
++		{ BTRFS_BLOCK_GROUP_RAID1, 	"RAID1" },	\
++		{ BTRFS_BLOCK_GROUP_DUP, 	"DUP"	},	\
++		{ BTRFS_BLOCK_GROUP_RAID10, 	"RAID10"})
++
++DECLARE_EVENT_CLASS(btrfs__chunk,
++
++	TP_PROTO(struct btrfs_root *root, struct map_lookup *map,
++		 u64 offset, u64 size),
++
++	TP_ARGS(root, map, offset, size),
++
++	TP_STRUCT__entry(
++		__field(	int,  num_stripes		)
++		__field(	u64,  type			)
++		__field(	int,  sub_stripes		)
++		__field(	u64,  offset			)
++		__field(	u64,  size			)
++		__field(	u64,  root_objectid		)
++	),
++
++	TP_fast_assign(
++		tp_assign(num_stripes, map->num_stripes)
++		tp_assign(type, map->type)
++		tp_assign(sub_stripes, map->sub_stripes)
++		tp_assign(offset, offset)
++		tp_assign(size, size)
++		tp_assign(root_objectid, root->root_key.objectid)
++	),
++
++	TP_printk("root = %llu(%s), offset = %llu, size = %llu, "
++		  "num_stripes = %d, sub_stripes = %d, type = %s",
++		  show_root_type(__entry->root_objectid),
++		  (unsigned long long)__entry->offset,
++		  (unsigned long long)__entry->size,
++		  __entry->num_stripes, __entry->sub_stripes,
++		  show_chunk_type(__entry->type))
++)
++
++DEFINE_EVENT(btrfs__chunk,  btrfs_chunk_alloc,
++
++	TP_PROTO(struct btrfs_root *root, struct map_lookup *map,
++		 u64 offset, u64 size),
++
++	TP_ARGS(root, map, offset, size)
++)
++
++DEFINE_EVENT(btrfs__chunk,  btrfs_chunk_free,
++
++	TP_PROTO(struct btrfs_root *root, struct map_lookup *map,
++		 u64 offset, u64 size),
++
++	TP_ARGS(root, map, offset, size)
++)
++
++TRACE_EVENT(btrfs_cow_block,
++
++	TP_PROTO(struct btrfs_root *root, struct extent_buffer *buf,
++		 struct extent_buffer *cow),
++
++	TP_ARGS(root, buf, cow),
++
++	TP_STRUCT__entry(
++		__field(	u64,  root_objectid		)
++		__field(	u64,  buf_start			)
++		__field(	int,  refs			)
++		__field(	u64,  cow_start			)
++		__field(	int,  buf_level			)
++		__field(	int,  cow_level			)
++	),
++
++	TP_fast_assign(
++		tp_assign(root_objectid, root->root_key.objectid)
++		tp_assign(buf_start, buf->start)
++		tp_assign(refs, atomic_read(&buf->refs))
++		tp_assign(cow_start, cow->start)
++		tp_assign(buf_level, btrfs_header_level(buf))
++		tp_assign(cow_level, btrfs_header_level(cow))
++	),
++
++	TP_printk("root = %llu(%s), refs = %d, orig_buf = %llu "
++		  "(orig_level = %d), cow_buf = %llu (cow_level = %d)",
++		  show_root_type(__entry->root_objectid),
++		  __entry->refs,
++		  (unsigned long long)__entry->buf_start,
++		  __entry->buf_level,
++		  (unsigned long long)__entry->cow_start,
++		  __entry->cow_level)
++)
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,3,0))
++TRACE_EVENT(btrfs_space_reservation,
++
++	TP_PROTO(struct btrfs_fs_info *fs_info, char *type, u64 val,
++		 u64 bytes, int reserve),
++
++	TP_ARGS(fs_info, type, val, bytes, reserve),
++
++	TP_STRUCT__entry(
++		__array(	u8,	fsid,	BTRFS_UUID_SIZE	)
++		__string(	type,	type			)
++		__field(	u64,	val			)
++		__field(	u64,	bytes			)
++		__field(	int,	reserve			)
++	),
++
++	TP_fast_assign(
++		tp_memcpy(fsid, fs_info->fsid, BTRFS_UUID_SIZE)
++		tp_strcpy(type, type)
++		tp_assign(val, val)
++		tp_assign(bytes, bytes)
++		tp_assign(reserve, reserve)
++	),
++
++	TP_printk("%pU: %s: %Lu %s %Lu", __entry->fsid, __get_str(type),
++		  __entry->val, __entry->reserve ? "reserve" : "release",
++		  __entry->bytes)
 +)
 +#endif
 +
- TRACE_EVENT(snd_soc_jack_irq,
- 
- 	TP_PROTO(const char *name),
-diff --git a/instrumentation/events/lttng-module/block.h b/instrumentation/events/lttng-module/block.h
-index 42184f3..d42ebd4 100644
---- a/instrumentation/events/lttng-module/block.h
-+++ b/instrumentation/events/lttng-module/block.h
-@@ -8,6 +8,9 @@
- #include <linux/blkdev.h>
- #include <linux/tracepoint.h>
- #include <linux/trace_seq.h>
++DECLARE_EVENT_CLASS(btrfs__reserved_extent,
++
++	TP_PROTO(struct btrfs_root *root, u64 start, u64 len),
++
++	TP_ARGS(root, start, len),
++
++	TP_STRUCT__entry(
++		__field(	u64,  root_objectid		)
++		__field(	u64,  start			)
++		__field(	u64,  len			)
++	),
++
++	TP_fast_assign(
++		tp_assign(root_objectid, root->root_key.objectid)
++		tp_assign(start, start)
++		tp_assign(len, len)
++	),
++
++	TP_printk("root = %llu(%s), start = %llu, len = %llu",
++		  show_root_type(__entry->root_objectid),
++		  (unsigned long long)__entry->start,
++		  (unsigned long long)__entry->len)
++)
++
++DEFINE_EVENT(btrfs__reserved_extent,  btrfs_reserved_extent_alloc,
++
++	TP_PROTO(struct btrfs_root *root, u64 start, u64 len),
++
++	TP_ARGS(root, start, len)
++)
++
++DEFINE_EVENT(btrfs__reserved_extent,  btrfs_reserved_extent_free,
++
++	TP_PROTO(struct btrfs_root *root, u64 start, u64 len),
++
++	TP_ARGS(root, start, len)
++)
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,3,0))
++TRACE_EVENT(find_free_extent,
++
++	TP_PROTO(struct btrfs_root *root, u64 num_bytes, u64 empty_size,
++		 u64 data),
++
++	TP_ARGS(root, num_bytes, empty_size, data),
++
++	TP_STRUCT__entry(
++		__field(	u64,	root_objectid		)
++		__field(	u64,	num_bytes		)
++		__field(	u64,	empty_size		)
++		__field(	u64,	data			)
++	),
++
++	TP_fast_assign(
++		tp_assign(root_objectid, root->root_key.objectid)
++		tp_assign(num_bytes, num_bytes)
++		tp_assign(empty_size, empty_size)
++		tp_assign(data, data)
++	),
++
++	TP_printk("root = %Lu(%s), len = %Lu, empty_size = %Lu, "
++		  "flags = %Lu(%s)", show_root_type(__entry->root_objectid),
++		  __entry->num_bytes, __entry->empty_size, __entry->data,
++		  __print_flags((unsigned long)__entry->data, "|",
++				 BTRFS_GROUP_FLAGS))
++)
++
++DECLARE_EVENT_CLASS(btrfs__reserve_extent,
++
++	TP_PROTO(struct btrfs_root *root,
++		 struct btrfs_block_group_cache *block_group, u64 start,
++		 u64 len),
++
++	TP_ARGS(root, block_group, start, len),
++
++	TP_STRUCT__entry(
++		__field(	u64,	root_objectid		)
++		__field(	u64,	bg_objectid		)
++		__field(	u64,	flags			)
++		__field(	u64,	start			)
++		__field(	u64,	len			)
++	),
++
++	TP_fast_assign(
++		tp_assign(root_objectid, root->root_key.objectid)
++		tp_assign(bg_objectid, block_group->key.objectid)
++		tp_assign(flags, block_group->flags)
++		tp_assign(start, start)
++		tp_assign(len, len)
++	),
++
++	TP_printk("root = %Lu(%s), block_group = %Lu, flags = %Lu(%s), "
++		  "start = %Lu, len = %Lu",
++		  show_root_type(__entry->root_objectid), __entry->bg_objectid,
++		  __entry->flags, __print_flags((unsigned long)__entry->flags,
++						"|", BTRFS_GROUP_FLAGS),
++		  __entry->start, __entry->len)
++)
++
++DEFINE_EVENT(btrfs__reserve_extent, btrfs_reserve_extent,
++
++	TP_PROTO(struct btrfs_root *root,
++		 struct btrfs_block_group_cache *block_group, u64 start,
++		 u64 len),
++
++	TP_ARGS(root, block_group, start, len)
++)
++
++DEFINE_EVENT(btrfs__reserve_extent, btrfs_reserve_extent_cluster,
++
++	TP_PROTO(struct btrfs_root *root,
++		 struct btrfs_block_group_cache *block_group, u64 start,
++		 u64 len),
++
++	TP_ARGS(root, block_group, start, len)
++)
++
++TRACE_EVENT(btrfs_find_cluster,
++
++	TP_PROTO(struct btrfs_block_group_cache *block_group, u64 start,
++		 u64 bytes, u64 empty_size, u64 min_bytes),
++
++	TP_ARGS(block_group, start, bytes, empty_size, min_bytes),
++
++	TP_STRUCT__entry(
++		__field(	u64,	bg_objectid		)
++		__field(	u64,	flags			)
++		__field(	u64,	start			)
++		__field(	u64,	bytes			)
++		__field(	u64,	empty_size		)
++		__field(	u64,	min_bytes		)
++	),
++
++	TP_fast_assign(
++		tp_assign(bg_objectid, block_group->key.objectid)
++		tp_assign(flags, block_group->flags)
++		tp_assign(start, start)
++		tp_assign(bytes, bytes)
++		tp_assign(empty_size, empty_size)
++		tp_assign(min_bytes, min_bytes)
++	),
++
++	TP_printk("block_group = %Lu, flags = %Lu(%s), start = %Lu, len = %Lu,"
++		  " empty_size = %Lu, min_bytes = %Lu", __entry->bg_objectid,
++		  __entry->flags,
++		  __print_flags((unsigned long)__entry->flags, "|",
++				BTRFS_GROUP_FLAGS), __entry->start,
++		  __entry->bytes, __entry->empty_size,  __entry->min_bytes)
++)
++
++TRACE_EVENT(btrfs_failed_cluster_setup,
++
++	TP_PROTO(struct btrfs_block_group_cache *block_group),
++
++	TP_ARGS(block_group),
++
++	TP_STRUCT__entry(
++		__field(	u64,	bg_objectid		)
++	),
++
++	TP_fast_assign(
++		tp_assign(bg_objectid, block_group->key.objectid)
++	),
++
++	TP_printk("block_group = %Lu", __entry->bg_objectid)
++)
++
++TRACE_EVENT(btrfs_setup_cluster,
++
++	TP_PROTO(struct btrfs_block_group_cache *block_group,
++		 struct btrfs_free_cluster *cluster, u64 size, int bitmap),
++
++	TP_ARGS(block_group, cluster, size, bitmap),
++
++	TP_STRUCT__entry(
++		__field(	u64,	bg_objectid		)
++		__field(	u64,	flags			)
++		__field(	u64,	start			)
++		__field(	u64,	max_size		)
++		__field(	u64,	size			)
++		__field(	int,	bitmap			)
++	),
++
++	TP_fast_assign(
++		tp_assign(bg_objectid, block_group->key.objectid)
++		tp_assign(flags, block_group->flags)
++		tp_assign(start, cluster->window_start)
++		tp_assign(max_size, cluster->max_size)
++		tp_assign(size, size)
++		tp_assign(bitmap, bitmap)
++	),
++
++	TP_printk("block_group = %Lu, flags = %Lu(%s), window_start = %Lu, "
++		  "size = %Lu, max_size = %Lu, bitmap = %d",
++		  __entry->bg_objectid,
++		  __entry->flags,
++		  __print_flags((unsigned long)__entry->flags, "|",
++				BTRFS_GROUP_FLAGS), __entry->start,
++		  __entry->size, __entry->max_size, __entry->bitmap)
++)
++#endif
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,4,0))
++TRACE_EVENT(alloc_extent_state,
++
++	TP_PROTO(struct extent_state *state, gfp_t mask, unsigned long IP),
++
++	TP_ARGS(state, mask, IP),
++
++	TP_STRUCT__entry(
++		__field(struct extent_state *, state)
++		__field(gfp_t, mask)
++		__field(unsigned long, ip)
++	),
++
++	TP_fast_assign(
++		tp_assign(state, state)
++		tp_assign(mask, mask)
++		tp_assign(ip, IP)
++	),
++
++	TP_printk("state=%p; mask = %s; caller = %pF", __entry->state,
++		  show_gfp_flags(__entry->mask), (void *)__entry->ip)
++)
++
++TRACE_EVENT(free_extent_state,
++
++	TP_PROTO(struct extent_state *state, unsigned long IP),
++
++	TP_ARGS(state, IP),
++
++	TP_STRUCT__entry(
++		__field(struct extent_state *, state)
++		__field(unsigned long, ip)
++	),
++
++	TP_fast_assign(
++		tp_assign(state, state)
++		tp_assign(ip, IP)
++	),
++
++	TP_printk(" state=%p; caller = %pF", __entry->state,
++		  (void *)__entry->ip)
++)
++#endif
++
++#endif /* _TRACE_BTRFS_H */
++
++/* This part must be outside protection */
++#include "../../../probes/define_trace.h"
+diff --git a/instrumentation/events/lttng-module/compaction.h b/instrumentation/events/lttng-module/compaction.h
+new file mode 100644
+index 0000000..1b237fa
+--- /dev/null
++++ b/instrumentation/events/lttng-module/compaction.h
+@@ -0,0 +1,74 @@
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM compaction
++
++#if !defined(_TRACE_COMPACTION_H) || defined(TRACE_HEADER_MULTI_READ)
++#define _TRACE_COMPACTION_H
++
++#include <linux/types.h>
++#include <linux/tracepoint.h>
++#include <trace/events/gfpflags.h>
++
++DECLARE_EVENT_CLASS(mm_compaction_isolate_template,
++
++	TP_PROTO(unsigned long nr_scanned,
++		unsigned long nr_taken),
++
++	TP_ARGS(nr_scanned, nr_taken),
++
++	TP_STRUCT__entry(
++		__field(unsigned long, nr_scanned)
++		__field(unsigned long, nr_taken)
++	),
++
++	TP_fast_assign(
++		tp_assign(nr_scanned, nr_scanned)
++		tp_assign(nr_taken, nr_taken)
++	),
++
++	TP_printk("nr_scanned=%lu nr_taken=%lu",
++		__entry->nr_scanned,
++		__entry->nr_taken)
++)
++
++DEFINE_EVENT(mm_compaction_isolate_template, mm_compaction_isolate_migratepages,
++
++	TP_PROTO(unsigned long nr_scanned,
++		unsigned long nr_taken),
++
++	TP_ARGS(nr_scanned, nr_taken)
++)
++
++DEFINE_EVENT(mm_compaction_isolate_template, mm_compaction_isolate_freepages,
++	TP_PROTO(unsigned long nr_scanned,
++		unsigned long nr_taken),
++
++	TP_ARGS(nr_scanned, nr_taken)
++)
++
++TRACE_EVENT(mm_compaction_migratepages,
++
++	TP_PROTO(unsigned long nr_migrated,
++		unsigned long nr_failed),
++
++	TP_ARGS(nr_migrated, nr_failed),
++
++	TP_STRUCT__entry(
++		__field(unsigned long, nr_migrated)
++		__field(unsigned long, nr_failed)
++	),
++
++	TP_fast_assign(
++		tp_assign(nr_migrated, nr_migrated)
++		tp_assign(nr_failed, nr_failed)
++	),
++
++	TP_printk("nr_migrated=%lu nr_failed=%lu",
++		__entry->nr_migrated,
++		__entry->nr_failed)
++)
++
++
++#endif /* _TRACE_COMPACTION_H */
++
++/* This part must be outside protection */
++#include "../../../probes/define_trace.h"
+diff --git a/instrumentation/events/lttng-module/ext4.h b/instrumentation/events/lttng-module/ext4.h
+new file mode 100644
+index 0000000..661a5a9
+--- /dev/null
++++ b/instrumentation/events/lttng-module/ext4.h
+@@ -0,0 +1,2398 @@
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM ext4
++
++#if !defined(_TRACE_EXT4_H) || defined(TRACE_HEADER_MULTI_READ)
++#define _TRACE_EXT4_H
++
++#include <linux/writeback.h>
++#include <linux/tracepoint.h>
 +#include <linux/version.h>
 +
-+#define RWBS_LEN	8
- 
- #ifndef _TRACE_BLOCK_DEF_
- #define _TRACE_BLOCK_DEF_
-@@ -19,23 +22,45 @@ enum {
- 	RWBS_FLAG_DISCARD	= (1 << 1),
- 	RWBS_FLAG_READ		= (1 << 2),
- 	RWBS_FLAG_RAHEAD	= (1 << 3),
--	RWBS_FLAG_SYNC		= (1 << 4),
--	RWBS_FLAG_META		= (1 << 5),
--	RWBS_FLAG_SECURE	= (1 << 6),
-+	RWBS_FLAG_BARRIER	= (1 << 4),
-+	RWBS_FLAG_SYNC		= (1 << 5),
-+	RWBS_FLAG_META		= (1 << 6),
-+	RWBS_FLAG_SECURE	= (1 << 7),
-+	RWBS_FLAG_FLUSH		= (1 << 8),
-+	RWBS_FLAG_FUA		= (1 << 9),
- };
- 
- #endif /* _TRACE_BLOCK_DEF_ */
- 
- #define __print_rwbs_flags(rwbs)		\
- 	__print_flags(rwbs, "",			\
-+		{ RWBS_FLAG_FLUSH, "F" },	\
- 		{ RWBS_FLAG_WRITE, "W" },	\
- 		{ RWBS_FLAG_DISCARD, "D" },	\
- 		{ RWBS_FLAG_READ, "R" },	\
-+		{ RWBS_FLAG_FUA, "F" },		\
- 		{ RWBS_FLAG_RAHEAD, "A" },	\
-+		{ RWBS_FLAG_BARRIER, "B" },	\
- 		{ RWBS_FLAG_SYNC, "S" },	\
- 		{ RWBS_FLAG_META, "M" },	\
- 		{ RWBS_FLAG_SECURE, "E" })
- 
++#ifndef _TRACE_EXT4_DEF_
++#define _TRACE_EXT4_DEF_
++struct ext4_allocation_context;
++struct ext4_allocation_request;
++struct ext4_prealloc_space;
++struct ext4_inode_info;
++struct mpage_da_data;
++struct ext4_map_blocks;
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,2,0))
++struct ext4_extent;
++#endif
++#endif
++
++#define EXT4_I(inode) (container_of(inode, struct ext4_inode_info, vfs_inode))
 +#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,1,0))
-+
-+#define blk_fill_rwbs(rwbs, rw, bytes)					      \
-+		tp_assign(rwbs, ((rw) & WRITE ? RWBS_FLAG_WRITE :	      \
-+			( (rw) & REQ_DISCARD ? RWBS_FLAG_DISCARD :	      \
-+			( (bytes) ? RWBS_FLAG_READ :			      \
-+			( 0 ))))					      \
-+			| ((rw) & REQ_RAHEAD ? RWBS_FLAG_RAHEAD : 0)	      \
-+			| ((rw) & REQ_SYNC ? RWBS_FLAG_SYNC : 0)	      \
-+			| ((rw) & REQ_META ? RWBS_FLAG_META : 0)	      \
-+			| ((rw) & REQ_SECURE ? RWBS_FLAG_SECURE : 0)	      \
-+			| ((rw) & REQ_FLUSH ? RWBS_FLAG_FLUSH : 0)	      \
-+			| ((rw) & REQ_FUA ? RWBS_FLAG_FUA : 0))
-+
-+#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
-+
- #define blk_fill_rwbs(rwbs, rw, bytes)					      \
- 		tp_assign(rwbs, ((rw) & WRITE ? RWBS_FLAG_WRITE :	      \
- 			( (rw) & REQ_DISCARD ? RWBS_FLAG_DISCARD :	      \
-@@ -46,6 +71,33 @@ enum {
- 			| ((rw) & REQ_META ? RWBS_FLAG_META : 0)	      \
- 			| ((rw) & REQ_SECURE ? RWBS_FLAG_SECURE : 0))
- 
-+#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,36))
-+
-+#define blk_fill_rwbs(rwbs, rw, bytes)					      \
-+		tp_assign(rwbs, ((rw) & WRITE ? RWBS_FLAG_WRITE :	      \
-+			( (rw) & REQ_DISCARD ? RWBS_FLAG_DISCARD :	      \
-+			( (bytes) ? RWBS_FLAG_READ :			      \
-+			( 0 ))))					      \
-+			| ((rw) & REQ_RAHEAD ? RWBS_FLAG_RAHEAD : 0)	      \
-+			| ((rw) & REQ_HARDBARRIER ? RWBS_FLAG_BARRIER : 0)    \
-+			| ((rw) & REQ_SYNC ? RWBS_FLAG_SYNC : 0)	      \
-+			| ((rw) & REQ_META ? RWBS_FLAG_META : 0)	      \
-+			| ((rw) & REQ_SECURE ? RWBS_FLAG_SECURE : 0))
-+
++#define TP_MODE_T	__u16
 +#else
-+
-+#define blk_fill_rwbs(rwbs, rw, bytes)					      \
-+		tp_assign(rwbs, ((rw) & WRITE ? RWBS_FLAG_WRITE :	      \
-+			( (rw) & (1 << BIO_RW_DISCARD) ? RWBS_FLAG_DISCARD :  \
-+			( (bytes) ? RWBS_FLAG_READ :			      \
-+			( 0 ))))					      \
-+			| ((rw) & (1 << BIO_RW_AHEAD) ? RWBS_FLAG_RAHEAD : 0) \
-+			| ((rw) & (1 << BIO_RW_SYNCIO) ? RWBS_FLAG_SYNC : 0)  \
-+			| ((rw) & (1 << BIO_RW_META) ? RWBS_FLAG_META : 0)    \
-+			| ((rw) & (1 << BIO_RW_BARRIER) ? RWBS_FLAG_BARRIER : 0))
-+
++#define TP_MODE_T	umode_t
 +#endif
 +
- DECLARE_EVENT_CLASS(block_rq_with_error,
- 
- 	TP_PROTO(struct request_queue *q, struct request *rq),
-@@ -261,9 +313,15 @@ TRACE_EVENT(block_bio_bounce,
-  */
- TRACE_EVENT(block_bio_complete,
- 
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,38))
- 	TP_PROTO(struct request_queue *q, struct bio *bio, int error),
- 
- 	TP_ARGS(q, bio, error),
-+#else
-+	TP_PROTO(struct request_queue *q, struct bio *bio),
++TRACE_EVENT(ext4_free_inode,
++	TP_PROTO(struct inode *inode),
 +
-+	TP_ARGS(q, bio),
-+#endif
- 
- 	TP_STRUCT__entry(
- 		__field( dev_t,		dev		)
-@@ -277,7 +335,11 @@ TRACE_EVENT(block_bio_complete,
- 		tp_assign(dev, bio->bi_bdev->bd_dev)
- 		tp_assign(sector, bio->bi_sector)
- 		tp_assign(nr_sector, bio->bi_size >> 9)
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,38))
- 		tp_assign(error, error)
-+#else
-+		tp_assign(error, 0)
-+#endif
- 		blk_fill_rwbs(rwbs, bio->bi_rw, bio->bi_size)
- 	),
- 
-@@ -452,9 +514,15 @@ TRACE_EVENT(block_plug,
- 
- DECLARE_EVENT_CLASS(block_unplug,
- 
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,39))
- 	TP_PROTO(struct request_queue *q, unsigned int depth, bool explicit),
- 
- 	TP_ARGS(q, depth, explicit),
-+#else
-+	TP_PROTO(struct request_queue *q),
++	TP_ARGS(inode),
 +
-+	TP_ARGS(q),
-+#endif
- 
- 	TP_STRUCT__entry(
- 		__field( int,		nr_rq			)
-@@ -462,13 +530,33 @@ DECLARE_EVENT_CLASS(block_unplug,
- 	),
- 
- 	TP_fast_assign(
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,39))
- 		tp_assign(nr_rq, depth)
-+#else
-+		tp_assign(nr_rq, q->rq.count[READ] + q->rq.count[WRITE])
-+#endif
- 		tp_memcpy(comm, current->comm, TASK_COMM_LEN)
- 	),
- 
- 	TP_printk("[%s] %d", __entry->comm, __entry->nr_rq)
- )
- 
-+#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,39))
-+/**
-+ * block_unplug_timer - timed release of operations requests in queue to device driver
-+ * @q: request queue to unplug
-+ *
-+ * Unplug the request queue @q because a timer expired and allow block
-+ * operation requests to be sent to the device driver.
-+ */
-+DEFINE_EVENT(block_unplug, block_unplug_timer,
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	uid_t,	uid			)
++		__field(	gid_t,	gid			)
++		__field(	__u64, blocks			)
++		__field(	TP_MODE_T, mode			)
++	),
 +
-+	TP_PROTO(struct request_queue *q),
-+
-+	TP_ARGS(q)
-+)
-+#endif
-+
- /**
-  * block_unplug - release of operations requests in request queue
-  * @q: request queue to unplug
-@@ -478,11 +566,21 @@ DECLARE_EVENT_CLASS(block_unplug,
-  * Unplug request queue @q because device driver is scheduled to work
-  * on elements in the request queue.
-  */
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,39))
- DEFINE_EVENT(block_unplug, block_unplug,
-+#else
-+DEFINE_EVENT(block_unplug, block_unplug_io,
-+#endif
- 
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,39))
- 	TP_PROTO(struct request_queue *q, unsigned int depth, bool explicit),
- 
- 	TP_ARGS(q, depth, explicit)
-+#else
-+	TP_PROTO(struct request_queue *q),
-+
-+	TP_ARGS(q)
-+#endif
- )
- 
- /**
-@@ -537,7 +635,11 @@ TRACE_EVENT(block_split,
-  * An operation for a logical device has been mapped to the
-  * raw block device.
-  */
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,38))
- TRACE_EVENT(block_bio_remap,
-+#else
-+TRACE_EVENT(block_remap,
-+#endif
- 
- 	TP_PROTO(struct request_queue *q, struct bio *bio, dev_t dev,
- 		 sector_t from),
-@@ -571,6 +673,7 @@ TRACE_EVENT(block_bio_remap,
- 		  (unsigned long long)__entry->old_sector)
- )
- 
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,32))
- /**
-  * block_rq_remap - map request for a block operation request
-  * @q: queue holding the operation
-@@ -615,6 +718,7 @@ TRACE_EVENT(block_rq_remap,
- 		  MAJOR(__entry->old_dev), MINOR(__entry->old_dev),
- 		  (unsigned long long)__entry->old_sector)
- )
-+#endif
- 
- #undef __print_rwbs_flags
- #undef blk_fill_rwbs
-diff --git a/instrumentation/events/lttng-module/ext3.h b/instrumentation/events/lttng-module/ext3.h
-index f1b4aa9..32917fb 100644
---- a/instrumentation/events/lttng-module/ext3.h
-+++ b/instrumentation/events/lttng-module/ext3.h
-@@ -5,6 +5,7 @@
- #define _TRACE_EXT3_H
- 
- #include <linux/tracepoint.h>
-+#include <linux/version.h>
- 
- TRACE_EVENT(ext3_free_inode,
- 	TP_PROTO(struct inode *inode),
-@@ -24,8 +25,13 @@ TRACE_EVENT(ext3_free_inode,
- 		tp_assign(dev, inode->i_sb->s_dev)
- 		tp_assign(ino, inode->i_ino)
- 		tp_assign(mode, inode->i_mode)
++	TP_fast_assign(
++		tp_assign(dev, inode->i_sb->s_dev)
++		tp_assign(ino, inode->i_ino)
 +#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,5,0))
 +		tp_assign(uid, i_uid_read(inode))
 +		tp_assign(gid, i_gid_read(inode))
 +#else
- 		tp_assign(uid, inode->i_uid)
- 		tp_assign(gid, inode->i_gid)
++		tp_assign(uid, inode->i_uid)
++		tp_assign(gid, inode->i_gid)
 +#endif
- 		tp_assign(blocks, inode->i_blocks)
- 	),
- 
-diff --git a/instrumentation/events/lttng-module/jbd.h b/instrumentation/events/lttng-module/jbd.h
-index b6bd64a..570bdac 100644
---- a/instrumentation/events/lttng-module/jbd.h
-+++ b/instrumentation/events/lttng-module/jbd.h
-@@ -6,6 +6,7 @@
- 
- #include <linux/jbd.h>
- #include <linux/tracepoint.h>
-+#include <linux/version.h>
- 
- TRACE_EVENT(jbd_checkpoint,
- 
-@@ -217,6 +218,26 @@ TRACE_EVENT(jbd_cleanup_journal_tail,
- 		  __entry->block_nr, __entry->freed)
- )
- 
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,5,0))
-+TRACE_EVENT(journal_write_superblock,
-+	TP_PROTO(journal_t *journal, int write_op),
++		tp_assign(blocks, inode->i_blocks)
++		tp_assign(mode, inode->i_mode)
++	),
 +
-+	TP_ARGS(journal, write_op),
++	TP_printk("dev %d,%d ino %lu mode 0%o uid %u gid %u blocks %llu",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino, __entry->mode,
++		  __entry->uid, __entry->gid, __entry->blocks)
++)
++
++TRACE_EVENT(ext4_request_inode,
++	TP_PROTO(struct inode *dir, int mode),
++
++	TP_ARGS(dir, mode),
 +
 +	TP_STRUCT__entry(
 +		__field(	dev_t,	dev			)
-+		__field(	int,	write_op		)
++		__field(	ino_t,	dir			)
++		__field(	TP_MODE_T, mode			)
 +	),
 +
 +	TP_fast_assign(
-+		tp_assign(dev, journal->j_fs_dev->bd_dev)
-+		tp_assign(write_op, write_op)
++		tp_assign(dev, dir->i_sb->s_dev)
++		tp_assign(dir, dir->i_ino)
++		tp_assign(mode, mode)
 +	),
 +
-+	TP_printk("dev %d,%d write_op %x", MAJOR(__entry->dev),
-+		  MINOR(__entry->dev), __entry->write_op)
++	TP_printk("dev %d,%d dir %lu mode 0%o",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->dir, __entry->mode)
 +)
-+#else
- TRACE_EVENT(jbd_update_superblock_end,
- 	TP_PROTO(journal_t *journal, int wait),
- 
-@@ -236,6 +257,7 @@ TRACE_EVENT(jbd_update_superblock_end,
- 		  MAJOR(__entry->dev), MINOR(__entry->dev),
- 		   __entry->wait)
- )
-+#endif
- 
- #endif /* _TRACE_JBD_H */
- 
-diff --git a/instrumentation/events/lttng-module/jbd2.h b/instrumentation/events/lttng-module/jbd2.h
-index c7992c0..872cf9e 100644
---- a/instrumentation/events/lttng-module/jbd2.h
-+++ b/instrumentation/events/lttng-module/jbd2.h
-@@ -6,12 +6,15 @@
- 
- #include <linux/jbd2.h>
- #include <linux/tracepoint.h>
-+#include <linux/version.h>
- 
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,32))
- #ifndef _TRACE_JBD2_DEF
- #define _TRACE_JBD2_DEF
- struct transaction_chp_stats_s;
- struct transaction_run_stats_s;
- #endif
-+#endif
- 
- TRACE_EVENT(jbd2_checkpoint,
- 
-@@ -84,6 +87,15 @@ DEFINE_EVENT(jbd2_commit, jbd2_commit_logging,
- 	TP_ARGS(journal, commit_transaction)
- )
- 
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,4,0))
-+DEFINE_EVENT(jbd2_commit, jbd2_drop_transaction,
 +
-+	TP_PROTO(journal_t *journal, transaction_t *commit_transaction),
++TRACE_EVENT(ext4_allocate_inode,
++	TP_PROTO(struct inode *inode, struct inode *dir, int mode),
 +
-+	TP_ARGS(journal, commit_transaction)
-+)
-+#endif
-+
- TRACE_EVENT(jbd2_end_commit,
- 	TP_PROTO(journal_t *journal, transaction_t *commit_transaction),
- 
-@@ -128,6 +140,7 @@ TRACE_EVENT(jbd2_submit_inode_data,
- 		  (unsigned long) __entry->ino)
- )
- 
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,32))
- TRACE_EVENT(jbd2_run_stats,
- 	TP_PROTO(dev_t dev, unsigned long tid,
- 		 struct transaction_run_stats_s *stats),
-@@ -202,8 +215,14 @@ TRACE_EVENT(jbd2_checkpoint_stats,
- 		  jiffies_to_msecs(__entry->chp_time),
- 		  __entry->forced_to_close, __entry->written, __entry->dropped)
- )
-+#endif
- 
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,34))
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,4,0))
-+TRACE_EVENT(jbd2_update_log_tail,
-+#else
- TRACE_EVENT(jbd2_cleanup_journal_tail,
-+#endif
- 
- 	TP_PROTO(journal_t *journal, tid_t first_tid,
- 		 unsigned long block_nr, unsigned long freed),
-@@ -231,6 +250,29 @@ TRACE_EVENT(jbd2_cleanup_journal_tail,
- 		  __entry->tail_sequence, __entry->first_tid,
- 		  __entry->block_nr, __entry->freed)
- )
-+#endif
-+
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,4,0))
-+TRACE_EVENT(jbd2_write_superblock,
-+
-+	TP_PROTO(journal_t *journal, int write_op),
-+
-+	TP_ARGS(journal, write_op),
++	TP_ARGS(inode, dir, mode),
 +
 +	TP_STRUCT__entry(
-+		__field(	dev_t,  dev			)
-+		__field(	  int,  write_op		)
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	ino_t,	dir			)
++		__field(	TP_MODE_T, mode			)
 +	),
 +
 +	TP_fast_assign(
-+		tp_assign(dev, journal->j_fs_dev->bd_dev)
-+		tp_assign(write_op, write_op)
++		tp_assign(dev, inode->i_sb->s_dev)
++		tp_assign(ino, inode->i_ino)
++		tp_assign(dir, dir->i_ino)
++		tp_assign(mode, mode)
 +	),
 +
-+	TP_printk("dev %d,%d write_op %x", MAJOR(__entry->dev),
-+		  MINOR(__entry->dev), __entry->write_op)
++	TP_printk("dev %d,%d ino %lu dir %lu mode 0%o",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  (unsigned long) __entry->dir, __entry->mode)
++)
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
++TRACE_EVENT(ext4_evict_inode,
++	TP_PROTO(struct inode *inode),
++
++	TP_ARGS(inode),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	int,	nlink			)
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, inode->i_sb->s_dev)
++		tp_assign(ino, inode->i_ino)
++		tp_assign(nlink, inode->i_nlink)
++	),
++
++	TP_printk("dev %d,%d ino %lu nlink %d",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino, __entry->nlink)
++)
++
++TRACE_EVENT(ext4_drop_inode,
++	TP_PROTO(struct inode *inode, int drop),
++
++	TP_ARGS(inode, drop),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	int,	drop			)
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, inode->i_sb->s_dev)
++		tp_assign(ino, inode->i_ino)
++		tp_assign(drop, drop)
++	),
++
++	TP_printk("dev %d,%d ino %lu drop %d",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino, __entry->drop)
++)
++
++TRACE_EVENT(ext4_mark_inode_dirty,
++	TP_PROTO(struct inode *inode, unsigned long IP),
++
++	TP_ARGS(inode, IP),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(unsigned long,	ip			)
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, inode->i_sb->s_dev)
++		tp_assign(ino, inode->i_ino)
++		tp_assign(ip, IP)
++	),
++
++	TP_printk("dev %d,%d ino %lu caller %pF",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino, (void *)__entry->ip)
++)
++
++TRACE_EVENT(ext4_begin_ordered_truncate,
++	TP_PROTO(struct inode *inode, loff_t new_size),
++
++	TP_ARGS(inode, new_size),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	loff_t,	new_size		)
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, inode->i_sb->s_dev)
++		tp_assign(ino, inode->i_ino)
++		tp_assign(new_size, new_size)
++	),
++
++	TP_printk("dev %d,%d ino %lu new_size %lld",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->new_size)
 +)
 +#endif
- 
- #endif /* _TRACE_JBD2_H */
- 
-diff --git a/instrumentation/events/lttng-module/kmem.h b/instrumentation/events/lttng-module/kmem.h
-index dab8989..baf4176 100644
---- a/instrumentation/events/lttng-module/kmem.h
-+++ b/instrumentation/events/lttng-module/kmem.h
-@@ -4,6 +4,13 @@
- #if !defined(_TRACE_KMEM_H) || defined(TRACE_HEADER_MULTI_READ)
- #define _TRACE_KMEM_H
- 
-+#include <linux/types.h>
++
++DECLARE_EVENT_CLASS(ext4__write_begin,
++
++	TP_PROTO(struct inode *inode, loff_t pos, unsigned int len,
++		 unsigned int flags),
++
++	TP_ARGS(inode, pos, len, flags),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	loff_t,	pos			)
++		__field(	unsigned int, len		)
++		__field(	unsigned int, flags		)
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, inode->i_sb->s_dev)
++		tp_assign(ino, inode->i_ino)
++		tp_assign(pos, pos)
++		tp_assign(len, len)
++		tp_assign(flags, flags)
++	),
++
++	TP_printk("dev %d,%d ino %lu pos %lld len %u flags %u",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->pos, __entry->len, __entry->flags)
++)
++
++DEFINE_EVENT(ext4__write_begin, ext4_write_begin,
++
++	TP_PROTO(struct inode *inode, loff_t pos, unsigned int len,
++		 unsigned int flags),
++
++	TP_ARGS(inode, pos, len, flags)
++)
++
++DEFINE_EVENT(ext4__write_begin, ext4_da_write_begin,
++
++	TP_PROTO(struct inode *inode, loff_t pos, unsigned int len,
++		 unsigned int flags),
++
++	TP_ARGS(inode, pos, len, flags)
++)
++
++DECLARE_EVENT_CLASS(ext4__write_end,
++	TP_PROTO(struct inode *inode, loff_t pos, unsigned int len,
++			unsigned int copied),
++
++	TP_ARGS(inode, pos, len, copied),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	loff_t,	pos			)
++		__field(	unsigned int, len		)
++		__field(	unsigned int, copied		)
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, inode->i_sb->s_dev)
++		tp_assign(ino, inode->i_ino)
++		tp_assign(pos, pos)
++		tp_assign(len, len)
++		tp_assign(copied, copied)
++	),
++
++	TP_printk("dev %d,%d ino %lu pos %lld len %u copied %u",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->pos, __entry->len, __entry->copied)
++)
++
++DEFINE_EVENT(ext4__write_end, ext4_ordered_write_end,
++
++	TP_PROTO(struct inode *inode, loff_t pos, unsigned int len,
++		 unsigned int copied),
++
++	TP_ARGS(inode, pos, len, copied)
++)
++
++DEFINE_EVENT(ext4__write_end, ext4_writeback_write_end,
++
++	TP_PROTO(struct inode *inode, loff_t pos, unsigned int len,
++		 unsigned int copied),
++
++	TP_ARGS(inode, pos, len, copied)
++)
++
++DEFINE_EVENT(ext4__write_end, ext4_journalled_write_end,
++
++	TP_PROTO(struct inode *inode, loff_t pos, unsigned int len,
++		 unsigned int copied),
++
++	TP_ARGS(inode, pos, len, copied)
++)
++
++DEFINE_EVENT(ext4__write_end, ext4_da_write_end,
++
++	TP_PROTO(struct inode *inode, loff_t pos, unsigned int len,
++		 unsigned int copied),
++
++	TP_ARGS(inode, pos, len, copied)
++)
++
++#if (LINUX_VERSION_CODE < KERNEL_VERSION(3,0,0))
++TRACE_EVENT(ext4_writepage,
++	TP_PROTO(struct inode *inode, struct page *page),
++
++	TP_ARGS(inode, page),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	pgoff_t, index			)
++
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, inode->i_sb->s_dev)
++		tp_assign(ino, inode->i_ino)
++		tp_assign(index, page->index)
++	),
++
++	TP_printk("dev %d,%d ino %lu page_index %lu",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino, __entry->index)
++)
++#endif
++
++TRACE_EVENT(ext4_da_writepages,
++	TP_PROTO(struct inode *inode, struct writeback_control *wbc),
++
++	TP_ARGS(inode, wbc),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	long,	nr_to_write		)
++		__field(	long,	pages_skipped		)
++		__field(	loff_t,	range_start		)
++		__field(	loff_t,	range_end		)
++		__field(       pgoff_t,	writeback_index		)
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,39))
++		__field(	int,	sync_mode		)
++#endif
++#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,37))
++		__field(	char,	nonblocking		)
++#endif
++		__field(	char,	for_kupdate		)
++#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,39))
++		__field(	char,	for_reclaim		)
++#endif
++		__field(	char,	range_cyclic		)
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, inode->i_sb->s_dev)
++		tp_assign(ino, inode->i_ino)
++		tp_assign(nr_to_write, wbc->nr_to_write)
++		tp_assign(pages_skipped, wbc->pages_skipped)
++		tp_assign(range_start, wbc->range_start)
++		tp_assign(range_end, wbc->range_end)
++		tp_assign(writeback_index, inode->i_mapping->writeback_index)
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,39))
++		tp_assign(sync_mode, wbc->sync_mode)
++#endif
++#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,37))
++		tp_assign(nonblocking, wbc->nonblocking)
++#endif
++		tp_assign(for_kupdate, wbc->for_kupdate)
++#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,39))
++		tp_assign(for_reclaim, wbc->for_reclaim)
++#endif
++		tp_assign(range_cyclic, wbc->range_cyclic)
++	),
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,39))
++	TP_printk("dev %d,%d ino %lu nr_to_write %ld pages_skipped %ld "
++		  "range_start %lld range_end %lld sync_mode %d "
++		  "for_kupdate %d range_cyclic %d writeback_index %lu",
++#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
++	TP_printk("dev %d,%d ino %lu nr_to_write %ld pages_skipped %ld "
++		  "range_start %llu range_end %llu "
++		  "for_kupdate %d for_reclaim %d "
++		  "range_cyclic %d writeback_index %lu",
++#else
++	TP_printk("dev %d,%d ino %lu nr_to_write %ld pages_skipped %ld "
++		  "range_start %llu range_end %llu "
++		  "nonblocking %d for_kupdate %d for_reclaim %d "
++		  "range_cyclic %d writeback_index %lu",
++#endif
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino, __entry->nr_to_write,
++		  __entry->pages_skipped, __entry->range_start,
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,39))
++		  __entry->range_end, __entry->sync_mode,
++		  __entry->for_kupdate, __entry->range_cyclic,
++#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
++		  __entry->range_end,
++		  __entry->for_kupdate, __entry->for_reclaim,
++		  __entry->range_cyclic,
++#else
++		  __entry->range_end, __entry->nonblocking,
++		  __entry->for_kupdate, __entry->for_reclaim,
++		  __entry->range_cyclic,
++#endif
++		  (unsigned long) __entry->writeback_index)
++)
++
++TRACE_EVENT(ext4_da_write_pages,
++	TP_PROTO(struct inode *inode, struct mpage_da_data *mpd),
++
++	TP_ARGS(inode, mpd),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	__u64,	b_blocknr		)
++		__field(	__u32,	b_size			)
++		__field(	__u32,	b_state			)
++		__field(	unsigned long,	first_page	)
++		__field(	int,	io_done			)
++		__field(	int,	pages_written		)
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,39))
++		__field(	int,	sync_mode		)
++#endif
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, inode->i_sb->s_dev)
++		tp_assign(ino, inode->i_ino)
++		tp_assign(b_blocknr, mpd->b_blocknr)
++		tp_assign(b_size, mpd->b_size)
++		tp_assign(b_state, mpd->b_state)
++		tp_assign(first_page, mpd->first_page)
++		tp_assign(io_done, mpd->io_done)
++		tp_assign(pages_written, mpd->pages_written)
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,39))
++		tp_assign(sync_mode, mpd->wbc->sync_mode)
++#endif
++	),
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,39))
++	TP_printk("dev %d,%d ino %lu b_blocknr %llu b_size %u b_state 0x%04x "
++		  "first_page %lu io_done %d pages_written %d sync_mode %d",
++#else
++	TP_printk("dev %d,%d ino %lu b_blocknr %llu b_size %u b_state 0x%04x "
++		  "first_page %lu io_done %d pages_written %d",
++#endif
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->b_blocknr, __entry->b_size,
++		  __entry->b_state, __entry->first_page,
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,39))
++		  __entry->io_done, __entry->pages_written,
++		  __entry->sync_mode
++#else
++		  __entry->io_done, __entry->pages_written
++#endif
++                  )
++)
++
++TRACE_EVENT(ext4_da_writepages_result,
++	TP_PROTO(struct inode *inode, struct writeback_control *wbc,
++			int ret, int pages_written),
++
++	TP_ARGS(inode, wbc, ret, pages_written),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	int,	ret			)
++		__field(	int,	pages_written		)
++		__field(	long,	pages_skipped		)
++		__field(       pgoff_t,	writeback_index		)
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,39))
++		__field(	int,	sync_mode		)
++#endif
++#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,33))
++		__field(	char,	encountered_congestion	)
++#endif
++#if (LINUX_VERSION_CODE < KERNEL_VERSION(3,1,0))
++		__field(	char,	more_io			)
++#endif
++#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,35))
++		__field(	char,	no_nrwrite_index_update	)
++#endif
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, inode->i_sb->s_dev)
++		tp_assign(ino, inode->i_ino)
++		tp_assign(ret, ret)
++		tp_assign(pages_written, pages_written)
++		tp_assign(pages_skipped, wbc->pages_skipped)
++		tp_assign(writeback_index, inode->i_mapping->writeback_index)
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,39))
++		tp_assign(sync_mode, wbc->sync_mode)
++#endif
++#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,33))
++		tp_assign(encountered_congestion, wbc->encountered_congestion)
++#endif
++#if (LINUX_VERSION_CODE < KERNEL_VERSION(3,1,0))
++		tp_assign(more_io, wbc->more_io)
++#endif
++#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,35))
++		tp_assign(no_nrwrite_index_update, wbc->no_nrwrite_index_update)
++#endif
++	),
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,1,0))
++	TP_printk("dev %d,%d ino %lu ret %d pages_written %d pages_skipped %ld "
++		  "sync_mode %d writeback_index %lu",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino, __entry->ret,
++		  __entry->pages_written, __entry->pages_skipped,
++		  __entry->sync_mode,
++		  (unsigned long) __entry->writeback_index)
++#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,39))
++	TP_printk("dev %d,%d ino %lu ret %d pages_written %d pages_skipped %ld "
++		  " more_io %d sync_mode %d writeback_index %lu",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino, __entry->ret,
++		  __entry->pages_written, __entry->pages_skipped,
++		  __entry->more_io, __entry->sync_mode,
++		  (unsigned long) __entry->writeback_index)
++#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,35))
++	TP_printk("dev %d,%d ino %lu ret %d pages_written %d pages_skipped %ld "
++		  " more_io %d writeback_index %lu",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino, __entry->ret,
++		  __entry->pages_written, __entry->pages_skipped,
++		  __entry->more_io,
++		  (unsigned long) __entry->writeback_index)
++#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
++	TP_printk("dev %d,%d ino %lu ret %d pages_written %d pages_skipped %ld "
++		  " more_io %d no_nrwrite_index_update %d writeback_index %lu",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino, __entry->ret,
++		  __entry->pages_written, __entry->pages_skipped,
++		  __entry->more_io, __entry->no_nrwrite_index_update,
++		  (unsigned long) __entry->writeback_index)
++#else
++	TP_printk("dev %d,%d ino %lu ret %d pages_written %d pages_skipped %ld "
++		  " congestion %d"
++		  " more_io %d no_nrwrite_index_update %d writeback_index %lu",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino, __entry->ret,
++		  __entry->pages_written, __entry->pages_skipped,
++		  __entry->encountered_congestion,
++		  __entry->more_io, __entry->no_nrwrite_index_update,
++		  (unsigned long) __entry->writeback_index)
++#endif
++)
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,39))
++DECLARE_EVENT_CLASS(ext4__page_op,
++	TP_PROTO(struct page *page),
++
++	TP_ARGS(page),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	pgoff_t, index			)
++
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, page->mapping->host->i_sb->s_dev)
++		tp_assign(ino, page->mapping->host->i_ino)
++		tp_assign(index, page->index)
++	),
++
++	TP_printk("dev %d,%d ino %lu page_index %lu",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  (unsigned long) __entry->index)
++)
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,0,0))
++DEFINE_EVENT(ext4__page_op, ext4_writepage,
++
++	TP_PROTO(struct page *page),
++
++	TP_ARGS(page)
++)
++#endif
++
++DEFINE_EVENT(ext4__page_op, ext4_readpage,
++
++	TP_PROTO(struct page *page),
++
++	TP_ARGS(page)
++)
++
++DEFINE_EVENT(ext4__page_op, ext4_releasepage,
++
++	TP_PROTO(struct page *page),
++
++	TP_ARGS(page)
++)
++
++TRACE_EVENT(ext4_invalidatepage,
++	TP_PROTO(struct page *page, unsigned long offset),
++
++	TP_ARGS(page, offset),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	pgoff_t, index			)
++		__field(	unsigned long, offset		)
++
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, page->mapping->host->i_sb->s_dev)
++		tp_assign(ino, page->mapping->host->i_ino)
++		tp_assign(index, page->index)
++		tp_assign(offset, offset)
++	),
++
++	TP_printk("dev %d,%d ino %lu page_index %lu offset %lu",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  (unsigned long) __entry->index, __entry->offset)
++)
++#endif
++
++TRACE_EVENT(ext4_discard_blocks,
++	TP_PROTO(struct super_block *sb, unsigned long long blk,
++			unsigned long long count),
++
++	TP_ARGS(sb, blk, count),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	__u64,	blk			)
++		__field(	__u64,	count			)
++
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, sb->s_dev)
++		tp_assign(blk, blk)
++		tp_assign(count, count)
++	),
++
++	TP_printk("dev %d,%d blk %llu count %llu",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  __entry->blk, __entry->count)
++)
++
++DECLARE_EVENT_CLASS(ext4__mb_new_pa,
++	TP_PROTO(struct ext4_allocation_context *ac,
++		 struct ext4_prealloc_space *pa),
++
++	TP_ARGS(ac, pa),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	__u64,	pa_pstart		)
++		__field(	__u64,	pa_lstart		)
++		__field(	__u32,	pa_len			)
++
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, ac->ac_sb->s_dev)
++		tp_assign(ino, ac->ac_inode->i_ino)
++		tp_assign(pa_pstart, pa->pa_pstart)
++		tp_assign(pa_lstart, pa->pa_lstart)
++		tp_assign(pa_len, pa->pa_len)
++	),
++
++	TP_printk("dev %d,%d ino %lu pstart %llu len %u lstart %llu",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->pa_pstart, __entry->pa_len, __entry->pa_lstart)
++)
++
++DEFINE_EVENT(ext4__mb_new_pa, ext4_mb_new_inode_pa,
++
++	TP_PROTO(struct ext4_allocation_context *ac,
++		 struct ext4_prealloc_space *pa),
++
++	TP_ARGS(ac, pa)
++)
++
++DEFINE_EVENT(ext4__mb_new_pa, ext4_mb_new_group_pa,
++
++	TP_PROTO(struct ext4_allocation_context *ac,
++		 struct ext4_prealloc_space *pa),
++
++	TP_ARGS(ac, pa)
++)
++
++TRACE_EVENT(ext4_mb_release_inode_pa,
++	TP_PROTO(
++#if (LINUX_VERSION_CODE < KERNEL_VERSION(3,0,0))
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
++		 struct super_block *sb,
++		 struct inode *inode,
++#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,36))
++		 struct super_block *sb,
++		 struct ext4_allocation_context *ac,
++#else
++		 struct ext4_allocation_context *ac,
++#endif
++#endif
++		 struct ext4_prealloc_space *pa,
++		 unsigned long long block, unsigned int count),
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,0,0))
++	TP_ARGS(pa, block, count),
++#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
++	TP_ARGS(sb, inode, pa, block, count),
++#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,36))
++	TP_ARGS(sb, ac, pa, block, count),
++#else
++	TP_ARGS(ac, pa, block, count),
++#endif
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	__u64,	block			)
++		__field(	__u32,	count			)
++
++	),
++
++	TP_fast_assign(
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,0,0))
++		tp_assign(dev, pa->pa_inode->i_sb->s_dev)
++		tp_assign(ino, pa->pa_inode->i_ino)
++#else
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,36))
++		tp_assign(dev, sb->s_dev)
++#else
++		tp_assign(dev, ac->ac_sb->s_dev)
++#endif
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
++		tp_assign(ino, inode->i_ino)
++#else
++		tp_assign(ino, (ac && ac->ac_inode) ? ac->ac_inode->i_ino : 0)
++#endif
++#endif
++		tp_assign(block, block)
++		tp_assign(count, count)
++	),
++
++	TP_printk("dev %d,%d ino %lu block %llu count %u",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->block, __entry->count)
++)
++
++TRACE_EVENT(ext4_mb_release_group_pa,
++
++#if (LTTNG_KERNEL_RANGE(3,0,0, 3,3,0))
++	TP_PROTO(struct ext4_prealloc_space *pa),
++
++	TP_ARGS(pa),
++#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
++	TP_PROTO(struct super_block *sb, struct ext4_prealloc_space *pa),
++
++	TP_ARGS(sb, pa),
++#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,36))
++	TP_PROTO(struct super_block *sb,
++		 struct ext4_allocation_context *ac,
++		 struct ext4_prealloc_space *pa),
++
++	TP_ARGS(sb, ac, pa),
++#else
++	TP_PROTO(struct ext4_allocation_context *ac,
++		 struct ext4_prealloc_space *pa),
++
++	TP_ARGS(ac, pa),
++#endif
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,37))
++		__field(	ino_t,	ino			)
++#endif
++		__field(	__u64,	pa_pstart		)
++		__field(	__u32,	pa_len			)
++
++	),
++
++	TP_fast_assign(
++#if (LTTNG_KERNEL_RANGE(3,0,0, 3,3,0))
++		tp_assign(dev, pa->pa_inode->i_sb->s_dev)
++#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,36))
++		tp_assign(dev, sb->s_dev)
++#else
++		tp_assign(dev, ac->ac_sb->s_dev)
++#endif
++#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,37))
++		tp_assign(ino, (ac && ac->ac_inode) ? ac->ac_inode->i_ino : 0)
++#endif
++		tp_assign(pa_pstart, pa->pa_pstart)
++		tp_assign(pa_len, pa->pa_len)
++	),
++
++	TP_printk("dev %d,%d pstart %llu len %u",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  __entry->pa_pstart, __entry->pa_len)
++)
++
++TRACE_EVENT(ext4_discard_preallocations,
++	TP_PROTO(struct inode *inode),
++
++	TP_ARGS(inode),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, inode->i_sb->s_dev)
++		tp_assign(ino, inode->i_ino)
++	),
++
++	TP_printk("dev %d,%d ino %lu",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino)
++)
++
++TRACE_EVENT(ext4_mb_discard_preallocations,
++	TP_PROTO(struct super_block *sb, int needed),
++
++	TP_ARGS(sb, needed),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	int,	needed			)
++
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, sb->s_dev)
++		tp_assign(needed, needed)
++	),
++
++	TP_printk("dev %d,%d needed %d",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  __entry->needed)
++)
++
++TRACE_EVENT(ext4_request_blocks,
++	TP_PROTO(struct ext4_allocation_request *ar),
++
++	TP_ARGS(ar),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	unsigned int, len		)
++		__field(	__u32,  logical			)
++		__field(	__u32,	lleft			)
++		__field(	__u32,	lright			)
++		__field(	__u64,	goal			)
++		__field(	__u64,	pleft			)
++		__field(	__u64,	pright			)
++		__field(	unsigned int, flags		)
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, ar->inode->i_sb->s_dev)
++		tp_assign(ino, ar->inode->i_ino)
++		tp_assign(len, ar->len)
++		tp_assign(logical, ar->logical)
++		tp_assign(goal, ar->goal)
++		tp_assign(lleft, ar->lleft)
++		tp_assign(lright, ar->lright)
++		tp_assign(pleft, ar->pleft)
++		tp_assign(pright, ar->pright)
++		tp_assign(flags, ar->flags)
++	),
++
++	TP_printk("dev %d,%d ino %lu flags %u len %u lblk %u goal %llu "
++		  "lleft %u lright %u pleft %llu pright %llu ",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino, __entry->flags,
++		  __entry->len, __entry->logical, __entry->goal,
++		  __entry->lleft, __entry->lright, __entry->pleft,
++		  __entry->pright)
++)
++
++TRACE_EVENT(ext4_allocate_blocks,
++	TP_PROTO(struct ext4_allocation_request *ar, unsigned long long block),
++
++	TP_ARGS(ar, block),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	__u64,	block			)
++		__field(	unsigned int, len		)
++		__field(	__u32,  logical			)
++		__field(	__u32,	lleft			)
++		__field(	__u32,	lright			)
++		__field(	__u64,	goal			)
++		__field(	__u64,	pleft			)
++		__field(	__u64,	pright			)
++		__field(	unsigned int, flags		)
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, ar->inode->i_sb->s_dev)
++		tp_assign(ino, ar->inode->i_ino)
++		tp_assign(block, block)
++		tp_assign(len, ar->len)
++		tp_assign(logical, ar->logical)
++		tp_assign(goal, ar->goal)
++		tp_assign(lleft, ar->lleft)
++		tp_assign(lright, ar->lright)
++		tp_assign(pleft, ar->pleft)
++		tp_assign(pright, ar->pright)
++		tp_assign(flags, ar->flags)
++	),
++
++	TP_printk("dev %d,%d ino %lu flags %u len %u block %llu lblk %u "
++		  "goal %llu lleft %u lright %u pleft %llu pright %llu",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino, __entry->flags,
++		  __entry->len, __entry->block, __entry->logical,
++		  __entry->goal,  __entry->lleft, __entry->lright,
++		  __entry->pleft, __entry->pright)
++)
++
++TRACE_EVENT(ext4_free_blocks,
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
++	TP_PROTO(struct inode *inode, __u64 block, unsigned long count,
++		 int flags),
++
++	TP_ARGS(inode, block, count, flags),
++#else
++	TP_PROTO(struct inode *inode, __u64 block, unsigned long count,
++		 int metadata),
++
++	TP_ARGS(inode, block, count, metadata),
++#endif
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	__u64,	block			)
++		__field(	unsigned long,	count		)
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
++		__field(	int,	flags			)
++		__field(	TP_MODE_T, mode			)
++#else
++		__field(	int,	metadata		)
++#endif
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, inode->i_sb->s_dev)
++		tp_assign(ino, inode->i_ino)
++		tp_assign(block, block)
++		tp_assign(count, count)
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
++		tp_assign(flags, flags)
++		tp_assign(mode, inode->i_mode)
++#else
++		tp_assign(metadata, metadata)
++#endif
++	),
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
++	TP_printk("dev %d,%d ino %lu mode 0%o block %llu count %lu flags %d",
++#else
++	TP_printk("dev %d,%d ino %lu block %llu count %lu metadata %d",
++#endif
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
++		  __entry->mode, __entry->block, __entry->count,
++		  __entry->flags)
++#else
++		  __entry->block, __entry->count, __entry->metadata)
++#endif
++)
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,39))
++TRACE_EVENT(ext4_sync_file_enter,
++#else
++TRACE_EVENT(ext4_sync_file,
++#endif
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,35))
++	TP_PROTO(struct file *file, int datasync),
++
++	TP_ARGS(file, datasync),
++#else
++	TP_PROTO(struct file *file, struct dentry *dentry, int datasync),
++
++	TP_ARGS(file, dentry, datasync),
++#endif
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	ino_t,	parent			)
++		__field(	int,	datasync		)
++	),
++
++	TP_fast_assign(
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,35))
++		tp_assign(dev, file->f_path.dentry->d_inode->i_sb->s_dev)
++		tp_assign(ino, file->f_path.dentry->d_inode->i_ino)
++		tp_assign(datasync, datasync)
++		tp_assign(parent, file->f_path.dentry->d_parent->d_inode->i_ino)
++#else
++		tp_assign(dev, dentry->d_inode->i_sb->s_dev)
++		tp_assign(ino, dentry->d_inode->i_ino)
++		tp_assign(datasync, datasync)
++		tp_assign(parent, dentry->d_parent->d_inode->i_ino)
++#endif
++	),
++
++	TP_printk("dev %d,%d ino %lu parent %lu datasync %d ",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  (unsigned long) __entry->parent, __entry->datasync)
++)
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,39))
++TRACE_EVENT(ext4_sync_file_exit,
++	TP_PROTO(struct inode *inode, int ret),
++
++	TP_ARGS(inode, ret),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	int,	ret			)
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, inode->i_sb->s_dev)
++		tp_assign(ino, inode->i_ino)
++		tp_assign(ret, ret)
++	),
++
++	TP_printk("dev %d,%d ino %lu ret %d",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->ret)
++)
++#endif
++
++TRACE_EVENT(ext4_sync_fs,
++	TP_PROTO(struct super_block *sb, int wait),
++
++	TP_ARGS(sb, wait),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	int,	wait			)
++
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, sb->s_dev)
++		tp_assign(wait, wait)
++	),
++
++	TP_printk("dev %d,%d wait %d",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  __entry->wait)
++)
++
++TRACE_EVENT(ext4_alloc_da_blocks,
++	TP_PROTO(struct inode *inode),
++
++	TP_ARGS(inode),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field( unsigned int,	data_blocks	)
++		__field( unsigned int,	meta_blocks	)
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, inode->i_sb->s_dev)
++		tp_assign(ino, inode->i_ino)
++		tp_assign(data_blocks, EXT4_I(inode)->i_reserved_data_blocks)
++		tp_assign(meta_blocks, EXT4_I(inode)->i_reserved_meta_blocks)
++	),
++
++	TP_printk("dev %d,%d ino %lu data_blocks %u meta_blocks %u",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->data_blocks, __entry->meta_blocks)
++)
++
++TRACE_EVENT(ext4_mballoc_alloc,
++	TP_PROTO(struct ext4_allocation_context *ac),
++
++	TP_ARGS(ac),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	__u32, 	orig_logical		)
++		__field(	  int,	orig_start		)
++		__field(	__u32, 	orig_group		)
++		__field(	  int,	orig_len		)
++		__field(	__u32, 	goal_logical		)
++		__field(	  int,	goal_start		)
++		__field(	__u32, 	goal_group		)
++		__field(	  int,	goal_len		)
++		__field(	__u32, 	result_logical		)
++		__field(	  int,	result_start		)
++		__field(	__u32, 	result_group		)
++		__field(	  int,	result_len		)
++		__field(	__u16,	found			)
++		__field(	__u16,	groups			)
++		__field(	__u16,	buddy			)
++		__field(	__u16,	flags			)
++		__field(	__u16,	tail			)
++		__field(	__u8,	cr			)
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, ac->ac_inode->i_sb->s_dev)
++		tp_assign(ino, ac->ac_inode->i_ino)
++		tp_assign(orig_logical, ac->ac_o_ex.fe_logical)
++		tp_assign(orig_start, ac->ac_o_ex.fe_start)
++		tp_assign(orig_group, ac->ac_o_ex.fe_group)
++		tp_assign(orig_len, ac->ac_o_ex.fe_len)
++		tp_assign(goal_logical, ac->ac_g_ex.fe_logical)
++		tp_assign(goal_start, ac->ac_g_ex.fe_start)
++		tp_assign(goal_group, ac->ac_g_ex.fe_group)
++		tp_assign(goal_len, ac->ac_g_ex.fe_len)
++		tp_assign(result_logical, ac->ac_f_ex.fe_logical)
++		tp_assign(result_start, ac->ac_f_ex.fe_start)
++		tp_assign(result_group, ac->ac_f_ex.fe_group)
++		tp_assign(result_len, ac->ac_f_ex.fe_len)
++		tp_assign(found, ac->ac_found)
++		tp_assign(flags, ac->ac_flags)
++		tp_assign(groups, ac->ac_groups_scanned)
++		tp_assign(buddy, ac->ac_buddy)
++		tp_assign(tail, ac->ac_tail)
++		tp_assign(cr, ac->ac_criteria)
++	),
++
++	TP_printk("dev %d,%d inode %lu orig %u/%d/%u@%u goal %u/%d/%u@%u "
++		  "result %u/%d/%u@%u blks %u grps %u cr %u flags 0x%04x "
++		  "tail %u broken %u",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->orig_group, __entry->orig_start,
++		  __entry->orig_len, __entry->orig_logical,
++		  __entry->goal_group, __entry->goal_start,
++		  __entry->goal_len, __entry->goal_logical,
++		  __entry->result_group, __entry->result_start,
++		  __entry->result_len, __entry->result_logical,
++		  __entry->found, __entry->groups, __entry->cr,
++		  __entry->flags, __entry->tail,
++		  __entry->buddy ? 1 << __entry->buddy : 0)
++)
++
++TRACE_EVENT(ext4_mballoc_prealloc,
++	TP_PROTO(struct ext4_allocation_context *ac),
++
++	TP_ARGS(ac),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	__u32, 	orig_logical		)
++		__field(	  int,	orig_start		)
++		__field(	__u32, 	orig_group		)
++		__field(	  int,	orig_len		)
++		__field(	__u32, 	result_logical		)
++		__field(	  int,	result_start		)
++		__field(	__u32, 	result_group		)
++		__field(	  int,	result_len		)
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, ac->ac_inode->i_sb->s_dev)
++		tp_assign(ino, ac->ac_inode->i_ino)
++		tp_assign(orig_logical, ac->ac_o_ex.fe_logical)
++		tp_assign(orig_start, ac->ac_o_ex.fe_start)
++		tp_assign(orig_group, ac->ac_o_ex.fe_group)
++		tp_assign(orig_len, ac->ac_o_ex.fe_len)
++		tp_assign(result_logical, ac->ac_b_ex.fe_logical)
++		tp_assign(result_start, ac->ac_b_ex.fe_start)
++		tp_assign(result_group, ac->ac_b_ex.fe_group)
++		tp_assign(result_len, ac->ac_b_ex.fe_len)
++	),
++
++	TP_printk("dev %d,%d inode %lu orig %u/%d/%u@%u result %u/%d/%u@%u",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->orig_group, __entry->orig_start,
++		  __entry->orig_len, __entry->orig_logical,
++		  __entry->result_group, __entry->result_start,
++		  __entry->result_len, __entry->result_logical)
++)
++
++DECLARE_EVENT_CLASS(ext4__mballoc,
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
++	TP_PROTO(struct super_block *sb,
++		 struct inode *inode,
++		 ext4_group_t group,
++		 ext4_grpblk_t start,
++		 ext4_grpblk_t len),
++
++	TP_ARGS(sb, inode, group, start, len),
++#else
++	TP_PROTO(struct ext4_allocation_context *ac),
++
++	TP_ARGS(ac),
++#endif
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,37))
++		__field(	__u32, 	result_logical		)
++#endif
++		__field(	  int,	result_start		)
++		__field(	__u32, 	result_group		)
++		__field(	  int,	result_len		)
++	),
++
++	TP_fast_assign(
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
++		tp_assign(dev, sb->s_dev)
++		tp_assign(ino, inode ? inode->i_ino : 0)
++		tp_assign(result_start, start)
++		tp_assign(result_group, group)
++		tp_assign(result_len, len)
++#else
++		tp_assign(dev, ac->ac_sb->s_dev)
++		tp_assign(ino, ac->ac_inode ? ac->ac_inode->i_ino : 0)
++		tp_assign(result_logical, ac->ac_b_ex.fe_logical)
++		tp_assign(result_start, ac->ac_b_ex.fe_start)
++		tp_assign(result_group, ac->ac_b_ex.fe_group)
++		tp_assign(result_len, ac->ac_b_ex.fe_len)
++#endif
++	),
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
++	TP_printk("dev %d,%d inode %lu extent %u/%d/%d ",
++#else
++	TP_printk("dev %d,%d inode %lu extent %u/%d/%u@%u ",
++#endif
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->result_group, __entry->result_start,
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
++		  __entry->result_len
++#else
++		  __entry->result_len, __entry->result_logical
++#endif
++	)
++)
++
++DEFINE_EVENT(ext4__mballoc, ext4_mballoc_discard,
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
++	TP_PROTO(struct super_block *sb,
++		 struct inode *inode,
++		 ext4_group_t group,
++		 ext4_grpblk_t start,
++		 ext4_grpblk_t len),
++
++	TP_ARGS(sb, inode, group, start, len)
++#else
++	TP_PROTO(struct ext4_allocation_context *ac),
++
++	TP_ARGS(ac)
++#endif
++)
++
++DEFINE_EVENT(ext4__mballoc, ext4_mballoc_free,
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
++	TP_PROTO(struct super_block *sb,
++		 struct inode *inode,
++		 ext4_group_t group,
++		 ext4_grpblk_t start,
++		 ext4_grpblk_t len),
++
++	TP_ARGS(sb, inode, group, start, len)
++#else
++	TP_PROTO(struct ext4_allocation_context *ac),
++
++	TP_ARGS(ac)
++#endif
++)
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
++TRACE_EVENT(ext4_forget,
++	TP_PROTO(struct inode *inode, int is_metadata, __u64 block),
++
++	TP_ARGS(inode, is_metadata, block),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	__u64,	block			)
++		__field(	int,	is_metadata		)
++		__field(	TP_MODE_T, mode			)
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, inode->i_sb->s_dev)
++		tp_assign(ino, inode->i_ino)
++		tp_assign(block, block)
++		tp_assign(is_metadata, is_metadata)
++		tp_assign(mode, inode->i_mode)
++	),
++
++	TP_printk("dev %d,%d ino %lu mode 0%o is_metadata %d block %llu",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->mode, __entry->is_metadata, __entry->block)
++)
++#endif
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,34))
++TRACE_EVENT(ext4_da_update_reserve_space,
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,2,0))
++	TP_PROTO(struct inode *inode, int used_blocks, int quota_claim),
++
++	TP_ARGS(inode, used_blocks, quota_claim),
++#else
++	TP_PROTO(struct inode *inode, int used_blocks),
++
++	TP_ARGS(inode, used_blocks),
++#endif
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	__u64,	i_blocks		)
++		__field(	int,	used_blocks		)
++		__field(	int,	reserved_data_blocks	)
++		__field(	int,	reserved_meta_blocks	)
++		__field(	int,	allocated_meta_blocks	)
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,2,0))
++		__field(	int,	quota_claim		)
++#endif
++		__field(	TP_MODE_T, mode			)
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, inode->i_sb->s_dev)
++		tp_assign(ino, inode->i_ino)
++		tp_assign(i_blocks, inode->i_blocks)
++		tp_assign(used_blocks, used_blocks)
++		tp_assign(reserved_data_blocks,
++				EXT4_I(inode)->i_reserved_data_blocks)
++		tp_assign(reserved_meta_blocks,
++				EXT4_I(inode)->i_reserved_meta_blocks)
++		tp_assign(allocated_meta_blocks,
++				EXT4_I(inode)->i_allocated_meta_blocks)
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,2,0))
++		tp_assign(quota_claim, quota_claim)
++#endif
++		tp_assign(mode, inode->i_mode)
++	),
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,2,0))
++	TP_printk("dev %d,%d ino %lu mode 0%o i_blocks %llu used_blocks %d "
++		  "reserved_data_blocks %d reserved_meta_blocks %d "
++		  "allocated_meta_blocks %d quota_claim %d",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->mode, __entry->i_blocks,
++		  __entry->used_blocks, __entry->reserved_data_blocks,
++		  __entry->reserved_meta_blocks, __entry->allocated_meta_blocks,
++		  __entry->quota_claim)
++#else
++	TP_printk("dev %d,%d ino %lu mode 0%o i_blocks %llu used_blocks %d "
++		  "reserved_data_blocks %d reserved_meta_blocks %d "
++		  "allocated_meta_blocks %d",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->mode, __entry->i_blocks,
++		  __entry->used_blocks, __entry->reserved_data_blocks,
++		  __entry->reserved_meta_blocks, __entry->allocated_meta_blocks)
++#endif
++)
++
++TRACE_EVENT(ext4_da_reserve_space,
++	TP_PROTO(struct inode *inode, int md_needed),
++
++	TP_ARGS(inode, md_needed),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	__u64,	i_blocks		)
++		__field(	int,	md_needed		)
++		__field(	int,	reserved_data_blocks	)
++		__field(	int,	reserved_meta_blocks	)
++		__field(	TP_MODE_T, mode			)
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, inode->i_sb->s_dev)
++		tp_assign(ino, inode->i_ino)
++		tp_assign(i_blocks, inode->i_blocks)
++		tp_assign(md_needed, md_needed)
++		tp_assign(reserved_data_blocks,
++				EXT4_I(inode)->i_reserved_data_blocks)
++		tp_assign(reserved_meta_blocks,
++				EXT4_I(inode)->i_reserved_meta_blocks)
++		tp_assign(mode, inode->i_mode)
++	),
++
++	TP_printk("dev %d,%d ino %lu mode 0%o i_blocks %llu md_needed %d "
++		  "reserved_data_blocks %d reserved_meta_blocks %d",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->mode, __entry->i_blocks,
++		  __entry->md_needed, __entry->reserved_data_blocks,
++		  __entry->reserved_meta_blocks)
++)
++
++TRACE_EVENT(ext4_da_release_space,
++	TP_PROTO(struct inode *inode, int freed_blocks),
++
++	TP_ARGS(inode, freed_blocks),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	__u64,	i_blocks		)
++		__field(	int,	freed_blocks		)
++		__field(	int,	reserved_data_blocks	)
++		__field(	int,	reserved_meta_blocks	)
++		__field(	int,	allocated_meta_blocks	)
++		__field(	TP_MODE_T, mode			)
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, inode->i_sb->s_dev)
++		tp_assign(ino, inode->i_ino)
++		tp_assign(i_blocks, inode->i_blocks)
++		tp_assign(freed_blocks, freed_blocks)
++		tp_assign(reserved_data_blocks,
++				EXT4_I(inode)->i_reserved_data_blocks)
++		tp_assign(reserved_meta_blocks,
++				EXT4_I(inode)->i_reserved_meta_blocks)
++		tp_assign(allocated_meta_blocks,
++				EXT4_I(inode)->i_allocated_meta_blocks)
++		tp_assign(mode, inode->i_mode)
++	),
++
++	TP_printk("dev %d,%d ino %lu mode 0%o i_blocks %llu freed_blocks %d "
++		  "reserved_data_blocks %d reserved_meta_blocks %d "
++		  "allocated_meta_blocks %d",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->mode, __entry->i_blocks,
++		  __entry->freed_blocks, __entry->reserved_data_blocks,
++		  __entry->reserved_meta_blocks, __entry->allocated_meta_blocks)
++)
++#endif
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,35))
++DECLARE_EVENT_CLASS(ext4__bitmap_load,
++	TP_PROTO(struct super_block *sb, unsigned long group),
++
++	TP_ARGS(sb, group),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	__u32,	group			)
++
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, sb->s_dev)
++		tp_assign(group, group)
++	),
++
++	TP_printk("dev %d,%d group %u",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  __entry->group)
++)
++
++DEFINE_EVENT(ext4__bitmap_load, ext4_mb_bitmap_load,
++
++	TP_PROTO(struct super_block *sb, unsigned long group),
++
++	TP_ARGS(sb, group)
++)
++
++DEFINE_EVENT(ext4__bitmap_load, ext4_mb_buddy_bitmap_load,
++
++	TP_PROTO(struct super_block *sb, unsigned long group),
++
++	TP_ARGS(sb, group)
++)
++#endif
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,39))
++DEFINE_EVENT(ext4__bitmap_load, ext4_read_block_bitmap_load,
++
++	TP_PROTO(struct super_block *sb, unsigned long group),
++
++	TP_ARGS(sb, group)
++)
++
++DEFINE_EVENT(ext4__bitmap_load, ext4_load_inode_bitmap,
++
++	TP_PROTO(struct super_block *sb, unsigned long group),
++
++	TP_ARGS(sb, group)
++)
++
++TRACE_EVENT(ext4_direct_IO_enter,
++	TP_PROTO(struct inode *inode, loff_t offset, unsigned long len, int rw),
++
++	TP_ARGS(inode, offset, len, rw),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	loff_t,	pos			)
++		__field(	unsigned long,	len		)
++		__field(	int,	rw			)
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, inode->i_sb->s_dev)
++		tp_assign(ino, inode->i_ino)
++		tp_assign(pos, offset)
++		tp_assign(len, len)
++		tp_assign(rw, rw)
++	),
++
++	TP_printk("dev %d,%d ino %lu pos %lld len %lu rw %d",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->pos, __entry->len, __entry->rw)
++)
++
++TRACE_EVENT(ext4_direct_IO_exit,
++	TP_PROTO(struct inode *inode, loff_t offset, unsigned long len,
++		 int rw, int ret),
++
++	TP_ARGS(inode, offset, len, rw, ret),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	loff_t,	pos			)
++		__field(	unsigned long,	len		)
++		__field(	int,	rw			)
++		__field(	int,	ret			)
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, inode->i_sb->s_dev)
++		tp_assign(ino, inode->i_ino)
++		tp_assign(pos, offset)
++		tp_assign(len, len)
++		tp_assign(rw, rw)
++		tp_assign(ret, ret)
++	),
++
++	TP_printk("dev %d,%d ino %lu pos %lld len %lu rw %d ret %d",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->pos, __entry->len,
++		  __entry->rw, __entry->ret)
++)
++
++TRACE_EVENT(ext4_fallocate_enter,
++	TP_PROTO(struct inode *inode, loff_t offset, loff_t len, int mode),
++
++	TP_ARGS(inode, offset, len, mode),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	loff_t,	pos			)
++		__field(	loff_t,	len			)
++		__field(	int,	mode			)
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, inode->i_sb->s_dev)
++		tp_assign(ino, inode->i_ino)
++		tp_assign(pos, offset)
++		tp_assign(len, len)
++		tp_assign(mode, mode)
++	),
++
++	TP_printk("dev %d,%d ino %lu pos %lld len %lld mode %d",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino, __entry->pos,
++		  __entry->len, __entry->mode)
++)
++
++TRACE_EVENT(ext4_fallocate_exit,
++	TP_PROTO(struct inode *inode, loff_t offset,
++		 unsigned int max_blocks, int ret),
++
++	TP_ARGS(inode, offset, max_blocks, ret),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	loff_t,	pos			)
++		__field(	unsigned int,	blocks		)
++		__field(	int, 	ret			)
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, inode->i_sb->s_dev)
++		tp_assign(ino, inode->i_ino)
++		tp_assign(pos, offset)
++		tp_assign(blocks, max_blocks)
++		tp_assign(ret, ret)
++	),
++
++	TP_printk("dev %d,%d ino %lu pos %lld blocks %u ret %d",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->pos, __entry->blocks,
++		  __entry->ret)
++)
++
++TRACE_EVENT(ext4_unlink_enter,
++	TP_PROTO(struct inode *parent, struct dentry *dentry),
++
++	TP_ARGS(parent, dentry),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	ino_t,	parent			)
++		__field(	loff_t,	size			)
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, dentry->d_inode->i_sb->s_dev)
++		tp_assign(ino, dentry->d_inode->i_ino)
++		tp_assign(parent, parent->i_ino)
++		tp_assign(size, dentry->d_inode->i_size)
++	),
++
++	TP_printk("dev %d,%d ino %lu size %lld parent %lu",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino, __entry->size,
++		  (unsigned long) __entry->parent)
++)
++
++TRACE_EVENT(ext4_unlink_exit,
++	TP_PROTO(struct dentry *dentry, int ret),
++
++	TP_ARGS(dentry, ret),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	int,	ret			)
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, dentry->d_inode->i_sb->s_dev)
++		tp_assign(ino, dentry->d_inode->i_ino)
++		tp_assign(ret, ret)
++	),
++
++	TP_printk("dev %d,%d ino %lu ret %d",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->ret)
++)
++
++DECLARE_EVENT_CLASS(ext4__truncate,
++	TP_PROTO(struct inode *inode),
++
++	TP_ARGS(inode),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,		dev		)
++		__field(	ino_t,		ino		)
++		__field(	__u64,		blocks		)
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, inode->i_sb->s_dev)
++		tp_assign(ino, inode->i_ino)
++		tp_assign(blocks, inode->i_blocks)
++	),
++
++	TP_printk("dev %d,%d ino %lu blocks %llu",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino, __entry->blocks)
++)
++
++DEFINE_EVENT(ext4__truncate, ext4_truncate_enter,
++
++	TP_PROTO(struct inode *inode),
++
++	TP_ARGS(inode)
++)
++
++DEFINE_EVENT(ext4__truncate, ext4_truncate_exit,
++
++	TP_PROTO(struct inode *inode),
++
++	TP_ARGS(inode)
++)
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,2,0))
++/* 'ux' is the uninitialized extent. */
++TRACE_EVENT(ext4_ext_convert_to_initialized_enter,
++	TP_PROTO(struct inode *inode, struct ext4_map_blocks *map,
++		 struct ext4_extent *ux),
++
++	TP_ARGS(inode, map, ux),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,		dev	)
++		__field(	ino_t,		ino	)
++		__field(	ext4_lblk_t,	m_lblk	)
++		__field(	unsigned,	m_len	)
++		__field(	ext4_lblk_t,	u_lblk	)
++		__field(	unsigned,	u_len	)
++		__field(	ext4_fsblk_t,	u_pblk	)
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, inode->i_sb->s_dev)
++		tp_assign(ino, inode->i_ino)
++		tp_assign(m_lblk, map->m_lblk)
++		tp_assign(m_len, map->m_len)
++		tp_assign(u_lblk, le32_to_cpu(ux->ee_block))
++		tp_assign(u_len, ext4_ext_get_actual_len(ux))
++		tp_assign(u_pblk, ext4_ext_pblock(ux))
++	),
++
++	TP_printk("dev %d,%d ino %lu m_lblk %u m_len %u u_lblk %u u_len %u "
++		  "u_pblk %llu",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->m_lblk, __entry->m_len,
++		  __entry->u_lblk, __entry->u_len, __entry->u_pblk)
++)
++
++/*
++ * 'ux' is the uninitialized extent.
++ * 'ix' is the initialized extent to which blocks are transferred.
++ */
++TRACE_EVENT(ext4_ext_convert_to_initialized_fastpath,
++	TP_PROTO(struct inode *inode, struct ext4_map_blocks *map,
++		 struct ext4_extent *ux, struct ext4_extent *ix),
++
++	TP_ARGS(inode, map, ux, ix),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,		dev	)
++		__field(	ino_t,		ino	)
++		__field(	ext4_lblk_t,	m_lblk	)
++		__field(	unsigned,	m_len	)
++		__field(	ext4_lblk_t,	u_lblk	)
++		__field(	unsigned,	u_len	)
++		__field(	ext4_fsblk_t,	u_pblk	)
++		__field(	ext4_lblk_t,	i_lblk	)
++		__field(	unsigned,	i_len	)
++		__field(	ext4_fsblk_t,	i_pblk	)
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, inode->i_sb->s_dev)
++		tp_assign(ino, inode->i_ino)
++		tp_assign(m_lblk, map->m_lblk)
++		tp_assign(m_len, map->m_len)
++		tp_assign(u_lblk, le32_to_cpu(ux->ee_block))
++		tp_assign(u_len, ext4_ext_get_actual_len(ux))
++		tp_assign(u_pblk, ext4_ext_pblock(ux))
++		tp_assign(i_lblk, le32_to_cpu(ix->ee_block))
++		tp_assign(i_len, ext4_ext_get_actual_len(ix))
++		tp_assign(i_pblk, ext4_ext_pblock(ix))
++	),
++
++	TP_printk("dev %d,%d ino %lu m_lblk %u m_len %u "
++		  "u_lblk %u u_len %u u_pblk %llu "
++		  "i_lblk %u i_len %u i_pblk %llu ",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->m_lblk, __entry->m_len,
++		  __entry->u_lblk, __entry->u_len, __entry->u_pblk,
++		  __entry->i_lblk, __entry->i_len, __entry->i_pblk)
++)
++#endif
++
++DECLARE_EVENT_CLASS(ext4__map_blocks_enter,
++	TP_PROTO(struct inode *inode, ext4_lblk_t lblk,
++		 unsigned int len, unsigned int flags),
++
++	TP_ARGS(inode, lblk, len, flags),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,		dev		)
++		__field(	ino_t,		ino		)
++		__field(	ext4_lblk_t,	lblk		)
++		__field(	unsigned int,	len		)
++		__field(	unsigned int,	flags		)
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, inode->i_sb->s_dev)
++		tp_assign(ino, inode->i_ino)
++		tp_assign(lblk, lblk)
++		tp_assign(len, len)
++		tp_assign(flags, flags)
++	),
++
++	TP_printk("dev %d,%d ino %lu lblk %u len %u flags %u",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->lblk, __entry->len, __entry->flags)
++)
++
++DEFINE_EVENT(ext4__map_blocks_enter, ext4_ext_map_blocks_enter,
++	TP_PROTO(struct inode *inode, ext4_lblk_t lblk,
++		 unsigned len, unsigned flags),
++
++	TP_ARGS(inode, lblk, len, flags)
++)
++
++DEFINE_EVENT(ext4__map_blocks_enter, ext4_ind_map_blocks_enter,
++	TP_PROTO(struct inode *inode, ext4_lblk_t lblk,
++		 unsigned len, unsigned flags),
++
++	TP_ARGS(inode, lblk, len, flags)
++)
++
++DECLARE_EVENT_CLASS(ext4__map_blocks_exit,
++	TP_PROTO(struct inode *inode, ext4_lblk_t lblk,
++		 ext4_fsblk_t pblk, unsigned int len, int ret),
++
++	TP_ARGS(inode, lblk, pblk, len, ret),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,		dev		)
++		__field(	ino_t,		ino		)
++		__field(	ext4_fsblk_t,	pblk		)
++		__field(	ext4_lblk_t,	lblk		)
++		__field(	unsigned int,	len		)
++		__field(	int,		ret		)
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, inode->i_sb->s_dev)
++		tp_assign(ino, inode->i_ino)
++		tp_assign(pblk, pblk)
++		tp_assign(lblk, lblk)
++		tp_assign(len, len)
++		tp_assign(ret, ret)
++	),
++
++	TP_printk("dev %d,%d ino %lu lblk %u pblk %llu len %u ret %d",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->lblk, __entry->pblk,
++		  __entry->len, __entry->ret)
++)
++
++DEFINE_EVENT(ext4__map_blocks_exit, ext4_ext_map_blocks_exit,
++	TP_PROTO(struct inode *inode, ext4_lblk_t lblk,
++		 ext4_fsblk_t pblk, unsigned len, int ret),
++
++	TP_ARGS(inode, lblk, pblk, len, ret)
++)
++
++DEFINE_EVENT(ext4__map_blocks_exit, ext4_ind_map_blocks_exit,
++	TP_PROTO(struct inode *inode, ext4_lblk_t lblk,
++		 ext4_fsblk_t pblk, unsigned len, int ret),
++
++	TP_ARGS(inode, lblk, pblk, len, ret)
++)
++
++TRACE_EVENT(ext4_ext_load_extent,
++	TP_PROTO(struct inode *inode, ext4_lblk_t lblk, ext4_fsblk_t pblk),
++
++	TP_ARGS(inode, lblk, pblk),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,		dev		)
++		__field(	ino_t,		ino		)
++		__field(	ext4_fsblk_t,	pblk		)
++		__field(	ext4_lblk_t,	lblk		)
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, inode->i_sb->s_dev)
++		tp_assign(ino, inode->i_ino)
++		tp_assign(pblk, pblk)
++		tp_assign(lblk, lblk)
++	),
++
++	TP_printk("dev %d,%d ino %lu lblk %u pblk %llu",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->lblk, __entry->pblk)
++)
++
++TRACE_EVENT(ext4_load_inode,
++	TP_PROTO(struct inode *inode),
++
++	TP_ARGS(inode),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev		)
++		__field(	ino_t,	ino		)
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, inode->i_sb->s_dev)
++		tp_assign(ino, inode->i_ino)
++	),
++
++	TP_printk("dev %d,%d ino %ld",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino)
++)
++#endif
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,1,0))
++TRACE_EVENT(ext4_journal_start,
++	TP_PROTO(struct super_block *sb, int nblocks, unsigned long IP),
++
++	TP_ARGS(sb, nblocks, IP),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(unsigned long,	ip			)
++		__field(	  int, 	nblocks			)
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, sb->s_dev)
++		tp_assign(ip, IP)
++		tp_assign(nblocks, nblocks)
++	),
++
++	TP_printk("dev %d,%d nblocks %d caller %pF",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  __entry->nblocks, (void *)__entry->ip)
++)
++
++DECLARE_EVENT_CLASS(ext4__trim,
++	TP_PROTO(struct super_block *sb,
++		 ext4_group_t group,
++		 ext4_grpblk_t start,
++		 ext4_grpblk_t len),
++
++	TP_ARGS(sb, group, start, len),
++
++	TP_STRUCT__entry(
++		__field(	int,	dev_major		)
++		__field(	int,	dev_minor		)
++		__field(	__u32, 	group			)
++		__field(	int,	start			)
++		__field(	int,	len			)
++	),
++
++	TP_fast_assign(
++		tp_assign(dev_major, MAJOR(sb->s_dev))
++		tp_assign(dev_minor, MINOR(sb->s_dev))
++		tp_assign(group, group)
++		tp_assign(start, start)
++		tp_assign(len, len)
++	),
++
++	TP_printk("dev %d,%d group %u, start %d, len %d",
++		  __entry->dev_major, __entry->dev_minor,
++		  __entry->group, __entry->start, __entry->len)
++)
++
++DEFINE_EVENT(ext4__trim, ext4_trim_extent,
++
++	TP_PROTO(struct super_block *sb,
++		 ext4_group_t group,
++		 ext4_grpblk_t start,
++		 ext4_grpblk_t len),
++
++	TP_ARGS(sb, group, start, len)
++)
++
++DEFINE_EVENT(ext4__trim, ext4_trim_all_free,
++
++	TP_PROTO(struct super_block *sb,
++		 ext4_group_t group,
++		 ext4_grpblk_t start,
++		 ext4_grpblk_t len),
++
++	TP_ARGS(sb, group, start, len)
++)
++#endif
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,2,0))
++TRACE_EVENT(ext4_ext_handle_uninitialized_extents,
++	TP_PROTO(struct inode *inode, struct ext4_map_blocks *map,
++		 unsigned int allocated, ext4_fsblk_t newblock),
++
++	TP_ARGS(inode, map, allocated, newblock),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,		dev		)
++		__field(	ino_t,		ino		)
++		__field(	int,		flags		)
++		__field(	ext4_lblk_t,	lblk		)
++		__field(	ext4_fsblk_t,	pblk		)
++		__field(	unsigned int,	len		)
++		__field(	unsigned int,	allocated	)
++		__field(	ext4_fsblk_t,	newblk		)
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, inode->i_sb->s_dev)
++		tp_assign(ino, inode->i_ino)
++		tp_assign(flags, map->m_flags)
++		tp_assign(lblk, map->m_lblk)
++		tp_assign(pblk, map->m_pblk)
++		tp_assign(len, map->m_len)
++		tp_assign(allocated, allocated)
++		tp_assign(newblk, newblock)
++	),
++
++	TP_printk("dev %d,%d ino %lu m_lblk %u m_pblk %llu m_len %u flags %d"
++		  "allocated %d newblock %llu",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  (unsigned) __entry->lblk, (unsigned long long) __entry->pblk,
++		  __entry->len, __entry->flags,
++		  (unsigned int) __entry->allocated,
++		  (unsigned long long) __entry->newblk)
++)
++
++TRACE_EVENT(ext4_get_implied_cluster_alloc_exit,
++	TP_PROTO(struct super_block *sb, struct ext4_map_blocks *map, int ret),
++
++	TP_ARGS(sb, map, ret),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,		dev	)
++		__field(	unsigned int,	flags	)
++		__field(	ext4_lblk_t,	lblk	)
++		__field(	ext4_fsblk_t,	pblk	)
++		__field(	unsigned int,	len	)
++		__field(	int,		ret	)
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, sb->s_dev)
++		tp_assign(flags, map->m_flags)
++		tp_assign(lblk, map->m_lblk)
++		tp_assign(pblk, map->m_pblk)
++		tp_assign(len, map->m_len)
++		tp_assign(ret, ret)
++	),
++
++	TP_printk("dev %d,%d m_lblk %u m_pblk %llu m_len %u m_flags %u ret %d",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  __entry->lblk, (unsigned long long) __entry->pblk,
++		  __entry->len, __entry->flags, __entry->ret)
++)
++
++TRACE_EVENT(ext4_ext_put_in_cache,
++	TP_PROTO(struct inode *inode, ext4_lblk_t lblk, unsigned int len,
++		 ext4_fsblk_t start),
++
++	TP_ARGS(inode, lblk, len, start),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,		dev	)
++		__field(	ino_t,		ino	)
++		__field(	ext4_lblk_t,	lblk	)
++		__field(	unsigned int,	len	)
++		__field(	ext4_fsblk_t,	start	)
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, inode->i_sb->s_dev)
++		tp_assign(ino, inode->i_ino)
++		tp_assign(lblk, lblk)
++		tp_assign(len, len)
++		tp_assign(start, start)
++	),
++
++	TP_printk("dev %d,%d ino %lu lblk %u len %u start %llu",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  (unsigned) __entry->lblk,
++		  __entry->len,
++		  (unsigned long long) __entry->start)
++)
++
++TRACE_EVENT(ext4_ext_in_cache,
++	TP_PROTO(struct inode *inode, ext4_lblk_t lblk, int ret),
++
++	TP_ARGS(inode, lblk, ret),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,		dev	)
++		__field(	ino_t,		ino	)
++		__field(	ext4_lblk_t,	lblk	)
++		__field(	int,		ret	)
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, inode->i_sb->s_dev)
++		tp_assign(ino, inode->i_ino)
++		tp_assign(lblk, lblk)
++		tp_assign(ret, ret)
++	),
++
++	TP_printk("dev %d,%d ino %lu lblk %u ret %d",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  (unsigned) __entry->lblk,
++		  __entry->ret)
++
++)
++
++TRACE_EVENT(ext4_find_delalloc_range,
++	TP_PROTO(struct inode *inode, ext4_lblk_t from, ext4_lblk_t to,
++		int reverse, int found, ext4_lblk_t found_blk),
++
++	TP_ARGS(inode, from, to, reverse, found, found_blk),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,		dev		)
++		__field(	ino_t,		ino		)
++		__field(	ext4_lblk_t,	from		)
++		__field(	ext4_lblk_t,	to		)
++		__field(	int,		reverse		)
++		__field(	int,		found		)
++		__field(	ext4_lblk_t,	found_blk	)
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, inode->i_sb->s_dev)
++		tp_assign(ino, inode->i_ino)
++		tp_assign(from, from)
++		tp_assign(to, to)
++		tp_assign(reverse, reverse)
++		tp_assign(found, found)
++		tp_assign(found_blk, found_blk)
++	),
++
++	TP_printk("dev %d,%d ino %lu from %u to %u reverse %d found %d "
++		  "(blk = %u)",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  (unsigned) __entry->from, (unsigned) __entry->to,
++		  __entry->reverse, __entry->found,
++		  (unsigned) __entry->found_blk)
++)
++
++TRACE_EVENT(ext4_get_reserved_cluster_alloc,
++	TP_PROTO(struct inode *inode, ext4_lblk_t lblk, unsigned int len),
++
++	TP_ARGS(inode, lblk, len),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,		dev	)
++		__field(	ino_t,		ino	)
++		__field(	ext4_lblk_t,	lblk	)
++		__field(	unsigned int,	len	)
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, inode->i_sb->s_dev)
++		tp_assign(ino, inode->i_ino)
++		tp_assign(lblk, lblk)
++		tp_assign(len, len)
++	),
++
++	TP_printk("dev %d,%d ino %lu lblk %u len %u",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  (unsigned) __entry->lblk,
++		  __entry->len)
++)
++
++TRACE_EVENT(ext4_ext_show_extent,
++	TP_PROTO(struct inode *inode, ext4_lblk_t lblk, ext4_fsblk_t pblk,
++		 unsigned short len),
++
++	TP_ARGS(inode, lblk, pblk, len),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,		dev	)
++		__field(	ino_t,		ino	)
++		__field(	ext4_fsblk_t,	pblk	)
++		__field(	ext4_lblk_t,	lblk	)
++		__field(	unsigned short,	len	)
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, inode->i_sb->s_dev)
++		tp_assign(ino, inode->i_ino)
++		tp_assign(pblk, pblk)
++		tp_assign(lblk, lblk)
++		tp_assign(len, len)
++	),
++
++	TP_printk("dev %d,%d ino %lu lblk %u pblk %llu len %u",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  (unsigned) __entry->lblk,
++		  (unsigned long long) __entry->pblk,
++		  (unsigned short) __entry->len)
++)
++
++TRACE_EVENT(ext4_remove_blocks,
++	    TP_PROTO(struct inode *inode, struct ext4_extent *ex,
++		ext4_lblk_t from, ext4_fsblk_t to,
++		ext4_fsblk_t partial_cluster),
++
++	TP_ARGS(inode, ex, from, to, partial_cluster),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,		dev	)
++		__field(	ino_t,		ino	)
++		__field(	ext4_lblk_t,	from	)
++		__field(	ext4_lblk_t,	to	)
++		__field(	ext4_fsblk_t,	partial	)
++		__field(	ext4_fsblk_t,	ee_pblk	)
++		__field(	ext4_lblk_t,	ee_lblk	)
++		__field(	unsigned short,	ee_len	)
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, inode->i_sb->s_dev)
++		tp_assign(ino, inode->i_ino)
++		tp_assign(from, from)
++		tp_assign(to, to)
++		tp_assign(partial, partial_cluster)
++		tp_assign(ee_pblk, ext4_ext_pblock(ex))
++		tp_assign(ee_lblk, cpu_to_le32(ex->ee_block))
++		tp_assign(ee_len, ext4_ext_get_actual_len(ex))
++	),
++
++	TP_printk("dev %d,%d ino %lu extent [%u(%llu), %u]"
++		  "from %u to %u partial_cluster %u",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  (unsigned) __entry->ee_lblk,
++		  (unsigned long long) __entry->ee_pblk,
++		  (unsigned short) __entry->ee_len,
++		  (unsigned) __entry->from,
++		  (unsigned) __entry->to,
++		  (unsigned) __entry->partial)
++)
++
++TRACE_EVENT(ext4_ext_rm_leaf,
++	TP_PROTO(struct inode *inode, ext4_lblk_t start,
++		 struct ext4_extent *ex, ext4_fsblk_t partial_cluster),
++
++	TP_ARGS(inode, start, ex, partial_cluster),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,		dev	)
++		__field(	ino_t,		ino	)
++		__field(	ext4_fsblk_t,	partial	)
++		__field(	ext4_lblk_t,	start	)
++		__field(	ext4_lblk_t,	ee_lblk	)
++		__field(	ext4_fsblk_t,	ee_pblk	)
++		__field(	short,		ee_len	)
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, inode->i_sb->s_dev)
++		tp_assign(ino, inode->i_ino)
++		tp_assign(partial, partial_cluster)
++		tp_assign(start, start)
++		tp_assign(ee_lblk, le32_to_cpu(ex->ee_block))
++		tp_assign(ee_pblk, ext4_ext_pblock(ex))
++		tp_assign(ee_len, ext4_ext_get_actual_len(ex))
++	),
++
++	TP_printk("dev %d,%d ino %lu start_lblk %u last_extent [%u(%llu), %u]"
++		  "partial_cluster %u",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  (unsigned) __entry->start,
++		  (unsigned) __entry->ee_lblk,
++		  (unsigned long long) __entry->ee_pblk,
++		  (unsigned short) __entry->ee_len,
++		  (unsigned) __entry->partial)
++)
++
++TRACE_EVENT(ext4_ext_rm_idx,
++	TP_PROTO(struct inode *inode, ext4_fsblk_t pblk),
++
++	TP_ARGS(inode, pblk),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,		dev	)
++		__field(	ino_t,		ino	)
++		__field(	ext4_fsblk_t,	pblk	)
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, inode->i_sb->s_dev)
++		tp_assign(ino, inode->i_ino)
++		tp_assign(pblk, pblk)
++	),
++
++	TP_printk("dev %d,%d ino %lu index_pblk %llu",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  (unsigned long long) __entry->pblk)
++)
++
++TRACE_EVENT(ext4_ext_remove_space,
++	TP_PROTO(struct inode *inode, ext4_lblk_t start, int depth),
++
++	TP_ARGS(inode, start, depth),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,		dev	)
++		__field(	ino_t,		ino	)
++		__field(	ext4_lblk_t,	start	)
++		__field(	int,		depth	)
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, inode->i_sb->s_dev)
++		tp_assign(ino, inode->i_ino)
++		tp_assign(start, start)
++		tp_assign(depth, depth)
++	),
++
++	TP_printk("dev %d,%d ino %lu since %u depth %d",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  (unsigned) __entry->start,
++		  __entry->depth)
++)
++
++TRACE_EVENT(ext4_ext_remove_space_done,
++	TP_PROTO(struct inode *inode, ext4_lblk_t start, int depth,
++		ext4_lblk_t partial, unsigned short eh_entries),
++
++	TP_ARGS(inode, start, depth, partial, eh_entries),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,		dev		)
++		__field(	ino_t,		ino		)
++		__field(	ext4_lblk_t,	start		)
++		__field(	int,		depth		)
++		__field(	ext4_lblk_t,	partial		)
++		__field(	unsigned short,	eh_entries	)
++	),
++
++	TP_fast_assign(
++		tp_assign(dev, inode->i_sb->s_dev)
++		tp_assign(ino, inode->i_ino)
++		tp_assign(start, start)
++		tp_assign(depth, depth)
++		tp_assign(partial, partial)
++		tp_assign(eh_entries, eh_entries)
++	),
++
++	TP_printk("dev %d,%d ino %lu since %u depth %d partial %u "
++		  "remaining_entries %u",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  (unsigned) __entry->start,
++		  __entry->depth,
++		  (unsigned) __entry->partial,
++		  (unsigned short) __entry->eh_entries)
++)
++#endif
++
++#endif /* _TRACE_EXT4_H */
++
++/* This part must be outside protection */
++#include "../../../probes/define_trace.h"
+diff --git a/instrumentation/events/lttng-module/printk.h b/instrumentation/events/lttng-module/printk.h
+new file mode 100644
+index 0000000..4c744f9
+--- /dev/null
++++ b/instrumentation/events/lttng-module/printk.h
+@@ -0,0 +1,64 @@
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM printk
++
++#if !defined(_TRACE_PRINTK_H) || defined(TRACE_HEADER_MULTI_READ)
++#define _TRACE_PRINTK_H
++
 +#include <linux/tracepoint.h>
 +#include <linux/version.h>
++
++#define MSG_TRACE_MAX_LEN	2048
++
++TRACE_EVENT_CONDITION(console,
++	TP_PROTO(const char *log_buf, unsigned start, unsigned end,
++		 unsigned log_buf_len),
++
++	TP_ARGS(log_buf, start, end, log_buf_len),
++
++	TP_CONDITION(start != end),
++
++	TP_STRUCT__entry(
++		__dynamic_array_text(char, msg,
++			min_t(unsigned, end - start, MSG_TRACE_MAX_LEN) + 1)
++	),
++
++	TP_fast_assign(
++		tp_memcpy_dyn(msg,
++			({
++				char lmsg[MSG_TRACE_MAX_LEN + 1];
++
++				if ((end - start) > MSG_TRACE_MAX_LEN)
++					start = end - MSG_TRACE_MAX_LEN;
++
++#if (LINUX_VERSION_CODE < KERNEL_VERSION(3,5,0))
++				if ((start & (log_buf_len - 1)) >
++					(end & (log_buf_len - 1))) {
++					memcpy(lmsg,
++						log_buf +
++						(start & (log_buf_len - 1)),
++						log_buf_len -
++						(start & (log_buf_len - 1)));
++					memcpy(lmsg + log_buf_len -
++						(start & (log_buf_len - 1)),
++						log_buf,
++						end & (log_buf_len - 1));
++				} else
++					memcpy(lmsg,
++						log_buf +
++						(start & (log_buf_len - 1)),
++						end - start);
++#else
++				memcpy(lmsg, log_buf + start, end - start);
++#endif
++				lmsg[end - start] = 0;
++				lmsg;
++			})
++		)
++	),
++
++	TP_printk("%s", __get_str(msg))
++)
++#endif /* _TRACE_PRINTK_H */
++
++/* This part must be outside protection */
++#include "../../../probes/define_trace.h"
+diff --git a/instrumentation/events/lttng-module/random.h b/instrumentation/events/lttng-module/random.h
+new file mode 100644
+index 0000000..6ecdd90
+--- /dev/null
++++ b/instrumentation/events/lttng-module/random.h
+@@ -0,0 +1,134 @@
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM random
++
++#if !defined(_TRACE_RANDOM_H) || defined(TRACE_HEADER_MULTI_READ)
++#define _TRACE_RANDOM_H
++
++#include <linux/writeback.h>
++#include <linux/tracepoint.h>
++
++DECLARE_EVENT_CLASS(random__mix_pool_bytes,
++	TP_PROTO(const char *pool_name, int bytes, unsigned long IP),
++
++	TP_ARGS(pool_name, bytes, IP),
++
++	TP_STRUCT__entry(
++		__string(   pool_name,	pool_name		)
++		__field(	  int,	bytes			)
++		__field(unsigned long,	IP			)
++	),
++
++	TP_fast_assign(
++		tp_strcpy(pool_name, pool_name)
++		tp_assign(bytes, bytes)
++		tp_assign(IP, IP)
++	),
++
++	TP_printk("%s pool: bytes %d caller %pF",
++		  __get_str(pool_name), __entry->bytes, (void *)__entry->IP)
++)
++
++DEFINE_EVENT(random__mix_pool_bytes, mix_pool_bytes,
++	TP_PROTO(const char *pool_name, int bytes, unsigned long IP),
++
++	TP_ARGS(pool_name, bytes, IP)
++)
++
++DEFINE_EVENT(random__mix_pool_bytes, mix_pool_bytes_nolock,
++	TP_PROTO(const char *pool_name, int bytes, unsigned long IP),
++
++	TP_ARGS(pool_name, bytes, IP)
++)
++
++TRACE_EVENT(credit_entropy_bits,
++	TP_PROTO(const char *pool_name, int bits, int entropy_count,
++		 int entropy_total, unsigned long IP),
++
++	TP_ARGS(pool_name, bits, entropy_count, entropy_total, IP),
++
++	TP_STRUCT__entry(
++		__string(   pool_name,	pool_name		)
++		__field(	  int,	bits			)
++		__field(	  int,	entropy_count		)
++		__field(	  int,	entropy_total		)
++		__field(unsigned long,	IP			)
++	),
++
++	TP_fast_assign(
++		tp_strcpy(pool_name, pool_name)
++		tp_assign(bits, bits)
++		tp_assign(entropy_count, entropy_count)
++		tp_assign(entropy_total, entropy_total)
++		tp_assign(IP, IP)
++	),
++
++	TP_printk("%s pool: bits %d entropy_count %d entropy_total %d "
++		  "caller %pF", __get_str(pool_name), __entry->bits,
++		  __entry->entropy_count, __entry->entropy_total,
++		  (void *)__entry->IP)
++)
++
++TRACE_EVENT(get_random_bytes,
++	TP_PROTO(int nbytes, unsigned long IP),
++
++	TP_ARGS(nbytes, IP),
++
++	TP_STRUCT__entry(
++		__field(	  int,	nbytes			)
++		__field(unsigned long,	IP			)
++	),
++
++	TP_fast_assign(
++		tp_assign(nbytes, nbytes)
++		tp_assign(IP, IP)
++	),
++
++	TP_printk("nbytes %d caller %pF", __entry->nbytes, (void *)__entry->IP)
++)
++
++DECLARE_EVENT_CLASS(random__extract_entropy,
++	TP_PROTO(const char *pool_name, int nbytes, int entropy_count,
++		 unsigned long IP),
++
++	TP_ARGS(pool_name, nbytes, entropy_count, IP),
++
++	TP_STRUCT__entry(
++		__string(   pool_name,	pool_name		)
++		__field(	  int,	nbytes			)
++		__field(	  int,	entropy_count		)
++		__field(unsigned long,	IP			)
++	),
++
++	TP_fast_assign(
++		tp_strcpy(pool_name, pool_name)
++		tp_assign(nbytes, nbytes)
++		tp_assign(entropy_count, entropy_count)
++		tp_assign(IP, IP)
++	),
++
++	TP_printk("%s pool: nbytes %d entropy_count %d caller %pF",
++		  __get_str(pool_name), __entry->nbytes, __entry->entropy_count,
++		  (void *)__entry->IP)
++)
++
++
++DEFINE_EVENT(random__extract_entropy, extract_entropy,
++	TP_PROTO(const char *pool_name, int nbytes, int entropy_count,
++		 unsigned long IP),
++
++	TP_ARGS(pool_name, nbytes, entropy_count, IP)
++)
++
++DEFINE_EVENT(random__extract_entropy, extract_entropy_user,
++	TP_PROTO(const char *pool_name, int nbytes, int entropy_count,
++		 unsigned long IP),
++
++	TP_ARGS(pool_name, nbytes, entropy_count, IP)
++)
++
++
++
++#endif /* _TRACE_RANDOM_H */
++
++/* This part must be outside protection */
++#include "../../../probes/define_trace.h"
+diff --git a/instrumentation/events/lttng-module/rcu.h b/instrumentation/events/lttng-module/rcu.h
+new file mode 100644
+index 0000000..56434aa
+--- /dev/null
++++ b/instrumentation/events/lttng-module/rcu.h
+@@ -0,0 +1,721 @@
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM rcu
++
++#if !defined(_TRACE_RCU_H) || defined(TRACE_HEADER_MULTI_READ)
++#define _TRACE_RCU_H
++
++#include <linux/tracepoint.h>
++#include <linux/version.h>
++
++/*
++ * Tracepoint for start/end markers used for utilization calculations.
++ * By convention, the string is of the following forms:
++ *
++ * "Start <activity>" -- Mark the start of the specified activity,
++ *			 such as "context switch".  Nesting is permitted.
++ * "End <activity>" -- Mark the end of the specified activity.
++ *
++ * An "@" character within "<activity>" is a comment character: Data
++ * reduction scripts will ignore the "@" and the remainder of the line.
++ */
++TRACE_EVENT(rcu_utilization,
++
++	TP_PROTO(char *s),
++
++	TP_ARGS(s),
++
++	TP_STRUCT__entry(
++		__string(s, s)
++	),
++
++	TP_fast_assign(
++		tp_strcpy(s, s)
++	),
++
++	TP_printk("%s", __get_str(s))
++)
++
++#ifdef CONFIG_RCU_TRACE
++
++#if defined(CONFIG_TREE_RCU) || defined(CONFIG_TREE_PREEMPT_RCU)
++
++/*
++ * Tracepoint for grace-period events: starting and ending a grace
++ * period ("start" and "end", respectively), a CPU noting the start
++ * of a new grace period or the end of an old grace period ("cpustart"
++ * and "cpuend", respectively), a CPU passing through a quiescent
++ * state ("cpuqs"), a CPU coming online or going offline ("cpuonl"
++ * and "cpuofl", respectively), and a CPU being kicked for being too
++ * long in dyntick-idle mode ("kick").
++ */
++TRACE_EVENT(rcu_grace_period,
++
++	TP_PROTO(char *rcuname, unsigned long gpnum, char *gpevent),
++
++	TP_ARGS(rcuname, gpnum, gpevent),
++
++	TP_STRUCT__entry(
++		__string(rcuname, rcuname)
++		__field(unsigned long, gpnum)
++		__string(gpevent, gpevent)
++	),
++
++	TP_fast_assign(
++		tp_strcpy(rcuname, rcuname)
++		tp_assign(gpnum, gpnum)
++		tp_strcpy(gpevent, gpevent)
++	),
++
++	TP_printk("%s %lu %s",
++		  __get_str(rcuname), __entry->gpnum, __get_str(gpevent))
++)
++
++/*
++ * Tracepoint for grace-period-initialization events.  These are
++ * distinguished by the type of RCU, the new grace-period number, the
++ * rcu_node structure level, the starting and ending CPU covered by the
++ * rcu_node structure, and the mask of CPUs that will be waited for.
++ * All but the type of RCU are extracted from the rcu_node structure.
++ */
++TRACE_EVENT(rcu_grace_period_init,
++
++	TP_PROTO(char *rcuname, unsigned long gpnum, u8 level,
++		 int grplo, int grphi, unsigned long qsmask),
++
++	TP_ARGS(rcuname, gpnum, level, grplo, grphi, qsmask),
++
++	TP_STRUCT__entry(
++		__string(rcuname, rcuname)
++		__field(unsigned long, gpnum)
++		__field(u8, level)
++		__field(int, grplo)
++		__field(int, grphi)
++		__field(unsigned long, qsmask)
++	),
++
++	TP_fast_assign(
++		tp_strcpy(rcuname, rcuname)
++		tp_assign(gpnum, gpnum)
++		tp_assign(level, level)
++		tp_assign(grplo, grplo)
++		tp_assign(grphi, grphi)
++		tp_assign(qsmask, qsmask)
++	),
++
++	TP_printk("%s %lu %u %d %d %lx",
++		  __get_str(rcuname), __entry->gpnum, __entry->level,
++		  __entry->grplo, __entry->grphi, __entry->qsmask)
++)
++
++/*
++ * Tracepoint for tasks blocking within preemptible-RCU read-side
++ * critical sections.  Track the type of RCU (which one day might
++ * include SRCU), the grace-period number that the task is blocking
++ * (the current or the next), and the task's PID.
++ */
++TRACE_EVENT(rcu_preempt_task,
++
++	TP_PROTO(char *rcuname, int pid, unsigned long gpnum),
++
++	TP_ARGS(rcuname, pid, gpnum),
++
++	TP_STRUCT__entry(
++		__string(rcuname, rcuname)
++		__field(unsigned long, gpnum)
++		__field(int, pid)
++	),
++
++	TP_fast_assign(
++		tp_strcpy(rcuname, rcuname)
++		tp_assign(gpnum, gpnum)
++		tp_assign(pid, pid)
++	),
++
++	TP_printk("%s %lu %d",
++		  __get_str(rcuname), __entry->gpnum, __entry->pid)
++)
++
++/*
++ * Tracepoint for tasks that blocked within a given preemptible-RCU
++ * read-side critical section exiting that critical section.  Track the
++ * type of RCU (which one day might include SRCU) and the task's PID.
++ */
++TRACE_EVENT(rcu_unlock_preempted_task,
++
++	TP_PROTO(char *rcuname, unsigned long gpnum, int pid),
++
++	TP_ARGS(rcuname, gpnum, pid),
++
++	TP_STRUCT__entry(
++		__string(rcuname, rcuname)
++		__field(unsigned long, gpnum)
++		__field(int, pid)
++	),
++
++	TP_fast_assign(
++		tp_strcpy(rcuname, rcuname)
++		tp_assign(gpnum, gpnum)
++		tp_assign(pid, pid)
++	),
++
++	TP_printk("%s %lu %d", __get_str(rcuname), __entry->gpnum, __entry->pid)
++)
++
++/*
++ * Tracepoint for quiescent-state-reporting events.  These are
++ * distinguished by the type of RCU, the grace-period number, the
++ * mask of quiescent lower-level entities, the rcu_node structure level,
++ * the starting and ending CPU covered by the rcu_node structure, and
++ * whether there are any blocked tasks blocking the current grace period.
++ * All but the type of RCU are extracted from the rcu_node structure.
++ */
++TRACE_EVENT(rcu_quiescent_state_report,
++
++	TP_PROTO(char *rcuname, unsigned long gpnum,
++		 unsigned long mask, unsigned long qsmask,
++		 u8 level, int grplo, int grphi, int gp_tasks),
++
++	TP_ARGS(rcuname, gpnum, mask, qsmask, level, grplo, grphi, gp_tasks),
++
++	TP_STRUCT__entry(
++		__string(rcuname, rcuname)
++		__field(unsigned long, gpnum)
++		__field(unsigned long, mask)
++		__field(unsigned long, qsmask)
++		__field(u8, level)
++		__field(int, grplo)
++		__field(int, grphi)
++		__field(u8, gp_tasks)
++	),
++
++	TP_fast_assign(
++		tp_strcpy(rcuname, rcuname)
++		tp_assign(gpnum, gpnum)
++		tp_assign(mask, mask)
++		tp_assign(qsmask, qsmask)
++		tp_assign(level, level)
++		tp_assign(grplo, grplo)
++		tp_assign(grphi, grphi)
++		tp_assign(gp_tasks, gp_tasks)
++	),
++
++	TP_printk("%s %lu %lx>%lx %u %d %d %u",
++		  __get_str(rcuname), __entry->gpnum,
++		  __entry->mask, __entry->qsmask, __entry->level,
++		  __entry->grplo, __entry->grphi, __entry->gp_tasks)
++)
++
++/*
++ * Tracepoint for quiescent states detected by force_quiescent_state().
++ * These trace events include the type of RCU, the grace-period number
++ * that was blocked by the CPU, the CPU itself, and the type of quiescent
++ * state, which can be "dti" for dyntick-idle mode, "ofl" for CPU offline,
++ * or "kick" when kicking a CPU that has been in dyntick-idle mode for
++ * too long.
++ */
++TRACE_EVENT(rcu_fqs,
++
++	TP_PROTO(char *rcuname, unsigned long gpnum, int cpu, char *qsevent),
++
++	TP_ARGS(rcuname, gpnum, cpu, qsevent),
++
++	TP_STRUCT__entry(
++		__string(rcuname, rcuname)
++		__field(unsigned long, gpnum)
++		__field(int, cpu)
++		__string(qsevent, qsevent)
++	),
++
++	TP_fast_assign(
++		tp_strcpy(rcuname, rcuname)
++		tp_assign(gpnum, gpnum)
++		tp_assign(cpu, cpu)
++		tp_strcpy(qsevent, qsevent)
++	),
++
++	TP_printk("%s %lu %d %s",
++		  __get_str(rcuname), __entry->gpnum,
++		  __entry->cpu, __get_str(qsevent))
++)
++
++#endif /* #if defined(CONFIG_TREE_RCU) || defined(CONFIG_TREE_PREEMPT_RCU) */
++
++/*
++ * Tracepoint for dyntick-idle entry/exit events.  These take a string
++ * as argument: "Start" for entering dyntick-idle mode, "End" for
++ * leaving it, "--=" for events moving towards idle, and "++=" for events
++ * moving away from idle.  "Error on entry: not idle task" and "Error on
++ * exit: not idle task" indicate that a non-idle task is erroneously
++ * toying with the idle loop.
++ *
++ * These events also take a pair of numbers, which indicate the nesting
++ * depth before and after the event of interest.  Note that task-related
++ * events use the upper bits of each number, while interrupt-related
++ * events use the lower bits.
++ */
++TRACE_EVENT(rcu_dyntick,
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,3,0))
++	TP_PROTO(char *polarity, long long oldnesting, long long newnesting),
++
++	TP_ARGS(polarity, oldnesting, newnesting),
++#else
++	TP_PROTO(char *polarity),
++
++	TP_ARGS(polarity),
++#endif
++
++	TP_STRUCT__entry(
++		__string(polarity, polarity)
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,3,0))
++		__field(long long, oldnesting)
++		__field(long long, newnesting)
++#endif
++	),
++
++	TP_fast_assign(
++		tp_strcpy(polarity, polarity)
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,3,0))
++		tp_assign(oldnesting, oldnesting)
++		tp_assign(newnesting, newnesting)
++#endif
++	),
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,3,0))
++	TP_printk("%s %llx %llx", __get_str(polarity),
++		  __entry->oldnesting, __entry->newnesting)
++#else
++	TP_printk("%s", __get_str(polarity))
++#endif
++)
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,3,0))
++/*
++ * Tracepoint for RCU preparation for idle, the goal being to get RCU
++ * processing done so that the current CPU can shut off its scheduling
++ * clock and enter dyntick-idle mode.  One way to accomplish this is
++ * to drain all RCU callbacks from this CPU, and the other is to have
++ * done everything RCU requires for the current grace period.  In this
++ * latter case, the CPU will be awakened at the end of the current grace
++ * period in order to process the remainder of its callbacks.
++ *
++ * These tracepoints take a string as argument:
++ *
++ *	"No callbacks": Nothing to do, no callbacks on this CPU.
++ *	"In holdoff": Nothing to do, holding off after unsuccessful attempt.
++ *	"Begin holdoff": Attempt failed, don't retry until next jiffy.
++ *	"Dyntick with callbacks": Entering dyntick-idle despite callbacks.
++ *	"Dyntick with lazy callbacks": Entering dyntick-idle w/lazy callbacks.
++ *	"More callbacks": Still more callbacks, try again to clear them out.
++ *	"Callbacks drained": All callbacks processed, off to dyntick idle!
++ *	"Timer": Timer fired to cause CPU to continue processing callbacks.
++ *	"Demigrate": Timer fired on wrong CPU, woke up correct CPU.
++ *	"Cleanup after idle": Idle exited, timer canceled.
++ */
++TRACE_EVENT(rcu_prep_idle,
++
++	TP_PROTO(char *reason),
++
++	TP_ARGS(reason),
++
++	TP_STRUCT__entry(
++		__string(reason, reason)
++	),
++
++	TP_fast_assign(
++		tp_strcpy(reason, reason)
++	),
++
++	TP_printk("%s", __get_str(reason))
++)
++#endif
++
++/*
++ * Tracepoint for the registration of a single RCU callback function.
++ * The first argument is the type of RCU, the second argument is
++ * a pointer to the RCU callback itself, the third element is the
++ * number of lazy callbacks queued, and the fourth element is the
++ * total number of callbacks queued.
++ */
++TRACE_EVENT(rcu_callback,
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,4,0))
++	TP_PROTO(char *rcuname, struct rcu_head *rhp, long qlen_lazy,
++		 long qlen),
++
++	TP_ARGS(rcuname, rhp, qlen_lazy, qlen),
++#else
++	TP_PROTO(char *rcuname, struct rcu_head *rhp, long qlen),
++
++	TP_ARGS(rcuname, rhp, qlen),
++#endif
++
++	TP_STRUCT__entry(
++		__string(rcuname, rcuname)
++		__field(void *, rhp)
++		__field(void *, func)
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,4,0))
++		__field(long, qlen_lazy)
++#endif
++		__field(long, qlen)
++	),
++
++	TP_fast_assign(
++		tp_strcpy(rcuname, rcuname)
++		tp_assign(rhp, rhp)
++		tp_assign(func, rhp->func)
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,4,0))
++		tp_assign(qlen_lazy, qlen_lazy)
++#endif
++		tp_assign(qlen, qlen)
++	),
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,4,0))
++	TP_printk("%s rhp=%p func=%pf %ld/%ld",
++		  __get_str(rcuname), __entry->rhp, __entry->func,
++		  __entry->qlen_lazy, __entry->qlen)
++#else
++	TP_printk("%s rhp=%p func=%pf %ld",
++		  __get_str(rcuname), __entry->rhp, __entry->func,
++		  __entry->qlen)
++#endif
++)
++
++/*
++ * Tracepoint for the registration of a single RCU callback of the special
++ * kfree() form.  The first argument is the RCU type, the second argument
++ * is a pointer to the RCU callback, the third argument is the offset
++ * of the callback within the enclosing RCU-protected data structure,
++ * the fourth argument is the number of lazy callbacks queued, and the
++ * fifth argument is the total number of callbacks queued.
++ */
++TRACE_EVENT(rcu_kfree_callback,
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,4,0))
++	TP_PROTO(char *rcuname, struct rcu_head *rhp, unsigned long offset,
++		 long qlen_lazy, long qlen),
++
++	TP_ARGS(rcuname, rhp, offset, qlen_lazy, qlen),
++#else
++	TP_PROTO(char *rcuname, struct rcu_head *rhp, unsigned long offset,
++		 long qlen),
++
++	TP_ARGS(rcuname, rhp, offset, qlen),
++#endif
++
++	TP_STRUCT__entry(
++		__string(rcuname, rcuname)
++		__field(void *, rhp)
++		__field(unsigned long, offset)
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,4,0))
++		__field(long, qlen_lazy)
++#endif
++		__field(long, qlen)
++	),
++
++	TP_fast_assign(
++		tp_strcpy(rcuname, rcuname)
++		tp_assign(rhp, rhp)
++		tp_assign(offset, offset)
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,4,0))
++		tp_assign(qlen_lazy, qlen_lazy)
++#endif
++		tp_assign(qlen, qlen)
++	),
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,4,0))
++	TP_printk("%s rhp=%p func=%ld %ld/%ld",
++		  __get_str(rcuname), __entry->rhp, __entry->offset,
++		  __entry->qlen_lazy, __entry->qlen)
++#else
++	TP_printk("%s rhp=%p func=%ld %ld",
++		  __get_str(rcuname), __entry->rhp, __entry->offset,
++		  __entry->qlen)
++#endif
++)
++
++/*
++ * Tracepoint for marking the beginning rcu_do_batch, performed to start
++ * RCU callback invocation.  The first argument is the RCU flavor,
++ * the second is the number of lazy callbacks queued, the third is
++ * the total number of callbacks queued, and the fourth argument is
++ * the current RCU-callback batch limit.
++ */
++TRACE_EVENT(rcu_batch_start,
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,4,0))
++	TP_PROTO(char *rcuname, long qlen_lazy, long qlen, int blimit),
++
++	TP_ARGS(rcuname, qlen_lazy, qlen, blimit),
++#else
++	TP_PROTO(char *rcuname, long qlen, int blimit),
++
++	TP_ARGS(rcuname, qlen, blimit),
++#endif
++
++	TP_STRUCT__entry(
++		__string(rcuname, rcuname)
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,4,0))
++		__field(long, qlen_lazy)
++#endif
++		__field(long, qlen)
++		__field(int, blimit)
++	),
++
++	TP_fast_assign(
++		tp_strcpy(rcuname, rcuname)
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,4,0))
++		tp_assign(qlen_lazy, qlen_lazy)
++#endif
++		tp_assign(qlen, qlen)
++		tp_assign(blimit, blimit)
++	),
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,4,0))
++	TP_printk("%s CBs=%ld/%ld bl=%d",
++		  __get_str(rcuname), __entry->qlen_lazy, __entry->qlen,
++		  __entry->blimit)
++#else
++	TP_printk("%s CBs=%ld bl=%d",
++		  __get_str(rcuname), __entry->qlen, __entry->blimit)
++#endif
++)
++
++/*
++ * Tracepoint for the invocation of a single RCU callback function.
++ * The first argument is the type of RCU, and the second argument is
++ * a pointer to the RCU callback itself.
++ */
++TRACE_EVENT(rcu_invoke_callback,
++
++	TP_PROTO(char *rcuname, struct rcu_head *rhp),
++
++	TP_ARGS(rcuname, rhp),
++
++	TP_STRUCT__entry(
++		__string(rcuname, rcuname)
++		__field(void *, rhp)
++		__field(void *, func)
++	),
++
++	TP_fast_assign(
++		tp_strcpy(rcuname, rcuname)
++		tp_assign(rhp, rhp)
++		tp_assign(func, rhp->func)
++	),
++
++	TP_printk("%s rhp=%p func=%pf",
++		  __get_str(rcuname), __entry->rhp, __entry->func)
++)
++
++/*
++ * Tracepoint for the invocation of a single RCU callback of the special
++ * kfree() form.  The first argument is the RCU flavor, the second
++ * argument is a pointer to the RCU callback, and the third argument
++ * is the offset of the callback within the enclosing RCU-protected
++ * data structure.
++ */
++TRACE_EVENT(rcu_invoke_kfree_callback,
++
++	TP_PROTO(char *rcuname, struct rcu_head *rhp, unsigned long offset),
++
++	TP_ARGS(rcuname, rhp, offset),
++
++	TP_STRUCT__entry(
++		__string(rcuname, rcuname)
++		__field(void *, rhp)
++		__field(unsigned long, offset)
++	),
++
++	TP_fast_assign(
++		tp_strcpy(rcuname, rcuname)
++		tp_assign(rhp, rhp)
++		tp_assign(offset, offset)
++	),
++
++	TP_printk("%s rhp=%p func=%ld",
++		  __get_str(rcuname), __entry->rhp, __entry->offset)
++)
++
++/*
++ * Tracepoint for exiting rcu_do_batch after RCU callbacks have been
++ * invoked.  The first argument is the name of the RCU flavor,
++ * the second argument is number of callbacks actually invoked,
++ * the third argument (cb) is whether or not any of the callbacks that
++ * were ready to invoke at the beginning of this batch are still
++ * queued, the fourth argument (nr) is the return value of need_resched(),
++ * the fifth argument (iit) is 1 if the current task is the idle task,
++ * and the sixth argument (risk) is the return value from
++ * rcu_is_callbacks_kthread().
++ */
++TRACE_EVENT(rcu_batch_end,
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,3,0))
++	TP_PROTO(char *rcuname, int callbacks_invoked,
++		 bool cb, bool nr, bool iit, bool risk),
++
++	TP_ARGS(rcuname, callbacks_invoked, cb, nr, iit, risk),
++#else
++	TP_PROTO(char *rcuname, int callbacks_invoked),
++
++	TP_ARGS(rcuname, callbacks_invoked),
++#endif
++
++	TP_STRUCT__entry(
++		__string(rcuname, rcuname)
++		__field(int, callbacks_invoked)
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,3,0))
++		__field(bool, cb)
++		__field(bool, nr)
++		__field(bool, iit)
++		__field(bool, risk)
++#endif
++	),
++
++	TP_fast_assign(
++		tp_strcpy(rcuname, rcuname)
++		tp_assign(callbacks_invoked, callbacks_invoked)
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,3,0))
++		tp_assign(cb, cb)
++		tp_assign(nr, nr)
++		tp_assign(iit, iit)
++		tp_assign(risk, risk)
++#endif
++	),
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,3,0))
++	TP_printk("%s CBs-invoked=%d idle=%c%c%c%c",
++		  __get_str(rcuname), __entry->callbacks_invoked,
++		  __entry->cb ? 'C' : '.',
++		  __entry->nr ? 'S' : '.',
++		  __entry->iit ? 'I' : '.',
++		  __entry->risk ? 'R' : '.')
++#else
++	TP_printk("%s CBs-invoked=%d",
++		  __get_str(rcuname), __entry->callbacks_invoked)
++#endif
++)
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,3,0))
++/*
++ * Tracepoint for rcutorture readers.  The first argument is the name
++ * of the RCU flavor from rcutorture's viewpoint and the second argument
++ * is the callback address.
++ */
++TRACE_EVENT(rcu_torture_read,
++
++	TP_PROTO(char *rcutorturename, struct rcu_head *rhp),
++
++	TP_ARGS(rcutorturename, rhp),
++
++	TP_STRUCT__entry(
++		__string(rcutorturename, rcutorturename)
++		__field(struct rcu_head *, rhp)
++	),
++
++	TP_fast_assign(
++		tp_strcpy(rcutorturename, rcutorturename)
++		tp_assign(rhp, rhp)
++	),
++
++	TP_printk("%s torture read %p",
++		  __get_str(rcutorturename), __entry->rhp)
++)
++#endif
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0))
++/*
++ * Tracepoint for _rcu_barrier() execution.  The string "s" describes
++ * the _rcu_barrier phase:
++ *	"Begin": rcu_barrier_callback() started.
++ *	"Check": rcu_barrier_callback() checking for piggybacking.
++ *	"EarlyExit": rcu_barrier_callback() piggybacked, thus early exit.
++ *	"Inc1": rcu_barrier_callback() piggyback check counter incremented.
++ *	"Offline": rcu_barrier_callback() found offline CPU
++ *	"OnlineQ": rcu_barrier_callback() found online CPU with callbacks.
++ *	"OnlineNQ": rcu_barrier_callback() found online CPU, no callbacks.
++ *	"IRQ": An rcu_barrier_callback() callback posted on remote CPU.
++ *	"CB": An rcu_barrier_callback() invoked a callback, not the last.
++ *	"LastCB": An rcu_barrier_callback() invoked the last callback.
++ *	"Inc2": rcu_barrier_callback() piggyback check counter incremented.
++ * The "cpu" argument is the CPU or -1 if meaningless, the "cnt" argument
++ * is the count of remaining callbacks, and "done" is the piggybacking count.
++ */
++TRACE_EVENT(rcu_barrier,
++
++	TP_PROTO(char *rcuname, char *s, int cpu, int cnt, unsigned long done),
++
++	TP_ARGS(rcuname, s, cpu, cnt, done),
++
++	TP_STRUCT__entry(
++		__string(rcuname, rcuname)
++		__string(s, s)
++		__field(int, cpu)
++		__field(int, cnt)
++		__field(unsigned long, done)
++	),
++
++	TP_fast_assign(
++		tp_strcpy(rcuname, rcuname)
++		tp_strcpy(s, s)
++		tp_assign(cpu, cpu)
++		tp_assign(cnt, cnt)
++		tp_assign(done, done)
++	),
++
++	TP_printk("%s %s cpu %d remaining %d # %lu",
++		  __get_str(rcuname), __get_str(s), __entry->cpu, __entry->cnt,
++		  __entry->done)
++)
++#endif
++
++#else /* #ifdef CONFIG_RCU_TRACE */
++
++#define trace_rcu_grace_period(rcuname, gpnum, gpevent) do { } while (0)
++#define trace_rcu_grace_period_init(rcuname, gpnum, level, grplo, grphi, \
++				    qsmask) do { } while (0)
++#define trace_rcu_preempt_task(rcuname, pid, gpnum) do { } while (0)
++#define trace_rcu_unlock_preempted_task(rcuname, gpnum, pid) do { } while (0)
++#define trace_rcu_quiescent_state_report(rcuname, gpnum, mask, qsmask, level, \
++					 grplo, grphi, gp_tasks) do { } \
++	while (0)
++#define trace_rcu_fqs(rcuname, gpnum, cpu, qsevent) do { } while (0)
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,3,0))
++#define trace_rcu_dyntick(polarity, oldnesting, newnesting) do { } while (0)
++#else
++#define trace_rcu_dyntick(polarity) do { } while (0)
++#endif
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,3,0))
++#define trace_rcu_prep_idle(reason) do { } while (0)
++#endif
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,4,0))
++#define trace_rcu_callback(rcuname, rhp, qlen_lazy, qlen) do { } while (0)
++#define trace_rcu_kfree_callback(rcuname, rhp, offset, qlen_lazy, qlen) \
++	do { } while (0)
++#define trace_rcu_batch_start(rcuname, qlen_lazy, qlen, blimit) \
++	do { } while (0)
++#else
++#define trace_rcu_callback(rcuname, rhp, qlen) do { } while (0)
++#define trace_rcu_kfree_callback(rcuname, rhp, offset, qlen) do { } while (0)
++#define trace_rcu_batch_start(rcuname, qlen, blimit) do { } while (0)
++#endif
++#define trace_rcu_invoke_callback(rcuname, rhp) do { } while (0)
++#define trace_rcu_invoke_kfree_callback(rcuname, rhp, offset) do { } while (0)
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,3,0))
++#define trace_rcu_batch_end(rcuname, callbacks_invoked, cb, nr, iit, risk) \
++	do { } while (0)
++#else
++#define trace_rcu_batch_end(rcuname, callbacks_invoked) do { } while (0)
++#endif
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,3,0))
++#define trace_rcu_torture_read(rcutorturename, rhp) do { } while (0)
++#endif
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0))
++#define trace_rcu_barrier(name, s, cpu, cnt, done) do { } while (0)
++#endif
++#endif /* #else #ifdef CONFIG_RCU_TRACE */
++
++#endif /* _TRACE_RCU_H */
++
++/* This part must be outside protection */
++#include "../../../probes/define_trace.h"
+diff --git a/instrumentation/events/lttng-module/regmap.h b/instrumentation/events/lttng-module/regmap.h
+new file mode 100644
+index 0000000..df56ac0
+--- /dev/null
++++ b/instrumentation/events/lttng-module/regmap.h
+@@ -0,0 +1,188 @@
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM regmap
++
++#if !defined(_TRACE_REGMAP_H) || defined(TRACE_HEADER_MULTI_READ)
++#define _TRACE_REGMAP_H
++
++#include <linux/ktime.h>
++#include <linux/tracepoint.h>
++#include <linux/version.h>
++
++#ifndef _TRACE_REGMAP_DEF_
++#define _TRACE_REGMAP_DEF_
++struct device;
++struct regmap;
++#endif
++
++/*
++ * Log register events
++ */
++DECLARE_EVENT_CLASS(regmap_reg,
++
++	TP_PROTO(struct device *dev, unsigned int reg,
++		 unsigned int val),
++
++	TP_ARGS(dev, reg, val),
++
++	TP_STRUCT__entry(
++		__string(	name,		dev_name(dev)	)
++		__field(	unsigned int,	reg		)
++		__field(	unsigned int,	val		)
++	),
++
++	TP_fast_assign(
++		tp_strcpy(name, dev_name(dev))
++		tp_assign(reg, reg)
++		tp_assign(val, val)
++	),
++
++	TP_printk("%s reg=%x val=%x", __get_str(name),
++		  (unsigned int)__entry->reg,
++		  (unsigned int)__entry->val)
++)
++
++DEFINE_EVENT(regmap_reg, regmap_reg_write,
++
++	TP_PROTO(struct device *dev, unsigned int reg,
++		 unsigned int val),
++
++	TP_ARGS(dev, reg, val)
++
++)
++
++DEFINE_EVENT(regmap_reg, regmap_reg_read,
++
++	TP_PROTO(struct device *dev, unsigned int reg,
++		 unsigned int val),
++
++	TP_ARGS(dev, reg, val)
++
++)
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,3,0))
++DEFINE_EVENT(regmap_reg, regmap_reg_read_cache,
++
++	TP_PROTO(struct device *dev, unsigned int reg,
++		 unsigned int val),
++
++	TP_ARGS(dev, reg, val)
++
++)
++#endif
++
++DECLARE_EVENT_CLASS(regmap_block,
++
++	TP_PROTO(struct device *dev, unsigned int reg, int count),
++
++	TP_ARGS(dev, reg, count),
++
++	TP_STRUCT__entry(
++		__string(	name,		dev_name(dev)	)
++		__field(	unsigned int,	reg		)
++		__field(	int,		count		)
++	),
++
++	TP_fast_assign(
++		tp_strcpy(name, dev_name(dev))
++		tp_assign(reg, reg)
++		tp_assign(count, count)
++	),
++
++	TP_printk("%s reg=%x count=%d", __get_str(name),
++		  (unsigned int)__entry->reg,
++		  (int)__entry->count)
++)
++
++DEFINE_EVENT(regmap_block, regmap_hw_read_start,
++
++	TP_PROTO(struct device *dev, unsigned int reg, int count),
++
++	TP_ARGS(dev, reg, count)
++)
++
++DEFINE_EVENT(regmap_block, regmap_hw_read_done,
++
++	TP_PROTO(struct device *dev, unsigned int reg, int count),
++
++	TP_ARGS(dev, reg, count)
++)
++
++DEFINE_EVENT(regmap_block, regmap_hw_write_start,
++
++	TP_PROTO(struct device *dev, unsigned int reg, int count),
++
++	TP_ARGS(dev, reg, count)
++)
++
++DEFINE_EVENT(regmap_block, regmap_hw_write_done,
++
++	TP_PROTO(struct device *dev, unsigned int reg, int count),
++
++	TP_ARGS(dev, reg, count)
++)
++
++TRACE_EVENT(regcache_sync,
++
++	TP_PROTO(struct device *dev, const char *type,
++		 const char *status),
++
++	TP_ARGS(dev, type, status),
++
++	TP_STRUCT__entry(
++		__string(       name,           dev_name(dev)   )
++		__string(	status,		status		)
++		__string(	type,		type		)
++	),
++
++	TP_fast_assign(
++		tp_strcpy(name, dev_name(dev))
++		tp_strcpy(status, status)
++		tp_strcpy(type, type)
++	),
++
++	TP_printk("%s type=%s status=%s", __get_str(name),
++		  __get_str(type), __get_str(status))
++)
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,4,0))
++DECLARE_EVENT_CLASS(regmap_bool,
++
++	TP_PROTO(struct device *dev, bool flag),
++
++	TP_ARGS(dev, flag),
++
++	TP_STRUCT__entry(
++		__string(	name,		dev_name(dev)	)
++		__field(	int,		flag		)
++	),
++
++	TP_fast_assign(
++		tp_strcpy(name, dev_name(dev))
++		tp_assign(flag, flag)
++	),
++
++	TP_printk("%s flag=%d", __get_str(name),
++		  (int)__entry->flag)
++)
++
++DEFINE_EVENT(regmap_bool, regmap_cache_only,
++
++	TP_PROTO(struct device *dev, bool flag),
++
++	TP_ARGS(dev, flag)
++
++)
++
++DEFINE_EVENT(regmap_bool, regmap_cache_bypass,
++
++	TP_PROTO(struct device *dev, bool flag),
++
++	TP_ARGS(dev, flag)
++
++)
++#endif
++
++#endif /* _TRACE_REGMAP_H */
++
++/* This part must be outside protection */
++#include "../../../probes/define_trace.h"
+diff --git a/instrumentation/events/lttng-module/rpm.h b/instrumentation/events/lttng-module/rpm.h
+new file mode 100644
+index 0000000..16bcad0
+--- /dev/null
++++ b/instrumentation/events/lttng-module/rpm.h
+@@ -0,0 +1,101 @@
++
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM rpm
++
++#if !defined(_TRACE_RUNTIME_POWER_H) || defined(TRACE_HEADER_MULTI_READ)
++#define _TRACE_RUNTIME_POWER_H
++
++#include <linux/ktime.h>
++#include <linux/tracepoint.h>
++
++#ifndef _TRACE_RPM_DEF_
++#define _TRACE_RPM_DEF_
++struct device;
++#endif
++
++/*
++ * The rpm_internal events are used for tracing some important
++ * runtime pm internal functions.
++ */
++DECLARE_EVENT_CLASS(rpm_internal,
++
++	TP_PROTO(struct device *dev, int flags),
++
++	TP_ARGS(dev, flags),
++
++	TP_STRUCT__entry(
++		__string(       name,		dev_name(dev)	)
++		__field(        int,            flags           )
++		__field(        int ,   	usage_count	)
++		__field(        int ,   	disable_depth   )
++		__field(        int ,   	runtime_auto	)
++		__field(        int ,   	request_pending	)
++		__field(        int ,   	irq_safe	)
++		__field(        int ,   	child_count 	)
++	),
++
++	TP_fast_assign(
++		tp_strcpy(name, dev_name(dev))
++		tp_assign(flags, flags)
++		tp_assign(usage_count, atomic_read(&dev->power.usage_count))
++		tp_assign(disable_depth, dev->power.disable_depth)
++		tp_assign(runtime_auto, dev->power.runtime_auto)
++		tp_assign(request_pending, dev->power.request_pending)
++		tp_assign(irq_safe, dev->power.irq_safe)
++		tp_assign(child_count, atomic_read(&dev->power.child_count))
++	),
++
++	TP_printk("%s flags-%x cnt-%-2d dep-%-2d auto-%-1d p-%-1d"
++			" irq-%-1d child-%d",
++			__get_str(name), __entry->flags,
++			__entry->usage_count,
++			__entry->disable_depth,
++			__entry->runtime_auto,
++			__entry->request_pending,
++			__entry->irq_safe,
++			__entry->child_count
++		 )
++)
++DEFINE_EVENT(rpm_internal, rpm_suspend,
++
++	TP_PROTO(struct device *dev, int flags),
++
++	TP_ARGS(dev, flags)
++)
++DEFINE_EVENT(rpm_internal, rpm_resume,
++
++	TP_PROTO(struct device *dev, int flags),
++
++	TP_ARGS(dev, flags)
++)
++DEFINE_EVENT(rpm_internal, rpm_idle,
++
++	TP_PROTO(struct device *dev, int flags),
++
++	TP_ARGS(dev, flags)
++)
++
++TRACE_EVENT(rpm_return_int,
++	TP_PROTO(struct device *dev, unsigned long ip, int ret),
++	TP_ARGS(dev, ip, ret),
++
++	TP_STRUCT__entry(
++		__string(       name,		dev_name(dev))
++		__field(	unsigned long,		ip	)
++		__field(	int,			ret	)
++	),
++
++	TP_fast_assign(
++		tp_strcpy(name, dev_name(dev))
++		tp_assign(ip, ip)
++		tp_assign(ret, ret)
++	),
++
++	TP_printk("%pS:%s ret=%d", (void *)__entry->ip, __get_str(name),
++		__entry->ret)
++)
++
++#endif /* _TRACE_RUNTIME_POWER_H */
++
++/* This part must be outside protection */
++#include "../../../probes/define_trace.h"
+diff --git a/instrumentation/events/lttng-module/sunrpc.h b/instrumentation/events/lttng-module/sunrpc.h
+new file mode 100644
+index 0000000..6320668
+--- /dev/null
++++ b/instrumentation/events/lttng-module/sunrpc.h
+@@ -0,0 +1,177 @@
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM sunrpc
++
++#if !defined(_TRACE_SUNRPC_H) || defined(TRACE_HEADER_MULTI_READ)
++#define _TRACE_SUNRPC_H
++
++#include <linux/sunrpc/sched.h>
++#include <linux/sunrpc/clnt.h>
++#include <linux/tracepoint.h>
++
++DECLARE_EVENT_CLASS(rpc_task_status,
++
++	TP_PROTO(struct rpc_task *task),
++
++	TP_ARGS(task),
++
++	TP_STRUCT__entry(
++		__field(const struct rpc_task *, task)
++		__field(const struct rpc_clnt *, clnt)
++		__field(int, status)
++	),
++
++	TP_fast_assign(
++		tp_assign(task, task)
++		tp_assign(clnt, task->tk_client)
++		tp_assign(status, task->tk_status)
++	),
++
++	TP_printk("task:%p@%p, status %d",__entry->task, __entry->clnt, __entry->status)
++)
++
++DEFINE_EVENT(rpc_task_status, rpc_call_status,
++	TP_PROTO(struct rpc_task *task),
++
++	TP_ARGS(task)
++)
++
++DEFINE_EVENT(rpc_task_status, rpc_bind_status,
++	TP_PROTO(struct rpc_task *task),
++
++	TP_ARGS(task)
++)
++
++TRACE_EVENT(rpc_connect_status,
++	TP_PROTO(struct rpc_task *task, int status),
++
++	TP_ARGS(task, status),
++
++	TP_STRUCT__entry(
++		__field(const struct rpc_task *, task)
++		__field(const struct rpc_clnt *, clnt)
++		__field(int, status)
++	),
++
++	TP_fast_assign(
++		tp_assign(task, task)
++		tp_assign(clnt, task->tk_client)
++		tp_assign(status, status)
++	),
++
++	TP_printk("task:%p@%p, status %d",__entry->task, __entry->clnt, __entry->status)
++)
++
++DECLARE_EVENT_CLASS(rpc_task_running,
++
++	TP_PROTO(const struct rpc_clnt *clnt, const struct rpc_task *task, const void *action),
++
++	TP_ARGS(clnt, task, action),
++
++	TP_STRUCT__entry(
++		__field(const struct rpc_clnt *, clnt)
++		__field(const struct rpc_task *, task)
++		__field(const void *, action)
++		__field(unsigned long, runstate)
++		__field(int, status)
++		__field(unsigned short, flags)
++		),
++
++	TP_fast_assign(
++		tp_assign(clnt, clnt)
++		tp_assign(task, task)
++		tp_assign(action, action)
++		tp_assign(runstate, task->tk_runstate)
++		tp_assign(status, task->tk_status)
++		tp_assign(flags, task->tk_flags)
++		),
++
++	TP_printk("task:%p@%p flags=%4.4x state=%4.4lx status=%d action=%pf",
++		__entry->task,
++		__entry->clnt,
++		__entry->flags,
++		__entry->runstate,
++		__entry->status,
++		__entry->action
++		)
++)
++
++DEFINE_EVENT(rpc_task_running, rpc_task_begin,
++
++	TP_PROTO(const struct rpc_clnt *clnt, const struct rpc_task *task, const void *action),
++
++	TP_ARGS(clnt, task, action)
++
++)
++
++DEFINE_EVENT(rpc_task_running, rpc_task_run_action,
++
++	TP_PROTO(const struct rpc_clnt *clnt, const struct rpc_task *task, const void *action),
++
++	TP_ARGS(clnt, task, action)
++
++)
++
++DEFINE_EVENT(rpc_task_running, rpc_task_complete,
++
++	TP_PROTO(const struct rpc_clnt *clnt, const struct rpc_task *task, const void *action),
++
++	TP_ARGS(clnt, task, action)
++
++)
++
++DECLARE_EVENT_CLASS(rpc_task_queued,
++
++	TP_PROTO(const struct rpc_clnt *clnt, const struct rpc_task *task, const struct rpc_wait_queue *q),
++
++	TP_ARGS(clnt, task, q),
++
++	TP_STRUCT__entry(
++		__field(const struct rpc_clnt *, clnt)
++		__field(const struct rpc_task *, task)
++		__field(unsigned long, timeout)
++		__field(unsigned long, runstate)
++		__field(int, status)
++		__field(unsigned short, flags)
++		__string(q_name, rpc_qname(q))
++		),
++
++	TP_fast_assign(
++		tp_assign(clnt, clnt)
++		tp_assign(task, task)
++		tp_assign(timeout, task->tk_timeout)
++		tp_assign(runstate, task->tk_runstate)
++		tp_assign(status, task->tk_status)
++		tp_assign(flags, task->tk_flags)
++		tp_strcpy(q_name, rpc_qname(q))
++		),
++
++	TP_printk("task:%p@%p flags=%4.4x state=%4.4lx status=%d timeout=%lu queue=%s",
++		__entry->task,
++		__entry->clnt,
++		__entry->flags,
++		__entry->runstate,
++		__entry->status,
++		__entry->timeout,
++		__get_str(q_name)
++		)
++)
++
++DEFINE_EVENT(rpc_task_queued, rpc_task_sleep,
++
++	TP_PROTO(const struct rpc_clnt *clnt, const struct rpc_task *task, const struct rpc_wait_queue *q),
++
++	TP_ARGS(clnt, task, q)
++
++)
++
++DEFINE_EVENT(rpc_task_queued, rpc_task_wakeup,
++
++	TP_PROTO(const struct rpc_clnt *clnt, const struct rpc_task *task, const struct rpc_wait_queue *q),
++
++	TP_ARGS(clnt, task, q)
++
++)
++
++#endif /* _TRACE_SUNRPC_H */
++
++#include "../../../probes/define_trace.h"
+diff --git a/instrumentation/events/lttng-module/workqueue.h b/instrumentation/events/lttng-module/workqueue.h
+new file mode 100644
+index 0000000..02115c7
+--- /dev/null
++++ b/instrumentation/events/lttng-module/workqueue.h
+@@ -0,0 +1,316 @@
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM workqueue
++
++#if !defined(_TRACE_WORKQUEUE_H) || defined(TRACE_HEADER_MULTI_READ)
++#define _TRACE_WORKQUEUE_H
++
++#include <linux/tracepoint.h>
++#include <linux/workqueue.h>
++#include <linux/version.h>
++
 +#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,36))
-+#include <trace/events/gfpflags.h>
++
++#ifndef _TRACE_WORKQUEUE_DEF_
++#define _TRACE_WORKQUEUE_DEF_
++
++struct worker;
++struct global_cwq;
++
++/* Have to duplicate all these definitions from kernel/workqueue.c */
++/* Extracts only */
++
++enum {
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0))
++	NR_WORKER_POOLS		= 2,		/* # worker pools per gcwq */
++#endif
++	BUSY_WORKER_HASH_ORDER 	= 6,		/* 64 pointers */
++	BUSY_WORKER_HASH_SIZE	= 1 << BUSY_WORKER_HASH_ORDER,
++};
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0))
++struct worker_pool {
++	struct global_cwq	*gcwq;		/* I: the owning gcwq */
++	unsigned int		flags;		/* X: flags */
++
++	struct list_head	worklist;	/* L: list of pending works */
++	int			nr_workers;	/* L: total number of workers */
++	int			nr_idle;	/* L: currently idle ones */
++
++	struct list_head	idle_list;	/* X: list of idle workers */
++	struct timer_list	idle_timer;	/* L: worker idle timeout */
++	struct timer_list	mayday_timer;	/* L: SOS timer for workers */
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,7,0))
++	struct mutex		assoc_mutex;	/* protect GCWQ_DISASSOCUATED */
++#else
++	struct mutex		manager_mutex;	/* mutex manager should hold */
++#endif
++	struct ida		worker_ida;	/* L: for worker IDs */
++};
++
++struct global_cwq {
++	spinlock_t		lock;		/* the gcwq lock */
++	unsigned int		cpu;		/* I: the associated cpu */
++	unsigned int		flags;		/* L: GCWQ_* flags */
++
++	/* workers are chained either in busy_hash or pool idle_list */
++	struct hlist_head	busy_hash[BUSY_WORKER_HASH_SIZE];
++						/* L: hash of busy workers */
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,7,0))
++	struct worker_pool	pools[NR_WORKER_POOLS];
++						/* normal and highpri pools */
++#else
++	struct worker_pool	pools[2];	/* normal and highpri pools */
++
++	wait_queue_head_t	rebind_hold;	/* rebind hold wait */
++#endif
++} ____cacheline_aligned_in_smp;
++
++#else
++
++struct global_cwq {
++	spinlock_t		lock;		/* the gcwq lock */
++	struct list_head	worklist;	/* L: list of pending works */
++	unsigned int		cpu;		/* I: the associated cpu */
++	unsigned int		flags;		/* L: GCWQ_* flags */
++
++	int			nr_workers;	/* L: total number of workers */
++	int			nr_idle;	/* L: currently idle ones */
++
++	/* workers are chained either in the idle_list or busy_hash */
++	struct list_head	idle_list;	/* X: list of idle workers */
++	struct hlist_head	busy_hash[BUSY_WORKER_HASH_SIZE];
++						/* L: hash of busy workers */
++
++	struct timer_list	idle_timer;	/* L: worker idle timeout */
++	struct timer_list	mayday_timer;	/* L: SOS timer for dworkers */
++
++	struct ida		worker_ida;	/* L: for worker IDs */
++
++	struct task_struct	*trustee;	/* L: for gcwq shutdown */
++	unsigned int		trustee_state;	/* L: trustee state */
++	wait_queue_head_t	trustee_wait;	/* trustee wait */
++	struct worker		*first_idle;	/* L: first idle worker */
++} ____cacheline_aligned_in_smp;
++
 +#endif
 +
- DECLARE_EVENT_CLASS(kmem_alloc,
- 
- 	TP_PROTO(unsigned long call_site,
-@@ -143,7 +150,12 @@ DEFINE_EVENT(kmem_free, kmem_cache_free,
- 	TP_ARGS(call_site, ptr)
- )
- 
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,32))
++struct cpu_workqueue_struct {
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0))
++	struct worker_pool	*pool;		/* I: The associated pool */
++#else
++	struct global_cwq	*gcwq;		/* I: the associated gcwq */
++#endif
++	struct workqueue_struct	*wq;		/* I: the owning workqueue */
++	int			work_color;	/* L: current color */
++	int			flush_color;	/* L: flushing color */
++	int			nr_in_flight[WORK_NR_COLORS];
++						/* L: nr of in_flight works */
++	int			nr_active;	/* L: nr of active works */
++	int			max_active;	/* L: max active works */
++	struct list_head	delayed_works;	/* L: delayed works */
++};
++
++#endif
++
++DECLARE_EVENT_CLASS(workqueue_work,
++
++	TP_PROTO(struct work_struct *work),
++
++	TP_ARGS(work),
++
++	TP_STRUCT__entry(
++		__field( void *,	work	)
++	),
++
++	TP_fast_assign(
++		tp_assign(work, work)
++	),
++
++	TP_printk("work struct %p", __entry->work)
++)
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
++/**
++ * workqueue_queue_work - called when a work gets queued
++ * @req_cpu:	the requested cpu
++ * @cwq:	pointer to struct cpu_workqueue_struct
++ * @work:	pointer to struct work_struct
++ *
++ * This event occurs when a work is queued immediately or once a
++ * delayed work is actually queued on a workqueue (ie: once the delay
++ * has been reached).
++ */
++TRACE_EVENT(workqueue_queue_work,
++
++	TP_PROTO(unsigned int req_cpu, struct cpu_workqueue_struct *cwq,
++		 struct work_struct *work),
++
++	TP_ARGS(req_cpu, cwq, work),
++
++	TP_STRUCT__entry(
++		__field( void *,	work	)
++		__field( void *,	function)
++		__field( void *,	workqueue)
++		__field( unsigned int,	req_cpu	)
++		__field( unsigned int,	cpu	)
++	),
++
++	TP_fast_assign(
++		tp_assign(work, work)
++		tp_assign(function, work->func)
++		tp_assign(workqueue, cwq->wq)
++		tp_assign(req_cpu, req_cpu)
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0))
++		tp_assign(cpu, cwq->pool->gcwq->cpu)
++#else
++		tp_assign(cpu, cwq->gcwq->cpu)
++#endif
++	),
++
++	TP_printk("work struct=%p function=%pf workqueue=%p req_cpu=%u cpu=%u",
++		  __entry->work, __entry->function, __entry->workqueue,
++		  __entry->req_cpu, __entry->cpu)
++)
++
++/**
++ * workqueue_activate_work - called when a work gets activated
++ * @work:	pointer to struct work_struct
++ *
++ * This event occurs when a queued work is put on the active queue,
++ * which happens immediately after queueing unless @max_active limit
++ * is reached.
++ */
++DEFINE_EVENT(workqueue_work, workqueue_activate_work,
++
++	TP_PROTO(struct work_struct *work),
++
++	TP_ARGS(work)
++)
++#endif
++
++/**
++ * workqueue_execute_start - called immediately before the workqueue callback
++ * @work:	pointer to struct work_struct
++ *
++ * Allows to track workqueue execution.
++ */
++TRACE_EVENT(workqueue_execute_start,
++
++	TP_PROTO(struct work_struct *work),
++
++	TP_ARGS(work),
++
++	TP_STRUCT__entry(
++		__field( void *,	work	)
++		__field( void *,	function)
++	),
++
++	TP_fast_assign(
++		tp_assign(work, work)
++		tp_assign(function, work->func)
++	),
++
++	TP_printk("work struct %p: function %pf", __entry->work, __entry->function)
++)
++
++/**
++ * workqueue_execute_end - called immediately after the workqueue callback
++ * @work:	pointer to struct work_struct
++ *
++ * Allows to track workqueue execution.
++ */
++DEFINE_EVENT(workqueue_work, workqueue_execute_end,
++
++	TP_PROTO(struct work_struct *work),
++
++	TP_ARGS(work)
++)
++
++#else
++
++DECLARE_EVENT_CLASS(workqueue,
++
++	TP_PROTO(struct task_struct *wq_thread, struct work_struct *work),
++
++	TP_ARGS(wq_thread, work),
++
++	TP_STRUCT__entry(
++		__array(char,		thread_comm,	TASK_COMM_LEN)
++		__field(pid_t,		thread_pid)
++		__field(work_func_t,	func)
++	),
++
++	TP_fast_assign(
++		tp_memcpy(thread_comm, wq_thread->comm, TASK_COMM_LEN)
++		tp_assign(thread_pid, wq_thread->pid)
++		tp_assign(func, work->func)
++	),
++
++	TP_printk("thread=%s:%d func=%pf", __entry->thread_comm,
++		__entry->thread_pid, __entry->func)
++)
++
++DEFINE_EVENT(workqueue, workqueue_insertion,
++
++	TP_PROTO(struct task_struct *wq_thread, struct work_struct *work),
++
++	TP_ARGS(wq_thread, work)
++)
++
++DEFINE_EVENT(workqueue, workqueue_execution,
++
++	TP_PROTO(struct task_struct *wq_thread, struct work_struct *work),
++
++	TP_ARGS(wq_thread, work)
++)
++
++/* Trace the creation of one workqueue thread on a cpu */
++TRACE_EVENT(workqueue_creation,
++
++	TP_PROTO(struct task_struct *wq_thread, int cpu),
++
++	TP_ARGS(wq_thread, cpu),
++
++	TP_STRUCT__entry(
++		__array(char,	thread_comm,	TASK_COMM_LEN)
++		__field(pid_t,	thread_pid)
++		__field(int,	cpu)
++	),
++
++	TP_fast_assign(
++		tp_memcpy(thread_comm, wq_thread->comm, TASK_COMM_LEN)
++		tp_assign(thread_pid, wq_thread->pid)
++		tp_assign(cpu, cpu)
++	),
++
++	TP_printk("thread=%s:%d cpu=%d", __entry->thread_comm,
++		__entry->thread_pid, __entry->cpu)
++)
++
++TRACE_EVENT(workqueue_destruction,
++
++	TP_PROTO(struct task_struct *wq_thread),
++
++	TP_ARGS(wq_thread),
++
++	TP_STRUCT__entry(
++		__array(char,	thread_comm,	TASK_COMM_LEN)
++		__field(pid_t,	thread_pid)
++	),
++
++	TP_fast_assign(
++		tp_memcpy(thread_comm, wq_thread->comm, TASK_COMM_LEN)
++		tp_assign(thread_pid, wq_thread->pid)
++	),
++
++	TP_printk("thread=%s:%d", __entry->thread_comm, __entry->thread_pid)
++)
++
++#endif
++
++#endif /*  _TRACE_WORKQUEUE_H */
++
++/* This part must be outside protection */
++#include "../../../probes/define_trace.h"
+diff --git a/instrumentation/events/lttng-module/writeback.h b/instrumentation/events/lttng-module/writeback.h
+new file mode 100644
+index 0000000..b3d5538
+--- /dev/null
++++ b/instrumentation/events/lttng-module/writeback.h
+@@ -0,0 +1,673 @@
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM writeback
++
++#if !defined(_TRACE_WRITEBACK_H) || defined(TRACE_HEADER_MULTI_READ)
++#define _TRACE_WRITEBACK_H
++
++#include <linux/backing-dev.h>
++#include <linux/writeback.h>
++#include <linux/version.h>
++
++#ifndef _TRACE_WRITEBACK_DEF_
++#define _TRACE_WRITEBACK_DEF_
++/* Have to duplicate it here from fs/fs-writeback.c */
++struct wb_writeback_work {
++	long nr_pages;
++	struct super_block *sb;
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,1,0))
++	unsigned long *older_than_this;
++#endif
++	enum writeback_sync_modes sync_mode;
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,1,0))
++	unsigned int tagged_writepages:1;
++#endif
++	unsigned int for_kupdate:1;
++	unsigned int range_cyclic:1;
++	unsigned int for_background:1;
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,2,0))
++	enum wb_reason reason;		/* why was writeback initiated? */
++#endif
++
++	struct list_head list;		/* pending work list */
++	struct completion *done;	/* set if the caller waits */
++};
++static inline struct backing_dev_info *inode_to_bdi(struct inode *inode)
++{
++	struct super_block *sb = inode->i_sb;
++
++	if (strcmp(sb->s_type->name, "bdev") == 0)
++		return inode->i_mapping->backing_dev_info;
++
++	return sb->s_bdi;
++}
++#endif
++
++#define show_inode_state(state)					\
++	__print_flags(state, "|",				\
++		{I_DIRTY_SYNC,		"I_DIRTY_SYNC"},	\
++		{I_DIRTY_DATASYNC,	"I_DIRTY_DATASYNC"},	\
++		{I_DIRTY_PAGES,		"I_DIRTY_PAGES"},	\
++		{I_NEW,			"I_NEW"},		\
++		{I_WILL_FREE,		"I_WILL_FREE"},		\
++		{I_FREEING,		"I_FREEING"},		\
++		{I_CLEAR,		"I_CLEAR"},		\
++		{I_SYNC,		"I_SYNC"},		\
++		{I_REFERENCED,		"I_REFERENCED"}		\
++	)
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,2,0))
++#define WB_WORK_REASON							\
++		{WB_REASON_BACKGROUND,		"background"},		\
++		{WB_REASON_TRY_TO_FREE_PAGES,	"try_to_free_pages"},	\
++		{WB_REASON_SYNC,		"sync"},		\
++		{WB_REASON_PERIODIC,		"periodic"},		\
++		{WB_REASON_LAPTOP_TIMER,	"laptop_timer"},	\
++		{WB_REASON_FREE_MORE_MEM,	"free_more_memory"},	\
++		{WB_REASON_FS_FREE_SPACE,	"fs_free_space"},	\
++		{WB_REASON_FORKER_THREAD,	"forker_thread"}
++#endif
++
++DECLARE_EVENT_CLASS(writeback_work_class,
++	TP_PROTO(struct backing_dev_info *bdi, struct wb_writeback_work *work),
++	TP_ARGS(bdi, work),
++	TP_STRUCT__entry(
++		__array(char, name, 32)
++		__field(long, nr_pages)
++		__field(dev_t, sb_dev)
++		__field(int, sync_mode)
++		__field(int, for_kupdate)
++		__field(int, range_cyclic)
++		__field(int, for_background)
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,2,0))
++		__field(int, reason)
++#endif
++	),
++	TP_fast_assign(
++		tp_memcpy(name, dev_name(bdi->dev ? bdi->dev :
++				default_backing_dev_info.dev), 32)
++		tp_assign(nr_pages, work->nr_pages)
++		tp_assign(sb_dev, work->sb ? work->sb->s_dev : 0)
++		tp_assign(sync_mode, work->sync_mode)
++		tp_assign(for_kupdate, work->for_kupdate)
++		tp_assign(range_cyclic, work->range_cyclic)
++		tp_assign(for_background, work->for_background)
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,2,0))
++		tp_assign(reason, work->reason)
++#endif
++	),
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,2,0))
++	TP_printk("bdi %s: sb_dev %d:%d nr_pages=%ld sync_mode=%d "
++		  "kupdate=%d range_cyclic=%d background=%d reason=%s",
++		  __entry->name,
++		  MAJOR(__entry->sb_dev), MINOR(__entry->sb_dev),
++		  __entry->nr_pages,
++		  __entry->sync_mode,
++		  __entry->for_kupdate,
++		  __entry->range_cyclic,
++		  __entry->for_background,
++		  __print_symbolic(__entry->reason, WB_WORK_REASON)
++	)
++#else
++	TP_printk("bdi %s: sb_dev %d:%d nr_pages=%ld sync_mode=%d "
++		  "kupdate=%d range_cyclic=%d background=%d",
++		  __entry->name,
++		  MAJOR(__entry->sb_dev), MINOR(__entry->sb_dev),
++		  __entry->nr_pages,
++		  __entry->sync_mode,
++		  __entry->for_kupdate,
++		  __entry->range_cyclic,
++		  __entry->for_background
++	)
++#endif
++)
++#define DEFINE_WRITEBACK_WORK_EVENT(name) \
++DEFINE_EVENT(writeback_work_class, name, \
++	TP_PROTO(struct backing_dev_info *bdi, struct wb_writeback_work *work), \
++	TP_ARGS(bdi, work))
++DEFINE_WRITEBACK_WORK_EVENT(writeback_nothread)
++DEFINE_WRITEBACK_WORK_EVENT(writeback_queue)
++DEFINE_WRITEBACK_WORK_EVENT(writeback_exec)
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,1,0))
++DEFINE_WRITEBACK_WORK_EVENT(writeback_start)
++DEFINE_WRITEBACK_WORK_EVENT(writeback_written)
++DEFINE_WRITEBACK_WORK_EVENT(writeback_wait)
++#endif
++
++TRACE_EVENT(writeback_pages_written,
++	TP_PROTO(long pages_written),
++	TP_ARGS(pages_written),
++	TP_STRUCT__entry(
++		__field(long,		pages)
++	),
++	TP_fast_assign(
++		tp_assign(pages, pages_written)
++	),
++	TP_printk("%ld", __entry->pages)
++)
++
++DECLARE_EVENT_CLASS(writeback_class,
++	TP_PROTO(struct backing_dev_info *bdi),
++	TP_ARGS(bdi),
++	TP_STRUCT__entry(
++		__array(char, name, 32)
++	),
++	TP_fast_assign(
++		tp_memcpy(name, dev_name(bdi->dev), 32)
++	),
++	TP_printk("bdi %s",
++		  __entry->name
++	)
++)
++#define DEFINE_WRITEBACK_EVENT(name) \
++DEFINE_EVENT(writeback_class, name, \
++	TP_PROTO(struct backing_dev_info *bdi), \
++	TP_ARGS(bdi))
++
++DEFINE_WRITEBACK_EVENT(writeback_nowork)
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,38))
++DEFINE_WRITEBACK_EVENT(writeback_wake_background)
++#endif
++DEFINE_WRITEBACK_EVENT(writeback_wake_thread)
++DEFINE_WRITEBACK_EVENT(writeback_wake_forker_thread)
++DEFINE_WRITEBACK_EVENT(writeback_bdi_register)
++DEFINE_WRITEBACK_EVENT(writeback_bdi_unregister)
++DEFINE_WRITEBACK_EVENT(writeback_thread_start)
++DEFINE_WRITEBACK_EVENT(writeback_thread_stop)
++#if (LTTNG_KERNEL_RANGE(3,1,0, 3,2,0))
++DEFINE_WRITEBACK_EVENT(balance_dirty_start)
++DEFINE_WRITEBACK_EVENT(balance_dirty_wait)
++
++TRACE_EVENT(balance_dirty_written,
++
++	TP_PROTO(struct backing_dev_info *bdi, int written),
++
++	TP_ARGS(bdi, written),
++
++	TP_STRUCT__entry(
++		__array(char,	name, 32)
++		__field(int,	written)
++	),
++
++	TP_fast_assign(
++		tp_memcpy(name, dev_name(bdi->dev), 32)
++		tp_assign(written, written)
++	),
++
++	TP_printk("bdi %s written %d",
++		  __entry->name,
++		  __entry->written
++	)
++)
++#endif
++
++DECLARE_EVENT_CLASS(wbc_class,
++	TP_PROTO(struct writeback_control *wbc, struct backing_dev_info *bdi),
++	TP_ARGS(wbc, bdi),
++	TP_STRUCT__entry(
++		__array(char, name, 32)
++		__field(long, nr_to_write)
++		__field(long, pages_skipped)
++		__field(int, sync_mode)
++		__field(int, for_kupdate)
++		__field(int, for_background)
++		__field(int, for_reclaim)
++		__field(int, range_cyclic)
++#if (LINUX_VERSION_CODE < KERNEL_VERSION(3,1,0))
++		__field(int, more_io)
++		__field(unsigned long, older_than_this)
++#endif
++		__field(long, range_start)
++		__field(long, range_end)
++	),
++
++	TP_fast_assign(
++		tp_memcpy(name, dev_name(bdi->dev), 32)
++		tp_assign(nr_to_write, wbc->nr_to_write)
++		tp_assign(pages_skipped, wbc->pages_skipped)
++		tp_assign(sync_mode, wbc->sync_mode)
++		tp_assign(for_kupdate, wbc->for_kupdate)
++		tp_assign(for_background, wbc->for_background)
++		tp_assign(for_reclaim, wbc->for_reclaim)
++		tp_assign(range_cyclic, wbc->range_cyclic)
++#if (LINUX_VERSION_CODE < KERNEL_VERSION(3,1,0))
++		tp_assign(more_io, wbc->more_io)
++		tp_assign(older_than_this, wbc->older_than_this ?
++						*wbc->older_than_this : 0)
++#endif
++		tp_assign(range_start, (long)wbc->range_start)
++		tp_assign(range_end, (long)wbc->range_end)
++	),
++
++	TP_printk("bdi %s: towrt=%ld skip=%ld mode=%d kupd=%d "
++#if (LINUX_VERSION_CODE < KERNEL_VERSION(3,1,0))
++		"bgrd=%d reclm=%d cyclic=%d more=%d older=0x%lx "
++#else
++		"bgrd=%d reclm=%d cyclic=%d "
++#endif
++		"start=0x%lx end=0x%lx",
++		__entry->name,
++		__entry->nr_to_write,
++		__entry->pages_skipped,
++		__entry->sync_mode,
++		__entry->for_kupdate,
++		__entry->for_background,
++		__entry->for_reclaim,
++		__entry->range_cyclic,
++#if (LINUX_VERSION_CODE < KERNEL_VERSION(3,1,0))
++		__entry->more_io,
++		__entry->older_than_this,
++#endif
++		__entry->range_start,
++		__entry->range_end)
++)
++
++#define DEFINE_WBC_EVENT(name) \
++DEFINE_EVENT(wbc_class, name, \
++	TP_PROTO(struct writeback_control *wbc, struct backing_dev_info *bdi), \
++	TP_ARGS(wbc, bdi))
++#if (LINUX_VERSION_CODE < KERNEL_VERSION(3,1,0))
++DEFINE_WBC_EVENT(wbc_writeback_start)
++DEFINE_WBC_EVENT(wbc_writeback_written)
++DEFINE_WBC_EVENT(wbc_writeback_wait)
++DEFINE_WBC_EVENT(wbc_balance_dirty_start)
++DEFINE_WBC_EVENT(wbc_balance_dirty_written)
++DEFINE_WBC_EVENT(wbc_balance_dirty_wait)
++#endif
++DEFINE_WBC_EVENT(wbc_writepage)
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,1,0))
++TRACE_EVENT(writeback_queue_io,
++	TP_PROTO(struct bdi_writeback *wb,
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,2,0))
++		 struct wb_writeback_work *work,
++#else
++		 unsigned long *older_than_this,
++#endif
++		 int moved),
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,2,0))
++	TP_ARGS(wb, work, moved),
++#else
++	TP_ARGS(wb, older_than_this, moved),
++#endif
++	TP_STRUCT__entry(
++		__array(char,		name, 32)
++		__field(unsigned long,	older)
++		__field(long,		age)
++		__field(int,		moved)
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,2,0))
++		__field(int,		reason)
++#endif
++	),
++	TP_fast_assign(
++		tp_memcpy(name, dev_name(wb->bdi->dev), 32)
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,2,0))
++		tp_assign(older,
++			work->older_than_this ? *(work->older_than_this) : 0)
++		tp_assign(age, work->older_than_this ?
++			(jiffies - *(work->older_than_this)) * 1000 / HZ : -1)
++#else
++		tp_assign(older, older_than_this ?  *older_than_this : 0)
++		tp_assign(age, older_than_this ?
++			(jiffies - *older_than_this) * 1000 / HZ : -1)
++#endif
++		tp_assign(moved, moved)
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,2,0))
++		tp_assign(reason, work->reason)
++#endif
++	),
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,2,0))
++	TP_printk("bdi %s: older=%lu age=%ld enqueue=%d reason=%s",
++		__entry->name,
++		__entry->older,	/* older_than_this in jiffies */
++		__entry->age,	/* older_than_this in relative milliseconds */
++		__entry->moved,
++		__print_symbolic(__entry->reason, WB_WORK_REASON)
++	)
++#else
++	TP_printk("bdi %s: older=%lu age=%ld enqueue=%d",
++		__entry->name,
++		__entry->older,	/* older_than_this in jiffies */
++		__entry->age,	/* older_than_this in relative milliseconds */
++		__entry->moved
++	)
++#endif
++)
++
++TRACE_EVENT(global_dirty_state,
++
++	TP_PROTO(unsigned long background_thresh,
++		 unsigned long dirty_thresh
++	),
++
++	TP_ARGS(background_thresh,
++		dirty_thresh
++	),
++
++	TP_STRUCT__entry(
++		__field(unsigned long,	nr_dirty)
++		__field(unsigned long,	nr_writeback)
++		__field(unsigned long,	nr_unstable)
++		__field(unsigned long,	background_thresh)
++		__field(unsigned long,	dirty_thresh)
++		__field(unsigned long,	dirty_limit)
++		__field(unsigned long,	nr_dirtied)
++		__field(unsigned long,	nr_written)
++	),
++
++	TP_fast_assign(
++		tp_assign(nr_dirty, global_page_state(NR_FILE_DIRTY))
++		tp_assign(nr_writeback, global_page_state(NR_WRITEBACK))
++		tp_assign(nr_unstable, global_page_state(NR_UNSTABLE_NFS))
++		tp_assign(nr_dirtied, global_page_state(NR_DIRTIED))
++		tp_assign(nr_written, global_page_state(NR_WRITTEN))
++		tp_assign(background_thresh, background_thresh)
++		tp_assign(dirty_thresh, dirty_thresh)
++		tp_assign(dirty_limit, global_dirty_limit)
++	),
++
++	TP_printk("dirty=%lu writeback=%lu unstable=%lu "
++		  "bg_thresh=%lu thresh=%lu limit=%lu "
++		  "dirtied=%lu written=%lu",
++		  __entry->nr_dirty,
++		  __entry->nr_writeback,
++		  __entry->nr_unstable,
++		  __entry->background_thresh,
++		  __entry->dirty_thresh,
++		  __entry->dirty_limit,
++		  __entry->nr_dirtied,
++		  __entry->nr_written
++	)
++)
++#endif
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,2,0))
++
++#define KBps(x)			((x) << (PAGE_SHIFT - 10))
++
++TRACE_EVENT(bdi_dirty_ratelimit,
++
++	TP_PROTO(struct backing_dev_info *bdi,
++		 unsigned long dirty_rate,
++		 unsigned long task_ratelimit),
++
++	TP_ARGS(bdi, dirty_rate, task_ratelimit),
++
++	TP_STRUCT__entry(
++		__array(char,		bdi, 32)
++		__field(unsigned long,	write_bw)
++		__field(unsigned long,	avg_write_bw)
++		__field(unsigned long,	dirty_rate)
++		__field(unsigned long,	dirty_ratelimit)
++		__field(unsigned long,	task_ratelimit)
++		__field(unsigned long,	balanced_dirty_ratelimit)
++	),
++
++	TP_fast_assign(
++		tp_memcpy(bdi, dev_name(bdi->dev), 32)
++		tp_assign(write_bw, KBps(bdi->write_bandwidth))
++		tp_assign(avg_write_bw, KBps(bdi->avg_write_bandwidth))
++		tp_assign(dirty_rate, KBps(dirty_rate))
++		tp_assign(dirty_ratelimit, KBps(bdi->dirty_ratelimit))
++		tp_assign(task_ratelimit, KBps(task_ratelimit))
++		tp_assign(balanced_dirty_ratelimit,
++					KBps(bdi->balanced_dirty_ratelimit))
++	),
++
++	TP_printk("bdi %s: "
++		  "write_bw=%lu awrite_bw=%lu dirty_rate=%lu "
++		  "dirty_ratelimit=%lu task_ratelimit=%lu "
++		  "balanced_dirty_ratelimit=%lu",
++		  __entry->bdi,
++		  __entry->write_bw,		/* write bandwidth */
++		  __entry->avg_write_bw,	/* avg write bandwidth */
++		  __entry->dirty_rate,		/* bdi dirty rate */
++		  __entry->dirty_ratelimit,	/* base ratelimit */
++		  __entry->task_ratelimit, /* ratelimit with position control */
++		  __entry->balanced_dirty_ratelimit /* the balanced ratelimit */
++	)
++)
++
++TRACE_EVENT(balance_dirty_pages,
++
++	TP_PROTO(struct backing_dev_info *bdi,
++		 unsigned long thresh,
++		 unsigned long bg_thresh,
++		 unsigned long dirty,
++		 unsigned long bdi_thresh,
++		 unsigned long bdi_dirty,
++		 unsigned long dirty_ratelimit,
++		 unsigned long task_ratelimit,
++		 unsigned long dirtied,
 +#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,3,0))
-+TRACE_EVENT(mm_page_free,
-+#else
- TRACE_EVENT(mm_page_free_direct,
++		 unsigned long period,
 +#endif
- 
- 	TP_PROTO(struct page *page, unsigned int order),
- 
-@@ -165,7 +177,11 @@ TRACE_EVENT(mm_page_free_direct,
- 			__entry->order)
- )
- 
++		 long pause,
++		 unsigned long start_time),
++
++	TP_ARGS(bdi, thresh, bg_thresh, dirty, bdi_thresh, bdi_dirty,
++		dirty_ratelimit, task_ratelimit,
 +#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,3,0))
-+TRACE_EVENT(mm_page_free_batched,
++		dirtied, period, pause, start_time),
 +#else
- TRACE_EVENT(mm_pagevec_free,
++		dirtied, pause, start_time),
 +#endif
- 
- 	TP_PROTO(struct page *page, int cold),
- 
-@@ -210,7 +226,7 @@ TRACE_EVENT(mm_page_alloc,
- 
- 	TP_printk("page=%p pfn=%lu order=%d migratetype=%d gfp_flags=%s",
- 		__entry->page,
--		page_to_pfn(__entry->page),
-+		__entry->page ? page_to_pfn(__entry->page) : 0,
- 		__entry->order,
- 		__entry->migratetype,
- 		show_gfp_flags(__entry->gfp_flags))
-@@ -236,7 +252,7 @@ DECLARE_EVENT_CLASS(mm_page,
- 
- 	TP_printk("page=%p pfn=%lu order=%u migratetype=%d percpu_refill=%d",
- 		__entry->page,
--		page_to_pfn(__entry->page),
-+		__entry->page ? page_to_pfn(__entry->page) : 0,
- 		__entry->order,
- 		__entry->migratetype,
- 		__entry->order == 0)
-@@ -251,7 +267,11 @@ DEFINE_EVENT(mm_page, mm_page_alloc_zone_locked,
- 
- DEFINE_EVENT_PRINT(mm_page, mm_page_pcpu_drain,
- 
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
- 	TP_PROTO(struct page *page, unsigned int order, int migratetype),
-+#else
-+	TP_PROTO(struct page *page, int order, int migratetype),
-+#endif
- 
- 	TP_ARGS(page, order, migratetype),
- 
-@@ -297,6 +317,7 @@ TRACE_EVENT(mm_page_alloc_extfrag,
- 		__entry->fallback_order < pageblock_order,
- 		__entry->alloc_migratetype == __entry->fallback_migratetype)
- )
-+#endif
- 
- #endif /* _TRACE_KMEM_H */
- 
-diff --git a/instrumentation/events/lttng-module/kvm.h b/instrumentation/events/lttng-module/kvm.h
-index ffdc2a6..cda3cfc 100644
---- a/instrumentation/events/lttng-module/kvm.h
-+++ b/instrumentation/events/lttng-module/kvm.h
-@@ -7,6 +7,8 @@
- #undef TRACE_SYSTEM
- #define TRACE_SYSTEM kvm
- 
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,38))
-+
- #define ERSN(x) { KVM_EXIT_##x, "KVM_EXIT_" #x }
- 
- #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0))
-@@ -50,8 +52,16 @@ TRACE_EVENT(kvm_userspace_exit,
- 		  __print_symbolic(__entry->reason, kvm_trace_exit_reason),
- 		  __entry->errno < 0 ? -__entry->errno : __entry->reason)
- )
-+#endif
- 
-+#if (LINUX_VERSION_CODE < KERNEL_VERSION(3,6,0))
- #if defined(__KVM_HAVE_IOAPIC)
-+#undef __KVM_HAVE_IRQ_LINE
-+#define __KVM_HAVE_IRQ_LINE
-+#endif
-+#endif
-+
-+#if defined(__KVM_HAVE_IRQ_LINE)
- TRACE_EVENT(kvm_set_irq,
- 	TP_PROTO(unsigned int gsi, int level, int irq_source_id),
- 	TP_ARGS(gsi, level, irq_source_id),
-@@ -71,7 +81,9 @@ TRACE_EVENT(kvm_set_irq,
- 	TP_printk("gsi %u level %d source %d",
- 		  __entry->gsi, __entry->level, __entry->irq_source_id)
- )
-+#endif
- 
-+#if defined(__KVM_HAVE_IOAPIC)
- #define kvm_deliver_mode		\
- 	{0x0, "Fixed"},			\
- 	{0x1, "LowPrio"},		\
-@@ -189,6 +201,8 @@ TRACE_EVENT(kvm_mmio,
- 		  __entry->len, __entry->gpa, __entry->val)
- )
- 
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,34))
-+
- #define kvm_fpu_load_symbol	\
- 	{0, "unload"},		\
- 	{1, "load"}
-@@ -229,6 +243,9 @@ TRACE_EVENT(kvm_age_page,
- 		  __entry->hva, __entry->gfn,
- 		  __entry->referenced ? "YOUNG" : "OLD")
- )
-+#endif
-+
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,38))
- 
- #ifdef CONFIG_KVM_ASYNC_PF
- DECLARE_EVENT_CLASS(kvm_async_get_page_class,
-@@ -321,6 +338,8 @@ TRACE_EVENT(
- 
- #endif
- 
-+#endif
-+
- #endif /* _TRACE_KVM_MAIN_H */
- 
- /* This part must be outside protection */
-diff --git a/instrumentation/events/lttng-module/lock.h b/instrumentation/events/lttng-module/lock.h
-index e2c1c7a..8c1389d 100644
---- a/instrumentation/events/lttng-module/lock.h
-+++ b/instrumentation/events/lttng-module/lock.h
-@@ -1,5 +1,15 @@
-+#include <linux/version.h>
-+
- #undef TRACE_SYSTEM
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
- #define TRACE_SYSTEM lock
-+#else
-+#define TRACE_SYSTEM lockdep
-+#define TRACE_INCLUDE_FILE lock
-+#if defined(_TRACE_LOCKDEP_H)
-+#define _TRACE_LOCK_H
-+#endif
-+#endif
- 
- #if !defined(_TRACE_LOCK_H) || defined(TRACE_HEADER_MULTI_READ)
- #define _TRACE_LOCK_H
-@@ -20,21 +30,31 @@ TRACE_EVENT(lock_acquire,
- 	TP_STRUCT__entry(
- 		__field(unsigned int, flags)
- 		__string(name, lock->name)
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,34))
- 		__field(void *, lockdep_addr)
-+#endif
- 	),
- 
- 	TP_fast_assign(
- 		tp_assign(flags, (trylock ? 1 : 0) | (read ? 2 : 0))
- 		tp_strcpy(name, lock->name)
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,34))
- 		tp_assign(lockdep_addr, lock)
-+#endif
- 	),
- 
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,34))
- 	TP_printk("%p %s%s%s", __entry->lockdep_addr,
-+#else
-+	TP_printk("%s%s%s",
-+#endif
- 		  (__entry->flags & 1) ? "try " : "",
- 		  (__entry->flags & 2) ? "read " : "",
- 		  __get_str(name))
- )
- 
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,35))
-+
- DECLARE_EVENT_CLASS(lock,
- 
- 	TP_PROTO(struct lockdep_map *lock, unsigned long ip),
-@@ -78,6 +98,107 @@ DEFINE_EVENT(lock, lock_acquired,
- )
- 
- #endif
-+
-+#else /* #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,35)) */
-+
-+TRACE_EVENT(lock_release,
-+
-+	TP_PROTO(struct lockdep_map *lock, int nested, unsigned long ip),
-+
-+	TP_ARGS(lock, nested, ip),
-+
 +	TP_STRUCT__entry(
-+		__string(	name, 	lock->name	)
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,34))
-+		__field(	void *, lockdep_addr	)
++		__array(	 char,	bdi, 32)
++		__field(unsigned long,	limit)
++		__field(unsigned long,	setpoint)
++		__field(unsigned long,	dirty)
++		__field(unsigned long,	bdi_setpoint)
++		__field(unsigned long,	bdi_dirty)
++		__field(unsigned long,	dirty_ratelimit)
++		__field(unsigned long,	task_ratelimit)
++		__field(unsigned int,	dirtied)
++		__field(unsigned int,	dirtied_pause)
++		__field(unsigned long,	paused)
++		__field(	 long,	pause)
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,3,0))
++		__field(unsigned long,	period)
++		__field(	 long,	think)
 +#endif
 +	),
 +
 +	TP_fast_assign(
-+		tp_strcpy(name, lock->name)
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,34))
-+		tp_assign(lockdep_addr, lock)
++		tp_memcpy(bdi, dev_name(bdi->dev), 32)
++		tp_assign(limit, global_dirty_limit)
++		tp_assign(setpoint,
++			(global_dirty_limit + (thresh + bg_thresh) / 2) / 2)
++		tp_assign(dirty, dirty)
++		tp_assign(bdi_setpoint,
++			((global_dirty_limit + (thresh + bg_thresh) / 2) / 2) *
++			bdi_thresh / (thresh + 1))
++		tp_assign(bdi_dirty, bdi_dirty)
++		tp_assign(dirty_ratelimit, KBps(dirty_ratelimit))
++		tp_assign(task_ratelimit, KBps(task_ratelimit))
++		tp_assign(dirtied, dirtied)
++		tp_assign(dirtied_pause, current->nr_dirtied_pause)
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,3,0))
++		tp_assign(think, current->dirty_paused_when == 0 ? 0 :
++			(long)(jiffies - current->dirty_paused_when) * 1000/HZ)
++		tp_assign(period, period * 1000 / HZ)
 +#endif
++		tp_assign(pause, pause * 1000 / HZ)
++		tp_assign(paused, (jiffies - start_time) * 1000 / HZ)
 +	),
 +
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,34))
-+	TP_printk("%p %s",  __entry->lockdep_addr, __get_str(name))
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,3,0))
++	TP_printk("bdi %s: "
++		  "limit=%lu setpoint=%lu dirty=%lu "
++		  "bdi_setpoint=%lu bdi_dirty=%lu "
++		  "dirty_ratelimit=%lu task_ratelimit=%lu "
++		  "dirtied=%u dirtied_pause=%u "
++		  "paused=%lu pause=%ld period=%lu think=%ld",
++		  __entry->bdi,
++		  __entry->limit,
++		  __entry->setpoint,
++		  __entry->dirty,
++		  __entry->bdi_setpoint,
++		  __entry->bdi_dirty,
++		  __entry->dirty_ratelimit,
++		  __entry->task_ratelimit,
++		  __entry->dirtied,
++		  __entry->dirtied_pause,
++		  __entry->paused,	/* ms */
++		  __entry->pause,	/* ms */
++		  __entry->period,	/* ms */
++		  __entry->think	/* ms */
++	  )
 +#else
-+	TP_printk("%s",  __get_str(name))
++	TP_printk("bdi %s: "
++		  "limit=%lu setpoint=%lu dirty=%lu "
++		  "bdi_setpoint=%lu bdi_dirty=%lu "
++		  "dirty_ratelimit=%lu task_ratelimit=%lu "
++		  "dirtied=%u dirtied_pause=%u "
++		  "paused=%lu pause=%ld",
++		  __entry->bdi,
++		  __entry->limit,
++		  __entry->setpoint,
++		  __entry->dirty,
++		  __entry->bdi_setpoint,
++		  __entry->bdi_dirty,
++		  __entry->dirty_ratelimit,
++		  __entry->task_ratelimit,
++		  __entry->dirtied,
++		  __entry->dirtied_pause,
++		  __entry->paused,	/* ms */
++		  __entry->pause	/* ms */
++	  )
 +#endif
 +)
-+
-+#ifdef CONFIG_LOCK_STAT
-+
-+TRACE_EVENT(lock_contended,
-+
-+	TP_PROTO(struct lockdep_map *lock, unsigned long ip),
-+
-+	TP_ARGS(lock, ip),
-+
-+	TP_STRUCT__entry(
-+		__string(	name, 	lock->name	)
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,34))
-+		__field(	void *, lockdep_addr	)
-+#endif
-+	),
-+
-+	TP_fast_assign(
-+		tp_strcpy(name, lock->name)
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,34))
-+		tp_assign(lockdep_addr, lock)
-+#endif
-+	),
-+
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,34))
-+	TP_printk("%p %s",  __entry->lockdep_addr, __get_str(name))
-+#else
-+	TP_printk("%s",  __get_str(name))
-+#endif
-+)
-+
-+TRACE_EVENT(lock_acquired,
-+
-+	TP_PROTO(struct lockdep_map *lock, unsigned long ip, s64 waittime),
-+
-+	TP_ARGS(lock, ip, waittime),
-+
-+	TP_STRUCT__entry(
-+		__string(	name, 	lock->name	)
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,34))
-+		__field(	s64,    wait_nsec	)
-+		__field(	void *, lockdep_addr	)
-+#else
-+		__field(unsigned long, wait_usec)
-+		__field(unsigned long, wait_nsec_rem)
-+#endif
-+	),
-+
-+	TP_fast_assign(
-+		tp_strcpy(name, lock->name)
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,34))
-+		tp_assign(wait_nsec, waittime)
-+		tp_assign(lockdep_addr, lock)
-+#else
-+		tp_assign(wait_usec, (unsigned long)waittime)
-+		tp_assign(wait_nsec_rem, do_div(waittime, NSEC_PER_USEC))
-+#endif
-+	),
-+
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,34))
-+	TP_printk("%p %s (%llu ns)",  __entry->lockdep_addr,
-+		  __get_str(name), __entry->wait_nsec)
-+#else
-+	TP_printk("%s (%lu.%03lu us)",
-+		  __get_str(name),
-+		  __entry->wait_usec, __entry->wait_nsec_rem)
-+#endif
-+)
-+
-+#endif
-+
-+#endif /* #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,35)) */
-+
- #endif
- 
- #endif /* _TRACE_LOCK_H */
-diff --git a/instrumentation/events/lttng-module/module.h b/instrumentation/events/lttng-module/module.h
-index 65a8135..c63f866 100644
---- a/instrumentation/events/lttng-module/module.h
-+++ b/instrumentation/events/lttng-module/module.h
-@@ -15,6 +15,7 @@
- #define _TRACE_MODULE_H
- 
- #include <linux/tracepoint.h>
-+#include <linux/version.h>
- 
- #ifdef CONFIG_MODULES
- 
-@@ -69,9 +70,15 @@ TRACE_EVENT(module_free,
- 
- DECLARE_EVENT_CLASS(module_refcnt,
- 
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,35))
- 	TP_PROTO(struct module *mod, unsigned long ip),
- 
- 	TP_ARGS(mod, ip),
-+#else
-+	TP_PROTO(struct module *mod, unsigned long ip, int refcnt),
-+
-+	TP_ARGS(mod, ip, refcnt),
-+#endif
- 
- 	TP_STRUCT__entry(
- 		__field(	unsigned long,	ip		)
-@@ -81,7 +88,11 @@ DECLARE_EVENT_CLASS(module_refcnt,
- 
- 	TP_fast_assign(
- 		tp_assign(ip, ip)
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,35))
- 		tp_assign(refcnt, __this_cpu_read(mod->refptr->incs) + __this_cpu_read(mod->refptr->decs))
-+#else
-+		tp_assign(refcnt, refcnt)
-+#endif
- 		tp_strcpy(name, mod->name)
- 	),
- 
-@@ -91,16 +102,28 @@ DECLARE_EVENT_CLASS(module_refcnt,
- 
- DEFINE_EVENT(module_refcnt, module_get,
- 
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,35))
- 	TP_PROTO(struct module *mod, unsigned long ip),
- 
- 	TP_ARGS(mod, ip)
-+#else
-+	TP_PROTO(struct module *mod, unsigned long ip, int refcnt),
-+
-+	TP_ARGS(mod, ip, refcnt)
-+#endif
- )
- 
- DEFINE_EVENT(module_refcnt, module_put,
- 
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,35))
- 	TP_PROTO(struct module *mod, unsigned long ip),
- 
- 	TP_ARGS(mod, ip)
-+#else
-+	TP_PROTO(struct module *mod, unsigned long ip, int refcnt),
-+
-+	TP_ARGS(mod, ip, refcnt)
-+#endif
- )
- #endif /* CONFIG_MODULE_UNLOAD */
- 
-diff --git a/instrumentation/events/lttng-module/power.h b/instrumentation/events/lttng-module/power.h
-index f2e3f54..7eeb87c 100644
---- a/instrumentation/events/lttng-module/power.h
-+++ b/instrumentation/events/lttng-module/power.h
-@@ -6,7 +6,9 @@
- 
- #include <linux/ktime.h>
- #include <linux/tracepoint.h>
-+#include <linux/version.h>
- 
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,38))
- DECLARE_EVENT_CLASS(cpu,
- 
- 	TP_PROTO(unsigned int state, unsigned int cpu_id),
-@@ -64,8 +66,50 @@ TRACE_EVENT(machine_suspend,
- 
- 	TP_printk("state=%lu", (unsigned long)__entry->state)
- )
 +#endif
 +
 +#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,5,0))
-+DECLARE_EVENT_CLASS(wakeup_source,
++TRACE_EVENT(writeback_sb_inodes_requeue,
 +
-+	TP_PROTO(const char *name, unsigned int state),
-+
-+	TP_ARGS(name, state),
++	TP_PROTO(struct inode *inode),
++	TP_ARGS(inode),
 +
 +	TP_STRUCT__entry(
-+		__string(       name,           name            )
-+		__field(        u64,            state           )
++		__array(char, name, 32)
++		__field(unsigned long, ino)
++		__field(unsigned long, state)
++		__field(unsigned long, dirtied_when)
 +	),
 +
 +	TP_fast_assign(
-+		tp_strcpy(name, name)
-+		tp_assign(state, state)
++		tp_memcpy(name, dev_name(inode_to_bdi(inode)->dev), 32)
++		tp_assign(ino, inode->i_ino)
++		tp_assign(state, inode->i_state)
++		tp_assign(dirtied_when, inode->dirtied_when)
 +	),
 +
-+	TP_printk("%s state=0x%lx", __get_str(name),
-+		(unsigned long)__entry->state)
-+)
-+
-+DEFINE_EVENT(wakeup_source, wakeup_source_activate,
-+
-+	TP_PROTO(const char *name, unsigned int state),
-+
-+	TP_ARGS(name, state)
-+)
-+
-+DEFINE_EVENT(wakeup_source, wakeup_source_deactivate,
-+
-+	TP_PROTO(const char *name, unsigned int state),
-+
-+	TP_ARGS(name, state)
-+)
-+#endif
-+
-+#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,38))
-+#undef CONFIG_EVENT_POWER_TRACING_DEPRECATED
-+#define CONFIG_EVENT_POWER_TRACING_DEPRECATED
-+#define _PWR_EVENT_AVOID_DOUBLE_DEFINING_DEPRECATED
-+#endif
- 
--/* This code will be removed after deprecation time exceeded (2.6.41) */
- #ifdef CONFIG_EVENT_POWER_TRACING_DEPRECATED
- 
- /*
-@@ -74,56 +118,100 @@ TRACE_EVENT(machine_suspend,
-  */
- DECLARE_EVENT_CLASS(power,
- 
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,36))
- 	TP_PROTO(unsigned int type, unsigned int state, unsigned int cpu_id),
- 
- 	TP_ARGS(type, state, cpu_id),
-+#else
-+	TP_PROTO(unsigned int type, unsigned int state),
-+
-+	TP_ARGS(type, state),
-+#endif
- 
- 	TP_STRUCT__entry(
- 		__field(	u64,		type		)
- 		__field(	u64,		state		)
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,36))
- 		__field(	u64,		cpu_id		)
-+#endif
- 	),
- 
- 	TP_fast_assign(
- 		tp_assign(type, type)
- 		tp_assign(state, state)
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,36))
- 		tp_assign(cpu_id, cpu_id)
-+#endif
- 	),
- 
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,36))
- 	TP_printk("type=%lu state=%lu cpu_id=%lu", (unsigned long)__entry->type,
- 		(unsigned long)__entry->state, (unsigned long)__entry->cpu_id)
-+#else
-+	TP_printk("type=%lu state=%lu", (unsigned long)__entry->type,
-+		(unsigned long)__entry->state)
-+#endif
- )
- 
- DEFINE_EVENT(power, power_start,
- 
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,36))
- 	TP_PROTO(unsigned int type, unsigned int state, unsigned int cpu_id),
- 
- 	TP_ARGS(type, state, cpu_id)
-+#else
-+	TP_PROTO(unsigned int type, unsigned int state),
-+
-+	TP_ARGS(type, state)
-+#endif
- )
- 
- DEFINE_EVENT(power, power_frequency,
- 
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,36))
- 	TP_PROTO(unsigned int type, unsigned int state, unsigned int cpu_id),
- 
- 	TP_ARGS(type, state, cpu_id)
-+#else
-+	TP_PROTO(unsigned int type, unsigned int state),
-+
-+	TP_ARGS(type, state)
-+#endif
- )
- 
- TRACE_EVENT(power_end,
- 
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,36))
- 	TP_PROTO(unsigned int cpu_id),
- 
- 	TP_ARGS(cpu_id),
-+#else
-+	TP_PROTO(int dummy),
-+
-+	TP_ARGS(dummy),
-+#endif
- 
- 	TP_STRUCT__entry(
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,36))
- 		__field(	u64,		cpu_id		)
-+#else
-+		__field(	u64,		dummy		)
-+#endif
- 	),
- 
- 	TP_fast_assign(
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,36))
- 		tp_assign(cpu_id, cpu_id)
-+#else
-+		tp_assign(dummy, 0xffff)
-+#endif
- 	),
- 
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,36))
- 	TP_printk("cpu_id=%lu", (unsigned long)__entry->cpu_id)
--
-+#else
-+	TP_printk("dummy=%lu", (unsigned long)__entry->dummy)
-+#endif
- )
- 
- /* Deprecated dummy functions must be protected against multi-declartion */
-@@ -151,11 +239,16 @@ enum {
-    events get removed */
- static inline void trace_power_start(u64 type, u64 state, u64 cpuid) {};
- static inline void trace_power_end(u64 cpuid) {};
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,4,0))
-+static inline void trace_power_start_rcuidle(u64 type, u64 state, u64 cpuid) {};
-+static inline void trace_power_end_rcuidle(u64 cpuid) {};
-+#endif
- static inline void trace_power_frequency(u64 type, u64 state, u64 cpuid) {};
- #endif /* _PWR_EVENT_AVOID_DOUBLE_DEFINING_DEPRECATED */
- 
- #endif /* CONFIG_EVENT_POWER_TRACING_DEPRECATED */
- 
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
- /*
-  * The clock events are used for clock enable/disable and for
-  *  clock rate change
-@@ -234,6 +327,8 @@ DEFINE_EVENT(power_domain, power_domain_target,
- 
- 	TP_ARGS(name, state, cpu_id)
- )
-+#endif
-+
- #endif /* _TRACE_POWER_H */
- 
- /* This part must be outside protection */
-diff --git a/instrumentation/events/lttng-module/sched.h b/instrumentation/events/lttng-module/sched.h
-index 005f3d1..4d30fe3 100644
---- a/instrumentation/events/lttng-module/sched.h
-+++ b/instrumentation/events/lttng-module/sched.h
-@@ -6,10 +6,14 @@
- 
- #include <linux/sched.h>
- #include <linux/tracepoint.h>
-+#include <linux/binfmts.h>
-+#include <linux/version.h>
- 
- #ifndef _TRACE_SCHED_DEF_
- #define _TRACE_SCHED_DEF_
- 
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,35))
-+
- static inline long __trace_sched_switch_state(struct task_struct *p)
- {
- 	long state = p->state;
-@@ -19,12 +23,18 @@ static inline long __trace_sched_switch_state(struct task_struct *p)
- 	 * For all intents and purposes a preempted task is a running task.
- 	 */
- 	if (task_thread_info(p)->preempt_count & PREEMPT_ACTIVE)
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,2,0))
-+		state = TASK_RUNNING | TASK_STATE_MAX;
-+#else
- 		state = TASK_RUNNING;
- #endif
-+#endif
- 
- 	return state;
- }
- 
-+#endif
-+
- #endif /* _TRACE_SCHED_DEF_ */
- 
- /*
-@@ -89,7 +99,9 @@ DECLARE_EVENT_CLASS(sched_wakeup_template,
- 		__field(	pid_t,	tid			)
- 		__field(	int,	prio			)
- 		__field(	int,	success			)
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,32))
- 		__field(	int,	target_cpu		)
-+#endif
- 	),
- 
- 	TP_fast_assign(
-@@ -97,12 +109,25 @@ DECLARE_EVENT_CLASS(sched_wakeup_template,
- 		tp_assign(tid, p->pid)
- 		tp_assign(prio, p->prio)
- 		tp_assign(success, success)
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,32))
- 		tp_assign(target_cpu, task_cpu(p))
-+#endif
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0))
++	TP_printk("bdi %s: ino=%lu state=%s dirtied_when=%lu age=%lu",
++		  __entry->name,
++		  __entry->ino,
++		  show_inode_state(__entry->state),
++		  __entry->dirtied_when,
++		  (jiffies - __entry->dirtied_when) / HZ
 +	)
-+	TP_perf_assign(
-+		__perf_task(p)
-+#endif
- 	),
- 
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,32))
- 	TP_printk("comm=%s tid=%d prio=%d success=%d target_cpu=%03d",
- 		  __entry->comm, __entry->tid, __entry->prio,
- 		  __entry->success, __entry->target_cpu)
-+#else
-+	TP_printk("comm=%s tid=%d prio=%d success=%d",
-+		  __entry->comm, __entry->tid, __entry->prio,
-+		  __entry->success)
-+#endif
- )
- 
- #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,35))
-@@ -164,12 +189,27 @@ TRACE_EVENT(sched_switch,
- 		tp_memcpy(next_comm, next->comm, TASK_COMM_LEN)
- 		tp_assign(prev_tid, prev->pid)
- 		tp_assign(prev_prio, prev->prio - MAX_RT_PRIO)
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,35))
- 		tp_assign(prev_state, __trace_sched_switch_state(prev))
-+#else
-+		tp_assign(prev_state, prev->state)
-+#endif
- 		tp_memcpy(prev_comm, prev->comm, TASK_COMM_LEN)
- 		tp_assign(next_tid, next->pid)
- 		tp_assign(next_prio, next->prio - MAX_RT_PRIO)
- 	),
- 
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,2,0))
-+	TP_printk("prev_comm=%s prev_tid=%d prev_prio=%d prev_state=%s%s ==> next_comm=%s next_tid=%d next_prio=%d",
-+		__entry->prev_comm, __entry->prev_tid, __entry->prev_prio,
-+		__entry->prev_state & (TASK_STATE_MAX-1) ?
-+		  __print_flags(__entry->prev_state & (TASK_STATE_MAX-1), "|",
-+				{ 1, "S"} , { 2, "D" }, { 4, "T" }, { 8, "t" },
-+				{ 16, "Z" }, { 32, "X" }, { 64, "x" },
-+				{ 128, "W" }) : "R",
-+		__entry->prev_state & TASK_STATE_MAX ? "+" : "",
-+		__entry->next_comm, __entry->next_tid, __entry->next_prio)
-+#else
- 	TP_printk("prev_comm=%s prev_tid=%d prev_prio=%d prev_state=%s ==> next_comm=%s next_tid=%d next_prio=%d",
- 		__entry->prev_comm, __entry->prev_tid, __entry->prev_prio,
- 		__entry->prev_state ?
-@@ -178,6 +218,7 @@ TRACE_EVENT(sched_switch,
- 				{ 16, "Z" }, { 32, "X" }, { 64, "x" },
- 				{ 128, "W" }) : "R",
- 		__entry->next_comm, __entry->next_tid, __entry->next_prio)
-+#endif
- )
- 
- /*
-@@ -313,6 +354,33 @@ TRACE_EVENT(sched_process_fork,
- 		__entry->child_comm, __entry->child_tid)
- )
- 
-+#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,33))
-+/*
-+ * Tracepoint for sending a signal:
-+ */
-+TRACE_EVENT(sched_signal_send,
-+
-+	TP_PROTO(int sig, struct task_struct *p),
-+
-+	TP_ARGS(sig, p),
-+
-+	TP_STRUCT__entry(
-+		__field(	int,	sig			)
-+		__array(	char,	comm,	TASK_COMM_LEN	)
-+		__field(	pid_t,	pid			)
-+	),
-+
-+	TP_fast_assign(
-+		tp_memcpy(comm, p->comm, TASK_COMM_LEN)
-+		tp_assign(pid, p->pid)
-+		tp_assign(sig, sig)
-+	),
-+
-+	TP_printk("sig=%d comm=%s pid=%d",
-+		__entry->sig, __entry->comm, __entry->pid)
 +)
 +#endif
 +
- #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,4,0))
- /*
-  * Tracepoint for exec:
-@@ -341,6 +409,7 @@ TRACE_EVENT(sched_process_exec,
- )
- #endif
- 
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,32))
- /*
-  * XXX the below sched_stat tracepoints only apply to SCHED_OTHER/BATCH/IDLE
-  *     adding sched_stat support to SCHED_FIFO/RR would be welcome.
-@@ -396,6 +465,15 @@ DEFINE_EVENT(sched_stat_template, sched_stat_iowait,
- 	     TP_PROTO(struct task_struct *tsk, u64 delay),
- 	     TP_ARGS(tsk, delay))
- 
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,3,0))
-+/*
-+ * Tracepoint for accounting blocked time (time the task is in uninterruptible).
-+ */
-+DEFINE_EVENT(sched_stat_template, sched_stat_blocked,
-+	     TP_PROTO(struct task_struct *tsk, u64 delay),
-+	     TP_ARGS(tsk, delay))
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
++DECLARE_EVENT_CLASS(writeback_congest_waited_template,
++
++	TP_PROTO(unsigned int usec_timeout, unsigned int usec_delayed),
++
++	TP_ARGS(usec_timeout, usec_delayed),
++
++	TP_STRUCT__entry(
++		__field(	unsigned int,	usec_timeout	)
++		__field(	unsigned int,	usec_delayed	)
++	),
++
++	TP_fast_assign(
++		tp_assign(usec_timeout, usec_timeout)
++		tp_assign(usec_delayed, usec_delayed)
++	),
++
++	TP_printk("usec_timeout=%u usec_delayed=%u",
++			__entry->usec_timeout,
++			__entry->usec_delayed)
++)
++
++DEFINE_EVENT(writeback_congest_waited_template, writeback_congestion_wait,
++
++	TP_PROTO(unsigned int usec_timeout, unsigned int usec_delayed),
++
++	TP_ARGS(usec_timeout, usec_delayed)
++)
++
++DEFINE_EVENT(writeback_congest_waited_template, writeback_wait_iff_congested,
++
++	TP_PROTO(unsigned int usec_timeout, unsigned int usec_delayed),
++
++	TP_ARGS(usec_timeout, usec_delayed)
++)
 +#endif
 +
- /*
-  * Tracepoint for accounting runtime (time the task is executing
-  * on a CPU).
-@@ -421,6 +499,9 @@ TRACE_EVENT(sched_stat_runtime,
- 	)
- 	TP_perf_assign(
- 		__perf_count(runtime)
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0))
-+		__perf_task(tsk)
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,1,0))
++DECLARE_EVENT_CLASS(writeback_single_inode_template,
++
++	TP_PROTO(struct inode *inode,
++		 struct writeback_control *wbc,
++		 unsigned long nr_to_write
++	),
++
++	TP_ARGS(inode, wbc, nr_to_write),
++
++	TP_STRUCT__entry(
++		__array(char, name, 32)
++		__field(unsigned long, ino)
++		__field(unsigned long, state)
++		__field(unsigned long, dirtied_when)
++		__field(unsigned long, writeback_index)
++		__field(long, nr_to_write)
++		__field(unsigned long, wrote)
++	),
++
++	TP_fast_assign(
++		tp_memcpy(name, dev_name(inode_to_bdi(inode)->dev), 32)
++		tp_assign(ino, inode->i_ino)
++		tp_assign(state, inode->i_state)
++		tp_assign(dirtied_when, inode->dirtied_when)
++		tp_assign(writeback_index, inode->i_mapping->writeback_index)
++		tp_assign(nr_to_write, nr_to_write)
++		tp_assign(wrote, nr_to_write - wbc->nr_to_write)
++	),
++
++	TP_printk("bdi %s: ino=%lu state=%s dirtied_when=%lu age=%lu "
++		  "index=%lu to_write=%ld wrote=%lu",
++		  __entry->name,
++		  __entry->ino,
++		  show_inode_state(__entry->state),
++		  __entry->dirtied_when,
++		  (jiffies - __entry->dirtied_when) / HZ,
++		  __entry->writeback_index,
++		  __entry->nr_to_write,
++		  __entry->wrote
++	)
++)
++
++#if (LINUX_VERSION_CODE < KERNEL_VERSION(3,5,0))
++DEFINE_EVENT(writeback_single_inode_template, writeback_single_inode_requeue,
++	TP_PROTO(struct inode *inode,
++		struct writeback_control *wbc,
++		unsigned long nr_to_write),
++	TP_ARGS(inode, wbc, nr_to_write)
++)
 +#endif
- 	),
- 
- 	TP_printk("comm=%s tid=%d runtime=%Lu [ns] vruntime=%Lu [ns]",
-@@ -428,7 +509,9 @@ TRACE_EVENT(sched_stat_runtime,
- 			(unsigned long long)__entry->runtime,
- 			(unsigned long long)__entry->vruntime)
- )
++
++DEFINE_EVENT(writeback_single_inode_template, writeback_single_inode,
++	TP_PROTO(struct inode *inode,
++		 struct writeback_control *wbc,
++		 unsigned long nr_to_write),
++	TP_ARGS(inode, wbc, nr_to_write)
++)
 +#endif
- 
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
- /*
-  * Tracepoint for showing priority inheritance modifying a tasks
-  * priority.
-@@ -457,6 +540,7 @@ TRACE_EVENT(sched_pi_setprio,
- 			__entry->comm, __entry->tid,
- 			__entry->oldprio, __entry->newprio)
- )
-+#endif
- 
- #endif /* _TRACE_SCHED_H */
- 
-diff --git a/instrumentation/events/lttng-module/scsi.h b/instrumentation/events/lttng-module/scsi.h
-index 18d2b02..15f0c70 100644
---- a/instrumentation/events/lttng-module/scsi.h
-+++ b/instrumentation/events/lttng-module/scsi.h
-@@ -8,6 +8,7 @@
- #include <scsi/scsi_host.h>
- #include <linux/tracepoint.h>
- #include <linux/trace_seq.h>
-+#include <linux/version.h>
- 
- #ifndef _TRACE_SCSI_DEF
- #define _TRACE_SCSI_DEF
-@@ -187,6 +188,7 @@
- 		scsi_statusbyte_name(SAM_STAT_ACA_ACTIVE),	\
- 		scsi_statusbyte_name(SAM_STAT_TASK_ABORTED))
- 
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,39))
- #define scsi_prot_op_name(result)	{ result, #result }
- #define show_prot_op_name(val)					\
- 	__print_symbolic(val,					\
-@@ -197,6 +199,7 @@
- 		scsi_prot_op_name(SCSI_PROT_WRITE_INSERT),	\
- 		scsi_prot_op_name(SCSI_PROT_READ_PASS),		\
- 		scsi_prot_op_name(SCSI_PROT_WRITE_PASS))
-+#endif
- 
- const char *scsi_trace_parse_cdb(struct trace_seq*, unsigned char*, int);
- #define __parse_cdb(cdb, len) scsi_trace_parse_cdb(p, cdb, len)
-@@ -217,7 +220,9 @@ TRACE_EVENT(scsi_dispatch_cmd_start,
- 		__field( unsigned int,	cmd_len )
- 		__field( unsigned int,	data_sglen )
- 		__field( unsigned int,	prot_sglen )
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,39))
- 		__field( unsigned char,	prot_op )
-+#endif
- 		__dynamic_array_hex(unsigned char,	cmnd, cmd->cmd_len)
- 	),
- 
-@@ -230,15 +235,24 @@ TRACE_EVENT(scsi_dispatch_cmd_start,
- 		tp_assign(cmd_len, cmd->cmd_len)
- 		tp_assign(data_sglen, scsi_sg_count(cmd))
- 		tp_assign(prot_sglen, scsi_prot_sg_count(cmd))
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,39))
- 		tp_assign(prot_op, scsi_get_prot_op(cmd))
-+#endif
- 		tp_memcpy_dyn(cmnd, cmd->cmnd)
- 	),
- 
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,39))
- 	TP_printk("host_no=%u channel=%u id=%u lun=%u data_sgl=%u prot_sgl=%u" \
- 		  " prot_op=%s cmnd=(%s %s raw=%s)",
-+#else
-+	TP_printk("host_no=%u channel=%u id=%u lun=%u data_sgl=%u prot_sgl=%u" \
-+		  " cmnd=(%s %s raw=%s)",
-+#endif
- 		  __entry->host_no, __entry->channel, __entry->id,
- 		  __entry->lun, __entry->data_sglen, __entry->prot_sglen,
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,39))
- 		  show_prot_op_name(__entry->prot_op),
-+#endif
- 		  show_opcode_name(__entry->opcode),
- 		  __parse_cdb(__get_dynamic_array(cmnd), __entry->cmd_len),
- 		  __print_hex(__get_dynamic_array(cmnd), __entry->cmd_len))
-@@ -260,7 +274,9 @@ TRACE_EVENT(scsi_dispatch_cmd_error,
- 		__field( unsigned int,	cmd_len )
- 		__field( unsigned int,	data_sglen )
- 		__field( unsigned int,	prot_sglen )
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,39))
- 		__field( unsigned char,	prot_op )
-+#endif
- 		__dynamic_array_hex(unsigned char,	cmnd, cmd->cmd_len)
- 	),
- 
-@@ -274,15 +290,24 @@ TRACE_EVENT(scsi_dispatch_cmd_error,
- 		tp_assign(cmd_len, cmd->cmd_len)
- 		tp_assign(data_sglen, scsi_sg_count(cmd))
- 		tp_assign(prot_sglen, scsi_prot_sg_count(cmd))
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,39))
- 		tp_assign(prot_op, scsi_get_prot_op(cmd))
-+#endif
- 		tp_memcpy_dyn(cmnd, cmd->cmnd)
- 	),
- 
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,39))
- 	TP_printk("host_no=%u channel=%u id=%u lun=%u data_sgl=%u prot_sgl=%u" \
- 		  " prot_op=%s cmnd=(%s %s raw=%s) rtn=%d",
-+#else
-+	TP_printk("host_no=%u channel=%u id=%u lun=%u data_sgl=%u prot_sgl=%u" \
-+		  " cmnd=(%s %s raw=%s) rtn=%d",
-+#endif
- 		  __entry->host_no, __entry->channel, __entry->id,
- 		  __entry->lun, __entry->data_sglen, __entry->prot_sglen,
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,39))
- 		  show_prot_op_name(__entry->prot_op),
-+#endif
- 		  show_opcode_name(__entry->opcode),
- 		  __parse_cdb(__get_dynamic_array(cmnd), __entry->cmd_len),
- 		  __print_hex(__get_dynamic_array(cmnd), __entry->cmd_len),
-@@ -305,7 +330,9 @@ DECLARE_EVENT_CLASS(scsi_cmd_done_timeout_template,
- 		__field( unsigned int,	cmd_len )
- 		__field( unsigned int,	data_sglen )
- 		__field( unsigned int,	prot_sglen )
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,39))
- 		__field( unsigned char,	prot_op )
-+#endif
- 		__dynamic_array_hex(unsigned char,	cmnd, cmd->cmd_len)
- 	),
- 
-@@ -319,16 +346,26 @@ DECLARE_EVENT_CLASS(scsi_cmd_done_timeout_template,
- 		tp_assign(cmd_len, cmd->cmd_len)
- 		tp_assign(data_sglen, scsi_sg_count(cmd))
- 		tp_assign(prot_sglen, scsi_prot_sg_count(cmd))
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,39))
- 		tp_assign(prot_op, scsi_get_prot_op(cmd))
-+#endif
- 		tp_memcpy_dyn(cmnd, cmd->cmnd)
- 	),
- 
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,39))
- 	TP_printk("host_no=%u channel=%u id=%u lun=%u data_sgl=%u " \
- 		  "prot_sgl=%u prot_op=%s cmnd=(%s %s raw=%s) result=(driver=" \
- 		  "%s host=%s message=%s status=%s)",
-+#else
-+	TP_printk("host_no=%u channel=%u id=%u lun=%u data_sgl=%u " \
-+		  "prot_sgl=%u cmnd=(%s %s raw=%s) result=(driver=%s host=%s " \
-+		  "message=%s status=%s)",
-+#endif
- 		  __entry->host_no, __entry->channel, __entry->id,
- 		  __entry->lun, __entry->data_sglen, __entry->prot_sglen,
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,39))
- 		  show_prot_op_name(__entry->prot_op),
-+#endif
- 		  show_opcode_name(__entry->opcode),
- 		  __parse_cdb(__get_dynamic_array(cmnd), __entry->cmd_len),
- 		  __print_hex(__get_dynamic_array(cmnd), __entry->cmd_len),
-diff --git a/instrumentation/events/lttng-module/signal.h b/instrumentation/events/lttng-module/signal.h
-index 945747f..a1c904b 100644
---- a/instrumentation/events/lttng-module/signal.h
-+++ b/instrumentation/events/lttng-module/signal.h
-@@ -135,6 +135,7 @@ TRACE_EVENT(signal_deliver,
- 		  __entry->sa_handler, __entry->sa_flags)
- )
- 
-+#if (LINUX_VERSION_CODE < KERNEL_VERSION(3,4,0))
- DECLARE_EVENT_CLASS(signal_queue_overflow,
- 
- 	TP_PROTO(int sig, int group, struct siginfo *info),
-@@ -193,6 +194,7 @@ DEFINE_EVENT(signal_queue_overflow, signal_lose_info,
- 
- 	TP_ARGS(sig, group, info)
- )
-+#endif
- 
- #endif /* _TRACE_SIGNAL_H */
- 
-diff --git a/instrumentation/events/lttng-module/skb.h b/instrumentation/events/lttng-module/skb.h
-index 3163356..c8a6160 100644
---- a/instrumentation/events/lttng-module/skb.h
-+++ b/instrumentation/events/lttng-module/skb.h
-@@ -7,6 +7,7 @@
- #include <linux/skbuff.h>
- #include <linux/netdevice.h>
- #include <linux/tracepoint.h>
-+#include <linux/version.h>
- 
- /*
-  * Tracepoint for free an sk_buff:
-@@ -33,6 +34,7 @@ TRACE_EVENT(kfree_skb,
- 		__entry->skbaddr, __entry->protocol, __entry->location)
- )
- 
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
- TRACE_EVENT(consume_skb,
- 
- 	TP_PROTO(struct sk_buff *skb),
-@@ -49,7 +51,9 @@ TRACE_EVENT(consume_skb,
- 
- 	TP_printk("skbaddr=%p", __entry->skbaddr)
- )
-+#endif
- 
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,32))
- TRACE_EVENT(skb_copy_datagram_iovec,
- 
- 	TP_PROTO(const struct sk_buff *skb, int len),
-@@ -68,6 +72,7 @@ TRACE_EVENT(skb_copy_datagram_iovec,
- 
- 	TP_printk("skbaddr=%p len=%d", __entry->skbaddr, __entry->len)
- )
-+#endif
- 
- #endif /* _TRACE_SKB_H */
- 
-diff --git a/instrumentation/events/lttng-module/vmscan.h b/instrumentation/events/lttng-module/vmscan.h
-index d6ab952..c137310 100644
---- a/instrumentation/events/lttng-module/vmscan.h
-+++ b/instrumentation/events/lttng-module/vmscan.h
-@@ -4,6 +4,47 @@
- #if !defined(_TRACE_VMSCAN_H) || defined(TRACE_HEADER_MULTI_READ)
- #define _TRACE_VMSCAN_H
- 
++
++#endif /* _TRACE_WRITEBACK_H */
++
++/* This part must be outside protection */
++#include "../../../probes/define_trace.h"
+diff --git a/instrumentation/events/mainline/btrfs.h b/instrumentation/events/mainline/btrfs.h
+new file mode 100644
+index 0000000..54fab04
+--- /dev/null
++++ b/instrumentation/events/mainline/btrfs.h
+@@ -0,0 +1,918 @@
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM btrfs
++
++#if !defined(_TRACE_BTRFS_H) || defined(TRACE_HEADER_MULTI_READ)
++#define _TRACE_BTRFS_H
++
++#include <linux/writeback.h>
++#include <linux/tracepoint.h>
++#include <trace/events/gfpflags.h>
++
++struct btrfs_root;
++struct btrfs_fs_info;
++struct btrfs_inode;
++struct extent_map;
++struct btrfs_ordered_extent;
++struct btrfs_delayed_ref_node;
++struct btrfs_delayed_tree_ref;
++struct btrfs_delayed_data_ref;
++struct btrfs_delayed_ref_head;
++struct btrfs_block_group_cache;
++struct btrfs_free_cluster;
++struct map_lookup;
++struct extent_buffer;
++
++#define show_ref_type(type)						\
++	__print_symbolic(type,						\
++		{ BTRFS_TREE_BLOCK_REF_KEY, 	"TREE_BLOCK_REF" },	\
++		{ BTRFS_EXTENT_DATA_REF_KEY, 	"EXTENT_DATA_REF" },	\
++		{ BTRFS_EXTENT_REF_V0_KEY, 	"EXTENT_REF_V0" },	\
++		{ BTRFS_SHARED_BLOCK_REF_KEY, 	"SHARED_BLOCK_REF" },	\
++		{ BTRFS_SHARED_DATA_REF_KEY, 	"SHARED_DATA_REF" })
++
++#define __show_root_type(obj)						\
++	__print_symbolic_u64(obj,					\
++		{ BTRFS_ROOT_TREE_OBJECTID, 	"ROOT_TREE"	},	\
++		{ BTRFS_EXTENT_TREE_OBJECTID, 	"EXTENT_TREE"	},	\
++		{ BTRFS_CHUNK_TREE_OBJECTID, 	"CHUNK_TREE"	},	\
++		{ BTRFS_DEV_TREE_OBJECTID, 	"DEV_TREE"	},	\
++		{ BTRFS_FS_TREE_OBJECTID, 	"FS_TREE"	},	\
++		{ BTRFS_ROOT_TREE_DIR_OBJECTID, "ROOT_TREE_DIR"	},	\
++		{ BTRFS_CSUM_TREE_OBJECTID, 	"CSUM_TREE"	},	\
++		{ BTRFS_TREE_LOG_OBJECTID,	"TREE_LOG"	},	\
++		{ BTRFS_TREE_RELOC_OBJECTID,	"TREE_RELOC"	},	\
++		{ BTRFS_DATA_RELOC_TREE_OBJECTID, "DATA_RELOC_TREE" })
++
++#define show_root_type(obj)						\
++	obj, ((obj >= BTRFS_DATA_RELOC_TREE_OBJECTID) ||		\
++	      (obj <= BTRFS_CSUM_TREE_OBJECTID )) ? __show_root_type(obj) : "-"
++
++#define BTRFS_GROUP_FLAGS	\
++	{ BTRFS_BLOCK_GROUP_DATA,	"DATA"}, \
++	{ BTRFS_BLOCK_GROUP_SYSTEM,	"SYSTEM"}, \
++	{ BTRFS_BLOCK_GROUP_METADATA,	"METADATA"}, \
++	{ BTRFS_BLOCK_GROUP_RAID0,	"RAID0"}, \
++	{ BTRFS_BLOCK_GROUP_RAID1,	"RAID1"}, \
++	{ BTRFS_BLOCK_GROUP_DUP,	"DUP"}, \
++	{ BTRFS_BLOCK_GROUP_RAID10,	"RAID10"}
++
++#define BTRFS_UUID_SIZE 16
++
++TRACE_EVENT(btrfs_transaction_commit,
++
++	TP_PROTO(struct btrfs_root *root),
++
++	TP_ARGS(root),
++
++	TP_STRUCT__entry(
++		__field(	u64,  generation		)
++		__field(	u64,  root_objectid		)
++	),
++
++	TP_fast_assign(
++		__entry->generation	= root->fs_info->generation;
++		__entry->root_objectid	= root->root_key.objectid;
++	),
++
++	TP_printk("root = %llu(%s), gen = %llu",
++		  show_root_type(__entry->root_objectid),
++		  (unsigned long long)__entry->generation)
++);
++
++DECLARE_EVENT_CLASS(btrfs__inode,
++
++	TP_PROTO(struct inode *inode),
++
++	TP_ARGS(inode),
++
++	TP_STRUCT__entry(
++		__field(	ino_t,  ino			)
++		__field(	blkcnt_t,  blocks		)
++		__field(	u64,  disk_i_size		)
++		__field(	u64,  generation		)
++		__field(	u64,  last_trans		)
++		__field(	u64,  logged_trans		)
++		__field(	u64,  root_objectid		)
++	),
++
++	TP_fast_assign(
++		__entry->ino	= inode->i_ino;
++		__entry->blocks	= inode->i_blocks;
++		__entry->disk_i_size  = BTRFS_I(inode)->disk_i_size;
++		__entry->generation = BTRFS_I(inode)->generation;
++		__entry->last_trans = BTRFS_I(inode)->last_trans;
++		__entry->logged_trans = BTRFS_I(inode)->logged_trans;
++		__entry->root_objectid =
++				BTRFS_I(inode)->root->root_key.objectid;
++	),
++
++	TP_printk("root = %llu(%s), gen = %llu, ino = %lu, blocks = %llu, "
++		  "disk_i_size = %llu, last_trans = %llu, logged_trans = %llu",
++		  show_root_type(__entry->root_objectid),
++		  (unsigned long long)__entry->generation,
++		  (unsigned long)__entry->ino,
++		  (unsigned long long)__entry->blocks,
++		  (unsigned long long)__entry->disk_i_size,
++		  (unsigned long long)__entry->last_trans,
++		  (unsigned long long)__entry->logged_trans)
++);
++
++DEFINE_EVENT(btrfs__inode, btrfs_inode_new,
++
++	TP_PROTO(struct inode *inode),
++
++	TP_ARGS(inode)
++);
++
++DEFINE_EVENT(btrfs__inode, btrfs_inode_request,
++
++	TP_PROTO(struct inode *inode),
++
++	TP_ARGS(inode)
++);
++
++DEFINE_EVENT(btrfs__inode, btrfs_inode_evict,
++
++	TP_PROTO(struct inode *inode),
++
++	TP_ARGS(inode)
++);
++
++#define __show_map_type(type)						\
++	__print_symbolic_u64(type,					\
++		{ EXTENT_MAP_LAST_BYTE, "LAST_BYTE" 	},		\
++		{ EXTENT_MAP_HOLE, 	"HOLE" 		},		\
++		{ EXTENT_MAP_INLINE, 	"INLINE" 	},		\
++		{ EXTENT_MAP_DELALLOC,	"DELALLOC" 	})
++
++#define show_map_type(type)			\
++	type, (type >= EXTENT_MAP_LAST_BYTE) ? "-" :  __show_map_type(type)
++
++#define show_map_flags(flag)						\
++	__print_flags(flag, "|",					\
++		{ EXTENT_FLAG_PINNED, 		"PINNED" 	},	\
++		{ EXTENT_FLAG_COMPRESSED, 	"COMPRESSED" 	},	\
++		{ EXTENT_FLAG_VACANCY, 		"VACANCY" 	},	\
++		{ EXTENT_FLAG_PREALLOC, 	"PREALLOC" 	})
++
++TRACE_EVENT(btrfs_get_extent,
++
++	TP_PROTO(struct btrfs_root *root, struct extent_map *map),
++
++	TP_ARGS(root, map),
++
++	TP_STRUCT__entry(
++		__field(	u64,  root_objectid	)
++		__field(	u64,  start		)
++		__field(	u64,  len		)
++		__field(	u64,  orig_start	)
++		__field(	u64,  block_start	)
++		__field(	u64,  block_len		)
++		__field(	unsigned long,  flags	)
++		__field(	int,  refs		)
++		__field(	unsigned int,  compress_type	)
++	),
++
++	TP_fast_assign(
++		__entry->root_objectid	= root->root_key.objectid;
++		__entry->start 		= map->start;
++		__entry->len		= map->len;
++		__entry->orig_start	= map->orig_start;
++		__entry->block_start	= map->block_start;
++		__entry->block_len	= map->block_len;
++		__entry->flags		= map->flags;
++		__entry->refs		= atomic_read(&map->refs);
++		__entry->compress_type	= map->compress_type;
++	),
++
++	TP_printk("root = %llu(%s), start = %llu, len = %llu, "
++		  "orig_start = %llu, block_start = %llu(%s), "
++		  "block_len = %llu, flags = %s, refs = %u, "
++		  "compress_type = %u",
++		  show_root_type(__entry->root_objectid),
++		  (unsigned long long)__entry->start,
++		  (unsigned long long)__entry->len,
++		  (unsigned long long)__entry->orig_start,
++		  show_map_type(__entry->block_start),
++		  (unsigned long long)__entry->block_len,
++		  show_map_flags(__entry->flags),
++		  __entry->refs, __entry->compress_type)
++);
++
++#define show_ordered_flags(flags)					\
++	__print_symbolic(flags,					\
++		{ BTRFS_ORDERED_IO_DONE, 	"IO_DONE" 	},	\
++		{ BTRFS_ORDERED_COMPLETE, 	"COMPLETE" 	},	\
++		{ BTRFS_ORDERED_NOCOW, 		"NOCOW" 	},	\
++		{ BTRFS_ORDERED_COMPRESSED, 	"COMPRESSED" 	},	\
++		{ BTRFS_ORDERED_PREALLOC, 	"PREALLOC" 	},	\
++		{ BTRFS_ORDERED_DIRECT, 	"DIRECT" 	})
++
++DECLARE_EVENT_CLASS(btrfs__ordered_extent,
++
++	TP_PROTO(struct inode *inode, struct btrfs_ordered_extent *ordered),
++
++	TP_ARGS(inode, ordered),
++
++	TP_STRUCT__entry(
++		__field(	ino_t,  ino		)
++		__field(	u64,  file_offset	)
++		__field(	u64,  start		)
++		__field(	u64,  len		)
++		__field(	u64,  disk_len		)
++		__field(	u64,  bytes_left	)
++		__field(	unsigned long,  flags	)
++		__field(	int,  compress_type	)
++		__field(	int,  refs		)
++		__field(	u64,  root_objectid	)
++	),
++
++	TP_fast_assign(
++		__entry->ino 		= inode->i_ino;
++		__entry->file_offset	= ordered->file_offset;
++		__entry->start		= ordered->start;
++		__entry->len		= ordered->len;
++		__entry->disk_len	= ordered->disk_len;
++		__entry->bytes_left	= ordered->bytes_left;
++		__entry->flags		= ordered->flags;
++		__entry->compress_type	= ordered->compress_type;
++		__entry->refs		= atomic_read(&ordered->refs);
++		__entry->root_objectid	=
++				BTRFS_I(inode)->root->root_key.objectid;
++	),
++
++	TP_printk("root = %llu(%s), ino = %llu, file_offset = %llu, "
++		  "start = %llu, len = %llu, disk_len = %llu, "
++		  "bytes_left = %llu, flags = %s, compress_type = %d, "
++		  "refs = %d",
++		  show_root_type(__entry->root_objectid),
++		  (unsigned long long)__entry->ino,
++		  (unsigned long long)__entry->file_offset,
++		  (unsigned long long)__entry->start,
++		  (unsigned long long)__entry->len,
++		  (unsigned long long)__entry->disk_len,
++		  (unsigned long long)__entry->bytes_left,
++		  show_ordered_flags(__entry->flags),
++		  __entry->compress_type, __entry->refs)
++);
++
++DEFINE_EVENT(btrfs__ordered_extent, btrfs_ordered_extent_add,
++
++	TP_PROTO(struct inode *inode, struct btrfs_ordered_extent *ordered),
++
++	TP_ARGS(inode, ordered)
++);
++
++DEFINE_EVENT(btrfs__ordered_extent, btrfs_ordered_extent_remove,
++
++	TP_PROTO(struct inode *inode, struct btrfs_ordered_extent *ordered),
++
++	TP_ARGS(inode, ordered)
++);
++
++DEFINE_EVENT(btrfs__ordered_extent, btrfs_ordered_extent_start,
++
++	TP_PROTO(struct inode *inode, struct btrfs_ordered_extent *ordered),
++
++	TP_ARGS(inode, ordered)
++);
++
++DEFINE_EVENT(btrfs__ordered_extent, btrfs_ordered_extent_put,
++
++	TP_PROTO(struct inode *inode, struct btrfs_ordered_extent *ordered),
++
++	TP_ARGS(inode, ordered)
++);
++
++DECLARE_EVENT_CLASS(btrfs__writepage,
++
++	TP_PROTO(struct page *page, struct inode *inode,
++		 struct writeback_control *wbc),
++
++	TP_ARGS(page, inode, wbc),
++
++	TP_STRUCT__entry(
++		__field(	ino_t,  ino			)
++		__field(	pgoff_t,  index			)
++		__field(	long,   nr_to_write		)
++		__field(	long,   pages_skipped		)
++		__field(	loff_t, range_start		)
++		__field(	loff_t, range_end		)
++		__field(	char,   for_kupdate		)
++		__field(	char,   for_reclaim		)
++		__field(	char,   range_cyclic		)
++		__field(	pgoff_t,  writeback_index	)
++		__field(	u64,    root_objectid		)
++	),
++
++	TP_fast_assign(
++		__entry->ino		= inode->i_ino;
++		__entry->index		= page->index;
++		__entry->nr_to_write	= wbc->nr_to_write;
++		__entry->pages_skipped	= wbc->pages_skipped;
++		__entry->range_start	= wbc->range_start;
++		__entry->range_end	= wbc->range_end;
++		__entry->for_kupdate	= wbc->for_kupdate;
++		__entry->for_reclaim	= wbc->for_reclaim;
++		__entry->range_cyclic	= wbc->range_cyclic;
++		__entry->writeback_index = inode->i_mapping->writeback_index;
++		__entry->root_objectid	=
++				 BTRFS_I(inode)->root->root_key.objectid;
++	),
++
++	TP_printk("root = %llu(%s), ino = %lu, page_index = %lu, "
++		  "nr_to_write = %ld, pages_skipped = %ld, range_start = %llu, "
++		  "range_end = %llu, for_kupdate = %d, "
++		  "for_reclaim = %d, range_cyclic = %d, writeback_index = %lu",
++		  show_root_type(__entry->root_objectid),
++		  (unsigned long)__entry->ino, __entry->index,
++		  __entry->nr_to_write, __entry->pages_skipped,
++		  __entry->range_start, __entry->range_end,
++		  __entry->for_kupdate,
++		  __entry->for_reclaim, __entry->range_cyclic,
++		  (unsigned long)__entry->writeback_index)
++);
++
++DEFINE_EVENT(btrfs__writepage, __extent_writepage,
++
++	TP_PROTO(struct page *page, struct inode *inode,
++		 struct writeback_control *wbc),
++
++	TP_ARGS(page, inode, wbc)
++);
++
++TRACE_EVENT(btrfs_writepage_end_io_hook,
++
++	TP_PROTO(struct page *page, u64 start, u64 end, int uptodate),
++
++	TP_ARGS(page, start, end, uptodate),
++
++	TP_STRUCT__entry(
++		__field(	ino_t,	 ino		)
++		__field(	pgoff_t, index		)
++		__field(	u64,	 start		)
++		__field(	u64,	 end		)
++		__field(	int,	 uptodate	)
++		__field(	u64,    root_objectid	)
++	),
++
++	TP_fast_assign(
++		__entry->ino	= page->mapping->host->i_ino;
++		__entry->index	= page->index;
++		__entry->start	= start;
++		__entry->end	= end;
++		__entry->uptodate = uptodate;
++		__entry->root_objectid	=
++			 BTRFS_I(page->mapping->host)->root->root_key.objectid;
++	),
++
++	TP_printk("root = %llu(%s), ino = %lu, page_index = %lu, start = %llu, "
++		  "end = %llu, uptodate = %d",
++		  show_root_type(__entry->root_objectid),
++		  (unsigned long)__entry->ino, (unsigned long)__entry->index,
++		  (unsigned long long)__entry->start,
++		  (unsigned long long)__entry->end, __entry->uptodate)
++);
++
++TRACE_EVENT(btrfs_sync_file,
++
++	TP_PROTO(struct file *file, int datasync),
++
++	TP_ARGS(file, datasync),
++
++	TP_STRUCT__entry(
++		__field(	ino_t,  ino		)
++		__field(	ino_t,  parent		)
++		__field(	int,    datasync	)
++		__field(	u64,    root_objectid	)
++	),
++
++	TP_fast_assign(
++		struct dentry *dentry = file->f_path.dentry;
++		struct inode *inode = dentry->d_inode;
++
++		__entry->ino		= inode->i_ino;
++		__entry->parent		= dentry->d_parent->d_inode->i_ino;
++		__entry->datasync	= datasync;
++		__entry->root_objectid	=
++				 BTRFS_I(inode)->root->root_key.objectid;
++	),
++
++	TP_printk("root = %llu(%s), ino = %ld, parent = %ld, datasync = %d",
++		  show_root_type(__entry->root_objectid),
++		  (unsigned long)__entry->ino, (unsigned long)__entry->parent,
++		  __entry->datasync)
++);
++
++TRACE_EVENT(btrfs_sync_fs,
++
++	TP_PROTO(int wait),
++
++	TP_ARGS(wait),
++
++	TP_STRUCT__entry(
++		__field(	int,  wait		)
++	),
++
++	TP_fast_assign(
++		__entry->wait	= wait;
++	),
++
++	TP_printk("wait = %d", __entry->wait)
++);
++
++#define show_ref_action(action)						\
++	__print_symbolic(action,					\
++		{ BTRFS_ADD_DELAYED_REF,    "ADD_DELAYED_REF" },	\
++		{ BTRFS_DROP_DELAYED_REF,   "DROP_DELAYED_REF" },	\
++		{ BTRFS_ADD_DELAYED_EXTENT, "ADD_DELAYED_EXTENT" }, 	\
++		{ BTRFS_UPDATE_DELAYED_HEAD, "UPDATE_DELAYED_HEAD" })
++			
++
++TRACE_EVENT(btrfs_delayed_tree_ref,
++
++	TP_PROTO(struct btrfs_delayed_ref_node *ref,
++		 struct btrfs_delayed_tree_ref *full_ref,
++		 int action),
++
++	TP_ARGS(ref, full_ref, action),
++
++	TP_STRUCT__entry(
++		__field(	u64,  bytenr		)
++		__field(	u64,  num_bytes		)
++		__field(	int,  action		) 
++		__field(	u64,  parent		)
++		__field(	u64,  ref_root		)
++		__field(	int,  level		)
++		__field(	int,  type		)
++		__field(	u64,  seq		)
++	),
++
++	TP_fast_assign(
++		__entry->bytenr		= ref->bytenr;
++		__entry->num_bytes	= ref->num_bytes;
++		__entry->action		= action;
++		__entry->parent		= full_ref->parent;
++		__entry->ref_root	= full_ref->root;
++		__entry->level		= full_ref->level;
++		__entry->type		= ref->type;
++		__entry->seq		= ref->seq;
++	),
++
++	TP_printk("bytenr = %llu, num_bytes = %llu, action = %s, "
++		  "parent = %llu(%s), ref_root = %llu(%s), level = %d, "
++		  "type = %s, seq = %llu",
++		  (unsigned long long)__entry->bytenr,
++		  (unsigned long long)__entry->num_bytes,
++		  show_ref_action(__entry->action),
++		  show_root_type(__entry->parent),
++		  show_root_type(__entry->ref_root),
++		  __entry->level, show_ref_type(__entry->type),
++		  (unsigned long long)__entry->seq)
++);
++
++TRACE_EVENT(btrfs_delayed_data_ref,
++
++	TP_PROTO(struct btrfs_delayed_ref_node *ref,
++		 struct btrfs_delayed_data_ref *full_ref,
++		 int action),
++
++	TP_ARGS(ref, full_ref, action),
++
++	TP_STRUCT__entry(
++		__field(	u64,  bytenr		)
++		__field(	u64,  num_bytes		)
++		__field(	int,  action		) 
++		__field(	u64,  parent		)
++		__field(	u64,  ref_root		)
++		__field(	u64,  owner		)
++		__field(	u64,  offset		)
++		__field(	int,  type		)
++		__field(	u64,  seq		)
++	),
++
++	TP_fast_assign(
++		__entry->bytenr		= ref->bytenr;
++		__entry->num_bytes	= ref->num_bytes;
++		__entry->action		= action;
++		__entry->parent		= full_ref->parent;
++		__entry->ref_root	= full_ref->root;
++		__entry->owner		= full_ref->objectid;
++		__entry->offset		= full_ref->offset;
++		__entry->type		= ref->type;
++		__entry->seq		= ref->seq;
++	),
++
++	TP_printk("bytenr = %llu, num_bytes = %llu, action = %s, "
++		  "parent = %llu(%s), ref_root = %llu(%s), owner = %llu, "
++		  "offset = %llu, type = %s, seq = %llu",
++		  (unsigned long long)__entry->bytenr,
++		  (unsigned long long)__entry->num_bytes,
++		  show_ref_action(__entry->action),
++		  show_root_type(__entry->parent),
++		  show_root_type(__entry->ref_root),
++		  (unsigned long long)__entry->owner,
++		  (unsigned long long)__entry->offset,
++		  show_ref_type(__entry->type),
++		  (unsigned long long)__entry->seq)
++);
++
++TRACE_EVENT(btrfs_delayed_ref_head,
++
++	TP_PROTO(struct btrfs_delayed_ref_node *ref,
++		 struct btrfs_delayed_ref_head *head_ref,
++		 int action),
++
++	TP_ARGS(ref, head_ref, action),
++
++	TP_STRUCT__entry(
++		__field(	u64,  bytenr		)
++		__field(	u64,  num_bytes		)
++		__field(	int,  action		) 
++		__field(	int,  is_data		)
++	),
++
++	TP_fast_assign(
++		__entry->bytenr		= ref->bytenr;
++		__entry->num_bytes	= ref->num_bytes;
++		__entry->action		= action;
++		__entry->is_data	= head_ref->is_data;
++	),
++
++	TP_printk("bytenr = %llu, num_bytes = %llu, action = %s, is_data = %d",
++		  (unsigned long long)__entry->bytenr,
++		  (unsigned long long)__entry->num_bytes,
++		  show_ref_action(__entry->action),
++		  __entry->is_data)
++);
++
++#define show_chunk_type(type)					\
++	__print_flags(type, "|",				\
++		{ BTRFS_BLOCK_GROUP_DATA, 	"DATA"	},	\
++		{ BTRFS_BLOCK_GROUP_SYSTEM, 	"SYSTEM"},	\
++		{ BTRFS_BLOCK_GROUP_METADATA, 	"METADATA"},	\
++		{ BTRFS_BLOCK_GROUP_RAID0, 	"RAID0" },	\
++		{ BTRFS_BLOCK_GROUP_RAID1, 	"RAID1" },	\
++		{ BTRFS_BLOCK_GROUP_DUP, 	"DUP"	},	\
++		{ BTRFS_BLOCK_GROUP_RAID10, 	"RAID10"})
++
++DECLARE_EVENT_CLASS(btrfs__chunk,
++
++	TP_PROTO(struct btrfs_root *root, struct map_lookup *map,
++		 u64 offset, u64 size),
++
++	TP_ARGS(root, map, offset, size),
++
++	TP_STRUCT__entry(
++		__field(	int,  num_stripes		)
++		__field(	u64,  type			)
++		__field(	int,  sub_stripes		)
++		__field(	u64,  offset			)
++		__field(	u64,  size			)
++		__field(	u64,  root_objectid		)
++	),
++
++	TP_fast_assign(
++		__entry->num_stripes	= map->num_stripes;
++		__entry->type		= map->type;
++		__entry->sub_stripes	= map->sub_stripes;
++		__entry->offset		= offset;
++		__entry->size		= size;
++		__entry->root_objectid	= root->root_key.objectid;
++	),
++
++	TP_printk("root = %llu(%s), offset = %llu, size = %llu, "
++		  "num_stripes = %d, sub_stripes = %d, type = %s",
++		  show_root_type(__entry->root_objectid),
++		  (unsigned long long)__entry->offset,
++		  (unsigned long long)__entry->size,
++		  __entry->num_stripes, __entry->sub_stripes,
++		  show_chunk_type(__entry->type))
++);
++
++DEFINE_EVENT(btrfs__chunk,  btrfs_chunk_alloc,
++
++	TP_PROTO(struct btrfs_root *root, struct map_lookup *map,
++		 u64 offset, u64 size),
++
++	TP_ARGS(root, map, offset, size)
++);
++
++DEFINE_EVENT(btrfs__chunk,  btrfs_chunk_free,
++
++	TP_PROTO(struct btrfs_root *root, struct map_lookup *map,
++		 u64 offset, u64 size),
++
++	TP_ARGS(root, map, offset, size)
++);
++
++TRACE_EVENT(btrfs_cow_block,
++
++	TP_PROTO(struct btrfs_root *root, struct extent_buffer *buf,
++		 struct extent_buffer *cow),
++
++	TP_ARGS(root, buf, cow),
++
++	TP_STRUCT__entry(
++		__field(	u64,  root_objectid		)
++		__field(	u64,  buf_start			)
++		__field(	int,  refs			)
++		__field(	u64,  cow_start			)
++		__field(	int,  buf_level			)
++		__field(	int,  cow_level			)
++	),
++
++	TP_fast_assign(
++		__entry->root_objectid	= root->root_key.objectid;
++		__entry->buf_start	= buf->start;
++		__entry->refs		= atomic_read(&buf->refs);
++		__entry->cow_start	= cow->start;
++		__entry->buf_level	= btrfs_header_level(buf);
++		__entry->cow_level	= btrfs_header_level(cow);
++	),
++
++	TP_printk("root = %llu(%s), refs = %d, orig_buf = %llu "
++		  "(orig_level = %d), cow_buf = %llu (cow_level = %d)",
++		  show_root_type(__entry->root_objectid),
++		  __entry->refs,
++		  (unsigned long long)__entry->buf_start,
++		  __entry->buf_level,
++		  (unsigned long long)__entry->cow_start,
++		  __entry->cow_level)
++);
++
++TRACE_EVENT(btrfs_space_reservation,
++
++	TP_PROTO(struct btrfs_fs_info *fs_info, char *type, u64 val,
++		 u64 bytes, int reserve),
++
++	TP_ARGS(fs_info, type, val, bytes, reserve),
++
++	TP_STRUCT__entry(
++		__array(	u8,	fsid,	BTRFS_UUID_SIZE	)
++		__string(	type,	type			)
++		__field(	u64,	val			)
++		__field(	u64,	bytes			)
++		__field(	int,	reserve			)
++	),
++
++	TP_fast_assign(
++		memcpy(__entry->fsid, fs_info->fsid, BTRFS_UUID_SIZE);
++		__assign_str(type, type);
++		__entry->val		= val;
++		__entry->bytes		= bytes;
++		__entry->reserve	= reserve;
++	),
++
++	TP_printk("%pU: %s: %Lu %s %Lu", __entry->fsid, __get_str(type),
++		  __entry->val, __entry->reserve ? "reserve" : "release",
++		  __entry->bytes)
++);
++
++DECLARE_EVENT_CLASS(btrfs__reserved_extent,
++
++	TP_PROTO(struct btrfs_root *root, u64 start, u64 len),
++
++	TP_ARGS(root, start, len),
++
++	TP_STRUCT__entry(
++		__field(	u64,  root_objectid		)
++		__field(	u64,  start			)
++		__field(	u64,  len			)
++	),
++
++	TP_fast_assign(
++		__entry->root_objectid	= root->root_key.objectid;
++		__entry->start		= start;
++		__entry->len		= len;
++	),
++
++	TP_printk("root = %llu(%s), start = %llu, len = %llu",
++		  show_root_type(__entry->root_objectid),
++		  (unsigned long long)__entry->start,
++		  (unsigned long long)__entry->len)
++);
++
++DEFINE_EVENT(btrfs__reserved_extent,  btrfs_reserved_extent_alloc,
++
++	TP_PROTO(struct btrfs_root *root, u64 start, u64 len),
++
++	TP_ARGS(root, start, len)
++);
++
++DEFINE_EVENT(btrfs__reserved_extent,  btrfs_reserved_extent_free,
++
++	TP_PROTO(struct btrfs_root *root, u64 start, u64 len),
++
++	TP_ARGS(root, start, len)
++);
++
++TRACE_EVENT(find_free_extent,
++
++	TP_PROTO(struct btrfs_root *root, u64 num_bytes, u64 empty_size,
++		 u64 data),
++
++	TP_ARGS(root, num_bytes, empty_size, data),
++
++	TP_STRUCT__entry(
++		__field(	u64,	root_objectid		)
++		__field(	u64,	num_bytes		)
++		__field(	u64,	empty_size		)
++		__field(	u64,	data			)
++	),
++
++	TP_fast_assign(
++		__entry->root_objectid	= root->root_key.objectid;
++		__entry->num_bytes	= num_bytes;
++		__entry->empty_size	= empty_size;
++		__entry->data		= data;
++	),
++
++	TP_printk("root = %Lu(%s), len = %Lu, empty_size = %Lu, "
++		  "flags = %Lu(%s)", show_root_type(__entry->root_objectid),
++		  __entry->num_bytes, __entry->empty_size, __entry->data,
++		  __print_flags((unsigned long)__entry->data, "|",
++				 BTRFS_GROUP_FLAGS))
++);
++
++DECLARE_EVENT_CLASS(btrfs__reserve_extent,
++
++	TP_PROTO(struct btrfs_root *root,
++		 struct btrfs_block_group_cache *block_group, u64 start,
++		 u64 len),
++
++	TP_ARGS(root, block_group, start, len),
++
++	TP_STRUCT__entry(
++		__field(	u64,	root_objectid		)
++		__field(	u64,	bg_objectid		)
++		__field(	u64,	flags			)
++		__field(	u64,	start			)
++		__field(	u64,	len			)
++	),
++
++	TP_fast_assign(
++		__entry->root_objectid	= root->root_key.objectid;
++		__entry->bg_objectid	= block_group->key.objectid;
++		__entry->flags		= block_group->flags;
++		__entry->start		= start;
++		__entry->len		= len;
++	),
++
++	TP_printk("root = %Lu(%s), block_group = %Lu, flags = %Lu(%s), "
++		  "start = %Lu, len = %Lu",
++		  show_root_type(__entry->root_objectid), __entry->bg_objectid,
++		  __entry->flags, __print_flags((unsigned long)__entry->flags,
++						"|", BTRFS_GROUP_FLAGS),
++		  __entry->start, __entry->len)
++);
++
++DEFINE_EVENT(btrfs__reserve_extent, btrfs_reserve_extent,
++
++	TP_PROTO(struct btrfs_root *root,
++		 struct btrfs_block_group_cache *block_group, u64 start,
++		 u64 len),
++
++	TP_ARGS(root, block_group, start, len)
++);
++
++DEFINE_EVENT(btrfs__reserve_extent, btrfs_reserve_extent_cluster,
++
++	TP_PROTO(struct btrfs_root *root,
++		 struct btrfs_block_group_cache *block_group, u64 start,
++		 u64 len),
++
++	TP_ARGS(root, block_group, start, len)
++);
++
++TRACE_EVENT(btrfs_find_cluster,
++
++	TP_PROTO(struct btrfs_block_group_cache *block_group, u64 start,
++		 u64 bytes, u64 empty_size, u64 min_bytes),
++
++	TP_ARGS(block_group, start, bytes, empty_size, min_bytes),
++
++	TP_STRUCT__entry(
++		__field(	u64,	bg_objectid		)
++		__field(	u64,	flags			)
++		__field(	u64,	start			)
++		__field(	u64,	bytes			)
++		__field(	u64,	empty_size		)
++		__field(	u64,	min_bytes		)
++	),
++
++	TP_fast_assign(
++		__entry->bg_objectid	= block_group->key.objectid;
++		__entry->flags		= block_group->flags;
++		__entry->start		= start;
++		__entry->bytes		= bytes;
++		__entry->empty_size	= empty_size;
++		__entry->min_bytes	= min_bytes;
++	),
++
++	TP_printk("block_group = %Lu, flags = %Lu(%s), start = %Lu, len = %Lu,"
++		  " empty_size = %Lu, min_bytes = %Lu", __entry->bg_objectid,
++		  __entry->flags,
++		  __print_flags((unsigned long)__entry->flags, "|",
++				BTRFS_GROUP_FLAGS), __entry->start,
++		  __entry->bytes, __entry->empty_size,  __entry->min_bytes)
++);
++
++TRACE_EVENT(btrfs_failed_cluster_setup,
++
++	TP_PROTO(struct btrfs_block_group_cache *block_group),
++
++	TP_ARGS(block_group),
++
++	TP_STRUCT__entry(
++		__field(	u64,	bg_objectid		)
++	),
++
++	TP_fast_assign(
++		__entry->bg_objectid	= block_group->key.objectid;
++	),
++
++	TP_printk("block_group = %Lu", __entry->bg_objectid)
++);
++
++TRACE_EVENT(btrfs_setup_cluster,
++
++	TP_PROTO(struct btrfs_block_group_cache *block_group,
++		 struct btrfs_free_cluster *cluster, u64 size, int bitmap),
++
++	TP_ARGS(block_group, cluster, size, bitmap),
++
++	TP_STRUCT__entry(
++		__field(	u64,	bg_objectid		)
++		__field(	u64,	flags			)
++		__field(	u64,	start			)
++		__field(	u64,	max_size		)
++		__field(	u64,	size			)
++		__field(	int,	bitmap			)
++	),
++
++	TP_fast_assign(
++		__entry->bg_objectid	= block_group->key.objectid;
++		__entry->flags		= block_group->flags;
++		__entry->start		= cluster->window_start;
++		__entry->max_size	= cluster->max_size;
++		__entry->size		= size;
++		__entry->bitmap		= bitmap;
++	),
++
++	TP_printk("block_group = %Lu, flags = %Lu(%s), window_start = %Lu, "
++		  "size = %Lu, max_size = %Lu, bitmap = %d",
++		  __entry->bg_objectid,
++		  __entry->flags,
++		  __print_flags((unsigned long)__entry->flags, "|",
++				BTRFS_GROUP_FLAGS), __entry->start,
++		  __entry->size, __entry->max_size, __entry->bitmap)
++);
++
++struct extent_state;
++TRACE_EVENT(alloc_extent_state,
++
++	TP_PROTO(struct extent_state *state, gfp_t mask, unsigned long IP),
++
++	TP_ARGS(state, mask, IP),
++
++	TP_STRUCT__entry(
++		__field(struct extent_state *, state)
++		__field(gfp_t, mask)
++		__field(unsigned long, ip)
++	),
++
++	TP_fast_assign(
++		__entry->state	= state,
++		__entry->mask	= mask,
++		__entry->ip	= IP
++	),
++
++	TP_printk("state=%p; mask = %s; caller = %pF", __entry->state,
++		  show_gfp_flags(__entry->mask), (void *)__entry->ip)
++);
++
++TRACE_EVENT(free_extent_state,
++
++	TP_PROTO(struct extent_state *state, unsigned long IP),
++
++	TP_ARGS(state, IP),
++
++	TP_STRUCT__entry(
++		__field(struct extent_state *, state)
++		__field(unsigned long, ip)
++	),
++
++	TP_fast_assign(
++		__entry->state	= state,
++		__entry->ip = IP
++	),
++
++	TP_printk(" state=%p; caller = %pF", __entry->state,
++		  (void *)__entry->ip)
++);
++
++#endif /* _TRACE_BTRFS_H */
++
++/* This part must be outside protection */
++#include <trace/define_trace.h>
+diff --git a/instrumentation/events/mainline/compaction.h b/instrumentation/events/mainline/compaction.h
+new file mode 100644
+index 0000000..fde1b3e
+--- /dev/null
++++ b/instrumentation/events/mainline/compaction.h
+@@ -0,0 +1,74 @@
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM compaction
++
++#if !defined(_TRACE_COMPACTION_H) || defined(TRACE_HEADER_MULTI_READ)
++#define _TRACE_COMPACTION_H
++
 +#include <linux/types.h>
 +#include <linux/tracepoint.h>
-+#include <linux/mm.h>
-+#include <linux/memcontrol.h>
 +#include <trace/events/gfpflags.h>
-+#include <linux/version.h>
 +
-+#ifndef _TRACE_VMSCAN_DEF
-+#define _TRACE_VMSCAN_DEF
-+#define RECLAIM_WB_ANON		0x0001u
-+#define RECLAIM_WB_FILE		0x0002u
-+#define RECLAIM_WB_MIXED	0x0010u
-+#define RECLAIM_WB_SYNC		0x0004u /* Unused, all reclaim async */
-+#define RECLAIM_WB_ASYNC	0x0008u
++DECLARE_EVENT_CLASS(mm_compaction_isolate_template,
 +
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
-+#define show_reclaim_flags(flags)				\
-+	(flags) ? __print_flags(flags, "|",			\
-+		{RECLAIM_WB_ANON,	"RECLAIM_WB_ANON"},	\
-+		{RECLAIM_WB_FILE,	"RECLAIM_WB_FILE"},	\
-+		{RECLAIM_WB_MIXED,	"RECLAIM_WB_MIXED"},	\
-+		{RECLAIM_WB_SYNC,	"RECLAIM_WB_SYNC"},	\
-+		{RECLAIM_WB_ASYNC,	"RECLAIM_WB_ASYNC"}	\
-+		) : "RECLAIM_WB_NONE"
-+#else
-+#define show_reclaim_flags(flags)				\
-+	(flags) ? __print_flags(flags, "|",			\
-+		{RECLAIM_WB_ANON,	"RECLAIM_WB_ANON"},	\
-+		{RECLAIM_WB_FILE,	"RECLAIM_WB_FILE"},	\
-+		{RECLAIM_WB_SYNC,	"RECLAIM_WB_SYNC"},	\
-+		{RECLAIM_WB_ASYNC,	"RECLAIM_WB_ASYNC"}	\
-+		) : "RECLAIM_WB_NONE"
-+#endif
++	TP_PROTO(unsigned long nr_scanned,
++		unsigned long nr_taken),
 +
-+#if ((LINUX_VERSION_CODE <= KERNEL_VERSION(3,0,38)) || \
-+	LTTNG_KERNEL_RANGE(3,1,0, 3,2,0))
-+typedef int isolate_mode_t;
-+#endif
++	TP_ARGS(nr_scanned, nr_taken),
 +
-+#endif
-+
- TRACE_EVENT(mm_vmscan_kswapd_sleep,
- 
- 	TP_PROTO(int nid),
-@@ -147,6 +188,7 @@ DEFINE_EVENT(mm_vmscan_direct_reclaim_end_template, mm_vmscan_memcg_softlimit_re
- 	TP_ARGS(nr_reclaimed)
- )
- 
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,1,0))
- TRACE_EVENT(mm_shrink_slab_start,
- 	TP_PROTO(struct shrinker *shr, struct shrink_control *sc,
- 		long nr_objects_to_shrink, unsigned long pgs_scanned,
-@@ -224,6 +266,7 @@ TRACE_EVENT(mm_shrink_slab_end,
- 		__entry->total_scan,
- 		__entry->retval)
- )
-+#endif
- 
- DECLARE_EVENT_CLASS(mm_vmscan_lru_isolate_template,
- 
-@@ -231,30 +274,41 @@ DECLARE_EVENT_CLASS(mm_vmscan_lru_isolate_template,
- 		unsigned long nr_requested,
- 		unsigned long nr_scanned,
- 		unsigned long nr_taken,
-+#if (LINUX_VERSION_CODE < KERNEL_VERSION(3,5,0))
- 		unsigned long nr_lumpy_taken,
- 		unsigned long nr_lumpy_dirty,
- 		unsigned long nr_lumpy_failed,
-+#endif
- #if (LINUX_VERSION_CODE < KERNEL_VERSION(3,3,0))
--		isolate_mode_t isolate_mode),
-+		isolate_mode_t isolate_mode
- #else
- 		isolate_mode_t isolate_mode,
--		int file),
-+		int file
- #endif
-+	),
- 
-+	TP_ARGS(order, nr_requested, nr_scanned, nr_taken,
-+#if (LINUX_VERSION_CODE < KERNEL_VERSION(3,5,0))
-+		nr_lumpy_taken, nr_lumpy_dirty, nr_lumpy_failed,
-+#endif
- #if (LINUX_VERSION_CODE < KERNEL_VERSION(3,3,0))
--	TP_ARGS(order, nr_requested, nr_scanned, nr_taken, nr_lumpy_taken, nr_lumpy_dirty, nr_lumpy_failed, isolate_mode),
-+		isolate_mode
- #else
--	TP_ARGS(order, nr_requested, nr_scanned, nr_taken, nr_lumpy_taken, nr_lumpy_dirty, nr_lumpy_failed, isolate_mode, file),
-+		isolate_mode, file
- #endif
++	TP_STRUCT__entry(
++		__field(unsigned long, nr_scanned)
++		__field(unsigned long, nr_taken)
 +	),
 +
- 
- 	TP_STRUCT__entry(
- 		__field(int, order)
- 		__field(unsigned long, nr_requested)
- 		__field(unsigned long, nr_scanned)
- 		__field(unsigned long, nr_taken)
-+#if (LINUX_VERSION_CODE < KERNEL_VERSION(3,5,0))
- 		__field(unsigned long, nr_lumpy_taken)
- 		__field(unsigned long, nr_lumpy_dirty)
- 		__field(unsigned long, nr_lumpy_failed)
-+#endif
- 		__field(isolate_mode_t, isolate_mode)
- #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,3,0))
- 		__field(int, file)
-@@ -266,9 +320,11 @@ DECLARE_EVENT_CLASS(mm_vmscan_lru_isolate_template,
- 		tp_assign(nr_requested, nr_requested)
- 		tp_assign(nr_scanned, nr_scanned)
- 		tp_assign(nr_taken, nr_taken)
-+#if (LINUX_VERSION_CODE < KERNEL_VERSION(3,5,0))
- 		tp_assign(nr_lumpy_taken, nr_lumpy_taken)
- 		tp_assign(nr_lumpy_dirty, nr_lumpy_dirty)
- 		tp_assign(nr_lumpy_failed, nr_lumpy_failed)
-+#endif
- 		tp_assign(isolate_mode, isolate_mode)
- #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,3,0))
- 		tp_assign(file, file)
-@@ -277,9 +333,6 @@ DECLARE_EVENT_CLASS(mm_vmscan_lru_isolate_template,
- 
- #if (LINUX_VERSION_CODE < KERNEL_VERSION(3,3,0))
- 	TP_printk("isolate_mode=%d order=%d nr_requested=%lu nr_scanned=%lu nr_taken=%lu contig_taken=%lu contig_dirty=%lu contig_failed=%lu",
--#else
--	TP_printk("isolate_mode=%d order=%d nr_requested=%lu nr_scanned=%lu nr_taken=%lu contig_taken=%lu contig_dirty=%lu contig_failed=%lu file=%d",
--#endif
- 		__entry->isolate_mode,
- 		__entry->order,
- 		__entry->nr_requested,
-@@ -287,11 +340,26 @@ DECLARE_EVENT_CLASS(mm_vmscan_lru_isolate_template,
- 		__entry->nr_taken,
- 		__entry->nr_lumpy_taken,
- 		__entry->nr_lumpy_dirty,
--#if (LINUX_VERSION_CODE < KERNEL_VERSION(3,3,0))
- 		__entry->nr_lumpy_failed)
--#else
-+#elif (LINUX_VERSION_CODE < KERNEL_VERSION(3,5,0))
-+	TP_printk("isolate_mode=%d order=%d nr_requested=%lu nr_scanned=%lu nr_taken=%lu contig_taken=%lu contig_dirty=%lu contig_failed=%lu file=%d",
-+		__entry->isolate_mode,
-+		__entry->order,
-+		__entry->nr_requested,
++	TP_fast_assign(
++		__entry->nr_scanned = nr_scanned;
++		__entry->nr_taken = nr_taken;
++	),
++
++	TP_printk("nr_scanned=%lu nr_taken=%lu",
 +		__entry->nr_scanned,
-+		__entry->nr_taken,
-+		__entry->nr_lumpy_taken,
-+		__entry->nr_lumpy_dirty,
- 		__entry->nr_lumpy_failed,
- 		__entry->file)
-+#else
-+	TP_printk("isolate_mode=%d order=%d nr_requested=%lu nr_scanned=%lu nr_taken=%lu file=%d",
-+		__entry->isolate_mode,
-+		__entry->order,
-+		__entry->nr_requested,
-+		__entry->nr_scanned,
-+		__entry->nr_taken,
-+		__entry->file)
- #endif
- )
- 
-@@ -307,19 +375,23 @@ DEFINE_EVENT(mm_vmscan_lru_isolate_template, mm_vmscan_lru_isolate,
- 		unsigned long nr_lumpy_failed,
- #endif
- #if (LINUX_VERSION_CODE < KERNEL_VERSION(3,3,0))
--		isolate_mode_t isolate_mode),
-+		isolate_mode_t isolate_mode
- #else
- 		isolate_mode_t isolate_mode,
--		int file),
-+		int file
- #endif
-+	),
- 
-+	TP_ARGS(order, nr_requested, nr_scanned, nr_taken,
-+#if (LINUX_VERSION_CODE < KERNEL_VERSION(3,5,0))
-+		nr_lumpy_taken, nr_lumpy_dirty, nr_lumpy_failed,
-+#endif
- #if (LINUX_VERSION_CODE < KERNEL_VERSION(3,3,0))
--	TP_ARGS(order, nr_requested, nr_scanned, nr_taken, nr_lumpy_taken, nr_lumpy_dirty, nr_lumpy_failed, isolate_mode)
--#elif (LINUX_VERSION_CODE < KERNEL_VERSION(3,5,0))
--	TP_ARGS(order, nr_requested, nr_scanned, nr_taken, nr_lumpy_taken, nr_lumpy_dirty, nr_lumpy_failed, isolate_mode, file)
-+		isolate_mode
- #else
--	TP_ARGS(order, nr_requested, nr_scanned, nr_taken, isolate_mode, file)
-+		isolate_mode, file
- #endif
-+	)
- 
- )
- 
-@@ -335,20 +407,23 @@ DEFINE_EVENT(mm_vmscan_lru_isolate_template, mm_vmscan_memcg_isolate,
- 		unsigned long nr_lumpy_failed,
- #endif
- #if (LINUX_VERSION_CODE < KERNEL_VERSION(3,3,0))
--		isolate_mode_t isolate_mode),
-+		isolate_mode_t isolate_mode
- #else
- 		isolate_mode_t isolate_mode,
--		int file),
-+		int file
- #endif
-+	),
- 
-+	TP_ARGS(order, nr_requested, nr_scanned, nr_taken,
-+#if (LINUX_VERSION_CODE < KERNEL_VERSION(3,5,0))
-+		nr_lumpy_taken, nr_lumpy_dirty, nr_lumpy_failed,
-+#endif
- #if (LINUX_VERSION_CODE < KERNEL_VERSION(3,3,0))
--	TP_ARGS(order, nr_requested, nr_scanned, nr_taken, nr_lumpy_taken, nr_lumpy_dirty, nr_lumpy_failed, isolate_mode)
--#elif (LINUX_VERSION_CODE < KERNEL_VERSION(3,5,0))
--	TP_ARGS(order, nr_requested, nr_scanned, nr_taken, nr_lumpy_taken, nr_lumpy_dirty, nr_lumpy_failed, isolate_mode, file)
-+		isolate_mode
- #else
--	TP_ARGS(order, nr_requested, nr_scanned, nr_taken, isolate_mode, file)
-+		isolate_mode, file
- #endif
--
-+	)
- )
- 
- TRACE_EVENT(mm_vmscan_writepage,
-@@ -374,6 +449,7 @@ TRACE_EVENT(mm_vmscan_writepage,
- 		show_reclaim_flags(__entry->reclaim_flags))
- )
- 
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
- TRACE_EVENT(mm_vmscan_lru_shrink_inactive,
- 
- 	TP_PROTO(int nid, int zid,
-@@ -406,9 +482,9 @@ TRACE_EVENT(mm_vmscan_lru_shrink_inactive,
- 		__entry->priority,
- 		show_reclaim_flags(__entry->reclaim_flags))
- )
-+#endif
- 
- #if (LINUX_VERSION_CODE < KERNEL_VERSION(3,5,0))
--
- TRACE_EVENT(replace_swap_token,
- 	TP_PROTO(struct mm_struct *old_mm,
- 		 struct mm_struct *new_mm),
-@@ -490,7 +566,6 @@ TRACE_EVENT_CONDITION(update_swap_token_priority,
- 		  __entry->mm, __entry->old_prio, __entry->new_prio,
- 		  __entry->swap_token_mm, __entry->swap_token_prio)
- )
--
- #endif
- 
- #endif /* _TRACE_VMSCAN_H */
-diff --git a/instrumentation/events/mainline/asoc.h b/instrumentation/events/mainline/asoc.h
-index ab26f8a..5fc2dcd 100644
---- a/instrumentation/events/mainline/asoc.h
-+++ b/instrumentation/events/mainline/asoc.h
-@@ -7,6 +7,8 @@
- #include <linux/ktime.h>
- #include <linux/tracepoint.h>
- 
-+#define DAPM_DIRECT "(direct)"
++		__entry->nr_taken)
++);
 +
- struct snd_soc_jack;
- struct snd_soc_codec;
- struct snd_soc_platform;
-@@ -241,6 +243,84 @@ TRACE_EVENT(snd_soc_dapm_walk_done,
- 		  (int)__entry->path_checks, (int)__entry->neighbour_checks)
- );
- 
-+TRACE_EVENT(snd_soc_dapm_output_path,
++DEFINE_EVENT(mm_compaction_isolate_template, mm_compaction_isolate_migratepages,
 +
-+	TP_PROTO(struct snd_soc_dapm_widget *widget,
-+		struct snd_soc_dapm_path *path),
++	TP_PROTO(unsigned long nr_scanned,
++		unsigned long nr_taken),
 +
-+	TP_ARGS(widget, path),
++	TP_ARGS(nr_scanned, nr_taken)
++);
++
++DEFINE_EVENT(mm_compaction_isolate_template, mm_compaction_isolate_freepages,
++	TP_PROTO(unsigned long nr_scanned,
++		unsigned long nr_taken),
++
++	TP_ARGS(nr_scanned, nr_taken)
++);
++
++TRACE_EVENT(mm_compaction_migratepages,
++
++	TP_PROTO(unsigned long nr_migrated,
++		unsigned long nr_failed),
++
++	TP_ARGS(nr_migrated, nr_failed),
 +
 +	TP_STRUCT__entry(
-+		__string(	wname,	widget->name		)
-+		__string(	pname,	path->name ? path->name : DAPM_DIRECT)
-+		__string(	psname,	path->sink->name	)
-+		__field(	int,	path_sink		)
-+		__field(	int,	path_connect		)
++		__field(unsigned long, nr_migrated)
++		__field(unsigned long, nr_failed)
 +	),
 +
 +	TP_fast_assign(
-+		__assign_str(wname, widget->name);
-+		__assign_str(pname, path->name ? path->name : DAPM_DIRECT);
-+		__assign_str(psname, path->sink->name);
-+		__entry->path_connect = path->connect;
-+		__entry->path_sink = (long)path->sink;
++		__entry->nr_migrated = nr_migrated;
++		__entry->nr_failed = nr_failed;
 +	),
 +
-+	TP_printk("%c%s -> %s -> %s\n",
-+		(int) __entry->path_sink &&
-+		(int) __entry->path_connect ? '*' : ' ',
-+		__get_str(wname), __get_str(pname), __get_str(psname))
++	TP_printk("nr_migrated=%lu nr_failed=%lu",
++		__entry->nr_migrated,
++		__entry->nr_failed)
 +);
 +
-+TRACE_EVENT(snd_soc_dapm_input_path,
 +
-+	TP_PROTO(struct snd_soc_dapm_widget *widget,
-+		struct snd_soc_dapm_path *path),
++#endif /* _TRACE_COMPACTION_H */
 +
-+	TP_ARGS(widget, path),
++/* This part must be outside protection */
++#include <trace/define_trace.h>
+diff --git a/instrumentation/events/mainline/ext4.h b/instrumentation/events/mainline/ext4.h
+new file mode 100644
+index 0000000..d49b285
+--- /dev/null
++++ b/instrumentation/events/mainline/ext4.h
+@@ -0,0 +1,2061 @@
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM ext4
++
++#if !defined(_TRACE_EXT4_H) || defined(TRACE_HEADER_MULTI_READ)
++#define _TRACE_EXT4_H
++
++#include <linux/writeback.h>
++#include <linux/tracepoint.h>
++
++struct ext4_allocation_context;
++struct ext4_allocation_request;
++struct ext4_extent;
++struct ext4_prealloc_space;
++struct ext4_inode_info;
++struct mpage_da_data;
++struct ext4_map_blocks;
++struct ext4_extent;
++
++#define EXT4_I(inode) (container_of(inode, struct ext4_inode_info, vfs_inode))
++
++TRACE_EVENT(ext4_free_inode,
++	TP_PROTO(struct inode *inode),
++
++	TP_ARGS(inode),
 +
 +	TP_STRUCT__entry(
-+		__string(	wname,	widget->name		)
-+		__string(	pname,	path->name ? path->name : DAPM_DIRECT)
-+		__string(	psname,	path->source->name	)
-+		__field(	int,	path_source		)
-+		__field(	int,	path_connect		)
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	uid_t,	uid			)
++		__field(	gid_t,	gid			)
++		__field(	__u64, blocks			)
++		__field(	__u16, mode			)
 +	),
 +
 +	TP_fast_assign(
-+		__assign_str(wname, widget->name);
-+		__assign_str(pname, path->name ? path->name : DAPM_DIRECT);
-+		__assign_str(psname, path->source->name);
-+		__entry->path_connect = path->connect;
-+		__entry->path_source = (long)path->source;
-+	),
-+
-+	TP_printk("%c%s <- %s <- %s\n",
-+		(int) __entry->path_source &&
-+		(int) __entry->path_connect ? '*' : ' ',
-+		__get_str(wname), __get_str(pname), __get_str(psname))
-+);
-+
-+TRACE_EVENT(snd_soc_dapm_connected,
-+
-+	TP_PROTO(int paths, int stream),
-+
-+	TP_ARGS(paths, stream),
-+
-+	TP_STRUCT__entry(
-+		__field(	int,	paths		)
-+		__field(	int,	stream		)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->paths = paths;
-+		__entry->stream = stream;
-+	),
-+
-+	TP_printk("%s: found %d paths\n",
-+		__entry->stream ? "capture" : "playback", __entry->paths)
-+);
-+
- TRACE_EVENT(snd_soc_jack_irq,
- 
- 	TP_PROTO(const char *name),
-diff --git a/instrumentation/events/mainline/block.h b/instrumentation/events/mainline/block.h
-index bf36654..05c5e61 100644
---- a/instrumentation/events/mainline/block.h
-+++ b/instrumentation/events/mainline/block.h
-@@ -8,6 +8,8 @@
- #include <linux/blkdev.h>
- #include <linux/tracepoint.h>
- 
-+#define RWBS_LEN	8
-+
- DECLARE_EVENT_CLASS(block_rq_with_error,
- 
- 	TP_PROTO(struct request_queue *q, struct request *rq),
-@@ -19,7 +21,7 @@ DECLARE_EVENT_CLASS(block_rq_with_error,
- 		__field(  sector_t,	sector			)
- 		__field(  unsigned int,	nr_sector		)
- 		__field(  int,		errors			)
--		__array(  char,		rwbs,	6		)
-+		__array(  char,		rwbs,	RWBS_LEN	)
- 		__dynamic_array( char,	cmd,	blk_cmd_buf_len(rq)	)
- 	),
- 
-@@ -104,7 +106,7 @@ DECLARE_EVENT_CLASS(block_rq,
- 		__field(  sector_t,	sector			)
- 		__field(  unsigned int,	nr_sector		)
- 		__field(  unsigned int,	bytes			)
--		__array(  char,		rwbs,	6		)
-+		__array(  char,		rwbs,	RWBS_LEN	)
- 		__array(  char,         comm,   TASK_COMM_LEN   )
- 		__dynamic_array( char,	cmd,	blk_cmd_buf_len(rq)	)
- 	),
-@@ -183,7 +185,7 @@ TRACE_EVENT(block_bio_bounce,
- 		__field( dev_t,		dev			)
- 		__field( sector_t,	sector			)
- 		__field( unsigned int,	nr_sector		)
--		__array( char,		rwbs,	6		)
-+		__array( char,		rwbs,	RWBS_LEN	)
- 		__array( char,		comm,	TASK_COMM_LEN	)
- 	),
- 
-@@ -222,7 +224,7 @@ TRACE_EVENT(block_bio_complete,
- 		__field( sector_t,	sector		)
- 		__field( unsigned,	nr_sector	)
- 		__field( int,		error		)
--		__array( char,		rwbs,	6	)
-+		__array( char,		rwbs,	RWBS_LEN)
- 	),
- 
- 	TP_fast_assign(
-@@ -249,7 +251,7 @@ DECLARE_EVENT_CLASS(block_bio,
- 		__field( dev_t,		dev			)
- 		__field( sector_t,	sector			)
- 		__field( unsigned int,	nr_sector		)
--		__array( char,		rwbs,	6		)
-+		__array( char,		rwbs,	RWBS_LEN	)
- 		__array( char,		comm,	TASK_COMM_LEN	)
- 	),
- 
-@@ -321,7 +323,7 @@ DECLARE_EVENT_CLASS(block_get_rq,
- 		__field( dev_t,		dev			)
- 		__field( sector_t,	sector			)
- 		__field( unsigned int,	nr_sector		)
--		__array( char,		rwbs,	6		)
-+		__array( char,		rwbs,	RWBS_LEN	)
- 		__array( char,		comm,	TASK_COMM_LEN	)
-         ),
- 
-@@ -456,7 +458,7 @@ TRACE_EVENT(block_split,
- 		__field( dev_t,		dev				)
- 		__field( sector_t,	sector				)
- 		__field( sector_t,	new_sector			)
--		__array( char,		rwbs,		6		)
-+		__array( char,		rwbs,		RWBS_LEN	)
- 		__array( char,		comm,		TASK_COMM_LEN	)
- 	),
- 
-@@ -498,7 +500,7 @@ TRACE_EVENT(block_bio_remap,
- 		__field( unsigned int,	nr_sector	)
- 		__field( dev_t,		old_dev		)
- 		__field( sector_t,	old_sector	)
--		__array( char,		rwbs,	6	)
-+		__array( char,		rwbs,	RWBS_LEN)
- 	),
- 
- 	TP_fast_assign(
-@@ -542,7 +544,7 @@ TRACE_EVENT(block_rq_remap,
- 		__field( unsigned int,	nr_sector	)
- 		__field( dev_t,		old_dev		)
- 		__field( sector_t,	old_sector	)
--		__array( char,		rwbs,	6	)
-+		__array( char,		rwbs,	RWBS_LEN)
- 	),
- 
- 	TP_fast_assign(
-diff --git a/instrumentation/events/mainline/ext3.h b/instrumentation/events/mainline/ext3.h
-index 7b53c05..15d11a3 100644
---- a/instrumentation/events/mainline/ext3.h
-+++ b/instrumentation/events/mainline/ext3.h
-@@ -24,8 +24,8 @@ TRACE_EVENT(ext3_free_inode,
- 		__entry->dev	= inode->i_sb->s_dev;
- 		__entry->ino	= inode->i_ino;
- 		__entry->mode	= inode->i_mode;
--		__entry->uid	= inode->i_uid;
--		__entry->gid	= inode->i_gid;
++		__entry->dev	= inode->i_sb->s_dev;
++		__entry->ino	= inode->i_ino;
 +		__entry->uid	= i_uid_read(inode);
 +		__entry->gid	= i_gid_read(inode);
- 		__entry->blocks	= inode->i_blocks;
- 	),
- 
-diff --git a/instrumentation/events/mainline/fs_ext3.h b/instrumentation/events/mainline/fs_ext3.h
-deleted file mode 100644
-index 76353e4..0000000
---- a/instrumentation/events/mainline/fs_ext3.h
-+++ /dev/null
-@@ -1,1323 +0,0 @@
--/*
-- * Written by Stephen C. Tweedie <sct@redhat.com>, 1999
-- *
-- * Copyright 1998--1999 Red Hat corp --- All Rights Reserved
-- *
-- * This file is part of the Linux kernel and is made available under
-- * the terms of the GNU General Public License, version 2, or at your
-- * option, any later version, incorporated herein by reference.
-- *
-- * Copyright (C) 1992, 1993, 1994, 1995
-- * Remy Card (card@masi.ibp.fr)
-- * Laboratoire MASI - Institut Blaise Pascal
-- * Universite Pierre et Marie Curie (Paris VI)
-- *
-- *  from
-- *
-- *  linux/include/linux/minix_fs.h
-- *
-- *  Copyright (C) 1991, 1992  Linus Torvalds
-- */
--
--#include <linux/fs.h>
--#include <linux/jbd.h>
--#include <linux/magic.h>
--#include <linux/bug.h>
--#include <linux/blockgroup_lock.h>
--
--/*
-- * The second extended filesystem constants/structures
-- */
--
--/*
-- * Define EXT3FS_DEBUG to produce debug messages
-- */
--#undef EXT3FS_DEBUG
--
--/*
-- * Define EXT3_RESERVATION to reserve data blocks for expanding files
-- */
--#define EXT3_DEFAULT_RESERVE_BLOCKS     8
--/*max window size: 1024(direct blocks) + 3([t,d]indirect blocks) */
--#define EXT3_MAX_RESERVE_BLOCKS         1027
--#define EXT3_RESERVE_WINDOW_NOT_ALLOCATED 0
--
--/*
-- * Debug code
-- */
--#ifdef EXT3FS_DEBUG
--#define ext3_debug(f, a...)						\
--	do {								\
--		printk (KERN_DEBUG "EXT3-fs DEBUG (%s, %d): %s:",	\
--			__FILE__, __LINE__, __func__);		\
--		printk (KERN_DEBUG f, ## a);				\
--	} while (0)
--#else
--#define ext3_debug(f, a...)	do {} while (0)
--#endif
--
--/*
-- * Special inodes numbers
-- */
--#define	EXT3_BAD_INO		 1	/* Bad blocks inode */
--#define EXT3_ROOT_INO		 2	/* Root inode */
--#define EXT3_BOOT_LOADER_INO	 5	/* Boot loader inode */
--#define EXT3_UNDEL_DIR_INO	 6	/* Undelete directory inode */
--#define EXT3_RESIZE_INO		 7	/* Reserved group descriptors inode */
--#define EXT3_JOURNAL_INO	 8	/* Journal inode */
--
--/* First non-reserved inode for old ext3 filesystems */
--#define EXT3_GOOD_OLD_FIRST_INO	11
--
--/*
-- * Maximal count of links to a file
-- */
--#define EXT3_LINK_MAX		32000
--
--/*
-- * Macro-instructions used to manage several block sizes
-- */
--#define EXT3_MIN_BLOCK_SIZE		1024
--#define	EXT3_MAX_BLOCK_SIZE		65536
--#define EXT3_MIN_BLOCK_LOG_SIZE		10
--#define EXT3_BLOCK_SIZE(s)		((s)->s_blocksize)
--#define	EXT3_ADDR_PER_BLOCK(s)		(EXT3_BLOCK_SIZE(s) / sizeof (__u32))
--#define EXT3_BLOCK_SIZE_BITS(s)	((s)->s_blocksize_bits)
--#define	EXT3_ADDR_PER_BLOCK_BITS(s)	(EXT3_SB(s)->s_addr_per_block_bits)
--#define EXT3_INODE_SIZE(s)		(EXT3_SB(s)->s_inode_size)
--#define EXT3_FIRST_INO(s)		(EXT3_SB(s)->s_first_ino)
--
--/*
-- * Macro-instructions used to manage fragments
-- */
--#define EXT3_MIN_FRAG_SIZE		1024
--#define	EXT3_MAX_FRAG_SIZE		4096
--#define EXT3_MIN_FRAG_LOG_SIZE		  10
--#define EXT3_FRAG_SIZE(s)		(EXT3_SB(s)->s_frag_size)
--#define EXT3_FRAGS_PER_BLOCK(s)		(EXT3_SB(s)->s_frags_per_block)
--
--/*
-- * Structure of a blocks group descriptor
-- */
--struct ext3_group_desc
--{
--	__le32	bg_block_bitmap;		/* Blocks bitmap block */
--	__le32	bg_inode_bitmap;		/* Inodes bitmap block */
--	__le32	bg_inode_table;		/* Inodes table block */
--	__le16	bg_free_blocks_count;	/* Free blocks count */
--	__le16	bg_free_inodes_count;	/* Free inodes count */
--	__le16	bg_used_dirs_count;	/* Directories count */
--	__u16	bg_pad;
--	__le32	bg_reserved[3];
--};
--
--/*
-- * Macro-instructions used to manage group descriptors
-- */
--#define EXT3_BLOCKS_PER_GROUP(s)	(EXT3_SB(s)->s_blocks_per_group)
--#define EXT3_DESC_PER_BLOCK(s)		(EXT3_SB(s)->s_desc_per_block)
--#define EXT3_INODES_PER_GROUP(s)	(EXT3_SB(s)->s_inodes_per_group)
--#define EXT3_DESC_PER_BLOCK_BITS(s)	(EXT3_SB(s)->s_desc_per_block_bits)
--
--/*
-- * Constants relative to the data blocks
-- */
--#define	EXT3_NDIR_BLOCKS		12
--#define	EXT3_IND_BLOCK			EXT3_NDIR_BLOCKS
--#define	EXT3_DIND_BLOCK			(EXT3_IND_BLOCK + 1)
--#define	EXT3_TIND_BLOCK			(EXT3_DIND_BLOCK + 1)
--#define	EXT3_N_BLOCKS			(EXT3_TIND_BLOCK + 1)
--
--/*
-- * Inode flags
-- */
--#define	EXT3_SECRM_FL			0x00000001 /* Secure deletion */
--#define	EXT3_UNRM_FL			0x00000002 /* Undelete */
--#define	EXT3_COMPR_FL			0x00000004 /* Compress file */
--#define EXT3_SYNC_FL			0x00000008 /* Synchronous updates */
--#define EXT3_IMMUTABLE_FL		0x00000010 /* Immutable file */
--#define EXT3_APPEND_FL			0x00000020 /* writes to file may only append */
--#define EXT3_NODUMP_FL			0x00000040 /* do not dump file */
--#define EXT3_NOATIME_FL			0x00000080 /* do not update atime */
--/* Reserved for compression usage... */
--#define EXT3_DIRTY_FL			0x00000100
--#define EXT3_COMPRBLK_FL		0x00000200 /* One or more compressed clusters */
--#define EXT3_NOCOMPR_FL			0x00000400 /* Don't compress */
--#define EXT3_ECOMPR_FL			0x00000800 /* Compression error */
--/* End compression flags --- maybe not all used */
--#define EXT3_INDEX_FL			0x00001000 /* hash-indexed directory */
--#define EXT3_IMAGIC_FL			0x00002000 /* AFS directory */
--#define EXT3_JOURNAL_DATA_FL		0x00004000 /* file data should be journaled */
--#define EXT3_NOTAIL_FL			0x00008000 /* file tail should not be merged */
--#define EXT3_DIRSYNC_FL			0x00010000 /* dirsync behaviour (directories only) */
--#define EXT3_TOPDIR_FL			0x00020000 /* Top of directory hierarchies*/
--#define EXT3_RESERVED_FL		0x80000000 /* reserved for ext3 lib */
--
--#define EXT3_FL_USER_VISIBLE		0x0003DFFF /* User visible flags */
--#define EXT3_FL_USER_MODIFIABLE		0x000380FF /* User modifiable flags */
--
--/* Flags that should be inherited by new inodes from their parent. */
--#define EXT3_FL_INHERITED (EXT3_SECRM_FL | EXT3_UNRM_FL | EXT3_COMPR_FL |\
--			   EXT3_SYNC_FL | EXT3_NODUMP_FL |\
--			   EXT3_NOATIME_FL | EXT3_COMPRBLK_FL |\
--			   EXT3_NOCOMPR_FL | EXT3_JOURNAL_DATA_FL |\
--			   EXT3_NOTAIL_FL | EXT3_DIRSYNC_FL)
--
--/* Flags that are appropriate for regular files (all but dir-specific ones). */
--#define EXT3_REG_FLMASK (~(EXT3_DIRSYNC_FL | EXT3_TOPDIR_FL))
--
--/* Flags that are appropriate for non-directories/regular files. */
--#define EXT3_OTHER_FLMASK (EXT3_NODUMP_FL | EXT3_NOATIME_FL)
--
--/* Mask out flags that are inappropriate for the given type of inode. */
--static inline __u32 ext3_mask_flags(umode_t mode, __u32 flags)
--{
--	if (S_ISDIR(mode))
--		return flags;
--	else if (S_ISREG(mode))
--		return flags & EXT3_REG_FLMASK;
--	else
--		return flags & EXT3_OTHER_FLMASK;
--}
--
--/* Used to pass group descriptor data when online resize is done */
--struct ext3_new_group_input {
--	__u32 group;            /* Group number for this data */
--	__u32 block_bitmap;     /* Absolute block number of block bitmap */
--	__u32 inode_bitmap;     /* Absolute block number of inode bitmap */
--	__u32 inode_table;      /* Absolute block number of inode table start */
--	__u32 blocks_count;     /* Total number of blocks in this group */
--	__u16 reserved_blocks;  /* Number of reserved blocks in this group */
--	__u16 unused;
--};
--
--/* The struct ext3_new_group_input in kernel space, with free_blocks_count */
--struct ext3_new_group_data {
--	__u32 group;
--	__u32 block_bitmap;
--	__u32 inode_bitmap;
--	__u32 inode_table;
--	__u32 blocks_count;
--	__u16 reserved_blocks;
--	__u16 unused;
--	__u32 free_blocks_count;
--};
--
--
--/*
-- * ioctl commands
-- */
--#define	EXT3_IOC_GETFLAGS		FS_IOC_GETFLAGS
--#define	EXT3_IOC_SETFLAGS		FS_IOC_SETFLAGS
--#define	EXT3_IOC_GETVERSION		_IOR('f', 3, long)
--#define	EXT3_IOC_SETVERSION		_IOW('f', 4, long)
--#define EXT3_IOC_GROUP_EXTEND		_IOW('f', 7, unsigned long)
--#define EXT3_IOC_GROUP_ADD		_IOW('f', 8,struct ext3_new_group_input)
--#define	EXT3_IOC_GETVERSION_OLD		FS_IOC_GETVERSION
--#define	EXT3_IOC_SETVERSION_OLD		FS_IOC_SETVERSION
--#ifdef CONFIG_JBD_DEBUG
--#define EXT3_IOC_WAIT_FOR_READONLY	_IOR('f', 99, long)
--#endif
--#define EXT3_IOC_GETRSVSZ		_IOR('f', 5, long)
--#define EXT3_IOC_SETRSVSZ		_IOW('f', 6, long)
--
--/*
-- * ioctl commands in 32 bit emulation
-- */
--#define EXT3_IOC32_GETFLAGS		FS_IOC32_GETFLAGS
--#define EXT3_IOC32_SETFLAGS		FS_IOC32_SETFLAGS
--#define EXT3_IOC32_GETVERSION		_IOR('f', 3, int)
--#define EXT3_IOC32_SETVERSION		_IOW('f', 4, int)
--#define EXT3_IOC32_GETRSVSZ		_IOR('f', 5, int)
--#define EXT3_IOC32_SETRSVSZ		_IOW('f', 6, int)
--#define EXT3_IOC32_GROUP_EXTEND		_IOW('f', 7, unsigned int)
--#ifdef CONFIG_JBD_DEBUG
--#define EXT3_IOC32_WAIT_FOR_READONLY	_IOR('f', 99, int)
--#endif
--#define EXT3_IOC32_GETVERSION_OLD	FS_IOC32_GETVERSION
--#define EXT3_IOC32_SETVERSION_OLD	FS_IOC32_SETVERSION
--
--
--/*
-- *  Mount options
-- */
--struct ext3_mount_options {
--	unsigned long s_mount_opt;
--	uid_t s_resuid;
--	gid_t s_resgid;
--	unsigned long s_commit_interval;
--#ifdef CONFIG_QUOTA
--	int s_jquota_fmt;
--	char *s_qf_names[MAXQUOTAS];
--#endif
--};
--
--/*
-- * Structure of an inode on the disk
-- */
--struct ext3_inode {
--	__le16	i_mode;		/* File mode */
--	__le16	i_uid;		/* Low 16 bits of Owner Uid */
--	__le32	i_size;		/* Size in bytes */
--	__le32	i_atime;	/* Access time */
--	__le32	i_ctime;	/* Creation time */
--	__le32	i_mtime;	/* Modification time */
--	__le32	i_dtime;	/* Deletion Time */
--	__le16	i_gid;		/* Low 16 bits of Group Id */
--	__le16	i_links_count;	/* Links count */
--	__le32	i_blocks;	/* Blocks count */
--	__le32	i_flags;	/* File flags */
--	union {
--		struct {
--			__u32  l_i_reserved1;
--		} linux1;
--		struct {
--			__u32  h_i_translator;
--		} hurd1;
--		struct {
--			__u32  m_i_reserved1;
--		} masix1;
--	} osd1;				/* OS dependent 1 */
--	__le32	i_block[EXT3_N_BLOCKS];/* Pointers to blocks */
--	__le32	i_generation;	/* File version (for NFS) */
--	__le32	i_file_acl;	/* File ACL */
--	__le32	i_dir_acl;	/* Directory ACL */
--	__le32	i_faddr;	/* Fragment address */
--	union {
--		struct {
--			__u8	l_i_frag;	/* Fragment number */
--			__u8	l_i_fsize;	/* Fragment size */
--			__u16	i_pad1;
--			__le16	l_i_uid_high;	/* these 2 fields    */
--			__le16	l_i_gid_high;	/* were reserved2[0] */
--			__u32	l_i_reserved2;
--		} linux2;
--		struct {
--			__u8	h_i_frag;	/* Fragment number */
--			__u8	h_i_fsize;	/* Fragment size */
--			__u16	h_i_mode_high;
--			__u16	h_i_uid_high;
--			__u16	h_i_gid_high;
--			__u32	h_i_author;
--		} hurd2;
--		struct {
--			__u8	m_i_frag;	/* Fragment number */
--			__u8	m_i_fsize;	/* Fragment size */
--			__u16	m_pad1;
--			__u32	m_i_reserved2[2];
--		} masix2;
--	} osd2;				/* OS dependent 2 */
--	__le16	i_extra_isize;
--	__le16	i_pad1;
--};
--
--#define i_size_high	i_dir_acl
--
--#define i_reserved1	osd1.linux1.l_i_reserved1
--#define i_frag		osd2.linux2.l_i_frag
--#define i_fsize		osd2.linux2.l_i_fsize
--#define i_uid_low	i_uid
--#define i_gid_low	i_gid
--#define i_uid_high	osd2.linux2.l_i_uid_high
--#define i_gid_high	osd2.linux2.l_i_gid_high
--#define i_reserved2	osd2.linux2.l_i_reserved2
--
--/*
-- * File system states
-- */
--#define	EXT3_VALID_FS			0x0001	/* Unmounted cleanly */
--#define	EXT3_ERROR_FS			0x0002	/* Errors detected */
--#define	EXT3_ORPHAN_FS			0x0004	/* Orphans being recovered */
--
--/*
-- * Misc. filesystem flags
-- */
--#define EXT2_FLAGS_SIGNED_HASH		0x0001  /* Signed dirhash in use */
--#define EXT2_FLAGS_UNSIGNED_HASH	0x0002  /* Unsigned dirhash in use */
--#define EXT2_FLAGS_TEST_FILESYS		0x0004	/* to test development code */
--
--/*
-- * Mount flags
-- */
--#define EXT3_MOUNT_CHECK		0x00001	/* Do mount-time checks */
--/* EXT3_MOUNT_OLDALLOC was there */
--#define EXT3_MOUNT_GRPID		0x00004	/* Create files with directory's group */
--#define EXT3_MOUNT_DEBUG		0x00008	/* Some debugging messages */
--#define EXT3_MOUNT_ERRORS_CONT		0x00010	/* Continue on errors */
--#define EXT3_MOUNT_ERRORS_RO		0x00020	/* Remount fs ro on errors */
--#define EXT3_MOUNT_ERRORS_PANIC		0x00040	/* Panic on errors */
--#define EXT3_MOUNT_MINIX_DF		0x00080	/* Mimics the Minix statfs */
--#define EXT3_MOUNT_NOLOAD		0x00100	/* Don't use existing journal*/
--#define EXT3_MOUNT_ABORT		0x00200	/* Fatal error detected */
--#define EXT3_MOUNT_DATA_FLAGS		0x00C00	/* Mode for data writes: */
--#define EXT3_MOUNT_JOURNAL_DATA		0x00400	/* Write data to journal */
--#define EXT3_MOUNT_ORDERED_DATA		0x00800	/* Flush data before commit */
--#define EXT3_MOUNT_WRITEBACK_DATA	0x00C00	/* No data ordering */
--#define EXT3_MOUNT_UPDATE_JOURNAL	0x01000	/* Update the journal format */
--#define EXT3_MOUNT_NO_UID32		0x02000  /* Disable 32-bit UIDs */
--#define EXT3_MOUNT_XATTR_USER		0x04000	/* Extended user attributes */
--#define EXT3_MOUNT_POSIX_ACL		0x08000	/* POSIX Access Control Lists */
--#define EXT3_MOUNT_RESERVATION		0x10000	/* Preallocation */
--#define EXT3_MOUNT_BARRIER		0x20000 /* Use block barriers */
--#define EXT3_MOUNT_QUOTA		0x80000 /* Some quota option set */
--#define EXT3_MOUNT_USRQUOTA		0x100000 /* "old" user quota */
--#define EXT3_MOUNT_GRPQUOTA		0x200000 /* "old" group quota */
--#define EXT3_MOUNT_DATA_ERR_ABORT	0x400000 /* Abort on file data write
--						  * error in ordered mode */
--
--/* Compatibility, for having both ext2_fs.h and ext3_fs.h included at once */
--#ifndef _LINUX_EXT2_FS_H
--#define clear_opt(o, opt)		o &= ~EXT3_MOUNT_##opt
--#define set_opt(o, opt)			o |= EXT3_MOUNT_##opt
--#define test_opt(sb, opt)		(EXT3_SB(sb)->s_mount_opt & \
--					 EXT3_MOUNT_##opt)
--#else
--#define EXT2_MOUNT_NOLOAD		EXT3_MOUNT_NOLOAD
--#define EXT2_MOUNT_ABORT		EXT3_MOUNT_ABORT
--#define EXT2_MOUNT_DATA_FLAGS		EXT3_MOUNT_DATA_FLAGS
--#endif
--
--#define ext3_set_bit			__set_bit_le
--#define ext3_set_bit_atomic		ext2_set_bit_atomic
--#define ext3_clear_bit			__clear_bit_le
--#define ext3_clear_bit_atomic		ext2_clear_bit_atomic
--#define ext3_test_bit			test_bit_le
--#define ext3_find_next_zero_bit		find_next_zero_bit_le
--
--/*
-- * Maximal mount counts between two filesystem checks
-- */
--#define EXT3_DFL_MAX_MNT_COUNT		20	/* Allow 20 mounts */
--#define EXT3_DFL_CHECKINTERVAL		0	/* Don't use interval check */
--
--/*
-- * Behaviour when detecting errors
-- */
--#define EXT3_ERRORS_CONTINUE		1	/* Continue execution */
--#define EXT3_ERRORS_RO			2	/* Remount fs read-only */
--#define EXT3_ERRORS_PANIC		3	/* Panic */
--#define EXT3_ERRORS_DEFAULT		EXT3_ERRORS_CONTINUE
--
--/*
-- * Structure of the super block
-- */
--struct ext3_super_block {
--/*00*/	__le32	s_inodes_count;		/* Inodes count */
--	__le32	s_blocks_count;		/* Blocks count */
--	__le32	s_r_blocks_count;	/* Reserved blocks count */
--	__le32	s_free_blocks_count;	/* Free blocks count */
--/*10*/	__le32	s_free_inodes_count;	/* Free inodes count */
--	__le32	s_first_data_block;	/* First Data Block */
--	__le32	s_log_block_size;	/* Block size */
--	__le32	s_log_frag_size;	/* Fragment size */
--/*20*/	__le32	s_blocks_per_group;	/* # Blocks per group */
--	__le32	s_frags_per_group;	/* # Fragments per group */
--	__le32	s_inodes_per_group;	/* # Inodes per group */
--	__le32	s_mtime;		/* Mount time */
--/*30*/	__le32	s_wtime;		/* Write time */
--	__le16	s_mnt_count;		/* Mount count */
--	__le16	s_max_mnt_count;	/* Maximal mount count */
--	__le16	s_magic;		/* Magic signature */
--	__le16	s_state;		/* File system state */
--	__le16	s_errors;		/* Behaviour when detecting errors */
--	__le16	s_minor_rev_level;	/* minor revision level */
--/*40*/	__le32	s_lastcheck;		/* time of last check */
--	__le32	s_checkinterval;	/* max. time between checks */
--	__le32	s_creator_os;		/* OS */
--	__le32	s_rev_level;		/* Revision level */
--/*50*/	__le16	s_def_resuid;		/* Default uid for reserved blocks */
--	__le16	s_def_resgid;		/* Default gid for reserved blocks */
--	/*
--	 * These fields are for EXT3_DYNAMIC_REV superblocks only.
--	 *
--	 * Note: the difference between the compatible feature set and
--	 * the incompatible feature set is that if there is a bit set
--	 * in the incompatible feature set that the kernel doesn't
--	 * know about, it should refuse to mount the filesystem.
--	 *
--	 * e2fsck's requirements are more strict; if it doesn't know
--	 * about a feature in either the compatible or incompatible
--	 * feature set, it must abort and not try to meddle with
--	 * things it doesn't understand...
--	 */
--	__le32	s_first_ino;		/* First non-reserved inode */
--	__le16   s_inode_size;		/* size of inode structure */
--	__le16	s_block_group_nr;	/* block group # of this superblock */
--	__le32	s_feature_compat;	/* compatible feature set */
--/*60*/	__le32	s_feature_incompat;	/* incompatible feature set */
--	__le32	s_feature_ro_compat;	/* readonly-compatible feature set */
--/*68*/	__u8	s_uuid[16];		/* 128-bit uuid for volume */
--/*78*/	char	s_volume_name[16];	/* volume name */
--/*88*/	char	s_last_mounted[64];	/* directory where last mounted */
--/*C8*/	__le32	s_algorithm_usage_bitmap; /* For compression */
--	/*
--	 * Performance hints.  Directory preallocation should only
--	 * happen if the EXT3_FEATURE_COMPAT_DIR_PREALLOC flag is on.
--	 */
--	__u8	s_prealloc_blocks;	/* Nr of blocks to try to preallocate*/
--	__u8	s_prealloc_dir_blocks;	/* Nr to preallocate for dirs */
--	__le16	s_reserved_gdt_blocks;	/* Per group desc for online growth */
--	/*
--	 * Journaling support valid if EXT3_FEATURE_COMPAT_HAS_JOURNAL set.
--	 */
--/*D0*/	__u8	s_journal_uuid[16];	/* uuid of journal superblock */
--/*E0*/	__le32	s_journal_inum;		/* inode number of journal file */
--	__le32	s_journal_dev;		/* device number of journal file */
--	__le32	s_last_orphan;		/* start of list of inodes to delete */
--	__le32	s_hash_seed[4];		/* HTREE hash seed */
--	__u8	s_def_hash_version;	/* Default hash version to use */
--	__u8	s_reserved_char_pad;
--	__u16	s_reserved_word_pad;
--	__le32	s_default_mount_opts;
--	__le32	s_first_meta_bg;	/* First metablock block group */
--	__le32	s_mkfs_time;		/* When the filesystem was created */
--	__le32	s_jnl_blocks[17];	/* Backup of the journal inode */
--	/* 64bit support valid if EXT4_FEATURE_COMPAT_64BIT */
--/*150*/	__le32	s_blocks_count_hi;	/* Blocks count */
--	__le32	s_r_blocks_count_hi;	/* Reserved blocks count */
--	__le32	s_free_blocks_count_hi;	/* Free blocks count */
--	__le16	s_min_extra_isize;	/* All inodes have at least # bytes */
--	__le16	s_want_extra_isize; 	/* New inodes should reserve # bytes */
--	__le32	s_flags;		/* Miscellaneous flags */
--	__le16  s_raid_stride;		/* RAID stride */
--	__le16  s_mmp_interval;         /* # seconds to wait in MMP checking */
--	__le64  s_mmp_block;            /* Block for multi-mount protection */
--	__le32  s_raid_stripe_width;    /* blocks on all data disks (N*stride)*/
--	__u8	s_log_groups_per_flex;  /* FLEX_BG group size */
--	__u8	s_reserved_char_pad2;
--	__le16  s_reserved_pad;
--	__u32   s_reserved[162];        /* Padding to the end of the block */
--};
--
--/* data type for block offset of block group */
--typedef int ext3_grpblk_t;
--
--/* data type for filesystem-wide blocks number */
--typedef unsigned long ext3_fsblk_t;
--
--#define E3FSBLK "%lu"
--
--struct ext3_reserve_window {
--	ext3_fsblk_t	_rsv_start;	/* First byte reserved */
--	ext3_fsblk_t	_rsv_end;	/* Last byte reserved or 0 */
--};
--
--struct ext3_reserve_window_node {
--	struct rb_node		rsv_node;
--	__u32			rsv_goal_size;
--	__u32			rsv_alloc_hit;
--	struct ext3_reserve_window	rsv_window;
--};
--
--struct ext3_block_alloc_info {
--	/* information about reservation window */
--	struct ext3_reserve_window_node	rsv_window_node;
--	/*
--	 * was i_next_alloc_block in ext3_inode_info
--	 * is the logical (file-relative) number of the
--	 * most-recently-allocated block in this file.
--	 * We use this for detecting linearly ascending allocation requests.
--	 */
--	__u32                   last_alloc_logical_block;
--	/*
--	 * Was i_next_alloc_goal in ext3_inode_info
--	 * is the *physical* companion to i_next_alloc_block.
--	 * it the physical block number of the block which was most-recentl
--	 * allocated to this file.  This give us the goal (target) for the next
--	 * allocation when we detect linearly ascending requests.
--	 */
--	ext3_fsblk_t		last_alloc_physical_block;
--};
--
--#define rsv_start rsv_window._rsv_start
--#define rsv_end rsv_window._rsv_end
--
--/*
-- * third extended file system inode data in memory
-- */
--struct ext3_inode_info {
--	__le32	i_data[15];	/* unconverted */
--	__u32	i_flags;
--#ifdef EXT3_FRAGMENTS
--	__u32	i_faddr;
--	__u8	i_frag_no;
--	__u8	i_frag_size;
--#endif
--	ext3_fsblk_t	i_file_acl;
--	__u32	i_dir_acl;
--	__u32	i_dtime;
--
--	/*
--	 * i_block_group is the number of the block group which contains
--	 * this file's inode.  Constant across the lifetime of the inode,
--	 * it is ued for making block allocation decisions - we try to
--	 * place a file's data blocks near its inode block, and new inodes
--	 * near to their parent directory's inode.
--	 */
--	__u32	i_block_group;
--	unsigned long	i_state_flags;	/* Dynamic state flags for ext3 */
--
--	/* block reservation info */
--	struct ext3_block_alloc_info *i_block_alloc_info;
--
--	__u32	i_dir_start_lookup;
--#ifdef CONFIG_EXT3_FS_XATTR
--	/*
--	 * Extended attributes can be read independently of the main file
--	 * data. Taking i_mutex even when reading would cause contention
--	 * between readers of EAs and writers of regular file data, so
--	 * instead we synchronize on xattr_sem when reading or changing
--	 * EAs.
--	 */
--	struct rw_semaphore xattr_sem;
--#endif
--
--	struct list_head i_orphan;	/* unlinked but open inodes */
--
--	/*
--	 * i_disksize keeps track of what the inode size is ON DISK, not
--	 * in memory.  During truncate, i_size is set to the new size by
--	 * the VFS prior to calling ext3_truncate(), but the filesystem won't
--	 * set i_disksize to 0 until the truncate is actually under way.
--	 *
--	 * The intent is that i_disksize always represents the blocks which
--	 * are used by this file.  This allows recovery to restart truncate
--	 * on orphans if we crash during truncate.  We actually write i_disksize
--	 * into the on-disk inode when writing inodes out, instead of i_size.
--	 *
--	 * The only time when i_disksize and i_size may be different is when
--	 * a truncate is in progress.  The only things which change i_disksize
--	 * are ext3_get_block (growth) and ext3_truncate (shrinkth).
--	 */
--	loff_t	i_disksize;
--
--	/* on-disk additional length */
--	__u16 i_extra_isize;
--
--	/*
--	 * truncate_mutex is for serialising ext3_truncate() against
--	 * ext3_getblock().  In the 2.4 ext2 design, great chunks of inode's
--	 * data tree are chopped off during truncate. We can't do that in
--	 * ext3 because whenever we perform intermediate commits during
--	 * truncate, the inode and all the metadata blocks *must* be in a
--	 * consistent state which allows truncation of the orphans to restart
--	 * during recovery.  Hence we must fix the get_block-vs-truncate race
--	 * by other means, so we have truncate_mutex.
--	 */
--	struct mutex truncate_mutex;
--
--	/*
--	 * Transactions that contain inode's metadata needed to complete
--	 * fsync and fdatasync, respectively.
--	 */
--	atomic_t i_sync_tid;
--	atomic_t i_datasync_tid;
--
--	struct inode vfs_inode;
--};
--
--/*
-- * third extended-fs super-block data in memory
-- */
--struct ext3_sb_info {
--	unsigned long s_frag_size;	/* Size of a fragment in bytes */
--	unsigned long s_frags_per_block;/* Number of fragments per block */
--	unsigned long s_inodes_per_block;/* Number of inodes per block */
--	unsigned long s_frags_per_group;/* Number of fragments in a group */
--	unsigned long s_blocks_per_group;/* Number of blocks in a group */
--	unsigned long s_inodes_per_group;/* Number of inodes in a group */
--	unsigned long s_itb_per_group;	/* Number of inode table blocks per group */
--	unsigned long s_gdb_count;	/* Number of group descriptor blocks */
--	unsigned long s_desc_per_block;	/* Number of group descriptors per block */
--	unsigned long s_groups_count;	/* Number of groups in the fs */
--	unsigned long s_overhead_last;  /* Last calculated overhead */
--	unsigned long s_blocks_last;    /* Last seen block count */
--	struct buffer_head * s_sbh;	/* Buffer containing the super block */
--	struct ext3_super_block * s_es;	/* Pointer to the super block in the buffer */
--	struct buffer_head ** s_group_desc;
--	unsigned long  s_mount_opt;
--	ext3_fsblk_t s_sb_block;
--	uid_t s_resuid;
--	gid_t s_resgid;
--	unsigned short s_mount_state;
--	unsigned short s_pad;
--	int s_addr_per_block_bits;
--	int s_desc_per_block_bits;
--	int s_inode_size;
--	int s_first_ino;
--	spinlock_t s_next_gen_lock;
--	u32 s_next_generation;
--	u32 s_hash_seed[4];
--	int s_def_hash_version;
--	int s_hash_unsigned;	/* 3 if hash should be signed, 0 if not */
--	struct percpu_counter s_freeblocks_counter;
--	struct percpu_counter s_freeinodes_counter;
--	struct percpu_counter s_dirs_counter;
--	struct blockgroup_lock *s_blockgroup_lock;
--
--	/* root of the per fs reservation window tree */
--	spinlock_t s_rsv_window_lock;
--	struct rb_root s_rsv_window_root;
--	struct ext3_reserve_window_node s_rsv_window_head;
--
--	/* Journaling */
--	struct inode * s_journal_inode;
--	struct journal_s * s_journal;
--	struct list_head s_orphan;
--	struct mutex s_orphan_lock;
--	struct mutex s_resize_lock;
--	unsigned long s_commit_interval;
--	struct block_device *journal_bdev;
--#ifdef CONFIG_QUOTA
--	char *s_qf_names[MAXQUOTAS];		/* Names of quota files with journalled quota */
--	int s_jquota_fmt;			/* Format of quota to use */
--#endif
--};
--
--static inline spinlock_t *
--sb_bgl_lock(struct ext3_sb_info *sbi, unsigned int block_group)
--{
--	return bgl_lock_ptr(sbi->s_blockgroup_lock, block_group);
--}
--
--static inline struct ext3_sb_info * EXT3_SB(struct super_block *sb)
--{
--	return sb->s_fs_info;
--}
--static inline struct ext3_inode_info *EXT3_I(struct inode *inode)
--{
--	return container_of(inode, struct ext3_inode_info, vfs_inode);
--}
--
--static inline int ext3_valid_inum(struct super_block *sb, unsigned long ino)
--{
--	return ino == EXT3_ROOT_INO ||
--		ino == EXT3_JOURNAL_INO ||
--		ino == EXT3_RESIZE_INO ||
--		(ino >= EXT3_FIRST_INO(sb) &&
--		 ino <= le32_to_cpu(EXT3_SB(sb)->s_es->s_inodes_count));
--}
--
--/*
-- * Inode dynamic state flags
-- */
--enum {
--	EXT3_STATE_JDATA,		/* journaled data exists */
--	EXT3_STATE_NEW,			/* inode is newly created */
--	EXT3_STATE_XATTR,		/* has in-inode xattrs */
--	EXT3_STATE_FLUSH_ON_CLOSE,	/* flush dirty pages on close */
--};
--
--static inline int ext3_test_inode_state(struct inode *inode, int bit)
--{
--	return test_bit(bit, &EXT3_I(inode)->i_state_flags);
--}
--
--static inline void ext3_set_inode_state(struct inode *inode, int bit)
--{
--	set_bit(bit, &EXT3_I(inode)->i_state_flags);
--}
--
--static inline void ext3_clear_inode_state(struct inode *inode, int bit)
--{
--	clear_bit(bit, &EXT3_I(inode)->i_state_flags);
--}
--
--#define NEXT_ORPHAN(inode) EXT3_I(inode)->i_dtime
--
--/*
-- * Codes for operating systems
-- */
--#define EXT3_OS_LINUX		0
--#define EXT3_OS_HURD		1
--#define EXT3_OS_MASIX		2
--#define EXT3_OS_FREEBSD		3
--#define EXT3_OS_LITES		4
--
--/*
-- * Revision levels
-- */
--#define EXT3_GOOD_OLD_REV	0	/* The good old (original) format */
--#define EXT3_DYNAMIC_REV	1	/* V2 format w/ dynamic inode sizes */
--
--#define EXT3_CURRENT_REV	EXT3_GOOD_OLD_REV
--#define EXT3_MAX_SUPP_REV	EXT3_DYNAMIC_REV
--
--#define EXT3_GOOD_OLD_INODE_SIZE 128
--
--/*
-- * Feature set definitions
-- */
--
--#define EXT3_HAS_COMPAT_FEATURE(sb,mask)			\
--	( EXT3_SB(sb)->s_es->s_feature_compat & cpu_to_le32(mask) )
--#define EXT3_HAS_RO_COMPAT_FEATURE(sb,mask)			\
--	( EXT3_SB(sb)->s_es->s_feature_ro_compat & cpu_to_le32(mask) )
--#define EXT3_HAS_INCOMPAT_FEATURE(sb,mask)			\
--	( EXT3_SB(sb)->s_es->s_feature_incompat & cpu_to_le32(mask) )
--#define EXT3_SET_COMPAT_FEATURE(sb,mask)			\
--	EXT3_SB(sb)->s_es->s_feature_compat |= cpu_to_le32(mask)
--#define EXT3_SET_RO_COMPAT_FEATURE(sb,mask)			\
--	EXT3_SB(sb)->s_es->s_feature_ro_compat |= cpu_to_le32(mask)
--#define EXT3_SET_INCOMPAT_FEATURE(sb,mask)			\
--	EXT3_SB(sb)->s_es->s_feature_incompat |= cpu_to_le32(mask)
--#define EXT3_CLEAR_COMPAT_FEATURE(sb,mask)			\
--	EXT3_SB(sb)->s_es->s_feature_compat &= ~cpu_to_le32(mask)
--#define EXT3_CLEAR_RO_COMPAT_FEATURE(sb,mask)			\
--	EXT3_SB(sb)->s_es->s_feature_ro_compat &= ~cpu_to_le32(mask)
--#define EXT3_CLEAR_INCOMPAT_FEATURE(sb,mask)			\
--	EXT3_SB(sb)->s_es->s_feature_incompat &= ~cpu_to_le32(mask)
--
--#define EXT3_FEATURE_COMPAT_DIR_PREALLOC	0x0001
--#define EXT3_FEATURE_COMPAT_IMAGIC_INODES	0x0002
--#define EXT3_FEATURE_COMPAT_HAS_JOURNAL		0x0004
--#define EXT3_FEATURE_COMPAT_EXT_ATTR		0x0008
--#define EXT3_FEATURE_COMPAT_RESIZE_INODE	0x0010
--#define EXT3_FEATURE_COMPAT_DIR_INDEX		0x0020
--
--#define EXT3_FEATURE_RO_COMPAT_SPARSE_SUPER	0x0001
--#define EXT3_FEATURE_RO_COMPAT_LARGE_FILE	0x0002
--#define EXT3_FEATURE_RO_COMPAT_BTREE_DIR	0x0004
--
--#define EXT3_FEATURE_INCOMPAT_COMPRESSION	0x0001
--#define EXT3_FEATURE_INCOMPAT_FILETYPE		0x0002
--#define EXT3_FEATURE_INCOMPAT_RECOVER		0x0004 /* Needs recovery */
--#define EXT3_FEATURE_INCOMPAT_JOURNAL_DEV	0x0008 /* Journal device */
--#define EXT3_FEATURE_INCOMPAT_META_BG		0x0010
--
--#define EXT3_FEATURE_COMPAT_SUPP	EXT2_FEATURE_COMPAT_EXT_ATTR
--#define EXT3_FEATURE_INCOMPAT_SUPP	(EXT3_FEATURE_INCOMPAT_FILETYPE| \
--					 EXT3_FEATURE_INCOMPAT_RECOVER| \
--					 EXT3_FEATURE_INCOMPAT_META_BG)
--#define EXT3_FEATURE_RO_COMPAT_SUPP	(EXT3_FEATURE_RO_COMPAT_SPARSE_SUPER| \
--					 EXT3_FEATURE_RO_COMPAT_LARGE_FILE| \
--					 EXT3_FEATURE_RO_COMPAT_BTREE_DIR)
--
--/*
-- * Default values for user and/or group using reserved blocks
-- */
--#define	EXT3_DEF_RESUID		0
--#define	EXT3_DEF_RESGID		0
--
--/*
-- * Default mount options
-- */
--#define EXT3_DEFM_DEBUG		0x0001
--#define EXT3_DEFM_BSDGROUPS	0x0002
--#define EXT3_DEFM_XATTR_USER	0x0004
--#define EXT3_DEFM_ACL		0x0008
--#define EXT3_DEFM_UID16		0x0010
--#define EXT3_DEFM_JMODE		0x0060
--#define EXT3_DEFM_JMODE_DATA	0x0020
--#define EXT3_DEFM_JMODE_ORDERED	0x0040
--#define EXT3_DEFM_JMODE_WBACK	0x0060
--
--/*
-- * Structure of a directory entry
-- */
--#define EXT3_NAME_LEN 255
--
--struct ext3_dir_entry {
--	__le32	inode;			/* Inode number */
--	__le16	rec_len;		/* Directory entry length */
--	__le16	name_len;		/* Name length */
--	char	name[EXT3_NAME_LEN];	/* File name */
--};
--
--/*
-- * The new version of the directory entry.  Since EXT3 structures are
-- * stored in intel byte order, and the name_len field could never be
-- * bigger than 255 chars, it's safe to reclaim the extra byte for the
-- * file_type field.
-- */
--struct ext3_dir_entry_2 {
--	__le32	inode;			/* Inode number */
--	__le16	rec_len;		/* Directory entry length */
--	__u8	name_len;		/* Name length */
--	__u8	file_type;
--	char	name[EXT3_NAME_LEN];	/* File name */
--};
--
--/*
-- * Ext3 directory file types.  Only the low 3 bits are used.  The
-- * other bits are reserved for now.
-- */
--#define EXT3_FT_UNKNOWN		0
--#define EXT3_FT_REG_FILE	1
--#define EXT3_FT_DIR		2
--#define EXT3_FT_CHRDEV		3
--#define EXT3_FT_BLKDEV		4
--#define EXT3_FT_FIFO		5
--#define EXT3_FT_SOCK		6
--#define EXT3_FT_SYMLINK		7
--
--#define EXT3_FT_MAX		8
--
--/*
-- * EXT3_DIR_PAD defines the directory entries boundaries
-- *
-- * NOTE: It must be a multiple of 4
-- */
--#define EXT3_DIR_PAD			4
--#define EXT3_DIR_ROUND			(EXT3_DIR_PAD - 1)
--#define EXT3_DIR_REC_LEN(name_len)	(((name_len) + 8 + EXT3_DIR_ROUND) & \
--					 ~EXT3_DIR_ROUND)
--#define EXT3_MAX_REC_LEN		((1<<16)-1)
--
--/*
-- * Tests against MAX_REC_LEN etc were put in place for 64k block
-- * sizes; if that is not possible on this arch, we can skip
-- * those tests and speed things up.
-- */
--static inline unsigned ext3_rec_len_from_disk(__le16 dlen)
--{
--	unsigned len = le16_to_cpu(dlen);
--
--#if (PAGE_CACHE_SIZE >= 65536)
--	if (len == EXT3_MAX_REC_LEN)
--		return 1 << 16;
--#endif
--	return len;
--}
--
--static inline __le16 ext3_rec_len_to_disk(unsigned len)
--{
--#if (PAGE_CACHE_SIZE >= 65536)
--	if (len == (1 << 16))
--		return cpu_to_le16(EXT3_MAX_REC_LEN);
--	else if (len > (1 << 16))
--		BUG();
--#endif
--	return cpu_to_le16(len);
--}
--
--/*
-- * Hash Tree Directory indexing
-- * (c) Daniel Phillips, 2001
-- */
--
--#define is_dx(dir) (EXT3_HAS_COMPAT_FEATURE(dir->i_sb, \
--				      EXT3_FEATURE_COMPAT_DIR_INDEX) && \
--		      (EXT3_I(dir)->i_flags & EXT3_INDEX_FL))
--#define EXT3_DIR_LINK_MAX(dir) (!is_dx(dir) && (dir)->i_nlink >= EXT3_LINK_MAX)
--#define EXT3_DIR_LINK_EMPTY(dir) ((dir)->i_nlink == 2 || (dir)->i_nlink == 1)
--
--/* Legal values for the dx_root hash_version field: */
--
--#define DX_HASH_LEGACY		0
--#define DX_HASH_HALF_MD4	1
--#define DX_HASH_TEA		2
--#define DX_HASH_LEGACY_UNSIGNED	3
--#define DX_HASH_HALF_MD4_UNSIGNED	4
--#define DX_HASH_TEA_UNSIGNED		5
--
--/* hash info structure used by the directory hash */
--struct dx_hash_info
--{
--	u32		hash;
--	u32		minor_hash;
--	int		hash_version;
--	u32		*seed;
--};
--
--#define EXT3_HTREE_EOF	0x7fffffff
--
--/*
-- * Control parameters used by ext3_htree_next_block
-- */
--#define HASH_NB_ALWAYS		1
--
--
--/*
-- * Describe an inode's exact location on disk and in memory
-- */
--struct ext3_iloc
--{
--	struct buffer_head *bh;
--	unsigned long offset;
--	unsigned long block_group;
--};
--
--static inline struct ext3_inode *ext3_raw_inode(struct ext3_iloc *iloc)
--{
--	return (struct ext3_inode *) (iloc->bh->b_data + iloc->offset);
--}
--
--/*
-- * This structure is stuffed into the struct file's private_data field
-- * for directories.  It is where we put information so that we can do
-- * readdir operations in hash tree order.
-- */
--struct dir_private_info {
--	struct rb_root	root;
--	struct rb_node	*curr_node;
--	struct fname	*extra_fname;
--	loff_t		last_pos;
--	__u32		curr_hash;
--	__u32		curr_minor_hash;
--	__u32		next_hash;
--};
--
--/* calculate the first block number of the group */
--static inline ext3_fsblk_t
--ext3_group_first_block_no(struct super_block *sb, unsigned long group_no)
--{
--	return group_no * (ext3_fsblk_t)EXT3_BLOCKS_PER_GROUP(sb) +
--		le32_to_cpu(EXT3_SB(sb)->s_es->s_first_data_block);
--}
--
--/*
-- * Special error return code only used by dx_probe() and its callers.
-- */
--#define ERR_BAD_DX_DIR	-75000
--
--/*
-- * Function prototypes
-- */
--
--/*
-- * Ok, these declarations are also in <linux/kernel.h> but none of the
-- * ext3 source programs needs to include it so they are duplicated here.
-- */
--# define NORET_TYPE    /**/
--# define ATTRIB_NORET  __attribute__((noreturn))
--# define NORET_AND     noreturn,
--
--/* balloc.c */
--extern int ext3_bg_has_super(struct super_block *sb, int group);
--extern unsigned long ext3_bg_num_gdb(struct super_block *sb, int group);
--extern ext3_fsblk_t ext3_new_block (handle_t *handle, struct inode *inode,
--			ext3_fsblk_t goal, int *errp);
--extern ext3_fsblk_t ext3_new_blocks (handle_t *handle, struct inode *inode,
--			ext3_fsblk_t goal, unsigned long *count, int *errp);
--extern void ext3_free_blocks (handle_t *handle, struct inode *inode,
--			ext3_fsblk_t block, unsigned long count);
--extern void ext3_free_blocks_sb (handle_t *handle, struct super_block *sb,
--				 ext3_fsblk_t block, unsigned long count,
--				unsigned long *pdquot_freed_blocks);
--extern ext3_fsblk_t ext3_count_free_blocks (struct super_block *);
--extern void ext3_check_blocks_bitmap (struct super_block *);
--extern struct ext3_group_desc * ext3_get_group_desc(struct super_block * sb,
--						    unsigned int block_group,
--						    struct buffer_head ** bh);
--extern int ext3_should_retry_alloc(struct super_block *sb, int *retries);
--extern void ext3_init_block_alloc_info(struct inode *);
--extern void ext3_rsv_window_add(struct super_block *sb, struct ext3_reserve_window_node *rsv);
--extern int ext3_trim_fs(struct super_block *sb, struct fstrim_range *range);
--
--/* dir.c */
--extern int ext3_check_dir_entry(const char *, struct inode *,
--				struct ext3_dir_entry_2 *,
--				struct buffer_head *, unsigned long);
--extern int ext3_htree_store_dirent(struct file *dir_file, __u32 hash,
--				    __u32 minor_hash,
--				    struct ext3_dir_entry_2 *dirent);
--extern void ext3_htree_free_dir_info(struct dir_private_info *p);
--
--/* fsync.c */
--extern int ext3_sync_file(struct file *, loff_t, loff_t, int);
--
--/* hash.c */
--extern int ext3fs_dirhash(const char *name, int len, struct
--			  dx_hash_info *hinfo);
--
--/* ialloc.c */
--extern struct inode * ext3_new_inode (handle_t *, struct inode *,
--				      const struct qstr *, umode_t);
--extern void ext3_free_inode (handle_t *, struct inode *);
--extern struct inode * ext3_orphan_get (struct super_block *, unsigned long);
--extern unsigned long ext3_count_free_inodes (struct super_block *);
--extern unsigned long ext3_count_dirs (struct super_block *);
--extern void ext3_check_inodes_bitmap (struct super_block *);
--extern unsigned long ext3_count_free (struct buffer_head *, unsigned);
--
--
--/* inode.c */
--int ext3_forget(handle_t *handle, int is_metadata, struct inode *inode,
--		struct buffer_head *bh, ext3_fsblk_t blocknr);
--struct buffer_head * ext3_getblk (handle_t *, struct inode *, long, int, int *);
--struct buffer_head * ext3_bread (handle_t *, struct inode *, int, int, int *);
--int ext3_get_blocks_handle(handle_t *handle, struct inode *inode,
--	sector_t iblock, unsigned long maxblocks, struct buffer_head *bh_result,
--	int create);
--
--extern struct inode *ext3_iget(struct super_block *, unsigned long);
--extern int  ext3_write_inode (struct inode *, struct writeback_control *);
--extern int  ext3_setattr (struct dentry *, struct iattr *);
--extern void ext3_evict_inode (struct inode *);
--extern int  ext3_sync_inode (handle_t *, struct inode *);
--extern void ext3_discard_reservation (struct inode *);
--extern void ext3_dirty_inode(struct inode *, int);
--extern int ext3_change_inode_journal_flag(struct inode *, int);
--extern int ext3_get_inode_loc(struct inode *, struct ext3_iloc *);
--extern int ext3_can_truncate(struct inode *inode);
--extern void ext3_truncate(struct inode *inode);
--extern void ext3_set_inode_flags(struct inode *);
--extern void ext3_get_inode_flags(struct ext3_inode_info *);
--extern void ext3_set_aops(struct inode *inode);
--extern int ext3_fiemap(struct inode *inode, struct fiemap_extent_info *fieinfo,
--		       u64 start, u64 len);
--
--/* ioctl.c */
--extern long ext3_ioctl(struct file *, unsigned int, unsigned long);
--extern long ext3_compat_ioctl(struct file *, unsigned int, unsigned long);
--
--/* namei.c */
--extern int ext3_orphan_add(handle_t *, struct inode *);
--extern int ext3_orphan_del(handle_t *, struct inode *);
--extern int ext3_htree_fill_tree(struct file *dir_file, __u32 start_hash,
--				__u32 start_minor_hash, __u32 *next_hash);
--
--/* resize.c */
--extern int ext3_group_add(struct super_block *sb,
--				struct ext3_new_group_data *input);
--extern int ext3_group_extend(struct super_block *sb,
--				struct ext3_super_block *es,
--				ext3_fsblk_t n_blocks_count);
--
--/* super.c */
--extern __printf(3, 4)
--void ext3_error(struct super_block *, const char *, const char *, ...);
--extern void __ext3_std_error (struct super_block *, const char *, int);
--extern __printf(3, 4)
--void ext3_abort(struct super_block *, const char *, const char *, ...);
--extern __printf(3, 4)
--void ext3_warning(struct super_block *, const char *, const char *, ...);
--extern __printf(3, 4)
--void ext3_msg(struct super_block *, const char *, const char *, ...);
--extern void ext3_update_dynamic_rev (struct super_block *sb);
--
--#define ext3_std_error(sb, errno)				\
--do {								\
--	if ((errno))						\
--		__ext3_std_error((sb), __func__, (errno));	\
--} while (0)
--
--/*
-- * Inodes and files operations
-- */
--
--/* dir.c */
--extern const struct file_operations ext3_dir_operations;
--
--/* file.c */
--extern const struct inode_operations ext3_file_inode_operations;
--extern const struct file_operations ext3_file_operations;
--
--/* namei.c */
--extern const struct inode_operations ext3_dir_inode_operations;
--extern const struct inode_operations ext3_special_inode_operations;
--
--/* symlink.c */
--extern const struct inode_operations ext3_symlink_inode_operations;
--extern const struct inode_operations ext3_fast_symlink_inode_operations;
--
--#define EXT3_JOURNAL(inode)	(EXT3_SB((inode)->i_sb)->s_journal)
--
--/* Define the number of blocks we need to account to a transaction to
-- * modify one block of data.
-- *
-- * We may have to touch one inode, one bitmap buffer, up to three
-- * indirection blocks, the group and superblock summaries, and the data
-- * block to complete the transaction.  */
--
--#define EXT3_SINGLEDATA_TRANS_BLOCKS	8U
--
--/* Extended attribute operations touch at most two data buffers,
-- * two bitmap buffers, and two group summaries, in addition to the inode
-- * and the superblock, which are already accounted for. */
--
--#define EXT3_XATTR_TRANS_BLOCKS		6U
--
--/* Define the minimum size for a transaction which modifies data.  This
-- * needs to take into account the fact that we may end up modifying two
-- * quota files too (one for the group, one for the user quota).  The
-- * superblock only gets updated once, of course, so don't bother
-- * counting that again for the quota updates. */
--
--#define EXT3_DATA_TRANS_BLOCKS(sb)	(EXT3_SINGLEDATA_TRANS_BLOCKS + \
--					 EXT3_XATTR_TRANS_BLOCKS - 2 + \
--					 EXT3_MAXQUOTAS_TRANS_BLOCKS(sb))
--
--/* Delete operations potentially hit one directory's namespace plus an
-- * entire inode, plus arbitrary amounts of bitmap/indirection data.  Be
-- * generous.  We can grow the delete transaction later if necessary. */
--
--#define EXT3_DELETE_TRANS_BLOCKS(sb)   (EXT3_MAXQUOTAS_TRANS_BLOCKS(sb) + 64)
--
--/* Define an arbitrary limit for the amount of data we will anticipate
-- * writing to any given transaction.  For unbounded transactions such as
-- * write(2) and truncate(2) we can write more than this, but we always
-- * start off at the maximum transaction size and grow the transaction
-- * optimistically as we go. */
--
--#define EXT3_MAX_TRANS_DATA		64U
--
--/* We break up a large truncate or write transaction once the handle's
-- * buffer credits gets this low, we need either to extend the
-- * transaction or to start a new one.  Reserve enough space here for
-- * inode, bitmap, superblock, group and indirection updates for at least
-- * one block, plus two quota updates.  Quota allocations are not
-- * needed. */
--
--#define EXT3_RESERVE_TRANS_BLOCKS	12U
--
--#define EXT3_INDEX_EXTRA_TRANS_BLOCKS	8
--
--#ifdef CONFIG_QUOTA
--/* Amount of blocks needed for quota update - we know that the structure was
-- * allocated so we need to update only inode+data */
--#define EXT3_QUOTA_TRANS_BLOCKS(sb) (test_opt(sb, QUOTA) ? 2 : 0)
--/* Amount of blocks needed for quota insert/delete - we do some block writes
-- * but inode, sb and group updates are done only once */
--#define EXT3_QUOTA_INIT_BLOCKS(sb) (test_opt(sb, QUOTA) ? (DQUOT_INIT_ALLOC*\
--		(EXT3_SINGLEDATA_TRANS_BLOCKS-3)+3+DQUOT_INIT_REWRITE) : 0)
--#define EXT3_QUOTA_DEL_BLOCKS(sb) (test_opt(sb, QUOTA) ? (DQUOT_DEL_ALLOC*\
--		(EXT3_SINGLEDATA_TRANS_BLOCKS-3)+3+DQUOT_DEL_REWRITE) : 0)
--#else
--#define EXT3_QUOTA_TRANS_BLOCKS(sb) 0
--#define EXT3_QUOTA_INIT_BLOCKS(sb) 0
--#define EXT3_QUOTA_DEL_BLOCKS(sb) 0
--#endif
--#define EXT3_MAXQUOTAS_TRANS_BLOCKS(sb) (MAXQUOTAS*EXT3_QUOTA_TRANS_BLOCKS(sb))
--#define EXT3_MAXQUOTAS_INIT_BLOCKS(sb) (MAXQUOTAS*EXT3_QUOTA_INIT_BLOCKS(sb))
--#define EXT3_MAXQUOTAS_DEL_BLOCKS(sb) (MAXQUOTAS*EXT3_QUOTA_DEL_BLOCKS(sb))
--
--int
--ext3_mark_iloc_dirty(handle_t *handle,
--		     struct inode *inode,
--		     struct ext3_iloc *iloc);
--
--/*
-- * On success, We end up with an outstanding reference count against
-- * iloc->bh.  This _must_ be cleaned up later.
-- */
--
--int ext3_reserve_inode_write(handle_t *handle, struct inode *inode,
--			struct ext3_iloc *iloc);
--
--int ext3_mark_inode_dirty(handle_t *handle, struct inode *inode);
--
--/*
-- * Wrapper functions with which ext3 calls into JBD.  The intent here is
-- * to allow these to be turned into appropriate stubs so ext3 can control
-- * ext2 filesystems, so ext2+ext3 systems only nee one fs.  This work hasn't
-- * been done yet.
-- */
--
--static inline void ext3_journal_release_buffer(handle_t *handle,
--						struct buffer_head *bh)
--{
--	journal_release_buffer(handle, bh);
--}
--
--void ext3_journal_abort_handle(const char *caller, const char *err_fn,
--		struct buffer_head *bh, handle_t *handle, int err);
--
--int __ext3_journal_get_undo_access(const char *where, handle_t *handle,
--				struct buffer_head *bh);
--
--int __ext3_journal_get_write_access(const char *where, handle_t *handle,
--				struct buffer_head *bh);
--
--int __ext3_journal_forget(const char *where, handle_t *handle,
--				struct buffer_head *bh);
--
--int __ext3_journal_revoke(const char *where, handle_t *handle,
--				unsigned long blocknr, struct buffer_head *bh);
--
--int __ext3_journal_get_create_access(const char *where,
--				handle_t *handle, struct buffer_head *bh);
--
--int __ext3_journal_dirty_metadata(const char *where,
--				handle_t *handle, struct buffer_head *bh);
--
--#define ext3_journal_get_undo_access(handle, bh) \
--	__ext3_journal_get_undo_access(__func__, (handle), (bh))
--#define ext3_journal_get_write_access(handle, bh) \
--	__ext3_journal_get_write_access(__func__, (handle), (bh))
--#define ext3_journal_revoke(handle, blocknr, bh) \
--	__ext3_journal_revoke(__func__, (handle), (blocknr), (bh))
--#define ext3_journal_get_create_access(handle, bh) \
--	__ext3_journal_get_create_access(__func__, (handle), (bh))
--#define ext3_journal_dirty_metadata(handle, bh) \
--	__ext3_journal_dirty_metadata(__func__, (handle), (bh))
--#define ext3_journal_forget(handle, bh) \
--	__ext3_journal_forget(__func__, (handle), (bh))
--
--int ext3_journal_dirty_data(handle_t *handle, struct buffer_head *bh);
--
--handle_t *ext3_journal_start_sb(struct super_block *sb, int nblocks);
--int __ext3_journal_stop(const char *where, handle_t *handle);
--
--static inline handle_t *ext3_journal_start(struct inode *inode, int nblocks)
--{
--	return ext3_journal_start_sb(inode->i_sb, nblocks);
--}
--
--#define ext3_journal_stop(handle) \
--	__ext3_journal_stop(__func__, (handle))
--
--static inline handle_t *ext3_journal_current_handle(void)
--{
--	return journal_current_handle();
--}
--
--static inline int ext3_journal_extend(handle_t *handle, int nblocks)
--{
--	return journal_extend(handle, nblocks);
--}
--
--static inline int ext3_journal_restart(handle_t *handle, int nblocks)
--{
--	return journal_restart(handle, nblocks);
--}
--
--static inline int ext3_journal_blocks_per_page(struct inode *inode)
--{
--	return journal_blocks_per_page(inode);
--}
--
--static inline int ext3_journal_force_commit(journal_t *journal)
--{
--	return journal_force_commit(journal);
--}
--
--/* super.c */
--int ext3_force_commit(struct super_block *sb);
--
--static inline int ext3_should_journal_data(struct inode *inode)
--{
--	if (!S_ISREG(inode->i_mode))
--		return 1;
--	if (test_opt(inode->i_sb, DATA_FLAGS) == EXT3_MOUNT_JOURNAL_DATA)
--		return 1;
--	if (EXT3_I(inode)->i_flags & EXT3_JOURNAL_DATA_FL)
--		return 1;
--	return 0;
--}
--
--static inline int ext3_should_order_data(struct inode *inode)
--{
--	if (!S_ISREG(inode->i_mode))
--		return 0;
--	if (EXT3_I(inode)->i_flags & EXT3_JOURNAL_DATA_FL)
--		return 0;
--	if (test_opt(inode->i_sb, DATA_FLAGS) == EXT3_MOUNT_ORDERED_DATA)
--		return 1;
--	return 0;
--}
--
--static inline int ext3_should_writeback_data(struct inode *inode)
--{
--	if (!S_ISREG(inode->i_mode))
--		return 0;
--	if (EXT3_I(inode)->i_flags & EXT3_JOURNAL_DATA_FL)
--		return 0;
--	if (test_opt(inode->i_sb, DATA_FLAGS) == EXT3_MOUNT_WRITEBACK_DATA)
--		return 1;
--	return 0;
--}
--
--#include <trace/events/ext3.h>
--
-diff --git a/instrumentation/events/mainline/jbd.h b/instrumentation/events/mainline/jbd.h
-index aff64d8..da6f259 100644
---- a/instrumentation/events/mainline/jbd.h
-+++ b/instrumentation/events/mainline/jbd.h
-@@ -36,19 +36,17 @@ DECLARE_EVENT_CLASS(jbd_commit,
- 
- 	TP_STRUCT__entry(
- 		__field(	dev_t,	dev			)
--		__field(	char,	sync_commit		)
- 		__field(	int,	transaction		)
- 	),
- 
- 	TP_fast_assign(
- 		__entry->dev		= journal->j_fs_dev->bd_dev;
--		__entry->sync_commit = commit_transaction->t_synchronous_commit;
- 		__entry->transaction	= commit_transaction->t_tid;
- 	),
- 
--	TP_printk("dev %d,%d transaction %d sync %d",
-+	TP_printk("dev %d,%d transaction %d",
- 		  MAJOR(__entry->dev), MINOR(__entry->dev),
--		  __entry->transaction, __entry->sync_commit)
-+		  __entry->transaction)
- );
- 
- DEFINE_EVENT(jbd_commit, jbd_start_commit,
-@@ -87,19 +85,17 @@ TRACE_EVENT(jbd_drop_transaction,
- 
- 	TP_STRUCT__entry(
- 		__field(	dev_t,	dev			)
--		__field(	char,	sync_commit		)
- 		__field(	int,	transaction		)
- 	),
- 
- 	TP_fast_assign(
- 		__entry->dev		= journal->j_fs_dev->bd_dev;
--		__entry->sync_commit = commit_transaction->t_synchronous_commit;
- 		__entry->transaction	= commit_transaction->t_tid;
- 	),
- 
--	TP_printk("dev %d,%d transaction %d sync %d",
-+	TP_printk("dev %d,%d transaction %d",
- 		  MAJOR(__entry->dev), MINOR(__entry->dev),
--		  __entry->transaction, __entry->sync_commit)
-+		  __entry->transaction)
- );
- 
- TRACE_EVENT(jbd_end_commit,
-@@ -109,21 +105,19 @@ TRACE_EVENT(jbd_end_commit,
- 
- 	TP_STRUCT__entry(
- 		__field(	dev_t,	dev			)
--		__field(	char,	sync_commit		)
- 		__field(	int,	transaction		)
- 		__field(	int,	head			)
- 	),
- 
- 	TP_fast_assign(
- 		__entry->dev		= journal->j_fs_dev->bd_dev;
--		__entry->sync_commit = commit_transaction->t_synchronous_commit;
- 		__entry->transaction	= commit_transaction->t_tid;
- 		__entry->head		= journal->j_tail_sequence;
- 	),
- 
--	TP_printk("dev %d,%d transaction %d sync %d head %d",
-+	TP_printk("dev %d,%d transaction %d head %d",
- 		  MAJOR(__entry->dev), MINOR(__entry->dev),
--		  __entry->transaction, __entry->sync_commit, __entry->head)
-+		  __entry->transaction, __entry->head)
- );
- 
- TRACE_EVENT(jbd_do_submit_data,
-@@ -133,19 +127,17 @@ TRACE_EVENT(jbd_do_submit_data,
- 
- 	TP_STRUCT__entry(
- 		__field(	dev_t,	dev			)
--		__field(	char,	sync_commit		)
- 		__field(	int,	transaction		)
- 	),
- 
- 	TP_fast_assign(
- 		__entry->dev		= journal->j_fs_dev->bd_dev;
--		__entry->sync_commit = commit_transaction->t_synchronous_commit;
- 		__entry->transaction	= commit_transaction->t_tid;
- 	),
- 
--	TP_printk("dev %d,%d transaction %d sync %d",
-+	TP_printk("dev %d,%d transaction %d",
- 		  MAJOR(__entry->dev), MINOR(__entry->dev),
--		   __entry->transaction, __entry->sync_commit)
-+		   __entry->transaction)
- );
- 
- TRACE_EVENT(jbd_cleanup_journal_tail,
-@@ -177,24 +169,23 @@ TRACE_EVENT(jbd_cleanup_journal_tail,
- 		  __entry->block_nr, __entry->freed)
- );
- 
--TRACE_EVENT(jbd_update_superblock_end,
--	TP_PROTO(journal_t *journal, int wait),
-+TRACE_EVENT(journal_write_superblock,
-+	TP_PROTO(journal_t *journal, int write_op),
- 
--	TP_ARGS(journal, wait),
-+	TP_ARGS(journal, write_op),
- 
- 	TP_STRUCT__entry(
- 		__field(	dev_t,	dev			)
--		__field(	int,	wait			)
-+		__field(	int,	write_op		)
- 	),
- 
- 	TP_fast_assign(
- 		__entry->dev		= journal->j_fs_dev->bd_dev;
--		__entry->wait		= wait;
-+		__entry->write_op	= write_op;
- 	),
- 
--	TP_printk("dev %d,%d wait %d",
--		  MAJOR(__entry->dev), MINOR(__entry->dev),
--		   __entry->wait)
-+	TP_printk("dev %d,%d write_op %x", MAJOR(__entry->dev),
-+		  MINOR(__entry->dev), __entry->write_op)
- );
- 
- #endif /* _TRACE_JBD_H */
-diff --git a/instrumentation/events/mainline/jbd2.h b/instrumentation/events/mainline/jbd2.h
-index 7596441..127993d 100644
---- a/instrumentation/events/mainline/jbd2.h
-+++ b/instrumentation/events/mainline/jbd2.h
-@@ -81,6 +81,13 @@ DEFINE_EVENT(jbd2_commit, jbd2_commit_logging,
- 	TP_ARGS(journal, commit_transaction)
- );
- 
-+DEFINE_EVENT(jbd2_commit, jbd2_drop_transaction,
++		__entry->blocks	= inode->i_blocks;
++		__entry->mode	= inode->i_mode;
++	),
 +
-+	TP_PROTO(journal_t *journal, transaction_t *commit_transaction),
-+
-+	TP_ARGS(journal, commit_transaction)
++	TP_printk("dev %d,%d ino %lu mode 0%o uid %u gid %u blocks %llu",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino, __entry->mode,
++		  __entry->uid, __entry->gid, __entry->blocks)
 +);
 +
- TRACE_EVENT(jbd2_end_commit,
- 	TP_PROTO(journal_t *journal, transaction_t *commit_transaction),
- 
-@@ -200,7 +207,7 @@ TRACE_EVENT(jbd2_checkpoint_stats,
- 		  __entry->forced_to_close, __entry->written, __entry->dropped)
- );
- 
--TRACE_EVENT(jbd2_cleanup_journal_tail,
-+TRACE_EVENT(jbd2_update_log_tail,
- 
- 	TP_PROTO(journal_t *journal, tid_t first_tid,
- 		 unsigned long block_nr, unsigned long freed),
-@@ -229,6 +236,26 @@ TRACE_EVENT(jbd2_cleanup_journal_tail,
- 		  __entry->block_nr, __entry->freed)
- );
- 
-+TRACE_EVENT(jbd2_write_superblock,
++TRACE_EVENT(ext4_request_inode,
++	TP_PROTO(struct inode *dir, int mode),
 +
-+	TP_PROTO(journal_t *journal, int write_op),
-+
-+	TP_ARGS(journal, write_op),
++	TP_ARGS(dir, mode),
 +
 +	TP_STRUCT__entry(
-+		__field(	dev_t,  dev			)
-+		__field(	  int,  write_op		)
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	dir			)
++		__field(	__u16, mode			)
 +	),
 +
 +	TP_fast_assign(
-+		__entry->dev		= journal->j_fs_dev->bd_dev;
-+		__entry->write_op	= write_op;
++		__entry->dev	= dir->i_sb->s_dev;
++		__entry->dir	= dir->i_ino;
++		__entry->mode	= mode;
 +	),
 +
-+	TP_printk("dev %d,%d write_op %x", MAJOR(__entry->dev),
-+		  MINOR(__entry->dev), __entry->write_op)
++	TP_printk("dev %d,%d dir %lu mode 0%o",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->dir, __entry->mode)
 +);
 +
- #endif /* _TRACE_JBD2_H */
- 
- /* This part must be outside protection */
-diff --git a/instrumentation/events/mainline/kmem.h b/instrumentation/events/mainline/kmem.h
-index a9c87ad..08fa272 100644
---- a/instrumentation/events/mainline/kmem.h
-+++ b/instrumentation/events/mainline/kmem.h
-@@ -147,7 +147,7 @@ DEFINE_EVENT(kmem_free, kmem_cache_free,
- 	TP_ARGS(call_site, ptr)
- );
- 
--TRACE_EVENT(mm_page_free_direct,
-+TRACE_EVENT(mm_page_free,
- 
- 	TP_PROTO(struct page *page, unsigned int order),
- 
-@@ -169,7 +169,7 @@ TRACE_EVENT(mm_page_free_direct,
- 			__entry->order)
- );
- 
--TRACE_EVENT(mm_pagevec_free,
-+TRACE_EVENT(mm_page_free_batched,
- 
- 	TP_PROTO(struct page *page, int cold),
- 
-@@ -214,7 +214,7 @@ TRACE_EVENT(mm_page_alloc,
- 
- 	TP_printk("page=%p pfn=%lu order=%d migratetype=%d gfp_flags=%s",
- 		__entry->page,
--		page_to_pfn(__entry->page),
-+		__entry->page ? page_to_pfn(__entry->page) : 0,
- 		__entry->order,
- 		__entry->migratetype,
- 		show_gfp_flags(__entry->gfp_flags))
-@@ -240,7 +240,7 @@ DECLARE_EVENT_CLASS(mm_page,
- 
- 	TP_printk("page=%p pfn=%lu order=%u migratetype=%d percpu_refill=%d",
- 		__entry->page,
--		page_to_pfn(__entry->page),
-+		__entry->page ? page_to_pfn(__entry->page) : 0,
- 		__entry->order,
- 		__entry->migratetype,
- 		__entry->order == 0)
-diff --git a/instrumentation/events/mainline/power.h b/instrumentation/events/mainline/power.h
-index 1bcc2a8..0c97838 100644
---- a/instrumentation/events/mainline/power.h
-+++ b/instrumentation/events/mainline/power.h
-@@ -65,7 +65,40 @@ TRACE_EVENT(machine_suspend,
- 	TP_printk("state=%lu", (unsigned long)__entry->state)
- );
- 
--/* This code will be removed after deprecation time exceeded (2.6.41) */
-+DECLARE_EVENT_CLASS(wakeup_source,
++TRACE_EVENT(ext4_allocate_inode,
++	TP_PROTO(struct inode *inode, struct inode *dir, int mode),
 +
-+	TP_PROTO(const char *name, unsigned int state),
-+
-+	TP_ARGS(name, state),
++	TP_ARGS(inode, dir, mode),
 +
 +	TP_STRUCT__entry(
-+		__string(       name,           name            )
-+		__field(        u64,            state           )
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	ino_t,	dir			)
++		__field(	__u16,	mode			)
 +	),
 +
 +	TP_fast_assign(
-+		__assign_str(name, name);
-+		__entry->state = state;
++		__entry->dev	= inode->i_sb->s_dev;
++		__entry->ino	= inode->i_ino;
++		__entry->dir	= dir->i_ino;
++		__entry->mode	= mode;
 +	),
 +
-+	TP_printk("%s state=0x%lx", __get_str(name),
-+		(unsigned long)__entry->state)
++	TP_printk("dev %d,%d ino %lu dir %lu mode 0%o",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  (unsigned long) __entry->dir, __entry->mode)
 +);
 +
-+DEFINE_EVENT(wakeup_source, wakeup_source_activate,
++TRACE_EVENT(ext4_evict_inode,
++	TP_PROTO(struct inode *inode),
 +
-+	TP_PROTO(const char *name, unsigned int state),
++	TP_ARGS(inode),
 +
-+	TP_ARGS(name, state)
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	int,	nlink			)
++	),
++
++	TP_fast_assign(
++		__entry->dev	= inode->i_sb->s_dev;
++		__entry->ino	= inode->i_ino;
++		__entry->nlink	= inode->i_nlink;
++	),
++
++	TP_printk("dev %d,%d ino %lu nlink %d",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino, __entry->nlink)
 +);
 +
-+DEFINE_EVENT(wakeup_source, wakeup_source_deactivate,
++TRACE_EVENT(ext4_drop_inode,
++	TP_PROTO(struct inode *inode, int drop),
 +
-+	TP_PROTO(const char *name, unsigned int state),
++	TP_ARGS(inode, drop),
 +
-+	TP_ARGS(name, state)
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	int,	drop			)
++	),
++
++	TP_fast_assign(
++		__entry->dev	= inode->i_sb->s_dev;
++		__entry->ino	= inode->i_ino;
++		__entry->drop	= drop;
++	),
++
++	TP_printk("dev %d,%d ino %lu drop %d",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino, __entry->drop)
 +);
 +
- #ifdef CONFIG_EVENT_POWER_TRACING_DEPRECATED
- 
- /*
-@@ -151,6 +184,8 @@ enum {
-    events get removed */
- static inline void trace_power_start(u64 type, u64 state, u64 cpuid) {};
- static inline void trace_power_end(u64 cpuid) {};
-+static inline void trace_power_start_rcuidle(u64 type, u64 state, u64 cpuid) {};
-+static inline void trace_power_end_rcuidle(u64 cpuid) {};
- static inline void trace_power_frequency(u64 type, u64 state, u64 cpuid) {};
- #endif /* _PWR_EVENT_AVOID_DOUBLE_DEFINING_DEPRECATED */
- 
-diff --git a/instrumentation/events/mainline/sched.h b/instrumentation/events/mainline/sched.h
-index 6700ecc..ea7a203 100644
---- a/instrumentation/events/mainline/sched.h
-+++ b/instrumentation/events/mainline/sched.h
-@@ -6,6 +6,7 @@
- 
- #include <linux/sched.h>
- #include <linux/tracepoint.h>
-+#include <linux/binfmts.h>
- 
- /*
-  * Tracepoint for calling kthread_stop, performed to end a kthread:
-@@ -100,7 +101,7 @@ static inline long __trace_sched_switch_state(struct task_struct *p)
- 	 * For all intents and purposes a preempted task is a running task.
- 	 */
- 	if (task_thread_info(p)->preempt_count & PREEMPT_ACTIVE)
--		state = TASK_RUNNING;
-+		state = TASK_RUNNING | TASK_STATE_MAX;
- #endif
- 
- 	return state;
-@@ -137,13 +138,14 @@ TRACE_EVENT(sched_switch,
- 		__entry->next_prio	= next->prio;
- 	),
- 
--	TP_printk("prev_comm=%s prev_pid=%d prev_prio=%d prev_state=%s ==> next_comm=%s next_pid=%d next_prio=%d",
-+	TP_printk("prev_comm=%s prev_pid=%d prev_prio=%d prev_state=%s%s ==> next_comm=%s next_pid=%d next_prio=%d",
- 		__entry->prev_comm, __entry->prev_pid, __entry->prev_prio,
--		__entry->prev_state ?
--		  __print_flags(__entry->prev_state, "|",
-+		__entry->prev_state & (TASK_STATE_MAX-1) ?
-+		  __print_flags(__entry->prev_state & (TASK_STATE_MAX-1), "|",
- 				{ 1, "S"} , { 2, "D" }, { 4, "T" }, { 8, "t" },
- 				{ 16, "Z" }, { 32, "X" }, { 64, "x" },
- 				{ 128, "W" }) : "R",
-+		__entry->prev_state & TASK_STATE_MAX ? "+" : "",
- 		__entry->next_comm, __entry->next_pid, __entry->next_prio)
- );
- 
-@@ -356,6 +358,13 @@ DEFINE_EVENT(sched_stat_template, sched_stat_iowait,
- 	     TP_ARGS(tsk, delay));
- 
- /*
-+ * Tracepoint for accounting blocked time (time the task is in uninterruptible).
-+ */
-+DEFINE_EVENT(sched_stat_template, sched_stat_blocked,
-+	     TP_PROTO(struct task_struct *tsk, u64 delay),
-+	     TP_ARGS(tsk, delay));
++TRACE_EVENT(ext4_mark_inode_dirty,
++	TP_PROTO(struct inode *inode, unsigned long IP),
++
++	TP_ARGS(inode, IP),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(unsigned long,	ip			)
++	),
++
++	TP_fast_assign(
++		__entry->dev	= inode->i_sb->s_dev;
++		__entry->ino	= inode->i_ino;
++		__entry->ip	= IP;
++	),
++
++	TP_printk("dev %d,%d ino %lu caller %pF",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino, (void *)__entry->ip)
++);
++
++TRACE_EVENT(ext4_begin_ordered_truncate,
++	TP_PROTO(struct inode *inode, loff_t new_size),
++
++	TP_ARGS(inode, new_size),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	loff_t,	new_size		)
++	),
++
++	TP_fast_assign(
++		__entry->dev		= inode->i_sb->s_dev;
++		__entry->ino		= inode->i_ino;
++		__entry->new_size	= new_size;
++	),
++
++	TP_printk("dev %d,%d ino %lu new_size %lld",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->new_size)
++);
++
++DECLARE_EVENT_CLASS(ext4__write_begin,
++
++	TP_PROTO(struct inode *inode, loff_t pos, unsigned int len,
++		 unsigned int flags),
++
++	TP_ARGS(inode, pos, len, flags),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	loff_t,	pos			)
++		__field(	unsigned int, len		)
++		__field(	unsigned int, flags		)
++	),
++
++	TP_fast_assign(
++		__entry->dev	= inode->i_sb->s_dev;
++		__entry->ino	= inode->i_ino;
++		__entry->pos	= pos;
++		__entry->len	= len;
++		__entry->flags	= flags;
++	),
++
++	TP_printk("dev %d,%d ino %lu pos %lld len %u flags %u",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->pos, __entry->len, __entry->flags)
++);
++
++DEFINE_EVENT(ext4__write_begin, ext4_write_begin,
++
++	TP_PROTO(struct inode *inode, loff_t pos, unsigned int len,
++		 unsigned int flags),
++
++	TP_ARGS(inode, pos, len, flags)
++);
++
++DEFINE_EVENT(ext4__write_begin, ext4_da_write_begin,
++
++	TP_PROTO(struct inode *inode, loff_t pos, unsigned int len,
++		 unsigned int flags),
++
++	TP_ARGS(inode, pos, len, flags)
++);
++
++DECLARE_EVENT_CLASS(ext4__write_end,
++	TP_PROTO(struct inode *inode, loff_t pos, unsigned int len,
++			unsigned int copied),
++
++	TP_ARGS(inode, pos, len, copied),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	loff_t,	pos			)
++		__field(	unsigned int, len		)
++		__field(	unsigned int, copied		)
++	),
++
++	TP_fast_assign(
++		__entry->dev	= inode->i_sb->s_dev;
++		__entry->ino	= inode->i_ino;
++		__entry->pos	= pos;
++		__entry->len	= len;
++		__entry->copied	= copied;
++	),
++
++	TP_printk("dev %d,%d ino %lu pos %lld len %u copied %u",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->pos, __entry->len, __entry->copied)
++);
++
++DEFINE_EVENT(ext4__write_end, ext4_ordered_write_end,
++
++	TP_PROTO(struct inode *inode, loff_t pos, unsigned int len,
++		 unsigned int copied),
++
++	TP_ARGS(inode, pos, len, copied)
++);
++
++DEFINE_EVENT(ext4__write_end, ext4_writeback_write_end,
++
++	TP_PROTO(struct inode *inode, loff_t pos, unsigned int len,
++		 unsigned int copied),
++
++	TP_ARGS(inode, pos, len, copied)
++);
++
++DEFINE_EVENT(ext4__write_end, ext4_journalled_write_end,
++
++	TP_PROTO(struct inode *inode, loff_t pos, unsigned int len,
++		 unsigned int copied),
++
++	TP_ARGS(inode, pos, len, copied)
++);
++
++DEFINE_EVENT(ext4__write_end, ext4_da_write_end,
++
++	TP_PROTO(struct inode *inode, loff_t pos, unsigned int len,
++		 unsigned int copied),
++
++	TP_ARGS(inode, pos, len, copied)
++);
++
++TRACE_EVENT(ext4_da_writepages,
++	TP_PROTO(struct inode *inode, struct writeback_control *wbc),
++
++	TP_ARGS(inode, wbc),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	long,	nr_to_write		)
++		__field(	long,	pages_skipped		)
++		__field(	loff_t,	range_start		)
++		__field(	loff_t,	range_end		)
++		__field(       pgoff_t,	writeback_index		)
++		__field(	int,	sync_mode		)
++		__field(	char,	for_kupdate		)
++		__field(	char,	range_cyclic		)
++	),
++
++	TP_fast_assign(
++		__entry->dev		= inode->i_sb->s_dev;
++		__entry->ino		= inode->i_ino;
++		__entry->nr_to_write	= wbc->nr_to_write;
++		__entry->pages_skipped	= wbc->pages_skipped;
++		__entry->range_start	= wbc->range_start;
++		__entry->range_end	= wbc->range_end;
++		__entry->writeback_index = inode->i_mapping->writeback_index;
++		__entry->sync_mode	= wbc->sync_mode;
++		__entry->for_kupdate	= wbc->for_kupdate;
++		__entry->range_cyclic	= wbc->range_cyclic;
++	),
++
++	TP_printk("dev %d,%d ino %lu nr_to_write %ld pages_skipped %ld "
++		  "range_start %lld range_end %lld sync_mode %d "
++		  "for_kupdate %d range_cyclic %d writeback_index %lu",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino, __entry->nr_to_write,
++		  __entry->pages_skipped, __entry->range_start,
++		  __entry->range_end, __entry->sync_mode,
++		  __entry->for_kupdate, __entry->range_cyclic,
++		  (unsigned long) __entry->writeback_index)
++);
++
++TRACE_EVENT(ext4_da_write_pages,
++	TP_PROTO(struct inode *inode, struct mpage_da_data *mpd),
++
++	TP_ARGS(inode, mpd),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	__u64,	b_blocknr		)
++		__field(	__u32,	b_size			)
++		__field(	__u32,	b_state			)
++		__field(	unsigned long,	first_page	)
++		__field(	int,	io_done			)
++		__field(	int,	pages_written		)
++		__field(	int,	sync_mode		)
++	),
++
++	TP_fast_assign(
++		__entry->dev		= inode->i_sb->s_dev;
++		__entry->ino		= inode->i_ino;
++		__entry->b_blocknr	= mpd->b_blocknr;
++		__entry->b_size		= mpd->b_size;
++		__entry->b_state	= mpd->b_state;
++		__entry->first_page	= mpd->first_page;
++		__entry->io_done	= mpd->io_done;
++		__entry->pages_written	= mpd->pages_written;
++		__entry->sync_mode	= mpd->wbc->sync_mode;
++	),
++
++	TP_printk("dev %d,%d ino %lu b_blocknr %llu b_size %u b_state 0x%04x "
++		  "first_page %lu io_done %d pages_written %d sync_mode %d",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->b_blocknr, __entry->b_size,
++		  __entry->b_state, __entry->first_page,
++		  __entry->io_done, __entry->pages_written,
++		  __entry->sync_mode
++                  )
++);
++
++TRACE_EVENT(ext4_da_writepages_result,
++	TP_PROTO(struct inode *inode, struct writeback_control *wbc,
++			int ret, int pages_written),
++
++	TP_ARGS(inode, wbc, ret, pages_written),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	int,	ret			)
++		__field(	int,	pages_written		)
++		__field(	long,	pages_skipped		)
++		__field(       pgoff_t,	writeback_index		)
++		__field(	int,	sync_mode		)
++	),
++
++	TP_fast_assign(
++		__entry->dev		= inode->i_sb->s_dev;
++		__entry->ino		= inode->i_ino;
++		__entry->ret		= ret;
++		__entry->pages_written	= pages_written;
++		__entry->pages_skipped	= wbc->pages_skipped;
++		__entry->writeback_index = inode->i_mapping->writeback_index;
++		__entry->sync_mode	= wbc->sync_mode;
++	),
++
++	TP_printk("dev %d,%d ino %lu ret %d pages_written %d pages_skipped %ld "
++		  "sync_mode %d writeback_index %lu",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino, __entry->ret,
++		  __entry->pages_written, __entry->pages_skipped,
++		  __entry->sync_mode,
++		  (unsigned long) __entry->writeback_index)
++);
++
++DECLARE_EVENT_CLASS(ext4__page_op,
++	TP_PROTO(struct page *page),
++
++	TP_ARGS(page),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	pgoff_t, index			)
++
++	),
++
++	TP_fast_assign(
++		__entry->dev	= page->mapping->host->i_sb->s_dev;
++		__entry->ino	= page->mapping->host->i_ino;
++		__entry->index	= page->index;
++	),
++
++	TP_printk("dev %d,%d ino %lu page_index %lu",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  (unsigned long) __entry->index)
++);
++
++DEFINE_EVENT(ext4__page_op, ext4_writepage,
++
++	TP_PROTO(struct page *page),
++
++	TP_ARGS(page)
++);
++
++DEFINE_EVENT(ext4__page_op, ext4_readpage,
++
++	TP_PROTO(struct page *page),
++
++	TP_ARGS(page)
++);
++
++DEFINE_EVENT(ext4__page_op, ext4_releasepage,
++
++	TP_PROTO(struct page *page),
++
++	TP_ARGS(page)
++);
++
++TRACE_EVENT(ext4_invalidatepage,
++	TP_PROTO(struct page *page, unsigned long offset),
++
++	TP_ARGS(page, offset),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	pgoff_t, index			)
++		__field(	unsigned long, offset		)
++
++	),
++
++	TP_fast_assign(
++		__entry->dev	= page->mapping->host->i_sb->s_dev;
++		__entry->ino	= page->mapping->host->i_ino;
++		__entry->index	= page->index;
++		__entry->offset	= offset;
++	),
++
++	TP_printk("dev %d,%d ino %lu page_index %lu offset %lu",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  (unsigned long) __entry->index, __entry->offset)
++);
++
++TRACE_EVENT(ext4_discard_blocks,
++	TP_PROTO(struct super_block *sb, unsigned long long blk,
++			unsigned long long count),
++
++	TP_ARGS(sb, blk, count),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	__u64,	blk			)
++		__field(	__u64,	count			)
++
++	),
++
++	TP_fast_assign(
++		__entry->dev	= sb->s_dev;
++		__entry->blk	= blk;
++		__entry->count	= count;
++	),
++
++	TP_printk("dev %d,%d blk %llu count %llu",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  __entry->blk, __entry->count)
++);
++
++DECLARE_EVENT_CLASS(ext4__mb_new_pa,
++	TP_PROTO(struct ext4_allocation_context *ac,
++		 struct ext4_prealloc_space *pa),
++
++	TP_ARGS(ac, pa),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	__u64,	pa_pstart		)
++		__field(	__u64,	pa_lstart		)
++		__field(	__u32,	pa_len			)
++
++	),
++
++	TP_fast_assign(
++		__entry->dev		= ac->ac_sb->s_dev;
++		__entry->ino		= ac->ac_inode->i_ino;
++		__entry->pa_pstart	= pa->pa_pstart;
++		__entry->pa_lstart	= pa->pa_lstart;
++		__entry->pa_len		= pa->pa_len;
++	),
++
++	TP_printk("dev %d,%d ino %lu pstart %llu len %u lstart %llu",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->pa_pstart, __entry->pa_len, __entry->pa_lstart)
++);
++
++DEFINE_EVENT(ext4__mb_new_pa, ext4_mb_new_inode_pa,
++
++	TP_PROTO(struct ext4_allocation_context *ac,
++		 struct ext4_prealloc_space *pa),
++
++	TP_ARGS(ac, pa)
++);
++
++DEFINE_EVENT(ext4__mb_new_pa, ext4_mb_new_group_pa,
++
++	TP_PROTO(struct ext4_allocation_context *ac,
++		 struct ext4_prealloc_space *pa),
++
++	TP_ARGS(ac, pa)
++);
++
++TRACE_EVENT(ext4_mb_release_inode_pa,
++	TP_PROTO(struct ext4_prealloc_space *pa,
++		 unsigned long long block, unsigned int count),
++
++	TP_ARGS(pa, block, count),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	__u64,	block			)
++		__field(	__u32,	count			)
++
++	),
++
++	TP_fast_assign(
++		__entry->dev		= pa->pa_inode->i_sb->s_dev;
++		__entry->ino		= pa->pa_inode->i_ino;
++		__entry->block		= block;
++		__entry->count		= count;
++	),
++
++	TP_printk("dev %d,%d ino %lu block %llu count %u",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->block, __entry->count)
++);
++
++TRACE_EVENT(ext4_mb_release_group_pa,
++	TP_PROTO(struct super_block *sb, struct ext4_prealloc_space *pa),
++
++	TP_ARGS(sb, pa),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	__u64,	pa_pstart		)
++		__field(	__u32,	pa_len			)
++
++	),
++
++	TP_fast_assign(
++		__entry->dev		= sb->s_dev;
++		__entry->pa_pstart	= pa->pa_pstart;
++		__entry->pa_len		= pa->pa_len;
++	),
++
++	TP_printk("dev %d,%d pstart %llu len %u",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  __entry->pa_pstart, __entry->pa_len)
++);
++
++TRACE_EVENT(ext4_discard_preallocations,
++	TP_PROTO(struct inode *inode),
++
++	TP_ARGS(inode),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++
++	),
++
++	TP_fast_assign(
++		__entry->dev	= inode->i_sb->s_dev;
++		__entry->ino	= inode->i_ino;
++	),
++
++	TP_printk("dev %d,%d ino %lu",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino)
++);
++
++TRACE_EVENT(ext4_mb_discard_preallocations,
++	TP_PROTO(struct super_block *sb, int needed),
++
++	TP_ARGS(sb, needed),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	int,	needed			)
++
++	),
++
++	TP_fast_assign(
++		__entry->dev	= sb->s_dev;
++		__entry->needed	= needed;
++	),
++
++	TP_printk("dev %d,%d needed %d",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  __entry->needed)
++);
++
++TRACE_EVENT(ext4_request_blocks,
++	TP_PROTO(struct ext4_allocation_request *ar),
++
++	TP_ARGS(ar),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	unsigned int, len		)
++		__field(	__u32,  logical			)
++		__field(	__u32,	lleft			)
++		__field(	__u32,	lright			)
++		__field(	__u64,	goal			)
++		__field(	__u64,	pleft			)
++		__field(	__u64,	pright			)
++		__field(	unsigned int, flags		)
++	),
++
++	TP_fast_assign(
++		__entry->dev	= ar->inode->i_sb->s_dev;
++		__entry->ino	= ar->inode->i_ino;
++		__entry->len	= ar->len;
++		__entry->logical = ar->logical;
++		__entry->goal	= ar->goal;
++		__entry->lleft	= ar->lleft;
++		__entry->lright	= ar->lright;
++		__entry->pleft	= ar->pleft;
++		__entry->pright	= ar->pright;
++		__entry->flags	= ar->flags;
++	),
++
++	TP_printk("dev %d,%d ino %lu flags %u len %u lblk %u goal %llu "
++		  "lleft %u lright %u pleft %llu pright %llu ",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino, __entry->flags,
++		  __entry->len, __entry->logical, __entry->goal,
++		  __entry->lleft, __entry->lright, __entry->pleft,
++		  __entry->pright)
++);
++
++TRACE_EVENT(ext4_allocate_blocks,
++	TP_PROTO(struct ext4_allocation_request *ar, unsigned long long block),
++
++	TP_ARGS(ar, block),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	__u64,	block			)
++		__field(	unsigned int, len		)
++		__field(	__u32,  logical			)
++		__field(	__u32,	lleft			)
++		__field(	__u32,	lright			)
++		__field(	__u64,	goal			)
++		__field(	__u64,	pleft			)
++		__field(	__u64,	pright			)
++		__field(	unsigned int, flags		)
++	),
++
++	TP_fast_assign(
++		__entry->dev	= ar->inode->i_sb->s_dev;
++		__entry->ino	= ar->inode->i_ino;
++		__entry->block	= block;
++		__entry->len	= ar->len;
++		__entry->logical = ar->logical;
++		__entry->goal	= ar->goal;
++		__entry->lleft	= ar->lleft;
++		__entry->lright	= ar->lright;
++		__entry->pleft	= ar->pleft;
++		__entry->pright	= ar->pright;
++		__entry->flags	= ar->flags;
++	),
++
++	TP_printk("dev %d,%d ino %lu flags %u len %u block %llu lblk %u "
++		  "goal %llu lleft %u lright %u pleft %llu pright %llu",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino, __entry->flags,
++		  __entry->len, __entry->block, __entry->logical,
++		  __entry->goal,  __entry->lleft, __entry->lright,
++		  __entry->pleft, __entry->pright)
++);
++
++TRACE_EVENT(ext4_free_blocks,
++	TP_PROTO(struct inode *inode, __u64 block, unsigned long count,
++		 int flags),
++
++	TP_ARGS(inode, block, count, flags),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	__u64,	block			)
++		__field(	unsigned long,	count		)
++		__field(	int,	flags			)
++		__field(	__u16,	mode			)
++	),
++
++	TP_fast_assign(
++		__entry->dev		= inode->i_sb->s_dev;
++		__entry->ino		= inode->i_ino;
++		__entry->block		= block;
++		__entry->count		= count;
++		__entry->flags		= flags;
++		__entry->mode		= inode->i_mode;
++	),
++
++	TP_printk("dev %d,%d ino %lu mode 0%o block %llu count %lu flags %d",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->mode, __entry->block, __entry->count,
++		  __entry->flags)
++);
++
++TRACE_EVENT(ext4_sync_file_enter,
++	TP_PROTO(struct file *file, int datasync),
++
++	TP_ARGS(file, datasync),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	ino_t,	parent			)
++		__field(	int,	datasync		)
++	),
++
++	TP_fast_assign(
++		struct dentry *dentry = file->f_path.dentry;
++
++		__entry->dev		= dentry->d_inode->i_sb->s_dev;
++		__entry->ino		= dentry->d_inode->i_ino;
++		__entry->datasync	= datasync;
++		__entry->parent		= dentry->d_parent->d_inode->i_ino;
++	),
++
++	TP_printk("dev %d,%d ino %lu parent %lu datasync %d ",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  (unsigned long) __entry->parent, __entry->datasync)
++);
++
++TRACE_EVENT(ext4_sync_file_exit,
++	TP_PROTO(struct inode *inode, int ret),
++
++	TP_ARGS(inode, ret),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	int,	ret			)
++	),
++
++	TP_fast_assign(
++		__entry->dev		= inode->i_sb->s_dev;
++		__entry->ino		= inode->i_ino;
++		__entry->ret		= ret;
++	),
++
++	TP_printk("dev %d,%d ino %lu ret %d",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->ret)
++);
++
++TRACE_EVENT(ext4_sync_fs,
++	TP_PROTO(struct super_block *sb, int wait),
++
++	TP_ARGS(sb, wait),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	int,	wait			)
++
++	),
++
++	TP_fast_assign(
++		__entry->dev	= sb->s_dev;
++		__entry->wait	= wait;
++	),
++
++	TP_printk("dev %d,%d wait %d",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  __entry->wait)
++);
++
++TRACE_EVENT(ext4_alloc_da_blocks,
++	TP_PROTO(struct inode *inode),
++
++	TP_ARGS(inode),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field( unsigned int,	data_blocks	)
++		__field( unsigned int,	meta_blocks	)
++	),
++
++	TP_fast_assign(
++		__entry->dev	= inode->i_sb->s_dev;
++		__entry->ino	= inode->i_ino;
++		__entry->data_blocks = EXT4_I(inode)->i_reserved_data_blocks;
++		__entry->meta_blocks = EXT4_I(inode)->i_reserved_meta_blocks;
++	),
++
++	TP_printk("dev %d,%d ino %lu data_blocks %u meta_blocks %u",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->data_blocks, __entry->meta_blocks)
++);
++
++TRACE_EVENT(ext4_mballoc_alloc,
++	TP_PROTO(struct ext4_allocation_context *ac),
++
++	TP_ARGS(ac),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	__u32, 	orig_logical		)
++		__field(	  int,	orig_start		)
++		__field(	__u32, 	orig_group		)
++		__field(	  int,	orig_len		)
++		__field(	__u32, 	goal_logical		)
++		__field(	  int,	goal_start		)
++		__field(	__u32, 	goal_group		)
++		__field(	  int,	goal_len		)
++		__field(	__u32, 	result_logical		)
++		__field(	  int,	result_start		)
++		__field(	__u32, 	result_group		)
++		__field(	  int,	result_len		)
++		__field(	__u16,	found			)
++		__field(	__u16,	groups			)
++		__field(	__u16,	buddy			)
++		__field(	__u16,	flags			)
++		__field(	__u16,	tail			)
++		__field(	__u8,	cr			)
++	),
++
++	TP_fast_assign(
++		__entry->dev		= ac->ac_inode->i_sb->s_dev;
++		__entry->ino		= ac->ac_inode->i_ino;
++		__entry->orig_logical	= ac->ac_o_ex.fe_logical;
++		__entry->orig_start	= ac->ac_o_ex.fe_start;
++		__entry->orig_group	= ac->ac_o_ex.fe_group;
++		__entry->orig_len	= ac->ac_o_ex.fe_len;
++		__entry->goal_logical	= ac->ac_g_ex.fe_logical;
++		__entry->goal_start	= ac->ac_g_ex.fe_start;
++		__entry->goal_group	= ac->ac_g_ex.fe_group;
++		__entry->goal_len	= ac->ac_g_ex.fe_len;
++		__entry->result_logical	= ac->ac_f_ex.fe_logical;
++		__entry->result_start	= ac->ac_f_ex.fe_start;
++		__entry->result_group	= ac->ac_f_ex.fe_group;
++		__entry->result_len	= ac->ac_f_ex.fe_len;
++		__entry->found		= ac->ac_found;
++		__entry->flags		= ac->ac_flags;
++		__entry->groups		= ac->ac_groups_scanned;
++		__entry->buddy		= ac->ac_buddy;
++		__entry->tail		= ac->ac_tail;
++		__entry->cr		= ac->ac_criteria;
++	),
++
++	TP_printk("dev %d,%d inode %lu orig %u/%d/%u@%u goal %u/%d/%u@%u "
++		  "result %u/%d/%u@%u blks %u grps %u cr %u flags 0x%04x "
++		  "tail %u broken %u",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->orig_group, __entry->orig_start,
++		  __entry->orig_len, __entry->orig_logical,
++		  __entry->goal_group, __entry->goal_start,
++		  __entry->goal_len, __entry->goal_logical,
++		  __entry->result_group, __entry->result_start,
++		  __entry->result_len, __entry->result_logical,
++		  __entry->found, __entry->groups, __entry->cr,
++		  __entry->flags, __entry->tail,
++		  __entry->buddy ? 1 << __entry->buddy : 0)
++);
++
++TRACE_EVENT(ext4_mballoc_prealloc,
++	TP_PROTO(struct ext4_allocation_context *ac),
++
++	TP_ARGS(ac),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	__u32, 	orig_logical		)
++		__field(	  int,	orig_start		)
++		__field(	__u32, 	orig_group		)
++		__field(	  int,	orig_len		)
++		__field(	__u32, 	result_logical		)
++		__field(	  int,	result_start		)
++		__field(	__u32, 	result_group		)
++		__field(	  int,	result_len		)
++	),
++
++	TP_fast_assign(
++		__entry->dev		= ac->ac_inode->i_sb->s_dev;
++		__entry->ino		= ac->ac_inode->i_ino;
++		__entry->orig_logical	= ac->ac_o_ex.fe_logical;
++		__entry->orig_start	= ac->ac_o_ex.fe_start;
++		__entry->orig_group	= ac->ac_o_ex.fe_group;
++		__entry->orig_len	= ac->ac_o_ex.fe_len;
++		__entry->result_logical	= ac->ac_b_ex.fe_logical;
++		__entry->result_start	= ac->ac_b_ex.fe_start;
++		__entry->result_group	= ac->ac_b_ex.fe_group;
++		__entry->result_len	= ac->ac_b_ex.fe_len;
++	),
++
++	TP_printk("dev %d,%d inode %lu orig %u/%d/%u@%u result %u/%d/%u@%u",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->orig_group, __entry->orig_start,
++		  __entry->orig_len, __entry->orig_logical,
++		  __entry->result_group, __entry->result_start,
++		  __entry->result_len, __entry->result_logical)
++);
++
++DECLARE_EVENT_CLASS(ext4__mballoc,
++	TP_PROTO(struct super_block *sb,
++		 struct inode *inode,
++		 ext4_group_t group,
++		 ext4_grpblk_t start,
++		 ext4_grpblk_t len),
++
++	TP_ARGS(sb, inode, group, start, len),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	  int,	result_start		)
++		__field(	__u32, 	result_group		)
++		__field(	  int,	result_len		)
++	),
++
++	TP_fast_assign(
++		__entry->dev		= sb->s_dev;
++		__entry->ino		= inode ? inode->i_ino : 0;
++		__entry->result_start	= start;
++		__entry->result_group	= group;
++		__entry->result_len	= len;
++	),
++
++	TP_printk("dev %d,%d inode %lu extent %u/%d/%d ",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->result_group, __entry->result_start,
++		  __entry->result_len)
++);
++
++DEFINE_EVENT(ext4__mballoc, ext4_mballoc_discard,
++
++	TP_PROTO(struct super_block *sb,
++		 struct inode *inode,
++		 ext4_group_t group,
++		 ext4_grpblk_t start,
++		 ext4_grpblk_t len),
++
++	TP_ARGS(sb, inode, group, start, len)
++);
++
++DEFINE_EVENT(ext4__mballoc, ext4_mballoc_free,
++
++	TP_PROTO(struct super_block *sb,
++		 struct inode *inode,
++		 ext4_group_t group,
++		 ext4_grpblk_t start,
++		 ext4_grpblk_t len),
++
++	TP_ARGS(sb, inode, group, start, len)
++);
++
++TRACE_EVENT(ext4_forget,
++	TP_PROTO(struct inode *inode, int is_metadata, __u64 block),
++
++	TP_ARGS(inode, is_metadata, block),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	__u64,	block			)
++		__field(	int,	is_metadata		)
++		__field(	__u16,	mode			)
++	),
++
++	TP_fast_assign(
++		__entry->dev	= inode->i_sb->s_dev;
++		__entry->ino	= inode->i_ino;
++		__entry->block	= block;
++		__entry->is_metadata = is_metadata;
++		__entry->mode	= inode->i_mode;
++	),
++
++	TP_printk("dev %d,%d ino %lu mode 0%o is_metadata %d block %llu",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->mode, __entry->is_metadata, __entry->block)
++);
++
++TRACE_EVENT(ext4_da_update_reserve_space,
++	TP_PROTO(struct inode *inode, int used_blocks, int quota_claim),
++
++	TP_ARGS(inode, used_blocks, quota_claim),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	__u64,	i_blocks		)
++		__field(	int,	used_blocks		)
++		__field(	int,	reserved_data_blocks	)
++		__field(	int,	reserved_meta_blocks	)
++		__field(	int,	allocated_meta_blocks	)
++		__field(	int,	quota_claim		)
++		__field(	__u16,	mode			)
++	),
++
++	TP_fast_assign(
++		__entry->dev	= inode->i_sb->s_dev;
++		__entry->ino	= inode->i_ino;
++		__entry->i_blocks = inode->i_blocks;
++		__entry->used_blocks = used_blocks;
++		__entry->reserved_data_blocks =
++				EXT4_I(inode)->i_reserved_data_blocks;
++		__entry->reserved_meta_blocks =
++				EXT4_I(inode)->i_reserved_meta_blocks;
++		__entry->allocated_meta_blocks =
++				EXT4_I(inode)->i_allocated_meta_blocks;
++		__entry->quota_claim = quota_claim;
++		__entry->mode	= inode->i_mode;
++	),
++
++	TP_printk("dev %d,%d ino %lu mode 0%o i_blocks %llu used_blocks %d "
++		  "reserved_data_blocks %d reserved_meta_blocks %d "
++		  "allocated_meta_blocks %d quota_claim %d",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->mode, __entry->i_blocks,
++		  __entry->used_blocks, __entry->reserved_data_blocks,
++		  __entry->reserved_meta_blocks, __entry->allocated_meta_blocks,
++		  __entry->quota_claim)
++);
++
++TRACE_EVENT(ext4_da_reserve_space,
++	TP_PROTO(struct inode *inode, int md_needed),
++
++	TP_ARGS(inode, md_needed),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	__u64,	i_blocks		)
++		__field(	int,	md_needed		)
++		__field(	int,	reserved_data_blocks	)
++		__field(	int,	reserved_meta_blocks	)
++		__field(	__u16,  mode			)
++	),
++
++	TP_fast_assign(
++		__entry->dev	= inode->i_sb->s_dev;
++		__entry->ino	= inode->i_ino;
++		__entry->i_blocks = inode->i_blocks;
++		__entry->md_needed = md_needed;
++		__entry->reserved_data_blocks = EXT4_I(inode)->i_reserved_data_blocks;
++		__entry->reserved_meta_blocks = EXT4_I(inode)->i_reserved_meta_blocks;
++		__entry->mode	= inode->i_mode;
++	),
++
++	TP_printk("dev %d,%d ino %lu mode 0%o i_blocks %llu md_needed %d "
++		  "reserved_data_blocks %d reserved_meta_blocks %d",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->mode, __entry->i_blocks,
++		  __entry->md_needed, __entry->reserved_data_blocks,
++		  __entry->reserved_meta_blocks)
++);
++
++TRACE_EVENT(ext4_da_release_space,
++	TP_PROTO(struct inode *inode, int freed_blocks),
++
++	TP_ARGS(inode, freed_blocks),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	__u64,	i_blocks		)
++		__field(	int,	freed_blocks		)
++		__field(	int,	reserved_data_blocks	)
++		__field(	int,	reserved_meta_blocks	)
++		__field(	int,	allocated_meta_blocks	)
++		__field(	__u16,  mode			)
++	),
++
++	TP_fast_assign(
++		__entry->dev	= inode->i_sb->s_dev;
++		__entry->ino	= inode->i_ino;
++		__entry->i_blocks = inode->i_blocks;
++		__entry->freed_blocks = freed_blocks;
++		__entry->reserved_data_blocks = EXT4_I(inode)->i_reserved_data_blocks;
++		__entry->reserved_meta_blocks = EXT4_I(inode)->i_reserved_meta_blocks;
++		__entry->allocated_meta_blocks = EXT4_I(inode)->i_allocated_meta_blocks;
++		__entry->mode	= inode->i_mode;
++	),
++
++	TP_printk("dev %d,%d ino %lu mode 0%o i_blocks %llu freed_blocks %d "
++		  "reserved_data_blocks %d reserved_meta_blocks %d "
++		  "allocated_meta_blocks %d",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->mode, __entry->i_blocks,
++		  __entry->freed_blocks, __entry->reserved_data_blocks,
++		  __entry->reserved_meta_blocks, __entry->allocated_meta_blocks)
++);
++
++DECLARE_EVENT_CLASS(ext4__bitmap_load,
++	TP_PROTO(struct super_block *sb, unsigned long group),
++
++	TP_ARGS(sb, group),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	__u32,	group			)
++
++	),
++
++	TP_fast_assign(
++		__entry->dev	= sb->s_dev;
++		__entry->group	= group;
++	),
++
++	TP_printk("dev %d,%d group %u",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  __entry->group)
++);
++
++DEFINE_EVENT(ext4__bitmap_load, ext4_mb_bitmap_load,
++
++	TP_PROTO(struct super_block *sb, unsigned long group),
++
++	TP_ARGS(sb, group)
++);
++
++DEFINE_EVENT(ext4__bitmap_load, ext4_mb_buddy_bitmap_load,
++
++	TP_PROTO(struct super_block *sb, unsigned long group),
++
++	TP_ARGS(sb, group)
++);
++
++DEFINE_EVENT(ext4__bitmap_load, ext4_read_block_bitmap_load,
++
++	TP_PROTO(struct super_block *sb, unsigned long group),
++
++	TP_ARGS(sb, group)
++);
++
++DEFINE_EVENT(ext4__bitmap_load, ext4_load_inode_bitmap,
++
++	TP_PROTO(struct super_block *sb, unsigned long group),
++
++	TP_ARGS(sb, group)
++);
++
++TRACE_EVENT(ext4_direct_IO_enter,
++	TP_PROTO(struct inode *inode, loff_t offset, unsigned long len, int rw),
++
++	TP_ARGS(inode, offset, len, rw),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	loff_t,	pos			)
++		__field(	unsigned long,	len		)
++		__field(	int,	rw			)
++	),
++
++	TP_fast_assign(
++		__entry->dev	= inode->i_sb->s_dev;
++		__entry->ino	= inode->i_ino;
++		__entry->pos	= offset;
++		__entry->len	= len;
++		__entry->rw	= rw;
++	),
++
++	TP_printk("dev %d,%d ino %lu pos %lld len %lu rw %d",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->pos, __entry->len, __entry->rw)
++);
++
++TRACE_EVENT(ext4_direct_IO_exit,
++	TP_PROTO(struct inode *inode, loff_t offset, unsigned long len,
++		 int rw, int ret),
++
++	TP_ARGS(inode, offset, len, rw, ret),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	loff_t,	pos			)
++		__field(	unsigned long,	len		)
++		__field(	int,	rw			)
++		__field(	int,	ret			)
++	),
++
++	TP_fast_assign(
++		__entry->dev	= inode->i_sb->s_dev;
++		__entry->ino	= inode->i_ino;
++		__entry->pos	= offset;
++		__entry->len	= len;
++		__entry->rw	= rw;
++		__entry->ret	= ret;
++	),
++
++	TP_printk("dev %d,%d ino %lu pos %lld len %lu rw %d ret %d",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->pos, __entry->len,
++		  __entry->rw, __entry->ret)
++);
++
++TRACE_EVENT(ext4_fallocate_enter,
++	TP_PROTO(struct inode *inode, loff_t offset, loff_t len, int mode),
++
++	TP_ARGS(inode, offset, len, mode),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	loff_t,	pos			)
++		__field(	loff_t,	len			)
++		__field(	int,	mode			)
++	),
++
++	TP_fast_assign(
++		__entry->dev	= inode->i_sb->s_dev;
++		__entry->ino	= inode->i_ino;
++		__entry->pos	= offset;
++		__entry->len	= len;
++		__entry->mode	= mode;
++	),
++
++	TP_printk("dev %d,%d ino %lu pos %lld len %lld mode %d",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino, __entry->pos,
++		  __entry->len, __entry->mode)
++);
++
++TRACE_EVENT(ext4_fallocate_exit,
++	TP_PROTO(struct inode *inode, loff_t offset,
++		 unsigned int max_blocks, int ret),
++
++	TP_ARGS(inode, offset, max_blocks, ret),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	loff_t,	pos			)
++		__field(	unsigned int,	blocks		)
++		__field(	int, 	ret			)
++	),
++
++	TP_fast_assign(
++		__entry->dev	= inode->i_sb->s_dev;
++		__entry->ino	= inode->i_ino;
++		__entry->pos	= offset;
++		__entry->blocks	= max_blocks;
++		__entry->ret	= ret;
++	),
++
++	TP_printk("dev %d,%d ino %lu pos %lld blocks %u ret %d",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->pos, __entry->blocks,
++		  __entry->ret)
++);
++
++TRACE_EVENT(ext4_unlink_enter,
++	TP_PROTO(struct inode *parent, struct dentry *dentry),
++
++	TP_ARGS(parent, dentry),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	ino_t,	parent			)
++		__field(	loff_t,	size			)
++	),
++
++	TP_fast_assign(
++		__entry->dev		= dentry->d_inode->i_sb->s_dev;
++		__entry->ino		= dentry->d_inode->i_ino;
++		__entry->parent		= parent->i_ino;
++		__entry->size		= dentry->d_inode->i_size;
++	),
++
++	TP_printk("dev %d,%d ino %lu size %lld parent %lu",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino, __entry->size,
++		  (unsigned long) __entry->parent)
++);
++
++TRACE_EVENT(ext4_unlink_exit,
++	TP_PROTO(struct dentry *dentry, int ret),
++
++	TP_ARGS(dentry, ret),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(	ino_t,	ino			)
++		__field(	int,	ret			)
++	),
++
++	TP_fast_assign(
++		__entry->dev		= dentry->d_inode->i_sb->s_dev;
++		__entry->ino		= dentry->d_inode->i_ino;
++		__entry->ret		= ret;
++	),
++
++	TP_printk("dev %d,%d ino %lu ret %d",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->ret)
++);
++
++DECLARE_EVENT_CLASS(ext4__truncate,
++	TP_PROTO(struct inode *inode),
++
++	TP_ARGS(inode),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,		dev		)
++		__field(	ino_t,		ino		)
++		__field(	__u64,		blocks		)
++	),
++
++	TP_fast_assign(
++		__entry->dev    = inode->i_sb->s_dev;
++		__entry->ino    = inode->i_ino;
++		__entry->blocks	= inode->i_blocks;
++	),
++
++	TP_printk("dev %d,%d ino %lu blocks %llu",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino, __entry->blocks)
++);
++
++DEFINE_EVENT(ext4__truncate, ext4_truncate_enter,
++
++	TP_PROTO(struct inode *inode),
++
++	TP_ARGS(inode)
++);
++
++DEFINE_EVENT(ext4__truncate, ext4_truncate_exit,
++
++	TP_PROTO(struct inode *inode),
++
++	TP_ARGS(inode)
++);
++
++/* 'ux' is the uninitialized extent. */
++TRACE_EVENT(ext4_ext_convert_to_initialized_enter,
++	TP_PROTO(struct inode *inode, struct ext4_map_blocks *map,
++		 struct ext4_extent *ux),
++
++	TP_ARGS(inode, map, ux),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,		dev	)
++		__field(	ino_t,		ino	)
++		__field(	ext4_lblk_t,	m_lblk	)
++		__field(	unsigned,	m_len	)
++		__field(	ext4_lblk_t,	u_lblk	)
++		__field(	unsigned,	u_len	)
++		__field(	ext4_fsblk_t,	u_pblk	)
++	),
++
++	TP_fast_assign(
++		__entry->dev		= inode->i_sb->s_dev;
++		__entry->ino		= inode->i_ino;
++		__entry->m_lblk		= map->m_lblk;
++		__entry->m_len		= map->m_len;
++		__entry->u_lblk		= le32_to_cpu(ux->ee_block);
++		__entry->u_len		= ext4_ext_get_actual_len(ux);
++		__entry->u_pblk		= ext4_ext_pblock(ux);
++	),
++
++	TP_printk("dev %d,%d ino %lu m_lblk %u m_len %u u_lblk %u u_len %u "
++		  "u_pblk %llu",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->m_lblk, __entry->m_len,
++		  __entry->u_lblk, __entry->u_len, __entry->u_pblk)
++);
 +
 +/*
-  * Tracepoint for accounting runtime (time the task is executing
-  * on a CPU).
-  */
-diff --git a/instrumentation/events/mainline/signal.h b/instrumentation/events/mainline/signal.h
-index 17df434..39a8a43 100644
---- a/instrumentation/events/mainline/signal.h
-+++ b/instrumentation/events/mainline/signal.h
-@@ -23,11 +23,23 @@
- 		}						\
- 	} while (0)
- 
-+#ifndef TRACE_HEADER_MULTI_READ
-+enum {
-+	TRACE_SIGNAL_DELIVERED,
-+	TRACE_SIGNAL_IGNORED,
-+	TRACE_SIGNAL_ALREADY_PENDING,
-+	TRACE_SIGNAL_OVERFLOW_FAIL,
-+	TRACE_SIGNAL_LOSE_INFO,
-+};
-+#endif
++ * 'ux' is the uninitialized extent.
++ * 'ix' is the initialized extent to which blocks are transferred.
++ */
++TRACE_EVENT(ext4_ext_convert_to_initialized_fastpath,
++	TP_PROTO(struct inode *inode, struct ext4_map_blocks *map,
++		 struct ext4_extent *ux, struct ext4_extent *ix),
 +
- /**
-  * signal_generate - called when a signal is generated
-  * @sig: signal number
-  * @info: pointer to struct siginfo
-  * @task: pointer to struct task_struct
-+ * @group: shared or private
-+ * @result: TRACE_SIGNAL_*
-  *
-  * Current process sends a 'sig' signal to 'task' process with
-  * 'info' siginfo. If 'info' is SEND_SIG_NOINFO or SEND_SIG_PRIV,
-@@ -37,9 +49,10 @@
-  */
- TRACE_EVENT(signal_generate,
- 
--	TP_PROTO(int sig, struct siginfo *info, struct task_struct *task),
-+	TP_PROTO(int sig, struct siginfo *info, struct task_struct *task,
-+			int group, int result),
- 
--	TP_ARGS(sig, info, task),
-+	TP_ARGS(sig, info, task, group, result),
- 
- 	TP_STRUCT__entry(
- 		__field(	int,	sig			)
-@@ -47,6 +60,8 @@ TRACE_EVENT(signal_generate,
- 		__field(	int,	code			)
- 		__array(	char,	comm,	TASK_COMM_LEN	)
- 		__field(	pid_t,	pid			)
-+		__field(	int,	group			)
-+		__field(	int,	result			)
- 	),
- 
- 	TP_fast_assign(
-@@ -54,11 +69,14 @@ TRACE_EVENT(signal_generate,
- 		TP_STORE_SIGINFO(__entry, info);
- 		memcpy(__entry->comm, task->comm, TASK_COMM_LEN);
- 		__entry->pid	= task->pid;
-+		__entry->group	= group;
-+		__entry->result	= result;
- 	),
- 
--	TP_printk("sig=%d errno=%d code=%d comm=%s pid=%d",
-+	TP_printk("sig=%d errno=%d code=%d comm=%s pid=%d grp=%d res=%d",
- 		  __entry->sig, __entry->errno, __entry->code,
--		  __entry->comm, __entry->pid)
-+		  __entry->comm, __entry->pid, __entry->group,
-+		  __entry->result)
- );
- 
- /**
-@@ -101,65 +119,6 @@ TRACE_EVENT(signal_deliver,
- 		  __entry->sa_handler, __entry->sa_flags)
- );
- 
--DECLARE_EVENT_CLASS(signal_queue_overflow,
--
--	TP_PROTO(int sig, int group, struct siginfo *info),
--
--	TP_ARGS(sig, group, info),
--
--	TP_STRUCT__entry(
--		__field(	int,	sig	)
--		__field(	int,	group	)
--		__field(	int,	errno	)
--		__field(	int,	code	)
--	),
--
--	TP_fast_assign(
--		__entry->sig	= sig;
--		__entry->group	= group;
--		TP_STORE_SIGINFO(__entry, info);
--	),
--
--	TP_printk("sig=%d group=%d errno=%d code=%d",
--		  __entry->sig, __entry->group, __entry->errno, __entry->code)
--);
--
--/**
-- * signal_overflow_fail - called when signal queue is overflow
-- * @sig: signal number
-- * @group: signal to process group or not (bool)
-- * @info: pointer to struct siginfo
-- *
-- * Kernel fails to generate 'sig' signal with 'info' siginfo, because
-- * siginfo queue is overflow, and the signal is dropped.
-- * 'group' is not 0 if the signal will be sent to a process group.
-- * 'sig' is always one of RT signals.
-- */
--DEFINE_EVENT(signal_queue_overflow, signal_overflow_fail,
--
--	TP_PROTO(int sig, int group, struct siginfo *info),
--
--	TP_ARGS(sig, group, info)
--);
--
--/**
-- * signal_lose_info - called when siginfo is lost
-- * @sig: signal number
-- * @group: signal to process group or not (bool)
-- * @info: pointer to struct siginfo
-- *
-- * Kernel generates 'sig' signal but loses 'info' siginfo, because siginfo
-- * queue is overflow.
-- * 'group' is not 0 if the signal will be sent to a process group.
-- * 'sig' is always one of non-RT signals.
-- */
--DEFINE_EVENT(signal_queue_overflow, signal_lose_info,
--
--	TP_PROTO(int sig, int group, struct siginfo *info),
--
--	TP_ARGS(sig, group, info)
--);
--
- #endif /* _TRACE_SIGNAL_H */
- 
- /* This part must be outside protection */
-diff --git a/instrumentation/events/mainline/vmscan.h b/instrumentation/events/mainline/vmscan.h
-index 36851f7..bab3b87 100644
---- a/instrumentation/events/mainline/vmscan.h
-+++ b/instrumentation/events/mainline/vmscan.h
-@@ -13,7 +13,7 @@
- #define RECLAIM_WB_ANON		0x0001u
- #define RECLAIM_WB_FILE		0x0002u
- #define RECLAIM_WB_MIXED	0x0010u
--#define RECLAIM_WB_SYNC		0x0004u
-+#define RECLAIM_WB_SYNC		0x0004u /* Unused, all reclaim async */
- #define RECLAIM_WB_ASYNC	0x0008u
- 
- #define show_reclaim_flags(flags)				\
-@@ -25,15 +25,15 @@
- 		{RECLAIM_WB_ASYNC,	"RECLAIM_WB_ASYNC"}	\
- 		) : "RECLAIM_WB_NONE"
- 
--#define trace_reclaim_flags(page, sync) ( \
-+#define trace_reclaim_flags(page) ( \
- 	(page_is_file_cache(page) ? RECLAIM_WB_FILE : RECLAIM_WB_ANON) | \
--	(sync & RECLAIM_MODE_SYNC ? RECLAIM_WB_SYNC : RECLAIM_WB_ASYNC)   \
-+	(RECLAIM_WB_ASYNC) \
- 	)
- 
--#define trace_shrink_flags(file, sync) ( \
--	(sync & RECLAIM_MODE_SYNC ? RECLAIM_WB_MIXED : \
--			(file ? RECLAIM_WB_FILE : RECLAIM_WB_ANON)) |  \
--	(sync & RECLAIM_MODE_SYNC ? RECLAIM_WB_SYNC : RECLAIM_WB_ASYNC) \
-+#define trace_shrink_flags(file) \
-+	( \
-+		(file ? RECLAIM_WB_FILE : RECLAIM_WB_ANON) | \
-+		(RECLAIM_WB_ASYNC) \
- 	)
- 
- TRACE_EVENT(mm_vmscan_kswapd_sleep,
-@@ -263,22 +263,18 @@ DECLARE_EVENT_CLASS(mm_vmscan_lru_isolate_template,
- 		unsigned long nr_requested,
- 		unsigned long nr_scanned,
- 		unsigned long nr_taken,
--		unsigned long nr_lumpy_taken,
--		unsigned long nr_lumpy_dirty,
--		unsigned long nr_lumpy_failed,
--		int isolate_mode),
-+		isolate_mode_t isolate_mode,
-+		int file),
- 
--	TP_ARGS(order, nr_requested, nr_scanned, nr_taken, nr_lumpy_taken, nr_lumpy_dirty, nr_lumpy_failed, isolate_mode),
-+	TP_ARGS(order, nr_requested, nr_scanned, nr_taken, isolate_mode, file),
- 
- 	TP_STRUCT__entry(
- 		__field(int, order)
- 		__field(unsigned long, nr_requested)
- 		__field(unsigned long, nr_scanned)
- 		__field(unsigned long, nr_taken)
--		__field(unsigned long, nr_lumpy_taken)
--		__field(unsigned long, nr_lumpy_dirty)
--		__field(unsigned long, nr_lumpy_failed)
--		__field(int, isolate_mode)
-+		__field(isolate_mode_t, isolate_mode)
-+		__field(int, file)
- 	),
- 
- 	TP_fast_assign(
-@@ -286,21 +282,17 @@ DECLARE_EVENT_CLASS(mm_vmscan_lru_isolate_template,
- 		__entry->nr_requested = nr_requested;
- 		__entry->nr_scanned = nr_scanned;
- 		__entry->nr_taken = nr_taken;
--		__entry->nr_lumpy_taken = nr_lumpy_taken;
--		__entry->nr_lumpy_dirty = nr_lumpy_dirty;
--		__entry->nr_lumpy_failed = nr_lumpy_failed;
- 		__entry->isolate_mode = isolate_mode;
-+		__entry->file = file;
- 	),
- 
--	TP_printk("isolate_mode=%d order=%d nr_requested=%lu nr_scanned=%lu nr_taken=%lu contig_taken=%lu contig_dirty=%lu contig_failed=%lu",
-+	TP_printk("isolate_mode=%d order=%d nr_requested=%lu nr_scanned=%lu nr_taken=%lu file=%d",
- 		__entry->isolate_mode,
- 		__entry->order,
- 		__entry->nr_requested,
- 		__entry->nr_scanned,
- 		__entry->nr_taken,
--		__entry->nr_lumpy_taken,
--		__entry->nr_lumpy_dirty,
--		__entry->nr_lumpy_failed)
-+		__entry->file)
- );
- 
- DEFINE_EVENT(mm_vmscan_lru_isolate_template, mm_vmscan_lru_isolate,
-@@ -309,12 +301,10 @@ DEFINE_EVENT(mm_vmscan_lru_isolate_template, mm_vmscan_lru_isolate,
- 		unsigned long nr_requested,
- 		unsigned long nr_scanned,
- 		unsigned long nr_taken,
--		unsigned long nr_lumpy_taken,
--		unsigned long nr_lumpy_dirty,
--		unsigned long nr_lumpy_failed,
--		int isolate_mode),
-+		isolate_mode_t isolate_mode,
-+		int file),
- 
--	TP_ARGS(order, nr_requested, nr_scanned, nr_taken, nr_lumpy_taken, nr_lumpy_dirty, nr_lumpy_failed, isolate_mode)
-+	TP_ARGS(order, nr_requested, nr_scanned, nr_taken, isolate_mode, file)
- 
- );
- 
-@@ -324,12 +314,10 @@ DEFINE_EVENT(mm_vmscan_lru_isolate_template, mm_vmscan_memcg_isolate,
- 		unsigned long nr_requested,
- 		unsigned long nr_scanned,
- 		unsigned long nr_taken,
--		unsigned long nr_lumpy_taken,
--		unsigned long nr_lumpy_dirty,
--		unsigned long nr_lumpy_failed,
--		int isolate_mode),
-+		isolate_mode_t isolate_mode,
-+		int file),
- 
--	TP_ARGS(order, nr_requested, nr_scanned, nr_taken, nr_lumpy_taken, nr_lumpy_dirty, nr_lumpy_failed, isolate_mode)
-+	TP_ARGS(order, nr_requested, nr_scanned, nr_taken, isolate_mode, file)
- 
- );
- 
-@@ -389,88 +377,6 @@ TRACE_EVENT(mm_vmscan_lru_shrink_inactive,
- 		show_reclaim_flags(__entry->reclaim_flags))
- );
- 
--TRACE_EVENT(replace_swap_token,
--	TP_PROTO(struct mm_struct *old_mm,
--		 struct mm_struct *new_mm),
--
--	TP_ARGS(old_mm, new_mm),
--
--	TP_STRUCT__entry(
--		__field(struct mm_struct*,	old_mm)
--		__field(unsigned int,		old_prio)
--		__field(struct mm_struct*,	new_mm)
--		__field(unsigned int,		new_prio)
--	),
--
--	TP_fast_assign(
--		__entry->old_mm   = old_mm;
--		__entry->old_prio = old_mm ? old_mm->token_priority : 0;
--		__entry->new_mm   = new_mm;
--		__entry->new_prio = new_mm->token_priority;
--	),
--
--	TP_printk("old_token_mm=%p old_prio=%u new_token_mm=%p new_prio=%u",
--		  __entry->old_mm, __entry->old_prio,
--		  __entry->new_mm, __entry->new_prio)
--);
--
--DECLARE_EVENT_CLASS(put_swap_token_template,
--	TP_PROTO(struct mm_struct *swap_token_mm),
--
--	TP_ARGS(swap_token_mm),
--
--	TP_STRUCT__entry(
--		__field(struct mm_struct*, swap_token_mm)
--	),
--
--	TP_fast_assign(
--		__entry->swap_token_mm = swap_token_mm;
--	),
--
--	TP_printk("token_mm=%p", __entry->swap_token_mm)
--);
--
--DEFINE_EVENT(put_swap_token_template, put_swap_token,
--	TP_PROTO(struct mm_struct *swap_token_mm),
--	TP_ARGS(swap_token_mm)
--);
--
--DEFINE_EVENT_CONDITION(put_swap_token_template, disable_swap_token,
--	TP_PROTO(struct mm_struct *swap_token_mm),
--	TP_ARGS(swap_token_mm),
--	TP_CONDITION(swap_token_mm != NULL)
--);
--
--TRACE_EVENT_CONDITION(update_swap_token_priority,
--	TP_PROTO(struct mm_struct *mm,
--		 unsigned int old_prio,
--		 struct mm_struct *swap_token_mm),
--
--	TP_ARGS(mm, old_prio, swap_token_mm),
--
--	TP_CONDITION(mm->token_priority != old_prio),
--
--	TP_STRUCT__entry(
--		__field(struct mm_struct*, mm)
--		__field(unsigned int, old_prio)
--		__field(unsigned int, new_prio)
--		__field(struct mm_struct*, swap_token_mm)
--		__field(unsigned int, swap_token_prio)
--	),
--
--	TP_fast_assign(
--		__entry->mm		= mm;
--		__entry->old_prio	= old_prio;
--		__entry->new_prio	= mm->token_priority;
--		__entry->swap_token_mm	= swap_token_mm;
--		__entry->swap_token_prio = swap_token_mm ? swap_token_mm->token_priority : 0;
--	),
--
--	TP_printk("mm=%p old_prio=%u new_prio=%u swap_token_mm=%p token_prio=%u",
--		  __entry->mm, __entry->old_prio, __entry->new_prio,
--		  __entry->swap_token_mm, __entry->swap_token_prio)
--);
--
- #endif /* _TRACE_VMSCAN_H */
- 
- /* This part must be outside protection */
++	TP_ARGS(inode, map, ux, ix),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,		dev	)
++		__field(	ino_t,		ino	)
++		__field(	ext4_lblk_t,	m_lblk	)
++		__field(	unsigned,	m_len	)
++		__field(	ext4_lblk_t,	u_lblk	)
++		__field(	unsigned,	u_len	)
++		__field(	ext4_fsblk_t,	u_pblk	)
++		__field(	ext4_lblk_t,	i_lblk	)
++		__field(	unsigned,	i_len	)
++		__field(	ext4_fsblk_t,	i_pblk	)
++	),
++
++	TP_fast_assign(
++		__entry->dev		= inode->i_sb->s_dev;
++		__entry->ino		= inode->i_ino;
++		__entry->m_lblk		= map->m_lblk;
++		__entry->m_len		= map->m_len;
++		__entry->u_lblk		= le32_to_cpu(ux->ee_block);
++		__entry->u_len		= ext4_ext_get_actual_len(ux);
++		__entry->u_pblk		= ext4_ext_pblock(ux);
++		__entry->i_lblk		= le32_to_cpu(ix->ee_block);
++		__entry->i_len		= ext4_ext_get_actual_len(ix);
++		__entry->i_pblk		= ext4_ext_pblock(ix);
++	),
++
++	TP_printk("dev %d,%d ino %lu m_lblk %u m_len %u "
++		  "u_lblk %u u_len %u u_pblk %llu "
++		  "i_lblk %u i_len %u i_pblk %llu ",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->m_lblk, __entry->m_len,
++		  __entry->u_lblk, __entry->u_len, __entry->u_pblk,
++		  __entry->i_lblk, __entry->i_len, __entry->i_pblk)
++);
++
++DECLARE_EVENT_CLASS(ext4__map_blocks_enter,
++	TP_PROTO(struct inode *inode, ext4_lblk_t lblk,
++		 unsigned int len, unsigned int flags),
++
++	TP_ARGS(inode, lblk, len, flags),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,		dev		)
++		__field(	ino_t,		ino		)
++		__field(	ext4_lblk_t,	lblk		)
++		__field(	unsigned int,	len		)
++		__field(	unsigned int,	flags		)
++	),
++
++	TP_fast_assign(
++		__entry->dev    = inode->i_sb->s_dev;
++		__entry->ino    = inode->i_ino;
++		__entry->lblk	= lblk;
++		__entry->len	= len;
++		__entry->flags	= flags;
++	),
++
++	TP_printk("dev %d,%d ino %lu lblk %u len %u flags %u",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->lblk, __entry->len, __entry->flags)
++);
++
++DEFINE_EVENT(ext4__map_blocks_enter, ext4_ext_map_blocks_enter,
++	TP_PROTO(struct inode *inode, ext4_lblk_t lblk,
++		 unsigned len, unsigned flags),
++
++	TP_ARGS(inode, lblk, len, flags)
++);
++
++DEFINE_EVENT(ext4__map_blocks_enter, ext4_ind_map_blocks_enter,
++	TP_PROTO(struct inode *inode, ext4_lblk_t lblk,
++		 unsigned len, unsigned flags),
++
++	TP_ARGS(inode, lblk, len, flags)
++);
++
++DECLARE_EVENT_CLASS(ext4__map_blocks_exit,
++	TP_PROTO(struct inode *inode, ext4_lblk_t lblk,
++		 ext4_fsblk_t pblk, unsigned int len, int ret),
++
++	TP_ARGS(inode, lblk, pblk, len, ret),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,		dev		)
++		__field(	ino_t,		ino		)
++		__field(	ext4_fsblk_t,	pblk		)
++		__field(	ext4_lblk_t,	lblk		)
++		__field(	unsigned int,	len		)
++		__field(	int,		ret		)
++	),
++
++	TP_fast_assign(
++		__entry->dev    = inode->i_sb->s_dev;
++		__entry->ino    = inode->i_ino;
++		__entry->pblk	= pblk;
++		__entry->lblk	= lblk;
++		__entry->len	= len;
++		__entry->ret	= ret;
++	),
++
++	TP_printk("dev %d,%d ino %lu lblk %u pblk %llu len %u ret %d",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->lblk, __entry->pblk,
++		  __entry->len, __entry->ret)
++);
++
++DEFINE_EVENT(ext4__map_blocks_exit, ext4_ext_map_blocks_exit,
++	TP_PROTO(struct inode *inode, ext4_lblk_t lblk,
++		 ext4_fsblk_t pblk, unsigned len, int ret),
++
++	TP_ARGS(inode, lblk, pblk, len, ret)
++);
++
++DEFINE_EVENT(ext4__map_blocks_exit, ext4_ind_map_blocks_exit,
++	TP_PROTO(struct inode *inode, ext4_lblk_t lblk,
++		 ext4_fsblk_t pblk, unsigned len, int ret),
++
++	TP_ARGS(inode, lblk, pblk, len, ret)
++);
++
++TRACE_EVENT(ext4_ext_load_extent,
++	TP_PROTO(struct inode *inode, ext4_lblk_t lblk, ext4_fsblk_t pblk),
++
++	TP_ARGS(inode, lblk, pblk),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,		dev		)
++		__field(	ino_t,		ino		)
++		__field(	ext4_fsblk_t,	pblk		)
++		__field(	ext4_lblk_t,	lblk		)
++	),
++
++	TP_fast_assign(
++		__entry->dev    = inode->i_sb->s_dev;
++		__entry->ino    = inode->i_ino;
++		__entry->pblk	= pblk;
++		__entry->lblk	= lblk;
++	),
++
++	TP_printk("dev %d,%d ino %lu lblk %u pblk %llu",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  __entry->lblk, __entry->pblk)
++);
++
++TRACE_EVENT(ext4_load_inode,
++	TP_PROTO(struct inode *inode),
++
++	TP_ARGS(inode),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev		)
++		__field(	ino_t,	ino		)
++	),
++
++	TP_fast_assign(
++		__entry->dev		= inode->i_sb->s_dev;
++		__entry->ino		= inode->i_ino;
++	),
++
++	TP_printk("dev %d,%d ino %ld",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino)
++);
++
++TRACE_EVENT(ext4_journal_start,
++	TP_PROTO(struct super_block *sb, int nblocks, unsigned long IP),
++
++	TP_ARGS(sb, nblocks, IP),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,	dev			)
++		__field(unsigned long,	ip			)
++		__field(	int,	nblocks			)
++	),
++
++	TP_fast_assign(
++		__entry->dev	 = sb->s_dev;
++		__entry->ip	 = IP;
++		__entry->nblocks = nblocks;
++	),
++
++	TP_printk("dev %d,%d nblocks %d caller %pF",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  __entry->nblocks, (void *)__entry->ip)
++);
++
++DECLARE_EVENT_CLASS(ext4__trim,
++	TP_PROTO(struct super_block *sb,
++		 ext4_group_t group,
++		 ext4_grpblk_t start,
++		 ext4_grpblk_t len),
++
++	TP_ARGS(sb, group, start, len),
++
++	TP_STRUCT__entry(
++		__field(	int,	dev_major		)
++		__field(	int,	dev_minor		)
++		__field(	__u32, 	group			)
++		__field(	int,	start			)
++		__field(	int,	len			)
++	),
++
++	TP_fast_assign(
++		__entry->dev_major	= MAJOR(sb->s_dev);
++		__entry->dev_minor	= MINOR(sb->s_dev);
++		__entry->group		= group;
++		__entry->start		= start;
++		__entry->len		= len;
++	),
++
++	TP_printk("dev %d,%d group %u, start %d, len %d",
++		  __entry->dev_major, __entry->dev_minor,
++		  __entry->group, __entry->start, __entry->len)
++);
++
++DEFINE_EVENT(ext4__trim, ext4_trim_extent,
++
++	TP_PROTO(struct super_block *sb,
++		 ext4_group_t group,
++		 ext4_grpblk_t start,
++		 ext4_grpblk_t len),
++
++	TP_ARGS(sb, group, start, len)
++);
++
++DEFINE_EVENT(ext4__trim, ext4_trim_all_free,
++
++	TP_PROTO(struct super_block *sb,
++		 ext4_group_t group,
++		 ext4_grpblk_t start,
++		 ext4_grpblk_t len),
++
++	TP_ARGS(sb, group, start, len)
++);
++
++TRACE_EVENT(ext4_ext_handle_uninitialized_extents,
++	TP_PROTO(struct inode *inode, struct ext4_map_blocks *map,
++		 unsigned int allocated, ext4_fsblk_t newblock),
++
++	TP_ARGS(inode, map, allocated, newblock),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,		dev		)
++		__field(	ino_t,		ino		)
++		__field(	int,		flags		)
++		__field(	ext4_lblk_t,	lblk		)
++		__field(	ext4_fsblk_t,	pblk		)
++		__field(	unsigned int,	len		)
++		__field(	unsigned int,	allocated	)
++		__field(	ext4_fsblk_t,	newblk		)
++	),
++
++	TP_fast_assign(
++		__entry->dev		= inode->i_sb->s_dev;
++		__entry->ino		= inode->i_ino;
++		__entry->flags		= map->m_flags;
++		__entry->lblk		= map->m_lblk;
++		__entry->pblk		= map->m_pblk;
++		__entry->len		= map->m_len;
++		__entry->allocated	= allocated;
++		__entry->newblk		= newblock;
++	),
++
++	TP_printk("dev %d,%d ino %lu m_lblk %u m_pblk %llu m_len %u flags %d"
++		  "allocated %d newblock %llu",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  (unsigned) __entry->lblk, (unsigned long long) __entry->pblk,
++		  __entry->len, __entry->flags,
++		  (unsigned int) __entry->allocated,
++		  (unsigned long long) __entry->newblk)
++);
++
++TRACE_EVENT(ext4_get_implied_cluster_alloc_exit,
++	TP_PROTO(struct super_block *sb, struct ext4_map_blocks *map, int ret),
++
++	TP_ARGS(sb, map, ret),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,		dev	)
++		__field(	unsigned int,	flags	)
++		__field(	ext4_lblk_t,	lblk	)
++		__field(	ext4_fsblk_t,	pblk	)
++		__field(	unsigned int,	len	)
++		__field(	int,		ret	)
++	),
++
++	TP_fast_assign(
++		__entry->dev	= sb->s_dev;
++		__entry->flags	= map->m_flags;
++		__entry->lblk	= map->m_lblk;
++		__entry->pblk	= map->m_pblk;
++		__entry->len	= map->m_len;
++		__entry->ret	= ret;
++	),
++
++	TP_printk("dev %d,%d m_lblk %u m_pblk %llu m_len %u m_flags %u ret %d",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  __entry->lblk, (unsigned long long) __entry->pblk,
++		  __entry->len, __entry->flags, __entry->ret)
++);
++
++TRACE_EVENT(ext4_ext_put_in_cache,
++	TP_PROTO(struct inode *inode, ext4_lblk_t lblk, unsigned int len,
++		 ext4_fsblk_t start),
++
++	TP_ARGS(inode, lblk, len, start),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,		dev	)
++		__field(	ino_t,		ino	)
++		__field(	ext4_lblk_t,	lblk	)
++		__field(	unsigned int,	len	)
++		__field(	ext4_fsblk_t,	start	)
++	),
++
++	TP_fast_assign(
++		__entry->dev	= inode->i_sb->s_dev;
++		__entry->ino	= inode->i_ino;
++		__entry->lblk	= lblk;
++		__entry->len	= len;
++		__entry->start	= start;
++	),
++
++	TP_printk("dev %d,%d ino %lu lblk %u len %u start %llu",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  (unsigned) __entry->lblk,
++		  __entry->len,
++		  (unsigned long long) __entry->start)
++);
++
++TRACE_EVENT(ext4_ext_in_cache,
++	TP_PROTO(struct inode *inode, ext4_lblk_t lblk, int ret),
++
++	TP_ARGS(inode, lblk, ret),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,		dev	)
++		__field(	ino_t,		ino	)
++		__field(	ext4_lblk_t,	lblk	)
++		__field(	int,		ret	)
++	),
++
++	TP_fast_assign(
++		__entry->dev	= inode->i_sb->s_dev;
++		__entry->ino	= inode->i_ino;
++		__entry->lblk	= lblk;
++		__entry->ret	= ret;
++	),
++
++	TP_printk("dev %d,%d ino %lu lblk %u ret %d",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  (unsigned) __entry->lblk,
++		  __entry->ret)
++
++);
++
++TRACE_EVENT(ext4_find_delalloc_range,
++	TP_PROTO(struct inode *inode, ext4_lblk_t from, ext4_lblk_t to,
++		int reverse, int found, ext4_lblk_t found_blk),
++
++	TP_ARGS(inode, from, to, reverse, found, found_blk),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,		dev		)
++		__field(	ino_t,		ino		)
++		__field(	ext4_lblk_t,	from		)
++		__field(	ext4_lblk_t,	to		)
++		__field(	int,		reverse		)
++		__field(	int,		found		)
++		__field(	ext4_lblk_t,	found_blk	)
++	),
++
++	TP_fast_assign(
++		__entry->dev		= inode->i_sb->s_dev;
++		__entry->ino		= inode->i_ino;
++		__entry->from		= from;
++		__entry->to		= to;
++		__entry->reverse	= reverse;
++		__entry->found		= found;
++		__entry->found_blk	= found_blk;
++	),
++
++	TP_printk("dev %d,%d ino %lu from %u to %u reverse %d found %d "
++		  "(blk = %u)",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  (unsigned) __entry->from, (unsigned) __entry->to,
++		  __entry->reverse, __entry->found,
++		  (unsigned) __entry->found_blk)
++);
++
++TRACE_EVENT(ext4_get_reserved_cluster_alloc,
++	TP_PROTO(struct inode *inode, ext4_lblk_t lblk, unsigned int len),
++
++	TP_ARGS(inode, lblk, len),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,		dev	)
++		__field(	ino_t,		ino	)
++		__field(	ext4_lblk_t,	lblk	)
++		__field(	unsigned int,	len	)
++	),
++
++	TP_fast_assign(
++		__entry->dev	= inode->i_sb->s_dev;
++		__entry->ino	= inode->i_ino;
++		__entry->lblk	= lblk;
++		__entry->len	= len;
++	),
++
++	TP_printk("dev %d,%d ino %lu lblk %u len %u",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  (unsigned) __entry->lblk,
++		  __entry->len)
++);
++
++TRACE_EVENT(ext4_ext_show_extent,
++	TP_PROTO(struct inode *inode, ext4_lblk_t lblk, ext4_fsblk_t pblk,
++		 unsigned short len),
++
++	TP_ARGS(inode, lblk, pblk, len),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,		dev	)
++		__field(	ino_t,		ino	)
++		__field(	ext4_fsblk_t,	pblk	)
++		__field(	ext4_lblk_t,	lblk	)
++		__field(	unsigned short,	len	)
++	),
++
++	TP_fast_assign(
++		__entry->dev	= inode->i_sb->s_dev;
++		__entry->ino	= inode->i_ino;
++		__entry->pblk	= pblk;
++		__entry->lblk	= lblk;
++		__entry->len	= len;
++	),
++
++	TP_printk("dev %d,%d ino %lu lblk %u pblk %llu len %u",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  (unsigned) __entry->lblk,
++		  (unsigned long long) __entry->pblk,
++		  (unsigned short) __entry->len)
++);
++
++TRACE_EVENT(ext4_remove_blocks,
++	    TP_PROTO(struct inode *inode, struct ext4_extent *ex,
++		ext4_lblk_t from, ext4_fsblk_t to,
++		ext4_fsblk_t partial_cluster),
++
++	TP_ARGS(inode, ex, from, to, partial_cluster),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,		dev	)
++		__field(	ino_t,		ino	)
++		__field(	ext4_lblk_t,	from	)
++		__field(	ext4_lblk_t,	to	)
++		__field(	ext4_fsblk_t,	partial	)
++		__field(	ext4_fsblk_t,	ee_pblk	)
++		__field(	ext4_lblk_t,	ee_lblk	)
++		__field(	unsigned short,	ee_len	)
++	),
++
++	TP_fast_assign(
++		__entry->dev		= inode->i_sb->s_dev;
++		__entry->ino		= inode->i_ino;
++		__entry->from		= from;
++		__entry->to		= to;
++		__entry->partial	= partial_cluster;
++		__entry->ee_pblk	= ext4_ext_pblock(ex);
++		__entry->ee_lblk	= cpu_to_le32(ex->ee_block);
++		__entry->ee_len		= ext4_ext_get_actual_len(ex);
++	),
++
++	TP_printk("dev %d,%d ino %lu extent [%u(%llu), %u]"
++		  "from %u to %u partial_cluster %u",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  (unsigned) __entry->ee_lblk,
++		  (unsigned long long) __entry->ee_pblk,
++		  (unsigned short) __entry->ee_len,
++		  (unsigned) __entry->from,
++		  (unsigned) __entry->to,
++		  (unsigned) __entry->partial)
++);
++
++TRACE_EVENT(ext4_ext_rm_leaf,
++	TP_PROTO(struct inode *inode, ext4_lblk_t start,
++		 struct ext4_extent *ex, ext4_fsblk_t partial_cluster),
++
++	TP_ARGS(inode, start, ex, partial_cluster),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,		dev	)
++		__field(	ino_t,		ino	)
++		__field(	ext4_fsblk_t,	partial	)
++		__field(	ext4_lblk_t,	start	)
++		__field(	ext4_lblk_t,	ee_lblk	)
++		__field(	ext4_fsblk_t,	ee_pblk	)
++		__field(	short,		ee_len	)
++	),
++
++	TP_fast_assign(
++		__entry->dev		= inode->i_sb->s_dev;
++		__entry->ino		= inode->i_ino;
++		__entry->partial	= partial_cluster;
++		__entry->start		= start;
++		__entry->ee_lblk	= le32_to_cpu(ex->ee_block);
++		__entry->ee_pblk	= ext4_ext_pblock(ex);
++		__entry->ee_len		= ext4_ext_get_actual_len(ex);
++	),
++
++	TP_printk("dev %d,%d ino %lu start_lblk %u last_extent [%u(%llu), %u]"
++		  "partial_cluster %u",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  (unsigned) __entry->start,
++		  (unsigned) __entry->ee_lblk,
++		  (unsigned long long) __entry->ee_pblk,
++		  (unsigned short) __entry->ee_len,
++		  (unsigned) __entry->partial)
++);
++
++TRACE_EVENT(ext4_ext_rm_idx,
++	TP_PROTO(struct inode *inode, ext4_fsblk_t pblk),
++
++	TP_ARGS(inode, pblk),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,		dev	)
++		__field(	ino_t,		ino	)
++		__field(	ext4_fsblk_t,	pblk	)
++	),
++
++	TP_fast_assign(
++		__entry->dev	= inode->i_sb->s_dev;
++		__entry->ino	= inode->i_ino;
++		__entry->pblk	= pblk;
++	),
++
++	TP_printk("dev %d,%d ino %lu index_pblk %llu",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  (unsigned long long) __entry->pblk)
++);
++
++TRACE_EVENT(ext4_ext_remove_space,
++	TP_PROTO(struct inode *inode, ext4_lblk_t start, int depth),
++
++	TP_ARGS(inode, start, depth),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,		dev	)
++		__field(	ino_t,		ino	)
++		__field(	ext4_lblk_t,	start	)
++		__field(	int,		depth	)
++	),
++
++	TP_fast_assign(
++		__entry->dev	= inode->i_sb->s_dev;
++		__entry->ino	= inode->i_ino;
++		__entry->start	= start;
++		__entry->depth	= depth;
++	),
++
++	TP_printk("dev %d,%d ino %lu since %u depth %d",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  (unsigned) __entry->start,
++		  __entry->depth)
++);
++
++TRACE_EVENT(ext4_ext_remove_space_done,
++	TP_PROTO(struct inode *inode, ext4_lblk_t start, int depth,
++		ext4_lblk_t partial, unsigned short eh_entries),
++
++	TP_ARGS(inode, start, depth, partial, eh_entries),
++
++	TP_STRUCT__entry(
++		__field(	dev_t,		dev		)
++		__field(	ino_t,		ino		)
++		__field(	ext4_lblk_t,	start		)
++		__field(	int,		depth		)
++		__field(	ext4_lblk_t,	partial		)
++		__field(	unsigned short,	eh_entries	)
++	),
++
++	TP_fast_assign(
++		__entry->dev		= inode->i_sb->s_dev;
++		__entry->ino		= inode->i_ino;
++		__entry->start		= start;
++		__entry->depth		= depth;
++		__entry->partial	= partial;
++		__entry->eh_entries	= eh_entries;
++	),
++
++	TP_printk("dev %d,%d ino %lu since %u depth %d partial %u "
++		  "remaining_entries %u",
++		  MAJOR(__entry->dev), MINOR(__entry->dev),
++		  (unsigned long) __entry->ino,
++		  (unsigned) __entry->start,
++		  __entry->depth,
++		  (unsigned) __entry->partial,
++		  (unsigned short) __entry->eh_entries)
++);
++
++#endif /* _TRACE_EXT4_H */
++
++/* This part must be outside protection */
++#include <trace/define_trace.h>
+diff --git a/instrumentation/events/mainline/printk.h b/instrumentation/events/mainline/printk.h
+new file mode 100644
+index 0000000..94ec79c
+--- /dev/null
++++ b/instrumentation/events/mainline/printk.h
+@@ -0,0 +1,41 @@
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM printk
++
++#if !defined(_TRACE_PRINTK_H) || defined(TRACE_HEADER_MULTI_READ)
++#define _TRACE_PRINTK_H
++
++#include <linux/tracepoint.h>
++
++TRACE_EVENT_CONDITION(console,
++	TP_PROTO(const char *log_buf, unsigned start, unsigned end,
++		 unsigned log_buf_len),
++
++	TP_ARGS(log_buf, start, end, log_buf_len),
++
++	TP_CONDITION(start != end),
++
++	TP_STRUCT__entry(
++		__dynamic_array(char, msg, end - start + 1)
++	),
++
++	TP_fast_assign(
++		if ((start & (log_buf_len - 1)) > (end & (log_buf_len - 1))) {
++			memcpy(__get_dynamic_array(msg),
++			       log_buf + (start & (log_buf_len - 1)),
++			       log_buf_len - (start & (log_buf_len - 1)));
++			memcpy((char *)__get_dynamic_array(msg) +
++			       log_buf_len - (start & (log_buf_len - 1)),
++			       log_buf, end & (log_buf_len - 1));
++		} else
++			memcpy(__get_dynamic_array(msg),
++			       log_buf + (start & (log_buf_len - 1)),
++			       end - start);
++		((char *)__get_dynamic_array(msg))[end - start] = 0;
++	),
++
++	TP_printk("%s", __get_str(msg))
++);
++#endif /* _TRACE_PRINTK_H */
++
++/* This part must be outside protection */
++#include <trace/define_trace.h>
+diff --git a/instrumentation/events/mainline/random.h b/instrumentation/events/mainline/random.h
+new file mode 100644
+index 0000000..422df19
+--- /dev/null
++++ b/instrumentation/events/mainline/random.h
+@@ -0,0 +1,134 @@
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM random
++
++#if !defined(_TRACE_RANDOM_H) || defined(TRACE_HEADER_MULTI_READ)
++#define _TRACE_RANDOM_H
++
++#include <linux/writeback.h>
++#include <linux/tracepoint.h>
++
++DECLARE_EVENT_CLASS(random__mix_pool_bytes,
++	TP_PROTO(const char *pool_name, int bytes, unsigned long IP),
++
++	TP_ARGS(pool_name, bytes, IP),
++
++	TP_STRUCT__entry(
++		__field( const char *,	pool_name		)
++		__field(	  int,	bytes			)
++		__field(unsigned long,	IP			)
++	),
++
++	TP_fast_assign(
++		__entry->pool_name	= pool_name;
++		__entry->bytes		= bytes;
++		__entry->IP		= IP;
++	),
++
++	TP_printk("%s pool: bytes %d caller %pF",
++		  __entry->pool_name, __entry->bytes, (void *)__entry->IP)
++);
++
++DEFINE_EVENT(random__mix_pool_bytes, mix_pool_bytes,
++	TP_PROTO(const char *pool_name, int bytes, unsigned long IP),
++
++	TP_ARGS(pool_name, bytes, IP)
++);
++
++DEFINE_EVENT(random__mix_pool_bytes, mix_pool_bytes_nolock,
++	TP_PROTO(const char *pool_name, int bytes, unsigned long IP),
++
++	TP_ARGS(pool_name, bytes, IP)
++);
++
++TRACE_EVENT(credit_entropy_bits,
++	TP_PROTO(const char *pool_name, int bits, int entropy_count,
++		 int entropy_total, unsigned long IP),
++
++	TP_ARGS(pool_name, bits, entropy_count, entropy_total, IP),
++
++	TP_STRUCT__entry(
++		__field( const char *,	pool_name		)
++		__field(	  int,	bits			)
++		__field(	  int,	entropy_count		)
++		__field(	  int,	entropy_total		)
++		__field(unsigned long,	IP			)
++	),
++
++	TP_fast_assign(
++		__entry->pool_name	= pool_name;
++		__entry->bits		= bits;
++		__entry->entropy_count	= entropy_count;
++		__entry->entropy_total	= entropy_total;
++		__entry->IP		= IP;
++	),
++
++	TP_printk("%s pool: bits %d entropy_count %d entropy_total %d "
++		  "caller %pF", __entry->pool_name, __entry->bits,
++		  __entry->entropy_count, __entry->entropy_total,
++		  (void *)__entry->IP)
++);
++
++TRACE_EVENT(get_random_bytes,
++	TP_PROTO(int nbytes, unsigned long IP),
++
++	TP_ARGS(nbytes, IP),
++
++	TP_STRUCT__entry(
++		__field(	  int,	nbytes			)
++		__field(unsigned long,	IP			)
++	),
++
++	TP_fast_assign(
++		__entry->nbytes		= nbytes;
++		__entry->IP		= IP;
++	),
++
++	TP_printk("nbytes %d caller %pF", __entry->nbytes, (void *)__entry->IP)
++);
++
++DECLARE_EVENT_CLASS(random__extract_entropy,
++	TP_PROTO(const char *pool_name, int nbytes, int entropy_count,
++		 unsigned long IP),
++
++	TP_ARGS(pool_name, nbytes, entropy_count, IP),
++
++	TP_STRUCT__entry(
++		__field( const char *,	pool_name		)
++		__field(	  int,	nbytes			)
++		__field(	  int,	entropy_count		)
++		__field(unsigned long,	IP			)
++	),
++
++	TP_fast_assign(
++		__entry->pool_name	= pool_name;
++		__entry->nbytes		= nbytes;
++		__entry->entropy_count	= entropy_count;
++		__entry->IP		= IP;
++	),
++
++	TP_printk("%s pool: nbytes %d entropy_count %d caller %pF",
++		  __entry->pool_name, __entry->nbytes, __entry->entropy_count,
++		  (void *)__entry->IP)
++);
++
++
++DEFINE_EVENT(random__extract_entropy, extract_entropy,
++	TP_PROTO(const char *pool_name, int nbytes, int entropy_count,
++		 unsigned long IP),
++
++	TP_ARGS(pool_name, nbytes, entropy_count, IP)
++);
++
++DEFINE_EVENT(random__extract_entropy, extract_entropy_user,
++	TP_PROTO(const char *pool_name, int nbytes, int entropy_count,
++		 unsigned long IP),
++
++	TP_ARGS(pool_name, nbytes, entropy_count, IP)
++);
++
++
++
++#endif /* _TRACE_RANDOM_H */
++
++/* This part must be outside protection */
++#include <trace/define_trace.h>
+diff --git a/instrumentation/events/mainline/rcu.h b/instrumentation/events/mainline/rcu.h
+new file mode 100644
+index 0000000..5bde94d
+--- /dev/null
++++ b/instrumentation/events/mainline/rcu.h
+@@ -0,0 +1,618 @@
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM rcu
++
++#if !defined(_TRACE_RCU_H) || defined(TRACE_HEADER_MULTI_READ)
++#define _TRACE_RCU_H
++
++#include <linux/tracepoint.h>
++
++/*
++ * Tracepoint for start/end markers used for utilization calculations.
++ * By convention, the string is of the following forms:
++ *
++ * "Start <activity>" -- Mark the start of the specified activity,
++ *			 such as "context switch".  Nesting is permitted.
++ * "End <activity>" -- Mark the end of the specified activity.
++ *
++ * An "@" character within "<activity>" is a comment character: Data
++ * reduction scripts will ignore the "@" and the remainder of the line.
++ */
++TRACE_EVENT(rcu_utilization,
++
++	TP_PROTO(char *s),
++
++	TP_ARGS(s),
++
++	TP_STRUCT__entry(
++		__field(char *, s)
++	),
++
++	TP_fast_assign(
++		__entry->s = s;
++	),
++
++	TP_printk("%s", __entry->s)
++);
++
++#ifdef CONFIG_RCU_TRACE
++
++#if defined(CONFIG_TREE_RCU) || defined(CONFIG_TREE_PREEMPT_RCU)
++
++/*
++ * Tracepoint for grace-period events: starting and ending a grace
++ * period ("start" and "end", respectively), a CPU noting the start
++ * of a new grace period or the end of an old grace period ("cpustart"
++ * and "cpuend", respectively), a CPU passing through a quiescent
++ * state ("cpuqs"), a CPU coming online or going offline ("cpuonl"
++ * and "cpuofl", respectively), and a CPU being kicked for being too
++ * long in dyntick-idle mode ("kick").
++ */
++TRACE_EVENT(rcu_grace_period,
++
++	TP_PROTO(char *rcuname, unsigned long gpnum, char *gpevent),
++
++	TP_ARGS(rcuname, gpnum, gpevent),
++
++	TP_STRUCT__entry(
++		__field(char *, rcuname)
++		__field(unsigned long, gpnum)
++		__field(char *, gpevent)
++	),
++
++	TP_fast_assign(
++		__entry->rcuname = rcuname;
++		__entry->gpnum = gpnum;
++		__entry->gpevent = gpevent;
++	),
++
++	TP_printk("%s %lu %s",
++		  __entry->rcuname, __entry->gpnum, __entry->gpevent)
++);
++
++/*
++ * Tracepoint for grace-period-initialization events.  These are
++ * distinguished by the type of RCU, the new grace-period number, the
++ * rcu_node structure level, the starting and ending CPU covered by the
++ * rcu_node structure, and the mask of CPUs that will be waited for.
++ * All but the type of RCU are extracted from the rcu_node structure.
++ */
++TRACE_EVENT(rcu_grace_period_init,
++
++	TP_PROTO(char *rcuname, unsigned long gpnum, u8 level,
++		 int grplo, int grphi, unsigned long qsmask),
++
++	TP_ARGS(rcuname, gpnum, level, grplo, grphi, qsmask),
++
++	TP_STRUCT__entry(
++		__field(char *, rcuname)
++		__field(unsigned long, gpnum)
++		__field(u8, level)
++		__field(int, grplo)
++		__field(int, grphi)
++		__field(unsigned long, qsmask)
++	),
++
++	TP_fast_assign(
++		__entry->rcuname = rcuname;
++		__entry->gpnum = gpnum;
++		__entry->level = level;
++		__entry->grplo = grplo;
++		__entry->grphi = grphi;
++		__entry->qsmask = qsmask;
++	),
++
++	TP_printk("%s %lu %u %d %d %lx",
++		  __entry->rcuname, __entry->gpnum, __entry->level,
++		  __entry->grplo, __entry->grphi, __entry->qsmask)
++);
++
++/*
++ * Tracepoint for tasks blocking within preemptible-RCU read-side
++ * critical sections.  Track the type of RCU (which one day might
++ * include SRCU), the grace-period number that the task is blocking
++ * (the current or the next), and the task's PID.
++ */
++TRACE_EVENT(rcu_preempt_task,
++
++	TP_PROTO(char *rcuname, int pid, unsigned long gpnum),
++
++	TP_ARGS(rcuname, pid, gpnum),
++
++	TP_STRUCT__entry(
++		__field(char *, rcuname)
++		__field(unsigned long, gpnum)
++		__field(int, pid)
++	),
++
++	TP_fast_assign(
++		__entry->rcuname = rcuname;
++		__entry->gpnum = gpnum;
++		__entry->pid = pid;
++	),
++
++	TP_printk("%s %lu %d",
++		  __entry->rcuname, __entry->gpnum, __entry->pid)
++);
++
++/*
++ * Tracepoint for tasks that blocked within a given preemptible-RCU
++ * read-side critical section exiting that critical section.  Track the
++ * type of RCU (which one day might include SRCU) and the task's PID.
++ */
++TRACE_EVENT(rcu_unlock_preempted_task,
++
++	TP_PROTO(char *rcuname, unsigned long gpnum, int pid),
++
++	TP_ARGS(rcuname, gpnum, pid),
++
++	TP_STRUCT__entry(
++		__field(char *, rcuname)
++		__field(unsigned long, gpnum)
++		__field(int, pid)
++	),
++
++	TP_fast_assign(
++		__entry->rcuname = rcuname;
++		__entry->gpnum = gpnum;
++		__entry->pid = pid;
++	),
++
++	TP_printk("%s %lu %d", __entry->rcuname, __entry->gpnum, __entry->pid)
++);
++
++/*
++ * Tracepoint for quiescent-state-reporting events.  These are
++ * distinguished by the type of RCU, the grace-period number, the
++ * mask of quiescent lower-level entities, the rcu_node structure level,
++ * the starting and ending CPU covered by the rcu_node structure, and
++ * whether there are any blocked tasks blocking the current grace period.
++ * All but the type of RCU are extracted from the rcu_node structure.
++ */
++TRACE_EVENT(rcu_quiescent_state_report,
++
++	TP_PROTO(char *rcuname, unsigned long gpnum,
++		 unsigned long mask, unsigned long qsmask,
++		 u8 level, int grplo, int grphi, int gp_tasks),
++
++	TP_ARGS(rcuname, gpnum, mask, qsmask, level, grplo, grphi, gp_tasks),
++
++	TP_STRUCT__entry(
++		__field(char *, rcuname)
++		__field(unsigned long, gpnum)
++		__field(unsigned long, mask)
++		__field(unsigned long, qsmask)
++		__field(u8, level)
++		__field(int, grplo)
++		__field(int, grphi)
++		__field(u8, gp_tasks)
++	),
++
++	TP_fast_assign(
++		__entry->rcuname = rcuname;
++		__entry->gpnum = gpnum;
++		__entry->mask = mask;
++		__entry->qsmask = qsmask;
++		__entry->level = level;
++		__entry->grplo = grplo;
++		__entry->grphi = grphi;
++		__entry->gp_tasks = gp_tasks;
++	),
++
++	TP_printk("%s %lu %lx>%lx %u %d %d %u",
++		  __entry->rcuname, __entry->gpnum,
++		  __entry->mask, __entry->qsmask, __entry->level,
++		  __entry->grplo, __entry->grphi, __entry->gp_tasks)
++);
++
++/*
++ * Tracepoint for quiescent states detected by force_quiescent_state().
++ * These trace events include the type of RCU, the grace-period number
++ * that was blocked by the CPU, the CPU itself, and the type of quiescent
++ * state, which can be "dti" for dyntick-idle mode, "ofl" for CPU offline,
++ * or "kick" when kicking a CPU that has been in dyntick-idle mode for
++ * too long.
++ */
++TRACE_EVENT(rcu_fqs,
++
++	TP_PROTO(char *rcuname, unsigned long gpnum, int cpu, char *qsevent),
++
++	TP_ARGS(rcuname, gpnum, cpu, qsevent),
++
++	TP_STRUCT__entry(
++		__field(char *, rcuname)
++		__field(unsigned long, gpnum)
++		__field(int, cpu)
++		__field(char *, qsevent)
++	),
++
++	TP_fast_assign(
++		__entry->rcuname = rcuname;
++		__entry->gpnum = gpnum;
++		__entry->cpu = cpu;
++		__entry->qsevent = qsevent;
++	),
++
++	TP_printk("%s %lu %d %s",
++		  __entry->rcuname, __entry->gpnum,
++		  __entry->cpu, __entry->qsevent)
++);
++
++#endif /* #if defined(CONFIG_TREE_RCU) || defined(CONFIG_TREE_PREEMPT_RCU) */
++
++/*
++ * Tracepoint for dyntick-idle entry/exit events.  These take a string
++ * as argument: "Start" for entering dyntick-idle mode, "End" for
++ * leaving it, "--=" for events moving towards idle, and "++=" for events
++ * moving away from idle.  "Error on entry: not idle task" and "Error on
++ * exit: not idle task" indicate that a non-idle task is erroneously
++ * toying with the idle loop.
++ *
++ * These events also take a pair of numbers, which indicate the nesting
++ * depth before and after the event of interest.  Note that task-related
++ * events use the upper bits of each number, while interrupt-related
++ * events use the lower bits.
++ */
++TRACE_EVENT(rcu_dyntick,
++
++	TP_PROTO(char *polarity, long long oldnesting, long long newnesting),
++
++	TP_ARGS(polarity, oldnesting, newnesting),
++
++	TP_STRUCT__entry(
++		__field(char *, polarity)
++		__field(long long, oldnesting)
++		__field(long long, newnesting)
++	),
++
++	TP_fast_assign(
++		__entry->polarity = polarity;
++		__entry->oldnesting = oldnesting;
++		__entry->newnesting = newnesting;
++	),
++
++	TP_printk("%s %llx %llx", __entry->polarity,
++		  __entry->oldnesting, __entry->newnesting)
++);
++
++/*
++ * Tracepoint for RCU preparation for idle, the goal being to get RCU
++ * processing done so that the current CPU can shut off its scheduling
++ * clock and enter dyntick-idle mode.  One way to accomplish this is
++ * to drain all RCU callbacks from this CPU, and the other is to have
++ * done everything RCU requires for the current grace period.  In this
++ * latter case, the CPU will be awakened at the end of the current grace
++ * period in order to process the remainder of its callbacks.
++ *
++ * These tracepoints take a string as argument:
++ *
++ *	"No callbacks": Nothing to do, no callbacks on this CPU.
++ *	"In holdoff": Nothing to do, holding off after unsuccessful attempt.
++ *	"Begin holdoff": Attempt failed, don't retry until next jiffy.
++ *	"Dyntick with callbacks": Entering dyntick-idle despite callbacks.
++ *	"Dyntick with lazy callbacks": Entering dyntick-idle w/lazy callbacks.
++ *	"More callbacks": Still more callbacks, try again to clear them out.
++ *	"Callbacks drained": All callbacks processed, off to dyntick idle!
++ *	"Timer": Timer fired to cause CPU to continue processing callbacks.
++ *	"Demigrate": Timer fired on wrong CPU, woke up correct CPU.
++ *	"Cleanup after idle": Idle exited, timer canceled.
++ */
++TRACE_EVENT(rcu_prep_idle,
++
++	TP_PROTO(char *reason),
++
++	TP_ARGS(reason),
++
++	TP_STRUCT__entry(
++		__field(char *, reason)
++	),
++
++	TP_fast_assign(
++		__entry->reason = reason;
++	),
++
++	TP_printk("%s", __entry->reason)
++);
++
++/*
++ * Tracepoint for the registration of a single RCU callback function.
++ * The first argument is the type of RCU, the second argument is
++ * a pointer to the RCU callback itself, the third element is the
++ * number of lazy callbacks queued, and the fourth element is the
++ * total number of callbacks queued.
++ */
++TRACE_EVENT(rcu_callback,
++
++	TP_PROTO(char *rcuname, struct rcu_head *rhp, long qlen_lazy,
++		 long qlen),
++
++	TP_ARGS(rcuname, rhp, qlen_lazy, qlen),
++
++	TP_STRUCT__entry(
++		__field(char *, rcuname)
++		__field(void *, rhp)
++		__field(void *, func)
++		__field(long, qlen_lazy)
++		__field(long, qlen)
++	),
++
++	TP_fast_assign(
++		__entry->rcuname = rcuname;
++		__entry->rhp = rhp;
++		__entry->func = rhp->func;
++		__entry->qlen_lazy = qlen_lazy;
++		__entry->qlen = qlen;
++	),
++
++	TP_printk("%s rhp=%p func=%pf %ld/%ld",
++		  __entry->rcuname, __entry->rhp, __entry->func,
++		  __entry->qlen_lazy, __entry->qlen)
++);
++
++/*
++ * Tracepoint for the registration of a single RCU callback of the special
++ * kfree() form.  The first argument is the RCU type, the second argument
++ * is a pointer to the RCU callback, the third argument is the offset
++ * of the callback within the enclosing RCU-protected data structure,
++ * the fourth argument is the number of lazy callbacks queued, and the
++ * fifth argument is the total number of callbacks queued.
++ */
++TRACE_EVENT(rcu_kfree_callback,
++
++	TP_PROTO(char *rcuname, struct rcu_head *rhp, unsigned long offset,
++		 long qlen_lazy, long qlen),
++
++	TP_ARGS(rcuname, rhp, offset, qlen_lazy, qlen),
++
++	TP_STRUCT__entry(
++		__field(char *, rcuname)
++		__field(void *, rhp)
++		__field(unsigned long, offset)
++		__field(long, qlen_lazy)
++		__field(long, qlen)
++	),
++
++	TP_fast_assign(
++		__entry->rcuname = rcuname;
++		__entry->rhp = rhp;
++		__entry->offset = offset;
++		__entry->qlen_lazy = qlen_lazy;
++		__entry->qlen = qlen;
++	),
++
++	TP_printk("%s rhp=%p func=%ld %ld/%ld",
++		  __entry->rcuname, __entry->rhp, __entry->offset,
++		  __entry->qlen_lazy, __entry->qlen)
++);
++
++/*
++ * Tracepoint for marking the beginning rcu_do_batch, performed to start
++ * RCU callback invocation.  The first argument is the RCU flavor,
++ * the second is the number of lazy callbacks queued, the third is
++ * the total number of callbacks queued, and the fourth argument is
++ * the current RCU-callback batch limit.
++ */
++TRACE_EVENT(rcu_batch_start,
++
++	TP_PROTO(char *rcuname, long qlen_lazy, long qlen, int blimit),
++
++	TP_ARGS(rcuname, qlen_lazy, qlen, blimit),
++
++	TP_STRUCT__entry(
++		__field(char *, rcuname)
++		__field(long, qlen_lazy)
++		__field(long, qlen)
++		__field(int, blimit)
++	),
++
++	TP_fast_assign(
++		__entry->rcuname = rcuname;
++		__entry->qlen_lazy = qlen_lazy;
++		__entry->qlen = qlen;
++		__entry->blimit = blimit;
++	),
++
++	TP_printk("%s CBs=%ld/%ld bl=%d",
++		  __entry->rcuname, __entry->qlen_lazy, __entry->qlen,
++		  __entry->blimit)
++);
++
++/*
++ * Tracepoint for the invocation of a single RCU callback function.
++ * The first argument is the type of RCU, and the second argument is
++ * a pointer to the RCU callback itself.
++ */
++TRACE_EVENT(rcu_invoke_callback,
++
++	TP_PROTO(char *rcuname, struct rcu_head *rhp),
++
++	TP_ARGS(rcuname, rhp),
++
++	TP_STRUCT__entry(
++		__field(char *, rcuname)
++		__field(void *, rhp)
++		__field(void *, func)
++	),
++
++	TP_fast_assign(
++		__entry->rcuname = rcuname;
++		__entry->rhp = rhp;
++		__entry->func = rhp->func;
++	),
++
++	TP_printk("%s rhp=%p func=%pf",
++		  __entry->rcuname, __entry->rhp, __entry->func)
++);
++
++/*
++ * Tracepoint for the invocation of a single RCU callback of the special
++ * kfree() form.  The first argument is the RCU flavor, the second
++ * argument is a pointer to the RCU callback, and the third argument
++ * is the offset of the callback within the enclosing RCU-protected
++ * data structure.
++ */
++TRACE_EVENT(rcu_invoke_kfree_callback,
++
++	TP_PROTO(char *rcuname, struct rcu_head *rhp, unsigned long offset),
++
++	TP_ARGS(rcuname, rhp, offset),
++
++	TP_STRUCT__entry(
++		__field(char *, rcuname)
++		__field(void *, rhp)
++		__field(unsigned long, offset)
++	),
++
++	TP_fast_assign(
++		__entry->rcuname = rcuname;
++		__entry->rhp = rhp;
++		__entry->offset	= offset;
++	),
++
++	TP_printk("%s rhp=%p func=%ld",
++		  __entry->rcuname, __entry->rhp, __entry->offset)
++);
++
++/*
++ * Tracepoint for exiting rcu_do_batch after RCU callbacks have been
++ * invoked.  The first argument is the name of the RCU flavor,
++ * the second argument is number of callbacks actually invoked,
++ * the third argument (cb) is whether or not any of the callbacks that
++ * were ready to invoke at the beginning of this batch are still
++ * queued, the fourth argument (nr) is the return value of need_resched(),
++ * the fifth argument (iit) is 1 if the current task is the idle task,
++ * and the sixth argument (risk) is the return value from
++ * rcu_is_callbacks_kthread().
++ */
++TRACE_EVENT(rcu_batch_end,
++
++	TP_PROTO(char *rcuname, int callbacks_invoked,
++		 bool cb, bool nr, bool iit, bool risk),
++
++	TP_ARGS(rcuname, callbacks_invoked, cb, nr, iit, risk),
++
++	TP_STRUCT__entry(
++		__field(char *, rcuname)
++		__field(int, callbacks_invoked)
++		__field(bool, cb)
++		__field(bool, nr)
++		__field(bool, iit)
++		__field(bool, risk)
++	),
++
++	TP_fast_assign(
++		__entry->rcuname = rcuname;
++		__entry->callbacks_invoked = callbacks_invoked;
++		__entry->cb = cb;
++		__entry->nr = nr;
++		__entry->iit = iit;
++		__entry->risk = risk;
++	),
++
++	TP_printk("%s CBs-invoked=%d idle=%c%c%c%c",
++		  __entry->rcuname, __entry->callbacks_invoked,
++		  __entry->cb ? 'C' : '.',
++		  __entry->nr ? 'S' : '.',
++		  __entry->iit ? 'I' : '.',
++		  __entry->risk ? 'R' : '.')
++);
++
++/*
++ * Tracepoint for rcutorture readers.  The first argument is the name
++ * of the RCU flavor from rcutorture's viewpoint and the second argument
++ * is the callback address.
++ */
++TRACE_EVENT(rcu_torture_read,
++
++	TP_PROTO(char *rcutorturename, struct rcu_head *rhp),
++
++	TP_ARGS(rcutorturename, rhp),
++
++	TP_STRUCT__entry(
++		__field(char *, rcutorturename)
++		__field(struct rcu_head *, rhp)
++	),
++
++	TP_fast_assign(
++		__entry->rcutorturename = rcutorturename;
++		__entry->rhp = rhp;
++	),
++
++	TP_printk("%s torture read %p",
++		  __entry->rcutorturename, __entry->rhp)
++);
++
++/*
++ * Tracepoint for _rcu_barrier() execution.  The string "s" describes
++ * the _rcu_barrier phase:
++ *	"Begin": rcu_barrier_callback() started.
++ *	"Check": rcu_barrier_callback() checking for piggybacking.
++ *	"EarlyExit": rcu_barrier_callback() piggybacked, thus early exit.
++ *	"Inc1": rcu_barrier_callback() piggyback check counter incremented.
++ *	"Offline": rcu_barrier_callback() found offline CPU
++ *	"OnlineQ": rcu_barrier_callback() found online CPU with callbacks.
++ *	"OnlineNQ": rcu_barrier_callback() found online CPU, no callbacks.
++ *	"IRQ": An rcu_barrier_callback() callback posted on remote CPU.
++ *	"CB": An rcu_barrier_callback() invoked a callback, not the last.
++ *	"LastCB": An rcu_barrier_callback() invoked the last callback.
++ *	"Inc2": rcu_barrier_callback() piggyback check counter incremented.
++ * The "cpu" argument is the CPU or -1 if meaningless, the "cnt" argument
++ * is the count of remaining callbacks, and "done" is the piggybacking count.
++ */
++TRACE_EVENT(rcu_barrier,
++
++	TP_PROTO(char *rcuname, char *s, int cpu, int cnt, unsigned long done),
++
++	TP_ARGS(rcuname, s, cpu, cnt, done),
++
++	TP_STRUCT__entry(
++		__field(char *, rcuname)
++		__field(char *, s)
++		__field(int, cpu)
++		__field(int, cnt)
++		__field(unsigned long, done)
++	),
++
++	TP_fast_assign(
++		__entry->rcuname = rcuname;
++		__entry->s = s;
++		__entry->cpu = cpu;
++		__entry->cnt = cnt;
++		__entry->done = done;
++	),
++
++	TP_printk("%s %s cpu %d remaining %d # %lu",
++		  __entry->rcuname, __entry->s, __entry->cpu, __entry->cnt,
++		  __entry->done)
++);
++
++#else /* #ifdef CONFIG_RCU_TRACE */
++
++#define trace_rcu_grace_period(rcuname, gpnum, gpevent) do { } while (0)
++#define trace_rcu_grace_period_init(rcuname, gpnum, level, grplo, grphi, \
++				    qsmask) do { } while (0)
++#define trace_rcu_preempt_task(rcuname, pid, gpnum) do { } while (0)
++#define trace_rcu_unlock_preempted_task(rcuname, gpnum, pid) do { } while (0)
++#define trace_rcu_quiescent_state_report(rcuname, gpnum, mask, qsmask, level, \
++					 grplo, grphi, gp_tasks) do { } \
++	while (0)
++#define trace_rcu_fqs(rcuname, gpnum, cpu, qsevent) do { } while (0)
++#define trace_rcu_dyntick(polarity, oldnesting, newnesting) do { } while (0)
++#define trace_rcu_prep_idle(reason) do { } while (0)
++#define trace_rcu_callback(rcuname, rhp, qlen_lazy, qlen) do { } while (0)
++#define trace_rcu_kfree_callback(rcuname, rhp, offset, qlen_lazy, qlen) \
++	do { } while (0)
++#define trace_rcu_batch_start(rcuname, qlen_lazy, qlen, blimit) \
++	do { } while (0)
++#define trace_rcu_invoke_callback(rcuname, rhp) do { } while (0)
++#define trace_rcu_invoke_kfree_callback(rcuname, rhp, offset) do { } while (0)
++#define trace_rcu_batch_end(rcuname, callbacks_invoked, cb, nr, iit, risk) \
++	do { } while (0)
++#define trace_rcu_torture_read(rcutorturename, rhp) do { } while (0)
++#define trace_rcu_barrier(name, s, cpu, cnt, done) do { } while (0)
++
++#endif /* #else #ifdef CONFIG_RCU_TRACE */
++
++#endif /* _TRACE_RCU_H */
++
++/* This part must be outside protection */
++#include <trace/define_trace.h>
+diff --git a/instrumentation/events/mainline/regmap.h b/instrumentation/events/mainline/regmap.h
+new file mode 100644
+index 0000000..41a7dbd
+--- /dev/null
++++ b/instrumentation/events/mainline/regmap.h
+@@ -0,0 +1,181 @@
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM regmap
++
++#if !defined(_TRACE_REGMAP_H) || defined(TRACE_HEADER_MULTI_READ)
++#define _TRACE_REGMAP_H
++
++#include <linux/ktime.h>
++#include <linux/tracepoint.h>
++
++struct device;
++struct regmap;
++
++/*
++ * Log register events
++ */
++DECLARE_EVENT_CLASS(regmap_reg,
++
++	TP_PROTO(struct device *dev, unsigned int reg,
++		 unsigned int val),
++
++	TP_ARGS(dev, reg, val),
++
++	TP_STRUCT__entry(
++		__string(	name,		dev_name(dev)	)
++		__field(	unsigned int,	reg		)
++		__field(	unsigned int,	val		)
++	),
++
++	TP_fast_assign(
++		__assign_str(name, dev_name(dev));
++		__entry->reg = reg;
++		__entry->val = val;
++	),
++
++	TP_printk("%s reg=%x val=%x", __get_str(name),
++		  (unsigned int)__entry->reg,
++		  (unsigned int)__entry->val)
++);
++
++DEFINE_EVENT(regmap_reg, regmap_reg_write,
++
++	TP_PROTO(struct device *dev, unsigned int reg,
++		 unsigned int val),
++
++	TP_ARGS(dev, reg, val)
++
++);
++
++DEFINE_EVENT(regmap_reg, regmap_reg_read,
++
++	TP_PROTO(struct device *dev, unsigned int reg,
++		 unsigned int val),
++
++	TP_ARGS(dev, reg, val)
++
++);
++
++DEFINE_EVENT(regmap_reg, regmap_reg_read_cache,
++
++	TP_PROTO(struct device *dev, unsigned int reg,
++		 unsigned int val),
++
++	TP_ARGS(dev, reg, val)
++
++);
++
++DECLARE_EVENT_CLASS(regmap_block,
++
++	TP_PROTO(struct device *dev, unsigned int reg, int count),
++
++	TP_ARGS(dev, reg, count),
++
++	TP_STRUCT__entry(
++		__string(	name,		dev_name(dev)	)
++		__field(	unsigned int,	reg		)
++		__field(	int,		count		)
++	),
++
++	TP_fast_assign(
++		__assign_str(name, dev_name(dev));
++		__entry->reg = reg;
++		__entry->count = count;
++	),
++
++	TP_printk("%s reg=%x count=%d", __get_str(name),
++		  (unsigned int)__entry->reg,
++		  (int)__entry->count)
++);
++
++DEFINE_EVENT(regmap_block, regmap_hw_read_start,
++
++	TP_PROTO(struct device *dev, unsigned int reg, int count),
++
++	TP_ARGS(dev, reg, count)
++);
++
++DEFINE_EVENT(regmap_block, regmap_hw_read_done,
++
++	TP_PROTO(struct device *dev, unsigned int reg, int count),
++
++	TP_ARGS(dev, reg, count)
++);
++
++DEFINE_EVENT(regmap_block, regmap_hw_write_start,
++
++	TP_PROTO(struct device *dev, unsigned int reg, int count),
++
++	TP_ARGS(dev, reg, count)
++);
++
++DEFINE_EVENT(regmap_block, regmap_hw_write_done,
++
++	TP_PROTO(struct device *dev, unsigned int reg, int count),
++
++	TP_ARGS(dev, reg, count)
++);
++
++TRACE_EVENT(regcache_sync,
++
++	TP_PROTO(struct device *dev, const char *type,
++		 const char *status),
++
++	TP_ARGS(dev, type, status),
++
++	TP_STRUCT__entry(
++		__string(       name,           dev_name(dev)   )
++		__string(	status,		status		)
++		__string(	type,		type		)
++		__field(	int,		type		)
++	),
++
++	TP_fast_assign(
++		__assign_str(name, dev_name(dev));
++		__assign_str(status, status);
++		__assign_str(type, type);
++	),
++
++	TP_printk("%s type=%s status=%s", __get_str(name),
++		  __get_str(type), __get_str(status))
++);
++
++DECLARE_EVENT_CLASS(regmap_bool,
++
++	TP_PROTO(struct device *dev, bool flag),
++
++	TP_ARGS(dev, flag),
++
++	TP_STRUCT__entry(
++		__string(	name,		dev_name(dev)	)
++		__field(	int,		flag		)
++	),
++
++	TP_fast_assign(
++		__assign_str(name, dev_name(dev));
++		__entry->flag = flag;
++	),
++
++	TP_printk("%s flag=%d", __get_str(name),
++		  (int)__entry->flag)
++);
++
++DEFINE_EVENT(regmap_bool, regmap_cache_only,
++
++	TP_PROTO(struct device *dev, bool flag),
++
++	TP_ARGS(dev, flag)
++
++);
++
++DEFINE_EVENT(regmap_bool, regmap_cache_bypass,
++
++	TP_PROTO(struct device *dev, bool flag),
++
++	TP_ARGS(dev, flag)
++
++);
++
++#endif /* _TRACE_REGMAP_H */
++
++/* This part must be outside protection */
++#include <trace/define_trace.h>
+diff --git a/instrumentation/events/mainline/rpm.h b/instrumentation/events/mainline/rpm.h
+new file mode 100644
+index 0000000..33f85b6
+--- /dev/null
++++ b/instrumentation/events/mainline/rpm.h
+@@ -0,0 +1,100 @@
++
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM rpm
++
++#if !defined(_TRACE_RUNTIME_POWER_H) || defined(TRACE_HEADER_MULTI_READ)
++#define _TRACE_RUNTIME_POWER_H
++
++#include <linux/ktime.h>
++#include <linux/tracepoint.h>
++
++struct device;
++
++/*
++ * The rpm_internal events are used for tracing some important
++ * runtime pm internal functions.
++ */
++DECLARE_EVENT_CLASS(rpm_internal,
++
++	TP_PROTO(struct device *dev, int flags),
++
++	TP_ARGS(dev, flags),
++
++	TP_STRUCT__entry(
++		__string(       name,		dev_name(dev)	)
++		__field(        int,            flags           )
++		__field(        int ,   	usage_count	)
++		__field(        int ,   	disable_depth   )
++		__field(        int ,   	runtime_auto	)
++		__field(        int ,   	request_pending	)
++		__field(        int ,   	irq_safe	)
++		__field(        int ,   	child_count 	)
++	),
++
++	TP_fast_assign(
++		__assign_str(name, dev_name(dev));
++		__entry->flags = flags;
++		__entry->usage_count = atomic_read(
++			&dev->power.usage_count);
++		__entry->disable_depth = dev->power.disable_depth;
++		__entry->runtime_auto = dev->power.runtime_auto;
++		__entry->request_pending = dev->power.request_pending;
++		__entry->irq_safe = dev->power.irq_safe;
++		__entry->child_count = atomic_read(
++			&dev->power.child_count);
++	),
++
++	TP_printk("%s flags-%x cnt-%-2d dep-%-2d auto-%-1d p-%-1d"
++			" irq-%-1d child-%d",
++			__get_str(name), __entry->flags,
++			__entry->usage_count,
++			__entry->disable_depth,
++			__entry->runtime_auto,
++			__entry->request_pending,
++			__entry->irq_safe,
++			__entry->child_count
++		 )
++);
++DEFINE_EVENT(rpm_internal, rpm_suspend,
++
++	TP_PROTO(struct device *dev, int flags),
++
++	TP_ARGS(dev, flags)
++);
++DEFINE_EVENT(rpm_internal, rpm_resume,
++
++	TP_PROTO(struct device *dev, int flags),
++
++	TP_ARGS(dev, flags)
++);
++DEFINE_EVENT(rpm_internal, rpm_idle,
++
++	TP_PROTO(struct device *dev, int flags),
++
++	TP_ARGS(dev, flags)
++);
++
++TRACE_EVENT(rpm_return_int,
++	TP_PROTO(struct device *dev, unsigned long ip, int ret),
++	TP_ARGS(dev, ip, ret),
++
++	TP_STRUCT__entry(
++		__string(       name,		dev_name(dev))
++		__field(	unsigned long,		ip	)
++		__field(	int,			ret	)
++	),
++
++	TP_fast_assign(
++		__assign_str(name, dev_name(dev));
++		__entry->ip = ip;
++		__entry->ret = ret;
++	),
++
++	TP_printk("%pS:%s ret=%d", (void *)__entry->ip, __get_str(name),
++		__entry->ret)
++);
++
++#endif /* _TRACE_RUNTIME_POWER_H */
++
++/* This part must be outside protection */
++#include <trace/define_trace.h>
+diff --git a/instrumentation/events/mainline/sunrpc.h b/instrumentation/events/mainline/sunrpc.h
+new file mode 100644
+index 0000000..43be87d
+--- /dev/null
++++ b/instrumentation/events/mainline/sunrpc.h
+@@ -0,0 +1,177 @@
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM sunrpc
++
++#if !defined(_TRACE_SUNRPC_H) || defined(TRACE_HEADER_MULTI_READ)
++#define _TRACE_SUNRPC_H
++
++#include <linux/sunrpc/sched.h>
++#include <linux/sunrpc/clnt.h>
++#include <linux/tracepoint.h>
++
++DECLARE_EVENT_CLASS(rpc_task_status,
++
++	TP_PROTO(struct rpc_task *task),
++
++	TP_ARGS(task),
++
++	TP_STRUCT__entry(
++		__field(const struct rpc_task *, task)
++		__field(const struct rpc_clnt *, clnt)
++		__field(int, status)
++	),
++
++	TP_fast_assign(
++		__entry->task = task;
++		__entry->clnt = task->tk_client;
++		__entry->status = task->tk_status;
++	),
++
++	TP_printk("task:%p@%p, status %d",__entry->task, __entry->clnt, __entry->status)
++);
++
++DEFINE_EVENT(rpc_task_status, rpc_call_status,
++	TP_PROTO(struct rpc_task *task),
++
++	TP_ARGS(task)
++);
++
++DEFINE_EVENT(rpc_task_status, rpc_bind_status,
++	TP_PROTO(struct rpc_task *task),
++
++	TP_ARGS(task)
++);
++
++TRACE_EVENT(rpc_connect_status,
++	TP_PROTO(struct rpc_task *task, int status),
++
++	TP_ARGS(task, status),
++
++	TP_STRUCT__entry(
++		__field(const struct rpc_task *, task)
++		__field(const struct rpc_clnt *, clnt)
++		__field(int, status)
++	),
++
++	TP_fast_assign(
++		__entry->task = task;
++		__entry->clnt = task->tk_client;
++		__entry->status = status;
++	),
++
++	TP_printk("task:%p@%p, status %d",__entry->task, __entry->clnt, __entry->status)
++);
++
++DECLARE_EVENT_CLASS(rpc_task_running,
++
++	TP_PROTO(const struct rpc_clnt *clnt, const struct rpc_task *task, const void *action),
++
++	TP_ARGS(clnt, task, action),
++
++	TP_STRUCT__entry(
++		__field(const struct rpc_clnt *, clnt)
++		__field(const struct rpc_task *, task)
++		__field(const void *, action)
++		__field(unsigned long, runstate)
++		__field(int, status)
++		__field(unsigned short, flags)
++		),
++
++	TP_fast_assign(
++		__entry->clnt = clnt;
++		__entry->task = task;
++		__entry->action = action;
++		__entry->runstate = task->tk_runstate;
++		__entry->status = task->tk_status;
++		__entry->flags = task->tk_flags;
++		),
++
++	TP_printk("task:%p@%p flags=%4.4x state=%4.4lx status=%d action=%pf",
++		__entry->task,
++		__entry->clnt,
++		__entry->flags,
++		__entry->runstate,
++		__entry->status,
++		__entry->action
++		)
++);
++
++DEFINE_EVENT(rpc_task_running, rpc_task_begin,
++
++	TP_PROTO(const struct rpc_clnt *clnt, const struct rpc_task *task, const void *action),
++
++	TP_ARGS(clnt, task, action)
++
++);
++
++DEFINE_EVENT(rpc_task_running, rpc_task_run_action,
++
++	TP_PROTO(const struct rpc_clnt *clnt, const struct rpc_task *task, const void *action),
++
++	TP_ARGS(clnt, task, action)
++
++);
++
++DEFINE_EVENT(rpc_task_running, rpc_task_complete,
++
++	TP_PROTO(const struct rpc_clnt *clnt, const struct rpc_task *task, const void *action),
++
++	TP_ARGS(clnt, task, action)
++
++);
++
++DECLARE_EVENT_CLASS(rpc_task_queued,
++
++	TP_PROTO(const struct rpc_clnt *clnt, const struct rpc_task *task, const struct rpc_wait_queue *q),
++
++	TP_ARGS(clnt, task, q),
++
++	TP_STRUCT__entry(
++		__field(const struct rpc_clnt *, clnt)
++		__field(const struct rpc_task *, task)
++		__field(unsigned long, timeout)
++		__field(unsigned long, runstate)
++		__field(int, status)
++		__field(unsigned short, flags)
++		__string(q_name, rpc_qname(q))
++		),
++
++	TP_fast_assign(
++		__entry->clnt = clnt;
++		__entry->task = task;
++		__entry->timeout = task->tk_timeout;
++		__entry->runstate = task->tk_runstate;
++		__entry->status = task->tk_status;
++		__entry->flags = task->tk_flags;
++		__assign_str(q_name, rpc_qname(q));
++		),
++
++	TP_printk("task:%p@%p flags=%4.4x state=%4.4lx status=%d timeout=%lu queue=%s",
++		__entry->task,
++		__entry->clnt,
++		__entry->flags,
++		__entry->runstate,
++		__entry->status,
++		__entry->timeout,
++		__get_str(q_name)
++		)
++);
++
++DEFINE_EVENT(rpc_task_queued, rpc_task_sleep,
++
++	TP_PROTO(const struct rpc_clnt *clnt, const struct rpc_task *task, const struct rpc_wait_queue *q),
++
++	TP_ARGS(clnt, task, q)
++
++);
++
++DEFINE_EVENT(rpc_task_queued, rpc_task_wakeup,
++
++	TP_PROTO(const struct rpc_clnt *clnt, const struct rpc_task *task, const struct rpc_wait_queue *q),
++
++	TP_ARGS(clnt, task, q)
++
++);
++
++#endif /* _TRACE_SUNRPC_H */
++
++#include <trace/define_trace.h>
+diff --git a/instrumentation/events/mainline/workqueue.h b/instrumentation/events/mainline/workqueue.h
+new file mode 100644
+index 0000000..f28d1b6
+--- /dev/null
++++ b/instrumentation/events/mainline/workqueue.h
+@@ -0,0 +1,121 @@
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM workqueue
++
++#if !defined(_TRACE_WORKQUEUE_H) || defined(TRACE_HEADER_MULTI_READ)
++#define _TRACE_WORKQUEUE_H
++
++#include <linux/tracepoint.h>
++#include <linux/workqueue.h>
++
++DECLARE_EVENT_CLASS(workqueue_work,
++
++	TP_PROTO(struct work_struct *work),
++
++	TP_ARGS(work),
++
++	TP_STRUCT__entry(
++		__field( void *,	work	)
++	),
++
++	TP_fast_assign(
++		__entry->work		= work;
++	),
++
++	TP_printk("work struct %p", __entry->work)
++);
++
++/**
++ * workqueue_queue_work - called when a work gets queued
++ * @req_cpu:	the requested cpu
++ * @cwq:	pointer to struct cpu_workqueue_struct
++ * @work:	pointer to struct work_struct
++ *
++ * This event occurs when a work is queued immediately or once a
++ * delayed work is actually queued on a workqueue (ie: once the delay
++ * has been reached).
++ */
++TRACE_EVENT(workqueue_queue_work,
++
++	TP_PROTO(unsigned int req_cpu, struct cpu_workqueue_struct *cwq,
++		 struct work_struct *work),
++
++	TP_ARGS(req_cpu, cwq, work),
++
++	TP_STRUCT__entry(
++		__field( void *,	work	)
++		__field( void *,	function)
++		__field( void *,	workqueue)
++		__field( unsigned int,	req_cpu	)
++		__field( unsigned int,	cpu	)
++	),
++
++	TP_fast_assign(
++		__entry->work		= work;
++		__entry->function	= work->func;
++		__entry->workqueue	= cwq->wq;
++		__entry->req_cpu	= req_cpu;
++		__entry->cpu		= cwq->pool->gcwq->cpu;
++	),
++
++	TP_printk("work struct=%p function=%pf workqueue=%p req_cpu=%u cpu=%u",
++		  __entry->work, __entry->function, __entry->workqueue,
++		  __entry->req_cpu, __entry->cpu)
++);
++
++/**
++ * workqueue_activate_work - called when a work gets activated
++ * @work:	pointer to struct work_struct
++ *
++ * This event occurs when a queued work is put on the active queue,
++ * which happens immediately after queueing unless @max_active limit
++ * is reached.
++ */
++DEFINE_EVENT(workqueue_work, workqueue_activate_work,
++
++	TP_PROTO(struct work_struct *work),
++
++	TP_ARGS(work)
++);
++
++/**
++ * workqueue_execute_start - called immediately before the workqueue callback
++ * @work:	pointer to struct work_struct
++ *
++ * Allows to track workqueue execution.
++ */
++TRACE_EVENT(workqueue_execute_start,
++
++	TP_PROTO(struct work_struct *work),
++
++	TP_ARGS(work),
++
++	TP_STRUCT__entry(
++		__field( void *,	work	)
++		__field( void *,	function)
++	),
++
++	TP_fast_assign(
++		__entry->work		= work;
++		__entry->function	= work->func;
++	),
++
++	TP_printk("work struct %p: function %pf", __entry->work, __entry->function)
++);
++
++/**
++ * workqueue_execute_end - called immediately after the workqueue callback
++ * @work:	pointer to struct work_struct
++ *
++ * Allows to track workqueue execution.
++ */
++DEFINE_EVENT(workqueue_work, workqueue_execute_end,
++
++	TP_PROTO(struct work_struct *work),
++
++	TP_ARGS(work)
++);
++
++#endif /*  _TRACE_WORKQUEUE_H */
++
++/* This part must be outside protection */
++#include <trace/define_trace.h>
+diff --git a/instrumentation/events/mainline/writeback.h b/instrumentation/events/mainline/writeback.h
+new file mode 100644
+index 0000000..b453d92
+--- /dev/null
++++ b/instrumentation/events/mainline/writeback.h
+@@ -0,0 +1,492 @@
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM writeback
++
++#if !defined(_TRACE_WRITEBACK_H) || defined(TRACE_HEADER_MULTI_READ)
++#define _TRACE_WRITEBACK_H
++
++#include <linux/backing-dev.h>
++#include <linux/writeback.h>
++
++#define show_inode_state(state)					\
++	__print_flags(state, "|",				\
++		{I_DIRTY_SYNC,		"I_DIRTY_SYNC"},	\
++		{I_DIRTY_DATASYNC,	"I_DIRTY_DATASYNC"},	\
++		{I_DIRTY_PAGES,		"I_DIRTY_PAGES"},	\
++		{I_NEW,			"I_NEW"},		\
++		{I_WILL_FREE,		"I_WILL_FREE"},		\
++		{I_FREEING,		"I_FREEING"},		\
++		{I_CLEAR,		"I_CLEAR"},		\
++		{I_SYNC,		"I_SYNC"},		\
++		{I_REFERENCED,		"I_REFERENCED"}		\
++	)
++
++#define WB_WORK_REASON							\
++		{WB_REASON_BACKGROUND,		"background"},		\
++		{WB_REASON_TRY_TO_FREE_PAGES,	"try_to_free_pages"},	\
++		{WB_REASON_SYNC,		"sync"},		\
++		{WB_REASON_PERIODIC,		"periodic"},		\
++		{WB_REASON_LAPTOP_TIMER,	"laptop_timer"},	\
++		{WB_REASON_FREE_MORE_MEM,	"free_more_memory"},	\
++		{WB_REASON_FS_FREE_SPACE,	"fs_free_space"},	\
++		{WB_REASON_FORKER_THREAD,	"forker_thread"}
++
++struct wb_writeback_work;
++
++DECLARE_EVENT_CLASS(writeback_work_class,
++	TP_PROTO(struct backing_dev_info *bdi, struct wb_writeback_work *work),
++	TP_ARGS(bdi, work),
++	TP_STRUCT__entry(
++		__array(char, name, 32)
++		__field(long, nr_pages)
++		__field(dev_t, sb_dev)
++		__field(int, sync_mode)
++		__field(int, for_kupdate)
++		__field(int, range_cyclic)
++		__field(int, for_background)
++		__field(int, reason)
++	),
++	TP_fast_assign(
++		struct device *dev = bdi->dev;
++		if (!dev)
++			dev = default_backing_dev_info.dev;
++		strncpy(__entry->name, dev_name(dev), 32);
++		__entry->nr_pages = work->nr_pages;
++		__entry->sb_dev = work->sb ? work->sb->s_dev : 0;
++		__entry->sync_mode = work->sync_mode;
++		__entry->for_kupdate = work->for_kupdate;
++		__entry->range_cyclic = work->range_cyclic;
++		__entry->for_background	= work->for_background;
++		__entry->reason = work->reason;
++	),
++	TP_printk("bdi %s: sb_dev %d:%d nr_pages=%ld sync_mode=%d "
++		  "kupdate=%d range_cyclic=%d background=%d reason=%s",
++		  __entry->name,
++		  MAJOR(__entry->sb_dev), MINOR(__entry->sb_dev),
++		  __entry->nr_pages,
++		  __entry->sync_mode,
++		  __entry->for_kupdate,
++		  __entry->range_cyclic,
++		  __entry->for_background,
++		  __print_symbolic(__entry->reason, WB_WORK_REASON)
++	)
++);
++#define DEFINE_WRITEBACK_WORK_EVENT(name) \
++DEFINE_EVENT(writeback_work_class, name, \
++	TP_PROTO(struct backing_dev_info *bdi, struct wb_writeback_work *work), \
++	TP_ARGS(bdi, work))
++DEFINE_WRITEBACK_WORK_EVENT(writeback_nothread);
++DEFINE_WRITEBACK_WORK_EVENT(writeback_queue);
++DEFINE_WRITEBACK_WORK_EVENT(writeback_exec);
++DEFINE_WRITEBACK_WORK_EVENT(writeback_start);
++DEFINE_WRITEBACK_WORK_EVENT(writeback_written);
++DEFINE_WRITEBACK_WORK_EVENT(writeback_wait);
++
++TRACE_EVENT(writeback_pages_written,
++	TP_PROTO(long pages_written),
++	TP_ARGS(pages_written),
++	TP_STRUCT__entry(
++		__field(long,		pages)
++	),
++	TP_fast_assign(
++		__entry->pages		= pages_written;
++	),
++	TP_printk("%ld", __entry->pages)
++);
++
++DECLARE_EVENT_CLASS(writeback_class,
++	TP_PROTO(struct backing_dev_info *bdi),
++	TP_ARGS(bdi),
++	TP_STRUCT__entry(
++		__array(char, name, 32)
++	),
++	TP_fast_assign(
++		strncpy(__entry->name, dev_name(bdi->dev), 32);
++	),
++	TP_printk("bdi %s",
++		  __entry->name
++	)
++);
++#define DEFINE_WRITEBACK_EVENT(name) \
++DEFINE_EVENT(writeback_class, name, \
++	TP_PROTO(struct backing_dev_info *bdi), \
++	TP_ARGS(bdi))
++
++DEFINE_WRITEBACK_EVENT(writeback_nowork);
++DEFINE_WRITEBACK_EVENT(writeback_wake_background);
++DEFINE_WRITEBACK_EVENT(writeback_wake_thread);
++DEFINE_WRITEBACK_EVENT(writeback_wake_forker_thread);
++DEFINE_WRITEBACK_EVENT(writeback_bdi_register);
++DEFINE_WRITEBACK_EVENT(writeback_bdi_unregister);
++DEFINE_WRITEBACK_EVENT(writeback_thread_start);
++DEFINE_WRITEBACK_EVENT(writeback_thread_stop);
++
++DECLARE_EVENT_CLASS(wbc_class,
++	TP_PROTO(struct writeback_control *wbc, struct backing_dev_info *bdi),
++	TP_ARGS(wbc, bdi),
++	TP_STRUCT__entry(
++		__array(char, name, 32)
++		__field(long, nr_to_write)
++		__field(long, pages_skipped)
++		__field(int, sync_mode)
++		__field(int, for_kupdate)
++		__field(int, for_background)
++		__field(int, for_reclaim)
++		__field(int, range_cyclic)
++		__field(long, range_start)
++		__field(long, range_end)
++	),
++
++	TP_fast_assign(
++		strncpy(__entry->name, dev_name(bdi->dev), 32);
++		__entry->nr_to_write	= wbc->nr_to_write;
++		__entry->pages_skipped	= wbc->pages_skipped;
++		__entry->sync_mode	= wbc->sync_mode;
++		__entry->for_kupdate	= wbc->for_kupdate;
++		__entry->for_background	= wbc->for_background;
++		__entry->for_reclaim	= wbc->for_reclaim;
++		__entry->range_cyclic	= wbc->range_cyclic;
++		__entry->range_start	= (long)wbc->range_start;
++		__entry->range_end	= (long)wbc->range_end;
++	),
++
++	TP_printk("bdi %s: towrt=%ld skip=%ld mode=%d kupd=%d "
++		"bgrd=%d reclm=%d cyclic=%d "
++		"start=0x%lx end=0x%lx",
++		__entry->name,
++		__entry->nr_to_write,
++		__entry->pages_skipped,
++		__entry->sync_mode,
++		__entry->for_kupdate,
++		__entry->for_background,
++		__entry->for_reclaim,
++		__entry->range_cyclic,
++		__entry->range_start,
++		__entry->range_end)
++)
++
++#define DEFINE_WBC_EVENT(name) \
++DEFINE_EVENT(wbc_class, name, \
++	TP_PROTO(struct writeback_control *wbc, struct backing_dev_info *bdi), \
++	TP_ARGS(wbc, bdi))
++DEFINE_WBC_EVENT(wbc_writepage);
++
++TRACE_EVENT(writeback_queue_io,
++	TP_PROTO(struct bdi_writeback *wb,
++		 struct wb_writeback_work *work,
++		 int moved),
++	TP_ARGS(wb, work, moved),
++	TP_STRUCT__entry(
++		__array(char,		name, 32)
++		__field(unsigned long,	older)
++		__field(long,		age)
++		__field(int,		moved)
++		__field(int,		reason)
++	),
++	TP_fast_assign(
++		unsigned long *older_than_this = work->older_than_this;
++		strncpy(__entry->name, dev_name(wb->bdi->dev), 32);
++		__entry->older	= older_than_this ?  *older_than_this : 0;
++		__entry->age	= older_than_this ?
++				  (jiffies - *older_than_this) * 1000 / HZ : -1;
++		__entry->moved	= moved;
++		__entry->reason	= work->reason;
++	),
++	TP_printk("bdi %s: older=%lu age=%ld enqueue=%d reason=%s",
++		__entry->name,
++		__entry->older,	/* older_than_this in jiffies */
++		__entry->age,	/* older_than_this in relative milliseconds */
++		__entry->moved,
++		__print_symbolic(__entry->reason, WB_WORK_REASON)
++	)
++);
++
++TRACE_EVENT(global_dirty_state,
++
++	TP_PROTO(unsigned long background_thresh,
++		 unsigned long dirty_thresh
++	),
++
++	TP_ARGS(background_thresh,
++		dirty_thresh
++	),
++
++	TP_STRUCT__entry(
++		__field(unsigned long,	nr_dirty)
++		__field(unsigned long,	nr_writeback)
++		__field(unsigned long,	nr_unstable)
++		__field(unsigned long,	background_thresh)
++		__field(unsigned long,	dirty_thresh)
++		__field(unsigned long,	dirty_limit)
++		__field(unsigned long,	nr_dirtied)
++		__field(unsigned long,	nr_written)
++	),
++
++	TP_fast_assign(
++		__entry->nr_dirty	= global_page_state(NR_FILE_DIRTY);
++		__entry->nr_writeback	= global_page_state(NR_WRITEBACK);
++		__entry->nr_unstable	= global_page_state(NR_UNSTABLE_NFS);
++		__entry->nr_dirtied	= global_page_state(NR_DIRTIED);
++		__entry->nr_written	= global_page_state(NR_WRITTEN);
++		__entry->background_thresh = background_thresh;
++		__entry->dirty_thresh	= dirty_thresh;
++		__entry->dirty_limit = global_dirty_limit;
++	),
++
++	TP_printk("dirty=%lu writeback=%lu unstable=%lu "
++		  "bg_thresh=%lu thresh=%lu limit=%lu "
++		  "dirtied=%lu written=%lu",
++		  __entry->nr_dirty,
++		  __entry->nr_writeback,
++		  __entry->nr_unstable,
++		  __entry->background_thresh,
++		  __entry->dirty_thresh,
++		  __entry->dirty_limit,
++		  __entry->nr_dirtied,
++		  __entry->nr_written
++	)
++);
++
++#define KBps(x)			((x) << (PAGE_SHIFT - 10))
++
++TRACE_EVENT(bdi_dirty_ratelimit,
++
++	TP_PROTO(struct backing_dev_info *bdi,
++		 unsigned long dirty_rate,
++		 unsigned long task_ratelimit),
++
++	TP_ARGS(bdi, dirty_rate, task_ratelimit),
++
++	TP_STRUCT__entry(
++		__array(char,		bdi, 32)
++		__field(unsigned long,	write_bw)
++		__field(unsigned long,	avg_write_bw)
++		__field(unsigned long,	dirty_rate)
++		__field(unsigned long,	dirty_ratelimit)
++		__field(unsigned long,	task_ratelimit)
++		__field(unsigned long,	balanced_dirty_ratelimit)
++	),
++
++	TP_fast_assign(
++		strlcpy(__entry->bdi, dev_name(bdi->dev), 32);
++		__entry->write_bw	= KBps(bdi->write_bandwidth);
++		__entry->avg_write_bw	= KBps(bdi->avg_write_bandwidth);
++		__entry->dirty_rate	= KBps(dirty_rate);
++		__entry->dirty_ratelimit = KBps(bdi->dirty_ratelimit);
++		__entry->task_ratelimit	= KBps(task_ratelimit);
++		__entry->balanced_dirty_ratelimit =
++					  KBps(bdi->balanced_dirty_ratelimit);
++	),
++
++	TP_printk("bdi %s: "
++		  "write_bw=%lu awrite_bw=%lu dirty_rate=%lu "
++		  "dirty_ratelimit=%lu task_ratelimit=%lu "
++		  "balanced_dirty_ratelimit=%lu",
++		  __entry->bdi,
++		  __entry->write_bw,		/* write bandwidth */
++		  __entry->avg_write_bw,	/* avg write bandwidth */
++		  __entry->dirty_rate,		/* bdi dirty rate */
++		  __entry->dirty_ratelimit,	/* base ratelimit */
++		  __entry->task_ratelimit, /* ratelimit with position control */
++		  __entry->balanced_dirty_ratelimit /* the balanced ratelimit */
++	)
++);
++
++TRACE_EVENT(balance_dirty_pages,
++
++	TP_PROTO(struct backing_dev_info *bdi,
++		 unsigned long thresh,
++		 unsigned long bg_thresh,
++		 unsigned long dirty,
++		 unsigned long bdi_thresh,
++		 unsigned long bdi_dirty,
++		 unsigned long dirty_ratelimit,
++		 unsigned long task_ratelimit,
++		 unsigned long dirtied,
++		 unsigned long period,
++		 long pause,
++		 unsigned long start_time),
++
++	TP_ARGS(bdi, thresh, bg_thresh, dirty, bdi_thresh, bdi_dirty,
++		dirty_ratelimit, task_ratelimit,
++		dirtied, period, pause, start_time),
++
++	TP_STRUCT__entry(
++		__array(	 char,	bdi, 32)
++		__field(unsigned long,	limit)
++		__field(unsigned long,	setpoint)
++		__field(unsigned long,	dirty)
++		__field(unsigned long,	bdi_setpoint)
++		__field(unsigned long,	bdi_dirty)
++		__field(unsigned long,	dirty_ratelimit)
++		__field(unsigned long,	task_ratelimit)
++		__field(unsigned int,	dirtied)
++		__field(unsigned int,	dirtied_pause)
++		__field(unsigned long,	paused)
++		__field(	 long,	pause)
++		__field(unsigned long,	period)
++		__field(	 long,	think)
++	),
++
++	TP_fast_assign(
++		unsigned long freerun = (thresh + bg_thresh) / 2;
++		strlcpy(__entry->bdi, dev_name(bdi->dev), 32);
++
++		__entry->limit		= global_dirty_limit;
++		__entry->setpoint	= (global_dirty_limit + freerun) / 2;
++		__entry->dirty		= dirty;
++		__entry->bdi_setpoint	= __entry->setpoint *
++						bdi_thresh / (thresh + 1);
++		__entry->bdi_dirty	= bdi_dirty;
++		__entry->dirty_ratelimit = KBps(dirty_ratelimit);
++		__entry->task_ratelimit	= KBps(task_ratelimit);
++		__entry->dirtied	= dirtied;
++		__entry->dirtied_pause	= current->nr_dirtied_pause;
++		__entry->think		= current->dirty_paused_when == 0 ? 0 :
++			 (long)(jiffies - current->dirty_paused_when) * 1000/HZ;
++		__entry->period		= period * 1000 / HZ;
++		__entry->pause		= pause * 1000 / HZ;
++		__entry->paused		= (jiffies - start_time) * 1000 / HZ;
++	),
++
++
++	TP_printk("bdi %s: "
++		  "limit=%lu setpoint=%lu dirty=%lu "
++		  "bdi_setpoint=%lu bdi_dirty=%lu "
++		  "dirty_ratelimit=%lu task_ratelimit=%lu "
++		  "dirtied=%u dirtied_pause=%u "
++		  "paused=%lu pause=%ld period=%lu think=%ld",
++		  __entry->bdi,
++		  __entry->limit,
++		  __entry->setpoint,
++		  __entry->dirty,
++		  __entry->bdi_setpoint,
++		  __entry->bdi_dirty,
++		  __entry->dirty_ratelimit,
++		  __entry->task_ratelimit,
++		  __entry->dirtied,
++		  __entry->dirtied_pause,
++		  __entry->paused,	/* ms */
++		  __entry->pause,	/* ms */
++		  __entry->period,	/* ms */
++		  __entry->think	/* ms */
++	  )
++);
++
++TRACE_EVENT(writeback_sb_inodes_requeue,
++
++	TP_PROTO(struct inode *inode),
++	TP_ARGS(inode),
++
++	TP_STRUCT__entry(
++		__array(char, name, 32)
++		__field(unsigned long, ino)
++		__field(unsigned long, state)
++		__field(unsigned long, dirtied_when)
++	),
++
++	TP_fast_assign(
++		strncpy(__entry->name,
++		        dev_name(inode_to_bdi(inode)->dev), 32);
++		__entry->ino		= inode->i_ino;
++		__entry->state		= inode->i_state;
++		__entry->dirtied_when	= inode->dirtied_when;
++	),
++
++	TP_printk("bdi %s: ino=%lu state=%s dirtied_when=%lu age=%lu",
++		  __entry->name,
++		  __entry->ino,
++		  show_inode_state(__entry->state),
++		  __entry->dirtied_when,
++		  (jiffies - __entry->dirtied_when) / HZ
++	)
++);
++
++DECLARE_EVENT_CLASS(writeback_congest_waited_template,
++
++	TP_PROTO(unsigned int usec_timeout, unsigned int usec_delayed),
++
++	TP_ARGS(usec_timeout, usec_delayed),
++
++	TP_STRUCT__entry(
++		__field(	unsigned int,	usec_timeout	)
++		__field(	unsigned int,	usec_delayed	)
++	),
++
++	TP_fast_assign(
++		__entry->usec_timeout	= usec_timeout;
++		__entry->usec_delayed	= usec_delayed;
++	),
++
++	TP_printk("usec_timeout=%u usec_delayed=%u",
++			__entry->usec_timeout,
++			__entry->usec_delayed)
++);
++
++DEFINE_EVENT(writeback_congest_waited_template, writeback_congestion_wait,
++
++	TP_PROTO(unsigned int usec_timeout, unsigned int usec_delayed),
++
++	TP_ARGS(usec_timeout, usec_delayed)
++);
++
++DEFINE_EVENT(writeback_congest_waited_template, writeback_wait_iff_congested,
++
++	TP_PROTO(unsigned int usec_timeout, unsigned int usec_delayed),
++
++	TP_ARGS(usec_timeout, usec_delayed)
++);
++
++DECLARE_EVENT_CLASS(writeback_single_inode_template,
++
++	TP_PROTO(struct inode *inode,
++		 struct writeback_control *wbc,
++		 unsigned long nr_to_write
++	),
++
++	TP_ARGS(inode, wbc, nr_to_write),
++
++	TP_STRUCT__entry(
++		__array(char, name, 32)
++		__field(unsigned long, ino)
++		__field(unsigned long, state)
++		__field(unsigned long, dirtied_when)
++		__field(unsigned long, writeback_index)
++		__field(long, nr_to_write)
++		__field(unsigned long, wrote)
++	),
++
++	TP_fast_assign(
++		strncpy(__entry->name,
++			dev_name(inode_to_bdi(inode)->dev), 32);
++		__entry->ino		= inode->i_ino;
++		__entry->state		= inode->i_state;
++		__entry->dirtied_when	= inode->dirtied_when;
++		__entry->writeback_index = inode->i_mapping->writeback_index;
++		__entry->nr_to_write	= nr_to_write;
++		__entry->wrote		= nr_to_write - wbc->nr_to_write;
++	),
++
++	TP_printk("bdi %s: ino=%lu state=%s dirtied_when=%lu age=%lu "
++		  "index=%lu to_write=%ld wrote=%lu",
++		  __entry->name,
++		  __entry->ino,
++		  show_inode_state(__entry->state),
++		  __entry->dirtied_when,
++		  (jiffies - __entry->dirtied_when) / HZ,
++		  __entry->writeback_index,
++		  __entry->nr_to_write,
++		  __entry->wrote
++	)
++);
++
++DEFINE_EVENT(writeback_single_inode_template, writeback_single_inode,
++	TP_PROTO(struct inode *inode,
++		 struct writeback_control *wbc,
++		 unsigned long nr_to_write),
++	TP_ARGS(inode, wbc, nr_to_write)
++);
++
++#endif /* _TRACE_WRITEBACK_H */
++
++/* This part must be outside protection */
++#include <trace/define_trace.h>
 diff --git a/probes/Makefile b/probes/Makefile
-index c39a84a..779616d 100644
+index 779616d..088cd5f 100644
 --- a/probes/Makefile
 +++ b/probes/Makefile
-@@ -24,23 +24,23 @@ endif
+@@ -121,6 +121,79 @@ endif
+ #obj-m += lttng-probe-lock.o
+ #endif
  
- obj-m +=  $(shell \
- 	if [ $(VERSION) -ge 3 \
--		-o \( $(VERSION) -eq 2 -a $(PATCHLEVEL) -ge 6 -a $(SUBLEVEL) -ge 35 \) ] ; then \
-+		-o \( $(VERSION) -eq 2 -a $(PATCHLEVEL) -ge 6 -a $(SUBLEVEL) -ge 33 \) ] ; then \
- 		echo "lttng-probe-signal.o" ; fi;)
- 
- ifneq ($(CONFIG_BLOCK),)
- ifneq ($(CONFIG_EVENT_TRACING),)	# need blk_cmd_buf_len
--obj-m +=  $(shell \
--	if [ $(VERSION) -ge 3 \
--		-o \( $(VERSION) -eq 2 -a $(PATCHLEVEL) -ge 6 -a $(SUBLEVEL) -ge 38 \) ] ; then \
--		echo "lttng-probe-block.o" ; fi;)
-+obj-m += lttng-probe-block.o
- endif
- endif
- 
- ifneq ($(CONFIG_NET),)
--obj-m += lttng-probe-net.o
- obj-m += lttng-probe-napi.o
- obj-m += lttng-probe-skb.o
- obj-m +=  $(shell \
++ifneq ($(CONFIG_BTRFS_FS),)
++btrfs_dep = $(srctree)/fs/btrfs/*.h
++btrfs = $(shell \
 +	if [ $(VERSION) -ge 3 \
-+		-o \( $(VERSION) -eq 2 -a $(PATCHLEVEL) -ge 6 -a $(SUBLEVEL) -ge 37 \) ] ; then \
-+		echo "lttng-probe-net.o" ; fi;)
-+obj-m +=  $(shell \
- 	if [ $(VERSION) -ge 3 -a $(PATCHLEVEL) -ge 1 ] ; then \
- 		echo "lttng-probe-sock.o" ; fi;)
- obj-m +=  $(shell \
-@@ -56,9 +56,22 @@ obj-m +=  $(shell \
- endif
- 
- ifneq ($(CONFIG_EXT3_FS),)
--obj-m +=  $(shell \
-+ext3_dep = $(srctree)/fs/ext3/*.h
-+ext3_dep_check = $(wildcard $(ext3_dep))
-+ext3 = $(shell \
- 	if [ $(VERSION) -ge 3 -a $(PATCHLEVEL) -ge 1 ] ; then \
--		echo "lttng-probe-ext3.o" ; fi;)
-+		if [ $(VERSION) -ge 3 -a $(PATCHLEVEL) -ge 4 -a \
-+			-z "$(ext3_dep_check)" ] ; then \
-+			echo "warn" ; \
-+			exit ; \
-+		fi; \
-+		echo "lttng-probe-ext3.o" ; \
-+	fi;)
-+ifeq ($(ext3),warn)
-+$(warning Files $(ext3_dep) not found. Probe "ext3" is disabled. Use full kernel source tree to enable it.)
-+ext3 =
++		-o \( $(VERSION) -eq 2 -a $(PATCHLEVEL) -ge 6 -a $(SUBLEVEL) -ge 39 \) ] ; then \
++		echo "lttng-probe-btrfs.o" ; fi;)
++ifneq ($(btrfs),)
++ifeq ($(wildcard $(btrfs_dep)),)
++$(warning Files $(btrfs_dep) not found. Probe "btrfs" is disabled. Use full kernel source tree to enable it.)
++btrfs =
 +endif
-+obj-m += $(ext3)
- endif
- 
- ifneq ($(CONFIG_GPIOLIB),)
-@@ -86,12 +99,14 @@ endif
- 
- ifneq ($(CONFIG_SCSI),)
- obj-m +=  $(shell \
--	if [ $(VERSION) -ge 3 ] ; then \
++endif
++obj-m += $(btrfs)
++endif
++
++obj-m +=  $(shell \
 +	if [ $(VERSION) -ge 3 \
-+		-o \( $(VERSION) -eq 2 -a $(PATCHLEVEL) -ge 6 -a $(SUBLEVEL) -ge 35 \) ] ; then \
- 		echo "lttng-probe-scsi.o" ; fi;)
- endif
- 
- vmscan = $(shell \
--	if [ $(VERSION) -ge 3 ] ; then \
++		-o \( $(VERSION) -eq 2 -a $(PATCHLEVEL) -ge 6 -a $(SUBLEVEL) -ge 38 \) ] ; then \
++		echo "lttng-probe-compaction.o" ; fi;)
++
++ifneq ($(CONFIG_EXT4_FS),)
++ext4_dep = $(srctree)/fs/ext4/*.h
++ext4 = lttng-probe-ext4.o
++ifeq ($(wildcard $(ext4_dep)),)
++$(warning Files $(ext4_dep) not found. Probe "ext4" is disabled. Use full kernel source tree to enable it.)
++ext4 =
++endif
++obj-m += $(ext4)
++endif
++
++obj-m +=  $(shell \
++	if [ $(VERSION) -ge 3 -a $(PATCHLEVEL) -ge 4 ] ; then \
++		echo "lttng-probe-printk.o" ; fi;)
++ifneq ($(CONFIG_FRAME_WARN),0)
++CFLAGS_lttng-probe-printk.o += -Wframe-larger-than=2200
++endif
++
++obj-m +=  $(shell \
++	if [ \( $(VERSION) -eq 3 -a $(PATCHLEVEL) -ge 6 \) \
++		-o \( $(VERSION) -eq 3 -a $(PATCHLEVEL) -eq 5 -a $(SUBLEVEL) -ge 2 \) \
++		-o \( $(VERSION) -eq 3 -a $(PATCHLEVEL) -eq 4 -a $(SUBLEVEL) -ge 9 \) \
++		-o \( $(VERSION) -eq 3 -a $(PATCHLEVEL) -eq 0 -a $(SUBLEVEL) -ge 41 \) ] ; then \
++		echo "lttng-probe-random.o" ; fi;)
++
++obj-m +=  $(shell \
++	if [ $(VERSION) -ge 3 -a $(PATCHLEVEL) -ge 2 ] ; then \
++		echo "lttng-probe-rcu.o" ; fi;)
++
++ifneq ($(CONFIG_REGMAP),)
++obj-m +=  $(shell \
++	if [ $(VERSION) -ge 3 -a $(PATCHLEVEL) -ge 2 ] ; then \
++		echo "lttng-probe-regmap.o" ; fi;)
++endif
++
++ifneq ($(CONFIG_PM_RUNTIME),)
++obj-m +=  $(shell \
++	if [ $(VERSION) -ge 3 -a $(PATCHLEVEL) -ge 2 ] ; then \
++		echo "lttng-probe-rpm.o" ; fi;)
++endif
++
++ifneq ($(CONFIG_SUNRPC),)
++obj-m +=  $(shell \
++	if [ $(VERSION) -ge 3 -a $(PATCHLEVEL) -ge 4 ] ; then \
++		echo "lttng-probe-sunrpc.o" ; fi;)
++endif
++
++obj-m += lttng-probe-workqueue.o
++
++obj-m +=  $(shell \
 +	if [ $(VERSION) -ge 3 \
 +		-o \( $(VERSION) -eq 2 -a $(PATCHLEVEL) -ge 6 -a $(SUBLEVEL) -ge 36 \) ] ; then \
- 		echo "lttng-probe-vmscan.o" ; fi;)
- ifneq ($(CONFIG_SWAP),)
- 	obj-m += $(vmscan)
-@@ -101,9 +116,11 @@ ifneq ($(CONFIG_CGROUP_MEM_RES_CTLR),)
- endif
- endif
- 
--ifneq ($(CONFIG_LOCKDEP),)
--obj-m += lttng-probe-lock.o
--endif
-+# lock probe does not work, so disabling it for now
-+#ifneq ($(CONFIG_LOCKDEP),)
-+#obj-m += lttng-probe-lock.o
-+#endif
++		echo "lttng-probe-writeback.o" ; fi;)
 +
  
  ifneq ($(CONFIG_KPROBES),)
  obj-m += lttng-kprobes.o
-diff --git a/probes/lttng-probe-asoc.c b/probes/lttng-probe-asoc.c
-index 427639f..ad54a37 100644
---- a/probes/lttng-probe-asoc.c
-+++ b/probes/lttng-probe-asoc.c
-@@ -1,5 +1,5 @@
- /*
-- * probes/lttng-probe-block.c
-+ * probes/lttng-probe-asoc.c
-  *
-  * LTTng asoc probes.
-  *
-@@ -41,5 +41,5 @@
- #include "../instrumentation/events/lttng-module/asoc.h"
- 
- MODULE_LICENSE("GPL and additional rights");
--MODULE_AUTHOR("Wade Farnsworth <wade_farnsworth@mentor.com> and Paul Woegerer <paul_woegerer@mentor.com>");
-+MODULE_AUTHOR("Wade Farnsworth <wade_farnsworth@mentor.com>, Paul Woegerer <paul_woegerer@mentor.com>, and Andrew Gabbasov <andrew_gabbasov@mentor.com>");
- MODULE_DESCRIPTION("LTTng asoc probes");
-diff --git a/probes/lttng-probe-block.c b/probes/lttng-probe-block.c
-index c0c2702..3eb668f 100644
---- a/probes/lttng-probe-block.c
-+++ b/probes/lttng-probe-block.c
-@@ -29,6 +29,8 @@
-  */
- #include <trace/events/block.h>
- 
+diff --git a/probes/lttng-probe-btrfs.c b/probes/lttng-probe-btrfs.c
+new file mode 100644
+index 0000000..4b5f84e
+--- /dev/null
++++ b/probes/lttng-probe-btrfs.c
+@@ -0,0 +1,48 @@
++/*
++ * probes/lttng-probe-btrfs.c
++ *
++ * LTTng btrfs probes.
++ *
++ * Copyright (C) 2010-2012 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
++ * Copyright (C) 2012 Mentor Graphics Corp.
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; only
++ * version 2.1 of the License.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
++ */
++
++#include <linux/module.h>
++#include <linux/fs.h>
++#include <../fs/btrfs/ctree.h>
++#include <../fs/btrfs/transaction.h>
++#include <../fs/btrfs/volumes.h>
++#include <linux/dcache.h>
++
++/*
++ * Create the tracepoint static inlines from the kernel to validate that our
++ * trace event macros match the kernel we run on.
++ */
++#include <trace/events/btrfs.h>
++
++/*
++ * Create LTTng tracepoint probes.
++ */
++#define LTTNG_PACKAGE_BUILD
++#define CREATE_TRACE_POINTS
++#define TRACE_INCLUDE_PATH ../instrumentation/events/lttng-module
++
++#include "../instrumentation/events/lttng-module/btrfs.h"
++
++MODULE_LICENSE("GPL and additional rights");
++MODULE_AUTHOR("Andrew Gabbasov <andrew_gabbasov@mentor.com>");
++MODULE_DESCRIPTION("LTTng btrfs probes");
+diff --git a/probes/lttng-probe-compaction.c b/probes/lttng-probe-compaction.c
+new file mode 100644
+index 0000000..13b9959
+--- /dev/null
++++ b/probes/lttng-probe-compaction.c
+@@ -0,0 +1,43 @@
++/*
++ * probes/lttng-probe-compaction.c
++ *
++ * LTTng compaction probes.
++ *
++ * Copyright (C) 2010-2012 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
++ * Copyright (C) 2012 Mentor Graphics Corp.
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; only
++ * version 2.1 of the License.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
++ */
++
++#include <linux/module.h>
++
++/*
++ * Create the tracepoint static inlines from the kernel to validate that our
++ * trace event macros match the kernel we run on.
++ */
++#include <trace/events/compaction.h>
++
++/*
++ * Create LTTng tracepoint probes.
++ */
++#define LTTNG_PACKAGE_BUILD
++#define CREATE_TRACE_POINTS
++#define TRACE_INCLUDE_PATH ../instrumentation/events/lttng-module
++
++#include "../instrumentation/events/lttng-module/compaction.h"
++
++MODULE_LICENSE("GPL and additional rights");
++MODULE_AUTHOR("Andrew Gabbasov <andrew_gabbasov@mentor.com>");
++MODULE_DESCRIPTION("LTTng compaction probes");
+diff --git a/probes/lttng-probe-ext4.c b/probes/lttng-probe-ext4.c
+new file mode 100644
+index 0000000..19c9b68
+--- /dev/null
++++ b/probes/lttng-probe-ext4.c
+@@ -0,0 +1,50 @@
++/*
++ * probes/lttng-probe-ext4.c
++ *
++ * LTTng ext4 probes.
++ *
++ * Copyright (C) 2010-2012 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
++ * Copyright (C) 2012 Mentor Graphics Corp.
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; only
++ * version 2.1 of the License.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
++ */
++
++#include <linux/module.h>
++#include <linux/fs.h>
++#include <../fs/ext4/ext4.h>
++#include <../fs/ext4/mballoc.h>
++#include <linux/dcache.h>
++
++/*
++ * Create the tracepoint static inlines from the kernel to validate that our
++ * trace event macros match the kernel we run on.
++ */
++#include <trace/events/ext4.h>
++
++#include "../lttng-kernel-version.h"
 +#include "../wrapper/tracepoint.h"
 +
- /*
-  * Create LTTng tracepoint probes.
-  */
-diff --git a/probes/lttng-probe-ext3.c b/probes/lttng-probe-ext3.c
-index 0df2b67..87c8cfb 100644
---- a/probes/lttng-probe-ext3.c
-+++ b/probes/lttng-probe-ext3.c
-@@ -27,20 +27,16 @@
- #include <linux/version.h>
- 
- #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,4,0))
--/*
-- * Since 3.4 the is no linux/ext3_fs_i.h anymore. Instead we have to use
-- * ext3.h from fs/ext3/ext3.h (which also includes trace/events/ext3.h)
-- */
--#include "../instrumentation/events/mainline/fs_ext3.h"
-+#include <../fs/ext3/ext3.h>
- #else
- #include <linux/ext3_fs_i.h>
++/*
++ * Create LTTng tracepoint probes.
++ */
++#define LTTNG_PACKAGE_BUILD
++#define CREATE_TRACE_POINTS
++#define TRACE_INCLUDE_PATH ../instrumentation/events/lttng-module
++
++#include "../instrumentation/events/lttng-module/ext4.h"
++
++MODULE_LICENSE("GPL and additional rights");
++MODULE_AUTHOR("Andrew Gabbasov <andrew_gabbasov@mentor.com>");
++MODULE_DESCRIPTION("LTTng ext4 probes");
+diff --git a/probes/lttng-probe-printk.c b/probes/lttng-probe-printk.c
+new file mode 100644
+index 0000000..1fe1f01
+--- /dev/null
++++ b/probes/lttng-probe-printk.c
+@@ -0,0 +1,43 @@
++/*
++ * probes/lttng-probe-printk.c
++ *
++ * LTTng printk probes.
++ *
++ * Copyright (C) 2010-2012 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
++ * Copyright (C) 2012 Mentor Graphics Corp.
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; only
++ * version 2.1 of the License.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
++ */
++
++#include <linux/module.h>
++
++/*
++ * Create the tracepoint static inlines from the kernel to validate that our
++ * trace event macros match the kernel we run on.
++ */
++#include <trace/events/printk.h>
++
++/*
++ * Create LTTng tracepoint probes.
++ */
++#define LTTNG_PACKAGE_BUILD
++#define CREATE_TRACE_POINTS
++#define TRACE_INCLUDE_PATH ../instrumentation/events/lttng-module
++
++#include "../instrumentation/events/lttng-module/printk.h"
++
++MODULE_LICENSE("GPL and additional rights");
++MODULE_AUTHOR("Andrew Gabbasov <andrew_gabbasov@mentor.com>");
++MODULE_DESCRIPTION("LTTng printk probes");
+diff --git a/probes/lttng-probe-random.c b/probes/lttng-probe-random.c
+new file mode 100644
+index 0000000..df9f551
+--- /dev/null
++++ b/probes/lttng-probe-random.c
+@@ -0,0 +1,43 @@
++/*
++ * probes/lttng-probe-random.c
++ *
++ * LTTng random probes.
++ *
++ * Copyright (C) 2010-2012 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
++ * Copyright (C) 2012 Mentor Graphics Corp.
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; only
++ * version 2.1 of the License.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
++ */
++
++#include <linux/module.h>
++
++/*
++ * Create the tracepoint static inlines from the kernel to validate that our
++ * trace event macros match the kernel we run on.
++ */
++#include <trace/events/random.h>
++
++/*
++ * Create LTTng tracepoint probes.
++ */
++#define LTTNG_PACKAGE_BUILD
++#define CREATE_TRACE_POINTS
++#define TRACE_INCLUDE_PATH ../instrumentation/events/lttng-module
++
++#include "../instrumentation/events/lttng-module/random.h"
++
++MODULE_LICENSE("GPL and additional rights");
++MODULE_AUTHOR("Andrew Gabbasov <andrew_gabbasov@mentor.com>");
++MODULE_DESCRIPTION("LTTng random probes");
+diff --git a/probes/lttng-probe-rcu.c b/probes/lttng-probe-rcu.c
+new file mode 100644
+index 0000000..5216500
+--- /dev/null
++++ b/probes/lttng-probe-rcu.c
+@@ -0,0 +1,44 @@
++/*
++ * probes/lttng-probe-rcu.c
++ *
++ * LTTng rcu probes.
++ *
++ * Copyright (C) 2010-2012 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
++ * Copyright (C) 2012 Mentor Graphics Corp.
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; only
++ * version 2.1 of the License.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
++ */
++
++#include <linux/module.h>
++#include <linux/rcupdate.h>
++
++/*
++ * Create the tracepoint static inlines from the kernel to validate that our
++ * trace event macros match the kernel we run on.
++ */
++#include <trace/events/rcu.h>
++
++/*
++ * Create LTTng tracepoint probes.
++ */
++#define LTTNG_PACKAGE_BUILD
++#define CREATE_TRACE_POINTS
++#define TRACE_INCLUDE_PATH ../instrumentation/events/lttng-module
++
++#include "../instrumentation/events/lttng-module/rcu.h"
++
++MODULE_LICENSE("GPL and additional rights");
++MODULE_AUTHOR("Andrew Gabbasov <andrew_gabbasov@mentor.com>");
++MODULE_DESCRIPTION("LTTng rcu probes");
+diff --git a/probes/lttng-probe-regmap.c b/probes/lttng-probe-regmap.c
+new file mode 100644
+index 0000000..7c1fd00
+--- /dev/null
++++ b/probes/lttng-probe-regmap.c
+@@ -0,0 +1,44 @@
++/*
++ * probes/lttng-probe-regmap.c
++ *
++ * LTTng regmap probes.
++ *
++ * Copyright (C) 2010-2012 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
++ * Copyright (C) 2012 Mentor Graphics Corp.
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; only
++ * version 2.1 of the License.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
++ */
++
++#include <linux/module.h>
++#include <linux/device.h>
++
++/*
++ * Create the tracepoint static inlines from the kernel to validate that our
++ * trace event macros match the kernel we run on.
++ */
++#include <trace/events/regmap.h>
++
++/*
++ * Create LTTng tracepoint probes.
++ */
++#define LTTNG_PACKAGE_BUILD
++#define CREATE_TRACE_POINTS
++#define TRACE_INCLUDE_PATH ../instrumentation/events/lttng-module
++
++#include "../instrumentation/events/lttng-module/regmap.h"
++
++MODULE_LICENSE("GPL and additional rights");
++MODULE_AUTHOR("Andrew Gabbasov <andrew_gabbasov@mentor.com>");
++MODULE_DESCRIPTION("LTTng regmap probes");
+diff --git a/probes/lttng-probe-rpm.c b/probes/lttng-probe-rpm.c
+new file mode 100644
+index 0000000..607e9e5
+--- /dev/null
++++ b/probes/lttng-probe-rpm.c
+@@ -0,0 +1,44 @@
++/*
++ * probes/lttng-probe-rpm.c
++ *
++ * LTTng rpm probes.
++ *
++ * Copyright (C) 2010-2012 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
++ * Copyright (C) 2012 Mentor Graphics Corp.
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; only
++ * version 2.1 of the License.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
++ */
++
++#include <linux/module.h>
++#include <linux/device.h>
++
++/*
++ * Create the tracepoint static inlines from the kernel to validate that our
++ * trace event macros match the kernel we run on.
++ */
++#include <trace/events/rpm.h>
++
++/*
++ * Create LTTng tracepoint probes.
++ */
++#define LTTNG_PACKAGE_BUILD
++#define CREATE_TRACE_POINTS
++#define TRACE_INCLUDE_PATH ../instrumentation/events/lttng-module
++
++#include "../instrumentation/events/lttng-module/rpm.h"
++
++MODULE_LICENSE("GPL and additional rights");
++MODULE_AUTHOR("Andrew Gabbasov <andrew_gabbasov@mentor.com>");
++MODULE_DESCRIPTION("LTTng rpm probes");
+diff --git a/probes/lttng-probe-sunrpc.c b/probes/lttng-probe-sunrpc.c
+new file mode 100644
+index 0000000..504413e
+--- /dev/null
++++ b/probes/lttng-probe-sunrpc.c
+@@ -0,0 +1,43 @@
++/*
++ * probes/lttng-probe-sunrpc.c
++ *
++ * LTTng sunrpc probes.
++ *
++ * Copyright (C) 2010-2012 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
++ * Copyright (C) 2012 Mentor Graphics Corp.
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; only
++ * version 2.1 of the License.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
++ */
++
++#include <linux/module.h>
++
++/*
++ * Create the tracepoint static inlines from the kernel to validate that our
++ * trace event macros match the kernel we run on.
++ */
++#include <trace/events/sunrpc.h>
++
++/*
++ * Create LTTng tracepoint probes.
++ */
++#define LTTNG_PACKAGE_BUILD
++#define CREATE_TRACE_POINTS
++#define TRACE_INCLUDE_PATH ../instrumentation/events/lttng-module
++
++#include "../instrumentation/events/lttng-module/sunrpc.h"
++
++MODULE_LICENSE("GPL and additional rights");
++MODULE_AUTHOR("Andrew Gabbasov <andrew_gabbasov@mentor.com>");
++MODULE_DESCRIPTION("LTTng sunrpc probes");
+diff --git a/probes/lttng-probe-workqueue.c b/probes/lttng-probe-workqueue.c
+new file mode 100644
+index 0000000..6f36e00
+--- /dev/null
++++ b/probes/lttng-probe-workqueue.c
+@@ -0,0 +1,48 @@
++/*
++ * probes/lttng-probe-workqueue.c
++ *
++ * LTTng workqueue probes.
++ *
++ * Copyright (C) 2010-2012 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
++ * Copyright (C) 2012 Mentor Graphics Corp.
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; only
++ * version 2.1 of the License.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
++ */
++
++#include <linux/module.h>
++#include <linux/idr.h>
++
++struct cpu_workqueue_struct;
++
++/*
++ * Create the tracepoint static inlines from the kernel to validate that our
++ * trace event macros match the kernel we run on.
++ */
++#include <trace/events/workqueue.h>
++
++#include "../wrapper/tracepoint.h"
++
++/*
++ * Create LTTng tracepoint probes.
++ */
++#define LTTNG_PACKAGE_BUILD
++#define CREATE_TRACE_POINTS
++#define TRACE_INCLUDE_PATH ../instrumentation/events/lttng-module
++
++#include "../instrumentation/events/lttng-module/workqueue.h"
++
++MODULE_LICENSE("GPL and additional rights");
++MODULE_AUTHOR("Andrew Gabbasov <andrew_gabbasov@mentor.com>");
++MODULE_DESCRIPTION("LTTng workqueue probes");
+diff --git a/probes/lttng-probe-writeback.c b/probes/lttng-probe-writeback.c
+new file mode 100644
+index 0000000..0a5c022
+--- /dev/null
++++ b/probes/lttng-probe-writeback.c
+@@ -0,0 +1,69 @@
++/*
++ * probes/lttng-probe-writeback.c
++ *
++ * LTTng writeback probes.
++ *
++ * Copyright (C) 2010-2012 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
++ * Copyright (C) 2012 Mentor Graphics Corp.
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; only
++ * version 2.1 of the License.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
++ */
++
++#include <linux/module.h>
++#include <linux/device.h>
++#include <linux/mm.h>
++
++/*
++ * Create the tracepoint static inlines from the kernel to validate that our
++ * trace event macros match the kernel we run on.
++ */
++#include <trace/events/writeback.h>
++
++#include "../lttng-kernel-version.h"
++
++/* #if <check version number if global_dirty_limit will be exported> */
++#ifdef CONFIG_KALLSYMS
++#include "../wrapper/kallsyms.h"
++
++static unsigned long *wrapper_global_dirty_limit_sym = 0;
++static inline
++unsigned long wrapper_global_dirty_limit(void)
++{
++	if (!wrapper_global_dirty_limit_sym)
++		wrapper_global_dirty_limit_sym =
++			(void *)kallsyms_lookup_funcptr("global_dirty_limit");
++	if (wrapper_global_dirty_limit_sym)
++		return *wrapper_global_dirty_limit_sym;
++	else {
++		printk(KERN_WARNING "LTTng: global_dirty_limit symbol lookup failed.\n");
++		return 0;
++	}
++}
++#define global_dirty_limit wrapper_global_dirty_limit()
 +#endif
- 
- /*
-  * Create the tracepoint static inlines from the kernel to validate that our
-  * trace event macros match the kernel we run on.
-  */
- #include <trace/events/ext3.h>
--#endif
- 
- /*
-  * Create LTTng tracepoint probes.
-@@ -52,5 +48,5 @@
- #include "../instrumentation/events/lttng-module/ext3.h"
- 
- MODULE_LICENSE("GPL and additional rights");
--MODULE_AUTHOR("Wade Farnsworth <wade_farnsworth@mentor.com> and Paul Woegerer <paul_woegerer@mentor.com>");
-+MODULE_AUTHOR("Wade Farnsworth <wade_farnsworth@mentor.com>, Paul Woegerer <paul_woegerer@mentor.com>, and Andrew Gabbasov <andrew_gabbasov@mentor.com>");
- MODULE_DESCRIPTION("LTTng ext3 probes");
-diff --git a/probes/lttng-probe-irq.c b/probes/lttng-probe-irq.c
-index afcd1d2..bdd78fb 100644
---- a/probes/lttng-probe-irq.c
-+++ b/probes/lttng-probe-irq.c
-@@ -22,7 +22,6 @@
- 
- #include <linux/module.h>
- #include <linux/interrupt.h>
--#include "../wrapper/tracepoint.h"
- 
- /*
-  * Create the tracepoint static inlines from the kernel to validate that our
-@@ -30,6 +29,8 @@
-  */
- #include <trace/events/irq.h>
- 
-+#include "../wrapper/tracepoint.h"
++/* #endif <check version number> */
 +
- /*
-  * Create LTTng tracepoint probes.
-  */
-diff --git a/probes/lttng-probe-jbd.c b/probes/lttng-probe-jbd.c
-index 46911cc..dc94894 100644
---- a/probes/lttng-probe-jbd.c
-+++ b/probes/lttng-probe-jbd.c
-@@ -22,7 +22,6 @@
-  */
- 
- #include <linux/module.h>
--#include <linux/version.h>
- 
- /*
-  * Create the tracepoint static inlines from the kernel to validate that our
-@@ -40,5 +39,5 @@
- #include "../instrumentation/events/lttng-module/jbd.h"
- 
- MODULE_LICENSE("GPL and additional rights");
--MODULE_AUTHOR("Wade Farnsworth <wade_farnsworth@mentor.com> and Paul Woegerer <paul_woegerer@mentor.com>");
-+MODULE_AUTHOR("Wade Farnsworth <wade_farnsworth@mentor.com>, Paul Woegerer <paul_woegerer@mentor.com>, and Andrew Gabbasov <andrew_gabbasov@mentor.com>");
- MODULE_DESCRIPTION("LTTng jbd probes");
-diff --git a/probes/lttng-probe-jbd2.c b/probes/lttng-probe-jbd2.c
-index eea0a66..30ccf3f 100644
---- a/probes/lttng-probe-jbd2.c
-+++ b/probes/lttng-probe-jbd2.c
-@@ -29,6 +29,8 @@
-  */
- #include <trace/events/jbd2.h>
- 
-+#include "../wrapper/tracepoint.h"
++/*
++ * Create LTTng tracepoint probes.
++ */
++#define LTTNG_PACKAGE_BUILD
++#define CREATE_TRACE_POINTS
++#define TRACE_INCLUDE_PATH ../instrumentation/events/lttng-module
 +
- /*
-  * Create LTTng tracepoint probes.
-  */
-@@ -39,5 +41,5 @@
- #include "../instrumentation/events/lttng-module/jbd2.h"
- 
- MODULE_LICENSE("GPL and additional rights");
--MODULE_AUTHOR("Wade Farnsworth <wade_farnsworth@mentor.com>");
-+MODULE_AUTHOR("Wade Farnsworth <wade_farnsworth@mentor.com> and Andrew Gabbasov <andrew_gabbasov@mentor.com>");
- MODULE_DESCRIPTION("LTTng jbd2 probes");
-diff --git a/probes/lttng-probe-kmem.c b/probes/lttng-probe-kmem.c
-index af67759..441df75 100644
---- a/probes/lttng-probe-kmem.c
-+++ b/probes/lttng-probe-kmem.c
-@@ -29,6 +29,8 @@
-  */
- #include <trace/events/kmem.h>
- 
-+#include "../wrapper/tracepoint.h"
++#include "../instrumentation/events/lttng-module/writeback.h"
 +
- /*
-  * Create LTTng tracepoint probes.
-  */
-@@ -39,5 +41,5 @@
- #include "../instrumentation/events/lttng-module/kmem.h"
- 
- MODULE_LICENSE("GPL and additional rights");
--MODULE_AUTHOR("Wade Farnsworth <wade_farnsworth@mentor.com>");
-+MODULE_AUTHOR("Wade Farnsworth <wade_farnsworth@mentor.com> and Andrew Gabbasov <andrew_gabbasov@mentor.com>");
- MODULE_DESCRIPTION("LTTng kmem probes");
-diff --git a/probes/lttng-probe-kvm.c b/probes/lttng-probe-kvm.c
-index 3b59fa1..bdec187 100644
---- a/probes/lttng-probe-kvm.c
-+++ b/probes/lttng-probe-kvm.c
-@@ -29,6 +29,8 @@
-  */
- #include <trace/events/kvm.h>
- 
-+#include "../wrapper/tracepoint.h"
-+
- /*
-  * Create LTTng tracepoint probes.
-  */
-diff --git a/probes/lttng-probe-lock.c b/probes/lttng-probe-lock.c
-index 16ac0e7..b95e0c5 100644
---- a/probes/lttng-probe-lock.c
-+++ b/probes/lttng-probe-lock.c
-@@ -22,12 +22,19 @@
-  */
- 
- #include <linux/module.h>
-+#include <linux/version.h>
- 
- /*
-  * Create the tracepoint static inlines from the kernel to validate that our
-  * trace event macros match the kernel we run on.
-  */
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
- #include <trace/events/lock.h>
-+#else
-+#include <trace/events/lockdep.h>
-+#endif
-+
-+#include "../wrapper/tracepoint.h"
- 
- /*
-  * Create LTTng tracepoint probes.
-@@ -39,5 +46,5 @@
- #include "../instrumentation/events/lttng-module/lock.h"
- 
- MODULE_LICENSE("GPL and additional rights");
--MODULE_AUTHOR("Wade Farnsworth <wade_farnsworth@mentor.com>");
-+MODULE_AUTHOR("Wade Farnsworth <wade_farnsworth@mentor.com> and Andrew Gabbasov <andrew_gabbasov@mentor.com>");
- MODULE_DESCRIPTION("LTTng lock probes");
-diff --git a/probes/lttng-probe-module.c b/probes/lttng-probe-module.c
-index 1a3c255..3594001 100644
---- a/probes/lttng-probe-module.c
-+++ b/probes/lttng-probe-module.c
-@@ -29,6 +29,8 @@
-  */
- #include <trace/events/module.h>
- 
-+#include "../wrapper/tracepoint.h"
-+
- /*
-  * Create LTTng tracepoint probes.
-  */
-@@ -39,5 +41,5 @@
- #include "../instrumentation/events/lttng-module/module.h"
- 
- MODULE_LICENSE("GPL and additional rights");
--MODULE_AUTHOR("Wade Farnsworth <wade_farnsworth@mentor.com>");
-+MODULE_AUTHOR("Wade Farnsworth <wade_farnsworth@mentor.com> and Andrew Gabbasov <andrew_gabbasov@mentor.com>");
- MODULE_DESCRIPTION("LTTng module probes");
-diff --git a/probes/lttng-probe-napi.c b/probes/lttng-probe-napi.c
-index cae8504..47371a8 100644
---- a/probes/lttng-probe-napi.c
-+++ b/probes/lttng-probe-napi.c
-@@ -29,6 +29,8 @@
-  */
- #include <trace/events/napi.h>
- 
-+#include "../wrapper/tracepoint.h"
-+
- /*
-  * Create LTTng tracepoint probes.
-  */
-diff --git a/probes/lttng-probe-power.c b/probes/lttng-probe-power.c
-index 5dcb93f..ff25a8a 100644
---- a/probes/lttng-probe-power.c
-+++ b/probes/lttng-probe-power.c
-@@ -29,6 +29,8 @@
-  */
- #include <trace/events/power.h>
- 
-+#include "../wrapper/tracepoint.h"
-+
- /*
-  * Create LTTng tracepoint probes.
-  */
-@@ -39,5 +41,5 @@
- #include "../instrumentation/events/lttng-module/power.h"
- 
- MODULE_LICENSE("GPL and additional rights");
--MODULE_AUTHOR("Wade Farnsworth <wade_farnsworth@mentor.com>");
-+MODULE_AUTHOR("Wade Farnsworth <wade_farnsworth@mentor.com> and Andrew Gabbasov <andrew_gabbasov@mentor.com>");
- MODULE_DESCRIPTION("LTTng power probes");
-diff --git a/probes/lttng-probe-sched.c b/probes/lttng-probe-sched.c
-index caef6f7..8a72e14 100644
---- a/probes/lttng-probe-sched.c
-+++ b/probes/lttng-probe-sched.c
-@@ -21,7 +21,6 @@
-  */
- 
- #include <linux/module.h>
--#include "../wrapper/tracepoint.h"
- 
- /*
-  * Create the tracepoint static inlines from the kernel to validate that our
-@@ -29,6 +28,8 @@
-  */
- #include <trace/events/sched.h>
- 
-+#include "../wrapper/tracepoint.h"
-+
- /*
-  * Create LTTng tracepoint probes.
-  */
-diff --git a/probes/lttng-probe-scsi.c b/probes/lttng-probe-scsi.c
-index 51702c3..57677c6 100644
---- a/probes/lttng-probe-scsi.c
-+++ b/probes/lttng-probe-scsi.c
-@@ -40,5 +40,5 @@
- #include "../instrumentation/events/lttng-module/scsi.h"
- 
- MODULE_LICENSE("GPL and additional rights");
--MODULE_AUTHOR("Wade Farnsworth <wade_farnsworth@mentor.com>");
-+MODULE_AUTHOR("Wade Farnsworth <wade_farnsworth@mentor.com> and Andrew Gabbasov <andrew_gabbasov@mentor.com>");
- MODULE_DESCRIPTION("LTTng scsi probes");
-diff --git a/probes/lttng-probe-skb.c b/probes/lttng-probe-skb.c
-index 52edf88..71e890d 100644
---- a/probes/lttng-probe-skb.c
-+++ b/probes/lttng-probe-skb.c
-@@ -29,6 +29,8 @@
-  */
- #include <trace/events/skb.h>
- 
-+#include "../wrapper/tracepoint.h"
-+
- /*
-  * Create LTTng tracepoint probes.
-  */
-@@ -39,5 +41,5 @@
- #include "../instrumentation/events/lttng-module/skb.h"
- 
- MODULE_LICENSE("GPL and additional rights");
--MODULE_AUTHOR("Wade Farnsworth <wade_farnsworth@mentor.com>");
-+MODULE_AUTHOR("Wade Farnsworth <wade_farnsworth@mentor.com> and Andrew Gabbasov <andrew_gabbasov@mentor.com>");
- MODULE_DESCRIPTION("LTTng skb probes");
-diff --git a/probes/lttng-probe-timer.c b/probes/lttng-probe-timer.c
-index 9cf7492..299f630 100644
---- a/probes/lttng-probe-timer.c
-+++ b/probes/lttng-probe-timer.c
-@@ -21,7 +21,6 @@
-  */
- 
- #include <linux/module.h>
--#include "../wrapper/tracepoint.h"
- 
- /*
-  * Create the tracepoint static inlines from the kernel to validate that our
-@@ -31,6 +30,8 @@
- #include <linux/sched.h>
- #include <trace/events/timer.h>
- 
-+#include "../wrapper/tracepoint.h"
-+
- /*
-  * Create LTTng tracepoint probes.
-  */
-diff --git a/probes/lttng-probe-vmscan.c b/probes/lttng-probe-vmscan.c
-index 4f5739c..d5892a4 100644
---- a/probes/lttng-probe-vmscan.c
-+++ b/probes/lttng-probe-vmscan.c
-@@ -22,7 +22,6 @@
-  */
- 
- #include <linux/module.h>
--#include <linux/version.h>
- 
- /*
-  * Create the tracepoint static inlines from the kernel to validate that our
-@@ -39,13 +38,8 @@
- #define CREATE_TRACE_POINTS
- #define TRACE_INCLUDE_PATH ../instrumentation/events/lttng-module
- 
--#if ((LINUX_VERSION_CODE <= KERNEL_VERSION(3,0,38)) || \
--	LTTNG_KERNEL_RANGE(3,1,0, 3,2,0))
--typedef int isolate_mode_t;
--#endif
--
- #include "../instrumentation/events/lttng-module/vmscan.h"
- 
- MODULE_LICENSE("GPL and additional rights");
--MODULE_AUTHOR("Wade Farnsworth <wade_farnsworth@mentor.com> and Paul Woegerer <paul_woegerer@mentor.com>");
-+MODULE_AUTHOR("Wade Farnsworth <wade_farnsworth@mentor.com>, Paul Woegerer <paul_woegerer@mentor.com>, and Andrew Gabbasov <andrew_gabbasov@mentor.com>");
- MODULE_DESCRIPTION("LTTng vmscan probes");
++MODULE_LICENSE("GPL and additional rights");
++MODULE_AUTHOR("Andrew Gabbasov <andrew_gabbasov@mentor.com>");
++MODULE_DESCRIPTION("LTTng writeback probes");
 -- 
 1.7.10.4
