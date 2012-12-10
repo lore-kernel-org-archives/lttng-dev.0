@@ -1,18 +1,20 @@
-From: Christian Babeux <christian.babeux@efficios.com>
-Subject: [PATCH lttng-tools] Tests: Fix sleep interruption in
-	health stall test
-Date: Mon, 10 Dec 2012 14:46:15 -0500
-Message-ID: <1355168775-4350-1-git-send-email-christian.babeux__10938.9972327792$1355168889$gmane$org@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH lttng-tools] Add kernel modules loading
+	for	new probes
+Date: Mon, 10 Dec 2012 14:50:57 -0500
+Message-ID: <20121210195057.GB17705__17299.655712168$1355169098$gmane$org@Krystal>
+References: <1355168223-6704-1-git-send-email-andrew_gabbasov@mentor.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ia0-f176.google.com ([209.85.210.176])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <christian.babeux@0x80.ca>) id 1Ti9JJ-0002ty-HP
-	for lttng-dev@lists.lttng.org; Mon, 10 Dec 2012 14:46:41 -0500
-Received: by mail-ia0-f176.google.com with SMTP id y26so1818104iab.35
-	for <lttng-dev@lists.lttng.org>; Mon, 10 Dec 2012 11:46:36 -0800 (PST)
+	(envelope-from <compudj@mail.openrapids.net>) id 1Ti9NS-0002wO-Ej
+	for lttng-dev@lists.lttng.org; Mon, 10 Dec 2012 14:50:58 -0500
+Content-Disposition: inline
+In-Reply-To: <1355168223-6704-1-git-send-email-andrew_gabbasov@mentor.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,56 +23,79 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: dgoulet@efficios.com
+To: dgoulet@efficios.com, Andrew Gabbasov <andrew_gabbasov@mentor.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-The sleep(3) call can return the number of seconds left to sleep
-if interrupted. Handle the intteruption in the health stall test.
+* Andrew Gabbasov (andrew_gabbasov@mentor.com) wrote:
+> New probes introduced by commit b87700e318c27267890cbd6fb5e50b687279131b
+> in lttng-modules.
 
-Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
----
- tests/tools/health/health_stall.c | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+David, these probes are 2.2 material. So feel free to either include
+this patch in 2.1 or keep it for 2.2. Since the modprobe error is
+ignored, it won't make much difference.
 
-diff --git a/tests/tools/health/health_stall.c b/tests/tools/health/health_stall.c
-index f91bd49..38fe5f8 100644
---- a/tests/tools/health/health_stall.c
-+++ b/tests/tools/health/health_stall.c
-@@ -43,7 +43,10 @@ void __testpoint_thread_manage_clients_before_loop(void)
- 	const char *var = "LTTNG_THREAD_MANAGE_CLIENTS_STALL";
- 
- 	if (check_env_var(var)) {
--		sleep(STALL_TIME);
-+		unsigned int sleep_time = STALL_TIME;
-+		while (sleep_time > 0) {
-+			sleep_time = sleep(sleep_time);
-+		}
- 	}
- }
- 
-@@ -52,7 +55,10 @@ void __testpoint_thread_manage_kernel_before_loop(void)
- 	const char *var = "LTTNG_THREAD_MANAGE_KERNEL_STALL";
- 
- 	if (check_env_var(var)) {
--		sleep(STALL_TIME);
-+		unsigned int sleep_time = STALL_TIME;
-+		while (sleep_time > 0) {
-+			sleep_time = sleep(sleep_time);
-+		}
- 	}
- }
- 
-@@ -61,6 +67,9 @@ void __testpoint_thread_manage_apps_before_loop(void)
- 	const char *var = "LTTNG_THREAD_MANAGE_APPS_STALL";
- 
- 	if (check_env_var(var)) {
--		sleep(STALL_TIME);
-+		unsigned int sleep_time = STALL_TIME;
-+		while (sleep_time > 0) {
-+			sleep_time = sleep(sleep_time);
-+		}
- 	}
- }
+Thanks,
+
+Acked-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+
+> 
+> Signed-off-by: Andrew Gabbasov <andrew_gabbasov@mentor.com>
+> ---
+>  src/bin/lttng-sessiond/modprobe.c |   11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/src/bin/lttng-sessiond/modprobe.c b/src/bin/lttng-sessiond/modprobe.c
+> index 8e5cc94..1a5a1b7 100644
+> --- a/src/bin/lttng-sessiond/modprobe.c
+> +++ b/src/bin/lttng-sessiond/modprobe.c
+> @@ -46,7 +46,10 @@ const struct kern_modules_param kern_modules_list[] = {
+>  	{ "lttng-types", 0 },
+>  	{ "lttng-probe-asoc", 0 },
+>  	{ "lttng-probe-block", 0 },
+> +	{ "lttng-probe-btrfs", 0 },
+> +	{ "lttng-probe-compaction", 0 },
+>  	{ "lttng-probe-ext3", 0 },
+> +	{ "lttng-probe-ext4", 0 },
+>  	{ "lttng-probe-gpio", 0 },
+>  	{ "lttng-probe-irq", 0 },
+>  	{ "lttng-probe-jbd", 0 },
+> @@ -58,16 +61,24 @@ const struct kern_modules_param kern_modules_list[] = {
+>  	{ "lttng-probe-napi", 0 },
+>  	{ "lttng-probe-net", 0 },
+>  	{ "lttng-probe-power", 0 },
+> +	{ "lttng-probe-printk", 0 },
+> +	{ "lttng-probe-random", 0 },
+> +	{ "lttng-probe-rcu", 0 },
+> +	{ "lttng-probe-regmap", 0 },
+>  	{ "lttng-probe-regulator", 0 },
+> +	{ "lttng-probe-rpm", 0 },
+>  	{ "lttng-probe-sched", 0 },
+>  	{ "lttng-probe-scsi", 0 },
+>  	{ "lttng-probe-signal", 0 },
+>  	{ "lttng-probe-skb", 0 },
+>  	{ "lttng-probe-sock", 0 },
+>  	{ "lttng-probe-statedump", 0 },
+> +	{ "lttng-probe-sunrpc", 0 },
+>  	{ "lttng-probe-timer", 0 },
+>  	{ "lttng-probe-udp", 0 },
+>  	{ "lttng-probe-vmscan", 0 },
+> +	{ "lttng-probe-workqueue", 0 },
+> +	{ "lttng-probe-writeback", 0 },
+>  };
+>  
+>  /*
+> -- 
+> 1.7.10.4
+> 
+> 
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
 -- 
-1.8.0.1
+Mathieu Desnoyers
+Operating System Efficiency R&D Consultant
+EfficiOS Inc.
+http://www.efficios.com
