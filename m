@@ -1,26 +1,20 @@
-From: Jon Bernard <jbernard@debian.org>
-Subject: Re: [PATCH lttng-tools] Link test utilities against
- urcu-bp
-Date: Mon, 10 Dec 2012 14:23:23 -0500
-Message-ID: <20121210192323.GA1276__3052.26982241056$1355167443$gmane$org@quintessa>
-References: <20121128151359.GA2051@quintessa> <50B64AB6.6080904@efficios.com>
-	<20121128210845.GA30284@quintessa> <20121203140304.GA3546@Krystal>
+From: Andrew Gabbasov <andrew_gabbasov@mentor.com>
+Subject: [PATCH lttng-tools] Add kernel modules loading for new
+	probes
+Date: Mon, 10 Dec 2012 13:37:03 -0600
+Message-ID: <1355168223-6704-1-git-send-email-andrew_gabbasov__30375.589853111$1355168276$gmane$org@mentor.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from out4-smtp.messagingengine.com ([66.111.4.28])
+Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jbernard@debian.org>) id 1Ti8ws-0002i9-Aj
-	for lttng-dev@lists.lttng.org; Mon, 10 Dec 2012 14:23:30 -0500
-Received: from compute5.internal (compute5.nyi.mail.srv.osa [10.202.2.45])
-	by gateway1.nyi.mail.srv.osa (Postfix) with ESMTP id D790120F7D
-	for <lttng-dev@lists.lttng.org>; Mon, 10 Dec 2012 14:23:24 -0500 (EST)
-Received: from localhost (unknown [216.252.204.142])
-	by mail.messagingengine.com (Postfix) with ESMTPA id 929E78E0562
-	for <lttng-dev@lists.lttng.org>; Mon, 10 Dec 2012 14:23:24 -0500 (EST)
-Content-Disposition: inline
-In-Reply-To: <20121203140304.GA3546@Krystal>
+	(envelope-from <Andrew_Gabbasov@mentor.com>) id 1Ti9AH-0002oh-DT
+	for lttng-dev@lists.lttng.org; Mon, 10 Dec 2012 14:37:21 -0500
+Received: from svr-orw-fem-01.mgc.mentorg.com ([147.34.98.93])
+	by relay1.mentorg.com with esmtp
+	id 1Ti9AB-0001oE-G8 from Andrew_Gabbasov@mentor.com
+	for lttng-dev@lists.lttng.org; Mon, 10 Dec 2012 11:37:15 -0800
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -32,80 +26,53 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
-> * Jon Bernard (jbernard@debian.org) wrote:
-> > * David Goulet <dgoulet@efficios.com> wrote:
-> > > Hi Jon,
-> > > 
-> > > Can you enlighten us on what setup are you using?
-> > > 
-> > > This symbol is used by lttng-ust which is linked with -lurcu-bp so
-> > > lttng-tools should not have an issue here.
-> > > 
-> > > Are you cross-compiling ?
-> > 
-> > Nothing unusual, I'm building lttng-tools (version 2.1.8~rc8) from source
-> > against URCU version 0.7.5 and UST version 2.1.0~rc2.  During compilation
-> > (configure with no additional parameters), I see the following:
-> > 
-> >     make[3]: Entering directory `tests/tools/streaming'
-> >     CC     unit_tests.o
-> >     CCLD   unit_tests
-> >     CC     gen-ust-events.o
-> >     CC     tp.o
-> >     CCLD   gen-ust-events
-> >     /usr/bin/ld: tp.o: undefined reference to symbol 'rcu_dereference_sym'
-> > 
-> > This link error occurs on each of the gen-events targets as there is no explicit
-> > link against urcu-bp.  I must have something different, as I'm sure you'd have
-> > noticed this earlier.  What additional information might you need?
-> 
-> Hi Jon,
-> 
-> It looks like something we already fixed in lttng-ust, but maybe the fix
-> needs to be ported to tools also.
-> 
-> See lttng-ust:
-> 
-> commit faebb41808b9deda5ef5dfea0c035077407e7f9f
-> Author: Christian Babeux <christian.babeux@efficios.com>
-> Date:   Thu Aug 2 18:55:11 2012 -0400
-> 
->     Fix: Libtool fails to find dependent libraries when cross-compiling lttng-ust
->     
->     This problem arise when cross compiling and linking libraries with
->     indirect libraries dependencies (such as liblttng-ust). This "bug" is
->     caused by an upstream modification in the libtool package on Debian
->     system. The libtool "link_all_deplibs" flag is set to "no" by default
->     on linux targets (AFAIK, other distros set it to "unknown").
->     
->     The chosen solution is to detect such cases via the configure script
->     and automagically patch the libtool.m4 by forcing the "link_all_deplibs"
->     to "unknown".
->     
->     This fixup can be disabled with the appropriate configure flag:
->     
->     ./configure --disable-libtool-linkdep-fixup
->     
->     Sample configure output on affected systems:
->     
->     checking for occurence(s) of link_all_deplibs = no in
->              ./config/libtool.m4... 3
->     configure: WARNING: the detected libtool will not link all
->                dependencies, forcing link_all_deplibs = unknown
->     
->     Fixes: #321
->     
->     Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
->     Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> 
-> Thoughts ?
+New probes introduced by commit b87700e318c27267890cbd6fb5e50b687279131b
+in lttng-modules.
 
-Yep, it seems to be an issue with Debian's libtool, I think cross-compiling is
-coincidental.  I'll prepare a port of this to tools, if someone doesn't beat me
-to it.
+Signed-off-by: Andrew Gabbasov <andrew_gabbasov@mentor.com>
+---
+ src/bin/lttng-sessiond/modprobe.c |   11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-Cheers,
-
+diff --git a/src/bin/lttng-sessiond/modprobe.c b/src/bin/lttng-sessiond/modprobe.c
+index 8e5cc94..1a5a1b7 100644
+--- a/src/bin/lttng-sessiond/modprobe.c
++++ b/src/bin/lttng-sessiond/modprobe.c
+@@ -46,7 +46,10 @@ const struct kern_modules_param kern_modules_list[] = {
+ 	{ "lttng-types", 0 },
+ 	{ "lttng-probe-asoc", 0 },
+ 	{ "lttng-probe-block", 0 },
++	{ "lttng-probe-btrfs", 0 },
++	{ "lttng-probe-compaction", 0 },
+ 	{ "lttng-probe-ext3", 0 },
++	{ "lttng-probe-ext4", 0 },
+ 	{ "lttng-probe-gpio", 0 },
+ 	{ "lttng-probe-irq", 0 },
+ 	{ "lttng-probe-jbd", 0 },
+@@ -58,16 +61,24 @@ const struct kern_modules_param kern_modules_list[] = {
+ 	{ "lttng-probe-napi", 0 },
+ 	{ "lttng-probe-net", 0 },
+ 	{ "lttng-probe-power", 0 },
++	{ "lttng-probe-printk", 0 },
++	{ "lttng-probe-random", 0 },
++	{ "lttng-probe-rcu", 0 },
++	{ "lttng-probe-regmap", 0 },
+ 	{ "lttng-probe-regulator", 0 },
++	{ "lttng-probe-rpm", 0 },
+ 	{ "lttng-probe-sched", 0 },
+ 	{ "lttng-probe-scsi", 0 },
+ 	{ "lttng-probe-signal", 0 },
+ 	{ "lttng-probe-skb", 0 },
+ 	{ "lttng-probe-sock", 0 },
+ 	{ "lttng-probe-statedump", 0 },
++	{ "lttng-probe-sunrpc", 0 },
+ 	{ "lttng-probe-timer", 0 },
+ 	{ "lttng-probe-udp", 0 },
+ 	{ "lttng-probe-vmscan", 0 },
++	{ "lttng-probe-workqueue", 0 },
++	{ "lttng-probe-writeback", 0 },
+ };
+ 
+ /*
 -- 
-Jon
+1.7.10.4
