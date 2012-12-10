@@ -1,18 +1,21 @@
-From: Christian Babeux <christian.babeux@efficios.com>
-Subject: [PATCH v2 lttng-tools] Add return code to the testpoint
-	mechanism
-Date: Mon, 10 Dec 2012 15:38:39 -0500
-Message-ID: <1355171919-13833-1-git-send-email-christian.babeux__11327.3399569609$1355171979$gmane$org@efficios.com>
+From: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
+Subject: Re: [PATCH] urcu: avoid false sharing for rcu_gp_ctr
+Date: Mon, 10 Dec 2012 15:48:54 -0800
+Message-ID: <20121210234854.GK2516__26084.3532546007$1355183420$gmane$org@linux.vnet.ibm.com>
+References: <50C19575.2070802@cn.fujitsu.com> <20121207163234.GB11975@Krystal>
+	<CACvQF50Y2wC3t=VMJ==574aHVvod+ipGA1K5hR97r_dRbcegkw@mail.gmail.com>
+	<20121207165748.GA12338@Krystal>
+	<CACvQF50V_9T6T3j4AwbdBuEiHHbcxdNGgP1WF5T4OHpXZyMgEA@mail.gmail.com>
+	<20121207172252.GA12525@Krystal>
+	<20121210150417.GR2516@linux.vnet.ibm.com>
+	<20121210180111.GA11209@Krystal>
+Reply-To: paulmck@linux.vnet.ibm.com
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ia0-f176.google.com ([209.85.210.176])
-	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <christian.babeux@0x80.ca>) id 1TiA7q-0003J8-4M
-	for lttng-dev@lists.lttng.org; Mon, 10 Dec 2012 15:38:54 -0500
-Received: by mail-ia0-f176.google.com with SMTP id y26so1945275iab.35
-	for <lttng-dev@lists.lttng.org>; Mon, 10 Dec 2012 12:38:48 -0800 (PST)
+Content-Disposition: inline
+In-Reply-To: <20121210180111.GA11209@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,332 +24,254 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: dgoulet@efficios.com
-Cc: lttng-dev@lists.lttng.org, mathieu.desnoyers@efficios.com
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "ltt-dev@lists.casi.polymtl.ca" <ltt-dev@lists.casi.polymtl.ca>, Lai Jiangshan <eag0628@gmail.com>
 List-Id: lttng-dev@lists.lttng.org
 
-The testpoint processing could fail and currently there is no mechanism
-to notify the caller of such failures. This patch adds an int return code
-to the testpoint prototype. Non-zero return code indicate failure.
+On Mon, Dec 10, 2012 at 01:01:12PM -0500, Mathieu Desnoyers wrote:
+> * Paul E. McKenney (paulmck@linux.vnet.ibm.com) wrote:
+> > On Fri, Dec 07, 2012 at 12:22:52PM -0500, Mathieu Desnoyers wrote:
+> > > * Lai Jiangshan (eag0628@gmail.com) wrote:
+> > > > On Saturday, December 8, 2012, Mathieu Desnoyers wrote:
+> > > > 
+> > > > > * Lai Jiangshan (eag0628@gmail.com <javascript:;>) wrote:
+> > > > > > we can define rcu_gp_ctr and registry with aligned attribute, but it is
+> > > > > not
+> > > > > > reliable way
+> > > > > >
+> > > > > > We need only this:
+> > > > > > unsigned long rcu_gp_ctr __attribute((aligned and padded(don't put other
+> > > > > > var next to it except the futex)))
+> > > > >
+> > > > > In which situation would this be unreliable ?
+> > > > 
+> > > > 
+> > > > 
+> > > > int a;
+> > > > int b __attribute__((aligned));
+> > > > int c;
+> > > > 
+> > > > b and c will be in the same line, even we define c as aligned too, the
+> > > > compiler/linker may put a next to b, thus a and b in the same line
+> > > 
+> > > So if our goal is to have rcu_gp_ctr and rcu_gp_futex on the same cache
+> > > line, which is different from that of the registry, we could do:
+> > > 
+> > > typeA rcu_gp_ctr __attribute__((aligned(...)));
+> > > typeB rcu_gp_futex;
+> > > typeC registry __attribute__((aligned(...)));
+> > > 
+> > > I would expect the compiler won't typically reorder rcu_gp_futex and
+> > > registry. But I guess there is no guarantee it is going to be always
+> > > true given by the C99 standard.
+> > > 
+> > > I guess this is a case where we could bump the library version number
+> > > and do things properly.
+> > > 
+> > > Let's think a bit more about it, anyone else has comments on this ?
+> > 
+> > If you really want the alignment and padding, they should go into a
+> > structure.  ;-)
+> 
+> OK, so we would bump to liburcu2 then for the 0.8 release ?
 
-When using the testpoint mechanism, the caller should properly handle
-testpoint failure cases and trigger the appropriate response
-(error handling, thread teardown, etc.).
+I don't believe that this optimization by itself warrants a version
+bump.  Perhaps hold it in reserve when the next need for a version bump
+comes along.
 
-Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
----
- src/bin/lttng-sessiond/main.c     | 44 ++++++++++++++++++++++++++++-----------
- src/common/testpoint/testpoint.h  | 20 +++++++++---------
- tests/tools/health/health_exit.c  | 20 +++++++++++++-----
- tests/tools/health/health_stall.c | 12 ++++++++---
- 4 files changed, 66 insertions(+), 30 deletions(-)
+So, how to do this without a version bump?  One approach would be to
+use linker-script magic (yeah, now -that- will be portable!).  Or if
+the alignment attributes happen to do the right thing on popular gcc
+versions, go with them until the next version bump allows us to do
+it more deterministically.
 
-diff --git a/src/bin/lttng-sessiond/main.c b/src/bin/lttng-sessiond/main.c
-index d5cfc0e..6110ee9 100644
---- a/src/bin/lttng-sessiond/main.c
-+++ b/src/bin/lttng-sessiond/main.c
-@@ -689,14 +689,14 @@ static void *thread_manage_kernel(void *data)
- 	char tmp;
- 	struct lttng_poll_event events;
- 
--	DBG("Thread manage kernel started");
-+	DBG("[thread] Thread manage kernel started");
- 
--	testpoint(thread_manage_kernel);
-+	if (testpoint(thread_manage_kernel)) {
-+		goto error_testpoint;
-+	}
- 
- 	health_code_update(&health_thread_kernel);
- 
--	testpoint(thread_manage_kernel_before_loop);
--
- 	ret = create_thread_poll_set(&events, 2);
- 	if (ret < 0) {
- 		goto error_poll_create;
-@@ -707,6 +707,10 @@ static void *thread_manage_kernel(void *data)
- 		goto error;
- 	}
- 
-+	if (testpoint(thread_manage_kernel_before_loop)) {
-+		goto error;
-+	}
-+
- 	while (1) {
- 		health_code_update(&health_thread_kernel);
- 
-@@ -794,6 +798,7 @@ exit:
- error:
- 	lttng_poll_clean(&events);
- error_poll_create:
-+error_testpoint:
- 	utils_close_pipe(kernel_poll_pipe);
- 	kernel_poll_pipe[0] = kernel_poll_pipe[1] = -1;
- 	if (err) {
-@@ -889,7 +894,9 @@ static void *thread_manage_consumer(void *data)
- restart:
- 	health_poll_update(&consumer_data->health);
- 
--	testpoint(thread_manage_consumer);
-+	if (testpoint(thread_manage_consumer)) {
-+		goto error;
-+	}
- 
- 	ret = lttng_poll_wait(&events, -1);
- 	health_poll_update(&consumer_data->health);
-@@ -1093,11 +1100,13 @@ static void *thread_manage_apps(void *data)
- 
- 	DBG("[thread] Manage application started");
- 
--	testpoint(thread_manage_apps);
--
- 	rcu_register_thread();
- 	rcu_thread_online();
- 
-+	if (testpoint(thread_manage_apps)) {
-+		goto error_testpoint;
-+	}
-+
- 	health_code_update(&health_thread_app_manage);
- 
- 	ret = create_thread_poll_set(&events, 2);
-@@ -1110,7 +1119,9 @@ static void *thread_manage_apps(void *data)
- 		goto error;
- 	}
- 
--	testpoint(thread_manage_apps_before_loop);
-+	if (testpoint(thread_manage_apps_before_loop)) {
-+		goto error;
-+	}
- 
- 	health_code_update(&health_thread_app_manage);
- 
-@@ -1250,6 +1261,7 @@ exit:
- error:
- 	lttng_poll_clean(&events);
- error_poll_create:
-+error_testpoint:
- 	utils_close_pipe(apps_cmd_pipe);
- 	apps_cmd_pipe[0] = apps_cmd_pipe[1] = -1;
- 
-@@ -1358,7 +1370,9 @@ static void *thread_registration_apps(void *data)
- 
- 	DBG("[thread] Manage application registration started");
- 
--	testpoint(thread_registration_apps);
-+	if (testpoint(thread_registration_apps)) {
-+		goto error_testpoint;
-+	}
- 
- 	ret = lttcomm_listen_unix_sock(apps_sock);
- 	if (ret < 0) {
-@@ -1537,6 +1551,7 @@ error_poll_add:
- 	lttng_poll_clean(&events);
- error_listen:
- error_create_poll:
-+error_testpoint:
- 	DBG("UST Registration thread cleanup complete");
- 
- 	return NULL;
-@@ -3122,10 +3137,12 @@ static void *thread_manage_clients(void *data)
- 
- 	DBG("[thread] Manage client started");
- 
--	testpoint(thread_manage_clients);
--
- 	rcu_register_thread();
- 
-+	if (testpoint(thread_manage_clients)) {
-+		goto error_testpoint;
-+	}
-+
- 	health_code_update(&health_thread_cmd);
- 
- 	ret = lttcomm_listen_unix_sock(client_sock);
-@@ -3155,7 +3172,9 @@ static void *thread_manage_clients(void *data)
- 		kill(ppid, SIGUSR1);
- 	}
- 
--	testpoint(thread_manage_clients_before_loop);
-+	if (testpoint(thread_manage_clients_before_loop)) {
-+		goto error;
-+	}
- 
- 	health_code_update(&health_thread_cmd);
- 
-@@ -3330,6 +3349,7 @@ error:
- 
- error_listen:
- error_create_poll:
-+error_testpoint:
- 	unlink(client_unix_sock_path);
- 	if (client_sock >= 0) {
- 		ret = close(client_sock);
-diff --git a/src/common/testpoint/testpoint.h b/src/common/testpoint/testpoint.h
-index ba3af8a..dc5be83 100644
---- a/src/common/testpoint/testpoint.h
-+++ b/src/common/testpoint/testpoint.h
-@@ -31,38 +31,38 @@ void *lttng_testpoint_lookup(const char *name);
- /*
-  * Testpoint is only active if the global lttng_testpoint_activated flag is
-  * set.
-+ * Return a non-zero error code to indicate failure.
-  */
--#define testpoint(name)					\
--	do {							\
--		if (caa_unlikely(lttng_testpoint_activated)) {	\
--			__testpoint_##name##_wrapper();		\
--		}						\
--	} while (0)
-+#define testpoint(name)				\
-+	((caa_unlikely(lttng_testpoint_activated))	\
-+	? __testpoint_##name##_wrapper() : 0)
- 
- /*
-  * One wrapper per testpoint is generated. This is to keep track of the symbol
-  * lookup status and the corresponding function pointer, if any.
-  */
- #define _TESTPOINT_DECL(_name)						\
--	static inline void __testpoint_##_name##_wrapper(void)		\
-+	static inline int __testpoint_##_name##_wrapper(void)		\
- 	{								\
--		static void (*tp)(void);				\
-+		int ret = 0;						\
-+		static int (*tp)(void);					\
- 		static int found;					\
- 		const char *tp_name = "__testpoint_" #_name;		\
- 									\
- 		if (tp) {						\
--			tp();						\
-+			ret = tp();					\
- 		} else {						\
- 			if (!found) {					\
- 				tp = lttng_testpoint_lookup(tp_name);	\
- 				if (tp) {				\
- 					found = 1;			\
--					tp();				\
-+					ret = tp();			\
- 				} else {				\
- 					found = -1;			\
- 				}					\
- 			}						\
- 		}							\
-+		return ret;						\
- 	}
- 
- /* Testpoint declaration */
-diff --git a/tests/tools/health/health_exit.c b/tests/tools/health/health_exit.c
-index 258b08d..8e41405 100644
---- a/tests/tools/health/health_exit.c
-+++ b/tests/tools/health/health_exit.c
-@@ -35,47 +35,57 @@ int check_env_var(const char *env)
- 	return 0;
- }
- 
--void __testpoint_thread_manage_clients(void)
-+int __testpoint_thread_manage_clients(void)
- {
- 	const char *var = "LTTNG_THREAD_MANAGE_CLIENTS_EXIT";
- 
- 	if (check_env_var(var)) {
- 		pthread_exit(NULL);
- 	}
-+
-+	return 0;
- }
- 
--void __testpoint_thread_registration_apps(void)
-+int __testpoint_thread_registration_apps(void)
- {
- 	const char *var = "LTTNG_THREAD_REG_APPS_EXIT";
- 
- 	if (check_env_var(var)) {
- 		pthread_exit(NULL);
- 	}
-+
-+	return 0;
- }
- 
--void __testpoint_thread_manage_apps(void)
-+int __testpoint_thread_manage_apps(void)
- {
- 	const char *var = "LTTNG_THREAD_MANAGE_APPS_EXIT";
- 
- 	if (check_env_var(var)) {
- 		pthread_exit(NULL);
- 	}
-+
-+	return 0;
- }
- 
--void __testpoint_thread_manage_kernel(void)
-+int __testpoint_thread_manage_kernel(void)
- {
- 	const char *var = "LTTNG_THREAD_MANAGE_KERNEL_EXIT";
- 
- 	if (check_env_var(var)) {
- 		pthread_exit(NULL);
- 	}
-+
-+	return 0;
- }
- 
--void __testpoint_thread_manage_consumer(void)
-+int __testpoint_thread_manage_consumer(void)
- {
- 	const char *var = "LTTNG_THREAD_MANAGE_CONSUMER_EXIT";
- 
- 	if (check_env_var(var)) {
- 		pthread_exit(NULL);
- 	}
-+
-+	return 0;
- }
-diff --git a/tests/tools/health/health_stall.c b/tests/tools/health/health_stall.c
-index 38fe5f8..127f5fc 100644
---- a/tests/tools/health/health_stall.c
-+++ b/tests/tools/health/health_stall.c
-@@ -38,7 +38,7 @@ int check_env_var(const char *env)
- 	return 0;
- }
- 
--void __testpoint_thread_manage_clients_before_loop(void)
-+int __testpoint_thread_manage_clients_before_loop(void)
- {
- 	const char *var = "LTTNG_THREAD_MANAGE_CLIENTS_STALL";
- 
-@@ -48,9 +48,11 @@ void __testpoint_thread_manage_clients_before_loop(void)
- 			sleep_time = sleep(sleep_time);
- 		}
- 	}
-+
-+	return 0;
- }
- 
--void __testpoint_thread_manage_kernel_before_loop(void)
-+int __testpoint_thread_manage_kernel_before_loop(void)
- {
- 	const char *var = "LTTNG_THREAD_MANAGE_KERNEL_STALL";
- 
-@@ -60,9 +62,11 @@ void __testpoint_thread_manage_kernel_before_loop(void)
- 			sleep_time = sleep(sleep_time);
- 		}
- 	}
-+
-+	return 0;
- }
- 
--void __testpoint_thread_manage_apps_before_loop(void)
-+int __testpoint_thread_manage_apps_before_loop(void)
- {
- 	const char *var = "LTTNG_THREAD_MANAGE_APPS_STALL";
- 
-@@ -72,4 +76,6 @@ void __testpoint_thread_manage_apps_before_loop(void)
- 			sleep_time = sleep(sleep_time);
- 		}
- 	}
-+
-+	return 0;
- }
--- 
-1.8.0.1
+							Thanx, Paul
+
+> Thanks,
+> 
+> Mathieu
+> 
+> > 
+> > 							Thanx, Paul
+> > 
+> > > Thanks,
+> > > 
+> > > Mathieu
+> > > 
+> > > > 
+> > > > 
+> > > > >
+> > > > > Thanks,
+> > > > >
+> > > > > Mathieu
+> > > > >
+> > > > > >
+> > > > > > On Saturday, December 8, 2012, Mathieu Desnoyers wrote:
+> > > > > >
+> > > > > > > * Lai Jiangshan (laijs@cn.fujitsu.com <javascript:;> <javascript:;>)
+> > > > > wrote:
+> > > > > > > > @rcu_gp_ctr and @registry share the same cache line, it causes
+> > > > > > > > false sharing and slowdown both of the read site and update site.
+> > > > > > > >
+> > > > > > > > Fix: Use different cache line for them.
+> > > > > > > >
+> > > > > > > > Although rcu_gp_futex is updated less than rcu_gp_ctr, but
+> > > > > > > > they always be accessed at almost the same time, so we also move
+> > > > > > > rcu_gp_futex
+> > > > > > > > to the cacheline of rcu_gp_ctr to reduce the cacheline-usage or
+> > > > > > > cache-missing
+> > > > > > > > of read site.
+> > > > > > >
+> > > > > > > Hi Lai,
+> > > > > > >
+> > > > > > > I agree on the goal: placing registry and rcu_gp_ctr on different
+> > > > > > > cache-lines. And yes, it makes sense to put rcu_gp_ctr and rcu_gp_futex
+> > > > > > > on the same cache-line. I agree that the next patch is fine too
+> > > > > (keeping
+> > > > > > > qsbr and other urcu similar). This is indeed what I try to ensure
+> > > > > > > myself.
+> > > > > > >
+> > > > > > > I'm just concerned that this patch seems to break ABI compability for
+> > > > > > > liburcu: the read-side, within applications, would have to be
+> > > > > > > recompiled. So I guess we should decide if we do this change in a way
+> > > > > > > that does not break the ABI (e.g. not introducing a structure), or if
+> > > > > we
+> > > > > > > choose to bump the library version number.
+> > > > > > >
+> > > > > > > Thoughts ?
+> > > > > > >
+> > > > > > > Thanks,
+> > > > > > >
+> > > > > > > Mathieu
+> > > > > > >
+> > > > > > > >
+> > > > > > > >
+> > > > > > > > test: (4X6=24 CPUs)
+> > > > > > > >
+> > > > > > > > Before patch:
+> > > > > > > >
+> > > > > > > > [root@localhost userspace-rcu]# ./tests/test_urcu_mb 20 1 20
+> > > > > > > > SUMMARY ./tests/test_urcu_mb      testdur   20 nr_readers  20 rdur
+> > > > > > >  0 wdur      0 nr_writers   1 wdelay      0 nr_reads   2100285330
+> > > > > nr_writes
+> > > > > > >      3390219 nr_ops   2103675549
+> > > > > > > > [root@localhost userspace-rcu]# ./tests/test_urcu_mb 20 1 20
+> > > > > > > > SUMMARY ./tests/test_urcu_mb      testdur   20 nr_readers  20 rdur
+> > > > > > >  0 wdur      0 nr_writers   1 wdelay      0 nr_reads   1619868562
+> > > > > nr_writes
+> > > > > > >      3529478 nr_ops   1623398040
+> > > > > > > > [root@localhost userspace-rcu]# ./tests/test_urcu_mb 20 1 20
+> > > > > > > > SUMMARY ./tests/test_urcu_mb      testdur   20 nr_readers  20 rdur
+> > > > > > >  0 wdur      0 nr_writers   1 wdelay      0 nr_reads   1949067038
+> > > > > nr_writes
+> > > > > > >      3469334 nr_ops   1952536372
+> > > > > > > >
+> > > > > > > >
+> > > > > > > > after patch:
+> > > > > > > >
+> > > > > > > > [root@localhost userspace-rcu]# ./tests/test_urcu_mb 20 1 20
+> > > > > > > > SUMMARY ./tests/test_urcu_mb      testdur   20 nr_readers  20 rdur
+> > > > > > >  0 wdur      0 nr_writers   1 wdelay      0 nr_reads   3380191848
+> > > > > nr_writes
+> > > > > > >      4903248 nr_ops   3385095096
+> > > > > > > > [root@localhost userspace-rcu]# ./tests/test_urcu_mb 20 1 20
+> > > > > > > > SUMMARY ./tests/test_urcu_mb      testdur   20 nr_readers  20 rdur
+> > > > > > >  0 wdur      0 nr_writers   1 wdelay      0 nr_reads   3397637486
+> > > > > nr_writes
+> > > > > > >      4129809 nr_ops   3401767295
+> > > > > > > >
+> > > > > > > > Singed-by: Lai Jiangshan <laijs@cn.fujitsu.com <javascript:;><javascript:;>>
+> > > > > > > > ---
+> > > > > > > > diff --git a/urcu.c b/urcu.c
+> > > > > > > > index 15def09..436d71c 100644
+> > > > > > > > --- a/urcu.c
+> > > > > > > > +++ b/urcu.c
+> > > > > > > > @@ -83,16 +83,7 @@ void __attribute__((destructor)) rcu_exit(void);
+> > > > > > > >  #endif
+> > > > > > > >
+> > > > > > > >  static pthread_mutex_t rcu_gp_lock = PTHREAD_MUTEX_INITIALIZER;
+> > > > > > > > -
+> > > > > > > > -int32_t rcu_gp_futex;
+> > > > > > > > -
+> > > > > > > > -/*
+> > > > > > > > - * Global grace period counter.
+> > > > > > > > - * Contains the current RCU_GP_CTR_PHASE.
+> > > > > > > > - * Also has a RCU_GP_COUNT of 1, to accelerate the reader fast path.
+> > > > > > > > - * Written to only by writer with mutex taken. Read by both writer
+> > > > > and
+> > > > > > > readers.
+> > > > > > > > - */
+> > > > > > > > -unsigned long rcu_gp_ctr = RCU_GP_COUNT;
+> > > > > > > > +struct urcu_gp rcu_gp = { .ctr = RCU_GP_COUNT };
+> > > > > > > >
+> > > > > > > >  /*
+> > > > > > > >   * Written to only by each individual reader. Read by both the
+> > > > > reader
+> > > > > > > and the
+> > > > > > > > @@ -217,8 +208,8 @@ static void wait_gp(void)
+> > > > > > > >  {
+> > > > > > > >       /* Read reader_gp before read futex */
+> > > > > > > >       smp_mb_master(RCU_MB_GROUP);
+> > > > > > > > -     if (uatomic_read(&rcu_gp_futex) == -1)
+> > > > > > > > -             futex_async(&rcu_gp_futex, FUTEX_WAIT, -1,
+> > > > > > > > +     if (uatomic_read(&rcu_gp.futex) == -1)
+> > > > > > > > +             futex_async(&rcu_gp.futex, FUTEX_WAIT, -1,
+> > > > > > > >                     NULL, NULL, 0);
+> > > > > > > >  }
+> > > > > > > >
+> > > > > > > > @@ -232,12 +223,12 @@ static void wait_for_readers(struct
+> > > > > cds_list_head
+> > > > > > > *input_readers,
+> > > > > > > >       /*
+> > > > > > > >        * Wait for each thread URCU_TLS(rcu_reader).ctr to either
+> > > > > > > >        * indicate quiescence (not nested), or observe the current
+> > > > > > > > -      * rcu_gp_ctr value.
+> > > > > > > > +      * rcu_gp.ctr value.
+> > > > > > > >        */
+> > > > > > > >       for (;;) {
+> > > > > > > >               wait_loops++;
+> > > > > > > >               if (wait_loops == RCU_QS_ACTIVE_ATTEMPTS) {
+> > > > > > > > -                     uatomic_dec(&rcu_gp_futex);
+> > > > > > > > +                     uatomic_dec(&rcu_gp.futex);
+> > > > > > > >                       /* Write futex before read reader_gp */
+> > > > > > > >                       smp_mb_master(RCU_MB_GROUP);
+> > > > > > > >               }
+> > > > > > > > @@ -270,7 +261,7 @@ static void wait_for_readers(struct cds_list_head
+> > > > > > > *input_readers,
+> > > > > > > >                       if (wait_loops == RCU_QS_ACTIVE_ATTEMPTS) {
+> > > > > > > >                               /* Read reader_gp before write futex */
+> > > > > > > >                               smp_mb_master(RCU_MB_GROUP);
+> > > > > > > > -                             uatomic_set(&rcu_gp_futex, 0);
+> > > > > > > > +                             uatomic_set(&rcu_gp.futex, 0);
+> > > > > > > >                       }
+> > > > > > > >                       break;
+> > > > > > > >               } else {
+> > > > > > > > @@ -289,7 +280,7 @@ static void wait_for_readers(struct cds_list_head
+> > > > > > > *input_readers,
+> > > > > > > >                       if (wait_loops == RCU_QS_ACTIVE_ATTEMPTS) {
+> > > > > > > >                               /* Read reader_gp before write futex */
+> > > > > > > >                             > > lttng-dev@lists.lttng.org<javascript:;><javascript:;>
+> > > > > > > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> > > > > > >
+> > > > >
+> > > > > --
+> > > > > Mathieu Desnoyers
+> > > > > Operating System Efficiency R&D Consultant
+> > > > > EfficiOS Inc.
+> > > > > http://www.efficios.com
+> > > > >
+> > > 
+> > > -- 
+> > > Mathieu Desnoyers
+> > > Operating System Efficiency R&D Consultant
+> > > EfficiOS Inc.
+> > > http://www.efficios.com
+> > > 
+> > 
+> 
+> -- 
+> Mathieu Desnoyers
+> Operating System Efficiency R&D Consultant
+> EfficiOS Inc.
+> http://www.efficios.com
+> 
