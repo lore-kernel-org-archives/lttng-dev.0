@@ -1,19 +1,20 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH] urcu: avoid false sharing for rcu_gp_ctr
-Date: Mon, 10 Dec 2012 13:01:12 -0500
-Message-ID: <20121210180111.GA11209__49624.3934998803$1355162512$gmane$org@Krystal>
-References: <50C19575.2070802@cn.fujitsu.com> <20121207163234.GB11975@Krystal>
-	<CACvQF50Y2wC3t=VMJ==574aHVvod+ipGA1K5hR97r_dRbcegkw@mail.gmail.com>
-	<20121207165748.GA12338@Krystal>
-	<CACvQF50V_9T6T3j4AwbdBuEiHHbcxdNGgP1WF5T4OHpXZyMgEA@mail.gmail.com>
-	<20121207172252.GA12525@Krystal>
-	<20121210150417.GR2516@linux.vnet.ibm.com>
+From: "Gabbasov, Andrew" <Andrew_Gabbasov@mentor.com>
+Subject: Re: [PATCH lttng-modules] wrapper/perf.h: Fix
+	kernel	version condition
+Date: Mon, 10 Dec 2012 18:14:22 +0000
+Message-ID: <6C5EA58090A5ED459815C4D04C2B466F8C5686DF__15667.0548640706$1355163309$gmane$org@EU-MBX-01.mgc.mentorg.com>
+References: <1355065230-4313-1-git-send-email-andrew_gabbasov@mentor.com>,
+	<20121210160533.GB5557@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Content-Disposition: inline
-In-Reply-To: <20121210150417.GR2516@linux.vnet.ibm.com>
+Received: from relay1.mentorg.com ([192.94.38.131])
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <Andrew_Gabbasov@mentor.com>) id 1Ti7s7-0002BV-7I
+	for lttng-dev@lists.lttng.org; Mon, 10 Dec 2012 13:14:31 -0500
+In-Reply-To: <20121210160533.GB5557@Krystal>
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,239 +23,96 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
-Cc: "ltt-dev@lists.casi.polymtl.ca" <ltt-dev@lists.casi.polymtl.ca>, Lai Jiangshan <eag0628@gmail.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-* Paul E. McKenney (paulmck@linux.vnet.ibm.com) wrote:
-> On Fri, Dec 07, 2012 at 12:22:52PM -0500, Mathieu Desnoyers wrote:
-> > * Lai Jiangshan (eag0628@gmail.com) wrote:
-> > > On Saturday, December 8, 2012, Mathieu Desnoyers wrote:
-> > > 
-> > > > * Lai Jiangshan (eag0628@gmail.com <javascript:;>) wrote:
-> > > > > we can define rcu_gp_ctr and registry with aligned attribute, but it is
-> > > > not
-> > > > > reliable way
-> > > > >
-> > > > > We need only this:
-> > > > > unsigned long rcu_gp_ctr __attribute((aligned and padded(don't put other
-> > > > > var next to it except the futex)))
-> > > >
-> > > > In which situation would this be unreliable ?
-> > > 
-> > > 
-> > > 
-> > > int a;
-> > > int b __attribute__((aligned));
-> > > int c;
-> > > 
-> > > b and c will be in the same line, even we define c as aligned too, the
-> > > compiler/linker may put a next to b, thus a and b in the same line
-> > 
-> > So if our goal is to have rcu_gp_ctr and rcu_gp_futex on the same cache
-> > line, which is different from that of the registry, we could do:
-> > 
-> > typeA rcu_gp_ctr __attribute__((aligned(...)));
-> > typeB rcu_gp_futex;
-> > typeC registry __attribute__((aligned(...)));
-> > 
-> > I would expect the compiler won't typically reorder rcu_gp_futex and
-> > registry. But I guess there is no guarantee it is going to be always
-> > true given by the C99 standard.
-> > 
-> > I guess this is a case where we could bump the library version number
-> > and do things properly.
-> > 
-> > Let's think a bit more about it, anyone else has comments on this ?
-> 
-> If you really want the alignment and padding, they should go into a
-> structure.  ;-)
+Hi Mathieu,
 
-OK, so we would bump to liburcu2 then for the 0.8 release ?
+I was looking at stable versions when setting all those versions ifdef's.
+Stable 2.6.36.x has "old" parameter (pid_t), while 2.6.37.x already has "new" parameter
+(struct task_struct *). That's why the checking statement with ">=" should have 2.6.37.
+
+For example, see
+http://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=blob;f=include/linux/perf_event.h;h=1d42c6ecd00a3d0b885c84f36e0c38dca976eee4;hb=refs/heads/linux-2.6.36.y
+line 871. This is the file in latest 2.6.36.y version, that has "old" pid_t parameter
+in perf_event_create_kernel_counter() function, so this change was introduced
+later than in 2.6.36.
+
+Thanks.
+
+Best regards,
+Andrew
+________________________________________
+From: Mathieu Desnoyers [mathieu.desnoyers@efficios.com]
+Sent: Monday, December 10, 2012 20:05
+To: Gabbasov, Andrew
+Cc: lttng-dev@lists.lttng.org
+Subject: Re: [lttng-dev] [PATCH lttng-modules] wrapper/perf.h: Fix kernel       version condition
+
+* Andrew Gabbasov (andrew_gabbasov@mentor.com) wrote:
+> The pid_t parameter of function perf_event_create_kernel_counter
+> was changed to task_struct pointer starting from 2.6.37.x.
+
+Did you check if 2.6.36.x stable kernels also introduced this change ?
+This might explain why in my own testing I did put 2.6.36 as kernel
+version cutoff.
 
 Thanks,
 
 Mathieu
 
-> 
-> 							Thanx, Paul
-> 
-> > Thanks,
-> > 
-> > Mathieu
-> > 
-> > > 
-> > > 
-> > > >
-> > > > Thanks,
-> > > >
-> > > > Mathieu
-> > > >
-> > > > >
-> > > > > On Saturday, December 8, 2012, Mathieu Desnoyers wrote:
-> > > > >
-> > > > > > * Lai Jiangshan (laijs@cn.fujitsu.com <javascript:;> <javascript:;>)
-> > > > wrote:
-> > > > > > > @rcu_gp_ctr and @registry share the same cache line, it causes
-> > > > > > > false sharing and slowdown both of the read site and update site.
-> > > > > > >
-> > > > > > > Fix: Use different cache line for them.
-> > > > > > >
-> > > > > > > Although rcu_gp_futex is updated less than rcu_gp_ctr, but
-> > > > > > > they always be accessed at almost the same time, so we also move
-> > > > > > rcu_gp_futex
-> > > > > > > to the cacheline of rcu_gp_ctr to reduce the cacheline-usage or
-> > > > > > cache-missing
-> > > > > > > of read site.
-> > > > > >
-> > > > > > Hi Lai,
-> > > > > >
-> > > > > > I agree on the goal: placing registry and rcu_gp_ctr on different
-> > > > > > cache-lines. And yes, it makes sense to put rcu_gp_ctr and rcu_gp_futex
-> > > > > > on the same cache-line. I agree that the next patch is fine too
-> > > > (keeping
-> > > > > > qsbr and other urcu similar). This is indeed what I try to ensure
-> > > > > > myself.
-> > > > > >
-> > > > > > I'm just concerned that this patch seems to break ABI compability for
-> > > > > > liburcu: the read-side, within applications, would have to be
-> > > > > > recompiled. So I guess we should decide if we do this change in a way
-> > > > > > that does not break the ABI (e.g. not introducing a structure), or if
-> > > > we
-> > > > > > choose to bump the library version number.
-> > > > > >
-> > > > > > Thoughts ?
-> > > > > >
-> > > > > > Thanks,
-> > > > > >
-> > > > > > Mathieu
-> > > > > >
-> > > > > > >
-> > > > > > >
-> > > > > > > test: (4X6=24 CPUs)
-> > > > > > >
-> > > > > > > Before patch:
-> > > > > > >
-> > > > > > > [root@localhost userspace-rcu]# ./tests/test_urcu_mb 20 1 20
-> > > > > > > SUMMARY ./tests/test_urcu_mb      testdur   20 nr_readers  20 rdur
-> > > > > >  0 wdur      0 nr_writers   1 wdelay      0 nr_reads   2100285330
-> > > > nr_writes
-> > > > > >      3390219 nr_ops   2103675549
-> > > > > > > [root@localhost userspace-rcu]# ./tests/test_urcu_mb 20 1 20
-> > > > > > > SUMMARY ./tests/test_urcu_mb      testdur   20 nr_readers  20 rdur
-> > > > > >  0 wdur      0 nr_writers   1 wdelay      0 nr_reads   1619868562
-> > > > nr_writes
-> > > > > >      3529478 nr_ops   1623398040
-> > > > > > > [root@localhost userspace-rcu]# ./tests/test_urcu_mb 20 1 20
-> > > > > > > SUMMARY ./tests/test_urcu_mb      testdur   20 nr_readers  20 rdur
-> > > > > >  0 wdur      0 nr_writers   1 wdelay      0 nr_reads   1949067038
-> > > > nr_writes
-> > > > > >      3469334 nr_ops   1952536372
-> > > > > > >
-> > > > > > >
-> > > > > > > after patch:
-> > > > > > >
-> > > > > > > [root@localhost userspace-rcu]# ./tests/test_urcu_mb 20 1 20
-> > > > > > > SUMMARY ./tests/test_urcu_mb      testdur   20 nr_readers  20 rdur
-> > > > > >  0 wdur      0 nr_writers   1 wdelay      0 nr_reads   3380191848
-> > > > nr_writes
-> > > > > >      4903248 nr_ops   3385095096
-> > > > > > > [root@localhost userspace-rcu]# ./tests/test_urcu_mb 20 1 20
-> > > > > > > SUMMARY ./tests/test_urcu_mb      testdur   20 nr_readers  20 rdur
-> > > > > >  0 wdur      0 nr_writers   1 wdelay      0 nr_reads   3397637486
-> > > > nr_writes
-> > > > > >      4129809 nr_ops   3401767295
-> > > > > > >
-> > > > > > > Singed-by: Lai Jiangshan <laijs@cn.fujitsu.com <javascript:;><javascript:;>>
-> > > > > > > ---
-> > > > > > > diff --git a/urcu.c b/urcu.c
-> > > > > > > index 15def09..436d71c 100644
-> > > > > > > --- a/urcu.c
-> > > > > > > +++ b/urcu.c
-> > > > > > > @@ -83,16 +83,7 @@ void __attribute__((destructor)) rcu_exit(void);
-> > > > > > >  #endif
-> > > > > > >
-> > > > > > >  static pthread_mutex_t rcu_gp_lock = PTHREAD_MUTEX_INITIALIZER;
-> > > > > > > -
-> > > > > > > -int32_t rcu_gp_futex;
-> > > > > > > -
-> > > > > > > -/*
-> > > > > > > - * Global grace period counter.
-> > > > > > > - * Contains the current RCU_GP_CTR_PHASE.
-> > > > > > > - * Also has a RCU_GP_COUNT of 1, to accelerate the reader fast path.
-> > > > > > > - * Written to only by writer with mutex taken. Read by both writer
-> > > > and
-> > > > > > readers.
-> > > > > > > - */
-> > > > > > > -unsigned long rcu_gp_ctr = RCU_GP_COUNT;
-> > > > > > > +struct urcu_gp rcu_gp = { .ctr = RCU_GP_COUNT };
-> > > > > > >
-> > > > > > >  /*
-> > > > > > >   * Written to only by each individual reader. Read by both the
-> > > > reader
-> > > > > > and the
-> > > > > > > @@ -217,8 +208,8 @@ static void wait_gp(void)
-> > > > > > >  {
-> > > > > > >       /* Read reader_gp before read futex */
-> > > > > > >       smp_mb_master(RCU_MB_GROUP);
-> > > > > > > -     if (uatomic_read(&rcu_gp_futex) == -1)
-> > > > > > > -             futex_async(&rcu_gp_futex, FUTEX_WAIT, -1,
-> > > > > > > +     if (uatomic_read(&rcu_gp.futex) == -1)
-> > > > > > > +             futex_async(&rcu_gp.futex, FUTEX_WAIT, -1,
-> > > > > > >                     NULL, NULL, 0);
-> > > > > > >  }
-> > > > > > >
-> > > > > > > @@ -232,12 +223,12 @@ static void wait_for_readers(struct
-> > > > cds_list_head
-> > > > > > *input_readers,
-> > > > > > >       /*
-> > > > > > >        * Wait for each thread URCU_TLS(rcu_reader).ctr to either
-> > > > > > >        * indicate quiescence (not nested), or observe the current
-> > > > > > > -      * rcu_gp_ctr value.
-> > > > > > > +      * rcu_gp.ctr value.
-> > > > > > >        */
-> > > > > > >       for (;;) {
-> > > > > > >               wait_loops++;
-> > > > > > >               if (wait_loops == RCU_QS_ACTIVE_ATTEMPTS) {
-> > > > > > > -                     uatomic_dec(&rcu_gp_futex);
-> > > > > > > +                     uatomic_dec(&rcu_gp.futex);
-> > > > > > >                       /* Write futex before read reader_gp */
-> > > > > > >                       smp_mb_master(RCU_MB_GROUP);
-> > > > > > >               }
-> > > > > > > @@ -270,7 +261,7 @@ static void wait_for_readers(struct cds_list_head
-> > > > > > *input_readers,
-> > > > > > >                       if (wait_loops == RCU_QS_ACTIVE_ATTEMPTS) {
-> > > > > > >                               /* Read reader_gp before write futex */
-> > > > > > >                               smp_mb_master(RCU_MB_GROUP);
-> > > > > > > -                             uatomic_set(&rcu_gp_futex, 0);
-> > > > > > > +                             uatomic_set(&rcu_gp.futex, 0);
-> > > > > > >                       }
-> > > > > > >                       break;
-> > > > > > >               } else {
-> > > > > > > @@ -289,7 +280,7 @@ static void wait_for_readers(struct cds_list_head
-> > > > > > *input_readers,
-> > > > > > >                       if (wait_loops == RCU_QS_ACTIVE_ATTEMPTS) {
-> > > > > > >                               /* Read reader_gp before write futex */
-> > > > > > >                             > > lttng-dev@lists.lttng.org<javascript:;><javascript:;>
-> > > > > > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> > > > > >
-> > > >
-> > > > --
-> > > > Mathieu Desnoyers
-> > > > Operating System Efficiency R&D Consultant
-> > > > EfficiOS Inc.
-> > > > http://www.efficios.com
-> > > >
-> > 
-> > -- 
-> > Mathieu Desnoyers
-> > Operating System Efficiency R&D Consultant
-> > EfficiOS Inc.
-> > http://www.efficios.com
-> > 
-> 
+>
+> Signed-off-by: Andrew Gabbasov <andrew_gabbasov@mentor.com>
+> ---
+>  wrapper/perf.h |    9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
+>
+> diff --git a/wrapper/perf.h b/wrapper/perf.h
+> index 5dfa84b..5de205c 100644
+> --- a/wrapper/perf.h
+> +++ b/wrapper/perf.h
+> @@ -34,7 +34,7 @@ wrapper_perf_event_create_kernel_counter(struct perf_event_attr *attr,
+>  }
+>  #else /* defined(CONFIG_PERF_EVENTS) && (LINUX_VERSION_CODE >= KERNEL_VERSION(3,0,99)) */
+>
+> -#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,36))
+> +#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
+>  static inline struct perf_event *
+>  wrapper_perf_event_create_kernel_counter(struct perf_event_attr *attr,
+>                               int cpu,
+> @@ -43,7 +43,7 @@ wrapper_perf_event_create_kernel_counter(struct perf_event_attr *attr,
+>  {
+>       return perf_event_create_kernel_counter(attr, cpu, task, callback);
+>  }
+> -#else /* (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,36)) */
+> +#else /* (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37)) */
+>  static inline struct perf_event *
+>  wrapper_perf_event_create_kernel_counter(struct perf_event_attr *attr,
+>                               int cpu,
+> @@ -60,8 +60,11 @@ wrapper_perf_event_create_kernel_counter(struct perf_event_attr *attr,
+>       return perf_event_create_kernel_counter(attr, cpu, pid, callback);
+>  }
+>
+> +#endif /* (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37)) */
+> +
+> +#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,36))
+>  #define local64_read(l)              atomic64_read(l)
+> -#endif /* (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,36)) */
+> +#endif
+>
+>  #endif /* defined(CONFIG_PERF_EVENTS) && (LINUX_VERSION_CODE >= KERNEL_VERSION(3,0,99)) */
+>
+> --
+> 1.7.10.4
+>
+>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
--- 
+--
 Mathieu Desnoyers
 Operating System Efficiency R&D Consultant
 EfficiOS Inc.
