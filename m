@@ -1,147 +1,99 @@
-From: Lai Jiangshan <laijs@cn.fujitsu.com>
-Subject: Re: [PATCH 1/3] urcu: avoid "expression result unused"
- from clang
-Date: Mon, 10 Dec 2012 10:33:43 +0800
-Message-ID: <50C54A07.20101__15402.5391013876$1355106885$gmane$org@cn.fujitsu.com>
-References: <1354872295-32371-1-git-send-email-laijs@cn.fujitsu.com>
-	<20121207165848.GB12338@Krystal>
-	<CACvQF53+x_PDd+aOtM0k2wN0BJZXRMkB3pjXxfvsV=HkdknM=Q@mail.gmail.com>
-	<CACvQF514yxBjppYFKJEqX=n31LdU6dTqBg9-7kn5AoTy0i7=Lw@mail.gmail.com>
-	<20121208150023.GA16943@Krystal>
+From: Hui Zhu <teawater@gmail.com>
+Subject: Re: [lttng-dev] Request change name of function lookup_enum in libbabeltrace to make GDB use this lib
+Date: Mon, 10 Dec 2012 16:30:12 +0800
+Message-ID: <CANFwon2U61xKrSFVq0wJ0axVKqjz7RzWcOn5vJ3MUEL4JC+VOA@mail.gmail.com>
+References: <CANFwon2s-eJoCrhzJmxhoGx9G2NeOAFf-FDFk1SoxD1OhPxWsg@mail.gmail.com> <20121205120845.GA31696@Krystal> <50C0C06A.40207@redhat.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from [222.73.24.84] (helo=song.cn.fujitsu.com)
-	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <laijs@cn.fujitsu.com>) id 1ThtBs-00035U-DT
-	for lttng-dev@lists.lttng.org; Sun, 09 Dec 2012 21:33:56 -0500
-In-Reply-To: <20121208150023.GA16943@Krystal>
-List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
-	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
-	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Lai Jiangshan <eag0628@gmail.com>
+Content-Type: text/plain; charset=ISO-8859-1
+Return-path: <gdb-return-41634-gdb-gdb=m.gmane.org@sourceware.org>
+In-Reply-To: <50C0C06A.40207@redhat.com>
+List-Unsubscribe: <mailto:gdb-unsubscribe-gdb-gdb=m.gmane.org@sourceware.org>
+List-Subscribe: <mailto:gdb-subscribe@sourceware.org>
+List-Archive: <http://sourceware.org/ml/gdb/>
+List-Post: <mailto:gdb@sourceware.org>
+List-Help: <mailto:gdb-help@sourceware.org>, <http://sourceware.org/ml/#faqs>
+Sender: gdb-owner@sourceware.org
+To: Pedro Alves <palves@redhat.com>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Julien Desfossez <jdesfossez@efficios.com>, lttng-dev <lttng-dev@lists.lttng.org>, Tom Tromey <tromey@redhat.com>, gdb@sourceware.org
 List-Id: lttng-dev@lists.lttng.org
 
-On 12/08/2012 11:00 PM, Mathieu Desnoyers wrote:
-> * Lai Jiangshan (eag0628@gmail.com) wrote:
->> How about the one in yy.diff?
+On Thu, Dec 6, 2012 at 11:57 PM, Pedro Alves <palves@redhat.com> wrote:
+> On 12/05/2012 12:08 PM, Mathieu Desnoyers wrote:
+>> * Hui Zhu (teawater@gmail.com) wrote:
+>>> Hi,
+>>>
+>>> I am working on add CTF support to GDB.  You can see my patch review threads in:
+>>> http://sourceware.org/ml/gdb-patches/2012-11/msg00552.html
+>>> http://sourceware.org/ml/gdb-patches/2012-11/msg00554.html
+>>> http://sourceware.org/ml/gdb-patches/2012-11/msg00553.html
+>>> http://sourceware.org/ml/gdb-patches/2012-11/msg00555.html
+>>> http://sourceware.org/ml/gdb-patches/2012-11/msg00556.html
+>>>
+>>> To make GDB support CTF read, I use libbabeltrace with GDB.  You can
+>>> see the patch in
+>>> http://sourceware.org/ml/gdb-patches/2012-11/msg00555.html.
+>>> I have a issue is  libbabeltrace have a function called lookup_enum
+>>> that is same with a GDB function.
+>>> I change the function name of GDB to handle this issue in my patch.
+>>>
+>>> But Tom said let libbabeltrace to change function name is better.
+>>> So I send this mail to ask do you mind change the function name of
+>>> lookup_enum?   If you can change the function name that will be really
+>>> helpful for us.  Thanks a lot.
+>>> And I post a patch about change the function name in libbabeltrace.
 >>
->> xx.diff fixes the one what I had sent in 1/3 patch, but it may still
->> cause warning in future if the complier become more strict.
-> 
-> Hrm. In any cases, I think that even with the 2 patches you propose, the
-> warning "unused expression return" would still be valid (because we end
-> up not using the result of the outer statement-expression). 
+>> I'm CCing Julien Desfossez on this one. From what I see,
+>> include/babeltrace/types.h is not included into the system, so it should
+>> not be considered to be a public header of libbabeltrace.
+>
+> I've just built and installed babeltrace 1.0.0 (where's the mainline repository,
+> BTW?), and indeed, I'm not seeing the types.h file anywhere in the
+> installed tree:
+>
+> $ ~/src/babeltrace/install/include> find
+> .
+> ./babeltrace
+> ./babeltrace/trace-handle.h
+> ./babeltrace/list.h
+> ./babeltrace/babeltrace.h
+> ./babeltrace/context.h
+> ./babeltrace/iterator.h
+> ./babeltrace/ctf
+> ./babeltrace/ctf/callbacks.h
+> ./babeltrace/ctf/events.h
+> ./babeltrace/ctf/iterator.h
+> ./babeltrace/format.h
+> ./babeltrace/clock-types.h
+>
+> The GDB patch is including types.h explicitly:
+>
+> +#ifdef HAVE_LIBBABELTRACE
+> +#include <babeltrace/babeltrace.h>
+> +#include <babeltrace/types.h>
+> +#include <babeltrace/ctf/events.h>
+> +#include <babeltrace/ctf/iterator.h>
+>
+> So indeed, Hui, you'll need to make sure your patch works against an
+> installed babeltrace, making sure it does not pick up headers
+> from babeltrace's source directory.  If there's really no reason to
+> include that types.h header (since it seems you don't really need any
+> function declared in that file), maybe there's actually nothing for
+> babeltrace to do.
 
-The one in yy.diff:
+Oops, sorry for I miss something.
+I use include babeltrace/types.h because I use function
+get_int_signedness that defined inside it.
 
-1 ? _v : statement_which_has_side_affect;
-
-The compiler should not warn for it. "?:" can be used for control flow,
-the complier should only warn if both branches are warning.
+Thanks,
+Hui
 
 
-We might
-> want to consider simpler approaches:
-> 
-> 1 - Add the missing (void) casts before each CMM_STORE_SHARED() in the
->     code. I don't like this because it makes the CMM_STORE_SHARED common
->     case more cumbersome to use.
-> 2 - Change the CMM_STORE_SHARED() API so it does not return anything.
->     I think most use-cases don't involve using its return value anyway.
-> 
-> Thoughts ?
-> 
-> Thanks,
-> 
-> Mathieu
-> 
+>
+>> Julien, is there an publically exposed babeltrace API that performs
+>> something similar to the internal lookup_enum() ?
 >>
->> On Sat, Dec 8, 2012 at 1:27 AM, Lai Jiangshan <eag0628@gmail.com> wrote:
->>>
->>>
->>> On Saturday, December 8, 2012, Mathieu Desnoyers wrote:
->>>>
->>>> * Lai Jiangshan (laijs@cn.fujitsu.com) wrote:
->>>>> The last expression result is unused and clang will complain.
->>>>> The trick in the patch supresses the complaint
->>>>
->>>> Hrm, but with this patch, gcc complains:
->>>>
->>>> rculfhash.c:1921:3: warning: variable '_w' set but not used
->>>> [-Wunused-but-set-variable]
->>>>
->>>> using
->>>>
->>>> gcc version 4.7.2 (Debian 4.7.2-4)
->>>
->>>
->>> Ouch, my gcc is too old
->>>
->>>
->>>>
->>>>
->>>> Thoughts ?
->>>>
->>>> Thanks,
->>>>
->>>> Mathieu
->>>>
->>>>>
->>>>> Signed-off-by: Lai Jiangshan <laijs@cn.fujitsu.com>
->>>>> ---
->>>>>  urcu/system.h        |    5 ++++-
->>>>>  2 files changed, 4 insertions(+), 1 deletions(-)
->>>>>
->>>>> diff --git a/urcu/system.h b/urcu/system.h
->>>>> index 2a45f22..6b7b0af 100644
->>>>> --- a/urcu/system.h
->>>>> +++ b/urcu/system.h
->>>>> @@ -46,12 +46,15 @@
->>>>>  /*
->>>>>   * Store v into x, where x is located in shared memory. Performs the
->>>>>   * required cache flush after writing. Returns v.
->>>>> + * "_w" here avoids the warning from clang:
->>>>> + *   warning: expression result unused [-Wunused-value]
->>>>>   */
->>>>>  #define CMM_STORE_SHARED(x, v)               \
->>>>>       ({                              \
->>>>>               __typeof__(x) _v = _CMM_STORE_SHARED(x, v);     \
->>>>> +             __typeof__(x) _w;       \
->>>>>               cmm_smp_wmc();          \
->>>>> -             _v;                     \
->>>>> +             _w = _v;                \
->>>>>       })
->>>>>
->>>>>  #endif /* _URCU_SYSTEM_H */
->>>>> --
->>>>> 1.7.4.4
->>>>>
->>>>>
->>>>> _______________________________________________
->>>>> lttng-dev mailing list
->>>>> lttng-dev@lists.lttng.org
->>>>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->>>>
->>>>
->>>> --
->>>> Mathieu Desnoyers
->>>> Operating System Efficiency R&D Consultant
->>>> EfficiOS Inc.
->>>> http://www.efficios.com
->>>>
->>>> _______________________________________________
->>>> lttng-dev mailing list
->>>> lttng-dev@lists.lttng.org
->>>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> 
-> 
-> 
-> 
+>> Hui, are you using other functions from include/babeltrace/types.h ?
+>
+> --
+> Pedro Alves
+>
