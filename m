@@ -1,125 +1,82 @@
-From: Hui Zhu <teawater@gmail.com>
-Subject: Re: [lttng-dev] Request change name of function lookup_enum in libbabeltrace to make GDB use this lib
-Date: Tue, 11 Dec 2012 23:18:24 +0800
-Message-ID: <CANFwon2T5CYcjssSyTh_yjV2fgw0N3SZXqytNJQOCR1h2vM8MQ@mail.gmail.com>
-References: <CANFwon2s-eJoCrhzJmxhoGx9G2NeOAFf-FDFk1SoxD1OhPxWsg@mail.gmail.com> <20121205120845.GA31696@Krystal> <50C0C06A.40207@redhat.com> <CANFwon2U61xKrSFVq0wJ0axVKqjz7RzWcOn5vJ3MUEL4JC+VOA@mail.gmail.com> <20121210140524.GA31945@Krystal>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: 'call_rcu' unstable?
+Date: Tue, 11 Dec 2012 12:55:25 -0500
+Message-ID: <20121211175524.GB6393__29273.7291929827$1355248629$gmane$org@Krystal>
+References: <tencent_3FFFB50C2209B0C914907B07@qq.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-1
-Return-path: <gdb-return-41642-gdb-gdb=m.gmane.org@sourceware.org>
-In-Reply-To: <20121210140524.GA31945@Krystal>
-List-Unsubscribe: <mailto:gdb-unsubscribe-gdb-gdb=m.gmane.org@sourceware.org>
-List-Subscribe: <mailto:gdb-subscribe@sourceware.org>
-List-Archive: <http://sourceware.org/ml/gdb/>
-List-Post: <mailto:gdb@sourceware.org>
-List-Help: <mailto:gdb-help@sourceware.org>, <http://sourceware.org/ml/#faqs>
-Sender: gdb-owner@sourceware.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Pedro Alves <palves@redhat.com>, Julien Desfossez <jdesfossez@efficios.com>, lttng-dev <lttng-dev@lists.lttng.org>, Tom Tromey <tromey@redhat.com>, gdb@sourceware.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <compudj@mail.openrapids.net>) id 1TiU3C-0000qL-9Z
+	for lttng-dev@lists.lttng.org; Tue, 11 Dec 2012 12:55:26 -0500
+Content-Disposition: inline
+In-Reply-To: <tencent_3FFFB50C2209B0C914907B07@qq.com>
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+To: zs <84500316@qq.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-On Mon, Dec 10, 2012 at 10:05 PM, Mathieu Desnoyers
-<mathieu.desnoyers@efficios.com> wrote:
-> * Hui Zhu (teawater@gmail.com) wrote:
->> On Thu, Dec 6, 2012 at 11:57 PM, Pedro Alves <palves@redhat.com> wrote:
->> > On 12/05/2012 12:08 PM, Mathieu Desnoyers wrote:
->> >> * Hui Zhu (teawater@gmail.com) wrote:
->> >>> Hi,
->> >>>
->> >>> I am working on add CTF support to GDB.  You can see my patch review threads in:
->> >>> http://sourceware.org/ml/gdb-patches/2012-11/msg00552.html
->> >>> http://sourceware.org/ml/gdb-patches/2012-11/msg00554.html
->> >>> http://sourceware.org/ml/gdb-patches/2012-11/msg00553.html
->> >>> http://sourceware.org/ml/gdb-patches/2012-11/msg00555.html
->> >>> http://sourceware.org/ml/gdb-patches/2012-11/msg00556.html
->> >>>
->> >>> To make GDB support CTF read, I use libbabeltrace with GDB.  You can
->> >>> see the patch in
->> >>> http://sourceware.org/ml/gdb-patches/2012-11/msg00555.html.
->> >>> I have a issue is  libbabeltrace have a function called lookup_enum
->> >>> that is same with a GDB function.
->> >>> I change the function name of GDB to handle this issue in my patch.
->> >>>
->> >>> But Tom said let libbabeltrace to change function name is better.
->> >>> So I send this mail to ask do you mind change the function name of
->> >>> lookup_enum?   If you can change the function name that will be really
->> >>> helpful for us.  Thanks a lot.
->> >>> And I post a patch about change the function name in libbabeltrace.
->> >>
->> >> I'm CCing Julien Desfossez on this one. From what I see,
->> >> include/babeltrace/types.h is not included into the system, so it should
->> >> not be considered to be a public header of libbabeltrace.
->> >
->> > I've just built and installed babeltrace 1.0.0 (where's the mainline repository,
->> > BTW?), and indeed, I'm not seeing the types.h file anywhere in the
->> > installed tree:
->> >
->> > $ ~/src/babeltrace/install/include> find
->> > .
->> > ./babeltrace
->> > ./babeltrace/trace-handle.h
->> > ./babeltrace/list.h
->> > ./babeltrace/babeltrace.h
->> > ./babeltrace/context.h
->> > ./babeltrace/iterator.h
->> > ./babeltrace/ctf
->> > ./babeltrace/ctf/callbacks.h
->> > ./babeltrace/ctf/events.h
->> > ./babeltrace/ctf/iterator.h
->> > ./babeltrace/format.h
->> > ./babeltrace/clock-types.h
->> >
->> > The GDB patch is including types.h explicitly:
->> >
->> > +#ifdef HAVE_LIBBABELTRACE
->> > +#include <babeltrace/babeltrace.h>
->> > +#include <babeltrace/types.h>
->> > +#include <babeltrace/ctf/events.h>
->> > +#include <babeltrace/ctf/iterator.h>
->> >
->> > So indeed, Hui, you'll need to make sure your patch works against an
->> > installed babeltrace, making sure it does not pick up headers
->> > from babeltrace's source directory.  If there's really no reason to
->> > include that types.h header (since it seems you don't really need any
->> > function declared in that file), maybe there's actually nothing for
->> > babeltrace to do.
->>
->> Oops, sorry for I miss something.
->> I use include babeltrace/types.h because I use function
->> get_int_signedness that defined inside it.
->
-> Can you use:
->
-> include/babeltrace/ctf/events.h: bt_ctf_get_int_signedness() instead ?
->
-> This one is within an exported header,
->
-> Thanks,
->
-> Mathieu
+* zs (84500316@qq.com) wrote:
+> Hi list,
+> 
+> I found a big problem in my product, that use urcu 0.7.5. My program cost too mutch CPU in the funtion 'update_counter_and_wait:uruc.c:247', and I use gdb to see to *wait_loops*, it says -167777734. The CPU usage grows up from 1% to 100% in one day!
+> 
+> 
+> Here is the sample code to show how I use urcu library:
+> 
+> #include <urcu.h>
+> 
+> thread ()
+> {
+> rcu_register_thread();
+> 
+> for (;;) {
+> rcu_read_lock();
+> xxx
+> rcu_read_unlock();
 
-Great! My part is OK now.  Thanks for your help.
+Please triple-check that all your rcu_read_lock() and rcu_read_unlock()
+are balanced (no double-unlock, nor missing unlock for each lock taken).
 
-Best,
-Hui
+The type of problem you get would happen in such a case.
 
->
->>
->> Thanks,
->> Hui
->>
->>
->> >
->> >> Julien, is there an publically exposed babeltrace API that performs
->> >> something similar to the internal lookup_enum() ?
->> >>
->> >> Hui, are you using other functions from include/babeltrace/types.h ?
->> >
->> > --
->> > Pedro Alves
->> >
->
-> --
-> Mathieu Desnoyers
-> Operating System Efficiency R&D Consultant
-> EfficiOS Inc.
-> http://www.efficios.com
+Thanks,
+
+Mathieu
+
+> }
+> }
+> 
+> main()
+> {
+> rcu_init();
+>   pthread_create(, , , , thread);
+> 
+> rcu_register_thread();
+> for (;;)
+> {
+>  if (xxx)
+>    call_rcu();
+> }
+> 
+> }
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- 
+Mathieu Desnoyers
+Operating System Efficiency R&D Consultant
+EfficiOS Inc.
+http://www.efficios.com
