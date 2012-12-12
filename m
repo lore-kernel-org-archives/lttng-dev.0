@@ -1,15 +1,25 @@
-From: "=?utf-8?B?enM=?=" <84500316@qq.com>
-Subject: Re: 'call_rcu' unstable?
-Date: Wed, 12 Dec 2012 14:15:14 +0800
-Message-ID: <tencent_24EB0C2A7911DDF711681704__24893.1232527413$1355293046$gmane$org@qq.com>
+From: Lai Jiangshan <laijs@cn.fujitsu.com>
+Subject: Re: [PATCH V2] urcu: avoid false sharing for rcu_gp_ctr
+Date: Wed, 12 Dec 2012 17:58:55 +0800
+Message-ID: <50C8555F.1030607__21689.6750884645$1355306402$gmane$org@cn.fujitsu.com>
+References: <50C19575.2070802@cn.fujitsu.com> <20121207163234.GB11975@Krystal>
+	<CACvQF50Y2wC3t=VMJ==574aHVvod+ipGA1K5hR97r_dRbcegkw@mail.gmail.com>
+	<20121207165748.GA12338@Krystal>
+	<CACvQF50V_9T6T3j4AwbdBuEiHHbcxdNGgP1WF5T4OHpXZyMgEA@mail.gmail.com>
+	<20121207172252.GA12525@Krystal>
+	<20121210150417.GR2516@linux.vnet.ibm.com>
+	<20121210180111.GA11209@Krystal>
+	<20121210234854.GK2516@linux.vnet.ibm.com>
+	<50C6D2AB.9070100@cn.fujitsu.com> <20121211123802.GA4356@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtpbg6.qq.com ([183.60.61.231])
-	by ltt.polymtl.ca with smtp (Exim 4.72)
-	(envelope-from <84500316@qq.com>) id 1TifcW-0006dc-7k
-	for lttng-dev@lists.lttng.org; Wed, 12 Dec 2012 01:16:42 -0500
+Received: from [222.73.24.84] (helo=song.cn.fujitsu.com)
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <laijs@cn.fujitsu.com>) id 1Tij5k-0008IF-At
+	for lttng-dev@lists.lttng.org; Wed, 12 Dec 2012 04:59:15 -0500
+In-Reply-To: <20121211123802.GA4356@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -18,203 +28,109 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?utf-8?B?TWF0aGlldSBEZXNub3llcnM=?= <mathieu.desnoyers@efficios.com>
-Cc: =?utf-8?B?bHR0bmctZGV2?= <lttng-dev@lists.lttng.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Lai Jiangshan <eag0628@gmail.com>, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, paulmck@linux.vnet.ibm.com
 List-Id: lttng-dev@lists.lttng.org
 
-thanks Mathieu Desnoyers for the patience.
-
->- Did you ensure that you issue rcu_register_thread() at thread start of
->  each of your threads ? And rcu_register_thread before returning from
->  each thread ?
-Sure.
-
->- How is the list g_sslvpnctxlist[h] initialized ? 
-Here, is the way:
-I alloc and init 'g_sslvpnctxlist' in one process, and exec rcu_read_lock/unlock/call_rcu in another process(which create many rx/tx threads). 
-        if (sslvpn_shm_alloc(&shm) == -1) {
-                syslog(LOG_ERR, "alloc share stats memory failed %s\n", strerror(errno));
-                exit(-1);
-        }
-        g_sslvpnctxlist = (void *)shm.addr;
-        for (i = 0; i < sslvpn_max_users; i++)
-                 CDS_INIT_LIST_HEAD(&g_sslvpnctxlist[i]);
-It looks strange, that someone uses share-memory(created by mmap) to hold the 'g_sslvpnctxlist' (+_+);
-Later I will re-coding this part, not use share-memory. 
-
-Are there concurrent
->  modifications of this list ? If yes, are they synchronized with a
->  mutex ?
-I do not use mutex, because all the add/del are executing in one thread. 
-
->- When your application is a state where the call_rcu worker thread
->  busy-waits on RCU read-side critical sections, it would be interesting
->  to know on what read-side critical section it is waiting. In order to
->  do so, from gdb attached to your process when it is hung:
->  - we'
-
-  I did attach the process and check each thread, it says:
-six threads block in 'msgrcv' IO, and one thread hangs in 'update_counter_and_wait:uruc.c:247'
-
-  I do not have the chance to check the rcu_reader TLS values,
- because my customer will not allow the problem happlen again(I have replaced rcu_lock by pthread_mutex).
-
- I am trying to reproduce the problem in my testing workplace, if happens, I will give more.
-
-thanks .
-   
-
-
-
------------------- Original ------------------
-From:  "Mathieu Desnoyers"<mathieu.desnoyers@efficios.com>;
-Date:  Wed, Dec 12, 2012 10:41 AM
-To:  "zs"<84500316@qq.com>; 
-Cc:  "lttng-dev"<lttng-dev@lists.lttng.org>; 
-Subject:  Re: [lttng-dev] 'call_rcu' unstable?
-
-
-
-* zs (84500316@qq.com) wrote:
-> Thanks , BUT ...
-> I really check my code:
+On 12/11/2012 08:38 PM, Mathieu Desnoyers wrote:
+> * Lai Jiangshan (laijs@cn.fujitsu.com) wrote:
+>> From 66f50786b9d5f1bcf2ad56e3a9ab905005c6cd90 Mon Sep 17 00:00:00 2001
+>> From: Lai Jiangshan <laijs@cn.fujitsu.com>
+>> Date: Tue, 11 Dec 2012 14:24:44 +0800
+>> Subject: [PATCH] urcu: avoid false sharing for rcu_gp_ctr
+>>
+>> @rcu_gp_ctr and @registry share the same cache line, it causes
+>> false sharing and slowdown both of the read site and update site.
+>>
+>> Fix: Use different cache line for them.
+>>
+>> Although rcu_gp_futex is updated less than rcu_gp_ctr, but
+>> they always be accessed at almost the same time, so we also move rcu_gp_futex
+>> to the cacheline of rcu_gp_ctr to reduce the cacheline-usage or cache-missing
+>> of read site.
+>>
+>> test: (4X6=24 CPUs)
+>>
+>> Before patch:
+>>
+>> [root@localhost userspace-rcu]# ./tests/test_urcu_mb 20 1 20
+>> SUMMARY ./tests/test_urcu_mb      testdur   20 nr_readers  20 rdur      0 wdur      0 nr_writers   1 wdelay      0 nr_reads   2100285330 nr_writes      3390219 nr_ops   2103675549
+>> [root@localhost userspace-rcu]# ./tests/test_urcu_mb 20 1 20
+>> SUMMARY ./tests/test_urcu_mb      testdur   20 nr_readers  20 rdur      0 wdur      0 nr_writers   1 wdelay      0 nr_reads   1619868562 nr_writes      3529478 nr_ops   1623398040
+>> [root@localhost userspace-rcu]# ./tests/test_urcu_mb 20 1 20
+>> SUMMARY ./tests/test_urcu_mb      testdur   20 nr_readers  20 rdur      0 wdur      0 nr_writers   1 wdelay      0 nr_reads   1949067038 nr_writes      3469334 nr_ops   1952536372
+>>
+>> after patch:
+>>
+>> [root@localhost userspace-rcu]# ./tests/test_urcu_mb 20 1 20
+>> SUMMARY ./tests/test_urcu_mb      testdur   20 nr_readers  20 rdur      0 wdur      0 nr_writers   1 wdelay      0 nr_reads   3380191848 nr_writes      4903248 nr_ops   3385095096
+>> [root@localhost userspace-rcu]# ./tests/test_urcu_mb 20 1 20
+>> SUMMARY ./tests/test_urcu_mb      testdur   20 nr_readers  20 rdur      0 wdur      0 nr_writers   1 wdelay      0 nr_reads   3397637486 nr_writes      4129809 nr_ops   3401767295
+>>
+>> Signed-off-by: Lai Jiangshan <laijs@cn.fujitsu.com>
+>> ---
+>>  Makefile.am              |   10 +++++-----
+>>  compat_rcu_gp.lds        |   25 +++++++++++++++++++++++++
+>>  compat_rcu_gp_bp.lds     |   24 ++++++++++++++++++++++++
+>>  compat_rcu_gp_mb.lds     |   25 +++++++++++++++++++++++++
+>>  compat_rcu_gp_qsbr.lds   |   25 +++++++++++++++++++++++++
+>>  compat_rcu_gp_signal.lds |   25 +++++++++++++++++++++++++
+>>  urcu-bp.c                |   14 ++++----------
+>>  urcu-qsbr.c              |   35 +++++++++++++++--------------------
+>>  urcu.c                   |   34 +++++++++++++---------------------
+>>  urcu/map/urcu-bp.h       |    3 +--
+>>  urcu/map/urcu-qsbr.h     |    3 +--
+>>  urcu/map/urcu.h          |    9 +++------
+>>  urcu/static/urcu-bp.h    |   23 ++++++++++++++---------
+>>  urcu/static/urcu-qsbr.h  |   39 ++++++++++++++++++++++++---------------
+>>  urcu/static/urcu.h       |   38 ++++++++++++++++++++++++--------------
+>>  15 files changed, 228 insertions(+), 104 deletions(-)
+>>  create mode 100644 compat_rcu_gp.lds
+>>  create mode 100644 compat_rcu_gp_bp.lds
+>>  create mode 100644 compat_rcu_gp_mb.lds
+>>  create mode 100644 compat_rcu_gp_qsbr.lds
+>>  create mode 100644 compat_rcu_gp_signal.lds
+>>
+>> diff --git a/Makefile.am b/Makefile.am
+>> index 0a4d357..b2b7b6a 100644
+>> --- a/Makefile.am
+>> +++ b/Makefile.am
+>> @@ -56,21 +56,21 @@ lib_LTLIBRARIES = liburcu-common.la \
+>>  #
+>>  liburcu_common_la_SOURCES = wfqueue.c wfcqueue.c wfstack.c $(COMPAT)
+>>  
+>> -liburcu_la_SOURCES = urcu.c urcu-pointer.c $(COMPAT)
+>> +liburcu_la_SOURCES = urcu.c urcu-pointer.c compat_rcu_gp.lds $(COMPAT)
 > 
-> zs# find .|xargs grep rcu_read 
-> 
-> ./sslvpn_ctx.c: rcu_read_lock();
-> ./sslvpn_ctx.c:                 rcu_read_unlock();
-> ./sslvpn_ctx.c: rcu_read_unlock();
+> Hrm, I tried your patch with "make V=1", and have not found any use of
+> those "lds" files. I'm not sure adding them as SOURCES is enough.
 
-OK, in that case, continuing on the debugging checklist:
+Use liburcu_mb_la_LDFLAGS = -Xlinker compat_rcu_gp_mb.lds instead!
 
-- Did you ensure that you issue rcu_register_thread() at thread start of
-  each of your threads ? And rcu_register_thread before returning from
-  each thread ?
-- How is the list g_sslvpnctxlist[h] initialized ? Are there concurrent
-  modifications of this list ? If yes, are they synchronized with a
-  mutex ?
-- When your application is a state where the call_rcu worker thread
-  busy-waits on RCU read-side critical sections, it would be interesting
-  to know on what read-side critical section it is waiting. In order to
-  do so, from gdb attached to your process when it is hung:
-  - we'd need to look at the urcu.c "registry" list. We'd need to figure
-    out which list entries are keeping the busy-loop waiting.
-  - then, we should look at each thread's "rcu_reader" TLS variable, to
-    see its address and content.
-  By comparing the content of the list and each active thread's
-  rcu_reader TLS variable, we should be able to figure out what is
-  keeping grace period to complete. If you can provide these dumps, it
-  would let me help you digging further into your issue.
-
-Thanks,
-
-Mathieu
+Result(nm .libs/liburcu-mb.so):
+00000000002046e0 D rcu_flavor_mb
+0000000000204a80 D rcu_gp_ctr_mb
+0000000000204a88 A rcu_gp_futex_mb
+0000000000204c60 b rcu_gp_lock
+0000000000204a80 D rcu_gp_mb
 
 
+The type "A" makes me nervous, Do we expect this?
+
+And a new problem:
+liburcu.so is RCU_MB actually in my system,
+but compat_rcu_gp.lds uses rcu_gp_memb(RCU_MEMBARRIER),
+it can't work in my system, how to fix it?
+
+
 > 
-> AND in sslvpn_ctx.c:
-> void *sslvpn_lookup_ssl(unsigned long iip)
-> {
->         struct sslvpn_ctx *ctx;
->         int h;
-> 
->         h = get_hash(iip, 0);
-> 
->         rcu_read_lock();
->         cds_list_for_each_entry_rcu(ctx, &g_sslvpnctxlist[h], cdlist) {
->                 if ((ctx->flags & SSL_CTX_ESTABLISHED) && ctx->iip && ctx->iip == iip) {
-> 
->                         uatomic_add(&ctx->ssl_use, 1);
->                         rcu_read_unlock();
->                         return ctx;
->                 }
->         }
-> 
->         rcu_read_unlock();
->         return NULL;
-> }
-> 
-> By the way, *sslvpn_lookup_ssl* called by 6 threads for TX.
-> the 7th thread only will call *call_rcu*:
-> 
-> int sslvpn_del_ctx(struct sslvpn_ctx *pctx)
-> {
->         ...
->         cds_list_del_rcu(&ctx->cdlist);
->         ctx->flags |= SSL_CTX_DYING;
->         call_rcu(&ctx->rcu, func);
->         ...
-> }
-> 
-> 
-> 
-> 
-> 
-> ------------------ Original ------------------
-> From:  "Mathieu Desnoyers"<mathieu.desnoyers@efficios.com>;
-> Date:  Wed, Dec 12, 2012 01:55 AM
-> To:  "zs"<84500316@qq.com>; 
-> Cc:  "lttng-dev"<lttng-dev@lists.lttng.org>; 
-> Subject:  Re: [lttng-dev] 'call_rcu' unstable?
-> 
-> 
-> 
-> * zs (84500316@qq.com) wrote:
-> > Hi list,
-> > 
-> > I found a big problem in my product, that use urcu 0.7.5. My program cost too mutch CPU in the funtion 'update_counter_and_wait:uruc.c:247', and I use gdb to see to *wait_loops*, it says -167777734. The CPU usage grows up from 1% to 100% in one day!
-> > 
-> > 
-> > Here is the sample code to show how I use urcu library:
-> > 
-> > #include <urcu.h>
-> > 
-> > thread ()
-> > {
-> > rcu_register_thread();
-> > 
-> > for (;;) {
-> > rcu_read_lock();
-> > xxx
-> > rcu_read_unlock();
-> 
-> Please triple-check that all your rcu_read_lock() and rcu_read_unlock()
-> are balanced (no double-unlock, nor missing unlock for each lock taken).
-> 
-> The type of problem you get would happen in such a case.
-> 
-> Thanks,
-> 
-> Mathieu
-> 
-> > }
-> > }
-> > 
-> > main()
-> > {
-> > rcu_init();
-> >   pthread_create(, , , , thread);
-> > 
-> > rcu_register_thread();
-> > for (;;)
-> > {
-> >  if (xxx)
-> >    call_rcu();
-> > }
-> > 
-> > }
-> > _______________________________________________
-> > lttng-dev mailing list
-> > lttng-dev@lists.lttng.org
-> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> 
-> -- 
-> Mathieu Desnoyers
-> Operating System Efficiency R&D Consultant
-> EfficiOS Inc.
-> http://www.efficios.com
--- 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+>>  liburcu_la_LIBADD = liburcu-common.la
+>>  
+>> -liburcu_qsbr_la_SOURCES = urcu-qsbr.c urcu-pointer.c $(COMPAT)
+>> +liburcu_qsbr_la_SOURCES = urcu-qsbr.c urcu-pointer.c compat_rcu_gp_qsbr.lds $(COMPAT)
+>>  liburcu_qsbr_la_LIBADD = liburcu-common.la
+>>  
+>> -liburcu_mb_la_SOURCES = urcu.c urcu-pointer.c $(COMPAT)
+>> +liburcu_mb_la_SOURCES = urcu.c urcu-pointer.c compat_rcu_gp_mb.lds $(COMPAT)
+>>  liburcu_mb_la_CFLAGS = -DRCU_MB
+>>  liburcu_mb_la_LIBADD = liburcu-common.la
