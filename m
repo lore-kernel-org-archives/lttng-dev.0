@@ -1,20 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: put_ulong calls in
-	lib_ring_buffer_compat_ioctl()	should be compat?
-Date: Tue, 11 Dec 2012 21:47:04 -0500
-Message-ID: <20121212024704.GB19284__20176.0311880664$1355280761$gmane$org@Krystal>
-References: <50C7B110.3040009@acm.org>
+From: Radhika Chowdary <radhika.putty@gmail.com>
+Subject: Unable to import big LTTng traces
+Date: Wed, 12 Dec 2012 11:29:52 +0530
+Message-ID: <CAMSKo873P7Tm_xGoYfSx1aQMSO7AnQrpUSUCpS-r_mP5EpTOcw__4197.11212530292$1355292044$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0913851133=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from mail-ob0-f172.google.com ([209.85.214.172])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1TicLh-0004us-DV
-	for lttng-dev@lists.lttng.org; Tue, 11 Dec 2012 21:47:05 -0500
-Content-Disposition: inline
-In-Reply-To: <50C7B110.3040009@acm.org>
+	(envelope-from <radhika.putty@gmail.com>) id 1TifMM-0006LS-24
+	for lttng-dev@lists.lttng.org; Wed, 12 Dec 2012 00:59:58 -0500
+Received: by mail-ob0-f172.google.com with SMTP id za17so239986obc.3
+	for <lttng-dev@lists.lttng.org>; Tue, 11 Dec 2012 21:59:52 -0800 (PST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,81 +19,50 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: minyard@acm.org
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Corey Minyard (tcminyard@gmail.com) wrote:
-> I was noticing the that some of the put_ulong calls in  
-> lib_ring_buffer_compat_ioctl() were not compat_put_ulong.  I can't  
-> imagine this is correct.  Here's a patch to fix it, assuming that is  
-> wrong.  It seems to work ok.
+--===============0913851133==
+Content-Type: multipart/alternative; boundary=e89a8ff1ce42c6aa9204d0a1814f
 
-Merged, thanks!
+--e89a8ff1ce42c6aa9204d0a1814f
+Content-Type: text/plain; charset=ISO-8859-1
 
-Mathieu
+Hi
 
->
-> diff --git a/lib/ringbuffer/ring_buffer_vfs.c  
-> b/lib/ringbuffer/ring_buffer_vfs.c
-> index c69b64e..899af81 100644
-> --- a/lib/ringbuffer/ring_buffer_vfs.c
-> +++ b/lib/ringbuffer/ring_buffer_vfs.c
-> @@ -331,7 +331,7 @@ long lib_ring_buffer_compat_ioctl(struct file *filp,  
-> unsigned int cmd,
->          data_size = lib_ring_buffer_get_read_data_size(config, buf);
->          if (data_size > UINT_MAX)
->              return -EFBIG;
-> -        return put_ulong(data_size, arg);
-> +        return compat_put_ulong(data_size, arg);
->      }
->      case RING_BUFFER_COMPAT_GET_PADDED_SUBBUF_SIZE:
->      {
-> @@ -341,12 +341,12 @@ long lib_ring_buffer_compat_ioctl(struct file  
-> *filp, unsigned int cmd,
->          size = PAGE_ALIGN(size);
->          if (size > UINT_MAX)
->              return -EFBIG;
-> -        return put_ulong(size, arg);
-> +        return compat_put_ulong(size, arg);
->      }
->      case RING_BUFFER_COMPAT_GET_MAX_SUBBUF_SIZE:
->          if (chan->backend.subbuf_size > UINT_MAX)
->              return -EFBIG;
-> -        return put_ulong(chan->backend.subbuf_size, arg);
-> +        return compat_put_ulong(chan->backend.subbuf_size, arg);
->      case RING_BUFFER_COMPAT_GET_MMAP_LEN:
->      {
->          unsigned long mmap_buf_len;
-> @@ -358,7 +358,7 @@ long lib_ring_buffer_compat_ioctl(struct file *filp,  
-> unsigned int cmd,
->              mmap_buf_len += chan->backend.subbuf_size;
->          if (mmap_buf_len > UINT_MAX)
->              return -EFBIG;
-> -        return put_ulong(mmap_buf_len, arg);
-> +        return compat_put_ulong(mmap_buf_len, arg);
->      }
->      case RING_BUFFER_COMPAT_GET_MMAP_READ_OFFSET:
->      {
-> @@ -371,7 +371,7 @@ long lib_ring_buffer_compat_ioctl(struct file *filp,  
-> unsigned int cmd,
->          read_offset = buf->backend.array[sb_bindex]->mmap_offset;
->          if (read_offset > UINT_MAX)
->              return -EINVAL;
-> -        return put_ulong(read_offset, arg);
-> +        return compat_put_ulong(read_offset, arg);
->      }
->      case RING_BUFFER_COMPAT_FLUSH:
->          lib_ring_buffer_switch_slow(buf, SWITCH_ACTIVE);
->
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+I am using linuxtools plugins for importing LTTng traces. I have a trace
+folder of size 400MB and when I try to import it in the Traces folder it
+takes for ever to import it. At the bottom left corner I see Indexing...
+Events view gets populated soon but not others.
 
--- 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+Is there a limit on the size of traces that it can import?
+
+Thanks
+Radhika
+
+--e89a8ff1ce42c6aa9204d0a1814f
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+Hi<div><br></div><div>I am using linuxtools plugins for importing LTTng tra=
+ces. I have a trace folder of size 400MB and when I try to import it in the=
+ Traces folder it takes for ever to import it. At the bottom left corner I =
+see Indexing... Events view gets populated soon but not others.</div>
+<div><br></div><div>Is there a limit on the size of traces that it can impo=
+rt?</div><div><br></div><div>Thanks</div><div>Radhika</div>
+
+--e89a8ff1ce42c6aa9204d0a1814f--
+
+
+--===============0913851133==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0913851133==--
