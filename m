@@ -1,16 +1,19 @@
-From: Marc Dumais <marc.dumais@ericsson.com>
-Subject: Re: Unable to import big LTTng traces
-Date: Wed, 12 Dec 2012 07:08:11 -0500
-Message-ID: <50C873AB.9000902__5981.18012208051$1355314125$gmane$org@ericsson.com>
-References: <CAMSKo873P7Tm_xGoYfSx1aQMSO7AnQrpUSUCpS-r_mP5EpTOcw@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: 'call_rcu' unstable?
+Date: Wed, 12 Dec 2012 09:58:48 -0500
+Message-ID: <20121212145848.GA29236__22083.8162735619$1355324378$gmane$org@Krystal>
+References: <tencent_23D20B3D4C566CFC60D89D83@qq.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0784896159=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from imr4.ericy.com ([198.24.6.9])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <marc.dumais@ericsson.com>) id 1Til6b-00019f-L8
-	for lttng-dev@lists.lttng.org; Wed, 12 Dec 2012 07:08:05 -0500
-In-Reply-To: <CAMSKo873P7Tm_xGoYfSx1aQMSO7AnQrpUSUCpS-r_mP5EpTOcw@mail.gmail.com>
+	(envelope-from <compudj@mail.openrapids.net>) id 1Tinlq-000222-LO
+	for lttng-dev@lists.lttng.org; Wed, 12 Dec 2012 09:58:50 -0500
+Content-Disposition: inline
+In-Reply-To: <tencent_23D20B3D4C566CFC60D89D83@qq.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,120 +22,251 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Radhika Chowdary <radhika.putty@gmail.com>
-Cc: lttng-dev@lists.lttng.org
+To: zs <84500316@qq.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0784896159==
-Content-Type: multipart/alternative;
-	boundary="------------040702000107090104030300"
+* zs (84500316@qq.com) wrote:
+> thanks Mathieu Desnoyers for the patience.
+> 
+> >- Did you ensure that you issue rcu_register_thread() at thread start of
+> >  each of your threads ? And rcu_register_thread before returning from
+> >  each thread ?
+> Sure.
+> 
+> >- How is the list g_sslvpnctxlist[h] initialized ? 
+> Here, is the way:
+> I alloc and init 'g_sslvpnctxlist' in one process, and exec rcu_read_lock/unlock/call_rcu in another process(which create many rx/tx threads). 
+>         if (sslvpn_shm_alloc(&shm) == -1) {
+>                 syslog(LOG_ERR, "alloc share stats memory failed %s\n", strerror(errno));
+>                 exit(-1);
+>         }
+>         g_sslvpnctxlist = (void *)shm.addr;
+>         for (i = 0; i < sslvpn_max_users; i++)
+>                  CDS_INIT_LIST_HEAD(&g_sslvpnctxlist[i]);
+> It looks strange, that someone uses share-memory(created by mmap) to
+> hold the 'g_sslvpnctxlist' (+_+);
+> Later I will re-coding this part, not use share-memory. 
 
---------------040702000107090104030300
-Content-Type: text/plain; charset="ISO-8859-1"; format=flowed
-Content-Transfer-Encoding: 7bit
+A couple of things to keep in mind:
 
-Hi Radhika,
+- the shm lists need to be initialized before being passed to the other
+  process adding to them and deleting from them,
+- you need to be aware that a synchronize_rcu() (or call_rcu())
+  executing in the context of one process will not see the RCU read-side
+  locks of another process. So while it should theoretically be OK
+  to do cds_list_add_rcu() from one process and read data from another
+  process, both data read and use of call_rcu/synchronize_rcu need to be
+  performed within the same process, which might make reclaim more
+  complicated. But I understand that you allocate list node, add,
+  remove, and iterate all from the same process, and only initialize
+  the list head from a different process, so this should be good.
+> 
+> Are there concurrent
+> >  modifications of this list ? If yes, are they synchronized with a
+> >  mutex ?
+> I do not use mutex, because all the add/del are executing in one thread. 
 
-This might be a question better asked in the Eclipse Linux Tools project 
-forum:
+Fair enough, as long as your list head init has been performed before
+your first "add".
 
-http://www.eclipse.org/forums/index.php?t=thread&frm_id=60
+> 
+> >- When your application is a state where the call_rcu worker thread
+> >  busy-waits on RCU read-side critical sections, it would be interesting
+> >  to know on what read-side critical section it is waiting. In order to
+> >  do so, from gdb attached to your process when it is hung:
+> >  - we'
+> 
+>   I did attach the process and check each thread, it says:
+> six threads block in 'msgrcv' IO, and one thread hangs in
+> 'update_counter_and_wait:uruc.c:247'
 
-Regards,
+Hrm, interesting! I wonder what messages they are waiting on. This might
+be the root cause of the issue: a blocking msgrcv that waits for data
+that is not coming, and at least one of them would be holding the RCU
+read-side lock while waiting. This would in turn also stop progress from
+the call_rcu worker thread.
 
-Marc
+> 
+>   I do not have the chance to check the rcu_reader TLS values,
+>  because my customer will not allow the problem happlen again(I have
+>  replaced rcu_lock by pthread_mutex).
 
+I understand.
 
-On 12/12/2012 12:59 AM, Radhika Chowdary wrote:
-> Hi
->
-> I am using linuxtools plugins for importing LTTng traces. I have a 
-> trace folder of size 400MB and when I try to import it in the Traces 
-> folder it takes for ever to import it. At the bottom left corner I see 
-> Indexing... Events view gets populated soon but not others.
->
-> Is there a limit on the size of traces that it can import?
->
-> Thanks
-> Radhika
->
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> 
+>  I am trying to reproduce the problem in my testing workplace, if
+>  happens, I will give more.
 
+OK, that would be helpful! But maybe finding out what messages those
+threads are waiting on might be enough. Is it expected by design that
+those threads wait for a long time on msgrcv ? Is the rcu read-side lock
+held across those msgrcv calls ?
 
---------------040702000107090104030300
-Content-Type: text/html; charset="ISO-8859-1"
-Content-Transfer-Encoding: 7bit
+Thanks,
 
-<html>
-  <head>
-    <meta content="text/html; charset=ISO-8859-1"
-      http-equiv="Content-Type">
-  </head>
-  <body bgcolor="#FFFFFF" text="#000000">
-    Hi Radhika,<br>
-    <br>
-    This might be a question better asked in the Eclipse Linux Tools
-    project forum:<br>
-    <br>
-    <a class="moz-txt-link-freetext" href="http://www.eclipse.org/forums/index.php?t=thread&amp;frm_id=60">http://www.eclipse.org/forums/index.php?t=thread&amp;frm_id=60</a><br>
-    <br>
-    Regards,<br>
-    <br>
-    Marc<br>
-    <br>
-    <br>
-    <div class="moz-cite-prefix">On 12/12/2012 12:59 AM, Radhika
-      Chowdary wrote:<br>
-    </div>
-    <blockquote
-cite="mid:CAMSKo873P7Tm_xGoYfSx1aQMSO7AnQrpUSUCpS-r_mP5EpTOcw@mail.gmail.com"
-      type="cite">
-      <meta http-equiv="Content-Type" content="text/html;
-        charset=ISO-8859-1">
-      Hi
-      <div><br>
-      </div>
-      <div>I am using linuxtools plugins for importing LTTng traces. I
-        have a trace folder of size 400MB and when I try to import it in
-        the Traces folder it takes for ever to import it. At the bottom
-        left corner I see Indexing... Events view gets populated soon
-        but not others.</div>
-      <div><br>
-      </div>
-      <div>Is there a limit on the size of traces that it can import?</div>
-      <div><br>
-      </div>
-      <div>Thanks</div>
-      <div>Radhika</div>
-      <br>
-      <fieldset class="mimeAttachmentHeader"></fieldset>
-      <br>
-      <pre wrap="">_______________________________________________
-lttng-dev mailing list
-<a class="moz-txt-link-abbreviated" href="mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a>
-<a class="moz-txt-link-freetext" href="http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a>
-</pre>
-    </blockquote>
-    <br>
-  </body>
-</html>
+Mathieu
 
---------------040702000107090104030300--
-
-
---===============0784896159==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0784896159==--
+> 
+> thanks .
+>    
+> 
+> 
+> 
+> ------------------ Original ------------------
+> From:  "Mathieu Desnoyers"<mathieu.desnoyers@efficios.com>;
+> Date:  Wed, Dec 12, 2012 10:41 AM
+> To:  "zs"<84500316@qq.com>; 
+> Cc:  "lttng-dev"<lttng-dev@lists.lttng.org>; 
+> Subject:  Re: [lttng-dev] 'call_rcu' unstable?
+> 
+> 
+> 
+> * zs (84500316@qq.com) wrote:
+> > Thanks , BUT ...
+> > I really check my code:
+> > 
+> > zs# find .|xargs grep rcu_read 
+> > 
+> > ./sslvpn_ctx.c: rcu_read_lock();
+> > ./sslvpn_ctx.c:                 rcu_read_unlock();
+> > ./sslvpn_ctx.c: rcu_read_unlock();
+> 
+> OK, in that case, continuing on the debugging checklist:
+> 
+> - Did you ensure that you issue rcu_register_thread() at thread start of
+>   each of your threads ? And rcu_register_thread before returning from
+>   each thread ?
+> - How is the list g_sslvpnctxlist[h] initialized ? Are there concurrent
+>   modifications of this list ? If yes, are they synchronized with a
+>   mutex ?
+> - When your application is a state where the call_rcu worker thread
+>   busy-waits on RCU read-side critical sections, it would be interesting
+>   to know on what read-side critical section it is waiting. In order to
+>   do so, from gdb attached to your process when it is hung:
+>   - we'd need to look at the urcu.c "registry" list. We'd need to figure
+>     out which list entries are keeping the busy-loop waiting.
+>   - then, we should look at each thread's "rcu_reader" TLS variable, to
+>     see its address and content.
+>   By comparing the content of the list and each active thread's
+>   rcu_reader TLS variable, we should be able to figure out what is
+>   keeping grace period to complete. If you can provide these dumps, it
+>   would let me help you digging further into your issue.
+> 
+> Thanks,
+> 
+> Mathieu
+> 
+> 
+> > 
+> > AND in sslvpn_ctx.c:
+> > void *sslvpn_lookup_ssl(unsigned long iip)
+> > {
+> >         struct sslvpn_ctx *ctx;
+> >         int h;
+> > 
+> >         h = get_hash(iip, 0);
+> > 
+> >         rcu_read_lock();
+> >         cds_list_for_each_entry_rcu(ctx, &g_sslvpnctxlist[h], cdlist) {
+> >                 if ((ctx->flags & SSL_CTX_ESTABLISHED) && ctx->iip && ctx->iip == iip) {
+> > 
+> >                         uatomic_add(&ctx->ssl_use, 1);
+> >                         rcu_read_unlock();
+> >                         return ctx;
+> >                 }
+> >         }
+> > 
+> >         rcu_read_unlock();
+> >         return NULL;
+> > }
+> > 
+> > By the way, *sslvpn_lookup_ssl* called by 6 threads for TX.
+> > the 7th thread only will call *call_rcu*:
+> > 
+> > int sslvpn_del_ctx(struct sslvpn_ctx *pctx)
+> > {
+> >         ...
+> >         cds_list_del_rcu(&ctx->cdlist);
+> >         ctx->flags |= SSL_CTX_DYING;
+> >         call_rcu(&ctx->rcu, func);
+> >         ...
+> > }
+> > 
+> > 
+> > 
+> > 
+> > 
+> > ------------------ Original ------------------
+> > From:  "Mathieu Desnoyers"<mathieu.desnoyers@efficios.com>;
+> > Date:  Wed, Dec 12, 2012 01:55 AM
+> > To:  "zs"<84500316@qq.com>; 
+> > Cc:  "lttng-dev"<lttng-dev@lists.lttng.org>; 
+> > Subject:  Re: [lttng-dev] 'call_rcu' unstable?
+> > 
+> > 
+> > 
+> > * zs (84500316@qq.com) wrote:
+> > > Hi list,
+> > > 
+> > > I found a big problem in my product, that use urcu 0.7.5. My program cost too mutch CPU in the funtion 'update_counter_and_wait:uruc.c:247', and I use gdb to see to *wait_loops*, it says -167777734. The CPU usage grows up from 1% to 100% in one day!
+> > > 
+> > > 
+> > > Here is the sample code to show how I use urcu library:
+> > > 
+> > > #include <urcu.h>
+> > > 
+> > > thread ()
+> > > {
+> > > rcu_register_thread();
+> > > 
+> > > for (;;) {
+> > > rcu_read_lock();
+> > > xxx
+> > > rcu_read_unlock();
+> > 
+> > Please triple-check that all your rcu_read_lock() and rcu_read_unlock()
+> > are balanced (no double-unlock, nor missing unlock for each lock taken).
+> > 
+> > The type of problem you get would happen in such a case.
+> > 
+> > Thanks,
+> > 
+> > Mathieu
+> > 
+> > > }
+> > > }
+> > > 
+> > > main()
+> > > {
+> > > rcu_init();
+> > >   pthread_create(, , , , thread);
+> > > 
+> > > rcu_register_thread();
+> > > for (;;)
+> > > {
+> > >  if (xxx)
+> > >    call_rcu();
+> > > }
+> > > 
+> > > }
+> > > _______________________________________________
+> > > lttng-dev mailing list
+> > > lttng-dev@lists.lttng.org
+> > > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> > 
+> > -- 
+> > Mathieu Desnoyers
+> > Operating System Efficiency R&D Consultant
+> > EfficiOS Inc.
+> > http://www.efficios.com
+> -- 
+> Mathieu Desnoyers
+> Operating System Efficiency R&D Consultant
+> EfficiOS Inc.
+> http://www.efficios.com
+-- 
+Mathieu Desnoyers
+Operating System Efficiency R&D Consultant
+EfficiOS Inc.
+http://www.efficios.com
