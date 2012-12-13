@@ -1,19 +1,17 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Question about use libbabeltrace
-Date: Thu, 13 Dec 2012 06:35:53 -0500
-Message-ID: <20121213113553.GA9680__6870.45747549764$1355399197$gmane$org@Krystal>
-References: <CANFwon0LGfGbP=a+OBHQMSKWz=_DYPKoEN=-udAmX6LiTTfCng@mail.gmail.com>
+From: Jan Blunck <jblunck@infradead.org>
+Subject: How to document existing tracepoints (e.g. doxygen)
+Date: Thu, 13 Dec 2012 12:42:47 +0100
+Message-ID: <CALe+Z03oNt7L8=5CJUY1ss+-yWBvoTevv=En_4E58Y8d=m_x9A__36480.9968778447$1355399309$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from mail-oa0-f48.google.com ([209.85.219.48])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1Tj750-0003aS-Si
-	for lttng-dev@lists.lttng.org; Thu, 13 Dec 2012 06:35:54 -0500
-Content-Disposition: inline
-In-Reply-To: <CANFwon0LGfGbP=a+OBHQMSKWz=_DYPKoEN=-udAmX6LiTTfCng@mail.gmail.com>
+	(envelope-from <jblunck@gmail.com>) id 1Tj7Bk-0003eZ-Vc
+	for lttng-dev@lists.lttng.org; Thu, 13 Dec 2012 06:42:53 -0500
+Received: by mail-oa0-f48.google.com with SMTP id h2so2016869oag.35
+	for <lttng-dev@lists.lttng.org>; Thu, 13 Dec 2012 03:42:47 -0800 (PST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,75 +20,16 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Hui Zhu <teawater@gmail.com>
-Cc: Hui Zhu <hui_zhu@mentor.com>, lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Hui Zhu (teawater@gmail.com) wrote:
-> Hi guys,
-> 
-> Maybe you had known that I am working on add CTF support to GDB that
-> use libbabeltrace from my prev mail.
-> 
-> I use libbabeltrace in this patch
-> http://sourceware.org/ml/gdb-patches/2012-11/msg00717.html
-> 
-> What I check if current machine have libbabeltrace in following way:
-> +    if test "x$enable_glibtest" = "xyes" ; then
-> +      ac_save_CFLAGS="$CFLAGS"
-> +      ac_save_LIBS="$LIBS"
-> +      CFLAGS="$CFLAGS $GLIB_CFLAGS"
-> +      LIBS="$LIBS -lbabeltrace -lbabeltrace-ctf"
-> +      rm -f conf.glibtest
-> +      if test "$cross_compiling" = yes; then :
-> +  $as_echo $ac_n "cross compiling; assumed OK... $ac_c"
-> +else
-> +  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-> +/* end confdefs.h.  */
-> +
-> +#include <babeltrace/babeltrace.h>
-> +#include <babeltrace/types.h>
-> +#include <babeltrace/ctf/events.h>
-> +#include <babeltrace/ctf/iterator.h>
-> +
-> +int
-> +main ()
-> +{
-> +  if (!bt_context_create())
-> +    return 1;
-> +  return 0;
-> +}
-> +
-> +_ACEOF
-> +if ac_fn_c_try_run "$LINENO"; then :
-> +
-> +else
-> +  no_glib=yes
-> +fi
-> 
-> Just try to build example with -lbabeltrace -lbabeltrace-ctf.
-> 
-> My question is does libbabeltrace have better way to handle it?  For
-> example: pkg-config
+List,
 
-We don't have pkg-config support in babeltrace yet, but we would gladly
-welcome a contribution adding it! :)
+Does anyone have experience or thoughts on how to document existing tracepoints?
 
-Thanks,
+I tried to do that with doxygen but it did not work out of the box.
+The target audience are sysadmins that should not or could not be
+forced to read the source.
 
-Mathieu
-
-> 
-> Thanks,
-> Hui
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+Regards,
+Jan
