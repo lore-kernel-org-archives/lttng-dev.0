@@ -1,20 +1,20 @@
-From: Yannick Brosseau <yannick.brosseau@gmail.com>
-Subject: Re: Question about use libbabeltrace
-Date: Fri, 14 Dec 2012 01:13:06 -0500
-Message-ID: <50CAC372.5000807__49985.3011024699$1355465633$gmane$org@gmail.com>
-References: <CANFwon0LGfGbP=a+OBHQMSKWz=_DYPKoEN=-udAmX6LiTTfCng@mail.gmail.com>
-	<20121213113553.GA9680@Krystal>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [BABELTRACE PATCH] Provides a basic pkg-config	file
+	for libbabeltrace
+Date: Fri, 14 Dec 2012 07:36:35 -0500
+Message-ID: <20121214123635.GA12399__20368.1795778268$1355488638$gmane$org@Krystal>
+References: <1355465503-1266-1-git-send-email-yannick.brosseau@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ia0-f176.google.com ([209.85.210.176])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <yannick.brosseau@gmail.com>) id 1TjOWK-00040Q-A0
-	for lttng-dev@lists.lttng.org; Fri, 14 Dec 2012 01:13:16 -0500
-Received: by mail-ia0-f176.google.com with SMTP id y26so2764968iab.35
-	for <lttng-dev@lists.lttng.org>; Thu, 13 Dec 2012 22:13:10 -0800 (PST)
-In-Reply-To: <20121213113553.GA9680@Krystal>
+	(envelope-from <compudj@mail.openrapids.net>) id 1TjUVJ-0007H7-8o
+	for lttng-dev@lists.lttng.org; Fri, 14 Dec 2012 07:36:37 -0500
+Content-Disposition: inline
+In-Reply-To: <1355465503-1266-1-git-send-email-yannick.brosseau@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,61 +23,80 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Hui Zhu <hui_zhu@mentor.com>, lttng-dev <lttng-dev@lists.lttng.org>
+To: Yannick Brosseau <yannick.brosseau@gmail.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On 2012-12-13 06:35, Mathieu Desnoyers wrote:
-> * Hui Zhu (teawater@gmail.com) wrote:
->> Hi guys,
->>
->> Maybe you had known that I am working on add CTF support to GDB that
->> use libbabeltrace from my prev mail.
->>
->> I use libbabeltrace in this patch
->> http://sourceware.org/ml/gdb-patches/2012-11/msg00717.html
->>
->> What I check if current machine have libbabeltrace in following way:
->> +    if test "x$enable_glibtest" = "xyes" ; then
->> +      ac_save_CFLAGS="$CFLAGS"
->> +      ac_save_LIBS="$LIBS"
->> +      CFLAGS="$CFLAGS $GLIB_CFLAGS"
->> +      LIBS="$LIBS -lbabeltrace -lbabeltrace-ctf"
->> +      rm -f conf.glibtest
->> +      if test "$cross_compiling" = yes; then :
->> +  $as_echo $ac_n "cross compiling; assumed OK... $ac_c"
->> +else
->> +  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
->> +/* end confdefs.h.  */
->> +
->> +#include <babeltrace/babeltrace.h>
->> +#include <babeltrace/types.h>
->> +#include <babeltrace/ctf/events.h>
->> +#include <babeltrace/ctf/iterator.h>
->> +
->> +int
->> +main ()
->> +{
->> +  if (!bt_context_create())
->> +    return 1;
->> +  return 0;
->> +}
->> +
->> +_ACEOF
->> +if ac_fn_c_try_run "$LINENO"; then :
->> +
->> +else
->> +  no_glib=yes
->> +fi
->>
->> Just try to build example with -lbabeltrace -lbabeltrace-ctf.
->>
->> My question is does libbabeltrace have better way to handle it?  For
->> example: pkg-config
-> We don't have pkg-config support in babeltrace yet, but we would gladly
-> welcome a contribution adding it! :)
->
+* Yannick Brosseau (yannick.brosseau@gmail.com) wrote:
+> This pkg-config file specify the usage of libbabeltrace and libbabeltrace-ctf since ctf is
+> the only format currently supported and tested.
+> 
+> Signed-off-by: Yannick Brosseau <yannick.brosseau@gmail.com>
 
-I finally did it...
+Merged, thanks!
 
-Yannick
+Mathieu
+
+> ---
+>  Makefile.am      |    3 +++
+>  babeltrace.pc.in |   14 ++++++++++++++
+>  configure.ac     |    1 +
+>  3 files changed, 18 insertions(+)
+>  create mode 100644 babeltrace.pc.in
+> 
+> diff --git a/Makefile.am b/Makefile.am
+> index 7a63612..b25b58f 100644
+> --- a/Makefile.am
+> +++ b/Makefile.am
+> @@ -8,3 +8,6 @@ dist_doc_DATA = ChangeLog LICENSE mit-license.txt gpl-2.0.txt \
+>  		std-ext-lib.txt
+>  
+>  dist_noinst_DATA = CodingStyle
+> +
+> +pkgconfigdir = $(libdir)/pkgconfig
+> +pkgconfig_DATA = babeltrace.pc
+> diff --git a/babeltrace.pc.in b/babeltrace.pc.in
+> new file mode 100644
+> index 0000000..12349dd
+> --- /dev/null
+> +++ b/babeltrace.pc.in
+> @@ -0,0 +1,14 @@
+> +prefix=@prefix@
+> +exec_prefix=@exec_prefix@
+> +libdir=@libdir@
+> +includedir=@includedir@
+> +
+> +Name: Babeltrace
+> +Description: libbabeltrace provides a reader for trace files, reading mainly the 
+> +Common Trace Format (CTF).
+> +Version: @PACKAGE_VERSION@
+> +Requires:
+> +Requires.private: uuid popt
+> +Libs: -L${libdir} -lbabeltrace -lbabeltrace-ctf
+> +Cflags: -I${includedir} 
+> +
+> diff --git a/configure.ac b/configure.ac
+> index 19f16a6..86dd17c 100644
+> --- a/configure.ac
+> +++ b/configure.ac
+> @@ -109,5 +109,6 @@ AC_CONFIG_FILES([
+>  	tests/lib/Makefile
+>  	extras/Makefile
+>  	extras/valgrind/Makefile
+> +	babeltrace.pc
+>  ])
+>  AC_OUTPUT
+> -- 
+> 1.7.10.4
+> 
+> 
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- 
+Mathieu Desnoyers
+Operating System Efficiency R&D Consultant
+EfficiOS Inc.
+http://www.efficios.com
