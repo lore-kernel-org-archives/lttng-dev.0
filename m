@@ -1,16 +1,37 @@
-From: =?ISO-8859-1?Q?S=E9bastien_Barth=E9l=E9my?= <barthelemy@crans.org>
-Subject: tracepoint generation is fragile wrt macro expansion
-Date: Fri, 14 Dec 2012 17:36:22 +0100
-Message-ID: <CAPkDDd4UfCdhoY0s1Es55NkuXNt4qFa4v1wiLDXutcqHOvPMCg__13384.589556563$1355503034$gmane$org@mail.gmail.com>
+From: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
+Subject: Re: [RFC PATCH urcu] Add "last" output parameter to
+	pop/dequeue
+Date: Fri, 14 Dec 2012 08:36:09 -0800
+Message-ID: <20121214163609.GD2542__21414.2754245133$1355503041$gmane$org@linux.vnet.ibm.com>
+References: <20121213114456.GA9780@Krystal>
+Reply-To: paulmck@linux.vnet.ibm.com
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary=f46d043743efcad22704d0d2a158
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-lb0-f176.google.com ([209.85.217.176])
+Received: from e37.co.us.ibm.com ([32.97.110.158])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <sebastien.barthelemy@gmail.com>) id 1TjYFR-0000ga-AP
-	for lttng-dev@lists.lttng.org; Fri, 14 Dec 2012 11:36:29 -0500
-Received: by mail-lb0-f176.google.com with SMTP id k6so3003259lbo.35
-	for <lttng-dev@lists.lttng.org>; Fri, 14 Dec 2012 08:36:23 -0800 (PST)
+	(envelope-from <paulmck@linux.vnet.ibm.com>) id 1TjYFb-0000hA-Bu
+	for lttng-dev@lists.lttng.org; Fri, 14 Dec 2012 11:36:39 -0500
+Received: from /spool/local
+	by e37.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only!
+	Violators will be prosecuted
+	for <lttng-dev@lists.lttng.org> from <paulmck@linux.vnet.ibm.com>;
+	Fri, 14 Dec 2012 09:36:33 -0700
+Received: from d03relay04.boulder.ibm.com (d03relay04.boulder.ibm.com
+	[9.17.195.106])
+	by d03dlp03.boulder.ibm.com (Postfix) with ESMTP id 6B7B619D8059
+	for <lttng-dev@lists.lttng.org>; Fri, 14 Dec 2012 09:36:19 -0700 (MST)
+Received: from d03av02.boulder.ibm.com (d03av02.boulder.ibm.com [9.17.195.168])
+	by d03relay04.boulder.ibm.com (8.13.8/8.13.8/NCO v10.0) with ESMTP id
+	qBEGaEYH113004
+	for <lttng-dev@lists.lttng.org>; Fri, 14 Dec 2012 09:36:15 -0700
+Received: from d03av02.boulder.ibm.com (loopback [127.0.0.1])
+	by d03av02.boulder.ibm.com (8.14.4/8.13.1/NCO v10.0 AVout) with ESMTP
+	id qBEGaDe7002122
+	for <lttng-dev@lists.lttng.org>; Fri, 14 Dec 2012 09:36:13 -0700
+Content-Disposition: inline
+In-Reply-To: <20121213114456.GA9780@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,216 +40,697 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev@lists.lttng.org, rp@svcs.cs.pdx.edu
 List-Id: lttng-dev@lists.lttng.org
 
---f46d043743efcad22704d0d2a158
-Content-Type: multipart/alternative; boundary=f46d043743efcad22504d0d2a156
+On Thu, Dec 13, 2012 at 06:44:56AM -0500, Mathieu Desnoyers wrote:
+> I noticed that in addition to having:
+> 
+> - push/enqueue returning whether the stack/queue was empty prior to the
+>   operation,
+> - pop_all/splice, by nature, emptying the stack/queue,
+> 
+> it can be interesting to make pop/dequeue operations return whether they
+> are returning the last element of the stack/queue (therefore emptying
+> it). This allow extending the test-cases covering the number of empty
+> stack/queue encountered by both push/enqueuer and pop/dequeuer threads
+> not only to push/enqueue paired with pop_all/splice, but also to
+> pop/dequeue.
+> 
+> In the case of wfstack, this unfortunately requires to modify an already
+> exposed API. As a RFC, one question we should answer is how we want to
+> handle the way forward: should we add new functions to the wfstack API
+> and leave the existing ones alone ? 
+> 
+> Thoughts ?
 
---f46d043743efcad22504d0d2a156
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
+Hmmm...  What is the use case, given that a push might happen immediately
+after the pop said that the stack/queue was empty?  Of course, if we
+somehow know that there are no concurrent pushes, we could instead
+check for empty.
 
-Hello,
+So what am I missing here?
 
-please find attached a small patch which demonstrates the problem.
+							Thanx, Paul
 
-The patch simply renames the test file ust_tests_hello.h into
-ust_tests-linux-hello.h. The build then fails on linux because the "linux"
-in
-
-    #define TRACEPOINT_INCLUDE_FILE ./ust_tests-linux-hello.h
-
-gets expanded to "1", and it then tries to include ust_tests-1-hello.h.
-
-I do not know if this can be fixed, hopefully you'll have a better idea.
-
-I came into the problem because I generate the tracepoint definition file
-(=E0 la lttng-gen-tp) but define TRACEPOINT_INCLUDE_FILE to the full path o=
-f
-the generated file, which happens to be in the build directory, something
-like .../build-sys-linux-x86_64/..., So I'm more exposed.
-
-Maybe a possible solution would involve __FILE__?
-
-Cheers
-
--- S=E9bastien
-
---f46d043743efcad22504d0d2a156
-Content-Type: text/html; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
-
-Hello,<br><br>please find attached a small patch which demonstrates the pro=
-blem.<br><br>The patch simply renames the test file ust_tests_hello.h into =
-ust_tests-linux-hello.h. The build then fails on linux because the &quot;li=
-nux&quot; in<br>
-<br>=A0=A0=A0 #define TRACEPOINT_INCLUDE_FILE ./ust_tests-linux-hello.h<br>=
-<br>gets expanded to &quot;1&quot;, and it then tries to include ust_tests-=
-1-hello.h.<br><br>I do not know if this can be fixed, hopefully you&#39;ll =
-have a better idea.<br>
-<br>I came into the problem because I generate the tracepoint definition fi=
-le (=E0 la lttng-gen-tp) but define TRACEPOINT_INCLUDE_FILE to the full pat=
-h of the generated file, which happens to be in the build directory, someth=
-ing like .../build-sys-linux-x86_64/..., So I&#39;m more exposed.<br>
-<br>Maybe a possible solution would involve __FILE__?<br><br>Cheers<br><br>=
--- S=E9bastien<br><br><br>
-
---f46d043743efcad22504d0d2a156--
-
---f46d043743efcad22704d0d2a158
-Content-Type: application/octet-stream;
-	name="0001-make-ust_tests_hello-fail-because-of-macro-expansion.patch"
-Content-Disposition: attachment;
-	filename="0001-make-ust_tests_hello-fail-because-of-macro-expansion.patch"
-Content-Transfer-Encoding: base64
-X-Attachment-Id: f_hapizyig0
-
-RnJvbSAxMzU1NTRjNDI5NjVmZTk4OGY5OTk4NTdkNWYwMjY2NmUzZmZhMjdmIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiA9P1VURi04P3E/Uz1DMz1BOWJhc3RpZW49MjBCYXJ0aD1DMz1B
-OWw9QzM9QTlteT89CiA8c2JhcnRoZWxlbXlAYWxkZWJhcmFuLXJvYm90aWNzLmNvbT4KRGF0ZTog
-RnJpLCAxNCBEZWMgMjAxMiAxNzoxOTowNyArMDEwMApTdWJqZWN0OiBbUEFUQ0hdIG1ha2UgdXN0
-X3Rlc3RzX2hlbGxvIGZhaWwgYmVjYXVzZSBvZiBtYWNybyBleHBhbnNpb24KCnJlbmFtaW5nIHVz
-dF90ZXN0c19oZWxsby5oIGludG8gdXN0X3Rlc3RzLWxpbnV4LWhlbGxvLmgKbWFrZXMgdGhlIGV4
-YW1wbGUgZmFpbCBiZWNhdXNlIHRoZSAtbGludXgtIiBpbgpUUkFDRVBPSU5UX0lOQ0xVREVfRklM
-RSBnZXRzIGV4cGFuZGVkIHRvICItMS0iLgotLS0KIHRlc3RzL2hlbGxvL01ha2VmaWxlLmFtICAg
-ICAgICAgICAgIHwgICAgMiArLQogdGVzdHMvaGVsbG8vaGVsbG8uYyAgICAgICAgICAgICAgICAg
-fCAgICAyICstCiB0ZXN0cy9oZWxsby90cC5jICAgICAgICAgICAgICAgICAgICB8ICAgIDIgKy0K
-IHRlc3RzL2hlbGxvL3VzdF90ZXN0cy1saW51eC1oZWxsby5oIHwgICA3NiArKysrKysrKysrKysr
-KysrKysrKysrKysrKysrKysrKysrKwogdGVzdHMvaGVsbG8vdXN0X3Rlc3RzX2hlbGxvLmggICAg
-ICAgfCAgIDc2IC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiA1IGZpbGVzIGNo
-YW5nZWQsIDc5IGluc2VydGlvbnMoKyksIDc5IGRlbGV0aW9ucygtKQogY3JlYXRlIG1vZGUgMTAw
-NjQ0IHRlc3RzL2hlbGxvL3VzdF90ZXN0cy1saW51eC1oZWxsby5oCiBkZWxldGUgbW9kZSAxMDA2
-NDQgdGVzdHMvaGVsbG8vdXN0X3Rlc3RzX2hlbGxvLmgKCmRpZmYgLS1naXQgYS90ZXN0cy9oZWxs
-by9NYWtlZmlsZS5hbSBiL3Rlc3RzL2hlbGxvL01ha2VmaWxlLmFtCmluZGV4IDFlZTdmOGQuLmVl
-Y2Y4ODUgMTAwNjQ0Ci0tLSBhL3Rlc3RzL2hlbGxvL01ha2VmaWxlLmFtCisrKyBiL3Rlc3RzL2hl
-bGxvL01ha2VmaWxlLmFtCkBAIC0xLDcgKzEsNyBAQAogQU1fQ1BQRkxBR1MgPSAtSSQodG9wX3Ny
-Y2RpcikvaW5jbHVkZSAtSSQodG9wX2J1aWxkZGlyKS9pbmNsdWRlIC1Xc3lzdGVtLWhlYWRlcnMK
-IAogbm9pbnN0X1BST0dSQU1TID0gaGVsbG8KLWhlbGxvX1NPVVJDRVMgPSBoZWxsby5jIHRwLmMg
-dXN0X3Rlc3RzX2hlbGxvLmgKK2hlbGxvX1NPVVJDRVMgPSBoZWxsby5jIHRwLmMgdXN0X3Rlc3Rz
-LWxpbnV4LWhlbGxvLmgKIGhlbGxvX0xEQUREID0gJCh0b3BfYnVpbGRkaXIpL2xpYmx0dG5nLXVz
-dC9saWJsdHRuZy11c3QubGEKIGhlbGxvX0NGTEFHUyA9IC1XZXJyb3I9b2xkLXN0eWxlLWRlZmlu
-aXRpb24KIApkaWZmIC0tZ2l0IGEvdGVzdHMvaGVsbG8vaGVsbG8uYyBiL3Rlc3RzL2hlbGxvL2hl
-bGxvLmMKaW5kZXggMGMxOGMwMS4uZTc2YjMzMCAxMDA2NDQKLS0tIGEvdGVzdHMvaGVsbG8vaGVs
-bG8uYworKysgYi90ZXN0cy9oZWxsby9oZWxsby5jCkBAIC0zMSw3ICszMSw3IEBACiAjaW5jbHVk
-ZSA8c3RkYm9vbC5oPgogCiAjZGVmaW5lIFRSQUNFUE9JTlRfREVGSU5FCi0jaW5jbHVkZSAidXN0
-X3Rlc3RzX2hlbGxvLmgiCisjaW5jbHVkZSAidXN0X3Rlc3RzLWxpbnV4LWhlbGxvLmgiCiAKIHZv
-aWQgaW50aGFuZGxlcihpbnQgc2lnKQogewpkaWZmIC0tZ2l0IGEvdGVzdHMvaGVsbG8vdHAuYyBi
-L3Rlc3RzL2hlbGxvL3RwLmMKaW5kZXggNDc5MDk2NS4uN2FlYWNhMCAxMDA2NDQKLS0tIGEvdGVz
-dHMvaGVsbG8vdHAuYworKysgYi90ZXN0cy9oZWxsby90cC5jCkBAIC0yMyw0ICsyMyw0IEBACiAg
-Ki8KIAogI2RlZmluZSBUUkFDRVBPSU5UX0NSRUFURV9QUk9CRVMKLSNpbmNsdWRlICJ1c3RfdGVz
-dHNfaGVsbG8uaCIKKyNpbmNsdWRlICJ1c3RfdGVzdHMtbGludXgtaGVsbG8uaCIKZGlmZiAtLWdp
-dCBhL3Rlc3RzL2hlbGxvL3VzdF90ZXN0cy1saW51eC1oZWxsby5oIGIvdGVzdHMvaGVsbG8vdXN0
-X3Rlc3RzLWxpbnV4LWhlbGxvLmgKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMC4u
-NDhhNTQxOQotLS0gL2Rldi9udWxsCisrKyBiL3Rlc3RzL2hlbGxvL3VzdF90ZXN0cy1saW51eC1o
-ZWxsby5oCkBAIC0wLDAgKzEsNzYgQEAKKyN1bmRlZiBUUkFDRVBPSU5UX1BST1ZJREVSCisjZGVm
-aW5lIFRSQUNFUE9JTlRfUFJPVklERVIgdXN0X3Rlc3RzX2hlbGxvCisKKyNpZiAhZGVmaW5lZChf
-VFJBQ0VQT0lOVF9VU1RfVEVTVFNfSEVMTE9fSCkgfHwgZGVmaW5lZChUUkFDRVBPSU5UX0hFQURF
-Ul9NVUxUSV9SRUFEKQorI2RlZmluZSBfVFJBQ0VQT0lOVF9VU1RfVEVTVFNfSEVMTE9fSAorCisj
-aWZkZWYgX19jcGx1c3BsdXMKK2V4dGVybiAiQyIgeworI2VuZGlmCisKKy8qCisgKiBDb3B5cmln
-aHQgKEMpIDIwMTEgIE1hdGhpZXUgRGVzbm95ZXJzIDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lv
-cy5jb20+CisgKgorICogUGVybWlzc2lvbiBpcyBoZXJlYnkgZ3JhbnRlZCwgZnJlZSBvZiBjaGFy
-Z2UsIHRvIGFueSBwZXJzb24gb2J0YWluaW5nIGEgY29weQorICogb2YgdGhpcyBzb2Z0d2FyZSBh
-bmQgYXNzb2NpYXRlZCBkb2N1bWVudGF0aW9uIGZpbGVzICh0aGUgIlNvZnR3YXJlIiksIHRvIGRl
-YWwKKyAqIGluIHRoZSBTb2Z0d2FyZSB3aXRob3V0IHJlc3RyaWN0aW9uLCBpbmNsdWRpbmcgd2l0
-aG91dCBsaW1pdGF0aW9uIHRoZSByaWdodHMKKyAqIHRvIHVzZSwgY29weSwgbW9kaWZ5LCBtZXJn
-ZSwgcHVibGlzaCwgZGlzdHJpYnV0ZSwgc3VibGljZW5zZSwgYW5kL29yIHNlbGwKKyAqIGNvcGll
-cyBvZiB0aGUgU29mdHdhcmUsIGFuZCB0byBwZXJtaXQgcGVyc29ucyB0byB3aG9tIHRoZSBTb2Z0
-d2FyZSBpcworICogZnVybmlzaGVkIHRvIGRvIHNvLCBzdWJqZWN0IHRvIHRoZSBmb2xsb3dpbmcg
-Y29uZGl0aW9uczoKKyAqCisgKiBUaGUgYWJvdmUgY29weXJpZ2h0IG5vdGljZSBhbmQgdGhpcyBw
-ZXJtaXNzaW9uIG5vdGljZSBzaGFsbCBiZSBpbmNsdWRlZCBpbgorICogYWxsIGNvcGllcyBvciBz
-dWJzdGFudGlhbCBwb3J0aW9ucyBvZiB0aGUgU29mdHdhcmUuCisgKgorICogVEhFIFNPRlRXQVJF
-IElTIFBST1ZJREVEICJBUyBJUyIsIFdJVEhPVVQgV0FSUkFOVFkgT0YgQU5ZIEtJTkQsIEVYUFJF
-U1MgT1IKKyAqIElNUExJRUQsIElOQ0xVRElORyBCVVQgTk9UIExJTUlURUQgVE8gVEhFIFdBUlJB
-TlRJRVMgT0YgTUVSQ0hBTlRBQklMSVRZLAorICogRklUTkVTUyBGT1IgQSBQQVJUSUNVTEFSIFBV
-UlBPU0UgQU5EIE5PTklORlJJTkdFTUVOVC4gSU4gTk8gRVZFTlQgU0hBTEwgVEhFCisgKiBBVVRI
-T1JTIE9SIENPUFlSSUdIVCBIT0xERVJTIEJFIExJQUJMRSBGT1IgQU5ZIENMQUlNLCBEQU1BR0VT
-IE9SIE9USEVSCisgKiBMSUFCSUxJVFksIFdIRVRIRVIgSU4gQU4gQUNUSU9OIE9GIENPTlRSQUNU
-LCBUT1JUIE9SIE9USEVSV0lTRSwgQVJJU0lORyBGUk9NLAorICogT1VUIE9GIE9SIElOIENPTk5F
-Q1RJT04gV0lUSCBUSEUgU09GVFdBUkUgT1IgVEhFIFVTRSBPUiBPVEhFUiBERUFMSU5HUyBJTiBU
-SEUKKyAqIFNPRlRXQVJFLgorICovCisKKyNpbmNsdWRlIDxsdHRuZy90cmFjZXBvaW50Lmg+Cisj
-aW5jbHVkZSA8c3RkYm9vbC5oPgorCitUUkFDRVBPSU5UX0VWRU5UKHVzdF90ZXN0c19oZWxsbywg
-dHB0ZXN0LAorCVRQX0FSR1MoaW50LCBhbmludCwgaW50LCBuZXRpbnQsIGxvbmcgKiwgdmFsdWVz
-LAorCQljaGFyICosIHRleHQsIHNpemVfdCwgdGV4dGxlbiwKKwkJZG91YmxlLCBkb3VibGVhcmcs
-IGZsb2F0LCBmbG9hdGFyZywKKwkJYm9vbCwgYm9vbGFyZyksCisJVFBfRklFTERTKAorCQljdGZf
-aW50ZWdlcihpbnQsIGludGZpZWxkLCBhbmludCkKKwkJY3RmX2ludGVnZXJfaGV4KGludCwgaW50
-ZmllbGQyLCBhbmludCkKKwkJY3RmX2ludGVnZXIobG9uZywgbG9uZ2ZpZWxkLCBhbmludCkKKwkJ
-Y3RmX2ludGVnZXJfbmV0d29yayhpbnQsIG5ldGludGZpZWxkLCBuZXRpbnQpCisJCWN0Zl9pbnRl
-Z2VyX25ldHdvcmtfaGV4KGludCwgbmV0aW50ZmllbGRoZXgsIG5ldGludCkKKwkJY3RmX2FycmF5
-KGxvbmcsIGFycmZpZWxkMSwgdmFsdWVzLCAzKQorCQljdGZfYXJyYXlfdGV4dChjaGFyLCBhcnJm
-aWVsZDIsIHRleHQsIDEwKQorCQljdGZfc2VxdWVuY2UoY2hhciwgc2VxZmllbGQxLCB0ZXh0LAor
-CQkJICAgICBzaXplX3QsIHRleHRsZW4pCisJCWN0Zl9zZXF1ZW5jZV90ZXh0KGNoYXIsIHNlcWZp
-ZWxkMiwgdGV4dCwKKwkJCSAgICAgc2l6ZV90LCB0ZXh0bGVuKQorCQljdGZfc3RyaW5nKHN0cmlu
-Z2ZpZWxkLCB0ZXh0KQorCQljdGZfZmxvYXQoZmxvYXQsIGZsb2F0ZmllbGQsIGZsb2F0YXJnKQor
-CQljdGZfZmxvYXQoZG91YmxlLCBkb3VibGVmaWVsZCwgZG91YmxlYXJnKQorCQljdGZfaW50ZWdl
-cihib29sLCBib29sZmllbGQsIGJvb2xhcmcpCisJCWN0Zl9pbnRlZ2VyX25vd3JpdGUoaW50LCBm
-aWx0ZXJmaWVsZCwgYW5pbnQpCisJKQorKQorCitUUkFDRVBPSU5UX0VWRU5UKHVzdF90ZXN0c19o
-ZWxsbywgdHB0ZXN0X3NpZ2hhbmRsZXIsCisJVFBfQVJHUygpLAorCVRQX0ZJRUxEUygpCispCisK
-KyNlbmRpZiAvKiBfVFJBQ0VQT0lOVF9VU1RfVEVTVFNfSEVMTE9fSCAqLworCisjdW5kZWYgVFJB
-Q0VQT0lOVF9JTkNMVURFX0ZJTEUKKyNkZWZpbmUgVFJBQ0VQT0lOVF9JTkNMVURFX0ZJTEUgLi91
-c3RfdGVzdHMtbGludXgtaGVsbG8uaAorCisvKiBUaGlzIHBhcnQgbXVzdCBiZSBvdXRzaWRlIGlm
-ZGVmIHByb3RlY3Rpb24gKi8KKyNpbmNsdWRlIDxsdHRuZy90cmFjZXBvaW50LWV2ZW50Lmg+CisK
-KyNpZmRlZiBfX2NwbHVzcGx1cworfQorI2VuZGlmCmRpZmYgLS1naXQgYS90ZXN0cy9oZWxsby91
-c3RfdGVzdHNfaGVsbG8uaCBiL3Rlc3RzL2hlbGxvL3VzdF90ZXN0c19oZWxsby5oCmRlbGV0ZWQg
-ZmlsZSBtb2RlIDEwMDY0NAppbmRleCA3YjZiNzg3Li4wMDAwMDAwCi0tLSBhL3Rlc3RzL2hlbGxv
-L3VzdF90ZXN0c19oZWxsby5oCisrKyAvZGV2L251bGwKQEAgLTEsNzYgKzAsMCBAQAotI3VuZGVm
-IFRSQUNFUE9JTlRfUFJPVklERVIKLSNkZWZpbmUgVFJBQ0VQT0lOVF9QUk9WSURFUiB1c3RfdGVz
-dHNfaGVsbG8KLQotI2lmICFkZWZpbmVkKF9UUkFDRVBPSU5UX1VTVF9URVNUU19IRUxMT19IKSB8
-fCBkZWZpbmVkKFRSQUNFUE9JTlRfSEVBREVSX01VTFRJX1JFQUQpCi0jZGVmaW5lIF9UUkFDRVBP
-SU5UX1VTVF9URVNUU19IRUxMT19ICi0KLSNpZmRlZiBfX2NwbHVzcGx1cwotZXh0ZXJuICJDIiB7
-Ci0jZW5kaWYKLQotLyoKLSAqIENvcHlyaWdodCAoQykgMjAxMSAgTWF0aGlldSBEZXNub3llcnMg
-PG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4KLSAqCi0gKiBQZXJtaXNzaW9uIGlzIGhl
-cmVieSBncmFudGVkLCBmcmVlIG9mIGNoYXJnZSwgdG8gYW55IHBlcnNvbiBvYnRhaW5pbmcgYSBj
-b3B5Ci0gKiBvZiB0aGlzIHNvZnR3YXJlIGFuZCBhc3NvY2lhdGVkIGRvY3VtZW50YXRpb24gZmls
-ZXMgKHRoZSAiU29mdHdhcmUiKSwgdG8gZGVhbAotICogaW4gdGhlIFNvZnR3YXJlIHdpdGhvdXQg
-cmVzdHJpY3Rpb24sIGluY2x1ZGluZyB3aXRob3V0IGxpbWl0YXRpb24gdGhlIHJpZ2h0cwotICog
-dG8gdXNlLCBjb3B5LCBtb2RpZnksIG1lcmdlLCBwdWJsaXNoLCBkaXN0cmlidXRlLCBzdWJsaWNl
-bnNlLCBhbmQvb3Igc2VsbAotICogY29waWVzIG9mIHRoZSBTb2Z0d2FyZSwgYW5kIHRvIHBlcm1p
-dCBwZXJzb25zIHRvIHdob20gdGhlIFNvZnR3YXJlIGlzCi0gKiBmdXJuaXNoZWQgdG8gZG8gc28s
-IHN1YmplY3QgdG8gdGhlIGZvbGxvd2luZyBjb25kaXRpb25zOgotICoKLSAqIFRoZSBhYm92ZSBj
-b3B5cmlnaHQgbm90aWNlIGFuZCB0aGlzIHBlcm1pc3Npb24gbm90aWNlIHNoYWxsIGJlIGluY2x1
-ZGVkIGluCi0gKiBhbGwgY29waWVzIG9yIHN1YnN0YW50aWFsIHBvcnRpb25zIG9mIHRoZSBTb2Z0
-d2FyZS4KLSAqCi0gKiBUSEUgU09GVFdBUkUgSVMgUFJPVklERUQgIkFTIElTIiwgV0lUSE9VVCBX
-QVJSQU5UWSBPRiBBTlkgS0lORCwgRVhQUkVTUyBPUgotICogSU1QTElFRCwgSU5DTFVESU5HIEJV
-VCBOT1QgTElNSVRFRCBUTyBUSEUgV0FSUkFOVElFUyBPRiBNRVJDSEFOVEFCSUxJVFksCi0gKiBG
-SVRORVNTIEZPUiBBIFBBUlRJQ1VMQVIgUFVSUE9TRSBBTkQgTk9OSU5GUklOR0VNRU5ULiBJTiBO
-TyBFVkVOVCBTSEFMTCBUSEUKLSAqIEFVVEhPUlMgT1IgQ09QWVJJR0hUIEhPTERFUlMgQkUgTElB
-QkxFIEZPUiBBTlkgQ0xBSU0sIERBTUFHRVMgT1IgT1RIRVIKLSAqIExJQUJJTElUWSwgV0hFVEhF
-UiBJTiBBTiBBQ1RJT04gT0YgQ09OVFJBQ1QsIFRPUlQgT1IgT1RIRVJXSVNFLCBBUklTSU5HIEZS
-T00sCi0gKiBPVVQgT0YgT1IgSU4gQ09OTkVDVElPTiBXSVRIIFRIRSBTT0ZUV0FSRSBPUiBUSEUg
-VVNFIE9SIE9USEVSIERFQUxJTkdTIElOIFRIRQotICogU09GVFdBUkUuCi0gKi8KLQotI2luY2x1
-ZGUgPGx0dG5nL3RyYWNlcG9pbnQuaD4KLSNpbmNsdWRlIDxzdGRib29sLmg+Ci0KLVRSQUNFUE9J
-TlRfRVZFTlQodXN0X3Rlc3RzX2hlbGxvLCB0cHRlc3QsCi0JVFBfQVJHUyhpbnQsIGFuaW50LCBp
-bnQsIG5ldGludCwgbG9uZyAqLCB2YWx1ZXMsCi0JCWNoYXIgKiwgdGV4dCwgc2l6ZV90LCB0ZXh0
-bGVuLAotCQlkb3VibGUsIGRvdWJsZWFyZywgZmxvYXQsIGZsb2F0YXJnLAotCQlib29sLCBib29s
-YXJnKSwKLQlUUF9GSUVMRFMoCi0JCWN0Zl9pbnRlZ2VyKGludCwgaW50ZmllbGQsIGFuaW50KQot
-CQljdGZfaW50ZWdlcl9oZXgoaW50LCBpbnRmaWVsZDIsIGFuaW50KQotCQljdGZfaW50ZWdlcihs
-b25nLCBsb25nZmllbGQsIGFuaW50KQotCQljdGZfaW50ZWdlcl9uZXR3b3JrKGludCwgbmV0aW50
-ZmllbGQsIG5ldGludCkKLQkJY3RmX2ludGVnZXJfbmV0d29ya19oZXgoaW50LCBuZXRpbnRmaWVs
-ZGhleCwgbmV0aW50KQotCQljdGZfYXJyYXkobG9uZywgYXJyZmllbGQxLCB2YWx1ZXMsIDMpCi0J
-CWN0Zl9hcnJheV90ZXh0KGNoYXIsIGFycmZpZWxkMiwgdGV4dCwgMTApCi0JCWN0Zl9zZXF1ZW5j
-ZShjaGFyLCBzZXFmaWVsZDEsIHRleHQsCi0JCQkgICAgIHNpemVfdCwgdGV4dGxlbikKLQkJY3Rm
-X3NlcXVlbmNlX3RleHQoY2hhciwgc2VxZmllbGQyLCB0ZXh0LAotCQkJICAgICBzaXplX3QsIHRl
-eHRsZW4pCi0JCWN0Zl9zdHJpbmcoc3RyaW5nZmllbGQsIHRleHQpCi0JCWN0Zl9mbG9hdChmbG9h
-dCwgZmxvYXRmaWVsZCwgZmxvYXRhcmcpCi0JCWN0Zl9mbG9hdChkb3VibGUsIGRvdWJsZWZpZWxk
-LCBkb3VibGVhcmcpCi0JCWN0Zl9pbnRlZ2VyKGJvb2wsIGJvb2xmaWVsZCwgYm9vbGFyZykKLQkJ
-Y3RmX2ludGVnZXJfbm93cml0ZShpbnQsIGZpbHRlcmZpZWxkLCBhbmludCkKLQkpCi0pCi0KLVRS
-QUNFUE9JTlRfRVZFTlQodXN0X3Rlc3RzX2hlbGxvLCB0cHRlc3Rfc2lnaGFuZGxlciwKLQlUUF9B
-UkdTKCksCi0JVFBfRklFTERTKCkKLSkKLQotI2VuZGlmIC8qIF9UUkFDRVBPSU5UX1VTVF9URVNU
-U19IRUxMT19IICovCi0KLSN1bmRlZiBUUkFDRVBPSU5UX0lOQ0xVREVfRklMRQotI2RlZmluZSBU
-UkFDRVBPSU5UX0lOQ0xVREVfRklMRSAuL3VzdF90ZXN0c19oZWxsby5oCi0KLS8qIFRoaXMgcGFy
-dCBtdXN0IGJlIG91dHNpZGUgaWZkZWYgcHJvdGVjdGlvbiAqLwotI2luY2x1ZGUgPGx0dG5nL3Ry
-YWNlcG9pbnQtZXZlbnQuaD4KLQotI2lmZGVmIF9fY3BsdXNwbHVzCi19Ci0jZW5kaWYKLS0gCjEu
-Ny45LjUKCg==
---f46d043743efcad22704d0d2a158
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---f46d043743efcad22704d0d2a158--
+> Thanks,
+> 
+> Mathieu
+> 
+> ---
+> diff --git a/tests/test_urcu_wfcq.c b/tests/test_urcu_wfcq.c
+> index 91285a5..de9566d 100644
+> --- a/tests/test_urcu_wfcq.c
+> +++ b/tests/test_urcu_wfcq.c
+> @@ -168,6 +168,7 @@ static DEFINE_URCU_TLS(unsigned long long, nr_successful_dequeues);
+>  static DEFINE_URCU_TLS(unsigned long long, nr_successful_enqueues);
+>  static DEFINE_URCU_TLS(unsigned long long, nr_empty_dest_enqueues);
+>  static DEFINE_URCU_TLS(unsigned long long, nr_splice);
+> +static DEFINE_URCU_TLS(unsigned long long, nr_dequeue_last);
+> 
+>  static unsigned int nr_enqueuers;
+>  static unsigned int nr_dequeuers;
+> @@ -228,11 +229,15 @@ fail:
+>  static void do_test_dequeue(enum test_sync sync)
+>  {
+>  	struct cds_wfcq_node *node;
+> +	bool last;
+> 
+>  	if (sync == TEST_SYNC_MUTEX)
+> -		node = cds_wfcq_dequeue_blocking(&head, &tail);
+> +		node = cds_wfcq_dequeue_blocking(&head, &tail, &last);
+>  	else
+> -		node = __cds_wfcq_dequeue_blocking(&head, &tail);
+> +		node = __cds_wfcq_dequeue_blocking(&head, &tail, &last);
+> +
+> +	if (last)
+> +		URCU_TLS(nr_dequeue_last)++;
+> 
+>  	if (node) {
+>  		free(node);
+> @@ -263,6 +268,7 @@ static void do_test_splice(enum test_sync sync)
+>  		break;
+>  	case CDS_WFCQ_RET_DEST_EMPTY:
+>  		URCU_TLS(nr_splice)++;
+> +		URCU_TLS(nr_dequeue_last)++;
+>  		/* ok */
+>  		break;
+>  	case CDS_WFCQ_RET_DEST_NON_EMPTY:
+> @@ -325,16 +331,21 @@ static void *thr_dequeuer(void *_count)
+>  	count[0] = URCU_TLS(nr_dequeues);
+>  	count[1] = URCU_TLS(nr_successful_dequeues);
+>  	count[2] = URCU_TLS(nr_splice);
+> +	count[3] = URCU_TLS(nr_dequeue_last);
+>  	return ((void*)2);
+>  }
+> 
+> -static void test_end(unsigned long long *nr_dequeues)
+> +static void test_end(unsigned long long *nr_dequeues,
+> +		unsigned long long *nr_dequeue_last)
+>  {
+>  	struct cds_wfcq_node *node;
+> +	bool last;
+> 
+>  	do {
+> -		node = cds_wfcq_dequeue_blocking(&head, &tail);
+> +		node = cds_wfcq_dequeue_blocking(&head, &tail, &last);
+>  		if (node) {
+> +			if (last)
+> +				(*nr_dequeue_last)++;
+>  			free(node);
+>  			(*nr_dequeues)++;
+>  		}
+> @@ -367,7 +378,7 @@ int main(int argc, char **argv)
+>  	unsigned long long tot_successful_enqueues = 0,
+>  			   tot_successful_dequeues = 0,
+>  			   tot_empty_dest_enqueues = 0,
+> -			   tot_splice = 0;
+> +			   tot_splice = 0, tot_dequeue_last = 0;
+>  	unsigned long long end_dequeues = 0;
+>  	int i, a, retval = 0;
+> 
+> @@ -480,7 +491,7 @@ int main(int argc, char **argv)
+>  	tid_enqueuer = malloc(sizeof(*tid_enqueuer) * nr_enqueuers);
+>  	tid_dequeuer = malloc(sizeof(*tid_dequeuer) * nr_dequeuers);
+>  	count_enqueuer = malloc(3 * sizeof(*count_enqueuer) * nr_enqueuers);
+> -	count_dequeuer = malloc(3 * sizeof(*count_dequeuer) * nr_dequeuers);
+> +	count_dequeuer = malloc(4 * sizeof(*count_dequeuer) * nr_dequeuers);
+>  	cds_wfcq_init(&head, &tail);
+> 
+>  	next_aff = 0;
+> @@ -493,7 +504,7 @@ int main(int argc, char **argv)
+>  	}
+>  	for (i = 0; i < nr_dequeuers; i++) {
+>  		err = pthread_create(&tid_dequeuer[i], NULL, thr_dequeuer,
+> -				     &count_dequeuer[3 * i]);
+> +				     &count_dequeuer[4 * i]);
+>  		if (err != 0)
+>  			exit(1);
+>  	}
+> @@ -533,34 +544,37 @@ int main(int argc, char **argv)
+>  		err = pthread_join(tid_dequeuer[i], &tret);
+>  		if (err != 0)
+>  			exit(1);
+> -		tot_dequeues += count_dequeuer[3 * i];
+> -		tot_successful_dequeues += count_dequeuer[3 * i + 1];
+> -		tot_splice += count_dequeuer[3 * i + 2];
+> +		tot_dequeues += count_dequeuer[4 * i];
+> +		tot_successful_dequeues += count_dequeuer[4 * i + 1];
+> +		tot_splice += count_dequeuer[4 * i + 2];
+> +		tot_dequeue_last += count_dequeuer[4 * i + 3];
+>  	}
+>  	
+> -	test_end(&end_dequeues);
+> +	test_end(&end_dequeues, &tot_dequeue_last);
+> 
+>  	printf_verbose("total number of enqueues : %llu, dequeues %llu\n",
+>  		       tot_enqueues, tot_dequeues);
+>  	printf_verbose("total number of successful enqueues : %llu, "
+>  		       "enqueues to empty dest : %llu, "
+>  		       "successful dequeues %llu, "
+> -		       "splice : %llu\n",
+> +		       "splice : %llu, dequeue_last : %llu\n",
+>  		       tot_successful_enqueues,
+>  		       tot_empty_dest_enqueues,
+>  		       tot_successful_dequeues,
+> -		       tot_splice);
+> +		       tot_splice, tot_dequeue_last);
+>  	printf("SUMMARY %-25s testdur %4lu nr_enqueuers %3u wdelay %6lu "
+>  		"nr_dequeuers %3u "
+>  		"rdur %6lu nr_enqueues %12llu nr_dequeues %12llu "
+>  		"successful enqueues %12llu enqueues to empty dest %12llu "
+>  		"successful dequeues %12llu splice %12llu "
+> +		"dequeue_last %llu "
+>  		"end_dequeues %llu nr_ops %12llu\n",
+>  		argv[0], duration, nr_enqueuers, wdelay,
+>  		nr_dequeuers, rduration, tot_enqueues, tot_dequeues,
+>  		tot_successful_enqueues,
+>  		tot_empty_dest_enqueues,
+> -		tot_successful_dequeues, tot_splice, end_dequeues,
+> +		tot_successful_dequeues, tot_splice, tot_dequeue_last,
+> +		end_dequeues,
+>  		tot_enqueues + tot_dequeues);
+> 
+>  	if (tot_successful_enqueues != tot_successful_dequeues + end_dequeues) {
+> @@ -576,12 +590,11 @@ int main(int argc, char **argv)
+>  	 * exactly as many empty queues than the number of non-empty
+>  	 * src splice.
+>  	 */
+> -	if (test_wait_empty && test_splice && !test_dequeue
+> -			&& tot_empty_dest_enqueues != tot_splice) {
+> +	if (tot_empty_dest_enqueues != tot_dequeue_last) {
+>  		printf("WARNING! Discrepancy between empty enqueue (%llu) and "
+> -			"number of non-empty splice (%llu)\n",
+> +			"number of dequeue of last element (%llu)\n",
+>  			tot_empty_dest_enqueues,
+> -			tot_splice);
+> +			tot_dequeue_last);
+>  		retval = 1;
+>  	}
+>  	free(count_enqueuer);
+> diff --git a/tests/test_urcu_wfs.c b/tests/test_urcu_wfs.c
+> index 259ca24..6c54153 100644
+> --- a/tests/test_urcu_wfs.c
+> +++ b/tests/test_urcu_wfs.c
+> @@ -171,6 +171,7 @@ static DEFINE_URCU_TLS(unsigned long long, nr_successful_dequeues);
+>  static DEFINE_URCU_TLS(unsigned long long, nr_successful_enqueues);
+>  static DEFINE_URCU_TLS(unsigned long long, nr_empty_dest_enqueues);
+>  static DEFINE_URCU_TLS(unsigned long long, nr_pop_all);
+> +static DEFINE_URCU_TLS(unsigned long long, nr_pop_last);
+> 
+>  static unsigned int nr_enqueuers;
+>  static unsigned int nr_dequeuers;
+> @@ -230,14 +231,17 @@ fail:
+>  static void do_test_pop(enum test_sync sync)
+>  {
+>  	struct cds_wfs_node *node;
+> +	bool last;
+> 
+>  	if (sync == TEST_SYNC_MUTEX)
+>  		cds_wfs_pop_lock(&s);
+> -	node = __cds_wfs_pop_blocking(&s);
+> +	node = __cds_wfs_pop_blocking(&s, &last);
+>  	if (sync == TEST_SYNC_MUTEX)
+>  		cds_wfs_pop_unlock(&s);
+> 
+>  	if (node) {
+> +		if (last)
+> +			URCU_TLS(nr_pop_last)++;
+>  		free(node);
+>  		URCU_TLS(nr_successful_dequeues)++;
+>  	}
+> @@ -260,6 +264,7 @@ static void do_test_pop_all(enum test_sync sync)
+>  		return;
+> 
+>  	URCU_TLS(nr_pop_all)++;
+> +	URCU_TLS(nr_pop_last)++;
+> 
+>  	cds_wfs_for_each_blocking_safe(head, node, n) {
+>  		free(node);
+> @@ -308,24 +313,30 @@ static void *thr_dequeuer(void *_count)
+> 
+>  	printf_verbose("dequeuer thread_end, thread id : %lx, tid %lu, "
+>  		       "dequeues %llu, successful_dequeues %llu "
+> -		       "pop_all %llu\n",
+> +		       "pop_all %llu pop_last %llu\n",
+>  		       pthread_self(),
+>  			(unsigned long) gettid(),
+>  		       URCU_TLS(nr_dequeues), URCU_TLS(nr_successful_dequeues),
+> -		       URCU_TLS(nr_pop_all));
+> +		       URCU_TLS(nr_pop_all),
+> +		       URCU_TLS(nr_pop_last));
+>  	count[0] = URCU_TLS(nr_dequeues);
+>  	count[1] = URCU_TLS(nr_successful_dequeues);
+>  	count[2] = URCU_TLS(nr_pop_all);
+> +	count[3] = URCU_TLS(nr_pop_last);
+>  	return ((void*)2);
+>  }
+> 
+> -static void test_end(struct cds_wfs_stack *s, unsigned long long *nr_dequeues)
+> +static void test_end(struct cds_wfs_stack *s, unsigned long long *nr_dequeues,
+> +		unsigned long long *nr_pop_last)
+>  {
+>  	struct cds_wfs_node *node;
+> +	bool last;
+> 
+>  	do {
+> -		node = cds_wfs_pop_blocking(s);
+> +		node = cds_wfs_pop_blocking(s, &last);
+>  		if (node) {
+> +			if (last)
+> +				(*nr_pop_last)++;
+>  			free(node);
+>  			(*nr_dequeues)++;
+>  		}
+> @@ -358,7 +369,7 @@ int main(int argc, char **argv)
+>  	unsigned long long tot_successful_enqueues = 0,
+>  			   tot_successful_dequeues = 0,
+>  			   tot_empty_dest_enqueues = 0,
+> -			   tot_pop_all = 0;
+> +			   tot_pop_all = 0, tot_pop_last = 0;
+>  	unsigned long long end_dequeues = 0;
+>  	int i, a, retval = 0;
+> 
+> @@ -471,7 +482,7 @@ int main(int argc, char **argv)
+>  	tid_enqueuer = malloc(sizeof(*tid_enqueuer) * nr_enqueuers);
+>  	tid_dequeuer = malloc(sizeof(*tid_dequeuer) * nr_dequeuers);
+>  	count_enqueuer = malloc(3 * sizeof(*count_enqueuer) * nr_enqueuers);
+> -	count_dequeuer = malloc(3 * sizeof(*count_dequeuer) * nr_dequeuers);
+> +	count_dequeuer = malloc(4 * sizeof(*count_dequeuer) * nr_dequeuers);
+>  	cds_wfs_init(&s);
+> 
+>  	next_aff = 0;
+> @@ -484,7 +495,7 @@ int main(int argc, char **argv)
+>  	}
+>  	for (i = 0; i < nr_dequeuers; i++) {
+>  		err = pthread_create(&tid_dequeuer[i], NULL, thr_dequeuer,
+> -				     &count_dequeuer[3 * i]);
+> +				     &count_dequeuer[4 * i]);
+>  		if (err != 0)
+>  			exit(1);
+>  	}
+> @@ -524,34 +535,36 @@ int main(int argc, char **argv)
+>  		err = pthread_join(tid_dequeuer[i], &tret);
+>  		if (err != 0)
+>  			exit(1);
+> -		tot_dequeues += count_dequeuer[3 * i];
+> -		tot_successful_dequeues += count_dequeuer[3 * i + 1];
+> -		tot_pop_all += count_dequeuer[3 * i + 2];
+> +		tot_dequeues += count_dequeuer[4 * i];
+> +		tot_successful_dequeues += count_dequeuer[4 * i + 1];
+> +		tot_pop_all += count_dequeuer[4 * i + 2];
+> +		tot_pop_last += count_dequeuer[4 * i + 3];
+>  	}
+>  	
+> -	test_end(&s, &end_dequeues);
+> +	test_end(&s, &end_dequeues, &tot_pop_last);
+> 
+>  	printf_verbose("total number of enqueues : %llu, dequeues %llu\n",
+>  		       tot_enqueues, tot_dequeues);
+>  	printf_verbose("total number of successful enqueues : %llu, "
+>  		       "enqueues to empty dest : %llu, "
+>  		       "successful dequeues %llu, "
+> -		       "pop_all : %llu\n",
+> +		       "pop_all : %llu, pop_last : %llu\n",
+>  		       tot_successful_enqueues,
+>  		       tot_empty_dest_enqueues,
+>  		       tot_successful_dequeues,
+> -		       tot_pop_all);
+> +		       tot_pop_all, tot_pop_last);
+>  	printf("SUMMARY %-25s testdur %4lu nr_enqueuers %3u wdelay %6lu "
+>  		"nr_dequeuers %3u "
+>  		"rdur %6lu nr_enqueues %12llu nr_dequeues %12llu "
+>  		"successful enqueues %12llu enqueues to empty dest %12llu "
+>  		"successful dequeues %12llu pop_all %12llu "
+> -		"end_dequeues %llu nr_ops %12llu\n",
+> +		"pop_last %llu end_dequeues %llu nr_ops %12llu\n",
+>  		argv[0], duration, nr_enqueuers, wdelay,
+>  		nr_dequeuers, rduration, tot_enqueues, tot_dequeues,
+>  		tot_successful_enqueues,
+>  		tot_empty_dest_enqueues,
+> -		tot_successful_dequeues, tot_pop_all, end_dequeues,
+> +		tot_successful_dequeues, tot_pop_all, tot_pop_last,
+> +		end_dequeues,
+>  		tot_enqueues + tot_dequeues);
+>  	if (tot_successful_enqueues != tot_successful_dequeues + end_dequeues) {
+>  		printf("WARNING! Discrepancy between nr succ. enqueues %llu vs "
+> @@ -561,16 +574,14 @@ int main(int argc, char **argv)
+>  		retval = 1;
+>  	}
+>  	/*
+> -	 * If only using pop_all to dequeue, the enqueuer should see
+> -	 * exactly as many empty queues than the number of non-empty
+> -	 * stacks dequeued.
+> +	 * The enqueuer should see exactly as many empty queues than the
+> +	 * number of non-empty stacks dequeued.
+>  	 */
+> -	if (test_wait_empty && test_pop_all && !test_pop
+> -			&& tot_empty_dest_enqueues != tot_pop_all) {
+> +	if (tot_empty_dest_enqueues != tot_pop_last) {
+>  		printf("WARNING! Discrepancy between empty enqueue (%llu) and "
+> -			"number of non-empty pop_all (%llu)\n",
+> +			"number of pop last (%llu)\n",
+>  			tot_empty_dest_enqueues,
+> -			tot_pop_all);
+> +			tot_pop_last);
+>  		retval = 1;
+>  	}
+>  	free(count_enqueuer);
+> diff --git a/urcu/static/wfcqueue.h b/urcu/static/wfcqueue.h
+> index 4b3535a..33c99ed 100644
+> --- a/urcu/static/wfcqueue.h
+> +++ b/urcu/static/wfcqueue.h
+> @@ -352,16 +352,23 @@ ___cds_wfcq_next_nonblocking(struct cds_wfcq_head *head,
+>  static inline struct cds_wfcq_node *
+>  ___cds_wfcq_dequeue(struct cds_wfcq_head *head,
+>  		struct cds_wfcq_tail *tail,
+> +		bool *last,
+>  		int blocking)
+>  {
+>  	struct cds_wfcq_node *node, *next;
+> 
+> -	if (_cds_wfcq_empty(head, tail))
+> +	if (_cds_wfcq_empty(head, tail)) {
+> +		if (last)
+> +			*last = 0;
+>  		return NULL;
+> +	}
+> 
+>  	node = ___cds_wfcq_node_sync_next(&head->node, blocking);
+> -	if (!blocking && node == CDS_WFCQ_WOULDBLOCK)
+> +	if (!blocking && node == CDS_WFCQ_WOULDBLOCK) {
+> +		if (last)
+> +			*last = 0;
+>  		return CDS_WFCQ_WOULDBLOCK;
+> +	}
+> 
+>  	if ((next = CMM_LOAD_SHARED(node->next)) == NULL) {
+>  		/*
+> @@ -379,8 +386,11 @@ ___cds_wfcq_dequeue(struct cds_wfcq_head *head,
+>  		 * content.
+>  		 */
+>  		_cds_wfcq_node_init(&head->node);
+> -		if (uatomic_cmpxchg(&tail->p, node, &head->node) == node)
+> +		if (uatomic_cmpxchg(&tail->p, node, &head->node) == node) {
+> +			if (last)
+> +				*last = 1;
+>  			return node;
+> +		}
+>  		next = ___cds_wfcq_node_sync_next(node, blocking);
+>  		/*
+>  		 * In nonblocking mode, if we would need to block to
+> @@ -389,6 +399,8 @@ ___cds_wfcq_dequeue(struct cds_wfcq_head *head,
+>  		 */
+>  		if (!blocking && next == CDS_WFCQ_WOULDBLOCK) {
+>  			head->node.next = node;
+> +			if (last)
+> +				*last = 0;
+>  			return CDS_WFCQ_WOULDBLOCK;
+>  		}
+>  	}
+> @@ -400,6 +412,8 @@ ___cds_wfcq_dequeue(struct cds_wfcq_head *head,
+> 
+>  	/* Load q->head.next before loading node's content */
+>  	cmm_smp_read_barrier_depends();
+> +	if (last)
+> +		*last = 0;
+>  	return node;
+>  }
+> 
+> @@ -414,9 +428,9 @@ ___cds_wfcq_dequeue(struct cds_wfcq_head *head,
+>   */
+>  static inline struct cds_wfcq_node *
+>  ___cds_wfcq_dequeue_blocking(struct cds_wfcq_head *head,
+> -		struct cds_wfcq_tail *tail)
+> +		struct cds_wfcq_tail *tail, bool *last)
+>  {
+> -	return ___cds_wfcq_dequeue(head, tail, 1);
+> +	return ___cds_wfcq_dequeue(head, tail, last, 1);
+>  }
+> 
+>  /*
+> @@ -427,9 +441,9 @@ ___cds_wfcq_dequeue_blocking(struct cds_wfcq_head *head,
+>   */
+>  static inline struct cds_wfcq_node *
+>  ___cds_wfcq_dequeue_nonblocking(struct cds_wfcq_head *head,
+> -		struct cds_wfcq_tail *tail)
+> +		struct cds_wfcq_tail *tail, bool *last)
+>  {
+> -	return ___cds_wfcq_dequeue(head, tail, 0);
+> +	return ___cds_wfcq_dequeue(head, tail, last, 0);
+>  }
+> 
+>  /*
+> @@ -542,12 +556,12 @@ ___cds_wfcq_splice_nonblocking(
+>   */
+>  static inline struct cds_wfcq_node *
+>  _cds_wfcq_dequeue_blocking(struct cds_wfcq_head *head,
+> -		struct cds_wfcq_tail *tail)
+> +		struct cds_wfcq_tail *tail, bool *last)
+>  {
+>  	struct cds_wfcq_node *retval;
+> 
+>  	_cds_wfcq_dequeue_lock(head, tail);
+> -	retval = ___cds_wfcq_dequeue_blocking(head, tail);
+> +	retval = ___cds_wfcq_dequeue_blocking(head, tail, last);
+>  	_cds_wfcq_dequeue_unlock(head, tail);
+>  	return retval;
+>  }
+> diff --git a/urcu/static/wfstack.h b/urcu/static/wfstack.h
+> index 9bc9519..2ebda27 100644
+> --- a/urcu/static/wfstack.h
+> +++ b/urcu/static/wfstack.h
+> @@ -161,23 +161,35 @@ ___cds_wfs_node_sync_next(struct cds_wfs_node *node, int blocking)
+> 
+>  static inline
+>  struct cds_wfs_node *
+> -___cds_wfs_pop(struct cds_wfs_stack *s, int blocking)
+> +___cds_wfs_pop(struct cds_wfs_stack *s, bool *last, int blocking)
+>  {
+>  	struct cds_wfs_head *head, *new_head;
+>  	struct cds_wfs_node *next;
+> 
+>  	for (;;) {
+>  		head = CMM_LOAD_SHARED(s->head);
+> -		if (___cds_wfs_end(head))
+> +		if (___cds_wfs_end(head)) {
+> +			if (last)
+> +				*last = 0;
+>  			return NULL;
+> +		}
+>  		next = ___cds_wfs_node_sync_next(&head->node, blocking);
+> -		if (!blocking && next == CDS_WFS_WOULDBLOCK)
+> +		if (!blocking && next == CDS_WFS_WOULDBLOCK) {
+> +			if (last)
+> +				*last = 0;
+>  			return CDS_WFS_WOULDBLOCK;
+> +		}
+>  		new_head = caa_container_of(next, struct cds_wfs_head, node);
+> -		if (uatomic_cmpxchg(&s->head, head, new_head) == head)
+> +		if (uatomic_cmpxchg(&s->head, head, new_head) == head) {
+> +			if (last)
+> +				*last = ___cds_wfs_end(new_head);
+>  			return &head->node;
+> -		if (!blocking)
+> +		}
+> +		if (!blocking) {
+> +			if (last)
+> +				*last = 0;
+>  			return CDS_WFS_WOULDBLOCK;
+> +		}
+>  		/* busy-loop if head changed under us */
+>  	}
+>  }
+> @@ -200,9 +212,9 @@ ___cds_wfs_pop(struct cds_wfs_stack *s, int blocking)
+>   */
+>  static inline
+>  struct cds_wfs_node *
+> -___cds_wfs_pop_blocking(struct cds_wfs_stack *s)
+> +___cds_wfs_pop_blocking(struct cds_wfs_stack *s, bool *last)
+>  {
+> -	return ___cds_wfs_pop(s, 1);
+> +	return ___cds_wfs_pop(s, last, 1);
+>  }
+> 
+>  /*
+> @@ -213,9 +225,9 @@ ___cds_wfs_pop_blocking(struct cds_wfs_stack *s)
+>   */
+>  static inline
+>  struct cds_wfs_node *
+> -___cds_wfs_pop_nonblocking(struct cds_wfs_stack *s)
+> +___cds_wfs_pop_nonblocking(struct cds_wfs_stack *s, bool *last)
+>  {
+> -	return ___cds_wfs_pop(s, 0);
+> +	return ___cds_wfs_pop(s, last, 0);
+>  }
+> 
+>  /*
+> @@ -284,12 +296,12 @@ static inline void _cds_wfs_pop_unlock(struct cds_wfs_stack *s)
+>   */
+>  static inline
+>  struct cds_wfs_node *
+> -_cds_wfs_pop_blocking(struct cds_wfs_stack *s)
+> +_cds_wfs_pop_blocking(struct cds_wfs_stack *s, bool *last)
+>  {
+>  	struct cds_wfs_node *retnode;
+> 
+>  	_cds_wfs_pop_lock(s);
+> -	retnode = ___cds_wfs_pop_blocking(s);
+> +	retnode = ___cds_wfs_pop_blocking(s, last);
+>  	_cds_wfs_pop_unlock(s);
+>  	return retnode;
+>  }
+> diff --git a/urcu/wfcqueue.h b/urcu/wfcqueue.h
+> index b6be9f3..4b9e73b 100644
+> --- a/urcu/wfcqueue.h
+> +++ b/urcu/wfcqueue.h
+> @@ -197,7 +197,8 @@ extern bool cds_wfcq_enqueue(struct cds_wfcq_head *head,
+>   */
+>  extern struct cds_wfcq_node *cds_wfcq_dequeue_blocking(
+>  		struct cds_wfcq_head *head,
+> -		struct cds_wfcq_tail *tail);
+> +		struct cds_wfcq_tail *tail,
+> +		bool *last);
+> 
+>  /*
+>   * cds_wfcq_splice_blocking: enqueue all src_q nodes at the end of dest_q.
+> @@ -229,7 +230,8 @@ extern enum cds_wfcq_ret cds_wfcq_splice_blocking(
+>   */
+>  extern struct cds_wfcq_node *__cds_wfcq_dequeue_blocking(
+>  		struct cds_wfcq_head *head,
+> -		struct cds_wfcq_tail *tail);
+> +		struct cds_wfcq_tail *tail,
+> +		bool *last);
+> 
+>  /*
+>   * __cds_wfcq_dequeue_nonblocking: dequeue a node from a wait-free queue.
+> @@ -239,7 +241,8 @@ extern struct cds_wfcq_node *__cds_wfcq_dequeue_blocking(
+>   */
+>  extern struct cds_wfcq_node *__cds_wfcq_dequeue_nonblocking(
+>  		struct cds_wfcq_head *head,
+> -		struct cds_wfcq_tail *tail);
+> +		struct cds_wfcq_tail *tail,
+> +		bool *last);
+> 
+>  /*
+>   * __cds_wfcq_splice_blocking: enqueue all src_q nodes at the end of dest_q.
+> diff --git a/urcu/wfstack.h b/urcu/wfstack.h
+> index 03fee8f..1e4b848 100644
+> --- a/urcu/wfstack.h
+> +++ b/urcu/wfstack.h
+> @@ -147,7 +147,8 @@ extern int cds_wfs_push(struct cds_wfs_stack *s, struct cds_wfs_node *node);
+>   *
+>   * Calls __cds_wfs_pop_blocking with an internal pop mutex held.
+>   */
+> -extern struct cds_wfs_node *cds_wfs_pop_blocking(struct cds_wfs_stack *s);
+> +extern struct cds_wfs_node *cds_wfs_pop_blocking(struct cds_wfs_stack *s,
+> +		bool *last);
+> 
+>  /*
+>   * cds_wfs_pop_all_blocking: pop all nodes from a stack.
+> @@ -219,7 +220,8 @@ extern void cds_wfs_pop_unlock(struct cds_wfs_stack *s);
+>   * 3) Ensuring that only ONE thread can call __cds_wfs_pop_blocking()
+>   *    and __cds_wfs_pop_all(). (multi-provider/single-consumer scheme).
+>   */
+> -extern struct cds_wfs_node *__cds_wfs_pop_blocking(struct cds_wfs_stack *s);
+> +extern struct cds_wfs_node *__cds_wfs_pop_blocking(struct cds_wfs_stack *s,
+> +		bool *last);
+> 
+>  /*
+>   * __cds_wfs_pop_nonblocking: pop a node from the stack.
+> @@ -227,7 +229,8 @@ extern struct cds_wfs_node *__cds_wfs_pop_blocking(struct cds_wfs_stack *s);
+>   * Same as __cds_wfs_pop_blocking, but returns CDS_WFS_WOULDBLOCK if
+>   * it needs to block.
+>   */
+> -extern struct cds_wfs_node *__cds_wfs_pop_nonblocking(struct cds_wfs_stack *s);
+> +extern struct cds_wfs_node *__cds_wfs_pop_nonblocking(struct cds_wfs_stack *s,
+> +		bool *last);
+> 
+>  /*
+>   * __cds_wfs_pop_all: pop all nodes from a stack.
+> diff --git a/wfcqueue.c b/wfcqueue.c
+> index ab0eb93..7baefdf 100644
+> --- a/wfcqueue.c
+> +++ b/wfcqueue.c
+> @@ -68,9 +68,10 @@ void cds_wfcq_dequeue_unlock(struct cds_wfcq_head *head,
+> 
+>  struct cds_wfcq_node *cds_wfcq_dequeue_blocking(
+>  		struct cds_wfcq_head *head,
+> -		struct cds_wfcq_tail *tail)
+> +		struct cds_wfcq_tail *tail,
+> +		bool *last)
+>  {
+> -	return _cds_wfcq_dequeue_blocking(head, tail);
+> +	return _cds_wfcq_dequeue_blocking(head, tail, last);
+>  }
+> 
+>  enum cds_wfcq_ret cds_wfcq_splice_blocking(
+> @@ -85,16 +86,18 @@ enum cds_wfcq_ret cds_wfcq_splice_blocking(
+> 
+>  struct cds_wfcq_node *__cds_wfcq_dequeue_blocking(
+>  		struct cds_wfcq_head *head,
+> -		struct cds_wfcq_tail *tail)
+> +		struct cds_wfcq_tail *tail,
+> +		bool *last)
+>  {
+> -	return ___cds_wfcq_dequeue_blocking(head, tail);
+> +	return ___cds_wfcq_dequeue_blocking(head, tail, last);
+>  }
+> 
+>  struct cds_wfcq_node *__cds_wfcq_dequeue_nonblocking(
+>  		struct cds_wfcq_head *head,
+> -		struct cds_wfcq_tail *tail)
+> +		struct cds_wfcq_tail *tail,
+> +		bool *last)
+>  {
+> -	return ___cds_wfcq_dequeue_nonblocking(head, tail);
+> +	return ___cds_wfcq_dequeue_nonblocking(head, tail, last);
+>  }
+> 
+>  enum cds_wfcq_ret __cds_wfcq_splice_blocking(
+> diff --git a/wfstack.c b/wfstack.c
+> index 4ccb6b9..041703b 100644
+> --- a/wfstack.c
+> +++ b/wfstack.c
+> @@ -48,9 +48,10 @@ int cds_wfs_push(struct cds_wfs_stack *s, struct cds_wfs_node *node)
+>  	return _cds_wfs_push(s, node);
+>  }
+> 
+> -struct cds_wfs_node *cds_wfs_pop_blocking(struct cds_wfs_stack *s)
+> +struct cds_wfs_node *cds_wfs_pop_blocking(struct cds_wfs_stack *s,
+> +		bool *last)
+>  {
+> -	return _cds_wfs_pop_blocking(s);
+> +	return _cds_wfs_pop_blocking(s, last);
+>  }
+> 
+>  struct cds_wfs_head *cds_wfs_pop_all_blocking(struct cds_wfs_stack *s)
+> @@ -83,14 +84,16 @@ void cds_wfs_pop_unlock(struct cds_wfs_stack *s)
+>  	_cds_wfs_pop_unlock(s);
+>  }
+> 
+> -struct cds_wfs_node *__cds_wfs_pop_blocking(struct cds_wfs_stack *s)
+> +struct cds_wfs_node *__cds_wfs_pop_blocking(struct cds_wfs_stack *s,
+> +		bool *last)
+>  {
+> -	return ___cds_wfs_pop_blocking(s);
+> +	return ___cds_wfs_pop_blocking(s, last);
+>  }
+> 
+> -struct cds_wfs_node *__cds_wfs_pop_nonblocking(struct cds_wfs_stack *s)
+> +struct cds_wfs_node *__cds_wfs_pop_nonblocking(struct cds_wfs_stack *s,
+> +		bool *last)
+>  {
+> -	return ___cds_wfs_pop_nonblocking(s);
+> +	return ___cds_wfs_pop_nonblocking(s, last);
+>  }
+> 
+>  struct cds_wfs_head *__cds_wfs_pop_all(struct cds_wfs_stack *s)
+> 
+> -- 
+> Mathieu Desnoyers
+> Operating System Efficiency R&D Consultant
+> EfficiOS Inc.
+> http://www.efficios.com
+> 
