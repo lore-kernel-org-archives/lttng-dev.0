@@ -1,25 +1,19 @@
-From: David OShea <David.OShea@quantum.com>
-Subject: Poor handling of spaces in field names
-Date: Fri, 14 Dec 2012 00:05:12 +0000
-Message-ID: <20998D40D9A2B7499CA5A3A2666CB1EB19F8A09C__36586.1357808628$1355443563$gmane$org@ZURMSG1.QUANTUM.com>
+From: Radhika Chowdary <radhika.putty@gmail.com>
+Subject: Re: Unable to import big LTTng traces
+Date: Fri, 14 Dec 2012 09:02:20 +0530
+Message-ID: <CAMSKo86n_0Rpgz6KGZTgHpLtuHM8t2UYpvDF5CeFD5Oi+_TqWQ__30293.1048944176$1355455993$gmane$org@mail.gmail.com>
+References: <CAMSKo873P7Tm_xGoYfSx1aQMSO7AnQrpUSUCpS-r_mP5EpTOcw@mail.gmail.com>
+	<50CA1992.9020706@voxpopuli.im>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1610215528=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mx0a-000ceb01.pphosted.com ([67.231.144.126])
+Received: from mail-ob0-f176.google.com ([209.85.214.176])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <prvs=8695654041=david.oshea@quantum.com>)
-	id 1TjImD-00013N-Ak
-	for lttng-dev@lists.lttng.org; Thu, 13 Dec 2012 19:05:17 -0500
-Received: from pps.filterd (m0030277 [127.0.0.1])
-	by mx0a-000ceb01.pphosted.com (8.14.5/8.14.5) with SMTP id
-	qBE04hSO019118
-	for <lttng-dev@lists.lttng.org>; Thu, 13 Dec 2012 16:05:16 -0800
-Received: from ppoxedge2.quantum.com ([146.174.252.28])
-	by mx0a-000ceb01.pphosted.com with ESMTP id 197rs7g1te-2
-	(version=TLSv1/SSLv3 cipher=AES128-SHA bits=128 verify=NOT)
-	for <lttng-dev@lists.lttng.org>; Thu, 13 Dec 2012 16:05:16 -0800
-Content-Language: en-US
+	(envelope-from <radhika.putty@gmail.com>) id 1TjM0g-0002bY-09
+	for lttng-dev@lists.lttng.org; Thu, 13 Dec 2012 22:32:26 -0500
+Received: by mail-ob0-f176.google.com with SMTP id un3so2908064obb.35
+	for <lttng-dev@lists.lttng.org>; Thu, 13 Dec 2012 19:32:20 -0800 (PST)
+In-Reply-To: <50CA1992.9020706@voxpopuli.im>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -28,28 +22,131 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi all,
+--===============1610215528==
+Content-Type: multipart/alternative; boundary=f46d043be10ed717c304d0c7ada5
 
-I never expected to be able to put spaces in field names, but I accidentally did so and had quite a bit of trouble debugging the problem, as 'babeltrace -v <path>' just gave me:
+--f46d043be10ed717c304d0c7ada5
+Content-Type: text/plain; charset=ISO-8859-1
 
-"""
-error syntax error
-[error] Error creating AST
-[warning] Unable to open trace metadata for path "[...]".
-[warning] [Context] Cannot open_trace of the format [...] .
+Thanks for the replies. I think I should be patient while the trace file
+imports
 
-[warning] [Context] cannot open trace "[...]" from [...] for reading.
-"""
+/Radhika
 
-I had to set BABELTRACE_DEBUG=1 to see the metadata scanner and parser debug output to figure out what I'd done wrong :)
+On Thu, Dec 13, 2012 at 11:38 PM, Alexandre Montplaisir <
+alexmonthy@voxpopuli.im> wrote:
 
-Would it be possible and practical to have the macros generate some dummy code using the field names in order to detect them not being valid identifiers at compile time?  Better error messages from the metadata parser would also be nice, but I imagine that's probably not so easy.
+> On 12-12-12 12:59 AM, Radhika Chowdary wrote:
+> > Hi
+> >
+> > I am using linuxtools plugins for importing LTTng traces. I have a trace
+> > folder of size 400MB and when I try to import it in the Traces folder it
+> > takes for ever to import it. At the bottom left corner I see Indexing...
+> > Events view gets populated soon but not others.
+>
+> Hi,
+>
+> It is expected that the indexing phase takes a while for very large
+> trace. It could probably be optimized a bit too, since we haven't spent
+> much time on performance improvements. Good news is that once indexed,
+> it will be faster to reopen the same trace later on.
+>
+> We have not yet implemented a percentage progression monitor for the
+> indexing job. This is not trivial since it has to be implemented
+> differently depending on the trace type, but would definitely be nice to
+> have.
+>
+> If you use the latest master branch, the timestamps for the start and
+> end of the histogram are now correctly formatted, so it is possible to
+> know roughly where the indexing is at, provided you know the end time of
+> your trace. I'd suggest trying that out to make sure it's not stopping
+> at some point, which would be a bug.
+>
+> > Is there a limit on the size of traces that it can import?
+>
+> There is no theoretical limit on the trace size that can be imported. It
+> is capped only by your patience ;)  and the amount of available disk
+> space, since the index files can be quite big too.
+>
+>
+> Cheers,
+> Alex
+>
+>
 
-Thanks in advance,
-David
+--f46d043be10ed717c304d0c7ada5
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
 
-----------------------------------------------------------------------
-The information contained in this transmission may be confidential. Any disclosure, copying, or further distribution of confidential information is not permitted unless such privilege is explicitly granted in writing by Quantum. Quantum reserves the right to have electronic communications, including email and attachments, sent across its networks filtered through anti virus and spam software programs and retain such messages in order to comply with applicable data security and retention requirements. Quantum is not responsible for the proper and complete transmission of the substance of this communication or for any delay in its receipt.
+Thanks for the replies. I think I should be patient while the trace file im=
+ports<div><br></div><div>/Radhika<br><br><div class=3D"gmail_quote">On Thu,=
+ Dec 13, 2012 at 11:38 PM, Alexandre Montplaisir <span dir=3D"ltr">&lt;<a h=
+ref=3D"mailto:alexmonthy@voxpopuli.im" target=3D"_blank">alexmonthy@voxpopu=
+li.im</a>&gt;</span> wrote:<br>
+<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
+x #ccc solid;padding-left:1ex"><div class=3D"im">On 12-12-12 12:59 AM, Radh=
+ika Chowdary wrote:<br>
+&gt; Hi<br>
+&gt;<br>
+&gt; I am using linuxtools plugins for importing LTTng traces. I have a tra=
+ce<br>
+&gt; folder of size 400MB and when I try to import it in the Traces folder =
+it<br>
+&gt; takes for ever to import it. At the bottom left corner I see Indexing.=
+..<br>
+&gt; Events view gets populated soon but not others.<br>
+<br>
+</div>Hi,<br>
+<br>
+It is expected that the indexing phase takes a while for very large<br>
+trace. It could probably be optimized a bit too, since we haven&#39;t spent=
+<br>
+much time on performance improvements. Good news is that once indexed,<br>
+it will be faster to reopen the same trace later on.<br>
+<br>
+We have not yet implemented a percentage progression monitor for the<br>
+indexing job. This is not trivial since it has to be implemented<br>
+differently depending on the trace type, but would definitely be nice to<br=
+>
+have.<br>
+<br>
+If you use the latest master branch, the timestamps for the start and<br>
+end of the histogram are now correctly formatted, so it is possible to<br>
+know roughly where the indexing is at, provided you know the end time of<br=
+>
+your trace. I&#39;d suggest trying that out to make sure it&#39;s not stopp=
+ing<br>
+at some point, which would be a bug.<br>
+<div class=3D"im"><br>
+&gt; Is there a limit on the size of traces that it can import?<br>
+<br>
+</div>There is no theoretical limit on the trace size that can be imported.=
+ It<br>
+is capped only by your patience ;) =A0and the amount of available disk<br>
+space, since the index files can be quite big too.<br>
+<br>
+<br>
+Cheers,<br>
+Alex<br>
+<br>
+</blockquote></div><br></div>
+
+--f46d043be10ed717c304d0c7ada5--
+
+
+--===============1610215528==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1610215528==--
