@@ -1,20 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [BABELTRACE PATCH] Provides a basic pkg-config	file
-	for libbabeltrace
-Date: Fri, 14 Dec 2012 07:36:35 -0500
-Message-ID: <20121214123635.GA12399__20368.1795778268$1355488638$gmane$org@Krystal>
-References: <1355465503-1266-1-git-send-email-yannick.brosseau@gmail.com>
+From: =?ISO-8859-1?Q?S=E9bastien_Barth=E9l=E9my?= <barthelemy@crans.org>
+Subject: tracepoint generation is fragile wrt macro expansion
+Date: Fri, 14 Dec 2012 17:36:22 +0100
+Message-ID: <CAPkDDd4UfCdhoY0s1Es55NkuXNt4qFa4v1wiLDXutcqHOvPMCg__13384.589556563$1355503034$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary=f46d043743efcad22704d0d2a158
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from mail-lb0-f176.google.com ([209.85.217.176])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1TjUVJ-0007H7-8o
-	for lttng-dev@lists.lttng.org; Fri, 14 Dec 2012 07:36:37 -0500
-Content-Disposition: inline
-In-Reply-To: <1355465503-1266-1-git-send-email-yannick.brosseau@gmail.com>
+	(envelope-from <sebastien.barthelemy@gmail.com>) id 1TjYFR-0000ga-AP
+	for lttng-dev@lists.lttng.org; Fri, 14 Dec 2012 11:36:29 -0500
+Received: by mail-lb0-f176.google.com with SMTP id k6so3003259lbo.35
+	for <lttng-dev@lists.lttng.org>; Fri, 14 Dec 2012 08:36:23 -0800 (PST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,80 +19,216 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Yannick Brosseau <yannick.brosseau@gmail.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Yannick Brosseau (yannick.brosseau@gmail.com) wrote:
-> This pkg-config file specify the usage of libbabeltrace and libbabeltrace-ctf since ctf is
-> the only format currently supported and tested.
-> 
-> Signed-off-by: Yannick Brosseau <yannick.brosseau@gmail.com>
+--f46d043743efcad22704d0d2a158
+Content-Type: multipart/alternative; boundary=f46d043743efcad22504d0d2a156
 
-Merged, thanks!
+--f46d043743efcad22504d0d2a156
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
 
-Mathieu
+Hello,
 
-> ---
->  Makefile.am      |    3 +++
->  babeltrace.pc.in |   14 ++++++++++++++
->  configure.ac     |    1 +
->  3 files changed, 18 insertions(+)
->  create mode 100644 babeltrace.pc.in
-> 
-> diff --git a/Makefile.am b/Makefile.am
-> index 7a63612..b25b58f 100644
-> --- a/Makefile.am
-> +++ b/Makefile.am
-> @@ -8,3 +8,6 @@ dist_doc_DATA = ChangeLog LICENSE mit-license.txt gpl-2.0.txt \
->  		std-ext-lib.txt
->  
->  dist_noinst_DATA = CodingStyle
-> +
-> +pkgconfigdir = $(libdir)/pkgconfig
-> +pkgconfig_DATA = babeltrace.pc
-> diff --git a/babeltrace.pc.in b/babeltrace.pc.in
-> new file mode 100644
-> index 0000000..12349dd
-> --- /dev/null
-> +++ b/babeltrace.pc.in
-> @@ -0,0 +1,14 @@
-> +prefix=@prefix@
-> +exec_prefix=@exec_prefix@
-> +libdir=@libdir@
-> +includedir=@includedir@
-> +
-> +Name: Babeltrace
-> +Description: libbabeltrace provides a reader for trace files, reading mainly the 
-> +Common Trace Format (CTF).
-> +Version: @PACKAGE_VERSION@
-> +Requires:
-> +Requires.private: uuid popt
-> +Libs: -L${libdir} -lbabeltrace -lbabeltrace-ctf
-> +Cflags: -I${includedir} 
-> +
-> diff --git a/configure.ac b/configure.ac
-> index 19f16a6..86dd17c 100644
-> --- a/configure.ac
-> +++ b/configure.ac
-> @@ -109,5 +109,6 @@ AC_CONFIG_FILES([
->  	tests/lib/Makefile
->  	extras/Makefile
->  	extras/valgrind/Makefile
-> +	babeltrace.pc
->  ])
->  AC_OUTPUT
-> -- 
-> 1.7.10.4
-> 
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+please find attached a small patch which demonstrates the problem.
 
--- 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+The patch simply renames the test file ust_tests_hello.h into
+ust_tests-linux-hello.h. The build then fails on linux because the "linux"
+in
+
+    #define TRACEPOINT_INCLUDE_FILE ./ust_tests-linux-hello.h
+
+gets expanded to "1", and it then tries to include ust_tests-1-hello.h.
+
+I do not know if this can be fixed, hopefully you'll have a better idea.
+
+I came into the problem because I generate the tracepoint definition file
+(=E0 la lttng-gen-tp) but define TRACEPOINT_INCLUDE_FILE to the full path o=
+f
+the generated file, which happens to be in the build directory, something
+like .../build-sys-linux-x86_64/..., So I'm more exposed.
+
+Maybe a possible solution would involve __FILE__?
+
+Cheers
+
+-- S=E9bastien
+
+--f46d043743efcad22504d0d2a156
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+Hello,<br><br>please find attached a small patch which demonstrates the pro=
+blem.<br><br>The patch simply renames the test file ust_tests_hello.h into =
+ust_tests-linux-hello.h. The build then fails on linux because the &quot;li=
+nux&quot; in<br>
+<br>=A0=A0=A0 #define TRACEPOINT_INCLUDE_FILE ./ust_tests-linux-hello.h<br>=
+<br>gets expanded to &quot;1&quot;, and it then tries to include ust_tests-=
+1-hello.h.<br><br>I do not know if this can be fixed, hopefully you&#39;ll =
+have a better idea.<br>
+<br>I came into the problem because I generate the tracepoint definition fi=
+le (=E0 la lttng-gen-tp) but define TRACEPOINT_INCLUDE_FILE to the full pat=
+h of the generated file, which happens to be in the build directory, someth=
+ing like .../build-sys-linux-x86_64/..., So I&#39;m more exposed.<br>
+<br>Maybe a possible solution would involve __FILE__?<br><br>Cheers<br><br>=
+-- S=E9bastien<br><br><br>
+
+--f46d043743efcad22504d0d2a156--
+
+--f46d043743efcad22704d0d2a158
+Content-Type: application/octet-stream;
+	name="0001-make-ust_tests_hello-fail-because-of-macro-expansion.patch"
+Content-Disposition: attachment;
+	filename="0001-make-ust_tests_hello-fail-because-of-macro-expansion.patch"
+Content-Transfer-Encoding: base64
+X-Attachment-Id: f_hapizyig0
+
+RnJvbSAxMzU1NTRjNDI5NjVmZTk4OGY5OTk4NTdkNWYwMjY2NmUzZmZhMjdmIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiA9P1VURi04P3E/Uz1DMz1BOWJhc3RpZW49MjBCYXJ0aD1DMz1B
+OWw9QzM9QTlteT89CiA8c2JhcnRoZWxlbXlAYWxkZWJhcmFuLXJvYm90aWNzLmNvbT4KRGF0ZTog
+RnJpLCAxNCBEZWMgMjAxMiAxNzoxOTowNyArMDEwMApTdWJqZWN0OiBbUEFUQ0hdIG1ha2UgdXN0
+X3Rlc3RzX2hlbGxvIGZhaWwgYmVjYXVzZSBvZiBtYWNybyBleHBhbnNpb24KCnJlbmFtaW5nIHVz
+dF90ZXN0c19oZWxsby5oIGludG8gdXN0X3Rlc3RzLWxpbnV4LWhlbGxvLmgKbWFrZXMgdGhlIGV4
+YW1wbGUgZmFpbCBiZWNhdXNlIHRoZSAtbGludXgtIiBpbgpUUkFDRVBPSU5UX0lOQ0xVREVfRklM
+RSBnZXRzIGV4cGFuZGVkIHRvICItMS0iLgotLS0KIHRlc3RzL2hlbGxvL01ha2VmaWxlLmFtICAg
+ICAgICAgICAgIHwgICAgMiArLQogdGVzdHMvaGVsbG8vaGVsbG8uYyAgICAgICAgICAgICAgICAg
+fCAgICAyICstCiB0ZXN0cy9oZWxsby90cC5jICAgICAgICAgICAgICAgICAgICB8ICAgIDIgKy0K
+IHRlc3RzL2hlbGxvL3VzdF90ZXN0cy1saW51eC1oZWxsby5oIHwgICA3NiArKysrKysrKysrKysr
+KysrKysrKysrKysrKysrKysrKysrKwogdGVzdHMvaGVsbG8vdXN0X3Rlc3RzX2hlbGxvLmggICAg
+ICAgfCAgIDc2IC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiA1IGZpbGVzIGNo
+YW5nZWQsIDc5IGluc2VydGlvbnMoKyksIDc5IGRlbGV0aW9ucygtKQogY3JlYXRlIG1vZGUgMTAw
+NjQ0IHRlc3RzL2hlbGxvL3VzdF90ZXN0cy1saW51eC1oZWxsby5oCiBkZWxldGUgbW9kZSAxMDA2
+NDQgdGVzdHMvaGVsbG8vdXN0X3Rlc3RzX2hlbGxvLmgKCmRpZmYgLS1naXQgYS90ZXN0cy9oZWxs
+by9NYWtlZmlsZS5hbSBiL3Rlc3RzL2hlbGxvL01ha2VmaWxlLmFtCmluZGV4IDFlZTdmOGQuLmVl
+Y2Y4ODUgMTAwNjQ0Ci0tLSBhL3Rlc3RzL2hlbGxvL01ha2VmaWxlLmFtCisrKyBiL3Rlc3RzL2hl
+bGxvL01ha2VmaWxlLmFtCkBAIC0xLDcgKzEsNyBAQAogQU1fQ1BQRkxBR1MgPSAtSSQodG9wX3Ny
+Y2RpcikvaW5jbHVkZSAtSSQodG9wX2J1aWxkZGlyKS9pbmNsdWRlIC1Xc3lzdGVtLWhlYWRlcnMK
+IAogbm9pbnN0X1BST0dSQU1TID0gaGVsbG8KLWhlbGxvX1NPVVJDRVMgPSBoZWxsby5jIHRwLmMg
+dXN0X3Rlc3RzX2hlbGxvLmgKK2hlbGxvX1NPVVJDRVMgPSBoZWxsby5jIHRwLmMgdXN0X3Rlc3Rz
+LWxpbnV4LWhlbGxvLmgKIGhlbGxvX0xEQUREID0gJCh0b3BfYnVpbGRkaXIpL2xpYmx0dG5nLXVz
+dC9saWJsdHRuZy11c3QubGEKIGhlbGxvX0NGTEFHUyA9IC1XZXJyb3I9b2xkLXN0eWxlLWRlZmlu
+aXRpb24KIApkaWZmIC0tZ2l0IGEvdGVzdHMvaGVsbG8vaGVsbG8uYyBiL3Rlc3RzL2hlbGxvL2hl
+bGxvLmMKaW5kZXggMGMxOGMwMS4uZTc2YjMzMCAxMDA2NDQKLS0tIGEvdGVzdHMvaGVsbG8vaGVs
+bG8uYworKysgYi90ZXN0cy9oZWxsby9oZWxsby5jCkBAIC0zMSw3ICszMSw3IEBACiAjaW5jbHVk
+ZSA8c3RkYm9vbC5oPgogCiAjZGVmaW5lIFRSQUNFUE9JTlRfREVGSU5FCi0jaW5jbHVkZSAidXN0
+X3Rlc3RzX2hlbGxvLmgiCisjaW5jbHVkZSAidXN0X3Rlc3RzLWxpbnV4LWhlbGxvLmgiCiAKIHZv
+aWQgaW50aGFuZGxlcihpbnQgc2lnKQogewpkaWZmIC0tZ2l0IGEvdGVzdHMvaGVsbG8vdHAuYyBi
+L3Rlc3RzL2hlbGxvL3RwLmMKaW5kZXggNDc5MDk2NS4uN2FlYWNhMCAxMDA2NDQKLS0tIGEvdGVz
+dHMvaGVsbG8vdHAuYworKysgYi90ZXN0cy9oZWxsby90cC5jCkBAIC0yMyw0ICsyMyw0IEBACiAg
+Ki8KIAogI2RlZmluZSBUUkFDRVBPSU5UX0NSRUFURV9QUk9CRVMKLSNpbmNsdWRlICJ1c3RfdGVz
+dHNfaGVsbG8uaCIKKyNpbmNsdWRlICJ1c3RfdGVzdHMtbGludXgtaGVsbG8uaCIKZGlmZiAtLWdp
+dCBhL3Rlc3RzL2hlbGxvL3VzdF90ZXN0cy1saW51eC1oZWxsby5oIGIvdGVzdHMvaGVsbG8vdXN0
+X3Rlc3RzLWxpbnV4LWhlbGxvLmgKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMC4u
+NDhhNTQxOQotLS0gL2Rldi9udWxsCisrKyBiL3Rlc3RzL2hlbGxvL3VzdF90ZXN0cy1saW51eC1o
+ZWxsby5oCkBAIC0wLDAgKzEsNzYgQEAKKyN1bmRlZiBUUkFDRVBPSU5UX1BST1ZJREVSCisjZGVm
+aW5lIFRSQUNFUE9JTlRfUFJPVklERVIgdXN0X3Rlc3RzX2hlbGxvCisKKyNpZiAhZGVmaW5lZChf
+VFJBQ0VQT0lOVF9VU1RfVEVTVFNfSEVMTE9fSCkgfHwgZGVmaW5lZChUUkFDRVBPSU5UX0hFQURF
+Ul9NVUxUSV9SRUFEKQorI2RlZmluZSBfVFJBQ0VQT0lOVF9VU1RfVEVTVFNfSEVMTE9fSAorCisj
+aWZkZWYgX19jcGx1c3BsdXMKK2V4dGVybiAiQyIgeworI2VuZGlmCisKKy8qCisgKiBDb3B5cmln
+aHQgKEMpIDIwMTEgIE1hdGhpZXUgRGVzbm95ZXJzIDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lv
+cy5jb20+CisgKgorICogUGVybWlzc2lvbiBpcyBoZXJlYnkgZ3JhbnRlZCwgZnJlZSBvZiBjaGFy
+Z2UsIHRvIGFueSBwZXJzb24gb2J0YWluaW5nIGEgY29weQorICogb2YgdGhpcyBzb2Z0d2FyZSBh
+bmQgYXNzb2NpYXRlZCBkb2N1bWVudGF0aW9uIGZpbGVzICh0aGUgIlNvZnR3YXJlIiksIHRvIGRl
+YWwKKyAqIGluIHRoZSBTb2Z0d2FyZSB3aXRob3V0IHJlc3RyaWN0aW9uLCBpbmNsdWRpbmcgd2l0
+aG91dCBsaW1pdGF0aW9uIHRoZSByaWdodHMKKyAqIHRvIHVzZSwgY29weSwgbW9kaWZ5LCBtZXJn
+ZSwgcHVibGlzaCwgZGlzdHJpYnV0ZSwgc3VibGljZW5zZSwgYW5kL29yIHNlbGwKKyAqIGNvcGll
+cyBvZiB0aGUgU29mdHdhcmUsIGFuZCB0byBwZXJtaXQgcGVyc29ucyB0byB3aG9tIHRoZSBTb2Z0
+d2FyZSBpcworICogZnVybmlzaGVkIHRvIGRvIHNvLCBzdWJqZWN0IHRvIHRoZSBmb2xsb3dpbmcg
+Y29uZGl0aW9uczoKKyAqCisgKiBUaGUgYWJvdmUgY29weXJpZ2h0IG5vdGljZSBhbmQgdGhpcyBw
+ZXJtaXNzaW9uIG5vdGljZSBzaGFsbCBiZSBpbmNsdWRlZCBpbgorICogYWxsIGNvcGllcyBvciBz
+dWJzdGFudGlhbCBwb3J0aW9ucyBvZiB0aGUgU29mdHdhcmUuCisgKgorICogVEhFIFNPRlRXQVJF
+IElTIFBST1ZJREVEICJBUyBJUyIsIFdJVEhPVVQgV0FSUkFOVFkgT0YgQU5ZIEtJTkQsIEVYUFJF
+U1MgT1IKKyAqIElNUExJRUQsIElOQ0xVRElORyBCVVQgTk9UIExJTUlURUQgVE8gVEhFIFdBUlJB
+TlRJRVMgT0YgTUVSQ0hBTlRBQklMSVRZLAorICogRklUTkVTUyBGT1IgQSBQQVJUSUNVTEFSIFBV
+UlBPU0UgQU5EIE5PTklORlJJTkdFTUVOVC4gSU4gTk8gRVZFTlQgU0hBTEwgVEhFCisgKiBBVVRI
+T1JTIE9SIENPUFlSSUdIVCBIT0xERVJTIEJFIExJQUJMRSBGT1IgQU5ZIENMQUlNLCBEQU1BR0VT
+IE9SIE9USEVSCisgKiBMSUFCSUxJVFksIFdIRVRIRVIgSU4gQU4gQUNUSU9OIE9GIENPTlRSQUNU
+LCBUT1JUIE9SIE9USEVSV0lTRSwgQVJJU0lORyBGUk9NLAorICogT1VUIE9GIE9SIElOIENPTk5F
+Q1RJT04gV0lUSCBUSEUgU09GVFdBUkUgT1IgVEhFIFVTRSBPUiBPVEhFUiBERUFMSU5HUyBJTiBU
+SEUKKyAqIFNPRlRXQVJFLgorICovCisKKyNpbmNsdWRlIDxsdHRuZy90cmFjZXBvaW50Lmg+Cisj
+aW5jbHVkZSA8c3RkYm9vbC5oPgorCitUUkFDRVBPSU5UX0VWRU5UKHVzdF90ZXN0c19oZWxsbywg
+dHB0ZXN0LAorCVRQX0FSR1MoaW50LCBhbmludCwgaW50LCBuZXRpbnQsIGxvbmcgKiwgdmFsdWVz
+LAorCQljaGFyICosIHRleHQsIHNpemVfdCwgdGV4dGxlbiwKKwkJZG91YmxlLCBkb3VibGVhcmcs
+IGZsb2F0LCBmbG9hdGFyZywKKwkJYm9vbCwgYm9vbGFyZyksCisJVFBfRklFTERTKAorCQljdGZf
+aW50ZWdlcihpbnQsIGludGZpZWxkLCBhbmludCkKKwkJY3RmX2ludGVnZXJfaGV4KGludCwgaW50
+ZmllbGQyLCBhbmludCkKKwkJY3RmX2ludGVnZXIobG9uZywgbG9uZ2ZpZWxkLCBhbmludCkKKwkJ
+Y3RmX2ludGVnZXJfbmV0d29yayhpbnQsIG5ldGludGZpZWxkLCBuZXRpbnQpCisJCWN0Zl9pbnRl
+Z2VyX25ldHdvcmtfaGV4KGludCwgbmV0aW50ZmllbGRoZXgsIG5ldGludCkKKwkJY3RmX2FycmF5
+KGxvbmcsIGFycmZpZWxkMSwgdmFsdWVzLCAzKQorCQljdGZfYXJyYXlfdGV4dChjaGFyLCBhcnJm
+aWVsZDIsIHRleHQsIDEwKQorCQljdGZfc2VxdWVuY2UoY2hhciwgc2VxZmllbGQxLCB0ZXh0LAor
+CQkJICAgICBzaXplX3QsIHRleHRsZW4pCisJCWN0Zl9zZXF1ZW5jZV90ZXh0KGNoYXIsIHNlcWZp
+ZWxkMiwgdGV4dCwKKwkJCSAgICAgc2l6ZV90LCB0ZXh0bGVuKQorCQljdGZfc3RyaW5nKHN0cmlu
+Z2ZpZWxkLCB0ZXh0KQorCQljdGZfZmxvYXQoZmxvYXQsIGZsb2F0ZmllbGQsIGZsb2F0YXJnKQor
+CQljdGZfZmxvYXQoZG91YmxlLCBkb3VibGVmaWVsZCwgZG91YmxlYXJnKQorCQljdGZfaW50ZWdl
+cihib29sLCBib29sZmllbGQsIGJvb2xhcmcpCisJCWN0Zl9pbnRlZ2VyX25vd3JpdGUoaW50LCBm
+aWx0ZXJmaWVsZCwgYW5pbnQpCisJKQorKQorCitUUkFDRVBPSU5UX0VWRU5UKHVzdF90ZXN0c19o
+ZWxsbywgdHB0ZXN0X3NpZ2hhbmRsZXIsCisJVFBfQVJHUygpLAorCVRQX0ZJRUxEUygpCispCisK
+KyNlbmRpZiAvKiBfVFJBQ0VQT0lOVF9VU1RfVEVTVFNfSEVMTE9fSCAqLworCisjdW5kZWYgVFJB
+Q0VQT0lOVF9JTkNMVURFX0ZJTEUKKyNkZWZpbmUgVFJBQ0VQT0lOVF9JTkNMVURFX0ZJTEUgLi91
+c3RfdGVzdHMtbGludXgtaGVsbG8uaAorCisvKiBUaGlzIHBhcnQgbXVzdCBiZSBvdXRzaWRlIGlm
+ZGVmIHByb3RlY3Rpb24gKi8KKyNpbmNsdWRlIDxsdHRuZy90cmFjZXBvaW50LWV2ZW50Lmg+CisK
+KyNpZmRlZiBfX2NwbHVzcGx1cworfQorI2VuZGlmCmRpZmYgLS1naXQgYS90ZXN0cy9oZWxsby91
+c3RfdGVzdHNfaGVsbG8uaCBiL3Rlc3RzL2hlbGxvL3VzdF90ZXN0c19oZWxsby5oCmRlbGV0ZWQg
+ZmlsZSBtb2RlIDEwMDY0NAppbmRleCA3YjZiNzg3Li4wMDAwMDAwCi0tLSBhL3Rlc3RzL2hlbGxv
+L3VzdF90ZXN0c19oZWxsby5oCisrKyAvZGV2L251bGwKQEAgLTEsNzYgKzAsMCBAQAotI3VuZGVm
+IFRSQUNFUE9JTlRfUFJPVklERVIKLSNkZWZpbmUgVFJBQ0VQT0lOVF9QUk9WSURFUiB1c3RfdGVz
+dHNfaGVsbG8KLQotI2lmICFkZWZpbmVkKF9UUkFDRVBPSU5UX1VTVF9URVNUU19IRUxMT19IKSB8
+fCBkZWZpbmVkKFRSQUNFUE9JTlRfSEVBREVSX01VTFRJX1JFQUQpCi0jZGVmaW5lIF9UUkFDRVBP
+SU5UX1VTVF9URVNUU19IRUxMT19ICi0KLSNpZmRlZiBfX2NwbHVzcGx1cwotZXh0ZXJuICJDIiB7
+Ci0jZW5kaWYKLQotLyoKLSAqIENvcHlyaWdodCAoQykgMjAxMSAgTWF0aGlldSBEZXNub3llcnMg
+PG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4KLSAqCi0gKiBQZXJtaXNzaW9uIGlzIGhl
+cmVieSBncmFudGVkLCBmcmVlIG9mIGNoYXJnZSwgdG8gYW55IHBlcnNvbiBvYnRhaW5pbmcgYSBj
+b3B5Ci0gKiBvZiB0aGlzIHNvZnR3YXJlIGFuZCBhc3NvY2lhdGVkIGRvY3VtZW50YXRpb24gZmls
+ZXMgKHRoZSAiU29mdHdhcmUiKSwgdG8gZGVhbAotICogaW4gdGhlIFNvZnR3YXJlIHdpdGhvdXQg
+cmVzdHJpY3Rpb24sIGluY2x1ZGluZyB3aXRob3V0IGxpbWl0YXRpb24gdGhlIHJpZ2h0cwotICog
+dG8gdXNlLCBjb3B5LCBtb2RpZnksIG1lcmdlLCBwdWJsaXNoLCBkaXN0cmlidXRlLCBzdWJsaWNl
+bnNlLCBhbmQvb3Igc2VsbAotICogY29waWVzIG9mIHRoZSBTb2Z0d2FyZSwgYW5kIHRvIHBlcm1p
+dCBwZXJzb25zIHRvIHdob20gdGhlIFNvZnR3YXJlIGlzCi0gKiBmdXJuaXNoZWQgdG8gZG8gc28s
+IHN1YmplY3QgdG8gdGhlIGZvbGxvd2luZyBjb25kaXRpb25zOgotICoKLSAqIFRoZSBhYm92ZSBj
+b3B5cmlnaHQgbm90aWNlIGFuZCB0aGlzIHBlcm1pc3Npb24gbm90aWNlIHNoYWxsIGJlIGluY2x1
+ZGVkIGluCi0gKiBhbGwgY29waWVzIG9yIHN1YnN0YW50aWFsIHBvcnRpb25zIG9mIHRoZSBTb2Z0
+d2FyZS4KLSAqCi0gKiBUSEUgU09GVFdBUkUgSVMgUFJPVklERUQgIkFTIElTIiwgV0lUSE9VVCBX
+QVJSQU5UWSBPRiBBTlkgS0lORCwgRVhQUkVTUyBPUgotICogSU1QTElFRCwgSU5DTFVESU5HIEJV
+VCBOT1QgTElNSVRFRCBUTyBUSEUgV0FSUkFOVElFUyBPRiBNRVJDSEFOVEFCSUxJVFksCi0gKiBG
+SVRORVNTIEZPUiBBIFBBUlRJQ1VMQVIgUFVSUE9TRSBBTkQgTk9OSU5GUklOR0VNRU5ULiBJTiBO
+TyBFVkVOVCBTSEFMTCBUSEUKLSAqIEFVVEhPUlMgT1IgQ09QWVJJR0hUIEhPTERFUlMgQkUgTElB
+QkxFIEZPUiBBTlkgQ0xBSU0sIERBTUFHRVMgT1IgT1RIRVIKLSAqIExJQUJJTElUWSwgV0hFVEhF
+UiBJTiBBTiBBQ1RJT04gT0YgQ09OVFJBQ1QsIFRPUlQgT1IgT1RIRVJXSVNFLCBBUklTSU5HIEZS
+T00sCi0gKiBPVVQgT0YgT1IgSU4gQ09OTkVDVElPTiBXSVRIIFRIRSBTT0ZUV0FSRSBPUiBUSEUg
+VVNFIE9SIE9USEVSIERFQUxJTkdTIElOIFRIRQotICogU09GVFdBUkUuCi0gKi8KLQotI2luY2x1
+ZGUgPGx0dG5nL3RyYWNlcG9pbnQuaD4KLSNpbmNsdWRlIDxzdGRib29sLmg+Ci0KLVRSQUNFUE9J
+TlRfRVZFTlQodXN0X3Rlc3RzX2hlbGxvLCB0cHRlc3QsCi0JVFBfQVJHUyhpbnQsIGFuaW50LCBp
+bnQsIG5ldGludCwgbG9uZyAqLCB2YWx1ZXMsCi0JCWNoYXIgKiwgdGV4dCwgc2l6ZV90LCB0ZXh0
+bGVuLAotCQlkb3VibGUsIGRvdWJsZWFyZywgZmxvYXQsIGZsb2F0YXJnLAotCQlib29sLCBib29s
+YXJnKSwKLQlUUF9GSUVMRFMoCi0JCWN0Zl9pbnRlZ2VyKGludCwgaW50ZmllbGQsIGFuaW50KQot
+CQljdGZfaW50ZWdlcl9oZXgoaW50LCBpbnRmaWVsZDIsIGFuaW50KQotCQljdGZfaW50ZWdlcihs
+b25nLCBsb25nZmllbGQsIGFuaW50KQotCQljdGZfaW50ZWdlcl9uZXR3b3JrKGludCwgbmV0aW50
+ZmllbGQsIG5ldGludCkKLQkJY3RmX2ludGVnZXJfbmV0d29ya19oZXgoaW50LCBuZXRpbnRmaWVs
+ZGhleCwgbmV0aW50KQotCQljdGZfYXJyYXkobG9uZywgYXJyZmllbGQxLCB2YWx1ZXMsIDMpCi0J
+CWN0Zl9hcnJheV90ZXh0KGNoYXIsIGFycmZpZWxkMiwgdGV4dCwgMTApCi0JCWN0Zl9zZXF1ZW5j
+ZShjaGFyLCBzZXFmaWVsZDEsIHRleHQsCi0JCQkgICAgIHNpemVfdCwgdGV4dGxlbikKLQkJY3Rm
+X3NlcXVlbmNlX3RleHQoY2hhciwgc2VxZmllbGQyLCB0ZXh0LAotCQkJICAgICBzaXplX3QsIHRl
+eHRsZW4pCi0JCWN0Zl9zdHJpbmcoc3RyaW5nZmllbGQsIHRleHQpCi0JCWN0Zl9mbG9hdChmbG9h
+dCwgZmxvYXRmaWVsZCwgZmxvYXRhcmcpCi0JCWN0Zl9mbG9hdChkb3VibGUsIGRvdWJsZWZpZWxk
+LCBkb3VibGVhcmcpCi0JCWN0Zl9pbnRlZ2VyKGJvb2wsIGJvb2xmaWVsZCwgYm9vbGFyZykKLQkJ
+Y3RmX2ludGVnZXJfbm93cml0ZShpbnQsIGZpbHRlcmZpZWxkLCBhbmludCkKLQkpCi0pCi0KLVRS
+QUNFUE9JTlRfRVZFTlQodXN0X3Rlc3RzX2hlbGxvLCB0cHRlc3Rfc2lnaGFuZGxlciwKLQlUUF9B
+UkdTKCksCi0JVFBfRklFTERTKCkKLSkKLQotI2VuZGlmIC8qIF9UUkFDRVBPSU5UX1VTVF9URVNU
+U19IRUxMT19IICovCi0KLSN1bmRlZiBUUkFDRVBPSU5UX0lOQ0xVREVfRklMRQotI2RlZmluZSBU
+UkFDRVBPSU5UX0lOQ0xVREVfRklMRSAuL3VzdF90ZXN0c19oZWxsby5oCi0KLS8qIFRoaXMgcGFy
+dCBtdXN0IGJlIG91dHNpZGUgaWZkZWYgcHJvdGVjdGlvbiAqLwotI2luY2x1ZGUgPGx0dG5nL3Ry
+YWNlcG9pbnQtZXZlbnQuaD4KLQotI2lmZGVmIF9fY3BsdXNwbHVzCi19Ci0jZW5kaWYKLS0gCjEu
+Ny45LjUKCg==
+--f46d043743efcad22704d0d2a158
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--f46d043743efcad22704d0d2a158--
