@@ -1,18 +1,20 @@
 From: Christian Babeux <christian.babeux@efficios.com>
-Subject: [PATCH 1/5] run-report: Use libtool wrapper to spawn
-	the sessiond for tests
-Date: Tue, 18 Dec 2012 16:31:14 -0500
-Message-ID: <1355866278-11702-1-git-send-email-christian.babeux__36492.8102041178$1355866343$gmane$org@efficios.com>
+Subject: [PATCH 2/5] run-report: Restore SIGPIPE default handler
+	in subprocess calls
+Date: Tue, 18 Dec 2012 16:31:15 -0500
+Message-ID: <1355866278-11702-2-git-send-email-christian.babeux__3014.45455193079$1355866344$gmane$org@efficios.com>
+References: <1355866278-11702-1-git-send-email-christian.babeux@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f169.google.com ([209.85.223.169])
+Received: from mail-ie0-f173.google.com ([209.85.223.173])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <christian.babeux@0x80.ca>) id 1Tl4lK-0005JF-UY
-	for lttng-dev@lists.lttng.org; Tue, 18 Dec 2012 16:31:43 -0500
-Received: by mail-ie0-f169.google.com with SMTP id c14so1692357ieb.28
-	for <lttng-dev@lists.lttng.org>; Tue, 18 Dec 2012 13:31:37 -0800 (PST)
+	(envelope-from <christian.babeux@0x80.ca>) id 1Tl4lQ-0005JG-An
+	for lttng-dev@lists.lttng.org; Tue, 18 Dec 2012 16:31:48 -0500
+Received: by mail-ie0-f173.google.com with SMTP id e13so1698089iej.18
+	for <lttng-dev@lists.lttng.org>; Tue, 18 Dec 2012 13:31:43 -0800 (PST)
+In-Reply-To: <1355866278-11702-1-git-send-email-christian.babeux@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -25,69 +27,44 @@ To: dgoulet@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-The run-report script was using the sessiond binary generated via libtool
-under the ".libs/" folder. When using this binary, the consumerd used when
-starting the sessiond is the one installed system-wide (if any). This could
-lead to tests failures if no consumer are installed in the system or any
-version mismatch occurs.
+Python override the SIGPIPE default handler because it prefers to check
+every write and raise an IOError exception rather than taking SIGPIPE [1].
 
-This commit fix this by using the consumerd that was built with libtool in
-the local source tree.
+This behavior has the unfortunate side-effect of polluting stdout with
+broken pipe messages on shell pipelines invocations (e.g. echo foo |
+grep something | etc.) in shell scripts spawned via subprocess.Popen().
+
+This commit fix the polluting of stdout by restoring the default SIGPIPE
+handler on subprocess calls.
+
+[1] - http://bugs.python.org/issue1652
 
 Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
 ---
- tests/run-report.py | 18 ++++++++++++++----
- 1 file changed, 14 insertions(+), 4 deletions(-)
+ tests/run-report.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/tests/run-report.py b/tests/run-report.py
-index 1516c7e..ca6e6a3 100755
+index ca6e6a3..6f559c9 100755
 --- a/tests/run-report.py
 +++ b/tests/run-report.py
-@@ -5,11 +5,14 @@ import subprocess
- import threading
- import Queue
+@@ -7,7 +7,7 @@ import Queue
  import time
-+import shlex
+ import shlex
  
- from signal import signal, SIGTERM, SIGINT
+-from signal import signal, SIGTERM, SIGINT
++from signal import signal, SIGTERM, SIGINT, SIGPIPE, SIG_DFL
  
  SESSIOND_BIN_NAME = "lttng-sessiond"
--SESSIOND_BIN_PATH = "src/bin/lttng-sessiond/.libs/"
-+SESSIOND_BIN_PATH = "src/bin/lttng-sessiond/"
-+CONSUMERD_BIN_NAME = "lttng-consumerd"
-+CONSUMERD_BIN_PATH = "src/bin/lttng-consumerd/"
- TESTDIR_PATH = ""
+ SESSIOND_BIN_PATH = "src/bin/lttng-sessiond/"
+@@ -182,7 +182,7 @@ class TestWorker(threading.Thread):
+         env = os.environ
+         env['TEST_NO_SESSIOND'] = '1'
  
- PRINT_BRACKET = "\033[1;34m[\033[1;33m+\033[1;34m]\033[00m"
-@@ -208,19 +211,26 @@ def spawn_session_daemon():
-         os.kill(pid, SIGTERM)
+-        test = subprocess.Popen([bin_path_name], env=env)
++        test = subprocess.Popen([bin_path_name], env=env, preexec_fn = lambda: signal(SIGPIPE, SIG_DFL))
+         test.wait()
  
-     bin_path = os.path.join(TESTDIR_PATH, "..", SESSIOND_BIN_PATH, SESSIOND_BIN_NAME)
-+    consumer_path = os.path.join(TESTDIR_PATH, "..", CONSUMERD_BIN_PATH, CONSUMERD_BIN_NAME)
- 
-     if not os.path.isfile(bin_path):
-         print "Error: No session daemon binary found. Compiled?"
-         return 0
- 
-     try:
--        sdaemon_proc = subprocess.Popen([bin_path, "-d"], shell=False,
--                stderr = subprocess.PIPE)
-+        args = shlex.split("libtool execute " + bin_path
-+                           + " --consumerd32-path=" + consumer_path
-+                           + " --consumerd64-path=" + consumer_path)
-+
-+        sdaemon_proc = subprocess.Popen(args, shell = False, stderr = subprocess.PIPE)
-+
-     except OSError, e:
-         print e
-         return 0
- 
--    return get_pid(SESSIOND_BIN_NAME)
-+    time.sleep(1)
-+
-+    return get_pid("lt-" + SESSIOND_BIN_NAME)
- 
- def start_test(name):
-     """
+         # Send ret value to main thread
 -- 
 1.8.0.2
