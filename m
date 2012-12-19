@@ -1,18 +1,19 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: Re: [PATCH 1/5] run-report: Use libtool wrapper to
- spawn the sessiond for tests
-Date: Tue, 18 Dec 2012 16:43:53 -0500
-Message-ID: <50D0E399.8060804__39326.6084990048$1355867077$gmane$org@efficios.com>
-References: <1355866278-11702-1-git-send-email-christian.babeux@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: babletrace with python bindings
+Date: Wed, 19 Dec 2012 13:39:32 -0500
+Message-ID: <20121219183932.GA9587__28871.4459901259$1355942429$gmane$org@Krystal>
+References: <20121218184045.288000@gmx.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([213.239.202.151])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1Tl4xA-0005T7-Ay
-	for lttng-dev@lists.lttng.org; Tue, 18 Dec 2012 16:43:56 -0500
-In-Reply-To: <1355866278-11702-1-git-send-email-christian.babeux@efficios.com>
+	(envelope-from <compudj@mail.openrapids.net>) id 1TlOYI-0006zm-8l
+	for lttng-dev@lists.lttng.org; Wed, 19 Dec 2012 13:39:34 -0500
+Content-Disposition: inline
+In-Reply-To: <20121218184045.288000@gmx.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,78 +22,69 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Christian Babeux <christian.babeux@efficios.com>
+To: ajonwa ajonwa <ajonwa@gmx.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Merged!
-
-Thanks!
-
-David
-
-Christian Babeux:
-> The run-report script was using the sessiond binary generated via libtool
-> under the ".libs/" folder. When using this binary, the consumerd used when
-> starting the sessiond is the one installed system-wide (if any). This could
-> lead to tests failures if no consumer are installed in the system or any
-> version mismatch occurs.
+* ajonwa ajonwa (ajonwa@gmx.com) wrote:
+> Hello everyone,
 > 
-> This commit fix this by using the consumerd that was built with libtool in
-> the local source tree.
+>  I get the following error message while attempting to compile babeltrace with python bindings:
 > 
-> Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
-> ---
->  tests/run-report.py | 18 ++++++++++++++----
->  1 file changed, 14 insertions(+), 4 deletions(-)
+>  CC _babeltrace_la-babeltrace_wrap.lo
+> babeltrace_wrap.c: In function '_wrap__bt_ctf_field_type':
+> babeltrace_wrap.c:4621:56: warning: passing argument 1 of 'bt_ctf_field_type' from incompatible pointer type [enabled by default]
+> ../../include/babeltrace/ctf/events.h:158:18: note: expected 'const struct declaration *' but argument is of type 'const struct definition *'
+> babeltrace_wrap.c: In function '_wrap__bt_ctf_get_int_signedness':
+> babeltrace_wrap.c:4643:51: warning: passing argument 1 of 'bt_ctf_get_int_signedness' from incompatible pointer type [enabled by default]
+> ../../include/babeltrace/ctf/events.h:167:5: note: expected 'const struct declaration *' but argument is of type 'const struct definition *'
+> babeltrace_wrap.c: In function '_wrap__bt_ctf_get_int_base':
+> babeltrace_wrap.c:4665:45: warning: passing argument 1 of 'bt_ctf_get_int_base' from incompatible pointer type [enabled by default]
+> ../../include/babeltrace/ctf/events.h:172:5: note: expected 'const struct declaration *' but argument is of type 'const struct definition *'
+> babeltrace_wrap.c: In function '_wrap__bt_ctf_get_int_byte_order':
+> babeltrace_wrap.c:4687:51: warning: passing argument 1 of 'bt_ctf_get_int_byte_order' from incompatible pointer type [enabled by default]
+> ../../include/babeltrace/ctf/events.h:178:5: note: expected 'const struct declaration *' but argument is of type 'const struct definition *'
+> babeltrace_wrap.c: In function '_wrap__bt_ctf_get_int_len':
+> babeltrace_wrap.c:4709:39: warning: passing argument 1 of 'bt_ctf_get_int_len' from incompatible pointer type [enabled by default]
+> ../../include/babeltrace/ctf/events.h:184:9: note: expected 'const struct declaration *' but argument is of type 'const struct definition *'
+> babeltrace_wrap.c: In function '_wrap__bt_ctf_get_encoding':
+> babeltrace_wrap.c:4731:66: warning: passing argument 1 of 'bt_ctf_get_encoding' from incompatible pointer type [enabled by default]
+> ../../include/babeltrace/ctf/events.h:190:26: note: expected 'const struct declaration *' but argument is of type 'const struct definition *'
+> babeltrace_wrap.c: In function '_wrap__bt_ctf_get_array_len':
+> babeltrace_wrap.c:4753:46: warning: passing argument 1 of 'bt_ctf_get_array_len' from incompatible pointer type [enabled by default]
+> ../../include/babeltrace/ctf/events.h:196:5: note: expected 'const struct declaration *' but argument is of type 'const struct definition *'
+> babeltrace_wrap.c: In function 'init_babeltrace':
+> babeltrace_wrap.c:6020:61: error: 'BT_SEEK_END' undeclared (first use in this function)
+> babeltrace_wrap.c:6020:61: note: each undeclared identifier is reported only once for each function it appears in
+> make[3]: *** [_babeltrace_la-babeltrace_wrap.lo] Error 1
 > 
-> diff --git a/tests/run-report.py b/tests/run-report.py
-> index 1516c7e..ca6e6a3 100755
-> --- a/tests/run-report.py
-> +++ b/tests/run-report.py
-> @@ -5,11 +5,14 @@ import subprocess
->  import threading
->  import Queue
->  import time
-> +import shlex
->  
->  from signal import signal, SIGTERM, SIGINT
->  
->  SESSIOND_BIN_NAME = "lttng-sessiond"
-> -SESSIOND_BIN_PATH = "src/bin/lttng-sessiond/.libs/"
-> +SESSIOND_BIN_PATH = "src/bin/lttng-sessiond/"
-> +CONSUMERD_BIN_NAME = "lttng-consumerd"
-> +CONSUMERD_BIN_PATH = "src/bin/lttng-consumerd/"
->  TESTDIR_PATH = ""
->  
->  PRINT_BRACKET = "\033[1;34m[\033[1;33m+\033[1;34m]\033[00m"
-> @@ -208,19 +211,26 @@ def spawn_session_daemon():
->          os.kill(pid, SIGTERM)
->  
->      bin_path = os.path.join(TESTDIR_PATH, "..", SESSIOND_BIN_PATH, SESSIOND_BIN_NAME)
-> +    consumer_path = os.path.join(TESTDIR_PATH, "..", CONSUMERD_BIN_PATH, CONSUMERD_BIN_NAME)
->  
->      if not os.path.isfile(bin_path):
->          print "Error: No session daemon binary found. Compiled?"
->          return 0
->  
->      try:
-> -        sdaemon_proc = subprocess.Popen([bin_path, "-d"], shell=False,
-> -                stderr = subprocess.PIPE)
-> +        args = shlex.split("libtool execute " + bin_path
-> +                           + " --consumerd32-path=" + consumer_path
-> +                           + " --consumerd64-path=" + consumer_path)
-> +
-> +        sdaemon_proc = subprocess.Popen(args, shell = False, stderr = subprocess.PIPE)
-> +
->      except OSError, e:
->          print e
->          return 0
->  
-> -    return get_pid(SESSIOND_BIN_NAME)
-> +    time.sleep(1)
-> +
-> +    return get_pid("lt-" + SESSIOND_BIN_NAME)
->  
->  def start_test(name):
->      """
+>  I got the source code by checking out bindings/python (git checkout bindings/python).
+> 
+>  I will be grateful if someone would tell how to fix the error.
+
+This branch is currently in development, and might be out of sync with
+the master branch of babeltrace at the moment. We don't have immediate
+plans to work on it, but bontributions are welcome.
+
+Thanks,
+
+Mathieu
+
+> 
+> 
+> 
+>  Thanks,
+> 
+>  Geoffrey
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+
+-- 
+Mathieu Desnoyers
+Operating System Efficiency R&D Consultant
+EfficiOS Inc.
+http://www.efficios.com
