@@ -1,17 +1,17 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: Re: LTTng 2.1: create session errors
-Date: Thu, 20 Dec 2012 14:11:55 -0500
-Message-ID: <50D362FB.2010901__47272.7579916411$1356030761$gmane$org@efficios.com>
-References: <50D35E5F.6020405@ericsson.com>
+From: Yannick Brosseau <yannick.brosseau@gmail.com>
+Subject: [LTTng-Tools PATCH] Add pkg-config for liblttng-ctl
+Date: Thu, 20 Dec 2012 14:28:00 -0500
+Message-ID: <1356031680-24111-1-git-send-email-yannick.brosseau__26093.4653728784$1356031734$gmane$org@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([213.239.202.151])
+Received: from mail-ie0-f177.google.com ([209.85.223.177])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1TllXC-00020p-Rs
-	for lttng-dev@lists.lttng.org; Thu, 20 Dec 2012 14:11:59 -0500
-In-Reply-To: <50D35E5F.6020405@ericsson.com>
+	(envelope-from <yannick.brosseau@gmail.com>) id 1Tllmw-0002AH-Ux
+	for lttng-dev@lists.lttng.org; Thu, 20 Dec 2012 14:28:15 -0500
+Received: by mail-ie0-f177.google.com with SMTP id k13so5159190iea.22
+	for <lttng-dev@lists.lttng.org>; Thu, 20 Dec 2012 11:28:09 -0800 (PST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,101 +20,72 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Bernd Hufmann <Bernd.Hufmann@ericsson.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Just in time before I push for 2.1 sable.
+Signed-off-by: Yannick Brosseau <yannick.brosseau@gmail.com>
+---
+ .gitignore                        |    2 +-
+ configure.ac                      |    1 +
+ src/lib/lttng-ctl/Makefile.am     |    3 +++
+ src/lib/lttng-ctl/lttng-ctl.pc.in |   13 +++++++++++++
+ 4 files changed, 18 insertions(+), 1 deletion(-)
+ create mode 100644 src/lib/lttng-ctl/lttng-ctl.pc.in
 
-Bernd Hufmann:
-> Hello
-> 
-> I'm currently using lttng-tools 2.1.0-RC9. I see some errors when using
-> "lttng create " with streaming options:
-> 
-> 1) lttng create mysession -C net://192:1.1.1: -D net://192:1.1.1.1
-> 
-> The command output shows:
->    Session mysession created.
->    Traces will be written in (null)
->    Control URL net://192.1.1.1.1 set for session mysession
->    Data URL net://192.1.1.1.1 set for session mysession
-> 
-> The line "Traces will be written in (null)" should show the correct
-> location similar when using the -U option. Also, when typing "lttng list
-> mysession" afterwards the trace path is not displayed correctly.
-> (mysession (net://192.1.1.1:5342/ [data: 5343]) [inactive]).
-
-Fixed.
-
-> 
-> 2) lttng create mysession -C net://192:1.1.1:5342 -D net://192.1.1.1:5343
-> 
-> This command output shows:
->    Session mysession created.
->    Traces will be written in (null)
->    Error: Control URL uses the net:// protocol and the data URL is
-> different. Not allowed.
->    Error: Invalid parameter
-> 
-> The command fails with an error. However, the session seems to be
-> created, but no consumer is defined. First of all, it should be possible
-> to define the port with the option -C and -D. Secondly, if an error
-> occurs the session shouldn't be created.
-
-Both URL are not equal since the port is different here. So, you CAN'T
-use net:// with create session unless both URLs are identical. Use
-tcp:// here. The net:// protocol stands for the default transport layer
-for both port.
-
-The session stays created here and I can't change that for now. You can
-simply use "lttng enable-consumer" after to set the correct thing. This
-could however be changed for next version as a bug fix.
-
-> 
-> 3) lttng create mysession -C net://192.1.1.1
-> 
-> This command doesn't fail. I expected it to fail since the command help
-> states that -D <data URL> must be used too. BTW, "lttng create mysession
-> -D net://192.1.1.1" fails.
-
-Fixed.
-
-> 
-> 4) lttng create mysession -C net://192:1.1.1 -D net://192.1.1.2
-> This command fails, because the IP address is not the same. Is this
-> intended?
-
-It is because URLs are not identical. Use tcp:// here instread.
-
-> 
-> 5) In "lttng create -h" and "enable-consumer -h" show "tcp[4|6]" as
-> possible protocols, but "tcp4" doesn't work. I have to use "tcp". The
-> help should be updated for that.
-
-Fixed
-
-> 
-> 6) Why isn't it possible to use "tcp[6]" together with option -U?
-> Instead "net[6]" has to be used, which defaults to TCP as network
-> transport.
-
--U is used to specify BOTH url for ports so for now we only allow net://
-that do this job.
-
-Future work will fine grained more the URI parsing but for now, use
-net[6]:// only with -U.
-
-It will be upstream in a jiffy.
-
-Thanks!
-David
-
-> 
-> Could someone please look into this?
-> 
-> Best Regards
-> Bernd
-> 
-> 
-> 
+diff --git a/.gitignore b/.gitignore
+index 383dbf9..afc97b6 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -35,7 +35,7 @@ src/bin/lttng-sessiond/lttng-sessiond
+ src/bin/lttng/lttng
+ src/bin/lttng-consumerd/lttng-consumerd
+ src/bin/lttng-relayd/lttng-relayd
+-
++src/lib/lttng-ctl/lttng-ctl.pc
+ src/lib/lttng-ctl/filter/filter-grammar-test
+ src/lib/lttng-ctl/filter/filter-lexer.c
+ src/lib/lttng-ctl/filter/filter-parser.c
+diff --git a/configure.ac b/configure.ac
+index 54aa385..be6736c 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -281,6 +281,7 @@ AC_CONFIG_FILES([
+ 	src/lib/Makefile
+ 	src/lib/lttng-ctl/Makefile
+ 	src/lib/lttng-ctl/filter/Makefile
++	src/lib/lttng-ctl/lttng-ctl.pc
+ 	src/bin/Makefile
+ 	src/bin/lttng-consumerd/Makefile
+ 	src/bin/lttng-sessiond/Makefile
+diff --git a/src/lib/lttng-ctl/Makefile.am b/src/lib/lttng-ctl/Makefile.am
+index 2681bdd..542f4bb 100644
+--- a/src/lib/lttng-ctl/Makefile.am
++++ b/src/lib/lttng-ctl/Makefile.am
+@@ -11,3 +11,6 @@ liblttng_ctl_la_LIBADD = \
+ 		$(top_builddir)/src/common/libcommon.la \
+ 		$(top_builddir)/src/common/hashtable/libhashtable.la \
+ 		$(top_builddir)/src/lib/lttng-ctl/filter/libfilter.la
++
++pkgconfigdir = $(libdir)/pkgconfig
++pkgconfig_DATA = lttng-ctl.pc
+diff --git a/src/lib/lttng-ctl/lttng-ctl.pc.in b/src/lib/lttng-ctl/lttng-ctl.pc.in
+new file mode 100644
+index 0000000..6c9d1e7
+--- /dev/null
++++ b/src/lib/lttng-ctl/lttng-ctl.pc.in
+@@ -0,0 +1,13 @@
++prefix=@prefix@
++exec_prefix=@exec_prefix@
++libdir=@libdir@
++includedir=@includedir@
++
++Name: LTTng control library
++Description: The LTTng control and utility library is a library 
++Version: @PACKAGE_VERSION@
++Requires:
++Requires.private: 
++Libs: -L${libdir} -llttng-ctl
++Cflags: -I${includedir} 
++
+-- 
+1.7.10.4
