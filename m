@@ -1,192 +1,84 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [lttng-dev] Request change name of function lookup_enum in	libbabeltrace to make GDB use this lib
-Date: Thu, 20 Dec 2012 09:16:43 -0500
-Message-ID: <20121220141643.GA22763__5985.26008329845$1356013051$gmane$org@Krystal>
-References: <CANFwon2s-eJoCrhzJmxhoGx9G2NeOAFf-FDFk1SoxD1OhPxWsg@mail.gmail.com> <20121205120845.GA31696@Krystal> <50C0C06A.40207@redhat.com> <CANFwon2U61xKrSFVq0wJ0axVKqjz7RzWcOn5vJ3MUEL4JC+VOA@mail.gmail.com> <20121210140524.GA31945@Krystal> <CANFwon2T5CYcjssSyTh_yjV2fgw0N3SZXqytNJQOCR1h2vM8MQ@mail.gmail.com> <CANFwon18bwvqnXe6xVoWS0C3Ls2LQmxy7BDjWf8wj=-iEzd3Qg@mail.gmail.com>
+Subject: [RELEASE] LTTng-UST 2.1.0
+Date: Thu, 20 Dec 2012 13:45:25 -0500
+Message-ID: <20121220184525.GA28486__44864.8733472966$1356029170$gmane$org@Krystal>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Return-path: <gdb-return-41661-gdb-gdb=m.gmane.org@sourceware.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <compudj@mail.openrapids.net>) id 1Tll7W-0001lb-Jq
+	for lttng-dev@lists.lttng.org; Thu, 20 Dec 2012 13:45:26 -0500
+Received: from localhost (localhost [127.0.0.1])
+	by blackscsi.openrapids.net (Postfix) with ESMTP id 44225140278
+	for <lttng-dev@lists.lttng.org>; Thu, 20 Dec 2012 13:45:26 -0500 (EST)
+Received: from blackscsi.openrapids.net ([127.0.0.1])
+	by localhost (blackscsi.openrapids.net [127.0.0.1]) (amavisd-new,
+	port 10024)
+	with ESMTP id PbQGnEUDTui9 for <lttng-dev@lists.lttng.org>;
+	Thu, 20 Dec 2012 13:45:25 -0500 (EST)
 Content-Disposition: inline
-In-Reply-To: <CANFwon18bwvqnXe6xVoWS0C3Ls2LQmxy7BDjWf8wj=-iEzd3Qg@mail.gmail.com>
-List-Unsubscribe: <mailto:gdb-unsubscribe-gdb-gdb=m.gmane.org@sourceware.org>
-List-Subscribe: <mailto:gdb-subscribe@sourceware.org>
-List-Archive: <http://sourceware.org/ml/gdb/>
-List-Post: <mailto:gdb@sourceware.org>
-List-Help: <mailto:gdb-help@sourceware.org>, <http://sourceware.org/ml/#faqs>
-Sender: gdb-owner@sourceware.org
-To: Hui Zhu <teawater@gmail.com>
-Cc: Pedro Alves <palves@redhat.com>, Julien Desfossez <jdesfossez@efficios.com>, lttng-dev <lttng-dev@lists.lttng.org>, Tom Tromey <tromey@redhat.com>, gdb@sourceware.org
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Hui Zhu (teawater@gmail.com) wrote:
-> On Tue, Dec 11, 2012 at 11:18 PM, Hui Zhu <teawater@gmail.com> wrote:
-> > On Mon, Dec 10, 2012 at 10:05 PM, Mathieu Desnoyers
-> > <mathieu.desnoyers@efficios.com> wrote:
-> >> * Hui Zhu (teawater@gmail.com) wrote:
-> >>> On Thu, Dec 6, 2012 at 11:57 PM, Pedro Alves <palves@redhat.com> wrote:
-> >>> > On 12/05/2012 12:08 PM, Mathieu Desnoyers wrote:
-> >>> >> * Hui Zhu (teawater@gmail.com) wrote:
-> >>> >>> Hi,
-> >>> >>>
-> >>> >>> I am working on add CTF support to GDB.  You can see my patch review threads in:
-> >>> >>> http://sourceware.org/ml/gdb-patches/2012-11/msg00552.html
-> >>> >>> http://sourceware.org/ml/gdb-patches/2012-11/msg00554.html
-> >>> >>> http://sourceware.org/ml/gdb-patches/2012-11/msg00553.html
-> >>> >>> http://sourceware.org/ml/gdb-patches/2012-11/msg00555.html
-> >>> >>> http://sourceware.org/ml/gdb-patches/2012-11/msg00556.html
-> >>> >>>
-> >>> >>> To make GDB support CTF read, I use libbabeltrace with GDB.  You can
-> >>> >>> see the patch in
-> >>> >>> http://sourceware.org/ml/gdb-patches/2012-11/msg00555.html.
-> >>> >>> I have a issue is  libbabeltrace have a function called lookup_enum
-> >>> >>> that is same with a GDB function.
-> >>> >>> I change the function name of GDB to handle this issue in my patch.
-> >>> >>>
-> >>> >>> But Tom said let libbabeltrace to change function name is better.
-> >>> >>> So I send this mail to ask do you mind change the function name of
-> >>> >>> lookup_enum?   If you can change the function name that will be really
-> >>> >>> helpful for us.  Thanks a lot.
-> >>> >>> And I post a patch about change the function name in libbabeltrace.
-> >>> >>
-> >>> >> I'm CCing Julien Desfossez on this one. From what I see,
-> >>> >> include/babeltrace/types.h is not included into the system, so it should
-> >>> >> not be considered to be a public header of libbabeltrace.
-> >>> >
-> >>> > I've just built and installed babeltrace 1.0.0 (where's the mainline repository,
-> >>> > BTW?), and indeed, I'm not seeing the types.h file anywhere in the
-> >>> > installed tree:
-> >>> >
-> >>> > $ ~/src/babeltrace/install/include> find
-> >>> > .
-> >>> > ./babeltrace
-> >>> > ./babeltrace/trace-handle.h
-> >>> > ./babeltrace/list.h
-> >>> > ./babeltrace/babeltrace.h
-> >>> > ./babeltrace/context.h
-> >>> > ./babeltrace/iterator.h
-> >>> > ./babeltrace/ctf
-> >>> > ./babeltrace/ctf/callbacks.h
-> >>> > ./babeltrace/ctf/events.h
-> >>> > ./babeltrace/ctf/iterator.h
-> >>> > ./babeltrace/format.h
-> >>> > ./babeltrace/clock-types.h
-> >>> >
-> >>> > The GDB patch is including types.h explicitly:
-> >>> >
-> >>> > +#ifdef HAVE_LIBBABELTRACE
-> >>> > +#include <babeltrace/babeltrace.h>
-> >>> > +#include <babeltrace/types.h>
-> >>> > +#include <babeltrace/ctf/events.h>
-> >>> > +#include <babeltrace/ctf/iterator.h>
-> >>> >
-> >>> > So indeed, Hui, you'll need to make sure your patch works against an
-> >>> > installed babeltrace, making sure it does not pick up headers
-> >>> > from babeltrace's source directory.  If there's really no reason to
-> >>> > include that types.h header (since it seems you don't really need any
-> >>> > function declared in that file), maybe there's actually nothing for
-> >>> > babeltrace to do.
-> >>>
-> >>> Oops, sorry for I miss something.
-> >>> I use include babeltrace/types.h because I use function
-> >>> get_int_signedness that defined inside it.
-> >>
-> >> Can you use:
-> >>
-> >> include/babeltrace/ctf/events.h: bt_ctf_get_int_signedness() instead ?
-> >>
-> >> This one is within an exported header,
-> >>
-> >> Thanks,
-> >>
-> >> Mathieu
-> >
-> > Great! My part is OK now.  Thanks for your help.
-> >
-> > Best,
-> > Hui
-> >
-> 
-> Hi Mathieu.,
-> 
-> I am so sorry that I still have issue with the function name of lookup_enum.
-> What I met is a crash when try to use libbabeltrace in GDB:
-> #0  0x00000000005d0cfc in block_static_block (block=0x7ffff6e5ee3e) at
-> ../../gdb/gdb/block.c:343
-> #1  0x00000000005d42ae in lookup_symbol_aux_local (name=0xf70c70
-> "\240!\224\001", block=0x7ffff6e5ee3e,
->     domain=STRUCT_DOMAIN, language=language_c) at ../../gdb/gdb/symtab.c:1429
-> #2  0x00000000005d40b5 in lookup_symbol_aux (name=0xf70c70
-> "\240!\224\001", block=0x7ffff6e5ee3e, domain=STRUCT_DOMAIN,
->     language=language_c, is_a_field_of_this=0x0) at ../../gdb/gdb/symtab.c:1345
-> #3  0x00000000005d3cae in lookup_symbol_in_language (name=0xf70c70
-> "\240!\224\001", block=0x7ffff6e5ee3e,
->     domain=STRUCT_DOMAIN, lang=language_c, is_a_field_of_this=0x0) at
-> ../../gdb/gdb/symtab.c:1231
-> #4  0x00000000005d3cff in lookup_symbol (name=0xf70c70
-> "\240!\224\001", block=0x7ffff6e5ee3e, domain=STRUCT_DOMAIN,
->     is_a_field_of_this=0x0) at ../../gdb/gdb/symtab.c:1246
-> #5  0x000000000062f372 in lookup_enum (name=0xf70c70 "\240!\224\001",
-> block=0x7ffff6e5ee3e)
->     at ../../gdb/gdb/gdbtypes.c:1287
-> #6  0x00007ffff6e479b5 in ctf_read_event (ppos=0xf6cca8,
-> stream=0xf6cc10) at ../../../babeltrace/formats/ctf/ctf.c:434
-> #7  0x00007ffff7071204 in stream_read_event (sin=<optimized out>) at
-> ../../babeltrace/lib/iterator.c:65
-> #8  0x00007ffff7071eb3 in bt_iter_init (iter=0x13ec820, ctx=0xf4b8b0,
-> begin_pos=0x7fffffffdad0, end_pos=<optimized out>)
->     at ../../babeltrace/lib/iterator.c:703
-> #9  0x00007ffff6e4a6ac in bt_ctf_iter_create (ctx=0xf4b8b0,
-> begin_pos=0x7fffffffdad0, end_pos=0x0)
->     at ../../../babeltrace/formats/ctf/iterator.c:53
-> #10 0x000000000050d4b1 in bt_ctf_open (dirname=0xd98c1b
-> "/home/teawater/gdb/ctf/kernel/") at ../../gdb/gdb/ctf.c:1289
-> 
-> You can see that when function ctf_read_event of libbabeltrace try to
-> call function lookup_enum.  It call the function of GDB.  Then it got
-> crash.
-> 
-> So could you help me with it?
+LTTng-UST, the Linux Trace Toolkit Next Generation Userspace Tracer, is
+port of the low-overhead tracing capabilities of the LTTng kernel tracer
+to user-space. The library "liblttng-ust" enables tracing of
+applications and libraries.
 
-Hrm, since lookup_enum() and other similar functions are internal to
-babeltrace, we should probably define them as:
+Highlights of the 2.1 UST release:
 
-__attribute__((visibility("hidden")))
+* Filtering by event field content is now supported. Example:
 
-so they don't override other libraries' symbols.
+  lttng enable-event -u 'myevent' --filter 'myfield > 50 && otherfield < 100'
 
-Can you try doing this modification to babeltrace and see if it helps ?
-If it does, then we'll consider doing that across our code-base.
+  (see lttng(1) for details)
 
-Thanks,
+* Applications built against lttng-ust 2.0 still work with
+  lttng-ust 2.1, but it is recommended to rebuild the tracepoint probes
+  if you want to be able to use filters on those events.
 
-Mathieu
+* It must be used with lttng-tools 2.1, which supports network
+  streaming over TCP.
 
+Detailed Changelog since 2.1.0-rc2:
 
-> 
-> Thanks,
-> Hui
-> 
-> >>
-> >>>
-> >>> Thanks,
-> >>> Hui
-> >>>
-> >>>
-> >>> >
-> >>> >> Julien, is there an publically exposed babeltrace API that performs
-> >>> >> something similar to the internal lookup_enum() ?
-> >>> >>
-> >>> >> Hui, are you using other functions from include/babeltrace/types.h ?
-> >>> >
-> >>> > --
-> >>> > Pedro Alves
-> >>> >
-> >>
-> >> --
-> >> Mathieu Desnoyers
-> >> Operating System Efficiency R&D Consultant
-> >> EfficiOS Inc.
-> >> http://www.efficios.com
+2012-12-20 (13th Baktun) lttng-ust 2.1.0
+        * Bump liblttng-ust-ctl lib version major number
+        * Bump UST proto version minor number
+        * Helper to debug: add object name
+        * Tests: Fix rundir not created in ust-basic-tracing
+        * ust test: add missing return -1
+        * Test: update ust tracing unit tests to 2.1 internal ABI
+        * Tests: Fix rundir not created in ust-multi-test
+        * Adapt internal files and examples to TRACEPOINT_INCLUDE
+        * Adapt tests to TRACEPOINT_INCLUDE
+        * Cleanup: tests remove hello.cxx/ust_tests_demo.h
+        * Fix: don't do macro expansion in tracepoint file name
+        * Fix lttng-gen-tp: Template file must end in .tp
+        * Pack structures in comm protocol between UST and sessiond
+        * Cleanup lttng-gen-tp: Help not showing when using -h,--help
+        * Cleanup lttng-gen-tp: remove leading underscore before include guard
+        * fix memleak: ustctl free shadow chan on ustctl_unmap_channel()
+        * Update license text
+        * Fix: check if event enabled for bytecode-less events
+        * Fix: handle enablers without bytecode
+        * Print probe provider mismatch error even without -Wsystem-headers
+        * filter: Add missing padding
+
+Project website: http://lttng.org
+Download link: http://lttng.org/download
+(please refer to the README file for installation instructions)
 
 -- 
 Mathieu Desnoyers
