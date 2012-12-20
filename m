@@ -1,17 +1,17 @@
 From: Yannick Brosseau <yannick.brosseau@gmail.com>
-Subject: [LTTng-Tools PATCH] Add pkg-config for liblttng-ctl
-Date: Thu, 20 Dec 2012 14:28:00 -0500
-Message-ID: <1356031680-24111-1-git-send-email-yannick.brosseau__26093.4653728784$1356031734$gmane$org@gmail.com>
+Subject: [LTTng-Tools PATCH] Add pkg-config for liblttng-ctl [v2]
+Date: Thu, 20 Dec 2012 14:31:06 -0500
+Message-ID: <1356031866-24252-1-git-send-email-yannick.brosseau__22702.8233268813$1356031912$gmane$org@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f177.google.com ([209.85.223.177])
+Received: from mail-ie0-f176.google.com ([209.85.223.176])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <yannick.brosseau@gmail.com>) id 1Tllmw-0002AH-Ux
-	for lttng-dev@lists.lttng.org; Thu, 20 Dec 2012 14:28:15 -0500
-Received: by mail-ie0-f177.google.com with SMTP id k13so5159190iea.22
-	for <lttng-dev@lists.lttng.org>; Thu, 20 Dec 2012 11:28:09 -0800 (PST)
+	(envelope-from <yannick.brosseau@gmail.com>) id 1Tllps-0002Ca-Q9
+	for lttng-dev@lists.lttng.org; Thu, 20 Dec 2012 14:31:16 -0500
+Received: by mail-ie0-f176.google.com with SMTP id 13so5126179iea.7
+	for <lttng-dev@lists.lttng.org>; Thu, 20 Dec 2012 11:31:11 -0800 (PST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,6 +22,8 @@ List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
+
+v2: Update description
 
 Signed-off-by: Yannick Brosseau <yannick.brosseau@gmail.com>
 ---
@@ -70,7 +72,7 @@ index 2681bdd..542f4bb 100644
 +pkgconfig_DATA = lttng-ctl.pc
 diff --git a/src/lib/lttng-ctl/lttng-ctl.pc.in b/src/lib/lttng-ctl/lttng-ctl.pc.in
 new file mode 100644
-index 0000000..6c9d1e7
+index 0000000..86382c2
 --- /dev/null
 +++ b/src/lib/lttng-ctl/lttng-ctl.pc.in
 @@ -0,0 +1,13 @@
@@ -80,7 +82,7 @@ index 0000000..6c9d1e7
 +includedir=@includedir@
 +
 +Name: LTTng control library
-+Description: The LTTng control and utility library is a library 
++Description: The LTTng control and utility library is a library used to control the tracing sessions of a LTTng-session deamon
 +Version: @PACKAGE_VERSION@
 +Requires:
 +Requires.private: 
