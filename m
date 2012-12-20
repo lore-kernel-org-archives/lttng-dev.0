@@ -1,26 +1,19 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: [RELEASE] LTTng-tools 2.1.0
-Date: Thu, 20 Dec 2012 14:34:42 -0500
-Message-ID: <50D36852.3040506__1083.79585803977$1356032120$gmane$org@efficios.com>
+From: =?ISO-8859-1?Q?Rapha=EBl_Beamonte?= <raphael.beamonte@polymtl.ca>
+Subject: Re: [LTTng-Tools PATCH] Add pkg-config for liblttng-ctl
+ [v2]
+Date: Thu, 20 Dec 2012 15:43:45 -0500
+Message-ID: <50D37881.9000608__3319.60666594586$1356036301$gmane$org@polymtl.ca>
+References: <1356031866-24252-1-git-send-email-yannick.brosseau@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0232233214=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([213.239.202.151])
+Received: from mail-ie0-f174.google.com ([209.85.223.174])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1TlltF-0002F8-5r
-	for lttng-dev@lists.lttng.org; Thu, 20 Dec 2012 14:34:45 -0500
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by smtp.ini-tech.com (Postfix) with ESMTP id F189C1873E9
-	for <lttng-dev@lists.lttng.org>; Thu, 20 Dec 2012 14:37:05 -0500 (EST)
-Received: from smtp.ini-tech.com ([127.0.0.1])
-	by localhost (smtp.ini-tech.com [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id Wm_hXnnl-w3e for <lttng-dev@lists.lttng.org>;
-	Thu, 20 Dec 2012 14:37:05 -0500 (EST)
-Received: from 127.0.0.1 (cable-13.246.173-198.electronicbox.net
-	[173.246.13.198])
-	by smtp.ini-tech.com (Postfix) with ESMTPSA id 21256187393
-	for <lttng-dev@lists.lttng.org>; Thu, 20 Dec 2012 14:37:05 -0500 (EST)
+	(envelope-from <nashii@gmail.com>) id 1Tlmy8-0002mv-LE
+	for lttng-dev@lists.lttng.org; Thu, 20 Dec 2012 15:43:52 -0500
+Received: by mail-ie0-f174.google.com with SMTP id c11so5139324ieb.5
+	for <lttng-dev@lists.lttng.org>; Thu, 20 Dec 2012 12:43:47 -0800 (PST)
+In-Reply-To: <1356031866-24252-1-git-send-email-yannick.brosseau@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -29,92 +22,73 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Yannick Brosseau <yannick.brosseau@gmail.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Greetings everyone (especially LTTng elves),
+This is an OpenPGP/MIME signed message (RFC 2440 and 3156)
+--===============0232233214==
+Content-Type: multipart/signed; micalg=pgp-sha1;
+ protocol="application/pgp-signature";
+ boundary="------------enig199D358058A3BF9E6C61AD6E"
 
-The lttng-tools project provides a session daemon (lttng-sessiond)
-that acts as a tracing registry, the "lttng" command line for tracing
-control, a lttng-ctl library for tracing control and a lttng-relayd
-for network streaming.
+This is an OpenPGP/MIME signed message (RFC 2440 and 3156)
+--------------enig199D358058A3BF9E6C61AD6E
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
 
-This is for real!!! The 2.1.0 stable release is NOW out! Code name,
-Basse Messe:
+On 2012-12-20 14:31, Yannick Brosseau wrote:
+> +Description: The LTTng control and utility library is a library used t=
+o control the tracing sessions of a LTTng-session deamon
 
-Light coloured German ale whose style was named after the city Cologne
-(Koln) where it was first brewed. It is a rather simple beer with
-lightly fruity aromas and a delicate hoppy fragrance. The beer has a
-pronounced malty taste with a subtle bitter aftertaste
+Following our discussions on the IRC channel, I would propose a
+correction of the description :
 
-New features now:
+The LTTng control and utility library is used to control the tracing
+session of a LTTng-session daemon
 
-* Network streaming.
-Introduce the new lttng-relayd component used to receive the trace on a
-remote host. For this, we've added the new lttng enable-consumer command
-that allow the user to control the consumer destination of the session
-(disk or network). The lttng_set_consumer_url() API call is added with
-enable_consumer and disable_consumer as well.
+--=20
+Rapha=EBl Beamonte.
+M.Sc.A. Laboratoire DORSAL - http://www.dorsal.polymtl.ca/
+Ecole Polytechnique, Montr=E9al (Qu=E9bec)
+(+1) (438) 938-6879 - raphael.beamonte@polymtl.ca
 
-* Filtering for UST
-A --filter has been added to lttng enable-event command and a new
-lttng_enable_event_with_filter() API call.
 
-* Data pending
-Now, by default, the stop command waits for the data traced to be
-written completely on disk or over the network before returning. This
-means that right after the command returns, you are assured that the
-data is available for any viewer. This can be override by --no-wait or
-by using the lttng_stop_session_no_wait. Also we've added the
-lttng_data_pending() API call.
+--------------enig199D358058A3BF9E6C61AD6E
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
 
-* Health check
-Using lttng_health_check() with the right health component (see
-lttng.h), you can now monitor the health of the session daemon for most
-of its subsystems. See lttng-health-check(3) for more information.
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.12 (GNU/Linux)
 
-This version concludes more than a year of development which introduce
-very exciting set of features. As usual here is the changelog:
+iQIcBAEBAgAGBQJQ03iBAAoJECV+8Ygg/tEoLDAP/A4nanU/UIPi9fxPFx8Cmdvk
+dlyWOUbPtp4DzwAq+K09LFy4F3b/Se8FJXiyWOBN6kPafXb2yJKfAr0bDbT1d7FW
+Mk+bBUFjhZ1IRxadL+II2/DVEl8GuMz+U5OgCS88UQ6cFg1vT1IE8VVSmMBWvsP5
+JE3uIQDvxuZwxxqzfpFA89j3W5QZNBvBiHvEGow56CGPHgI9RlQdHRpOEhaQVn0l
+2m6LOrbQaJmg+i1X2MnyraiiEc77FC+jbMaAB0Wxd9m4kCsT+xKWH2tdXzgLSjsv
+eB183b4f3dwrp9EQfSkaHA1GQD2bSzLxZy33kaIXySWrdR7JfJL2Yyxs2SIXimkS
+3ZP6nllPNks2qEhfnbLxM2D8Srwlf1uYXyNLV/Js57Di7Be3nJNlDWfPkarlhwnF
+oZw6GaXVuFIKsd5+h8kwfKKcVCErtnEO/Xdt9rm3/MIo1JQICPzOLJGRFp09y9E/
+PMh8nhqw/YsK551uBhVrlHL3Wjb6ilykv/PMdA+QI/FpCbwWN4TJC4SoG/22+D3P
+mVlsUAgguFE+gdCftavKVn5K0v8PJVyjD667e0v2F4rvdVHDE9ZVjlcr9+novSo6
+56KVOpgUyITO6cGBLu/2RyixOtv5aEMfHldyEFt6u56IKOoI0KEd/qL+ms6kCgMY
+0GIAVETonkKIgZ1Ngm6U
+=lohy
+-----END PGP SIGNATURE-----
 
-2012-12-20 lttng-tools 2.1.0 (13th Baktun)
-        * STABLE VERSION 2.1.0-stable - "Basse Messe"
-        * Multiple minor fixes
-        * Multiple memory and fd leaks
-        * Fix: Off by one in seq num for data pending command
-        * Fix: flag metadata stream on quiescent control cmd
-        * Fix: prioritize control socket communication in relayd
-        * Fix: poll and epoll fd set reallocation
-        * Fix: add missing goto pending if data is inflight
-        * Fix: remove ua_sess->started assert on stop trace
-        * Set classes of traffic in high_throughput_limit
-        * Fix: use the poll wait ret value when iterating on fd(s)
-        * Fix: force the poll() return value to be nb_fd
-        * Fix: Wrong check of node when cleaning up ht
-        * Fix: set started flag of ust app after ustctl
-        * Fix: memory leak in add relayd socket error path
-        * Fix: add packed attribute to filter structure
-        * Fix: Add missing health code update for consumer command
-        * Add LTTNG_PACKED macro
-        * Fix data pending for inflight streaming
-        * Map session id of relayd and sessiond in consumer
-        * Add the relayd create session command
-        * Make the consumer sends a ACK after each command
-        * Remove MSG_WAITALL on every recvmsg() socket typ
-        * Fix: Add missing relayd ht cleanup and ht destroy
-        * Fix: Relayd and sessiond version check
-        * Fix: protect consumer_find_channel with rcu locking
-        * Fix: don't steal key when adding a metadata stream
-        * Consumer hold stream mutex for add stream<
+--------------enig199D358058A3BF9E6C61AD6E--
 
-Thanks to everyone that made possible this version!
 
-Don't hesitate to report bugs on bugs.lttng.org or email us for any
-comments and questions.
+--===============0232233214==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-Project website: http://lttng.org/lttng2.0
-Download link:
-http://lttng.org/files/lttng-tools/lttng-tools-2.1.0.tar.bz2 (for
-the PGP signature, same file with .asc appended)
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
-Cheers!
-David
+--===============0232233214==--
