@@ -1,7 +1,7 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] LTTng-UST 2.1.0
-Date: Thu, 20 Dec 2012 13:45:25 -0500
-Message-ID: <20121220184525.GA28486__44864.8733472966$1356029170$gmane$org@Krystal>
+Subject: [RELEASE] LTTng modules 2.1.0
+Date: Thu, 20 Dec 2012 13:51:11 -0500
+Message-ID: <20121220185111.GB28486__22547.3767998212$1356029516$gmane$org@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -9,16 +9,16 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1Tll7W-0001lb-Jq
-	for lttng-dev@lists.lttng.org; Thu, 20 Dec 2012 13:45:26 -0500
+	(envelope-from <compudj@mail.openrapids.net>) id 1TllD7-0001oo-0R
+	for lttng-dev@lists.lttng.org; Thu, 20 Dec 2012 13:51:13 -0500
 Received: from localhost (localhost [127.0.0.1])
-	by blackscsi.openrapids.net (Postfix) with ESMTP id 44225140278
-	for <lttng-dev@lists.lttng.org>; Thu, 20 Dec 2012 13:45:26 -0500 (EST)
+	by blackscsi.openrapids.net (Postfix) with ESMTP id CFC8E140278
+	for <lttng-dev@lists.lttng.org>; Thu, 20 Dec 2012 13:51:12 -0500 (EST)
 Received: from blackscsi.openrapids.net ([127.0.0.1])
 	by localhost (blackscsi.openrapids.net [127.0.0.1]) (amavisd-new,
 	port 10024)
-	with ESMTP id PbQGnEUDTui9 for <lttng-dev@lists.lttng.org>;
-	Thu, 20 Dec 2012 13:45:25 -0500 (EST)
+	with ESMTP id ESKTMJPQhD7p for <lttng-dev@lists.lttng.org>;
+	Thu, 20 Dec 2012 13:51:11 -0500 (EST)
 Content-Disposition: inline
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -31,54 +31,42 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-LTTng-UST, the Linux Trace Toolkit Next Generation Userspace Tracer, is
-port of the low-overhead tracing capabilities of the LTTng kernel tracer
-to user-space. The library "liblttng-ust" enables tracing of
-applications and libraries.
+The LTTng modules provide Linux kernel tracing capability to the LTTng
+2.0 tracer toolset.
 
-Highlights of the 2.1 UST release:
+Highlights of the 2.1 lttng-modules release:
 
-* Filtering by event field content is now supported. Example:
+* Added ARM system call tracing,
+* Added MIPS system call tracing,
+* Some enhancements to the state dump,
+* Support for older kernels: 2.6.32 up to 2.6.37 with up to 3 kernel
+  patches in linux-patches/ directory of the tree. (in addition to
+  2.6.38 up to 3.7.1)
 
-  lttng enable-event -u 'myevent' --filter 'myfield > 50 && otherfield < 100'
-
-  (see lttng(1) for details)
-
-* Applications built against lttng-ust 2.0 still work with
-  lttng-ust 2.1, but it is recommended to rebuild the tracepoint probes
-  if you want to be able to use filters on those events.
-
-* It must be used with lttng-tools 2.1, which supports network
-  streaming over TCP.
-
-Detailed Changelog since 2.1.0-rc2:
-
-2012-12-20 (13th Baktun) lttng-ust 2.1.0
-        * Bump liblttng-ust-ctl lib version major number
-        * Bump UST proto version minor number
-        * Helper to debug: add object name
-        * Tests: Fix rundir not created in ust-basic-tracing
-        * ust test: add missing return -1
-        * Test: update ust tracing unit tests to 2.1 internal ABI
-        * Tests: Fix rundir not created in ust-multi-test
-        * Adapt internal files and examples to TRACEPOINT_INCLUDE
-        * Adapt tests to TRACEPOINT_INCLUDE
-        * Cleanup: tests remove hello.cxx/ust_tests_demo.h
-        * Fix: don't do macro expansion in tracepoint file name
-        * Fix lttng-gen-tp: Template file must end in .tp
-        * Pack structures in comm protocol between UST and sessiond
-        * Cleanup lttng-gen-tp: Help not showing when using -h,--help
-        * Cleanup lttng-gen-tp: remove leading underscore before include guard
-        * fix memleak: ustctl free shadow chan on ustctl_unmap_channel()
-        * Update license text
-        * Fix: check if event enabled for bytecode-less events
-        * Fix: handle enablers without bytecode
-        * Print probe provider mismatch error even without -Wsystem-headers
-        * filter: Add missing padding
+Changelog since LTTng modules 2.1.0-rc1:
+2012-12-20 (13th Baktun) LTTng modules 2.1.0
+        * put_ulong calls in lib_ring_buffer_compat_ioctl() should be compat
+        * wrapper/perf.h: Fix kernel version condition
+        * Fix possible kernel build errors with linux-patches
+        * Add missing MIT license text to 3 files under this license
+        * Check if interrupt action name is not null in statedump
+        * Fix exec instrumentation: only for kernels 3.4.0 and higher
+        * Add TRACE_EVENT(sched_process_exec) to sched.h
+        * lib/ringbuffer/frontend_api.h: Include linux/prefetch.h.
+        * Fix warning with 3.6.0 kernel
+        * ABI with support for compat 32/64 bits
+        * Perform calculation on bit size in 64-bit
+        * Use uint64_t for packet header content size and packet size
+        * Fix: compat layer only on supported architectures
+        * Fix ring buffer 32/64 bits compat
+        * Fix cleanup: move lttng-tracer-core.h include to lib ringbuffer config.h
+        * Fix ring_buffer_frontend.c: missing include lttng-tracer-core.h
+        * Fix: statedump missing check for NULL namespace
 
 Project website: http://lttng.org
 Download link: http://lttng.org/download
-(please refer to the README file for installation instructions)
+(please refer to the README files for installation instructions and
+lttng-tools doc/quickstart.txt for usage information)
 
 -- 
 Mathieu Desnoyers
