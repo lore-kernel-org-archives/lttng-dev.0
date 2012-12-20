@@ -1,9 +1,10 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH 1/2] urcu: fix comments for
-	cds_list_for_each_prev()
-Date: Thu, 20 Dec 2012 06:14:00 -0500
-Message-ID: <20121220111400.GA19897__23575.1989916482$1356002084$gmane$org@Krystal>
+Subject: Re: [PATCH 2/2] rculfhash: add cds_lfht_replace to the
+	write	operations in the comments
+Date: Thu, 20 Dec 2012 06:14:56 -0500
+Message-ID: <20121220111456.GB19897__46144.3617627539$1356002134$gmane$org@Krystal>
 References: <1355999373-1407-1-git-send-email-laijs@cn.fujitsu.com>
+	<1355999373-1407-2-git-send-email-laijs@cn.fujitsu.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -11,10 +12,10 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1Tle4g-0006LQ-8c
-	for lttng-dev@lists.lttng.org; Thu, 20 Dec 2012 06:14:02 -0500
+	(envelope-from <compudj@mail.openrapids.net>) id 1Tle5Z-0006MF-8x
+	for lttng-dev@lists.lttng.org; Thu, 20 Dec 2012 06:14:57 -0500
 Content-Disposition: inline
-In-Reply-To: <1355999373-1407-1-git-send-email-laijs@cn.fujitsu.com>
+In-Reply-To: <1355999373-1407-2-git-send-email-laijs@cn.fujitsu.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -35,22 +36,22 @@ Merged, thanks!
 Mathieu
 
 > ---
->  urcu/list.h |    2 +-
+>  rculfhash.c |    2 +-
 >  1 files changed, 1 insertions(+), 1 deletions(-)
 > 
-> diff --git a/urcu/list.h b/urcu/list.h
-> index f27ff7b..5d04394 100644
-> --- a/urcu/list.h
-> +++ b/urcu/list.h
-> @@ -141,7 +141,7 @@ cds_list_splice (struct cds_list_head *add, struct cds_list_head *head)
->    for (pos = (head)->next; pos != (head); pos = pos->next)
->  
->  
-> -/* Iterate forward over the elements of the list.  */
-> +/* Iterate backward over the elements of the list.  */
->  #define cds_list_for_each_prev(pos, head) \
->    for (pos = (head)->prev; pos != (head); pos = pos->prev)
->  
+> diff --git a/rculfhash.c b/rculfhash.c
+> index 7050d5c..3650ed3 100644
+> --- a/rculfhash.c
+> +++ b/rculfhash.c
+> @@ -129,7 +129,7 @@
+>   *  - cds_lfht_first followed iteration with cds_lfht_next (and/or
+>   *    cds_lfht_next_duplicate, although less common).
+>   *
+> - * We define "write" operations as any of cds_lfht_add,
+> + * We define "write" operations as any of cds_lfht_add, cds_lfht_replace,
+>   * cds_lfht_add_unique (success), cds_lfht_add_replace, cds_lfht_del.
+>   *
+>   * When cds_lfht_add_unique succeeds (returns the node passed as
 > -- 
 > 1.7.4.4
 > 
