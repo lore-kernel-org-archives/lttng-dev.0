@@ -1,18 +1,16 @@
-From: Danny Serres <serres@live.ca>
-Subject: Re: babletrace with python bindings
-Date: Wed, 19 Dec 2012 17:35:58 -0500
-Message-ID: <BLU0-SMTP471D5E1CF1F24224DBC499BC0300__20125.3621642993$1355956607$gmane$org@phx.gbl>
-References: <20121218184045.288000@gmx.com> <20121219183932.GA9587@Krystal>
-	<50D23FEB.20509@live.ca>
+From: Lai Jiangshan <laijs@cn.fujitsu.com>
+Subject: [PATCH 1/2] urcu: fix comments for
+	cds_list_for_each_prev()
+Date: Thu, 20 Dec 2012 18:29:32 +0800
+Message-ID: <1355999373-1407-1-git-send-email-laijs__38147.3185298548$1355999420$gmane$org@cn.fujitsu.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from blu0-omc3-s8.blu0.hotmail.com ([65.55.116.83])
+Received: from [222.73.24.84] (helo=song.cn.fujitsu.com)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <serres@live.ca>) id 1TlSFF-0000P2-B6
-	for lttng-dev@lists.lttng.org; Wed, 19 Dec 2012 17:36:09 -0500
-In-Reply-To: <50D23FEB.20509@live.ca>
+	(envelope-from <laijs@cn.fujitsu.com>) id 1TldNg-0005yQ-6S
+	for lttng-dev@lists.lttng.org; Thu, 20 Dec 2012 05:29:36 -0500
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,114 +19,26 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev@lists.lttng.org, ajonwa ajonwa <ajonwa@gmx.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On 12-12-19 05:30 PM, Danny Serres wrote:
-> On 12-12-19 01:39 PM, Mathieu Desnoyers wrote:
->> * ajonwa ajonwa (ajonwa@gmx.com) wrote:
->>> Hello everyone,
->>>
->>>   I get the following error message while attempting to compile 
->>> babeltrace with python bindings:
->>>
->>>   CC _babeltrace_la-babeltrace_wrap.lo
->>> babeltrace_wrap.c: In function '_wrap__bt_ctf_field_type':
->>> babeltrace_wrap.c:4621:56: warning: passing argument 1 of 
->>> 'bt_ctf_field_type' from incompatible pointer type [enabled by default]
->>> ../../include/babeltrace/ctf/events.h:158:18: note: expected 'const 
->>> struct declaration *' but argument is of type 'const struct 
->>> definition *'
->>> babeltrace_wrap.c: In function '_wrap__bt_ctf_get_int_signedness':
->>> babeltrace_wrap.c:4643:51: warning: passing argument 1 of 
->>> 'bt_ctf_get_int_signedness' from incompatible pointer type [enabled 
->>> by default]
->>> ../../include/babeltrace/ctf/events.h:167:5: note: expected 'const 
->>> struct declaration *' but argument is of type 'const struct 
->>> definition *'
->>> babeltrace_wrap.c: In function '_wrap__bt_ctf_get_int_base':
->>> babeltrace_wrap.c:4665:45: warning: passing argument 1 of 
->>> 'bt_ctf_get_int_base' from incompatible pointer type [enabled by 
->>> default]
->>> ../../include/babeltrace/ctf/events.h:172:5: note: expected 'const 
->>> struct declaration *' but argument is of type 'const struct 
->>> definition *'
->>> babeltrace_wrap.c: In function '_wrap__bt_ctf_get_int_byte_order':
->>> babeltrace_wrap.c:4687:51: warning: passing argument 1 of 
->>> 'bt_ctf_get_int_byte_order' from incompatible pointer type [enabled 
->>> by default]
->>> ../../include/babeltrace/ctf/events.h:178:5: note: expected 'const 
->>> struct declaration *' but argument is of type 'const struct 
->>> definition *'
->>> babeltrace_wrap.c: In function '_wrap__bt_ctf_get_int_len':
->>> babeltrace_wrap.c:4709:39: warning: passing argument 1 of 
->>> 'bt_ctf_get_int_len' from incompatible pointer type [enabled by 
->>> default]
->>> ../../include/babeltrace/ctf/events.h:184:9: note: expected 'const 
->>> struct declaration *' but argument is of type 'const struct 
->>> definition *'
->>> babeltrace_wrap.c: In function '_wrap__bt_ctf_get_encoding':
->>> babeltrace_wrap.c:4731:66: warning: passing argument 1 of 
->>> 'bt_ctf_get_encoding' from incompatible pointer type [enabled by 
->>> default]
->>> ../../include/babeltrace/ctf/events.h:190:26: note: expected 'const 
->>> struct declaration *' but argument is of type 'const struct 
->>> definition *'
->>> babeltrace_wrap.c: In function '_wrap__bt_ctf_get_array_len':
->>> babeltrace_wrap.c:4753:46: warning: passing argument 1 of 
->>> 'bt_ctf_get_array_len' from incompatible pointer type [enabled by 
->>> default]
->>> ../../include/babeltrace/ctf/events.h:196:5: note: expected 'const 
->>> struct declaration *' but argument is of type 'const struct 
->>> definition *'
->>> babeltrace_wrap.c: In function 'init_babeltrace':
->>> babeltrace_wrap.c:6020:61: error: 'BT_SEEK_END' undeclared (first 
->>> use in this function)
->>> babeltrace_wrap.c:6020:61: note: each undeclared identifier is 
->>> reported only once for each function it appears in
->>> make[3]: *** [_babeltrace_la-babeltrace_wrap.lo] Error 1
->>>
->>>   I got the source code by checking out bindings/python (git 
->>> checkout bindings/python).
->>>
->>>   I will be grateful if someone would tell how to fix the error.
-> Babeltrace API changed since this was made.  To fix it, simply edit 
-> the appropriate lines of the
->  lttng.i.in swig file in extras/bindings/swig/python (see the 
-> CTF/EVENTS.H section of the file) and 
-I meant bindings/python/babeltrace.i.in
-> make sure all function declarations match the ones in 
-> include/ctf/events.h
-> From the error message, most (if not all) *const struct definition* 
-> args must be changed to
-> *const struct declaration*
-> This might yield some errors in the Python code itself regarding 
-> Definition objects.
-> That class would need to be rewritten to fit the new API, along with 
-> the corresponding functions.
-> But it should compile anyway
-> Also the 3 BT_SEEK_END lines must be changed to BT_SEEK_LAST
->
-> Hope this helps
-> Danny
->
->> This branch is currently in development, and might be out of sync with
->> the master branch of babeltrace at the moment. We don't have immediate
->> plans to work on it, but bontributions are welcome.
->>
->> Thanks,
->>
->> Mathieu
->>
->>>
->>> B
->>>   Thanks,
->>>
->>>   Geoffreyget_int_s
->>> _______________________________________________
->>> lttng-dev mailing list
->>> lttng-dev@lists.lttng.org
->>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->>
->
+Signed-off-by: Lai Jiangshan <laijs@cn.fujitsu.com>
+---
+ urcu/list.h |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/urcu/list.h b/urcu/list.h
+index f27ff7b..5d04394 100644
+--- a/urcu/list.h
++++ b/urcu/list.h
+@@ -141,7 +141,7 @@ cds_list_splice (struct cds_list_head *add, struct cds_list_head *head)
+   for (pos = (head)->next; pos != (head); pos = pos->next)
+ 
+ 
+-/* Iterate forward over the elements of the list.  */
++/* Iterate backward over the elements of the list.  */
+ #define cds_list_for_each_prev(pos, head) \
+   for (pos = (head)->prev; pos != (head); pos = pos->prev)
+ 
+-- 
+1.7.4.4
