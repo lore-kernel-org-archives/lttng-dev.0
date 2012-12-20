@@ -1,25 +1,19 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] LTTng modules 2.1.0
-Date: Thu, 20 Dec 2012 13:51:11 -0500
-Message-ID: <20121220185111.GB28486__22547.3767998212$1356029516$gmane$org@Krystal>
+From: Bernd Hufmann <Bernd.Hufmann@ericsson.com>
+Subject: LTTng 2.1: create session errors
+Date: Thu, 20 Dec 2012 13:52:15 -0500
+Message-ID: <50D35E5F.6020405__1850.13326486132$1356029615$gmane$org@ericsson.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from imr3.ericy.com ([198.24.6.13])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1TllD7-0001oo-0R
-	for lttng-dev@lists.lttng.org; Thu, 20 Dec 2012 13:51:13 -0500
-Received: from localhost (localhost [127.0.0.1])
-	by blackscsi.openrapids.net (Postfix) with ESMTP id CFC8E140278
-	for <lttng-dev@lists.lttng.org>; Thu, 20 Dec 2012 13:51:12 -0500 (EST)
-Received: from blackscsi.openrapids.net ([127.0.0.1])
-	by localhost (blackscsi.openrapids.net [127.0.0.1]) (amavisd-new,
-	port 10024)
-	with ESMTP id ESKTMJPQhD7p for <lttng-dev@lists.lttng.org>;
-	Thu, 20 Dec 2012 13:51:11 -0500 (EST)
-Content-Disposition: inline
+	(envelope-from <bernd.hufmann@ericsson.com>) id 1TllEl-0001q9-CD
+	for lttng-dev@lists.lttng.org; Thu, 20 Dec 2012 13:52:55 -0500
+Received: from EUSAAHC002.ericsson.se ([147.117.188.78])
+	by imr3.ericy.com (8.13.8/8.13.8) with ESMTP id qBKIqmqd024627
+	(version=TLSv1/SSLv3 cipher=AES128-SHA bits=128 verify=FAIL)
+	for <lttng-dev@lists.lttng.org>; Thu, 20 Dec 2012 12:52:48 -0600
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -28,48 +22,65 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-The LTTng modules provide Linux kernel tracing capability to the LTTng
-2.0 tracer toolset.
+Hello
 
-Highlights of the 2.1 lttng-modules release:
+I'm currently using lttng-tools 2.1.0-RC9. I see some errors when using 
+"lttng create " with streaming options:
 
-* Added ARM system call tracing,
-* Added MIPS system call tracing,
-* Some enhancements to the state dump,
-* Support for older kernels: 2.6.32 up to 2.6.37 with up to 3 kernel
-  patches in linux-patches/ directory of the tree. (in addition to
-  2.6.38 up to 3.7.1)
+1) lttng create mysession -C net://192:1.1.1: -D net://192:1.1.1.1
 
-Changelog since LTTng modules 2.1.0-rc1:
-2012-12-20 (13th Baktun) LTTng modules 2.1.0
-        * put_ulong calls in lib_ring_buffer_compat_ioctl() should be compat
-        * wrapper/perf.h: Fix kernel version condition
-        * Fix possible kernel build errors with linux-patches
-        * Add missing MIT license text to 3 files under this license
-        * Check if interrupt action name is not null in statedump
-        * Fix exec instrumentation: only for kernels 3.4.0 and higher
-        * Add TRACE_EVENT(sched_process_exec) to sched.h
-        * lib/ringbuffer/frontend_api.h: Include linux/prefetch.h.
-        * Fix warning with 3.6.0 kernel
-        * ABI with support for compat 32/64 bits
-        * Perform calculation on bit size in 64-bit
-        * Use uint64_t for packet header content size and packet size
-        * Fix: compat layer only on supported architectures
-        * Fix ring buffer 32/64 bits compat
-        * Fix cleanup: move lttng-tracer-core.h include to lib ringbuffer config.h
-        * Fix ring_buffer_frontend.c: missing include lttng-tracer-core.h
-        * Fix: statedump missing check for NULL namespace
+The command output shows:
+    Session mysession created.
+    Traces will be written in (null)
+    Control URL net://192.1.1.1.1 set for session mysession
+    Data URL net://192.1.1.1.1 set for session mysession
 
-Project website: http://lttng.org
-Download link: http://lttng.org/download
-(please refer to the README files for installation instructions and
-lttng-tools doc/quickstart.txt for usage information)
+The line "Traces will be written in (null)" should show the correct 
+location similar when using the -U option. Also, when typing "lttng list 
+mysession" afterwards the trace path is not displayed correctly. 
+(mysession (net://192.1.1.1:5342/ [data: 5343]) [inactive]).
+
+2) lttng create mysession -C net://192:1.1.1:5342 -D net://192.1.1.1:5343
+
+This command output shows:
+    Session mysession created.
+    Traces will be written in (null)
+    Error: Control URL uses the net:// protocol and the data URL is 
+different. Not allowed.
+    Error: Invalid parameter
+
+The command fails with an error. However, the session seems to be 
+created, but no consumer is defined. First of all, it should be possible 
+to define the port with the option -C and -D. Secondly, if an error 
+occurs the session shouldn't be created.
+
+3) lttng create mysession -C net://192.1.1.1
+
+This command doesn't fail. I expected it to fail since the command help 
+states that -D <data URL> must be used too. BTW, "lttng create mysession 
+-D net://192.1.1.1" fails.
+
+4) lttng create mysession -C net://192:1.1.1 -D net://192.1.1.2
+This command fails, because the IP address is not the same. Is this 
+intended?
+
+5) In "lttng create -h" and "enable-consumer -h" show "tcp[4|6]" as 
+possible protocols, but "tcp4" doesn't work. I have to use "tcp". The 
+help should be updated for that.
+
+6) Why isn't it possible to use "tcp[6]" together with option -U? 
+Instead "net[6]" has to be used, which defaults to TCP as network transport.
+
+Could someone please look into this?
+
+Best Regards
+Bernd
+
+
 
 -- 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+This Communication is Confidential. We only send and receive email on 
+the basis of the terms set out at www.ericsson.com/email_disclaimer
