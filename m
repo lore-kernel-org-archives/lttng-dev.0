@@ -1,68 +1,58 @@
-From: =?ISO-8859-1?Q?S=E9bastien_Barth=E9l=E9my?= <barthelemy@crans.org>
-Subject: Re: tracepoint generation is fragile wrt macro expansion
-Date: Sat, 22 Dec 2012 08:52:46 +0100
-Message-ID: <CAPkDDd7bjrKYybHsD5oN794C3O2c=SsymeRkWtbFdRzKrBD3kg__21257.4915880852$1356162818$gmane$org@mail.gmail.com>
-References: <CAPkDDd4UfCdhoY0s1Es55NkuXNt4qFa4v1wiLDXutcqHOvPMCg@mail.gmail.com>
-	<20121217205440.GA11058@Krystal>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [RFC PATCH Userspace RCU] Discourage use of pthread_atfork() for
+	call_rcu handlers
+Date: Wed, 26 Dec 2012 12:33:18 -0500
+Message-ID: <20121226173318.GA22298@Krystal>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0577568946=="
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f181.google.com ([209.85.223.181])
-	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <sebastien.barthelemy@gmail.com>) id 1TmJt6-0000mF-04
-	for lttng-dev@lists.lttng.org; Sat, 22 Dec 2012 02:52:52 -0500
-Received: by mail-ie0-f181.google.com with SMTP id 16so7160159iea.26
-	for <lttng-dev@lists.lttng.org>; Fri, 21 Dec 2012 23:52:46 -0800 (PST)
-In-Reply-To: <20121217205440.GA11058@Krystal>
-List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
-	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
-	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+Content-Type: text/plain; charset=us-ascii
+Return-path: <libc-alpha-return-35525-glibc-alpha=m.gmane.org@sourceware.org>
+Content-Disposition: inline
+List-Unsubscribe: <mailto:libc-alpha-unsubscribe-glibc-alpha=m.gmane.org@sourceware.org>
+List-Subscribe: <mailto:libc-alpha-subscribe@sourceware.org>
+List-Archive: <http://sourceware.org/ml/libc-alpha/>
+List-Post: <mailto:libc-alpha@sourceware.org>
+List-Help: <mailto:libc-alpha-help@sourceware.org>, <http://sourceware.org/ml/#faqs>
+Sender: libc-alpha-owner@sourceware.org
+To: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Lai Jiangshan <laijs@cn.fujitsu.com>, Alan Stern <stern@rowland.harvard.edu>, Stephen Hemminger <shemminger@vyatta.com>
+Cc: linux-kernel@vger.kernel.org, lttng-dev@lists.lttng.org, rp@svcs.cs.pdx.edu, libc-alpha@sourceware.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============0577568946==
-Content-Type: multipart/alternative; boundary=f46d044305cef4864804d16c3f37
+Discourage use of glibc pthread_atfork() for call_rcu handlers due to
+its inappropriate assumptions about single-threadedness while pthread
+atfork handlers are executing. This results in hangs within the glibc
+memory allocator.
+    
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+---
+diff --git a/README b/README
+index 83330ea..2d29c1d 100644
+--- a/README
++++ b/README
+@@ -273,7 +273,20 @@ Interaction with fork()
+ 	must invoke call_rcu_before_fork() before the fork() and
+ 	call_rcu_after_fork_parent() after the fork().  The child
+ 	process must invoke call_rcu_after_fork_child().
+-	These three APIs are suitable for passing to pthread_atfork().
++	Even though these three APIs are suitable for passing to
++	pthread_atfork(), use of pthread_atfork() is *STRONGLY
++	DISCOURAGED* for programs calling the glibc memory allocator
++	(malloc(), calloc(), free(), ...) within call_rcu callbacks.
++	This is due to limitations in the way glibc memory allocator
++	handles calls to the memory allocator from concurrent threads
++	while the pthread_atfork() handlers are executing.
++	Combining e.g.:
++	* call to free() from callbacks executed within call_rcu worker
++	  threads,
++	* executing call_rcu atfork handlers within the glibc pthread
++	  atfork mechanism,
++	will sometimes trigger interesting process hangs. This usually
++	hangs on a memory allocator lock within glibc.
+ 
+ Thread Local Storage (TLS)
+ 
 
---f46d044305cef4864804d16c3f37
-Content-Type: text/plain; charset=ISO-8859-1
-
-On Mon, Dec 17, 2012 at 9:54 PM, Mathieu Desnoyers <
-mathieu.desnoyers@efficios.com> wrote:
-
->
-> Please let me know if the patch above works for you,
->
-
-it works! Thank you for the quick fix.
-
-Regards
--- Sebastian
-
---f46d044305cef4864804d16c3f37
-Content-Type: text/html; charset=ISO-8859-1
-
-<br><br><div class="gmail_quote">On Mon, Dec 17, 2012 at 9:54 PM, Mathieu Desnoyers <span dir="ltr">&lt;<a href="mailto:mathieu.desnoyers@efficios.com" target="_blank">mathieu.desnoyers@efficios.com</a>&gt;</span> wrote:<br>
-<blockquote class="gmail_quote" style="margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex"><br>
-Please let me know if the patch above works for you,<br></blockquote><div><br>it works! Thank you for the quick fix. <br><br>Regards<br>-- Sebastian<br></div></div>
-
---f46d044305cef4864804d16c3f37--
-
-
---===============0577568946==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0577568946==--
+-- 
+Mathieu Desnoyers
+Operating System Efficiency R&D Consultant
+EfficiOS Inc.
+http://www.efficios.com
