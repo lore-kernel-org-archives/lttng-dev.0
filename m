@@ -1,19 +1,19 @@
-From: David OShea <David.OShea@quantum.com>
-Subject: Re: babletrace with python bindings
-Date: Mon, 7 Jan 2013 04:40:03 +0000
-Message-ID: <20998D40D9A2B7499CA5A3A2666CB1EB19F8ABF4__38153.0875726186$1357533658$gmane$org@ZURMSG1.QUANTUM.com>
-References: <20121218184045.288000@gmx.com> <20121219183932.GA9587@Krystal>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: Cross-domain influence on overhead
+Date: Mon, 7 Jan 2013 08:44:04 -0500
+Message-ID: <20130107134404.GA30165__13402.8028850027$1357566306$gmane$org@Krystal>
+References: <524C960C5DFC794E82BE548D825F05CF5BC8AEAD@EU-MBX-04.mgc.mentorg.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mx0b-000ceb01.pphosted.com ([67.231.152.126])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <prvs=9719282f64=david.oshea@quantum.com>)
-	id 1Ts4VQ-0003J0-Jw
-	for lttng-dev@lists.lttng.org; Sun, 06 Jan 2013 23:40:12 -0500
-In-Reply-To: <20121219183932.GA9587@Krystal>
-Content-Language: en-US
+	(envelope-from <compudj@mail.openrapids.net>) id 1TsCzm-0007s1-CV
+	for lttng-dev@lists.lttng.org; Mon, 07 Jan 2013 08:44:06 -0500
+Content-Disposition: inline
+In-Reply-To: <524C960C5DFC794E82BE548D825F05CF5BC8AEAD@EU-MBX-04.mgc.mentorg.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,33 +22,59 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, ajonwa ajonwa <ajonwa@gmx.com>
+To: "Oestman, Fredrik" <Fredrik_Oestman@mentor.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-> -----Original Message-----
-> From: Mathieu Desnoyers [mailto:mathieu.desnoyers@efficios.com]
-> Sent: Thursday, 20 December 2012 5:10 AM
-> To: ajonwa ajonwa
-> Cc: lttng-dev@lists.lttng.org
-> Subject: Re: [lttng-dev] babletrace with python bindings
-> 
-> * ajonwa ajonwa (ajonwa@gmx.com) wrote:
-> > Hello everyone,
-> >
-> >  I get the following error message while attempting to compile
-> babeltrace with python bindings:
-[...]
-> This branch is currently in development, and might be out of sync with
-> the master branch of babeltrace at the moment. We don't have immediate
-> plans to work on it, but bontributions are welcome.
+* Oestman, Fredrik (Fredrik_Oestman@mentor.com) wrote:
+> Hi,
+> =
 
-Apologies for the late reply.  I just wanted to point out that if you check out commit 24a3136a383, it does build.  It's an older version of babeltrace, but does work despite some bugs.
+> I've noticed the following somewhat puzzling effect on both Intel and
+> ARM architecture computers:
+> =
 
-The main bug I recall is that iterator.set_pos(babeltrace.IterPos(babeltrace.SEEK_BEGIN)) doesn't fail immediately, and works in some traces, but sometimes results in a subsequent assertion failure in the Python interpreter after a few events have been read, or returns a bogus event at the start of the trace.  Quite possibly this is a babeltrace bug that has been fixed already. 
+> If all trace events are enabled in one domain only, either kernel or
+> user space, and there are lots of static tracepoints instrumented in
+> the other, then these inactive tracepoints start causing overhead of
+> about the same magnitude as if they were active, as if trace events
+> were enabled in this domain.
+> =
 
-Regards,
-David
+> Is there any obvious explanation to this behaviour?
 
-----------------------------------------------------------------------
-The information contained in this transmission may be confidential. Any disclosure, copying, or further distribution of confidential information is not permitted unless such privilege is explicitly granted in writing by Quantum. Quantum reserves the right to have electronic communications, including email and attachments, sent across its networks filtered through anti virus and spam software programs and retain such messages in order to comply with applicable data security and retention requirements. Quantum is not responsible for the proper and complete transmission of the substance of this communication or for any delay in its receipt.
+No, this would be really surprising.
+
+Can you provide your test script, and more details about the way you
+perform your benchmarks ? How is the overhead calculated ? From how many
+tracepoints hit ? How many processes spawned/exec() done ? How many
+tracepoints hit per process ?
+
+Thanks,
+
+Mathieu
+
+> =
+
+> Cheers,
+> =
+
+> Fredrik =D6stman
+> =
+
+> http://go.mentor.com/sourceryanalyzer/
+> =
+
+> =
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- =
+
+Mathieu Desnoyers
+Operating System Efficiency R&D Consultant
+EfficiOS Inc.
+http://www.efficios.com
