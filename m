@@ -1,19 +1,19 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Reading cache misses in Userspace?
-Date: Mon, 7 Jan 2013 08:47:44 -0500
-Message-ID: <20130107134744.GB30165__2617.87322019718$1357566522$gmane$org@Krystal>
-References: <50E8834D.1010802@gmx.de>
+From: "Oestman, Fredrik" <Fredrik_Oestman@mentor.com>
+Subject: Re: Cross-domain influence on overhead
+Date: Mon, 7 Jan 2013 13:53:49 +0000
+Message-ID: <524C960C5DFC794E82BE548D825F05CF5BC8B0E2__25757.5744916268$1357566913$gmane$org@EU-MBX-04.mgc.mentorg.com>
+References: <524C960C5DFC794E82BE548D825F05CF5BC8AEAD@EU-MBX-04.mgc.mentorg.com>,
+	<20130107134404.GA30165@Krystal>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1TsD3J-0007ua-Nm
-	for lttng-dev@lists.lttng.org; Mon, 07 Jan 2013 08:47:45 -0500
-Content-Disposition: inline
-In-Reply-To: <50E8834D.1010802@gmx.de>
+	(envelope-from <Fredrik_Oestman@mentor.com>) id 1TsD9J-0007xd-K5
+	for lttng-dev@lists.lttng.org; Mon, 07 Jan 2013 08:53:57 -0500
+In-Reply-To: <20130107134404.GA30165@Krystal>
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,73 +22,18 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Alexander Kampmann <alexander.kampmann@gmx.de>
-Cc: lttng-dev@lists.lttng.org
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-* Alexander Kampmann (alexander.kampmann@gmx.de) wrote:
-> hey,
->
-> I would like to find out which part of my application causes most cache  
-> misses. So I tried to add userspace events to my application. I hoped  
-> LTTng would give me some mean of determining between which tracepoints  
-> the most cache misses occur.
->
-> I started a session like that:
->
-> sudo lttng create session
-> sudo lttng enable-event -a -u
-> sudo lttng add-context -u -t perf:LLC-load-misses -t  
-> perf:LLC-store-misses -t perf:LLC-prefetch-misses
->
-> I get:
->
-> Error: perf:LLC-prefetch-misses: UST invalid context
-> Error: perf:LLC-store-misses: UST invalid context
-> Error: perf:LLC-load-misses: UST invalid context
->
-> Does this mean I can not add perf:LLC-* context to my userspace events?  
-> Is there any way to figure out which part of my application causes cache  
-> misses?
+Hi,
 
-Currently, perf counters are only for kernel tracing (-k domain). We
-envision using those counters from user-space when Linux kernel support
-will be there.
+Mathieu Desnoyers wrote:
+>No, this would be really surprising.
 
->
-> If I use
->
-> sudo lttng add-context -k -t perf:LLC-load-misses -t  
-> perf:LLC-store-misses -t perf:LLC-prefetch-misses
->
-> instead, I don't get an error, but the babeltrace output does not  
-> contain any cache miss counts as well.
+Indeed. It appears to have been an artefact of the test setup which escaped=
+ our initial reviews. Very sorry for this!
 
-Does it contain _any_ performance counters at all ?
+Cheers,
 
-Did you ensure that you issue add-context before you start tracing ?
-
-How many performance counters does your machine have ? Shown by dmesg,
-e.g.:
-
-dmesg |grep "generic reg"
-
-Thanks,
-
-Mathieu
-
->
-> I would appreciate any help,
->
-> Alex
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- 
-Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
-EfficiOS Inc.
-http://www.efficios.com
+Fredrik =D6stman
