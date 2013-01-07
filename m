@@ -1,19 +1,18 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: Re: [PATCH lttng-tools] Add kernel modules loading for
- new probes
-Date: Mon, 07 Jan 2013 15:07:19 -0500
-Message-ID: <50EB2AF7.90108__46198.6089860604$1357589285$gmane$org@efficios.com>
-References: <1355168223-6704-1-git-send-email-andrew_gabbasov@mentor.com>
-	<20121210195057.GB17705@Krystal>
+From: David Goulet <dgoulet@ev0ke.net>
+Subject: Re: [LTTng-Tools PATCH] Add pkg-config for liblttng-ctl
+ [v2]
+Date: Mon, 07 Jan 2013 15:07:32 -0500
+Message-ID: <50EB2B04.20300__37715.6240087517$1357589296$gmane$org@ev0ke.net>
+References: <1356031866-24252-1-git-send-email-yannick.brosseau@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from smtp.ini-tech.com ([213.239.202.151])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1TsIyg-0002Wt-H1
-	for lttng-dev@lists.lttng.org; Mon, 07 Jan 2013 15:07:22 -0500
-In-Reply-To: <20121210195057.GB17705@Krystal>
+	(envelope-from <dgoulet@ev0ke.net>) id 1TsIyu-0002Xi-Hg
+	for lttng-dev@lists.lttng.org; Mon, 07 Jan 2013 15:07:36 -0500
+In-Reply-To: <1356031866-24252-1-git-send-email-yannick.brosseau@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,80 +21,79 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev@lists.lttng.org, Andrew Gabbasov <andrew_gabbasov@mentor.com>
+To: Yannick Brosseau <yannick.brosseau@gmail.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Merged in master!
+Merged!
 
-Cheers!
+Thanks!
 David
 
-Mathieu Desnoyers:
-> * Andrew Gabbasov (andrew_gabbasov@mentor.com) wrote:
->> New probes introduced by commit b87700e318c27267890cbd6fb5e50b687279131b
->> in lttng-modules.
+Yannick Brosseau:
+> v2: Update description
 > 
-> David, these probes are 2.2 material. So feel free to either include
-> this patch in 2.1 or keep it for 2.2. Since the modprobe error is
-> ignored, it won't make much difference.
+> Signed-off-by: Yannick Brosseau <yannick.brosseau@gmail.com>
+> ---
+>  .gitignore                        |    2 +-
+>  configure.ac                      |    1 +
+>  src/lib/lttng-ctl/Makefile.am     |    3 +++
+>  src/lib/lttng-ctl/lttng-ctl.pc.in |   13 +++++++++++++
+>  4 files changed, 18 insertions(+), 1 deletion(-)
+>  create mode 100644 src/lib/lttng-ctl/lttng-ctl.pc.in
 > 
-> Thanks,
-> 
-> Acked-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> 
->>
->> Signed-off-by: Andrew Gabbasov <andrew_gabbasov@mentor.com>
->> ---
->>  src/bin/lttng-sessiond/modprobe.c |   11 +++++++++++
->>  1 file changed, 11 insertions(+)
->>
->> diff --git a/src/bin/lttng-sessiond/modprobe.c b/src/bin/lttng-sessiond/modprobe.c
->> index 8e5cc94..1a5a1b7 100644
->> --- a/src/bin/lttng-sessiond/modprobe.c
->> +++ b/src/bin/lttng-sessiond/modprobe.c
->> @@ -46,7 +46,10 @@ const struct kern_modules_param kern_modules_list[] = {
->>  	{ "lttng-types", 0 },
->>  	{ "lttng-probe-asoc", 0 },
->>  	{ "lttng-probe-block", 0 },
->> +	{ "lttng-probe-btrfs", 0 },
->> +	{ "lttng-probe-compaction", 0 },
->>  	{ "lttng-probe-ext3", 0 },
->> +	{ "lttng-probe-ext4", 0 },
->>  	{ "lttng-probe-gpio", 0 },
->>  	{ "lttng-probe-irq", 0 },
->>  	{ "lttng-probe-jbd", 0 },
->> @@ -58,16 +61,24 @@ const struct kern_modules_param kern_modules_list[] = {
->>  	{ "lttng-probe-napi", 0 },
->>  	{ "lttng-probe-net", 0 },
->>  	{ "lttng-probe-power", 0 },
->> +	{ "lttng-probe-printk", 0 },
->> +	{ "lttng-probe-random", 0 },
->> +	{ "lttng-probe-rcu", 0 },
->> +	{ "lttng-probe-regmap", 0 },
->>  	{ "lttng-probe-regulator", 0 },
->> +	{ "lttng-probe-rpm", 0 },
->>  	{ "lttng-probe-sched", 0 },
->>  	{ "lttng-probe-scsi", 0 },
->>  	{ "lttng-probe-signal", 0 },
->>  	{ "lttng-probe-skb", 0 },
->>  	{ "lttng-probe-sock", 0 },
->>  	{ "lttng-probe-statedump", 0 },
->> +	{ "lttng-probe-sunrpc", 0 },
->>  	{ "lttng-probe-timer", 0 },
->>  	{ "lttng-probe-udp", 0 },
->>  	{ "lttng-probe-vmscan", 0 },
->> +	{ "lttng-probe-workqueue", 0 },
->> +	{ "lttng-probe-writeback", 0 },
->>  };
->>  
->>  /*
->> -- 
->> 1.7.10.4
->>
->>
->> _______________________________________________
->> lttng-dev mailing list
->> lttng-dev@lists.lttng.org
->> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> 
+> diff --git a/.gitignore b/.gitignore
+> index 383dbf9..afc97b6 100644
+> --- a/.gitignore
+> +++ b/.gitignore
+> @@ -35,7 +35,7 @@ src/bin/lttng-sessiond/lttng-sessiond
+>  src/bin/lttng/lttng
+>  src/bin/lttng-consumerd/lttng-consumerd
+>  src/bin/lttng-relayd/lttng-relayd
+> -
+> +src/lib/lttng-ctl/lttng-ctl.pc
+>  src/lib/lttng-ctl/filter/filter-grammar-test
+>  src/lib/lttng-ctl/filter/filter-lexer.c
+>  src/lib/lttng-ctl/filter/filter-parser.c
+> diff --git a/configure.ac b/configure.ac
+> index 54aa385..be6736c 100644
+> --- a/configure.ac
+> +++ b/configure.ac
+> @@ -281,6 +281,7 @@ AC_CONFIG_FILES([
+>  	src/lib/Makefile
+>  	src/lib/lttng-ctl/Makefile
+>  	src/lib/lttng-ctl/filter/Makefile
+> +	src/lib/lttng-ctl/lttng-ctl.pc
+>  	src/bin/Makefile
+>  	src/bin/lttng-consumerd/Makefile
+>  	src/bin/lttng-sessiond/Makefile
+> diff --git a/src/lib/lttng-ctl/Makefile.am b/src/lib/lttng-ctl/Makefile.am
+> index 2681bdd..542f4bb 100644
+> --- a/src/lib/lttng-ctl/Makefile.am
+> +++ b/src/lib/lttng-ctl/Makefile.am
+> @@ -11,3 +11,6 @@ liblttng_ctl_la_LIBADD = \
+>  		$(top_builddir)/src/common/libcommon.la \
+>  		$(top_builddir)/src/common/hashtable/libhashtable.la \
+>  		$(top_builddir)/src/lib/lttng-ctl/filter/libfilter.la
+> +
+> +pkgconfigdir = $(libdir)/pkgconfig
+> +pkgconfig_DATA = lttng-ctl.pc
+> diff --git a/src/lib/lttng-ctl/lttng-ctl.pc.in b/src/lib/lttng-ctl/lttng-ctl.pc.in
+> new file mode 100644
+> index 0000000..86382c2
+> --- /dev/null
+> +++ b/src/lib/lttng-ctl/lttng-ctl.pc.in
+> @@ -0,0 +1,13 @@
+> +prefix=@prefix@
+> +exec_prefix=@exec_prefix@
+> +libdir=@libdir@
+> +includedir=@includedir@
+> +
+> +Name: LTTng control library
+> +Description: The LTTng control and utility library is a library used to control the tracing sessions of a LTTng-session deamon
+> +Version: @PACKAGE_VERSION@
+> +Requires:
+> +Requires.private: 
+> +Libs: -L${libdir} -llttng-ctl
+> +Cflags: -I${includedir} 
+> +
