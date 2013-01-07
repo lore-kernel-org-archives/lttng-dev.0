@@ -1,19 +1,19 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Cross-domain influence on overhead
-Date: Mon, 7 Jan 2013 08:44:04 -0500
-Message-ID: <20130107134404.GA30165__13402.8028850027$1357566306$gmane$org@Krystal>
-References: <524C960C5DFC794E82BE548D825F05CF5BC8AEAD@EU-MBX-04.mgc.mentorg.com>
+Subject: Re: Reading cache misses in Userspace?
+Date: Mon, 7 Jan 2013 08:47:44 -0500
+Message-ID: <20130107134744.GB30165__2617.87322019718$1357566522$gmane$org@Krystal>
+References: <50E8834D.1010802@gmx.de>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1TsCzm-0007s1-CV
-	for lttng-dev@lists.lttng.org; Mon, 07 Jan 2013 08:44:06 -0500
+	(envelope-from <compudj@mail.openrapids.net>) id 1TsD3J-0007ua-Nm
+	for lttng-dev@lists.lttng.org; Mon, 07 Jan 2013 08:47:45 -0500
 Content-Disposition: inline
-In-Reply-To: <524C960C5DFC794E82BE548D825F05CF5BC8AEAD@EU-MBX-04.mgc.mentorg.com>
+In-Reply-To: <50E8834D.1010802@gmx.de>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,58 +22,72 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Oestman, Fredrik" <Fredrik_Oestman@mentor.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Alexander Kampmann <alexander.kampmann@gmx.de>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Oestman, Fredrik (Fredrik_Oestman@mentor.com) wrote:
-> Hi,
-> =
+* Alexander Kampmann (alexander.kampmann@gmx.de) wrote:
+> hey,
+>
+> I would like to find out which part of my application causes most cache  
+> misses. So I tried to add userspace events to my application. I hoped  
+> LTTng would give me some mean of determining between which tracepoints  
+> the most cache misses occur.
+>
+> I started a session like that:
+>
+> sudo lttng create session
+> sudo lttng enable-event -a -u
+> sudo lttng add-context -u -t perf:LLC-load-misses -t  
+> perf:LLC-store-misses -t perf:LLC-prefetch-misses
+>
+> I get:
+>
+> Error: perf:LLC-prefetch-misses: UST invalid context
+> Error: perf:LLC-store-misses: UST invalid context
+> Error: perf:LLC-load-misses: UST invalid context
+>
+> Does this mean I can not add perf:LLC-* context to my userspace events?  
+> Is there any way to figure out which part of my application causes cache  
+> misses?
 
-> I've noticed the following somewhat puzzling effect on both Intel and
-> ARM architecture computers:
-> =
+Currently, perf counters are only for kernel tracing (-k domain). We
+envision using those counters from user-space when Linux kernel support
+will be there.
 
-> If all trace events are enabled in one domain only, either kernel or
-> user space, and there are lots of static tracepoints instrumented in
-> the other, then these inactive tracepoints start causing overhead of
-> about the same magnitude as if they were active, as if trace events
-> were enabled in this domain.
-> =
+>
+> If I use
+>
+> sudo lttng add-context -k -t perf:LLC-load-misses -t  
+> perf:LLC-store-misses -t perf:LLC-prefetch-misses
+>
+> instead, I don't get an error, but the babeltrace output does not  
+> contain any cache miss counts as well.
 
-> Is there any obvious explanation to this behaviour?
+Does it contain _any_ performance counters at all ?
 
-No, this would be really surprising.
+Did you ensure that you issue add-context before you start tracing ?
 
-Can you provide your test script, and more details about the way you
-perform your benchmarks ? How is the overhead calculated ? From how many
-tracepoints hit ? How many processes spawned/exec() done ? How many
-tracepoints hit per process ?
+How many performance counters does your machine have ? Shown by dmesg,
+e.g.:
+
+dmesg |grep "generic reg"
 
 Thanks,
 
 Mathieu
 
-> =
-
-> Cheers,
-> =
-
-> Fredrik =D6stman
-> =
-
-> http://go.mentor.com/sourceryanalyzer/
-> =
-
-> =
-
+>
+> I would appreciate any help,
+>
+> Alex
+>
 > _______________________________________________
 > lttng-dev mailing list
 > lttng-dev@lists.lttng.org
 > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
--- =
-
+-- 
 Mathieu Desnoyers
 Operating System Efficiency R&D Consultant
 EfficiOS Inc.
