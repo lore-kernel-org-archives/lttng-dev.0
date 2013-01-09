@@ -1,7 +1,7 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] Userspace RCU 0.6.9
-Date: Wed, 9 Jan 2013 13:39:11 -0500
-Message-ID: <20130109183911.GA14358@Krystal>
+Subject: [RELEASE] Userspace RCU 0.7.6
+Date: Wed, 9 Jan 2013 13:46:17 -0500
+Message-ID: <20130109184616.GA14968@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Return-path: <linux-kernel-owner@vger.kernel.org>
@@ -18,25 +18,29 @@ copies of a given data structure to live at the same time, and by
 monitoring the data structure accesses to detect grace periods after
 which memory reclamation is possible.
 
-This is a bugfix release for the stable-0.6 series of the Userspace RCU
-library. It fixes a hang in use-case where call_rcu is used in a parent
-process that performs a fork(), without following exec(), and then
-continues to use call_rcu or synchronize_rcu.
+liburcu-cds provides efficient data structures based on RCU and
+lock-free algorithms. Those structures include hash tables, queues,
+stacks, and doubly-linked lists.
+
+This is a bugfix release, mainly fixing handling of processes using
+call_rcu, then fork() without following exec(), and then continuing use
+of synchronize_rcu() or call_rcu() in the child process. A hang in
+synchronize_rcu() in the child could occur, which is fixed by this
+release.
 
 Changelog:
-2013-01-09 Userspace RCU 0.6.9
-        * API cleanup: use "uatomic_*" in cmm_smp_mb__ API
-        * uatomic: add memory barrier API for and/or/add/sub/inc/sub
-        * Fix uatomic sign cast
+2013-01-09 Userspace RCU 0.7.6
         * Discourage use of pthread_atfork() for call_rcu handlers
         * Fix call_rcu fork handling
         * test: fork handling
+        * Fix TLS detection: test with linker, add --disable-compiler-tls
+        * Cleanup: cast pthread_self() return value to unsigned long
+        * Fallback mechanism not working on platform where TLS is unsupported
 
 Project website: http://lttng.org/urcu
 Download link: http://lttng.org/files/urcu/
 
 -- 
 Mathieu Desnoyers
-Operating System Efficiency R&D Consultant
 EfficiOS Inc.
 http://www.efficios.com
