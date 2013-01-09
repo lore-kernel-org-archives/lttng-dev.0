@@ -1,46 +1,72 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] Userspace RCU 0.7.6
-Date: Wed, 9 Jan 2013 13:46:17 -0500
-Message-ID: <20130109184616.GA14968@Krystal>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Return-path: <linux-kernel-owner@vger.kernel.org>
-Content-Disposition: inline
-Sender: linux-kernel-owner@vger.kernel.org
-To: linux-kernel@vger.kernel.org, lttng-dev@lists.lttng.org, rp@svcs.cs.pdx.edu
-Cc: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Lai Jiangshan <laijs@cn.fujitsu.com>, Stephen Hemminger <shemminger@vyatta.com>, Alan Stern <stern@rowland.harvard.edu>
+From: Julien Desfossez <jdesfossez@efficios.com>
+Subject: [BABELTRACE PATCH] Namespace the lookup_enum function
+Date: Wed,  9 Jan 2013 14:48:13 -0500
+Message-ID: <1357760893-11961-1-git-send-email-jdesfossez@efficios.com>
+References: <20130107211855.GB3678@Krystal>
+Return-path: <gdb-return-41715-gdb-gdb=m.gmane.org@sourceware.org>
+In-Reply-To: <20130107211855.GB3678@Krystal>
+List-Unsubscribe: <mailto:gdb-unsubscribe-gdb-gdb=m.gmane.org@sourceware.org>
+List-Subscribe: <mailto:gdb-subscribe@sourceware.org>
+List-Archive: <http://sourceware.org/ml/gdb/>
+List-Post: <mailto:gdb@sourceware.org>
+List-Help: <mailto:gdb-help@sourceware.org>, <http://sourceware.org/ml/#faqs>
+Sender: gdb-owner@sourceware.org
+To: teawater@gmail.com
+Cc: mathieu.desnoyers@efficios.com, lttng-dev@lists.lttng.org, gdb@sourceware.org, tromey@redhat.com, palves@redhat.com, Julien Desfossez <jdesfossez@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-liburcu is a LGPLv2.1 userspace RCU (read-copy-update) library. This
-data synchronization library provides read-side access which scales
-linearly with the number of cores. It does so by allowing multiples
-copies of a given data structure to live at the same time, and by
-monitoring the data structure accesses to detect grace periods after
-which memory reclamation is possible.
+This patch namespaces the lookup_enum function because it causes problem
+with the integration in gdb even though it is not exported.
+Hui, can you try this patch and confirm it solves the current problem ?
+After that we will continue the internal namespacing.
 
-liburcu-cds provides efficient data structures based on RCU and
-lock-free algorithms. Those structures include hash tables, queues,
-stacks, and doubly-linked lists.
+Thanks,
 
-This is a bugfix release, mainly fixing handling of processes using
-call_rcu, then fork() without following exec(), and then continuing use
-of synchronize_rcu() or call_rcu() in the child process. A hang in
-synchronize_rcu() in the child could occur, which is fixed by this
-release.
+Julien
+---
+ formats/ctf/ctf.c          |    2 +-
+ include/babeltrace/types.h |    2 +-
+ types/types.c              |    2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-Changelog:
-2013-01-09 Userspace RCU 0.7.6
-        * Discourage use of pthread_atfork() for call_rcu handlers
-        * Fix call_rcu fork handling
-        * test: fork handling
-        * Fix TLS detection: test with linker, add --disable-compiler-tls
-        * Cleanup: cast pthread_self() return value to unsigned long
-        * Fallback mechanism not working on platform where TLS is unsupported
-
-Project website: http://lttng.org/urcu
-Download link: http://lttng.org/files/urcu/
-
+diff --git a/formats/ctf/ctf.c b/formats/ctf/ctf.c
+index 18a5601..a8f8408 100644
+--- a/formats/ctf/ctf.c
++++ b/formats/ctf/ctf.c
+@@ -431,7 +431,7 @@ int ctf_read_event(struct stream_pos *ppos, struct ctf_stream_definition *stream
+ 		} else {
+ 			struct definition_enum *enum_definition;
+ 
+-			enum_definition = lookup_enum(&stream->stream_event_header->p, "id", FALSE);
++			enum_definition = bt_lookup_enum(&stream->stream_event_header->p, "id", FALSE);
+ 			if (enum_definition) {
+ 				id = enum_definition->integer->value._unsigned;
+ 			}
+diff --git a/include/babeltrace/types.h b/include/babeltrace/types.h
+index b42ba03..00c928b 100644
+--- a/include/babeltrace/types.h
++++ b/include/babeltrace/types.h
+@@ -521,7 +521,7 @@ struct definition *lookup_definition(const struct definition *definition,
+ struct definition_integer *lookup_integer(const struct definition *definition,
+ 					  const char *field_name,
+ 					  int signedness);
+-struct definition_enum *lookup_enum(const struct definition *definition,
++struct definition_enum *bt_lookup_enum(const struct definition *definition,
+ 				    const char *field_name,
+ 				    int signedness);
+ struct definition *lookup_variant(const struct definition *definition,
+diff --git a/types/types.c b/types/types.c
+index 5599027..139e318 100644
+--- a/types/types.c
++++ b/types/types.c
+@@ -642,7 +642,7 @@ struct definition_integer *lookup_integer(const struct definition *definition,
+ 	return lookup_integer;
+ }
+ 
+-struct definition_enum *lookup_enum(const struct definition *definition,
++struct definition_enum *bt_lookup_enum(const struct definition *definition,
+ 				    const char *field_name,
+ 				    int signedness)
+ {
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+1.7.10.4
