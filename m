@@ -1,17 +1,17 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] Babeltrace 1.0.2
-Date: Fri, 11 Jan 2013 09:51:10 -0500
-Message-ID: <20130111145110.GA15036__10491.9969024651$1357915922$gmane$org@Krystal>
+From: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
+Subject: Re: tracing of non-JNI java in IBM jvm
+Date: Fri, 11 Jan 2013 10:51:46 -0500
+Message-ID: <50F03512.4080100__26067.5230333165$1357919645$gmane$org@voxpopuli.im>
+References: <A94B468263DDE2448A14367F590EB97301D10803@ltcfiswmsgmb15>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from ironport2-out.teksavvy.com ([206.248.154.182])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1Ttfwy-00088Y-U0
-	for lttng-dev@lists.lttng.org; Fri, 11 Jan 2013 09:51:17 -0500
-Content-Disposition: inline
+	(envelope-from <alexmonthy@voxpopuli.im>) id 1Ttgv3-0000BX-UR
+	for lttng-dev@lists.lttng.org; Fri, 11 Jan 2013 10:53:22 -0500
+In-Reply-To: <A94B468263DDE2448A14367F590EB97301D10803@ltcfiswmsgmb15>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,44 +20,93 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org, tiwg@multicore-association.org
+To: "Ostermueller, Erik" <Erik.Ostermueller@fisglobal.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-The Babeltrace project provides trace read and write libraries, as well
-as a trace converter. Plugins can be created for any trace format to
-allow its conversion to/from another trace format.
+Hi Erik,
 
-The main format expected to be converted to/from is the Common Trace
-Format (CTF). The default input format of the "babeltrace" command is
-CTF, and its default output format is a human-readable text log. The
-"babeltrace-log" command converts from a text log to a CTF trace.
+I'm not sure what you mean by "non-JNI java calls". LTTng-UST is a
+tracer implemented in C. There are Java bindings available (if you
+configure UST with --with-jni-interface), but if you want to use it to
+trace Java applications, it will have to go through JNI.
 
-Please note that the 1.0.1 tarball does not build, this is why we skip
-from 1.0.0 to 1.0.2 directly.
+If this is what you want to do, I have an example at
+http://git.dorsal.polymtl.ca/~alexmont?p=ust-jni-tests.git;a=summary .
+It's a small Java application instrumented with UST JNI tracepoints.
 
-Changelog:
+Finally, there is an ongoing project about hooking UST into a JUL
+(java.util.logging) handler, and moving more logic like session control
+to the Java side of things. It's still at the design stage afaik, but
+you might want to monitor this thread:
+http://lists.lttng.org/pipermail/lttng-dev/2013-January/019371.html
 
-2012-01-11 Babeltrace 1.0.2
-        * Fix: add tests/lib missing files to Makefile.am
+One more comment below,
 
-2012-01-11 Babeltrace 1.0.1
-        * Provides a basic pkg-config file for libbabeltrace
-        * Fix erroneous warning/error messages
-        * Fix comment in context.h
-        * Cleanup: Remove whitespace at EOL from mit-license.txt
-        * Add missing permission notice in each source file
-        * Adding a test which do a sequence of seek BEGIN, LAST, BEGIN, LAST
-        * Run seek tests on a second trace file
-        * Add #define _GNU_SOURCE to remove warning about asprintf
-        * Include a test for SEEK_BEGIN and SEEK_LAST
-        * Fix: Report success even if we find at least one valid stream in find_max_timestamp_ctf_stream_class
-        * Fix SEEK_BEGIN for streams that do not contain any event
+On 13-01-10 05:52 PM, Ostermueller, Erik wrote:
+> Hi all,
+>
+> Would like to use LTTng to trace some pure, non-JNI java method calls.
+> Seems like I need to
+>
+> *         install 2.1.0-rc2
+>
+> *         install the TMF/Eclipse LTTng plugin
 
-Project website: http://www.efficios.com/babeltrace
-Download link: http://www.efficios.com/files/babeltrace/
-CTF specification: http://www.efficios.com/ctf
+The Eclipse plugin does no tracing by itself. It's mainly only a viewer
+for LTTng/UST traces. It also has a control feature that allows
+controlling a LTTng session daemon from within Eclipse, but it still
+requires the lttng tools to be installed on the traced machine.
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+
+Cheers,
+Alex
+
+>
+> *         how do I indicate which classes/methods to be traced?
+>
+> I started with the "User-space" tracing section this doc:  https://bugs.lttng.org/projects/lttng-tools/wiki
+> ...but then I stop understanding things when I read "So, after instrumenting you applications with LTTng-ust 2.0".
+> That was followed by a link to http://lttng.org/lttng2.0, but that didn't help.
+>
+> Would love to be an alpha/beta tester if this isn't ready yet.
+>
+> Thanks a lot,
+> --Erik
+>
+> ###   some info about my environment:  ####################################
+>
+>
+> =>uname -a
+> Linux vlxesngperf01.atldev.com 2.6.18-238.5.1.el5 #1 SMP Mon Feb 21 05:52:39 EST 2011 x86_64 x86_64 x86_64 GNU/Linux
+>
+> =>cat /etc/issue
+> Red Hat Enterprise Linux Server release 5.6 (Tikanga)
+> Kernel \r on an \m
+>
+>
+> tp@vlxesngperf01 /usr/tp/app/tp/nmon/bin$=>java -version
+> java version "1.6.0"
+> Java(TM) SE Runtime Environment (build pxa6460sr9fp2ifix-20111111_05(SR9 FP2+IV03622+IV02378+IZ99243+IZ97310+IV00707))
+> IBM J9 VM (build 2.4, JRE 1.6.0 IBM J9 2.4 Linux amd64-64 jvmxa6460sr9-20111111_94827 (JIT enabled, AOT enabled)
+> J9VM - 20111111_094827
+> JIT  - r9_20101028_17488ifx45
+> GC   - 20101027_AA)
+> JCL  - 20110727_04
+>
+>
+> ________________________________
+> Erik Ostermueller
+> Xpress Architecture
+>
+> T: 501.220.7753
+> C:501.213.8309
+> erik.ostermueller@fisglobal.com<mailto:erik.ostermueller@fisglobal.com>
+> [Description: Description: Description: Description: cid:image001.png@01CD8AB3.84921E40]
+> [Description: Description: Description: Description: cid:image003.png@01CD8AB3.84921E40]
+>
+> _____________
+> The information contained in this message is proprietary and/or confidential. If you are not the intended recipient, please: (i) delete the message and all copies; (ii) do not disclose, distribute or use the message in any manner; and (iii) notify the sender immediately. In addition, please be aware that any message addressed to our domain is subject to archiving and review by persons other than the intended recipient. Thank you.
+>
+>
+>
