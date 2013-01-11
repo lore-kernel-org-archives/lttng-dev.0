@@ -1,17 +1,16 @@
-From: Aaron Spear <aspear@vmware.com>
-Subject: Re: tracing of non-JNI java in IBM jvm
-Date: Fri, 11 Jan 2013 10:55:37 -0800 (PST)
-Message-ID: <439402897.6438391.1357930537656.JavaMail.root__6556.56743697381$1357930596$gmane$org@vmware.com>
-References: <A94B468263DDE2448A14367F590EB97301D10B85@ltcfiswmsgmb15>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Subject: lttng-ust quick start?
+Date: Fri, 11 Jan 2013 17:12:49 -0500
+Message-ID: <3CA1A65C03C1A34C81BBC6272782E696987596__37780.0902272158$1357942710$gmane$org@valcartierex01.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp-outbound-1.vmware.com ([208.91.2.12])
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <aspear@vmware.com>) id 1TtjlX-0001h9-Vr
-	for lttng-dev@lists.lttng.org; Fri, 11 Jan 2013 13:55:44 -0500
-In-Reply-To: <A94B468263DDE2448A14367F590EB97301D10B85@ltcfiswmsgmb15>
+	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1Ttmv5-0003EC-N5
+	for lttng-dev@lists.lttng.org; Fri, 11 Jan 2013 17:17:47 -0500
+Content-class: urn:content-classes:message
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,70 +19,63 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Erik Ostermueller <Erik.Ostermueller@fisglobal.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
 
------ Original Message -----
-> From: "Erik Ostermueller" <Erik.Ostermueller@fisglobal.com>
-> To: "Alexandre Montplaisir" <alexmonthy@voxpopuli.im>
-> Cc: lttng-dev@lists.lttng.org
-> Sent: Friday, January 11, 2013 9:26:51 AM
-> Subject: Re: [lttng-dev] tracing of non-JNI java in IBM jvm
-> 
-> Thanks Alex for the quick reply....now I get it.
-> I'll jump in on that other thread you mentioned.
-> 
-> There is a tool called InTrace that does some of this work.
-> Perhaps some design ideas or even code could be stolen from here:
->  http://mchr3k.github.com/org.intrace/
-> This project:
-> * implements the java.lang.instrumentation api, which can be used to
-> plug a tracing tool into an already-running JVM.
-> * allows you to instrument/de-instrument various classes without
-> restarting the JVM.
-> * Uses http://asm.ow2.org/ to inject byte code for entry/exit tracing
-> methods.
-> * stores thread id (good) but does nothing to sort/organize activity
-> by thread id into a session(bad)
-> * no graphing/aggregating of performance metrics...just displays
-> entry/exit times, method parameters, etc...
+   I have this Ubuntu 12.04 machine with the lttng-tools suite installed, a=
+nd I now want to quickstart userspace tracing.  Starting at http://lttng.or=
+g/quickstart, we're told succinctly that we need to instrument the target a=
+pplication (details in the lttng-ust(3) manpage) and then do the actual tra=
+cing (Userspace Tracing section of the lttng-tools wiki page).  Fair enough=
+.  But the lttng-ust(3) manpage is off to a rocky start.
 
-Hi Erik,
+   The first thing we're told is " to use the lttng-gen-tp(1) tool. See the=
+ lttng-gen-tp(1) manpage for explanation."  The catch here is that lttng-ge=
+n-tp is NOT part of the basic lttng-tools installation.  The manpage should=
+ explain (briefly) that lttng-gen-tp is obtained by installing liblttng-ust=
+-dev.  Might as well install liblttng-ctl-dev at the same time, so we have =
+a complete LTTng installation.
 
-I think that what you are mentioning is certainly one thing that is needed. To me I see a couple of different components here:
-1) implementation of java.util.logging interfaces as well as SLF4J interfaces, as well as a dedicated LTTng java API for registering
-custom event typess.  This would be used for static, compile time instrumentation of java apps.
-2) an implementation that uses the tooling you mention above for dynamic instrumentation of any running java app.  You basically would define trace and install trace points on the fly.  This would be really, really powerful.
+   The next step in the lttng-ust(3) manpage is to create a tracepoint prov=
+ider: "To create a tracepoint provider, within a build tree similar to exam=
+ples/easy-ust installed with lttng-ust documentation, a sample_component_pr=
+ovider.h for the general layout."  The sentence makes no sense (is it missi=
+ng parts?), but even if one glosses over this, the main problem is that the=
+re is no easy-ust anywhere to be found within the LTTng installation.  Turn=
+ing to the Internet, I find https://github.com/giraldeau/lttng-ust/tree/mas=
+ter/doc/examples/easy-ust and grab the handful of files found there.  I the=
+n open a console within that directory and invoke make:
 
-The implementations of the above would have to be quite different from the way that things are done currently with UST.  Currently UST uses macros in C files to define the various tracepoints statically.  We would need to have API's that could be called dynamically to define tracepoints, so that the java code could do this.  I have not actually looked under the hood with the current UST implementation to see what the implications are for this.  
+gcc -I. -c -o sample.o sample.c
+gcc -I. -c -o tp.o tp.c
+In file included from /usr/local/include/lttng/ust-tracepoint-event.h:496:0,
+                 from /usr/local/include/lttng/tracepoint-event.h:40,
+                 from sample_component_provider.h:135,
+                 from tp.c:25:
+././sample_component_provider.h:128:1: erreur: '__tp_loglevel_entry__sample=
+_component___TRACE_WARNING' undeclared here (not in a function)
+make: *** [tp.o] Erreur 1
 
-It seems to me that we would want to have a Java API usage similar to what you can do with SLF4J:
+   I think it's telling me it does not recognise the TRACE_WARNING tracepoi=
+nt loglevel being defined in sample_component_provider.h (the "TRACEPOINT_L=
+OGLEVEL(sample_component, message, TRACE_WARNING)" call), but the name seem=
+s legitimate and ust-tracepoint-event.h looks like it should handle the TRA=
+CEPOINT_LOGLEVEL* definitions.
 
-class MyClass {
-      private static final Tracer tracer = LTTngFactory.getTracer("MyComponentName");
-      private static final String MY_TRACEPOINT = "MyTracepointWithIntegerStringAndLong";
+   How do I fix this?
 
-      static {
-          // register a tracepoint.  this goes through JNI and creates a tracepoint
-          // in UST that has the given name and the specified objects
-          tracer.registerTracepoint(MY_TRACEPOINT,
-                                     new Object[]{Integer.class,String.class,Long.class});
-      }
-
-      public void someMethod() {
-          Integer someInteger = 123456;
-          String  someString = "this is the string";
-          Long  someLong = 56789;
-
-          tracer.trace(MY_TRACEPOINT,someInteger,someString,someLong);
-      }
-}
-
-Then over the top of this you have implementations of SLF4J, java.util.logging, whatever.  The infrastructure required in the JNI side for this would be the same implementation needed by the binding to the InTrace technology to dynamically create tracepoints.
-
-I need all of this right now, and am willing to spend time in the next few months to implement it.
-
-cheers,
-Aaron Spear, Staff Engineer, VMware Inc
+Daniel U. Thibault
+R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) / Defence R&D=
+ Canada - Valcartier (DRDC Valcartier)
+Cyber s=E9curit=E9 pour les missions essentielles (CME) / Mission Critical =
+Cyber Security (MCCS)
+Protection des syst=E8mes et contremesures (PSC) / Systems Protection & Cou=
+ntermeasures (SPC)
+2459 route de la Bravoure
+Qu=E9bec, QC=A0 G3J 1X5
+CANADA
+Vox=A0: (418) 844-4000 x4245
+Fax=A0: (418) 844-4538
+Gouvernement du Canada=A0/ Government of Canada
+<http://www.valcartier.drdc-rddc.gc.ca/>
