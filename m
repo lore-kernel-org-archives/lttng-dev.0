@@ -1,21 +1,31 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [BABELTRACE PATCH] Namespace the lookup_enum function
+Subject: Re: [BABELTRACE PATCH] Namespace the lookup_enum
+	function
 Date: Sun, 13 Jan 2013 12:57:54 -0500
-Message-ID: <20130113175754.GA3917__35832.2076769129$1358099918$gmane$org@Krystal>
-References: <20130107211855.GB3678@Krystal> <1357760893-11961-1-git-send-email-jdesfossez@efficios.com>
+Message-ID: <20130113175754.GA3917__1638.77224918014$1358099919$gmane$org@Krystal>
+References: <20130107211855.GB3678@Krystal>
+	<1357760893-11961-1-git-send-email-jdesfossez@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Return-path: <gdb-return-41729-gdb-gdb=m.gmane.org@sourceware.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <compudj@mail.openrapids.net>) id 1TuRog-000624-U3
+	for lttng-dev@lists.lttng.org; Sun, 13 Jan 2013 12:57:55 -0500
 Content-Disposition: inline
 In-Reply-To: <1357760893-11961-1-git-send-email-jdesfossez@efficios.com>
-List-Unsubscribe: <mailto:gdb-unsubscribe-gdb-gdb=m.gmane.org@sourceware.org>
-List-Subscribe: <mailto:gdb-subscribe@sourceware.org>
-List-Archive: <http://sourceware.org/ml/gdb/>
-List-Post: <mailto:gdb@sourceware.org>
-List-Help: <mailto:gdb-help@sourceware.org>, <http://sourceware.org/ml/#faqs>
-Sender: gdb-owner@sourceware.org
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
 To: Julien Desfossez <jdesfossez@efficios.com>
-Cc: teawater@gmail.com, lttng-dev@lists.lttng.org, gdb@sourceware.org, tromey@redhat.com, palves@redhat.com
+Cc: tromey@redhat.com, gdb@sourceware.org, lttng-dev@lists.lttng.org, palves@redhat.com
 List-Id: lttng-dev@lists.lttng.org
 
 * Julien Desfossez (jdesfossez@efficios.com) wrote:
