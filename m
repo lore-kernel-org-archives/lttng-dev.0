@@ -1,9 +1,8 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH] don't build C++ example if a C++
-	compiler	isn't available
-Date: Sun, 13 Jan 2013 11:44:55 -0500
-Message-ID: <20130113164455.GA31623__36984.1662505225$1358095559$gmane$org@Krystal>
-References: <1357979088-28687-1-git-send-email-s.martin49@gmail.com>
+Subject: Re: [PATCH] Make sync_file_range() usage optional
+Date: Sun, 13 Jan 2013 11:48:46 -0500
+Message-ID: <20130113164846.GB31623__28739.6203297705$1358095771$gmane$org@Krystal>
+References: <1357979037-28550-1-git-send-email-s.martin49@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -11,10 +10,10 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1TuQgA-0005TD-6R
-	for lttng-dev@lists.lttng.org; Sun, 13 Jan 2013 11:45:02 -0500
+	(envelope-from <compudj@mail.openrapids.net>) id 1TuQjp-0005VN-JD
+	for lttng-dev@lists.lttng.org; Sun, 13 Jan 2013 11:48:49 -0500
 Content-Disposition: inline
-In-Reply-To: <1357979088-28687-1-git-send-email-s.martin49@gmail.com>
+In-Reply-To: <1357979037-28550-1-git-send-email-s.martin49@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,18 +22,28 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Samuel Martin <s.martin49@gmail.com>
+To: Samuel Martin <s.martin49@gmail.com>, dgoulet@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
 * Samuel Martin (s.martin49@gmail.com) wrote:
-> By default lttng-ust builds a hello.cxx C++ example that demonstrates
-> the usage of the userspace tracing library in a C++ program.
-> Unfortunately, when no C++ support is available, the build of lttng-ust
-> fails just because of this example code. So we make the compilation of
-> this code conditional on whether a working C++ compiler was found.
+> Under uClibc, sync_file_range() is not available under all
+> architectures, so we fall back to fdatasync() in this case.
 
-merged into master, stable-2.1, stable-2.0 branches,
+Hi Samuel,
+
+For future, please specify either of:
+
+[PATCH urcu]
+[PATCH lttng-tools]
+[PATCH lttng-ust]
+[PATCH lttng-modules]
+
+in the subject.
+
+This patch belongs to lttng-tools, so I CC David who maintains it.
+
+Acked-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 
 Thanks!
 
@@ -44,50 +53,39 @@ Mathieu
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 > ---
->  configure.ac      | 12 ++++++++++++
->  tests/Makefile.am |  6 +++++-
->  2 files changed, 17 insertions(+), 1 deletion(-)
+>  configure.ac                     | 2 +-
+>  src/common/compat/compat-fcntl.c | 4 ++++
+>  2 files changed, 5 insertions(+), 1 deletion(-)
 > 
 > diff --git a/configure.ac b/configure.ac
-> index c4377a5..d33be32 100644
+> index 425941b..80940c0 100644
 > --- a/configure.ac
 > +++ b/configure.ac
-> @@ -77,6 +77,18 @@ AC_PROG_CXX
->  AC_PROG_MAKE_SET
->  LT_INIT
+> @@ -150,7 +150,7 @@ AS_IF([test "x$lttng_ust_support" = "xyes"], [
+>  	)
+>  ])
+>  AM_CONDITIONAL([HAVE_LIBLTTNG_UST_CTL], [test "x$lttng_ust_ctl_found" = xyes])
+> -AC_CHECK_FUNCS([sched_getcpu sysconf])
+> +AC_CHECK_FUNCS([sched_getcpu sysconf sync_file_range])
 >  
-> +# rw_PROG_CXX_WORKS
-> +# Check whether the C++ compiler works.
-> +AC_CACHE_CHECK([whether the C++ compiler works],
-> +		[rw_cv_prog_cxx_works],
-> +		[AC_LANG_PUSH([C++])
-> +		AC_LINK_IFELSE([AC_LANG_PROGRAM([], [])],
-> +				[rw_cv_prog_cxx_works=yes],
-> +				[rw_cv_prog_cxx_works=no])
-> +		AC_LANG_POP([C++])])
-> +
-> +AM_CONDITIONAL([CXX_WORKS], [test "x$rw_cv_prog_cxx_works" = "xyes"])
-> +
->  ## Checks for libraries.
+>  # check for dlopen
 >  AC_CHECK_LIB([dl], [dlopen],
->  [
-> diff --git a/tests/Makefile.am b/tests/Makefile.am
-> index 2b12422..7365ce4 100644
-> --- a/tests/Makefile.am
-> +++ b/tests/Makefile.am
-> @@ -1,7 +1,11 @@
->  SUBDIRS = . hello hello-static-lib fork ust-basic-tracing ust-multi-test \
-> -		demo hello.cxx daemon
-> +		demo daemon
->  #SUBDIRS = . hello2 basic basic_long simple_include snprintf test-nevents test-libustinstr-malloc dlopen same_line_marker trace_event register_test tracepoint libustctl_function_tests exit-fast
+> diff --git a/src/common/compat/compat-fcntl.c b/src/common/compat/compat-fcntl.c
+> index 5a1c757..7ff63a3 100644
+> --- a/src/common/compat/compat-fcntl.c
+> +++ b/src/common/compat/compat-fcntl.c
+> @@ -23,7 +23,11 @@
+>  int compat_sync_file_range(int fd, off64_t offset, off64_t nbytes,
+>  		unsigned int flags)
+>  {
+> +#ifdef HAVE_SYNC_FILE_RANGE
+>  	return sync_file_range(fd, offset, nbytes, flags);
+> +#else
+> +	return fdatasync(fd);
+> +#endif
+>  }
 >  
-> +if CXX_WORKS
-> +SUBDIRS += hello.cxx
-> +endif
-> +
->  dist_noinst_SCRIPTS = test_loop runtests trace_matches
->  
->  noinst_LIBRARIES = libtap.a
+>  #endif /* __linux__ */
 > -- 
 > 1.8.1
 > 
