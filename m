@@ -1,8 +1,9 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH] Make sync_file_range() usage optional
-Date: Sun, 13 Jan 2013 11:48:46 -0500
-Message-ID: <20130113164846.GB31623__28739.6203297705$1358095771$gmane$org@Krystal>
-References: <1357979037-28550-1-git-send-email-s.martin49@gmail.com>
+Subject: Re: babletrace with python bindings
+Date: Sun, 13 Jan 2013 12:54:30 -0500
+Message-ID: <20130113175430.GA3702__28109.6085593619$1358099719$gmane$org@Krystal>
+References: <20121218184045.288000@gmx.com> <20121219183932.GA9587@Krystal>
+	<20998D40D9A2B7499CA5A3A2666CB1EB19F8ABF4@ZURMSG1.QUANTUM.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -10,10 +11,10 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1TuQjp-0005VN-JD
-	for lttng-dev@lists.lttng.org; Sun, 13 Jan 2013 11:48:49 -0500
+	(envelope-from <compudj@mail.openrapids.net>) id 1TuRlQ-0005zi-Mh
+	for lttng-dev@lists.lttng.org; Sun, 13 Jan 2013 12:54:32 -0500
 Content-Disposition: inline
-In-Reply-To: <1357979037-28550-1-git-send-email-s.martin49@gmail.com>
+In-Reply-To: <20998D40D9A2B7499CA5A3A2666CB1EB19F8ABF4@ZURMSG1.QUANTUM.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,78 +23,62 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Samuel Martin <s.martin49@gmail.com>, dgoulet@efficios.com
-Cc: lttng-dev@lists.lttng.org
+To: David OShea <David.OShea@quantum.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, ajonwa ajonwa <ajonwa@gmx.com>
 List-Id: lttng-dev@lists.lttng.org
 
-* Samuel Martin (s.martin49@gmail.com) wrote:
-> Under uClibc, sync_file_range() is not available under all
-> architectures, so we fall back to fdatasync() in this case.
+* David OShea (David.OShea@quantum.com) wrote:
+> > -----Original Message-----
+> > From: Mathieu Desnoyers [mailto:mathieu.desnoyers@efficios.com]
+> > Sent: Thursday, 20 December 2012 5:10 AM
+> > To: ajonwa ajonwa
+> > Cc: lttng-dev@lists.lttng.org
+> > Subject: Re: [lttng-dev] babletrace with python bindings
+> > 
+> > * ajonwa ajonwa (ajonwa@gmx.com) wrote:
+> > > Hello everyone,
+> > >
+> > >  I get the following error message while attempting to compile
+> > babeltrace with python bindings:
+> [...]
+> > This branch is currently in development, and might be out of sync with
+> > the master branch of babeltrace at the moment. We don't have immediate
+> > plans to work on it, but bontributions are welcome.
+> 
+> Apologies for the late reply.  I just wanted to point out that if you
+> check out commit 24a3136a383, it does build.  It's an older version of
+> babeltrace, but does work despite some bugs.
+> 
+> The main bug I recall is that
+> iterator.set_pos(babeltrace.IterPos(babeltrace.SEEK_BEGIN)) doesn't
+> fail immediately, and works in some traces, but sometimes results in a
+> subsequent assertion failure in the Python interpreter after a few
+> events have been read, or returns a bogus event at the start of the
+> trace.  Quite possibly this is a babeltrace bug that has been fixed
+> already. 
 
-Hi Samuel,
+Probably by this commit:
 
-For future, please specify either of:
+commit 08ac0e0801251211279f9deb07f9cbbbd712d9c5
+Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Date:   Fri Nov 9 13:02:59 2012 -0500
 
-[PATCH urcu]
-[PATCH lttng-tools]
-[PATCH lttng-ust]
-[PATCH lttng-modules]
+    Fix SEEK_BEGIN for streams that do not contain any event
+    
+    Reported-by: Yannick Brosseau <yannick.brosseau@gmail.com>
+    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 
-in the subject.
-
-This patch belongs to lttng-tools, so I CC David who maintains it.
-
-Acked-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-
-Thanks!
+Thanks,
 
 Mathieu
 
+
 > 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> ---
->  configure.ac                     | 2 +-
->  src/common/compat/compat-fcntl.c | 4 ++++
->  2 files changed, 5 insertions(+), 1 deletion(-)
+> Regards,
+> David
 > 
-> diff --git a/configure.ac b/configure.ac
-> index 425941b..80940c0 100644
-> --- a/configure.ac
-> +++ b/configure.ac
-> @@ -150,7 +150,7 @@ AS_IF([test "x$lttng_ust_support" = "xyes"], [
->  	)
->  ])
->  AM_CONDITIONAL([HAVE_LIBLTTNG_UST_CTL], [test "x$lttng_ust_ctl_found" = xyes])
-> -AC_CHECK_FUNCS([sched_getcpu sysconf])
-> +AC_CHECK_FUNCS([sched_getcpu sysconf sync_file_range])
->  
->  # check for dlopen
->  AC_CHECK_LIB([dl], [dlopen],
-> diff --git a/src/common/compat/compat-fcntl.c b/src/common/compat/compat-fcntl.c
-> index 5a1c757..7ff63a3 100644
-> --- a/src/common/compat/compat-fcntl.c
-> +++ b/src/common/compat/compat-fcntl.c
-> @@ -23,7 +23,11 @@
->  int compat_sync_file_range(int fd, off64_t offset, off64_t nbytes,
->  		unsigned int flags)
->  {
-> +#ifdef HAVE_SYNC_FILE_RANGE
->  	return sync_file_range(fd, offset, nbytes, flags);
-> +#else
-> +	return fdatasync(fd);
-> +#endif
->  }
->  
->  #endif /* __linux__ */
-> -- 
-> 1.8.1
-> 
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> ----------------------------------------------------------------------
+> The information contained in this transmission may be confidential. Any disclosure, copying, or further distribution of confidential information is not permitted unless such privilege is explicitly granted in writing by Quantum. Quantum reserves the right to have electronic communications, including email and attachments, sent across its networks filtered through anti virus and spam software programs and retain such messages in order to comply with applicable data security and retention requirements. Quantum is not responsible for the proper and complete transmission of the substance of this communication or for any delay in its receipt.
 
 -- 
 Mathieu Desnoyers
