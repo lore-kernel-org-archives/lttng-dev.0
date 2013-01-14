@@ -1,17 +1,19 @@
-From: Yannick Brosseau <yannick.brosseau@gmail.com>
-Subject: [lttng-tools PATCH] Add support for kernel uprobes
-Date: Sun, 13 Jan 2013 22:03:37 -0500
-Message-ID: <1358132617-18443-1-git-send-email-yannick.brosseau__49825.1398130835$1358132668$gmane$org@gmail.com>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Subject: Re: lttng-ust quick start?
+Date: Mon, 14 Jan 2013 12:30:37 -0500
+Message-ID: <3CA1A65C03C1A34C81BBC6272782E6969875D2__29855.8243936442$1358184736$gmane$org@valcartierex01.valcartier.drdc-rddc.gc.ca>
+References: <3CA1A65C03C1A34C81BBC6272782E696987596@valcartierex01.valcartier.drdc-rddc.gc.ca>
+	<CAGDH53nz9-O_RU+QNg64r8HeoJq7xTf_=-PpqoFNsFftrSZ6eg@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f177.google.com ([209.85.223.177])
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <yannick.brosseau@gmail.com>) id 1TuaKy-0001cf-QZ
-	for lttng-dev@lists.lttng.org; Sun, 13 Jan 2013 22:03:48 -0500
-Received: by mail-ie0-f177.google.com with SMTP id k13so4456714iea.22
-	for <lttng-dev@lists.lttng.org>; Sun, 13 Jan 2013 19:03:43 -0800 (PST)
+	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1Tuns0-0000K1-6J
+	for lttng-dev@lists.lttng.org; Mon, 14 Jan 2013 12:30:48 -0500
+Content-class: urn:content-classes:message
+In-Reply-To: <CAGDH53nz9-O_RU+QNg64r8HeoJq7xTf_=-PpqoFNsFftrSZ6eg@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,279 +22,70 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Christian Babeux <christian.babeux@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Inspired by the k*probe support.
-
-It add a new option to enable-event --uprobe which require a path name
-and an offset in the specified file.
-
-(The file Documentation/trace/uprobetracer.txt in the kernel source provides
-and example on how to extract the offset for a symbol in a program)
-
-Signed-off-by: Yannick Brosseau <yannick.brosseau@gmail.com>
----
- include/lttng/lttng.h                  |   15 +++++++++
- src/bin/lttng-sessiond/cmd.c           |    5 +++
- src/bin/lttng-sessiond/modprobe.c      |    1 +
- src/bin/lttng-sessiond/trace-kernel.c  |    7 ++++
- src/bin/lttng/commands/enable_events.c |   55 ++++++++++++++++++++++++++++++++
- src/bin/lttng/commands/list.c          |    8 +++++
- src/common/lttng-kernel.h              |    7 ++++
- 7 files changed, 98 insertions(+)
-
-diff --git a/include/lttng/lttng.h b/include/lttng/lttng.h
-index e21b479..c790e7b 100644
---- a/include/lttng/lttng.h
-+++ b/include/lttng/lttng.h
-@@ -72,6 +72,7 @@ enum lttng_event_type {
- 	LTTNG_EVENT_FUNCTION_ENTRY            = 3,
- 	LTTNG_EVENT_NOOP                      = 4,
- 	LTTNG_EVENT_SYSCALL                   = 5,
-+	LTTNG_EVENT_UPROBE                    = 6,
- };
- 
- /*
-@@ -219,6 +220,19 @@ struct lttng_event_function_attr {
- };
- 
- /*
-+ * Event uprobe.
-+ *
-+ * The structures should be initialized to zero before use.
-+ */
-+#define LTTNG_EVENT_UPROBE_PADDING1         24
-+struct lttng_event_uprobe_attr {
-+	char path[LTTNG_SYMBOL_NAME_LEN];
-+	uint64_t offset;
-+
-+	char padding[LTTNG_EVENT_UPROBE_PADDING1];
-+};
-+
-+/*
-  * Generic lttng event
-  *
-  * The structures should be initialized to zero before use.
-@@ -242,6 +256,7 @@ struct lttng_event {
- 	union {
- 		struct lttng_event_probe_attr probe;
- 		struct lttng_event_function_attr ftrace;
-+		struct lttng_event_uprobe_attr uprobe;
- 
- 		char padding[LTTNG_EVENT_PADDING2];
- 	} attr;
-diff --git a/src/bin/lttng-sessiond/cmd.c b/src/bin/lttng-sessiond/cmd.c
-index 491acde..d7fee70 100644
---- a/src/bin/lttng-sessiond/cmd.c
-+++ b/src/bin/lttng-sessiond/cmd.c
-@@ -315,6 +315,11 @@ static int list_lttng_kernel_events(char *channel_name,
- 			memcpy(&((*events)[i].attr.ftrace), &event->event->u.ftrace,
- 					sizeof(struct lttng_kernel_function));
- 			break;
-+		case LTTNG_KERNEL_UPROBE:
-+			(*events)[i].type = LTTNG_EVENT_UPROBE;
-+			memcpy(&(*events)[i].attr.uprobe, &event->event->u.uprobe,
-+					sizeof(struct lttng_kernel_uprobe));
-+			break;
- 		case LTTNG_KERNEL_NOOP:
- 			(*events)[i].type = LTTNG_EVENT_NOOP;
- 			break;
-diff --git a/src/bin/lttng-sessiond/modprobe.c b/src/bin/lttng-sessiond/modprobe.c
-index 1a5a1b7..805e127 100644
---- a/src/bin/lttng-sessiond/modprobe.c
-+++ b/src/bin/lttng-sessiond/modprobe.c
-@@ -35,6 +35,7 @@ const struct kern_modules_param kern_modules_list[] = {
- 	{ "lttng-ftrace", 0 },
- 	{ "lttng-kprobes", 0 },
- 	{ "lttng-kretprobes", 0 },
-+	{ "lttng-uprobes", 0 },
- 	{ "lttng-lib-ring-buffer", 1 },
- 	{ "lttng-ring-buffer-client-discard", 1 },
- 	{ "lttng-ring-buffer-client-overwrite", 1 },
-diff --git a/src/bin/lttng-sessiond/trace-kernel.c b/src/bin/lttng-sessiond/trace-kernel.c
-index f38cf3d..24f33f9 100644
---- a/src/bin/lttng-sessiond/trace-kernel.c
-+++ b/src/bin/lttng-sessiond/trace-kernel.c
-@@ -207,6 +207,13 @@ struct ltt_kernel_event *trace_kernel_create_event(struct lttng_event *ev)
- 				ev->attr.probe.symbol_name, LTTNG_KERNEL_SYM_NAME_LEN);
- 		attr->u.kprobe.symbol_name[LTTNG_KERNEL_SYM_NAME_LEN - 1] = '\0';
- 		break;
-+	case LTTNG_EVENT_UPROBE:
-+		attr->instrumentation = LTTNG_KERNEL_UPROBE;
-+		attr->u.uprobe.offset = ev->attr.uprobe.offset;
-+		strncpy(attr->u.uprobe.path,
-+				ev->attr.uprobe.path, LTTNG_KERNEL_SYM_NAME_LEN);
-+		attr->u.uprobe.path[LTTNG_KERNEL_SYM_NAME_LEN - 1] = '\0';
-+		break;
- 	case LTTNG_EVENT_FUNCTION:
- 		attr->instrumentation = LTTNG_KERNEL_KRETPROBE;
- 		attr->u.kretprobe.addr = ev->attr.probe.addr;
-diff --git a/src/bin/lttng/commands/enable_events.c b/src/bin/lttng/commands/enable_events.c
-index b6c18e1..61cb15b 100644
---- a/src/bin/lttng/commands/enable_events.c
-+++ b/src/bin/lttng/commands/enable_events.c
-@@ -38,6 +38,7 @@ static char *opt_session_name;
- static int opt_userspace;
- static int opt_enable_all;
- static char *opt_probe;
-+static char *opt_uprobe;
- static char *opt_function;
- static char *opt_function_entry_symbol;
- static char *opt_channel_name;
-@@ -52,6 +53,7 @@ enum {
- 	OPT_HELP = 1,
- 	OPT_TRACEPOINT,
- 	OPT_PROBE,
-+	OPT_UPROBE,
- 	OPT_FUNCTION,
- 	OPT_FUNCTION_ENTRY,
- 	OPT_SYSCALL,
-@@ -74,6 +76,7 @@ static struct poptOption long_options[] = {
- 	{"userspace",      'u', POPT_ARG_NONE, 0, OPT_USERSPACE, 0, 0},
- 	{"tracepoint",     0,   POPT_ARG_NONE, 0, OPT_TRACEPOINT, 0, 0},
- 	{"probe",          0,   POPT_ARG_STRING, &opt_probe, OPT_PROBE, 0, 0},
-+	{"uprobe",          0,   POPT_ARG_STRING, &opt_uprobe, OPT_UPROBE, 0, 0},
- 	{"function",       0,   POPT_ARG_STRING, &opt_function, OPT_FUNCTION, 0, 0},
- #if 0
- 	/*
-@@ -117,6 +120,10 @@ static void usage(FILE *ofp)
- 	fprintf(ofp, "                           Dynamic probe.\n");
- 	fprintf(ofp, "                           Addr and offset can be octal (0NNN...),\n");
- 	fprintf(ofp, "                           decimal (NNN...) or hexadecimal (0xNNN...)\n");
-+	fprintf(ofp, "    --uprobe [path+offset]\n");
-+	fprintf(ofp, "                           Dynamic uprobe.\n");
-+	fprintf(ofp, "                           offset can be octal (0NNN...),\n");
-+	fprintf(ofp, "                           decimal (NNN...) or hexadecimal (0xNNN...)\n");
- 	fprintf(ofp, "    --function [addr | symbol | symbol+offset]\n");
- 	fprintf(ofp, "                           Dynamic function entry/return probe.\n");
- 	fprintf(ofp, "                           Addr and offset can be octal (0NNN...),\n");
-@@ -245,6 +252,42 @@ static int parse_probe_opts(struct lttng_event *ev, char *opt)
- end:
- 	return ret;
- }
-+/*
-+ * Parse uprobe options.
-+ */
-+static int parse_uprobe_opts(struct lttng_event *ev, char *opt)
-+{
-+	int ret;
-+	char s_hex[19];
-+	char name[LTTNG_SYMBOL_NAME_LEN];
-+
-+	if (opt == NULL) {
-+		ret = -1;
-+		goto end;
-+	}
-+
-+	/* Check for path+offset */
-+	ret = sscanf(opt, "%[^'+']+%s", name, s_hex);
-+	if (ret == 2) {
-+		strncpy(ev->attr.uprobe.path, name, LTTNG_SYMBOL_NAME_LEN);
-+		ev->attr.uprobe.path[LTTNG_SYMBOL_NAME_LEN - 1] = '\0';
-+		DBG("probe path %s", ev->attr.uprobe.path);
-+		if (strlen(s_hex) == 0) {
-+			ERR("Invalid uprobe offset %s", s_hex);
-+			ret = -1;
-+			goto end;
-+		}
-+		ev->attr.uprobe.offset = strtoul(s_hex, NULL, 0);
-+		DBG("uprobe offset %" PRIu64, ev->attr.uprobe.offset);
-+		goto end;
-+	}
-+
-+	/* No match */
-+	ret = -1;
-+
-+end:
-+	return ret;
-+}
- 
- /*
-  * Maps loglevel from string to value
-@@ -471,6 +514,14 @@ static int enable_events(char *session_name)
- 					goto error;
- 				}
- 				break;
-+			case LTTNG_EVENT_UPROBE:
-+				ret = parse_uprobe_opts(&ev, opt_uprobe);
-+				if (ret < 0) {
-+					ERR("Unable to parse uprobe options");
-+					ret = 0;
-+					goto error;
-+				}
-+				break;
- 			case LTTNG_EVENT_FUNCTION:
- 				ret = parse_probe_opts(&ev, opt_function);
- 				if (ret < 0) {
-@@ -522,6 +573,7 @@ static int enable_events(char *session_name)
- 				ev.name[LTTNG_SYMBOL_NAME_LEN - 1] = '\0';
- 				break;
- 			case LTTNG_EVENT_PROBE:
-+			case LTTNG_EVENT_UPROBE:
- 			case LTTNG_EVENT_FUNCTION:
- 			case LTTNG_EVENT_FUNCTION_ENTRY:
- 			case LTTNG_EVENT_SYSCALL:
-@@ -636,6 +688,9 @@ int cmd_enable_events(int argc, const char **argv)
- 		case OPT_PROBE:
- 			opt_event_type = LTTNG_EVENT_PROBE;
- 			break;
-+		case OPT_UPROBE:
-+			opt_event_type = LTTNG_EVENT_UPROBE;
-+			break;
- 		case OPT_FUNCTION:
- 			opt_event_type = LTTNG_EVENT_FUNCTION;
- 			break;
-diff --git a/src/bin/lttng/commands/list.c b/src/bin/lttng/commands/list.c
-index a6ea6b8..ffae239 100644
---- a/src/bin/lttng/commands/list.c
-+++ b/src/bin/lttng/commands/list.c
-@@ -231,6 +231,14 @@ static void print_events(struct lttng_event *event)
- 			MSG("%ssymbol: %s", indent8, event->attr.probe.symbol_name);
- 		}
- 		break;
-+	case LTTNG_EVENT_UPROBE:
-+		MSG("%s%s (type: uprobe)%s%s", indent6,
-+				event->name, enabled_string(event->enabled),
-+				filter_string(event->filter));
-+
-+		MSG("%spath: %s", indent8, event->attr.uprobe.path);
-+		MSG("%soffset: 0x%" PRIx64, indent8, event->attr.uprobe.offset);
-+		break;
- 	case LTTNG_EVENT_FUNCTION:
- 	case LTTNG_EVENT_FUNCTION_ENTRY:
- 		MSG("%s%s (type: function)%s%s", indent6,
-diff --git a/src/common/lttng-kernel.h b/src/common/lttng-kernel.h
-index fa8ba61..a43b956 100644
---- a/src/common/lttng-kernel.h
-+++ b/src/common/lttng-kernel.h
-@@ -38,6 +38,7 @@ enum lttng_kernel_instrumentation {
- 	LTTNG_KERNEL_KRETPROBE     = 3,
- 	LTTNG_KERNEL_NOOP          = 4,    /* not hooked */
- 	LTTNG_KERNEL_SYSCALL       = 5,
-+	LTTNG_KERNEL_UPROBE        = 6,
- };
- 
- enum lttng_kernel_context_type {
-@@ -96,6 +97,11 @@ struct lttng_kernel_function {
- 	char symbol_name[LTTNG_KERNEL_SYM_NAME_LEN];
- }__attribute__((packed));
- 
-+struct lttng_kernel_uprobe {
-+	char path[LTTNG_KERNEL_SYM_NAME_LEN];
-+	uint64_t offset;
-+}__attribute__((packed));
-+
- #define LTTNG_KERNEL_EVENT_PADDING1    16
- #define LTTNG_KERNEL_EVENT_PADDING2    LTTNG_KERNEL_SYM_NAME_LEN + 32
- struct lttng_kernel_event {
-@@ -108,6 +114,7 @@ struct lttng_kernel_event {
- 		struct lttng_kernel_kretprobe kretprobe;
- 		struct lttng_kernel_kprobe kprobe;
- 		struct lttng_kernel_function ftrace;
-+		struct lttng_kernel_uprobe uprobe;
- 		char padding[LTTNG_KERNEL_EVENT_PADDING2];
- 	} u;
- }__attribute__((packed));
--- 
-1.7.10.4
+LS0tLS1NZXNzYWdlIGQnb3JpZ2luZS0tLS0tDQpFbnZvecOpwqA6IDExIGphbnZpZXIgMjAxMyAx
+Nzo0NQ0KDQo+ID4gVHVybmluZyB0byB0aGUgSW50ZXJuZXQsIEkgZmluZCBodHRwczovL2dpdGh1
+Yi5jb20vZ2lyYWxkZWF1L2x0dG5nLXVzdC90cmVlL21hc3Rlci9kb2MvZXhhbXBsZXMvZWFzeS11
+c3QgYW5kIGdyYWIgdGhlIGhhbmRmdWwgb2YgZmlsZXMgZm91bmQgdGhlcmUuDQo+ID4gSSB0aGVu
+IG9wZW4gYSBjb25zb2xlIHdpdGhpbiB0aGF0IGRpcmVjdG9yeSBhbmQgaW52b2tlIG1ha2U6DQo+
+DQo+IFBsZWFzZSB1c2UgYW4gb2ZmaWNpYWwgZ2l0IHJlcG9zaXRvcnkgc3VjaCBhczogZ2l0Oi8v
+Z2l0Lmx0dG5nLm9yZy9sdHRuZy11c3QuZ2l0IE9yIHlvdSBjYW4gdXNlIGEgc291cmNlIGRpc3Ry
+aWJ1dGlvbjoNCj4gaHR0cDovL2x0dG5nLm9yZy9maWxlcy9sdHRuZy11c3QvbHR0bmctdXN0LTIu
+MS4wLnRhci5iejINCj4NCj4gTm9ybWFsbHkgdGhpcyBleGFtcGxlIHNob3VsZCBiZSBpbnN0YWxs
+ZWQgaW4gL3Vzci9zaGFyZS9kb2MvbHR0bmctdXN0L2V4YW1wbGVzL2Vhc3ktdXN0IG9yIC91c3Iv
+bG9jYWwvc2hhcmUvZG9jL2x0dG5nLXVzdC9leGFtcGxlcy9lYXN5LXVzdCBpbiB5b3VyIGNhc2Uu
+DQo+DQo+IENocmlzdGlhbg0KLS0tLS1GaW4gZHUgbWVzc2FnZSBkJ29yaWdpbmUtLS0tLQ0KDQog
+ICBQYXJ0IG9mIG15IHBvaW50IGlzIHRoYXQgdGhlIFVidW50dSBkaXN0cmlidXRpb24gaXMgYnJv
+a2VuIGJlY2F1c2UgaXQgZG9lcyBub3QgaW5zdGFsbCB0aGUgZWFzeS11c3QgZmlsZXMuICBJIGhh
+dmUgbmVpdGhlciAvdXNyL3NoYXJlL2RvYy9sdHRuZy11c3QvIG5vciAvdXNyL2xvY2FsL3NoYXJl
+L2RvYy8gZGlyZWN0b3JpZXMgb24gbXkgbWFjaGluZXMuDQoNCiAgIE5vdGUgdGhhdCBHb29nbGlu
+ZyBmb3IgImVhc3ktdXN0IiBmaW5kcyBubyBnaXQgcmVwb3NpdG9yaWVzIGV4Y2VwdCBmb3IgdGhl
+IG9uZSBJIHF1b3RlZC4NCg0KICAgVGhlIFVidW50dSBkaXN0cmlidXRpb24gKGxpYmx0dG5nLXVz
+dDApIGlzIDIuMC4yLCBidXQgaXQgaXMgbmV2ZXJ0aGVsZXNzIG5vdCBzZWxmLWNvbnNpc3RlbnQg
+YmVjYXVzZSB0aGUgbWFuIHBhZ2VzIGl0IGluc3RhbGxzIGZvciBsdHRuZy11c3QoMykgbWVudGlv
+biBlYXN5LXVzdC4gIENvdWxkIGl0IGJlIGFuIGx0dG5nLXVzdCBkaXN0cmlidXRpb24gd2FzIChp
+cykgcGxhbm5lZCBmb3IgVWJ1bnR1IGJ1dCBoYXNuJ3QgbWFkZSBpdCAib3V0IHRoZXJlIiB5ZXQs
+IGFuZCB0aGUgbHR0bmctdXN0IG1hbiBwYWdlcyB3ZXJlIGluY2x1ZGVkIGluIGxpYmx0dG5nLXVz
+dDAgYnkgYWNjaWRlbnQ/DQoNCiAgIFRoZXJlIGlzIGEgbmVhcmx5IGNvbXBsZXRlIG1pc21hdGNo
+IGJldHdlZW4gdGhlIFVidW50dSBsdHRuZyBwYWNrYWdlcyBhbmQgdGhlIGx0dG5nLm9yZyBnaXQg
+cmVwb3NpdG9yeSwgd2hpY2ggaXMgbm90IGNvbmR1Y2l2ZSB0byBvbmUgYWRkaW5nIHRoZSBjb250
+ZW50cyBvZiB0aGUgbGF0dGVyIHRvIHdoYXQncyBpbnN0YWxsZWQgYnkgdGhlIGZvcm1lcjoNCg0K
+VWJ1bnR1ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGx0dG5nLm9yZyBnaXQN
+Cg0KbGlibHR0bmctY3RsLWRldg0KbGlibHR0bmctY3RsMA0KbGlibHR0bmctdXN0LWRldg0KbGli
+bHR0bmctdXN0MA0KbGlidXJjdS1kZXYNCmxpYnVyY3UxDQpsdHRuZy1tb2R1bGVzLWRrbXMgICAg
+IGx0dG5nLW1vZHVsZXMuZ2l0DQpsdHRuZy10b29scyAgICAgICAgICAgICAgICAgICAgICAgICBs
+dHRuZy10b29scy5naXQNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICBsdHRuZy11c3QuZ2l0DQpsdHRuZ3RvcCAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+IGx0dG5ndG9wLmdpdCAgICgyLjA/KQ0KDQogICBJIHRyaWVkIGx0dG5nLXVzdCAyLjAuMiAoYTM2
+N2VlNikgMjAxMy1BcHItMTggZnJvbSBodHRwOi8vZ2l0Lmx0dG5nLm9yZy8uICBBbHRob3VnaCBs
+dHRuZy11c3QgaXRzZWxmIGNvbXBpbGVzIGNvcnJlY3RseSAoSSBvbmx5IG9taXR0ZWQgdGhlIGxh
+c3Qgc3RlcCwgJ3N1ZG8gbWFrZSBpbnN0YWxsJywgaW4gb3JkZXIgdG8gdXNlIHRoZSBleGlzdGlu
+ZyBsaWJsdHRuZy11c3QgMi4wLjIgaW5zdGFsbGF0aW9uKSwgZWFzeS11c3QncyBtYWtlIHlpZWxk
+cyBwcmVjaXNlbHkgdGhlIHNhbWUgZXJyb3I6DQoNCmdjYyAtSS4gLWMgLW8gc2FtcGxlLm8gc2Ft
+cGxlLmMNCmdjYyAtSS4gLWMgLW8gdHAubyB0cC5jDQpJbiBmaWxlIGluY2x1ZGVkIGZyb20gL3Vz
+ci9sb2NhbC9pbmNsdWRlL2x0dG5nL3VzdC10cmFjZXBvaW50LWV2ZW50Lmg6NDk2OjAsDQogICAg
+ICAgICAgICAgICAgIGZyb20gL3Vzci9sb2NhbC9pbmNsdWRlL2x0dG5nL3RyYWNlcG9pbnQtZXZl
+bnQuaDo0MCwNCiAgICAgICAgICAgICAgICAgZnJvbSBzYW1wbGVfY29tcG9uZW50X3Byb3ZpZGVy
+Lmg6MTM1LA0KICAgICAgICAgICAgICAgICBmcm9tIHRwLmM6MjU6DQouLy4vc2FtcGxlX2NvbXBv
+bmVudF9wcm92aWRlci5oOjEyODoxOiBlcnJvcjog4oCYX190cF9sb2dsZXZlbF9lbnRyeV9fc2Ft
+cGxlX2NvbXBvbmVudF9fX1RSQUNFX1dBUk5JTkfigJkgdW5kZWNsYXJlZCBoZXJlIChub3QgaW4g
+YSBmdW5jdGlvbikNCm1ha2U6ICoqKiBbdHAub10gRXJyb3IgMQ0KDQpEYW5pZWwgVS4gVGhpYmF1
+bHQNClIgJiBEIHBvdXIgbGEgZMOpZmVuc2UgQ2FuYWRhIC0gVmFsY2FydGllciAoUkREQyBWYWxj
+YXJ0aWVyKSAvIERlZmVuY2UgUiZEIENhbmFkYSAtIFZhbGNhcnRpZXIgKERSREMgVmFsY2FydGll
+cikNCkN5YmVyIHPDqWN1cml0w6kgcG91ciBsZXMgbWlzc2lvbnMgZXNzZW50aWVsbGVzIChDTUUp
+IC8gTWlzc2lvbiBDcml0aWNhbCBDeWJlciBTZWN1cml0eSAoTUNDUykNClByb3RlY3Rpb24gZGVz
+IHN5c3TDqG1lcyBldCBjb250cmVtZXN1cmVzIChQU0MpIC8gU3lzdGVtcyBQcm90ZWN0aW9uICYg
+Q291bnRlcm1lYXN1cmVzIChTUEMpDQoyNDU5IHJvdXRlIGRlIGxhIEJyYXZvdXJlDQpRdcOpYmVj
+LCBRQyAgRzNKIDFYNQ0KQ0FOQURBDQpWb3ggOiAoNDE4KSA4NDQtNDAwMCB4NDI0NQ0KRmF4IDog
+KDQxOCkgODQ0LTQ1MzgNCltWYWxjYXJ0aWVyXVxcdnNpLXdkdXQtbzk4MCwgW1NlY3RldXItU0ld
+XFxlZGdlDQpOQUMgOiA5MThWIFFTREogPGh0dHA6Ly93d3cudHJhdmVsZ2lzLmNvbS9tYXAuYXNw
+P2FkZHI9OTE4ViUyMFFTREo+DQpHb3V2ZXJuZW1lbnQgZHUgQ2FuYWRhIC8gR292ZXJubWVudCBv
+ZiBDYW5hZGENCjxodHRwOi8vd3d3LnZhbGNhcnRpZXIuZHJkYy1yZGRjLmdjLmNhLz4NCiBMaW5r
+ZWRJbjogPGh0dHA6Ly9jYS5saW5rZWRpbi5jb20vaW4vZGFuaWVsLXUtdGhpYmF1bHQvPg0KIFJl
+c2VhcmNoIEdhdGU6IDxodHRwczovL3d3dy5yZXNlYXJjaGdhdGUubmV0L3Byb2ZpbGUvRGFuaWVs
+X1RoaWJhdWx0Lz4NCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRw
+Oi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
