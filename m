@@ -1,20 +1,18 @@
-From: Yannick Brosseau <yannick.brosseau@gmail.com>
-Subject: Re: [lttng-modules PATCH] Add uprobes support
-Date: Mon, 14 Jan 2013 13:18:35 -0500
-Message-ID: <50F44BFB.3070206__13355.9309797876$1358187570$gmane$org@gmail.com>
-References: <1358131230-3446-1-git-send-email-yannick.brosseau@gmail.com>
-	<50F448D6.7050600@redhat.com>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Subject: Re: lttng-ust quick start?
+Date: Mon, 14 Jan 2013 14:27:24 -0500
+Message-ID: <3CA1A65C03C1A34C81BBC6272782E6969875EA__19316.0023460679$1358191701$gmane$org@valcartierex01.valcartier.drdc-rddc.gc.ca>
+References: <3CA1A65C03C1A34C81BBC6272782E696987596@valcartierex01.valcartier.drdc-rddc.gc.ca>
+	<CAGDH53nz9-O_RU+QNg64r8HeoJq7xTf_=-PpqoFNsFftrSZ6eg@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f179.google.com ([209.85.223.179])
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <yannick.brosseau@gmail.com>) id 1TuocJ-0000ib-3T
-	for lttng-dev@lists.lttng.org; Mon, 14 Jan 2013 13:18:39 -0500
-Received: by mail-ie0-f179.google.com with SMTP id k14so5449631iea.24
-	for <lttng-dev@lists.lttng.org>; Mon, 14 Jan 2013 10:18:37 -0800 (PST)
-In-Reply-To: <50F448D6.7050600@redhat.com>
+	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1Tupgx-0001G1-Fb
+	for lttng-dev@lists.lttng.org; Mon, 14 Jan 2013 14:27:31 -0500
+Content-class: urn:content-classes:message
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,31 +21,33 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Josh Stone <jistone@redhat.com>
+To: Christian Babeux <christian.babeux@efficios.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On 2013-01-14 13:05, Josh Stone wrote:
-> On 01/13/2013 06:40 PM, Yannick Brosseau wrote:
->> +	ret = uprobe_register(event->u.uprobe.inode,
->> +			event->u.uprobe.offset,
->> +			&event->u.uprobe.up_consumer);
->> +	uprobe_unregister(event->u.uprobe.inode,
->> +			event->u.uprobe.offset,
->> +			&event->u.uprobe.up_consumer);
-> I'm guessing that you're using a Fedora kernel? :)
-Oh, you're right... I did not realize that the vanilla kernel did not
-contains those export.
->
-> These functions are not yet exported upstream, but coincidentally I just
-> posted a patch for that a few days ago:
->
->   https://patchwork.kernel.org/patch/1962891/
->   https://lkml.org/lkml/2013/1/13/118
->
-> If there's any more complaint about this, maybe you can chime in to
-> advocate for lttng's needs too.
->
-Ok, I'll weight in if necessary.
-
-Yannick
+ICAgSW50ZXJlc3RpbmdseSwgaWYgSSBkbyBpbnN0YWxsIGx0dG5nLXVzdCAyLjAuMiAoYTM2N2Vl
+NikgMjAxMy1BcHItMTgsIGVhc3ktdXN0J3MgbWFrZSBjb21waWxlcyBjb3JyZWN0bHkuICBPbmUg
+a2V5IGRpZmZlcmVuY2UgaXMgdGhhdCAvdXNyWy9sb2NhbF0vaW5jbHVkZS9sdHRuZy90cmFjZXBv
+aW50Lmggbm93IGluY2x1ZGVzIGFuIGVudW0gc2V0dGluZyB0aGUgVFJBQ0VfV0FSTklORyB2YWx1
+ZS4NCg0KICAgVGhlIGNvbmNsdXNpb24gaXMgaW5lc2NhcGFibGU6IHRoZSBVYnVudHUgbGlibHR0
+bmctdXN0LWRldiBwYWNrYWdlIGlzIGJyb2tlbi4gIEhvdyBtYW55IG1vcmUgaGVhZGVycyBpbiB0
+aGlzIFVidW50dSBwYWNrYWdlIGFyZSB0aGUgd3Jvbmcgb25lcz8gIEFuZCBhcmUgYW55IG9mIHRo
+ZSBvdGhlciAuaC1jb250YWluaW5nIHBhY2thZ2VzIChsaWJsdHRuZy1jdGwtZGV2LCBsaWJ1cmN1
+LWRldiBhbmQgbHR0bmctbW9kdWxlcy1ka21zKSBzaW1pbGFybHkgY29tcHJvbWlzZWQ/DQoNCkRh
+bmllbCBVLiBUaGliYXVsdA0KUiAmIEQgcG91ciBsYSBkw6lmZW5zZSBDYW5hZGEgLSBWYWxjYXJ0
+aWVyIChSRERDIFZhbGNhcnRpZXIpIC8gRGVmZW5jZSBSJkQgQ2FuYWRhIC0gVmFsY2FydGllciAo
+RFJEQyBWYWxjYXJ0aWVyKSBDeWJlciBzw6ljdXJpdMOpIHBvdXIgbGVzIG1pc3Npb25zIGVzc2Vu
+dGllbGxlcyAoQ01FKSAvIE1pc3Npb24gQ3JpdGljYWwgQ3liZXIgU2VjdXJpdHkgKE1DQ1MpIFBy
+b3RlY3Rpb24gZGVzIHN5c3TDqG1lcyBldCBjb250cmVtZXN1cmVzIChQU0MpIC8gU3lzdGVtcyBQ
+cm90ZWN0aW9uICYgQ291bnRlcm1lYXN1cmVzIChTUEMpDQoyNDU5IHJvdXRlIGRlIGxhIEJyYXZv
+dXJlDQpRdcOpYmVjLCBRQyAgRzNKIDFYNQ0KQ0FOQURBDQpWb3ggOiAoNDE4KSA4NDQtNDAwMCB4
+NDI0NQ0KRmF4IDogKDQxOCkgODQ0LTQ1MzgNCltWYWxjYXJ0aWVyXVxcdnNpLXdkdXQtbzk4MCwg
+W1NlY3RldXItU0ldXFxlZGdlIE5BQyA6IDkxOFYgUVNESiA8aHR0cDovL3d3dy50cmF2ZWxnaXMu
+Y29tL21hcC5hc3A/YWRkcj05MThWJTIwUVNESj4NCkdvdXZlcm5lbWVudCBkdSBDYW5hZGEgLyBH
+b3Zlcm5tZW50IG9mIENhbmFkYSA8aHR0cDovL3d3dy52YWxjYXJ0aWVyLmRyZGMtcmRkYy5nYy5j
+YS8+DQogTGlua2VkSW46IDxodHRwOi8vY2EubGlua2VkaW4uY29tL2luL2RhbmllbC11LXRoaWJh
+dWx0Lz4NCiBSZXNlYXJjaCBHYXRlOiA8aHR0cHM6Ly93d3cucmVzZWFyY2hnYXRlLm5ldC9wcm9m
+aWxlL0RhbmllbF9UaGliYXVsdC8+DQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRu
+Zy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0
+bmctZGV2Cg==
