@@ -1,22 +1,19 @@
-From: paul.chavent@fnac.net
-Subject: Compile out of src tree
-Date: Tue, 15 Jan 2013 13:36:16 +0100 (CET)
-Message-ID: <8549183.73181358253376696.JavaMail.www__21298.3694313609$1358253432$gmane$org@wsfrf1114>
-Reply-To: paul.chavent@fnac.net
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: Compile out of src tree
+Date: Tue, 15 Jan 2013 08:48:50 -0500
+Message-ID: <20130115134850.GA25260__47077.0585271113$1358257774$gmane$org@Krystal>
+References: <8549183.73181358253376696.JavaMail.www@wsfrf1114>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp11.services.sfr.fr ([93.17.128.28])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <paul.chavent@fnac.net>) id 1Tv5kd-00010A-91
-	for lttng-dev@lists.lttng.org; Tue, 15 Jan 2013 07:36:23 -0500
-Received: from filter.sfr.fr (localhost [127.0.0.1])
-	by msfrf1102.sfr.fr (SMTP Server) with ESMTP id B4BA470001A0
-	for <lttng-dev@lists.lttng.org>; Tue, 15 Jan 2013 13:36:16 +0100 (CET)
-Received: from wsfrf1114 (wsfrf1114 [10.18.24.28])
-	by msfrf1102.sfr.fr (SMTP Server) with ESMTP id AD0F47000131
-	for <lttng-dev@lists.lttng.org>; Tue, 15 Jan 2013 13:36:16 +0100 (CET)
+	(envelope-from <compudj@mail.openrapids.net>) id 1Tv6sm-0001Z0-Bz
+	for lttng-dev@lists.lttng.org; Tue, 15 Jan 2013 08:48:52 -0500
+Content-Disposition: inline
+In-Reply-To: <8549183.73181358253376696.JavaMail.www@wsfrf1114>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -25,17 +22,54 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: paul.chavent@fnac.net, dgoulet@efficios.com
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-SGkuCgpKdXN0IGEgbGl0dGxlIHBhdGNoIGluIG9yZGVyIHRvIHN1Y2NlZWQgYnVpbGRpbmcgb3V0
-IG9mIHNyYyB0cmVlLgoKUmVnYXJkcy4KClBhdWwuCgpkaWZmIC0tZ2l0IGEvdGVzdHMvdG9vbHMv
-aGVhbHRoL01ha2VmaWxlLmFtIGIvdGVzdHMvdG9vbHMvaGVhbHRoL01ha2VmaWxlLmFtCmluZGV4
-IDI2ZDI0NjEuLjE0MjRmNjMgMTAwNjQ0Ci0tLSBhL3Rlc3RzL3Rvb2xzL2hlYWx0aC9NYWtlZmls
-ZS5hbQorKysgYi90ZXN0cy90b29scy9oZWFsdGgvTWFrZWZpbGUuYW0KQEAgLTEsNCArMSw0IEBA
-Ci1BTV9DRkxBR1MgPSAtSS4gLU8yIC1nIC1JLi4vLi4vLi4vaW5jbHVkZQorQU1fQ0ZMQUdTID0g
-LUkkKHNyY2RpcikgLU8yIC1nIC1JJCh0b3Bfc3JjZGlyKS9pbmNsdWRlCsKgQU1fTERGTEFHUyA9
-CsKgCsKgaWYgTFRUTkdfVE9PTFNfQlVJTERfV0lUSF9MSUJETAoKCgoKX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdAps
-dHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9t
-YWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+* paul.chavent@fnac.net (paul.chavent@fnac.net) wrote:
+> Hi.
+> =
+
+> Just a little patch in order to succeed building out of src tree.
+
+Good point!
+
+Acked-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+
+> =
+
+> Regards.
+> =
+
+> Paul.
+> =
+
+> diff --git a/tests/tools/health/Makefile.am b/tests/tools/health/Makefile=
+.am
+> index 26d2461..1424f63 100644
+> --- a/tests/tools/health/Makefile.am
+> +++ b/tests/tools/health/Makefile.am
+> @@ -1,4 +1,4 @@
+> -AM_CFLAGS =3D -I. -O2 -g -I../../../include
+> +AM_CFLAGS =3D -I$(srcdir) -O2 -g -I$(top_srcdir)/include
+> =A0AM_LDFLAGS =3D
+> =A0
+> =A0if LTTNG_TOOLS_BUILD_WITH_LIBDL
+> =
+
+> =
+
+> =
+
+> =
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- =
+
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
