@@ -1,20 +1,21 @@
-From: Yannick Brosseau <yannick.brosseau@gmail.com>
-Subject: Re: [lttng-tools PATCH] Add support for kernel uprobes
-Date: Wed, 16 Jan 2013 11:55:27 -0500
-Message-ID: <50F6DB7F.5070202__2436.11229020662$1358355387$gmane$org@gmail.com>
-References: <1358132617-18443-1-git-send-email-yannick.brosseau@gmail.com>
-	<20130116155238.GA11695@Krystal>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [RFC PATCH lttng-ust] Introduce hash table
+	for	lttng_create_event_if_missing()
+Date: Wed, 16 Jan 2013 12:58:44 -0500
+Message-ID: <20130116175844.GA13272__6273.18547708473$1358359494$gmane$org@Krystal>
+References: <20130116151446.GA11082@Krystal>
+	<CAGDH53nkNuNsaAPY0oKS4LNOHEeDnAMk4=+EopBMg104vu-2bw@mail.gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qc0-f179.google.com ([209.85.216.179])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <yannick.brosseau@gmail.com>) id 1TvWHA-0006CL-4p
-	for lttng-dev@lists.lttng.org; Wed, 16 Jan 2013 11:55:44 -0500
-Received: by mail-qc0-f179.google.com with SMTP id b14so1027096qcs.10
-	for <lttng-dev@lists.lttng.org>; Wed, 16 Jan 2013 08:55:38 -0800 (PST)
-In-Reply-To: <20130116155238.GA11695@Krystal>
+	(envelope-from <compudj@mail.openrapids.net>) id 1TvXGA-0006ow-UZ
+	for lttng-dev@lists.lttng.org; Wed, 16 Jan 2013 12:58:47 -0500
+Content-Disposition: inline
+In-Reply-To: <CAGDH53nkNuNsaAPY0oKS4LNOHEeDnAMk4=+EopBMg104vu-2bw@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,26 +24,182 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: Christian Babeux <christian.babeux@efficios.com>, dgoulet@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On 2013-01-16 10:52, Mathieu Desnoyers wrote:
-> * Yannick Brosseau (yannick.brosseau@gmail.com) wrote:
->> Inspired by the k*probe support.
->>
->> It add a new option to enable-event --uprobe which require a path name
->> and an offset in the specified file.
->>
->> (The file Documentation/trace/uprobetracer.txt in the kernel source provides
->> and example on how to extract the offset for a symbol in a program)
-> Asking Masami and looking at perf might help us add support for lookup
-> by file/lineno (using dwarf info). I think in terms of usability this is
-> really important, and should appear in tools at the same time as the
-> basic feature based on file/offset (or at least appear in the same
-> LTTng release).
->
-> We should keep in mind that liblttng-ctl is LGPLv2.1, so we cannot use
-> perf code as-is without asking for the author's permission first.
-> Nothing prevents us from writing this support ourself if need be though.
-Ok, great, I'll look into it.
+* Christian Babeux (christian.babeux@efficios.com) wrote:
+> I was able to reproduce this overhead issue on my machine.
+> This patch fixed it.
+
+OK! Patch pushed into lttng-ust master and stable-2.1 branches.
+
+Thanks,
+
+Mathieu
+
+> 
+> Acked-by: Christian Babeux <christian.babeux@efficios.com>
+> 
+> On Wed, Jan 16, 2013 at 10:14 AM, Mathieu Desnoyers
+> <mathieu.desnoyers@efficios.com> wrote:
+> > lttng_create_event_if_missing() takes a lot of CPU time with stress-test
+> > applications containing 1000 different TRACEPOINT_EVENT() and 1000
+> > individual tracepoint() call-site.
+> >
+> > With tracing disabled:
+> >
+> > time ./AppWith1000_lines_TP 0
+> >
+> > real    0m2.487s
+> > user    0m2.424s
+> > sys     0m0.000s
+> >
+> >
+> > Introducing this hash table cuts the overhead very significantly when
+> > tracing is enabled:
+> >
+> > Before patch:
+> >
+> >  72.16%  AppWith1000_lin  liblttng-ust.so.0.0.0             [.] lttng_create_event_if_missing
+> >  25.64%  AppWith1000_lin  AppWith1000_lines_TP              [.] a(int)
+> >
+> > time ./AppWith1000_lines_TP 0
+> >
+> > real    0m7.946s
+> > user    0m7.864s
+> > sys     0m0.000s
+> >
+> >
+> > After patch:
+> >
+> >  89.13%  AppWith1000_lin  AppWith1000_lines_TP              [.] a(int)
+> >   3.30%  AppWith1000_lin  liblttng-ust.so.0.0.0             [.] lttng_create_event_if_missing
+> >
+> > time ./AppWith1000_lines_TP 0
+> >
+> > real    0m2.762s
+> > user    0m2.692s
+> > sys     0m0.004s
+> >
+> > Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> > ---
+> > diff --git a/include/lttng/ust-events.h b/include/lttng/ust-events.h
+> > index 095fb1e..1db8e58 100644
+> > --- a/include/lttng/ust-events.h
+> > +++ b/include/lttng/ust-events.h
+> > @@ -362,6 +362,7 @@ struct lttng_event {
+> >         int has_enablers_without_bytecode;
+> >         /* Backward references: list of lttng_enabler_ref (ref to enablers) */
+> >         struct cds_list_head enablers_ref_head;
+> > +       struct cds_hlist_node hlist;    /* session ht of events */
+> >  };
+> >
+> >  struct channel;
+> > @@ -467,6 +468,7 @@ struct lttng_session {
+> >         /* New UST 2.1 */
+> >         /* List of enablers */
+> >         struct cds_list_head enablers_head;
+> > +       struct lttng_ust_event_ht events_ht;    /* ht of events */
+> >  };
+> >
+> >  struct lttng_transport {
+> > diff --git a/liblttng-ust/lttng-events.c b/liblttng-ust/lttng-events.c
+> > index 5e6c90c..f70c65f 100644
+> > --- a/liblttng-ust/lttng-events.c
+> > +++ b/liblttng-ust/lttng-events.c
+> > @@ -127,7 +127,7 @@ void synchronize_trace(void)
+> >  struct lttng_session *lttng_session_create(void)
+> >  {
+> >         struct lttng_session *session;
+> > -       int ret;
+> > +       int ret, i;
+> >
+> >         session = zmalloc(sizeof(struct lttng_session));
+> >         if (!session)
+> > @@ -135,6 +135,8 @@ struct lttng_session *lttng_session_create(void)
+> >         CDS_INIT_LIST_HEAD(&session->chan_head);
+> >         CDS_INIT_LIST_HEAD(&session->events_head);
+> >         CDS_INIT_LIST_HEAD(&session->enablers_head);
+> > +       for (i = 0; i < LTTNG_UST_EVENT_HT_SIZE; i++)
+> > +               CDS_INIT_HLIST_HEAD(&session->events_ht.table[i]);
+> >         ret = lttng_ust_uuid_generate(session->uuid);
+> >         if (ret != 0) {
+> >                 session->uuid[0] = '\0';
+> > @@ -329,17 +331,19 @@ int lttng_event_create(const struct lttng_event_desc *desc,
+> >  {
+> >         const char *event_name = desc->name;
+> >         struct lttng_event *event;
+> > +       struct cds_hlist_head *head;
+> > +       struct cds_hlist_node *node;
+> >         int ret = 0;
+> > +       size_t name_len = strlen(event_name);
+> > +       uint32_t hash;
+> >
+> >         if (chan->used_event_id == -1U) {
+> >                 ret = -ENOMEM;
+> >                 goto full;
+> >         }
+> > -       /*
+> > -        * This is O(n^2) (for each event, the loop is called at event
+> > -        * creation). Might require a hash if we have lots of events.
+> > -        */
+> > -       cds_list_for_each_entry(event, &chan->session->events_head, node) {
+> > +       hash = jhash(event_name, name_len, 0);
+> > +       head = &chan->session->events_ht.table[hash & (LTTNG_UST_EVENT_HT_SIZE - 1)];
+> > +       cds_hlist_for_each_entry(event, node, head, hlist) {
+> >                 assert(event->desc);
+> >                 if (!strncmp(event->desc->name,
+> >                                 desc->name,
+> > @@ -380,6 +384,7 @@ int lttng_event_create(const struct lttng_event_desc *desc,
+> >         if (ret)
+> >                 goto statedump_error;
+> >         cds_list_add(&event->node, &chan->session->events_head);
+> > +       cds_hlist_add_head(&event->hlist, head);
+> >         return 0;
+> >
+> >  statedump_error:
+> > @@ -499,17 +504,24 @@ void lttng_create_event_if_missing(struct lttng_enabler *enabler)
+> >         cds_list_for_each_entry(probe_desc, probe_list, head) {
+> >                 for (i = 0; i < probe_desc->nr_events; i++) {
+> >                         int found = 0, ret;
+> > +                       struct cds_hlist_head *head;
+> > +                       struct cds_hlist_node *node;
+> > +                       const char *event_name;
+> > +                       size_t name_len;
+> > +                       uint32_t hash;
+> >
+> >                         desc = probe_desc->event_desc[i];
+> >                         if (!lttng_desc_match_enabler(desc, enabler))
+> >                                 continue;
+> > +                       event_name = desc->name;
+> > +                       name_len = strlen(event_name);
+> >
+> >                         /*
+> > -                        * For each event in session event list,
+> > -                        * check if already created.
+> > +                        * Check if already created.
+> >                          */
+> > -                       cds_list_for_each_entry(event,
+> > -                                       &session->events_head, node) {
+> > +                       hash = jhash(event_name, name_len, 0);
+> > +                       head = &session->events_ht.table[hash & (LTTNG_UST_EVENT_HT_SIZE - 1)];
+> > +                       cds_hlist_for_each_entry(event, node, head, hlist) {
+> >                                 if (event->desc == desc)
+> >                                         found = 1;
+> >                         }
+> >
+> > --
+> > Mathieu Desnoyers
+> > EfficiOS Inc.
+> > http://www.efficios.com
+> >
+> > _______________________________________________
+> > lttng-dev mailing list
+> > lttng-dev@lists.lttng.org
+> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
