@@ -1,9 +1,8 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [BABELTRACE PATCH] Add missing runall.sh to
-	dist	packaging
-Date: Fri, 18 Jan 2013 13:16:00 -0500
-Message-ID: <20130118181600.GA16664__31903.5650617026$1358533011$gmane$org@Krystal>
-References: <1358527840-4543-1-git-send-email-yannick.brosseau@gmail.com>
+Subject: Re: yacc lttng-tools problem
+Date: Fri, 18 Jan 2013 13:26:19 -0500
+Message-ID: <20130118182619.GA17411__49836.6081309088$1358533627$gmane$org@Krystal>
+References: <3CA1A65C03C1A34C81BBC6272782E696987823@valcartierex01.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -11,10 +10,10 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1TwGTy-0004aL-17
-	for lttng-dev@lists.lttng.org; Fri, 18 Jan 2013 13:16:02 -0500
+	(envelope-from <compudj@mail.openrapids.net>) id 1TwGdx-0004fu-BB
+	for lttng-dev@lists.lttng.org; Fri, 18 Jan 2013 13:26:21 -0500
 Content-Disposition: inline
-In-Reply-To: <1358527840-4543-1-git-send-email-yannick.brosseau@gmail.com>
+In-Reply-To: <3CA1A65C03C1A34C81BBC6272782E696987823@valcartierex01.valcartier.drdc-rddc.gc.ca>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,43 +22,34 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Yannick Brosseau <yannick.brosseau@gmail.com>
-Cc: lttng-dev@lists.lttng.org
+To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Cc: lttng-dev@lists.lttng.org, "Couture, Mario" <Mario.Couture@drdc-rddc.gc.ca>, =?iso-8859-1?Q?Painchaud=2C_Fr=E9d=E9ric?= <Frederic.Painchaud@drdc-rddc.gc.ca>
 List-Id: lttng-dev@lists.lttng.org
 
-* Yannick Brosseau (yannick.brosseau@gmail.com) wrote:
-> Signed-off-by: Yannick Brosseau <yannick.brosseau@gmail.com>
+* Thibault, Daniel (Daniel.Thibault@drdc-rddc.gc.ca) wrote:
+>    I need help to get lttng-tools to compile.
+> 
+>    I have grabbed the (nearly) latest git.lttng.org packages:
+> 
+> lttng-modules (2.1.0+-c6403de)
+> userspace-rcu (0.7.6-da9bed2)
+> lttng-ust (2.1.0+-340f776) (one new commit since)
+> lttng-tools (2.1.1+-281047b) (six new commits since)
+> 
+>    The userspace-rcu repository is weird: the 0.7.6 commit which I
+>    fetched is marked as "8 days ago" but the master stops at "11 days
+>    ago".
 
-merged, thanks!
+0.7.6 tags is against stable-0.7 branch, not master, so it's allright.
+stable-0.7 contains backports of fixes.
+
+The master branch is in preparation for an upcoming 0.8.
+
+Thanks,
 
 Mathieu
 
-> ---
->  tests/lib/Makefile.am |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/tests/lib/Makefile.am b/tests/lib/Makefile.am
-> index f7e32c2..e9e264b 100644
-> --- a/tests/lib/Makefile.am
-> +++ b/tests/lib/Makefile.am
-> @@ -12,7 +12,7 @@ noinst_PROGRAMS = test-seeks
->  
->  test_seeks_SOURCES = test-seeks.c
->  
-> -EXTRA_DIST = README.tap
-> +EXTRA_DIST = README.tap runall.sh
->  
->  check-am:
->  	./runall.sh
-> -- 
-> 1.7.10.4
-> 
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
 -- 
 Mathieu Desnoyers
 EfficiOS Inc.
