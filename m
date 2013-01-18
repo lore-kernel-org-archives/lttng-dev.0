@@ -1,20 +1,20 @@
 From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
 	<jeremie.galarneau@efficios.com>
-Subject: [PATCH babeltrace 2/3] Fix: Python 3 binding
-	compatibility and clean intermediate files.
-Date: Fri, 18 Jan 2013 16:45:33 +0000
-Message-ID: <1358527534-16401-2-git-send-email-jeremie.galarneau__42451.9009342932$1358545625$gmane$org@efficios.com>
+Subject: [PATCH babeltrace 3/3] Fix: Removed Python bindings to
+	static constructor and destructor.
+Date: Fri, 18 Jan 2013 16:45:34 +0000
+Message-ID: <1358527534-16401-3-git-send-email-jeremie.galarneau__27097.4218765788$1358545646$gmane$org@efficios.com>
 References: <1358527534-16401-1-git-send-email-jeremie.galarneau@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qa0-f46.google.com ([209.85.216.46])
+Received: from mail-qc0-f176.google.com ([209.85.216.176])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1TwJlb-0006HO-6Q
-	for lttng-dev@lists.lttng.org; Fri, 18 Jan 2013 16:46:27 -0500
-Received: by mail-qa0-f46.google.com with SMTP id r4so5571508qaq.19
-	for <lttng-dev@lists.lttng.org>; Fri, 18 Jan 2013 13:46:21 -0800 (PST)
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1TwJlv-0006IE-LN
+	for lttng-dev@lists.lttng.org; Fri, 18 Jan 2013 16:46:47 -0500
+Received: by mail-qc0-f176.google.com with SMTP id n41so2687183qco.7
+	for <lttng-dev@lists.lttng.org>; Fri, 18 Jan 2013 13:46:42 -0800 (PST)
 In-Reply-To: <1358527534-16401-1-git-send-email-jeremie.galarneau@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -27,22 +27,18 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-ClNpZ25lZC1vZmYtYnk6IErDqXLDqW1pZSBHYWxhcm5lYXUgPGplcmVtaWUuZ2FsYXJuZWF1QGVm
-ZmljaW9zLmNvbT4KLS0tCiBiaW5kaW5ncy9weXRob24vTWFrZWZpbGUuYW0gfCA1ICsrLS0tCiAx
-IGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdp
-dCBhL2JpbmRpbmdzL3B5dGhvbi9NYWtlZmlsZS5hbSBiL2JpbmRpbmdzL3B5dGhvbi9NYWtlZmls
-ZS5hbQppbmRleCBiZjgwNTBlLi41MzZlMDdmIDEwMDY0NAotLS0gYS9iaW5kaW5ncy9weXRob24v
-TWFrZWZpbGUuYW0KKysrIGIvYmluZGluZ3MvcHl0aG9uL01ha2VmaWxlLmFtCkBAIC0yMyw2ICsy
-Myw1IEBAIF9iYWJlbHRyYWNlX2xhX0xJQkFERCA9ICQodG9wX3NyY2RpcikvZm9ybWF0cy9jdGYv
-bGliYmFiZWx0cmFjZS1jdGYubGEJXAogIyBTV0lHICd3YXJuaW5nIG1kIHZhcmlhYmxlIHVudXNl
-ZCcgZml4ZWQgYWZ0ZXIgU1dJRyBidWlsZDoKIGJhYmVsdHJhY2Vfd3JhcC5jOiBiYWJlbHRyYWNl
-LmkKIAkkKFNXSUcpIC1weXRob24gLVdhbGwgLUkuIC1JJCh0b3Bfc3JjZGlyKS9pbmNsdWRlIGJh
-YmVsdHJhY2UuaQotCXNlZCAtaSAicy9QeU9iamVjdCBcKm0sIFwqZCwgXCptZDsvUHlPYmplY3Qg
-XCptLCBcKmQ7XG4jaWYgZGVmaW5lZChTV0lHUFlUSE9OX0JVSUxUSU4pXG5QeU9iamVjdCAqbWQ7
-XG4jZW5kaWYvZyIgYmFiZWx0cmFjZV93cmFwLmMKLQlzZWQgLWkgInMvbWQgPSBkL2QvZyIgYmFi
-ZWx0cmFjZV93cmFwLmMKLQlzZWQgLWkgInMvKHZvaWQpcHVibGljX3N5bWJvbDsvKHZvaWQpcHVi
-bGljX3N5bWJvbDtcbiAgbWQgPSBkOy9nIiBiYWJlbHRyYWNlX3dyYXAuYworCitDTEVBTkZJTEVT
-ID0gYmFiZWx0cmFjZS5pIGJhYmVsdHJhY2UucHkgYmFiZWx0cmFjZV93cmFwLmMKLS0gCjEuOC4x
-LjEKCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRu
-Zy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3Rz
-Lmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+UmVzb2x2ZXMgYW4gdW5kZWZpbmVkIHN5bWJvbCBvbiBQeXRob24gbW9kdWxlIGxvYWQuCgpTaWdu
+ZWQtb2ZmLWJ5OiBKw6lyw6ltaWUgR2FsYXJuZWF1IDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lv
+cy5jb20+Ci0tLQogYmluZGluZ3MvcHl0aG9uL2JhYmVsdHJhY2UuaS5pbiB8IDMgLS0tCiAxIGZp
+bGUgY2hhbmdlZCwgMyBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9iaW5kaW5ncy9weXRob24v
+YmFiZWx0cmFjZS5pLmluIGIvYmluZGluZ3MvcHl0aG9uL2JhYmVsdHJhY2UuaS5pbgppbmRleCBk
+NDVhZmIwLi5kZDQ5YmE1IDEwMDY0NAotLS0gYS9iaW5kaW5ncy9weXRob24vYmFiZWx0cmFjZS5p
+LmluCisrKyBiL2JpbmRpbmdzL3B5dGhvbi9iYWJlbHRyYWNlLmkuaW4KQEAgLTE5NCw5ICsxOTQs
+NiBAQCBleHRlcm4gc3RydWN0IGZvcm1hdCAqYnRfbG9va3VwX2Zvcm1hdChidF9pbnRlcm5fc3Ry
+IHFuYW1lKTsKIGV4dGVybiB2b2lkIGJ0X2ZwcmludGZfZm9ybWF0X2xpc3QoRklMRSAqZnApOwog
+ZXh0ZXJuIGludCBidF9yZWdpc3Rlcl9mb3JtYXQoc3RydWN0IGZvcm1hdCAqZm9ybWF0KTsKIAot
+dm9pZCBmb3JtYXRfaW5pdCh2b2lkKTsKLXZvaWQgZm9ybWF0X2ZpbmFsaXplKHZvaWQpOwotCiAl
+cHl0aG9uY29kZSAlewogCiBkZWYgcHJpbnRfZm9ybWF0X2xpc3QoYmFiZWx0cmFjZV9maWxlKToK
+LS0gCjEuOC4xLjEKCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0
+cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
