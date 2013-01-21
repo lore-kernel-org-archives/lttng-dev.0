@@ -1,16 +1,19 @@
-From: Matthew Khouzam <matthew.khouzam@ericsson.com>
-Subject: Re: lttng on android
-Date: Mon, 21 Jan 2013 10:23:47 -0500
-Message-ID: <50FD5D83.5070308__35947.9776969694$1358781985$gmane$org@ericsson.com>
-References: <CAHg4Oy8D-TDOkvQV5qpFBfC3RM_=57uwyWD067m2guxaupr-8A@mail.gmail.com>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Subject: Re: Odd dependency for lttng-ust
+Date: Mon, 21 Jan 2013 10:24:26 -0500
+Message-ID: <3CA1A65C03C1A34C81BBC6272782E696987887__30560.9771669426$1358781986$gmane$org@valcartierex01.valcartier.drdc-rddc.gc.ca>
+References: <3CA1A65C03C1A34C81BBC6272782E696987880@valcartierex01.valcartier.drdc-rddc.gc.ca>
+	<20130121145954.GA1472@Krystal>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2090043451=="
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from [198.24.6.45] (helo=usevmg20.ericsson.net)
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <matthew.khouzam@ericsson.com>) id 1TxJEr-00030K-TJ
+	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1TxJEs-00030P-9u
 	for lttng-dev@lists.lttng.org; Mon, 21 Jan 2013 10:24:46 -0500
-In-Reply-To: <CAHg4Oy8D-TDOkvQV5qpFBfC3RM_=57uwyWD067m2guxaupr-8A@mail.gmail.com>
+Content-class: urn:content-classes:message
+In-Reply-To: <20130121145954.GA1472@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,113 +22,40 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org, =?ISO-8859-1?Q?Genevi=E8ve_Bastien?= <gbastien@versatic.net>
-Cc: Amit Balboul <amit.balboul@shinesec.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev@lists.lttng.org, "Couture, Mario" <Mario.Couture@drdc-rddc.gc.ca>, "Painchaud, Frederic" <Frederic.Painchaud@drdc-rddc.gc.ca>
 List-Id: lttng-dev@lists.lttng.org
 
---===============2090043451==
-Content-Type: multipart/alternative;
-	boundary="------------000604090301050509080506"
+-----Message d'origine-----
+Quoting the lttng-tools README file:
+"    - liburcu
+      Userspace RCU library, by Mathieu Desnoyers and Paul E. McKenney
+      -> Tested with liburcu >=3D v0.7.2"
 
---------------000604090301050509080506
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 7bit
+Therefore you need to install Userspace RCU 0.7.2 or later.
+A dependency is not only on a package, but also on a range of versions.
 
-I believe a group at l'ecole polytechnique de Montreal is working on
-this, Genvieve, could you please comment more?
+Mathieu
+-----Fin du message d'origine-----
 
-On 13-01-21 06:48 AM, Amit Balboul wrote:
-> Hi,
->
-> Is there a way to build the LTTng tools to Android (3.0.31) on ARM ??
->
-> I've managed to compile the modules(2.0.6), put them in the Android
-> device and modprobe them.
-> Now I would like to extract the traces logs from the device.
-> How can I do it ?
-> Is there any support for this at all in the LTTng project ?
->
->
-> Thank you for your response !
->
-> Amit.
->
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+   But shouldn't the userspace RCU library be installed by the userspace-rc=
+u package?  That's the gist of my puzzlement.  By the time I get to lttng-u=
+st's configure, I've installed lttng-modules and userspace-rcu.  Doing an i=
+nstall of git.lttng.org's userspace-rcu should be equivalent to installing =
+the liburcu-dev package from repository, no?
 
-
---------------000604090301050509080506
-Content-Type: text/html; charset="ISO-8859-1"
-Content-Transfer-Encoding: 7bit
-
-<html>
-  <head>
-    <meta content="text/html; charset=ISO-8859-1"
-      http-equiv="Content-Type">
-  </head>
-  <body bgcolor="#FFFFFF" text="#000000">
-    I believe a group at l'ecole polytechnique de Montreal is working on
-    this, Genvieve, could you please comment more?<br>
-    <br>
-    <div class="moz-cite-prefix">On 13-01-21 06:48 AM, Amit Balboul
-      wrote:<br>
-    </div>
-    <blockquote
-cite="mid:CAHg4Oy8D-TDOkvQV5qpFBfC3RM_=57uwyWD067m2guxaupr-8A@mail.gmail.com"
-      type="cite">
-      <meta http-equiv="Content-Type" content="text/html;
-        charset=ISO-8859-1">
-      <div dir="ltr">Hi,
-        <div><br>
-        </div>
-        <div style="">Is there a way to build the LTTng tools to Android
-          (3.0.31) on ARM ??</div>
-        <div style=""><br>
-        </div>
-        <div style="">I've managed to compile the modules(2.0.6), put
-          them in the Android device and modprobe them.</div>
-        <div style="">Now I would like to extract the traces logs from
-          the device.</div>
-        <div style="">How can I do it ?</div>
-        <div style="">Is there any support for this at all in the LTTng
-          project ?</div>
-        <div style=""><br>
-        </div>
-        <div style=""><br>
-        </div>
-        <div style="">Thank you for your response !</div>
-        <div style=""><br>
-        </div>
-        <div style="">Amit.</div>
-      </div>
-      <br>
-      <fieldset class="mimeAttachmentHeader"></fieldset>
-      <br>
-      <pre wrap="">_______________________________________________
-lttng-dev mailing list
-<a class="moz-txt-link-abbreviated" href="mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a>
-<a class="moz-txt-link-freetext" href="http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a>
-</pre>
-    </blockquote>
-    <br>
-  </body>
-</html>
-
---------------000604090301050509080506--
-
-
---===============2090043451==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============2090043451==--
+Daniel U. Thibault
+R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) / Defence R&D=
+ Canada - Valcartier (DRDC Valcartier)
+Cyber s=E9curit=E9 pour les missions essentielles (CME) / Mission Critical =
+Cyber Security (MCCS)
+Protection des syst=E8mes et contremesures (PSC) / Systems Protection & Cou=
+ntermeasures (SPC)
+2459 route de la Bravoure
+Qu=E9bec, QC  G3J 1X5
+CANADA
+Vox : (418) 844-4000 x4245
+Fax : (418) 844-4538
+NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+Gouvernement du Canada / Government of Canada
+<http://www.valcartier.drdc-rddc.gc.ca/>
