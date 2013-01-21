@@ -1,19 +1,20 @@
-From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
-	<jeremie.galarneau@efficios.com>
-Subject: [PATCH babeltrace] Fix: Double free in
-	bt_context_remove_trace().
-Date: Mon, 21 Jan 2013 14:17:54 +0000
-Message-ID: <1358777874-24083-1-git-send-email-jeremie.galarneau__30170.4640187838$1358795973$gmane$org@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH babeltrace] Fix: Double free
+	in	bt_context_remove_trace().
+Date: Mon, 21 Jan 2013 14:32:25 -0500
+Message-ID: <20130121193225.GA8005__1607.93298059634$1358796789$gmane$org@Krystal>
+References: <1358777874-24083-1-git-send-email-jeremie.galarneau@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qa0-f54.google.com ([209.85.216.54])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1TxMtM-00054s-4o
-	for lttng-dev@lists.lttng.org; Mon, 21 Jan 2013 14:18:48 -0500
-Received: by mail-qa0-f54.google.com with SMTP id p6so3148912qad.6
-	for <lttng-dev@lists.lttng.org>; Mon, 21 Jan 2013 11:18:42 -0800 (PST)
+	(envelope-from <compudj@mail.openrapids.net>) id 1TxN6Y-0005C7-Ih
+	for lttng-dev@lists.lttng.org; Mon, 21 Jan 2013 14:32:26 -0500
+Content-Disposition: inline
+In-Reply-To: <1358777874-24083-1-git-send-email-jeremie.galarneau@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,44 +23,108 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Y3RmX2Nsb3NlX3RyYWNlIHdhcyBiZWluZyBjYWxsZWQgdHdpY2Ugd2hlbiBjYWxsaW5nIGJ0X2Nv
-bnRleHRfcmVtb3ZlX3RyYWNlIHRodXMKY2F1c2luZyBmcmVlKCkgdG8gYmUgY2FsbGVkIG9uIGFu
-IGludmFsaWQgcG9pbnRlci4KCkNhbGxpbmcgYnRfY29udGV4dF9yZW1vdmVfdHJhY2UoKSB3b3Vs
-ZCBjYWxsIGN0Zl9jbG9zZV90cmFjZSgpIG9uY2UgdmlhIHRoZQpjbG9zZV9oYW5kbGUgY2FsbGJh
-Y2sgcmVnaXN0ZXJlZCBvbiB0aGUgY3RmIGZvcm1hdCBzdHJ1Y3QgYW5kIGEgc2Vjb25kIGNhbGwg
-d291bGQKdGFrZSBwbGFjZSBmcm9tIGJ0X3RyYWNlX2hhbmRsZV9kZXN0cm95KCkgd2hpY2ggaXMg
-cmVnaXN0ZXJlZCBhcyB0aGUKdmFsdWVfZGVzdHJveV9mdW5jIG9uIHRoZSB0cmFjZV9oYW5kbGVz
-IGhhc2ggdGFibGUgb2YgdGhlIGN1cnJlbnQgY29udGV4dC4KClRoZSBmaXJzdCBleHBsaWNpdCBj
-YWxsIHRvIGhhbmRsZS0+Zm9ybWF0LT5jbG9zZV90cmFjZSBpcyB1bm5lY2Vzc2FyeS4KClRoZSBj
-cmFzaCBpcyByZXByb2R1Y2libGUgYnkgaW52b2tpbmcgdGhlIHRlc3RzLXB5dGhvbi5weSBzY3Jp
-cHQuCgpTaWduZWQtb2ZmLWJ5OiBKw6lyw6ltaWUgR2FsYXJuZWF1IDxqZXJlbWllLmdhbGFybmVh
-dUBlZmZpY2lvcy5jb20+Ci0tLQogbGliL2NvbnRleHQuYyAgICAgIHwgOCArLS0tLS0tLQogbGli
-L3RyYWNlLWhhbmRsZS5jIHwgNSArKysrLQogMiBmaWxlcyBjaGFuZ2VkLCA1IGluc2VydGlvbnMo
-KyksIDggZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvbGliL2NvbnRleHQuYyBiL2xpYi9jb250
-ZXh0LmMKaW5kZXggNTUxNmU0OS4uMDVmYjk5NCAxMDA2NDQKLS0tIGEvbGliL2NvbnRleHQuYwor
-KysgYi9saWIvY29udGV4dC5jCkBAIC0xNTYsNyArMTU2LDYgQEAgZW5kOgogaW50IGJ0X2NvbnRl
-eHRfcmVtb3ZlX3RyYWNlKHN0cnVjdCBidF9jb250ZXh0ICpjdHgsIGludCBoYW5kbGVfaWQpCiB7
-CiAJc3RydWN0IGJ0X3RyYWNlX2hhbmRsZSAqaGFuZGxlOwotCWludCByZXQ7CiAKIAlpZiAoIWN0
-eCkKIAkJcmV0dXJuIC1FSU5WQUw7CkBAIC0xNjgsMTIgKzE2Nyw3IEBAIGludCBidF9jb250ZXh0
-X3JlbW92ZV90cmFjZShzdHJ1Y3QgYnRfY29udGV4dCAqY3R4LCBpbnQgaGFuZGxlX2lkKQogCiAJ
-LyogUmVtb3ZlIGZyb20gY29udGFpbmVycyAqLwogCXRyYWNlX2NvbGxlY3Rpb25fcmVtb3ZlKGN0
-eC0+dGMsIGhhbmRsZS0+dGQpOwotCS8qIENsb3NlIHRoZSB0cmFjZSAqLwotCXJldCA9IGhhbmRs
-ZS0+Zm9ybWF0LT5jbG9zZV90cmFjZShoYW5kbGUtPnRkKTsKLQlpZiAocmV0KSB7Ci0JCWZwcmlu
-dGYoc3RkZXJyLCAiRXJyb3IgaW4gY2xvc2VfdHJhY2UgY2FsbGJhY2tcbiIpOwotCQlyZXR1cm4g
-cmV0OwotCX0KKwogCS8qIFJlbW92ZSBhbmQgZnJlZSB0aGUgaGFuZGxlICovCiAJZ19oYXNoX3Rh
-YmxlX3JlbW92ZShjdHgtPnRyYWNlX2hhbmRsZXMsCiAJCQkoZ3BvaW50ZXIpICh1bnNpZ25lZCBs
-b25nKSBoYW5kbGVfaWQpOwpkaWZmIC0tZ2l0IGEvbGliL3RyYWNlLWhhbmRsZS5jIGIvbGliL3Ry
-YWNlLWhhbmRsZS5jCmluZGV4IDBkYTU2NWIuLjE3YTZlMGQgMTAwNjQ0Ci0tLSBhL2xpYi90cmFj
-ZS1oYW5kbGUuYworKysgYi9saWIvdHJhY2UtaGFuZGxlLmMKQEAgLTQ5LDcgKzQ5LDEwIEBAIHN0
-cnVjdCBidF90cmFjZV9oYW5kbGUgKmJ0X3RyYWNlX2hhbmRsZV9jcmVhdGUoc3RydWN0IGJ0X2Nv
-bnRleHQgKmN0eCkKIAogdm9pZCBidF90cmFjZV9oYW5kbGVfZGVzdHJveShzdHJ1Y3QgYnRfdHJh
-Y2VfaGFuZGxlICp0aCkKIHsKLQl0aC0+Zm9ybWF0LT5jbG9zZV90cmFjZSh0aC0+dGQpOworCWlm
-ICh0aC0+Zm9ybWF0LT5jbG9zZV90cmFjZSh0aC0+dGQpKSB7CisJCWZwcmludGYoc3RkZXJyLCAi
-RXJyb3IgaW4gY2xvc2VfdHJhY2UgY2FsbGJhY2tcbiIpOworCX0KKwogCWdfZnJlZSh0aCk7CiB9
-CiAKLS0gCjEuOC4xLjEKCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcK
-aHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2
-Cg==
+* J=E9r=E9mie Galarneau (jeremie.galarneau@efficios.com) wrote:
+> ctf_close_trace was being called twice when calling bt_context_remove_tra=
+ce thus
+> causing free() to be called on an invalid pointer.
+> =
+
+> Calling bt_context_remove_trace() would call ctf_close_trace() once via t=
+he
+> close_handle callback registered on the ctf format struct and a second ca=
+ll would
+> take place from bt_trace_handle_destroy() which is registered as the
+> value_destroy_func on the trace_handles hash table of the current context.
+> =
+
+> The first explicit call to handle->format->close_trace is unnecessary.
+> =
+
+> The crash is reproducible by invoking the tests-python.py script.
+
+I think we should leave the close_trace calls in both locations, but set
+handle->td to -1 when we close it, and test for negative handle ID
+before doing the close.
+
+Thanks,
+
+Mathieu
+
+> =
+
+> Signed-off-by: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
+> ---
+>  lib/context.c      | 8 +-------
+>  lib/trace-handle.c | 5 ++++-
+>  2 files changed, 5 insertions(+), 8 deletions(-)
+> =
+
+> diff --git a/lib/context.c b/lib/context.c
+> index 5516e49..05fb994 100644
+> --- a/lib/context.c
+> +++ b/lib/context.c
+> @@ -156,7 +156,6 @@ end:
+>  int bt_context_remove_trace(struct bt_context *ctx, int handle_id)
+>  {
+>  	struct bt_trace_handle *handle;
+> -	int ret;
+>  =
+
+>  	if (!ctx)
+>  		return -EINVAL;
+> @@ -168,12 +167,7 @@ int bt_context_remove_trace(struct bt_context *ctx, =
+int handle_id)
+>  =
+
+>  	/* Remove from containers */
+>  	trace_collection_remove(ctx->tc, handle->td);
+> -	/* Close the trace */
+> -	ret =3D handle->format->close_trace(handle->td);
+> -	if (ret) {
+> -		fprintf(stderr, "Error in close_trace callback\n");
+> -		return ret;
+> -	}
+> +
+>  	/* Remove and free the handle */
+>  	g_hash_table_remove(ctx->trace_handles,
+>  			(gpointer) (unsigned long) handle_id);
+> diff --git a/lib/trace-handle.c b/lib/trace-handle.c
+> index 0da565b..17a6e0d 100644
+> --- a/lib/trace-handle.c
+> +++ b/lib/trace-handle.c
+> @@ -49,7 +49,10 @@ struct bt_trace_handle *bt_trace_handle_create(struct =
+bt_context *ctx)
+>  =
+
+>  void bt_trace_handle_destroy(struct bt_trace_handle *th)
+>  {
+> -	th->format->close_trace(th->td);
+> +	if (th->format->close_trace(th->td)) {
+> +		fprintf(stderr, "Error in close_trace callback\n");
+> +	}
+> +
+>  	g_free(th);
+>  }
+>  =
+
+> -- =
+
+> 1.8.1.1
+> =
+
+> =
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- =
+
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
