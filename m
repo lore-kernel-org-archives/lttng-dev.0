@@ -1,17 +1,17 @@
-From: =?UTF-8?B?5rOw5p2l?= <tailai.ly@alibaba-inc.com>
-Subject: Re: Query on the rcu red-black tree status
-Date: Mon, 21 Jan 2013 09:51:08 +0800
-Message-ID: <50FC9F0C.9090404__46241.8383024216$1358733129$gmane$org@alibaba-inc.com>
-References: <50FB83D0.8010908@alibaba-inc.com> <20130121010550.GA2364@Krystal>
+From: Liu Yuan <namei.unix@gmail.com>
+Subject: Query on the rculist
+Date: Mon, 21 Jan 2013 10:01:39 +0800
+Message-ID: <50FCA183.8030201__9908.53724438257$1358733748$gmane$org@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from out4133-129.mail.aliyun.com ([42.120.133.129])
+Received: from mail-pa0-f51.google.com ([209.85.220.51])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <tailai.ly@alibaba-inc.com>) id 1Tx6Xf-0004pT-1I
-	for lttng-dev@lists.lttng.org; Sun, 20 Jan 2013 20:51:20 -0500
-In-Reply-To: <20130121010550.GA2364@Krystal>
+	(envelope-from <namei.unix@gmail.com>) id 1Tx6ho-0004vu-Ij
+	for lttng-dev@lists.lttng.org; Sun, 20 Jan 2013 21:01:48 -0500
+Received: by mail-pa0-f51.google.com with SMTP id fb11so3067514pad.38
+	for <lttng-dev@lists.lttng.org>; Sun, 20 Jan 2013 18:01:42 -0800 (PST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,78 +20,22 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: rp@svcs.cs.pdx.edu, lttng-dev@lists.lttng.org, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
+To: lttng-dev@lists.lttng.org
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-T24gMDEvMjEvMjAxMyAwOTowNSBBTSwgTWF0aGlldSBEZXNub3llcnMgd3JvdGU6Cj4gKiDms7Dm
-naUgKHRhaWxhaS5seUBhbGliYWJhLWluYy5jb20pIHdyb3RlOgo+PiBIaSBMaXN0Cj4+Cj4+ICAg
-SSBhbSBkZXZlbG9wZXIgb2YgU2hlZXBkb2cgcHJvamVjdCwgd2hpY2ggaXMgYSBoZWF2eSB1c2Vy
-IG9mIHVyY3UKPj4gbGlicmFyeS4gSSBub3RpY2VkIHRoZXJlIGlzIGEgYnJhbmNoIHdoaWNoIGlt
-cGxlbWVudCByY3UgcmVkLWJsYWNrIHRyZWUKPj4gYW5kIGl0IHNlZW1zIHRvIGhhbHQgb24gdGhl
-IGxhdGUgMjAxMS4gSXMgdGhlcmUgcm9hZG1hcCB0byBtZXJnZSB0aGlzCj4+IGludG8gbWFzdGVy
-IGJyYW5jaD8KPiAKPiBIaSBZdWFuLAo+IAo+IFRoZXJlIGFyZSBhIGNvdXBsZSBvZiBmYWN0b3Jz
-IHRoYXQgYXJlIG1ha2luZyBtZSB1bmNvbWZvcnRhYmxlIHdpdGgKPiBwdWxsaW5nIHRoZSBSQ1Ug
-cmVkLWJsYWNrIHRyZWUgKHNpbmdsZS1wcm9kdWNlciwgbXVsdGlwbGUgUkNVIGNvbnN1bWVycwo+
-IFJlZCBCbGFjayB0cmVlKSBpbnRvIHRoZSBVc2Vyc3BhY2UgUkNVIG1hc3RlciBicmFuY2ggYXQg
-dGhpcyBwb2ludC4KPiBJdCBtaWdodCBiZSBhIGdvb2QgdGhpbmsgdG8gYnJpbmcgdGhlbSB1cCBm
-b3IgZGlzY3Vzc2lvbjoKPiAKPiAxKSBNeSBvd24gdW5kZXJzdGFuZGluZyBvZiB0aGUgY29kZSBp
-cyBub3Qgc3VmZmljaWVudCB0byB2b3VjaCBmb3IgaXQuCj4gCj4gVGhlIGNvZGUsIHdoaWNoIGhh
-cyBiZWVuIHNpdHRpbmcgaGVyZSBzaW5jZSBsYXRlIDIwMTE6Cj4gCj4gZ2l0Oi8vZ2l0Lmx0dG5n
-Lm9yZy91c2Vyc3BhY2UtcmN1LmdpdCBicmFuY2g6IHJidHJlZTIKPiAKPiBGaWxlczoKPiAKPiB1
-cmN1L3JjdXJidHJlZS5oICAoQVBJKQo+IHVyY3UtcmJ0cmVlLmMgKGltcGxlbWVudGF0aW9uKQo+
-IHRlc3RzL3Rlc3RfdXJjdV9yYnRyZWUuYyAodGVzdHMsIGV4YW1wbGUgdXNhZ2UpCj4gCj4gSSBp
-bXBsZW1lbnRlZCB0aGlzIGNvZGUgdG8gc2hvdyB0aGF0IGl0IGlzIHBvc3NpYmxlIHRvIGltcGxl
-bWVudCBhCj4gcmVkLWJsYWNrIHRyZWUgdGhhdCBhbGxvd3MgY29tcGxldGVseSB3YWl0LWZyZWUg
-UkNVIHJlYWRlcnMsIGJ1dCBhbG9uZwo+IHRoZSB3YXksIHRoZSBjb2RlIGdyZXcgdG8gYSBjZXJ0
-YWluIGxldmVsIG9mIGNvbXBsZXhpdHkuIEZvciBpbnN0YW5jZSwgSQo+IGNvdWxkIG5vdCBzYXkg
-dGhhdCBJIHdvdWxkIGJlIGNvbWZvcnRhYmxlIHRvIGRvIGNoYW5nZXMgdG8gaXQgd2l0aG91dAo+
-IHZlcnkgdGhvcm91Z2ggdGVzdGluZy4gSSBkb24ndCBjdXJyZW50bHkgZmVlbCBjb25maWRlbnQg
-YWJvdXQgbXkgb3duCj4gYWJpbGl0eSB0byB1bmRlcnN0YW5kIGVhY2ggY29ybmVyLWNhc2Ugb2Yg
-dGhpcyBjb2RlLiBJZiBzb21ldGhpbmcKPiBicmVha3MsIHRoZSB0dXJuLWFyb3VuZCB0aW1lIHRv
-IGlkZW50aWZ5IHRoZSBmYXVsdCBtaWdodCBiZSB1bmFjY2VwdGFibHkKPiBsb25nLgo+IAo+IDIp
-IExhY2sgb2YgcmV2aWV3Lgo+IAo+IElmIEkgbG9vayBhdCBteSByZWNlbnQgZXhwZXJpZW5jZSB3
-aXRoIHRoZSB3YWl0LWZyZWUgYW5kIGxvY2stZnJlZQo+IHF1ZXVlcyBhbmQgc3RhY2ssIGFzIHdl
-bGwgYXMgd2l0aCB0aGUgUkNVIGxvY2stZnJlZSBoYXNoIHRhYmxlLCBhIGxvdCBvZgo+IHJldmll
-dywgZGlzY3Vzc2lvbiBhYm91dCBzZW1hbnRpY3MsIGFkZGVkIHRlc3RpbmcgZnJvbSBtYW55IHBl
-b3BsZSwgYXMKPiB3ZWxsIGFzIGZlZWRiYWNrIGZyb20gQVBJIHVzZXJzIGFyZSBhbGwgbmVjZXNz
-YXJ5IHRvIGdldCB0byBhIHBvaW50Cj4gd2hlcmUgd2UgY2FuIGZlZWwgY29tZm9ydGFibGUgd2l0
-aCB0aGUgaW1wbGVtZW50YXRpb24sIHRoZSBsZXZlbCBvZgo+IGRvY3VtZW50YXRpb24sIGFzIHdl
-bGwgYXMgdGhlIEFQSSBwZXIgc2UuIEkgZG9uJ3QgdGhpbmsgdGhlIFJDVQo+IHJlZC1ibGFjayB0
-cmVlIGlzIGF0IHRoaXMgbGV2ZWwgeWV0Lgo+IAo+IDMpIE5vdCB0ZXN0ZWQgdGhvcm91Z2hseSBl
-bm91Z2ggZm9yIG15IG93biBzdGFuZGFyZHMuCj4gCj4gRXZlbiB0aG91Z2ggSSBjcmVhdGVkIHNv
-bWUgc3RyZXNzLXRlc3RzIGZvciB0aGUgZGF0YSBzdHJ1Y3R1cmUgdGhhdCBtYWtlCj4gbWUgcmF0
-aGVyIGNvbmZpZGVudCB0aGF0IGl0IHdvcmtzIHdlbGwsIHdlIHdvdWxkIG5lZWQgdG8gZmFydGhl
-ciBpbgo+IHRlcm1zIG9mIHRlc3QtY2FzZXM6IGNyZWF0aW5nIGN1c3RvbWl6ZWQgc3RyZXNzLXRl
-c3RzIHRoYXQgcHVycG9zZWZ1bGx5Cj4gc3RyZXNzIHNwZWNpZmljIGFzcGVjdHMgb2YgdGhlIGRh
-dGEgc3RydWN0dXJlIChlLmcuIGNvcm5lci1jYXNlcyB0aGF0Cj4gaGFwcGVuIHJhcmVseSkgd291
-bGQgaW5jcmVhc2UgbXkgb3duIGNvbmZpZGVuY2UgaW4gdGhlIHF1YWxpdHkgb2YgdGhlCj4gaW1w
-bGVtZW50YXRpb24uCj4gCj4gNCkgTm8gdXNlciBzbyBmYXIuCj4gCj4gVGhpcyBpcyBhbHdheXMg
-YSBjaGlja2VuLWFuZC1lZ2cgcHJvYmxlbTogd2UgbmVlZCB1c2VycyB0byBnZXQgZmVlZGJhY2sK
-PiBvbiB0aGUgQVBJLCBidXQgYXMgc29vbiBhcyB3ZSBzZXR0bGUgb24gYW4gQVBJIGFuZCByZWxl
-YXNlIGEgdmVyc2lvbgo+IHdpdGggaXQsIGl0IGJlY29tZXMgdmVyeSBwYWluZnVsIHRvIGNoYW5n
-ZSBpdCAoaW4gZmFjdCwgd2UgY3JlYXRlIG5ldwo+IEFQSXMgYW5kIHNsb3dseSBkZXByZWNhdGUg
-YW4gb2xkIG9uZSByYXRoZXIgdGhhbiBicmVhayBhbiBBUEkpLiBTbywKPiBpZGVhbGx5LCBJIHBy
-ZWZlciB0byB3YWl0IHVudGlsIHNvbWUgdXNlcnMgYWN0dWFsbHkgc2hvdyBpbnRlcmVzdCAobGlr
-ZQo+IHlvdSBhcmUgY3VycmVudGx5IGRvaW5nKSBiZWZvcmUgSSBtZXJnZSBBUElzIGludG8gdGhl
-IG1hc3RlciBicmFuY2guCj4gVGhpcyBsZXRzIHVzIGRvIHNvbWUgYmFjay1hbmQtZm9ydGggYW5k
-IGFsbG93IHRoZSBBUEkgdG8gZXZvbHZlIGJlZm9yZQo+IHdlIGZpbmFsaXplIGl0Lgo+IAo+IDUp
-IEkgYW0gY3VycmVudGx5IHdvcmtpbmcgb24gb3RoZXIsIHNpbWlsYXIgZGF0YSBzdHJ1Y3R1cmVz
-Cj4gCj4gQXMgeW91IGFyZSBwcm9iYWJseSBhd2FyZSwgSSBhbSBjdXJyZW50bHkgd29ya2luZyBv
-biBhIFJDVQo+IGltcGxlbWVudGF0aW9uIG9mIEp1ZHkgQXJyYXlzLCB3aGljaCB0YXJnZXQgTXVs
-dGlwbGUtUHJvZHVjZXJzCj4gTXVsdGlwbGUtQ29uc3VtZXJzIHVzZS1jYXNlcy4gVGhlIGRlc2ln
-biBpcyB3ZWxsIHVuZGVyd2F5LCBidXQgdGhlCj4gaW1wbGVtZW50YXRpb24gaXMgZmFyIGZyb20g
-Y29tcGxldGUgKEkgZG8gdGhpcyBwYXJ0LXRpbWUgYXMgYSByZXNlYXJjaAo+IHRyYWNrIHdpdGhp
-biBteSBvd24gY29tcGFueSkuIEF0IHNvbWUgcG9pbnQsIEkgd2FudCB0byBjb21wYXJlIHRoZQo+
-IFJCdHJlZSBhbmQgUkNVIGp1ZHkgYXJyYXkgaW1wbGVtZW50YXRpb25zIGluIHRlcm1zIG9mIHBl
-cmZvcm1hbmNlLAo+IHNjYWxhYmlsaXR5LCByZWFsLXRpbWUgYmVoYXZpb3IsIGFuZCBvdGhlciBh
-c3BlY3RzLiBJIGZlZWwgaXQgaXMKPiBpbXBvcnRhbnQgdGhhdCB3ZSBjb21wYXJlIHRob3NlLCBh
-bmQgbGVhcm4gZnJvbSB0aGlzIGNvbXBhcmlzb24sIGJlZm9yZQo+IHB1c2hpbmcgdGhvc2UgZGF0
-YSBzdHJ1Y3R1cmVzIGludG8gcHJvZHVjdGlvbi4KPiAKPiBUaG91Z2h0cywgY29tbWVudHMsIGFu
-ZCBmZWVkYmFjayBhcmUgd2VsY29tZSEKPiAKPiBUaGFua3MsCj4gCgpIaSBNYXRoaWV1CgogIFRo
-YW5rcyBmb3IgeW91ciBkZXRhaWxlZCBleHBsYW5hdGlvbiBhbmQgSSBoYXZlIHRha2VuIG5vdGUg
-b2YgaXQuIEp1ZHkKQXJyYXlzIGxvb2tzIG1vcmUgcG93ZXJmdWwsIGxvb2tzIGZvcndhcmQgdG8g
-c2VlaW5nIGl0IGluIGEgcHJvZHVjdGlvbgpsZXZlbC4KClRoYW5rcywKWXVhbgoKX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcg
-bGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dp
-LWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+Hi List,
+
+   I noticed that there are just few functions suffixed with rcu for
+rculist. And from the source of Linux kernel rculist, I came up with
+some comments saying that list_empty_rcu() can be simply achieved by
+calling list_empty(). Is this true to urcu too? My questions is, are
+following equivalents true?
+
+  list_empty_rcu -> list_empty
+  list_del_init_rcu -> list_del_init
+
+If there are more equivalents, please show light on it.
+
+Thanks,
+Yuan
