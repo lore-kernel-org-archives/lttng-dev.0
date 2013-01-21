@@ -1,7 +1,7 @@
-From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+From: Christian Babeux <christian.babeux@efficios.com>
 Subject: Re: Odd dependency for lttng-ust
-Date: Mon, 21 Jan 2013 14:34:29 -0500
-Message-ID: <3CA1A65C03C1A34C81BBC6272782E6969878C8__23052.7887856171$1358796935$gmane$org@valcartierex01.valcartier.drdc-rddc.gc.ca>
+Date: Mon, 21 Jan 2013 15:06:51 -0500
+Message-ID: <CAGDH53mMdBb+9AmuwjaM_UUaw2dcPQO+5MP+pHGxcwsJ_UZyDg__29269.6140510545$1358798872$gmane$org@mail.gmail.com>
 References: <3CA1A65C03C1A34C81BBC6272782E696987880@valcartierex01.valcartier.drdc-rddc.gc.ca>
 	<20130121145954.GA1472@Krystal>
 	<3CA1A65C03C1A34C81BBC6272782E696987887@valcartierex01.valcartier.drdc-rddc.gc.ca>
@@ -12,16 +12,18 @@ References: <3CA1A65C03C1A34C81BBC6272782E696987880@valcartierex01.valcartier.dr
 	<20130121170655.GA4268@Krystal>
 	<3CA1A65C03C1A34C81BBC6272782E6969878AE@valcartierex01.valcartier.drdc-rddc.gc.ca>
 	<20130121183846.GA6838@Krystal>
+	<3CA1A65C03C1A34C81BBC6272782E6969878C8@valcartierex01.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
+Received: from mail-ie0-f175.google.com ([209.85.223.175])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1TxN8p-0005Db-Sq
-	for lttng-dev@lists.lttng.org; Mon, 21 Jan 2013 14:34:47 -0500
-Content-class: urn:content-classes:message
-In-Reply-To: <20130121183846.GA6838@Krystal>
+	(envelope-from <christian.babeux@0x80.ca>) id 1TxNdx-0005V6-KD
+	for lttng-dev@lists.lttng.org; Mon, 21 Jan 2013 15:06:57 -0500
+Received: by mail-ie0-f175.google.com with SMTP id qd14so10527912ieb.34
+	for <lttng-dev@lists.lttng.org>; Mon, 21 Jan 2013 12:06:52 -0800 (PST)
+In-Reply-To: <3CA1A65C03C1A34C81BBC6272782E6969878C8@valcartierex01.valcartier.drdc-rddc.gc.ca>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -30,47 +32,54 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev@lists.lttng.org, "Couture, Mario" <Mario.Couture@drdc-rddc.gc.ca>, "Painchaud, Frederic" <Frederic.Painchaud@drdc-rddc.gc.ca>
+To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Cc: lttng-dev@lists.lttng.org, "Couture, Mario" <Mario.Couture@drdc-rddc.gc.ca>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, "Painchaud,
+	Frederic" <Frederic.Painchaud@drdc-rddc.gc.ca>
 List-Id: lttng-dev@lists.lttng.org
 
------Message d'origine-----
-De=A0: Mathieu Desnoyers [mailto:mathieu.desnoyers@efficios.com] =
-
-Envoy=E9=A0: 21 janvier 2013 13:39
-
-As the error messages suggests, please try:
-LDFLAGS=3D-L/usr/local/lib ./configure
-instead of "./configure"
-
-Mathieu
------Fin du message d'origine-----
-
-   Interesting, that prefix does allow configure to complete successfully. =
- lttng-tools runs into the same problem as lttng-ust, and requires the same=
- LDFLAGS prefix for its configure.  No other problems arise.
-
-   So how do we fix userspace-rcu so the bootstrap -configure - make - inst=
-all sequence doesn't run into this problem?  I'm presuming here that usersp=
-ace-rcu's install needs to be touched up.  Or maybe lttng-ust's (and lttng-=
-tools's) bootstrap.
-
-   (It's a problem because the ReadMe for the lttng-ust and lttng-tools pac=
-kages stipulate a plain ./configure invocation: as they currently stand, th=
-e instructions fail)
-
-Daniel U. Thibault
-R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) / Defence R&D=
- Canada - Valcartier (DRDC Valcartier)
-Cyber s=E9curit=E9 pour les missions essentielles (CME) / Mission Critical =
-Cyber Security (MCCS)
-Protection des syst=E8mes et contremesures (PSC) / Systems Protection & Cou=
-ntermeasures (SPC)
-2459 route de la Bravoure
-Qu=E9bec, QC  G3J 1X5
-CANADA
-Vox : (418) 844-4000 x4245
-Fax : (418) 844-4538
-NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-Gouvernement du Canada / Government of Canada
-<http://www.valcartier.drdc-rddc.gc.ca/>
+SGkgRGFuaWVsLAoKQ291bGQgeW91IG1ha2Ugc3VyZSB0aGF0IGFsbCBwcmV2aW91cyBsaWJ1cmN1
+IHZlcnNpb25zIGFyZSBwcm9wZXJseQp1bmluc3RhbGxlZCAoZS5nLiBubyBsaWJ1cmN1KiBpbiAv
+dXNyL2xpYik/CgpJIHRoaW5rIHRoYXQgeW91IG1pZ2h0IGhhdmUgYW4gb2xkIHZlcnNpb24gaW5z
+dGFsbGVkIGFuZCB0aGF0CmNvbmZpZ3VyZSBpcyBsb29raW5nIHVwIHRoZSBsaWJyYXJ5IHZpYSB0
+aGUgZGVmYXVsdCBMRF9MSUJSQVJZX1BBVEgKd2hpY2ggY29udGFpbnMgL3Vzci9saWIgYmVmb3Jl
+IC91c3IvbG9jYWwvbGliIGFuZCBoZW5jZSB5b3Ugc2VlIHRoZQplcnJvciB0aGF0ICJjaGVja2lu
+ZyBmb3IgX2Nkc19sZmh0X25ldyBpbiAtbHVyY3UtY2RzIG5vIiBldmVuIHRob3VnaCBhCm5ld2Vy
+IHZlcnNpb24gaXMgcHJlc2VudCBpbiAvdXNyL2xvY2FsL2xpYi4KCkFzIGEgZ2VuZXJhbCBndWlk
+ZWxpbmUsIG1ha2Ugc3VyZSB3aGVuIHlvdSBpbnN0YWxsIHBhY2thZ2VzIGZyb20Kc291cmNlIHRo
+YXQgeW91IHVuaW5zdGFsbCBwcmV2aW91cyB2ZXJzaW9uIHRoYXQgbWlnaHQgaGF2ZSBiZWVuCmlu
+c3RhbGxlZCBieSB5b3VyIHBhY2thZ2UgbWFuYWdlciBpbiBvcmRlciB0byBtaW5pbWl6ZSBwb3Rl
+bnRpYWwKY29uZmxpY3RzLgoKQ2hyaXN0aWFuCgpPbiBNb24sIEphbiAyMSwgMjAxMyBhdCAyOjM0
+IFBNLCBUaGliYXVsdCwgRGFuaWVsCjxEYW5pZWwuVGhpYmF1bHRAZHJkYy1yZGRjLmdjLmNhPiB3
+cm90ZToKPiAtLS0tLU1lc3NhZ2UgZCdvcmlnaW5lLS0tLS0KPiBEZSA6IE1hdGhpZXUgRGVzbm95
+ZXJzIFttYWlsdG86bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tXQo+IEVudm95w6kgOiAy
+MSBqYW52aWVyIDIwMTMgMTM6MzkKPgo+IEFzIHRoZSBlcnJvciBtZXNzYWdlcyBzdWdnZXN0cywg
+cGxlYXNlIHRyeToKPiBMREZMQUdTPS1ML3Vzci9sb2NhbC9saWIgLi9jb25maWd1cmUKPiBpbnN0
+ZWFkIG9mICIuL2NvbmZpZ3VyZSIKPgo+IE1hdGhpZXUKPiAtLS0tLUZpbiBkdSBtZXNzYWdlIGQn
+b3JpZ2luZS0tLS0tCj4KPiAgICBJbnRlcmVzdGluZywgdGhhdCBwcmVmaXggZG9lcyBhbGxvdyBj
+b25maWd1cmUgdG8gY29tcGxldGUgc3VjY2Vzc2Z1bGx5LiAgbHR0bmctdG9vbHMgcnVucyBpbnRv
+IHRoZSBzYW1lIHByb2JsZW0gYXMgbHR0bmctdXN0LCBhbmQgcmVxdWlyZXMgdGhlIHNhbWUgTERG
+TEFHUyBwcmVmaXggZm9yIGl0cyBjb25maWd1cmUuICBObyBvdGhlciBwcm9ibGVtcyBhcmlzZS4K
+Pgo+ICAgIFNvIGhvdyBkbyB3ZSBmaXggdXNlcnNwYWNlLXJjdSBzbyB0aGUgYm9vdHN0cmFwIC1j
+b25maWd1cmUgLSBtYWtlIC0gaW5zdGFsbCBzZXF1ZW5jZSBkb2Vzbid0IHJ1biBpbnRvIHRoaXMg
+cHJvYmxlbT8gIEknbSBwcmVzdW1pbmcgaGVyZSB0aGF0IHVzZXJzcGFjZS1yY3UncyBpbnN0YWxs
+IG5lZWRzIHRvIGJlIHRvdWNoZWQgdXAuICBPciBtYXliZSBsdHRuZy11c3QncyAoYW5kIGx0dG5n
+LXRvb2xzJ3MpIGJvb3RzdHJhcC4KPgo+ICAgIChJdCdzIGEgcHJvYmxlbSBiZWNhdXNlIHRoZSBS
+ZWFkTWUgZm9yIHRoZSBsdHRuZy11c3QgYW5kIGx0dG5nLXRvb2xzIHBhY2thZ2VzIHN0aXB1bGF0
+ZSBhIHBsYWluIC4vY29uZmlndXJlIGludm9jYXRpb246IGFzIHRoZXkgY3VycmVudGx5IHN0YW5k
+LCB0aGUgaW5zdHJ1Y3Rpb25zIGZhaWwpCj4KPiBEYW5pZWwgVS4gVGhpYmF1bHQKPiBSICYgRCBw
+b3VyIGxhIGTDqWZlbnNlIENhbmFkYSAtIFZhbGNhcnRpZXIgKFJEREMgVmFsY2FydGllcikgLyBE
+ZWZlbmNlIFImRCBDYW5hZGEgLSBWYWxjYXJ0aWVyIChEUkRDIFZhbGNhcnRpZXIpCj4gQ3liZXIg
+c8OpY3VyaXTDqSBwb3VyIGxlcyBtaXNzaW9ucyBlc3NlbnRpZWxsZXMgKENNRSkgLyBNaXNzaW9u
+IENyaXRpY2FsIEN5YmVyIFNlY3VyaXR5IChNQ0NTKQo+IFByb3RlY3Rpb24gZGVzIHN5c3TDqG1l
+cyBldCBjb250cmVtZXN1cmVzIChQU0MpIC8gU3lzdGVtcyBQcm90ZWN0aW9uICYgQ291bnRlcm1l
+YXN1cmVzIChTUEMpCj4gMjQ1OSByb3V0ZSBkZSBsYSBCcmF2b3VyZQo+IFF1w6liZWMsIFFDICBH
+M0ogMVg1Cj4gQ0FOQURBCj4gVm94IDogKDQxOCkgODQ0LTQwMDAgeDQyNDUKPiBGYXggOiAoNDE4
+KSA4NDQtNDUzOAo+IE5BQyA6IDkxOFYgUVNESiA8aHR0cDovL3d3dy50cmF2ZWxnaXMuY29tL21h
+cC5hc3A/YWRkcj05MThWJTIwUVNESj4KPiBHb3V2ZXJuZW1lbnQgZHUgQ2FuYWRhIC8gR292ZXJu
+bWVudCBvZiBDYW5hZGEKPiA8aHR0cDovL3d3dy52YWxjYXJ0aWVyLmRyZGMtcmRkYy5nYy5jYS8+
+Cj4KPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGx0
+dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0cDov
+L2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2CgpfX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFp
+bGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9y
+Zy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
