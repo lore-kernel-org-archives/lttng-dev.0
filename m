@@ -1,20 +1,17 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH 2/4] tile: Add definition of NR_syscalls
-Date: Mon, 21 Jan 2013 20:06:53 -0500
-Message-ID: <20130122010653.GA27148__31446.2986811579$1358816861$gmane$org@Krystal>
-References: <1358816098-13070-1-git-send-email-simon.marchi@polymtl.ca>
-	<1358816098-13070-2-git-send-email-simon.marchi@polymtl.ca>
+From: Rusty Russell <rusty@rustcorp.com.au>
+Subject: Re: Coding blog: lockless queues
+Date: Tue, 22 Jan 2013 09:29:49 +1030
+Message-ID: <87ip6quopm.fsf__13884.1866086752$1358818242$gmane$org@rustcorp.com.au>
+References: <20130110165942.GA5133@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from ozlabs.org ([203.10.76.45])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1TxSKH-0007wk-CI
-	for lttng-dev@lists.lttng.org; Mon, 21 Jan 2013 20:06:57 -0500
-Content-Disposition: inline
-In-Reply-To: <1358816098-13070-2-git-send-email-simon.marchi@polymtl.ca>
+	(envelope-from <rusty@ozlabs.org>) id 1TxSgT-000892-Dn
+	for lttng-dev@lists.lttng.org; Mon, 21 Jan 2013 20:29:53 -0500
+In-Reply-To: <20130110165942.GA5133@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,51 +20,25 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Simon Marchi <simon.marchi@polymtl.ca>
-Cc: lttng-dev@lists.lttng.org, linux-kernel@vger.kernel.org, cmetcalf@tilera.com
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: rp@svcs.cs.pdx.edu, lttng-dev@lists.lttng.org, Alan Stern <stern@rowland.harvard.edu>, Stephen Hemminger <shemminger@vyatta.com>, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
 List-Id: lttng-dev@lists.lttng.org
 
-* Simon Marchi (simon.marchi@polymtl.ca) wrote:
-> It is required by the syscall tracepoint mechanism.
-> 
-> Signed-off-by: Simon Marchi <simon.marchi@polymtl.ca>
-> ---
->  arch/tile/include/uapi/asm/unistd.h |    2 ++
->  1 files changed, 2 insertions(+), 0 deletions(-)
-> 
-> diff --git a/arch/tile/include/uapi/asm/unistd.h b/arch/tile/include/uapi/asm/unistd.h
-> index cd7b6dd..c763c86 100644
-> --- a/arch/tile/include/uapi/asm/unistd.h
-> +++ b/arch/tile/include/uapi/asm/unistd.h
-> @@ -20,6 +20,8 @@
->  /* Use the standard ABI for syscalls. */
->  #include <asm-generic/unistd.h>
->  
-> +#define NR_syscalls (__NR_syscalls)
+Mathieu Desnoyers <mathieu.desnoyers@efficios.com> writes:
+> Hi Rusty!
+>
+> I've stumbled on your blog post: http://rusty.ozlabs.org/?p=317
+>
+> and I find that you looked at the RCU lock-free queue implementation in
+> the Userspace RCU project, but not at the wait-free concurrent queue
+> implementation we have (wait-free enqueue, blocking dequeue), which does
+> not require RCU at all and might be a much better fit for what you are
+> trying to achieve.
 
-The parenthesis around __NR_syscalls seems unnecessary. (unless
-parenthesis would happen to be missing around a __NR_syscalls definition
-with multiple identifiers, but clearly, the parenthesis don't belong
-here).
+Clearly, I stopped reading too early!  It's a very nice
+implementation...
 
-Thanks,
+If I revisit this, I'll do a code review and post it on my blog.
 
-Mathieu
-
-> +
->  /* Additional Tilera-specific syscalls. */
->  #define __NR_cacheflush	(__NR_arch_specific_syscall + 1)
->  __SYSCALL(__NR_cacheflush, sys_cacheflush)
-> -- 
-> 1.7.1
-> 
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Thanks!
+Rusty.
