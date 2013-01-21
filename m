@@ -1,7 +1,7 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: David Goulet <dgoulet@efficios.com>
 Subject: Re: Odd dependency for lttng-ust
-Date: Mon, 21 Jan 2013 10:47:43 -0500
-Message-ID: <20130121154743.GA2474__26540.2788333178$1358783311$gmane$org@Krystal>
+Date: Mon, 21 Jan 2013 10:53:24 -0500
+Message-ID: <50FD6474.6070207__27894.3148012788$1358783649$gmane$org@efficios.com>
 References: <3CA1A65C03C1A34C81BBC6272782E696987880@valcartierex01.valcartier.drdc-rddc.gc.ca>
 	<20130121145954.GA1472@Krystal>
 	<3CA1A65C03C1A34C81BBC6272782E696987887@valcartierex01.valcartier.drdc-rddc.gc.ca>
@@ -11,12 +11,10 @@ Mime-Version: 1.0
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from smtp.ini-tech.com ([213.239.202.151])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1TxJb7-0003GZ-I2
-	for lttng-dev@lists.lttng.org; Mon, 21 Jan 2013 10:47:45 -0500
-Content-Disposition: inline
+	(envelope-from <dgoulet@efficios.com>) id 1TxJge-0003KD-J9
+	for lttng-dev@lists.lttng.org; Mon, 21 Jan 2013 10:53:28 -0500
 In-Reply-To: <3CA1A65C03C1A34C81BBC6272782E69698788F@valcartierex01.valcartier.drdc-rddc.gc.ca>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -27,14 +25,23 @@ List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Cc: lttng-dev@lists.lttng.org, "Couture, Mario" <Mario.Couture@drdc-rddc.gc.ca>, "Painchaud, Frederic" <Frederic.Painchaud@drdc-rddc.gc.ca>
+Cc: lttng-dev@lists.lttng.org, "Couture, Mario" <Mario.Couture@drdc-rddc.gc.ca>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, "Painchaud,
+	Frederic" <Frederic.Painchaud@drdc-rddc.gc.ca>
 List-Id: lttng-dev@lists.lttng.org
 
-* Thibault, Daniel (Daniel.Thibault@drdc-rddc.gc.ca) wrote:
-> -----Message d'origine-----
-> De=A0: Mathieu Desnoyers [mailto:mathieu.desnoyers@efficios.com] =
+Also, I do still forget it still today but after installing URCU and UST:
 
-> Envoy=E9=A0: 21 janvier 2013 10:30
+$ sudo ldconfig
+
+:)
+
+David
+
+Thibault, Daniel:
+> -----Message d'origine-----
+> De : Mathieu Desnoyers [mailto:mathieu.desnoyers@efficios.com] =
+
+> Envoy=E9 : 21 janvier 2013 10:30
 > =
 
 > No. Distribution packages usually lag behind the project upstream.
@@ -75,16 +82,6 @@ it;a=3Dsummary
  userspace-rcu?  Could it be version 0.7.6 is not retro-compatible with 0.7=
 .2 (that is to say, lttng-ust requires 0.7.2, and 0.7.2 only, not "0.7.2 or=
  later")?
-
-0.7.6 should work. You might want to check the list of packages
-installed by your distribution to see if an old userspace RCU package is
-installed into /usr/ and overrides the one you installed within
-/usr/local/.
-
-Thanks,
-
-Mathieu
-
 > =
 
 > Daniel U. Thibault
@@ -105,9 +102,9 @@ ountermeasures (SPC)
 > <http://www.valcartier.drdc-rddc.gc.ca/>
 >  LinkedIn: <http://ca.linkedin.com/in/daniel-u-thibault/>
 >  Research Gate: <https://www.researchgate.net/profile/Daniel_Thibault/>
+> =
 
--- =
-
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
