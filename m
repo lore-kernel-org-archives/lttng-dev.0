@@ -1,17 +1,20 @@
-From: Simon Marchi <simon.marchi@polymtl.ca>
-Subject: [PATCH 4/4] tile: select HAVE_SYSCALL_TRACEPOINTS
-Date: Mon, 21 Jan 2013 19:54:58 -0500
-Message-ID: <1358816098-13070-4-git-send-email-simon.marchi__43423.788136761$1358816167$gmane$org@polymtl.ca>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH 2/4] tile: Add definition of NR_syscalls
+Date: Mon, 21 Jan 2013 20:06:53 -0500
+Message-ID: <20130122010653.GA27148__31446.2986811579$1358816861$gmane$org@Krystal>
 References: <1358816098-13070-1-git-send-email-simon.marchi@polymtl.ca>
+	<1358816098-13070-2-git-send-email-simon.marchi@polymtl.ca>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.polymtl.ca ([132.207.4.11])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <simon.marchi@polymtl.ca>) id 1TxS8t-0007o2-38
-	for lttng-dev@lists.lttng.org; Mon, 21 Jan 2013 19:55:11 -0500
-In-Reply-To: <1358816098-13070-1-git-send-email-simon.marchi@polymtl.ca>
+	(envelope-from <compudj@mail.openrapids.net>) id 1TxSKH-0007wk-CI
+	for lttng-dev@lists.lttng.org; Mon, 21 Jan 2013 20:06:57 -0500
+Content-Disposition: inline
+In-Reply-To: <1358816098-13070-2-git-send-email-simon.marchi@polymtl.ca>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,26 +23,51 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: cmetcalf@tilera.com
-Cc: lttng-dev@lists.lttng.org, linux-kernel@vger.kernel.org, Simon Marchi <simon.marchi@polymtl.ca>
+To: Simon Marchi <simon.marchi@polymtl.ca>
+Cc: lttng-dev@lists.lttng.org, linux-kernel@vger.kernel.org, cmetcalf@tilera.com
 List-Id: lttng-dev@lists.lttng.org
 
-Signed-off-by: Simon Marchi <simon.marchi@polymtl.ca>
----
- arch/tile/Kconfig |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+* Simon Marchi (simon.marchi@polymtl.ca) wrote:
+> It is required by the syscall tracepoint mechanism.
+> 
+> Signed-off-by: Simon Marchi <simon.marchi@polymtl.ca>
+> ---
+>  arch/tile/include/uapi/asm/unistd.h |    2 ++
+>  1 files changed, 2 insertions(+), 0 deletions(-)
+> 
+> diff --git a/arch/tile/include/uapi/asm/unistd.h b/arch/tile/include/uapi/asm/unistd.h
+> index cd7b6dd..c763c86 100644
+> --- a/arch/tile/include/uapi/asm/unistd.h
+> +++ b/arch/tile/include/uapi/asm/unistd.h
+> @@ -20,6 +20,8 @@
+>  /* Use the standard ABI for syscalls. */
+>  #include <asm-generic/unistd.h>
+>  
+> +#define NR_syscalls (__NR_syscalls)
 
-diff --git a/arch/tile/Kconfig b/arch/tile/Kconfig
-index 8cab409..1adb853 100644
---- a/arch/tile/Kconfig
-+++ b/arch/tile/Kconfig
-@@ -22,6 +22,7 @@ config TILE
- 	select GENERIC_CLOCKEVENTS
- 	select MODULES_USE_ELF_RELA
- 	select HAVE_ARCH_TRACEHOOK
-+	select HAVE_SYSCALL_TRACEPOINTS
- 
- # FIXME: investigate whether we need/want these options.
- #	select HAVE_IOREMAP_PROT
+The parenthesis around __NR_syscalls seems unnecessary. (unless
+parenthesis would happen to be missing around a __NR_syscalls definition
+with multiple identifiers, but clearly, the parenthesis don't belong
+here).
+
+Thanks,
+
+Mathieu
+
+> +
+>  /* Additional Tilera-specific syscalls. */
+>  #define __NR_cacheflush	(__NR_arch_specific_syscall + 1)
+>  __SYSCALL(__NR_cacheflush, sys_cacheflush)
+> -- 
+> 1.7.1
+> 
+> 
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
 -- 
-1.7.1
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
