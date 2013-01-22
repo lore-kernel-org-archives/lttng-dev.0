@@ -1,19 +1,19 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Automating lttng-sessiond startup
-Date: Tue, 22 Jan 2013 16:51:14 -0500
-Message-ID: <20130122215114.GA30918__46041.1175540232$1358891525$gmane$org@Krystal>
-References: <3CA1A65C03C1A34C81BBC6272782E69698797F@valcartierex01.valcartier.drdc-rddc.gc.ca>
+From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
+	<jeremie.galarneau@efficios.com>
+Subject: [PATCH babeltrace 1/2] Add missing shebangs to Python
+	examples.
+Date: Tue, 22 Jan 2013 23:47:25 +0000
+Message-ID: <1358898446-1622-1-git-send-email-jeremie.galarneau__27660.2582577199$1358916541$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from mail-qc0-f181.google.com ([209.85.216.181])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1TxlkU-000147-V6
-	for lttng-dev@lists.lttng.org; Tue, 22 Jan 2013 16:51:19 -0500
-Content-Disposition: inline
-In-Reply-To: <3CA1A65C03C1A34C81BBC6272782E69698797F@valcartierex01.valcartier.drdc-rddc.gc.ca>
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1TxsFw-0004A2-Sa
+	for lttng-dev@lists.lttng.org; Tue, 22 Jan 2013 23:48:13 -0500
+Received: by mail-qc0-f181.google.com with SMTP id x40so4799862qcp.26
+	for <lttng-dev@lists.lttng.org>; Tue, 22 Jan 2013 20:48:07 -0800 (PST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,63 +22,88 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Cc: lttng-dev@lists.lttng.org, "Couture, Mario" <Mario.Couture@drdc-rddc.gc.ca>, =?iso-8859-1?Q?Painchaud=2C_Fr=E9d=E9ric?= <Frederic.Painchaud@drdc-rddc.gc.ca>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-We plan to put these init scripts into extras/ within lttng-tools at
-some point, with appropriate documentation.
-
-This part of the install process is rather hard to automate nowadays,
-since every distribution has its own init system (upstrart, initrd,
-others).
-
-Thanks,
-
-Mathieu
-
-* Thibault, Daniel (Daniel.Thibault@drdc-rddc.gc.ca) wrote:
->    To answer my own earlier question, the Ubuntu lttng packages (but not =
-the git.lttng.org packages) automate the launch of the lttng-sessiond daemo=
-n through the Upstart service, by adding /etc/init/lttng-sessiond.conf:
-> =
-
-> description "LTTng 2.0 central tracing registry session daemon"
-> author "St=E9phane Graber <stgraber@ubuntu.com>"
-> start on local-filesystems
-> stop on runlevel [06]
-> respawn
-> exec lttng-sessiond
-> =
-
->    You need only create this file (as root) to have the git.lttng.org LTT=
-ng installation on a par with the Ubuntu packages'.
-> =
-
-> Daniel U. Thibault
-> R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) / Defence R=
-&D Canada - Valcartier (DRDC Valcartier)
-> Cyber s=E9curit=E9 pour les missions essentielles (CME) / Mission Critica=
-l Cyber Security (MCCS)
-> Protection des syst=E8mes et contremesures (PSC) / Systems Protection & C=
-ountermeasures (SPC)
-> 2459 route de la Bravoure
-> Qu=E9bec, QC=A0 G3J 1X5
-> CANADA
-> Vox=A0: (418) 844-4000 x4245
-> Fax=A0: (418) 844-4538
-> NAC=A0: 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-> Gouvernement du Canada=A0/ Government of Canada
-> <http://www.valcartier.drdc-rddc.gc.ca/>
-> =
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- =
-
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+ClNpZ25lZC1vZmYtYnk6IErDqXLDqW1pZSBHYWxhcm5lYXUgPGplcmVtaWUuZ2FsYXJuZWF1QGVm
+ZmljaW9zLmNvbT4KLS0tCiBiaW5kaW5ncy9weXRob24vZXhhbXBsZXMvYmFiZWx0cmFjZV9hbmRf
+bHR0bmcucHkgfCAxICsKIGJpbmRpbmdzL3B5dGhvbi9leGFtcGxlcy9ldmVudGNvdW50LnB5ICAg
+ICAgICAgICB8IDEgKwogYmluZGluZ3MvcHl0aG9uL2V4YW1wbGVzL2V2ZW50Y291bnRsaXN0LnB5
+ICAgICAgIHwgMSArCiBiaW5kaW5ncy9weXRob24vZXhhbXBsZXMvZXZlbnRzX3Blcl9jcHUucHkg
+ICAgICAgfCAxICsKIGJpbmRpbmdzL3B5dGhvbi9leGFtcGxlcy9leGFtcGxlLWFwaS10ZXN0LnB5
+ICAgICB8IDEgKwogYmluZGluZ3MvcHl0aG9uL2V4YW1wbGVzL2hpc3RvZ3JhbS5weSAgICAgICAg
+ICAgIHwgMSArCiBiaW5kaW5ncy9weXRob24vZXhhbXBsZXMvc2NoZWRfc3dpdGNoLnB5ICAgICAg
+ICAgfCAxICsKIGJpbmRpbmdzL3B5dGhvbi9leGFtcGxlcy9zb2Z0aXJxdGltZXMucHkgICAgICAg
+ICB8IDEgKwogYmluZGluZ3MvcHl0aG9uL2V4YW1wbGVzL3N5c2NhbGxzX2J5X3BpZC5weSAgICAg
+IHwgMSArCiA5IGZpbGVzIGNoYW5nZWQsIDkgaW5zZXJ0aW9ucygrKQogbW9kZSBjaGFuZ2UgMTAw
+NjQ0ID0+IDEwMDc1NSBiaW5kaW5ncy9weXRob24vZXhhbXBsZXMvYmFiZWx0cmFjZV9hbmRfbHR0
+bmcucHkKIG1vZGUgY2hhbmdlIDEwMDY0NCA9PiAxMDA3NTUgYmluZGluZ3MvcHl0aG9uL2V4YW1w
+bGVzL2V2ZW50Y291bnQucHkKIG1vZGUgY2hhbmdlIDEwMDY0NCA9PiAxMDA3NTUgYmluZGluZ3Mv
+cHl0aG9uL2V4YW1wbGVzL2V2ZW50Y291bnRsaXN0LnB5CiBtb2RlIGNoYW5nZSAxMDA2NDQgPT4g
+MTAwNzU1IGJpbmRpbmdzL3B5dGhvbi9leGFtcGxlcy9ldmVudHNfcGVyX2NwdS5weQogbW9kZSBj
+aGFuZ2UgMTAwNjQ0ID0+IDEwMDc1NSBiaW5kaW5ncy9weXRob24vZXhhbXBsZXMvZXhhbXBsZS1h
+cGktdGVzdC5weQogbW9kZSBjaGFuZ2UgMTAwNjQ0ID0+IDEwMDc1NSBiaW5kaW5ncy9weXRob24v
+ZXhhbXBsZXMvaGlzdG9ncmFtLnB5CiBtb2RlIGNoYW5nZSAxMDA2NDQgPT4gMTAwNzU1IGJpbmRp
+bmdzL3B5dGhvbi9leGFtcGxlcy9zY2hlZF9zd2l0Y2gucHkKIG1vZGUgY2hhbmdlIDEwMDY0NCA9
+PiAxMDA3NTUgYmluZGluZ3MvcHl0aG9uL2V4YW1wbGVzL3NvZnRpcnF0aW1lcy5weQogbW9kZSBj
+aGFuZ2UgMTAwNjQ0ID0+IDEwMDc1NSBiaW5kaW5ncy9weXRob24vZXhhbXBsZXMvc3lzY2FsbHNf
+YnlfcGlkLnB5CgpkaWZmIC0tZ2l0IGEvYmluZGluZ3MvcHl0aG9uL2V4YW1wbGVzL2JhYmVsdHJh
+Y2VfYW5kX2x0dG5nLnB5IGIvYmluZGluZ3MvcHl0aG9uL2V4YW1wbGVzL2JhYmVsdHJhY2VfYW5k
+X2x0dG5nLnB5Cm9sZCBtb2RlIDEwMDY0NApuZXcgbW9kZSAxMDA3NTUKaW5kZXggY2I0NDc5Ni4u
+NWFiMzU4YwotLS0gYS9iaW5kaW5ncy9weXRob24vZXhhbXBsZXMvYmFiZWx0cmFjZV9hbmRfbHR0
+bmcucHkKKysrIGIvYmluZGluZ3MvcHl0aG9uL2V4YW1wbGVzL2JhYmVsdHJhY2VfYW5kX2x0dG5n
+LnB5CkBAIC0xLDMgKzEsNCBAQAorIyEvdXNyL2Jpbi9weXRob24KICMgYmFiZWx0cmFjZV9hbmRf
+bHR0bmcucHkKICMgCiAjIEJhYmVsdHJhY2UgYW5kIExUVG5nIGV4YW1wbGUgc2NyaXB0CmRpZmYg
+LS1naXQgYS9iaW5kaW5ncy9weXRob24vZXhhbXBsZXMvZXZlbnRjb3VudC5weSBiL2JpbmRpbmdz
+L3B5dGhvbi9leGFtcGxlcy9ldmVudGNvdW50LnB5Cm9sZCBtb2RlIDEwMDY0NApuZXcgbW9kZSAx
+MDA3NTUKaW5kZXggNWU5NmE0My4uMGNjOWUxOQotLS0gYS9iaW5kaW5ncy9weXRob24vZXhhbXBs
+ZXMvZXZlbnRjb3VudC5weQorKysgYi9iaW5kaW5ncy9weXRob24vZXhhbXBsZXMvZXZlbnRjb3Vu
+dC5weQpAQCAtMSwzICsxLDQgQEAKKyMhL3Vzci9iaW4vcHl0aG9uCiAjIGV2ZW50Y291bnQucHkK
+ICMgCiAjIEJhYmVsdHJhY2UgZXZlbnQgY291bnQgZXhhbXBsZSBzY3JpcHQKZGlmZiAtLWdpdCBh
+L2JpbmRpbmdzL3B5dGhvbi9leGFtcGxlcy9ldmVudGNvdW50bGlzdC5weSBiL2JpbmRpbmdzL3B5
+dGhvbi9leGFtcGxlcy9ldmVudGNvdW50bGlzdC5weQpvbGQgbW9kZSAxMDA2NDQKbmV3IG1vZGUg
+MTAwNzU1CmluZGV4IDk0NWE5NjAuLmViNDEzYTgKLS0tIGEvYmluZGluZ3MvcHl0aG9uL2V4YW1w
+bGVzL2V2ZW50Y291bnRsaXN0LnB5CisrKyBiL2JpbmRpbmdzL3B5dGhvbi9leGFtcGxlcy9ldmVu
+dGNvdW50bGlzdC5weQpAQCAtMSwzICsxLDQgQEAKKyMhL3Vzci9iaW4vcHl0aG9uCiAjIGV2ZW50
+Y291bnRsaXN0LnB5CiAjIAogIyBCYWJlbHRyYWNlIGV2ZW50IGNvdW50IGxpc3QgZXhhbXBsZSBz
+Y3JpcHQKZGlmZiAtLWdpdCBhL2JpbmRpbmdzL3B5dGhvbi9leGFtcGxlcy9ldmVudHNfcGVyX2Nw
+dS5weSBiL2JpbmRpbmdzL3B5dGhvbi9leGFtcGxlcy9ldmVudHNfcGVyX2NwdS5weQpvbGQgbW9k
+ZSAxMDA2NDQKbmV3IG1vZGUgMTAwNzU1CmluZGV4IGJlNDk3ZWMuLjdlODcxZDEKLS0tIGEvYmlu
+ZGluZ3MvcHl0aG9uL2V4YW1wbGVzL2V2ZW50c19wZXJfY3B1LnB5CisrKyBiL2JpbmRpbmdzL3B5
+dGhvbi9leGFtcGxlcy9ldmVudHNfcGVyX2NwdS5weQpAQCAtMSwzICsxLDQgQEAKKyMhL3Vzci9i
+aW4vcHl0aG9uCiAjIGV2ZW50c19wZXJfY3B1LnB5CiAjIAogIyBCYWJlbHRyYWNlIGV2ZW50cyBw
+ZXIgY3B1IGV4YW1wbGUgc2NyaXB0CmRpZmYgLS1naXQgYS9iaW5kaW5ncy9weXRob24vZXhhbXBs
+ZXMvZXhhbXBsZS1hcGktdGVzdC5weSBiL2JpbmRpbmdzL3B5dGhvbi9leGFtcGxlcy9leGFtcGxl
+LWFwaS10ZXN0LnB5Cm9sZCBtb2RlIDEwMDY0NApuZXcgbW9kZSAxMDA3NTUKaW5kZXggMTA0ZjJk
+NS4uMzdlOWY0YgotLS0gYS9iaW5kaW5ncy9weXRob24vZXhhbXBsZXMvZXhhbXBsZS1hcGktdGVz
+dC5weQorKysgYi9iaW5kaW5ncy9weXRob24vZXhhbXBsZXMvZXhhbXBsZS1hcGktdGVzdC5weQpA
+QCAtMSwzICsxLDQgQEAKKyMhL3Vzci9iaW4vcHl0aG9uCiAjIGV4YW1wbGVfYXBpX3Rlc3QucHkK
+ICMgCiAjIEJhYmVsdHJhY2UgZXhhbXBsZSBzY3JpcHQgYmFzZWQgb24gdGhlIEJhYmVsdHJhY2Ug
+QVBJIHRlc3Qgc2NyaXB0CmRpZmYgLS1naXQgYS9iaW5kaW5ncy9weXRob24vZXhhbXBsZXMvaGlz
+dG9ncmFtLnB5IGIvYmluZGluZ3MvcHl0aG9uL2V4YW1wbGVzL2hpc3RvZ3JhbS5weQpvbGQgbW9k
+ZSAxMDA2NDQKbmV3IG1vZGUgMTAwNzU1CmluZGV4IDQ0NjE2YTYuLjUzM2FiZWIKLS0tIGEvYmlu
+ZGluZ3MvcHl0aG9uL2V4YW1wbGVzL2hpc3RvZ3JhbS5weQorKysgYi9iaW5kaW5ncy9weXRob24v
+ZXhhbXBsZXMvaGlzdG9ncmFtLnB5CkBAIC0xLDMgKzEsNCBAQAorIyEvdXNyL2Jpbi9weXRob24K
+ICMgaGlzdG9ncmFtLnB5CiAjIAogIyBCYWJlbHRyYWNlIGhpc3RvZ3JhbSBleGFtcGxlIHNjcmlw
+dApkaWZmIC0tZ2l0IGEvYmluZGluZ3MvcHl0aG9uL2V4YW1wbGVzL3NjaGVkX3N3aXRjaC5weSBi
+L2JpbmRpbmdzL3B5dGhvbi9leGFtcGxlcy9zY2hlZF9zd2l0Y2gucHkKb2xkIG1vZGUgMTAwNjQ0
+Cm5ldyBtb2RlIDEwMDc1NQppbmRleCA3YWU4MzRiLi5jZWU4ODJmCi0tLSBhL2JpbmRpbmdzL3B5
+dGhvbi9leGFtcGxlcy9zY2hlZF9zd2l0Y2gucHkKKysrIGIvYmluZGluZ3MvcHl0aG9uL2V4YW1w
+bGVzL3NjaGVkX3N3aXRjaC5weQpAQCAtMSwzICsxLDQgQEAKKyMhL3Vzci9iaW4vcHl0aG9uCiAj
+IHNjaGVkX3N3aXRjaC5weQogIyAKICMgQmFiZWx0cmFjZSBleGFtcGxlIHNjcmlwdCB3aXRoIHNj
+aGVkX3N3aXRjaCBldmVudHMKZGlmZiAtLWdpdCBhL2JpbmRpbmdzL3B5dGhvbi9leGFtcGxlcy9z
+b2Z0aXJxdGltZXMucHkgYi9iaW5kaW5ncy9weXRob24vZXhhbXBsZXMvc29mdGlycXRpbWVzLnB5
+Cm9sZCBtb2RlIDEwMDY0NApuZXcgbW9kZSAxMDA3NTUKaW5kZXggOTAzYmYzZS4uOGU0NjVkMgot
+LS0gYS9iaW5kaW5ncy9weXRob24vZXhhbXBsZXMvc29mdGlycXRpbWVzLnB5CisrKyBiL2JpbmRp
+bmdzL3B5dGhvbi9leGFtcGxlcy9zb2Z0aXJxdGltZXMucHkKQEAgLTEsMyArMSw0IEBACisjIS91
+c3IvYmluL3B5dGhvbgogIyBzb2Z0aXJxdGltZXMucHkKICMgCiAjIEJhYmVsdHJhY2UgdGltZSBv
+ZiBzb2Z0aXJxcyBleGFtcGxlIHNjcmlwdApkaWZmIC0tZ2l0IGEvYmluZGluZ3MvcHl0aG9uL2V4
+YW1wbGVzL3N5c2NhbGxzX2J5X3BpZC5weSBiL2JpbmRpbmdzL3B5dGhvbi9leGFtcGxlcy9zeXNj
+YWxsc19ieV9waWQucHkKb2xkIG1vZGUgMTAwNjQ0Cm5ldyBtb2RlIDEwMDc1NQppbmRleCAzYWUz
+NDJlLi4zMGVjZTExCi0tLSBhL2JpbmRpbmdzL3B5dGhvbi9leGFtcGxlcy9zeXNjYWxsc19ieV9w
+aWQucHkKKysrIGIvYmluZGluZ3MvcHl0aG9uL2V4YW1wbGVzL3N5c2NhbGxzX2J5X3BpZC5weQpA
+QCAtMSwzICsxLDQgQEAKKyMhL3Vzci9iaW4vcHl0aG9uCiAjIHN5c2NhbGxfYnlfcGlkLnB5CiAj
+IAogIyBCYWJlbHRyYWNlIHN5c2NhbGwgYnkgcGlkIGV4YW1wbGUgc2NyaXB0Ci0tIAoxLjguMS4x
+CgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmct
+ZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5s
+dHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
