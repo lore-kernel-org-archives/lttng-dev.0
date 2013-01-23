@@ -1,20 +1,19 @@
-From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
-	<jeremie.galarneau@efficios.com>
-Subject: [PATCH babeltrace 2/2] Fix: Unified types expected by
-	the Definition Python interface.
-Date: Tue, 22 Jan 2013 23:47:26 +0000
-Message-ID: <1358898446-1622-2-git-send-email-jeremie.galarneau__24119.4854061634$1358916571$gmane$org@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH babeltrace 1/2] Add missing shebangs
+	to	Python examples.
+Date: Wed, 23 Jan 2013 09:45:50 -0500
+Message-ID: <20130123144550.GA3952__3236.81540689922$1358952408$gmane$org@Krystal>
 References: <1358898446-1622-1-git-send-email-jeremie.galarneau@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qc0-f180.google.com ([209.85.216.180])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1TxsGW-0004Ar-9W
-	for lttng-dev@lists.lttng.org; Tue, 22 Jan 2013 23:48:48 -0500
-Received: by mail-qc0-f180.google.com with SMTP id v28so478287qcm.39
-	for <lttng-dev@lists.lttng.org>; Tue, 22 Jan 2013 20:48:42 -0800 (PST)
+	(envelope-from <compudj@mail.openrapids.net>) id 1Ty1aM-0001pf-O6
+	for lttng-dev@lists.lttng.org; Wed, 23 Jan 2013 09:45:54 -0500
+Content-Disposition: inline
 In-Reply-To: <1358898446-1622-1-git-send-email-jeremie.galarneau@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -24,83 +23,180 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-VGhpcyBjaGFuZ2UgbWFrZXMgdGhlIFB5dGhvbiBpdGVyYXRvciB0ZXN0IGNhc2UgZXhlY3V0ZSBz
-dWNjZXNzZnVsbHkuCgpTaWduZWQtb2ZmLWJ5OiBKw6lyw6ltaWUgR2FsYXJuZWF1IDxqZXJlbWll
-LmdhbGFybmVhdUBlZmZpY2lvcy5jb20+Ci0tLQogYmluZGluZ3MvcHl0aG9uL2JhYmVsdHJhY2Uu
-aS5pbiB8IDIzICsrKysrKysrKysrKystLS0tLS0tLS0tCiAxIGZpbGUgY2hhbmdlZCwgMTMgaW5z
-ZXJ0aW9ucygrKSwgMTAgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvYmluZGluZ3MvcHl0aG9u
-L2JhYmVsdHJhY2UuaS5pbiBiL2JpbmRpbmdzL3B5dGhvbi9iYWJlbHRyYWNlLmkuaW4KaW5kZXgg
-ZGQ0OWJhNS4uYTU0MjZjOCAxMDA2NDQKLS0tIGEvYmluZGluZ3MvcHl0aG9uL2JhYmVsdHJhY2Uu
-aS5pbgorKysgYi9iaW5kaW5ncy9weXRob24vYmFiZWx0cmFjZS5pLmluCkBAIC01NTMsOCArNTUz
-LDggQEAgc3RydWN0IGJ0X2N0Zl9ldmVudCAqYnRfY3RmX2l0ZXJfcmVhZF9ldmVudChzdHJ1Y3Qg
-YnRfY3RmX2l0ZXIgKml0ZXIpOwogCQljb25zdCBzdHJ1Y3QgZGVmaW5pdGlvbiAqc2NvcGUsCWNv
-bnN0IGNoYXIgKmZpZWxkKTsKICVyZW5hbWUoIl9idF9jdGZfZ2V0X2luZGV4IikgYnRfY3RmX2dl
-dF9pbmRleChjb25zdCBzdHJ1Y3QgYnRfY3RmX2V2ZW50ICpjdGZfZXZlbnQsCiAJCWNvbnN0IHN0
-cnVjdCBkZWZpbml0aW9uICpmaWVsZCwJdW5zaWduZWQgaW50IGluZGV4KTsKLSVyZW5hbWUoIl9i
-dF9jdGZfZmllbGRfbmFtZSIpIGJ0X2N0Zl9maWVsZF9uYW1lKGNvbnN0IHN0cnVjdCBkZWZpbml0
-aW9uICpkZWYpOwotJXJlbmFtZSgiX2J0X2N0Zl9maWVsZF90eXBlIikgYnRfY3RmX2ZpZWxkX3R5
-cGUoY29uc3Qgc3RydWN0IGRlY2xhcmF0aW9uICpkZWYpOworJXJlbmFtZSgiX2J0X2N0Zl9maWVs
-ZF9uYW1lIikgYnRfY3RmX2ZpZWxkX25hbWUoY29uc3Qgc3RydWN0IGRlZmluaXRpb24gKmZpZWxk
-KTsKKyVyZW5hbWUoIl9idF9jdGZfZmllbGRfdHlwZSIpIGJ0X2N0Zl9maWVsZF90eXBlKGNvbnN0
-IHN0cnVjdCBkZWNsYXJhdGlvbiAqZmllbGQpOwogJXJlbmFtZSgiX2J0X2N0Zl9nZXRfaW50X3Np
-Z25lZG5lc3MiKSBidF9jdGZfZ2V0X2ludF9zaWduZWRuZXNzKAogCQljb25zdCBzdHJ1Y3QgZGVj
-bGFyYXRpb24gKmZpZWxkKTsKICVyZW5hbWUoIl9idF9jdGZfZ2V0X2ludF9iYXNlIikgYnRfY3Rm
-X2dldF9pbnRfYmFzZShjb25zdCBzdHJ1Y3QgZGVjbGFyYXRpb24gKmZpZWxkKTsKQEAgLTU3Miw2
-ICs1NzIsOCBAQCBzdHJ1Y3QgYnRfY3RmX2V2ZW50ICpidF9jdGZfaXRlcl9yZWFkX2V2ZW50KHN0
-cnVjdCBidF9jdGZfaXRlciAqaXRlcik7CiAJCWJ0X2N0Zl9ldmVudF9kZWNsICpldmVudCk7CiAl
-cmVuYW1lKCJfYnRfY3RmX2dldF9kZWNsX2ZpZWxkX25hbWUiKSBidF9jdGZfZ2V0X2RlY2xfZmll
-bGRfbmFtZSgKIAkJY29uc3Qgc3RydWN0IGJ0X2N0Zl9maWVsZF9kZWNsICpmaWVsZCk7CislcmVu
-YW1lKCJfYnRfY3RmX2dldF9kZWNsX2Zyb21fZGVmIikgYnRfY3RmX2dldF9kZWNsX2Zyb21fZGVm
-KAorCQljb25zdCBzdHJ1Y3QgZGVmaW5pdGlvbiAqZmllbGQpOwogCiBjb25zdCBzdHJ1Y3QgZGVm
-aW5pdGlvbiAqYnRfY3RmX2dldF90b3BfbGV2ZWxfc2NvcGUoY29uc3Qgc3RydWN0IGJ0X2N0Zl9l
-dmVudCAqY3RmX2V2ZW50LAogCQllbnVtIGJ0X2N0Zl9zY29wZSBzY29wZSk7CkBAIC01ODQsOCAr
-NTg2LDggQEAgY29uc3Qgc3RydWN0IGRlZmluaXRpb24gKmJ0X2N0Zl9nZXRfZmllbGQoY29uc3Qg
-c3RydWN0IGJ0X2N0Zl9ldmVudCAqY3RmX2V2ZW50LAogY29uc3Qgc3RydWN0IGRlZmluaXRpb24g
-KmJ0X2N0Zl9nZXRfaW5kZXgoY29uc3Qgc3RydWN0IGJ0X2N0Zl9ldmVudCAqY3RmX2V2ZW50LAog
-CQljb25zdCBzdHJ1Y3QgZGVmaW5pdGlvbiAqZmllbGQsCiAJCXVuc2lnbmVkIGludCBpbmRleCk7
-Ci1jb25zdCBjaGFyICpidF9jdGZfZmllbGRfbmFtZShjb25zdCBzdHJ1Y3QgZGVmaW5pdGlvbiAq
-ZGVmKTsKLWVudW0gY3RmX3R5cGVfaWQgYnRfY3RmX2ZpZWxkX3R5cGUoY29uc3Qgc3RydWN0IGRl
-Y2xhcmF0aW9uICpkZWYpOworY29uc3QgY2hhciAqYnRfY3RmX2ZpZWxkX25hbWUoY29uc3Qgc3Ry
-dWN0IGRlZmluaXRpb24gKmZpZWxkKTsKK2VudW0gY3RmX3R5cGVfaWQgYnRfY3RmX2ZpZWxkX3R5
-cGUoY29uc3Qgc3RydWN0IGRlY2xhcmF0aW9uICpmaWVsZCk7CiBpbnQgYnRfY3RmX2dldF9pbnRf
-c2lnbmVkbmVzcyhjb25zdCBzdHJ1Y3QgZGVjbGFyYXRpb24gKmZpZWxkKTsKIGludCBidF9jdGZf
-Z2V0X2ludF9iYXNlKGNvbnN0IHN0cnVjdCBkZWNsYXJhdGlvbiAqZmllbGQpOwogaW50IGJ0X2N0
-Zl9nZXRfaW50X2J5dGVfb3JkZXIoY29uc3Qgc3RydWN0IGRlY2xhcmF0aW9uICpmaWVsZCk7CkBA
-IC01OTksNiArNjAxLDcgQEAgY2hhciAqYnRfY3RmX2dldF9zdHJpbmcoY29uc3Qgc3RydWN0IGRl
-ZmluaXRpb24gKmZpZWxkKTsKIGludCBidF9jdGZfZmllbGRfZ2V0X2Vycm9yKHZvaWQpOwogY29u
-c3QgY2hhciAqYnRfY3RmX2dldF9kZWNsX2V2ZW50X25hbWUoY29uc3Qgc3RydWN0IGJ0X2N0Zl9l
-dmVudF9kZWNsICpldmVudCk7CiBjb25zdCBjaGFyICpidF9jdGZfZ2V0X2RlY2xfZmllbGRfbmFt
-ZShjb25zdCBzdHJ1Y3QgYnRfY3RmX2ZpZWxkX2RlY2wgKmZpZWxkKTsKK2NvbnN0IHN0cnVjdCBk
-ZWNsYXJhdGlvbiAqYnRfY3RmX2dldF9kZWNsX2Zyb21fZGVmKGNvbnN0IHN0cnVjdCBkZWZpbml0
-aW9uICpmaWVsZCk7CiAKICVweXRob25jb2RlJXsKIApAQCAtODM5LDI1ICs4NDIsMjUgQEAgY2xh
-c3MgY3RmOgogCiAJCWRlZiBmaWVsZF90eXBlKHNlbGYpOgogCQkJIiIiUmV0dXJuIHRoZSB0eXBl
-IG9mIGEgZmllbGQgb3IgLTEgaWYgdW5rbm93bi4iIiIKLQkJCXJldHVybiBfYnRfY3RmX2ZpZWxk
-X3R5cGUoc2VsZi5fZCkKKwkJCXJldHVybiBfYnRfY3RmX2ZpZWxkX3R5cGUoX2J0X2N0Zl9nZXRf
-ZGVjbF9mcm9tX2RlZihzZWxmLl9kKSkKIAogCQlkZWYgZ2V0X2ludF9zaWduZWRuZXNzKHNlbGYp
-OgogCQkJIiIiCiAJCQlSZXR1cm4gdGhlIHNpZ25lZG5lc3Mgb2YgYW4gaW50ZWdlcjoKIAkJCTAg
-aWYgdW5zaWduZWQ7IDEgaWYgc2lnbmVkOyAtMSBvbiBlcnJvci4KIAkJCSIiIgotCQkJcmV0dXJu
-IF9idF9jdGZfZ2V0X2ludF9zaWduZWRuZXNzKHNlbGYuX2QpCisJCQlyZXR1cm4gX2J0X2N0Zl9n
-ZXRfaW50X3NpZ25lZG5lc3MoX2J0X2N0Zl9nZXRfZGVjbF9mcm9tX2RlZihzZWxmLl9kKSkKIAog
-CQlkZWYgZ2V0X2ludF9iYXNlKHNlbGYpOgogCQkJIiIiUmV0dXJuIHRoZSBiYXNlIG9mIGFuIGlu
-dCBvciBhIG5lZ2F0aXZlIHZhbHVlIG9uIGVycm9yLiIiIgotCQkJcmV0dXJuIF9idF9jdGZfZ2V0
-X2ludF9iYXNlKHNlbGYuX2QpCisJCQlyZXR1cm4gX2J0X2N0Zl9nZXRfaW50X2Jhc2UoX2J0X2N0
-Zl9nZXRfZGVjbF9mcm9tX2RlZihzZWxmLl9kKSkKIAogCQlkZWYgZ2V0X2ludF9ieXRlX29yZGVy
-KHNlbGYpOgogCQkJIiIiCiAJCQlSZXR1cm4gdGhlIGJ5dGUgb3JkZXIgb2YgYW4gaW50IG9yIGEg
-bmVnYXRpdmUKIAkJCXZhbHVlIG9uIGVycm9yLgogCQkJIiIiCi0JCQlyZXR1cm4gX2J0X2N0Zl9n
-ZXRfaW50X2J5dGVfb3JkZXIoc2VsZi5fZCkKKwkJCXJldHVybiBfYnRfY3RmX2dldF9pbnRfYnl0
-ZV9vcmRlcihfYnRfY3RmX2dldF9kZWNsX2Zyb21fZGVmKHNlbGYuX2QpKQogCiAJCWRlZiBnZXRf
-aW50X2xlbihzZWxmKToKIAkJCSIiIgpAQCAtODcxLDE0ICs4NzQsMTQgQEAgY2xhc3MgY3RmOgog
-CQkJUmV0dXJuIHRoZSBlbmNvZGluZyBvZiBhbiBpbnQgb3IgYSBzdHJpbmcuCiAJCQlSZXR1cm4g
-YSBuZWdhdGl2ZSB2YWx1ZSBvbiBlcnJvci4KIAkJCSIiIgotCQkJcmV0dXJuIF9idF9jdGZfZ2V0
-X2VuY29kaW5nKHNlbGYuX2QpCisJCQlyZXR1cm4gX2J0X2N0Zl9nZXRfZW5jb2RpbmcoX2J0X2N0
-Zl9nZXRfZGVjbF9mcm9tX2RlZihzZWxmLl9kKSkKIAogCQlkZWYgZ2V0X2FycmF5X2xlbihzZWxm
-KToKIAkJCSIiIgogCQkJUmV0dXJuIHRoZSBsZW4gb2YgYW4gYXJyYXkgb3IgYSBuZWdhdGl2ZQog
-CQkJdmFsdWUgb24gZXJyb3IuCiAJCQkiIiIKLQkJCXJldHVybiBfYnRfY3RmX2dldF9hcnJheV9s
-ZW4oc2VsZi5fZCkKKwkJCXJldHVybiBfYnRfY3RmX2dldF9hcnJheV9sZW4oX2J0X2N0Zl9nZXRf
-ZGVjbF9mcm9tX2RlZihzZWxmLl9kKSkKIAogCQlkZWYgZ2V0X3VpbnQ2NChzZWxmKToKIAkJCSIi
-IgotLSAKMS44LjEuMQoKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpo
-dHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+* J=E9r=E9mie Galarneau (jeremie.galarneau@efficios.com) wrote:
+> =
+
+> Signed-off-by: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
+> ---
+>  bindings/python/examples/babeltrace_and_lttng.py | 1 +
+>  bindings/python/examples/eventcount.py           | 1 +
+>  bindings/python/examples/eventcountlist.py       | 1 +
+>  bindings/python/examples/events_per_cpu.py       | 1 +
+>  bindings/python/examples/example-api-test.py     | 1 +
+>  bindings/python/examples/histogram.py            | 1 +
+>  bindings/python/examples/sched_switch.py         | 1 +
+>  bindings/python/examples/softirqtimes.py         | 1 +
+>  bindings/python/examples/syscalls_by_pid.py      | 1 +
+>  9 files changed, 9 insertions(+)
+>  mode change 100644 =3D> 100755 bindings/python/examples/babeltrace_and_l=
+ttng.py
+>  mode change 100644 =3D> 100755 bindings/python/examples/eventcount.py
+>  mode change 100644 =3D> 100755 bindings/python/examples/eventcountlist.py
+>  mode change 100644 =3D> 100755 bindings/python/examples/events_per_cpu.py
+>  mode change 100644 =3D> 100755 bindings/python/examples/example-api-test=
+.py
+>  mode change 100644 =3D> 100755 bindings/python/examples/histogram.py
+>  mode change 100644 =3D> 100755 bindings/python/examples/sched_switch.py
+>  mode change 100644 =3D> 100755 bindings/python/examples/softirqtimes.py
+>  mode change 100644 =3D> 100755 bindings/python/examples/syscalls_by_pid.=
+py
+> =
+
+> diff --git a/bindings/python/examples/babeltrace_and_lttng.py b/bindings/=
+python/examples/babeltrace_and_lttng.py
+> old mode 100644
+> new mode 100755
+> index cb44796..5ab358c
+> --- a/bindings/python/examples/babeltrace_and_lttng.py
+> +++ b/bindings/python/examples/babeltrace_and_lttng.py
+> @@ -1,3 +1,4 @@
+> +#!/usr/bin/python
+
+Please compare with other lttng projects (see tools tests), where I
+think we use "env" and then python. So I'm not sure which roule we want
+to go, but I think this has to do with Debian not having the same
+symlinks that other distros wrt python 2 and 3.
+
+Thanks,
+
+Mathieu
+
+>  # babeltrace_and_lttng.py
+>  # =
+
+>  # Babeltrace and LTTng example script
+> diff --git a/bindings/python/examples/eventcount.py b/bindings/python/exa=
+mples/eventcount.py
+> old mode 100644
+> new mode 100755
+> index 5e96a43..0cc9e19
+> --- a/bindings/python/examples/eventcount.py
+> +++ b/bindings/python/examples/eventcount.py
+> @@ -1,3 +1,4 @@
+> +#!/usr/bin/python
+>  # eventcount.py
+>  # =
+
+>  # Babeltrace event count example script
+> diff --git a/bindings/python/examples/eventcountlist.py b/bindings/python=
+/examples/eventcountlist.py
+> old mode 100644
+> new mode 100755
+> index 945a960..eb413a8
+> --- a/bindings/python/examples/eventcountlist.py
+> +++ b/bindings/python/examples/eventcountlist.py
+> @@ -1,3 +1,4 @@
+> +#!/usr/bin/python
+>  # eventcountlist.py
+>  # =
+
+>  # Babeltrace event count list example script
+> diff --git a/bindings/python/examples/events_per_cpu.py b/bindings/python=
+/examples/events_per_cpu.py
+> old mode 100644
+> new mode 100755
+> index be497ec..7e871d1
+> --- a/bindings/python/examples/events_per_cpu.py
+> +++ b/bindings/python/examples/events_per_cpu.py
+> @@ -1,3 +1,4 @@
+> +#!/usr/bin/python
+>  # events_per_cpu.py
+>  # =
+
+>  # Babeltrace events per cpu example script
+> diff --git a/bindings/python/examples/example-api-test.py b/bindings/pyth=
+on/examples/example-api-test.py
+> old mode 100644
+> new mode 100755
+> index 104f2d5..37e9f4b
+> --- a/bindings/python/examples/example-api-test.py
+> +++ b/bindings/python/examples/example-api-test.py
+> @@ -1,3 +1,4 @@
+> +#!/usr/bin/python
+>  # example_api_test.py
+>  # =
+
+>  # Babeltrace example script based on the Babeltrace API test script
+> diff --git a/bindings/python/examples/histogram.py b/bindings/python/exam=
+ples/histogram.py
+> old mode 100644
+> new mode 100755
+> index 44616a6..533abeb
+> --- a/bindings/python/examples/histogram.py
+> +++ b/bindings/python/examples/histogram.py
+> @@ -1,3 +1,4 @@
+> +#!/usr/bin/python
+>  # histogram.py
+>  # =
+
+>  # Babeltrace histogram example script
+> diff --git a/bindings/python/examples/sched_switch.py b/bindings/python/e=
+xamples/sched_switch.py
+> old mode 100644
+> new mode 100755
+> index 7ae834b..cee882f
+> --- a/bindings/python/examples/sched_switch.py
+> +++ b/bindings/python/examples/sched_switch.py
+> @@ -1,3 +1,4 @@
+> +#!/usr/bin/python
+>  # sched_switch.py
+>  # =
+
+>  # Babeltrace example script with sched_switch events
+> diff --git a/bindings/python/examples/softirqtimes.py b/bindings/python/e=
+xamples/softirqtimes.py
+> old mode 100644
+> new mode 100755
+> index 903bf3e..8e465d2
+> --- a/bindings/python/examples/softirqtimes.py
+> +++ b/bindings/python/examples/softirqtimes.py
+> @@ -1,3 +1,4 @@
+> +#!/usr/bin/python
+>  # softirqtimes.py
+>  # =
+
+>  # Babeltrace time of softirqs example script
+> diff --git a/bindings/python/examples/syscalls_by_pid.py b/bindings/pytho=
+n/examples/syscalls_by_pid.py
+> old mode 100644
+> new mode 100755
+> index 3ae342e..30ece11
+> --- a/bindings/python/examples/syscalls_by_pid.py
+> +++ b/bindings/python/examples/syscalls_by_pid.py
+> @@ -1,3 +1,4 @@
+> +#!/usr/bin/python
+>  # syscall_by_pid.py
+>  # =
+
+>  # Babeltrace syscall by pid example script
+> -- =
+
+> 1.8.1.1
+> =
+
+> =
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- =
+
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
