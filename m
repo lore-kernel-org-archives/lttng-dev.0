@@ -1,14 +1,18 @@
-From: Yang Wang <yangw.wang5@unb.ca>
-Subject: bug?
-Date: Wed, 23 Jan 2013 20:09:30 +0000
-Message-ID: <8E0A14A4C9B95B459AE214584119C1EB3BC909B3__21184.7803243019$1358972290$gmane$org@Hal.ad.unb.ca>
+From: "Ostermueller, Erik" <Erik.Ostermueller@fisglobal.com>
+Subject: Re: tracing of non-JNI java in IBM jvm
+Date: Wed, 23 Jan 2013 21:46:34 +0000
+Message-ID: <A94B468263DDE2448A14367F590EB97301D12F91__37941.3706985817$1358977659$gmane$org@ltcfiswmsgmb15>
+References: <A94B468263DDE2448A14367F590EB97301D12EC3@ltcfiswmsgmb15>
+	<2081361152.17856221.1358970308809.JavaMail.root@vmware.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0718229024=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from tempo.its.unb.ca ([131.202.1.21])
+Received: from mx1.fisglobal.com ([199.200.24.190])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <yangw.wang5@unb.ca>) id 1Ty6eD-0004SL-Pr
-	for lttng-dev@lists.lttng.org; Wed, 23 Jan 2013 15:10:13 -0500
+	(envelope-from <Erik.Ostermueller@fisglobal.com>) id 1Ty89a-0005DM-1G
+	for lttng-dev@lists.lttng.org; Wed, 23 Jan 2013 16:46:42 -0500
+In-Reply-To: <2081361152.17856221.1358970308809.JavaMail.root@vmware.com>
 Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -18,143 +22,197 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
-Cc: Kenneth Kent <ken@unb.ca>, "," <Grame_johson@ca.ibm.com>
+To: Aaron Spear <aspear@vmware.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, "linuxtools-dev@eclipse.org" <linuxtools-dev@eclipse.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0718229024==
-Content-Language: en-US
-Content-Type: multipart/alternative;
-	boundary="_000_8E0A14A4C9B95B459AE214584119C1EB3BC909B3Haladunbca_"
+Aaron wrote:
+>> not yet ready to show anyone as I hacked it together
+Hacked, shmacked. Pour that code into a jar file ship it! ...just kidding.
+Seriously, though, I'd love to test out your prototype to get a feel for all the pieces involved -- I'm new to lttng.
+If the prototype grows into something more release-able, I might have a small amount of time to contribute some code....if nothing else, I'd be happy to some load and do some profiling of the solution.
 
---_000_8E0A14A4C9B95B459AE214584119C1EB3BC909B3Haladunbca_
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Would also be nice to optionally capture some "state"  to attach to a single gantt trace.  For example, SOA developers (they're so picky) would want the XML input that led to a performance problem that has been traced.  The uses would be responsible for identifying which method return val or parm contained input XML.  In Trace already knows how to capture that.  Would then want the new solution to dump the XML onto thread local storage (or similar) so it could be included (somehow) in the trace output.  Does CTF support storage of additional data like this?
 
-Hello,
+I'm the kernel folks are rolling their eyes... sounds like a lot of overhead....but CompuWare's DynaTrace already does this with impressively low overhead.
 
-I am Yang Wang, I am currently using lttng to trace my JVM.
+--Erik
 
-During my using lttng in tracing JVM, I found three problems,
+-----Original Message-----
+From: Aaron Spear [mailto:aspear@vmware.com]
+Sent: Wednesday, January 23, 2013 1:45 PM
+To: Ostermueller, Erik
+Cc: lttng-dev@lists.lttng.org; Alexandre Montplaisir; linuxtools-dev@eclipse.org
+Subject: Re: [lttng-dev] tracing of non-JNI java in IBM jvm
 
- 1) in lttng-ust-2.1.0/include/lttng/ust-tracepoint-event.h
+Hi Erik,
 
-     why using an assertion "assert(!ret);"  (Line676)?
-     not allowing double registering and init?
-     if double registering or initialization (provider), why not allowed ju=
-st returning silently instead
-      of aborting"? How about comments assert(!ret); =3D=3D>//assert(!ret);=
- what is the side-effects
-      of doing this?
+I am happy to report that I already implemented what I mentioned before as a *prototype*.  My solution has the following:
 
- 2) The other problem is in ./userspace-rcu-0.7.5/urcu/list.h Line85
+-JNI library and classes that use UST to log function entries-exits.  So I end up with a CTF log that has function entries and exits.
+-extension to in-trace agent library to use this library for function entries and exits.  So, you can select a subset of classes to instrument dynamically.
+-clone of the Control Flow View that understands this particular function entry and exit event schema -I have threads as the parent, and then whatever functions the thread calls as children.  If you collapse the thread, you still see intervals over which it is running which is nice.
 
-  I have to add a guard "if" statement as the assertion in my program fails=
- otherwise
+The net result is that you can see Gantt charts of function calls in *any* java application.  All you have to do is
+1) launch the java app injecting the custom in-trace agent
+2) start lttng ust tracing
+3) connect to the java app's injected agent and select what classes you want instrumented
 
-  static inline void
-  __cds_list_del (struct cds_list_head *prev, struct cds_list_head *next)
-  {
-   if (prev !=3D NULL && next !=3D NULL) {
-      //assert(prev !=3D NULL && next !=3D NULL);
-      next->prev =3D prev;
-      prev->next =3D next;
-  }
+See the attached screenshot that shows a very simple java application that spawns 5 threads, and each thread calls 4 functions and then exits.
 
- 3) Now my instrumented prog is ready to run. Here is my commands:
-     lttng create
-     lttng enable-event -u -a
-     lttng start
-     ./prog
+I think that the idea is pretty cool and have the intent to contribute it if there is interest.  This implementation is not yet ready to show anyone as I hacked it together for a paper that I am writing.  Here are a few of the caveats about it:
 
-    The (lttng) instrumented prog is stuck there without any outputs relate=
-d to lttng tracing, how can I know what happen inside.
-    In other words, does lttng have any mechanism to trace itself?
+1) the current implementation is quite intrusive on the java side.  Sloppy use of strings in particular.  It needs some careful architecting.  I have a number of ideas on this front, but have not yet had bandwidth to implement them.
+2) There are lots of details to be worked out with the in-trace integration.  The current collection UI really needs some help.  I tried briefly to get the eclipse plugin to work with Eclipse 4, but only the RCP app seems to work for me.  I think that the "Connections" view needs to have different collection agents plugged in and you should be able to connect to a java app and dynamically select classes to instrument and/or select from sets of classes/methods.
+3) My vision is to create a viewer that could do arbitrary state over time, and use CTF extensions to feed this so that the implementation is entirely data driven.  Basically any hierarchy of parent-child entries with state under them.  This particular one is, like the LTTng Control Flow View, hard coded to the event schema right now, but I can see how we can make it more general.   I should say that the guys that wrote the framework did a good job of making it useable for different things (nice work guys!) 
 
-   Thanks
+Note that you could in fact use it for instrumenting native applications as well of course.  The "DynamoRIO" project in particular does the same sort of thing as In Trace does (only more efficiently) so I think this is quite viable as a collection mechanism.
 
-   Yang
+cheers!
+Aaron Spear
 
---_000_8E0A14A4C9B95B459AE214584119C1EB3BC909B3Haladunbca_
-Content-Type: text/html; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+----- Original Message -----
+> From: "Erik Ostermueller" <Erik.Ostermueller@fisglobal.com>
+> To: "Aaron Spear" <aspear@vmware.com>
+> Cc: lttng-dev@lists.lttng.org, "Alexandre Montplaisir" 
+> <alexmonthy@voxpopuli.im>
+> Sent: Wednesday, January 23, 2013 11:03:15 AM
+> Subject: RE: [lttng-dev] tracing of non-JNI java in IBM jvm
+> 
+> Aaron,
+> 
+> Sorry to have disappeared from this discussion.
+> What if we went is a slightly different direction.
+> 
+> The InTrace tool
+> (https://urldefense.proofpoint.com/v1/url?u=http://mchr3k.github.com/o
+> rg.intrace/&k=%2FbkpAUdJWZuiTILCq%2FFnQg%3D%3D%0A&r=k0mtagpeWG6phJwAIzKq%2B4lTFA1JCM2OiWhVYmwwWeM%3D%0A&m=lFXy7dQ3u8Zg1jElCpolYCb7TruJrJgRwBFE22Y6%2BmY%3D%0A&s=96ea6ae0f26bd65195aad3b74892a253c5f364ba26e802b78e04d40b04f6ea10) will log start/stop times of dynamically instrumented methods to a text file (proprietary format).
+> What if we simply wrote a process to convert that log to CTF, and view 
+> the trace with the lttng eclipse plug-in, unmodified.
+> 
+> The idea would be to, at first, just support these two views:
+> https://urldefense.proofpoint.com/v1/url?u=http://wiki.eclipse.org/Lin
+> ux_Tools_Project/LTTng/User_Guide%23Control_Flow_View&k=%2FbkpAUdJWZui
+> TILCq%2FFnQg%3D%3D%0A&r=k0mtagpeWG6phJwAIzKq%2B4lTFA1JCM2OiWhVYmwwWeM%
+> 3D%0A&m=lFXy7dQ3u8Zg1jElCpolYCb7TruJrJgRwBFE22Y6%2BmY%3D%0A&s=912d647a
+> 2e19035e7ceb23bfbb7ca8b2e4217d47037a04c3e4ec65862ceae233
+> https://urldefense.proofpoint.com/v1/url?u=http://wiki.eclipse.org/Lin
+> ux_Tools_Project/LTTng/User_Guide%23Statistics_View&k=%2FbkpAUdJWZuiTI
+> LCq%2FFnQg%3D%3D%0A&r=k0mtagpeWG6phJwAIzKq%2B4lTFA1JCM2OiWhVYmwwWeM%3D
+> %0A&m=lFXy7dQ3u8Zg1jElCpolYCb7TruJrJgRwBFE22Y6%2BmY%3D%0A&s=b8aa3bbc7e
+> 1bd3611941f0be18ced0000cd89295515ff32346c71549cc49ea26
+> 
+> --Erik
+> 
+> 
+> 
+> -----Original Message-----
+> From: Aaron Spear [mailto:aspear@vmware.com]
+> Sent: Friday, January 11, 2013 12:56 PM
+> To: Ostermueller, Erik
+> Cc: lttng-dev@lists.lttng.org; Alexandre Montplaisir
+> Subject: Re: [lttng-dev] tracing of non-JNI java in IBM jvm
+> 
+> 
+> ----- Original Message -----
+> > From: "Erik Ostermueller" <Erik.Ostermueller@fisglobal.com>
+> > To: "Alexandre Montplaisir" <alexmonthy@voxpopuli.im>
+> > Cc: lttng-dev@lists.lttng.org
+> > Sent: Friday, January 11, 2013 9:26:51 AM
+> > Subject: Re: [lttng-dev] tracing of non-JNI java in IBM jvm
+> > 
+> > Thanks Alex for the quick reply....now I get it.
+> > I'll jump in on that other thread you mentioned.
+> > 
+> > There is a tool called InTrace that does some of this work.
+> > Perhaps some design ideas or even code could be stolen from here:
+> >  
+> > https://urldefense.proofpoint.com/v1/url?u=http://mchr3k.github.com/
+> > org.intrace/&k=%2FbkpAUdJWZuiTILCq%2FFnQg%3D%3D%0A&r=k0mtagpeWG6phJw
+> > AIzKq%2B4lTFA1JCM2OiWhVYmwwWeM%3D%0A&m=lFXy7dQ3u8Zg1jElCpolYCb7TruJr
+> > JgRwBFE22Y6%2BmY%3D%0A&s=96ea6ae0f26bd65195aad3b74892a253c5f364ba26e
+> > 802b78e04d40b04f6ea10
+> > This project:
+> > * implements the java.lang.instrumentation api, which can be used to 
+> > plug a tracing tool into an already-running JVM.
+> > * allows you to instrument/de-instrument various classes without 
+> > restarting the JVM.
+> > * Uses
+> > https://urldefense.proofpoint.com/v1/url?u=http://asm.ow2.org/&k=%2F
+> > bkpAUdJWZuiTILCq%2FFnQg%3D%3D%0A&r=k0mtagpeWG6phJwAIzKq%2B4lTFA1JCM2OiWhVYmwwWeM%3D%0A&m=lFXy7dQ3u8Zg1jElCpolYCb7TruJrJgRwBFE22Y6%2BmY%3D%0A&s=e3bd826c82ea04de7f36936be65be723da73938e69695a85c5dcc17b05bc8caf to inject byte code for entry/exit tracing methods.
+> > * stores thread id (good) but does nothing to sort/organize activity 
+> > by thread id into a session(bad)
+> > * no graphing/aggregating of performance metrics...just displays 
+> > entry/exit times, method parameters, etc...
+> 
+> Hi Erik,
+> 
+> I think that what you are mentioning is certainly one thing that is 
+> needed. To me I see a couple of different components here:
+> 1) implementation of java.util.logging interfaces as well as SLF4J 
+> interfaces, as well as a dedicated LTTng java API for registering 
+> custom event typess.  This would be used for static, compile time 
+> instrumentation of java apps.
+> 2) an implementation that uses the tooling you mention above for 
+> dynamic instrumentation of any running java app.  You basically would 
+> define trace and install trace points on the fly.  This would be 
+> really, really powerful.
+> 
+> The implementations of the above would have to be quite different from 
+> the way that things are done currently with UST.  Currently UST uses 
+> macros in C files to define the various tracepoints statically.
+>  We would need to have API's that could be called dynamically to 
+> define tracepoints, so that the java code could do this.  I have not 
+> actually looked under the hood with the current UST implementation to 
+> see what the implications are for this.
+> 
+> It seems to me that we would want to have a Java API usage similar to 
+> what you can do with SLF4J:
+> 
+> class MyClass {
+>       private static final Tracer tracer =
+>       LTTngFactory.getTracer("MyComponentName");
+>       private static final String MY_TRACEPOINT =
+>       "MyTracepointWithIntegerStringAndLong";
+> 
+>       static {
+>           // register a tracepoint.  this goes through JNI and
+>           creates a tracepoint
+>           // in UST that has the given name and the specified objects
+>           tracer.registerTracepoint(MY_TRACEPOINT,
+>                                      new
+>                                      Object[]{Integer.class,String.class,Long.class});
+>       }
+> 
+>       public void someMethod() {
+>           Integer someInteger = 123456;
+>           String  someString = "this is the string";
+>           Long  someLong = 56789;
+> 
+>           tracer.trace(MY_TRACEPOINT,someInteger,someString,someLong);
+>       }
+> }
+> 
+> Then over the top of this you have implementations of SLF4J, 
+> java.util.logging, whatever.  The infrastructure required in the JNI 
+> side for this would be the same implementation needed by the binding 
+> to the InTrace technology to dynamically create tracepoints.
+> 
+> I need all of this right now, and am willing to spend time in the next 
+> few months to implement it.
+> 
+> cheers,
+> Aaron Spear, Staff Engineer, VMware Inc
+> 
+> _____________
+> The information contained in this message is proprietary and/or 
+> confidential. If you are not the intended recipient, please: (i) 
+> delete the message and all copies; (ii) do not disclose, distribute or 
+> use the message in any manner; and (iii) notify the sender 
+> immediately. In addition, please be aware that any message addressed 
+> to our domain is subject to archiving and review by persons other than 
+> the intended recipient. Thank you
+> 
 
-<html dir=3D"ltr">
-<head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Diso-8859-=
-1">
-<style id=3D"owaParaStyle" type=3D"text/css">P {margin-top:0;margin-bottom:=
-0;}</style>
-</head>
-<body ocsi=3D"0" fpstyle=3D"1">
-<div style=3D"direction: ltr;font-family: Tahoma;color: #000000;font-size: =
-10pt;"><font size=3D"2"><span style=3D"font-size:10pt;">Hello,<br>
-<br>
-I am Yang Wang, I am currently using lttng to trace my JVM.<br>
-<br>
-During my using lttng in tracing JVM, I found three problems,<br>
-<br>
-&nbsp;1) in </span></font><font size=3D"2"><span style=3D"font-size:10pt;">=
-lttng-ust-2.1.0/include/lttng/ust-tracepoint-event.h</span></font><br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp; why using an assertion &quot;<font size=3D"2"><spa=
-n style=3D"font-size:10pt;">assert(!ret);&quot;&nbsp; (Line676)?<br>
-&nbsp;&nbsp;&nbsp;&nbsp; not allowing double registering and init?<br>
-&nbsp;&nbsp;&nbsp;&nbsp; if double registering or initialization (provider)=
-, why not allowed just returning silently instead&nbsp;&nbsp;
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; of aborting&quot;? How about </span></font><=
-b><font size=3D"2"><span style=3D"font-size:10pt;">comments assert(!ret); =
-=3D=3D&gt;//assert(!ret);</span></font></b> what is the side-effects<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; of doing this?<br>
-<font size=3D"2"><span style=3D"font-size:10pt;">&nbsp;<br>
-&nbsp;2) The other problem is in .<b>/userspace-rcu-0.7.5/urcu/list.h Line8=
-5</b><br>
-<br>
-&nbsp; I have to add a guard &quot;if&quot; statement as the assertion in m=
-y program fails otherwise<br>
-<br>
-&nbsp; static inline void<br>
-&nbsp; __cds_list_del (struct cds_list_head *prev, struct cds_list_head *ne=
-xt)<br>
-&nbsp; {<br>
-&nbsp;<b>&nbsp; if (prev !=3D NULL &amp;&amp; next !=3D NULL) {</b><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //assert(prev !=3D NULL &amp;&amp; next !=3D=
- NULL);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; next-&gt;prev =3D prev;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; prev-&gt;next =3D next;<br>
-&nbsp; }<br>
-<br>
-&nbsp;3) Now my instrumented prog is ready to run. Here is my commands:<br>
-&nbsp;&nbsp;&nbsp;&nbsp; lttng create<br>
-&nbsp;&nbsp;&nbsp;&nbsp; lttng enable-event -u -a<br>
-&nbsp;&nbsp;&nbsp;&nbsp; lttng start<br>
-&nbsp;&nbsp;&nbsp;&nbsp; ./prog <br>
-<br>
-&nbsp;&nbsp;&nbsp; The (lttng) instrumented prog is stuck there without any=
- outputs related to lttng tracing, how can I know what happen inside.<br>
-&nbsp;&nbsp;&nbsp; In other words, does lttng have any mechanism to trace i=
-tself?<br>
-<br>
-&nbsp;&nbsp; Thanks<br>
-<br>
-&nbsp;&nbsp; Yang<br>
-</span></font></div>
-</body>
-</html>
-
---_000_8E0A14A4C9B95B459AE214584119C1EB3BC909B3Haladunbca_--
-
-
---===============0718229024==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0718229024==--
+_____________
+The information contained in this message is proprietary and/or confidential. If you are not the intended recipient, please: (i) delete the message and all copies; (ii) do not disclose, distribute or use the message in any manner; and (iii) notify the sender immediately. In addition, please be aware that any message addressed to our domain is subject to archiving and review by persons other than the intended recipient. Thank you.
