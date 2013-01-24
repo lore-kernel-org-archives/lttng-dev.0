@@ -1,7 +1,7 @@
 From: Julien Desfossez <jdesfossez@efficios.com>
-Subject: [BABELTRACE PATCH 08/18] namespace the enum functions
-Date: Thu, 24 Jan 2013 16:21:40 -0500
-Message-ID: <1359062510-7557-8-git-send-email-jdesfossez__844.135453417216$1359062610$gmane$org@efficios.com>
+Subject: [BABELTRACE PATCH 09/18] namespace the int functions
+Date: Thu, 24 Jan 2013 16:21:41 -0500
+Message-ID: <1359062510-7557-9-git-send-email-jdesfossez__20693.2321576916$1359062610$gmane$org@efficios.com>
 References: <1359062510-7557-1-git-send-email-jdesfossez@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,8 +9,8 @@ Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from smtp.ini-tech.com ([213.239.202.151])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jdesfossez@efficios.com>) id 1TyUFO-0008Ek-GY
-	for lttng-dev@lists.lttng.org; Thu, 24 Jan 2013 16:22:10 -0500
+	(envelope-from <jdesfossez@efficios.com>) id 1TyUFP-0008Ey-MM
+	for lttng-dev@lists.lttng.org; Thu, 24 Jan 2013 16:22:12 -0500
 In-Reply-To: <1359062510-7557-1-git-send-email-jdesfossez@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -26,284 +26,219 @@ List-Id: lttng-dev@lists.lttng.org
 
 Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
 ---
- formats/ctf/events.c                               |    4 +--
- .../ctf/metadata/ctf-visitor-generate-io-struct.c  |    6 ++--
- formats/ctf/types/enum.c                           |    4 +--
- include/babeltrace/types.h                         |   14 ++++-----
- types/enum.c                                       |   30 ++++++++++----------
- types/variant.c                                    |    4 +--
- 6 files changed, 31 insertions(+), 31 deletions(-)
+ formats/ctf/ctf.c          |   18 +++++++++---------
+ formats/ctf/events.c       |   10 +++++-----
+ include/babeltrace/types.h |   14 +++++++-------
+ types/integer.c            |   14 +++++++-------
+ 4 files changed, 28 insertions(+), 28 deletions(-)
 
+diff --git a/formats/ctf/ctf.c b/formats/ctf/ctf.c
+index 6a24087..45ab65e 100644
+--- a/formats/ctf/ctf.c
++++ b/formats/ctf/ctf.c
+@@ -1317,7 +1317,7 @@ int create_stream_packet_index(struct ctf_trace *td,
+ 				uint64_t magic;
+ 
+ 				field = struct_definition_get_field_from_index(file_stream->parent.trace_packet_header, len_index);
+-				magic = get_unsigned_int(field);
++				magic = bt_get_unsigned_int(field);
+ 				if (magic != CTF_MAGIC) {
+ 					fprintf(stderr, "[error] Invalid magic number 0x%" PRIX64 " at packet %u (file offset %zd).\n",
+ 							magic,
+@@ -1344,7 +1344,7 @@ int create_stream_packet_index(struct ctf_trace *td,
+ 					struct definition *elem;
+ 
+ 					elem = bt_array_index(defarray, i);
+-					uuidval[i] = get_unsigned_int(elem);
++					uuidval[i] = bt_get_unsigned_int(elem);
+ 				}
+ 				ret = babeltrace_uuid_compare(td->uuid, uuidval);
+ 				if (ret) {
+@@ -1359,7 +1359,7 @@ int create_stream_packet_index(struct ctf_trace *td,
+ 				struct definition *field;
+ 
+ 				field = struct_definition_get_field_from_index(file_stream->parent.trace_packet_header, len_index);
+-				stream_id = get_unsigned_int(field);
++				stream_id = bt_get_unsigned_int(field);
+ 			}
+ 		}
+ 
+@@ -1396,7 +1396,7 @@ int create_stream_packet_index(struct ctf_trace *td,
+ 				struct definition *field;
+ 
+ 				field = struct_definition_get_field_from_index(file_stream->parent.stream_packet_context, len_index);
+-				packet_index.content_size = get_unsigned_int(field);
++				packet_index.content_size = bt_get_unsigned_int(field);
+ 			} else {
+ 				/* Use file size for packet size */
+ 				packet_index.content_size = filestats.st_size * CHAR_BIT;
+@@ -1408,7 +1408,7 @@ int create_stream_packet_index(struct ctf_trace *td,
+ 				struct definition *field;
+ 
+ 				field = struct_definition_get_field_from_index(file_stream->parent.stream_packet_context, len_index);
+-				packet_index.packet_size = get_unsigned_int(field);
++				packet_index.packet_size = bt_get_unsigned_int(field);
+ 			} else {
+ 				/* Use content size if non-zero, else file size */
+ 				packet_index.packet_size = packet_index.content_size ? : filestats.st_size * CHAR_BIT;
+@@ -1420,7 +1420,7 @@ int create_stream_packet_index(struct ctf_trace *td,
+ 				struct definition *field;
+ 
+ 				field = struct_definition_get_field_from_index(file_stream->parent.stream_packet_context, len_index);
+-				packet_index.timestamp_begin = get_unsigned_int(field);
++				packet_index.timestamp_begin = bt_get_unsigned_int(field);
+ 				if (file_stream->parent.stream_class->trace->collection) {
+ 					packet_index.timestamp_begin =
+ 						ctf_get_real_timestamp(
+@@ -1435,7 +1435,7 @@ int create_stream_packet_index(struct ctf_trace *td,
+ 				struct definition *field;
+ 
+ 				field = struct_definition_get_field_from_index(file_stream->parent.stream_packet_context, len_index);
+-				packet_index.timestamp_end = get_unsigned_int(field);
++				packet_index.timestamp_end = bt_get_unsigned_int(field);
+ 				if (file_stream->parent.stream_class->trace->collection) {
+ 					packet_index.timestamp_end =
+ 						ctf_get_real_timestamp(
+@@ -1450,8 +1450,8 @@ int create_stream_packet_index(struct ctf_trace *td,
+ 				struct definition *field;
+ 
+ 				field = struct_definition_get_field_from_index(file_stream->parent.stream_packet_context, len_index);
+-				packet_index.events_discarded = get_unsigned_int(field);
+-				packet_index.events_discarded_len = get_int_len(field);
++				packet_index.events_discarded = bt_get_unsigned_int(field);
++				packet_index.events_discarded_len = bt_get_int_len(field);
+ 			}
+ 		} else {
+ 			/* Use file size for packet size */
 diff --git a/formats/ctf/events.c b/formats/ctf/events.c
-index b530cd5..1d1ef6f 100644
+index 1d1ef6f..372fdd1 100644
 --- a/formats/ctf/events.c
 +++ b/formats/ctf/events.c
-@@ -463,10 +463,10 @@ const char *bt_ctf_get_enum_str(const struct definition *field)
+@@ -462,12 +462,12 @@ const char *bt_ctf_get_enum_str(const struct definition *field)
+ 	}
  	def_enum = container_of(field, const struct definition_enum, p);
  	decl_enum = def_enum->declaration;
- 	if (get_int_signedness(&def_enum->integer->p)) {
--		array = enum_int_to_quark_set(decl_enum,
-+		array = bt_enum_int_to_quark_set(decl_enum,
- 			get_signed_int(&def_enum->integer->p));
+-	if (get_int_signedness(&def_enum->integer->p)) {
++	if (bt_get_int_signedness(&def_enum->integer->p)) {
+ 		array = bt_enum_int_to_quark_set(decl_enum,
+-			get_signed_int(&def_enum->integer->p));
++			bt_get_signed_int(&def_enum->integer->p));
  	} else {
--		array = enum_uint_to_quark_set(decl_enum,
-+		array = bt_enum_uint_to_quark_set(decl_enum,
- 			get_unsigned_int(&def_enum->integer->p));
+ 		array = bt_enum_uint_to_quark_set(decl_enum,
+-			get_unsigned_int(&def_enum->integer->p));
++			bt_get_unsigned_int(&def_enum->integer->p));
  	}
  	if (!array) {
-diff --git a/formats/ctf/metadata/ctf-visitor-generate-io-struct.c b/formats/ctf/metadata/ctf-visitor-generate-io-struct.c
-index 9ade8c4..928262f 100644
---- a/formats/ctf/metadata/ctf-visitor-generate-io-struct.c
-+++ b/formats/ctf/metadata/ctf-visitor-generate-io-struct.c
-@@ -1007,7 +1007,7 @@ int ctf_enumerator_list_visit(FILE *fd, int depth,
- 		if (nr_vals <= 1)
- 			end = start;
- 		last->u.s = end + 1;
--		enum_signed_insert(enum_declaration, start, end, q);
-+		bt_enum_signed_insert(enum_declaration, start, end, q);
- 	} else {
- 		uint64_t start, end;
- 		int nr_vals = 0;
-@@ -1047,7 +1047,7 @@ int ctf_enumerator_list_visit(FILE *fd, int depth,
- 		if (nr_vals <= 1)
- 			end = start;
- 		last->u.u = end + 1;
--		enum_unsigned_insert(enum_declaration, start, end, q);
-+		bt_enum_unsigned_insert(enum_declaration, start, end, q);
- 	}
- 	return 0;
- }
-@@ -1114,7 +1114,7 @@ struct declaration *ctf_declaration_enum_visit(FILE *fd, int depth,
- 			return NULL;
- 		}
- 		integer_declaration = container_of(declaration, struct declaration_integer, p);
--		enum_declaration = enum_declaration_new(integer_declaration);
-+		enum_declaration = bt_enum_declaration_new(integer_declaration);
- 		bt_declaration_unref(&integer_declaration->p);	/* leave ref to enum */
- 		if (enum_declaration->integer_declaration->signedness) {
- 			last_value.u.s = 0;
-diff --git a/formats/ctf/types/enum.c b/formats/ctf/types/enum.c
-index e4e7ac8..1891175 100644
---- a/formats/ctf/types/enum.c
-+++ b/formats/ctf/types/enum.c
-@@ -48,14 +48,14 @@ int ctf_enum_read(struct stream_pos *ppos, struct definition *definition)
- 	if (ret)
- 		return ret;
- 	if (!integer_declaration->signedness) {
--		qs = enum_uint_to_quark_set(enum_declaration,
-+		qs = bt_enum_uint_to_quark_set(enum_declaration,
- 			integer_definition->value._unsigned);
- 		if (!qs) {
- 			fprintf(stderr, "[warning] Unknown value %" PRIu64 " in enum.\n",
- 				integer_definition->value._unsigned);
- 		}
- 	} else {
--		qs = enum_int_to_quark_set(enum_declaration,
-+		qs = bt_enum_int_to_quark_set(enum_declaration,
- 			integer_definition->value._signed);
- 		if (!qs) {
- 			fprintf(stderr, "[warning] Unknown value %" PRId64 " in enum.\n",
+ 		bt_ctf_field_set_error(-ENOENT);
+@@ -559,7 +559,7 @@ uint64_t bt_ctf_get_uint64(const struct definition *field)
+ 	uint64_t ret = 0;
+ 
+ 	if (field && bt_ctf_field_type(bt_ctf_get_decl_from_def(field)) == CTF_TYPE_INTEGER)
+-		ret = get_unsigned_int(field);
++		ret = bt_get_unsigned_int(field);
+ 	else
+ 		bt_ctf_field_set_error(-EINVAL);
+ 
+@@ -571,7 +571,7 @@ int64_t bt_ctf_get_int64(const struct definition *field)
+ 	int64_t ret = 0;
+ 
+ 	if (field && bt_ctf_field_type(bt_ctf_get_decl_from_def(field)) == CTF_TYPE_INTEGER)
+-		ret = get_signed_int(field);
++		ret = bt_get_signed_int(field);
+ 	else
+ 		bt_ctf_field_set_error(-EINVAL);
+ 
 diff --git a/include/babeltrace/types.h b/include/babeltrace/types.h
-index 1b0cd2b..15bbef3 100644
+index 15bbef3..7b3485d 100644
 --- a/include/babeltrace/types.h
 +++ b/include/babeltrace/types.h
-@@ -399,14 +399,14 @@ struct declaration_float *float_declaration_new(size_t mantissa_len,
-  * Returns a GArray of GQuark or NULL.
-  * Caller must release the GArray with g_array_unref().
-  */
--GArray *enum_uint_to_quark_set(const struct declaration_enum *enum_declaration,
-+GArray *bt_enum_uint_to_quark_set(const struct declaration_enum *enum_declaration,
- 			       uint64_t v);
+@@ -374,13 +374,13 @@ struct declaration_integer *integer_declaration_new(size_t len, int byte_order,
+ 				  int signedness, size_t alignment,
+ 				  int base, enum ctf_string_encoding encoding,
+ 				  struct ctf_clock *clock);
+-uint64_t get_unsigned_int(const struct definition *field);
+-int64_t get_signed_int(const struct definition *field);
+-int get_int_signedness(const struct definition *field);
+-int get_int_byte_order(const struct definition *field);
+-int get_int_base(const struct definition *field);
+-size_t get_int_len(const struct definition *field);	/* in bits */
+-enum ctf_string_encoding get_int_encoding(const struct definition *field);
++uint64_t bt_get_unsigned_int(const struct definition *field);
++int64_t bt_get_signed_int(const struct definition *field);
++int bt_get_int_signedness(const struct definition *field);
++int bt_get_int_byte_order(const struct definition *field);
++int bt_get_int_base(const struct definition *field);
++size_t bt_get_int_len(const struct definition *field);	/* in bits */
++enum ctf_string_encoding bt_get_int_encoding(const struct definition *field);
  
  /*
-  * Returns a GArray of GQuark or NULL.
-  * Caller must release the GArray with g_array_unref().
-  */
--GArray *enum_int_to_quark_set(const struct declaration_enum *enum_declaration,
-+GArray *bt_enum_int_to_quark_set(const struct declaration_enum *enum_declaration,
- 			      int64_t v);
- 
- /*
-@@ -414,16 +414,16 @@ GArray *enum_int_to_quark_set(const struct declaration_enum *enum_declaration,
-  * Callers do _not_ own the returned GArray (and therefore _don't_ need to
-  * release it).
-  */
--GArray *enum_quark_to_range_set(const struct declaration_enum *enum_declaration,
-+GArray *bt_enum_quark_to_range_set(const struct declaration_enum *enum_declaration,
- 				GQuark q);
--void enum_signed_insert(struct declaration_enum *enum_declaration,
-+void bt_enum_signed_insert(struct declaration_enum *enum_declaration,
-                         int64_t start, int64_t end, GQuark q);
--void enum_unsigned_insert(struct declaration_enum *enum_declaration,
-+void bt_enum_unsigned_insert(struct declaration_enum *enum_declaration,
- 			  uint64_t start, uint64_t end, GQuark q);
--size_t enum_get_nr_enumerators(struct declaration_enum *enum_declaration);
-+size_t bt_enum_get_nr_enumerators(struct declaration_enum *enum_declaration);
- 
- struct declaration_enum *
--	enum_declaration_new(struct declaration_integer *integer_declaration);
-+	bt_enum_declaration_new(struct declaration_integer *integer_declaration);
- 
- struct declaration_string *
- 	string_declaration_new(enum ctf_string_encoding encoding);
-diff --git a/types/enum.c b/types/enum.c
-index 43df4eb..6d33713 100644
---- a/types/enum.c
-+++ b/types/enum.c
-@@ -124,7 +124,7 @@ void enum_val_free(void *ptr)
-  * Returns a GArray or NULL.
-  * Caller must release the GArray with g_array_unref().
-  */
--GArray *enum_uint_to_quark_set(const struct declaration_enum *enum_declaration,
-+GArray *bt_enum_uint_to_quark_set(const struct declaration_enum *enum_declaration,
- 			       uint64_t v)
- {
- 	struct enum_range_to_quark *iter;
-@@ -171,7 +171,7 @@ GArray *enum_uint_to_quark_set(const struct declaration_enum *enum_declaration,
-  * Returns a GArray or NULL.
-  * Caller must release the GArray with g_array_unref().
-  */
--GArray *enum_int_to_quark_set(const struct declaration_enum *enum_declaration,
-+GArray *bt_enum_int_to_quark_set(const struct declaration_enum *enum_declaration,
- 			      int64_t v)
- {
- 	struct enum_range_to_quark *iter;
-@@ -215,7 +215,7 @@ GArray *enum_int_to_quark_set(const struct declaration_enum *enum_declaration,
+  * mantissa_len is the length of the number of bytes represented by the mantissa
+diff --git a/types/integer.c b/types/integer.c
+index 20e7688..58b6104 100644
+--- a/types/integer.c
++++ b/types/integer.c
+@@ -115,7 +115,7 @@ void _integer_definition_free(struct definition *definition)
+ 	g_free(integer);
  }
  
- static
--void enum_unsigned_insert_value_to_quark_set(struct declaration_enum *enum_declaration,
-+void bt_enum_unsigned_insert_value_to_quark_set(struct declaration_enum *enum_declaration,
- 			 uint64_t v, GQuark q)
+-enum ctf_string_encoding get_int_encoding(const struct definition *field)
++enum ctf_string_encoding bt_get_int_encoding(const struct definition *field)
  {
- 	uint64_t *valuep;
-@@ -241,7 +241,7 @@ void enum_unsigned_insert_value_to_quark_set(struct declaration_enum *enum_decla
+ 	struct definition_integer *integer_definition;
+ 	const struct declaration_integer *integer_declaration;
+@@ -126,7 +126,7 @@ enum ctf_string_encoding get_int_encoding(const struct definition *field)
+ 	return integer_declaration->encoding;
  }
  
- static
--void enum_signed_insert_value_to_quark_set(struct declaration_enum *enum_declaration,
-+void bt_enum_signed_insert_value_to_quark_set(struct declaration_enum *enum_declaration,
- 			int64_t v, GQuark q)
+-int get_int_base(const struct definition *field)
++int bt_get_int_base(const struct definition *field)
  {
- 	int64_t *valuep;
-@@ -266,7 +266,7 @@ void enum_signed_insert_value_to_quark_set(struct declaration_enum *enum_declara
- 	}
+ 	struct definition_integer *integer_definition;
+ 	const struct declaration_integer *integer_declaration;
+@@ -137,7 +137,7 @@ int get_int_base(const struct definition *field)
+ 	return integer_declaration->base;
  }
  
--GArray *enum_quark_to_range_set(const struct declaration_enum *enum_declaration,
-+GArray *bt_enum_quark_to_range_set(const struct declaration_enum *enum_declaration,
- 				GQuark q)
+-size_t get_int_len(const struct definition *field)
++size_t bt_get_int_len(const struct definition *field)
  {
- 	return g_hash_table_lookup(enum_declaration->table.quark_to_range_set,
-@@ -274,7 +274,7 @@ GArray *enum_quark_to_range_set(const struct declaration_enum *enum_declaration,
+ 	struct definition_integer *integer_definition;
+ 	const struct declaration_integer *integer_declaration;
+@@ -148,7 +148,7 @@ size_t get_int_len(const struct definition *field)
+ 	return integer_declaration->len;
  }
  
- static
--void enum_signed_insert_range_to_quark(struct declaration_enum *enum_declaration,
-+void bt_enum_signed_insert_range_to_quark(struct declaration_enum *enum_declaration,
-                         int64_t start, int64_t end, GQuark q)
+-int get_int_byte_order(const struct definition *field)
++int bt_get_int_byte_order(const struct definition *field)
  {
- 	struct enum_range_to_quark *rtoq;
-@@ -287,7 +287,7 @@ void enum_signed_insert_range_to_quark(struct declaration_enum *enum_declaration
+ 	struct definition_integer *integer_definition;
+ 	const struct declaration_integer *integer_declaration;
+@@ -159,7 +159,7 @@ int get_int_byte_order(const struct definition *field)
+ 	return integer_declaration->byte_order;
  }
  
- static
--void enum_unsigned_insert_range_to_quark(struct declaration_enum *enum_declaration,
-+void bt_enum_unsigned_insert_range_to_quark(struct declaration_enum *enum_declaration,
-                         uint64_t start, uint64_t end, GQuark q)
+-int get_int_signedness(const struct definition *field)
++int bt_get_int_signedness(const struct definition *field)
  {
- 	struct enum_range_to_quark *rtoq;
-@@ -299,14 +299,14 @@ void enum_unsigned_insert_range_to_quark(struct declaration_enum *enum_declarati
- 	rtoq->quark = q;
+ 	struct definition_integer *integer_definition;
+ 	const struct declaration_integer *integer_declaration;
+@@ -170,7 +170,7 @@ int get_int_signedness(const struct definition *field)
+ 	return integer_declaration->signedness;
  }
  
--void enum_signed_insert(struct declaration_enum *enum_declaration,
-+void bt_enum_signed_insert(struct declaration_enum *enum_declaration,
-                         int64_t start, int64_t end, GQuark q)
+-uint64_t get_unsigned_int(const struct definition *field)
++uint64_t bt_get_unsigned_int(const struct definition *field)
  {
- 	GArray *array;
- 	struct enum_range *range;
- 
- 	if (start == end) {
--		enum_signed_insert_value_to_quark_set(enum_declaration, start, q);
-+		bt_enum_signed_insert_value_to_quark_set(enum_declaration, start, q);
- 	} else {
- 		if (start > end) {
- 			uint64_t tmp;
-@@ -315,7 +315,7 @@ void enum_signed_insert(struct declaration_enum *enum_declaration,
- 			start = end;
- 			end = tmp;
- 		}
--		enum_signed_insert_range_to_quark(enum_declaration, start, end, q);
-+		bt_enum_signed_insert_range_to_quark(enum_declaration, start, end, q);
- 	}
- 
- 	array = g_hash_table_lookup(enum_declaration->table.quark_to_range_set,
-@@ -333,7 +333,7 @@ void enum_signed_insert(struct declaration_enum *enum_declaration,
- 	range->end._signed = end;
+ 	struct definition_integer *integer_definition;
+ 	const struct declaration_integer *integer_declaration;
+@@ -186,7 +186,7 @@ uint64_t get_unsigned_int(const struct definition *field)
+ 	return (uint64_t)integer_definition->value._signed;
  }
  
--void enum_unsigned_insert(struct declaration_enum *enum_declaration,
-+void bt_enum_unsigned_insert(struct declaration_enum *enum_declaration,
- 			  uint64_t start, uint64_t end, GQuark q)
+-int64_t get_signed_int(const struct definition *field)
++int64_t bt_get_signed_int(const struct definition *field)
  {
- 	GArray *array;
-@@ -341,7 +341,7 @@ void enum_unsigned_insert(struct declaration_enum *enum_declaration,
- 
- 
- 	if (start == end) {
--		enum_unsigned_insert_value_to_quark_set(enum_declaration, start, q);
-+		bt_enum_unsigned_insert_value_to_quark_set(enum_declaration, start, q);
- 	} else {
- 		if (start > end) {
- 			uint64_t tmp;
-@@ -350,7 +350,7 @@ void enum_unsigned_insert(struct declaration_enum *enum_declaration,
- 			start = end;
- 			end = tmp;
- 		}
--		enum_unsigned_insert_range_to_quark(enum_declaration, start, end, q);
-+		bt_enum_unsigned_insert_range_to_quark(enum_declaration, start, end, q);
- 	}
- 
- 	array = g_hash_table_lookup(enum_declaration->table.quark_to_range_set,
-@@ -368,7 +368,7 @@ void enum_unsigned_insert(struct declaration_enum *enum_declaration,
- 	range->end._unsigned = end;
- }
- 
--size_t enum_get_nr_enumerators(struct declaration_enum *enum_declaration)
-+size_t bt_enum_get_nr_enumerators(struct declaration_enum *enum_declaration)
- {
- 	return g_hash_table_size(enum_declaration->table.quark_to_range_set);
- }
-@@ -391,7 +391,7 @@ void _enum_declaration_free(struct declaration *declaration)
- }
- 
- struct declaration_enum *
--	enum_declaration_new(struct declaration_integer *integer_declaration)
-+	bt_enum_declaration_new(struct declaration_integer *integer_declaration)
- {
- 	struct declaration_enum *enum_declaration;
- 
-diff --git a/types/variant.c b/types/variant.c
-index a58c17f..47c821e 100644
---- a/types/variant.c
-+++ b/types/variant.c
-@@ -144,14 +144,14 @@ int check_enum_tag(struct definition_variant *variant,
- 	 * variant choice map to an enumerator too. We then validate that the
- 	 * number of enumerators equals the number of variant choices.
- 	 */
--	if (variant->declaration->untagged_variant->fields->len != enum_get_nr_enumerators(enum_declaration))
-+	if (variant->declaration->untagged_variant->fields->len != bt_enum_get_nr_enumerators(enum_declaration))
- 		return -EPERM;
- 
- 	for (i = 0; i < variant->declaration->untagged_variant->fields->len; i++) {
- 		struct declaration_field *field_declaration =
- 			&g_array_index(variant->declaration->untagged_variant->fields,
- 				       struct declaration_field, i);
--		if (!enum_quark_to_range_set(enum_declaration, field_declaration->name)) {
-+		if (!bt_enum_quark_to_range_set(enum_declaration, field_declaration->name)) {
- 			missing_field = 1;
- 			break;
- 		}
+ 	struct definition_integer *integer_definition;
+ 	const struct declaration_integer *integer_declaration;
 -- 
 1.7.10.4
