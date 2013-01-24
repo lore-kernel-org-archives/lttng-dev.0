@@ -1,19 +1,17 @@
-From: Julien Desfossez <julien.desfossez@polymtl.ca>
-Subject: Re: [BABELTRACE PATCH 03/18] Hide internal functions of
- libbabeltrace-ctf
-Date: Thu, 24 Jan 2013 16:26:37 -0500
-Message-ID: <5101A70D.10607__31407.2940768257$1359062849$gmane$org@polymtl.ca>
+From: Julien Desfossez <jdesfossez@efficios.com>
+Subject: [BABELTRACE PATCH 11/18] namespace the string functions
+Date: Thu, 24 Jan 2013 16:21:43 -0500
+Message-ID: <1359062510-7557-11-git-send-email-jdesfossez__21582.6208623641$1359064627$gmane$org@efficios.com>
 References: <1359062510-7557-1-git-send-email-jdesfossez@efficios.com>
-	<1359062510-7557-3-git-send-email-jdesfossez@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fukushima.klipix.org ([194.250.102.243])
+Received: from smtp.ini-tech.com ([213.239.202.151])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <julien.desfossez@polymtl.ca>) id 1TyUJq-00007r-U1
-	for lttng-dev@lists.lttng.org; Thu, 24 Jan 2013 16:26:47 -0500
-In-Reply-To: <1359062510-7557-3-git-send-email-jdesfossez@efficios.com>
+	(envelope-from <jdesfossez@efficios.com>) id 1TyUFR-0008Ey-3z
+	for lttng-dev@lists.lttng.org; Thu, 24 Jan 2013 16:22:13 -0500
+In-Reply-To: <1359062510-7557-1-git-send-email-jdesfossez@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,171 +20,91 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Julien Desfossez <jdesfossez@efficios.com>
-Cc: lttng-dev@lists.lttng.org, mathieu.desnoyers@efficios.com
+To: mathieu.desnoyers@efficios.com
+Cc: lttng-dev@lists.lttng.org, Julien Desfossez <jdesfossez@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-On 24/01/13 04:21 PM, Julien Desfossez wrote:
-> Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
-> ---
->  formats/ctf/ctf.c                           |    5 ++++-
->  formats/ctf/metadata/ctf-ast.h              |    5 +++++
->  formats/ctf/types/float.c                   |    4 +++-
->  include/babeltrace/ctf/callbacks-internal.h |    1 +
->  include/babeltrace/ctf/callbacks.h          |    1 +
->  include/babeltrace/ctf/types.h              |   14 ++++++++++++++
->  6 files changed, 28 insertions(+), 2 deletions(-)
-> 
-> diff --git a/formats/ctf/ctf.c b/formats/ctf/ctf.c
-> index a8f8408..a55f5e4 100644
-> --- a/formats/ctf/ctf.c
-> +++ b/formats/ctf/ctf.c
-> @@ -307,6 +307,7 @@ void ctf_update_timestamp(struct ctf_stream_definition *stream,
->   * Print timestamp, rescaling clock frequency to nanoseconds and
->   * applying offsets as needed (unix time).
->   */
-> +static
->  void ctf_print_timestamp_real(FILE *fp,
->  			struct ctf_stream_definition *stream,
->  			uint64_t timestamp)
-> @@ -371,6 +372,7 @@ end:
->  /*
->   * Print timestamp, in cycles
->   */
-> +static
->  void ctf_print_timestamp_cycles(FILE *fp,
->  		struct ctf_stream_definition *stream,
->  		uint64_t timestamp)
-> @@ -1724,7 +1726,7 @@ error:
->  	return NULL;
->  }
->  
-> -
-> +static
->  void ctf_init_mmap_pos(struct ctf_stream_pos *pos,
->  		struct mmap_stream *mmap_info)
->  {
-> @@ -1815,6 +1817,7 @@ error_def:
->  	return ret;
->  }
->  
-> +static
->  int ctf_open_mmap_trace_read(struct ctf_trace *td,
->  		struct mmap_stream_list *mmap_list,
->  		void (*packet_seek)(struct stream_pos *pos, size_t index,
-> diff --git a/formats/ctf/metadata/ctf-ast.h b/formats/ctf/metadata/ctf-ast.h
-> index d5a0544..1368627 100644
-> --- a/formats/ctf/metadata/ctf-ast.h
-> +++ b/formats/ctf/metadata/ctf-ast.h
-> @@ -302,11 +302,16 @@ const char *node_type(struct ctf_node *node);
->  
->  struct ctf_trace;
->  
-> +BT_HIDDEN
->  int ctf_visitor_print_xml(FILE *fd, int depth, struct ctf_node *node);
-> +BT_HIDDEN
->  int ctf_visitor_semantic_check(FILE *fd, int depth, struct ctf_node *node);
-> +BT_HIDDEN
->  int ctf_visitor_parent_links(FILE *fd, int depth, struct ctf_node *node);
-> +BT_HIDDEN
->  int ctf_visitor_construct_metadata(FILE *fd, int depth, struct ctf_node *node,
->  			struct ctf_trace *trace, int byte_order);
-> +BT_HIDDEN
->  int ctf_destroy_metadata(struct ctf_trace *trace);
->  
->  #endif /* _CTF_AST_H */
-> diff --git a/formats/ctf/types/float.c b/formats/ctf/types/float.c
-> index 0cf9cae..054e262 100644
-> --- a/formats/ctf/types/float.c
-> +++ b/formats/ctf/types/float.c
-> @@ -96,7 +96,7 @@ static void float_unlock(void)
->  	assert(!ret);
->  }
->  
-> -int _ctf_float_copy(struct stream_pos *destp,
-> +static int _ctf_float_copy(struct stream_pos *destp,
->  		    struct definition_float *dest_definition,
->  		    struct stream_pos *srcp,
->  		    const struct definition_float *src_definition)
-> @@ -278,6 +278,7 @@ end:
->  	return ret;
->  }
->  
-> +static
->  void __attribute__((constructor)) ctf_float_init(void)
->  {
->  	static_float_declaration =
-> @@ -292,6 +293,7 @@ void __attribute__((constructor)) ctf_float_init(void)
->  				__alignof__(double));
->  }
->  
-> +static
->  void __attribute__((destructor)) ctf_float_fini(void)
->  {
->  	declaration_unref(&static_float_declaration->p);
-> diff --git a/include/babeltrace/ctf/callbacks-internal.h b/include/babeltrace/ctf/callbacks-internal.h
-> index 0390b9a..41bc846 100644
-> --- a/include/babeltrace/ctf/callbacks-internal.h
-> +++ b/include/babeltrace/ctf/callbacks-internal.h
-> @@ -60,6 +60,7 @@ struct bt_dependencies {
->  	int refcount;			/* free when decremented to 0 */
->  };
->  
-> +BT_HIDDEN
->  void process_callbacks(struct bt_ctf_iter *iter, struct ctf_stream_definition *stream);
->  
->  #endif /* _BABELTRACE_CALLBACKS_INTERNAL_H */
-> diff --git a/include/babeltrace/ctf/callbacks.h b/include/babeltrace/ctf/callbacks.h
-> index c178767..8d25741 100644
-> --- a/include/babeltrace/ctf/callbacks.h
-> +++ b/include/babeltrace/ctf/callbacks.h
-> @@ -51,6 +51,7 @@ enum bt_cb_ret {
->  /*
->   * Receives a variable number of strings as parameter, ended with NULL.
->   */
-> +BT_HIDDEN
->  struct bt_dependencies *babeltrace_dependencies_create(const char *first, ...);
-this last modif will be removed, this is part of the exposed API, sorry.
+Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
+---
+ formats/ctf/events.c                                  |    2 +-
+ formats/ctf/metadata/ctf-visitor-generate-io-struct.c |    2 +-
+ include/babeltrace/types.h                            |    6 +++---
+ types/string.c                                        |    6 +++---
+ 4 files changed, 8 insertions(+), 8 deletions(-)
 
-Julien
-
->  
->  /*
-> diff --git a/include/babeltrace/ctf/types.h b/include/babeltrace/ctf/types.h
-> index 6b8752e..8bd0102 100644
-> --- a/include/babeltrace/ctf/types.h
-> +++ b/include/babeltrace/ctf/types.h
-> @@ -90,19 +90,33 @@ struct ctf_stream_pos *ctf_pos(struct stream_pos *pos)
->  	return container_of(pos, struct ctf_stream_pos, parent);
->  }
->  
-> +BT_HIDDEN
->  int ctf_integer_read(struct stream_pos *pos, struct definition *definition);
-> +BT_HIDDEN
->  int ctf_integer_write(struct stream_pos *pos, struct definition *definition);
-> +BT_HIDDEN
->  int ctf_float_read(struct stream_pos *pos, struct definition *definition);
-> +BT_HIDDEN
->  int ctf_float_write(struct stream_pos *pos, struct definition *definition);
-> +BT_HIDDEN
->  int ctf_string_read(struct stream_pos *pos, struct definition *definition);
-> +BT_HIDDEN
->  int ctf_string_write(struct stream_pos *pos, struct definition *definition);
-> +BT_HIDDEN
->  int ctf_enum_read(struct stream_pos *pos, struct definition *definition);
-> +BT_HIDDEN
->  int ctf_enum_write(struct stream_pos *pos, struct definition *definition);
-> +BT_HIDDEN
->  int ctf_struct_rw(struct stream_pos *pos, struct definition *definition);
-> +BT_HIDDEN
->  int ctf_variant_rw(struct stream_pos *pos, struct definition *definition);
-> +BT_HIDDEN
->  int ctf_array_read(struct stream_pos *pos, struct definition *definition);
-> +BT_HIDDEN
->  int ctf_array_write(struct stream_pos *pos, struct definition *definition);
-> +BT_HIDDEN
->  int ctf_sequence_read(struct stream_pos *pos, struct definition *definition);
-> +BT_HIDDEN
->  int ctf_sequence_write(struct stream_pos *pos, struct definition *definition);
->  
->  void ctf_packet_seek(struct stream_pos *pos, size_t index, int whence);
+diff --git a/formats/ctf/events.c b/formats/ctf/events.c
+index 036ce46..3660c04 100644
+--- a/formats/ctf/events.c
++++ b/formats/ctf/events.c
+@@ -601,7 +601,7 @@ char *bt_ctf_get_string(const struct definition *field)
+ 	char *ret = NULL;
+ 
+ 	if (field && bt_ctf_field_type(bt_ctf_get_decl_from_def(field)) == CTF_TYPE_STRING)
+-		ret = get_string(field);
++		ret = bt_get_string(field);
+ 	else
+ 		bt_ctf_field_set_error(-EINVAL);
+ 
+diff --git a/formats/ctf/metadata/ctf-visitor-generate-io-struct.c b/formats/ctf/metadata/ctf-visitor-generate-io-struct.c
+index 94dd0c8..bdb9f5f 100644
+--- a/formats/ctf/metadata/ctf-visitor-generate-io-struct.c
++++ b/formats/ctf/metadata/ctf-visitor-generate-io-struct.c
+@@ -1558,7 +1558,7 @@ struct declaration *ctf_declaration_string_visit(FILE *fd, int depth,
+ 	}
+ 	if (encoding_c && !strcmp(encoding_c, "ASCII"))
+ 		encoding = CTF_STRING_ASCII;
+-	string_declaration = string_declaration_new(encoding);
++	string_declaration = bt_string_declaration_new(encoding);
+ 	return &string_declaration->p;
+ }
+ 
+diff --git a/include/babeltrace/types.h b/include/babeltrace/types.h
+index a0c5467..da69b91 100644
+--- a/include/babeltrace/types.h
++++ b/include/babeltrace/types.h
+@@ -426,9 +426,9 @@ struct declaration_enum *
+ 	bt_enum_declaration_new(struct declaration_integer *integer_declaration);
+ 
+ struct declaration_string *
+-	string_declaration_new(enum ctf_string_encoding encoding);
+-char *get_string(const struct definition *field);
+-enum ctf_string_encoding get_string_encoding(const struct definition *field);
++	bt_string_declaration_new(enum ctf_string_encoding encoding);
++char *bt_get_string(const struct definition *field);
++enum ctf_string_encoding bt_get_string_encoding(const struct definition *field);
+ 
+ struct declaration_struct *
+ 	struct_declaration_new(struct declaration_scope *parent_scope,
+diff --git a/types/string.c b/types/string.c
+index cebce12..255388f 100644
+--- a/types/string.c
++++ b/types/string.c
+@@ -48,7 +48,7 @@ void _string_declaration_free(struct declaration *declaration)
+ }
+ 
+ struct declaration_string *
+-	string_declaration_new(enum ctf_string_encoding encoding)
++	bt_string_declaration_new(enum ctf_string_encoding encoding)
+ {
+ 	struct declaration_string *string_declaration;
+ 
+@@ -109,7 +109,7 @@ void _string_definition_free(struct definition *definition)
+ 	g_free(string);
+ }
+ 
+-enum ctf_string_encoding get_string_encoding(const struct definition *field)
++enum ctf_string_encoding bt_get_string_encoding(const struct definition *field)
+ {
+ 	struct definition_string *string_definition;
+ 	const struct declaration_string *string_declaration;
+@@ -120,7 +120,7 @@ enum ctf_string_encoding get_string_encoding(const struct definition *field)
+ 	return string_declaration->encoding;
+ }
+ 
+-char *get_string(const struct definition *field)
++char *bt_get_string(const struct definition *field)
+ {
+ 	struct definition_string *string_definition =
+ 		container_of(field, struct definition_string, p);
+-- 
+1.7.10.4
