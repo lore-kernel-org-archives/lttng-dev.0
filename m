@@ -1,96 +1,123 @@
-From: Julien Desfossez <jdesfossez@efficios.com>
-Subject: Re: [lttng-dev] [BABELTRACE PATCH] Namespace the lookup_enum function
-Date: Thu, 24 Jan 2013 12:43:19 -0500
-Message-ID: <510172B7.1090908@efficios.com>
-References: <20130107211855.GB3678@Krystal> <1357760893-11961-1-git-send-email-jdesfossez@efficios.com> <20130113175754.GA3917@Krystal>
+From: Simon Marchi <simon.marchi@polymtl.ca>
+Subject: [PATCH v2 urcu] Add compilation support for the TileGX
+	architecture
+Date: Thu, 24 Jan 2013 13:42:02 -0500
+Message-ID: <1359052922-24335-1-git-send-email-simon.marchi__2493.41788371584$1359052971$gmane$org@polymtl.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-1
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Return-path: <gdb-return-41757-gdb-gdb=m.gmane.org@sourceware.org>
-In-Reply-To: <20130113175754.GA3917@Krystal>
-List-Unsubscribe: <mailto:gdb-unsubscribe-gdb-gdb=m.gmane.org@sourceware.org>
-List-Subscribe: <mailto:gdb-subscribe@sourceware.org>
-List-Archive: <http://sourceware.org/ml/gdb/>
-List-Post: <mailto:gdb@sourceware.org>
-List-Help: <mailto:gdb-help@sourceware.org>, <http://sourceware.org/ml/#faqs>
-Sender: gdb-owner@sourceware.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Julien Desfossez <jdesfossez@efficios.com>, tromey@redhat.com, gdb@sourceware.org, lttng-dev@lists.lttng.org, palves@redhat.com
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from smtp.polymtl.ca ([132.207.4.11])
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <simon.marchi@polymtl.ca>) id 1TyRkU-0006u2-Mu
+	for lttng-dev@lists.lttng.org; Thu, 24 Jan 2013 13:42:06 -0500
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+To: lttng-dev@lists.lttng.org
+Cc: Simon Marchi <simon.marchi@polymtl.ca>
 List-Id: lttng-dev@lists.lttng.org
 
-For info, this patch was merged in Babeltrace master, see commit
-9e3274b092343c999fcde33854d2df37b3702496
+This patch adds compilation support for the TileGx architecture. Since
+the tests were not ran on other architectures of the Tile family
+(Tile64, TIlepro), errors are triggered during compilation if the
+architecture is another Tile arch.
 
-Thanks,
+Signed-off-by: Simon Marchi <simon.marchi@polymtl.ca>
+---
+ configure.ac        |    1 +
+ urcu/arch/tile.h    |   30 ++++++++++++++++++++++++++++++
+ urcu/uatomic/tile.h |   28 ++++++++++++++++++++++++++++
+ 3 files changed, 59 insertions(+), 0 deletions(-)
+ create mode 100644 urcu/arch/tile.h
+ create mode 100644 urcu/uatomic/tile.h
 
-Julien
-
-On 13/01/13 12:57 PM, Mathieu Desnoyers wrote:
-> * Julien Desfossez (jdesfossez@efficios.com) wrote:
->> This patch namespaces the lookup_enum function because it causes problem
->> with the integration in gdb even though it is not exported.
->> Hui, can you try this patch and confirm it solves the current problem ?
->> After that we will continue the internal namespacing.
-> 
-> Hi Julien,
-> 
-> Since we know these changes are needed, can you provide patches with
-> proper changelogs, and I'll pull them.
-> 
-> Thanks,
-> 
-> Mathieu
-> 
->>
->> Thanks,
->>
->> Julien
->> ---
->>  formats/ctf/ctf.c          |    2 +-
->>  include/babeltrace/types.h |    2 +-
->>  types/types.c              |    2 +-
->>  3 files changed, 3 insertions(+), 3 deletions(-)
->>
->> diff --git a/formats/ctf/ctf.c b/formats/ctf/ctf.c
->> index 18a5601..a8f8408 100644
->> --- a/formats/ctf/ctf.c
->> +++ b/formats/ctf/ctf.c
->> @@ -431,7 +431,7 @@ int ctf_read_event(struct stream_pos *ppos, struct ctf_stream_definition *stream
->>  		} else {
->>  			struct definition_enum *enum_definition;
->>  
->> -			enum_definition = lookup_enum(&stream->stream_event_header->p, "id", FALSE);
->> +			enum_definition = bt_lookup_enum(&stream->stream_event_header->p, "id", FALSE);
->>  			if (enum_definition) {
->>  				id = enum_definition->integer->value._unsigned;
->>  			}
->> diff --git a/include/babeltrace/types.h b/include/babeltrace/types.h
->> index b42ba03..00c928b 100644
->> --- a/include/babeltrace/types.h
->> +++ b/include/babeltrace/types.h
->> @@ -521,7 +521,7 @@ struct definition *lookup_definition(const struct definition *definition,
->>  struct definition_integer *lookup_integer(const struct definition *definition,
->>  					  const char *field_name,
->>  					  int signedness);
->> -struct definition_enum *lookup_enum(const struct definition *definition,
->> +struct definition_enum *bt_lookup_enum(const struct definition *definition,
->>  				    const char *field_name,
->>  				    int signedness);
->>  struct definition *lookup_variant(const struct definition *definition,
->> diff --git a/types/types.c b/types/types.c
->> index 5599027..139e318 100644
->> --- a/types/types.c
->> +++ b/types/types.c
->> @@ -642,7 +642,7 @@ struct definition_integer *lookup_integer(const struct definition *definition,
->>  	return lookup_integer;
->>  }
->>  
->> -struct definition_enum *lookup_enum(const struct definition *definition,
->> +struct definition_enum *bt_lookup_enum(const struct definition *definition,
->>  				    const char *field_name,
->>  				    int signedness)
->>  {
->> -- 
->> 1.7.10.4
->>
-> 
+diff --git a/configure.ac b/configure.ac
+index 1d04062..d064a13 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -77,6 +77,7 @@ AS_CASE([$host_cpu],
+ 	[ia64], [ARCHTYPE="gcc"],
+ 	[arm*], [ARCHTYPE="arm"],
+ 	[mips*], [ARCHTYPE="mips"],
++	[tile*], [ARCHTYPE="tile"],
+ 	[ARCHTYPE="unknown"]
+ )
+ 
+diff --git a/urcu/arch/tile.h b/urcu/arch/tile.h
+new file mode 100644
+index 0000000..f1283af
+--- /dev/null
++++ b/urcu/arch/tile.h
+@@ -0,0 +1,30 @@
++#ifndef _URCU_ARCH_TILE_H
++#define _URCU_ARCH_TILE_H
++
++/*
++ * arch_tile.h: trivial definitions for the Tile architecture
++ *
++ * Copyright (c) 2013 Simon Marchi <simon.marchi@polymtl.ca>
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
++ */
++
++#ifdef __tilegx__
++#include <urcu/arch/gcc.h>
++#else
++#error "URCU has only been tested on the TileGx architecture. For other Tile* architectures, please run the tests first and report the results to the maintainer so that proper support can be added."
++#endif
++
++#endif /* _URCU_ARCH_TILE_H */
+diff --git a/urcu/uatomic/tile.h b/urcu/uatomic/tile.h
+new file mode 100644
+index 0000000..b15f885
+--- /dev/null
++++ b/urcu/uatomic/tile.h
+@@ -0,0 +1,28 @@
++#ifndef _URCU_ARCH_UATOMIC_TILE_H
++#define _URCU_ARCH_UATOMIC_TILE_H
++
++/*
++ * Copyright (c) 2013 Simon Marchi <simon.marchi@polymtl.ca>
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
++ */
++
++#ifdef __tilegx__
++#include <urcu/uatomic/gcc.h>
++#else
++#error "URCU has only been tested on the TileGx architecture. For other Tile* architectures, please run the tests first and report the results to the maintainer so that proper support can be added."
++#endif
++
++#endif /* _URCU_ARCH_UATOMIC_TILE_H */
+-- 
+1.7.1
