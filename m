@@ -1,18 +1,23 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: Re: [PULL REQUEST lttng-tools] please pull for
-	compudj-pull
-Date: Fri, 25 Jan 2013 10:48:50 -0500
-Message-ID: <5102A962.4010105__11342.4834017225$1359128983$gmane$org@efficios.com>
-References: <20130124234731.GA16402@Krystal>
+From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: [PATCH babeltrace 1/2] Add missing shebangs to
+	Python examples.
+Date: Fri, 25 Jan 2013 16:03:12 +0000
+Message-ID: <CA+jJMxuo=r+k+yPdNneE_W9J86pwRgOF9R9=mo8QfMwZO4peOw__24140.2322463275$1359129840$gmane$org@mail.gmail.com>
+References: <1358898446-1622-1-git-send-email-jeremie.galarneau@efficios.com>
+	<20130123144550.GA3952@Krystal>
+	<CAGDH53=N1Ae2cLr5UEDeMBBGwN+pTTwf+dnhTpriPGJ+oL4huA@mail.gmail.com>
+	<CA+jJMxvqEXqgK8oMmJZT5WKiKuNYm7Wws47QOi=e2wzYnaKH8A@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([213.239.202.151])
+Received: from mail-ia0-f169.google.com ([209.85.210.169])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1TylWP-0000mV-9w
-	for lttng-dev@lists.lttng.org; Fri, 25 Jan 2013 10:48:53 -0500
-In-Reply-To: <20130124234731.GA16402@Krystal>
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1TylkN-0000vI-KI
+	for lttng-dev@lists.lttng.org; Fri, 25 Jan 2013 11:03:19 -0500
+Received: by mail-ia0-f169.google.com with SMTP id j5so843433iaf.28
+	for <lttng-dev@lists.lttng.org>; Fri, 25 Jan 2013 08:03:13 -0800 (PST)
+In-Reply-To: <CA+jJMxvqEXqgK8oMmJZT5WKiKuNYm7Wws47QOi=e2wzYnaKH8A@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,56 +26,35 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: Christian Babeux <christian.babeux@efficios.com>
+Cc: lttng-dev@lists.lttng.org, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-Merged!
+Looks like this patch will require more work since it was decided we
+only want to explicitly support Python3. I'll have to look into the
+examples and see what can be ported and fixed. I'll also work on
+having a more comprehensive test suite in preparation for an eventual
+merge into master.
 
-Note that commit ec1406acb4af789da299b4e81b3b7f5cc0057714 has been
-backported to stable-2.1.
+However, please note that the second patch from this series - [PATCH
+babeltrace 2/2] Fix: Unified types expected by the Definition Python
+interface. - will remain unchanged and should be pulled as it fixes a
+bug that prevented the Python iterator tests from passing.
 
-Thanks!
+Regards,
+J=E9r=E9mie
 
-Mathieu Desnoyers:
-> Hi David,
-> 
-> Please pull from my pull branch at:
-> 
-> git://git.dorsal.polymtl.ca/~compudj/lttng-tools
-> branch: compudj-pull
-> 
-> It contains the following useful commits:
-> 
-> commit 9d623b7096efbd378f566c39e4c9ab91e21fb656
-> Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> Date:   Thu Jan 24 18:43:48 2013 -0500
-> 
->     symbol prefixing: in-house copy of hash table
->     
->     Will ensure we don't clash with the real version in liburcu cds. It's
->     especially important since those symbols are exported globally by
->     liblttng-ctl.
->     
->     Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> 
-> commit ec1406acb4af789da299b4e81b3b7f5cc0057714
-> Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> Date:   Thu Jan 24 18:34:44 2013 -0500
-> 
->     Fix: add missing unistd.h include for fdatasync in compat-fcntl.c
->     
->     Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> 
-> commit 73f94c074aa293f09e526c01ed262a1751e10523
-> Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> Date:   Thu Jan 24 18:33:41 2013 -0500
-> 
->     namespace lttngctl filter flex/bison symbols
->     
->     Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> 
+On Wed, Jan 23, 2013 at 5:21 PM, J=E9r=E9mie Galarneau
+<jeremie.galarneau@gmail.com> wrote:
+>> I would recommend using "#!/usr/bin/env python" so it will default to
+>> the Python interpreter available on the machine. Take note that we
+>> might have issues with Python 3 interpreters if the scripts are not
+>> fully compliant.
+>
+> It does seem like some of the example scripts are not Python 3
+> compatible. However, forcing the use of Python 2 on distros wich use
+> Python 3 as the default interpreter is far from ideal... I'll see if I
+> can make them version agnostic before resubmitting.
+>
 > Thanks,
-> 
-> Mathieu
-> 
+> J=E9r=E9mie
