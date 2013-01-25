@@ -1,17 +1,18 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PULL REQUEST lttng-tools] please pull for compudj-pull
-Date: Thu, 24 Jan 2013 18:47:32 -0500
-Message-ID: <20130124234731.GA16402__38457.0378730588$1359071302$gmane$org@Krystal>
+From: Yang Wang <yangw.wang5@unb.ca>
+Subject: How to debug the CTF struct problem?
+Date: Fri, 25 Jan 2013 00:48:08 +0000
+Message-ID: <8E0A14A4C9B95B459AE214584119C1EB3BC90A1E__15289.8098495372$1359074940$gmane$org@Hal.ad.unb.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0562449608=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from tempo.its.unb.ca ([131.202.1.21])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1TyWW7-0001NG-66
-	for lttng-dev@lists.lttng.org; Thu, 24 Jan 2013 18:47:35 -0500
-Content-Disposition: inline
+	(envelope-from <yangw.wang5@unb.ca>) id 1TyXSp-0001qX-AG
+	for lttng-dev@lists.lttng.org; Thu, 24 Jan 2013 19:48:15 -0500
+Received: from joshua.ad.unb.ca (joshua.ad.unb.ca [131.202.6.82])
+	by tempo.its.unb.ca (8.13.8/8.13.8) with ESMTP id r0P0m9s8024398
+	for <lttng-dev@lists.lttng.org>; Thu, 24 Jan 2013 20:48:09 -0400
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,52 +21,97 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: dgoulet@efficios.com
-Cc: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi David,
+--===============0562449608==
+Content-Language: en-US
+Content-Type: multipart/alternative;
+	boundary="_000_8E0A14A4C9B95B459AE214584119C1EB3BC90A1EHaladunbca_"
 
-Please pull from my pull branch at:
+--_000_8E0A14A4C9B95B459AE214584119C1EB3BC90A1EHaladunbca_
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-git://git.dorsal.polymtl.ca/~compudj/lttng-tools
-branch: compudj-pull
+Hello
 
-It contains the following useful commits:
+Could anybody know what causes the following problem? How to debug it?
+I guess somewhere a tracepoint is wrong, but I don't know which one
+as I have tons of tracepoints automatically generated and scattered in all =
+the system
+files.
 
-commit 9d623b7096efbd378f566c39e4c9ab91e21fb656
-Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Date:   Thu Jan 24 18:43:48 2013 -0500
+yang@yang-OptiPlex-990:~/j9home/home/yangwang/benchmarks$ lttng view
+Trace directory: /home/yang/lttng-traces/auto-20130124-190929
 
-    symbol prefixing: in-house copy of hash table
-    
-    Will ensure we don't clash with the real version in liburcu cds. It's
-    especially important since those symbols are exported globally by
-    liblttng-ctl.
-    
-    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+[error] ctf_struct_type_declarators_visit: duplicate field _string in struc=
+t
+[error] ctf_visitor_construct_metadata: event declaration error
+[error] Error in CTF metadata constructor -1
+[warning] Unable to open trace metadata for path "/home/yang/lttng-traces/a=
+uto-20130124-190929/ust/java-7907-20130124-190951".
+[warning] [Context] Cannot open_trace of the format /home/yang/lttng-traces=
+/auto-20130124-190929/ust/java-7907-20130124-190951 .
 
-commit ec1406acb4af789da299b4e81b3b7f5cc0057714
-Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Date:   Thu Jan 24 18:34:44 2013 -0500
+Thanks in advance
 
-    Fix: add missing unistd.h include for fdatasync in compat-fcntl.c
-    
-    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Yang
 
-commit 73f94c074aa293f09e526c01ed262a1751e10523
-Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Date:   Thu Jan 24 18:33:41 2013 -0500
 
-    namespace lttngctl filter flex/bison symbols
-    
-    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+--_000_8E0A14A4C9B95B459AE214584119C1EB3BC90A1EHaladunbca_
+Content-Type: text/html; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-Thanks,
+<html dir=3D"ltr">
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Diso-8859-=
+1">
+<style id=3D"owaParaStyle" type=3D"text/css">P {margin-top:0;margin-bottom:=
+0;}</style>
+</head>
+<body ocsi=3D"0" fpstyle=3D"1">
+<div style=3D"direction: ltr;font-family: Tahoma;color: #000000;font-size: =
+10pt;">Hello
+<br>
+<br>
+Could anybody know what causes the following problem? How to debug it?<br>
+I guess somewhere a tracepoint is wrong, but I don't know which one<br>
+as I have tons of tracepoints automatically generated and scattered in all =
+the system<br>
+files.<br>
+<br>
+yang@yang-OptiPlex-990:~/j9home/home/yangwang/benchmarks$ lttng view<br>
+Trace directory: /home/yang/lttng-traces/auto-20130124-190929<br>
+<br>
+[error] ctf_struct_type_declarators_visit: duplicate field _string in struc=
+t<br>
+[error] ctf_visitor_construct_metadata: event declaration error<br>
+[error] Error in CTF metadata constructor -1<br>
+[warning] Unable to open trace metadata for path &quot;/home/yang/lttng-tra=
+ces/auto-20130124-190929/ust/java-7907-20130124-190951&quot;.<br>
+[warning] [Context] Cannot open_trace of the format /home/yang/lttng-traces=
+/auto-20130124-190929/ust/java-7907-20130124-190951 .<br>
+<br>
+Thanks in advance<br>
+<br>
+Yang<br>
+<br>
+</div>
+</body>
+</html>
 
-Mathieu
+--_000_8E0A14A4C9B95B459AE214584119C1EB3BC90A1EHaladunbca_--
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+
+--===============0562449608==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0562449608==--
