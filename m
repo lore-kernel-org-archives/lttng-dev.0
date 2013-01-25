@@ -1,32 +1,20 @@
 From: Hui Zhu <teawater@gmail.com>
-Subject: Re: [BABELTRACE PATCH] Namespace the lookup_enum
-	function
+Subject: Re: [lttng-dev] [BABELTRACE PATCH] Namespace the lookup_enum function
 Date: Fri, 25 Jan 2013 19:16:00 +0800
-Message-ID: <CANFwon2ThqwK+HJUxoiKn+Q6nzMtCk6MgXR=xDiEWk4rnEuO3Q__17896.961750421$1359112658$gmane$org@mail.gmail.com>
-References: <20130107211855.GB3678@Krystal>
-	<1357760893-11961-1-git-send-email-jdesfossez@efficios.com>
-	<20130113175754.GA3917@Krystal> <510172B7.1090908@efficios.com>
+Message-ID: <CANFwon2ThqwK+HJUxoiKn+Q6nzMtCk6MgXR=xDiEWk4rnEuO3Q__12213.5531776168$1359112659$gmane$org@mail.gmail.com>
+References: <20130107211855.GB3678@Krystal> <1357760893-11961-1-git-send-email-jdesfossez@efficios.com> <20130113175754.GA3917@Krystal> <510172B7.1090908@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-oa0-f47.google.com ([209.85.219.47])
-	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <teawater@gmail.com>) id 1TyhH4-0006pY-Oa
-	for lttng-dev@lists.lttng.org; Fri, 25 Jan 2013 06:16:46 -0500
-Received: by mail-oa0-f47.google.com with SMTP id h1so219883oag.6
-	for <lttng-dev@lists.lttng.org>; Fri, 25 Jan 2013 03:16:40 -0800 (PST)
+Content-Type: text/plain; charset=ISO-8859-1
+Return-path: <gdb-return-41758-gdb-gdb=m.gmane.org@sourceware.org>
 In-Reply-To: <510172B7.1090908@efficios.com>
-List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
-	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
-	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
+List-Unsubscribe: <mailto:gdb-unsubscribe-gdb-gdb=m.gmane.org@sourceware.org>
+List-Subscribe: <mailto:gdb-subscribe@sourceware.org>
+List-Archive: <http://sourceware.org/ml/gdb/>
+List-Post: <mailto:gdb@sourceware.org>
+List-Help: <mailto:gdb-help@sourceware.org>, <http://sourceware.org/ml/#faqs>
+Sender: gdb-owner@sourceware.org
 To: Julien Desfossez <jdesfossez@efficios.com>
-Cc: tromey@redhat.com, gdb@sourceware.org, lttng-dev@lists.lttng.org, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, palves@redhat.com
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, tromey@redhat.com, gdb@sourceware.org, lttng-dev@lists.lttng.org, palves@redhat.com
 List-Id: lttng-dev@lists.lttng.org
 
 Hi Julien and Mathieu,
