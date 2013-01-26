@@ -1,16 +1,17 @@
-From: Francis Giraldeau <francis.giraldeau@gmail.com>
-Subject: Sync instrumentation to today's linux 3.8
-Date: Fri, 25 Jan 2013 17:10:26 -0500
-Message-ID: <CAC6yHM5Vd8zZc-1nmFuVfuxiH3yUwA+mNUd6cejZFfvFb4kURw__27742.3266125426$1359151881$gmane$org@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [COMMIT urcu] doc/cds-api.txt: expand documentation
+Date: Sat, 26 Jan 2013 10:57:31 -0500
+Message-ID: <20130126155731.GA20955__14692.7126138054$1359215908$gmane$org@Krystal>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0414423026=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ia0-f169.google.com ([209.85.210.169])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <francis.giraldeau@gmail.com>) id 1TyrTk-0003q6-07
-	for lttng-dev@lists.lttng.org; Fri, 25 Jan 2013 17:10:32 -0500
-Received: by mail-ia0-f169.google.com with SMTP id j5so1412961iaf.0
-	for <lttng-dev@lists.lttng.org>; Fri, 25 Jan 2013 14:10:26 -0800 (PST)
+	(envelope-from <compudj@mail.openrapids.net>) id 1Tz88L-0003c4-Vd
+	for lttng-dev@lists.lttng.org; Sat, 26 Jan 2013 10:57:34 -0500
+Content-Disposition: inline
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,66 +20,71 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Lai Jiangshan <laijs@cn.fujitsu.com>
+Cc: lttng-dev@lists.lttng.org, rp@svcs.cs.pdx.edu
 List-Id: lttng-dev@lists.lttng.org
 
---===============0414423026==
-Content-Type: multipart/alternative; boundary=e89a8f3baa43d0c9e504d424312f
+Expand explanations, reorder items to have all wait-free descriptions
+first, so that the rculfqueue API comes last, since it is less
+featureful and is the only API of the queues/stacks to actually rely on
+RCU.
 
---e89a8f3baa43d0c9e504d424312f
-Content-Type: text/plain; charset=ISO-8859-1
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+---
+diff --git a/doc/cds-api.txt b/doc/cds-api.txt
+index 81d511c..8896e20 100644
+--- a/doc/cds-api.txt
++++ b/doc/cds-api.txt
+@@ -28,28 +28,36 @@ urcu/rcuhlist.h:
+ 	for implementing hash tables. Downside over rculist.h: lookup of
+ 	tail in O(n).
+ 
+-urcu/rculfqueue.h:
++urcu/wfstack.h:
+ 
+-	RCU queue with lock-free enqueue, lock-free dequeue. RCU used to
+-	provide existance guarantees.
++	Stack with wait-free push and wait-free pop_all. Both blocking
++	and non-blocking pop and traversal operations are provided.
++	This stack does _not_ specifically rely on RCU.
++	Various synchronization techniques can be used to deal with
++	pop ABA. Those are detailed in the API.
+ 
+ urcu/wfcqueue.h:
+ 
+-	Concurrent queue with wait-free enqueue, blocking traversal.
+-	This queue does _not_ use RCU.
++	Concurrent queue with wait-free enqueue. Both blocking and
++	non-blocking dequeue, splice (move all elements from one queue
++	to another), and traversal operations are provided.
++	This queue does _not_ specifically rely on RCU. Mutual exclusion
++	is used to protect dequeue, splice (from source queue) and
++	traversal (see API for details).
+ 	(note: deprecates urcu/wfqueue.h)
+ 
+ urcu/lfstack.h:
+ 
+-	RCU stack with lock-free push, lock-free dequeue. Various
+-	synchronization techniques can be used to deal with "pop" ABA.
+-	Those are detailed in the API.
++	Stack with lock-free push, lock-free pop, wait-free pop_all,
++	wait-free traversal. Various synchronization techniques can be
++	used to deal with pop ABA. Those are detailed in the API.
++	This stack does _not_ specifically rely on RCU.
+ 	(note: deprecates urcu/rculfstack.h)
+ 
+-urcu/wfstack.h:
++urcu/rculfqueue.h:
+ 
+-	Stack with wait-free enqueue, blocking dequeue. This stack does
+-	_not_ use RCU.
++	RCU queue with lock-free enqueue, lock-free dequeue.
++	This queue relies on RCU for existence guarantees.
+ 
+ urcu/rculfhash.h:
+ 
 
-To prepare instrumentation for the next linux release, here is the ticket I
-was working on. It's mostly straight forward.
-
-http://redmine.dorsal.polymtl.ca/issues/431
-
-There is one issue with ext4 includes. I had to copy fs/ext4/ext4.h and
-ext4_extent.h for the function ext4_ext_get_actual_len(). I added them to
-instrumentation/mainline/fs/ext4 directory. I'm not sure if it's the best
-solution.
-
-Still testing to do, thought. BTW, is there a test setup for regression? I
-would like to verify that it doesn't break any supported kernel and I don't
-have the required setup.
-
-With this, maybe lttng-modules 2.1 can target linux 3.8?
-
-Cheers,
-
-Francis
-
---e89a8f3baa43d0c9e504d424312f
-Content-Type: text/html; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">To prepare instrumentation for the next linux release, her=
-e is the ticket I was working on. It&#39;s mostly straight forward.=A0<div>=
-<br></div><div><a href=3D"http://redmine.dorsal.polymtl.ca/issues/431">http=
-://redmine.dorsal.polymtl.ca/issues/431</a><br>
-<div><br></div><div>There is one issue with ext4 includes. I had to copy fs=
-/ext4/ext4.h and ext4_extent.h for the function=A0ext4_ext_get_actual_len()=
-. I added them to instrumentation/mainline/fs/ext4 directory. I&#39;m not s=
-ure if it&#39;s the best solution.<br>
-</div><div style><br></div><div style>Still testing to do, thought. BTW, is=
- there a test setup for regression? I would like to verify that it doesn&#3=
-9;t break any supported kernel and I don&#39;t have the required setup.<br>
-</div><div style><br></div><div style>With this, maybe lttng-modules 2.1 ca=
-n target linux 3.8?=A0</div><div style><br></div><div style>Cheers,</div><d=
-iv style><br></div><div style>Francis</div></div></div>
-
---e89a8f3baa43d0c9e504d424312f--
-
-
---===============0414423026==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0414423026==--
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
