@@ -1,9 +1,8 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Sync instrumentation to today's linux 3.8
-Date: Mon, 28 Jan 2013 11:19:53 -0500
-Message-ID: <20130128161953.GB23427__12257.2373169989$1359390042$gmane$org@Krystal>
-References: <CAC6yHM5Vd8zZc-1nmFuVfuxiH3yUwA+mNUd6cejZFfvFb4kURw@mail.gmail.com>
-	<20130128161555.GA23427@Krystal>
+Subject: Re: bug?
+Date: Mon, 28 Jan 2013 11:37:12 -0500
+Message-ID: <20130128163712.GA23710__23549.0044382916$1359391095$gmane$org@Krystal>
+References: <8E0A14A4C9B95B459AE214584119C1EB3BC909B3@Hal.ad.unb.ca>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -11,10 +10,10 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1TzrR4-0000mt-QF
-	for lttng-dev@lists.lttng.org; Mon, 28 Jan 2013 11:19:54 -0500
+	(envelope-from <compudj@mail.openrapids.net>) id 1Tzrhy-0000vs-C5
+	for lttng-dev@lists.lttng.org; Mon, 28 Jan 2013 11:37:22 -0500
 Content-Disposition: inline
-In-Reply-To: <20130128161555.GA23427@Krystal>
+In-Reply-To: <8E0A14A4C9B95B459AE214584119C1EB3BC909B3@Hal.ad.unb.ca>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,67 +22,90 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Francis Giraldeau <francis.giraldeau@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Yang Wang <yangw.wang5@unb.ca>
+Cc: Kenneth Kent <ken@unb.ca>, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, ",
+	" <Grame_johson@ca.ibm.com>
 List-Id: lttng-dev@lists.lttng.org
 
-* Mathieu Desnoyers (mathieu.desnoyers@efficios.com) wrote:
-> * Francis Giraldeau (francis.giraldeau@gmail.com) wrote:
-> > To prepare instrumentation for the next linux release, here is the ticket I
-> > was working on. It's mostly straight forward.
-> > 
-> > http://redmine.dorsal.polymtl.ca/issues/431
-> > 
-> > There is one issue with ext4 includes. I had to copy fs/ext4/ext4.h and
-> > ext4_extent.h for the function ext4_ext_get_actual_len(). I added them to
-> > instrumentation/mainline/fs/ext4 directory. I'm not sure if it's the best
-> > solution.
-> > 
-> > Still testing to do, thought. BTW, is there a test setup for regression? I
-> > would like to verify that it doesn't break any supported kernel and I don't
-> > have the required setup.
-> > 
-> > With this, maybe lttng-modules 2.1 can target linux 3.8?
+* Yang Wang (yangw.wang5@unb.ca) wrote:
+> Hello,
+> 
+> I am Yang Wang, I am currently using lttng to trace my JVM.
+> 
+> During my using lttng in tracing JVM, I found three problems,
+> 
+>  1) in lttng-ust-2.1.0/include/lttng/ust-tracepoint-event.h
+> 
+>      why using an assertion "assert(!ret);"  (Line676)?
+>      not allowing double registering and init?
+>      if double registering or initialization (provider), why not allowed just returning silently instead
+>       of aborting"? How about comments assert(!ret); ==>//assert(!ret); what is the side-effects
+>       of doing this?
 
-And FYI, ext4 tracepoints are only in lttng-modules master branch. They
-were excluded from 2.1.x because they arrived too late in the 2.1 cycle.
+This would be caused by having two different versions of .so with
+conflicting provider name. This is usually a linking issue, and/or due
+to the fact that your system has old/deprecated provider .so still
+reachable.
 
-Thanks,
+If your system has only one version of the provider available, you would
+not trigger double registering.
+
+So I don't see how silently allowing multiple non-matching providers
+(and using just the first one that happened to be loaded) would help
+diagnosing bogus setups.
+
+> 
+>  2) The other problem is in ./userspace-rcu-0.7.5/urcu/list.h Line85
+> 
+>   I have to add a guard "if" statement as the assertion in my program fails otherwise
+> 
+>   static inline void
+>   __cds_list_del (struct cds_list_head *prev, struct cds_list_head *next)
+>   {
+>    if (prev != NULL && next != NULL) {
+>       //assert(prev != NULL && next != NULL);
+>       next->prev = prev;
+>       prev->next = next;
+>   }
+
+It might be caused by e.g. double registration issues I'm talking about,
+now that you removed the assert in __lttng_events_init__.
+
+You should verify which provider .so are reachable, and make sure you
+don't try to load two different providers with the same name.
+
+> 
+>  3) Now my instrumented prog is ready to run. Here is my commands:
+>      lttng create
+>      lttng enable-event -u -a
+>      lttng start
+>      ./prog
+> 
+>     The (lttng) instrumented prog is stuck there without any outputs
+>     related to lttng tracing, how can I know what happen inside.
+>     In other words, does lttng have any mechanism to trace itself?
+
+Start with LTTNG_UST_DEBUG=1 env. var. set (see man 3 lttng-ust)
+
+gdb is usually pretty good at letting us know the culprit of such a
+hang. Recommendation: compile your program with CFLAGS="-O0 -g", and use
+"thread apply all bt full" to see the stack of each thread.
+
+Best regards,
 
 Mathieu
 
+
 > 
-> Please send the patch by email.
+>    Thanks
 > 
-> 3.8 is still in rc stage. Removing ext4_ext_get_actual_len() seems like
-> a bad move from upstream Linux if it is needed in the instrumentation
-> headers. This should be fixed upstream rather than duplicated within our
-> own code.
-> 
-> Thanks,
-> 
-> Mathieu
-> 
-> > 
-> > Cheers,
-> > 
-> > Francis
-> 
-> > _______________________________________________
-> > lttng-dev mailing list
-> > lttng-dev@lists.lttng.org
-> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> 
-> 
-> -- 
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> http://www.efficios.com
-> 
+>    Yang
+
 > _______________________________________________
 > lttng-dev mailing list
 > lttng-dev@lists.lttng.org
 > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
 
 -- 
 Mathieu Desnoyers
