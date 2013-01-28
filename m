@@ -1,20 +1,19 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH babeltrace] Fix: Added a null pointer
-	check	to bt_ctf_field_name.
-Date: Mon, 28 Jan 2013 11:09:50 -0500
-Message-ID: <20130128160950.GA23309__2146.02768323875$1359389437$gmane$org@Krystal>
-References: <1359369367-12876-1-git-send-email-jeremie.galarneau@efficios.com>
+Subject: Re: Sync instrumentation to today's linux 3.8
+Date: Mon, 28 Jan 2013 11:15:55 -0500
+Message-ID: <20130128161555.GA23427__25309.9584057511$1359389804$gmane$org@Krystal>
+References: <CAC6yHM5Vd8zZc-1nmFuVfuxiH3yUwA+mNUd6cejZFfvFb4kURw@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1TzrHL-0000gs-Vv
-	for lttng-dev@lists.lttng.org; Mon, 28 Jan 2013 11:09:52 -0500
+	(envelope-from <compudj@mail.openrapids.net>) id 1TzrNF-0000kj-U8
+	for lttng-dev@lists.lttng.org; Mon, 28 Jan 2013 11:15:58 -0500
 Content-Disposition: inline
-In-Reply-To: <1359369367-12876-1-git-send-email-jeremie.galarneau@efficios.com>
+In-Reply-To: <CAC6yHM5Vd8zZc-1nmFuVfuxiH3yUwA+mNUd6cejZFfvFb4kURw@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,62 +22,50 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: Francis Giraldeau <francis.giraldeau@gmail.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-* J=E9r=E9mie Galarneau (jeremie.galarneau@efficios.com) wrote:
-> This function is called indirectly when calling __repr__ (print) in the p=
-ython
-> bindings on the definition object returned by the get_top_level_scope met=
-hod
-> thus resulting in a segmentation fault when the name attribute is not set.
+* Francis Giraldeau (francis.giraldeau@gmail.com) wrote:
+> To prepare instrumentation for the next linux release, here is the ticket I
+> was working on. It's mostly straight forward.
+> 
+> http://redmine.dorsal.polymtl.ca/issues/431
+> 
+> There is one issue with ext4 includes. I had to copy fs/ext4/ext4.h and
+> ext4_extent.h for the function ext4_ext_get_actual_len(). I added them to
+> instrumentation/mainline/fs/ext4 directory. I'm not sure if it's the best
+> solution.
+> 
+> Still testing to do, thought. BTW, is there a test setup for regression? I
+> would like to verify that it doesn't break any supported kernel and I don't
+> have the required setup.
+> 
+> With this, maybe lttng-modules 2.1 can target linux 3.8?
 
-merged into master and python bindings branches, thanks!
+Please send the patch by email.
+
+3.8 is still in rc stage. Removing ext4_ext_get_actual_len() seems like
+a bad move from upstream Linux if it is needed in the instrumentation
+headers. This should be fixed upstream rather than duplicated within our
+own code.
+
+Thanks,
 
 Mathieu
 
-> =
-
-> Fixes #373
-> =
-
-> Signed-off-by: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
-> ---
->  formats/ctf/events.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> =
-
-> diff --git a/formats/ctf/events.c b/formats/ctf/events.c
-> index ac7dce4..182d0de 100644
-> --- a/formats/ctf/events.c
-> +++ b/formats/ctf/events.c
-> @@ -168,7 +168,7 @@ const char *bt_ctf_event_name(const struct bt_ctf_eve=
-nt *ctf_event)
->  =
-
->  const char *bt_ctf_field_name(const struct definition *def)
->  {
-> -	if (!def)
-> +	if (!def || !def->name)
->  		return NULL;
->  =
-
->  	return rem_(g_quark_to_string(def->name));
-> -- =
-
-> 1.8.1.1
-> =
-
-> =
+> 
+> Cheers,
+> 
+> Francis
 
 > _______________________________________________
 > lttng-dev mailing list
 > lttng-dev@lists.lttng.org
 > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
--- =
 
+-- 
 Mathieu Desnoyers
 EfficiOS Inc.
 http://www.efficios.com
