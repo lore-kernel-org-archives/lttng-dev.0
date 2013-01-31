@@ -1,19 +1,19 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: The disable-libtool-linkdep-fixup configure option
-Date: Tue, 29 Jan 2013 12:32:40 -0500
-Message-ID: <20130129173240.GA9703__47411.3761600622$1359480814$gmane$org@Krystal>
-References: <3CA1A65C03C1A34C81BBC6272782E6969BDD0C@valcartierex01.valcartier.drdc-rddc.gc.ca>
+From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
+	<jeremie.galarneau@efficios.com>
+Subject: [PATCH babeltrace 1/2] Added Python 3.0 or better
+	requirement to the README file
+Date: Thu, 31 Jan 2013 13:50:50 +0000
+Message-ID: <1359640251-6133-1-git-send-email-jeremie.galarneau__25503.1973509633$1359658319$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from mail-qa0-f50.google.com ([209.85.216.50])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1U0F36-0004UR-0c
-	for lttng-dev@lists.lttng.org; Tue, 29 Jan 2013 12:32:44 -0500
-Content-Disposition: inline
-In-Reply-To: <3CA1A65C03C1A34C81BBC6272782E6969BDD0C@valcartierex01.valcartier.drdc-rddc.gc.ca>
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1U0zE4-0002fQ-DF
+	for lttng-dev@lists.lttng.org; Thu, 31 Jan 2013 13:51:08 -0500
+Received: by mail-qa0-f50.google.com with SMTP id dx4so1171870qab.2
+	for <lttng-dev@lists.lttng.org>; Thu, 31 Jan 2013 10:51:02 -0800 (PST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,49 +22,17 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Cc: lttng-dev@lists.lttng.org, "Couture, Mario" <Mario.Couture@drdc-rddc.gc.ca>, =?iso-8859-1?Q?Painchaud=2C_Fr=E9d=E9ric?= <Frederic.Painchaud@drdc-rddc.gc.ca>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Thibault, Daniel (Daniel.Thibault@drdc-rddc.gc.ca) wrote:
-> > > The default value of the option is 'yes' (re: configure.ac), which means the fixup is applied.  Setting the option to another value, such as 'no', means the fixup is not applied.
-> > > Why then is the option named *disable*-libtool-linkdep-fixup?  Shouldn't it be named *enable*-libtool-linkdep-fixup instead?
-> >
-> >Because the option is enabled by default on all systems. This is to facilitate cross-compilation on Debian/Ubuntu systems.
-> >
-> > Christian
-> 
-> If you had to compare the following two command lines, which one would you say disabled the fixup?
-> 
-> ./configure --disable-libtool-linkdep-fixup=yes
-> ./configure --disable-libtool-linkdep-fixup=no
-> 
-> The first line is the current default, and it leaves the fixup enabled
-> (right?).  That's why I suspect enable-libtool-linkdep-fixup would be
-> a more meaningful name.
-
-Please read the autoconf documentation, and become familiar with the
-usual practices of other open source projects on this matter.
-
-The autoconf documentation would, amongst other things, tell you about
-"./configure --help". Its output lists:
-
-  --disable-libtool-linkdep-fixup
-                          disable the libtool fixup for linking all dependent
-                          libraries (link_all_deplibs)
-
-as a matter of fact, this option does not take "=yes/=no" parameters as
-you suggest, nor does any of the --enable/disable-* configure options in
-general. This option is enabled by default, unless you specify
---disable-libtool-linkdep-fixup. As a general guide-line, you should
-never need to use this override, except in very exceptional situations
-(e.g. in the event of future distribution changes).
-
-Thank you,
-
-Mathieu
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+ClNpZ25lZC1vZmYtYnk6IErDqXLDqW1pZSBHYWxhcm5lYXUgPGplcmVtaWUuZ2FsYXJuZWF1QGVm
+ZmljaW9zLmNvbT4KLS0tCiBSRUFETUUgfCAyICsrCiAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRp
+b25zKCspCgpkaWZmIC0tZ2l0IGEvUkVBRE1FIGIvUkVBRE1FCmluZGV4IDlkZjAyZTcuLmNlOThl
+MjQgMTAwNjQ0Ci0tLSBhL1JFQURNRQorKysgYi9SRUFETUUKQEAgLTQ5LDYgKzQ5LDggQEAgVG8g
+Y29tcGlsZSBCYWJlbHRyYWNlLCB5b3Ugd2lsbCBuZWVkOgogCSAgKERlYmlhbi9VYnVudHUgOiBw
+eXRob24tZGV2KQogCXN3aWcgPj0gMi4wIChvcHRpb25hbCkKIAkgIChEZWJpYW4vVWJ1bnR1IDog
+c3dpZzIuMCkKKwlweXRob24gMy4wIG9yIGJldHRlciAob3B0aW9uYWwpCisJICAoRGViaWFuL1Vi
+dW50dSA6IHB5dGhvbjMpCiAKIAogRm9yIGRldmVsb3BlcnMgdXNpbmcgdGhlIGdpdCB0cmVlOgot
+LSAKMS44LjEuMQoKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRw
+Oi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
