@@ -1,21 +1,17 @@
-From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH babeltrace 1/2] Added Python 3.0 or better
- requirement to the README file
-Date: Fri, 1 Feb 2013 13:54:57 +0000
-Message-ID: <CA+jJMxv0tcbzd0m27586h_D3fY9e6-0Nd8Mt=-iKUOkcCH6E5g__6539.73233788765$1359726948$gmane$org@mail.gmail.com>
-References: <1359640251-6133-1-git-send-email-jeremie.galarneau@efficios.com>
-	<510BA252.3020604@gmail.com>
+From: Christian Babeux <christian.babeux@efficios.com>
+Subject: LTTng & Google Summer of Code 2013
+Date: Fri, 1 Feb 2013 11:39:09 -0500
+Message-ID: <CAGDH53kvT4dOMc2o4RA4ak56bfxcUaq0MpW9BzPjvt9E-bLn7w__6237.34025653011$1359736809$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-we0-f181.google.com ([74.125.82.181])
+Received: from mail-ia0-f173.google.com ([209.85.210.173])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1U1H55-0003WW-QQ
-	for lttng-dev@lists.lttng.org; Fri, 01 Feb 2013 08:55:04 -0500
-Received: by mail-we0-f181.google.com with SMTP id t44so2946831wey.26
-	for <lttng-dev@lists.lttng.org>; Fri, 01 Feb 2013 05:54:58 -0800 (PST)
-In-Reply-To: <510BA252.3020604@gmail.com>
+	(envelope-from <christian.babeux@0x80.ca>) id 1U1Je7-0004sc-IM
+	for lttng-dev@lists.lttng.org; Fri, 01 Feb 2013 11:39:23 -0500
+Received: by mail-ia0-f173.google.com with SMTP id h37so1247552iak.4
+	for <lttng-dev@lists.lttng.org>; Fri, 01 Feb 2013 08:39:17 -0800 (PST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -27,38 +23,49 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-As for as I know, the bindings do work with Python 2.7.
-However, we have decided to no longer explicitly support older
-versions of Python in order to make the bindings, along with future
-developments, easily maintainable.
+Hi everyone,
 
-Regards,
-J=E9r=E9mie
+After some initial discussion with the LTTng developers, we think it
+would be a great opportunity for the LTTng project to participate as a
+mentoring organisation in Google Summer of Code 2013.
 
-On Fri, Feb 1, 2013 at 11:09 AM, Yannick Brosseau
-<yannick.brosseau@gmail.com> wrote:
-> On 2013-02-01 00:50, J=E9r=E9mie Galarneau wrote:
->> Signed-off-by: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
->> ---
->>  README | 2 ++
->>  1 file changed, 2 insertions(+)
->>
->> diff --git a/README b/README
->> index 9df02e7..ce98e24 100644
->> --- a/README
->> +++ b/README
->> @@ -49,6 +49,8 @@ To compile Babeltrace, you will need:
->>         (Debian/Ubuntu : python-dev)
->>       swig >=3D 2.0 (optional)
->>         (Debian/Ubuntu : swig2.0)
->> +     python 3.0 or better (optional)
->> +       (Debian/Ubuntu : python3)
-> We really need python 3.0 to run the bindings now?
->
->>
->
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+Apparently, some attempts were made in the past years but the
+application deadline was missed by a few picoseconds ;).
+
+Here are some of the requirements for a mentoring organisation application [1]:
+
+"
+What is the URL for your Ideas page?
+What is the main development mailing list for your organization?
+What is the main IRC channel for your organization?
+Does your organization have an application template you would like to
+see students use? If so, please provide it now.
+"
+
+One of the *most* important point of this list is to have an idea
+pages/list ready for the application.
+
+Here are some projects ideas that a student or intern could
+accomplish within the scope of Google Summer of Code:
+
+- Continue the Android port of LTTng
+- Continue the work done on Python bindings for babeltrace/lttng-tools.
+- Trace probe support in C++ [2].
+- A meta-command support in lttng-tools (ex: lttng --trace, see [3]).
+- Improve the liblttng-ust-libc-wrapper with additionnal libc functions support.
+- LTTV features.
+- Implement syscalls on other architectures (maybe not relevant, see [4])
+- Hook the trace/debug infrastructure of Wine in UST.
+- Etc.
+
+So I'm asking the community for feedback and ideas to get this
+application going!
+
+Thanks,
+
+Christian
+
+[1] - https://www.google-melange.com/document/show/gsoc_program/google/gsoc2012/faqs#mentoring_apply
+[2] - http://bugs.lttng.org/issues/338
+[3] - http://bugs.lttng.org/issues/15
+[4] - http://bugs.lttng.org/issues/33
