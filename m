@@ -1,15 +1,16 @@
-From: kumar sarma <swaroopkumarsarma@yahoo.co.in>
-Subject: lttng requirements
-Date: Mon, 4 Feb 2013 21:24:57 +0800 (SGT)
-Message-ID: <1359984297.48440.YahooMailNeo__14594.9295525954$1359984357$gmane$org@web194606.mail.sg3.yahoo.com>
-Reply-To: kumar sarma <swaroopkumarsarma@yahoo.co.in>
+From: Simon Marchi <simon.marchi@polymtl.ca>
+Subject: [PATCH lttng-modules] Fix check in
+	lttng_strlen_user_inatomic
+Date: Wed,  6 Feb 2013 09:54:34 -0500
+Message-ID: <1360162474-13940-1-git-send-email-simon.marchi__36676.1860125282$1360162528$gmane$org@polymtl.ca>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0661188352=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from nm30-vm8.bullet.mail.sg3.yahoo.com ([106.10.151.183])
+Received: from smtp.polymtl.ca ([132.207.4.11])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <swaroopkumarsarma@yahoo.co.in>) id 1U2M2l-0006pl-3Q
-	for lttng-dev@lists.lttng.org; Mon, 04 Feb 2013 08:25:08 -0500
+	(envelope-from <simon.marchi@polymtl.ca>) id 1U36OS-0005By-Ui
+	for lttng-dev@lists.lttng.org; Wed, 06 Feb 2013 09:54:37 -0500
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -18,41 +19,30 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
+Cc: Simon Marchi <simon.marchi@polymtl.ca>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0661188352==
-Content-Type: multipart/alternative; boundary="-1722158877-466291661-1359984297=:48440"
+__copy_from_user_inatomic returns the number of bytes that could not be
+copied, not an error code. This fixes the test accordingly.
 
----1722158877-466291661-1359984297=:48440
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Simon Marchi <simon.marchi@polymtl.ca>
+---
+ probes/lttng-probe-user.c |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Hi,=0A=A0=0AI want to use ltt-ng on my 2.6.32.42 kernel, uclibc, mips platf=
-orm.=A0 Can anyone suggest what are all the requirements for this?=0A=A0=0A=
-Regards,=0ASwaroop.
----1722158877-466291661-1359984297=:48440
-Content-Type: text/html; charset=iso-8859-1
-Content-Transfer-Encoding: quoted-printable
-
-<html><body><div style=3D"color:#000; background-color:#fff; font-family:ti=
-mes new roman, new york, times, serif;font-size:12pt"><div>Hi,</div><div>&n=
-bsp;</div><div>I want to use ltt-ng on my 2.6.32.42 kernel, uclibc, mips pl=
-atform.&nbsp; Can anyone suggest what are all the requirements for this?</d=
-iv><div>&nbsp;</div><div>Regards,</div><div>Swaroop.</div></div></body></ht=
-ml>
----1722158877-466291661-1359984297=:48440--
-
-
---===============0661188352==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0661188352==--
+diff --git a/probes/lttng-probe-user.c b/probes/lttng-probe-user.c
+index 94ecf2f..a2368b5 100644
+--- a/probes/lttng-probe-user.c
++++ b/probes/lttng-probe-user.c
+@@ -41,7 +41,7 @@ long lttng_strlen_user_inatomic(const char *addr)
+ 		ret = __copy_from_user_inatomic(&v,
+ 			(__force const char __user *)(addr),
+ 			sizeof(v));
+-		if (unlikely(ret == -EFAULT))
++		if (unlikely(ret > 0))
+ 			break;
+ 		count++;
+ 		if (unlikely(!v))
+-- 
+1.7.1
