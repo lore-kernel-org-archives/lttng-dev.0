@@ -1,19 +1,19 @@
-From: Christian Babeux <christian.babeux@efficios.com>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
 Subject: Re: lttng, lttng-sessiond and the tracing group
-Date: Wed, 6 Feb 2013 12:52:25 -0500
-Message-ID: <CAGDH53n_ZMYQdfhD377uSR=_SjP7JLm9iLXzm=Sq+tXB8n1idQ__37842.4750910655$1360173205$gmane$org@mail.gmail.com>
+Date: Wed, 6 Feb 2013 18:27:24 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD013F1B__33891.8856149123$1360175336$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 References: <48CF5AC71E61DB46B70D0F388054EFFD013EB1@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+	<CAGDH53n_ZMYQdfhD377uSR=_SjP7JLm9iLXzm=Sq+tXB8n1idQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ia0-f171.google.com ([209.85.210.171])
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <christian.babeux@0x80.ca>) id 1U39Ad-0006gn-B9
-	for lttng-dev@lists.lttng.org; Wed, 06 Feb 2013 12:52:31 -0500
-Received: by mail-ia0-f171.google.com with SMTP id z13so1898979iaz.16
-	for <lttng-dev@lists.lttng.org>; Wed, 06 Feb 2013 09:52:25 -0800 (PST)
-In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD013EB1@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1U39ix-0006xz-PQ
+	for lttng-dev@lists.lttng.org; Wed, 06 Feb 2013 13:27:59 -0500
+In-Reply-To: <CAGDH53n_ZMYQdfhD377uSR=_SjP7JLm9iLXzm=Sq+tXB8n1idQ@mail.gmail.com>
+Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,60 +22,46 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+To: Christian Babeux <christian.babeux@efficios.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Daniel,
-
->    First observation
-
-I'm not able to reproduce your first observation on my machine.
-
-> [...]
-> $ sudo lttng -vvv create rootlevel
-> DEBUG3: URI string: file:///home/daniel/lttng-traces/rootlevel-20130206-091954 [in uri_parse() at uri.c:253]
-> DEBUG3: URI file destination: /home/daniel/lttng-traces/rootlevel-20130206-091954 [in uri_parse() at uri.c:290]
-> DEBUG3: URI dtype: 3, proto: 0, host: , subdir: , ctrl: 0, data: 0 [in uri_parse() at uri.c:467]
-> DEBUG1: LSM cmd type : 8 [in send_session_msg() at lttng-ctl.c:261]
-> Session rootlevel created.
-> Traces will be written in /home/daniel/lttng-traces/rootlevel-20130206-091954
-> DEBUG1: Init config session in /home/daniel [in config_init() at conf.c:294]
-
-This looks wrong. Traces should be written under the
-/root/lttng-traces. Are you sure this command has effectively been
-issued has the root user? It looks like it was issued as your normal
-user hence the "session=rootlevel" in your user ~/.lttngrc. Could you
-try su'ing to root instead?
-
->    Second observation
->
->    Contention for ~/.lttngrc can lead to odd behaviour.  This can only occur with users in the tracing group, I think (the root lttng-sessiond has no business writing to a non-tracing user's home directory).  Witness this:
-
-I'm also not able to reproduce this situation. I'm thinking there
-might be a slight difference between the sudo and $HOME directory
-behavior between our two machines...
-
->    Third observation
->
->    'lttng set-session' issues an error only if there is no name specified or if the name is too long (or if .lttngrc is root-owned, of course): it'll happily change the contents to whatever the argument is, including non-existent sessions or even illegal session names (containing embedded '/', for example).
-
-Yes this is the expected behavior. From the lttng man-page:
-
-"
-set-session NAME
-       Set current session name
-       Will change the session name in the .lttngrc file.
-"
-
-Verification is done when issuing the "start" command. An invalid or
-non-existent session will be detected and no tracing will occur.
-
->A too-long session name (246 characters or more) also has the unfortunate side effect of wiping the contents of .lttngrc.
-
-Could you file a bug report for this issue here:
-http://bugs.lttng.org/projects/lttng-tools
-
-Thanks,
-
-Christian
+LS0tLS1NZXNzYWdlIGQnb3JpZ2luZS0tLS0tDQpEZcKgOiBjaHJpc3RpYW4uYmFiZXV4QDB4ODAu
+Y2EgW21haWx0bzpjaHJpc3RpYW4uYmFiZXV4QDB4ODAuY2FdIERlIGxhIHBhcnQgZGUgQ2hyaXN0
+aWFuIEJhYmV1eA0KRW52b3nDqcKgOiA2IGbDqXZyaWVyIDIwMTMgMTI6NTINCg0KPiA+ICAgIEZp
+cnN0IG9ic2VydmF0aW9uDQo+DQo+IEknbSBub3QgYWJsZSB0byByZXByb2R1Y2UgeW91ciBmaXJz
+dCBvYnNlcnZhdGlvbiBvbiBteSBtYWNoaW5lLg0KPg0KPiA+IFsuLi5dDQo+ID4gJCBzdWRvIGx0
+dG5nIC12dnYgY3JlYXRlIHJvb3RsZXZlbA0KPiA+IFNlc3Npb24gcm9vdGxldmVsIGNyZWF0ZWQu
+DQo+ID4gVHJhY2VzIHdpbGwgYmUgd3JpdHRlbiBpbiANCj4gPiAvaG9tZS9kYW5pZWwvbHR0bmct
+dHJhY2VzL3Jvb3RsZXZlbC0yMDEzMDIwNi0wOTE5NTQNCj4NCj4gVGhpcyBsb29rcyB3cm9uZy4g
+VHJhY2VzIHNob3VsZCBiZSB3cml0dGVuIHVuZGVyIHRoZSAvcm9vdC9sdHRuZy10cmFjZXMuIEFy
+ZSB5b3Ugc3VyZSB0aGlzIGNvbW1hbmQgaGFzIGVmZmVjdGl2ZWx5IGJlZW4gaXNzdWVkIGhhcyB0
+aGUgcm9vdCB1c2VyPyBJdCBsb29rcyBsaWtlIGl0IHdhcyBpc3N1ZWQgYXMgeW91ciBub3JtYWwg
+dXNlciBoZW5jZSB0aGUgInNlc3Npb249cm9vdGxldmVsIiBpbiB5b3VyIHVzZXIgfi8ubHR0bmdy
+Yy4gQ291bGQgeW91IHRyeSBzdSdpbmcgdG8gcm9vdCBpbnN0ZWFkPw0KDQogICBUaGlzIG1heSB2
+ZXJ5IHdlbGwgYmUgYW4gIlVidW50aXNtIi4gIEFsbCBmbGF2b3VycyBvZiBVYnVudHUgdXNlIGEg
+bG9ja2VkIHJvb3QgYW5kIGZvcmNlIGFsbCB1c2VycyB0byBzeXN0ZW1hdGljYWxseSB1c2Ugc3Vk
+bzsgdGhlIHN1IGNvbW1hbmQgd29uJ3QgZ28gYW55d2hlcmUgYmVjYXVzZSB0aGVyZSBpcyBubyBy
+b290IHBhc3N3b3JkLiAgKEl0IGlzIHBvc3NpYmxlLCB0aG91Z2ggc3Ryb25nbHkgZGlzY291cmFn
+ZWQsIHRvIHVubG9jayBhbmQgbGF0ZXIgcmVsb2NrIHRoZSByb290IGFjY291bnQsIGFzIGV4cGxh
+aW5lZCBoZXJlOiBodHRwczovL2hlbHAudWJ1bnR1LmNvbS9jb21tdW5pdHkvUm9vdFN1ZG8pICBU
+aGUgc2hvcnQgYW5kIHN3ZWV0IG9mIGl0IGlzIHRoYXQgKG5lYXJseSkgYWxsIHN1cGVyLXVzZXIg
+b3BlcmF0aW9ucyB1bmRlciBVYnVudHUgd2lsbCBiZSBjb25kdWN0ZWQgYnkgYSB1c2VyICh3aXRo
+IHN1ZG8gcHJpdmlsZWdlcyksIG5vdCBieSB0aGUgcm9vdCBhY2NvdW50LiAgSGVuY2UgdGhlIHNo
+ZW5hbmlnYW5zIEkgcmFuIGludG8uICBJdCBzb3VuZHMgbGlrZSBMVFRuZyB3aWxsIGhhdmUgdG8g
+YWRqdXN0IHRoZSB3YXkgaXQgYWxsb2NhdGVzIHRoZSByb290IC5sdHRuZ3JjIHBhdGggdW5kZXIg
+VWJ1bnR1IHN5c3RlbXMsIHNvIHRoYXQgaXQgdXNlcyAvcm9vdC8ubHR0bmdyYyBpbnN0ZWFkIG9m
+IH4vLmx0dG5ncmMNCg0KRGFuaWVsIFUuIFRoaWJhdWx0DQpSICYgRCBwb3VyIGxhIGTDqWZlbnNl
+IENhbmFkYSAtIFZhbGNhcnRpZXIgKFJEREMgVmFsY2FydGllcikgLyBEZWZlbmNlIFImRCBDYW5h
+ZGEgLSBWYWxjYXJ0aWVyIChEUkRDIFZhbGNhcnRpZXIpDQpDeWJlciBzw6ljdXJpdMOpIHBvdXIg
+bGVzIG1pc3Npb25zIGVzc2VudGllbGxlcyAoQ01FKSAvIE1pc3Npb24gQ3JpdGljYWwgQ3liZXIg
+U2VjdXJpdHkgKE1DQ1MpDQpQcm90ZWN0aW9uIGRlcyBzeXN0w6htZXMgZXQgY29udHJlbWVzdXJl
+cyAoUFNDKSAvIFN5c3RlbXMgUHJvdGVjdGlvbiAmIENvdW50ZXJtZWFzdXJlcyAoU1BDKQ0KMjQ1
+OSByb3V0ZSBkZSBsYSBCcmF2b3VyZQ0KUXXDqWJlYywgUUMgIEczSiAxWDUNCkNBTkFEQQ0KVm94
+IDogKDQxOCkgODQ0LTQwMDAgeDQyNDUNCkZheCA6ICg0MTgpIDg0NC00NTM4DQpOQUMgOiA5MThW
+IFFTREogPGh0dHA6Ly93d3cudHJhdmVsZ2lzLmNvbS9tYXAuYXNwP2FkZHI9OTE4ViUyMFFTREo+
+DQpHb3V2ZXJuZW1lbnQgZHUgQ2FuYWRhIC8gR292ZXJubWVudCBvZiBDYW5hZGENCjxodHRwOi8v
+d3d3LnZhbGNhcnRpZXIuZHJkYy1yZGRjLmdjLmNhLz4NCl9fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2
+QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9s
+aXN0aW5mby9sdHRuZy1kZXYK
