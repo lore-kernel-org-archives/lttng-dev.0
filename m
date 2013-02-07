@@ -1,16 +1,19 @@
-From: =?UTF-8?B?6LW15a6H6b6Z?= <zylthinking@gmail.com>
-Subject: my user space rcu code
-Date: Thu, 7 Feb 2013 18:02:14 +0800
-Message-ID: <CAEYCTcJjofYAfDQTYRtVOUQedfnm0TnNKBXwAUGMcd07fM2gFA__43396.5952754535$1360250045$gmane$org@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: my user space rcu code
+Date: Thu, 7 Feb 2013 11:20:51 -0500
+Message-ID: <20130207162051.GA5538__29818.6120730408$1360254107$gmane$org@Krystal>
+References: <CAEYCTcJjofYAfDQTYRtVOUQedfnm0TnNKBXwAUGMcd07fM2gFA@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0745176043=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-la0-f50.google.com ([209.85.215.50])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <zylthinking@gmail.com>) id 1U3OJV-0005ol-KB
-	for lttng-dev@lists.lttng.org; Thu, 07 Feb 2013 05:02:41 -0500
-Received: by mail-la0-f50.google.com with SMTP id ec20so2420738lab.9
-	for <lttng-dev@lists.lttng.org>; Thu, 07 Feb 2013 02:02:35 -0800 (PST)
+	(envelope-from <compudj@mail.openrapids.net>) id 1U3UDX-0000c4-90
+	for lttng-dev@lists.lttng.org; Thu, 07 Feb 2013 11:20:55 -0500
+Content-Disposition: inline
+In-Reply-To: <CAEYCTcJjofYAfDQTYRtVOUQedfnm0TnNKBXwAUGMcd07fM2gFA@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,65 +22,80 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: =?utf-8?B?6LW15a6H6b6Z?= <zylthinking@gmail.com>
+Cc: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, lttng-dev@lists.lttng.org, rp@svcs.cs.pdx.edu
 List-Id: lttng-dev@lists.lttng.org
 
---===============0745176043==
-Content-Type: multipart/alternative; boundary=e89a8f234685bb0cb804d51f8ae4
-
---e89a8f234685bb0cb804d51f8ae4
-Content-Type: text/plain; charset=UTF-8
-
-Hi,
-
-I write a user space rcu, code at
-https://github.com/zylthinking/tools/blob/master/rcu.h
-https://github.com/zylthinking/tools/blob/master/rcu.c.
-
-I notice the main difference  with liburcu should be I use a daemon thread
-to do works such as waking up sleepers, while the liburcu does not.
-
-I wonder why we can't use such a thread. When we use it, the
-rcu_read_(un)lock will not includes wake up writers any more. which will
-help to improve performance. It is the cost of such a daemon thread is too
-high?
-
-zhao yulong
-
---e89a8f234685bb0cb804d51f8ae4
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hi,<div><br></div><div style>I write a user space rcu, cod=
-e at=C2=A0</div><div style><a href=3D"https://github.com/zylthinking/tools/=
-blob/master/rcu.h">https://github.com/zylthinking/tools/blob/master/rcu.h</=
-a><br>
-
-</div><div style><a href=3D"https://github.com/zylthinking/tools/blob/maste=
-r/rcu.c">https://github.com/zylthinking/tools/blob/master/rcu.c</a>.</div><=
-div style><br></div><div style>I notice the main difference =C2=A0with libu=
-rcu should be I use a daemon thread to do works such as waking up sleepers,=
- while the liburcu does not.</div>
-
-<div style><br></div><div style>I wonder why we can&#39;t use such a thread=
-. When we use it, the rcu_read_(un)lock will not includes wake up writers a=
-ny more. which will help to=C2=A0improve=C2=A0performance. It is the=C2=A0c=
-ost of such a daemon thread=C2=A0is too high?</div>
-
-<div style><br></div><div style>zhao yulong</div></div>
-
---e89a8f234685bb0cb804d51f8ae4--
-
-
---===============0745176043==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0745176043==--
+KiDotbXlrofpvpkgKHp5bHRoaW5raW5nQGdtYWlsLmNvbSkgd3JvdGU6Cj4gSGksCj4gCj4gSSB3
+cml0ZSBhIHVzZXIgc3BhY2UgcmN1LCBjb2RlIGF0Cj4gaHR0cHM6Ly9naXRodWIuY29tL3p5bHRo
+aW5raW5nL3Rvb2xzL2Jsb2IvbWFzdGVyL3JjdS5oCj4gaHR0cHM6Ly9naXRodWIuY29tL3p5bHRo
+aW5raW5nL3Rvb2xzL2Jsb2IvbWFzdGVyL3JjdS5jLgo+IAo+IEkgbm90aWNlIHRoZSBtYWluIGRp
+ZmZlcmVuY2UgIHdpdGggbGlidXJjdSBzaG91bGQgYmUgSSB1c2UgYSBkYWVtb24gdGhyZWFkCj4g
+dG8gZG8gd29ya3Mgc3VjaCBhcyB3YWtpbmcgdXAgc2xlZXBlcnMsIHdoaWxlIHRoZSBsaWJ1cmN1
+IGRvZXMgbm90Lgo+IAo+IEkgd29uZGVyIHdoeSB3ZSBjYW4ndCB1c2Ugc3VjaCBhIHRocmVhZC4g
+V2hlbiB3ZSB1c2UgaXQsIHRoZQo+IHJjdV9yZWFkXyh1bilsb2NrIHdpbGwgbm90IGluY2x1ZGVz
+IHdha2UgdXAgd3JpdGVycyBhbnkgbW9yZS4gd2hpY2ggd2lsbAo+IGhlbHAgdG8gaW1wcm92ZSBw
+ZXJmb3JtYW5jZS4gSXQgaXMgdGhlIGNvc3Qgb2Ygc3VjaCBhIGRhZW1vbiB0aHJlYWQgaXMgdG9v
+Cj4gaGlnaD8KPiAKPiB6aGFvIHl1bG9uZwoKSGkgWmhhbywKClRoZSBtYWluIHJlYXNvbiBmb3Ig
+aGF2aW5nIHRoZSAid2FrZXVwIHdyaXRlciIgcHJlc2VudCBpbiB0aGUKcmN1X3JlYWRfdW5sb2Nr
+KCkgcGF0aCBpbiBsaWJ1cmN1IGlzIHRvIGJlIGVuZXJneS1lZmZpY2llbnQ6IHdlIGRvbid0Cndh
+bnQgYW55IHRocmVhZCB0byBjb25zdW1lIHBvd2VyIHVubGVzcyB0aGV5IHJlYWxseSBoYXZlIHRv
+LiBGb3IKaW5zdGFuY2UsIGVuZGxlc3MgYnVzeS13YWl0aW5nIG9uIGEgdmFyaWFibGUgaXMgYXZv
+aWRlZC4KClRoaXMgaXMgd2h5IHdlIHJlbHkgb24gc3lzX2Z1dGV4IHRvIHdha2UgdXAgYXdhaXRp
+bmcgd3JpdGVycyBmcm9tCnJjdV9yZWFkX3VubG9jaygpLiBBRkFJVSwgeW91ciByY3VfZGFlbW9u
+KCkgdGhyZWFkIGlzIGFsd2F5cyBhY3RpdmUsIGFuZApldmVuIHRob3VnaCBpdCBjYWxscyAic2No
+ZWRfeWllbGQoKSIgdG8gYmUgbmljZSB0byBvdGhlcnMsIGl0IHdpbGwga2VlcApvbmUgQ1BVIGFs
+d2F5cyBwb3dlcmVkIG9uLgoKT25lIGltcG9ydGFudCB0aGluZyB0byBub3RpY2UgaXMgdGhhdCBs
+aWJ1cmN1IHJjdV9yZWFkX3VubG9jaygpIG9ubHkKY2FsbHMgc3lzX2Z1dGV4IGlmIGEgd3JpdGVy
+IGlzIHdhaXRpbmcuIFRoZXJlZm9yZSwgaW4gYSBzY2VuYXJpbyB3aXRoCmZyZXF1ZW50IHJlYWRz
+IGFuZCBpbmZyZXF1ZW50IHVwZGF0ZXMsIHJjdV9yZWFkX3VubG9jaygpIG9ubHkgaGFzIHRvCnRh
+a2UgdGhlIHBlcmZvcm1hbmNlIG92ZXJoZWFkIG9mIGEgbG9hZCwgdGVzdCBhbmQgYnJhbmNoLCBh
+Y3R1YWxseQpza2lwcGluZyB0aGUgZnV0ZXggd2FrZSBjYWxsLgoKQW5vdGhlciByZWFzb24gZm9y
+IG5vdCBnb2luZyBmb3IgYSB3b3JrZXIgdGhyZWFkIHRvIGhhbmRsZSB3YWl0L3dha2V1cApiZXR3
+ZWVuIHN5bmNocm9uaXplX3JjdSBhbmQgcmN1X3JlYWRfdW5sb2NrIGlzIHRvIG1pbmltaXplIGlt
+cGFjdCBvbiB0aGUKYXBwbGljYXRpb24gcHJvY2Vzcy90aHJlYWRpbmcgbW9kZWwuIFRoaXMgaXMg
+ZXNwZWNpYWxseSB0cnVlIGZvcgphcHBsaWNhdGlvbnMgdGhhdCByZWx5IG9uIGZvcmsoKSBfbm90
+XyBmb2xsb3dlZCBieSBleGVjKCk6IExpbnV4CmFjdHVhbGx5IGNvcGllcyBhIHNpbmdsZSB0aHJl
+YWQgb2YgdGhlIHBhcmVudCAodGhlIG9uZSBleGVjdXRpbmcKZm9yaygpKSwgYW5kIGRpc2NhcmRz
+IGFsbCBvdGhlciB0aHJlYWRzLiBUaGVyZWZvcmUsIHdlIG11c3QgYmUgYXdhcmUKdGhhdCBhZGRp
+bmcgYW4gaW4tbGlicmFyeSB0aHJlYWQgd2lsbCByZXF1aXJlIHVzZXJzIHRvIGhhbmRsZSB0aGUK
+Zm9yaygpLW5vdC1mb2xsb3dlZC1ieS1leGVjKCkgY2FzZSBjYXJlZnVsbHkuIFNpbmNlIHdlIGhh
+ZCBubyBvdGhlcgpjaG9pY2UsIHdlIHJlbHkgb24gd29ya2VyIHRocmVhZHMgZm9yIGNhbGxfcmN1
+LCBidXQgd2UgZG9uJ3QgdXNlIHdvcmtlcgp0aHJlYWRzIGZvciB0aGUgInNpbXBsZXIiIHVzZS1j
+YXNlIG9mIHN5bmNocm9uaXplX3JjdSgpLgoKQSB0aGlyZCByZWFzb24gZm9yIGRpcmVjdGx5IHdh
+a2luZyB1cCB0aGUgd3JpdGVyIHRocmVhZCByYXRoZXIgdGhhbgpoYXZpbmcgYSB3b3JrZXIgdGhy
+ZWFkIGRpc3BhdGNoaW5nIHRoaXMgaW5mb3JtYXRpb24gaXMgc3BlZWQuIEdpdmVuIHRoZQpwb3dl
+ciBlZmZpY2llbmN5IGNvbnN0cmFpbnRzIGV4cHJlc3NlZCBhYm92ZSwgd2Ugd291bGQgaGF2ZSB0
+byBpc3N1ZSBvbmUKc3lzdGVtIGNhbGwgZnJvbSB0aGUgcmN1X3JlYWRfdW5sb2NrKCkgc2l0ZSB0
+byB3YWtlIHVwIHRoZSByY3VfZGFlbW9uKCkKdGhyZWFkIChzbyBpdCBkb2VzIG5vdCBoYXZlIHRv
+IGJ1c3ktd2FpdCksIGFuZCBhbm90aGVyIHN5c3RlbSBjYWxsIHRvCndha2UgdXAgdGhlIHdyaXRl
+ciwgaW52b2x2aW5nIGEgdGhpcmQgdGhyZWFkIGluIHdoYXQgc2hvdWxkIHJlYWxseQppbnZvbHZl
+IG9ubHkgdHdvIHRocmVhZHMuIFRoaXMgd2lsbCB0aGVyZWZvcmUgYWRkIG92ZXJoZWFkIHRvIHRo
+aXMKc2lnbmFsbGluZyBieSByZXF1aXJpbmcgdGhlIHNjaGVkdWxlciB0byBwZXJmb3JtIG9uZSBl
+eHRyYSBjb250ZXh0CnN3aXRjaCwgYW5kIG1heSBpbnZvbHZlIGV4dHJhIGNvbW11bmljYXRpb24g
+YmV0d2VlbiBwcm9jZXNzb3JzLCBzaW5jZQpyY3VfZGFlbW9uKCkgd2lsbCBsaWtlbHkgZXhlY3V0
+ZSBvbiBhIGRpZmZlcmVudCBDUFUsIGFuZCB3aWxsIGhhdmUgdG8KYnJpbmcgaW4gY2FjaGUgbGlu
+ZXMgZnJvbSBvdGhlciBwcm9jZXNzb3JzLgoKRmluYWxseSwgbGV0J3MgZGlzY3VzcyB0aGUgcmVh
+bC10aW1lIGFzcGVjdC4gRm9yIFJULCB3ZSBpZGVhbGx5IHdhbnQKd2FpdC1mcmVlIHJjdV9yZWFk
+X2xvY2svdW5sb2NrLiBJbmRlZWQsIGhhdmluZyBhIHN5c19mdXRleCB3YWtldXAgY2FsbAppbiBy
+Y3VfcmVhZF91bmxvY2soKSBjb3VsZCBhcmd1YWJseSBiZSBzZWVuIGEgbWFraW5nIHRoZSB1bmxv
+Y2sgcGF0aApsZXNzIHN0cmljdGx5IHdhaXQtZnJlZSAoaW4gY2FzZSB5b3Ugd291bGQgYmUgY29u
+Y2VybmVkIGFib3V0IHRoZQppbnRlcm5hbCBpbXBsZW1lbnRhdGlvbiBvZiBzeXNfZnV0ZXggd2Fr
+ZSBub3QgYmVpbmcgZW50aXJlbHkgd2FpdC1mcmVlKS4KQ3VycmVudGx5LCBvbiBMaW51eCwgb25l
+IHdheSB0byBjaGFuZ2UgdGhlIGJlaGF2aW9yIG9mIHJjdV9yZWFkX3VubG9jaygpCnRvIG1ha2Ug
+aXQgZXZlbiBtb3JlIFJULWZyaWVuZGx5IChpbiBjYXNlIHlvdSBhcmUgY29uY2VybmVkIGFib3V0
+IHVzaW5nCnN5c19mdXRleCgpIG9uIGEgcHVyZSBSVCB0aHJlYWQpIGlzIHRvIHVuZGVmaW5lIENP
+TkZJR19SQ1VfSEFWRV9GVVRFWCwKdGh1cyBjaGFuZ2luZyB0aGUgYmVoYXZpb3Igb2YgdXJjdS9m
+dXRleC5oIGFuZCBjb21wYXRfZnV0ZXguYy4gVGhlCmZ1dGV4X2FzeW5jKCkgY2FsbCB3aWxsIHRo
+ZW4gZG8gYnVzeS13YWl0aW5nIG9uIHRoZSBGVVRFWF9XQUlUIHNpZGUKKHdhaXRpbmcgMTB1cyBi
+ZXR3ZWVuIGF0dGVtcHRzKSwgYW5kIGRvIGV4YWN0bHkgX25vdGhpbmdfIG9uIHRoZSB3YWtlLXVw
+CnNpZGUsIHdoaWNoIGlzIGNlcnRhaW5seSB3YWl0LWZyZWUuIFRoaXMgd2lsbCBiZSBsZXNzIGVu
+ZXJneS1lZmZpY2llbnQsCm9mIGNvdXJzZSwgYnV0IHdpbGwgcHJvdmlkZSBhIHN0cmljdGx5IHdh
+aXQtZnJlZSByY3VfcmVhZF91bmxvY2soKS4KCldlIG1pZ2h0IHdhbnQgdG8gY29uc2lkZXIgY3Jl
+YXRpbmcgYSBsaWJ1cmN1LXJ0LnNvIGZvciByZWFsLXRpbWUKdXNlLWNhc2VzIHRoYXQgcHJlZmVy
+IHRoZSBub24tZW5lcmd5LWVmZmljaWVudCB3YWl0LCBhbG9uZyB3aXRoIHRoZQpzdHJpY3RseSB3
+YWl0LWZyZWUgcmN1X3JlYWRfdW5sb2NrKCkuIFRob3VnaHRzID8KClRoYW5rcywKCk1hdGhpZXUK
+Ci0tIApNYXRoaWV1IERlc25veWVycwpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3Mu
+Y29tCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRu
+Zy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3Rz
+Lmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
