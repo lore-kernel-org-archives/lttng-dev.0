@@ -1,21 +1,21 @@
-From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
-	<jeremie.galarneau@efficios.com>
-Subject: [PATCH babeltrace 1/2] Move the bitfield test to
-	tests/lib/
-Date: Thu,  7 Feb 2013 16:40:52 -0500
-Message-ID: <1360273253-12401-1-git-send-email-jeremie.galarneau__24169.0735369504$1360273341$gmane$org@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH babeltrace 1/2] Move the bitfield test
+	to	tests/lib/
+Date: Thu, 7 Feb 2013 17:31:58 -0500
+Message-ID: <20130207223158.GA10074__49370.8321046599$1360276373$gmane$org@Krystal>
 References: <20130207174526.GA6632@Krystal>
+	<1360273253-12401-1-git-send-email-jeremie.galarneau@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-vb0-f44.google.com ([209.85.212.44])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1U3ZDi-00038j-2E
-	for lttng-dev@lists.lttng.org; Thu, 07 Feb 2013 16:41:26 -0500
-Received: by mail-vb0-f44.google.com with SMTP id fr13so1931046vbb.17
-	for <lttng-dev@lists.lttng.org>; Thu, 07 Feb 2013 13:41:20 -0800 (PST)
-In-Reply-To: <20130207174526.GA6632@Krystal>
+	(envelope-from <compudj@mail.openrapids.net>) id 1U3a0i-0003YE-JL
+	for lttng-dev@lists.lttng.org; Thu, 07 Feb 2013 17:32:04 -0500
+Content-Disposition: inline
+In-Reply-To: <1360273253-12401-1-git-send-email-jeremie.galarneau@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,388 +24,892 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-ClNpZ25lZC1vZmYtYnk6IErDqXLDqW1pZSBHYWxhcm5lYXUgPGplcmVtaWUuZ2FsYXJuZWF1QGVm
-ZmljaW9zLmNvbT4KLS0tCiAuZ2l0aWdub3JlICAgICAgICAgICAgICAgIHwgICAyICstCiB0ZXN0
-cy9NYWtlZmlsZS5hbSAgICAgICAgIHwgICA0IC0KIHRlc3RzL2xpYi9NYWtlZmlsZS5hbSAgICAg
-fCAgIDMgKy0KIHRlc3RzL2xpYi9ydW5hbGwuc2ggICAgICAgfCAgIDUgKy0KIHRlc3RzL2xpYi90
-ZXN0LWJpdGZpZWxkLmMgfCAzNzEgKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysr
-KysrKysrKysrKwogdGVzdHMvcnVuYWxsLnNoICAgICAgICAgICB8ICAgNyAtCiB0ZXN0cy90ZXN0
-LWJpdGZpZWxkLmMgICAgIHwgMzcxIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0KIDcgZmlsZXMgY2hhbmdlZCwgMzc4IGluc2VydGlvbnMoKyksIDM4NSBkZWxl
-dGlvbnMoLSkKIGNyZWF0ZSBtb2RlIDEwMDY0NCB0ZXN0cy9saWIvdGVzdC1iaXRmaWVsZC5jCiBk
-ZWxldGUgbW9kZSAxMDA2NDQgdGVzdHMvdGVzdC1iaXRmaWVsZC5jCgpkaWZmIC0tZ2l0IGEvLmdp
-dGlnbm9yZSBiLy5naXRpZ25vcmUKaW5kZXggMDM0NDNkZi4uNzUyMzA4ZSAxMDA2NDQKLS0tIGEv
-LmdpdGlnbm9yZQorKysgYi8uZ2l0aWdub3JlCkBAIC0xLDQgKzEsNCBAQAotL3Rlc3RzL3Rlc3Qt
-Yml0ZmllbGQKKy90ZXN0cy9saWIvdGVzdC1iaXRmaWVsZAogL3Rlc3RzL2xpYi90ZXN0LXNlZWtz
-CiAqLm8KICouYQpkaWZmIC0tZ2l0IGEvdGVzdHMvTWFrZWZpbGUuYW0gYi90ZXN0cy9NYWtlZmls
-ZS5hbQppbmRleCA0Nzg5MWU5Li44MTZmYTY2IDEwMDY0NAotLS0gYS90ZXN0cy9NYWtlZmlsZS5h
-bQorKysgYi90ZXN0cy9NYWtlZmlsZS5hbQpAQCAtMiwxMCArMiw2IEBAIEFNX0NGTEFHUyA9ICQo
-UEFDS0FHRV9DRkxBR1MpIC1JJCh0b3Bfc3JjZGlyKS9pbmNsdWRlCiAKIFNVQkRJUlMgPSBsaWIK
-IAotbm9pbnN0X1BST0dSQU1TID0gdGVzdC1iaXRmaWVsZAotCi10ZXN0X2JpdGZpZWxkX1NPVVJD
-RVMgPSB0ZXN0LWJpdGZpZWxkLmMKLQogRVhUUkFfRElTVCA9IHJ1bmFsbC5zaCBjdGYtdHJhY2Vz
-LyoqCiAKIGNoZWNrLWFtOgpkaWZmIC0tZ2l0IGEvdGVzdHMvbGliL01ha2VmaWxlLmFtIGIvdGVz
-dHMvbGliL01ha2VmaWxlLmFtCmluZGV4IGU5ZTI2NGIuLjA2MTNiZWIgMTAwNjQ0Ci0tLSBhL3Rl
-c3RzL2xpYi9NYWtlZmlsZS5hbQorKysgYi90ZXN0cy9saWIvTWFrZWZpbGUuYW0KQEAgLTgsOSAr
-OCwxMCBAQCB0ZXN0X3NlZWtzX0xEQUREID0gbGlidGVzdGNvbW1vbi5hIFwKIAkkKHRvcF9idWls
-ZGRpcikvbGliL2xpYmJhYmVsdHJhY2UubGEgXAogCSQodG9wX2J1aWxkZGlyKS9mb3JtYXRzL2N0
-Zi9saWJiYWJlbHRyYWNlLWN0Zi5sYQogCi1ub2luc3RfUFJPR1JBTVMgPSB0ZXN0LXNlZWtzCitu
-b2luc3RfUFJPR1JBTVMgPSB0ZXN0LXNlZWtzIHRlc3QtYml0ZmllbGQKIAogdGVzdF9zZWVrc19T
-T1VSQ0VTID0gdGVzdC1zZWVrcy5jCit0ZXN0X2JpdGZpZWxkX1NPVVJDRVMgPSB0ZXN0LWJpdGZp
-ZWxkLmMKIAogRVhUUkFfRElTVCA9IFJFQURNRS50YXAgcnVuYWxsLnNoCiAKZGlmZiAtLWdpdCBh
-L3Rlc3RzL2xpYi9ydW5hbGwuc2ggYi90ZXN0cy9saWIvcnVuYWxsLnNoCmluZGV4IDM0NTAzYmIu
-LmI1NTIyYWQgMTAwNzU1Ci0tLSBhL3Rlc3RzL2xpYi9ydW5hbGwuc2gKKysrIGIvdGVzdHMvbGli
-L3J1bmFsbC5zaApAQCAtMyw0ICszLDcgQEAKICMgV2l0aCBhIHRyYWNlIHRoYW4gY29udGFpbnMg
-ZW1wdHkgcGFja2V0cwogLi90ZXN0LXNlZWtzIC4uL2N0Zi10cmFjZXMvc3VjY2VlZC93ay1oZWFy
-dGJlYXQtdS8gMTM1MTUzMjg5NzU4NjU1ODUxOSAxMzUxNTMyODk3NTkxMzMxMTk0CiAjIFdpdGgg
-YSBiaWdnZXIgdHJhY2UKLS4vdGVzdC1zZWVrcyAuLi9jdGYtdHJhY2VzL3N1Y2NlZWQvbHR0bmct
-bW9kdWxlcy0yLjAtcHJlNS8gNjEzMzQxNzQ1MjQyMzQgNjEzMzYzODE5OTgzOTYKXCBObyBuZXds
-aW5lIGF0IGVuZCBvZiBmaWxlCisuL3Rlc3Qtc2Vla3MgLi4vY3RmLXRyYWNlcy9zdWNjZWVkL2x0
-dG5nLW1vZHVsZXMtMi4wLXByZTUvIDYxMzM0MTc0NTI0MjM0IDYxMzM2MzgxOTk4Mzk2CisKKyMg
-cnVuIGJpdGZpZWxkIHRlc3RzCisuL3Rlc3QtYml0ZmllbGQKZGlmZiAtLWdpdCBhL3Rlc3RzL2xp
-Yi90ZXN0LWJpdGZpZWxkLmMgYi90ZXN0cy9saWIvdGVzdC1iaXRmaWVsZC5jCm5ldyBmaWxlIG1v
-ZGUgMTAwNjQ0CmluZGV4IDAwMDAwMDAuLjNiZjc1NjgKLS0tIC9kZXYvbnVsbAorKysgYi90ZXN0
-cy9saWIvdGVzdC1iaXRmaWVsZC5jCkBAIC0wLDAgKzEsMzcxIEBACisvKgorICogdGVzdC1iaXRm
-aWVsZC5jCisgKgorICogQmFiZWxUcmFjZSAtIGJpdGZpZWxkIHRlc3QgcHJvZ3JhbQorICoKKyAq
-IENvcHlyaWdodCAyMDEwIC0gTWF0aGlldSBEZXNub3llcnMgPG1hdGhpZXUuZGVzbm95ZXJzQGVm
-ZmljaW9zLmNvbT4KKyAqCisgKiBUaGlzIHByb2dyYW0gaXMgZnJlZSBzb2Z0d2FyZTsgeW91IGNh
-biByZWRpc3RyaWJ1dGUgaXQgYW5kL29yIG1vZGlmeQorICogaXQgdW5kZXIgdGhlIHRlcm1zIG9m
-IHRoZSBHTlUgR2VuZXJhbCBQdWJsaWMgTGljZW5zZSBhcyBwdWJsaXNoZWQgYnkKKyAqIHRoZSBG
-cmVlIFNvZnR3YXJlIEZvdW5kYXRpb247IHVuZGVyIHZlcnNpb24gMiBvZiB0aGUgTGljZW5zZS4K
-KyAqCisgKiBUaGlzIHByb2dyYW0gaXMgZGlzdHJpYnV0ZWQgaW4gdGhlIGhvcGUgdGhhdCBpdCB3
-aWxsIGJlIHVzZWZ1bCwKKyAqIGJ1dCBXSVRIT1VUIEFOWSBXQVJSQU5UWTsgd2l0aG91dCBldmVu
-IHRoZSBpbXBsaWVkIHdhcnJhbnR5IG9mCisgKiBNRVJDSEFOVEFCSUxJVFkgb3IgRklUTkVTUyBG
-T1IgQSBQQVJUSUNVTEFSIFBVUlBPU0UuICBTZWUgdGhlCisgKiBHTlUgR2VuZXJhbCBQdWJsaWMg
-TGljZW5zZSBmb3IgbW9yZSBkZXRhaWxzLgorICoKKyAqIFlvdSBzaG91bGQgaGF2ZSByZWNlaXZl
-ZCBhIGNvcHkgb2YgdGhlIEdOVSBHZW5lcmFsIFB1YmxpYyBMaWNlbnNlIGFsb25nCisgKiB3aXRo
-IHRoaXMgcHJvZ3JhbTsgaWYgbm90LCB3cml0ZSB0byB0aGUgRnJlZSBTb2Z0d2FyZSBGb3VuZGF0
-aW9uLCBJbmMuLAorICogNTEgRnJhbmtsaW4gU3RyZWV0LCBGaWZ0aCBGbG9vciwgQm9zdG9uLCBN
-QSAwMjExMC0xMzAxIFVTQS4KKyAqLworCisjZGVmaW5lIF9HTlVfU09VUkNFCisjaW5jbHVkZSA8
-YmFiZWx0cmFjZS9iaXRmaWVsZC5oPgorI2luY2x1ZGUgPHRpbWUuaD4KKyNpbmNsdWRlIDxzdGRs
-aWIuaD4KKyNpbmNsdWRlIDxzdGRpby5oPgorCit1bnNpZ25lZCBpbnQgZ2xvYjsKKworLyoKKyAq
-IFRoaXMgZnVuY3Rpb24gaXMgb25seSBkZWNsYXJlZCB0byBzaG93IHRoZSBzaXplIG9mIGEgYml0
-ZmllbGQgd3JpdGUgaW4KKyAqIG9iamR1bXAuCisgKi8KK3ZvaWQgZmN0KHZvaWQpCit7CisJYnRf
-Yml0ZmllbGRfd3JpdGUoJmdsb2IsIHVuc2lnbmVkIGludCwgMTIsIDE1LCAweDEyMzQ1Njc4KTsK
-K30KKworLyogVGVzdCBhcnJheSBzaXplLCBpbiBieXRlcyAqLworI2RlZmluZSBURVNUX0xFTiAx
-MjgKKyNkZWZpbmUgTlJfVEVTVFMgMTAKKwordW5zaWduZWQgaW50IHNyY3JhbmQ7CisKKyNpZiBk
-ZWZpbmVkKF9faTM4NikgfHwgZGVmaW5lZChfX3g4Nl82NCkKKworc3RhdGljIGlubGluZSBpbnQg
-ZmxzKGludCB4KQoreworCWludCByOworCWFzbSgiYnNybCAlMSwlMFxuXHQiCisJICAgICJjbW92
-emwgJTIsJTAiCisJICAgIDogIj0mciIgKHIpIDogInJtIiAoeCksICJybSIgKC0xKSk7CisJcmV0
-dXJuIHIgKyAxOworfQorCisjZWxpZiBkZWZpbmVkKF9fUFBDX18pCisKK3N0YXRpYyBfX2lubGlu
-ZV9fIGludCBmbHModW5zaWduZWQgaW50IHgpCit7CisJaW50IGx6OworCisJYXNtICgiY250bHp3
-ICUwLCUxIiA6ICI9ciIgKGx6KSA6ICJyIiAoeCkpOworCXJldHVybiAzMiAtIGx6OworfQorCisj
-ZWxzZQorCitzdGF0aWMgaW50IGZscyh1bnNpZ25lZCBpbnQgeCkKK3sKKwlpbnQgciA9IDMyOwor
-CisJaWYgKCF4KQorCQlyZXR1cm4gMDsKKwlpZiAoISh4ICYgMHhGRkZGMDAwMFUpKSB7CisJCXgg
-PDw9IDE2OworCQlyIC09IDE2OworCX0KKwlpZiAoISh4ICYgMHhGRjAwMDAwMFUpKSB7CisJCXgg
-PDw9IDg7CisJCXIgLT0gODsKKwl9CisJaWYgKCEoeCAmIDB4RjAwMDAwMDBVKSkgeworCQl4IDw8
-PSA0OworCQlyIC09IDQ7CisJfQorCWlmICghKHggJiAweEMwMDAwMDAwVSkpIHsKKwkJeCA8PD0g
-MjsKKwkJciAtPSAyOworCX0KKwlpZiAoISh4ICYgMHg4MDAwMDAwMFUpKSB7CisJCXggPDw9IDE7
-CisJCXIgLT0gMTsKKwl9CisJcmV0dXJuIHI7Cit9CisKKyNlbmRpZgorCisjZGVmaW5lIHByaW50
-X2J5dGVfYXJyYXkoYywgbGVuKQlcCitkbyB7CQkJCQlcCisJdW5zaWduZWQgbG9uZyBpOwkJXAor
-CQkJCQlcCisJZm9yIChpID0gMDsgaSA8IChsZW4pOyBpKyspIHsJXAorCQlwcmludGYoIjB4JVgi
-LCAoYylbaV0pOwlcCisJCWlmIChpICE9IChsZW4pIC0gMSkJXAorCQkJcHJpbnRmKCIgIik7CVwK
-Kwl9CQkJCVwKKwlwcmludGYoIlxuIik7CQkJXAorfSB3aGlsZSAoMCkKKworI2RlZmluZSBpbml0
-X2J5dGVfYXJyYXkoYywgbGVuLCB2YWwpCVwKK2RvIHsJCQkJCVwKKwl1bnNpZ25lZCBsb25nIGk7
-CQlcCisJCQkJCVwKKwlmb3IgKGkgPSAwOyBpIDwgKGxlbik7IGkrKykJXAorCQkoYylbaV0gPSAo
-dmFsKTsJCVwKK30gd2hpbGUgKDApCisKK2ludCBydW5fdGVzdF91bnNpZ25lZCh2b2lkKQorewor
-CXVuc2lnbmVkIGludCBzcmMsIG5yYml0czsKKwl1bmlvbiB7CisJCXVuc2lnbmVkIGNoYXIgY1tU
-RVNUX0xFTl07CisJCXVuc2lnbmVkIHNob3J0IHNbVEVTVF9MRU4vc2l6ZW9mKHVuc2lnbmVkIHNo
-b3J0KV07CisJCXVuc2lnbmVkIGludCBpW1RFU1RfTEVOL3NpemVvZih1bnNpZ25lZCBpbnQpXTsK
-KwkJdW5zaWduZWQgbG9uZyBsW1RFU1RfTEVOL3NpemVvZih1bnNpZ25lZCBsb25nKV07CisJCXVu
-c2lnbmVkIGxvbmcgbG9uZyBsbFtURVNUX0xFTi9zaXplb2YodW5zaWduZWQgbG9uZyBsb25nKV07
-CisJfSB0YXJnZXQ7CisJdW5zaWduZWQgbG9uZyBsb25nIHJlYWR2YWw7CisJdW5zaWduZWQgaW50
-IHMsIGw7CisJaW50IGVyciA9IDA7CisKKwlwcmludGYoIlJ1bm5pbmcgdW5zaWduZWQgdGVzdCB3
-aXRoIDB4JVhcbiIsIHNyY3JhbmQpOworCisJc3JjID0gc3JjcmFuZDsKKwlucmJpdHMgPSBmbHMo
-c3JjKTsKKworCWZvciAocyA9IDA7IHMgPCBDSEFSX0JJVCAqIFRFU1RfTEVOOyBzKyspIHsKKwkJ
-Zm9yIChsID0gbnJiaXRzOyBsIDwgKENIQVJfQklUICogVEVTVF9MRU4pIC0gczsgbCsrKSB7CisJ
-CQlpbml0X2J5dGVfYXJyYXkodGFyZ2V0LmMsIFRFU1RfTEVOLCAweEZGKTsKKwkJCWJ0X2JpdGZp
-ZWxkX3dyaXRlKHRhcmdldC5jLCB1bnNpZ25lZCBjaGFyLCBzLCBsLCBzcmMpOworCQkJYnRfYml0
-ZmllbGRfcmVhZCh0YXJnZXQuYywgdW5zaWduZWQgY2hhciwgcywgbCwgJnJlYWR2YWwpOworCQkJ
-aWYgKHJlYWR2YWwgIT0gc3JjKSB7CisJCQkJcHJpbnRmKCJFcnJvciAoYnl0ZXdpc2UpIHNyYyAl
-WCByZWFkICVsbFggc2hpZnQgJWQgbGVuICVkXG4iLAorCQkJCSAgICAgICBzcmMsIHJlYWR2YWws
-IHMsIGwpOworCQkJCXByaW50X2J5dGVfYXJyYXkodGFyZ2V0LmMsIFRFU1RfTEVOKTsKKwkJCQll
-cnIgPSAxOworCQkJfQorCisJCQlpbml0X2J5dGVfYXJyYXkodGFyZ2V0LmMsIFRFU1RfTEVOLCAw
-eEZGKTsKKwkJCWJ0X2JpdGZpZWxkX3dyaXRlKHRhcmdldC5zLCB1bnNpZ25lZCBzaG9ydCwgcywg
-bCwgc3JjKTsKKwkJCWJ0X2JpdGZpZWxkX3JlYWQodGFyZ2V0LmMsIHVuc2lnbmVkIGNoYXIsIHMs
-IGwsICZyZWFkdmFsKTsKKwkJCWlmIChyZWFkdmFsICE9IHNyYykgeworCQkJCXByaW50ZigiRXJy
-b3IgKHNob3J0d2lzZSkgc3JjICVYIHJlYWQgJWxsWCBzaGlmdCAlZCBsZW4gJWRcbiIsCisJCQkJ
-ICAgICAgIHNyYywgcmVhZHZhbCwgcywgbCk7CisJCQkJcHJpbnRfYnl0ZV9hcnJheSh0YXJnZXQu
-YywgVEVTVF9MRU4pOworCQkJCWVyciA9IDE7CisJCQl9CisKKwkJCWluaXRfYnl0ZV9hcnJheSh0
-YXJnZXQuYywgVEVTVF9MRU4sIDB4RkYpOworCQkJYnRfYml0ZmllbGRfd3JpdGUodGFyZ2V0Lmks
-IHVuc2lnbmVkIGludCwgcywgbCwgc3JjKTsKKwkJCWJ0X2JpdGZpZWxkX3JlYWQodGFyZ2V0LmMs
-IHVuc2lnbmVkIGNoYXIsIHMsIGwsICZyZWFkdmFsKTsKKwkJCWlmIChyZWFkdmFsICE9IHNyYykg
-eworCQkJCXByaW50ZigiRXJyb3IgKGludHdpc2UpIHNyYyAlWCByZWFkICVsbFggc2hpZnQgJWQg
-bGVuICVkXG4iLAorCQkJCSAgICAgICBzcmMsIHJlYWR2YWwsIHMsIGwpOworCQkJCXByaW50X2J5
-dGVfYXJyYXkodGFyZ2V0LmMsIFRFU1RfTEVOKTsKKwkJCQllcnIgPSAxOworCQkJfQorCisJCQlp
-bml0X2J5dGVfYXJyYXkodGFyZ2V0LmMsIFRFU1RfTEVOLCAweEZGKTsKKwkJCWJ0X2JpdGZpZWxk
-X3dyaXRlKHRhcmdldC5sLCB1bnNpZ25lZCBsb25nLCBzLCBsLCBzcmMpOworCQkJYnRfYml0Zmll
-bGRfcmVhZCh0YXJnZXQuYywgdW5zaWduZWQgY2hhciwgcywgbCwgJnJlYWR2YWwpOworCQkJaWYg
-KHJlYWR2YWwgIT0gc3JjKSB7CisJCQkJcHJpbnRmKCJFcnJvciAobG9uZ3dpc2UpIHNyYyAlWCBy
-ZWFkICVsbFggc2hpZnQgJWQgbGVuICVkXG4iLAorCQkJCSAgICAgICBzcmMsIHJlYWR2YWwsIHMs
-IGwpOworCQkJCXByaW50X2J5dGVfYXJyYXkodGFyZ2V0LmMsIFRFU1RfTEVOKTsKKwkJCQllcnIg
-PSAxOworCQkJfQorCisJCQlpbml0X2J5dGVfYXJyYXkodGFyZ2V0LmMsIFRFU1RfTEVOLCAweEZG
-KTsKKwkJCWJ0X2JpdGZpZWxkX3dyaXRlKHRhcmdldC5sbCwgdW5zaWduZWQgbG9uZyBsb25nLCBz
-LCBsLCBzcmMpOworCQkJYnRfYml0ZmllbGRfcmVhZCh0YXJnZXQuYywgdW5zaWduZWQgY2hhciwg
-cywgbCwgJnJlYWR2YWwpOworCQkJaWYgKHJlYWR2YWwgIT0gc3JjKSB7CisJCQkJcHJpbnRmKCJF
-cnJvciAobG9uZ2xvbmd3aXNlKSBzcmMgJVggcmVhZCAlbGxYIHNoaWZ0ICVkIGxlbiAlZFxuIiwK
-KwkJCQkgICAgICAgc3JjLCByZWFkdmFsLCBzLCBsKTsKKwkJCQlwcmludF9ieXRlX2FycmF5KHRh
-cmdldC5jLCBURVNUX0xFTik7CisJCQkJZXJyID0gMTsKKwkJCX0KKwkJfQorCX0KKwlpZiAoIWVy
-cikKKwkJcHJpbnRmKCJTdWNjZXNzIVxuIik7CisJZWxzZQorCQlwcmludGYoIkZhaWxlZCFcbiIp
-OworCXJldHVybiBlcnI7Cit9CisKK2ludCBydW5fdGVzdF9zaWduZWQodm9pZCkKK3sKKwlpbnQg
-c3JjLCBucmJpdHM7CisJdW5pb24geworCQlzaWduZWQgY2hhciBjW1RFU1RfTEVOXTsKKwkJc2hv
-cnQgc1tURVNUX0xFTi9zaXplb2Yoc2hvcnQpXTsKKwkJaW50IGlbVEVTVF9MRU4vc2l6ZW9mKGlu
-dCldOworCQlsb25nIGxbVEVTVF9MRU4vc2l6ZW9mKGxvbmcpXTsKKwkJbG9uZyBsb25nIGxsW1RF
-U1RfTEVOL3NpemVvZihsb25nIGxvbmcpXTsKKwl9IHRhcmdldDsKKwlsb25nIGxvbmcgcmVhZHZh
-bDsKKwl1bnNpZ25lZCBpbnQgcywgbDsKKwlpbnQgZXJyID0gMDsKKworCXByaW50ZigiUnVubmlu
-ZyBzaWduZWQgdGVzdCB3aXRoIDB4JVhcbiIsIHNyY3JhbmQpOworCisJc3JjID0gc3JjcmFuZDsK
-KwlpZiAoc3JjICYgMHg4MDAwMDAwMFUpCisJCW5yYml0cyA9IGZscyh+c3JjKSArIDE7CS8qIEZp
-bmQgbGVhc3Qgc2lnbmlmaWNhbnQgYml0IGNvbnZleWluZyBzaWduICovCisJZWxzZQorCQlucmJp
-dHMgPSBmbHMoc3JjKSArIDE7CS8qIEtlZXAgc2lnbiBhdCAwICovCisKKwlmb3IgKHMgPSAwOyBz
-IDwgOCAqIFRFU1RfTEVOOyBzKyspIHsKKwkJZm9yIChsID0gbnJiaXRzOyBsIDwgKDggKiBURVNU
-X0xFTikgLSBzOyBsKyspIHsKKwkJCWluaXRfYnl0ZV9hcnJheSh0YXJnZXQuYywgVEVTVF9MRU4s
-IDB4MCk7CisJCQlidF9iaXRmaWVsZF93cml0ZSh0YXJnZXQuYywgc2lnbmVkIGNoYXIsIHMsIGws
-IHNyYyk7CisJCQlidF9iaXRmaWVsZF9yZWFkKHRhcmdldC5jLCBzaWduZWQgY2hhciwgcywgbCwg
-JnJlYWR2YWwpOworCQkJaWYgKHJlYWR2YWwgIT0gc3JjKSB7CisJCQkJcHJpbnRmKCJFcnJvciAo
-Ynl0ZXdpc2UpIHNyYyAlWCByZWFkICVsbFggc2hpZnQgJWQgbGVuICVkXG4iLAorCQkJCSAgICAg
-ICBzcmMsIHJlYWR2YWwsIHMsIGwpOworCQkJCXByaW50X2J5dGVfYXJyYXkodGFyZ2V0LmMsIFRF
-U1RfTEVOKTsKKwkJCQllcnIgPSAxOworCQkJfQorCisJCQlpbml0X2J5dGVfYXJyYXkodGFyZ2V0
-LmMsIFRFU1RfTEVOLCAweDApOworCQkJYnRfYml0ZmllbGRfd3JpdGUodGFyZ2V0LnMsIHNob3J0
-LCBzLCBsLCBzcmMpOworCQkJYnRfYml0ZmllbGRfcmVhZCh0YXJnZXQuYywgc2lnbmVkIGNoYXIs
-IHMsIGwsICZyZWFkdmFsKTsKKwkJCWlmIChyZWFkdmFsICE9IHNyYykgeworCQkJCXByaW50Zigi
-RXJyb3IgKHNob3J0d2lzZSkgc3JjICVYIHJlYWQgJWxsWCBzaGlmdCAlZCBsZW4gJWRcbiIsCisJ
-CQkJICAgICAgIHNyYywgcmVhZHZhbCwgcywgbCk7CisJCQkJcHJpbnRfYnl0ZV9hcnJheSh0YXJn
-ZXQuYywgVEVTVF9MRU4pOworCQkJCWVyciA9IDE7CisJCQl9CisKKwkJCWluaXRfYnl0ZV9hcnJh
-eSh0YXJnZXQuYywgVEVTVF9MRU4sIDB4MCk7CisJCQlidF9iaXRmaWVsZF93cml0ZSh0YXJnZXQu
-aSwgaW50LCBzLCBsLCBzcmMpOworCQkJYnRfYml0ZmllbGRfcmVhZCh0YXJnZXQuYywgc2lnbmVk
-IGNoYXIsIHMsIGwsICZyZWFkdmFsKTsKKwkJCWlmIChyZWFkdmFsICE9IHNyYykgeworCQkJCXBy
-aW50ZigiRXJyb3IgKGludHdpc2UpIHNyYyAlWCByZWFkICVsbFggc2hpZnQgJWQgbGVuICVkXG4i
-LAorCQkJCSAgICAgICBzcmMsIHJlYWR2YWwsIHMsIGwpOworCQkJCXByaW50X2J5dGVfYXJyYXko
-dGFyZ2V0LmMsIFRFU1RfTEVOKTsKKwkJCQllcnIgPSAxOworCQkJfQorCisJCQlpbml0X2J5dGVf
-YXJyYXkodGFyZ2V0LmMsIFRFU1RfTEVOLCAweDApOworCQkJYnRfYml0ZmllbGRfd3JpdGUodGFy
-Z2V0LmwsIGxvbmcsIHMsIGwsIHNyYyk7CisJCQlidF9iaXRmaWVsZF9yZWFkKHRhcmdldC5jLCBz
-aWduZWQgY2hhciwgcywgbCwgJnJlYWR2YWwpOworCQkJaWYgKHJlYWR2YWwgIT0gc3JjKSB7CisJ
-CQkJcHJpbnRmKCJFcnJvciAobG9uZ3dpc2UpIHNyYyAlWCByZWFkICVsbFggc2hpZnQgJWQgbGVu
-ICVkXG4iLAorCQkJCSAgICAgICBzcmMsIHJlYWR2YWwsIHMsIGwpOworCQkJCXByaW50X2J5dGVf
-YXJyYXkodGFyZ2V0LmMsIFRFU1RfTEVOKTsKKwkJCQllcnIgPSAxOworCQkJfQorCisJCQlpbml0
-X2J5dGVfYXJyYXkodGFyZ2V0LmMsIFRFU1RfTEVOLCAweDApOworCQkJYnRfYml0ZmllbGRfd3Jp
-dGUodGFyZ2V0LmxsLCBsb25nIGxvbmcsIHMsIGwsIHNyYyk7CisJCQlidF9iaXRmaWVsZF9yZWFk
-KHRhcmdldC5jLCBzaWduZWQgY2hhciwgcywgbCwgJnJlYWR2YWwpOworCQkJaWYgKHJlYWR2YWwg
-IT0gc3JjKSB7CisJCQkJcHJpbnRmKCJFcnJvciAobG9uZ2xvbmd3aXNlKSBzcmMgJVggcmVhZCAl
-bGxYIHNoaWZ0ICVkIGxlbiAlZFxuIiwKKwkJCQkgICAgICAgc3JjLCByZWFkdmFsLCBzLCBsKTsK
-KwkJCQlwcmludF9ieXRlX2FycmF5KHRhcmdldC5jLCBURVNUX0xFTik7CisJCQkJZXJyID0gMTsK
-KwkJCX0KKwkJfQorCX0KKwlpZiAoIWVycikKKwkJcHJpbnRmKCJTdWNjZXNzIVxuIik7CisJZWxz
-ZQorCQlwcmludGYoIkZhaWxlZCFcbiIpOworCXJldHVybiBlcnI7Cit9CisKK2ludCBydW5fdGVz
-dCh2b2lkKQoreworCWludCBlcnIgPSAwOworCWludCBpOworCisJc3JhbmQodGltZShOVUxMKSk7
-CisKKwlzcmNyYW5kID0gMDsKKwllcnIgfD0gcnVuX3Rlc3RfdW5zaWduZWQoKTsKKwlzcmNyYW5k
-ID0gMDsKKwllcnIgfD0gcnVuX3Rlc3Rfc2lnbmVkKCk7CisJc3JjcmFuZCA9IDE7CisJZXJyIHw9
-IHJ1bl90ZXN0X3Vuc2lnbmVkKCk7CisJc3JjcmFuZCA9IH4wVTsKKwllcnIgfD0gcnVuX3Rlc3Rf
-dW5zaWduZWQoKTsKKwlzcmNyYW5kID0gLTE7CisJZXJyIHw9IHJ1bl90ZXN0X3NpZ25lZCgpOwor
-CXNyY3JhbmQgPSAoaW50KTB4ODAwMDAwMDBVOworCWVyciB8PSBydW5fdGVzdF9zaWduZWQoKTsK
-KworCWZvciAoaSA9IDA7IGkgPCBOUl9URVNUUzsgaSsrKSB7CisJCXNyY3JhbmQgPSByYW5kKCk7
-CisJCWVyciB8PSBydW5fdGVzdF91bnNpZ25lZCgpOworCQllcnIgfD0gcnVuX3Rlc3Rfc2lnbmVk
-KCk7CisJfQorCXJldHVybiBlcnI7Cit9CisKK2ludCBtYWluKGludCBhcmdjLCBjaGFyICoqYXJn
-dikKK3sKKwl1bnNpZ25lZCBsb25nIHNyYzsKKwl1bnNpZ25lZCBpbnQgc2hpZnQsIGxlbjsKKwlp
-bnQgcmV0OworCXVuaW9uIHsKKwkJdW5zaWduZWQgY2hhciBjWzhdOworCQl1bnNpZ25lZCBzaG9y
-dCBzWzRdOworCQl1bnNpZ25lZCBpbnQgaVsyXTsKKwkJdW5zaWduZWQgbG9uZyBsWzJdOworCQl1
-bnNpZ25lZCBsb25nIGxvbmcgbGxbMV07CisJfSB0YXJnZXQ7CisJdW5zaWduZWQgbG9uZyBsb25n
-IHJlYWR2YWw7CisKKwlpZiAoYXJnYyA+IDEpCisJCXNyYyA9IGF0b2koYXJndlsxXSk7CisJZWxz
-ZQorCQlzcmMgPSAweDEyMzQ1Njc4OworCWlmIChhcmdjID4gMikKKwkJc2hpZnQgPSBhdG9pKGFy
-Z3ZbMl0pOworCWVsc2UKKwkJc2hpZnQgPSAxMjsKKwlpZiAoYXJnYyA+IDMpCisJCWxlbiA9IGF0
-b2koYXJndlszXSk7CisJZWxzZQorCQlsZW4gPSA0MDsKKworCXRhcmdldC5pWzBdID0gMHhGRkZG
-RkZGRjsKKwl0YXJnZXQuaVsxXSA9IDB4RkZGRkZGRkY7CisJYnRfYml0ZmllbGRfd3JpdGUodGFy
-Z2V0LmMsIHVuc2lnbmVkIGNoYXIsIHNoaWZ0LCBsZW4sIHNyYyk7CisJcHJpbnRmKCJieXRld2lz
-ZVxuIik7CisJcHJpbnRfYnl0ZV9hcnJheSh0YXJnZXQuYywgOCk7CisKKwl0YXJnZXQuaVswXSA9
-IDB4RkZGRkZGRkY7CisJdGFyZ2V0LmlbMV0gPSAweEZGRkZGRkZGOworCWJ0X2JpdGZpZWxkX3dy
-aXRlKHRhcmdldC5zLCB1bnNpZ25lZCBzaG9ydCwgc2hpZnQsIGxlbiwgc3JjKTsKKwlwcmludGYo
-InNob3J0d2lzZVxuIik7CisJcHJpbnRfYnl0ZV9hcnJheSh0YXJnZXQuYywgOCk7CisKKwl0YXJn
-ZXQuaVswXSA9IDB4RkZGRkZGRkY7CisJdGFyZ2V0LmlbMV0gPSAweEZGRkZGRkZGOworCWJ0X2Jp
-dGZpZWxkX3dyaXRlKHRhcmdldC5pLCB1bnNpZ25lZCBpbnQsIHNoaWZ0LCBsZW4sIHNyYyk7CisJ
-cHJpbnRmKCJpbnR3aXNlXG4iKTsKKwlwcmludF9ieXRlX2FycmF5KHRhcmdldC5jLCA4KTsKKwor
-CXRhcmdldC5pWzBdID0gMHhGRkZGRkZGRjsKKwl0YXJnZXQuaVsxXSA9IDB4RkZGRkZGRkY7CisJ
-YnRfYml0ZmllbGRfd3JpdGUodGFyZ2V0LmwsIHVuc2lnbmVkIGxvbmcsIHNoaWZ0LCBsZW4sIHNy
-Yyk7CisJcHJpbnRmKCJsb25nd2lzZVxuIik7CisJcHJpbnRfYnl0ZV9hcnJheSh0YXJnZXQuYywg
-OCk7CisKKwl0YXJnZXQuaVswXSA9IDB4RkZGRkZGRkY7CisJdGFyZ2V0LmlbMV0gPSAweEZGRkZG
-RkZGOworCWJ0X2JpdGZpZWxkX3dyaXRlKHRhcmdldC5sbCwgdW5zaWduZWQgbG9uZyBsb25nLCBz
-aGlmdCwgbGVuLCBzcmMpOworCXByaW50ZigibGx1d2lzZVxuIik7CisJcHJpbnRfYnl0ZV9hcnJh
-eSh0YXJnZXQuYywgOCk7CisKKwlidF9iaXRmaWVsZF9yZWFkKHRhcmdldC5jLCB1bnNpZ25lZCBj
-aGFyLCBzaGlmdCwgbGVuLCAmcmVhZHZhbCk7CisJcHJpbnRmKCJyZWFkOiAlbGxYXG4iLCByZWFk
-dmFsKTsKKworCXJldCA9IHJ1bl90ZXN0KCk7CisKKwlyZXR1cm4gcmV0OworfQpkaWZmIC0tZ2l0
-IGEvdGVzdHMvcnVuYWxsLnNoIGIvdGVzdHMvcnVuYWxsLnNoCmluZGV4IGIyYWY2NTYuLjllMGJk
-Y2EgMTAwNzU1Ci0tLSBhL3Rlc3RzL3J1bmFsbC5zaAorKysgYi90ZXN0cy9ydW5hbGwuc2gKQEAg
-LTUzLDEzICs1Myw2IEBAIGZ1bmN0aW9uIHJ1bl9iYWJlbHRyYWNlICgpCiAJcmV0dXJuICQ/CiB9
-CiAKLWVjaG8gLWUgIlJ1bm5pbmcgdGVzdC1iaXRmaWVsZC4uLiIKLS4vdGVzdC1iaXRmaWVsZAot
-dGVzdF9jaGVjawotaWYgWyAkPyAtbmUgMCBdOyB0aGVuCi0JZXhpdCAxCi1maQotCiAjcnVuIGJh
-YmVsdHJhY2UgZXhwZWN0cyBzdWNjZXNzCiBlY2hvIC1lICJSdW5uaW5nIGJhYmVsdHJhY2Ugd2l0
-aG91dCBhcmd1bWVudC4uLiIKIHJ1bl9iYWJlbHRyYWNlCmRpZmYgLS1naXQgYS90ZXN0cy90ZXN0
-LWJpdGZpZWxkLmMgYi90ZXN0cy90ZXN0LWJpdGZpZWxkLmMKZGVsZXRlZCBmaWxlIG1vZGUgMTAw
-NjQ0CmluZGV4IDNiZjc1NjguLjAwMDAwMDAKLS0tIGEvdGVzdHMvdGVzdC1iaXRmaWVsZC5jCisr
-KyAvZGV2L251bGwKQEAgLTEsMzcxICswLDAgQEAKLS8qCi0gKiB0ZXN0LWJpdGZpZWxkLmMKLSAq
-Ci0gKiBCYWJlbFRyYWNlIC0gYml0ZmllbGQgdGVzdCBwcm9ncmFtCi0gKgotICogQ29weXJpZ2h0
-IDIwMTAgLSBNYXRoaWV1IERlc25veWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29t
-PgotICoKLSAqIFRoaXMgcHJvZ3JhbSBpcyBmcmVlIHNvZnR3YXJlOyB5b3UgY2FuIHJlZGlzdHJp
-YnV0ZSBpdCBhbmQvb3IgbW9kaWZ5Ci0gKiBpdCB1bmRlciB0aGUgdGVybXMgb2YgdGhlIEdOVSBH
-ZW5lcmFsIFB1YmxpYyBMaWNlbnNlIGFzIHB1Ymxpc2hlZCBieQotICogdGhlIEZyZWUgU29mdHdh
-cmUgRm91bmRhdGlvbjsgdW5kZXIgdmVyc2lvbiAyIG9mIHRoZSBMaWNlbnNlLgotICoKLSAqIFRo
-aXMgcHJvZ3JhbSBpcyBkaXN0cmlidXRlZCBpbiB0aGUgaG9wZSB0aGF0IGl0IHdpbGwgYmUgdXNl
-ZnVsLAotICogYnV0IFdJVEhPVVQgQU5ZIFdBUlJBTlRZOyB3aXRob3V0IGV2ZW4gdGhlIGltcGxp
-ZWQgd2FycmFudHkgb2YKLSAqIE1FUkNIQU5UQUJJTElUWSBvciBGSVRORVNTIEZPUiBBIFBBUlRJ
-Q1VMQVIgUFVSUE9TRS4gIFNlZSB0aGUKLSAqIEdOVSBHZW5lcmFsIFB1YmxpYyBMaWNlbnNlIGZv
-ciBtb3JlIGRldGFpbHMuCi0gKgotICogWW91IHNob3VsZCBoYXZlIHJlY2VpdmVkIGEgY29weSBv
-ZiB0aGUgR05VIEdlbmVyYWwgUHVibGljIExpY2Vuc2UgYWxvbmcKLSAqIHdpdGggdGhpcyBwcm9n
-cmFtOyBpZiBub3QsIHdyaXRlIHRvIHRoZSBGcmVlIFNvZnR3YXJlIEZvdW5kYXRpb24sIEluYy4s
-Ci0gKiA1MSBGcmFua2xpbiBTdHJlZXQsIEZpZnRoIEZsb29yLCBCb3N0b24sIE1BIDAyMTEwLTEz
-MDEgVVNBLgotICovCi0KLSNkZWZpbmUgX0dOVV9TT1VSQ0UKLSNpbmNsdWRlIDxiYWJlbHRyYWNl
-L2JpdGZpZWxkLmg+Ci0jaW5jbHVkZSA8dGltZS5oPgotI2luY2x1ZGUgPHN0ZGxpYi5oPgotI2lu
-Y2x1ZGUgPHN0ZGlvLmg+Ci0KLXVuc2lnbmVkIGludCBnbG9iOwotCi0vKgotICogVGhpcyBmdW5j
-dGlvbiBpcyBvbmx5IGRlY2xhcmVkIHRvIHNob3cgdGhlIHNpemUgb2YgYSBiaXRmaWVsZCB3cml0
-ZSBpbgotICogb2JqZHVtcC4KLSAqLwotdm9pZCBmY3Qodm9pZCkKLXsKLQlidF9iaXRmaWVsZF93
-cml0ZSgmZ2xvYiwgdW5zaWduZWQgaW50LCAxMiwgMTUsIDB4MTIzNDU2NzgpOwotfQotCi0vKiBU
-ZXN0IGFycmF5IHNpemUsIGluIGJ5dGVzICovCi0jZGVmaW5lIFRFU1RfTEVOIDEyOAotI2RlZmlu
-ZSBOUl9URVNUUyAxMAotCi11bnNpZ25lZCBpbnQgc3JjcmFuZDsKLQotI2lmIGRlZmluZWQoX19p
-Mzg2KSB8fCBkZWZpbmVkKF9feDg2XzY0KQotCi1zdGF0aWMgaW5saW5lIGludCBmbHMoaW50IHgp
-Ci17Ci0JaW50IHI7Ci0JYXNtKCJic3JsICUxLCUwXG5cdCIKLQkgICAgImNtb3Z6bCAlMiwlMCIK
-LQkgICAgOiAiPSZyIiAocikgOiAicm0iICh4KSwgInJtIiAoLTEpKTsKLQlyZXR1cm4gciArIDE7
-Ci19Ci0KLSNlbGlmIGRlZmluZWQoX19QUENfXykKLQotc3RhdGljIF9faW5saW5lX18gaW50IGZs
-cyh1bnNpZ25lZCBpbnQgeCkKLXsKLQlpbnQgbHo7Ci0KLQlhc20gKCJjbnRsencgJTAsJTEiIDog
-Ij1yIiAobHopIDogInIiICh4KSk7Ci0JcmV0dXJuIDMyIC0gbHo7Ci19Ci0KLSNlbHNlCi0KLXN0
-YXRpYyBpbnQgZmxzKHVuc2lnbmVkIGludCB4KQotewotCWludCByID0gMzI7Ci0KLQlpZiAoIXgp
-Ci0JCXJldHVybiAwOwotCWlmICghKHggJiAweEZGRkYwMDAwVSkpIHsKLQkJeCA8PD0gMTY7Ci0J
-CXIgLT0gMTY7Ci0JfQotCWlmICghKHggJiAweEZGMDAwMDAwVSkpIHsKLQkJeCA8PD0gODsKLQkJ
-ciAtPSA4OwotCX0KLQlpZiAoISh4ICYgMHhGMDAwMDAwMFUpKSB7Ci0JCXggPDw9IDQ7Ci0JCXIg
-LT0gNDsKLQl9Ci0JaWYgKCEoeCAmIDB4QzAwMDAwMDBVKSkgewotCQl4IDw8PSAyOwotCQlyIC09
-IDI7Ci0JfQotCWlmICghKHggJiAweDgwMDAwMDAwVSkpIHsKLQkJeCA8PD0gMTsKLQkJciAtPSAx
-OwotCX0KLQlyZXR1cm4gcjsKLX0KLQotI2VuZGlmCi0KLSNkZWZpbmUgcHJpbnRfYnl0ZV9hcnJh
-eShjLCBsZW4pCVwKLWRvIHsJCQkJCVwKLQl1bnNpZ25lZCBsb25nIGk7CQlcCi0JCQkJCVwKLQlm
-b3IgKGkgPSAwOyBpIDwgKGxlbik7IGkrKykgewlcCi0JCXByaW50ZigiMHglWCIsIChjKVtpXSk7
-CVwKLQkJaWYgKGkgIT0gKGxlbikgLSAxKQlcCi0JCQlwcmludGYoIiAiKTsJXAotCX0JCQkJXAot
-CXByaW50ZigiXG4iKTsJCQlcCi19IHdoaWxlICgwKQotCi0jZGVmaW5lIGluaXRfYnl0ZV9hcnJh
-eShjLCBsZW4sIHZhbCkJXAotZG8gewkJCQkJXAotCXVuc2lnbmVkIGxvbmcgaTsJCVwKLQkJCQkJ
-XAotCWZvciAoaSA9IDA7IGkgPCAobGVuKTsgaSsrKQlcCi0JCShjKVtpXSA9ICh2YWwpOwkJXAot
-fSB3aGlsZSAoMCkKLQotaW50IHJ1bl90ZXN0X3Vuc2lnbmVkKHZvaWQpCi17Ci0JdW5zaWduZWQg
-aW50IHNyYywgbnJiaXRzOwotCXVuaW9uIHsKLQkJdW5zaWduZWQgY2hhciBjW1RFU1RfTEVOXTsK
-LQkJdW5zaWduZWQgc2hvcnQgc1tURVNUX0xFTi9zaXplb2YodW5zaWduZWQgc2hvcnQpXTsKLQkJ
-dW5zaWduZWQgaW50IGlbVEVTVF9MRU4vc2l6ZW9mKHVuc2lnbmVkIGludCldOwotCQl1bnNpZ25l
-ZCBsb25nIGxbVEVTVF9MRU4vc2l6ZW9mKHVuc2lnbmVkIGxvbmcpXTsKLQkJdW5zaWduZWQgbG9u
-ZyBsb25nIGxsW1RFU1RfTEVOL3NpemVvZih1bnNpZ25lZCBsb25nIGxvbmcpXTsKLQl9IHRhcmdl
-dDsKLQl1bnNpZ25lZCBsb25nIGxvbmcgcmVhZHZhbDsKLQl1bnNpZ25lZCBpbnQgcywgbDsKLQlp
-bnQgZXJyID0gMDsKLQotCXByaW50ZigiUnVubmluZyB1bnNpZ25lZCB0ZXN0IHdpdGggMHglWFxu
-Iiwgc3JjcmFuZCk7Ci0KLQlzcmMgPSBzcmNyYW5kOwotCW5yYml0cyA9IGZscyhzcmMpOwotCi0J
-Zm9yIChzID0gMDsgcyA8IENIQVJfQklUICogVEVTVF9MRU47IHMrKykgewotCQlmb3IgKGwgPSBu
-cmJpdHM7IGwgPCAoQ0hBUl9CSVQgKiBURVNUX0xFTikgLSBzOyBsKyspIHsKLQkJCWluaXRfYnl0
-ZV9hcnJheSh0YXJnZXQuYywgVEVTVF9MRU4sIDB4RkYpOwotCQkJYnRfYml0ZmllbGRfd3JpdGUo
-dGFyZ2V0LmMsIHVuc2lnbmVkIGNoYXIsIHMsIGwsIHNyYyk7Ci0JCQlidF9iaXRmaWVsZF9yZWFk
-KHRhcmdldC5jLCB1bnNpZ25lZCBjaGFyLCBzLCBsLCAmcmVhZHZhbCk7Ci0JCQlpZiAocmVhZHZh
-bCAhPSBzcmMpIHsKLQkJCQlwcmludGYoIkVycm9yIChieXRld2lzZSkgc3JjICVYIHJlYWQgJWxs
-WCBzaGlmdCAlZCBsZW4gJWRcbiIsCi0JCQkJICAgICAgIHNyYywgcmVhZHZhbCwgcywgbCk7Ci0J
-CQkJcHJpbnRfYnl0ZV9hcnJheSh0YXJnZXQuYywgVEVTVF9MRU4pOwotCQkJCWVyciA9IDE7Ci0J
-CQl9Ci0KLQkJCWluaXRfYnl0ZV9hcnJheSh0YXJnZXQuYywgVEVTVF9MRU4sIDB4RkYpOwotCQkJ
-YnRfYml0ZmllbGRfd3JpdGUodGFyZ2V0LnMsIHVuc2lnbmVkIHNob3J0LCBzLCBsLCBzcmMpOwot
-CQkJYnRfYml0ZmllbGRfcmVhZCh0YXJnZXQuYywgdW5zaWduZWQgY2hhciwgcywgbCwgJnJlYWR2
-YWwpOwotCQkJaWYgKHJlYWR2YWwgIT0gc3JjKSB7Ci0JCQkJcHJpbnRmKCJFcnJvciAoc2hvcnR3
-aXNlKSBzcmMgJVggcmVhZCAlbGxYIHNoaWZ0ICVkIGxlbiAlZFxuIiwKLQkJCQkgICAgICAgc3Jj
-LCByZWFkdmFsLCBzLCBsKTsKLQkJCQlwcmludF9ieXRlX2FycmF5KHRhcmdldC5jLCBURVNUX0xF
-Tik7Ci0JCQkJZXJyID0gMTsKLQkJCX0KLQotCQkJaW5pdF9ieXRlX2FycmF5KHRhcmdldC5jLCBU
-RVNUX0xFTiwgMHhGRik7Ci0JCQlidF9iaXRmaWVsZF93cml0ZSh0YXJnZXQuaSwgdW5zaWduZWQg
-aW50LCBzLCBsLCBzcmMpOwotCQkJYnRfYml0ZmllbGRfcmVhZCh0YXJnZXQuYywgdW5zaWduZWQg
-Y2hhciwgcywgbCwgJnJlYWR2YWwpOwotCQkJaWYgKHJlYWR2YWwgIT0gc3JjKSB7Ci0JCQkJcHJp
-bnRmKCJFcnJvciAoaW50d2lzZSkgc3JjICVYIHJlYWQgJWxsWCBzaGlmdCAlZCBsZW4gJWRcbiIs
-Ci0JCQkJICAgICAgIHNyYywgcmVhZHZhbCwgcywgbCk7Ci0JCQkJcHJpbnRfYnl0ZV9hcnJheSh0
-YXJnZXQuYywgVEVTVF9MRU4pOwotCQkJCWVyciA9IDE7Ci0JCQl9Ci0KLQkJCWluaXRfYnl0ZV9h
-cnJheSh0YXJnZXQuYywgVEVTVF9MRU4sIDB4RkYpOwotCQkJYnRfYml0ZmllbGRfd3JpdGUodGFy
-Z2V0LmwsIHVuc2lnbmVkIGxvbmcsIHMsIGwsIHNyYyk7Ci0JCQlidF9iaXRmaWVsZF9yZWFkKHRh
-cmdldC5jLCB1bnNpZ25lZCBjaGFyLCBzLCBsLCAmcmVhZHZhbCk7Ci0JCQlpZiAocmVhZHZhbCAh
-PSBzcmMpIHsKLQkJCQlwcmludGYoIkVycm9yIChsb25nd2lzZSkgc3JjICVYIHJlYWQgJWxsWCBz
-aGlmdCAlZCBsZW4gJWRcbiIsCi0JCQkJICAgICAgIHNyYywgcmVhZHZhbCwgcywgbCk7Ci0JCQkJ
-cHJpbnRfYnl0ZV9hcnJheSh0YXJnZXQuYywgVEVTVF9MRU4pOwotCQkJCWVyciA9IDE7Ci0JCQl9
-Ci0KLQkJCWluaXRfYnl0ZV9hcnJheSh0YXJnZXQuYywgVEVTVF9MRU4sIDB4RkYpOwotCQkJYnRf
-Yml0ZmllbGRfd3JpdGUodGFyZ2V0LmxsLCB1bnNpZ25lZCBsb25nIGxvbmcsIHMsIGwsIHNyYyk7
-Ci0JCQlidF9iaXRmaWVsZF9yZWFkKHRhcmdldC5jLCB1bnNpZ25lZCBjaGFyLCBzLCBsLCAmcmVh
-ZHZhbCk7Ci0JCQlpZiAocmVhZHZhbCAhPSBzcmMpIHsKLQkJCQlwcmludGYoIkVycm9yIChsb25n
-bG9uZ3dpc2UpIHNyYyAlWCByZWFkICVsbFggc2hpZnQgJWQgbGVuICVkXG4iLAotCQkJCSAgICAg
-ICBzcmMsIHJlYWR2YWwsIHMsIGwpOwotCQkJCXByaW50X2J5dGVfYXJyYXkodGFyZ2V0LmMsIFRF
-U1RfTEVOKTsKLQkJCQllcnIgPSAxOwotCQkJfQotCQl9Ci0JfQotCWlmICghZXJyKQotCQlwcmlu
-dGYoIlN1Y2Nlc3MhXG4iKTsKLQllbHNlCi0JCXByaW50ZigiRmFpbGVkIVxuIik7Ci0JcmV0dXJu
-IGVycjsKLX0KLQotaW50IHJ1bl90ZXN0X3NpZ25lZCh2b2lkKQotewotCWludCBzcmMsIG5yYml0
-czsKLQl1bmlvbiB7Ci0JCXNpZ25lZCBjaGFyIGNbVEVTVF9MRU5dOwotCQlzaG9ydCBzW1RFU1Rf
-TEVOL3NpemVvZihzaG9ydCldOwotCQlpbnQgaVtURVNUX0xFTi9zaXplb2YoaW50KV07Ci0JCWxv
-bmcgbFtURVNUX0xFTi9zaXplb2YobG9uZyldOwotCQlsb25nIGxvbmcgbGxbVEVTVF9MRU4vc2l6
-ZW9mKGxvbmcgbG9uZyldOwotCX0gdGFyZ2V0OwotCWxvbmcgbG9uZyByZWFkdmFsOwotCXVuc2ln
-bmVkIGludCBzLCBsOwotCWludCBlcnIgPSAwOwotCi0JcHJpbnRmKCJSdW5uaW5nIHNpZ25lZCB0
-ZXN0IHdpdGggMHglWFxuIiwgc3JjcmFuZCk7Ci0KLQlzcmMgPSBzcmNyYW5kOwotCWlmIChzcmMg
-JiAweDgwMDAwMDAwVSkKLQkJbnJiaXRzID0gZmxzKH5zcmMpICsgMTsJLyogRmluZCBsZWFzdCBz
-aWduaWZpY2FudCBiaXQgY29udmV5aW5nIHNpZ24gKi8KLQllbHNlCi0JCW5yYml0cyA9IGZscyhz
-cmMpICsgMTsJLyogS2VlcCBzaWduIGF0IDAgKi8KLQotCWZvciAocyA9IDA7IHMgPCA4ICogVEVT
-VF9MRU47IHMrKykgewotCQlmb3IgKGwgPSBucmJpdHM7IGwgPCAoOCAqIFRFU1RfTEVOKSAtIHM7
-IGwrKykgewotCQkJaW5pdF9ieXRlX2FycmF5KHRhcmdldC5jLCBURVNUX0xFTiwgMHgwKTsKLQkJ
-CWJ0X2JpdGZpZWxkX3dyaXRlKHRhcmdldC5jLCBzaWduZWQgY2hhciwgcywgbCwgc3JjKTsKLQkJ
-CWJ0X2JpdGZpZWxkX3JlYWQodGFyZ2V0LmMsIHNpZ25lZCBjaGFyLCBzLCBsLCAmcmVhZHZhbCk7
-Ci0JCQlpZiAocmVhZHZhbCAhPSBzcmMpIHsKLQkJCQlwcmludGYoIkVycm9yIChieXRld2lzZSkg
-c3JjICVYIHJlYWQgJWxsWCBzaGlmdCAlZCBsZW4gJWRcbiIsCi0JCQkJICAgICAgIHNyYywgcmVh
-ZHZhbCwgcywgbCk7Ci0JCQkJcHJpbnRfYnl0ZV9hcnJheSh0YXJnZXQuYywgVEVTVF9MRU4pOwot
-CQkJCWVyciA9IDE7Ci0JCQl9Ci0KLQkJCWluaXRfYnl0ZV9hcnJheSh0YXJnZXQuYywgVEVTVF9M
-RU4sIDB4MCk7Ci0JCQlidF9iaXRmaWVsZF93cml0ZSh0YXJnZXQucywgc2hvcnQsIHMsIGwsIHNy
-Yyk7Ci0JCQlidF9iaXRmaWVsZF9yZWFkKHRhcmdldC5jLCBzaWduZWQgY2hhciwgcywgbCwgJnJl
-YWR2YWwpOwotCQkJaWYgKHJlYWR2YWwgIT0gc3JjKSB7Ci0JCQkJcHJpbnRmKCJFcnJvciAoc2hv
-cnR3aXNlKSBzcmMgJVggcmVhZCAlbGxYIHNoaWZ0ICVkIGxlbiAlZFxuIiwKLQkJCQkgICAgICAg
-c3JjLCByZWFkdmFsLCBzLCBsKTsKLQkJCQlwcmludF9ieXRlX2FycmF5KHRhcmdldC5jLCBURVNU
-X0xFTik7Ci0JCQkJZXJyID0gMTsKLQkJCX0KLQotCQkJaW5pdF9ieXRlX2FycmF5KHRhcmdldC5j
-LCBURVNUX0xFTiwgMHgwKTsKLQkJCWJ0X2JpdGZpZWxkX3dyaXRlKHRhcmdldC5pLCBpbnQsIHMs
-IGwsIHNyYyk7Ci0JCQlidF9iaXRmaWVsZF9yZWFkKHRhcmdldC5jLCBzaWduZWQgY2hhciwgcywg
-bCwgJnJlYWR2YWwpOwotCQkJaWYgKHJlYWR2YWwgIT0gc3JjKSB7Ci0JCQkJcHJpbnRmKCJFcnJv
-ciAoaW50d2lzZSkgc3JjICVYIHJlYWQgJWxsWCBzaGlmdCAlZCBsZW4gJWRcbiIsCi0JCQkJICAg
-ICAgIHNyYywgcmVhZHZhbCwgcywgbCk7Ci0JCQkJcHJpbnRfYnl0ZV9hcnJheSh0YXJnZXQuYywg
-VEVTVF9MRU4pOwotCQkJCWVyciA9IDE7Ci0JCQl9Ci0KLQkJCWluaXRfYnl0ZV9hcnJheSh0YXJn
-ZXQuYywgVEVTVF9MRU4sIDB4MCk7Ci0JCQlidF9iaXRmaWVsZF93cml0ZSh0YXJnZXQubCwgbG9u
-ZywgcywgbCwgc3JjKTsKLQkJCWJ0X2JpdGZpZWxkX3JlYWQodGFyZ2V0LmMsIHNpZ25lZCBjaGFy
-LCBzLCBsLCAmcmVhZHZhbCk7Ci0JCQlpZiAocmVhZHZhbCAhPSBzcmMpIHsKLQkJCQlwcmludGYo
-IkVycm9yIChsb25nd2lzZSkgc3JjICVYIHJlYWQgJWxsWCBzaGlmdCAlZCBsZW4gJWRcbiIsCi0J
-CQkJICAgICAgIHNyYywgcmVhZHZhbCwgcywgbCk7Ci0JCQkJcHJpbnRfYnl0ZV9hcnJheSh0YXJn
-ZXQuYywgVEVTVF9MRU4pOwotCQkJCWVyciA9IDE7Ci0JCQl9Ci0KLQkJCWluaXRfYnl0ZV9hcnJh
-eSh0YXJnZXQuYywgVEVTVF9MRU4sIDB4MCk7Ci0JCQlidF9iaXRmaWVsZF93cml0ZSh0YXJnZXQu
-bGwsIGxvbmcgbG9uZywgcywgbCwgc3JjKTsKLQkJCWJ0X2JpdGZpZWxkX3JlYWQodGFyZ2V0LmMs
-IHNpZ25lZCBjaGFyLCBzLCBsLCAmcmVhZHZhbCk7Ci0JCQlpZiAocmVhZHZhbCAhPSBzcmMpIHsK
-LQkJCQlwcmludGYoIkVycm9yIChsb25nbG9uZ3dpc2UpIHNyYyAlWCByZWFkICVsbFggc2hpZnQg
-JWQgbGVuICVkXG4iLAotCQkJCSAgICAgICBzcmMsIHJlYWR2YWwsIHMsIGwpOwotCQkJCXByaW50
-X2J5dGVfYXJyYXkodGFyZ2V0LmMsIFRFU1RfTEVOKTsKLQkJCQllcnIgPSAxOwotCQkJfQotCQl9
-Ci0JfQotCWlmICghZXJyKQotCQlwcmludGYoIlN1Y2Nlc3MhXG4iKTsKLQllbHNlCi0JCXByaW50
-ZigiRmFpbGVkIVxuIik7Ci0JcmV0dXJuIGVycjsKLX0KLQotaW50IHJ1bl90ZXN0KHZvaWQpCi17
-Ci0JaW50IGVyciA9IDA7Ci0JaW50IGk7Ci0KLQlzcmFuZCh0aW1lKE5VTEwpKTsKLQotCXNyY3Jh
-bmQgPSAwOwotCWVyciB8PSBydW5fdGVzdF91bnNpZ25lZCgpOwotCXNyY3JhbmQgPSAwOwotCWVy
-ciB8PSBydW5fdGVzdF9zaWduZWQoKTsKLQlzcmNyYW5kID0gMTsKLQllcnIgfD0gcnVuX3Rlc3Rf
-dW5zaWduZWQoKTsKLQlzcmNyYW5kID0gfjBVOwotCWVyciB8PSBydW5fdGVzdF91bnNpZ25lZCgp
-OwotCXNyY3JhbmQgPSAtMTsKLQllcnIgfD0gcnVuX3Rlc3Rfc2lnbmVkKCk7Ci0Jc3JjcmFuZCA9
-IChpbnQpMHg4MDAwMDAwMFU7Ci0JZXJyIHw9IHJ1bl90ZXN0X3NpZ25lZCgpOwotCi0JZm9yIChp
-ID0gMDsgaSA8IE5SX1RFU1RTOyBpKyspIHsKLQkJc3JjcmFuZCA9IHJhbmQoKTsKLQkJZXJyIHw9
-IHJ1bl90ZXN0X3Vuc2lnbmVkKCk7Ci0JCWVyciB8PSBydW5fdGVzdF9zaWduZWQoKTsKLQl9Ci0J
-cmV0dXJuIGVycjsKLX0KLQotaW50IG1haW4oaW50IGFyZ2MsIGNoYXIgKiphcmd2KQotewotCXVu
-c2lnbmVkIGxvbmcgc3JjOwotCXVuc2lnbmVkIGludCBzaGlmdCwgbGVuOwotCWludCByZXQ7Ci0J
-dW5pb24gewotCQl1bnNpZ25lZCBjaGFyIGNbOF07Ci0JCXVuc2lnbmVkIHNob3J0IHNbNF07Ci0J
-CXVuc2lnbmVkIGludCBpWzJdOwotCQl1bnNpZ25lZCBsb25nIGxbMl07Ci0JCXVuc2lnbmVkIGxv
-bmcgbG9uZyBsbFsxXTsKLQl9IHRhcmdldDsKLQl1bnNpZ25lZCBsb25nIGxvbmcgcmVhZHZhbDsK
-LQotCWlmIChhcmdjID4gMSkKLQkJc3JjID0gYXRvaShhcmd2WzFdKTsKLQllbHNlCi0JCXNyYyA9
-IDB4MTIzNDU2Nzg7Ci0JaWYgKGFyZ2MgPiAyKQotCQlzaGlmdCA9IGF0b2koYXJndlsyXSk7Ci0J
-ZWxzZQotCQlzaGlmdCA9IDEyOwotCWlmIChhcmdjID4gMykKLQkJbGVuID0gYXRvaShhcmd2WzNd
-KTsKLQllbHNlCi0JCWxlbiA9IDQwOwotCi0JdGFyZ2V0LmlbMF0gPSAweEZGRkZGRkZGOwotCXRh
-cmdldC5pWzFdID0gMHhGRkZGRkZGRjsKLQlidF9iaXRmaWVsZF93cml0ZSh0YXJnZXQuYywgdW5z
-aWduZWQgY2hhciwgc2hpZnQsIGxlbiwgc3JjKTsKLQlwcmludGYoImJ5dGV3aXNlXG4iKTsKLQlw
-cmludF9ieXRlX2FycmF5KHRhcmdldC5jLCA4KTsKLQotCXRhcmdldC5pWzBdID0gMHhGRkZGRkZG
-RjsKLQl0YXJnZXQuaVsxXSA9IDB4RkZGRkZGRkY7Ci0JYnRfYml0ZmllbGRfd3JpdGUodGFyZ2V0
-LnMsIHVuc2lnbmVkIHNob3J0LCBzaGlmdCwgbGVuLCBzcmMpOwotCXByaW50Zigic2hvcnR3aXNl
-XG4iKTsKLQlwcmludF9ieXRlX2FycmF5KHRhcmdldC5jLCA4KTsKLQotCXRhcmdldC5pWzBdID0g
-MHhGRkZGRkZGRjsKLQl0YXJnZXQuaVsxXSA9IDB4RkZGRkZGRkY7Ci0JYnRfYml0ZmllbGRfd3Jp
-dGUodGFyZ2V0LmksIHVuc2lnbmVkIGludCwgc2hpZnQsIGxlbiwgc3JjKTsKLQlwcmludGYoImlu
-dHdpc2VcbiIpOwotCXByaW50X2J5dGVfYXJyYXkodGFyZ2V0LmMsIDgpOwotCi0JdGFyZ2V0Lmlb
-MF0gPSAweEZGRkZGRkZGOwotCXRhcmdldC5pWzFdID0gMHhGRkZGRkZGRjsKLQlidF9iaXRmaWVs
-ZF93cml0ZSh0YXJnZXQubCwgdW5zaWduZWQgbG9uZywgc2hpZnQsIGxlbiwgc3JjKTsKLQlwcmlu
-dGYoImxvbmd3aXNlXG4iKTsKLQlwcmludF9ieXRlX2FycmF5KHRhcmdldC5jLCA4KTsKLQotCXRh
-cmdldC5pWzBdID0gMHhGRkZGRkZGRjsKLQl0YXJnZXQuaVsxXSA9IDB4RkZGRkZGRkY7Ci0JYnRf
-Yml0ZmllbGRfd3JpdGUodGFyZ2V0LmxsLCB1bnNpZ25lZCBsb25nIGxvbmcsIHNoaWZ0LCBsZW4s
-IHNyYyk7Ci0JcHJpbnRmKCJsbHV3aXNlXG4iKTsKLQlwcmludF9ieXRlX2FycmF5KHRhcmdldC5j
-LCA4KTsKLQotCWJ0X2JpdGZpZWxkX3JlYWQodGFyZ2V0LmMsIHVuc2lnbmVkIGNoYXIsIHNoaWZ0
-LCBsZW4sICZyZWFkdmFsKTsKLQlwcmludGYoInJlYWQ6ICVsbFhcbiIsIHJlYWR2YWwpOwotCi0J
-cmV0ID0gcnVuX3Rlc3QoKTsKLQotCXJldHVybiByZXQ7Ci19Ci0tIAoxLjguMS4xCgoKX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxp
-bmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcv
-Y2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+* J=E9r=E9mie Galarneau (jeremie.galarneau@efficios.com) wrote:
+> =
+
+> Signed-off-by: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
+
+merged, thanks!
+
+Mathieu
+
+> ---
+>  .gitignore                |   2 +-
+>  tests/Makefile.am         |   4 -
+>  tests/lib/Makefile.am     |   3 +-
+>  tests/lib/runall.sh       |   5 +-
+>  tests/lib/test-bitfield.c | 371 ++++++++++++++++++++++++++++++++++++++++=
+++++++
+>  tests/runall.sh           |   7 -
+>  tests/test-bitfield.c     | 371 ----------------------------------------=
+------
+>  7 files changed, 378 insertions(+), 385 deletions(-)
+>  create mode 100644 tests/lib/test-bitfield.c
+>  delete mode 100644 tests/test-bitfield.c
+> =
+
+> diff --git a/.gitignore b/.gitignore
+> index 03443df..752308e 100644
+> --- a/.gitignore
+> +++ b/.gitignore
+> @@ -1,4 +1,4 @@
+> -/tests/test-bitfield
+> +/tests/lib/test-bitfield
+>  /tests/lib/test-seeks
+>  *.o
+>  *.a
+> diff --git a/tests/Makefile.am b/tests/Makefile.am
+> index 47891e9..816fa66 100644
+> --- a/tests/Makefile.am
+> +++ b/tests/Makefile.am
+> @@ -2,10 +2,6 @@ AM_CFLAGS =3D $(PACKAGE_CFLAGS) -I$(top_srcdir)/include
+>  =
+
+>  SUBDIRS =3D lib
+>  =
+
+> -noinst_PROGRAMS =3D test-bitfield
+> -
+> -test_bitfield_SOURCES =3D test-bitfield.c
+> -
+>  EXTRA_DIST =3D runall.sh ctf-traces/**
+>  =
+
+>  check-am:
+> diff --git a/tests/lib/Makefile.am b/tests/lib/Makefile.am
+> index e9e264b..0613beb 100644
+> --- a/tests/lib/Makefile.am
+> +++ b/tests/lib/Makefile.am
+> @@ -8,9 +8,10 @@ test_seeks_LDADD =3D libtestcommon.a \
+>  	$(top_builddir)/lib/libbabeltrace.la \
+>  	$(top_builddir)/formats/ctf/libbabeltrace-ctf.la
+>  =
+
+> -noinst_PROGRAMS =3D test-seeks
+> +noinst_PROGRAMS =3D test-seeks test-bitfield
+>  =
+
+>  test_seeks_SOURCES =3D test-seeks.c
+> +test_bitfield_SOURCES =3D test-bitfield.c
+>  =
+
+>  EXTRA_DIST =3D README.tap runall.sh
+>  =
+
+> diff --git a/tests/lib/runall.sh b/tests/lib/runall.sh
+> index 34503bb..b5522ad 100755
+> --- a/tests/lib/runall.sh
+> +++ b/tests/lib/runall.sh
+> @@ -3,4 +3,7 @@
+>  # With a trace than contains empty packets
+>  ./test-seeks ../ctf-traces/succeed/wk-heartbeat-u/ 1351532897586558519 1=
+351532897591331194
+>  # With a bigger trace
+> -./test-seeks ../ctf-traces/succeed/lttng-modules-2.0-pre5/ 6133417452423=
+4 61336381998396
+> \ No newline at end of file
+> +./test-seeks ../ctf-traces/succeed/lttng-modules-2.0-pre5/ 6133417452423=
+4 61336381998396
+> +
+> +# run bitfield tests
+> +./test-bitfield
+> diff --git a/tests/lib/test-bitfield.c b/tests/lib/test-bitfield.c
+> new file mode 100644
+> index 0000000..3bf7568
+> --- /dev/null
+> +++ b/tests/lib/test-bitfield.c
+> @@ -0,0 +1,371 @@
+> +/*
+> + * test-bitfield.c
+> + *
+> + * BabelTrace - bitfield test program
+> + *
+> + * Copyright 2010 - Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> + *
+> + * This program is free software; you can redistribute it and/or modify
+> + * it under the terms of the GNU General Public License as published by
+> + * the Free Software Foundation; under version 2 of the License.
+> + *
+> + * This program is distributed in the hope that it will be useful,
+> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
+> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+> + * GNU General Public License for more details.
+> + *
+> + * You should have received a copy of the GNU General Public License alo=
+ng
+> + * with this program; if not, write to the Free Software Foundation, Inc=
+.,
+> + * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+> + */
+> +
+> +#define _GNU_SOURCE
+> +#include <babeltrace/bitfield.h>
+> +#include <time.h>
+> +#include <stdlib.h>
+> +#include <stdio.h>
+> +
+> +unsigned int glob;
+> +
+> +/*
+> + * This function is only declared to show the size of a bitfield write in
+> + * objdump.
+> + */
+> +void fct(void)
+> +{
+> +	bt_bitfield_write(&glob, unsigned int, 12, 15, 0x12345678);
+> +}
+> +
+> +/* Test array size, in bytes */
+> +#define TEST_LEN 128
+> +#define NR_TESTS 10
+> +
+> +unsigned int srcrand;
+> +
+> +#if defined(__i386) || defined(__x86_64)
+> +
+> +static inline int fls(int x)
+> +{
+> +	int r;
+> +	asm("bsrl %1,%0\n\t"
+> +	    "cmovzl %2,%0"
+> +	    : "=3D&r" (r) : "rm" (x), "rm" (-1));
+> +	return r + 1;
+> +}
+> +
+> +#elif defined(__PPC__)
+> +
+> +static __inline__ int fls(unsigned int x)
+> +{
+> +	int lz;
+> +
+> +	asm ("cntlzw %0,%1" : "=3Dr" (lz) : "r" (x));
+> +	return 32 - lz;
+> +}
+> +
+> +#else
+> +
+> +static int fls(unsigned int x)
+> +{
+> +	int r =3D 32;
+> +
+> +	if (!x)
+> +		return 0;
+> +	if (!(x & 0xFFFF0000U)) {
+> +		x <<=3D 16;
+> +		r -=3D 16;
+> +	}
+> +	if (!(x & 0xFF000000U)) {
+> +		x <<=3D 8;
+> +		r -=3D 8;
+> +	}
+> +	if (!(x & 0xF0000000U)) {
+> +		x <<=3D 4;
+> +		r -=3D 4;
+> +	}
+> +	if (!(x & 0xC0000000U)) {
+> +		x <<=3D 2;
+> +		r -=3D 2;
+> +	}
+> +	if (!(x & 0x80000000U)) {
+> +		x <<=3D 1;
+> +		r -=3D 1;
+> +	}
+> +	return r;
+> +}
+> +
+> +#endif
+> +
+> +#define print_byte_array(c, len)	\
+> +do {					\
+> +	unsigned long i;		\
+> +					\
+> +	for (i =3D 0; i < (len); i++) {	\
+> +		printf("0x%X", (c)[i]);	\
+> +		if (i !=3D (len) - 1)	\
+> +			printf(" ");	\
+> +	}				\
+> +	printf("\n");			\
+> +} while (0)
+> +
+> +#define init_byte_array(c, len, val)	\
+> +do {					\
+> +	unsigned long i;		\
+> +					\
+> +	for (i =3D 0; i < (len); i++)	\
+> +		(c)[i] =3D (val);		\
+> +} while (0)
+> +
+> +int run_test_unsigned(void)
+> +{
+> +	unsigned int src, nrbits;
+> +	union {
+> +		unsigned char c[TEST_LEN];
+> +		unsigned short s[TEST_LEN/sizeof(unsigned short)];
+> +		unsigned int i[TEST_LEN/sizeof(unsigned int)];
+> +		unsigned long l[TEST_LEN/sizeof(unsigned long)];
+> +		unsigned long long ll[TEST_LEN/sizeof(unsigned long long)];
+> +	} target;
+> +	unsigned long long readval;
+> +	unsigned int s, l;
+> +	int err =3D 0;
+> +
+> +	printf("Running unsigned test with 0x%X\n", srcrand);
+> +
+> +	src =3D srcrand;
+> +	nrbits =3D fls(src);
+> +
+> +	for (s =3D 0; s < CHAR_BIT * TEST_LEN; s++) {
+> +		for (l =3D nrbits; l < (CHAR_BIT * TEST_LEN) - s; l++) {
+> +			init_byte_array(target.c, TEST_LEN, 0xFF);
+> +			bt_bitfield_write(target.c, unsigned char, s, l, src);
+> +			bt_bitfield_read(target.c, unsigned char, s, l, &readval);
+> +			if (readval !=3D src) {
+> +				printf("Error (bytewise) src %X read %llX shift %d len %d\n",
+> +				       src, readval, s, l);
+> +				print_byte_array(target.c, TEST_LEN);
+> +				err =3D 1;
+> +			}
+> +
+> +			init_byte_array(target.c, TEST_LEN, 0xFF);
+> +			bt_bitfield_write(target.s, unsigned short, s, l, src);
+> +			bt_bitfield_read(target.c, unsigned char, s, l, &readval);
+> +			if (readval !=3D src) {
+> +				printf("Error (shortwise) src %X read %llX shift %d len %d\n",
+> +				       src, readval, s, l);
+> +				print_byte_array(target.c, TEST_LEN);
+> +				err =3D 1;
+> +			}
+> +
+> +			init_byte_array(target.c, TEST_LEN, 0xFF);
+> +			bt_bitfield_write(target.i, unsigned int, s, l, src);
+> +			bt_bitfield_read(target.c, unsigned char, s, l, &readval);
+> +			if (readval !=3D src) {
+> +				printf("Error (intwise) src %X read %llX shift %d len %d\n",
+> +				       src, readval, s, l);
+> +				print_byte_array(target.c, TEST_LEN);
+> +				err =3D 1;
+> +			}
+> +
+> +			init_byte_array(target.c, TEST_LEN, 0xFF);
+> +			bt_bitfield_write(target.l, unsigned long, s, l, src);
+> +			bt_bitfield_read(target.c, unsigned char, s, l, &readval);
+> +			if (readval !=3D src) {
+> +				printf("Error (longwise) src %X read %llX shift %d len %d\n",
+> +				       src, readval, s, l);
+> +				print_byte_array(target.c, TEST_LEN);
+> +				err =3D 1;
+> +			}
+> +
+> +			init_byte_array(target.c, TEST_LEN, 0xFF);
+> +			bt_bitfield_write(target.ll, unsigned long long, s, l, src);
+> +			bt_bitfield_read(target.c, unsigned char, s, l, &readval);
+> +			if (readval !=3D src) {
+> +				printf("Error (longlongwise) src %X read %llX shift %d len %d\n",
+> +				       src, readval, s, l);
+> +				print_byte_array(target.c, TEST_LEN);
+> +				err =3D 1;
+> +			}
+> +		}
+> +	}
+> +	if (!err)
+> +		printf("Success!\n");
+> +	else
+> +		printf("Failed!\n");
+> +	return err;
+> +}
+> +
+> +int run_test_signed(void)
+> +{
+> +	int src, nrbits;
+> +	union {
+> +		signed char c[TEST_LEN];
+> +		short s[TEST_LEN/sizeof(short)];
+> +		int i[TEST_LEN/sizeof(int)];
+> +		long l[TEST_LEN/sizeof(long)];
+> +		long long ll[TEST_LEN/sizeof(long long)];
+> +	} target;
+> +	long long readval;
+> +	unsigned int s, l;
+> +	int err =3D 0;
+> +
+> +	printf("Running signed test with 0x%X\n", srcrand);
+> +
+> +	src =3D srcrand;
+> +	if (src & 0x80000000U)
+> +		nrbits =3D fls(~src) + 1;	/* Find least significant bit conveying sign=
+ */
+> +	else
+> +		nrbits =3D fls(src) + 1;	/* Keep sign at 0 */
+> +
+> +	for (s =3D 0; s < 8 * TEST_LEN; s++) {
+> +		for (l =3D nrbits; l < (8 * TEST_LEN) - s; l++) {
+> +			init_byte_array(target.c, TEST_LEN, 0x0);
+> +			bt_bitfield_write(target.c, signed char, s, l, src);
+> +			bt_bitfield_read(target.c, signed char, s, l, &readval);
+> +			if (readval !=3D src) {
+> +				printf("Error (bytewise) src %X read %llX shift %d len %d\n",
+> +				       src, readval, s, l);
+> +				print_byte_array(target.c, TEST_LEN);
+> +				err =3D 1;
+> +			}
+> +
+> +			init_byte_array(target.c, TEST_LEN, 0x0);
+> +			bt_bitfield_write(target.s, short, s, l, src);
+> +			bt_bitfield_read(target.c, signed char, s, l, &readval);
+> +			if (readval !=3D src) {
+> +				printf("Error (shortwise) src %X read %llX shift %d len %d\n",
+> +				       src, readval, s, l);
+> +				print_byte_array(target.c, TEST_LEN);
+> +				err =3D 1;
+> +			}
+> +
+> +			init_byte_array(target.c, TEST_LEN, 0x0);
+> +			bt_bitfield_write(target.i, int, s, l, src);
+> +			bt_bitfield_read(target.c, signed char, s, l, &readval);
+> +			if (readval !=3D src) {
+> +				printf("Error (intwise) src %X read %llX shift %d len %d\n",
+> +				       src, readval, s, l);
+> +				print_byte_array(target.c, TEST_LEN);
+> +				err =3D 1;
+> +			}
+> +
+> +			init_byte_array(target.c, TEST_LEN, 0x0);
+> +			bt_bitfield_write(target.l, long, s, l, src);
+> +			bt_bitfield_read(target.c, signed char, s, l, &readval);
+> +			if (readval !=3D src) {
+> +				printf("Error (longwise) src %X read %llX shift %d len %d\n",
+> +				       src, readval, s, l);
+> +				print_byte_array(target.c, TEST_LEN);
+> +				err =3D 1;
+> +			}
+> +
+> +			init_byte_array(target.c, TEST_LEN, 0x0);
+> +			bt_bitfield_write(target.ll, long long, s, l, src);
+> +			bt_bitfield_read(target.c, signed char, s, l, &readval);
+> +			if (readval !=3D src) {
+> +				printf("Error (longlongwise) src %X read %llX shift %d len %d\n",
+> +				       src, readval, s, l);
+> +				print_byte_array(target.c, TEST_LEN);
+> +				err =3D 1;
+> +			}
+> +		}
+> +	}
+> +	if (!err)
+> +		printf("Success!\n");
+> +	else
+> +		printf("Failed!\n");
+> +	return err;
+> +}
+> +
+> +int run_test(void)
+> +{
+> +	int err =3D 0;
+> +	int i;
+> +
+> +	srand(time(NULL));
+> +
+> +	srcrand =3D 0;
+> +	err |=3D run_test_unsigned();
+> +	srcrand =3D 0;
+> +	err |=3D run_test_signed();
+> +	srcrand =3D 1;
+> +	err |=3D run_test_unsigned();
+> +	srcrand =3D ~0U;
+> +	err |=3D run_test_unsigned();
+> +	srcrand =3D -1;
+> +	err |=3D run_test_signed();
+> +	srcrand =3D (int)0x80000000U;
+> +	err |=3D run_test_signed();
+> +
+> +	for (i =3D 0; i < NR_TESTS; i++) {
+> +		srcrand =3D rand();
+> +		err |=3D run_test_unsigned();
+> +		err |=3D run_test_signed();
+> +	}
+> +	return err;
+> +}
+> +
+> +int main(int argc, char **argv)
+> +{
+> +	unsigned long src;
+> +	unsigned int shift, len;
+> +	int ret;
+> +	union {
+> +		unsigned char c[8];
+> +		unsigned short s[4];
+> +		unsigned int i[2];
+> +		unsigned long l[2];
+> +		unsigned long long ll[1];
+> +	} target;
+> +	unsigned long long readval;
+> +
+> +	if (argc > 1)
+> +		src =3D atoi(argv[1]);
+> +	else
+> +		src =3D 0x12345678;
+> +	if (argc > 2)
+> +		shift =3D atoi(argv[2]);
+> +	else
+> +		shift =3D 12;
+> +	if (argc > 3)
+> +		len =3D atoi(argv[3]);
+> +	else
+> +		len =3D 40;
+> +
+> +	target.i[0] =3D 0xFFFFFFFF;
+> +	target.i[1] =3D 0xFFFFFFFF;
+> +	bt_bitfield_write(target.c, unsigned char, shift, len, src);
+> +	printf("bytewise\n");
+> +	print_byte_array(target.c, 8);
+> +
+> +	target.i[0] =3D 0xFFFFFFFF;
+> +	target.i[1] =3D 0xFFFFFFFF;
+> +	bt_bitfield_write(target.s, unsigned short, shift, len, src);
+> +	printf("shortwise\n");
+> +	print_byte_array(target.c, 8);
+> +
+> +	target.i[0] =3D 0xFFFFFFFF;
+> +	target.i[1] =3D 0xFFFFFFFF;
+> +	bt_bitfield_write(target.i, unsigned int, shift, len, src);
+> +	printf("intwise\n");
+> +	print_byte_array(target.c, 8);
+> +
+> +	target.i[0] =3D 0xFFFFFFFF;
+> +	target.i[1] =3D 0xFFFFFFFF;
+> +	bt_bitfield_write(target.l, unsigned long, shift, len, src);
+> +	printf("longwise\n");
+> +	print_byte_array(target.c, 8);
+> +
+> +	target.i[0] =3D 0xFFFFFFFF;
+> +	target.i[1] =3D 0xFFFFFFFF;
+> +	bt_bitfield_write(target.ll, unsigned long long, shift, len, src);
+> +	printf("lluwise\n");
+> +	print_byte_array(target.c, 8);
+> +
+> +	bt_bitfield_read(target.c, unsigned char, shift, len, &readval);
+> +	printf("read: %llX\n", readval);
+> +
+> +	ret =3D run_test();
+> +
+> +	return ret;
+> +}
+> diff --git a/tests/runall.sh b/tests/runall.sh
+> index b2af656..9e0bdca 100755
+> --- a/tests/runall.sh
+> +++ b/tests/runall.sh
+> @@ -53,13 +53,6 @@ function run_babeltrace ()
+>  	return $?
+>  }
+>  =
+
+> -echo -e "Running test-bitfield..."
+> -./test-bitfield
+> -test_check
+> -if [ $? -ne 0 ]; then
+> -	exit 1
+> -fi
+> -
+>  #run babeltrace expects success
+>  echo -e "Running babeltrace without argument..."
+>  run_babeltrace
+> diff --git a/tests/test-bitfield.c b/tests/test-bitfield.c
+> deleted file mode 100644
+> index 3bf7568..0000000
+> --- a/tests/test-bitfield.c
+> +++ /dev/null
+> @@ -1,371 +0,0 @@
+> -/*
+> - * test-bitfield.c
+> - *
+> - * BabelTrace - bitfield test program
+> - *
+> - * Copyright 2010 - Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> - *
+> - * This program is free software; you can redistribute it and/or modify
+> - * it under the terms of the GNU General Public License as published by
+> - * the Free Software Foundation; under version 2 of the License.
+> - *
+> - * This program is distributed in the hope that it will be useful,
+> - * but WITHOUT ANY WARRANTY; without even the implied warranty of
+> - * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+> - * GNU General Public License for more details.
+> - *
+> - * You should have received a copy of the GNU General Public License alo=
+ng
+> - * with this program; if not, write to the Free Software Foundation, Inc=
+.,
+> - * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+> - */
+> -
+> -#define _GNU_SOURCE
+> -#include <babeltrace/bitfield.h>
+> -#include <time.h>
+> -#include <stdlib.h>
+> -#include <stdio.h>
+> -
+> -unsigned int glob;
+> -
+> -/*
+> - * This function is only declared to show the size of a bitfield write in
+> - * objdump.
+> - */
+> -void fct(void)
+> -{
+> -	bt_bitfield_write(&glob, unsigned int, 12, 15, 0x12345678);
+> -}
+> -
+> -/* Test array size, in bytes */
+> -#define TEST_LEN 128
+> -#define NR_TESTS 10
+> -
+> -unsigned int srcrand;
+> -
+> -#if defined(__i386) || defined(__x86_64)
+> -
+> -static inline int fls(int x)
+> -{
+> -	int r;
+> -	asm("bsrl %1,%0\n\t"
+> -	    "cmovzl %2,%0"
+> -	    : "=3D&r" (r) : "rm" (x), "rm" (-1));
+> -	return r + 1;
+> -}
+> -
+> -#elif defined(__PPC__)
+> -
+> -static __inline__ int fls(unsigned int x)
+> -{
+> -	int lz;
+> -
+> -	asm ("cntlzw %0,%1" : "=3Dr" (lz) : "r" (x));
+> -	return 32 - lz;
+> -}
+> -
+> -#else
+> -
+> -static int fls(unsigned int x)
+> -{
+> -	int r =3D 32;
+> -
+> -	if (!x)
+> -		return 0;
+> -	if (!(x & 0xFFFF0000U)) {
+> -		x <<=3D 16;
+> -		r -=3D 16;
+> -	}
+> -	if (!(x & 0xFF000000U)) {
+> -		x <<=3D 8;
+> -		r -=3D 8;
+> -	}
+> -	if (!(x & 0xF0000000U)) {
+> -		x <<=3D 4;
+> -		r -=3D 4;
+> -	}
+> -	if (!(x & 0xC0000000U)) {
+> -		x <<=3D 2;
+> -		r -=3D 2;
+> -	}
+> -	if (!(x & 0x80000000U)) {
+> -		x <<=3D 1;
+> -		r -=3D 1;
+> -	}
+> -	return r;
+> -}
+> -
+> -#endif
+> -
+> -#define print_byte_array(c, len)	\
+> -do {					\
+> -	unsigned long i;		\
+> -					\
+> -	for (i =3D 0; i < (len); i++) {	\
+> -		printf("0x%X", (c)[i]);	\
+> -		if (i !=3D (len) - 1)	\
+> -			printf(" ");	\
+> -	}				\
+> -	printf("\n");			\
+> -} while (0)
+> -
+> -#define init_byte_array(c, len, val)	\
+> -do {					\
+> -	unsigned long i;		\
+> -					\
+> -	for (i =3D 0; i < (len); i++)	\
+> -		(c)[i] =3D (val);		\
+> -} while (0)
+> -
+> -int run_test_unsigned(void)
+> -{
+> -	unsigned int src, nrbits;
+> -	union {
+> -		unsigned char c[TEST_LEN];
+> -		unsigned short s[TEST_LEN/sizeof(unsigned short)];
+> -		unsigned int i[TEST_LEN/sizeof(unsigned int)];
+> -		unsigned long l[TEST_LEN/sizeof(unsigned long)];
+> -		unsigned long long ll[TEST_LEN/sizeof(unsigned long long)];
+> -	} target;
+> -	unsigned long long readval;
+> -	unsigned int s, l;
+> -	int err =3D 0;
+> -
+> -	printf("Running unsigned test with 0x%X\n", srcrand);
+> -
+> -	src =3D srcrand;
+> -	nrbits =3D fls(src);
+> -
+> -	for (s =3D 0; s < CHAR_BIT * TEST_LEN; s++) {
+> -		for (l =3D nrbits; l < (CHAR_BIT * TEST_LEN) - s; l++) {
+> -			init_byte_array(target.c, TEST_LEN, 0xFF);
+> -			bt_bitfield_write(target.c, unsigned char, s, l, src);
+> -			bt_bitfield_read(target.c, unsigned char, s, l, &readval);
+> -			if (readval !=3D src) {
+> -				printf("Error (bytewise) src %X read %llX shift %d len %d\n",
+> -				       src, readval, s, l);
+> -				print_byte_array(target.c, TEST_LEN);
+> -				err =3D 1;
+> -			}
+> -
+> -			init_byte_array(target.c, TEST_LEN, 0xFF);
+> -			bt_bitfield_write(target.s, unsigned short, s, l, src);
+> -			bt_bitfield_read(target.c, unsigned char, s, l, &readval);
+> -			if (readval !=3D src) {
+> -				printf("Error (shortwise) src %X read %llX shift %d len %d\n",
+> -				       src, readval, s, l);
+> -				print_byte_array(target.c, TEST_LEN);
+> -				err =3D 1;
+> -			}
+> -
+> -			init_byte_array(target.c, TEST_LEN, 0xFF);
+> -			bt_bitfield_write(target.i, unsigned int, s, l, src);
+> -			bt_bitfield_read(target.c, unsigned char, s, l, &readval);
+> -			if (readval !=3D src) {
+> -				printf("Error (intwise) src %X read %llX shift %d len %d\n",
+> -				       src, readval, s, l);
+> -				print_byte_array(target.c, TEST_LEN);
+> -				err =3D 1;
+> -			}
+> -
+> -			init_byte_array(target.c, TEST_LEN, 0xFF);
+> -			bt_bitfield_write(target.l, unsigned long, s, l, src);
+> -			bt_bitfield_read(target.c, unsigned char, s, l, &readval);
+> -			if (readval !=3D src) {
+> -				printf("Error (longwise) src %X read %llX shift %d len %d\n",
+> -				       src, readval, s, l);
+> -				print_byte_array(target.c, TEST_LEN);
+> -				err =3D 1;
+> -			}
+> -
+> -			init_byte_array(target.c, TEST_LEN, 0xFF);
+> -			bt_bitfield_write(target.ll, unsigned long long, s, l, src);
+> -			bt_bitfield_read(target.c, unsigned char, s, l, &readval);
+> -			if (readval !=3D src) {
+> -				printf("Error (longlongwise) src %X read %llX shift %d len %d\n",
+> -				       src, readval, s, l);
+> -				print_byte_array(target.c, TEST_LEN);
+> -				err =3D 1;
+> -			}
+> -		}
+> -	}
+> -	if (!err)
+> -		printf("Success!\n");
+> -	else
+> -		printf("Failed!\n");
+> -	return err;
+> -}
+> -
+> -int run_test_signed(void)
+> -{
+> -	int src, nrbits;
+> -	union {
+> -		signed char c[TEST_LEN];
+> -		short s[TEST_LEN/sizeof(short)];
+> -		int i[TEST_LEN/sizeof(int)];
+> -		long l[TEST_LEN/sizeof(long)];
+> -		long long ll[TEST_LEN/sizeof(long long)];
+> -	} target;
+> -	long long readval;
+> -	unsigned int s, l;
+> -	int err =3D 0;
+> -
+> -	printf("Running signed test with 0x%X\n", srcrand);
+> -
+> -	src =3D srcrand;
+> -	if (src & 0x80000000U)
+> -		nrbits =3D fls(~src) + 1;	/* Find least significant bit conveying sign=
+ */
+> -	else
+> -		nrbits =3D fls(src) + 1;	/* Keep sign at 0 */
+> -
+> -	for (s =3D 0; s < 8 * TEST_LEN; s++) {
+> -		for (l =3D nrbits; l < (8 * TEST_LEN) - s; l++) {
+> -			init_byte_array(target.c, TEST_LEN, 0x0);
+> -			bt_bitfield_write(target.c, signed char, s, l, src);
+> -			bt_bitfield_read(target.c, signed char, s, l, &readval);
+> -			if (readval !=3D src) {
+> -				printf("Error (bytewise) src %X read %llX shift %d len %d\n",
+> -				       src, readval, s, l);
+> -				print_byte_array(target.c, TEST_LEN);
+> -				err =3D 1;
+> -			}
+> -
+> -			init_byte_array(target.c, TEST_LEN, 0x0);
+> -			bt_bitfield_write(target.s, short, s, l, src);
+> -			bt_bitfield_read(target.c, signed char, s, l, &readval);
+> -			if (readval !=3D src) {
+> -				printf("Error (shortwise) src %X read %llX shift %d len %d\n",
+> -				       src, readval, s, l);
+> -				print_byte_array(target.c, TEST_LEN);
+> -				err =3D 1;
+> -			}
+> -
+> -			init_byte_array(target.c, TEST_LEN, 0x0);
+> -			bt_bitfield_write(target.i, int, s, l, src);
+> -			bt_bitfield_read(target.c, signed char, s, l, &readval);
+> -			if (readval !=3D src) {
+> -				printf("Error (intwise) src %X read %llX shift %d len %d\n",
+> -				       src, readval, s, l);
+> -				print_byte_array(target.c, TEST_LEN);
+> -				err =3D 1;
+> -			}
+> -
+> -			init_byte_array(target.c, TEST_LEN, 0x0);
+> -			bt_bitfield_write(target.l, long, s, l, src);
+> -			bt_bitfield_read(target.c, signed char, s, l, &readval);
+> -			if (readval !=3D src) {
+> -				printf("Error (longwise) src %X read %llX shift %d len %d\n",
+> -				       src, readval, s, l);
+> -				print_byte_array(target.c, TEST_LEN);
+> -				err =3D 1;
+> -			}
+> -
+> -			init_byte_array(target.c, TEST_LEN, 0x0);
+> -			bt_bitfield_write(target.ll, long long, s, l, src);
+> -			bt_bitfield_read(target.c, signed char, s, l, &readval);
+> -			if (readval !=3D src) {
+> -				printf("Error (longlongwise) src %X read %llX shift %d len %d\n",
+> -				       src, readval, s, l);
+> -				print_byte_array(target.c, TEST_LEN);
+> -				err =3D 1;
+> -			}
+> -		}
+> -	}
+> -	if (!err)
+> -		printf("Success!\n");
+> -	else
+> -		printf("Failed!\n");
+> -	return err;
+> -}
+> -
+> -int run_test(void)
+> -{
+> -	int err =3D 0;
+> -	int i;
+> -
+> -	srand(time(NULL));
+> -
+> -	srcrand =3D 0;
+> -	err |=3D run_test_unsigned();
+> -	srcrand =3D 0;
+> -	err |=3D run_test_signed();
+> -	srcrand =3D 1;
+> -	err |=3D run_test_unsigned();
+> -	srcrand =3D ~0U;
+> -	err |=3D run_test_unsigned();
+> -	srcrand =3D -1;
+> -	err |=3D run_test_signed();
+> -	srcrand =3D (int)0x80000000U;
+> -	err |=3D run_test_signed();
+> -
+> -	for (i =3D 0; i < NR_TESTS; i++) {
+> -		srcrand =3D rand();
+> -		err |=3D run_test_unsigned();
+> -		err |=3D run_test_signed();
+> -	}
+> -	return err;
+> -}
+> -
+> -int main(int argc, char **argv)
+> -{
+> -	unsigned long src;
+> -	unsigned int shift, len;
+> -	int ret;
+> -	union {
+> -		unsigned char c[8];
+> -		unsigned short s[4];
+> -		unsigned int i[2];
+> -		unsigned long l[2];
+> -		unsigned long long ll[1];
+> -	} target;
+> -	unsigned long long readval;
+> -
+> -	if (argc > 1)
+> -		src =3D atoi(argv[1]);
+> -	else
+> -		src =3D 0x12345678;
+> -	if (argc > 2)
+> -		shift =3D atoi(argv[2]);
+> -	else
+> -		shift =3D 12;
+> -	if (argc > 3)
+> -		len =3D atoi(argv[3]);
+> -	else
+> -		len =3D 40;
+> -
+> -	target.i[0] =3D 0xFFFFFFFF;
+> -	target.i[1] =3D 0xFFFFFFFF;
+> -	bt_bitfield_write(target.c, unsigned char, shift, len, src);
+> -	printf("bytewise\n");
+> -	print_byte_array(target.c, 8);
+> -
+> -	target.i[0] =3D 0xFFFFFFFF;
+> -	target.i[1] =3D 0xFFFFFFFF;
+> -	bt_bitfield_write(target.s, unsigned short, shift, len, src);
+> -	printf("shortwise\n");
+> -	print_byte_array(target.c, 8);
+> -
+> -	target.i[0] =3D 0xFFFFFFFF;
+> -	target.i[1] =3D 0xFFFFFFFF;
+> -	bt_bitfield_write(target.i, unsigned int, shift, len, src);
+> -	printf("intwise\n");
+> -	print_byte_array(target.c, 8);
+> -
+> -	target.i[0] =3D 0xFFFFFFFF;
+> -	target.i[1] =3D 0xFFFFFFFF;
+> -	bt_bitfield_write(target.l, unsigned long, shift, len, src);
+> -	printf("longwise\n");
+> -	print_byte_array(target.c, 8);
+> -
+> -	target.i[0] =3D 0xFFFFFFFF;
+> -	target.i[1] =3D 0xFFFFFFFF;
+> -	bt_bitfield_write(target.ll, unsigned long long, shift, len, src);
+> -	printf("lluwise\n");
+> -	print_byte_array(target.c, 8);
+> -
+> -	bt_bitfield_read(target.c, unsigned char, shift, len, &readval);
+> -	printf("read: %llX\n", readval);
+> -
+> -	ret =3D run_test();
+> -
+> -	return ret;
+> -}
+> -- =
+
+> 1.8.1.1
+> =
+
+> =
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- =
+
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
