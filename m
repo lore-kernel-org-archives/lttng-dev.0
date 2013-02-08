@@ -1,18 +1,21 @@
-From: Christian Babeux <christian.babeux@efficios.com>
-Subject: [PATCH lttng-tools] Fix: Conditionally disable overlap
-	app test requiring shared libs support
-Date: Thu,  7 Feb 2013 22:47:04 -0500
-Message-ID: <1360295224-5970-1-git-send-email-christian.babeux__5957.78586944125$1360295288$gmane$org@efficios.com>
+From: "Ikaheimonen, JP" <jp_ikaheimonen@mentor.com>
+Subject: How to disable an event that's been enabled by a
+ wildcard selection or -a?
+Date: Fri, 8 Feb 2013 09:25:31 +0000
+Message-ID: <009B25148989C6458484484699278506985C0CFA__45671.9063608491$1360315584$gmane$org@EU-MBX-01.mgc.mentorg.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f173.google.com ([209.85.223.173])
+Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <christian.babeux@0x80.ca>) id 1U3evl-0005tG-Nk
-	for lttng-dev@lists.lttng.org; Thu, 07 Feb 2013 22:47:17 -0500
-Received: by mail-ie0-f173.google.com with SMTP id 9so4546079iec.4
-	for <lttng-dev@lists.lttng.org>; Thu, 07 Feb 2013 19:47:12 -0800 (PST)
+	(envelope-from <jp_ikaheimonen@mentor.com>) id 1U3kDC-00008u-72
+	for lttng-dev@lists.lttng.org; Fri, 08 Feb 2013 04:25:38 -0500
+Received: from svr-orw-exc-10.mgc.mentorg.com ([147.34.98.58])
+	by relay1.mentorg.com with esmtp
+	id 1U3kD6-0005lw-IP from jp_ikaheimonen@mentor.com
+	for lttng-dev@lists.lttng.org; Fri, 08 Feb 2013 01:25:32 -0800
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,56 +24,19 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: dgoulet@efficios.com
-Cc: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-When building lttng-tools with shared library support explicitly
-disabled (e.g.: ./configure --disable-shared), libtool fail with
-a fatal error:
+Consider the following scenario.
+I want to write a script that traces all UST tracepoints of a given application. I have no idea what the names of these tracepoints are. Also, I know that the application uses a library that contains some tracepoints I am not interested about. Now I want to trace all UST tracepoints except the ones I already know about. Is this possible with the lttng commands?
 
-Making all in demo
-  CC       tp.lo
-  CC       tp2.lo
-  CC       tp3.lo
-  CC       demo.o
-  CCLD     demo
-  CCLD     liblttng-ust-provider-ust-tests-demo.la
-  CCLD     liblttng-ust-provider-ust-tests-demo3.la
-libtool: link: can not build a shared library
-libtool: link: See the libtool documentation for more information.
-libtool: link: Fatal configuration error.
+If I enable all tracepoints with "lttng enable-event -u -a" I get all events, even those I do not want. I've tried using "lttng disable-event", and "lttng enable-event" with a filter, but I cannot seem to be able to get rid of the specific events.
 
-The build should not fail because some tests require explicit shared
-library support, instead they should be skipped. This can be accomplished
-by detecting builds with no shared libs support with the NO_SHARED
-Automake variable.
+Thank you,
 
-Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
----
- tests/ust/overlap/demo/Makefile.am | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+JP Ikaheimonen
+Mentor Graphics Embedded Systems Division
+Nucleus(r) | Linux(r) | Android(tm) | Services | UI | Multi-OS
 
-diff --git a/tests/ust/overlap/demo/Makefile.am b/tests/ust/overlap/demo/Makefile.am
-index e354636..68b6e08 100644
---- a/tests/ust/overlap/demo/Makefile.am
-+++ b/tests/ust/overlap/demo/Makefile.am
-@@ -1,5 +1,10 @@
- AM_CFLAGS=-I$(srcdir)
--
-+if NO_SHARED
-+# Do not build this test if shared libraries support was
-+# explicitly disabled.
-+else
-+# Force the shared flag on the noinst libraries since they are
-+# only built static by default
- FORCE_SHARED_LIB_OPTIONS = -module -shared -avoid-version \
- 						   -rpath $(abs_builddir)
- 
-@@ -30,3 +35,4 @@ endif
- 
- noinst_SCRIPTS = demo-trace
- EXTRA_DIST = demo-trace
-+endif
--- 
-1.8.1.2
+Android is a trademark of Google Inc. Use of this trademark is subject to Google Permissions.
+Linux is the registered trademark of Linus Torvalds in the U.S. and other countries.
