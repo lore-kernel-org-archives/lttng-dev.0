@@ -1,19 +1,18 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH urcu] Fix configure checks for Tile
-Date: Mon, 11 Feb 2013 19:12:09 -0500
-Message-ID: <20130212001209.GA901__2680.92726259983$1360628038$gmane$org@Krystal>
-References: <1360627451-11698-1-git-send-email-simon.marchi@polymtl.ca>
+From: Simon Marchi <simon.marchi@polymtl.ca>
+Subject: Installation of LTTng on the TILEncore-Gx card (TILE-Gx
+	processor)
+Date: Mon, 11 Feb 2013 20:36:54 -0500
+Message-ID: <CAFXXi0kspnh+2aCk+Ar70UR54aJwEY44SoTziS6MBZzmASCWQQ__36406.0658067048$1360633100$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from mail-ie0-f182.google.com ([209.85.223.182])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1U53Tn-0006cp-7j
-	for lttng-dev@lists.lttng.org; Mon, 11 Feb 2013 19:12:11 -0500
-Content-Disposition: inline
-In-Reply-To: <1360627451-11698-1-git-send-email-simon.marchi@polymtl.ca>
+	(envelope-from <thundersim@gmail.com>) id 1U54oM-0007IC-4B
+	for lttng-dev@lists.lttng.org; Mon, 11 Feb 2013 20:37:30 -0500
+Received: by mail-ie0-f182.google.com with SMTP id k14so8574612iea.27
+	for <lttng-dev@lists.lttng.org>; Mon, 11 Feb 2013 17:37:24 -0800 (PST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,149 +21,66 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Simon Marchi <simon.marchi@polymtl.ca>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
+Cc: James Tau <jtau@tilera.com>, Chris Metcalf <cmetcalf@tilera.com>
 List-Id: lttng-dev@lists.lttng.org
 
-* Simon Marchi (simon.marchi@polymtl.ca) wrote:
-> The previous method of checking whether the architecture is TileGx or
-> not was buggy. urcu/arch/tile.h included urcu/arch/gcc.h, which was not
-> installed on the system, causing a configure error. I am not sure why it
-> worked when I tested commit 1000f1f4204e5fbb337f4ea911f1e29f67df79aa,
-> maybe some previous partial install or something.
-> 
-> The check is now done earlier, during the configure step and should not
-> cause any trouble.
+Now that the support for the TileGx architecture is integrated in the
+various tools of the LTTng chain, I thought I could reduce the bus
+factor and post the installation steps to get LTTng up and running on
+this platform. The steps assume that the TILERA_ROOT variable is set
+correctly. The version of the Tilera MDE used is 4.1.3.150969 with the
+TILEncore-Gx card.
 
-merged, thanks!
+= urcu installation =
+$ git clone git://git.lttng.org/userspace-rcu.git
+$ ./bootstrap
+$ ac_cv_func_malloc_0_nonnull=yes ./configure --host=tile
+--prefix=$TILERA_ROOT/tile/usr/local
+$ make
+$ make install
 
-Mathieu
+= lttng-ust installation =
+$ git clone git://git.lttng.org/lttng-ust.git
+$ ./bootstrap
+$ ./configure --host=tile --prefix=$TILERA_ROOT/tile/usr/local
+$ make
+$ make install
 
-> 
-> Signed-off-by: Simon Marchi <simon.marchi@polymtl.ca>
-> ---
->  configure.ac        |   17 ++++++++++++++++-
->  urcu/arch/tile.h    |   30 ------------------------------
->  urcu/uatomic/tile.h |   28 ----------------------------
->  3 files changed, 16 insertions(+), 59 deletions(-)
->  delete mode 100644 urcu/arch/tile.h
->  delete mode 100644 urcu/uatomic/tile.h
-> 
-> diff --git a/configure.ac b/configure.ac
-> index d064a13..7a315e8 100644
-> --- a/configure.ac
-> +++ b/configure.ac
-> @@ -77,7 +77,7 @@ AS_CASE([$host_cpu],
->  	[ia64], [ARCHTYPE="gcc"],
->  	[arm*], [ARCHTYPE="arm"],
->  	[mips*], [ARCHTYPE="mips"],
-> -	[tile*], [ARCHTYPE="tile"],
-> +	[tile*], [ARCHTYPE="gcc"],
->  	[ARCHTYPE="unknown"]
->  )
->  
-> @@ -113,6 +113,21 @@ AS_IF([test "x$ARCHTYPE" = "xarm"],[
->  	])
->  ])
->  
-> +# Tile-specific checks
-> +AS_IF([echo "$host_cpu" | grep "^tile"],[
-> +	AC_MSG_CHECKING([for Tile architecture type])
-> +	AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
-> +				#ifndef __tilegx__
-> +				#error
-> +				#endif
-> +		]])
-> +	],[
-> +		AC_MSG_RESULT([ok])
-> +	],[
-> +		AC_MSG_FAILURE([URCU has only been tested on the TileGx architecture. For other Tile* architectures, please run the tests first and report the results to the maintainer so that proper support can be added.])
-> +	])
-> +])
-> +
->  # x86-specific checks
->  AS_IF([test "x$ARCHTYPE" = "xx86"],[
->  	AC_MSG_CHECKING([if architecture really supports the mfence instruction])
-> diff --git a/urcu/arch/tile.h b/urcu/arch/tile.h
-> deleted file mode 100644
-> index 8ef35da..0000000
-> --- a/urcu/arch/tile.h
-> +++ /dev/null
-> @@ -1,30 +0,0 @@
-> -#ifndef _URCU_ARCH_TILE_H
-> -#define _URCU_ARCH_TILE_H
-> -
-> -/*
-> - * arch_tile.h: trivial definitions for the Tile architecture
-> - *
-> - * Copyright (c) 2013 Simon Marchi <simon.marchi@polymtl.ca>
-> - *
-> - * This library is free software; you can redistribute it and/or
-> - * modify it under the terms of the GNU Lesser General Public
-> - * License as published by the Free Software Foundation; either
-> - * version 2.1 of the License, or (at your option) any later version.
-> - *
-> - * This library is distributed in the hope that it will be useful,
-> - * but WITHOUT ANY WARRANTY; without even the implied warranty of
-> - * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-> - * Lesser General Public License for more details.
-> - *
-> - * You should have received a copy of the GNU Lesser General Public
-> - * License along with this library; if not, write to the Free Software
-> - * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
-> - */
-> -
-> -#ifdef __tilegx__
-> -#include <urcu/arch/gcc.h>
-> -#else
-> -#error "URCU has only been tested on the TileGx architecture. For other Tile* architectures, please run the tests first and report the results to the maintainer so that proper support can be added."
-> -#endif
-> -
-> -#endif /* _URCU_ARCH_TILE_H */
-> diff --git a/urcu/uatomic/tile.h b/urcu/uatomic/tile.h
-> deleted file mode 100644
-> index 40eafd1..0000000
-> --- a/urcu/uatomic/tile.h
-> +++ /dev/null
-> @@ -1,28 +0,0 @@
-> -#ifndef _URCU_ARCH_UATOMIC_TILE_H
-> -#define _URCU_ARCH_UATOMIC_TILE_H
-> -
-> -/*
-> - * Copyright (c) 2013 Simon Marchi <simon.marchi@polymtl.ca>
-> - *
-> - * This library is free software; you can redistribute it and/or
-> - * modify it under the terms of the GNU Lesser General Public
-> - * License as published by the Free Software Foundation; either
-> - * version 2.1 of the License, or (at your option) any later version.
-> - *
-> - * This library is distributed in the hope that it will be useful,
-> - * but WITHOUT ANY WARRANTY; without even the implied warranty of
-> - * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-> - * Lesser General Public License for more details.
-> - *
-> - * You should have received a copy of the GNU Lesser General Public
-> - * License along with this library; if not, write to the Free Software
-> - * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
-> - */
-> -
-> -#ifdef __tilegx__
-> -#include <urcu/uatomic/gcc.h>
-> -#else
-> -#error "URCU has only been tested on the TileGx architecture. For other Tile* architectures, please run the tests first and report the results to the maintainer so that proper support can be added."
-> -#endif
-> -
-> -#endif /* _URCU_ARCH_UATOMIC_TILE_H */
-> -- 
-> 1.7.1
-> 
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+= lttng-tools installation =
+$ git clone git://git.lttng.org/lttng-tools.git
+$ ./bootstrap
+$ ./configure --host=tile --prefix=$TILERA_ROOT/tile/usr/local
+--with-consumerd64-bin=/usr/local/lib/lttng/libexec/lttng-consumerd
+--with-consumerd64-libdir=/usr/local/lib
+$ make
+$ make install
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+
+By default, /usr/local/lib is not in the dynamic linker's search path,
+so you should add it:
+$ echo "/usr/local/lib" >> $TILERA_ROOT/tile/etc/ld.so.conf.d/local.conf
+
+You should boot the card using --root so that the filesystem in
+$TILERA_ROOT/tile gets loaded on the card:
+$ tile-monitor --root
+
+Once on the card, you can set your path to include /usr/local/bin,
+update the linker cache and set the path of the session daemon binary:
+$ export PATH=$PATH:/usr/local/bin
+$ ldconfig
+$ LTTNG_SESSIOND_PATH=/usr/local/bin/lttng-sessiond
+
+Now you should be ready to go, I hope I didn't forget any step. Have
+fun ust-tracing !
+
+Kernel tracing is a little bit more tricky because the kernel config
+shipped by Tilera does not activate tracepoints. There is also a fix
+needed to properly load the modules. Let's hope that these two issues
+will be resolved in a future version of the MDE. In the meantime, I
+can provide the instructions on this list or by personal email if
+anybody needs or wants them.
+
+Thanks,
+
+Simon
