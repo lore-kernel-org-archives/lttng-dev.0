@@ -1,19 +1,19 @@
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: babeltrace converting text <=> ctf
-Date: Thu, 14 Feb 2013 12:54:04 +0100
-Message-ID: <20130214115404.GA13194__34512.0599064559$1360842897$gmane$org@linutronix.de>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH] babeltrace: make '-w' actually work
+Date: Thu, 14 Feb 2013 10:39:40 -0500
+Message-ID: <20130214153940.GA29405__14556.0040291914$1360856442$gmane$org@Krystal>
+References: <1360839138-16265-1-git-send-email-bigeasy@linutronix.de>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from www.linutronix.de ([62.245.132.108] helo=Galois.linutronix.de)
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <bigeasy@linutronix.de>) id 1U5xOD-0006e5-KW
-	for lttng-dev@lists.lttng.org; Thu, 14 Feb 2013 06:54:09 -0500
-Received: from bigeasy by Galois.linutronix.de with local (Exim 4.72)
-	(envelope-from <bigeasy@linutronix.de>) id 1U5xO8-0003f4-7L
-	for lttng-dev@lists.lttng.org; Thu, 14 Feb 2013 12:54:04 +0100
+	(envelope-from <compudj@mail.openrapids.net>) id 1U60uW-0008TL-5h
+	for lttng-dev@lists.lttng.org; Thu, 14 Feb 2013 10:39:44 -0500
 Content-Disposition: inline
+In-Reply-To: <1360839138-16265-1-git-send-email-bigeasy@linutronix.de>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,42 +22,41 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-SSBzdGFydGVkIGxsdG5nIHRvIGR1bXAgYSBmZXcga2VybmVsIGV2ZW50cywgbm90aGluZyBzcGVj
-aWFsLiBPbmNlIEkgaGFkCnRoZSBiaW5hcnkgQ1RGIEkgY29udmVydGVkIGl0IHRvIHRleHQgb3V0
-cHV0IHZpYQoKfGJhYmVsdHJhY2UgLXcgdHJhY2UudHh0IGtlcm5lbC8KCnwgWzEwOjQwOjEwLjM1
-Nzc2ODkyMF0gKCs/Lj8/Pz8/Pz8/Pykgc3F1c2Iga21hbGxvYzogeyBjcHVfaWQgPSAzIH0sIHsg
-Y2FsbF9zaXRlID0g4oCmCnwgWzEwOjQwOjEwLjM1Nzc4NTAxMF0gKCswLjAwMDAxNjA5MCkgc3F1
-c2Iga2ZyZWU6IHsgY3B1X2lkID0gMyB9LCB7IGNhbGxfc2l0ZSA9IOKApgp8IFsxMDo0MDoxMC4z
-NTc4MDA3MDBdICgrMC4wMDAwMTU2OTApIHNxdXNiIGttYWxsb2M6IHsgY3B1X2lkID0gMyB9LCB7
-IGNhbGxfc2l0ZSA9IOKApgoKYW5kIG5vdyBiYWNrIHRvIENURi4gU2luY2UgYmFiZWx0cmFjZSBk
-b2VzIG5vdCBzdXBwb3J0IHRleHQgYXMgaW5wdXQgb3IKQ1RGIGFzIG91dHB1dCAoYW5kIHRoZSBl
-cnJvciBtZXNzYWdlIHdhcyBub3QgZ2l2aW5nIGEgaGludCkgSSB0cmllZCBpdAp3aXRoIGJhYmVs
-dHJhY2UtbG9nOgoKfGJhYmVsdHJhY2UtbG9nIDwgdHJhY2UudHh0IGN0Zl92MQoKYW5kIG5vdyBi
-YWNrIHRvIHRleHQ6Cgp8YmFiZWx0cmFjZSAtdyBjdHZfdjEudHh0IGN0Zl92MQoKYW5kIEkgZ290
-OgoKfCAwIHN0cmluZzogeyB9LCB7IHN0ciA9ICJbMTA6NDA6MTAuMzU3NzY4OTIwXSAoKz8uPz8/
-Pz8/Pz8/KSBzcXVzYiBrbWFsbG9jOiB7IGNwdV9pZCA9IDMgfSwgeyBjYWxsX3NpdGUgPSDigKYK
-fCAwIHN0cmluZzogeyB9LCB7IHN0ciA9ICJbMTA6NDA6MTAuMzU3Nzg1MDEwXSAoKzAuMDAwMDE2
-MDkwKSBzcXVzYiBrZnJlZTogeyBjcHVfaWQgPSAzIH0sIHsgY2FsbF9zaXRlID0g4oCmCnwgMCBz
-dHJpbmc6IHsgfSwgeyBzdHIgPSAiWzEwOjQwOjEwLjM1NzgwMDcwMF0gKCswLjAwMDAxNTY5MCkg
-c3F1c2Iga21hbGxvYzogeyBjcHVfaWQgPSAzIH0sIHsgY2FsbF9zaXRlID0g4oCmCgpXaGF0IEkg
-ZG9uJ3QgbGlrZSBoZXJlLCBpcyB0aGF0IHRoZSB0aW1lc3RhbXAgaW5mb3JtYXRpb24gaXMgbG9z
-dC4KTG9va2luZyBhdCBiYWJlbHRyYWNlLWxvZyBJIG5vdGljZWQgYSB0aW1lc3RhbXAgb3B0aW9u
-LiBTbyBJIHRyaWVkIHRoaXM6Cgp8YmFiZWx0cmFjZS1sb2cgLXQgPCB0cmFjZS50eHQgY3RmX3Yy
-CnxiYWJlbHRyYWNlIC13IGN0dl92Mi50eHQgY3RmX3YyCnxbZXJyb3JdIEludmFsaWQgbWFnaWMg
-bnVtYmVyIDB4MCBhdCBwYWNrZXQgMjYgKGZpbGUgb2Zmc2V0IDg1MTk2OCkuCnxbZXJyb3JdIE9w
-ZW4gZmlsZSBzdHJlYW0gZXJyb3IuCgpidWguIEFmdGVyIGxvb2tpbmcgYXQgYmFiZWx0cmFjZS1s
-b2cgSSBub3RpY2VkIHRoYXQgdGhlIHNzY2FuZigpIGRvZXMKbm90IG1hdGNoIGFueXRoaW5nIGJl
-Y2F1c2UgdGhlIHRpbWVzdGFtcCB2YWx1ZSBpcyBkaWZmZXJlbnQuIFNvIEkgdHJpZWQKdG8gY2hh
-bmdlIHRoZSBpbnB1dCBzbyB0aGUgc3NjYW5mKCkgd2lsbCBtYXRjaDoKCnxiYWJlbHRyYWNlIC13
-IHRyYWNlX3NlY29uZHMudHh0IC0tY2xvY2stc2Vjb25kcyBrZXJuZWwvCnxiYWJlbHRyYWNlLWxv
-ZyAtdCA8IHRyYWNlX3NlY29uZHMudHh0IGN0Zl92Mwp8YmFiZWx0cmFjZSAtdyBjdGZfdjMudHh0
-IGN0Zl92My8KfFtlcnJvcl0gSW52YWxpZCBtYWdpYyBudW1iZXIgMHgxRjcyQ0Y3QyBhdCBwYWNr
-ZXQgODEgKGZpbGUgb2Zmc2V0IDI2NTQyMDgpLgp8W2Vycm9yXSBPcGVuIGZpbGUgc3RyZWFtIGVy
-cm9yLgoKTGl0dGxlIGRpZmZlcmVudCBidXQgc3RpbGwgZG9lc24ndCB3b3JrLgpDb3VsZCB0aGlz
-IGJlIGFuIHVzZXIgZXJyb3Igb3IgYW4gZWFzeSB0byBzcG90IENURiBsaWJhcnkgYnVnPwoKU2Vi
-YXN0aWFuCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwps
-dHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xp
-c3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+* Sebastian Andrzej Siewior (bigeasy@linutronix.de) wrote:
+> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+
+Good catch !
+
+Merged, thanks!
+
+Mathieu
+
+> ---
+>  converter/babeltrace.c |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/converter/babeltrace.c b/converter/babeltrace.c
+> index fe7d39f..31e3d6e 100644
+> --- a/converter/babeltrace.c
+> +++ b/converter/babeltrace.c
+> @@ -109,7 +109,7 @@ enum {
+>   */
+>  static struct poptOption long_options[] = {
+>  	/* longName, shortName, argInfo, argPtr, value, descrip, argDesc */
+> -	{ "output", 'w', POPT_ARG_STRING, NULL, OPT_NONE, NULL, NULL },
+> +	{ "output", 'w', POPT_ARG_STRING, NULL, OPT_OUTPUT_PATH, NULL, NULL },
+>  	{ "input-format", 'i', POPT_ARG_STRING, NULL, OPT_INPUT_FORMAT, NULL, NULL },
+>  	{ "output-format", 'o', POPT_ARG_STRING, NULL, OPT_OUTPUT_FORMAT, NULL, NULL },
+>  	{ "help", 'h', POPT_ARG_NONE, NULL, OPT_HELP, NULL, NULL },
+> -- 
+> 1.7.10.4
+> 
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
