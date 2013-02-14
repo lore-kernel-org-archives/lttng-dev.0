@@ -1,17 +1,19 @@
-From: Julien Desfossez <jdesfossez@efficios.com>
-Subject: Re: [RFC] on-disk multiple tracefiles circular buffer
-Date: Thu, 14 Feb 2013 00:11:59 -0500
-Message-ID: <511C721F.6060600__15388.2741266445$1360818779$gmane$org@efficios.com>
-References: <501458912.795461360787706118.JavaMail.root@srv12.zimbra.polymtl.ca>
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: babeltrace converting text <=> ctf
+Date: Thu, 14 Feb 2013 12:54:04 +0100
+Message-ID: <20130214115404.GA13194__34512.0599064559$1360842897$gmane$org@linutronix.de>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fukushima.klipix.org ([194.250.102.243])
+Received: from www.linutronix.de ([62.245.132.108] helo=Galois.linutronix.de)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jdesfossez@efficios.com>) id 1U5r79-00034V-UF
-	for lttng-dev@lists.lttng.org; Thu, 14 Feb 2013 00:12:08 -0500
-In-Reply-To: <501458912.795461360787706118.JavaMail.root@srv12.zimbra.polymtl.ca>
+	(envelope-from <bigeasy@linutronix.de>) id 1U5xOD-0006e5-KW
+	for lttng-dev@lists.lttng.org; Thu, 14 Feb 2013 06:54:09 -0500
+Received: from bigeasy by Galois.linutronix.de with local (Exim 4.72)
+	(envelope-from <bigeasy@linutronix.de>) id 1U5xO8-0003f4-7L
+	for lttng-dev@lists.lttng.org; Thu, 14 Feb 2013 12:54:04 +0100
+Content-Disposition: inline
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,28 +22,42 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Michel Dagenais <michel.dagenais@polymtl.ca>
-Cc: lttng-dev@lists.lttng.org, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
->> -C limits the maximum file size and -W the amount of such files to
->> keep on disk.
-> 
-> Do you round up to the next packet / subbuffer / event?
-We won't exceed the maximum file size specified, so when we detect that
-a write will be too big, we rotate the tracefile before writing in it.
-The smallest file size the user can specify will be the subbuffer size.
-
-> In the upcoming releases, there should be small indexes telling where each packet / subbuffer starts in each file. How are these index files affected by these switches?
-There will be one index file per tracefile, so the logic to write the
-index file will be the same as the logic to write the tracefile : when
-we rotate the tracefile, we rotate the index file.
-
-It is a good question since we might end up with a lot of files though,
-for each channel : 2*CPU*tracefile_count.
-
-I'd like to hear what the others have to say about that.
-
-Thank you,
-
-Julien
+SSBzdGFydGVkIGxsdG5nIHRvIGR1bXAgYSBmZXcga2VybmVsIGV2ZW50cywgbm90aGluZyBzcGVj
+aWFsLiBPbmNlIEkgaGFkCnRoZSBiaW5hcnkgQ1RGIEkgY29udmVydGVkIGl0IHRvIHRleHQgb3V0
+cHV0IHZpYQoKfGJhYmVsdHJhY2UgLXcgdHJhY2UudHh0IGtlcm5lbC8KCnwgWzEwOjQwOjEwLjM1
+Nzc2ODkyMF0gKCs/Lj8/Pz8/Pz8/Pykgc3F1c2Iga21hbGxvYzogeyBjcHVfaWQgPSAzIH0sIHsg
+Y2FsbF9zaXRlID0g4oCmCnwgWzEwOjQwOjEwLjM1Nzc4NTAxMF0gKCswLjAwMDAxNjA5MCkgc3F1
+c2Iga2ZyZWU6IHsgY3B1X2lkID0gMyB9LCB7IGNhbGxfc2l0ZSA9IOKApgp8IFsxMDo0MDoxMC4z
+NTc4MDA3MDBdICgrMC4wMDAwMTU2OTApIHNxdXNiIGttYWxsb2M6IHsgY3B1X2lkID0gMyB9LCB7
+IGNhbGxfc2l0ZSA9IOKApgoKYW5kIG5vdyBiYWNrIHRvIENURi4gU2luY2UgYmFiZWx0cmFjZSBk
+b2VzIG5vdCBzdXBwb3J0IHRleHQgYXMgaW5wdXQgb3IKQ1RGIGFzIG91dHB1dCAoYW5kIHRoZSBl
+cnJvciBtZXNzYWdlIHdhcyBub3QgZ2l2aW5nIGEgaGludCkgSSB0cmllZCBpdAp3aXRoIGJhYmVs
+dHJhY2UtbG9nOgoKfGJhYmVsdHJhY2UtbG9nIDwgdHJhY2UudHh0IGN0Zl92MQoKYW5kIG5vdyBi
+YWNrIHRvIHRleHQ6Cgp8YmFiZWx0cmFjZSAtdyBjdHZfdjEudHh0IGN0Zl92MQoKYW5kIEkgZ290
+OgoKfCAwIHN0cmluZzogeyB9LCB7IHN0ciA9ICJbMTA6NDA6MTAuMzU3NzY4OTIwXSAoKz8uPz8/
+Pz8/Pz8/KSBzcXVzYiBrbWFsbG9jOiB7IGNwdV9pZCA9IDMgfSwgeyBjYWxsX3NpdGUgPSDigKYK
+fCAwIHN0cmluZzogeyB9LCB7IHN0ciA9ICJbMTA6NDA6MTAuMzU3Nzg1MDEwXSAoKzAuMDAwMDE2
+MDkwKSBzcXVzYiBrZnJlZTogeyBjcHVfaWQgPSAzIH0sIHsgY2FsbF9zaXRlID0g4oCmCnwgMCBz
+dHJpbmc6IHsgfSwgeyBzdHIgPSAiWzEwOjQwOjEwLjM1NzgwMDcwMF0gKCswLjAwMDAxNTY5MCkg
+c3F1c2Iga21hbGxvYzogeyBjcHVfaWQgPSAzIH0sIHsgY2FsbF9zaXRlID0g4oCmCgpXaGF0IEkg
+ZG9uJ3QgbGlrZSBoZXJlLCBpcyB0aGF0IHRoZSB0aW1lc3RhbXAgaW5mb3JtYXRpb24gaXMgbG9z
+dC4KTG9va2luZyBhdCBiYWJlbHRyYWNlLWxvZyBJIG5vdGljZWQgYSB0aW1lc3RhbXAgb3B0aW9u
+LiBTbyBJIHRyaWVkIHRoaXM6Cgp8YmFiZWx0cmFjZS1sb2cgLXQgPCB0cmFjZS50eHQgY3RmX3Yy
+CnxiYWJlbHRyYWNlIC13IGN0dl92Mi50eHQgY3RmX3YyCnxbZXJyb3JdIEludmFsaWQgbWFnaWMg
+bnVtYmVyIDB4MCBhdCBwYWNrZXQgMjYgKGZpbGUgb2Zmc2V0IDg1MTk2OCkuCnxbZXJyb3JdIE9w
+ZW4gZmlsZSBzdHJlYW0gZXJyb3IuCgpidWguIEFmdGVyIGxvb2tpbmcgYXQgYmFiZWx0cmFjZS1s
+b2cgSSBub3RpY2VkIHRoYXQgdGhlIHNzY2FuZigpIGRvZXMKbm90IG1hdGNoIGFueXRoaW5nIGJl
+Y2F1c2UgdGhlIHRpbWVzdGFtcCB2YWx1ZSBpcyBkaWZmZXJlbnQuIFNvIEkgdHJpZWQKdG8gY2hh
+bmdlIHRoZSBpbnB1dCBzbyB0aGUgc3NjYW5mKCkgd2lsbCBtYXRjaDoKCnxiYWJlbHRyYWNlIC13
+IHRyYWNlX3NlY29uZHMudHh0IC0tY2xvY2stc2Vjb25kcyBrZXJuZWwvCnxiYWJlbHRyYWNlLWxv
+ZyAtdCA8IHRyYWNlX3NlY29uZHMudHh0IGN0Zl92Mwp8YmFiZWx0cmFjZSAtdyBjdGZfdjMudHh0
+IGN0Zl92My8KfFtlcnJvcl0gSW52YWxpZCBtYWdpYyBudW1iZXIgMHgxRjcyQ0Y3QyBhdCBwYWNr
+ZXQgODEgKGZpbGUgb2Zmc2V0IDI2NTQyMDgpLgp8W2Vycm9yXSBPcGVuIGZpbGUgc3RyZWFtIGVy
+cm9yLgoKTGl0dGxlIGRpZmZlcmVudCBidXQgc3RpbGwgZG9lc24ndCB3b3JrLgpDb3VsZCB0aGlz
+IGJlIGFuIHVzZXIgZXJyb3Igb3IgYW4gZWFzeSB0byBzcG90IENURiBsaWJhcnkgYnVnPwoKU2Vi
+YXN0aWFuCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwps
+dHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xp
+c3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
