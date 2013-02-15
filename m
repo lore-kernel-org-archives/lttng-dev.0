@@ -1,7 +1,7 @@
 From: Julien Desfossez <jdesfossez@efficios.com>
-Subject: [BABELTRACE PATCH 7/7] Namespace the struct declaration
-Date: Fri, 15 Feb 2013 12:22:56 -0500
-Message-ID: <1360948976-14999-7-git-send-email-jdesfossez__47843.1112286218$1360949063$gmane$org@efficios.com>
+Subject: [BABELTRACE PATCH 6/7] Namespace the struct definition
+Date: Fri, 15 Feb 2013 12:22:55 -0500
+Message-ID: <1360948976-14999-6-git-send-email-jdesfossez__44876.2957159944$1360949075$gmane$org@efficios.com>
 References: <1360948976-14999-1-git-send-email-jdesfossez@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,8 +9,8 @@ Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from smtp.ini-tech.com ([213.239.202.151])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jdesfossez@efficios.com>) id 1U6P0G-0003wb-8d
-	for lttng-dev@lists.lttng.org; Fri, 15 Feb 2013 12:23:16 -0500
+	(envelope-from <jdesfossez@efficios.com>) id 1U6P0G-0003wg-Rl
+	for lttng-dev@lists.lttng.org; Fri, 15 Feb 2013 12:23:17 -0500
 In-Reply-To: <1360948976-14999-1-git-send-email-jdesfossez@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -24,1162 +24,1869 @@ To: mathieu.desnoyers@efficios.com
 Cc: lttng-dev@lists.lttng.org, Julien Desfossez <jdesfossez@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-This struct is exposed in the public API so we need to namespace it.
+This struct is exposed in the public API, so we need to namespace it.
 
 Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
 ---
- formats/ctf-text/types/array.c                     |    2 +-
- formats/ctf-text/types/sequence.c                  |    2 +-
- formats/ctf-text/types/struct.c                    |    2 +-
- formats/ctf/events.c                               |   26 +++++-----
- .../ctf/metadata/ctf-visitor-generate-io-struct.c  |   54 ++++++++++----------
- formats/ctf/types/array.c                          |    4 +-
- formats/ctf/types/sequence.c                       |    4 +-
- formats/ctf/types/struct.c                         |    2 +-
- formats/ctf/types/variant.c                        |    2 +-
- include/babeltrace/ctf/events.h                    |   20 ++++----
- include/babeltrace/types.h                         |   48 ++++++++---------
- types/array.c                                      |   12 ++---
- types/enum.c                                       |    6 +--
- types/float.c                                      |    8 +--
- types/integer.c                                    |    6 +--
- types/sequence.c                                   |   10 ++--
- types/string.c                                     |    6 +--
- types/struct.c                                     |   10 ++--
- types/types.c                                      |   12 ++---
- types/variant.c                                    |   14 ++---
- 20 files changed, 125 insertions(+), 125 deletions(-)
+ formats/ctf-text/ctf-text.c         |    2 +-
+ formats/ctf-text/types/array.c      |    2 +-
+ formats/ctf-text/types/enum.c       |    2 +-
+ formats/ctf-text/types/float.c      |    2 +-
+ formats/ctf-text/types/integer.c    |    2 +-
+ formats/ctf-text/types/sequence.c   |    2 +-
+ formats/ctf-text/types/string.c     |    2 +-
+ formats/ctf-text/types/struct.c     |    2 +-
+ formats/ctf-text/types/variant.c    |    2 +-
+ formats/ctf/ctf.c                   |   32 ++++++------
+ formats/ctf/events.c                |   44 ++++++++--------
+ formats/ctf/types/array.c           |    4 +-
+ formats/ctf/types/enum.c            |    4 +-
+ formats/ctf/types/float.c           |    8 +--
+ formats/ctf/types/integer.c         |    8 +--
+ formats/ctf/types/sequence.c        |    4 +-
+ formats/ctf/types/string.c          |    4 +-
+ formats/ctf/types/struct.c          |    2 +-
+ formats/ctf/types/variant.c         |    2 +-
+ include/babeltrace/ctf-text/types.h |   18 +++----
+ include/babeltrace/ctf/events.h     |   32 ++++++------
+ include/babeltrace/ctf/types.h      |   28 +++++-----
+ include/babeltrace/types.h          |   98 +++++++++++++++++------------------
+ types/array.c                       |   26 +++++-----
+ types/enum.c                        |   10 ++--
+ types/float.c                       |   10 ++--
+ types/integer.c                     |   22 ++++----
+ types/sequence.c                    |   26 +++++-----
+ types/string.c                      |   12 ++---
+ types/struct.c                      |   22 ++++----
+ types/types.c                       |   28 +++++-----
+ types/variant.c                     |   22 ++++----
+ 32 files changed, 242 insertions(+), 242 deletions(-)
 
+diff --git a/formats/ctf-text/ctf-text.c b/formats/ctf-text/ctf-text.c
+index cd69125..e9fd741 100644
+--- a/formats/ctf-text/ctf-text.c
++++ b/formats/ctf-text/ctf-text.c
+@@ -135,7 +135,7 @@ struct ctf_callsite_dups *ctf_trace_callsite_lookup(struct ctf_trace *trace,
+ 			(gpointer) (unsigned long) callsite_name);
+ }
+ 
+-int print_field(struct definition *definition)
++int print_field(struct bt_definition *definition)
+ {
+ 	/* Print all fields in verbose mode */
+ 	if (babeltrace_verbose)
 diff --git a/formats/ctf-text/types/array.c b/formats/ctf-text/types/array.c
-index d9f57a2..47eb128 100644
+index 9e7d49f..d9f57a2 100644
 --- a/formats/ctf-text/types/array.c
 +++ b/formats/ctf-text/types/array.c
-@@ -36,7 +36,7 @@ int ctf_text_array_write(struct bt_stream_pos *ppos, struct bt_definition *defin
- 		container_of(definition, struct definition_array, p);
- 	struct declaration_array *array_declaration =
- 		array_definition->declaration;
--	struct declaration *elem = array_declaration->elem;
-+	struct bt_declaration *elem = array_declaration->elem;
- 	int field_nr_saved;
- 	int ret = 0;
+@@ -29,7 +29,7 @@
+ #include <babeltrace/ctf-text/types.h>
+ #include <stdio.h>
  
+-int ctf_text_array_write(struct bt_stream_pos *ppos, struct definition *definition)
++int ctf_text_array_write(struct bt_stream_pos *ppos, struct bt_definition *definition)
+ {
+ 	struct ctf_text_stream_pos *pos = ctf_text_pos(ppos);
+ 	struct definition_array *array_definition =
+diff --git a/formats/ctf-text/types/enum.c b/formats/ctf-text/types/enum.c
+index 8a2463b..6470500 100644
+--- a/formats/ctf-text/types/enum.c
++++ b/formats/ctf-text/types/enum.c
+@@ -30,7 +30,7 @@
+ #include <stdio.h>
+ #include <stdint.h>
+ 
+-int ctf_text_enum_write(struct bt_stream_pos *ppos, struct definition *definition)
++int ctf_text_enum_write(struct bt_stream_pos *ppos, struct bt_definition *definition)
+ {
+ 	struct definition_enum *enum_definition =
+ 		container_of(definition, struct definition_enum, p);
+diff --git a/formats/ctf-text/types/float.c b/formats/ctf-text/types/float.c
+index a925480..a4946f9 100644
+--- a/formats/ctf-text/types/float.c
++++ b/formats/ctf-text/types/float.c
+@@ -31,7 +31,7 @@
+ #include <babeltrace/ctf-text/types.h>
+ #include <stdio.h>
+ 
+-int ctf_text_float_write(struct bt_stream_pos *ppos, struct definition *definition)
++int ctf_text_float_write(struct bt_stream_pos *ppos, struct bt_definition *definition)
+ {
+ 	struct definition_float *float_definition =
+ 		container_of(definition, struct definition_float, p);
+diff --git a/formats/ctf-text/types/integer.c b/formats/ctf-text/types/integer.c
+index 3a469f6..7363b52 100644
+--- a/formats/ctf-text/types/integer.c
++++ b/formats/ctf-text/types/integer.c
+@@ -32,7 +32,7 @@
+ #include <stdint.h>
+ #include <babeltrace/bitfield.h>
+ 
+-int ctf_text_integer_write(struct bt_stream_pos *ppos, struct definition *definition)
++int ctf_text_integer_write(struct bt_stream_pos *ppos, struct bt_definition *definition)
+ {
+ 	struct definition_integer *integer_definition =
+ 		container_of(definition, struct definition_integer, p);
 diff --git a/formats/ctf-text/types/sequence.c b/formats/ctf-text/types/sequence.c
-index 706fe5e..a9499b4 100644
+index 61be860..706fe5e 100644
 --- a/formats/ctf-text/types/sequence.c
 +++ b/formats/ctf-text/types/sequence.c
-@@ -36,7 +36,7 @@ int ctf_text_sequence_write(struct bt_stream_pos *ppos, struct bt_definition *de
- 		container_of(definition, struct definition_sequence, p);
- 	struct declaration_sequence *sequence_declaration =
- 		sequence_definition->declaration;
--	struct declaration *elem = sequence_declaration->elem;
-+	struct bt_declaration *elem = sequence_declaration->elem;
- 	int field_nr_saved;
- 	int ret = 0;
+@@ -29,7 +29,7 @@
+ #include <babeltrace/ctf-text/types.h>
+ #include <stdio.h>
  
+-int ctf_text_sequence_write(struct bt_stream_pos *ppos, struct definition *definition)
++int ctf_text_sequence_write(struct bt_stream_pos *ppos, struct bt_definition *definition)
+ {
+ 	struct ctf_text_stream_pos *pos = ctf_text_pos(ppos);
+ 	struct definition_sequence *sequence_definition =
+diff --git a/formats/ctf-text/types/string.c b/formats/ctf-text/types/string.c
+index f49d1b7..c397f0e 100644
+--- a/formats/ctf-text/types/string.c
++++ b/formats/ctf-text/types/string.c
+@@ -32,7 +32,7 @@
+ #include <string.h>
+ 
+ int ctf_text_string_write(struct bt_stream_pos *ppos,
+-			  struct definition *definition)
++			  struct bt_definition *definition)
+ {
+ 	struct definition_string *string_definition =
+ 		container_of(definition, struct definition_string, p);
 diff --git a/formats/ctf-text/types/struct.c b/formats/ctf-text/types/struct.c
-index 1b9e27e..cbfcc7c 100644
+index a727a89..1b9e27e 100644
 --- a/formats/ctf-text/types/struct.c
 +++ b/formats/ctf-text/types/struct.c
-@@ -31,7 +31,7 @@
+@@ -29,7 +29,7 @@
+ #include <babeltrace/ctf-text/types.h>
+ #include <stdio.h>
  
- int ctf_text_struct_write(struct bt_stream_pos *ppos, struct bt_definition *definition)
+-int ctf_text_struct_write(struct bt_stream_pos *ppos, struct definition *definition)
++int ctf_text_struct_write(struct bt_stream_pos *ppos, struct bt_definition *definition)
  {
--	struct declaration *declaration = definition->declaration;
-+	struct bt_declaration *declaration = definition->declaration;
+ 	struct declaration *declaration = definition->declaration;
  	struct declaration_struct *struct_declaration =
- 		container_of(declaration, struct declaration_struct, p);
+diff --git a/formats/ctf-text/types/variant.c b/formats/ctf-text/types/variant.c
+index ca7c1ae..3aeb6ec 100644
+--- a/formats/ctf-text/types/variant.c
++++ b/formats/ctf-text/types/variant.c
+@@ -29,7 +29,7 @@
+ #include <babeltrace/ctf-text/types.h>
+ #include <stdio.h>
+ 
+-int ctf_text_variant_write(struct bt_stream_pos *ppos, struct definition *definition)
++int ctf_text_variant_write(struct bt_stream_pos *ppos, struct bt_definition *definition)
+ {
  	struct ctf_text_stream_pos *pos = ctf_text_pos(ppos);
+ 	int field_nr_saved;
+diff --git a/formats/ctf/ctf.c b/formats/ctf/ctf.c
+index aea12a1..5a51495 100644
+--- a/formats/ctf/ctf.c
++++ b/formats/ctf/ctf.c
+@@ -421,7 +421,7 @@ int ctf_read_event(struct bt_stream_pos *ppos, struct ctf_stream_definition *str
+ 	/* Read event header */
+ 	if (likely(stream->stream_event_header)) {
+ 		struct definition_integer *integer_definition;
+-		struct definition *variant;
++		struct bt_definition *variant;
+ 
+ 		ret = generic_rw(ppos, &stream->stream_event_header->p);
+ 		if (unlikely(ret))
+@@ -1150,7 +1150,7 @@ struct ctf_event_definition *create_event_definitions(struct ctf_trace *td,
+ 	struct ctf_event_definition *stream_event = g_new0(struct ctf_event_definition, 1);
+ 
+ 	if (event->context_decl) {
+-		struct definition *definition =
++		struct bt_definition *definition =
+ 			event->context_decl->p.definition_new(&event->context_decl->p,
+ 				stream->parent_def_scope, 0, 0, "event.context");
+ 		if (!definition) {
+@@ -1161,7 +1161,7 @@ struct ctf_event_definition *create_event_definitions(struct ctf_trace *td,
+ 		stream->parent_def_scope = stream_event->event_context->p.scope;
+ 	}
+ 	if (event->fields_decl) {
+-		struct definition *definition =
++		struct bt_definition *definition =
+ 			event->fields_decl->p.definition_new(&event->fields_decl->p,
+ 				stream->parent_def_scope, 0, 0, "event.fields");
+ 		if (!definition) {
+@@ -1195,7 +1195,7 @@ int create_stream_definitions(struct ctf_trace *td, struct ctf_stream_definition
+ 	stream_class = stream->stream_class;
+ 
+ 	if (stream_class->packet_context_decl) {
+-		struct definition *definition =
++		struct bt_definition *definition =
+ 			stream_class->packet_context_decl->p.definition_new(&stream_class->packet_context_decl->p,
+ 				stream->parent_def_scope, 0, 0, "stream.packet.context");
+ 		if (!definition) {
+@@ -1207,7 +1207,7 @@ int create_stream_definitions(struct ctf_trace *td, struct ctf_stream_definition
+ 		stream->parent_def_scope = stream->stream_packet_context->p.scope;
+ 	}
+ 	if (stream_class->event_header_decl) {
+-		struct definition *definition =
++		struct bt_definition *definition =
+ 			stream_class->event_header_decl->p.definition_new(&stream_class->event_header_decl->p,
+ 				stream->parent_def_scope, 0, 0, "stream.event.header");
+ 		if (!definition) {
+@@ -1219,7 +1219,7 @@ int create_stream_definitions(struct ctf_trace *td, struct ctf_stream_definition
+ 		stream->parent_def_scope = stream->stream_event_header->p.scope;
+ 	}
+ 	if (stream_class->event_context_decl) {
+-		struct definition *definition =
++		struct bt_definition *definition =
+ 			stream_class->event_context_decl->p.definition_new(&stream_class->event_context_decl->p,
+ 				stream->parent_def_scope, 0, 0, "stream.event.context");
+ 		if (!definition) {
+@@ -1321,7 +1321,7 @@ int create_stream_packet_index(struct ctf_trace *td,
+ 				return ret;
+ 			len_index = bt_struct_declaration_lookup_field_index(file_stream->parent.trace_packet_header->declaration, g_quark_from_static_string("magic"));
+ 			if (len_index >= 0) {
+-				struct definition *field;
++				struct bt_definition *field;
+ 				uint64_t magic;
+ 
+ 				field = bt_struct_definition_get_field_from_index(file_stream->parent.trace_packet_header, len_index);
+@@ -1339,7 +1339,7 @@ int create_stream_packet_index(struct ctf_trace *td,
+ 			len_index = bt_struct_declaration_lookup_field_index(file_stream->parent.trace_packet_header->declaration, g_quark_from_static_string("uuid"));
+ 			if (len_index >= 0) {
+ 				struct definition_array *defarray;
+-				struct definition *field;
++				struct bt_definition *field;
+ 				uint64_t i;
+ 				uint8_t uuidval[BABELTRACE_UUID_LEN];
+ 
+@@ -1349,7 +1349,7 @@ int create_stream_packet_index(struct ctf_trace *td,
+ 				assert(bt_array_len(defarray) == BABELTRACE_UUID_LEN);
+ 
+ 				for (i = 0; i < BABELTRACE_UUID_LEN; i++) {
+-					struct definition *elem;
++					struct bt_definition *elem;
+ 
+ 					elem = bt_array_index(defarray, i);
+ 					uuidval[i] = bt_get_unsigned_int(elem);
+@@ -1364,7 +1364,7 @@ int create_stream_packet_index(struct ctf_trace *td,
+ 
+ 			len_index = bt_struct_declaration_lookup_field_index(file_stream->parent.trace_packet_header->declaration, g_quark_from_static_string("stream_id"));
+ 			if (len_index >= 0) {
+-				struct definition *field;
++				struct bt_definition *field;
+ 
+ 				field = bt_struct_definition_get_field_from_index(file_stream->parent.trace_packet_header, len_index);
+ 				stream_id = bt_get_unsigned_int(field);
+@@ -1401,7 +1401,7 @@ int create_stream_packet_index(struct ctf_trace *td,
+ 			/* read content size from header */
+ 			len_index = bt_struct_declaration_lookup_field_index(file_stream->parent.stream_packet_context->declaration, g_quark_from_static_string("content_size"));
+ 			if (len_index >= 0) {
+-				struct definition *field;
++				struct bt_definition *field;
+ 
+ 				field = bt_struct_definition_get_field_from_index(file_stream->parent.stream_packet_context, len_index);
+ 				packet_index.content_size = bt_get_unsigned_int(field);
+@@ -1413,7 +1413,7 @@ int create_stream_packet_index(struct ctf_trace *td,
+ 			/* read packet size from header */
+ 			len_index = bt_struct_declaration_lookup_field_index(file_stream->parent.stream_packet_context->declaration, g_quark_from_static_string("packet_size"));
+ 			if (len_index >= 0) {
+-				struct definition *field;
++				struct bt_definition *field;
+ 
+ 				field = bt_struct_definition_get_field_from_index(file_stream->parent.stream_packet_context, len_index);
+ 				packet_index.packet_size = bt_get_unsigned_int(field);
+@@ -1425,7 +1425,7 @@ int create_stream_packet_index(struct ctf_trace *td,
+ 			/* read timestamp begin from header */
+ 			len_index = bt_struct_declaration_lookup_field_index(file_stream->parent.stream_packet_context->declaration, g_quark_from_static_string("timestamp_begin"));
+ 			if (len_index >= 0) {
+-				struct definition *field;
++				struct bt_definition *field;
+ 
+ 				field = bt_struct_definition_get_field_from_index(file_stream->parent.stream_packet_context, len_index);
+ 				packet_index.timestamp_begin = bt_get_unsigned_int(field);
+@@ -1440,7 +1440,7 @@ int create_stream_packet_index(struct ctf_trace *td,
+ 			/* read timestamp end from header */
+ 			len_index = bt_struct_declaration_lookup_field_index(file_stream->parent.stream_packet_context->declaration, g_quark_from_static_string("timestamp_end"));
+ 			if (len_index >= 0) {
+-				struct definition *field;
++				struct bt_definition *field;
+ 
+ 				field = bt_struct_definition_get_field_from_index(file_stream->parent.stream_packet_context, len_index);
+ 				packet_index.timestamp_end = bt_get_unsigned_int(field);
+@@ -1455,7 +1455,7 @@ int create_stream_packet_index(struct ctf_trace *td,
+ 			/* read events discarded from header */
+ 			len_index = bt_struct_declaration_lookup_field_index(file_stream->parent.stream_packet_context->declaration, g_quark_from_static_string("events_discarded"));
+ 			if (len_index >= 0) {
+-				struct definition *field;
++				struct bt_definition *field;
+ 
+ 				field = bt_struct_definition_get_field_from_index(file_stream->parent.stream_packet_context, len_index);
+ 				packet_index.events_discarded = bt_get_unsigned_int(field);
+@@ -1499,7 +1499,7 @@ int create_trace_definitions(struct ctf_trace *td, struct ctf_stream_definition
+ 	int ret;
+ 
+ 	if (td->packet_header_decl) {
+-		struct definition *definition =
++		struct bt_definition *definition =
+ 			td->packet_header_decl->p.definition_new(&td->packet_header_decl->p,
+ 				stream->parent_def_scope, 0, 0, "trace.packet.header");
+ 		if (!definition) {
 diff --git a/formats/ctf/events.c b/formats/ctf/events.c
-index af7f5e1..3cf3b88 100644
+index d9460b1..af7f5e1 100644
 --- a/formats/ctf/events.c
 +++ b/formats/ctf/events.c
-@@ -174,7 +174,7 @@ const char *bt_ctf_field_name(const struct bt_definition *def)
- 	return rem_(g_quark_to_string(def->name));
+@@ -46,10 +46,10 @@
+  */
+ __thread int bt_ctf_last_field_error = 0;
+ 
+-const struct definition *bt_ctf_get_top_level_scope(const struct bt_ctf_event *ctf_event,
++const struct bt_definition *bt_ctf_get_top_level_scope(const struct bt_ctf_event *ctf_event,
+ 		enum bt_ctf_scope scope)
+ {
+-	const struct definition *tmp = NULL;
++	const struct bt_definition *tmp = NULL;
+ 	const struct ctf_event_definition *event;
+ 
+ 	if (!ctf_event)
+@@ -96,11 +96,11 @@ error:
+ 	return NULL;
  }
  
--enum ctf_type_id bt_ctf_field_type(const struct declaration *decl)
-+enum ctf_type_id bt_ctf_field_type(const struct bt_declaration *decl)
+-const struct definition *bt_ctf_get_field(const struct bt_ctf_event *ctf_event,
+-		const struct definition *scope,
++const struct bt_definition *bt_ctf_get_field(const struct bt_ctf_event *ctf_event,
++		const struct bt_definition *scope,
+ 		const char *field)
  {
- 	if (!decl)
- 		return CTF_TYPE_UNKNOWN;
-@@ -358,7 +358,7 @@ int bt_ctf_field_get_error(void)
+-	const struct definition *def;
++	const struct bt_definition *def;
+ 	char *field_underscore;
+ 
+ 	if (!ctf_event || !scope || !field)
+@@ -127,11 +127,11 @@ const struct definition *bt_ctf_get_field(const struct bt_ctf_event *ctf_event,
+ 	return def;
  }
  
- static const struct declaration_integer *
--get_declaration_integer(const struct declaration *decl)
-+get_declaration_integer(const struct bt_declaration *decl)
+-const struct definition *bt_ctf_get_index(const struct bt_ctf_event *ctf_event,
+-		const struct definition *field,
++const struct bt_definition *bt_ctf_get_index(const struct bt_ctf_event *ctf_event,
++		const struct bt_definition *field,
+ 		unsigned int index)
  {
- 	if (!decl || bt_ctf_field_type(decl) != CTF_TYPE_INTEGER)
+-	struct definition *ret = NULL;
++	struct bt_definition *ret = NULL;
+ 
+ 	if (!ctf_event || !field)
  		return NULL;
-@@ -366,7 +366,7 @@ get_declaration_integer(const struct declaration *decl)
+@@ -166,7 +166,7 @@ const char *bt_ctf_event_name(const struct bt_ctf_event *ctf_event)
+ 	return g_quark_to_string(event_class->name);
  }
  
- static const struct declaration_string *
--get_declaration_string(const struct declaration *decl)
-+get_declaration_string(const struct bt_declaration *decl)
+-const char *bt_ctf_field_name(const struct definition *def)
++const char *bt_ctf_field_name(const struct bt_definition *def)
  {
- 	if (!decl || bt_ctf_field_type(decl) != CTF_TYPE_STRING)
+ 	if (!def || !def->name)
  		return NULL;
-@@ -374,7 +374,7 @@ get_declaration_string(const struct declaration *decl)
+@@ -183,8 +183,8 @@ enum ctf_type_id bt_ctf_field_type(const struct declaration *decl)
  }
  
- static const struct declaration_array *
--get_declaration_array(const struct declaration *decl)
-+get_declaration_array(const struct bt_declaration *decl)
+ int bt_ctf_get_field_list(const struct bt_ctf_event *ctf_event,
+-		const struct definition *scope,
+-		struct definition const * const **list,
++		const struct bt_definition *scope,
++		struct bt_definition const * const **list,
+ 		unsigned int *count)
  {
- 	if (!decl || bt_ctf_field_type(decl) != CTF_TYPE_ARRAY)
- 		return NULL;
-@@ -382,14 +382,14 @@ get_declaration_array(const struct declaration *decl)
+ 	if (!ctf_event || !scope || !list || !count)
+@@ -204,7 +204,7 @@ int bt_ctf_get_field_list(const struct bt_ctf_event *ctf_event,
+ 		if (!def_struct)
+ 			goto error;
+ 		if (def_struct->fields->pdata) {
+-			*list = (struct definition const* const*) def_struct->fields->pdata;
++			*list = (struct bt_definition const* const*) def_struct->fields->pdata;
+ 			*count = def_struct->fields->len;
+ 			goto end;
+ 		} else {
+@@ -222,7 +222,7 @@ int bt_ctf_get_field_list(const struct bt_ctf_event *ctf_event,
+ 		if (!def_variant)
+ 			goto error;
+ 		if (def_variant->fields->pdata) {
+-			*list = (struct definition const* const*) def_variant->fields->pdata;
++			*list = (struct bt_definition const* const*) def_variant->fields->pdata;
+ 			*count = def_variant->fields->len;
+ 			goto end;
+ 		} else {
+@@ -238,7 +238,7 @@ int bt_ctf_get_field_list(const struct bt_ctf_event *ctf_event,
+ 		if (!def_array)
+ 			goto error;
+ 		if (def_array->elems->pdata) {
+-			*list = (struct definition const* const*) def_array->elems->pdata;
++			*list = (struct bt_definition const* const*) def_array->elems->pdata;
+ 			*count = def_array->elems->len;
+ 			goto end;
+ 		} else {
+@@ -254,7 +254,7 @@ int bt_ctf_get_field_list(const struct bt_ctf_event *ctf_event,
+ 		if (!def_sequence)
+ 			goto error;
+ 		if (def_sequence->elems->pdata) {
+-			*list = (struct definition const* const*) def_sequence->elems->pdata;
++			*list = (struct bt_definition const* const*) def_sequence->elems->pdata;
+ 			*count = def_sequence->elems->len;
+ 			goto end;
+ 		} else {
+@@ -437,7 +437,7 @@ ssize_t bt_ctf_get_int_len(const struct declaration *decl)
+ 	return (ssize_t) integer->len;
  }
  
- static const struct declaration_sequence *
--get_declaration_sequence(const struct declaration *decl)
-+get_declaration_sequence(const struct bt_declaration *decl)
+-const struct definition *bt_ctf_get_enum_int(const struct definition *field)
++const struct bt_definition *bt_ctf_get_enum_int(const struct bt_definition *field)
  {
- 	if (!decl || bt_ctf_field_type(decl) != CTF_TYPE_SEQUENCE)
- 		return NULL;
- 	return container_of(decl, const struct declaration_sequence, p);
+ 	const struct definition_enum *def_enum;
+ 
+@@ -449,7 +449,7 @@ const struct definition *bt_ctf_get_enum_int(const struct definition *field)
+ 	return &def_enum->integer->p;
  }
  
--int bt_ctf_get_int_signedness(const struct declaration *decl)
-+int bt_ctf_get_int_signedness(const struct bt_declaration *decl)
+-const char *bt_ctf_get_enum_str(const struct definition *field)
++const char *bt_ctf_get_enum_str(const struct bt_definition *field)
  {
- 	const struct declaration_integer *integer;
- 
-@@ -401,7 +401,7 @@ int bt_ctf_get_int_signedness(const struct declaration *decl)
- 	return integer->signedness;
- }
- 
--int bt_ctf_get_int_base(const struct declaration *decl)
-+int bt_ctf_get_int_base(const struct bt_declaration *decl)
- {
- 	const struct declaration_integer *integer;
- 
-@@ -413,7 +413,7 @@ int bt_ctf_get_int_base(const struct declaration *decl)
- 	return integer->base;
- }
- 
--int bt_ctf_get_int_byte_order(const struct declaration *decl)
-+int bt_ctf_get_int_byte_order(const struct bt_declaration *decl)
- {
- 	const struct declaration_integer *integer;
- 
-@@ -425,7 +425,7 @@ int bt_ctf_get_int_byte_order(const struct declaration *decl)
- 	return integer->byte_order;
- }
- 
--ssize_t bt_ctf_get_int_len(const struct declaration *decl)
-+ssize_t bt_ctf_get_int_len(const struct bt_declaration *decl)
- {
- 	const struct declaration_integer *integer;
- 
-@@ -485,7 +485,7 @@ const char *bt_ctf_get_enum_str(const struct bt_definition *field)
- 	return ret;
- }
- 
--enum ctf_string_encoding bt_ctf_get_encoding(const struct declaration *decl)
-+enum ctf_string_encoding bt_ctf_get_encoding(const struct bt_declaration *decl)
- {
- 	enum ctf_string_encoding ret = 0;
- 	enum ctf_type_id type;
-@@ -540,7 +540,7 @@ error:
+ 	const struct definition_enum *def_enum;
+ 	const struct declaration_enum *decl_enum;
+@@ -554,7 +554,7 @@ error:
  	return -1;
  }
  
--int bt_ctf_get_array_len(const struct declaration *decl)
-+int bt_ctf_get_array_len(const struct bt_declaration *decl)
+-uint64_t bt_ctf_get_uint64(const struct definition *field)
++uint64_t bt_ctf_get_uint64(const struct bt_definition *field)
  {
- 	const struct declaration_array *array;
+ 	uint64_t ret = 0;
+ 
+@@ -566,7 +566,7 @@ uint64_t bt_ctf_get_uint64(const struct definition *field)
+ 	return ret;
+ }
+ 
+-int64_t bt_ctf_get_int64(const struct definition *field)
++int64_t bt_ctf_get_int64(const struct bt_definition *field)
+ {
+ 	int64_t ret = 0;
+ 
+@@ -578,7 +578,7 @@ int64_t bt_ctf_get_int64(const struct definition *field)
+ 	return ret;
+ }
+ 
+-char *bt_ctf_get_char_array(const struct definition *field)
++char *bt_ctf_get_char_array(const struct bt_definition *field)
+ {
+ 	char *ret = NULL;
+ 	GString *char_array;
+@@ -596,7 +596,7 @@ end:
+ 	return ret;
+ }
+ 
+-char *bt_ctf_get_string(const struct definition *field)
++char *bt_ctf_get_string(const struct bt_definition *field)
+ {
+ 	char *ret = NULL;
  
 @@ -767,7 +767,7 @@ const char *bt_ctf_get_decl_field_name(const struct bt_ctf_field_decl *field)
  	return rem_(g_quark_to_string(((struct declaration_field *) field)->name));
  }
  
--const struct declaration *bt_ctf_get_decl_from_def(const struct bt_definition *def)
-+const struct bt_declaration *bt_ctf_get_decl_from_def(const struct bt_definition *def)
+-const struct declaration *bt_ctf_get_decl_from_def(const struct definition *def)
++const struct declaration *bt_ctf_get_decl_from_def(const struct bt_definition *def)
  {
  	if (def)
  		return def->declaration;
-@@ -775,7 +775,7 @@ const struct declaration *bt_ctf_get_decl_from_def(const struct bt_definition *d
- 	return NULL;
- }
- 
--const struct declaration *bt_ctf_get_decl_from_field_decl(
-+const struct bt_declaration *bt_ctf_get_decl_from_field_decl(
- 		const struct bt_ctf_field_decl *field)
- {
- 	if (field)
-diff --git a/formats/ctf/metadata/ctf-visitor-generate-io-struct.c b/formats/ctf/metadata/ctf-visitor-generate-io-struct.c
-index ebf8b1b..4671d1b 100644
---- a/formats/ctf/metadata/ctf-visitor-generate-io-struct.c
-+++ b/formats/ctf/metadata/ctf-visitor-generate-io-struct.c
-@@ -58,7 +58,7 @@ struct last_enum_value {
- int opt_clock_force_correlate;
- 
- static
--struct declaration *ctf_type_specifier_list_visit(FILE *fd,
-+struct bt_declaration *ctf_type_specifier_list_visit(FILE *fd,
- 		int depth, struct ctf_node *type_specifier_list,
- 		struct declaration_scope *declaration_scope,
- 		struct ctf_trace *trace);
-@@ -411,12 +411,12 @@ GQuark create_typealias_identifier(FILE *fd, int depth,
- }
- 
- static
--struct declaration *ctf_type_declarator_visit(FILE *fd, int depth,
-+struct bt_declaration *ctf_type_declarator_visit(FILE *fd, int depth,
- 	struct ctf_node *type_specifier_list,
- 	GQuark *field_name,
- 	struct ctf_node *node_type_declarator,
- 	struct declaration_scope *declaration_scope,
--	struct declaration *nested_declaration,
-+	struct bt_declaration *nested_declaration,
- 	struct ctf_trace *trace)
- {
- 	/*
-@@ -483,7 +483,7 @@ struct declaration *ctf_type_declarator_visit(FILE *fd, int depth,
- 			*field_name = 0;
- 		return nested_declaration;
- 	} else {
--		struct declaration *declaration;
-+		struct bt_declaration *declaration;
- 		struct ctf_node *first;
- 
- 		/* TYPEDEC_NESTED */
-@@ -562,7 +562,7 @@ int ctf_struct_type_declarators_visit(FILE *fd, int depth,
- 	GQuark field_name;
- 
- 	bt_list_for_each_entry(iter, type_declarators, siblings) {
--		struct declaration *field_declaration;
-+		struct bt_declaration *field_declaration;
- 
- 		field_declaration = ctf_type_declarator_visit(fd, depth,
- 						type_specifier_list,
-@@ -600,7 +600,7 @@ int ctf_variant_type_declarators_visit(FILE *fd, int depth,
- 	GQuark field_name;
- 
- 	bt_list_for_each_entry(iter, type_declarators, siblings) {
--		struct declaration *field_declaration;
-+		struct bt_declaration *field_declaration;
- 
- 		field_declaration = ctf_type_declarator_visit(fd, depth,
- 						type_specifier_list,
-@@ -635,7 +635,7 @@ int ctf_typedef_visit(FILE *fd, int depth, struct declaration_scope *scope,
- 	GQuark identifier;
- 
- 	bt_list_for_each_entry(iter, type_declarators, siblings) {
--		struct declaration *type_declaration;
-+		struct bt_declaration *type_declaration;
- 		int ret;
- 	
- 		type_declaration = ctf_type_declarator_visit(fd, depth,
-@@ -670,7 +670,7 @@ int ctf_typealias_visit(FILE *fd, int depth, struct declaration_scope *scope,
- 		struct ctf_node *target, struct ctf_node *alias,
- 		struct ctf_trace *trace)
- {
--	struct declaration *type_declaration;
-+	struct bt_declaration *type_declaration;
- 	struct ctf_node *node;
- 	GQuark dummy_id;
- 	GQuark alias_q;
-@@ -744,7 +744,7 @@ int ctf_struct_declaration_list_visit(FILE *fd, int depth,
- 
- 	switch (iter->type) {
- 	case NODE_TYPEDEF:
--		/* For each declarator, declare type and add type to struct declaration scope */
-+		/* For each declarator, declare type and add type to struct bt_declaration scope */
- 		ret = ctf_typedef_visit(fd, depth,
- 			struct_declaration->scope,
- 			iter->u._typedef.type_specifier_list,
-@@ -753,7 +753,7 @@ int ctf_struct_declaration_list_visit(FILE *fd, int depth,
- 			return ret;
- 		break;
- 	case NODE_TYPEALIAS:
--		/* Declare type with declarator and add type to struct declaration scope */
-+		/* Declare type with declarator and add type to struct bt_declaration scope */
- 		ret = ctf_typealias_visit(fd, depth,
- 			struct_declaration->scope,
- 			iter->u.typealias.target,
-@@ -823,7 +823,7 @@ int ctf_variant_declaration_list_visit(FILE *fd, int depth,
- }
- 
- static
--struct declaration *ctf_declaration_struct_visit(FILE *fd,
-+struct bt_declaration *ctf_declaration_struct_visit(FILE *fd,
- 	int depth, const char *name, struct bt_list_head *declaration_list,
- 	int has_body, struct bt_list_head *min_align,
- 	struct declaration_scope *declaration_scope,
-@@ -894,7 +894,7 @@ error:
- }
- 
- static
--struct declaration *ctf_declaration_variant_visit(FILE *fd,
-+struct bt_declaration *ctf_declaration_variant_visit(FILE *fd,
- 	int depth, const char *name, const char *choice,
- 	struct bt_list_head *declaration_list,
- 	int has_body, struct declaration_scope *declaration_scope,
-@@ -1053,7 +1053,7 @@ int ctf_enumerator_list_visit(FILE *fd, int depth,
- }
- 
- static
--struct declaration *ctf_declaration_enum_visit(FILE *fd, int depth,
-+struct bt_declaration *ctf_declaration_enum_visit(FILE *fd, int depth,
- 			const char *name,
- 			struct ctf_node *container_type,
- 			struct bt_list_head *enumerator_list,
-@@ -1061,7 +1061,7 @@ struct declaration *ctf_declaration_enum_visit(FILE *fd, int depth,
- 			struct declaration_scope *declaration_scope,
- 			struct ctf_trace *trace)
- {
--	struct declaration *declaration;
-+	struct bt_declaration *declaration;
- 	struct declaration_enum *enum_declaration;
- 	struct declaration_integer *integer_declaration;
- 	struct last_enum_value last_value;
-@@ -1146,12 +1146,12 @@ error:
- }
- 
- static
--struct declaration *ctf_declaration_type_specifier_visit(FILE *fd, int depth,
-+struct bt_declaration *ctf_declaration_type_specifier_visit(FILE *fd, int depth,
- 		struct ctf_node *type_specifier_list,
- 		struct declaration_scope *declaration_scope)
- {
- 	GString *str;
--	struct declaration *declaration;
-+	struct bt_declaration *declaration;
- 	char *str_c;
- 	int ret;
- 	GQuark id_q;
-@@ -1263,7 +1263,7 @@ int get_byte_order(FILE *fd, int depth, struct ctf_node *unary_expression,
- }
- 
- static
--struct declaration *ctf_declaration_integer_visit(FILE *fd, int depth,
-+struct bt_declaration *ctf_declaration_integer_visit(FILE *fd, int depth,
- 		struct bt_list_head *expressions,
- 		struct ctf_trace *trace)
- {
-@@ -1449,7 +1449,7 @@ struct declaration *ctf_declaration_integer_visit(FILE *fd, int depth,
- }
- 
- static
--struct declaration *ctf_declaration_floating_point_visit(FILE *fd, int depth,
-+struct bt_declaration *ctf_declaration_floating_point_visit(FILE *fd, int depth,
- 		struct bt_list_head *expressions,
- 		struct ctf_trace *trace)
- {
-@@ -1528,7 +1528,7 @@ struct declaration *ctf_declaration_floating_point_visit(FILE *fd, int depth,
- }
- 
- static
--struct declaration *ctf_declaration_string_visit(FILE *fd, int depth,
-+struct bt_declaration *ctf_declaration_string_visit(FILE *fd, int depth,
- 		struct bt_list_head *expressions,
- 		struct ctf_trace *trace)
- {
-@@ -1564,7 +1564,7 @@ struct declaration *ctf_declaration_string_visit(FILE *fd, int depth,
- 
- 
- static
--struct declaration *ctf_type_specifier_list_visit(FILE *fd,
-+struct bt_declaration *ctf_type_specifier_list_visit(FILE *fd,
- 		int depth, struct ctf_node *type_specifier_list,
- 		struct declaration_scope *declaration_scope,
- 		struct ctf_trace *trace)
-@@ -1715,7 +1715,7 @@ int ctf_event_declaration_visit(FILE *fd, int depth, struct ctf_node *node, stru
- 			}
- 			CTF_EVENT_SET_FIELD(event, stream_id);
- 		} else if (!strcmp(left, "context")) {
--			struct declaration *declaration;
-+			struct bt_declaration *declaration;
- 
- 			if (event->context_decl) {
- 				fprintf(fd, "[error] %s: context already declared in event declaration\n", __func__);
-@@ -1736,7 +1736,7 @@ int ctf_event_declaration_visit(FILE *fd, int depth, struct ctf_node *node, stru
- 			}
- 			event->context_decl = container_of(declaration, struct declaration_struct, p);
- 		} else if (!strcmp(left, "fields")) {
--			struct declaration *declaration;
-+			struct bt_declaration *declaration;
- 
- 			if (event->fields_decl) {
- 				fprintf(fd, "[error] %s: fields already declared in event declaration\n", __func__);
-@@ -1915,7 +1915,7 @@ int ctf_stream_declaration_visit(FILE *fd, int depth, struct ctf_node *node, str
- 			}
- 			CTF_STREAM_SET_FIELD(stream, stream_id);
- 		} else if (!strcmp(left, "event.header")) {
--			struct declaration *declaration;
-+			struct bt_declaration *declaration;
- 
- 			if (stream->event_header_decl) {
- 				fprintf(fd, "[error] %s: event.header already declared in stream declaration\n", __func__);
-@@ -1936,7 +1936,7 @@ int ctf_stream_declaration_visit(FILE *fd, int depth, struct ctf_node *node, str
- 			}
- 			stream->event_header_decl = container_of(declaration, struct declaration_struct, p);
- 		} else if (!strcmp(left, "event.context")) {
--			struct declaration *declaration;
-+			struct bt_declaration *declaration;
- 
- 			if (stream->event_context_decl) {
- 				fprintf(fd, "[error] %s: event.context already declared in stream declaration\n", __func__);
-@@ -1957,7 +1957,7 @@ int ctf_stream_declaration_visit(FILE *fd, int depth, struct ctf_node *node, str
- 			}
- 			stream->event_context_decl = container_of(declaration, struct declaration_struct, p);
- 		} else if (!strcmp(left, "packet.context")) {
--			struct declaration *declaration;
-+			struct bt_declaration *declaration;
- 
- 			if (stream->packet_context_decl) {
- 				fprintf(fd, "[error] %s: packet.context already declared in stream declaration\n", __func__);
-@@ -2155,7 +2155,7 @@ int ctf_trace_declaration_visit(FILE *fd, int depth, struct ctf_node *node, stru
- 			}
- 			CTF_TRACE_SET_FIELD(trace, byte_order);
- 		} else if (!strcmp(left, "packet.header")) {
--			struct declaration *declaration;
-+			struct bt_declaration *declaration;
- 
- 			if (trace->packet_header_decl) {
- 				fprintf(fd, "[error] %s: packet.header already declared in trace declaration\n", __func__);
-@@ -2841,7 +2841,7 @@ int ctf_root_declaration_visit(FILE *fd, int depth, struct ctf_node *node, struc
- 		break;
- 	case NODE_TYPE_SPECIFIER_LIST:
- 	{
--		struct declaration *declaration;
-+		struct bt_declaration *declaration;
- 
- 		/*
- 		 * Just add the type specifier to the root scope
 diff --git a/formats/ctf/types/array.c b/formats/ctf/types/array.c
-index 683c171..ea3ecfd 100644
+index b1cbe2f..683c171 100644
 --- a/formats/ctf/types/array.c
 +++ b/formats/ctf/types/array.c
-@@ -34,7 +34,7 @@ int ctf_array_read(struct bt_stream_pos *ppos, struct bt_definition *definition)
- 		container_of(definition, struct definition_array, p);
- 	struct declaration_array *array_declaration =
- 		array_definition->declaration;
--	struct declaration *elem = array_declaration->elem;
-+	struct bt_declaration *elem = array_declaration->elem;
- 	struct ctf_stream_pos *pos =
- 		container_of(ppos, struct ctf_stream_pos, parent);
+@@ -28,7 +28,7 @@
  
-@@ -70,7 +70,7 @@ int ctf_array_write(struct bt_stream_pos *ppos, struct bt_definition *definition
- 		container_of(definition, struct definition_array, p);
- 	struct declaration_array *array_declaration =
- 		array_definition->declaration;
--	struct declaration *elem = array_declaration->elem;
-+	struct bt_declaration *elem = array_declaration->elem;
- 	struct ctf_stream_pos *pos =
- 		container_of(ppos, struct ctf_stream_pos, parent);
+ #include <babeltrace/ctf/types.h>
  
+-int ctf_array_read(struct bt_stream_pos *ppos, struct definition *definition)
++int ctf_array_read(struct bt_stream_pos *ppos, struct bt_definition *definition)
+ {
+ 	struct definition_array *array_definition =
+ 		container_of(definition, struct definition_array, p);
+@@ -64,7 +64,7 @@ int ctf_array_read(struct bt_stream_pos *ppos, struct definition *definition)
+ 	return bt_array_rw(ppos, definition);
+ }
+ 
+-int ctf_array_write(struct bt_stream_pos *ppos, struct definition *definition)
++int ctf_array_write(struct bt_stream_pos *ppos, struct bt_definition *definition)
+ {
+ 	struct definition_array *array_definition =
+ 		container_of(definition, struct definition_array, p);
+diff --git a/formats/ctf/types/enum.c b/formats/ctf/types/enum.c
+index 9371b27..9461af6 100644
+--- a/formats/ctf/types/enum.c
++++ b/formats/ctf/types/enum.c
+@@ -31,7 +31,7 @@
+ #include <stdint.h>
+ #include <glib.h>
+ 
+-int ctf_enum_read(struct bt_stream_pos *ppos, struct definition *definition)
++int ctf_enum_read(struct bt_stream_pos *ppos, struct bt_definition *definition)
+ {
+ 	struct definition_enum *enum_definition =
+ 		container_of(definition, struct definition_enum, p);
+@@ -69,7 +69,7 @@ int ctf_enum_read(struct bt_stream_pos *ppos, struct definition *definition)
+ 	return 0;
+ }
+ 
+-int ctf_enum_write(struct bt_stream_pos *pos, struct definition *definition)
++int ctf_enum_write(struct bt_stream_pos *pos, struct bt_definition *definition)
+ {
+ 	struct definition_enum *enum_definition =
+ 		container_of(definition, struct definition_enum, p);
+diff --git a/formats/ctf/types/float.c b/formats/ctf/types/float.c
+index f46e26a..2e0bd5c 100644
+--- a/formats/ctf/types/float.c
++++ b/formats/ctf/types/float.c
+@@ -165,7 +165,7 @@ static int _ctf_float_copy(struct bt_stream_pos *destp,
+ 	return 0;
+ }
+ 
+-int ctf_float_read(struct bt_stream_pos *ppos, struct definition *definition)
++int ctf_float_read(struct bt_stream_pos *ppos, struct bt_definition *definition)
+ {
+ 	struct definition_float *float_definition =
+ 		container_of(definition, struct definition_float, p);
+@@ -173,7 +173,7 @@ int ctf_float_read(struct bt_stream_pos *ppos, struct definition *definition)
+ 		float_definition->declaration;
+ 	struct ctf_stream_pos *pos = ctf_pos(ppos);
+ 	union doubleIEEE754 u;
+-	struct definition *tmpdef;
++	struct bt_definition *tmpdef;
+ 	struct definition_float *tmpfloat;
+ 	struct ctf_stream_pos destp;
+ 	struct mmap_align mma;
+@@ -222,7 +222,7 @@ end:
+ 	return ret;
+ }
+ 
+-int ctf_float_write(struct bt_stream_pos *ppos, struct definition *definition)
++int ctf_float_write(struct bt_stream_pos *ppos, struct bt_definition *definition)
+ {
+ 	struct definition_float *float_definition =
+ 		container_of(definition, struct definition_float, p);
+@@ -230,7 +230,7 @@ int ctf_float_write(struct bt_stream_pos *ppos, struct definition *definition)
+ 		float_definition->declaration;
+ 	struct ctf_stream_pos *pos = ctf_pos(ppos);
+ 	union doubleIEEE754 u;
+-	struct definition *tmpdef;
++	struct bt_definition *tmpdef;
+ 	struct definition_float *tmpfloat;
+ 	struct ctf_stream_pos srcp;
+ 	struct mmap_align mma;
+diff --git a/formats/ctf/types/integer.c b/formats/ctf/types/integer.c
+index 1267925..257341a 100644
+--- a/formats/ctf/types/integer.c
++++ b/formats/ctf/types/integer.c
+@@ -40,7 +40,7 @@
+ 
+ static
+ int _aligned_integer_read(struct bt_stream_pos *ppos,
+-			  struct definition *definition)
++			  struct bt_definition *definition)
+ {
+ 	struct definition_integer *integer_definition =
+ 		container_of(definition, struct definition_integer, p);
+@@ -142,7 +142,7 @@ int _aligned_integer_read(struct bt_stream_pos *ppos,
+ 
+ static
+ int _aligned_integer_write(struct bt_stream_pos *ppos,
+-			    struct definition *definition)
++			    struct bt_definition *definition)
+ {
+ 	struct definition_integer *integer_definition =
+ 		container_of(definition, struct definition_integer, p);
+@@ -211,7 +211,7 @@ end:
+ 	return 0;
+ }
+ 
+-int ctf_integer_read(struct bt_stream_pos *ppos, struct definition *definition)
++int ctf_integer_read(struct bt_stream_pos *ppos, struct bt_definition *definition)
+ {
+ 	struct definition_integer *integer_definition =
+ 		container_of(definition, struct definition_integer, p);
+@@ -256,7 +256,7 @@ int ctf_integer_read(struct bt_stream_pos *ppos, struct definition *definition)
+ 	return 0;
+ }
+ 
+-int ctf_integer_write(struct bt_stream_pos *ppos, struct definition *definition)
++int ctf_integer_write(struct bt_stream_pos *ppos, struct bt_definition *definition)
+ {
+ 	struct definition_integer *integer_definition =
+ 		container_of(definition, struct definition_integer, p);
 diff --git a/formats/ctf/types/sequence.c b/formats/ctf/types/sequence.c
-index 53ebf75..898c367 100644
+index b2221ea..53ebf75 100644
 --- a/formats/ctf/types/sequence.c
 +++ b/formats/ctf/types/sequence.c
-@@ -34,7 +34,7 @@ int ctf_sequence_read(struct bt_stream_pos *ppos, struct bt_definition *definiti
- 		container_of(definition, struct definition_sequence, p);
- 	struct declaration_sequence *sequence_declaration =
- 		sequence_definition->declaration;
--	struct declaration *elem = sequence_declaration->elem;
-+	struct bt_declaration *elem = sequence_declaration->elem;
- 	struct ctf_stream_pos *pos = ctf_pos(ppos);
+@@ -28,7 +28,7 @@
  
- 	if (elem->id == CTF_TYPE_INTEGER) {
-@@ -69,7 +69,7 @@ int ctf_sequence_write(struct bt_stream_pos *ppos, struct bt_definition *definit
- 		container_of(definition, struct definition_sequence, p);
- 	struct declaration_sequence *sequence_declaration =
- 		sequence_definition->declaration;
--	struct declaration *elem = sequence_declaration->elem;
-+	struct bt_declaration *elem = sequence_declaration->elem;
- 	struct ctf_stream_pos *pos = ctf_pos(ppos);
+ #include <babeltrace/ctf/types.h>
  
- 	if (elem->id == CTF_TYPE_INTEGER) {
+-int ctf_sequence_read(struct bt_stream_pos *ppos, struct definition *definition)
++int ctf_sequence_read(struct bt_stream_pos *ppos, struct bt_definition *definition)
+ {
+ 	struct definition_sequence *sequence_definition =
+ 		container_of(definition, struct definition_sequence, p);
+@@ -63,7 +63,7 @@ int ctf_sequence_read(struct bt_stream_pos *ppos, struct definition *definition)
+ 	return bt_sequence_rw(ppos, definition);
+ }
+ 
+-int ctf_sequence_write(struct bt_stream_pos *ppos, struct definition *definition)
++int ctf_sequence_write(struct bt_stream_pos *ppos, struct bt_definition *definition)
+ {
+ 	struct definition_sequence *sequence_definition =
+ 		container_of(definition, struct definition_sequence, p);
+diff --git a/formats/ctf/types/string.c b/formats/ctf/types/string.c
+index 5771733..a2433bf 100644
+--- a/formats/ctf/types/string.c
++++ b/formats/ctf/types/string.c
+@@ -31,7 +31,7 @@
+ #include <limits.h>		/* C99 limits */
+ #include <string.h>
+ 
+-int ctf_string_read(struct bt_stream_pos *ppos, struct definition *definition)
++int ctf_string_read(struct bt_stream_pos *ppos, struct bt_definition *definition)
+ {
+ 	struct definition_string *string_definition =
+ 		container_of(definition, struct definition_string, p);
+@@ -69,7 +69,7 @@ int ctf_string_read(struct bt_stream_pos *ppos, struct definition *definition)
+ }
+ 
+ int ctf_string_write(struct bt_stream_pos *ppos,
+-		      struct definition *definition)
++		      struct bt_definition *definition)
+ {
+ 	struct definition_string *string_definition =
+ 		container_of(definition, struct definition_string, p);
 diff --git a/formats/ctf/types/struct.c b/formats/ctf/types/struct.c
-index b004767..106f682 100644
+index 7c1562b..b004767 100644
 --- a/formats/ctf/types/struct.c
 +++ b/formats/ctf/types/struct.c
-@@ -30,7 +30,7 @@
+@@ -28,7 +28,7 @@
  
- int ctf_struct_rw(struct bt_stream_pos *ppos, struct bt_definition *definition)
+ #include <babeltrace/ctf/types.h>
+ 
+-int ctf_struct_rw(struct bt_stream_pos *ppos, struct definition *definition)
++int ctf_struct_rw(struct bt_stream_pos *ppos, struct bt_definition *definition)
  {
--	struct declaration *declaration = definition->declaration;
-+	struct bt_declaration *declaration = definition->declaration;
+ 	struct declaration *declaration = definition->declaration;
  	struct ctf_stream_pos *pos = ctf_pos(ppos);
- 
- 	ctf_align_pos(pos, declaration->alignment);
 diff --git a/formats/ctf/types/variant.c b/formats/ctf/types/variant.c
-index ece8b33..b3d6396 100644
+index 3c0c371..ece8b33 100644
 --- a/formats/ctf/types/variant.c
 +++ b/formats/ctf/types/variant.c
-@@ -30,7 +30,7 @@
+@@ -28,7 +28,7 @@
  
- int ctf_variant_rw(struct bt_stream_pos *ppos, struct bt_definition *definition)
+ #include <babeltrace/ctf/types.h>
+ 
+-int ctf_variant_rw(struct bt_stream_pos *ppos, struct definition *definition)
++int ctf_variant_rw(struct bt_stream_pos *ppos, struct bt_definition *definition)
  {
--	struct declaration *declaration = definition->declaration;
-+	struct bt_declaration *declaration = definition->declaration;
+ 	struct declaration *declaration = definition->declaration;
  	struct ctf_stream_pos *pos = ctf_pos(ppos);
+diff --git a/include/babeltrace/ctf-text/types.h b/include/babeltrace/ctf-text/types.h
+index 15c8333..74a68a1 100644
+--- a/include/babeltrace/ctf-text/types.h
++++ b/include/babeltrace/ctf-text/types.h
+@@ -62,21 +62,21 @@ struct ctf_text_stream_pos *ctf_text_pos(struct bt_stream_pos *pos)
+  * Write only is supported for now.
+  */
+ BT_HIDDEN
+-int ctf_text_integer_write(struct bt_stream_pos *pos, struct definition *definition);
++int ctf_text_integer_write(struct bt_stream_pos *pos, struct bt_definition *definition);
+ BT_HIDDEN
+-int ctf_text_float_write(struct bt_stream_pos *pos, struct definition *definition);
++int ctf_text_float_write(struct bt_stream_pos *pos, struct bt_definition *definition);
+ BT_HIDDEN
+-int ctf_text_string_write(struct bt_stream_pos *pos, struct definition *definition);
++int ctf_text_string_write(struct bt_stream_pos *pos, struct bt_definition *definition);
+ BT_HIDDEN
+-int ctf_text_enum_write(struct bt_stream_pos *pos, struct definition *definition);
++int ctf_text_enum_write(struct bt_stream_pos *pos, struct bt_definition *definition);
+ BT_HIDDEN
+-int ctf_text_struct_write(struct bt_stream_pos *pos, struct definition *definition);
++int ctf_text_struct_write(struct bt_stream_pos *pos, struct bt_definition *definition);
+ BT_HIDDEN
+-int ctf_text_variant_write(struct bt_stream_pos *pos, struct definition *definition);
++int ctf_text_variant_write(struct bt_stream_pos *pos, struct bt_definition *definition);
+ BT_HIDDEN
+-int ctf_text_array_write(struct bt_stream_pos *pos, struct definition *definition);
++int ctf_text_array_write(struct bt_stream_pos *pos, struct bt_definition *definition);
+ BT_HIDDEN
+-int ctf_text_sequence_write(struct bt_stream_pos *pos, struct definition *definition);
++int ctf_text_sequence_write(struct bt_stream_pos *pos, struct bt_definition *definition);
  
- 	ctf_align_pos(pos, declaration->alignment);
+ static inline
+ void print_pos_tabs(struct ctf_text_stream_pos *pos)
+@@ -91,6 +91,6 @@ void print_pos_tabs(struct ctf_text_stream_pos *pos)
+  * Check if the field must be printed.
+  */
+ BT_HIDDEN
+-int print_field(struct definition *definition);
++int print_field(struct bt_definition *definition);
+ 
+ #endif /* _BABELTRACE_CTF_TEXT_TYPES_H */
 diff --git a/include/babeltrace/ctf/events.h b/include/babeltrace/ctf/events.h
-index ecc5c28..c92470c 100644
+index 19d7361..ecc5c28 100644
 --- a/include/babeltrace/ctf/events.h
 +++ b/include/babeltrace/ctf/events.h
-@@ -40,7 +40,7 @@ extern "C" {
+@@ -39,7 +39,7 @@
+ extern "C" {
  #endif
  
- struct bt_definition;
--struct declaration;
-+struct bt_declaration;
+-struct definition;
++struct bt_definition;
+ struct declaration;
  struct bt_ctf_event;
  struct bt_ctf_event_decl;
- struct bt_ctf_field_decl;
-@@ -158,19 +158,19 @@ const char *bt_ctf_field_name(const struct bt_definition *def);
+@@ -94,7 +94,7 @@ enum ctf_string_encoding {
+  * between the enum and the actual definition of top-level scopes.
+  * On error return NULL.
+  */
+-const struct definition *bt_ctf_get_top_level_scope(const struct bt_ctf_event *event,
++const struct bt_definition *bt_ctf_get_top_level_scope(const struct bt_ctf_event *event,
+ 		enum bt_ctf_scope scope);
+ 
+ /*
+@@ -130,35 +130,35 @@ uint64_t bt_ctf_get_timestamp(const struct bt_ctf_event *event);
+  * from which the event is extracted is unchanged).
+  */
+ int bt_ctf_get_field_list(const struct bt_ctf_event *event,
+-		const struct definition *scope,
+-		struct definition const * const **list,
++		const struct bt_definition *scope,
++		struct bt_definition const * const **list,
+ 		unsigned int *count);
+ 
+ /*
+  * bt_ctf_get_field: returns the definition of a specific field
+  */
+-const struct definition *bt_ctf_get_field(const struct bt_ctf_event *event,
+-		const struct definition *scope,
++const struct bt_definition *bt_ctf_get_field(const struct bt_ctf_event *event,
++		const struct bt_definition *scope,
+ 		const char *field);
+ 
+ /*
+  * bt_ctf_get_index: if the field is an array or a sequence, return the element
+  * at position index, otherwise return NULL;
+  */
+-const struct definition *bt_ctf_get_index(const struct bt_ctf_event *event,
+-		const struct definition *field,
++const struct bt_definition *bt_ctf_get_index(const struct bt_ctf_event *event,
++		const struct bt_definition *field,
+ 		unsigned int index);
+ 
+ /*
+  * bt_ctf_field_name: returns the name of a field or NULL on error
+  */
+-const char *bt_ctf_field_name(const struct definition *def);
++const char *bt_ctf_field_name(const struct bt_definition *def);
+ 
+ /*
   * bt_ctf_get_decl_from_def: return the declaration of a field from
   * its definition or NULL on error
   */
--const struct declaration *bt_ctf_get_decl_from_def(const struct bt_definition *def);
-+const struct bt_declaration *bt_ctf_get_decl_from_def(const struct bt_definition *def);
+-const struct declaration *bt_ctf_get_decl_from_def(const struct definition *def);
++const struct declaration *bt_ctf_get_decl_from_def(const struct bt_definition *def);
  
  /*
   * bt_ctf_get_decl_from_field_decl: return the declaration of a field from
-  * a field_decl or NULL on error
+@@ -225,12 +225,12 @@ int bt_ctf_get_array_len(const struct declaration *decl);
+  * bt_ctf_get_enum_str gets the string matching the current enumeration
+  * value, or NULL if the current value does not match any string.
   */
--const struct declaration *bt_ctf_get_decl_from_field_decl(
-+const struct bt_declaration *bt_ctf_get_decl_from_field_decl(
- 		const struct bt_ctf_field_decl *field);
+-uint64_t bt_ctf_get_uint64(const struct definition *field);
+-int64_t bt_ctf_get_int64(const struct definition *field);
+-const struct definition *bt_ctf_get_enum_int(const struct definition *field);
+-const char *bt_ctf_get_enum_str(const struct definition *field);
+-char *bt_ctf_get_char_array(const struct definition *field);
+-char *bt_ctf_get_string(const struct definition *field);
++uint64_t bt_ctf_get_uint64(const struct bt_definition *field);
++int64_t bt_ctf_get_int64(const struct bt_definition *field);
++const struct bt_definition *bt_ctf_get_enum_int(const struct bt_definition *field);
++const char *bt_ctf_get_enum_str(const struct bt_definition *field);
++char *bt_ctf_get_char_array(const struct bt_definition *field);
++char *bt_ctf_get_string(const struct bt_definition *field);
  
  /*
-  * bt_ctf_field_type: returns the type of a field or -1 if unknown
-  */
--enum ctf_type_id bt_ctf_field_type(const struct declaration *decl);
-+enum ctf_type_id bt_ctf_field_type(const struct bt_declaration *decl);
+  * bt_ctf_field_get_error: returns the last error code encountered while
+diff --git a/include/babeltrace/ctf/types.h b/include/babeltrace/ctf/types.h
+index f7b93d3..781b942 100644
+--- a/include/babeltrace/ctf/types.h
++++ b/include/babeltrace/ctf/types.h
+@@ -91,33 +91,33 @@ struct ctf_stream_pos *ctf_pos(struct bt_stream_pos *pos)
+ }
  
- /*
-  * bt_ctf_get_int_signedness: return the signedness of an integer
-@@ -179,37 +179,37 @@ enum ctf_type_id bt_ctf_field_type(const struct declaration *decl);
-  * return 1 if signed
-  * return -1 on error
-  */
--int bt_ctf_get_int_signedness(const struct declaration *decl);
-+int bt_ctf_get_int_signedness(const struct bt_declaration *decl);
+ BT_HIDDEN
+-int ctf_integer_read(struct bt_stream_pos *pos, struct definition *definition);
++int ctf_integer_read(struct bt_stream_pos *pos, struct bt_definition *definition);
+ BT_HIDDEN
+-int ctf_integer_write(struct bt_stream_pos *pos, struct definition *definition);
++int ctf_integer_write(struct bt_stream_pos *pos, struct bt_definition *definition);
+ BT_HIDDEN
+-int ctf_float_read(struct bt_stream_pos *pos, struct definition *definition);
++int ctf_float_read(struct bt_stream_pos *pos, struct bt_definition *definition);
+ BT_HIDDEN
+-int ctf_float_write(struct bt_stream_pos *pos, struct definition *definition);
++int ctf_float_write(struct bt_stream_pos *pos, struct bt_definition *definition);
+ BT_HIDDEN
+-int ctf_string_read(struct bt_stream_pos *pos, struct definition *definition);
++int ctf_string_read(struct bt_stream_pos *pos, struct bt_definition *definition);
+ BT_HIDDEN
+-int ctf_string_write(struct bt_stream_pos *pos, struct definition *definition);
++int ctf_string_write(struct bt_stream_pos *pos, struct bt_definition *definition);
+ BT_HIDDEN
+-int ctf_enum_read(struct bt_stream_pos *pos, struct definition *definition);
++int ctf_enum_read(struct bt_stream_pos *pos, struct bt_definition *definition);
+ BT_HIDDEN
+-int ctf_enum_write(struct bt_stream_pos *pos, struct definition *definition);
++int ctf_enum_write(struct bt_stream_pos *pos, struct bt_definition *definition);
+ BT_HIDDEN
+-int ctf_struct_rw(struct bt_stream_pos *pos, struct definition *definition);
++int ctf_struct_rw(struct bt_stream_pos *pos, struct bt_definition *definition);
+ BT_HIDDEN
+-int ctf_variant_rw(struct bt_stream_pos *pos, struct definition *definition);
++int ctf_variant_rw(struct bt_stream_pos *pos, struct bt_definition *definition);
+ BT_HIDDEN
+-int ctf_array_read(struct bt_stream_pos *pos, struct definition *definition);
++int ctf_array_read(struct bt_stream_pos *pos, struct bt_definition *definition);
+ BT_HIDDEN
+-int ctf_array_write(struct bt_stream_pos *pos, struct definition *definition);
++int ctf_array_write(struct bt_stream_pos *pos, struct bt_definition *definition);
+ BT_HIDDEN
+-int ctf_sequence_read(struct bt_stream_pos *pos, struct definition *definition);
++int ctf_sequence_read(struct bt_stream_pos *pos, struct bt_definition *definition);
+ BT_HIDDEN
+-int ctf_sequence_write(struct bt_stream_pos *pos, struct definition *definition);
++int ctf_sequence_write(struct bt_stream_pos *pos, struct bt_definition *definition);
  
- /*
-  * bt_ctf_get_int_base: return the base of an int or a negative value on error
-  */
--int bt_ctf_get_int_base(const struct declaration *decl);
-+int bt_ctf_get_int_base(const struct bt_declaration *decl);
+ void ctf_packet_seek(struct bt_stream_pos *pos, size_t index, int whence);
  
- /*
-  * bt_ctf_get_int_byte_order: return the byte order of an int or a negative
-  * value on error
-  */
--int bt_ctf_get_int_byte_order(const struct declaration *decl);
-+int bt_ctf_get_int_byte_order(const struct bt_declaration *decl);
- 
- /*
-  * bt_ctf_get_int_len: return the size, in bits, of an int or a negative
-  * value on error
-  */
--ssize_t bt_ctf_get_int_len(const struct declaration *decl);
-+ssize_t bt_ctf_get_int_len(const struct bt_declaration *decl);
- 
- /*
-  * bt_ctf_get_encoding: return the encoding of an int, a string, or of
-  * the integer contained in a char array or a sequence.
-  * return a negative value on error
-  */
--enum ctf_string_encoding bt_ctf_get_encoding(const struct declaration *decl);
-+enum ctf_string_encoding bt_ctf_get_encoding(const struct bt_declaration *decl);
- 
- /*
-  * bt_ctf_get_array_len: return the len of an array or a negative
-  * value on error
-  */
--int bt_ctf_get_array_len(const struct declaration *decl);
-+int bt_ctf_get_array_len(const struct bt_declaration *decl);
- 
- /*
-  * Field access functions
 diff --git a/include/babeltrace/types.h b/include/babeltrace/types.h
-index 0b8d1c1..22c6876 100644
+index 093ef0c..0b8d1c1 100644
 --- a/include/babeltrace/types.h
 +++ b/include/babeltrace/types.h
-@@ -78,16 +78,16 @@ struct definition_scope {
- 	GArray *scope_path;	/* array of GQuark */
- };
+@@ -45,7 +45,7 @@
+ struct ctf_stream_definition;
+ struct bt_stream_pos;
+ struct bt_format;
+-struct definition;
++struct bt_definition;
+ struct ctf_clock;
  
--struct declaration {
-+struct bt_declaration {
- 	enum ctf_type_id id;
- 	size_t alignment;	/* type alignment, in bits */
- 	int ref;		/* number of references to the type */
- 	/*
+ /* type scope */
+@@ -86,7 +86,7 @@ struct declaration {
  	 * declaration_free called with declaration ref is decremented to 0.
  	 */
--	void (*declaration_free)(struct declaration *declaration);
-+	void (*declaration_free)(struct bt_declaration *declaration);
- 	struct bt_definition *
--		(*definition_new)(struct declaration *declaration,
-+		(*definition_new)(struct bt_declaration *declaration,
+ 	void (*declaration_free)(struct declaration *declaration);
+-	struct definition *
++	struct bt_definition *
+ 		(*definition_new)(struct declaration *declaration,
  				  struct definition_scope *parent_scope,
  				  GQuark field_name, int index,
- 				  const char *root_name);
-@@ -98,7 +98,7 @@ struct declaration {
+@@ -94,10 +94,10 @@ struct declaration {
+ 	/*
+ 	 * definition_free called with definition ref is decremented to 0.
+ 	 */
+-	void (*definition_free)(struct definition *definition);
++	void (*definition_free)(struct bt_definition *definition);
  };
  
- struct bt_definition {
--	struct declaration *declaration;
-+	struct bt_declaration *declaration;
+-struct definition {
++struct bt_definition {
+ 	struct declaration *declaration;
  	int index;		/* Position of the definition in its container */
  	GQuark name;		/* Field name in its container (or 0 if unset) */
- 	int ref;		/* number of references to the definition */
-@@ -134,7 +134,7 @@ int generic_rw(struct bt_stream_pos *pos, struct bt_definition *definition)
-  * read/write non aligned on CHAR_BIT.
-  */
- struct declaration_integer {
--	struct declaration p;
-+	struct bt_declaration p;
- 	size_t len;		/* length, in bits. */
- 	int byte_order;		/* byte order */
- 	int signedness;
-@@ -154,7 +154,7 @@ struct definition_integer {
+@@ -107,7 +107,7 @@ struct definition {
  };
  
- struct declaration_float {
--	struct declaration p;
-+	struct bt_declaration p;
- 	struct declaration_integer *sign;
- 	struct declaration_integer *mantissa;
- 	struct declaration_integer *exp;
-@@ -211,7 +211,7 @@ struct enum_table {
+ typedef int (*rw_dispatch)(struct bt_stream_pos *pos,
+-			   struct definition *definition);
++			   struct bt_definition *definition);
+ 
+ /* Parent of per-plugin positions */
+ struct bt_stream_pos {
+@@ -118,7 +118,7 @@ struct bt_stream_pos {
  };
  
- struct declaration_enum {
--	struct declaration p;
-+	struct bt_declaration p;
- 	struct declaration_integer *integer_declaration;
- 	struct enum_table table;
- };
-@@ -225,7 +225,7 @@ struct definition_enum {
- };
- 
- struct declaration_string {
--	struct declaration p;
-+	struct bt_declaration p;
- 	enum ctf_string_encoding encoding;
+ static inline
+-int generic_rw(struct bt_stream_pos *pos, struct definition *definition)
++int generic_rw(struct bt_stream_pos *pos, struct bt_definition *definition)
+ {
+ 	enum ctf_type_id dispatch_id = definition->declaration->id;
+ 	rw_dispatch call;
+@@ -144,7 +144,7 @@ struct declaration_integer {
  };
  
-@@ -238,11 +238,11 @@ struct definition_string {
- 
- struct declaration_field {
- 	GQuark name;
--	struct declaration *declaration;
-+	struct bt_declaration *declaration;
+ struct definition_integer {
+-	struct definition p;
++	struct bt_definition p;
+ 	struct declaration_integer *declaration;
+ 	/* Last values read */
+ 	union {
+@@ -163,7 +163,7 @@ struct declaration_float {
  };
  
- struct declaration_struct {
--	struct declaration p;
-+	struct bt_declaration p;
- 	GHashTable *fields_by_name;	/* Tuples (field name, field index) */
- 	struct declaration_scope *scope;
- 	GArray *fields;			/* Array of declaration_field */
-@@ -255,14 +255,14 @@ struct definition_struct {
+ struct definition_float {
+-	struct definition p;
++	struct bt_definition p;
+ 	struct declaration_float *declaration;
+ 	struct definition_integer *sign;
+ 	struct definition_integer *mantissa;
+@@ -217,7 +217,7 @@ struct declaration_enum {
+ };
+ 
+ struct definition_enum {
+-	struct definition p;
++	struct bt_definition p;
+ 	struct definition_integer *integer;
+ 	struct declaration_enum *declaration;
+ 	/* Last GQuark values read. Keeping a reference on the GQuark array. */
+@@ -230,7 +230,7 @@ struct declaration_string {
+ };
+ 
+ struct definition_string {
+-	struct definition p;
++	struct bt_definition p;
+ 	struct declaration_string *declaration;
+ 	char *value;	/* freed at definition_string teardown */
+ 	size_t len, alloc_len;
+@@ -249,9 +249,9 @@ struct declaration_struct {
+ };
+ 
+ struct definition_struct {
+-	struct definition p;
++	struct bt_definition p;
+ 	struct declaration_struct *declaration;
+-	GPtrArray *fields;		/* Array of pointers to struct definition */
++	GPtrArray *fields;		/* Array of pointers to struct bt_definition */
  };
  
  struct declaration_untagged_variant {
--	struct declaration p;
-+	struct bt_declaration p;
- 	GHashTable *fields_by_tag;	/* Tuples (field tag, field index) */
- 	struct declaration_scope *scope;
- 	GArray *fields;			/* Array of declaration_field */
- };
+@@ -269,11 +269,11 @@ struct declaration_variant {
  
- struct declaration_variant {
--	struct declaration p;
-+	struct bt_declaration p;
- 	struct declaration_untagged_variant *untagged_variant;
- 	GArray *tag_name;		/* Array of GQuark */
- };
-@@ -277,9 +277,9 @@ struct definition_variant {
+ /* A variant needs to be tagged to be defined. */
+ struct definition_variant {
+-	struct definition p;
++	struct bt_definition p;
+ 	struct declaration_variant *declaration;
+-	struct definition *enum_tag;
+-	GPtrArray *fields;		/* Array of pointers to struct definition */
+-	struct definition *current_field;	/* Last field read */
++	struct bt_definition *enum_tag;
++	GPtrArray *fields;		/* Array of pointers to struct bt_definition */
++	struct bt_definition *current_field;	/* Last field read */
  };
  
  struct declaration_array {
--	struct declaration p;
-+	struct bt_declaration p;
- 	size_t len;
--	struct declaration *elem;
-+	struct bt_declaration *elem;
- 	struct declaration_scope *scope;
+@@ -284,9 +284,9 @@ struct declaration_array {
  };
  
-@@ -291,9 +291,9 @@ struct definition_array {
+ struct definition_array {
+-	struct definition p;
++	struct bt_definition p;
+ 	struct declaration_array *declaration;
+-	GPtrArray *elems;		/* Array of pointers to struct definition */
++	GPtrArray *elems;		/* Array of pointers to struct bt_definition */
+ 	GString *string;		/* String for encoded integer children */
  };
  
- struct declaration_sequence {
--	struct declaration p;
-+	struct bt_declaration p;
- 	GArray *length_name;		/* Array of GQuark */
--	struct declaration *elem;
-+	struct bt_declaration *elem;
- 	struct declaration_scope *scope;
+@@ -298,10 +298,10 @@ struct declaration_sequence {
  };
  
-@@ -306,9 +306,9 @@ struct definition_sequence {
+ struct definition_sequence {
+-	struct definition p;
++	struct bt_definition p;
+ 	struct declaration_sequence *declaration;
+ 	struct definition_integer *length;
+-	GPtrArray *elems;		/* Array of pointers to struct definition */
++	GPtrArray *elems;		/* Array of pointers to struct bt_definition */
+ 	GString *string;		/* String for encoded integer children */
  };
  
- int bt_register_declaration(GQuark declaration_name,
--			 struct declaration *declaration,
-+			 struct bt_declaration *declaration,
- 			 struct declaration_scope *scope);
--struct declaration *bt_lookup_declaration(GQuark declaration_name,
-+struct bt_declaration *bt_lookup_declaration(GQuark declaration_name,
- 				struct declaration_scope *scope);
+@@ -343,12 +343,12 @@ void bt_free_declaration_scope(struct declaration_scope *scope);
+  * field_definition is for field definitions. They are registered into
+  * definition scopes.
+  */
+-struct definition *
++struct bt_definition *
+ 	bt_lookup_path_definition(GArray *cur_path,	/* array of GQuark */
+ 			       GArray *lookup_path,	/* array of GQuark */
+ 			       struct definition_scope *scope);
+ int bt_register_field_definition(GQuark field_name,
+-			      struct definition *definition,
++			      struct bt_definition *definition,
+ 			      struct definition_scope *scope);
+ struct definition_scope *
+ 	bt_new_definition_scope(struct definition_scope *parent_scope,
+@@ -359,7 +359,7 @@ GQuark bt_new_definition_path(struct definition_scope *parent_scope,
+ 			   GQuark field_name, const char *root_name);
  
- /*
-@@ -364,8 +364,8 @@ int compare_definition_path(struct bt_definition *definition, GQuark path)
+ static inline
+-int compare_definition_path(struct definition *definition, GQuark path)
++int compare_definition_path(struct bt_definition *definition, GQuark path)
+ {
  	return definition->path == path;
  }
+@@ -367,20 +367,20 @@ int compare_definition_path(struct definition *definition, GQuark path)
+ void bt_declaration_ref(struct declaration *declaration);
+ void bt_declaration_unref(struct declaration *declaration);
  
--void bt_declaration_ref(struct declaration *declaration);
--void bt_declaration_unref(struct declaration *declaration);
-+void bt_declaration_ref(struct bt_declaration *declaration);
-+void bt_declaration_unref(struct bt_declaration *declaration);
+-void bt_definition_ref(struct definition *definition);
+-void bt_definition_unref(struct definition *definition);
++void bt_definition_ref(struct bt_definition *definition);
++void bt_definition_unref(struct bt_definition *definition);
  
- void bt_definition_ref(struct bt_definition *definition);
- void bt_definition_unref(struct bt_definition *definition);
-@@ -435,7 +435,7 @@ struct declaration_struct *
- 			       uint64_t min_align);
- void bt_struct_declaration_add_field(struct declaration_struct *struct_declaration,
- 				  const char *field_name,
--				  struct declaration *field_declaration);
-+				  struct bt_declaration *field_declaration);
+ struct declaration_integer *bt_integer_declaration_new(size_t len, int byte_order,
+ 				  int signedness, size_t alignment,
+ 				  int base, enum ctf_string_encoding encoding,
+ 				  struct ctf_clock *clock);
+-uint64_t bt_get_unsigned_int(const struct definition *field);
+-int64_t bt_get_signed_int(const struct definition *field);
+-int bt_get_int_signedness(const struct definition *field);
+-int bt_get_int_byte_order(const struct definition *field);
+-int bt_get_int_base(const struct definition *field);
+-size_t bt_get_int_len(const struct definition *field);	/* in bits */
+-enum ctf_string_encoding bt_get_int_encoding(const struct definition *field);
++uint64_t bt_get_unsigned_int(const struct bt_definition *field);
++int64_t bt_get_signed_int(const struct bt_definition *field);
++int bt_get_int_signedness(const struct bt_definition *field);
++int bt_get_int_byte_order(const struct bt_definition *field);
++int bt_get_int_base(const struct bt_definition *field);
++size_t bt_get_int_len(const struct bt_definition *field);	/* in bits */
++enum ctf_string_encoding bt_get_int_encoding(const struct bt_definition *field);
+ 
  /*
-  * Returns the index of a field within a structure.
-  */
-@@ -465,7 +465,7 @@ struct declaration_variant *bt_variant_declaration_new(struct declaration_untagg
+  * mantissa_len is the length of the number of bytes represented by the mantissa
+@@ -427,8 +427,8 @@ struct declaration_enum *
  
- void bt_untagged_variant_declaration_add_field(struct declaration_untagged_variant *untagged_variant_declaration,
- 		const char *field_name,
--		struct declaration *field_declaration);
-+		struct bt_declaration *field_declaration);
+ struct declaration_string *
+ 	bt_string_declaration_new(enum ctf_string_encoding encoding);
+-char *bt_get_string(const struct definition *field);
+-enum ctf_string_encoding bt_get_string_encoding(const struct definition *field);
++char *bt_get_string(const struct bt_definition *field);
++enum ctf_string_encoding bt_get_string_encoding(const struct bt_definition *field);
+ 
+ struct declaration_struct *
+ 	bt_struct_declaration_new(struct declaration_scope *parent_scope,
+@@ -447,10 +447,10 @@ int bt_struct_declaration_lookup_field_index(struct declaration_struct *struct_d
  struct declaration_field *
- 	bt_untagged_variant_declaration_get_field_from_tag(struct declaration_untagged_variant *untagged_variant_declaration,
- 		GQuark tag);
-@@ -488,7 +488,7 @@ int bt_variant_rw(struct bt_stream_pos *pos, struct bt_definition *definition);
-  * array.
+ bt_struct_declaration_get_field_from_index(struct declaration_struct *struct_declaration,
+ 					int index);
+-struct definition *
++struct bt_definition *
+ bt_struct_definition_get_field_from_index(struct definition_struct *struct_definition,
+ 				       int index);
+-int bt_struct_rw(struct bt_stream_pos *pos, struct definition *definition);
++int bt_struct_rw(struct bt_stream_pos *pos, struct bt_definition *definition);
+ uint64_t bt_struct_declaration_len(struct declaration_struct *struct_declaration);
+ 
+ /*
+@@ -473,14 +473,14 @@ struct declaration_field *
+  * Returns 0 on success, -EPERM on error.
   */
- struct declaration_array *
--	bt_array_declaration_new(size_t len, struct declaration *elem_declaration,
-+	bt_array_declaration_new(size_t len, struct bt_declaration *elem_declaration,
+ int variant_definition_set_tag(struct definition_variant *variant,
+-			       struct definition *enum_tag);
++			       struct bt_definition *enum_tag);
+ /*
+  * Returns the field selected by the current tag value.
+  * field returned only valid as long as the variant structure is not appended
+  * to.
+  */
+-struct definition *bt_variant_get_current_field(struct definition_variant *variant);
+-int bt_variant_rw(struct bt_stream_pos *pos, struct definition *definition);
++struct bt_definition *bt_variant_get_current_field(struct definition_variant *variant);
++int bt_variant_rw(struct bt_stream_pos *pos, struct bt_definition *definition);
+ 
+ /*
+  * elem_declaration passed as parameter now belongs to the array. No
+@@ -491,10 +491,10 @@ struct declaration_array *
+ 	bt_array_declaration_new(size_t len, struct declaration *elem_declaration,
  		struct declaration_scope *parent_scope);
  uint64_t bt_array_len(struct definition_array *array);
- struct bt_definition *bt_array_index(struct definition_array *array, uint64_t i);
-@@ -502,7 +502,7 @@ int bt_get_array_len(const struct bt_definition *field);
-  */
- struct declaration_sequence *
- 	bt_sequence_declaration_new(const char *length_name,
--		struct declaration *elem_declaration,
-+		struct bt_declaration *elem_declaration,
+-struct definition *bt_array_index(struct definition_array *array, uint64_t i);
+-int bt_array_rw(struct bt_stream_pos *pos, struct definition *definition);
+-GString *bt_get_char_array(const struct definition *field);
+-int bt_get_array_len(const struct definition *field);
++struct bt_definition *bt_array_index(struct definition_array *array, uint64_t i);
++int bt_array_rw(struct bt_stream_pos *pos, struct bt_definition *definition);
++GString *bt_get_char_array(const struct bt_definition *field);
++int bt_get_array_len(const struct bt_definition *field);
+ 
+ /*
+  * int_declaration and elem_declaration passed as parameter now belong
+@@ -505,8 +505,8 @@ struct declaration_sequence *
+ 		struct declaration *elem_declaration,
  		struct declaration_scope *parent_scope);
  uint64_t bt_sequence_len(struct definition_sequence *sequence);
- struct bt_definition *bt_sequence_index(struct definition_sequence *sequence, uint64_t i);
+-struct definition *bt_sequence_index(struct definition_sequence *sequence, uint64_t i);
+-int bt_sequence_rw(struct bt_stream_pos *pos, struct definition *definition);
++struct bt_definition *bt_sequence_index(struct definition_sequence *sequence, uint64_t i);
++int bt_sequence_rw(struct bt_stream_pos *pos, struct bt_definition *definition);
+ 
+ /*
+  * in: path (dot separated), out: q (GArray of GQuark)
+@@ -516,15 +516,15 @@ void bt_append_scope_path(const char *path, GArray *q);
+ /*
+  * Lookup helpers.
+  */
+-struct definition *bt_lookup_definition(const struct definition *definition,
++struct bt_definition *bt_lookup_definition(const struct bt_definition *definition,
+ 				     const char *field_name);
+-struct definition_integer *bt_lookup_integer(const struct definition *definition,
++struct definition_integer *bt_lookup_integer(const struct bt_definition *definition,
+ 					  const char *field_name,
+ 					  int signedness);
+-struct definition_enum *bt_lookup_enum(const struct definition *definition,
++struct definition_enum *bt_lookup_enum(const struct bt_definition *definition,
+ 				    const char *field_name,
+ 				    int signedness);
+-struct definition *bt_lookup_variant(const struct definition *definition,
++struct bt_definition *bt_lookup_variant(const struct bt_definition *definition,
+ 				  const char *field_name);
+ 
+ static inline
 diff --git a/types/array.c b/types/array.c
-index debc15a..c9b973b 100644
+index 43decb5..debc15a 100644
 --- a/types/array.c
 +++ b/types/array.c
-@@ -32,7 +32,7 @@
+@@ -32,13 +32,13 @@
  #include <inttypes.h>
  
  static
--struct bt_definition *_array_definition_new(struct declaration *declaration,
-+struct bt_definition *_array_definition_new(struct bt_declaration *declaration,
+-struct definition *_array_definition_new(struct declaration *declaration,
++struct bt_definition *_array_definition_new(struct declaration *declaration,
  			struct definition_scope *parent_scope,
  			GQuark field_name, int index, const char *root_name);
  static
-@@ -59,7 +59,7 @@ int bt_array_rw(struct bt_stream_pos *pos, struct bt_definition *definition)
+-void _array_definition_free(struct definition *definition);
++void _array_definition_free(struct bt_definition *definition);
+ 
+-int bt_array_rw(struct bt_stream_pos *pos, struct definition *definition)
++int bt_array_rw(struct bt_stream_pos *pos, struct bt_definition *definition)
+ {
+ 	struct definition_array *array_definition =
+ 		container_of(definition, struct definition_array, p);
+@@ -49,7 +49,7 @@ int bt_array_rw(struct bt_stream_pos *pos, struct definition *definition)
+ 
+ 	/* No need to align, because the first field will align itself. */
+ 	for (i = 0; i < array_declaration->len; i++) {
+-		struct definition *field =
++		struct bt_definition *field =
+ 			g_ptr_array_index(array_definition->elems, i);
+ 		ret = generic_rw(pos, field);
+ 		if (ret)
+@@ -93,7 +93,7 @@ struct declaration_array *
  }
  
  static
--void _array_declaration_free(struct declaration *declaration)
-+void _array_declaration_free(struct bt_declaration *declaration)
- {
- 	struct declaration_array *array_declaration =
- 		container_of(declaration, struct declaration_array, p);
-@@ -71,11 +71,11 @@ void _array_declaration_free(struct declaration *declaration)
- 
- struct declaration_array *
- 	bt_array_declaration_new(size_t len,
--			      struct declaration *elem_declaration,
-+			      struct bt_declaration *elem_declaration,
- 			      struct declaration_scope *parent_scope)
- {
- 	struct declaration_array *array_declaration;
--	struct declaration *declaration;
-+	struct bt_declaration *declaration;
- 
- 	array_declaration = g_new(struct declaration_array, 1);
- 	declaration = &array_declaration->p;
-@@ -94,7 +94,7 @@ struct declaration_array *
- 
- static
- struct bt_definition *
--	_array_definition_new(struct declaration *declaration,
-+	_array_definition_new(struct bt_declaration *declaration,
+-struct definition *
++struct bt_definition *
+ 	_array_definition_new(struct declaration *declaration,
  			      struct definition_scope *parent_scope,
  			      GQuark field_name, int index, const char *root_name)
+@@ -142,7 +142,7 @@ struct definition *
+ 	array->elems = g_ptr_array_sized_new(array_declaration->len);
+ 	g_ptr_array_set_size(array->elems, array_declaration->len);
+ 	for (i = 0; i < array_declaration->len; i++) {
+-		struct definition **field;
++		struct bt_definition **field;
+ 		GString *str;
+ 		GQuark name;
+ 
+@@ -151,7 +151,7 @@ struct definition *
+ 		name = g_quark_from_string(str->str);
+ 		(void) g_string_free(str, TRUE);
+ 
+-		field = (struct definition **) &g_ptr_array_index(array->elems, i);
++		field = (struct bt_definition **) &g_ptr_array_index(array->elems, i);
+ 		*field = array_declaration->elem->definition_new(array_declaration->elem,
+ 					  array->p.scope,
+ 					  name, i, NULL);
+@@ -163,7 +163,7 @@ struct definition *
+ 
+ error:
+ 	for (i--; i >= 0; i--) {
+-		struct definition *field;
++		struct bt_definition *field;
+ 
+ 		field = g_ptr_array_index(array->elems, i);
+ 		field->declaration->definition_free(field);
+@@ -176,7 +176,7 @@ error:
+ }
+ 
+ static
+-void _array_definition_free(struct definition *definition)
++void _array_definition_free(struct bt_definition *definition)
  {
-@@ -229,7 +229,7 @@ GString *bt_get_char_array(const struct bt_definition *field)
+ 	struct definition_array *array =
+ 		container_of(definition, struct definition_array, p);
+@@ -186,7 +186,7 @@ void _array_definition_free(struct definition *definition)
+ 		(void) g_string_free(array->string, TRUE);
+ 	if (array->elems) {
+ 		for (i = 0; i < array->elems->len; i++) {
+-			struct definition *field;
++			struct bt_definition *field;
+ 
+ 			field = g_ptr_array_index(array->elems, i);
+ 			field->declaration->definition_free(field);
+@@ -205,7 +205,7 @@ uint64_t bt_array_len(struct definition_array *array)
+ 	return array->elems->len;
+ }
+ 
+-struct definition *bt_array_index(struct definition_array *array, uint64_t i)
++struct bt_definition *bt_array_index(struct definition_array *array, uint64_t i)
+ {
+ 	if (!array->elems)
+ 		return NULL;
+@@ -214,7 +214,7 @@ struct definition *bt_array_index(struct definition_array *array, uint64_t i)
+ 	return g_ptr_array_index(array->elems, i);
+ }
+ 
+-int bt_get_array_len(const struct definition *field)
++int bt_get_array_len(const struct bt_definition *field)
  {
  	struct definition_array *array_definition;
  	struct declaration_array *array_declaration;
--	struct declaration *elem;
-+	struct bt_declaration *elem;
+@@ -225,7 +225,7 @@ int bt_get_array_len(const struct definition *field)
+ 	return array_declaration->len;
+ }
  
- 	array_definition = container_of(field, struct definition_array, p);
- 	array_declaration = array_definition->declaration;
+-GString *bt_get_char_array(const struct definition *field)
++GString *bt_get_char_array(const struct bt_definition *field)
+ {
+ 	struct definition_array *array_definition;
+ 	struct declaration_array *array_declaration;
 diff --git a/types/enum.c b/types/enum.c
-index e967e14..8394e1b 100644
+index 2c0cfe8..e967e14 100644
 --- a/types/enum.c
 +++ b/types/enum.c
-@@ -41,7 +41,7 @@
+@@ -41,12 +41,12 @@
  #endif
  
  static
--struct bt_definition *_enum_definition_new(struct declaration *declaration,
-+struct bt_definition *_enum_definition_new(struct bt_declaration *declaration,
+-struct definition *_enum_definition_new(struct declaration *declaration,
++struct bt_definition *_enum_definition_new(struct declaration *declaration,
  					struct definition_scope *parent_scope,
  					GQuark field_name, int index,
  					const char *root_name);
-@@ -374,7 +374,7 @@ size_t bt_enum_get_nr_enumerators(struct declaration_enum *enum_declaration)
+ static
+-void _enum_definition_free(struct definition *definition);
++void _enum_definition_free(struct bt_definition *definition);
+ 
+ static
+ void enum_range_set_free(void *ptr)
+@@ -417,7 +417,7 @@ struct declaration_enum *
  }
  
  static
--void _enum_declaration_free(struct declaration *declaration)
-+void _enum_declaration_free(struct bt_declaration *declaration)
- {
- 	struct declaration_enum *enum_declaration =
- 		container_of(declaration, struct declaration_enum, p);
-@@ -418,7 +418,7 @@ struct declaration_enum *
- 
- static
- struct bt_definition *
--	_enum_definition_new(struct declaration *declaration,
-+	_enum_definition_new(struct bt_declaration *declaration,
+-struct definition *
++struct bt_definition *
+ 	_enum_definition_new(struct declaration *declaration,
  			     struct definition_scope *parent_scope,
  			     GQuark field_name, int index,
- 			     const char *root_name)
+@@ -426,7 +426,7 @@ struct definition *
+ 	struct declaration_enum *enum_declaration =
+ 		container_of(declaration, struct declaration_enum, p);
+ 	struct definition_enum *_enum;
+-	struct definition *definition_integer_parent;
++	struct bt_definition *definition_integer_parent;
+ 	int ret;
+ 
+ 	_enum = g_new(struct definition_enum, 1);
+@@ -456,7 +456,7 @@ struct definition *
+ }
+ 
+ static
+-void _enum_definition_free(struct definition *definition)
++void _enum_definition_free(struct bt_definition *definition)
+ {
+ 	struct definition_enum *_enum =
+ 		container_of(definition, struct definition_enum, p);
 diff --git a/types/float.c b/types/float.c
-index 7aeb9c3..3b61f8f 100644
+index 16d4352..7aeb9c3 100644
 --- a/types/float.c
 +++ b/types/float.c
-@@ -32,7 +32,7 @@
+@@ -32,12 +32,12 @@
  #include <babeltrace/endian.h>
  
  static
--struct bt_definition *_float_definition_new(struct declaration *declaration,
-+struct bt_definition *_float_definition_new(struct bt_declaration *declaration,
+-struct definition *_float_definition_new(struct declaration *declaration,
++struct bt_definition *_float_definition_new(struct declaration *declaration,
  				   struct definition_scope *parent_scope,
  				   GQuark field_name, int index,
  				   const char *root_name);
-@@ -40,7 +40,7 @@ static
- void _float_definition_free(struct bt_definition *definition);
+ static
+-void _float_definition_free(struct definition *definition);
++void _float_definition_free(struct bt_definition *definition);
  
  static
--void _float_declaration_free(struct declaration *declaration)
-+void _float_declaration_free(struct bt_declaration *declaration)
- {
- 	struct declaration_float *float_declaration =
- 		container_of(declaration, struct declaration_float, p);
-@@ -56,7 +56,7 @@ struct declaration_float *
- 		       size_t exp_len, int byte_order, size_t alignment)
- {
- 	struct declaration_float *float_declaration;
--	struct declaration *declaration;
-+	struct bt_declaration *declaration;
- 
- 	float_declaration = g_new(struct declaration_float, 1);
- 	declaration = &float_declaration->p;
-@@ -82,7 +82,7 @@ struct declaration_float *
- 
- static
- struct bt_definition *
--	_float_definition_new(struct declaration *declaration,
-+	_float_definition_new(struct bt_declaration *declaration,
- 			      struct definition_scope *parent_scope,
- 			      GQuark field_name, int index,
- 			      const char *root_name)
-diff --git a/types/integer.c b/types/integer.c
-index 92c7eb1..73d4f2a 100644
---- a/types/integer.c
-+++ b/types/integer.c
-@@ -33,7 +33,7 @@
- #include <stdint.h>
- 
- static
--struct bt_definition *_integer_definition_new(struct declaration *declaration,
-+struct bt_definition *_integer_definition_new(struct bt_declaration *declaration,
- 			       struct definition_scope *parent_scope,
- 			       GQuark field_name, int index,
- 			       const char *root_name);
-@@ -41,7 +41,7 @@ static
- void _integer_definition_free(struct bt_definition *definition);
- 
- static
--void _integer_declaration_free(struct declaration *declaration)
-+void _integer_declaration_free(struct bt_declaration *declaration)
- {
- 	struct declaration_integer *integer_declaration =
- 		container_of(declaration, struct declaration_integer, p);
-@@ -74,7 +74,7 @@ struct declaration_integer *
- 
- static
- struct bt_definition *
--	_integer_definition_new(struct declaration *declaration,
-+	_integer_definition_new(struct bt_declaration *declaration,
- 				struct definition_scope *parent_scope,
- 				GQuark field_name, int index,
- 				const char *root_name)
-diff --git a/types/sequence.c b/types/sequence.c
-index 8792325..6c61ef7 100644
---- a/types/sequence.c
-+++ b/types/sequence.c
-@@ -32,7 +32,7 @@
- #include <inttypes.h>
- 
- static
--struct bt_definition *_sequence_definition_new(struct declaration *declaration,
-+struct bt_definition *_sequence_definition_new(struct bt_declaration *declaration,
- 					struct definition_scope *parent_scope,
- 					GQuark field_name, int index,
- 					const char *root_name);
-@@ -88,7 +88,7 @@ int bt_sequence_rw(struct bt_stream_pos *pos, struct bt_definition *definition)
+ void _float_declaration_free(struct declaration *declaration)
+@@ -81,7 +81,7 @@ struct declaration_float *
  }
  
  static
--void _sequence_declaration_free(struct declaration *declaration)
-+void _sequence_declaration_free(struct bt_declaration *declaration)
- {
- 	struct declaration_sequence *sequence_declaration =
- 		container_of(declaration, struct declaration_sequence, p);
-@@ -101,11 +101,11 @@ void _sequence_declaration_free(struct declaration *declaration)
+-struct definition *
++struct bt_definition *
+ 	_float_definition_new(struct declaration *declaration,
+ 			      struct definition_scope *parent_scope,
+ 			      GQuark field_name, int index,
+@@ -90,7 +90,7 @@ struct definition *
+ 	struct declaration_float *float_declaration =
+ 		container_of(declaration, struct declaration_float, p);
+ 	struct definition_float *_float;
+-	struct definition *tmp;
++	struct bt_definition *tmp;
  
- struct declaration_sequence *
- 	bt_sequence_declaration_new(const char *length,
--			  struct declaration *elem_declaration,
-+			  struct bt_declaration *elem_declaration,
- 			  struct declaration_scope *parent_scope)
- {
- 	struct declaration_sequence *sequence_declaration;
--	struct declaration *declaration;
-+	struct bt_declaration *declaration;
+ 	_float = g_new(struct definition_float, 1);
+ 	bt_declaration_ref(&float_declaration->p);
+@@ -138,7 +138,7 @@ struct definition *
+ }
  
- 	sequence_declaration = g_new(struct declaration_sequence, 1);
- 	declaration = &sequence_declaration->p;
+ static
+-void _float_definition_free(struct definition *definition)
++void _float_definition_free(struct bt_definition *definition)
+ {
+ 	struct definition_float *_float =
+ 		container_of(definition, struct definition_float, p);
+diff --git a/types/integer.c b/types/integer.c
+index 47f23eb..92c7eb1 100644
+--- a/types/integer.c
++++ b/types/integer.c
+@@ -33,12 +33,12 @@
+ #include <stdint.h>
+ 
+ static
+-struct definition *_integer_definition_new(struct declaration *declaration,
++struct bt_definition *_integer_definition_new(struct declaration *declaration,
+ 			       struct definition_scope *parent_scope,
+ 			       GQuark field_name, int index,
+ 			       const char *root_name);
+ static
+-void _integer_definition_free(struct definition *definition);
++void _integer_definition_free(struct bt_definition *definition);
+ 
+ static
+ void _integer_declaration_free(struct declaration *declaration)
+@@ -73,7 +73,7 @@ struct declaration_integer *
+ }
+ 
+ static
+-struct definition *
++struct bt_definition *
+ 	_integer_definition_new(struct declaration *declaration,
+ 				struct definition_scope *parent_scope,
+ 				GQuark field_name, int index,
+@@ -106,7 +106,7 @@ struct definition *
+ }
+ 
+ static
+-void _integer_definition_free(struct definition *definition)
++void _integer_definition_free(struct bt_definition *definition)
+ {
+ 	struct definition_integer *integer =
+ 		container_of(definition, struct definition_integer, p);
+@@ -115,7 +115,7 @@ void _integer_definition_free(struct definition *definition)
+ 	g_free(integer);
+ }
+ 
+-enum ctf_string_encoding bt_get_int_encoding(const struct definition *field)
++enum ctf_string_encoding bt_get_int_encoding(const struct bt_definition *field)
+ {
+ 	struct definition_integer *integer_definition;
+ 	const struct declaration_integer *integer_declaration;
+@@ -126,7 +126,7 @@ enum ctf_string_encoding bt_get_int_encoding(const struct definition *field)
+ 	return integer_declaration->encoding;
+ }
+ 
+-int bt_get_int_base(const struct definition *field)
++int bt_get_int_base(const struct bt_definition *field)
+ {
+ 	struct definition_integer *integer_definition;
+ 	const struct declaration_integer *integer_declaration;
+@@ -137,7 +137,7 @@ int bt_get_int_base(const struct definition *field)
+ 	return integer_declaration->base;
+ }
+ 
+-size_t bt_get_int_len(const struct definition *field)
++size_t bt_get_int_len(const struct bt_definition *field)
+ {
+ 	struct definition_integer *integer_definition;
+ 	const struct declaration_integer *integer_declaration;
+@@ -148,7 +148,7 @@ size_t bt_get_int_len(const struct definition *field)
+ 	return integer_declaration->len;
+ }
+ 
+-int bt_get_int_byte_order(const struct definition *field)
++int bt_get_int_byte_order(const struct bt_definition *field)
+ {
+ 	struct definition_integer *integer_definition;
+ 	const struct declaration_integer *integer_declaration;
+@@ -159,7 +159,7 @@ int bt_get_int_byte_order(const struct definition *field)
+ 	return integer_declaration->byte_order;
+ }
+ 
+-int bt_get_int_signedness(const struct definition *field)
++int bt_get_int_signedness(const struct bt_definition *field)
+ {
+ 	struct definition_integer *integer_definition;
+ 	const struct declaration_integer *integer_declaration;
+@@ -170,7 +170,7 @@ int bt_get_int_signedness(const struct definition *field)
+ 	return integer_declaration->signedness;
+ }
+ 
+-uint64_t bt_get_unsigned_int(const struct definition *field)
++uint64_t bt_get_unsigned_int(const struct bt_definition *field)
+ {
+ 	struct definition_integer *integer_definition;
+ 	const struct declaration_integer *integer_declaration;
+@@ -186,7 +186,7 @@ uint64_t bt_get_unsigned_int(const struct definition *field)
+ 	return (uint64_t)integer_definition->value._signed;
+ }
+ 
+-int64_t bt_get_signed_int(const struct definition *field)
++int64_t bt_get_signed_int(const struct bt_definition *field)
+ {
+ 	struct definition_integer *integer_definition;
+ 	const struct declaration_integer *integer_declaration;
+diff --git a/types/sequence.c b/types/sequence.c
+index a91a249..8792325 100644
+--- a/types/sequence.c
++++ b/types/sequence.c
+@@ -32,14 +32,14 @@
+ #include <inttypes.h>
+ 
+ static
+-struct definition *_sequence_definition_new(struct declaration *declaration,
++struct bt_definition *_sequence_definition_new(struct declaration *declaration,
+ 					struct definition_scope *parent_scope,
+ 					GQuark field_name, int index,
+ 					const char *root_name);
+ static
+-void _sequence_definition_free(struct definition *definition);
++void _sequence_definition_free(struct bt_definition *definition);
+ 
+-int bt_sequence_rw(struct bt_stream_pos *pos, struct definition *definition)
++int bt_sequence_rw(struct bt_stream_pos *pos, struct bt_definition *definition)
+ {
+ 	struct definition_sequence *sequence_definition =
+ 		container_of(definition, struct definition_sequence, p);
+@@ -62,7 +62,7 @@ int bt_sequence_rw(struct bt_stream_pos *pos, struct definition *definition)
+ 		g_ptr_array_set_size(sequence_definition->elems, len);
+ 
+ 	for (i = oldlen; i < len; i++) {
+-		struct definition **field;
++		struct bt_definition **field;
+ 		GString *str;
+ 		GQuark name;
+ 
+@@ -71,15 +71,15 @@ int bt_sequence_rw(struct bt_stream_pos *pos, struct definition *definition)
+ 		name = g_quark_from_string(str->str);
+ 		(void) g_string_free(str, TRUE);
+ 
+-		field = (struct definition **) &g_ptr_array_index(sequence_definition->elems, i);
++		field = (struct bt_definition **) &g_ptr_array_index(sequence_definition->elems, i);
+ 		*field = sequence_declaration->elem->definition_new(sequence_declaration->elem,
+ 					  sequence_definition->p.scope,
+ 					  name, i, NULL);
+ 	}
+ 	for (i = 0; i < len; i++) {
+-		struct definition **field;
++		struct bt_definition **field;
+ 
+-		field = (struct definition **) &g_ptr_array_index(sequence_definition->elems, i);
++		field = (struct bt_definition **) &g_ptr_array_index(sequence_definition->elems, i);
+ 		ret = generic_rw(pos, *field);
+ 		if (ret)
+ 			return ret;
 @@ -126,7 +126,7 @@ struct declaration_sequence *
  }
  
  static
--struct bt_definition *_sequence_definition_new(struct declaration *declaration,
-+struct bt_definition *_sequence_definition_new(struct bt_declaration *declaration,
+-struct definition *_sequence_definition_new(struct declaration *declaration,
++struct bt_definition *_sequence_definition_new(struct declaration *declaration,
  				struct definition_scope *parent_scope,
  				GQuark field_name, int index,
  				const char *root_name)
+@@ -134,7 +134,7 @@ struct definition *_sequence_definition_new(struct declaration *declaration,
+ 	struct declaration_sequence *sequence_declaration =
+ 		container_of(declaration, struct declaration_sequence, p);
+ 	struct definition_sequence *sequence;
+-	struct definition *len_parent;
++	struct bt_definition *len_parent;
+ 	int ret;
+ 
+ 	sequence = g_new(struct definition_sequence, 1);
+@@ -198,18 +198,18 @@ error:
+ }
+ 
+ static
+-void _sequence_definition_free(struct definition *definition)
++void _sequence_definition_free(struct bt_definition *definition)
+ {
+ 	struct definition_sequence *sequence =
+ 		container_of(definition, struct definition_sequence, p);
+-	struct definition *len_definition = &sequence->length->p;
++	struct bt_definition *len_definition = &sequence->length->p;
+ 	uint64_t i;
+ 
+ 	if (sequence->string)
+ 		(void) g_string_free(sequence->string, TRUE);
+ 	if (sequence->elems) {
+ 		for (i = 0; i < sequence->elems->len; i++) {
+-			struct definition *field;
++			struct bt_definition *field;
+ 
+ 			field = g_ptr_array_index(sequence->elems, i);
+ 			field->declaration->definition_free(field);
+@@ -227,7 +227,7 @@ uint64_t bt_sequence_len(struct definition_sequence *sequence)
+ 	return sequence->length->value._unsigned;
+ }
+ 
+-struct definition *bt_sequence_index(struct definition_sequence *sequence, uint64_t i)
++struct bt_definition *bt_sequence_index(struct definition_sequence *sequence, uint64_t i)
+ {
+ 	if (!sequence->elems)
+ 		return NULL;
 diff --git a/types/string.c b/types/string.c
-index 5db1716..5bbba98 100644
+index dff27ee..5db1716 100644
 --- a/types/string.c
 +++ b/types/string.c
-@@ -32,7 +32,7 @@
+@@ -32,12 +32,12 @@
  #include <babeltrace/types.h>
  
  static
--struct bt_definition *_string_definition_new(struct declaration *declaration,
-+struct bt_definition *_string_definition_new(struct bt_declaration *declaration,
+-struct definition *_string_definition_new(struct declaration *declaration,
++struct bt_definition *_string_definition_new(struct declaration *declaration,
  				struct definition_scope *parent_scope,
  				GQuark field_name, int index,
  				const char *root_name);
-@@ -40,7 +40,7 @@ static
- void _string_definition_free(struct bt_definition *definition);
+ static
+-void _string_definition_free(struct definition *definition);
++void _string_definition_free(struct bt_definition *definition);
  
  static
--void _string_declaration_free(struct declaration *declaration)
-+void _string_declaration_free(struct bt_declaration *declaration)
- {
- 	struct declaration_string *string_declaration =
- 		container_of(declaration, struct declaration_string, p);
-@@ -65,7 +65,7 @@ struct declaration_string *
+ void _string_declaration_free(struct declaration *declaration)
+@@ -64,7 +64,7 @@ struct declaration_string *
+ }
  
  static
- struct bt_definition *
--	_string_definition_new(struct declaration *declaration,
-+	_string_definition_new(struct bt_declaration *declaration,
+-struct definition *
++struct bt_definition *
+ 	_string_definition_new(struct declaration *declaration,
  			       struct definition_scope *parent_scope,
  			       GQuark field_name, int index,
- 			       const char *root_name)
+@@ -99,7 +99,7 @@ struct definition *
+ }
+ 
+ static
+-void _string_definition_free(struct definition *definition)
++void _string_definition_free(struct bt_definition *definition)
+ {
+ 	struct definition_string *string =
+ 		container_of(definition, struct definition_string, p);
+@@ -109,7 +109,7 @@ void _string_definition_free(struct definition *definition)
+ 	g_free(string);
+ }
+ 
+-enum ctf_string_encoding bt_get_string_encoding(const struct definition *field)
++enum ctf_string_encoding bt_get_string_encoding(const struct bt_definition *field)
+ {
+ 	struct definition_string *string_definition;
+ 	const struct declaration_string *string_declaration;
+@@ -120,7 +120,7 @@ enum ctf_string_encoding bt_get_string_encoding(const struct definition *field)
+ 	return string_declaration->encoding;
+ }
+ 
+-char *bt_get_string(const struct definition *field)
++char *bt_get_string(const struct bt_definition *field)
+ {
+ 	struct definition_string *string_definition =
+ 		container_of(field, struct definition_string, p);
 diff --git a/types/struct.c b/types/struct.c
-index fadc187..b9fb679 100644
+index 219d523..fadc187 100644
 --- a/types/struct.c
 +++ b/types/struct.c
-@@ -36,7 +36,7 @@
+@@ -36,14 +36,14 @@
  #endif
  
  static
--struct bt_definition *_struct_definition_new(struct declaration *declaration,
-+struct bt_definition *_struct_definition_new(struct bt_declaration *declaration,
+-struct definition *_struct_definition_new(struct declaration *declaration,
++struct bt_definition *_struct_definition_new(struct declaration *declaration,
  				struct definition_scope *parent_scope,
  				GQuark field_name, int index,
  				const char *root_name);
-@@ -61,7 +61,7 @@ int bt_struct_rw(struct bt_stream_pos *ppos, struct bt_definition *definition)
+ static
+-void _struct_definition_free(struct definition *definition);
++void _struct_definition_free(struct bt_definition *definition);
+ 
+-int bt_struct_rw(struct bt_stream_pos *ppos, struct definition *definition)
++int bt_struct_rw(struct bt_stream_pos *ppos, struct bt_definition *definition)
+ {
+ 	struct definition_struct *struct_definition =
+ 		container_of(definition, struct definition_struct, p);
+@@ -51,7 +51,7 @@ int bt_struct_rw(struct bt_stream_pos *ppos, struct definition *definition)
+ 	int ret;
+ 
+ 	for (i = 0; i < struct_definition->fields->len; i++) {
+-		struct definition *field =
++		struct bt_definition *field =
+ 			g_ptr_array_index(struct_definition->fields, i);
+ 		ret = generic_rw(ppos, field);
+ 		if (ret)
+@@ -105,7 +105,7 @@ struct declaration_struct *
  }
  
  static
--void _struct_declaration_free(struct declaration *declaration)
-+void _struct_declaration_free(struct bt_declaration *declaration)
- {
- 	struct declaration_struct *struct_declaration =
- 		container_of(declaration, struct declaration_struct, p);
-@@ -85,7 +85,7 @@ struct declaration_struct *
- 			       uint64_t min_align)
- {
- 	struct declaration_struct *struct_declaration;
--	struct declaration *declaration;
-+	struct bt_declaration *declaration;
- 
- 	struct_declaration = g_new(struct declaration_struct, 1);
- 	declaration = &struct_declaration->p;
-@@ -106,7 +106,7 @@ struct declaration_struct *
- 
- static
- struct bt_definition *
--	_struct_definition_new(struct declaration *declaration,
-+	_struct_definition_new(struct bt_declaration *declaration,
+-struct definition *
++struct bt_definition *
+ 	_struct_definition_new(struct declaration *declaration,
  			       struct definition_scope *parent_scope,
  			       GQuark field_name, int index,
- 			       const char *root_name)
-@@ -183,7 +183,7 @@ void _struct_definition_free(struct bt_definition *definition)
+@@ -141,8 +141,8 @@ struct definition *
+ 		struct declaration_field *declaration_field =
+ 			&g_array_index(struct_declaration->fields,
+ 				       struct declaration_field, i);
+-		struct definition **field =
+-			(struct definition **) &g_ptr_array_index(_struct->fields, i);
++		struct bt_definition **field =
++			(struct bt_definition **) &g_ptr_array_index(_struct->fields, i);
  
- void bt_struct_declaration_add_field(struct declaration_struct *struct_declaration,
- 			   const char *field_name,
--			   struct declaration *field_declaration)
-+			   struct bt_declaration *field_declaration)
- {
- 	struct declaration_field *field;
- 	unsigned long index;
-diff --git a/types/types.c b/types/types.c
-index b235c13..0d1a89d 100644
---- a/types/types.c
-+++ b/types/types.c
-@@ -51,7 +51,7 @@ GQuark prefix_quark(const char *prefix, GQuark quark)
+ 		*field = declaration_field->declaration->definition_new(declaration_field->declaration,
+ 							  _struct->p.scope,
+@@ -154,7 +154,7 @@ struct definition *
+ 
+ error:
+ 	for (i--; i >= 0; i--) {
+-		struct definition *field = g_ptr_array_index(_struct->fields, i);
++		struct bt_definition *field = g_ptr_array_index(_struct->fields, i);
+ 		bt_definition_unref(field);
+ 	}
+ 	bt_free_definition_scope(_struct->p.scope);
+@@ -164,7 +164,7 @@ error:
  }
  
  static
--struct declaration *
-+struct bt_declaration *
- 	bt_lookup_declaration_scope(GQuark declaration_name,
- 		struct declaration_scope *scope)
+-void _struct_definition_free(struct definition *definition)
++void _struct_definition_free(struct bt_definition *definition)
  {
-@@ -59,10 +59,10 @@ struct declaration *
- 				   (gconstpointer) (unsigned long) declaration_name);
+ 	struct definition_struct *_struct =
+ 		container_of(definition, struct definition_struct, p);
+@@ -172,7 +172,7 @@ void _struct_definition_free(struct definition *definition)
+ 
+ 	assert(_struct->fields->len == _struct->declaration->fields->len);
+ 	for (i = 0; i < _struct->fields->len; i++) {
+-		struct definition *field = g_ptr_array_index(_struct->fields, i);
++		struct bt_definition *field = g_ptr_array_index(_struct->fields, i);
+ 		bt_definition_unref(field);
+ 	}
+ 	bt_free_definition_scope(_struct->p.scope);
+@@ -241,7 +241,7 @@ struct declaration_field *
+ /*
+  * field returned only valid as long as the field structure is not appended to.
+  */
+-struct definition *
++struct bt_definition *
+ bt_struct_definition_get_field_from_index(struct definition_struct *_struct,
+ 					int index)
+ {
+diff --git a/types/types.c b/types/types.c
+index 3e20dfe..b235c13 100644
+--- a/types/types.c
++++ b/types/types.c
+@@ -92,7 +92,7 @@ int bt_register_declaration(GQuark name, struct declaration *declaration,
  }
  
--struct declaration *bt_lookup_declaration(GQuark declaration_name,
-+struct bt_declaration *bt_lookup_declaration(GQuark declaration_name,
- 		struct declaration_scope *scope)
+ static
+-struct definition *
++struct bt_definition *
+ 	lookup_field_definition_scope(GQuark field_name,
+ 		struct definition_scope *scope)
  {
--	struct declaration *declaration;
-+	struct bt_declaration *declaration;
+@@ -158,7 +158,7 @@ end:
+ }
  
- 	while (scope) {
- 		declaration = bt_lookup_declaration_scope(declaration_name,
-@@ -74,7 +74,7 @@ struct declaration *bt_lookup_declaration(GQuark declaration_name,
+ static struct definition_scope *
+-	get_definition_scope(const struct definition *definition)
++	get_definition_scope(const struct bt_definition *definition)
+ {
+ 	return definition->scope;
+ }
+@@ -183,12 +183,12 @@ static struct definition_scope *
+  * lookup_path: the path leading to the enum we want to look for.
+  * scope: the definition scope containing the variant definition.
+  */
+-struct definition *
++struct bt_definition *
+ 	bt_lookup_path_definition(GArray *cur_path,
+ 			       GArray *lookup_path,
+ 			       struct definition_scope *scope)
+ {
+-	struct definition *definition, *lookup_definition;
++	struct bt_definition *definition, *lookup_definition;
+ 	GQuark last;
+ 	int index;
+ 
+@@ -262,7 +262,7 @@ lookup:
  	return NULL;
  }
  
--int bt_register_declaration(GQuark name, struct declaration *declaration,
-+int bt_register_declaration(GQuark name, struct bt_declaration *declaration,
- 		struct declaration_scope *scope)
+-int bt_register_field_definition(GQuark field_name, struct definition *definition,
++int bt_register_field_definition(GQuark field_name, struct bt_definition *definition,
+ 		struct definition_scope *scope)
  {
- 	if (!name)
-@@ -279,12 +279,12 @@ int bt_register_field_definition(GQuark field_name, struct bt_definition *defini
- 	return 0;
+ 	if (!scope || !field_name)
+@@ -292,12 +292,12 @@ void bt_declaration_unref(struct declaration *declaration)
+ 		declaration->declaration_free(declaration);
  }
  
--void bt_declaration_ref(struct declaration *declaration)
-+void bt_declaration_ref(struct bt_declaration *declaration)
+-void bt_definition_ref(struct definition *definition)
++void bt_definition_ref(struct bt_definition *definition)
  {
- 	declaration->ref++;
+ 	definition->ref++;
  }
  
--void bt_declaration_unref(struct declaration *declaration)
-+void bt_declaration_unref(struct bt_declaration *declaration)
+-void bt_definition_unref(struct definition *definition)
++void bt_definition_unref(struct bt_definition *definition)
  {
- 	if (!declaration)
+ 	if (!definition)
  		return;
+@@ -612,7 +612,7 @@ void bt_free_definition_scope(struct definition_scope *scope)
+ 	g_free(scope);
+ }
+ 
+-struct definition *bt_lookup_definition(const struct definition *definition,
++struct bt_definition *bt_lookup_definition(const struct bt_definition *definition,
+ 				     const char *field_name)
+ {
+ 	struct definition_scope *scope = get_definition_scope(definition);
+@@ -624,11 +624,11 @@ struct definition *bt_lookup_definition(const struct definition *definition,
+ 					     scope);
+ }
+ 
+-struct definition_integer *bt_lookup_integer(const struct definition *definition,
++struct definition_integer *bt_lookup_integer(const struct bt_definition *definition,
+ 					  const char *field_name,
+ 					  int signedness)
+ {
+-	struct definition *lookup;
++	struct bt_definition *lookup;
+ 	struct definition_integer *lookup_integer;
+ 
+ 	lookup = bt_lookup_definition(definition, field_name);
+@@ -642,11 +642,11 @@ struct definition_integer *bt_lookup_integer(const struct definition *definition
+ 	return lookup_integer;
+ }
+ 
+-struct definition_enum *bt_lookup_enum(const struct definition *definition,
++struct definition_enum *bt_lookup_enum(const struct bt_definition *definition,
+ 				    const char *field_name,
+ 				    int signedness)
+ {
+-	struct definition *lookup;
++	struct bt_definition *lookup;
+ 	struct definition_enum *lookup_enum;
+ 
+ 	lookup = bt_lookup_definition(definition, field_name);
+@@ -660,10 +660,10 @@ struct definition_enum *bt_lookup_enum(const struct definition *definition,
+ 	return lookup_enum;
+ }
+ 
+-struct definition *bt_lookup_variant(const struct definition *definition,
++struct bt_definition *bt_lookup_variant(const struct bt_definition *definition,
+ 				  const char *field_name)
+ {
+-	struct definition *lookup;
++	struct bt_definition *lookup;
+ 	struct definition_variant *bt_lookup_variant;
+ 
+ 	lookup = bt_lookup_definition(definition, field_name);
 diff --git a/types/variant.c b/types/variant.c
-index ed29550..1f0dc6a 100644
+index 4db0de9..ed29550 100644
 --- a/types/variant.c
 +++ b/types/variant.c
-@@ -32,7 +32,7 @@
+@@ -32,18 +32,18 @@
  #include <errno.h>
  
  static
--struct bt_definition *_variant_definition_new(struct declaration *declaration,
-+struct bt_definition *_variant_definition_new(struct bt_declaration *declaration,
+-struct definition *_variant_definition_new(struct declaration *declaration,
++struct bt_definition *_variant_definition_new(struct declaration *declaration,
  				struct definition_scope *parent_scope,
  				GQuark field_name, int index,
  				const char *root_name);
-@@ -50,7 +50,7 @@ int bt_variant_rw(struct bt_stream_pos *ppos, struct bt_definition *definition)
- }
+ static
+-void _variant_definition_free(struct definition *definition);
++void _variant_definition_free(struct bt_definition *definition);
+ 
+-int bt_variant_rw(struct bt_stream_pos *ppos, struct definition *definition)
++int bt_variant_rw(struct bt_stream_pos *ppos, struct bt_definition *definition)
+ {
+ 	struct definition_variant *variant_definition =
+ 		container_of(definition, struct definition_variant, p);
+-	struct definition *field;
++	struct bt_definition *field;
+ 
+ 	field = bt_variant_get_current_field(variant_definition);
+ 	return generic_rw(ppos, field);
+@@ -130,7 +130,7 @@ struct declaration_variant *
+  */
+ static
+ int check_enum_tag(struct definition_variant *variant,
+-		   struct definition *enum_tag)
++		   struct bt_definition *enum_tag)
+ {
+ 	struct definition_enum *_enum =
+ 		container_of(enum_tag, struct definition_enum, p);
+@@ -172,7 +172,7 @@ int check_enum_tag(struct definition_variant *variant,
+ 
  
  static
--void _untagged_variant_declaration_free(struct declaration *declaration)
-+void _untagged_variant_declaration_free(struct bt_declaration *declaration)
- {
- 	struct declaration_untagged_variant *untagged_variant_declaration =
- 		container_of(declaration, struct declaration_untagged_variant, p);
-@@ -73,7 +73,7 @@ struct declaration_untagged_variant *bt_untagged_bt_variant_declaration_new(
- 				      struct declaration_scope *parent_scope)
- {
- 	struct declaration_untagged_variant *untagged_variant_declaration;
--	struct declaration *declaration;
-+	struct bt_declaration *declaration;
- 
- 	untagged_variant_declaration = g_new(struct declaration_untagged_variant, 1);
- 	declaration = &untagged_variant_declaration->p;
-@@ -93,7 +93,7 @@ struct declaration_untagged_variant *bt_untagged_bt_variant_declaration_new(
- }
- 
- static
--void _variant_declaration_free(struct declaration *declaration)
-+void _variant_declaration_free(struct bt_declaration *declaration)
- {
- 	struct declaration_variant *variant_declaration =
- 		container_of(declaration, struct declaration_variant, p);
-@@ -107,7 +107,7 @@ struct declaration_variant *
- 	bt_variant_declaration_new(struct declaration_untagged_variant *untagged_variant, const char *tag)
- {
- 	struct declaration_variant *variant_declaration;
--	struct declaration *declaration;
-+	struct bt_declaration *declaration;
- 
- 	variant_declaration = g_new(struct declaration_variant, 1);
- 	declaration = &variant_declaration->p;
-@@ -173,7 +173,7 @@ int check_enum_tag(struct definition_variant *variant,
- 
- static
- struct bt_definition *
--	_variant_definition_new(struct declaration *declaration,
-+	_variant_definition_new(struct bt_declaration *declaration,
+-struct definition *
++struct bt_definition *
+ 	_variant_definition_new(struct declaration *declaration,
  				struct definition_scope *parent_scope,
  				GQuark field_name, int index,
- 				const char *root_name)
-@@ -259,7 +259,7 @@ void _variant_definition_free(struct bt_definition *definition)
+@@ -216,8 +216,8 @@ struct definition *
+ 		struct declaration_field *declaration_field =
+ 			&g_array_index(variant_declaration->untagged_variant->fields,
+ 				       struct declaration_field, i);
+-		struct definition **field =
+-			(struct definition **) &g_ptr_array_index(variant->fields, i);
++		struct bt_definition **field =
++			(struct bt_definition **) &g_ptr_array_index(variant->fields, i);
  
- void bt_untagged_variant_declaration_add_field(struct declaration_untagged_variant *untagged_variant_declaration,
- 			    const char *field_name,
--			    struct declaration *field_declaration)
-+			    struct bt_declaration *field_declaration)
+ 		/*
+ 		 * All child definition are at index 0, because they are
+@@ -239,7 +239,7 @@ error:
+ }
+ 
+ static
+-void _variant_definition_free(struct definition *definition)
++void _variant_definition_free(struct bt_definition *definition)
  {
- 	struct declaration_field *field;
- 	unsigned long index;
+ 	struct definition_variant *variant =
+ 		container_of(definition, struct definition_variant, p);
+@@ -247,7 +247,7 @@ void _variant_definition_free(struct definition *definition)
+ 
+ 	assert(variant->fields->len == variant->declaration->untagged_variant->fields->len);
+ 	for (i = 0; i < variant->fields->len; i++) {
+-		struct definition *field = g_ptr_array_index(variant->fields, i);
++		struct bt_definition *field = g_ptr_array_index(variant->fields, i);
+ 		bt_definition_unref(field);
+ 	}
+ 	bt_definition_unref(variant->enum_tag);
+@@ -301,7 +301,7 @@ bt_untagged_variant_declaration_get_field_from_tag(struct declaration_untagged_v
+ /*
+  * field returned only valid as long as the field structure is not appended to.
+  */
+-struct definition *bt_variant_get_current_field(struct definition_variant *variant)
++struct bt_definition *bt_variant_get_current_field(struct definition_variant *variant)
+ {
+ 	struct definition_enum *_enum =
+ 		container_of(variant->enum_tag, struct definition_enum, p);
 -- 
 1.7.10.4
