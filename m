@@ -1,17 +1,16 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: Re: Issue faced in logging the traces
-Date: Fri, 15 Feb 2013 09:29:19 -0500
-Message-ID: <511E463F.2080605__21927.4427312941$1360938608$gmane$org@efficios.com>
-References: <CAG15VGA_O+6P9cLT8h3U-_W=YUVHEVFiBN5Zrm6Gj4i1qBV6BQ@mail.gmail.com>
+From: Julien Desfossez <jdesfossez@efficios.com>
+Subject: [BABELTRACE PATCH 1/7] Namespace compliance for
+	dependencies function
+Date: Fri, 15 Feb 2013 12:22:50 -0500
+Message-ID: <1360948976-14999-1-git-send-email-jdesfossez__28502.9795057655$1360949039$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from smtp.ini-tech.com ([213.239.202.151])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1U6MHy-0002Xx-Hw
-	for lttng-dev@lists.lttng.org; Fri, 15 Feb 2013 09:29:22 -0500
-In-Reply-To: <CAG15VGA_O+6P9cLT8h3U-_W=YUVHEVFiBN5Zrm6Gj4i1qBV6BQ@mail.gmail.com>
+	(envelope-from <jdesfossez@efficios.com>) id 1U6P05-0003vI-Oc
+	for lttng-dev@lists.lttng.org; Fri, 15 Feb 2013 12:23:06 -0500
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,46 +19,66 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Vivek Kumar <vivekkumar.p@gmail.com>
-Cc: lttng-dev@lists.lttng.org
+To: mathieu.desnoyers@efficios.com
+Cc: lttng-dev@lists.lttng.org, Julien Desfossez <jdesfossez@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Vivek,
+Use the bt_ prefix instead of babeltrace_
 
-In order to collect a trace you need to instrument your application with
-LTTng-UST tracepoints.
+Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
+---
+ formats/ctf/callbacks.c            |    6 +++---
+ include/babeltrace/ctf/callbacks.h |    4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-If you like to gather the syscalls for instance, you need to install the
-LTTng modules and start your session daemon as root.
-
-If you are still experiencing problem, please provide the commands you
-use and setup.
-
-Thanks!
-David
-
-Vivek Kumar:
-> Hi,
->  
-> I am trying to port LTTng to my arm based board.
-> For userspace tracing, I have been able to successfully port followings:
-> LTTng-tools,
-> LTT-ust Library
-> Userspace-rcu
-> libpopt
->  
-> Now I can see that lttng-sessiond is running, and am able to create
-> sessions, enable-event and start and stop tracing.
-> But, I don't see traces be logged in the home directory (indeed nothing
-> happens, i.e, not even the creation of the base directory -> lttng-traces).
-> Am I missing anything because of that LTTng is failing to log traces?
-> Please help.
->  
-> Regards, Vivek
-> 
-> 
-> -- 
-> Best, Vivek
-> 
-> 
-> This body part will be downloaded on demand.
+diff --git a/formats/ctf/callbacks.c b/formats/ctf/callbacks.c
+index 71e3248..793f3d3 100644
+--- a/formats/ctf/callbacks.c
++++ b/formats/ctf/callbacks.c
+@@ -38,7 +38,7 @@
+ #include <inttypes.h>
+ 
+ static
+-struct bt_dependencies *_babeltrace_dependencies_create(const char *first,
++struct bt_dependencies *_bt_dependencies_create(const char *first,
+ 							va_list ap)
+ {
+ 	const char *iter;
+@@ -56,13 +56,13 @@ struct bt_dependencies *_babeltrace_dependencies_create(const char *first,
+ 	return dep;
+ }
+ 
+-struct bt_dependencies *babeltrace_dependencies_create(const char *first, ...)
++struct bt_dependencies *bt_dependencies_create(const char *first, ...)
+ {
+ 	va_list ap;
+ 	struct bt_dependencies *deps;
+ 
+ 	va_start(ap, first);
+-	deps = _babeltrace_dependencies_create(first, ap);
++	deps = _bt_dependencies_create(first, ap);
+ 	va_end(ap);
+ 	return deps;
+ }
+diff --git a/include/babeltrace/ctf/callbacks.h b/include/babeltrace/ctf/callbacks.h
+index c178767..bc75769 100644
+--- a/include/babeltrace/ctf/callbacks.h
++++ b/include/babeltrace/ctf/callbacks.h
+@@ -51,13 +51,13 @@ enum bt_cb_ret {
+ /*
+  * Receives a variable number of strings as parameter, ended with NULL.
+  */
+-struct bt_dependencies *babeltrace_dependencies_create(const char *first, ...);
++struct bt_dependencies *bt_dependencies_create(const char *first, ...);
+ 
+ /*
+  * struct bt_dependencies must be destroyed explicitly if not passed as
+  * parameter to a bt_ctf_iter_add_callback().
+  */
+-void babeltrace_dependencies_destroy(struct bt_dependencies *dep);
++void bt_dependencies_destroy(struct bt_dependencies *dep);
+ 
+ /*
+  * bt_ctf_iter_add_callback: Add a callback to iterator.
+-- 
+1.7.10.4
