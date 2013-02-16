@@ -1,62 +1,49 @@
-From: Christian Babeux <christian.babeux@efficios.com>
-Subject: Re: [lttng-dev] Using lttng-ust's libringbuffer outside lttng-ust
-Date: Fri, 15 Feb 2013 15:36:11 -0500
-Message-ID: <CAGDH53=8kL0oXWZ0Xo73-1EviVbheU0t9fXuzSt05ZCSqVzH_w@mail.gmail.com>
-References: <511A9E5A.4010303@redhat.com>
+From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
+	<jeremie.galarneau@efficios.com>
+Subject: [PATCH lttng-tools] Fix: mark generated python bindings
+	files as nodist
+Date: Fri, 15 Feb 2013 20:46:45 -0500
+Message-ID: <1360979205-20346-1-git-send-email-jeremie.galarneau__47268.8816058964$1360979302$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Return-path: <systemtap-return-20417-gls-systemtap=m.gmane.org@sourceware.org>
-In-Reply-To: <511A9E5A.4010303@redhat.com>
-List-Unsubscribe: <mailto:systemtap-unsubscribe-gls-systemtap=m.gmane.org@sourceware.org>
-List-Subscribe: <mailto:systemtap-subscribe@sourceware.org>
-List-Post: <mailto:systemtap@sourceware.org>
-List-Help: <mailto:systemtap-help@sourceware.org>, <http://sourceware.org/lists.html#faqs>
-Sender: systemtap-owner@sourceware.org
-To: David Smith <dsmith@redhat.com>
-Cc: lttng-dev@lists.lttng.org, systemtap@sourceware.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail-vb0-f50.google.com ([209.85.212.50])
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1U6WsB-0007nY-LR
+	for lttng-dev@lists.lttng.org; Fri, 15 Feb 2013 20:47:27 -0500
+Received: by mail-vb0-f50.google.com with SMTP id ft2so2534345vbb.9
+	for <lttng-dev@lists.lttng.org>; Fri, 15 Feb 2013 17:47:22 -0800 (PST)
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi David,
-
-> Over in systemtap land, we're working on implementing a pure userspace
-> backend, using a project called dyninst (<http://www.dyninst.org/>).
-
-This project looks very interesting!
-
-> Assuming it does make sense, I could use some help. Is there any
-> documentation that I've missed somewhere that describes libringbuffer in
-> any detail?
-
-I found some old presentation that Mathieu did a Linuxcon in 2010 [1].
-The presentation describe the unified kernel ringbuffer on which the
-user space one is based. I'm afraid that if you want up-to-date
-documentation, the source code will be the best place to look.
-
-> The next question would be what is the best way of using libringbuffer
-> outside lttng-ust. One (not great) possibility would be to just copy the
-> code into systemtap. Of course the problem there is keeping the code up
-> to date with changes in lttng-ust. The next possibility would be to make
-> it a separate project (more like userspace-rcu).
-
-Splitting libringbuffer from the UST tree right now would prove to be
-quite a challenge. We would need to expose an API to the "clients" of
-the ringbuffer. Currently there are two levels of abstraction that one
-can use with the ringbuffer: a "high-level" one where you use a
-predefined "client" with the associated performance degradation and a
-"low-level" one where you know exactly which kind of "client" you are
-using with the associated fast-path inlined.
-
-We would need to discuss which level of abstraction we expose to the
-user: a generic one or "N apis" for the different low-level "clients".
-
-With that said, I'm curious about which specific features of Dyninst
-SystemTAP will be using and also do you think that it would be
-possible to integrate Dyninst as an additional instrumentation source
-into lttng-ust?
-
-Thanks,
-
-Christian
-
-[1] -  A new unified Lockless Ring Buffer library for efficient kernel tracing:
-        http://www.efficios.com/pub/linuxcon2010-tracingsummit/presentation-linuxcon-2010-tracing-mini-summit.pdf
+bWFrZSBkaXN0IHdvdWxkIGZhaWwgaWYgLi9jb25maWd1cmUgaGFkIG5vdCBiZWVuIGludm9rZWQg
+d2l0aAp0aGUgLS1lbmFibGUtcHl0aG9uLWJpbmRpbmdzIHN3aXRjaC4KClNpZ25lZC1vZmYtYnk6
+IErDqXLDqW1pZSBHYWxhcm5lYXUgPGplcmVtaWUuZ2FsYXJuZWF1QGVmZmljaW9zLmNvbT4KLS0t
+CiBleHRyYXMvYmluZGluZ3Mvc3dpZy9weXRob24vTWFrZWZpbGUuYW0gfCA4ICsrKy0tLS0tCiAx
+IGZpbGUgY2hhbmdlZCwgMyBpbnNlcnRpb25zKCspLCA1IGRlbGV0aW9ucygtKQoKZGlmZiAtLWdp
+dCBhL2V4dHJhcy9iaW5kaW5ncy9zd2lnL3B5dGhvbi9NYWtlZmlsZS5hbSBiL2V4dHJhcy9iaW5k
+aW5ncy9zd2lnL3B5dGhvbi9NYWtlZmlsZS5hbQppbmRleCBjNmE2OTAxLi42ZTdiYWE2IDEwMDY0
+NAotLS0gYS9leHRyYXMvYmluZGluZ3Mvc3dpZy9weXRob24vTWFrZWZpbGUuYW0KKysrIGIvZXh0
+cmFzL2JpbmRpbmdzL3N3aWcvcHl0aG9uL01ha2VmaWxlLmFtCkBAIC00LDE2ICs0LDE0IEBAIGx0
+dG5nLmk6IGx0dG5nLmkuaW4KIEFNX0NGTEFHUyA9IC1JJChQWVRIT05fSU5DTFVERSkgLUkkKHRv
+cF9zcmNkaXIpL2xpYi9sdHRuZy1jdGwgLUkuLi9jb21tb24gXAogICAgICAgICAgICAgICAkKEJV
+RERZX0NGTEFHUykKIAotRVhUUkFfRElTVCA9IGx0dG5nLmkKLXB5dGhvbl9QWVRIT04gPSBsdHRu
+Zy5weQorRVhUUkFfRElTVCA9IGx0dG5nLmkuaW4KK25vZGlzdF9weXRob25fUFlUSE9OID0gbHR0
+bmcucHkKIHB5ZXhlY19MVExJQlJBUklFUyA9IF9sdHRuZy5sYQogCiBNQUlOVEFJTkVSQ0xFQU5G
+SUxFUyA9IGx0dG5nX3dyYXAuYyBsdHRuZy5weQogCi1fbHR0bmdfbGFfU09VUkNFUyA9IGx0dG5n
+X3dyYXAuYwotCitub2Rpc3RfX2x0dG5nX2xhX1NPVVJDRVMgPSBsdHRuZ193cmFwLmMKIF9sdHRu
+Z19sYV9MREZMQUdTID0gLW1vZHVsZQotCiBfbHR0bmdfbGFfTElCQUREID0gCSQodG9wX3NyY2Rp
+cikvc3JjL2xpYi9sdHRuZy1jdGwvbGlibHR0bmctY3RsLmxhIAkJXAogCQkJJCh0b3Bfc3JjZGly
+KS9zcmMvY29tbW9uL3Nlc3Npb25kLWNvbW0vbGlic2Vzc2lvbmQtY29tbS5sYQogCi0tIAoxLjgu
+MS4xCgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0
+bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0
+cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
