@@ -1,19 +1,18 @@
-From: "Woegerer, Paul" <Paul_Woegerer@mentor.com>
-Subject: Re: How to disable an event that's been enabled by a
- wildcard selection or -a?
-Date: Mon, 18 Feb 2013 09:47:22 +0100
-Message-ID: <5121EA9A.8080905__41944.5587475368$1361177285$gmane$org@mentor.com>
-References: <009B25148989C6458484484699278506985C0CFA@EU-MBX-01.mgc.mentorg.com>
-	<20998D40D9A2B7499CA5A3A2666CB1EB19F968AF@ZURMSG1.QUANTUM.com>
+From: "Gabbasov, Andrew" <Andrew_Gabbasov@mentor.com>
+Subject: Re: LTTng: global_dirty_limit symbol lookup failed
+Date: Mon, 18 Feb 2013 10:14:46 +0000
+Message-ID: <6C5EA58090A5ED459815C4D04C2B466F8C56DAF3__44702.2349959754$1361182542$gmane$org@EU-MBX-01.mgc.mentorg.com>
+References: <20130125172448.GA694@Krystal>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Paul_Woegerer@mentor.com>) id 1U7MNX-0007bV-AJ
-	for lttng-dev@lists.lttng.org; Mon, 18 Feb 2013 03:47:15 -0500
-In-Reply-To: <20998D40D9A2B7499CA5A3A2666CB1EB19F968AF@ZURMSG1.QUANTUM.com>
+	(envelope-from <Andrew_Gabbasov@mentor.com>) id 1U7NkN-0008JA-VR
+	for lttng-dev@lists.lttng.org; Mon, 18 Feb 2013 05:14:56 -0500
+In-Reply-To: <20130125172448.GA694@Krystal>
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,120 +21,68 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: David.OShea@quantum.com
-Cc: lttng-dev@lists.lttng.org
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi David,
+> Hi Andrew,
+> 
+> Commit:
+> 
+> commit b87700e318c27267890cbd6fb5e50b687279131b
+> Author: Andrew Gabbasov <andrew_gabbasov@mentor.com>
+> Date:   Mon Dec 10 11:14:52 2012 -0500
+> 
+>     Add new kernel probes instrumentation
+> 
+>     Add kernel probes for btrfs, compaction, ext4, printk, random, rcu,
+>     regmap, rpm, sunrpc, workqueue, writeback.
+> 
+>     Signed-off-by: Andrew Gabbasov <andrew_gabbasov@mentor.com>
+>     Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> 
+> has 2 issues:
+> 
+> 1) it implements a wrapper around global_dirty_limit() in probes/. All
+>    wrappers should be in /wrapper/, without exception, otherwise the
+>    code will quickly become unmaintainable (we need to know what
+>    wrappers we can eventually remove if we remove support for older
+>    kernels in the future, and we need to be aware of those wrappers for
+>    complete testing coverage). I have no problem with having a
+>    probes/Makefile using a relative path (e.g. ../wrapper/somefile.o) as
+>    input if needed.
+> 
+> 2) It fills my dmesg log output with:
+>    "LTTng: global_dirty_limit symbol lookup failed."
+>    messages. .config follows.
+> 
+> Can you look into those issues ?
+> 
+> Thanks,
+> 
+> Mathieu
 
-On 02/14/2013 05:52 AM, David OShea wrote:
-> Hi,
-> =
+Hi Mathieu,
 
-> My understanding (hopefully someone will correct me if I'm wrong) is that=
- each time you invoke 'lttng enable-event', your specification for the even=
-ts you want enabled is stored and applied, and/or potentially applied later=
- if a new application connects to the session daemon.  All 'lttng disable-e=
-vent' does is remove one of the specifications you previously provided to '=
-lttng enable-event', so you can't say 'enable-event *' and then 'disable-ev=
-ent foo:*' to get all events except 'foo:*'.
-> =
+Sorry for a late response.
 
-> If you could constrain the application to use a particular trace provider=
- name for all of its tracepoints, say "app", then you could just do 'lttng =
-enable-event app:*'.  If you can't do that, then I think you need to fall b=
-ack on getting a list of all the available tracepoints using 'lttng list -u=
-', parsing this to find all of the available tracepoints, extracting the tr=
-ace provider name from them, then using 'lttng enable-event <provider>:*' f=
-or each provider other than the provider from your uninteresting library.  =
-I think there are APIs that can be used instead of issuing the 'lttng' comm=
-ands.
-> =
+I'm sending a separate e-mail with the patch to fix these issues. Here are some details:
 
-> I would certainly also like a way to be able to, say, enable all events o=
-ther than foo:* and bar:* using one command.
+1) I moved the wrapper to a separate file wrapper/writeback.h. Since it is supposed to be used
+in writeback probe only, I think, using static variable will be harmless.
 
-I submitted a patch that does exactly this a while ago:
-http://lists.lttng.org/pipermail/lttng-dev/2012-June/018179.html
+2) Since global_dirty_limit is not a function, but a global variable, its address is available
+to kallsyms lookup only if CONFIG_KALLSYMS_ALL is set. In order not to introduce wrapper
+related checks of this config into tracepoint definition include file, I decided not to exclude
+separate tracepoints in case of this config absence, but to omit the whole probe from
+building. So, writeback probe will be available only if CONFIG_KALLSYMS_ALL is set.
 
-Although it's not upstream it works well for us.
+3) Additional issue that I noticed: in case of CONFIG_THUMB2_KERNEL setting for ARM,
+kallsyms_lookup_funcptr modifies the address found for the symbol. In order to avoid
+it for data addresses, I introduced a new kallsyms_lookup_dataptr function, that does not
+do any address modifications. And this new function is used for global_dirty_limit wrapper.
 
-Thanks,
-Paul
+Thanks.
 
-
-> =
-
-> Regards,
-> David
-> =
-
->> -----Original Message-----
->> From: Ikaheimonen, JP [mailto:jp_ikaheimonen@mentor.com]
->> Sent: Friday, 8 February 2013 7:56 PM
->> To: lttng-dev@lists.lttng.org
->> Subject: [lttng-dev] How to disable an event that's been enabled by a
->> wildcard selection or -a?
->>
->> Consider the following scenario.
->> I want to write a script that traces all UST tracepoints of a given
->> application. I have no idea what the names of these tracepoints are.
->> Also, I know that the application uses a library that contains some
->> tracepoints I am not interested about. Now I want to trace all UST
->> tracepoints except the ones I already know about. Is this possible with
->> the lttng commands?
->>
->> If I enable all tracepoints with "lttng enable-event -u -a" I get all
->> events, even those I do not want. I've tried using "lttng disable-
->> event", and "lttng enable-event" with a filter, but I cannot seem to be
->> able to get rid of the specific events.
->>
->> Thank you,
->>
->> JP Ikaheimonen
->> Mentor Graphics Embedded Systems Division
->> Nucleus(r) | Linux(r) | Android(tm) | Services | UI | Multi-OS
->>
->> Android is a trademark of Google Inc. Use of this trademark is subject
->> to Google Permissions.
->> Linux is the registered trademark of Linus Torvalds in the U.S. and
->> other countries.
->>
->> _______________________________________________
->> lttng-dev mailing list
->> lttng-dev@lists.lttng.org
->> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> =
-
-> ----------------------------------------------------------------------
-> The information contained in this transmission may be confidential. Any d=
-isclosure, copying, or further distribution of confidential information is =
-not permitted unless such privilege is explicitly granted in writing by Qua=
-ntum. Quantum reserves the right to have electronic communications, includi=
-ng email and attachments, sent across its networks filtered through anti vi=
-rus and spam software programs and retain such messages in order to comply =
-with applicable data security and retention requirements. Quantum is not re=
-sponsible for the proper and complete transmission of the substance of this=
- communication or for any delay in its receipt.
-> =
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> =
-
-
-
--- =
-
-Paul Woegerer | SW Development Engineer
-http://go.mentor.com/sourceryanalyzer
-
-Mentor Embedded(tm) | Prinz Eugen Stra=DFe 72/2/4, Vienna, 1040 Austria
-Nucleus=AE | Linux=AE | Android(tm) | Services | UI | Multi-OS
-
-Android is a trademark of Google Inc. Use of this trademark is subject
-to Google Permissions.
-Linux is the registered trademark of Linus Torvalds in the U.S. and
-other countries.
+Best regards,
+Andrew
