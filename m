@@ -1,16 +1,16 @@
-From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Subject: Function of lttng create --disable-consumer?
-Date: Wed, 20 Feb 2013 21:15:06 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD01C538__24417.0276717798$1361394987$gmane$org@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+From: Amit Balboul <amit.balboul@shinesec.com>
+Subject: compiling LTTng for android
+Date: Thu, 21 Feb 2013 12:13:29 +0200
+Message-ID: <CAHg4Oy_bQHi7q6+Deb7AO_ZtJZj=9i5h+WyPTnaFO4uLxAwQXA__21045.6698122018$1361441671$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/mixed; boundary="===============0211218823=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
+Received: from mail-la0-f43.google.com ([209.85.215.43])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1U8H0n-0003aH-5C
-	for lttng-dev@lists.lttng.org; Wed, 20 Feb 2013 16:15:33 -0500
-Content-Language: fr-FR
+	(envelope-from <amit.balboul@shinesec.com>) id 1U8T9j-0001Cu-Ra
+	for lttng-dev@lists.lttng.org; Thu, 21 Feb 2013 05:13:36 -0500
+Received: by mail-la0-f43.google.com with SMTP id ek20so8688267lab.30
+	for <lttng-dev@lists.lttng.org>; Thu, 21 Feb 2013 02:13:29 -0800 (PST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,73 +19,150 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
-Cc: "Painchaud, Frederic" <Frederic.Painchaud@drdc-rddc.gc.ca>, "Couture,
-	Mario" <Mario.Couture@drdc-rddc.gc.ca>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Back on Wed Oct 3 14:27:07 EDT 2012, David Goulet wrote, in response to Ber=
-nd Hufmann:
+--===============0211218823==
+Content-Type: multipart/alternative; boundary=f46d042ef66181650f04d639532f
 
-> >   * I'm not sure what is the purpose of the options --no-consumer or
-> >     --disable-consumer. Could you please explain the use cases for using
-> >     --no-consumer or --disable-consumer? =
+--f46d042ef66181650f04d639532f
+Content-Type: text/plain; charset=ISO-8859-1
 
->
-> This basically disables the consumer for a tracing session. It's not very
-> useful for now but for upcoming snapshots and live tracing, it will make
-> way more sense! :).
+Hi all,
 
-In the create.c command code, the --disable-consumer option is checked in o=
-nly one place, and serves to call disable_consumer after the -C/-D option p=
-air has called enable_consumer to commit its configuration.  However, exper=
-imentation reveals something odd:
+In continue to posts from
+http://www.mail-archive.com/lttng-dev@lists.lttng.org/msg02542.html,
 
-$ sudo -H lttng create sessiona
+I'm trying to build the LTTng kernel-tracer for Android on ARM:
+(JB4.2.1 - kernel 3.0.31 - on Galaxy Nexus).
+I'm having some trouble completing the process, didn't find any usable
+information so far, maybe u can help.
 
-By itself, this does not launch the consumer daemon (I'm keeping an eye on =
-the System Monitor window's list of processes, where lttng-consumerd normal=
-ly appears).  Once I later do:
+I want to build the: (I've managed in the past to build the modules for
+goldfish's 2.6.29 but this required patching the kernel).
+(1) userspace-rcu
+(2) modules
+(3) tools
+I'm currently stuck in the first phase (building userspace-rcu).
 
-$ sudo -H lttng enable-event sched_switch -k
+My steps and the issues I've encountered are:
+1. Clone the userspace-rcu git repository
+2. Generate a sysroot for arm-linux-androideabi from google's NDK (using
+its "make-standalone-toolchain.sh" script with arm-linux-androideabi-4.4.3
+toolchain).
+3. Run ./bootstrap - creating config.h.in, Makefile.in, configure, ...
+4. Run ./configure with --host=arm-linux-androideabi and the relevant
+environment variables (CC, LD, CPPFLAGS, CFLAGS, LDFLAGS, LIB), pointing to
+the NDK ARM SYSROOT.
+5. Run make
 
-The consumer launches at that point.  There is no option in enable-event to=
- prevent this.  If I instead do:
+Some errors I encoutered and their fixes (workarounds), while trying as
+much as I can leave the sources untouched:
+1. syscall.h not found. In some files, the <syscall.h> is included. In NDK
+SYSROOT the syscall.h lays in sys/
+FIX: created a link: SYSROOT/include/syscall.h ->
+SYSROOT/include/sys/syscall.h
+2. Android's libraries includes the pthread lib automatically, thus not
+having a stand-alone pthread library.
+FIX: removed "-lpthread" from Makefile.am, tests/Makefile.am
+3. static declaration of "gettid" follows non-static declaration (in
+SYSROOT/include/unistd.h, "gettid" is declared as "external")
+For the mean time I commented this declaration... Maybe adding "#ifndef
+gettid" before the declaration of  "static gettid" in the sources will fix
+it ?
+4. rand_r not declared - added a module that implements rand_r (as seen in
+https://github.com/xbmc/xbmc/tree/master/xbmc/android/bionic_supplement)
+5. undefined reference to rpl_malloc
+FIX: setting ac_cv_func_malloc_0_nonnull=yes before launching ./configure.
 
-$ sudo -H lttng create sessiona --disable-consumer
-$ sudo -H lttng enable-event sched_switch -k
+now, after running ./configure and make, still not completed. I get many
+"undefined reference to __sync_syncronize" messages. the
+urcu/arch/generic.h defines the memory barriers functions as cmm_* but
+their implementation is not taken from urcu/arch/arm.h but from Line 46 in
+the same file (generic.h).
+Can u help with this?
+Am I missing something here ?
 
-Precisely the same thing happens.  Likewise for 'lttng create sessiona -U n=
-et://131.131.131.131' with or without the --disable-consumer switch.  But i=
-f I instead do:
+Also, how does the build system use the kernel 3.0.31 (or any other)
+sysroot ?
 
-$ sudo -H lttng create sessiona --disable-consumer -C net://131.131.131.131=
- -D net://131.131.131.131
-$ sudo -H lttng enable-event sched_switch -k
+Thank you
 
-(Where the net: target has lttng-relayd running) The consumer does *not* la=
-unch.  Not even after I do:
+Amit.
 
-$ sudo -H lttng enable-consumer
+--f46d042ef66181650f04d639532f
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
 
-Starting the trace does not launch the consumer either and, not surprisingl=
-y, the trace does not get written anywhere.  And all this without any error=
- or warning messages. 'lttng list' looks normal, too.
+<div dir=3D"ltr">Hi all,<div><br></div><div>In continue to posts from=A0<a =
+href=3D"http://www.mail-archive.com/lttng-dev@lists.lttng.org/msg02542.html=
+">http://www.mail-archive.com/lttng-dev@lists.lttng.org/msg02542.html</a>,<=
+br>
+<div><br></div><div>I&#39;m trying to build the LTTng kernel-tracer for And=
+roid on ARM:</div><div>(JB4.2.1 - kernel 3.0.31 - on Galaxy Nexus).<br></di=
+v><div>I&#39;m having some trouble completing the process, didn&#39;t find =
+any usable information so far, maybe u can help.<br>
 
-Is this a bug or am I missing something?
+</div><div><br></div><div>I want to build the: (I&#39;ve managed in the pas=
+t to build the modules for goldfish&#39;s 2.6.29 but this required patching=
+ the kernel).</div><div>(1) userspace-rcu</div><div>(2) modules</div><div>
+(3) tools</div><div>I&#39;m currently stuck in the first phase (building us=
+erspace-rcu).</div>
+<div><br></div><div>My steps and the issues I&#39;ve encountered are:</div>=
+<div>1. Clone the userspace-rcu git repository</div><div>2. Generate a sysr=
+oot for arm-linux-androideabi from google&#39;s NDK (using its &quot;make-s=
+tandalone-toolchain.sh&quot; script with arm-linux-androideabi-4.4.3 toolch=
+ain).</div>
 
-Daniel U. Thibault
-R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) / Defence R&D=
- Canada - Valcartier (DRDC Valcartier)
-Cyber s=E9curit=E9 pour les missions essentielles (CME) / Mission Critical =
-Cyber Security (MCCS)
-Protection des syst=E8mes et contremesures (PSC) / Systems Protection & Cou=
-ntermeasures (SPC)
-2459 route de la Bravoure
-Qu=E9bec, QC  G3J 1X5
-CANADA
-Vox : (418) 844-4000 x4245
-Fax : (418) 844-4538
-NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-Gouvernement du Canada / Government of Canada
-<http://www.valcartier.drdc-rddc.gc.ca/>
+<div>3. Run ./bootstrap - creating <a href=3D"http://config.h.in" target=3D=
+"_blank">config.h.in</a>, Makefile.in, configure, ...<br></div><div>4. Run =
+./configure with --host=3Darm-linux-androideabi and the relevant environmen=
+t variables (CC, LD, CPPFLAGS, CFLAGS, LDFLAGS, LIB), pointing to the NDK A=
+RM SYSROOT.</div>
+<div style>5. Run make</div><div style><br></div><div style>Some errors I e=
+ncoutered and their fixes (workarounds), while trying as much as I can leav=
+e the sources untouched:</div><div style>1. syscall.h not found. In some fi=
+les, the &lt;syscall.h&gt; is included. In NDK SYSROOT the syscall.h lays i=
+n sys/</div>
+<div style>FIX: created a link: SYSROOT/include/syscall.h -&gt; SYSROOT/inc=
+lude/sys/syscall.h</div><div style>2. Android&#39;s libraries includes the =
+pthread lib automatically, thus not having a stand-alone pthread library.</=
+div>
+<div style>FIX: removed &quot;-lpthread&quot; from Makefile.am, tests/Makef=
+ile.am</div><div style>3. static declaration of &quot;gettid&quot; follows =
+non-static declaration (in SYSROOT/include/unistd.h, &quot;gettid&quot; is =
+declared as &quot;external&quot;)<br>
+</div><div style>For the mean time I commented this declaration... Maybe ad=
+ding &quot;#ifndef gettid&quot; before the declaration of =A0&quot;static g=
+ettid&quot; in the sources will fix it ?</div><div style>4. rand_r not decl=
+ared - added a module that implements rand_r (as seen in=A0<a href=3D"https=
+://github.com/xbmc/xbmc/tree/master/xbmc/android/bionic_supplement">https:/=
+/github.com/xbmc/xbmc/tree/master/xbmc/android/bionic_supplement</a>)</div>
+<div style>5. undefined reference to rpl_malloc<br></div><div style>FIX: se=
+tting ac_cv_func_malloc_0_nonnull=3Dyes before launching ./configure.</div>=
+<div style><br></div><div style>now, after running ./configure and make, st=
+ill not completed. I get many &quot;undefined reference to __sync_syncroniz=
+e&quot; messages. the urcu/arch/generic.h defines the memory barriers funct=
+ions as cmm_* but their implementation is not taken from urcu/arch/arm.h bu=
+t from Line 46 in the same file (generic.h).</div>
+<div style>Can u help with this?</div><div style>Am I missing something her=
+e ?</div><div style><br></div><div style>Also, how does the build system us=
+e the kernel 3.0.31 (or any other) sysroot ?<br></div><div><br></div><div s=
+tyle>
+Thank you</div></div><div style><br></div><div style>Amit.</div></div>
+
+--f46d042ef66181650f04d639532f--
+
+
+--===============0211218823==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0211218823==--
