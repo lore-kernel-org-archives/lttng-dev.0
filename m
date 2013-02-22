@@ -1,20 +1,25 @@
-From: Simon Marchi <simon.marchi@polymtl.ca>
-Subject: Re: Stream trace data over PCIe (or anything else)
-Date: Thu, 21 Feb 2013 23:34:37 -0500
-Message-ID: <CAFXXi0=5ocdF9vfis_WPNjkwkJbUObL+On5cN9DweikcVEG_RQ__11346.1423352875$1361507763$gmane$org@mail.gmail.com>
-References: <CAFXXi0=Tf3nEefTvv4EccZVMVg+73xrwdROK=a=zVyV8jmOjTA@mail.gmail.com>
-	<20130222020407.GA15200@Krystal>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH 1/3] urcu: avoid "expression result
+	unused"	from clang
+Date: Fri, 22 Feb 2013 07:57:50 -0500
+Message-ID: <20130222125750.GA21519__7744.35974094576$1361537984$gmane$org@Krystal>
+References: <1354872295-32371-1-git-send-email-laijs@cn.fujitsu.com>
+	<20121207165848.GB12338@Krystal>
+	<CACvQF53+x_PDd+aOtM0k2wN0BJZXRMkB3pjXxfvsV=HkdknM=Q@mail.gmail.com>
+	<CACvQF514yxBjppYFKJEqX=n31LdU6dTqBg9-7kn5AoTy0i7=Lw@mail.gmail.com>
+	<20121208150023.GA16943@Krystal> <50C54A07.20101@cn.fujitsu.com>
+	<20121210140930.GA32034@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f175.google.com ([209.85.223.175])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <thundersim@gmail.com>) id 1U8kLp-0001aX-CB
-	for lttng-dev@lists.lttng.org; Thu, 21 Feb 2013 23:35:13 -0500
-Received: by mail-ie0-f175.google.com with SMTP id c12so278864ieb.20
-	for <lttng-dev@lists.lttng.org>; Thu, 21 Feb 2013 20:35:08 -0800 (PST)
-In-Reply-To: <20130222020407.GA15200@Krystal>
+	(envelope-from <compudj@mail.openrapids.net>) id 1U8sCI-0005kZ-4T
+	for lttng-dev@lists.lttng.org; Fri, 22 Feb 2013 07:57:54 -0500
+Content-Disposition: inline
+In-Reply-To: <20121210140930.GA32034@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,65 +28,188 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: Lai Jiangshan <laijs@cn.fujitsu.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Lai Jiangshan <eag0628@gmail.com>
 List-Id: lttng-dev@lists.lttng.org
 
-Yes indeed. When I first played with the card, I didn't get it to work
-so I forgot about this feature. I looked at it again and got it to
-work.
+* Mathieu Desnoyers (mathieu.desnoyers@efficios.com) wrote:
+> * Lai Jiangshan (laijs@cn.fujitsu.com) wrote:
+> > On 12/08/2012 11:00 PM, Mathieu Desnoyers wrote:
+> > > * Lai Jiangshan (eag0628@gmail.com) wrote:
+> > >> How about the one in yy.diff?
+> > >>
+> > >> xx.diff fixes the one what I had sent in 1/3 patch, but it may still
+> > >> cause warning in future if the complier become more strict.
+> > > 
+> > > Hrm. In any cases, I think that even with the 2 patches you propose, the
+> > > warning "unused expression return" would still be valid (because we end
+> > > up not using the result of the outer statement-expression). 
+> > 
+> > The one in yy.diff:
+> > 
+> > 1 ? _v : statement_which_has_side_affect;
+> > 
+> > The compiler should not warn for it. "?:" can be used for control flow,
+> > the complier should only warn if both branches are warning.
+> 
+> In the case of yy.diff, whether the warning will appear or not would
+> depend on the phase at which the compiler generates the warning, no ?
+> For instance, it it chooses to check for unused return values after
+> eliminating dead code (considering branches that cannot be taken), then
+> we would be in the same situation as we are today, even if we have a
+> statement with side effect.
+> 
+> I am more and more enclined to try asking their opinion to the clang
+> community about this.
 
-I successfully streamed some events over the connection to relayd
-listening on the other side !
+I finally found a way to silence warnings both in gcc and clang:
 
-On 21 February 2013 21:04, Mathieu Desnoyers
-<mathieu.desnoyers@efficios.com> wrote:
-> * Simon Marchi (simon.marchi@polymtl.ca) wrote:
->> Hello LTTng cyborgs,
->>
->> As some of you might know, I am trying to port and adapt LTTng to the
->> Tilera TILEncore-Gx card (and later the Intel Xeon Phi). The main
->> constraint with these platforms is the non existent disk space, which
->> means the trace will have to be streamed. I am thinking of using the
->> PCI express connection the two cards have to stream the trace data and
->> save it on the host. It seems like this use case is similar to what
->> the network consumer and relayd offer, but simply on another medium.
->>
->> The consumer currently has two destination types: local and net (enum
->> consumer_dst_type in bin/lttng-sessiond/consumer.h). I understand that
->> I could create another type of consumer which sends data over the PCI
->> port instead. On the other side of the bus, I could adapt relayd to
->> receive on the PCI port of the host and save the trace as it currently
->> does for the network.
->>
->> I would like to hear your comments about this approach. Does it sound
->> right, is there a better way ? Would it be worth it to design a system
->> that would make it easier to add a new type of "transport" for the
->> trace data ?
->
-> Is it possible to bind a network interface between the tilera and the
-> host that uses the PCI express port ?
->
+
+diff --git a/urcu/system.h b/urcu/system.h
+index 2a45f22..6f31459 100644
+--- a/urcu/system.h
++++ b/urcu/system.h
+@@ -47,11 +47,11 @@
+  * Store v into x, where x is located in shared memory. Performs the
+  * required cache flush after writing. Returns v.
+  */
+-#define CMM_STORE_SHARED(x, v)		\
+-	({				\
+-		__typeof__(x) _v = _CMM_STORE_SHARED(x, v);	\
+-		cmm_smp_wmc();		\
+-		_v;			\
++#define CMM_STORE_SHARED(x, v)						\
++	({								\
++		__typeof__(x) _v = _CMM_STORE_SHARED(x, v);		\
++		cmm_smp_wmc();						\
++		_v = _v;	/* Work around clang "unused result" */	\
+ 	})
+ 
+ #endif /* _URCU_SYSTEM_H */
+
+Thanks,
+
+Mathieu
+
+
+> 
 > Thanks,
->
+> 
 > Mathieu
->
->>
->> Thanks !
->>
->> Simon
->>
->> _______________________________________________
->> lttng-dev mailing list
->> lttng-dev@lists.lttng.org
->> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
-> --
+> 
+> > 
+> > 
+> > We might
+> > > want to consider simpler approaches:
+> > > 
+> > > 1 - Add the missing (void) casts before each CMM_STORE_SHARED() in the
+> > >     code. I don't like this because it makes the CMM_STORE_SHARED common
+> > >     case more cumbersome to use.
+> > > 2 - Change the CMM_STORE_SHARED() API so it does not return anything.
+> > >     I think most use-cases don't involve using its return value anyway.
+> > > 
+> > > Thoughts ?
+> > > 
+> > > Thanks,
+> > > 
+> > > Mathieu
+> > > 
+> > >>
+> > >> On Sat, Dec 8, 2012 at 1:27 AM, Lai Jiangshan <eag0628@gmail.com> wrote:
+> > >>>
+> > >>>
+> > >>> On Saturday, December 8, 2012, Mathieu Desnoyers wrote:
+> > >>>>
+> > >>>> * Lai Jiangshan (laijs@cn.fujitsu.com) wrote:
+> > >>>>> The last expression result is unused and clang will complain.
+> > >>>>> The trick in the patch supresses the complaint
+> > >>>>
+> > >>>> Hrm, but with this patch, gcc complains:
+> > >>>>
+> > >>>> rculfhash.c:1921:3: warning: variable '_w' set but not used
+> > >>>> [-Wunused-but-set-variable]
+> > >>>>
+> > >>>> using
+> > >>>>
+> > >>>> gcc version 4.7.2 (Debian 4.7.2-4)
+> > >>>
+> > >>>
+> > >>> Ouch, my gcc is too old
+> > >>>
+> > >>>
+> > >>>>
+> > >>>>
+> > >>>> Thoughts ?
+> > >>>>
+> > >>>> Thanks,
+> > >>>>
+> > >>>> Mathieu
+> > >>>>
+> > >>>>>
+> > >>>>> Signed-off-by: Lai Jiangshan <laijs@cn.fujitsu.com>
+> > >>>>> ---
+> > >>>>>  urcu/system.h        |    5 ++++-
+> > >>>>>  2 files changed, 4 insertions(+), 1 deletions(-)
+> > >>>>>
+> > >>>>> diff --git a/urcu/system.h b/urcu/system.h
+> > >>>>> index 2a45f22..6b7b0af 100644
+> > >>>>> --- a/urcu/system.h
+> > >>>>> +++ b/urcu/system.h
+> > >>>>> @@ -46,12 +46,15 @@
+> > >>>>>  /*
+> > >>>>>   * Store v into x, where x is located in shared memory. Performs the
+> > >>>>>   * required cache flush after writing. Returns v.
+> > >>>>> + * "_w" here avoids the warning from clang:
+> > >>>>> + *   warning: expression result unused [-Wunused-value]
+> > >>>>>   */
+> > >>>>>  #define CMM_STORE_SHARED(x, v)               \
+> > >>>>>       ({                              \
+> > >>>>>               __typeof__(x) _v = _CMM_STORE_SHARED(x, v);     \
+> > >>>>> +             __typeof__(x) _w;       \
+> > >>>>>               cmm_smp_wmc();          \
+> > >>>>> -             _v;                     \
+> > >>>>> +             _w = _v;                \
+> > >>>>>       })
+> > >>>>>
+> > >>>>>  #endif /* _URCU_SYSTEM_H */
+> > >>>>> --
+> > >>>>> 1.7.4.4
+> > >>>>>
+> > >>>>>
+> > >>>>> _______________________________________________
+> > >>>>> lttng-dev mailing list
+> > >>>>> lttng-dev@lists.lttng.org
+> > >>>>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> > >>>>
+> > >>>>
+> > >>>> --
+> > >>>> Mathieu Desnoyers
+> > >>>> Operating System Efficiency R&D Consultant
+> > >>>> EfficiOS Inc.
+> > >>>> http://www.efficios.com
+> > >>>>
+> > >>>> _______________________________________________
+> > >>>> lttng-dev mailing list
+> > >>>> lttng-dev@lists.lttng.org
+> > >>>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> > > 
+> > > 
+> > > 
+> > > 
+> > 
+> 
+> -- 
 > Mathieu Desnoyers
+> Operating System Efficiency R&D Consultant
 > EfficiOS Inc.
 > http://www.efficios.com
->
+> 
 > _______________________________________________
 > lttng-dev mailing list
 > lttng-dev@lists.lttng.org
 > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
