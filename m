@@ -1,17 +1,18 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: liburcu sparc support, build failure on buildd
-Date: Fri, 22 Feb 2013 09:15:51 -0500
-Message-ID: <20130222141551.GB22156__36415.536949835$1361542659$gmane$org@Krystal>
+From: Samuel Thibault <sthibault@debian.org>
+Subject: Re: Package liburcu: build for hurd-i386
+Date: Fri, 22 Feb 2013 15:30:32 +0100
+Message-ID: <20130222143032.GB8091__14067.4766306349$1361543677$gmane$org@type.bordeaux.inria.fr>
+References: <20130222140920.GA22156@Krystal>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1U8tPk-0006Qb-QW
-	for lttng-dev@lists.lttng.org; Fri, 22 Feb 2013 09:15:52 -0500
+	(envelope-from <samuel.thibault@ens-lyon.org>) id 1U8te2-0006Yg-Hj
+	for lttng-dev@lists.lttng.org; Fri, 22 Feb 2013 09:30:38 -0500
 Content-Disposition: inline
+In-Reply-To: <20130222140920.GA22156@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,53 +21,22 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: sparc@buildd.debian.org, debian-sparc@lists.debian.org
-Cc: lttng-dev@lists.lttng.org
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev@lists.lttng.org, hurd-i386@buildd.debian.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
+Hello,
 
-I notice the following build failure here
+Mathieu Desnoyers, le Fri 22 Feb 2013 09:09:20 -0500, a =E9crit :
+> I noticed a build failure on hurd-i386, and committed a fix in Userspace
+> RCU master branch to address this issue. Testing would be welcome.
 
-https://buildd.debian.org/status/package.php?p=liburcu
+Unfortunately it doesn't work, because sched_setaffinity is for now just
+a fail-stub on hurd-i386, and thus configure considers it as missing,
+and thus the CPU_SET test is disabled completely.
 
-Tail of log for liburcu on sparc:
+I however guess you could just disable defining your own cpu_set_t when
+!HAVE_SCHED_SETAFFINITY, since it is probably used only for using
+sched_setaffinity.
 
-urcu/static/wfqueue.h:84:2: warning: implicit declaration of function 'CMM_STORE_SHARED' [-Wimplicit-function-declaration]
-urcu/static/wfqueue.h: In function '___cds_wfq_node_sync_next':
-urcu/static/wfqueue.h:99:2: warning: implicit declaration of function 'CMM_LOAD_SHARED' [-Wimplicit-function-declaration]
-urcu/static/wfqueue.h:99:15: warning: assignment makes pointer from integer without a cast [enabled by default]
-urcu/static/wfqueue.h:104:4: warning: implicit declaration of function 'caa_cpu_relax' [-Wimplicit-function-declaration]
-urcu/static/wfqueue.h: In function '___cds_wfq_dequeue_blocking':
-urcu/static/wfqueue.h:126:55: warning: comparison between pointer and integer [enabled by default]
-make[3]: *** [wfqueue.lo] Error 1
-make[3]: Leaving directory `/build/buildd-liburcu_0.7.6-1-sparc-GySyug/liburcu-0.7.6'
-make[2]: *** [all-recursive] Error 1
-make[2]: Leaving directory `/build/buildd-liburcu_0.7.6-1-sparc-GySyug/liburcu-0.7.6'
-make[1]: *** [all] Error 2
-make[1]: Leaving directory `/build/buildd-liburcu_0.7.6-1-sparc-GySyug/liburcu-0.7.6'
-dh_auto_build: make -j1 returned exit code 2
-make: *** [build-arch] Error 2
-
-One main question I have: what sparc architectures are supported by
-Debian's "sparc" architecture ? Userspace RCU only supports Sparcv9 and
-onward, because it requires some atomic instructions.
-
-As documented in the urcu README file, building a package that includes
-sparcv9 isntructions for 32-bit sparc can be done with:
-
-CFLAGS="-m32 -Wa,-Av9a -g -O2" ./configure
-
-But if Debian sparc needs to support pre-v9 sparcs, then I guess it
-would not be appropriate to use v9 instructions for urcu sparc build.
-
-Thoughts ?
-
-Thanks,
-
-Mathieu
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Samuel
