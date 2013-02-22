@@ -1,16 +1,19 @@
-From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Subject: babeltrace omits its closing verbose comment
-Date: Fri, 22 Feb 2013 20:13:15 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD01C9AC__842.948075342242$1361564071$gmane$org@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: Babeltrace stable 1.0 branch
+Date: Fri, 22 Feb 2013 15:19:12 -0500
+Message-ID: <20130222201912.GA25956__30413.2453784861$1361564401$gmane$org@Krystal>
+References: <CAFXXi0=27XrL-udMKWqwTZ_XJz6YiZfYSowvfzw31LLA0oWhtg@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1U8z02-0000tC-Sf
-	for lttng-dev@lists.lttng.org; Fri, 22 Feb 2013 15:13:43 -0500
-Content-Language: fr-FR
+	(envelope-from <compudj@mail.openrapids.net>) id 1U8z5P-0000wo-90
+	for lttng-dev@lists.lttng.org; Fri, 22 Feb 2013 15:19:15 -0500
+Content-Disposition: inline
+In-Reply-To: <CAFXXi0=27XrL-udMKWqwTZ_XJz6YiZfYSowvfzw31LLA0oWhtg@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,38 +22,30 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
-Cc: "Painchaud, Frederic" <Frederic.Painchaud@drdc-rddc.gc.ca>, "Couture,
-	Mario" <Mario.Couture@drdc-rddc.gc.ca>
+To: Simon Marchi <simon.marchi@polymtl.ca>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-The verbose output of babeltrace (-v, --verbose) is missing its closing com=
-ment.  Looking at babeltrace.c, line 670:
+* Simon Marchi (simon.marchi@polymtl.ca) wrote:
+> This is a reminder of what we discussed on IRC a few days ago. It
+> would be interesting to have a stable 1.0 branch of babeltrace so we
+> can setup automatic builds of bt stable on launchpad.
 
-fmt_write->close_trace(td_write);
+Branch added, thanks!
 
-bt_context_put(ctx);
-printf_verbose("finished converting. Output written to:\n%s\n",
-		opt_output_path ? : "<stdout>");
-goto end;
+Mathieu
 
-I suspect that the printf_verbose should be moved to *before* the fmt_write=
-->close_trace.  That way the last comment would be sent to stdout (or the u=
-ser-selected --output, once bug 459 (http://bugs.lttng.org/issues/459) is f=
-ixed), right?
+> 
+> Thanks !
+> 
+> Simon
+> 
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
-Daniel U. Thibault
-R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) / Defence R&D=
- Canada - Valcartier (DRDC Valcartier)
-Cyber s=E9curit=E9 pour les missions essentielles (CME) / Mission Critical =
-Cyber Security (MCCS)
-Protection des syst=E8mes et contremesures (PSC) / Systems Protection & Cou=
-ntermeasures (SPC)
-2459 route de la Bravoure
-Qu=E9bec, QC=A0 G3J 1X5
-CANADA
-Vox=A0: (418) 844-4000 x4245
-Fax=A0: (418) 844-4538
-NAC=A0: 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-Gouvernement du Canada=A0/ Government of Canada
-<http://www.valcartier.drdc-rddc.gc.ca/>
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
