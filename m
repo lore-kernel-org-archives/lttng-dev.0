@@ -1,16 +1,18 @@
-From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Subject: babeltrace -i ?
-Date: Mon, 25 Feb 2013 18:50:36 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD01CF4B__1178.93555802784$1361818321$gmane$org@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+From: David Smith <dsmith@redhat.com>
+Subject: Re: Using lttng-ust's libringbuffer outside lttng-ust
+Date: Mon, 25 Feb 2013 13:07:06 -0600
+Message-ID: <512BB65A.9060604__1221.65993457219$1361823915$gmane$org@redhat.com>
+References: <511A9E5A.4010303@redhat.com>
+	<CAGDH53=8kL0oXWZ0Xo73-1EviVbheU0t9fXuzSt05ZCSqVzH_w@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
+Received: from mx1.redhat.com ([209.132.183.28])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1UA38l-0008U7-U6
-	for lttng-dev@lists.lttng.org; Mon, 25 Feb 2013 13:51:08 -0500
-Content-Language: fr-FR
+	(envelope-from <dsmith@redhat.com>) id 1UA4b5-0000of-J4
+	for lttng-dev@lists.lttng.org; Mon, 25 Feb 2013 15:24:27 -0500
+In-Reply-To: <CAGDH53=8kL0oXWZ0Xo73-1EviVbheU0t9fXuzSt05ZCSqVzH_w@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,42 +21,42 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
-Cc: "Painchaud, Frederic" <Frederic.Painchaud@drdc-rddc.gc.ca>, "Couture,
-	Mario" <Mario.Couture@drdc-rddc.gc.ca>
+To: Christian Babeux <christian.babeux@efficios.com>
+Cc: lttng-dev@lists.lttng.org, systemtap@sourceware.org
 List-Id: lttng-dev@lists.lttng.org
 
-   What is the babeltrace -i, --input-format option meant for?  At first I =
-thought one could round-trip a CTF trace to text and back using babeltrace,=
- but if I try this:
+On 02/15/2013 02:36 PM, Christian Babeux wrote:
+> Hi David,
 
-$ babeltrace /path_to_the/ctf_trace_directory -w /path_to_the/text_trace_fi=
-le
-$ babeltrace /path_to_the/text_trace_file -i text -o ctf -w /path_to_the/re=
-constituted_ctf_trace_directory
+Thanks for the response.
 
-   The second command gives me:
+>> The next question would be what is the best way of using libringbuffer
+>> outside lttng-ust. One (not great) possibility would be to just copy the
+>> code into systemtap. Of course the problem there is keeping the code up
+>> to date with changes in lttng-ust. The next possibility would be to make
+>> it a separate project (more like userspace-rcu).
+> 
+> Splitting libringbuffer from the UST tree right now would prove to be
+> quite a challenge. We would need to expose an API to the "clients" of
+> the ringbuffer. Currently there are two levels of abstraction that one
+> can use with the ringbuffer: a "high-level" one where you use a
+> predefined "client" with the associated performance degradation and a
+> "low-level" one where you know exactly which kind of "client" you are
+> using with the associated fast-path inlined.
+> 
+> We would need to discuss which level of abstraction we expose to the
+> user: a generic one or "N apis" for the different low-level "clients".
 
-[error] Cannot open any trace for reading.
-[error] opening trace "/path_to_the/text_trace_file" for reading.
-[error] none of the specified trace paths could be opened.
+In my head, I was planning on using the APIs defined in
+libringbuffer/*.h (like lib_ring_buffer_{reserve,commit,write} from
+frontend_api.h). But, perhaps we could back up a sec and you could
+describe a bit more the low-level vs. high-level levels of abstraction.
+Feel free to point me at some code.
 
-   If '-i ctf' is the only currently-implemented option, then we should get=
- a more appropriate error message when using another: something along the l=
-ines of "babeltrace input format not supported ".
-
-Daniel U. Thibault
-R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) / Defence R&D=
- Canada - Valcartier (DRDC Valcartier)
-Cyber s=E9curit=E9 pour les missions essentielles (CME) / Mission Critical =
-Cyber Security (MCCS)
-Protection des syst=E8mes et contremesures (PSC) / Systems Protection & Cou=
-ntermeasures (SPC)
-2459 route de la Bravoure
-Qu=E9bec, QC=A0 G3J 1X5
-CANADA
-Vox=A0: (418) 844-4000 x4245
-Fax=A0: (418) 844-4538
-NAC=A0: 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-Gouvernement du Canada=A0/ Government of Canada
-<http://www.valcartier.drdc-rddc.gc.ca/>
+-- 
+David Smith
+dsmith@redhat.com
+Red Hat
+http://www.redhat.com
+256.217.0141 (direct)
+256.837.0057 (fax)
