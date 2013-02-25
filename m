@@ -1,26 +1,16 @@
-From: David OShea <David.OShea@quantum.com>
-Subject: Application freeze at startup with LTTng-UST and Perl
- dlopen() - TRACEPOINT_PROBE_DYNAMIC_LINKAGE?
-Date: Mon, 25 Feb 2013 01:17:03 +0000
-Message-ID: <20998D40D9A2B7499CA5A3A2666CB1EB19F97108__31721.7303127565$1361755107$gmane$org@ZURMSG1.QUANTUM.com>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Subject: babeltrace -i ?
+Date: Mon, 25 Feb 2013 18:50:36 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD01CF4B__1178.93555802784$1361818321$gmane$org@VAL-E-01.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mx0b-000ceb01.pphosted.com ([67.231.152.126])
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <prvs=07684fd662=david.oshea@quantum.com>)
-	id 1U9mh9-0008Nh-0f
-	for lttng-dev@lists.lttng.org; Sun, 24 Feb 2013 20:17:31 -0500
-Received: from pps.filterd (m0001158 [127.0.0.1])
-	by mx0b-000ceb01.pphosted.com (8.14.5/8.14.5) with SMTP id
-	r1P1HUF3001352
-	for <lttng-dev@lists.lttng.org>; Sun, 24 Feb 2013 17:17:30 -0800
-Received: from ppoxedge1.quantum.com ([146.174.252.27])
-	by mx0b-000ceb01.pphosted.com with ESMTP id 1aqhnkru3e-1
-	(version=TLSv1/SSLv3 cipher=AES128-SHA bits=128 verify=NOT)
-	for <lttng-dev@lists.lttng.org>; Sun, 24 Feb 2013 17:17:29 -0800
-Content-Language: en-US
+	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1UA38l-0008U7-U6
+	for lttng-dev@lists.lttng.org; Mon, 25 Feb 2013 13:51:08 -0500
+Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -30,86 +20,41 @@ List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+Cc: "Painchaud, Frederic" <Frederic.Painchaud@drdc-rddc.gc.ca>, "Couture,
+	Mario" <Mario.Couture@drdc-rddc.gc.ca>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi all,
+   What is the babeltrace -i, --input-format option meant for?  At first I =
+thought one could round-trip a CTF trace to text and back using babeltrace,=
+ but if I try this:
 
-I'm getting freezes at application startup with LTTng-UST which I assume are due to my lack of understanding of TRACEPOINT_PROBE_DYNAMIC_LINKAGE.
+$ babeltrace /path_to_the/ctf_trace_directory -w /path_to_the/text_trace_fi=
+le
+$ babeltrace /path_to_the/text_trace_file -i text -o ctf -w /path_to_the/re=
+constituted_ctf_trace_directory
 
-I'm running:
-- lttng-tools-2.0.4
-- lttng-ust-2.0.5 patched with 009745db "Cache the procname per-thread rather than per-process to take into account that prctl() can be used to set thread names." and e699eda "don't spawn per-user thread if HOME is not set".
-- liburcu0-0.7.4-0
+   The second command gives me:
 
-This is being run on CentOS 5.4.
+[error] Cannot open any trace for reading.
+[error] opening trace "/path_to_the/text_trace_file" for reading.
+[error] none of the specified trace paths could be opened.
 
-The lttng-ust man page says:
+   If '-i ctf' is the only currently-implemented option, then we should get=
+ a more appropriate error message when using another: something along the l=
+ines of "babeltrace input format not supported ".
 
-"""
-BUILDING/LINKING THE TRACEPOINT PROVIDER
-[...]
-         1.1) Compile the Tracepoint provider with the application, either
-              directly or through a static library (.a):
-[...]
-         2) Compile the Tracepoint Provider separately from the application,
-            using dynamic linking:
-           - Into exactly one object of your application: define
-             "TRACEPOINT_DEFINE" _and_ also define
-             "TRACEPOINT_PROBE_DYNAMIC_LINKAGE", then include the tracepoint
-             provider header.	
-[...]
-"""
-
-I have a dynamic library that includes code with tracepoint() calls, plus the relevant tracepoint definitions and trace providers - it is sort of "self-contained".  My Perl script dlopen()s this dynamic library.  Am I correct in thinking that this falls into option 2) above, because whilst the trace provider is statically linked with the code that uses the tracepoints, the trace provider is being dynamically linked into the application, and that is the part that matters to LTTng? 
- 
-When I build this dynamic library without TRACEPOINT_PROBE_DYNAMIC_LINKAGE #defined in the tracepoint definitions, I get a freeze that looks like https://bugs.lttng.org/issues/142 from the strace output:
-
-"""
-open("/usr/lib64/liburcu-common.so.1", O_RDONLY) = 4
-read(4, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0p\7`\0310\0\0\0"..., 832) = 832
-fstat(4, {st_mode=S_IFREG|0755, st_size=9464, ...}) = 0
-mmap(0x3019600000, 2102552, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 4, 0) = 0x3019600000
-mprotect(0x3019602000, 2093056, PROT_NONE) = 0
-mmap(0x3019801000, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 4, 0x1000) = 0x3019801000
-close(4)                                = 0
-mprotect(0x3fd3607000, 4096, PROT_READ) = 0
-munmap(0x2ae2a2766000, 49028)           = 0
-open("/dev/urandom", O_RDONLY)          = 4
-fcntl(4, F_GETFD)                       = 0
-fcntl(4, F_SETFD, FD_CLOEXEC)           = 0
-getuid()                                = 0
-getppid()                               = 8809
-read(4, "\266\310we\347u\31\336\33\266 \262C\3267\32", 16) = 16
-gettid()                                = 8810
-clock_gettime(CLOCK_REALTIME, {1361753274, 392351000}) = 0
-getuid()                                = 0
-geteuid()                               = 0
-rt_sigprocmask(SIG_SETMASK, ~[RTMIN RT_1], [], 8) = 0
-mmap(NULL, 10489856, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_32BIT, -1, 0) = 0x4023d000
-mprotect(0x4023d000, 4096, PROT_NONE)   = 0
-clone(child_stack=0x40c3d250, flags=CLONE_VM|CLONE_FS|CLONE_FILES|CLONE_SIGHAND|CLONE_THREAD|CLONE_SYSVSEM|CLONE_SETTLS|CLONE_PARENT_SETTID|CLONE_CHILD_CLEARTID, parent_tidptr=0x40c3d9d0, tls=0x40c3d940, child_tidptr=0x40c3d9d0) = 8811
-mmap(NULL, 10489856, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_32BIT, -1, 0) = 0x41e43000
-mprotect(0x41e43000, 4096, PROT_NONE)   = 0
-clone(child_stack=0x42843250, flags=CLONE_VM|CLONE_FS|CLONE_FILES|CLONE_SIGHAND|CLONE_THREAD|CLONE_SYSVSEM|CLONE_SETTLS|CLONE_PARENT_SETTID|CLONE_CHILD_CLEARTID, parent_tidptr=0x428439d0, tls=0x42843940, child_tidptr=0x428439d0) = 8812
-rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
-futex(0x2ae2a29a5a80, FUTEX_WAIT_PRIVATE, 0, {2, 999506000}) = -1 ETIMEDOUT (Connection timed out)
-gettid()                                = 8810
-write(2, "libust[8810/8810]: Error: Timed "..., 107libust[8810/8810]: Error: Timed out waiting for ltt-sessiond (in lttng_ust_init() at lttng-ust-comm.c:952)
-) = 107
-futex(0x2ae2a29a5b00, FUTEX_WAIT_PRIVATE, 2, NULL
-"""
-(freeze at this point)
-
-I realise that bug 142 is fixed in the version of the code I'm running.
-
-I also found that, even though the Perl script does not fork() (unless I'm very much mistaken), if I 'export LD_PRELOAD=/usr/lib64/liblttng-ust-fork.so.0' and then run a shell script that invokes 'perl ...' to start the script, the problem goes away.  Is this because, when the shell fork()s to start Perl, liblttng-ust-fork.so.0 will cause LTTng to be initialised in the new process much earlier than is the case with just the dlopen()? 
-
-I played around with another script and dynamic library combination and found a similar problem occurred on CentOS 5.4, but when I used the same LTTng-UST and related libraries on Fedora 16, I didn't get the freeze.
-
-Finally, I noticed that commit ID b834deadbfa8a78ae1d00440fd91c41dfd351eba changed README to remove a note suggesting that dlopen() not be used.  It looks like the same change should be made to doc/man/lttng-ust.3, which still suggests that you not use dlopen().
-
-Thanks in advance,
-David
-
-----------------------------------------------------------------------
-The information contained in this transmission may be confidential. Any disclosure, copying, or further distribution of confidential information is not permitted unless such privilege is explicitly granted in writing by Quantum. Quantum reserves the right to have electronic communications, including email and attachments, sent across its networks filtered through anti virus and spam software programs and retain such messages in order to comply with applicable data security and retention requirements. Quantum is not responsible for the proper and complete transmission of the substance of this communication or for any delay in its receipt.
+Daniel U. Thibault
+R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) / Defence R&D=
+ Canada - Valcartier (DRDC Valcartier)
+Cyber s=E9curit=E9 pour les missions essentielles (CME) / Mission Critical =
+Cyber Security (MCCS)
+Protection des syst=E8mes et contremesures (PSC) / Systems Protection & Cou=
+ntermeasures (SPC)
+2459 route de la Bravoure
+Qu=E9bec, QC=A0 G3J 1X5
+CANADA
+Vox=A0: (418) 844-4000 x4245
+Fax=A0: (418) 844-4538
+NAC=A0: 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+Gouvernement du Canada=A0/ Government of Canada
+<http://www.valcartier.drdc-rddc.gc.ca/>
