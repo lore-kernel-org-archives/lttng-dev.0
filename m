@@ -1,54 +1,56 @@
-From: David Smith <dsmith@redhat.com>
-Subject: Re: [lttng-dev] Using lttng-ust's libringbuffer outside lttng-ust
-Date: Mon, 25 Feb 2013 13:07:06 -0600
-Message-ID: <512BB65A.9060604__38824.4417416447$1361823922$gmane$org@redhat.com>
-References: <511A9E5A.4010303@redhat.com> <CAGDH53=8kL0oXWZ0Xo73-1EviVbheU0t9fXuzSt05ZCSqVzH_w@mail.gmail.com>
+From: Yao Qi <yao@codesourcery.com>
+Subject: Iterate events in one packet
+Date: Wed, 27 Feb 2013 15:19:53 +0800
+Message-ID: <512DB399.6030807__22433.0138917596$1361949716$gmane$org@codesourcery.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-Return-path: <systemtap-return-20471-gls-systemtap=m.gmane.org@sourceware.org>
-In-Reply-To: <CAGDH53=8kL0oXWZ0Xo73-1EviVbheU0t9fXuzSt05ZCSqVzH_w@mail.gmail.com>
-List-Unsubscribe: <mailto:systemtap-unsubscribe-gls-systemtap=m.gmane.org@sourceware.org>
-List-Subscribe: <mailto:systemtap-subscribe@sourceware.org>
-List-Post: <mailto:systemtap@sourceware.org>
-List-Help: <mailto:systemtap-help@sourceware.org>, <http://sourceware.org/lists.html#faqs>
-Sender: systemtap-owner@sourceware.org
-To: Christian Babeux <christian.babeux@efficios.com>
-Cc: lttng-dev@lists.lttng.org, systemtap@sourceware.org
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Transfer-Encoding: base64
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from relay1.mentorg.com ([192.94.38.131])
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <Yao_Qi@mentor.com>) id 1UAbK7-0000bB-Ub
+	for lttng-dev@lists.lttng.org; Wed, 27 Feb 2013 02:21:08 -0500
+Received: from svr-orw-exc-10.mgc.mentorg.com ([147.34.98.58])
+	by relay1.mentorg.com with esmtp
+	id 1UAbK1-00015B-Q5 from Yao_Qi@mentor.com
+	for lttng-dev@lists.lttng.org; Tue, 26 Feb 2013 23:21:01 -0800
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On 02/15/2013 02:36 PM, Christian Babeux wrote:
-> Hi David,
-
-Thanks for the response.
-
->> The next question would be what is the best way of using libringbuffer
->> outside lttng-ust. One (not great) possibility would be to just copy the
->> code into systemtap. Of course the problem there is keeping the code up
->> to date with changes in lttng-ust. The next possibility would be to make
->> it a separate project (more like userspace-rcu).
-> 
-> Splitting libringbuffer from the UST tree right now would prove to be
-> quite a challenge. We would need to expose an API to the "clients" of
-> the ringbuffer. Currently there are two levels of abstraction that one
-> can use with the ringbuffer: a "high-level" one where you use a
-> predefined "client" with the associated performance degradation and a
-> "low-level" one where you know exactly which kind of "client" you are
-> using with the associated fast-path inlined.
-> 
-> We would need to discuss which level of abstraction we expose to the
-> user: a generic one or "N apis" for the different low-level "clients".
-
-In my head, I was planning on using the APIs defined in
-libringbuffer/*.h (like lib_ring_buffer_{reserve,commit,write} from
-frontend_api.h). But, perhaps we could back up a sec and you could
-describe a bit more the low-level vs. high-level levels of abstraction.
-Feel free to point me at some code.
-
--- 
-David Smith
-dsmith@redhat.com
-Red Hat
-http://www.redhat.com
-256.217.0141 (direct)
-256.837.0057 (fax)
+SGksCldoZW4gSSBnZW5lcmF0ZSBDVEYsIEkgbG9naWNhbGx5IGdyb3VwIGV2ZW50cyBhbmQgcHV0
+IHRoZW0gaW50byBvbmUgCnBhY2tldC4gIFdoZW4gcmVhZGluZyB0aGUgQ1RGIGRhdGEgKHcvIGxp
+YmJhYmVsdHJhY2UpLCBjYW4gSSBpdGVyYXRlIApvdmVyIGV2ZW50cyBpbiBvbmUgcGFja2V0IChh
+bmQgc3RvcCB3aGVuIGl0ZXJhdG9yIGdvZXMgdG8gdGhlIG5leHQgcGFja2V0KT8KCkZvciBleGFt
+cGxlLAoKc3RyZWFtIHsKICAgICAgICAgcGFja2V0LmNvbnRleHQgOj0gc3RydWN0IHsKICAgICAg
+ICAgICAgICAgICB1aW50MzJfdCBjb250ZW50X3NpemU7CiAgICAgICAgICAgICAgICAgdWludDMy
+X3QgcGFja2V0X3NpemU7CiAgICAgICAgIH07CiAgICAgICAgIGV2ZW50LmhlYWRlciA6PSBzdHJ1
+Y3QgewogICAgICAgICAgICAgICAgIHVpbnQzMl90IGlkOwogICAgICAgICB9Owp9OwoKZXZlbnQg
+ewogICAgICAgICBuYW1lID0gInRzdiI7CiAgICAgICAgIGlkID0gMTsKICAgICAgICAgZmllbGRz
+IDo9IHN0cnVjdCB7CiAgICAgICAgICAgICAgICAgdWludDY0X3QgdmFsOwogICAgICAgICAgICAg
+ICAgIHVpbnQzMl90IG51bTsKICAgICAgICAgfTsKfTsKCmV2ZW50IHsKICAgICAgICAgbmFtZSA9
+ICJyZWdpc3RlciI7CiAgICAgICAgIGlkID0gMDsKICAgICAgICAgZmllbGRzIDo9IHN0cnVjdCB7
+CiAgICAgICAgICAgICAgICAgdWludDhfdCBjb250ZW50c1s0NDBdOwogICAgICAgICB9Owp9OwoK
+d2UgaGF2ZSBtdWx0aXBsZSBldmVudHMgYW5kIHB1dCB0aGVtIGludG8gZGlmZmVyZW50IHBhY2tl
+dHMgYWNjb3JkaW5nIHRvIApteSBsb2dpYywKCnBhY2tldCAxOiB0c3YxLCByZWdpc3RlcjEsCnBh
+Y2tldCAyOiB0c3YyLCB0c3YzLCByZWdpc3RlcjIKCmZyb20gaXRlcmF0b3IncyBwb2ludCBvZiB2
+aWV3LCBwYWNrZXQgYm91bmRhcnkgaXMgaW52aXNpYmxlIGFuZCBpdGVyYXRvciAKd2lsbCBnbyB0
+aHJvdWdoIHRoZW0gbGlrZSAidHN2MSwgcmVnaXN0ZXIxLCB0c3YyLCB0c3YzLCByZWdpc3RlcjIi
+LiAgSW4gCm9yZGVyIHRvIGlkZW50aWZ5IHRoZSBib3VuZGFyeSBvZiBwYWNrZXQgaW4gdGhlIGl0
+ZXJhdG9yLCBJIGhhdmUgdG8gCmNyZWF0ZSBhIGV2ZW50ICJtYXJrZXIiIGFuZCBwdXQgaXQgYXQg
+dGhlIGZpcnN0IGV2ZW50IG9mIG9uZSBwYWNrZXQuCgpldmVudCB7CiAgICAgICAgIG5hbWUgPSAi
+bWFya2VyIjsKICAgICAgICAgaWQgPSAyOwogICAgICAgICBmaWVsZHMgOj0gc3RydWN0IHsKICAg
+ICAgICAgfTsKfTsKCnBhY2tldCAxOiBtYXJrZXIxLCB0c3YxLCByZWdpc3RlcjEsCnBhY2tldCAy
+OiBtYXJrZXIyLCB0c3YyLCB0c3YzLCByZWdpc3RlcjIKCldlJ2xsIHN0b3AgdGhlIGl0ZXJhdGlv
+biBvbmNlIHdlIHNlZSAibWFya2VyIiBldmVudC4gIEl0IHdvcmtzIGZvciBtZSwgCmJ1dCBJIGFt
+IHdvbmRlcmluZyB3ZSBjYW4gc29sdmUgdGhpcyBwcm9ibGVtIGluIGEgYmV0dGVyIHdheT8KCi0t
+IApZYW8gKOm9kOWwpykKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpo
+dHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
