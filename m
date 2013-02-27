@@ -1,20 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Iterate events in one packet
-Date: Wed, 27 Feb 2013 10:15:35 -0500
-Message-ID: <20130227151535.GB860__34993.6273218647$1361978185$gmane$org@Krystal>
-References: <512DB399.6030807@codesourcery.com> <20130227122347.GA4252@Krystal>
-	<512E01B9.8070007@codesourcery.com>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Subject: babeltrace local time?
+Date: Wed, 27 Feb 2013 22:02:50 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD01D433__27583.2156571143$1362002657$gmane$org@VAL-E-01.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UAijI-0004aR-SU
-	for lttng-dev@lists.lttng.org; Wed, 27 Feb 2013 10:15:36 -0500
-Content-Disposition: inline
-In-Reply-To: <512E01B9.8070007@codesourcery.com>
+	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1UAp5u-0007qR-EJ
+	for lttng-dev@lists.lttng.org; Wed, 27 Feb 2013 17:03:22 -0500
+Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,42 +19,28 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Yao Qi <yao@codesourcery.com>
-Cc: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+Cc: "Painchaud, Frederic" <Frederic.Painchaud@drdc-rddc.gc.ca>, "Couture,
+	Mario" <Mario.Couture@drdc-rddc.gc.ca>
 List-Id: lttng-dev@lists.lttng.org
 
-KiBZYW8gUWkgKHlhb0Bjb2Rlc291cmNlcnkuY29tKSB3cm90ZToKPiBPbiAwMi8yNy8yMDEzIDA4
-OjIzIFBNLCBNYXRoaWV1IERlc25veWVycyB3cm90ZToKPj4gSSdtIGN1cmlvdXMgdG8gc2VlIHdo
-YXQgeW91IGFyZSB0cnlpbmcgdG8gYWNoaWV2ZSBieSBncm91cGluZyBldmVudHMKPj4gdGhpcyB3
-YXkgPwo+Cj4gV2UgcHJvcG9zZSB0byBHREIgY29tbXVuaXR5IHRvIHNhdmUgR0RCIHRyYWNlIGRh
-dGEgaW50byBDVEYgYW5kIHJlYWQgQ1RGICAKPiBkYXRhIHNhdmVkIGJ5IEdEQiAodmlhIGxpYmJh
-YmVsdHJhY2UpLgo+Cj4gICBbUEFUQ0ggMC81LCAybmQgdHJ5XSBDVEYgU3VwcG9ydAo+ICAgaHR0
-cDovL3NvdXJjZXdhcmUub3JnL21sL2dkYi1wYXRjaGVzLzIwMTMtMDIvbXNnMDA2NjkuaHRtbAo+
-Cj4gVGhlIEdEQiB0cmFjZSBkYXRhIGlzIGNvbXBvc2VkIGJ5IHNldmVyYWwgdHJhY2UgZnJhbWVz
-LCBhbmQgZWFjaCB0cmFjZSAgCj4gZnJhbWUgaXMgY29tcG9zZWQgYnkgc2V2ZXJhbCBibG9ja3Mu
-ICBXaGVuIHNhdmluZyBHREIgdHJhY2UgZGF0YSBpbnRvICAKPiBDVEYsIHdlIHNhdmUgdGhlIGJs
-b2NrIGFzIGN0ZiBldmVudCwgYW5kIHNhdmUgdGhlc2UgZXZlbnRzIGJlbG9uZyB0byB0aGUgIAo+
-IHNhbWUgdHJhY2UgZnJhbWUgaW50byBvbmUgcGFja2V0LCBzbyB0aGF0IHRoZSBpbmZvcm1hdGlv
-biBvZiB0aGUgdHJhY2UgIAo+IGZyYW1lIGNhbiBiZSBzYXZlZCBpbnRvIHBhY2tldCBjb250ZXh0
-Lgo+Cj4gV2hlbiByZWFkaW5nIENURiBkYXRhLCB1c3VhbGx5IHdlIHdpbGwgbG9vayBmb3IgZXZl
-bnRzIGluIGN1cnJlbnQgdHJhY2UgIAo+IGZyYW1lIChwYWNrZXQpLCBzbyB0aGF0IEkgYW0gYXNr
-aW5nIHRoaXMgcXVlc3Rpb24sIHRvIHNlZSBpZiBpdCBpcyAgCj4gZWFzaWVyIHRvIGRvIGl0ZXJh
-dGlvbiBpbiBvbmUgcGFja2V0LgoKWW91IG1pZ2h0IHdhbnQgdG8gY29uc2lkZXIgYW4gYWx0ZXJu
-YXRpdmUgZGVzaWduOgoKY29uc2lkZXIgdGhpcyBtYXBwaW5nIGluc3RlYWQ6CgpvbmUgZXZlbnQg
-PSBvbmUgdHJhY2UgZnJhbWUKdGhlIGV2ZW50ICJwYXlsb2FkIiB3b3VsZCBiZSBhIHNlcXVlbmNl
-IG9mIGJsb2Nrcy4KRWFjaCBibG9jayBjYW4gY29udGFpbiBpdHMgb3duIGluZm9ybWF0aW9uLiBZ
-b3UgY291bGQgdXNlIHRoZSAidmFyaWFudCIKdHlwZSBpZiB5b3UgbmVlZCBkaWZmZXJlbnQgdHlw
-ZXMgZm9yIGVhY2ggYmxvY2sgd2l0aGluIGEgdHJhY2UgZnJhbWUuCgpUaGlzIHdvdWxkIGZpdCBt
-b3JlIG5pY2VseSB3aXRoIENURi4KClRoYW5rcywKCk1hdGhpZXUKCgo+Cj4+Cj4+IFlvdSBrbm93
-IHlvdSBjb3VsZCBzaW1wbHkgcHV0IGVhY2ggbG9naWNhbCBldmVudCBncm91cCBpbnRvIGEgZGlm
-ZmVyZW50Cj4+ICJjaGFubmVsIiB3aXRoaW4gdGhlIHNhbWUgdHJhY2UsIHJpZ2h0ID8KPgo+IENh
-biB5b3UgZWxhYm9yYXRlIGEgbGl0dGxlIHBsZWFzZT8gIEkgYW0gcXVpdGUgbmV3IHRvIENURiBh
-bmQgYmFiZWx0cmFjZS4KPgo+Pgo+PiBUaGUgbGV2ZWwgb2YgYWJzdHJhY3Rpb24gYXQgd2hpY2gg
-dGhlIGJhYmVsdHJhY2UgaXRlcmF0b3IgcHJlc2VudHMgdGhlCj4+IHRyYWNlIGRvZXMgbm90IGV4
-cG9zZSBkZXRhaWxzIGFib3V0IHBhY2tldCBzd2l0Y2hpbmcuIEknZCBuZWVkIG1vcmUKPj4gaW5m
-b3JtYXRpb24gdG8gdW5kZXJzdGFuZCB0aGUgdmFsdWUgb2YgeW91ciB1c2UtY2FzZS4KPgo+IEhv
-cGUgbXkgZGVzY3JpcHRpb24gYWJvdmUgaXMgY2xlYXIuCj4KPiAtLSAKPiBZYW8gKOm9kOWwpykK
-Ci0tIApNYXRoaWV1IERlc25veWVycwpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3Mu
-Y29tCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRu
-Zy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3Rz
-Lmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+   When babeltrace prints out timestamps in "local time" (the default), is =
+that the trace's local time (i.e. the local time of the system that was tra=
+ced) or is it the local time of the system running babeltrace?  I suspect t=
+he former but I want to be sure.
+
+Daniel U. Thibault
+R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) / Defence R&D=
+ Canada - Valcartier (DRDC Valcartier)
+Cyber s=E9curit=E9 pour les missions essentielles (CME) / Mission Critical =
+Cyber Security (MCCS)
+Protection des syst=E8mes et contremesures (PSC) / Systems Protection & Cou=
+ntermeasures (SPC)
+2459 route de la Bravoure
+Qu=E9bec, QC=A0 G3J 1X5
+CANADA
+Vox=A0: (418) 844-4000 x4245
+Fax=A0: (418) 844-4538
+NAC=A0: 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+Gouvernement du Canada=A0/ Government of Canada
+<http://www.valcartier.drdc-rddc.gc.ca/>
