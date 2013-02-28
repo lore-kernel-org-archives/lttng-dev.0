@@ -1,18 +1,20 @@
 From: Christian Babeux <christian.babeux@efficios.com>
-Subject: [PATCH lttng-tools] Fix: Memory leak on error paths of
-	relay_add_stream
-Date: Thu, 28 Feb 2013 15:48:24 -0500
-Message-ID: <1362084510-10072-1-git-send-email-christian.babeux__5439.15466773814$1362084580$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools] Fix: Memory leaks on error paths
+	when exporting consumerd libdir in env
+Date: Thu, 28 Feb 2013 15:48:26 -0500
+Message-ID: <1362084510-10072-3-git-send-email-christian.babeux__49396.5557463982$1362084581$gmane$org@efficios.com>
+References: <1362084510-10072-1-git-send-email-christian.babeux@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f178.google.com ([209.85.223.178])
+Received: from mail-ie0-f181.google.com ([209.85.223.181])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <christian.babeux@0x80.ca>) id 1UBAPF-0001o7-9Y
-	for lttng-dev@lists.lttng.org; Thu, 28 Feb 2013 15:48:45 -0500
-Received: by mail-ie0-f178.google.com with SMTP id c13so2618305ieb.23
-	for <lttng-dev@lists.lttng.org>; Thu, 28 Feb 2013 12:48:39 -0800 (PST)
+	(envelope-from <christian.babeux@0x80.ca>) id 1UBAPP-0001oh-9s
+	for lttng-dev@lists.lttng.org; Thu, 28 Feb 2013 15:48:55 -0500
+Received: by mail-ie0-f181.google.com with SMTP id 17so2647712iea.26
+	for <lttng-dev@lists.lttng.org>; Thu, 28 Feb 2013 12:48:49 -0800 (PST)
+In-Reply-To: <1362084510-10072-1-git-send-email-christian.babeux@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -25,48 +27,31 @@ To: dgoulet@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On error paths the memory allocated for stream is never freed.
-
-Also, fix undefined behavior on asprintf alloc failure. According to
-asprintf(3), the content of the pointer passed to it is undefined if
-an alloc failure occurs, so we could end up freeing a pointer in an
-undefined state. Force its value to NULL.
 
 Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
 ---
- src/bin/lttng-relayd/main.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ src/bin/lttng-sessiond/main.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/src/bin/lttng-relayd/main.c b/src/bin/lttng-relayd/main.c
-index 4f9d742..00b7ea3 100644
---- a/src/bin/lttng-relayd/main.c
-+++ b/src/bin/lttng-relayd/main.c
-@@ -941,6 +941,7 @@ int relay_add_stream(struct lttcomm_relayd_hdr *recv_hdr,
- 	ret = asprintf(&path, "%s/%s", root_path, stream_info.channel_name);
- 	if (ret < 0) {
- 		PERROR("asprintf stream path");
-+		path = NULL;
- 		goto end;
- 	}
- 
-@@ -963,13 +964,17 @@ int relay_add_stream(struct lttcomm_relayd_hdr *recv_hdr,
- end:
- 	free(path);
- 	free(root_path);
-+
-+	reply.handle = htobe64(stream->stream_handle);
- 	/* send the session id to the client or a negative return code on error */
- 	if (ret < 0) {
- 		reply.ret_code = htobe32(LTTNG_ERR_UNK);
-+		/* stream was not properly added to the ht, so free it */
-+		free(stream);
- 	} else {
- 		reply.ret_code = htobe32(LTTNG_OK);
- 	}
--	reply.handle = htobe64(stream->stream_handle);
-+
- 	send_ret = cmd->sock->ops->sendmsg(cmd->sock, &reply,
- 			sizeof(struct lttcomm_relayd_status_stream), 0);
- 	if (send_ret < 0) {
+diff --git a/src/bin/lttng-sessiond/main.c b/src/bin/lttng-sessiond/main.c
+index e9529f1..82f0a84 100644
+--- a/src/bin/lttng-sessiond/main.c
++++ b/src/bin/lttng-sessiond/main.c
+@@ -1798,6 +1798,7 @@ static pid_t spawn_consumerd(struct consumer_data *consumer_data)
+ 				ret = putenv(tmpnew);
+ 				if (ret) {
+ 					ret = -errno;
++					free(tmpnew);
+ 					goto error;
+ 				}
+ 			}
+@@ -1842,6 +1843,7 @@ static pid_t spawn_consumerd(struct consumer_data *consumer_data)
+ 				ret = putenv(tmpnew);
+ 				if (ret) {
+ 					ret = -errno;
++					free(tmpnew);
+ 					goto error;
+ 				}
+ 			}
 -- 
 1.8.1.3
