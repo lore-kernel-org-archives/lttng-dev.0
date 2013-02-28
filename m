@@ -1,20 +1,20 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH babeltrace] Fix: Undefined behavior of
-	double free on	strlist in get_names_args
-Date: Thu, 28 Feb 2013 17:54:29 -0500
-Message-ID: <20130228225429.GA915__30337.478957563$1362092119$gmane$org@Krystal>
-References: <1362084708-10329-1-git-send-email-christian.babeux@efficios.com>
+From: Christian Babeux <christian.babeux@efficios.com>
+Subject: [PATCH babeltrace] Fix: Undefined behavior of double
+	free on strlist in get_names_args
+Date: Thu, 28 Feb 2013 18:13:26 -0500
+Message-ID: <1362093206-12791-1-git-send-email-christian.babeux__18912.7974249006$1362093263$gmane$org@efficios.com>
+References: <20130228225429.GA915@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from mail-ie0-f181.google.com ([209.85.223.181])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UBCMw-0002sx-OH
-	for lttng-dev@lists.lttng.org; Thu, 28 Feb 2013 17:54:30 -0500
-Content-Disposition: inline
-In-Reply-To: <1362084708-10329-1-git-send-email-christian.babeux@efficios.com>
+	(envelope-from <christian.babeux@0x80.ca>) id 1UBCfT-00033U-Oh
+	for lttng-dev@lists.lttng.org; Thu, 28 Feb 2013 18:13:39 -0500
+Received: by mail-ie0-f181.google.com with SMTP id 17so2774572iea.40
+	for <lttng-dev@lists.lttng.org>; Thu, 28 Feb 2013 15:13:34 -0800 (PST)
+In-Reply-To: <20130228225429.GA915@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,47 +23,27 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Christian Babeux <christian.babeux@efficios.com>
+To: mathieu.desnoyers@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Christian Babeux (christian.babeux@efficios.com) wrote:
-> 
-> Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
-> ---
->  converter/babeltrace.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/converter/babeltrace.c b/converter/babeltrace.c
-> index 20ded00..28c63cb 100644
-> --- a/converter/babeltrace.c
-> +++ b/converter/babeltrace.c
-> @@ -205,6 +205,7 @@ static int get_names_args(poptContext *pc)
->  		} else {
->  			fprintf(stderr, "[error] unknown field name type %s\n", str);
->  			free(strlist);
-> +			strlist = NULL;
 
-could we just remove the free(strlist), and just have:
+Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
+---
+ converter/babeltrace.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-   ret = -EINVAL;
-   goto end;
-
-instead ?
-
-Thanks,
-
-Mathieu
-
->  			ret = -EINVAL;
->  			goto end;
->  		}
-> -- 
-> 1.8.1.3
-> 
-
-
+diff --git a/converter/babeltrace.c b/converter/babeltrace.c
+index 20ded00..ed19fa8 100644
+--- a/converter/babeltrace.c
++++ b/converter/babeltrace.c
+@@ -204,7 +204,6 @@ static int get_names_args(poptContext *pc)
+ 			opt_payload_field_names = 0;
+ 		} else {
+ 			fprintf(stderr, "[error] unknown field name type %s\n", str);
+-			free(strlist);
+ 			ret = -EINVAL;
+ 			goto end;
+ 		}
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+1.8.1.3
