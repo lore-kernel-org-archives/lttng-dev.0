@@ -1,19 +1,19 @@
 From: Christian Babeux <christian.babeux@efficios.com>
-Subject: [PATCH lttng-tools] Fix: Memory leaks on error paths
-	when exporting consumerd libdir in env
-Date: Thu, 28 Feb 2013 15:48:26 -0500
-Message-ID: <1362084510-10072-3-git-send-email-christian.babeux__49396.5557463982$1362084581$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools] Fix: Memory leaks on unknown
+	hashtable type error handling
+Date: Thu, 28 Feb 2013 15:48:27 -0500
+Message-ID: <1362084510-10072-4-git-send-email-christian.babeux__23818.4628346518$1362084591$gmane$org@efficios.com>
 References: <1362084510-10072-1-git-send-email-christian.babeux@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f181.google.com ([209.85.223.181])
+Received: from mail-ie0-f182.google.com ([209.85.223.182])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <christian.babeux@0x80.ca>) id 1UBAPP-0001oh-9s
-	for lttng-dev@lists.lttng.org; Thu, 28 Feb 2013 15:48:55 -0500
-Received: by mail-ie0-f181.google.com with SMTP id 17so2647712iea.26
-	for <lttng-dev@lists.lttng.org>; Thu, 28 Feb 2013 12:48:49 -0800 (PST)
+	(envelope-from <christian.babeux@0x80.ca>) id 1UBAPV-0001pi-Cp
+	for lttng-dev@lists.lttng.org; Thu, 28 Feb 2013 15:49:01 -0500
+Received: by mail-ie0-f182.google.com with SMTP id k14so2653718iea.41
+	for <lttng-dev@lists.lttng.org>; Thu, 28 Feb 2013 12:48:56 -0800 (PST)
 In-Reply-To: <1362084510-10072-1-git-send-email-christian.babeux@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -30,28 +30,20 @@ List-Id: lttng-dev@lists.lttng.org
 
 Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
 ---
- src/bin/lttng-sessiond/main.c | 2 ++
- 1 file changed, 2 insertions(+)
+ src/common/hashtable/hashtable.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/src/bin/lttng-sessiond/main.c b/src/bin/lttng-sessiond/main.c
-index e9529f1..82f0a84 100644
---- a/src/bin/lttng-sessiond/main.c
-+++ b/src/bin/lttng-sessiond/main.c
-@@ -1798,6 +1798,7 @@ static pid_t spawn_consumerd(struct consumer_data *consumer_data)
- 				ret = putenv(tmpnew);
- 				if (ret) {
- 					ret = -errno;
-+					free(tmpnew);
- 					goto error;
- 				}
- 			}
-@@ -1842,6 +1843,7 @@ static pid_t spawn_consumerd(struct consumer_data *consumer_data)
- 				ret = putenv(tmpnew);
- 				if (ret) {
- 					ret = -errno;
-+					free(tmpnew);
- 					goto error;
- 				}
- 			}
+diff --git a/src/common/hashtable/hashtable.c b/src/common/hashtable/hashtable.c
+index 24d5797..5bf85e5 100644
+--- a/src/common/hashtable/hashtable.c
++++ b/src/common/hashtable/hashtable.c
+@@ -90,6 +90,7 @@ struct lttng_ht *lttng_ht_new(unsigned long size, int type)
+ 		break;
+ 	default:
+ 		ERR("Unknown lttng hashtable type %d", type);
++		lttng_ht_destroy(ht);
+ 		goto error;
+ 	}
+ 
 -- 
 1.8.1.3
