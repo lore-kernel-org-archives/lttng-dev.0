@@ -1,21 +1,20 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH babeltrace] Fix: Undefined behavior of
-	double free on	strlist in get_names_args
-Date: Thu, 28 Feb 2013 21:27:53 -0500
-Message-ID: <20130301022753.GA3321__3158.29501855678$1362104928$gmane$org@Krystal>
-References: <20130228225429.GA915@Krystal>
-	<1362093206-12791-1-git-send-email-christian.babeux@efficios.com>
+Subject: Re: [PATCH babeltrace] Fix: Ensure the specified
+	input	format is CTF
+Date: Thu, 28 Feb 2013 21:28:51 -0500
+Message-ID: <20130301022851.GB3321__41640.1941948154$1362104973$gmane$org@Krystal>
+References: <1362094212-27792-1-git-send-email-jeremie.galarneau@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UBFhU-0004ZP-NR
-	for lttng-dev@lists.lttng.org; Thu, 28 Feb 2013 21:27:56 -0500
+	(envelope-from <compudj@mail.openrapids.net>) id 1UBFiO-0004b5-9N
+	for lttng-dev@lists.lttng.org; Thu, 28 Feb 2013 21:28:52 -0500
 Content-Disposition: inline
-In-Reply-To: <1362093206-12791-1-git-send-email-christian.babeux@efficios.com>
+In-Reply-To: <1362094212-27792-1-git-send-email-jeremie.galarneau@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,39 +23,76 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Christian Babeux <christian.babeux@efficios.com>
+To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Christian Babeux (christian.babeux@efficios.com) wrote:
-> 
-> Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
+* J=E9r=E9mie Galarneau (jeremie.galarneau@efficios.com) wrote:
+> Add a check to make sure the input trace format argument passed to the
+> babeltrace converter is "ctf" as it is currently the only one supported.
+> =
 
-Merged, thanks!
+> Add a note to this effect in the man page.
+> =
+
+> Fixes #462
+
+merged, thanks!
 
 Mathieu
 
+> =
+
+> Signed-off-by: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
 > ---
->  converter/babeltrace.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
+>  converter/babeltrace.c | 2 +-
+>  doc/babeltrace.1       | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> =
+
 > diff --git a/converter/babeltrace.c b/converter/babeltrace.c
-> index 20ded00..ed19fa8 100644
+> index 20ded00..6847248 100644
 > --- a/converter/babeltrace.c
 > +++ b/converter/babeltrace.c
-> @@ -204,7 +204,6 @@ static int get_names_args(poptContext *pc)
->  			opt_payload_field_names = 0;
->  		} else {
->  			fprintf(stderr, "[error] unknown field name type %s\n", str);
-> -			free(strlist);
->  			ret = -EINVAL;
->  			goto end;
+> @@ -607,7 +607,7 @@ int main(int argc, char **argv)
 >  		}
-> -- 
-> 1.8.1.3
-> 
+>  	}
+>  	fmt_read =3D bt_lookup_format(g_quark_from_static_string(opt_input_form=
+at));
+> -	if (!fmt_read) {
+> +	if (!fmt_read || fmt_read->name !=3D g_quark_from_static_string("ctf"))=
+ {
+>  		fprintf(stderr, "[error] Format \"%s\" is not supported.\n\n",
+>  			opt_input_format);
+>  		partial_error =3D 1;
+> diff --git a/doc/babeltrace.1 b/doc/babeltrace.1
+> index 3196299..78e9055 100644
+> --- a/doc/babeltrace.1
+> +++ b/doc/babeltrace.1
+> @@ -29,7 +29,7 @@ Input trace FILE(s) or directory(ies)
+>  Output trace path (default: stdout)
+>  .TP
+>  .BR "-i, --input-format FORMAT"
+> -Input trace format (default: ctf)
+> +Input trace format (default: ctf). CTF is currently the only supported i=
+nput format.
+>  .TP
+>  .BR "-o, --output-format FORMAT"
+>  Output trace format (default: text)
+> -- =
 
--- 
+> 1.8.1.4
+> =
+
+> =
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- =
+
 Mathieu Desnoyers
 EfficiOS Inc.
 http://www.efficios.com
