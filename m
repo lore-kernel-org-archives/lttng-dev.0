@@ -1,21 +1,21 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Package liburcu fix for kfreebsd-amd64
-	and	kfreebsd-i386
-Date: Sun, 3 Mar 2013 02:05:49 -0500
-Message-ID: <20130303070549.GA7315__25527.2422371947$1362294403$gmane$org@Krystal>
-References: <20130222134515.GA22069@Krystal>
-	<87bob1ftwa.fsf@mitoraj.siccegge.de>
+From: David Bryant <david.bryant@quantum.com>
+Subject: static versus dynamic linking
+	(TRACEPOINT_PROBE_DYNAMIC_LINKAGE)
+Date: Mon, 04 Mar 2013 10:21:45 +1030
+Message-ID: <5133E211.8070909__44246.2219311439$1362354766$gmane$org@quantum.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from [202.189.79.91] (helo=mail.rocksoft.com)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UC2zY-0003uC-Pz
-	for lttng-dev@lists.lttng.org; Sun, 03 Mar 2013 02:05:52 -0500
-Content-Disposition: inline
-In-Reply-To: <87bob1ftwa.fsf@mitoraj.siccegge.de>
+	(envelope-from <david.bryant@quantum.com>) id 1UCIh4-00038v-12
+	for lttng-dev@lists.lttng.org; Sun, 03 Mar 2013 18:51:50 -0500
+Received: from [192.168.1.107] (unknown [150.101.103.33])
+	(using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by mail.rocksoft.com (Postfix) with ESMTPSA id 5C8B9FFC032
+	for <lttng-dev@lists.lttng.org>; Mon,  4 Mar 2013 10:21:47 +1030 (CST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,35 +24,21 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Christoph Egger <christoph@debian.org>
-Cc: lttng-dev@lists.lttng.org, debian-bsd@lists.debian.org
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-* Christoph Egger (christoph@debian.org) wrote:
-> Mathieu Desnoyers <mathieu.desnoyers@efficios.com> writes:
-> > I noticed failures to build for the liburcu Debian package for
-> > kfreebsd-amd64 and kfreebsd-i386. I just pushed a commit into the master
-> > branch that should solve the build errors encountered. Would it be
-> > possible to test a build of Userspace RCU master branch against those
-> > two architectures ? If it works fine, then I could backport this commit
-> > into the stable-0.7 branch.
-> 
-> Where do I get this master branch? debcheckout doesn't. Also, please
-> direct this request to the porter list (Cc-ed) giving more people a
-> chance to repond.
+Hello,
 
-You can get it from:
+I'm trying to decide whether to use static or dynamic tracepoint probe 
+linkage. What are the factors that I should consider?
 
-git clone git://git.lttng.org/userspace-rcu.git
+Are there any licensing related issues? For example, is closed-source 
+software allowed to use static linking?
 
-or use the gitweb interface:
-https://git.lttng.org/?p=userspace-rcu.git;a=summary
+Is it purely an organisational feature, i.e., allowing a program to be 
+cleanly severed from its probes when they are not in use?
 
-Thanks!
+(This is a bit of a re-post, but I didn't get any response last time...)
 
-Mathieu
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Thanks,
+Dave
