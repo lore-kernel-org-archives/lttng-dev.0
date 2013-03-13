@@ -1,20 +1,20 @@
-From: =?UTF-8?q?Rapha=C3=ABl=20Beamonte?= <raphael.beamonte@gmail.com>
-Subject: [lttng-tools PATCH (correction)] Add a git version line
-	in LTTng versions compiled from git sources.
-Date: Tue, 12 Mar 2013 22:32:54 -0400
-Message-ID: <58d3a93c0b404dbea2dfa196630fae58594db08f.1363141970.git.raphael.beamonte__42209.4802641824$1363142041$gmane$org@gmail.com>
-References: <963e75cf2cdaa8ccf854f3d34932d5fc1f2c1103.1363140466.git.raphael.beamonte@gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [lttng-tools PATCH] Add a git version line in	LTTng
+	versions compiled from git sources.
+Date: Wed, 13 Mar 2013 09:26:33 -0400
+Message-ID: <20130313132633.GA15843__2244.11018793962$1363181247$gmane$org@Krystal>
+References: <513FA045.401@efficios.com>
+	<963e75cf2cdaa8ccf854f3d34932d5fc1f2c1103.1363140466.git.raphael.beamonte@gmail.com>
+	<513FE084.7030405@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============1823978760=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ia0-f181.google.com ([209.85.210.181])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <raphael.beamonte@gmail.com>) id 1UFbVA-0005rA-CM
-	for lttng-dev@lists.lttng.org; Tue, 12 Mar 2013 22:33:12 -0400
-Received: by mail-ia0-f181.google.com with SMTP id w33so526841iag.12
-	for <lttng-dev@lists.lttng.org>; Tue, 12 Mar 2013 19:33:07 -0700 (PDT)
-In-Reply-To: <963e75cf2cdaa8ccf854f3d34932d5fc1f2c1103.1363140466.git.raphael.beamonte@gmail.com>
+	(envelope-from <compudj@mail.openrapids.net>) id 1UFlhT-0002sr-2Z
+	for lttng-dev@lists.lttng.org; Wed, 13 Mar 2013 09:26:35 -0400
+In-Reply-To: <513FE084.7030405@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,44 +23,135 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: dgoulet@efficios.com
-Cc: =?UTF-8?q?Rapha=C3=ABl=20Beamonte?= <raphael.beamonte@gmail.com>, lttng-dev@lists.lttng.org
+To: =?iso-8859-1?Q?Rapha=EBl?= Beamonte <raphael.beamonte@gmail.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-U2lnbmVkLW9mZi1ieTogUmFwaGHDq2wgQmVhbW9udGUgPHJhcGhhZWwuYmVhbW9udGVAZ21haWwu
-Y29tPgotLS0KIHNyYy9iaW4vbHR0bmcvTWFrZWZpbGUuYW0gICAgICAgIHwgICAgNiArKysrKy0K
-IHNyYy9iaW4vbHR0bmcvY29tbWFuZHMvdmVyc2lvbi5jIHwgICAgMyArKysKIHNyYy9iaW4vbHR0
-bmcvbHR0bmcuYyAgICAgICAgICAgIHwgICAgNiArKysrKy0KIDMgZmlsZXMgY2hhbmdlZCwgMTMg
-aW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9zcmMvYmluL2x0dG5n
-L01ha2VmaWxlLmFtIGIvc3JjL2Jpbi9sdHRuZy9NYWtlZmlsZS5hbQppbmRleCAyMWVlYmFiLi4x
-YjEyMTliIDEwMDY0NAotLS0gYS9zcmMvYmluL2x0dG5nL01ha2VmaWxlLmFtCisrKyBiL3NyYy9i
-aW4vbHR0bmcvTWFrZWZpbGUuYW0KQEAgLTEsNSArMSw5IEBACitnaXRfdmVyc2lvbl9zdHJpbmc9
-JCQoZ2l0IGRlc2NyaWJlIC0tbG9uZyAtLWFsbCAyPi9kZXYvbnVsbCkKK2dpdF92ZXJzaW9uPSQk
-KHRlc3QgLW4gIiR7Z2l0X3ZlcnNpb25fc3RyaW5nfSIgJiYgZWNobyAiLURHSVRfVkVSU0lPTj1c
-IiR7Z2l0X3ZlcnNpb25fc3RyaW5nfVwiIikKKwogQU1fQ1BQRkxBR1MgPSAtSSQodG9wX3NyY2Rp
-cikvaW5jbHVkZSAtSSQodG9wX3NyY2Rpcikvc3JjIFwKLQkJCSAgLURJTlNUQUxMX0JJTl9QQVRI
-PVwiIiQoYmluZGlyKSJcIgorCQkJICAtRElOU1RBTExfQklOX1BBVEg9XCIiJChiaW5kaXIpIlwi
-IFwKKwkJCSAgJHtnaXRfdmVyc2lvbn0KIAogYmluX1BST0dSQU1TID0gbHR0bmcKIApkaWZmIC0t
-Z2l0IGEvc3JjL2Jpbi9sdHRuZy9jb21tYW5kcy92ZXJzaW9uLmMgYi9zcmMvYmluL2x0dG5nL2Nv
-bW1hbmRzL3ZlcnNpb24uYwppbmRleCA3ZjY5ZGUzLi42YjMxNWM1IDEwMDY0NAotLS0gYS9zcmMv
-YmluL2x0dG5nL2NvbW1hbmRzL3ZlcnNpb24uYworKysgYi9zcmMvYmluL2x0dG5nL2NvbW1hbmRz
-L3ZlcnNpb24uYwpAQCAtNzksNiArNzksOSBAQCBpbnQgY21kX3ZlcnNpb24oaW50IGFyZ2MsIGNv
-bnN0IGNoYXIgKiphcmd2KQogCX0KIAogCU1TRygibHR0bmcgdmVyc2lvbiAiIFZFUlNJT04gIiAt
-ICIgVkVSU0lPTl9OQU1FKTsKKyNpZmRlZiBHSVRfVkVSU0lPTgorCU1TRygiR2l0IHZlcnNpb246
-ICIgR0lUX1ZFUlNJT04pOworI2VuZGlmCiAJTVNHKCJcbiIgVkVSU0lPTl9ERVNDUklQVElPTiAi
-XG4iKTsKIAlNU0coIldlYiBzaXRlOiBodHRwOi8vbHR0bmcub3JnIik7CiAJTVNHKCJcbmx0dG5n
-IGlzIGZyZWUgc29mdHdhcmUgYW5kIHVuZGVyIHRoZSBHUEwgbGljZW5zZSBhbmQgcGFydCBMR1BM
-Iik7CmRpZmYgLS1naXQgYS9zcmMvYmluL2x0dG5nL2x0dG5nLmMgYi9zcmMvYmluL2x0dG5nL2x0
-dG5nLmMKaW5kZXggODU2MjE0NC4uMjhmOGZlYyAxMDA2NDQKLS0tIGEvc3JjL2Jpbi9sdHRuZy9s
-dHRuZy5jCisrKyBiL3NyYy9iaW4vbHR0bmcvbHR0bmcuYwpAQCAtODEsNyArODEsMTEgQEAgc3Rh
-dGljIHN0cnVjdCBjbWRfc3RydWN0IGNvbW1hbmRzW10gPSAgewogCiBzdGF0aWMgdm9pZCB1c2Fn
-ZShGSUxFICpvZnApCiB7Ci0JZnByaW50ZihvZnAsICJMVFRuZyBUcmFjZSBDb250cm9sICIgVkVS
-U0lPTiIgLSAiIFZFUlNJT05fTkFNRSJcblxuIik7CisJZnByaW50ZihvZnAsICJMVFRuZyBUcmFj
-ZSBDb250cm9sICIgVkVSU0lPTiIgLSAiIFZFUlNJT05fTkFNRSJcbiIpOworI2lmZGVmIEdJVF9W
-RVJTSU9OCisJZnByaW50ZihvZnAsICJHaXQgdmVyc2lvbjogIiBHSVRfVkVSU0lPTiJcbiIpOwor
-I2VuZGlmCisJZnByaW50ZihvZnAsICJcbiIpOwogCWZwcmludGYob2ZwLCAidXNhZ2U6IGx0dG5n
-IFtPUFRJT05TXSA8Q09NTUFORD4gWzxBUkdTPl1cbiIpOwogCWZwcmludGYob2ZwLCAiXG4iKTsK
-IAlmcHJpbnRmKG9mcCwgIk9wdGlvbnM6XG4iKTsKLS0gCjEuNy4xMC40CgoKX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlz
-dApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJp
-bi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+
+--===============1823978760==
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="r5Pyd7+fXNt84Ff3"
+Content-Disposition: inline
+
+
+--r5Pyd7+fXNt84Ff3
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+* Rapha=EBl Beamonte (raphael.beamonte@gmail.com) wrote:
+> Hello,
+>=20
+> This version adds a line "Git version" to "LTTng --help". The value of
+> this line is calculated during "make" and then defined in a GIT_VERSION
+> macro.
+> It also works for versions without Git as it will just not define the
+> GIT_VERSION value. The black point is that the "test" is made each time
+> we "make" the tool. This can be corrected but I'm not sure it's
+> necessary as this one is well working.
+>=20
+> If this patch is ok for you, I can apply an identical patch to UST and
+> babeltrace.
+
+Does the entire project needs to be rebuilt at every commit then, or
+just one or two files ?
+
+Thanks,
+
+Mathieu
+
+>=20
+> Rapha=EBl
+>=20
+> On 2013-03-12 22:07, Rapha=EBl Beamonte wrote:
+> > Signed-off-by: Rapha=EBl Beamonte <raphael.beamonte@gmail.com>
+> > ---
+> >  src/bin/lttng/Makefile.am |    6 +++++-
+> >  src/bin/lttng/lttng.c     |    6 +++++-
+> >  2 files changed, 10 insertions(+), 2 deletions(-)
+> >=20
+> > diff --git a/src/bin/lttng/Makefile.am b/src/bin/lttng/Makefile.am
+> > index 21eebab..1b1219b 100644
+> > --- a/src/bin/lttng/Makefile.am
+> > +++ b/src/bin/lttng/Makefile.am
+> > @@ -1,5 +1,9 @@
+> > +git_version_string=3D$$(git describe --long --all 2>/dev/null)
+> > +git_version=3D$$(test -n "${git_version_string}" && echo "-DGIT_VERSIO=
+N=3D\"${git_version_string}\"")
+> > +
+> >  AM_CPPFLAGS =3D -I$(top_srcdir)/include -I$(top_srcdir)/src \
+> > -			  -DINSTALL_BIN_PATH=3D\""$(bindir)"\"
+> > +			  -DINSTALL_BIN_PATH=3D\""$(bindir)"\" \
+> > +			  ${git_version}
+> > =20
+> >  bin_PROGRAMS =3D lttng
+> > =20
+> > diff --git a/src/bin/lttng/lttng.c b/src/bin/lttng/lttng.c
+> > index 8562144..28f8fec 100644
+> > --- a/src/bin/lttng/lttng.c
+> > +++ b/src/bin/lttng/lttng.c
+> > @@ -81,7 +81,11 @@ static struct cmd_struct commands[] =3D  {
+> > =20
+> >  static void usage(FILE *ofp)
+> >  {
+> > -	fprintf(ofp, "LTTng Trace Control " VERSION" - " VERSION_NAME"\n\n");
+> > +	fprintf(ofp, "LTTng Trace Control " VERSION" - " VERSION_NAME"\n");
+> > +#ifdef GIT_VERSION
+> > +	fprintf(ofp, "Git version: " GIT_VERSION"\n");
+> > +#endif
+> > +	fprintf(ofp, "\n");
+> >  	fprintf(ofp, "usage: lttng [OPTIONS] <COMMAND> [<ARGS>]\n");
+> >  	fprintf(ofp, "\n");
+> >  	fprintf(ofp, "Options:\n");
+> >=20
+>=20
+>=20
+> --=20
+> Rapha=EBl Beamonte.
+> Information Systems and Telecommunications Engineer (UTT, France)
+> Specialized in Mobile Technologies and Embedded Systems
+> M.A.Sc. Student in Computer Engineering (Polytechnique Montr=E9al, Canada)
+> (33)-(0)6 10 97 27 25 - (1) 438 938-6879 - raphael.beamonte@gmail.com
+>=20
+
+
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+
+--=20
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
+
+--r5Pyd7+fXNt84Ff3
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+Content-Disposition: inline
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.9 (GNU/Linux)
+
+iD8DBQFRQH6JPyWo/juummgRAo4AAJ42/9VoccIU/1GbUJgjiLggVTnImACgsCxX
+DZfs62W4ksmKCgTYWOHyqqA=
+=jbGX
+-----END PGP SIGNATURE-----
+
+--r5Pyd7+fXNt84Ff3--
+
+
+--===============1823978760==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1823978760==--
