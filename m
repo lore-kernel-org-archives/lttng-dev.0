@@ -1,26 +1,21 @@
-From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH babeltrace 1/2] Added Python 3.0 or better
- requirement to the README file
-Date: Wed, 13 Mar 2013 10:51:31 -0400
-Message-ID: <CA+jJMxv-hAR8pYSvYcArXTgqTCPH_Ef2e-98ASfKfAOusWJJaA__38352.4819081233$1363186351$gmane$org@mail.gmail.com>
-References: <1359640251-6133-1-git-send-email-jeremie.galarneau@efficios.com>
-	<510BA252.3020604@gmail.com>
-	<CA+jJMxv0tcbzd0m27586h_D3fY9e6-0Nd8Mt=-iKUOkcCH6E5g@mail.gmail.com>
-	<513E9904.2050201@gmail.com>
-	<CA+jJMxu+RekfzeVVNqF2_FhKCYJ3SWeQsCL8ETPZzP7YtbiUoA@mail.gmail.com>
-	<20130313140610.GC16186@Krystal> <514089E7.1080705@gmail.com>
-	<20130313142313.GA16532@Krystal>
+From: Christian Babeux <christian.babeux@efficios.com>
+Subject: Re: [lttng-tools PATCH (correction)] Add a git version
+ line in LTTng versions compiled from git sources.
+Date: Wed, 13 Mar 2013 11:37:37 -0400
+Message-ID: <CAGDH53=MGLJ=jEzYYRbtFeBtZ+XGtj_5hU9A2KSMHd1-9inv9Q__47345.9698529497$1363189123$gmane$org@mail.gmail.com>
+References: <963e75cf2cdaa8ccf854f3d34932d5fc1f2c1103.1363140466.git.raphael.beamonte@gmail.com>
+	<58d3a93c0b404dbea2dfa196630fae58594db08f.1363141970.git.raphael.beamonte@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wg0-f45.google.com ([74.125.82.45])
+Received: from mail-vb0-f52.google.com ([209.85.212.52])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1UFn1l-0003cg-Vi
-	for lttng-dev@lists.lttng.org; Wed, 13 Mar 2013 10:51:38 -0400
-Received: by mail-wg0-f45.google.com with SMTP id dq12so1066009wgb.24
-	for <lttng-dev@lists.lttng.org>; Wed, 13 Mar 2013 07:51:32 -0700 (PDT)
-In-Reply-To: <20130313142313.GA16532@Krystal>
+	(envelope-from <christian.babeux@0x80.ca>) id 1UFnkN-000416-FG
+	for lttng-dev@lists.lttng.org; Wed, 13 Mar 2013 11:37:43 -0400
+Received: by mail-vb0-f52.google.com with SMTP id fa15so554393vbb.25
+	for <lttng-dev@lists.lttng.org>; Wed, 13 Mar 2013 08:37:37 -0700 (PDT)
+In-Reply-To: <58d3a93c0b404dbea2dfa196630fae58594db08f.1363141970.git.raphael.beamonte@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -29,107 +24,23 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: =?UTF-8?Q?Rapha=C3=ABl_Beamonte?= <raphael.beamonte@gmail.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-If I'm not mistaken, the scripts do work with Python 2.7. However,
-maintaining this compatibility comes with a significant development
-and testing overhead which I don't think brings that much value in the
-end.
-
-We're not talking about dropping support for tracing on RHEL here...
-we're talking about Python bindings which are completely optional and
-not part of the master branch. To me this is simply a case of handling
-a dependency just like any other... a package exists for most users,
-and RHEL users may have to install from source. I just don't see the
-problem.
-
-Anyway, RHEL/CentOS 6 does not even provide a Python 2.7 package...
-Only Python 2.6 is officially supported[1].
-
-J=E9r=E9mie
-
-[1] http://mirror.centos.org/centos/6/os/x86_64/Packages/
-
-On Wed, Mar 13, 2013 at 10:23 AM, Mathieu Desnoyers
-<mathieu.desnoyers@efficios.com> wrote:
-> * Yannick Brosseau (yannick.brosseau@gmail.com) wrote:
->> On 2013-03-13 10:06, Mathieu Desnoyers wrote:
->> > Hi Yannick,
->> >
->> > Please list all the distro and distro versions you care about that sti=
-ll
->> > ship with python 2.7 by default today, along with the time-frame for
->> > which they are going to still be supported by the vendors, and whether
->> > those distributions allow users to install python 3.0 side-by-side with
->> > 2.7 or not.
->> Just to name 2: Centos/RHEL 6.x and Debian.
->>
->> CentOS/RHEL does not have a Python 3 package
->>
->> Debian is default to 2.7, can install python3, but will potentially
->> breaks apps that rely on python 2 if I set python 3 to default.
->
-> For our python scripts to work, do we need python 3 to be default ?
->
-> About RHEL6, interesting links:
->
-> http://www.muktware.com/5203/google-says-red-hat-enterprise-linux-6-obsol=
-ete
->
-> Something to think about ;)
->
-> J=E9r=E9mie: how much extra effort would be required to support python 2.=
-7+
-> (only) as well as python 3 ?
->
-> Thanks,
->
-> Mathieu
->
->>
->>
->>
->> > Thanks,
->> >
->> > Mathieu
->> >
->> > * J=E9r=E9mie Galarneau (jeremie.galarneau@efficios.com) wrote:
->> >> Although I agree it can prove to be an inconvenience for some users,
->> >> most distributions provide a Python 3 package at this point.
->> >>
->> >> The reasoning is that since these bindings are still in development
->> >> and won't be integrated into the master branch for some time, the
->> >> effort needed to develop and test them while targeting two versions of
->> >> Python is hard to justify.
->> >>
->> >> On Mon, Mar 11, 2013 at 10:55 PM, Yannick Brosseau
->> >> <yannick.brosseau@gmail.com> wrote:
->> >>> On 2013-02-01 08:54, J=E9r=E9mie Galarneau wrote:
->> >>>> As for as I know, the bindings do work with Python 2.7.
->> >>>> However, we have decided to no longer explicitly support older
->> >>>> versions of Python in order to make the bindings, along with future
->> >>>> developments, easily maintainable.
->> >>>>
->> >>> My main concern is that 2.7 is still the default version for many li=
-nux
->> >>> distribution, so it might be early to drop 2.7 support.
->> >>>
->> >>> Yannick
->> >>>
->> >>>
->> >>> _______________________________________________
->> >>> lttng-dev mailing list
->> >>> lttng-dev@lists.lttng.org
->> >>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->> >> _______________________________________________
->> >> lttng-dev mailing list
->> >> lttng-dev@lists.lttng.org
->> >> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->>
->
-> --
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> http://www.efficios.com
+SGkgUmFwaGHDq2wsCgpJIHdvbmRlciBpZiB3ZSB3b3VsZCBsaWtlIHRvIGFsc28gaGF2ZSB0aGUg
+c2FtZSBpbmZvcm1hdGlvbiB3aGVuCnJ1bm5pbmcgbHR0bmctc2Vzc2lvbmQgLS12ZXJzaW9uPwoK
+PiAgICAgICAgIE1TRygibHR0bmcgdmVyc2lvbiAiIFZFUlNJT04gIiAtICIgVkVSU0lPTl9OQU1F
+KTsKPiArI2lmZGVmIEdJVF9WRVJTSU9OCj4gKyAgICAgICBNU0coIkdpdCB2ZXJzaW9uOiAiIEdJ
+VF9WRVJTSU9OKTsKPiArI2VuZGlmCj4gICAgICAgICBNU0coIlxuIiBWRVJTSU9OX0RFU0NSSVBU
+SU9OICJcbiIpOwo+ICAgICAgICAgTVNHKCJXZWIgc2l0ZTogaHR0cDovL2x0dG5nLm9yZyIpOwo+
+ICAgICAgICAgTVNHKCJcbmx0dG5nIGlzIGZyZWUgc29mdHdhcmUgYW5kIHVuZGVyIHRoZSBHUEwg
+bGljZW5zZSBhbmQgcGFydCBMR1BMIik7CgpXb3VsZCBpdCBiZSBwb3NzaWJsZSB0byBwdXQgc3Vj
+aCBhIGRlZmluZSBpbiBhIGhlYWRlciBmaWxlLCBwZXJoYXBzCmNvbmZpZy5oPyBJIHRoaW5rIHRo
+ZSBkb3duc2lkZSBvZiB0aGlzIGFwcHJvYWNoIGlzIHRoYXQgaXQgd291bGQKcmVxdWlyZSBhIHJl
+YnVpbGQgb2YgYWxsIGZpbGVzIHRoYXQgaW5jbHVkZSBjb25maWcuaCBlYWNoIHRpbWUgeW91cgpn
+aXQgaW5kZXggaXMgbW9kaWZpZWQgKGNvbW1pdCwgcHVsbCwgZXRjLiksIHRob3VnaCBJJ20gbm90
+IGVudGlyZWx5CnN1cmUgb2YgdGhpcy4KClRoYW5rcywKCkNocmlzdGlhbgoKX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlz
+dApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJp
+bi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
