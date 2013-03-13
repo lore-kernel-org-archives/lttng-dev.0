@@ -1,20 +1,20 @@
-From: =?UTF-8?q?Rapha=C3=ABl=20Beamonte?= <raphael.beamonte@gmail.com>
-Subject: [lttng-tools PATCH] Add a git version line in LTTng
-	versions compiled from git sources.
-Date: Tue, 12 Mar 2013 22:07:50 -0400
-Message-ID: <963e75cf2cdaa8ccf854f3d34932d5fc1f2c1103.1363140466.git.raphael.beamonte__10287.0060400621$1363140552$gmane$org@gmail.com>
+From: =?UTF-8?B?UmFwaGHDq2wgQmVhbW9udGU=?= <raphael.beamonte@gmail.com>
+Subject: Re: [lttng-tools PATCH] Add a git version line in LTTng
+ versions compiled from git sources.
+Date: Tue, 12 Mar 2013 22:12:20 -0400
+Message-ID: <513FE084.7030405__27719.8961507112$1363140812$gmane$org@gmail.com>
 References: <513FA045.401@efficios.com>
+	<963e75cf2cdaa8ccf854f3d34932d5fc1f2c1103.1363140466.git.raphael.beamonte@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============1840599116=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f169.google.com ([209.85.223.169])
+Received: from mail-ob0-f179.google.com ([209.85.214.179])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <raphael.beamonte@gmail.com>) id 1UFb76-0005eZ-VW
-	for lttng-dev@lists.lttng.org; Tue, 12 Mar 2013 22:08:21 -0400
-Received: by mail-ie0-f169.google.com with SMTP id 13so756714iea.14
-	for <lttng-dev@lists.lttng.org>; Tue, 12 Mar 2013 19:08:13 -0700 (PDT)
-In-Reply-To: <513FA045.401@efficios.com>
+	(envelope-from <raphael.beamonte@gmail.com>) id 1UFbBB-0005hT-Tp
+	for lttng-dev@lists.lttng.org; Tue, 12 Mar 2013 22:12:34 -0400
+Received: by mail-ob0-f179.google.com with SMTP id un3so536260obb.24
+	for <lttng-dev@lists.lttng.org>; Tue, 12 Mar 2013 19:12:28 -0700 (PDT)
+In-Reply-To: <963e75cf2cdaa8ccf854f3d34932d5fc1f2c1103.1363140466.git.raphael.beamonte@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,34 +23,124 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: dgoulet@efficios.com
-Cc: =?UTF-8?q?Rapha=C3=ABl=20Beamonte?= <raphael.beamonte@gmail.com>, lttng-dev@lists.lttng.org
+To: =?UTF-8?B?UmFwaGHDq2wgQmVhbW9udGU=?= <raphael.beamonte@gmail.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-U2lnbmVkLW9mZi1ieTogUmFwaGHDq2wgQmVhbW9udGUgPHJhcGhhZWwuYmVhbW9udGVAZ21haWwu
-Y29tPgotLS0KIHNyYy9iaW4vbHR0bmcvTWFrZWZpbGUuYW0gfCAgICA2ICsrKysrLQogc3JjL2Jp
-bi9sdHRuZy9sdHRuZy5jICAgICB8ICAgIDYgKysrKystCiAyIGZpbGVzIGNoYW5nZWQsIDEwIGlu
-c2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvc3JjL2Jpbi9sdHRuZy9N
-YWtlZmlsZS5hbSBiL3NyYy9iaW4vbHR0bmcvTWFrZWZpbGUuYW0KaW5kZXggMjFlZWJhYi4uMWIx
-MjE5YiAxMDA2NDQKLS0tIGEvc3JjL2Jpbi9sdHRuZy9NYWtlZmlsZS5hbQorKysgYi9zcmMvYmlu
-L2x0dG5nL01ha2VmaWxlLmFtCkBAIC0xLDUgKzEsOSBAQAorZ2l0X3ZlcnNpb25fc3RyaW5nPSQk
-KGdpdCBkZXNjcmliZSAtLWxvbmcgLS1hbGwgMj4vZGV2L251bGwpCitnaXRfdmVyc2lvbj0kJCh0
-ZXN0IC1uICIke2dpdF92ZXJzaW9uX3N0cmluZ30iICYmIGVjaG8gIi1ER0lUX1ZFUlNJT049XCIk
-e2dpdF92ZXJzaW9uX3N0cmluZ31cIiIpCisKIEFNX0NQUEZMQUdTID0gLUkkKHRvcF9zcmNkaXIp
-L2luY2x1ZGUgLUkkKHRvcF9zcmNkaXIpL3NyYyBcCi0JCQkgIC1ESU5TVEFMTF9CSU5fUEFUSD1c
-IiIkKGJpbmRpcikiXCIKKwkJCSAgLURJTlNUQUxMX0JJTl9QQVRIPVwiIiQoYmluZGlyKSJcIiBc
-CisJCQkgICR7Z2l0X3ZlcnNpb259CiAKIGJpbl9QUk9HUkFNUyA9IGx0dG5nCiAKZGlmZiAtLWdp
-dCBhL3NyYy9iaW4vbHR0bmcvbHR0bmcuYyBiL3NyYy9iaW4vbHR0bmcvbHR0bmcuYwppbmRleCA4
-NTYyMTQ0Li4yOGY4ZmVjIDEwMDY0NAotLS0gYS9zcmMvYmluL2x0dG5nL2x0dG5nLmMKKysrIGIv
-c3JjL2Jpbi9sdHRuZy9sdHRuZy5jCkBAIC04MSw3ICs4MSwxMSBAQCBzdGF0aWMgc3RydWN0IGNt
-ZF9zdHJ1Y3QgY29tbWFuZHNbXSA9ICB7CiAKIHN0YXRpYyB2b2lkIHVzYWdlKEZJTEUgKm9mcCkK
-IHsKLQlmcHJpbnRmKG9mcCwgIkxUVG5nIFRyYWNlIENvbnRyb2wgIiBWRVJTSU9OIiAtICIgVkVS
-U0lPTl9OQU1FIlxuXG4iKTsKKwlmcHJpbnRmKG9mcCwgIkxUVG5nIFRyYWNlIENvbnRyb2wgIiBW
-RVJTSU9OIiAtICIgVkVSU0lPTl9OQU1FIlxuIik7CisjaWZkZWYgR0lUX1ZFUlNJT04KKwlmcHJp
-bnRmKG9mcCwgIkdpdCB2ZXJzaW9uOiAiIEdJVF9WRVJTSU9OIlxuIik7CisjZW5kaWYKKwlmcHJp
-bnRmKG9mcCwgIlxuIik7CiAJZnByaW50ZihvZnAsICJ1c2FnZTogbHR0bmcgW09QVElPTlNdIDxD
-T01NQU5EPiBbPEFSR1M+XVxuIik7CiAJZnByaW50ZihvZnAsICJcbiIpOwogCWZwcmludGYob2Zw
-LCAiT3B0aW9uczpcbiIpOwotLSAKMS43LjEwLjQKCgpfX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBs
-aXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlz
-dGluZm8vbHR0bmctZGV2Cg==
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--===============1840599116==
+Content-Type: multipart/signed; micalg=pgp-sha1;
+ protocol="application/pgp-signature";
+ boundary="----enig2XEAODWDQGTOALABDXVSL"
+
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+------enig2XEAODWDQGTOALABDXVSL
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+Hello,
+
+This version adds a line "Git version" to "LTTng --help". The value of
+this line is calculated during "make" and then defined in a GIT_VERSION
+macro.
+It also works for versions without Git as it will just not define the
+GIT_VERSION value. The black point is that the "test" is made each time
+we "make" the tool. This can be corrected but I'm not sure it's
+necessary as this one is well working.
+
+If this patch is ok for you, I can apply an identical patch to UST and
+babeltrace.
+
+Rapha=C3=ABl
+
+On 2013-03-12 22:07, Rapha=C3=ABl Beamonte wrote:
+> Signed-off-by: Rapha=C3=ABl Beamonte <raphael.beamonte@gmail.com>
+> ---
+>  src/bin/lttng/Makefile.am |    6 +++++-
+>  src/bin/lttng/lttng.c     |    6 +++++-
+>  2 files changed, 10 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/src/bin/lttng/Makefile.am b/src/bin/lttng/Makefile.am
+> index 21eebab..1b1219b 100644
+> --- a/src/bin/lttng/Makefile.am
+> +++ b/src/bin/lttng/Makefile.am
+> @@ -1,5 +1,9 @@
+> +git_version_string=3D$$(git describe --long --all 2>/dev/null)
+> +git_version=3D$$(test -n "${git_version_string}" && echo "-DGIT_VERSIO=
+N=3D\"${git_version_string}\"")
+> +
+>  AM_CPPFLAGS =3D -I$(top_srcdir)/include -I$(top_srcdir)/src \
+> -			  -DINSTALL_BIN_PATH=3D\""$(bindir)"\"
+> +			  -DINSTALL_BIN_PATH=3D\""$(bindir)"\" \
+> +			  ${git_version}
+> =20
+>  bin_PROGRAMS =3D lttng
+> =20
+> diff --git a/src/bin/lttng/lttng.c b/src/bin/lttng/lttng.c
+> index 8562144..28f8fec 100644
+> --- a/src/bin/lttng/lttng.c
+> +++ b/src/bin/lttng/lttng.c
+> @@ -81,7 +81,11 @@ static struct cmd_struct commands[] =3D  {
+> =20
+>  static void usage(FILE *ofp)
+>  {
+> -	fprintf(ofp, "LTTng Trace Control " VERSION" - " VERSION_NAME"\n\n");=
+
+> +	fprintf(ofp, "LTTng Trace Control " VERSION" - " VERSION_NAME"\n");
+> +#ifdef GIT_VERSION
+> +	fprintf(ofp, "Git version: " GIT_VERSION"\n");
+> +#endif
+> +	fprintf(ofp, "\n");
+>  	fprintf(ofp, "usage: lttng [OPTIONS] <COMMAND> [<ARGS>]\n");
+>  	fprintf(ofp, "\n");
+>  	fprintf(ofp, "Options:\n");
+>=20
+
+
+--=20
+Rapha=C3=ABl Beamonte.
+Information Systems and Telecommunications Engineer (UTT, France)
+Specialized in Mobile Technologies and Embedded Systems
+M.A.Sc. Student in Computer Engineering (Polytechnique Montr=C3=A9al, Can=
+ada)
+(33)-(0)6 10 97 27 25 - (1) 438 938-6879 - raphael.beamonte@gmail.com
+
+
+------enig2XEAODWDQGTOALABDXVSL
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.12 (GNU/Linux)
+
+iQIcBAEBAgAGBQJRP+CJAAoJECV+8Ygg/tEoMQ8P/0jqplUsZ0QkBE0xXmumswqD
+2wOK0ylDOCMPRccLvqkceRiwrSau9a9cjUbPKkx8CNvVWerjBw/eYeUJig5Zfu3L
+AmTkDZqWgNQr2qIatNTHc5bJRb8xMs3EbWdh4gKOPGuXJ9TtHCJ75tYHsYEzydhR
+aQdscpSeBdEGFGHCpoZaitxhOTrMzPpv/YP7WNWU3TwcDlieE5ji4ElFI4wQNEPd
+fAxI66IaJOGcatZWVZZPVKGchIqvtXB2e39l2qjbEf6nB6xFMW38bzU7wH5t/W2a
+uyNukvS8SoqTnmu9Vl6BYhW0Z942e4Wy2rlVTw23MfWXLPAnT8wnTqluoCHAXLYm
+AyUUuERoqSigkXEKHiCt8zCcoXTVb7vUo2GypvadWJBpmqYUM5j/vfM0A8cfWQ4x
+D9H+DF0ZuxPBHr5XahLpP9Htrhp0C9DCfMgxvPsezcRiIHkMXMMKzAiXXY6fc7Ur
+PVx2U2WjczLLf3x+VIjXpWesbXTnP+Bq4jIGnGA4Ewv+4tuvc71Eu2CgIU1/+XRp
+K7sn8DiNqs4rFuRa2dkPbTB12r9iGpFfp5FDtnn+Ptvi1ORR20EWk17R3CfjdE21
+yZUvXlbLB3FjewW8JqD0Tq8ozWUfPxcn91Ak9nN9VpcSDgrnlrFxFOKRUoVDK9W6
+yd8PApFjvvN+4eLuoi3j
+=RHKA
+-----END PGP SIGNATURE-----
+
+------enig2XEAODWDQGTOALABDXVSL--
+
+
+--===============1840599116==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1840599116==--
