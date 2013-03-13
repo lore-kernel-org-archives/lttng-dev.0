@@ -1,19 +1,24 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: build error: ltt-control package
-Date: Wed, 13 Mar 2013 10:01:52 -0400
-Message-ID: <20130313140152.GB16186__30262.3956733898$1363183364$gmane$org@Krystal>
-References: <201303130125186687389@gmail.com>
+Subject: Re: [PATCH babeltrace 1/2] Added Python 3.0 or
+	better	requirement to the README file
+Date: Wed, 13 Mar 2013 10:06:10 -0400
+Message-ID: <20130313140610.GC16186__48305.3200216547$1363183630$gmane$org@Krystal>
+References: <1359640251-6133-1-git-send-email-jeremie.galarneau@efficios.com>
+	<510BA252.3020604@gmail.com>
+	<CA+jJMxv0tcbzd0m27586h_D3fY9e6-0Nd8Mt=-iKUOkcCH6E5g@mail.gmail.com>
+	<513E9904.2050201@gmail.com>
+	<CA+jJMxu+RekfzeVVNqF2_FhKCYJ3SWeQsCL8ETPZzP7YtbiUoA@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UFmFd-0003Am-Qc
-	for lttng-dev@lists.lttng.org; Wed, 13 Mar 2013 10:01:53 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1UFmJo-0003DK-As
+	for lttng-dev@lists.lttng.org; Wed, 13 Mar 2013 10:06:12 -0400
 Content-Disposition: inline
-In-Reply-To: <201303130125186687389@gmail.com>
+In-Reply-To: <CA+jJMxu+RekfzeVVNqF2_FhKCYJ3SWeQsCL8ETPZzP7YtbiUoA@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,59 +27,60 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: OSDepend <osdepend@gmail.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: Yannick Brosseau <yannick.brosseau@gmail.com>, =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* OSDepend (osdepend@gmail.com) wrote:
-> Hi, all,
-> 
-> I met some trouble when i tried to "make" the ltt-control-0.88-09242010. The code is list below:
-> 
-> make[2]: Leaving directory `/usr/src/ltt-control-0.88-09242010/liblttd'
-> Making all in lttd
-> make[2]: Entering directory `/usr/src/ltt-control-0.88-09242010/lttd'
-> gcc -DHAVE_CONFIG_H -I.. -I..     -g -O2 -MT lttd.o -MD -MP -MF .deps/lttd.Tpo -c -o lttd.o lttd.c
-> mv -f .deps/lttd.Tpo .deps/lttd.Po
-> /bin/sh ../libtool --tag=CC   --mode=link gcc  -g -O2   -o lttd lttd.o ../liblttd/liblttd.la -lpthread
-> libtool: link: gcc -g -O2 -o .libs/lttd lttd.o  ../liblttd/.libs/liblttd.so -lpthread
-> ../liblttd/.libs/liblttd.so: undefined reference to `sync_file_range'
-> collect2: ld returned 1 exit status
-> make[2]: *** [lttd] Error 1
-> make[2]: Leaving directory `/usr/src/ltt-control-0.88-09242010/lttd'
-> make[1]: *** [all-recursive] Error 1
-> make[1]: Leaving directory `/usr/src/ltt-control-0.88-09242010'
-> make: *** [all] Error 2
-> 
-> My workstation is Centos 5.5, glibc-2.5.
-> It seems like a design bug in centos which ignore the sysycall sync_file_range, so seems the only way for me is to just delete the related code.
-> Is there any other way to make it through? please help me out!!
+Hi Yannick,
 
-I'm afraid this old LTTng 0.x version is not supported anymore. Please
-move to 2.x series.
-
-However, removing the sync_file_range call should keep things working.
-You might also want to replace that call with fdatasync() for older
-distros.
+Please list all the distro and distro versions you care about that still
+ship with python 2.7 by default today, along with the time-frame for
+which they are going to still be supported by the vendors, and whether
+those distributions allow users to install python 3.0 side-by-side with
+2.7 or not.
 
 Thanks,
 
 Mathieu
 
-> 
-> 2013-03-13
-> 
-> 
-> 
-> zhengchen
+* J=E9r=E9mie Galarneau (jeremie.galarneau@efficios.com) wrote:
+> Although I agree it can prove to be an inconvenience for some users,
+> most distributions provide a Python 3 package at this point.
+> =
+
+> The reasoning is that since these bindings are still in development
+> and won't be integrated into the master branch for some time, the
+> effort needed to develop and test them while targeting two versions of
+> Python is hard to justify.
+> =
+
+> On Mon, Mar 11, 2013 at 10:55 PM, Yannick Brosseau
+> <yannick.brosseau@gmail.com> wrote:
+> > On 2013-02-01 08:54, J=E9r=E9mie Galarneau wrote:
+> >> As for as I know, the bindings do work with Python 2.7.
+> >> However, we have decided to no longer explicitly support older
+> >> versions of Python in order to make the bindings, along with future
+> >> developments, easily maintainable.
+> >>
+> > My main concern is that 2.7 is still the default version for many linux
+> > distribution, so it might be early to drop 2.7 support.
+> >
+> > Yannick
+> >
+> >
+> > _______________________________________________
+> > lttng-dev mailing list
+> > lttng-dev@lists.lttng.org
+> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> =
 
 > _______________________________________________
 > lttng-dev mailing list
 > lttng-dev@lists.lttng.org
 > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
+-- =
 
--- 
 Mathieu Desnoyers
 EfficiOS Inc.
 http://www.efficios.com
