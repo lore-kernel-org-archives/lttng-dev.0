@@ -1,22 +1,19 @@
-From: =?ISO-8859-1?Q?Rapha=EBl_Beamonte?= <raphael.beamonte@gmail.com>
+From: David Goulet <dgoulet@efficios.com>
 Subject: Re: [PATCH] Add a git version information in LTTng
  versions compiled from git sources
-Date: Thu, 14 Mar 2013 00:49:37 -0400
-Message-ID: <514156E1.6070300__26481.6558374607$1363236631$gmane$org@gmail.com>
+Date: Thu, 14 Mar 2013 12:53:07 -0400
+Message-ID: <51420073.7060005__9008.53155549175$1363280055$gmane$org@efficios.com>
 References: <5140A719.6020003@gmail.com>
 	<1363230220-11071-1-git-send-email-raphael.beamonte@gmail.com>
-	<51414101.4080809@gmail.com>
-	<CAEzWAe+Q41BjiSf+6FQ00jg3qrC71ZbdanDpunqFdYFeWBeGxg@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0015867700=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ia0-f175.google.com ([209.85.210.175])
+Received: from smtp.ini-tech.com ([213.239.202.151])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <raphael.beamonte@gmail.com>) id 1UG06r-0001mP-PU
-	for lttng-dev@lists.lttng.org; Thu, 14 Mar 2013 00:49:45 -0400
-Received: by mail-ia0-f175.google.com with SMTP id o25so1586982iad.20
-	for <lttng-dev@lists.lttng.org>; Wed, 13 Mar 2013 21:49:40 -0700 (PDT)
-In-Reply-To: <CAEzWAe+Q41BjiSf+6FQ00jg3qrC71ZbdanDpunqFdYFeWBeGxg@mail.gmail.com>
+	(envelope-from <dgoulet@efficios.com>) id 1UGBP1-0007rd-CQ
+	for lttng-dev@lists.lttng.org; Thu, 14 Mar 2013 12:53:15 -0400
+In-Reply-To: <1363230220-11071-1-git-send-email-raphael.beamonte@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -25,68 +22,106 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Brosseau, Yannick" <yannick.brosseau@gmail.com>
+To: =?UTF-8?B?UmFwaGHDq2wgQmVhbW9udGU=?= <raphael.beamonte@gmail.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---===============0015867700==
-Content-Type: multipart/signed; micalg=pgp-sha1;
- protocol="application/pgp-signature";
- boundary="----enig2GDQSBKTGTNOKMTBTBSOE"
-
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
-------enig2GDQSBKTGTNOKMTBTBSOE
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
-
-On 2013-03-14 00:34, Brosseau, Yannick wrote:
-> For that part, you should probably have a version.h.in or something
-> similar that is the template and the version.h that is generated.
-
-Yes, that's an interesting idea. I'll look into that.
-
-> A make dist should probably generate a version.h without the git
-> version information.
-
-Right. I'll find a way to do that.
-
-
-------enig2GDQSBKTGTNOKMTBTBSOE
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.12 (GNU/Linux)
-
-iQIcBAEBAgAGBQJRQVbhAAoJECV+8Ygg/tEoGHAP/iUFEedgaV6CR/uInmD1Inrb
-ys1jfmsO48HwzdUjXEn7u2rPF+gUJbf+yDZ3q12r/Z1A019gBGy27a4FGXGYaCBs
-0ZV9yv/ToS7rx9fvPirMduSx4r9JUVN64fGHVCfXcSS1pzG739MoHhBBdyW2zg9b
-n/lufhmQqLYv3kmIzvZBf7HdK4dNKuEqx/pt6sKh/Dp3UVptUFc4goScyeRgB+CN
-xEIUSqLBr47/RyB8vXhBPY/gc8do+M3hTAZV2SzR1Di4xxvS4k95TvL7TqZF17+t
-fIPAoFs92wZ/b29WyzGpReepuX1ry/XB3KAubXr14RdkLT6fgd4HGelhyHh7noCr
-wAurqlEt6pARDowddBsS3odl26vO2JvHStStt47hLFqtqZwKWl2flEdL5Wg0n8P1
-0dBA5UGnQKO1fHo9mTrHs2NSTSrCrdxMi8079eXMuTzydrdybFWAhwvLCDf5oAVE
-luIAxFgPEHpew3YglMhjrL4asn8we2rfrlf8BZBnG4wpiW3Jvf7d5X/lf3fDAzp/
-92zqH347JhyeFXBxed/bJjmFclPfIgM6Qg3gJlLC8lqyw8OTbz274lLb+k6ddwHU
-HFv7iWCQnSHoCBQ2dn3R7OIqJgW0DjIIfUmnpVsMOrlj8GuES9QM7BCFBXar0jLW
-2/IFyrylV2M6d0crWzCY
-=zLgB
------END PGP SIGNATURE-----
-
-------enig2GDQSBKTGTNOKMTBTBSOE--
-
-
---===============0015867700==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0015867700==--
+SGV5IFJhcGhhw6tsLAoKVGhpcyBkb2VzIG5vdCBzZWVtcyB0byB3b3JrLi4uIEkndmUgYXBwbGll
+ZCB5b3VyIHBhdGNoIGFuZCByZWNvbXBpbGUgbXkKZ2l0IHRyZWUgYnV0IHZlcnNpb24gYXJlIHN0
+aWxsIHNob3dpbmcgIjIuMS4wIiAuLi4gPwoKQW5vdGhlciB0aGluZywgd2UgcmVhbGx5IGRvIHBy
+ZWZlciBoYXZpbmcgI2lmZGVmIHN0YXRlbWVudCBpbiBvbmUgY2FsbApzaXRlIHBlciBiaW5hcmll
+cyB0aGlzIG1lYW5zIHRoYXQgeW91IG1pZ2h0IHdhbnQgdG8gdXNlIGxpa2UKImx0dG5nLXNlc3Np
+b25kLmgiLCBwdXQgdGhlIGlmZGVmIHRoZXJlIGFuZCBkbyBhbiBpbmxpbmUgZnVuY3Rpb24gdG8K
+cHJpbnQgdGhlIGNvcnJlY3QgdmVyc2lvbi4KCkxhc3QgdGhpbmcsIGRvbid0IHVzZSBzcGFjZXMg
+cGxlYXNlISBZb3UgY2FuIHVzZSBleHRyYXMvY2hlY2twYXRjaC5wbCB0bwptYWtlIHN1cmUgeW91
+IGFyZSBvayB3aXRoIHRoZSBzdGQgd2UgaGF2ZS4KClRoYW5rcyEKRGF2aWQKClJhcGhhw6tsIEJl
+YW1vbnRlOgo+IFNpZ25lZC1vZmYtYnk6IFJhcGhhw6tsIEJlYW1vbnRlIDxyYXBoYWVsLmJlYW1v
+bnRlQGdtYWlsLmNvbT4KPiAtLS0KPiAgaW5jbHVkZS9NYWtlZmlsZS5hbSAgICAgICAgICAgICAg
+fCAgIDIwICsrKysrKysrKysrKysrKysrKystCj4gIGluY2x1ZGUvbHR0bmcvdmVyc2lvbi5oICAg
+ICAgICAgIHwgICAyNSArKysrKysrKysrKysrKysrKysrKysrKysrCj4gIHNyYy9iaW4vbHR0bmct
+c2Vzc2lvbmQvbWFpbi5jICAgIHwgICAgNSArKysrKwo+ICBzcmMvYmluL2x0dG5nL2NvbW1hbmRz
+L3ZlcnNpb24uYyB8ICAgIDQgKysrKwo+ICBzcmMvYmluL2x0dG5nL2x0dG5nLmMgICAgICAgICAg
+ICB8ICAgIDcgKysrKysrLQo+ICA1IGZpbGVzIGNoYW5nZWQsIDU5IGluc2VydGlvbnMoKyksIDIg
+ZGVsZXRpb25zKC0pCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBpbmNsdWRlL2x0dG5nL3ZlcnNpb24u
+aAo+IAo+IGRpZmYgLS1naXQgYS9pbmNsdWRlL01ha2VmaWxlLmFtIGIvaW5jbHVkZS9NYWtlZmls
+ZS5hbQo+IGluZGV4IDBiY2I2ZjkuLjY2NjQ4MTMgMTAwNjQ0Cj4gLS0tIGEvaW5jbHVkZS9NYWtl
+ZmlsZS5hbQo+ICsrKyBiL2luY2x1ZGUvTWFrZWZpbGUuYW0KPiBAQCAtMSArMSwxOSBAQAo+IC1s
+dHRuZ2luY2x1ZGVfSEVBREVSUyA9IGx0dG5nL2x0dG5nLmggbHR0bmcvbHR0bmctZXJyb3IuaAo+
+ICthbGwtbG9jYWw6Cj4gKwkoZ2l0X3ZlcnNpb249JCQoZ2l0IGRlc2NyaWJlIC0tbG9uZyAtLWFs
+bCAyPi9kZXYvbnVsbCk7IFwKPiArCXZlcnNpb25faD0kKHRvcF9idWlsZGRpcikvaW5jbHVkZS9s
+dHRuZy92ZXJzaW9uLmg7IFwKPiArCWlmIFsgLXogIiQke2dpdF92ZXJzaW9ufSIgXTsgdGhlbiBc
+Cj4gKwkJaWYgWyAkJChncmVwIC1jICJeI2RlZmluZSBHSVRfVkVSU0lPTiIgIiQke3ZlcnNpb25f
+aH0iKSAtZ3QgMCBdOyB0aGVuIFwKPiArCQkJc2VkIC1pICIvXiNkZWZpbmUgR0lUX1ZFUlNJT04v
+ZCIgIiQke3ZlcnNpb25faH0iOyBcCj4gKwkJZmk7IFwKPiArCWVsc2UgXAo+ICsJCWlmIFsgJCQo
+Z3JlcCAtY0UgIl4jZGVmaW5lIEdJVF9WRVJTSU9OIFwiPyQke2dpdF92ZXJzaW9ufVwiPyQkIiAi
+JCR7dmVyc2lvbl9ofSIpIC1lcSAwIF07IHRoZW4gXAo+ICsJCQlpZiBbICQkKGdyZXAgLWMgIl4j
+ZGVmaW5lIEdJVF9WRVJTSU9OIiAiJCR7dmVyc2lvbl9ofSIpIC1ndCAwIF07IHRoZW4gXAo+ICsJ
+CQkJc2VkIC1pICJzJ14jZGVmaW5lIEdJVF9WRVJTSU9OLiokJCcjZGVmaW5lIEdJVF9WRVJTSU9O
+IFwiJCR7Z2l0X3ZlcnNpb259XCInIiAiJCR7dmVyc2lvbl9ofSI7IFwKPiArCQkJZWxzZSBcCj4g
+KwkJCQlzZWQgLWkgInMnXlwoI2RlZmluZSBWRVJTSU9OX0guKlwpJCQnXDFcblxuI2RlZmluZSBH
+SVRfVkVSU0lPTiBcIiQke2dpdF92ZXJzaW9ufVwiJyIgIiQke3ZlcnNpb25faH0iOyBcCj4gKwkJ
+CWZpOyBcCj4gKwkJZmk7IFwKPiArCWZpKQo+ICsKPiArCj4gK2x0dG5naW5jbHVkZV9IRUFERVJT
+ID0gbHR0bmcvbHR0bmcuaCBsdHRuZy9sdHRuZy1lcnJvci5oIGx0dG5nL3ZlcnNpb24uaAo+IGRp
+ZmYgLS1naXQgYS9pbmNsdWRlL2x0dG5nL3ZlcnNpb24uaCBiL2luY2x1ZGUvbHR0bmcvdmVyc2lv
+bi5oCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAwLi40MmE1MDlkCj4gLS0t
+IC9kZXYvbnVsbAo+ICsrKyBiL2luY2x1ZGUvbHR0bmcvdmVyc2lvbi5oCj4gQEAgLTAsMCArMSwy
+NSBAQAo+ICsvKgo+ICsgKiB2ZXJzaW9uLmgKPiArICoKPiArICogTGludXggVHJhY2UgVG9vbGtp
+dCB2ZXJzaW9uIGhlYWRlciBmaWxlCj4gKyAqCj4gKyAqIENvcHlyaWdodCAoQykgMjAxMyAtIFJh
+cGhhw6tsIEJlYW1vbnRlIDxyYXBoYWVsLmJlYW1vbnRlQGdtYWlsLmNvbT4KPiArICoKPiArICog
+VGhpcyBsaWJyYXJ5IGlzIGZyZWUgc29mdHdhcmU7IHlvdSBjYW4gcmVkaXN0cmlidXRlIGl0IGFu
+ZC9vciBtb2RpZnkgaXQKPiArICogdW5kZXIgdGhlIHRlcm1zIG9mIHRoZSBHTlUgTGVzc2VyIEdl
+bmVyYWwgUHVibGljIExpY2Vuc2UsIHZlcnNpb24gMi4xIG9ubHksCj4gKyAqIGFzIHB1Ymxpc2hl
+ZCBieSB0aGUgRnJlZSBTb2Z0d2FyZSBGb3VuZGF0aW9uLgo+ICsgKgo+ICsgKiBUaGlzIGxpYnJh
+cnkgaXMgZGlzdHJpYnV0ZWQgaW4gdGhlIGhvcGUgdGhhdCBpdCB3aWxsIGJlIHVzZWZ1bCwgYnV0
+IFdJVEhPVVQKPiArICogQU5ZIFdBUlJBTlRZOyB3aXRob3V0IGV2ZW4gdGhlIGltcGxpZWQgd2Fy
+cmFudHkgb2YgTUVSQ0hBTlRBQklMSVRZIG9yCj4gKyAqIEZJVE5FU1MgRk9SIEEgUEFSVElDVUxB
+UiBQVVJQT1NFLiBTZWUgdGhlIEdOVSBMZXNzZXIgR2VuZXJhbCBQdWJsaWMgTGljZW5zZQo+ICsg
+KiBmb3IgbW9yZSBkZXRhaWxzLgo+ICsgKgo+ICsgKiBZb3Ugc2hvdWxkIGhhdmUgcmVjZWl2ZWQg
+YSBjb3B5IG9mIHRoZSBHTlUgTGVzc2VyIEdlbmVyYWwgUHVibGljIExpY2Vuc2UKPiArICogYWxv
+bmcgd2l0aCB0aGlzIGxpYnJhcnk7IGlmIG5vdCwgd3JpdGUgdG8gdGhlIEZyZWUgU29mdHdhcmUg
+Rm91bmRhdGlvbiwKPiArICogSW5jLiwgNTEgRnJhbmtsaW4gU3RyZWV0LCBGaWZ0aCBGbG9vciwg
+Qm9zdG9uLCBNQSAwMjExMC0xMzAxIFVTQQo+ICsgKi8KPiArCj4gKyNpZm5kZWYgVkVSU0lPTl9I
+Cj4gKyNkZWZpbmUgVkVSU0lPTl9ICj4gKwo+ICsjZW5kaWYgLyogVkVSU0lPTl9IICovCj4gZGlm
+ZiAtLWdpdCBhL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvbWFpbi5jIGIvc3JjL2Jpbi9sdHRuZy1z
+ZXNzaW9uZC9tYWluLmMKPiBpbmRleCBmN2JiNTNlLi5mMGQ1ODk1IDEwMDY0NAo+IC0tLSBhL3Ny
+Yy9iaW4vbHR0bmctc2Vzc2lvbmQvbWFpbi5jCj4gKysrIGIvc3JjL2Jpbi9sdHRuZy1zZXNzaW9u
+ZC9tYWluLmMKPiBAQCAtMzUsNiArMzUsNyBAQAo+ICAjaW5jbHVkZSA8dXJjdS91YXRvbWljLmg+
+Cj4gICNpbmNsdWRlIDx1bmlzdGQuaD4KPiAgI2luY2x1ZGUgPGNvbmZpZy5oPgo+ICsjaW5jbHVk
+ZSA8bHR0bmcvdmVyc2lvbi5oPgo+ICAKPiAgI2luY2x1ZGUgPGNvbW1vbi9jb21tb24uaD4KPiAg
+I2luY2x1ZGUgPGNvbW1vbi9jb21wYXQvc29ja2V0Lmg+Cj4gQEAgLTM1NDcsNyArMzU0OCwxMSBA
+QCBzdGF0aWMgaW50IHBhcnNlX2FyZ3MoaW50IGFyZ2MsIGNoYXIgKiphcmd2KQo+ICAJCQl1c2Fn
+ZSgpOwo+ICAJCQlleGl0KEVYSVRfRkFJTFVSRSk7Cj4gIAkJY2FzZSAnVic6Cj4gKyNpZmRlZiBH
+SVRfVkVSU0lPTgo+ICsJCQlmcHJpbnRmKHN0ZG91dCwgIiVzIChHaXQ6ICVzKVxuIiwgVkVSU0lP
+TiwgR0lUX1ZFUlNJT04pOwo+ICsjZWxzZSAvKiBHSVRfVkVSU0lPTiAqLwo+ICAJCQlmcHJpbnRm
+KHN0ZG91dCwgIiVzXG4iLCBWRVJTSU9OKTsKPiArI2VuZGlmIC8qIEdJVF9WRVJTSU9OICovCj4g
+IAkJCWV4aXQoRVhJVF9TVUNDRVNTKTsKPiAgCQljYXNlICdTJzoKPiAgCQkJb3B0X3NpZ19wYXJl
+bnQgPSAxOwo+IGRpZmYgLS1naXQgYS9zcmMvYmluL2x0dG5nL2NvbW1hbmRzL3ZlcnNpb24uYyBi
+L3NyYy9iaW4vbHR0bmcvY29tbWFuZHMvdmVyc2lvbi5jCj4gaW5kZXggN2Y2OWRlMy4uYzZlOWUx
+MCAxMDA2NDQKPiAtLS0gYS9zcmMvYmluL2x0dG5nL2NvbW1hbmRzL3ZlcnNpb24uYwo+ICsrKyBi
+L3NyYy9iaW4vbHR0bmcvY29tbWFuZHMvdmVyc2lvbi5jCj4gQEAgLTI0LDYgKzI0LDcgQEAKPiAg
+I2luY2x1ZGUgPHN5cy90eXBlcy5oPgo+ICAjaW5jbHVkZSA8dW5pc3RkLmg+Cj4gICNpbmNsdWRl
+IDxjb25maWcuaD4KPiArI2luY2x1ZGUgPGx0dG5nL3ZlcnNpb24uaD4KPiAgCj4gICNpbmNsdWRl
+ICIuLi9jb21tYW5kLmgiCj4gIAo+IEBAIC03OSw2ICs4MCw5IEBAIGludCBjbWRfdmVyc2lvbihp
+bnQgYXJnYywgY29uc3QgY2hhciAqKmFyZ3YpCj4gIAl9Cj4gIAo+ICAJTVNHKCJsdHRuZyB2ZXJz
+aW9uICIgVkVSU0lPTiAiIC0gIiBWRVJTSU9OX05BTUUpOwo+ICsjaWZkZWYgR0lUX1ZFUlNJT04K
+PiArICAgICAgICBNU0coIkdpdCB2ZXJzaW9uOiAiIEdJVF9WRVJTSU9OKTsKPiArI2VuZGlmCj4g
+IAlNU0coIlxuIiBWRVJTSU9OX0RFU0NSSVBUSU9OICJcbiIpOwo+ICAJTVNHKCJXZWIgc2l0ZTog
+aHR0cDovL2x0dG5nLm9yZyIpOwo+ICAJTVNHKCJcbmx0dG5nIGlzIGZyZWUgc29mdHdhcmUgYW5k
+IHVuZGVyIHRoZSBHUEwgbGljZW5zZSBhbmQgcGFydCBMR1BMIik7Cj4gZGlmZiAtLWdpdCBhL3Ny
+Yy9iaW4vbHR0bmcvbHR0bmcuYyBiL3NyYy9iaW4vbHR0bmcvbHR0bmcuYwo+IGluZGV4IDg1NjIx
+NDQuLmUzMGE3YzYgMTAwNjQ0Cj4gLS0tIGEvc3JjL2Jpbi9sdHRuZy9sdHRuZy5jCj4gKysrIGIv
+c3JjL2Jpbi9sdHRuZy9sdHRuZy5jCj4gQEAgLTI1LDYgKzI1LDcgQEAKPiAgI2luY2x1ZGUgPHN5
+cy93YWl0Lmg+Cj4gICNpbmNsdWRlIDx1bmlzdGQuaD4KPiAgI2luY2x1ZGUgPGNvbmZpZy5oPgo+
+ICsjaW5jbHVkZSA8bHR0bmcvdmVyc2lvbi5oPgo+ICAjaW5jbHVkZSA8Y3R5cGUuaD4KPiAgCj4g
+ICNpbmNsdWRlIDxsdHRuZy9sdHRuZy5oPgo+IEBAIC04MSw3ICs4MiwxMSBAQCBzdGF0aWMgc3Ry
+dWN0IGNtZF9zdHJ1Y3QgY29tbWFuZHNbXSA9ICB7Cj4gIAo+ICBzdGF0aWMgdm9pZCB1c2FnZShG
+SUxFICpvZnApCj4gIHsKPiAtCWZwcmludGYob2ZwLCAiTFRUbmcgVHJhY2UgQ29udHJvbCAiIFZF
+UlNJT04iIC0gIiBWRVJTSU9OX05BTUUiXG5cbiIpOwo+ICsJZnByaW50ZihvZnAsICJMVFRuZyBU
+cmFjZSBDb250cm9sICIgVkVSU0lPTiIgLSAiIFZFUlNJT05fTkFNRSJcbiIpOwo+ICsjaWZkZWYg
+R0lUX1ZFUlNJT04KPiArCQlmcHJpbnRmKG9mcCwgIkdpdCB2ZXJzaW9uOiAiIEdJVF9WRVJTSU9O
+IlxuIik7Cj4gKyNlbmRpZgo+ICsJZnByaW50ZihvZnAsICJcbiIpOwo+ICAJZnByaW50ZihvZnAs
+ICJ1c2FnZTogbHR0bmcgW09QVElPTlNdIDxDT01NQU5EPiBbPEFSR1M+XVxuIik7Cj4gIAlmcHJp
+bnRmKG9mcCwgIlxuIik7Cj4gIAlmcHJpbnRmKG9mcCwgIk9wdGlvbnM6XG4iKTsKCl9fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5n
+IGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2Nn
+aS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
