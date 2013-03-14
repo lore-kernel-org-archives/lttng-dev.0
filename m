@@ -1,37 +1,20 @@
-From: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
-Subject: Re: [urcu commit] list: implement
-	cds_list_for_each_safe()
-Date: Wed, 13 Mar 2013 09:46:18 -0700
-Message-ID: <20130313164618.GU3725__10822.3387077034$1363193335$gmane$org@linux.vnet.ibm.com>
-References: <20130313163030.GA17870@Krystal>
-Reply-To: paulmck@linux.vnet.ibm.com
+From: =?UTF-8?q?Rapha=C3=ABl=20Beamonte?= <raphael.beamonte@gmail.com>
+Subject: [PATCH] Add a git version information in LTTng versions
+	compiled from git sources
+Date: Wed, 13 Mar 2013 23:03:40 -0400
+Message-ID: <1363230220-11071-1-git-send-email-raphael.beamonte__46163.5726657279$1363230307$gmane$org@gmail.com>
+References: <5140A719.6020003@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from e32.co.us.ibm.com ([32.97.110.150])
+Received: from mail-ia0-f172.google.com ([209.85.210.172])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <paulmck@linux.vnet.ibm.com>) id 1UFoqR-0004dS-N5
-	for lttng-dev@lists.lttng.org; Wed, 13 Mar 2013 12:48:03 -0400
-Received: from /spool/local
-	by e32.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only!
-	Violators will be prosecuted
-	for <lttng-dev@lists.lttng.org> from <paulmck@linux.vnet.ibm.com>;
-	Wed, 13 Mar 2013 10:47:48 -0600
-Received: from d03relay01.boulder.ibm.com (d03relay01.boulder.ibm.com
-	[9.17.195.226])
-	by d03dlp03.boulder.ibm.com (Postfix) with ESMTP id 1D8BE19D805E
-	for <lttng-dev@lists.lttng.org>; Wed, 13 Mar 2013 10:46:19 -0600 (MDT)
-Received: from d03av06.boulder.ibm.com (d03av06.boulder.ibm.com [9.17.195.245])
-	by d03relay01.boulder.ibm.com (8.13.8/8.13.8/NCO v10.0) with ESMTP id
-	r2DGkKL6082856
-	for <lttng-dev@lists.lttng.org>; Wed, 13 Mar 2013 10:46:20 -0600
-Received: from d03av06.boulder.ibm.com (loopback [127.0.0.1])
-	by d03av06.boulder.ibm.com (8.14.4/8.13.1/NCO v10.0 AVout) with ESMTP
-	id r2DGmuPi025049
-	for <lttng-dev@lists.lttng.org>; Wed, 13 Mar 2013 10:48:56 -0600
-Content-Disposition: inline
-In-Reply-To: <20130313163030.GA17870@Krystal>
+	(envelope-from <raphael.beamonte@gmail.com>) id 1UFySd-0000w0-B4
+	for lttng-dev@lists.lttng.org; Wed, 13 Mar 2013 23:04:07 -0400
+Received: by mail-ia0-f172.google.com with SMTP id l29so1657660iag.3
+	for <lttng-dev@lists.lttng.org>; Wed, 13 Mar 2013 20:04:01 -0700 (PDT)
+In-Reply-To: <5140A719.6020003@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -40,47 +23,92 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: dgoulet@efficios.com
+Cc: =?UTF-8?q?Rapha=C3=ABl=20Beamonte?= <raphael.beamonte@gmail.com>, lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On Wed, Mar 13, 2013 at 12:30:30PM -0400, Mathieu Desnoyers wrote:
-> commit 7e5b9a4d1a4a63fac405ed74c42f93abdc223794
-> Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> Date:   Wed Mar 13 12:23:11 2013 -0400
-> 
->     list: implement cds_list_for_each_safe()
->     
->     Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-
-Reviewed-by: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
-
-> diff --git a/urcu/list.h b/urcu/list.h
-> index 5d04394..1d1c7b5 100644
-> --- a/urcu/list.h
-> +++ b/urcu/list.h
-> @@ -140,12 +140,17 @@ cds_list_splice (struct cds_list_head *add, struct cds_list_head *head)
->  #define cds_list_for_each(pos, head) \
->    for (pos = (head)->next; pos != (head); pos = pos->next)
-> 
-> +/* Iterate forward over the elements list. The list elements can be
-> +   removed from the list while doing this.  */
-> +#define cds_list_for_each_safe(pos, p, head) \
-> +  for (pos = (head)->next, p = pos->next; \
-> +       pos != (head); \
-> +       pos = p, p = pos->next)
-> 
->  /* Iterate backward over the elements of the list.  */
->  #define cds_list_for_each_prev(pos, head) \
->    for (pos = (head)->prev; pos != (head); pos = pos->prev)
-> 
-> -
->  /* Iterate backwards over the elements list.  The list elements can be
->     removed from the list while doing this.  */
->  #define cds_list_for_each_prev_safe(pos, p, head) \
-> 
-> -- 
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> http://www.efficios.com
-> 
+U2lnbmVkLW9mZi1ieTogUmFwaGHDq2wgQmVhbW9udGUgPHJhcGhhZWwuYmVhbW9udGVAZ21haWwu
+Y29tPgotLS0KIGluY2x1ZGUvTWFrZWZpbGUuYW0gICAgICAgICAgICAgIHwgICAyMCArKysrKysr
+KysrKysrKysrKysrLQogaW5jbHVkZS9sdHRuZy92ZXJzaW9uLmggICAgICAgICAgfCAgIDI1ICsr
+KysrKysrKysrKysrKysrKysrKysrKysKIHNyYy9iaW4vbHR0bmctc2Vzc2lvbmQvbWFpbi5jICAg
+IHwgICAgNSArKysrKwogc3JjL2Jpbi9sdHRuZy9jb21tYW5kcy92ZXJzaW9uLmMgfCAgICA0ICsr
+KysKIHNyYy9iaW4vbHR0bmcvbHR0bmcuYyAgICAgICAgICAgIHwgICAgNyArKysrKystCiA1IGZp
+bGVzIGNoYW5nZWQsIDU5IGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCiBjcmVhdGUgbW9k
+ZSAxMDA2NDQgaW5jbHVkZS9sdHRuZy92ZXJzaW9uLmgKCmRpZmYgLS1naXQgYS9pbmNsdWRlL01h
+a2VmaWxlLmFtIGIvaW5jbHVkZS9NYWtlZmlsZS5hbQppbmRleCAwYmNiNmY5Li42NjY0ODEzIDEw
+MDY0NAotLS0gYS9pbmNsdWRlL01ha2VmaWxlLmFtCisrKyBiL2luY2x1ZGUvTWFrZWZpbGUuYW0K
+QEAgLTEgKzEsMTkgQEAKLWx0dG5naW5jbHVkZV9IRUFERVJTID0gbHR0bmcvbHR0bmcuaCBsdHRu
+Zy9sdHRuZy1lcnJvci5oCithbGwtbG9jYWw6CisJKGdpdF92ZXJzaW9uPSQkKGdpdCBkZXNjcmli
+ZSAtLWxvbmcgLS1hbGwgMj4vZGV2L251bGwpOyBcCisJdmVyc2lvbl9oPSQodG9wX2J1aWxkZGly
+KS9pbmNsdWRlL2x0dG5nL3ZlcnNpb24uaDsgXAorCWlmIFsgLXogIiQke2dpdF92ZXJzaW9ufSIg
+XTsgdGhlbiBcCisJCWlmIFsgJCQoZ3JlcCAtYyAiXiNkZWZpbmUgR0lUX1ZFUlNJT04iICIkJHt2
+ZXJzaW9uX2h9IikgLWd0IDAgXTsgdGhlbiBcCisJCQlzZWQgLWkgIi9eI2RlZmluZSBHSVRfVkVS
+U0lPTi9kIiAiJCR7dmVyc2lvbl9ofSI7IFwKKwkJZmk7IFwKKwllbHNlIFwKKwkJaWYgWyAkJChn
+cmVwIC1jRSAiXiNkZWZpbmUgR0lUX1ZFUlNJT04gXCI/JCR7Z2l0X3ZlcnNpb259XCI/JCQiICIk
+JHt2ZXJzaW9uX2h9IikgLWVxIDAgXTsgdGhlbiBcCisJCQlpZiBbICQkKGdyZXAgLWMgIl4jZGVm
+aW5lIEdJVF9WRVJTSU9OIiAiJCR7dmVyc2lvbl9ofSIpIC1ndCAwIF07IHRoZW4gXAorCQkJCXNl
+ZCAtaSAicydeI2RlZmluZSBHSVRfVkVSU0lPTi4qJCQnI2RlZmluZSBHSVRfVkVSU0lPTiBcIiQk
+e2dpdF92ZXJzaW9ufVwiJyIgIiQke3ZlcnNpb25faH0iOyBcCisJCQllbHNlIFwKKwkJCQlzZWQg
+LWkgInMnXlwoI2RlZmluZSBWRVJTSU9OX0guKlwpJCQnXDFcblxuI2RlZmluZSBHSVRfVkVSU0lP
+TiBcIiQke2dpdF92ZXJzaW9ufVwiJyIgIiQke3ZlcnNpb25faH0iOyBcCisJCQlmaTsgXAorCQlm
+aTsgXAorCWZpKQorCisKK2x0dG5naW5jbHVkZV9IRUFERVJTID0gbHR0bmcvbHR0bmcuaCBsdHRu
+Zy9sdHRuZy1lcnJvci5oIGx0dG5nL3ZlcnNpb24uaApkaWZmIC0tZ2l0IGEvaW5jbHVkZS9sdHRu
+Zy92ZXJzaW9uLmggYi9pbmNsdWRlL2x0dG5nL3ZlcnNpb24uaApuZXcgZmlsZSBtb2RlIDEwMDY0
+NAppbmRleCAwMDAwMDAwLi40MmE1MDlkCi0tLSAvZGV2L251bGwKKysrIGIvaW5jbHVkZS9sdHRu
+Zy92ZXJzaW9uLmgKQEAgLTAsMCArMSwyNSBAQAorLyoKKyAqIHZlcnNpb24uaAorICoKKyAqIExp
+bnV4IFRyYWNlIFRvb2xraXQgdmVyc2lvbiBoZWFkZXIgZmlsZQorICoKKyAqIENvcHlyaWdodCAo
+QykgMjAxMyAtIFJhcGhhw6tsIEJlYW1vbnRlIDxyYXBoYWVsLmJlYW1vbnRlQGdtYWlsLmNvbT4K
+KyAqCisgKiBUaGlzIGxpYnJhcnkgaXMgZnJlZSBzb2Z0d2FyZTsgeW91IGNhbiByZWRpc3RyaWJ1
+dGUgaXQgYW5kL29yIG1vZGlmeSBpdAorICogdW5kZXIgdGhlIHRlcm1zIG9mIHRoZSBHTlUgTGVz
+c2VyIEdlbmVyYWwgUHVibGljIExpY2Vuc2UsIHZlcnNpb24gMi4xIG9ubHksCisgKiBhcyBwdWJs
+aXNoZWQgYnkgdGhlIEZyZWUgU29mdHdhcmUgRm91bmRhdGlvbi4KKyAqCisgKiBUaGlzIGxpYnJh
+cnkgaXMgZGlzdHJpYnV0ZWQgaW4gdGhlIGhvcGUgdGhhdCBpdCB3aWxsIGJlIHVzZWZ1bCwgYnV0
+IFdJVEhPVVQKKyAqIEFOWSBXQVJSQU5UWTsgd2l0aG91dCBldmVuIHRoZSBpbXBsaWVkIHdhcnJh
+bnR5IG9mIE1FUkNIQU5UQUJJTElUWSBvcgorICogRklUTkVTUyBGT1IgQSBQQVJUSUNVTEFSIFBV
+UlBPU0UuIFNlZSB0aGUgR05VIExlc3NlciBHZW5lcmFsIFB1YmxpYyBMaWNlbnNlCisgKiBmb3Ig
+bW9yZSBkZXRhaWxzLgorICoKKyAqIFlvdSBzaG91bGQgaGF2ZSByZWNlaXZlZCBhIGNvcHkgb2Yg
+dGhlIEdOVSBMZXNzZXIgR2VuZXJhbCBQdWJsaWMgTGljZW5zZQorICogYWxvbmcgd2l0aCB0aGlz
+IGxpYnJhcnk7IGlmIG5vdCwgd3JpdGUgdG8gdGhlIEZyZWUgU29mdHdhcmUgRm91bmRhdGlvbiwK
+KyAqIEluYy4sIDUxIEZyYW5rbGluIFN0cmVldCwgRmlmdGggRmxvb3IsIEJvc3RvbiwgTUEgMDIx
+MTAtMTMwMSBVU0EKKyAqLworCisjaWZuZGVmIFZFUlNJT05fSAorI2RlZmluZSBWRVJTSU9OX0gK
+KworI2VuZGlmIC8qIFZFUlNJT05fSCAqLwpkaWZmIC0tZ2l0IGEvc3JjL2Jpbi9sdHRuZy1zZXNz
+aW9uZC9tYWluLmMgYi9zcmMvYmluL2x0dG5nLXNlc3Npb25kL21haW4uYwppbmRleCBmN2JiNTNl
+Li5mMGQ1ODk1IDEwMDY0NAotLS0gYS9zcmMvYmluL2x0dG5nLXNlc3Npb25kL21haW4uYworKysg
+Yi9zcmMvYmluL2x0dG5nLXNlc3Npb25kL21haW4uYwpAQCAtMzUsNiArMzUsNyBAQAogI2luY2x1
+ZGUgPHVyY3UvdWF0b21pYy5oPgogI2luY2x1ZGUgPHVuaXN0ZC5oPgogI2luY2x1ZGUgPGNvbmZp
+Zy5oPgorI2luY2x1ZGUgPGx0dG5nL3ZlcnNpb24uaD4KIAogI2luY2x1ZGUgPGNvbW1vbi9jb21t
+b24uaD4KICNpbmNsdWRlIDxjb21tb24vY29tcGF0L3NvY2tldC5oPgpAQCAtMzU0Nyw3ICszNTQ4
+LDExIEBAIHN0YXRpYyBpbnQgcGFyc2VfYXJncyhpbnQgYXJnYywgY2hhciAqKmFyZ3YpCiAJCQl1
+c2FnZSgpOwogCQkJZXhpdChFWElUX0ZBSUxVUkUpOwogCQljYXNlICdWJzoKKyNpZmRlZiBHSVRf
+VkVSU0lPTgorCQkJZnByaW50ZihzdGRvdXQsICIlcyAoR2l0OiAlcylcbiIsIFZFUlNJT04sIEdJ
+VF9WRVJTSU9OKTsKKyNlbHNlIC8qIEdJVF9WRVJTSU9OICovCiAJCQlmcHJpbnRmKHN0ZG91dCwg
+IiVzXG4iLCBWRVJTSU9OKTsKKyNlbmRpZiAvKiBHSVRfVkVSU0lPTiAqLwogCQkJZXhpdChFWElU
+X1NVQ0NFU1MpOwogCQljYXNlICdTJzoKIAkJCW9wdF9zaWdfcGFyZW50ID0gMTsKZGlmZiAtLWdp
+dCBhL3NyYy9iaW4vbHR0bmcvY29tbWFuZHMvdmVyc2lvbi5jIGIvc3JjL2Jpbi9sdHRuZy9jb21t
+YW5kcy92ZXJzaW9uLmMKaW5kZXggN2Y2OWRlMy4uYzZlOWUxMCAxMDA2NDQKLS0tIGEvc3JjL2Jp
+bi9sdHRuZy9jb21tYW5kcy92ZXJzaW9uLmMKKysrIGIvc3JjL2Jpbi9sdHRuZy9jb21tYW5kcy92
+ZXJzaW9uLmMKQEAgLTI0LDYgKzI0LDcgQEAKICNpbmNsdWRlIDxzeXMvdHlwZXMuaD4KICNpbmNs
+dWRlIDx1bmlzdGQuaD4KICNpbmNsdWRlIDxjb25maWcuaD4KKyNpbmNsdWRlIDxsdHRuZy92ZXJz
+aW9uLmg+CiAKICNpbmNsdWRlICIuLi9jb21tYW5kLmgiCiAKQEAgLTc5LDYgKzgwLDkgQEAgaW50
+IGNtZF92ZXJzaW9uKGludCBhcmdjLCBjb25zdCBjaGFyICoqYXJndikKIAl9CiAKIAlNU0coImx0
+dG5nIHZlcnNpb24gIiBWRVJTSU9OICIgLSAiIFZFUlNJT05fTkFNRSk7CisjaWZkZWYgR0lUX1ZF
+UlNJT04KKyAgICAgICAgTVNHKCJHaXQgdmVyc2lvbjogIiBHSVRfVkVSU0lPTik7CisjZW5kaWYK
+IAlNU0coIlxuIiBWRVJTSU9OX0RFU0NSSVBUSU9OICJcbiIpOwogCU1TRygiV2ViIHNpdGU6IGh0
+dHA6Ly9sdHRuZy5vcmciKTsKIAlNU0coIlxubHR0bmcgaXMgZnJlZSBzb2Z0d2FyZSBhbmQgdW5k
+ZXIgdGhlIEdQTCBsaWNlbnNlIGFuZCBwYXJ0IExHUEwiKTsKZGlmZiAtLWdpdCBhL3NyYy9iaW4v
+bHR0bmcvbHR0bmcuYyBiL3NyYy9iaW4vbHR0bmcvbHR0bmcuYwppbmRleCA4NTYyMTQ0Li5lMzBh
+N2M2IDEwMDY0NAotLS0gYS9zcmMvYmluL2x0dG5nL2x0dG5nLmMKKysrIGIvc3JjL2Jpbi9sdHRu
+Zy9sdHRuZy5jCkBAIC0yNSw2ICsyNSw3IEBACiAjaW5jbHVkZSA8c3lzL3dhaXQuaD4KICNpbmNs
+dWRlIDx1bmlzdGQuaD4KICNpbmNsdWRlIDxjb25maWcuaD4KKyNpbmNsdWRlIDxsdHRuZy92ZXJz
+aW9uLmg+CiAjaW5jbHVkZSA8Y3R5cGUuaD4KIAogI2luY2x1ZGUgPGx0dG5nL2x0dG5nLmg+CkBA
+IC04MSw3ICs4MiwxMSBAQCBzdGF0aWMgc3RydWN0IGNtZF9zdHJ1Y3QgY29tbWFuZHNbXSA9ICB7
+CiAKIHN0YXRpYyB2b2lkIHVzYWdlKEZJTEUgKm9mcCkKIHsKLQlmcHJpbnRmKG9mcCwgIkxUVG5n
+IFRyYWNlIENvbnRyb2wgIiBWRVJTSU9OIiAtICIgVkVSU0lPTl9OQU1FIlxuXG4iKTsKKwlmcHJp
+bnRmKG9mcCwgIkxUVG5nIFRyYWNlIENvbnRyb2wgIiBWRVJTSU9OIiAtICIgVkVSU0lPTl9OQU1F
+IlxuIik7CisjaWZkZWYgR0lUX1ZFUlNJT04KKwkJZnByaW50ZihvZnAsICJHaXQgdmVyc2lvbjog
+IiBHSVRfVkVSU0lPTiJcbiIpOworI2VuZGlmCisJZnByaW50ZihvZnAsICJcbiIpOwogCWZwcmlu
+dGYob2ZwLCAidXNhZ2U6IGx0dG5nIFtPUFRJT05TXSA8Q09NTUFORD4gWzxBUkdTPl1cbiIpOwog
+CWZwcmludGYob2ZwLCAiXG4iKTsKIAlmcHJpbnRmKG9mcCwgIk9wdGlvbnM6XG4iKTsKLS0gCjEu
+Ny4xMC40CgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
+bHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9s
+aXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
