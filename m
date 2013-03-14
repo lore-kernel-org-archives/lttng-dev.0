@@ -1,20 +1,20 @@
-From: =?UTF-8?q?Rapha=C3=ABl=20Beamonte?= <raphael.beamonte@gmail.com>
-Subject: [PATCH] Add a git version information in LTTng versions
-	compiled from git sources
-Date: Wed, 13 Mar 2013 23:03:40 -0400
-Message-ID: <1363230220-11071-1-git-send-email-raphael.beamonte__46163.5726657279$1363230307$gmane$org@gmail.com>
+From: =?UTF-8?B?UmFwaGHDq2wgQmVhbW9udGU=?= <raphael.beamonte@gmail.com>
+Subject: Re: [PATCH] Add a git version information in LTTng
+ versions compiled from git sources
+Date: Wed, 13 Mar 2013 23:16:17 -0400
+Message-ID: <51414101.4080809__38385.4724154391$1363231030$gmane$org@gmail.com>
 References: <5140A719.6020003@gmail.com>
+	<1363230220-11071-1-git-send-email-raphael.beamonte@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============0686342846=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ia0-f172.google.com ([209.85.210.172])
+Received: from mail-ia0-f175.google.com ([209.85.210.175])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <raphael.beamonte@gmail.com>) id 1UFySd-0000w0-B4
-	for lttng-dev@lists.lttng.org; Wed, 13 Mar 2013 23:04:07 -0400
-Received: by mail-ia0-f172.google.com with SMTP id l29so1657660iag.3
-	for <lttng-dev@lists.lttng.org>; Wed, 13 Mar 2013 20:04:01 -0700 (PDT)
-In-Reply-To: <5140A719.6020003@gmail.com>
+	(envelope-from <raphael.beamonte@gmail.com>) id 1UFyeX-00012K-9f
+	for lttng-dev@lists.lttng.org; Wed, 13 Mar 2013 23:16:25 -0400
+Received: by mail-ia0-f175.google.com with SMTP id o25so1571591iad.34
+	for <lttng-dev@lists.lttng.org>; Wed, 13 Mar 2013 20:16:19 -0700 (PDT)
+In-Reply-To: <1363230220-11071-1-git-send-email-raphael.beamonte@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,91 +24,86 @@ List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 To: dgoulet@efficios.com
-Cc: =?UTF-8?q?Rapha=C3=ABl=20Beamonte?= <raphael.beamonte@gmail.com>, lttng-dev@lists.lttng.org
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-U2lnbmVkLW9mZi1ieTogUmFwaGHDq2wgQmVhbW9udGUgPHJhcGhhZWwuYmVhbW9udGVAZ21haWwu
-Y29tPgotLS0KIGluY2x1ZGUvTWFrZWZpbGUuYW0gICAgICAgICAgICAgIHwgICAyMCArKysrKysr
-KysrKysrKysrKysrLQogaW5jbHVkZS9sdHRuZy92ZXJzaW9uLmggICAgICAgICAgfCAgIDI1ICsr
-KysrKysrKysrKysrKysrKysrKysrKysKIHNyYy9iaW4vbHR0bmctc2Vzc2lvbmQvbWFpbi5jICAg
-IHwgICAgNSArKysrKwogc3JjL2Jpbi9sdHRuZy9jb21tYW5kcy92ZXJzaW9uLmMgfCAgICA0ICsr
-KysKIHNyYy9iaW4vbHR0bmcvbHR0bmcuYyAgICAgICAgICAgIHwgICAgNyArKysrKystCiA1IGZp
-bGVzIGNoYW5nZWQsIDU5IGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCiBjcmVhdGUgbW9k
-ZSAxMDA2NDQgaW5jbHVkZS9sdHRuZy92ZXJzaW9uLmgKCmRpZmYgLS1naXQgYS9pbmNsdWRlL01h
-a2VmaWxlLmFtIGIvaW5jbHVkZS9NYWtlZmlsZS5hbQppbmRleCAwYmNiNmY5Li42NjY0ODEzIDEw
-MDY0NAotLS0gYS9pbmNsdWRlL01ha2VmaWxlLmFtCisrKyBiL2luY2x1ZGUvTWFrZWZpbGUuYW0K
-QEAgLTEgKzEsMTkgQEAKLWx0dG5naW5jbHVkZV9IRUFERVJTID0gbHR0bmcvbHR0bmcuaCBsdHRu
-Zy9sdHRuZy1lcnJvci5oCithbGwtbG9jYWw6CisJKGdpdF92ZXJzaW9uPSQkKGdpdCBkZXNjcmli
-ZSAtLWxvbmcgLS1hbGwgMj4vZGV2L251bGwpOyBcCisJdmVyc2lvbl9oPSQodG9wX2J1aWxkZGly
-KS9pbmNsdWRlL2x0dG5nL3ZlcnNpb24uaDsgXAorCWlmIFsgLXogIiQke2dpdF92ZXJzaW9ufSIg
-XTsgdGhlbiBcCisJCWlmIFsgJCQoZ3JlcCAtYyAiXiNkZWZpbmUgR0lUX1ZFUlNJT04iICIkJHt2
-ZXJzaW9uX2h9IikgLWd0IDAgXTsgdGhlbiBcCisJCQlzZWQgLWkgIi9eI2RlZmluZSBHSVRfVkVS
-U0lPTi9kIiAiJCR7dmVyc2lvbl9ofSI7IFwKKwkJZmk7IFwKKwllbHNlIFwKKwkJaWYgWyAkJChn
-cmVwIC1jRSAiXiNkZWZpbmUgR0lUX1ZFUlNJT04gXCI/JCR7Z2l0X3ZlcnNpb259XCI/JCQiICIk
-JHt2ZXJzaW9uX2h9IikgLWVxIDAgXTsgdGhlbiBcCisJCQlpZiBbICQkKGdyZXAgLWMgIl4jZGVm
-aW5lIEdJVF9WRVJTSU9OIiAiJCR7dmVyc2lvbl9ofSIpIC1ndCAwIF07IHRoZW4gXAorCQkJCXNl
-ZCAtaSAicydeI2RlZmluZSBHSVRfVkVSU0lPTi4qJCQnI2RlZmluZSBHSVRfVkVSU0lPTiBcIiQk
-e2dpdF92ZXJzaW9ufVwiJyIgIiQke3ZlcnNpb25faH0iOyBcCisJCQllbHNlIFwKKwkJCQlzZWQg
-LWkgInMnXlwoI2RlZmluZSBWRVJTSU9OX0guKlwpJCQnXDFcblxuI2RlZmluZSBHSVRfVkVSU0lP
-TiBcIiQke2dpdF92ZXJzaW9ufVwiJyIgIiQke3ZlcnNpb25faH0iOyBcCisJCQlmaTsgXAorCQlm
-aTsgXAorCWZpKQorCisKK2x0dG5naW5jbHVkZV9IRUFERVJTID0gbHR0bmcvbHR0bmcuaCBsdHRu
-Zy9sdHRuZy1lcnJvci5oIGx0dG5nL3ZlcnNpb24uaApkaWZmIC0tZ2l0IGEvaW5jbHVkZS9sdHRu
-Zy92ZXJzaW9uLmggYi9pbmNsdWRlL2x0dG5nL3ZlcnNpb24uaApuZXcgZmlsZSBtb2RlIDEwMDY0
-NAppbmRleCAwMDAwMDAwLi40MmE1MDlkCi0tLSAvZGV2L251bGwKKysrIGIvaW5jbHVkZS9sdHRu
-Zy92ZXJzaW9uLmgKQEAgLTAsMCArMSwyNSBAQAorLyoKKyAqIHZlcnNpb24uaAorICoKKyAqIExp
-bnV4IFRyYWNlIFRvb2xraXQgdmVyc2lvbiBoZWFkZXIgZmlsZQorICoKKyAqIENvcHlyaWdodCAo
-QykgMjAxMyAtIFJhcGhhw6tsIEJlYW1vbnRlIDxyYXBoYWVsLmJlYW1vbnRlQGdtYWlsLmNvbT4K
-KyAqCisgKiBUaGlzIGxpYnJhcnkgaXMgZnJlZSBzb2Z0d2FyZTsgeW91IGNhbiByZWRpc3RyaWJ1
-dGUgaXQgYW5kL29yIG1vZGlmeSBpdAorICogdW5kZXIgdGhlIHRlcm1zIG9mIHRoZSBHTlUgTGVz
-c2VyIEdlbmVyYWwgUHVibGljIExpY2Vuc2UsIHZlcnNpb24gMi4xIG9ubHksCisgKiBhcyBwdWJs
-aXNoZWQgYnkgdGhlIEZyZWUgU29mdHdhcmUgRm91bmRhdGlvbi4KKyAqCisgKiBUaGlzIGxpYnJh
-cnkgaXMgZGlzdHJpYnV0ZWQgaW4gdGhlIGhvcGUgdGhhdCBpdCB3aWxsIGJlIHVzZWZ1bCwgYnV0
-IFdJVEhPVVQKKyAqIEFOWSBXQVJSQU5UWTsgd2l0aG91dCBldmVuIHRoZSBpbXBsaWVkIHdhcnJh
-bnR5IG9mIE1FUkNIQU5UQUJJTElUWSBvcgorICogRklUTkVTUyBGT1IgQSBQQVJUSUNVTEFSIFBV
-UlBPU0UuIFNlZSB0aGUgR05VIExlc3NlciBHZW5lcmFsIFB1YmxpYyBMaWNlbnNlCisgKiBmb3Ig
-bW9yZSBkZXRhaWxzLgorICoKKyAqIFlvdSBzaG91bGQgaGF2ZSByZWNlaXZlZCBhIGNvcHkgb2Yg
-dGhlIEdOVSBMZXNzZXIgR2VuZXJhbCBQdWJsaWMgTGljZW5zZQorICogYWxvbmcgd2l0aCB0aGlz
-IGxpYnJhcnk7IGlmIG5vdCwgd3JpdGUgdG8gdGhlIEZyZWUgU29mdHdhcmUgRm91bmRhdGlvbiwK
-KyAqIEluYy4sIDUxIEZyYW5rbGluIFN0cmVldCwgRmlmdGggRmxvb3IsIEJvc3RvbiwgTUEgMDIx
-MTAtMTMwMSBVU0EKKyAqLworCisjaWZuZGVmIFZFUlNJT05fSAorI2RlZmluZSBWRVJTSU9OX0gK
-KworI2VuZGlmIC8qIFZFUlNJT05fSCAqLwpkaWZmIC0tZ2l0IGEvc3JjL2Jpbi9sdHRuZy1zZXNz
-aW9uZC9tYWluLmMgYi9zcmMvYmluL2x0dG5nLXNlc3Npb25kL21haW4uYwppbmRleCBmN2JiNTNl
-Li5mMGQ1ODk1IDEwMDY0NAotLS0gYS9zcmMvYmluL2x0dG5nLXNlc3Npb25kL21haW4uYworKysg
-Yi9zcmMvYmluL2x0dG5nLXNlc3Npb25kL21haW4uYwpAQCAtMzUsNiArMzUsNyBAQAogI2luY2x1
-ZGUgPHVyY3UvdWF0b21pYy5oPgogI2luY2x1ZGUgPHVuaXN0ZC5oPgogI2luY2x1ZGUgPGNvbmZp
-Zy5oPgorI2luY2x1ZGUgPGx0dG5nL3ZlcnNpb24uaD4KIAogI2luY2x1ZGUgPGNvbW1vbi9jb21t
-b24uaD4KICNpbmNsdWRlIDxjb21tb24vY29tcGF0L3NvY2tldC5oPgpAQCAtMzU0Nyw3ICszNTQ4
-LDExIEBAIHN0YXRpYyBpbnQgcGFyc2VfYXJncyhpbnQgYXJnYywgY2hhciAqKmFyZ3YpCiAJCQl1
-c2FnZSgpOwogCQkJZXhpdChFWElUX0ZBSUxVUkUpOwogCQljYXNlICdWJzoKKyNpZmRlZiBHSVRf
-VkVSU0lPTgorCQkJZnByaW50ZihzdGRvdXQsICIlcyAoR2l0OiAlcylcbiIsIFZFUlNJT04sIEdJ
-VF9WRVJTSU9OKTsKKyNlbHNlIC8qIEdJVF9WRVJTSU9OICovCiAJCQlmcHJpbnRmKHN0ZG91dCwg
-IiVzXG4iLCBWRVJTSU9OKTsKKyNlbmRpZiAvKiBHSVRfVkVSU0lPTiAqLwogCQkJZXhpdChFWElU
-X1NVQ0NFU1MpOwogCQljYXNlICdTJzoKIAkJCW9wdF9zaWdfcGFyZW50ID0gMTsKZGlmZiAtLWdp
-dCBhL3NyYy9iaW4vbHR0bmcvY29tbWFuZHMvdmVyc2lvbi5jIGIvc3JjL2Jpbi9sdHRuZy9jb21t
-YW5kcy92ZXJzaW9uLmMKaW5kZXggN2Y2OWRlMy4uYzZlOWUxMCAxMDA2NDQKLS0tIGEvc3JjL2Jp
-bi9sdHRuZy9jb21tYW5kcy92ZXJzaW9uLmMKKysrIGIvc3JjL2Jpbi9sdHRuZy9jb21tYW5kcy92
-ZXJzaW9uLmMKQEAgLTI0LDYgKzI0LDcgQEAKICNpbmNsdWRlIDxzeXMvdHlwZXMuaD4KICNpbmNs
-dWRlIDx1bmlzdGQuaD4KICNpbmNsdWRlIDxjb25maWcuaD4KKyNpbmNsdWRlIDxsdHRuZy92ZXJz
-aW9uLmg+CiAKICNpbmNsdWRlICIuLi9jb21tYW5kLmgiCiAKQEAgLTc5LDYgKzgwLDkgQEAgaW50
-IGNtZF92ZXJzaW9uKGludCBhcmdjLCBjb25zdCBjaGFyICoqYXJndikKIAl9CiAKIAlNU0coImx0
-dG5nIHZlcnNpb24gIiBWRVJTSU9OICIgLSAiIFZFUlNJT05fTkFNRSk7CisjaWZkZWYgR0lUX1ZF
-UlNJT04KKyAgICAgICAgTVNHKCJHaXQgdmVyc2lvbjogIiBHSVRfVkVSU0lPTik7CisjZW5kaWYK
-IAlNU0coIlxuIiBWRVJTSU9OX0RFU0NSSVBUSU9OICJcbiIpOwogCU1TRygiV2ViIHNpdGU6IGh0
-dHA6Ly9sdHRuZy5vcmciKTsKIAlNU0coIlxubHR0bmcgaXMgZnJlZSBzb2Z0d2FyZSBhbmQgdW5k
-ZXIgdGhlIEdQTCBsaWNlbnNlIGFuZCBwYXJ0IExHUEwiKTsKZGlmZiAtLWdpdCBhL3NyYy9iaW4v
-bHR0bmcvbHR0bmcuYyBiL3NyYy9iaW4vbHR0bmcvbHR0bmcuYwppbmRleCA4NTYyMTQ0Li5lMzBh
-N2M2IDEwMDY0NAotLS0gYS9zcmMvYmluL2x0dG5nL2x0dG5nLmMKKysrIGIvc3JjL2Jpbi9sdHRu
-Zy9sdHRuZy5jCkBAIC0yNSw2ICsyNSw3IEBACiAjaW5jbHVkZSA8c3lzL3dhaXQuaD4KICNpbmNs
-dWRlIDx1bmlzdGQuaD4KICNpbmNsdWRlIDxjb25maWcuaD4KKyNpbmNsdWRlIDxsdHRuZy92ZXJz
-aW9uLmg+CiAjaW5jbHVkZSA8Y3R5cGUuaD4KIAogI2luY2x1ZGUgPGx0dG5nL2x0dG5nLmg+CkBA
-IC04MSw3ICs4MiwxMSBAQCBzdGF0aWMgc3RydWN0IGNtZF9zdHJ1Y3QgY29tbWFuZHNbXSA9ICB7
-CiAKIHN0YXRpYyB2b2lkIHVzYWdlKEZJTEUgKm9mcCkKIHsKLQlmcHJpbnRmKG9mcCwgIkxUVG5n
-IFRyYWNlIENvbnRyb2wgIiBWRVJTSU9OIiAtICIgVkVSU0lPTl9OQU1FIlxuXG4iKTsKKwlmcHJp
-bnRmKG9mcCwgIkxUVG5nIFRyYWNlIENvbnRyb2wgIiBWRVJTSU9OIiAtICIgVkVSU0lPTl9OQU1F
-IlxuIik7CisjaWZkZWYgR0lUX1ZFUlNJT04KKwkJZnByaW50ZihvZnAsICJHaXQgdmVyc2lvbjog
-IiBHSVRfVkVSU0lPTiJcbiIpOworI2VuZGlmCisJZnByaW50ZihvZnAsICJcbiIpOwogCWZwcmlu
-dGYob2ZwLCAidXNhZ2U6IGx0dG5nIFtPUFRJT05TXSA8Q09NTUFORD4gWzxBUkdTPl1cbiIpOwog
-CWZwcmludGYob2ZwLCAiXG4iKTsKIAlmcHJpbnRmKG9mcCwgIk9wdGlvbnM6XG4iKTsKLS0gCjEu
-Ny4xMC40CgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
-bHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9s
-aXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--===============0686342846==
+Content-Type: multipart/signed; micalg=pgp-sha1;
+ protocol="application/pgp-signature";
+ boundary="----enig2URIXSGUJJPXXIHGIEVCX"
+
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+------enig2URIXSGUJJPXXIHGIEVCX
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+On 2013-03-13 23:03, Rapha=C3=ABl Beamonte wrote:
+> Signed-off-by: Rapha=C3=ABl Beamonte <raphael.beamonte@gmail.com>
+> ---
+>  include/Makefile.am              |   20 +++++++++++++++++++-
+>  include/lttng/version.h          |   25 +++++++++++++++++++++++++
+>  src/bin/lttng-sessiond/main.c    |    5 +++++
+>  src/bin/lttng/commands/version.c |    4 ++++
+>  src/bin/lttng/lttng.c            |    7 ++++++-
+>  5 files changed, 59 insertions(+), 2 deletions(-)
+>  create mode 100644 include/lttng/version.h
+
+Ok, this is a new try. This one uses shell script in the Makefile of the
+include directory to verify and change (only if necessary) the value of
+the GIT_VERSION define. It allows the sessiond/main.c,
+commands/version.c and lttng.c files to be the only one to need
+re-compilation for versioning when the git version changes.
+
+I thought at first to put the content of the shell script in a
+version.sh file that would be called, but I wasn't sure the idea of
+calling an external shell script at make would be better that directly
+put the operations in the makefile.
+
+One thing I'm not sure about is that currently, the version.h needs to
+be versioned but perhaps should be in the .gitignore file to only save
+the "original" version file in the repository. There could be another
+solution if you think it's better : generating the version.h file with
+the bash script at first run. In this case, I think the version.sh shell
+script should perhaps be a better solution.
+
+
+
+------enig2URIXSGUJJPXXIHGIEVCX
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.12 (GNU/Linux)
+
+iQIcBAEBAgAGBQJRQUEBAAoJECV+8Ygg/tEoM24P/1MdGxfMCGvThIlJaNpirLM7
+SbxS5VuTCxFj4Y0StIVYTy3qEfg8TKKdpLhviaSPOBiVmbUlyks9sxp7iHxkXt0L
+73g08O7R1Pvnp7gutclMJBABVdaz40wKvk4LX8m/RERP1RJj5mD5NHDqxtMq5wnp
+r3kIz9NrT332+0EB3Ky/5t8Qtc/iyOhoSeY5qMp5RpG3p5Lwdx2ahXboab/kic23
+lMc3A1+rXII8rni2KT8JNv+jOkBcmq+4BVNZ13qGIauc3Dte2K6j5f/B4o05UtOS
+SutuwDam4nJjPKIxn6E6XXMTVEme5kq8LkI5Giz3sUj2vHhel1h+CFDnI8+0LTR3
+O30RZ13Uz76Ui/eTDjbG85Rf3Dano5m+fZ7CEBT7qCdrleeJNArU9SSimxoMNgbp
+j6bYeD489qXbU4/0wly1IdBsTAiwhU9P2zEUbK/bED9m3IjFFXbrh77EjPgyC7NI
+c2AgGkqvsdVHJVqIRh2s8A0gzf8ChxxBUErpyudEWJT1LMkIb82lY1UoIQ1Vpn1b
+4CpQPl7HeKmIdV3/8J4lNa2qF8CYwt+i/ycUuQ6CpLwgCgRV9Hsu+ztcHE96UvVa
+IST16fD4O7BOpg1kAcgq0dLhBIiEOzatwY4Jg3cQyJfwI0l05Hg2mOumxayK6spP
+Y67U2KaqLoyMseh63YwS
+=AmIS
+-----END PGP SIGNATURE-----
+
+------enig2URIXSGUJJPXXIHGIEVCX--
+
+
+--===============0686342846==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0686342846==--
