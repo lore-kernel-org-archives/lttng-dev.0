@@ -1,19 +1,18 @@
-From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: dlopen, gcc -l and LD_PRELOAD
-Date: Fri, 15 Mar 2013 15:33:11 -0400
-Message-ID: <CA+jJMxvm5=mms0BwFtDEy8CKuYOM08K7EYCddKWoRY2VSbxV1Q__3088.03419252417$1363376047$gmane$org@mail.gmail.com>
-References: <48CF5AC71E61DB46B70D0F388054EFFD027A2C@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
+	<jeremie.galarneau@efficios.com>
+Subject: [PATCH ctf] Typo fix in the tracers requirements
+Date: Fri, 15 Mar 2013 17:16:04 -0400
+Message-ID: <1363382164-12487-1-git-send-email-jeremie.galarneau__47735.33936027$1363382237$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-we0-f180.google.com ([74.125.82.180])
+Received: from mail-vc0-f181.google.com ([209.85.220.181])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1UGaNR-00042O-Pm
-	for lttng-dev@lists.lttng.org; Fri, 15 Mar 2013 15:33:18 -0400
-Received: by mail-we0-f180.google.com with SMTP id k14so3440952wer.25
-	for <lttng-dev@lists.lttng.org>; Fri, 15 Mar 2013 12:33:11 -0700 (PDT)
-In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD027A2C@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1UGbzM-0004pp-RC
+	for lttng-dev@lists.lttng.org; Fri, 15 Mar 2013 17:16:32 -0400
+Received: by mail-vc0-f181.google.com with SMTP id hv10so1607154vcb.12
+	for <lttng-dev@lists.lttng.org>; Fri, 15 Mar 2013 14:16:27 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,63 +21,28 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On Fri, Mar 15, 2013 at 12:41 PM, Thibault, Daniel
-<Daniel.Thibault@drdc-rddc.gc.ca> wrote:
->    In the lttng-ust man pages, there is a paragraph that reads:
->
-> Note about dlopen() usage: Due to locking side-effects caused by the way =
-libc lazily resolves Thread-Local Storage (TLS) symbols when a library is d=
-lopened, linking the tracepoint probe or liblttng-ust with dlopen() is disc=
-ouraged.  They should be linked with the application using "-llibname" or l=
-oaded with LD_PRELOAD.
->
->    I'm confused by the LD_PRELOAD bit: as far as I know, LD_PRELOAD serve=
-s only to substitute a dynamic library (the LD_PRELOAD argument) for anothe=
-r (the one the executable was linked against).  I don't see how one could c=
-ompile an instrumented application and leave its tracepoint provider unlink=
-ed, which is what the stated -llibname <-> LD_PRELOAD opposition implies.
->
-
-You may want to have a look at the comment at
-lttng-ust/include/lttng/tracepoint.h:229 which explains how this is
-accomplished. Basically, the tracepoint provider symbols are
-initialised and the probe is registered when the provider's shared
-object constructor is invoked. See ust-tracepoint-event.h:671 if you
-are interested in the actual implementation.
-
->    (Also, shouldn't that paragraph drop 'lazily', assuming the locking pr=
-oblems also arise if dlopen is used with RTLD_NOW?  Because if RTLD_NOW fix=
-ed the locking problem, that's what would be recommended here, no?)
-
-Good question. I think this problem has been fixed as part of the 2.1
-release. However, I do know there are other issues related to
-"dlopen()"-ing probe providers; details on the bug tracker[1].
-
-J=E9r=E9mie
-[1] https://bugs.lttng.org/issues/447
-
->
-> Daniel U. Thibault
-> R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) / Defence R=
-&D Canada - Valcartier (DRDC Valcartier)
-> Cyber s=E9curit=E9 pour les missions essentielles (CME) / Mission Critica=
-l Cyber Security (MCCS)
-> Protection des syst=E8mes et contremesures (PSC) / Systems Protection & C=
-ountermeasures (SPC)
-> 2459 route de la Bravoure
-> Qu=E9bec, QC  G3J 1X5
-> CANADA
-> Vox : (418) 844-4000 x4245
-> Fax : (418) 844-4538
-> NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-> Gouvernement du Canada / Government of Canada
-> <http://www.valcartier.drdc-rddc.gc.ca/>
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+U2lnbmVkLW9mZi1ieTogSsOpcsOpbWllIEdhbGFybmVhdSA8amVyZW1pZS5nYWxhcm5lYXVAZWZm
+aWNpb3MuY29tPgotLS0KIGNvbW1vbi10cmFjZS1mb3JtYXQtcmVxcy50eHQgfCAyICstCiAxIGZp
+bGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkKCmRpZmYgLS1naXQgYS9j
+b21tb24tdHJhY2UtZm9ybWF0LXJlcXMudHh0IGIvY29tbW9uLXRyYWNlLWZvcm1hdC1yZXFzLnR4
+dAppbmRleCA2NmZlNTVhLi5lNWU3YzdhIDEwMDY0NAotLS0gYS9jb21tb24tdHJhY2UtZm9ybWF0
+LXJlcXMudHh0CisrKyBiL2NvbW1vbi10cmFjZS1mb3JtYXQtcmVxcy50eHQKQEAgLTI2OCw3ICsy
+NjgsNyBAQCBFbnVtZXJhdGluZyB0aGVzZSBoaWdoZXItbGV2ZWwgcmVxdWlyZW1lbnRzIGluZmx1
+ZW5jZSB0aGUgdHJhY2UgZm9ybWF0IGluIG1hbnkKIHdheXMuIEZvciBpbnN0YW5jZSwgYSByZXF1
+aXJlbWVudCBmb3IgY29tcGFjdG5lc3MgbGVhZHMgdG8gc2NoZW1lcyB3aGVyZSBhbGwKIGluZm9y
+bWF0aW9uIHJlcGV0aXRpb24gc2hvdWxkIGJlIGVsaW1pbmF0ZWQuIFRodXMgdGhlIG5lZWQgZm9y
+IG9wdGlvbmFsCiBwZXItc2VjdGlvbiBjb250ZXh0IGluZm9ybWF0aW9uLiBBbm90aGVyIGV4YW1w
+bGUgaXMgdGhlIHJlcXVpcmVtZW50IGZvciBzcGVlZAotYW5kIHN0cmVhbWluZy4gVGhlIHJlcXVp
+cmVtZW50IGZvciBzcGVlZCBhbnMgdHJlYW1pbmcgbGVhZHMgdG8gemVyby1jb3B5CithbmQgc3Ry
+ZWFtaW5nLiBUaGUgcmVxdWlyZW1lbnQgZm9yIHNwZWVkIGFuZCBzdHJlYW1pbmcgbGVhZHMgdG8g
+emVyby1jb3B5CiBpbXBsZW1lbnRhdGlvbnMsIHdoaWNoIGltcGx5IHRoYXQgdGhlIHRyYWNlIGZv
+cm1hdCBzaG91bGQgYmUgd3JpdHRlbiBuYXRpdmVseSBieQogdGhlIHRyYWNlci4gIFRoZSB0cmFj
+ZXIgcmVxdWlyZW1lbnRzIHN0YXRlZCBpbiB0aGlzIHNlY3Rpb24gYXJlIHN0YXRlZCB0byBlbnN1
+cmUKIHRoYXQgdGhlIHRyYWNlIGZvcm1hdCBzdHJ1Y3R1cmUgbWFrZXMgaXQgcG9zc2libGUgZm9y
+IGEgdHJhY2VyIHRvIGNvcGUgd2l0aCB0aGUKLS0gCjEuOC4xLjUKCgpfX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0
+dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21h
+aWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
