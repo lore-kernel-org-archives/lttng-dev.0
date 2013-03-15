@@ -1,9 +1,9 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH] Teach babeltrace understand "native"
-	and	"network" for byte_order
-Date: Fri, 15 Mar 2013 08:07:53 -0400
-Message-ID: <20130315120753.GA30973__22214.6561755382$1363349328$gmane$org@Krystal>
-References: <1363341137-26956-1-git-send-email-yao@codesourcery.com>
+Subject: Re: [RFC-PATCH] Adding trap tracepoints definitions
+Date: Fri, 15 Mar 2013 09:08:09 -0400
+Message-ID: <20130315130809.GA31329__13741.1848795184$1363352950$gmane$org@Krystal>
+References: <CADcCL0j+_N-6b4QvbLRnpC_DvpH3K8U9G2yQsb1ACzqqz3vQSA@mail.gmail.com>
+	<1363307192-14522-1-git-send-email-fdeslaur@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -11,10 +11,10 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UGTQQ-0000Kd-Sx
-	for lttng-dev@lists.lttng.org; Fri, 15 Mar 2013 08:07:54 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1UGUMk-0000pi-SL
+	for lttng-dev@lists.lttng.org; Fri, 15 Mar 2013 09:08:10 -0400
 Content-Disposition: inline
-In-Reply-To: <1363341137-26956-1-git-send-email-yao@codesourcery.com>
+In-Reply-To: <1363307192-14522-1-git-send-email-fdeslaur@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,76 +23,113 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Yao Qi <yao@codesourcery.com>
+To: Francis Deslauriers <fdeslaur@gmail.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Yao Qi (yao@codesourcery.com) wrote:
-> Hi,
-> We wrote byte_order in metadata either "le" or "be", according to the
-> host endianness.  Today, when I check the ctf specification, I find
-> "native" fits our needs well.  However, after I replace "le" with
-> "native" in metadata, I got the following error message:
+* Francis Deslauriers (fdeslaur@gmail.com) wrote:
+> This patch adds new trap tracepoint definitions. Both trap entry and trap exit
+> tracepoints can be added.
 > 
->   [error] get_trace_byte_order: unexpected string "native". Should be "native", "network", "be" or "le".
+> Signed-off-by: Francis Deslauriers <fdeslaur@gmail.com>
+> ---
+>  include/trace/events/trap.h |   39 +++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 39 insertions(+)
+>  create mode 100644 include/trace/events/trap.h
 > 
-> This patch teaches babeltrace understand "native" and "network".  With
-> this patch applied, the output looks right now.  Let me know if I need
-> run testsuite, and how.
+> diff --git a/include/trace/events/trap.h b/include/trace/events/trap.h
+> new file mode 100644
+> index 0000000..869c512
+> --- /dev/null
+> +++ b/include/trace/events/trap.h
+> @@ -0,0 +1,39 @@
+> +#undef TRACE_SYSTEM
+> +#define TRACE_SYSTEM trap
+> +
+> +#if !defined(_TRACE_TRAP_H) || defined(TRACE_HEADER_MULTI_READ)
+> +#define _TRACE_TRAP_H
+> +
+> +#include <linux/tracepoint.h>
+> +
+> +DECLARE_EVENT_CLASS(trap,
+> +	TP_PROTO(int trap_nb),
+> +
+> +	TP_ARGS(trap_nb),
 
-your interpretation of what the byte order should accept is based on
-section 4.1.3 of the CTF spec, which discusses what byte order can be
-accepted by a type.
+you might want
 
-However, here you are proposing to change the byte order recognised at
-the trace declaration level. Unfortunately, we cannot assume anything
-about native endianness of the traced machine until we have the
-endianness information at the trace declaration level, as the trace can
-come from any source.
+        TP_PROTO(struct pt_regs *regs, long trap);
 
-Possibly that the CTF spec would need to be clarified. Currently, we
-need to look at:
+why trap instead of trap_nb: based on include/trace/events/irq.h. "irq"
+is used and not "irq_nb".
 
-7.4 TSDL Examples
+Why long instead of int ?
 
-trace {
-  ...
-  byte_order = be OR le;                        /* Endianness (required) */
-  ...
-};
+Because s390 represents its trap number in a long.
 
-to understand that only be and le should be expected in the trace
-description.
+why having the regs there ? It's the context of the trap, was passed as
+parameter to the original lttng 0.x patchset. See
+https://git.lttng.org/?p=linux-2.6-lttng.git;a=shortlog;h=refs/heads/2.6.38.6-lttng-0.249
 
-Thoughts ?
+> +
+> +	TP_STRUCT__entry(
+> +		__field(    int,    trap_nb )
+
+Please split entry and exit events into two different event (without
+class).
+
+And add, for entry:
+
+        __field(  unsigned long,        ip)
+
+> +	),
+> +	TP_fast_assign(
+> +		__entry->trap_nb = trap_nb;
+
+entry:
+
+        __entry->ip = regs ? instruction_pointer(regs) : 0UL;
+
+This would be a good generic starting point to make the trap
+instrumentation useful. In a later step, this will allow us to dump all
+registers if need be as we specialize the trap header on a
+per-architecture basis. But this should come later: let's start simple,
+get the entire chain working and push the feature into mainline Linux,
+and only then expand if necessary.
+
+With the "ip" field, we'd get the same feature set as lttng 0.x, see
+e.g.
+
+https://git.lttng.org/?p=lttng-modules.git;a=blob;f=probes/trap-trace.c;h=397254cd700779b3333d7593c33f9660eec2ffc5;hb=refs/heads/v0.19-stable
 
 Thanks,
 
 Mathieu
 
-> 
-> Signed-off-by: Yao Qi <yao@codesourcery.com>
-> ---
->  .../ctf/metadata/ctf-visitor-generate-io-struct.c  |    4 ++++
->  1 files changed, 4 insertions(+), 0 deletions(-)
-> 
-> diff --git a/formats/ctf/metadata/ctf-visitor-generate-io-struct.c b/formats/ctf/metadata/ctf-visitor-generate-io-struct.c
-> index 9bcc170..cea2877 100644
-> --- a/formats/ctf/metadata/ctf-visitor-generate-io-struct.c
-> +++ b/formats/ctf/metadata/ctf-visitor-generate-io-struct.c
-> @@ -1227,6 +1227,10 @@ int get_trace_byte_order(FILE *fd, int depth, struct ctf_node *unary_expression)
->  		byte_order = BIG_ENDIAN;
->  	else if (!strcmp(unary_expression->u.unary_expression.u.string, "le"))
->  		byte_order = LITTLE_ENDIAN;
-> +	else if (!strcmp(unary_expression->u.unary_expression.u.string, "native"))
-> +		byte_order = BYTE_ORDER;
-> +	else if (!strcmp(unary_expression->u.unary_expression.u.string, "network"))
-> +		byte_order = BIG_ENDIAN;
->  	else {
->  		fprintf(fd, "[error] %s: unexpected string \"%s\". Should be \"be\" or \"le\".\n",
->  			__func__, unary_expression->u.unary_expression.u.string);
+
+> +),
+> +
+> +	TP_printk("number=%d", __entry->trap_nb)
+> +);
+> +
+> +DEFINE_EVENT(trap, trap_entry,
+> +
+> +	TP_PROTO(int trap_nb),
+> +
+> +	TP_ARGS(trap_nb)
+> +);
+> +DEFINE_EVENT(trap, trap_exit,
+> +
+> +	TP_PROTO(int trap_nb),
+> +
+> +	TP_ARGS(trap_nb)
+> +);
+> +
+> +#endif /* _TRACE_TRAP_H */
+> +/* This part must be outside protection */
+> +#include <trace/define_trace.h>
 > -- 
-> 1.7.7.6
+> 1.7.10.4
 > 
 > 
 > _______________________________________________
