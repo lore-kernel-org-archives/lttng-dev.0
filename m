@@ -1,20 +1,20 @@
-From: =?UTF-8?q?Rapha=C3=ABl=20Beamonte?= <raphael.beamonte@gmail.com>
-Subject: [lttng-tools PATCH] Add a git version information in
-	LTTng versions compiled from git sources
-Date: Fri, 15 Mar 2013 14:40:40 -0400
-Message-ID: <2f2984a90ab0b25a5b9e6259060fdd6c5c7bb00a.1363372839.git.raphael.beamonte__4221.06482224098$1363372909$gmane$org@gmail.com>
+From: =?UTF-8?B?UmFwaGHDq2wgQmVhbW9udGU=?= <raphael.beamonte@gmail.com>
+Subject: Re: [lttng-tools PATCH] Add a git version information
+ in LTTng versions compiled from git sources
+Date: Fri, 15 Mar 2013 14:44:05 -0400
+Message-ID: <51436BF5.4000501__34753.0600884513$1363373106$gmane$org@gmail.com>
 References: <51421C12.5050907@gmail.com>
+	<2f2984a90ab0b25a5b9e6259060fdd6c5c7bb00a.1363372839.git.raphael.beamonte@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============0345899571=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f175.google.com ([209.85.223.175])
+Received: from mail-ia0-f171.google.com ([209.85.210.171])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <raphael.beamonte@gmail.com>) id 1UGZYl-0003b2-9K
-	for lttng-dev@lists.lttng.org; Fri, 15 Mar 2013 14:40:55 -0400
-Received: by mail-ie0-f175.google.com with SMTP id c12so4812083ieb.34
-	for <lttng-dev@lists.lttng.org>; Fri, 15 Mar 2013 11:40:49 -0700 (PDT)
-In-Reply-To: <51421C12.5050907@gmail.com>
+	(envelope-from <raphael.beamonte@gmail.com>) id 1UGZc2-0003dW-9C
+	for lttng-dev@lists.lttng.org; Fri, 15 Mar 2013 14:44:18 -0400
+Received: by mail-ia0-f171.google.com with SMTP id z13so3527386iaz.30
+	for <lttng-dev@lists.lttng.org>; Fri, 15 Mar 2013 11:44:12 -0700 (PDT)
+In-Reply-To: <2f2984a90ab0b25a5b9e6259060fdd6c5c7bb00a.1363372839.git.raphael.beamonte@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,138 +24,80 @@ List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 To: dgoulet@efficios.com
-Cc: =?UTF-8?q?Rapha=C3=ABl=20Beamonte?= <raphael.beamonte@gmail.com>, lttng-dev@lists.lttng.org
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-U2lnbmVkLW9mZi1ieTogUmFwaGHDq2wgQmVhbW9udGUgPHJhcGhhZWwuYmVhbW9udGVAZ21haWwu
-Y29tPgotLS0KIC5naXRpZ25vcmUgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgIDIg
-KysKIGluY2x1ZGUvTWFrZWZpbGUuYW0gICAgICAgICAgICAgICAgICAgICB8ICAgMjYgKysrKysr
-KysrKysrKysrKysrKysrKysrKy0KIGluY2x1ZGUvdmVyc2lvbi5oLnRtcGwgICAgICAgICAgICAg
-ICAgICB8ICAgMjcgKysrKysrKysrKysrKysrKysrKysrKysrKysrCiBzcmMvYmluL2x0dG5nLXNl
-c3Npb25kL2x0dG5nLXNlc3Npb25kLmggfCAgIDE0ICsrKysrKysrKysrKysrCiBzcmMvYmluL2x0
-dG5nLXNlc3Npb25kL21haW4uYyAgICAgICAgICAgfCAgICAyICstCiBzcmMvYmluL2x0dG5nL2Nv
-bW1hbmRzL3ZlcnNpb24uYyAgICAgICAgfCAgICA0ICsrKy0KIHNyYy9iaW4vbHR0bmcvbHR0bmcu
-YyAgICAgICAgICAgICAgICAgICB8ICAgIDUgKysrKy0KIHNyYy9iaW4vbHR0bmcvdXRpbHMuaCAg
-ICAgICAgICAgICAgICAgICB8ICAgMTMgKysrKysrKysrKysrKwogOCBmaWxlcyBjaGFuZ2VkLCA4
-OSBpbnNlcnRpb25zKCspLCA0IGRlbGV0aW9ucygtKQogY3JlYXRlIG1vZGUgMTAwNjQ0IGluY2x1
-ZGUvdmVyc2lvbi5oLnRtcGwKCmRpZmYgLS1naXQgYS8uZ2l0aWdub3JlIGIvLmdpdGlnbm9yZQpp
-bmRleCBhYzcyYmY0Li5hMzZmMGI5IDEwMDY0NAotLS0gYS8uZ2l0aWdub3JlCisrKyBiLy5naXRp
-Z25vcmUKQEAgLTMxLDYgKzMxLDggQEAgY29uZmlnLwogIWNvbmZpZy9lcG9sbC5tNAogIWNvbmZp
-Zy9jb25maWdfZmVhdHVyZS5tNAogCitpbmNsdWRlL3ZlcnNpb24uaAorCiBzcmMvYmluL2x0dG5n
-LXNlc3Npb25kL2x0dG5nLXNlc3Npb25kCiBzcmMvYmluL2x0dG5nL2x0dG5nCiBzcmMvYmluL2x0
-dG5nLWNvbnN1bWVyZC9sdHRuZy1jb25zdW1lcmQKZGlmZiAtLWdpdCBhL2luY2x1ZGUvTWFrZWZp
-bGUuYW0gYi9pbmNsdWRlL01ha2VmaWxlLmFtCmluZGV4IDBiY2I2ZjkuLmI0NmMxZTIgMTAwNjQ0
-Ci0tLSBhL2luY2x1ZGUvTWFrZWZpbGUuYW0KKysrIGIvaW5jbHVkZS9NYWtlZmlsZS5hbQpAQCAt
-MSArMSwyNSBAQAotbHR0bmdpbmNsdWRlX0hFQURFUlMgPSBsdHRuZy9sdHRuZy5oIGx0dG5nL2x0
-dG5nLWVycm9yLmgKK3ZlcnNpb24uaDogdmVyc2lvbi5oLnRtcGwKKwkoZ2l0X3ZlcnNpb249IiQk
-KGdpdCBkZXNjcmliZSAtLWxvbmcgLS1hbGwgMj4vZGV2L251bGwpIjsgXAorCXZlcnNpb25faF90
-bXBsPSIkKHRvcF9idWlsZGRpcikvaW5jbHVkZS92ZXJzaW9uLmgudG1wbCI7IFwKKwl2ZXJzaW9u
-X2g9IiQodG9wX2J1aWxkZGlyKS9pbmNsdWRlL3ZlcnNpb24uaCI7IFwKKwlpZiBbICEgLWUgIiQk
-e3ZlcnNpb25faH0iIF0gfHwgXAorCQlbICIkJHt2ZXJzaW9uX2hfdG1wbH0iIC1udCAiJCR7dmVy
-c2lvbl9ofSIgXTsgdGhlbiBcCisJCWNwICIkJHt2ZXJzaW9uX2hfdG1wbH0iICIkJHt2ZXJzaW9u
-X2h9IjsgXAorCWZpOyBcCisJaWYgWyAteiAiJCR7Z2l0X3ZlcnNpb259IiBdOyB0aGVuIFwKKwkJ
-aWYgWyAkJChncmVwIC1jICJeI2RlZmluZSBHSVRfVkVSU0lPTiIgIiQke3ZlcnNpb25faH0iKSAt
-Z3QgMCBdOyB0aGVuIFwKKwkJCXNlZCAtaSAiL14jZGVmaW5lIEdJVF9WRVJTSU9OL2QiICIkJHt2
-ZXJzaW9uX2h9IjsgXAorCQlmaTsgXAorCWVsc2UgXAorCQlpZiBbICQkKGdyZXAgLWNFICJeI2Rl
-ZmluZSBHSVRfVkVSU0lPTiBcIj8kJHtnaXRfdmVyc2lvbn1cIj8kJCIgIiQke3ZlcnNpb25faH0i
-KSAtZXEgMCBdOyB0aGVuIFwKKwkJCWlmIFsgJCQoZ3JlcCAtYyAiXiNkZWZpbmUgR0lUX1ZFUlNJ
-T04iICIkJHt2ZXJzaW9uX2h9IikgLWd0IDAgXTsgdGhlbiBcCisJCQkJc2VkIC1pICJzJ14jZGVm
-aW5lIEdJVF9WRVJTSU9OLiokJCcjZGVmaW5lIEdJVF9WRVJTSU9OIFwiJCR7Z2l0X3ZlcnNpb259
-XCInIiAiJCR7dmVyc2lvbl9ofSI7IFwKKwkJCWVsc2UgXAorCQkJCXNlZCAtaSAicydeXCgjZGVm
-aW5lIFZFUlNJT05fSC4qXCkkJCdcMVxuXG4jZGVmaW5lIEdJVF9WRVJTSU9OIFwiJCR7Z2l0X3Zl
-cnNpb259XCInIiAiJCR7dmVyc2lvbl9ofSI7IFwKKwkJCWZpOyBcCisJCWZpOyBcCisJZmkpCisK
-Ky5QSE9OWTogdmVyc2lvbi5oCisKK2x0dG5naW5jbHVkZV9IRUFERVJTID0gbHR0bmcvbHR0bmcu
-aCBsdHRuZy9sdHRuZy1lcnJvci5oIHZlcnNpb24uaApkaWZmIC0tZ2l0IGEvaW5jbHVkZS92ZXJz
-aW9uLmgudG1wbCBiL2luY2x1ZGUvdmVyc2lvbi5oLnRtcGwKbmV3IGZpbGUgbW9kZSAxMDA2NDQK
-aW5kZXggMDAwMDAwMC4uYzQyNzg5YwotLS0gL2Rldi9udWxsCisrKyBiL2luY2x1ZGUvdmVyc2lv
-bi5oLnRtcGwKQEAgLTAsMCArMSwyNyBAQAorLyoKKyAqIHZlcnNpb24uaAorICoKKyAqIExpbnV4
-IFRyYWNlIFRvb2xraXQgdmVyc2lvbiBoZWFkZXIgZmlsZQorICoKKyAqIENvcHlyaWdodCAoQykg
-MjAxMyAtIFJhcGhhw6tsIEJlYW1vbnRlIDxyYXBoYWVsLmJlYW1vbnRlQGdtYWlsLmNvbT4KKyAq
-CisgKiBUaGlzIGxpYnJhcnkgaXMgZnJlZSBzb2Z0d2FyZTsgeW91IGNhbiByZWRpc3RyaWJ1dGUg
-aXQgYW5kL29yIG1vZGlmeSBpdAorICogdW5kZXIgdGhlIHRlcm1zIG9mIHRoZSBHTlUgTGVzc2Vy
-IEdlbmVyYWwgUHVibGljIExpY2Vuc2UsIHZlcnNpb24gMi4xIG9ubHksCisgKiBhcyBwdWJsaXNo
-ZWQgYnkgdGhlIEZyZWUgU29mdHdhcmUgRm91bmRhdGlvbi4KKyAqCisgKiBUaGlzIGxpYnJhcnkg
-aXMgZGlzdHJpYnV0ZWQgaW4gdGhlIGhvcGUgdGhhdCBpdCB3aWxsIGJlIHVzZWZ1bCwgYnV0IFdJ
-VEhPVVQKKyAqIEFOWSBXQVJSQU5UWTsgd2l0aG91dCBldmVuIHRoZSBpbXBsaWVkIHdhcnJhbnR5
-IG9mIE1FUkNIQU5UQUJJTElUWSBvcgorICogRklUTkVTUyBGT1IgQSBQQVJUSUNVTEFSIFBVUlBP
-U0UuIFNlZSB0aGUgR05VIExlc3NlciBHZW5lcmFsIFB1YmxpYyBMaWNlbnNlCisgKiBmb3IgbW9y
-ZSBkZXRhaWxzLgorICoKKyAqIFlvdSBzaG91bGQgaGF2ZSByZWNlaXZlZCBhIGNvcHkgb2YgdGhl
-IEdOVSBMZXNzZXIgR2VuZXJhbCBQdWJsaWMgTGljZW5zZQorICogYWxvbmcgd2l0aCB0aGlzIGxp
-YnJhcnk7IGlmIG5vdCwgd3JpdGUgdG8gdGhlIEZyZWUgU29mdHdhcmUgRm91bmRhdGlvbiwKKyAq
-IEluYy4sIDUxIEZyYW5rbGluIFN0cmVldCwgRmlmdGggRmxvb3IsIEJvc3RvbiwgTUEgMDIxMTAt
-MTMwMSBVU0EKKyAqLworCisjaWZuZGVmIFZFUlNJT05fSAorI2RlZmluZSBWRVJTSU9OX0gKKwor
-I2RlZmluZSBHSVRfVkVSU0lPTgorCisjZW5kaWYgLyogVkVSU0lPTl9IICovCmRpZmYgLS1naXQg
-YS9zcmMvYmluL2x0dG5nLXNlc3Npb25kL2x0dG5nLXNlc3Npb25kLmggYi9zcmMvYmluL2x0dG5n
-LXNlc3Npb25kL2x0dG5nLXNlc3Npb25kLmgKaW5kZXggOTI1OGYzOC4uZTkxOTE4YSAxMDA2NDQK
-LS0tIGEvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9sdHRuZy1zZXNzaW9uZC5oCisrKyBiL3NyYy9i
-aW4vbHR0bmctc2Vzc2lvbmQvbHR0bmctc2Vzc2lvbmQuaApAQCAtMSw1ICsxLDYgQEAKIC8qCiAg
-KiBDb3B5cmlnaHQgKEMpIDIwMTEgLSBEYXZpZCBHb3VsZXQgPGRhdmlkLmdvdWxldEBwb2x5bXRs
-LmNhPgorICogQ29weXJpZ2h0IChDKSAyMDEzIC0gUmFwaGHDq2wgQmVhbW9udGUgPHJhcGhhZWwu
-YmVhbW9udGVAZ21haWwuY29tPgogICoKICAqIFRoaXMgcHJvZ3JhbSBpcyBmcmVlIHNvZnR3YXJl
-OyB5b3UgY2FuIHJlZGlzdHJpYnV0ZSBpdCBhbmQvb3IgbW9kaWZ5CiAgKiBpdCB1bmRlciB0aGUg
-dGVybXMgb2YgdGhlIEdOVSBHZW5lcmFsIFB1YmxpYyBMaWNlbnNlLCB2ZXJzaW9uIDIgb25seSwK
-QEAgLTI4LDYgKzI5LDggQEAKIAogI2luY2x1ZGUgInNlc3Npb24uaCIKICNpbmNsdWRlICJ1c3Qt
-YXBwLmgiCisjaW5jbHVkZSAidmVyc2lvbi5oIgorCiAKIGV4dGVybiBjb25zdCBjaGFyIGRlZmF1
-bHRfaG9tZV9kaXJbXSwKIAlkZWZhdWx0X3RyYWNpbmdfZ3JvdXBbXSwKQEAgLTc0LDQgKzc3LDE1
-IEBAIGV4dGVybiBpbnQgYXBwc19jbWRfbm90aWZ5X3BpcGVbMl07CiBpbnQgc2Vzc2lvbmRfc2V0
-X3RocmVhZF9wb2xsc2V0KHN0cnVjdCBsdHRuZ19wb2xsX2V2ZW50ICpldmVudHMsIHNpemVfdCBz
-aXplKTsKIGludCBzZXNzaW9uZF9jaGVja190aHJlYWRfcXVpdF9waXBlKGludCBmZCwgdWludDMy
-X3QgZXZlbnRzKTsKIAorLyoKKyAqIFRoaXMgc3RhdGljIGNvbnN0IGNoYXIgYWxsb3dzIHRvIHJl
-dHVybiB0aGUgdmVyc2lvbiBudW1iZXIgZGVwZW5kaW5nCisgKiB3aGV0aGVyIG9yIG5vdCB0aGUg
-R0lUX1ZFUlNJT04gdmFsdWUgaXMgYXZhaWxhYmxlCisgKi8KKyNpZmRlZiBHSVRfVkVSU0lPTgor
-c3RhdGljIGNvbnN0IGNoYXIgbHR0bmdfc2Vzc2lvbmRfdmVyc2lvbltdID0gVkVSU0lPTiAiIChH
-aXQ6ICIgR0lUX1ZFUlNJT04gIikiOworI2Vsc2UgLyogR0lUX1ZFUlNJT04gKi8KK3N0YXRpYyBj
-b25zdCBjaGFyIGx0dG5nX3Nlc3Npb25kX3ZlcnNpb25bXSA9IFZFUlNJT047CisjZW5kaWYgLyog
-R0lUX1ZFUlNJT04gKi8KKworCiAjZW5kaWYgLyogX0xUVF9TRVNTSU9ORF9IICovCmRpZmYgLS1n
-aXQgYS9zcmMvYmluL2x0dG5nLXNlc3Npb25kL21haW4uYyBiL3NyYy9iaW4vbHR0bmctc2Vzc2lv
-bmQvbWFpbi5jCmluZGV4IGY3YmI1M2UuLjg1N2EyMGQgMTAwNjQ0Ci0tLSBhL3NyYy9iaW4vbHR0
-bmctc2Vzc2lvbmQvbWFpbi5jCisrKyBiL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvbWFpbi5jCkBA
-IC0zNTQ3LDcgKzM1NDcsNyBAQCBzdGF0aWMgaW50IHBhcnNlX2FyZ3MoaW50IGFyZ2MsIGNoYXIg
-Kiphcmd2KQogCQkJdXNhZ2UoKTsKIAkJCWV4aXQoRVhJVF9GQUlMVVJFKTsKIAkJY2FzZSAnVic6
-Ci0JCQlmcHJpbnRmKHN0ZG91dCwgIiVzXG4iLCBWRVJTSU9OKTsKKwkJCWZwcmludGYoc3Rkb3V0
-LCAiJXNcbiIsIGx0dG5nX3Nlc3Npb25kX3ZlcnNpb24pOwogCQkJZXhpdChFWElUX1NVQ0NFU1Mp
-OwogCQljYXNlICdTJzoKIAkJCW9wdF9zaWdfcGFyZW50ID0gMTsKZGlmZiAtLWdpdCBhL3NyYy9i
-aW4vbHR0bmcvY29tbWFuZHMvdmVyc2lvbi5jIGIvc3JjL2Jpbi9sdHRuZy9jb21tYW5kcy92ZXJz
-aW9uLmMKaW5kZXggN2Y2OWRlMy4uMjE3MGQwMCAxMDA2NDQKLS0tIGEvc3JjL2Jpbi9sdHRuZy9j
-b21tYW5kcy92ZXJzaW9uLmMKKysrIGIvc3JjL2Jpbi9sdHRuZy9jb21tYW5kcy92ZXJzaW9uLmMK
-QEAgLTI2LDYgKzI2LDcgQEAKICNpbmNsdWRlIDxjb25maWcuaD4KIAogI2luY2x1ZGUgIi4uL2Nv
-bW1hbmQuaCIKKyNpbmNsdWRlICIuLi91dGlscy5oIgogCiBlbnVtIHsKIAlPUFRfSEVMUCA9IDEs
-CkBAIC03OSw3ICs4MCw4IEBAIGludCBjbWRfdmVyc2lvbihpbnQgYXJnYywgY29uc3QgY2hhciAq
-KmFyZ3YpCiAJfQogCiAJTVNHKCJsdHRuZyB2ZXJzaW9uICIgVkVSU0lPTiAiIC0gIiBWRVJTSU9O
-X05BTUUpOwotCU1TRygiXG4iIFZFUlNJT05fREVTQ1JJUFRJT04gIlxuIik7CisJTVNHKCIlcyIs
-IGx0dG5nX3ZlcnNpb24pOworCU1TRyhWRVJTSU9OX0RFU0NSSVBUSU9OICJcbiIpOwogCU1TRygi
-V2ViIHNpdGU6IGh0dHA6Ly9sdHRuZy5vcmciKTsKIAlNU0coIlxubHR0bmcgaXMgZnJlZSBzb2Z0
-d2FyZSBhbmQgdW5kZXIgdGhlIEdQTCBsaWNlbnNlIGFuZCBwYXJ0IExHUEwiKTsKIApkaWZmIC0t
-Z2l0IGEvc3JjL2Jpbi9sdHRuZy9sdHRuZy5jIGIvc3JjL2Jpbi9sdHRuZy9sdHRuZy5jCmluZGV4
-IDg1NjIxNDQuLjAwMmJmNGUgMTAwNjQ0Ci0tLSBhL3NyYy9iaW4vbHR0bmcvbHR0bmcuYworKysg
-Yi9zcmMvYmluL2x0dG5nL2x0dG5nLmMKQEAgLTMxLDYgKzMxLDcgQEAKICNpbmNsdWRlIDxjb21t
-b24vZXJyb3IuaD4KIAogI2luY2x1ZGUgImNvbW1hbmQuaCIKKyNpbmNsdWRlICJ1dGlscy5oIgog
-CiAvKiBWYXJpYWJsZXMgKi8KIHN0YXRpYyBjaGFyICpwcm9nbmFtZTsKQEAgLTgxLDcgKzgyLDkg
-QEAgc3RhdGljIHN0cnVjdCBjbWRfc3RydWN0IGNvbW1hbmRzW10gPSAgewogCiBzdGF0aWMgdm9p
-ZCB1c2FnZShGSUxFICpvZnApCiB7Ci0JZnByaW50ZihvZnAsICJMVFRuZyBUcmFjZSBDb250cm9s
-ICIgVkVSU0lPTiIgLSAiIFZFUlNJT05fTkFNRSJcblxuIik7CisJZnByaW50ZihvZnAsICJMVFRu
-ZyBUcmFjZSBDb250cm9sICIgVkVSU0lPTiAiIC0gIiBWRVJTSU9OX05BTUUgIlxuIik7CisJZnBy
-aW50ZihvZnAsIGx0dG5nX3ZlcnNpb24pOworCWZwcmludGYob2ZwLCAiXG4iKTsKIAlmcHJpbnRm
-KG9mcCwgInVzYWdlOiBsdHRuZyBbT1BUSU9OU10gPENPTU1BTkQ+IFs8QVJHUz5dXG4iKTsKIAlm
-cHJpbnRmKG9mcCwgIlxuIik7CiAJZnByaW50ZihvZnAsICJPcHRpb25zOlxuIik7CmRpZmYgLS1n
-aXQgYS9zcmMvYmluL2x0dG5nL3V0aWxzLmggYi9zcmMvYmluL2x0dG5nL3V0aWxzLmgKaW5kZXgg
-OWY3YmZjYy4uMTJlZTdjMCAxMDA2NDQKLS0tIGEvc3JjL2Jpbi9sdHRuZy91dGlscy5oCisrKyBi
-L3NyYy9iaW4vbHR0bmcvdXRpbHMuaApAQCAtMSw1ICsxLDYgQEAKIC8qCiAgKiBDb3B5cmlnaHQg
-KEMpIDIwMTEgLSBEYXZpZCBHb3VsZXQgPGRhdmlkLmdvdWxldEBwb2x5bXRsLmNhPgorICogQ29w
-eXJpZ2h0IChDKSAyMDEzIC0gUmFwaGHDq2wgQmVhbW9udGUgPHJhcGhhZWwuYmVhbW9udGVAZ21h
-aWwuY29tPgogICoKICAqIFRoaXMgcHJvZ3JhbSBpcyBmcmVlIHNvZnR3YXJlOyB5b3UgY2FuIHJl
-ZGlzdHJpYnV0ZSBpdCBhbmQvb3IgbW9kaWZ5CiAgKiBpdCB1bmRlciB0aGUgdGVybXMgb2YgdGhl
-IEdOVSBHZW5lcmFsIFB1YmxpYyBMaWNlbnNlLCB2ZXJzaW9uIDIgb25seSwKQEAgLTE5LDggKzIw
-LDIwIEBACiAjZGVmaW5lIF9MVFROR19VVElMU19ICiAKICNpbmNsdWRlIDxwb3B0Lmg+CisjaW5j
-bHVkZSA8dmVyc2lvbi5oPgogCiBjaGFyICpnZXRfc2Vzc2lvbl9uYW1lKHZvaWQpOwogdm9pZCBs
-aXN0X2NtZF9vcHRpb25zKEZJTEUgKm9mcCwgc3RydWN0IHBvcHRPcHRpb24gKm9wdGlvbnMpOwog
-CisvKgorICogVGhpcyBzdGF0aWMgY29uc3QgY2hhciBhbGxvd3MgdG8gcmV0dXJuIHRoZSB2ZXJz
-aW9uIG51bWJlciBkZXBlbmRpbmcKKyAqIHdoZXRoZXIgb3Igbm90IHRoZSBHSVRfVkVSU0lPTiB2
-YWx1ZSBpcyBhdmFpbGFibGUKKyAqLworI2lmZGVmIEdJVF9WRVJTSU9OCitzdGF0aWMgY29uc3Qg
-Y2hhciBsdHRuZ192ZXJzaW9uW10gPSAiR2l0IHZlcnNpb246ICIgR0lUX1ZFUlNJT04gIlxuIjsK
-KyNlbHNlIC8qIEdJVF9WRVJTSU9OICovCitzdGF0aWMgY29uc3QgY2hhciBsdHRuZ192ZXJzaW9u
-W10gPSAiIjsKKyNlbmRpZiAvKiBHSVRfVkVSU0lPTiAqLworCisKICNlbmRpZiAvKiBfTFRUTkdf
-VVRJTFNfSCAqLwotLSAKMS43LjEwLjQKCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5s
-dHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8v
-bHR0bmctZGV2Cg==
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--===============0345899571==
+Content-Type: multipart/signed; micalg=pgp-sha1;
+ protocol="application/pgp-signature";
+ boundary="----enig2GJGOJVXIQWVCKBSGOJLW"
+
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+------enig2GJGOJVXIQWVCKBSGOJLW
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+On 2013-03-15 14:40, Rapha=C3=ABl Beamonte wrote:
+> Signed-off-by: Rapha=C3=ABl Beamonte <raphael.beamonte@gmail.com>
+> ---
+>  .gitignore                              |    2 ++
+>  include/Makefile.am                     |   26 +++++++++++++++++++++++=
+++-
+>  include/version.h.tmpl                  |   27 +++++++++++++++++++++++=
+++++
+>  src/bin/lttng-sessiond/lttng-sessiond.h |   14 ++++++++++++++
+>  src/bin/lttng-sessiond/main.c           |    2 +-
+>  src/bin/lttng/commands/version.c        |    4 +++-
+>  src/bin/lttng/lttng.c                   |    5 ++++-
+>  src/bin/lttng/utils.h                   |   13 +++++++++++++
+>  8 files changed, 89 insertions(+), 4 deletions(-)
+>  create mode 100644 include/version.h.tmpl
+
+This new version of the patch should answer to your last comments. Feel
+free to give new comments and critics !
+
+I just wasn't able to check the "make dist" as it seems broken in the
+last commit of lttng-tools.
+
+Rapha=C3=ABl
+
+
+------enig2GJGOJVXIQWVCKBSGOJLW
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.12 (GNU/Linux)
+
+iQIcBAEBAgAGBQJRQ2v6AAoJECV+8Ygg/tEowssP/3Gjm687ln2gusHtQF9WpAwc
+J/ioi8eRkn0Gnub2/hYO77yCfMCWeZFu1PeVGNfbebNysffTTqREEanY9VakrYb4
+GDtKmqZb/p4KgaUjQSN5K32zhWPRg3XorAyWmvSAS8e5kh0f6CDRRLQs1Sjkbjsp
+LhPrYT2x0wWnEjqEqALUxa88lQZmiOUnkHHwSInX2z6pm+fJyxcTr1bVE2gmotzt
+l9W77+dVmEgFF1tc9DRErowKb0iTKqZVCNrqEppF9o721gvZq4g6rwodtpAjryIh
+j7/p7735PHxZYP0hy69zfYKN9VvdtxZ7j97UiMQTePExF7kUjhpVxssXEI4Uz8Lv
+8ESEJv7/qg0rTHeYA5ild5QqICdfOK3pIhBFyf+VVTCgQKg6WZqiemLwK62B+V+l
+7tikDkHKJDYsXCZjI7psTPUOZRVguuFYKnOO+da8LAuv+l1etDGHbCL6ng6XzYuE
+YIAE4rWzBUQ36IMT2fdjdBs3k4CjetufzuAkMWQvGPsTTZ2XOokctD/o4gnNVHFj
+J1xQcJWjAmjkHkssuLdjBVhFqwCuEhfHmkdHisn6RXm5T+P5rgqP2I/BQzZI7PtS
+oU7Mi6caiMsINyK3L0i/Oly87MAaqL256DWGRzg9iyYynQkwkCjELjSoW566C39O
+iiGS5ltnhAvPrfhoJOxQ
+=6OP4
+-----END PGP SIGNATURE-----
+
+------enig2GJGOJVXIQWVCKBSGOJLW--
+
+
+--===============0345899571==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0345899571==--
