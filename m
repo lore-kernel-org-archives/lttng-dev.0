@@ -1,19 +1,22 @@
-From: Yao Qi <yao@codesourcery.com>
-Subject: Re: [PATCH] Teach babeltrace understand "native" and
- "network" for byte_order
-Date: Fri, 15 Mar 2013 23:16:08 +0800
-Message-ID: <51433B38.3080805__45820.7144205973$1363360686$gmane$org@codesourcery.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH] Teach babeltrace understand "native"
+	and	"network" for byte_order
+Date: Fri, 15 Mar 2013 11:33:20 -0400
+Message-ID: <20130315153320.GA1659__49357.2465064519$1363361648$gmane$org@Krystal>
 References: <1363341137-26956-1-git-send-email-yao@codesourcery.com>
 	<20130315120753.GA30973@Krystal> <20130315143337.GA959@Krystal>
+	<51433B38.3080805@codesourcery.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from relay1.mentorg.com ([192.94.38.131])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Yao_Qi@mentor.com>) id 1UGWNf-0001yP-L6
-	for lttng-dev@lists.lttng.org; Fri, 15 Mar 2013 11:17:15 -0400
-In-Reply-To: <20130315143337.GA959@Krystal>
+	(envelope-from <compudj@mail.openrapids.net>) id 1UGWdF-00026D-BE
+	for lttng-dev@lists.lttng.org; Fri, 15 Mar 2013 11:33:21 -0400
+Content-Disposition: inline
+In-Reply-To: <51433B38.3080805@codesourcery.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,40 +25,110 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: Yao Qi <yao@codesourcery.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-T24gMDMvMTUvMjAxMyAxMDozMyBQTSwgTWF0aGlldSBEZXNub3llcnMgd3JvdGU6Cj4gICAgIGJ5
-dGVfb3JkZXIgPSBuYXRpdmUgT1IgbmV0d29yayBPUiBiZSBPUiBsZTsJLyogbmV0d29yayBhbmQg
-YmUgYXJlIGFsaWFzZXMgKi8KPgo+ICtFdmVuIHRob3VnaCB0aGUgdHJhY2UgZGVzY3JpcHRpb24g
-c2VjdGlvbiBpcyBub3QgcGVyIHNlIGEgdHlwZSwgZm9yIHNha2UKPiArb2YgY2xhcml0eSwgaXQg
-c2hvdWxkIGJlIG5vdGVkIHRoYXQgbmF0aXZlIGFuZCBuZXR3b3JrIGJ5dGUgb3JkZXJzIGFyZQo+
-ICtvbmx5IGFsbG93ZWQgd2l0aGluIHR5cGUgZGVjbGFyYXRpb24uIFRoZSBieXRlX29yZGVyIHNw
-ZWNpZmllZCBpbiB0aGUKPiArdHJhY2UgZGVzY3JpcHRpb24gc2VjdGlvbiBvbmx5IGFjY2VwdHMg
-YmUgT1IgbGUgdmFsdWVzLgo+ICsKClRoZSBmaXJzdCBhbmQgbGFzdCBzZW50ZW5jZSBiZWxvdyBp
-cyBhIGxpdHRsZSBiaXQgY29uZnVzaW5nIHRvIG1lLgoKNC4xLjMgQnl0ZSBvcmRlcgoKQnkgZGVm
-YXVsdCwgdGhlIG5hdGl2ZSBlbmRpYW5uZXNzIG9mIHRoZSBzb3VyY2UgYXJjaGl0ZWN0dXJlIGlz
-IHVzZWQuCi4uLi4KSWYgbm90IHNwZWNpZmllZCwgdGhlIGJ5dGUgb3JkZXIgaXMgbmF0aXZlLgoK
-CjEuICAibmF0aXZlIGVuZGlhbm5lc3MiIGFwcGVhciBpbiB0aGUgc3BlYyBmb3IgdGhlIGZpcnN0
-IHRpbWUsIHdpdGhvdXQgYSAKcHJlY2lzZSBleHBsYW5hdGlvbi4gIEFmdGVyIHlvdXIgZXhwbGFu
-YXRpb24gaW4gdGhlIGxhc3QgbWFpbCwgSSBnb3QgdG8gCmtub3cgaXQgaXMgdGhlIGVuZGlhbmVz
-cyBkZXNjcmliZWQgaW4gdGhlIHRyYWNlIGRlc2NyaXB0aW9uLgoKMi4gICJzb3VyY2UgYXJjaGl0
-ZWN0dXJlIiBpcyBub3QgY2xlYXIgdG8gbWUuCgpNYXliZSwgd2UgY2FuIHNheSBzb21ldGhpbmcg
-bGlrZToKCiJCeSBkZWZhdWx0LCBieXRlIG9yZGVyIG9mIGEgYmFzaWMgdHlwZSBpcyB0aGUgYnl0
-ZSBvcmRlciBkZXNjcmliZWQgaW4gCnRoZSB0cmFjZSBkZXNjcmlwdGlvbi4gIEl0IGNhbiBiZSBv
-dmVycmlkZGVuIGJ5IHNwZWNpZnlpbmcgYSAKImJ5dGVfb3JkZXIiIGF0dHJpYnV0ZSBmb3IgYSBi
-YXNpYyB0eXBlLiAgVHlwaWNhbCB1c2UtY2FzZSBpcyB0byBzcGVjaWZ5IAp0aGUgbmV0d29yayBi
-eXRlIG9yZGVyIChiaWcgZW5kaWFuOiAiYmUiKSB0byBzYXZlIGRhdGEgY2FwdHVyZWQgZnJvbSB0
-aGUgCm5ldHdvcmsgaW50byB0aGUgdHJhY2Ugd2l0aG91dCBjb252ZXJzaW9uLiIKCkkgYWxzbyBz
-dWdnZXN0IHRoYXQgd2UgZ2V0IHJpZCBvZiB0aGUgdGVybSAibmF0aXZlIiBoZXJlLiAgSUlVQywg
-d2UgaGF2ZSAKZm91ciBvcHRpb25zIGZvciBieXRlIG9yZGVyLCBkZWZhdWx0LCBuZXR3b3JrLCBs
-ZSBhbmQgYmUuICBUaGUgbGF0dGVyIAp0aHJlZSBhcmUgZWFzeSB0byB1bmRlcnN0YW5kLCBhbmQg
-aWYgYXR0cmlidXRlICJieXRlX29yZGVyIiBpcyBub3QgCnNwZWNpZmllZCwgaXQgaXMgdGhlIGRl
-ZmF1bHQuICBPbiB0aGUgb3RoZXIgaGFuZCwgIm5hdGl2ZSBlbmRpYW5uZXNzIiAKbWVhbnMgdGhl
-IGVuZGlhbm5lc3Mgb2YgdW5kZXJseWluZyBtYWNoaW5lLCB3aGljaCBpcyBhIGxpdHRsZSBkaWZm
-ZXJlbnQuCgpJIGFtIG5vdCBnb29kIGF0IGRvY3VtZW50YXRpb24sIG5vciBhIG5hdGl2ZSBFbmds
-aXNoIHNwZWFrZXIuICBNeSAKc3VnZ2VzdGlvbiBjYW4gYmUgd3JvbmcuCgotLSAKWWFvICjpvZDl
-sKcpCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRu
-Zy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3Rz
-Lmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+* Yao Qi (yao@codesourcery.com) wrote:
+> On 03/15/2013 10:33 PM, Mathieu Desnoyers wrote:
+>>     byte_order = native OR network OR be OR le;	/* network and be are aliases */
+>>
+>> +Even though the trace description section is not per se a type, for sake
+>> +of clarity, it should be noted that native and network byte orders are
+>> +only allowed within type declaration. The byte_order specified in the
+>> +trace description section only accepts be OR le values.
+>> +
+>
+> The first and last sentence below is a little bit confusing to me.
+>
+> 4.1.3 Byte order
+>
+> By default, the native endianness of the source architecture is used.
+> ....
+> If not specified, the byte order is native.
+>
+>
+> 1.  "native endianness" appear in the spec for the first time, without a  
+> precise explanation.  After your explanation in the last mail, I got to  
+> know it is the endianess described in the trace description.
+>
+> 2.  "source architecture" is not clear to me.
+>
+> Maybe, we can say something like:
+>
+> "By default, byte order of a basic type is the byte order described in  
+> the trace description.  It can be overridden by specifying a  
+> "byte_order" attribute for a basic type.  Typical use-case is to specify  
+> the network byte order (big endian: "be") to save data captured from the  
+> network into the trace without conversion."
+>
+> I also suggest that we get rid of the term "native" here.  IIUC, we have  
+> four options for byte order, default, network, le and be.  The latter  
+> three are easy to understand, and if attribute "byte_order" is not  
+> specified, it is the default.  On the other hand, "native endianness"  
+> means the endianness of underlying machine, which is a little different.
+
+I added an explanatory paragraph for "native" in addition to your
+recommended changes. We cannot remove an keyword from the specification
+lightly, because this would break compatibility.
+
+>
+> I am not good at documentation, nor a native English speaker.  My  
+> suggestion can be wrong.
+
+Here is the update. Comments are welcome!
+
+Thanks,
+
+Mathieu
+
+commit 237324a20398c5c8eaf92aff0eace177ef8a747f
+Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Date:   Fri Mar 15 11:32:03 2013 -0400
+
+    Clarify byte order section
+    
+    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+
+diff --git a/common-trace-format-specification.txt b/common-trace-format-specification.txt
+index 4ab3ed9..797dec1 100644
+--- a/common-trace-format-specification.txt
++++ b/common-trace-format-specification.txt
+@@ -171,20 +171,23 @@ TSDL meta-data attribute representation of a specific alignment:
+ 
+ 4.1.3 Byte order
+ 
+-By default, the native endianness of the source architecture is used.
+-Byte order can be overridden for a basic type by specifying a "byte_order"
+-attribute. Typical use-case is to specify the network byte order (big endian:
+-"be") to save data captured from the network into the trace without conversion.
+-If not specified, the byte order is native.
++By default, byte order of a basic type is the byte order described in
++the trace description.  It can be overridden by specifying a
++"byte_order" attribute for a basic type.  Typical use-case is to specify
++the network byte order (big endian: "be") to save data captured from the
++network into the trace without conversion.
+ 
+ TSDL meta-data representation:
+ 
+   byte_order = native OR network OR be OR le;	/* network and be are aliases */
+ 
++The "native" keyword selects the byte order described in the trace
++description. The "network" byte order is an alias for big endian.
++
+ Even though the trace description section is not per se a type, for sake
+-of clarity, it should be noted that native and network byte orders are
+-only allowed within type declaration. The byte_order specified in the
+-trace description section only accepts be OR le values.
++of clarity, it should be noted that "native" and "network" byte orders
++are only allowed within type declaration. The byte_order specified in
++the trace description section only accepts "be" or "le" values.
+ 
+ 4.1.4 Size
+ 
+
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
