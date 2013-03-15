@@ -1,19 +1,16 @@
-From: Christian Babeux <christian.babeux@efficios.com>
-Subject: Re: LTTng & Google Summer of Code 2013
-Date: Thu, 14 Mar 2013 22:22:57 -0400
-Message-ID: <CAGDH53nMfPnVjpfEpsMQof-c3OT4Zg7JutY0D7WB2hnoBwO5AQ__10551.9065088176$1363314232$gmane$org@mail.gmail.com>
-References: <CAGDH53kvT4dOMc2o4RA4ak56bfxcUaq0MpW9BzPjvt9E-bLn7w@mail.gmail.com>
+From: Francis Deslauriers <fdeslaur@gmail.com>
+Subject: [RFC-PATCH] Adding trap tracepoints definitions
+Date: Thu, 14 Mar 2013 20:25:32 -0400
+Message-ID: <CADcCL0j+_N-6b4QvbLRnpC_DvpH3K8U9G2yQsb1ACzqqz3vQSA__47674.8251975097$1363317126$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0812677088=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-vb0-f42.google.com ([209.85.212.42])
+Received: from mail-lb0-f177.google.com ([209.85.217.177])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <christian.babeux@0x80.ca>) id 1UGKIR-0003sM-Cn
-	for lttng-dev@lists.lttng.org; Thu, 14 Mar 2013 22:23:03 -0400
-Received: by mail-vb0-f42.google.com with SMTP id ff1so1618702vbb.15
-	for <lttng-dev@lists.lttng.org>; Thu, 14 Mar 2013 19:22:57 -0700 (PDT)
-In-Reply-To: <CAGDH53kvT4dOMc2o4RA4ak56bfxcUaq0MpW9BzPjvt9E-bLn7w@mail.gmail.com>
+	(envelope-from <fdeslaur@gmail.com>) id 1UGIT8-00030B-D9
+	for lttng-dev@lists.lttng.org; Thu, 14 Mar 2013 20:25:58 -0400
+Received: by mail-lb0-f177.google.com with SMTP id go11so2316892lbb.22
+	for <lttng-dev@lists.lttng.org>; Thu, 14 Mar 2013 17:25:52 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -25,65 +22,87 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi lttng-droids,
+--===============0812677088==
+Content-Type: multipart/alternative; boundary=f46d04426b6685047104d7ebaeb2
 
-As a follow up to the initial discussion, here is the detailed ideas
-list for the proposition for GSoC 2013:
+--f46d04426b6685047104d7ebaeb2
+Content-Type: text/plain; charset=ISO-8859-1
 
-http://bugs.lttng.org/projects/lttng/wiki/Google_Summer_of_Code_2013
+Hi,
 
-Feedback and corrections are quite welcome!
+I am currently working on adding trap tracepoints in the kernel. As of now,
+i
+have an implementation of the tracepoints trap_entry and trap_exit. I have
+created a LTTng probe for those events as well.
+
+It would really be appreciated that you, LTTng guys, can give me your
+comments
+about my work already done. It would also be great if some of you could
+test it
+during a "not so short" amount of time, so we could perhaps propose the
+patches
+to add these tracepoints in the mainline kernel after having tested them
+properly.
+
+I will first send a patch concerning the implementation of the tracepoints.
+This will be followed by a lttng-modules patch adding the LTTng trap probe.
+Finally, i will send a patch about the locations of the tracepoints in the
+kernel
+itself.
+
+Feel free to give general comments and critics in reply of this email, and
+specific
+comments in reply to the patches they apply to.
 
 Thanks,
 
-Christian
+Francis Deslauriers
+
+--f46d04426b6685047104d7ebaeb2
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><span style=3D"font-family:arial,sans-serif;font-size:13px=
+">Hi,</span><br style=3D"font-family:arial,sans-serif;font-size:13px"><br s=
+tyle=3D"font-family:arial,sans-serif;font-size:13px"><span style=3D"font-fa=
+mily:arial,sans-serif;font-size:13px">I am currently working on adding trap=
+ tracepoints in the kernel. As of now, i</span><br style=3D"font-family:ari=
+al,sans-serif;font-size:13px">
+
+<span style=3D"font-family:arial,sans-serif;font-size:13px">have an impleme=
+ntation of the tracepoints trap_entry and trap_exit. I have=A0</span><div s=
+tyle=3D"font-family:arial,sans-serif;font-size:13px">created=A0a LTTng prob=
+e for those events as well.<br>
+
+<br>It would really be appreciated that you, LTTng guys, can give me your c=
+omments<br>about my work already done. It would also be great if some of yo=
+u could test it=A0<br>during a &quot;not so short&quot; amount of time, so =
+we could perhaps propose the patches<br>
+
+to add these tracepoints in the mainline kernel after having tested them pr=
+operly.<br><br>I will first send a patch concerning the implementation of t=
+he tracepoints.<br>This will be followed by a lttng-modules patch adding th=
+e LTTng trap probe.<br>
+
+Finally, i will send a patch about the locations of the tracepoints in the =
+kernel<br>itself.<br><br>Feel free to give general comments and critics in =
+reply of this email, and specific<br>comments in reply to the patches they =
+apply to.<br>
+
+<br>Thanks,<br><br>Francis Deslauriers</div></div>
+
+--f46d04426b6685047104d7ebaeb2--
 
 
-On Fri, Feb 1, 2013 at 11:39 AM, Christian Babeux
-<christian.babeux@efficios.com> wrote:
-> Hi everyone,
->
-> After some initial discussion with the LTTng developers, we think it
-> would be a great opportunity for the LTTng project to participate as a
-> mentoring organisation in Google Summer of Code 2013.
->
-> Apparently, some attempts were made in the past years but the
-> application deadline was missed by a few picoseconds ;).
->
-> Here are some of the requirements for a mentoring organisation application [1]:
->
-> "
-> What is the URL for your Ideas page?
-> What is the main development mailing list for your organization?
-> What is the main IRC channel for your organization?
-> Does your organization have an application template you would like to
-> see students use? If so, please provide it now.
-> "
->
-> One of the *most* important point of this list is to have an idea
-> pages/list ready for the application.
->
-> Here are some projects ideas that a student or intern could
-> accomplish within the scope of Google Summer of Code:
->
-> - Continue the Android port of LTTng
-> - Continue the work done on Python bindings for babeltrace/lttng-tools.
-> - Trace probe support in C++ [2].
-> - A meta-command support in lttng-tools (ex: lttng --trace, see [3]).
-> - Improve the liblttng-ust-libc-wrapper with additionnal libc functions support.
-> - LTTV features.
-> - Implement syscalls on other architectures (maybe not relevant, see [4])
-> - Hook the trace/debug infrastructure of Wine in UST.
-> - Etc.
->
-> So I'm asking the community for feedback and ideas to get this
-> application going!
->
-> Thanks,
->
-> Christian
->
-> [1] - https://www.google-melange.com/document/show/gsoc_program/google/gsoc2012/faqs#mentoring_apply
-> [2] - http://bugs.lttng.org/issues/338
-> [3] - http://bugs.lttng.org/issues/15
-> [4] - http://bugs.lttng.org/issues/33
+--===============0812677088==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0812677088==--
