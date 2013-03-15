@@ -1,19 +1,20 @@
-From: Francis Deslauriers <fdeslaur@gmail.com>
-Subject: [RFC-PATCH] Adding trap tracepoints definitions
-Date: Thu, 14 Mar 2013 20:26:32 -0400
-Message-ID: <1363307192-14522-1-git-send-email-fdeslaur__46865.145097445$1363317130$gmane$org@gmail.com>
-References: <CADcCL0j+_N-6b4QvbLRnpC_DvpH3K8U9G2yQsb1ACzqqz3vQSA@mail.gmail.com>
+From: Yao Qi <yao@codesourcery.com>
+Subject: [PATCH] Teach babeltrace understand "native" and
+	"network" for byte_order
+Date: Fri, 15 Mar 2013 17:52:17 +0800
+Message-ID: <1363341137-26956-1-git-send-email-yao__22167.1540210538$1363341291$gmane$org@codesourcery.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f171.google.com ([209.85.223.171])
+Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <fdeslaur@gmail.com>) id 1UGITx-000315-V7
-	for lttng-dev@lists.lttng.org; Thu, 14 Mar 2013 20:26:50 -0400
-Received: by mail-ie0-f171.google.com with SMTP id 10so3788950ied.2
-	for <lttng-dev@lists.lttng.org>; Thu, 14 Mar 2013 17:26:44 -0700 (PDT)
-In-Reply-To: <CADcCL0j+_N-6b4QvbLRnpC_DvpH3K8U9G2yQsb1ACzqqz3vQSA@mail.gmail.com>
+	(envelope-from <Yao_Qi@mentor.com>) id 1UGRKI-0007Sa-82
+	for lttng-dev@lists.lttng.org; Fri, 15 Mar 2013 05:53:26 -0400
+Received: from svr-orw-fem-01.mgc.mentorg.com ([147.34.98.93])
+	by relay1.mentorg.com with esmtp
+	id 1UGRKC-0002B6-87 from Yao_Qi@mentor.com
+	for lttng-dev@lists.lttng.org; Fri, 15 Mar 2013 02:53:20 -0700
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,62 +24,39 @@ List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
-Cc: Francis Deslauriers <fdeslaur@gmail.com>
 List-Id: lttng-dev@lists.lttng.org
 
-This patch adds new trap tracepoint definitions. Both trap entry and trap exit
-tracepoints can be added.
+Hi,
+We wrote byte_order in metadata either "le" or "be", according to the
+host endianness.  Today, when I check the ctf specification, I find
+"native" fits our needs well.  However, after I replace "le" with
+"native" in metadata, I got the following error message:
 
-Signed-off-by: Francis Deslauriers <fdeslaur@gmail.com>
+  [error] get_trace_byte_order: unexpected string "native". Should be "native", "network", "be" or "le".
+
+This patch teaches babeltrace understand "native" and "network".  With
+this patch applied, the output looks right now.  Let me know if I need
+run testsuite, and how.
+
+Signed-off-by: Yao Qi <yao@codesourcery.com>
 ---
- include/trace/events/trap.h |   39 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
- create mode 100644 include/trace/events/trap.h
+ .../ctf/metadata/ctf-visitor-generate-io-struct.c  |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/include/trace/events/trap.h b/include/trace/events/trap.h
-new file mode 100644
-index 0000000..869c512
---- /dev/null
-+++ b/include/trace/events/trap.h
-@@ -0,0 +1,39 @@
-+#undef TRACE_SYSTEM
-+#define TRACE_SYSTEM trap
-+
-+#if !defined(_TRACE_TRAP_H) || defined(TRACE_HEADER_MULTI_READ)
-+#define _TRACE_TRAP_H
-+
-+#include <linux/tracepoint.h>
-+
-+DECLARE_EVENT_CLASS(trap,
-+	TP_PROTO(int trap_nb),
-+
-+	TP_ARGS(trap_nb),
-+
-+	TP_STRUCT__entry(
-+		__field(    int,    trap_nb )
-+	),
-+	TP_fast_assign(
-+		__entry->trap_nb = trap_nb;
-+),
-+
-+	TP_printk("number=%d", __entry->trap_nb)
-+);
-+
-+DEFINE_EVENT(trap, trap_entry,
-+
-+	TP_PROTO(int trap_nb),
-+
-+	TP_ARGS(trap_nb)
-+);
-+DEFINE_EVENT(trap, trap_exit,
-+
-+	TP_PROTO(int trap_nb),
-+
-+	TP_ARGS(trap_nb)
-+);
-+
-+#endif /* _TRACE_TRAP_H */
-+/* This part must be outside protection */
-+#include <trace/define_trace.h>
+diff --git a/formats/ctf/metadata/ctf-visitor-generate-io-struct.c b/formats/ctf/metadata/ctf-visitor-generate-io-struct.c
+index 9bcc170..cea2877 100644
+--- a/formats/ctf/metadata/ctf-visitor-generate-io-struct.c
++++ b/formats/ctf/metadata/ctf-visitor-generate-io-struct.c
+@@ -1227,6 +1227,10 @@ int get_trace_byte_order(FILE *fd, int depth, struct ctf_node *unary_expression)
+ 		byte_order = BIG_ENDIAN;
+ 	else if (!strcmp(unary_expression->u.unary_expression.u.string, "le"))
+ 		byte_order = LITTLE_ENDIAN;
++	else if (!strcmp(unary_expression->u.unary_expression.u.string, "native"))
++		byte_order = BYTE_ORDER;
++	else if (!strcmp(unary_expression->u.unary_expression.u.string, "network"))
++		byte_order = BIG_ENDIAN;
+ 	else {
+ 		fprintf(fd, "[error] %s: unexpected string \"%s\". Should be \"be\" or \"le\".\n",
+ 			__func__, unary_expression->u.unary_expression.u.string);
 -- 
-1.7.10.4
+1.7.7.6
