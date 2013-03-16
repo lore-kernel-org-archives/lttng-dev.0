@@ -1,19 +1,11 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH ctf] Typo fix in the tracers requirements
-Date: Fri, 15 Mar 2013 17:37:12 -0400
-Message-ID: <20130315213712.GA5443__48613.3697479547$1363383480$gmane$org@Krystal>
-References: <1363382164-12487-1-git-send-email-jeremie.galarneau@efficios.com>
+From: Kalyana Sundaram Venkataraman <kalyanasv@yahoo.com>
+Subject: link
+Date: Sat, 16 Mar 2013 16:36:47 -0700 (PDT)
+Message-ID: <1363477007.53900.YahooMailNeo__23258.3039127805$1363477068$gmane$org@web164903.mail.bf1.yahoo.com>
+Reply-To: Kalyana Sundaram Venkataraman <kalyanasv@yahoo.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/mixed; boundary="===============0388658383=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
-	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UGcJQ-0004zo-Fw
-	for lttng-dev@lists.lttng.org; Fri, 15 Mar 2013 17:37:16 -0400
-Content-Disposition: inline
-In-Reply-To: <1363382164-12487-1-git-send-email-jeremie.galarneau@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,55 +14,39 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: m fallon <m.fallon@ieee.org>, Johnson A <Johnson.A@ieee.org>, lintel users <lintel-users@lists.sourceforge.net>, kalyana venkataraman <kalyana.venkataraman@ieee.org>, ltt dev <ltt-dev@lists.casi.polymtl.ca>, joepgeurts <joepgeurts@gmail.com>
 List-Id: lttng-dev@lists.lttng.org
 
-* J=E9r=E9mie Galarneau (jeremie.galarneau@efficios.com) wrote:
-> Signed-off-by: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
+--===============0388658383==
+Content-Type: multipart/alternative; boundary="675359693-891317444-1363477007=:53900"
 
-merged, thanks!
+--675359693-891317444-1363477007=:53900
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Mathieu
+    =0Ahttp://reklam-grafika.hu/bxl/jcopryatla
+--675359693-891317444-1363477007=:53900
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-> ---
->  common-trace-format-reqs.txt | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> =
+<html><body><div style=3D"color:#000; background-color:#fff; font-family:ta=
+homa, new york, times, serif;font-size:10pt"><div><span style=3D"font-famil=
+y: arial,helvetica,sans-serif;"><span class=3D"tab"><span style=3D"font-siz=
+e: 18px;">&nbsp;&nbsp;&nbsp; </span></span></span><br><span style=3D"font-s=
+ize: 18px;"><a href=3D"http://reklam-grafika.hu/bxl/jcopryatla">http://rekl=
+am-grafika.hu/bxl/jcopryatla</a></span></div></div></body></html>
+--675359693-891317444-1363477007=:53900--
 
-> diff --git a/common-trace-format-reqs.txt b/common-trace-format-reqs.txt
-> index 66fe55a..e5e7c7a 100644
-> --- a/common-trace-format-reqs.txt
-> +++ b/common-trace-format-reqs.txt
-> @@ -268,7 +268,7 @@ Enumerating these higher-level requirements influence=
- the trace format in many
->  ways. For instance, a requirement for compactness leads to schemes where=
- all
->  information repetition should be eliminated. Thus the need for optional
->  per-section context information. Another example is the requirement for =
-speed
-> -and streaming. The requirement for speed ans treaming leads to zero-copy
-> +and streaming. The requirement for speed and streaming leads to zero-copy
->  implementations, which imply that the trace format should be written nat=
-ively by
->  the tracer.  The tracer requirements stated in this section are stated t=
-o ensure
->  that the trace format structure makes it possible for a tracer to cope w=
-ith the
-> -- =
 
-> 1.8.1.5
-> =
+--===============0388658383==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-> =
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- =
-
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+--===============0388658383==--
