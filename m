@@ -1,19 +1,20 @@
-From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
-	<jeremie.galarneau@efficios.com>
-Subject: [PATCH lttng-ust] Remove mention of locking issues
-	associated with dlopen usage
-Date: Tue, 19 Mar 2013 16:39:53 -0400
-Message-ID: <1363725593-8202-1-git-send-email-jeremie.galarneau__43855.209745425$1363725661$gmane$org@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH lttng-ust] Remove mention of locking
+	issues	associated with dlopen usage
+Date: Tue, 19 Mar 2013 16:45:13 -0400
+Message-ID: <20130319204513.GA3261__33395.1025073931$1363725960$gmane$org@Krystal>
+References: <1363725593-8202-1-git-send-email-jeremie.galarneau@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-vc0-f171.google.com ([209.85.220.171])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1UI3KJ-0000OC-J6
-	for lttng-dev@lists.lttng.org; Tue, 19 Mar 2013 16:40:07 -0400
-Received: by mail-vc0-f171.google.com with SMTP id ha11so781964vcb.30
-	for <lttng-dev@lists.lttng.org>; Tue, 19 Mar 2013 13:40:02 -0700 (PDT)
+	(envelope-from <compudj@mail.openrapids.net>) id 1UI3PH-0000RO-7J
+	for lttng-dev@lists.lttng.org; Tue, 19 Mar 2013 16:45:15 -0400
+Content-Disposition: inline
+In-Reply-To: <1363725593-8202-1-git-send-email-jeremie.galarneau@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,61 +23,110 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-VGhpcyBub3RpY2UgaGFzIGJlZW4gcmVtb3ZlZCBmcm9tIHRoZSBSRUFETUUgYXMgcGFydCBvZiBy
-ZXZpc2lvbiBiODM0ZGVhZC4KCkFkZCBhIHdhcm5pbmcgcmVsYXRpbmcgdG8gZGxjbG9zZSgpIHVz
-YWdlIGRldGFpbGVkIGluIGlzc3VlIDQ0NyBpbiBib3RoIHRoZQptYW4gcGFnZSBhbmQgdGhlIFJF
-QURNRSBmaWxlLgoKU2lnbmVkLW9mZi1ieTogSsOpcsOpbWllIEdhbGFybmVhdSA8amVyZW1pZS5n
-YWxhcm5lYXVAZWZmaWNpb3MuY29tPgotLS0KIFJFQURNRSAgICAgICAgICAgICAgfCAgNiArKysr
-Ky0KIGRvYy9tYW4vbHR0bmctdXN0LjMgfCAxNCArKysrKysrLS0tLS0tLQogMiBmaWxlcyBjaGFu
-Z2VkLCAxMiBpbnNlcnRpb25zKCspLCA4IGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL1JFQURN
-RSBiL1JFQURNRQppbmRleCA1NWM3MmRmLi4zOTBhNzE5IDEwMDY0NAotLS0gYS9SRUFETUUKKysr
-IGIvUkVBRE1FCkBAIC03NSw3ICs3NSw3IEBAIFVTQUdFOgogICAgIC0gSW5jbHVkZSB0aGUgdHJh
-Y2Vwb2ludCBwcm92aWRlciBoZWFkZXIgaW50byBhbGwgQyBmaWxlcyB1c2luZwogICAgICAgdGhl
-IHByb3ZpZGVyLgogICAgIC0gRXhhbXBsZToKLSAgICAgICAgdGVzdHMvaGVsbG8vICBoZWxsby5j
-IHRwLmMgdXN0X3Rlc3RzX2hlbGxvLmggTWFrZWZpbGUuZXhhbXBsZS4qCisgICAgICAtIHRlc3Rz
-L2hlbGxvLyAgaGVsbG8uYyB0cC5jIHVzdF90ZXN0c19oZWxsby5oIE1ha2VmaWxlLmV4YW1wbGUu
-KgogCiAgIDIpIENvbXBpbGUgdGhlIFRyYWNlcG9pbnQgUHJvdmlkZXIgc2VwYXJhdGVseSBmcm9t
-IHRoZSBhcHBsaWNhdGlvbiwKICAgICAgdXNpbmcgZHluYW1pYyBsaW5raW5nOgpAQCAtOTcsNiAr
-OTcsMTAgQEAgVVNBR0U6CiAKICAgLSBFbmFibGUgaW5zdHJ1bWVudGF0aW9uIGFuZCBjb250cm9s
-IHRyYWNpbmcgd2l0aCB0aGUgImx0dG5nIiBjb21tYW5kCiAgICAgZnJvbSBsdHRuZy10b29scy4g
-U2VlIGx0dG5nLXRvb2xzIGRvYy9xdWlja3N0YXJ0LnR4dC4KKyAgLSBOb3RlIGFib3V0IGRsY2xv
-c2UoKSB1c2FnZTogaXQgaXMgbm90IHNhZmUgdG8gdXNlIGRsY2xvc2Ugb24gYQorICAgIHByb3Zp
-ZGVyIHNoYXJlZCBvYmplY3QgdGhhdCBpcyBiZWluZyBhY3RpdmVseSB1c2VkIGZvciB0cmFjaW5n
-IGR1ZQorICAgIHRvIGEgbGFjayBvZiByZWZlcmVuY2UgY291bnRpbmcgZnJvbSBsdHRuZy11c3Qg
-dG8gdGhlIHVzZWQgc2hhcmVkCisgICAgb2JqZWN0LgogCiBFTlZJUk9OTUVOVCBWQVJJQUJMRVM6
-CiAKZGlmZiAtLWdpdCBhL2RvYy9tYW4vbHR0bmctdXN0LjMgYi9kb2MvbWFuL2x0dG5nLXVzdC4z
-CmluZGV4IDA4OTI3YzYuLjdjYzNiZmQgMTAwNjQ0Ci0tLSBhL2RvYy9tYW4vbHR0bmctdXN0LjMK
-KysrIGIvZG9jL21hbi9sdHRuZy11c3QuMwpAQCAtMjY1LDcgKzI2NSw3IEBAIGNhcmVmdWxseToK
-ICAgICAtIEluY2x1ZGUgdGhlIHRyYWNlcG9pbnQgcHJvdmlkZXIgaGVhZGVyIGludG8gYWxsIEMg
-ZmlsZXMgdXNpbmcKICAgICAgIHRoZSBwcm92aWRlci4KICAgICAtIEV4YW1wbGU6Ci0gICAgICAg
-IHRlc3RzL2hlbGxvLyAgaGVsbG8uYyB0cC5jIHVzdF90ZXN0c19oZWxsby5oIE1ha2VmaWxlLmV4
-YW1wbGUKKyAgICAgIC0gdGVzdHMvaGVsbG8vICBoZWxsby5jIHRwLmMgdXN0X3Rlc3RzX2hlbGxv
-LmggTWFrZWZpbGUuZXhhbXBsZQogCiAgIDIpIENvbXBpbGUgdGhlIFRyYWNlcG9pbnQgUHJvdmlk
-ZXIgc2VwYXJhdGVseSBmcm9tIHRoZSBhcHBsaWNhdGlvbiwKICAgICAgdXNpbmcgZHluYW1pYyBs
-aW5raW5nOgpAQCAtMjgwLDE1ICsyODAsMTUgQEAgY2FyZWZ1bGx5OgogICAgIC0gTGluayBhcHBs
-aWNhdGlvbiB3aXRoICJcLWxkbCIuCiAgICAgLSBTZXQgYSBMRF9QUkVMT0FEIGVudmlyb25tZW50
-IHRvIHByZWxvYWQgdGhlIHRyYWNlcG9pbnQgcHJvdmlkZXIKICAgICAgIHNoYXJlZCBvYmplY3Qg
-YmVmb3JlIHN0YXJ0aW5nIHRoZSBhcHBsaWNhdGlvbiB3aGVuIHRyYWNpbmcgaXMKLSAgICAgIG5l
-ZWRlZC4KKyAgICAgIG5lZWRlZC4gQW5vdGhlciB3YXkgaXMgdG8gZGxvcGVuIHRoZSB0cmFjZXBv
-aW50IHByb2JlIHdoZW4gbmVlZGVkCisgICAgICBieSB0aGUgYXBwbGljYXRpb24uCiAgICAgLSBF
-eGFtcGxlOgogICAgICAgLSB0ZXN0cy9kZW1vLyAgIGRlbW8uYyAgdHAqLmMgdXN0X3Rlc3RzX2Rl
-bW8qLmggZGVtby10cmFjZQogCi0gIC0gTm90ZSBhYm91dCBkbG9wZW4oKSB1c2FnZTogZHVlIHRv
-IGxvY2tpbmcgc2lkZS1lZmZlY3RzIGR1ZSB0byB0aGUKLSAgICB3YXkgbGliYyBsYXppbHkgcmVz
-b2x2ZXMgVGhyZWFkLUxvY2FsIFN0b3JhZ2UgKFRMUykgc3ltYm9scyB3aGVuIGEKLSAgICBsaWJy
-YXJ5IGlzIGRsb3BlbidkLCBsaW5raW5nIHRoZSB0cmFjZXBvaW50IHByb2JlIG9yIGxpYmx0dG5n
-LXVzdAotICAgIHdpdGggZGxvcGVuKCkgaXMgZGlzY291cmFnZWQuIFRoZXkgc2hvdWxkIGJlIGxp
-bmtlZCB3aXRoIHRoZQotICAgIGFwcGxpY2F0aW9uIHVzaW5nICJcLWxsaWJuYW1lIiBvciBsb2Fk
-ZWQgd2l0aCBMRF9QUkVMT0FELgorICAtIE5vdGUgYWJvdXQgZGxjbG9zZSgpIHVzYWdlOiBpdCBp
-cyBub3Qgc2FmZSB0byB1c2UgZGxjbG9zZSBvbiBhCisgICAgcHJvdmlkZXIgc2hhcmVkIG9iamVj
-dCB0aGF0IGlzIGJlaW5nIGFjdGl2ZWx5IHVzZWQgZm9yIHRyYWNpbmcgZHVlCisgICAgdG8gYSBs
-YWNrIG9mIHJlZmVyZW5jZSBjb3VudGluZyBmcm9tIGx0dG5nLXVzdCB0byB0aGUgdXNlZCBzaGFy
-ZWQKKyAgICBvYmplY3QuCiAgIC0gRW5hYmxlIGluc3RydW1lbnRhdGlvbiBhbmQgY29udHJvbCB0
-cmFjaW5nIHdpdGggdGhlICJsdHRuZyIgY29tbWFuZAogICAgIGZyb20gbHR0bmctdG9vbHMuIFNl
-ZSBsdHRuZy10b29scyBkb2MvcXVpY2tzdGFydC50eHQuCiAgIC0gTm90ZSBmb3IgQysrIHN1cHBv
-cnQ6IGFsdGhvdWdoIGFuIGFwcGxpY2F0aW9uIGluc3RydW1lbnRlZCB3aXRoCi0tIAoxLjguMS41
-CgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmct
-ZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5s
-dHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+* J=E9r=E9mie Galarneau (jeremie.galarneau@efficios.com) wrote:
+> This notice has been removed from the README as part of revision b834dead.
+> =
+
+> Add a warning relating to dlclose() usage detailed in issue 447 in both t=
+he
+> man page and the README file.
+
+merged into master and stable-2.1, thanks!
+
+Mathieu
+
+> =
+
+> Signed-off-by: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
+> ---
+>  README              |  6 +++++-
+>  doc/man/lttng-ust.3 | 14 +++++++-------
+>  2 files changed, 12 insertions(+), 8 deletions(-)
+> =
+
+> diff --git a/README b/README
+> index 55c72df..390a719 100644
+> --- a/README
+> +++ b/README
+> @@ -75,7 +75,7 @@ USAGE:
+>      - Include the tracepoint provider header into all C files using
+>        the provider.
+>      - Example:
+> -        tests/hello/  hello.c tp.c ust_tests_hello.h Makefile.example.*
+> +      - tests/hello/  hello.c tp.c ust_tests_hello.h Makefile.example.*
+>  =
+
+>    2) Compile the Tracepoint Provider separately from the application,
+>       using dynamic linking:
+> @@ -97,6 +97,10 @@ USAGE:
+>  =
+
+>    - Enable instrumentation and control tracing with the "lttng" command
+>      from lttng-tools. See lttng-tools doc/quickstart.txt.
+> +  - Note about dlclose() usage: it is not safe to use dlclose on a
+> +    provider shared object that is being actively used for tracing due
+> +    to a lack of reference counting from lttng-ust to the used shared
+> +    object.
+>  =
+
+>  ENVIRONMENT VARIABLES:
+>  =
+
+> diff --git a/doc/man/lttng-ust.3 b/doc/man/lttng-ust.3
+> index 08927c6..7cc3bfd 100644
+> --- a/doc/man/lttng-ust.3
+> +++ b/doc/man/lttng-ust.3
+> @@ -265,7 +265,7 @@ carefully:
+>      - Include the tracepoint provider header into all C files using
+>        the provider.
+>      - Example:
+> -        tests/hello/  hello.c tp.c ust_tests_hello.h Makefile.example
+> +      - tests/hello/  hello.c tp.c ust_tests_hello.h Makefile.example
+>  =
+
+>    2) Compile the Tracepoint Provider separately from the application,
+>       using dynamic linking:
+> @@ -280,15 +280,15 @@ carefully:
+>      - Link application with "\-ldl".
+>      - Set a LD_PRELOAD environment to preload the tracepoint provider
+>        shared object before starting the application when tracing is
+> -      needed.
+> +      needed. Another way is to dlopen the tracepoint probe when needed
+> +      by the application.
+>      - Example:
+>        - tests/demo/   demo.c  tp*.c ust_tests_demo*.h demo-trace
+>  =
+
+> -  - Note about dlopen() usage: due to locking side-effects due to the
+> -    way libc lazily resolves Thread-Local Storage (TLS) symbols when a
+> -    library is dlopen'd, linking the tracepoint probe or liblttng-ust
+> -    with dlopen() is discouraged. They should be linked with the
+> -    application using "\-llibname" or loaded with LD_PRELOAD.
+> +  - Note about dlclose() usage: it is not safe to use dlclose on a
+> +    provider shared object that is being actively used for tracing due
+> +    to a lack of reference counting from lttng-ust to the used shared
+> +    object.
+>    - Enable instrumentation and control tracing with the "lttng" command
+>      from lttng-tools. See lttng-tools doc/quickstart.txt.
+>    - Note for C++ support: although an application instrumented with
+> -- =
+
+> 1.8.1.5
+> =
+
+> =
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- =
+
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
