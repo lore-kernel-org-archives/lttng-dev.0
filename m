@@ -1,19 +1,19 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: Re: [PATCH lttng-tools] Add with-sessiond-bin configure
- option
-Date: Tue, 19 Mar 2013 15:19:13 -0400
-Message-ID: <5148BA31.6060803__24606.0181213126$1363720813$gmane$org@efficios.com>
-References: <1362094937-6677-1-git-send-email-simon.marchi@polymtl.ca>
-	<CAFXXi0kGM8G6rjwBvkJhZyw5F2UppKmy4nMUnWUTY=iQaz7z=A@mail.gmail.com>
+From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
+	<jeremie.galarneau@efficios.com>
+Subject: [PATCH lttng-ust] Remove mention of locking issues
+	associated with dlopen usage
+Date: Tue, 19 Mar 2013 16:39:53 -0400
+Message-ID: <1363725593-8202-1-git-send-email-jeremie.galarneau__43855.209745425$1363725661$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([213.239.202.151])
+Received: from mail-vc0-f171.google.com ([209.85.220.171])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1UI244-0008AC-P8
-	for lttng-dev@lists.lttng.org; Tue, 19 Mar 2013 15:19:17 -0400
-In-Reply-To: <CAFXXi0kGM8G6rjwBvkJhZyw5F2UppKmy4nMUnWUTY=iQaz7z=A@mail.gmail.com>
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1UI3KJ-0000OC-J6
+	for lttng-dev@lists.lttng.org; Tue, 19 Mar 2013 16:40:07 -0400
+Received: by mail-vc0-f171.google.com with SMTP id ha11so781964vcb.30
+	for <lttng-dev@lists.lttng.org>; Tue, 19 Mar 2013 13:40:02 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,145 +22,61 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Simon Marchi <simon.marchi@polymtl.ca>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-It's still on my stack. Don't worry.
-
-I have my hands full with the 2.2 development. Don't worry, this will be
-review and merged before the release.
-
-Thanks
-David
-
-Simon Marchi:
-> Bump.
-> 
-> On 28 February 2013 18:42, Simon Marchi <simon.marchi@polymtl.ca> wrote:
->> I also cleaned up the little check_sessiond function. The check using
->> access(2) was only done for the command line option, but I think it is a
->> good idea to do it wherever the path comes from.
->>
->> closes #441
->>
->> Signed-off-by: Simon Marchi <simon.marchi@polymtl.ca>
->> ---
->>  configure.ac          |   17 +++++++++++++++++
->>  src/bin/lttng/lttng.c |   37 ++++++++++++++++++++-----------------
->>  2 files changed, 37 insertions(+), 17 deletions(-)
->>
->> diff --git a/configure.ac b/configure.ac
->> index 71fbb60..7349713 100644
->> --- a/configure.ac
->> +++ b/configure.ac
->> @@ -91,12 +91,20 @@ AC_ARG_WITH([consumerd64-libdir],
->>         [CONSUMERD64_LIBDIR=''])
->>  AC_SUBST([CONSUMERD64_LIBDIR])
->>
->> +AC_ARG_WITH([sessiond-bin],
->> +       AS_HELP_STRING([--with-sessiond-bin],
->> +       [Location of the sessiond executable (including the filename)]),
->> +       [SESSIOND_BIN="$withval"],
->> +       [SESSIOND_BIN=''])
->> +AC_SUBST([SESSIOND_BIN])
->> +
->>  AC_DEFINE_UNQUOTED([CONFIG_CONSUMERD32_BIN], "$CONSUMERD32_BIN", [Location of the 32-bit consumerd executable.])
->>  AC_DEFINE_UNQUOTED([CONFIG_CONSUMERD64_BIN], "$CONSUMERD64_BIN", [Location of the 64-bit consumerd executable])
->>  AC_DEFINE_UNQUOTED([CONFIG_CONSUMERD32_LIBDIR], "$CONSUMERD32_LIBDIR", [Search for consumerd 32-bit libraries in this location.])
->>  AC_DEFINE_UNQUOTED([CONFIG_CONSUMERD64_LIBDIR], "$CONSUMERD64_LIBDIR", [Search for consumerd 64-bit libraries in this location.])
->>  AC_DEFINE_UNQUOTED([CONFIG_BABELTRACE_BIN], "$BABELTRACE_BIN", [Location of the babeltrace viewer executable.])
->>  AC_DEFINE_UNQUOTED([CONFIG_LTTV_GUI_BIN], "$LTTV_GUI_BIN", [Location of the lttv GUI viewer executable.])
->> +AC_DEFINE_UNQUOTED([CONFIG_SESSIOND_BIN], "$SESSIOND_BIN", [Location of the sessiond executable.])
->>
->>  # Check for pthread
->>  AC_CHECK_LIB([pthread], [pthread_create], [],
->> @@ -383,6 +391,15 @@ AS_ECHO("`eval eval echo $libdir`")
->>  # If we build the sessiond, print the paths it will use
->>  AS_IF([test "x$consumerd_only" = "xno"],[
->>         AS_ECHO()
->> +       AS_ECHO_N("The lttng command will look for the lttng-sessiond executable at: ")
->> +       AS_IF([test "$SESSIOND_BIN" = ""],[
->> +               AS_ECHO_N("`eval eval echo $bindir`")
->> +               AS_ECHO("/lttng-sessiond")
->> +       ],[
->> +               AS_ECHO("$SESSIOND_BIN")
->> +       ])
->> +
->> +       AS_ECHO()
->>         AS_ECHO("The sessiond daemon will look in the following directories: ")
->>         AS_ECHO_N("32-bit consumerd executable at: ")
->>         AS_IF([test "$CONSUMERD32_BIN" = ""],[
->> diff --git a/src/bin/lttng/lttng.c b/src/bin/lttng/lttng.c
->> index 8562144..4097956 100644
->> --- a/src/bin/lttng/lttng.c
->> +++ b/src/bin/lttng/lttng.c
->> @@ -346,35 +346,38 @@ end:
->>  static int check_sessiond(void)
->>  {
->>         int ret;
->> -       char *pathname = NULL, *alloc_pathname = NULL;
->> +       char *pathname = NULL;
->>
->>         ret = lttng_session_daemon_alive();
->>         if (ret == 0) { /* not alive */
->>                 /* Try command line option path */
->> -               if (opt_sessiond_path != NULL) {
->> -                       ret = access(opt_sessiond_path, F_OK | X_OK);
->> -                       if (ret < 0) {
->> -                               ERR("No such file or access denied: %s", opt_sessiond_path);
->> -                               goto end;
->> -                       }
->> -                       pathname = opt_sessiond_path;
->> -               } else {
->> -                       /* Try LTTNG_SESSIOND_PATH env variable */
->> +               pathname = opt_sessiond_path;
->> +
->> +               /* Try LTTNG_SESSIOND_PATH env variable */
->> +               if (pathname == NULL) {
->>                         pathname = getenv(DEFAULT_SESSIOND_PATH_ENV);
->>                 }
->>
->> -               /* Let's rock and roll */
->> +               /* Try with configured path */
->>                 if (pathname == NULL) {
->> -                       ret = asprintf(&alloc_pathname, INSTALL_BIN_PATH "/lttng-sessiond");
->> -                       if (ret < 0) {
->> -                               perror("asprintf spawn sessiond");
->> -                               goto end;
->> +                       if (CONFIG_SESSIOND_BIN[0] != '\0') {
->> +                               pathname = CONFIG_SESSIOND_BIN;
->>                         }
->> -                       pathname = alloc_pathname;
->> +               }
->> +
->> +               /* Let's rock and roll while trying the default path */
->> +               if (pathname == NULL) {
->> +                       pathname = INSTALL_BIN_PATH "/lttng-sessiond";
->> +               }
->> +
->> +               /* Check existence and permissions */
->> +               ret = access(pathname, F_OK | X_OK);
->> +               if (ret < 0) {
->> +                       ERR("No such file or access denied: %s", pathname);
->> +                       goto end;
->>                 }
->>
->>                 ret = spawn_sessiond(pathname);
->> -               free(alloc_pathname);
->>                 if (ret < 0) {
->>                         ERR("Problem occurred when starting %s", pathname);
->>                         goto end;
->> --
->> 1.7.1
->>
->>
->> _______________________________________________
->> lttng-dev mailing list
->> lttng-dev@lists.lttng.org
->> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+VGhpcyBub3RpY2UgaGFzIGJlZW4gcmVtb3ZlZCBmcm9tIHRoZSBSRUFETUUgYXMgcGFydCBvZiBy
+ZXZpc2lvbiBiODM0ZGVhZC4KCkFkZCBhIHdhcm5pbmcgcmVsYXRpbmcgdG8gZGxjbG9zZSgpIHVz
+YWdlIGRldGFpbGVkIGluIGlzc3VlIDQ0NyBpbiBib3RoIHRoZQptYW4gcGFnZSBhbmQgdGhlIFJF
+QURNRSBmaWxlLgoKU2lnbmVkLW9mZi1ieTogSsOpcsOpbWllIEdhbGFybmVhdSA8amVyZW1pZS5n
+YWxhcm5lYXVAZWZmaWNpb3MuY29tPgotLS0KIFJFQURNRSAgICAgICAgICAgICAgfCAgNiArKysr
+Ky0KIGRvYy9tYW4vbHR0bmctdXN0LjMgfCAxNCArKysrKysrLS0tLS0tLQogMiBmaWxlcyBjaGFu
+Z2VkLCAxMiBpbnNlcnRpb25zKCspLCA4IGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL1JFQURN
+RSBiL1JFQURNRQppbmRleCA1NWM3MmRmLi4zOTBhNzE5IDEwMDY0NAotLS0gYS9SRUFETUUKKysr
+IGIvUkVBRE1FCkBAIC03NSw3ICs3NSw3IEBAIFVTQUdFOgogICAgIC0gSW5jbHVkZSB0aGUgdHJh
+Y2Vwb2ludCBwcm92aWRlciBoZWFkZXIgaW50byBhbGwgQyBmaWxlcyB1c2luZwogICAgICAgdGhl
+IHByb3ZpZGVyLgogICAgIC0gRXhhbXBsZToKLSAgICAgICAgdGVzdHMvaGVsbG8vICBoZWxsby5j
+IHRwLmMgdXN0X3Rlc3RzX2hlbGxvLmggTWFrZWZpbGUuZXhhbXBsZS4qCisgICAgICAtIHRlc3Rz
+L2hlbGxvLyAgaGVsbG8uYyB0cC5jIHVzdF90ZXN0c19oZWxsby5oIE1ha2VmaWxlLmV4YW1wbGUu
+KgogCiAgIDIpIENvbXBpbGUgdGhlIFRyYWNlcG9pbnQgUHJvdmlkZXIgc2VwYXJhdGVseSBmcm9t
+IHRoZSBhcHBsaWNhdGlvbiwKICAgICAgdXNpbmcgZHluYW1pYyBsaW5raW5nOgpAQCAtOTcsNiAr
+OTcsMTAgQEAgVVNBR0U6CiAKICAgLSBFbmFibGUgaW5zdHJ1bWVudGF0aW9uIGFuZCBjb250cm9s
+IHRyYWNpbmcgd2l0aCB0aGUgImx0dG5nIiBjb21tYW5kCiAgICAgZnJvbSBsdHRuZy10b29scy4g
+U2VlIGx0dG5nLXRvb2xzIGRvYy9xdWlja3N0YXJ0LnR4dC4KKyAgLSBOb3RlIGFib3V0IGRsY2xv
+c2UoKSB1c2FnZTogaXQgaXMgbm90IHNhZmUgdG8gdXNlIGRsY2xvc2Ugb24gYQorICAgIHByb3Zp
+ZGVyIHNoYXJlZCBvYmplY3QgdGhhdCBpcyBiZWluZyBhY3RpdmVseSB1c2VkIGZvciB0cmFjaW5n
+IGR1ZQorICAgIHRvIGEgbGFjayBvZiByZWZlcmVuY2UgY291bnRpbmcgZnJvbSBsdHRuZy11c3Qg
+dG8gdGhlIHVzZWQgc2hhcmVkCisgICAgb2JqZWN0LgogCiBFTlZJUk9OTUVOVCBWQVJJQUJMRVM6
+CiAKZGlmZiAtLWdpdCBhL2RvYy9tYW4vbHR0bmctdXN0LjMgYi9kb2MvbWFuL2x0dG5nLXVzdC4z
+CmluZGV4IDA4OTI3YzYuLjdjYzNiZmQgMTAwNjQ0Ci0tLSBhL2RvYy9tYW4vbHR0bmctdXN0LjMK
+KysrIGIvZG9jL21hbi9sdHRuZy11c3QuMwpAQCAtMjY1LDcgKzI2NSw3IEBAIGNhcmVmdWxseToK
+ICAgICAtIEluY2x1ZGUgdGhlIHRyYWNlcG9pbnQgcHJvdmlkZXIgaGVhZGVyIGludG8gYWxsIEMg
+ZmlsZXMgdXNpbmcKICAgICAgIHRoZSBwcm92aWRlci4KICAgICAtIEV4YW1wbGU6Ci0gICAgICAg
+IHRlc3RzL2hlbGxvLyAgaGVsbG8uYyB0cC5jIHVzdF90ZXN0c19oZWxsby5oIE1ha2VmaWxlLmV4
+YW1wbGUKKyAgICAgIC0gdGVzdHMvaGVsbG8vICBoZWxsby5jIHRwLmMgdXN0X3Rlc3RzX2hlbGxv
+LmggTWFrZWZpbGUuZXhhbXBsZQogCiAgIDIpIENvbXBpbGUgdGhlIFRyYWNlcG9pbnQgUHJvdmlk
+ZXIgc2VwYXJhdGVseSBmcm9tIHRoZSBhcHBsaWNhdGlvbiwKICAgICAgdXNpbmcgZHluYW1pYyBs
+aW5raW5nOgpAQCAtMjgwLDE1ICsyODAsMTUgQEAgY2FyZWZ1bGx5OgogICAgIC0gTGluayBhcHBs
+aWNhdGlvbiB3aXRoICJcLWxkbCIuCiAgICAgLSBTZXQgYSBMRF9QUkVMT0FEIGVudmlyb25tZW50
+IHRvIHByZWxvYWQgdGhlIHRyYWNlcG9pbnQgcHJvdmlkZXIKICAgICAgIHNoYXJlZCBvYmplY3Qg
+YmVmb3JlIHN0YXJ0aW5nIHRoZSBhcHBsaWNhdGlvbiB3aGVuIHRyYWNpbmcgaXMKLSAgICAgIG5l
+ZWRlZC4KKyAgICAgIG5lZWRlZC4gQW5vdGhlciB3YXkgaXMgdG8gZGxvcGVuIHRoZSB0cmFjZXBv
+aW50IHByb2JlIHdoZW4gbmVlZGVkCisgICAgICBieSB0aGUgYXBwbGljYXRpb24uCiAgICAgLSBF
+eGFtcGxlOgogICAgICAgLSB0ZXN0cy9kZW1vLyAgIGRlbW8uYyAgdHAqLmMgdXN0X3Rlc3RzX2Rl
+bW8qLmggZGVtby10cmFjZQogCi0gIC0gTm90ZSBhYm91dCBkbG9wZW4oKSB1c2FnZTogZHVlIHRv
+IGxvY2tpbmcgc2lkZS1lZmZlY3RzIGR1ZSB0byB0aGUKLSAgICB3YXkgbGliYyBsYXppbHkgcmVz
+b2x2ZXMgVGhyZWFkLUxvY2FsIFN0b3JhZ2UgKFRMUykgc3ltYm9scyB3aGVuIGEKLSAgICBsaWJy
+YXJ5IGlzIGRsb3BlbidkLCBsaW5raW5nIHRoZSB0cmFjZXBvaW50IHByb2JlIG9yIGxpYmx0dG5n
+LXVzdAotICAgIHdpdGggZGxvcGVuKCkgaXMgZGlzY291cmFnZWQuIFRoZXkgc2hvdWxkIGJlIGxp
+bmtlZCB3aXRoIHRoZQotICAgIGFwcGxpY2F0aW9uIHVzaW5nICJcLWxsaWJuYW1lIiBvciBsb2Fk
+ZWQgd2l0aCBMRF9QUkVMT0FELgorICAtIE5vdGUgYWJvdXQgZGxjbG9zZSgpIHVzYWdlOiBpdCBp
+cyBub3Qgc2FmZSB0byB1c2UgZGxjbG9zZSBvbiBhCisgICAgcHJvdmlkZXIgc2hhcmVkIG9iamVj
+dCB0aGF0IGlzIGJlaW5nIGFjdGl2ZWx5IHVzZWQgZm9yIHRyYWNpbmcgZHVlCisgICAgdG8gYSBs
+YWNrIG9mIHJlZmVyZW5jZSBjb3VudGluZyBmcm9tIGx0dG5nLXVzdCB0byB0aGUgdXNlZCBzaGFy
+ZWQKKyAgICBvYmplY3QuCiAgIC0gRW5hYmxlIGluc3RydW1lbnRhdGlvbiBhbmQgY29udHJvbCB0
+cmFjaW5nIHdpdGggdGhlICJsdHRuZyIgY29tbWFuZAogICAgIGZyb20gbHR0bmctdG9vbHMuIFNl
+ZSBsdHRuZy10b29scyBkb2MvcXVpY2tzdGFydC50eHQuCiAgIC0gTm90ZSBmb3IgQysrIHN1cHBv
+cnQ6IGFsdGhvdWdoIGFuIGFwcGxpY2F0aW9uIGluc3RydW1lbnRlZCB3aXRoCi0tIAoxLjguMS41
+CgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmct
+ZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5s
+dHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
