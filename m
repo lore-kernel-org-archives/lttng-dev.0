@@ -1,36 +1,20 @@
-From: nathanm2@linux.vnet.ibm.com
-Subject: Extracting LTTng ring buffers from a vmcore?
-Date: Mon, 18 Mar 2013 19:58:10 -0400
-Message-ID: <20130318195810.Horde.Fv0FZZir309RR6oS2LPiI2A__3067.72186090729$1363651161$gmane$org@imap.linux.ibm.com>
+From: Yao Qi <yao@codesourcery.com>
+Subject: Re: [PATCH] Teach babeltrace understand "native" and
+ "network" for byte_order
+Date: Tue, 19 Mar 2013 09:01:45 +0800
+Message-ID: <5147B8F9.3050308__26753.1207799495$1363655022$gmane$org@codesourcery.com>
+References: <1363341137-26956-1-git-send-email-yao@codesourcery.com>
+	<20130315120753.GA30973@Krystal> <20130315143337.GA959@Krystal>
+	<51433B38.3080805@codesourcery.com> <20130315153320.GA1659@Krystal>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"; DelSp="Yes"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from e7.ny.us.ibm.com ([32.97.182.137])
+Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <nathanm2@linux.vnet.ibm.com>) id 1UHjwf-0005xQ-4w
-	for lttng-dev@lists.lttng.org; Mon, 18 Mar 2013 19:58:25 -0400
-Received: from /spool/local
-	by e7.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only!
-	Violators will be prosecuted
-	for <lttng-dev@lists.lttng.org> from <nathanm2@linux.vnet.ibm.com>;
-	Mon, 18 Mar 2013 19:58:15 -0400
-Received: from d01relay04.pok.ibm.com (d01relay04.pok.ibm.com [9.56.227.236])
-	by d01dlp03.pok.ibm.com (Postfix) with ESMTP id 4C7FAC9001A
-	for <lttng-dev@lists.lttng.org>; Mon, 18 Mar 2013 19:58:12 -0400 (EDT)
-Received: from d01av02.pok.ibm.com (d01av02.pok.ibm.com [9.56.224.216])
-	by d01relay04.pok.ibm.com (8.13.8/8.13.8/NCO v10.0) with ESMTP id
-	r2INwCCD317420
-	for <lttng-dev@lists.lttng.org>; Mon, 18 Mar 2013 19:58:12 -0400
-Received: from d01av02.pok.ibm.com (loopback [127.0.0.1])
-	by d01av02.pok.ibm.com (8.14.4/8.13.1/NCO v10.0 AVout) with ESMTP id
-	r2INwBf3023876
-	for <lttng-dev@lists.lttng.org>; Mon, 18 Mar 2013 20:58:11 -0300
-Received: from imap.linux.ibm.com (maier.raleigh.ibm.com [9.37.253.158])
-	by d01av02.pok.ibm.com (8.14.4/8.13.1/NCO v10.0 AVin) with ESMTP id
-	r2INwBTE023851
-	for <lttng-dev@lists.lttng.org>; Mon, 18 Mar 2013 20:58:11 -0300
-Content-Disposition: inline
+	(envelope-from <Yao_Qi@mentor.com>) id 1UHkx2-0006Sa-3f
+	for lttng-dev@lists.lttng.org; Mon, 18 Mar 2013 21:02:52 -0400
+In-Reply-To: <20130315153320.GA1659@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -39,19 +23,16 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-While reading through the lib_ring_buffer_commit function I came  
-across the following comment:
-
-/*
-  * Update used size at each commit. It's needed only for extracting
-  * ring_buffer buffers from vmcore, after crash.
-  */
-
-I need something exactly like this, but didn't see anything while  
-looking through the lttng tools.  Did I miss something?
-
-Thanks
-Nate
+T24gMDMvMTUvMjAxMyAxMTozMyBQTSwgTWF0aGlldSBEZXNub3llcnMgd3JvdGU6Cj4gSSBhZGRl
+ZCBhbiBleHBsYW5hdG9yeSBwYXJhZ3JhcGggZm9yICJuYXRpdmUiIGluIGFkZGl0aW9uIHRvIHlv
+dXIKPiByZWNvbW1lbmRlZCBjaGFuZ2VzLiBXZSBjYW5ub3QgcmVtb3ZlIGFuIGtleXdvcmQgZnJv
+bSB0aGUgc3BlY2lmaWNhdGlvbgo+IGxpZ2h0bHksIGJlY2F1c2UgdGhpcyB3b3VsZCBicmVhayBj
+b21wYXRpYmlsaXR5LgoKSXQgbG9va3MgcHJldHR5IGdvb2QuICBUaGFua3MgZm9yIGRvaW5nIHRo
+aXMuCgotLSAKWWFvICjpvZDlsKcpCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRu
+Zy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0
+bmctZGV2Cg==
