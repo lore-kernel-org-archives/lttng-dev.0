@@ -1,19 +1,20 @@
-From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
-	<jeremie.galarneau@efficios.com>
-Subject: [PATCH lttng-ust] Add missing buffers-uid folder in ust
-	regression test Makefile
-Date: Thu, 21 Mar 2013 17:26:27 -0400
-Message-ID: <1363901187-7955-1-git-send-email-jeremie.galarneau__43311.5545115017$1363901248$gmane$org@efficios.com>
+From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: [PATCH lttng-ust] Add missing buffers-uid folder in
+ ust regression test Makefile
+Date: Thu, 21 Mar 2013 17:28:00 -0400
+Message-ID: <CA+jJMxsY17Y=01d5JZ2baegTt29fNEXmvy3gwvKRXrrVQgvStw__14894.1013882451$1363901330$gmane$org@mail.gmail.com>
+References: <1363901187-7955-1-git-send-email-jeremie.galarneau@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-vc0-f178.google.com ([209.85.220.178])
+Received: from mail-wi0-f171.google.com ([209.85.212.171])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1UIn0V-0007VX-5f
-	for lttng-dev@lists.lttng.org; Thu, 21 Mar 2013 17:26:43 -0400
-Received: by mail-vc0-f178.google.com with SMTP id hz11so2697121vcb.37
-	for <lttng-dev@lists.lttng.org>; Thu, 21 Mar 2013 14:26:37 -0700 (PDT)
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1UIn1q-0007X2-Ox
+	for lttng-dev@lists.lttng.org; Thu, 21 Mar 2013 17:28:06 -0400
+Received: by mail-wi0-f171.google.com with SMTP id hn17so7117117wib.4
+	for <lttng-dev@lists.lttng.org>; Thu, 21 Mar 2013 14:28:00 -0700 (PDT)
+In-Reply-To: <1363901187-7955-1-git-send-email-jeremie.galarneau@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -25,17 +26,41 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-ClNpZ25lZC1vZmYtYnk6IErDqXLDqW1pZSBHYWxhcm5lYXUgPGplcmVtaWUuZ2FsYXJuZWF1QGVm
-ZmljaW9zLmNvbT4KLS0tCiB0ZXN0cy9yZWdyZXNzaW9uL3VzdC9NYWtlZmlsZS5hbSB8IDIgKy0K
-IDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQoKZGlmZiAtLWdp
-dCBhL3Rlc3RzL3JlZ3Jlc3Npb24vdXN0L01ha2VmaWxlLmFtIGIvdGVzdHMvcmVncmVzc2lvbi91
-c3QvTWFrZWZpbGUuYW0KaW5kZXggZDg5MDRiYi4uYzVkZWUyMSAxMDA2NDQKLS0tIGEvdGVzdHMv
-cmVncmVzc2lvbi91c3QvTWFrZWZpbGUuYW0KKysrIGIvdGVzdHMvcmVncmVzc2lvbi91c3QvTWFr
-ZWZpbGUuYW0KQEAgLTEsNiArMSw2IEBACiBpZiBIQVZFX0xJQkxUVE5HX1VTVF9DVEwKIFNVQkRJ
-UlMgPSBucHJvY2Vzc2VzIGhpZ2gtdGhyb3VnaHB1dCBsb3ctdGhyb3VnaHB1dCBiZWZvcmUtYWZ0
-ZXIgbXVsdGktc2Vzc2lvbiBcCi0JCSAgb3ZlcmxhcAorCQkgIG92ZXJsYXAgYnVmZmVycy11aWQK
-IAogRVhUUkFfRElTVCA9IHJ1bmFsbC5zaCBydW4tdXN0LWdsb2JhbC10ZXN0cy5zaCB0ZXN0X2V2
-ZW50X2Jhc2ljIHRlc3RfZXZlbnRfd2lsZGNhcmQKIAotLSAKMS44LjIKCgpfX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0
-Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmlu
-L21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+Oops...Wrong subject! Applies to lttng-tools, obviously.
+
+J=E9r=E9mie
+
+On Thu, Mar 21, 2013 at 5:26 PM, J=E9r=E9mie Galarneau
+<jeremie.galarneau@efficios.com> wrote:
+>
+> Signed-off-by: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
+> ---
+>  tests/regression/ust/Makefile.am | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tests/regression/ust/Makefile.am b/tests/regression/ust/Make=
+file.am
+> index d8904bb..c5dee21 100644
+> --- a/tests/regression/ust/Makefile.am
+> +++ b/tests/regression/ust/Makefile.am
+> @@ -1,6 +1,6 @@
+>  if HAVE_LIBLTTNG_UST_CTL
+>  SUBDIRS =3D nprocesses high-throughput low-throughput before-after multi=
+-session \
+> -                 overlap
+> +                 overlap buffers-uid
+>
+>  EXTRA_DIST =3D runall.sh run-ust-global-tests.sh test_event_basic test_e=
+vent_wildcard
+>
+> --
+> 1.8.2
+>
+
+
+
+-- =
+
+J=E9r=E9mie Galarneau
+EfficiOS Inc.
+http://www.efficios.com
