@@ -1,24 +1,19 @@
-From: Christian Babeux <christian.babeux@efficios.com>
-Subject: Re: [PATCH lttng-tools 4/6] Tests: Use Perl prove as
- the testsuite runner
-Date: Thu, 21 Mar 2013 17:25:47 -0400
-Message-ID: <CAGDH53=eWqSre8+nXB2yznPz2+KzQHt2e8uhgHfOCZyct6Sp7Q__26051.229859195$1363901199$gmane$org@mail.gmail.com>
-References: <1363895807-17892-1-git-send-email-christian.babeux@efficios.com>
-	<1363895807-17892-4-git-send-email-christian.babeux@efficios.com>
-	<514B746C.7010205@gmail.com>
-	<CAGDH53nch9AjJP5Y--a=FPWCsCdfWJ0VaPZXAHRBgYcnzL3LjQ@mail.gmail.com>
-	<514B79CF.2040807@gmail.com>
+From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
+	<jeremie.galarneau@efficios.com>
+Subject: [PATCH lttng-ust] Add missing buffers-uid folder in ust
+	regression test Makefile
+Date: Thu, 21 Mar 2013 17:26:27 -0400
+Message-ID: <1363901187-7955-1-git-send-email-jeremie.galarneau__43311.5545115017$1363901248$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-vc0-f181.google.com ([209.85.220.181])
+Received: from mail-vc0-f178.google.com ([209.85.220.178])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <christian.babeux@0x80.ca>) id 1UImzg-0007UV-Kx
-	for lttng-dev@lists.lttng.org; Thu, 21 Mar 2013 17:25:52 -0400
-Received: by mail-vc0-f181.google.com with SMTP id hv10so2680165vcb.40
-	for <lttng-dev@lists.lttng.org>; Thu, 21 Mar 2013 14:25:47 -0700 (PDT)
-In-Reply-To: <514B79CF.2040807@gmail.com>
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1UIn0V-0007VX-5f
+	for lttng-dev@lists.lttng.org; Thu, 21 Mar 2013 17:26:43 -0400
+Received: by mail-vc0-f178.google.com with SMTP id hz11so2697121vcb.37
+	for <lttng-dev@lists.lttng.org>; Thu, 21 Mar 2013 14:26:37 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -27,17 +22,20 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Yannick Brosseau <yannick.brosseau@gmail.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Okay I'll post a patch updating the README.
-
-On Thu, Mar 21, 2013 at 5:21 PM, Yannick Brosseau
-<yannick.brosseau@gmail.com> wrote:
-> On 2013-03-21 17:12, Christian Babeux wrote:
->>> This new dependency should be documented in the README file.
->> Since lttng-tools depends on Automake (which is a Perl script), would
->> that still be relevant to add?
->>
-> Automake is not needed if you use the tar.gz, so I think it should be there
+ClNpZ25lZC1vZmYtYnk6IErDqXLDqW1pZSBHYWxhcm5lYXUgPGplcmVtaWUuZ2FsYXJuZWF1QGVm
+ZmljaW9zLmNvbT4KLS0tCiB0ZXN0cy9yZWdyZXNzaW9uL3VzdC9NYWtlZmlsZS5hbSB8IDIgKy0K
+IDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQoKZGlmZiAtLWdp
+dCBhL3Rlc3RzL3JlZ3Jlc3Npb24vdXN0L01ha2VmaWxlLmFtIGIvdGVzdHMvcmVncmVzc2lvbi91
+c3QvTWFrZWZpbGUuYW0KaW5kZXggZDg5MDRiYi4uYzVkZWUyMSAxMDA2NDQKLS0tIGEvdGVzdHMv
+cmVncmVzc2lvbi91c3QvTWFrZWZpbGUuYW0KKysrIGIvdGVzdHMvcmVncmVzc2lvbi91c3QvTWFr
+ZWZpbGUuYW0KQEAgLTEsNiArMSw2IEBACiBpZiBIQVZFX0xJQkxUVE5HX1VTVF9DVEwKIFNVQkRJ
+UlMgPSBucHJvY2Vzc2VzIGhpZ2gtdGhyb3VnaHB1dCBsb3ctdGhyb3VnaHB1dCBiZWZvcmUtYWZ0
+ZXIgbXVsdGktc2Vzc2lvbiBcCi0JCSAgb3ZlcmxhcAorCQkgIG92ZXJsYXAgYnVmZmVycy11aWQK
+IAogRVhUUkFfRElTVCA9IHJ1bmFsbC5zaCBydW4tdXN0LWdsb2JhbC10ZXN0cy5zaCB0ZXN0X2V2
+ZW50X2Jhc2ljIHRlc3RfZXZlbnRfd2lsZGNhcmQKIAotLSAKMS44LjIKCgpfX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0
+Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmlu
+L21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
