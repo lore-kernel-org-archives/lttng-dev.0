@@ -1,20 +1,21 @@
-From: Christian Babeux <christian.babeux@efficios.com>
-Subject: [PATCH lttng-tools 6/6] Tests: Do not exit when a
-	failure occurs in test_buffers_uid
-Date: Thu, 21 Mar 2013 15:56:47 -0400
-Message-ID: <1363895807-17892-6-git-send-email-christian.babeux__42742.0666594573$1363895911$gmane$org@efficios.com>
+From: Yannick Brosseau <yannick.brosseau@gmail.com>
+Subject: Re: [PATCH lttng-tools 4/6] Tests: Use Perl prove as
+ the testsuite runner
+Date: Thu, 21 Mar 2013 16:58:20 -0400
+Message-ID: <514B746C.7010205__49310.4236004457$1363899558$gmane$org@gmail.com>
 References: <1363895807-17892-1-git-send-email-christian.babeux@efficios.com>
+	<1363895807-17892-4-git-send-email-christian.babeux@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ia0-f169.google.com ([209.85.210.169])
+Received: from mail-ie0-f170.google.com ([209.85.223.170])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <christian.babeux@0x80.ca>) id 1UIlcS-0006jp-0Q
-	for lttng-dev@lists.lttng.org; Thu, 21 Mar 2013 15:57:48 -0400
-Received: by mail-ia0-f169.google.com with SMTP id j5so2934915iaf.0
-	for <lttng-dev@lists.lttng.org>; Thu, 21 Mar 2013 12:57:42 -0700 (PDT)
-In-Reply-To: <1363895807-17892-1-git-send-email-christian.babeux@efficios.com>
+	(envelope-from <yannick.brosseau@gmail.com>) id 1UImZC-0007Ef-Ui
+	for lttng-dev@lists.lttng.org; Thu, 21 Mar 2013 16:58:31 -0400
+Received: by mail-ie0-f170.google.com with SMTP id c11so4078458ieb.15
+	for <lttng-dev@lists.lttng.org>; Thu, 21 Mar 2013 13:58:25 -0700 (PDT)
+In-Reply-To: <1363895807-17892-4-git-send-email-christian.babeux@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,31 +24,16 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: dgoulet@efficios.com
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
+On 2013-03-21 15:56, Christian Babeux wrote:
+> Currently the regression and unit testsuites are runned via a custom
+> runner script. By using the Perl prove utility, we can run the testsuites
+> and also gain additionnal features such as: parallel jobs, separate testlists,
+> etc.
+>
 
-Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
----
- tests/regression/ust/buffers-uid/test_buffers_uid | 5 -----
- 1 file changed, 5 deletions(-)
+This new dependency should be documented in the README file.
 
-diff --git a/tests/regression/ust/buffers-uid/test_buffers_uid b/tests/regression/ust/buffers-uid/test_buffers_uid
-index 1c590f2..215a060 100755
---- a/tests/regression/ust/buffers-uid/test_buffers_uid
-+++ b/tests/regression/ust/buffers-uid/test_buffers_uid
-@@ -230,11 +230,6 @@ start_lttng_sessiond
- while [ $i -lt $TEST_COUNT ]; do
- 	TRACE_PATH=$(mktemp -d)
- 	${TESTS[$i]}
--	if [ $? -ne 0 ]; then
--		stop_lttng_sessiond
--		exit 1
--	fi
--
- 	rm -rf $TRACE_PATH
- 	let "i++"
- done
--- 
-1.8.1.3
+Yannick
