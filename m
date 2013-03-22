@@ -1,17 +1,19 @@
-From: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
-Subject: Re: TMF: inconsistencies in the context vtid reporting
-Date: Fri, 22 Mar 2013 17:24:59 -0400
-Message-ID: <514CCC2B.1040802__21596.0986599841$1363987690$gmane$org@voxpopuli.im>
-References: <CAPkDDd7B50XiXCGsc0QGq6+gZxeEOGQ=tB536vSy3k9RqbcdjQ@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH] lttng-abi.c: fix the error check
+Date: Fri, 22 Mar 2013 17:57:45 -0400
+Message-ID: <20130322215745.GB18746__32703.9129952484$1363989524$gmane$org@Krystal>
+References: <1363975622-37401-1-git-send-email-maxin.john@enea.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from ironport2-out.teksavvy.com ([206.248.154.182])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <alexmonthy@voxpopuli.im>) id 1UJ9Ub-0002Ax-Tp
-	for lttng-dev@lists.lttng.org; Fri, 22 Mar 2013 17:27:18 -0400
-In-Reply-To: <CAPkDDd7B50XiXCGsc0QGq6+gZxeEOGQ=tB536vSy3k9RqbcdjQ@mail.gmail.com>
+	(envelope-from <compudj@mail.openrapids.net>) id 1UJ9y9-0002P3-7i
+	for lttng-dev@lists.lttng.org; Fri, 22 Mar 2013 17:57:49 -0400
+Content-Disposition: inline
+In-Reply-To: <1363975622-37401-1-git-send-email-maxin.john@enea.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,89 +22,87 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?ISO-8859-1?Q?S=E9bastien_Barth=E9l=E9my?= <barthelemy@crans.org>
+To: maxin.john@enea.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi S=E9bastien,
+* maxin.john@enea.com (maxin.john@enea.com) wrote:
+> From: "Maxin B. John" <maxin.john@enea.com>
+> 
+> lttng_syscalls_register() may return -ENOMEM or -EINVAL. So fix
+> the error path to check for negative values in lttng_abi_create_event()
+> and lttng_channel_ioctl().
 
-On 13-03-22 06:02 AM, S=E9bastien Barth=E9l=E9my wrote:
-> Hello,
->
-> I'm using simultaneous kernel and userspace tracing in order to
-> understand how a multi threaded application (mis)behaves at shutdown.
->
-> The idea is to use userspace tracepoints in the application, augmented
-> with the vtid context, in order to know which thread is calling what
-> and to relate that with the threads lifespan as reconstructed from the
-> kernel scheduler traces.
->
-> First, is the approach ok? Am I right to expect the vtid attached to
-> ust event to match the tid shown in the reconstructed kernel scheduler
-> state?
+I don't understand what this is supposed to fix.
 
-It should work, yes. However note that the concept of "vtid" (virtual
-thread ID) is used to differentiate the tid assigned to a process when
-used within a container (LXC) vs. its tid on the host. You could use
-context.tid too, but if you don't use containers those two should be the
-same.
+The expected return values from lttng_syscalls_register are:
 
-> Should I expect "time shifts" between the kernel and userspace traces
-> (which would make the correlation harder).
+0 -> success
+-EINVAL -> error
+-ENOMEM -> error
 
-Ideally no, but depending on your kernel/libc versions, UST might not
-have access to the same time sources as the kernel tracer, so you could
-get small offsets. Maybe one of the tracer devs can give a better
-explanation.
+so whether we check for error with
 
->
-> I was hoping to see the unix signals in the kernel trace too but could
-> not find them so far.
->
-> So now, the problem is that I get inconsistencies: some UST events
-> report a vtid which is shown as waiting by the kernel trace (both in
-> the Control Flow and the Resources views). How could a waiting thread
-> trigger an UST event?
->
-> I believe my kernel trace is complete, since the following command
-> shows no output.
->
->     $ babeltrace lttng-traces/auto-20130321-172308/kernel/ > /dev/null
->
-> My userspace trace is not complete. But I believe it does not matter,
-> because the missing events are seconds before the time window I'm
-> interested in, and AFAIK, there is no state reconstruction involved
-> (but may be there is?).
+if (ret)
 
-It could happen ; maybe the tracer missed an important sched_switch
-event that set a process in a particular state. I wouldn't recommend
-running analyses on traces with missing events, some information could
-be all wrong.
+or
 
-Unless you are on an embedded platform with very limited memory, it's
-usually safe to increase the buffer size to a couple MBs. See
---enable-channel and --subbuf-size in the LTTng man page. I have to warn
-you about https://bugs.lttng.org/issues/228 in advance though...
+if (ret < 0)
 
-I still think the default value should be higher (and have the embedded
-guys use --subbuf-size to reduce it), but I don't call those shots ;)
+should yield to the exact same result, since we don't expect positive
+return values.
 
-> I eventually came to a more blatant inconsistency: the displayed
-> context vtid of an event is not always the same.
->
-> [...]
->
-> I'm using TMF 2.0.0.201303211612 (nightly build from yesterday).
+And for lttng_abi_create_event(), the original code flow is to execute 2
+kfree(), and then "return ret", which will return either -EINVAL or
+-ENOMEM to the caller.
 
-Are your traces available somewhere (if they can be made public)? I
-would like to take a look at it, it seems the CTF parser gets confused
-between vtid and vpid for some weird reason...
+So by adding this return -ENOMEM, you hide the real cause (-EINVAL or
+-ENOMEM), and you add 2 memory leaks.
 
-> And by the way, thank your for the support I already got on IRC
-> yesterday, you're a dream project to work with.
+Or am I missing something ?
 
-Thanks! That's encouraging to hear ;)
+Thanks,
 
+Mathieu
 
-Cheers,
-Alex
+> 
+> Signed-off-by: Maxin B. John <maxin.john@enea.com>
+> ---
+>  lttng-abi.c |    4 +++-
+>  1 files changed, 3 insertions(+), 1 deletions(-)
+> 
+> diff --git a/lttng-abi.c b/lttng-abi.c
+> index 25a350a..5613b75 100644
+> --- a/lttng-abi.c
+> +++ b/lttng-abi.c
+> @@ -648,7 +648,7 @@ int lttng_abi_create_event(struct file *channel_file,
+>  		if (event_param->name[0] != '\0')
+>  			return -EINVAL;
+>  		ret = lttng_syscalls_register(channel, NULL);
+> -		if (ret)
+> +		if (ret < 0)
+>  			goto fd_error;
+>  		event_fd = 0;
+>  		break;
+> @@ -753,6 +753,8 @@ long lttng_channel_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
+>  			break;
+>  		}
+>  		ret = lttng_abi_create_event(file, uevent_param);
+> +		if (ret < 0)
+> +			return -ENOMEM;
+>  
+>  old_event_error_free_old_param:
+>  		kfree(old_uevent_param);
+> -- 
+> 1.7.5.4
+> 
+> 
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
