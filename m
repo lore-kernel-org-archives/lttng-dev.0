@@ -1,16 +1,19 @@
-From: <maxin.john@enea.com>
-Subject: [PATCH] lttng-module: sched.h: Fix compilation on 3.9
-	kernel
-Date: Fri, 22 Mar 2013 13:58:15 +0100
-Message-ID: <1363957095-54785-1-git-send-email-maxin.john__26914.8060739555$1363971214$gmane$org@enea.com>
+From: =?ISO-8859-1?Q?S=E9bastien_Barth=E9l=E9my?= <barthelemy@crans.org>
+Subject: Re: TMF: inconsistencies in the context vtid reporting
+Date: Fri, 22 Mar 2013 18:58:51 +0100
+Message-ID: <CAPkDDd7m36bbp=iApsHwxxxXjeQ0AEWDpocXoKHY8dOTmcZhBg__18647.8376308971$1363975185$gmane$org@mail.gmail.com>
+References: <CAPkDDd7B50XiXCGsc0QGq6+gZxeEOGQ=tB536vSy3k9RqbcdjQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from sestofw01.enea.se ([192.36.1.252] helo=mx-3.enea.com)
-	by ltt.polymtl.ca with smtp (Exim 4.72)
-	(envelope-from <Maxin.John@enea.com>) id 1UJ1YN-0006aG-U1
-	for lttng-dev@lists.lttng.org; Fri, 22 Mar 2013 08:58:40 -0400
+Received: from mail-wi0-f173.google.com ([209.85.212.173])
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <sebastien.barthelemy@gmail.com>) id 1UJ6Ez-0000SW-S4
+	for lttng-dev@lists.lttng.org; Fri, 22 Mar 2013 13:58:58 -0400
+Received: by mail-wi0-f173.google.com with SMTP id ez12so47008wid.12
+	for <lttng-dev@lists.lttng.org>; Fri, 22 Mar 2013 10:58:51 -0700 (PDT)
+In-Reply-To: <CAPkDDd7B50XiXCGsc0QGq6+gZxeEOGQ=tB536vSy3k9RqbcdjQ@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,45 +22,12 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: mathieu.desnoyers@efficios.com
-Cc: lttng-dev@lists.lttng.org, "Maxin B. John" <maxin.john@enea.com>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-From: "Maxin B. John" <maxin.john@enea.com>
+On Fri, Mar 22, 2013 at 11:02 AM, S=E9bastien Barth=E9l=E9my
+<barthelemy@crans.org> wrote:
+> I was hoping to see the unix signals in the kernel trace too but could
+> not find them so far.
 
-With commit 8bd75c77b7c6a3954140dd2e20346aef3efe4a35
-included in 3.9-rc1 kernel, rt specific bits in "linux/sched.h"
-were moved into new header file "linux/sched/rt.h".
-
-Fixes this compilation error:
- CC [M]  /home/majo/lttng/lttng-modules/probes/lttng-probe-sched.o
-...
-/home/majo/lttng/lttng-modules/probes/../instrumentation/events/lttng-module
-/../../../probes/../instrumentation/events/lttng-module/sched.h:
-In function '__event_probe__sched_switch':
-/home/majo/lttng/lttng-modules/probes/../instrumentation/events/lttng-module
-/../../../probes/../instrumentation/events/lttng-module/sched.h:164:1:
-error: 'MAX_RT_PRIO' undeclared (first use in this function)
-...
-
-Signed-off-by: Maxin B. John <maxin.john@enea.com>
----
- instrumentation/events/lttng-module/sched.h |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
-
-diff --git a/instrumentation/events/lttng-module/sched.h b/instrumentation/events/lttng-module/sched.h
-index e42acd2..25faad0 100644
---- a/instrumentation/events/lttng-module/sched.h
-+++ b/instrumentation/events/lttng-module/sched.h
-@@ -8,6 +8,9 @@
- #include <linux/tracepoint.h>
- #include <linux/binfmts.h>
- #include <linux/version.h>
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,9,0))
-+#include <linux/sched/rt.h>
-+#endif
- 
- #ifndef _TRACE_SCHED_DEF_
- #define _TRACE_SCHED_DEF_
--- 
-1.7.5.4
+I found them eventually.
