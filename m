@@ -1,19 +1,15 @@
-From: =?ISO-8859-1?Q?S=E9bastien_Barth=E9l=E9my?= <barthelemy@crans.org>
-Subject: Re: TMF: inconsistencies in the context vtid reporting
-Date: Fri, 22 Mar 2013 18:58:51 +0100
-Message-ID: <CAPkDDd7m36bbp=iApsHwxxxXjeQ0AEWDpocXoKHY8dOTmcZhBg__18647.8376308971$1363975185$gmane$org@mail.gmail.com>
-References: <CAPkDDd7B50XiXCGsc0QGq6+gZxeEOGQ=tB536vSy3k9RqbcdjQ@mail.gmail.com>
+From: <maxin.john@enea.com>
+Subject: [PATCH] lttng-abi.c: fix the error check
+Date: Fri, 22 Mar 2013 19:07:02 +0100
+Message-ID: <1363975622-37401-1-git-send-email-maxin.john__37629.4068330482$1363976101$gmane$org@enea.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wi0-f173.google.com ([209.85.212.173])
-	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <sebastien.barthelemy@gmail.com>) id 1UJ6Ez-0000SW-S4
-	for lttng-dev@lists.lttng.org; Fri, 22 Mar 2013 13:58:58 -0400
-Received: by mail-wi0-f173.google.com with SMTP id ez12so47008wid.12
-	for <lttng-dev@lists.lttng.org>; Fri, 22 Mar 2013 10:58:51 -0700 (PDT)
-In-Reply-To: <CAPkDDd7B50XiXCGsc0QGq6+gZxeEOGQ=tB536vSy3k9RqbcdjQ@mail.gmail.com>
+Received: from sestofw01.enea.se ([192.36.1.252] helo=mx-3.enea.com)
+	by ltt.polymtl.ca with smtp (Exim 4.72)
+	(envelope-from <Maxin.John@enea.com>) id 1UJ6Mw-0000Yi-AQ
+	for lttng-dev@lists.lttng.org; Fri, 22 Mar 2013 14:07:10 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,12 +18,42 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: mathieu.desnoyers@efficios.com
+Cc: lttng-dev@lists.lttng.org, "Maxin B. John" <maxin.john@enea.com>
 List-Id: lttng-dev@lists.lttng.org
 
-On Fri, Mar 22, 2013 at 11:02 AM, S=E9bastien Barth=E9l=E9my
-<barthelemy@crans.org> wrote:
-> I was hoping to see the unix signals in the kernel trace too but could
-> not find them so far.
+From: "Maxin B. John" <maxin.john@enea.com>
 
-I found them eventually.
+lttng_syscalls_register() may return -ENOMEM or -EINVAL. So fix
+the error path to check for negative values in lttng_abi_create_event()
+and lttng_channel_ioctl().
+
+Signed-off-by: Maxin B. John <maxin.john@enea.com>
+---
+ lttng-abi.c |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
+
+diff --git a/lttng-abi.c b/lttng-abi.c
+index 25a350a..5613b75 100644
+--- a/lttng-abi.c
++++ b/lttng-abi.c
+@@ -648,7 +648,7 @@ int lttng_abi_create_event(struct file *channel_file,
+ 		if (event_param->name[0] != '\0')
+ 			return -EINVAL;
+ 		ret = lttng_syscalls_register(channel, NULL);
+-		if (ret)
++		if (ret < 0)
+ 			goto fd_error;
+ 		event_fd = 0;
+ 		break;
+@@ -753,6 +753,8 @@ long lttng_channel_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
+ 			break;
+ 		}
+ 		ret = lttng_abi_create_event(file, uevent_param);
++		if (ret < 0)
++			return -ENOMEM;
+ 
+ old_event_error_free_old_param:
+ 		kfree(old_uevent_param);
+-- 
+1.7.5.4
