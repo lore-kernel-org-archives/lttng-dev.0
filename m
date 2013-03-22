@@ -1,15 +1,18 @@
-From: <maxin.john@enea.com>
-Subject: [PATCH] lttng-abi.c: fix the error check
-Date: Fri, 22 Mar 2013 19:07:02 +0100
-Message-ID: <1363975622-37401-1-git-send-email-maxin.john__37629.4068330482$1363976101$gmane$org@enea.com>
+From: Christian Babeux <christian.babeux@efficios.com>
+Subject: [PATCH lttng-tools] Add optional Perl dependency
+	requirement to README
+Date: Fri, 22 Mar 2013 15:49:19 -0400
+Message-ID: <1363981759-4718-1-git-send-email-christian.babeux__42619.5252723575$1363981848$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from sestofw01.enea.se ([192.36.1.252] helo=mx-3.enea.com)
-	by ltt.polymtl.ca with smtp (Exim 4.72)
-	(envelope-from <Maxin.John@enea.com>) id 1UJ6Mw-0000Yi-AQ
-	for lttng-dev@lists.lttng.org; Fri, 22 Mar 2013 14:07:10 -0400
+Received: from mail-ia0-f171.google.com ([209.85.210.171])
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <christian.babeux@0x80.ca>) id 1UJ7yR-0001Lo-LY
+	for lttng-dev@lists.lttng.org; Fri, 22 Mar 2013 15:49:59 -0400
+Received: by mail-ia0-f171.google.com with SMTP id z13so3901733iaz.30
+	for <lttng-dev@lists.lttng.org>; Fri, 22 Mar 2013 12:49:54 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -18,42 +21,29 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: mathieu.desnoyers@efficios.com
-Cc: lttng-dev@lists.lttng.org, "Maxin B. John" <maxin.john@enea.com>
+To: dgoulet@efficios.com
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-From: "Maxin B. John" <maxin.john@enea.com>
 
-lttng_syscalls_register() may return -ENOMEM or -EINVAL. So fix
-the error path to check for negative values in lttng_abi_create_event()
-and lttng_channel_ioctl().
-
-Signed-off-by: Maxin B. John <maxin.john@enea.com>
+Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
 ---
- lttng-abi.c |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+ README | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/lttng-abi.c b/lttng-abi.c
-index 25a350a..5613b75 100644
---- a/lttng-abi.c
-+++ b/lttng-abi.c
-@@ -648,7 +648,7 @@ int lttng_abi_create_event(struct file *channel_file,
- 		if (event_param->name[0] != '\0')
- 			return -EINVAL;
- 		ret = lttng_syscalls_register(channel, NULL);
--		if (ret)
-+		if (ret < 0)
- 			goto fd_error;
- 		event_fd = 0;
- 		break;
-@@ -753,6 +753,8 @@ long lttng_channel_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
- 			break;
- 		}
- 		ret = lttng_abi_create_event(file, uevent_param);
-+		if (ret < 0)
-+			return -ENOMEM;
+diff --git a/README b/README
+index 4ef88cb..cfbf1ac 100644
+--- a/README
++++ b/README
+@@ -28,6 +28,9 @@ REQUIREMENTS:
  
- old_event_error_free_old_param:
- 		kfree(old_uevent_param);
+       * Debian/Ubuntu package: libpopt-dev
+ 
++    - Perl (optional)
++      Needed for make check and tests.
++
+     - SWIG >= 2.0 (optional)
+       Needed for Python bindings (--enable-python-bindings).
+ 
 -- 
-1.7.5.4
+1.8.2
