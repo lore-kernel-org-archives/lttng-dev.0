@@ -1,19 +1,19 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH] lttng-abi.c: fix the error check
-Date: Fri, 22 Mar 2013 17:57:45 -0400
-Message-ID: <20130322215745.GB18746__32703.9129952484$1363989524$gmane$org@Krystal>
-References: <1363975622-37401-1-git-send-email-maxin.john@enea.com>
+From: "Brosseau, Yannick" <yannick.brosseau@gmail.com>
+Subject: Fwd: [Bug 925071] New: babeltrace: Does not support
+ aarch64 in f19 and rawhide
+Date: Fri, 22 Mar 2013 20:18:19 -0400
+Message-ID: <CAEzWAe+K1bbq9EFX9j5dd1atVGWGGVBKib0V1N_vnMpy3hfkEQ__7072.495079092$1363997959$gmane$org@mail.gmail.com>
+References: <bug-925071-315593@bugzilla.redhat.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1775998197=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from mail-vb0-f54.google.com ([209.85.212.54])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UJ9y9-0002P3-7i
-	for lttng-dev@lists.lttng.org; Fri, 22 Mar 2013 17:57:49 -0400
-Content-Disposition: inline
-In-Reply-To: <1363975622-37401-1-git-send-email-maxin.john@enea.com>
+	(envelope-from <yannick.brosseau@gmail.com>) id 1UJCAD-0003Ta-JC
+	for lttng-dev@lists.lttng.org; Fri, 22 Mar 2013 20:18:25 -0400
+Received: by mail-vb0-f54.google.com with SMTP id p14so561417vbm.41
+	for <lttng-dev@lists.lttng.org>; Fri, 22 Mar 2013 17:18:20 -0700 (PDT)
+In-Reply-To: <bug-925071-315593@bugzilla.redhat.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,87 +22,130 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: maxin.john@enea.com
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* maxin.john@enea.com (maxin.john@enea.com) wrote:
-> From: "Maxin B. John" <maxin.john@enea.com>
-> 
-> lttng_syscalls_register() may return -ENOMEM or -EINVAL. So fix
-> the error path to check for negative values in lttng_abi_create_event()
-> and lttng_channel_ioctl().
+--===============1775998197==
+Content-Type: multipart/alternative; boundary=20cf307ca04c4ec47004d88c8263
 
-I don't understand what this is supposed to fix.
+--20cf307ca04c4ec47004d88c8263
+Content-Type: text/plain; charset=ISO-8859-1
 
-The expected return values from lttng_syscalls_register are:
+I think that's a problem that might occur for other distribution soon
+---------- Mensaje remitido ----------
+De: <bugzilla@redhat.com>
+Fecha: mar 22, 2013 8:06 p.m.
+Asunto: [Bug 925071] New: babeltrace: Does not support aarch64 in f19 and
+rawhide
+Para: <yannick.brosseau@gmail.com>
+Cc:
 
-0 -> success
--EINVAL -> error
--ENOMEM -> error
+Product: Fedora
+https://bugzilla.redhat.com/show_bug.cgi?id=925071
 
-so whether we check for error with
+            Bug ID: 925071
+           Summary: babeltrace: Does not support aarch64 in f19 and
+                    rawhide
+           Product: Fedora
+           Version: rawhide
+         Component: babeltrace
+          Severity: unspecified
+          Priority: unspecified
+          Assignee: yannick.brosseau@gmail.com
+          Reporter: dennis@ausil.us
+        QA Contact: extras-qa@fedoraproject.org
+                CC: yannick.brosseau@gmail.com
+            Blocks: 922257 (ARM64)
 
-if (ret)
+Support for the ARM 64 bit CPU architecture (aarch64) was introduced in
+autoconf 2.69.  babeltrace appears to use an earlier version of
+autoconf, preventing its being built.  This can be fixed in of three ways
+(In
+order of preference):
 
-or
+1. Work with upstream to migrate the package to autoconf 2.69.
 
-if (ret < 0)
+2. Rerun autoconf or autoreconf in %prep or %build prior to running
+configure.
 
-should yield to the exact same result, since we don't expect positive
-return values.
+3. Apply the patch at
+http://ausil.fedorapeople.org/aarch64/babeltrace/babeltrace-aarch64.patch
+which updates config.guess and config.sub to recognize aarch64.
 
-And for lttng_abi_create_event(), the original code flow is to execute 2
-kfree(), and then "return ret", which will return either -EINVAL or
--ENOMEM to the caller.
+--
+You are receiving this mail because:
+You are on the CC list for the bug.
+You are the assignee for the bug.
 
-So by adding this return -ENOMEM, you hide the real cause (-EINVAL or
--ENOMEM), and you add 2 memory leaks.
+--20cf307ca04c4ec47004d88c8263
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
 
-Or am I missing something ?
+<p dir=3D"ltr">I think that&#39;s a problem that might occur for other dist=
+ribution soon </p>
+<div class=3D"gmail_quote">---------- Mensaje remitido ----------<br>De:  &=
+lt;<a href=3D"mailto:bugzilla@redhat.com">bugzilla@redhat.com</a>&gt;<br>Fe=
+cha: mar 22, 2013 8:06 p.m.<br>Asunto: [Bug 925071] New: babeltrace: Does n=
+ot support aarch64 in f19 and rawhide<br>
+Para:  &lt;<a href=3D"mailto:yannick.brosseau@gmail.com">yannick.brosseau@g=
+mail.com</a>&gt;<br>Cc: <br><br type=3D"attribution">Product: Fedora<br>
+<a href=3D"https://bugzilla.redhat.com/show_bug.cgi?id=3D925071" target=3D"=
+_blank">https://bugzilla.redhat.com/show_bug.cgi?id=3D925071</a><br>
+<br>
+=A0 =A0 =A0 =A0 =A0 =A0 Bug ID: 925071<br>
+=A0 =A0 =A0 =A0 =A0 =A0Summary: babeltrace: Does not support aarch64 in f19=
+ and<br>
+=A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 rawhide<br>
+=A0 =A0 =A0 =A0 =A0 =A0Product: Fedora<br>
+=A0 =A0 =A0 =A0 =A0 =A0Version: rawhide<br>
+=A0 =A0 =A0 =A0 =A0Component: babeltrace<br>
+=A0 =A0 =A0 =A0 =A0 Severity: unspecified<br>
+=A0 =A0 =A0 =A0 =A0 Priority: unspecified<br>
+=A0 =A0 =A0 =A0 =A0 Assignee: <a href=3D"mailto:yannick.brosseau@gmail.com"=
+>yannick.brosseau@gmail.com</a><br>
+=A0 =A0 =A0 =A0 =A0 Reporter: <a href=3D"mailto:dennis@ausil.us">dennis@aus=
+il.us</a><br>
+=A0 =A0 =A0 =A0 QA Contact: <a href=3D"mailto:extras-qa@fedoraproject.org">=
+extras-qa@fedoraproject.org</a><br>
+=A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 CC: <a href=3D"mailto:yannick.brosseau@gmai=
+l.com">yannick.brosseau@gmail.com</a><br>
+=A0 =A0 =A0 =A0 =A0 =A0 Blocks: 922257 (ARM64)<br>
+<br>
+Support for the ARM 64 bit CPU architecture (aarch64) was introduced in<br>
+autoconf 2.69. =A0babeltrace appears to use an earlier version of<br>
+autoconf, preventing its being built. =A0This can be fixed in of three ways=
+ (In<br>
+order of preference):<br>
+<br>
+1. Work with upstream to migrate the package to autoconf 2.69.<br>
+<br>
+2. Rerun autoconf or autoreconf in %prep or %build prior to running<br>
+configure.<br>
+<br>
+3. Apply the patch at<br>
+<a href=3D"http://ausil.fedorapeople.org/aarch64/babeltrace/babeltrace-aarc=
+h64.patch" target=3D"_blank">http://ausil.fedorapeople.org/aarch64/babeltra=
+ce/babeltrace-aarch64.patch</a><br>
+which updates config.guess and config.sub to recognize aarch64.<br>
+<br>
+--<br>
+You are receiving this mail because:<br>
+You are on the CC list for the bug.<br>
+You are the assignee for the bug.<br>
+</div>
 
-Thanks,
+--20cf307ca04c4ec47004d88c8263--
 
-Mathieu
 
-> 
-> Signed-off-by: Maxin B. John <maxin.john@enea.com>
-> ---
->  lttng-abi.c |    4 +++-
->  1 files changed, 3 insertions(+), 1 deletions(-)
-> 
-> diff --git a/lttng-abi.c b/lttng-abi.c
-> index 25a350a..5613b75 100644
-> --- a/lttng-abi.c
-> +++ b/lttng-abi.c
-> @@ -648,7 +648,7 @@ int lttng_abi_create_event(struct file *channel_file,
->  		if (event_param->name[0] != '\0')
->  			return -EINVAL;
->  		ret = lttng_syscalls_register(channel, NULL);
-> -		if (ret)
-> +		if (ret < 0)
->  			goto fd_error;
->  		event_fd = 0;
->  		break;
-> @@ -753,6 +753,8 @@ long lttng_channel_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
->  			break;
->  		}
->  		ret = lttng_abi_create_event(file, uevent_param);
-> +		if (ret < 0)
-> +			return -ENOMEM;
->  
->  old_event_error_free_old_param:
->  		kfree(old_uevent_param);
-> -- 
-> 1.7.5.4
-> 
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+--===============1775998197==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1775998197==--
