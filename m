@@ -1,16 +1,21 @@
-From: "Maxin B. John" <maxin.john@enea.com>
-Subject: Re: [PATCH] lttng-abi.c: fix the error check
-Date: Sat, 23 Mar 2013 17:56:21 +0100
-Message-ID: <20130323165621.GA62630__29268.7258137905$1364057833$gmane$org@sestofb10.enea.se>
-References: <20130323160334.GB28816@Krystal>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: Fwd: [Bug 925071] New: babeltrace: Does not	support
+	aarch64 in f19 and rawhide
+Date: Sat, 23 Mar 2013 13:37:17 -0400
+Message-ID: <20130323173717.GC28816__47789.4067219042$1364060289$gmane$org@Krystal>
+References: <bug-925071-315593@bugzilla.redhat.com>
+	<CAEzWAe+K1bbq9EFX9j5dd1atVGWGGVBKib0V1N_vnMpy3hfkEQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1869637879=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from sestofw01.enea.se ([192.36.1.252] helo=mx-3.enea.com)
-	by ltt.polymtl.ca with smtp (Exim 4.72)
-	(envelope-from <Maxin.John@enea.com>) id 1UJRk3-0002pY-OZ
-	for lttng-dev@lists.lttng.org; Sat, 23 Mar 2013 12:56:28 -0400
-In-Reply-To: <20130323160334.GB28816@Krystal>
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <compudj@mail.openrapids.net>) id 1UJSNb-00039K-3I
+	for lttng-dev@lists.lttng.org; Sat, 23 Mar 2013 13:37:19 -0400
+Content-Disposition: inline
+In-Reply-To: <CAEzWAe+K1bbq9EFX9j5dd1atVGWGGVBKib0V1N_vnMpy3hfkEQ@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,85 +24,75 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: "Brosseau, Yannick" <yannick.brosseau@gmail.com>, dgoulet@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============1869637879==
-Content-Type: text/plain; charset="unknown-8bit"
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Will fix within babeltrace 1.1.0.
 
- On Sat, Mar 23, 2013 at 12:03:34PM -0400, Mathieu Desnoyers wrote:
- > * Mathieu Desnoyers (mathieu.desnoyers@efficios.com) wrote:
- > > * Maxin B. John (maxin.john@enea.com) wrote:
- > > > I was trying to fix a random problem happened in hawkboard with=C2=
-=B7
- > > > 3.9.0-rc3 kernel.
- > > >
- > > > root@hawkboard:~# uname -a
- > > > Linux hawkboard 3.9.0-rc3-00244-g9217cbb #35 PREEMPT Fri Mar 22
- > > > 18:03:26 CET 2013 armv5tejl GNU/Linux
- <snip>
+I just updated my trees for the next lttng-ust releases too (just
+removed my config/config.* and re-ran ./bootstrap).
 
- > a look at:
- >
- > arch/arm/include/uapi/asm/unistd.h
- >
- > shows:
- >
- > #define __NR_OABI_SYSCALL_BASE  0x900000
- >
- > #if defined(__thumb__) || defined(__ARM_EABI__)
- > #define __NR_SYSCALL_BASE       0
- > #else
- > #define __NR_SYSCALL_BASE       __NR_OABI_SYSCALL_BASE
- > #endif
- >
- > So this offset "base" might be causing the large allocation. Can you try
- > the following patch and see if it helps ?
- > ---
+David, you might want to do the same for lttng-tools.
 
-I have applied the patch and tested it on the device. However, I can
-still see the random page allocation failure (It works fine at first
-time and then randomly fails). Could be a hardware problem.. I will
-verify it in another similar board.
+Thanks,
 
-I forgot to mention that even before, with this page allocation failure,
-lttng works as expected and I can see the output using babeltrace.
+Mathieu
 
-oot@hawkboard:~# lttng enable-event -a -k
-lttng-sessiond: page allocation failure: order:10, mode:0x10c0d0
-[<c001358c>] (unwind_backtrace+0x0/0xfc) from [<c037af14>]
-(dump_stack+0x20/0x24)
-[<c037af14>] (dump_stack+0x20/0x24) from [<c00b7de8>]
-(warn_alloc_failed+0xd0/0x114)
-[<c00b7de8>] (warn_alloc_failed+0xd0/0x114) from [<c00bad80>]
-(__alloc_pages_nodemask+0x620/0x8bc)
-[<c00bad80>] (__alloc_pages_nodemask+0x620/0x8bc) from [<c00bb03c>]
-(__get_free_pages+0x20/0x5c)
-[<c00bb03c>] (__get_free_pages+0x20/0x5c) from [<c00e9e50>]
-(kmalloc_order_trace+0x34/0xf4)
-[<c00e9e50>] (kmalloc_order_trace+0x34/0xf4) from [<bf09affc>]
-(lttng_syscalls_register+0x1a4/0x240 [lttng_tracer])
-[<bf09affc>] (lttng_syscalls_register+0x1a4/0x240 [lttng_tracer]) from
-[<bf082ce8>] (lttng_abi_create_event+0x7c/0x138 [lttng_tracer])
-[<bf082ce8>] (lttng_abi_create_event+0x7c/0x
-....
+* Brosseau, Yannick (yannick.brosseau@gmail.com) wrote:
+> I think that's a problem that might occur for other distribution soon
+> ---------- Mensaje remitido ----------
+> De: <bugzilla@redhat.com>
+> Fecha: mar 22, 2013 8:06 p.m.
+> Asunto: [Bug 925071] New: babeltrace: Does not support aarch64 in f19 and
+> rawhide
+> Para: <yannick.brosseau@gmail.com>
+> Cc:
+> 
+> Product: Fedora
+> https://bugzilla.redhat.com/show_bug.cgi?id=925071
+> 
+>             Bug ID: 925071
+>            Summary: babeltrace: Does not support aarch64 in f19 and
+>                     rawhide
+>            Product: Fedora
+>            Version: rawhide
+>          Component: babeltrace
+>           Severity: unspecified
+>           Priority: unspecified
+>           Assignee: yannick.brosseau@gmail.com
+>           Reporter: dennis@ausil.us
+>         QA Contact: extras-qa@fedoraproject.org
+>                 CC: yannick.brosseau@gmail.com
+>             Blocks: 922257 (ARM64)
+> 
+> Support for the ARM 64 bit CPU architecture (aarch64) was introduced in
+> autoconf 2.69.  babeltrace appears to use an earlier version of
+> autoconf, preventing its being built.  This can be fixed in of three ways
+> (In
+> order of preference):
+> 
+> 1. Work with upstream to migrate the package to autoconf 2.69.
+> 
+> 2. Rerun autoconf or autoreconf in %prep or %build prior to running
+> configure.
+> 
+> 3. Apply the patch at
+> http://ausil.fedorapeople.org/aarch64/babeltrace/babeltrace-aarch64.patch
+> which updates config.guess and config.sub to recognize aarch64.
+> 
+> --
+> You are receiving this mail because:
+> You are on the CC list for the bug.
+> You are the assignee for the bug.
 
-Thanks & Regards,
-Maxin
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
 
---===============1869637879==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1869637879==--
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
