@@ -1,19 +1,17 @@
-From: "Brosseau, Yannick" <yannick.brosseau@gmail.com>
-Subject: Fwd: [Bug 925071] New: babeltrace: Does not support
- aarch64 in f19 and rawhide
-Date: Fri, 22 Mar 2013 20:18:19 -0400
-Message-ID: <CAEzWAe+K1bbq9EFX9j5dd1atVGWGGVBKib0V1N_vnMpy3hfkEQ__7072.495079092$1363997959$gmane$org@mail.gmail.com>
-References: <bug-925071-315593@bugzilla.redhat.com>
+From: "Maxin B. John" <maxin.john@enea.com>
+Subject: Re: [PATCH] lttng-abi.c: fix the error check
+Date: Sat, 23 Mar 2013 15:34:35 +0100
+Message-ID: <20130323143435.GA55460__25099.1037967198$1364050412$gmane$org@sestofb10.enea.se>
+References: <20130322215745.GB18746@Krystal>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1775998197=="
+Content-Type: multipart/mixed; boundary="===============0724140588=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-vb0-f54.google.com ([209.85.212.54])
-	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <yannick.brosseau@gmail.com>) id 1UJCAD-0003Ta-JC
-	for lttng-dev@lists.lttng.org; Fri, 22 Mar 2013 20:18:25 -0400
-Received: by mail-vb0-f54.google.com with SMTP id p14so561417vbm.41
-	for <lttng-dev@lists.lttng.org>; Fri, 22 Mar 2013 17:18:20 -0700 (PDT)
-In-Reply-To: <bug-925071-315593@bugzilla.redhat.com>
+Received: from sestofw01.enea.se ([192.36.1.252] helo=mx-3.enea.com)
+	by ltt.polymtl.ca with smtp (Exim 4.72)
+	(envelope-from <Maxin.John@enea.com>) id 1UJPWs-0001jE-Fg
+	for lttng-dev@lists.lttng.org; Sat, 23 Mar 2013 10:34:42 -0400
+In-Reply-To: <20130322215745.GB18746@Krystal>
+ <maxin.john@enea.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,122 +20,117 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============1775998197==
-Content-Type: multipart/alternative; boundary=20cf307ca04c4ec47004d88c8263
-
---20cf307ca04c4ec47004d88c8263
-Content-Type: text/plain; charset=ISO-8859-1
-
-I think that's a problem that might occur for other distribution soon
----------- Mensaje remitido ----------
-De: <bugzilla@redhat.com>
-Fecha: mar 22, 2013 8:06 p.m.
-Asunto: [Bug 925071] New: babeltrace: Does not support aarch64 in f19 and
-rawhide
-Para: <yannick.brosseau@gmail.com>
-Cc:
-
-Product: Fedora
-https://bugzilla.redhat.com/show_bug.cgi?id=925071
-
-            Bug ID: 925071
-           Summary: babeltrace: Does not support aarch64 in f19 and
-                    rawhide
-           Product: Fedora
-           Version: rawhide
-         Component: babeltrace
-          Severity: unspecified
-          Priority: unspecified
-          Assignee: yannick.brosseau@gmail.com
-          Reporter: dennis@ausil.us
-        QA Contact: extras-qa@fedoraproject.org
-                CC: yannick.brosseau@gmail.com
-            Blocks: 922257 (ARM64)
-
-Support for the ARM 64 bit CPU architecture (aarch64) was introduced in
-autoconf 2.69.  babeltrace appears to use an earlier version of
-autoconf, preventing its being built.  This can be fixed in of three ways
-(In
-order of preference):
-
-1. Work with upstream to migrate the package to autoconf 2.69.
-
-2. Rerun autoconf or autoreconf in %prep or %build prior to running
-configure.
-
-3. Apply the patch at
-http://ausil.fedorapeople.org/aarch64/babeltrace/babeltrace-aarch64.patch
-which updates config.guess and config.sub to recognize aarch64.
-
---
-You are receiving this mail because:
-You are on the CC list for the bug.
-You are the assignee for the bug.
-
---20cf307ca04c4ec47004d88c8263
-Content-Type: text/html; charset=ISO-8859-1
+--===============0724140588==
+Content-Type: text/plain; charset="unknown-8bit"
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-<p dir=3D"ltr">I think that&#39;s a problem that might occur for other dist=
-ribution soon </p>
-<div class=3D"gmail_quote">---------- Mensaje remitido ----------<br>De:  &=
-lt;<a href=3D"mailto:bugzilla@redhat.com">bugzilla@redhat.com</a>&gt;<br>Fe=
-cha: mar 22, 2013 8:06 p.m.<br>Asunto: [Bug 925071] New: babeltrace: Does n=
-ot support aarch64 in f19 and rawhide<br>
-Para:  &lt;<a href=3D"mailto:yannick.brosseau@gmail.com">yannick.brosseau@g=
-mail.com</a>&gt;<br>Cc: <br><br type=3D"attribution">Product: Fedora<br>
-<a href=3D"https://bugzilla.redhat.com/show_bug.cgi?id=3D925071" target=3D"=
-_blank">https://bugzilla.redhat.com/show_bug.cgi?id=3D925071</a><br>
-<br>
-=A0 =A0 =A0 =A0 =A0 =A0 Bug ID: 925071<br>
-=A0 =A0 =A0 =A0 =A0 =A0Summary: babeltrace: Does not support aarch64 in f19=
- and<br>
-=A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 rawhide<br>
-=A0 =A0 =A0 =A0 =A0 =A0Product: Fedora<br>
-=A0 =A0 =A0 =A0 =A0 =A0Version: rawhide<br>
-=A0 =A0 =A0 =A0 =A0Component: babeltrace<br>
-=A0 =A0 =A0 =A0 =A0 Severity: unspecified<br>
-=A0 =A0 =A0 =A0 =A0 Priority: unspecified<br>
-=A0 =A0 =A0 =A0 =A0 Assignee: <a href=3D"mailto:yannick.brosseau@gmail.com"=
->yannick.brosseau@gmail.com</a><br>
-=A0 =A0 =A0 =A0 =A0 Reporter: <a href=3D"mailto:dennis@ausil.us">dennis@aus=
-il.us</a><br>
-=A0 =A0 =A0 =A0 QA Contact: <a href=3D"mailto:extras-qa@fedoraproject.org">=
-extras-qa@fedoraproject.org</a><br>
-=A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 CC: <a href=3D"mailto:yannick.brosseau@gmai=
-l.com">yannick.brosseau@gmail.com</a><br>
-=A0 =A0 =A0 =A0 =A0 =A0 Blocks: 922257 (ARM64)<br>
-<br>
-Support for the ARM 64 bit CPU architecture (aarch64) was introduced in<br>
-autoconf 2.69. =A0babeltrace appears to use an earlier version of<br>
-autoconf, preventing its being built. =A0This can be fixed in of three ways=
- (In<br>
-order of preference):<br>
-<br>
-1. Work with upstream to migrate the package to autoconf 2.69.<br>
-<br>
-2. Rerun autoconf or autoreconf in %prep or %build prior to running<br>
-configure.<br>
-<br>
-3. Apply the patch at<br>
-<a href=3D"http://ausil.fedorapeople.org/aarch64/babeltrace/babeltrace-aarc=
-h64.patch" target=3D"_blank">http://ausil.fedorapeople.org/aarch64/babeltra=
-ce/babeltrace-aarch64.patch</a><br>
-which updates config.guess and config.sub to recognize aarch64.<br>
-<br>
---<br>
-You are receiving this mail because:<br>
-You are on the CC list for the bug.<br>
-You are the assignee for the bug.<br>
-</div>
+I was trying to fix a random problem happened in hawkboard with=20
+3.9.0-rc3 kernel.
+=20
+root@hawkboard:~# uname -a
+Linux hawkboard 3.9.0-rc3-00244-g9217cbb #35 PREEMPT Fri Mar 22
+18:03:26 CET 2013 armv5tejl GNU/Linux
+=20
+root@hawkboard:~# lttng create mysession
+Session mysession created.
+Traces will be written in
+/home/root/lttng-traces/mysession-20130321-131130
+root@hawkboard:~# lttng enable-event -a -k
+lttng-sessiond: page allocation failure: order:10, mode:0x10c0d0
+[<c001358c>] (unwind_backtrace+0x0/0xfc) from [<c037af14>]
+(dump_stack+0x20/0x24)
+[<c037af14>] (dump_stack+0x20/0x24) from [<c00b7de8>]
+(warn_alloc_failed+0xd0/0x114)
+[<c00b7de8>] (warn_alloc_failed+0xd0/0x114) from [<c00bad80>]
+(__alloc_pages_nodemask+0x620/0x8bc)
+[<c00bad80>] (__alloc_pages_nodemask+0x620/0x8bc) from [<c00bb03c>]
+(__get_free_pages+0x20/0x5c)
+[<c00bb03c>] (__get_free_pages+0x20/0x5c) from [<c00e9e50>]
+(kmalloc_order_trace+0x34/0xf4)
+[<c00e9e50>] (kmalloc_order_trace+0x34/0xf4) from [<bf09affc>]
+(lttng_syscalls_register+0x1a4/0x244 [lttng_tracer])
+[<bf09affc>] (lttng_syscalls_register+0x1a4/0x244 [lttng_tracer]) from
+[<bf082ce8>] (lttng_abi_create_event+0x7c/0x138 [lttng_tracer])
+[<bf082ce8>] (lttng_abi_create_event+0x7c/0x138 [lttng_tracer]) from
+[<bf083958>] (lttng_channel_ioctl+0x198/0x53c [lttng_tracer])
+[<bf083958>] (lttng_channel_ioctl+0x198/0x53c [lttng_tracer]) from
+[<c0100ecc>] (do_vfs_ioctl+0x8c/0x608)
+[<c0100ecc>] (do_vfs_ioctl+0x8c/0x608) from [<c01014c8>]
+(sys_ioctl+0x80/0x88)
+[<c01014c8>] (sys_ioctl+0x80/0x88) from [<c000e2e0>]
+(ret_fast_syscall+0x0/0x44)
+Mem-info:
+DMA per-cpu:
+CPU    0: hi:   18, btch:   3 usd:   0
+active_anon:789 inactive_anon:12 isolated_anon:0
+ active_file:2056 inactive_file:2348 isolated_file:0
+ unevictable:0 dirty:0 writeback:0 unstable:0
+ free:2790 slab_reclaimable:852 slab_unreclaimable:944
+ mapped:589 shmem:21 pagetables:134 bounce:0
+ free_cma:0
+DMA free:11160kB min:968kB low:1208kB high:1452kB active_anon:3156kB
+inactive_anon:48kB active_file:8224kB inactive_file:9392kB
+unevictable:0kB isolated(anon):0kB isolated(file):0kB present:65536kB
+managed:59016kB mlocked:0kB dirty:0kB writeback:0kB mapped:2356kB
+shmem:84kB slab_reclaimable:3408kB slab_unreclaimable:3776kB
+kernel_stack:448kB pagetables:536kB unstable:0kB bounce:0kB
+free_cma:0kB writeback_tmp:0kB pages_scanned:0 all_unreclaimable? no
+lowmem_reserve[]: 0 0 0
+DMA: 4*4kB (UEM) 9*8kB (UEM) 4*16kB (UEM) 8*32kB (EMR) 4*64kB (EMR)
+4*128kB (EMR) 3*256kB (UER) 4*512kB (UEMR) 3*1024kB (UEM) 2*2048kB
+(UE) 0*4096kB =3D 11160kB
+4432 total pagecache pages
+16384 pages of RAM
+2955 free pages
+1571 reserved pages
+1571 slab pages
+264956 pages shared
+0 pages swap cached
+PERROR: create event ioctl: Cannot allocate memory [in
+kernel_create_event() at kernel.c:206]
+All kernel events are enabled in channel channel0
 
---20cf307ca04c4ec47004d88c8263--
+ > The expected return values from lttng_syscalls_register are:
+ >=C2=B7
+ > 0 -> success
+ > -EINVAL -> error
+ > -ENOMEM -> error
+ >=C2=B7
+ > so whether we check for error with
+ >=C2=B7
+ > if (ret)
+ > or
+ > if (ret < 0)
+ >=C2=B7
+ > should yield to the exact same result, since we don't expect positive
+ > return values.
+=20
+ Now, I can see that my idea wasn't right.=20
+
+ > And for lttng_abi_create_event(), the original code flow is to execute 2
+ > kfree(), and then "return ret", which will return either -EINVAL or
+ > -ENOMEM to the caller.
+ >=C2=B7
+ > So by adding this return -ENOMEM, you hide the real cause (-EINVAL or
+ > -ENOMEM), and you add 2 memory leaks.
+=20
+ Ahh.. Sorry!
+=20
+ > Or am I missing something ?
+ >=C2=B7
+ > Thanks,
+ > Mathieu
+=20
+ Best Regards,
+ Maxin
 
 
---===============1775998197==
+--===============0724140588==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -148,4 +141,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============1775998197==--
+--===============0724140588==--
