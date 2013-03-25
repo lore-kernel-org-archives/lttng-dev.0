@@ -1,20 +1,15 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH babeltrace] Replace AM_PROG_MKDIR obsolete
-	macro with	AC_PROG_MKDIR_P
-Date: Sat, 23 Mar 2013 19:03:27 -0400
-Message-ID: <20130323230327.GA2745__16029.3201836341$1364079865$gmane$org@Krystal>
-References: <1364064475-24015-1-git-send-email-christian.babeux@efficios.com>
+From: <maxin.john@enea.com>
+Subject: [PATCH] lttng-module: block.h : Fix build for 3.9 kernel
+Date: Mon, 25 Mar 2013 13:30:57 +0100
+Message-ID: <1364214657-35068-1-git-send-email-maxin.john__28713.1250872791$1364214740$gmane$org@enea.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
-	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UJXTH-0005cB-22
-	for lttng-dev@lists.lttng.org; Sat, 23 Mar 2013 19:03:31 -0400
-Content-Disposition: inline
-In-Reply-To: <1364064475-24015-1-git-send-email-christian.babeux@efficios.com>
+Received: from sestofw01.enea.se ([192.36.1.252] helo=mx-3.enea.com)
+	by ltt.polymtl.ca with smtp (Exim 4.72)
+	(envelope-from <Maxin.John@enea.com>) id 1UK6Yd-0006Q5-9S
+	for lttng-dev@lists.lttng.org; Mon, 25 Mar 2013 08:31:23 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,55 +18,84 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Christian Babeux <christian.babeux@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: mathieu.desnoyers@efficios.com
+Cc: lttng-dev@lists.lttng.org, anders.roxell@enea.com, "Maxin B. John" <maxin.john@enea.com>
 List-Id: lttng-dev@lists.lttng.org
 
-* Christian Babeux (christian.babeux@efficios.com) wrote:
-> The bootstrap script is complaining with a deprecation warning [1] for
-> the AM_PROG_MKDIR_P Automake macro.
+From: "Maxin B. John" <maxin.john@enea.com>
 
-Merged, thanks!
+commit :3a366e614d0837d9fc23f78cdb1a1186ebc3387f
+ block: add missing block_bio_complete() tracepoint
+added block_bio_complete to 3.9 kernel
 
-Mathieu
+commit : 8c1cf6bb02fda79b0a4b9bd121f6be6d4ce7a15a
+ block: add @req to bio_{front|back}_merge tracepoints
+added block_bio_backmerge and block_bio_frontmerge to 3.9 kernel
 
-> 
-> Relevant bootstrap output:
-> 
-> configure.ac:13: warning: The 'AM_PROG_MKDIR_P' macro is deprecated,
-> 		 and will soon be removed.
-> configure.ac:13: You should use the Autoconf-provided 'AC_PROG_MKDIR_P'
-> 		 macro instead,
-> configure.ac:13: and use '$(MKDIR_P)' instead of '$(mkdir_p)'in your
-> 		 Makefile.am files.
-> 
-> Fix this by updating configure.ac with the proposed AC_PROG_MKDIR_P macro.
-> 
-> [1] - https://www.gnu.org/software/automake/manual/html_node/Obsolete-Macros.html
-> 
-> Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
-> ---
->  configure.ac | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/configure.ac b/configure.ac
-> index b96e09f..cc23f5a 100644
-> --- a/configure.ac
-> +++ b/configure.ac
-> @@ -10,7 +10,7 @@ m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
->  
->  AC_CONFIG_MACRO_DIR([m4])
->  
-> -AM_PROG_MKDIR_P
-> +AC_PROG_MKDIR_P
->  
->  AC_CONFIG_HEADERS([config.h])
->  
-> -- 
-> 1.8.2
-> 
+Update block.h based on these commits in mainline kernel
 
+Fixes this build failure:
+....
+include/trace/events/block.h:353:1: note: previous definition of
+'trace_block_bio_frontmerge' was here
+make[3]: *** [/home/majo/kernel/lttng/lttng-modules/probes/
+lttng-probe-block.o] Error 1
+make[2]: *** [/home/majo/kernel/lttng/lttng-modules/probes] Error 2
+make[1]: *** [_module_/home/majo/kernel/lttng/lttng-modules] Error 2
+make: *** [default] Error 2
+
+Signed-off-by: Maxin B. John <maxin.john@enea.com>
+---
+ instrumentation/events/lttng-module/block.h |   16 ++++++++++++++++
+ 1 files changed, 16 insertions(+), 0 deletions(-)
+
+diff --git a/instrumentation/events/lttng-module/block.h b/instrumentation/events/lttng-module/block.h
+index d42ebd4..59bd2c0 100644
+--- a/instrumentation/events/lttng-module/block.h
++++ b/instrumentation/events/lttng-module/block.h
+@@ -311,6 +311,13 @@ TRACE_EVENT(block_bio_bounce,
+  * This tracepoint indicates there is no further work to do on this
+  * block IO operation @bio.
+  */
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,9,0))
++/**
++ * commit :3a366e614d0837d9fc23f78cdb1a1186ebc3387f
++ * block: add missing block_bio_complete() tracepoint
++ * added block_bio_complete to 3.9.0 kernel
++ */
++#else
+ TRACE_EVENT(block_bio_complete,
+ 
+ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,38))
+@@ -349,6 +356,7 @@ TRACE_EVENT(block_bio_complete,
+ 		  (unsigned long long)__entry->sector,
+ 		  __entry->nr_sector, __entry->error)
+ )
++#endif
+ 
+ DECLARE_EVENT_CLASS(block_bio,
+ 
+@@ -387,6 +395,13 @@ DECLARE_EVENT_CLASS(block_bio,
+  * Merging block request @bio to the end of an existing block request
+  * in queue @q.
+  */
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,9,0))
++/**
++ * commit : 8c1cf6bb02fda79b0a4b9bd121f6be6d4ce7a15a
++ * block: add @req to bio_{front|back}_merge tracepoints
++ * added block_bio_backmerge and block_bio_frontmerge to 3.9.0 kernel
++ */
++#else
+ DEFINE_EVENT(block_bio, block_bio_backmerge,
+ 
+ 	TP_PROTO(struct request_queue *q, struct bio *bio),
+@@ -408,6 +423,7 @@ DEFINE_EVENT(block_bio, block_bio_frontmerge,
+ 
+ 	TP_ARGS(q, bio)
+ )
++#endif
+ 
+ /**
+  * block_bio_queue - putting new block IO operation in queue
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+1.7.5.4
