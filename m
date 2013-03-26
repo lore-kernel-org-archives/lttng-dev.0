@@ -1,21 +1,19 @@
-From: Christian Babeux <christian.babeux@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Subject: Re: Pull request: lttng-ust tests clean-up
-Date: Tue, 26 Mar 2013 11:08:51 -0400
-Message-ID: <CAGDH53n8zoH7_tt00HvrWLS6E_U8RRvY04muSPHrYyso45D-fQ__18387.8601681956$1364310590$gmane$org@mail.gmail.com>
+Date: Tue, 26 Mar 2013 11:24:38 -0400
+Message-ID: <20130326152438.GA16058__49370.9635608413$1364311547$gmane$org@Krystal>
 References: <CA+jJMxteq8pb2CjCLVEBLFoXAdfWDX_djLfUxrQ9ad_UiYh5cA@mail.gmail.com>
-	<20130326134852.GA14753@Krystal>
-	<CA+jJMxsk-JcPROObmKEtH1J+p_ArxwhXHp0yYcg1Xsu6DGDrpw@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ve0-f172.google.com ([209.85.128.172])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <christian.babeux@0x80.ca>) id 1UKVUf-0002hx-VM
-	for lttng-dev@lists.lttng.org; Tue, 26 Mar 2013 11:08:58 -0400
-Received: by mail-ve0-f172.google.com with SMTP id oz10so878933veb.31
-	for <lttng-dev@lists.lttng.org>; Tue, 26 Mar 2013 08:08:52 -0700 (PDT)
-In-Reply-To: <CA+jJMxsk-JcPROObmKEtH1J+p_ArxwhXHp0yYcg1Xsu6DGDrpw@mail.gmail.com>
+	(envelope-from <compudj@mail.openrapids.net>) id 1UKVjt-0002rk-SG
+	for lttng-dev@lists.lttng.org; Tue, 26 Mar 2013 11:24:42 -0400
+Content-Disposition: inline
+In-Reply-To: <CA+jJMxteq8pb2CjCLVEBLFoXAdfWDX_djLfUxrQ9ad_UiYh5cA@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,96 +22,63 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Cc: lttng-dev@lists.lttng.org, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-SGkgSsOpcsOpbWllLAoKPiBJJ20gd29uZGVyaW5nIHdoYXQgd291bGQgYmUgdGhlIGJlc3Qgd2F5
-IHRvIGdldCB0ZXN0cwo+IHRvIHJ1biBjb25kaXRpb25hbGx5IGRlcGVuZGluZyBvbiB0aGUgImNv
-bmZpZ3VyZSIgb3B0aW9ucyBub3cgdGhhdCB3ZQo+IGFyZSB1c2luZyBDaHJpc3RpYW4ncyAicHJv
-dmUgKyB0ZXN0IGxpc3RzIiBzY2hlbWUuCgpXaGF0IEkgaGF2ZSBpbiBtaW5kIGlzIHNvbWV0aGlu
-ZyBhbG9uZyB0aGlzIHdheToKCkluIHRoZSBsdHRuZy10b29scy90ZXN0cy9NYWtlZmlsZS5hbToK
-CmlmIFVTRV9QWVRIT04KY2hlY2stYW06CiAgICAgICAgLi9ydW4uc2ggdW5pdF90ZXN0cwogICAg
-ICAgIC4vcnVuLnNoIGZhc3RfcmVncmVzc2lvbgogICAgICAgIC4vcnVuLnNoIHdpdGhfYmluZGlu
-Z3NfcmVncmVzc2lvbgplbHNlCmNoZWNrLWFtOgogICAgICAgIC4vcnVuLnNoIHVuaXRfdGVzdHMK
-ICAgICAgICAuL3J1bi5zaCBmYXN0X3JlZ3Jlc3Npb24KZW5kaWYKClRoZSB0ZXN0bGlzdCB3aXRo
-X2JpbmRpbmdzX3JlZ3Jlc3Npb24gd291bGQgY29udGFpbiB0aGUgYXBwcm9wcmlhdGUKdGVzdHMg
-dGhhdCBoYXZlIGEgZGVwZW5kZW5jeSBvbiB0aGUgbHR0bmctdG9vbHMgUHl0aG9uIGJpbmRpbmdz
-LgoKPiBXaGlsZSB0aGlzIHdvdWxkIGNlcnRhaW5seSBiZSBnb29kCj4gZW5vdWdoIGZvciBub3cs
-IG1hbnVhbGx5IG1haW50YWluaW5nIHRlc3QgbGlzdHMgYmFzZWQgb24gY29uZmlndXJhdGlvbgo+
-IGRlcGVuZGFuY2llcyBtYXkgZ3JvdyB0ZWRpb3VzIGFzIHdlIGFkZCBjb25maWd1cmF0aW9uIG9w
-dGlvbnMgYW5kCj4gdGVzdHMuCgogQWdyZWVkLiBUaGlzIHdvdWxkIG9ubHkgYXBwbHkgb2YgY291
-cnNlIGlmIHdlIGFkZCB0aG9zZSB0ZXN0cyB0byB0aGUKZGVmYXVsdCAibWFrZSBjaGVjayIgdGFy
-Z2V0LgoKPiBQZXJoYXBzIHdlIGNvdWxkIGR5bmFtaWNhbGx5IGdlbmVyYXRlIHRlc3QgbGlzdHMg
-ZGVwZW5kaW5nIG9uIHRoZQo+IGNvbmZpZ3VyYXRpb24gb3B0aW9ucyBhbmQgZWFjaCB0ZXN0cycg
-cmVxdWlyZW1lbnRzLi4uIGJ1dCB0aGF0Cj4gY2VydGFpbmx5IHNvdW5kcyBsaWtlIG92ZXJraWxs
-IHJpZ2h0IG5vdy4KCkxldCdzIGtlZXAgaXQgc2ltcGxlIGZvciBub3cgOikuCgpDaHJpc3RpYW4K
-Ck9uIFR1ZSwgTWFyIDI2LCAyMDEzIGF0IDEwOjQ4IEFNLCBKw6lyw6ltaWUgR2FsYXJuZWF1Cjxq
-ZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20+IHdyb3RlOgo+IE9uIFR1ZSwgTWFyIDI2LCAy
-MDEzIGF0IDk6NDggQU0sIE1hdGhpZXUgRGVzbm95ZXJzCj4gPG1hdGhpZXUuZGVzbm95ZXJzQGVm
-ZmljaW9zLmNvbT4gd3JvdGU6Cj4+ICogSsOpcsOpbWllIEdhbGFybmVhdSAoamVyZW1pZS5nYWxh
-cm5lYXVAZWZmaWNpb3MuY29tKSB3cm90ZToKPj4+IEhpIGFsbCwKPj4+Cj4+PiBJJ2QgbGlrZSB0
-byBwcm9wb3NlIGEgc2V0IG9mIHBhdGNoZXMgdG8gY2xlYW4tdXAgdGhlIGx0dG5nLXVzdCB0ZXN0
-cy4KPj4+IFNpbmNlIHRoZSBjbGVhbi11cCBub3cgd2VpZ2hzIGluIGF0IGEgZmFpcmx5IGhlZnR5
-IDIxIHBhdGNoZXMsIEkgdGhpbmsKPj4+IGEgbGluayB0byBteSBwZXJzb25hbCByZXBvc2l0b3J5
-IG1pZ2h0IGJlIG1vcmUgYXBwcm9wcmlhdGUgdGhhbgo+Pj4gcG9zdGluZyB0aGUgcGF0Y2gtc2V0
-IG9uIHRoaXMgbGlzdC4KPj4+Cj4+PiBUaGUgcmVsZXZhbnQgY29tbWl0cyBhcmUgOGFlNTEyMi4u
-LjAwNjBlYjIKPj4+Cj4+PiBJIHdpbGwgYWxzbyBiZSBwb3N0aW5nIGEgc2V0IG9mIHBhdGNoZXMg
-dGhhdCBmaXhlcyBhbmQgbW92ZXMgc29tZSBvZgo+Pj4gdGhlIGx0dG5nLXVzdCB0ZXN0cyB0byBs
-dHRuZy10b29scyBzaW5jZSB0aGV5IGRlcGVuZCBvbiBpdC4KPj4+Cj4+PiBHaXQgYWNjZXNzOgo+
-Pj4gZ2l0Oi8vZ2l0aHViLmNvbS9qZ2FsYXIvbHR0bmctdXN0LXRlc3RzLWNsZWFudXAuZ2l0ICAt
-YiB0ZXN0LWNsZWFudXAKPj4+Cj4+PiBXZWIgaW50ZXJmYWNlOgo+Pj4gaHR0cHM6Ly9naXRodWIu
-Y29tL2pnYWxhci9sdHRuZy11c3QtdGVzdHMtY2xlYW51cAo+Pgo+PiBJIHRyaWVkIHJ1bm5pbmcg
-dGhlIHZhcmlvdXMgYmF0Y2ggZmlsZXMgdW5kZXIgdGVzdHMvIGluIHlvdXIgdHJlZSwgYW5kCj4+
-IHRoZXkgcHJldHR5IG11Y2ggYWxsIGNvbXBsYWluIGFib3V0Ogo+Pgo+PiBjb21wdWRqQHRoaW5r
-b3M6fi9naXQvamdhbGFyL2x0dG5nLXVzdC10ZXN0cy1jbGVhbnVwL3Rlc3RzJAo+PiAoZ2l0OnRl
-c3QtY2xlYW51cCk+IC4vcnVudGVzdHMKPj4gLi9ydW50ZXN0czogbGluZSAzMTogLi8vc25wcmlu
-dGYvcnVuOiBObyBzdWNoIGZpbGUgb3IgZGlyZWN0b3J5Cj4+Cj4+IElzIHRoYXQgZXhwZWN0ZWQg
-Pwo+Pgo+Cj4gSSBtZWFudCB0byByZW1vdmUgdGhhdCBmaWxlIHNpbmNlLCB3aXRoIENocmlzdGlh
-bidzIHJlY2VudCBsdHRuZy10b29scwo+IHBhdGNoZXMsIHdlIG1vdmVkIGF3YXkgZnJvbSB1c2lu
-ZyBydW5uZXIgc2NyaXB0cyB0byB1c2luZyBwcm92ZSArIHRlc3QKPiBsaXN0cy4gSSdsbCBjb3Jy
-ZWN0IHRoZSBsYXN0IGNvbW1pdCAoVGVzdHM6IFVzZSBQZXJsIHByb3ZlIGFzIHRoZQo+IHRlc3Rz
-dWl0ZSBydW5uZXIpLgo+Cj4+IEFsc28sIG1ha2UgY2hlY2sgb25seSBydW5zIGEgc2luZ2xlIHRl
-c3Q6Cj4+Cj4+IHNucHJpbnRmL3Rlc3Rfc25wcmludGYgLi4gb2sKPj4gQWxsIHRlc3RzIHN1Y2Nl
-c3NmdWwuCj4+IEZpbGVzPTEsIFRlc3RzPTEsICAwIHdhbGxjbG9jayBzZWNzICggMC4wMSB1c3Ig
-KyAgMC4wMCBzeXMgPSAgMC4wMSBDUFUpCj4+IFJlc3VsdDogUEFTUwo+Pgo+PiBJcyB0aGF0IGV4
-cGVjdGVkIHRvbyA/Cj4KPiBZZXMsIG1vc3Qgb2YgdGhlIHRlc3RzIHdlcmUgbW92ZWQgdG8gbHR0
-bmctdG9vbHMgc2luY2UgdGhleSBkZXBlbmQgb24KPiBsdHRuZy1zZXNzaW9uZC4gSG9wZWZ1bGx5
-LCBub3cgdGhhdCB0aGUgaW5mcmFzdHJ1Y3R1cmUgaXMgaW4gcGxhY2UsCj4gSXQnbGwgYmUgZWFz
-aWVyIHRvIGFkZCBzZWxmLWNvbnRhaW5lZCBVU1QgdGVzdHMuCj4KPiBJJ2xsIHRha2UgdGhlIG9w
-cG9ydHVuaXR5IHRvIGFzayBpZiB5b3UsIG9yIGFueW9uZSBlbHNlIHJlYWxseSwgaGF2ZQo+IHN1
-Z2dlc3Rpb25zIGZvciBVU1QgdW5pdCB0ZXN0cyB0aGF0IGRvbid0IGRlcGVuZCBvbiBsdHRuZy10
-b29scz8KPgo+IEkgY2FuIHRoaW5rIG9mIGEgZmV3LCBzdWNoIGFzIHZhbGlkYXRpbmcgdGhlIGhl
-YWRlciBmaWxlcyBvdXRwdXR0ZWQgYnkKPiBsdHRuZy1nZW4tdHAsIHRlc3RpbmcgdGhlIGZpbHRl
-ciBieXRlY29kZSBpbnRlcnByZXRhdGlvbiBtZWNoYW5pc21zLAo+IGV0Yy4gQnV0IEkgd29uZGVy
-IGlmIHVuaXQgdGVzdGluZyB0aGUgY29udHJvbCBpbnRlcmZhY2UsIGZvciBpbnN0YW5jZSwKPiBp
-cyByZWFsaXN0aWMgc2luY2UgaXQgdGVuZHMgdG8gY2hhbmdlIGZhaXJseSBvZnRlbi4gT2YgY291
-cnNlLCBsdHRuZwo+IGNvbnRyaWJ1dG9ycyBhcmUgd2VsY29tZSB0byBzdWJtaXQgbmV3IHRlc3Rz
-IQo+Cj4gQXMgZm9yIG15IGx0dG5nLXRvb2xzIHBhdGNoZXMsIHNvbWUgb2YgdGhlIG5ldyB0ZXN0
-cyBkZXBlbmQgb24gdGhlCj4gbHR0bmctdG9vbHMgcHl0aG9uIGJpbmRpbmdzIChub3QgaW5jbHVk
-ZWQgaW4gdGhlIGRlZmF1bHQKPiBjb25maWd1cmF0aW9uKS4gSSdtIHdvbmRlcmluZyB3aGF0IHdv
-dWQgYmUgdGhlIGJlc3Qgd2F5IHRvIGdldCB0ZXN0cwo+IHRvIHJ1biBjb25kaXRpb25hbGx5IGRl
-cGVuZGluZyBvbiB0aGUgImNvbmZpZ3VyZSIgb3B0aW9ucyBub3cgdGhhdCB3ZQo+IGFyZSB1c2lu
-ZyBDaHJpc3RpYW4ncyAicHJvdmUgKyB0ZXN0IGxpc3RzIiBzY2hlbWUuCj4KPiBJIGhhdmUgZGlz
-Y3Vzc2VkIHRoZSBpc3N1ZSB3aXRoIGhpbSBwcml2YXRlbHkgYW5kIHdlIGJvdGggYWdyZWVkIHRo
-YXQKPiB3ZSBjb3VsZCBoYXZlIHNlcGFyYXRlIHRlc3QgbGlzdHMgdGhhdCB3b3VsZCBiZSB1c2Vk
-IGRlcGVuZGluZyBvbiB0aGUKPiBjdXJyZW50IHByb2plY3QgY29uZmlndXJhdGlvbi4gV2hpbGUg
-dGhpcyB3b3VsZCBjZXJ0YWlubHkgYmUgZ29vZAo+IGVub3VnaCBmb3Igbm93LCBtYW51YWxseSBt
-YWludGFpbmluZyB0ZXN0IGxpc3RzIGJhc2VkIG9uIGNvbmZpZ3VyYXRpb24KPiBkZXBlbmRhbmNp
-ZXMgbWF5IGdyb3cgdGVkaW91cyBhcyB3ZSBhZGQgY29uZmlndXJhdGlvbiBvcHRpb25zIGFuZAo+
-IHRlc3RzLgo+Cj4gUGVyaGFwcyB3ZSBjb3VsZCBkeW5hbWljYWxseSBnZW5lcmF0ZSB0ZXN0IGxp
-c3RzIGRlcGVuZGluZyBvbiB0aGUKPiBjb25maWd1cmF0aW9uIG9wdGlvbnMgYW5kIGVhY2ggdGVz
-dHMnIHJlcXVpcmVtZW50cy4uLiBidXQgdGhhdAo+IGNlcnRhaW5seSBzb3VuZHMgbGlrZSBvdmVy
-a2lsbCByaWdodCBub3cuIFRob3VnaHRzPwo+Cj4gSsOpcsOpbWllCj4KPj4KPj4gVGhhbmtzLAo+
-Pgo+PiBNYXRoaWV1Cj4+Cj4+Pgo+Pj4gQ29tbWVudHMgYXJlIHdlbGNvbWUsIGFzIGFsd2F5cyEK
-Pj4+Cj4+PiBSZWdhcmRzLAo+Pj4gSsOpcsOpbWllCj4+Pgo+Pj4gLS0KPj4+IErDqXLDqW1pZSBH
-YWxhcm5lYXUKPj4+IEVmZmljaU9TIEluYy4KPj4+IGh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCj4+
-Pgo+Pj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPj4+
-IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPj4+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPj4+
-IGh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRl
-dgo+Pgo+PiAtLQo+PiBNYXRoaWV1IERlc25veWVycwo+PiBFZmZpY2lPUyBJbmMuCj4+IGh0dHA6
-Ly93d3cuZWZmaWNpb3MuY29tCj4KPgo+Cj4gLS0KPiBKw6lyw6ltaWUgR2FsYXJuZWF1Cj4gRWZm
-aWNpT1MgSW5jLgo+IGh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCgpfX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5n
-LWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxt
-YW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+* J=E9r=E9mie Galarneau (jeremie.galarneau@efficios.com) wrote:
+> Hi all,
+> =
+
+> I'd like to propose a set of patches to clean-up the lttng-ust tests.
+> Since the clean-up now weighs in at a fairly hefty 21 patches, I think
+> a link to my personal repository might be more appropriate than
+> posting the patch-set on this list.
+
+merged, thanks!
+
+I rebased it on master.
+
+Mathieu
+
+> =
+
+> The relevant commits are 8ae5122...0060eb2
+> =
+
+> I will also be posting a set of patches that fixes and moves some of
+> the lttng-ust tests to lttng-tools since they depend on it.
+> =
+
+> Git access:
+> git://github.com/jgalar/lttng-ust-tests-cleanup.git  -b test-cleanup
+> =
+
+> Web interface:
+> https://github.com/jgalar/lttng-ust-tests-cleanup
+> =
+
+> Comments are welcome, as always!
+> =
+
+> Regards,
+> J=E9r=E9mie
+> =
+
+> -- =
+
+> J=E9r=E9mie Galarneau
+> EfficiOS Inc.
+> http://www.efficios.com
+> =
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- =
+
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
