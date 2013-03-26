@@ -1,25 +1,17 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] LTTng-UST 2.1.2
-Date: Mon, 25 Mar 2013 14:40:45 -0400
-Message-ID: <20130325184045.GA26037__7355.8934302584$1364236905$gmane$org@Krystal>
+From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Pull request: lttng-ust tests clean-up
+Date: Mon, 25 Mar 2013 20:26:07 -0400
+Message-ID: <CA+jJMxteq8pb2CjCLVEBLFoXAdfWDX_djLfUxrQ9ad_UiYh5cA__47076.136354781$1364257624$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from mail-wi0-f171.google.com ([209.85.212.171])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UKCK7-00015m-VN
-	for lttng-dev@lists.lttng.org; Mon, 25 Mar 2013 14:40:48 -0400
-Received: from localhost (localhost [127.0.0.1])
-	by blackscsi.openrapids.net (Postfix) with ESMTP id AFC75140592
-	for <lttng-dev@lists.lttng.org>; Mon, 25 Mar 2013 14:40:47 -0400 (EDT)
-Received: from blackscsi.openrapids.net ([127.0.0.1])
-	by localhost (blackscsi.openrapids.net [127.0.0.1]) (amavisd-new,
-	port 10024)
-	with ESMTP id 1A33KUpVZpLM for <lttng-dev@lists.lttng.org>;
-	Mon, 25 Mar 2013 14:40:45 -0400 (EDT)
-Content-Disposition: inline
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1UKHiP-0003lC-TM
+	for lttng-dev@lists.lttng.org; Mon, 25 Mar 2013 20:26:14 -0400
+Received: by mail-wi0-f171.google.com with SMTP id hn17so10893772wib.16
+	for <lttng-dev@lists.lttng.org>; Mon, 25 Mar 2013 17:26:08 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -31,38 +23,31 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-LTTng-UST, the Linux Trace Toolkit Next Generation Userspace Tracer, is
-port of the low-overhead tracing capabilities of the LTTng kernel tracer
-to user-space. The library "liblttng-ust" enables tracing of
-applications and libraries.
+Hi all,
 
-Changelog:
-2013-03-25 lttng-ust 2.1.2
-        * Fix uninitialized has_loglevel variable
-        * tracepoint: Don't add NULL probes
-        * Remove mention of locking issues associated with dlopen usage
-        * Fix: refcount issue in lttng-ust-abi.c
-        * Fix: don't flush-final for offset 0 if reader is on sub-buffer
-        * Use tp rcu link test in provider
-        * Remove direct dependency of probes on urcu-bp
-        * Fix package: don't distribute generated headers
-        * Fix: don't cancel already exited threads
-        * Scalability fix: tracepoint.c hash table size increase
-        * Scalability fix for many events: event hash table size
-        * Speed up probe registration for large amount of events
-        * Add missing demo-trace shell script to dist tarball
-        * Fix: missing test for lttng_ust_comm_should_quit in
-        * lttng-ust-comm.c
-        * Documentation: clarify debian package name for uuid in README
-        * Document dependency on libuuid
-        * Fix: comment in ust-ctl.h
-        * Fix I/O-related error values in ustctl
+I'd like to propose a set of patches to clean-up the lttng-ust tests.
+Since the clean-up now weighs in at a fairly hefty 21 patches, I think
+a link to my personal repository might be more appropriate than
+posting the patch-set on this list.
 
-Project website: http://lttng.org
-Download link: http://lttng.org/download
-(please refer to the README file for installation instructions)
+The relevant commits are 8ae5122...0060eb2
 
--- 
-Mathieu Desnoyers
+I will also be posting a set of patches that fixes and moves some of
+the lttng-ust tests to lttng-tools since they depend on it.
+
+Git access:
+git://github.com/jgalar/lttng-ust-tests-cleanup.git  -b test-cleanup
+
+Web interface:
+https://github.com/jgalar/lttng-ust-tests-cleanup
+
+Comments are welcome, as always!
+
+Regards,
+J=E9r=E9mie
+
+-- =
+
+J=E9r=E9mie Galarneau
 EfficiOS Inc.
 http://www.efficios.com
