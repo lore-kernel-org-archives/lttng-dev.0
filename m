@@ -1,16 +1,20 @@
-From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Subject: Re: [LTTNG-TOOLS PATCH] UST periodical metadata flush
-Date: Tue, 26 Mar 2013 14:01:06 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD029735__44096.4338639334$1364306574$gmane$org@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: Pull request: lttng-ust tests clean-up
+Date: Tue, 26 Mar 2013 10:48:19 -0400
+Message-ID: <CA+jJMxsk-JcPROObmKEtH1J+p_ArxwhXHp0yYcg1Xsu6DGDrpw__32973.5007755973$1364309371$gmane$org@mail.gmail.com>
+References: <CA+jJMxteq8pb2CjCLVEBLFoXAdfWDX_djLfUxrQ9ad_UiYh5cA@mail.gmail.com>
+	<20130326134852.GA14753@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
+Received: from mail-wi0-f173.google.com ([209.85.212.173])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1UKURw-00028o-CU
-	for lttng-dev@lists.lttng.org; Tue, 26 Mar 2013 10:02:04 -0400
-Content-Language: fr-FR
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1UKVAo-0002VF-6M
+	for lttng-dev@lists.lttng.org; Tue, 26 Mar 2013 10:48:26 -0400
+Received: by mail-wi0-f173.google.com with SMTP id ez12so974390wid.6
+	for <lttng-dev@lists.lttng.org>; Tue, 26 Mar 2013 07:48:20 -0700 (PDT)
+In-Reply-To: <20130326134852.GA14753@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,67 +23,118 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
-Cc: "Mathieu Desnoyers
-	(mathieu.desnoyers@efficios.com)" <mathieu.desnoyers@efficios.com>, "Julien Desfossez (jdesfossez@efficios.com)" <jdesfossez@efficios.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Christian Babeux <christian.babeux@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
------Message d'origine-----
-Date: Mon, 25 Mar 2013 22:27:05 -0400
-From: Julien Desfossez <jdesfossez@efficios.com>
+On Tue, Mar 26, 2013 at 9:48 AM, Mathieu Desnoyers
+<mathieu.desnoyers@efficios.com> wrote:
+> * J=E9r=E9mie Galarneau (jeremie.galarneau@efficios.com) wrote:
+>> Hi all,
+>>
+>> I'd like to propose a set of patches to clean-up the lttng-ust tests.
+>> Since the clean-up now weighs in at a fairly hefty 21 patches, I think
+>> a link to my personal repository might be more appropriate than
+>> posting the patch-set on this list.
+>>
+>> The relevant commits are 8ae5122...0060eb2
+>>
+>> I will also be posting a set of patches that fixes and moves some of
+>> the lttng-ust tests to lttng-tools since they depend on it.
+>>
+>> Git access:
+>> git://github.com/jgalar/lttng-ust-tests-cleanup.git  -b test-cleanup
+>>
+>> Web interface:
+>> https://github.com/jgalar/lttng-ust-tests-cleanup
+>
+> I tried running the various batch files under tests/ in your tree, and
+> they pretty much all complain about:
+>
+> compudj@thinkos:~/git/jgalar/lttng-ust-tests-cleanup/tests$
+> (git:test-cleanup)> ./runtests
+> ./runtests: line 31: .//snprintf/run: No such file or directory
+>
+> Is that expected ?
+>
 
-diff --git a/src/bin/lttng-consumerd/lttng-consumerd.c b/src/bin/lttng-cons=
-umerd/lttng-consumerd.c
-index 8486807..afac445 100644
---- a/src/bin/lttng-consumerd/lttng-consumerd.c
-+++ b/src/bin/lttng-consumerd/lttng-consumerd.c
-[...]
-@@ -138,6 +140,8 @@ static void usage(FILE *fp)
- 			"Specify path for the command socket\n");
- 	fprintf(fp, "  -e, --consumerd-err-sock PATH     "
- 			"Specify path for the error socket\n");
-+	fprintf(fp, "  -e, --consumerd-metadata-sock PATH     "
-+			"Specify path for the metadata socket (UST only)\n");
- 	fprintf(fp, "  -d, --daemonize                    "
- 			"Start as a daemon.\n");
- 	fprintf(fp, "  -q, --quiet                        "
-[...]
-@@ -200,6 +205,9 @@ static void parse_args(int argc, char **argv)
- 		case 'e':
- 			snprintf(error_sock_path, PATH_MAX, "%s", optarg);
- 			break;
-+		case 'm':
-+			snprintf(metadata_sock_path, PATH_MAX, "%s", optarg);
-+			break;
- 		case 'd':
- 			opt_daemon =3D 1;
- 			break;
-+					"--consumerd-metadata-sock", consumer_data->metadata_unix_sock_path,
- 					NULL);
- 			if (consumerd64_libdir[0] !=3D '\0') {
- 				free(tmpnew);
------Fin du message d'origine-----
+I meant to remove that file since, with Christian's recent lttng-tools
+patches, we moved away from using runner scripts to using prove + test
+lists. I'll correct the last commit (Tests: Use Perl prove as the
+testsuite runner).
 
-   Shouldn't the first part be:
+> Also, make check only runs a single test:
+>
+> snprintf/test_snprintf .. ok
+> All tests successful.
+> Files=3D1, Tests=3D1,  0 wallclock secs ( 0.01 usr +  0.00 sys =3D  0.01 =
+CPU)
+> Result: PASS
+>
+> Is that expected too ?
 
-+	fprintf(fp, "  -m, --consumerd-metadata-sock PATH     "
-+			"Specify path for the metadata socket (UST only)\n");
+Yes, most of the tests were moved to lttng-tools since they depend on
+lttng-sessiond. Hopefully, now that the infrastructure is in place,
+It'll be easier to add self-contained UST tests.
 
-...so it matches the second part (and doesn't ambiguate itself with with --=
-consumerd-err-sock)?
+I'll take the opportunity to ask if you, or anyone else really, have
+suggestions for UST unit tests that don't depend on lttng-tools?
 
-Daniel U. Thibault
-R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) / Defence R&D=
- Canada - Valcartier (DRDC Valcartier)
-Cyber s=E9curit=E9 pour les missions essentielles (CME) / Mission Critical =
-Cyber Security (MCCS)
-Protection des syst=E8mes et contremesures (PSC) / Systems Protection & Cou=
-ntermeasures (SPC)
-2459 route de la Bravoure
-Qu=E9bec, QC  G3J 1X5
-CANADA
-Vox : (418) 844-4000 x4245
-Fax : (418) 844-4538
-NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-Gouvernement du Canada / Government of Canada
-<http://www.valcartier.drdc-rddc.gc.ca/>
+I can think of a few, such as validating the header files outputted by
+lttng-gen-tp, testing the filter bytecode interpretation mechanisms,
+etc. But I wonder if unit testing the control interface, for instance,
+is realistic since it tends to change fairly often. Of course, lttng
+contributors are welcome to submit new tests!
+
+As for my lttng-tools patches, some of the new tests depend on the
+lttng-tools python bindings (not included in the default
+configuration). I'm wondering what woud be the best way to get tests
+to run conditionally depending on the "configure" options now that we
+are using Christian's "prove + test lists" scheme.
+
+I have discussed the issue with him privately and we both agreed that
+we could have separate test lists that would be used depending on the
+current project configuration. While this would certainly be good
+enough for now, manually maintaining test lists based on configuration
+dependancies may grow tedious as we add configuration options and
+tests.
+
+Perhaps we could dynamically generate test lists depending on the
+configuration options and each tests' requirements... but that
+certainly sounds like overkill right now. Thoughts?
+
+J=E9r=E9mie
+
+>
+> Thanks,
+>
+> Mathieu
+>
+>>
+>> Comments are welcome, as always!
+>>
+>> Regards,
+>> J=E9r=E9mie
+>>
+>> --
+>> J=E9r=E9mie Galarneau
+>> EfficiOS Inc.
+>> http://www.efficios.com
+>>
+>> _______________________________________________
+>> lttng-dev mailing list
+>> lttng-dev@lists.lttng.org
+>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>
+> --
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> http://www.efficios.com
+
+
+
+-- =
+
+J=E9r=E9mie Galarneau
+EfficiOS Inc.
+http://www.efficios.com
