@@ -1,19 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Pull request: lttng-ust tests clean-up
-Date: Tue, 26 Mar 2013 09:48:52 -0400
-Message-ID: <20130326134852.GA14753__10812.05630112$1364305792$gmane$org@Krystal>
-References: <CA+jJMxteq8pb2CjCLVEBLFoXAdfWDX_djLfUxrQ9ad_UiYh5cA@mail.gmail.com>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Subject: Re: [LTTNG-TOOLS PATCH] UST periodical metadata flush
+Date: Tue, 26 Mar 2013 14:01:06 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD029735__44096.4338639334$1364306574$gmane$org@VAL-E-01.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UKUFE-000202-9L
-	for lttng-dev@lists.lttng.org; Tue, 26 Mar 2013 09:48:56 -0400
-Content-Disposition: inline
-In-Reply-To: <CA+jJMxteq8pb2CjCLVEBLFoXAdfWDX_djLfUxrQ9ad_UiYh5cA@mail.gmail.com>
+	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1UKURw-00028o-CU
+	for lttng-dev@lists.lttng.org; Tue, 26 Mar 2013 10:02:04 -0400
+Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,82 +19,67 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+Cc: "Mathieu Desnoyers
+	(mathieu.desnoyers@efficios.com)" <mathieu.desnoyers@efficios.com>, "Julien Desfossez (jdesfossez@efficios.com)" <jdesfossez@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-* J=E9r=E9mie Galarneau (jeremie.galarneau@efficios.com) wrote:
-> Hi all,
-> =
+-----Message d'origine-----
+Date: Mon, 25 Mar 2013 22:27:05 -0400
+From: Julien Desfossez <jdesfossez@efficios.com>
 
-> I'd like to propose a set of patches to clean-up the lttng-ust tests.
-> Since the clean-up now weighs in at a fairly hefty 21 patches, I think
-> a link to my personal repository might be more appropriate than
-> posting the patch-set on this list.
-> =
+diff --git a/src/bin/lttng-consumerd/lttng-consumerd.c b/src/bin/lttng-cons=
+umerd/lttng-consumerd.c
+index 8486807..afac445 100644
+--- a/src/bin/lttng-consumerd/lttng-consumerd.c
++++ b/src/bin/lttng-consumerd/lttng-consumerd.c
+[...]
+@@ -138,6 +140,8 @@ static void usage(FILE *fp)
+ 			"Specify path for the command socket\n");
+ 	fprintf(fp, "  -e, --consumerd-err-sock PATH     "
+ 			"Specify path for the error socket\n");
++	fprintf(fp, "  -e, --consumerd-metadata-sock PATH     "
++			"Specify path for the metadata socket (UST only)\n");
+ 	fprintf(fp, "  -d, --daemonize                    "
+ 			"Start as a daemon.\n");
+ 	fprintf(fp, "  -q, --quiet                        "
+[...]
+@@ -200,6 +205,9 @@ static void parse_args(int argc, char **argv)
+ 		case 'e':
+ 			snprintf(error_sock_path, PATH_MAX, "%s", optarg);
+ 			break;
++		case 'm':
++			snprintf(metadata_sock_path, PATH_MAX, "%s", optarg);
++			break;
+ 		case 'd':
+ 			opt_daemon =3D 1;
+ 			break;
++					"--consumerd-metadata-sock", consumer_data->metadata_unix_sock_path,
+ 					NULL);
+ 			if (consumerd64_libdir[0] !=3D '\0') {
+ 				free(tmpnew);
+-----Fin du message d'origine-----
 
-> The relevant commits are 8ae5122...0060eb2
-> =
+   Shouldn't the first part be:
 
-> I will also be posting a set of patches that fixes and moves some of
-> the lttng-ust tests to lttng-tools since they depend on it.
-> =
++	fprintf(fp, "  -m, --consumerd-metadata-sock PATH     "
++			"Specify path for the metadata socket (UST only)\n");
 
-> Git access:
-> git://github.com/jgalar/lttng-ust-tests-cleanup.git  -b test-cleanup
-> =
+...so it matches the second part (and doesn't ambiguate itself with with --=
+consumerd-err-sock)?
 
-> Web interface:
-> https://github.com/jgalar/lttng-ust-tests-cleanup
-
-I tried running the various batch files under tests/ in your tree, and
-they pretty much all complain about:
-
-compudj@thinkos:~/git/jgalar/lttng-ust-tests-cleanup/tests$
-(git:test-cleanup)> ./runtests =
-
-./runtests: line 31: .//snprintf/run: No such file or directory
-
-Is that expected ?
-
-Also, make check only runs a single test:
-
-snprintf/test_snprintf .. ok   =
-
-All tests successful.
-Files=3D1, Tests=3D1,  0 wallclock secs ( 0.01 usr +  0.00 sys =3D  0.01 CP=
-U)
-Result: PASS
-
-Is that expected too ?
-
-Thanks,
-
-Mathieu
-
-> =
-
-> Comments are welcome, as always!
-> =
-
-> Regards,
-> J=E9r=E9mie
-> =
-
-> -- =
-
-> J=E9r=E9mie Galarneau
-> EfficiOS Inc.
-> http://www.efficios.com
-> =
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- =
-
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Daniel U. Thibault
+R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) / Defence R&D=
+ Canada - Valcartier (DRDC Valcartier)
+Cyber s=E9curit=E9 pour les missions essentielles (CME) / Mission Critical =
+Cyber Security (MCCS)
+Protection des syst=E8mes et contremesures (PSC) / Systems Protection & Cou=
+ntermeasures (SPC)
+2459 route de la Bravoure
+Qu=E9bec, QC  G3J 1X5
+CANADA
+Vox : (418) 844-4000 x4245
+Fax : (418) 844-4538
+NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+Gouvernement du Canada / Government of Canada
+<http://www.valcartier.drdc-rddc.gc.ca/>
