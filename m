@@ -1,18 +1,15 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: Re: [PATCH lttng-tools] Fix: Add test scripts and lists
- to the distribution package
-Date: Wed, 27 Mar 2013 10:39:00 -0400
-Message-ID: <51530484.20700__11161.5700684071$1364395190$gmane$org@efficios.com>
-References: <1364362715-14459-1-git-send-email-jeremie.galarneau@efficios.com>
+From: "Woegerer, Paul" <Paul_Woegerer@mentor.com>
+Subject: [lttng-ust PATCH] Add man page for lttng-ust-cyg-profile
+Date: Wed, 27 Mar 2013 17:14:56 +0100
+Message-ID: <51531B00.1030302__48235.8063375161$1364400939$gmane$org@mentor.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([213.239.202.151])
+Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1UKrVI-0005kQ-D5
-	for lttng-dev@lists.lttng.org; Wed, 27 Mar 2013 10:39:04 -0400
-In-Reply-To: <1364362715-14459-1-git-send-email-jeremie.galarneau@efficios.com>
+	(envelope-from <Paul_Woegerer@mentor.com>) id 1UKszj-0006Xd-7H
+	for lttng-dev@lists.lttng.org; Wed, 27 Mar 2013 12:14:35 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,46 +18,142 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?UTF-8?B?SsOpcsOpbWllIEdhbGFybmVhdQ==?= <jeremie.galarneau@efficios.com>
+To: mathieu.desnoyers@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-TWVyZ2VkIQoKSsOpcsOpbWllIEdhbGFybmVhdToKPiBTaWduZWQtb2ZmLWJ5OiBKw6lyw6ltaWUg
-R2FsYXJuZWF1IDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20+Cj4gLS0tCj4gIHRlc3Rz
-L01ha2VmaWxlLmFtICAgICAgICAgICAgICAgICAgICAgICAgIHwgMyArKysKPiAgdGVzdHMvcmVn
-cmVzc2lvbi90b29scy9oZWFsdGgvTWFrZWZpbGUuYW0gfCAzICsrKwo+ICB0ZXN0cy91dGlscy9N
-YWtlZmlsZS5hbSAgICAgICAgICAgICAgICAgICB8IDMgKystCj4gIHRlc3RzL3V0aWxzL3RhcC9N
-YWtlZmlsZS5hbSAgICAgICAgICAgICAgIHwgMiArKwo+ICA0IGZpbGVzIGNoYW5nZWQsIDEwIGlu
-c2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkKPiAKPiBkaWZmIC0tZ2l0IGEvdGVzdHMvTWFrZWZp
-bGUuYW0gYi90ZXN0cy9NYWtlZmlsZS5hbQo+IGluZGV4IDVmZWFjYTIuLmM4YTg1ZTAgMTAwNjQ0
-Cj4gLS0tIGEvdGVzdHMvTWFrZWZpbGUuYW0KPiArKysgYi90ZXN0cy9NYWtlZmlsZS5hbQo+IEBA
-IC0xMCwzICsxMCw2IEBAIGNoZWNrLWFtOgo+ICAJLi9ydW4uc2ggdW5pdF90ZXN0cwo+ICAJLi9y
-dW4uc2ggZmFzdF9yZWdyZXNzaW9uCj4gIGVuZGlmCj4gKwo+ICtkaXN0X25vaW5zdF9TQ1JJUFRT
-ID0gcnVuLnNoIHVuaXRfdGVzdHMgZmFzdF9yZWdyZXNzaW9uIGxvbmdfcmVncmVzc2lvbiByb290
-X3JlZ3Jlc3Npb24gd2l0aF9iaW5kaW5nc19yZWdyZXNzaW9uCj4gK0VYVFJBX0RJU1QgPSBydW4u
-c2ggdW5pdF90ZXN0cyBmYXN0X3JlZ3Jlc3Npb24gbG9uZ19yZWdyZXNzaW9uIHJvb3RfcmVncmVz
-c2lvbiB3aXRoX2JpbmRpbmdzX3JlZ3Jlc3Npb24KPiBkaWZmIC0tZ2l0IGEvdGVzdHMvcmVncmVz
-c2lvbi90b29scy9oZWFsdGgvTWFrZWZpbGUuYW0gYi90ZXN0cy9yZWdyZXNzaW9uL3Rvb2xzL2hl
-YWx0aC9NYWtlZmlsZS5hbQo+IGluZGV4IDk0ZTU0ZGYuLjA5OGZiZjQgMTAwNjQ0Cj4gLS0tIGEv
-dGVzdHMvcmVncmVzc2lvbi90b29scy9oZWFsdGgvTWFrZWZpbGUuYW0KPiArKysgYi90ZXN0cy9y
-ZWdyZXNzaW9uL3Rvb2xzL2hlYWx0aC9NYWtlZmlsZS5hbQo+IEBAIC0zNiwzICszNiw2IEBAIGhl
-YWx0aF9jaGVja19TT1VSQ0VTID0gaGVhbHRoX2NoZWNrLmMgJChVVElMUykKPiAgaGVhbHRoX2No
-ZWNrX0xEQUREID0gJCh0b3BfYnVpbGRkaXIpL3NyYy9saWIvbHR0bmctY3RsL2xpYmx0dG5nLWN0
-bC5sYSBcCj4gIAkJICAgICAkKHRvcF9idWlsZGRpcikvc3JjL2NvbW1vbi9saWJjb21tb24ubGEK
-PiAgZW5kaWYKPiArCj4gK2Rpc3Rfbm9pbnN0X1NDUklQVFMgPSB0ZXN0X3RocmVhZF9leGl0IHRl
-c3RfdGhyZWFkX3N0YWxsIHRlc3RfdHBfZmFpbAo+ICtFWFRSQV9ESVNUID0gdGVzdF90aHJlYWRf
-ZXhpdCB0ZXN0X3RocmVhZF9zdGFsbCB0ZXN0X3RwX2ZhaWwKPiBkaWZmIC0tZ2l0IGEvdGVzdHMv
-dXRpbHMvTWFrZWZpbGUuYW0gYi90ZXN0cy91dGlscy9NYWtlZmlsZS5hbQo+IGluZGV4IDQzMjU4
-NDYuLjFiMzYyZmMgMTAwNjQ0Cj4gLS0tIGEvdGVzdHMvdXRpbHMvTWFrZWZpbGUuYW0KPiArKysg
-Yi90ZXN0cy91dGlscy9NYWtlZmlsZS5hbQo+IEBAIC0xLDMgKzEsNCBAQAo+ICBTVUJESVJTID0g
-dGFwCj4gIAo+IC1FWFRSQV9ESVNUID0gdXRpbHMuc2ggdXRpbHMuaAo+ICtFWFRSQV9ESVNUID0g
-dXRpbHMuc2ggdXRpbHMuaCB0ZXN0X3V0aWxzLnB5Cj4gK2Rpc3Rfbm9pbnN0X1NDUklQVFMgPSB1
-dGlscy5zaCB1dGlscy5oIHRlc3RfdXRpbHMucHkKPiBkaWZmIC0tZ2l0IGEvdGVzdHMvdXRpbHMv
-dGFwL01ha2VmaWxlLmFtIGIvdGVzdHMvdXRpbHMvdGFwL01ha2VmaWxlLmFtCj4gaW5kZXggMzY2
-ZjRjNC4uMTRjZDIzNCAxMDA2NDQKPiAtLS0gYS90ZXN0cy91dGlscy90YXAvTWFrZWZpbGUuYW0K
-PiArKysgYi90ZXN0cy91dGlscy90YXAvTWFrZWZpbGUuYW0KPiBAQCAtMSwyICsxLDQgQEAKPiAg
-bGliX0xUTElCUkFSSUVTID0gbGlidGFwLmxhCj4gIGxpYnRhcF9sYV9TT1VSQ0VTID0gdGFwLmMg
-dGFwLmgKPiArZGlzdF9ub2luc3RfU0NSSVBUUyA9IHRhcC5zaAo+ICtFWFRSQV9ESVNUID0gdGFw
-LnNoCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRu
-Zy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3Rz
-Lmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+As promised...
+
+From acba8cd14abc7e61cf1346b5649972bac3ea0d53 Mon Sep 17 00:00:00 2001
+From: Paul Woegerer <paul_woegerer@mentor.com>
+Date: Wed, 27 Mar 2013 17:02:27 +0100
+Subject: [PATCH] Add man page for lttng-ust-cyg-profile
+
+---
+ doc/Makefile.am                 |    3 +-
+ doc/man/lttng-ust-cyg-profile.3 |   79 +++++++++++++++++++++++++++++++++++=
+++++
+ 2 files changed, 81 insertions(+), 1 deletion(-)
+ create mode 100644 doc/man/lttng-ust-cyg-profile.3
+
+diff --git a/doc/Makefile.am b/doc/Makefile.am
+index 66c22fa..ccd6d18 100644
+--- a/doc/Makefile.am
++++ b/doc/Makefile.am
+@@ -1,4 +1,5 @@
+ SUBDIRS =3D . examples
+ =
+
+ dist_man_MANS =3D man/lttng-gen-tp.1 \
+-	man/lttng-ust.3
++	man/lttng-ust.3 \
++	man/lttng-ust-cyg-profile.3
+diff --git a/doc/man/lttng-ust-cyg-profile.3 b/doc/man/lttng-ust-cyg-profil=
+e.3
+new file mode 100644
+index 0000000..58dbce8
+--- /dev/null
++++ b/doc/man/lttng-ust-cyg-profile.3
+@@ -0,0 +1,79 @@
++.TH "LTTNG-UST-CYG-PROFILE" "1" "March 26, 2013" "" ""
++.SH "NAME"
++lttng-ust-cyg-profile \(em LTTng UST 2.0 Function Tracing
++.SH "SYNOPSIS"
++Compile the application source code with option \fB-finstrument-functions\=
+fP
++and launch your application either with:
++.TP
++\fBLD_PRELOAD=3Dliblttng-ust-cyg-profile-fast.so\fP appname
++.PP
++or (to use verbose function tracing)
++.TP
++\fBLD_PRELOAD=3Dliblttng-ust-cyg-profile.so\fP appname
++.PP
++All events emitted for function tracing are provided on loglevel
++TRACE_DEBUG_FUNCTION. The following command can be used to add
++function tracing events in your trace session:
++.TP
++.B lttng enable-event -u -a --loglevel-only TRACE_DEBUG_FUNCTION
++.SH "DESCRIPTION"
++For compilers that provide code generation option
++\fB-finstrument-functions\fP (e.g. GCC and LLVM/Clang) LTTng-UST provides
++shared libraries that allow users to trace the function flow of their
++applications.
++
++Function tracing comes in two flavors (each providing different trade-offs=
+):
++.IP liblttng-ust-cyg-profile-fast.so
++This is a lightweight variant that should only be used where it can be
++guaranteed that the complete event stream is recorded without any missing
++events. Any kind of duplicate information is left out.
++
++At each function entry the address of the called function is recored as
++lttng_ust_cyg_profile_fast:func_entry. Function exit is recorded as
++lttng_ust_cyg_profile_fast:func_exit (without any field data).
++
++.IP liblttng-ust-cyg-profile.so
++This is a more robust variant which also works for use-cases where events
++might get discarded or not recorded from application startup. In these cas=
+es
++the trace analyzer needs extra information to be able to reconstruct the
++program flow.
++
++For each function entry and exit the address of the called function and the
++call site address are recorded as lttng_ust_cyg_profile:func_entry and
++lttng_ust_cyg_profile:func_exit.
++.SH "USAGE"
++To use function tracing you need to make sure the sources of your applicat=
+ion
++are compiled with -finstrument-functions. It might be necessary to limit
++the number of source files where this option is used to prevent excessive
++amount of trace data to be generated during run time. Usually there are
++additional compiler flags that allow you to specify more fine grained sele=
+ction
++of function instrumentation.
++
++For each instrumented function the executable will contain calls to profil=
+ing
++function hooks (after function entry and just before function exit).
++
++By preloading (LD_PRELOAD) one of the provided shared libraries, these
++profiling hooks get defined to emit LTTng events (as described above).
++
++Using this feature can result in massive amount trace data to be generated
++by the instrumented application. Application runtime is also considerably
++affected. Be careful on systems with limited resources.
++.SH "SEE ALSO"
++lttng-ust(3), lttng(1), gcc(1), ld.so(8)
++.SH "BUGS"
++If you encounter any issues or usability problem, please report it on
++our mailing list <lttng-dev@lists.lttng.org> to help improve this
++project.
++.SH "CREDITS"
++liblttng-ust is distributed under the GNU Lesser General Public License
++version 2.1. The headers are distributed under the MIT license.
++
++See http://lttng.org for more information on the LTTng project.
++
++Mailing list for support and development: <lttng-dev@lists.lttng.org>.
++
++You can find us on IRC server irc.oftc.net (OFTC) in #lttng.
++.SH "AUTHORS"
++liblttng-ust was originally written by Mathieu Desnoyers, with additional
++contributions from various other people. It is currently maintained by
++Mathieu Desnoyers <mathieu.desnoyers@efficios.com>.
+-- =
+
+1.7.10.4
+
+
+-- =
+
+Paul Woegerer | SW Development Engineer
+http://go.mentor.com/sourceryanalyzer
+
+Mentor Embedded(tm) | Prinz Eugen Stra=DFe 72/2/4, Vienna, 1040 Austria
+Nucleus=AE | Linux=AE | Android(tm) | Services | UI | Multi-OS
+
+Android is a trademark of Google Inc. Use of this trademark is subject to G=
+oogle Permissions.
+Linux is the registered trademark of Linus Torvalds in the U.S. and other c=
+ountries.
