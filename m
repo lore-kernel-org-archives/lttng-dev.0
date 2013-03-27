@@ -1,20 +1,18 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-ust] Fix: Remove test runner script
-Date: Wed, 27 Mar 2013 10:19:29 -0400
-Message-ID: <20130327141929.GF6283__33257.9152579003$1364394017$gmane$org@Krystal>
-References: <CA+jJMxsk-JcPROObmKEtH1J+p_ArxwhXHp0yYcg1Xsu6DGDrpw@mail.gmail.com>
-	<1364359059-15307-1-git-send-email-jeremie.galarneau@efficios.com>
+From: David Goulet <dgoulet@efficios.com>
+Subject: Re: [PATCH lttng-tools 1/7] Tests: Add Python
+ test_utils module
+Date: Wed, 27 Mar 2013 10:38:47 -0400
+Message-ID: <51530477.4060309__17266.6653794751$1364395185$gmane$org@efficios.com>
+References: <1364257716-5739-1-git-send-email-jeremie.galarneau@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from smtp.ini-tech.com ([213.239.202.151])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UKrCM-0005Y5-UF
-	for lttng-dev@lists.lttng.org; Wed, 27 Mar 2013 10:19:31 -0400
-Content-Disposition: inline
-In-Reply-To: <1364359059-15307-1-git-send-email-jeremie.galarneau@efficios.com>
+	(envelope-from <dgoulet@efficios.com>) id 1UKrV5-0005i9-N7
+	for lttng-dev@lists.lttng.org; Wed, 27 Mar 2013 10:38:51 -0400
+In-Reply-To: <1364257716-5739-1-git-send-email-jeremie.galarneau@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,132 +21,97 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
+To: =?UTF-8?B?SsOpcsOpbWllIEdhbGFybmVhdQ==?= <jeremie.galarneau@efficios.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* J=E9r=E9mie Galarneau (jeremie.galarneau@efficios.com) wrote:
-> Deprecated by the use of Perl prove and test lists.
-
-merged, thanks!
-
-Mathieu
-
-> =
-
-> Signed-off-by: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
-> ---
->  tests/Makefile.am |  2 +-
->  tests/README      |  4 ++--
->  tests/runtests    | 36 ------------------------------------
->  tests/test_loop   |  2 +-
->  4 files changed, 4 insertions(+), 40 deletions(-)
->  delete mode 100755 tests/runtests
-> =
-
-> diff --git a/tests/Makefile.am b/tests/Makefile.am
-> index 6f9b969..425440a 100644
-> --- a/tests/Makefile.am
-> +++ b/tests/Makefile.am
-> @@ -4,7 +4,7 @@ if CXX_WORKS
->  SUBDIRS +=3D hello.cxx
->  endif
->  =
-
-> -dist_noinst_SCRIPTS =3D test_loop runtests trace_matches
-> +dist_noinst_SCRIPTS =3D test_loop run.sh trace_matches unit_tests
->  =
-
->  noinst_LIBRARIES =3D libtap.a
->  =
-
-> diff --git a/tests/README b/tests/README
-> index 1c920eb..5f1da32 100644
-> --- a/tests/README
-> +++ b/tests/README
-> @@ -1,8 +1,8 @@
->  Using the ust test suite.
->  =
-
->  Running
-> -	./runtests
-> -runs all the tests once. The output is in TAP format.
-> +	./run.sh unit_tests
-> +runs all the tests once.
->  =
-
->  Running
->  	./test_loop
-> diff --git a/tests/runtests b/tests/runtests
-> deleted file mode 100755
-> index 8f5c874..0000000
-> --- a/tests/runtests
-> +++ /dev/null
-> @@ -1,36 +0,0 @@
-> -#!/bin/bash
-> -#
-> -# Copyright 2010 Ericsson AB
-> -#
-> -#    This file is part of LTTng-UST.
-> -#
-> -#    LTTng-UST is free software: you can redistribute it and/or modify
-> -#    it under the terms of the GNU General Public License as published by
-> -#    the Free Software Foundation, either version 2 of the License, or
-> -#    (at your option) any later version.
-> -#
-> -#    LTTng-UST is distributed in the hope that it will be useful,
-> -#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-> -#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-> -#    GNU General Public License for more details.
-> -#
-> -#    You should have received a copy of the GNU General Public License
-> -#    along with LTTng-UST.  If not, see <http://www.gnu.org/licenses/>.
-> -
-> -
-> -tests_failed=3D0
-> -
-> -TESTDIR=3D$(dirname $0)
-> -
-> -function simple_harness_run() {
-> -    if ! "$TESTDIR/$@"; then
-> -	let tests_failed=3D$tests_failed+1
-> -    fi
-> -}
-> -
-> -./${TEST_DIR}/snprintf/run
-> -
-> -# This testcase is currently broken, do not run.
-> -# simple_harness_run tracepoint/run
-> -
-> -exit 0
-> diff --git a/tests/test_loop b/tests/test_loop
-> index 619b1e3..be3e16c 100755
-> --- a/tests/test_loop
-> +++ b/tests/test_loop
-> @@ -3,7 +3,7 @@
->  DIR=3D$(dirname $0)
->  =
-
->  while [ 0 ]; do
-> -	$DIR/runtests
-> +	$DIR/run.sh $DIR/unit_tests
->  	if [ "$?" !=3D "0" ]; then
->  		break;
->  	fi
-> -- =
-
-> 1.8.2
-> =
-
-> =
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- =
-
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+TWVyZ2VkIQoKVGhhbmtzIQoKSsOpcsOpbWllIEdhbGFybmVhdToKPiBCYXNpYyBQeXRob24gdGVz
+dCBmcmFtZXdvcmsgYmFzZWQgb24gdGhlIGx0dG5nLXRvb2xzIFB5dGhvbiBiaW5kaW5ncwo+IHRo
+YXQgZmFjaWxpdGF0ZXMgdGhlIGNyZWF0aW9uIG9mIGEgdHJhY2luZyBzZXNzaW9uIHNhdmluZyBp
+dHMgdHJhY2UgaW4KPiBhIHRlbXBvcmFyeSBsb2NhdGlvbiwgdGhlIGFjdGl2YXRpb24gb2YgZXZl
+bnRzIGluIHRoZSBVU1QgZG9tYWluIGFuZAo+IGNsZWFuIHRlYXJkb3duIG9mIHRoZSB0ZXN0IHNl
+c3Npb24uCj4gCj4gQWxzbyBwcm92aWRlcyBiYXNpYyBUQVAgb3V0cHV0IGZhY2lsaXRpZXMuCj4g
+Cj4gU2lnbmVkLW9mZi1ieTogSsOpcsOpbWllIEdhbGFybmVhdSA8amVyZW1pZS5nYWxhcm5lYXVA
+ZWZmaWNpb3MuY29tPgo+IC0tLQo+ICB0ZXN0cy91dGlscy90ZXN0X3V0aWxzLnB5IHwgMTExICsr
+KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysKPiAgMSBmaWxlIGNo
+YW5nZWQsIDExMSBpbnNlcnRpb25zKCspCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCB0ZXN0cy91dGls
+cy90ZXN0X3V0aWxzLnB5Cj4gCj4gZGlmZiAtLWdpdCBhL3Rlc3RzL3V0aWxzL3Rlc3RfdXRpbHMu
+cHkgYi90ZXN0cy91dGlscy90ZXN0X3V0aWxzLnB5Cj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBp
+bmRleCAwMDAwMDAwLi41ZTAwZGU0Cj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBiL3Rlc3RzL3V0aWxz
+L3Rlc3RfdXRpbHMucHkKPiBAQCAtMCwwICsxLDExMSBAQAo+ICsjIS91c3IvYmluL2VudiBweXRo
+b24zCj4gKyMKPiArIyBDb3B5cmlnaHQgKEMpIC0gMjAxMyBKw6lyw6ltaWUgR2FsYXJuZWF1IDxq
+ZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20+Cj4gKyMKPiArIyBUaGlzIHByb2dyYW0gaXMg
+ZnJlZSBzb2Z0d2FyZTsgeW91IGNhbiByZWRpc3RyaWJ1dGUgaXQgYW5kL29yIG1vZGlmeSBpdAo+
+ICsjIHVuZGVyIHRoZSB0ZXJtcyBvZiB0aGUgR05VIEdlbmVyYWwgUHVibGljIExpY2Vuc2UsIHZl
+cnNpb24gMiBvbmx5LCBhcwo+ICsjIHB1Ymxpc2hlZCBieSB0aGUgRnJlZSBTb2Z0d2FyZSBGb3Vu
+ZGF0aW9uLgo+ICsjCj4gKyMgVGhpcyBwcm9ncmFtIGlzIGRpc3RyaWJ1dGVkIGluIHRoZSBob3Bl
+IHRoYXQgaXQgd2lsbCBiZSB1c2VmdWwsIGJ1dCBXSVRIT1VUCj4gKyMgQU5ZIFdBUlJBTlRZOyB3
+aXRob3V0IGV2ZW4gdGhlIGltcGxpZWQgd2FycmFudHkgb2YgTUVSQ0hBTlRBQklMSVRZIG9yCj4g
+KyMgRklUTkVTUyBGT1IgQSBQQVJUSUNVTEFSIFBVUlBPU0UuICBTZWUgdGhlIEdOVSBHZW5lcmFs
+IFB1YmxpYyBMaWNlbnNlIGZvcgo+ICsjIG1vcmUgZGV0YWlscy4KPiArIwo+ICsjIFlvdSBzaG91
+bGQgaGF2ZSByZWNlaXZlZCBhIGNvcHkgb2YgdGhlIEdOVSBHZW5lcmFsIFB1YmxpYyBMaWNlbnNl
+IGFsb25nIHdpdGgKPiArIyB0aGlzIHByb2dyYW07IGlmIG5vdCwgd3JpdGUgdG8gdGhlIEZyZWUg
+U29mdHdhcmUgRm91bmRhdGlvbiwgSW5jLiwgNTEKPiArIyBGcmFua2xpbiBTdHJlZXQsIEZpZnRo
+IEZsb29yLCBCb3N0b24sIE1BIDAyMTEwLTEzMDEgVVNBLgo+ICsKPiAraW1wb3J0IHV1aWQKPiAr
+aW1wb3J0IG9zCj4gK2ltcG9ydCBzdWJwcm9jZXNzCj4gK2ltcG9ydCBzaHV0aWwKPiAraW1wb3J0
+IHN5cwo+ICtpbXBvcnQgdGVtcGZpbGUKPiArCj4gKyMgSW1wb3J0IGx0dG5nIGJpbmRpbmdzIGdl
+bmVyYXRlZCBpbiB0aGUgY3VycmVudCB0cmVlCj4gK2x0dG5nX2JpbmRpbmdzX3BhdGggPSBvcy5w
+YXRoLmRpcm5hbWUob3MucGF0aC5hYnNwYXRoKF9fZmlsZV9fKSkgKyAiLyIKPiArZm9yIGkgaW4g
+cmFuZ2UoMyk6Cj4gKyAgICBsdHRuZ19iaW5kaW5nc19wYXRoID0gb3MucGF0aC5kaXJuYW1lKGx0
+dG5nX2JpbmRpbmdzX3BhdGgpCj4gK2x0dG5nX2JpbmRpbmdzX3BhdGggPSBsdHRuZ19iaW5kaW5n
+c19wYXRoICsgIi9leHRyYXMvYmluZGluZ3Mvc3dpZy9weXRob24iCj4gK2x0dG5nX2JpbmRpbmdz
+X2xpYnNfcGF0aCA9IGx0dG5nX2JpbmRpbmdzX3BhdGggKyAiLy5saWJzIgo+ICtzeXMucGF0aC5h
+cHBlbmQobHR0bmdfYmluZGluZ3NfcGF0aCkKPiArc3lzLnBhdGguYXBwZW5kKGx0dG5nX2JpbmRp
+bmdzX2xpYnNfcGF0aCkKPiArZnJvbSBsdHRuZyBpbXBvcnQgKgo+ICsKPiArCj4gK2NsYXNzIFNl
+c3Npb25JbmZvOgo+ICsgICAgZGVmIF9faW5pdF9fKHNlbGYsIGhhbmRsZSwgc2Vzc2lvbl9uYW1l
+LCB0bXBfZGlyZWN0b3J5LCBjaGFubmVsX25hbWUpOgo+ICsgICAgICAgIHNlbGYuaGFuZGxlID0g
+aGFuZGxlCj4gKyAgICAgICAgc2VsZi5uYW1lID0gc2Vzc2lvbl9uYW1lCj4gKyAgICAgICAgc2Vs
+Zi50bXBfZGlyZWN0b3J5ID0gdG1wX2RpcmVjdG9yeQo+ICsgICAgICAgIHNlbGYudHJhY2VfcGF0
+aCA9IHRtcF9kaXJlY3RvcnkgKyAiLyIgKyBzZXNzaW9uX25hbWUKPiArICAgICAgICBzZWxmLmNo
+YW5uZWxfbmFtZSA9IGNoYW5uZWxfbmFtZQo+ICsKPiArZGVmIGJhaWwoZGlhZywgc2Vzc2lvbl9p
+bmZvID0gTm9uZSk6Cj4gKyAgICBwcmludCgiQmFpbCBvdXQhIikKPiArICAgIHByaW50KCIjIiwg
+ZGlhZykKPiArCj4gKyAgICBpZiBzZXNzaW9uX2luZm8gaXMgbm90IE5vbmU6Cj4gKyAgICAgICAg
+c3RvcF9zZXNzaW9uKHNlc3Npb25faW5mbywgVHJ1ZSkKPiArCj4gKyAgICAgICAgaWYgb3MucGF0
+aC5leGlzdHMoc2Vzc2lvbl9pbmZvLnRyYWNlX3BhdGgpOgo+ICsgICAgICAgICAgICBzaHV0aWwu
+cm10cmVlKHNlc3Npb25faW5mby50cmFjZV9wYXRoKQo+ICsgICAgZXhpdCgtMSkKPiArCj4gK2Rl
+ZiBwcmludF90ZXN0X3Jlc3VsdChyZXN1bHQsIG51bWJlciwgZGVzY3JpcHRpb24pOgo+ICsgICAg
+cmVzdWx0X3N0cmluZyA9IE5vbmUKPiArICAgIGlmIHJlc3VsdCBpcyBUcnVlOgo+ICsgICAgICAg
+IHJlc3VsdF9zdHJpbmcgPSAib2siCj4gKyAgICBlbHNlOgo+ICsgICAgICAgIHJlc3VsdF9zdHJp
+bmcgPSAibm90IG9rIgo+ICsKPiArICAgIHJlc3VsdF9zdHJpbmcgKz0gIiB7MH0gLSB7MX0iLmZv
+cm1hdChudW1iZXIsIGRlc2NyaXB0aW9uKQo+ICsgICAgcHJpbnQocmVzdWx0X3N0cmluZykKPiAr
+Cj4gK2RlZiBlbmFibGVfdXN0X3RyYWNlcG9pbnRfZXZlbnQoc2Vzc2lvbl9pbmZvLCBldmVudF9u
+YW1lKToKPiArICAgIGV2ZW50ID0gRXZlbnQoKQo+ICsgICAgZXZlbnQubmFtZSA9IGV2ZW50X25h
+bWUKPiArICAgIGV2ZW50LnR5cGUgPSBFVkVOVF9UUkFDRVBPSU5UCj4gKyAgICBldmVudC5sb2ds
+ZXZlbCA9IEVWRU5UX0xPR0xFVkVMX0FMTAo+ICsgICAgcmVzID0gZW5hYmxlX2V2ZW50KHNlc3Np
+b25faW5mby5oYW5kbGUsIGV2ZW50LCBzZXNzaW9uX2luZm8uY2hhbm5lbF9uYW1lKQo+ICsgICAg
+aWYgcmVzIDwgMDoKPiArICAgICAgICBiYWlsKCJGYWlsZWQgdG8gZW5hYmxlIHVzZXJzcGFjZSBl
+dmVudCAiICsgZXZlbnRfbmFtZSwgc2Vzc2lvbl9pbmZvKQo+ICsKPiArZGVmIGNyZWF0ZV9zZXNz
+aW9uKCk6Cj4gKyAgICBkb20gPSBEb21haW4oKQo+ICsgICAgZG9tLnR5cGUgPSBET01BSU5fVVNU
+Cj4gKwo+ICsgICAgc2Vzc2lvbl9uYW1lID0gc3RyKHV1aWQudXVpZDEoKSkKPiArICAgIHRtcF9k
+aXJlY3RvcnkgPSB0ZW1wZmlsZS5ta2R0ZW1wKCkKPiArICAgIHRyYWNlX3BhdGggPSB0bXBfZGly
+ZWN0b3J5ICsgIi8iICsgc2Vzc2lvbl9uYW1lCj4gKwo+ICsgICAgcmVzID0gY3JlYXRlKHNlc3Np
+b25fbmFtZSwgdHJhY2VfcGF0aCkKPiArICAgIGlmIHJlcyA8IDA6Cj4gKyAgICAgICAgYmFpbCgi
+RmFpbGVkIHRvIGNyZWF0ZSB0cmFjaW5nIHNlc3Npb24uIikKPiArCj4gKyAgICBjaGFubmVsID0g
+Q2hhbm5lbCgpCj4gKyAgICBjaGFubmVsLm5hbWUgPSAiY2hhbm5lbDAiCj4gKyAgICBjaGFubmVs
+X3NldF9kZWZhdWx0X2F0dHIoZG9tLCBjaGFubmVsLmF0dHIpCj4gKwo+ICsgICAgaGFuID0gSGFu
+ZGxlKHNlc3Npb25fbmFtZSwgZG9tKQo+ICsgICAgcmVzID0gZW5hYmxlX2NoYW5uZWwoaGFuLCBj
+aGFubmVsKQo+ICsKPiArICAgIHNlc3Npb25faW5mbyA9IFNlc3Npb25JbmZvKGhhbiwgc2Vzc2lv
+bl9uYW1lLCB0bXBfZGlyZWN0b3J5LCBjaGFubmVsLm5hbWUpCj4gKyAgICBpZiByZXMgPCAwOgo+
+ICsgICAgICAgIGJhaWwoIkZhaWxlZCB0byBlbmFibGUgY2hhbm5lbCAiICsgY2hhbm5lbC5uYW1l
+LCBzZXNzaW9uX2luZm8pCj4gKyAgICByZXR1cm4gc2Vzc2lvbl9pbmZvCj4gKwo+ICtkZWYgc3Rh
+cnRfc2Vzc2lvbihzZXNzaW9uX2luZm8pOgo+ICsgICAgc3RhcnQoc2Vzc2lvbl9pbmZvLm5hbWUp
+Cj4gKwo+ICtkZWYgc3RvcF9zZXNzaW9uKHNlc3Npb25faW5mbywgYmFpbGluZyA9IEZhbHNlKToK
+PiArICAgICMgV29ya2Fyb3VuZCBsdHRuZy1jdGwgb3V0cHV0aW5nIGRpcmVjdGx5IHRvIHN0ZG91
+dCBieSBzcGF3bmluZyBhIHN1YnByb2Nlc3MuCj4gKyAgICBsdHRuZ19iaW5hcnlfcGF0aCA9IG9z
+LnBhdGguZGlybmFtZShvcy5wYXRoLmFic3BhdGgoX19maWxlX18pKSArICIvIgo+ICsgICAgZm9y
+IGkgaW4gcmFuZ2UoMyk6Cj4gKyAgICAgICAgbHR0bmdfYmluYXJ5X3BhdGggPSBvcy5wYXRoLmRp
+cm5hbWUobHR0bmdfYmluYXJ5X3BhdGgpCj4gKyAgICBsdHRuZ19iaW5hcnlfcGF0aCA9IGx0dG5n
+X2JpbmFyeV9wYXRoICsgIi9zcmMvYmluL2x0dG5nL2x0dG5nIgo+ICsKPiArICAgIHJldGNvZGUg
+PSBzdWJwcm9jZXNzLmNhbGwoW2x0dG5nX2JpbmFyeV9wYXRoLCAic3RvcCIsIHNlc3Npb25faW5m
+by5uYW1lXSwgc3Rkb3V0PXN1YnByb2Nlc3MuUElQRSwgc3RkZXJyPXN1YnByb2Nlc3MuUElQRSkK
+PiArICAgIGlmIHJldGNvZGUgIT0gMCBhbmQgbm90IGJhaWxpbmc6Cj4gKyAgICAgICAgYmFpbCgi
+VW5hYmxlIHRvIHN0b3Agc2Vzc2lvbiAiICsgc2Vzc2lvbl9pbmZvLm5hbWUsIHNlc3Npb25faW5m
+bykKPiArICAgIGRlc3Ryb3koc2Vzc2lvbl9pbmZvLm5hbWUpCgpfX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5n
+LWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxt
+YW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
