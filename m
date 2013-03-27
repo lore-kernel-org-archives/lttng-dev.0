@@ -1,19 +1,25 @@
-From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
-	<jeremie.galarneau@efficios.com>
-Subject: [PATCH lttng-tools] Fix: Add test scripts and lists to
-	the distribution package
-Date: Wed, 27 Mar 2013 01:38:35 -0400
-Message-ID: <1364362715-14459-1-git-send-email-jeremie.galarneau__15184.2747036882$1364362776$gmane$org@efficios.com>
+From: David OShea <David.OShea@quantum.com>
+Subject: LTTng-UST memory requirements
+Date: Wed, 27 Mar 2013 10:02:52 +0000
+Message-ID: <20998D40D9A2B7499CA5A3A2666CB1EB23FCE56C__40338.0919284702$1364378631$gmane$org@ZURMSG1.QUANTUM.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qe0-f43.google.com ([209.85.128.43])
+Received: from mx0b-000ceb01.pphosted.com ([67.231.152.126])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1UKj4S-0001HQ-Of
-	for lttng-dev@lists.lttng.org; Wed, 27 Mar 2013 01:38:48 -0400
-Received: by mail-qe0-f43.google.com with SMTP id 1so4288585qee.2
-	for <lttng-dev@lists.lttng.org>; Tue, 26 Mar 2013 22:38:43 -0700 (PDT)
+	(envelope-from <prvs=1798f9fb1d=david.oshea@quantum.com>)
+	id 1UKnC5-0003Gm-Qr
+	for lttng-dev@lists.lttng.org; Wed, 27 Mar 2013 06:02:57 -0400
+Received: from pps.filterd (m0001151 [127.0.0.1])
+	by mx0b-000ceb01.pphosted.com (8.14.5/8.14.5) with SMTP id
+	r2RA25bU025043
+	for <lttng-dev@lists.lttng.org>; Wed, 27 Mar 2013 03:02:57 -0700
+Received: from ppoxedge1.quantum.com ([146.174.252.27])
+	by mx0b-000ceb01.pphosted.com with ESMTP id 1bay3q2fjs-1
+	(version=TLSv1/SSLv3 cipher=AES128-SHA bits=128 verify=NOT)
+	for <lttng-dev@lists.lttng.org>; Wed, 27 Mar 2013 03:02:57 -0700
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,43 +28,21 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-U2lnbmVkLW9mZi1ieTogSsOpcsOpbWllIEdhbGFybmVhdSA8amVyZW1pZS5nYWxhcm5lYXVAZWZm
-aWNpb3MuY29tPgotLS0KIHRlc3RzL01ha2VmaWxlLmFtICAgICAgICAgICAgICAgICAgICAgICAg
-IHwgMyArKysKIHRlc3RzL3JlZ3Jlc3Npb24vdG9vbHMvaGVhbHRoL01ha2VmaWxlLmFtIHwgMyAr
-KysKIHRlc3RzL3V0aWxzL01ha2VmaWxlLmFtICAgICAgICAgICAgICAgICAgIHwgMyArKy0KIHRl
-c3RzL3V0aWxzL3RhcC9NYWtlZmlsZS5hbSAgICAgICAgICAgICAgIHwgMiArKwogNCBmaWxlcyBj
-aGFuZ2VkLCAxMCBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pCgpkaWZmIC0tZ2l0IGEvdGVz
-dHMvTWFrZWZpbGUuYW0gYi90ZXN0cy9NYWtlZmlsZS5hbQppbmRleCA1ZmVhY2EyLi5jOGE4NWUw
-IDEwMDY0NAotLS0gYS90ZXN0cy9NYWtlZmlsZS5hbQorKysgYi90ZXN0cy9NYWtlZmlsZS5hbQpA
-QCAtMTAsMyArMTAsNiBAQCBjaGVjay1hbToKIAkuL3J1bi5zaCB1bml0X3Rlc3RzCiAJLi9ydW4u
-c2ggZmFzdF9yZWdyZXNzaW9uCiBlbmRpZgorCitkaXN0X25vaW5zdF9TQ1JJUFRTID0gcnVuLnNo
-IHVuaXRfdGVzdHMgZmFzdF9yZWdyZXNzaW9uIGxvbmdfcmVncmVzc2lvbiByb290X3JlZ3Jlc3Np
-b24gd2l0aF9iaW5kaW5nc19yZWdyZXNzaW9uCitFWFRSQV9ESVNUID0gcnVuLnNoIHVuaXRfdGVz
-dHMgZmFzdF9yZWdyZXNzaW9uIGxvbmdfcmVncmVzc2lvbiByb290X3JlZ3Jlc3Npb24gd2l0aF9i
-aW5kaW5nc19yZWdyZXNzaW9uCmRpZmYgLS1naXQgYS90ZXN0cy9yZWdyZXNzaW9uL3Rvb2xzL2hl
-YWx0aC9NYWtlZmlsZS5hbSBiL3Rlc3RzL3JlZ3Jlc3Npb24vdG9vbHMvaGVhbHRoL01ha2VmaWxl
-LmFtCmluZGV4IDk0ZTU0ZGYuLjA5OGZiZjQgMTAwNjQ0Ci0tLSBhL3Rlc3RzL3JlZ3Jlc3Npb24v
-dG9vbHMvaGVhbHRoL01ha2VmaWxlLmFtCisrKyBiL3Rlc3RzL3JlZ3Jlc3Npb24vdG9vbHMvaGVh
-bHRoL01ha2VmaWxlLmFtCkBAIC0zNiwzICszNiw2IEBAIGhlYWx0aF9jaGVja19TT1VSQ0VTID0g
-aGVhbHRoX2NoZWNrLmMgJChVVElMUykKIGhlYWx0aF9jaGVja19MREFERCA9ICQodG9wX2J1aWxk
-ZGlyKS9zcmMvbGliL2x0dG5nLWN0bC9saWJsdHRuZy1jdGwubGEgXAogCQkgICAgICQodG9wX2J1
-aWxkZGlyKS9zcmMvY29tbW9uL2xpYmNvbW1vbi5sYQogZW5kaWYKKworZGlzdF9ub2luc3RfU0NS
-SVBUUyA9IHRlc3RfdGhyZWFkX2V4aXQgdGVzdF90aHJlYWRfc3RhbGwgdGVzdF90cF9mYWlsCitF
-WFRSQV9ESVNUID0gdGVzdF90aHJlYWRfZXhpdCB0ZXN0X3RocmVhZF9zdGFsbCB0ZXN0X3RwX2Zh
-aWwKZGlmZiAtLWdpdCBhL3Rlc3RzL3V0aWxzL01ha2VmaWxlLmFtIGIvdGVzdHMvdXRpbHMvTWFr
-ZWZpbGUuYW0KaW5kZXggNDMyNTg0Ni4uMWIzNjJmYyAxMDA2NDQKLS0tIGEvdGVzdHMvdXRpbHMv
-TWFrZWZpbGUuYW0KKysrIGIvdGVzdHMvdXRpbHMvTWFrZWZpbGUuYW0KQEAgLTEsMyArMSw0IEBA
-CiBTVUJESVJTID0gdGFwCiAKLUVYVFJBX0RJU1QgPSB1dGlscy5zaCB1dGlscy5oCitFWFRSQV9E
-SVNUID0gdXRpbHMuc2ggdXRpbHMuaCB0ZXN0X3V0aWxzLnB5CitkaXN0X25vaW5zdF9TQ1JJUFRT
-ID0gdXRpbHMuc2ggdXRpbHMuaCB0ZXN0X3V0aWxzLnB5CmRpZmYgLS1naXQgYS90ZXN0cy91dGls
-cy90YXAvTWFrZWZpbGUuYW0gYi90ZXN0cy91dGlscy90YXAvTWFrZWZpbGUuYW0KaW5kZXggMzY2
-ZjRjNC4uMTRjZDIzNCAxMDA2NDQKLS0tIGEvdGVzdHMvdXRpbHMvdGFwL01ha2VmaWxlLmFtCisr
-KyBiL3Rlc3RzL3V0aWxzL3RhcC9NYWtlZmlsZS5hbQpAQCAtMSwyICsxLDQgQEAKIGxpYl9MVExJ
-QlJBUklFUyA9IGxpYnRhcC5sYQogbGlidGFwX2xhX1NPVVJDRVMgPSB0YXAuYyB0YXAuaAorZGlz
-dF9ub2luc3RfU0NSSVBUUyA9IHRhcC5zaAorRVhUUkFfRElTVCA9IHRhcC5zaAotLSAKMS44LjIK
-CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1k
-ZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0
-dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+Hi all,
+
+Are any details available of the memory requirements for LTTng?  I'm particularly interested in UST, and not only the case where tracing is being performed, but also when no session is started.  For example.:
+
+- Session daemon memory requirements: I assume this would be a function of the number of tracepoints, trace providers, attached processes, sessions, etc.
+
+- Consumer daemon memory requirements: how many of these would there be, how much memory does each use
+
+- In-application memory requirements: I assume this would also be a function of the number of trace providers, trace points, etc.
+
+Thanks in advance,
+David
+
+----------------------------------------------------------------------
+The information contained in this transmission may be confidential. Any disclosure, copying, or further distribution of confidential information is not permitted unless such privilege is explicitly granted in writing by Quantum. Quantum reserves the right to have electronic communications, including email and attachments, sent across its networks filtered through anti virus and spam software programs and retain such messages in order to comply with applicable data security and retention requirements. Quantum is not responsible for the proper and complete transmission of the substance of this communication or for any delay in its receipt.
