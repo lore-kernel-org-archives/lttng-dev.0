@@ -1,20 +1,19 @@
-From: Yannick Brosseau <yannick.brosseau@gmail.com>
+From: Matthew Khouzam <matthew.khouzam@ericsson.com>
 Subject: Re: On git and mail requests
-Date: Thu, 28 Mar 2013 11:25:25 -0400
-Message-ID: <515460E5.6090308__14077.5065789514$1364484392$gmane$org@gmail.com>
+Date: Thu, 28 Mar 2013 11:47:26 -0400
+Message-ID: <5154660E.4070603__27013.2347279743$1364485723$gmane$org@ericsson.com>
 References: <51545BBC.4090701@ericsson.com>
 	<CA+jJMxspeigG9OBtAJp7tNd7Rd7uXcBhV-LDkYdv0eBODJenNA@mail.gmail.com>
+	<515460E5.6090308@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f169.google.com ([209.85.223.169])
+Received: from usevmg21.ericsson.net ([198.24.6.65])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <yannick.brosseau@gmail.com>) id 1ULEhp-0000mi-7B
-	for lttng-dev@lists.lttng.org; Thu, 28 Mar 2013 11:25:33 -0400
-Received: by mail-ie0-f169.google.com with SMTP id qd14so10427959ieb.28
-	for <lttng-dev@lists.lttng.org>; Thu, 28 Mar 2013 08:25:27 -0700 (PDT)
-In-Reply-To: <CA+jJMxspeigG9OBtAJp7tNd7Rd7uXcBhV-LDkYdv0eBODJenNA@mail.gmail.com>
+	(envelope-from <matthew.khouzam@ericsson.com>) id 1ULF3L-0000yI-9Y
+	for lttng-dev@lists.lttng.org; Thu, 28 Mar 2013 11:47:47 -0400
+In-Reply-To: <515460E5.6090308@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -26,34 +25,48 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-I don't think we have enough traffic to justify 2 mailing list.
+So to conclude from the discussion on IRC. It is being considered but
+redmine's code review system is not good enough yet.
+Glad it was thought out.
 
-Yannick
 
-On 2013-03-28 11:12, J=E9r=E9mie Galarneau wrote:
-> I know some projects use separate dev and user mailing lists. Perhaps
-> we could follow this route.
+btw, if anyone else is having the issue, filter on the word "PATCH" in
+the header, the mailing list becomes much cleaner. :)
+
+
+On 13-03-28 11:25 AM, Yannick Brosseau wrote:
+> I don't think we have enough traffic to justify 2 mailing list.
 >
-> J=E9r=E9mie
+> Yannick
 >
-> On Thu, Mar 28, 2013 at 11:03 AM, Matthew Khouzam
-> <matthew.khouzam@ericsson.com> wrote:
->> Hello tracing sorcerers,
+> On 2013-03-28 11:12, J=E9r=E9mie Galarneau wrote:
+>> I know some projects use separate dev and user mailing lists. Perhaps
+>> we could follow this route.
 >>
->> I was having a harder and harder time reading the mailing list's
->> discussions. I have a filter to hide "patches" in my mail client. I
->> think though it would be interesting maybe to use redmine's code review
->> system and keep the mailing list for support? That way we can see the
->> user issues more easily?
+>> J=E9r=E9mie
 >>
->> Any thoughts?
->> Matthew
+>> On Thu, Mar 28, 2013 at 11:03 AM, Matthew Khouzam
+>> <matthew.khouzam@ericsson.com> wrote:
+>>> Hello tracing sorcerers,
+>>>
+>>> I was having a harder and harder time reading the mailing list's
+>>> discussions. I have a filter to hide "patches" in my mail client. I
+>>> think though it would be interesting maybe to use redmine's code review
+>>> system and keep the mailing list for support? That way we can see the
+>>> user issues more easily?
+>>>
+>>> Any thoughts?
+>>> Matthew
+>>>
+>>>
+>>>
+>>> _______________________________________________
+>>> lttng-dev mailing list
+>>> lttng-dev@lists.lttng.org
+>>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 >>
->>
->>
->> _______________________________________________
->> lttng-dev mailing list
->> lttng-dev@lists.lttng.org
->> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 >
->
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
