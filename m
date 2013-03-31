@@ -1,19 +1,16 @@
 From: Simon Marchi <simon.marchi@polymtl.ca>
-Subject: Re: lttng-tools 2.2.0-rc1 build error, librt no symbols
-Date: Sun, 31 Mar 2013 14:25:34 -0400
-Message-ID: <CAFXXi0nx3rCccm1WnXnD7bTtmstSt7QksDNGoWuDbFo9=E2oPw__48569.5240473889$1364754418$gmane$org@mail.gmail.com>
-References: <CAKPZSeDCSOBUJGuWPadVm4Q99mr_7R5PJdf9VZr_TdqP-101=g@mail.gmail.com>
+Subject: [PATCH lttng-tools] Fix link: move -lrt at the end of
+	the link line
+Date: Sun, 31 Mar 2013 14:40:18 -0400
+Message-ID: <1364755218-27374-1-git-send-email-simon.marchi__13851.3222606436$1364755258$gmane$org@polymtl.ca>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f171.google.com ([209.85.223.171])
+Received: from smtp.electronicbox.net ([96.127.255.83])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <thundersim@gmail.com>) id 1UMMxG-0001xU-DJ
-	for lttng-dev@lists.lttng.org; Sun, 31 Mar 2013 14:26:10 -0400
-Received: by mail-ie0-f171.google.com with SMTP id e14so1808744iej.16
-	for <lttng-dev@lists.lttng.org>; Sun, 31 Mar 2013 11:26:05 -0700 (PDT)
-In-Reply-To: <CAKPZSeDCSOBUJGuWPadVm4Q99mr_7R5PJdf9VZr_TdqP-101=g@mail.gmail.com>
+	(envelope-from <simon.marchi@polymtl.ca>) id 1UMNAr-00024J-W0
+	for lttng-dev@lists.lttng.org; Sun, 31 Mar 2013 14:40:14 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,42 +19,34 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: yin sun <sunyin51@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
+Cc: Simon Marchi <simon.marchi@polymtl.ca>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Yin,
+It has to be after libconsumer.la.
 
-I get the same error. Try putting -lrt after the other arguments of
-the LDADD. Since libconsumer.la uses timer_settime from librt, -lrt
-has to be after it on the command line.
+Signed-off-by: Simon Marchi <simon.marchi@polymtl.ca>
+---
+ src/bin/lttng-consumerd/Makefile.am |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Simon
-
-On 31 March 2013 13:14, yin sun <sunyin51@gmail.com> wrote:
-> I am trying the latest git 2.2.0-rc1. seems the the librt is not resolved
-> correctly on my ubuntu 12.10 64bit. Don't know why.
->
-> I tried to build with static lib seems fine. here is my diff.
->
-> diff --git a/src/bin/lttng-consumerd/Makefile.am
-> b/src/bin/lttng-consumerd/Makefile.am
-> index a418eb4..1711581 100644
-> --- a/src/bin/lttng-consumerd/Makefile.am
-> +++ b/src/bin/lttng-consumerd/Makefile.am
-> @@ -4,7 +4,7 @@ lttnglibexec_PROGRAMS = lttng-consumerd
->
->  lttng_consumerd_SOURCES = lttng-consumerd.c lttng-consumerd.h
->
-> -lttng_consumerd_LDADD = -lrt \
-> +lttng_consumerd_LDADD = /usr/lib/x86_64-linux-gnu/librt.a \
->            $(top_builddir)/src/common/libconsumer.la \
->            $(top_builddir)/src/common/sessiond-comm/libsessiond-comm.la \
->            $(top_builddir)/src/common/libcommon.la
->
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
+diff --git a/src/bin/lttng-consumerd/Makefile.am b/src/bin/lttng-consumerd/Makefile.am
+index a418eb4..d340c68 100644
+--- a/src/bin/lttng-consumerd/Makefile.am
++++ b/src/bin/lttng-consumerd/Makefile.am
+@@ -4,10 +4,11 @@ lttnglibexec_PROGRAMS = lttng-consumerd
+ 
+ lttng_consumerd_SOURCES = lttng-consumerd.c lttng-consumerd.h
+ 
+-lttng_consumerd_LDADD = -lrt \
++lttng_consumerd_LDADD = \
+ 	   $(top_builddir)/src/common/libconsumer.la \
+ 	   $(top_builddir)/src/common/sessiond-comm/libsessiond-comm.la \
+-	   $(top_builddir)/src/common/libcommon.la
++	   $(top_builddir)/src/common/libcommon.la \
++	   -lrt
+ 
+ if HAVE_LIBLTTNG_UST_CTL
+ lttng_consumerd_LDADD += -llttng-ust-ctl
+-- 
+1.7.10.4
