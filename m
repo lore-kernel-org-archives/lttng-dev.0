@@ -1,20 +1,25 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-modules] Clean up
-	using	global_dirty_limit wrapper for writeback probe
-Date: Tue, 2 Apr 2013 09:27:01 -0400
-Message-ID: <20130402132701.GA12063__15762.8617402681$1364909284$gmane$org@Krystal>
-References: <1361182646-31794-1-git-send-email-andrew_gabbasov@mentor.com>
+From: Markus Weinfurtner <markus.weinfurtner.ext@nsn.com>
+Subject: add-context perf counters support in userspace
+Date: Tue, 02 Apr 2013 15:25:08 +0200
+Message-ID: <515ADC34.9060304__47008.8601032787$1364909302$gmane$org@nsn.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from demumfd002.nsn-inter.net ([93.183.12.31])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UN1Es-0005KY-Ph
-	for lttng-dev@lists.lttng.org; Tue, 02 Apr 2013 09:27:02 -0400
-Content-Disposition: inline
-In-Reply-To: <1361182646-31794-1-git-send-email-andrew_gabbasov@mentor.com>
+	(envelope-from <markus.weinfurtner.ext@nsn.com>) id 1UN1DD-0005Iu-DN
+	for lttng-dev@lists.lttng.org; Tue, 02 Apr 2013 09:25:19 -0400
+Received: from demuprx017.emea.nsn-intra.net ([10.150.129.56])
+	by demumfd002.nsn-inter.net (8.12.11.20060308/8.12.11) with ESMTP id
+	r32DPB6q030263
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-SHA bits=256 verify=OK)
+	for <lttng-dev@lists.lttng.org>; Tue, 2 Apr 2013 15:25:11 +0200
+Received: from [10.151.15.150] ([10.151.15.150])
+	by demuprx017.emea.nsn-intra.net (8.12.11.20060308/8.12.11) with ESMTP
+	id r32DPAqN011025
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-SHA bits=256 verify=NO)
+	for <lttng-dev@lists.lttng.org>; Tue, 2 Apr 2013 15:25:11 +0200
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,174 +28,13 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Andrew Gabbasov <andrew_gabbasov@mentor.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Andrew Gabbasov (andrew_gabbasov@mentor.com) wrote:
-> Move the wrapper around reading of global_dirty_limit to /wrapper/ directory.
-> Introduce a new kallsyms_lookup_dataptr function for obtaining the address
-> unchanged and use it in global_dirty_limit wrapper.
-> Since the data address is available only if CONFIG_KALLSYMS_ALL is set,
-> omit the whole probe from building if this config is missing.
+Hi,
 
-merged, thanks!
+will perf counters in add-context for userspace be supported in the future?
+Does anybody currently work on this?
 
-Mathieu
-
-> 
-> Signed-off-by: Andrew Gabbasov <andrew_gabbasov@mentor.com>
-> ---
->  probes/Makefile                |    2 ++
->  probes/lttng-probe-writeback.c |   19 ++-----------
->  wrapper/kallsyms.h             |    6 ++++
->  wrapper/writeback.h            |   61 ++++++++++++++++++++++++++++++++++++++++
->  4 files changed, 71 insertions(+), 17 deletions(-)
->  create mode 100644 wrapper/writeback.h
-> 
-> diff --git a/probes/Makefile b/probes/Makefile
-> index 088cd5f..08adad5 100644
-> --- a/probes/Makefile
-> +++ b/probes/Makefile
-> @@ -189,10 +189,12 @@ endif
->  
->  obj-m += lttng-probe-workqueue.o
->  
-> +ifneq ($(CONFIG_KALLSYMS_ALL),)
->  obj-m +=  $(shell \
->  	if [ $(VERSION) -ge 3 \
->  		-o \( $(VERSION) -eq 2 -a $(PATCHLEVEL) -ge 6 -a $(SUBLEVEL) -ge 36 \) ] ; then \
->  		echo "lttng-probe-writeback.o" ; fi;)
-> +endif
->  
->  
->  ifneq ($(CONFIG_KPROBES),)
-> diff --git a/probes/lttng-probe-writeback.c b/probes/lttng-probe-writeback.c
-> index 0a5c022..5e421e5 100644
-> --- a/probes/lttng-probe-writeback.c
-> +++ b/probes/lttng-probe-writeback.c
-> @@ -32,27 +32,12 @@
->  #include <trace/events/writeback.h>
->  
->  #include "../lttng-kernel-version.h"
-> +#include "../wrapper/writeback.h"
->  
->  /* #if <check version number if global_dirty_limit will be exported> */
-> -#ifdef CONFIG_KALLSYMS
-> -#include "../wrapper/kallsyms.h"
->  
-> -static unsigned long *wrapper_global_dirty_limit_sym = 0;
-> -static inline
-> -unsigned long wrapper_global_dirty_limit(void)
-> -{
-> -	if (!wrapper_global_dirty_limit_sym)
-> -		wrapper_global_dirty_limit_sym =
-> -			(void *)kallsyms_lookup_funcptr("global_dirty_limit");
-> -	if (wrapper_global_dirty_limit_sym)
-> -		return *wrapper_global_dirty_limit_sym;
-> -	else {
-> -		printk(KERN_WARNING "LTTng: global_dirty_limit symbol lookup failed.\n");
-> -		return 0;
-> -	}
-> -}
->  #define global_dirty_limit wrapper_global_dirty_limit()
-> -#endif
-> +
->  /* #endif <check version number> */
->  
->  /*
-> diff --git a/wrapper/kallsyms.h b/wrapper/kallsyms.h
-> index f07788a..ad9e1f2 100644
-> --- a/wrapper/kallsyms.h
-> +++ b/wrapper/kallsyms.h
-> @@ -42,4 +42,10 @@ unsigned long kallsyms_lookup_funcptr(const char *name)
->  #endif
->  	return addr;
->  }
-> +
-> +static inline
-> +unsigned long kallsyms_lookup_dataptr(const char *name)
-> +{
-> +	return kallsyms_lookup_name(name);
-> +}
->  #endif /* _LTTNG_WRAPPER_KALLSYMS_H */
-> diff --git a/wrapper/writeback.h b/wrapper/writeback.h
-> new file mode 100644
-> index 0000000..818ddd6
-> --- /dev/null
-> +++ b/wrapper/writeback.h
-> @@ -0,0 +1,61 @@
-> +#ifndef _LTTNG_WRAPPER_WRITEBACK_H
-> +#define _LTTNG_WRAPPER_WRITEBACK_H
-> +
-> +/*
-> + * wrapper/writeback.h
-> + *
-> + * wrapper around global_dirty_limit read. Using KALLSYMS with KALLSYMS_ALL
-> + * to get its address when available, else we need to have a kernel that
-> + * exports this variable to GPL modules.
-> + *
-> + * Copyright (C) 2013 Mentor Graphics Corp.
-> + *
-> + * This library is free software; you can redistribute it and/or
-> + * modify it under the terms of the GNU Lesser General Public
-> + * License as published by the Free Software Foundation; only
-> + * version 2.1 of the License.
-> + *
-> + * This library is distributed in the hope that it will be useful,
-> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
-> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-> + * Lesser General Public License for more details.
-> + *
-> + * You should have received a copy of the GNU Lesser General Public
-> + * License along with this library; if not, write to the Free Software
-> + * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
-> + */
-> +
-> +#ifdef CONFIG_KALLSYMS_ALL
-> +
-> +#include <linux/kallsyms.h>
-> +#include "kallsyms.h"
-> +
-> +static unsigned long *global_dirty_limit_sym = 0;
-> +
-> +static inline
-> +unsigned long wrapper_global_dirty_limit(void)
-> +{
-> +	if (!global_dirty_limit_sym)
-> +		global_dirty_limit_sym =
-> +			(void *)kallsyms_lookup_dataptr("global_dirty_limit");
-> +	if (global_dirty_limit_sym)
-> +		return *global_dirty_limit_sym;
-> +	else {
-> +		printk(KERN_WARNING "LTTng: global_dirty_limit symbol lookup failed.\n");
-> +		return 0;
-> +	}
-> +}
-> +
-> +#else
-> +
-> +#include <linux/writeback.h>
-> +
-> +static inline
-> +unsigned long wrapper_global_dirty_limit(void)
-> +{
-> +	return global_dirty_limit;
-> +}
-> +
-> +#endif
-> +
-> +#endif /* _LTTNG_WRAPPER_WRITEBACK_H */
-> -- 
-> 1.7.10.4
-> 
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Br,
+Markus
