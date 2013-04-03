@@ -1,19 +1,21 @@
-From: =?ISO-8859-1?Q?Rapha=EBl_Beamonte?= <raphael.beamonte@polymtl.ca>
+From: Simon Marchi <simon.marchi@polymtl.ca>
 Subject: Re: [PATCH lttng-tools] lttng cli: Accept human
  readable sizes for --subbuf-size
-Date: Tue, 02 Apr 2013 22:52:54 -0400
-Message-ID: <515B9986.7080802__508.07820302925$1364957637$gmane$org@polymtl.ca>
+Date: Tue, 2 Apr 2013 23:37:43 -0400
+Message-ID: <CAFXXi0=GHXVvAmx7DZ44rSQ2SK6cXUjDhOyA2PLBB2HG7kHjSQ__43462.8410068855$1364960353$gmane$org@mail.gmail.com>
 References: <1364935514-11042-1-git-send-email-simon.marchi@polymtl.ca>
+	<CAGDH53ks4zAi7YfQZfFA1d3r=2ZEUvX9_gZYUk9YyPZHwT6uuA@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1529428301=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail-ie0-f169.google.com ([209.85.223.169])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <nashii@gmail.com>) id 1UNDox-00036r-KB
-	for lttng-dev@lists.lttng.org; Tue, 02 Apr 2013 22:53:07 -0400
-Received: by mail-ie0-f169.google.com with SMTP id qd14so1190903ieb.14
-	for <lttng-dev@lists.lttng.org>; Tue, 02 Apr 2013 19:53:02 -0700 (PDT)
-In-Reply-To: <1364935514-11042-1-git-send-email-simon.marchi@polymtl.ca>
+	(envelope-from <thundersim@gmail.com>) id 1UNEWg-0003SI-VE
+	for lttng-dev@lists.lttng.org; Tue, 02 Apr 2013 23:38:19 -0400
+Received: by mail-ie0-f169.google.com with SMTP id qd14so1219430ieb.14
+	for <lttng-dev@lists.lttng.org>; Tue, 02 Apr 2013 20:38:13 -0700 (PDT)
+In-Reply-To: <CAGDH53ks4zAi7YfQZfFA1d3r=2ZEUvX9_gZYUk9YyPZHwT6uuA@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,68 +24,121 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Christian Babeux <christian.babeux@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---===============1529428301==
-Content-Type: multipart/signed; micalg=pgp-sha1;
- protocol="application/pgp-signature";
- boundary="----enig2DGICDEUBPFSDQABVNEAR"
+On 2 April 2013 22:39, Christian Babeux <christian.babeux@efficios.com> wrote:
+> Hi Simon,
+>
+>> I wanted to add some unit tests for parse_human_size, but the current
+>> test system does not make it easy. They will come later.
+>
+> Could you describe the issues you had on a separate thread so we can
+> further discuss it?
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
-------enig2DGICDEUBPFSDQABVNEAR
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
+Will do.
 
-On 2013-04-02 16:45, Simon Marchi wrote:
-> --subbuf-size accepts sizes such as:
->=20
-> - 123 -> 123
-> - 123k or 123K -> 123 * 1024
-> - 123m or 123M -> 123 * 1024 * 1024
-> - 123g or 123G -> 123 * 1024 * 1024 * 1024
+> Here a few comments on your patch:
+>
+>> +       char *buffer = malloc(length);
+>> +
+>> +       if (buffer) {
+>> +               /* Get and print error message */
+>> +               regerror(errcode, regex, buffer, length);
+>> +               ERR("%s\n", buffer);
+>> +               free(buffer);
+>> +       }
+>
+> What if malloc() fails? Printing an error message would be appropriate
+> to handle that case.
 
-I don't really like using non-SI prefixes such as "K", "m" or "g" (well,
-in fact "m" is an SI prefix but for milli, not mega).
-I think that would be better to only use "k", "M" and "G".
+Ok.
 
+>> +       /* Compile regex */
+>> +       ret = regcomp(&regex, "^[0-9][0-9]*\\([kmg]\\{0,1\\}\\)$", REG_ICASE);
+>
+> This regex could be simplified to: "^[:digit:]+\\([kmg]\\)?$"
 
-------enig2DGICDEUBPFSDQABVNEAR
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
+I preferred not to use extended regex. + and ? is included in the
+extended posix regexes [1]. I also prefer [0-9] over [:digit:],
+because it is as clear and less characters, but I don't mind :).
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.12 (GNU/Linux)
+>> +               *size = atol(str);
+>
+> atol() can return negative numbers and the result is stored in an
+> unsigned (size_t). This could lead to enormous subbuffers allocated by
+> accident. A check should be added to allow only positive numbers.
+>
+> Also, atol() does not detect conversion errors, returning 0 in error
+> cases [1]. Perhaps using strtol() would be more appropriate?
 
-iQIcBAEBAgAGBQJRW5mLAAoJECV+8Ygg/tEo9CYP/jgksvrlxm28qslwkp/CnSY+
-cOMx00BXgqgkXZp1XrBy3cBGe27XYMdsYUoALCXIV4gSGnORoefafcZ06JqW5KYU
-LUANgcDvwzYCpRx5OVXB+H15Ndoi3GQiHi7CuER7RHzIVHYMdv2sqhFMiKVLMNQg
-tm+S461MvBw23rgGG323WQF7araKnsCTV5iT/0964WUjdiiBt0b2bjNQ0O9BTNWM
-T6wMa8kxSZKC7TtqlhXMP94hYRAdA/1/f9rwTxf80o81zNrrUuu2A26qavLuG4w8
-vETdIlBTyrB1ouULnMl/dF+eOdGL0/VbRIpmP5AndHsSvfn3iVWKz4JPZbms2PEh
-lA+htHISj7xCjUs6pZqNs8IVgLOxdN8y+CdOTNSQX59CKfqhBV+RpsINS+ebZPx5
-rd1dtRNn+FbMllTKCVOzVDULavV904QVX+nffsb7MQCDnwF5FS6WpdkTjb6rAm8H
-coFBlVvIuXGHAk6tTxa7uVzaSWdoSrFnY/kKrVt21uY/2Wg9SPhJIN9kJ5DclARX
-kr/M0jI4X8wki1pUQ1Y3Q6YiJVCuv1HV6D6YPlNloXmLme1syHONOxAxY17/mIyY
-ZiUAjgMTbA1+soViO1SheAY33fWH4DWTXepnkPgRrTaddScXKCVwXiZ5Yi/8nTd9
-B9YQMtjE1sULGt6xEtik
-=z6cD
------END PGP SIGNATURE-----
+True. But here, we are safe because the regex test passed We know for
+sure that we have a positive number that atol will correctly parse.
 
-------enig2DGICDEUBPFSDQABVNEAR--
+>> +               /* Check if there is a suffix */
+>> +               regmatch_t suffix_match = matches[1];
+>> +               if (suffix_match.rm_eo - suffix_match.rm_so > 0) {
+>> +                       switch (*(str + suffix_match.rm_so)) {
+>> +                       case 'k':
+>> +                       case 'K':
+>> +                               *size = *size * 1024;
+>> +                               break;
+>> +                       case 'm':
+>> +                       case 'M':
+>> +                               *size = *size * 1024 * 1024;
+>> +                               break;
+>> +                       case 'g':
+>> +                       case 'G':
+>> +                               *size = *size * 1024 * 1024 * 1024;
+>> +                               break;
+>> +                       }
+>
+> I think you could split the computation of the human size in two
+> separate variables (size, computed_size perhaps?).
 
+Do you want to return both values to the caller, or simply use two
+intermediate variables and multiply them at the end ?
 
---===============1529428301==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+> Also, you could add checks for possible overflows/truncation in the
+> computation/store  (e.g. a user could specify 4194304K (SIZE_MAX/1024
+> + 1), quite unlikely but still possible!). This might be a bit
+> overkill though...
 
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+Do you have an idea in mind on ho to do this ?
 
---===============1529428301==--
+> Could you also add a default case with perhaps ERR() or assert()?
+
+Like earlier, we are safe because we passed the regex test. But it's
+still good idea to add this default to catch eventual dev mistakes.
+
+>> +               ret = 1;
+>> [...]
+>> +               regfree(&regex);
+>> +               return 1;
+>
+> ret seems to be unused here. Maybe you meant return ret?
+
+Oops.
+
+> You might also want to add negative numbers and large number testcases
+> to your unit tests.
+
+Of course.
+
+> Looking forward to the corrected patch + unit tests :).
+>
+> Thanks!
+>
+> Christian
+>
+> P.S.: This new feature seems in part related to bug #228 [1].
+>
+> [1] - http://stackoverflow.com/questions/3792663/atol-v-s-strtol
+> [2] - http://bugs.lttng.org/issues/228
+
+Thanks for the comments.
+
+Simon
+
+[1] http://en.wikipedia.org/wiki/Regular_expression#POSIX_Basic_Regular_Expressions
