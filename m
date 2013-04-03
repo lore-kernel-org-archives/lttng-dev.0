@@ -1,19 +1,17 @@
-From: Christian Babeux <christian.babeux@efficios.com>
-Subject: Re: lttng-tools test suite problem
-Date: Wed, 3 Apr 2013 12:49:42 -0400
-Message-ID: <CAGDH53mtYuayRxgteSpZ5w+zkrfZo4rs6wwJBTHFamTSoKqtpA__35062.1391473853$1365007844$gmane$org@mail.gmail.com>
-References: <CAFXXi0mrOQdqQ-4j27_Eu4oCtfLcxhFF2EdYdy+tZsLZngDeRw@mail.gmail.com>
+From: Matthew Khouzam <matthew.khouzam@ericsson.com>
+Subject: Re: Error using add-context for perf counters
+Date: Wed, 3 Apr 2013 14:06:10 -0400
+Message-ID: <515C6F92.5060803__17557.3809691288$1365012455$gmane$org@ericsson.com>
+References: <5148B66A.6080007@ericsson.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-vb0-f43.google.com ([209.85.212.43])
+Received: from usevmg21.ericsson.net ([198.24.6.65])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <christian.babeux@0x80.ca>) id 1UNQse-0001fK-EQ
-	for lttng-dev@lists.lttng.org; Wed, 03 Apr 2013 12:49:48 -0400
-Received: by mail-vb0-f43.google.com with SMTP id q12so603621vbe.2
-	for <lttng-dev@lists.lttng.org>; Wed, 03 Apr 2013 09:49:42 -0700 (PDT)
-In-Reply-To: <CAFXXi0mrOQdqQ-4j27_Eu4oCtfLcxhFF2EdYdy+tZsLZngDeRw@mail.gmail.com>
+	(envelope-from <matthew.khouzam@ericsson.com>) id 1UNS53-0002HS-NH
+	for lttng-dev@lists.lttng.org; Wed, 03 Apr 2013 14:06:41 -0400
+In-Reply-To: <5148B66A.6080007@ericsson.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,78 +20,45 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Simon Marchi <simon.marchi@polymtl.ca>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Simon,
+Hi, I can confirm this bug, Has anyone else tried it?
 
-> A- Create a folder for each unit test. This is cumbersome, because it
-> will require creating a Makefile in each directory, which requires to
-> modify configure.ac. If it's hard to add a test, there will be less
-> tests, which is baaaaad. Also, a single test that needs stuff from two
-> files that have the same name will face the same problem as right now.
-
-Agreed.
-
-> B- Use of option subdir-objects [1] [2]. Looks like a good solution,
-> but it won't work for me, it gives weird behaviours...
-
-I would advocate for this option. Could you describe the issues you
-encountered using subdirs-objects?
-
-Thanks,
-
-Christian
-
-On Wed, Apr 3, 2013 at 3:16 AM, Simon Marchi <simon.marchi@polymtl.ca> wrote:
+On 13-03-19 03:03 PM, Bernd Hufmann wrote:
+> Hello
 >
-> Hello LTTng protagonists,
+> I cannot add contexts for perf counters using lttng-tools v2.1.1 and I
+> get an error (see below). When using lttng-tools 2.0.5 (on a different
+> computer) it works. Could somebody from lttng development team look
+> into that?
 >
-> Here is a more detailled description of the problem I have with the
-> lttng-tools test suite.
+> Thanks
+> Bernd
 >
-> Suppose I want to write a unit test for the list_cmd_options function
-> that is found in src/bin/lttng/utils.c. Based on existing tests, I
-> would create the file tests/unit/test_list_cmd_options.c and add the
-> following lines to tests/unit/Makefile.am:
+> ----------------------------------------------------------------------
+> > lttng create mySession
+> Session mySession created.
+> Traces will be written in
+> /home/bernd/lttng-traces/mySession-20130319-145021
 >
-> test_list_cmd_options_SOURCES = test_list_cmd_options.c \
->     $(top_srcdir)/src/bin/lttng/utils.c
-> test_list_cmd_options_LDADD = $(LIBTAP)
+> > lttng enable-event -a -k
+> All kernel events are enabled in channel channel0
 >
-> However, when I execute ./bootstrap, I get the following error:
+> > lttng add-context -k -t perf:branch-misses -t perf:cache-misses
+> PERROR: add context ioctl: Invalid argument [in
+> kernel_add_channel_context() at kernel.c:47]
+> Error: perf:cache-misses: Add kernel context failed
+> PERROR: add context ioctl: Invalid argument [in
+> kernel_add_channel_context() at kernel.c:47]
+> Error: perf:branch-misses: Add kernel context failed
+> Warning: Some command(s) went wrong
 >
-> + [ ! -e config ]
-> + autoreconf -i
-> tests/unit/Makefile.am: object `utils.$(OBJEXT)' created by \
->     `$(top_srcdir)/src/bin/lttng/utils.c' and \
->     `$(top_srcdir)/src/common/utils.c'
-> autoreconf: automake failed with exit status: 1
+> -----------------------------------------------------------------------
+> My setup is:
+> Ubuntu 12.04 with kernel 3.2.0-38
+> lttng-modules v2.1.1
+> lttng-tools v2.1.1
 >
-> IIUC, it is caused by the fact that other tests use the similarly
-> named $(top_srcdir)/src/common/utils.c. Object files for the unit
-> tests are all created in the same directory, regardless of where they
-> come from. It results that two files with the same name will clash.
 >
-> I kind of see two solutions for this:
 >
-> A- Create a folder for each unit test. This is cumbersome, because it
-> will require creating a Makefile in each directory, which requires to
-> modify configure.ac. If it's hard to add a test, there will be less
-> tests, which is baaaaad. Also, a single test that needs stuff from two
-> files that have the same name will face the same problem as right now.
-> B- Use of option subdir-objects [1] [2]. Looks like a good solution,
-> but it won't work for me, it gives weird behaviours...
->
-> Thanks for looking into this. Testing ftw !
->
-> Simon
->
-> [1] http://www.gnu.org/software/automake/manual/html_node/Program-and-Library-Variables.html
-> [2] http://stackoverflow.com/questions/917948/automake-and-files-with-the-same-name
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
