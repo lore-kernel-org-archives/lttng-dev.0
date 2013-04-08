@@ -1,20 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [RFC-Patch 1/2] Add page fault trace
-	event	definitions
-Date: Mon, 8 Apr 2013 06:57:58 -0400
-Message-ID: <20130408105758.GA24595__1527.88515338234$1365437383$gmane$org@Krystal>
-References: <1365398358-23374-1-git-send-email-fdeslaur@gmail.com>
+From: Simon Marchi <simon.marchi@polymtl.ca>
+Subject: [RFC PATCH lttng-tools v3] lttng cli: Accept human
+	readable sizes for --subbuf-size
+Date: Mon,  8 Apr 2013 12:40:09 -0400
+Message-ID: <1365439209-27624-1-git-send-email-simon.marchi__21921.2974807762$1365439263$gmane$org@polymtl.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from smtp.electronicbox.net ([96.127.255.83])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UP9lw-0004h7-4j
-	for lttng-dev@lists.lttng.org; Mon, 08 Apr 2013 06:58:00 -0400
-Content-Disposition: inline
-In-Reply-To: <1365398358-23374-1-git-send-email-fdeslaur@gmail.com>
+	(envelope-from <simon.marchi@polymtl.ca>) id 1UPF76-0007YT-UI
+	for lttng-dev@lists.lttng.org; Mon, 08 Apr 2013 12:40:13 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,113 +19,353 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Francis Deslauriers <fdeslaur@gmail.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
+Cc: Simon Marchi <simon.marchi@polymtl.ca>
 List-Id: lttng-dev@lists.lttng.org
 
-* Francis Deslauriers (fdeslaur@gmail.com) wrote:
-> Add page_fault_entry and page_fault_exit event definitions. It will
-> allow each architecture to instrument their page faults.
-> =
+--subbuf-size accepts sizes such as:
 
-> Signed-off-by: Francis Deslauriers <fdeslaur@gmail.com>
-> Reviewed-by: Rapha=EBl Beamonte <raphael.beamonte@polymtl.ca>
-> ---
->  include/trace/events/fault.h |   51 ++++++++++++++++++++++++++++++++++++=
-++++++
->  1 file changed, 51 insertions(+)
->  create mode 100644 include/trace/events/fault.h
-> =
+- 123 -> 123
+- 123k -> 123 * 1024
+- 123M -> 123 * 1024 * 1024
+- 123G -> 123 * 1024 * 1024 * 1024
 
-> diff --git a/include/trace/events/fault.h b/include/trace/events/fault.h
-> new file mode 100644
-> index 0000000..7256b40
-> --- /dev/null
-> +++ b/include/trace/events/fault.h
-> @@ -0,0 +1,51 @@
-> +#undef TRACE_SYSTEM
-> +#define TRACE_SYSTEM fault
-> +
-> +#if !defined(_TRACE_FAULT_H) || defined(TRACE_HEADER_MULTI_READ)
-> +#define _TRACE_FAULT_H
-> +
-> +#include <linux/tracepoint.h>
-> +
-> +TRACE_EVENT(page_fault_entry,
-> +
-> +	TP_PROTO(struct pt_regs *regs, unsigned long address,
-> +					int write_access),
-> +
-> +	TP_ARGS(regs, address, write_access),
-> +
-> +	TP_STRUCT__entry(
-> +		__field(	unsigned long,	ip	)
-> +		__field(	unsigned long,	addr	)
-> +		__field(	int,		write	)
+It uses the new parse_size_suffix function, which could probably be used
+at other places, such as tracefile size.
 
-uint8_t,      write
+Unit tests are included.
 
-will save some space.
+Signed-off-by: Simon Marchi <simon.marchi@polymtl.ca>
+---
+New in v3:
+* Changes following Mathieu Desnoyers' comments.
+ - Function name parse_human_size -> parse_size_suffix
+ - Replace division for bit shift, multipliers by log2
+ - Coding style issues.
+ - strtoll -> strtoull
+* Unit tests (depends on fix of object names clash)
 
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__entry->ip	=3D regs ? instruction_pointer(regs) : 0UL;
-> +		__entry->addr	=3D address;
-> +		__entry->write	=3D write_access;
+ src/bin/lttng/commands/enable_channels.c |   21 ++++-
+ src/bin/lttng/utils.c                    |  123 +++++++++++++++++++++++++++++-
+ src/bin/lttng/utils.h                    |    6 ++
+ tests/unit/Makefile.am                   |   15 +++-
+ tests/unit/test_parse_size_suffix.c      |   72 +++++++++++++++++
+ 5 files changed, 230 insertions(+), 7 deletions(-)
+ create mode 100644 tests/unit/test_parse_size_suffix.c
 
-Just to be clean, if we use uint8_t:
-
-__entry->write  =3D !!write_access;
-
-It will map zero/nonzero values to 0 and 1, and thus ensure it can be
-represented on a uint8_t.
-
-Thanks,
-
-Mathieu
-
-
-> +	),
-> +
-> +	TP_printk("ip=3D%lu addr=3D%lu write_access=3D%d",
-> +		__entry->ip, __entry->addr, __entry->write)
-> +);
-> +
-> +TRACE_EVENT(page_fault_exit,
-> +
-> +	TP_PROTO(int result),
-> +
-> +	TP_ARGS(result),
-> +
-> +	TP_STRUCT__entry(
-> +		__field(	int,	res	)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__entry->res	=3D result;
-> +	),
-> +
-> +	TP_printk("result=3D%d", __entry->res)
-> +);
-> +
-> +#endif /* _TRACE_FAULT_H */
-> +/* This part must be outside protection */
-> +#include <trace/define_trace.h>
-> -- =
-
-> 1.7.10.4
-> =
-
-> =
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- =
-
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+diff --git a/src/bin/lttng/commands/enable_channels.c b/src/bin/lttng/commands/enable_channels.c
+index d026af4..dbec8ab 100644
+--- a/src/bin/lttng/commands/enable_channels.c
++++ b/src/bin/lttng/commands/enable_channels.c
+@@ -66,7 +66,7 @@ static struct poptOption long_options[] = {
+ 	{"userspace",      'u', POPT_ARG_NONE, 0, OPT_USERSPACE, 0, 0},
+ 	{"discard",        0,   POPT_ARG_NONE, 0, OPT_DISCARD, 0, 0},
+ 	{"overwrite",      0,   POPT_ARG_NONE, 0, OPT_OVERWRITE, 0, 0},
+-	{"subbuf-size",    0,   POPT_ARG_DOUBLE, 0, OPT_SUBBUF_SIZE, 0, 0},
++	{"subbuf-size",    0,   POPT_ARG_STRING, 0, OPT_SUBBUF_SIZE, 0, 0},
+ 	{"num-subbuf",     0,   POPT_ARG_INT, 0, OPT_NUM_SUBBUF, 0, 0},
+ 	{"switch-timer",   0,   POPT_ARG_INT, 0, OPT_SWITCH_TIMER, 0, 0},
+ 	{"read-timer",     0,   POPT_ARG_INT, 0, OPT_READ_TIMER, 0, 0},
+@@ -289,6 +289,7 @@ int cmd_enable_channels(int argc, const char **argv)
+ 	int opt, ret = CMD_SUCCESS;
+ 	static poptContext pc;
+ 	char *session_name = NULL;
++	char *opt_arg = NULL;
+ 
+ 	init_channel_config();
+ 
+@@ -309,8 +310,22 @@ int cmd_enable_channels(int argc, const char **argv)
+ 			DBG("Channel set to overwrite");
+ 			break;
+ 		case OPT_SUBBUF_SIZE:
+-			/* TODO Replace atol with strtol and check for errors */
+-			chan.attr.subbuf_size = atol(poptGetOptArg(pc));
++			/* Parse the size */
++			opt_arg = poptGetOptArg(pc);
++			if (parse_size_suffix(opt_arg, &chan.attr.subbuf_size) < 0) {
++				ERR("Wrong value the --subbuf-size parameter: %s", opt_arg);
++				ret = CMD_ERROR;
++				goto end;
++			}
++
++			/* Check if power of 2 */
++			if ((chan.attr.subbuf_size - 1) & chan.attr.subbuf_size) {
++				ERR("The subbuf size is not a power of 2: %" PRIu64 " (%s)",
++						chan.attr.subbuf_size, opt_arg);
++				ret = CMD_ERROR;
++				goto end;
++			}
++
+ 			DBG("Channel subbuf size set to %" PRIu64, chan.attr.subbuf_size);
+ 			break;
+ 		case OPT_NUM_SUBBUF:
+diff --git a/src/bin/lttng/utils.c b/src/bin/lttng/utils.c
+index b7f5170..cade12f 100644
+--- a/src/bin/lttng/utils.c
++++ b/src/bin/lttng/utils.c
+@@ -16,9 +16,11 @@
+  */
+ 
+ #define _GNU_SOURCE
+-#include <stdlib.h>
++#include <assert.h>
+ #include <ctype.h>
+ #include <limits.h>
++#include <regex.h>
++#include <stdlib.h>
+ 
+ #include <common/error.h>
+ 
+@@ -77,3 +79,122 @@ void list_cmd_options(FILE *ofp, struct poptOption *options)
+ 		}
+ 	}
+ }
++
++/**
++ * Prints the error message corresponding to a regex error code.
++ *
++ * @param errcode	The error code.
++ * @param regex		The regex object that produced the error code.
++ */
++static void regex_print_error(int errcode, regex_t *regex)
++{
++	/* Get length of error message and allocate accordingly */
++	size_t length = regerror(errcode, regex, NULL, 0);
++	char *buffer = malloc(length);
++
++	if (!buffer) {
++		ERR("regex_print_error: malloc failed");
++		return;
++	}
++
++	/* Get and print error message */
++	regerror(errcode, regex, buffer, length);
++	ERR("regex error: %s\n", buffer);
++	free(buffer);
++
++}
++
++/**
++ * Parse a string that represents a size in human readable format. It
++ * supports decimal integers suffixed by 'k', 'M' or 'G'.
++ *
++ * The suffix multiply the integer by:
++ * 'k': 1024
++ * 'M': 1024 * 1024
++ * 'G': 1024 * 1024 * 1024
++ *
++ * @param str	The string to parse.
++ * @param size	Pointer to a size_t that will be filled with the
++ * 	  	resulting size.
++ *
++ * @return	0 on success, -1 on failure.
++ */
++int parse_size_suffix(char *str, uint64_t *size)
++{
++	regex_t regex;
++	int ret;
++	const int nmatch = 2;
++	regmatch_t matches[nmatch];
++
++	if (!str)
++		return 0;
++
++	/* Compile regex */
++	ret = regcomp(&regex, "^[0-9][0-9]*\\([kKMG]\\{0,1\\}\\)$", 0);
++
++	/* Check for regex error */
++	if (ret != 0) {
++		regex_print_error(ret, &regex);
++
++		ret = -1;
++		goto end;
++	}
++
++	/* Match regex */
++	ret = regexec(&regex, str, nmatch, matches, 0);
++	if (ret != 0) {
++		/* There is no match (or error) */
++		ret = -1;
++		goto end;
++	}
++
++	/* There is a match ! */
++	unsigned long long base_size;
++	long shift = 0;
++	errno = 0;
++	base_size = strtoll(str, NULL, 10);
++
++	/* Check result of conversion */
++	if (errno != 0) {
++		PERROR("strtoull");
++		ret = -1;
++		goto end;
++	}
++
++	/* Check if there is a suffix */
++	regmatch_t suffix_match = matches[1];
++	if (suffix_match.rm_eo - suffix_match.rm_so == 1) {
++		switch (*(str + suffix_match.rm_so)) {
++		case 'K':
++		case 'k':
++			shift = KIBI_LOG2;
++			break;
++		case 'M':
++			shift = MEBI_LOG2;
++			break;
++		case 'G':
++			shift = GIBI_LOG2;
++			break;
++		default:
++			ERR("parse_human_size: invalid suffix");
++			ret = -1;
++			goto end;
++		}
++	}
++
++	*size = base_size << shift;
++
++	/* Check for overflow */
++	if ((*size >> shift) != base_size) {
++		ERR("parse_size_suffix: oops, overflow detected.");
++		ret = -1;
++		goto end;
++	}
++
++	ret = 0;
++	goto end;
++
++end:
++	regfree(&regex);
++	return ret;
++}
+diff --git a/src/bin/lttng/utils.h b/src/bin/lttng/utils.h
+index 9f7bfcc..12a72be 100644
+--- a/src/bin/lttng/utils.h
++++ b/src/bin/lttng/utils.h
+@@ -19,8 +19,14 @@
+ #define _LTTNG_UTILS_H
+ 
+ #include <popt.h>
++#include <stdint.h>
++
++#define KIBI_LOG2       10
++#define MEBI_LOG2       20
++#define GIBI_LOG2       30
+ 
+ char *get_session_name(void);
+ void list_cmd_options(FILE *ofp, struct poptOption *options);
++int parse_size_suffix(char *str, uint64_t *size);
+ 
+ #endif /* _LTTNG_UTILS_H */
+diff --git a/tests/unit/Makefile.am b/tests/unit/Makefile.am
+index 67e7fe4..5b49733 100644
+--- a/tests/unit/Makefile.am
++++ b/tests/unit/Makefile.am
+@@ -14,10 +14,11 @@ LIBCOMMON=$(top_builddir)/src/common/libcommon.la
+ LIBSESSIOND_COMM=$(top_builddir)/src/common/sessiond-comm/libsessiond-comm.la
+ LIBHASHTABLE=$(top_builddir)/src/common/hashtable/libhashtable.la
+ 
++# Define test programs
++noinst_PROGRAMS = test_uri test_session	test_kernel_data test_parse_size_suffix
++
+ if HAVE_LIBLTTNG_UST_CTL
+-noinst_PROGRAMS = test_uri test_session test_ust_data test_kernel_data
+-else
+-noinst_PROGRAMS = test_uri test_session	test_kernel_data
++noinst_PROGRAMS += test_ust_data
+ endif
+ 
+ # URI unit tests
+@@ -69,3 +70,11 @@ test_kernel_data_SOURCES = test_kernel_data.c
+ test_kernel_data_LDADD = $(LIBTAP) $(LIBCOMMON) $(LIBSESSIOND_COMM) $(LIBHASHTABLE) \
+ 						 -lrt
+ test_kernel_data_LDADD += $(KERN_DATA_TRACE)
++
++# parse_size_suffix unit test
++PARSE_SIZE_SUFFIX=$(top_srcdir)/src/bin/lttng/utils.o \
++		$(top_srcdir)/src/bin/lttng/conf.o
++
++test_parse_size_suffix_SOURCES = test_parse_size_suffix.c
++test_parse_size_suffix_LDADD = $(LIBTAP)
++test_parse_size_suffix_LDADD += $(PARSE_SIZE_SUFFIX)
+diff --git a/tests/unit/test_parse_size_suffix.c b/tests/unit/test_parse_size_suffix.c
+new file mode 100644
+index 0000000..70ccb76
+--- /dev/null
++++ b/tests/unit/test_parse_size_suffix.c
+@@ -0,0 +1,72 @@
++/*
++ * Copyright (C) - 2013 Simon Marchi <simon.marchi@polymtl.ca>
++ *
++ * This program is free software; you can redistribute it and/or modify it
++ * under the terms of the GNU General Public License as published by as
++ * published by the Free Software Foundation; only version 2 of the License.
++ *
++ * This program is distributed in the hope that it will be useful, but WITHOUT
++ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
++ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
++ * more details.
++ *
++ * You should have received a copy of the GNU General Public License along with
++ * this program; if not, write to the Free Software Foundation, Inc., 51
++ * Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
++ */
++
++#include <assert.h>
++#include <string.h>
++
++#include <tap/tap.h>
++
++#include <src/bin/lttng/utils.h>
++
++/* For lttngerr.h */
++int lttng_opt_quiet = 1;
++int lttng_opt_verbose = 3;
++
++/* Valid test cases */
++static char *valid_tests_inputs[] = { "0", "1234", "16k", "128K", "32M", "1024G" };
++static uint64_t valid_tests_expected_results[] = {0, 1234, 16384, 131072, 33554432, 1099511627776};
++static const int num_valid_tests = sizeof(valid_tests_inputs) / sizeof(valid_tests_inputs[0]);
++
++/* Invalid test cases */
++static char *invalid_tests_inputs[] = { "", "-1", "k", "4611686018427387904G" };
++static const int num_invalid_tests = sizeof(invalid_tests_inputs) / sizeof(invalid_tests_inputs[0]);
++
++void test_parse_size_suffix(void)
++{
++	uint64_t result;
++	int ret;
++	int i;
++
++	// Test valid cases
++	for (i = 0; i < num_valid_tests; i++) {
++		char name[100];
++		sprintf(name, "testing %s", valid_tests_inputs[i]);
++
++		ret = parse_size_suffix(valid_tests_inputs[i], &result);
++		ok(ret == 0 && result == valid_tests_expected_results[i], name);
++	}
++
++	// Test invalid cases
++	for (i = 0; i < num_invalid_tests; i++) {
++		char name[100];
++		sprintf(name, "testing %s", invalid_tests_inputs[i]);
++
++		ret = parse_size_suffix(invalid_tests_inputs[i], &result);
++		ok(ret != 0, name);
++	}
++}
++
++int main(int argc, char **argv)
++{
++	plan_tests(num_valid_tests + num_invalid_tests);
++
++	diag("parse_size_suffix tests");
++
++	test_parse_size_suffix();
++
++	return exit_status();
++}
+-- 
+1.7.10.4
