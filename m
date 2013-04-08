@@ -1,15 +1,16 @@
-From: =?UTF-8?q?Genevi=C3=A8ve=20Bastien?= <gbastien+lttng@versatic.net>
-Subject: [RFC-patch] Add support of variant (raw) metadata
-Date: Mon,  8 Apr 2013 10:53:35 -0400
-Message-ID: <1365432815-14887-1-git-send-email-gbastien+lttng__8911.64243589646$1365437225$gmane$org@versatic.net>
+From: Simon Marchi <simon.marchi@polymtl.ca>
+Subject: [RFC PATCH lttng-tools] Unit tests: don't rebuild units
+	under test
+Date: Mon,  8 Apr 2013 11:20:04 -0400
+Message-ID: <1365434404-11002-1-git-send-email-simon.marchi__10229.3772659779$1365437225$gmane$org@polymtl.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.polymtl.ca ([132.207.4.11])
+Received: from smtp.electronicbox.net ([96.127.255.83])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <gbastien+lttng@versatic.net>) id 1UPDRz-0006en-8L
-	for lttng-dev@lists.lttng.org; Mon, 08 Apr 2013 10:53:39 -0400
+	(envelope-from <simon.marchi@polymtl.ca>) id 1UPDrc-0006tQ-7g
+	for lttng-dev@lists.lttng.org; Mon, 08 Apr 2013 11:20:08 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,90 +20,95 @@ List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
+Cc: Simon Marchi <simon.marchi@polymtl.ca>
 List-Id: lttng-dev@lists.lttng.org
 
-QWRkIG1hY3JvcyB0byBhbGxvdyB0byBzcGVjaWZ5IHNvbWUgcmF3IG1ldGFkYXRhIGZvciBhIHRy
-YWNlcG9pbnQgZXZlbnQKZmllbGQuCkFkZCBtYWNyb3MgdG8gY29weSBkeW5hbWljIGxlbmd0aCBk
-YXRhIHdpdGhvdXQgdGhlIGxlbmd0aCBmaWVsZCB3aXRoIGl0LApmb3IgaW5zdGFuY2UgZm9yIHZh
-cmlhbnQgZXZlbnQgdHlwZXMuCgpTaWduZWQtb2ZmLWJ5OiBHZW5ldmnDqHZlIEJhc3RpZW4gPGdi
-YXN0aWVuK2x0dG5nQHZlcnNhdGljLm5ldD4KLS0tCiBsdHRuZy1ldmVudHMuYyAgICAgICAgICAg
-ICAgfCAgNyArKysrKysrCiBsdHRuZy1ldmVudHMuaCAgICAgICAgICAgICAgfCAgNCArKysrCiBw
-cm9iZXMvbHR0bmctZXZlbnRzLXJlc2V0LmggfCAgNiArKysrKysKIHByb2Jlcy9sdHRuZy1ldmVu
-dHMuaCAgICAgICB8IDQ1ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysr
-KysrKwogNCBmaWxlcyBjaGFuZ2VkLCA2MiBpbnNlcnRpb25zKCspCgpkaWZmIC0tZ2l0IGEvbHR0
-bmctZXZlbnRzLmMgYi9sdHRuZy1ldmVudHMuYwppbmRleCA0ZjMwOTA0Li44Y2VlY2Y1IDEwMDY0
-NAotLS0gYS9sdHRuZy1ldmVudHMuYworKysgYi9sdHRuZy1ldmVudHMuYwpAQCAtNjU0LDYgKzY1
-NCwxMyBAQCBpbnQgX2x0dG5nX2ZpZWxkX3N0YXRlZHVtcChzdHJ1Y3QgbHR0bmdfc2Vzc2lvbiAq
-c2Vzc2lvbiwKIAkJCQkiIHsgZW5jb2RpbmcgPSBBU0NJSTsgfSIgOiAiIiwKIAkJCWZpZWxkLT5u
-YW1lKTsKIAkJYnJlYWs7CisJY2FzZSBhdHlwZV9yYXc6CisJCS8qIGZpZWxkIGNvbnRhaW5zIHJh
-dyBtZXRhZGF0YSEgIE5vIGd1YXJhbnRlZSBpdCBpcyB2YWxpZCAqLworCQlyZXQgPSBsdHRuZ19t
-ZXRhZGF0YV9wcmludGYoc2Vzc2lvbiwKKwkJCSIJCSVzIF8lcztcbiIsCisJCQlmaWVsZC0+dHlw
-ZS51LnJhdy5yYXdfZGF0YSwKKwkJCWZpZWxkLT5uYW1lKTsKKwkJYnJlYWs7CiAJZGVmYXVsdDoK
-IAkJV0FSTl9PTl9PTkNFKDEpOwogCQlyZXR1cm4gLUVJTlZBTDsKZGlmZiAtLWdpdCBhL2x0dG5n
-LWV2ZW50cy5oIGIvbHR0bmctZXZlbnRzLmgKaW5kZXggMDlkNTYxOC4uOTY4ZTJhNCAxMDA2NDQK
-LS0tIGEvbHR0bmctZXZlbnRzLmgKKysrIGIvbHR0bmctZXZlbnRzLmgKQEAgLTQ4LDYgKzQ4LDcg
-QEAgZW51bSBhYnN0cmFjdF90eXBlcyB7CiAJYXR5cGVfYXJyYXksCiAJYXR5cGVfc2VxdWVuY2Us
-CiAJYXR5cGVfc3RyaW5nLAorCWF0eXBlX3JhdywKIAlOUl9BQlNUUkFDVF9UWVBFUywKIH07CiAK
-QEAgLTExNiw2ICsxMTcsOSBAQCBzdHJ1Y3QgbHR0bmdfdHlwZSB7CiAJCQlzdHJ1Y3QgbHR0bmdf
-YmFzaWNfdHlwZSBsZW5ndGhfdHlwZTsKIAkJCXN0cnVjdCBsdHRuZ19iYXNpY190eXBlIGVsZW1f
-dHlwZTsKIAkJfSBzZXF1ZW5jZTsKKwkJc3RydWN0IHsKKwkJCWNoYXIgKnJhd19kYXRhOworCQl9
-IHJhdzsKIAl9IHU7CiB9OwogCmRpZmYgLS1naXQgYS9wcm9iZXMvbHR0bmctZXZlbnRzLXJlc2V0
-LmggYi9wcm9iZXMvbHR0bmctZXZlbnRzLXJlc2V0LmgKaW5kZXggNzM1NWUxOC4uOGM5Y2Y0ZCAx
-MDA2NDQKLS0tIGEvcHJvYmVzL2x0dG5nLWV2ZW50cy1yZXNldC5oCisrKyBiL3Byb2Jlcy9sdHRu
-Zy1ldmVudHMtcmVzZXQuaApAQCAtMzUsNiArMzUsOSBAQAogI3VuZGVmIF9fc3RyaW5nCiAjZGVm
-aW5lIF9fc3RyaW5nKF9pdGVtLCBfc3JjKQogCisjdW5kZWYgX192YXJpYW50X3JhdworI2RlZmlu
-ZSBfX3ZhcmlhbnRfcmF3KF9pdGVtLCBfcmF3X21ldGFkYXRhLCBfbGVuZ3RoKQorCiAjdW5kZWYg
-dHBfYXNzaWduCiAjZGVmaW5lIHRwX2Fzc2lnbihkZXN0LCBzcmMpCiAKQEAgLTQ0LDYgKzQ3LDkg
-QEAKICN1bmRlZiB0cF9tZW1jcHlfZHluCiAjZGVmaW5lIHRwX21lbWNweV9keW4oZGVzdCwgc3Jj
-LCBsZW4pCiAKKyN1bmRlZiB0cF9tZW1jcHlfdmFyCisjZGVmaW5lIHRwX21lbWNweV92YXIoZGVz
-dCwgc3JjLCBsZW4pCisKICN1bmRlZiB0cF9zdHJjcHkKICNkZWZpbmUgdHBfc3RyY3B5KGRlc3Qs
-IHNyYykKIApkaWZmIC0tZ2l0IGEvcHJvYmVzL2x0dG5nLWV2ZW50cy5oIGIvcHJvYmVzL2x0dG5n
-LWV2ZW50cy5oCmluZGV4IDMzY2FiY2YuLmNlNWI2NDcgMTAwNjQ0Ci0tLSBhL3Byb2Jlcy9sdHRu
-Zy1ldmVudHMuaAorKysgYi9wcm9iZXMvbHR0bmctZXZlbnRzLmgKQEAgLTIwNSw2ICsyMDUsMjEg
-QEAgdm9pZCB0cmFjZV8jI19uYW1lKHZvaWQgKl9fZGF0YSk7CiAjZGVmaW5lIF9fc3RyaW5nX2Zy
-b21fdXNlcihfaXRlbSwgX3NyYykJCQkJXAogCV9fc3RyaW5nKF9pdGVtLCBfc3JjKQogCisjdW5k
-ZWYgX192YXJpYW50X3JhdworI2RlZmluZSBfX3ZhcmlhbnRfcmF3KF9pdGVtLCBfcmF3X21ldGFk
-YXRhLCBfbGVuZ3RoKQkJCVwKKwl7CQkJCQkJCVwKKwkgIC5uYW1lID0gI19pdGVtLAkJCQkJXAor
-CSAgLnR5cGUgPQkJCQkJCVwKKwkJewkJCQkJCVwKKwkJICAuYXR5cGUgPSBhdHlwZV9yYXcsCQkJ
-XAorCQkgIC51LnJhdy5yYXdfZGF0YSA9ICNfcmF3X21ldGFkYXRhLAlcCisJCX0sCQkJCQkJXAor
-CX0sCisKKyN1bmRlZiBfX3ZhcmlhbnRfcmF3X2Zyb21fdXNlcgorI2RlZmluZSBfX3ZhcmlhbnRf
-cmF3X2Zyb21fdXNlcihfaXRlbSwgX3Jhd19tZXRhZGF0YSwgX2xlbmd0aCkJXAorCV9fdmFyaWFu
-dF9yYXcoX2l0ZW0sIF9yYXdfbWV0YWRhdGEsIF9sZW5ndGgpCisKICN1bmRlZiBUUF9TVFJVQ1Rf
-X2VudHJ5CiAjZGVmaW5lIFRQX1NUUlVDVF9fZW50cnkoYXJncy4uLikgYXJncwkvKiBPbmx5IG9u
-ZSB1c2VkIGluIHRoaXMgcGhhc2UgKi8KIApAQCAtMzUzLDYgKzM2OCwxMSBAQCBzdGF0aWMgX191
-c2VkIHN0cnVjdCBsdHRuZ19wcm9iZV9kZXNjIFRQX0lEKF9fcHJvYmVfZGVzY19fXywgVFJBQ0Vf
-U1lTVEVNKSA9IHsKICNkZWZpbmUgX19zdHJpbmcoX2l0ZW0sIF9zcmMpCQkJCQkJICAgICAgIFwK
-IAlfX2V2ZW50X2xlbiArPSBfX2R5bmFtaWNfbGVuW19fZHluYW1pY19sZW5faWR4KytdID0gc3Ry
-bGVuKF9zcmMpICsgMTsKIAorI3VuZGVmIF9fdmFyaWFudF9yYXcKKyNkZWZpbmUgX192YXJpYW50
-X3JhdyhfaXRlbSwgX3Jhd19tZXRhZGF0YSwgX2xlbmd0aCkJCQlcCisJX19ldmVudF9sZW4gKz0g
-X19keW5hbWljX2xlbltfX2R5bmFtaWNfbGVuX2lkeCsrXSA9IChfbGVuZ3RoKTsKKworCiAvKgog
-ICogc3RybGVuX3VzZXIgaW5jbHVkZXMgXDAuIElmIHJldHVybnMgMCwgaXQgZmF1bHRlZCwgc28g
-d2Ugc2V0IHNpemUgdG8KICAqIDEgKFwwIG9ubHkpLgpAQCAtNDU5LDYgKzQ3OSwxMCBAQCBzdGF0
-aWMgaW5saW5lIHNpemVfdCBfX2V2ZW50X2dldF9hbGlnbl9fIyNfbmFtZShfcHJvdG8pCQkJICAg
-ICAgXAogI2RlZmluZSBfX3N0cmluZ19mcm9tX3VzZXIoX2l0ZW0sIF9zcmMpCQlcCiAJX19zdHJp
-bmcoX2l0ZW0sIF9zcmMpCiAKKyN1bmRlZiBfX3ZhcmlhbnRfcmF3CisjZGVmaW5lIF9fdmFyaWFu
-dF9yYXcoX2l0ZW0sIF9yYXdfbWV0YWRhdGEsIF9sZW5ndGgpCVwKKwljaGFyCSpfaXRlbTsKKwog
-I3VuZGVmIFRQX1NUUlVDVF9fZW50cnkKICNkZWZpbmUgVFBfU1RSVUNUX19lbnRyeShhcmdzLi4u
-KSBhcmdzCiAKQEAgLTUxMCw2ICs1MzQsMTEgQEAgX19lbmRfZmllbGRfIyNfaXRlbToKICNkZWZp
-bmUgX19zdHJpbmdfZnJvbV91c2VyKF9pdGVtLCBfc3JjKQkJCQkJXAogCV9fc3RyaW5nKF9pdGVt
-LCBfc3JjKQogCisjdW5kZWYgX192YXJpYW50X3JhdworI2RlZmluZSBfX3ZhcmlhbnRfcmF3KF9p
-dGVtLCBfcmF3X21ldGFkYXRhLCBfbGVuZ3RoKQkJXAorCWdvdG8gX19hc3NpZ25fIyNfaXRlbTsJ
-CVwKK19fZW5kX2ZpZWxkXyMjX2l0ZW06CisKIC8qCiAgKiBNYWNyb3MgbWFwcGluZyB0cF9hc3Np
-Z24oKSB0byAiPSIsIHRwX21lbWNweSgpIHRvIG1lbWNweSgpIGFuZCB0cF9zdHJjcHkoKSB0bwog
-ICogc3RyY3B5KCkuCkBAIC01NjYsNiArNTk1LDIyIEBAIF9fYXNzaWduXyMjZGVzdCMjXzI6CQkJ
-CQkJCVwKICNkZWZpbmUgdHBfbWVtY3B5X2R5bl9mcm9tX3VzZXIoZGVzdCwgc3JjKQkJCQlcCiAJ
-dHBfbWVtY3B5X2R5bl9nZW4oZXZlbnRfd3JpdGVfZnJvbV91c2VyLCBkZXN0LCBzcmMpCiAKKy8q
-IHZhcmlhYmxlIGxlbmd0aCBzZXF1ZW5jZSBjb3B5LCB3aXRoIG5vIHNpemUgaW4gbWV0YWRhdGEg
-Ki8KKyN1bmRlZiB0cF9tZW1jcHlfdmFyX2dlbgorI2RlZmluZSB0cF9tZW1jcHlfdmFyX2dlbih3
-cml0ZV9vcHMsIGRlc3QsIHNyYykJCQlcCitfX2Fzc2lnbl8jI2Rlc3Q6CQkJCQkJXAorCWxpYl9y
-aW5nX2J1ZmZlcl9hbGlnbl9jdHgoJl9fY3R4LCA4KTsJXAorCV9fY2hhbi0+b3BzLT53cml0ZV9v
-cHMoJl9fY3R4LCBzcmMsIF9fZ2V0X2R5bmFtaWNfYXJyYXlfbGVuKGRlc3QpKTsJXAorCWdvdG8g
-X19lbmRfZmllbGRfIyNkZXN0OworCisjdW5kZWYgdHBfbWVtY3B5X3ZhcgorI2RlZmluZSB0cF9t
-ZW1jcHlfdmFyKGRlc3QsIHNyYykJCQkJCVwKKwl0cF9tZW1jcHlfdmFyX2dlbihldmVudF93cml0
-ZSwgZGVzdCwgc3JjKQorCisjdW5kZWYgdHBfbWVtY3B5X3Zhcl9mcm9tX3VzZXIKKyNkZWZpbmUg
-dHBfbWVtY3B5X3Zhcl9mcm9tX3VzZXIoZGVzdCwgc3JjKQkJCQlcCisJdHBfbWVtY3B5X3Zhcl9n
-ZW4oZXZlbnRfd3JpdGVfZnJvbV91c2VyLCBkZXN0LCBzcmMpCisKIC8qCiAgKiBUaGUgc3RyaW5n
-IGxlbmd0aCBpbmNsdWRpbmcgdGhlIGZpbmFsIFwwLgogICovCi0tIAoxLjguMgoKCl9fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5n
-IGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2Nn
-aS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+Only the tests themselves are built in the unit test folder. They reuse
+the object files that are already built during the main compilation
+pass. This would fix the conflicts between object names.
+
+Signed-off-by: Simon Marchi <simon.marchi@polymtl.ca>
+---
+ tests/unit/Makefile.am |   55 +++++++++++++++++++++++++-----------------------
+ 1 file changed, 29 insertions(+), 26 deletions(-)
+
+diff --git a/tests/unit/Makefile.am b/tests/unit/Makefile.am
+index c9e1bfc..67e7fe4 100644
+--- a/tests/unit/Makefile.am
++++ b/tests/unit/Makefile.am
+@@ -25,44 +25,47 @@ test_uri_SOURCES = test_uri.c
+ test_uri_LDADD = $(LIBTAP) $(LIBCOMMON) $(LIBHASHTABLE)
+ 
+ # Session unit test
+-SESSIONS=$(top_srcdir)/src/bin/lttng-sessiond/session.c	\
+-	 $(top_srcdir)/src/bin/lttng-sessiond/consumer.c \
+-	 $(top_srcdir)/src/bin/lttng-sessiond/health.c \
+-	 $(top_srcdir)/src/common/uri.c \
+-	 $(top_srcdir)/src/common/utils.c \
+-	 $(top_srcdir)/src/common/error.c
++SESSIONS=$(top_srcdir)/src/bin/lttng-sessiond/session.o	\
++	 $(top_srcdir)/src/bin/lttng-sessiond/consumer.o \
++	 $(top_srcdir)/src/bin/lttng-sessiond/health.o \
++	 $(top_srcdir)/src/common/uri.o \
++	 $(top_srcdir)/src/common/utils.o \
++	 $(top_srcdir)/src/common/error.o
+ 
+-test_session_SOURCES = test_session.c $(SESSIONS)
++test_session_SOURCES = test_session.c
+ test_session_LDADD = $(LIBTAP) $(LIBCOMMON) $(LIBSESSIOND_COMM) $(LIBHASHTABLE) \
+ 					 -lrt
++test_session_LDADD += $(SESSIONS)
+ 
+ # UST data structures unit test
+ if HAVE_LIBLTTNG_UST_CTL
+-UST_DATA_TRACE=$(top_srcdir)/src/bin/lttng-sessiond/trace-ust.c \
+-	       $(top_srcdir)/src/bin/lttng-sessiond/consumer.c \
+-		   $(top_srcdir)/src/bin/lttng-sessiond/buffer-registry.c \
+-		   $(top_srcdir)/src/bin/lttng-sessiond/ust-registry.c \
+-		   $(top_srcdir)/src/bin/lttng-sessiond/ust-metadata.c \
+-		   $(top_srcdir)/src/bin/lttng-sessiond/ust-app.c \
+-		   $(top_srcdir)/src/bin/lttng-sessiond/ust-consumer.c \
+-		   $(top_srcdir)/src/bin/lttng-sessiond/fd-limit.c \
+-		   $(top_srcdir)/src/bin/lttng-sessiond/health.c \
+-		   $(top_srcdir)/src/bin/lttng-sessiond/session.c \
+-		   $(top_srcdir)/src/common/uri.c \
+-		   $(top_srcdir)/src/common/utils.c
++UST_DATA_TRACE=$(top_srcdir)/src/bin/lttng-sessiond/trace-ust.o \
++	       $(top_srcdir)/src/bin/lttng-sessiond/consumer.o \
++		   $(top_srcdir)/src/bin/lttng-sessiond/buffer-registry.o \
++		   $(top_srcdir)/src/bin/lttng-sessiond/ust-registry.o \
++		   $(top_srcdir)/src/bin/lttng-sessiond/ust-metadata.o \
++		   $(top_srcdir)/src/bin/lttng-sessiond/ust-app.o \
++		   $(top_srcdir)/src/bin/lttng-sessiond/ust-consumer.o \
++		   $(top_srcdir)/src/bin/lttng-sessiond/fd-limit.o \
++		   $(top_srcdir)/src/bin/lttng-sessiond/health.o \
++		   $(top_srcdir)/src/bin/lttng-sessiond/session.o \
++		   $(top_srcdir)/src/common/uri.o \
++		   $(top_srcdir)/src/common/utils.o
+ 
+-test_ust_data_SOURCES = test_ust_data.c $(UST_DATA_TRACE)
++test_ust_data_SOURCES = test_ust_data.c
+ test_ust_data_LDADD = $(LIBTAP) $(LIBCOMMON) $(LIBSESSIOND_COMM) $(LIBHASHTABLE) \
+ 					  -lrt -llttng-ust-ctl
++test_ust_data_LDADD += $(UST_DATA_TRACE)
+ endif
+ 
+ # Kernel data structures unit test
+-KERN_DATA_TRACE=$(top_srcdir)/src/bin/lttng-sessiond/trace-kernel.c	\
+-		$(top_srcdir)/src/bin/lttng-sessiond/consumer.c	\
+-		$(top_srcdir)/src/bin/lttng-sessiond/health.c \
+-		$(top_srcdir)/src/common/uri.c \
+-		$(top_srcdir)/src/common/utils.c
++KERN_DATA_TRACE=$(top_srcdir)/src/bin/lttng-sessiond/trace-kernel.o	\
++		$(top_srcdir)/src/bin/lttng-sessiond/consumer.o	\
++		$(top_srcdir)/src/bin/lttng-sessiond/health.o \
++		$(top_srcdir)/src/common/uri.o \
++		$(top_srcdir)/src/common/utils.o
+ 
+-test_kernel_data_SOURCES = test_kernel_data.c $(KERN_DATA_TRACE)
++test_kernel_data_SOURCES = test_kernel_data.c
+ test_kernel_data_LDADD = $(LIBTAP) $(LIBCOMMON) $(LIBSESSIOND_COMM) $(LIBHASHTABLE) \
+ 						 -lrt
++test_kernel_data_LDADD += $(KERN_DATA_TRACE)
+-- 
+1.7.10.4
