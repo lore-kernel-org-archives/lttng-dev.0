@@ -1,20 +1,19 @@
 From: Christian Babeux <christian.babeux@efficios.com>
-Subject: Re: Bugfix: Bug #453
-Date: Tue, 9 Apr 2013 12:08:59 -0400
-Message-ID: <CAGDH53=V4GzhLyrkzcaUBbe1+gTx8ZH_80chzobCvukNZRmBig__5871.31748111478$1365523766$gmane$org@mail.gmail.com>
-References: <CA+mmcvWDDUhXG3HXhv=zihZ=aJZupuyLO0azMrx4xfv5ZKk1Jw@mail.gmail.com>
-	<51642913.9060904@polymtl.ca>
+Subject: Re: Participating in gsoc'13
+Date: Tue, 9 Apr 2013 12:21:54 -0400
+Message-ID: <CAGDH53mGm1qFqOP3hJRUzCRtQy6AOBGZzembqv6XHG7CrjfNfQ__3785.96512969143$1365524546$gmane$org@mail.gmail.com>
+References: <CAJ4iDFfm41_PsLtmJaK+piR28-zfFbh=tzMjMGZN5jzMGcyF8g@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-vc0-f169.google.com ([209.85.220.169])
+Received: from mail-vc0-f181.google.com ([209.85.220.181])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <christian.babeux@0x80.ca>) id 1UPb6W-0002EX-Ll
-	for lttng-dev@lists.lttng.org; Tue, 09 Apr 2013 12:09:04 -0400
-Received: by mail-vc0-f169.google.com with SMTP id hx10so3444673vcb.0
-	for <lttng-dev@lists.lttng.org>; Tue, 09 Apr 2013 09:08:59 -0700 (PDT)
-In-Reply-To: <51642913.9060904@polymtl.ca>
+	(envelope-from <christian.babeux@0x80.ca>) id 1UPbJ1-0002Lm-RZ
+	for lttng-dev@lists.lttng.org; Tue, 09 Apr 2013 12:22:00 -0400
+Received: by mail-vc0-f181.google.com with SMTP id ia10so2155155vcb.40
+	for <lttng-dev@lists.lttng.org>; Tue, 09 Apr 2013 09:21:54 -0700 (PDT)
+In-Reply-To: <CAJ4iDFfm41_PsLtmJaK+piR28-zfFbh=tzMjMGZN5jzMGcyF8g@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,51 +22,56 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?UTF-8?Q?Rapha=C3=ABl_Beamonte?= <raphael.beamonte@polymtl.ca>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Simarpreet Singh <simarpreet007@gmail.com>
+To: garvit sharma <garvits45@gmail.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-SGVsbG8gU2ltYXIsCgpIZXJlIGEgZmV3IGFkZGl0aW9uYWwgZ3VpZGVsaW5lcy90aXBzIGZvciBz
-dWJtaXR0aW5nIHBhdGNoZXM6CgotIEkgc2VlIGluIHlvdXIgcGF0Y2hlcyB0aGF0IHlvdSBiYXNl
-ZCB5b3Vyc2VsZiBvbiBteSBwZXJzb25hbCBnaXRodWIKbHR0bmctdG9vbHMgcmVwb3NpdG9yeSB0
-byBwcmVwYXJlIHlvdXIgcGF0Y2hlcy4gVGhpcyByZXBvc2l0b3J5IG1pZ2h0CmJlIGxhZ2dpbmcg
-YmVoaW5kIHRoZSBvZmZpY2lhbCBvbmUsIGhlbmNlIEkgd291bGQgc3VnZ2VzdCB1c2luZyB0aGUK
-b2ZmaWNpYWwgZ2l0IHJlcG9zaXRvcnkgdG8gcHJlcGFyZSB5b3VyIHBhdGNoLiBZb3UgY2FuIGZp
-bmQgdGhlbSBpbgoiR2l0IFJlcG9zaXRvcmllcyIgaW4gdGhlIERvd25sb2FkIFsxXSBzZWN0aW9u
-IG9uIHRoZSBsdHRuZyB3ZWJzaXRlLgoKLSBBZGQgdGhlIGZvbGxvd2luZyBhdCB0aGUgZW5kIG9m
-IHlvdXIgY29tbWl0IG1lc3NhZ2U6CgpGaXhlcyAjNDUzCgpUaGlzIHdpbGwgYXV0b21hdGljYWxs
-eSBjbG9zZSB0aGUgYnVnICM0NTMgaW4gdGhlIGJ1ZyB0cmFja2VyIHdoZW4KeW91ciBwYXRjaCBp
-cyBtZXJnZWQgOikuCgotIEluZGljYXRlIGluIHRoZSBwYXRjaCBzdWJqZWN0IG9uIHdoaWNoIHBy
-b2plY3QgdGhlIHBhdGNoIGlzIHRvIGJlCmFwcGxpZWQuIEluIHlvdXIgcGFydGljdWxhciBjYXNl
-LCB0aGUgcGF0Y2hlcyBuZWVkIHRvIGJlIGFwcGxpZWQgb24KdGhlIGx0dG5nLXRvb2xzIHRyZWUu
-IFlvdSBjYW4gYWNjb21wbGlzaCB0aGlzIHdpdGggdGhlCictLXN1YmplY3QtcHJlZml4JyBvcHRp
-b24gd2hlbiB1c2luZyB0aGUgZ2l0IGZvcm1hdC1wYXRjaCBjb21tYW5kOgoKZ2l0IGZvcm1hdC1w
-YXRjaCAtcyAtMSAtLXN1YmplY3QtcHJlZml4PSJQQVRDSCBsdHRuZy10b29scyIKCi0gQWRkIHlv
-dXIgc2lnbm9mZiBpbiB0aGUgcGF0Y2guIFVzZSB0aGUgJy1zJyBvcHRpb24gd2hlbiB1c2luZyBn
-aXQKZm9ybWF0LXBhdGNoLgoKLSBTZW5kIHRoZSBwYXRjaCB0byB0aGUgbWFpbnRhaW5lciBvZiB0
-aGUgcHJvamVjdCBhbmQgQ0MgdGhlIGxpc3QuIEluCnlvdXIgY2FzZSwgRGF2aWQgR291bGV0IChk
-Z291bGV0IGF0IGVmZmljaW9zIGRvdCBjb20pIGlzIHRoZQptYWludGFpbmVyIG9mIGx0dG5nLXRv
-b2xzLiBZb3UgY2FuIGFjY29tcGxpc2ggdGhpcyB3aXRoIHRoZSBmb2xsb3dpbmcKZ2l0IHNlbmQt
-ZW1haWwgY29tbWFuZDoKCmdpdCBzZW5kLWVtYWlsIC0tdG8gbWFpbnRhaW5lcl9lbWFpbCAtLWNj
-IGxpc3RfZW1haWwgKi5wYXRjaAoKSWYgeW91IHdhbnQgdG8gZGlzY3VzcyBhIHByb2plY3QgcHJv
-cG9zYWwsIHlvdSBjYW4gam9pbiB1cyBvbiBJUkMgb24KdGhlIE9GVEMgbmV0d29yayBpbiB0aGUg
-I2x0dG5nIGNoYW5uZWwuCgpUaGFua3MsCgpDaHJpc3RpYW4KClsxXSAtIGh0dHA6Ly9sdHRuZy5v
-cmcvZG93bmxvYWQKCk9uIFR1ZSwgQXByIDksIDIwMTMgYXQgMTA6NDMgQU0sIFJhcGhhw6tsIEJl
-YW1vbnRlCjxyYXBoYWVsLmJlYW1vbnRlQHBvbHltdGwuY2E+IHdyb3RlOgo+IEhlbGxvIFNpbWFy
-LAo+Cj4gT24gMjAxMy0wNC0wOCAyMzo0MSwgU2ltYXJwcmVldCBTaW5naCB3cm90ZToKPj4gMSkg
-SG93IGRvIHlvdSBJIHN1Ym1pdCBteSBjaGFuZ2VzIHRvIHRoZSBsdHRuZy10b29scyByZXBvPyBE
-byBJIG5lZWQgYW55Cj4+IGtpbmQgb2YgYXV0aG9yaXphdGlvbiBiZWZvcmUgSSBjYW4gZG8gc28/
-Cj4KPiBUbyBzdWJtaXQgeW91ciBjb21taXQgcGF0Y2hlcywgeW91IGNhbiB1c2UgdGhlICJnaXQg
-c2VuZC1lbWFpbCIKPiBmdW5jdGlvbmFsaXR5IHRvIHNlbmQgdGhlbSBkaXJlY3RseSB0byB0aGlz
-IGxpc3QuIEFmdGVyIHRoYXQsIHRoZQo+IGNvbmNlcm5lZCBsdHRuZyBkZXZzIHdpbGwgYmUgYWJs
-ZSB0byBnaXZlIHlvdSB0aGVpciBmZWVkYmFjayBhbmQvYWZ0ZXIKPiBhcHBseSB5b3VyIHBhdGNo
-ZXMgb24gdGhlIG1haW4gZ2l0IHJlcG9zLgo+Cj4+Cj4+IDIpIFdoYXQgdGltZXpvbmUgZG8geW91
-IGd1eXMgd29yayBpbj8gSSBoYWQgYSBmZXcgcXVlc3Rpb25zIHRvIGRpc2N1c3MKPj4gcmVnYXJk
-aW5nIEdTT0MgMjAxMyBpbiBkZXRhaWxzIGFuZCBJIGd1ZXNzIGl0J3MgYmV0dGVyIHRvIHRhbGsg
-b3ZlciBJUkMuCj4KPiBNb3N0IG9mIHVzIGFyZSBvbiBBbWVyaWNhIEVhc3Rlcm4gVGltZSBab25l
-Lgo+Cj4gUmFwaGHDq2wKPgo+Cj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX18KPiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0
-dG5nLm9yZwo+IGh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZv
-L2x0dG5nLWRldgo+CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0
-cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+Hi Garvit,
+
+Are you interested by a particular project idea?
+
+In order to start with the LTTng codebase, I would suggest you try to
+install the related tools (lttng-tools, lttng-ust, lttng-modules,
+babeltrace, etc.) and try to trace a simple program or your kernel.
+You can find some information  about the installation of LTTng on
+Youtube [1], the quick start [2] guide and the LTTng man-pages [3].
+
+Thanks,
+
+Christian
+
+[1] - https://www.youtube.com/user/lttng
+[2] - http://lttng.org/quickstart
+[3] - http://lttng.org/documentation
+
+On Tue, Apr 9, 2013 at 3:26 AM, garvit sharma <garvits45@gmail.com> wrote:
+> Hello All,
+>
+>               Myself Garvit Sharma doing B.tec(third year) with majors
+> in cse. I went through the project  ideas and really want to spend my
+> summer in writing codes for lttng.
+>
+>               programming and tools that i know : C/C++, Java, python,
+> php, Javascript, XML, AJAX, valgrind, oprofile.
+>
+>               OS : linux, windows.
+>
+>               please tell me from where should i start in order to learn things.
+>
+> --
+> Regards
+>
+> Garvit Sharma
+> Computer Science and Engineering
+> UG Third year
+> LNM IIT, Jaipur
+>
+> *No Body is a Scholar by birth, its only hard work and strong determination
+> that makes him master.*
+> *
+> *
+>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
