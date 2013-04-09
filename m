@@ -1,16 +1,18 @@
-From: Xuan Hu <huxuan8218528@gmail.com>
-Subject: GSoC 2013 proposal - Babeltrace python bindings
-Date: Tue, 9 Apr 2013 17:38:13 +0800
-Message-ID: <CAB44bLY4dUPe_fJj7v5oU6hnDAqypmoi3Mt=km5GHkDUOa6pPg__26864.1923358247$1365500337$gmane$org@mail.gmail.com>
+From: =?ISO-8859-1?Q?Rapha=EBl_Beamonte?= <raphael.beamonte@polymtl.ca>
+Subject: Re: Bugfix: Bug #453
+Date: Tue, 09 Apr 2013 10:43:31 -0400
+Message-ID: <51642913.9060904__34471.6215659448$1365518652$gmane$org@polymtl.ca>
+References: <CA+mmcvWDDUhXG3HXhv=zihZ=aJZupuyLO0azMrx4xfv5ZKk1Jw@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0091501070=="
+Content-Type: multipart/mixed; boundary="===============0617130188=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-we0-f172.google.com ([74.125.82.172])
+Received: from mail-ie0-f179.google.com ([209.85.223.179])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <huxuan8218528@gmail.com>) id 1UPV0O-0007Dw-46
-	for lttng-dev@lists.lttng.org; Tue, 09 Apr 2013 05:38:20 -0400
-Received: by mail-we0-f172.google.com with SMTP id r3so5309758wey.17
-	for <lttng-dev@lists.lttng.org>; Tue, 09 Apr 2013 02:38:14 -0700 (PDT)
+	(envelope-from <nashii@gmail.com>) id 1UPZlt-0001Tz-KC
+	for lttng-dev@lists.lttng.org; Tue, 09 Apr 2013 10:43:41 -0400
+Received: by mail-ie0-f179.google.com with SMTP id k11so8467376iea.38
+	for <lttng-dev@lists.lttng.org>; Tue, 09 Apr 2013 07:43:36 -0700 (PDT)
+In-Reply-To: <CA+mmcvWDDUhXG3HXhv=zihZ=aJZupuyLO0azMrx4xfv5ZKk1Jw@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,72 +21,70 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Simarpreet Singh <simarpreet007@gmail.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============0091501070==
-Content-Type: multipart/alternative; boundary=001a11c1b648f8620204d9ea4f8f
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--===============0617130188==
+Content-Type: multipart/signed; micalg=pgp-sha1;
+ protocol="application/pgp-signature";
+ boundary="----enig2PLFKCJJBKRTMQCEUEJUU"
 
---001a11c1b648f8620204d9ea4f8f
-Content-Type: text/plain; charset=UTF-8
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+------enig2PLFKCJJBKRTMQCEUEJUU
+Content-Type: text/plain; charset=ISO-8859-1
 Content-Transfer-Encoding: quoted-printable
 
-Hello everyone,
+Hello Simar,
 
-I'm really interested in the project of `Babeltrace python bindings`.
-Besides I'm confident with my python skill and I'm willing to study more
-skills related. As far as I know, I think this is a somewhat standalone
-project which should create a module for python programmers to get the
-results which babeltrace produce. Wish potential mentor (jgalar) can judge
-whether it is or not. Besides I wonder to know any suggestions for me to
-begin with this project?
+On 2013-04-08 23:41, Simarpreet Singh wrote:
+> 1) How do you I submit my changes to the lttng-tools repo? Do I need an=
+y
+> kind of authorization before I can do so?
 
---=20
-=E6=89=88=E7=85=8A Sean.Hu
+To submit your commit patches, you can use the "git send-email"
+functionality to send them directly to this list. After that, the
+concerned lttng devs will be able to give you their feedback and/after
+apply your patches on the main git repos.
 
-=E5=8C=97=E4=BA=AC=E5=A4=A7=E5=AD=A6=E4=BF=A1=E6=81=AF=E7=A7=91=E5=AD=A6=E6=
-=8A=80=E6=9C=AF=E5=AD=A6=E9=99=A22012=E7=BA=A7=E7=A1=95=E5=A3=AB=E7=A0=94=
-=E7=A9=B6=E7=94=9F
-2012, Master Degree Candidate, EECS, PKU
+>=20
+> 2) What timezone do you guys work in? I had a few questions to discuss
+> regarding GSOC 2013 in details and I guess it's better to talk over IRC=
+=2E
 
-Blog <http://huxuan.org/> | GitHub <https://github.com/huxuan/> |
-Twitter<https://twitter.com/huxuan/>|
-Douban <http://www.douban.com/people/huxuan/> |
-Google+<https://plus.google.com/u/0/116930918200210859389>|
-Jiepang <http://jiepang.com/huxuan/> | Weibo <http://weibo.com/victorhu>
+Most of us are on America Eastern Time Zone.
 
---001a11c1b648f8620204d9ea4f8f
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hello everyone,<div><br></div><div>I&#39;m really interest=
-ed in the project of `Babeltrace python bindings`. Besides I&#39;m confiden=
-t with my python skill and I&#39;m willing to study more skills related. As=
- far as I know, I think this is a somewhat standalone project which should =
-create a module for python programmers to get the results which babeltrace =
-produce. Wish potential mentor (jgalar) can judge whether it is or not. Bes=
-ides I wonder to know any suggestions for me to begin with this project?</d=
-iv>
-<div><div><div><br></div>-- <br><div dir=3D"ltr"><div>=E6=89=88=E7=85=8A Se=
-an.Hu</div><div><br></div><div><div><div>=E5=8C=97=E4=BA=AC=E5=A4=A7=E5=AD=
-=A6=E4=BF=A1=E6=81=AF=E7=A7=91=E5=AD=A6=E6=8A=80=E6=9C=AF=E5=AD=A6=E9=99=A2=
-2012=E7=BA=A7=E7=A1=95=E5=A3=AB=E7=A0=94=E7=A9=B6=E7=94=9F</div><div>2012, =
-Master Degree Candidate, EECS, PKU</div><div><br></div><div><a href=3D"http=
-://huxuan.org/" target=3D"_blank">Blog</a>=C2=A0|=C2=A0<a href=3D"https://g=
-ithub.com/huxuan/" target=3D"_blank">GitHub</a> | <a href=3D"https://twitte=
-r.com/huxuan/" target=3D"_blank">Twitter</a> |=C2=A0<a href=3D"http://www.d=
-ouban.com/people/huxuan/" target=3D"_blank">Douban</a> | <a href=3D"https:/=
-/plus.google.com/u/0/116930918200210859389" target=3D"_blank">Google+</a> |=
-=C2=A0<a href=3D"http://jiepang.com/huxuan/" target=3D"_blank">Jiepang</a>=
-=C2=A0| <a href=3D"http://weibo.com/victorhu" target=3D"_blank">Weibo</a><b=
-r>
-</div></div></div></div>
-</div></div></div>
-
---001a11c1b648f8620204d9ea4f8f--
+Rapha=EBl
 
 
---===============0091501070==
+------enig2PLFKCJJBKRTMQCEUEJUU
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.12 (GNU/Linux)
+
+iQIcBAEBAgAGBQJRZCkUAAoJECV+8Ygg/tEoPrIP/1JtY4dXlYXmX1VA51vhuMji
+PlC471c8apSqTC40CATtAyx4Vvdbl0i2BSlD26gpc/xlDhBgU6Qftd7yFDBcMGQd
+e/WcSF9wS20hCgZi9Yph26UGqM/Xuog/vO5GCnVGI2KfQZPWgREcI3ZcLp8C3xpi
+ru16nKAuhTbIcq3NiTxSZLsgOAMWmEGjhX4PfbTkaErRBlWOzpilxitniP2NM+Ah
+QYj8D9U+I7e7mt2vXJCDOB1nMY4gvT+t7D2XOUQh9nHa99VNKF6oDQiMKGY1HIyF
+9smpSqtKfPKJMQd4rhY6qJUEjri4fCVKAIF3DtKgLuuKB59iCHoQR/I+poqSlbha
+eFeuFji/XYJiDKbBBGXauFgDHqqe7gUWZyDv6hUfJXtAztFcIeCpJSDeNA9jlJw9
+sax+dli8/0gOoL0a807vM/OHqjhwu5NZX+E4TloK23iN4rcPDkhsKAy91buV0oHu
+VtxFFu/i1f2fyPuyuMYjLww1m/IT42bqJohIQW/vJ2vSIjNcPHHmlReWkJbmvuFj
+OoJIwZtaIvtXFSNjsyjntksNxyWrOK7uCsTUZR3n7AftR3MpE8Iad5g+tUzCXUYA
+AkRXScDdYvu8VexfXrZpd2+sjCKyeDT740Q4Q7YVuRbYZBl6/6jtdJcPJuFdLAwR
+KyFLp0ykF76tNVj/sjIp
+=Ru/v
+-----END PGP SIGNATURE-----
+
+------enig2PLFKCJJBKRTMQCEUEJUU--
+
+
+--===============0617130188==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -95,4 +95,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============0091501070==--
+--===============0617130188==--
