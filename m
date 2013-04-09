@@ -1,18 +1,19 @@
 From: Simarpreet Singh <simarpreet007@gmail.com>
-Subject: [PATCH lttng-tools] Fixing a few typos in lttng-tools
-	tree Fixes #453
-Date: Tue,  9 Apr 2013 15:41:35 -0400
-Message-ID: <1365536495-8416-1-git-send-email-simarpreet007__8205.6644642309$1365536549$gmane$org@gmail.com>
+Subject: Re: Bugfix: Bug #488
+Date: Tue, 9 Apr 2013 15:46:23 -0400
+Message-ID: <CA+mmcvXfavEx+2ZFD-cfOFNxs5Fss30j0cNdx8jfenhqJhAKkQ__36139.3446605236$1365536813$gmane$org@mail.gmail.com>
+References: <CA+mmcvU4d5ugJmxs4DyPbiis-JS3rMAZ7x8qZswoEDxDKiCssQ@mail.gmail.com>
+	<51643CE4.4050902@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1118202855=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f172.google.com ([209.85.223.172])
+Received: from mail-wi0-f177.google.com ([209.85.212.177])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <simarpreet007@gmail.com>) id 1UPeQd-0003yr-G5
-	for lttng-dev@lists.lttng.org; Tue, 09 Apr 2013 15:42:03 -0400
-Received: by mail-ie0-f172.google.com with SMTP id c10so8917925ieb.17
-	for <lttng-dev@lists.lttng.org>; Tue, 09 Apr 2013 12:41:58 -0700 (PDT)
+	(envelope-from <simarpreet007@gmail.com>) id 1UPeUv-000421-AK
+	for lttng-dev@lists.lttng.org; Tue, 09 Apr 2013 15:46:29 -0400
+Received: by mail-wi0-f177.google.com with SMTP id hm14so4061730wib.16
+	for <lttng-dev@lists.lttng.org>; Tue, 09 Apr 2013 12:46:23 -0700 (PDT)
+In-Reply-To: <51643CE4.4050902@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,64 +22,159 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: dgoulet@efficios.com
-Cc: lttng-dev@lists.lttng.org, Simarpreet Singh <simarpreet007@gmail.com>
+To: David Goulet <dgoulet@efficios.com>, christian.babeux@efficios.com, =?ISO-8859-1?Q?Rapha=EBl_Beamonte?= <raphael.beamonte@polymtl.ca>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
+--===============1118202855==
+Content-Type: multipart/alternative; boundary=047d7bfd0bd6e60b9004d9f2ce9f
 
-Signed-off-by: Simarpreet Singh <simarpreet007@gmail.com>
----
- src/common/error.c |   10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+--047d7bfd0bd6e60b9004d9f2ce9f
+Content-Type: text/plain; charset=ISO-8859-1
 
-diff --git a/src/common/error.c b/src/common/error.c
-index 4fb022c..4b9b46e 100644
---- a/src/common/error.c
-+++ b/src/common/error.c
-@@ -40,7 +40,7 @@ static const char *error_string_array[] = {
- 	[ ERROR_INDEX(LTTNG_ERR_SESS_NOT_FOUND) ] = "Session name not found",
- 	[ ERROR_INDEX(LTTNG_ERR_FATAL) ] = "Fatal error of the session daemon",
- 	[ ERROR_INDEX(LTTNG_ERR_SELECT_SESS) ] = "A session MUST be selected",
--	[ ERROR_INDEX(LTTNG_ERR_EXIST_SESS) ] = "Session name already exist",
-+	[ ERROR_INDEX(LTTNG_ERR_EXIST_SESS) ] = "Session name already exists",
- 	[ ERROR_INDEX(LTTNG_ERR_NO_EVENT) ] = "Event not found",
- 	[ ERROR_INDEX(LTTNG_ERR_CONNECT_FAIL) ] = "Unable to connect to Unix socket",
- 	[ ERROR_INDEX(LTTNG_ERR_EPERM) ] = "Permission denied",
-@@ -58,7 +58,7 @@ static const char *error_string_array[] = {
- 	[ ERROR_INDEX(LTTNG_ERR_KERN_DISABLE_FAIL) ] = "Disable kernel event failed",
- 	[ ERROR_INDEX(LTTNG_ERR_KERN_META_FAIL) ] = "Opening metadata failed",
- 	[ ERROR_INDEX(LTTNG_ERR_KERN_START_FAIL) ] = "Starting kernel trace failed",
--	[ ERROR_INDEX(LTTNG_ERR_KERN_STOP_FAIL) ] = "Stoping kernel trace failed",
-+	[ ERROR_INDEX(LTTNG_ERR_KERN_STOP_FAIL) ] = "Stopping kernel trace failed",
- 	[ ERROR_INDEX(LTTNG_ERR_KERN_CONSUMER_FAIL) ] = "Kernel consumer start failed",
- 	[ ERROR_INDEX(LTTNG_ERR_KERN_STREAM_FAIL) ] = "Kernel create stream failed",
- 	[ ERROR_INDEX(LTTNG_ERR_KERN_LIST_FAIL) ] = "Listing kernel events failed",
-@@ -73,7 +73,7 @@ static const char *error_string_array[] = {
- 	[ ERROR_INDEX(LTTNG_ERR_UST_DISABLE_FAIL) ] = "Disable UST event failed",
- 	[ ERROR_INDEX(LTTNG_ERR_UST_META_FAIL) ] = "Opening metadata failed",
- 	[ ERROR_INDEX(LTTNG_ERR_UST_START_FAIL) ] = "Starting UST trace failed",
--	[ ERROR_INDEX(LTTNG_ERR_UST_STOP_FAIL) ] = "Stoping UST trace failed",
-+	[ ERROR_INDEX(LTTNG_ERR_UST_STOP_FAIL) ] = "Stopping UST trace failed",
- 	[ ERROR_INDEX(LTTNG_ERR_UST_CONSUMER64_FAIL) ] = "64-bit UST consumer start failed",
- 	[ ERROR_INDEX(LTTNG_ERR_UST_CONSUMER32_FAIL) ] = "32-bit UST consumer start failed",
- 	[ ERROR_INDEX(LTTNG_ERR_UST_STREAM_FAIL) ] = "UST create stream failed",
-@@ -82,7 +82,7 @@ static const char *error_string_array[] = {
- 	[ ERROR_INDEX(LTTNG_ERR_UST_EVENT_NOT_FOUND)] = "UST event not found",
- 	[ ERROR_INDEX(LTTNG_ERR_UST_CONTEXT_EXIST)] = "UST context already exist",
- 	[ ERROR_INDEX(LTTNG_ERR_UST_CONTEXT_INVAL)] = "UST invalid context",
--	[ ERROR_INDEX(LTTNG_ERR_NEED_ROOT_SESSIOND) ] = "Tracing the kernel requires a root lttng-sessiond daemon and \"tracing\" group user membership",
-+	[ ERROR_INDEX(LTTNG_ERR_NEED_ROOT_SESSIOND) ] = "Tracing the kernel requires a root lttng-sessiond daemon or \"tracing\" group user membership",
- 	[ ERROR_INDEX(LTTNG_ERR_TRACE_ALREADY_STARTED) ] = "Tracing already started",
- 	[ ERROR_INDEX(LTTNG_ERR_TRACE_ALREADY_STOPPED) ] = "Tracing already stopped",
- 	[ ERROR_INDEX(LTTNG_ERR_KERN_EVENT_ENOSYS) ] = "Kernel event type not supported",
-@@ -91,7 +91,7 @@ static const char *error_string_array[] = {
- 	[ ERROR_INDEX(LTTNG_ERR_NO_KERNCONSUMERD) ] = "No kernel consumer detected",
- 	[ ERROR_INDEX(LTTNG_ERR_EVENT_EXIST_LOGLEVEL) ] = "Event already enabled with different loglevel",
- 	[ ERROR_INDEX(LTTNG_ERR_URL_DATA_MISS) ] = "Missing data path URL",
--	[ ERROR_INDEX(LTTNG_ERR_URL_CTRL_MISS) ] = "Missing control data path URL",
-+	[ ERROR_INDEX(LTTNG_ERR_URL_CTRL_MISS) ] = "Missing control path URL",
- 	[ ERROR_INDEX(LTTNG_ERR_ENABLE_CONSUMER_FAIL) ] = "Enabling consumer failed",
- 	[ ERROR_INDEX(LTTNG_ERR_RELAYD_CONNECT_FAIL) ] = "Unable to connect to lttng-relayd",
- 	[ ERROR_INDEX(LTTNG_ERR_RELAYD_VERSION_FAIL) ] = "Relay daemon not compatible",
--- 
-1.7.9.5
+Hey guys,
+
+Thanks for the help, I just submitted Fix #453 for a review, hopefully I
+did it correct. *fingers crossed*
+
+I'll be submitting fixes for #488 in a few hours.
+
+Thanks again,
+Simar
+
+
+On Tue, Apr 9, 2013 at 12:08 PM, David Goulet <dgoulet@efficios.com> wrote:
+
+> Hi Simarpreet,
+>
+> Can you please rebase your branch on the HEAD of the master branch of
+> lttng-tools before sending a pull request.
+>
+> Also, when you fix a bug in the tracker, use "Fix:" with a meaningful
+> message, add "Fixes #xxx" at the end and finally your signed-off message
+> like so:
+>
+> ---
+>
+> Fix: [...]
+>
+> [more info if necessary]
+>
+> Fixes #xxx
+>
+> Signed-off-by: YOUR_NAME <YOUR_EMAIL>
+>
+> ---
+>
+> Apart from those aesthetics fix, thanks a lot for the contribution. I'll
+> wait for your fixes to pull back the commits.
+>
+> Cheers!
+> David
+>
+> Simarpreet Singh:
+> > Hello again,
+> >
+> > Sorry for the emails guys, I fixed a bunch of other typos in the
+> > codebase, I think these shall go under Bug #488.
+> >
+> > Bug URL: http://bugs.lttng.org/issues/488
+> >
+> > Fix:
+> https://github.com/simar7/lttng-tools/commit/6a6df32f6fadcb85a275b8ea93306af2d498c263
+> >
+> > I've pushed my changes on my github account, I'll try to figure out the
+> > correct way to file them in the meantime.
+> >
+> >
+> > Thanks,
+> > Simar
+> >
+> >
+> > This body part will be downloaded on demand.
+>
+
+--047d7bfd0bd6e60b9004d9f2ce9f
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hey guys,<div><br></div><div>Thanks for the help, I just s=
+ubmitted Fix #453 for a review, hopefully I did it correct. *fingers crosse=
+d*</div><div><br></div><div>I&#39;ll be submitting fixes for #488 in a few =
+hours.</div>
+<div><br></div><div>Thanks again,</div><div>Simar<br><div class=3D"gmail_ex=
+tra"><br><br><div class=3D"gmail_quote">On Tue, Apr 9, 2013 at 12:08 PM, Da=
+vid Goulet <span dir=3D"ltr">&lt;<a href=3D"mailto:dgoulet@efficios.com" ta=
+rget=3D"_blank">dgoulet@efficios.com</a>&gt;</span> wrote:<br>
+
+<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
+x #ccc solid;padding-left:1ex">Hi Simarpreet,<br>
+<br>
+Can you please rebase your branch on the HEAD of the master branch of<br>
+lttng-tools before sending a pull request.<br>
+<br>
+Also, when you fix a bug in the tracker, use &quot;Fix:&quot; with a meanin=
+gful<br>
+message, add &quot;Fixes #xxx&quot; at the end and finally your signed-off =
+message<br>
+like so:<br>
+<br>
+---<br>
+<br>
+Fix: [...]<br>
+<br>
+[more info if necessary]<br>
+<br>
+Fixes #xxx<br>
+<br>
+Signed-off-by: YOUR_NAME &lt;YOUR_EMAIL&gt;<br>
+<br>
+---<br>
+<br>
+Apart from those aesthetics fix, thanks a lot for the contribution. I&#39;l=
+l<br>
+wait for your fixes to pull back the commits.<br>
+<br>
+Cheers!<br>
+David<br>
+<br>
+Simarpreet Singh:<br>
+<div><div>&gt; Hello again,<br>
+&gt;<br>
+&gt; Sorry for the emails guys, I fixed a bunch of other typos in the<br>
+&gt; codebase, I think these shall go under Bug #488.<br>
+&gt;<br>
+&gt; Bug URL: <a href=3D"http://bugs.lttng.org/issues/488" target=3D"_blank=
+">http://bugs.lttng.org/issues/488</a><br>
+&gt;<br>
+&gt; Fix: <a href=3D"https://github.com/simar7/lttng-tools/commit/6a6df32f6=
+fadcb85a275b8ea93306af2d498c263" target=3D"_blank">https://github.com/simar=
+7/lttng-tools/commit/6a6df32f6fadcb85a275b8ea93306af2d498c263</a><br>
+&gt;<br>
+&gt; I&#39;ve pushed my changes on my github account, I&#39;ll try to figur=
+e out the<br>
+&gt; correct way to file them in the meantime.<br>
+&gt;<br>
+&gt;<br>
+&gt; Thanks,<br>
+&gt; Simar<br>
+&gt;<br>
+&gt;<br>
+</div></div>&gt; This body part will be downloaded on demand.<br>
+</blockquote></div><br></div></div></div>
+
+--047d7bfd0bd6e60b9004d9f2ce9f--
+
+
+--===============1118202855==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1118202855==--
