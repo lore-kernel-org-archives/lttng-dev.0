@@ -1,16 +1,17 @@
-From: Simarpreet Singh <simarpreet007@gmail.com>
-Subject: Bugfix: Bug #488
-Date: Tue, 9 Apr 2013 00:09:35 -0400
-Message-ID: <CA+mmcvU4d5ugJmxs4DyPbiis-JS3rMAZ7x8qZswoEDxDKiCssQ__17972.9671603583$1365480608$gmane$org@mail.gmail.com>
+From: garvit sharma <garvits45@gmail.com>
+Subject: Participating in gsoc'13
+Date: Tue, 9 Apr 2013 12:56:54 +0530
+Message-ID: <CAJ4iDFfm41_PsLtmJaK+piR28-zfFbh=tzMjMGZN5jzMGcyF8g__8191.07839274711$1365492446$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2090151039=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wg0-f42.google.com ([74.125.82.42])
+Received: from mail-qc0-f180.google.com ([209.85.216.180])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <simarpreet007@gmail.com>) id 1UPPsL-0004UX-Nj
-	for lttng-dev@lists.lttng.org; Tue, 09 Apr 2013 00:09:41 -0400
-Received: by mail-wg0-f42.google.com with SMTP id k13so4427216wgh.1
-	for <lttng-dev@lists.lttng.org>; Mon, 08 Apr 2013 21:09:36 -0700 (PDT)
+	(envelope-from <garvits45@gmail.com>) id 1UPSxI-0006Ae-En
+	for lttng-dev@lists.lttng.org; Tue, 09 Apr 2013 03:27:00 -0400
+Received: by mail-qc0-f180.google.com with SMTP id b40so2882559qcq.11
+	for <lttng-dev@lists.lttng.org>; Tue, 09 Apr 2013 00:26:54 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,58 +23,28 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============2090151039==
-Content-Type: multipart/alternative; boundary=f46d043bdce6ad7dd604d9e5b8c9
+Hello All,
 
---f46d043bdce6ad7dd604d9e5b8c9
-Content-Type: text/plain; charset=ISO-8859-1
+              Myself Garvit Sharma doing B.tec(third year) with majors
+in cse. I went through the project  ideas and really want to spend my
+summer in writing codes for lttng.
 
-Hello again,
+              programming and tools that i know : C/C++, Java, python,
+php, Javascript, XML, AJAX, valgrind, oprofile.
 
-Sorry for the emails guys, I fixed a bunch of other typos in the codebase,
-I think these shall go under Bug #488.
+              OS : linux, windows.
 
-Bug URL: http://bugs.lttng.org/issues/488
+              please tell me from where should i start in order to learn things.
 
-Fix:
-https://github.com/simar7/lttng-tools/commit/6a6df32f6fadcb85a275b8ea93306af2d498c263
+-- 
+Regards
 
-I've pushed my changes on my github account, I'll try to figure out the
-correct way to file them in the meantime.
+Garvit Sharma
+Computer Science and Engineering
+UG Third year
+LNM IIT, Jaipur
 
-
-Thanks,
-Simar
-
---f46d043bdce6ad7dd604d9e5b8c9
-Content-Type: text/html; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hello again,<div><br></div><div>Sorry for the emails guys,=
- I fixed a bunch of other typos in the codebase, I think these shall go und=
-er Bug #488.</div><div><br></div><div style>Bug URL:=A0<a href=3D"http://bu=
-gs.lttng.org/issues/488">http://bugs.lttng.org/issues/488</a></div>
-<div style><br></div><div style>Fix:=A0<a href=3D"https://github.com/simar7=
-/lttng-tools/commit/6a6df32f6fadcb85a275b8ea93306af2d498c263">https://githu=
-b.com/simar7/lttng-tools/commit/6a6df32f6fadcb85a275b8ea93306af2d498c263</a=
-></div>
-<div style><br></div><div style>I&#39;ve pushed my changes on my github acc=
-ount, I&#39;ll try to figure out the correct way to file them in the meanti=
-me.</div><div style><br></div><div style><br></div><div style>Thanks,<br>
-Simar</div></div>
-
---f46d043bdce6ad7dd604d9e5b8c9--
-
-
---===============2090151039==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============2090151039==--
+*No Body is a Scholar by birth, its only hard work and strong determination
+that makes him master.*
+*
+*
