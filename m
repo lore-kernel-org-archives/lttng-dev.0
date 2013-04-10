@@ -1,24 +1,21 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: LTTng system call tracing on ARM
-Date: Wed, 10 Apr 2013 12:39:50 -0400
-Message-ID: <20130410163950.GA6879__35728.5234415487$1365612015$gmane$org@Krystal>
-References: <20130410084053.GB25958@hal>
-	<CA+umk=pX-4t74XQqsP+vLsDGF1atWzUi75gmSyoVGsDkqQcB7g@mail.gmail.com>
-	<20130410130246.GA12801@hal>
-	<CA+umk=pPAvGqkC2pPfr6sA3sPtZroKoPegJ6gET2eBYSPp4Fhw@mail.gmail.com>
-	<20130410160233.GA17568@hal> <20130410162012.GA6525@Krystal>
-	<20130410163055.GA18278@hal>
+From: Simon Marchi <simon.marchi@polymtl.ca>
+Subject: Re: [RFC PATCH lttng-tools v3] lttng cli: Accept human
+ readable sizes for --subbuf-size
+Date: Wed, 10 Apr 2013 14:23:34 -0400
+Message-ID: <CAFXXi0=8FxVMz5RjOmL5r9iXmDHKi5mb2eBZkkFv8pktZLvsnQ__36254.7611854554$1365618281$gmane$org@mail.gmail.com>
+References: <1365439209-27624-1-git-send-email-simon.marchi@polymtl.ca>
+	<51644824.6000505@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from mail-ie0-f178.google.com ([209.85.223.178])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UPy3s-00062S-Ib
-	for lttng-dev@lists.lttng.org; Wed, 10 Apr 2013 12:39:52 -0400
-Content-Disposition: inline
-In-Reply-To: <20130410163055.GA18278@hal>
+	(envelope-from <thundersim@gmail.com>) id 1UPzgo-0006sn-L4
+	for lttng-dev@lists.lttng.org; Wed, 10 Apr 2013 14:24:10 -0400
+Received: by mail-ie0-f178.google.com with SMTP id bn7so948000ieb.23
+	for <lttng-dev@lists.lttng.org>; Wed, 10 Apr 2013 11:24:05 -0700 (PDT)
+In-Reply-To: <51644824.6000505@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -27,185 +24,59 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Jan Glauber <jan.glauber@gmail.com>
-Cc: lttng-dev@lists.lttng.org, Ryan Kyser <Ryan.Kyser@jci.com>
+To: David Goulet <dgoulet@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-* Jan Glauber (jan.glauber@gmail.com) wrote:
-> On Wed, Apr 10, 2013 at 12:20:12PM -0400, Mathieu Desnoyers wrote:
-> > 
-> > Thanks for the detailed report !!
-> > 
-> > Please try with this commit:
-> 
-> Yes, that patch works. But I'm still curious if you can explain what the
-> override was for ;-
+On 9 April 2013 12:56, David Goulet <dgoulet@efficios.com> wrote:
+>> @@ -77,3 +79,122 @@ void list_cmd_options(FILE *ofp, struct poptOption *options)
+>>               }
+>>       }
+>>  }
+>> +
+>> +/**
+>> + * Prints the error message corresponding to a regex error code.
+>> + *
+>> + * @param errcode    The error code.
+>> + * @param regex              The regex object that produced the error code.
+>> + */
+>> +static void regex_print_error(int errcode, regex_t *regex)
+>> +{
+>> +     /* Get length of error message and allocate accordingly */
+>> +     size_t length = regerror(errcode, regex, NULL, 0);
+>> +     char *buffer = malloc(length);
+>
+> I know it's not _necessary_ but I would prefer to have the same std
+> across the code. So, we usually declare the variables without
+> assignation (that comes from a function call), then use assert() for
+> given params (if needed) and finally used them.
+>
+> Here, declare length and buffer without assignation. Assert on "regex !=
+> NULL" because a NULL value seems to me that it might break (or
+> segfault). Finally, set length, check the return error code and set
+> buffer checking also for errors.
+>
+> Use zmalloc also please.
 
-The "override" allows defining how to serialize the information for
-specific system calls. It can either replace the behavior of the
-"semi-automated" description of the system call (brought into
-lttng-modules by means of the system call extractor script), or just
-provide the serialization description for a system call that was not
-available to the system call extractor.
+Ok, no problem.
 
-In this case, sys_set_tls was not available for automated extraction, so
-the override entry has been added to it would not appear as a
-"sys_unknown" system call, but would rather show "sys_set_tls" along
-with the well-printed system call arguments.
+There is nothing specified for the return value of regerror so there
+is nothing to check. Actually, it does abort() if you pass a wrong
+error code...
 
-You may want to have a look at:
+> I wonder if these *_LOG2 should go in default.h ? Thoughts?
 
-lttng-modules/instrumentation/syscalls/README
+I see default.h as a place you put default arbitrary values for buffer
+sizes, paths, names, etc. KIBI_LOG2 and al are not values you decide.
+I think they are fine in utils.h.
 
-for details.
+> If regex was uninit like for instance on regcomp error, does this call
+> behaves well ?
 
-If we want to handle the set_tls special-case (and same for other
-ARM-specific syscalls), we'll probably want to do that with a
-arm-specific table that will contain those system calls.
+Good catch, changed.
+
+"Ack" for all other comments.
 
 Thanks,
 
-Mathieu
-
-
-> 
-> --Jan
->  
-> > commit 11fa478f18241fedee86f7dc7820a91c629c9e7e
-> > Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> > Date:   Wed Apr 10 12:14:38 2013 -0400
-> > 
-> >     Fix: remove ARM set_tls system call override
-> >     
-> >     We'll need to find a better way to instrument ARM-specific system calls
-> >     located at a far offset from the standard systems calls. A 16MB
-> >     lttng-modules kernel module is really not acceptable.
-> >     
-> >     Removing this instrumentation for now. sys_set_tls will appear as
-> >     sys_unknown.
-> >     
-> >     Fixes #472
-> >     
-> >     CC: Ryan Kyser <Ryan.Kyser@jci.com>
-> >     Ref: http://lists.lttng.org/pipermail/lttng-dev/2013-April/019990.html
-> >     Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> > 
-> > diff --git a/instrumentation/syscalls/headers/arm-32-syscalls-2.6.38_integers_override.h b/instrumentation/syscalls/headers/arm-32-syscalls-2.6.38_integers_override.h
-> > index 93b8674..895370f 100644
-> > --- a/instrumentation/syscalls/headers/arm-32-syscalls-2.6.38_integers_override.h
-> > +++ b/instrumentation/syscalls/headers/arm-32-syscalls-2.6.38_integers_override.h
-> > @@ -2,7 +2,6 @@
-> >  
-> >  #define OVERRIDE_TABLE_32_sys_arm_fadvise64_64
-> >  #define OVERRIDE_TABLE_32_sys_sync_file_range2
-> > -#define OVERRIDE_TABLE_32_sys_set_tls
-> >  
-> >  #ifndef CREATE_SYSCALL_TABLE
-> >  
-> > @@ -38,18 +37,6 @@ SC_TRACE_EVENT(sys_sync_file_range2,
-> >  	TP_printk()
-> >  )
-> >  
-> > -SC_TRACE_EVENT(sys_set_tls,
-> > -	TP_PROTO(unsigned int tid, unsigned long tls),
-> > -	TP_ARGS(tid, tls),
-> > -	TP_STRUCT__entry(
-> > -		__field(unsigned int, tid)
-> > -		__field_hex(unsigned int, tls)),
-> > -	TP_fast_assign(
-> > -		tp_assign(tid, tid)
-> > -		tp_assign(tls, tls)),
-> > -	TP_printk()
-> > -)
-> > -
-> >  #else	/* CREATE_SYSCALL_TABLE */
-> >  
-> >  #define OVVERRIDE_TABLE_32_sys_mmap
-> > @@ -59,9 +46,6 @@ TRACE_SYSCALL_TABLE(sys_mmap, sys_mmap, 90, 6)
-> >  TRACE_SYSCALL_TABLE(sys_arm_fadvise64_64, sys_arm_fadvise64_64, 270, 4)
-> >  #define OVERRIDE_TABLE_32_sys_sync_file_range2
-> >  TRACE_SYSCALL_TABLE(sys_sync_file_range2, sys_sync_file_range2, 341, 4)
-> > -#define OVERRIDE_TABLE_32_sys_set_tls
-> > -TRACE_SYSCALL_TABLE(sys_set_tls, sys_set_tls, 0xf0005, 2)
-> > -
-> >  
-> >  #endif /* CREATE_SYSCALL_TABLE */
-> >  
-> > 
-> > 
-> > > 
-> > > --Jan
-> > > 
-> > > > -PL
-> > > > 
-> > > > 
-> > > > 
-> > > > On Wed, Apr 10, 2013 at 9:02 AM, Jan Glauber <jan.glauber@gmail.com> wrote:
-> > > > 
-> > > > > On Wed, Apr 10, 2013 at 08:37:18AM -0400, PLSTC wrote:
-> > > > > > Hey Jan,
-> > > > > >
-> > > > > > I cannot speak on behalf of everyone here, but during our attempt to port
-> > > > > > LTTng to Android, we also noticed that the kernels we were using (3.0.x)
-> > > > > > were nowhere near the requirements for syscall tracepoints support. I
-> > > > > > believe such support was added on x86/64 way earlier (early 3.x) than on
-> > > > > > ARM, which is why it was included in LTTng's modules a while ago. Simply
-> > > > > > put, the ARM kernel is late.
-> > > > >
-> > > > > OK, so for ARM kernel version 3.6 is the minimum unless the syscall
-> > > > > tracepoint
-> > > > > support is backported.
-> > > > >
-> > > > > > There are a few actuals ways to 'enable' syscall tracepoints support on
-> > > > > > early ARM kernels, but they all including a bit of kernel
-> > > > > hacking/patching.
-> > > > > > I could send you some links if you're interested in that.
-> > > > >
-> > > > > Yes, sure!
-> > > > >
-> > > > > --Jan
-> > > > >
-> > > > > > -PL
-> > > > > > On Apr 10, 2013 4:40 AM, "Jan Glauber" <jan.glauber@gmail.com> wrote:
-> > > > > >
-> > > > > > > Hi,
-> > > > > > >
-> > > > > > > I want to use LTTng for system call tracing on ARM. Now lttng-modules
-> > > > > seems
-> > > > > > > to support system call tracing on ARM already since
-> > > > > > > "8f4f80e LTTng Modules ARM syscall instrumentation".
-> > > > > > >
-> > > > > > > But I wonder how that worked since lttng-syscalls.c is only build under
-> > > > > > > CONFIG_HAVE_SYSCALL_TRACEPOINTS and that was added to ARM only with
-> > > > > kernel
-> > > > > > > 3.6
-> > > > > > > (much after than the lttng-modules commit).
-> > > > > > >
-> > > > > > > Am I missing something? Is system call tracing working on ARM with the
-> > > > > > > upstream
-> > > > > > > LTTng version?
-> > > > > > >
-> > > > > > > thanks,
-> > > > > > > Jan
-> > > > > > >
-> > > > > > > _______________________________________________
-> > > > > > > lttng-dev mailing list
-> > > > > > > lttng-dev@lists.lttng.org
-> > > > > > > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> > > > > > >
-> > > > >
-> > > 
-> > > _______________________________________________
-> > > lttng-dev mailing list
-> > > lttng-dev@lists.lttng.org
-> > > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> > 
-> > -- 
-> > Mathieu Desnoyers
-> > EfficiOS Inc.
-> > http://www.efficios.com
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Simon
