@@ -1,20 +1,18 @@
 From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: GSoC 2013 proposal - Babeltrace python bindings
-Date: Wed, 10 Apr 2013 17:28:16 -0400
-Message-ID: <CA+jJMxthrZXAeUE-J3muXVWsAfPLyRbtYb8oQsodSQmP29sTKg__3902.46439860693$1365629335$gmane$org@mail.gmail.com>
-References: <CAB44bLY4dUPe_fJj7v5oU6hnDAqypmoi3Mt=km5GHkDUOa6pPg@mail.gmail.com>
-	<CA+jJMxsAE=5abYynLYvzCw9YqrtuDLn9-ToouQ8WoFzjpKsXRQ@mail.gmail.com>
-	<CAB44bLYaRCCNnkJ0Vkd180dgv63748ZM=5TNErvzAZAUETSobA@mail.gmail.com>
+Subject: Re: Google Summer of Code
+Date: Wed, 10 Apr 2013 17:53:13 -0400
+Message-ID: <CA+jJMxtP+n274AhsXQ23TXYPo8UsXtShjYxwJwwO69e=N1nbnQ__3043.05875110931$1365630831$gmane$org@mail.gmail.com>
+References: <48CF5AC71E61DB46B70D0F388054EFFD12D0DC32@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2024447365=="
+Content-Type: multipart/mixed; boundary="===============0685263220=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wi0-f169.google.com ([209.85.212.169])
+Received: from mail-wg0-f48.google.com ([74.125.82.48])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1UQ2Z4-0008Jz-Tl
-	for lttng-dev@lists.lttng.org; Wed, 10 Apr 2013 17:28:23 -0400
-Received: by mail-wi0-f169.google.com with SMTP id c10so6658078wiw.2
-	for <lttng-dev@lists.lttng.org>; Wed, 10 Apr 2013 14:28:16 -0700 (PDT)
-In-Reply-To: <CAB44bLYaRCCNnkJ0Vkd180dgv63748ZM=5TNErvzAZAUETSobA@mail.gmail.com>
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1UQ2xD-00005V-5N
+	for lttng-dev@lists.lttng.org; Wed, 10 Apr 2013 17:53:19 -0400
+Received: by mail-wg0-f48.google.com with SMTP id m15so1019985wgh.27
+	for <lttng-dev@lists.lttng.org>; Wed, 10 Apr 2013 14:53:13 -0700 (PDT)
+In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD12D0DC32@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,318 +21,172 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Xuan Hu <huxuan8218528@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, "Couture,
+	Mario" <Mario.Couture@drdc-rddc.gc.ca>, "Painchaud,
+	Frederic" <Frederic.Painchaud@drdc-rddc.gc.ca>
 List-Id: lttng-dev@lists.lttng.org
 
---===============2024447365==
-Content-Type: multipart/alternative; boundary=f46d0438914b1ef7a804da08595f
+--===============0685263220==
+Content-Type: multipart/alternative; boundary=f46d044286ca53506404da08b222
 
---f46d0438914b1ef7a804da08595f
-Content-Type: text/plain; charset=GB2312
+--f46d044286ca53506404da08b222
+Content-Type: text/plain; charset=ISO-8859-1
 Content-Transfer-Encoding: quoted-printable
 
-Hi Xuan,
+Certainly seems worthwhile to me although I never heard about debugfs being
+phased out. Could you clarify that point?
 
-There is no public API list that I know of. You'll want to have a look at
-the public headers in the include/babeltrace folder. There is also an
-official Babeltrace API documentation in doc/API.txt that provides a
-high-level description of the interface and the terminology used.
+J=E9r=E9mie
 
-J=A8=A6r=A8=A6mie
+On Tue, Apr 9, 2013 at 11:21 AM, Thibault, Daniel <
+Daniel.Thibault@drdc-rddc.gc.ca> wrote:
 
-
-
-On Wed, Apr 10, 2013 at 1:23 AM, Xuan Hu <huxuan8218528@gmail.com> wrote:
-
-> Hi, jgalar.
+>    The Google Summer of Code LTTng entry (
+> http://bugs.lttng.org/projects/lttng/wiki/Google_Summer_of_Code_2013) is
+> a promising initiative.  May I propose another little project idea?
 >
-> Thx for your detailed clarification. I will begin with looking throuth th=
-e
-> CTF specification and investigation with the code of bing/python branch.
-> I have one little question, where can I find the list of libbabeltrace's
-> public API? And I also failed to find documents tends for developments an=
-d
-> contributors. I think these would be helpful for me to get fimiliar with
-> our projects. :-)
+> Babeltrace support for the debugfs (/sys/kernel/debug/tracing) trace form=
+at
 >
-> Wish for your reply.
+> Brief explanation:
+> Provide a Babeltrace plug-in to allow Babeltrace to read from traces
+> created by the debugfs service (/sys/kernel/debug/tracing/trace).
 >
+> Expected results: A Babeltrace plug-in, tests, examples and documentation=
+.
 >
-> On Wed, Apr 10, 2013 at 3:37 AM, J=A8=A6r=A8=A6mie Galarneau <
-> jeremie.galarneau@efficios.com> wrote:
+> Skill level: Easy - Medium
 >
->> Hi Xuan,
->>
->> First, thanks for reaching out!
->>
->> Basically, the Babeltrace Python bindings project aims at providing
->> Python developers with a library to read the trace formats supported by
->> Babeltrace. I'll take the chance to detail what we had in mind with this
->> project.
->>
->> The first part consists of producing Python bindings to libbabeltrace's
->> public API. This has already been done last summer but is not yet part o=
-f
->> the master branch. It currently lives in the "bindings/python" branch of
->> Babeltrace's repository[1]. However, it is not completely up-to-date and
->> lacks thorough testing.
->>
->> The second part, which is more of an interface design exercise, is
->> exposing the trace data read by libbabeltrace in a "Pythonic" way. That
->> includes implementing Python's generator-iterator interface, expressing =
-the
->> trace metadata using Python's data structures, etc. libbabeltrace can al=
-so
->> be used as a trace writer so the Python interface should expose this
->> functionality by providing a symmetric output interface. All in all, it
->> calls for a lot more design work than actual implementation.
->>
->> For starters, you may want to have a look at the CTF specification[2],
->> which is currently the only trace format supported by Babeltrace, to giv=
-e
->> you an idea of the challenges at hand. Trying out the complete LTTng
->> toolchain will also give you a better view of this project.
->>
->> [1]
->> https://bugs.lttng.org/projects/babeltrace/repository/show?rev=3Dbinding=
-s%2Fpython
->> [2]
->> http://git.efficios.com/?p=3Dctf.git;a=3Dblob_plain;f=3Dcommon-trace-for=
-mat-specification.txt;hb=3Dmaster
->>
->> Don't hesitate to come forward and propose a tentative API or ask for
->> clarifications.
->>
->> Regards,
->> J=A8=A6r=A8=A6mie
->>
->> On Tue, Apr 9, 2013 at 5:38 AM, Xuan Hu <huxuan8218528@gmail.com> wrote:
->>
->>> Hello everyone,
->>>
->>> I'm really interested in the project of `Babeltrace python bindings`.
->>> Besides I'm confident with my python skill and I'm willing to study mor=
-e
->>> skills related. As far as I know, I think this is a somewhat standalone
->>> project which should create a module for python programmers to get the
->>> results which babeltrace produce. Wish potential mentor (jgalar) can ju=
-dge
->>> whether it is or not. Besides I wonder to know any suggestions for me t=
-o
->>> begin with this project?
->>>
->>> --
->>> =EC=E8=EC=D3 Sean.Hu
->>>
->>> =B1=B1=BE=A9=B4=F3=D1=A7=D0=C5=CF=A2=BF=C6=D1=A7=BC=BC=CA=F5=D1=A7=D4=
-=BA2012=BC=B6=CB=B6=CA=BF=D1=D0=BE=BF=C9=FA
->>> 2012, Master Degree Candidate, EECS, PKU
->>>
->>> Blog <http://huxuan.org/> | GitHproposeub <https://github.com/huxuan/>|
->>> Twitter <https://twitter.com/huxuan/> | Douban<http://www.douban.com/pe=
-ople/huxuan/>|
->>> Google+ <https://plus.google.com/u/0/116930918200210859389> | Jiepang<h=
-ttp://jiepang.com/huxuan/> |
->>> Weibo <http://weibo.com/victorhu>
->>>
->>> _______________________________________________
->>> lttng-dev mailing list
->>> lttng-dev@lists.lttng.org
->>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->>>
->>>
->>
->>
->> --
->> J=A8=A6r=A8=A6mie Galarneau
->> EfficiOS Inc.
->> http://www.efficios.com
->>
+> Prerequisite Knowledge: C, OO development
 >
+> Mentors: ?
 >
+>    Even if the debugfs tracing facility is destined for eventual
+> withdrawal from the Linux kernel, it may be of interest to some to recove=
+r
+> older traces generated in this way -if only in order to be able to proces=
+s
+> them in the same way as CTF text dumps.  Conversion to the babeltrace tex=
+t
+> format should be fairly straightforward; conversion to CTF would be
+> trickier.
 >
-> --
-> =EC=E8=EC=D3 Sean.Hu
+>    Is this idea worthwhile or worthless?
 >
-> =B1=B1=BE=A9=B4=F3=D1=A7=D0=C5=CF=A2=BF=C6=D1=A7=BC=BC=CA=F5=D1=A7=D4=BA2=
-012=BC=B6=CB=B6=CA=BF=D1=D0=BE=BF=C9=FA
-> 2012, Master Degree Candidate, EECS, PKU
+> Daniel U. Thibault
+> R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) / Defence R=
+&D
+> Canada - Valcartier (DRDC Valcartier)
+> Cyber s=E9curit=E9 pour les missions essentielles (CME) / Mission Critica=
+l
+> Cyber Security (MCCS)
+> Protection des syst=E8mes et contremesures (PSC) / Systems Protection &
+> Countermeasures (SPC)
+> 2459 route de la Bravoure
+> Qu=E9bec, QC  G3J 1X5
+> CANADA
+> Vox : (418) 844-4000 x4245
+> Fax : (418) 844-4538
+> NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+> Gouvernement du Canada / Government of Canada
+> <http://www.valcartier.drdc-rddc.gc.ca/>
 >
-> Blog <http://huxuan.org/> | GitHub <https://github.com/huxuan/> | Twitter=
-<https://twitter.com/huxuan/>|
-> Douban <http://www.douban.com/people/huxuan/> | Google+<https://plus.goog=
-le.com/u/0/116930918200210859389>|
-> Jiepang <http://jiepang.com/huxuan/> | Weibo <http://weibo.com/victorhu>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 >
 
 
 
 --=20
-J=A8=A6r=A8=A6mie Galarneau
+J=E9r=E9mie Galarneau
 EfficiOS Inc.
 http://www.efficios.com
 
---f46d0438914b1ef7a804da08595f
-Content-Type: text/html; charset=GB2312
+--f46d044286ca53506404da08b222
+Content-Type: text/html; charset=ISO-8859-1
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr">Hi Xuan,<div><br></div><div style>There is no public API l=
-ist that I know of. You&#39;ll want to have a look at the public headers in=
- the include/babeltrace folder. There is also an official Babeltrace API do=
-cumentation in doc/API.txt that provides a high-level description of the in=
-terface and the terminology used.</div>
-<div style><br></div><div style>J=A8=A6r=A8=A6mie</div><div style><br></div=
-><div class=3D"gmail_extra"><br><br><div class=3D"gmail_quote">On Wed, Apr =
-10, 2013 at 1:23 AM, Xuan Hu <span dir=3D"ltr">&lt;<a href=3D"mailto:huxuan=
-8218528@gmail.com" target=3D"_blank">huxuan8218528@gmail.com</a>&gt;</span>=
- wrote:<br>
-<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
-x #ccc solid;padding-left:1ex"><div dir=3D"ltr">Hi, jgalar.<div><br></div><=
-div>Thx for your detailed clarification. I will begin with looking throuth =
-the CTF specification and investigation with the code of bing/python branch=
-.</div>
-<div>I have one little question, where can I find the list of libbabeltrace=
-&#39;s public API? And I also failed to find documents tends for developmen=
-ts and contributors. I think these would be helpful for me to get fimiliar =
-with our projects. :-)</div>
+<div dir=3D"ltr">Certainly seems worthwhile to me although I never heard ab=
+out debugfs being phased out. Could you clarify that point?<div><br></div><=
+div><div>J=E9r=E9mie<br></div><div><div class=3D"gmail_extra"><br><div clas=
+s=3D"gmail_quote">
+On Tue, Apr 9, 2013 at 11:21 AM, Thibault, Daniel <span dir=3D"ltr">&lt;<a =
+href=3D"mailto:Daniel.Thibault@drdc-rddc.gc.ca" target=3D"_blank">Daniel.Th=
+ibault@drdc-rddc.gc.ca</a>&gt;</span> wrote:<br><blockquote class=3D"gmail_=
+quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1=
+ex">
+=A0 =A0The Google Summer of Code LTTng entry (<a href=3D"http://bugs.lttng.=
+org/projects/lttng/wiki/Google_Summer_of_Code_2013" target=3D"_blank">http:=
+//bugs.lttng.org/projects/lttng/wiki/Google_Summer_of_Code_2013</a>) is a p=
+romising initiative. =A0May I propose another little project idea?<br>
 
-<div><br></div><div>Wish for your reply.</div></div><div class=3D"gmail_ext=
-ra"><div><div class=3D"h5"><br><br><div class=3D"gmail_quote">On Wed, Apr 1=
-0, 2013 at 3:37 AM, J=A8=A6r=A8=A6mie Galarneau <span dir=3D"ltr">&lt;<a hr=
-ef=3D"mailto:jeremie.galarneau@efficios.com" target=3D"_blank">jeremie.gala=
-rneau@efficios.com</a>&gt;</span> wrote:<br>
+<br>
+Babeltrace support for the debugfs (/sys/kernel/debug/tracing) trace format=
+<br>
+<br>
+Brief explanation:<br>
+Provide a Babeltrace plug-in to allow Babeltrace to read from traces create=
+d by the debugfs service (/sys/kernel/debug/tracing/trace).<br>
+<br>
+Expected results: A Babeltrace plug-in, tests, examples and documentation.<=
+br>
+<br>
+Skill level: Easy - Medium<br>
+<br>
+Prerequisite Knowledge: C, OO development<br>
+<br>
+Mentors: ?<br>
+<br>
+=A0 =A0Even if the debugfs tracing facility is destined for eventual withdr=
+awal from the Linux kernel, it may be of interest to some to recover older =
+traces generated in this way -if only in order to be able to process them i=
+n the same way as CTF text dumps. =A0Conversion to the babeltrace text form=
+at should be fairly straightforward; conversion to CTF would be trickier.<b=
+r>
 
-<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
-x #ccc solid;padding-left:1ex"><div dir=3D"ltr">Hi Xuan,<div><br></div><div=
->First, thanks for reaching out!</div><div><br></div><div>Basically, the Ba=
-beltrace Python bindings project aims at providing Python developers with a=
- library to read the trace formats supported by Babeltrace. I&#39;ll take t=
-he chance to detail what we had in mind with this project.</div>
-
-
-
-<div><br></div><div>The first part consists of producing Python bindings to=
- libbabeltrace&#39;s public API. This has already been done last summer but=
- is not yet part of the master branch. It currently lives in the &quot;bind=
-ings/python&quot; branch of Babeltrace&#39;s repository[1]. However, it is =
-not completely up-to-date and lacks thorough testing.</div>
-
-
-
-<div><br></div><div>The second part, which is more of an interface design e=
-xercise, is exposing the trace data read by libbabeltrace in a &quot;Python=
-ic&quot; way. That includes implementing Python&#39;s generator-iterator in=
-terface, expressing the trace metadata using Python&#39;s data structures, =
-etc. libbabeltrace can also be used as a trace writer so the Python interfa=
-ce should expose this functionality by providing a symmetric output interfa=
-ce. All in all, it calls for a lot more design work than actual implementat=
-ion.</div>
-
-
-
-<div><br></div><div>For starters, you may want to have a look at the CTF sp=
-ecification[2], which is currently the only trace format supported by Babel=
-trace, to give you an idea of the challenges at hand. Trying out the comple=
-te LTTng toolchain will also give you a better view of this project.</div>
-
-
-
-<div><br></div><div>[1]&nbsp;<a href=3D"https://bugs.lttng.org/projects/bab=
-eltrace/repository/show?rev=3Dbindings%2Fpython" target=3D"_blank">https://=
-bugs.lttng.org/projects/babeltrace/repository/show?rev=3Dbindings%2Fpython<=
-/a><br></div>
-
-
-
-<div class=3D"gmail_extra">[2]&nbsp;<a href=3D"http://git.efficios.com/?p=
-=3Dctf.git;a=3Dblob_plain;f=3Dcommon-trace-format-specification.txt;hb=3Dma=
-ster" target=3D"_blank">http://git.efficios.com/?p=3Dctf.git;a=3Dblob_plain=
-;f=3Dcommon-trace-format-specification.txt;hb=3Dmaster</a><br>
-
-
-
-<br>Don&#39;t hesitate to come forward and propose a tentative API or ask f=
-or clarifications.<br><br>Regards,<br>J=A8=A6r=A8=A6mie<br><br><div class=
-=3D"gmail_quote"><div><div>On Tue, Apr 9, 2013 at 5:38 AM, Xuan Hu <span di=
-r=3D"ltr">&lt;<a href=3D"mailto:huxuan8218528@gmail.com" target=3D"_blank">=
-huxuan8218528@gmail.com</a>&gt;</span> wrote:<br>
-
-
-
-</div></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0=
-.8ex;border-left-width:1px;border-left-color:rgb(204,204,204);border-left-s=
-tyle:solid;padding-left:1ex"><div dir=3D"ltr"><div><div>Hello everyone,<div=
->
-
-<br></div><div>I&#39;m really interested in the project of `Babeltrace pyth=
-on bindings`. Besides I&#39;m confident with my python skill and I&#39;m wi=
-lling to study more skills related. As far as I know, I think this is a som=
-ewhat standalone project which should create a module for python programmer=
-s to get the results which babeltrace produce. Wish potential mentor (jgala=
-r) can judge whether it is or not. Besides I wonder to know any suggestions=
- for me to begin with this project?</div>
-
-
-
-</div></div><span><font color=3D"#888888">
-<div><div><div><br></div>-- <br><div dir=3D"ltr"><div>=EC=E8=EC=D3 Sean.Hu<=
-/div><div><br></div><div><div><div><div><div>=B1=B1=BE=A9=B4=F3=D1=A7=D0=C5=
-=CF=A2=BF=C6=D1=A7=BC=BC=CA=F5=D1=A7=D4=BA2012=BC=B6=CB=B6=CA=BF=D1=D0=BE=
-=BF=C9=FA</div><div>2012, Master Degree Candidate, EECS, PKU</div><div><br>=
-</div></div></div>
-<div><a href=3D"http://huxuan.org/" target=3D"_blank">Blog</a>&nbsp;|&nbsp;=
-<a href=3D"https://github.com/huxuan/" target=3D"_blank">GitHproposeub</a> =
-| <a href=3D"https://twitter.com/huxuan/" target=3D"_blank">Twitter</a> |&n=
-bsp;<a href=3D"http://www.douban.com/people/huxuan/" target=3D"_blank">Doub=
-an</a> | <a href=3D"https://plus.google.com/u/0/116930918200210859389" targ=
-et=3D"_blank">Google+</a> |&nbsp;<a href=3D"http://jiepang.com/huxuan/" tar=
-get=3D"_blank">Jiepang</a>&nbsp;| <a href=3D"http://weibo.com/victorhu" tar=
-get=3D"_blank">Weibo</a><br>
-
-
-
-
-</div></div></div></div>
-</div></div></font></span></div>
-<br>_______________________________________________<br>
+<br>
+=A0 =A0Is this idea worthwhile or worthless?<br>
+<br>
+Daniel U. Thibault<br>
+R &amp; D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) / Defence=
+ R&amp;D Canada - Valcartier (DRDC Valcartier)<br>
+Cyber s=E9curit=E9 pour les missions essentielles (CME) / Mission Critical =
+Cyber Security (MCCS)<br>
+Protection des syst=E8mes et contremesures (PSC) / Systems Protection &amp;=
+ Countermeasures (SPC)<br>
+2459 route de la Bravoure<br>
+Qu=E9bec, QC=A0 G3J 1X5<br>
+CANADA<br>
+Vox=A0: <a href=3D"tel:%28418%29%20844-4000%20x4245" value=3D"+14188444000"=
+>(418) 844-4000 x4245</a><br>
+Fax=A0: <a href=3D"tel:%28418%29%20844-4538" value=3D"+14188444538">(418) 8=
+44-4538</a><br>
+NAC=A0: 918V QSDJ &lt;<a href=3D"http://www.travelgis.com/map.asp?addr=3D91=
+8V%20QSDJ" target=3D"_blank">http://www.travelgis.com/map.asp?addr=3D918V%2=
+0QSDJ</a>&gt;<br>
+Gouvernement du Canada=A0/ Government of Canada<br>
+&lt;<a href=3D"http://www.valcartier.drdc-rddc.gc.ca/" target=3D"_blank">ht=
+tp://www.valcartier.drdc-rddc.gc.ca/</a>&gt;<br>
+<br>
+_______________________________________________<br>
 lttng-dev mailing list<br>
-<a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-dev@li=
-sts.lttng.org</a><br>
+<a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a><=
+br>
 <a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" targe=
 t=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><=
 br>
-<br></blockquote></div><span><font color=3D"#888888"><br><br clear=3D"all">=
-<div><br></div>-- <br>J=A8=A6r=A8=A6mie Galarneau<br>EfficiOS Inc.<br><a hr=
-ef=3D"http://www.efficios.com" target=3D"_blank">http://www.efficios.com</a=
->
-</font></span></div></div>
-</blockquote></div><br><br clear=3D"all"><div><br></div>-- <br></div></div>=
-<div dir=3D"ltr"><div>=EC=E8=EC=D3 Sean.Hu</div><div><br></div><div><div><d=
-iv><div class=3D"h5"><div>=B1=B1=BE=A9=B4=F3=D1=A7=D0=C5=CF=A2=BF=C6=D1=A7=
-=BC=BC=CA=F5=D1=A7=D4=BA2012=BC=B6=CB=B6=CA=BF=D1=D0=BE=BF=C9=FA</div><div>=
-2012, Master Degree Candidate, EECS, PKU</div>
-<div><br></div>
-</div></div><div><a href=3D"http://huxuan.org/" target=3D"_blank">Blog</a>&=
-nbsp;|&nbsp;<a href=3D"https://github.com/huxuan/" target=3D"_blank">GitHub=
-</a> | <a href=3D"https://twitter.com/huxuan/" target=3D"_blank">Twitter</a=
-> |&nbsp;<a href=3D"http://www.douban.com/people/huxuan/" target=3D"_blank"=
->Douban</a> | <a href=3D"https://plus.google.com/u/0/116930918200210859389"=
- target=3D"_blank">Google+</a> |&nbsp;<a href=3D"http://jiepang.com/huxuan/=
-" target=3D"_blank">Jiepang</a>&nbsp;| <a href=3D"http://weibo.com/victorhu=
-" target=3D"_blank">Weibo</a><br>
-
+</blockquote></div><br><br clear=3D"all"><div><br></div>-- <br>J=E9r=E9mie =
+Galarneau<br>EfficiOS Inc.<br><a href=3D"http://www.efficios.com" target=3D=
+"_blank">http://www.efficios.com</a>
 </div></div></div></div>
-</div>
-</blockquote></div><br><br clear=3D"all"><div><br></div>-- <br>J=A8=A6r=A8=
-=A6mie Galarneau<br>EfficiOS Inc.<br><a href=3D"http://www.efficios.com" ta=
-rget=3D"_blank">http://www.efficios.com</a>
-</div></div>
 
---f46d0438914b1ef7a804da08595f--
+--f46d044286ca53506404da08b222--
 
 
---===============2024447365==
+--===============0685263220==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -345,4 +197,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============2024447365==--
+--===============0685263220==--
