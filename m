@@ -1,18 +1,21 @@
-From: Bernd Hufmann <Bernd.Hufmann@ericsson.com>
-Subject: Re: Error using add-context for perf counters
-Date: Wed, 10 Apr 2013 11:16:10 -0400
-Message-ID: <5165823A.3020903__24112.298191949$1365607008$gmane$org@ericsson.com>
-References: <5148B66A.6080007@ericsson.com> <515C6F92.5060803@ericsson.com>
-	<20130410142108.GA5362@Krystal>
+From: Simon Marchi <simon.marchi@polymtl.ca>
+Subject: Re: [PATCH lttng-tools] Fix link: move -lrt at the end
+ of the link line
+Date: Wed, 10 Apr 2013 11:44:19 -0400
+Message-ID: <CAFXXi0=sstDTxVts6kuHjyzVC5FSP490zHC7vY=GvPQQsr0HPw__47493.0107164711$1365608719$gmane$org@mail.gmail.com>
+References: <1364755218-27374-1-git-send-email-simon.marchi@polymtl.ca>
+	<20130410142223.GA5448@Krystal>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from usevmg21.ericsson.net ([198.24.6.65])
+Received: from mail-ia0-f170.google.com ([209.85.210.170])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <bernd.hufmann@ericsson.com>) id 1UPwl0-0005FB-JN
-	for lttng-dev@lists.lttng.org; Wed, 10 Apr 2013 11:16:18 -0400
-In-Reply-To: <20130410142108.GA5362@Krystal>
+	(envelope-from <thundersim@gmail.com>) id 1UPxCh-0005Tx-Na
+	for lttng-dev@lists.lttng.org; Wed, 10 Apr 2013 11:44:55 -0400
+Received: by mail-ia0-f170.google.com with SMTP id j38so546563iad.1
+	for <lttng-dev@lists.lttng.org>; Wed, 10 Apr 2013 08:44:50 -0700 (PDT)
+In-Reply-To: <20130410142223.GA5448@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,68 +24,65 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Mathieu
+The problem was mentionned on the mailing list a few days ago [1].
 
-I tried it with 2.2-rc1 and it also fails.
-I'll open a bug report for that.
+"Recent" Ubuntus pass --as-needed to the linker [2], which makes it
+sensitive to the ordering of libraries on the command line. Libraries
+that resolve undefined symbols of other libs or objects must be
+specified after those other libs or objects (much like the behavior of
+old linkers, if I understand correctly). timer_settime is used in one
+of the LTTng libs and is defined in librt, so librt must be put after
+it. Me trying to compile lttng-tools on Ubuntu without the patch [3].
 
-Thanks
-Bernd
+[1] http://lists.lttng.org/pipermail/lttng-dev/2013-March/019929.html
+[2] https://wiki.ubuntu.com/NattyNarwhal/ToolchainTransition
+[3] http://pastebin.com/G2pSkseF
 
-On 04/10/2013 10:21 AM, Mathieu Desnoyers wrote:
-> please open a bug report on the bug tracker for this issue if you still
-> see it. Please let us know if you see it in 2.2-rc1 too.
->
-> * Matthew Khouzam (matthew.khouzam@ericsson.com) wrote:
->> Hi, I can confirm this bug, Has anyone else tried it?
+On 10 April 2013 10:22, Mathieu Desnoyers
+<mathieu.desnoyers@efficios.com> wrote:
+> * Simon Marchi (simon.marchi@polymtl.ca) wrote:
+>> It has to be after libconsumer.la.
 >>
->> On 13-03-19 03:03 PM, Bernd Hufmann wrote:
->>> Hello
->>>
->>> I cannot add contexts for perf counters using lttng-tools v2.1.1 and I
->>> get an error (see below). When using lttng-tools 2.0.5 (on a different
->>> computer) it works. Could somebody from lttng development team look
->>> into that?
->>>
->>> Thanks
->>> Bernd
->>>
->>> ----------------------------------------------------------------------
->>>> lttng create mySession
->>> Session mySession created.
->>> Traces will be written in
->>> /home/bernd/lttng-traces/mySession-20130319-145021
->>>
->>>> lttng enable-event -a -k
->>> All kernel events are enabled in channel channel0
->>>
->>>> lttng add-context -k -t perf:branch-misses -t perf:cache-misses
->>> PERROR: add context ioctl: Invalid argument [in
->>> kernel_add_channel_context() at kernel.c:47]
->>> Error: perf:cache-misses: Add kernel context failed
->>> PERROR: add context ioctl: Invalid argument [in
->>> kernel_add_channel_context() at kernel.c:47]
->>> Error: perf:branch-misses: Add kernel context failed
->>> Warning: Some command(s) went wrong
->>>
->>> -----------------------------------------------------------------------
->>> My setup is:
->>> Ubuntu 12.04 with kernel 3.2.0-38
->>> lttng-modules v2.1.1
->>> lttng-tools v2.1.1
->>>
->>>
->>>
+>
+> why, what issue does it fix ?
+>
+>> Signed-off-by: Simon Marchi <simon.marchi@polymtl.ca>
+>> ---
+>>  src/bin/lttng-consumerd/Makefile.am |    5 +++--
+>>  1 file changed, 3 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/src/bin/lttng-consumerd/Makefile.am b/src/bin/lttng-consumerd/Makefile.am
+>> index a418eb4..d340c68 100644
+>> --- a/src/bin/lttng-consumerd/Makefile.am
+>> +++ b/src/bin/lttng-consumerd/Makefile.am
+>> @@ -4,10 +4,11 @@ lttnglibexec_PROGRAMS = lttng-consumerd
+>>
+>>  lttng_consumerd_SOURCES = lttng-consumerd.c lttng-consumerd.h
+>>
+>> -lttng_consumerd_LDADD = -lrt \
+>> +lttng_consumerd_LDADD = \
+>>          $(top_builddir)/src/common/libconsumer.la \
+>>          $(top_builddir)/src/common/sessiond-comm/libsessiond-comm.la \
+>> -        $(top_builddir)/src/common/libcommon.la
+>> +        $(top_builddir)/src/common/libcommon.la \
+>> +        -lrt
+>>
+>>  if HAVE_LIBLTTNG_UST_CTL
+>>  lttng_consumerd_LDADD += -llttng-ust-ctl
+>> --
+>> 1.7.10.4
+>>
 >>
 >> _______________________________________________
 >> lttng-dev mailing list
 >> lttng-dev@lists.lttng.org
 >> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
-
--- 
-This Communication is Confidential. We only send and receive email on 
-the basis of the terms set out at www.ericsson.com/email_disclaimer
+>
+> --
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> http://www.efficios.com
