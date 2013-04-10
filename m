@@ -1,22 +1,23 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-tools] Fix link: move -lrt at the
-	end	of the link line
-Date: Wed, 10 Apr 2013 12:01:01 -0400
-Message-ID: <20130410160101.GA5945__3047.9782414206$1365609694$gmane$org@Krystal>
-References: <1364755218-27374-1-git-send-email-simon.marchi@polymtl.ca>
-	<20130410142223.GA5448@Krystal>
-	<CAFXXi0=sstDTxVts6kuHjyzVC5FSP490zHC7vY=GvPQQsr0HPw@mail.gmail.com>
+From: Jan Glauber <jan.glauber@gmail.com>
+Subject: Re: LTTng system call tracing on ARM
+Date: Wed, 10 Apr 2013 18:02:34 +0200
+Message-ID: <20130410160233.GA17568__4333.85973233289$1365609787$gmane$org@hal>
+References: <20130410084053.GB25958@hal>
+	<CA+umk=pX-4t74XQqsP+vLsDGF1atWzUi75gmSyoVGsDkqQcB7g@mail.gmail.com>
+	<20130410130246.GA12801@hal>
+	<CA+umk=pPAvGqkC2pPfr6sA3sPtZroKoPegJ6gET2eBYSPp4Fhw@mail.gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from mail-bk0-f54.google.com ([209.85.214.54])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UPxSJ-0005ey-3o
-	for lttng-dev@lists.lttng.org; Wed, 10 Apr 2013 12:01:03 -0400
+	(envelope-from <jan.glauber@gmail.com>) id 1UPxTx-0005gD-7M
+	for lttng-dev@lists.lttng.org; Wed, 10 Apr 2013 12:02:45 -0400
+Received: by mail-bk0-f54.google.com with SMTP id q16so337049bkw.13
+	for <lttng-dev@lists.lttng.org>; Wed, 10 Apr 2013 09:02:39 -0700 (PDT)
 Content-Disposition: inline
-In-Reply-To: <CAFXXi0=sstDTxVts6kuHjyzVC5FSP490zHC7vY=GvPQQsr0HPw@mail.gmail.com>
+In-Reply-To: <CA+umk=pPAvGqkC2pPfr6sA3sPtZroKoPegJ6gET2eBYSPp4Fhw@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -25,78 +26,135 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Simon Marchi <simon.marchi@polymtl.ca>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Pierre-Luc St-Charles <pierre-luc.st-charles@polymtl.ca>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Simon Marchi (simon.marchi@polymtl.ca) wrote:
-> The problem was mentionned on the mailing list a few days ago [1].
+On Wed, Apr 10, 2013 at 09:38:33AM -0400, Pierre-Luc St-Charles wrote:
+> Here are the links I stashed a while back about previous patching attempts
+> to add syscall tracepoints to the ARM kernel :
 > 
-> "Recent" Ubuntus pass --as-needed to the linker [2], which makes it
-> sensitive to the ordering of libraries on the command line. Libraries
-> that resolve undefined symbols of other libs or objects must be
-> specified after those other libs or objects (much like the behavior of
-> old linkers, if I understand correctly). timer_settime is used in one
-> of the LTTng libs and is defined in librt, so librt must be put after
-> it. Me trying to compile lttng-tools on Ubuntu without the patch [3].
+> Most promising:
+> http://www.spinics.net/lists/arm-kernel/msg166419.html
 > 
-> [1] http://lists.lttng.org/pipermail/lttng-dev/2013-March/019929.html
-> [2] https://wiki.ubuntu.com/NattyNarwhal/ToolchainTransition
-> [3] http://pastebin.com/G2pSkseF
-
-OK, this should be added to the patch changelog.
-
-Thanks,
-
-Mathieu
-
+> Earlier draft(s):
+> http://lists.infradead.org/pipermail/linux-arm-kernel/2012-February/086974.html
+> https://lkml.org/lkml/2011/12/1/131
+> http://comments.gmane.org/gmane.linux.ports.arm.kernel/141933
 > 
-> On 10 April 2013 10:22, Mathieu Desnoyers
-> <mathieu.desnoyers@efficios.com> wrote:
-> > * Simon Marchi (simon.marchi@polymtl.ca) wrote:
-> >> It has to be after libconsumer.la.
-> >>
-> >
-> > why, what issue does it fix ?
-> >
-> >> Signed-off-by: Simon Marchi <simon.marchi@polymtl.ca>
-> >> ---
-> >>  src/bin/lttng-consumerd/Makefile.am |    5 +++--
-> >>  1 file changed, 3 insertions(+), 2 deletions(-)
-> >>
-> >> diff --git a/src/bin/lttng-consumerd/Makefile.am b/src/bin/lttng-consumerd/Makefile.am
-> >> index a418eb4..d340c68 100644
-> >> --- a/src/bin/lttng-consumerd/Makefile.am
-> >> +++ b/src/bin/lttng-consumerd/Makefile.am
-> >> @@ -4,10 +4,11 @@ lttnglibexec_PROGRAMS = lttng-consumerd
-> >>
-> >>  lttng_consumerd_SOURCES = lttng-consumerd.c lttng-consumerd.h
-> >>
-> >> -lttng_consumerd_LDADD = -lrt \
-> >> +lttng_consumerd_LDADD = \
-> >>          $(top_builddir)/src/common/libconsumer.la \
-> >>          $(top_builddir)/src/common/sessiond-comm/libsessiond-comm.la \
-> >> -        $(top_builddir)/src/common/libcommon.la
-> >> +        $(top_builddir)/src/common/libcommon.la \
-> >> +        -lrt
-> >>
-> >>  if HAVE_LIBLTTNG_UST_CTL
-> >>  lttng_consumerd_LDADD += -llttng-ust-ctl
-> >> --
-> >> 1.7.10.4
-> >>
-> >>
-> >> _______________________________________________
-> >> lttng-dev mailing list
-> >> lttng-dev@lists.lttng.org
-> >> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> >
-> > --
-> > Mathieu Desnoyers
-> > EfficiOS Inc.
-> > http://www.efficios.com
+> I believe the first link shows the most refined patch there is out there,
+> but it might take some minor tinkering to apply it to a different kernel
+> version. I briefly tried to apply it to the 3.0.31 kernel, but it's a bit
+> out of my 'tinkering' range, and I never finished it.
+> 
+> 
+> Good luck!
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Thanks, fortunately I'm targeting 3.4. It wasn't too hard, got the kernel running
+and ftrace already works.
+
+Now I'm facing something hilarious, on loading the lttng-tracer module I get:
+
+Error: could not insert module lttng-tracer.ko: Cannot allocate memory
+
+[15912.259399] alloc_vmap_area: 2 callbacks suppressed
+[15912.264953] vmap allocation for size 15998976 failed: use vmalloc=<size> to increase size.
+[15912.273895] vmalloc: allocation failure: 15991653 bytes
+[15912.279602] insmod: page allocation failure: order:0, mode:0xd0
+
+Never saw vmalloc fail on loading a kernel module before. Hmmm.
+Looking at the module reveals:
+-rw-rw-r-- 1 jang jang 16036281 Apr 10 17:48 lttng-tracer.ko
+
+Wow. 16 megs for a kernel module ?!? readelf says its all in .rodata.
+
+Doing an objdump on that
+Disassembly of section .rodata:
+
+00000000 <sc_table>:
+...
+    1714:       00f0a788        rscseq  sl, r0, r8, lsl #15
+    1718:       00f0a7a0        rscseq  sl, r0, r0, lsr #15
+    171c:       00000004        andeq   r0, r0, r4
+        ...
+  f00054:       00f0a860        rscseq  sl, r0, r0, ror #16
+  f00058:       00f0a878        rscseq  sl, r0, r8, ror r8
+  f0005c:       00000002        andeq   r0, r0, r2
+
+Now whats that? A big hole in the system call table?
+
+Digging through the various defines and headers of lttng-modules I've found:
+
+instrumentation/syscalls/headers/arm-32-syscalls-2.6.38_integers_override.h:
+...
+#define OVERRIDE_TABLE_32_sys_set_tls
+TRACE_SYSCALL_TABLE(sys_set_tls, sys_set_tls, 0xf0005, 2)
+
+Weird ARM apparently expanded the system call area above 0xf0000. I don't
+understand why this override logic is needed but removing that define results
+in a kernel module with a much more sane size.
+
+LTTng system call tracing works with that change for me.
+
+Any idea on how the override problem can be solved with the magic system calls?
+
+--Jan
+
+> -PL
+> 
+> 
+> 
+> On Wed, Apr 10, 2013 at 9:02 AM, Jan Glauber <jan.glauber@gmail.com> wrote:
+> 
+> > On Wed, Apr 10, 2013 at 08:37:18AM -0400, PLSTC wrote:
+> > > Hey Jan,
+> > >
+> > > I cannot speak on behalf of everyone here, but during our attempt to port
+> > > LTTng to Android, we also noticed that the kernels we were using (3.0.x)
+> > > were nowhere near the requirements for syscall tracepoints support. I
+> > > believe such support was added on x86/64 way earlier (early 3.x) than on
+> > > ARM, which is why it was included in LTTng's modules a while ago. Simply
+> > > put, the ARM kernel is late.
+> >
+> > OK, so for ARM kernel version 3.6 is the minimum unless the syscall
+> > tracepoint
+> > support is backported.
+> >
+> > > There are a few actuals ways to 'enable' syscall tracepoints support on
+> > > early ARM kernels, but they all including a bit of kernel
+> > hacking/patching.
+> > > I could send you some links if you're interested in that.
+> >
+> > Yes, sure!
+> >
+> > --Jan
+> >
+> > > -PL
+> > > On Apr 10, 2013 4:40 AM, "Jan Glauber" <jan.glauber@gmail.com> wrote:
+> > >
+> > > > Hi,
+> > > >
+> > > > I want to use LTTng for system call tracing on ARM. Now lttng-modules
+> > seems
+> > > > to support system call tracing on ARM already since
+> > > > "8f4f80e LTTng Modules ARM syscall instrumentation".
+> > > >
+> > > > But I wonder how that worked since lttng-syscalls.c is only build under
+> > > > CONFIG_HAVE_SYSCALL_TRACEPOINTS and that was added to ARM only with
+> > kernel
+> > > > 3.6
+> > > > (much after than the lttng-modules commit).
+> > > >
+> > > > Am I missing something? Is system call tracing working on ARM with the
+> > > > upstream
+> > > > LTTng version?
+> > > >
+> > > > thanks,
+> > > > Jan
+> > > >
+> > > > _______________________________________________
+> > > > lttng-dev mailing list
+> > > > lttng-dev@lists.lttng.org
+> > > > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> > > >
+> >
