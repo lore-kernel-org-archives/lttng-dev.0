@@ -1,18 +1,19 @@
-From: Tabibel Sami <sami.tabibel@gmail.com>
-Subject: GSoC 2013,
-	"Instrumenting Open Source projects using UST" project.
-Date: Wed, 10 Apr 2013 04:20:42 +0200
-Message-ID: <CAL_rx6WAZFhUdD2ytRXk9NOJb-=wLmBsE_dfAX+MpxSyVKh2Tg__21840.9979170703$1365560480$gmane$org@mail.gmail.com>
+From: Francis Deslauriers <fdeslaur@gmail.com>
+Subject: [RFC-Patch 1/2] Add page fault trace event definitions
+Date: Tue,  9 Apr 2013 23:59:19 -0400
+Message-ID: <1365566360-7206-1-git-send-email-fdeslaur__19982.9977741048$1365566415$gmane$org@gmail.com>
+References: <1365398358-23374-1-git-send-email-fdeslaur@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-vb0-f46.google.com ([209.85.212.46])
+Received: from mail-qe0-f53.google.com ([209.85.128.53])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <sami.tabibel@gmail.com>) id 1UPkeW-000751-Dw
-	for lttng-dev@lists.lttng.org; Tue, 09 Apr 2013 22:20:48 -0400
-Received: by mail-vb0-f46.google.com with SMTP id 11so5290855vbe.33
-	for <lttng-dev@lists.lttng.org>; Tue, 09 Apr 2013 19:20:43 -0700 (PDT)
+	(envelope-from <fdeslaur@gmail.com>) id 1UPmCF-0007oX-Mu
+	for lttng-dev@lists.lttng.org; Tue, 09 Apr 2013 23:59:43 -0400
+Received: by mail-qe0-f53.google.com with SMTP id q19so22916qeb.12
+	for <lttng-dev@lists.lttng.org>; Tue, 09 Apr 2013 20:59:38 -0700 (PDT)
+In-Reply-To: <1365398358-23374-1-git-send-email-fdeslaur@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,13 +25,35 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hello,
-I am doing master degree of Cryptology and information security
-I have good C, Python and Scapy skills, and i am interested to work on
-"Instrumenting Open Source projects using UST" project this summer.
-
-I am looking for any comment about the difficulty and the content of
-the project, and also about my chances to be accepted if i apply for.
-
-Thanks in advance.
-Best Regards.
+QWRkIHBhZ2VfZmF1bHRfZW50cnkgYW5kIHBhZ2VfZmF1bHRfZXhpdCBldmVudCBkZWZpbml0aW9u
+cy4gSXQgd2lsbAphbGxvdyBlYWNoIGFyY2hpdGVjdHVyZSB0byBpbnN0cnVtZW50IHRoZWlyIHBh
+Z2UgZmF1bHRzLgoKU2lnbmVkLW9mZi1ieTogRnJhbmNpcyBEZXNsYXVyaWVycyA8ZmRlc2xhdXJA
+Z21haWwuY29tPgpSZXZpZXdlZC1ieTogUmFwaGHDq2wgQmVhbW9udGUgPHJhcGhhZWwuYmVhbW9u
+dGVAZ21haWwuY29tPgotLS0KIGluY2x1ZGUvdHJhY2UvZXZlbnRzL2ZhdWx0LmggfCAgIDUxICsr
+KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKwogMSBmaWxlIGNoYW5nZWQs
+IDUxIGluc2VydGlvbnMoKykKIGNyZWF0ZSBtb2RlIDEwMDY0NCBpbmNsdWRlL3RyYWNlL2V2ZW50
+cy9mYXVsdC5oCgpkaWZmIC0tZ2l0IGEvaW5jbHVkZS90cmFjZS9ldmVudHMvZmF1bHQuaCBiL2lu
+Y2x1ZGUvdHJhY2UvZXZlbnRzL2ZhdWx0LmgKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAw
+MDAwMC4uNTIyZGRlZQotLS0gL2Rldi9udWxsCisrKyBiL2luY2x1ZGUvdHJhY2UvZXZlbnRzL2Zh
+dWx0LmgKQEAgLTAsMCArMSw1MSBAQAorI3VuZGVmIFRSQUNFX1NZU1RFTQorI2RlZmluZSBUUkFD
+RV9TWVNURU0gZmF1bHQKKworI2lmICFkZWZpbmVkKF9UUkFDRV9GQVVMVF9IKSB8fCBkZWZpbmVk
+KFRSQUNFX0hFQURFUl9NVUxUSV9SRUFEKQorI2RlZmluZSBfVFJBQ0VfRkFVTFRfSAorCisjaW5j
+bHVkZSA8bGludXgvdHJhY2Vwb2ludC5oPgorCitUUkFDRV9FVkVOVChwYWdlX2ZhdWx0X2VudHJ5
+LAorCisJVFBfUFJPVE8oc3RydWN0IHB0X3JlZ3MgKnJlZ3MsIHVuc2lnbmVkIGxvbmcgYWRkcmVz
+cywKKwkJCQkJaW50IHdyaXRlX2FjY2VzcyksCisKKwlUUF9BUkdTKHJlZ3MsIGFkZHJlc3MsIHdy
+aXRlX2FjY2VzcyksCisKKwlUUF9TVFJVQ1RfX2VudHJ5KAorCQlfX2ZpZWxkKAl1bnNpZ25lZCBs
+b25nLAlpcAkpCisJCV9fZmllbGQoCXVuc2lnbmVkIGxvbmcsCWFkZHIJKQorCQlfX2ZpZWxkKAl1
+aW50OF90LAl3cml0ZQkpCisJKSwKKworCVRQX2Zhc3RfYXNzaWduKAorCQlfX2VudHJ5LT5pcAk9
+IHJlZ3MgPyBpbnN0cnVjdGlvbl9wb2ludGVyKHJlZ3MpIDogMFVMOworCQlfX2VudHJ5LT5hZGRy
+CT0gYWRkcmVzczsKKwkJX19lbnRyeS0+d3JpdGUJPSAhIXdyaXRlX2FjY2VzczsKKwkpLAorCisJ
+VFBfcHJpbnRrKCJpcD0lbHUgYWRkcj0lbHUgd3JpdGVfYWNjZXNzPSVkIiwKKwkJX19lbnRyeS0+
+aXAsIF9fZW50cnktPmFkZHIsIF9fZW50cnktPndyaXRlKQorKTsKKworVFJBQ0VfRVZFTlQocGFn
+ZV9mYXVsdF9leGl0LAorCisJVFBfUFJPVE8oaW50IHJlc3VsdCksCisKKwlUUF9BUkdTKHJlc3Vs
+dCksCisKKwlUUF9TVFJVQ1RfX2VudHJ5KAorCQlfX2ZpZWxkKAlpbnQsCXJlcwkpCisJKSwKKwor
+CVRQX2Zhc3RfYXNzaWduKAorCQlfX2VudHJ5LT5yZXMJPSByZXN1bHQ7CisJKSwKKworCVRQX3By
+aW50aygicmVzdWx0PSVkIiwgX19lbnRyeS0+cmVzKQorKTsKKworI2VuZGlmIC8qIF9UUkFDRV9G
+QVVMVF9IICovCisvKiBUaGlzIHBhcnQgbXVzdCBiZSBvdXRzaWRlIHByb3RlY3Rpb24gKi8KKyNp
+bmNsdWRlIDx0cmFjZS9kZWZpbmVfdHJhY2UuaD4KLS0gCjEuNy4xMC40CgoKX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlz
+dApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJp
+bi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
