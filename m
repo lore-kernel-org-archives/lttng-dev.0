@@ -1,16 +1,20 @@
-From: Simon Marchi <simon.marchi@polymtl.ca>
-Subject: [RFC PATCH lttng-tools v4] lttng cli: Accept human
-	readable sizes for --subbuf-size
-Date: Wed, 10 Apr 2013 14:52:21 -0400
-Message-ID: <1365619941-16708-1-git-send-email-simon.marchi__2668.26246302134$1365619959$gmane$org@polymtl.ca>
+From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: GSoC 2013 proposal - Babeltrace python bindings
+Date: Wed, 10 Apr 2013 17:28:16 -0400
+Message-ID: <CA+jJMxthrZXAeUE-J3muXVWsAfPLyRbtYb8oQsodSQmP29sTKg__3902.46439860693$1365629335$gmane$org@mail.gmail.com>
+References: <CAB44bLY4dUPe_fJj7v5oU6hnDAqypmoi3Mt=km5GHkDUOa6pPg@mail.gmail.com>
+	<CA+jJMxsAE=5abYynLYvzCw9YqrtuDLn9-ToouQ8WoFzjpKsXRQ@mail.gmail.com>
+	<CAB44bLYaRCCNnkJ0Vkd180dgv63748ZM=5TNErvzAZAUETSobA@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============2024447365=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.electronicbox.net ([96.127.255.83])
+Received: from mail-wi0-f169.google.com ([209.85.212.169])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <simon.marchi@polymtl.ca>) id 1UQ082-00075h-2C
-	for lttng-dev@lists.lttng.org; Wed, 10 Apr 2013 14:52:18 -0400
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1UQ2Z4-0008Jz-Tl
+	for lttng-dev@lists.lttng.org; Wed, 10 Apr 2013 17:28:23 -0400
+Received: by mail-wi0-f169.google.com with SMTP id c10so6658078wiw.2
+	for <lttng-dev@lists.lttng.org>; Wed, 10 Apr 2013 14:28:16 -0700 (PDT)
+In-Reply-To: <CAB44bLYaRCCNnkJ0Vkd180dgv63748ZM=5TNErvzAZAUETSobA@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,351 +23,326 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
-Cc: Simon Marchi <simon.marchi@polymtl.ca>
+To: Xuan Hu <huxuan8218528@gmail.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---subbuf-size accepts sizes such as:
+--===============2024447365==
+Content-Type: multipart/alternative; boundary=f46d0438914b1ef7a804da08595f
 
-- 123 -> 123
-- 123k -> 123 * 1024
-- 123M -> 123 * 1024 * 1024
-- 123G -> 123 * 1024 * 1024 * 1024
+--f46d0438914b1ef7a804da08595f
+Content-Type: text/plain; charset=GB2312
+Content-Transfer-Encoding: quoted-printable
 
-It uses the new parse_size_suffix function, which could probably be used
-at other places, such as tracefile size.
+Hi Xuan,
 
-Unit tests are included.
+There is no public API list that I know of. You'll want to have a look at
+the public headers in the include/babeltrace folder. There is also an
+official Babeltrace API documentation in doc/API.txt that provides a
+high-level description of the interface and the terminology used.
 
-Signed-off-by: Simon Marchi <simon.marchi@polymtl.ca>
----
-New in v4:
-- Changes following David Goulet's comments
- - Move stuff in src/common/utils.{c,h}
- - malloc -> zmalloc
- - Formatting
+J=A8=A6r=A8=A6mie
 
- src/bin/lttng/commands/enable_channels.c |   21 ++++-
- src/common/utils.c                       |  124 ++++++++++++++++++++++++++++++
- src/common/utils.h                       |    8 ++
- tests/unit/Makefile.am                   |   15 +++-
- tests/unit/test_parse_size_suffix.c      |   73 ++++++++++++++++++
- 5 files changed, 235 insertions(+), 6 deletions(-)
- create mode 100644 tests/unit/test_parse_size_suffix.c
 
-diff --git a/src/bin/lttng/commands/enable_channels.c b/src/bin/lttng/commands/enable_channels.c
-index d026af4..dbec8ab 100644
---- a/src/bin/lttng/commands/enable_channels.c
-+++ b/src/bin/lttng/commands/enable_channels.c
-@@ -66,7 +66,7 @@ static struct poptOption long_options[] = {
- 	{"userspace",      'u', POPT_ARG_NONE, 0, OPT_USERSPACE, 0, 0},
- 	{"discard",        0,   POPT_ARG_NONE, 0, OPT_DISCARD, 0, 0},
- 	{"overwrite",      0,   POPT_ARG_NONE, 0, OPT_OVERWRITE, 0, 0},
--	{"subbuf-size",    0,   POPT_ARG_DOUBLE, 0, OPT_SUBBUF_SIZE, 0, 0},
-+	{"subbuf-size",    0,   POPT_ARG_STRING, 0, OPT_SUBBUF_SIZE, 0, 0},
- 	{"num-subbuf",     0,   POPT_ARG_INT, 0, OPT_NUM_SUBBUF, 0, 0},
- 	{"switch-timer",   0,   POPT_ARG_INT, 0, OPT_SWITCH_TIMER, 0, 0},
- 	{"read-timer",     0,   POPT_ARG_INT, 0, OPT_READ_TIMER, 0, 0},
-@@ -289,6 +289,7 @@ int cmd_enable_channels(int argc, const char **argv)
- 	int opt, ret = CMD_SUCCESS;
- 	static poptContext pc;
- 	char *session_name = NULL;
-+	char *opt_arg = NULL;
- 
- 	init_channel_config();
- 
-@@ -309,8 +310,22 @@ int cmd_enable_channels(int argc, const char **argv)
- 			DBG("Channel set to overwrite");
- 			break;
- 		case OPT_SUBBUF_SIZE:
--			/* TODO Replace atol with strtol and check for errors */
--			chan.attr.subbuf_size = atol(poptGetOptArg(pc));
-+			/* Parse the size */
-+			opt_arg = poptGetOptArg(pc);
-+			if (parse_size_suffix(opt_arg, &chan.attr.subbuf_size) < 0) {
-+				ERR("Wrong value the --subbuf-size parameter: %s", opt_arg);
-+				ret = CMD_ERROR;
-+				goto end;
-+			}
-+
-+			/* Check if power of 2 */
-+			if ((chan.attr.subbuf_size - 1) & chan.attr.subbuf_size) {
-+				ERR("The subbuf size is not a power of 2: %" PRIu64 " (%s)",
-+						chan.attr.subbuf_size, opt_arg);
-+				ret = CMD_ERROR;
-+				goto end;
-+			}
-+
- 			DBG("Channel subbuf size set to %" PRIu64, chan.attr.subbuf_size);
- 			break;
- 		case OPT_NUM_SUBBUF:
-diff --git a/src/common/utils.c b/src/common/utils.c
-index b16cdc9..9e8fd9d 100644
---- a/src/common/utils.c
-+++ b/src/common/utils.c
-@@ -26,6 +26,7 @@
- #include <sys/stat.h>
- #include <unistd.h>
- #include <inttypes.h>
-+#include <regex.h>
- 
- #include <common/common.h>
- #include <common/runas.h>
-@@ -386,3 +387,126 @@ int utils_rotate_stream_file(char *path_name, char *file_name, uint64_t size,
- error:
- 	return ret;
- }
-+
-+/**
-+ * Prints the error message corresponding to a regex error code.
-+ *
-+ * @param errcode	The error code.
-+ * @param regex		The regex object that produced the error code.
-+ */
-+static void regex_print_error(int errcode, regex_t *regex)
-+{
-+	/* Get length of error message and allocate accordingly */
-+	size_t length;
-+	char *buffer;
-+
-+	assert(regex != NULL);
-+
-+	length = regerror(errcode, regex, NULL, 0);
-+	buffer = zmalloc(length);
-+
-+	if (!buffer) {
-+		ERR("regex_print_error: zmalloc failed");
-+		return;
-+	}
-+
-+	/* Get and print error message */
-+	regerror(errcode, regex, buffer, length);
-+	ERR("regex error: %s\n", buffer);
-+	free(buffer);
-+
-+}
-+
-+/**
-+ * Parse a string that represents a size in human readable format. It
-+ * supports decimal integers suffixed by 'k', 'M' or 'G'.
-+ *
-+ * The suffix multiply the integer by:
-+ * 'k': 1024
-+ * 'M': 1024 * 1024
-+ * 'G': 1024 * 1024 * 1024
-+ *
-+ * @param str	The string to parse.
-+ * @param size	Pointer to a size_t that will be filled with the
-+ * 	  	resulting size.
-+ *
-+ * @return 0 on success, -1 on failure.
-+ */
-+int parse_size_suffix(char *str, uint64_t *size)
-+{
-+	regex_t regex;
-+	int ret;
-+	const int nmatch = 2;
-+	regmatch_t suffix_match, matches[nmatch];
-+
-+	if (!str) {
-+		return 0;
-+	}
-+
-+	/* Compile regex */
-+	ret = regcomp(&regex, "^[0-9][0-9]*\\([kKMG]\\{0,1\\}\\)$", 0);
-+
-+	/* Check for regex error */
-+	if (ret != 0) {
-+		regex_print_error(ret, &regex);
-+		ret = -1;
-+		goto end;
-+	}
-+
-+	/* Match regex */
-+	ret = regexec(&regex, str, nmatch, matches, 0);
-+	if (ret != 0) {
-+		/* There is no match (or error) */
-+		ret = -1;
-+		goto free;
-+	}
-+
-+	/* There is a match ! */
-+	unsigned long long base_size;
-+	long shift = 0;
-+	errno = 0;
-+	base_size = strtoull(str, NULL, 10);
-+	/* Check result of conversion */
-+	if (errno != 0) {
-+		PERROR("strtoull");
-+		ret = -1;
-+		goto free;
-+	}
-+
-+	/* Check if there is a suffix */
-+	suffix_match = matches[1];
-+	if (suffix_match.rm_eo - suffix_match.rm_so == 1) {
-+		switch (*(str + suffix_match.rm_so)) {
-+		case 'K':
-+		case 'k':
-+			shift = KIBI_LOG2;
-+			break;
-+		case 'M':
-+			shift = MEBI_LOG2;
-+			break;
-+		case 'G':
-+			shift = GIBI_LOG2;
-+			break;
-+		default:
-+			ERR("parse_human_size: invalid suffix");
-+			ret = -1;
-+			goto free;
-+		}
-+	}
-+
-+	*size = base_size << shift;
-+
-+	/* Check for overflow */
-+	if ((*size >> shift) != base_size) {
-+		ERR("parse_size_suffix: oops, overflow detected.");
-+		ret = -1;
-+		goto free;
-+	}
-+
-+	ret = 0;
-+
-+free:
-+	regfree(&regex);
-+end:
-+	return ret;
-+}
-diff --git a/src/common/utils.h b/src/common/utils.h
-index 2d39cef..61faa4e 100644
---- a/src/common/utils.h
-+++ b/src/common/utils.h
-@@ -18,6 +18,14 @@
- #ifndef _COMMON_UTILS_H
- #define _COMMON_UTILS_H
- 
-+#include <sys/types.h>
-+#include <unistd.h>
-+#include <stdint.h>
-+
-+#define KIBI_LOG2 10
-+#define MEBI_LOG2 20
-+#define GIBI_LOG2 30
-+
- char *utils_expand_path(const char *path);
- int utils_create_pipe(int *dst);
- int utils_create_pipe_cloexec(int *dst);
-diff --git a/tests/unit/Makefile.am b/tests/unit/Makefile.am
-index 67e7fe4..4c15731 100644
---- a/tests/unit/Makefile.am
-+++ b/tests/unit/Makefile.am
-@@ -14,10 +14,11 @@ LIBCOMMON=$(top_builddir)/src/common/libcommon.la
- LIBSESSIOND_COMM=$(top_builddir)/src/common/sessiond-comm/libsessiond-comm.la
- LIBHASHTABLE=$(top_builddir)/src/common/hashtable/libhashtable.la
- 
-+# Define test programs
-+noinst_PROGRAMS = test_uri test_session	test_kernel_data test_parse_size_suffix
-+
- if HAVE_LIBLTTNG_UST_CTL
--noinst_PROGRAMS = test_uri test_session test_ust_data test_kernel_data
--else
--noinst_PROGRAMS = test_uri test_session	test_kernel_data
-+noinst_PROGRAMS += test_ust_data
- endif
- 
- # URI unit tests
-@@ -69,3 +70,11 @@ test_kernel_data_SOURCES = test_kernel_data.c
- test_kernel_data_LDADD = $(LIBTAP) $(LIBCOMMON) $(LIBSESSIOND_COMM) $(LIBHASHTABLE) \
- 						 -lrt
- test_kernel_data_LDADD += $(KERN_DATA_TRACE)
-+
-+# parse_size_suffix unit test
-+PARSE_SIZE_SUFFIX=$(top_srcdir)/src/common/utils.o \
-+		$(top_srcdir)/src/common/runas.o
-+
-+test_parse_size_suffix_SOURCES = test_parse_size_suffix.c
-+test_parse_size_suffix_LDADD = $(LIBTAP) $(LIBHASHTABLE) $(LIBCOMMON)
-+test_parse_size_suffix_LDADD += $(PARSE_SIZE_SUFFIX)
-diff --git a/tests/unit/test_parse_size_suffix.c b/tests/unit/test_parse_size_suffix.c
-new file mode 100644
-index 0000000..d3c3bda
---- /dev/null
-+++ b/tests/unit/test_parse_size_suffix.c
-@@ -0,0 +1,73 @@
-+/*
-+ * Copyright (C) - 2013 Simon Marchi <simon.marchi@polymtl.ca>
-+ *
-+ * This program is free software; you can redistribute it and/or modify it
-+ * under the terms of the GNU General Public License as published by as
-+ * published by the Free Software Foundation; only version 2 of the License.
-+ *
-+ * This program is distributed in the hope that it will be useful, but WITHOUT
-+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
-+ * more details.
-+ *
-+ * You should have received a copy of the GNU General Public License along with
-+ * this program; if not, write to the Free Software Foundation, Inc., 51
-+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-+ */
-+
-+#include <assert.h>
-+#include <string.h>
-+#include <stdio.h>
-+
-+#include <tap/tap.h>
-+
-+#include <src/common/utils.h>
-+
-+/* For lttngerr.h */
-+int lttng_opt_quiet = 1;
-+int lttng_opt_verbose = 3;
-+
-+/* Valid test cases */
-+static char *valid_tests_inputs[] = { "0", "1234", "16k", "128K", "32M", "1024G" };
-+static uint64_t valid_tests_expected_results[] = {0, 1234, 16384, 131072, 33554432, 1099511627776};
-+static const int num_valid_tests = sizeof(valid_tests_inputs) / sizeof(valid_tests_inputs[0]);
-+
-+/* Invalid test cases */
-+static char *invalid_tests_inputs[] = { "", "-1", "k", "4611686018427387904G" };
-+static const int num_invalid_tests = sizeof(invalid_tests_inputs) / sizeof(invalid_tests_inputs[0]);
-+
-+void test_parse_size_suffix(void)
-+{
-+	uint64_t result;
-+	int ret;
-+	int i;
-+
-+	// Test valid cases
-+	for (i = 0; i < num_valid_tests; i++) {
-+		char name[100];
-+		sprintf(name, "testing %s", valid_tests_inputs[i]);
-+
-+		ret = parse_size_suffix(valid_tests_inputs[i], &result);
-+		ok(ret == 0 && result == valid_tests_expected_results[i], name);
-+	}
-+
-+	// Test invalid cases
-+	for (i = 0; i < num_invalid_tests; i++) {
-+		char name[100];
-+		sprintf(name, "testing %s", invalid_tests_inputs[i]);
-+
-+		ret = parse_size_suffix(invalid_tests_inputs[i], &result);
-+		ok(ret != 0, name);
-+	}
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	plan_tests(num_valid_tests + num_invalid_tests);
-+
-+	diag("parse_size_suffix tests");
-+
-+	test_parse_size_suffix();
-+
-+	return exit_status();
-+}
--- 
-1.7.10.4
+
+On Wed, Apr 10, 2013 at 1:23 AM, Xuan Hu <huxuan8218528@gmail.com> wrote:
+
+> Hi, jgalar.
+>
+> Thx for your detailed clarification. I will begin with looking throuth th=
+e
+> CTF specification and investigation with the code of bing/python branch.
+> I have one little question, where can I find the list of libbabeltrace's
+> public API? And I also failed to find documents tends for developments an=
+d
+> contributors. I think these would be helpful for me to get fimiliar with
+> our projects. :-)
+>
+> Wish for your reply.
+>
+>
+> On Wed, Apr 10, 2013 at 3:37 AM, J=A8=A6r=A8=A6mie Galarneau <
+> jeremie.galarneau@efficios.com> wrote:
+>
+>> Hi Xuan,
+>>
+>> First, thanks for reaching out!
+>>
+>> Basically, the Babeltrace Python bindings project aims at providing
+>> Python developers with a library to read the trace formats supported by
+>> Babeltrace. I'll take the chance to detail what we had in mind with this
+>> project.
+>>
+>> The first part consists of producing Python bindings to libbabeltrace's
+>> public API. This has already been done last summer but is not yet part o=
+f
+>> the master branch. It currently lives in the "bindings/python" branch of
+>> Babeltrace's repository[1]. However, it is not completely up-to-date and
+>> lacks thorough testing.
+>>
+>> The second part, which is more of an interface design exercise, is
+>> exposing the trace data read by libbabeltrace in a "Pythonic" way. That
+>> includes implementing Python's generator-iterator interface, expressing =
+the
+>> trace metadata using Python's data structures, etc. libbabeltrace can al=
+so
+>> be used as a trace writer so the Python interface should expose this
+>> functionality by providing a symmetric output interface. All in all, it
+>> calls for a lot more design work than actual implementation.
+>>
+>> For starters, you may want to have a look at the CTF specification[2],
+>> which is currently the only trace format supported by Babeltrace, to giv=
+e
+>> you an idea of the challenges at hand. Trying out the complete LTTng
+>> toolchain will also give you a better view of this project.
+>>
+>> [1]
+>> https://bugs.lttng.org/projects/babeltrace/repository/show?rev=3Dbinding=
+s%2Fpython
+>> [2]
+>> http://git.efficios.com/?p=3Dctf.git;a=3Dblob_plain;f=3Dcommon-trace-for=
+mat-specification.txt;hb=3Dmaster
+>>
+>> Don't hesitate to come forward and propose a tentative API or ask for
+>> clarifications.
+>>
+>> Regards,
+>> J=A8=A6r=A8=A6mie
+>>
+>> On Tue, Apr 9, 2013 at 5:38 AM, Xuan Hu <huxuan8218528@gmail.com> wrote:
+>>
+>>> Hello everyone,
+>>>
+>>> I'm really interested in the project of `Babeltrace python bindings`.
+>>> Besides I'm confident with my python skill and I'm willing to study mor=
+e
+>>> skills related. As far as I know, I think this is a somewhat standalone
+>>> project which should create a module for python programmers to get the
+>>> results which babeltrace produce. Wish potential mentor (jgalar) can ju=
+dge
+>>> whether it is or not. Besides I wonder to know any suggestions for me t=
+o
+>>> begin with this project?
+>>>
+>>> --
+>>> =EC=E8=EC=D3 Sean.Hu
+>>>
+>>> =B1=B1=BE=A9=B4=F3=D1=A7=D0=C5=CF=A2=BF=C6=D1=A7=BC=BC=CA=F5=D1=A7=D4=
+=BA2012=BC=B6=CB=B6=CA=BF=D1=D0=BE=BF=C9=FA
+>>> 2012, Master Degree Candidate, EECS, PKU
+>>>
+>>> Blog <http://huxuan.org/> | GitHproposeub <https://github.com/huxuan/>|
+>>> Twitter <https://twitter.com/huxuan/> | Douban<http://www.douban.com/pe=
+ople/huxuan/>|
+>>> Google+ <https://plus.google.com/u/0/116930918200210859389> | Jiepang<h=
+ttp://jiepang.com/huxuan/> |
+>>> Weibo <http://weibo.com/victorhu>
+>>>
+>>> _______________________________________________
+>>> lttng-dev mailing list
+>>> lttng-dev@lists.lttng.org
+>>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>>>
+>>>
+>>
+>>
+>> --
+>> J=A8=A6r=A8=A6mie Galarneau
+>> EfficiOS Inc.
+>> http://www.efficios.com
+>>
+>
+>
+>
+> --
+> =EC=E8=EC=D3 Sean.Hu
+>
+> =B1=B1=BE=A9=B4=F3=D1=A7=D0=C5=CF=A2=BF=C6=D1=A7=BC=BC=CA=F5=D1=A7=D4=BA2=
+012=BC=B6=CB=B6=CA=BF=D1=D0=BE=BF=C9=FA
+> 2012, Master Degree Candidate, EECS, PKU
+>
+> Blog <http://huxuan.org/> | GitHub <https://github.com/huxuan/> | Twitter=
+<https://twitter.com/huxuan/>|
+> Douban <http://www.douban.com/people/huxuan/> | Google+<https://plus.goog=
+le.com/u/0/116930918200210859389>|
+> Jiepang <http://jiepang.com/huxuan/> | Weibo <http://weibo.com/victorhu>
+>
+
+
+
+--=20
+J=A8=A6r=A8=A6mie Galarneau
+EfficiOS Inc.
+http://www.efficios.com
+
+--f46d0438914b1ef7a804da08595f
+Content-Type: text/html; charset=GB2312
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hi Xuan,<div><br></div><div style>There is no public API l=
+ist that I know of. You&#39;ll want to have a look at the public headers in=
+ the include/babeltrace folder. There is also an official Babeltrace API do=
+cumentation in doc/API.txt that provides a high-level description of the in=
+terface and the terminology used.</div>
+<div style><br></div><div style>J=A8=A6r=A8=A6mie</div><div style><br></div=
+><div class=3D"gmail_extra"><br><br><div class=3D"gmail_quote">On Wed, Apr =
+10, 2013 at 1:23 AM, Xuan Hu <span dir=3D"ltr">&lt;<a href=3D"mailto:huxuan=
+8218528@gmail.com" target=3D"_blank">huxuan8218528@gmail.com</a>&gt;</span>=
+ wrote:<br>
+<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
+x #ccc solid;padding-left:1ex"><div dir=3D"ltr">Hi, jgalar.<div><br></div><=
+div>Thx for your detailed clarification. I will begin with looking throuth =
+the CTF specification and investigation with the code of bing/python branch=
+.</div>
+<div>I have one little question, where can I find the list of libbabeltrace=
+&#39;s public API? And I also failed to find documents tends for developmen=
+ts and contributors. I think these would be helpful for me to get fimiliar =
+with our projects. :-)</div>
+
+<div><br></div><div>Wish for your reply.</div></div><div class=3D"gmail_ext=
+ra"><div><div class=3D"h5"><br><br><div class=3D"gmail_quote">On Wed, Apr 1=
+0, 2013 at 3:37 AM, J=A8=A6r=A8=A6mie Galarneau <span dir=3D"ltr">&lt;<a hr=
+ef=3D"mailto:jeremie.galarneau@efficios.com" target=3D"_blank">jeremie.gala=
+rneau@efficios.com</a>&gt;</span> wrote:<br>
+
+<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
+x #ccc solid;padding-left:1ex"><div dir=3D"ltr">Hi Xuan,<div><br></div><div=
+>First, thanks for reaching out!</div><div><br></div><div>Basically, the Ba=
+beltrace Python bindings project aims at providing Python developers with a=
+ library to read the trace formats supported by Babeltrace. I&#39;ll take t=
+he chance to detail what we had in mind with this project.</div>
+
+
+
+<div><br></div><div>The first part consists of producing Python bindings to=
+ libbabeltrace&#39;s public API. This has already been done last summer but=
+ is not yet part of the master branch. It currently lives in the &quot;bind=
+ings/python&quot; branch of Babeltrace&#39;s repository[1]. However, it is =
+not completely up-to-date and lacks thorough testing.</div>
+
+
+
+<div><br></div><div>The second part, which is more of an interface design e=
+xercise, is exposing the trace data read by libbabeltrace in a &quot;Python=
+ic&quot; way. That includes implementing Python&#39;s generator-iterator in=
+terface, expressing the trace metadata using Python&#39;s data structures, =
+etc. libbabeltrace can also be used as a trace writer so the Python interfa=
+ce should expose this functionality by providing a symmetric output interfa=
+ce. All in all, it calls for a lot more design work than actual implementat=
+ion.</div>
+
+
+
+<div><br></div><div>For starters, you may want to have a look at the CTF sp=
+ecification[2], which is currently the only trace format supported by Babel=
+trace, to give you an idea of the challenges at hand. Trying out the comple=
+te LTTng toolchain will also give you a better view of this project.</div>
+
+
+
+<div><br></div><div>[1]&nbsp;<a href=3D"https://bugs.lttng.org/projects/bab=
+eltrace/repository/show?rev=3Dbindings%2Fpython" target=3D"_blank">https://=
+bugs.lttng.org/projects/babeltrace/repository/show?rev=3Dbindings%2Fpython<=
+/a><br></div>
+
+
+
+<div class=3D"gmail_extra">[2]&nbsp;<a href=3D"http://git.efficios.com/?p=
+=3Dctf.git;a=3Dblob_plain;f=3Dcommon-trace-format-specification.txt;hb=3Dma=
+ster" target=3D"_blank">http://git.efficios.com/?p=3Dctf.git;a=3Dblob_plain=
+;f=3Dcommon-trace-format-specification.txt;hb=3Dmaster</a><br>
+
+
+
+<br>Don&#39;t hesitate to come forward and propose a tentative API or ask f=
+or clarifications.<br><br>Regards,<br>J=A8=A6r=A8=A6mie<br><br><div class=
+=3D"gmail_quote"><div><div>On Tue, Apr 9, 2013 at 5:38 AM, Xuan Hu <span di=
+r=3D"ltr">&lt;<a href=3D"mailto:huxuan8218528@gmail.com" target=3D"_blank">=
+huxuan8218528@gmail.com</a>&gt;</span> wrote:<br>
+
+
+
+</div></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0=
+.8ex;border-left-width:1px;border-left-color:rgb(204,204,204);border-left-s=
+tyle:solid;padding-left:1ex"><div dir=3D"ltr"><div><div>Hello everyone,<div=
+>
+
+<br></div><div>I&#39;m really interested in the project of `Babeltrace pyth=
+on bindings`. Besides I&#39;m confident with my python skill and I&#39;m wi=
+lling to study more skills related. As far as I know, I think this is a som=
+ewhat standalone project which should create a module for python programmer=
+s to get the results which babeltrace produce. Wish potential mentor (jgala=
+r) can judge whether it is or not. Besides I wonder to know any suggestions=
+ for me to begin with this project?</div>
+
+
+
+</div></div><span><font color=3D"#888888">
+<div><div><div><br></div>-- <br><div dir=3D"ltr"><div>=EC=E8=EC=D3 Sean.Hu<=
+/div><div><br></div><div><div><div><div><div>=B1=B1=BE=A9=B4=F3=D1=A7=D0=C5=
+=CF=A2=BF=C6=D1=A7=BC=BC=CA=F5=D1=A7=D4=BA2012=BC=B6=CB=B6=CA=BF=D1=D0=BE=
+=BF=C9=FA</div><div>2012, Master Degree Candidate, EECS, PKU</div><div><br>=
+</div></div></div>
+<div><a href=3D"http://huxuan.org/" target=3D"_blank">Blog</a>&nbsp;|&nbsp;=
+<a href=3D"https://github.com/huxuan/" target=3D"_blank">GitHproposeub</a> =
+| <a href=3D"https://twitter.com/huxuan/" target=3D"_blank">Twitter</a> |&n=
+bsp;<a href=3D"http://www.douban.com/people/huxuan/" target=3D"_blank">Doub=
+an</a> | <a href=3D"https://plus.google.com/u/0/116930918200210859389" targ=
+et=3D"_blank">Google+</a> |&nbsp;<a href=3D"http://jiepang.com/huxuan/" tar=
+get=3D"_blank">Jiepang</a>&nbsp;| <a href=3D"http://weibo.com/victorhu" tar=
+get=3D"_blank">Weibo</a><br>
+
+
+
+
+</div></div></div></div>
+</div></div></font></span></div>
+<br>_______________________________________________<br>
+lttng-dev mailing list<br>
+<a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-dev@li=
+sts.lttng.org</a><br>
+<a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" targe=
+t=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><=
+br>
+<br></blockquote></div><span><font color=3D"#888888"><br><br clear=3D"all">=
+<div><br></div>-- <br>J=A8=A6r=A8=A6mie Galarneau<br>EfficiOS Inc.<br><a hr=
+ef=3D"http://www.efficios.com" target=3D"_blank">http://www.efficios.com</a=
+>
+</font></span></div></div>
+</blockquote></div><br><br clear=3D"all"><div><br></div>-- <br></div></div>=
+<div dir=3D"ltr"><div>=EC=E8=EC=D3 Sean.Hu</div><div><br></div><div><div><d=
+iv><div class=3D"h5"><div>=B1=B1=BE=A9=B4=F3=D1=A7=D0=C5=CF=A2=BF=C6=D1=A7=
+=BC=BC=CA=F5=D1=A7=D4=BA2012=BC=B6=CB=B6=CA=BF=D1=D0=BE=BF=C9=FA</div><div>=
+2012, Master Degree Candidate, EECS, PKU</div>
+<div><br></div>
+</div></div><div><a href=3D"http://huxuan.org/" target=3D"_blank">Blog</a>&=
+nbsp;|&nbsp;<a href=3D"https://github.com/huxuan/" target=3D"_blank">GitHub=
+</a> | <a href=3D"https://twitter.com/huxuan/" target=3D"_blank">Twitter</a=
+> |&nbsp;<a href=3D"http://www.douban.com/people/huxuan/" target=3D"_blank"=
+>Douban</a> | <a href=3D"https://plus.google.com/u/0/116930918200210859389"=
+ target=3D"_blank">Google+</a> |&nbsp;<a href=3D"http://jiepang.com/huxuan/=
+" target=3D"_blank">Jiepang</a>&nbsp;| <a href=3D"http://weibo.com/victorhu=
+" target=3D"_blank">Weibo</a><br>
+
+</div></div></div></div>
+</div>
+</blockquote></div><br><br clear=3D"all"><div><br></div>-- <br>J=A8=A6r=A8=
+=A6mie Galarneau<br>EfficiOS Inc.<br><a href=3D"http://www.efficios.com" ta=
+rget=3D"_blank">http://www.efficios.com</a>
+</div></div>
+
+--f46d0438914b1ef7a804da08595f--
+
+
+--===============2024447365==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============2024447365==--
