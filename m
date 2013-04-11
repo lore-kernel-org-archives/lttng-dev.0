@@ -1,16 +1,20 @@
-From: =?UTF-8?q?Genevi=C3=A8ve=20Bastien?= <gbastien+lttng@versatic.net>
-Subject: [RFC-patch] Add support of struct metadata in
-	tracepoints
-Date: Thu, 11 Apr 2013 16:07:31 -0400
-Message-ID: <1365710851-1690-1-git-send-email-gbastien+lttng__29517.6698746674$1365710882$gmane$org@versatic.net>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [RFC-patch] Add support of struct metadata
+	in	tracepoints
+Date: Thu, 11 Apr 2013 16:46:44 -0400
+Message-ID: <20130411204644.GA27227__43794.4150566638$1365713235$gmane$org@Krystal>
+References: <1365710851-1690-1-git-send-email-gbastien+lttng@versatic.net>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.polymtl.ca ([132.207.4.11])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <gbastien+lttng@versatic.net>) id 1UQNmQ-0002hG-FF
-	for lttng-dev@lists.lttng.org; Thu, 11 Apr 2013 16:07:34 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1UQOOP-0002zS-2x
+	for lttng-dev@lists.lttng.org; Thu, 11 Apr 2013 16:46:49 -0400
+Content-Disposition: inline
+In-Reply-To: <1365710851-1690-1-git-send-email-gbastien+lttng@versatic.net>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,272 +23,716 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: =?iso-8859-1?Q?Genevi=E8ve?= Bastien <gbastien+lttng@versatic.net>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-SW50cm9kdWNlIHRoZSBuZXcgbWFjcm8gVFJBQ0VQT0lOVF9TVFJVQ1QgdG8gZGVmaW5lIGN0ZiBz
-dHJ1Y3QgbWV0YWRhdGEKdGhhdCBjYW4gYmUgdXNlZCBieSB0cmFjZXBvaW50cyB1c2luZyBfc3Ry
-dWN0IGFzIGVudHJ5IGFuZCB0cF9tZW1jcHlfc3RydWN0CnRvIGNvcHkgYSBzdHJ1Y3QgZmllbGQu
-ClRoaXMgZXh0cmEgbWV0YWRhdGEgaXMgYWRkZWQgdG8gdGhlIG1ldGFkYXRhIGZpbGUgb25seSBp
-ZiBldmVudHMgdXNlIGl0LgoKU2lnbmVkLW9mZi1ieTogR2VuZXZpw6h2ZSBCYXN0aWVuIDxnYmFz
-dGllbitsdHRuZ0B2ZXJzYXRpYy5uZXQ+Ci0tLQogbHR0bmctZXZlbnRzLmMgICAgICAgICAgICAg
-IHwgMTM0ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrLQogbHR0bmct
-ZXZlbnRzLmggICAgICAgICAgICAgIHwgIDM1ICsrKysrKysrKysrCiBwcm9iZXMvbHR0bmctZXZl
-bnRzLXJlc2V0LmggfCAgMTUgKysrKysKIHByb2Jlcy9sdHRuZy1ldmVudHMuaCAgICAgICB8IDEz
-OCArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrLQogNCBmaWxlcyBj
-aGFuZ2VkLCAzMjAgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9s
-dHRuZy1ldmVudHMuYyBiL2x0dG5nLWV2ZW50cy5jCmluZGV4IDRmMzA5MDQuLjQzMWExN2MgMTAw
-NjQ0Ci0tLSBhL2x0dG5nLWV2ZW50cy5jCisrKyBiL2x0dG5nLWV2ZW50cy5jCkBAIC02NTQsNiAr
-NjU0LDEzIEBAIGludCBfbHR0bmdfZmllbGRfc3RhdGVkdW1wKHN0cnVjdCBsdHRuZ19zZXNzaW9u
-ICpzZXNzaW9uLAogCQkJCSIgeyBlbmNvZGluZyA9IEFTQ0lJOyB9IiA6ICIiLAogCQkJZmllbGQt
-Pm5hbWUpOwogCQlicmVhazsKKwljYXNlIGF0eXBlX3N0cnVjdDoKKwkJcmV0ID0gbHR0bmdfbWV0
-YWRhdGFfcHJpbnRmKHNlc3Npb24sCisJCQkiCQlzdHJ1Y3QgJXMlcyBfJXM7XG4iLAorCQkJZmll
-bGQtPnR5cGUudS5jdGZfc3RydWN0LnByb3ZpZGVyLAorCQkJZmllbGQtPnR5cGUudS5jdGZfc3Ry
-dWN0Lm5hbWUsCisJCQlmaWVsZC0+bmFtZSk7CisJCWJyZWFrOwogCWRlZmF1bHQ6CiAJCVdBUk5f
-T05fT05DRSgxKTsKIAkJcmV0dXJuIC1FSU5WQUw7CkBAIC02NjIsNiArNjY5LDEyMiBAQCBpbnQg
-X2x0dG5nX2ZpZWxkX3N0YXRlZHVtcChzdHJ1Y3QgbHR0bmdfc2Vzc2lvbiAqc2Vzc2lvbiwKIH0K
-IAogc3RhdGljCitpbnQgX2x0dG5nX2lzX2V4dHJhX21ldGFkYXRhX2R1bXBlZChzdHJ1Y3QgbHR0
-bmdfc2Vzc2lvbiAqc2Vzc2lvbiwKKwkJY29uc3Qgc3RydWN0IGx0dG5nX21ldGFkYXRhICptZXRh
-ZGF0YSkgeworCS8qIElzIHRoZSBtZXRhZGF0YSBkdW1wZWQgeWV0ID8gKi8KKwlzdHJ1Y3QgbHR0
-bmdfbWV0YWRhdGFfZHVtcGVkICpkdW1wZWQ7CisJaW50IGlzX2R1bXBlZCA9IDA7CisKKwlkdW1w
-ZWQgPSBzZXNzaW9uLT5leHRyYV9tZXRhZGF0YVttZXRhZGF0YS0+bXR5cGVdOworCXN3aXRjaCAo
-bWV0YWRhdGEtPm10eXBlKSB7CisJY2FzZSBtdHlwZV9zdHJ1Y3Q6CisJCXdoaWxlIChkdW1wZWQp
-IHsKKwkJCWlmIChtZXRhZGF0YS0+bS5zdHJ1Y3RfZGVzYyA9PQorCQkJCQlkdW1wZWQtPmR1bXBl
-ZF9wdHIuc3RydWN0X2Rlc2MpIHsKKwkJCQlpc19kdW1wZWQgPSAxOworCQkJCWJyZWFrOworCQkJ
-fQorCQkJZHVtcGVkID0gZHVtcGVkLT5uZXh0OworCQl9CisJCWJyZWFrOworCWRlZmF1bHQ6CisJ
-CVdBUk5fT05fT05DRSgxKTsKKwkJcmV0dXJuIC1FSU5WQUw7CisJfQorCXJldHVybiBpc19kdW1w
-ZWQ7Cit9CisKK3N0YXRpYyBpbnQgX2x0dG5nX2V4dHJhX21ldGFkYXRhX21hcmtfZHVtcGVkKHN0
-cnVjdCBsdHRuZ19zZXNzaW9uICpzZXNzaW9uLAorCQljb25zdCBzdHJ1Y3QgbHR0bmdfbWV0YWRh
-dGEgKm1ldGFkYXRhKSB7CisJLyogbWFyayB0aGlzIG1ldGFkYXRhIGFzIGR1bXBlZCAqLworCXN0
-cnVjdCBsdHRuZ19tZXRhZGF0YV9kdW1wZWQgKmR1bXBlZCwgKmp1c3RfZHVtcGVkOworCisJanVz
-dF9kdW1wZWQgPSBremFsbG9jKHNpemVvZihzdHJ1Y3QgbHR0bmdfbWV0YWRhdGFfZHVtcGVkKSwK
-KwkJCUdGUF9LRVJORUwpOworCWlmICghanVzdF9kdW1wZWQpCisJCXJldHVybiAtRU5PTUVNOwor
-CisJZHVtcGVkID0gc2Vzc2lvbi0+ZXh0cmFfbWV0YWRhdGFbbWV0YWRhdGEtPm10eXBlXTsKKwor
-CXN3aXRjaCAobWV0YWRhdGEtPm10eXBlKSB7CisJY2FzZSBtdHlwZV9zdHJ1Y3Q6CisJCWp1c3Rf
-ZHVtcGVkLT5kdW1wZWRfcHRyLnN0cnVjdF9kZXNjID0gbWV0YWRhdGEtPm0uc3RydWN0X2Rlc2M7
-CisJCWJyZWFrOworCWRlZmF1bHQ6CisJCVdBUk5fT05fT05DRSgxKTsKKwkJcmV0dXJuIC1FSU5W
-QUw7CisJfQorCisJanVzdF9kdW1wZWQtPm5leHQgPSBzZXNzaW9uLT5leHRyYV9tZXRhZGF0YVtt
-dHlwZV9zdHJ1Y3RdOworCXNlc3Npb24tPmV4dHJhX21ldGFkYXRhW210eXBlX3N0cnVjdF0gPSBq
-dXN0X2R1bXBlZDsKKwlyZXR1cm4gMDsKK30KKworc3RhdGljCitpbnQgX2x0dG5nX2V2ZW50X2V4
-dHJhX21ldGFkYXRhX2RvX3N0YXRlZHVtcChzdHJ1Y3QgbHR0bmdfc2Vzc2lvbiAqc2Vzc2lvbiwK
-KwkJY29uc3Qgc3RydWN0IGx0dG5nX21ldGFkYXRhICptZXRhKQoreworCWludCBpLCByZXQgPSAw
-OworCisJc3dpdGNoIChtZXRhLT5tdHlwZSkgeworCWNhc2UgbXR5cGVfc3RydWN0OgorCisJCXJl
-dCA9IGx0dG5nX21ldGFkYXRhX3ByaW50ZihzZXNzaW9uLAorCQkJInN0cnVjdCAlcyVzIHtcbiIs
-CisJCQltZXRhLT5tLnN0cnVjdF9kZXNjLT5wcm92aWRlciwgbWV0YS0+bS5zdHJ1Y3RfZGVzYy0+
-bmFtZQorCQkpOworCQlpZiAocmV0KQorCQkJcmV0dXJuIHJldDsKKworCQkvKiBQcmludCBmaWVs
-ZHMgKi8KKwkJZm9yIChpID0gMDsgaSA8IG1ldGEtPm0uc3RydWN0X2Rlc2MtPm5yX2ZpZWxkczsg
-aSsrKSB7CisJCQljb25zdCBzdHJ1Y3QgbHR0bmdfZXZlbnRfZmllbGQgKmZpZWxkOworCQkJZmll
-bGQgPSAmbWV0YS0+bS5zdHJ1Y3RfZGVzYy0+ZmllbGRzW2ldOworCisJCQlyZXQgPSBfbHR0bmdf
-ZmllbGRfc3RhdGVkdW1wKHNlc3Npb24sIGZpZWxkKTsKKwkJCWlmIChyZXQpCisJCQkJcmV0dXJu
-IHJldDsKKwkJfQorCisJCXJldCA9IGx0dG5nX21ldGFkYXRhX3ByaW50ZihzZXNzaW9uLAorCQkJ
-CSJ9O1xuXG4iKTsKKwkJaWYgKHJldCkKKwkJCXJldHVybiByZXQ7CisKKwkJYnJlYWs7CisJZGVm
-YXVsdDoKKwkJV0FSTl9PTl9PTkNFKDEpOworCQlyZXR1cm4gLUVJTlZBTDsKKwl9CisJaWYgKHJl
-dCkKKwkJcmV0dXJuIHJldDsKKworCXJldCA9IF9sdHRuZ19leHRyYV9tZXRhZGF0YV9tYXJrX2R1
-bXBlZChzZXNzaW9uLCBtZXRhKTsKKwlyZXR1cm4gcmV0OworfQorCitzdGF0aWMKK2ludCBfbHR0
-bmdfZXZlbnRfZXh0cmFfbWV0YWRhdGFfc3RhdGVkdW1wKHN0cnVjdCBsdHRuZ19zZXNzaW9uICpz
-ZXNzaW9uLAorCQkJIHN0cnVjdCBsdHRuZ19ldmVudCAqZXZlbnQpCit7CisJY29uc3Qgc3RydWN0
-IGx0dG5nX2V2ZW50X2Rlc2MgKmRlc2MgPSBldmVudC0+ZGVzYzsKKwlpbnQgaSwgcmV0ID0gMDsK
-KworCWZvciAoaSA9IDA7IGkgPCBkZXNjLT5ucl9tZXRhZGF0YTsgaSsrKSB7CisJCWNvbnN0IHN0
-cnVjdCBsdHRuZ19tZXRhZGF0YSAqbWV0YSA9ICZkZXNjLT5leHRyYV9tZXRhZGF0YVtpXTsKKwor
-CQlpZiAoIV9sdHRuZ19pc19leHRyYV9tZXRhZGF0YV9kdW1wZWQoc2Vzc2lvbiwgbWV0YSkpIHsK
-KwkJCXJldCA9IF9sdHRuZ19ldmVudF9leHRyYV9tZXRhZGF0YV9kb19zdGF0ZWR1bXAoc2Vzc2lv
-biwKKwkJCQkJbWV0YSk7CisJCQlpZiAocmV0KQorCQkJCXJldHVybiByZXQ7CisJCX0KKwl9CisJ
-cmV0dXJuIHJldDsKKworfQorCitzdGF0aWMKIGludCBfbHR0bmdfY29udGV4dF9tZXRhZGF0YV9z
-dGF0ZWR1bXAoc3RydWN0IGx0dG5nX3Nlc3Npb24gKnNlc3Npb24sCiAJCQkJICAgIHN0cnVjdCBs
-dHRuZ19jdHggKmN0eCkKIHsKQEAgLTcxMCw2ICs4MzMsMTEgQEAgaW50IF9sdHRuZ19ldmVudF9t
-ZXRhZGF0YV9zdGF0ZWR1bXAoc3RydWN0IGx0dG5nX3Nlc3Npb24gKnNlc3Npb24sCiAJaWYgKGNo
-YW4gPT0gc2Vzc2lvbi0+bWV0YWRhdGEpCiAJCXJldHVybiAwOwogCisJLyogRHVtcCB0aGUgZXh0
-cmEgbWV0YWRhdGEgZm9yIHRoaXMgZXZlbnQgKi8KKwlyZXQgPSBfbHR0bmdfZXZlbnRfZXh0cmFf
-bWV0YWRhdGFfc3RhdGVkdW1wKHNlc3Npb24sIGV2ZW50KTsKKwlpZiAocmV0KQorCQlnb3RvIGVu
-ZDsKKwogCXJldCA9IGx0dG5nX21ldGFkYXRhX3ByaW50ZihzZXNzaW9uLAogCQkiZXZlbnQge1xu
-IgogCQkiCW5hbWUgPSAlcztcbiIKQEAgLTkwNSw3ICsxMDMzLDcgQEAgaW50IF9sdHRuZ19zZXNz
-aW9uX21ldGFkYXRhX3N0YXRlZHVtcChzdHJ1Y3QgbHR0bmdfc2Vzc2lvbiAqc2Vzc2lvbikKIAl1
-bnNpZ25lZCBjaGFyIHV1aWRfc1szN10sIGNsb2NrX3V1aWRfc1tCT09UX0lEX0xFTl07CiAJc3Ry
-dWN0IGx0dG5nX2NoYW5uZWwgKmNoYW47CiAJc3RydWN0IGx0dG5nX2V2ZW50ICpldmVudDsKLQlp
-bnQgcmV0ID0gMDsKKwlpbnQgcmV0ID0gMCwgaTsKIAogCWlmICghQUNDRVNTX09OQ0Uoc2Vzc2lv
-bi0+YWN0aXZlKSkKIAkJcmV0dXJuIDA7CkBAIC0xMDQyLDYgKzExNzAsMTAgQEAgaW50IF9sdHRu
-Z19zZXNzaW9uX21ldGFkYXRhX3N0YXRlZHVtcChzdHJ1Y3QgbHR0bmdfc2Vzc2lvbiAqc2Vzc2lv
-bikKIAlpZiAocmV0KQogCQlnb3RvIGVuZDsKIAorCS8qIEluaXRpYWxpemVkIHVuZHVtcGVkIG1l
-dGFkYXRhICovCisJZm9yIChpID0gMDsgaSA8IE5SX01FVEFEQVRBX1RZUEVTOyBpKyspCisJCXNl
-c3Npb24tPmV4dHJhX21ldGFkYXRhW2ldID0gMDsKKwogc2tpcF9zZXNzaW9uOgogCWxpc3RfZm9y
-X2VhY2hfZW50cnkoY2hhbiwgJnNlc3Npb24tPmNoYW4sIGxpc3QpIHsKIAkJcmV0ID0gX2x0dG5n
-X2NoYW5uZWxfbWV0YWRhdGFfc3RhdGVkdW1wKHNlc3Npb24sIGNoYW4pOwpkaWZmIC0tZ2l0IGEv
-bHR0bmctZXZlbnRzLmggYi9sdHRuZy1ldmVudHMuaAppbmRleCAzN2E1ZGI3Li4yY2FiNWYzIDEw
-MDY0NAotLS0gYS9sdHRuZy1ldmVudHMuaAorKysgYi9sdHRuZy1ldmVudHMuaApAQCAtNDcsOSAr
-NDcsMTYgQEAgZW51bSBhYnN0cmFjdF90eXBlcyB7CiAJYXR5cGVfYXJyYXksCiAJYXR5cGVfc2Vx
-dWVuY2UsCiAJYXR5cGVfc3RyaW5nLAorCWF0eXBlX3N0cnVjdCwKIAlOUl9BQlNUUkFDVF9UWVBF
-UywKIH07CiAKKy8qIE1ldGFkYXRhIHR5cGVzICovCitlbnVtIG1ldGFkYXRhX3R5cGVzIHsKKwlt
-dHlwZV9zdHJ1Y3QsCisJTlJfTUVUQURBVEFfVFlQRVMsCit9OworCiAvKiBVcGRhdGUgdGhlIHN0
-cmluZ19lbmNvZGluZ3MgbmFtZSB0YWJsZSBpbiBsdHRuZy10eXBlcy5jIGFsb25nIHdpdGggdGhp
-cyBlbnVtICovCiBlbnVtIGx0dG5nX3N0cmluZ19lbmNvZGluZ3MgewogCWx0dG5nX2VuY29kZV9u
-b25lID0gMCwKQEAgLTExNSw2ICsxMjIsOSBAQCBzdHJ1Y3QgbHR0bmdfdHlwZSB7CiAJCQlzdHJ1
-Y3QgbHR0bmdfYmFzaWNfdHlwZSBsZW5ndGhfdHlwZTsKIAkJCXN0cnVjdCBsdHRuZ19iYXNpY190
-eXBlIGVsZW1fdHlwZTsKIAkJfSBzZXF1ZW5jZTsKKwkJc3RydWN0IHsKKwkJCWNvbnN0IGNoYXIg
-Km5hbWUsICpwcm92aWRlcjsKKwkJfSBjdGZfc3RydWN0OwogCX0gdTsKIH07CiAKQEAgLTE2MSwx
-MiArMTcxLDM2IEBAIHN0cnVjdCBsdHRuZ19jdHggewogCXVuc2lnbmVkIGludCBhbGxvY2F0ZWRf
-ZmllbGRzOwogfTsKIAorc3RydWN0IGx0dG5nX3N0cnVjdF9kZXNjIHsKKwljb25zdCBjaGFyICpu
-YW1lLCAqcHJvdmlkZXI7CisJY29uc3Qgc3RydWN0IGx0dG5nX2V2ZW50X2ZpZWxkICpmaWVsZHM7
-IC8qIGZpZWxkcyAqLworCXVuc2lnbmVkIGludCBucl9maWVsZHM7CisJc3RydWN0IG1vZHVsZSAq
-b3duZXI7Cit9OworCitzdHJ1Y3QgbHR0bmdfbWV0YWRhdGEgeworCWVudW0gbWV0YWRhdGFfdHlw
-ZXMgbXR5cGU7CisJdW5pb24geworCQlzdHJ1Y3QgbHR0bmdfc3RydWN0X2Rlc2MgKnN0cnVjdF9k
-ZXNjOworCX0gbTsKK307CisKK3N0cnVjdCBsdHRuZ19tZXRhZGF0YV9kdW1wZWQgeworCXVuaW9u
-IHsKKwkJc3RydWN0IGx0dG5nX3N0cnVjdF9kZXNjICpzdHJ1Y3RfZGVzYzsKKwl9IGR1bXBlZF9w
-dHI7CisJc3RydWN0IGx0dG5nX21ldGFkYXRhX2R1bXBlZCAqbmV4dDsKK307CisKIHN0cnVjdCBs
-dHRuZ19ldmVudF9kZXNjIHsKIAljb25zdCBjaGFyICpuYW1lOwogCXZvaWQgKnByb2JlX2NhbGxi
-YWNrOwogCWNvbnN0IHN0cnVjdCBsdHRuZ19ldmVudF9jdHggKmN0eDsJLyogY29udGV4dCAqLwog
-CWNvbnN0IHN0cnVjdCBsdHRuZ19ldmVudF9maWVsZCAqZmllbGRzOwkvKiBldmVudCBwYXlsb2Fk
-ICovCisJLyogRXh0cmEgbWV0YWRhdGEgYWRkZWQgYnkgZXZlbnRzICovCisJY29uc3Qgc3RydWN0
-IGx0dG5nX21ldGFkYXRhICpleHRyYV9tZXRhZGF0YTsKIAl1bnNpZ25lZCBpbnQgbnJfZmllbGRz
-OworCXVuc2lnbmVkIGludCBucl9tZXRhZGF0YTsKIAlzdHJ1Y3QgbW9kdWxlICpvd25lcjsKIH07
-CiAKQEAgLTI3Nyw2ICszMTEsNyBAQCBzdHJ1Y3QgbHR0bmdfc2Vzc2lvbiB7CiAJc3RydWN0IGxp
-c3RfaGVhZCBsaXN0OwkJLyogU2Vzc2lvbiBsaXN0ICovCiAJdW5zaWduZWQgaW50IGZyZWVfY2hh
-bl9pZDsJLyogTmV4dCBjaGFuIElEIHRvIGFsbG9jYXRlICovCiAJdXVpZF9sZSB1dWlkOwkJCS8q
-IFRyYWNlIHNlc3Npb24gdW5pcXVlIElEICovCisJc3RydWN0IGx0dG5nX21ldGFkYXRhX2R1bXBl
-ZCAqZXh0cmFfbWV0YWRhdGFbTlJfTUVUQURBVEFfVFlQRVNdOwogCXVuc2lnbmVkIGludCBtZXRh
-ZGF0YV9kdW1wZWQ6MTsKIH07CiAKZGlmZiAtLWdpdCBhL3Byb2Jlcy9sdHRuZy1ldmVudHMtcmVz
-ZXQuaCBiL3Byb2Jlcy9sdHRuZy1ldmVudHMtcmVzZXQuaAppbmRleCA0NGU4YmE1Li5iZjhiYmYx
-IDEwMDY0NAotLS0gYS9wcm9iZXMvbHR0bmctZXZlbnRzLXJlc2V0LmgKKysrIGIvcHJvYmVzL2x0
-dG5nLWV2ZW50cy1yZXNldC5oCkBAIC0yMCw2ICsyMCw5IEBACiAKIC8qIFJlc2V0IG1hY3JvcyB1
-c2VkIHdpdGhpbiBUUkFDRV9FVkVOVCB0byAibm90aGluZyIgKi8KIAorI3VuZGVmIFRSQUNFX01F
-VEFEQVRBCisjZGVmaW5lIFRSQUNFX01FVEFEQVRBIDEKKwogI3VuZGVmIF9fZmllbGRfZnVsbAog
-I2RlZmluZSBfX2ZpZWxkX2Z1bGwoX3R5cGUsIF9pdGVtLCBfb3JkZXIsIF9iYXNlKQogCkBAIC0z
-NSw2ICszOCw5IEBACiAjdW5kZWYgX19zdHJpbmcKICNkZWZpbmUgX19zdHJpbmcoX2l0ZW0sIF9z
-cmMpCiAKKyN1bmRlZiBfX3N0cnVjdAorI2RlZmluZSBfX3N0cnVjdChfcHJvdmlkZXIsIF90eXBl
-LCBfaXRlbSwgX3BhcmFtcykKKwogI3VuZGVmIHRwX2Fzc2lnbgogI2RlZmluZSB0cF9hc3NpZ24o
-ZGVzdCwgc3JjKQogCkBAIC00Nyw2ICs1Myw5IEBACiAjdW5kZWYgdHBfc3RyY3B5CiAjZGVmaW5l
-IHRwX3N0cmNweShkZXN0LCBzcmMpCiAKKyN1bmRlZiB0cF9tZW1jcHlfc3RydWN0CisjZGVmaW5l
-IHRwX21lbWNweV9zdHJ1Y3QoZGVzdCwgc3JjKQorCiAjdW5kZWYgX19nZXRfc3RyCiAjZGVmaW5l
-IF9fZ2V0X3N0cihmaWVsZCkKIApAQCAtNjUsNiArNzQsOSBAQAogI3VuZGVmIFRQX1NUUlVDVF9f
-ZW50cnkKICNkZWZpbmUgVFBfU1RSVUNUX19lbnRyeShhcmdzLi4uKQogCisjdW5kZWYgVFBfRklF
-TERTCisjZGVmaW5lIFRQX0ZJRUxEUyhhcmdzLi4uKQorCiAjdW5kZWYgVFBfZmFzdF9hc3NpZ24K
-ICNkZWZpbmUgVFBfZmFzdF9hc3NpZ24oYXJncy4uLikKIApAQCAtOTQsMyArMTA2LDYgQEAKIAog
-I3VuZGVmIFRSQUNFX0VWRU5UX0ZMQUdTCiAjZGVmaW5lIFRSQUNFX0VWRU5UX0ZMQUdTKG5hbWUs
-IHZhbHVlKQorCisjdW5kZWYgVFJBQ0VQT0lOVF9TVFJVQ1QKKyNkZWZpbmUgVFJBQ0VQT0lOVF9T
-VFJVQ1QoX3Byb3ZpZGVyLCBfbmFtZSwgX3Byb3RvLCBfZmllbGRzKQpkaWZmIC0tZ2l0IGEvcHJv
-YmVzL2x0dG5nLWV2ZW50cy5oIGIvcHJvYmVzL2x0dG5nLWV2ZW50cy5oCmluZGV4IDhhM2E4ODYu
-Ljg0NjUwOTUgMTAwNjQ0Ci0tLSBhL3Byb2Jlcy9sdHRuZy1ldmVudHMuaAorKysgYi9wcm9iZXMv
-bHR0bmctZXZlbnRzLmgKQEAgLTI2Myw5ICsyNjMsMzEgQEAgdm9pZCB0cmFjZV8jI19uYW1lKHZv
-aWQgKl9fZGF0YSk7CiAjZGVmaW5lIF9fc3RyaW5nX2Zyb21fdXNlcihfaXRlbSwgX3NyYykJCQkJ
-XAogCV9fc3RyaW5nKF9pdGVtLCBfc3JjKQogCisjdW5kZWYgX19zdHJ1Y3QKKyNkZWZpbmUgX19z
-dHJ1Y3QoX3Byb3ZpZGVyLCBfdHlwZSwgX2l0ZW0sIF9wYXJhbXMpCQlcCisJewkJCQkJCQlcCisJ
-ICAubmFtZSA9ICNfaXRlbSwJCQkJCVwKKwkgIC50eXBlID0JCQkJCQlcCisJICB7CQkJCQkJCVwK
-KwkJLmF0eXBlID0gYXR5cGVfc3RydWN0LAkJCQlcCisJCS51LmN0Zl9zdHJ1Y3QubmFtZSA9ICNf
-dHlwZSwJCQlcCisJCS51LmN0Zl9zdHJ1Y3QucHJvdmlkZXIgPSAjX3Byb3ZpZGVyLAkJXAorCSAg
-fSwJCQkJCQkJXAorCX0sCisKICN1bmRlZiBUUF9TVFJVQ1RfX2VudHJ5CiAjZGVmaW5lIFRQX1NU
-UlVDVF9fZW50cnkoYXJncy4uLikgYXJncwkvKiBPbmx5IG9uZSB1c2VkIGluIHRoaXMgcGhhc2Ug
-Ki8KIAorI3VuZGVmIFRQX0ZJRUxEUworI2RlZmluZSBUUF9GSUVMRFMoYXJncy4uLikgYXJncwkv
-KiBPbmx5IG9uZSB1c2VkIGluIHRoaXMgcGhhc2UgKi8KKworI3VuZGVmIFRSQUNFUE9JTlRfU1RS
-VUNUCisjZGVmaW5lIFRSQUNFUE9JTlRfU1RSVUNUKF9wcm92aWRlciwgX25hbWUsIF9wcm90bywg
-X2ZpZWxkcykJXAorCXN0YXRpYyBjb25zdCBzdHJ1Y3QgbHR0bmdfZXZlbnRfZmllbGQJCQlcCisJ
-CV9fc3RydWN0X2ZpZWxkc19fXyMjX3Byb3ZpZGVyIyNfbmFtZVtdID0gewlcCisJCQlfZmllbGRz
-CQkJCQlcCisJfTsKKwogI3VuZGVmIERFQ0xBUkVfRVZFTlRfQ0xBU1NfTk9BUkdTCiAjZGVmaW5l
-IERFQ0xBUkVfRVZFTlRfQ0xBU1NfTk9BUkdTKF9uYW1lLCBfdHN0cnVjdCwgX2Fzc2lnbiwgX3By
-aW50KSBcCiAJc3RhdGljIGNvbnN0IHN0cnVjdCBsdHRuZ19ldmVudF9maWVsZCBfX2V2ZW50X2Zp
-ZWxkc19fXyMjX25hbWVbXSA9IHsgXApAQCAtMzAxLDYgKzMyMyw2MCBAQCBzdGF0aWMgdm9pZCBf
-X2V2ZW50X3Byb2JlX18jI19uYW1lKHZvaWQgKl9fZGF0YSk7CiAjaW5jbHVkZSBUUkFDRV9JTkNM
-VURFKFRSQUNFX0lOQ0xVREVfRklMRSkKIAogLyoKKyAqIFN0YWdlIDMuMiBvZiB0aGUgdHJhY2Ug
-ZXZlbnRzLgorICoKKyAqIENyZWF0ZSBleHRyYSBtZXRhZGF0YSBkZXNjcmlwdGlvbgorICovCisK
-KyNpbmNsdWRlICJsdHRuZy1ldmVudHMtcmVzZXQuaCIJLyogUmVzZXQgYWxsIG1hY3JvcyB3aXRo
-aW4gVFJBQ0VfRVZFTlQgKi8KKworI3VuZGVmIFRSQUNFUE9JTlRfU1RSVUNUCisjZGVmaW5lIFRS
-QUNFUE9JTlRfU1RSVUNUKF9wcm92aWRlciwgX25hbWUsIF9wcm90bywgX2ZpZWxkcykJXAorc3Rh
-dGljIHN0cnVjdCBsdHRuZ19zdHJ1Y3RfZGVzYyBfX3N0cnVjdF9kZXNjX19fIyNfcHJvdmlkZXIj
-I19uYW1lID0gewlcCisJCS5maWVsZHMgPSBfX3N0cnVjdF9maWVsZHNfX18jI19wcm92aWRlciMj
-X25hbWUsCQlcCisJCS5uYW1lID0gI19uYW1lLAkJXAorCQkucHJvdmlkZXIgPSAjX3Byb3ZpZGVy
-LAlcCisJCS5ucl9maWVsZHMgPSBBUlJBWV9TSVpFKF9fc3RydWN0X2ZpZWxkc19fXyMjX3Byb3Zp
-ZGVyIyNfbmFtZSksXAorCQkub3duZXIgPSBUSElTX01PRFVMRSwJXAorCX07CisKKyNpbmNsdWRl
-IFRSQUNFX0lOQ0xVREUoVFJBQ0VfSU5DTFVERV9GSUxFKQorCisvKgorICogU3RhZ2UgMy4zIG9m
-IHRoZSB0cmFjZSBldmVudHMuCisgKgorICogQXNzb2NpYXRlIG1ldGFkYXRhIGRlc2NyaXB0aW9u
-IHRvIGV2ZW50IG9yIGV2ZW50IHRlbXBsYXRlCisgKi8KKworLyogTmFtZWQgZmllbGQgdHlwZXMg
-bXVzdCBiZSBkZWZpbmVkIGluIGx0dG5nLXR5cGVzLmggKi8KKworI2luY2x1ZGUgImx0dG5nLWV2
-ZW50cy1yZXNldC5oIgkvKiBSZXNldCBhbGwgbWFjcm9zIHdpdGhpbiBUUkFDRV9FVkVOVCAqLwor
-CisjdW5kZWYgX19zdHJ1Y3QKKyNkZWZpbmUgX19zdHJ1Y3QoX3Byb3ZpZGVyLCBfdHlwZSwgX2l0
-ZW0sIF9wYXJhbXMpCQlcCisJewkJCQkJCQlcCisJICAubXR5cGUgPSBtdHlwZV9zdHJ1Y3QsCQkJ
-CQlcCisJICAubS5zdHJ1Y3RfZGVzYyA9ICZfX3N0cnVjdF9kZXNjX19fIyNfcHJvdmlkZXIjI190
-eXBlLAlcCisJfSwKKworI3VuZGVmIFRQX1NUUlVDVF9fZW50cnkKKyNkZWZpbmUgVFBfU1RSVUNU
-X19lbnRyeShhcmdzLi4uKSBhcmdzCS8qIE9ubHkgb25lIHVzZWQgaW4gdGhpcyBwaGFzZSAqLwor
-CisjdW5kZWYgREVDTEFSRV9FVkVOVF9DTEFTU19OT0FSR1MKKyNkZWZpbmUgREVDTEFSRV9FVkVO
-VF9DTEFTU19OT0FSR1MoX25hbWUsIF90c3RydWN0LCBfYXNzaWduLCBfcHJpbnQpIFwKK3N0YXRp
-YyBjb25zdCBzdHJ1Y3QgbHR0bmdfbWV0YWRhdGEgX19tZXRhZGF0YV9mb3JfXyMjX25hbWVbXSA9
-IHsJXAorCV90c3RydWN0CQlcCit9OworCisjdW5kZWYgREVDTEFSRV9FVkVOVF9DTEFTUworI2Rl
-ZmluZSBERUNMQVJFX0VWRU5UX0NMQVNTKF9uYW1lLCBfcHJvdG8sIF9hcmdzLCBfdHN0cnVjdCwg
-X2Fzc2lnbiwgX3ByaW50KSBcCisJREVDTEFSRV9FVkVOVF9DTEFTU19OT0FSR1MoX25hbWUsIFBB
-UkFNUyhfdHN0cnVjdCksIFBBUkFNUyhfYXNzaWduKSwgXAorCQkJUEFSQU1TKF9wcmludCkpCisK
-KyNpbmNsdWRlIFRSQUNFX0lOQ0xVREUoVFJBQ0VfSU5DTFVERV9GSUxFKQorCisKKy8qCiAgKiBT
-dGFnZSAzLjkgb2YgdGhlIHRyYWNlIGV2ZW50cy4KICAqCiAgKiBDcmVhdGUgZXZlbnQgZGVzY3Jp
-cHRpb25zLgpAQCAtMzE4LDkgKzM5NCwxMSBAQCBzdGF0aWMgdm9pZCBfX2V2ZW50X3Byb2JlX18j
-I19uYW1lKHZvaWQgKl9fZGF0YSk7CiAjZGVmaW5lIERFRklORV9FVkVOVF9NQVBfTk9BUkdTKF90
-ZW1wbGF0ZSwgX25hbWUsIF9tYXApCQkJXAogc3RhdGljIGNvbnN0IHN0cnVjdCBsdHRuZ19ldmVu
-dF9kZXNjIF9fZXZlbnRfZGVzY19fXyMjX21hcCA9IHsJCVwKIAkuZmllbGRzID0gX19ldmVudF9m
-aWVsZHNfX18jI190ZW1wbGF0ZSwJCSAgICAgCQlcCisJLmV4dHJhX21ldGFkYXRhID0gX19tZXRh
-ZGF0YV9mb3JfXyMjX3RlbXBsYXRlLAkJCVwKIAkubmFtZSA9ICNfbWFwLAkJCQkJICAgICAJCVwK
-IAkucHJvYmVfY2FsbGJhY2sgPSAodm9pZCAqKSBUUF9QUk9CRV9DQihfdGVtcGxhdGUpLCAgIAkJ
-XAogCS5ucl9maWVsZHMgPSBBUlJBWV9TSVpFKF9fZXZlbnRfZmllbGRzX19fIyNfdGVtcGxhdGUp
-LAkJXAorCS5ucl9tZXRhZGF0YSA9IEFSUkFZX1NJWkUoX19tZXRhZGF0YV9mb3JfXyMjX3RlbXBs
-YXRlKSwJCVwKIAkub3duZXIgPSBUSElTX01PRFVMRSwJCQkJICAgICAJCVwKIH07CiAKQEAgLTQy
-MCwxMiArNDk4LDMzIEBAIHN0YXRpYyBfX3VzZWQgc3RydWN0IGx0dG5nX3Byb2JlX2Rlc2MgVFBf
-SUQoX19wcm9iZV9kZXNjX19fLCBUUkFDRV9TWVNURU0pID0gewogCV9fZXZlbnRfbGVuICs9IF9f
-ZHluYW1pY19sZW5bX19keW5hbWljX2xlbl9pZHgrK10gPQkJICAgICAgIFwKIAkJbWF4X3Qoc2l6
-ZV90LCBsdHRuZ19zdHJsZW5fdXNlcl9pbmF0b21pYyhfc3JjKSwgMSk7CiAKKyN1bmRlZiBfX3N0
-cnVjdAorI2RlZmluZSBfX3N0cnVjdChfcHJvdmlkZXIsIF90eXBlLCBfaXRlbSwgX3BhcmFtcykJ
-CQlcCisJX19ldmVudF9sZW4gKz0gX19keW5hbWljX2xlbltfX2R5bmFtaWNfbGVuX2lkeCsrXSA9
-CQlcCisJCV9fc3RydWN0X2dldF9zaXplX18jI19wcm92aWRlciMjX3R5cGUoX19keW5hbWljX2xl
-biwgX3BhcmFtcyk7CisKICN1bmRlZiBUUF9QUk9UTwogI2RlZmluZSBUUF9QUk9UTyhhcmdzLi4u
-KSBhcmdzCiAKICN1bmRlZiBUUF9TVFJVQ1RfX2VudHJ5CiAjZGVmaW5lIFRQX1NUUlVDVF9fZW50
-cnkoYXJncy4uLikgYXJncwogCisjdW5kZWYgVFBfRklFTERTCisjZGVmaW5lIFRQX0ZJRUxEUyhh
-cmdzLi4uKSBhcmdzCisKKyN1bmRlZiBUUkFDRVBPSU5UX1NUUlVDVAorI2RlZmluZSBUUkFDRVBP
-SU5UX1NUUlVDVChfcHJvdmlkZXIsIF9uYW1lLCBfcHJvdG8sIF9maWVsZHMpCVwKK3N0YXRpYyBp
-bmxpbmUgc2l6ZV90IF9fc3RydWN0X2dldF9zaXplX18jI19wcm92aWRlciMjX25hbWUoc2l6ZV90
-ICpfX2R5bmFtaWNfbGVuLCBfcHJvdG8pXAorCXsJCQkJCQkJCVwKKwlzaXplX3QgX19ldmVudF9s
-ZW4gPSAwOwkJCQkJCVwKKwl1bnNpZ25lZCBpbnQgX19keW5hbWljX2xlbl9pZHggPSAwOwkJCQlc
-CisJCQkJCQkJCQlcCisJaWYgKDApCQkJCQkJCQlcCisJCSh2b2lkKSBfX2R5bmFtaWNfbGVuX2lk
-eDsJLyogZG9uJ3Qgd2FybiBpZiB1bnVzZWQgKi9cCisJX2ZpZWxkcwkJCQkJCQkJXAorCXJldHVy
-biBfX2V2ZW50X2xlbjsJCQkJCQlcCit9CisKICN1bmRlZiBERUNMQVJFX0VWRU5UX0NMQVNTCiAj
-ZGVmaW5lIERFQ0xBUkVfRVZFTlRfQ0xBU1MoX25hbWUsIF9wcm90bywgX2FyZ3MsIF90c3RydWN0
-LCBfYXNzaWduLCBfcHJpbnQpICBcCiBzdGF0aWMgaW5saW5lIHNpemVfdCBfX2V2ZW50X2dldF9z
-aXplX18jI19uYW1lKHNpemVfdCAqX19keW5hbWljX2xlbiwgX3Byb3RvKSBcCkBAIC00NzAsMTIg
-KzU2OSwyOSBAQCBzdGF0aWMgaW5saW5lIHNpemVfdCBfX2V2ZW50X2dldF9zaXplX18jI19uYW1l
-KHNpemVfdCAqX19keW5hbWljX2xlbiwgX3Byb3RvKSBcCiAjdW5kZWYgX19zdHJpbmdfZnJvbV91
-c2VyCiAjZGVmaW5lIF9fc3RyaW5nX2Zyb21fdXNlcihfaXRlbSwgX3NyYykKIAorI3VuZGVmIF9f
-c3RydWN0CisjZGVmaW5lIF9fc3RydWN0KF9wcm92aWRlciwgX3R5cGUsIF9pdGVtLCBfcGFyYW1z
-KQkJCVwKKwlfX2V2ZW50X2FsaWduID0gbWF4X3Qoc2l6ZV90LCBfX2V2ZW50X2FsaWduLAkJCVwK
-KwkJX19zdHJ1Y3RfZ2V0X2FsaWduX18jI19wcm92aWRlciMjX3R5cGUoX3BhcmFtcykpOworCiAj
-dW5kZWYgVFBfUFJPVE8KICNkZWZpbmUgVFBfUFJPVE8oYXJncy4uLikgYXJncwogCiAjdW5kZWYg
-VFBfU1RSVUNUX19lbnRyeQogI2RlZmluZSBUUF9TVFJVQ1RfX2VudHJ5KGFyZ3MuLi4pIGFyZ3MK
-IAorI3VuZGVmIFRQX0ZJRUxEUworI2RlZmluZSBUUF9GSUVMRFMoYXJncy4uLikgYXJncworCisj
-dW5kZWYgVFJBQ0VQT0lOVF9TVFJVQ1QKKyNkZWZpbmUgVFJBQ0VQT0lOVF9TVFJVQ1QoX3Byb3Zp
-ZGVyLCBfbmFtZSwgX3Byb3RvLCBfZmllbGRzKQlcCitzdGF0aWMgaW5saW5lIHNpemVfdCBfX3N0
-cnVjdF9nZXRfYWxpZ25fXyMjX3Byb3ZpZGVyIyNfbmFtZShfcHJvdG8pCVwKK3sJCQkJCQkJCQlc
-CisJc2l6ZV90IF9fZXZlbnRfYWxpZ24gPSAxOwkJCQkJXAorCV9maWVsZHMJCQkJCQkJCVwKKwly
-ZXR1cm4gX19ldmVudF9hbGlnbjsJCQkJCQlcCit9CisKICN1bmRlZiBERUNMQVJFX0VWRU5UX0NM
-QVNTCiAjZGVmaW5lIERFQ0xBUkVfRVZFTlRfQ0xBU1MoX25hbWUsIF9wcm90bywgX2FyZ3MsIF90
-c3RydWN0LCBfYXNzaWduLCBfcHJpbnQpICBcCiBzdGF0aWMgaW5saW5lIHNpemVfdCBfX2V2ZW50
-X2dldF9hbGlnbl9fIyNfbmFtZShfcHJvdG8pCQkJICAgICAgXApAQCAtNTE3LDYgKzYzMyw5IEBA
-IHN0YXRpYyBpbmxpbmUgc2l6ZV90IF9fZXZlbnRfZ2V0X2FsaWduX18jI19uYW1lKF9wcm90bykJ
-CQkgICAgICBcCiAjZGVmaW5lIF9fc3RyaW5nX2Zyb21fdXNlcihfaXRlbSwgX3NyYykJCVwKIAlf
-X3N0cmluZyhfaXRlbSwgX3NyYykKIAorI3VuZGVmIF9fc3RydWN0CisjZGVmaW5lIF9fc3RydWN0
-KF9wcm92aWRlciwgX3R5cGUsIF9pdGVtLCBfcGFyYW1zKQkJY2hhciBfaXRlbTsKKwogI3VuZGVm
-IFRQX1NUUlVDVF9fZW50cnkKICNkZWZpbmUgVFBfU1RSVUNUX19lbnRyeShhcmdzLi4uKSBhcmdz
-CiAKQEAgLTU2OCw2ICs2ODcsMTEgQEAgX19lbmRfZmllbGRfIyNfaXRlbToKICNkZWZpbmUgX19z
-dHJpbmdfZnJvbV91c2VyKF9pdGVtLCBfc3JjKQkJCQkJXAogCV9fc3RyaW5nKF9pdGVtLCBfc3Jj
-KQogCisjdW5kZWYgX19zdHJ1Y3QKKyNkZWZpbmUgX19zdHJ1Y3QoX3Byb3ZpZGVyLCBfdHlwZSwg
-X2l0ZW0sIF9wYXJhbXMpCQkJXAorCWdvdG8gX19hc3NpZ25fIyNfaXRlbTsJCQkJCQlcCitfX2Vu
-ZF9maWVsZF8jI19pdGVtOgorCiAvKgogICogTWFjcm9zIG1hcHBpbmcgdHBfYXNzaWduKCkgdG8g
-Ij0iLCB0cF9tZW1jcHkoKSB0byBtZW1jcHkoKSBhbmQgdHBfc3RyY3B5KCkgdG8KICAqIHN0cmNw
-eSgpLgpAQCAtNjI0LDEyICs3NDgsMjQgQEAgX19hc3NpZ25fIyNkZXN0IyNfMjoJCQkJCQkJXAog
-I2RlZmluZSB0cF9tZW1jcHlfZHluX2Zyb21fdXNlcihkZXN0LCBzcmMpCQkJCVwKIAl0cF9tZW1j
-cHlfZHluX2dlbihldmVudF93cml0ZV9mcm9tX3VzZXIsIGRlc3QsIHNyYykKIAorI3VuZGVmIHRw
-X21lbWNweV9zdHJ1Y3RfZ2VuCisjZGVmaW5lIHRwX21lbWNweV9zdHJ1Y3RfZ2VuKHdyaXRlX29w
-cywgZGVzdCwgc3JjKQlcCitfX2Fzc2lnbl8jI2Rlc3Q6CQkJCQkJCVwKKwlsaWJfcmluZ19idWZm
-ZXJfYWxpZ25fY3R4KCZfX2N0eCwgbHR0bmdfYWxpZ25vZihfX3R5cGVtYXAuZGVzdCkpO1wKKwlf
-X2NoYW4tPm9wcy0+d3JpdGVfb3BzKCZfX2N0eCwgc3JjLAkJCQlcCisJCXNpemVvZihfX3R5cGVt
-YXAuZGVzdCkgKiBfX2dldF9keW5hbWljX2FycmF5X2xlbihkZXN0KSk7XAorCWdvdG8gX19lbmRf
-ZmllbGRfIyNkZXN0OworCisjdW5kZWYgdHBfbWVtY3B5X3N0cnVjdAorI2RlZmluZSB0cF9tZW1j
-cHlfc3RydWN0KGRlc3QsIHNyYykJXAorCQl0cF9tZW1jcHlfc3RydWN0X2dlbihldmVudF93cml0
-ZSwgZGVzdCwgc3JjKQorCiAvKgogICogVGhlIHN0cmluZyBsZW5ndGggaW5jbHVkaW5nIHRoZSBm
-aW5hbCBcMC4KICAqLwogI3VuZGVmIHRwX2NvcHlfc3RyaW5nX2Zyb21fdXNlcgogI2RlZmluZSB0
-cF9jb3B5X3N0cmluZ19mcm9tX3VzZXIoZGVzdCwgc3JjKQkJCQlcCi0JX19hc3NpZ25fIyNkZXN0
-OgkJCQkJCVwKK19fYXNzaWduXyMjZGVzdDoJCQkJCQkJXAogCXsJCQkJCQkJCVwKIAkJc2l6ZV90
-IF9fdXN0cmxlbjsJCQkJCVwKIAkJCQkJCQkJCVwKLS0gCjEuOC4yLjEKCgpfX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0
-Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmlu
-L21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+* Genevi=E8ve Bastien (gbastien+lttng@versatic.net) wrote:
+> Introduce the new macro TRACEPOINT_STRUCT to define ctf struct metadata
+> that can be used by tracepoints using _struct as entry and tp_memcpy_stru=
+ct
+> to copy a struct field.
+> This extra metadata is added to the metadata file only if events use it.
+> =
+
+> Signed-off-by: Genevi=E8ve Bastien <gbastien+lttng@versatic.net>
+> ---
+>  lttng-events.c              | 134 ++++++++++++++++++++++++++++++++++++++=
++++-
+>  lttng-events.h              |  35 +++++++++++
+>  probes/lttng-events-reset.h |  15 +++++
+>  probes/lttng-events.h       | 138 ++++++++++++++++++++++++++++++++++++++=
++++++-
+>  4 files changed, 320 insertions(+), 2 deletions(-)
+> =
+
+> diff --git a/lttng-events.c b/lttng-events.c
+> index 4f30904..431a17c 100644
+> --- a/lttng-events.c
+> +++ b/lttng-events.c
+> @@ -654,6 +654,13 @@ int _lttng_field_statedump(struct lttng_session *ses=
+sion,
+>  				" { encoding =3D ASCII; }" : "",
+>  			field->name);
+>  		break;
+> +	case atype_struct:
+> +		ret =3D lttng_metadata_printf(session,
+> +			"		struct %s%s _%s;\n",
+
+I think an underscore is missing:
+
+                        "               struct %s_%s _%s;\n"
+
+> +			field->type.u.ctf_struct.provider,
+> +			field->type.u.ctf_struct.name,
+> +			field->name);
+> +		break;
+>  	default:
+>  		WARN_ON_ONCE(1);
+>  		return -EINVAL;
+> @@ -662,6 +669,122 @@ int _lttng_field_statedump(struct lttng_session *se=
+ssion,
+>  }
+>  =
+
+>  static
+> +int _lttng_is_extra_metadata_dumped(struct lttng_session *session,
+
+rather than "extra_metadata", can we call this "type_metadata" ?
+
+"extra" is rather "extra vague" ;-)
+
+> +		const struct lttng_metadata *metadata) {
+
+newline before { (coding style, this applies to other functions below
+too)
+
+> +	/* Is the metadata dumped yet ? */
+> +	struct lttng_metadata_dumped *dumped;
+> +	int is_dumped =3D 0;
+> +
+> +	dumped =3D session->extra_metadata[metadata->mtype];
+> +	switch (metadata->mtype) {
+> +	case mtype_struct:
+> +		while (dumped) {
+
+it looks like a for() would be clearer than a while.
+
+> +			if (metadata->m.struct_desc =3D=3D
+> +					dumped->dumped_ptr.struct_desc) {
+> +				is_dumped =3D 1;
+> +				break;
+> +			}
+> +			dumped =3D dumped->next;
+> +		}
+> +		break;
+> +	default:
+> +		WARN_ON_ONCE(1);
+> +		return -EINVAL;
+> +	}
+> +	return is_dumped;
+> +}
+> +
+> +static int _lttng_extra_metadata_mark_dumped(struct lttng_session *sessi=
+on,
+> +		const struct lttng_metadata *metadata) {
+> +	/* mark this metadata as dumped */
+> +	struct lttng_metadata_dumped *dumped, *just_dumped;
+> +
+> +	just_dumped =3D kzalloc(sizeof(struct lttng_metadata_dumped),
+> +			GFP_KERNEL);
+> +	if (!just_dumped)
+> +		return -ENOMEM;
+> +
+> +	dumped =3D session->extra_metadata[metadata->mtype];
+> +
+> +	switch (metadata->mtype) {
+> +	case mtype_struct:
+> +		just_dumped->dumped_ptr.struct_desc =3D metadata->m.struct_desc;
+> +		break;
+> +	default:
+> +		WARN_ON_ONCE(1);
+
+memory leak of just_dumped.
+
+> +		return -EINVAL;
+> +	}
+> +
+> +	just_dumped->next =3D session->extra_metadata[mtype_struct];
+> +	session->extra_metadata[mtype_struct] =3D just_dumped;
+> +	return 0;
+> +}
+> +
+> +static
+> +int _lttng_event_extra_metadata_do_statedump(struct lttng_session *sessi=
+on,
+> +		const struct lttng_metadata *meta)
+> +{
+> +	int i, ret =3D 0;
+> +
+> +	switch (meta->mtype) {
+> +	case mtype_struct:
+
+remove newline.
+
+> +
+> +		ret =3D lttng_metadata_printf(session,
+> +			"struct %s%s {\n",
+
+missing underscore ?
+
+> +			meta->m.struct_desc->provider, meta->m.struct_desc->name
+> +		);
+> +		if (ret)
+> +			return ret;
+> +
+> +		/* Print fields */
+> +		for (i =3D 0; i < meta->m.struct_desc->nr_fields; i++) {
+> +			const struct lttng_event_field *field;
+
+add newline.
+
+> +			field =3D &meta->m.struct_desc->fields[i];
+
+remove newline.
+
+> +
+> +			ret =3D _lttng_field_statedump(session, field);
+> +			if (ret)
+> +				return ret;
+> +		}
+> +
+> +		ret =3D lttng_metadata_printf(session,
+> +				"};\n\n");
+> +		if (ret)
+> +			return ret;
+> +
+> +		break;
+> +	default:
+> +		WARN_ON_ONCE(1);
+> +		return -EINVAL;
+> +	}
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret =3D _lttng_extra_metadata_mark_dumped(session, meta);
+> +	return ret;
+> +}
+> +
+> +static
+> +int _lttng_event_extra_metadata_statedump(struct lttng_session *session,
+> +			 struct lttng_event *event)
+> +{
+> +	const struct lttng_event_desc *desc =3D event->desc;
+> +	int i, ret =3D 0;
+> +
+> +	for (i =3D 0; i < desc->nr_metadata; i++) {
+> +		const struct lttng_metadata *meta =3D &desc->extra_metadata[i];
+> +
+> +		if (!_lttng_is_extra_metadata_dumped(session, meta)) {
+
+if (_lttng_is_extra_metadata_dumped(session, meta))
+        continue;
+
+will save an indent level.
+
+> +			ret =3D _lttng_event_extra_metadata_do_statedump(session,
+> +					meta);
+> +			if (ret)
+> +				return ret;
+> +		}
+> +	}
+> +	return ret;
+> +
+> +}
+> +
+> +static
+>  int _lttng_context_metadata_statedump(struct lttng_session *session,
+>  				    struct lttng_ctx *ctx)
+>  {
+> @@ -710,6 +833,11 @@ int _lttng_event_metadata_statedump(struct lttng_ses=
+sion *session,
+>  	if (chan =3D=3D session->metadata)
+>  		return 0;
+>  =
+
+> +	/* Dump the extra metadata for this event */
+> +	ret =3D _lttng_event_extra_metadata_statedump(session, event);
+> +	if (ret)
+> +		goto end;
+> +
+>  	ret =3D lttng_metadata_printf(session,
+>  		"event {\n"
+>  		"	name =3D %s;\n"
+> @@ -905,7 +1033,7 @@ int _lttng_session_metadata_statedump(struct lttng_s=
+ession *session)
+>  	unsigned char uuid_s[37], clock_uuid_s[BOOT_ID_LEN];
+>  	struct lttng_channel *chan;
+>  	struct lttng_event *event;
+> -	int ret =3D 0;
+> +	int ret =3D 0, i;
+>  =
+
+>  	if (!ACCESS_ONCE(session->active))
+>  		return 0;
+> @@ -1042,6 +1170,10 @@ int _lttng_session_metadata_statedump(struct lttng=
+_session *session)
+>  	if (ret)
+>  		goto end;
+>  =
+
+> +	/* Initialized undumped metadata */
+> +	for (i =3D 0; i < NR_METADATA_TYPES; i++)
+> +		session->extra_metadata[i] =3D 0;
+
+this initialisation probably belongs to lttng_session_create().
+
+> +
+>  skip_session:
+>  	list_for_each_entry(chan, &session->chan, list) {
+>  		ret =3D _lttng_channel_metadata_statedump(session, chan);
+> diff --git a/lttng-events.h b/lttng-events.h
+> index 37a5db7..2cab5f3 100644
+> --- a/lttng-events.h
+> +++ b/lttng-events.h
+> @@ -47,9 +47,16 @@ enum abstract_types {
+>  	atype_array,
+>  	atype_sequence,
+>  	atype_string,
+> +	atype_struct,
+>  	NR_ABSTRACT_TYPES,
+>  };
+>  =
+
+> +/* Metadata types */
+> +enum metadata_types {
+> +	mtype_struct,
+> +	NR_METADATA_TYPES,
+> +};
+> +
+>  /* Update the string_encodings name table in lttng-types.c along with th=
+is enum */
+>  enum lttng_string_encodings {
+>  	lttng_encode_none =3D 0,
+> @@ -115,6 +122,9 @@ struct lttng_type {
+>  			struct lttng_basic_type length_type;
+>  			struct lttng_basic_type elem_type;
+>  		} sequence;
+> +		struct {
+> +			const char *name, *provider;
+> +		} ctf_struct;
+>  	} u;
+>  };
+>  =
+
+> @@ -161,12 +171,36 @@ struct lttng_ctx {
+>  	unsigned int allocated_fields;
+>  };
+>  =
+
+> +struct lttng_struct_desc {
+> +	const char *name, *provider;
+
+const char *provider, *name;
+
+seems clearer.
+
+> +	const struct lttng_event_field *fields; /* fields */
+> +	unsigned int nr_fields;
+> +	struct module *owner;
+> +};
+> +
+> +struct lttng_metadata {
+> +	enum metadata_types mtype;
+> +	union {
+> +		struct lttng_struct_desc *struct_desc;
+> +	} m;
+> +};
+> +
+> +struct lttng_metadata_dumped {
+> +	union {
+> +		struct lttng_struct_desc *struct_desc;
+> +	} dumped_ptr;
+> +	struct lttng_metadata_dumped *next;
+> +};
+> +
+>  struct lttng_event_desc {
+>  	const char *name;
+>  	void *probe_callback;
+>  	const struct lttng_event_ctx *ctx;	/* context */
+>  	const struct lttng_event_field *fields;	/* event payload */
+> +	/* Extra metadata added by events */
+> +	const struct lttng_metadata *extra_metadata;
+>  	unsigned int nr_fields;
+> +	unsigned int nr_metadata;
+>  	struct module *owner;
+>  };
+>  =
+
+> @@ -277,6 +311,7 @@ struct lttng_session {
+>  	struct list_head list;		/* Session list */
+>  	unsigned int free_chan_id;	/* Next chan ID to allocate */
+>  	uuid_le uuid;			/* Trace session unique ID */
+> +	struct lttng_metadata_dumped *extra_metadata[NR_METADATA_TYPES];
+>  	unsigned int metadata_dumped:1;
+>  };
+>  =
+
+> diff --git a/probes/lttng-events-reset.h b/probes/lttng-events-reset.h
+> index 44e8ba5..bf8bbf1 100644
+> --- a/probes/lttng-events-reset.h
+> +++ b/probes/lttng-events-reset.h
+> @@ -20,6 +20,9 @@
+>  =
+
+>  /* Reset macros used within TRACE_EVENT to "nothing" */
+>  =
+
+> +#undef TRACE_METADATA
+> +#define TRACE_METADATA 1
+> +
+>  #undef __field_full
+>  #define __field_full(_type, _item, _order, _base)
+>  =
+
+> @@ -35,6 +38,9 @@
+>  #undef __string
+>  #define __string(_item, _src)
+>  =
+
+> +#undef __struct
+> +#define __struct(_provider, _type, _item, _params)
+> +
+>  #undef tp_assign
+>  #define tp_assign(dest, src)
+>  =
+
+> @@ -47,6 +53,9 @@
+>  #undef tp_strcpy
+>  #define tp_strcpy(dest, src)
+>  =
+
+> +#undef tp_memcpy_struct
+> +#define tp_memcpy_struct(dest, src)
+> +
+>  #undef __get_str
+>  #define __get_str(field)
+>  =
+
+> @@ -65,6 +74,9 @@
+>  #undef TP_STRUCT__entry
+>  #define TP_STRUCT__entry(args...)
+>  =
+
+> +#undef TP_FIELDS
+> +#define TP_FIELDS(args...)
+> +
+>  #undef TP_fast_assign
+>  #define TP_fast_assign(args...)
+>  =
+
+> @@ -94,3 +106,6 @@
+>  =
+
+>  #undef TRACE_EVENT_FLAGS
+>  #define TRACE_EVENT_FLAGS(name, value)
+> +
+> +#undef TRACEPOINT_STRUCT
+> +#define TRACEPOINT_STRUCT(_provider, _name, _proto, _fields)
+> diff --git a/probes/lttng-events.h b/probes/lttng-events.h
+> index 8a3a886..8465095 100644
+> --- a/probes/lttng-events.h
+> +++ b/probes/lttng-events.h
+> @@ -263,9 +263,31 @@ void trace_##_name(void *__data);
+>  #define __string_from_user(_item, _src)				\
+>  	__string(_item, _src)
+>  =
+
+> +#undef __struct
+> +#define __struct(_provider, _type, _item, _params)		\
+> +	{							\
+> +	  .name =3D #_item,					\
+> +	  .type =3D						\
+> +	  {							\
+> +		.atype =3D atype_struct,				\
+> +		.u.ctf_struct.name =3D #_type,			\
+> +		.u.ctf_struct.provider =3D #_provider,		\
+> +	  },							\
+> +	},
+> +
+>  #undef TP_STRUCT__entry
+>  #define TP_STRUCT__entry(args...) args	/* Only one used in this phase */
+>  =
+
+> +#undef TP_FIELDS
+> +#define TP_FIELDS(args...) args	/* Only one used in this phase */
+> +
+> +#undef TRACEPOINT_STRUCT
+> +#define TRACEPOINT_STRUCT(_provider, _name, _proto, _fields)	\
+> +	static const struct lttng_event_field			\
+> +		__struct_fields___##_provider##_name[] =3D {	\
+> +			_fields					\
+> +	};
+> +
+>  #undef DECLARE_EVENT_CLASS_NOARGS
+>  #define DECLARE_EVENT_CLASS_NOARGS(_name, _tstruct, _assign, _print) \
+>  	static const struct lttng_event_field __event_fields___##_name[] =3D { \
+> @@ -301,6 +323,60 @@ static void __event_probe__##_name(void *__data);
+>  #include TRACE_INCLUDE(TRACE_INCLUDE_FILE)
+>  =
+
+>  /*
+> + * Stage 3.2 of the trace events.
+> + *
+> + * Create extra metadata description
+
+extra -> type
+
+> + */
+> +
+> +#include "lttng-events-reset.h"	/* Reset all macros within TRACE_EVENT */
+> +
+> +#undef TRACEPOINT_STRUCT
+> +#define TRACEPOINT_STRUCT(_provider, _name, _proto, _fields)	\
+> +static struct lttng_struct_desc __struct_desc___##_provider##_name =3D {=
+	\
+> +		.fields =3D __struct_fields___##_provider##_name,		\
+> +		.name =3D #_name,		\
+> +		.provider =3D #_provider,	\
+
+and exchange the two lines above, again for clarity.
+
+> +		.nr_fields =3D ARRAY_SIZE(__struct_fields___##_provider##_name),\
+> +		.owner =3D THIS_MODULE,	\
+> +	};
+> +
+> +#include TRACE_INCLUDE(TRACE_INCLUDE_FILE)
+> +
+> +/*
+> + * Stage 3.3 of the trace events.
+> + *
+> + * Associate metadata description to event or event template
+> + */
+> +
+> +/* Named field types must be defined in lttng-types.h */
+> +
+> +#include "lttng-events-reset.h"	/* Reset all macros within TRACE_EVENT */
+> +
+> +#undef __struct
+> +#define __struct(_provider, _type, _item, _params)		\
+> +	{							\
+> +	  .mtype =3D mtype_struct,					\
+> +	  .m.struct_desc =3D &__struct_desc___##_provider##_type,	\
+
+2 lines above: change double-spaces to tabs ?
+
+> +	},
+> +
+> +#undef TP_STRUCT__entry
+> +#define TP_STRUCT__entry(args...) args	/* Only one used in this phase */
+> +
+> +#undef DECLARE_EVENT_CLASS_NOARGS
+> +#define DECLARE_EVENT_CLASS_NOARGS(_name, _tstruct, _assign, _print) \
+> +static const struct lttng_metadata __metadata_for__##_name[] =3D {	\
+
+maybe call this:
+
+__type_metadata_for__##_name
+
+> +	_tstruct		\
+> +};
+> +
+> +#undef DECLARE_EVENT_CLASS
+> +#define DECLARE_EVENT_CLASS(_name, _proto, _args, _tstruct, _assign, _pr=
+int) \
+> +	DECLARE_EVENT_CLASS_NOARGS(_name, PARAMS(_tstruct), PARAMS(_assign), \
+> +			PARAMS(_print))
+> +
+> +#include TRACE_INCLUDE(TRACE_INCLUDE_FILE)
+> +
+> +
+> +/*
+>   * Stage 3.9 of the trace events.
+>   *
+>   * Create event descriptions.
+> @@ -318,9 +394,11 @@ static void __event_probe__##_name(void *__data);
+>  #define DEFINE_EVENT_MAP_NOARGS(_template, _name, _map)			\
+>  static const struct lttng_event_desc __event_desc___##_map =3D {		\
+>  	.fields =3D __event_fields___##_template,		     		\
+> +	.extra_metadata =3D __metadata_for__##_template,			\
+>  	.name =3D #_map,					     		\
+>  	.probe_callback =3D (void *) TP_PROBE_CB(_template),   		\
+>  	.nr_fields =3D ARRAY_SIZE(__event_fields___##_template),		\
+> +	.nr_metadata =3D ARRAY_SIZE(__metadata_for__##_template),		\
+>  	.owner =3D THIS_MODULE,				     		\
+>  };
+>  =
+
+> @@ -420,12 +498,33 @@ static __used struct lttng_probe_desc TP_ID(__probe=
+_desc___, TRACE_SYSTEM) =3D {
+>  	__event_len +=3D __dynamic_len[__dynamic_len_idx++] =3D		       \
+>  		max_t(size_t, lttng_strlen_user_inatomic(_src), 1);
+>  =
+
+> +#undef __struct
+> +#define __struct(_provider, _type, _item, _params)			\
+> +	__event_len +=3D __dynamic_len[__dynamic_len_idx++] =3D		\
+> +		__struct_get_size__##_provider##_type(__dynamic_len, _params);
+> +
+>  #undef TP_PROTO
+>  #define TP_PROTO(args...) args
+>  =
+
+>  #undef TP_STRUCT__entry
+>  #define TP_STRUCT__entry(args...) args
+>  =
+
+> +#undef TP_FIELDS
+> +#define TP_FIELDS(args...) args
+> +
+> +#undef TRACEPOINT_STRUCT
+> +#define TRACEPOINT_STRUCT(_provider, _name, _proto, _fields)	\
+
+what happens if a structure has a field that contains itself ?
+
+struct a {
+        struct a blah;
+}
+
+> +static inline size_t __struct_get_size__##_provider##_name(size_t *__dyn=
+amic_len, _proto)\
+> +	{								\
+> +	size_t __event_len =3D 0;						\
+> +	unsigned int __dynamic_len_idx =3D 0;				\
+> +									\
+> +	if (0)								\
+> +		(void) __dynamic_len_idx;	/* don't warn if unused */\
+> +	_fields								\
+> +	return __event_len;						\
+> +}
+> +
+>  #undef DECLARE_EVENT_CLASS
+>  #define DECLARE_EVENT_CLASS(_name, _proto, _args, _tstruct, _assign, _pr=
+int)  \
+>  static inline size_t __event_get_size__##_name(size_t *__dynamic_len, _p=
+roto) \
+> @@ -470,12 +569,29 @@ static inline size_t __event_get_size__##_name(size=
+_t *__dynamic_len, _proto) \
+>  #undef __string_from_user
+>  #define __string_from_user(_item, _src)
+>  =
+
+> +#undef __struct
+> +#define __struct(_provider, _type, _item, _params)			\
+> +	__event_align =3D max_t(size_t, __event_align,			\
+> +		__struct_get_align__##_provider##_type(_params));
+> +
+>  #undef TP_PROTO
+>  #define TP_PROTO(args...) args
+>  =
+
+>  #undef TP_STRUCT__entry
+>  #define TP_STRUCT__entry(args...) args
+>  =
+
+> +#undef TP_FIELDS
+> +#define TP_FIELDS(args...) args
+> +
+> +#undef TRACEPOINT_STRUCT
+> +#define TRACEPOINT_STRUCT(_provider, _name, _proto, _fields)	\
+> +static inline size_t __struct_get_align__##_provider##_name(_proto)	\
+
+same worry here about structure nested within itself.
+
+It might be good to first declare a function that gets the
+size/alignment (2 phases like you currently do), but ensure that within
+that function, you call a different functions is defined at later
+stages, which each simply call into the original function.
+
+This will ensure the compiler will issue an error if we try to nest a
+structure within itself.
+
+> +{									\
+> +	size_t __event_align =3D 1;					\
+> +	_fields								\
+> +	return __event_align;						\
+> +}
+> +
+>  #undef DECLARE_EVENT_CLASS
+>  #define DECLARE_EVENT_CLASS(_name, _proto, _args, _tstruct, _assign, _pr=
+int)  \
+>  static inline size_t __event_get_align__##_name(_proto)			      \
+> @@ -517,6 +633,9 @@ static inline size_t __event_get_align__##_name(_prot=
+o)			      \
+>  #define __string_from_user(_item, _src)		\
+>  	__string(_item, _src)
+>  =
+
+> +#undef __struct
+> +#define __struct(_provider, _type, _item, _params)		char _item;
+> +
+>  #undef TP_STRUCT__entry
+>  #define TP_STRUCT__entry(args...) args
+>  =
+
+> @@ -568,6 +687,11 @@ __end_field_##_item:
+>  #define __string_from_user(_item, _src)					\
+>  	__string(_item, _src)
+>  =
+
+> +#undef __struct
+> +#define __struct(_provider, _type, _item, _params)			\
+> +	goto __assign_##_item;						\
+> +__end_field_##_item:
+> +
+>  /*
+>   * Macros mapping tp_assign() to "=3D", tp_memcpy() to memcpy() and tp_s=
+trcpy() to
+>   * strcpy().
+> @@ -624,12 +748,24 @@ __assign_##dest##_2:							\
+>  #define tp_memcpy_dyn_from_user(dest, src)				\
+>  	tp_memcpy_dyn_gen(event_write_from_user, dest, src)
+>  =
+
+> +#undef tp_memcpy_struct_gen
+> +#define tp_memcpy_struct_gen(write_ops, dest, src)	\
+> +__assign_##dest:							\
+> +	lib_ring_buffer_align_ctx(&__ctx, lttng_alignof(__typemap.dest));\
+
+instead of lttng_alignof(__typemap.dest), you should probably call
+something that returns the same alignment result as:
+
+        __struct_get_align__##_provider##_type(_params))
+
+above.
+
+Given that a structure can contain a variant, we have to consider that
+its alignment should be calculated dynamically. (ref: CTF spec for
+Variant type).
+  =
+
+
+> +	__chan->ops->write_ops(&__ctx, src,				\
+> +		sizeof(__typemap.dest) * __get_dynamic_array_len(dest));\
+
+I expect that __typemap.dest is a char *, right ?
+
+That's a very good start!
+
+Thanks,
+
+Mathieu
+
+> +	goto __end_field_##dest;
+> +
+> +#undef tp_memcpy_struct
+> +#define tp_memcpy_struct(dest, src)	\
+> +		tp_memcpy_struct_gen(event_write, dest, src)
+> +
+>  /*
+>   * The string length including the final \0.
+>   */
+>  #undef tp_copy_string_from_user
+>  #define tp_copy_string_from_user(dest, src)				\
+> -	__assign_##dest:						\
+> +__assign_##dest:							\
+>  	{								\
+>  		size_t __ustrlen;					\
+>  									\
+> -- =
+
+> 1.8.2.1
+> =
+
+> =
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- =
+
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
