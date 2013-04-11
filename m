@@ -1,24 +1,17 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: [RFC lttng-tools] Snapshot
-Date: Thu, 11 Apr 2013 11:16:43 -0400
-Message-ID: <5166D3DB.1000904__31466.8820392855$1365693434$gmane$org@efficios.com>
+From: Julien Desfossez <jdesfossez@efficios.com>
+Subject: Re: [RFC lttng-tools] Snapshot
+Date: Thu, 11 Apr 2013 11:41:48 -0400
+Message-ID: <5166D9BC.6050201__14234.8043773838$1365694945$gmane$org@efficios.com>
+References: <5166D3DB.1000904@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="------------060403050602010306010308"
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([213.239.202.151])
+Received: from fukushima.klipix.org ([194.250.102.243])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1UQJF0-0000Bs-Tr
-	for lttng-dev@lists.lttng.org; Thu, 11 Apr 2013 11:16:47 -0400
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by smtp.ini-tech.com (Postfix) with ESMTP id 54881187515
-	for <lttng-dev@lists.lttng.org>; Thu, 11 Apr 2013 11:23:24 -0400 (EDT)
-Received: from smtp.ini-tech.com ([127.0.0.1])
-	by localhost (smtp.ini-tech.com [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id QV2qZBp6j65r for <lttng-dev@lists.lttng.org>;
-	Thu, 11 Apr 2013 11:23:23 -0400 (EDT)
-Received: from 127.0.0.1 (unknown [96.127.207.22])
-	by smtp.ini-tech.com (Postfix) with ESMTPSA id 0C76B1874F4
-	for <lttng-dev@lists.lttng.org>; Thu, 11 Apr 2013 11:23:22 -0400 (EDT)
+	(envelope-from <jdesfossez@efficios.com>) id 1UQJdN-0000PK-PQ
+	for lttng-dev@lists.lttng.org; Thu, 11 Apr 2013 11:41:57 -0400
+In-Reply-To: <5166D3DB.1000904@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -27,146 +20,37 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: David Goulet <dgoulet@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-This is a multi-part message in MIME format.
---------------060403050602010306010308
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Hi,
 
-Hi everyone,
+> Hi everyone,
+> 
+> This is the initial RFC for snapshot in lttng-tools. Once accepted, it
+> will be available in "doc/proposals/0006-lttng-snapshot.txt".
+> 
+> Any questions, comments or fixes are VERY welcome. There are probably
+> English mistakes so feel free to point it out to me.
 
-This is the initial RFC for snapshot in lttng-tools. Once accepted, it
-will be available in "doc/proposals/0006-lttng-snapshot.txt".
+It looks good, just a few comments :
 
-Any questions, comments or fixes are VERY welcome. There are probably
-English mistakes so feel free to point it out to me.
+For the add-output command, I think we discussed adding the --max-size
+parameter as well to limit the size of the snapshots written to this output.
 
-Thanks!
-David
+For the "lttng snapshot record", I think the options should allow to
+specify -C/-D also since we can specify an URL.
 
---------------060403050602010306010308
-Content-Type: text/plain;
- name="0006-lttng-snapshot.txt"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment;
- filename="0006-lttng-snapshot.txt"
+"This is a blocking call meaning that it will return only if the
+snapshot is completed" --> "only when the snapshot is completed or an
+error is returned"
 
-UkZDIC0gTFRUbmcgc25hcHNob3QKCkF1dGhvcjogRGF2aWQgR291bGV0IDxkZ291bGV0QGVm
-ZmljaW9zLmNvbT4KClZlcnNpb246CiAgICAtIHYwLjE6IDExLzA0LzIwMTMKICAgICAgICAq
-IEluaXRpYWwgcHJvcG9zYWwKCk1vdGl2YXRpb24KLS0tLS0tLS0tLQoKVGhpcyBwcm9wb3Nh
-bCBpcyBmb3IgdGhlIHNuYXBzaG90IGZlYXR1cmUgaW4gbHR0bmctdG9vbHMuIFRoZSBpZGVh
-IGlzIHRvIGJlCmFibGUgdG8gc25hcHNob3QgYSBwb3J0aW9uIG9mIHRoZSB0cmFjZSBhbmQg
-d3JpdGUgaXQgdG8gYSBzcGVjaWZpZWQgb3V0cHV0CihkaXNrIG9yIG5ldHdvcmspLiBUaGlz
-IGNvdWxkIGJlIHBhcnRpY3VsYXJseSB1c2VmdWwgd2l0aCBpbiBmbGlnaHQgcmVjb3JkZXIK
-bW9kZSB3aGVyZSB5b3UgZGV0ZWN0IGEgcHJvYmxlbSBvbiB5b3VyIHN5c3RlbSBmb3IgaW5z
-dGFuY2UgYW5kIHRoZW4gdXNlIHRoaXMKc25hcHNob3QgZmVhdHVyZSB0byBzYXZlIHRoZSBs
-YXRlc3QgYnVmZmVycyB3aGljaCBzaG91bGQgY29udGFpbiBpbmZvcm1hdGlvbnMKdG8gaGVs
-cCB1bmRlcnN0YW5kIHRoZSBpc3N1ZS4KClJlcXVpcmVtZW50cwotLS0tLS0tLS0tLS0tLS0t
-LQoKSW4gb3JkZXIgdG8gc25hcHNob3QgYSBzZXNzaW9uLCBpdCBtdXN0IGJlIHNldCBpbiBm
-bGlnaHQgcmVjb3JkZXIgbW9kZSBtZWFuaW5nCnRoYXQgdGhlcmUgaXMgKm5vKiBjb25zdW1l
-ciBleHRyYWN0aW5nIHRoZSB0cmFjZSBhbmQgd3JpdGluZyBpdCB0byBhCmRlc3RpbmF0aW9u
-LiBUbyBkbyB0aGF0LCB0aGUgLS1uby1vdXRwdXQgb3B0aW9uIGlzIGFkZGVkIHRvICJsdHRu
-ZyBjcmVhdGUiCmNvbW1hbmQuCgogICAgJCBsdHRuZyBjcmVhdGUgLS1uby1vdXRwdXQKICAg
-IENyZWF0ZSBhIHNlc3Npb24gd2l0aCBhY3RpdmUgdHJhY2luZyBidXQgbm8gZGF0YSBiZWlu
-ZyBjb2xsZWN0ZWQuCgogICAgRm9yIHRoZSBBUEkgY2FsbCBsdHRuZ19jcmVhdGVfc2Vzc2lv
-bigpLCBzaW1wbHkgc2V0IHRoZSBVUkwgdG8gTlVMTC4KCkZ1cnRoZXJtb3JlLCBieSBkZWZh
-dWx0LCB0aGlzIGNvbW1hbmQgd2lsbCBzZXQgYWxsIHN1YnNlcXVlbnQgY2hhbm5lbCBpbgpv
-dmVyd3JpdGUgbW9kZS4gWW91IGNhbiBmb3JjZSB0aGUgZGlzY2FyZCB2YWx1ZSAob3Zlcndy
-aXRlPTApIGJ1dCBpdCBpcyBhIGJpdApwb2ludGxlc3Mgc2luY2UgdGhlIHNuYXBzaG90IGRv
-ZXMgTk9UIHJlbW92ZSB0aGUgZGF0YSBmcm9tIHRoZSBidWZmZXJzLgoKUHJvcG9zZWQgU29s
-dXRpb24KLS0tLS0tLS0tLS0tLS0tLS0KCkZpcnN0LCB0aGUgbHR0bmcgY29tbWFuZCBsaW5l
-IFVJIG5ldyBjb21tYW5kIGlzIHByZXNlbnRlZCBmb2xsb3dlZCBieSB0aGUgbmV3CkFQSSBj
-YWxscy4KClVubGlrZSB0aGUgb3RoZXIgbHR0bmcgY29tbWFuZCwgdGhpcyBvbmUgdXNlcyB0
-aGUgZ2l0IGFsaWtlIFVJIGJ1dCBpbiB0aGUgZm9ybQpvZiB0aGUgb2JqZWN0IGZpcnN0IGFu
-ZCBhY3Rpb24gYWZ0ZXIgd2hlcmUgcHJldmlvdXMgY29tbWFuZCBvbmx5IHVzZSBhY3Rpb24K
-c3VjaCBhcyAiZW5hYmxlLWV2ZW50Ii4KCiAgICAkIGx0dG5nIHNuYXBzaG90IFtBQ1RJT05d
-IFtPUFRJT05TXQoKICAgIEFDVElPTjogKGRldGFpbGVkIGJlbG93KQoKVGhlIHVzZXIgY2Fu
-IHNwZWNpZnkgYW4gb3V0cHV0IGRlc3RpbmF0aW9uIGVpdGhlciBmb3IgdGhlIGN1cnJlbnQg
-c2Vzc2lvbgooYmVpbmcgdGhlIGRlZmF1bHQpIG9yIG9uIHRoZSBzcG90IHdoZW4gdGhlIGNv
-bW1hbmQgaXMgZXhlY3V0ZWQuIFRvIHNwZWNpZnkgYW4Kb3V0cHV0IGZvciB0aGUgc2Vzc2lv
-biwgdXNlIHRoZSAiYWRkLW91dHB1dCIgYWN0aW9uLgoKICAgICQgbHR0bmcgc25hcHNob3Qg
-YWRkLW91dHB1dCBbVVJMXSBbT1BUSU9OU10KCiAgICBPUFRJT05TOgogICAgICAgIC1zLCAt
-LXNlc3Npb24gTkFNRQogICAgICAgIC1DLCAtLWN0cmwtdXJsIFVSTAogICAgICAgIC1ELCAt
-LWRhdGEtdXJsIFVSTAogICAgICAgIC1hLCAtLWFsaWFzIEFMSUFTICAgIE5hbWUgb2YgdGhl
-IG91dHB1dCBpbiB0aGUgc2Vzc2lvbi4KCldpdGhvdXQgdGhlIC1zLCB0aGUgY3VycmVudCBz
-ZXNzaW9uIGlzIHVzZWQuIFRoZSBhYm92ZSBjb21tYW5kIGFkZHMgYW4gb3V0cHV0CmxvY2F0
-aW9uIHRvIHRoZSBzZXNzaW9uIHNvIHdoZW4gYSBzbmFwc2hvdCBpcyByZWNvcmRlZCBsYXRl
-ciBvbiwgaXQncyBzZW50CnRoZXJlLiBUaGlzIGFjdGlvbiBjb21tYW5kIHRha2VzIGVpdGhl
-ciBhIHZhbGlkIGx0dG5nIFVSTCAoc2VlIHByb3Bvc2FsIDAwMDQpCm9yIHRoZSAtQy8tRCBv
-cHRpb25zIGZyb20gImx0dG5nIGNyZWF0ZSIgY2FuIGJlIHVzZWQgdG8gZGVmaW5lIHJlbGF5
-ZCBvbgpkaWZmZXJlbnQgcG9ydHMuIFRoZSBhbGlhcyBvcHRpb24gY2FuIGJlIHVzZWQgdG8g
-Z2l2ZSBhIG5hbWUgdG8gdGhlIG91dHB1dCBzbwppdCdzIHJlY29nbml6YWJsZSBpbiB0aGUg
-bGlzdCBjb21tYW5kIGFuZCBjYW4gYWxzbyBiZSB1c2VkIHdpdGggdGhlIGRlbApjb21tYW5k
-LgoKRm9sbG93aW5nIHRoYXQsIHR3byBuZXcgYWN0aW9ucyBhcmUgYXZhaWxhYmxlIHRvIGNv
-bnRyb2wgb3V0cHV0cy4gWW91IGNhbiBsaXN0CmFuZCBkZWxldGUgb3V0cHV0cy4KCiAgICAk
-IGx0dG5nIHNuYXBzaG90IGxpc3Qtb3V0cHV0CiAgICBbMV06IGZpbGU6Ly9bLi4uXQogICAg
-WzJdOiBuZXQ6Ly8xLjEuMS4xOjg3NjI6OTEyMwogICAgWzNdIC0gQUxJQVM6IGZpbGU6Ly9b
-Li4uXQoKICAgICQgbHR0bmcgc25hcHNob3QgZGVsLW91dHB1dCBJRHxBTElBUwoKICAgIFRo
-ZSBvdXRwdXQgaWRlbnRpZmllZCBieSB0aGUgSUQgb3IgYWxpYXMgaXMgcmVtb3ZlZCBmcm9t
-IHRoZSBzZXNzaW9uLiBJbgogICAgdGhpcyBjYXNlIHRoZSBJRCBpcyB0aGUgbnVtYmVyIHJl
-dHVybmVkIGJ5IGxpc3Qtb3V0cHV0IChlLmcuOiAyKS4KClRvIHNwZWNpZnkgYW4gb3V0cHV0
-IGRlc3RpbmF0aW9uIG9uIHRoZSBzcG90IHdoZW4gdGhlIHNuYXBzaG90IGlzIHRha2VuLCB1
-c2UKdGhlIHJlY29yZCBhY3Rpb24uCgogICAgJCBsdHRuZyBzbmFwc2hvdCByZWNvcmQgW1VS
-TF0gW09QVElPTlNdCgogICAgT1BUSU9OUzoKICAgICAgICAtcywgLS1zZXNzaW9uIE5BTUUg
-ICAgIFNlc3Npb24gbmFtZQogICAgICAgIC1uLCAtLW5hbWUgTkFNRSAgICAgICAgTmFtZSBv
-ZiB0aGUgc25hcHNob3QgdG8gcmVjb2duaXplIGl0IGFmdGVyd2FyZHMuCiAgICAgICAgLW0s
-IC0tbWF4LXNpemUgU0laRSAgICBNYXhpbXVtIGJ5dGVzIHNpemUgb2YgdGhlIHNuYXBzaG90
-LgoKTm8gVVJMIG1lYW5zIHRoYXQgdGhlIGRlZmF1bHQgb3V0cHV0IG9mIHRoZSBzZXNzaW9u
-IGlzIHVzZWQuIFRoZSBtYXgtc2l6ZSBpcwp0aGUgbWF4aW11bSBzaXplIG9mIHRoZSB0cmFj
-ZSB5b3Ugd2FudCB0byBzbmFwc2hvdC4gVGhlIG5hbWUgaXMgdXNlZCBzbyB5b3UgY2FuCnJl
-Y29nbml6ZSB0aGUgc25hcHNob3Qgb25jZSB0YWtlbiBhbmQgd3JpdHRlbiBvbiBkaXNrLiBG
-aW5hbGx5LCB0aGUgLXMgbGV0IHRoZQp1c2VyIHNwZWNpZnkgYSBzZXNzaW9uIG5hbWUuCgpG
-aW5hbGx5LCB3ZSBhbGxvdyB0aGUgc25hcHNob3QgY29tbWFuZCB0byBiZSB1c2VkIHdpdGhv
-dXQgYW4gYWN0aW9uIHdoaWNoCmJhc2ljYWxseSBkbyAibHR0bmcgc25hcHNob3QgcmVjb3Jk
-Ii4KCiAgICAkIGx0dG5nIHNuYXBzaG90IFtPUFRJT05TXQoKICAgIE9QVElPTlM6CiAgICAg
-ICAgLXMsIC0tc2Vzc2lvbiBOQU1FCiAgICAgICAgLW0sIC0tbWF4LXNpemUgU0laRSAgICBN
-YXhpbXVtIGJ5dGVzIHNpemUgb2YgdGhlIHNuYXBzaG90LgoKICAgICQgbHR0bmcgc25hcHNo
-b3QgLXMgbXlzZXNzaW9uIC1tIDgxOTIKCiAgICBTbmFwc2hvdCB0aGUgc2Vzc2lvbiBhbmQg
-cHV0cyBpdCBpbiB0aGUgc2Vzc2lvbiBkZWZpbmUgb3V0cHV0IGRpcmVjdG9yeS4KCkJ5IGRl
-ZmF1bHQsIHRoZSBzbmFwc2hvdChzKSBhcmUgc2F2ZWQgaW4gdGhlIHNlc3Npb24gZGlyZWN0
-b3J5IGluIHRoZSBzbmFwc2hvdC8gZGlyZWN0b3J5LgoKICAgIFNFU1NJT05fRElSL3NuYXBz
-aG90LzxuYW1lPi08ZGF0ZT4tPHRpbWU+L1suLi5dCgpQdWJsaWMgQVBJCi0tLS0tLS0tLS0K
-Ci8qCiAqIFNuYXBzaG90IG91dHB1dCBzdHJ1Y3R1cmUuIFBhZGRpbmcgd2lsbCBiZSBhZGRl
-ZCBvbmNlIHRoaXMgUkZDIGlzIGFjY2VwdGVkLgogKi8Kc3RydWN0IGx0dG5nX3NuYXBzaG90
-X291dHB1dCB7CiAgICBpbnQgaWQ7CiAgICB1aW50NjRfdCBtYXhfc2l6ZTsgIC8qIDA6IHVu
-bGltaXRlZC4gKi8KICAgIGNoYXIgYWxpYXNbTkFNRV9NQVhdOwogICAgY2hhciB1cmxbUEFU
-SF9NQVhdOwp9OwoKLyoKICogUmV0dXJuIHRoZSBJRCBvZiB0aGUgb3V0cHV0IG9yIGEgbmVn
-YXRpdmUgdmFsdWUgYmVpbmcgYSBMVFROR19FUlIqIGNvZGUuCiAqLwppbnQgbHR0bmdfc25h
-cHNob3RfYWRkX291dHB1dChzdHJ1Y3QgbHR0bmdfaGFuZGxlICpoYW5kbGUsCiAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgIHN0cnVjdCBsdHRuZ19zbmFwc2hvdF9vdXRwdXQgKm91
-dHB1dCk7CgovKgogKiBSZXR1cm4gMCBvbiBzdWNjZXNzIG9yIGVsc2UgYSBuZWdhdGl2ZSBM
-VFROR19FUlIqIGNvZGUuCiAqLwppbnQgbHR0bmdfc25hcHNob3RfZGVsX291dHB1dChpbnQg
-aWQsIGNoYXIgKmFsaWFzKTsKCi8qCiAqIFJldHVybiB0aGUgbnVtYmVyIG9mIG91dHB1dCBh
-bmQgc2V0IG91dHB1dHMgd2l0aCB0aGUgcmV0dXJuZWQgaW5mby4KICoKICogT24gZXJyb3Is
-IGEgbmVnYXRpdmUgTFRUTkdfRVJSKiBjb2RlIGlzIHJldHVybmVkLgogKi8Kc3NpemVfdCBs
-dHRuZ19zbmFwc2hvdF9saXN0X291dHB1dChzdHJ1Y3QgbHR0bmdfaGFuZGxlICpoYW5kbGUs
-CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgc3RydWN0IGx0dG5nX3NuYXBz
-aG90X291dHB1dCAqKm91dHB1dHMpOwoKLyoKICogSWYgb3V0cHV0IGlzIHNwZWNpZmllZCwg
-dXNlIGl0IGFzIG91dHB1dCBvbmx5IGZvciB0aGlzIHNuYXBzaG90IG9yIGVsc2UgaWYKICog
-TlVMTCwgdGhlIGRlZmF1bHQgc25hcHNob3QgZGVzdGluYXRpb24gb2YgdGhlIHNlc3Npb24g
-aXMgdXNlZC4gSWYgbmFtZSBpcwogKiBzcGVjaWZpZWQsIHdyaXRlIGl0IGluIDxuYW1lPi08
-ZGF0ZT4tPHRpbWU+IG9yIGVsc2UgaWYgbmFtZSBpcyBOVUxMLCBvbmx5CiAqIHRoZSBkYXRl
-IGFuZCB0aW1lIHdpbGwgYmUgdXNlZCBmb3IgdGhlIGRpcmVjdG9yeSBuYW1lLgogKgogKiBU
-aGlzIGlzIGEgYmxvY2tpbmcgY2FsbCBtZWFuaW5nIHRoYXQgaXQgd2lsbCByZXR1cm4gb25s
-eSBpZiB0aGUgc25hcHNob3QgaXMKICogY29tcGxldGVkLiBGb3Igbm93LCBuby13YWl0IGlz
-IG5vdCBzdXBwb3J0ZWQgYnkgd2Uga2VlcCBhIHBhcmFtZXRlciBmb3IgdGhhdAogKiBmdXR1
-cmUgY2FzZS4gVGhlIHdhaXQgcGFyYW0gaXMgaWdub3JlZC4KICoKICogUmV0dXJuIDAgb24g
-c3VjY2VzcyBvciBlbHNlIGEgbmVnYXRpdmUgTFRUTkdfRVJSKiBjb2RlLgogKi8KaW50IGx0
-dG5nX3NuYXBzaG90X3JlY29yZChzdHJ1Y3QgbHR0bmdfaGFuZGxlICpoYW5kbGUsCiAgICAg
-ICAgICAgICAgICAgICAgICAgICAgc3RydWN0IGx0dG5nX3NuYXBzaG90X291dHB1dCAqb3V0
-cHV0LAogICAgICAgICAgICAgICAgICAgICAgICAgIGNoYXIgKm5hbWUsIGludCB3YWl0KTsK
+"For now, no-wait is not supported by we keep" --> "but we"
 
---------------060403050602010306010308
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+Since it will block the caller, should we add a timeout parameter to
+lttng_snapshot_record ?
 
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+Thanks,
 
---------------060403050602010306010308--
+Julien
