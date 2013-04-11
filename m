@@ -1,19 +1,24 @@
-From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [RFC lttng-tools] Snapshot
-Date: Thu, 11 Apr 2013 11:59:57 -0400
-Message-ID: <CA+jJMxtxUdHAeHYgE9_dB7807Yrq=VFoUVVUUpQ9eeVBEChNaQ__33411.5420970649$1365696034$gmane$org@mail.gmail.com>
-References: <5166D3DB.1000904@efficios.com>
+From: David Goulet <dgoulet@efficios.com>
+Subject: [RFC lttng-tools] Triggers
+Date: Thu, 11 Apr 2013 12:08:07 -0400
+Message-ID: <5166DFE7.8020802__18617.8961223506$1365696523$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/mixed; boundary="------------080005040004040707030004"
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wg0-f51.google.com ([74.125.82.51])
+Received: from smtp.ini-tech.com ([213.239.202.151])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1UQJuu-0000Y7-1p
-	for lttng-dev@lists.lttng.org; Thu, 11 Apr 2013 12:00:04 -0400
-Received: by mail-wg0-f51.google.com with SMTP id b12so1833457wgh.30
-	for <lttng-dev@lists.lttng.org>; Thu, 11 Apr 2013 08:59:58 -0700 (PDT)
-In-Reply-To: <5166D3DB.1000904@efficios.com>
+	(envelope-from <dgoulet@efficios.com>) id 1UQK2k-0000eb-SN
+	for lttng-dev@lists.lttng.org; Thu, 11 Apr 2013 12:08:11 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by smtp.ini-tech.com (Postfix) with ESMTP id BE9A1187515
+	for <lttng-dev@lists.lttng.org>; Thu, 11 Apr 2013 12:14:48 -0400 (EDT)
+Received: from smtp.ini-tech.com ([127.0.0.1])
+	by localhost (smtp.ini-tech.com [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id S29hryHJbF5Z for <lttng-dev@lists.lttng.org>;
+	Thu, 11 Apr 2013 12:14:47 -0400 (EDT)
+Received: from 127.0.0.1 (unknown [96.127.207.22])
+	by smtp.ini-tech.com (Postfix) with ESMTPSA id 8DE621874F4
+	for <lttng-dev@lists.lttng.org>; Thu, 11 Apr 2013 12:14:47 -0400 (EDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,64 +27,109 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: David Goulet <dgoulet@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Looks great! A few very minor points:
+This is a multi-part message in MIME format.
+--------------080005040004040707030004
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-In the "Motivation" section, English mistake: "could be particularly
-useful *with in* flight recorder mode" should be "could be
-particularly useful *in* flight recorder mode". Also, "informationS"
-is generally regarded as incorrect. Information has no plural form.
+Hi everyone,
 
-In the "Proposed Solution" section, "the lttng command line UI new
-command is presented" should be "the new lttng command-line UI command
-is presented".
+Here is the second RFC of the day.
 
-I'd propose rewriting the sentence "Unlike the other lttng command,
-this one uses the git alike UI but in the form of the object first and
- action after where previous command only use action such as
-"enable-event" as
-"This new command uses a git-alike UI, but in the form of the object
-first followed by the desired action, whereas other commands only use
-actions such as "enable-event"".
+By reading this, your imagination will probably go pretty crazy with
+possibilities ;). The first implementation will only have one option
+describe in the RFC but note that with this kind of feature, the sky is
+the limit! and of course world domination is never far.
 
-I'm not sure I would use an hyphen in "lttng snapshot list-output"
-when an output alias is present. That's an entirely subjective but it
-would seem more consistent with git (git remote -v, for instance).
+Thanks!
+David
 
-Could you clarify what the expected behavior would be when no session
-name is provided to "lttng snapshot record"? I guess it would capture
-a snapshot for every session created with the --no-output option.
-Also, what happens if a single URL is provided and no session name is
-given (with multiple active flight recorder sessions)?
+--------------080005040004040707030004
+Content-Type: text/plain;
+ name="0007-triggers.txt"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="0007-triggers.txt"
 
-Thanks,
-J=E9r=E9mie
+UkZDIC0gVHJpZ2dlcnMgaW4gbHR0bmctdG9vbHMKCkF1dGhvcjogRGF2aWQgR291bGV0IDxk
+Z291bGV0QGVmZmljaW9zLmNvbT4KClZlcnNpb246CiAgICAtIHYwLjE6IDExLzA0LzIwMTMK
+ICAgICAgICAqIEluaXRpYWwgcHJvcG9zYWwKCk1vdGl2YXRpb24KLS0tLS0tLS0tLQoKVGhl
+IG1haW4gaWRlYSBvZiB0cmlnZ2VycyBpcyBmb3IgdGhlIHVzZXIgdG8gYmUgYWJsZSB0byBz
+ZXQgYW4gYWN0aW9uIG9uIGEKc2Vzc2lvbiB0cmlnZ2VyZWQgYnkgYSBjZXJ0YWluIGV2ZW50
+IG9mIHRoZSBzeXN0ZW0uIFRvIGlsbHVzdHJhY2UgdGhlIGNvbmNlcHQsCmhlcmUgaXMgYW4g
+ZXhhbXBsZSB0aGF0IHdlIHdpbGwgYWN0dWFsbHkgcHJvcG9zZS4KCkxldCBzYXkgYW4gYXBw
+bGljYXRpb24gaXMgYmVpbmcgdHJhY2VkIGFuZCBvbiBjb3JlIGR1bXAsIHdlIHdvdWxkIGxp
+a2UgdG8KYXV0b21hdGljYWxseSBzbmFwc2hvdCB0aGUgc2Vzc2lvbiBhbmQgcHJvY2VlZCB0
+byBhbmFseXNpcyBsYXRlciBvbi4KClRoZSBpZGVhIHdvdWxkIGJlIHRvIHNldCBhICJ0cmln
+Z2VyIiBuYW1lZCBPbkFueUNvcmVEdW1wIGZvciB0aGUgc2Vzc2lvbi4gQW55CmNvcmVkdW1w
+IGRldGVjdGVkIHVzaW5nIC9wcm9jL3N5cy9rZXJuZWwvY29yZV9wYXR0ZXJuIHdpbGwgc2Vu
+ZCBhIG5vdGlmaWNhdGlvbgp0byB0aGUgc2Vzc2lvbiBkYWVtb24gYW5kIHRyaWdnZXIgdGhl
+IHVzZXIgZGVmaW5lZCBhY3Rpb24uCgpQcm9wb3NlZCBTb2x1dGlvbgotLS0tLS0tLS0tLS0t
+LS0tLQoKRmlyc3QsIGEgdHJpZ2dlciBjb21tYW5kIGlzIG5lZWRlZCBhbmQgZ29lcyBhcyBm
+b2xsb3dlZC4KCiAgICAkIGx0dG5nIHRyaWdnZXIgW09QVElPTlNdIDxXSEFUPiA8QUNUSU9O
+PgoKICAgIE9QVElPTlM6CiAgICAgICAgLXMsIC0tc2Vzc2lvbiBOQU1FCgpGb3IgdGhlIGV4
+YW1wbGUgc2hvd2VkIGluIHRoZSBNb3RpdmF0aW9uIHNlY3Rpb24sIHRoZSA8V0hBVD4gaXMg
+T25BbnlDb3JlRHVtcAphbmQgdGhlIDxBQ1RJT04+IGlzIHRvIHRha2UgYSBzbmFwc2hvdCBv
+ZiB0aGUgc2Vzc2lvbiB3aGVyZSB0aGlzIHRyaWdnZXIgaXMKc2V0LgoKICAgICQgbHR0bmcg
+dHJpZ2dlciAtcyBteXNlc3Npb24gT25BbnlDb3JlRHVtcCBzbmFwc2hvdAoKVXNpbmcgYSBw
+cm92aWRlZCBsdHRuZyBoZWxwZXIgcHJvZ3JhbSBzbyB0aGUgc3lzdGVtIGNhbiBub3RpZnkg
+dGhlIHNlc3Npb24KZGFlbW9uLCBhIG5ldyBub3RpZmljYXRpb24gc29ja2V0IGlzIG5lZWRl
+ZC4gQSBVbml4IG5hbWVkIHNvY2tldCBpcyBwcm9wb3NlZC4KCiAgICBMVFROR19SVU5fRElS
+L25vdGlmeS1sdHRuZy1zZXNzaW9uZAoKSW4gb3JkZXIgdG8gdXNlIHRoZSBub3RpZnkgc29j
+a2V0LCB0aGUgbWVzc2FnZSBwcm90b2NvbCBpcyBkZXRhaWxlZCBhcwpmb2xsb3dlZC4KCmVu
+dW0gbHR0Y29tbV9zZXNzaW9uZF9ub3RpZnlfY21kIHsKICAgIExUVENPTU1fTk9USUZZX1RS
+SUdHRVJfT05BTllDT1JFRFVNUCA9IDEsCn07CgpzdHJ1Y3QgbHR0Y29tbV9zZXNzaW9uZF9u
+b3RpZnlfaGVhZGVyIHsKICAgIHVpbnQzMl90IGNtZDsgICAvKiBBIGx0dGNvbW1fc2Vzc2lv
+bmRfbm90aWZ5X2NtZCB2YWx1ZS4gKi8KICAgIHVpbnQzMl90IG1zZ19zaXplOwp9OwoKc3Ry
+dWN0IGx0dGNvbW1fc2Vzc2lvbmRfbm90aWZ5X29uYW55Y29yZWR1bXAgewogICAgdWludDMy
+X3QgcGlkOwogICAgdWludDMyX3QgdWlkOwogICAgdWludDMyX3QgZ2lkOwogICAgY2hhciBl
+eGVjX25hbWVbTkFNRV9NQVhdOwogICAgY2hhciBob3N0bmFtZVsyNTVdOyAvKiBSRkMgMTAz
+NSBzcGVjaWZ5IHRoaXMgbWF4IHNpemUgb2YgYnl0ZXMgKi8KfTsKClB1YmxpYyBBUEkKLS0t
+LS0tLS0tLQoKZW51bSBsdHRuZ190cmlnZ2VyX3R5cGUgewogICAgTFRUTkdfVFJJR0dFUl9U
+WVBFX09OQU5ZQ09SRURVTVAgPSAxLAp9OwoKZW51bSBsdHRuZ190cmlnZ2VyX2FjdGlvbiB7
+CiAgICBMVFROR19UUklHR0VSX0FDVElPTl9TTkFQU0hPVCA9IDEsCiAgICBMVFROR19UUklH
+R0VSX0FDVElPTl9TVE9QICAgICA9IDIsCn07CgpzdHJ1Y3QgbHR0bmdfdHJpZ2dlcl9vbmFu
+eWNvcmVkdW1wIHsKICAgIHBpZF90IHBpZDsKICAgIHVpZF90IHVpZDsKICAgIGdpZF90IGdp
+ZDsKICAgIGNoYXIgZXhlY19uYW1lW05BTUVfTUFYXTsKICAgIGNoYXIgaG9zdG5hbWVbMjU1
+XTsgLyogUkZDIDEwMzUgc3BlY2lmeSB0aGlzIG1heCBzaXplIG9mIGJ5dGVzICovCn07Cgov
+KgogKiBTZXQgYSB0cmlnZ2VyIG9uIGEgc3BlY2lmaWMgc2Vzc2lvbiB1c2luZyB0aGUgZ2l2
+ZW4gaGFuZGxlLiBGb3Igbm93LCB3ZQogKiBkb24ndCBhbGxvdyBvcHRpb25zIHRvIGFuIGFj
+dGlvbiBzbyBvcHRzIGFuZCBuYl9vcHQgYXJlIGlnbm9yZWQuCiAqCiAqIE9uIHN1Y2Nlc3Mg
+cmV0dXJuIDAgb3IgZWxzZSBhIG5lZ2F0aXZlIExUVE5HX0VSUiogY29kZS4KICovCmludCBs
+dHRuZ190cmlnZ2VyX3NldChzdHJ1Y3QgbHR0bmdfaGFuZGxlICpoYW5kbGUsCiAgICAgICAg
+ICAgICAgICAgICAgICBlbnVtIGx0dG5nX3RyaWdnZXJfdHlwZSB0eXBlLAogICAgICAgICAg
+ICAgICAgICAgICAgZW51bSBsdHRuZ190cmlnZ2VyX2FjdGlvbiBhY3Rpb24sCiAgICAgICAg
+ICAgICAgICAgICAgICBjb25zdCB2b2lkICpvcHRzLAogICAgICAgICAgICAgICAgICAgICAg
+c2l6ZV90IG5iX29wdCk7CgovKgogKiBGaXJldXAgYSB0cmlnZ2VyIG9mIHRoZSBnaXZlbiB0
+eXBlLiBJZiBzb2NrZXRfcGF0aCBpcyBkZWZpbmVkLCB0aGUKICogbGlibHR0bmctY3RsIHdp
+bGwgdXNlIGl0IG9yIGVsc2UgdXNlIHRoZSBkZWZhdWx0IHVzaW5nIHRoZSBVSUQgb2YgdGhl
+CiAqIGNhbGxlci4KICoKICogUmV0dXJuIDAgb24gc3VjY2VzcyBvciBlbHNlIGEgbmVnYXRp
+dmUgTFRUTkdfRVJSKiBjb2RlLgogKi8KaW50IGx0dG5nX3RyaWdnZXIoZW51bSBsdHRuZ190
+cmlnZ2VyX3R5cGUgdHlwZSwKICAgICAgICAgICAgICAgICAgY2hhciAqc29ja2V0X3BhdGgs
+CiAgICAgICAgICAgICAgICAgIGNvbnN0IHZvaWQgKm9wdHMsCiAgICAgICAgICAgICAgICAg
+IHNpemVfdCBuYl9vcHQpOwoKQXMgYW4gZXhhbXBsZSwgdG8gc2V0IGEgb25hbnljb3JlZHVt
+cCB0cmlnZ2VyIGFuZCB0aGVuIGZpcmUgaXQgdXAuCgpsdHRuZ190cmlnZ2VyX3NldChoYW5k
+bGUsIExUVE5HX1RSSUdHRVJfVFlQRV9PTkFOWUNPUkVEVU1QLAogICAgICAgICAgICBMVFRO
+R19UUklHR0VSX0FDVElPTl9TTkFQU0hPVCwgTlVMTCwgMCk7CgpOb3cgdG8gZmlyZSBpdCB1
+cCBieSBiZWluZyBsZXQgc2F5IGluIGEgc21hbGwgcHJvZ3JhbSBzZXQgaW4KL3Byb2MvLi4u
+L2NvcmVfcGF0dGVybi4KCnN0cnVjdCBsdHRuZ190cmlnZ2VyX29uYW55Y29yZWR1bXAgbHRv
+ID0gewogICAgLnBpZCA9IDQyLAogICAgLnVpZCA9IDEwMDAsCiAgICAuZ2lkID0gMTAwMCwK
+ICAgIC5leGVjX25hbWUgPSAiYXBhY2hlMiIsCiAgICAuaG9zdG5hbWUgPSAiQV9IT1NUX05B
+TUUiLAp9OwoKbHR0bmdfdHJpZ2dlcihMVFROR19UUklHR0VSX1RZUEVfT05BTllDT1JFRFVN
+UCwKICAgICAgICAiL2hvbWUvYXVzZXIvLmx0dG5nL25vdGlmeS1sdHRuZy1zZXNzaW9uZCIs
+ICZsdG8sIHNpemVvZihsdG8pKTsK
+--------------080005040004040707030004
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-On Thu, Apr 11, 2013 at 11:16 AM, David Goulet <dgoulet@efficios.com> wrote:
->
-> Hi everyone,
->
-> This is the initial RFC for snapshot in lttng-tools. Once accepted, it
-> will be available in "doc/proposals/0006-lttng-snapshot.txt".
->
-> Any questions, comments or fixes are VERY welcome. There are probably
-> English mistakes so feel free to point it out to me.
->
-> Thanks!
-> David
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
-
-
---
-J=E9r=E9mie Galarneau
-EfficiOS Inc.
-http://www.efficios.com
+--------------080005040004040707030004--
