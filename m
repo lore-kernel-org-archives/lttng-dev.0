@@ -1,18 +1,25 @@
-From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: Google Summer of Code
-Date: Wed, 10 Apr 2013 17:53:13 -0400
-Message-ID: <CA+jJMxtP+n274AhsXQ23TXYPo8UsXtShjYxwJwwO69e=N1nbnQ__3043.05875110931$1365630831$gmane$org@mail.gmail.com>
-References: <48CF5AC71E61DB46B70D0F388054EFFD12D0DC32@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+From: Jan Glauber <jan.glauber@gmail.com>
+Subject: Re: LTTng system call tracing on ARM
+Date: Thu, 11 Apr 2013 10:20:34 +0200
+Message-ID: <20130411082033.GA2314__25355.7959957563$1365668472$gmane$org@hal>
+References: <20130410084053.GB25958@hal>
+	<CA+umk=pX-4t74XQqsP+vLsDGF1atWzUi75gmSyoVGsDkqQcB7g@mail.gmail.com>
+	<20130410130246.GA12801@hal>
+	<CA+umk=pPAvGqkC2pPfr6sA3sPtZroKoPegJ6gET2eBYSPp4Fhw@mail.gmail.com>
+	<20130410160233.GA17568@hal> <20130410162012.GA6525@Krystal>
+	<20130410163055.GA18278@hal> <20130410163950.GA6879@Krystal>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0685263220=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wg0-f48.google.com ([74.125.82.48])
+Received: from mail-bk0-f41.google.com ([209.85.214.41])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1UQ2xD-00005V-5N
-	for lttng-dev@lists.lttng.org; Wed, 10 Apr 2013 17:53:19 -0400
-Received: by mail-wg0-f48.google.com with SMTP id m15so1019985wgh.27
-	for <lttng-dev@lists.lttng.org>; Wed, 10 Apr 2013 14:53:13 -0700 (PDT)
-In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD12D0DC32@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+	(envelope-from <jan.glauber@gmail.com>) id 1UQCkP-00053m-Ss
+	for lttng-dev@lists.lttng.org; Thu, 11 Apr 2013 04:20:46 -0400
+Received: by mail-bk0-f41.google.com with SMTP id i18so658918bkv.14
+	for <lttng-dev@lists.lttng.org>; Thu, 11 Apr 2013 01:20:39 -0700 (PDT)
+Content-Disposition: inline
+In-Reply-To: <20130410163950.GA6879@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,180 +28,200 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, "Couture,
-	Mario" <Mario.Couture@drdc-rddc.gc.ca>, "Painchaud,
-	Frederic" <Frederic.Painchaud@drdc-rddc.gc.ca>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev@lists.lttng.org, Ryan Kyser <Ryan.Kyser@jci.com>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0685263220==
-Content-Type: multipart/alternative; boundary=f46d044286ca53506404da08b222
+On Wed, Apr 10, 2013 at 12:39:50PM -0400, Mathieu Desnoyers wrote:
+> * Jan Glauber (jan.glauber@gmail.com) wrote:
+> > On Wed, Apr 10, 2013 at 12:20:12PM -0400, Mathieu Desnoyers wrote:
+> > > 
+> > > Thanks for the detailed report !!
+> > > 
+> > > Please try with this commit:
+> > 
+> > Yes, that patch works. But I'm still curious if you can explain what the
+> > override was for ;-
+> 
+> The "override" allows defining how to serialize the information for
+> specific system calls. It can either replace the behavior of the
+> "semi-automated" description of the system call (brought into
+> lttng-modules by means of the system call extractor script), or just
+> provide the serialization description for a system call that was not
+> available to the system call extractor.
+> 
+> In this case, sys_set_tls was not available for automated extraction, so
+> the override entry has been added to it would not appear as a
+> "sys_unknown" system call, but would rather show "sys_set_tls" along
+> with the well-printed system call arguments.
 
---f46d044286ca53506404da08b222
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
+OK, thanks for explaining. So the version in instrumentation/syscalls/headers
+doesn't mean much, its just the starting point from where the extractor
+script picked up the descriptions.
 
-Certainly seems worthwhile to me although I never heard about debugfs being
-phased out. Could you clarify that point?
+So we could append recent system calls without generating new headers for
+lets say 3.4.
+ 
+> You may want to have a look at:
+> 
+> lttng-modules/instrumentation/syscalls/README
+> 
+> for details.
+> 
+> If we want to handle the set_tls special-case (and same for other
+> ARM-specific syscalls), we'll probably want to do that with a
+> arm-specific table that will contain those system calls.
 
-J=E9r=E9mie
+Yes, a seperate table would solve the issue. I don't know if ARM is the
+only arch doing such tricks to the system call table, so it might be worth
+checkingt that.
 
-On Tue, Apr 9, 2013 at 11:21 AM, Thibault, Daniel <
-Daniel.Thibault@drdc-rddc.gc.ca> wrote:
+Thanks,
+Jan
 
->    The Google Summer of Code LTTng entry (
-> http://bugs.lttng.org/projects/lttng/wiki/Google_Summer_of_Code_2013) is
-> a promising initiative.  May I propose another little project idea?
->
-> Babeltrace support for the debugfs (/sys/kernel/debug/tracing) trace form=
-at
->
-> Brief explanation:
-> Provide a Babeltrace plug-in to allow Babeltrace to read from traces
-> created by the debugfs service (/sys/kernel/debug/tracing/trace).
->
-> Expected results: A Babeltrace plug-in, tests, examples and documentation=
-.
->
-> Skill level: Easy - Medium
->
-> Prerequisite Knowledge: C, OO development
->
-> Mentors: ?
->
->    Even if the debugfs tracing facility is destined for eventual
-> withdrawal from the Linux kernel, it may be of interest to some to recove=
-r
-> older traces generated in this way -if only in order to be able to proces=
-s
-> them in the same way as CTF text dumps.  Conversion to the babeltrace tex=
-t
-> format should be fairly straightforward; conversion to CTF would be
-> trickier.
->
->    Is this idea worthwhile or worthless?
->
-> Daniel U. Thibault
-> R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) / Defence R=
-&D
-> Canada - Valcartier (DRDC Valcartier)
-> Cyber s=E9curit=E9 pour les missions essentielles (CME) / Mission Critica=
-l
-> Cyber Security (MCCS)
-> Protection des syst=E8mes et contremesures (PSC) / Systems Protection &
-> Countermeasures (SPC)
-> 2459 route de la Bravoure
-> Qu=E9bec, QC  G3J 1X5
-> CANADA
-> Vox : (418) 844-4000 x4245
-> Fax : (418) 844-4538
-> NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-> Gouvernement du Canada / Government of Canada
-> <http://www.valcartier.drdc-rddc.gc.ca/>
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
-
-
-
---=20
-J=E9r=E9mie Galarneau
-EfficiOS Inc.
-http://www.efficios.com
-
---f46d044286ca53506404da08b222
-Content-Type: text/html; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Certainly seems worthwhile to me although I never heard ab=
-out debugfs being phased out. Could you clarify that point?<div><br></div><=
-div><div>J=E9r=E9mie<br></div><div><div class=3D"gmail_extra"><br><div clas=
-s=3D"gmail_quote">
-On Tue, Apr 9, 2013 at 11:21 AM, Thibault, Daniel <span dir=3D"ltr">&lt;<a =
-href=3D"mailto:Daniel.Thibault@drdc-rddc.gc.ca" target=3D"_blank">Daniel.Th=
-ibault@drdc-rddc.gc.ca</a>&gt;</span> wrote:<br><blockquote class=3D"gmail_=
-quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1=
-ex">
-=A0 =A0The Google Summer of Code LTTng entry (<a href=3D"http://bugs.lttng.=
-org/projects/lttng/wiki/Google_Summer_of_Code_2013" target=3D"_blank">http:=
-//bugs.lttng.org/projects/lttng/wiki/Google_Summer_of_Code_2013</a>) is a p=
-romising initiative. =A0May I propose another little project idea?<br>
-
-<br>
-Babeltrace support for the debugfs (/sys/kernel/debug/tracing) trace format=
-<br>
-<br>
-Brief explanation:<br>
-Provide a Babeltrace plug-in to allow Babeltrace to read from traces create=
-d by the debugfs service (/sys/kernel/debug/tracing/trace).<br>
-<br>
-Expected results: A Babeltrace plug-in, tests, examples and documentation.<=
-br>
-<br>
-Skill level: Easy - Medium<br>
-<br>
-Prerequisite Knowledge: C, OO development<br>
-<br>
-Mentors: ?<br>
-<br>
-=A0 =A0Even if the debugfs tracing facility is destined for eventual withdr=
-awal from the Linux kernel, it may be of interest to some to recover older =
-traces generated in this way -if only in order to be able to process them i=
-n the same way as CTF text dumps. =A0Conversion to the babeltrace text form=
-at should be fairly straightforward; conversion to CTF would be trickier.<b=
-r>
-
-<br>
-=A0 =A0Is this idea worthwhile or worthless?<br>
-<br>
-Daniel U. Thibault<br>
-R &amp; D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) / Defence=
- R&amp;D Canada - Valcartier (DRDC Valcartier)<br>
-Cyber s=E9curit=E9 pour les missions essentielles (CME) / Mission Critical =
-Cyber Security (MCCS)<br>
-Protection des syst=E8mes et contremesures (PSC) / Systems Protection &amp;=
- Countermeasures (SPC)<br>
-2459 route de la Bravoure<br>
-Qu=E9bec, QC=A0 G3J 1X5<br>
-CANADA<br>
-Vox=A0: <a href=3D"tel:%28418%29%20844-4000%20x4245" value=3D"+14188444000"=
->(418) 844-4000 x4245</a><br>
-Fax=A0: <a href=3D"tel:%28418%29%20844-4538" value=3D"+14188444538">(418) 8=
-44-4538</a><br>
-NAC=A0: 918V QSDJ &lt;<a href=3D"http://www.travelgis.com/map.asp?addr=3D91=
-8V%20QSDJ" target=3D"_blank">http://www.travelgis.com/map.asp?addr=3D918V%2=
-0QSDJ</a>&gt;<br>
-Gouvernement du Canada=A0/ Government of Canada<br>
-&lt;<a href=3D"http://www.valcartier.drdc-rddc.gc.ca/" target=3D"_blank">ht=
-tp://www.valcartier.drdc-rddc.gc.ca/</a>&gt;<br>
-<br>
-_______________________________________________<br>
-lttng-dev mailing list<br>
-<a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a><=
-br>
-<a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" targe=
-t=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><=
-br>
-</blockquote></div><br><br clear=3D"all"><div><br></div>-- <br>J=E9r=E9mie =
-Galarneau<br>EfficiOS Inc.<br><a href=3D"http://www.efficios.com" target=3D=
-"_blank">http://www.efficios.com</a>
-</div></div></div></div>
-
---f46d044286ca53506404da08b222--
-
-
---===============0685263220==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0685263220==--
+> Thanks,
+> 
+> Mathieu
+> 
+> 
+> > 
+> > --Jan
+> >  
+> > > commit 11fa478f18241fedee86f7dc7820a91c629c9e7e
+> > > Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> > > Date:   Wed Apr 10 12:14:38 2013 -0400
+> > > 
+> > >     Fix: remove ARM set_tls system call override
+> > >     
+> > >     We'll need to find a better way to instrument ARM-specific system calls
+> > >     located at a far offset from the standard systems calls. A 16MB
+> > >     lttng-modules kernel module is really not acceptable.
+> > >     
+> > >     Removing this instrumentation for now. sys_set_tls will appear as
+> > >     sys_unknown.
+> > >     
+> > >     Fixes #472
+> > >     
+> > >     CC: Ryan Kyser <Ryan.Kyser@jci.com>
+> > >     Ref: http://lists.lttng.org/pipermail/lttng-dev/2013-April/019990.html
+> > >     Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> > > 
+> > > diff --git a/instrumentation/syscalls/headers/arm-32-syscalls-2.6.38_integers_override.h b/instrumentation/syscalls/headers/arm-32-syscalls-2.6.38_integers_override.h
+> > > index 93b8674..895370f 100644
+> > > --- a/instrumentation/syscalls/headers/arm-32-syscalls-2.6.38_integers_override.h
+> > > +++ b/instrumentation/syscalls/headers/arm-32-syscalls-2.6.38_integers_override.h
+> > > @@ -2,7 +2,6 @@
+> > >  
+> > >  #define OVERRIDE_TABLE_32_sys_arm_fadvise64_64
+> > >  #define OVERRIDE_TABLE_32_sys_sync_file_range2
+> > > -#define OVERRIDE_TABLE_32_sys_set_tls
+> > >  
+> > >  #ifndef CREATE_SYSCALL_TABLE
+> > >  
+> > > @@ -38,18 +37,6 @@ SC_TRACE_EVENT(sys_sync_file_range2,
+> > >  	TP_printk()
+> > >  )
+> > >  
+> > > -SC_TRACE_EVENT(sys_set_tls,
+> > > -	TP_PROTO(unsigned int tid, unsigned long tls),
+> > > -	TP_ARGS(tid, tls),
+> > > -	TP_STRUCT__entry(
+> > > -		__field(unsigned int, tid)
+> > > -		__field_hex(unsigned int, tls)),
+> > > -	TP_fast_assign(
+> > > -		tp_assign(tid, tid)
+> > > -		tp_assign(tls, tls)),
+> > > -	TP_printk()
+> > > -)
+> > > -
+> > >  #else	/* CREATE_SYSCALL_TABLE */
+> > >  
+> > >  #define OVVERRIDE_TABLE_32_sys_mmap
+> > > @@ -59,9 +46,6 @@ TRACE_SYSCALL_TABLE(sys_mmap, sys_mmap, 90, 6)
+> > >  TRACE_SYSCALL_TABLE(sys_arm_fadvise64_64, sys_arm_fadvise64_64, 270, 4)
+> > >  #define OVERRIDE_TABLE_32_sys_sync_file_range2
+> > >  TRACE_SYSCALL_TABLE(sys_sync_file_range2, sys_sync_file_range2, 341, 4)
+> > > -#define OVERRIDE_TABLE_32_sys_set_tls
+> > > -TRACE_SYSCALL_TABLE(sys_set_tls, sys_set_tls, 0xf0005, 2)
+> > > -
+> > >  
+> > >  #endif /* CREATE_SYSCALL_TABLE */
+> > >  
+> > > 
+> > > 
+> > > > 
+> > > > --Jan
+> > > > 
+> > > > > -PL
+> > > > > 
+> > > > > 
+> > > > > 
+> > > > > On Wed, Apr 10, 2013 at 9:02 AM, Jan Glauber <jan.glauber@gmail.com> wrote:
+> > > > > 
+> > > > > > On Wed, Apr 10, 2013 at 08:37:18AM -0400, PLSTC wrote:
+> > > > > > > Hey Jan,
+> > > > > > >
+> > > > > > > I cannot speak on behalf of everyone here, but during our attempt to port
+> > > > > > > LTTng to Android, we also noticed that the kernels we were using (3.0.x)
+> > > > > > > were nowhere near the requirements for syscall tracepoints support. I
+> > > > > > > believe such support was added on x86/64 way earlier (early 3.x) than on
+> > > > > > > ARM, which is why it was included in LTTng's modules a while ago. Simply
+> > > > > > > put, the ARM kernel is late.
+> > > > > >
+> > > > > > OK, so for ARM kernel version 3.6 is the minimum unless the syscall
+> > > > > > tracepoint
+> > > > > > support is backported.
+> > > > > >
+> > > > > > > There are a few actuals ways to 'enable' syscall tracepoints support on
+> > > > > > > early ARM kernels, but they all including a bit of kernel
+> > > > > > hacking/patching.
+> > > > > > > I could send you some links if you're interested in that.
+> > > > > >
+> > > > > > Yes, sure!
+> > > > > >
+> > > > > > --Jan
+> > > > > >
+> > > > > > > -PL
+> > > > > > > On Apr 10, 2013 4:40 AM, "Jan Glauber" <jan.glauber@gmail.com> wrote:
+> > > > > > >
+> > > > > > > > Hi,
+> > > > > > > >
+> > > > > > > > I want to use LTTng for system call tracing on ARM. Now lttng-modules
+> > > > > > seems
+> > > > > > > > to support system call tracing on ARM already since
+> > > > > > > > "8f4f80e LTTng Modules ARM syscall instrumentation".
+> > > > > > > >
+> > > > > > > > But I wonder how that worked since lttng-syscalls.c is only build under
+> > > > > > > > CONFIG_HAVE_SYSCALL_TRACEPOINTS and that was added to ARM only with
+> > > > > > kernel
+> > > > > > > > 3.6
+> > > > > > > > (much after than the lttng-modules commit).
+> > > > > > > >
+> > > > > > > > Am I missing something? Is system call tracing working on ARM with the
+> > > > > > > > upstream
+> > > > > > > > LTTng version?
+> > > > > > > >
+> > > > > > > > thanks,
+> > > > > > > > Jan
+> > > > > > > >
+> > > > > > > > _______________________________________________
+> > > > > > > > lttng-dev mailing list
+> > > > > > > > lttng-dev@lists.lttng.org
+> > > > > > > > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> > > > > > > >
+> > > > > >
+> > > > 
+> > > > _______________________________________________
+> > > > lttng-dev mailing list
+> > > > lttng-dev@lists.lttng.org
+> > > > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> > > 
+> > > -- 
+> > > Mathieu Desnoyers
+> > > EfficiOS Inc.
+> > > http://www.efficios.com
+> 
+> -- 
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> http://www.efficios.com
