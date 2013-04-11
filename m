@@ -1,21 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [RFC-Patch 1/2] Add page fault trace
-	event	definitions
-Date: Thu, 11 Apr 2013 14:19:39 -0400
-Message-ID: <20130411181939.GA21907__5461.78317531503$1365704403$gmane$org@Krystal>
-References: <1365398358-23374-1-git-send-email-fdeslaur@gmail.com>
-	<1365566360-7206-1-git-send-email-fdeslaur@gmail.com>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Subject: Re: [RFC lttng-tools] Triggers
+Date: Thu, 11 Apr 2013 18:29:39 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD12D0DFCE__45284.5449712642$1365705064$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UQM61-0001pE-MB
-	for lttng-dev@lists.lttng.org; Thu, 11 Apr 2013 14:19:41 -0400
-Content-Disposition: inline
-In-Reply-To: <1365566360-7206-1-git-send-email-fdeslaur@gmail.com>
+	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1UQMGX-0001vT-JN
+	for lttng-dev@lists.lttng.org; Thu, 11 Apr 2013 14:30:33 -0400
+Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,98 +19,28 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Francis Deslauriers <fdeslaur@gmail.com>
-Cc: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-* Francis Deslauriers (fdeslaur@gmail.com) wrote:
-> Add page_fault_entry and page_fault_exit event definitions. It will
-> allow each architecture to instrument their page faults.
-> =
+> Maybe something like that ?
+> $ lttng trigger [OPTIONS] {add|list|del} <NAME> <WHAT/WHERE> <ACTION>
 
-> Signed-off-by: Francis Deslauriers <fdeslaur@gmail.com>
-> Reviewed-by: Rapha=EBl Beamonte <raphael.beamonte@gmail.com>
+The problem with this is that lttng will become confused in its expectation=
+s if the <NAME> is one of "add", "list", or "del".  It'd be better to use o=
+ptions, i.e. "--add", "--list", "--del" or "--command=3D{add|list|del}".
 
-Reviewed-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-
-> ---
->  include/trace/events/fault.h |   51 ++++++++++++++++++++++++++++++++++++=
-++++++
->  1 file changed, 51 insertions(+)
->  create mode 100644 include/trace/events/fault.h
-> =
-
-> diff --git a/include/trace/events/fault.h b/include/trace/events/fault.h
-> new file mode 100644
-> index 0000000..522ddee
-> --- /dev/null
-> +++ b/include/trace/events/fault.h
-> @@ -0,0 +1,51 @@
-> +#undef TRACE_SYSTEM
-> +#define TRACE_SYSTEM fault
-> +
-> +#if !defined(_TRACE_FAULT_H) || defined(TRACE_HEADER_MULTI_READ)
-> +#define _TRACE_FAULT_H
-> +
-> +#include <linux/tracepoint.h>
-> +
-> +TRACE_EVENT(page_fault_entry,
-> +
-> +	TP_PROTO(struct pt_regs *regs, unsigned long address,
-> +					int write_access),
-> +
-> +	TP_ARGS(regs, address, write_access),
-> +
-> +	TP_STRUCT__entry(
-> +		__field(	unsigned long,	ip	)
-> +		__field(	unsigned long,	addr	)
-> +		__field(	uint8_t,	write	)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__entry->ip	=3D regs ? instruction_pointer(regs) : 0UL;
-> +		__entry->addr	=3D address;
-> +		__entry->write	=3D !!write_access;
-> +	),
-> +
-> +	TP_printk("ip=3D%lu addr=3D%lu write_access=3D%d",
-> +		__entry->ip, __entry->addr, __entry->write)
-> +);
-> +
-> +TRACE_EVENT(page_fault_exit,
-> +
-> +	TP_PROTO(int result),
-> +
-> +	TP_ARGS(result),
-> +
-> +	TP_STRUCT__entry(
-> +		__field(	int,	res	)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__entry->res	=3D result;
-> +	),
-> +
-> +	TP_printk("result=3D%d", __entry->res)
-> +);
-> +
-> +#endif /* _TRACE_FAULT_H */
-> +/* This part must be outside protection */
-> +#include <trace/define_trace.h>
-> -- =
-
-> 1.7.10.4
-> =
-
-> =
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- =
-
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Daniel U. Thibault
+R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) / Defence R&D=
+ Canada - Valcartier (DRDC Valcartier)
+Cyber s=E9curit=E9 pour les missions essentielles (CME) / Mission Critical =
+Cyber Security (MCCS)
+Protection des syst=E8mes et contremesures (PSC) / Systems Protection & Cou=
+ntermeasures (SPC)
+2459 route de la Bravoure
+Qu=E9bec, QC  G3J 1X5
+CANADA
+Vox : (418) 844-4000 x4245
+Fax : (418) 844-4538
+NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+Gouvernement du Canada / Government of Canada
+<http://www.valcartier.drdc-rddc.gc.ca/>
