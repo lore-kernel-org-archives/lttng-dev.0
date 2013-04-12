@@ -1,16 +1,21 @@
-From: Xiaona Han <xiaonahappy13@gmail.com>
-Subject: GSoC 2013 idea: support a new language binding for lttng
-Date: Fri, 12 Apr 2013 13:50:23 +0800
-Message-ID: <CAMMh03NCLpR453cAco3aWrmw63BLGJPa+CVane0xTk6ADhr8zw__246.147733605717$1365745852$gmane$org@mail.gmail.com>
+From: "Ikaheimonen, JP" <jp_ikaheimonen@mentor.com>
+Subject: [Babeltrace ] New option for specifiying time stamp
+ offsets in nanoseconds
+Date: Fri, 12 Apr 2013 05:50:07 +0000
+Message-ID: <009B25148989C6458484484699278506E5371E1A__43950.0570683323$1365745853$gmane$org@EU-MBX-03.mgc.mentorg.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1403039089=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f195.google.com ([209.85.223.195])
+Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <xiaonahappy13@gmail.com>) id 1UQWsW-0007NQ-Sc
-	for lttng-dev@lists.lttng.org; Fri, 12 Apr 2013 01:50:29 -0400
-Received: by mail-ie0-f195.google.com with SMTP id c11so1221488ieb.6
-	for <lttng-dev@lists.lttng.org>; Thu, 11 Apr 2013 22:50:23 -0700 (PDT)
+	(envelope-from <jp_ikaheimonen@mentor.com>) id 1UQWsJ-0007Mb-Pf
+	for lttng-dev@lists.lttng.org; Fri, 12 Apr 2013 01:50:15 -0400
+Received: from svr-orw-fem-01.mgc.mentorg.com ([147.34.98.93])
+	by relay1.mentorg.com with esmtp
+	id 1UQWsD-0001CA-Ji from jp_ikaheimonen@mentor.com
+	for lttng-dev@lists.lttng.org; Thu, 11 Apr 2013 22:50:09 -0700
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,51 +24,26 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============1403039089==
-Content-Type: multipart/alternative; boundary=089e0149522aa4f3d404da237ad9
+Hi,
 
---089e0149522aa4f3d404da237ad9
-Content-Type: text/plain; charset=ISO-8859-1
+in our work we are synchronizing traces from several sources.
+For that purpose, we found that we need to set a nanosecond-resolution offset to make the traces compatible.
 
-Dear all,
-    I am very interested in lttng of GSoC 2013. I find that current lttng
-only supports python. I want to support another language binding for lttng.
-I am familiar with Lua and SWIG. By adding Lua language support, lttng
-could be used by Lua developers and users.  Are there anyone interested in
-mentoring me about this idea? Thanks.
+Babeltrace has an option --clock-offset that can add a value for each timestamp.
+However, that option only accepts full seconds.
 
+We've added a new option --clock-offset-ns which allows the user to give a new offset, this time in nanoseconds.
+A patch with the implementation will follow.
 
-Best regards,
-Xiaona Han.
+Thank you,
 
---089e0149522aa4f3d404da237ad9
-Content-Type: text/html; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
+JP Ikaheimonen | SW Development Engineer
+http://go.mentor.com/sourceryanalyzer
 
-<div dir=3D"ltr">Dear all,<div style>=A0 =A0 I am very interested in lttng =
-of GSoC 2013. I find that current lttng only supports python. I want to sup=
-port another language binding for lttng. I am familiar with Lua and SWIG. B=
-y adding Lua language support, lttng could be used by Lua developers and us=
-ers. =A0Are there anyone interested in mentoring me about this idea? Thanks=
-.</div>
-<div style><br></div><div style><br></div><div style>Best regards,</div><di=
-v style>Xiaona Han.=A0</div></div>
+Mentor Embedded(tm) | Nucleus(r) | Linux(r) | Android(tm) | Services | UI | Multi-OS
 
---089e0149522aa4f3d404da237ad9--
-
-
---===============1403039089==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1403039089==--
+Android is a trademark of Google Inc. Use of this trademark is subject to Google Permissions.
+Linux is the registered trademark of Linus Torvalds in the U.S. and other countries.
