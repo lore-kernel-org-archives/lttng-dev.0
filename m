@@ -1,20 +1,20 @@
 From: Christian Babeux <christian.babeux@efficios.com>
-Subject: Re: GSoC 2013,
- "Instrumenting Open Source projects using UST" project.
-Date: Fri, 12 Apr 2013 11:48:10 -0400
-Message-ID: <CAGDH53n5KcVOtO9QukPWycCr7vSf4ybzxneriaEMv0u-VN2Z6g__47144.968485418$1365781725$gmane$org@mail.gmail.com>
-References: <CAL_rx6WAZFhUdD2ytRXk9NOJb-=wLmBsE_dfAX+MpxSyVKh2Tg@mail.gmail.com>
+Subject: Re: GSoC 2013 idea: support a new language binding for
+	lttng
+Date: Fri, 12 Apr 2013 11:50:55 -0400
+Message-ID: <CAGDH53mzO04Cktp1ggJ8sW_zDfY7j5St20-P4xswKa2a9D4CYg__6835.33880296654$1365781880$gmane$org@mail.gmail.com>
+References: <CAMMh03NCLpR453cAco3aWrmw63BLGJPa+CVane0xTk6ADhr8zw@mail.gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ve0-f173.google.com ([209.85.128.173])
+Received: from mail-vc0-f179.google.com ([209.85.220.179])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <christian.babeux@0x80.ca>) id 1UQgD2-0003sV-Cb
-	for lttng-dev@lists.lttng.org; Fri, 12 Apr 2013 11:48:16 -0400
-Received: by mail-ve0-f173.google.com with SMTP id cy12so2548012veb.18
-	for <lttng-dev@lists.lttng.org>; Fri, 12 Apr 2013 08:48:10 -0700 (PDT)
-In-Reply-To: <CAL_rx6WAZFhUdD2ytRXk9NOJb-=wLmBsE_dfAX+MpxSyVKh2Tg@mail.gmail.com>
+	(envelope-from <christian.babeux@0x80.ca>) id 1UQgFh-0003u6-0h
+	for lttng-dev@lists.lttng.org; Fri, 12 Apr 2013 11:51:01 -0400
+Received: by mail-vc0-f179.google.com with SMTP id hz11so2365363vcb.10
+	for <lttng-dev@lists.lttng.org>; Fri, 12 Apr 2013 08:50:55 -0700 (PDT)
+In-Reply-To: <CAMMh03NCLpR453cAco3aWrmw63BLGJPa+CVane0xTk6ADhr8zw@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,37 +23,33 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Tabibel Sami <sami.tabibel@gmail.com>
+To: Xiaona Han <xiaonahappy13@gmail.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
+Hi Xiaona,
 
-Do you have a specific open-source project in mind that you would like
-to instrument with LTTng?
+This could be feasible. I don't know how the others LTTng developers
+would feel about adding other language bindings.
 
-Instrumenting should be straightforward (add tracepoints to the
-application source code), the challenge will reside in finding the
-appropriates sites to instruments to get useful data out of the
-application.
-
-Thanks,
+Thoughts?
 
 Christian
 
-On Tue, Apr 9, 2013 at 10:20 PM, Tabibel Sami <sami.tabibel@gmail.com> wrote:
-> Hello,
-> I am doing master degree of Cryptology and information security
-> I have good C, Python and Scapy skills, and i am interested to work on
-> "Instrumenting Open Source projects using UST" project this summer.
+On Fri, Apr 12, 2013 at 1:50 AM, Xiaona Han <xiaonahappy13@gmail.com> wrote:
+> Dear all,
+>     I am very interested in lttng of GSoC 2013. I find that current lttng
+> only supports python. I want to support another language binding for lttng.
+> I am familiar with Lua and SWIG. By adding Lua language support, lttng could
+> be used by Lua developers and users.  Are there anyone interested in
+> mentoring me about this idea? Thanks.
 >
-> I am looking for any comment about the difficulty and the content of
-> the project, and also about my chances to be accepted if i apply for.
 >
-> Thanks in advance.
-> Best Regards.
+> Best regards,
+> Xiaona Han.
 >
 > _______________________________________________
 > lttng-dev mailing list
 > lttng-dev@lists.lttng.org
 > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>
