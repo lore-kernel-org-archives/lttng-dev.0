@@ -1,18 +1,21 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: Re: [PATCH lttng-tools] Fixing a few typos in
- lttng-tools tree Fixes #453
-Date: Fri, 12 Apr 2013 12:03:45 -0400
-Message-ID: <51683061.3070907__9025.91176932237$1365782704$gmane$org@efficios.com>
-References: <1365536495-8416-1-git-send-email-simarpreet007@gmail.com>
+From: Christian Babeux <christian.babeux@efficios.com>
+Subject: Re: GSoC 2013,
+ "Instrumenting Open Source projects using UST" project.
+Date: Fri, 12 Apr 2013 12:10:41 -0400
+Message-ID: <CAGDH53=JTgKVHwdvK4yjjuNXTWbm1BQXMPbn+kEnaOvnuLyJ8g__9053.30395694382$1365783073$gmane$org@mail.gmail.com>
+References: <CAL_rx6WAZFhUdD2ytRXk9NOJb-=wLmBsE_dfAX+MpxSyVKh2Tg@mail.gmail.com>
+	<CAGDH53n5KcVOtO9QukPWycCr7vSf4ybzxneriaEMv0u-VN2Z6g@mail.gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([213.239.202.151])
+Received: from mail-vc0-f177.google.com ([209.85.220.177])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1UQgSm-00043u-6a
-	for lttng-dev@lists.lttng.org; Fri, 12 Apr 2013 12:04:32 -0400
-In-Reply-To: <1365536495-8416-1-git-send-email-simarpreet007@gmail.com>
+	(envelope-from <christian.babeux@0x80.ca>) id 1UQgYp-00047O-5v
+	for lttng-dev@lists.lttng.org; Fri, 12 Apr 2013 12:10:47 -0400
+Received: by mail-vc0-f177.google.com with SMTP id hr11so2350134vcb.36
+	for <lttng-dev@lists.lttng.org>; Fri, 12 Apr 2013 09:10:41 -0700 (PDT)
+In-Reply-To: <CAGDH53n5KcVOtO9QukPWycCr7vSf4ybzxneriaEMv0u-VN2Z6g@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,66 +24,74 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Simarpreet Singh <simarpreet007@gmail.com>
-Cc: lttng-dev@lists.lttng.org
+To: Christian Babeux <christian.babeux@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Merged!
+Reply from Tabibel Sami:
 
-Thanks!
+---------- Forwarded message ----------
+From: Tabibel Sami <sami.tabibel@gmail.com>
+Date: Fri, Apr 12, 2013 at 11:59 AM
+Subject: Re: [lttng-dev] GSoC 2013, "Instrumenting Open Source
+projects using UST" project.
+To: Christian Babeux <christian.babeux@efficios.com>
 
-Simarpreet Singh:
-> Signed-off-by: Simarpreet Singh <simarpreet007@gmail.com>
-> ---
->  src/common/error.c |   10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/src/common/error.c b/src/common/error.c
-> index 4fb022c..4b9b46e 100644
-> --- a/src/common/error.c
-> +++ b/src/common/error.c
-> @@ -40,7 +40,7 @@ static const char *error_string_array[] = {
->  	[ ERROR_INDEX(LTTNG_ERR_SESS_NOT_FOUND) ] = "Session name not found",
->  	[ ERROR_INDEX(LTTNG_ERR_FATAL) ] = "Fatal error of the session daemon",
->  	[ ERROR_INDEX(LTTNG_ERR_SELECT_SESS) ] = "A session MUST be selected",
-> -	[ ERROR_INDEX(LTTNG_ERR_EXIST_SESS) ] = "Session name already exist",
-> +	[ ERROR_INDEX(LTTNG_ERR_EXIST_SESS) ] = "Session name already exists",
->  	[ ERROR_INDEX(LTTNG_ERR_NO_EVENT) ] = "Event not found",
->  	[ ERROR_INDEX(LTTNG_ERR_CONNECT_FAIL) ] = "Unable to connect to Unix socket",
->  	[ ERROR_INDEX(LTTNG_ERR_EPERM) ] = "Permission denied",
-> @@ -58,7 +58,7 @@ static const char *error_string_array[] = {
->  	[ ERROR_INDEX(LTTNG_ERR_KERN_DISABLE_FAIL) ] = "Disable kernel event failed",
->  	[ ERROR_INDEX(LTTNG_ERR_KERN_META_FAIL) ] = "Opening metadata failed",
->  	[ ERROR_INDEX(LTTNG_ERR_KERN_START_FAIL) ] = "Starting kernel trace failed",
-> -	[ ERROR_INDEX(LTTNG_ERR_KERN_STOP_FAIL) ] = "Stoping kernel trace failed",
-> +	[ ERROR_INDEX(LTTNG_ERR_KERN_STOP_FAIL) ] = "Stopping kernel trace failed",
->  	[ ERROR_INDEX(LTTNG_ERR_KERN_CONSUMER_FAIL) ] = "Kernel consumer start failed",
->  	[ ERROR_INDEX(LTTNG_ERR_KERN_STREAM_FAIL) ] = "Kernel create stream failed",
->  	[ ERROR_INDEX(LTTNG_ERR_KERN_LIST_FAIL) ] = "Listing kernel events failed",
-> @@ -73,7 +73,7 @@ static const char *error_string_array[] = {
->  	[ ERROR_INDEX(LTTNG_ERR_UST_DISABLE_FAIL) ] = "Disable UST event failed",
->  	[ ERROR_INDEX(LTTNG_ERR_UST_META_FAIL) ] = "Opening metadata failed",
->  	[ ERROR_INDEX(LTTNG_ERR_UST_START_FAIL) ] = "Starting UST trace failed",
-> -	[ ERROR_INDEX(LTTNG_ERR_UST_STOP_FAIL) ] = "Stoping UST trace failed",
-> +	[ ERROR_INDEX(LTTNG_ERR_UST_STOP_FAIL) ] = "Stopping UST trace failed",
->  	[ ERROR_INDEX(LTTNG_ERR_UST_CONSUMER64_FAIL) ] = "64-bit UST consumer start failed",
->  	[ ERROR_INDEX(LTTNG_ERR_UST_CONSUMER32_FAIL) ] = "32-bit UST consumer start failed",
->  	[ ERROR_INDEX(LTTNG_ERR_UST_STREAM_FAIL) ] = "UST create stream failed",
-> @@ -82,7 +82,7 @@ static const char *error_string_array[] = {
->  	[ ERROR_INDEX(LTTNG_ERR_UST_EVENT_NOT_FOUND)] = "UST event not found",
->  	[ ERROR_INDEX(LTTNG_ERR_UST_CONTEXT_EXIST)] = "UST context already exist",
->  	[ ERROR_INDEX(LTTNG_ERR_UST_CONTEXT_INVAL)] = "UST invalid context",
-> -	[ ERROR_INDEX(LTTNG_ERR_NEED_ROOT_SESSIOND) ] = "Tracing the kernel requires a root lttng-sessiond daemon and \"tracing\" group user membership",
-> +	[ ERROR_INDEX(LTTNG_ERR_NEED_ROOT_SESSIOND) ] = "Tracing the kernel requires a root lttng-sessiond daemon or \"tracing\" group user membership",
->  	[ ERROR_INDEX(LTTNG_ERR_TRACE_ALREADY_STARTED) ] = "Tracing already started",
->  	[ ERROR_INDEX(LTTNG_ERR_TRACE_ALREADY_STOPPED) ] = "Tracing already stopped",
->  	[ ERROR_INDEX(LTTNG_ERR_KERN_EVENT_ENOSYS) ] = "Kernel event type not supported",
-> @@ -91,7 +91,7 @@ static const char *error_string_array[] = {
->  	[ ERROR_INDEX(LTTNG_ERR_NO_KERNCONSUMERD) ] = "No kernel consumer detected",
->  	[ ERROR_INDEX(LTTNG_ERR_EVENT_EXIST_LOGLEVEL) ] = "Event already enabled with different loglevel",
->  	[ ERROR_INDEX(LTTNG_ERR_URL_DATA_MISS) ] = "Missing data path URL",
-> -	[ ERROR_INDEX(LTTNG_ERR_URL_CTRL_MISS) ] = "Missing control data path URL",
-> +	[ ERROR_INDEX(LTTNG_ERR_URL_CTRL_MISS) ] = "Missing control path URL",
->  	[ ERROR_INDEX(LTTNG_ERR_ENABLE_CONSUMER_FAIL) ] = "Enabling consumer failed",
->  	[ ERROR_INDEX(LTTNG_ERR_RELAYD_CONNECT_FAIL) ] = "Unable to connect to lttng-relayd",
->  	[ ERROR_INDEX(LTTNG_ERR_RELAYD_VERSION_FAIL) ] = "Relay daemon not compatible",
+
+On Fri, Apr 12, 2013 at 5:48 PM, Christian Babeux
+<christian.babeux@efficios.com> wrote:
+> Hi,
+>
+> Do you have a specific open-source project in mind that you would like
+> to instrument with LTTng?
+
+I have studied little of wpa_supplicant source code lately, I
+understand a little of its operation Principe, I have some backgrounds
+on 802.1x authentication. and i am khow working on implementation of
+EAP-SIM supplicant, It will be good thing if i can work on this
+software .
+
+> Instrumenting should be straightforward (add tracepoints to the
+> application source code), the challenge will reside in finding the
+> appropriates sites to instruments to get useful data out of the
+> application.
+>
+> Thanks,
+>
+Thanks
+Regards!
+--
+Sami
+
+On Fri, Apr 12, 2013 at 11:48 AM, Christian Babeux
+<christian.babeux@efficios.com> wrote:
+> Hi,
+>
+> Do you have a specific open-source project in mind that you would like
+> to instrument with LTTng?
+>
+> Instrumenting should be straightforward (add tracepoints to the
+> application source code), the challenge will reside in finding the
+> appropriates sites to instruments to get useful data out of the
+> application.
+>
+> Thanks,
+>
+> Christian
+>
+> On Tue, Apr 9, 2013 at 10:20 PM, Tabibel Sami <sami.tabibel@gmail.com> wrote:
+>> Hello,
+>> I am doing master degree of Cryptology and information security
+>> I have good C, Python and Scapy skills, and i am interested to work on
+>> "Instrumenting Open Source projects using UST" project this summer.
+>>
+>> I am looking for any comment about the difficulty and the content of
+>> the project, and also about my chances to be accepted if i apply for.
+>>
+>> Thanks in advance.
+>> Best Regards.
+>>
+>> _______________________________________________
+>> lttng-dev mailing list
+>> lttng-dev@lists.lttng.org
+>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
