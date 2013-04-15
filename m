@@ -1,23 +1,16 @@
-From: Xiaona Han <xiaonahappy13@gmail.com>
-Subject: Re: GSoC 2013 idea: support a new language binding for
-	lttng
-Date: Mon, 15 Apr 2013 22:25:15 +0800
-Message-ID: <CAMMh03MVH=Te=BbQoofqdmZwjEJD-RJE14Ga1PpcSfTn-YEp3A__14950.3590575934$1366035951$gmane$org@mail.gmail.com>
-References: <CAMMh03NCLpR453cAco3aWrmw63BLGJPa+CVane0xTk6ADhr8zw@mail.gmail.com>
-	<CAGDH53mzO04Cktp1ggJ8sW_zDfY7j5St20-P4xswKa2a9D4CYg@mail.gmail.com>
-	<CA+jJMxtJPH0JNUMH0bZHdO6b0yeN_2wvqoyrwAaRamKcNU8VkA@mail.gmail.com>
-	<CAMMh03PSP00DMVqy37DogVZGZCi70just9QMH2XvafjdG=vB8Q@mail.gmail.com>
-	<CAEzWAe+7zw9=nOLNCsXFcjtz18bGo=rOeV_YTsGJrYZHRJy1QA@mail.gmail.com>
+From: Matthew Khouzam <matthew.khouzam@ericsson.com>
+Subject: Re: [RFC lttng-tools] Triggers
+Date: Mon, 15 Apr 2013 10:36:34 -0400
+Message-ID: <516C1072.9030902__26812.9256241538$1366036678$gmane$org@ericsson.com>
+References: <5166DFE7.8020802@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0162119353=="
+Content-Type: multipart/mixed; boundary="===============1261080726=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-oa0-f44.google.com ([209.85.219.44])
+Received: from usevmg20.ericsson.net ([198.24.6.45])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <xiaonahappy13@gmail.com>) id 1URkLQ-0003LD-Sc
-	for lttng-dev@lists.lttng.org; Mon, 15 Apr 2013 10:25:21 -0400
-Received: by mail-oa0-f44.google.com with SMTP id h1so4477195oag.17
-	for <lttng-dev@lists.lttng.org>; Mon, 15 Apr 2013 07:25:15 -0700 (PDT)
-In-Reply-To: <CAEzWAe+7zw9=nOLNCsXFcjtz18bGo=rOeV_YTsGJrYZHRJy1QA@mail.gmail.com>
+	(envelope-from <matthew.khouzam@ericsson.com>) id 1URkX5-0003Rd-Qy
+	for lttng-dev@lists.lttng.org; Mon, 15 Apr 2013 10:37:23 -0400
+In-Reply-To: <5166DFE7.8020802@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -26,265 +19,118 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Brosseau, Yannick" <yannick.brosseau@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============0162119353==
-Content-Type: multipart/alternative; boundary=089e0149cd4a78d7c604da670537
+--===============1261080726==
+Content-Type: multipart/alternative;
+	boundary="------------070606020501060401000804"
 
---089e0149cd4a78d7c604da670537
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
+--------------070606020501060401000804
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 7bit
 
-Hi Yannick
-   Thanks for your encouragement. I take a quick look at the source code of
-lttng and find that lttng-tools has python bindings code. It means that
-support Lua bindings mainly need finish the code, documentations and tests
-for the lttng-tools. What about babeltrace? Do we need support  Lua
-bindings for babeltrace APIs in this project?
+Hey tracing architects,
+Just a thought of consistency.
+we have
+lttng add-context (you can have many)
+lttng disable-context
+lttng enable-consumer (you can only have one)
+lttng disable-consumer
+I would suggest
+lttng add-trigger (you can have many)
+lttng disable-trigger
+lttng modify-trigger ???
 
 
-2013/4/15 Brosseau, Yannick <yannick.brosseau@gmail.com>
+TLDR: there should be a naming convention for lttng commands, there
+probably are but I have not seen them, or maybe I have but I do not
+remember seeing them.
 
-> Hi,
+TLDR-TLDR: name things the same way please. :)
+
+On 13-04-11 12:08 PM, David Goulet wrote:
+> Hi everyone,
 >
-> I have some experience with Lua, so I could probably act as a mentor on
-> this one.
-> It would be interesting to find a specific use case to instrument that is
-> applied to the Lua language. Lot of games use this language, so I can see
-> some use at least there.
+> Here is the second RFC of the day.
 >
-> Yannick
+> By reading this, your imagination will probably go pretty crazy with
+> possibilities ;). The first implementation will only have one option
+> describe in the RFC but note that with this kind of feature, the sky is
+> the limit! and of course world domination is never far.
 >
->
-> On Sat, Apr 13, 2013 at 3:10 AM, Xiaona Han <xiaonahappy13@gmail.com>wrot=
-e:
->
->> Hi J=E9r=E9mie,
->>    There is no need for current LTTng contributor to be proficient in
->> Lua. During the summer, a mentor just provides guidance on the LTTng sid=
-e
->> and I will  sort out the Lua side, making the binding is suitable and
->> native for Lua users.
->>    For your second concern, if there is no one would maintain the
->> bindings after GSoC, I would like to continue working on it. Lua is a
->> lightweight   scripting language and is easy to be maintained.  Thanks.
->>
->> Best Regards,
->> Xiaona Han.
->>
->>
->> 2013/4/12 J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
->>
->>> My main concern is that I don't know if any current LTTng contributor
->>> is proficient in Lua and will be able to provide the necessary
->>> guidance. That also raises the important question of finding someone
->>> who will maintain the bindings after GSoC.
->>>
->>> J=E9r=E9mie
->>>
->>> On Fri, Apr 12, 2013 at 11:50 AM, Christian Babeux
->>> <christian.babeux@efficios.com> wrote:
->>> > Hi Xiaona,
->>> >
->>> > This could be feasible. I don't know how the others LTTng developers
->>> > would feel about adding other language bindings.
->>> >
->>> > Thoughts?
->>> >
->>> > Christian
->>> >
->>> > On Fri, Apr 12, 2013 at 1:50 AM, Xiaona Han <xiaonahappy13@gmail.com>
->>> wrote:
->>> >> Dear all,
->>> >>     I am very interested in lttng of GSoC 2013. I find that current
->>> lttng
->>> >> only supports python. I want to support another language binding for
->>> lttng.
->>> >> I am familiar with Lua and SWIG. By adding Lua language support,
->>> lttng could
->>> >> be used by Lua developers and users.  Are there anyone interested in
->>> >> mentoring me about this idea? Thanks.
->>> >>
->>> >>
->>> >> Best regards,
->>> >> Xiaona Han.
->>> >>
->>> >> _______________________________________________
->>> >> lttng-dev mailing list
->>> >> lttng-dev@lists.lttng.org
->>> >> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->>> >>
->>> >
->>> > _______________________________________________
->>> > lttng-dev mailing list
->>> > lttng-dev@lists.lttng.org
->>> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->>>
->>>
->>>
->>> --
->>> J=E9r=E9mie Galarneau
->>> EfficiOS Inc.
->>> http://www.efficios.com
->>>
->>
->>
->> _______________________________________________
->> lttng-dev mailing list
->> lttng-dev@lists.lttng.org
->> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->>
->>
+> Thanks!
+> David
 >
 >
-> --
-> Yannick Brosseau
-> yannickbrosseau.com
->
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
 
+--------------070606020501060401000804
+Content-Type: text/html; charset="ISO-8859-1"
+Content-Transfer-Encoding: 7bit
 
---=20
-Best Regards,
-Xiaona Han
+<html>
+  <head>
+    <meta content="text/html; charset=ISO-8859-1"
+      http-equiv="Content-Type">
+  </head>
+  <body bgcolor="#FFFFFF" text="#000000">
+    Hey tracing architects, <br>
+    Just a thought of consistency. <br>
+    we have <br>
+    lttng add-context (you can have many)<br>
+    lttng disable-context <br>
+    lttng enable-consumer (you can only have one)<br>
+    lttng disable-consumer <br>
+    I would suggest <br>
+    lttng add-trigger (you can have many)<br>
+    lttng disable-trigger<br>
+    lttng modify-trigger ??? <br>
+    <br>
+    <br>
+    TLDR: there should be a naming convention for lttng commands, there
+    probably are but I have not seen them, or maybe I have but I do not
+    remember seeing them. <br>
+    <br>
+    TLDR-TLDR: name things the same way please. :)<br>
+    <br>
+    <div class="moz-cite-prefix">On 13-04-11 12:08 PM, David Goulet
+      wrote:<br>
+    </div>
+    <blockquote cite="mid:5166DFE7.8020802@efficios.com" type="cite">
+      <pre wrap="">Hi everyone,
 
---089e0149cd4a78d7c604da670537
-Content-Type: text/html; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
+Here is the second RFC of the day.
 
-<div dir=3D"ltr"><div style>Hi Yannick</div>=A0 =A0Thanks for your encourag=
-ement. I take a quick look at the source code of lttng and find that lttng-=
-tools has python bindings code. It means that support Lua bindings mainly n=
-eed finish the code, documentations and tests for the lttng-tools. What abo=
-ut babeltrace? Do we need support =A0Lua bindings for babeltrace APIs in th=
-is project?=A0<br>
-<div class=3D"gmail_extra"><br><br><div class=3D"gmail_quote">2013/4/15 Bro=
-sseau, Yannick <span dir=3D"ltr">&lt;<a href=3D"mailto:yannick.brosseau@gma=
-il.com" target=3D"_blank">yannick.brosseau@gmail.com</a>&gt;</span><br>
-<blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-=
-left-width:1px;border-left-color:rgb(204,204,204);border-left-style:solid;p=
-adding-left:1ex"><div dir=3D"ltr"><div><div>Hi, <br><br></div>I have some e=
-xperience with Lua, so I could probably act as a mentor on this one. <br>
+By reading this, your imagination will probably go pretty crazy with
+possibilities ;). The first implementation will only have one option
+describe in the RFC but note that with this kind of feature, the sky is
+the limit! and of course world domination is never far.
 
-</div><div>It would be interesting to find a specific use case to instrumen=
-t that is applied to the Lua language. Lot of games use this language, so I=
- can see some use at least there. <br>
-</div><div><br></div>Yannick<br></div><div class=3D"gmail_extra"><div><div>=
-<br><br><div class=3D"gmail_quote">On Sat, Apr 13, 2013 at 3:10 AM, Xiaona =
-Han <span dir=3D"ltr">&lt;<a href=3D"mailto:xiaonahappy13@gmail.com" target=
-=3D"_blank">xiaonahappy13@gmail.com</a>&gt;</span> wrote:<br>
+Thanks!
+David
+</pre>
+      <br>
+      <fieldset class="mimeAttachmentHeader"></fieldset>
+      <br>
+      <pre wrap="">_______________________________________________
+lttng-dev mailing list
+<a class="moz-txt-link-abbreviated" href="mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a>
+<a class="moz-txt-link-freetext" href="http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a>
+</pre>
+    </blockquote>
+    <br>
+  </body>
+</html>
 
-
-<blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-=
-left-width:1px;border-left-color:rgb(204,204,204);border-left-style:solid;p=
-adding-left:1ex"><div dir=3D"ltr">Hi=A0J=E9r=E9mie,<div>=A0 =A0There is no =
-need for current LTTng contributor to be proficient in Lua. During the summ=
-er, a mentor just provides guidance on the LTTng side and I will =A0sort ou=
-t the Lua side, making the binding is suitable and native for Lua users.=A0=
-</div>
-
-
-
-<div>=A0 =A0For your second concern, if there is no one would maintain the =
-bindings after GSoC, I would like to continue working on it. Lua is a light=
-weight =A0 scripting language and is easy to be=A0maintained. =A0Thanks.</d=
-iv>
-<div><br></div><div>Best Regards,</div><div>Xiaona Han.</div><div><div><div=
- class=3D"gmail_extra"><br><br><div class=3D"gmail_quote">2013/4/12 J=E9r=
-=E9mie Galarneau <span dir=3D"ltr">&lt;<a href=3D"mailto:jeremie.galarneau@=
-efficios.com" target=3D"_blank">jeremie.galarneau@efficios.com</a>&gt;</spa=
-n><br>
-
-
-
-<blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-=
-left-width:1px;border-left-color:rgb(204,204,204);border-left-style:solid;p=
-adding-left:1ex">My main concern is that I don&#39;t know if any current LT=
-Tng contributor<br>
-
-is proficient in Lua and will be able to provide the necessary<br>
-guidance. That also raises the important question of finding someone<br>
-who will maintain the bindings after GSoC.<br>
-<br>
-J=E9r=E9mie<br>
-<div><div><br>
-On Fri, Apr 12, 2013 at 11:50 AM, Christian Babeux<br>
-&lt;<a href=3D"mailto:christian.babeux@efficios.com" target=3D"_blank">chri=
-stian.babeux@efficios.com</a>&gt; wrote:<br>
-&gt; Hi Xiaona,<br>
-&gt;<br>
-&gt; This could be feasible. I don&#39;t know how the others LTTng develope=
-rs<br>
-&gt; would feel about adding other language bindings.<br>
-&gt;<br>
-&gt; Thoughts?<br>
-&gt;<br>
-&gt; Christian<br>
-&gt;<br>
-&gt; On Fri, Apr 12, 2013 at 1:50 AM, Xiaona Han &lt;<a href=3D"mailto:xiao=
-nahappy13@gmail.com" target=3D"_blank">xiaonahappy13@gmail.com</a>&gt; wrot=
-e:<br>
-&gt;&gt; Dear all,<br>
-&gt;&gt; =A0 =A0 I am very interested in lttng of GSoC 2013. I find that cu=
-rrent lttng<br>
-&gt;&gt; only supports python. I want to support another language binding f=
-or lttng.<br>
-&gt;&gt; I am familiar with Lua and SWIG. By adding Lua language support, l=
-ttng could<br>
-&gt;&gt; be used by Lua developers and users. =A0Are there anyone intereste=
-d in<br>
-&gt;&gt; mentoring me about this idea? Thanks.<br>
-&gt;&gt;<br>
-&gt;&gt;<br>
-&gt;&gt; Best regards,<br>
-&gt;&gt; Xiaona Han.<br>
-&gt;&gt;<br>
-&gt;&gt; _______________________________________________<br>
-&gt;&gt; lttng-dev mailing list<br>
-&gt;&gt; <a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">ltt=
-ng-dev@lists.lttng.org</a><br>
-&gt;&gt; <a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-d=
-ev" target=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng=
--dev</a><br>
-&gt;&gt;<br>
-&gt;<br>
-&gt; _______________________________________________<br>
-&gt; lttng-dev mailing list<br>
-&gt; <a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-d=
-ev@lists.lttng.org</a><br>
-&gt; <a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" =
-target=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev=
-</a><br>
-<br>
-<br>
-<br>
-</div></div><span><font color=3D"#888888">--<br>
-J=E9r=E9mie Galarneau<br>
-EfficiOS Inc.<br>
-<a href=3D"http://www.efficios.com" target=3D"_blank">http://www.efficios.c=
-om</a><br>
-</font></span></blockquote></div><br></div></div></div></div>
-<br>_______________________________________________<br>
-lttng-dev mailing list<br>
-<a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-dev@li=
-sts.lttng.org</a><br>
-<a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" targe=
-t=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><=
-br>
-<br></blockquote></div><br><br clear=3D"all"><br>-- <br></div></div><span><=
-font color=3D"#888888">Yannick Brosseau<br><a href=3D"http://yannickbrossea=
-u.com" target=3D"_blank">yannickbrosseau.com</a>
-</font></span></div>
-</blockquote></div><br><br clear=3D"all"><div><br></div>-- <br><div dir=3D"=
-ltr">Best Regards,<div>Xiaona Han</div></div>
-</div></div>
-
---089e0149cd4a78d7c604da670537--
+--------------070606020501060401000804--
 
 
---===============0162119353==
+--===============1261080726==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -295,4 +141,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============0162119353==--
+--===============1261080726==--
