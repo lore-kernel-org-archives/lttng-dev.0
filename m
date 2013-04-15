@@ -1,19 +1,16 @@
-From: "Ikaheimonen, JP" <jp_ikaheimonen@mentor.com>
-Subject: Re: [Babeltrace PATCH] Add new option --clock-offset-ns
-Date: Mon, 15 Apr 2013 05:28:28 +0000
-Message-ID: <009B25148989C6458484484699278506E53720DA__8990.97668375379$1366003746$gmane$org@EU-MBX-03.mgc.mentorg.com>
-References: <009B25148989C6458484484699278506E5371E30@EU-MBX-03.mgc.mentorg.com>
-	<20130412132158.GA27890@Krystal>
+From: Matthew Khouzam <matthew.khouzam@ericsson.com>
+Subject: Re: Limitations on subbuf_size / num_subbuf?
+Date: Mon, 15 Apr 2013 10:23:28 -0400
+Message-ID: <516C0D60.1050503__2136.61584207348$1366035888$gmane$org@ericsson.com>
+References: <OFC51F8E88.28285A69-ONC2257B4D.003B3B3E-C2257B4D.003B6399@il.ibm.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0185973710=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from relay1.mentorg.com ([192.94.38.131])
+Received: from usevmg20.ericsson.net ([198.24.6.45])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jp_ikaheimonen@mentor.com>) id 1URby1-0007KD-PA
-	for lttng-dev@lists.lttng.org; Mon, 15 Apr 2013 01:28:37 -0400
-In-Reply-To: <20130412132158.GA27890@Krystal>
-Content-Language: en-US
+	(envelope-from <matthew.khouzam@ericsson.com>) id 1URkKO-0003Jx-NQ
+	for lttng-dev@lists.lttng.org; Mon, 15 Apr 2013 10:24:16 -0400
+In-Reply-To: <OFC51F8E88.28285A69-ONC2257B4D.003B3B3E-C2257B4D.003B6399@il.ibm.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,33 +19,124 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Mathieu,
+--===============0185973710==
+Content-Type: multipart/alternative;
+	boundary="------------090404030708060407070203"
 
-you ponder:
-> +			opt_clock_offset_ns = strtoull(str, &endptr, 0);
-> +			if (*endptr != '\0' || str == endptr || errno != 0) {
->Why test *endptr != '\0' and str == endptr ?
+--------------090404030708060407070203
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 7bit
 
-This check has been copied verbatim from the similar handler for option OPT_CLOCK_ OFFSET.
+Not at all a n00b question, but could you give some more info? what is
+your version of LTTng tools, are you using UST or kernel tracing? How
+much ram is on your system? Kernel version?
 
-To me, the check for *endptr != '\0' has some value. stroull(3) will report success if the argument
-starts with a valid number, and the test makes sure that the entire argument was used in converting
-the number (that is, there are no trailing bad characters).
+I actually have the patched lttng that has standard subbuffer sizes of 4
+mb, so I have not personnaly seen that problem. But the first thing I
+would do is upgrade to the latest stable.
 
-Likewise, the check str==endptr checks if any conversion occurred at all,
-although this should be covered by the error case of EINVAL.
-However, the manual only treats this error case as a possibility ('may return'), 
-so the check is necessary to make sure of the fact in all library implementations.
+On 13-04-14 06:49 AM, Amit Margalit wrote:
+> Hello,
+>
+> Sorry for the noob question. I seem to be unable to define the total
+> of subbuf_size * num_subbuf higher than 4MB. I am getting ~30%
+> discarded tracepoint data.
+>
+> Any assistance would be greatly appreciated.
+>
+> Amit Margalit
+> IBM XIV - /Storage Reinvented/
+> XIV-NAS Development Team
+> Tel. 03-689-7774
+> Fax. 03-689-7230
+>
+>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
-Cheers,
 
-JP Ikaheimonen | SW Development Engineer http://go.mentor.com/sourceryanalyzer
+--------------090404030708060407070203
+Content-Type: text/html; charset="ISO-8859-1"
+Content-Transfer-Encoding: 7bit
 
-Mentor Embedded(tm) | Nucleus(r) | Linux(r) | Android(tm) | Services | UI | Multi-OS
+<html>
+  <head>
+    <meta content="text/html; charset=ISO-8859-1"
+      http-equiv="Content-Type">
+  </head>
+  <body bgcolor="#FFFFFF" text="#000000">
+    Not at all a n00b question, but could you give some more info? what
+    is your version of LTTng tools, are you using UST or kernel tracing?
+    How much ram is on your system? Kernel version? <br>
+    <br>
+    I actually have the patched lttng that has standard subbuffer sizes
+    of 4 mb, so I have not personnaly seen that problem. But the first
+    thing I would do is upgrade to the latest stable.<br>
+    <br>
+    <div class="moz-cite-prefix">On 13-04-14 06:49 AM, Amit Margalit
+      wrote:<br>
+    </div>
+    <blockquote
+cite="mid:OFC51F8E88.28285A69-ONC2257B4D.003B3B3E-C2257B4D.003B6399@il.ibm.com"
+      type="cite">
+      <meta http-equiv="Content-Type" content="text/html;
+        charset=ISO-8859-1">
+      <font face="sans-serif" size="2">Hello,</font>
+      <br>
+      <br>
+      <font face="sans-serif" size="2">Sorry for the noob question. I
+        seem
+        to be unable to define the total of subbuf_size * num_subbuf
+        higher than
+        4MB. I am getting ~30% discarded tracepoint data.</font>
+      <br>
+      <br>
+      <font face="sans-serif" size="2">Any assistance would be greatly
+        appreciated.</font>
+      <br>
+      <br>
+      <font color="#000080" face="sans-serif" size="2">Amit Margalit</font>
+      <br>
+      <font color="#808000" face="sans-serif" size="2">IBM XIV </font><font
+        face="sans-serif" size="2">-
+        <i>Storage Reinvented</i></font>
+      <br>
+      <font face="sans-serif" size="2">XIV-NAS Development Team</font>
+      <br>
+      <font face="sans-serif" size="2">Tel. 03</font><font face="Arial"
+        size="2">-689-7774</font>
+      <br>
+      <font face="Arial" size="2">Fax. 03-689-7230</font>
+      <br>
+      <fieldset class="mimeAttachmentHeader"></fieldset>
+      <br>
+      <pre wrap="">_______________________________________________
+lttng-dev mailing list
+<a class="moz-txt-link-abbreviated" href="mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a>
+<a class="moz-txt-link-freetext" href="http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a>
+</pre>
+    </blockquote>
+    <br>
+  </body>
+</html>
 
-Android is a trademark of Google Inc. Use of this trademark is subject to Google Permissions.
-Linux is the registered trademark of Linus Torvalds in the U.S. and other countries.
+--------------090404030708060407070203--
+
+
+--===============0185973710==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0185973710==--
