@@ -1,17 +1,17 @@
 From: David Goulet <dgoulet@efficios.com>
-Subject: Re: [RFC lttng-tools] Triggers
-Date: Mon, 15 Apr 2013 10:54:06 -0400
-Message-ID: <516C148E.50907__19655.30671082$1366037682$gmane$org@efficios.com>
-References: <5166DFE7.8020802@efficios.com> <516C1072.9030902@ericsson.com>
+Subject: Re: [GSoC 2013] projects information
+Date: Mon, 15 Apr 2013 11:02:43 -0400
+Message-ID: <516C1693.7020908__29882.7918283225$1366038190$gmane$org@efficios.com>
+References: <1365761741.59268.YahooMailNeo@web122204.mail.ne1.yahoo.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from smtp.ini-tech.com ([213.239.202.151])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1URknK-0003aA-D5
-	for lttng-dev@lists.lttng.org; Mon, 15 Apr 2013 10:54:10 -0400
-In-Reply-To: <516C1072.9030902@ericsson.com>
+	(envelope-from <dgoulet@efficios.com>) id 1URkve-0003fo-O8
+	for lttng-dev@lists.lttng.org; Mon, 15 Apr 2013 11:02:47 -0400
+In-Reply-To: <1365761741.59268.YahooMailNeo@web122204.mail.ne1.yahoo.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,68 +20,58 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Matthew Khouzam <matthew.khouzam@ericsson.com>
-Cc: lttng-dev@lists.lttng.org
+To: Claudiu Olteanu <olteanu.claudiu@ymail.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-FYI, disable and enable-consumer are gone in 2.2-rc1.
+Hi Claudiu,
 
-That's an interesting discussion to have. For the last years, we've used
-"lttng ACTION OPTIONS" scheme. Now, we choose to change that for the
-triggers and snapshots (RFC) is to have less commands and focus on the
-"object semantic" like "lttng OBJECT ACTION OPTIONS" mainly because we
-are pretty sure that more options and possibilities will come in the
-future with these complex commands.
+I can give you more details for the strace-alike wrapper.
 
-So, the main reasons is that instead of creating 3+ more commands, we go
-for one command that allows the user to use triggers with all the
-different options under the same "roof".
+The lttng command line is a git alike such as "lttng create [...]" or
+"lttng enable-event [...]". What we are looking to do is a "lttng trace
+[...]" that behaves like strace meaning it will activate syscall
+tracing, live mode and/or the application tracepoints if available.
 
-It's a bit like "git commit" and "git remote". Git is still very usable
-but commands are simply different.
+Now, by the end of July, we are expecting to have the live feature
+meaning that you can see a trace while it's being written. We'll also
+need filtering in lttng-modules (available in UST) so only syscalls made
+by the application are recorded. Furthermore, per-PID tracing in UST
+would be awesome to complement "lttng trace" with the application's
+tracepoints.
 
-Hope that it clarifies why we propose this new scheme.
+As you can see, there is a lot to do but the end result will be a very
+useful tool which is "strace" type of tool that does NOT use PTRACE and
+change the behavior of your application :). (with greater performance).
 
+Kernel filtering, per-PID tracing in UST, "lttng trace" command... pick
+your choice :)
+
+Thanks!
 David
 
-Matthew Khouzam:
-> Hey tracing architects,
-> Just a thought of consistency.
-> we have
-> lttng add-context (you can have many)
-> lttng disable-context
-> lttng enable-consumer (you can only have one)
-> lttng disable-consumer
-> I would suggest
-> lttng add-trigger (you can have many)
-> lttng disable-trigger
-> lttng modify-trigger ???
+Claudiu Olteanu:
+> Hi there!
 > 
+> My name is Claudiu Olteanu, I'm from Bucharest, Romania and I study at
+> the University 'Politehnica' of Bucharest, the Faculty of Automatic
+> Control and Computers Science. I'm a third year student and I would like
+> to participate to GSoC this summer. After I took a look at the projects
+> list I decided that it would be interesting and motivating to work on
+> one of these projects :
+>  - Trace probe support in C++
+>  - Development of an strace-alike wrapper
 > 
-> TLDR: there should be a naming convention for lttng commands, there
-> probably are but I have not seen them, or maybe I have but I do not
-> remember seeing them.
+> I will appreciate it if you give me more details about them and some
+> advice that can put me on track.
 > 
-> TLDR-TLDR: name things the same way please. :)
+> You can find my CV here[1] in case you want to know more about me.
 > 
-> On 13-04-11 12:08 PM, David Goulet wrote:
->> Hi everyone,
->>
->> Here is the second RFC of the day.
->>
->> By reading this, your imagination will probably go pretty crazy with
->> possibilities ;). The first implementation will only have one option
->> describe in the RFC but note that with this kind of feature, the sky is
->> the limit! and of course world domination is never far.
->>
->> Thanks!
->> David
->>
->>
->> _______________________________________________
->> lttng-dev mailing list
->> lttng-dev@lists.lttng.org
->> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> Regards,
+> Claudiu
+> 
+> [1] -
+> https://docs.google.com/file/d/0BwSntkUS-WYzVUVoZkYxdzNvNmc/edit?usp=sharing
 > 
 > 
 > 
