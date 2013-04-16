@@ -1,17 +1,22 @@
-From: Philippe Proulx <philippe.proulx@polymtl.ca>
-Subject: Re: Java code for CTF trace writing?
-Date: Mon, 15 Apr 2013 18:01:40 -0400
-Message-ID: <CAB4xu_1zOHUD03dQ57DxKpQ1RWorocGK_0URCaxnohHB1FLEDw__49809.2266884216$1366063360$gmane$org@mail.gmail.com>
+From: Hari Prasad Kalavakunta <Hari.Prasad@radisys.com>
+Subject: Processor support for user space tracer (ppc64)
+Date: Tue, 16 Apr 2013 14:46:04 +0000
+Message-ID: <05E83BDD0E1F054FA73F00F6970F05C60608EA__13824.1670480513$1366123612$gmane$org@CH1PRD0810MB394.namprd08.prod.outlook.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1688776103=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-la0-f47.google.com ([209.85.215.47])
+Received: from mail-db8lp0189.outbound.messaging.microsoft.com
+	([213.199.154.189] helo=db8outboundpool.messaging.microsoft.com)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <eeppeliteloop@gmail.com>) id 1URrTd-0006wH-Ji
-	for lttng-dev@lists.lttng.org; Mon, 15 Apr 2013 18:02:17 -0400
-Received: by mail-la0-f47.google.com with SMTP id eh20so3710593lab.6
-	for <lttng-dev@lists.lttng.org>; Mon, 15 Apr 2013 15:02:11 -0700 (PDT)
+	(envelope-from <Hari.Prasad@radisys.com>) id 1US79I-0005q7-DD
+	for lttng-dev@lists.lttng.org; Tue, 16 Apr 2013 10:46:20 -0400
+Received: from mail8-db8 (localhost [127.0.0.1])	by mail8-db8-R.bigfish.com
+	(Postfix) with ESMTP id 14B1A1C40206	for <lttng-dev@lists.lttng.org>;
+	Tue, 16 Apr 2013 14:46:12 +0000 (UTC)
+Received: from DB8EHSMHS022.bigfish.com (unknown [10.174.8.245])	by
+	mail8-db8.bigfish.com (Postfix) with ESMTP id 28B58C004C	for
+	<lttng-dev@lists.lttng.org>; Tue, 16 Apr 2013 14:46:10 +0000 (UTC)
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,69 +25,151 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Aaron Spear <aspear@vmware.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Linux Tools developer discussions <linuxtools-dev@eclipse.org>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Actually, that was the exact purpose of my internship at Ericsson last summer.
+--===============1688776103==
+Content-Language: en-US
+Content-Type: multipart/alternative;
+	boundary="_000_05E83BDD0E1F054FA73F00F6970F05C60608EACH1PRD0810MB394na_"
 
-I designed a new architecture for the CTF part of TMF, but it is still
-not merged/integrated with mainline TMF (I don't even know if it's
-still planned). See
-<http://git.dorsal.polymtl.ca/~pproulx?p=javeltrace.git;a=summary>.
+--_000_05E83BDD0E1F054FA73F00F6970F05C60608EACH1PRD0810MB394na_
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 
-This new architecture is able to read _and write_ CTF packets in a
-generic way. The "Javeltrace" name is just a portmanteau of Java and
-Babeltrace, although should this refined library be integrated into
-TMF, it's not planned to be named like this. However, there exist a
-command-line tool that I made which is officially named Javeltrace and
-uses the aforementioned library. It is described here:
-<http://www.dorsal.polymtl.ca/~pproulx/javeltrace/>. As explained on
-the webpage, the main goal of this utility is to test my work
-interactively.
+Hello lttng-dev,
 
-Keep in mind that everything mentioned here is not thoroughly tested
-and for sure there are a few bugs remaining. Also, the code didn't
-evolve with the latest CTF versions, so there must be incompatibility
-at some level.
+Good morning and very short question.
 
-The main use case at Ericsson was to synthesize a precise fake trace
-from scratch using a human readable input format that could be
-versioned. The generated CTF traces would then be used to exercise
-parts of TMF to test specific behaviours without having to produce an
-actual real trace. After a few discussions, we chose JSON as an
-interchange format. So you will see lots of JSON related code out
-there. The command-line Javeltrace utility is able to translate
-from/to binary CTF.
+Is user space tracer not supported yet for ppc64?
 
-At the end of my internship, I started writing docs for what I did.
-It's here: <http://wiki.eclipse.org/Linux_Tools_Project/TMF/CTF_guide>.
-It's not finished, but almost, so it should be up-to-date with my Git
-codebase.
+URL http://lttng.org/comparison-systemtap-and-dtrace   lists only x86 for U=
+ser Space tracing. Could you please confirm the same.
 
-I also made this as a proof of concept:
-<http://git.dorsal.polymtl.ca/~pproulx?p=javeltrace.git;a=tree;f=lttng/org.eclipse.linuxtools.ctf.core/src/org/eclipse/linuxtools/ctf/core/trace/out;h=67ab3097e9f3fc52a685d29620e4c40ee26ee896;hb=47b4cef68eb4524fc9e1865f58474e0bc81eba77>
-(see all Mug*.java files). MugTracer is a simple Java tracer that
-produces native CTF without even using the rest of my library since
-CTF is so easy to *write*. It has a consumer thread and worked well,
-although I didn't run any benchmark and I believe it's really slow
-compared to UST.
+processor support
 
-Feel free to contact me, should you have any question about this.
+Kernel tracer: x86-32, x86-64, SPARC, SPARC64, ppc, ppc64, sh, sh64, ia64, =
+s390, MIPS 32/64, ARM, (arch-agnostic core)
+Userspace tracer: x86-32, x86-64
 
-On 15 April 2013 17:14, Aaron Spear <aspear@vmware.com> wrote:
-> Hi all,
+
+Regards,
+Hari
+
+--_000_05E83BDD0E1F054FA73F00F6970F05C60608EACH1PRD0810MB394na_
+Content-Type: text/html; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+<html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-micr=
+osoft-com:office:office" xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
+xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http:=
+//www.w3.org/TR/REC-html40">
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
 >
-> I was wondering if anyone knew of some open source Java library that could WRITE CTF traces? I am using the linuxtools/TMF plugins to read CTF traces, but now need to write them from Java as well.
+<meta name=3D"Generator" content=3D"Microsoft Word 14 (filtered medium)">
+<style><!--
+/* Font Definitions */
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+@font-face
+	{font-family:Tahoma;
+	panose-1:2 11 6 4 3 5 4 4 2 4;}
+/* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0in;
+	margin-bottom:.0001pt;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+a:link, span.MsoHyperlink
+	{mso-style-priority:99;
+	color:blue;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{mso-style-priority:99;
+	color:purple;
+	text-decoration:underline;}
+span.EmailStyle17
+	{mso-style-type:personal-compose;
+	font-family:"Calibri","sans-serif";
+	color:windowtext;}
+.MsoChpDefault
+	{mso-style-type:export-only;
+	font-family:"Calibri","sans-serif";}
+@page WordSection1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.0in 1.0in 1.0in;}
+div.WordSection1
+	{page:WordSection1;}
+--></style><!--[if gte mso 9]><xml>
+<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
+</xml><![endif]--><!--[if gte mso 9]><xml>
+<o:shapelayout v:ext=3D"edit">
+<o:idmap v:ext=3D"edit" data=3D"1" />
+</o:shapelayout></xml><![endif]-->
+</head>
+<body lang=3D"EN-US" link=3D"blue" vlink=3D"purple">
+<div class=3D"WordSection1">
+<p class=3D"MsoNormal">Hello lttng-dev,<o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">Good morning and very short question. <o:p></o:p></p=
 >
-> I have a use case where I have an "event bus" in the Java app world and I would like to persist this event stream as a CTF trace. In this particular use case, the speed/low intrusiveness of LTTng UST is not as important as the portability, so a pure Java solution is ideal, though not strictly required.
->
-> Also, please let me know if there are others out there who are interested in collaborating in writing such a library.
->
-> regards,
-> Aaron Spear
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">Is user space tracer not supported yet for ppc64?<o:=
+p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">URL <a href=3D"http://lttng.org/comparison-systemtap=
+-and-dtrace">
+http://lttng.org/comparison-systemtap-and-dtrace</a> &nbsp;&nbsp;lists only=
+ x86 for User Space tracing. Could you please confirm the same.<o:p></o:p><=
+/p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<table class=3D"MsoNormalTable" border=3D"1" cellpadding=3D"0" width=3D"75%=
+" style=3D"width:75.7%;border:solid black 2.25pt">
+<tbody>
+<tr>
+<td style=3D"padding:2.25pt 2.25pt 2.25pt 2.25pt">
+<p class=3D"MsoNormal" style=3D"margin-bottom:12.0pt;line-height:160%"><spa=
+n style=3D"font-size:9.0pt;line-height:160%;font-family:&quot;Tahoma&quot;,=
+&quot;sans-serif&quot;">processor support
+<o:p></o:p></span></p>
+</td>
+<td style=3D"padding:2.25pt 2.25pt 2.25pt 2.25pt">
+<p class=3D"MsoNormal" style=3D"margin-bottom:12.0pt;line-height:160%"><b><=
+span style=3D"font-size:9.0pt;line-height:160%;font-family:&quot;Tahoma&quo=
+t;,&quot;sans-serif&quot;">Kernel tracer:</span></b><span style=3D"font-siz=
+e:9.0pt;line-height:160%;font-family:&quot;Tahoma&quot;,&quot;sans-serif&qu=
+ot;">
+ x86-32, x86-64, SPARC, SPARC64, ppc, ppc64, sh, sh64, ia64, s390, MIPS 32/=
+64, ARM, (arch-agnostic core)<br>
+<b>Userspace tracer:</b> x86-32, x86-64<o:p></o:p></span></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">Regards,<o:p></o:p></p>
+<p class=3D"MsoNormal">Hari<o:p></o:p></p>
+</div>
+</body>
+</html>
+
+--_000_05E83BDD0E1F054FA73F00F6970F05C60608EACH1PRD0810MB394na_--
+
+
+--===============1688776103==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1688776103==--
