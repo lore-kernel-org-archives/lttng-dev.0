@@ -1,40 +1,16 @@
-From: Amit Margalit <AMITM@il.ibm.com>
-Subject: Re: Limitations on subbuf_size / num_subbuf?
-Date: Thu, 18 Apr 2013 09:11:07 +0300
-Message-ID: <OFC6774750.9138DA2C-ONC2257B51.002189D3-C2257B51.0021DDB3__6119.77378507635$1366265523$gmane$org@il.ibm.com>
-References: <OFC51F8E88.28285A69-ONC2257B4D.003B3B3E-C2257B4D.003B6399@il.ibm.com>
-	<516C0D60.1050503@ericsson.com>
+From: Dror Granot <dror@reduxio.com>
+Subject: Help needed in getting first ust event running
+Date: Thu, 18 Apr 2013 18:55:05 +0300
+Message-ID: <CAFw4v5-z8n-1C2_P89cugq3ayypby-CPr-N+SAxzcgOPEbwzTQ__17547.2800540321$1366300538$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0656307279=="
+Content-Type: multipart/mixed; boundary="===============0881015458=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from e06smtp12.uk.ibm.com ([195.75.94.108])
+Received: from mail-oa0-f47.google.com ([209.85.219.47])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <amitm@il.ibm.com>) id 1USi48-00087T-0X
-	for lttng-dev@lists.lttng.org; Thu, 18 Apr 2013 02:11:28 -0400
-Received: from /spool/local
-	by e06smtp12.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use
-	Only! Violators will be prosecuted
-	for <lttng-dev@lists.lttng.org> from <amitm@il.ibm.com>;
-	Thu, 18 Apr 2013 07:08:04 +0100
-Received: from b06cxnps4076.portsmouth.uk.ibm.com
-	(d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-	by d06dlp02.portsmouth.uk.ibm.com (Postfix) with ESMTP id B6008219002D
-	for <lttng-dev@lists.lttng.org>; Thu, 18 Apr 2013 07:13:35 +0100 (BST)
-Received: from d06av02.portsmouth.uk.ibm.com (d06av02.portsmouth.uk.ibm.com
-	[9.149.37.228])
-	by b06cxnps4076.portsmouth.uk.ibm.com (8.13.8/8.13.8/NCO v10.0) with
-	ESMTP id r3I6B9TE46465108
-	for <lttng-dev@lists.lttng.org>; Thu, 18 Apr 2013 06:11:09 GMT
-Received: from d06av02.portsmouth.uk.ibm.com (loopback [127.0.0.1])
-	by d06av02.portsmouth.uk.ibm.com (8.14.4/8.13.1/NCO v10.0 AVout) with
-	ESMTP id r3I6BI8k032005
-	for <lttng-dev@lists.lttng.org>; Thu, 18 Apr 2013 00:11:18 -0600
-Received: from d06ml311.portsmouth.uk.ibm.com (d06ml311.portsmouth.uk.ibm.com
-	[9.149.104.181])
-	by d06av02.portsmouth.uk.ibm.com (8.14.4/8.13.1/NCO v10.0 AVin) with
-	ESMTP id r3I6BI2L031992
-	for <lttng-dev@lists.lttng.org>; Thu, 18 Apr 2013 00:11:18 -0600
-In-Reply-To: <516C0D60.1050503@ericsson.com>
+	(envelope-from <dror@reduxio.com>) id 1USrB0-0004X4-Ur
+	for lttng-dev@lists.lttng.org; Thu, 18 Apr 2013 11:55:11 -0400
+Received: by mail-oa0-f47.google.com with SMTP id n9so2871102oag.20
+	for <lttng-dev@lists.lttng.org>; Thu, 18 Apr 2013 08:55:05 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -43,169 +19,222 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Matthew Khouzam <matthew.khouzam@ericsson.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-This is a multipart message in MIME format.
---===============0656307279==
-Content-Type: multipart/alternative; boundary="=_alternative 0021DCE6C2257B51_="
+--===============0881015458==
+Content-Type: multipart/alternative; boundary=089e0158b6a048960604daa4a0b8
 
-This is a multipart message in MIME format.
---=_alternative 0021DCE6C2257B51_=
-Content-Type: text/plain; charset="US-ASCII"
+--089e0158b6a048960604daa4a0b8
+Content-Type: text/plain; charset=ISO-8859-1
 
 Hi,
+I'm trying to add a simple ust event to my project, but I keep getting
+segmentation violation. I would really appreciate help in understanding
+what am I'm doing wrong. I'm running Ubuntu 12.04LTS and got lttng from
+git. I've ran the lttng with verbose but couldn't see anything valuable
+there. I'm using dynamic linkage (but the problem occurs also in static)
+and is as follows:
 
-Thank for the quick response. Here is the missing data:
-
-UST
-2.6.32.12-205 (I had to make a tiny patch to make it compile)
-MemTotal:       24628852 kB
-lttng-ust-2.1.2
-lttng-tools-2.1.1
-lttng-modules-2.1.1
-babeltrace-1.1.0
-userspace-rcu-0.7.6
-
-Which patch for 4MB?
-
-Thanks,
-
-Amit Margalit
-IBM XIV - Storage Reinvented
-XIV-NAS Development Team
-Tel. 03-689-7774
-Fax. 03-689-7230
+Program received signal SIGSEGV, Segmentation fault.
+0x0000000000000000 in ?? ()
+(gdb) where
+#0  0x0000000000000000 in ?? ()
+#1  0x000000000041b03f in __tracepoints__ptrs_init () at
+/usr/local/include/lttng/tracepoint.h:349
+#2  0x000000000043e95d in __libc_csu_init ()
+#3  0x00007ffff71f1700 in __libc_start_main () from
+/lib/x86_64-linux-gnu/libc.so.6
+#4  0x00000000004039e9 in _start ()
 
 
+increasing the debug level shows:
 
-From:   Matthew Khouzam <matthew.khouzam@ericsson.com>
-To:     <lttng-dev@lists.lttng.org>
-Date:   04/15/2013 05:24 PM
-Subject:        Re: [lttng-dev] Limitations on subbuf_size / num_subbuf?
+ibust[6455/6455]: LTT : ltt ring buffer client "relay-metadata-mmap" init
+ (in lttng_ring_buffer_metadata_client_init() at
+lttng-ring-buffer-metadata-client.h:313)
+libust[6455/6455]: LTT : ltt ring buffer client "relay-overwrite-mmap" init
+ (in lttng_ring_buffer_client_overwrite_init() at
+lttng-ring-buffer-client.h:562)
+libust[6455/6455]: LTT : ltt ring buffer client "relay-overwrite-rt-mmap"
+init
+ (in lttng_ring_buffer_client_overwrite_rt_init() at
+lttng-ring-buffer-client.h:562)
+libust[6455/6455]: LTT : ltt ring buffer client "relay-discard-mmap" init
+ (in lttng_ring_buffer_client_discard_init() at
+lttng-ring-buffer-client.h:562)
+libust[6455/6455]: LTT : ltt ring buffer client "relay-discard-rt-mmap" init
+ (in lttng_ring_buffer_client_discard_rt_init() at
+lttng-ring-buffer-client.h:562)
+libust[6455/6457]: Info: sessiond not accepting connections to local apps
+socket (in ust_listener_thread() at lttng-ust-comm.c:939)
+libust[6455/6457]: Waiting for local apps sessiond (in wait_for_sessiond()
+at lttng-ust-comm.c:849)
+libust[6455/6456]: Message Received "Get Tracer Version", Handle "root" (0)
+(in print_cmd() at lttng-ust-comm.c:216)
+libust[6455/6456]: Return value: 0 (in handle_message() at
+lttng-ust-comm.c:589)
+libust[6455/6456]: message successfully sent (in send_reply() at
+lttng-ust-comm.c:331)
+libust[6455/6456]: Message Received "Registration Done", Handle "root" (0)
+(in print_cmd() at lttng-ust-comm.c:216)
+libust[6455/6456]: Return value: 0 (in handle_message() at
+lttng-ust-comm.c:589)
+libust[6455/6456]: message successfully sent (in send_reply() at
+lttng-ust-comm.c:331)
+libust[6455/6455]: adding probe tgtd_project containing 1 events to lazy
+registration list (in lttng_probe_register() at lttng-probes.c:179)
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+libust[6455/6455]: LTT : ltt ring buffer client "relay-metadata-mmap" init
+ (in lttng_ring_buffer_metadata_client_init() at
+lttng-ring-buffer-metadata-client.h:313)
+libust[6455/6455]: LTT : ltt ring buffer client "relay-overwrite-mmap" init
+ (in lttng_ring_buffer_client_overwrite_init() at
+lttng-ring-buffer-client.h:562)
+libust[6455/6455]: LTT : ltt ring buffer client "relay-overwrite-rt-mmap"
+init
+ (in lttng_ring_buffer_client_overwrite_rt_init() at
+lttng-ring-buffer-client.h:562)
+libust[6455/6455]: LTT : ltt ring buffer client "relay-discard-mmap" init
+ (in lttng_ring_buffer_client_discard_init() at
+lttng-ring-buffer-client.h:562)
+libust[6455/6455]: LTT : ltt ring buffer client "relay-discard-rt-mmap" init
+ (in lttng_ring_buffer_client_discard_rt_init() at
+lttng-ring-buffer-client.h:562)
+[New Thread 0x7ffff653a700 (LWP 6458)]
+[New Thread 0x7ffff5d39700 (LWP 6459)]
+libust[6455/6459]: Info: sessiond not accepting connections to local apps
+socket (in ust_listener_thread() at lttng-ust-comm.c:939)
+libust[6455/6459]: Waiting for local apps sessiond (in wait_for_sessiond()
+at lttng-ust-comm.c:849)
+libust[6455/6458]: Message Received "Get Tracer Version", Handle "root" (0)
+(in print_cmd() at lttng-ust-comm.c:216)
+libust[6455/6458]: Return value: 0 (in handle_message() at
+lttng-ust-comm.c:589)
+libust[6455/6458]: message successfully sent (in send_reply() at
+lttng-ust-comm.c:331)
+libust[6455/6458]: Message Received "Registration Done", Handle "root" (0)
+(in print_cmd() at lttng-ust-comm.c:216)
+libust[6455/6458]: Return value: 0 (in handle_message() at
+lttng-ust-comm.c:589)
+libust[6455/6458]: message successfully sent (in send_reply() at
+lttng-ust-comm.c:331)
+libust[6455/6455]: adding probe check_project containing 1 events to lazy
+registration list (in lttng_probe_register() at lttng-probes.c:179)
+
+and then it fails.
+The segmentation violations seems to be due to the fact that the
+tracepoint_register_lib is not initialized, but I don't understand what I'm
+missing...
+
+print tracepoint_dlopen
+$1 = {liblttngust_handle = 0x7ffff7ff6030, tracepoint_register_lib = 0,
+tracepoint_unregister_lib = 0, rcu_read_lock_sym_bp = 0,
+rcu_read_unlock_sym_bp = 0,
+  rcu_dereference_sym_bp = 0}
+
+Thanks
+Dror
+
+--089e0158b6a048960604daa4a0b8
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hi,<div>I&#39;m trying to add a simple ust event to my pro=
+ject, but I keep getting segmentation violation. I would really appreciate =
+help in understanding what am I&#39;m doing wrong. I&#39;m running Ubuntu 1=
+2.04LTS and got lttng from git. I&#39;ve ran the lttng with verbose but cou=
+ldn&#39;t see anything valuable there. I&#39;m using dynamic linkage (but t=
+he problem occurs also in static) and is as follows:</div>
+<div><div><br></div><div>Program received signal SIGSEGV, Segmentation faul=
+t.</div><div>0x0000000000000000 in ?? ()</div><div>(gdb) where</div><div>#0=
+ =A00x0000000000000000 in ?? ()</div><div>#1 =A00x000000000041b03f in __tra=
+cepoints__ptrs_init () at /usr/local/include/lttng/tracepoint.h:349</div>
+<div>#2 =A00x000000000043e95d in __libc_csu_init ()</div><div>#3 =A00x00007=
+ffff71f1700 in __libc_start_main () from /lib/x86_64-linux-gnu/libc.so.6</d=
+iv><div>#4 =A00x00000000004039e9 in _start ()</div></div><div><br></div><di=
+v>
+<br></div><div style>increasing the debug level shows:</div><div style><br>=
+</div><div style><div>ibust[6455/6455]: LTT : ltt ring buffer client &quot;=
+relay-metadata-mmap&quot; init</div><div>=A0(in lttng_ring_buffer_metadata_=
+client_init() at lttng-ring-buffer-metadata-client.h:313)</div>
+<div>libust[6455/6455]: LTT : ltt ring buffer client &quot;relay-overwrite-=
+mmap&quot; init</div><div>=A0(in lttng_ring_buffer_client_overwrite_init() =
+at lttng-ring-buffer-client.h:562)</div><div>libust[6455/6455]: LTT : ltt r=
+ing buffer client &quot;relay-overwrite-rt-mmap&quot; init</div>
+<div>=A0(in lttng_ring_buffer_client_overwrite_rt_init() at lttng-ring-buff=
+er-client.h:562)</div><div>libust[6455/6455]: LTT : ltt ring buffer client =
+&quot;relay-discard-mmap&quot; init</div><div>=A0(in lttng_ring_buffer_clie=
+nt_discard_init() at lttng-ring-buffer-client.h:562)</div>
+<div>libust[6455/6455]: LTT : ltt ring buffer client &quot;relay-discard-rt=
+-mmap&quot; init</div><div>=A0(in lttng_ring_buffer_client_discard_rt_init(=
+) at lttng-ring-buffer-client.h:562)</div><div>libust[6455/6457]: Info: ses=
+siond not accepting connections to local apps socket (in ust_listener_threa=
+d() at lttng-ust-comm.c:939)</div>
+<div>libust[6455/6457]: Waiting for local apps sessiond (in wait_for_sessio=
+nd() at lttng-ust-comm.c:849)</div><div>libust[6455/6456]: Message Received=
+ &quot;Get Tracer Version&quot;, Handle &quot;root&quot; (0) (in print_cmd(=
+) at lttng-ust-comm.c:216)</div>
+<div>libust[6455/6456]: Return value: 0 (in handle_message() at lttng-ust-c=
+omm.c:589)</div><div>libust[6455/6456]: message successfully sent (in send_=
+reply() at lttng-ust-comm.c:331)</div><div>libust[6455/6456]: Message Recei=
+ved &quot;Registration Done&quot;, Handle &quot;root&quot; (0) (in print_cm=
+d() at lttng-ust-comm.c:216)</div>
+<div>libust[6455/6456]: Return value: 0 (in handle_message() at lttng-ust-c=
+omm.c:589)</div><div>libust[6455/6456]: message successfully sent (in send_=
+reply() at lttng-ust-comm.c:331)</div><div>libust[6455/6455]: adding probe =
+tgtd_project containing 1 events to lazy registration list (in lttng_probe_=
+register() at lttng-probes.c:179)</div>
+<div>[Thread debugging using libthread_db enabled]</div><div>Using host lib=
+thread_db library &quot;/lib/x86_64-linux-gnu/libthread_db.so.1&quot;.</div=
+><div>libust[6455/6455]: LTT : ltt ring buffer client &quot;relay-metadata-=
+mmap&quot; init</div>
+<div>=A0(in lttng_ring_buffer_metadata_client_init() at lttng-ring-buffer-m=
+etadata-client.h:313)</div><div>libust[6455/6455]: LTT : ltt ring buffer cl=
+ient &quot;relay-overwrite-mmap&quot; init</div><div>=A0(in lttng_ring_buff=
+er_client_overwrite_init() at lttng-ring-buffer-client.h:562)</div>
+<div>libust[6455/6455]: LTT : ltt ring buffer client &quot;relay-overwrite-=
+rt-mmap&quot; init</div><div>=A0(in lttng_ring_buffer_client_overwrite_rt_i=
+nit() at lttng-ring-buffer-client.h:562)</div><div>libust[6455/6455]: LTT :=
+ ltt ring buffer client &quot;relay-discard-mmap&quot; init</div>
+<div>=A0(in lttng_ring_buffer_client_discard_init() at lttng-ring-buffer-cl=
+ient.h:562)</div><div>libust[6455/6455]: LTT : ltt ring buffer client &quot=
+;relay-discard-rt-mmap&quot; init</div><div>=A0(in lttng_ring_buffer_client=
+_discard_rt_init() at lttng-ring-buffer-client.h:562)</div>
+<div>[New Thread 0x7ffff653a700 (LWP 6458)]</div><div>[New Thread 0x7ffff5d=
+39700 (LWP 6459)]</div><div>libust[6455/6459]: Info: sessiond not accepting=
+ connections to local apps socket (in ust_listener_thread() at lttng-ust-co=
+mm.c:939)</div>
+<div>libust[6455/6459]: Waiting for local apps sessiond (in wait_for_sessio=
+nd() at lttng-ust-comm.c:849)</div><div>libust[6455/6458]: Message Received=
+ &quot;Get Tracer Version&quot;, Handle &quot;root&quot; (0) (in print_cmd(=
+) at lttng-ust-comm.c:216)</div>
+<div>libust[6455/6458]: Return value: 0 (in handle_message() at lttng-ust-c=
+omm.c:589)</div><div>libust[6455/6458]: message successfully sent (in send_=
+reply() at lttng-ust-comm.c:331)</div><div>libust[6455/6458]: Message Recei=
+ved &quot;Registration Done&quot;, Handle &quot;root&quot; (0) (in print_cm=
+d() at lttng-ust-comm.c:216)</div>
+<div>libust[6455/6458]: Return value: 0 (in handle_message() at lttng-ust-c=
+omm.c:589)</div><div>libust[6455/6458]: message successfully sent (in send_=
+reply() at lttng-ust-comm.c:331)</div><div>libust[6455/6455]: adding probe =
+check_project containing 1 events to lazy registration list (in lttng_probe=
+_register() at lttng-probes.c:179)</div>
+<div><br></div><div style>and then it fails.</div><div style>The=A0segmenta=
+tion=A0violations=A0seems to be due to the fact that the tracepoint_registe=
+r_lib is not initialized, but I don&#39;t understand what I&#39;m missing..=
+.</div>
+<div style><br></div><div style><div>print tracepoint_dlopen</div><div>$1 =
+=3D {liblttngust_handle =3D 0x7ffff7ff6030, tracepoint_register_lib =3D 0, =
+tracepoint_unregister_lib =3D 0, rcu_read_lock_sym_bp =3D 0, rcu_read_unloc=
+k_sym_bp =3D 0,=A0</div>
+<div>=A0 rcu_dereference_sym_bp =3D 0}</div><div><br></div></div></div><div=
+ style>Thanks</div><div style>Dror</div></div>
+
+--089e0158b6a048960604daa4a0b8--
 
 
-
-Not at all a n00b question, but could you give some more info? what is 
-your version of LTTng tools, are you using UST or kernel tracing? How much 
-ram is on your system? Kernel version? 
-
-I actually have the patched lttng that has standard subbuffer sizes of 4 
-mb, so I have not personnaly seen that problem. But the first thing I 
-would do is upgrade to the latest stable.
-
-On 13-04-14 06:49 AM, Amit Margalit wrote:
-Hello, 
-
-Sorry for the noob question. I seem to be unable to define the total of 
-subbuf_size * num_subbuf higher than 4MB. I am getting ~30% discarded 
-tracepoint data. 
-
-Any assistance would be greatly appreciated. 
-
-Amit Margalit 
-IBM XIV - Storage Reinvented 
-XIV-NAS Development Team 
-Tel. 03-689-7774 
-Fax. 03-689-7230 
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
-
---=_alternative 0021DCE6C2257B51_=
-Content-Type: text/html; charset="US-ASCII"
-
-<font size=2 face="sans-serif">Hi,</font>
-<br>
-<br><font size=2 face="sans-serif">Thank for the quick response. Here is
-the missing data:</font>
-<br>
-<ol>
-<li value=1><font size=2 face="sans-serif">UST</font>
-<li value=2><font size=2 face="sans-serif">2.6.32.12-205 (I had to make
-a tiny patch to make it compile)</font>
-<li value=3><font size=2 face="sans-serif">MemTotal: &nbsp; &nbsp; &nbsp;
-24628852 kB</font>
-<li value=4><font size=2 face="sans-serif">lttng-ust-2.1.2</font>
-<li value=5><font size=2 face="sans-serif">lttng-tools-2.1.1</font>
-<li value=6><font size=2 face="sans-serif">lttng-modules-2.1.1</font>
-<li value=7><font size=2 face="sans-serif">babeltrace-1.1.0</font>
-<li value=8><font size=2 face="sans-serif">userspace-rcu-0.7.6</font></ol>
-<br><font size=2 face="sans-serif">Which patch for 4MB?</font>
-<br>
-<br><font size=2 color=#000080 face="sans-serif">Thanks,</font>
-<br>
-<br><font size=2 color=#000080 face="sans-serif">Amit Margalit</font>
-<br><font size=2 color=#808000 face="sans-serif">IBM XIV </font><font size=2 face="sans-serif">-
-<i>Storage Reinvented</i></font>
-<br><font size=2 face="sans-serif">XIV-NAS Development Team</font>
-<br><font size=2 face="sans-serif">Tel. 03</font><font size=2 face="Arial">-689-7774</font>
-<br><font size=2 face="Arial">Fax. 03-689-7230</font>
-<br>
-<br>
-<br>
-<br><font size=1 color=#5f5f5f face="sans-serif">From: &nbsp; &nbsp; &nbsp;
-&nbsp;</font><font size=1 face="sans-serif">Matthew Khouzam &lt;matthew.khouzam@ericsson.com&gt;</font>
-<br><font size=1 color=#5f5f5f face="sans-serif">To: &nbsp; &nbsp; &nbsp;
-&nbsp;</font><font size=1 face="sans-serif">&lt;lttng-dev@lists.lttng.org&gt;</font>
-<br><font size=1 color=#5f5f5f face="sans-serif">Date: &nbsp; &nbsp; &nbsp;
-&nbsp;</font><font size=1 face="sans-serif">04/15/2013 05:24 PM</font>
-<br><font size=1 color=#5f5f5f face="sans-serif">Subject: &nbsp; &nbsp;
-&nbsp; &nbsp;</font><font size=1 face="sans-serif">Re: [lttng-dev]
-Limitations on subbuf_size / num_subbuf?</font>
-<br>
-<hr noshade>
-<br>
-<br>
-<br><font size=3>Not at all a n00b question, but could you give some more
-info? what is your version of LTTng tools, are you using UST or kernel
-tracing? How much ram is on your system? Kernel version? <br>
-<br>
-I actually have the patched lttng that has standard subbuffer sizes of
-4 mb, so I have not personnaly seen that problem. But the first thing I
-would do is upgrade to the latest stable.<br>
-</font>
-<br><font size=3>On 13-04-14 06:49 AM, Amit Margalit wrote:</font>
-<br><font size=2 face="sans-serif">Hello,</font><font size=3> <br>
-</font><font size=2 face="sans-serif"><br>
-Sorry for the noob question. I seem to be unable to define the total of
-subbuf_size * num_subbuf higher than 4MB. I am getting ~30% discarded tracepoint
-data.</font><font size=3> <br>
-</font><font size=2 face="sans-serif"><br>
-Any assistance would be greatly appreciated.</font><font size=3> <br>
-</font><font size=2 color=#000080 face="sans-serif"><br>
-Amit Margalit</font><font size=3> </font><font size=2 color=#808000 face="sans-serif"><br>
-IBM XIV </font><font size=2 face="sans-serif">- <i>Storage Reinvented</i></font><font size=3>
-</font><font size=2 face="sans-serif"><br>
-XIV-NAS Development Team</font><font size=3> </font><font size=2 face="sans-serif"><br>
-Tel. 03</font><font size=2 face="Arial">-689-7774</font><font size=3> </font><font size=2 face="Arial"><br>
-Fax. 03-689-7230</font><font size=3> <br>
-</font>
-<br><tt><font size=3>_______________________________________________<br>
-lttng-dev mailing list<br>
-</font></tt><a href="mailto:lttng-dev@lists.lttng.org"><tt><font size=3 color=blue><u>lttng-dev@lists.lttng.org</u></font></tt></a><tt><font size=3><br>
-</font></tt><a href="http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev"><tt><font size=3 color=blue><u>http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</u></font></tt></a><tt><font size=3><br>
-</font></tt>
-<br><tt><font size=2>_______________________________________________<br>
-lttng-dev mailing list<br>
-lttng-dev@lists.lttng.org<br>
-</font></tt><a href="http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev"><tt><font size=2>http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</font></tt></a><tt><font size=2><br>
-</font></tt>
-<br>
---=_alternative 0021DCE6C2257B51_=--
-
-
-
---===============0656307279==
+--===============0881015458==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -216,4 +245,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============0656307279==--
+--===============0881015458==--
