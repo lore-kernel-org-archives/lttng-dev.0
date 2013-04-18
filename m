@@ -1,22 +1,21 @@
-From: David Goulet <dgoulet@efficios.com>
+From: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
 Subject: Re: Limitations on subbuf_size / num_subbuf?
-Date: Thu, 18 Apr 2013 13:24:20 -0400
-Message-ID: <51702C44.8090505__48133.8965626948$1366305892$gmane$org@efficios.com>
+Date: Thu, 18 Apr 2013 13:34:52 -0400
+Message-ID: <51702EBC.6040801__19010.1765715101$1366306676$gmane$org@voxpopuli.im>
 References: <OFC51F8E88.28285A69-ONC2257B4D.003B3B3E-C2257B4D.003B6399@il.ibm.com>
 	<516C0D60.1050503@ericsson.com>
 	<OFC6774750.9138DA2C-ONC2257B51.002189D3-C2257B51.0021DDB3@il.ibm.com>
-	<51702491.1000007@voxpopuli.im>
-	<20130418170748.GA32330@Krystal> <20130418171120.GA460@Krystal>
-	<51702AEF.7010508@voxpopuli.im>
+	<51702491.1000007@voxpopuli.im> <20130418170748.GA32330@Krystal>
+	<51702A9F.2010803@voxpopuli.im> <20130418172339.GA3151@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([213.239.202.151])
+Received: from ironport2-out.teksavvy.com ([206.248.154.182])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1USsZM-0005OL-2l
-	for lttng-dev@lists.lttng.org; Thu, 18 Apr 2013 13:24:24 -0400
-In-Reply-To: <51702AEF.7010508@voxpopuli.im>
+	(envelope-from <alexmonthy@voxpopuli.im>) id 1USsm3-0005Uk-34
+	for lttng-dev@lists.lttng.org; Thu, 18 Apr 2013 13:37:31 -0400
+In-Reply-To: <20130418172339.GA3151@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -25,15 +24,13 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
-Cc: lttng-dev@lists.lttng.org, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-
-
-Alexandre Montplaisir:
-> On 13-04-18 01:11 PM, Mathieu Desnoyers wrote:
->> * Mathieu Desnoyers (mathieu.desnoyers@efficios.com) wrote:
+On 13-04-18 01:23 PM, Mathieu Desnoyers wrote:
+> * Alexandre Montplaisir (alexmonthy@voxpopuli.im) wrote:
+>> On 13-04-18 01:07 PM, Mathieu Desnoyers wrote:
 >>> * Alexandre Montplaisir (alexmonthy@voxpopuli.im) wrote:
 >>>> On 13-04-18 02:11 AM, Amit Margalit wrote:
 >>>>> Hi,
@@ -57,42 +54,51 @@ Alexandre Montplaisir:
 >>>> http://bazaar.launchpad.net/~lttng/lttng-tools/packaging-daily/view/head:/patches/0002-Increase-default-subbuffer-size-to-4MB.patch
 >>> First, it should be noted that lttng enable-channel allow overriding the
 >>> subbuffer size.
->>>
+>> True that. But the value needs to be a power of two (which is not
+>> immediately obvious to new users). And if it's not exactly a power of
+>> two, it gets rejected, instead of simply rounding to the closest one. We
+>> have a patch for that too. ;)
+> I've never seen it on lttng-dev. Please share it, don't be shy :)
+
+Granted, it wasn't on lttng-dev. But an initial version was posted on
+Redmine at:
+https://bugs.lttng.org/issues/228
+
+>
 >>> It should be noted that lttng-modules 2.2 is going to output even _more_
 >>> events, so I don't think just making the buffers larger by default is
 >>> the right approach.
->> Oh, and I notice that the PPA changes the UST default to 4MB per
->> subbuffer too.
->>
->> That's not going to be pretty for per-pid tracing (which is the default)
->> on a system with 16 CPUs, tracing 100 processes with UST. 4x4MBx16x100 =
->> 25600 MB (25GB) of buffers just for UST.
-> 
-> Ok good to know, we will have to update it then.
-> 
->> Messing with defaults in packaging seems odd.
-> 
-> Actually, it's a pretty common practice ;)
+>> If it's gonna output more events, don't we want larger sizes?
+> No, because at some point, you want the default to take into account
+> typical HW configuration limitations. Usually, systems should not be
+> expected to be dedicated to tracing: whatever memory the tracer reserves
+> is less memory available for page cache and application, and therefore
+> more impact on the system.
 
-Well... maybe but at least *please* inform the maintainers when you do
-that because when bugs are received, it is pretty important for us (at
-least for me) to know what are the difference(s) between the dev tree
-and what is actually in production.
+I think 4 MB isn't anywhere close to hardware limitations (at least for
+desktop users, which are the main audience of the Ubuntu PPA packages).
 
-Thanks!
-David
 
-> 
-> 
-> Cheers,
-> Alex
-> 
->>
->> Mathieu
->>
+Cheers,
+Alex
+
 >>> I think we need to port the "loglevel" from UST to lttng-modules ASAP,
 >>> and assign a "debug" loglevel to events we don't care about by default.
->>>
+>> This sounds like a good idea.
+>>
+>> My main concern was that most users don't read the man pages, don't
+>> fiddle with custom flags, etc. They just run enable-event -a, then start
+>> tracing. In this setup, they should not expect dropped events.
+> Yep. Having loglevels should take care of that: debug-level events would
+> not be enabled unless a specific loglevel is specified.
+>
+> Thanks,
+>
+> Mathieu
+>
+>> Cheers,
+>> Alex
+>>
 >>> Thoughts ?
 >>>
 >>> Thanks,
@@ -138,23 +144,7 @@ David
 >>>>> XIV-NAS Development Team 
 >>>>> Tel. 03-689-7774 
 >>>>> Fax. 03-689-7230 
->>>>
 >>>> _______________________________________________
 >>>> lttng-dev mailing list
 >>>> lttng-dev@lists.lttng.org
 >>>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->>> -- 
->>> Mathieu Desnoyers
->>> EfficiOS Inc.
->>> http://www.efficios.com
->>>
->>> _______________________________________________
->>> lttng-dev mailing list
->>> lttng-dev@lists.lttng.org
->>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> 
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
