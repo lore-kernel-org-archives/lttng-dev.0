@@ -1,22 +1,15 @@
-From: Hari Prasad Kalavakunta <Hari.Prasad@radisys.com>
-Subject: lttng-tools-2.1.1 for linux-3.4.3
-Date: Fri, 19 Apr 2013 15:47:59 +0000
-Message-ID: <05E83BDD0E1F054FA73F00F6970F05C6062F72__24386.325319256$1366386529$gmane$org@CH1PRD0810MB394.namprd08.prod.outlook.com>
+From: =?UTF-8?q?Genevi=C3=A8ve=20Bastien?= <gbastien+lttng@versatic.net>
+Subject: [RFC-patch] Add support of enum metadata in tracepoints
+Date: Fri, 19 Apr 2013 13:51:04 -0400
+Message-ID: <1366393864-10809-1-git-send-email-gbastien+lttng__1064.88655224002$1366393905$gmane$org@versatic.net>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0772274462=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from co9ehsobe001.messaging.microsoft.com ([207.46.163.24]
-	helo=co9outboundpool.messaging.microsoft.com)
+Received: from smtp.polymtl.ca ([132.207.4.11])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Hari.Prasad@radisys.com>) id 1UTDXs-0007t5-88
-	for lttng-dev@lists.lttng.org; Fri, 19 Apr 2013 11:48:16 -0400
-Received: from mail147-co9 (localhost [127.0.0.1])	by
-	mail147-co9-R.bigfish.com (Postfix) with ESMTP id 4659454035D	for
-	<lttng-dev@lists.lttng.org>; Fri, 19 Apr 2013 15:48:10 +0000 (UTC)
-Received: from CO9EHSMHS016.bigfish.com (unknown [10.236.132.240])	by
-	mail147-co9.bigfish.com (Postfix) with ESMTP id 61012C4005E	for
-	<lttng-dev@lists.lttng.org>; Fri, 19 Apr 2013 15:48:08 +0000 (UTC)
-Content-Language: en-US
+	(envelope-from <gbastien+lttng@versatic.net>) id 1UTFSv-0000PM-1C
+	for lttng-dev@lists.lttng.org; Fri, 19 Apr 2013 13:51:17 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -25,202 +18,209 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============0772274462==
-Content-Language: en-US
-Content-Type: multipart/alternative;
-	boundary="_000_05E83BDD0E1F054FA73F00F6970F05C6062F72CH1PRD0810MB394na_"
-
---_000_05E83BDD0E1F054FA73F00F6970F05C6062F72CH1PRD0810MB394na_
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-
-Hello lttng-dev,
-
-When cross compiling lttng-tools-2.1.1 for PowerPC-32 bit, I am running int=
-o few issues. Could you please let me know what is wrong here.
-
-First, there was a problem using EPOLL feature.
-
-$ CFLAGS=3D"-m32 -g -O2" ./configure --prefix=3D/home/xxx/linux-3.4.3/ --ho=
-st=3Dpowerpc-linux
-$ make
-
-make[3]: Entering directory `/home/xxx/lttng2.1/lttng-tools-2.1.1/src/commo=
-n/compat'
-  CC     compat-epoll.lo
-In file included from compat-epoll.c:31:
-poll.h:76: error: 'EPOLL_CLOEXEC' undeclared here (not in a function)
-
-
-To go past this problem, I have chosen not to use EPOLL through ax_have_epo=
-ll_cppflags flag
-
-$ export ax_have_epoll_cppflags=3Dno
-$ CFLAGS=3D"-m32 -g -O2" ./configure --prefix=3D/home/xxx/linux-3.4.3/ --ho=
-st=3Dpowerpc-linux
-$ make
-
-YACC   filter-parser.c
-/home/xxx/lttng2.1/lttng-tools-2.1.1/src/lib/lttng-ctl/filter/filter-parser=
-.y:299.9-16: syntax error, unexpected identifier, expecting string
-
-
-This time parser appears have some kind of issue. Also, there are few warni=
-ngs as shown below that indicates to me that configure is not done in the c=
-orrect way.
-consumer.c: In function 'write_relayd_stream_header':
-consumer.c:749: warning: implicit declaration of function 'htobe64'
-consumer.c:750: warning: implicit declaration of function 'htobe32'
-
-Could you please let me know what could be wrong here. Your help is appreci=
-ated. Except of lttng-tools, all other components have be successfully buil=
-d and installed.
-
-Regards,
-Hari
-
---_000_05E83BDD0E1F054FA73F00F6970F05C6062F72CH1PRD0810MB394na_
-Content-Type: text/html; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-
-<html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-micr=
-osoft-com:office:office" xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
-xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http:=
-//www.w3.org/TR/REC-html40">
-<head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
->
-<meta name=3D"Generator" content=3D"Microsoft Word 14 (filtered medium)">
-<style><!--
-/* Font Definitions */
-@font-face
-	{font-family:"Cambria Math";
-	panose-1:2 4 5 3 5 4 6 3 2 4;}
-@font-face
-	{font-family:Calibri;
-	panose-1:2 15 5 2 2 2 4 3 2 4;}
-/* Style Definitions */
-p.MsoNormal, li.MsoNormal, div.MsoNormal
-	{margin:0in;
-	margin-bottom:.0001pt;
-	font-size:11.0pt;
-	font-family:"Calibri","sans-serif";}
-a:link, span.MsoHyperlink
-	{mso-style-priority:99;
-	color:blue;
-	text-decoration:underline;}
-a:visited, span.MsoHyperlinkFollowed
-	{mso-style-priority:99;
-	color:purple;
-	text-decoration:underline;}
-span.EmailStyle17
-	{mso-style-type:personal-compose;
-	font-family:"Calibri","sans-serif";
-	color:windowtext;}
-.MsoChpDefault
-	{mso-style-type:export-only;
-	font-family:"Calibri","sans-serif";}
-@page WordSection1
-	{size:8.5in 11.0in;
-	margin:1.0in 1.0in 1.0in 1.0in;}
-div.WordSection1
-	{page:WordSection1;}
---></style><!--[if gte mso 9]><xml>
-<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
-</xml><![endif]--><!--[if gte mso 9]><xml>
-<o:shapelayout v:ext=3D"edit">
-<o:idmap v:ext=3D"edit" data=3D"1" />
-</o:shapelayout></xml><![endif]-->
-</head>
-<body lang=3D"EN-US" link=3D"blue" vlink=3D"purple">
-<div class=3D"WordSection1">
-<p class=3D"MsoNormal">Hello lttng-dev,<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">When cross compiling lttng-tools-2.1.1 for PowerPC-3=
-2 bit, I am running into few issues. Could you please let me know what is w=
-rong here.<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">First, there was a problem using EPOLL feature.<o:p>=
-</o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal" style=3D"margin-left:.5in">$ CFLAGS=3D&quot;-m32 -g =
--O2&quot; ./configure --prefix=3D/home/xxx/linux-3.4.3/ --host=3Dpowerpc-li=
-nux<o:p></o:p></p>
-<p class=3D"MsoNormal" style=3D"margin-left:.5in">$ make<o:p></o:p></p>
-<p class=3D"MsoNormal" style=3D"margin-left:.5in"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal" style=3D"margin-left:1.0in"><span style=3D"font-fami=
-ly:&quot;Courier New&quot;">make[3]: Entering directory `/home/xxx/lttng2.1=
-/lttng-tools-2.1.1/src/common/compat'<o:p></o:p></span></p>
-<p class=3D"MsoNormal" style=3D"margin-left:1.0in"><span style=3D"font-fami=
-ly:&quot;Courier New&quot;">&nbsp; CC&nbsp;&nbsp;&nbsp;&nbsp; compat-epoll.=
-lo<o:p></o:p></span></p>
-<p class=3D"MsoNormal" style=3D"margin-left:1.0in"><span style=3D"font-fami=
-ly:&quot;Courier New&quot;">In file included from compat-epoll.c:31:<o:p></=
-o:p></span></p>
-<p class=3D"MsoNormal" style=3D"margin-left:1.0in"><span style=3D"font-fami=
-ly:&quot;Courier New&quot;">poll.h:76: error: 'EPOLL_CLOEXEC' undeclared he=
-re (not in a function)<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">To go past this problem, I have chosen not to use EP=
-OLL through ax_have_epoll_cppflags flag<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal" style=3D"margin-left:.5in">$ export ax_have_epoll_cp=
-pflags=3Dno<o:p></o:p></p>
-<p class=3D"MsoNormal" style=3D"margin-left:.5in">$ CFLAGS=3D&quot;-m32 -g =
--O2&quot; ./configure --prefix=3D/home/xxx/linux-3.4.3/ --host=3Dpowerpc-li=
-nux<o:p></o:p></p>
-<p class=3D"MsoNormal" style=3D"margin-left:.5in">$ make<o:p></o:p></p>
-<p class=3D"MsoNormal" style=3D"margin-left:.5in"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal" style=3D"margin-left:1.0in"><span style=3D"font-fami=
-ly:&quot;Courier New&quot;">YACC&nbsp;&nbsp; filter-parser.c<o:p></o:p></sp=
-an></p>
-<p class=3D"MsoNormal" style=3D"margin-left:1.0in"><span style=3D"font-fami=
-ly:&quot;Courier New&quot;">/home/xxx/lttng2.1/lttng-tools-2.1.1/src/lib/lt=
-tng-ctl/filter/filter-parser.y:299.9-16: syntax error, unexpected identifie=
-r, expecting string<o:p></o:p></span></p>
-<p class=3D"MsoNormal" style=3D"margin-left:1.0in"><span style=3D"font-fami=
-ly:&quot;Courier New&quot;"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-famil=
-y:&quot;Courier New&quot;"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal">This time parser appears have some kind of issue. Al=
-so, there are few warnings as shown below that indicates to me that configu=
-re is not done in the correct way.<o:p></o:p></p>
-<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-famil=
-y:&quot;Courier New&quot;">consumer.c: In function 'write_relayd_stream_hea=
-der':<o:p></o:p></span></p>
-<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-famil=
-y:&quot;Courier New&quot;">consumer.c:749: warning: implicit declaration of=
- function 'htobe64'<o:p></o:p></span></p>
-<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-famil=
-y:&quot;Courier New&quot;">consumer.c:750: warning: implicit declaration of=
- function 'htobe32'<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">Could you please let me know what could be wrong her=
-e. Your help is appreciated. Except of lttng-tools, all other components ha=
-ve be successfully build and installed.<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">Regards,<o:p></o:p></p>
-<p class=3D"MsoNormal">Hari<o:p></o:p></p>
-</div>
-</body>
-</html>
-
---_000_05E83BDD0E1F054FA73F00F6970F05C6062F72CH1PRD0810MB394na_--
-
-
---===============0772274462==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0772274462==--
+SW50cm9kdWNlIHRoZSBuZXcgbWFjcm8gVFJBQ0VQT0lOVF9FTlVNIHRvIGdsb2JhbGx5IGRlZmlu
+ZSBjdGYgZW51bSBtZXRhZGF0YQp0aGF0IGNhbiBiZSB1c2VkIGluIHRyYWNlcG9pbnRzIHVzaW5n
+IGZpZWxkX2VudW0gYXMgZW50cnkgYW5kIHRoZSB0cF9hc3NpZ24KYXNzaWduYXRpb24gbWFjcm8u
+CgpTaWduZWQtb2ZmLWJ5OiBHZW5ldmnDqHZlIEJhc3RpZW4gPGdiYXN0aWVuK2x0dG5nQHZlcnNh
+dGljLm5ldD4KLS0tCiBsdHRuZy1ldmVudHMuYyAgICAgICAgICAgICAgfCAgNjEgKysrKysrKysr
+KysrKysrKysrKysrKysrLQogbHR0bmctZXZlbnRzLmggICAgICAgICAgICAgIHwgICA0ICsrCiBw
+cm9iZXMvbHR0bmctZXZlbnRzLXJlc2V0LmggfCAgIDYgKysrCiBwcm9iZXMvbHR0bmctZXZlbnRz
+LmggICAgICAgfCAxMDggKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysr
+Ky0KIDQgZmlsZXMgY2hhbmdlZCwgMTc2IGluc2VydGlvbnMoKyksIDMgZGVsZXRpb25zKC0pCgpk
+aWZmIC0tZ2l0IGEvbHR0bmctZXZlbnRzLmMgYi9sdHRuZy1ldmVudHMuYwppbmRleCBiMzMyYzI5
+Li5kYzJiNDI1IDEwMDY0NAotLS0gYS9sdHRuZy1ldmVudHMuYworKysgYi9sdHRuZy1ldmVudHMu
+YwpAQCAtNTg2LDcgKzU4Niw4IEBAIGludCBfbHR0bmdfZmllbGRfc3RhdGVkdW1wKHN0cnVjdCBs
+dHRuZ19zZXNzaW9uICpzZXNzaW9uLAogCQlicmVhazsKIAljYXNlIGF0eXBlX2VudW06CiAJCXJl
+dCA9IGx0dG5nX21ldGFkYXRhX3ByaW50ZihzZXNzaW9uLAotCQkJIgkJJXMgXyVzO1xuIiwKKwkJ
+CSIJCWVudW0gZW51bV8lc18lcyBfJXM7XG4iLAorCQkJZmllbGQtPnR5cGUudS5iYXNpYy5lbnVt
+ZXJhdGlvbi5wcm92aWRlciwKIAkJCWZpZWxkLT50eXBlLnUuYmFzaWMuZW51bWVyYXRpb24ubmFt
+ZSwKIAkJCWZpZWxkLT5uYW1lKTsKIAkJYnJlYWs7CkBAIC03MDQsNiArNzA1LDE2IEBAIGludCBf
+bHR0bmdfaXNfdHlwZV9tZXRhZGF0YV9kdW1wZWQoc3RydWN0IGx0dG5nX3Nlc3Npb24gKnNlc3Np
+b24sCiAJCQlkdW1wZWQgPSBkdW1wZWQtPm5leHQ7CiAJCX0KIAkJYnJlYWs7CisJY2FzZSBtdHlw
+ZV9lbnVtOgorCQlmb3IgKGkgPSAwOyBpIDwgc2Vzc2lvbi0+ZHVtcGVkX21ldGFkYXRhW21ldGFk
+YXRhLT5tdHlwZV0ubnJfbWV0YWRhdGE7IGkrKykgeworCQkJaWYgKG1ldGFkYXRhLT5tLmN0Zl9l
+bnVtID09CisJCQkJCWR1bXBlZC0+ZHVtcGVkX3B0ci5jdGZfZW51bSkgeworCQkJCWlzX2R1bXBl
+ZCA9IDE7CisJCQkJYnJlYWs7CisJCQl9CisJCQlkdW1wZWQgPSBkdW1wZWQtPm5leHQ7CisJCX0K
+KwkJYnJlYWs7CiAJZGVmYXVsdDoKIAkJV0FSTl9PTl9PTkNFKDEpOwogCQlyZXR1cm4gLUVJTlZB
+TDsKQEAgLTcyNiw2ICs3MzcsOSBAQCBzdGF0aWMgaW50IF9sdHRuZ190eXBlX21ldGFkYXRhX21h
+cmtfZHVtcGVkKHN0cnVjdCBsdHRuZ19zZXNzaW9uICpzZXNzaW9uLAogCWNhc2UgbXR5cGVfc3Ry
+dWN0OgogCQlkdW1wZWQtPmR1bXBlZF9wdHIuc3RydWN0X2Rlc2MgPSBtZXRhZGF0YS0+bS5jdGZf
+c3Quc3RydWN0X2Rlc2M7CiAJCWJyZWFrOworCWNhc2UgbXR5cGVfZW51bToKKwkJZHVtcGVkLT5k
+dW1wZWRfcHRyLmN0Zl9lbnVtID0gbWV0YWRhdGEtPm0uY3RmX2VudW07CisJCWJyZWFrOwogCWRl
+ZmF1bHQ6CiAJCVdBUk5fT05fT05DRSgxKTsKIAkJcmV0dXJuIC1FSU5WQUw7CkBAIC03NzcsNiAr
+NzkxLDUxIEBAIGludCBfbHR0bmdfdHlwZV9tZXRhZGF0YV9kb19zdGF0ZWR1bXAoc3RydWN0IGx0
+dG5nX3Nlc3Npb24gKnNlc3Npb24sCiAJCWlmIChyZXQpCiAJCQlyZXR1cm4gcmV0OwogCQlicmVh
+azsKKwljYXNlIG10eXBlX2VudW06CisJCXJldCA9IGx0dG5nX21ldGFkYXRhX3ByaW50ZihzZXNz
+aW9uLAorCQkJImVudW0gJXMgOiBpbnRlZ2VyIHsgc2l6ZSA9ICV1OyBhbGlnbiA9ICV1OyBzaWdu
+ZWQgPSAldTsgYmFzZSA9ICV1OyVzIH0ge1xuIiwKKwkJCW1ldGEtPm0uY3RmX2VudW0tPm5hbWUs
+CisJCQltZXRhLT5tLmN0Zl9lbnVtLT5jb250YWluZXJfdHlwZS51LmJhc2ljLmludGVnZXIuc2l6
+ZSwKKwkJCW1ldGEtPm0uY3RmX2VudW0tPmNvbnRhaW5lcl90eXBlLnUuYmFzaWMuaW50ZWdlci5h
+bGlnbm1lbnQsCisJCQltZXRhLT5tLmN0Zl9lbnVtLT5jb250YWluZXJfdHlwZS51LmJhc2ljLmlu
+dGVnZXIuc2lnbmVkbmVzcywKKwkJCW1ldGEtPm0uY3RmX2VudW0tPmNvbnRhaW5lcl90eXBlLnUu
+YmFzaWMuaW50ZWdlci5iYXNlLAorI2lmZGVmIF9fQklHX0VORElBTgorCQkJbWV0YS0+bS5jdGZf
+ZW51bS0+Y29udGFpbmVyX3R5cGUudS5iYXNpYy5pbnRlZ2VyLnJldmVyc2VfYnl0ZV9vcmRlciA/
+ICIgYnl0ZV9vcmRlciA9IGxlOyIgOiAiIgorI2Vsc2UKKwkJCW1ldGEtPm0uY3RmX2VudW0tPmNv
+bnRhaW5lcl90eXBlLnUuYmFzaWMuaW50ZWdlci5yZXZlcnNlX2J5dGVfb3JkZXIgPyAiIGJ5dGVf
+b3JkZXIgPSBiZTsiIDogIiIKKyNlbmRpZgorCQkpOworCQlpZiAocmV0KQorCQkJcmV0dXJuIHJl
+dDsKKworCQkvKiBQcmludCBlbnVtZXJhdGlvbnMgKi8KKwkJZm9yIChpID0gMDsgaSA8IG1ldGEt
+Pm0uY3RmX2VudW0tPmxlbjsgaSsrKSB7CisJCQljb25zdCBzdHJ1Y3QgbHR0bmdfZW51bV9lbnRy
+eSAqZW50cnk7CisKKwkJCWVudHJ5ID0gJm1ldGEtPm0uY3RmX2VudW0tPmVudHJpZXNbaV07CisJ
+CQlpZiAoZW50cnktPnN0YXJ0ID09IGVudHJ5LT5lbmQpIHsKKwkJCQlyZXQgPSBsdHRuZ19tZXRh
+ZGF0YV9wcmludGYoc2Vzc2lvbiwKKwkJCQkJIiVzID0gJWQsXG4iLAorCQkJCQllbnRyeS0+c3Ry
+aW5nLAorCQkJCQllbnRyeS0+c3RhcnQKKwkJCQkpOworCQkJfSBlbHNlIHsKKwkJCQlyZXQgPSBs
+dHRuZ19tZXRhZGF0YV9wcmludGYoc2Vzc2lvbiwKKwkJCQkJIiVzID0gJWQgLi4uICVkLFxuIiwK
+KwkJCQkJZW50cnktPnN0cmluZywKKwkJCQkJZW50cnktPnN0YXJ0LAorCQkJCQllbnRyeS0+ZW5k
+CisJCQkJKTsKKwkJCX0KKworCQkJaWYgKHJldCkKKwkJCQlyZXR1cm4gcmV0OworCQl9CisJCXJl
+dCA9IGx0dG5nX21ldGFkYXRhX3ByaW50ZihzZXNzaW9uLAorCQkJCSJ9O1xuXG4iKTsKKwkJaWYg
+KHJldCkKKwkJCXJldHVybiByZXQ7CisJCWJyZWFrOwogCWRlZmF1bHQ6CiAJCVdBUk5fT05fT05D
+RSgxKTsKIAkJcmV0dXJuIC1FSU5WQUw7CmRpZmYgLS1naXQgYS9sdHRuZy1ldmVudHMuaCBiL2x0
+dG5nLWV2ZW50cy5oCmluZGV4IDY3YzQ5ZjEuLjlmMDk4YmUgMTAwNjQ0Ci0tLSBhL2x0dG5nLWV2
+ZW50cy5oCisrKyBiL2x0dG5nLWV2ZW50cy5oCkBAIC01NCw2ICs1NCw3IEBAIGVudW0gYWJzdHJh
+Y3RfdHlwZXMgewogLyogTWV0YWRhdGEgdHlwZXMgKi8KIGVudW0gbWV0YWRhdGFfdHlwZXMgewog
+CW10eXBlX3N0cnVjdCwKKwltdHlwZV9lbnVtLAogCU5SX01FVEFEQVRBX1RZUEVTLAogfTsKIApA
+QCAtOTYsNiArOTcsNyBAQCBzdHJ1Y3QgbHR0bmdfaW50ZWdlcl90eXBlIHsKIHVuaW9uIF9sdHRu
+Z19iYXNpY190eXBlIHsKIAlzdHJ1Y3QgbHR0bmdfaW50ZWdlcl90eXBlIGludGVnZXI7CiAJc3Ry
+dWN0IHsKKwkJY29uc3QgY2hhciAqcHJvdmlkZXI7CiAJCWNvbnN0IGNoYXIgKm5hbWU7CiAJfSBl
+bnVtZXJhdGlvbjsKIAlzdHJ1Y3QgewpAQCAtMTg2LDEyICsxODgsMTQgQEAgc3RydWN0IGx0dG5n
+X21ldGFkYXRhIHsKIAkJCWNvbnN0IHN0cnVjdCBsdHRuZ19tZXRhZGF0YSAqdHlwZV9tZXRhZGF0
+YTsKIAkJCXVuc2lnbmVkIGludCBucl9tZXRhZGF0YTsKIAkJfSBjdGZfc3Q7CisJCWNvbnN0IHN0
+cnVjdCBsdHRuZ19lbnVtICpjdGZfZW51bTsKIAl9IG07CiB9OwogCiBzdHJ1Y3QgbHR0bmdfbWV0
+YWRhdGFfZHVtcGVkX2RhdGEgewogCXVuaW9uIHsKIAkJY29uc3Qgc3RydWN0IGx0dG5nX3N0cnVj
+dF9kZXNjICpzdHJ1Y3RfZGVzYzsKKwkJY29uc3Qgc3RydWN0IGx0dG5nX2VudW0gKmN0Zl9lbnVt
+OwogCX0gZHVtcGVkX3B0cjsKIAlzdHJ1Y3QgbHR0bmdfbWV0YWRhdGFfZHVtcGVkX2RhdGEgKm5l
+eHQ7CiB9OwpkaWZmIC0tZ2l0IGEvcHJvYmVzL2x0dG5nLWV2ZW50cy1yZXNldC5oIGIvcHJvYmVz
+L2x0dG5nLWV2ZW50cy1yZXNldC5oCmluZGV4IGRkNjBjYTYuLjZkNTMzZDEgMTAwNjQ0Ci0tLSBh
+L3Byb2Jlcy9sdHRuZy1ldmVudHMtcmVzZXQuaAorKysgYi9wcm9iZXMvbHR0bmctZXZlbnRzLXJl
+c2V0LmgKQEAgLTI2LDYgKzI2LDkgQEAKICN1bmRlZiBfX2ZpZWxkX2Z1bGwKICNkZWZpbmUgX19m
+aWVsZF9mdWxsKF90eXBlLCBfaXRlbSwgX29yZGVyLCBfYmFzZSkKIAorI3VuZGVmIF9fZmllbGRf
+ZW51bQorI2RlZmluZSBfX2ZpZWxkX2VudW0oX3Byb3ZpZGVyLCBfdHlwZSwgX2l0ZW0pCisKICN1
+bmRlZiBfX2FycmF5X2VuY19leHQKICNkZWZpbmUgX19hcnJheV9lbmNfZXh0KF90eXBlLCBfaXRl
+bSwgX2xlbmd0aCwgX29yZGVyLCBfYmFzZSwgX2VuY29kaW5nKQogCkBAIC0xMDksMyArMTEyLDYg
+QEAKIAogI3VuZGVmIFRSQUNFUE9JTlRfU1RSVUNUCiAjZGVmaW5lIFRSQUNFUE9JTlRfU1RSVUNU
+KF9wcm92aWRlciwgX25hbWUsIF9wcm90bywgX2FyZ3MsIF9maWVsZHMpCisKKyN1bmRlZiBUUkFD
+RVBPSU5UX0VOVU0KKyNkZWZpbmUgVFJBQ0VQT0lOVF9FTlVNKF9wcm92aWRlciwgX25hbWUsIF90
+eXBlLCBfZW51bSkKZGlmZiAtLWdpdCBhL3Byb2Jlcy9sdHRuZy1ldmVudHMuaCBiL3Byb2Jlcy9s
+dHRuZy1ldmVudHMuaAppbmRleCA5M2Y0YWJjLi5jN2YxYmY5IDEwMDY0NAotLS0gYS9wcm9iZXMv
+bHR0bmctZXZlbnRzLmgKKysrIGIvcHJvYmVzL2x0dG5nLWV2ZW50cy5oCkBAIC0xNTcsNiArMTU3
+LDMxIEBAIHZvaWQgdHJhY2VfIyNfbmFtZSh2b2lkICpfX2RhdGEpOwogI2luY2x1ZGUgVFJBQ0Vf
+SU5DTFVERShUUkFDRV9JTkNMVURFX0ZJTEUpCiAKIC8qCisgKiBTdGFnZSAxLjkgb2YgdGhlIHRy
+YWNlIGV2ZW50cy4KKyAqCisgKiBVbmZvbGQgZW51bSBlbnRyaWVzCisgKi8KKworI2luY2x1ZGUg
+Imx0dG5nLWV2ZW50cy1yZXNldC5oIgkvKiBSZXNldCBhbGwgbWFjcm9zIHdpdGhpbiBUUkFDRV9F
+VkVOVCAqLworCisvKiBOYW1lZCBmaWVsZCB0eXBlcyBtdXN0IGJlIGRlZmluZWQgaW4gbHR0bmct
+dHlwZXMuaCAqLworCisjdW5kZWYgVFBfRU5VTQorI2RlZmluZSBUUF9FTlVNKGFyZ3MuLi4pIGFy
+Z3MJLyogT25seSBvbmUgdXNlZCBpbiB0aGlzIHBoYXNlICovCisKKyNkZWZpbmUgU1RBR0VfRVhQ
+T1JUX0VOVU1TCisjaW5jbHVkZSAibHR0bmctdHlwZXMuaCIKKworI3VuZGVmIFRSQUNFUE9JTlRf
+RU5VTQorI2RlZmluZSBUUkFDRVBPSU5UX0VOVU0oX3Byb3ZpZGVyLCBfbmFtZSwgX3R5cGUsIF9l
+bnVtKQkJCVwKKwlUUkFDRV9FVkVOVF9FTlVNKGVudW1fIyNfcHJvdmlkZXIjI18jI19uYW1lLCBf
+ZW51bSkKKworI3VuZGVmIFNUQUdFX0VYUE9SVF9FTlVNUworCisjaW5jbHVkZSBUUkFDRV9JTkNM
+VURFKFRSQUNFX0lOQ0xVREVfRklMRSkKKworCisvKgogICogU3RhZ2UgMiBvZiB0aGUgdHJhY2Ug
+ZXZlbnRzLgogICoKICAqIENyZWF0ZSBldmVudCBmaWVsZCB0eXBlIG1ldGFkYXRhIHNlY3Rpb24u
+CkBAIC0yNzUsNiArMzAwLDE4IEBAIHZvaWQgdHJhY2VfIyNfbmFtZSh2b2lkICpfX2RhdGEpOwog
+CSAgfSwJCQkJCQkJXAogCX0sCiAKKyN1bmRlZiBfX2ZpZWxkX2VudW0KKyNkZWZpbmUgX19maWVs
+ZF9lbnVtKF9wcm92aWRlciwgX3R5cGUsIF9kYXRhX3R5cGUsIF9pdGVtKQkJXAorCXsJCQkJCQkJ
+CVwKKwkJLm5hbWUgPSAjX2l0ZW0sCQkJCQkJXAorCQkudHlwZSA9CQkJCQkJCVwKKwkJewkJCQkJ
+CQlcCisJCQkuYXR5cGUgPSBhdHlwZV9lbnVtLAkJCQlcCisJCQkudS5iYXNpYy5lbnVtZXJhdGlv
+bi5wcm92aWRlciA9ICNfcHJvdmlkZXIsCVwKKwkJCS51LmJhc2ljLmVudW1lcmF0aW9uLm5hbWUg
+PSAjX3R5cGUsCQlcCisJCX0sCQkJCQkJCVwKKwl9LAorCiAjdW5kZWYgVFBfU1RSVUNUX19lbnRy
+eQogI2RlZmluZSBUUF9TVFJVQ1RfX2VudHJ5KGFyZ3MuLi4pIGFyZ3MJLyogT25seSBvbmUgdXNl
+ZCBpbiB0aGlzIHBoYXNlICovCiAKQEAgLTM0MCw2ICszNzcsMTkgQEAgc3RhdGljIHN0cnVjdCBs
+dHRuZ19zdHJ1Y3RfZGVzYyBfX3N0cnVjdF9kZXNjX19fIyNfcHJvdmlkZXIjI18jI19uYW1lID0g
+e1wKIAkJLm93bmVyID0gVEhJU19NT0RVTEUsCQkJCQlcCiAJfTsKIAorI3VuZGVmIFRQX1RZUEUK
+KyNkZWZpbmUgVFBfVFlQRShfdHlwZSkgX3R5cGUKKworI2RlZmluZSBTVEFHRV9FWFBPUlRfVFlQ
+RVMKKyNpbmNsdWRlICJsdHRuZy10eXBlcy5oIgorCisjdW5kZWYgVFJBQ0VQT0lOVF9FTlVNCisj
+ZGVmaW5lIFRSQUNFUE9JTlRfRU5VTShfcHJvdmlkZXIsIF9uYW1lLCBfdHlwZSwgX2VudW0pCQkJ
+XAorc3RhdGljIGNvbnN0IHN0cnVjdCBsdHRuZ19lbnVtIF9fZW51bV9maWVsZF9fIyNfcHJvdmlk
+ZXIjI18jI19uYW1lW10gPSB7XAorCVRSQUNFX0VWRU5UX1RZUEVfX19lbnVtKGVudW1fIyNfcHJv
+dmlkZXIjI18jI19uYW1lLCBfdHlwZSl9OworCisjdW5kZWYgU1RBR0VfRVhQT1JUX1RZUEVTCisK
+ICNpbmNsdWRlIFRSQUNFX0lOQ0xVREUoVFJBQ0VfSU5DTFVERV9GSUxFKQogCiAvKgpAQCAtMzYx
+LDYgKzQxMSwxMiBAQCBzdGF0aWMgc3RydWN0IGx0dG5nX3N0cnVjdF9kZXNjIF9fc3RydWN0X2Rl
+c2NfX18jI19wcm92aWRlciMjXyMjX25hbWUgPSB7XAogCQkubS5jdGZfc3QubnJfbWV0YWRhdGEg
+PSBBUlJBWV9TSVpFKF9fdHlwZV9tZXRhZGF0YV9mb3JfXyMjX3Byb3ZpZGVyIyNfIyNfdHlwZSks
+XAogCX0sCiAKKyN1bmRlZiBfX2ZpZWxkX2VudW0KKyNkZWZpbmUgX19maWVsZF9lbnVtKF9wcm92
+aWRlciwgX3R5cGUsIF9kYXRhX3R5cGUsIF9pdGVtKQkJXAorCXsJCQkJCQkJCVwKKwkJLm10eXBl
+ID0gbXR5cGVfZW51bSwJCQkJCVwKKwkJLm0uY3RmX2VudW0gPSAmX19lbnVtX2ZpZWxkX18jI19w
+cm92aWRlciMjXyMjX3R5cGVbMF0JXAorCX0sCiAKICN1bmRlZiBUUF9TVFJVQ1RfX2VudHJ5CiAj
+ZGVmaW5lIFRQX1NUUlVDVF9fZW50cnkoYXJncy4uLikgYXJncwkvKiBPbmx5IG9uZSB1c2VkIGlu
+IHRoaXMgcGhhc2UgKi8KQEAgLTM3NCw4ICs0MzAsNiBAQCBzdGF0aWMgY29uc3Qgc3RydWN0IGx0
+dG5nX21ldGFkYXRhIF9fdHlwZV9tZXRhZGF0YV9mb3JfXyMjX3Byb3ZpZGVyIyNfIyNfbmFtZVtd
+CiAJX2ZpZWxkcwkJCQkJCQkJXAogfTsKIAotCi0KICN1bmRlZiBERUNMQVJFX0VWRU5UX0NMQVNT
+X05PQVJHUwogI2RlZmluZSBERUNMQVJFX0VWRU5UX0NMQVNTX05PQVJHUyhfbmFtZSwgX3RzdHJ1
+Y3QsIF9hc3NpZ24sIF9wcmludCkgXAogc3RhdGljIGNvbnN0IHN0cnVjdCBsdHRuZ19tZXRhZGF0
+YSBfX3R5cGVfbWV0YWRhdGFfZm9yX18jI19uYW1lW10gPSB7CVwKQEAgLTUxNiw2ICs1NzAsMTAg
+QEAgc3RhdGljIF9fdXNlZCBzdHJ1Y3QgbHR0bmdfcHJvYmVfZGVzYyBUUF9JRChfX3Byb2JlX2Rl
+c2NfX18sIFRSQUNFX1NZU1RFTSkgPSB7CiAjZGVmaW5lIF9fc3RydWN0KF9wcm92aWRlciwgX3R5
+cGUsIF9pdGVtLCBfcGFyYW1zKQkJCVwKIAlfX2V2ZW50X2xlbiArPSBfX3N0cnVjdF9nZXRfc2l6
+ZV9fIyNfcHJvdmlkZXIjI18jI190eXBlKF9wYXJhbXMpO1wKIAorI3VuZGVmIF9fZmllbGRfZW51
+bQorI2RlZmluZSBfX2ZpZWxkX2VudW0oX3Byb3ZpZGVyLCBfdHlwZSwgX2RhdGFfdHlwZSwgX2l0
+ZW0pCQlcCisJX19ldmVudF9sZW4gKz0gX19lbnVtX2dldF9zaXplX18jI19wcm92aWRlciMjXyMj
+X3R5cGUoKTsKKwogI3VuZGVmIFRQX1BST1RPCiAjZGVmaW5lIFRQX1BST1RPKGFyZ3MuLi4pIGFy
+Z3MKIApAQCAtNTI1LDYgKzU4Myw5IEBAIHN0YXRpYyBfX3VzZWQgc3RydWN0IGx0dG5nX3Byb2Jl
+X2Rlc2MgVFBfSUQoX19wcm9iZV9kZXNjX19fLCBUUkFDRV9TWVNURU0pID0gewogI3VuZGVmIFRQ
+X0ZJRUxEUwogI2RlZmluZSBUUF9GSUVMRFMoYXJncy4uLikgYXJncwogCisjdW5kZWYgVFBfVFlQ
+RQorI2RlZmluZSBUUF9UWVBFKF90eXBlKSBfdHlwZQorCiAjdW5kZWYgVFJBQ0VQT0lOVF9TVFJV
+Q1QKICNkZWZpbmUgVFJBQ0VQT0lOVF9TVFJVQ1QoX3Byb3ZpZGVyLCBfbmFtZSwgX3Byb3RvLCBf
+YXJncywgX2ZpZWxkcykJXAogc3RhdGljIGlubGluZSBzaXplX3QgX19zdHJ1Y3RfZ2V0X3NpemVf
+XyMjX3Byb3ZpZGVyIyNfIyNfbmFtZShfcHJvdG8pICAgXApAQCAtNTM1LDYgKzU5NiwxMyBAQCBz
+dGF0aWMgaW5saW5lIHNpemVfdCBfX3N0cnVjdF9nZXRfc2l6ZV9fIyNfcHJvdmlkZXIjI18jI19u
+YW1lKF9wcm90bykgICBcCiAJcmV0dXJuIF9fZXZlbnRfbGVuOwkJCQkJCVwKIH0KIAorI3VuZGVm
+IFRSQUNFUE9JTlRfRU5VTQorI2RlZmluZSBUUkFDRVBPSU5UX0VOVU0oX3Byb3ZpZGVyLCBfbmFt
+ZSwgX3R5cGUsIF9lbnVtKQkJCVwKK3N0YXRpYyBpbmxpbmUgc2l6ZV90IF9fZW51bV9nZXRfc2l6
+ZV9fIyNfcHJvdmlkZXIjI18jI19uYW1lKHZvaWQpCVwKK3sJCQkJCQkJCQlcCisJcmV0dXJuIHNp
+emVvZihfdHlwZSk7CQkJCQkJXAorfQkJCQkJCQkJCVwKKwogI2luY2x1ZGUgVFJBQ0VfSU5DTFVE
+RShUUkFDRV9JTkNMVURFX0ZJTEUpCiAKIC8qCkBAIC01NzQsNiArNjQyLDkgQEAgc3RhdGljIGlu
+bGluZSBzaXplX3QgX19zdHJ1Y3RfZ2V0X3NpemVfXyMjX3Byb3ZpZGVyIyNfIyNfbmFtZShfcHJv
+dG8pICAgXAogI3VuZGVmIFRSQUNFUE9JTlRfU1RSVUNUCiAjZGVmaW5lIFRSQUNFUE9JTlRfU1RS
+VUNUKF9wcm92aWRlciwgX25hbWUsIF9wcm90bywgX2FyZ3MsIF9maWVsZHMpCiAKKyN1bmRlZiBU
+UkFDRVBPSU5UX0VOVU0KKyNkZWZpbmUgVFJBQ0VQT0lOVF9FTlVNKF9wcm92aWRlciwgX25hbWUs
+IF90eXBlLCBfZW51bSkKKwogI3VuZGVmIERFQ0xBUkVfRVZFTlRfQ0xBU1MKICNkZWZpbmUgREVD
+TEFSRV9FVkVOVF9DTEFTUyhfbmFtZSwgX3Byb3RvLCBfYXJncywgX3RzdHJ1Y3QsIF9hc3NpZ24s
+IF9wcmludCkgIFwKIHN0YXRpYyBpbmxpbmUgc2l6ZV90IF9fZXZlbnRfZ2V0X3NpemVfXyMjX25h
+bWUoc2l6ZV90ICpfX2R5bmFtaWNfbGVuLCBfcHJvdG8pIFwKQEAgLTYyMyw2ICs2OTQsMTEgQEAg
+c3RhdGljIGlubGluZSBzaXplX3QgX19ldmVudF9nZXRfc2l6ZV9fIyNfbmFtZShzaXplX3QgKl9f
+ZHluYW1pY19sZW4sIF9wcm90bykgXAogCV9fZXZlbnRfYWxpZ24gPSBtYXhfdChzaXplX3QsIF9f
+ZXZlbnRfYWxpZ24sCQkJXAogCQlfX2luc3RydWN0X2dldF9hbGlnbl9fIyNfcHJvdmlkZXIjI18j
+I190eXBlKF9wYXJhbXMpKTsKIAorI3VuZGVmIF9fZmllbGRfZW51bQorI2RlZmluZSBfX2ZpZWxk
+X2VudW0oX3Byb3ZpZGVyLCBfdHlwZSwgX2RhdGFfdHlwZSwgX2l0ZW0pCQlcCisJX19ldmVudF9h
+bGlnbiA9IG1heF90KHNpemVfdCwgX19ldmVudF9hbGlnbiwJCQlcCisJCV9fZW51bV9nZXRfYWxp
+Z25fXyMjX3Byb3ZpZGVyIyNfIyNfdHlwZSgpKTsKKwogI3VuZGVmIFRQX1BST1RPCiAjZGVmaW5l
+IFRQX1BST1RPKGFyZ3MuLi4pIGFyZ3MKIApAQCAtNjM1LDYgKzcxMSw5IEBAIHN0YXRpYyBpbmxp
+bmUgc2l6ZV90IF9fZXZlbnRfZ2V0X3NpemVfXyMjX25hbWUoc2l6ZV90ICpfX2R5bmFtaWNfbGVu
+LCBfcHJvdG8pIFwKICN1bmRlZiBUUF9GSUVMRFMKICNkZWZpbmUgVFBfRklFTERTKGFyZ3MuLi4p
+IGFyZ3MKIAorI3VuZGVmIFRQX1RZUEUKKyNkZWZpbmUgVFBfVFlQRSh0eXBlKSB0eXBlCisKICN1
+bmRlZiBUUkFDRVBPSU5UX1NUUlVDVAogI2RlZmluZSBUUkFDRVBPSU5UX1NUUlVDVChfcHJvdmlk
+ZXIsIF9uYW1lLCBfcHJvdG8sIF9hcmdzLCBfZmllbGRzKQlcCiBzdGF0aWMgaW5saW5lIHNpemVf
+dCBfX3N0cnVjdF9nZXRfYWxpZ25fXyMjX3Byb3ZpZGVyIyNfIyNfbmFtZShfcHJvdG8pCVwKQEAg
+LTY0OCw2ICs3MjcsMTMgQEAgc3RhdGljIGlubGluZSBzaXplX3QgX19pbnN0cnVjdF9nZXRfYWxp
+Z25fXyMjX3Byb3ZpZGVyIyNfIyNfbmFtZShfcHJvdG8pXAogCXJldHVybiBfX3N0cnVjdF9nZXRf
+YWxpZ25fXyMjX3Byb3ZpZGVyIyNfIyNfbmFtZShfYXJncyk7CVwKIH0KIAorI3VuZGVmIFRSQUNF
+UE9JTlRfRU5VTQorI2RlZmluZSBUUkFDRVBPSU5UX0VOVU0oX3Byb3ZpZGVyLCBfbmFtZSwgX3R5
+cGUsIF9lbnVtKQkJCVwKK3N0YXRpYyBpbmxpbmUgc2l6ZV90IF9fZW51bV9nZXRfYWxpZ25fXyMj
+X3Byb3ZpZGVyIyNfIyNfbmFtZSh2b2lkKQlcCit7CQkJCQkJCQkJXAorCXJldHVybiBsdHRuZ19h
+bGlnbm9mKF90eXBlKTsJCQkJCVwKK30KKwogI3VuZGVmIERFQ0xBUkVfRVZFTlRfQ0xBU1MKICNk
+ZWZpbmUgREVDTEFSRV9FVkVOVF9DTEFTUyhfbmFtZSwgX3Byb3RvLCBfYXJncywgX3RzdHJ1Y3Qs
+IF9hc3NpZ24sIF9wcmludCkgIFwKIHN0YXRpYyBpbmxpbmUgc2l6ZV90IF9fZXZlbnRfZ2V0X2Fs
+aWduX18jI19uYW1lKF9wcm90bykJCQkgICAgICBcCkBAIC02OTEsNiArNzc3LDEwIEBAIHN0YXRp
+YyBpbmxpbmUgc2l6ZV90IF9fZXZlbnRfZ2V0X2FsaWduX18jI19uYW1lKF9wcm90bykJCQkgICAg
+ICBcCiAjdW5kZWYgX19zdHJ1Y3QKICNkZWZpbmUgX19zdHJ1Y3QoX3Byb3ZpZGVyLCBfdHlwZSwg
+X2l0ZW0sIF9wYXJhbXMpCWNoYXIgX2l0ZW07CiAKKyN1bmRlZiBfX2ZpZWxkX2VudW0KKyNkZWZp
+bmUgX19maWVsZF9lbnVtKF9wcm92aWRlciwgX3R5cGUsIF9kYXRhX3R5cGUsIF9pdGVtKQkJXAor
+CV9kYXRhX3R5cGUgX2l0ZW07CisKICN1bmRlZiBUUF9TVFJVQ1RfX2VudHJ5CiAjZGVmaW5lIFRQ
+X1NUUlVDVF9fZW50cnkoYXJncy4uLikgYXJncwogCkBAIC03MDAsNiArNzkwLDE1IEBAIHN0cnVj
+dCBfX2V2ZW50X3R5cGVtYXBfXyMjX25hbWUgewkJCQkJICAgICAgXAogCV90c3RydWN0CQkJCQkJ
+CSAgICAgIFwKIH07CiAKKyN1bmRlZiBUUF9UWVBFCisjZGVmaW5lIFRQX1RZUEUodHlwZSkgdHlw
+ZQorCisjdW5kZWYgVFJBQ0VQT0lOVF9FTlVNCisjZGVmaW5lIFRSQUNFUE9JTlRfRU5VTShfcHJv
+dmlkZXIsIF9uYW1lLCBfdHlwZSwgX2VudW0pCQkJXAorc3RydWN0IF9fZW51bV9zdHJ1Y3RfXyMj
+X3Byb3ZpZGVyIyNfIyNfbmFtZSB7CQkJCVwKKwlfdHlwZSBpdGVtOwkJCQkJCQlcCit9OworCiAj
+aW5jbHVkZSBUUkFDRV9JTkNMVURFKFRSQUNFX0lOQ0xVREVfRklMRSkKIAogLyoKQEAgLTc0Niw2
+ICs4NDUsMTEgQEAgX19lbmRfZmllbGRfIyNfaXRlbToKIAlnb3RvIF9fYXNzaWduXyMjX2l0ZW07
+CQkJCQkJXAogX19lbmRfZmllbGRfIyNfaXRlbToKIAorI3VuZGVmIF9fZmllbGRfZW51bQorI2Rl
+ZmluZSBfX2ZpZWxkX2VudW0oX3Byb3ZpZGVyLCBfdHlwZSwgX2RhdGFfdHlwZSwgX2l0ZW0pCQlc
+CisJZ290byBfX2Fzc2lnbl8jI19pdGVtOwkJCQkJCVwKK19fZW5kX2ZpZWxkXyMjX2l0ZW06CisK
+IC8qCiAgKiBNYWNyb3MgbWFwcGluZyB0cF9hc3NpZ24oKSB0byAiPSIsIHRwX21lbWNweSgpIHRv
+IG1lbWNweSgpIGFuZCB0cF9zdHJjcHkoKSB0bwogICogc3RyY3B5KCkuCi0tIAoxLjguMi4xCgoK
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRu
+Zy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
