@@ -1,20 +1,20 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-ust] Fix: make 'hello.cxx' compile
-	with g++
-Date: Sun, 21 Apr 2013 09:37:53 -0400
-Message-ID: <20130421133753.GA26620__35735.4315616705$1366551505$gmane$org@Krystal>
-References: <1366511041-28805-1-git-send-email-soariez@gmail.com>
+Subject: Re: [RFC-patch] Add support of struct metadata
+	in	tracepoints
+Date: Sun, 21 Apr 2013 09:50:06 -0400
+Message-ID: <20130421135006.GA27816__25007.7418204912$1366552235$gmane$org@Krystal>
+References: <1366309257-17855-1-git-send-email-gbastien+lttng@versatic.net>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UTuSp-00049M-Rb
-	for lttng-dev@lists.lttng.org; Sun, 21 Apr 2013 09:37:55 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1UTuee-0004G9-Gz
+	for lttng-dev@lists.lttng.org; Sun, 21 Apr 2013 09:50:08 -0400
 Content-Disposition: inline
-In-Reply-To: <1366511041-28805-1-git-send-email-soariez@gmail.com>
+In-Reply-To: <1366309257-17855-1-git-send-email-gbastien+lttng@versatic.net>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,312 +23,549 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Zifei Tong <soariez@gmail.com>
+To: =?iso-8859-1?Q?Genevi=E8ve?= Bastien <gbastien+lttng@versatic.net>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
+* Genevi=E8ve Bastien (gbastien+lttng@versatic.net) wrote:
+> Introduce the new macro TRACEPOINT_STRUCT to define ctf struct metadata
+> that can be used by tracepoints using _struct as entry and tp_memcpy_stru=
+ct
+> to copy a struct field.
+> Struct metadata can contain nested structs.
+> This extra metadata is added to the metadata file only if events use it.
 
-Thanks for submitting this patch. Here are a couple of comments to
-improve it.
+Have you tried nesting structures into a sequence or array ? What
+changes would be needed to support this ?
 
-* Zifei Tong (soariez@gmail.com) wrote:
-> Fixes #338
+More comments below,
 
-Are those changes also compatible with the LLVM c++ compiler ?
+> =
 
-By the way, we should add a "-Wc++-compat" when compiling those headers
-under C, so we quickly spot the changes that are not compatible across
-both C and C++.
-
-> 
-> Signed-off-by: Zifei Tong <soariez@gmail.com>
+> Signed-off-by: Genevi=E8ve Bastien <gbastien+lttng@versatic.net>
 > ---
->  include/lttng/ringbuffer-config.h    |  5 +++++
->  include/lttng/tracepoint-event.h     | 12 ++++++------
->  include/lttng/ust-events.h           |  8 ++++----
->  include/lttng/ust-tracepoint-event.h | 19 ++++++++++---------
->  tests/hello.cxx/Makefile.am          |  2 +-
->  tests/hello.cxx/tp.c                 | 26 --------------------------
->  tests/hello.cxx/tp.cpp               | 26 ++++++++++++++++++++++++++
->  7 files changed, 52 insertions(+), 46 deletions(-)
->  delete mode 100644 tests/hello.cxx/tp.c
->  create mode 100644 tests/hello.cxx/tp.cpp
-> 
-> diff --git a/include/lttng/ringbuffer-config.h b/include/lttng/ringbuffer-config.h
-> index ca52fc7..bb01eab 100644
-> --- a/include/lttng/ringbuffer-config.h
-> +++ b/include/lttng/ringbuffer-config.h
-> @@ -347,8 +347,13 @@ int lib_ring_buffer_check_config(const struct lttng_ust_lib_ring_buffer_config *
->  			     unsigned int switch_timer_interval,
->  			     unsigned int read_timer_interval)
+>  lttng-events.c              | 166 ++++++++++++++++++++++++++++++++++-
+>  lttng-events.h              |  44 ++++++++++
+>  probes/lttng-events-reset.h |  15 ++++
+>  probes/lttng-events.h       | 206 ++++++++++++++++++++++++++++++++++++++=
+++++--
+>  4 files changed, 421 insertions(+), 10 deletions(-)
+> =
+
+> diff --git a/lttng-events.c b/lttng-events.c
+> index 4f30904..b332c29 100644
+> --- a/lttng-events.c
+> +++ b/lttng-events.c
+> @@ -61,6 +61,7 @@ void synchronize_trace(void)
+>  struct lttng_session *lttng_session_create(void)
 >  {
-> +	#ifdef __cplusplus
-> +	if (config->alloc == lttng_ust_lib_ring_buffer_config::RING_BUFFER_ALLOC_GLOBAL
-> +	    && config->sync == lttng_ust_lib_ring_buffer_config::RING_BUFFER_SYNC_PER_CPU
-> +	#else
->  	if (config->alloc == RING_BUFFER_ALLOC_GLOBAL
->  	    && config->sync == RING_BUFFER_SYNC_PER_CPU
-> +	#endif
+>  	struct lttng_session *session;
+> +	int i;
+>  =
 
-inlined precompiler directives like this make the function hard to
-follow (mix of #if/#else/#endif and if/else).
-
-We should find a better way to encapsulate this change.
-
-Why is this lttng_ust_lib_ring_buffer_config:: scoping needed in c++ ?
-
->  	    && switch_timer_interval)
->  		return -EINVAL;
->  	return 0;
-> diff --git a/include/lttng/tracepoint-event.h b/include/lttng/tracepoint-event.h
-> index 077eaa0..4630788 100644
-> --- a/include/lttng/tracepoint-event.h
-> +++ b/include/lttng/tracepoint-event.h
-> @@ -20,12 +20,12 @@
->   * SOFTWARE.
->   */
->  
-> +#ifdef TRACEPOINT_CREATE_PROBES
-> +
->  #ifdef __cplusplus
->  extern "C" {
->  #endif
->  
-> -#ifdef TRACEPOINT_CREATE_PROBES
-> -
->  #define __tp_stringify1(x)	#x
->  #define __tp_stringify(x)	__tp_stringify1(x)
->  
-> @@ -65,10 +65,10 @@ extern "C" {
->  #undef TRACEPOINT_INCLUDE_FILE
->  #undef TRACEPOINT_INCLUDE
->  
-> -#define TRACEPOINT_CREATE_PROBES
-> -
-> -#endif /* TRACEPOINT_CREATE_PROBES */
-> -
->  #ifdef __cplusplus
+>  	mutex_lock(&sessions_mutex);
+>  	session =3D kzalloc(sizeof(struct lttng_session), GFP_KERNEL);
+> @@ -70,6 +71,11 @@ struct lttng_session *lttng_session_create(void)
+>  	INIT_LIST_HEAD(&session->events);
+>  	uuid_le_gen(&session->uuid);
+>  	list_add(&session->list, &sessions);
+> +	/* Initialize dumped metadata */
+> +	for (i =3D 0; i < NR_METADATA_TYPES; i++) {
+> +		session->dumped_metadata[i].nr_metadata =3D 0;
+> +		session->dumped_metadata[i].next =3D 0;
+> +	}
+>  	mutex_unlock(&sessions_mutex);
+>  	return session;
 >  }
->  #endif
+> @@ -78,7 +84,8 @@ void lttng_session_destroy(struct lttng_session *sessio=
+n)
+>  {
+>  	struct lttng_channel *chan, *tmpchan;
+>  	struct lttng_event *event, *tmpevent;
+> -	int ret;
+> +	struct lttng_metadata_dumped_data *dumped;
+> +	int ret, i, j;
+
+int ret, i;
+
+>  =
+
+>  	mutex_lock(&sessions_mutex);
+>  	ACCESS_ONCE(session->active) =3D 0;
+> @@ -96,6 +103,15 @@ void lttng_session_destroy(struct lttng_session *sess=
+ion)
+>  	list_for_each_entry_safe(chan, tmpchan, &session->chan, list)
+>  		_lttng_channel_destroy(chan);
+>  	list_del(&session->list);
+> +	/* Destroy dumped metadata */
+> +	for (i =3D 0; i < NR_METADATA_TYPES; i++) {
+
+int j;
+
+
+(limit scope)
+
+> +		dumped =3D session->dumped_metadata[i].next;
+> +		for (j =3D 0; j < session->dumped_metadata[i].nr_metadata; j++) {
+> +			dumped =3D dumped->next;
+> +			kfree(dumped);
+> +		}
 > +
-> +#define TRACEPOINT_CREATE_PROBES
+> +	}
+>  	mutex_unlock(&sessions_mutex);
+>  	kfree(session);
+>  }
+[...]
+
+> diff --git a/probes/lttng-events-reset.h b/probes/lttng-events-reset.h
+> index 44e8ba5..dd60ca6 100644
+> --- a/probes/lttng-events-reset.h
+> +++ b/probes/lttng-events-reset.h
+> @@ -20,6 +20,9 @@
+>  =
+
+>  /* Reset macros used within TRACE_EVENT to "nothing" */
+>  =
+
+> +#undef TRACE_METADATA
+> +#define TRACE_METADATA 1
+
+What is TRACE_METADATA used for ?
+
 > +
-> +#endif /* TRACEPOINT_CREATE_PROBES */
-> diff --git a/include/lttng/ust-events.h b/include/lttng/ust-events.h
-> index 749478a..4ef918b 100644
-> --- a/include/lttng/ust-events.h
-> +++ b/include/lttng/ust-events.h
-> @@ -90,7 +90,7 @@ struct lttng_enum_entry {
->  #define __type_integer(_type, _byte_order, _base, _encoding)	\
->  	{							\
->  	    .atype = atype_integer,				\
-> -	    .u.basic.integer =					\
-> +	    .u = {.basic = {.integer =				\
->  		{						\
->  		  .size = sizeof(_type) * CHAR_BIT,		\
->  		  .alignment = lttng_alignof(_type) * CHAR_BIT,	\
-> @@ -98,7 +98,7 @@ struct lttng_enum_entry {
->  		  .reverse_byte_order = _byte_order != BYTE_ORDER,	\
->  		  .base = _base,				\
->  		  .encoding = lttng_encode_##_encoding,		\
-> -		},						\
-> +		}}},						\
->  	}							\
->  
->  #define LTTNG_UST_INTEGER_TYPE_PADDING	24
-> @@ -124,14 +124,14 @@ struct lttng_integer_type {
->  #define __type_float(_type)					\
->  	{							\
->  	    .atype = atype_float,				\
-> -	    .u.basic._float =					\
-> +	    .u = {.basic = {._float =				\
->  		{						\
->  		  .exp_dig = sizeof(_type) * CHAR_BIT		\
->  				- _float_mant_dig(_type),	\
->  		  .mant_dig = _float_mant_dig(_type),		\
->  		  .alignment = lttng_alignof(_type) * CHAR_BIT,	\
->  		  .reverse_byte_order = BYTE_ORDER != FLOAT_WORD_ORDER, \
-> -		},						\
-> +		}}},						\
+>  #undef __field_full
+>  #define __field_full(_type, _item, _order, _base)
+>  =
 
-changes to this file (above) do not respect coding style.
+> @@ -35,6 +38,9 @@
+>  #undef __string
+>  #define __string(_item, _src)
+>  =
 
-Missing spaces before ".", missing newlines and indendation for added
-{ }.
+> +#undef __struct
+> +#define __struct(_provider, _type, _item, _params)
+> +
+>  #undef tp_assign
+>  #define tp_assign(dest, src)
+>  =
 
->  	}							\
->  
->  #define LTTNG_UST_FLOAT_TYPE_PADDING	24
-> diff --git a/include/lttng/ust-tracepoint-event.h b/include/lttng/ust-tracepoint-event.h
-> index e46cc1a..f8df87c 100644
-> --- a/include/lttng/ust-tracepoint-event.h
-> +++ b/include/lttng/ust-tracepoint-event.h
-> @@ -147,12 +147,12 @@ static const char							\
->  	  .type =						\
->  		{						\
->  		  .atype = atype_array,				\
-> -		  .u.array =					\
-> +		  .u = {.array =				\
->  			{					\
-> -			    .length = _length,			\
->  			    .elem_type = __type_integer(_type, BYTE_ORDER, 10, _encoding), \
-> +			    .length = _length,			\
->  			},					\
-> -		},						\
-> +		}},						\
->  	  .nowrite = _nowrite,					\
->  	},
->  
-> @@ -164,11 +164,11 @@ static const char							\
->  	  .type =						\
->  		{						\
->  		  .atype = atype_sequence,			\
-> -		  .u.sequence =					\
-> +		  .u = {.sequence =				\
->  			{					\
->  			    .length_type = __type_integer(_length_type, BYTE_ORDER, 10, none), \
->  			    .elem_type = __type_integer(_type, BYTE_ORDER, 10, _encoding), \
-> -			},					\
-> +			}},					\
->  		},						\
->  	  .nowrite = _nowrite,					\
->  	},
-> @@ -180,7 +180,7 @@ static const char							\
->  	  .type =						\
->  		{						\
->  		  .atype = atype_string,			\
-> -		  .u.basic.string.encoding = lttng_encode_UTF8,	\
-> +		  .u = {.basic = {.string = {.encoding = lttng_encode_UTF8}}},	\
->  		},						\
->  	  .nowrite = _nowrite,					\
+> @@ -47,6 +53,9 @@
+>  #undef tp_strcpy
+>  #define tp_strcpy(dest, src)
+>  =
 
-same above about coding style.
+> +#undef tp_memcpy_struct
+> +#define tp_memcpy_struct(provider, name, dest, src)
+> +
+>  #undef __get_str
+>  #define __get_str(field)
+>  =
 
->  	},
-> @@ -483,7 +483,7 @@ void __event_probe__##_provider##___##_name(_TP_ARGS_DATA_PROTO(_args));      \
->  static									      \
->  void __event_probe__##_provider##___##_name(_TP_ARGS_DATA_PROTO(_args))	      \
->  {									      \
-> -	struct lttng_event *__event = __tp_data;			      \
-> +	struct lttng_event *__event = (struct lttng_event*) __tp_data;			      \
+> @@ -65,6 +74,9 @@
+>  #undef TP_STRUCT__entry
+>  #define TP_STRUCT__entry(args...)
+>  =
 
-coding style: space before *
+> +#undef TP_FIELDS
+> +#define TP_FIELDS(args...)
+> +
+>  #undef TP_fast_assign
+>  #define TP_fast_assign(args...)
+>  =
 
->  	struct lttng_channel *__chan = __event->chan;			      \
->  	struct lttng_ust_lib_ring_buffer_ctx __ctx;			      \
->  	size_t __event_len, __event_align;				      \
-> @@ -612,13 +612,14 @@ static const char *							       \
->  	__ref_model_emf_uri___##_provider##___##_name			       \
->  	__attribute__((weakref ("_model_emf_uri___" #_provider "___" #_name)));\
->  const struct lttng_event_desc __event_desc___##_provider##_##_name = {	       \
-> -	.fields = __event_fields___##_provider##___##_template,		       \
->  	.name = #_provider ":" #_name,					       \
->  	.probe_callback = (void (*)(void)) &__event_probe__##_provider##___##_template,\
-> +	.ctx = NULL,							       \
+> @@ -94,3 +106,6 @@
+>  =
 
-So each field need to be listed ? We usually don't put NULL
-initialization for structures that are always in zero-initialized
-memory. (coding style)
+>  #undef TRACE_EVENT_FLAGS
+>  #define TRACE_EVENT_FLAGS(name, value)
+> +
+> +#undef TRACEPOINT_STRUCT
+> +#define TRACEPOINT_STRUCT(_provider, _name, _proto, _args, _fields)
+> diff --git a/probes/lttng-events.h b/probes/lttng-events.h
+> index 8a3a886..93f4abc 100644
+> --- a/probes/lttng-events.h
+> +++ b/probes/lttng-events.h
+> @@ -263,9 +263,31 @@ void trace_##_name(void *__data);
+>  #define __string_from_user(_item, _src)				\
+>  	__string(_item, _src)
+>  =
 
-> +	.fields = __event_fields___##_provider##___##_template,		       \
->  	.nr_fields = _TP_ARRAY_SIZE(__event_fields___##_provider##___##_template), \
->  	.loglevel = &__ref_loglevel___##_provider##___##_name,		       \
->  	.signature = __tp_event_signature___##_provider##___##_template,       \
-> -	.u.ext.model_emf_uri = &__ref_model_emf_uri___##_provider##___##_name, \
-> +	.u = {.ext = {.model_emf_uri = &__ref_model_emf_uri___##_provider##___##_name}},\
+> +#undef __struct
+> +#define __struct(_provider, _type, _item, _params)		\
+> +	{							\
+> +	  .name =3D #_item,					\
+> +	  .type =3D						\
+> +	  {							\
+> +		.atype =3D atype_struct,				\
+> +		.u.ctf_struct.provider =3D #_provider,		\
+> +		.u.ctf_struct.name =3D #_type,			\
+> +	  },							\
+> +	},
+> +
+>  #undef TP_STRUCT__entry
+>  #define TP_STRUCT__entry(args...) args	/* Only one used in this phase */
+>  =
 
-coding style (missing spaces).
+> +#undef TP_FIELDS
+> +#define TP_FIELDS(args...) args	/* Only one used in this phase */
+> +
+> +#undef TRACEPOINT_STRUCT
+> +#define TRACEPOINT_STRUCT(_provider, _name, _proto, _args, _fields)	\
+> +	static const struct lttng_event_field			\
+> +		__struct_fields___##_provider##_##_name[] =3D {	\
+> +			_fields					\
+> +	};
+> +
+>  #undef DECLARE_EVENT_CLASS_NOARGS
+>  #define DECLARE_EVENT_CLASS_NOARGS(_name, _tstruct, _assign, _print) \
+>  	static const struct lttng_event_field __event_fields___##_name[] =3D { \
+> @@ -301,6 +323,74 @@ static void __event_probe__##_name(void *__data);
+>  #include TRACE_INCLUDE(TRACE_INCLUDE_FILE)
+>  =
+
+>  /*
+> + * Stage 3.2 of the trace events.
+> + *
+> + * Create type metadata description
+> + */
+> +
+> +#include "lttng-events-reset.h"	/* Reset all macros within TRACE_EVENT */
+> +
+> +#undef TRACEPOINT_STRUCT
+> +#define TRACEPOINT_STRUCT(_provider, _name, _proto, _args, _fields)	\
+> +static struct lttng_struct_desc __struct_desc___##_provider##_##_name =
+=3D {\
+> +		.fields =3D __struct_fields___##_provider##_##_name,	\
+> +		.nr_fields =3D ARRAY_SIZE(__struct_fields___##_provider##_##_name),\
+> +		.provider =3D #_provider,					\
+> +		.name =3D #_name,						\
+> +		.owner =3D THIS_MODULE,					\
+> +	};
+> +
+> +#include TRACE_INCLUDE(TRACE_INCLUDE_FILE)
+> +
+> +/*
+> + * Stage 3.3 of the trace events.
+> + *
+> + * Associate metadata description to event or event template or other st=
+ruct
+> + */
+> +
+> +/* Named field types must be defined in lttng-types.h */
+> +
+> +#include "lttng-events-reset.h"	/* Reset all macros within TRACE_EVENT */
+> +
+> +#undef __struct
+> +#define __struct(_provider, _type, _item, _params)			\
+> +	{								\
+> +		.mtype =3D mtype_struct,					\
+> +		.m.ctf_st.struct_desc =3D &__struct_desc___##_provider##_##_type,\
+> +		.m.ctf_st.type_metadata =3D __type_metadata_for__##_provider##_##_type=
+,\
+> +		.m.ctf_st.nr_metadata =3D ARRAY_SIZE(__type_metadata_for__##_provider#=
+#_##_type),\
+> +	},
+> +
+> +
+> +#undef TP_STRUCT__entry
+> +#define TP_STRUCT__entry(args...) args	/* Only one used in this phase */
+> +
+> +#undef TP_FIELDS
+> +#define TP_FIELDS(args...) args
+> +
+> +#undef TRACEPOINT_STRUCT
+> +#define TRACEPOINT_STRUCT(_provider, _name, _proto, _args, _fields)	\
+> +static const struct lttng_metadata __type_metadata_for__##_provider##_##=
+_name[] =3D {\
+> +	_fields								\
+> +};
+> +
+> +
+> +
+> +#undef DECLARE_EVENT_CLASS_NOARGS
+> +#define DECLARE_EVENT_CLASS_NOARGS(_name, _tstruct, _assign, _print) \
+> +static const struct lttng_metadata __type_metadata_for__##_name[] =3D {	\
+> +	_tstruct		\
+> +};
+> +
+> +#undef DECLARE_EVENT_CLASS
+> +#define DECLARE_EVENT_CLASS(_name, _proto, _args, _tstruct, _assign, _pr=
+int) \
+> +	DECLARE_EVENT_CLASS_NOARGS(_name, PARAMS(_tstruct), PARAMS(_assign), \
+> +			PARAMS(_print))
+> +
+> +#include TRACE_INCLUDE(TRACE_INCLUDE_FILE)
+> +
+> +
+> +/*
+>   * Stage 3.9 of the trace events.
+>   *
+>   * Create event descriptions.
+> @@ -318,9 +408,11 @@ static void __event_probe__##_name(void *__data);
+>  #define DEFINE_EVENT_MAP_NOARGS(_template, _name, _map)			\
+>  static const struct lttng_event_desc __event_desc___##_map =3D {		\
+>  	.fields =3D __event_fields___##_template,		     		\
+> +	.type_metadata =3D __type_metadata_for__##_template,		\
+>  	.name =3D #_map,					     		\
+>  	.probe_callback =3D (void *) TP_PROBE_CB(_template),   		\
+>  	.nr_fields =3D ARRAY_SIZE(__event_fields___##_template),		\
+> +	.nr_metadata =3D ARRAY_SIZE(__type_metadata_for__##_template),	\
+>  	.owner =3D THIS_MODULE,				     		\
+>  };
+>  =
+
+> @@ -379,9 +471,12 @@ static __used struct lttng_probe_desc TP_ID(__probe_=
+desc___, TRACE_SYSTEM) =3D {
+>  #undef TP_ID
+>  =
+
+>  /*
+> - * Stage 6 of the trace events.
+> + * Stage 6.0 of the trace events.
+>   *
+>   * Create static inline function that calculates event size.
+> + *
+> + * First stage creates function to calculate sizes of sub-metadata
+> + * (with no effect on the dynamic length values)
+
+This approach seems to only consider the case where you memcpy a struct
+directly into the buffers, no ?
+
+How does it deal with copying field-by-field into the structure's fields ?
+
+On a different point, I see nothing here that documents where/how
+recursion that could happen by nesting an array within itself is
+handled.
 
 Thanks,
 
 Mathieu
 
->  };
->  
->  #include TRACEPOINT_INCLUDE
-> diff --git a/tests/hello.cxx/Makefile.am b/tests/hello.cxx/Makefile.am
-> index 897416d..5f6c615 100644
-> --- a/tests/hello.cxx/Makefile.am
-> +++ b/tests/hello.cxx/Makefile.am
-> @@ -1,7 +1,7 @@
->  AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_builddir)/include -Wsystem-headers
->  
->  noinst_PROGRAMS = hello
-> -hello_SOURCES = hello.cpp tp.c ust_tests_hello.h
-> +hello_SOURCES = hello.cpp tp.cpp ust_tests_hello.h
->  hello_LDADD = $(top_builddir)/liblttng-ust/liblttng-ust.la
->  
->  if LTTNG_UST_BUILD_WITH_LIBDL
-> diff --git a/tests/hello.cxx/tp.c b/tests/hello.cxx/tp.c
-> deleted file mode 100644
-> index 4790965..0000000
-> --- a/tests/hello.cxx/tp.c
-> +++ /dev/null
-> @@ -1,26 +0,0 @@
-> -/*
-> - * tp.c
-> - *
-> - * Copyright (c) 2011 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> - *
-> - * Permission is hereby granted, free of charge, to any person obtaining a copy
-> - * of this software and associated documentation files (the "Software"), to deal
-> - * in the Software without restriction, including without limitation the rights
-> - * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-> - * copies of the Software, and to permit persons to whom the Software is
-> - * furnished to do so, subject to the following conditions:
-> - *
-> - * The above copyright notice and this permission notice shall be included in
-> - * all copies or substantial portions of the Software.
-> - *
-> - * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-> - * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-> - * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-> - * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-> - * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-> - * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-> - * SOFTWARE.
-> - */
-> -
-> -#define TRACEPOINT_CREATE_PROBES
-> -#include "ust_tests_hello.h"
-> diff --git a/tests/hello.cxx/tp.cpp b/tests/hello.cxx/tp.cpp
-> new file mode 100644
-> index 0000000..a2099ab
-> --- /dev/null
-> +++ b/tests/hello.cxx/tp.cpp
-> @@ -0,0 +1,26 @@
+>   */
+>  =
+
+>  #include "lttng-events-reset.h"	/* Reset all macros within TRACE_EVENT */
+> @@ -403,6 +498,57 @@ static __used struct lttng_probe_desc TP_ID(__probe_=
+desc___, TRACE_SYSTEM) =3D {
+>  	__event_len +=3D lib_ring_buffer_align(__event_len, lttng_alignof(u32))=
+;   \
+>  	__event_len +=3D sizeof(u32);					       \
+>  	__event_len +=3D lib_ring_buffer_align(__event_len, lttng_alignof(_type=
+)); \
+> +	__event_len +=3D sizeof(_type) * (_length);			       \
+> +
+> +#undef __string
+> +#define __string(_item, _src)						       \
+> +	__event_len +=3D strlen(_src) + 1;
+> +
 > +/*
-> + * tp.cpp
+> + * strlen_user includes \0. If returns 0, it faulted, so we set size to
+> + * 1 (\0 only).
+> + */
+> +#undef __string_from_user
+> +#define __string_from_user(_item, _src)					       \
+> +	__event_len +=3D max_t(size_t, lttng_strlen_user_inatomic(_src), 1);
+> +
+> +#undef __struct
+> +#define __struct(_provider, _type, _item, _params)			\
+> +	__event_len +=3D __struct_get_size__##_provider##_##_type(_params);\
+> +
+> +#undef TP_PROTO
+> +#define TP_PROTO(args...) args
+> +
+> +#undef TP_STRUCT__entry
+> +#define TP_STRUCT__entry(args...) args
+> +
+> +#undef TP_FIELDS
+> +#define TP_FIELDS(args...) args
+> +
+> +#undef TRACEPOINT_STRUCT
+> +#define TRACEPOINT_STRUCT(_provider, _name, _proto, _args, _fields)	\
+> +static inline size_t __struct_get_size__##_provider##_##_name(_proto)   \
+> +	{								\
+> +	size_t __event_len =3D 0;						\
+> +									\
+> +	_fields								\
+> +	return __event_len;						\
+> +}
+> +
+> +#include TRACE_INCLUDE(TRACE_INCLUDE_FILE)
+> +
+> +/*
+> + * Stage 6.1 of the trace events.
 > + *
-> + * Copyright (c) 2011 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> + *
-> + * Permission is hereby granted, free of charge, to any person obtaining a copy
-> + * of this software and associated documentation files (the "Software"), to deal
-> + * in the Software without restriction, including without limitation the rights
-> + * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-> + * copies of the Software, and to permit persons to whom the Software is
-> + * furnished to do so, subject to the following conditions:
-> + *
-> + * The above copyright notice and this permission notice shall be included in
-> + * all copies or substantial portions of the Software.
-> + *
-> + * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-> + * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-> + * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-> + * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-> + * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-> + * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-> + * SOFTWARE.
+> + * Create static inline function that calculates event size, this time a=
+dding
+> + * the size to the dynamic_len array
 > + */
 > +
-> +#define TRACEPOINT_CREATE_PROBES
-> +#include "ust_tests_hello.h"
-> -- 
-> 1.8.2.1
-> 
+> +#undef __dynamic_array_enc_ext
+> +#define __dynamic_array_enc_ext(_type, _item, _length, _order, _base, _e=
+ncoding)\
+> +	__event_len +=3D lib_ring_buffer_align(__event_len, lttng_alignof(u32))=
+; \
+> +	__event_len +=3D sizeof(u32);					       \
+> +	__event_len +=3D lib_ring_buffer_align(__event_len, lttng_alignof(_type=
+));\
+>  	__dynamic_len[__dynamic_len_idx] =3D (_length);			       \
+>  	__event_len +=3D sizeof(_type) * __dynamic_len[__dynamic_len_idx];     =
+  \
+>  	__dynamic_len_idx++;
+> @@ -420,11 +566,13 @@ static __used struct lttng_probe_desc TP_ID(__probe=
+_desc___, TRACE_SYSTEM) =3D {
+>  	__event_len +=3D __dynamic_len[__dynamic_len_idx++] =3D		       \
+>  		max_t(size_t, lttng_strlen_user_inatomic(_src), 1);
+>  =
 
--- 
+> -#undef TP_PROTO
+> -#define TP_PROTO(args...) args
+> +#undef __struct
+> +#define __struct(_provider, _type, _item, _params)			\
+> +	__event_len +=3D __dynamic_len[__dynamic_len_idx++] =3D		\
+> +		__struct_get_size__##_provider##_##_type(_params);
+>  =
+
+> -#undef TP_STRUCT__entry
+> -#define TP_STRUCT__entry(args...) args
+> +#undef TRACEPOINT_STRUCT
+> +#define TRACEPOINT_STRUCT(_provider, _name, _proto, _args, _fields)
+>  =
+
+>  #undef DECLARE_EVENT_CLASS
+>  #define DECLARE_EVENT_CLASS(_name, _proto, _args, _tstruct, _assign, _pr=
+int)  \
+> @@ -470,12 +618,36 @@ static inline size_t __event_get_size__##_name(size=
+_t *__dynamic_len, _proto) \
+>  #undef __string_from_user
+>  #define __string_from_user(_item, _src)
+>  =
+
+> +#undef __struct
+> +#define __struct(_provider, _type, _item, _params)			\
+> +	__event_align =3D max_t(size_t, __event_align,			\
+> +		__instruct_get_align__##_provider##_##_type(_params));
+> +
+>  #undef TP_PROTO
+>  #define TP_PROTO(args...) args
+>  =
+
+> +#undef TP_ARGS
+> +#define TP_ARGS(args...) args
+> +
+>  #undef TP_STRUCT__entry
+>  #define TP_STRUCT__entry(args...) args
+>  =
+
+> +#undef TP_FIELDS
+> +#define TP_FIELDS(args...) args
+> +
+> +#undef TRACEPOINT_STRUCT
+> +#define TRACEPOINT_STRUCT(_provider, _name, _proto, _args, _fields)	\
+> +static inline size_t __struct_get_align__##_provider##_##_name(_proto)	\
+> +{									\
+> +	size_t __event_align =3D 1;					\
+> +	_fields								\
+> +	return __event_align;						\
+> +}									\
+> +static inline size_t __instruct_get_align__##_provider##_##_name(_proto)\
+> +{									\
+> +	return __struct_get_align__##_provider##_##_name(_args);	\
+> +}
+> +
+>  #undef DECLARE_EVENT_CLASS
+>  #define DECLARE_EVENT_CLASS(_name, _proto, _args, _tstruct, _assign, _pr=
+int)  \
+>  static inline size_t __event_get_align__##_name(_proto)			      \
+> @@ -487,7 +659,6 @@ static inline size_t __event_get_align__##_name(_prot=
+o)			      \
+>  =
+
+>  #include TRACE_INCLUDE(TRACE_INCLUDE_FILE)
+>  =
+
+> -
+>  /*
+>   * Stage 8 of the trace events.
+>   *
+> @@ -517,6 +688,9 @@ static inline size_t __event_get_align__##_name(_prot=
+o)			      \
+>  #define __string_from_user(_item, _src)		\
+>  	__string(_item, _src)
+>  =
+
+> +#undef __struct
+> +#define __struct(_provider, _type, _item, _params)	char _item;
+> +
+>  #undef TP_STRUCT__entry
+>  #define TP_STRUCT__entry(args...) args
+>  =
+
+> @@ -528,7 +702,6 @@ struct __event_typemap__##_name {					      \
+>  =
+
+>  #include TRACE_INCLUDE(TRACE_INCLUDE_FILE)
+>  =
+
+> -
+>  /*
+>   * Stage 9 of the trace events.
+>   *
+> @@ -568,6 +741,11 @@ __end_field_##_item:
+>  #define __string_from_user(_item, _src)					\
+>  	__string(_item, _src)
+>  =
+
+> +#undef __struct
+> +#define __struct(_provider, _type, _item, _params)			\
+> +	goto __assign_##_item;						\
+> +__end_field_##_item:
+> +
+>  /*
+>   * Macros mapping tp_assign() to "=3D", tp_memcpy() to memcpy() and tp_s=
+trcpy() to
+>   * strcpy().
+> @@ -624,12 +802,24 @@ __assign_##dest##_2:							\
+>  #define tp_memcpy_dyn_from_user(dest, src)				\
+>  	tp_memcpy_dyn_gen(event_write_from_user, dest, src)
+>  =
+
+> +#undef tp_memcpy_struct_gen
+> +#define tp_memcpy_struct_gen(write_ops, provider, name, dest, src)	\
+> +__assign_##dest:							\
+> +	lib_ring_buffer_align_ctx(&__ctx, __struct_get_align__##provider##_##na=
+me(src));\
+> +	__chan->ops->write_ops(&__ctx, src,				\
+> +		sizeof(__typemap.dest) * __get_dynamic_array_len(dest));\
+> +	goto __end_field_##dest;
+> +
+> +#undef tp_memcpy_struct
+> +#define tp_memcpy_struct(provider, name, dest, src)	\
+> +		tp_memcpy_struct_gen(event_write, provider, name, dest, src)
+> +
+>  /*
+>   * The string length including the final \0.
+>   */
+>  #undef tp_copy_string_from_user
+>  #define tp_copy_string_from_user(dest, src)				\
+> -	__assign_##dest:						\
+> +__assign_##dest:							\
+>  	{								\
+>  		size_t __ustrlen;					\
+>  									\
+> -- =
+
+> 1.8.2.1
+> =
+
+> =
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- =
+
 Mathieu Desnoyers
 EfficiOS Inc.
 http://www.efficios.com
