@@ -1,22 +1,23 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-ust] Fix: make 'hello.cxx' compile
-	with g++
-Date: Sun, 21 Apr 2013 17:36:22 -0400
-Message-ID: <20130421213622.GA24632__16278.761594049$1366580212$gmane$org@Krystal>
-References: <1366511041-28805-1-git-send-email-soariez@gmail.com>
-	<20130421133753.GA26620@Krystal>
-	<CAJ7wx-GTRKhaZi-BryAF_mLxDoDY7xwChStmLKNxoUrOizVJLg@mail.gmail.com>
+From: SIDDHARTH VERMA <SIDDHARTH.VERMA@radisys.com>
+Subject: FW: LTTNG-Tools-2.1.1 Support for PPC-32Bit/64bit;
+ Unable to Resolve the Dependencies
+Date: Mon, 22 Apr 2013 05:20:15 +0000
+Message-ID: <A492A571B9D6304983C4106E4956338D04C3A87D__37153.2496567399$1366608062$gmane$org@BLUPRD0811MB426.namprd08.prod.outlook.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============0534716184=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from co1ehsobe002.messaging.microsoft.com ([216.32.180.185]
+	helo=co1outboundpool.messaging.microsoft.com)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UU1vs-0007iv-Ts
-	for lttng-dev@lists.lttng.org; Sun, 21 Apr 2013 17:36:24 -0400
-Content-Disposition: inline
-In-Reply-To: <CAJ7wx-GTRKhaZi-BryAF_mLxDoDY7xwChStmLKNxoUrOizVJLg@mail.gmail.com>
+	(envelope-from <SIDDHARTH.VERMA@radisys.com>) id 1UU9Ay-0002wB-RA
+	for lttng-dev@lists.lttng.org; Mon, 22 Apr 2013 01:20:29 -0400
+Received: from mail152-co1 (localhost [127.0.0.1])	by
+	mail152-co1-R.bigfish.com (Postfix) with ESMTP id 0F8E2A00274	for
+	<lttng-dev@lists.lttng.org>; Mon, 22 Apr 2013 05:20:21 +0000 (UTC)
+Received: from CO1EHSMHS032.bigfish.com (unknown [10.243.78.241])	by
+	mail152-co1.bigfish.com (Postfix) with ESMTP id D7D8E74004D	for
+	<lttng-dev@lists.lttng.org>; Mon, 22 Apr 2013 05:20:17 +0000 (UTC)
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -25,248 +26,462 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Zifei Tong <soariez@gmail.com>
-Cc: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-KiBaaWZlaSBUb25nIChzb2FyaWV6QGdtYWlsLmNvbSkgd3JvdGU6Cj4gSGksCj4gCj4gVGhhbmtz
-IGZvciB5b3VyIHJldmlldy4KPiAKPiA+IFdoeSBpcyB0aGlzIGx0dG5nX3VzdF9saWJfcmluZ19i
-dWZmZXJfY29uZmlnOjogc2NvcGluZyBuZWVkZWQgaW4gYysrID8KPiAKPiBDKysgd2lsbCBoaWRl
-IGVudW1lcmF0aW9uIGRlZmluZWQgaW5zaWRlIGNsYXNzL3N0cnVjdC4KPiAKPiBRdW90ZSBmcm9t
-IGh0dHA6Ly93d3cub3Blbi1zdGQub3JnL2p0YzEvc2MyMi93ZzIxL2RvY3MvcGFwZXJzLzIwMTEv
-bjMyNDIucGRmLAo+IHBhZ2UgMTU4Ogo+ID4gQW4gZW51bWVyYXRvciBkZWNsYXJlZCBpbiBjbGFz
-cyBzY29wZSBjYW4gYmUgcmVmZXJyZWQgdG8gdXNpbmcgdGhlIGNsYXNzCj4gbWVtYmVyIGFjY2Vz
-cwo+ID4gb3BlcmF0b3JzICg6OiwgLiAoZG90KSBhbmQgLT4gKGFycm93KSkgIFtFeGFtcGxlOgo+
-ID4gc3RydWN0IFggewo+ID4gICAgIGVudW0gZGlyZWN0aW9uIHsgbGVmdD3igJls4oCZLCByaWdo
-dD3igJly4oCZIH07Cj4gPiB9Owo+ID4gdm9pZCBnKFgqIHApIHsKPiA+ICAgICBpbnQgaTsKPiA+
-ICAgICBpID0gcC0+ZihsZWZ0KTsgLy8gZXJyb3I6IGxlZnQgbm90IGluIHNjb3BlCj4gPiAgICAg
-aSA9IHAtPmYoWDo6cmlnaHQpOyAvLyBPSwo+ID4gfQo+ID4g4oCUIGVuZCBleGFtcGxlIF0KPiAK
-PiAKPiA+IGlubGluZWQgcHJlY29tcGlsZXIgZGlyZWN0aXZlcyBsaWtlIHRoaXMgbWFrZSB0aGUg
-ZnVuY3Rpb24gaGFyZCB0bwo+ID4gZm9sbG93IChtaXggb2YgI2lmLyNlbHNlLyNlbmRpZiBhbmQg
-aWYvZWxzZSkuCj4gCj4gSSBhZ3JlZSBpbmxpbmVkIHByZWNvbXBpbGVyIGRpcmVjdGl2ZXMgaXMg
-YmFkIHN0eWxlLiBDb3VsZCB5b3Ugc3VnZ2VzdCBhCj4gd2F5IHRvIHJlbW92ZSB0aGUgbWl4IG9m
-ICNpZi8jZWxzZS8jZW5kaWYgYW5kIGlmL2Vsc2U/CgpNYXliZSB3ZSBjb3VsZCBzaW1wbHkgbGVm
-dCB0aGUgbnVtZXJhdGlvbiBvdXRzaWRlIG9mIHRoZSBzdHJ1Y3R1cmUKZGVjbGFyYXRpb24gPyBU
-aGlzIHdvdWxkIG1ha2UgaXRzIHNjb3BlIGdsb2JhbCBpbiBib3RoIGMgYW5kIGMrKy4KUGxlYXNl
-IHRyeSBtYWtpbmcgdGhpcyBjaGFuZ2UsIGFuZCBtYWtlIHN1cmUgeW91IGtlZXAgdGhpcyBkb2N1
-bWVudGF0aW9uCm9uIHRoZSByZWFzb25zIHdoeSB3ZSBuZWVkIHRvIGRvIHRoaXMgY2hhbmdlIGlu
-IHRoZSBwYXRjaCBjaGFuZ2Vsb2cuIEl0CndpbGwgYmUgdXNlZnVsIGZvciBmdXR1cmUgcmVmZXJl
-bmNlLgoKPiAKPiA+IFNvIGVhY2ggZmllbGQgbmVlZCB0byBiZSBsaXN0ZWQgPyBXZSB1c3VhbGx5
-IGRvbid0IHB1dCBOVUxMCj4gPiBpbml0aWFsaXphdGlvbiBmb3Igc3RydWN0dXJlcyB0aGF0IGFy
-ZSBhbHdheXMgaW4gemVyby1pbml0aWFsaXplZAo+ID4gbWVtb3J5LiAoY29kaW5nIHN0eWxlKQo+
-IAo+IFRoaXMgaXMgcmVsYXRlZCB0byBhIGtub3duIGlzc3VlIG9mIGcrKzoKPiBodHRwOi8vZ2Nj
-LmdudS5vcmcvYnVnemlsbGEvc2hvd19idWcuY2dpP2lkPTU1NjA2IChCdWcgNTU2MDYgLSBzb3Jy
-eSwKPiB1bmltcGxlbWVudGVkOiBub24tdHJpdmlhbCBkZXNpZ25hdGVkIGluaXRpYWxpemVycyBu
-b3Qgc3VwcG9ydGVkKS4KPiAKPiBnKysncyAndHJpdmlhbCBkZXNpZ25hdGVkIGluaXRpYWxpemVy
-cycgbWVhbnMgbm8gb3V0LW9mLW9yZGVyCj4gaW5pdGlhbGl6YXRpb24sIG5vIG1pc3NpbmcKPiBp
-bml0aWFsaXphdGlvbiAoZXhjZXB0IHRoZSBmaWVsZHMgb24gdGhlIHRhaWwgb2YgYSBzdHJ1Y3Qp
-LCBhbmQgbmVzdGVkCj4gaW5pdGlhbGl6YXRpb24gc2hvdWxkIGJlIGRvbmUgaW4gdGhlIGZvcm0g
-ey5mb28gPSB7LmJhciA9IDF9fSBpbnN0ZWFkIG9mCj4gey5mb28uYmFyID0gMX0uIFRoYXQncyB3
-aHkgSSBtYWRlIHN1Y2ggbW9kaWZpY2F0aW9uLgoKT0ssIHRoaXMganVzdGlmaWVzIHRoZSBzdHls
-ZSB0byBjb2Rpbmcgc3R5bGUuIFBsZWFzZSBkb2N1bWVudCBpbiB0aGUKcGF0Y2ggY2hhbmdlbG9n
-LgoKPiAKPiA+IEFyZSB0aG9zZSBjaGFuZ2VzIGFsc28gY29tcGF0aWJsZSB3aXRoIHRoZSBMTFZN
-IGMrKyBjb21waWxlciA/Cj4gQWN0dWFsbHksIGNsYW5nKysgaGF2ZSBkZXNpZ25hdGVkIGluaXRp
-YWxpemVycyBiZXR0ZXIgc3VwcG9ydGVkIHRoYW4gZysrLgo+IEFsbCB0aGUgbW9kaWZpY2F0aW9u
-IGFib3V0IGRlc2lnbmF0ZWQgaW5pdGlhbGl6ZXJzIGFyZSBub3QgcmVxdWlyZWQgZm9yCj4gY2xh
-bmcrKy4gTm8gbmVlZCB0byBhZGQgTlVMTCBpbml0aWFsaXphdGlvbiwgcmVvcmRlciBpbml0aWFs
-aXphdGlvbnMgb3IKPiBjaGFuZ2Ugey5mb28uYmFyID0gMX0gaW50byB7LmZvbyA9IHsuYmFyID0g
-MX19LiBUaGVzZSAodWdseSkgaGFja3MgYXJlIGp1c3QKPiB0byBtYWtlIGcrKyBoYXBweS4KCm9r
-LCBnb29kIHRvIGtub3cuCgo+IAo+IENsZWFuZWQtdXAgcGF0Y2ggYXR0YWNoZWQuCgpNb3JlIGNv
-bW1lbnRzIGJlbG93LAoKPiAKPiBUaGFua3MuCj4gCj4gRnJvbSAzNjkzMGZkZmEyNWE2ZWE2N2Rl
-NTUxMzAwMjYzZGVlMzUzZGY0M2U1IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQo+IEZyb206IFpp
-ZmVpIFRvbmcgPHNvYXJpZXpAZ21haWwuY29tPgo+IERhdGU6IFNhdCwgMjAgQXByIDIwMTMgMTk6
-Mzg6MzkgKzA4MDAKPiBTdWJqZWN0OiBbUEFUQ0ggbHR0bmctdXN0XSBGaXg6IG1ha2UgJ2hlbGxv
-LmN4eCcgY29tcGlsZSB3aXRoIGcrKwo+IAo+IEZpeGVzICMzMzgKPiAKPiBTaWduZWQtb2ZmLWJ5
-OiBaaWZlaSBUb25nIDxzb2FyaWV6QGdtYWlsLmNvbT4KPiAtLS0KPiAgaW5jbHVkZS9sdHRuZy9y
-aW5nYnVmZmVyLWNvbmZpZy5oICAgIHwgIDUgKysrKysKPiAgaW5jbHVkZS9sdHRuZy90cmFjZXBv
-aW50LWV2ZW50LmggICAgIHwgMTIgKysrKystLS0tLS0KPiAgaW5jbHVkZS9sdHRuZy91c3QtZXZl
-bnRzLmggICAgICAgICAgIHwgNDIKPiArKysrKysrKysrKysrKysrKysrKysrKy0tLS0tLS0tLS0t
-LS0KPiAgaW5jbHVkZS9sdHRuZy91c3QtdHJhY2Vwb2ludC1ldmVudC5oIHwgMzIgKysrKysrKysr
-KysrKysrKystLS0tLS0tLS0tCj4gIHRlc3RzL2hlbGxvLmN4eC9NYWtlZmlsZS5hbSAgICAgICAg
-ICB8ICAyICstCj4gIHRlc3RzL2hlbGxvLmN4eC90cC5jICAgICAgICAgICAgICAgICB8IDI2IC0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0KPiAgdGVzdHMvaGVsbG8uY3h4L3RwLmNwcCAgICAgICAgICAg
-ICAgIHwgMjYgKysrKysrKysrKysrKysrKysrKysrKwo+ICA3IGZpbGVzIGNoYW5nZWQsIDg2IGlu
-c2VydGlvbnMoKyksIDU5IGRlbGV0aW9ucygtKQo+ICBkZWxldGUgbW9kZSAxMDA2NDQgdGVzdHMv
-aGVsbG8uY3h4L3RwLmMKPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IHRlc3RzL2hlbGxvLmN4eC90cC5j
-cHAKPiAKPiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9sdHRuZy9yaW5nYnVmZmVyLWNvbmZpZy5oCj4g
-Yi9pbmNsdWRlL2x0dG5nL3JpbmdidWZmZXItY29uZmlnLmgKPiBpbmRleCBjYTUyZmM3Li5iYjAx
-ZWFiIDEwMDY0NAo+IC0tLSBhL2luY2x1ZGUvbHR0bmcvcmluZ2J1ZmZlci1jb25maWcuaAo+ICsr
-KyBiL2luY2x1ZGUvbHR0bmcvcmluZ2J1ZmZlci1jb25maWcuaAo+IEBAIC0zNDcsOCArMzQ3LDEz
-IEBAIGludCBsaWJfcmluZ19idWZmZXJfY2hlY2tfY29uZmlnKGNvbnN0IHN0cnVjdAo+IGx0dG5n
-X3VzdF9saWJfcmluZ19idWZmZXJfY29uZmlnICoKPiAgICAgICB1bnNpZ25lZCBpbnQgc3dpdGNo
-X3RpbWVyX2ludGVydmFsLAo+ICAgICAgIHVuc2lnbmVkIGludCByZWFkX3RpbWVyX2ludGVydmFs
-KQo+ICB7Cj4gKyAjaWZkZWYgX19jcGx1c3BsdXMKPiArIGlmIChjb25maWctPmFsbG9jID09Cj4g
-bHR0bmdfdXN0X2xpYl9yaW5nX2J1ZmZlcl9jb25maWc6OlJJTkdfQlVGRkVSX0FMTE9DX0dMT0JB
-TAo+ICsgICAgJiYgY29uZmlnLT5zeW5jID09Cj4gbHR0bmdfdXN0X2xpYl9yaW5nX2J1ZmZlcl9j
-b25maWc6OlJJTkdfQlVGRkVSX1NZTkNfUEVSX0NQVQo+ICsgI2Vsc2UKPiAgIGlmIChjb25maWct
-PmFsbG9jID09IFJJTkdfQlVGRkVSX0FMTE9DX0dMT0JBTAo+ICAgICAgJiYgY29uZmlnLT5zeW5j
-ID09IFJJTkdfQlVGRkVSX1NZTkNfUEVSX0NQVQo+ICsgI2VuZGlmCj4gICAgICAmJiBzd2l0Y2hf
-dGltZXJfaW50ZXJ2YWwpCj4gICByZXR1cm4gLUVJTlZBTDsKPiAgIHJldHVybiAwOwo+IGRpZmYg
-LS1naXQgYS9pbmNsdWRlL2x0dG5nL3RyYWNlcG9pbnQtZXZlbnQuaAo+IGIvaW5jbHVkZS9sdHRu
-Zy90cmFjZXBvaW50LWV2ZW50LmgKPiBpbmRleCAwNzdlYWEwLi40NjMwNzg4IDEwMDY0NAo+IC0t
-LSBhL2luY2x1ZGUvbHR0bmcvdHJhY2Vwb2ludC1ldmVudC5oCj4gKysrIGIvaW5jbHVkZS9sdHRu
-Zy90cmFjZXBvaW50LWV2ZW50LmgKPiBAQCAtMjAsMTIgKzIwLDEyIEBACj4gICAqIFNPRlRXQVJF
-Lgo+ICAgKi8KPiAKPiArI2lmZGVmIFRSQUNFUE9JTlRfQ1JFQVRFX1BST0JFUwo+ICsKPiAgI2lm
-ZGVmIF9fY3BsdXNwbHVzCj4gIGV4dGVybiAiQyIgewo+ICAjZW5kaWYKPiAKPiAtI2lmZGVmIFRS
-QUNFUE9JTlRfQ1JFQVRFX1BST0JFUwo+IC0KPiAgI2RlZmluZSBfX3RwX3N0cmluZ2lmeTEoeCkg
-I3gKPiAgI2RlZmluZSBfX3RwX3N0cmluZ2lmeSh4KSBfX3RwX3N0cmluZ2lmeTEoeCkKPiAKPiBA
-QCAtNjUsMTAgKzY1LDEwIEBAIGV4dGVybiAiQyIgewo+ICAjdW5kZWYgVFJBQ0VQT0lOVF9JTkNM
-VURFX0ZJTEUKPiAgI3VuZGVmIFRSQUNFUE9JTlRfSU5DTFVERQo+IAo+IC0jZGVmaW5lIFRSQUNF
-UE9JTlRfQ1JFQVRFX1BST0JFUwo+IC0KPiAtI2VuZGlmIC8qIFRSQUNFUE9JTlRfQ1JFQVRFX1BS
-T0JFUyAqLwoKSHJtLCBJIGRvbid0IGdldCB3aGF0IHRoaXMgaXMgc3VwcG9zZWQgdG8gZml4ID8K
-Ck5vcm1hbGwKCj4gLQo+ICAjaWZkZWYgX19jcGx1c3BsdXMKPiAgfQo+ICAjZW5kaWYKPiArCj4g
-KyNkZWZpbmUgVFJBQ0VQT0lOVF9DUkVBVEVfUFJPQkVTCj4gKwo+ICsjZW5kaWYgLyogVFJBQ0VQ
-T0lOVF9DUkVBVEVfUFJPQkVTICovCj4gZGlmZiAtLWdpdCBhL2luY2x1ZGUvbHR0bmcvdXN0LWV2
-ZW50cy5oIGIvaW5jbHVkZS9sdHRuZy91c3QtZXZlbnRzLmgKPiBpbmRleCA3NDk0NzhhLi5lOTdj
-YzFiIDEwMDY0NAo+IC0tLSBhL2luY2x1ZGUvbHR0bmcvdXN0LWV2ZW50cy5oCj4gKysrIGIvaW5j
-bHVkZS9sdHRuZy91c3QtZXZlbnRzLmgKPiBAQCAtODksMTUgKzg5LDIxIEBAIHN0cnVjdCBsdHRu
-Z19lbnVtX2VudHJ5IHsKPiAKPiAgI2RlZmluZSBfX3R5cGVfaW50ZWdlcihfdHlwZSwgX2J5dGVf
-b3JkZXIsIF9iYXNlLCBfZW5jb2RpbmcpIFwKPiAgIHsgXAo+IC0gICAgLmF0eXBlID0gYXR5cGVf
-aW50ZWdlciwgXAo+IC0gICAgLnUuYmFzaWMuaW50ZWdlciA9IFwKPiArICAuYXR5cGUgPSBhdHlw
-ZV9pbnRlZ2VyLCBcCj4gKyAgLnUgPSBcCj4gICB7IFwKPiAtICAuc2l6ZSA9IHNpemVvZihfdHlw
-ZSkgKiBDSEFSX0JJVCwgXAo+IC0gIC5hbGlnbm1lbnQgPSBsdHRuZ19hbGlnbm9mKF90eXBlKSAq
-IENIQVJfQklULCBcCj4gLSAgLnNpZ25lZG5lc3MgPSBsdHRuZ19pc19zaWduZWRfdHlwZShfdHlw
-ZSksIFwKPiAtICAucmV2ZXJzZV9ieXRlX29yZGVyID0gX2J5dGVfb3JkZXIgIT0gQllURV9PUkRF
-UiwgXAo+IC0gIC5iYXNlID0gX2Jhc2UsIFwKPiAtICAuZW5jb2RpbmcgPSBsdHRuZ19lbmNvZGVf
-IyNfZW5jb2RpbmcsIFwKPiArICAuYmFzaWMgPSBcCj4gKyB7IFwKPiArICAuaW50ZWdlciA9IFwK
-PiArIHsgXAoKUGxlYXNlIGVuc3VyZSB0aGF0IGVhY2ggbmVzdGVkICJ7IiBoYXMgaXRzIG93biBp
-bmRlbnQgbGV2ZWwuCgpJIGFsc28gdGhpbmsgeW91ciBtYWlsIGNsaWVudCB0dXJuZWQgdGFicyBp
-bnRvIHNwYWNlcy4KClRoYW5rcywKCk1hdGhpZXUKCj4gKyAgLnNpemUgPSBzaXplb2YoX3R5cGUp
-ICogQ0hBUl9CSVQsIFwKPiArICAuYWxpZ25tZW50ID0gbHR0bmdfYWxpZ25vZihfdHlwZSkgKiBD
-SEFSX0JJVCwgXAo+ICsgIC5zaWduZWRuZXNzID0gbHR0bmdfaXNfc2lnbmVkX3R5cGUoX3R5cGUp
-LCBcCj4gKyAgLnJldmVyc2VfYnl0ZV9vcmRlciA9IF9ieXRlX29yZGVyICE9IEJZVEVfT1JERVIs
-IFwKPiArICAuYmFzZSA9IF9iYXNlLCBcCj4gKyAgLmVuY29kaW5nID0gbHR0bmdfZW5jb2RlXyMj
-X2VuY29kaW5nLCBcCj4gKyB9IFwKPiArIH0gXAo+ICAgfSwgXAo+ICAgfSBcCj4gCj4gQEAgLTEy
-MywxNCArMTI5LDIwIEBAIHN0cnVjdCBsdHRuZ19pbnRlZ2VyX3R5cGUgewo+IAo+ICAjZGVmaW5l
-IF9fdHlwZV9mbG9hdChfdHlwZSkgXAo+ICAgeyBcCj4gLSAgICAuYXR5cGUgPSBhdHlwZV9mbG9h
-dCwgXAo+IC0gICAgLnUuYmFzaWMuX2Zsb2F0ID0gXAo+ICsgIC5hdHlwZSA9IGF0eXBlX2Zsb2F0
-LCBcCj4gKyAgLnUgPSBcCj4gICB7IFwKPiAtICAuZXhwX2RpZyA9IHNpemVvZihfdHlwZSkgKiBD
-SEFSX0JJVCBcCj4gLSAtIF9mbG9hdF9tYW50X2RpZyhfdHlwZSksIFwKPiAtICAubWFudF9kaWcg
-PSBfZmxvYXRfbWFudF9kaWcoX3R5cGUpLCBcCj4gLSAgLmFsaWdubWVudCA9IGx0dG5nX2FsaWdu
-b2YoX3R5cGUpICogQ0hBUl9CSVQsIFwKPiAtICAucmV2ZXJzZV9ieXRlX29yZGVyID0gQllURV9P
-UkRFUiAhPSBGTE9BVF9XT1JEX09SREVSLCBcCj4gKyAgLmJhc2ljID0gXAo+ICsgeyBcCj4gKyAg
-Ll9mbG9hdCA9IFwKPiArIHsgXAo+ICsgIC5leHBfZGlnID0gc2l6ZW9mKF90eXBlKSAqIENIQVJf
-QklUIFwKPiArICAtIF9mbG9hdF9tYW50X2RpZyhfdHlwZSksIFwKPiArICAubWFudF9kaWcgPSBf
-ZmxvYXRfbWFudF9kaWcoX3R5cGUpLCBcCj4gKyAgLmFsaWdubWVudCA9IGx0dG5nX2FsaWdub2Yo
-X3R5cGUpICogQ0hBUl9CSVQsIFwKPiArICAucmV2ZXJzZV9ieXRlX29yZGVyID0gQllURV9PUkRF
-UiAhPSBGTE9BVF9XT1JEX09SREVSLCBcCj4gKyB9Cj4gKyB9Cj4gICB9LCBcCj4gICB9IFwKPiAK
-PiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9sdHRuZy91c3QtdHJhY2Vwb2ludC1ldmVudC5oCj4gYi9p
-bmNsdWRlL2x0dG5nL3VzdC10cmFjZXBvaW50LWV2ZW50LmgKPiBpbmRleCBlNDZjYzFhLi4zYWE5
-NDZkIDEwMDY0NAo+IC0tLSBhL2luY2x1ZGUvbHR0bmcvdXN0LXRyYWNlcG9pbnQtZXZlbnQuaAo+
-ICsrKyBiL2luY2x1ZGUvbHR0bmcvdXN0LXRyYWNlcG9pbnQtZXZlbnQuaAo+IEBAIC0xNDcsMTEg
-KzE0NywxNCBAQCBzdGF0aWMgY29uc3QgY2hhciBcCj4gICAgLnR5cGUgPSBcCj4gICB7IFwKPiAg
-ICAuYXR5cGUgPSBhdHlwZV9hcnJheSwgXAo+IC0gIC51LmFycmF5ID0gXAo+ICsgIC51ID0gXAo+
-ICAgeyBcCj4gLSAgICAubGVuZ3RoID0gX2xlbmd0aCwgXAo+IC0gICAgLmVsZW1fdHlwZSA9IF9f
-dHlwZV9pbnRlZ2VyKF90eXBlLCBCWVRFX09SREVSLCAxMCwgX2VuY29kaW5nKSwgXAo+IC0gfSwg
-XAo+ICsgIC5hcnJheSA9IFwKPiArIHsgXAo+ICsgIC5lbGVtX3R5cGUgPSBfX3R5cGVfaW50ZWdl
-cihfdHlwZSwgQllURV9PUkRFUiwgMTAsIF9lbmNvZGluZyksIFwKPiArICAubGVuZ3RoID0gX2xl
-bmd0aCwgXAo+ICsgfSBcCj4gKyB9IFwKPiAgIH0sIFwKPiAgICAubm93cml0ZSA9IF9ub3dyaXRl
-LCBcCj4gICB9LAo+IEBAIC0xNjQsMTAgKzE2NywxMyBAQCBzdGF0aWMgY29uc3QgY2hhciBcCj4g
-ICAgLnR5cGUgPSBcCj4gICB7IFwKPiAgICAuYXR5cGUgPSBhdHlwZV9zZXF1ZW5jZSwgXAo+IC0g
-IC51LnNlcXVlbmNlID0gXAo+ICsgIC51ID0gXAo+ICAgeyBcCj4gLSAgICAubGVuZ3RoX3R5cGUg
-PSBfX3R5cGVfaW50ZWdlcihfbGVuZ3RoX3R5cGUsIEJZVEVfT1JERVIsIDEwLCBub25lKSwgXAo+
-IC0gICAgLmVsZW1fdHlwZSA9IF9fdHlwZV9pbnRlZ2VyKF90eXBlLCBCWVRFX09SREVSLCAxMCwg
-X2VuY29kaW5nKSwgXAo+ICsgIC5zZXF1ZW5jZSA9Cj4gKyB7IFwKPiArICAubGVuZ3RoX3R5cGUg
-PSBfX3R5cGVfaW50ZWdlcihfbGVuZ3RoX3R5cGUsIEJZVEVfT1JERVIsIDEwLCBub25lKSwgXAo+
-ICsgIC5lbGVtX3R5cGUgPSBfX3R5cGVfaW50ZWdlcihfdHlwZSwgQllURV9PUkRFUiwgMTAsIF9l
-bmNvZGluZyksIFwKPiArIH0sIFwKPiAgIH0sIFwKPiAgIH0sIFwKPiAgICAubm93cml0ZSA9IF9u
-b3dyaXRlLCBcCj4gQEAgLTE4MCw3ICsxODYsMTAgQEAgc3RhdGljIGNvbnN0IGNoYXIgXAo+ICAg
-IC50eXBlID0gXAo+ICAgeyBcCj4gICAgLmF0eXBlID0gYXR5cGVfc3RyaW5nLCBcCj4gLSAgLnUu
-YmFzaWMuc3RyaW5nLmVuY29kaW5nID0gbHR0bmdfZW5jb2RlX1VURjgsIFwKPiArICAudSA9Cj4g
-KyB7Cj4gKyAgLmJhc2ljID0geyAuc3RyaW5nID0geyAuZW5jb2RpbmcgPSBsdHRuZ19lbmNvZGVf
-VVRGOCB9IH0gXAo+ICsgfSwgXAo+ICAgfSwgXAo+ICAgIC5ub3dyaXRlID0gX25vd3JpdGUsIFwK
-PiAgIH0sCj4gQEAgLTQ4Myw3ICs0OTIsNyBAQCB2b2lkCj4gX19ldmVudF9wcm9iZV9fIyNfcHJv
-dmlkZXIjI19fXyMjX25hbWUoX1RQX0FSR1NfREFUQV9QUk9UTyhfYXJncykpOyAgICAgIFwKPiAg
-c3RhdGljICAgICAgXAo+ICB2b2lkIF9fZXZlbnRfcHJvYmVfXyMjX3Byb3ZpZGVyIyNfX18jI19u
-YW1lKF9UUF9BUkdTX0RBVEFfUFJPVE8oX2FyZ3MpKQo+ICAgIFwKPiAgeyAgICAgIFwKPiAtIHN0
-cnVjdCBsdHRuZ19ldmVudCAqX19ldmVudCA9IF9fdHBfZGF0YTsgICAgICBcCj4gKyBzdHJ1Y3Qg
-bHR0bmdfZXZlbnQgKl9fZXZlbnQgPSAoc3RydWN0IGx0dG5nX2V2ZW50ICopIF9fdHBfZGF0YTsg
-ICAgICBcCj4gICBzdHJ1Y3QgbHR0bmdfY2hhbm5lbCAqX19jaGFuID0gX19ldmVudC0+Y2hhbjsg
-ICAgICBcCj4gICBzdHJ1Y3QgbHR0bmdfdXN0X2xpYl9yaW5nX2J1ZmZlcl9jdHggX19jdHg7ICAg
-ICAgXAo+ICAgc2l6ZV90IF9fZXZlbnRfbGVuLCBfX2V2ZW50X2FsaWduOyAgICAgIFwKPiBAQCAt
-NjEyLDEzICs2MjEsMTQgQEAgc3RhdGljIGNvbnN0IGNoYXIgKiAgICAgICBcCj4gICBfX3JlZl9t
-b2RlbF9lbWZfdXJpX19fIyNfcHJvdmlkZXIjI19fXyMjX25hbWUgICAgICAgXAo+ICAgX19hdHRy
-aWJ1dGVfXygod2Vha3JlZiAoIl9tb2RlbF9lbWZfdXJpX19fIiAjX3Byb3ZpZGVyICJfX18iICNf
-bmFtZSkpKTtcCj4gIGNvbnN0IHN0cnVjdCBsdHRuZ19ldmVudF9kZXNjIF9fZXZlbnRfZGVzY19f
-XyMjX3Byb3ZpZGVyIyNfIyNfbmFtZSA9IHsKPiAgIFwKPiAtIC5maWVsZHMgPSBfX2V2ZW50X2Zp
-ZWxkc19fXyMjX3Byb3ZpZGVyIyNfX18jI190ZW1wbGF0ZSwgICAgICAgXAo+ICAgLm5hbWUgPSAj
-X3Byb3ZpZGVyICI6IiAjX25hbWUsICAgICAgIFwKPiAgIC5wcm9iZV9jYWxsYmFjayA9ICh2b2lk
-ICgqKSh2b2lkKSkKPiAmX19ldmVudF9wcm9iZV9fIyNfcHJvdmlkZXIjI19fXyMjX3RlbXBsYXRl
-LFwKPiArIC5jdHggPSBOVUxMLCAgICAgICBcCj4gKyAuZmllbGRzID0gX19ldmVudF9maWVsZHNf
-X18jI19wcm92aWRlciMjX19fIyNfdGVtcGxhdGUsICAgICAgIFwKPiAgIC5ucl9maWVsZHMgPQo+
-IF9UUF9BUlJBWV9TSVpFKF9fZXZlbnRfZmllbGRzX19fIyNfcHJvdmlkZXIjI19fXyMjX3RlbXBs
-YXRlKSwgXAo+ICAgLmxvZ2xldmVsID0gJl9fcmVmX2xvZ2xldmVsX19fIyNfcHJvdmlkZXIjI19f
-XyMjX25hbWUsICAgICAgIFwKPiAgIC5zaWduYXR1cmUgPSBfX3RwX2V2ZW50X3NpZ25hdHVyZV9f
-XyMjX3Byb3ZpZGVyIyNfX18jI190ZW1wbGF0ZSwgICAgICAgXAo+IC0gLnUuZXh0Lm1vZGVsX2Vt
-Zl91cmkgPSAmX19yZWZfbW9kZWxfZW1mX3VyaV9fXyMjX3Byb3ZpZGVyIyNfX18jI19uYW1lLCBc
-Cj4gKyAudSA9IHsgLmV4dCA9IHsgLm1vZGVsX2VtZl91cmkgPQo+ICZfX3JlZl9tb2RlbF9lbWZf
-dXJpX19fIyNfcHJvdmlkZXIjI19fXyMjX25hbWUgfSB9LCBcCj4gIH07Cj4gCj4gICNpbmNsdWRl
-IFRSQUNFUE9JTlRfSU5DTFVERQo+IGRpZmYgLS1naXQgYS90ZXN0cy9oZWxsby5jeHgvTWFrZWZp
-bGUuYW0gYi90ZXN0cy9oZWxsby5jeHgvTWFrZWZpbGUuYW0KPiBpbmRleCA4OTc0MTZkLi41ZjZj
-NjE1IDEwMDY0NAo+IC0tLSBhL3Rlc3RzL2hlbGxvLmN4eC9NYWtlZmlsZS5hbQo+ICsrKyBiL3Rl
-c3RzL2hlbGxvLmN4eC9NYWtlZmlsZS5hbQo+IEBAIC0xLDcgKzEsNyBAQAo+ICBBTV9DUFBGTEFH
-UyA9IC1JJCh0b3Bfc3JjZGlyKS9pbmNsdWRlIC1JJCh0b3BfYnVpbGRkaXIpL2luY2x1ZGUKPiAt
-V3N5c3RlbS1oZWFkZXJzCj4gCj4gIG5vaW5zdF9QUk9HUkFNUyA9IGhlbGxvCj4gLWhlbGxvX1NP
-VVJDRVMgPSBoZWxsby5jcHAgdHAuYyB1c3RfdGVzdHNfaGVsbG8uaAo+ICtoZWxsb19TT1VSQ0VT
-ID0gaGVsbG8uY3BwIHRwLmNwcCB1c3RfdGVzdHNfaGVsbG8uaAo+ICBoZWxsb19MREFERCA9ICQo
-dG9wX2J1aWxkZGlyKS9saWJsdHRuZy11c3QvbGlibHR0bmctdXN0LmxhCj4gCj4gIGlmIExUVE5H
-X1VTVF9CVUlMRF9XSVRIX0xJQkRMCj4gZGlmZiAtLWdpdCBhL3Rlc3RzL2hlbGxvLmN4eC90cC5j
-IGIvdGVzdHMvaGVsbG8uY3h4L3RwLmMKPiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRl
-eCA0NzkwOTY1Li4wMDAwMDAwCj4gLS0tIGEvdGVzdHMvaGVsbG8uY3h4L3RwLmMKPiArKysgL2Rl
-di9udWxsCj4gQEAgLTEsMjYgKzAsMCBAQAo+IC0vKgo+IC0gKiB0cC5jCj4gLSAqCj4gLSAqIENv
-cHlyaWdodCAoYykgMjAxMSBNYXRoaWV1IERlc25veWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZm
-aWNpb3MuY29tPgo+IC0gKgo+IC0gKiBQZXJtaXNzaW9uIGlzIGhlcmVieSBncmFudGVkLCBmcmVl
-IG9mIGNoYXJnZSwgdG8gYW55IHBlcnNvbiBvYnRhaW5pbmcgYQo+IGNvcHkKPiAtICogb2YgdGhp
-cyBzb2Z0d2FyZSBhbmQgYXNzb2NpYXRlZCBkb2N1bWVudGF0aW9uIGZpbGVzICh0aGUgIlNvZnR3
-YXJlIiksCj4gdG8gZGVhbAo+IC0gKiBpbiB0aGUgU29mdHdhcmUgd2l0aG91dCByZXN0cmljdGlv
-biwgaW5jbHVkaW5nIHdpdGhvdXQgbGltaXRhdGlvbiB0aGUKPiByaWdodHMKPiAtICogdG8gdXNl
-LCBjb3B5LCBtb2RpZnksIG1lcmdlLCBwdWJsaXNoLCBkaXN0cmlidXRlLCBzdWJsaWNlbnNlLCBh
-bmQvb3IKPiBzZWxsCj4gLSAqIGNvcGllcyBvZiB0aGUgU29mdHdhcmUsIGFuZCB0byBwZXJtaXQg
-cGVyc29ucyB0byB3aG9tIHRoZSBTb2Z0d2FyZSBpcwo+IC0gKiBmdXJuaXNoZWQgdG8gZG8gc28s
-IHN1YmplY3QgdG8gdGhlIGZvbGxvd2luZyBjb25kaXRpb25zOgo+IC0gKgo+IC0gKiBUaGUgYWJv
-dmUgY29weXJpZ2h0IG5vdGljZSBhbmQgdGhpcyBwZXJtaXNzaW9uIG5vdGljZSBzaGFsbCBiZSBp
-bmNsdWRlZAo+IGluCj4gLSAqIGFsbCBjb3BpZXMgb3Igc3Vic3RhbnRpYWwgcG9ydGlvbnMgb2Yg
-dGhlIFNvZnR3YXJlLgo+IC0gKgo+IC0gKiBUSEUgU09GVFdBUkUgSVMgUFJPVklERUQgIkFTIElT
-IiwgV0lUSE9VVCBXQVJSQU5UWSBPRiBBTlkgS0lORCwgRVhQUkVTUwo+IE9SCj4gLSAqIElNUExJ
-RUQsIElOQ0xVRElORyBCVVQgTk9UIExJTUlURUQgVE8gVEhFIFdBUlJBTlRJRVMgT0YgTUVSQ0hB
-TlRBQklMSVRZLAo+IC0gKiBGSVRORVNTIEZPUiBBIFBBUlRJQ1VMQVIgUFVSUE9TRSBBTkQgTk9O
-SU5GUklOR0VNRU5ULiBJTiBOTyBFVkVOVCBTSEFMTAo+IFRIRQo+IC0gKiBBVVRIT1JTIE9SIENP
-UFlSSUdIVCBIT0xERVJTIEJFIExJQUJMRSBGT1IgQU5ZIENMQUlNLCBEQU1BR0VTIE9SIE9USEVS
-Cj4gLSAqIExJQUJJTElUWSwgV0hFVEhFUiBJTiBBTiBBQ1RJT04gT0YgQ09OVFJBQ1QsIFRPUlQg
-T1IgT1RIRVJXSVNFLCBBUklTSU5HCj4gRlJPTSwKPiAtICogT1VUIE9GIE9SIElOIENPTk5FQ1RJ
-T04gV0lUSCBUSEUgU09GVFdBUkUgT1IgVEhFIFVTRSBPUiBPVEhFUiBERUFMSU5HUwo+IElOIFRI
-RQo+IC0gKiBTT0ZUV0FSRS4KPiAtICovCj4gLQo+IC0jZGVmaW5lIFRSQUNFUE9JTlRfQ1JFQVRF
-X1BST0JFUwo+IC0jaW5jbHVkZSAidXN0X3Rlc3RzX2hlbGxvLmgiCj4gZGlmZiAtLWdpdCBhL3Rl
-c3RzL2hlbGxvLmN4eC90cC5jcHAgYi90ZXN0cy9oZWxsby5jeHgvdHAuY3BwCj4gbmV3IGZpbGUg
-bW9kZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAwLi5hMjA5OWFiCj4gLS0tIC9kZXYvbnVsbAo+ICsr
-KyBiL3Rlc3RzL2hlbGxvLmN4eC90cC5jcHAKPiBAQCAtMCwwICsxLDI2IEBACj4gKy8qCj4gKyAq
-IHRwLmNwcAo+ICsgKgo+ICsgKiBDb3B5cmlnaHQgKGMpIDIwMTEgTWF0aGlldSBEZXNub3llcnMg
-PG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4KPiArICoKPiArICogUGVybWlzc2lvbiBp
-cyBoZXJlYnkgZ3JhbnRlZCwgZnJlZSBvZiBjaGFyZ2UsIHRvIGFueSBwZXJzb24gb2J0YWluaW5n
-IGEKPiBjb3B5Cj4gKyAqIG9mIHRoaXMgc29mdHdhcmUgYW5kIGFzc29jaWF0ZWQgZG9jdW1lbnRh
-dGlvbiBmaWxlcyAodGhlICJTb2Z0d2FyZSIpLAo+IHRvIGRlYWwKPiArICogaW4gdGhlIFNvZnR3
-YXJlIHdpdGhvdXQgcmVzdHJpY3Rpb24sIGluY2x1ZGluZyB3aXRob3V0IGxpbWl0YXRpb24gdGhl
-Cj4gcmlnaHRzCj4gKyAqIHRvIHVzZSwgY29weSwgbW9kaWZ5LCBtZXJnZSwgcHVibGlzaCwgZGlz
-dHJpYnV0ZSwgc3VibGljZW5zZSwgYW5kL29yCj4gc2VsbAo+ICsgKiBjb3BpZXMgb2YgdGhlIFNv
-ZnR3YXJlLCBhbmQgdG8gcGVybWl0IHBlcnNvbnMgdG8gd2hvbSB0aGUgU29mdHdhcmUgaXMKPiAr
-ICogZnVybmlzaGVkIHRvIGRvIHNvLCBzdWJqZWN0IHRvIHRoZSBmb2xsb3dpbmcgY29uZGl0aW9u
-czoKPiArICoKPiArICogVGhlIGFib3ZlIGNvcHlyaWdodCBub3RpY2UgYW5kIHRoaXMgcGVybWlz
-c2lvbiBub3RpY2Ugc2hhbGwgYmUgaW5jbHVkZWQKPiBpbgo+ICsgKiBhbGwgY29waWVzIG9yIHN1
-YnN0YW50aWFsIHBvcnRpb25zIG9mIHRoZSBTb2Z0d2FyZS4KPiArICoKPiArICogVEhFIFNPRlRX
-QVJFIElTIFBST1ZJREVEICJBUyBJUyIsIFdJVEhPVVQgV0FSUkFOVFkgT0YgQU5ZIEtJTkQsIEVY
-UFJFU1MKPiBPUgo+ICsgKiBJTVBMSUVELCBJTkNMVURJTkcgQlVUIE5PVCBMSU1JVEVEIFRPIFRI
-RSBXQVJSQU5USUVTIE9GIE1FUkNIQU5UQUJJTElUWSwKPiArICogRklUTkVTUyBGT1IgQSBQQVJU
-SUNVTEFSIFBVUlBPU0UgQU5EIE5PTklORlJJTkdFTUVOVC4gSU4gTk8gRVZFTlQgU0hBTEwKPiBU
-SEUKPiArICogQVVUSE9SUyBPUiBDT1BZUklHSFQgSE9MREVSUyBCRSBMSUFCTEUgRk9SIEFOWSBD
-TEFJTSwgREFNQUdFUyBPUiBPVEhFUgo+ICsgKiBMSUFCSUxJVFksIFdIRVRIRVIgSU4gQU4gQUNU
-SU9OIE9GIENPTlRSQUNULCBUT1JUIE9SIE9USEVSV0lTRSwgQVJJU0lORwo+IEZST00sCj4gKyAq
-IE9VVCBPRiBPUiBJTiBDT05ORUNUSU9OIFdJVEggVEhFIFNPRlRXQVJFIE9SIFRIRSBVU0UgT1Ig
-T1RIRVIgREVBTElOR1MKPiBJTiBUSEUKPiArICogU09GVFdBUkUuCj4gKyAqLwo+ICsKPiArI2Rl
-ZmluZSBUUkFDRVBPSU5UX0NSRUFURV9QUk9CRVMKPiArI2luY2x1ZGUgInVzdF90ZXN0c19oZWxs
-by5oIgo+IC0tIAo+IDEuOC4yLjEKPiAKPiAtLQo+IEJlc3QgUmVnYXJkcywKPiDku53lrZDpo54g
-KFppZmVpIFRvbmcpCj4gQ29sbGVnZSBvZiBDb21wdXRlciBTY2llbmNlIGFuZCBUZWNobm9sb2d5
-LCBaaGVqaWFuZyBVbml2ZXJzaXR5Cj4gCj4gc29hcmllekBnbWFpbC5jb20gLyB0b25nemlmZWlA
-emp1LmVkdS5jbgoKLS0gCk1hdGhpZXUgRGVzbm95ZXJzCkVmZmljaU9TIEluYy4KaHR0cDovL3d3
-dy5lZmZpY2lvcy5jb20KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpo
-dHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+--===============0534716184==
+Content-Language: en-US
+Content-Type: multipart/alternative;
+	boundary="_000_A492A571B9D6304983C4106E4956338D04C3A87DBLUPRD0811MB426_"
+
+--_000_A492A571B9D6304983C4106E4956338D04C3A87DBLUPRD0811MB426_
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+Hi Lttng-Support,
+
+
+
+I used following commands to compile and install the LTTng on PPC Board::
+
+
+
+1. ./configure --host=3Dpowerpc-linux CC=3D/usr/bin/ppc-linux-gcc CFLAGS=3D=
+"-m32 -g -O2"
+
+2. make
+
+3. make install
+
+4. ldconfig
+
+
+
+------------------------
+
+Error Logs for LTTng-Tools-2.1.1 && lttng-ust-2.2.0-rc1 && userspace-rcu-0.=
+7.2::
+
+------------------------
+
+liburcu & lttng-ust installed but getting below error while trying to make =
+LTTng-Tools
+
+------------------------
+
+------------------------
+
+[root@172.27.4.128]# make
+
+Making all in src
+
+make[1]: Entering directory `/root/siverma/2.1.1/lttng-tools-2.2.0-rc1/src'
+
+Making all in common
+
+make[2]: Entering directory `/root/siverma/2.1.1/lttng-tools-2.2.0-rc1/src/=
+common'
+
+Making all in compat
+
+make[3]: Entering directory `/root/siverma/2.1.1/lttng-tools-2.2.0-rc1/src/=
+common/compat'
+
+  CC     compat-fcntl.lo
+
+  CC     compat-epoll.lo
+
+In file included from compat-epoll.c:31:
+
+poll.h:72: error: 'EPOLLRDHUP' undeclared here (not in a function)
+
+poll.h:74: error: 'EPOLL_CLOEXEC' undeclared here (not in a function)
+
+compat-epoll.c: In function 'compat_epoll_create':
+
+compat-epoll.c:77: warning: implicit declaration of function 'epoll_create1=
+'
+
+make[3]: *** [compat-epoll.lo] Error 1
+
+make[3]: Leaving directory `/root/siverma/2.1.1/lttng-tools-2.2.0-rc1/src/c=
+ommon/compat'
+
+make[2]: *** [all-recursive] Error 1
+
+make[2]: Leaving directory `/root/siverma/2.1.1/lttng-tools-2.2.0-rc1/src/c=
+ommon'
+
+make[1]: *** [all-recursive] Error 1
+
+make[1]: Leaving directory `/root/siverma/2.1.1/lttng-tools-2.2.0-rc1/src'
+
+make: *** [all-recursive] Error 1
+
+
+
+------------------------------------
+
+I also tried with the previous version of the tool
+
+liburcu installed but getting below dependencies while trying to configure =
+for lttng-ust
+
+------------------------------------
+
+
+
+Error Logs lttng-ust-1.9.2 && lttng-tools-2.0.0-rc1 && userspace-rcu-0.6.6 =
+::
+
+------------------------------------
+
+------------------------------------
+
+checking for GNU libc compatible malloc... yes
+
+checking for gettimeofday... yes
+
+checking for munmap... yes
+
+checking for socket... yes
+
+checking for strerror... yes
+
+checking for strtol... yes
+
+checking for makeinfo... no
+
+configure: error: Please install the 'texinfo' program and make sure 'makei=
+nfo' is in the PATH.
+
+
+
+--------------------------------------------------------
+
+--------------------------------------------------------
+
+
+
+It seems there are many dependencies involved in the installation of the LT=
+Tng, some of them are as follows;
+
+
+
+Texinfo
+
+Makeinfo
+
+kernel image to 2.6.38 or higher
+
+librc
+
+libpotp > 1.13
+
+tcltk
+
+libasprintf
+
+gettext
+
+gc++
+
+glib 2.34.0 and some more packages.
+
+
+
+Do we have to download and cross compile them all for ppc or we can get som=
+e help from standard package managers for the same?
+
+As of now the kernel used in machine is "3.4.3-rt13"
+
+
+
+[root@172.27.4.128]# uname -a
+
+Linux 172.27.4.128 3.4.3-rt13 #1 SMP PREEMPT RT Sat Feb 23 09:46:06 CST 201=
+3 ppc ppc ppc GNU/Linux
+
+
+
+As per my observations it may take a lot of time to resolve them all as we =
+have to decide all the correct supporting packages
+
+with the correct releases in order to make them work for a particular Linux=
+ image, though its easy to resolve it by using
+
+standard package managers in latest Linux e.g. UBUNTU.
+
+
+
+Please suggest on the same.
+
+Regards
+Siddharth Verma
+Mobile: +91-9880621252
+siddharth.verma@radisys.com<mailto:siddharth.verma@radisys.com>
+
+--_000_A492A571B9D6304983C4106E4956338D04C3A87DBLUPRD0811MB426_
+Content-Type: text/html; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+<html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-micr=
+osoft-com:office:office" xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
+xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http:=
+//www.w3.org/TR/REC-html40">
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
+>
+<meta name=3D"Generator" content=3D"Microsoft Word 14 (filtered medium)">
+<style><!--
+/* Font Definitions */
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+@font-face
+	{font-family:Tahoma;
+	panose-1:2 11 6 4 3 5 4 4 2 4;}
+/* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0cm;
+	margin-bottom:.0001pt;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";
+	mso-fareast-language:EN-US;}
+a:link, span.MsoHyperlink
+	{mso-style-priority:99;
+	color:blue;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{mso-style-priority:99;
+	color:purple;
+	text-decoration:underline;}
+p.MsoPlainText, li.MsoPlainText, div.MsoPlainText
+	{mso-style-priority:99;
+	mso-style-link:"Plain Text Char";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";
+	mso-fareast-language:EN-US;}
+p.MsoAcetate, li.MsoAcetate, div.MsoAcetate
+	{mso-style-priority:99;
+	mso-style-link:"Balloon Text Char";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	font-size:8.0pt;
+	font-family:"Tahoma","sans-serif";
+	mso-fareast-language:EN-US;}
+span.PlainTextChar
+	{mso-style-name:"Plain Text Char";
+	mso-style-priority:99;
+	mso-style-link:"Plain Text";
+	font-family:"Calibri","sans-serif";}
+span.BalloonTextChar
+	{mso-style-name:"Balloon Text Char";
+	mso-style-priority:99;
+	mso-style-link:"Balloon Text";
+	font-family:"Tahoma","sans-serif";}
+span.EmailStyle21
+	{mso-style-type:personal;
+	font-family:"Calibri","sans-serif";
+	color:windowtext;}
+span.EmailStyle22
+	{mso-style-type:personal;
+	font-family:"Calibri","sans-serif";
+	color:#1F497D;}
+span.EmailStyle23
+	{mso-style-type:personal-reply;
+	font-family:"Calibri","sans-serif";
+	color:#1F497D;}
+.MsoChpDefault
+	{mso-style-type:export-only;
+	font-size:10.0pt;}
+@page WordSection1
+	{size:612.0pt 792.0pt;
+	margin:72.0pt 72.0pt 72.0pt 72.0pt;}
+div.WordSection1
+	{page:WordSection1;}
+--></style><!--[if gte mso 9]><xml>
+<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
+</xml><![endif]--><!--[if gte mso 9]><xml>
+<o:shapelayout v:ext=3D"edit">
+<o:idmap v:ext=3D"edit" data=3D"1" />
+</o:shapelayout></xml><![endif]-->
+</head>
+<body lang=3D"EN-IN" link=3D"blue" vlink=3D"purple">
+<div class=3D"WordSection1">
+<p class=3D"MsoPlainText">Hi <span style=3D"color:black">Lttng-Support,</sp=
+an><o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText">I used following commands to compile and install =
+the LTTng on PPC Board::<o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText"><b>1. ./configure --host=3Dpowerpc-linux CC=3D/us=
+r/bin/ppc-linux-gcc CFLAGS=3D&quot;-m32 -g -O2&quot;<o:p></o:p></b></p>
+<p class=3D"MsoPlainText"><b>2. make<o:p></o:p></b></p>
+<p class=3D"MsoPlainText"><b>3. make install<o:p></o:p></b></p>
+<p class=3D"MsoPlainText"><b>4. ldconfig<o:p></o:p></b></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText">------------------------<o:p></o:p></p>
+<p class=3D"MsoPlainText"><span style=3D"background:red;mso-highlight:red">=
+Error Logs for
+<b>LTTng-Tools-2.1.1 &amp;&amp; lttng-ust-2.2.0-rc1 &amp;&amp; userspace-rc=
+u-0.7.2</b>::</span><o:p></o:p></p>
+<p class=3D"MsoPlainText">------------------------<o:p></o:p></p>
+<p class=3D"MsoPlainText"><b>liburcu &amp; lttng-ust installed</b> but gett=
+ing below error while trying to
+<b>make LTTng-Tools</b><o:p></o:p></p>
+<p class=3D"MsoPlainText">------------------------<o:p></o:p></p>
+<p class=3D"MsoPlainText">------------------------<o:p></o:p></p>
+<p class=3D"MsoPlainText">[root@172.27.4.128]# make<o:p></o:p></p>
+<p class=3D"MsoPlainText">Making all in src<o:p></o:p></p>
+<p class=3D"MsoPlainText">make[1]: Entering directory `/root/siverma/2.1.1/=
+lttng-tools-2.2.0-rc1/src'<o:p></o:p></p>
+<p class=3D"MsoPlainText">Making all in common<o:p></o:p></p>
+<p class=3D"MsoPlainText">make[2]: Entering directory `/root/siverma/2.1.1/=
+lttng-tools-2.2.0-rc1/src/common'<o:p></o:p></p>
+<p class=3D"MsoPlainText">Making all in compat<o:p></o:p></p>
+<p class=3D"MsoPlainText">make[3]: Entering directory `/root/siverma/2.1.1/=
+lttng-tools-2.2.0-rc1/src/common/compat'<o:p></o:p></p>
+<p class=3D"MsoPlainText">&nbsp; CC&nbsp;&nbsp;&nbsp;&nbsp; compat-fcntl.lo=
+<o:p></o:p></p>
+<p class=3D"MsoPlainText">&nbsp; CC&nbsp;&nbsp;&nbsp;&nbsp; compat-epoll.lo=
+<o:p></o:p></p>
+<p class=3D"MsoPlainText">In file included from compat-epoll.c:31:<o:p></o:=
+p></p>
+<p class=3D"MsoPlainText">poll.h:72: error: 'EPOLLRDHUP' undeclared here (n=
+ot in a function)<o:p></o:p></p>
+<p class=3D"MsoPlainText">poll.h:74: error: 'EPOLL_CLOEXEC' undeclared here=
+ (not in a function)<o:p></o:p></p>
+<p class=3D"MsoPlainText">compat-epoll.c: In function 'compat_epoll_create'=
+:<o:p></o:p></p>
+<p class=3D"MsoPlainText">compat-epoll.c:77: warning: implicit declaration =
+of function 'epoll_create1'<o:p></o:p></p>
+<p class=3D"MsoPlainText">make[3]: *** [compat-epoll.lo] Error 1<o:p></o:p>=
+</p>
+<p class=3D"MsoPlainText">make[3]: Leaving directory `/root/siverma/2.1.1/l=
+ttng-tools-2.2.0-rc1/src/common/compat'<o:p></o:p></p>
+<p class=3D"MsoPlainText">make[2]: *** [all-recursive] Error 1<o:p></o:p></=
+p>
+<p class=3D"MsoPlainText">make[2]: Leaving directory `/root/siverma/2.1.1/l=
+ttng-tools-2.2.0-rc1/src/common'<o:p></o:p></p>
+<p class=3D"MsoPlainText">make[1]: *** [all-recursive] Error 1<o:p></o:p></=
+p>
+<p class=3D"MsoPlainText">make[1]: Leaving directory `/root/siverma/2.1.1/l=
+ttng-tools-2.2.0-rc1/src'<o:p></o:p></p>
+<p class=3D"MsoPlainText">make: *** [all-recursive] Error 1<o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText">------------------------------------<o:p></o:p></=
+p>
+<p class=3D"MsoPlainText"><span style=3D"background:red;mso-highlight:red">=
+I also tried with the previous version of the tool<o:p></o:p></span></p>
+<p class=3D"MsoPlainText"><b><span style=3D"background:red;mso-highlight:re=
+d">liburcu installed</span></b><span style=3D"background:red;mso-highlight:=
+red"> but
+<b>getting below dependencies</b> while trying to configure for lttng-ust</=
+span><o:p></o:p></p>
+<p class=3D"MsoPlainText">------------------------------------<o:p></o:p></=
+p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText"><span style=3D"background:red;mso-highlight:red">=
+Error Logs lttng-ust-1.9.2 &amp;&amp; lttng-tools-2.0.0-rc1 &amp;&amp; user=
+space-rcu-0.6.6 ::</span><o:p></o:p></p>
+<p class=3D"MsoPlainText">------------------------------------<o:p></o:p></=
+p>
+<p class=3D"MsoPlainText">------------------------------------<o:p></o:p></=
+p>
+<p class=3D"MsoPlainText">checking for GNU libc compatible malloc... yes<o:=
+p></o:p></p>
+<p class=3D"MsoPlainText">checking for gettimeofday... yes<o:p></o:p></p>
+<p class=3D"MsoPlainText">checking for munmap... yes<o:p></o:p></p>
+<p class=3D"MsoPlainText">checking for socket... yes<o:p></o:p></p>
+<p class=3D"MsoPlainText">checking for strerror... yes<o:p></o:p></p>
+<p class=3D"MsoPlainText">checking for strtol... yes<o:p></o:p></p>
+<p class=3D"MsoPlainText">checking for makeinfo... no<o:p></o:p></p>
+<p class=3D"MsoPlainText">configure: error: <b>Please install the 'texinfo'=
+ program and make sure 'makeinfo' is in the PATH</b>.<o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText">-------------------------------------------------=
+-------<o:p></o:p></p>
+<p class=3D"MsoPlainText">-------------------------------------------------=
+-------<span style=3D"color:#1F497D"><o:p></o:p></span></p>
+<p class=3D"MsoPlainText"><span style=3D"color:#1F497D;background:yellow;ms=
+o-highlight:yellow"><o:p>&nbsp;</o:p></span></p>
+<p class=3D"MsoPlainText"><span style=3D"color:#1F497D;background:yellow;ms=
+o-highlight:yellow">I</span><span style=3D"background:yellow;mso-highlight:=
+yellow">t seems there are many dependencies involved in the installation of=
+ the LTTng, some of them are as follows;</span><o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText">Texinfo<o:p></o:p></p>
+<p class=3D"MsoPlainText">Makeinfo<o:p></o:p></p>
+<p class=3D"MsoPlainText">kernel image to 2.6.38 or higher<o:p></o:p></p>
+<p class=3D"MsoPlainText">librc<o:p></o:p></p>
+<p class=3D"MsoPlainText">libpotp &gt; 1.13<o:p></o:p></p>
+<p class=3D"MsoPlainText">tcltk<o:p></o:p></p>
+<p class=3D"MsoPlainText">libasprintf<o:p></o:p></p>
+<p class=3D"MsoPlainText">gettext<o:p></o:p></p>
+<p class=3D"MsoPlainText">gc&#43;&#43;<o:p></o:p></p>
+<p class=3D"MsoPlainText">glib 2.34.0 and some more packages.<o:p></o:p></p=
+>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText"><span style=3D"background:yellow;mso-highlight:ye=
+llow">Do we have to download and cross compile them all for ppc or we can g=
+et some help from
+<span style=3D"color:#1F497D">standard package managers for</span> the same=
+?</span><o:p></o:p></p>
+<p class=3D"MsoPlainText">As of now the kernel used in <span style=3D"color=
+:#1F497D">
+machine</span> is &#8220;3.4.3-rt13&#8221;<o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText"><b>[root@172.27.4.128]# uname -a <o:p></o:p></b><=
+/p>
+<p class=3D"MsoPlainText"><b>Linux 172.27.4.128 3.4.3-rt13 #1 SMP PREEMPT R=
+T Sat Feb 23 09:46:06 CST 2013 ppc ppc ppc GNU/Linux<o:p></o:p></b></p>
+<p class=3D"MsoPlainText"><b><o:p>&nbsp;</o:p></b></p>
+<p class=3D"MsoPlainText"><span style=3D"background:yellow;mso-highlight:ye=
+llow">As per my observations it may take a lot of time to resolve them all =
+as we have to decide all the correct supporting packages
+<o:p></o:p></span></p>
+<p class=3D"MsoPlainText"><span style=3D"background:yellow;mso-highlight:ye=
+llow">with the correct releases in order to make them work for a particular=
+ Linux image, though its easy to resolve it by using
+<o:p></o:p></span></p>
+<p class=3D"MsoPlainText"><span style=3D"background:yellow;mso-highlight:ye=
+llow">standard package managers in latest Linux e.g. UBUNTU.</span><o:p></o=
+:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText">Please suggest on the same.<o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:10.0pt;font-family:&quot;Ar=
+ial&quot;,&quot;sans-serif&quot;;color:#222222;mso-fareast-language:EN-IN">=
+Regards<o:p></o:p></span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:10.0pt;font-family:&quot;Ar=
+ial&quot;,&quot;sans-serif&quot;;color:#222222;mso-fareast-language:EN-IN">=
+Siddharth Verma<o:p></o:p></span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:10.0pt;font-family:&quot;Ar=
+ial&quot;,&quot;sans-serif&quot;;color:#222222;mso-fareast-language:EN-IN">=
+Mobile: &#43;91-9880621252<o:p></o:p></span></p>
+<p class=3D"MsoNormal"><u><span style=3D"font-size:10.0pt;font-family:&quot=
+;Arial&quot;,&quot;sans-serif&quot;;color:#1155CC;mso-fareast-language:EN-I=
+N"><a href=3D"mailto:siddharth.verma@radisys.com">siddharth.verma@radisys.c=
+om</a><o:p></o:p></span></u></p>
+</div>
+</body>
+</html>
+
+--_000_A492A571B9D6304983C4106E4956338D04C3A87DBLUPRD0811MB426_--
+
+
+--===============0534716184==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0534716184==--
