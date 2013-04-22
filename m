@@ -1,21 +1,27 @@
-From: Yannick Brosseau <yannick.brosseau@gmail.com>
-Subject: Re: [RFC PATCH 0/2] babeltrace legacy LTT 2.6 converter
-Date: Mon, 22 Apr 2013 11:55:59 -0400
-Message-ID: <51755D8F.7070304__43379.8445309096$1366646188$gmane$org@gmail.com>
-References: <cover.1366364119.git.jan.glauber@gmail.com>
-	<51715CCB.90009@ericsson.com> <20130422125536.GA8755@hal>
-	<51755C85.3070803@ericsson.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: Fwd: Bug#705827: babeltrace: FTBFS on GNU/kFreeBSD
+Date: Mon, 22 Apr 2013 12:14:42 -0400
+Message-ID: <20130422161442.GA17918__43992.1566205614$1366647314$gmane$org@Krystal>
+References: <20130422152417.GA13418@quintessa>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qe0-f51.google.com ([209.85.128.51])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <yannick.brosseau@gmail.com>) id 1UUJ66-0008L8-LZ
-	for lttng-dev@lists.lttng.org; Mon, 22 Apr 2013 11:56:06 -0400
-Received: by mail-qe0-f51.google.com with SMTP id 1so4177407qec.38
-	for <lttng-dev@lists.lttng.org>; Mon, 22 Apr 2013 08:56:01 -0700 (PDT)
-In-Reply-To: <51755C85.3070803@ericsson.com>
+	(envelope-from <compudj@mail.openrapids.net>) id 1UUJO9-00005U-TQ
+	for lttng-dev@lists.lttng.org; Mon, 22 Apr 2013 12:14:45 -0400
+Received: from localhost (localhost [127.0.0.1])
+	by blackscsi.openrapids.net (Postfix) with ESMTP id BD9D71405F3
+	for <lttng-dev@lists.lttng.org>; Mon, 22 Apr 2013 12:14:43 -0400 (EDT)
+Received: from blackscsi.openrapids.net ([127.0.0.1])
+	by localhost (blackscsi.openrapids.net [127.0.0.1]) (amavisd-new,
+	port 10024)
+	with ESMTP id u1WTKkuasnPb for <lttng-dev@lists.lttng.org>;
+	Mon, 22 Apr 2013 12:14:42 -0400 (EDT)
+Content-Disposition: inline
+In-Reply-To: <20130422152417.GA13418@quintessa>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,36 +30,78 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Matthew Khouzam <matthew.khouzam@ericsson.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On 2013-04-22 11:51, Matthew Khouzam wrote:
-> On 13-04-22 08:55 AM, Jan Glauber wrote:
->> On Fri, Apr 19, 2013 at 11:03:39AM -0400, Matthew Khouzam wrote:
->>> Hi Jan,
->>>
->>> I have a few questions about the patch:
->>> Does it handle lost events?
->>> I think we would need to bring in a state system for this
->> Hi Matthew,
->>
->> Not sure what you mean there. I thought lost events are not recorded so there is
->> nothing to convert. What I do convert is the events_lost counter of LTT. The
->> value is copied to the events_discarded of LTTng. At least that looked reasonable
->> to me. Can you elaborate why we would need a state machine there?
-> In lttv, the control flow view and company needs a state system. The
-> events in lttng 0.x and 2.0 are slightly different, so we won't see
-> stuff like the current TID and file statuses. I'm just giving you the
-> heads up that it may be not so trivial to get the info. The best thing
-> to do IMO is look up events in LTTng 2.0 and try to match the ones you
-> have in babeltrace to them.
-> That way, it will work with lttv and eclipse.
->
-I'm not sure either that I understand what you mean.
+Fixed by:
 
-The goal is just to convert traces, not create a whole state system.
-When we will be able to get a converted trace, the viewers could adjust
-to support them.
+commit 493330cb8cd73be8a598308b78f0fc1d4912843a
+Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Date:   Mon Apr 22 12:12:50 2013 -0400
 
-Yannick
+    Fix kFreeBSD build
+    
+    Use general error numbers available on kFreeBSD.
+    
+    Reported-by: Petr Salinger <Petr.Salinger@seznam.cz>
+    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+
+Thanks for reporting,
+
+Mathieu
+
+* Jon Bernard (jbernard@debian.org) wrote:
+> Hello all, I received this request over the weekend and wanted to pass it on.
+> 
+> ----- Forwarded message from Petr Salinger <Petr.Salinger@seznam.cz> -----
+> 
+> Date: Sat, 20 Apr 2013 19:19:11 +0200 (CEST)
+> From: Petr Salinger <Petr.Salinger@seznam.cz>
+> To: submit@bugs.debian.org
+> Subject: Bug#705827: babeltrace: FTBFS on GNU/kFreeBSD
+> 
+> Package: babeltrace
+> Version: 1.1.0-1
+> Severity: serious
+> Tags: patch
+> User: debian-bsd@lists.debian.org
+> Usertags: kfreebsd
+> 
+> Hi,
+> 
+> the current version fails to build on GNU/kFreeBSD.
+> 
+> The value ENODATA is linux specific,
+> please use some general error number, like shown bellow.
+> 
+> It would also be nice if you can inform upstream about this.
+> 
+> Thanks
+> 	Petr
+> 
+> --- formats/ctf/ctf.c
+> +++ formats/ctf/ctf.c
+> @@ -1032,7 +1032,7 @@
+>         buflen = strlen(*buf);
+>         if (!buflen) {
+>                 *fp = NULL;
+> -               return -ENODATA;
+> +               return -ENOENT;
+>         }
+>         *fp = babeltrace_fmemopen(*buf, buflen, "rb");
+>         if (!*fp) {
+> 
+> ----- End forwarded message -----
+> 
+> -- 
+> Jon
+> 
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
