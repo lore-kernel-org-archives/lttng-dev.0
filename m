@@ -1,20 +1,16 @@
-From: Matthew Khouzam <matthew.khouzam@ericsson.com>
-Subject: Re: [RFC PATCH 0/2] babeltrace legacy LTT 2.6 converter
-Date: Tue, 23 Apr 2013 17:11:33 -0400
-Message-ID: <5176F905.4040109__28115.3043070391$1366751577$gmane$org@ericsson.com>
-References: <cover.1366364119.git.jan.glauber@gmail.com>
-	<51715CCB.90009@ericsson.com> <20130422125536.GA8755@hal>
-	<51755C85.3070803@ericsson.com> <51755D8F.7070304@gmail.com>
-	<20130423121401.GA14913@hal>
+From: Stefan Seefeld <stefan@codesourcery.com>
+Subject: [PATCH lttng-tools] Add --version command-line option
+	to lttng.
+Date: Tue, 23 Apr 2013 17:14:57 -0400
+Message-ID: <5176F9D1.8010907__23664.7781487138$1366752909$gmane$org@codesourcery.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from usevmg20.ericsson.net ([198.24.6.45])
+Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <matthew.khouzam@ericsson.com>) id 1UUkVs-0005gk-V5
-	for lttng-dev@lists.lttng.org; Tue, 23 Apr 2013 17:12:33 -0400
-In-Reply-To: <20130423121401.GA14913@hal>
+	(envelope-from <Stefan_Seefeld@mentor.com>) id 1UUkYK-0005il-Np
+	for lttng-dev@lists.lttng.org; Tue, 23 Apr 2013 17:15:04 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,49 +19,82 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Jan Glauber <jan.glauber@gmail.com>
-Cc: lttng-dev@lists.lttng.org
+To: dgoulet@efficios.com, lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-No problems here. I was inquiring about this so that nobody is surprised
-if all trace viewers features are not supported.
-On 13-04-23 08:14 AM, Jan Glauber wrote:
-> On Mon, Apr 22, 2013 at 11:55:59AM -0400, Yannick Brosseau wrote:
->> On 2013-04-22 11:51, Matthew Khouzam wrote:
->>> On 13-04-22 08:55 AM, Jan Glauber wrote:
->>>> On Fri, Apr 19, 2013 at 11:03:39AM -0400, Matthew Khouzam wrote:
->>>>> Hi Jan,
->>>>>
->>>>> I have a few questions about the patch:
->>>>> Does it handle lost events?
->>>>> I think we would need to bring in a state system for this
->>>> Hi Matthew,
->>>>
->>>> Not sure what you mean there. I thought lost events are not recorded so there is
->>>> nothing to convert. What I do convert is the events_lost counter of LTT. The
->>>> value is copied to the events_discarded of LTTng. At least that looked reasonable
->>>> to me. Can you elaborate why we would need a state machine there?
->>> In lttv, the control flow view and company needs a state system. The
->>> events in lttng 0.x and 2.0 are slightly different, so we won't see
->>> stuff like the current TID and file statuses. I'm just giving you the
->>> heads up that it may be not so trivial to get the info. The best thing
->>> to do IMO is look up events in LTTng 2.0 and try to match the ones you
->>> have in babeltrace to them.
->>> That way, it will work with lttv and eclipse.
->>>
->> I'm not sure either that I understand what you mean.
->>
->> The goal is just to convert traces, not create a whole state system.
->> When we will be able to get a converted trace, the viewers could adjust
->> to support them.
-> Yannick is right, these patches are just for converting the raw trace data.
-> Interpreting the converted trace data is then up to LTTV or Eclipse.
->
-> Conversion of the trace data to the concrete CTF description LTTng 2.x is
-> using would be quite hard and require also to convert the trace data itself
-> (which I avoided so far...).
->
-> -- Jan
->
->  
->> Yannick
+This patch adds a --version option to the 'lttng' tool, making it easier
+for users to check the version, and with that, the set of features
+supported.
+(It would also be useful to canonicalize and document the version string
+grammar so it can be easily parsed and converted to a numeric value for
+comparison.)
+
+
+Signed-off-by: Stefan Seefeld <stefan@codesourcery.com>
+---
+ src/bin/lttng/lttng.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/src/bin/lttng/lttng.c b/src/bin/lttng/lttng.c
+index 79a28ba..3848a0d 100644
+--- a/src/bin/lttng/lttng.c
++++ b/src/bin/lttng/lttng.c
+@@ -47,6 +47,7 @@ enum {
+
+ /* Getopt options. No first level command. */
+ static struct option long_options[] = {
++       {"version",          0, NULL, 'V'},
+        {"help",             0, NULL, 'h'},
+        {"group",            1, NULL, 'g'},
+        {"verbose",          0, NULL, 'v'},
+@@ -85,6 +86,7 @@ static void usage(FILE *ofp)
+        fprintf(ofp, "usage: lttng [OPTIONS] <COMMAND> [<ARGS>]\n");
+        fprintf(ofp, "\n");
+        fprintf(ofp, "Options:\n");
++       fprintf(ofp, "  -V, --version              Show version\n");
+        fprintf(ofp, "  -h, --help                 Show this help\n");
+        fprintf(ofp, "      --list-options         Simple listing of
+lttng options\n");
+        fprintf(ofp, "      --list-commands        Simple listing of
+lttng commands\n");
+@@ -116,6 +118,10 @@ static void usage(FILE *ofp)
+        fprintf(ofp, "See http://lttng.org for updates, bug reports and
+news.\n");
+ }
+
++static void version(FILE *ofp)
++{
++  fprintf(ofp, "lttng (LTTng Trace Control) " VERSION" - "
+VERSION_NAME"\n\n");
++}
+ /*
+  *  list_options
+
+
+  *
+@@ -426,8 +432,12 @@ static int parse_args(int argc, char **argv)
+
+
+                clean_exit(EXIT_FAILURE);
+        }
+
+-       while ((opt = getopt_long(argc, argv, "+hnvqg:", long_options,
+NULL)) != -1) {
++       while ((opt = getopt_long(argc, argv, "+Vhnvqg:", long_options,
+NULL)) != -1) {
+                switch (opt) {
++               case 'V':
++                       version(stdout);
++                       ret = 0;
++                       goto end;
+                case 'h':
+                        usage(stdout);
+                        ret = 0;
+-- 
+1.8.1.4
+
+
+-- 
+Stefan Seefeld
+CodeSourcery / Mentor Graphics
+stefan@codesourcery.com
