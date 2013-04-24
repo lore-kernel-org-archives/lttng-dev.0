@@ -1,21 +1,16 @@
-From: Zifei Tong <soariez@gmail.com>
-Subject: Re: GSoC 2013, "C++ probe support" project and more
-Date: Wed, 24 Apr 2013 23:45:59 +0800
-Message-ID: <CAJ7wx-EyT-8TzBELBrFUgbhCwwDVorjDRpTaAhf0iTkXnH43cQ__24110.7256654233$1366820930$gmane$org@mail.gmail.com>
-References: <CAJ7wx-Epdf=DV+acPKkXjbXbgPGXHOUnnfOEH_hbpnreL2z4dA@mail.gmail.com>
-	<CAJ7wx-Eq4eZ7g52W6c4ETLVHm88xrhOg2u1BjYwhDJ87vT+Kaw@mail.gmail.com>
-	<CAGDH53k0DuDWg2sQa2fRfXPMDHLYeyGJr0MXsth0PcxiY6bXUQ@mail.gmail.com>
+From: =?UTF-8?q?Genevi=C3=A8ve=20Bastien?= <gbastien+lttng@versatic.net>
+Subject: [RFC-patch 0/5] Add support of more CTF metadata in
+	lttng-modules
+Date: Wed, 24 Apr 2013 16:14:15 -0400
+Message-ID: <1366834460-25567-1-git-send-email-gbastien+lttng__15754.4793365107$1366834499$gmane$org@versatic.net>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-vb0-f49.google.com ([209.85.212.49])
+Received: from smtp.polymtl.ca ([132.207.4.11])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <soariez@gmail.com>) id 1UV1u9-0006FR-Iv
-	for lttng-dev@lists.lttng.org; Wed, 24 Apr 2013 11:46:45 -0400
-Received: by mail-vb0-f49.google.com with SMTP id 11so1808881vbf.36
-	for <lttng-dev@lists.lttng.org>; Wed, 24 Apr 2013 08:46:40 -0700 (PDT)
-In-Reply-To: <CAGDH53k0DuDWg2sQa2fRfXPMDHLYeyGJr0MXsth0PcxiY6bXUQ@mail.gmail.com>
+	(envelope-from <gbastien+lttng@versatic.net>) id 1UV65G-0008KK-69
+	for lttng-dev@lists.lttng.org; Wed, 24 Apr 2013 16:14:30 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,32 +19,28 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Christian Babeux <christian.babeux@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Christian,
-
-On Sun, Apr 21, 2013 at 2:44 AM, Christian Babeux
-<christian.babeux@efficios.com> wrote:
-> The improvement of liblttng-ust-libc has nothing to do with dyninst.
-> Maybe you meant the dynamic instrumentation project?
-
-I played with dyninst today. Here is a minimal working example:
-https://gist.github.com/5kg/5451894
-
-Dyninst is a really cool project (after struggling to get it work),
-and I am more confident that the "Dynamic instrumentation support in
-UST" project is doable as a GSoC project. The systemtap project is a
-great reference [1].
-
-Expected results might be somthing like this:
-http://sourceware.org/systemtap/SystemTap_Beginners_Guide/userspace-probing.html
-.
-
-[1] http://sourceware.org/git/gitweb.cgi?p=systemtap.git;a=tree;f=stapdyn;hb=HEAD
-[2] http://lists.lttng.org/pipermail/lttng-dev/2013-February/019636.html
-
---
-Best Regards,
-Zifei Tong
+SGkgbGlzdCwKClRoaXMgc2VyaWVzIG9mIHBhdGNoZXMgYWRkIGEgZmV3IG5ldyBtYWNyb3MgdG8g
+c3VwcG9ydCB0aGUgZm9sbG93aW5nIENURgptZXRhZGF0YTogdmFyaWFudHMsIHN0cnVjdHVyZXMg
+YW5kIG5hbWVkIGVudW1lcmF0aW9ucy4KClRoZSB1c2UgY2FzZSBpdCBpcyBhcHBsaWVkIHRvIGlz
+IHRvIGFkZCBwYWNrZXQgaGVhZGVyIGRhdGEgdG8gdGhlIG5ldF8qCnRyYWNlcG9pbnRzLCB3aGVu
+IGF2YWlsYWJsZSwgZm9yIG5ldHdvcmsgcHJvdG9jb2wgSVAgYW5kIElQdjYgYW5kIHRyYW5zcG9y
+dApwcm90b2NvbCBUQ1AuCgpCZXN0IHJlZ2FyZHMsCkdlbmV2acOodmUKCi0tLS0tLS0tLS0tLS0t
+LS0tLS0tLQpHZW5ldmnDqHZlIEJhc3RpZW4gKDUpOgogIEFkZCBzdXBwb3J0IG9mIHN0cnVjdCBt
+ZXRhZGF0YSBpbiB0cmFjZXBvaW50cwogIEFkZCBzdXBwb3J0IG9mIGVudW0gbWV0YWRhdGEgaW4g
+dHJhY2Vwb2ludHMKICBBZGQgc3VwcG9ydCBvZiB2YXJpYW50IG1ldGFkYXRhIGluIHRyYWNlcG9p
+bnRzCiAgQWRkIHNvbWUgZXh0cmEgZGF0YSB0byBuZXRfKiB0cmFjZXBvaW50cwogIEFkZCBtYWNy
+b3MgdG8gY29weSBzdHJ1Y3QgbWV0YWRhdGEgZmllbGQgYnkgZmllbGQKCiBpbnN0cnVtZW50YXRp
+b24vZXZlbnRzL2x0dG5nLW1vZHVsZS9uZXQuaCB8IDI0NCArKysrKysrKystCiBsdHRuZy1ldmVu
+dHMuYyAgICAgICAgICAgICAgICAgICAgICAgICAgICB8IDI3OSArKysrKysrKysrKy0KIGx0dG5n
+LWV2ZW50cy5oICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDY1ICsrKwogcHJvYmVzL2x0
+dG5nLWV2ZW50cy1yZXNldC5oICAgICAgICAgICAgICAgfCAgNTAgKysrCiBwcm9iZXMvbHR0bmct
+ZXZlbnRzLmggICAgICAgICAgICAgICAgICAgICB8IDcxMiArKysrKysrKysrKysrKysrKysrKysr
+KysrKysrLS0KIHByb2Jlcy9sdHRuZy10eXBlLWxpc3QuaCAgICAgICAgICAgICAgICAgIHwgIDEy
+ICstCiBwcm9iZXMvbHR0bmctdHlwZXMuaCAgICAgICAgICAgICAgICAgICAgICB8ICA2MSArKy0K
+IDcgZmlsZXMgY2hhbmdlZCwgMTM3OCBpbnNlcnRpb25zKCspLCA0NSBkZWxldGlvbnMoLSkKCi0t
+IAoxLjguMi4xCgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6
+Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
