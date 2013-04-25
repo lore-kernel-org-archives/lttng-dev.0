@@ -1,17 +1,19 @@
-From: Mats Liljegren <liljegren.mats2@gmail.com>
-Subject: Changed scheduling when using lttng
-Date: Thu, 25 Apr 2013 10:23:02 +0200
-Message-ID: <CA+xJJ18hL16P3gvowveWVfg+ZNh=cjEFOoPisznU0y28YfCdbw__31358.6408542053$1366878214$gmane$org@mail.gmail.com>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Subject: Re: checkinstall and lttng-ust with Java/JNI support
+Date: Thu, 25 Apr 2013 13:41:20 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD12D10183__29992.6341548145$1366897378$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+References: <48CF5AC71E61DB46B70D0F388054EFFD12D10094@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+	<51785325.3030509@voxpopuli.im>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ea0-f169.google.com ([209.85.215.169])
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <liljegren.mats2@gmail.com>) id 1UVHSO-0005sF-KJ
-	for lttng-dev@lists.lttng.org; Thu, 25 Apr 2013 04:23:08 -0400
-Received: by mail-ea0-f169.google.com with SMTP id d10so662708eaj.28
-	for <lttng-dev@lists.lttng.org>; Thu, 25 Apr 2013 01:23:02 -0700 (PDT)
+	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1UVMRQ-0000Bm-75
+	for lttng-dev@lists.lttng.org; Thu, 25 Apr 2013 09:42:28 -0400
+In-Reply-To: <51785325.3030509@voxpopuli.im>
+Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,93 +22,61 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, "Couture,
+	Mario" <Mario.Couture@drdc-rddc.gc.ca>, "Painchaud,
+	Frederic" <Frederic.Painchaud@drdc-rddc.gc.ca>
 List-Id: lttng-dev@lists.lttng.org
 
-I'm doing a benchmark application which intends to benchmark the
-effects of using the full nohz mode. I initially tried ftrace, but it
-had too much overhead, so I tried lttng instead. While I'm happy with
-the overhead in lttng, it has another problem: My application never
-executes in full nohz mode.
+-----Message d'origine-----
+De=A0: Alexandre Montplaisir [mailto:alexmonthy@voxpopuli.im] =
 
-In my investigation of why, I came up with the following two logs,
-first using ftrace with sched_switch event enabled:
+Envoy=E9=A0: 24 avril 2013 17:48
 
-       testapp-2048  [001] d... 50744.932281: sched_switch:
-prev_comm=testapp prev_pid=2048 prev_prio=139 prev_state=R ==>
-next_comm=kworker/1:1 next_pid=25 next_prio=120
-     kworker/1:1-25    [001] d... 50744.932312: sched_switch:
-prev_comm=kworker/1:1 prev_pid=25 prev_prio=120 prev_state=S ==>
-next_comm=ksoftirqd/1 next_pid=14 next_prio=120
->>>  ksoftirqd/1-14    [001] d... 50744.932343: sched_switch: prev_comm=ksoftirqd/1 prev_pid=14 prev_prio=120 prev_state=S ==> next_comm=testapp next_pid=2048 next_prio=139
-<<<    testapp-2048  [001] d... 50747.789948: sched_switch:
-prev_comm=testapp prev_pid=2048 prev_prio=139 prev_state=D ==>
-next_comm=kworker/1:1 next_pid=25 next_prio=120
-     kworker/1:1-25    [001] d... 50747.789978: sched_switch:
-prev_comm=kworker/1:1 prev_pid=25 prev_prio=120 prev_state=S ==>
-next_comm=testapp next_pid=2048 next_prio=139
-       testapp-2048  [001] d... 50747.799103: sched_switch:
-prev_comm=testapp prev_pid=2048 prev_prio=139 prev_state=R ==>
-next_comm=kworker/1:1 next_pid=25 next_prio=120
+> On 13-04-24 05:25 PM, Thibault, Daniel wrote:
+>> dpkg: error processing /home/daniel/Documents/git.lttng.org/lttng-ust-2.=
+2.0-rc1+-a16877a-Java/lttng-ust-java_2.2.0-rc1-12_amd64.deb (--install):
+>>  unable to create `/proc/self/coredump_filter.dpkg-new' (while =
 
-The line ">>>" is when the testapp is starting its benchmarking, and
-"<<<" when it has finished. As can be seen, the execution is done
-uninterrupted by any schedule switched for the whole 30s period.
+>> processing `./proc/self/coredump_filter'): No such file or directory Pro=
+cessing triggers for man-db ...
+>> Errors were encountered while processing:
+>
+> checkinstall has always been kind of sloppy. You could get some insight b=
+y printing the contents of the package (by doing "dpkg-deb --contents <pack=
+age-name>.deb"), it could be an invalid character somewhere, a path it does=
+n't recognize, etc.
 
-The second test was with lttng with sched_switch tracepoint enabled:
+    Comparison with the other two packages shows the problem is that checki=
+nstall somehow included ./proc/self/coredump_filter in the contents.  The i=
+nstaller fails when trying to create this, of course.  A bug has been filed=
+ against checkinstall with Ubuntu Launchpad (#1172711).  Fixing this turns =
+out to be very simple: I deployed the deb's contents using the "Extract Her=
+e" contextual menu, renamed the old deb to *.original, deleted the offendin=
+g proc subdirectory from the deployed contents, and finally repackaged the =
+contents with 'dpkg --build <packagename>'.  Worked like a charm.
 
-[07:20:04.813293457] (+0.000823975) pandaboard sched_switch: { cpu_id
-= 1 }, { prev_comm = "swapper/1", prev_tid = 0, prev_prio = 20,
-prev_state = 0, next_comm = "testapp", next_tid = 3027, next_prio = 39
-}
-[07:20:05.062438964] (+0.159973144) pandaboard sched_switch: { cpu_id
-= 1 }, { prev_comm = "testapp", prev_tid = 3027, prev_prio = 39,
-prev_state = 0, next_comm = "ksoftirqd/1", next_tid = 14, next_prio =
-20 }
-[07:20:05.062469482] (+0.000030518) pandaboard sched_switch: { cpu_id
-= 1 }, { prev_comm = "ksoftirqd/1", prev_tid = 14, prev_prio = 20,
-prev_state = 1, next_comm = "testapp", next_tid = 3027, next_prio = 39
-}
-[07:20:05.312438964] (+0.249969482) pandaboard sched_switch: { cpu_id
-= 1 }, { prev_comm = "testapp", prev_tid = 3027, prev_prio = 39,
-prev_state = 0, next_comm = "ksoftirqd/1", next_tid = 14, next_prio =
-20 }
-[07:20:05.312438964] (+0.000000000) pandaboard sched_switch: { cpu_id
-= 1 }, { prev_comm = "ksoftirqd/1", prev_tid = 14, prev_prio = 20,
-prev_state = 1, next_comm = "testapp", next_tid = 3027, next_prio = 39
-}
-[07:20:05.682434082] (+0.369995118) pandaboard sched_switch: { cpu_id
-= 1 }, { prev_comm = "testapp", prev_tid = 3027, prev_prio = 39,
-prev_state = 0, next_comm = "kworker/1:1", next_tid = 25, next_prio =
-20 }
-[07:20:05.682464599] (+0.000030517) pandaboard sched_switch: { cpu_id
-= 1 }, { prev_comm = "kworker/1:1", prev_tid = 25, prev_prio = 20,
-prev_state = 1, next_comm = "testapp", next_tid = 3027, next_prio = 39
-}
-[07:20:06.282440185] (+0.569976807) pandaboard sched_switch: { cpu_id
-= 1 }, { prev_comm = "testapp", prev_tid = 3027, prev_prio = 39,
-prev_state = 0, next_comm = "ksoftirqd/1", next_tid = 14, next_prio =
-20 }
-[07:20:06.282440185] (+0.000000000) pandaboard sched_switch: { cpu_id
-= 1 }, { prev_comm = "ksoftirqd/1", prev_tid = 14, prev_prio = 20,
-prev_state = 1, next_comm = "testapp", next_tid = 3027, next_prio = 39
-}
-[07:20:06.682434082] (+0.399993897) pandaboard sched_switch: { cpu_id
-= 1 }, { prev_comm = "testapp", prev_tid = 3027, prev_prio = 39,
-prev_state = 0, next_comm = "kworker/1:1", next_tid = 25, next_prio =
-20 }
-[07:20:06.682464599] (+0.000030517) pandaboard sched_switch: { cpu_id
-= 1 }, { prev_comm = "kworker/1:1", prev_tid = 25, prev_prio = 20,
-prev_state = 1, next_comm = "testapp", next_tid = 3027, next_prio = 39
-}
+> But if you want to build .deb packages to install on something other than=
+ your own machine, you should really use dpkg-buildpackage or, even better,=
+ pbuilder. Those require proper packaging information in a debian/ sub-dire=
+ctory. You can look at the debian/ directories in the Ubuntu packages (whic=
+h you can get with "apt-get source lttng-ust"), it should be straightforwar=
+d to tweak it to your needs.
 
-and so on...
+   Thanks for the tip.  I'll look into those.
 
-As can be seen, the scheduling is changed when lttng runs. It seems
-like lttng makes the non-migratable kthreads kworker/1:1 and
-ksoftirq/1 busy which totally destroyes measurements in my application
-since nohz mode is never entered.
-
-Is there a way around this? What is causing this behavior?
-
-/Mats
+Daniel U. Thibault
+R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) / Defence R&D=
+ Canada - Valcartier (DRDC Valcartier)
+Cyber s=E9curit=E9 pour les missions essentielles (CME) / Mission Critical =
+Cyber Security (MCCS)
+Protection des syst=E8mes et contremesures (PSC) / Systems Protection & Cou=
+ntermeasures (SPC)
+2459 route de la Bravoure
+Qu=E9bec, QC  G3J 1X5
+CANADA
+Vox : (418) 844-4000 x4245
+Fax : (418) 844-4538
+NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+Gouvernement du Canada / Government of Canada
+<http://www.valcartier.drdc-rddc.gc.ca/>
