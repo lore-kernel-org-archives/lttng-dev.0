@@ -1,17 +1,20 @@
-From: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
-Subject: Re: checkinstall and lttng-ust with Java/JNI support
-Date: Wed, 24 Apr 2013 17:48:21 -0400
-Message-ID: <51785325.3030509__16452.8560395867$1366840290$gmane$org@voxpopuli.im>
-References: <48CF5AC71E61DB46B70D0F388054EFFD12D10094@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+From: Suchakrapani Datt Sharma <suchakrapani.sharma@polymtl.ca>
+Subject: Re: GSoC 2013, "C++ probe support" project and more
+Date: Wed, 24 Apr 2013 23:21:34 -0400
+Message-ID: <1366860094.5178a13e78f12__13146.248079329$1366860125$gmane$org@www.imp.polymtl.ca>
+References: <CAJ7wx-Epdf=DV+acPKkXjbXbgPGXHOUnnfOEH_hbpnreL2z4dA@mail.gmail.com>
+	<CAJ7wx-Eq4eZ7g52W6c4ETLVHm88xrhOg2u1BjYwhDJ87vT+Kaw@mail.gmail.com>
+	<CAGDH53k0DuDWg2sQa2fRfXPMDHLYeyGJr0MXsth0PcxiY6bXUQ@mail.gmail.com>
+	<CAJ7wx-EyT-8TzBELBrFUgbhCwwDVorjDRpTaAhf0iTkXnH43cQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from ironport2-out.teksavvy.com ([206.248.154.182])
+Received: from smtp.polymtl.ca ([132.207.4.11])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <alexmonthy@voxpopuli.im>) id 1UV7aj-0000nG-Tb
-	for lttng-dev@lists.lttng.org; Wed, 24 Apr 2013 17:51:05 -0400
-In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD12D10094@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+	(envelope-from <suchakrapani.sharma@polymtl.ca>) id 1UVCka-0003NH-LY
+	for lttng-dev@lists.lttng.org; Wed, 24 Apr 2013 23:21:36 -0400
+In-Reply-To: <CAJ7wx-EyT-8TzBELBrFUgbhCwwDVorjDRpTaAhf0iTkXnH43cQ@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,81 +23,39 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, "Couture,
-	Mario" <Mario.Couture@drdc-rddc.gc.ca>, "Painchaud,
-	Frederic" <Frederic.Painchaud@drdc-rddc.gc.ca>
+To: Zifei Tong <soariez@gmail.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Daniel,
+Hi Zifei,
 
-On 13-04-24 05:25 PM, Thibault, Daniel wrote:
->    I was fooling around with checkinstall in order to create installation=
- packages for lttng-modules, userspace-rcu, etc., when I ran into what seem=
-s a very obscure bug (googling for the error message "unable to create `/pr=
-oc/self/coredump_filter.dpkg-new'" brings up nothing).
->
->    It occurs when building the Debian package for lttng-ust, but only if =
-Java/JNI support was requested. That is to say, building lttng-ust with no =
-extra support or with just systemtap support packages just fine.
->
->    But when I build it with JNI/Java support, the 'sudo checkinstall make=
- install' runs into this at the end:
->
-> Selecting previously unselected package lttng-ust-java.
-> (Reading database ... 147274 files and directories currently installed.)
-> Unpacking lttng-ust-java (from .../lttng-ust-java_2.2.0-rc1-12_amd64.deb)=
- ...
-> dpkg: error processing /home/daniel/Documents/git.lttng.org/lttng-ust-2.2=
-.0-rc1+-a16877a-Java/lttng-ust-java_2.2.0-rc1-12_amd64.deb (--install):
->  unable to create `/proc/self/coredump_filter.dpkg-new' (while processing=
- `./proc/self/coredump_filter'): No such file or directory
-> Processing triggers for man-db ...
-> Errors were encountered while processing:
->  /home/daniel/Documents/git.lttng.org/lttng-ust-2.2.0-rc1+-a16877a-Java/l=
-ttng-ust-java_2.2.0-rc1-12_amd64.deb
->
->    Note that the install supervised by checkinstall worked fine, and the =
-package was built successfully: the problem occurs when the package is fed =
-to apt, it seems.  The resulting package will cause the same error when run=
- through the Ubuntu Software Centre, for instance, meaning it is unusable.
->
->    Any clues as to what is failing here?
+Quoting Zifei Tong <soariez@gmail.com>:
 
-checkinstall has always been kind of sloppy. You could get some insight
-by printing the contents of the package (by doing "dpkg-deb --contents
-<package-name>.deb"), it could be an invalid character somewhere, a path
-it doesn't recognize, etc.
+> I played with dyninst today. Here is a minimal working example:
+> https://gist.github.com/5kg/5451894
 
-But if you want to build .deb packages to install on something other
-than your own machine, you should really use dpkg-buildpackage or, even
-better, pbuilder. Those require proper packaging information in a
-debian/ sub-directory. You can look at the debian/ directories in the
-Ubuntu packages (which you can get with "apt-get source lttng-ust"), it
-should be straightforward to tweak it to your needs.
+Nice! I have done something similar here and I was able to build and insert code
+snippets. But then I am more inclined towards analysing performance of dyninst.
+You may also want to look at DynC API to build complex code snippets in a C
+like syntax for dyninst.
 
+> Dyninst is a really cool project (after struggling to get it work)...
 
-Cheers,
-Alexandre
+Yeah it took sometime to understand their nomenclature and analysing the
+assembly to see how it really mutates the binary. You might also be interested
+in 'fast tracepoint' infrastructure and normal tracepoints provided by gdb. I
+ran some tests with fast tracepoints using gdb on a same 'mutatee' code (as
+dyninst) and it performed quite better than just dyninst. (a million runs of
+traced function(with no 'action' performed by gdb on tracepoint hit) showed a
+1.46% overhead - better tests are under way) But getting gdb's infra for
+dynamic tracing with UST may be somewhat a serious hack.
 
->
-> Daniel U. Thibault
-> R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) / Defence R=
-&D Canada - Valcartier (DRDC Valcartier)
-> Cyber s=E9curit=E9 pour les missions essentielles (CME) / Mission Critica=
-l Cyber Security (MCCS)
-> Protection des syst=E8mes et contremesures (PSC) / Systems Protection & C=
-ountermeasures (SPC)
-> 2459 route de la Bravoure
-> Qu=E9bec, QC  G3J 1X5
-> CANADA
-> Vox : (418) 844-4000 x4245
-> Fax : (418) 844-4538
-> NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-> Gouvernement du Canada / Government of Canada
-> <http://www.valcartier.drdc-rddc.gc.ca/>
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+Also, as you suggest stapdyn is also a good start to explore. I have not done
+that yet.
+
+I am going to start with getting elementary Dyninst+UST hack working from next
+week for continuing my tests/analysis and its gonna be good to hear from you
+about trials at your end.
+
+--
+Suchakra
