@@ -1,23 +1,18 @@
-From: Zifei Tong <soariez@gmail.com>
-Subject: Re: GSoC 2013, "C++ probe support" project and more
-Date: Sat, 27 Apr 2013 02:47:36 +0800
-Message-ID: <CAJ7wx-E3osJ9-JNh2agDRJTNtUu=TFYruSw-wcHa=9pJr2hMsA__28644.4456935444$1367002130$gmane$org@mail.gmail.com>
-References: <CAJ7wx-Epdf=DV+acPKkXjbXbgPGXHOUnnfOEH_hbpnreL2z4dA@mail.gmail.com>
-	<CAJ7wx-Eq4eZ7g52W6c4ETLVHm88xrhOg2u1BjYwhDJ87vT+Kaw@mail.gmail.com>
-	<CAGDH53k0DuDWg2sQa2fRfXPMDHLYeyGJr0MXsth0PcxiY6bXUQ@mail.gmail.com>
-	<CAJ7wx-EyT-8TzBELBrFUgbhCwwDVorjDRpTaAhf0iTkXnH43cQ@mail.gmail.com>
-	<1366860094.5178a13e78f12@www.imp.polymtl.ca>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [RFC PATCH] Fix: per-uid buffers should only be flushed
+	once on	stop
+Date: Fri, 26 Apr 2013 15:18:38 -0400
+Message-ID: <20130426191838.GA21939__12285.9793402769$1367003948$gmane$org@Krystal>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ve0-f172.google.com ([209.85.128.172])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <soariez@gmail.com>) id 1UVnh0-0005dR-4Y
-	for lttng-dev@lists.lttng.org; Fri, 26 Apr 2013 14:48:22 -0400
-Received: by mail-ve0-f172.google.com with SMTP id db10so2008740veb.31
-	for <lttng-dev@lists.lttng.org>; Fri, 26 Apr 2013 11:48:16 -0700 (PDT)
-In-Reply-To: <1366860094.5178a13e78f12@www.imp.polymtl.ca>
+	(envelope-from <compudj@mail.openrapids.net>) id 1UVoAL-0005th-HD
+	for lttng-dev@lists.lttng.org; Fri, 26 Apr 2013 15:18:41 -0400
+Content-Disposition: inline
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -26,33 +21,222 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Suchakrapani Datt Sharma <suchakrapani.sharma@polymtl.ca>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: dgoulet@efficios.com
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-SGkgU3VjaGFrcmEgYW5kIENocmlzdGlhbgoKPiBOaWNlISBJIGhhdmUgZG9uZSBzb21ldGhpbmcg
-c2ltaWxhciBoZXJlIGFuZCBJIHdhcyBhYmxlIHRvIGJ1aWxkIGFuZCBpbnNlcnQgY29kZQo+IHNu
-aXBwZXRzLiBCdXQgdGhlbiBJIGFtIG1vcmUgaW5jbGluZWQgdG93YXJkcyBhbmFseXNpbmcgcGVy
-Zm9ybWFuY2Ugb2YgZHluaW5zdC4KCkFjY29yZGluZyB0aGUgZG9jdW1lbnQgYW5kIG15IHRlc3Qs
-IHR1cm4KJ0JQYXRjaDo6c2V0VHJhbXBSZWN1cnNpdmUodHJ1ZSknIG9uIHdpbGwgcmVkdWNlIHRo
-ZSAnbXV0YXRlZScKaW5zdHJ1bWVudGF0aW9uIG92ZXJoZWFkIGEgbG90LgoKPiBZb3UgbWlnaHQg
-YWxzbyBiZSBpbnRlcmVzdGVkIGluICdmYXN0IHRyYWNlcG9pbnQnIGluZnJhc3RydWN0dXJlIGFu
-ZCBub3JtYWwgdHJhY2Vwb2ludHMgcHJvdmlkZWQgYnkgZ2RiLgo+IEJ1dCBnZXR0aW5nIGdkYidz
-IGluZnJhIGZvciBkeW5hbWljIHRyYWNpbmcgd2l0aCBVU1QgbWF5IGJlIHNvbWV3aGF0IGEgc2Vy
-aW91cyBoYWNrLgoKVGhhbmtzIGZvciBwb2ludGluZyBvdXQgZ2RiJ3MgJ2Zhc3QgdHJhY2Vwb2lu
-dCcgZmVhdHVyZS4gSSBqdXN0CmNvbXBpbGVkIGdkYiBhbmQgZ290ICdmdHJhY2UnIHdvcmsuCgo+
-IFF1b3RlIGZvcm0gZ2RiIGRvY3VtZW50IFsxXTogIkF0IHByZXNlbnQsIHRoZSBVU1QgKExUVG5n
-IFVzZXJzcGFjZSBUcmFjZXIsIGh0dHA6Ly9sdHRuZy5vcmcvdXN0KSB0cmFjaW5nIGVuZ2luZSBp
-cyBzdXBwb3J0ZWQuIgoKU28gZG9lcyBpdCBtZWFuIHRoZSBkeW5hbWljIGluc3RydW1lbnRhdGlv
-biBwcm9qZWN0IGlzIGFscmVhZHkgZG9uZSBieQp0aGUgZ2RiIGd1eXM/Cgo+IFRoZSBkeW5hbWlj
-IGluc3RydW1lbnRhdGlvbiBwcm9qZWN0IGlzIHZlcnkgaW50ZXJlc3RpbmcgaW5kZWVkLiBJIGFs
-c28KPiB0aGluayBpdCBjb3VsZCBiZSBkb2FibGUgYXMgYSBHU29DIHByb2plY3QuIERvIHlvdSBo
-YXZlIGFueSBwbGFuIG9uCj4gaG93IHlvdSB3b3VsZCBpbnRlZ3JhdGUgZHluaW5zdCB3aXRoIFVT
-VD8KPiBBbHNvLCBhIHF1aWNrIHJlbWluZGVyIHRoYXQgdGhlIEdTb0MgYXBwbGljYXRpb24gZm9y
-IHN0dWRlbnQgaXMgb3Blbgo+IHVudGlsIE1heSAzcmQuIERvbid0IGZvcmdldCB0byBzZW5kIHVz
-IHlvdXIgcHJvcG9zYWwgOikhCgpJIHdpbGwgZmluaXNoIG15IHByb3Bvc2FsIGFzIHNvb24gcG9z
-c2libGUuCgpUaGFua3MuCgpbMV0gaHR0cDovL3NvdXJjZXdhcmUub3JnL2dkYi9jdXJyZW50L29u
-bGluZWRvY3MvZ2RiL1NlcnZlci5odG1sI1NlcnZlcgotLQpCZXN0IFJlZ2FyZHMsCuS7neWtkOmj
-niAoWmlmZWkgVG9uZykKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpo
-dHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+They were flushed once per application previously, causing workload with
+many applications to trigger too many flush on stop, which in turn
+caused buffer padding bloat.
+
+* The pseudo-code for stop behavior on per-uid buffers was:
+
+flush session's buffers
+for each application:
+  - stop tracing
+  - wait quiescent
+  - flush buffers
+  - push metadata
+
+Now doing, for per-uid buffers:
+
+for each application:
+  - stop tracing
+  - wait quiescent
+  - push metadata
+flush session's buffers
+
+* And for per-pid buffers:
+
+Previously:
+
+for each application:
+  - stop tracing
+  - wait quiescent
+  - flush buffers
+  - push metadata
+
+Now:
+
+for each application:
+  - stop tracing
+  - wait quiescent
+  - push metadata
+for each application:
+  - flush buffers
+
+Refs: #497
+
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+---
+diff --git a/src/bin/lttng-sessiond/ust-app.c b/src/bin/lttng-sessiond/ust-app.c
+index 9bd622d..9bd4e69 100644
+--- a/src/bin/lttng-sessiond/ust-app.c
++++ b/src/bin/lttng-sessiond/ust-app.c
+@@ -3550,6 +3550,7 @@ int ust_app_create_event_glb(struct ltt_ust_session *usess,
+ /*
+  * Start tracing for a specific UST session and app.
+  */
++static
+ int ust_app_start_trace(struct ltt_ust_session *usess, struct ust_app *app)
+ {
+ 	int ret = 0;
+@@ -3642,12 +3643,11 @@ error_unlock:
+ /*
+  * Stop tracing for a specific UST session and app.
+  */
++static
+ int ust_app_stop_trace(struct ltt_ust_session *usess, struct ust_app *app)
+ {
+ 	int ret = 0;
+-	struct lttng_ht_iter iter;
+ 	struct ust_app_session *ua_sess;
+-	struct ust_app_channel *ua_chan;
+ 	struct ust_registry_session *registry;
+ 
+ 	DBG("Stopping tracing for ust app pid %d", app->pid);
+@@ -3700,6 +3700,52 @@ int ust_app_stop_trace(struct ltt_ust_session *usess, struct ust_app *app)
+ 
+ 	health_code_update();
+ 
++	registry = get_session_registry(ua_sess);
++	assert(registry);
++	/* Push metadata for application before freeing the application. */
++	(void) push_metadata(registry, ua_sess->consumer);
++
++	pthread_mutex_unlock(&ua_sess->lock);
++end_no_session:
++	rcu_read_unlock();
++	health_code_update();
++	return 0;
++
++error_rcu_unlock:
++	pthread_mutex_unlock(&ua_sess->lock);
++	rcu_read_unlock();
++	health_code_update();
++	return -1;
++}
++
++/*
++ * Flush buffers for a specific UST session and app.
++ */
++static
++int ust_app_flush_trace(struct ltt_ust_session *usess, struct ust_app *app)
++{
++	int ret = 0;
++	struct lttng_ht_iter iter;
++	struct ust_app_session *ua_sess;
++	struct ust_app_channel *ua_chan;
++
++	DBG("Flushing buffers for ust app pid %d", app->pid);
++
++	rcu_read_lock();
++
++	if (!app->compatible) {
++		goto end_no_session;
++	}
++
++	ua_sess = lookup_session_by_app(usess, app);
++	if (ua_sess == NULL) {
++		goto end_no_session;
++	}
++
++	pthread_mutex_lock(&ua_sess->lock);
++
++	health_code_update();
++
+ 	/* Flushing buffers */
+ 	cds_lfht_for_each_entry(ua_sess->channels->ht, &iter.iter, ua_chan,
+ 			node.node) {
+@@ -3723,22 +3769,11 @@ int ust_app_stop_trace(struct ltt_ust_session *usess, struct ust_app *app)
+ 
+ 	health_code_update();
+ 
+-	registry = get_session_registry(ua_sess);
+-	assert(registry);
+-	/* Push metadata for application before freeing the application. */
+-	(void) push_metadata(registry, ua_sess->consumer);
+-
+ 	pthread_mutex_unlock(&ua_sess->lock);
+ end_no_session:
+ 	rcu_read_unlock();
+ 	health_code_update();
+ 	return 0;
+-
+-error_rcu_unlock:
+-	pthread_mutex_unlock(&ua_sess->lock);
+-	rcu_read_unlock();
+-	health_code_update();
+-	return -1;
+ }
+ 
+ /*
+@@ -3823,9 +3858,21 @@ int ust_app_stop_trace_all(struct ltt_ust_session *usess)
+ 
+ 	rcu_read_lock();
+ 
+-	/* Flush all per UID buffers associated to that session. */
+-	if (usess->buffer_type == LTTNG_BUFFER_PER_UID) {
++	cds_lfht_for_each_entry(ust_app_ht->ht, &iter.iter, app, pid_n.node) {
++		ret = ust_app_stop_trace(usess, app);
++		if (ret < 0) {
++			/* Continue to next apps even on error */
++			continue;
++		}
++	}
++
++	/* Flush buffers */
++	switch (usess->buffer_type) {
++	case LTTNG_BUFFER_PER_UID:
++	{
+ 		struct buffer_reg_uid *reg;
++
++		/* Flush all per UID buffers associated to that session. */
+ 		cds_list_for_each_entry(reg, &usess->buffer_reg_uid_list, lnode) {
+ 			struct buffer_reg_channel *reg_chan;
+ 			struct consumer_socket *socket;
+@@ -3848,14 +3895,20 @@ int ust_app_stop_trace_all(struct ltt_ust_session *usess)
+ 				(void) consumer_flush_channel(socket, reg_chan->consumer_key);
+ 			}
+ 		}
++		break;
+ 	}
+-
+-	cds_lfht_for_each_entry(ust_app_ht->ht, &iter.iter, app, pid_n.node) {
+-		ret = ust_app_stop_trace(usess, app);
+-		if (ret < 0) {
+-			/* Continue to next apps even on error */
+-			continue;
++	case LTTNG_BUFFER_PER_PID:
++		cds_lfht_for_each_entry(ust_app_ht->ht, &iter.iter, app, pid_n.node) {
++			ret = ust_app_flush_trace(usess, app);
++			if (ret < 0) {
++				/* Continue to next apps even on error */
++				continue;
++			}
+ 		}
++		break;
++	default:
++		assert(0);
++		break;
+ 	}
+ 
+ 	rcu_read_unlock();
+diff --git a/src/bin/lttng-sessiond/ust-app.h b/src/bin/lttng-sessiond/ust-app.h
+index e0aa17a..255a75c 100644
+--- a/src/bin/lttng-sessiond/ust-app.h
++++ b/src/bin/lttng-sessiond/ust-app.h
+@@ -257,8 +257,6 @@ int ust_app_register_done(int sock)
+ int ust_app_version(struct ust_app *app);
+ void ust_app_unregister(int sock);
+ unsigned long ust_app_list_count(void);
+-int ust_app_start_trace(struct ltt_ust_session *usess, struct ust_app *app);
+-int ust_app_stop_trace(struct ltt_ust_session *usess, struct ust_app *app);
+ int ust_app_start_trace_all(struct ltt_ust_session *usess);
+ int ust_app_stop_trace_all(struct ltt_ust_session *usess);
+ int ust_app_destroy_trace_all(struct ltt_ust_session *usess);
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
