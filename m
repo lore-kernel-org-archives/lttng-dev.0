@@ -1,27 +1,23 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Changed scheduling when using lttng
-Date: Fri, 26 Apr 2013 12:14:39 -0400
-Message-ID: <20130426161439.GA5547__45898.7453989268$1366992901$gmane$org@Krystal>
-References: <CA+xJJ18hL16P3gvowveWVfg+ZNh=cjEFOoPisznU0y28YfCdbw@mail.gmail.com>
-	<20130425151213.GC7970@Krystal>
-	<CA+xJJ1-U_Y0DuLNJ+xwBLPLF+5LyS=mO4f7onpquEHSrbyOUAQ@mail.gmail.com>
-	<20130426132639.GA1468@Krystal>
-	<CA+xJJ19OE=nrfpEoOEib-7=GrP9hD-RV7bc=aY7nqDwB59auXQ@mail.gmail.com>
-	<20130426151444.GA2260@Krystal>
-	<CA+xJJ199oic8pmnKM4c674Zf_NJe3AR1YxFtBTjLryv3S67nkQ@mail.gmail.com>
-	<20130426153819.GA3026@Krystal>
-	<CA+xJJ18ea02rKcfJmw9B2bTOBY0Mz_Wr6c+aszb3HWPDz2zRAQ@mail.gmail.com>
+From: Zifei Tong <soariez@gmail.com>
+Subject: Re: GSoC 2013, "C++ probe support" project and more
+Date: Sat, 27 Apr 2013 02:47:36 +0800
+Message-ID: <CAJ7wx-E3osJ9-JNh2agDRJTNtUu=TFYruSw-wcHa=9pJr2hMsA__28644.4456935444$1367002130$gmane$org@mail.gmail.com>
+References: <CAJ7wx-Epdf=DV+acPKkXjbXbgPGXHOUnnfOEH_hbpnreL2z4dA@mail.gmail.com>
+	<CAJ7wx-Eq4eZ7g52W6c4ETLVHm88xrhOg2u1BjYwhDJ87vT+Kaw@mail.gmail.com>
+	<CAGDH53k0DuDWg2sQa2fRfXPMDHLYeyGJr0MXsth0PcxiY6bXUQ@mail.gmail.com>
+	<CAJ7wx-EyT-8TzBELBrFUgbhCwwDVorjDRpTaAhf0iTkXnH43cQ@mail.gmail.com>
+	<1366860094.5178a13e78f12@www.imp.polymtl.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from mail-ve0-f172.google.com ([209.85.128.172])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UVlIH-0004Se-5J
-	for lttng-dev@lists.lttng.org; Fri, 26 Apr 2013 12:14:41 -0400
-Content-Disposition: inline
-In-Reply-To: <CA+xJJ18ea02rKcfJmw9B2bTOBY0Mz_Wr6c+aszb3HWPDz2zRAQ@mail.gmail.com>
+	(envelope-from <soariez@gmail.com>) id 1UVnh0-0005dR-4Y
+	for lttng-dev@lists.lttng.org; Fri, 26 Apr 2013 14:48:22 -0400
+Received: by mail-ve0-f172.google.com with SMTP id db10so2008740veb.31
+	for <lttng-dev@lists.lttng.org>; Fri, 26 Apr 2013 11:48:16 -0700 (PDT)
+In-Reply-To: <1366860094.5178a13e78f12@www.imp.polymtl.ca>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -30,84 +26,33 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mats Liljegren <liljegren.mats2@gmail.com>
-Cc: lttng-dev@lists.lttng.org
+To: Suchakrapani Datt Sharma <suchakrapani.sharma@polymtl.ca>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-* Mats Liljegren (liljegren.mats2@gmail.com) wrote:
-> On Fri, Apr 26, 2013 at 5:38 PM, Mathieu Desnoyers
-> <mathieu.desnoyers@efficios.com> wrote:
-> > * Mats Liljegren (liljegren.mats2@gmail.com) wrote:
-> >> >> >> I tried number 1 using --read-timer 0, but "lttng stop" hanged at
-> >> >> >> "Waiting for data availability", producing lots of dots...
-> >> >> >
-> >> >> > As I said, we'd need to implement RING_BUFFER_WAKEUP_BY_WRITER when
-> >> >> > read-timer is set to 0. It's not implemented currently.
-> >> >> >
-> >> >> >>
-> >> >> >> Would it be possible to let some other (not using nohz mode) CPU to
-> >> >> >> flush the buffers?
-> >> >> >
-> >> >> > I guess that would be option 3) :
-> >> >> >
-> >> >> > Another option would be to let a single thread in the consumer handle
-> >> >> > the read-timer for all streams of the channel, like we do for UST.
-> >> >>
-> >> >> Ehm, well, you did say something about implement... Sorry for missing that.
-> >> >>
-> >> >> I guess now the question is which option that gives best
-> >> >> characteristics for least amount of work... Without knowing the design
-> >> >> of lttng-module, I'd believe that simply having the timer on another
-> >> >> CPU should be a good candidate. Is there anything to watch out for
-> >> >> with this solution?
-> >> >>
-> >> >> Are there any documents describing lttng-module design, or is it "join
-> >> >> the force, use the source"? I've seen some high-level description
-> >> >> showing how tools/libs/modules fit together, but I haven't found
-> >> >> anything that describes how lttng-modules is designed.
-> >> >
-> >> > Papers on the ring buffer design exist, but not on lttng-modules per se.
-> >> >
-> >> > I think the best solution in the shortest amount of time would be (2):
-> >> > using deferrable timers. It's just flags to pass to timer creation.
-> >>
-> >> Doesn't that require that the system is idle from time to time? My
-> >> application will occupy 100% CPU until finished, and expects there are
-> >> no ticks during that time.
-> >
-> > AFAIU, your initial question was about not preventing the CPU from going
-> > to low power mode when tracing. The deferred timers should do just that.
-> >
-> > Indeed, the timers will fire on CPUs that are active.
-> >
-> > I guess what you want there is no intrusiveness for CPU shielding.
-> > Indeed, for this kind of use-case, you may need to centralise the timer
-> > handling into lttng-consumerd.
-> 
-> I realize I didn't express myself very clearly: There is a distinction
-> between "full nohz" and "nohz idle". Full nohz means that if there are
-> no competing threads there is no reason to have ticks, so turn ticks
-> off. POSIX timers complicates things, but this was the simplistic view
-> of it... This is currently implemented as an extension of nohz idle
-> although they are quite orthogonal. Full nohz has been called "full
-> dynticks" and "extended nohz", quite a lot of naming confusion here.
-> 
-> I need to read up on the code to see what seems to be the best design.
-> I thought just changing lib_ring_buffer_start_switch_timer() so that
-> it used "add_timer_on(&buff->switch_timer, 0)" would do the trick,
-> perhaps by using some kind of config for this case... But things are
-> usually not as simple as they first appear to be.
-
-If you go for this approach, I would recommend having a single timer
-handler per channel (rather than per buffer). Within the handler, you
-can iterate on each buffer.
-
-Thanks,
-
-Mathieu
-
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+SGkgU3VjaGFrcmEgYW5kIENocmlzdGlhbgoKPiBOaWNlISBJIGhhdmUgZG9uZSBzb21ldGhpbmcg
+c2ltaWxhciBoZXJlIGFuZCBJIHdhcyBhYmxlIHRvIGJ1aWxkIGFuZCBpbnNlcnQgY29kZQo+IHNu
+aXBwZXRzLiBCdXQgdGhlbiBJIGFtIG1vcmUgaW5jbGluZWQgdG93YXJkcyBhbmFseXNpbmcgcGVy
+Zm9ybWFuY2Ugb2YgZHluaW5zdC4KCkFjY29yZGluZyB0aGUgZG9jdW1lbnQgYW5kIG15IHRlc3Qs
+IHR1cm4KJ0JQYXRjaDo6c2V0VHJhbXBSZWN1cnNpdmUodHJ1ZSknIG9uIHdpbGwgcmVkdWNlIHRo
+ZSAnbXV0YXRlZScKaW5zdHJ1bWVudGF0aW9uIG92ZXJoZWFkIGEgbG90LgoKPiBZb3UgbWlnaHQg
+YWxzbyBiZSBpbnRlcmVzdGVkIGluICdmYXN0IHRyYWNlcG9pbnQnIGluZnJhc3RydWN0dXJlIGFu
+ZCBub3JtYWwgdHJhY2Vwb2ludHMgcHJvdmlkZWQgYnkgZ2RiLgo+IEJ1dCBnZXR0aW5nIGdkYidz
+IGluZnJhIGZvciBkeW5hbWljIHRyYWNpbmcgd2l0aCBVU1QgbWF5IGJlIHNvbWV3aGF0IGEgc2Vy
+aW91cyBoYWNrLgoKVGhhbmtzIGZvciBwb2ludGluZyBvdXQgZ2RiJ3MgJ2Zhc3QgdHJhY2Vwb2lu
+dCcgZmVhdHVyZS4gSSBqdXN0CmNvbXBpbGVkIGdkYiBhbmQgZ290ICdmdHJhY2UnIHdvcmsuCgo+
+IFF1b3RlIGZvcm0gZ2RiIGRvY3VtZW50IFsxXTogIkF0IHByZXNlbnQsIHRoZSBVU1QgKExUVG5n
+IFVzZXJzcGFjZSBUcmFjZXIsIGh0dHA6Ly9sdHRuZy5vcmcvdXN0KSB0cmFjaW5nIGVuZ2luZSBp
+cyBzdXBwb3J0ZWQuIgoKU28gZG9lcyBpdCBtZWFuIHRoZSBkeW5hbWljIGluc3RydW1lbnRhdGlv
+biBwcm9qZWN0IGlzIGFscmVhZHkgZG9uZSBieQp0aGUgZ2RiIGd1eXM/Cgo+IFRoZSBkeW5hbWlj
+IGluc3RydW1lbnRhdGlvbiBwcm9qZWN0IGlzIHZlcnkgaW50ZXJlc3RpbmcgaW5kZWVkLiBJIGFs
+c28KPiB0aGluayBpdCBjb3VsZCBiZSBkb2FibGUgYXMgYSBHU29DIHByb2plY3QuIERvIHlvdSBo
+YXZlIGFueSBwbGFuIG9uCj4gaG93IHlvdSB3b3VsZCBpbnRlZ3JhdGUgZHluaW5zdCB3aXRoIFVT
+VD8KPiBBbHNvLCBhIHF1aWNrIHJlbWluZGVyIHRoYXQgdGhlIEdTb0MgYXBwbGljYXRpb24gZm9y
+IHN0dWRlbnQgaXMgb3Blbgo+IHVudGlsIE1heSAzcmQuIERvbid0IGZvcmdldCB0byBzZW5kIHVz
+IHlvdXIgcHJvcG9zYWwgOikhCgpJIHdpbGwgZmluaXNoIG15IHByb3Bvc2FsIGFzIHNvb24gcG9z
+c2libGUuCgpUaGFua3MuCgpbMV0gaHR0cDovL3NvdXJjZXdhcmUub3JnL2dkYi9jdXJyZW50L29u
+bGluZWRvY3MvZ2RiL1NlcnZlci5odG1sI1NlcnZlcgotLQpCZXN0IFJlZ2FyZHMsCuS7neWtkOmj
+niAoWmlmZWkgVG9uZykKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpo
+dHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
