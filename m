@@ -1,42 +1,28 @@
-From: Amit Margalit <AMITM@il.ibm.com>
-Subject: Re: Is there a way to make LTTng use the same
- subbuffers for multiple processes?
-Date: Mon, 29 Apr 2013 09:00:51 +0300
-Message-ID: <OF565A9179.C1F29AC9-ONC2257B5C.0020E852-C2257B5C.0020EF6F__40343.9708556563$1367215333$gmane$org@il.ibm.com>
-References: <OFDF63FF91.58AE5030-ONC2257B5B.004BA0B5-C2257B5B.004C083C@il.ibm.com>
-	<1871619348.1882721367199149384.JavaMail.root@srv11.zimbra.polymtl.ca>
+From: Mats Liljegren <liljegren.mats2@gmail.com>
+Subject: Re: Changed scheduling when using lttng
+Date: Mon, 29 Apr 2013 08:53:04 +0200
+Message-ID: <CA+xJJ181-F-36Kw18Z5R9rvhzDeNfUgNQofHrowmY5raZA2Qtw__35801.8638370142$1367218414$gmane$org@mail.gmail.com>
+References: <CA+xJJ18hL16P3gvowveWVfg+ZNh=cjEFOoPisznU0y28YfCdbw@mail.gmail.com>
+	<20130425151213.GC7970@Krystal>
+	<CA+xJJ1-U_Y0DuLNJ+xwBLPLF+5LyS=mO4f7onpquEHSrbyOUAQ@mail.gmail.com>
+	<20130426132639.GA1468@Krystal>
+	<CA+xJJ19OE=nrfpEoOEib-7=GrP9hD-RV7bc=aY7nqDwB59auXQ@mail.gmail.com>
+	<20130426151444.GA2260@Krystal>
+	<CA+xJJ199oic8pmnKM4c674Zf_NJe3AR1YxFtBTjLryv3S67nkQ@mail.gmail.com>
+	<20130426153819.GA3026@Krystal>
+	<CA+xJJ18ea02rKcfJmw9B2bTOBY0Mz_Wr6c+aszb3HWPDz2zRAQ@mail.gmail.com>
+	<20130426161439.GA5547@Krystal>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2084951131=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from e06smtp10.uk.ibm.com ([195.75.94.106])
+Received: from mail-ee0-f52.google.com ([74.125.83.52])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <amitm@il.ibm.com>) id 1UWh9i-0007co-Hu
-	for lttng-dev@lists.lttng.org; Mon, 29 Apr 2013 02:01:42 -0400
-Received: from /spool/local
-	by e06smtp10.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use
-	Only! Violators will be prosecuted
-	for <lttng-dev@lists.lttng.org> from <amitm@il.ibm.com>;
-	Mon, 29 Apr 2013 06:59:52 +0100
-Received: from b06cxnps3075.portsmouth.uk.ibm.com
-	(d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-	by d06dlp02.portsmouth.uk.ibm.com (Postfix) with ESMTP id D561A219005C
-	for <lttng-dev@lists.lttng.org>; Mon, 29 Apr 2013 07:04:03 +0100 (BST)
-Received: from d06av07.portsmouth.uk.ibm.com (d06av07.portsmouth.uk.ibm.com
-	[9.149.37.248])
-	by b06cxnps3075.portsmouth.uk.ibm.com (8.13.8/8.13.8/NCO v10.0) with
-	ESMTP id r3T60s6F38207616
-	for <lttng-dev@lists.lttng.org>; Mon, 29 Apr 2013 06:00:54 GMT
-Received: from d06av07.portsmouth.uk.ibm.com (d06av07.portsmouth.uk.ibm.com
-	[127.0.0.1])
-	by d06av07.portsmouth.uk.ibm.com (8.14.4/8.13.1/NCO v10.0 AVout) with
-	ESMTP id r3T4hr2u002319
-	for <lttng-dev@lists.lttng.org>; Mon, 29 Apr 2013 00:43:53 -0400
-Received: from d06ml311.portsmouth.uk.ibm.com (d06ml311.portsmouth.uk.ibm.com
-	[9.149.104.181])
-	by d06av07.portsmouth.uk.ibm.com (8.14.4/8.13.1/NCO v10.0 AVin) with
-	ESMTP id r3T4hrgj002315
-	for <lttng-dev@lists.lttng.org>; Mon, 29 Apr 2013 00:43:53 -0400
-In-Reply-To: <1871619348.1882721367199149384.JavaMail.root@srv11.zimbra.polymtl.ca>
+	(envelope-from <liljegren.mats2@gmail.com>) id 1UWhxX-00080n-3n
+	for lttng-dev@lists.lttng.org; Mon, 29 Apr 2013 02:53:11 -0400
+Received: by mail-ee0-f52.google.com with SMTP id d41so2432102eek.39
+	for <lttng-dev@lists.lttng.org>; Sun, 28 Apr 2013 23:53:05 -0700 (PDT)
+In-Reply-To: <20130426161439.GA5547@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -45,116 +31,40 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Michel Dagenais <michel.dagenais@polymtl.ca>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-This is a multipart message in MIME format.
---===============2084951131==
-Content-Type: multipart/alternative; boundary="=_alternative 0020EF1EC2257B5C_="
+On Fri, Apr 26, 2013 at 6:14 PM, Mathieu Desnoyers
+<mathieu.desnoyers@efficios.com> wrote:
+>> > AFAIU, your initial question was about not preventing the CPU from going
+>> > to low power mode when tracing. The deferred timers should do just that.
+>> >
+>> > Indeed, the timers will fire on CPUs that are active.
+>> >
+>> > I guess what you want there is no intrusiveness for CPU shielding.
+>> > Indeed, for this kind of use-case, you may need to centralise the timer
+>> > handling into lttng-consumerd.
+>>
+>> I realize I didn't express myself very clearly: There is a distinction
+>> between "full nohz" and "nohz idle". Full nohz means that if there are
+>> no competing threads there is no reason to have ticks, so turn ticks
+>> off. POSIX timers complicates things, but this was the simplistic view
+>> of it... This is currently implemented as an extension of nohz idle
+>> although they are quite orthogonal. Full nohz has been called "full
+>> dynticks" and "extended nohz", quite a lot of naming confusion here.
+>>
+>> I need to read up on the code to see what seems to be the best design.
+>> I thought just changing lib_ring_buffer_start_switch_timer() so that
+>> it used "add_timer_on(&buff->switch_timer, 0)" would do the trick,
+>> perhaps by using some kind of config for this case... But things are
+>> usually not as simple as they first appear to be.
+>
+> If you go for this approach, I would recommend having a single timer
+> handler per channel (rather than per buffer). Within the handler, you
+> can iterate on each buffer.
 
-This is a multipart message in MIME format.
---=_alternative 0020EF1EC2257B5C_=
-Content-Type: text/plain; charset="US-ASCII"
+Thanks for the advice!
+I'll dive into the code and see if I can make something that works.
 
-This is excellent. We'll give it a try. Thank you,
-
-Amit Margalit
-IBM XIV - Storage Reinvented
-XIV-NAS Development Team
-Tel. 03-689-7774
-Fax. 03-689-7230
-
-
-
-From:   Michel Dagenais <michel.dagenais@polymtl.ca>
-To:     Amit Margalit/Israel/IBM@IBMIL
-Cc:     lttng-dev@lists.lttng.org
-Date:   04/29/2013 04:32 AM
-Subject:        Re: [lttng-dev] Is there a way to make LTTng use the same 
-subbuffers for multiple processes?
-
-
-
-
-> Our system is a 12-core x86 (6-core + HT). If I take 4 subbuffers of 
-1MB, this means 4MB per
-> process. As the number of processes rises, this becomes prohibitive. 
-> For example, we may need to support > 500 sub-processes ==> 500 * 4MB = 
-2GB - 
-> which is a bit too much.  Is there a way to tell LTTng to share the 
-sub-buffers with forked processes? 
-
-This is the number one feature listed in the changelog for lttng-tools and 
-UST for version 2.2. The first release candidate is out so you can try the 
-feature, and the final 2.2 version should not be too far away.
-
-http://lttng.org/lttng-tools-220-rc1
-- Add UST per UID buffers support
-
-
---=_alternative 0020EF1EC2257B5C_=
-Content-Type: text/html; charset="US-ASCII"
-
-<font size=2 face="sans-serif">This is excellent. We'll give it a try.
-Thank you,</font>
-<br>
-<br><font size=2 color=#000080 face="sans-serif">Amit Margalit</font>
-<br><font size=2 color=#808000 face="sans-serif">IBM XIV </font><font size=2 face="sans-serif">-
-<i>Storage Reinvented</i></font>
-<br><font size=2 face="sans-serif">XIV-NAS Development Team</font>
-<br><font size=2 face="sans-serif">Tel. 03</font><font size=2 face="Arial">-689-7774</font>
-<br><font size=2 face="Arial">Fax. 03-689-7230</font>
-<br>
-<br>
-<br>
-<br><font size=1 color=#5f5f5f face="sans-serif">From: &nbsp; &nbsp; &nbsp;
-&nbsp;</font><font size=1 face="sans-serif">Michel Dagenais &lt;michel.dagenais@polymtl.ca&gt;</font>
-<br><font size=1 color=#5f5f5f face="sans-serif">To: &nbsp; &nbsp; &nbsp;
-&nbsp;</font><font size=1 face="sans-serif">Amit Margalit/Israel/IBM@IBMIL</font>
-<br><font size=1 color=#5f5f5f face="sans-serif">Cc: &nbsp; &nbsp; &nbsp;
-&nbsp;</font><font size=1 face="sans-serif">lttng-dev@lists.lttng.org</font>
-<br><font size=1 color=#5f5f5f face="sans-serif">Date: &nbsp; &nbsp; &nbsp;
-&nbsp;</font><font size=1 face="sans-serif">04/29/2013 04:32 AM</font>
-<br><font size=1 color=#5f5f5f face="sans-serif">Subject: &nbsp; &nbsp;
-&nbsp; &nbsp;</font><font size=1 face="sans-serif">Re: [lttng-dev]
-Is there a way to make LTTng use the same subbuffers for multiple processes?</font>
-<br>
-<hr noshade>
-<br>
-<br>
-<br><font size=3><br>
-&gt; </font><font size=2 face="sans-serif">Our system is a 12-core x86
-(6-core + HT). If I take 4 subbuffers of 1MB, this means 4MB per<br>
-&gt; process. As the number of processes rises, this becomes prohibitive.</font><font size=3>
-&nbsp;<br>
-&gt; </font><font size=2 face="sans-serif">For example, we may need to
-support &gt; 500 sub-processes ==&gt; 500 * 4MB = 2GB - <br>
-&gt; which is a bit too much.</font><font size=3> &nbsp;</font><font size=2 face="sans-serif">Is
-there a way to tell LTTng to share the sub-buffers with forked processes?</font><font size=3>
-<br>
-<br>
-This is the number one feature listed in the changelog for lttng-tools
-and UST for version 2.2. The first release candidate is out so you can
-try the feature, and the final 2.2 version should not be too far away.<br>
-<br>
-</font><a href="http://lttng.org/lttng-tools-220-rc1"><font size=3>http://lttng.org/lttng-tools-220-rc1</font></a><font size=3><br>
-- Add UST per UID buffers support<br>
-</font>
-<br>
---=_alternative 0020EF1EC2257B5C_=--
-
-
-
---===============2084951131==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============2084951131==--
+/Mats
