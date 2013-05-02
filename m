@@ -1,16 +1,16 @@
 From: "Ikaheimonen, JP" <jp_ikaheimonen@mentor.com>
-Subject: [Babeltrace RFC PATCH 18/28] Add MinGW implementation
-	of strnlen
-Date: Thu, 2 May 2013 12:00:08 +0000
-Message-ID: <009B25148989C6458484484699278506E537E951__45262.8556792208$1367496048$gmane$org@EU-MBX-01.mgc.mentorg.com>
+Subject: [Babeltrace RFC PATCH 19/28] Add MinGW implementation
+ of posix_fallocate
+Date: Thu, 2 May 2013 12:00:59 +0000
+Message-ID: <009B25148989C6458484484699278506E537E962__25322.6546141834$1367496105$gmane$org@EU-MBX-01.mgc.mentorg.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jp_ikaheimonen@mentor.com>) id 1UXsBN-00029i-Aw
-	for lttng-dev@lists.lttng.org; Thu, 02 May 2013 08:00:17 -0400
+	(envelope-from <jp_ikaheimonen@mentor.com>) id 1UXsCB-0002Ax-5P
+	for lttng-dev@lists.lttng.org; Thu, 02 May 2013 08:01:07 -0400
 Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -24,70 +24,46 @@ To: "Mathieu Desnoyers (mathieu.desnoyers@efficios.com)" <mathieu.desnoyers@effi
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
+Add dummy MinGW implementation of posix_fallocate.
+The implementation does not do anything, and always returns zero.
 ---
- compat/compat_strlib.c             | 23 +++++++++++++++++++++++
- formats/ctf/types/string.c         |  2 +-
- include/babeltrace/compat/string.h |  1 +
- 3 files changed, 25 insertions(+), 1 deletion(-)
+ formats/ctf/ctf.c                 |  2 +-
+ include/babeltrace/compat/fcntl.h | 13 +++++++++++++
+ 2 files changed, 14 insertions(+), 1 deletion(-)
+ create mode 100644 include/babeltrace/compat/fcntl.h
 
-diff --git a/compat/compat_strlib.c b/compat/compat_strlib.c
-index 3cbd455..980a8f5 100644
---- a/compat/compat_strlib.c
-+++ b/compat/compat_strlib.c
-@@ -50,6 +50,29 @@ int strerror_r(int errnum, char *buf, size_t buflen)
- 	buf[buflen - 1] = '\0';
- 	return 0;
- }
+diff --git a/formats/ctf/ctf.c b/formats/ctf/ctf.c
+index c29fcd7..431b2d4 100644
+--- a/formats/ctf/ctf.c
++++ b/formats/ctf/ctf.c
+@@ -41,7 +41,7 @@
+ #include <errno.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
+-#include <fcntl.h>
++#include <babeltrace/compat/fcntl.h>
+ #include <dirent.h>
+ #include <glib.h>
+ #include <babeltrace/compat/unistd.h>
+diff --git a/include/babeltrace/compat/fcntl.h b/include/babeltrace/compat/fcntl.h
+new file mode 100644
+index 0000000..0707c28
+--- /dev/null
++++ b/include/babeltrace/compat/fcntl.h
+@@ -0,0 +1,13 @@
++#ifndef _BABELTRACE_INCLUDE_COMPAT_FCNTL_H
++#define _BABELTRACE_INCLUDE_COMPAT_FCNTL_H
 +
-+size_t strnlen(const char *str, size_t maxlen)
++#include <fcntl.h>
++#ifdef __MINGW32__
++static inline
++int posix_fallocate(int fd, off_t offset, off_t len)
 +{
-+	char * ptr;
-+	size_t len;
-+	ptr = (char *)str;
-+	len = 0;
-+
-+	/* while there still are characters in the string */
-+	while(*ptr != '\0') {
-+		/* increment counter */
-+		len++;
-+		/* check that we do not exceed the given maximum */
-+		if (len == maxlen) {
-+			return len;
-+		}
-+		/* next character */
-+		ptr++;
-+
-+	}
-+	return len;
++	return 0;
 +}
++#endif
 +
- #endif
- 
- int compat_strerror_r(int errnum, char *buf, size_t buflen)
-diff --git a/formats/ctf/types/string.c b/formats/ctf/types/string.c
-index a2433bf..a2f513d 100644
---- a/formats/ctf/types/string.c
-+++ b/formats/ctf/types/string.c
-@@ -29,7 +29,7 @@
- #include <babeltrace/babeltrace-internal.h>
- #include <babeltrace/ctf/types.h>
- #include <limits.h>		/* C99 limits */
--#include <string.h>
-+#include <babeltrace/compat/string.h>
- 
- int ctf_string_read(struct bt_stream_pos *ppos, struct bt_definition *definition)
- {
-diff --git a/include/babeltrace/compat/string.h b/include/babeltrace/compat/string.h
-index 501d003..82f411e 100644
---- a/include/babeltrace/compat/string.h
-+++ b/include/babeltrace/compat/string.h
-@@ -5,6 +5,7 @@
- 
- #ifdef __MINGW32__
- char *strtok_r(char *str, const char *delim, char **nextp);
-+size_t strnlen(const char *str, size_t maxlen);
- #endif
- 
- int compat_strerror_r(int errnum, char *buf, size_t buflen);
++#endif
+\ No newline at end of file
 -- 
 1.8.1.msysgit.1
