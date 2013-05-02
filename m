@@ -1,16 +1,16 @@
 From: "Ikaheimonen, JP" <jp_ikaheimonen@mentor.com>
-Subject: [Babeltrace RFC PATCH 01/28] Move uuid.h to compat
-	directory
-Date: Thu, 2 May 2013 11:46:35 +0000
-Message-ID: <009B25148989C6458484484699278506E537E82D__24489.8263518282$1367495234$gmane$org@EU-MBX-01.mgc.mentorg.com>
+Subject: [Babeltrace RFC PATCH 03/28] Move build-specific
+ strerror_r to compat directory
+Date: Thu, 2 May 2013 11:46:49 +0000
+Message-ID: <009B25148989C6458484484699278506E537E844__17740.7174291604$1367495252$gmane$org@EU-MBX-01.mgc.mentorg.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jp_ikaheimonen@mentor.com>) id 1UXryF-0001nw-PC
-	for lttng-dev@lists.lttng.org; Thu, 02 May 2013 07:46:43 -0400
+	(envelope-from <jp_ikaheimonen@mentor.com>) id 1UXryT-0001oq-3z
+	for lttng-dev@lists.lttng.org; Thu, 02 May 2013 07:46:57 -0400
 Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -24,354 +24,175 @@ To: "Mathieu Desnoyers (mathieu.desnoyers@efficios.com)" <mathieu.desnoyers@effi
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Move build-specific files to a compat directory.
-UUID header file uuid.h is now moved from babeltrace/uuid to
-babeltrace/compat/uuid.h .
+Add a new source directory 'compat'.
+In that directory, add a new file 'strlib.c'.
+In that file, add a new function compat_strerror_r that encapsulates
+the build-specific differences of strerror_r.
+Where strerror_r is used, now use compat_strerror_r.
 ---
- converter/babeltrace-log.c                         |   2 +-
- formats/ctf/ctf.c                                  |   2 +-
- .../ctf/metadata/ctf-visitor-generate-io-struct.c  |   2 +-
- include/Makefile.am                                |   2 +-
- include/babeltrace/compat/uuid.h                   | 129 +++++++++++++++++++++
- include/babeltrace/ctf-ir/metadata.h               |   2 +-
- include/babeltrace/uuid.h                          | 129 ---------------------
- 7 files changed, 134 insertions(+), 134 deletions(-)
- create mode 100644 include/babeltrace/compat/uuid.h
- delete mode 100644 include/babeltrace/uuid.h
+ Makefile.am                              |  2 +-
+ compat/Makefile.am                       | 10 ++++++++++
+ compat/compat_strlib.c                   | 17 +++++++++++++++++
+ configure.ac                             |  1 +
+ include/babeltrace/babeltrace-internal.h | 32 +++-----------------------------
+ include/babeltrace/compat/string.h       |  9 +++++++++
+ lib/Makefile.am                          |  3 ++-
+ 7 files changed, 43 insertions(+), 31 deletions(-)
+ create mode 100644 compat/Makefile.am
+ create mode 100644 compat/compat_strlib.c
+ create mode 100644 include/babeltrace/compat/string.h
 
-diff --git a/converter/babeltrace-log.c b/converter/babeltrace-log.c
-index 563a90f..52a2fe1 100644
---- a/converter/babeltrace-log.c
-+++ b/converter/babeltrace-log.c
-@@ -45,7 +45,7 @@
+diff --git a/Makefile.am b/Makefile.am
+index b25b58f..cdfad5a 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -2,7 +2,7 @@ AM_CFLAGS = $(PACKAGE_CFLAGS) -I$(top_srcdir)/include
  
- #include <babeltrace/babeltrace-internal.h>
- #include <babeltrace/ctf/types.h>
--#include <babeltrace/uuid.h>
-+#include <babeltrace/compat/uuid.h>
- #include <babeltrace/endian.h>
+ ACLOCAL_AMFLAGS = -I m4
  
- #define USEC_PER_SEC 1000000UL
-diff --git a/formats/ctf/ctf.c b/formats/ctf/ctf.c
-index 58f937d..c424e36 100644
---- a/formats/ctf/ctf.c
-+++ b/formats/ctf/ctf.c
-@@ -33,7 +33,7 @@
- #include <babeltrace/ctf/events-internal.h>
- #include <babeltrace/trace-handle-internal.h>
- #include <babeltrace/context-internal.h>
--#include <babeltrace/uuid.h>
-+#include <babeltrace/compat/uuid.h>
- #include <babeltrace/endian.h>
- #include <inttypes.h>
- #include <stdio.h>
-diff --git a/formats/ctf/metadata/ctf-visitor-generate-io-struct.c b/formats/ctf/metadata/ctf-visitor-generate-io-struct.c
-index 0002fe4..23c4f2f 100644
---- a/formats/ctf/metadata/ctf-visitor-generate-io-struct.c
-+++ b/formats/ctf/metadata/ctf-visitor-generate-io-struct.c
-@@ -36,7 +36,7 @@
- #include <babeltrace/list.h>
- #include <babeltrace/types.h>
- #include <babeltrace/ctf/metadata.h>
--#include <babeltrace/uuid.h>
-+#include <babeltrace/compat/uuid.h>
- #include <babeltrace/endian.h>
- #include <babeltrace/ctf/events-internal.h>
- #include "ctf-scanner.h"
-diff --git a/include/Makefile.am b/include/Makefile.am
-index 6a65b5c..4617ee2 100644
---- a/include/Makefile.am
-+++ b/include/Makefile.am
-@@ -31,6 +31,6 @@ noinst_HEADERS = \
- 	babeltrace/ctf/types.h \
- 	babeltrace/ctf/callbacks-internal.h \
- 	babeltrace/trace-handle-internal.h \
--	babeltrace/uuid.h \
-+	babeltrace/compat/uuid.h \
- 	babeltrace/endian.h \
- 	babeltrace/mmap-align.h
-diff --git a/include/babeltrace/compat/uuid.h b/include/babeltrace/compat/uuid.h
+-SUBDIRS = include types lib formats converter tests doc extras
++SUBDIRS = include types compat lib formats converter tests doc extras
+ 
+ dist_doc_DATA = ChangeLog LICENSE mit-license.txt gpl-2.0.txt \
+ 		std-ext-lib.txt
+diff --git a/compat/Makefile.am b/compat/Makefile.am
 new file mode 100644
-index 0000000..2ce7467
+index 0000000..d756aa7
 --- /dev/null
-+++ b/include/babeltrace/compat/uuid.h
-@@ -0,0 +1,129 @@
-+#ifndef _BABELTRACE_UUID_H
-+#define _BABELTRACE_UUID_H
++++ b/compat/Makefile.am
+@@ -0,0 +1,10 @@
++AM_CFLAGS = $(PACKAGE_CFLAGS) -I$(top_srcdir)/include
 +
-+/*
-+ * babeltrace/uuid.h
-+ *
-+ * Copyright (C) 2011   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-+ *
-+ * Permission is hereby granted, free of charge, to any person obtaining a copy
-+ * of this software and associated documentation files (the "Software"), to deal
-+ * in the Software without restriction, including without limitation the rights
-+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-+ * copies of the Software, and to permit persons to whom the Software is
-+ * furnished to do so, subject to the following conditions:
-+ *
-+ * The above copyright notice and this permission notice shall be included in
-+ * all copies or substantial portions of the Software.
-+ *
-+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-+ * SOFTWARE.
-+ */
++lib_LTLIBRARIES = libcompat.la
 +
-+#include <config.h>
++libcompat_la_SOURCES = \
++	compat_strlib.c
 +
-+/* Includes final \0. */
-+#define BABELTRACE_UUID_STR_LEN		37
-+#define BABELTRACE_UUID_LEN		16
++libcompat_la_LDFLAGS = \
++	-Wl,--no-as-needed
 +
-+#ifdef BABELTRACE_HAVE_LIBUUID
-+#include <uuid/uuid.h>
+diff --git a/compat/compat_strlib.c b/compat/compat_strlib.c
+new file mode 100644
+index 0000000..9aabb07
+--- /dev/null
++++ b/compat/compat_strlib.c
+@@ -0,0 +1,17 @@
++#include <babeltrace/compat/string.h>
 +
-+static inline
-+int babeltrace_uuid_generate(unsigned char *uuid_out)
++int compat_strerror_r(int errnum, char *buf, size_t buflen)
 +{
-+	uuid_generate(uuid_out);
-+	return 0;
-+}
-+
-+static inline
-+int babeltrace_uuid_unparse(const unsigned char *uuid_in, char *str_out)
-+{
-+	uuid_unparse(uuid_in, str_out);
-+	return 0;
-+}
-+
-+static inline
-+int babeltrace_uuid_parse(const char *str_in, unsigned char *uuid_out)
-+{
-+	return uuid_parse(str_in, uuid_out);
-+}
-+
-+static inline
-+int babeltrace_uuid_compare(const unsigned char *uuid_a,
-+		const unsigned char *uuid_b)
-+{
-+	return uuid_compare(uuid_a, uuid_b);
-+}
-+
-+#elif defined(BABELTRACE_HAVE_LIBC_UUID)
-+#include <uuid.h>
-+#include <stdint.h>
-+#include <string.h>
-+#include <stdlib.h>
-+
-+static inline
-+int babeltrace_uuid_generate(unsigned char *uuid_out)
-+{
-+	uint32_t status;
-+
-+	uuid_create((uuid_t *) uuid_out, &status);
-+	if (status == uuid_s_ok)
-+		return 0;
-+	else
-+		return -1;
-+}
-+
-+static inline
-+int babeltrace_uuid_unparse(const unsigned char *uuid_in, char *str_out)
-+{
-+	uint32_t status;
-+	char *alloc_str;
-+	int ret;
-+
-+	uuid_to_string((uuid_t *) uuid_in, &alloc_str, &status);
-+	if (status == uuid_s_ok) {
-+		strcpy(str_out, alloc_str);
-+		ret = 0;
-+	} else {
-+		ret = -1;
-+	}
-+	free(alloc_str);
-+	return ret;
-+}
-+
-+static inline
-+int babeltrace_uuid_parse(const char *str_in, unsigned char *uuid_out)
-+{
-+	uint32_t status;
-+
-+	uuid_from_string(str_in, (uuid_t *) uuid_out, &status);
-+	if (status == uuid_s_ok)
-+		return 0;
-+	else
-+		return -1;
-+}
-+
-+static inline
-+int babeltrace_uuid_compare(const unsigned char *uuid_a,
-+		const unsigned char *uuid_b)
-+{
-+	uint32_t status;
-+
-+	uuid_compare((uuid_t *) uuid_a, (uuid_t *) uuid_b, &status);
-+	if (status == uuid_s_ok)
-+		return 0;
-+	else
-+		return -1;
-+}
-+
++#if !defined(__linux__) || ((_POSIX_C_SOURCE >= 200112L || _XOPEN_SOURCE >= 600) && !defined(_GNU_SOURCE))
++/* XSI-compliant strerror_r */
++	return strerror_r(errnum, buf, buflen);
 +#else
-+#error "Babeltrace needs to have a UUID generator configured."
++/* GNU-compliant strerror_r */
++	char * retbuf;
++	retbuf = strerror_r(errnum, buf, buflen);
++	if (retbuf != buf)
++		strcpy(buf, retbuf);
++	return 0;
 +#endif
++}
 +
-+#endif /* _BABELTRACE_UUID_H */
-diff --git a/include/babeltrace/ctf-ir/metadata.h b/include/babeltrace/ctf-ir/metadata.h
-index 3d684fb..5e92984 100644
---- a/include/babeltrace/ctf-ir/metadata.h
-+++ b/include/babeltrace/ctf-ir/metadata.h
-@@ -33,7 +33,7 @@
- #include <babeltrace/ctf/types.h>
- #include <sys/types.h>
- #include <dirent.h>
--#include <babeltrace/uuid.h>
-+#include <babeltrace/compat/uuid.h>
- #include <assert.h>
+diff --git a/configure.ac b/configure.ac
+index 83822d6..29366da 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -93,6 +93,7 @@ AC_SUBST(babeltracectfincludedir)
+ AC_CONFIG_FILES([
+ 	Makefile
+ 	types/Makefile
++	compat/Makefile
+ 	formats/Makefile
+ 	formats/ctf/Makefile
+ 	formats/ctf/types/Makefile
+diff --git a/include/babeltrace/babeltrace-internal.h b/include/babeltrace/babeltrace-internal.h
+index 22866bc..35382de 100644
+--- a/include/babeltrace/babeltrace-internal.h
++++ b/include/babeltrace/babeltrace-internal.h
+@@ -27,7 +27,7 @@
+ #include <stdio.h>
  #include <glib.h>
+ #include <stdint.h>
+-#include <string.h>
++#include <babeltrace/compat/string.h>
  
-diff --git a/include/babeltrace/uuid.h b/include/babeltrace/uuid.h
-deleted file mode 100644
-index 2ce7467..0000000
---- a/include/babeltrace/uuid.h
-+++ /dev/null
-@@ -1,129 +0,0 @@
--#ifndef _BABELTRACE_UUID_H
--#define _BABELTRACE_UUID_H
+ #define PERROR_BUFLEN	200
+ 
+@@ -81,46 +81,20 @@ extern int babeltrace_verbose, babeltrace_debug;
+ 		perrorstr,						\
+ 		## args)
+ 
+-#if !defined(__linux__) || ((_POSIX_C_SOURCE >= 200112L || _XOPEN_SOURCE >= 600) && !defined(_GNU_SOURCE))
+-
+ #define _bt_printf_perror(fp, fmt, args...)				\
+ 	({								\
+ 		char buf[PERROR_BUFLEN] = "Error in strerror_r()";	\
+-		strerror_r(errno, buf, sizeof(buf));			\
++		compat_strerror_r(errno, buf, sizeof(buf));			\
+ 		_bt_printfe(fp, "error", buf, fmt, ## args);		\
+ 	})
+ 
+ #define _bt_printfl_perror(fp, lineno, fmt, args...)			\
+ 	({								\
+ 		char buf[PERROR_BUFLEN] = "Error in strerror_r()";	\
+-		strerror_r(errno, buf, sizeof(buf));			\
++		compat_strerror_r(errno, buf, sizeof(buf));			\
+ 		_bt_printfle(fp, "error", lineno, buf, fmt, ## args);	\
+ 	})
+ 
+-#else
 -
 -/*
-- * babeltrace/uuid.h
-- *
-- * Copyright (C) 2011   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-- *
-- * Permission is hereby granted, free of charge, to any person obtaining a copy
-- * of this software and associated documentation files (the "Software"), to deal
-- * in the Software without restriction, including without limitation the rights
-- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-- * copies of the Software, and to permit persons to whom the Software is
-- * furnished to do so, subject to the following conditions:
-- *
-- * The above copyright notice and this permission notice shall be included in
-- * all copies or substantial portions of the Software.
-- *
-- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-- * SOFTWARE.
+- * Version using GNU strerror_r, for linux with appropriate defines.
 - */
 -
--#include <config.h>
+-#define _bt_printf_perror(fp, fmt, args...)				\
+-	({								\
+-		char *buf;						\
+-		char tmp[PERROR_BUFLEN] = "Error in strerror_r()";	\
+-		buf = strerror_r(errno, tmp, sizeof(tmp));		\
+-		_bt_printfe(fp, "error", buf, fmt, ## args);		\
+-	})
 -
--/* Includes final \0. */
--#define BABELTRACE_UUID_STR_LEN		37
--#define BABELTRACE_UUID_LEN		16
+-#define _bt_printfl_perror(fp, lineno, fmt, args...)			\
+-	({								\
+-		char *buf;						\
+-		char tmp[PERROR_BUFLEN] = "Error in strerror_r()";	\
+-		buf = strerror_r(errno, tmp, sizeof(tmp));		\
+-		_bt_printfle(fp, "error", lineno, buf, fmt, ## args);	\
+-	})
 -
--#ifdef BABELTRACE_HAVE_LIBUUID
--#include <uuid/uuid.h>
--
--static inline
--int babeltrace_uuid_generate(unsigned char *uuid_out)
--{
--	uuid_generate(uuid_out);
--	return 0;
--}
--
--static inline
--int babeltrace_uuid_unparse(const unsigned char *uuid_in, char *str_out)
--{
--	uuid_unparse(uuid_in, str_out);
--	return 0;
--}
--
--static inline
--int babeltrace_uuid_parse(const char *str_in, unsigned char *uuid_out)
--{
--	return uuid_parse(str_in, uuid_out);
--}
--
--static inline
--int babeltrace_uuid_compare(const unsigned char *uuid_a,
--		const unsigned char *uuid_b)
--{
--	return uuid_compare(uuid_a, uuid_b);
--}
--
--#elif defined(BABELTRACE_HAVE_LIBC_UUID)
--#include <uuid.h>
--#include <stdint.h>
--#include <string.h>
--#include <stdlib.h>
--
--static inline
--int babeltrace_uuid_generate(unsigned char *uuid_out)
--{
--	uint32_t status;
--
--	uuid_create((uuid_t *) uuid_out, &status);
--	if (status == uuid_s_ok)
--		return 0;
--	else
--		return -1;
--}
--
--static inline
--int babeltrace_uuid_unparse(const unsigned char *uuid_in, char *str_out)
--{
--	uint32_t status;
--	char *alloc_str;
--	int ret;
--
--	uuid_to_string((uuid_t *) uuid_in, &alloc_str, &status);
--	if (status == uuid_s_ok) {
--		strcpy(str_out, alloc_str);
--		ret = 0;
--	} else {
--		ret = -1;
--	}
--	free(alloc_str);
--	return ret;
--}
--
--static inline
--int babeltrace_uuid_parse(const char *str_in, unsigned char *uuid_out)
--{
--	uint32_t status;
--
--	uuid_from_string(str_in, (uuid_t *) uuid_out, &status);
--	if (status == uuid_s_ok)
--		return 0;
--	else
--		return -1;
--}
--
--static inline
--int babeltrace_uuid_compare(const unsigned char *uuid_a,
--		const unsigned char *uuid_b)
--{
--	uint32_t status;
--
--	uuid_compare((uuid_t *) uuid_a, (uuid_t *) uuid_b, &status);
--	if (status == uuid_s_ok)
--		return 0;
--	else
--		return -1;
--}
--
--#else
--#error "Babeltrace needs to have a UUID generator configured."
 -#endif
 -
--#endif /* _BABELTRACE_UUID_H */
+ /* printf without lineno information */
+ #define printf_fatal(fmt, args...)					\
+ 	_bt_printf(stderr, "fatal", fmt, ## args)
+diff --git a/include/babeltrace/compat/string.h b/include/babeltrace/compat/string.h
+new file mode 100644
+index 0000000..8591b7e
+--- /dev/null
++++ b/include/babeltrace/compat/string.h
+@@ -0,0 +1,9 @@
++#ifndef _BABELTRACE_COMPAT_STRING_H
++#define BABELTRACE_COMPAT_STRING_H
++
++#include <string.h>
++
++int compat_strerror_r(int errnum, char *buf, size_t buflen);
++
++#endif
++
+diff --git a/lib/Makefile.am b/lib/Makefile.am
+index 7ffb164..fa470c0 100644
+--- a/lib/Makefile.am
++++ b/lib/Makefile.am
+@@ -14,4 +14,5 @@ libbabeltrace_la_SOURCES = babeltrace.c \
+ libbabeltrace_la_LDFLAGS = \
+ 	-Wl,--no-as-needed \
+ 	prio_heap/libprio_heap.la \
+-	$(top_builddir)/types/libbabeltrace_types.la
++	$(top_builddir)/types/libbabeltrace_types.la \
++	$(top_builddir)/compat/libcompat.la
 -- 
 1.8.1.msysgit.1
