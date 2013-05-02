@@ -1,22 +1,19 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: How to disable an event that's been enabled by
-	a	wildcard selection or -a?
-Date: Thu, 2 May 2013 10:00:04 -0400
-Message-ID: <20130502140004.GA7584__3660.88090600005$1367503242$gmane$org@Krystal>
-References: <009B25148989C6458484484699278506985C0CFA@EU-MBX-01.mgc.mentorg.com>
-	<20998D40D9A2B7499CA5A3A2666CB1EB19F968AF@ZURMSG1.QUANTUM.com>
-	<5121EA9A.8080905@mentor.com> <20130502134010.GF7035@Krystal>
+Subject: Re: [Babeltrace PATCH] Add new option --clock-offset-ns
+Date: Thu, 2 May 2013 10:21:00 -0400
+Message-ID: <20130502142100.GA7353__11822.6227969446$1367504501$gmane$org@Krystal>
+References: <009B25148989C6458484484699278506E5371E30@EU-MBX-03.mgc.mentorg.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UXu3L-0003Ia-Bs
-	for lttng-dev@lists.lttng.org; Thu, 02 May 2013 10:00:07 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1UXuNa-0003TM-Iz
+	for lttng-dev@lists.lttng.org; Thu, 02 May 2013 10:21:02 -0400
 Content-Disposition: inline
-In-Reply-To: <20130502134010.GF7035@Krystal>
+In-Reply-To: <009B25148989C6458484484699278506E5371E30@EU-MBX-03.mgc.mentorg.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -25,218 +22,137 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Woegerer, Paul" <Paul_Woegerer@mentor.com>
-Cc: lttng-dev@lists.lttng.org
+To: "Ikaheimonen, JP" <jp_ikaheimonen@mentor.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-* Mathieu Desnoyers (mathieu.desnoyers@efficios.com) wrote:
-> * Woegerer, Paul (Paul_Woegerer@mentor.com) wrote:
-> > Hi David,
-> > =
-
-> > On 02/14/2013 05:52 AM, David OShea wrote:
-> > > Hi,
-> > > =
-
-> > > My understanding (hopefully someone will correct me if I'm wrong) is =
-that each time you invoke 'lttng enable-event', your specification for the =
-events you want enabled is stored and applied, and/or potentially applied l=
-ater if a new application connects to the session daemon.  All 'lttng disab=
-le-event' does is remove one of the specifications you previously provided =
-to 'lttng enable-event', so you can't say 'enable-event *' and then 'disabl=
-e-event foo:*' to get all events except 'foo:*'.
-> > > =
-
-> > > If you could constrain the application to use a particular trace prov=
-ider name for all of its tracepoints, say "app", then you could just do 'lt=
-tng enable-event app:*'.  If you can't do that, then I think you need to fa=
-ll back on getting a list of all the available tracepoints using 'lttng lis=
-t -u', parsing this to find all of the available tracepoints, extracting th=
-e trace provider name from them, then using 'lttng enable-event <provider>:=
-*' for each provider other than the provider from your uninteresting librar=
-y.  I think there are APIs that can be used instead of issuing the 'lttng' =
-commands.
-> > > =
-
-> > > I would certainly also like a way to be able to, say, enable all even=
-ts other than foo:* and bar:* using one command.
-> > =
-
-> > I submitted a patch that does exactly this a while ago:
-> > http://lists.lttng.org/pipermail/lttng-dev/2012-June/018179.html
-> > =
-
-> > Although it's not upstream it works well for us.
-> =
-
-> Hi Paul,
-> =
-
-> I would be interested to see this feature upstream. Previously was not a
-> good timing to pull it in, because we were adding the concept of event
-> "enablers" within lttng-ust.
-> =
-
-> One thing I'm curious about is how you present the logical combination
-> with exlusion match are present. For instance, if we only have
-> inclusion, we get:
-> =
-
-> lttng enable-event 'a'
-> lttng enable-event 'c'
-> lttng enable-event 'zc*'
-> =
-
-> it turns into :   (a || c || zc*)
-> =
-
-> I expect that negation would look like:
-> =
-
-> lttng enable-event 'a'
-> lttng enable-event '!abc*'
-> lttng enable-event 'c'
-> lttng enable-event '!cxx'
-> lttng enable-event 'zc*'
-> =
-
-> ->  !(abc* || cxx) || (a || c || zc*)
-
-I actually meant:
-
-  !(abc* || cxx) && (a || c || zc*)
-
-Thanks,
+merged, thanks!
 
 Mathieu
 
-> =
-
-> Am I correct ? If yes, we should expand lttng-tools lttng(1) manpage and
-> cmd help with this info.
-> =
-
-> Can you make sure it works well with lttng-ust master branch ?
-> =
-
-> Thanks,
-> =
-
-> Mathieu
-> =
-
-> > =
-
-> > Thanks,
-> > Paul
-> > =
-
-> > =
-
-> > > =
-
-> > > Regards,
-> > > David
-> > > =
-
-> > >> -----Original Message-----
-> > >> From: Ikaheimonen, JP [mailto:jp_ikaheimonen@mentor.com]
-> > >> Sent: Friday, 8 February 2013 7:56 PM
-> > >> To: lttng-dev@lists.lttng.org
-> > >> Subject: [lttng-dev] How to disable an event that's been enabled by a
-> > >> wildcard selection or -a?
-> > >>
-> > >> Consider the following scenario.
-> > >> I want to write a script that traces all UST tracepoints of a given
-> > >> application. I have no idea what the names of these tracepoints are.
-> > >> Also, I know that the application uses a library that contains some
-> > >> tracepoints I am not interested about. Now I want to trace all UST
-> > >> tracepoints except the ones I already know about. Is this possible w=
-ith
-> > >> the lttng commands?
-> > >>
-> > >> If I enable all tracepoints with "lttng enable-event -u -a" I get all
-> > >> events, even those I do not want. I've tried using "lttng disable-
-> > >> event", and "lttng enable-event" with a filter, but I cannot seem to=
- be
-> > >> able to get rid of the specific events.
-> > >>
-> > >> Thank you,
-> > >>
-> > >> JP Ikaheimonen
-> > >> Mentor Graphics Embedded Systems Division
-> > >> Nucleus(r) | Linux(r) | Android(tm) | Services | UI | Multi-OS
-> > >>
-> > >> Android is a trademark of Google Inc. Use of this trademark is subje=
-ct
-> > >> to Google Permissions.
-> > >> Linux is the registered trademark of Linus Torvalds in the U.S. and
-> > >> other countries.
-> > >>
-> > >> _______________________________________________
-> > >> lttng-dev mailing list
-> > >> lttng-dev@lists.lttng.org
-> > >> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> > > =
-
-> > > ----------------------------------------------------------------------
-> > > The information contained in this transmission may be confidential. A=
-ny disclosure, copying, or further distribution of confidential information=
- is not permitted unless such privilege is explicitly granted in writing by=
- Quantum. Quantum reserves the right to have electronic communications, inc=
-luding email and attachments, sent across its networks filtered through ant=
-i virus and spam software programs and retain such messages in order to com=
-ply with applicable data security and retention requirements. Quantum is no=
-t responsible for the proper and complete transmission of the substance of =
-this communication or for any delay in its receipt.
-> > > =
-
-> > > _______________________________________________
-> > > lttng-dev mailing list
-> > > lttng-dev@lists.lttng.org
-> > > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> > > =
-
-> > =
-
-> > =
-
-> > -- =
-
-> > Paul Woegerer | SW Development Engineer
-> > http://go.mentor.com/sourceryanalyzer
-> > =
-
-> > Mentor Embedded(tm) | Prinz Eugen Stra=DFe 72/2/4, Vienna, 1040 Austria
-> > Nucleus=AE | Linux=AE | Android(tm) | Services | UI | Multi-OS
-> > =
-
-> > Android is a trademark of Google Inc. Use of this trademark is subject
-> > to Google Permissions.
-> > Linux is the registered trademark of Linus Torvalds in the U.S. and
-> > other countries.
-> > =
-
-> > _______________________________________________
-> > lttng-dev mailing list
-> > lttng-dev@lists.lttng.org
-> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> =
-
-> -- =
-
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> http://www.efficios.com
-> =
-
+* Ikaheimonen, JP (jp_ikaheimonen@mentor.com) wrote:
+> 
+> Add a new option --clock-offset-ns. It requires a parameter
+> that specifies a clock offset (in nanoseconds) that is added
+> to each timestamp.
+> 
+> This works exactly as the option --clock-offset, except that
+> the value is given in nanoseconds instead of full seconds.
+> 
+> The two options --clock-offset and --clock-offset-ns are
+> compatible with each other, and it's possible to give both.
+> For example, having the options
+> 
+> --clock-offset 2 --clock-offset-ns 1000000
+> 
+> means that 2.001 seconds is added to each timestamp.
+> ---
+>  converter/babeltrace.c                   | 26 ++++++++++++++++++++++++++
+>  formats/ctf/ctf.c                        |  4 ++++
+>  include/babeltrace/babeltrace-internal.h |  1 +
+>  3 files changed, 31 insertions(+)
+> 
+> diff --git a/converter/babeltrace.c b/converter/babeltrace.c
+> index 83f300c..bfdfc47 100644
+> --- a/converter/babeltrace.c
+> +++ b/converter/babeltrace.c
+> @@ -92,6 +92,7 @@ enum {
+>  	OPT_FIELDS,
+>  	OPT_NO_DELTA,
+>  	OPT_CLOCK_OFFSET,
+> +	OPT_CLOCK_OFFSET_NS,
+>  	OPT_CLOCK_CYCLES,
+>  	OPT_CLOCK_SECONDS,
+>  	OPT_CLOCK_DATE,
+> @@ -120,6 +121,7 @@ static struct poptOption long_options[] = {
+>  	{ "fields", 'f', POPT_ARG_STRING, NULL, OPT_FIELDS, NULL, NULL },
+>  	{ "no-delta", 0, POPT_ARG_NONE, NULL, OPT_NO_DELTA, NULL, NULL },
+>  	{ "clock-offset", 0, POPT_ARG_STRING, NULL, OPT_CLOCK_OFFSET, NULL, NULL },
+> +	{ "clock-offset-ns", 0, POPT_ARG_STRING, NULL, OPT_CLOCK_OFFSET_NS, NULL, NULL },
+>  	{ "clock-cycles", 0, POPT_ARG_NONE, NULL, OPT_CLOCK_CYCLES, NULL, NULL },
+>  	{ "clock-seconds", 0, POPT_ARG_NONE, NULL, OPT_CLOCK_SECONDS, NULL, NULL },
+>  	{ "clock-date", 0, POPT_ARG_NONE, NULL, OPT_CLOCK_DATE, NULL, NULL },
+> @@ -163,6 +165,7 @@ static void usage(FILE *fp)
+>  	fprintf(fp, "                                     (default: trace:hostname,trace:procname,trace:vpid)\n");
+>  	fprintf(fp, "      --clock-cycles             Timestamp in cycles\n");
+>  	fprintf(fp, "      --clock-offset seconds     Clock offset in seconds\n");
+> +	fprintf(fp, "      --clock-offset-ns ns       Clock offset in nanoseconds\n");
+>  	fprintf(fp, "      --clock-seconds            Print the timestamps as [sec.ns]\n");
+>  	fprintf(fp, "                                 (default is: [hh:mm:ss.ns])\n");
+>  	fprintf(fp, "      --clock-date               Print clock date\n");
+> @@ -356,6 +359,29 @@ static int parse_options(int argc, char **argv)
+>  		case OPT_CLOCK_SECONDS:
+>  			opt_clock_seconds = 1;
+>  			break;
+> +		case OPT_CLOCK_OFFSET_NS:
+> +		{
+> +			char *str;
+> +			char *endptr;
+> +
+> +			str = (char *) poptGetOptArg(pc);
+> +			if (!str) {
+> +				fprintf(stderr, "[error] Missing --clock-offset-ns argument\n");
+> +				ret = -EINVAL;
+> +				goto end;
+> +			}
+> +			errno = 0;
+> +			opt_clock_offset_ns = strtoull(str, &endptr, 0);
+> +			if (*endptr != '\0' || str == endptr || errno != 0) {
+> +				fprintf(stderr, "[error] Incorrect --clock-offset-ns argument: %s\n", str);
+> +				ret = -EINVAL;
+> +				free(str);
+> +				goto end;
+> +			}
+> +			free(str);
+> +			break;
+> +		}
+> +
+>  		case OPT_CLOCK_DATE:
+>  			opt_clock_date = 1;
+>  			break;
+> diff --git a/formats/ctf/ctf.c b/formats/ctf/ctf.c
+> index 5a51495..4f320a6 100644
+> --- a/formats/ctf/ctf.c
+> +++ b/formats/ctf/ctf.c
+> @@ -72,6 +72,7 @@ int opt_clock_cycles,
+>  	opt_clock_gmt;
+>  
+>  uint64_t opt_clock_offset;
+> +uint64_t opt_clock_offset_ns;
+>  
+>  extern int yydebug;
+>  
+> @@ -316,6 +317,9 @@ void ctf_print_timestamp_real(FILE *fp,
+>  
+>  	ts_nsec = timestamp;
+>  
+> +	/* Add command-line offset in ns*/
+> +        ts_nsec += opt_clock_offset_ns;
+> +
+>  	/* Add command-line offset */
+>  	ts_sec += opt_clock_offset;
+>  
+> diff --git a/include/babeltrace/babeltrace-internal.h b/include/babeltrace/babeltrace-internal.h
+> index 6219b3a..81ea9b9 100644
+> --- a/include/babeltrace/babeltrace-internal.h
+> +++ b/include/babeltrace/babeltrace-internal.h
+> @@ -85,5 +85,6 @@ extern int opt_all_field_names,
+>  	opt_clock_force_correlate;
+>  
+>  extern uint64_t opt_clock_offset;
+> +extern uint64_t opt_clock_offset_ns;
+>  
+>  #endif
+> -- 
+> 1.8.1.msysgit.1
+> 
+> 
 > _______________________________________________
 > lttng-dev mailing list
 > lttng-dev@lists.lttng.org
 > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
--- =
-
+-- 
 Mathieu Desnoyers
 EfficiOS Inc.
 http://www.efficios.com
