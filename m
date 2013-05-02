@@ -1,16 +1,16 @@
 From: "Ikaheimonen, JP" <jp_ikaheimonen@mentor.com>
-Subject: [Babeltrace RFC PATCH 03/28] Move build-specific
- strerror_r to compat directory
-Date: Thu, 2 May 2013 11:46:49 +0000
-Message-ID: <009B25148989C6458484484699278506E537E844__17740.7174291604$1367495252$gmane$org@EU-MBX-01.mgc.mentorg.com>
+Subject: [Babeltrace RFC PATCH 02/28] Move memstream.h to compat
+	directory
+Date: Thu, 2 May 2013 11:46:42 +0000
+Message-ID: <009B25148989C6458484484699278506E537E83D__44018.8163928271$1367495256$gmane$org@EU-MBX-01.mgc.mentorg.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jp_ikaheimonen@mentor.com>) id 1UXryT-0001oq-3z
-	for lttng-dev@lists.lttng.org; Thu, 02 May 2013 07:46:57 -0400
+	(envelope-from <jp_ikaheimonen@mentor.com>) id 1UXryL-0001o1-SO
+	for lttng-dev@lists.lttng.org; Thu, 02 May 2013 07:46:50 -0400
 Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -24,175 +24,539 @@ To: "Mathieu Desnoyers (mathieu.desnoyers@efficios.com)" <mathieu.desnoyers@effi
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Add a new source directory 'compat'.
-In that directory, add a new file 'strlib.c'.
-In that file, add a new function compat_strerror_r that encapsulates
-the build-specific differences of strerror_r.
-Where strerror_r is used, now use compat_strerror_r.
+Move build-specific files to a compat directory.
+Memstream header file is moved to babeltrace/compat/memstream.h .
 ---
- Makefile.am                              |  2 +-
- compat/Makefile.am                       | 10 ++++++++++
- compat/compat_strlib.c                   | 17 +++++++++++++++++
- configure.ac                             |  1 +
- include/babeltrace/babeltrace-internal.h | 32 +++-----------------------------
- include/babeltrace/compat/string.h       |  9 +++++++++
- lib/Makefile.am                          |  3 ++-
- 7 files changed, 43 insertions(+), 31 deletions(-)
- create mode 100644 compat/Makefile.am
- create mode 100644 compat/compat_strlib.c
- create mode 100644 include/babeltrace/compat/string.h
+ formats/ctf/Makefile.am               |   3 +-
+ formats/ctf/ctf.c                     |   2 +-
+ formats/ctf/memstream.h               | 236 ----------------------------------
+ include/Makefile.am                   |   1 +
+ include/babeltrace/compat/memstream.h | 236 ++++++++++++++++++++++++++++++++++
+ 5 files changed, 239 insertions(+), 239 deletions(-)
+ delete mode 100644 formats/ctf/memstream.h
+ create mode 100644 include/babeltrace/compat/memstream.h
 
-diff --git a/Makefile.am b/Makefile.am
-index b25b58f..cdfad5a 100644
---- a/Makefile.am
-+++ b/Makefile.am
-@@ -2,7 +2,7 @@ AM_CFLAGS = $(PACKAGE_CFLAGS) -I$(top_srcdir)/include
+diff --git a/formats/ctf/Makefile.am b/formats/ctf/Makefile.am
+index d803b69..6dcc1bb 100644
+--- a/formats/ctf/Makefile.am
++++ b/formats/ctf/Makefile.am
+@@ -9,8 +9,7 @@ libbabeltrace_ctf_la_SOURCES = \
+ 	events.c \
+ 	iterator.c \
+ 	callbacks.c \
+-	events-private.h \
+-	memstream.h
++	events-private.h
  
- ACLOCAL_AMFLAGS = -I m4
+ # Request that the linker keeps all static libraries objects.
+ libbabeltrace_ctf_la_LDFLAGS = \
+diff --git a/formats/ctf/ctf.c b/formats/ctf/ctf.c
+index c424e36..d77c93a 100644
+--- a/formats/ctf/ctf.c
++++ b/formats/ctf/ctf.c
+@@ -51,7 +51,7 @@
+ #include "metadata/ctf-parser.h"
+ #include "metadata/ctf-ast.h"
+ #include "events-private.h"
+-#include "memstream.h"
++#include "babeltrace/compat/memstream.h"
  
--SUBDIRS = include types lib formats converter tests doc extras
-+SUBDIRS = include types compat lib formats converter tests doc extras
+ #define LOG2_CHAR_BIT	3
  
- dist_doc_DATA = ChangeLog LICENSE mit-license.txt gpl-2.0.txt \
- 		std-ext-lib.txt
-diff --git a/compat/Makefile.am b/compat/Makefile.am
-new file mode 100644
-index 0000000..d756aa7
---- /dev/null
-+++ b/compat/Makefile.am
-@@ -0,0 +1,10 @@
-+AM_CFLAGS = $(PACKAGE_CFLAGS) -I$(top_srcdir)/include
-+
-+lib_LTLIBRARIES = libcompat.la
-+
-+libcompat_la_SOURCES = \
-+	compat_strlib.c
-+
-+libcompat_la_LDFLAGS = \
-+	-Wl,--no-as-needed
-+
-diff --git a/compat/compat_strlib.c b/compat/compat_strlib.c
-new file mode 100644
-index 0000000..9aabb07
---- /dev/null
-+++ b/compat/compat_strlib.c
-@@ -0,0 +1,17 @@
-+#include <babeltrace/compat/string.h>
-+
-+int compat_strerror_r(int errnum, char *buf, size_t buflen)
-+{
-+#if !defined(__linux__) || ((_POSIX_C_SOURCE >= 200112L || _XOPEN_SOURCE >= 600) && !defined(_GNU_SOURCE))
-+/* XSI-compliant strerror_r */
-+	return strerror_r(errnum, buf, buflen);
-+#else
-+/* GNU-compliant strerror_r */
-+	char * retbuf;
-+	retbuf = strerror_r(errnum, buf, buflen);
-+	if (retbuf != buf)
-+		strcpy(buf, retbuf);
-+	return 0;
-+#endif
-+}
-+
-diff --git a/configure.ac b/configure.ac
-index 83822d6..29366da 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -93,6 +93,7 @@ AC_SUBST(babeltracectfincludedir)
- AC_CONFIG_FILES([
- 	Makefile
- 	types/Makefile
-+	compat/Makefile
- 	formats/Makefile
- 	formats/ctf/Makefile
- 	formats/ctf/types/Makefile
-diff --git a/include/babeltrace/babeltrace-internal.h b/include/babeltrace/babeltrace-internal.h
-index 22866bc..35382de 100644
---- a/include/babeltrace/babeltrace-internal.h
-+++ b/include/babeltrace/babeltrace-internal.h
-@@ -27,7 +27,7 @@
- #include <stdio.h>
- #include <glib.h>
- #include <stdint.h>
--#include <string.h>
-+#include <babeltrace/compat/string.h>
- 
- #define PERROR_BUFLEN	200
- 
-@@ -81,46 +81,20 @@ extern int babeltrace_verbose, babeltrace_debug;
- 		perrorstr,						\
- 		## args)
- 
--#if !defined(__linux__) || ((_POSIX_C_SOURCE >= 200112L || _XOPEN_SOURCE >= 600) && !defined(_GNU_SOURCE))
--
- #define _bt_printf_perror(fp, fmt, args...)				\
- 	({								\
- 		char buf[PERROR_BUFLEN] = "Error in strerror_r()";	\
--		strerror_r(errno, buf, sizeof(buf));			\
-+		compat_strerror_r(errno, buf, sizeof(buf));			\
- 		_bt_printfe(fp, "error", buf, fmt, ## args);		\
- 	})
- 
- #define _bt_printfl_perror(fp, lineno, fmt, args...)			\
- 	({								\
- 		char buf[PERROR_BUFLEN] = "Error in strerror_r()";	\
--		strerror_r(errno, buf, sizeof(buf));			\
-+		compat_strerror_r(errno, buf, sizeof(buf));			\
- 		_bt_printfle(fp, "error", lineno, buf, fmt, ## args);	\
- 	})
- 
--#else
+diff --git a/formats/ctf/memstream.h b/formats/ctf/memstream.h
+deleted file mode 100644
+index d2a96cb..0000000
+--- a/formats/ctf/memstream.h
++++ /dev/null
+@@ -1,236 +0,0 @@
+-#ifndef _BABELTRACE_FORMAT_CTF_MEMSTREAM_H
+-#define _BABELTRACE_FORMAT_CTF_MEMSTREAM_H
 -
 -/*
-- * Version using GNU strerror_r, for linux with appropriate defines.
+- * format/ctf/memstream.h
+- *
+- * Copyright 2012 (c) - Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+- *
+- * memstream compatibility layer.
+- *
+- * Permission is hereby granted, free of charge, to any person obtaining a copy
+- * of this software and associated documentation files (the "Software"), to deal
+- * in the Software without restriction, including without limitation the rights
+- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+- * copies of the Software, and to permit persons to whom the Software is
+- * furnished to do so, subject to the following conditions:
+- *
+- * The above copyright notice and this permission notice shall be included in
+- * all copies or substantial portions of the Software.
+- *
+- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+- * SOFTWARE.
 - */
 -
--#define _bt_printf_perror(fp, fmt, args...)				\
--	({								\
--		char *buf;						\
--		char tmp[PERROR_BUFLEN] = "Error in strerror_r()";	\
--		buf = strerror_r(errno, tmp, sizeof(tmp));		\
--		_bt_printfe(fp, "error", buf, fmt, ## args);		\
--	})
+-#define _GNU_SOURCE
+-#include <config.h>
 -
--#define _bt_printfl_perror(fp, lineno, fmt, args...)			\
--	({								\
--		char *buf;						\
--		char tmp[PERROR_BUFLEN] = "Error in strerror_r()";	\
--		buf = strerror_r(errno, tmp, sizeof(tmp));		\
--		_bt_printfle(fp, "error", lineno, buf, fmt, ## args);	\
--	})
+-#ifdef BABELTRACE_HAVE_FMEMOPEN
+-#include <stdio.h>
 -
--#endif
+-static inline
+-FILE *babeltrace_fmemopen(void *buf, size_t size, const char *mode)
+-{
+-	return fmemopen(buf, size, mode);
+-}
 -
- /* printf without lineno information */
- #define printf_fatal(fmt, args...)					\
- 	_bt_printf(stderr, "fatal", fmt, ## args)
-diff --git a/include/babeltrace/compat/string.h b/include/babeltrace/compat/string.h
+-#else /* BABELTRACE_HAVE_FMEMOPEN */
+-
+-#include <stdlib.h>
+-#include <stdio.h>
+-
+-/*
+- * Fallback for systems which don't have fmemopen. Copy buffer to a
+- * temporary file, and use that file as FILE * input.
+- */
+-static inline
+-FILE *babeltrace_fmemopen(void *buf, size_t size, const char *mode)
+-{
+-	char tmpname[PATH_MAX];
+-	size_t len;
+-	FILE *fp;
+-	int ret;
+-
+-	/*
+-	 * Support reading only.
+-	 */
+-	if (strcmp(mode, "rb") != 0) {
+-		return NULL;
+-	}
+-	strncpy(tmpname, "/tmp/babeltrace-tmp-XXXXXX", PATH_MAX);
+-	ret = mkstemp(tmpname);
+-	if (ret < 0) {
+-		return NULL;
+-	}
+-	/*
+-	 * We need to write to the file.
+-	 */
+-	fp = fdopen(ret, "w+");
+-	if (!fp) {
+-		goto error_unlink;
+-	}
+-	/* Copy the entire buffer to the file */
+-	len = fwrite(buf, sizeof(char), size, fp);
+-	if (len != size) {
+-		goto error_close;
+-	}
+-	ret = fseek(fp, 0L, SEEK_SET);
+-	if (ret < 0) {
+-		perror("fseek");
+-		goto error_close;
+-	}
+-	/* We keep the handle open, but can unlink the file on the VFS. */
+-	ret = unlink(tmpname);
+-	if (ret < 0) {
+-		perror("unlink");
+-	}
+-	return fp;
+-
+-error_close:
+-	ret = fclose(fp);
+-	if (ret < 0) {
+-		perror("close");
+-	}
+-error_unlink:
+-	ret = unlink(tmpname);
+-	if (ret < 0) {
+-		perror("unlink");
+-	}
+-	return NULL;
+-}
+-
+-#endif /* BABELTRACE_HAVE_FMEMOPEN */
+-
+-#ifdef BABELTRACE_HAVE_OPEN_MEMSTREAM
+-
+-#include <stdio.h>
+-
+-static inline
+-FILE *babeltrace_open_memstream(char **ptr, size_t *sizeloc)
+-{
+-	return open_memstream(ptr, sizeloc);
+-}
+-
+-static inline
+-int babeltrace_close_memstream(char **buf, size_t *size, FILE *fp)
+-{
+-	return fclose(fp);
+-}
+-
+-#else /* BABELTRACE_HAVE_OPEN_MEMSTREAM */
+-
+-#include <stdlib.h>
+-#include <stdio.h>
+-
+-/*
+- * Fallback for systems which don't have open_memstream. Create FILE *
+- * with babeltrace_open_memstream, but require call to
+- * babeltrace_close_memstream to flush all data written to the FILE *
+- * into the buffer (which we allocate).
+- */
+-static inline
+-FILE *babeltrace_open_memstream(char **ptr, size_t *sizeloc)
+-{
+-	char tmpname[PATH_MAX];
+-	int ret;
+-	FILE *fp;
+-
+-	strncpy(tmpname, "/tmp/babeltrace-tmp-XXXXXX", PATH_MAX);
+-	ret = mkstemp(tmpname);
+-	if (ret < 0) {
+-		return NULL;
+-	}
+-	fp = fdopen(ret, "w+");
+-	if (!fp) {
+-		goto error_unlink;
+-	}
+-	/*
+-	 * babeltrace_flush_memstream will update the buffer content
+-	 * with read from fp. No need to keep the file around, just the
+-	 * handle.
+-	 */
+-	ret = unlink(tmpname);
+-	if (ret < 0) {
+-		perror("unlink");
+-	}
+-	return fp;
+-
+-error_unlink:
+-	ret = unlink(tmpname);
+-	if (ret < 0) {
+-		perror("unlink");
+-	}
+-	return NULL;
+-}
+-
+-/* Get file size, allocate buffer, copy. */
+-static inline
+-int babeltrace_close_memstream(char **buf, size_t *size, FILE *fp)
+-{
+-	size_t len, n;
+-	long pos;
+-	int ret;
+-
+-	ret = fflush(fp);
+-	if (ret < 0) {
+-		perror("fflush");
+-		return ret;
+-	}
+-	ret = fseek(fp, 0L, SEEK_END);
+-	if (ret < 0) {
+-		perror("fseek");
+-		return ret;
+-	}
+-	pos = ftell(fp);
+-	if (ret < 0) {
+-		perror("ftell");
+-		return ret;
+-	}
+-	*size = pos;
+-	/* add final \0 */
+-	*buf = calloc(pos + 1, sizeof(char));
+-	if (!*buf) {
+-		return -ENOMEM;
+-	}
+-	ret = fseek(fp, 0L, SEEK_SET);
+-	if (ret < 0) {
+-		perror("fseek");
+-		goto error_free;
+-	}
+-	/* Copy the entire file into the buffer */
+-	n = 0;
+-	clearerr(fp);
+-	while (!feof(fp) && !ferror(fp) && (*size - n > 0)) {
+-		len = fread(*buf, sizeof(char), *size - n, fp);
+-		n += len;
+-	}
+-	if (n != *size) {
+-		ret = -1;
+-		goto error_close;
+-	}
+-	ret = fclose(fp);
+-	if (ret < 0) {
+-		perror("fclose");
+-		return ret;
+-	}
+-	return 0;
+-
+-error_close:
+-	ret = fclose(fp);
+-	if (ret < 0) {
+-		perror("fclose");
+-	}
+-error_free:
+-	free(*buf);
+-	*buf = NULL;
+-	return ret;
+-}
+-
+-#endif /* BABELTRACE_HAVE_OPEN_MEMSTREAM */
+-
+-#endif /* _BABELTRACE_FORMAT_CTF_MEMSTREAM_H */
+diff --git a/include/Makefile.am b/include/Makefile.am
+index 4617ee2..eee2ac1 100644
+--- a/include/Makefile.am
++++ b/include/Makefile.am
+@@ -32,5 +32,6 @@ noinst_HEADERS = \
+ 	babeltrace/ctf/callbacks-internal.h \
+ 	babeltrace/trace-handle-internal.h \
+ 	babeltrace/compat/uuid.h \
++	babeltrace/compat/memstream.h \
+ 	babeltrace/endian.h \
+ 	babeltrace/mmap-align.h
+diff --git a/include/babeltrace/compat/memstream.h b/include/babeltrace/compat/memstream.h
 new file mode 100644
-index 0000000..8591b7e
+index 0000000..d2a96cb
 --- /dev/null
-+++ b/include/babeltrace/compat/string.h
-@@ -0,0 +1,9 @@
-+#ifndef _BABELTRACE_COMPAT_STRING_H
-+#define BABELTRACE_COMPAT_STRING_H
++++ b/include/babeltrace/compat/memstream.h
+@@ -0,0 +1,236 @@
++#ifndef _BABELTRACE_FORMAT_CTF_MEMSTREAM_H
++#define _BABELTRACE_FORMAT_CTF_MEMSTREAM_H
 +
-+#include <string.h>
++/*
++ * format/ctf/memstream.h
++ *
++ * Copyright 2012 (c) - Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
++ *
++ * memstream compatibility layer.
++ *
++ * Permission is hereby granted, free of charge, to any person obtaining a copy
++ * of this software and associated documentation files (the "Software"), to deal
++ * in the Software without restriction, including without limitation the rights
++ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
++ * copies of the Software, and to permit persons to whom the Software is
++ * furnished to do so, subject to the following conditions:
++ *
++ * The above copyright notice and this permission notice shall be included in
++ * all copies or substantial portions of the Software.
++ *
++ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
++ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
++ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
++ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
++ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
++ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
++ * SOFTWARE.
++ */
 +
-+int compat_strerror_r(int errnum, char *buf, size_t buflen);
++#define _GNU_SOURCE
++#include <config.h>
 +
-+#endif
++#ifdef BABELTRACE_HAVE_FMEMOPEN
++#include <stdio.h>
 +
-diff --git a/lib/Makefile.am b/lib/Makefile.am
-index 7ffb164..fa470c0 100644
---- a/lib/Makefile.am
-+++ b/lib/Makefile.am
-@@ -14,4 +14,5 @@ libbabeltrace_la_SOURCES = babeltrace.c \
- libbabeltrace_la_LDFLAGS = \
- 	-Wl,--no-as-needed \
- 	prio_heap/libprio_heap.la \
--	$(top_builddir)/types/libbabeltrace_types.la
-+	$(top_builddir)/types/libbabeltrace_types.la \
-+	$(top_builddir)/compat/libcompat.la
++static inline
++FILE *babeltrace_fmemopen(void *buf, size_t size, const char *mode)
++{
++	return fmemopen(buf, size, mode);
++}
++
++#else /* BABELTRACE_HAVE_FMEMOPEN */
++
++#include <stdlib.h>
++#include <stdio.h>
++
++/*
++ * Fallback for systems which don't have fmemopen. Copy buffer to a
++ * temporary file, and use that file as FILE * input.
++ */
++static inline
++FILE *babeltrace_fmemopen(void *buf, size_t size, const char *mode)
++{
++	char tmpname[PATH_MAX];
++	size_t len;
++	FILE *fp;
++	int ret;
++
++	/*
++	 * Support reading only.
++	 */
++	if (strcmp(mode, "rb") != 0) {
++		return NULL;
++	}
++	strncpy(tmpname, "/tmp/babeltrace-tmp-XXXXXX", PATH_MAX);
++	ret = mkstemp(tmpname);
++	if (ret < 0) {
++		return NULL;
++	}
++	/*
++	 * We need to write to the file.
++	 */
++	fp = fdopen(ret, "w+");
++	if (!fp) {
++		goto error_unlink;
++	}
++	/* Copy the entire buffer to the file */
++	len = fwrite(buf, sizeof(char), size, fp);
++	if (len != size) {
++		goto error_close;
++	}
++	ret = fseek(fp, 0L, SEEK_SET);
++	if (ret < 0) {
++		perror("fseek");
++		goto error_close;
++	}
++	/* We keep the handle open, but can unlink the file on the VFS. */
++	ret = unlink(tmpname);
++	if (ret < 0) {
++		perror("unlink");
++	}
++	return fp;
++
++error_close:
++	ret = fclose(fp);
++	if (ret < 0) {
++		perror("close");
++	}
++error_unlink:
++	ret = unlink(tmpname);
++	if (ret < 0) {
++		perror("unlink");
++	}
++	return NULL;
++}
++
++#endif /* BABELTRACE_HAVE_FMEMOPEN */
++
++#ifdef BABELTRACE_HAVE_OPEN_MEMSTREAM
++
++#include <stdio.h>
++
++static inline
++FILE *babeltrace_open_memstream(char **ptr, size_t *sizeloc)
++{
++	return open_memstream(ptr, sizeloc);
++}
++
++static inline
++int babeltrace_close_memstream(char **buf, size_t *size, FILE *fp)
++{
++	return fclose(fp);
++}
++
++#else /* BABELTRACE_HAVE_OPEN_MEMSTREAM */
++
++#include <stdlib.h>
++#include <stdio.h>
++
++/*
++ * Fallback for systems which don't have open_memstream. Create FILE *
++ * with babeltrace_open_memstream, but require call to
++ * babeltrace_close_memstream to flush all data written to the FILE *
++ * into the buffer (which we allocate).
++ */
++static inline
++FILE *babeltrace_open_memstream(char **ptr, size_t *sizeloc)
++{
++	char tmpname[PATH_MAX];
++	int ret;
++	FILE *fp;
++
++	strncpy(tmpname, "/tmp/babeltrace-tmp-XXXXXX", PATH_MAX);
++	ret = mkstemp(tmpname);
++	if (ret < 0) {
++		return NULL;
++	}
++	fp = fdopen(ret, "w+");
++	if (!fp) {
++		goto error_unlink;
++	}
++	/*
++	 * babeltrace_flush_memstream will update the buffer content
++	 * with read from fp. No need to keep the file around, just the
++	 * handle.
++	 */
++	ret = unlink(tmpname);
++	if (ret < 0) {
++		perror("unlink");
++	}
++	return fp;
++
++error_unlink:
++	ret = unlink(tmpname);
++	if (ret < 0) {
++		perror("unlink");
++	}
++	return NULL;
++}
++
++/* Get file size, allocate buffer, copy. */
++static inline
++int babeltrace_close_memstream(char **buf, size_t *size, FILE *fp)
++{
++	size_t len, n;
++	long pos;
++	int ret;
++
++	ret = fflush(fp);
++	if (ret < 0) {
++		perror("fflush");
++		return ret;
++	}
++	ret = fseek(fp, 0L, SEEK_END);
++	if (ret < 0) {
++		perror("fseek");
++		return ret;
++	}
++	pos = ftell(fp);
++	if (ret < 0) {
++		perror("ftell");
++		return ret;
++	}
++	*size = pos;
++	/* add final \0 */
++	*buf = calloc(pos + 1, sizeof(char));
++	if (!*buf) {
++		return -ENOMEM;
++	}
++	ret = fseek(fp, 0L, SEEK_SET);
++	if (ret < 0) {
++		perror("fseek");
++		goto error_free;
++	}
++	/* Copy the entire file into the buffer */
++	n = 0;
++	clearerr(fp);
++	while (!feof(fp) && !ferror(fp) && (*size - n > 0)) {
++		len = fread(*buf, sizeof(char), *size - n, fp);
++		n += len;
++	}
++	if (n != *size) {
++		ret = -1;
++		goto error_close;
++	}
++	ret = fclose(fp);
++	if (ret < 0) {
++		perror("fclose");
++		return ret;
++	}
++	return 0;
++
++error_close:
++	ret = fclose(fp);
++	if (ret < 0) {
++		perror("fclose");
++	}
++error_free:
++	free(*buf);
++	*buf = NULL;
++	return ret;
++}
++
++#endif /* BABELTRACE_HAVE_OPEN_MEMSTREAM */
++
++#endif /* _BABELTRACE_FORMAT_CTF_MEMSTREAM_H */
 -- 
 1.8.1.msysgit.1
