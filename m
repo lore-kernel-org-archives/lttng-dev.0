@@ -1,16 +1,16 @@
 From: "Ikaheimonen, JP" <jp_ikaheimonen@mentor.com>
-Subject: [Babeltrace RFC PATCH 20/28] Add MinGW implementation
-	of readdir_r
-Date: Thu, 2 May 2013 12:01:45 +0000
-Message-ID: <009B25148989C6458484484699278506E537E973__19441.8078558103$1367496146$gmane$org@EU-MBX-01.mgc.mentorg.com>
+Subject: [Babeltrace RFC PATCH 21/28] Add MinGW implementation
+	of flockfile
+Date: Thu, 2 May 2013 12:02:38 +0000
+Message-ID: <009B25148989C6458484484699278506E537E983__28847.2550841563$1367496200$gmane$org@EU-MBX-01.mgc.mentorg.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jp_ikaheimonen@mentor.com>) id 1UXsCv-0002C9-3q
-	for lttng-dev@lists.lttng.org; Thu, 02 May 2013 08:01:53 -0400
+	(envelope-from <jp_ikaheimonen@mentor.com>) id 1UXsDm-0002DV-Iw
+	for lttng-dev@lists.lttng.org; Thu, 02 May 2013 08:02:46 -0400
 Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -24,50 +24,46 @@ To: "Mathieu Desnoyers (mathieu.desnoyers@efficios.com)" <mathieu.desnoyers@effi
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
+Add a dummy MinGW implementation of flockfile.
+The function does not do anything.
 ---
- formats/ctf/ctf.c                  |  2 +-
- include/babeltrace/compat/dirent.h | 20 ++++++++++++++++++++
- 2 files changed, 21 insertions(+), 1 deletion(-)
- create mode 100644 include/babeltrace/compat/dirent.h
+ include/babeltrace/compat/stdio.h | 14 ++++++++++++++
+ tests/lib/tap.c                   |  2 +-
+ 2 files changed, 15 insertions(+), 1 deletion(-)
+ create mode 100644 include/babeltrace/compat/stdio.h
 
-diff --git a/formats/ctf/ctf.c b/formats/ctf/ctf.c
-index 431b2d4..c6043bc 100644
---- a/formats/ctf/ctf.c
-+++ b/formats/ctf/ctf.c
-@@ -42,7 +42,7 @@
- #include <sys/types.h>
- #include <sys/stat.h>
- #include <babeltrace/compat/fcntl.h>
--#include <dirent.h>
-+#include <babeltrace/compat/dirent.h>
- #include <glib.h>
- #include <babeltrace/compat/unistd.h>
- #include <stdlib.h>
-diff --git a/include/babeltrace/compat/dirent.h b/include/babeltrace/compat/dirent.h
+diff --git a/include/babeltrace/compat/stdio.h b/include/babeltrace/compat/stdio.h
 new file mode 100644
-index 0000000..281f40b
+index 0000000..62ecf97
 --- /dev/null
-+++ b/include/babeltrace/compat/dirent.h
-@@ -0,0 +1,20 @@
-+#ifndef _BABELTRACE_INCLUDE_COMPAT_DIRENT_H
-+#define _BABELTRACE_INCLUDE_COMPAT_DIRENT_H
++++ b/include/babeltrace/compat/stdio.h
+@@ -0,0 +1,14 @@
++#ifndef _BABELTRACE_COMPAT_STDIO_H
++#define _BABELTRACE_COMPAT_STDIO_H
 +
-+#include <dirent.h>
++#include <stdio.h>
 +
 +#ifdef __MINGW32__
-+static inline
-+int readdir_r (DIR *dirp, struct dirent *entry, struct dirent **result)
++static inline void flockfile (FILE * filehandle)
 +{
-+	errno = 0;
-+	entry = readdir (dirp);
-+	*result = entry;
-+	if (entry == NULL && errno != 0) {
-+		return -1;
-+	}
-+	return 0;
++	return;
 +}
++
 +#endif
 +
 +#endif
+diff --git a/tests/lib/tap.c b/tests/lib/tap.c
+index a430951..8bcdf36 100644
+--- a/tests/lib/tap.c
++++ b/tests/lib/tap.c
+@@ -27,7 +27,7 @@
+ #define _GNU_SOURCE
+ #include <ctype.h>
+ #include <stdarg.h>
+-#include <stdio.h>
++#include <babeltrace/compat/stdio.h>
+ #include <stdlib.h>
+ 
+ #include "tap.h"
 -- 
 1.8.1.msysgit.1
