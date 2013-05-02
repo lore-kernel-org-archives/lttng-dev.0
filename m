@@ -1,16 +1,16 @@
 From: "Ikaheimonen, JP" <jp_ikaheimonen@mentor.com>
-Subject: [Babeltrace RFC PATCH 16/28] Add MinGW implementation
-	of strtok_r
-Date: Thu, 2 May 2013 11:57:27 +0000
-Message-ID: <009B25148989C6458484484699278506E537E92F__30246.9980823391$1367495884$gmane$org@EU-MBX-01.mgc.mentorg.com>
+Subject: [Babeltrace RFC PATCH 17/28] Add MinGW implementation
+	of sleep
+Date: Thu, 2 May 2013 11:58:44 +0000
+Message-ID: <009B25148989C6458484484699278506E537E940__19036.398191429$1367495967$gmane$org@EU-MBX-01.mgc.mentorg.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jp_ikaheimonen@mentor.com>) id 1UXs8k-00025D-4G
-	for lttng-dev@lists.lttng.org; Thu, 02 May 2013 07:57:34 -0400
+	(envelope-from <jp_ikaheimonen@mentor.com>) id 1UXsA0-00026u-NA
+	for lttng-dev@lists.lttng.org; Thu, 02 May 2013 07:58:52 -0400
 Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -25,89 +25,22 @@ Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
 ---
- compat/compat_strlib.c             | 40 ++++++++++++++++++++++++++++++++++++++
- converter/babeltrace.c             |  2 +-
- include/babeltrace/compat/string.h |  4 ++++
- 3 files changed, 45 insertions(+), 1 deletion(-)
+ include/babeltrace/compat/unistd.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/compat/compat_strlib.c b/compat/compat_strlib.c
-index 7413e74..3cbd455 100644
---- a/compat/compat_strlib.c
-+++ b/compat/compat_strlib.c
-@@ -1,6 +1,46 @@
- #include <babeltrace/compat/string.h>
+diff --git a/include/babeltrace/compat/unistd.h b/include/babeltrace/compat/unistd.h
+index f275b22..448e047 100644
+--- a/include/babeltrace/compat/unistd.h
++++ b/include/babeltrace/compat/unistd.h
+@@ -16,6 +16,8 @@ int fpathconf (int fd, int name)
+ 	return MAX_PATH;
+ }
  
- #ifdef __MINGW32__
++#define sleep(x) Sleep(1000 * (x))
 +
-+char* strtok_r(
-+	char *str,
-+	const char *delim,
-+	char **nextp)
-+{
-+	char *ret;
-+
-+	/* if str is NULL, continue from nextp */
-+	if (str == NULL) {
-+		str = *nextp;
-+	}
-+	/* skip the leading delimiter characters */
-+	str += strspn(str, delim);
-+
-+	/* return NULL if all are delimiters */
-+	if (*str == '\0') {
-+		return NULL;
-+	}
-+	/* return the pointer to the first character that is not delimiter */
-+	ret = str;
-+
-+	/* scan to the next delimiter */
-+	str += strcspn(str, delim);
-+
-+	/* if we found a delimiter instead of a NUL */
-+	if (*str) {
-+		/* replace the delimiter with the NUL */
-+		*str = '\0';
-+		/* next time, scan from the character after NUL */
-+		*nextp = str + 1;
-+	}
-+	else {
-+		/* end of string: next time, scan at the end (NUL) again */
-+		*nextp = str;
-+	}
-+
-+	return ret;
-+}
-+
- int strerror_r(int errnum, char *buf, size_t buflen)
- {
- 	/* non-recursive implementation of strerror_r */
-diff --git a/converter/babeltrace.c b/converter/babeltrace.c
-index 7b3db49..f4a9217 100644
---- a/converter/babeltrace.c
-+++ b/converter/babeltrace.c
-@@ -49,7 +49,7 @@
- #include <unistd.h>
- #include <inttypes.h>
- #include <babeltrace/compat/ftw.h>
--#include <string.h>
-+#include <babeltrace/compat/string.h>
- 
- #include <babeltrace/ctf-ir/metadata.h>	/* for clocks */
- 
-diff --git a/include/babeltrace/compat/string.h b/include/babeltrace/compat/string.h
-index 8591b7e..501d003 100644
---- a/include/babeltrace/compat/string.h
-+++ b/include/babeltrace/compat/string.h
-@@ -3,6 +3,10 @@
- 
- #include <string.h>
- 
-+#ifdef __MINGW32__
-+char *strtok_r(char *str, const char *delim, char **nextp);
-+#endif
-+
- int compat_strerror_r(int errnum, char *buf, size_t buflen);
+ #endif
  
  #endif
+\ No newline at end of file
 -- 
 1.8.1.msysgit.1
