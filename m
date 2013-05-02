@@ -1,10 +1,8 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH] Expose kernel tracer to user-space	(version
-	7)
-Date: Thu, 2 May 2013 16:30:19 -0400
-Message-ID: <20130502203019.GF15675__34784.0096023448$1367526650$gmane$org@Krystal>
-References: <1341322152-4380-1-git-send-email-francis.giraldeau@gmail.com>
-	<20120704093821.35384043@skate>
+Subject: Re: LTTng-UST 2.0 mutex usage
+Date: Thu, 2 May 2013 16:36:07 -0400
+Message-ID: <20130502203606.GG15675__1581.71789157695$1367527000$gmane$org@Krystal>
+References: <524C960C5DFC794E82BE548D825F05CF2834A6E5@EU-MBX-01.mgc.mentorg.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
@@ -12,10 +10,10 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UY08y-0006R6-Fo
-	for lttng-dev@lists.lttng.org; Thu, 02 May 2013 16:30:20 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1UY0Ea-0006UR-PU
+	for lttng-dev@lists.lttng.org; Thu, 02 May 2013 16:36:08 -0400
 Content-Disposition: inline
-In-Reply-To: <20120704093821.35384043@skate>
+In-Reply-To: <524C960C5DFC794E82BE548D825F05CF2834A6E5@EU-MBX-01.mgc.mentorg.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,53 +22,65 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: lttng-dev@lists.lttng.org
+To: "Oestman, Fredrik" <Fredrik_Oestman@mentor.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-* Thomas Petazzoni (thomas.petazzoni@free-electrons.com) wrote:
-> Hello,
+* Oestman, Fredrik (Fredrik_Oestman@mentor.com) wrote:
+> Hi,
 > =
 
-> Le Tue,  3 Jul 2012 15:29:12 +0200,
-> Francis Giraldeau <francis.giraldeau@gmail.com> a =E9crit :
 > =
 
-> > By writing to the file /proc/lttng_uevent, a user-space application cre=
-ates a
-> > kernel event. The event's payload is by default UTF-8 text, but any dat=
-a can be
-> > written. The maximum size of the data is at most the size of a packet d=
-efined
-> > for the trace session. Null-character is optional and is not enforced. =
- The
-> > event uses sequence for space efficiency and to store any data as paylo=
-ad.
+> We're experimenting with tracing calls to the pthreads library using a
+> LD_PRELOAD-ed interposer library, which is instrumented with UST
+> tracepoints. In the startup phase, before the application has been
+> called, probes are being registered, and one by one the tracepoints
+> start emitting events. So some of the pthreads mutex motions of UST
+> itself are being traced along.
 > =
 
-> Shouldn't this be in the debugfs filesystem rather than the proc
-> filesystem? The debugfs filesystem already has entries for various
-> tracing facilities of the Linux kernel, and adding entries in /proc
-> that are not process-related is frowned upon these days.
+> What would be a good way of avoiding emitting events before the
+> application itself has started, specifically events related to UST
+> mutexes?
 
-yes, I think this infrastructure should belong in debugfs.
+one way would be to implement mutexes within lttng-ust, so we would stop
+using the pthread mutexes.
+
+> The ust-ctl library appears to have a function ustctl_register_done(),
+> is that useful?
+
+No. This function is called by the session daemon when it has completed
+sending all commands to the application so its internal lttng-ust state
+matches that of the active tracing sessions.
+
+We need to be aware that a lttng-ust library can interact with up to 2
+session daemons: one for the user, one for root.
+
+> (Is there an API documentation?) Or would it be better
+> to find out which mutexes belong to UST and filter them out?
+
+custom implementation of mutexes within lttng-ust sounds like the best
+approach.
 
 Thanks,
 
 Mathieu
 
+> By controlling our interposer library from within the application we
+> can avoid the problem, but we'd rather do without recompiling the
+> application, since it sort of would defeat the reason for using
+> LD_PRELOAD in the first place.
 > =
 
-> Best regards,
 > =
 
-> Thomas
-> -- =
+> Cheers,
+> =
 
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
+> Fredrik =D6stman
+> =
+
 > =
 
 > _______________________________________________
