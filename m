@@ -1,14 +1,16 @@
 From: "Ikaheimonen, JP" <jp_ikaheimonen@mentor.com>
-Subject: [Babeltrace RFC PATCH 00/28] Add support for MinGW32
-Date: Thu, 2 May 2013 11:46:08 +0000
-Message-ID: <009B25148989C6458484484699278506E537E826__14991.0934306265$1367495222$gmane$org@EU-MBX-01.mgc.mentorg.com>
+Subject: [Babeltrace RFC PATCH 01/28] Move uuid.h to compat
+	directory
+Date: Thu, 2 May 2013 11:46:35 +0000
+Message-ID: <009B25148989C6458484484699278506E537E82D__24489.8263518282$1367495234$gmane$org@EU-MBX-01.mgc.mentorg.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1272718775=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jp_ikaheimonen@mentor.com>) id 1UXrxq-0001mW-Lx
-	for lttng-dev@lists.lttng.org; Thu, 02 May 2013 07:46:18 -0400
+	(envelope-from <jp_ikaheimonen@mentor.com>) id 1UXryF-0001nw-PC
+	for lttng-dev@lists.lttng.org; Thu, 02 May 2013 07:46:43 -0400
 Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -22,215 +24,354 @@ To: "Mathieu Desnoyers (mathieu.desnoyers@efficios.com)" <mathieu.desnoyers@effi
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============1272718775==
-Content-Language: en-US
-Content-Type: multipart/alternative;
-	boundary="_000_009B25148989C6458484484699278506E537E826EUMBX01mgcmento_"
+Move build-specific files to a compat directory.
+UUID header file uuid.h is now moved from babeltrace/uuid to
+babeltrace/compat/uuid.h .
+---
+ converter/babeltrace-log.c                         |   2 +-
+ formats/ctf/ctf.c                                  |   2 +-
+ .../ctf/metadata/ctf-visitor-generate-io-struct.c  |   2 +-
+ include/Makefile.am                                |   2 +-
+ include/babeltrace/compat/uuid.h                   | 129 +++++++++++++++++++++
+ include/babeltrace/ctf-ir/metadata.h               |   2 +-
+ include/babeltrace/uuid.h                          | 129 ---------------------
+ 7 files changed, 134 insertions(+), 134 deletions(-)
+ create mode 100644 include/babeltrace/compat/uuid.h
+ delete mode 100644 include/babeltrace/uuid.h
 
---_000_009B25148989C6458484484699278506E537E826EUMBX01mgcmento_
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-
-The following set of patches make it possible to compile babeltrace with Mi=
-nGW32.
-The babeltrace source has been reorganized. There is now a new compat sourc=
-e directory,
-along with a include/babeltrace/compat header directory. These now isolate =
-the system-specific
-pieces of code.
-
-The first three patches (01 - 03) deal with the new compat directories, mov=
-ing current code
-around. No new functionality is added in these patches.
-
-Patches 06 - 12, 14 - 22, and 25-27 add MinGW implementations of library fu=
-nctions that
-are missing in MinGW.
-
-Patches 04 and 24 make sure correct libraries and header files are used.
-
-Patch 05 updates .gitignore with Windows *.exe files.
-
-Patch 23 overcomes several problems in MinGW. With MinGW, openat() does not=
- work at
-all, and there is no easy implementation available. So instead of openat(),=
- in MinGW, we
-open the file using the full qualified path name. This patch also deals wit=
-h problems with
-directory handles.
-
-Patch 28 adds a binary flag for the fdopen() command as is required for Win=
-dows.
-
-Thank you,
-
-
-JP Ikaheimonen | SW Development Engineer http://go.mentor.com/sourceryanaly=
-zer
-
-
-
-Mentor Embedded(tm) | Nucleus(r) | Linux(r) | Android(tm) | Services | UI |=
- Multi-OS
-
-
-
-Android is a trademark of Google Inc. Use of this trademark is subject to G=
-oogle Permissions.
-
-Linux is the registered trademark of Linus Torvalds in the U.S. and other c=
-ountries.
-
-
---_000_009B25148989C6458484484699278506E537E826EUMBX01mgcmento_
-Content-Type: text/html; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-
-<html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-micr=
-osoft-com:office:office" xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
-xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http:=
-//www.w3.org/TR/REC-html40">
-<head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
->
-<meta name=3D"Generator" content=3D"Microsoft Word 14 (filtered medium)">
-<style><!--
-/* Font Definitions */
-@font-face
-	{font-family:Calibri;
-	panose-1:2 15 5 2 2 2 4 3 2 4;}
-@font-face
-	{font-family:Consolas;
-	panose-1:2 11 6 9 2 2 4 3 2 4;}
-/* Style Definitions */
-p.MsoNormal, li.MsoNormal, div.MsoNormal
-	{margin:0cm;
-	margin-bottom:.0001pt;
-	font-size:11.0pt;
-	font-family:"Calibri","sans-serif";
-	mso-fareast-language:EN-US;}
-a:link, span.MsoHyperlink
-	{mso-style-priority:99;
-	color:blue;
-	text-decoration:underline;}
-a:visited, span.MsoHyperlinkFollowed
-	{mso-style-priority:99;
-	color:purple;
-	text-decoration:underline;}
-p.MsoPlainText, li.MsoPlainText, div.MsoPlainText
-	{mso-style-priority:99;
-	mso-style-link:"Plain Text Char";
-	margin:0cm;
-	margin-bottom:.0001pt;
-	font-size:11.0pt;
-	font-family:"Calibri","sans-serif";
-	mso-fareast-language:EN-US;}
-span.EmailStyle17
-	{mso-style-type:personal-compose;
-	font-family:"Calibri","sans-serif";
-	color:windowtext;}
-span.PlainTextChar
-	{mso-style-name:"Plain Text Char";
-	mso-style-priority:99;
-	mso-style-link:"Plain Text";
-	font-family:"Calibri","sans-serif";}
-.MsoChpDefault
-	{mso-style-type:export-only;
-	font-family:"Calibri","sans-serif";
-	mso-fareast-language:EN-US;}
-@page WordSection1
-	{size:612.0pt 792.0pt;
-	margin:70.85pt 2.0cm 70.85pt 2.0cm;}
-div.WordSection1
-	{page:WordSection1;}
---></style><!--[if gte mso 9]><xml>
-<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
-</xml><![endif]--><!--[if gte mso 9]><xml>
-<o:shapelayout v:ext=3D"edit">
-<o:idmap v:ext=3D"edit" data=3D"1" />
-</o:shapelayout></xml><![endif]-->
-</head>
-<body lang=3D"FI" link=3D"blue" vlink=3D"purple">
-<div class=3D"WordSection1">
-<p class=3D"MsoNormal"><span lang=3D"EN-US">The following set of patches ma=
-ke it possible to compile babeltrace with MinGW32.<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">The babeltrace source has been =
-reorganized. There is now a new compat source directory,<o:p></o:p></span><=
-/p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">along with a include/babeltrace=
-/compat header directory. These now isolate the system-specific<o:p></o:p><=
-/span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">pieces of code.<o:p></o:p></spa=
-n></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">The first three patches (01 &#8=
-211; 03) deal with the new compat directories, moving current code<o:p></o:=
-p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">around. No new functionality is=
- added in these patches.<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">Patches 06 &#8211; 12, 14 &#821=
-1; 22, and 25-27 add MinGW implementations of library functions that<o:p></=
-o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">are missing in MinGW.<o:p></o:p=
-></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">Patches 04 and 24 make sure cor=
-rect libraries and header files are used.<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">Patch 05 updates .gitignore wit=
-h Windows *.exe files.<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">Patch 23 overcomes several prob=
-lems in MinGW. With MinGW, openat() does not work at<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">all, and there is no easy imple=
-mentation available. So instead of openat(), in MinGW, we<o:p></o:p></span>=
-</p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">open the file using the full qu=
-alified path name. This patch also deals with problems with<o:p></o:p></spa=
-n></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">directory handles.<o:p></o:p></=
-span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">Patch 28 adds a binary flag for=
- the fdopen() command as is required for Windows.<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">Thank you,<o:p></o:p></span></p=
->
-<p class=3D"MsoNormal"><span lang=3D"EN-US"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoPlainText"><span lang=3D"EN-US">JP Ikaheimonen | SW Developm=
-ent Engineer
-</span><a href=3D"http://go.mentor.com/sourceryanalyzer"><span lang=3D"EN-U=
-S">http://go.mentor.com/sourceryanalyzer</span></a><span lang=3D"EN-US"><o:=
-p></o:p></span></p>
-<p class=3D"MsoPlainText"><span lang=3D"EN-US"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoPlainText"><span lang=3D"EN-US">Mentor Embedded(tm) | Nucleu=
-s&reg; | Linux&reg; | Android(tm) | Services | UI | Multi-OS<o:p></o:p></sp=
-an></p>
-<p class=3D"MsoPlainText"><span lang=3D"EN-US"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoPlainText"><span lang=3D"EN-US">Android is a trademark of Go=
-ogle Inc. Use of this trademark is subject to Google Permissions.<o:p></o:p=
-></span></p>
-<p class=3D"MsoPlainText"><span lang=3D"EN-US">Linux is the registered trad=
-emark of Linus Torvalds in the U.S. and other countries.<o:p></o:p></span><=
-/p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US"><o:p>&nbsp;</o:p></span></p>
-</div>
-</body>
-</html>
-
---_000_009B25148989C6458484484699278506E537E826EUMBX01mgcmento_--
-
-
---===============1272718775==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1272718775==--
+diff --git a/converter/babeltrace-log.c b/converter/babeltrace-log.c
+index 563a90f..52a2fe1 100644
+--- a/converter/babeltrace-log.c
++++ b/converter/babeltrace-log.c
+@@ -45,7 +45,7 @@
+ 
+ #include <babeltrace/babeltrace-internal.h>
+ #include <babeltrace/ctf/types.h>
+-#include <babeltrace/uuid.h>
++#include <babeltrace/compat/uuid.h>
+ #include <babeltrace/endian.h>
+ 
+ #define USEC_PER_SEC 1000000UL
+diff --git a/formats/ctf/ctf.c b/formats/ctf/ctf.c
+index 58f937d..c424e36 100644
+--- a/formats/ctf/ctf.c
++++ b/formats/ctf/ctf.c
+@@ -33,7 +33,7 @@
+ #include <babeltrace/ctf/events-internal.h>
+ #include <babeltrace/trace-handle-internal.h>
+ #include <babeltrace/context-internal.h>
+-#include <babeltrace/uuid.h>
++#include <babeltrace/compat/uuid.h>
+ #include <babeltrace/endian.h>
+ #include <inttypes.h>
+ #include <stdio.h>
+diff --git a/formats/ctf/metadata/ctf-visitor-generate-io-struct.c b/formats/ctf/metadata/ctf-visitor-generate-io-struct.c
+index 0002fe4..23c4f2f 100644
+--- a/formats/ctf/metadata/ctf-visitor-generate-io-struct.c
++++ b/formats/ctf/metadata/ctf-visitor-generate-io-struct.c
+@@ -36,7 +36,7 @@
+ #include <babeltrace/list.h>
+ #include <babeltrace/types.h>
+ #include <babeltrace/ctf/metadata.h>
+-#include <babeltrace/uuid.h>
++#include <babeltrace/compat/uuid.h>
+ #include <babeltrace/endian.h>
+ #include <babeltrace/ctf/events-internal.h>
+ #include "ctf-scanner.h"
+diff --git a/include/Makefile.am b/include/Makefile.am
+index 6a65b5c..4617ee2 100644
+--- a/include/Makefile.am
++++ b/include/Makefile.am
+@@ -31,6 +31,6 @@ noinst_HEADERS = \
+ 	babeltrace/ctf/types.h \
+ 	babeltrace/ctf/callbacks-internal.h \
+ 	babeltrace/trace-handle-internal.h \
+-	babeltrace/uuid.h \
++	babeltrace/compat/uuid.h \
+ 	babeltrace/endian.h \
+ 	babeltrace/mmap-align.h
+diff --git a/include/babeltrace/compat/uuid.h b/include/babeltrace/compat/uuid.h
+new file mode 100644
+index 0000000..2ce7467
+--- /dev/null
++++ b/include/babeltrace/compat/uuid.h
+@@ -0,0 +1,129 @@
++#ifndef _BABELTRACE_UUID_H
++#define _BABELTRACE_UUID_H
++
++/*
++ * babeltrace/uuid.h
++ *
++ * Copyright (C) 2011   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
++ *
++ * Permission is hereby granted, free of charge, to any person obtaining a copy
++ * of this software and associated documentation files (the "Software"), to deal
++ * in the Software without restriction, including without limitation the rights
++ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
++ * copies of the Software, and to permit persons to whom the Software is
++ * furnished to do so, subject to the following conditions:
++ *
++ * The above copyright notice and this permission notice shall be included in
++ * all copies or substantial portions of the Software.
++ *
++ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
++ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
++ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
++ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
++ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
++ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
++ * SOFTWARE.
++ */
++
++#include <config.h>
++
++/* Includes final \0. */
++#define BABELTRACE_UUID_STR_LEN		37
++#define BABELTRACE_UUID_LEN		16
++
++#ifdef BABELTRACE_HAVE_LIBUUID
++#include <uuid/uuid.h>
++
++static inline
++int babeltrace_uuid_generate(unsigned char *uuid_out)
++{
++	uuid_generate(uuid_out);
++	return 0;
++}
++
++static inline
++int babeltrace_uuid_unparse(const unsigned char *uuid_in, char *str_out)
++{
++	uuid_unparse(uuid_in, str_out);
++	return 0;
++}
++
++static inline
++int babeltrace_uuid_parse(const char *str_in, unsigned char *uuid_out)
++{
++	return uuid_parse(str_in, uuid_out);
++}
++
++static inline
++int babeltrace_uuid_compare(const unsigned char *uuid_a,
++		const unsigned char *uuid_b)
++{
++	return uuid_compare(uuid_a, uuid_b);
++}
++
++#elif defined(BABELTRACE_HAVE_LIBC_UUID)
++#include <uuid.h>
++#include <stdint.h>
++#include <string.h>
++#include <stdlib.h>
++
++static inline
++int babeltrace_uuid_generate(unsigned char *uuid_out)
++{
++	uint32_t status;
++
++	uuid_create((uuid_t *) uuid_out, &status);
++	if (status == uuid_s_ok)
++		return 0;
++	else
++		return -1;
++}
++
++static inline
++int babeltrace_uuid_unparse(const unsigned char *uuid_in, char *str_out)
++{
++	uint32_t status;
++	char *alloc_str;
++	int ret;
++
++	uuid_to_string((uuid_t *) uuid_in, &alloc_str, &status);
++	if (status == uuid_s_ok) {
++		strcpy(str_out, alloc_str);
++		ret = 0;
++	} else {
++		ret = -1;
++	}
++	free(alloc_str);
++	return ret;
++}
++
++static inline
++int babeltrace_uuid_parse(const char *str_in, unsigned char *uuid_out)
++{
++	uint32_t status;
++
++	uuid_from_string(str_in, (uuid_t *) uuid_out, &status);
++	if (status == uuid_s_ok)
++		return 0;
++	else
++		return -1;
++}
++
++static inline
++int babeltrace_uuid_compare(const unsigned char *uuid_a,
++		const unsigned char *uuid_b)
++{
++	uint32_t status;
++
++	uuid_compare((uuid_t *) uuid_a, (uuid_t *) uuid_b, &status);
++	if (status == uuid_s_ok)
++		return 0;
++	else
++		return -1;
++}
++
++#else
++#error "Babeltrace needs to have a UUID generator configured."
++#endif
++
++#endif /* _BABELTRACE_UUID_H */
+diff --git a/include/babeltrace/ctf-ir/metadata.h b/include/babeltrace/ctf-ir/metadata.h
+index 3d684fb..5e92984 100644
+--- a/include/babeltrace/ctf-ir/metadata.h
++++ b/include/babeltrace/ctf-ir/metadata.h
+@@ -33,7 +33,7 @@
+ #include <babeltrace/ctf/types.h>
+ #include <sys/types.h>
+ #include <dirent.h>
+-#include <babeltrace/uuid.h>
++#include <babeltrace/compat/uuid.h>
+ #include <assert.h>
+ #include <glib.h>
+ 
+diff --git a/include/babeltrace/uuid.h b/include/babeltrace/uuid.h
+deleted file mode 100644
+index 2ce7467..0000000
+--- a/include/babeltrace/uuid.h
++++ /dev/null
+@@ -1,129 +0,0 @@
+-#ifndef _BABELTRACE_UUID_H
+-#define _BABELTRACE_UUID_H
+-
+-/*
+- * babeltrace/uuid.h
+- *
+- * Copyright (C) 2011   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+- *
+- * Permission is hereby granted, free of charge, to any person obtaining a copy
+- * of this software and associated documentation files (the "Software"), to deal
+- * in the Software without restriction, including without limitation the rights
+- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+- * copies of the Software, and to permit persons to whom the Software is
+- * furnished to do so, subject to the following conditions:
+- *
+- * The above copyright notice and this permission notice shall be included in
+- * all copies or substantial portions of the Software.
+- *
+- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+- * SOFTWARE.
+- */
+-
+-#include <config.h>
+-
+-/* Includes final \0. */
+-#define BABELTRACE_UUID_STR_LEN		37
+-#define BABELTRACE_UUID_LEN		16
+-
+-#ifdef BABELTRACE_HAVE_LIBUUID
+-#include <uuid/uuid.h>
+-
+-static inline
+-int babeltrace_uuid_generate(unsigned char *uuid_out)
+-{
+-	uuid_generate(uuid_out);
+-	return 0;
+-}
+-
+-static inline
+-int babeltrace_uuid_unparse(const unsigned char *uuid_in, char *str_out)
+-{
+-	uuid_unparse(uuid_in, str_out);
+-	return 0;
+-}
+-
+-static inline
+-int babeltrace_uuid_parse(const char *str_in, unsigned char *uuid_out)
+-{
+-	return uuid_parse(str_in, uuid_out);
+-}
+-
+-static inline
+-int babeltrace_uuid_compare(const unsigned char *uuid_a,
+-		const unsigned char *uuid_b)
+-{
+-	return uuid_compare(uuid_a, uuid_b);
+-}
+-
+-#elif defined(BABELTRACE_HAVE_LIBC_UUID)
+-#include <uuid.h>
+-#include <stdint.h>
+-#include <string.h>
+-#include <stdlib.h>
+-
+-static inline
+-int babeltrace_uuid_generate(unsigned char *uuid_out)
+-{
+-	uint32_t status;
+-
+-	uuid_create((uuid_t *) uuid_out, &status);
+-	if (status == uuid_s_ok)
+-		return 0;
+-	else
+-		return -1;
+-}
+-
+-static inline
+-int babeltrace_uuid_unparse(const unsigned char *uuid_in, char *str_out)
+-{
+-	uint32_t status;
+-	char *alloc_str;
+-	int ret;
+-
+-	uuid_to_string((uuid_t *) uuid_in, &alloc_str, &status);
+-	if (status == uuid_s_ok) {
+-		strcpy(str_out, alloc_str);
+-		ret = 0;
+-	} else {
+-		ret = -1;
+-	}
+-	free(alloc_str);
+-	return ret;
+-}
+-
+-static inline
+-int babeltrace_uuid_parse(const char *str_in, unsigned char *uuid_out)
+-{
+-	uint32_t status;
+-
+-	uuid_from_string(str_in, (uuid_t *) uuid_out, &status);
+-	if (status == uuid_s_ok)
+-		return 0;
+-	else
+-		return -1;
+-}
+-
+-static inline
+-int babeltrace_uuid_compare(const unsigned char *uuid_a,
+-		const unsigned char *uuid_b)
+-{
+-	uint32_t status;
+-
+-	uuid_compare((uuid_t *) uuid_a, (uuid_t *) uuid_b, &status);
+-	if (status == uuid_s_ok)
+-		return 0;
+-	else
+-		return -1;
+-}
+-
+-#else
+-#error "Babeltrace needs to have a UUID generator configured."
+-#endif
+-
+-#endif /* _BABELTRACE_UUID_H */
+-- 
+1.8.1.msysgit.1
