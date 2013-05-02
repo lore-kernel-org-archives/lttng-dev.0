@@ -1,18 +1,19 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: Re: [RFC PATCH lttng-tools] Unit tests: don't rebuild
- units under test
-Date: Thu, 02 May 2013 11:25:08 -0400
-Message-ID: <51828554.1080001__30260.4561126374$1367508352$gmane$org@efficios.com>
-References: <1365434404-11002-1-git-send-email-simon.marchi@polymtl.ca>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: using --function/--probe
+Date: Thu, 2 May 2013 15:54:31 -0400
+Message-ID: <20130502195431.GA15675__15938.1560901695$1367524512$gmane$org@Krystal>
+References: <20120605154950.GA21955@Krystal> <19046.1338994097@cloud.rain.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([5.9.158.244])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1UXvNk-00043h-23
-	for lttng-dev@lists.lttng.org; Thu, 02 May 2013 11:25:16 -0400
-In-Reply-To: <1365434404-11002-1-git-send-email-simon.marchi@polymtl.ca>
+	(envelope-from <compudj@mail.openrapids.net>) id 1UXzaL-00065s-GM
+	for lttng-dev@lists.lttng.org; Thu, 02 May 2013 15:54:33 -0400
+Content-Disposition: inline
+In-Reply-To: <19046.1338994097@cloud.rain.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,99 +22,66 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Simon Marchi <simon.marchi@polymtl.ca>
+To: Bill Trost <trost@cloud.rain.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Merged!
-
-Thanks!
-
-Simon Marchi:
-> Only the tests themselves are built in the unit test folder. They reuse
-> the object files that are already built during the main compilation
-> pass. This would fix the conflicts between object names.
+* Bill Trost (trost@cloud.rain.com) wrote:
+> Mathieu wrote:
+>     * Bill Trost (trost@cloud.rain.com) wrote:
+>     > and how does it differ from "--probe"? How do I determine
+>     > what symbols are valid for each of these options?
 > 
-> Signed-off-by: Simon Marchi <simon.marchi@polymtl.ca>
-> ---
->  tests/unit/Makefile.am |   55 +++++++++++++++++++++++++-----------------------
->  1 file changed, 29 insertions(+), 26 deletions(-)
+>     It entirely depends on which functions are blacklisted in the kernel
+>     (this is an attribute added to the functions specifically for kprobes).
+>     The keyword is "__kprobes".
 > 
-> diff --git a/tests/unit/Makefile.am b/tests/unit/Makefile.am
-> index c9e1bfc..67e7fe4 100644
-> --- a/tests/unit/Makefile.am
-> +++ b/tests/unit/Makefile.am
-> @@ -25,44 +25,47 @@ test_uri_SOURCES = test_uri.c
->  test_uri_LDADD = $(LIBTAP) $(LIBCOMMON) $(LIBHASHTABLE)
->  
->  # Session unit test
-> -SESSIONS=$(top_srcdir)/src/bin/lttng-sessiond/session.c	\
-> -	 $(top_srcdir)/src/bin/lttng-sessiond/consumer.c \
-> -	 $(top_srcdir)/src/bin/lttng-sessiond/health.c \
-> -	 $(top_srcdir)/src/common/uri.c \
-> -	 $(top_srcdir)/src/common/utils.c \
-> -	 $(top_srcdir)/src/common/error.c
-> +SESSIONS=$(top_srcdir)/src/bin/lttng-sessiond/session.o	\
-> +	 $(top_srcdir)/src/bin/lttng-sessiond/consumer.o \
-> +	 $(top_srcdir)/src/bin/lttng-sessiond/health.o \
-> +	 $(top_srcdir)/src/common/uri.o \
-> +	 $(top_srcdir)/src/common/utils.o \
-> +	 $(top_srcdir)/src/common/error.o
->  
-> -test_session_SOURCES = test_session.c $(SESSIONS)
-> +test_session_SOURCES = test_session.c
->  test_session_LDADD = $(LIBTAP) $(LIBCOMMON) $(LIBSESSIOND_COMM) $(LIBHASHTABLE) \
->  					 -lrt
-> +test_session_LDADD += $(SESSIONS)
->  
->  # UST data structures unit test
->  if HAVE_LIBLTTNG_UST_CTL
-> -UST_DATA_TRACE=$(top_srcdir)/src/bin/lttng-sessiond/trace-ust.c \
-> -	       $(top_srcdir)/src/bin/lttng-sessiond/consumer.c \
-> -		   $(top_srcdir)/src/bin/lttng-sessiond/buffer-registry.c \
-> -		   $(top_srcdir)/src/bin/lttng-sessiond/ust-registry.c \
-> -		   $(top_srcdir)/src/bin/lttng-sessiond/ust-metadata.c \
-> -		   $(top_srcdir)/src/bin/lttng-sessiond/ust-app.c \
-> -		   $(top_srcdir)/src/bin/lttng-sessiond/ust-consumer.c \
-> -		   $(top_srcdir)/src/bin/lttng-sessiond/fd-limit.c \
-> -		   $(top_srcdir)/src/bin/lttng-sessiond/health.c \
-> -		   $(top_srcdir)/src/bin/lttng-sessiond/session.c \
-> -		   $(top_srcdir)/src/common/uri.c \
-> -		   $(top_srcdir)/src/common/utils.c
-> +UST_DATA_TRACE=$(top_srcdir)/src/bin/lttng-sessiond/trace-ust.o \
-> +	       $(top_srcdir)/src/bin/lttng-sessiond/consumer.o \
-> +		   $(top_srcdir)/src/bin/lttng-sessiond/buffer-registry.o \
-> +		   $(top_srcdir)/src/bin/lttng-sessiond/ust-registry.o \
-> +		   $(top_srcdir)/src/bin/lttng-sessiond/ust-metadata.o \
-> +		   $(top_srcdir)/src/bin/lttng-sessiond/ust-app.o \
-> +		   $(top_srcdir)/src/bin/lttng-sessiond/ust-consumer.o \
-> +		   $(top_srcdir)/src/bin/lttng-sessiond/fd-limit.o \
-> +		   $(top_srcdir)/src/bin/lttng-sessiond/health.o \
-> +		   $(top_srcdir)/src/bin/lttng-sessiond/session.o \
-> +		   $(top_srcdir)/src/common/uri.o \
-> +		   $(top_srcdir)/src/common/utils.o
->  
-> -test_ust_data_SOURCES = test_ust_data.c $(UST_DATA_TRACE)
-> +test_ust_data_SOURCES = test_ust_data.c
->  test_ust_data_LDADD = $(LIBTAP) $(LIBCOMMON) $(LIBSESSIOND_COMM) $(LIBHASHTABLE) \
->  					  -lrt -llttng-ust-ctl
-> +test_ust_data_LDADD += $(UST_DATA_TRACE)
->  endif
->  
->  # Kernel data structures unit test
-> -KERN_DATA_TRACE=$(top_srcdir)/src/bin/lttng-sessiond/trace-kernel.c	\
-> -		$(top_srcdir)/src/bin/lttng-sessiond/consumer.c	\
-> -		$(top_srcdir)/src/bin/lttng-sessiond/health.c \
-> -		$(top_srcdir)/src/common/uri.c \
-> -		$(top_srcdir)/src/common/utils.c
-> +KERN_DATA_TRACE=$(top_srcdir)/src/bin/lttng-sessiond/trace-kernel.o	\
-> +		$(top_srcdir)/src/bin/lttng-sessiond/consumer.o	\
-> +		$(top_srcdir)/src/bin/lttng-sessiond/health.o \
-> +		$(top_srcdir)/src/common/uri.o \
-> +		$(top_srcdir)/src/common/utils.o
->  
-> -test_kernel_data_SOURCES = test_kernel_data.c $(KERN_DATA_TRACE)
-> +test_kernel_data_SOURCES = test_kernel_data.c
->  test_kernel_data_LDADD = $(LIBTAP) $(LIBCOMMON) $(LIBSESSIOND_COMM) $(LIBHASHTABLE) \
->  						 -lrt
-> +test_kernel_data_LDADD += $(KERN_DATA_TRACE)
+> Is that the only basis? For example, I can add a dynamic tracepoint (of
+> either flawor) for queue_work_on(), but not work __queue_work(), yet
+> neither of those functions have any apparent annotation. Or does
+> EXPORT_SYMBOL_GPL imply a probe point?
+
+No, it doesn't.
+
+> 
+>     > ...how do I trace what work is being
+>     > enqueued and run by the kworker threads?
+> 
+>     For this level of details, I think kprobes/kretprobes will not
+>     currently allow you to fetch it. The two options we have are:
+> 
+>     - use static tracepoints. Is there a tracepoint that targets the
+>       information you are looking for ? Try "lttng list -k".
+> 
+> No, I've been capturing all kernel events and haven't seen
+> anything resembling the kworker tracepoints of lttng 0.x.
+
+LTTng 2.2-rc has a new workqueue instrumentation. Maybe this can fit
+your use-case ?
+
+> 
+>     - or extend the dynamic probing to allow fetching variables from
+>       debug information,
+> 
+> Hmm. Well, I did a bit more poking and got a bit closer -- at least now
+> I know what dynamic points to use. (eg, "queue_work_on" and friends to
+> see what is being queued). I take it that LTT can't capture function call
+> arguments as a form of additional context? That would be an ideal
+> bit of information in this case.
+
+Currently it can't.
+
+(sorry for late reply)
+
+Thanks,
+
+Mathieu
+
+> 
+> Thanks again,
+> Bill
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
