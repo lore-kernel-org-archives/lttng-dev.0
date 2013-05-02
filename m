@@ -1,16 +1,16 @@
 From: "Ikaheimonen, JP" <jp_ikaheimonen@mentor.com>
-Subject: [Babeltrace RFC PATCH 27/28] MinGW implementation of
-	[v]asprintf
-Date: Thu, 2 May 2013 12:07:50 +0000
-Message-ID: <009B25148989C6458484484699278506E537E9E8__13518.4977007613$1367496518$gmane$org@EU-MBX-01.mgc.mentorg.com>
+Subject: [Babeltrace RFC PATCH 28/28] Open files as binary under
+	Windows
+Date: Thu, 2 May 2013 12:09:06 +0000
+Message-ID: <009B25148989C6458484484699278506E537E9FD__9640.87648685581$1367496588$gmane$org@EU-MBX-01.mgc.mentorg.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jp_ikaheimonen@mentor.com>) id 1UXsIo-0002Jz-9k
-	for lttng-dev@lists.lttng.org; Thu, 02 May 2013 08:07:58 -0400
+	(envelope-from <jp_ikaheimonen@mentor.com>) id 1UXsK2-0002Ml-ST
+	for lttng-dev@lists.lttng.org; Thu, 02 May 2013 08:09:15 -0400
 Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -25,64 +25,44 @@ Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
 ---
- include/babeltrace/compat/stdio.h | 38 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+ formats/ctf/ctf.c                     | 2 +-
+ include/babeltrace/compat/memstream.h | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/include/babeltrace/compat/stdio.h b/include/babeltrace/compat/stdio.h
-index be64e60..ce5bab2 100644
---- a/include/babeltrace/compat/stdio.h
-+++ b/include/babeltrace/compat/stdio.h
-@@ -4,6 +4,10 @@
- #include <stdio.h>
+diff --git a/formats/ctf/ctf.c b/formats/ctf/ctf.c
+index 7878555..c6c18a2 100644
+--- a/formats/ctf/ctf.c
++++ b/formats/ctf/ctf.c
+@@ -1085,7 +1085,7 @@ int ctf_open_trace_metadata_read(struct ctf_trace *td,
+ 			goto end_free;
+ 		}
  
- #ifdef __MINGW32__
-+
-+#include <stdlib.h>
-+#include <stdarg.h>
-+
- static inline void flockfile (FILE * filehandle)
- {
- 	return;
-@@ -13,6 +17,40 @@ static inline void funlockfile(FILE * filehandle)
- 	return;
- }
- 
-+static inline
-+int vasprintf(char ** strp, const char * fmt, va_list argv)
-+{
-+	int ret;
-+
-+	/* allocate even bigger chunks of memory until the string fits */
-+	char * buf;
-+	size_t size = 100;
-+	for(;;) {
-+		buf = malloc(size);
-+		if (buf == (char *)0) {
-+			ret = -1;
-+			break;
-+		}
-+		ret = vsnprintf(buf, size, fmt, argv);
-+		if (ret < size)
-+			break;
-+		size = size + 100;
-+		free(buf);
-+	}
-+	return ret;
-+}
-+
-+static inline
-+int asprintf(char ** strp, const char *fmt, ...)
-+{
-+	int ret;
-+	va_list argv;
-+	va_start(argv, fmt);
-+	ret = vasprintf(strp, fmt, argv);
-+	va_end(argv);
-+	return ret;
-+}
-+
- #endif
- 
- #endif
+-		fp = fdopen(metadata_stream->pos.fd, "r");
++		fp = fdopen(metadata_stream->pos.fd, "rb");
+ 		if (!fp) {
+ 			fprintf(stderr, "[error] Unable to open metadata stream.\n");
+ 			perror("Metadata stream open");
+diff --git a/include/babeltrace/compat/memstream.h b/include/babeltrace/compat/memstream.h
+index 44bc30c..be6d1a6 100644
+--- a/include/babeltrace/compat/memstream.h
++++ b/include/babeltrace/compat/memstream.h
+@@ -70,7 +70,7 @@ FILE *babeltrace_fmemopen(void *buf, size_t size, const char *mode)
+ 	/*
+ 	 * We need to write to the file.
+ 	 */
+-	fp = fdopen(ret, "w+");
++	fp = fdopen(ret, "w+b");
+ 	if (!fp) {
+ 		goto error_unlink;
+ 	}
+@@ -151,7 +151,7 @@ FILE *babeltrace_open_memstream(char **ptr, size_t *sizeloc)
+ 	if (ret < 0) {
+ 		return NULL;
+ 	}
+-	fp = fdopen(ret, "w+");
++	fp = fdopen(ret, "w+b");
+ 	if (!fp) {
+ 		goto error_unlink;
+ 	}
 -- 
 1.8.1.msysgit.1
