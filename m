@@ -1,17 +1,19 @@
-From: "Ikaheimonen, JP" <jp_ikaheimonen@mentor.com>
-Subject: [Babeltrace RFC PATCH 28/28] Open files as binary under
-	Windows
-Date: Thu, 2 May 2013 12:09:06 +0000
-Message-ID: <009B25148989C6458484484699278506E537E9FD__9640.87648685581$1367496588$gmane$org@EU-MBX-01.mgc.mentorg.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: LTTng-UST memory requirements
+Date: Thu, 2 May 2013 09:29:46 -0400
+Message-ID: <20130502132946.GD7035__46437.1889982887$1367501433$gmane$org@Krystal>
+References: <20998D40D9A2B7499CA5A3A2666CB1EB23FCE56C@ZURMSG1.QUANTUM.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from relay1.mentorg.com ([192.94.38.131])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jp_ikaheimonen@mentor.com>) id 1UXsK2-0002Ml-ST
-	for lttng-dev@lists.lttng.org; Thu, 02 May 2013 08:09:15 -0400
-Content-Language: en-US
+	(envelope-from <compudj@mail.openrapids.net>) id 1UXta2-0002zK-5U
+	for lttng-dev@lists.lttng.org; Thu, 02 May 2013 09:29:50 -0400
+Content-Disposition: inline
+In-Reply-To: <20998D40D9A2B7499CA5A3A2666CB1EB23FCE56C@ZURMSG1.QUANTUM.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,49 +22,48 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Mathieu Desnoyers (mathieu.desnoyers@efficios.com)" <mathieu.desnoyers@efficios.com>
+To: David OShea <David.OShea@quantum.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
----
- formats/ctf/ctf.c                     | 2 +-
- include/babeltrace/compat/memstream.h | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+* David OShea (David.OShea@quantum.com) wrote:
+> Hi all,
+> 
+> Are any details available of the memory requirements for LTTng?
 
-diff --git a/formats/ctf/ctf.c b/formats/ctf/ctf.c
-index 7878555..c6c18a2 100644
---- a/formats/ctf/ctf.c
-+++ b/formats/ctf/ctf.c
-@@ -1085,7 +1085,7 @@ int ctf_open_trace_metadata_read(struct ctf_trace *td,
- 			goto end_free;
- 		}
- 
--		fp = fdopen(metadata_stream->pos.fd, "r");
-+		fp = fdopen(metadata_stream->pos.fd, "rb");
- 		if (!fp) {
- 			fprintf(stderr, "[error] Unable to open metadata stream.\n");
- 			perror("Metadata stream open");
-diff --git a/include/babeltrace/compat/memstream.h b/include/babeltrace/compat/memstream.h
-index 44bc30c..be6d1a6 100644
---- a/include/babeltrace/compat/memstream.h
-+++ b/include/babeltrace/compat/memstream.h
-@@ -70,7 +70,7 @@ FILE *babeltrace_fmemopen(void *buf, size_t size, const char *mode)
- 	/*
- 	 * We need to write to the file.
- 	 */
--	fp = fdopen(ret, "w+");
-+	fp = fdopen(ret, "w+b");
- 	if (!fp) {
- 		goto error_unlink;
- 	}
-@@ -151,7 +151,7 @@ FILE *babeltrace_open_memstream(char **ptr, size_t *sizeloc)
- 	if (ret < 0) {
- 		return NULL;
- 	}
--	fp = fdopen(ret, "w+");
-+	fp = fdopen(ret, "w+b");
- 	if (!fp) {
- 		goto error_unlink;
- 	}
+I guess you'll have to measure this.
+
+One important point to consider is the memory requirements for trace
+buffers, which are user-configurable.
+
+Thanks,
+
+Mathieu
+
+>  I'm
+> particularly interested in UST, and not only the case where tracing is
+> being performed, but also when no session is started.  For example.:
+> 
+> - Session daemon memory requirements: I assume this would be a
+> function of the number of tracepoints, trace providers, attached
+> processes, sessions, etc.
+> 
+> - Consumer daemon memory requirements: how many of these would there be, how much memory does each use
+> 
+> - In-application memory requirements: I assume this would also be a function of the number of trace providers, trace points, etc.
+> 
+> Thanks in advance,
+> David
+> 
+> ----------------------------------------------------------------------
+> The information contained in this transmission may be confidential. Any disclosure, copying, or further distribution of confidential information is not permitted unless such privilege is explicitly granted in writing by Quantum. Quantum reserves the right to have electronic communications, including email and attachments, sent across its networks filtered through anti virus and spam software programs and retain such messages in order to comply with applicable data security and retention requirements. Quantum is not responsible for the proper and complete transmission of the substance of this communication or for any delay in its receipt.
+> 
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
 -- 
-1.8.1.msysgit.1
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
