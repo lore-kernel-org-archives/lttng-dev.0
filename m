@@ -1,16 +1,16 @@
 From: "Ikaheimonen, JP" <jp_ikaheimonen@mentor.com>
-Subject: [Babeltrace RFC PATCH 25/28] Replace mkdir with
-	compat_mkdir
-Date: Thu, 2 May 2013 12:05:55 +0000
-Message-ID: <009B25148989C6458484484699278506E537E9CA__41340.8024506227$1367496397$gmane$org@EU-MBX-01.mgc.mentorg.com>
+Subject: [Babeltrace RFC PATCH 26/28] Add MinGW implementation
+	of getline
+Date: Thu, 2 May 2013 12:06:51 +0000
+Message-ID: <009B25148989C6458484484699278506E537E9DB__38937.4852333733$1367496454$gmane$org@EU-MBX-01.mgc.mentorg.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jp_ikaheimonen@mentor.com>) id 1UXsGx-0002Hl-2z
-	for lttng-dev@lists.lttng.org; Thu, 02 May 2013 08:06:03 -0400
+	(envelope-from <jp_ikaheimonen@mentor.com>) id 1UXsHr-0002Iz-Fz
+	for lttng-dev@lists.lttng.org; Thu, 02 May 2013 08:06:59 -0400
 Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -24,70 +24,85 @@ To: "Mathieu Desnoyers (mathieu.desnoyers@efficios.com)" <mathieu.desnoyers@effi
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-The MinGW implementation of mkdir only accepts one parameter.
-Replace mkdir with compat_mkdir that in MinGW will ignore the
-parameters after the first one.
 ---
- converter/babeltrace-log.c        |  2 +-
- include/babeltrace/compat/fcntl.h | 27 +++++++++++++++++++++++++++
- 2 files changed, 28 insertions(+), 1 deletion(-)
+ compat/compat_strlib.c             | 40 ++++++++++++++++++++++++++++++++++++++
+ include/babeltrace/compat/string.h |  2 ++
+ 2 files changed, 42 insertions(+)
 
-diff --git a/converter/babeltrace-log.c b/converter/babeltrace-log.c
-index ac3bb3f..f997aad 100644
---- a/converter/babeltrace-log.c
-+++ b/converter/babeltrace-log.c
-@@ -332,7 +332,7 @@ int main(int argc, char **argv)
- 		exit(EXIT_SUCCESS);
- 	}
+diff --git a/compat/compat_strlib.c b/compat/compat_strlib.c
+index 980a8f5..181cf66 100644
+--- a/compat/compat_strlib.c
++++ b/compat/compat_strlib.c
+@@ -2,6 +2,10 @@
  
--	ret = mkdir(s_outputname, S_IRWXU|S_IRWXG);
-+	ret = compat_mkdir(s_outputname, S_IRWXU|S_IRWXG);
- 	if (ret) {
- 		perror("mkdir");
- 		goto error;
-diff --git a/include/babeltrace/compat/fcntl.h b/include/babeltrace/compat/fcntl.h
-index f58a1bf..167353c 100644
---- a/include/babeltrace/compat/fcntl.h
-+++ b/include/babeltrace/compat/fcntl.h
-@@ -6,6 +6,18 @@
- #include <stdarg.h>
- #include <stdio.h>
- 
-+#ifndef S_IRGRP
-+#define S_IRGRP 0
-+#endif
-+
-+#ifndef S_IWGRP
-+#define S_IWGRP 0
-+#endif
-+
-+#ifndef S_IRWXG
-+#define S_IRWXG 0
-+#endif
-+
  #ifdef __MINGW32__
- static inline
- int posix_fallocate(int fd, off_t offset, off_t len)
-@@ -68,4 +80,19 @@ int compat_closedirfd(int dirfd)
- #endif
+ 
++#include <stdlib.h>
++#include <stdio.h>
++#include <errno.h>
++
+ char* strtok_r(
+ 	char *str,
+ 	const char *delim,
+@@ -73,6 +77,42 @@ size_t strnlen(const char *str, size_t maxlen)
+ 	return len;
  }
  
-+static inline
-+int compat_mkdir(const char *pathname, ...)
++ssize_t getline(char **buf, size_t *len, FILE *stream)
 +{
-+#ifdef __MINGW32__
-+	return mkdir(pathname);
-+#else
-+	mode_t mode = 0;
-+	va_list args;
-+	va_start (args, pathname);
-+	mode = (mode_t)va_arg(args, int);
-+	va_end(args);
-+	return mkdir(pathname, mode);
-+#endif
++	int c = EOF;
++	ssize_t count = (ssize_t)0;
++
++	if( feof( stream ) || ferror( stream ) )
++		return -1;
++
++	for(;;) {
++		/* read character from stream */
++		c = fgetc(stream);
++		if (c == EOF) {
++			break;
++		}
++		if (c == '\n') {
++			break;
++		}
++
++		/* store to *buf */
++		/* check if it fits - space for character and NUL */
++		if (count > *len - 2) {
++			/* have to allocate more space */
++			*len = *len + 100;
++			*buf = realloc(*buf, *len);
++			if (*buf == NULL) {
++				errno = ENOMEM;
++				return (ssize_t)-1;
++			}
++		}
++		(*buf)[count] = c;
++		count++;
++	}
++	(*buf)[count] = '\0';
++	return (count == (ssize_t)0) ? (ssize_t)-1 : (ssize_t)0;
 +}
 +
  #endif
-\ No newline at end of file
+ 
+ int compat_strerror_r(int errnum, char *buf, size_t buflen)
+diff --git a/include/babeltrace/compat/string.h b/include/babeltrace/compat/string.h
+index 82f411e..50f6ba1 100644
+--- a/include/babeltrace/compat/string.h
++++ b/include/babeltrace/compat/string.h
+@@ -2,10 +2,12 @@
+ #define BABELTRACE_COMPAT_STRING_H
+ 
+ #include <string.h>
++#include <stdio.h>
+ 
+ #ifdef __MINGW32__
+ char *strtok_r(char *str, const char *delim, char **nextp);
+ size_t strnlen(const char *str, size_t maxlen);
++ssize_t getline(char **buf, size_t *len, FILE *stream);
+ #endif
+ 
+ int compat_strerror_r(int errnum, char *buf, size_t buflen);
 -- 
 1.8.1.msysgit.1
