@@ -1,20 +1,19 @@
-From: Bill Trost <trost@cloud.rain.com>
-Subject: Re: using --function/--probe
-Date: Fri, 03 May 2013 07:46:30 -0700
-Message-ID: <32266.1367592390__32007.126560393$1367593257$gmane$org@cloud.rain.com>
-References: <20130502195431.GA15675@Krystal><20120605154950.GA21955@Krystal>
-	<19046.1338994097@cloud.rain.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: registering user-defined properties on tracepoints
+Date: Fri, 3 May 2013 11:19:07 -0400
+Message-ID: <20130503151907.GA1513__26811.88299689$1367594381$gmane$org@Krystal>
+References: <7F632A9222059A42AF70FCB7965774AA2086527B@ALA-MBB.corp.ad.wrs.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from sym.pathetech.com ([173.240.244.141])
-	by ltt.polymtl.ca with smtp (Exim 4.72)
-	(envelope-from <trost@cloud.rain.com>) id 1UYHFS-0006tC-AH
-	for lttng-dev@lists.lttng.org; Fri, 03 May 2013 10:46:10 -0400
-In-reply-to: Your message of Thu, 02 May 2013 15:54:31 EDT.
-	<20130502195431.GA15675@Krystal>
-Content-ID: <32264.1367592390.1@cloud.rain.com>
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <compudj@mail.openrapids.net>) id 1UYHlM-0007Bd-Ri
+	for lttng-dev@lists.lttng.org; Fri, 03 May 2013 11:19:08 -0400
+Content-Disposition: inline
+In-Reply-To: <7F632A9222059A42AF70FCB7965774AA2086527B@ALA-MBB.corp.ad.wrs.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,35 +22,60 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: "McDermott, Andrew" <Andrew.McDermott@windriver.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Mathieu wrote:
-    * Bill Trost (trost@cloud.rain.com) wrote:
-    > Mathieu wrote:
-    >     * Bill Trost (trost@cloud.rain.com) wrote:
-    >     > ...how do I trace what work is being
-    >     > enqueued and run by the kworker threads?
-    > 
-    >     For this level of details, I think kprobes/kretprobes will not
-    >     currently allow you to fetch it. The two options we have are:
-    > 
-    >     - use static tracepoints. Is there a tracepoint that targets the
-    >       information you are looking for ? Try "lttng list -k".
-    > 
-    > No, I've been capturing all kernel events and haven't seen
-    > anything resembling the kworker tracepoints of lttng 0.x.
+* McDermott, Andrew (Andrew.McDermott@windriver.com) wrote:
+> 
+> Is it possible to add /other/ user-defined attributes to an event
+> definition.  What I'm trying to do is associate other related
+> properties/attributes to the event itself and on each field in the
+> event.
+> 
+> In this example I'm choosing to encode my attributes using a JSON-like
+> syntax, but the point is that this is really user-defined.
+> 
+>   TRACEPOINT_EVENT(foo, some_event,
+> 	TP_ARGS(int, value),
+>         TP_ATTRIBUTES("{ icon:some_event.png, helpIndex:docs/help/0001.html ... }")
+> 	TP_FIELDS(ctf_integer(int, foo, foo, "{java_formatter:com.windriver.SomeEventFormatter, leftAdjust:1, mask:64, ... }"))
+>   )
+> 
+> I could create an associated event:
+> 
+>   TRACEPOINT_EVENT(foo, some_event_metadata,
+> 	TP_ARGS(char *, str),
+> 	TP_FIELDS(ctf_string(char *, str))
+>   )
+> 
+> and have some rules based on the event names to bind the two together
+> but it seems "nicer" to keep them together.  My motivation is keeping
+> this kind of auxiliary information available with the trace itself as
+> opposed to some side-files which have the tendency to get out of sync.
+> 
+> Or perhaps this is another way of achieving this.  Any hints gratefully
+> received...
 
-    LTTng 2.2-rc has a new workqueue instrumentation. Maybe this can fit
-    your use-case ?
+I would advise adding this info similarly to what we do for EMF modeling
+info, and loglevels, in UST tracepoints: adding a separate
+TRACEPOINT_ATTRIBUTES(provider, name, ....), outside of
+TRACEPOINT_EVENT. It's a much easier way to add new stuff without
+breaking backward compatibility.
 
-Hi, Mathieu,
+Thanks,
 
-I'd forgotten all about this. We eventually discovered,
-as part of investigating the kworkers, that we had a
-misconfigured sysctl. When we fixed that, the offending
-kwork then disappeared completely -- problem solved.
+Mathieu
 
-Thanks for the "blast from the past",
-Bill
+> 
+> Thanks,
+> Andy.
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
