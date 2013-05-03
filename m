@@ -1,19 +1,20 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: LTTng on Android
-Date: Thu, 2 May 2013 16:59:59 -0400
-Message-ID: <20130502205959.GD16536__41837.9966322847$1367528433$gmane$org@Krystal>
-References: <CAMJ-Osde+NDU1U8d4Rew7tNfMnqXZU20n0Dq7cKY4YbkAM4hLw@mail.gmail.com>
+From: "Woegerer, Paul" <Paul_Woegerer@mentor.com>
+Subject: Re: How to disable an event that's been enabled by a
+ wildcard selection or -a?
+Date: Fri, 3 May 2013 12:40:53 +0200
+Message-ID: <51839435.8010607__44394.1635931425$1367577703$gmane$org@mentor.com>
+References: <009B25148989C6458484484699278506985C0CFA@EU-MBX-01.mgc.mentorg.com>
+	<20998D40D9A2B7499CA5A3A2666CB1EB19F968AF@ZURMSG1.QUANTUM.com>
+	<5121EA9A.8080905@mentor.com> <20130502134010.GF7035@Krystal>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UY0bg-0006iu-PB
-	for lttng-dev@lists.lttng.org; Thu, 02 May 2013 17:00:00 -0400
-Content-Disposition: inline
-In-Reply-To: <CAMJ-Osde+NDU1U8d4Rew7tNfMnqXZU20n0Dq7cKY4YbkAM4hLw@mail.gmail.com>
+	(envelope-from <Paul_Woegerer@mentor.com>) id 1UYDQH-0004sp-01
+	for lttng-dev@lists.lttng.org; Fri, 03 May 2013 06:41:05 -0400
+In-Reply-To: <20130502134010.GF7035@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,63 +23,79 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Santhosh Samarthyam <srsamarthyam@gmail.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Santhosh Samarthyam (srsamarthyam@gmail.com) wrote:
-> Dear All,
-> 
-> I have been closely following the status of LTTng on Android based on
-> the discussions in this mailing list.
-> I would be great if someone could validate the following
-> 
-> - No need for LTTng kernel patch if kernel version > 2.6.38
+On 05/02/2013 03:40 PM, Mathieu Desnoyers wrote:
+> Hi Paul,
+> =
 
-true.
+> I would be interested to see this feature upstream. Previously was not a
+> good timing to pull it in, because we were adding the concept of event
+> "enablers" within lttng-ust.
 
-> - No dependency on glibc after version 2.0 of lttng.
+Sounds great. I will port our patch to master.
 
-false.
+> =
 
-There has been interesting progress done on the Android side this
-winter by Polytechnique. We should see the patches soon(ish).
+> One thing I'm curious about is how you present the logical combination
+> with exlusion match are present. For instance, if we only have
+> inclusion, we get:
+> =
 
-The project will likely be continued in a Google Summer of Code project
-this summer, especially for UST tracing.
+> lttng enable-event 'a'
+> lttng enable-event 'c'
+> lttng enable-event 'zc*'
+> =
 
-Sorry for the late reply,
+> it turns into :   (a || c || zc*)
+> =
+
+> I expect that negation would look like:
+> =
+
+> lttng enable-event 'a'
+> lttng enable-event '!abc*'
+> lttng enable-event 'c'
+> lttng enable-event '!cxx'
+
+Our current solution does not handle '!cxx' correctly.
+I will fix that.
+
+> lttng enable-event 'zc*'
+> =
+
+> ->  !(abc* || cxx) || (a || c || zc*)
+
+Exactly. The "!something" wildcards are always first and will prevent furth=
+er matching with non-! wildcards.
+
+> =
+
+> Am I correct ? If yes, we should expand lttng-tools lttng(1) manpage and
+> cmd help with this info.
+
+I will take care of documentation updates as well.
+
+> =
+
+> Can you make sure it works well with lttng-ust master branch ?
+
+Once I have a working, tested patch against master I will send it to you.
 
 Thanks,
+Paul
 
-Mathieu
+-- =
 
-> 
-> So can I build LTTng on Android (Version details below)
-> 
-> Android version: Icecream sandwich (4.0.1)
-> Kernel version: 3.0.1
-> 
-> Can we build the following on an ARM based board running android?
-> (After creating the android make files)
-> LTTng-tools 2.0.4
-> LTTng-modules 2.0.4
-> LTTng-UST 2.0.4
-> liburcu 0.7.3
-> 
-> I am more interested in getting the LTTng-UST to work.
-> Any pointers on how to achieve this would be really helpful.
-> 
-> -- 
-> Cheers,
-> Santos
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+Paul Woegerer | SW Development Engineer
+http://go.mentor.com/sourceryanalyzer
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Mentor Embedded(tm) | Prinz Eugen Stra=DFe 72/2/4, Vienna, 1040 Austria
+Nucleus=AE | Linux=AE | Android(tm) | Services | UI | Multi-OS
+
+Android is a trademark of Google Inc. Use of this trademark is subject to G=
+oogle Permissions.
+Linux is the registered trademark of Linus Torvalds in the U.S. and other c=
+ountries.
