@@ -1,8 +1,8 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: registering user-defined properties on tracepoints
-Date: Fri, 3 May 2013 11:19:07 -0400
-Message-ID: <20130503151907.GA1513__26811.88299689$1367594381$gmane$org@Krystal>
-References: <7F632A9222059A42AF70FCB7965774AA2086527B@ALA-MBB.corp.ad.wrs.com>
+Subject: Re: getting a notification from 'lttng start|stop'
+Date: Fri, 3 May 2013 11:21:18 -0400
+Message-ID: <20130503152118.GB1513__27462.4611404308$1367594510$gmane$org@Krystal>
+References: <7F632A9222059A42AF70FCB7965774AA208660DB@ALA-MBB.corp.ad.wrs.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -10,10 +10,10 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UYHlM-0007Bd-Ri
-	for lttng-dev@lists.lttng.org; Fri, 03 May 2013 11:19:08 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1UYHnU-0007DK-BD
+	for lttng-dev@lists.lttng.org; Fri, 03 May 2013 11:21:20 -0400
 Content-Disposition: inline
-In-Reply-To: <7F632A9222059A42AF70FCB7965774AA2086527B@ALA-MBB.corp.ad.wrs.com>
+In-Reply-To: <7F632A9222059A42AF70FCB7965774AA208660DB@ALA-MBB.corp.ad.wrs.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -28,48 +28,35 @@ List-Id: lttng-dev@lists.lttng.org
 
 * McDermott, Andrew (Andrew.McDermott@windriver.com) wrote:
 > 
-> Is it possible to add /other/ user-defined attributes to an event
-> definition.  What I'm trying to do is associate other related
-> properties/attributes to the event itself and on each field in the
-> event.
+> Is it possible to see when tracing has actually started (i.e., when
+> `lttng start' is invoked)?
 > 
-> In this example I'm choosing to encode my attributes using a JSON-like
-> syntax, but the point is that this is really user-defined.
-> 
->   TRACEPOINT_EVENT(foo, some_event,
-> 	TP_ARGS(int, value),
->         TP_ATTRIBUTES("{ icon:some_event.png, helpIndex:docs/help/0001.html ... }")
-> 	TP_FIELDS(ctf_integer(int, foo, foo, "{java_formatter:com.windriver.SomeEventFormatter, leftAdjust:1, mask:64, ... }"))
->   )
-> 
-> I could create an associated event:
-> 
->   TRACEPOINT_EVENT(foo, some_event_metadata,
-> 	TP_ARGS(char *, str),
-> 	TP_FIELDS(ctf_string(char *, str))
->   )
-> 
-> and have some rules based on the event names to bind the two together
-> but it seems "nicer" to keep them together.  My motivation is keeping
-> this kind of auxiliary information available with the trace itself as
-> opposed to some side-files which have the tendency to get out of sync.
-> 
-> Or perhaps this is another way of achieving this.  Any hints gratefully
-> received...
+> I can observe that the tracepoint is enabled/disabled by looking at the
+> 'state' field in a 'struct tracepoint'.  Is there an equivalent variable
+> to monitor for `lttng start|stop'?  I was trying to dump some additional
+> process state (via calls to tracepoint) whenever an external
+> start/stop/start/stop/start sequence occurs.
 
-I would advise adding this info similarly to what we do for EMF modeling
-info, and loglevels, in UST tracepoints: adding a separate
-TRACEPOINT_ATTRIBUTES(provider, name, ....), outside of
-TRACEPOINT_EVENT. It's a much easier way to add new stuff without
-breaking backward compatibility.
+statedump for UST. This is a feature we don't have at this point. It
+would need to be designed within UST. I don't this a simple "hack" would
+do.
+
+> 
+> Also, when I run 'lttng enable-event -u -a' I see that the 'state' value
+> changes from '0' to '1', but if I run 'lttng disable-event -u -a' it
+> stays at '1'.  Is this expected?  If I subsequently run 'lttng destroy'
+> then it does go to '0'.  Shouldn't the disable set it to '0' too?
+
+I think it's been fixed, but if you still experience this issue, please
+file a bug report on bugs.lttng.org.
 
 Thanks,
 
 Mathieu
 
 > 
-> Thanks,
-> Andy.
+> -- 
+> andy
 > _______________________________________________
 > lttng-dev mailing list
 > lttng-dev@lists.lttng.org
