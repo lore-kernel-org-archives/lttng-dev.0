@@ -1,20 +1,19 @@
-From: "Woegerer, Paul" <Paul_Woegerer@mentor.com>
-Subject: Re: How to disable an event that's been enabled by a
- wildcard selection or -a?
-Date: Fri, 3 May 2013 12:40:53 +0200
-Message-ID: <51839435.8010607__44394.1635931425$1367577703$gmane$org@mentor.com>
-References: <009B25148989C6458484484699278506985C0CFA@EU-MBX-01.mgc.mentorg.com>
-	<20998D40D9A2B7499CA5A3A2666CB1EB19F968AF@ZURMSG1.QUANTUM.com>
-	<5121EA9A.8080905@mentor.com> <20130502134010.GF7035@Krystal>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: Managing trace sizes
+Date: Fri, 3 May 2013 08:29:19 -0400
+Message-ID: <20130503122919.GA30913__48812.5857817524$1367584193$gmane$org@Krystal>
+References: <13959c7e325.1340654510569746171.-9152529687053830431@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from relay1.mentorg.com ([192.94.38.131])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Paul_Woegerer@mentor.com>) id 1UYDQH-0004sp-01
-	for lttng-dev@lists.lttng.org; Fri, 03 May 2013 06:41:05 -0400
-In-Reply-To: <20130502134010.GF7035@Krystal>
+	(envelope-from <compudj@mail.openrapids.net>) id 1UYF72-0005ix-Mc
+	for lttng-dev@lists.lttng.org; Fri, 03 May 2013 08:29:20 -0400
+Content-Disposition: inline
+In-Reply-To: <13959c7e325.1340654510569746171.-9152529687053830431@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,79 +22,44 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: "jsilver.pmc@gmail.com" <jsilver.pmc@gmail.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On 05/02/2013 03:40 PM, Mathieu Desnoyers wrote:
-> Hi Paul,
-> =
+Hi Jon,
 
-> I would be interested to see this feature upstream. Previously was not a
-> good timing to pull it in, because we were adding the concept of event
-> "enablers" within lttng-ust.
+Sorry for the late reply,
 
-Sounds great. I will port our patch to master.
+* jsilver.pmc@gmail.com (jsilver.pmc@gmail.com) wrote:
+> Are there any ways currently, or planned, or other suggestions, to
+> address these within LTTng?
+> - compression of trace data
 
-> =
+There is room for that in the CTF specification, but LTTng does not
+implement trace compression yet.
 
-> One thing I'm curious about is how you present the logical combination
-> with exlusion match are present. For instance, if we only have
-> inclusion, we get:
-> =
+> - rolling or rotating trace files
+> - limiting the amount of disk space LTTng will use
 
-> lttng enable-event 'a'
-> lttng enable-event 'c'
-> lttng enable-event 'zc*'
-> =
-
-> it turns into :   (a || c || zc*)
-> =
-
-> I expect that negation would look like:
-> =
-
-> lttng enable-event 'a'
-> lttng enable-event '!abc*'
-> lttng enable-event 'c'
-> lttng enable-event '!cxx'
-
-Our current solution does not handle '!cxx' correctly.
-I will fix that.
-
-> lttng enable-event 'zc*'
-> =
-
-> ->  !(abc* || cxx) || (a || c || zc*)
-
-Exactly. The "!something" wildcards are always first and will prevent furth=
-er matching with non-! wildcards.
-
-> =
-
-> Am I correct ? If yes, we should expand lttng-tools lttng(1) manpage and
-> cmd help with this info.
-
-I will take care of documentation updates as well.
-
-> =
-
-> Can you make sure it works well with lttng-ust master branch ?
-
-Once I have a working, tested patch against master I will send it to you.
+These are available as new features in LTTng 2.2 (--tracefile-size and
+--tracefile-count).
 
 Thanks,
-Paul
 
--- =
+Mathieu
 
-Paul Woegerer | SW Development Engineer
-http://go.mentor.com/sourceryanalyzer
+> 
+> Thanks,
+> Jon
+> 
 
-Mentor Embedded(tm) | Prinz Eugen Stra=DFe 72/2/4, Vienna, 1040 Austria
-Nucleus=AE | Linux=AE | Android(tm) | Services | UI | Multi-OS
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
-Android is a trademark of Google Inc. Use of this trademark is subject to G=
-oogle Permissions.
-Linux is the registered trademark of Linus Torvalds in the U.S. and other c=
-ountries.
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
