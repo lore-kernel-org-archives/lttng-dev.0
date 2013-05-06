@@ -1,93 +1,214 @@
-From: Aaron Spear <aspear-pghWNbHTmq7QT0dZR+AlfA@public.gmane.org>
-Subject: Re: Java code for CTF trace writing?
-Date: Mon, 6 May 2013 10:53:27 -0700 (PDT)
-Message-ID: <1670315418.908522.1367862807840.JavaMail.root@vmware.com>
-References: <CAB4xu_1zOHUD03dQ57DxKpQ1RWorocGK_0URCaxnohHB1FLEDw@mail.gmail.com>
-	<5176AAFA.8060905@ericsson.com>
-	<1962635283.7490228.1366741297558.JavaMail.root@vmware.com>
-	<5176D556.8040801@ericsson.com>
-	<1218416875.7614701.1366750233878.JavaMail.root@vmware.com>
-	<A94B468263DDE2448A14367F590EB97301D4DA41@ltcfiswmsgmb15>
-Reply-To: Linux Tools developer discussions <linuxtools-dev-j9T/66MeVpFAfugRpC6u6w@public.gmane.org>
+From: Charles Briere <charlesbriere.flatzo@gmail.com>
+Subject: [PATCH lttng-tools 01/14] Adding some checks for
+	Android specific libraries to the configure step
+Date: Mon,  6 May 2013 18:10:51 +0000
+Message-ID: <1367863864-14680-1-git-send-email-charlesbriere.flatzo__1563.88209802589$1367863978$gmane$org@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Return-path: <linuxtools-dev-bounces-j9T/66MeVpFAfugRpC6u6w@public.gmane.org>
-In-Reply-To: <A94B468263DDE2448A14367F590EB97301D4DA41@ltcfiswmsgmb15>
-List-Unsubscribe: <https://dev.eclipse.org/mailman/options/linuxtools-dev>,
-	<mailto:linuxtools-dev-request-j9T/66MeVpFAfugRpC6u6w@public.gmane.org?subject=unsubscribe>
-List-Archive: <https://dev.eclipse.org/mailman/private/linuxtools-dev>
-List-Post: <mailto:linuxtools-dev-j9T/66MeVpFAfugRpC6u6w@public.gmane.org>
-List-Help: <mailto:linuxtools-dev-request-j9T/66MeVpFAfugRpC6u6w@public.gmane.org?subject=help>
-List-Subscribe: <https://dev.eclipse.org/mailman/listinfo/linuxtools-dev>,
-	<mailto:linuxtools-dev-request-j9T/66MeVpFAfugRpC6u6w@public.gmane.org?subject=subscribe>
-Errors-To: linuxtools-dev-bounces-j9T/66MeVpFAfugRpC6u6w@public.gmane.org
-Sender: linuxtools-dev-bounces-j9T/66MeVpFAfugRpC6u6w@public.gmane.org
-To: Erik Ostermueller <Erik.Ostermueller-/Lv4ykeZ0xsS+FvcfC7Uqw@public.gmane.org>
-Cc: Philippe Proulx <philippe.proulx-scC8bbJcJLCw5LPnMra/2Q@public.gmane.org>, Linux Tools developer discussions <linuxtools-dev-j9T/66MeVpFAfugRpC6u6w@public.gmane.org>, lttng-dev-bnB2LGs2QVJ+nrgayQ7rhA@public.gmane.org
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail-qe0-f53.google.com ([209.85.128.53])
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <charlesbriere.flatzo@gmail.com>) id 1UZPsc-0008QN-Bt
+	for lttng-dev@lists.lttng.org; Mon, 06 May 2013 14:11:18 -0400
+Received: by mail-qe0-f53.google.com with SMTP id cz11so2208053qeb.40
+	for <lttng-dev@lists.lttng.org>; Mon, 06 May 2013 11:11:12 -0700 (PDT)
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+To: dgoulet@efficios.com
+Cc: Charles Briere <charlesbriere.flatzo@gmail.com>, lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Erik,
+Signed-off-by: Charles Briere <charlesbriere.flatzo@gmail.com>
+---
+ configure.ac                        | 34 ++++++++++++++++++++++++++++++----
+ src/bin/lttng-consumerd/Makefile.am |  6 +++++-
+ src/bin/lttng-relayd/Makefile.am    |  9 ++++++++-
+ src/bin/lttng-sessiond/Makefile.am  |  6 +++++-
+ tests/unit/Makefile.am              | 18 +++++++++++++-----
+ 5 files changed, 61 insertions(+), 12 deletions(-)
 
-The answer at this moment is no, you can't see that.  That said, that is certainly the vision of what I want to create.  I am working on extending a view so that I can see Java methods in one trace alongside state changes that come from another trace. The idea is to have a single view that knows how to present state vs. time and then providers for that state for different kinds of tracing.  I have in fact done exactly what you want (java app trace + linux kernel trace), but it is clunky right now because you cannot see the Linux kernel trace and the Java trace at the same time.
-
-The issue here is simply one of implementation choices related to how traces are viewed.  At this moment the views in the LTTng viewer are singletons setup to only allow one trace to be viewed at a time (mostly.  the "Time Chart" view is an exception to this). What is needed is one of two things (I think both):
-
-1) support for being able to open as many instances of views as you wish, and then "pin" them to a particular trace.  If you could do this then you could open an LTTng linux kernel view and a java trace and whatever else you wanted at the same time. In addition to the pin support the views would need some mechanism for time sync between them (like the current control flow view syncs based on the selection in Histogram view)
-
-2) Change the "state flow view" that I created (borrowing code from the control flow view) so it supports multiple traces (e.g. LTTng kernel trace).  I am working on this right now for data driven traces.  One thought is that this view infrastructure could be changed so that a single view could show all of these different types of traces.  A bunch of refactoring would be required to do this though.  The current ControlFlowView has things very specific to kernel traces that don't make sense generically (e.g. process related details as columns in the trace)
-
-I can't comment as to the official direction of the project (since I am not a committer...) but Perhaps Alexandre or others could comment on thoughts on what could be done to address this and when.
-
-regards, 
-Aaron Spear
-
-
-
------ Original Message -----
-> Hello all,
-> 
-> I've got a question about the Java code that writes CTF traces.
-> Would this design provide a single trace with Java events and OS events in
-> the same trace?
-> Here is an example:
-> 
-> Consider an all-Java program that sends an XML requests request over HTTP.
-> Would like the trace detail to show Java method activity as well as OS
-> activity that opens/closes the socket.
-> 
-> This could be very helpful for unveiling the details of how Java code
-> consumes hardware resources.
-> 
-> Thanks,
-> --Erik
-> 
-> -----Original Message-----
-> From: Aaron Spear [mailto:aspear-pghWNbHTmq7QT0dZR+AlfA@public.gmane.org]
-> Sent: Tuesday, April 23, 2013 3:51 PM
-> To: Matthew Khouzam
-> Cc: Philippe Proulx; Dominique Toupin; lttng-dev-bnB2LGs2QVJ+nrgayQ7rhA@public.gmane.org; Linux Tools
-> developer discussions
-> Subject: Re: [lttng-dev] Java code for CTF trace writing?
-> 
-> > When would you be available to work on this feature, I would love to
-> > sync up our efforts for this.
-> 
-> The way things look right now, I will have bandwidth for it in another month,
-> so middle to end of May. Perhaps sooner if all the stars align.
-> 
-> Aaron
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev-bnB2LGs2QVJ+nrgayQ7rhA@public.gmane.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> 
-> _____________
-> The information contained in this message is proprietary and/or confidential.
-> If you are not the intended recipient, please: (i) delete the message and
-> all copies; (ii) do not disclose, distribute or use the message in any
-> manner; and (iii) notify the sender immediately. In addition, please be
-> aware that any message addressed to our domain is subject to archiving and
-> review by persons other than the intended recipient. Thank you
-> 
+diff --git a/configure.ac b/configure.ac
+index 4f85fc1..eee025a 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -41,6 +41,12 @@ AS_IF([test "x$libtool_fixup" = "xyes"],
+ 
+ AM_CONDITIONAL([NO_SHARED], [test x$enable_shared = xno])
+ 
++AM_CONDITIONAL([TARGET_HOST_ANDROID], [false])
++case "${host}" in
++    *-*-linux-androideabi) AM_CONDITIONAL([TARGET_HOST_ANDROID], [true])
++    ;;
++esac
++
+ AC_CHECK_HEADERS([ \
+ 	sys/types.h unistd.h fcntl.h string.h pthread.h limits.h \
+ 	signal.h stdlib.h sys/un.h sys/socket.h stdlib.h stdio.h \
+@@ -108,12 +114,24 @@ AC_DEFINE_UNQUOTED([CONFIG_SESSIOND_BIN], "$SESSIOND_BIN", [Location of the sess
+ 
+ # Check for pthread
+ AC_CHECK_LIB([pthread], [pthread_create], [],
+-	[AC_MSG_ERROR([Cannot find libpthread. Use [LDFLAGS]=-Ldir to specify its location.])]
++[
++    # Check for pthread in a bionic libc...
++	AC_CHECK_LIB([c], [pthread_create], [], 
++	[
++	    AC_MSG_ERROR([Cannot find libpthread. Use [LDFLAGS]=-Ldir to specify its location.])
++	])
++]
+ )
+ 
+ # Check libpopt
+ AC_CHECK_LIB([popt], [poptGetContext], [],
+-	[AC_MSG_ERROR([Cannot find libpopt. Use [LDFLAGS]=-Ldir to specify its location.])]
++[
++	# Check for libpopt in oprofile for Android
++	AC_CHECK_LIB([oprofile_popt], [poptGetContext], [], 
++    [
++        AC_MSG_ERROR([Cannot find libpopt. Use [LDFLAGS]=-Ldir to specify its location.])
++    ])
++]
+ )
+ 
+ # Check for libuuid
+@@ -130,7 +148,15 @@ AC_CHECK_LIB([uuid], [uuid_generate],
+ 		have_libc_uuid=yes
+ 	],
+ 	[
+-		AC_MSG_ERROR([Cannot find libuuid uuid_generate nor libc uuid_create. Use [LDFLAGS]=-Ldir to specify their location.])
++		# uuid_create not found in libc, check for bionic's impl in e2fsprog.
++		AC_CHECK_LIB([ext2_uuid], [uuid_generate],
++		[
++			AC_DEFINE_UNQUOTED([LTTNG_HAVE_LIBEXT2_UUID], 1, [Has libext2_uuid uuid support.])
++			have_libext2_uuid=yes
++		],
++		[
++			AC_MSG_ERROR([Cannot find libuuid uuid_generate, libc uuid_create nor libext2_uuid uuid_generate. Use [LDFLAGS]=-Ldir to specify their location.])
++		])
+ 	])
+ ]
+ )
+@@ -175,7 +201,7 @@ AS_IF([test "x$lttng_ust_support" = "xyes"], [
+ 			lttng_ust_ctl_found=yes
+ 		],
+ 		[AC_MSG_ERROR([Cannot find LTTng-UST 2.1.x. Use [LDFLAGS]=-Ldir to specify its location, or specify --disable-lttng-ust to build lttng-tools without LTTng-UST support.])],
+-		[-lurcu-common -lurcu-bp -lurcu-cds -lrt]
++		[-lurcu-common -lurcu-bp -lurcu-cds -lc -lrt]
+ 	)
+ ])
+ AM_CONDITIONAL([HAVE_LIBLTTNG_UST_CTL], [test "x$lttng_ust_ctl_found" = xyes])
+diff --git a/src/bin/lttng-consumerd/Makefile.am b/src/bin/lttng-consumerd/Makefile.am
+index a418eb4..c38590e 100644
+--- a/src/bin/lttng-consumerd/Makefile.am
++++ b/src/bin/lttng-consumerd/Makefile.am
+@@ -4,7 +4,7 @@ lttnglibexec_PROGRAMS = lttng-consumerd
+ 
+ lttng_consumerd_SOURCES = lttng-consumerd.c lttng-consumerd.h
+ 
+-lttng_consumerd_LDADD = -lrt \
++lttng_consumerd_LDADD = \
+ 	   $(top_builddir)/src/common/libconsumer.la \
+ 	   $(top_builddir)/src/common/sessiond-comm/libsessiond-comm.la \
+ 	   $(top_builddir)/src/common/libcommon.la
+@@ -12,3 +12,7 @@ lttng_consumerd_LDADD = -lrt \
+ if HAVE_LIBLTTNG_UST_CTL
+ lttng_consumerd_LDADD += -llttng-ust-ctl
+ endif
++
++if !TARGET_HOST_ANDROID
++lttng_consumerd_LDADD += -lrt 
++endif
+diff --git a/src/bin/lttng-relayd/Makefile.am b/src/bin/lttng-relayd/Makefile.am
+index ed82144..cb9076a 100644
+--- a/src/bin/lttng-relayd/Makefile.am
++++ b/src/bin/lttng-relayd/Makefile.am
+@@ -11,10 +11,17 @@ lttng_relayd_SOURCES = main.c lttng-relayd.h utils.h utils.c cmd.h \
+                        cmd-2-1.c cmd-2-1.h \
+                        cmd-2-2.c cmd-2-2.h
+ 
++if !TARGET_HOST_ANDROID
++lttng_relayd_LDADD = -lrt
++else
++lttng_relayd_LDADD = 
++endif
++
+ # link on liblttngctl for check if relayd is already alive.
+-lttng_relayd_LDADD = -lrt -lurcu-common -lurcu \
++lttng_relayd_LDADD += -lurcu-common -lurcu \
+ 		$(top_builddir)/src/lib/lttng-ctl/liblttng-ctl.la \
+ 		$(top_builddir)/src/common/sessiond-comm/libsessiond-comm.la \
+ 		$(top_builddir)/src/common/hashtable/libhashtable.la \
+ 		$(top_builddir)/src/common/libcommon.la \
+ 		$(top_builddir)/src/common/compat/libcompat.la
++
+diff --git a/src/bin/lttng-sessiond/Makefile.am b/src/bin/lttng-sessiond/Makefile.am
+index 244bc70..63e9555 100644
+--- a/src/bin/lttng-sessiond/Makefile.am
++++ b/src/bin/lttng-sessiond/Makefile.am
+@@ -37,7 +37,7 @@ endif
+ lttng_sessiond_SOURCES += lttng-sessiond.h main.c
+ 
+ # link on liblttngctl for check if sessiond is already alive.
+-lttng_sessiond_LDADD = -lrt -lurcu-common -lurcu \
++lttng_sessiond_LDADD = -lurcu-common -lurcu \
+ 		$(top_builddir)/src/lib/lttng-ctl/liblttng-ctl.la \
+ 		$(top_builddir)/src/common/sessiond-comm/libsessiond-comm.la \
+ 		$(top_builddir)/src/common/kernel-ctl/libkernel-ctl.la \
+@@ -49,4 +49,8 @@ lttng_sessiond_LDADD = -lrt -lurcu-common -lurcu \
+ 
+ if HAVE_LIBLTTNG_UST_CTL
+ lttng_sessiond_LDADD += -llttng-ust-ctl
++endif 
++
++if !TARGET_HOST_ANDROID
++lttng_sessiond_LDADD += -lrt
+ endif
+diff --git a/tests/unit/Makefile.am b/tests/unit/Makefile.am
+index c9e1bfc..3a59a7c 100644
+--- a/tests/unit/Makefile.am
++++ b/tests/unit/Makefile.am
+@@ -33,8 +33,7 @@ SESSIONS=$(top_srcdir)/src/bin/lttng-sessiond/session.c	\
+ 	 $(top_srcdir)/src/common/error.c
+ 
+ test_session_SOURCES = test_session.c $(SESSIONS)
+-test_session_LDADD = $(LIBTAP) $(LIBCOMMON) $(LIBSESSIOND_COMM) $(LIBHASHTABLE) \
+-					 -lrt
++test_session_LDADD = $(LIBTAP) $(LIBCOMMON) $(LIBSESSIOND_COMM) $(LIBHASHTABLE)
+ 
+ # UST data structures unit test
+ if HAVE_LIBLTTNG_UST_CTL
+@@ -53,7 +52,11 @@ UST_DATA_TRACE=$(top_srcdir)/src/bin/lttng-sessiond/trace-ust.c \
+ 
+ test_ust_data_SOURCES = test_ust_data.c $(UST_DATA_TRACE)
+ test_ust_data_LDADD = $(LIBTAP) $(LIBCOMMON) $(LIBSESSIOND_COMM) $(LIBHASHTABLE) \
+-					  -lrt -llttng-ust-ctl
++					  -llttng-ust-ctl
++if !TARGET_HOST_ANDROID
++test_ust_data_LDADD += -lrt
++endif
++
+ endif
+ 
+ # Kernel data structures unit test
+@@ -64,5 +67,10 @@ KERN_DATA_TRACE=$(top_srcdir)/src/bin/lttng-sessiond/trace-kernel.c	\
+ 		$(top_srcdir)/src/common/utils.c
+ 
+ test_kernel_data_SOURCES = test_kernel_data.c $(KERN_DATA_TRACE)
+-test_kernel_data_LDADD = $(LIBTAP) $(LIBCOMMON) $(LIBSESSIOND_COMM) $(LIBHASHTABLE) \
+-						 -lrt
++test_kernel_data_LDADD = $(LIBTAP) $(LIBCOMMON) $(LIBSESSIOND_COMM) $(LIBHASHTABLE)
++
++if !TARGET_HOST_ANDROID
++test_session_LDADD += -lrt
++test_kernel_data_LDADD += -lrt
++endif
++
+-- 
+1.8.1.msysgit.1
