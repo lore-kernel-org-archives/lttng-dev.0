@@ -1,20 +1,21 @@
-From: Charles Briere <charlesbriere.flatzo@gmail.com>
-Subject: [PATCH lttng-tools 12/14] Using pthread_kill instead of
-	pthread_cancel (not a good idea but requried for now)
-Date: Mon,  6 May 2013 18:18:49 +0000
-Message-ID: <1367864331-15212-12-git-send-email-charlesbriere.flatzo__30064.8748911501$1367867074$gmane$org@gmail.com>
+From: David Goulet <dgoulet@efficios.com>
+Subject: Re: [PATCH lttng-tools 02/14] Added a low-level endian
+ conversion function check in configure.ac to add support for systems where
+ only BSD-like 'betoh*(...)' functions are available (such as Android when
+ compiling with Bionic).
+Date: Mon, 06 May 2013 15:04:40 -0400
+Message-ID: <5187FEC8.4030707__18324.2738050923$1367867129$gmane$org@efficios.com>
 References: <1367864331-15212-1-git-send-email-charlesbriere.flatzo@gmail.com>
+	<1367864331-15212-2-git-send-email-charlesbriere.flatzo@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qe0-f51.google.com ([209.85.128.51])
+Received: from smtp.ini-tech.com ([5.9.158.244])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <charlesbriere.flatzo@gmail.com>) id 1UZQ0M-00006k-1x
-	for lttng-dev@lists.lttng.org; Mon, 06 May 2013 14:19:18 -0400
-Received: by mail-qe0-f51.google.com with SMTP id x7so2212221qeu.38
-	for <lttng-dev@lists.lttng.org>; Mon, 06 May 2013 11:19:12 -0700 (PDT)
-In-Reply-To: <1367864331-15212-1-git-send-email-charlesbriere.flatzo@gmail.com>
+	(envelope-from <dgoulet@efficios.com>) id 1UZQiP-0000kp-0J
+	for lttng-dev@lists.lttng.org; Mon, 06 May 2013 15:04:49 -0400
+In-Reply-To: <1367864331-15212-2-git-send-email-charlesbriere.flatzo@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,69 +24,106 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: dgoulet@efficios.com
+To: Charles Briere <charlesbriere.flatzo@gmail.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-From: Pierre-Luc St-Charles <pierre-luc.st-charles@polymtl.ca>
 
-Signed-off-by: Pierre-Luc St-Charles <pierre-luc.st-charles@polymtl.ca>
----
- configure.ac                  | 18 ++++++++++++++++++
- src/bin/lttng-sessiond/main.c |  8 ++++++++
- 2 files changed, 26 insertions(+)
 
-diff --git a/configure.ac b/configure.ac
-index c405020..154b0a7 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -198,6 +198,24 @@ AS_IF([test "x$have_pthread_cndtmwt_mono" = "xyes"],
- 	AC_DEFINE_UNQUOTED([LTTNG_HAVE_PTHREAD_CNDTMWT_MONO], 1, [Has non-standard pthread_cond_timedwait_monotonic support.])
- ])
- 
-+# Check for pthread_cancel support (which might not be present in lightweight versions of lpthread)
-+AC_CHECK_LIB([pthread], [pthread_cancel],
-+[
-+	have_pthread_cancel=yes
-+],
-+[
-+	AC_CHECK_LIB([c], [pthread_cancel],
-+	[
-+		have_pthread_cancel=yes
-+	])
-+])
-+AS_IF([test "x$have_pthread_cancel" = "xyes"],
-+[
-+	AC_DEFINE_UNQUOTED([LTTNG_HAVE_PTHREAD_CANCEL], 1, [Has standard pthread_cancel support.])
-+],
-+[
-+	AC_MSG_WARN([The targeted platform does not support pthread_cancel; defaulting to pthread_kill, but it might not be 100% safe.])
-+])
- 
- # URCU library version needed or newer
- liburcu_version=">= 0.7.2"
-diff --git a/src/bin/lttng-sessiond/main.c b/src/bin/lttng-sessiond/main.c
-index d8ff4c2..73bdc0a 100644
---- a/src/bin/lttng-sessiond/main.c
-+++ b/src/bin/lttng-sessiond/main.c
-@@ -1816,10 +1816,18 @@ static int spawn_consumer_thread(struct consumer_data *consumer_data)
- 			 */
- 			ERR("Condition timed out. The consumer thread was never ready."
- 					" Killing it");
-+#ifdef LTTNG_HAVE_PTHREAD_CANCEL
- 			ret = pthread_cancel(consumer_data->thread);
- 			if (ret < 0) {
- 				PERROR("pthread_cancel consumer thread");
- 			}
-+#else
-+			WARN("Using pthread_kill instead of pthread_cancel...");
-+			ret = pthread_kill(consumer_data->thread,SIGTERM);
-+			if (ret < 0) {
-+				PERROR("pthread_kill consumer thread");
-+			}
-+#endif
- 		} else {
- 			PERROR("pthread_cond_wait failed consumer thread");
- 		}
--- 
-1.8.1.msysgit.1
+Charles Briere:
+> From: Pierre-Luc St-Charles <pierre-luc.st-charles@polymtl.ca>
+> 
+> Signed-off-by: Pierre-Luc St-Charles <pierre-luc.st-charles@polymtl.ca>
+> ---
+>  configure.ac                   | 10 ++++++++++
+>  src/bin/lttng-relayd/cmd-2-2.c |  1 +
+>  src/bin/lttng-relayd/main.c    |  1 +
+>  src/common/compat/endian.h     |  6 +++++-
+>  src/common/relayd/relayd.c     |  1 +
+>  5 files changed, 18 insertions(+), 1 deletion(-)
+> 
+> diff --git a/configure.ac b/configure.ac
+> index eee025a..618d203 100644
+> --- a/configure.ac
+> +++ b/configure.ac
+> @@ -123,6 +123,16 @@ AC_CHECK_LIB([pthread], [pthread_create], [],
+>  ]
+>  )
+>  
+> +# Check low-level endian compat functions
+> +AC_CHECK_DECL(be64toh, [], 
+> +[
+> +	AC_CHECK_DECL(betoh64, [AC_DEFINE_UNQUOTED([LTTNG_HAVE_BETOH64], 1, [Has BSD-style endian conversion operations.])], 
+> +	[
+> +		AC_MSG_ERROR([Cannot find be64toh, betoh64 or any similar functions.])
+> +	])
+> +]
+> +)
+> +
+>  # Check libpopt
+>  AC_CHECK_LIB([popt], [poptGetContext], [],
+>  [
+> diff --git a/src/bin/lttng-relayd/cmd-2-2.c b/src/bin/lttng-relayd/cmd-2-2.c
+> index 0450fbf..09ff7f5 100644
+> --- a/src/bin/lttng-relayd/cmd-2-2.c
+> +++ b/src/bin/lttng-relayd/cmd-2-2.c
+> @@ -22,6 +22,7 @@
+>  
+>  #include <common/common.h>
+>  #include <common/sessiond-comm/relayd.h>
+> +#include <common/compat/endian.h>
+>  
+>  #include "cmd-generic.h"
+>  #include "cmd-2-1.h"
+> diff --git a/src/bin/lttng-relayd/main.c b/src/bin/lttng-relayd/main.c
+> index 9a2b3bd..0bf3ead 100644
+> --- a/src/bin/lttng-relayd/main.c
+> +++ b/src/bin/lttng-relayd/main.c
+> @@ -43,6 +43,7 @@
+>  #include <common/common.h>
+>  #include <common/compat/poll.h>
+>  #include <common/compat/socket.h>
+> +#include <common/compat/endian.h>
+>  #include <common/defaults.h>
+>  #include <common/futex.h>
+>  #include <common/sessiond-comm/sessiond-comm.h>
+> diff --git a/src/common/compat/endian.h b/src/common/compat/endian.h
+> index 2850866..b7f66cc 100644
+> --- a/src/common/compat/endian.h
+> +++ b/src/common/compat/endian.h
+> @@ -15,11 +15,15 @@
+>   * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+>   */
+>  
+> -#ifdef _COMPAT_ENDIAN_H
+> +#ifndef _COMPAT_ENDIAN_H
+>  #define _COMPAT_ENDIAN_H
+>  
+>  #ifdef __linux__
+>  #include <endian.h>
+> +#ifdef LTTNG_HAVE_BETOH64
+> +#define be64toh(x) betoh64(x)
+> +#define be32toh(x) betoh32(x)
+> +#endif // LTTNG_HAVE_BETOH64
+
+Please don't use "//" for comments and instead use /* */.
+
+It's used in some other patches so I'll only flag it once.
+
+Thanks!
+
+>  #elif defined(__FreeBSD__)
+>  #include <machine/endian.h>
+>  #else
+> diff --git a/src/common/relayd/relayd.c b/src/common/relayd/relayd.c
+> index 82bcf5f..ba7bd13 100644
+> --- a/src/common/relayd/relayd.c
+> +++ b/src/common/relayd/relayd.c
+> @@ -26,6 +26,7 @@
+>  #include <common/common.h>
+>  #include <common/defaults.h>
+>  #include <common/sessiond-comm/relayd.h>
+> +#include <common/compat/endian.h>
+>  
+>  #include "relayd.h"
+>  
