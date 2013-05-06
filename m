@@ -1,20 +1,19 @@
 From: David Goulet <dgoulet@efficios.com>
-Subject: Re: [PATCH lttng-tools 11/14] Added configure.ac check
- for pthread_cond_timedwait_monotonic support (which is a non-standard
- pthread function) & usage handling in sessiond's main.c.
-Date: Mon, 06 May 2013 15:22:45 -0400
-Message-ID: <51880305.3010308__45910.6707516641$1367868207$gmane$org@efficios.com>
+Subject: Re: [PATCH lttng-tools 12/14] Using pthread_kill
+ instead of pthread_cancel (not a good idea but requried for now)
+Date: Mon, 06 May 2013 15:22:58 -0400
+Message-ID: <51880312.1050609__28018.0109701634$1367868216$gmane$org@efficios.com>
 References: <1367864331-15212-1-git-send-email-charlesbriere.flatzo@gmail.com>
-	<1367864331-15212-11-git-send-email-charlesbriere.flatzo@gmail.com>
+	<1367864331-15212-12-git-send-email-charlesbriere.flatzo@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from smtp.ini-tech.com ([5.9.158.244])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1UZQzt-0000x1-7S
-	for lttng-dev@lists.lttng.org; Mon, 06 May 2013 15:22:53 -0400
-In-Reply-To: <1367864331-15212-11-git-send-email-charlesbriere.flatzo@gmail.com>
+	(envelope-from <dgoulet@efficios.com>) id 1UZR07-0000yB-HM
+	for lttng-dev@lists.lttng.org; Mon, 06 May 2013 15:23:07 -0400
+In-Reply-To: <1367864331-15212-12-git-send-email-charlesbriere.flatzo@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,79 +23,69 @@ List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 To: Charles Briere <charlesbriere.flatzo@gmail.com>
-Cc: lttng-dev@lists.lttng.org, Michael Poupart <michael-poupart@polymtl.ca>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-A compat layer should be used here for pthread.
+Same, should be put in a compat layer.
 
 Charles Briere:
-> From: Michael Poupart <michael-poupart@polymtl.ca>
+> From: Pierre-Luc St-Charles <pierre-luc.st-charles@polymtl.ca>
 > 
-> Signed-off-by: Michael Poupart <michael-poupart@polymtl.ca>
+> Signed-off-by: Pierre-Luc St-Charles <pierre-luc.st-charles@polymtl.ca>
 > ---
->  configure.ac                  | 17 +++++++++++++++++
->  src/bin/lttng-sessiond/main.c |  7 +++++++
->  2 files changed, 24 insertions(+)
+>  configure.ac                  | 18 ++++++++++++++++++
+>  src/bin/lttng-sessiond/main.c |  8 ++++++++
+>  2 files changed, 26 insertions(+)
 > 
 > diff --git a/configure.ac b/configure.ac
-> index b3738d2..c405020 100644
+> index c405020..154b0a7 100644
 > --- a/configure.ac
 > +++ b/configure.ac
-> @@ -182,6 +182,23 @@ AM_CONDITIONAL([LTTNG_BUILD_WITH_LIBUUID], [test "x$have_libuuid" = "xyes"])
->  AM_CONDITIONAL([LTTNG_BUILD_WITH_LIBC_UUID], [test "x$have_libc_uuid" = "xyes"])
->  AM_CONDITIONAL([LTTNG_BUILD_WITH_LIBEXT2_UUID], [test "x$have_libext2_uuid" = "xyes"])
+> @@ -198,6 +198,24 @@ AS_IF([test "x$have_pthread_cndtmwt_mono" = "xyes"],
+>  	AC_DEFINE_UNQUOTED([LTTNG_HAVE_PTHREAD_CNDTMWT_MONO], 1, [Has non-standard pthread_cond_timedwait_monotonic support.])
+>  ])
 >  
-> +# Check for the non-standard pthread_cond_timedwait_monotonic function in lpthread/libc
-> +AC_CHECK_LIB([pthread], [pthread_cond_timedwait_monotonic],
+> +# Check for pthread_cancel support (which might not be present in lightweight versions of lpthread)
+> +AC_CHECK_LIB([pthread], [pthread_cancel],
 > +[
-> +	have_pthread_cndtmwt_mono=yes
+> +	have_pthread_cancel=yes
 > +],
 > +[
-> +	AC_CHECK_LIB([c], [pthread_cond_timedwait_monotonic],
+> +	AC_CHECK_LIB([c], [pthread_cancel],
 > +	[
-> +		have_pthread_cndtmwt_mono=yes
+> +		have_pthread_cancel=yes
 > +	])
 > +])
-> +AS_IF([test "x$have_pthread_cndtmwt_mono" = "xyes"],
+> +AS_IF([test "x$have_pthread_cancel" = "xyes"],
 > +[
-> +	AC_DEFINE_UNQUOTED([LTTNG_HAVE_PTHREAD_CNDTMWT_MONO], 1, [Has non-standard pthread_cond_timedwait_monotonic support.])
+> +	AC_DEFINE_UNQUOTED([LTTNG_HAVE_PTHREAD_CANCEL], 1, [Has standard pthread_cancel support.])
+> +],
+> +[
+> +	AC_MSG_WARN([The targeted platform does not support pthread_cancel; defaulting to pthread_kill, but it might not be 100% safe.])
 > +])
-> +
-> +
+>  
 >  # URCU library version needed or newer
 >  liburcu_version=">= 0.7.2"
->  
 > diff --git a/src/bin/lttng-sessiond/main.c b/src/bin/lttng-sessiond/main.c
-> index f6a051a..d8ff4c2 100644
+> index d8ff4c2..73bdc0a 100644
 > --- a/src/bin/lttng-sessiond/main.c
 > +++ b/src/bin/lttng-sessiond/main.c
-> @@ -1732,6 +1732,7 @@ static int spawn_consumer_thread(struct consumer_data *consumer_data)
->  		goto error;
->  	}
->  
-> +#ifndef LTTNG_HAVE_PTHREAD_CNDTMWT_MONO
->  	/*
->  	 * Set the monotonic clock in order to make sure we DO NOT jump in time
->  	 * between the clock_gettime() call and the timedwait call. See bug #324
-> @@ -1743,6 +1744,7 @@ static int spawn_consumer_thread(struct consumer_data *consumer_data)
->  		PERROR("pthread_condattr_setclock consumer data");
->  		goto error;
->  	}
-> +#endif
->  
->  	ret = pthread_cond_init(&consumer_data->cond, &consumer_data->condattr);
->  	if (ret != 0) {
-> @@ -1792,8 +1794,13 @@ static int spawn_consumer_thread(struct consumer_data *consumer_data)
->  			ret = pthread_cond_wait(&consumer_data->cond,
->  					&consumer_data->cond_mutex);
->  		} else {
-> +#ifdef LTTNG_HAVE_PTHREAD_CNDTMWT_MONO
-> +			ret = pthread_cond_timedwait_monotonic(&consumer_data->cond,
-> +					&consumer_data->cond_mutex, &timeout);
+> @@ -1816,10 +1816,18 @@ static int spawn_consumer_thread(struct consumer_data *consumer_data)
+>  			 */
+>  			ERR("Condition timed out. The consumer thread was never ready."
+>  					" Killing it");
+> +#ifdef LTTNG_HAVE_PTHREAD_CANCEL
+>  			ret = pthread_cancel(consumer_data->thread);
+>  			if (ret < 0) {
+>  				PERROR("pthread_cancel consumer thread");
+>  			}
 > +#else
->  			ret = pthread_cond_timedwait(&consumer_data->cond,
->  					&consumer_data->cond_mutex, &timeout);
+> +			WARN("Using pthread_kill instead of pthread_cancel...");
+> +			ret = pthread_kill(consumer_data->thread,SIGTERM);
+> +			if (ret < 0) {
+> +				PERROR("pthread_kill consumer thread");
+> +			}
 > +#endif
+>  		} else {
+>  			PERROR("pthread_cond_wait failed consumer thread");
 >  		}
->  	}
->  
