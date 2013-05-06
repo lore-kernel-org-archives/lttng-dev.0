@@ -1,20 +1,20 @@
 From: Charles Briere <charlesbriere.flatzo@gmail.com>
-Subject: [PATCH lttng-tools 08/14] Added configure option for
-	specifying lttng run directory [LTTNG_RUNDIR] Set different
-	default run directory for Android
-Date: Mon,  6 May 2013 18:18:45 +0000
-Message-ID: <1367864331-15212-8-git-send-email-charlesbriere.flatzo__16140.3838465505$1367864422$gmane$org@gmail.com>
+Subject: [PATCH lttng-tools 10/14] Added HOST_NAME_MAX
+	definition to compat/socket.h if not already defined (which
+	is the case for android)
+Date: Mon,  6 May 2013 18:18:47 +0000
+Message-ID: <1367864331-15212-10-git-send-email-charlesbriere.flatzo__9169.22081164575$1367864424$gmane$org@gmail.com>
 References: <1367864331-15212-1-git-send-email-charlesbriere.flatzo@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qa0-f53.google.com ([209.85.216.53])
+Received: from mail-qa0-f52.google.com ([209.85.216.52])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <charlesbriere.flatzo@gmail.com>) id 1UZQ0E-00005g-TW
-	for lttng-dev@lists.lttng.org; Mon, 06 May 2013 14:19:11 -0400
-Received: by mail-qa0-f53.google.com with SMTP id f11so1115742qae.12
-	for <lttng-dev@lists.lttng.org>; Mon, 06 May 2013 11:19:05 -0700 (PDT)
+	(envelope-from <charlesbriere.flatzo@gmail.com>) id 1UZQ0I-00006F-MI
+	for lttng-dev@lists.lttng.org; Mon, 06 May 2013 14:19:15 -0400
+Received: by mail-qa0-f52.google.com with SMTP id g10so1452907qah.18
+	for <lttng-dev@lists.lttng.org>; Mon, 06 May 2013 11:19:09 -0700 (PDT)
 In-Reply-To: <1367864331-15212-1-git-send-email-charlesbriere.flatzo@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -25,68 +25,61 @@ List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 To: dgoulet@efficios.com
-Cc: Charles Briere <charlesbriere.flatzo@gmail.com>, lttng-dev@lists.lttng.org
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Signed-off-by: Charles Briere <charlesbriere.flatzo@gmail.com>
----
- configure.ac          | 23 +++++++++++++++++++++--
- src/common/defaults.h |  2 --
- 2 files changed, 21 insertions(+), 4 deletions(-)
+From: Pierre-Luc St-Charles <pierre-luc.st-charles@polymtl.ca>
 
-diff --git a/configure.ac b/configure.ac
-index eb79fc4..b3738d2 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -43,8 +43,10 @@ AM_CONDITIONAL([NO_SHARED], [test x$enable_shared = xno])
+Signed-off-by: Pierre-Luc St-Charles <pierre-luc.st-charles@polymtl.ca>
+---
+ src/bin/lttng-sessiond/consumer.c     | 1 +
+ src/bin/lttng-sessiond/ust-metadata.c | 1 +
+ src/common/compat/socket.h            | 9 +++++++++
+ 3 files changed, 11 insertions(+)
+
+diff --git a/src/bin/lttng-sessiond/consumer.c b/src/bin/lttng-sessiond/consumer.c
+index e3d1be0..98d79e4 100644
+--- a/src/bin/lttng-sessiond/consumer.c
++++ b/src/bin/lttng-sessiond/consumer.c
+@@ -25,6 +25,7 @@
+ #include <unistd.h>
+ #include <inttypes.h>
  
- AM_CONDITIONAL([TARGET_HOST_ANDROID], [false])
- case "${host}" in
--    *-*-linux-androideabi) AM_CONDITIONAL([TARGET_HOST_ANDROID], [true])
--    ;;
-+	*-*-linux-androideabi)
-+		AM_CONDITIONAL([TARGET_HOST_ANDROID], [true])
-+		target_host_android="yes"
-+	;;
- esac
++#include <common/compat/socket.h>
+ #include <common/common.h>
+ #include <common/defaults.h>
+ #include <common/uri.h>
+diff --git a/src/bin/lttng-sessiond/ust-metadata.c b/src/bin/lttng-sessiond/ust-metadata.c
+index b0f83d2..28f4d1a 100644
+--- a/src/bin/lttng-sessiond/ust-metadata.c
++++ b/src/bin/lttng-sessiond/ust-metadata.c
+@@ -28,6 +28,7 @@
+ #include <unistd.h>
+ #include <inttypes.h>
+ #include <common/common.h>
++#include <common/compat/socket.h>
  
- AC_CHECK_HEADERS([ \
-@@ -256,6 +258,23 @@ AC_CHECK_LIB([c], [open_memstream],
- ]
- )
+ #include "ust-registry.h"
+ #include "ust-clock.h"
+diff --git a/src/common/compat/socket.h b/src/common/compat/socket.h
+index 4d2925f..46aa9c5 100644
+--- a/src/common/compat/socket.h
++++ b/src/common/compat/socket.h
+@@ -23,6 +23,15 @@
  
-+AC_ARG_VAR([LTTNG_RUNDIR], [Path to run directory, default to /var/run])
+ #include <common/macros.h>
+ 
++#ifndef HOST_NAME_MAX
++/* 
++ * On some platforms (such as Android), this define might not be
++ * exposed in any kernel headers; the most commonly assigned value
++ * is 64. This can be verified using getconf HOST_MAX_NAME.
++ */
++#define HOST_NAME_MAX 64
++#endif
 +
-+AS_IF([test -n "$LTTNG_RUNDIR"],
-+[
-+	lttng_rundir=$LTTNG_RUNDIR
-+],
-+[
-+	AS_IF([test "x$target_host_android" = "xyes"],
-+	[
-+		lttng_rundir="/data/lttng/var/run"
-+	],
-+	[
-+		lttng_rundir="/var/run/lttng"
-+	])
-+])
-+AC_DEFINE_UNQUOTED([DEFAULT_LTTNG_RUNDIR], ["$lttng_rundir"], [Location of the run directory])
-+
- # For Python
- # SWIG version needed or newer:
- swig_version=2.0.0
-diff --git a/src/common/defaults.h b/src/common/defaults.h
-index fb6a975..74400d7 100644
---- a/src/common/defaults.h
-+++ b/src/common/defaults.h
-@@ -76,8 +76,6 @@
- #define DEFAULT_USTCONSUMERD32_CMD_SOCK_PATH    DEFAULT_USTCONSUMERD32_PATH "/command"
- #define DEFAULT_USTCONSUMERD32_ERR_SOCK_PATH    DEFAULT_USTCONSUMERD32_PATH "/error"
+ #ifdef __linux__
  
--/* Default lttng run directory */
--#define DEFAULT_LTTNG_RUNDIR                    "/var/run/lttng"
- #define DEFAULT_LTTNG_HOME_RUNDIR               "%s/.lttng"
- #define DEFAULT_LTTNG_SESSIOND_PIDFILE          "lttng-sessiond.pid"
- 
+ #define LTTNG_SOCK_CREDS SCM_CREDENTIALS
 -- 
 1.8.1.msysgit.1
