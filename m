@@ -1,19 +1,20 @@
 From: Charles Briere <charlesbriere.flatzo@gmail.com>
-Subject: [PATCH lttng-tools 06/14] Adding signal compat in order
-	to implement missing functions on Android
-Date: Mon,  6 May 2013 18:18:43 +0000
-Message-ID: <1367864331-15212-6-git-send-email-charlesbriere.flatzo__31975.277796346$1367864410$gmane$org@gmail.com>
+Subject: [PATCH lttng-tools 08/14] Added configure option for
+	specifying lttng run directory [LTTNG_RUNDIR] Set different
+	default run directory for Android
+Date: Mon,  6 May 2013 18:18:45 +0000
+Message-ID: <1367864331-15212-8-git-send-email-charlesbriere.flatzo__16140.3838465505$1367864422$gmane$org@gmail.com>
 References: <1367864331-15212-1-git-send-email-charlesbriere.flatzo@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qe0-f42.google.com ([209.85.128.42])
+Received: from mail-qa0-f53.google.com ([209.85.216.53])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <charlesbriere.flatzo@gmail.com>) id 1UZQ0B-00005D-Nb
-	for lttng-dev@lists.lttng.org; Mon, 06 May 2013 14:19:08 -0400
-Received: by mail-qe0-f42.google.com with SMTP id 1so2253370qee.29
-	for <lttng-dev@lists.lttng.org>; Mon, 06 May 2013 11:19:02 -0700 (PDT)
+	(envelope-from <charlesbriere.flatzo@gmail.com>) id 1UZQ0E-00005g-TW
+	for lttng-dev@lists.lttng.org; Mon, 06 May 2013 14:19:11 -0400
+Received: by mail-qa0-f53.google.com with SMTP id f11so1115742qae.12
+	for <lttng-dev@lists.lttng.org>; Mon, 06 May 2013 11:19:05 -0700 (PDT)
 In-Reply-To: <1367864331-15212-1-git-send-email-charlesbriere.flatzo@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -29,97 +30,63 @@ List-Id: lttng-dev@lists.lttng.org
 
 Signed-off-by: Charles Briere <charlesbriere.flatzo@gmail.com>
 ---
- src/common/compat/Makefile.am     |  3 ++-
- src/common/compat/compat-signal.c | 14 ++++++++++++++
- src/common/compat/signal.h        | 14 ++++++++++++++
- src/common/consumer-timer.c       |  2 +-
- src/common/runas.c                |  2 +-
- 5 files changed, 32 insertions(+), 3 deletions(-)
- create mode 100644 src/common/compat/compat-signal.c
- create mode 100644 src/common/compat/signal.h
+ configure.ac          | 23 +++++++++++++++++++++--
+ src/common/defaults.h |  2 --
+ 2 files changed, 21 insertions(+), 4 deletions(-)
 
-diff --git a/src/common/compat/Makefile.am b/src/common/compat/Makefile.am
-index 537375b..124ef08 100644
---- a/src/common/compat/Makefile.am
-+++ b/src/common/compat/Makefile.am
-@@ -9,4 +9,5 @@ COMPAT=compat-poll.c
- endif
+diff --git a/configure.ac b/configure.ac
+index eb79fc4..b3738d2 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -43,8 +43,10 @@ AM_CONDITIONAL([NO_SHARED], [test x$enable_shared = xno])
  
- libcompat_la_SOURCES = poll.h fcntl.h endian.h mman.h clone.h \
--                       socket.h compat-fcntl.c uuid.h tid.h $(COMPAT)
-+                       socket.h compat-fcntl.c uuid.h tid.h \
-+                       compat-signal.c $(COMPAT)
-diff --git a/src/common/compat/compat-signal.c b/src/common/compat/compat-signal.c
-new file mode 100644
-index 0000000..aba30db
---- /dev/null
-+++ b/src/common/compat/compat-signal.c
-@@ -0,0 +1,14 @@
-+#include "signal.h"
-+#ifdef __ANDROID__
-+int __rt_sigtimedwait(const sigset_t *set, siginfo_t *info, const struct timespec *ts, long nr) {
-+  return syscall(__NR_rt_sigtimedwait, set, info, ts, nr);
-+}
+ AM_CONDITIONAL([TARGET_HOST_ANDROID], [false])
+ case "${host}" in
+-    *-*-linux-androideabi) AM_CONDITIONAL([TARGET_HOST_ANDROID], [true])
+-    ;;
++	*-*-linux-androideabi)
++		AM_CONDITIONAL([TARGET_HOST_ANDROID], [true])
++		target_host_android="yes"
++	;;
+ esac
+ 
+ AC_CHECK_HEADERS([ \
+@@ -256,6 +258,23 @@ AC_CHECK_LIB([c], [open_memstream],
+ ]
+ )
+ 
++AC_ARG_VAR([LTTNG_RUNDIR], [Path to run directory, default to /var/run])
 +
-+int sigtimedwait(const sigset_t *set, siginfo_t *info, const struct timespec *ts) {
-+  return __rt_sigtimedwait(set,info,ts,_NSIG/8);
-+}
++AS_IF([test -n "$LTTNG_RUNDIR"],
++[
++	lttng_rundir=$LTTNG_RUNDIR
++],
++[
++	AS_IF([test "x$target_host_android" = "xyes"],
++	[
++		lttng_rundir="/data/lttng/var/run"
++	],
++	[
++		lttng_rundir="/var/run/lttng"
++	])
++])
++AC_DEFINE_UNQUOTED([DEFAULT_LTTNG_RUNDIR], ["$lttng_rundir"], [Location of the run directory])
 +
-+int sigwaitinfo(const sigset_t *set, siginfo_t *info) {
-+  return sigtimedwait(set, info, NULL);
-+}
-+#endif
-diff --git a/src/common/compat/signal.h b/src/common/compat/signal.h
-new file mode 100644
-index 0000000..f7251d3
---- /dev/null
-+++ b/src/common/compat/signal.h
-@@ -0,0 +1,14 @@
-+#ifndef LTTNG_COMPAT_SIGNAL_H
-+#define LTTNG_COMPAT_SIGNAL_H
-+
-+#include <signal.h>
-+#ifdef __ANDROID__
-+#include <sys/syscall.h>
-+#include <asm/unistd.h>
-+#include <linux/time.h>
-+int __rt_sigtimedwait(const sigset_t *set, siginfo_t *info, const struct timespec *ts, long nr);
-+int sigtimedwait(const sigset_t *set, siginfo_t *info, const struct timespec *ts);
-+int sigwaitinfo(const sigset_t *set, siginfo_t *info);
-+#endif // __ANDROID__
-+
-+#endif //LTTNG_COMPAT_SIGNAL_H
-diff --git a/src/common/consumer-timer.c b/src/common/consumer-timer.c
-index ef056d1..0ae369f 100644
---- a/src/common/consumer-timer.c
-+++ b/src/common/consumer-timer.c
-@@ -19,8 +19,8 @@
- #define _GNU_SOURCE
- #include <assert.h>
- #include <inttypes.h>
--#include <signal.h>
+ # For Python
+ # SWIG version needed or newer:
+ swig_version=2.0.0
+diff --git a/src/common/defaults.h b/src/common/defaults.h
+index fb6a975..74400d7 100644
+--- a/src/common/defaults.h
++++ b/src/common/defaults.h
+@@ -76,8 +76,6 @@
+ #define DEFAULT_USTCONSUMERD32_CMD_SOCK_PATH    DEFAULT_USTCONSUMERD32_PATH "/command"
+ #define DEFAULT_USTCONSUMERD32_ERR_SOCK_PATH    DEFAULT_USTCONSUMERD32_PATH "/error"
  
-+#include <common/compat/signal.h>
- #include <common/common.h>
- 
- #include "consumer-timer.h"
-diff --git a/src/common/runas.c b/src/common/runas.c
-index bd51cd4..0317cba 100644
---- a/src/common/runas.c
-+++ b/src/common/runas.c
-@@ -28,12 +28,12 @@
- #include <unistd.h>
- #include <fcntl.h>
- #include <sched.h>
--#include <sys/signal.h>
- 
- #include <common/common.h>
- #include <common/utils.h>
- #include <common/compat/mman.h>
- #include <common/compat/clone.h>
-+#include <common/compat/signal.h>
- 
- #include "runas.h"
+-/* Default lttng run directory */
+-#define DEFAULT_LTTNG_RUNDIR                    "/var/run/lttng"
+ #define DEFAULT_LTTNG_HOME_RUNDIR               "%s/.lttng"
+ #define DEFAULT_LTTNG_SESSIOND_PIDFILE          "lttng-sessiond.pid"
  
 -- 
 1.8.1.msysgit.1
