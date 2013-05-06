@@ -1,19 +1,21 @@
 From: Charles Briere <charlesbriere.flatzo@gmail.com>
-Subject: [PATCH lttng-tools 07/14] Adding missing SPLICE syscall
-	wrappers for Android
-Date: Mon,  6 May 2013 18:18:44 +0000
-Message-ID: <1367864331-15212-7-git-send-email-charlesbriere.flatzo__11559.6278607429$1367864427$gmane$org@gmail.com>
+Subject: [PATCH lttng-tools 11/14] Added configure.ac check for
+	pthread_cond_timedwait_monotonic support (which is a
+	non-standard pthread function) & usage handling in sessiond's
+	main.c.
+Date: Mon,  6 May 2013 18:18:48 +0000
+Message-ID: <1367864331-15212-11-git-send-email-charlesbriere.flatzo__4452.36713062531$1367866896$gmane$org@gmail.com>
 References: <1367864331-15212-1-git-send-email-charlesbriere.flatzo@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qa0-f48.google.com ([209.85.216.48])
+Received: from mail-qa0-f51.google.com ([209.85.216.51])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <charlesbriere.flatzo@gmail.com>) id 1UZQ0D-00005S-AY
-	for lttng-dev@lists.lttng.org; Mon, 06 May 2013 14:19:09 -0400
-Received: by mail-qa0-f48.google.com with SMTP id i13so1608409qae.7
-	for <lttng-dev@lists.lttng.org>; Mon, 06 May 2013 11:19:03 -0700 (PDT)
+	(envelope-from <charlesbriere.flatzo@gmail.com>) id 1UZQ0K-00006Y-5l
+	for lttng-dev@lists.lttng.org; Mon, 06 May 2013 14:19:16 -0400
+Received: by mail-qa0-f51.google.com with SMTP id hu16so1616530qab.3
+	for <lttng-dev@lists.lttng.org>; Mon, 06 May 2013 11:19:10 -0700 (PDT)
 In-Reply-To: <1367864331-15212-1-git-send-email-charlesbriere.flatzo@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -24,45 +26,78 @@ List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 To: dgoulet@efficios.com
-Cc: Charles Briere <charlesbriere.flatzo@gmail.com>, lttng-dev@lists.lttng.org
+Cc: lttng-dev@lists.lttng.org, Michael Poupart <michael-poupart@polymtl.ca>
 List-Id: lttng-dev@lists.lttng.org
 
-Signed-off-by: Charles Briere <charlesbriere.flatzo@gmail.com>
----
- src/common/compat/fcntl.h | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+From: Michael Poupart <michael-poupart@polymtl.ca>
 
-diff --git a/src/common/compat/fcntl.h b/src/common/compat/fcntl.h
-index 04fe03a..80a6899 100644
---- a/src/common/compat/fcntl.h
-+++ b/src/common/compat/fcntl.h
-@@ -31,6 +31,27 @@ typedef off64_t loff_t;
- #endif
+Signed-off-by: Michael Poupart <michael-poupart@polymtl.ca>
+---
+ configure.ac                  | 17 +++++++++++++++++
+ src/bin/lttng-sessiond/main.c |  7 +++++++
+ 2 files changed, 24 insertions(+)
+
+diff --git a/configure.ac b/configure.ac
+index b3738d2..c405020 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -182,6 +182,23 @@ AM_CONDITIONAL([LTTNG_BUILD_WITH_LIBUUID], [test "x$have_libuuid" = "xyes"])
+ AM_CONDITIONAL([LTTNG_BUILD_WITH_LIBC_UUID], [test "x$have_libc_uuid" = "xyes"])
+ AM_CONDITIONAL([LTTNG_BUILD_WITH_LIBEXT2_UUID], [test "x$have_libext2_uuid" = "xyes"])
  
- #ifdef __linux__
-+#ifdef __ANDROID__
-+#include <asm/unistd.h>
-+#include <sys/syscall.h>
-+#define SPLICE_F_MOVE		(0x01)
-+#define SPLICE_F_NONBLOCK	(0x02)
-+#define SPLICE_F_MORE		(0x04)
-+#define SPLICE_F_GIFT		(0x08)
-+static inline ssize_t splice(int fd_in, loff_t *off_in, int fd_out,
-+	                      loff_t *off_out, size_t len, unsigned int flags)
-+{
-+	return syscall(__NR_splice,fd_in,off_in,fd_out,off_out,len,flags);
-+}
-+#include <linux/fs.h>
-+#include <linux/fadvise.h>
-+#define POSIX_FADV_DONTNEED 0
-+static inline int posix_fadvise(int fd, off_t offset, off_t len, int advice)
-+{
-+       return -ENOSYS;
-+}
-+#endif /* __ANDROID__ */
++# Check for the non-standard pthread_cond_timedwait_monotonic function in lpthread/libc
++AC_CHECK_LIB([pthread], [pthread_cond_timedwait_monotonic],
++[
++	have_pthread_cndtmwt_mono=yes
++],
++[
++	AC_CHECK_LIB([c], [pthread_cond_timedwait_monotonic],
++	[
++		have_pthread_cndtmwt_mono=yes
++	])
++])
++AS_IF([test "x$have_pthread_cndtmwt_mono" = "xyes"],
++[
++	AC_DEFINE_UNQUOTED([LTTNG_HAVE_PTHREAD_CNDTMWT_MONO], 1, [Has non-standard pthread_cond_timedwait_monotonic support.])
++])
 +
- extern int compat_sync_file_range(int fd, off64_t offset, off64_t nbytes,
- 		unsigned int flags);
- #define lttng_sync_file_range(fd, offset, nbytes, flags) \
++
+ # URCU library version needed or newer
+ liburcu_version=">= 0.7.2"
+ 
+diff --git a/src/bin/lttng-sessiond/main.c b/src/bin/lttng-sessiond/main.c
+index f6a051a..d8ff4c2 100644
+--- a/src/bin/lttng-sessiond/main.c
++++ b/src/bin/lttng-sessiond/main.c
+@@ -1732,6 +1732,7 @@ static int spawn_consumer_thread(struct consumer_data *consumer_data)
+ 		goto error;
+ 	}
+ 
++#ifndef LTTNG_HAVE_PTHREAD_CNDTMWT_MONO
+ 	/*
+ 	 * Set the monotonic clock in order to make sure we DO NOT jump in time
+ 	 * between the clock_gettime() call and the timedwait call. See bug #324
+@@ -1743,6 +1744,7 @@ static int spawn_consumer_thread(struct consumer_data *consumer_data)
+ 		PERROR("pthread_condattr_setclock consumer data");
+ 		goto error;
+ 	}
++#endif
+ 
+ 	ret = pthread_cond_init(&consumer_data->cond, &consumer_data->condattr);
+ 	if (ret != 0) {
+@@ -1792,8 +1794,13 @@ static int spawn_consumer_thread(struct consumer_data *consumer_data)
+ 			ret = pthread_cond_wait(&consumer_data->cond,
+ 					&consumer_data->cond_mutex);
+ 		} else {
++#ifdef LTTNG_HAVE_PTHREAD_CNDTMWT_MONO
++			ret = pthread_cond_timedwait_monotonic(&consumer_data->cond,
++					&consumer_data->cond_mutex, &timeout);
++#else
+ 			ret = pthread_cond_timedwait(&consumer_data->cond,
+ 					&consumer_data->cond_mutex, &timeout);
++#endif
+ 		}
+ 	}
+ 
 -- 
 1.8.1.msysgit.1
