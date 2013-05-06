@@ -1,20 +1,19 @@
-From: "Woegerer, Paul" <Paul_Woegerer@mentor.com>
-Subject: Re: Emitting events from shared object constructors is
- (currently) not possible
-Date: Mon, 6 May 2013 14:45:32 +0200
-Message-ID: <5187A5EC.1000807__2449.74930906228$1367844396$gmane$org@mentor.com>
-References: <50AE31E8.4040507@mentor.com> <20121122153901.GA14685@Krystal>
-	<50AE4CEF.9050809@mentor.com> <20121122164512.GA16119@Krystal>
-	<50AF2EB6.8090706@mentor.com> <20130503183500.GB7288@Krystal>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: Add architecture specific tracepoints
+Date: Mon, 6 May 2013 08:56:59 -0400
+Message-ID: <20130506125659.GE12699__1397.099675569$1367845050$gmane$org@Krystal>
+References: <1358526136.50f976b837ad0@www.imp.polymtl.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from relay1.mentorg.com ([192.94.38.131])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Paul_Woegerer@mentor.com>) id 1UZKme-0005fW-Tb
-	for lttng-dev@lists.lttng.org; Mon, 06 May 2013 08:44:49 -0400
-In-Reply-To: <20130503183500.GB7288@Krystal>
+	(envelope-from <compudj@mail.openrapids.net>) id 1UZKyS-0005lP-Bh
+	for lttng-dev@lists.lttng.org; Mon, 06 May 2013 08:57:00 -0400
+Content-Disposition: inline
+In-Reply-To: <1358526136.50f976b837ad0@www.imp.polymtl.ca>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,135 +22,39 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: Mohamad Gebai <mohamad.gebai@polymtl.ca>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On 05/03/2013 08:35 PM, Mathieu Desnoyers wrote:
-> * Woegerer, Paul (Paul_Woegerer@mentor.com) wrote:
->> Without this change the user simply cannot make sure its own
->> constructor gets invoked after the trace provider constructors.
-> =
+* Mohamad Gebai (mohamad.gebai@polymtl.ca) wrote:
+> Hi,
+> I would like to add some of kvm's tracepoints to lttng as only few of them are
+> already included. The problem is that those tracepoints are architecture
+> specific (in the kernel source: arch/x86/kvm/trace.h). The readme file in
+> lttng-modules/instrumentation/events/lttng-module doesn't explain the procedure
+> to do this for arch specific folders. Should I add an arch folder in
+> lttng-modules/instrumentation/events/mainline and /lttng-module?
 
-> If we try to support tracing constructors, I'm concerned that with this
-> change (using priority):
-> 1 - we lose in terms of portability (not all gcc versions support the
-> priority argument,
-> 2 - there can be corner-cases that won't honor the priority.
-> =
+I'd go for:
 
-> We should thoroughly test and document the effect of priority in cases
-> of:
-> =
+lttng-modules/instrumentation/events/mainline/arch/${ARCH}
+lttng-modules/instrumentation/events/lttng-module/arch/${ARCH}
 
-> - multiple .o linked into an executable,
-> - multiple .o linked into a .a, statically linked (does not honor
->   constructors at all),
-> - multiple .o linked into a .so, many .so linked,
-> =
+Sorry for the late reply,
 
-> And figure out if the ordering of constructor is OK with each of those
-> cases.
+Thanks,
 
-You are right. Using the priority construct might cause more problems
-than it solves.
+Mathieu
 
-A pragmatic solution to the above problem would be to provide a special
-documented function (as part of man:lttng-ust) that allows the user to
-ensure that the static constructors (withing the same "dynamic linker
-unit" (.so or exe)) used by lttng-ust have been executed successfully.
-Something like:
+> 
+> Thanks.
+> 
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
-void ensure_lttng_ust_init_completed();
-
-If the trace provider constructors have been invoked already the
-function simply returns otherwise it invokes them explicitly and makes
-sure that a later invocation by the dynamic linker will not have any effect.
-
-> =
-
->>
->>>> And even if this is not the case I could explicitly dlopen the probe
->>>> shared object from within my constructor function and thus make sure
->>>> that the constructor function of the probe shared object gets called
->>>> before I emit an event from my constructor function.
->>>
->>> The idea would be to provide a nice API to facilitate this use-case, and
->>> document it in the instrumentation guide-lines (lttng-ust(3)).
->>
->> Therefore we would need to reliably deduce the tracepoint provider
->> shared library name from the header file that defines it. Since C/C++
->> has no package concept and gives you the freedom to name your shared
->> library whatever you like it seems to be hard to get there.
-> =
-
-> indeed,
-> =
-
->>
->> One way to deal with it would be to extend the lttng-gen-tp tool
->> directly build the tracepoint provider shared library instead of just
->> outputting the generated .c .h files.
-> =
-
-> But then we'd _require_ that people use .so for providers. They might
-> want to just pull the probe provider into their executable.
-> =
-
->> This way the shared library name
->> would be controlled by lttng-gen-tp tool and an autogenerated macro
->> (e.g. ensure_tracepoints_init()) in the generated .h file could provide
->> the dlopen code to explicitly load the tracepoint provider shared
->> library if needed.
-> =
-
-> Would this work fine with your constructor instrumentation use-case ?
-> Is the order of constructors across .so files guaranteed in any way ?
-
-Only if we use dlopen *exclusively* and do not rely on any linker
-induced shared object loading (-lfoo -lbar) anymore we would have full
-control over the order of execution.
-
---Paul
-
-> =
-
-> Thanks,
-> =
-
-> Mathieu
-> =
-
->>
->> Thanks,
->> Paul
->>
->>
->> -- =
-
->> Paul Woegerer | SW Development Engineer
->> http://go.mentor.com/sourceryanalyzer
->>
->> Mentor Embedded(tm) | Prinz Eugen Stra=DFe 72/2/4, Vienna, 1040 Austria
->> Nucleus=AE | Linux=AE | Android(tm) | Services | UI | Multi-OS
->>
->> Android is a trademark of Google Inc. Use of this trademark is subject
->> to Google Permissions.
->> Linux is the registered trademark of Linus Torvalds in the U.S. and
->> other countries.
-> =
-
-
-
--- =
-
-Paul Woegerer | SW Development Engineer
-http://go.mentor.com/sourceryanalyzer
-
-Mentor Embedded(tm) | Prinz Eugen Stra=DFe 72/2/4, Vienna, 1040 Austria
-Nucleus=AE | Linux=AE | Android(tm) | Services | UI | Multi-OS
-
-Android is a trademark of Google Inc. Use of this trademark is subject
-to Google Permissions.
-Linux is the registered trademark of Linus Torvalds in the U.S. and
-other countries.
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
