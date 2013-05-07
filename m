@@ -1,20 +1,22 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH babeltrace] Move memstream.h and uuid.h
-	to	include/babeltrace/compat directory
-Date: Tue, 7 May 2013 15:55:27 -0400
-Message-ID: <20130507195527.GA8879__38721.9282136813$1367956582$gmane$org@Krystal>
-References: <009B25148989C6458484484699278506985C2118@EU-MBX-01.mgc.mentorg.com>
+From: Richard Braun <rbraun@sceen.net>
+Subject: Re: Quick questions about liburcu and RCU in general
+Date: Tue, 7 May 2013 22:07:12 +0200
+Message-ID: <20130507200711.GA23006__3020.30424722961$1367957319$gmane$org@mail.sceen.net>
+References: <20130507094636.GA6151@mail.sceen.net>
+	<20130507115914.GB3875@Krystal>
+	<20130507142352.GA3648@linux.vnet.ibm.com>
+	<20130507145112.GA29086@mail.sceen.net>
+	<20130507152437.GE3648@linux.vnet.ibm.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from shattrath.sceen.net ([94.23.252.191] helo=mail.sceen.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UZnyz-0005Es-2S
-	for lttng-dev@lists.lttng.org; Tue, 07 May 2013 15:55:29 -0400
+	(envelope-from <rbraun@sceen.net>) id 1UZoAQ-0005MP-Cr
+	for lttng-dev@lists.lttng.org; Tue, 07 May 2013 16:07:18 -0400
 Content-Disposition: inline
-In-Reply-To: <009B25148989C6458484484699278506985C2118@EU-MBX-01.mgc.mentorg.com>
+In-Reply-To: <20130507152437.GE3648@linux.vnet.ibm.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,136 +25,22 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Ikaheimonen, JP" <jp_ikaheimonen@mentor.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
+Cc: lttng-dev@lists.lttng.org, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-I see that this patch has been splitted into the windows support
-patchset, so I'll merge the version in the patchset.
+On Tue, May 07, 2013 at 08:24:37AM -0700, Paul E. McKenney wrote:
+> > My question is rather about the techniques than the existing
+> > implementations. Is it safe to implement RCU in an unrelated project under
+> > GPLv3+, considering it's patented ?
+> 
+> I am not a lawyer, but my understanding is that the GPL patent protection
+> applies to derived works.  So if you start with userspace-rcu, adapt it
+> to your application, and relicense to GPLv3+, you should be OK.  I do
+> not believe this works if you do a cleanroom implementation, but again,
+> I am not a lawyer.
 
-Thanks,
-
-Mathieu
-
-* Ikaheimonen, JP (jp_ikaheimonen@mentor.com) wrote:
-> As preparation for a new compatibility layer, the files memstream.h
-> and uuid.h are moved to include/babeltrace/compat.
-> ---
->  converter/babeltrace-log.c                             |    2 +-
->  formats/ctf/Makefile.am                                |    3 +--
->  formats/ctf/ctf.c                                      |    4 ++--
->  formats/ctf/metadata/ctf-visitor-generate-io-struct.c  |    2 +-
->  include/Makefile.am                                    |    3 ++-
->  {formats/ctf => include/babeltrace/compat}/memstream.h |    0
->  include/babeltrace/{ => compat}/uuid.h                 |    0
->  include/babeltrace/ctf-ir/metadata.h                   |    2 +-
->  8 files changed, 8 insertions(+), 8 deletions(-)
->  rename {formats/ctf => include/babeltrace/compat}/memstream.h (100%)
->  rename include/babeltrace/{ => compat}/uuid.h (100%)
-> 
-> diff --git a/converter/babeltrace-log.c b/converter/babeltrace-log.c
-> index 2148711..0214e9a 100644
-> --- a/converter/babeltrace-log.c
-> +++ b/converter/babeltrace-log.c
-> @@ -45,7 +45,7 @@
->  
->  #include <babeltrace/babeltrace-internal.h>
->  #include <babeltrace/ctf/types.h>
-> -#include <babeltrace/uuid.h>
-> +#include <babeltrace/compat/uuid.h>
->  #include <babeltrace/endian.h>
->  
->  #define USEC_PER_SEC 1000000UL
-> diff --git a/formats/ctf/Makefile.am b/formats/ctf/Makefile.am
-> index d803b69..6dcc1bb 100644
-> --- a/formats/ctf/Makefile.am
-> +++ b/formats/ctf/Makefile.am
-> @@ -9,8 +9,7 @@ libbabeltrace_ctf_la_SOURCES = \
->  	events.c \
->  	iterator.c \
->  	callbacks.c \
-> -	events-private.h \
-> -	memstream.h
-> +	events-private.h
->  
->  # Request that the linker keeps all static libraries objects.
->  libbabeltrace_ctf_la_LDFLAGS = \
-> diff --git a/formats/ctf/ctf.c b/formats/ctf/ctf.c
-> index 5a51495..bb3ba83 100644
-> --- a/formats/ctf/ctf.c
-> +++ b/formats/ctf/ctf.c
-> @@ -33,7 +33,7 @@
->  #include <babeltrace/ctf/events-internal.h>
->  #include <babeltrace/trace-handle-internal.h>
->  #include <babeltrace/context-internal.h>
-> -#include <babeltrace/uuid.h>
-> +#include <babeltrace/compat/uuid.h>
->  #include <babeltrace/endian.h>
->  #include <inttypes.h>
->  #include <stdio.h>
-> @@ -51,7 +51,7 @@
->  #include "metadata/ctf-parser.h"
->  #include "metadata/ctf-ast.h"
->  #include "events-private.h"
-> -#include "memstream.h"
-> +#include <babeltrace/compat/memstream.h>"
->  
->  /*
->   * We currently simply map a page to read the packet header and packet
-> diff --git a/formats/ctf/metadata/ctf-visitor-generate-io-struct.c b/formats/ctf/metadata/ctf-visitor-generate-io-struct.c
-> index 9bcc170..3be054d 100644
-> --- a/formats/ctf/metadata/ctf-visitor-generate-io-struct.c
-> +++ b/formats/ctf/metadata/ctf-visitor-generate-io-struct.c
-> @@ -36,7 +36,7 @@
->  #include <babeltrace/list.h>
->  #include <babeltrace/types.h>
->  #include <babeltrace/ctf/metadata.h>
-> -#include <babeltrace/uuid.h>
-> +#include <babeltrace/compat/uuid.h>
->  #include <babeltrace/endian.h>
->  #include <babeltrace/ctf/events-internal.h>
->  #include "ctf-scanner.h"
-> diff --git a/include/Makefile.am b/include/Makefile.am
-> index 824be61..0ade99b 100644
-> --- a/include/Makefile.am
-> +++ b/include/Makefile.am
-> @@ -30,6 +30,7 @@ noinst_HEADERS = \
->  	babeltrace/ctf/types.h \
->  	babeltrace/ctf/callbacks-internal.h \
->  	babeltrace/trace-handle-internal.h \
-> -	babeltrace/uuid.h \
-> +	babeltrace/compat/uuid.h \
-> +	babeltrace/compat/memstream.h \
->  	babeltrace/endian.h \
->  	babeltrace/mmap-align.h
-> diff --git a/formats/ctf/memstream.h b/include/babeltrace/compat/memstream.h
-> similarity index 100%
-> rename from formats/ctf/memstream.h
-> rename to include/babeltrace/compat/memstream.h
-> diff --git a/include/babeltrace/uuid.h b/include/babeltrace/compat/uuid.h
-> similarity index 100%
-> rename from include/babeltrace/uuid.h
-> rename to include/babeltrace/compat/uuid.h
-> diff --git a/include/babeltrace/ctf-ir/metadata.h b/include/babeltrace/ctf-ir/metadata.h
-> index 04e8945..fdb671a 100644
-> --- a/include/babeltrace/ctf-ir/metadata.h
-> +++ b/include/babeltrace/ctf-ir/metadata.h
-> @@ -32,7 +32,7 @@
->  #include <babeltrace/ctf/types.h>
->  #include <sys/types.h>
->  #include <dirent.h>
-> -#include <babeltrace/uuid.h>
-> +#include <babeltrace/compat/uuid.h>
->  #include <assert.h>
->  #include <glib.h>
->  
-> -- 
-> 1.7.10.4
-> 
-> 
-> 
+Noted. Thank you both for your answers.
 
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Richard Braun
