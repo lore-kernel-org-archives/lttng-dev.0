@@ -1,21 +1,20 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-tools] Fix: change default UST per	UID
-	subbuffer size
-Date: Tue, 7 May 2013 14:30:37 -0400
-Message-ID: <20130507183037.GA7681__38949.3582807065$1367951477$gmane$org@Krystal>
-References: <1367942692-10203-1-git-send-email-dgoulet@efficios.com>
-	<20130507161904.GE6601@Krystal> <5189304B.3050108@efficios.com>
+From: Aaron Spear <aspear@vmware.com>
+Subject: Re: Using the additional Eclipse Kernel Trace Plugin
+ Views (Control flow, Resources)
+Date: Tue, 7 May 2013 11:49:50 -0700 (PDT)
+Message-ID: <652778195.2091532.1367952590522.JavaMail.root__45292.5731348389$1367952640$gmane$org@vmware.com>
+References: <517F8D02.4090202@stud.fh-dortmund.de>
+	<518004F6.5040202@ericsson.com> <51800F67.9040407@voxpopuli.im>
+	<5180D919.1020208@stud.fh-dortmund.de>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from smtp-outbound-2.vmware.com ([208.91.2.13])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UZmev-0004Rv-8B
-	for lttng-dev@lists.lttng.org; Tue, 07 May 2013 14:30:41 -0400
-Content-Disposition: inline
-In-Reply-To: <5189304B.3050108@efficios.com>
+	(envelope-from <aspear@vmware.com>) id 1UZmxY-0004bn-QH
+	for lttng-dev@lists.lttng.org; Tue, 07 May 2013 14:49:57 -0400
+In-Reply-To: <5180D919.1020208@stud.fh-dortmund.de>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,88 +23,87 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: David Goulet <dgoulet@efficios.com>
+To: Andre Bette <andreb@stud.fh-dortmund.de>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* David Goulet (dgoulet@efficios.com) wrote:
+Hi Andre,
+
+You will probably also want to search the recent traffic on the linuxtools-dev email list as well.  (That is probably the more appropriate forum for questions related to the linuxtools LTTng plugins/Java code)
+
+I recently posted a github link to some work in progress where I did went through the process that Alexandre described to create a completely data driven view to show state over time (though I didn't have the advantage of his explanation!).  I am using it to trace various things such as Java applications as well as state of virtual machines and such over time.  It is not perfect or complete, but it is headed in the right direction.
+
+Here is a link to the list archive: http://dev.eclipse.org/mhonarc/lists/linuxtools-dev/, and a direct link to my post: http://dev.eclipse.org/mhonarc/lists/linuxtools-dev/msg02574.html  Somewhere in that thread are some screenshots and such of what I did with it.
+
+regards,
+Aaron Spear
+
+
+----- Original Message -----
+> Hi Alexandre and Matthew,
+> 
+> Thank you both very much for the detailed answer. If I have more
+> questions about some Javacode I will ask later .
 > 
 > 
-> Mathieu Desnoyers:
-> > * David Goulet (dgoulet@efficios.com) wrote:
-> >> The default per UID subbuffer size are changed from 4096 bytes to 131072
-> >> bytes (128k).
+> Best Regards,
+> Andre
+> 
+> PS: Sorry for the doublepost
+> 
+> 
+> 
+> 
+> Am 30.04.2013 20:37, schrieb Alexandre Montplaisir:
+> > On 13-04-30 01:52 PM, Matthew Khouzam wrote:
+> >> Hi Andre,
+> >> This question seems familiar, I will paste an answer from earlier.
+> >> On 13-04-30 05:21 AM, Andre Bette wrote:
+> >>> Hi to everyone,
+> >>> in my project I am tracing a embedded system with a non linux OS.
+> >>> Output format is CTF. I really like the two extra views in the Eclipse
+> >>> Kernel Trace Visualization (Control flow, Resources).
+> >>>
+> >>> Is there a simple way to use this two views  with an non linux trace ?
+> >>> Is there any documentation about the Linux kernel trace format( the
+> >>> extra info added into the CTF format) or how the
+> >>> data(e.g. prozesses) is processed in the Eclipse Kernel Trace Plugin
+> >>> (The idea is to use a "fake" linux trace to use the two extra views )?
+> >>>
+> >> I will give a short answer that I am sure Alexandre Montplaisir has
+> >> expanded on earlier is  YES!
+> > Yeah my first reply bounced, but you can read it here:
+> > http://lists.lttng.org/pipermail/lttng-dev/2013-April/020165.html
+> >
+> > Cheers,
+> > Alex
+> >
+> >> You need to make a state system with a "state system input" that will
+> >> emulate the directory structure of the kernel state system.
 > >>
-> >> Fixes #524
+> >> It's not EXTREMELY hard, but I think it will get significantly easier in a
+> >> couple of months.
+> >> Great to hear you like the eclipse viewer, fan mail is always appreciated,
+> >> especially in duplicate!
 > >>
-> >> Signed-off-by: David Goulet <dgoulet@efficios.com>
-> >> ---
-> >>  src/bin/lttng-sessiond/channel.c |   40 +++++++++++++++++++++++++-------------
-> >>  src/bin/lttng-sessiond/channel.h |    3 ++-
-> >>  src/bin/lttng-sessiond/cmd.c     |   14 ++++++++-----
-> >>  src/common/defaults.c            |    9 ++++++---
-> >>  src/common/defaults.h            |   25 ++++++++++++++++++------
-> >>  src/lib/lttng-ctl/lttng-ctl.c    |    6 +++++-
-> >>  6 files changed, 67 insertions(+), 30 deletions(-)
-> > [...]
-> > 
-> >> diff --git a/src/common/defaults.h b/src/common/defaults.h
-> >> index fb6a975..4606976 100644
-> >> --- a/src/common/defaults.h
-> >> +++ b/src/common/defaults.h
-> >> @@ -148,7 +148,8 @@
-> >>  /* User space defaults */
-> >>  
-> >>  /* Must be a power of 2 */
-> >> -#define DEFAULT_UST_CHANNEL_SUBBUF_SIZE     4096    /* bytes */
-> >> +#define DEFAULT_UST_PID_CHANNEL_SUBBUF_SIZE 4096    /* bytes */
-> >> +#define DEFAULT_UST_UID_CHANNEL_SUBBUF_SIZE 131072  /* bytes */
-> > 
-> > Since we introduce DEFAULT_UST_{PID,UID}_* for SUBBUF_SIZE, I think it
-> > would make sense to introduce PID and UID defaults for SUBBUF_NUM and
-> > OUTPUT. They can simply map to their respective DEFAULT_UST_CHANNEL
-> > defaults. I recommend we rename DEFAULT_UST_CHANNEL_* defaults to
-> > _DEFAULT_UST_CHANNEL_* (leading underscore) so we ensure we don't forget
-> > any site that uses the old macro. The code that uses those should always
-> > use the UID/PID macros from now on. Having this in place will make it
-> > much easier to make default value changes in the future if need be
-> > without the risk of forgetting to changes some instances in the code
-> > (see commit 9f778c9a8f1d65f5bfdde7cfd7294492d6fdd34c as an example of a
-> > case we had to fix an issue that arised from inconsistency).
+> >> Matthew
+> >>
+> >>> Best Regards,
+> >>> Andre
+> >>>
+> >>> _______________________________________________
+> >>> lttng-dev mailing list
+> >>> lttng-dev@lists.lttng.org
+> >>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> >> _______________________________________________
+> >> lttng-dev mailing list
+> >> lttng-dev@lists.lttng.org
+> >> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> >
 > 
-> Not sure I understand here. Don't you mean rename DEFAULT_CHANNEL_* with
-> an underscore in order to make sure only domain specific values are used
-> in the code base? or every UST macros that are not used outside the
-> scope of default.h ?
-
-Resolved by phone discussion. I look forward to the updated patch.
-
-Thanks,
-
-Mathieu
-
 > 
-> Actually, subbuffer size are accessed through a getter in default.c
-> returning the max() value between our defaults and a page size. That
-> said, this means their should be *no* call site that uses the subbuffer
-> size macro.
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 > 
-> > 
-> > Moreover, I think you forgot to update the documentation (manpage +
-> > enable-channel --help).
-> 
-> Right.
-> 
-> Cheers!
-> David
-> 
-> > 
-> > Thanks,
-> > 
-> > Mathieu
-> > 
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
