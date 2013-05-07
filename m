@@ -1,19 +1,19 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: calibrate ?
-Date: Mon, 6 May 2013 22:59:08 -0400
-Message-ID: <20130507025908.GC24603__32193.1657883853$1367895578$gmane$org@Krystal>
-References: <48CF5AC71E61DB46B70D0F388054EFFD016445@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+Subject: Re: babeltrace converting text <=> ctf
+Date: Mon, 6 May 2013 23:01:44 -0400
+Message-ID: <20130507030144.GD24603__18433.0006050461$1367895734$gmane$org@Krystal>
+References: <20130214115404.GA13194@linutronix.de>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UZY7S-0004Zc-5A
-	for lttng-dev@lists.lttng.org; Mon, 06 May 2013 22:59:10 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1UZY9x-0004dL-CU
+	for lttng-dev@lists.lttng.org; Mon, 06 May 2013 23:01:45 -0400
 Content-Disposition: inline
-In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD016445@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+In-Reply-To: <20130214115404.GA13194@linutronix.de>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,129 +22,56 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, "Couture,
-	Mario" <Mario.Couture@drdc-rddc.gc.ca>, "Painchaud,
-	Frederic" <Frederic.Painchaud@drdc-rddc.gc.ca>
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-The calibrate function is just a rough sketch really. It could use some
-more work, but it's very low priority for now.
-
-If you feel like it, please open a feature request for this against
-lttng-tools.
-
-Thanks,
-
-Mathieu
-
-* Thibault, Daniel (Daniel.Thibault@drdc-rddc.gc.ca) wrote:
-> I took note of http://lwn.net/Articles/492296/ (Mathieu Desnoyers, Julien=
- Desfossez, David Goulet; LTTng 2.0: Tracing for power users and developers=
- - part 2, April 18, 2012) and ran this (using the Ubuntu lttng packages th=
-is time; babeltrace is 1.0.0~rc1-0ubuntu1 and lttng is 2.0.1-0ubuntu1 [libl=
-ttng-ctl0, lttng-tools] and 2.0.2-0ubuntu1 [liblttng-ust0, lttng-modules-dk=
-ms]):
-> =
-
-> $ sudo -H lttng create calibrate-session
-> Session calibrate-session created.
-> Traces will be written in /root/lttng-traces/calibrate-session-20130213-1=
-43220
-> $ sudo -H lttng enable-event calibrate-event -k --function lttng_calibrat=
-e_kretprobe
-> kernel event calibrate-event created in channel channel0
-> $ sudo -H lttng add-context -k -t perf:LLC-load-misses -t perf:LLC-store-=
-misses -t perf:LLC-prefetch-misses
-> Error: perf:LLC-prefetch-misses: Add kernel context failed
-> kernel context perf:LLC-store-misses added to all channels
-> kernel context perf:LLC-load-misses added to all channels
-> Warning: Some command(s) went wrong
-> $ sudo -H lttng start
-> Tracing started for session calibrate-session
-> $ for a in $(seq 1 10); do \
-> > sudo -H lttng calibrate -k --function; \
-> > done
-> Kernel calibration done
-> Kernel calibration done
-> Kernel calibration done
-> Kernel calibration done
-> Kernel calibration done
-> Kernel calibration done
-> Kernel calibration done
-> Kernel calibration done
-> Kernel calibration done
-> Kernel calibration done
-> $ sudo -H lttng destroy
-> Session calibrate-session destroyed at /root
-> $ sudo -H babeltrace /root/lttng-traces/calibrate-session-20130213-143220
-> error syntax error
-> [error] Error creating AST
-> [warning] Unable to open trace metadata for path "/root/lttng-traces/cali=
-brate-session-20130213-143220/kernel".
-> [warning] [Context] Cannot open_trace of the format /root/lttng-traces/ca=
-librate-session-20130213-143220/kernel .
-> =
-
-> [warning] [Context] opening trace "/root/lttng-traces/calibrate-session-2=
-0130213-143220/kernel" from /root/lttng-traces/calibrate-session-20130213-1=
-43220 for reading.
-> =
-
-> ##########
-> Now, the "Error: perf:LLC-prefetch-misses: Add kernel context failed" is =
-probably because 'dmesg | grep "generic r"' reports just two generic regist=
-ers, although it seems odd the error would occur on the first context attem=
-pt and not the last.
-> =
-
-> My real problem is with the trace thus generated and babeltrace's handlin=
-g of it.  It consists of five files: metadata and channel0_0 through channe=
-l0_3.  There is no kernel file.
-> =
-
-> I moved the trace to another machine and tried a more up-to-date babeltra=
-ce (babeltrace-1.0.3+-217b52c), with little difference:
-> =
-
-> error syntax error
-> [error] Error creating AST
-> [warning] Unable to open trace metadata for path "/home/daniel/lttng-trac=
-es/calibrate-session-20130213-143220/kernel".
-> [warning] [Context] Cannot open_trace of format ctf at path /home/daniel/=
-lttng-traces/calibrate-session-20130213-143220/kernel.
-> =
-
-> [warning] [Context] cannot open trace "/home/daniel/lttng-traces/calibrat=
-e-session-20130213-143220/kernel" from /home/daniel/lttng-traces/calibrate-=
-session-20130213-143220 for reading.
-> [error] Cannot open any trace for reading.
-> =
-
-> Daniel U. Thibault
-> R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) / Defence R=
-&D Canada - Valcartier (DRDC Valcartier)
-> Cyber s=E9curit=E9 pour les missions essentielles (CME) / Mission Critica=
-l Cyber Security (MCCS)
-> Protection des syst=E8mes et contremesures (PSC) / Systems Protection & C=
-ountermeasures (SPC)
-> 2459 route de la Bravoure
-> Qu=E9bec, QC=A0 G3J 1X5
-> CANADA
-> Vox=A0: (418) 844-4000 x4245
-> Fax=A0: (418) 844-4538
-> NAC=A0: 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-> Gouvernement du Canada=A0/ Government of Canada
-> <http://www.valcartier.drdc-rddc.gc.ca/>
-> =
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- =
-
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+KiBTZWJhc3RpYW4gQW5kcnplaiBTaWV3aW9yIChiaWdlYXN5QGxpbnV0cm9uaXguZGUpIHdyb3Rl
+Ogo+IEkgc3RhcnRlZCBsbHRuZyB0byBkdW1wIGEgZmV3IGtlcm5lbCBldmVudHMsIG5vdGhpbmcg
+c3BlY2lhbC4gT25jZSBJIGhhZAo+IHRoZSBiaW5hcnkgQ1RGIEkgY29udmVydGVkIGl0IHRvIHRl
+eHQgb3V0cHV0IHZpYQo+IAo+IHxiYWJlbHRyYWNlIC13IHRyYWNlLnR4dCBrZXJuZWwvCj4gCj4g
+fCBbMTA6NDA6MTAuMzU3NzY4OTIwXSAoKz8uPz8/Pz8/Pz8/KSBzcXVzYiBrbWFsbG9jOiB7IGNw
+dV9pZCA9IDMgfSwgeyBjYWxsX3NpdGUgPSDigKYKPiB8IFsxMDo0MDoxMC4zNTc3ODUwMTBdICgr
+MC4wMDAwMTYwOTApIHNxdXNiIGtmcmVlOiB7IGNwdV9pZCA9IDMgfSwgeyBjYWxsX3NpdGUgPSDi
+gKYKPiB8IFsxMDo0MDoxMC4zNTc4MDA3MDBdICgrMC4wMDAwMTU2OTApIHNxdXNiIGttYWxsb2M6
+IHsgY3B1X2lkID0gMyB9LCB7IGNhbGxfc2l0ZSA9IOKApgo+IAo+IGFuZCBub3cgYmFjayB0byBD
+VEYuIFNpbmNlIGJhYmVsdHJhY2UgZG9lcyBub3Qgc3VwcG9ydCB0ZXh0IGFzIGlucHV0IG9yCj4g
+Q1RGIGFzIG91dHB1dCAoYW5kIHRoZSBlcnJvciBtZXNzYWdlIHdhcyBub3QgZ2l2aW5nIGEgaGlu
+dCkgSSB0cmllZCBpdAo+IHdpdGggYmFiZWx0cmFjZS1sb2c6Cj4gCj4gfGJhYmVsdHJhY2UtbG9n
+IDwgdHJhY2UudHh0IGN0Zl92MQo+IAo+IGFuZCBub3cgYmFjayB0byB0ZXh0Ogo+IAo+IHxiYWJl
+bHRyYWNlIC13IGN0dl92MS50eHQgY3RmX3YxCj4gCj4gYW5kIEkgZ290Ogo+IAo+IHwgMCBzdHJp
+bmc6IHsgfSwgeyBzdHIgPSAiWzEwOjQwOjEwLjM1Nzc2ODkyMF0gKCs/Lj8/Pz8/Pz8/Pykgc3F1
+c2Iga21hbGxvYzogeyBjcHVfaWQgPSAzIH0sIHsgY2FsbF9zaXRlID0g4oCmCj4gfCAwIHN0cmlu
+ZzogeyB9LCB7IHN0ciA9ICJbMTA6NDA6MTAuMzU3Nzg1MDEwXSAoKzAuMDAwMDE2MDkwKSBzcXVz
+YiBrZnJlZTogeyBjcHVfaWQgPSAzIH0sIHsgY2FsbF9zaXRlID0g4oCmCj4gfCAwIHN0cmluZzog
+eyB9LCB7IHN0ciA9ICJbMTA6NDA6MTAuMzU3ODAwNzAwXSAoKzAuMDAwMDE1NjkwKSBzcXVzYiBr
+bWFsbG9jOiB7IGNwdV9pZCA9IDMgfSwgeyBjYWxsX3NpdGUgPSDigKYKPiAKPiBXaGF0IEkgZG9u
+J3QgbGlrZSBoZXJlLCBpcyB0aGF0IHRoZSB0aW1lc3RhbXAgaW5mb3JtYXRpb24gaXMgbG9zdC4K
+PiBMb29raW5nIGF0IGJhYmVsdHJhY2UtbG9nIEkgbm90aWNlZCBhIHRpbWVzdGFtcCBvcHRpb24u
+IFNvIEkgdHJpZWQgdGhpczoKCmJhYmVsdHJhY2UtbG9nIGlzIG1hZGUgdG8gZ28gZnJvbSBhIGRt
+ZXNnIG91dHB1dCB0byBDVEYuCgo+IAo+IHxiYWJlbHRyYWNlLWxvZyAtdCA8IHRyYWNlLnR4dCBj
+dGZfdjIKPiB8YmFiZWx0cmFjZSAtdyBjdHZfdjIudHh0IGN0Zl92Mgo+IHxbZXJyb3JdIEludmFs
+aWQgbWFnaWMgbnVtYmVyIDB4MCBhdCBwYWNrZXQgMjYgKGZpbGUgb2Zmc2V0IDg1MTk2OCkuCj4g
+fFtlcnJvcl0gT3BlbiBmaWxlIHN0cmVhbSBlcnJvci4KPiAKPiBidWguIEFmdGVyIGxvb2tpbmcg
+YXQgYmFiZWx0cmFjZS1sb2cgSSBub3RpY2VkIHRoYXQgdGhlIHNzY2FuZigpIGRvZXMKPiBub3Qg
+bWF0Y2ggYW55dGhpbmcgYmVjYXVzZSB0aGUgdGltZXN0YW1wIHZhbHVlIGlzIGRpZmZlcmVudC4g
+U28gSSB0cmllZAo+IHRvIGNoYW5nZSB0aGUgaW5wdXQgc28gdGhlIHNzY2FuZigpIHdpbGwgbWF0
+Y2g6Cj4gCj4gfGJhYmVsdHJhY2UgLXcgdHJhY2Vfc2Vjb25kcy50eHQgLS1jbG9jay1zZWNvbmRz
+IGtlcm5lbC8KPiB8YmFiZWx0cmFjZS1sb2cgLXQgPCB0cmFjZV9zZWNvbmRzLnR4dCBjdGZfdjMK
+PiB8YmFiZWx0cmFjZSAtdyBjdGZfdjMudHh0IGN0Zl92My8KPiB8W2Vycm9yXSBJbnZhbGlkIG1h
+Z2ljIG51bWJlciAweDFGNzJDRjdDIGF0IHBhY2tldCA4MSAoZmlsZSBvZmZzZXQgMjY1NDIwOCku
+Cj4gfFtlcnJvcl0gT3BlbiBmaWxlIHN0cmVhbSBlcnJvci4KPiAKPiBMaXR0bGUgZGlmZmVyZW50
+IGJ1dCBzdGlsbCBkb2Vzbid0IHdvcmsuCj4gQ291bGQgdGhpcyBiZSBhbiB1c2VyIGVycm9yIG9y
+IGFuIGVhc3kgdG8gc3BvdCBDVEYgbGliYXJ5IGJ1Zz8KCmJhYmVsdHJhY2UtbG9nIGlzIG5vdCBt
+ZWFudCB0byBjb252ZXJ0IGZyb20gQ1RGIHByZXR0eS1wcmludGluZyBvdXRwdXQsCmJ1dCByYXRo
+ZXIgZnJvbSBkbWVzZyBsb2dzLgoKV2hhdCB5b3Ugc2VlbSB0byBiZSBsb29raW5nIGZvciBpcyBh
+IENURiBwcmV0dHktcHJpbnRlZCBsb2cgZm9ybWF0IHRvCkNURiBjb252ZXJ0ZXIsIHdoaWNoIGRv
+ZXMgbm90IGV4aXN0IHRvZGF5LgoKU29ycnkgZm9yIHRoZSBsYXRlIHJlcGx5LAoKVGhhbmtzLAoK
+TWF0aGlldQoKPiAKPiBTZWJhc3RpYW4KPiAKPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZA
+bGlzdHMubHR0bmcub3JnCj4gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4v
+bGlzdGluZm8vbHR0bmctZGV2CgotLSAKTWF0aGlldSBEZXNub3llcnMKRWZmaWNpT1MgSW5jLgpo
+dHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0
+bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0
+dG5nLWRldgo=
