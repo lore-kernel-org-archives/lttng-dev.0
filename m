@@ -1,20 +1,19 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-tools] Fix: split UST per
-	UID/PID	default values
-Date: Tue, 7 May 2013 15:24:55 -0400
-Message-ID: <20130507192455.GA8394__5219.63762953437$1367954733$gmane$org@Krystal>
+From: David Goulet <dgoulet@efficios.com>
+Subject: Re: [PATCH lttng-tools] Fix: split UST per UID/PID
+ default values
+Date: Tue, 07 May 2013 15:31:14 -0400
+Message-ID: <51895682.6010800__35271.0114013918$1367955122$gmane$org@efficios.com>
 References: <1367953750-7731-1-git-send-email-dgoulet@efficios.com>
+	<20130507192455.GA8394@Krystal>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from smtp.ini-tech.com ([5.9.158.244])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UZnVS-0004v7-B4
-	for lttng-dev@lists.lttng.org; Tue, 07 May 2013 15:24:58 -0400
-Content-Disposition: inline
-In-Reply-To: <1367953750-7731-1-git-send-email-dgoulet@efficios.com>
+	(envelope-from <dgoulet@efficios.com>) id 1UZnbe-0004za-VF
+	for lttng-dev@lists.lttng.org; Tue, 07 May 2013 15:31:23 -0400
+In-Reply-To: <20130507192455.GA8394@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,701 +22,487 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: David Goulet <dgoulet@efficios.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* David Goulet (dgoulet@efficios.com) wrote:
-> The default per UID subbuffer size are changed from 4096 bytes to 131072
-> bytes (128k). The rest have the same values as before.
-> =
-
-> Some DEFAULT_CHANNEL_* macros are prefixed with an underscore making
-> sure they are not used elsewhere in the code base and only domain
-> specific values are used.
-
-Looks good, except for one small question: the metadata defaults (e.g.
-DEFAULT_METADATA_SWITCH_TIMER) don't seem to appear anywhere in the
-help/manpage. Any idea on how we could fix that ?
-
-Thanks,
-
-Mathieu
-
-
-> =
-
-> Fixes #524
-> =
-
-> Signed-off-by: David Goulet <dgoulet@efficios.com>
-> ---
->  doc/man/lttng.1                          |   15 ++++--
->  src/bin/lttng-sessiond/channel.c         |   59 ++++++++++++++-------
->  src/bin/lttng-sessiond/channel.h         |    3 +-
->  src/bin/lttng-sessiond/cmd.c             |   14 +++--
->  src/bin/lttng-sessiond/trace-ust.c       |    4 +-
->  src/bin/lttng-sessiond/ust-app.c         |    4 +-
->  src/bin/lttng/commands/enable_channels.c |   32 ++++++++----
->  src/common/defaults.c                    |   11 ++--
->  src/common/defaults.h                    |   84 +++++++++++++++++-------=
-------
->  src/lib/lttng-ctl/lttng-ctl.c            |   36 ++++++++-----
->  tests/unit/test_ust_data.c               |    4 +-
->  11 files changed, 168 insertions(+), 98 deletions(-)
-> =
-
-> diff --git a/doc/man/lttng.1 b/doc/man/lttng.1
-> index 37c2063..aa98990 100644
-> --- a/doc/man/lttng.1
-> +++ b/doc/man/lttng.1
-> @@ -327,17 +327,21 @@ same type.
->  \-\-overwrite
->          Flight recorder mode : overwrites events when subbuffers are full
->  \-\-subbuf-size SIZE
-> -        Subbuffer size in bytes {+k,+M,+G} (default: 4096, kernel defaul=
-t: 262144)
-> +        Subbuffer size in bytes {+k,+M,+G}
-> +        (default UST uid: 131072, UST pid: 4096, kernel: 262144)
->          Rounded up to the next power of 2.
->  \-\-num-subbuf NUM
-> -        Number of subbuffers (default: 4)
-> +        Number of subbuffers. (default UST uid: 4, UST pid: 4, kernel: 4)
->          Rounded up to the next power of 2.
->  \-\-switch-timer USEC
-> -        Switch subbuffer timer interval in =B5sec (default: 0)
-> +        Switch subbuffer timer interval in =B5sec.
-> +        (default UST uid: 0, UST pid: 0, kernel: 0)
->  \-\-read-timer USEC
-> -        Read timer interval in =B5sec (UST default: 0, kernel default: 2=
-00000)
-> +        Read timer interval in =B5sec.
-> +        (default UST uid: 0, UST pid: 0, kernel: 200000)
->  \-\-output TYPE
->          Channel output type. Possible values: mmap, splice
-> +        (default UST uid: mmap, UST pid: mmap, kernel: splice)
->  \-\-buffers-uid
->          Use per UID buffer (\-u only). Buffers are shared between applic=
-ations
->          that have the same UID.
-> @@ -347,9 +351,10 @@ same type.
->          Use shared buffer for the whole system (\-k only)
->  \-C, \-\-tracefile-size SIZE
->          Maximum size of each tracefile within a stream (in bytes).
-> +		0 means unlimited. (default: 0)
->  \-W, \-\-tracefile-count COUNT
->          Used in conjunction with \-C option, this will limit the number
-> -        of files created to the specified count.
-> +        of files created to the specified count. 0 means unlimited. (def=
-ault: 0)
->  =
-
->  .B EXAMPLES:
->  =
-
-> diff --git a/src/bin/lttng-sessiond/channel.c b/src/bin/lttng-sessiond/ch=
-annel.c
-> index ff2db69..8f835fd 100644
-> --- a/src/bin/lttng-sessiond/channel.c
-> +++ b/src/bin/lttng-sessiond/channel.c
-> @@ -33,7 +33,8 @@
->  /*
->   * Return allocated channel attributes.
->   */
-> -struct lttng_channel *channel_new_default_attr(int dom)
-> +struct lttng_channel *channel_new_default_attr(int dom,
-> +		enum lttng_buffer_type type)
->  {
->  	struct lttng_channel *chan;
->  =
-
-> @@ -49,10 +50,14 @@ struct lttng_channel *channel_new_default_attr(int do=
-m)
->  		goto error;
->  	}
->  =
-
-> +	/* Same for all domains. */
->  	chan->attr.overwrite =3D DEFAULT_CHANNEL_OVERWRITE;
-> +	chan->attr.tracefile_size =3D DEFAULT_CHANNEL_TRACEFILE_SIZE;
-> +	chan->attr.tracefile_count =3D DEFAULT_CHANNEL_TRACEFILE_COUNT;
->  =
-
->  	switch (dom) {
->  	case LTTNG_DOMAIN_KERNEL:
-> +		assert(type =3D=3D LTTNG_BUFFER_GLOBAL);
->  		chan->attr.subbuf_size =3D
->  			default_get_kernel_channel_subbuf_size();
->  		chan->attr.num_subbuf =3D DEFAULT_KERNEL_CHANNEL_SUBBUF_NUM;
-> @@ -61,16 +66,27 @@ struct lttng_channel *channel_new_default_attr(int do=
-m)
->  		chan->attr.read_timer_interval =3D DEFAULT_KERNEL_CHANNEL_READ_TIMER;
->  		break;
->  	case LTTNG_DOMAIN_UST:
-> -#if 0
-> -	case LTTNG_DOMAIN_UST_PID:
-> -	case LTTNG_DOMAIN_UST_PID_FOLLOW_CHILDREN:
-> -	case LTTNG_DOMAIN_UST_EXEC_NAME:
-> -#endif
-> -		chan->attr.subbuf_size =3D default_get_ust_channel_subbuf_size();
-> -		chan->attr.num_subbuf =3D DEFAULT_UST_CHANNEL_SUBBUF_NUM;
-> -		chan->attr.output =3D DEFAULT_UST_CHANNEL_OUTPUT;
-> -		chan->attr.switch_timer_interval =3D DEFAULT_UST_CHANNEL_SWITCH_TIMER;
-> -		chan->attr.read_timer_interval =3D DEFAULT_UST_CHANNEL_READ_TIMER;
-> +		switch (type) {
-> +		case LTTNG_BUFFER_PER_UID:
-> +			chan->attr.subbuf_size =3D default_get_ust_uid_channel_subbuf_size();
-> +			chan->attr.num_subbuf =3D DEFAULT_UST_UID_CHANNEL_SUBBUF_NUM;
-> +			chan->attr.output =3D DEFAULT_UST_UID_CHANNEL_OUTPUT;
-> +			chan->attr.switch_timer_interval =3D
-> +				DEFAULT_UST_UID_CHANNEL_SWITCH_TIMER;
-> +			chan->attr.read_timer_interval =3D
-> +				DEFAULT_UST_UID_CHANNEL_READ_TIMER;
-> +			break;
-> +		case LTTNG_BUFFER_PER_PID:
-> +		default:
-> +			chan->attr.subbuf_size =3D default_get_ust_pid_channel_subbuf_size();
-> +			chan->attr.num_subbuf =3D DEFAULT_UST_PID_CHANNEL_SUBBUF_NUM;
-> +			chan->attr.output =3D DEFAULT_UST_PID_CHANNEL_OUTPUT;
-> +			chan->attr.switch_timer_interval =3D
-> +				DEFAULT_UST_PID_CHANNEL_SWITCH_TIMER;
-> +			chan->attr.read_timer_interval =3D
-> +				DEFAULT_UST_PID_CHANNEL_READ_TIMER;
-> +			break;
-> +		}
->  		break;
->  	default:
->  		goto error;	/* Not implemented */
-> @@ -158,7 +174,8 @@ int channel_kernel_create(struct ltt_kernel_session *=
-ksession,
->  =
-
->  	/* Creating channel attributes if needed */
->  	if (attr =3D=3D NULL) {
-> -		defattr =3D channel_new_default_attr(LTTNG_DOMAIN_KERNEL);
-> +		defattr =3D channel_new_default_attr(LTTNG_DOMAIN_KERNEL,
-> +				LTTNG_BUFFER_GLOBAL);
->  		if (defattr =3D=3D NULL) {
->  			ret =3D LTTNG_ERR_FATAL;
->  			goto error;
-> @@ -237,7 +254,7 @@ int channel_ust_create(struct ltt_ust_session *usess,
->  =
-
->  	/* Creating channel attributes if needed */
->  	if (attr =3D=3D NULL) {
-> -		defattr =3D channel_new_default_attr(LTTNG_DOMAIN_UST);
-> +		defattr =3D channel_new_default_attr(LTTNG_DOMAIN_UST, type);
->  		if (defattr =3D=3D NULL) {
->  			ret =3D LTTNG_ERR_FATAL;
->  			goto error;
-> @@ -245,11 +262,6 @@ int channel_ust_create(struct ltt_ust_session *usess,
->  		attr =3D defattr;
->  	}
->  =
-
-> -	if (attr->attr.subbuf_size < DEFAULT_UST_CHANNEL_SUBBUF_SIZE) {
-> -		ret =3D LTTNG_ERR_INVALID;
-> -		goto error;
-> -	}
-> -
->  	/*
->  	 * Validate UST buffer size and number of buffers: must both be power o=
-f 2
->  	 * and nonzero. We validate right here for UST, because applications wi=
-ll
-> @@ -285,7 +297,18 @@ int channel_ust_create(struct ltt_ust_session *usess,
->  	/* Validate buffer type. */
->  	switch (type) {
->  	case LTTNG_BUFFER_PER_PID:
-> +		if (attr->attr.subbuf_size <
-> +				default_get_ust_pid_channel_subbuf_size()) {
-> +			ret =3D LTTNG_ERR_INVALID;
-> +			goto error;
-> +		}
-> +		break;
->  	case LTTNG_BUFFER_PER_UID:
-> +		if (attr->attr.subbuf_size <
-> +				default_get_ust_uid_channel_subbuf_size()) {
-> +			ret =3D LTTNG_ERR_INVALID;
-> +			goto error;
-> +		}
->  		break;
->  	default:
->  		ret =3D LTTNG_ERR_BUFFER_NOT_SUPPORTED;
-> diff --git a/src/bin/lttng-sessiond/channel.h b/src/bin/lttng-sessiond/ch=
-annel.h
-> index 7fbbb4c..15cabea 100644
-> --- a/src/bin/lttng-sessiond/channel.h
-> +++ b/src/bin/lttng-sessiond/channel.h
-> @@ -30,7 +30,8 @@ int channel_kernel_enable(struct ltt_kernel_session *ks=
-ession,
->  int channel_kernel_create(struct ltt_kernel_session *ksession,
->  		struct lttng_channel *chan, int kernel_pipe);
->  =
-
-> -struct lttng_channel *channel_new_default_attr(int domain);
-> +struct lttng_channel *channel_new_default_attr(int domain,
-> +		enum lttng_buffer_type type);
->  =
-
->  int channel_ust_create(struct ltt_ust_session *usess,
->  		struct lttng_channel *attr, enum lttng_buffer_type type);
-> diff --git a/src/bin/lttng-sessiond/cmd.c b/src/bin/lttng-sessiond/cmd.c
-> index 5d2cba1..528665a 100644
-> --- a/src/bin/lttng-sessiond/cmd.c
-> +++ b/src/bin/lttng-sessiond/cmd.c
-> @@ -1106,7 +1106,7 @@ int cmd_add_context(struct ltt_session *session, in=
-t domain,
->  		if (chan_count =3D=3D 0) {
->  			struct lttng_channel *attr;
->  			/* Create default channel */
-> -			attr =3D channel_new_default_attr(domain);
-> +			attr =3D channel_new_default_attr(domain, usess->buffer_type);
->  			if (attr =3D=3D NULL) {
->  				ret =3D LTTNG_ERR_FATAL;
->  				goto error;
-> @@ -1166,7 +1166,8 @@ int cmd_enable_event(struct ltt_session *session, s=
-truct lttng_domain *domain,
->  		kchan =3D trace_kernel_get_channel_by_name(channel_name,
->  				session->kernel_session);
->  		if (kchan =3D=3D NULL) {
-> -			attr =3D channel_new_default_attr(LTTNG_DOMAIN_KERNEL);
-> +			attr =3D channel_new_default_attr(LTTNG_DOMAIN_KERNEL,
-> +					LTTNG_BUFFER_GLOBAL);
->  			if (attr =3D=3D NULL) {
->  				ret =3D LTTNG_ERR_FATAL;
->  				goto error;
-> @@ -1216,7 +1217,8 @@ int cmd_enable_event(struct ltt_session *session, s=
-truct lttng_domain *domain,
->  				channel_name);
->  		if (uchan =3D=3D NULL) {
->  			/* Create default channel */
-> -			attr =3D channel_new_default_attr(LTTNG_DOMAIN_UST);
-> +			attr =3D channel_new_default_attr(LTTNG_DOMAIN_UST,
-> +					usess->buffer_type);
->  			if (attr =3D=3D NULL) {
->  				ret =3D LTTNG_ERR_FATAL;
->  				goto error;
-> @@ -1286,7 +1288,8 @@ int cmd_enable_event_all(struct ltt_session *sessio=
-n,
->  				session->kernel_session);
->  		if (kchan =3D=3D NULL) {
->  			/* Create default channel */
-> -			attr =3D channel_new_default_attr(LTTNG_DOMAIN_KERNEL);
-> +			attr =3D channel_new_default_attr(LTTNG_DOMAIN_KERNEL,
-> +					LTTNG_BUFFER_GLOBAL);
->  			if (attr =3D=3D NULL) {
->  				ret =3D LTTNG_ERR_FATAL;
->  				goto error;
-> @@ -1350,7 +1353,8 @@ int cmd_enable_event_all(struct ltt_session *sessio=
-n,
->  				channel_name);
->  		if (uchan =3D=3D NULL) {
->  			/* Create default channel */
-> -			attr =3D channel_new_default_attr(LTTNG_DOMAIN_UST);
-> +			attr =3D channel_new_default_attr(LTTNG_DOMAIN_UST,
-> +					usess->buffer_type);
->  			if (attr =3D=3D NULL) {
->  				ret =3D LTTNG_ERR_FATAL;
->  				goto error;
-> diff --git a/src/bin/lttng-sessiond/trace-ust.c b/src/bin/lttng-sessiond/=
-trace-ust.c
-> index 7592d77..8fb685c 100644
-> --- a/src/bin/lttng-sessiond/trace-ust.c
-> +++ b/src/bin/lttng-sessiond/trace-ust.c
-> @@ -384,8 +384,8 @@ struct ltt_ust_metadata *trace_ust_create_metadata(ch=
-ar *path)
->  	lum->attr.overwrite =3D DEFAULT_CHANNEL_OVERWRITE;
->  	lum->attr.subbuf_size =3D default_get_metadata_subbuf_size();
->  	lum->attr.num_subbuf =3D DEFAULT_METADATA_SUBBUF_NUM;
-> -	lum->attr.switch_timer_interval =3D DEFAULT_UST_CHANNEL_SWITCH_TIMER;
-> -	lum->attr.read_timer_interval =3D DEFAULT_UST_CHANNEL_READ_TIMER;
-> +	lum->attr.switch_timer_interval =3D DEFAULT_METADATA_SWITCH_TIMER;
-> +	lum->attr.read_timer_interval =3D DEFAULT_METADATA_READ_TIMER;
->  	lum->attr.output =3D LTTNG_UST_MMAP;
->  =
-
->  	lum->handle =3D -1;
-> diff --git a/src/bin/lttng-sessiond/ust-app.c b/src/bin/lttng-sessiond/us=
-t-app.c
-> index e362381..5710226 100644
-> --- a/src/bin/lttng-sessiond/ust-app.c
-> +++ b/src/bin/lttng-sessiond/ust-app.c
-> @@ -2527,8 +2527,8 @@ static int create_ust_app_metadata(struct ust_app_s=
-ession *ua_sess,
->  		metadata->attr.overwrite =3D DEFAULT_CHANNEL_OVERWRITE;
->  		metadata->attr.subbuf_size =3D default_get_metadata_subbuf_size();
->  		metadata->attr.num_subbuf =3D DEFAULT_METADATA_SUBBUF_NUM;
-> -		metadata->attr.switch_timer_interval =3D DEFAULT_UST_CHANNEL_SWITCH_TI=
-MER;
-> -		metadata->attr.read_timer_interval =3D DEFAULT_UST_CHANNEL_READ_TIMER;
-> +		metadata->attr.switch_timer_interval =3D DEFAULT_METADATA_SWITCH_TIMER;
-> +		metadata->attr.read_timer_interval =3D DEFAULT_METADATA_READ_TIMER;
->  		metadata->attr.output =3D LTTNG_UST_MMAP;
->  		metadata->attr.type =3D LTTNG_UST_CHAN_METADATA;
->  	} else {
-> diff --git a/src/bin/lttng/commands/enable_channels.c b/src/bin/lttng/com=
-mands/enable_channels.c
-> index 4816d62..c7bbca1 100644
-> --- a/src/bin/lttng/commands/enable_channels.c
-> +++ b/src/bin/lttng/commands/enable_channels.c
-> @@ -104,28 +104,40 @@ static void usage(FILE *ofp)
->  	fprintf(ofp, "      --overwrite          Flight recorder mode%s\n",
->  		DEFAULT_CHANNEL_OVERWRITE ? " (default)" : "");
->  	fprintf(ofp, "      --subbuf-size SIZE   Subbuffer size in bytes {+k,+M=
-,+G}\n");
-> -	fprintf(ofp, "                               (default: %zu, kernel defa=
-ult: %zu)\n",
-> -		default_get_channel_subbuf_size(),
-> +	fprintf(ofp, "                               (default UST uid: %zu, UST=
- pid: %zu, kernel: %zu)\n",
-> +		default_get_ust_uid_channel_subbuf_size(),
-> +		default_get_ust_pid_channel_subbuf_size(),
->  		default_get_kernel_channel_subbuf_size());
->  	fprintf(ofp, "                               Rounded up to the next pow=
-er of 2.\n");
->  	fprintf(ofp, "      --num-subbuf NUM     Number of subbufers\n");
-> -	fprintf(ofp, "                               (default: %u)\n",
-> -		DEFAULT_CHANNEL_SUBBUF_NUM);
-> +	fprintf(ofp, "                               (default UST uid: %u, UST =
-pid: %u, kernel: %u)\n",
-> +		DEFAULT_UST_UID_CHANNEL_SUBBUF_NUM, DEFAULT_UST_PID_CHANNEL_SUBBUF_NUM,
-> +		DEFAULT_KERNEL_CHANNEL_SUBBUF_NUM);
->  	fprintf(ofp, "                               Rounded up to the next pow=
-er of 2.\n");
-> -	fprintf(ofp, "      --switch-timer USEC  Switch timer interval in usec =
-(default: %u)\n",
-> -		DEFAULT_CHANNEL_SWITCH_TIMER);
-> -	fprintf(ofp, "      --read-timer USEC    Read timer interval in usec (U=
-ST default: %u, kernel default: %u)\n",
-> -		DEFAULT_UST_CHANNEL_READ_TIMER, DEFAULT_KERNEL_CHANNEL_READ_TIMER);
-> +	fprintf(ofp, "      --switch-timer USEC  Switch timer interval in usec\=
-n");
-> +	fprintf(ofp, "                               (default UST uid: %u, UST =
-pid: %u, kernel: %u)\n",
-> +		DEFAULT_UST_UID_CHANNEL_SWITCH_TIMER, DEFAULT_UST_PID_CHANNEL_SWITCH_T=
-IMER,
-> +		DEFAULT_KERNEL_CHANNEL_SWITCH_TIMER);
-> +	fprintf(ofp, "      --read-timer USEC    Read timer interval in usec.\n=
-");
-> +	fprintf(ofp, "                               (default UST uid: %u, UST =
-pid: %u, kernel: %u)\n",
-> +		DEFAULT_UST_UID_CHANNEL_READ_TIMER, DEFAULT_UST_UID_CHANNEL_READ_TIMER,
-> +		DEFAULT_KERNEL_CHANNEL_READ_TIMER);
->  	fprintf(ofp, "      --output TYPE        Channel output type (Values: %=
-s, %s)\n",
->  			output_mmap, output_splice);
-> +	fprintf(ofp, "                               (default UST uid: %s, UST =
-pid: %s, kernel: %s)\n",
-> +			DEFAULT_UST_UID_CHANNEL_OUTPUT =3D=3D LTTNG_EVENT_MMAP ? output_mmap =
-: output_splice,
-> +			DEFAULT_UST_PID_CHANNEL_OUTPUT =3D=3D LTTNG_EVENT_MMAP ? output_mmap =
-: output_splice,
-> +			DEFAULT_KERNEL_CHANNEL_OUTPUT =3D=3D LTTNG_EVENT_MMAP ? output_mmap :=
- output_splice);
->  	fprintf(ofp, "      --buffers-uid        Use per UID buffer (-u only)\n=
-");
->  	fprintf(ofp, "      --buffers-pid        Use per PID buffer (-u only)\n=
-");
->  	fprintf(ofp, "      --buffers-global     Use shared buffer for the whol=
-e system (-k only)\n");
->  	fprintf(ofp, "  -C, --tracefile-size SIZE\n");
-> -	fprintf(ofp, "                           Maximum size of each tracefile=
- within a stream (in bytes).\n");
-> +	fprintf(ofp, "                           Maximum size of each tracefile=
- within a stream (in bytes). 0 means unlimited.\n");
-> +	fprintf(ofp, "                               (default: %u)\n", DEFAULT_=
-CHANNEL_TRACEFILE_SIZE);
->  	fprintf(ofp, "  -W, --tracefile-count COUNT\n");
->  	fprintf(ofp, "                           Used in conjunction with -C op=
-tion, this will limit the number\n");
-> -	fprintf(ofp, "                           of files created to the specif=
-ied count.\n");
-> +	fprintf(ofp, "                           of files created to the specif=
-ied count. 0 means unlimited.\n");
-> +	fprintf(ofp, "                               (default: %u)\n", DEFAULT_=
-CHANNEL_TRACEFILE_COUNT);
->  	fprintf(ofp, "\n");
->  }
->  =
-
-> diff --git a/src/common/defaults.c b/src/common/defaults.c
-> index ccdbaf4..d74a42b 100644
-> --- a/src/common/defaults.c
-> +++ b/src/common/defaults.c
-> @@ -24,7 +24,8 @@
->  size_t default_channel_subbuf_size;
->  size_t default_metadata_subbuf_size;
->  size_t default_kernel_channel_subbuf_size;
-> -size_t default_ust_channel_subbuf_size;
-> +size_t default_ust_pid_channel_subbuf_size;
-> +size_t default_ust_uid_channel_subbuf_size;
->  =
-
->  static void __attribute__((constructor)) init_defaults(void)
->  {
-> @@ -39,11 +40,13 @@ static void __attribute__((constructor)) init_default=
-s(void)
->  	}
->  =
-
->  	default_channel_subbuf_size =3D
-> -		max(DEFAULT_CHANNEL_SUBBUF_SIZE, page_size);
-> +		max(_DEFAULT_CHANNEL_SUBBUF_SIZE, page_size);
->  	default_metadata_subbuf_size =3D
->  		max(DEFAULT_METADATA_SUBBUF_SIZE, page_size);
->  	default_kernel_channel_subbuf_size =3D
->  		max(DEFAULT_KERNEL_CHANNEL_SUBBUF_SIZE, page_size);
-> -	default_ust_channel_subbuf_size =3D
-> -		max(DEFAULT_UST_CHANNEL_SUBBUF_SIZE, page_size);
-> +	default_ust_pid_channel_subbuf_size =3D
-> +		max(DEFAULT_UST_PID_CHANNEL_SUBBUF_SIZE, page_size);
-> +	default_ust_uid_channel_subbuf_size =3D
-> +		max(DEFAULT_UST_UID_CHANNEL_SUBBUF_SIZE, page_size);
->  }
-> diff --git a/src/common/defaults.h b/src/common/defaults.h
-> index fb6a975..2c73277 100644
-> --- a/src/common/defaults.h
-> +++ b/src/common/defaults.h
-> @@ -112,55 +112,57 @@
->  =
-
->  /* Default channel attributes */
->  #define DEFAULT_CHANNEL_NAME            "channel0"
-> -#define DEFAULT_CHANNEL_OVERWRITE       0       /* usec */
-> -/* DEFAULT_CHANNEL_SUBBUF_SIZE must always be a power of 2 */
-> -#define DEFAULT_CHANNEL_SUBBUF_SIZE     4096    /* bytes */
-> -/* DEFAULT_CHANNEL_SUBBUF_NUM must always be a power of 2 */
-> -#define DEFAULT_CHANNEL_SUBBUF_NUM      4
-> -#define DEFAULT_CHANNEL_SWITCH_TIMER    0       /* usec */
-> -#define DEFAULT_CHANNEL_READ_TIMER      200000  /* usec */
-> -#define DEFAULT_CHANNEL_OUTPUT          LTTNG_EVENT_MMAP
-> -
-> +#define DEFAULT_CHANNEL_OVERWRITE       0
-> +#define DEFAULT_CHANNEL_TRACEFILE_SIZE  0
-> +#define DEFAULT_CHANNEL_TRACEFILE_COUNT 0
-> +
-> +/* Must always be a power of 2 */
-> +#define _DEFAULT_CHANNEL_SUBBUF_SIZE	4096    /* bytes */
-> +/* Must always be a power of 2 */
-> +#define _DEFAULT_CHANNEL_SUBBUF_NUM		4
-> +#define _DEFAULT_CHANNEL_SWITCH_TIMER	0       /* usec */
-> +#define _DEFAULT_CHANNEL_READ_TIMER		200000  /* usec */
-> +#define _DEFAULT_CHANNEL_OUTPUT			LTTNG_EVENT_MMAP
-> +
-> +/* Metadata channel defaults. */
->  #define DEFAULT_METADATA_SUBBUF_SIZE    4096
->  #define DEFAULT_METADATA_SUBBUF_NUM     2
->  #define DEFAULT_METADATA_CACHE_SIZE     4096
-> +#define DEFAULT_METADATA_SWITCH_TIMER	_DEFAULT_CHANNEL_SWITCH_TIMER
-> +#define DEFAULT_METADATA_READ_TIMER		_DEFAULT_CHANNEL_READ_TIMER
-> +#define DEFAULT_METADATA_OUTPUT			_DEFAULT_CHANNEL_OUTPUT
->  =
-
->  /* Kernel has different defaults */
->  =
-
->  /* DEFAULT_KERNEL_CHANNEL_SUBBUF_SIZE must always be a power of 2 */
-> -#define DEFAULT_KERNEL_CHANNEL_SUBBUF_SIZE  262144    /* bytes */
-> +#define DEFAULT_KERNEL_CHANNEL_SUBBUF_SIZE		262144    /* bytes */
->  /*
->   * DEFAULT_KERNEL_CHANNEL_SUBBUF_NUM must always be a power of 2.
->   * Update help manually if override.
->   */
-> -#define DEFAULT_KERNEL_CHANNEL_SUBBUF_NUM   DEFAULT_CHANNEL_SUBBUF_NUM
-> +#define DEFAULT_KERNEL_CHANNEL_SUBBUF_NUM		_DEFAULT_CHANNEL_SUBBUF_NUM
->  /* See lttng-kernel.h enum lttng_kernel_output for channel output */
-> -#define DEFAULT_KERNEL_CHANNEL_OUTPUT       LTTNG_EVENT_SPLICE
-> -/* By default, unlimited tracefile size */
-> -#define DEFAULT_KERNEL_CHANNEL_TRACEFILE_SIZE  0
-> -/* By default, unlimited tracefile count */
-> -#define DEFAULT_KERNEL_CHANNEL_TRACEFILE_COUNT 0
-> -
-> -#define DEFAULT_KERNEL_CHANNEL_SWITCH_TIMER	\
-> -		DEFAULT_CHANNEL_SWITCH_TIMER
-> -#define DEFAULT_KERNEL_CHANNEL_READ_TIMER      200000  /* usec */
-> +#define DEFAULT_KERNEL_CHANNEL_OUTPUT			LTTNG_EVENT_SPLICE
-> +#define DEFAULT_KERNEL_CHANNEL_SWITCH_TIMER		_DEFAULT_CHANNEL_SWITCH_TIM=
-ER
-> +#define DEFAULT_KERNEL_CHANNEL_READ_TIMER		_DEFAULT_CHANNEL_READ_TIMER
->  =
-
->  /* User space defaults */
->  =
-
->  /* Must be a power of 2 */
-> -#define DEFAULT_UST_CHANNEL_SUBBUF_SIZE     4096    /* bytes */
-> +#define DEFAULT_UST_PID_CHANNEL_SUBBUF_SIZE		_DEFAULT_CHANNEL_SUBBUF_SIZE
-> +#define DEFAULT_UST_UID_CHANNEL_SUBBUF_SIZE		131072  /* bytes */
->  /* Must be a power of 2. Update help manuall if override. */
-> -#define DEFAULT_UST_CHANNEL_SUBBUF_NUM      DEFAULT_CHANNEL_SUBBUF_NUM
-> +#define DEFAULT_UST_PID_CHANNEL_SUBBUF_NUM		_DEFAULT_CHANNEL_SUBBUF_NUM
-> +#define DEFAULT_UST_UID_CHANNEL_SUBBUF_NUM		_DEFAULT_CHANNEL_SUBBUF_NUM
->  /* See lttng-ust.h enum lttng_ust_output */
-> -#define DEFAULT_UST_CHANNEL_OUTPUT          LTTNG_EVENT_MMAP
-> -/* By default, unlimited tracefile size */
-> -#define DEFAULT_UST_CHANNEL_TRACEFILE_SIZE  0
-> -/* By default, unlimited tracefile count */
-> -#define DEFAULT_UST_CHANNEL_TRACEFILE_COUNT 0
-> +#define DEFAULT_UST_PID_CHANNEL_OUTPUT			_DEFAULT_CHANNEL_OUTPUT
-> +#define DEFAULT_UST_UID_CHANNEL_OUTPUT			_DEFAULT_CHANNEL_OUTPUT
-> +/* Timers in usec. */
-> +#define DEFAULT_UST_PID_CHANNEL_SWITCH_TIMER	_DEFAULT_CHANNEL_SWITCH_TIM=
-ER
-> +#define DEFAULT_UST_UID_CHANNEL_SWITCH_TIMER	_DEFAULT_CHANNEL_SWITCH_TIM=
-ER
->  =
-
-> -#define DEFAULT_UST_CHANNEL_SWITCH_TIMER	\
-> -		DEFAULT_CHANNEL_SWITCH_TIMER
-> -#define DEFAULT_UST_CHANNEL_READ_TIMER      0  /* usec */
-> +#define DEFAULT_UST_PID_CHANNEL_READ_TIMER      0  /* usec */
-> +#define DEFAULT_UST_UID_CHANNEL_READ_TIMER      0  /* usec */
->  =
-
->  /*
->   * Default timeout value for the sem_timedwait() call. Blocking forever =
-is not
-> @@ -202,10 +204,10 @@
->  =
-
->  extern size_t default_channel_subbuf_size;
->  extern size_t default_metadata_subbuf_size;
-> -extern size_t default_ust_channel_subbuf_size;
-> +extern size_t default_ust_pid_channel_subbuf_size;
-> +extern size_t default_ust_uid_channel_subbuf_size;
->  extern size_t default_kernel_channel_subbuf_size;
->  =
-
-> -
->  /*
->   * Returns the default subbuf size.
->   *
-> @@ -243,15 +245,27 @@ size_t default_get_kernel_channel_subbuf_size(void)
->  }
->  =
-
->  /*
-> - * Returns the default subbuf size for the UST domain.
-> + * Returns the default subbuf size for the UST domain per PID.
-> + *
-> + * This function depends on a value that is set at constructor time, so =
-it is
-> + * unsafe to call it from another constructor.
-> + */
-> +static inline
-> +size_t default_get_ust_pid_channel_subbuf_size(void)
-> +{
-> +	return default_ust_pid_channel_subbuf_size;
-> +}
-> +
-> +/*
-> + * Returns the default subbuf size for the UST domain per UID.
->   *
->   * This function depends on a value that is set at constructor time, so =
-it is
->   * unsafe to call it from another constructor.
->   */
->  static inline
-> -size_t default_get_ust_channel_subbuf_size(void)
-> +size_t default_get_ust_uid_channel_subbuf_size(void)
->  {
-> -	return default_ust_channel_subbuf_size;
-> +	return default_ust_uid_channel_subbuf_size;
->  }
->  =
-
->  #endif /* _DEFAULTS_H */
-> diff --git a/src/lib/lttng-ctl/lttng-ctl.c b/src/lib/lttng-ctl/lttng-ctl.c
-> index 3787e29..a7328eb 100644
-> --- a/src/lib/lttng-ctl/lttng-ctl.c
-> +++ b/src/lib/lttng-ctl/lttng-ctl.c
-> @@ -1386,29 +1386,37 @@ void lttng_channel_set_default_attr(struct lttng_=
-domain *domain,
->  =
-
->  	memset(attr, 0, sizeof(struct lttng_channel_attr));
->  =
-
-> +	/* Same for all domains. */
-> +	attr->overwrite =3D DEFAULT_CHANNEL_OVERWRITE;
-> +	attr->tracefile_size =3D DEFAULT_CHANNEL_TRACEFILE_SIZE;
-> +	attr->tracefile_count =3D DEFAULT_CHANNEL_TRACEFILE_COUNT;
-> +
->  	switch (domain->type) {
->  	case LTTNG_DOMAIN_KERNEL:
-> -		attr->overwrite =3D DEFAULT_CHANNEL_OVERWRITE;
->  		attr->switch_timer_interval =3D DEFAULT_KERNEL_CHANNEL_SWITCH_TIMER;
->  		attr->read_timer_interval =3D DEFAULT_KERNEL_CHANNEL_READ_TIMER;
-> -
->  		attr->subbuf_size =3D default_get_kernel_channel_subbuf_size();
->  		attr->num_subbuf =3D DEFAULT_KERNEL_CHANNEL_SUBBUF_NUM;
->  		attr->output =3D DEFAULT_KERNEL_CHANNEL_OUTPUT;
-> -		attr->tracefile_size =3D DEFAULT_KERNEL_CHANNEL_TRACEFILE_SIZE;
-> -		attr->tracefile_count =3D DEFAULT_KERNEL_CHANNEL_TRACEFILE_COUNT;
->  		break;
->  	case LTTNG_DOMAIN_UST:
-> -		attr->overwrite =3D DEFAULT_CHANNEL_OVERWRITE;
-> -		attr->switch_timer_interval =3D DEFAULT_UST_CHANNEL_SWITCH_TIMER;
-> -		attr->read_timer_interval =3D DEFAULT_UST_CHANNEL_READ_TIMER;
-> -
-> -		attr->subbuf_size =3D default_get_ust_channel_subbuf_size();
-> -		attr->num_subbuf =3D DEFAULT_UST_CHANNEL_SUBBUF_NUM;
-> -		attr->output =3D DEFAULT_UST_CHANNEL_OUTPUT;
-> -		attr->tracefile_size =3D DEFAULT_UST_CHANNEL_TRACEFILE_SIZE;
-> -		attr->tracefile_count =3D DEFAULT_UST_CHANNEL_TRACEFILE_COUNT;
-> -		break;
-> +		switch (domain->buf_type) {
-> +		case LTTNG_BUFFER_PER_UID:
-> +			attr->subbuf_size =3D default_get_ust_uid_channel_subbuf_size();
-> +			attr->num_subbuf =3D DEFAULT_UST_UID_CHANNEL_SUBBUF_NUM;
-> +			attr->output =3D DEFAULT_UST_UID_CHANNEL_OUTPUT;
-> +			attr->switch_timer_interval =3D DEFAULT_UST_UID_CHANNEL_SWITCH_TIMER;
-> +			attr->read_timer_interval =3D DEFAULT_UST_UID_CHANNEL_READ_TIMER;
-> +			break;
-> +		case LTTNG_BUFFER_PER_PID:
-> +		default:
-> +			attr->subbuf_size =3D default_get_ust_pid_channel_subbuf_size();
-> +			attr->num_subbuf =3D DEFAULT_UST_PID_CHANNEL_SUBBUF_NUM;
-> +			attr->output =3D DEFAULT_UST_PID_CHANNEL_OUTPUT;
-> +			attr->switch_timer_interval =3D DEFAULT_UST_PID_CHANNEL_SWITCH_TIMER;
-> +			attr->read_timer_interval =3D DEFAULT_UST_PID_CHANNEL_READ_TIMER;
-> +			break;
-> +		}
->  	default:
->  		/* Default behavior: leave set to 0. */
->  		break;
-> diff --git a/tests/unit/test_ust_data.c b/tests/unit/test_ust_data.c
-> index a79e2eb..c79dbf6 100644
-> --- a/tests/unit/test_ust_data.c
-> +++ b/tests/unit/test_ust_data.c
-> @@ -111,9 +111,9 @@ static void test_create_ust_metadata(void)
->  	   metadata->attr.num_subbuf
->  			=3D=3D DEFAULT_METADATA_SUBBUF_NUM &&
->  	   metadata->attr.switch_timer_interval
-> -			=3D=3D DEFAULT_UST_CHANNEL_SWITCH_TIMER &&
-> +			=3D=3D DEFAULT_METADATA_SWITCH_TIMER &&
->  	   metadata->attr.read_timer_interval
-> -			=3D=3D DEFAULT_UST_CHANNEL_READ_TIMER &&
-> +			=3D=3D DEFAULT_METADATA_READ_TIMER &&
->  	   metadata->attr.output =3D=3D LTTNG_UST_MMAP,
->  	   "Validate UST session metadata");
->  =
-
-> -- =
-
-> 1.7.10.4
-> =
-
-> =
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- =
-
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+CgpNYXRoaWV1IERlc25veWVyczoKPiAqIERhdmlkIEdvdWxldCAoZGdvdWxldEBlZmZpY2lvcy5j
+b20pIHdyb3RlOgo+PiBUaGUgZGVmYXVsdCBwZXIgVUlEIHN1YmJ1ZmZlciBzaXplIGFyZSBjaGFu
+Z2VkIGZyb20gNDA5NiBieXRlcyB0byAxMzEwNzIKPj4gYnl0ZXMgKDEyOGspLiBUaGUgcmVzdCBo
+YXZlIHRoZSBzYW1lIHZhbHVlcyBhcyBiZWZvcmUuCj4+Cj4+IFNvbWUgREVGQVVMVF9DSEFOTkVM
+XyogbWFjcm9zIGFyZSBwcmVmaXhlZCB3aXRoIGFuIHVuZGVyc2NvcmUgbWFraW5nCj4+IHN1cmUg
+dGhleSBhcmUgbm90IHVzZWQgZWxzZXdoZXJlIGluIHRoZSBjb2RlIGJhc2UgYW5kIG9ubHkgZG9t
+YWluCj4+IHNwZWNpZmljIHZhbHVlcyBhcmUgdXNlZC4KPiAKPiBMb29rcyBnb29kLCBleGNlcHQg
+Zm9yIG9uZSBzbWFsbCBxdWVzdGlvbjogdGhlIG1ldGFkYXRhIGRlZmF1bHRzIChlLmcuCj4gREVG
+QVVMVF9NRVRBREFUQV9TV0lUQ0hfVElNRVIpIGRvbid0IHNlZW0gdG8gYXBwZWFyIGFueXdoZXJl
+IGluIHRoZQo+IGhlbHAvbWFucGFnZS4gQW55IGlkZWEgb24gaG93IHdlIGNvdWxkIGZpeCB0aGF0
+ID8KClJpZ2h0LCBJIGd1ZXNzIGp1c3QgYWRkaW5nIGEgIm1ldGFkYXRhOiAiIGV2ZXJ5d2hlcmUg
+d291bGQgYmUgdGhlIHdheSB0bwpkbyBpdCA/CgpEYXZpZAoKPiAKPiBUaGFua3MsCj4gCj4gTWF0
+aGlldQo+IAo+IAo+Pgo+PiBGaXhlcyAjNTI0Cj4+Cj4+IFNpZ25lZC1vZmYtYnk6IERhdmlkIEdv
+dWxldCA8ZGdvdWxldEBlZmZpY2lvcy5jb20+Cj4+IC0tLQo+PiAgZG9jL21hbi9sdHRuZy4xICAg
+ICAgICAgICAgICAgICAgICAgICAgICB8ICAgMTUgKysrKy0tCj4+ICBzcmMvYmluL2x0dG5nLXNl
+c3Npb25kL2NoYW5uZWwuYyAgICAgICAgIHwgICA1OSArKysrKysrKysrKysrKy0tLS0tLS0KPj4g
+IHNyYy9iaW4vbHR0bmctc2Vzc2lvbmQvY2hhbm5lbC5oICAgICAgICAgfCAgICAzICstCj4+ICBz
+cmMvYmluL2x0dG5nLXNlc3Npb25kL2NtZC5jICAgICAgICAgICAgIHwgICAxNCArKystLQo+PiAg
+c3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC90cmFjZS11c3QuYyAgICAgICB8ICAgIDQgKy0KPj4gIHNy
+Yy9iaW4vbHR0bmctc2Vzc2lvbmQvdXN0LWFwcC5jICAgICAgICAgfCAgICA0ICstCj4+ICBzcmMv
+YmluL2x0dG5nL2NvbW1hbmRzL2VuYWJsZV9jaGFubmVscy5jIHwgICAzMiArKysrKysrKy0tLS0K
+Pj4gIHNyYy9jb21tb24vZGVmYXVsdHMuYyAgICAgICAgICAgICAgICAgICAgfCAgIDExICsrLS0K
+Pj4gIHNyYy9jb21tb24vZGVmYXVsdHMuaCAgICAgICAgICAgICAgICAgICAgfCAgIDg0ICsrKysr
+KysrKysrKysrKysrLS0tLS0tLS0tLS0tLQo+PiAgc3JjL2xpYi9sdHRuZy1jdGwvbHR0bmctY3Rs
+LmMgICAgICAgICAgICB8ICAgMzYgKysrKysrKystLS0tLQo+PiAgdGVzdHMvdW5pdC90ZXN0X3Vz
+dF9kYXRhLmMgICAgICAgICAgICAgICB8ICAgIDQgKy0KPj4gIDExIGZpbGVzIGNoYW5nZWQsIDE2
+OCBpbnNlcnRpb25zKCspLCA5OCBkZWxldGlvbnMoLSkKPj4KPj4gZGlmZiAtLWdpdCBhL2RvYy9t
+YW4vbHR0bmcuMSBiL2RvYy9tYW4vbHR0bmcuMQo+PiBpbmRleCAzN2MyMDYzLi5hYTk4OTkwIDEw
+MDY0NAo+PiAtLS0gYS9kb2MvbWFuL2x0dG5nLjEKPj4gKysrIGIvZG9jL21hbi9sdHRuZy4xCj4+
+IEBAIC0zMjcsMTcgKzMyNywyMSBAQCBzYW1lIHR5cGUuCj4+ICBcLVwtb3ZlcndyaXRlCj4+ICAg
+ICAgICAgIEZsaWdodCByZWNvcmRlciBtb2RlIDogb3ZlcndyaXRlcyBldmVudHMgd2hlbiBzdWJi
+dWZmZXJzIGFyZSBmdWxsCj4+ICBcLVwtc3ViYnVmLXNpemUgU0laRQo+PiAtICAgICAgICBTdWJi
+dWZmZXIgc2l6ZSBpbiBieXRlcyB7K2ssK00sK0d9IChkZWZhdWx0OiA0MDk2LCBrZXJuZWwgZGVm
+YXVsdDogMjYyMTQ0KQo+PiArICAgICAgICBTdWJidWZmZXIgc2l6ZSBpbiBieXRlcyB7K2ssK00s
+K0d9Cj4+ICsgICAgICAgIChkZWZhdWx0IFVTVCB1aWQ6IDEzMTA3MiwgVVNUIHBpZDogNDA5Niwg
+a2VybmVsOiAyNjIxNDQpCj4+ICAgICAgICAgIFJvdW5kZWQgdXAgdG8gdGhlIG5leHQgcG93ZXIg
+b2YgMi4KPj4gIFwtXC1udW0tc3ViYnVmIE5VTQo+PiAtICAgICAgICBOdW1iZXIgb2Ygc3ViYnVm
+ZmVycyAoZGVmYXVsdDogNCkKPj4gKyAgICAgICAgTnVtYmVyIG9mIHN1YmJ1ZmZlcnMuIChkZWZh
+dWx0IFVTVCB1aWQ6IDQsIFVTVCBwaWQ6IDQsIGtlcm5lbDogNCkKPj4gICAgICAgICAgUm91bmRl
+ZCB1cCB0byB0aGUgbmV4dCBwb3dlciBvZiAyLgo+PiAgXC1cLXN3aXRjaC10aW1lciBVU0VDCj4+
+IC0gICAgICAgIFN3aXRjaCBzdWJidWZmZXIgdGltZXIgaW50ZXJ2YWwgaW4gwrVzZWMgKGRlZmF1
+bHQ6IDApCj4+ICsgICAgICAgIFN3aXRjaCBzdWJidWZmZXIgdGltZXIgaW50ZXJ2YWwgaW4gwrVz
+ZWMuCj4+ICsgICAgICAgIChkZWZhdWx0IFVTVCB1aWQ6IDAsIFVTVCBwaWQ6IDAsIGtlcm5lbDog
+MCkKPj4gIFwtXC1yZWFkLXRpbWVyIFVTRUMKPj4gLSAgICAgICAgUmVhZCB0aW1lciBpbnRlcnZh
+bCBpbiDCtXNlYyAoVVNUIGRlZmF1bHQ6IDAsIGtlcm5lbCBkZWZhdWx0OiAyMDAwMDApCj4+ICsg
+ICAgICAgIFJlYWQgdGltZXIgaW50ZXJ2YWwgaW4gwrVzZWMuCj4+ICsgICAgICAgIChkZWZhdWx0
+IFVTVCB1aWQ6IDAsIFVTVCBwaWQ6IDAsIGtlcm5lbDogMjAwMDAwKQo+PiAgXC1cLW91dHB1dCBU
+WVBFCj4+ICAgICAgICAgIENoYW5uZWwgb3V0cHV0IHR5cGUuIFBvc3NpYmxlIHZhbHVlczogbW1h
+cCwgc3BsaWNlCj4+ICsgICAgICAgIChkZWZhdWx0IFVTVCB1aWQ6IG1tYXAsIFVTVCBwaWQ6IG1t
+YXAsIGtlcm5lbDogc3BsaWNlKQo+PiAgXC1cLWJ1ZmZlcnMtdWlkCj4+ICAgICAgICAgIFVzZSBw
+ZXIgVUlEIGJ1ZmZlciAoXC11IG9ubHkpLiBCdWZmZXJzIGFyZSBzaGFyZWQgYmV0d2VlbiBhcHBs
+aWNhdGlvbnMKPj4gICAgICAgICAgdGhhdCBoYXZlIHRoZSBzYW1lIFVJRC4KPj4gQEAgLTM0Nyw5
+ICszNTEsMTAgQEAgc2FtZSB0eXBlLgo+PiAgICAgICAgICBVc2Ugc2hhcmVkIGJ1ZmZlciBmb3Ig
+dGhlIHdob2xlIHN5c3RlbSAoXC1rIG9ubHkpCj4+ICBcLUMsIFwtXC10cmFjZWZpbGUtc2l6ZSBT
+SVpFCj4+ICAgICAgICAgIE1heGltdW0gc2l6ZSBvZiBlYWNoIHRyYWNlZmlsZSB3aXRoaW4gYSBz
+dHJlYW0gKGluIGJ5dGVzKS4KPj4gKwkJMCBtZWFucyB1bmxpbWl0ZWQuIChkZWZhdWx0OiAwKQo+
+PiAgXC1XLCBcLVwtdHJhY2VmaWxlLWNvdW50IENPVU5UCj4+ICAgICAgICAgIFVzZWQgaW4gY29u
+anVuY3Rpb24gd2l0aCBcLUMgb3B0aW9uLCB0aGlzIHdpbGwgbGltaXQgdGhlIG51bWJlcgo+PiAt
+ICAgICAgICBvZiBmaWxlcyBjcmVhdGVkIHRvIHRoZSBzcGVjaWZpZWQgY291bnQuCj4+ICsgICAg
+ICAgIG9mIGZpbGVzIGNyZWF0ZWQgdG8gdGhlIHNwZWNpZmllZCBjb3VudC4gMCBtZWFucyB1bmxp
+bWl0ZWQuIChkZWZhdWx0OiAwKQo+PiAgCj4+ICAuQiBFWEFNUExFUzoKPj4gIAo+PiBkaWZmIC0t
+Z2l0IGEvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9jaGFubmVsLmMgYi9zcmMvYmluL2x0dG5nLXNl
+c3Npb25kL2NoYW5uZWwuYwo+PiBpbmRleCBmZjJkYjY5Li44ZjgzNWZkIDEwMDY0NAo+PiAtLS0g
+YS9zcmMvYmluL2x0dG5nLXNlc3Npb25kL2NoYW5uZWwuYwo+PiArKysgYi9zcmMvYmluL2x0dG5n
+LXNlc3Npb25kL2NoYW5uZWwuYwo+PiBAQCAtMzMsNyArMzMsOCBAQAo+PiAgLyoKPj4gICAqIFJl
+dHVybiBhbGxvY2F0ZWQgY2hhbm5lbCBhdHRyaWJ1dGVzLgo+PiAgICovCj4+IC1zdHJ1Y3QgbHR0
+bmdfY2hhbm5lbCAqY2hhbm5lbF9uZXdfZGVmYXVsdF9hdHRyKGludCBkb20pCj4+ICtzdHJ1Y3Qg
+bHR0bmdfY2hhbm5lbCAqY2hhbm5lbF9uZXdfZGVmYXVsdF9hdHRyKGludCBkb20sCj4+ICsJCWVu
+dW0gbHR0bmdfYnVmZmVyX3R5cGUgdHlwZSkKPj4gIHsKPj4gIAlzdHJ1Y3QgbHR0bmdfY2hhbm5l
+bCAqY2hhbjsKPj4gIAo+PiBAQCAtNDksMTAgKzUwLDE0IEBAIHN0cnVjdCBsdHRuZ19jaGFubmVs
+ICpjaGFubmVsX25ld19kZWZhdWx0X2F0dHIoaW50IGRvbSkKPj4gIAkJZ290byBlcnJvcjsKPj4g
+IAl9Cj4+ICAKPj4gKwkvKiBTYW1lIGZvciBhbGwgZG9tYWlucy4gKi8KPj4gIAljaGFuLT5hdHRy
+Lm92ZXJ3cml0ZSA9IERFRkFVTFRfQ0hBTk5FTF9PVkVSV1JJVEU7Cj4+ICsJY2hhbi0+YXR0ci50
+cmFjZWZpbGVfc2l6ZSA9IERFRkFVTFRfQ0hBTk5FTF9UUkFDRUZJTEVfU0laRTsKPj4gKwljaGFu
+LT5hdHRyLnRyYWNlZmlsZV9jb3VudCA9IERFRkFVTFRfQ0hBTk5FTF9UUkFDRUZJTEVfQ09VTlQ7
+Cj4+ICAKPj4gIAlzd2l0Y2ggKGRvbSkgewo+PiAgCWNhc2UgTFRUTkdfRE9NQUlOX0tFUk5FTDoK
+Pj4gKwkJYXNzZXJ0KHR5cGUgPT0gTFRUTkdfQlVGRkVSX0dMT0JBTCk7Cj4+ICAJCWNoYW4tPmF0
+dHIuc3ViYnVmX3NpemUgPQo+PiAgCQkJZGVmYXVsdF9nZXRfa2VybmVsX2NoYW5uZWxfc3ViYnVm
+X3NpemUoKTsKPj4gIAkJY2hhbi0+YXR0ci5udW1fc3ViYnVmID0gREVGQVVMVF9LRVJORUxfQ0hB
+Tk5FTF9TVUJCVUZfTlVNOwo+PiBAQCAtNjEsMTYgKzY2LDI3IEBAIHN0cnVjdCBsdHRuZ19jaGFu
+bmVsICpjaGFubmVsX25ld19kZWZhdWx0X2F0dHIoaW50IGRvbSkKPj4gIAkJY2hhbi0+YXR0ci5y
+ZWFkX3RpbWVyX2ludGVydmFsID0gREVGQVVMVF9LRVJORUxfQ0hBTk5FTF9SRUFEX1RJTUVSOwo+
+PiAgCQlicmVhazsKPj4gIAljYXNlIExUVE5HX0RPTUFJTl9VU1Q6Cj4+IC0jaWYgMAo+PiAtCWNh
+c2UgTFRUTkdfRE9NQUlOX1VTVF9QSUQ6Cj4+IC0JY2FzZSBMVFROR19ET01BSU5fVVNUX1BJRF9G
+T0xMT1dfQ0hJTERSRU46Cj4+IC0JY2FzZSBMVFROR19ET01BSU5fVVNUX0VYRUNfTkFNRToKPj4g
+LSNlbmRpZgo+PiAtCQljaGFuLT5hdHRyLnN1YmJ1Zl9zaXplID0gZGVmYXVsdF9nZXRfdXN0X2No
+YW5uZWxfc3ViYnVmX3NpemUoKTsKPj4gLQkJY2hhbi0+YXR0ci5udW1fc3ViYnVmID0gREVGQVVM
+VF9VU1RfQ0hBTk5FTF9TVUJCVUZfTlVNOwo+PiAtCQljaGFuLT5hdHRyLm91dHB1dCA9IERFRkFV
+TFRfVVNUX0NIQU5ORUxfT1VUUFVUOwo+PiAtCQljaGFuLT5hdHRyLnN3aXRjaF90aW1lcl9pbnRl
+cnZhbCA9IERFRkFVTFRfVVNUX0NIQU5ORUxfU1dJVENIX1RJTUVSOwo+PiAtCQljaGFuLT5hdHRy
+LnJlYWRfdGltZXJfaW50ZXJ2YWwgPSBERUZBVUxUX1VTVF9DSEFOTkVMX1JFQURfVElNRVI7Cj4+
+ICsJCXN3aXRjaCAodHlwZSkgewo+PiArCQljYXNlIExUVE5HX0JVRkZFUl9QRVJfVUlEOgo+PiAr
+CQkJY2hhbi0+YXR0ci5zdWJidWZfc2l6ZSA9IGRlZmF1bHRfZ2V0X3VzdF91aWRfY2hhbm5lbF9z
+dWJidWZfc2l6ZSgpOwo+PiArCQkJY2hhbi0+YXR0ci5udW1fc3ViYnVmID0gREVGQVVMVF9VU1Rf
+VUlEX0NIQU5ORUxfU1VCQlVGX05VTTsKPj4gKwkJCWNoYW4tPmF0dHIub3V0cHV0ID0gREVGQVVM
+VF9VU1RfVUlEX0NIQU5ORUxfT1VUUFVUOwo+PiArCQkJY2hhbi0+YXR0ci5zd2l0Y2hfdGltZXJf
+aW50ZXJ2YWwgPQo+PiArCQkJCURFRkFVTFRfVVNUX1VJRF9DSEFOTkVMX1NXSVRDSF9USU1FUjsK
+Pj4gKwkJCWNoYW4tPmF0dHIucmVhZF90aW1lcl9pbnRlcnZhbCA9Cj4+ICsJCQkJREVGQVVMVF9V
+U1RfVUlEX0NIQU5ORUxfUkVBRF9USU1FUjsKPj4gKwkJCWJyZWFrOwo+PiArCQljYXNlIExUVE5H
+X0JVRkZFUl9QRVJfUElEOgo+PiArCQlkZWZhdWx0Ogo+PiArCQkJY2hhbi0+YXR0ci5zdWJidWZf
+c2l6ZSA9IGRlZmF1bHRfZ2V0X3VzdF9waWRfY2hhbm5lbF9zdWJidWZfc2l6ZSgpOwo+PiArCQkJ
+Y2hhbi0+YXR0ci5udW1fc3ViYnVmID0gREVGQVVMVF9VU1RfUElEX0NIQU5ORUxfU1VCQlVGX05V
+TTsKPj4gKwkJCWNoYW4tPmF0dHIub3V0cHV0ID0gREVGQVVMVF9VU1RfUElEX0NIQU5ORUxfT1VU
+UFVUOwo+PiArCQkJY2hhbi0+YXR0ci5zd2l0Y2hfdGltZXJfaW50ZXJ2YWwgPQo+PiArCQkJCURF
+RkFVTFRfVVNUX1BJRF9DSEFOTkVMX1NXSVRDSF9USU1FUjsKPj4gKwkJCWNoYW4tPmF0dHIucmVh
+ZF90aW1lcl9pbnRlcnZhbCA9Cj4+ICsJCQkJREVGQVVMVF9VU1RfUElEX0NIQU5ORUxfUkVBRF9U
+SU1FUjsKPj4gKwkJCWJyZWFrOwo+PiArCQl9Cj4+ICAJCWJyZWFrOwo+PiAgCWRlZmF1bHQ6Cj4+
+ICAJCWdvdG8gZXJyb3I7CS8qIE5vdCBpbXBsZW1lbnRlZCAqLwo+PiBAQCAtMTU4LDcgKzE3NCw4
+IEBAIGludCBjaGFubmVsX2tlcm5lbF9jcmVhdGUoc3RydWN0IGx0dF9rZXJuZWxfc2Vzc2lvbiAq
+a3Nlc3Npb24sCj4+ICAKPj4gIAkvKiBDcmVhdGluZyBjaGFubmVsIGF0dHJpYnV0ZXMgaWYgbmVl
+ZGVkICovCj4+ICAJaWYgKGF0dHIgPT0gTlVMTCkgewo+PiAtCQlkZWZhdHRyID0gY2hhbm5lbF9u
+ZXdfZGVmYXVsdF9hdHRyKExUVE5HX0RPTUFJTl9LRVJORUwpOwo+PiArCQlkZWZhdHRyID0gY2hh
+bm5lbF9uZXdfZGVmYXVsdF9hdHRyKExUVE5HX0RPTUFJTl9LRVJORUwsCj4+ICsJCQkJTFRUTkdf
+QlVGRkVSX0dMT0JBTCk7Cj4+ICAJCWlmIChkZWZhdHRyID09IE5VTEwpIHsKPj4gIAkJCXJldCA9
+IExUVE5HX0VSUl9GQVRBTDsKPj4gIAkJCWdvdG8gZXJyb3I7Cj4+IEBAIC0yMzcsNyArMjU0LDcg
+QEAgaW50IGNoYW5uZWxfdXN0X2NyZWF0ZShzdHJ1Y3QgbHR0X3VzdF9zZXNzaW9uICp1c2VzcywK
+Pj4gIAo+PiAgCS8qIENyZWF0aW5nIGNoYW5uZWwgYXR0cmlidXRlcyBpZiBuZWVkZWQgKi8KPj4g
+IAlpZiAoYXR0ciA9PSBOVUxMKSB7Cj4+IC0JCWRlZmF0dHIgPSBjaGFubmVsX25ld19kZWZhdWx0
+X2F0dHIoTFRUTkdfRE9NQUlOX1VTVCk7Cj4+ICsJCWRlZmF0dHIgPSBjaGFubmVsX25ld19kZWZh
+dWx0X2F0dHIoTFRUTkdfRE9NQUlOX1VTVCwgdHlwZSk7Cj4+ICAJCWlmIChkZWZhdHRyID09IE5V
+TEwpIHsKPj4gIAkJCXJldCA9IExUVE5HX0VSUl9GQVRBTDsKPj4gIAkJCWdvdG8gZXJyb3I7Cj4+
+IEBAIC0yNDUsMTEgKzI2Miw2IEBAIGludCBjaGFubmVsX3VzdF9jcmVhdGUoc3RydWN0IGx0dF91
+c3Rfc2Vzc2lvbiAqdXNlc3MsCj4+ICAJCWF0dHIgPSBkZWZhdHRyOwo+PiAgCX0KPj4gIAo+PiAt
+CWlmIChhdHRyLT5hdHRyLnN1YmJ1Zl9zaXplIDwgREVGQVVMVF9VU1RfQ0hBTk5FTF9TVUJCVUZf
+U0laRSkgewo+PiAtCQlyZXQgPSBMVFROR19FUlJfSU5WQUxJRDsKPj4gLQkJZ290byBlcnJvcjsK
+Pj4gLQl9Cj4+IC0KPj4gIAkvKgo+PiAgCSAqIFZhbGlkYXRlIFVTVCBidWZmZXIgc2l6ZSBhbmQg
+bnVtYmVyIG9mIGJ1ZmZlcnM6IG11c3QgYm90aCBiZSBwb3dlciBvZiAyCj4+ICAJICogYW5kIG5v
+bnplcm8uIFdlIHZhbGlkYXRlIHJpZ2h0IGhlcmUgZm9yIFVTVCwgYmVjYXVzZSBhcHBsaWNhdGlv
+bnMgd2lsbAo+PiBAQCAtMjg1LDcgKzI5NywxOCBAQCBpbnQgY2hhbm5lbF91c3RfY3JlYXRlKHN0
+cnVjdCBsdHRfdXN0X3Nlc3Npb24gKnVzZXNzLAo+PiAgCS8qIFZhbGlkYXRlIGJ1ZmZlciB0eXBl
+LiAqLwo+PiAgCXN3aXRjaCAodHlwZSkgewo+PiAgCWNhc2UgTFRUTkdfQlVGRkVSX1BFUl9QSUQ6
+Cj4+ICsJCWlmIChhdHRyLT5hdHRyLnN1YmJ1Zl9zaXplIDwKPj4gKwkJCQlkZWZhdWx0X2dldF91
+c3RfcGlkX2NoYW5uZWxfc3ViYnVmX3NpemUoKSkgewo+PiArCQkJcmV0ID0gTFRUTkdfRVJSX0lO
+VkFMSUQ7Cj4+ICsJCQlnb3RvIGVycm9yOwo+PiArCQl9Cj4+ICsJCWJyZWFrOwo+PiAgCWNhc2Ug
+TFRUTkdfQlVGRkVSX1BFUl9VSUQ6Cj4+ICsJCWlmIChhdHRyLT5hdHRyLnN1YmJ1Zl9zaXplIDwK
+Pj4gKwkJCQlkZWZhdWx0X2dldF91c3RfdWlkX2NoYW5uZWxfc3ViYnVmX3NpemUoKSkgewo+PiAr
+CQkJcmV0ID0gTFRUTkdfRVJSX0lOVkFMSUQ7Cj4+ICsJCQlnb3RvIGVycm9yOwo+PiArCQl9Cj4+
+ICAJCWJyZWFrOwo+PiAgCWRlZmF1bHQ6Cj4+ICAJCXJldCA9IExUVE5HX0VSUl9CVUZGRVJfTk9U
+X1NVUFBPUlRFRDsKPj4gZGlmZiAtLWdpdCBhL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvY2hhbm5l
+bC5oIGIvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9jaGFubmVsLmgKPj4gaW5kZXggN2ZiYmI0Yy4u
+MTVjYWJlYSAxMDA2NDQKPj4gLS0tIGEvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9jaGFubmVsLmgK
+Pj4gKysrIGIvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9jaGFubmVsLmgKPj4gQEAgLTMwLDcgKzMw
+LDggQEAgaW50IGNoYW5uZWxfa2VybmVsX2VuYWJsZShzdHJ1Y3QgbHR0X2tlcm5lbF9zZXNzaW9u
+ICprc2Vzc2lvbiwKPj4gIGludCBjaGFubmVsX2tlcm5lbF9jcmVhdGUoc3RydWN0IGx0dF9rZXJu
+ZWxfc2Vzc2lvbiAqa3Nlc3Npb24sCj4+ICAJCXN0cnVjdCBsdHRuZ19jaGFubmVsICpjaGFuLCBp
+bnQga2VybmVsX3BpcGUpOwo+PiAgCj4+IC1zdHJ1Y3QgbHR0bmdfY2hhbm5lbCAqY2hhbm5lbF9u
+ZXdfZGVmYXVsdF9hdHRyKGludCBkb21haW4pOwo+PiArc3RydWN0IGx0dG5nX2NoYW5uZWwgKmNo
+YW5uZWxfbmV3X2RlZmF1bHRfYXR0cihpbnQgZG9tYWluLAo+PiArCQllbnVtIGx0dG5nX2J1ZmZl
+cl90eXBlIHR5cGUpOwo+PiAgCj4+ICBpbnQgY2hhbm5lbF91c3RfY3JlYXRlKHN0cnVjdCBsdHRf
+dXN0X3Nlc3Npb24gKnVzZXNzLAo+PiAgCQlzdHJ1Y3QgbHR0bmdfY2hhbm5lbCAqYXR0ciwgZW51
+bSBsdHRuZ19idWZmZXJfdHlwZSB0eXBlKTsKPj4gZGlmZiAtLWdpdCBhL3NyYy9iaW4vbHR0bmct
+c2Vzc2lvbmQvY21kLmMgYi9zcmMvYmluL2x0dG5nLXNlc3Npb25kL2NtZC5jCj4+IGluZGV4IDVk
+MmNiYTEuLjUyODY2NWEgMTAwNjQ0Cj4+IC0tLSBhL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvY21k
+LmMKPj4gKysrIGIvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9jbWQuYwo+PiBAQCAtMTEwNiw3ICsx
+MTA2LDcgQEAgaW50IGNtZF9hZGRfY29udGV4dChzdHJ1Y3QgbHR0X3Nlc3Npb24gKnNlc3Npb24s
+IGludCBkb21haW4sCj4+ICAJCWlmIChjaGFuX2NvdW50ID09IDApIHsKPj4gIAkJCXN0cnVjdCBs
+dHRuZ19jaGFubmVsICphdHRyOwo+PiAgCQkJLyogQ3JlYXRlIGRlZmF1bHQgY2hhbm5lbCAqLwo+
+PiAtCQkJYXR0ciA9IGNoYW5uZWxfbmV3X2RlZmF1bHRfYXR0cihkb21haW4pOwo+PiArCQkJYXR0
+ciA9IGNoYW5uZWxfbmV3X2RlZmF1bHRfYXR0cihkb21haW4sIHVzZXNzLT5idWZmZXJfdHlwZSk7
+Cj4+ICAJCQlpZiAoYXR0ciA9PSBOVUxMKSB7Cj4+ICAJCQkJcmV0ID0gTFRUTkdfRVJSX0ZBVEFM
+Owo+PiAgCQkJCWdvdG8gZXJyb3I7Cj4+IEBAIC0xMTY2LDcgKzExNjYsOCBAQCBpbnQgY21kX2Vu
+YWJsZV9ldmVudChzdHJ1Y3QgbHR0X3Nlc3Npb24gKnNlc3Npb24sIHN0cnVjdCBsdHRuZ19kb21h
+aW4gKmRvbWFpbiwKPj4gIAkJa2NoYW4gPSB0cmFjZV9rZXJuZWxfZ2V0X2NoYW5uZWxfYnlfbmFt
+ZShjaGFubmVsX25hbWUsCj4+ICAJCQkJc2Vzc2lvbi0+a2VybmVsX3Nlc3Npb24pOwo+PiAgCQlp
+ZiAoa2NoYW4gPT0gTlVMTCkgewo+PiAtCQkJYXR0ciA9IGNoYW5uZWxfbmV3X2RlZmF1bHRfYXR0
+cihMVFROR19ET01BSU5fS0VSTkVMKTsKPj4gKwkJCWF0dHIgPSBjaGFubmVsX25ld19kZWZhdWx0
+X2F0dHIoTFRUTkdfRE9NQUlOX0tFUk5FTCwKPj4gKwkJCQkJTFRUTkdfQlVGRkVSX0dMT0JBTCk7
+Cj4+ICAJCQlpZiAoYXR0ciA9PSBOVUxMKSB7Cj4+ICAJCQkJcmV0ID0gTFRUTkdfRVJSX0ZBVEFM
+Owo+PiAgCQkJCWdvdG8gZXJyb3I7Cj4+IEBAIC0xMjE2LDcgKzEyMTcsOCBAQCBpbnQgY21kX2Vu
+YWJsZV9ldmVudChzdHJ1Y3QgbHR0X3Nlc3Npb24gKnNlc3Npb24sIHN0cnVjdCBsdHRuZ19kb21h
+aW4gKmRvbWFpbiwKPj4gIAkJCQljaGFubmVsX25hbWUpOwo+PiAgCQlpZiAodWNoYW4gPT0gTlVM
+TCkgewo+PiAgCQkJLyogQ3JlYXRlIGRlZmF1bHQgY2hhbm5lbCAqLwo+PiAtCQkJYXR0ciA9IGNo
+YW5uZWxfbmV3X2RlZmF1bHRfYXR0cihMVFROR19ET01BSU5fVVNUKTsKPj4gKwkJCWF0dHIgPSBj
+aGFubmVsX25ld19kZWZhdWx0X2F0dHIoTFRUTkdfRE9NQUlOX1VTVCwKPj4gKwkJCQkJdXNlc3Mt
+PmJ1ZmZlcl90eXBlKTsKPj4gIAkJCWlmIChhdHRyID09IE5VTEwpIHsKPj4gIAkJCQlyZXQgPSBM
+VFROR19FUlJfRkFUQUw7Cj4+ICAJCQkJZ290byBlcnJvcjsKPj4gQEAgLTEyODYsNyArMTI4OCw4
+IEBAIGludCBjbWRfZW5hYmxlX2V2ZW50X2FsbChzdHJ1Y3QgbHR0X3Nlc3Npb24gKnNlc3Npb24s
+Cj4+ICAJCQkJc2Vzc2lvbi0+a2VybmVsX3Nlc3Npb24pOwo+PiAgCQlpZiAoa2NoYW4gPT0gTlVM
+TCkgewo+PiAgCQkJLyogQ3JlYXRlIGRlZmF1bHQgY2hhbm5lbCAqLwo+PiAtCQkJYXR0ciA9IGNo
+YW5uZWxfbmV3X2RlZmF1bHRfYXR0cihMVFROR19ET01BSU5fS0VSTkVMKTsKPj4gKwkJCWF0dHIg
+PSBjaGFubmVsX25ld19kZWZhdWx0X2F0dHIoTFRUTkdfRE9NQUlOX0tFUk5FTCwKPj4gKwkJCQkJ
+TFRUTkdfQlVGRkVSX0dMT0JBTCk7Cj4+ICAJCQlpZiAoYXR0ciA9PSBOVUxMKSB7Cj4+ICAJCQkJ
+cmV0ID0gTFRUTkdfRVJSX0ZBVEFMOwo+PiAgCQkJCWdvdG8gZXJyb3I7Cj4+IEBAIC0xMzUwLDcg
+KzEzNTMsOCBAQCBpbnQgY21kX2VuYWJsZV9ldmVudF9hbGwoc3RydWN0IGx0dF9zZXNzaW9uICpz
+ZXNzaW9uLAo+PiAgCQkJCWNoYW5uZWxfbmFtZSk7Cj4+ICAJCWlmICh1Y2hhbiA9PSBOVUxMKSB7
+Cj4+ICAJCQkvKiBDcmVhdGUgZGVmYXVsdCBjaGFubmVsICovCj4+IC0JCQlhdHRyID0gY2hhbm5l
+bF9uZXdfZGVmYXVsdF9hdHRyKExUVE5HX0RPTUFJTl9VU1QpOwo+PiArCQkJYXR0ciA9IGNoYW5u
+ZWxfbmV3X2RlZmF1bHRfYXR0cihMVFROR19ET01BSU5fVVNULAo+PiArCQkJCQl1c2Vzcy0+YnVm
+ZmVyX3R5cGUpOwo+PiAgCQkJaWYgKGF0dHIgPT0gTlVMTCkgewo+PiAgCQkJCXJldCA9IExUVE5H
+X0VSUl9GQVRBTDsKPj4gIAkJCQlnb3RvIGVycm9yOwo+PiBkaWZmIC0tZ2l0IGEvc3JjL2Jpbi9s
+dHRuZy1zZXNzaW9uZC90cmFjZS11c3QuYyBiL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvdHJhY2Ut
+dXN0LmMKPj4gaW5kZXggNzU5MmQ3Ny4uOGZiNjg1YyAxMDA2NDQKPj4gLS0tIGEvc3JjL2Jpbi9s
+dHRuZy1zZXNzaW9uZC90cmFjZS11c3QuYwo+PiArKysgYi9zcmMvYmluL2x0dG5nLXNlc3Npb25k
+L3RyYWNlLXVzdC5jCj4+IEBAIC0zODQsOCArMzg0LDggQEAgc3RydWN0IGx0dF91c3RfbWV0YWRh
+dGEgKnRyYWNlX3VzdF9jcmVhdGVfbWV0YWRhdGEoY2hhciAqcGF0aCkKPj4gIAlsdW0tPmF0dHIu
+b3ZlcndyaXRlID0gREVGQVVMVF9DSEFOTkVMX09WRVJXUklURTsKPj4gIAlsdW0tPmF0dHIuc3Vi
+YnVmX3NpemUgPSBkZWZhdWx0X2dldF9tZXRhZGF0YV9zdWJidWZfc2l6ZSgpOwo+PiAgCWx1bS0+
+YXR0ci5udW1fc3ViYnVmID0gREVGQVVMVF9NRVRBREFUQV9TVUJCVUZfTlVNOwo+PiAtCWx1bS0+
+YXR0ci5zd2l0Y2hfdGltZXJfaW50ZXJ2YWwgPSBERUZBVUxUX1VTVF9DSEFOTkVMX1NXSVRDSF9U
+SU1FUjsKPj4gLQlsdW0tPmF0dHIucmVhZF90aW1lcl9pbnRlcnZhbCA9IERFRkFVTFRfVVNUX0NI
+QU5ORUxfUkVBRF9USU1FUjsKPj4gKwlsdW0tPmF0dHIuc3dpdGNoX3RpbWVyX2ludGVydmFsID0g
+REVGQVVMVF9NRVRBREFUQV9TV0lUQ0hfVElNRVI7Cj4+ICsJbHVtLT5hdHRyLnJlYWRfdGltZXJf
+aW50ZXJ2YWwgPSBERUZBVUxUX01FVEFEQVRBX1JFQURfVElNRVI7Cj4+ICAJbHVtLT5hdHRyLm91
+dHB1dCA9IExUVE5HX1VTVF9NTUFQOwo+PiAgCj4+ICAJbHVtLT5oYW5kbGUgPSAtMTsKPj4gZGlm
+ZiAtLWdpdCBhL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvdXN0LWFwcC5jIGIvc3JjL2Jpbi9sdHRu
+Zy1zZXNzaW9uZC91c3QtYXBwLmMKPj4gaW5kZXggZTM2MjM4MS4uNTcxMDIyNiAxMDA2NDQKPj4g
+LS0tIGEvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC91c3QtYXBwLmMKPj4gKysrIGIvc3JjL2Jpbi9s
+dHRuZy1zZXNzaW9uZC91c3QtYXBwLmMKPj4gQEAgLTI1MjcsOCArMjUyNyw4IEBAIHN0YXRpYyBp
+bnQgY3JlYXRlX3VzdF9hcHBfbWV0YWRhdGEoc3RydWN0IHVzdF9hcHBfc2Vzc2lvbiAqdWFfc2Vz
+cywKPj4gIAkJbWV0YWRhdGEtPmF0dHIub3ZlcndyaXRlID0gREVGQVVMVF9DSEFOTkVMX09WRVJX
+UklURTsKPj4gIAkJbWV0YWRhdGEtPmF0dHIuc3ViYnVmX3NpemUgPSBkZWZhdWx0X2dldF9tZXRh
+ZGF0YV9zdWJidWZfc2l6ZSgpOwo+PiAgCQltZXRhZGF0YS0+YXR0ci5udW1fc3ViYnVmID0gREVG
+QVVMVF9NRVRBREFUQV9TVUJCVUZfTlVNOwo+PiAtCQltZXRhZGF0YS0+YXR0ci5zd2l0Y2hfdGlt
+ZXJfaW50ZXJ2YWwgPSBERUZBVUxUX1VTVF9DSEFOTkVMX1NXSVRDSF9USU1FUjsKPj4gLQkJbWV0
+YWRhdGEtPmF0dHIucmVhZF90aW1lcl9pbnRlcnZhbCA9IERFRkFVTFRfVVNUX0NIQU5ORUxfUkVB
+RF9USU1FUjsKPj4gKwkJbWV0YWRhdGEtPmF0dHIuc3dpdGNoX3RpbWVyX2ludGVydmFsID0gREVG
+QVVMVF9NRVRBREFUQV9TV0lUQ0hfVElNRVI7Cj4+ICsJCW1ldGFkYXRhLT5hdHRyLnJlYWRfdGlt
+ZXJfaW50ZXJ2YWwgPSBERUZBVUxUX01FVEFEQVRBX1JFQURfVElNRVI7Cj4+ICAJCW1ldGFkYXRh
+LT5hdHRyLm91dHB1dCA9IExUVE5HX1VTVF9NTUFQOwo+PiAgCQltZXRhZGF0YS0+YXR0ci50eXBl
+ID0gTFRUTkdfVVNUX0NIQU5fTUVUQURBVEE7Cj4+ICAJfSBlbHNlIHsKPj4gZGlmZiAtLWdpdCBh
+L3NyYy9iaW4vbHR0bmcvY29tbWFuZHMvZW5hYmxlX2NoYW5uZWxzLmMgYi9zcmMvYmluL2x0dG5n
+L2NvbW1hbmRzL2VuYWJsZV9jaGFubmVscy5jCj4+IGluZGV4IDQ4MTZkNjIuLmM3YmJjYTEgMTAw
+NjQ0Cj4+IC0tLSBhL3NyYy9iaW4vbHR0bmcvY29tbWFuZHMvZW5hYmxlX2NoYW5uZWxzLmMKPj4g
+KysrIGIvc3JjL2Jpbi9sdHRuZy9jb21tYW5kcy9lbmFibGVfY2hhbm5lbHMuYwo+PiBAQCAtMTA0
+LDI4ICsxMDQsNDAgQEAgc3RhdGljIHZvaWQgdXNhZ2UoRklMRSAqb2ZwKQo+PiAgCWZwcmludGYo
+b2ZwLCAiICAgICAgLS1vdmVyd3JpdGUgICAgICAgICAgRmxpZ2h0IHJlY29yZGVyIG1vZGUlc1xu
+IiwKPj4gIAkJREVGQVVMVF9DSEFOTkVMX09WRVJXUklURSA/ICIgKGRlZmF1bHQpIiA6ICIiKTsK
+Pj4gIAlmcHJpbnRmKG9mcCwgIiAgICAgIC0tc3ViYnVmLXNpemUgU0laRSAgIFN1YmJ1ZmZlciBz
+aXplIGluIGJ5dGVzIHsraywrTSwrR31cbiIpOwo+PiAtCWZwcmludGYob2ZwLCAiICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgIChkZWZhdWx0OiAlenUsIGtlcm5lbCBkZWZhdWx0OiAlenUp
+XG4iLAo+PiAtCQlkZWZhdWx0X2dldF9jaGFubmVsX3N1YmJ1Zl9zaXplKCksCj4+ICsJZnByaW50
+ZihvZnAsICIgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgKGRlZmF1bHQgVVNUIHVpZDog
+JXp1LCBVU1QgcGlkOiAlenUsIGtlcm5lbDogJXp1KVxuIiwKPj4gKwkJZGVmYXVsdF9nZXRfdXN0
+X3VpZF9jaGFubmVsX3N1YmJ1Zl9zaXplKCksCj4+ICsJCWRlZmF1bHRfZ2V0X3VzdF9waWRfY2hh
+bm5lbF9zdWJidWZfc2l6ZSgpLAo+PiAgCQlkZWZhdWx0X2dldF9rZXJuZWxfY2hhbm5lbF9zdWJi
+dWZfc2l6ZSgpKTsKPj4gIAlmcHJpbnRmKG9mcCwgIiAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICBSb3VuZGVkIHVwIHRvIHRoZSBuZXh0IHBvd2VyIG9mIDIuXG4iKTsKPj4gIAlmcHJpbnRm
+KG9mcCwgIiAgICAgIC0tbnVtLXN1YmJ1ZiBOVU0gICAgIE51bWJlciBvZiBzdWJidWZlcnNcbiIp
+Owo+PiAtCWZwcmludGYob2ZwLCAiICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIChkZWZh
+dWx0OiAldSlcbiIsCj4+IC0JCURFRkFVTFRfQ0hBTk5FTF9TVUJCVUZfTlVNKTsKPj4gKwlmcHJp
+bnRmKG9mcCwgIiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAoZGVmYXVsdCBVU1QgdWlk
+OiAldSwgVVNUIHBpZDogJXUsIGtlcm5lbDogJXUpXG4iLAo+PiArCQlERUZBVUxUX1VTVF9VSURf
+Q0hBTk5FTF9TVUJCVUZfTlVNLCBERUZBVUxUX1VTVF9QSURfQ0hBTk5FTF9TVUJCVUZfTlVNLAo+
+PiArCQlERUZBVUxUX0tFUk5FTF9DSEFOTkVMX1NVQkJVRl9OVU0pOwo+PiAgCWZwcmludGYob2Zw
+LCAiICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFJvdW5kZWQgdXAgdG8gdGhlIG5leHQg
+cG93ZXIgb2YgMi5cbiIpOwo+PiAtCWZwcmludGYob2ZwLCAiICAgICAgLS1zd2l0Y2gtdGltZXIg
+VVNFQyAgU3dpdGNoIHRpbWVyIGludGVydmFsIGluIHVzZWMgKGRlZmF1bHQ6ICV1KVxuIiwKPj4g
+LQkJREVGQVVMVF9DSEFOTkVMX1NXSVRDSF9USU1FUik7Cj4+IC0JZnByaW50ZihvZnAsICIgICAg
+ICAtLXJlYWQtdGltZXIgVVNFQyAgICBSZWFkIHRpbWVyIGludGVydmFsIGluIHVzZWMgKFVTVCBk
+ZWZhdWx0OiAldSwga2VybmVsIGRlZmF1bHQ6ICV1KVxuIiwKPj4gLQkJREVGQVVMVF9VU1RfQ0hB
+Tk5FTF9SRUFEX1RJTUVSLCBERUZBVUxUX0tFUk5FTF9DSEFOTkVMX1JFQURfVElNRVIpOwo+PiAr
+CWZwcmludGYob2ZwLCAiICAgICAgLS1zd2l0Y2gtdGltZXIgVVNFQyAgU3dpdGNoIHRpbWVyIGlu
+dGVydmFsIGluIHVzZWNcbiIpOwo+PiArCWZwcmludGYob2ZwLCAiICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIChkZWZhdWx0IFVTVCB1aWQ6ICV1LCBVU1QgcGlkOiAldSwga2VybmVsOiAl
+dSlcbiIsCj4+ICsJCURFRkFVTFRfVVNUX1VJRF9DSEFOTkVMX1NXSVRDSF9USU1FUiwgREVGQVVM
+VF9VU1RfUElEX0NIQU5ORUxfU1dJVENIX1RJTUVSLAo+PiArCQlERUZBVUxUX0tFUk5FTF9DSEFO
+TkVMX1NXSVRDSF9USU1FUik7Cj4+ICsJZnByaW50ZihvZnAsICIgICAgICAtLXJlYWQtdGltZXIg
+VVNFQyAgICBSZWFkIHRpbWVyIGludGVydmFsIGluIHVzZWMuXG4iKTsKPj4gKwlmcHJpbnRmKG9m
+cCwgIiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAoZGVmYXVsdCBVU1QgdWlkOiAldSwg
+VVNUIHBpZDogJXUsIGtlcm5lbDogJXUpXG4iLAo+PiArCQlERUZBVUxUX1VTVF9VSURfQ0hBTk5F
+TF9SRUFEX1RJTUVSLCBERUZBVUxUX1VTVF9VSURfQ0hBTk5FTF9SRUFEX1RJTUVSLAo+PiArCQlE
+RUZBVUxUX0tFUk5FTF9DSEFOTkVMX1JFQURfVElNRVIpOwo+PiAgCWZwcmludGYob2ZwLCAiICAg
+ICAgLS1vdXRwdXQgVFlQRSAgICAgICAgQ2hhbm5lbCBvdXRwdXQgdHlwZSAoVmFsdWVzOiAlcywg
+JXMpXG4iLAo+PiAgCQkJb3V0cHV0X21tYXAsIG91dHB1dF9zcGxpY2UpOwo+PiArCWZwcmludGYo
+b2ZwLCAiICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIChkZWZhdWx0IFVTVCB1aWQ6ICVz
+LCBVU1QgcGlkOiAlcywga2VybmVsOiAlcylcbiIsCj4+ICsJCQlERUZBVUxUX1VTVF9VSURfQ0hB
+Tk5FTF9PVVRQVVQgPT0gTFRUTkdfRVZFTlRfTU1BUCA/IG91dHB1dF9tbWFwIDogb3V0cHV0X3Nw
+bGljZSwKPj4gKwkJCURFRkFVTFRfVVNUX1BJRF9DSEFOTkVMX09VVFBVVCA9PSBMVFROR19FVkVO
+VF9NTUFQID8gb3V0cHV0X21tYXAgOiBvdXRwdXRfc3BsaWNlLAo+PiArCQkJREVGQVVMVF9LRVJO
+RUxfQ0hBTk5FTF9PVVRQVVQgPT0gTFRUTkdfRVZFTlRfTU1BUCA/IG91dHB1dF9tbWFwIDogb3V0
+cHV0X3NwbGljZSk7Cj4+ICAJZnByaW50ZihvZnAsICIgICAgICAtLWJ1ZmZlcnMtdWlkICAgICAg
+ICBVc2UgcGVyIFVJRCBidWZmZXIgKC11IG9ubHkpXG4iKTsKPj4gIAlmcHJpbnRmKG9mcCwgIiAg
+ICAgIC0tYnVmZmVycy1waWQgICAgICAgIFVzZSBwZXIgUElEIGJ1ZmZlciAoLXUgb25seSlcbiIp
+Owo+PiAgCWZwcmludGYob2ZwLCAiICAgICAgLS1idWZmZXJzLWdsb2JhbCAgICAgVXNlIHNoYXJl
+ZCBidWZmZXIgZm9yIHRoZSB3aG9sZSBzeXN0ZW0gKC1rIG9ubHkpXG4iKTsKPj4gIAlmcHJpbnRm
+KG9mcCwgIiAgLUMsIC0tdHJhY2VmaWxlLXNpemUgU0laRVxuIik7Cj4+IC0JZnByaW50ZihvZnAs
+ICIgICAgICAgICAgICAgICAgICAgICAgICAgICBNYXhpbXVtIHNpemUgb2YgZWFjaCB0cmFjZWZp
+bGUgd2l0aGluIGEgc3RyZWFtIChpbiBieXRlcykuXG4iKTsKPj4gKwlmcHJpbnRmKG9mcCwgIiAg
+ICAgICAgICAgICAgICAgICAgICAgICAgIE1heGltdW0gc2l6ZSBvZiBlYWNoIHRyYWNlZmlsZSB3
+aXRoaW4gYSBzdHJlYW0gKGluIGJ5dGVzKS4gMCBtZWFucyB1bmxpbWl0ZWQuXG4iKTsKPj4gKwlm
+cHJpbnRmKG9mcCwgIiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAoZGVmYXVsdDogJXUp
+XG4iLCBERUZBVUxUX0NIQU5ORUxfVFJBQ0VGSUxFX1NJWkUpOwo+PiAgCWZwcmludGYob2ZwLCAi
+ICAtVywgLS10cmFjZWZpbGUtY291bnQgQ09VTlRcbiIpOwo+PiAgCWZwcmludGYob2ZwLCAiICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgVXNlZCBpbiBjb25qdW5jdGlvbiB3aXRoIC1DIG9wdGlv
+biwgdGhpcyB3aWxsIGxpbWl0IHRoZSBudW1iZXJcbiIpOwo+PiAtCWZwcmludGYob2ZwLCAiICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgb2YgZmlsZXMgY3JlYXRlZCB0byB0aGUgc3BlY2lmaWVk
+IGNvdW50LlxuIik7Cj4+ICsJZnByaW50ZihvZnAsICIgICAgICAgICAgICAgICAgICAgICAgICAg
+ICBvZiBmaWxlcyBjcmVhdGVkIHRvIHRoZSBzcGVjaWZpZWQgY291bnQuIDAgbWVhbnMgdW5saW1p
+dGVkLlxuIik7Cj4+ICsJZnByaW50ZihvZnAsICIgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgKGRlZmF1bHQ6ICV1KVxuIiwgREVGQVVMVF9DSEFOTkVMX1RSQUNFRklMRV9DT1VOVCk7Cj4+
+ICAJZnByaW50ZihvZnAsICJcbiIpOwo+PiAgfQo+PiAgCj4+IGRpZmYgLS1naXQgYS9zcmMvY29t
+bW9uL2RlZmF1bHRzLmMgYi9zcmMvY29tbW9uL2RlZmF1bHRzLmMKPj4gaW5kZXggY2NkYmFmNC4u
+ZDc0YTQyYiAxMDA2NDQKPj4gLS0tIGEvc3JjL2NvbW1vbi9kZWZhdWx0cy5jCj4+ICsrKyBiL3Ny
+Yy9jb21tb24vZGVmYXVsdHMuYwo+PiBAQCAtMjQsNyArMjQsOCBAQAo+PiAgc2l6ZV90IGRlZmF1
+bHRfY2hhbm5lbF9zdWJidWZfc2l6ZTsKPj4gIHNpemVfdCBkZWZhdWx0X21ldGFkYXRhX3N1YmJ1
+Zl9zaXplOwo+PiAgc2l6ZV90IGRlZmF1bHRfa2VybmVsX2NoYW5uZWxfc3ViYnVmX3NpemU7Cj4+
+IC1zaXplX3QgZGVmYXVsdF91c3RfY2hhbm5lbF9zdWJidWZfc2l6ZTsKPj4gK3NpemVfdCBkZWZh
+dWx0X3VzdF9waWRfY2hhbm5lbF9zdWJidWZfc2l6ZTsKPj4gK3NpemVfdCBkZWZhdWx0X3VzdF91
+aWRfY2hhbm5lbF9zdWJidWZfc2l6ZTsKPj4gIAo+PiAgc3RhdGljIHZvaWQgX19hdHRyaWJ1dGVf
+XygoY29uc3RydWN0b3IpKSBpbml0X2RlZmF1bHRzKHZvaWQpCj4+ICB7Cj4+IEBAIC0zOSwxMSAr
+NDAsMTMgQEAgc3RhdGljIHZvaWQgX19hdHRyaWJ1dGVfXygoY29uc3RydWN0b3IpKSBpbml0X2Rl
+ZmF1bHRzKHZvaWQpCj4+ICAJfQo+PiAgCj4+ICAJZGVmYXVsdF9jaGFubmVsX3N1YmJ1Zl9zaXpl
+ID0KPj4gLQkJbWF4KERFRkFVTFRfQ0hBTk5FTF9TVUJCVUZfU0laRSwgcGFnZV9zaXplKTsKPj4g
+KwkJbWF4KF9ERUZBVUxUX0NIQU5ORUxfU1VCQlVGX1NJWkUsIHBhZ2Vfc2l6ZSk7Cj4+ICAJZGVm
+YXVsdF9tZXRhZGF0YV9zdWJidWZfc2l6ZSA9Cj4+ICAJCW1heChERUZBVUxUX01FVEFEQVRBX1NV
+QkJVRl9TSVpFLCBwYWdlX3NpemUpOwo+PiAgCWRlZmF1bHRfa2VybmVsX2NoYW5uZWxfc3ViYnVm
+X3NpemUgPQo+PiAgCQltYXgoREVGQVVMVF9LRVJORUxfQ0hBTk5FTF9TVUJCVUZfU0laRSwgcGFn
+ZV9zaXplKTsKPj4gLQlkZWZhdWx0X3VzdF9jaGFubmVsX3N1YmJ1Zl9zaXplID0KPj4gLQkJbWF4
+KERFRkFVTFRfVVNUX0NIQU5ORUxfU1VCQlVGX1NJWkUsIHBhZ2Vfc2l6ZSk7Cj4+ICsJZGVmYXVs
+dF91c3RfcGlkX2NoYW5uZWxfc3ViYnVmX3NpemUgPQo+PiArCQltYXgoREVGQVVMVF9VU1RfUElE
+X0NIQU5ORUxfU1VCQlVGX1NJWkUsIHBhZ2Vfc2l6ZSk7Cj4+ICsJZGVmYXVsdF91c3RfdWlkX2No
+YW5uZWxfc3ViYnVmX3NpemUgPQo+PiArCQltYXgoREVGQVVMVF9VU1RfVUlEX0NIQU5ORUxfU1VC
+QlVGX1NJWkUsIHBhZ2Vfc2l6ZSk7Cj4+ICB9Cj4+IGRpZmYgLS1naXQgYS9zcmMvY29tbW9uL2Rl
+ZmF1bHRzLmggYi9zcmMvY29tbW9uL2RlZmF1bHRzLmgKPj4gaW5kZXggZmI2YTk3NS4uMmM3MzI3
+NyAxMDA2NDQKPj4gLS0tIGEvc3JjL2NvbW1vbi9kZWZhdWx0cy5oCj4+ICsrKyBiL3NyYy9jb21t
+b24vZGVmYXVsdHMuaAo+PiBAQCAtMTEyLDU1ICsxMTIsNTcgQEAKPj4gIAo+PiAgLyogRGVmYXVs
+dCBjaGFubmVsIGF0dHJpYnV0ZXMgKi8KPj4gICNkZWZpbmUgREVGQVVMVF9DSEFOTkVMX05BTUUg
+ICAgICAgICAgICAiY2hhbm5lbDAiCj4+IC0jZGVmaW5lIERFRkFVTFRfQ0hBTk5FTF9PVkVSV1JJ
+VEUgICAgICAgMCAgICAgICAvKiB1c2VjICovCj4+IC0vKiBERUZBVUxUX0NIQU5ORUxfU1VCQlVG
+X1NJWkUgbXVzdCBhbHdheXMgYmUgYSBwb3dlciBvZiAyICovCj4+IC0jZGVmaW5lIERFRkFVTFRf
+Q0hBTk5FTF9TVUJCVUZfU0laRSAgICAgNDA5NiAgICAvKiBieXRlcyAqLwo+PiAtLyogREVGQVVM
+VF9DSEFOTkVMX1NVQkJVRl9OVU0gbXVzdCBhbHdheXMgYmUgYSBwb3dlciBvZiAyICovCj4+IC0j
+ZGVmaW5lIERFRkFVTFRfQ0hBTk5FTF9TVUJCVUZfTlVNICAgICAgNAo+PiAtI2RlZmluZSBERUZB
+VUxUX0NIQU5ORUxfU1dJVENIX1RJTUVSICAgIDAgICAgICAgLyogdXNlYyAqLwo+PiAtI2RlZmlu
+ZSBERUZBVUxUX0NIQU5ORUxfUkVBRF9USU1FUiAgICAgIDIwMDAwMCAgLyogdXNlYyAqLwo+PiAt
+I2RlZmluZSBERUZBVUxUX0NIQU5ORUxfT1VUUFVUICAgICAgICAgIExUVE5HX0VWRU5UX01NQVAK
+Pj4gLQo+PiArI2RlZmluZSBERUZBVUxUX0NIQU5ORUxfT1ZFUldSSVRFICAgICAgIDAKPj4gKyNk
+ZWZpbmUgREVGQVVMVF9DSEFOTkVMX1RSQUNFRklMRV9TSVpFICAwCj4+ICsjZGVmaW5lIERFRkFV
+TFRfQ0hBTk5FTF9UUkFDRUZJTEVfQ09VTlQgMAo+PiArCj4+ICsvKiBNdXN0IGFsd2F5cyBiZSBh
+IHBvd2VyIG9mIDIgKi8KPj4gKyNkZWZpbmUgX0RFRkFVTFRfQ0hBTk5FTF9TVUJCVUZfU0laRQk0
+MDk2ICAgIC8qIGJ5dGVzICovCj4+ICsvKiBNdXN0IGFsd2F5cyBiZSBhIHBvd2VyIG9mIDIgKi8K
+Pj4gKyNkZWZpbmUgX0RFRkFVTFRfQ0hBTk5FTF9TVUJCVUZfTlVNCQk0Cj4+ICsjZGVmaW5lIF9E
+RUZBVUxUX0NIQU5ORUxfU1dJVENIX1RJTUVSCTAgICAgICAgLyogdXNlYyAqLwo+PiArI2RlZmlu
+ZSBfREVGQVVMVF9DSEFOTkVMX1JFQURfVElNRVIJCTIwMDAwMCAgLyogdXNlYyAqLwo+PiArI2Rl
+ZmluZSBfREVGQVVMVF9DSEFOTkVMX09VVFBVVAkJCUxUVE5HX0VWRU5UX01NQVAKPj4gKwo+PiAr
+LyogTWV0YWRhdGEgY2hhbm5lbCBkZWZhdWx0cy4gKi8KPj4gICNkZWZpbmUgREVGQVVMVF9NRVRB
+REFUQV9TVUJCVUZfU0laRSAgICA0MDk2Cj4+ICAjZGVmaW5lIERFRkFVTFRfTUVUQURBVEFfU1VC
+QlVGX05VTSAgICAgMgo+PiAgI2RlZmluZSBERUZBVUxUX01FVEFEQVRBX0NBQ0hFX1NJWkUgICAg
+IDQwOTYKPj4gKyNkZWZpbmUgREVGQVVMVF9NRVRBREFUQV9TV0lUQ0hfVElNRVIJX0RFRkFVTFRf
+Q0hBTk5FTF9TV0lUQ0hfVElNRVIKPj4gKyNkZWZpbmUgREVGQVVMVF9NRVRBREFUQV9SRUFEX1RJ
+TUVSCQlfREVGQVVMVF9DSEFOTkVMX1JFQURfVElNRVIKPj4gKyNkZWZpbmUgREVGQVVMVF9NRVRB
+REFUQV9PVVRQVVQJCQlfREVGQVVMVF9DSEFOTkVMX09VVFBVVAo+PiAgCj4+ICAvKiBLZXJuZWwg
+aGFzIGRpZmZlcmVudCBkZWZhdWx0cyAqLwo+PiAgCj4+ICAvKiBERUZBVUxUX0tFUk5FTF9DSEFO
+TkVMX1NVQkJVRl9TSVpFIG11c3QgYWx3YXlzIGJlIGEgcG93ZXIgb2YgMiAqLwo+PiAtI2RlZmlu
+ZSBERUZBVUxUX0tFUk5FTF9DSEFOTkVMX1NVQkJVRl9TSVpFICAyNjIxNDQgICAgLyogYnl0ZXMg
+Ki8KPj4gKyNkZWZpbmUgREVGQVVMVF9LRVJORUxfQ0hBTk5FTF9TVUJCVUZfU0laRQkJMjYyMTQ0
+ICAgIC8qIGJ5dGVzICovCj4+ICAvKgo+PiAgICogREVGQVVMVF9LRVJORUxfQ0hBTk5FTF9TVUJC
+VUZfTlVNIG11c3QgYWx3YXlzIGJlIGEgcG93ZXIgb2YgMi4KPj4gICAqIFVwZGF0ZSBoZWxwIG1h
+bnVhbGx5IGlmIG92ZXJyaWRlLgo+PiAgICovCj4+IC0jZGVmaW5lIERFRkFVTFRfS0VSTkVMX0NI
+QU5ORUxfU1VCQlVGX05VTSAgIERFRkFVTFRfQ0hBTk5FTF9TVUJCVUZfTlVNCj4+ICsjZGVmaW5l
+IERFRkFVTFRfS0VSTkVMX0NIQU5ORUxfU1VCQlVGX05VTQkJX0RFRkFVTFRfQ0hBTk5FTF9TVUJC
+VUZfTlVNCj4+ICAvKiBTZWUgbHR0bmcta2VybmVsLmggZW51bSBsdHRuZ19rZXJuZWxfb3V0cHV0
+IGZvciBjaGFubmVsIG91dHB1dCAqLwo+PiAtI2RlZmluZSBERUZBVUxUX0tFUk5FTF9DSEFOTkVM
+X09VVFBVVCAgICAgICBMVFROR19FVkVOVF9TUExJQ0UKPj4gLS8qIEJ5IGRlZmF1bHQsIHVubGlt
+aXRlZCB0cmFjZWZpbGUgc2l6ZSAqLwo+PiAtI2RlZmluZSBERUZBVUxUX0tFUk5FTF9DSEFOTkVM
+X1RSQUNFRklMRV9TSVpFICAwCj4+IC0vKiBCeSBkZWZhdWx0LCB1bmxpbWl0ZWQgdHJhY2VmaWxl
+IGNvdW50ICovCj4+IC0jZGVmaW5lIERFRkFVTFRfS0VSTkVMX0NIQU5ORUxfVFJBQ0VGSUxFX0NP
+VU5UIDAKPj4gLQo+PiAtI2RlZmluZSBERUZBVUxUX0tFUk5FTF9DSEFOTkVMX1NXSVRDSF9USU1F
+UglcCj4+IC0JCURFRkFVTFRfQ0hBTk5FTF9TV0lUQ0hfVElNRVIKPj4gLSNkZWZpbmUgREVGQVVM
+VF9LRVJORUxfQ0hBTk5FTF9SRUFEX1RJTUVSICAgICAgMjAwMDAwICAvKiB1c2VjICovCj4+ICsj
+ZGVmaW5lIERFRkFVTFRfS0VSTkVMX0NIQU5ORUxfT1VUUFVUCQkJTFRUTkdfRVZFTlRfU1BMSUNF
+Cj4+ICsjZGVmaW5lIERFRkFVTFRfS0VSTkVMX0NIQU5ORUxfU1dJVENIX1RJTUVSCQlfREVGQVVM
+VF9DSEFOTkVMX1NXSVRDSF9USU1FUgo+PiArI2RlZmluZSBERUZBVUxUX0tFUk5FTF9DSEFOTkVM
+X1JFQURfVElNRVIJCV9ERUZBVUxUX0NIQU5ORUxfUkVBRF9USU1FUgo+PiAgCj4+ICAvKiBVc2Vy
+IHNwYWNlIGRlZmF1bHRzICovCj4+ICAKPj4gIC8qIE11c3QgYmUgYSBwb3dlciBvZiAyICovCj4+
+IC0jZGVmaW5lIERFRkFVTFRfVVNUX0NIQU5ORUxfU1VCQlVGX1NJWkUgICAgIDQwOTYgICAgLyog
+Ynl0ZXMgKi8KPj4gKyNkZWZpbmUgREVGQVVMVF9VU1RfUElEX0NIQU5ORUxfU1VCQlVGX1NJWkUJ
+CV9ERUZBVUxUX0NIQU5ORUxfU1VCQlVGX1NJWkUKPj4gKyNkZWZpbmUgREVGQVVMVF9VU1RfVUlE
+X0NIQU5ORUxfU1VCQlVGX1NJWkUJCTEzMTA3MiAgLyogYnl0ZXMgKi8KPj4gIC8qIE11c3QgYmUg
+YSBwb3dlciBvZiAyLiBVcGRhdGUgaGVscCBtYW51YWxsIGlmIG92ZXJyaWRlLiAqLwo+PiAtI2Rl
+ZmluZSBERUZBVUxUX1VTVF9DSEFOTkVMX1NVQkJVRl9OVU0gICAgICBERUZBVUxUX0NIQU5ORUxf
+U1VCQlVGX05VTQo+PiArI2RlZmluZSBERUZBVUxUX1VTVF9QSURfQ0hBTk5FTF9TVUJCVUZfTlVN
+CQlfREVGQVVMVF9DSEFOTkVMX1NVQkJVRl9OVU0KPj4gKyNkZWZpbmUgREVGQVVMVF9VU1RfVUlE
+X0NIQU5ORUxfU1VCQlVGX05VTQkJX0RFRkFVTFRfQ0hBTk5FTF9TVUJCVUZfTlVNCj4+ICAvKiBT
+ZWUgbHR0bmctdXN0LmggZW51bSBsdHRuZ191c3Rfb3V0cHV0ICovCj4+IC0jZGVmaW5lIERFRkFV
+TFRfVVNUX0NIQU5ORUxfT1VUUFVUICAgICAgICAgIExUVE5HX0VWRU5UX01NQVAKPj4gLS8qIEJ5
+IGRlZmF1bHQsIHVubGltaXRlZCB0cmFjZWZpbGUgc2l6ZSAqLwo+PiAtI2RlZmluZSBERUZBVUxU
+X1VTVF9DSEFOTkVMX1RSQUNFRklMRV9TSVpFICAwCj4+IC0vKiBCeSBkZWZhdWx0LCB1bmxpbWl0
+ZWQgdHJhY2VmaWxlIGNvdW50ICovCj4+IC0jZGVmaW5lIERFRkFVTFRfVVNUX0NIQU5ORUxfVFJB
+Q0VGSUxFX0NPVU5UIDAKPj4gKyNkZWZpbmUgREVGQVVMVF9VU1RfUElEX0NIQU5ORUxfT1VUUFVU
+CQkJX0RFRkFVTFRfQ0hBTk5FTF9PVVRQVVQKPj4gKyNkZWZpbmUgREVGQVVMVF9VU1RfVUlEX0NI
+QU5ORUxfT1VUUFVUCQkJX0RFRkFVTFRfQ0hBTk5FTF9PVVRQVVQKPj4gKy8qIFRpbWVycyBpbiB1
+c2VjLiAqLwo+PiArI2RlZmluZSBERUZBVUxUX1VTVF9QSURfQ0hBTk5FTF9TV0lUQ0hfVElNRVIJ
+X0RFRkFVTFRfQ0hBTk5FTF9TV0lUQ0hfVElNRVIKPj4gKyNkZWZpbmUgREVGQVVMVF9VU1RfVUlE
+X0NIQU5ORUxfU1dJVENIX1RJTUVSCV9ERUZBVUxUX0NIQU5ORUxfU1dJVENIX1RJTUVSCj4+ICAK
+Pj4gLSNkZWZpbmUgREVGQVVMVF9VU1RfQ0hBTk5FTF9TV0lUQ0hfVElNRVIJXAo+PiAtCQlERUZB
+VUxUX0NIQU5ORUxfU1dJVENIX1RJTUVSCj4+IC0jZGVmaW5lIERFRkFVTFRfVVNUX0NIQU5ORUxf
+UkVBRF9USU1FUiAgICAgIDAgIC8qIHVzZWMgKi8KPj4gKyNkZWZpbmUgREVGQVVMVF9VU1RfUElE
+X0NIQU5ORUxfUkVBRF9USU1FUiAgICAgIDAgIC8qIHVzZWMgKi8KPj4gKyNkZWZpbmUgREVGQVVM
+VF9VU1RfVUlEX0NIQU5ORUxfUkVBRF9USU1FUiAgICAgIDAgIC8qIHVzZWMgKi8KPj4gIAo+PiAg
+LyoKPj4gICAqIERlZmF1bHQgdGltZW91dCB2YWx1ZSBmb3IgdGhlIHNlbV90aW1lZHdhaXQoKSBj
+YWxsLiBCbG9ja2luZyBmb3JldmVyIGlzIG5vdAo+PiBAQCAtMjAyLDEwICsyMDQsMTAgQEAKPj4g
+IAo+PiAgZXh0ZXJuIHNpemVfdCBkZWZhdWx0X2NoYW5uZWxfc3ViYnVmX3NpemU7Cj4+ICBleHRl
+cm4gc2l6ZV90IGRlZmF1bHRfbWV0YWRhdGFfc3ViYnVmX3NpemU7Cj4+IC1leHRlcm4gc2l6ZV90
+IGRlZmF1bHRfdXN0X2NoYW5uZWxfc3ViYnVmX3NpemU7Cj4+ICtleHRlcm4gc2l6ZV90IGRlZmF1
+bHRfdXN0X3BpZF9jaGFubmVsX3N1YmJ1Zl9zaXplOwo+PiArZXh0ZXJuIHNpemVfdCBkZWZhdWx0
+X3VzdF91aWRfY2hhbm5lbF9zdWJidWZfc2l6ZTsKPj4gIGV4dGVybiBzaXplX3QgZGVmYXVsdF9r
+ZXJuZWxfY2hhbm5lbF9zdWJidWZfc2l6ZTsKPj4gIAo+PiAtCj4+ICAvKgo+PiAgICogUmV0dXJu
+cyB0aGUgZGVmYXVsdCBzdWJidWYgc2l6ZS4KPj4gICAqCj4+IEBAIC0yNDMsMTUgKzI0NSwyNyBA
+QCBzaXplX3QgZGVmYXVsdF9nZXRfa2VybmVsX2NoYW5uZWxfc3ViYnVmX3NpemUodm9pZCkKPj4g
+IH0KPj4gIAo+PiAgLyoKPj4gLSAqIFJldHVybnMgdGhlIGRlZmF1bHQgc3ViYnVmIHNpemUgZm9y
+IHRoZSBVU1QgZG9tYWluLgo+PiArICogUmV0dXJucyB0aGUgZGVmYXVsdCBzdWJidWYgc2l6ZSBm
+b3IgdGhlIFVTVCBkb21haW4gcGVyIFBJRC4KPj4gKyAqCj4+ICsgKiBUaGlzIGZ1bmN0aW9uIGRl
+cGVuZHMgb24gYSB2YWx1ZSB0aGF0IGlzIHNldCBhdCBjb25zdHJ1Y3RvciB0aW1lLCBzbyBpdCBp
+cwo+PiArICogdW5zYWZlIHRvIGNhbGwgaXQgZnJvbSBhbm90aGVyIGNvbnN0cnVjdG9yLgo+PiAr
+ICovCj4+ICtzdGF0aWMgaW5saW5lCj4+ICtzaXplX3QgZGVmYXVsdF9nZXRfdXN0X3BpZF9jaGFu
+bmVsX3N1YmJ1Zl9zaXplKHZvaWQpCj4+ICt7Cj4+ICsJcmV0dXJuIGRlZmF1bHRfdXN0X3BpZF9j
+aGFubmVsX3N1YmJ1Zl9zaXplOwo+PiArfQo+PiArCj4+ICsvKgo+PiArICogUmV0dXJucyB0aGUg
+ZGVmYXVsdCBzdWJidWYgc2l6ZSBmb3IgdGhlIFVTVCBkb21haW4gcGVyIFVJRC4KPj4gICAqCj4+
+ICAgKiBUaGlzIGZ1bmN0aW9uIGRlcGVuZHMgb24gYSB2YWx1ZSB0aGF0IGlzIHNldCBhdCBjb25z
+dHJ1Y3RvciB0aW1lLCBzbyBpdCBpcwo+PiAgICogdW5zYWZlIHRvIGNhbGwgaXQgZnJvbSBhbm90
+aGVyIGNvbnN0cnVjdG9yLgo+PiAgICovCj4+ICBzdGF0aWMgaW5saW5lCj4+IC1zaXplX3QgZGVm
+YXVsdF9nZXRfdXN0X2NoYW5uZWxfc3ViYnVmX3NpemUodm9pZCkKPj4gK3NpemVfdCBkZWZhdWx0
+X2dldF91c3RfdWlkX2NoYW5uZWxfc3ViYnVmX3NpemUodm9pZCkKPj4gIHsKPj4gLQlyZXR1cm4g
+ZGVmYXVsdF91c3RfY2hhbm5lbF9zdWJidWZfc2l6ZTsKPj4gKwlyZXR1cm4gZGVmYXVsdF91c3Rf
+dWlkX2NoYW5uZWxfc3ViYnVmX3NpemU7Cj4+ICB9Cj4+ICAKPj4gICNlbmRpZiAvKiBfREVGQVVM
+VFNfSCAqLwo+PiBkaWZmIC0tZ2l0IGEvc3JjL2xpYi9sdHRuZy1jdGwvbHR0bmctY3RsLmMgYi9z
+cmMvbGliL2x0dG5nLWN0bC9sdHRuZy1jdGwuYwo+PiBpbmRleCAzNzg3ZTI5Li5hNzMyOGViIDEw
+MDY0NAo+PiAtLS0gYS9zcmMvbGliL2x0dG5nLWN0bC9sdHRuZy1jdGwuYwo+PiArKysgYi9zcmMv
+bGliL2x0dG5nLWN0bC9sdHRuZy1jdGwuYwo+PiBAQCAtMTM4NiwyOSArMTM4NiwzNyBAQCB2b2lk
+IGx0dG5nX2NoYW5uZWxfc2V0X2RlZmF1bHRfYXR0cihzdHJ1Y3QgbHR0bmdfZG9tYWluICpkb21h
+aW4sCj4+ICAKPj4gIAltZW1zZXQoYXR0ciwgMCwgc2l6ZW9mKHN0cnVjdCBsdHRuZ19jaGFubmVs
+X2F0dHIpKTsKPj4gIAo+PiArCS8qIFNhbWUgZm9yIGFsbCBkb21haW5zLiAqLwo+PiArCWF0dHIt
+Pm92ZXJ3cml0ZSA9IERFRkFVTFRfQ0hBTk5FTF9PVkVSV1JJVEU7Cj4+ICsJYXR0ci0+dHJhY2Vm
+aWxlX3NpemUgPSBERUZBVUxUX0NIQU5ORUxfVFJBQ0VGSUxFX1NJWkU7Cj4+ICsJYXR0ci0+dHJh
+Y2VmaWxlX2NvdW50ID0gREVGQVVMVF9DSEFOTkVMX1RSQUNFRklMRV9DT1VOVDsKPj4gKwo+PiAg
+CXN3aXRjaCAoZG9tYWluLT50eXBlKSB7Cj4+ICAJY2FzZSBMVFROR19ET01BSU5fS0VSTkVMOgo+
+PiAtCQlhdHRyLT5vdmVyd3JpdGUgPSBERUZBVUxUX0NIQU5ORUxfT1ZFUldSSVRFOwo+PiAgCQlh
+dHRyLT5zd2l0Y2hfdGltZXJfaW50ZXJ2YWwgPSBERUZBVUxUX0tFUk5FTF9DSEFOTkVMX1NXSVRD
+SF9USU1FUjsKPj4gIAkJYXR0ci0+cmVhZF90aW1lcl9pbnRlcnZhbCA9IERFRkFVTFRfS0VSTkVM
+X0NIQU5ORUxfUkVBRF9USU1FUjsKPj4gLQo+PiAgCQlhdHRyLT5zdWJidWZfc2l6ZSA9IGRlZmF1
+bHRfZ2V0X2tlcm5lbF9jaGFubmVsX3N1YmJ1Zl9zaXplKCk7Cj4+ICAJCWF0dHItPm51bV9zdWJi
+dWYgPSBERUZBVUxUX0tFUk5FTF9DSEFOTkVMX1NVQkJVRl9OVU07Cj4+ICAJCWF0dHItPm91dHB1
+dCA9IERFRkFVTFRfS0VSTkVMX0NIQU5ORUxfT1VUUFVUOwo+PiAtCQlhdHRyLT50cmFjZWZpbGVf
+c2l6ZSA9IERFRkFVTFRfS0VSTkVMX0NIQU5ORUxfVFJBQ0VGSUxFX1NJWkU7Cj4+IC0JCWF0dHIt
+PnRyYWNlZmlsZV9jb3VudCA9IERFRkFVTFRfS0VSTkVMX0NIQU5ORUxfVFJBQ0VGSUxFX0NPVU5U
+Owo+PiAgCQlicmVhazsKPj4gIAljYXNlIExUVE5HX0RPTUFJTl9VU1Q6Cj4+IC0JCWF0dHItPm92
+ZXJ3cml0ZSA9IERFRkFVTFRfQ0hBTk5FTF9PVkVSV1JJVEU7Cj4+IC0JCWF0dHItPnN3aXRjaF90
+aW1lcl9pbnRlcnZhbCA9IERFRkFVTFRfVVNUX0NIQU5ORUxfU1dJVENIX1RJTUVSOwo+PiAtCQlh
+dHRyLT5yZWFkX3RpbWVyX2ludGVydmFsID0gREVGQVVMVF9VU1RfQ0hBTk5FTF9SRUFEX1RJTUVS
+Owo+PiAtCj4+IC0JCWF0dHItPnN1YmJ1Zl9zaXplID0gZGVmYXVsdF9nZXRfdXN0X2NoYW5uZWxf
+c3ViYnVmX3NpemUoKTsKPj4gLQkJYXR0ci0+bnVtX3N1YmJ1ZiA9IERFRkFVTFRfVVNUX0NIQU5O
+RUxfU1VCQlVGX05VTTsKPj4gLQkJYXR0ci0+b3V0cHV0ID0gREVGQVVMVF9VU1RfQ0hBTk5FTF9P
+VVRQVVQ7Cj4+IC0JCWF0dHItPnRyYWNlZmlsZV9zaXplID0gREVGQVVMVF9VU1RfQ0hBTk5FTF9U
+UkFDRUZJTEVfU0laRTsKPj4gLQkJYXR0ci0+dHJhY2VmaWxlX2NvdW50ID0gREVGQVVMVF9VU1Rf
+Q0hBTk5FTF9UUkFDRUZJTEVfQ09VTlQ7Cj4+IC0JCWJyZWFrOwo+PiArCQlzd2l0Y2ggKGRvbWFp
+bi0+YnVmX3R5cGUpIHsKPj4gKwkJY2FzZSBMVFROR19CVUZGRVJfUEVSX1VJRDoKPj4gKwkJCWF0
+dHItPnN1YmJ1Zl9zaXplID0gZGVmYXVsdF9nZXRfdXN0X3VpZF9jaGFubmVsX3N1YmJ1Zl9zaXpl
+KCk7Cj4+ICsJCQlhdHRyLT5udW1fc3ViYnVmID0gREVGQVVMVF9VU1RfVUlEX0NIQU5ORUxfU1VC
+QlVGX05VTTsKPj4gKwkJCWF0dHItPm91dHB1dCA9IERFRkFVTFRfVVNUX1VJRF9DSEFOTkVMX09V
+VFBVVDsKPj4gKwkJCWF0dHItPnN3aXRjaF90aW1lcl9pbnRlcnZhbCA9IERFRkFVTFRfVVNUX1VJ
+RF9DSEFOTkVMX1NXSVRDSF9USU1FUjsKPj4gKwkJCWF0dHItPnJlYWRfdGltZXJfaW50ZXJ2YWwg
+PSBERUZBVUxUX1VTVF9VSURfQ0hBTk5FTF9SRUFEX1RJTUVSOwo+PiArCQkJYnJlYWs7Cj4+ICsJ
+CWNhc2UgTFRUTkdfQlVGRkVSX1BFUl9QSUQ6Cj4+ICsJCWRlZmF1bHQ6Cj4+ICsJCQlhdHRyLT5z
+dWJidWZfc2l6ZSA9IGRlZmF1bHRfZ2V0X3VzdF9waWRfY2hhbm5lbF9zdWJidWZfc2l6ZSgpOwo+
+PiArCQkJYXR0ci0+bnVtX3N1YmJ1ZiA9IERFRkFVTFRfVVNUX1BJRF9DSEFOTkVMX1NVQkJVRl9O
+VU07Cj4+ICsJCQlhdHRyLT5vdXRwdXQgPSBERUZBVUxUX1VTVF9QSURfQ0hBTk5FTF9PVVRQVVQ7
+Cj4+ICsJCQlhdHRyLT5zd2l0Y2hfdGltZXJfaW50ZXJ2YWwgPSBERUZBVUxUX1VTVF9QSURfQ0hB
+Tk5FTF9TV0lUQ0hfVElNRVI7Cj4+ICsJCQlhdHRyLT5yZWFkX3RpbWVyX2ludGVydmFsID0gREVG
+QVVMVF9VU1RfUElEX0NIQU5ORUxfUkVBRF9USU1FUjsKPj4gKwkJCWJyZWFrOwo+PiArCQl9Cj4+
+ICAJZGVmYXVsdDoKPj4gIAkJLyogRGVmYXVsdCBiZWhhdmlvcjogbGVhdmUgc2V0IHRvIDAuICov
+Cj4+ICAJCWJyZWFrOwo+PiBkaWZmIC0tZ2l0IGEvdGVzdHMvdW5pdC90ZXN0X3VzdF9kYXRhLmMg
+Yi90ZXN0cy91bml0L3Rlc3RfdXN0X2RhdGEuYwo+PiBpbmRleCBhNzllMmViLi5jNzlkYmY2IDEw
+MDY0NAo+PiAtLS0gYS90ZXN0cy91bml0L3Rlc3RfdXN0X2RhdGEuYwo+PiArKysgYi90ZXN0cy91
+bml0L3Rlc3RfdXN0X2RhdGEuYwo+PiBAQCAtMTExLDkgKzExMSw5IEBAIHN0YXRpYyB2b2lkIHRl
+c3RfY3JlYXRlX3VzdF9tZXRhZGF0YSh2b2lkKQo+PiAgCSAgIG1ldGFkYXRhLT5hdHRyLm51bV9z
+dWJidWYKPj4gIAkJCT09IERFRkFVTFRfTUVUQURBVEFfU1VCQlVGX05VTSAmJgo+PiAgCSAgIG1l
+dGFkYXRhLT5hdHRyLnN3aXRjaF90aW1lcl9pbnRlcnZhbAo+PiAtCQkJPT0gREVGQVVMVF9VU1Rf
+Q0hBTk5FTF9TV0lUQ0hfVElNRVIgJiYKPj4gKwkJCT09IERFRkFVTFRfTUVUQURBVEFfU1dJVENI
+X1RJTUVSICYmCj4+ICAJICAgbWV0YWRhdGEtPmF0dHIucmVhZF90aW1lcl9pbnRlcnZhbAo+PiAt
+CQkJPT0gREVGQVVMVF9VU1RfQ0hBTk5FTF9SRUFEX1RJTUVSICYmCj4+ICsJCQk9PSBERUZBVUxU
+X01FVEFEQVRBX1JFQURfVElNRVIgJiYKPj4gIAkgICBtZXRhZGF0YS0+YXR0ci5vdXRwdXQgPT0g
+TFRUTkdfVVNUX01NQVAsCj4+ICAJICAgIlZhbGlkYXRlIFVTVCBzZXNzaW9uIG1ldGFkYXRhIik7
+Cj4+ICAKPj4gLS0gCj4+IDEuNy4xMC40Cj4+Cj4+Cj4+IF9fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fCj4+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPj4gbHR0
+bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+PiBodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4v
+bWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKPiAKCl9fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxp
+c3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0
+aW5mby9sdHRuZy1kZXYK
