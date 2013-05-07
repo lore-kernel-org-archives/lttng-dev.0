@@ -1,8 +1,8 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Core dump with LTTng Tools v2.1.1
-Date: Mon, 6 May 2013 23:24:26 -0400
-Message-ID: <20130507032426.GH24603__22146.312837913$1367897097$gmane$org@Krystal>
-References: <5127746E.7080200@ericsson.com>
+Subject: Re: Quick questions about liburcu and RCU in general
+Date: Tue, 7 May 2013 07:59:14 -0400
+Message-ID: <20130507115914.GB3875__43610.8198286549$1367927991$gmane$org@Krystal>
+References: <20130507094636.GA6151@mail.sceen.net>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -10,10 +10,10 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UZYVw-0004rp-Br
-	for lttng-dev@lists.lttng.org; Mon, 06 May 2013 23:24:28 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1UZgY7-0000vw-Th
+	for lttng-dev@lists.lttng.org; Tue, 07 May 2013 07:59:15 -0400
 Content-Disposition: inline
-In-Reply-To: <5127746E.7080200@ericsson.com>
+In-Reply-To: <20130507094636.GA6151@mail.sceen.net>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,193 +22,66 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Bernd Hufmann <Bernd.Hufmann@ericsson.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Richard Braun <rbraun@sceen.net>
+Cc: lttng-dev@lists.lttng.org, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Bernd,
+Hi Richard,
 
-Is this still an issue with stable-2.1 branch and/or 2.2-rc releases ?
+* Richard Braun (rbraun@sceen.net) wrote:
+> Hello,
+> 
+> I'm currently studying RCU/URCU, and I have a few questions that I wasn't
+> sure where to ask.
+> 
+> 1/ Why use poll instead of sched_yield in e.g. force_mb_all_readers ?
+> (I guess it's about portability and the effect is expected to be the same,
+> but is there another reason ?)
+
+poll() allow us to do a millisecond-level wait (timer-based).
+sched_yield() is pretty much a scheduler hack that just says "be nice to
+other scheduled processes here". Quoting sched_yield(2):
+
+       If the calling thread is the only thread in the highest  priority list
+       at that time, it will continue to run after a call to sched_yield().
+
+This is a kind of behavior we don't want.
+
+> 2/ What was the conclusion of the discussion regarding sys_membarrier ?
+> (I couldn't find it in the main mail thread, and it looks quite interesting,
+> even though I expect most carefully written applications not to exceed
+> one thread per processor too much)
+
+The conclusion so far was that:
+
+- the implementation was fine,
+- we had to show there were enough users of this new ABI to justify its
+  inclusion and maintenance cost. Currently, it's pretty much just
+  liburcu that uses it. As the number of liburcu users grows, this
+  helps, but what would help even more would be to have other libraries
+  and applications using sys_membarrier() (other people interested and
+  weighting in).
+
+> 
+> 3/ Do you know if IBM allows the use of patented RCU techniques in GPLv3+
+> code as well ? ("GPL" is mentioned in the Linux documentation, and
+> apparently liburcu is covered by LGPLv2+ so I expect that to be the case,
+> just looking for a confirmation)
+
+AFAIK, LGPLv2+ code can migrate into GPLv3+, it's the other way around
+that is not permitted. Therefore, I would expect it is allowed, but I
+will let Paul answer to this one on behalf of IBM.
 
 Thanks,
 
 Mathieu
 
-* Bernd Hufmann (Bernd.Hufmann@ericsson.com) wrote:
-> Hello
->
-> When executing the command "lttng list -k" and I get a core dump with  
-> the output below. This happens not all the time, but when it happens I  
-> have to kill the lttng-sessiond and restart the lttng-sessiond. I  
-> attached the core dump.  Could someone of the LTTng team look into this?
->
-> My computer has Ubuntu 12.04 with kernel 3.2.0-29. I've installed LTTng  
-> modules v2.1.1, LTTng-UST v2.1.1 and userspace-rcu v0.7.6.
->
-> Thanks
-> Bernd
->
-> lttng list -k
-> Kernel events:
-> -------------
->       mm_vmscan_kswapd_sleep (loglevel: TRACE_EMERG (0)) (type:  
-> tracepoint)
->       mm_vmscan_kswapd_wake (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       mm_vmscan_wakeup_kswapd (loglevel: TRACE_EMERG (0)) (type:  
-> tracepoint)
->       mm_vmscan_direct_reclaim_begin (loglevel: TRACE_EMERG (0)) (type:  
-> tracepoint)
->       mm_vmscan_memcg_reclaim_begin (loglevel: TRACE_EMERG (0)) (type:  
-> tracepoint)
->       mm_vmscan_memcg_softlimit_reclaim_begin (loglevel: TRACE_EMERG  
-> (0)) (type: tracepoint)
->       mm_vmscan_direct_reclaim_end (loglevel: TRACE_EMERG (0)) (type:  
-> tracepoint)
->       mm_vmscan_memcg_reclaim_end (loglevel: TRACE_EMERG (0)) (type:  
-> tracepoint)
->       mm_vmscan_memcg_softlimit_reclaim_end (loglevel: TRACE_EMERG (0))  
-> (type: tracepoint)
->       mm_shrink_slab_start (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       mm_shrink_slab_end (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       mm_vmscan_lru_isolate (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       mm_vmscan_memcg_isolate (loglevel: TRACE_EMERG (0)) (type:  
-> tracepoint)
->       mm_vmscan_writepage (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       mm_vmscan_lru_shrink_inactive (loglevel: TRACE_EMERG (0)) (type:  
-> tracepoint)
->       replace_swap_token (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       put_swap_token (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       disable_swap_token (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       update_swap_token_priority (loglevel: TRACE_EMERG (0)) (type:  
-> tracepoint)
->       udp_fail_queue_rcv_skb (loglevel: TRACE_EMERG (0)) (type:  
-> tracepoint)
->       timer_init (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       timer_start (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       timer_expire_entry (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       timer_expire_exit (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       timer_cancel (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       hrtimer_init (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       hrtimer_start (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       hrtimer_expire_entry (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       hrtimer_expire_exit (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       hrtimer_cancel (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       itimer_state (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       itimer_expire (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       lttng_statedump_start (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       lttng_statedump_end (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       lttng_statedump_process_state (loglevel: TRACE_EMERG (0)) (type:  
-> tracepoint)
->       lttng_statedump_file_descriptor (loglevel: TRACE_EMERG (0)) (type: 
-> tracepoint)
->       lttng_statedump_vm_map (loglevel: TRACE_EMERG (0)) (type:  
-> tracepoint)
->       lttng_statedump_network_interface (loglevel: TRACE_EMERG (0))  
-> (type: tracepoint)
->       lttng_statedump_interrupt (loglevel: TRACE_EMERG (0)) (type:  
-> tracepoint)
->       sock_rcvqueue_full (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       sock_exceed_buf_limit (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       kfree_skb (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       consume_skb (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       skb_copy_datagram_iovec (loglevel: TRACE_EMERG (0)) (type:  
-> tracepoint)
->       signal_generate (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       signal_deliver (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       signal_overflow_fail (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       signal_lose_info (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       scsi_dispatch_cmd_start (loglevel: TRACE_EMERG (0)) (type:  
-> tracepoint)
->       scsi_dispatch_cmd_error (loglevel: TRACE_EMERG (0)) (type:  
-> tracepoint)
->       scsi_dispatch_cmd_done (loglevel: TRACE_EMERG (0)) (type:  
-> tracepoint)
->       scsi_dispatch_cmd_timeout (loglevel: TRACE_EMERG (0)) (type:  
-> tracepoint)
->       scsi_eh_wakeup (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       sched_kthread_stop (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       sched_kthread_stop_ret (loglevel: TRACE_EMERG (0)) (type:  
-> tracepoint)
->       sched_wakeup (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       sched_wakeup_new (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       sched_switch (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       sched_migrate_task (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       sched_process_free (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       sched_process_exit (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       sched_wait_task (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       sched_process_wait (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       sched_process_fork (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       sched_stat_wait (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       sched_stat_sleep (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       sched_stat_iowait (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       sched_stat_runtime (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       sched_pi_setprio (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       regulator_enable (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       regulator_enable_delay (loglevel: TRACE_EMERG (0)) (type:  
-> tracepoint)
->       regulator_enable_complete (loglevel: TRACE_EMERG (0)) (type:  
-> tracepoint)
->       regulator_disable (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       regulator_disable_complete (loglevel: TRACE_EMERG (0)) (type:  
-> tracepoint)
->       regulator_set_voltage (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       regulator_set_voltage_complete (loglevel: TRACE_EMERG (0)) (type:  
-> tracepoint)
->        (type: noop)
->       cpu_frequency (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       machine_suspend (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       power_start (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       power_frequency (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       power_end (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       clock_enable (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       clock_disable (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       clock_set_rate (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       power_domain_target (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       net_dev_xmit (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       net_dev_queue (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       netif_receive_skb (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       netif_rx (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       napi_poll (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       module_load (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       module_free (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       module_get (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       module_put (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       module_request (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       kvm_userspace_exit (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       kvm_set_irq (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       kvm_msi_set_irq (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       kvm_ack_irq (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       kvm_mmio (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       kvm_fpu (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       kvm_age_page (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       kvm_try_async_get_page (loglevel: TRACE_EMERG (0)) (type:  
-> tracepoint)
->       kvm_async_pf_doublefault (loglevel: TRACE_EMERG (0)) (type:  
-> tracepoint)
->       kvm_async_pf_not_present (loglevel: TRACE_EMERG (0)) (type:  
-> tracepoint)
->       kvm_async_pf_ready (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       kvm_async_pf_completed (loglevel: TRACE_EMERG (0)) (type:  
-> tracepoint)
->       kmalloc (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       kmem_cache_alloc (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       kmalloc_node (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       kmem_cache_alloc_node (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       kfree (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       kmem_cache_free (loglevel: TRACE_EMERG (0)) (type: tracepoint)
->       mm_page_free_direct (loglevel: TRACE_EMERG (0)) (type: tracepoint)
-> lttng: commands/list.c:253: print_events: Assertion `0' failed.
-> Aborted (core dumped)
+
+> 
+> Thanks for your answers.
+> 
 > -- 
-> This Communication is Confidential. We only send and receive email on  
-> the basis of the terms set out at www.ericsson.com/email_disclaimer
-
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
+> Richard Braun
 
 -- 
 Mathieu Desnoyers
