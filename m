@@ -1,19 +1,22 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Scope of event names?
-Date: Mon, 6 May 2013 23:15:05 -0400
-Message-ID: <20130507031505.GE24603__38845.3227504671$1367896539$gmane$org@Krystal>
-References: <48CF5AC71E61DB46B70D0F388054EFFD016655@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+Subject: Re: Issue faced in logging the traces
+Date: Mon, 6 May 2013 23:18:18 -0400
+Message-ID: <20130507031817.GF24603__22604.2414237329$1367896730$gmane$org@Krystal>
+References: <CAG15VGA_O+6P9cLT8h3U-_W=YUVHEVFiBN5Zrm6Gj4i1qBV6BQ@mail.gmail.com>
+	<511E463F.2080605@efficios.com>
+	<CAG15VGC0HbAaJXwzkwbf5QTDPS8NPN_sW1UieA1oeoQb_iurcQ@mail.gmail.com>
+	<CAG15VGDe4wvC0gzt8e3zGff-ow=NThetDMiZFZWk5u1dGmfFLQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UZYMt-0004kB-QG
-	for lttng-dev@lists.lttng.org; Mon, 06 May 2013 23:15:07 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1UZYPz-0004ml-DS
+	for lttng-dev@lists.lttng.org; Mon, 06 May 2013 23:18:19 -0400
 Content-Disposition: inline
-In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD016655@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+In-Reply-To: <CAG15VGDe4wvC0gzt8e3zGff-ow=NThetDMiZFZWk5u1dGmfFLQ@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,165 +25,117 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, "Couture,
-	Mario" <Mario.Couture@drdc-rddc.gc.ca>, "Painchaud,
-	Frederic" <Frederic.Painchaud@drdc-rddc.gc.ca>
+To: Vivek Kumar <vivekkumar.p@gmail.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Daniel,
+Hi Vivek,
 
-Yep, it seems to be a discrepancy in the semantic of event name scope
-uniqueness checks. Not sure if it comes from lttng-modules or
-lttng-tools. For now, please file a bug report against lttng-tools on
-the bug tracker.
+When reporting an issue, please provide:
+
+- lttng-sessiond verbose logs, debug logs,
+- detailed command line usage,
+
+in text-only format. Sorry, we're kind of busy, so don't expect us to
+dig this information from attachments.
+
+The best way to do this is to file a bug on bugs.lttng.org, so we can
+track the issue.
 
 Thanks,
 
 Mathieu
 
-* Thibault, Daniel (Daniel.Thibault@drdc-rddc.gc.ca) wrote:
->    I'm operating under the assumption that an event's "fully qualified" i=
-dentifier is something like session:domain:channel:name.  Tracepoints and s=
-yscalls have system-defined names, and of course the domain can only be 'ke=
-rnel' or 'userspace', but everything else is pretty much arbitrary.  My hyp=
-othesis is thus that, as long as they're in different channels (or domains =
-or possibly sessions), two events may bear the same name even though they r=
-epresent completely different occurrences.  So here's what I did (lttng lis=
-t output has been abridged), with comments interspersed:
-> =
-
-> $ sudo -H lttng create asession
-> Session asession created.
-> Traces will be written in /root/lttng-traces/asession-20130214-145626
-> $ sudo -H lttng enable-event sched_switch -k --tracepoint
-> kernel event sched_switch created in channel channel0
-> $ sudo -H lttng enable-event sched_switch -k --function lttng_calibrate_k=
-retprobe --channel channel1
-> Error: Event sched_switch: Enable kernel event failed (channel channel1, =
-session asession)
-> Warning: Some command(s) went wrong
-> /*
->  Okay, so maybe event names have session:domain scope. Let's test this.
->  */
-> $ sudo -H lttng enable-event fevent -k --function lttng_calibrate_kretpro=
-be --channel channel1
-> kernel event fevent created in channel channel1
-> $ sudo -H lttng enable-event fevent -k --function lttng_calibrate_kretpro=
-be --channel channel2
-> kernel event fevent created in channel channel2
-> /*
->  Apparently not.
->  */
-> $ sudo -H lttng list asession
-> Tracing session asession: [inactive]
-> =3D=3D=3D Domain: Kernel =3D=3D=3D
-> - channel2: [enabled]
->     Events:
->       fevent (type: probe) [enabled]
->         offset: 0x0
->         symbol: lttng_calibrate_kretprobe
-> - channel1: [enabled]
->     Events:
->       fevent (type: probe) [enabled]
->         offset: 0x0
->         symbol: lttng_calibrate_kretprobe
-> - channel0: [enabled]
->     Events:
->       sched_switch (loglevel: TRACE_EMERG (0)) (type: tracepoint) [enable=
-d]
-> /*
->  Instead of tracepoint then function, let's try function then tracepoint
->  */
-> $ sudo -H lttng enable-event sched_process_fork -k --function lttng_calib=
-rate_kretprobe --channel channel3
-> kernel event sched_process_fork created in channel channel3
-> $ sudo -H lttng enable-event sched_process_fork -k
-> kernel event sched_process_fork created in channel channel0
-> $ sudo -H lttng enable-event sched_process_fork -k --function lttng_calib=
-rate_kretprobe --channel channel4
-> Error: Event sched_process_fork: Enable kernel event failed (channel chan=
-nel4, session asession)
-> Warning: Some command(s) went wrong
-> /*
->  Fascinating.
->  */
-> $ sudo -H lttng list asession
-> Tracing session asession: [inactive]
-> - channel3: [enabled]
->     Events:
->       sched_process_fork (type: probe) [enabled]
->         offset: 0x0
->         symbol: lttng_calibrate_kretprobe
-> - channel2: [enabled]
->     Events:
->       fevent (type: probe) [enabled]
->         offset: 0x0
->         symbol: lttng_calibrate_kretprobe
-> - channel1: [enabled]
->     Events:
->       fevent (type: probe) [enabled]
->         offset: 0x0
->         symbol: lttng_calibrate_kretprobe
-> - channel0: [enabled]
->     Events:
->       sched_process_fork (loglevel: TRACE_EMERG (0)) (type: tracepoint) [=
-enabled]
->       sched_switch (loglevel: TRACE_EMERG (0)) (type: tracepoint) [enable=
-d]
-> =
-
->    At this point it looks like defining a kernel tracepoint prevents that=
- tracepoint's name from being used in other channels to define other events=
- (or even the same event).  But nothing apparently prevents these other eve=
-nts from being set up *before* the tracepoint.  (Not shown here is the case=
- where a tracepoint is defined in one channel, and then in another: the sec=
-ond tracepoint event definition fails as well)
-> =
-
->    Can anyone shed light on this?  (Note that I haven't even tried yet to=
- see what happens between simultaneous sessions...)
-> =
-
->    The control flow of the error-causing commands is something like:
-> =
-
-> event.c's event_kernel_enable_tracepoint returns LTTNG_ERR_KERN_ENABLE_FA=
-IL because
-> kernel.c's kernel_create_event gets something else than ENOSYS or EEXIST =
-from
-> kernel-ctl.c's kernctl_create_event =
-
-> =
-
->    Beyond kernctl_create_event is debugfs, inside of which occurs...whate=
-ver.
-> =
-
-> Daniel U. Thibault
-> R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) / Defence R=
-&D Canada - Valcartier (DRDC Valcartier)
-> Cyber s=E9curit=E9 pour les missions essentielles (CME) / Mission Critica=
-l Cyber Security (MCCS)
-> Protection des syst=E8mes et contremesures (PSC) / Systems Protection & C=
-ountermeasures (SPC)
-> 2459 route de la Bravoure
-> Qu=E9bec, QC=A0 G3J 1X5
-> CANADA
-> Vox=A0: (418) 844-4000 x4245
-> Fax=A0: (418) 844-4538
-> NAC=A0: 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-> Gouvernement du Canada=A0/ Government of Canada
-> <http://www.valcartier.drdc-rddc.gc.ca/>
-> =
+* Vivek Kumar (vivekkumar.p@gmail.com) wrote:
+> Hi David,
+> 
+> Any update?
+> 
+> Please let me know if more info is required.
+> 
+> Regards, Vivek
+> 
+> On Mon, Feb 18, 2013 at 4:26 PM, Vivek Kumar <vivekkumar.p@gmail.com> wrote:
+> 
+> > Hi David,
+> >
+> > Thanks for the response. LTTng-ust is also ported.
+> > Please find attached the PPT where I have taken the snaps and described
+> > the issue faced.
+> > At present I am trying to port and instrument LTTng for userspace only.
+> >
+> > My SoC is ARM-Cortex A9 from Mindspeed and the os is openWRT Linux.
+> >
+> > LTTng doesn't report any issue when I run it to instrument in userspace
+> > but CTF is not logged in the Home directory, please take a look to the
+> > powerpoint slides for descriptions and commands that I give.
+> >
+> > Regards, Vivek
+> >
+> >
+> >
+> > On Fri, Feb 15, 2013 at 7:59 PM, David Goulet <dgoulet@efficios.com>wrote:
+> >
+> >> Hi Vivek,
+> >>
+> >> In order to collect a trace you need to instrument your application with
+> >> LTTng-UST tracepoints.
+> >>
+> >> If you like to gather the syscalls for instance, you need to install the
+> >> LTTng modules and start your session daemon as root.
+> >>
+> >> If you are still experiencing problem, please provide the commands you
+> >> use and setup.
+> >>
+> >> Thanks!
+> >> David
+> >>
+> >> Vivek Kumar:
+> >> > Hi,
+> >> >
+> >> > I am trying to port LTTng to my arm based board.
+> >> > For userspace tracing, I have been able to successfully port followings:
+> >> > LTTng-tools,
+> >> > LTT-ust Library
+> >> > Userspace-rcu
+> >> > libpopt
+> >> >
+> >> > Now I can see that lttng-sessiond is running, and am able to create
+> >> > sessions, enable-event and start and stop tracing.
+> >> > But, I don't see traces be logged in the home directory (indeed nothing
+> >> > happens, i.e, not even the creation of the base directory ->
+> >> lttng-traces).
+> >> > Am I missing anything because of that LTTng is failing to log traces?
+> >> > Please help.
+> >> >
+> >> > Regards, Vivek
+> >> >
+> >> >
+> >> > --
+> >> > Best, Vivek
+> >> >
+> >> >
+> >> > This body part will be downloaded on demand.
+> >>
+> >
+> >
+> >
+> > --
+> > Best, Vivek
+> 
+> 
+> 
+> 
+> -- 
+> Best, Vivek
 
 > _______________________________________________
 > lttng-dev mailing list
 > lttng-dev@lists.lttng.org
 > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
--- =
 
+-- 
 Mathieu Desnoyers
 EfficiOS Inc.
 http://www.efficios.com
