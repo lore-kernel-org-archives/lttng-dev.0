@@ -1,19 +1,19 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: babeltrace converting text <=> ctf
-Date: Mon, 6 May 2013 23:01:44 -0400
-Message-ID: <20130507030144.GD24603__18433.0006050461$1367895734$gmane$org@Krystal>
-References: <20130214115404.GA13194@linutronix.de>
+Subject: Re: Scope of event names?
+Date: Mon, 6 May 2013 23:15:05 -0400
+Message-ID: <20130507031505.GE24603__38845.3227504671$1367896539$gmane$org@Krystal>
+References: <48CF5AC71E61DB46B70D0F388054EFFD016655@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UZY9x-0004dL-CU
-	for lttng-dev@lists.lttng.org; Mon, 06 May 2013 23:01:45 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1UZYMt-0004kB-QG
+	for lttng-dev@lists.lttng.org; Mon, 06 May 2013 23:15:07 -0400
 Content-Disposition: inline
-In-Reply-To: <20130214115404.GA13194@linutronix.de>
+In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD016655@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,56 +22,165 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: lttng-dev@lists.lttng.org
+To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, "Couture,
+	Mario" <Mario.Couture@drdc-rddc.gc.ca>, "Painchaud,
+	Frederic" <Frederic.Painchaud@drdc-rddc.gc.ca>
 List-Id: lttng-dev@lists.lttng.org
 
-KiBTZWJhc3RpYW4gQW5kcnplaiBTaWV3aW9yIChiaWdlYXN5QGxpbnV0cm9uaXguZGUpIHdyb3Rl
-Ogo+IEkgc3RhcnRlZCBsbHRuZyB0byBkdW1wIGEgZmV3IGtlcm5lbCBldmVudHMsIG5vdGhpbmcg
-c3BlY2lhbC4gT25jZSBJIGhhZAo+IHRoZSBiaW5hcnkgQ1RGIEkgY29udmVydGVkIGl0IHRvIHRl
-eHQgb3V0cHV0IHZpYQo+IAo+IHxiYWJlbHRyYWNlIC13IHRyYWNlLnR4dCBrZXJuZWwvCj4gCj4g
-fCBbMTA6NDA6MTAuMzU3NzY4OTIwXSAoKz8uPz8/Pz8/Pz8/KSBzcXVzYiBrbWFsbG9jOiB7IGNw
-dV9pZCA9IDMgfSwgeyBjYWxsX3NpdGUgPSDigKYKPiB8IFsxMDo0MDoxMC4zNTc3ODUwMTBdICgr
-MC4wMDAwMTYwOTApIHNxdXNiIGtmcmVlOiB7IGNwdV9pZCA9IDMgfSwgeyBjYWxsX3NpdGUgPSDi
-gKYKPiB8IFsxMDo0MDoxMC4zNTc4MDA3MDBdICgrMC4wMDAwMTU2OTApIHNxdXNiIGttYWxsb2M6
-IHsgY3B1X2lkID0gMyB9LCB7IGNhbGxfc2l0ZSA9IOKApgo+IAo+IGFuZCBub3cgYmFjayB0byBD
-VEYuIFNpbmNlIGJhYmVsdHJhY2UgZG9lcyBub3Qgc3VwcG9ydCB0ZXh0IGFzIGlucHV0IG9yCj4g
-Q1RGIGFzIG91dHB1dCAoYW5kIHRoZSBlcnJvciBtZXNzYWdlIHdhcyBub3QgZ2l2aW5nIGEgaGlu
-dCkgSSB0cmllZCBpdAo+IHdpdGggYmFiZWx0cmFjZS1sb2c6Cj4gCj4gfGJhYmVsdHJhY2UtbG9n
-IDwgdHJhY2UudHh0IGN0Zl92MQo+IAo+IGFuZCBub3cgYmFjayB0byB0ZXh0Ogo+IAo+IHxiYWJl
-bHRyYWNlIC13IGN0dl92MS50eHQgY3RmX3YxCj4gCj4gYW5kIEkgZ290Ogo+IAo+IHwgMCBzdHJp
-bmc6IHsgfSwgeyBzdHIgPSAiWzEwOjQwOjEwLjM1Nzc2ODkyMF0gKCs/Lj8/Pz8/Pz8/Pykgc3F1
-c2Iga21hbGxvYzogeyBjcHVfaWQgPSAzIH0sIHsgY2FsbF9zaXRlID0g4oCmCj4gfCAwIHN0cmlu
-ZzogeyB9LCB7IHN0ciA9ICJbMTA6NDA6MTAuMzU3Nzg1MDEwXSAoKzAuMDAwMDE2MDkwKSBzcXVz
-YiBrZnJlZTogeyBjcHVfaWQgPSAzIH0sIHsgY2FsbF9zaXRlID0g4oCmCj4gfCAwIHN0cmluZzog
-eyB9LCB7IHN0ciA9ICJbMTA6NDA6MTAuMzU3ODAwNzAwXSAoKzAuMDAwMDE1NjkwKSBzcXVzYiBr
-bWFsbG9jOiB7IGNwdV9pZCA9IDMgfSwgeyBjYWxsX3NpdGUgPSDigKYKPiAKPiBXaGF0IEkgZG9u
-J3QgbGlrZSBoZXJlLCBpcyB0aGF0IHRoZSB0aW1lc3RhbXAgaW5mb3JtYXRpb24gaXMgbG9zdC4K
-PiBMb29raW5nIGF0IGJhYmVsdHJhY2UtbG9nIEkgbm90aWNlZCBhIHRpbWVzdGFtcCBvcHRpb24u
-IFNvIEkgdHJpZWQgdGhpczoKCmJhYmVsdHJhY2UtbG9nIGlzIG1hZGUgdG8gZ28gZnJvbSBhIGRt
-ZXNnIG91dHB1dCB0byBDVEYuCgo+IAo+IHxiYWJlbHRyYWNlLWxvZyAtdCA8IHRyYWNlLnR4dCBj
-dGZfdjIKPiB8YmFiZWx0cmFjZSAtdyBjdHZfdjIudHh0IGN0Zl92Mgo+IHxbZXJyb3JdIEludmFs
-aWQgbWFnaWMgbnVtYmVyIDB4MCBhdCBwYWNrZXQgMjYgKGZpbGUgb2Zmc2V0IDg1MTk2OCkuCj4g
-fFtlcnJvcl0gT3BlbiBmaWxlIHN0cmVhbSBlcnJvci4KPiAKPiBidWguIEFmdGVyIGxvb2tpbmcg
-YXQgYmFiZWx0cmFjZS1sb2cgSSBub3RpY2VkIHRoYXQgdGhlIHNzY2FuZigpIGRvZXMKPiBub3Qg
-bWF0Y2ggYW55dGhpbmcgYmVjYXVzZSB0aGUgdGltZXN0YW1wIHZhbHVlIGlzIGRpZmZlcmVudC4g
-U28gSSB0cmllZAo+IHRvIGNoYW5nZSB0aGUgaW5wdXQgc28gdGhlIHNzY2FuZigpIHdpbGwgbWF0
-Y2g6Cj4gCj4gfGJhYmVsdHJhY2UgLXcgdHJhY2Vfc2Vjb25kcy50eHQgLS1jbG9jay1zZWNvbmRz
-IGtlcm5lbC8KPiB8YmFiZWx0cmFjZS1sb2cgLXQgPCB0cmFjZV9zZWNvbmRzLnR4dCBjdGZfdjMK
-PiB8YmFiZWx0cmFjZSAtdyBjdGZfdjMudHh0IGN0Zl92My8KPiB8W2Vycm9yXSBJbnZhbGlkIG1h
-Z2ljIG51bWJlciAweDFGNzJDRjdDIGF0IHBhY2tldCA4MSAoZmlsZSBvZmZzZXQgMjY1NDIwOCku
-Cj4gfFtlcnJvcl0gT3BlbiBmaWxlIHN0cmVhbSBlcnJvci4KPiAKPiBMaXR0bGUgZGlmZmVyZW50
-IGJ1dCBzdGlsbCBkb2Vzbid0IHdvcmsuCj4gQ291bGQgdGhpcyBiZSBhbiB1c2VyIGVycm9yIG9y
-IGFuIGVhc3kgdG8gc3BvdCBDVEYgbGliYXJ5IGJ1Zz8KCmJhYmVsdHJhY2UtbG9nIGlzIG5vdCBt
-ZWFudCB0byBjb252ZXJ0IGZyb20gQ1RGIHByZXR0eS1wcmludGluZyBvdXRwdXQsCmJ1dCByYXRo
-ZXIgZnJvbSBkbWVzZyBsb2dzLgoKV2hhdCB5b3Ugc2VlbSB0byBiZSBsb29raW5nIGZvciBpcyBh
-IENURiBwcmV0dHktcHJpbnRlZCBsb2cgZm9ybWF0IHRvCkNURiBjb252ZXJ0ZXIsIHdoaWNoIGRv
-ZXMgbm90IGV4aXN0IHRvZGF5LgoKU29ycnkgZm9yIHRoZSBsYXRlIHJlcGx5LAoKVGhhbmtzLAoK
-TWF0aGlldQoKPiAKPiBTZWJhc3RpYW4KPiAKPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZA
-bGlzdHMubHR0bmcub3JnCj4gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4v
-bGlzdGluZm8vbHR0bmctZGV2CgotLSAKTWF0aGlldSBEZXNub3llcnMKRWZmaWNpT1MgSW5jLgpo
-dHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0
-bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0
-dG5nLWRldgo=
+Hi Daniel,
+
+Yep, it seems to be a discrepancy in the semantic of event name scope
+uniqueness checks. Not sure if it comes from lttng-modules or
+lttng-tools. For now, please file a bug report against lttng-tools on
+the bug tracker.
+
+Thanks,
+
+Mathieu
+
+* Thibault, Daniel (Daniel.Thibault@drdc-rddc.gc.ca) wrote:
+>    I'm operating under the assumption that an event's "fully qualified" i=
+dentifier is something like session:domain:channel:name.  Tracepoints and s=
+yscalls have system-defined names, and of course the domain can only be 'ke=
+rnel' or 'userspace', but everything else is pretty much arbitrary.  My hyp=
+othesis is thus that, as long as they're in different channels (or domains =
+or possibly sessions), two events may bear the same name even though they r=
+epresent completely different occurrences.  So here's what I did (lttng lis=
+t output has been abridged), with comments interspersed:
+> =
+
+> $ sudo -H lttng create asession
+> Session asession created.
+> Traces will be written in /root/lttng-traces/asession-20130214-145626
+> $ sudo -H lttng enable-event sched_switch -k --tracepoint
+> kernel event sched_switch created in channel channel0
+> $ sudo -H lttng enable-event sched_switch -k --function lttng_calibrate_k=
+retprobe --channel channel1
+> Error: Event sched_switch: Enable kernel event failed (channel channel1, =
+session asession)
+> Warning: Some command(s) went wrong
+> /*
+>  Okay, so maybe event names have session:domain scope. Let's test this.
+>  */
+> $ sudo -H lttng enable-event fevent -k --function lttng_calibrate_kretpro=
+be --channel channel1
+> kernel event fevent created in channel channel1
+> $ sudo -H lttng enable-event fevent -k --function lttng_calibrate_kretpro=
+be --channel channel2
+> kernel event fevent created in channel channel2
+> /*
+>  Apparently not.
+>  */
+> $ sudo -H lttng list asession
+> Tracing session asession: [inactive]
+> =3D=3D=3D Domain: Kernel =3D=3D=3D
+> - channel2: [enabled]
+>     Events:
+>       fevent (type: probe) [enabled]
+>         offset: 0x0
+>         symbol: lttng_calibrate_kretprobe
+> - channel1: [enabled]
+>     Events:
+>       fevent (type: probe) [enabled]
+>         offset: 0x0
+>         symbol: lttng_calibrate_kretprobe
+> - channel0: [enabled]
+>     Events:
+>       sched_switch (loglevel: TRACE_EMERG (0)) (type: tracepoint) [enable=
+d]
+> /*
+>  Instead of tracepoint then function, let's try function then tracepoint
+>  */
+> $ sudo -H lttng enable-event sched_process_fork -k --function lttng_calib=
+rate_kretprobe --channel channel3
+> kernel event sched_process_fork created in channel channel3
+> $ sudo -H lttng enable-event sched_process_fork -k
+> kernel event sched_process_fork created in channel channel0
+> $ sudo -H lttng enable-event sched_process_fork -k --function lttng_calib=
+rate_kretprobe --channel channel4
+> Error: Event sched_process_fork: Enable kernel event failed (channel chan=
+nel4, session asession)
+> Warning: Some command(s) went wrong
+> /*
+>  Fascinating.
+>  */
+> $ sudo -H lttng list asession
+> Tracing session asession: [inactive]
+> - channel3: [enabled]
+>     Events:
+>       sched_process_fork (type: probe) [enabled]
+>         offset: 0x0
+>         symbol: lttng_calibrate_kretprobe
+> - channel2: [enabled]
+>     Events:
+>       fevent (type: probe) [enabled]
+>         offset: 0x0
+>         symbol: lttng_calibrate_kretprobe
+> - channel1: [enabled]
+>     Events:
+>       fevent (type: probe) [enabled]
+>         offset: 0x0
+>         symbol: lttng_calibrate_kretprobe
+> - channel0: [enabled]
+>     Events:
+>       sched_process_fork (loglevel: TRACE_EMERG (0)) (type: tracepoint) [=
+enabled]
+>       sched_switch (loglevel: TRACE_EMERG (0)) (type: tracepoint) [enable=
+d]
+> =
+
+>    At this point it looks like defining a kernel tracepoint prevents that=
+ tracepoint's name from being used in other channels to define other events=
+ (or even the same event).  But nothing apparently prevents these other eve=
+nts from being set up *before* the tracepoint.  (Not shown here is the case=
+ where a tracepoint is defined in one channel, and then in another: the sec=
+ond tracepoint event definition fails as well)
+> =
+
+>    Can anyone shed light on this?  (Note that I haven't even tried yet to=
+ see what happens between simultaneous sessions...)
+> =
+
+>    The control flow of the error-causing commands is something like:
+> =
+
+> event.c's event_kernel_enable_tracepoint returns LTTNG_ERR_KERN_ENABLE_FA=
+IL because
+> kernel.c's kernel_create_event gets something else than ENOSYS or EEXIST =
+from
+> kernel-ctl.c's kernctl_create_event =
+
+> =
+
+>    Beyond kernctl_create_event is debugfs, inside of which occurs...whate=
+ver.
+> =
+
+> Daniel U. Thibault
+> R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) / Defence R=
+&D Canada - Valcartier (DRDC Valcartier)
+> Cyber s=E9curit=E9 pour les missions essentielles (CME) / Mission Critica=
+l Cyber Security (MCCS)
+> Protection des syst=E8mes et contremesures (PSC) / Systems Protection & C=
+ountermeasures (SPC)
+> 2459 route de la Bravoure
+> Qu=E9bec, QC=A0 G3J 1X5
+> CANADA
+> Vox=A0: (418) 844-4000 x4245
+> Fax=A0: (418) 844-4538
+> NAC=A0: 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+> Gouvernement du Canada=A0/ Government of Canada
+> <http://www.valcartier.drdc-rddc.gc.ca/>
+> =
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- =
+
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
