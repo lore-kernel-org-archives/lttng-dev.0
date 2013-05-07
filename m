@@ -1,26 +1,19 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: [RFC] default channel should not be created when a
- channel has been explicitly created
-Date: Tue, 07 May 2013 10:56:13 -0400
-Message-ID: <5189160D.6080906__16276.6410423957$1367938613$gmane$org@efficios.com>
+From: Richard Braun <rbraun@sceen.net>
+Subject: Re: Quick questions about liburcu and RCU in general
+Date: Tue, 7 May 2013 16:59:58 +0200
+Message-ID: <20130507145958.GA29958__8299.33990394256$1367938837$gmane$org@mail.sceen.net>
+References: <20130507094636.GA6151@mail.sceen.net>
+	<20130507115914.GB3875@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([5.9.158.244])
+Received: from shattrath.sceen.net ([94.23.252.191] helo=mail.sceen.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1UZjJV-0002Zb-9t
-	for lttng-dev@lists.lttng.org; Tue, 07 May 2013 10:56:21 -0400
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by smtp.ini-tech.com (Postfix) with ESMTP id 3679BA1D9A
-	for <lttng-dev@lists.lttng.org>; Tue,  7 May 2013 14:56:13 +0000 (UTC)
-Received: from smtp.ini-tech.com ([127.0.0.1])
-	by localhost (smtp.ini-tech.com [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id NMxBfiv6gJdh for <lttng-dev@lists.lttng.org>;
-	Tue,  7 May 2013 14:56:12 +0000 (UTC)
-Received: from 127.0.0.1 (unknown [96.127.207.22])
-	by smtp.ini-tech.com (Postfix) with ESMTPSA id 4DF77A1D99
-	for <lttng-dev@lists.lttng.org>; Tue,  7 May 2013 14:56:12 +0000 (UTC)
+	(envelope-from <rbraun@sceen.net>) id 1UZjN4-0002dB-Qc
+	for lttng-dev@lists.lttng.org; Tue, 07 May 2013 11:00:02 -0400
+Content-Disposition: inline
+In-Reply-To: <20130507115914.GB3875@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -29,19 +22,31 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev@lists.lttng.org, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi everyone,
+On Tue, May 07, 2013 at 07:59:14AM -0400, Mathieu Desnoyers wrote:
+> > 1/ Why use poll instead of sched_yield in e.g. force_mb_all_readers ?
+> > (I guess it's about portability and the effect is expected to be the same,
+> > but is there another reason ?)
+> 
+> poll() allow us to do a millisecond-level wait (timer-based).
+> sched_yield() is pretty much a scheduler hack that just says "be nice to
+> other scheduled processes here". Quoting sched_yield(2):
+> 
+>        If the calling thread is the only thread in the highest  priority list
+>        at that time, it will continue to run after a call to sched_yield().
+> 
+> This is a kind of behavior we don't want.
 
-I would like to bring your attention on this issue and have everyone's
-opinion.
+Right, I see. But then, poll enforces a minimum delay whatever happens
+(which may be increased up to the scheduler time slice depending on the
+kernel). I guess this isn't something we want either.
 
-https://bugs.lttng.org/issues/522
+On the other hand, AIUI, poll is called only after all signals were
+already sent, and if a receiving thread didn't update its need_mb yet,
+so I expect it's a rare worst case that doesn't require more care.
 
-LTTng 2.2 is right now in release candidate and the question is if this
-should go in right now as a fix or hold on for 2.3? Also, should it be
-back ported to 2.1 also?
-
-Thanks!
-David
+-- 
+Richard Braun
