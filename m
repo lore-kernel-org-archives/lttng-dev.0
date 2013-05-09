@@ -1,25 +1,25 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] LTTng modules 2.2.0-rc2
-Date: Thu, 9 May 2013 09:05:05 -0400
-Message-ID: <20130509130505.GA26208__48875.1808683903$1368106303$gmane$org@Krystal>
+From: David Goulet <dgoulet@efficios.com>
+Subject: [RELEASE] LTTng Tools 2.2.0-rc2 (Cuda)
+Date: Thu, 09 May 2013 10:17:23 -0400
+Message-ID: <518BAFF3.5030207__6487.55407096377$1368109087$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from smtp.ini-tech.com ([5.9.158.244])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UaQWw-0008Ka-8u
-	for lttng-dev@lists.lttng.org; Thu, 09 May 2013 09:05:06 -0400
-Received: from localhost (localhost [127.0.0.1])
-	by blackscsi.openrapids.net (Postfix) with ESMTP id 1575714059E
-	for <lttng-dev@lists.lttng.org>; Thu,  9 May 2013 09:05:06 -0400 (EDT)
-Received: from blackscsi.openrapids.net ([127.0.0.1])
-	by localhost (blackscsi.openrapids.net [127.0.0.1]) (amavisd-new,
-	port 10024)
-	with ESMTP id S9B9LhXnO7en for <lttng-dev@lists.lttng.org>;
-	Thu,  9 May 2013 09:05:05 -0400 (EDT)
-Content-Disposition: inline
+	(envelope-from <dgoulet@efficios.com>) id 1UaRf1-0000XH-FB
+	for lttng-dev@lists.lttng.org; Thu, 09 May 2013 10:17:31 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by smtp.ini-tech.com (Postfix) with ESMTP id E6D4FA1D9A
+	for <lttng-dev@lists.lttng.org>; Thu,  9 May 2013 14:17:22 +0000 (UTC)
+Received: from smtp.ini-tech.com ([127.0.0.1])
+	by localhost (smtp.ini-tech.com [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id 3P4qpjmSzfTe for <lttng-dev@lists.lttng.org>;
+	Thu,  9 May 2013 14:17:22 +0000 (UTC)
+Received: from 127.0.0.1 (unknown [96.127.207.22])
+	by smtp.ini-tech.com (Postfix) with ESMTPSA id 13AA3A1D99
+	for <lttng-dev@lists.lttng.org>; Thu,  9 May 2013 14:17:21 +0000 (UTC)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -28,30 +28,48 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-The LTTng modules provide Linux kernel tracing capability to the LTTng
-2.x tracer toolset.
+Greetings everyone (including LTTng elves),
 
-Changelog:
-2013-05-09 LTTng modules 2.2.0-rc2
-        * Remove useless lttng_metadata probe
-        * Fix: warning kvm_trace_exit_reason redefined for 3.9 kernel
-        * Fix: 3.9.0 block layer instrumentation build
-        * Revert "Stop build if CONFIG_TRACEPOINTS is not set"
-        * Stop build if CONFIG_TRACEPOINTS is not set
-        * Add comments to endifs.
-        * Fix: remove ARM set_tls system call override
-        * Cleanup: arm sys_mmap whitespace
-        * Clean up using global_dirty_limit wrapper for writeback probe
+The lttng-tools project provides a session daemon (lttng-sessiond)
+that acts as a tracing registry, the "lttng" command line for tracing
+control, a lttng-ctl library for tracing control and a lttng-relayd
+for network streaming.
 
-Project website: http://lttng.org
-Download link: http://lttng.org/download
-(please refer to the README files for installation instructions and
-lttng-tools doc/quickstart.txt for usage information)
+One thing worth noting is that now the lttng UI will round up subbuffer
+size to the next power of 2 if needed and warn you about it. Here is an
+example with enable-channel.
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+$ lttng enable-channel --subbuf-size 15000 chan1 -u
+Warning: The subbuf size (15000) is rounded to the next power of 2 (16384)
+
+I won't print the full change log here because it's quite big. Most
+patches are bug fixes and documentation improvements. You can see the
+complete change log by looking at the ChangeLog file in the code base or
+by doing a "git show" on the commit id below.
+
+commit afeab1758cb2d7c7d672bddcaed6ab41fec93b92
+Author: David Goulet <dgoulet@efficios.com>
+Date:   Thu May 9 10:05:44 2013 -0400
+
+    Update version to v2.2.0-rc2
+
+    Signed-off-by: David Goulet <dgoulet@efficios.com>
+
+Please feel free to email the list about any questions/comments
+concerning this release. For bugs or missing documentations, use
+bugs.lttng.org!
+
+Using it is testing it!
+
+Project website: http://lttng.org/lttng2.0
+Download link:
+http://lttng.org/files/lttng-tools/lttng-tools-2.2.0-rc2.tar.bz2 (for
+the PGP signature, same file with .asc appended)
+
+sha1sum: c5c43f604fa9099c5ee124511925ee875f58bf29
+
+Thanks to all! Cheers!
+David
