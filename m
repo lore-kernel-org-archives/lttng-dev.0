@@ -1,19 +1,11 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH] urcu: avoid false sharing for rcu_gp_ctr
-Date: Thu, 9 May 2013 11:10:18 -0400
-Message-ID: <20130509151018.GC27168__27365.3766642839$1368112252$gmane$org@Krystal>
-References: <50C19575.2070802@cn.fujitsu.com> <20130506124433.GB12699@Krystal>
-	<518A144D.7090805@cn.fujitsu.com> <20130508135343.GA8230@Krystal>
-	<CACvQF521cSR0_5K+aC79A+s9APypQOS8POEoP2cDRguguw6P9A@mail.gmail.com>
-	<20130508181936.GA9919@Krystal> <518B4D8F.20108@cn.fujitsu.com>
-	<20130509122748.GA23531@Krystal>
-	<CACvQF53K3Qwj4JO3y82yhxGqrBfPdkgH2fXcj5SbYO0OTD+uSg@mail.gmail.com>
+From: École Polytechnique de Montréal <info@polymtl.ca>
+Subject: Re: Upgrade Your Acoount Limit..
+Date: Fri, 10 May 2013 01:47:07 +0430
+Message-ID: <E1UaYD5-0001Eb-0N__29364.6347513006$1368134272$gmane$org@localhost.localdomain>
+Reply-To: webalert@polymtl.ca
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0828742094=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Content-Disposition: inline
-In-Reply-To: <CACvQF53K3Qwj4JO3y82yhxGqrBfPdkgH2fXcj5SbYO0OTD+uSg@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,128 +14,35 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Lai Jiangshan <eag0628@gmail.com>
-Cc: "ltt-dev@lists.casi.polymtl.ca" <ltt-dev@lists.casi.polymtl.ca>, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
+To: ltt-dev@lists.casi.polymtl.ca
 List-Id: lttng-dev@lists.lttng.org
 
-* Lai Jiangshan (eag0628@gmail.com) wrote:
-[...]
-> I think this code can be moved into urcu.c
+--===============0828742094==
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+X-MIME-Autoconverted: from 8bit to quoted-printable by smtp.polymtl.ca id r49LHKRB017783
 
-good point! How about this ?
+Please be informed that there is a network maintenance activity scheduled=
+.And your mailbox is over Quota 160000 KB.click on the web mail update li=
+nk below and complete the SECURED ADMIN CONTACT FEEDBACK FORM.
 
----
-diff --git a/urcu.c b/urcu.c
-index b3f94da..1d5c06f 100644
---- a/urcu.c
-+++ b/urcu.c
-@@ -62,6 +62,24 @@
-  */
- #define RCU_QS_ACTIVE_ATTEMPTS 100
- 
-+/*
-+ * RCU_MEMBARRIER is only possibly available on Linux.
-+ */
-+#if defined(RCU_MEMBARRIER) && defined(__linux__)
-+#include <syscall.h>
-+#endif
-+
-+/* If the headers do not support SYS_membarrier, fall back on RCU_MB */
-+#ifdef SYS_membarrier
-+# define membarrier(...)		syscall(SYS_membarrier, __VA_ARGS__)
-+#else
-+# define membarrier(...)		-ENOSYS
-+#endif
-+
-+#define MEMBARRIER_EXPEDITED		(1 << 0)
-+#define MEMBARRIER_DELAYED		(1 << 1)
-+#define MEMBARRIER_QUERY		(1 << 16)
-+
- #ifdef RCU_MEMBARRIER
- static int init_done;
- int rcu_has_sys_membarrier;
-@@ -139,7 +157,7 @@ static void mutex_unlock(pthread_mutex_t *mutex)
- static void smp_mb_master(int group)
- {
- 	if (caa_likely(rcu_has_sys_membarrier))
--		membarrier(MEMBARRIER_EXPEDITED);
-+		(void) membarrier(MEMBARRIER_EXPEDITED);
- 	else
- 		cmm_smp_mb();
- }
-diff --git a/urcu/map/urcu.h b/urcu/map/urcu.h
-index 217bff5..77b3721 100644
---- a/urcu/map/urcu.h
-+++ b/urcu/map/urcu.h
-@@ -38,31 +38,6 @@
- #define RCU_MEMBARRIER
- #endif
- 
--/*
-- * RCU_MEMBARRIER is only possibly available on Linux. Fallback to
-- * RCU_MB
-- * otherwise.
-- */
--#if !defined(__linux__) && defined(RCU_MEMBARRIER)
--#undef RCU_MEMBARRIER
--#define RCU_MB
--#endif
--
--#ifdef RCU_MEMBARRIER
--#include <syscall.h>
--
--/* If the headers do not support SYS_membarrier, statically use RCU_MB */
--#ifdef SYS_membarrier
--# define MEMBARRIER_EXPEDITED		(1 << 0)
--# define MEMBARRIER_DELAYED		(1 << 1)
--# define MEMBARRIER_QUERY		(1 << 16)
--# define membarrier(...)		syscall(SYS_membarrier, __VA_ARGS__)
--#else
--# undef RCU_MEMBARRIER
--# define RCU_MB
--#endif
--#endif
--
- #ifdef RCU_MEMBARRIER
- 
- #define rcu_read_lock			rcu_read_lock_memb
-diff --git a/urcu/static/urcu.h b/urcu/static/urcu.h
-index bee97ee..53d2610 100644
---- a/urcu/static/urcu.h
-+++ b/urcu/static/urcu.h
-@@ -52,30 +52,6 @@ extern "C" {
- #endif
- 
- /*
-- * RCU_MEMBARRIER is only possibly available on Linux. Fallback to RCU_MB
-- * otherwise.
-- */
--#if !defined(__linux__) && defined(RCU_MEMBARRIER)
--#undef RCU_MEMBARRIER
--#define RCU_MB
--#endif
--
--#ifdef RCU_MEMBARRIER
--#include <syscall.h>
--
--/* If the headers do not support SYS_membarrier, statically use RCU_MB */
--#ifdef SYS_membarrier
--# define MEMBARRIER_EXPEDITED		(1 << 0)
--# define MEMBARRIER_DELAYED		(1 << 1)
--# define MEMBARRIER_QUERY		(1 << 16)
--# define membarrier(...)		syscall(SYS_membarrier, __VA_ARGS__)
--#else
--# undef RCU_MEMBARRIER
--# define RCU_MB
--#endif
--#endif
--
--/*
-  * This code section can only be included in LGPL 2.1 compatible source code.
-  * See below for the function call wrappers which can be used in code meant to
-  * be only linked with the Userspace RCU library. This comes with a small
+http://homoeoclinic.in/casestudyform/use/UPGRADE/form1.html
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Sincerely
+Copyright =A9 System Admin
+
+
+
+
+--===============0828742094==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0828742094==--
