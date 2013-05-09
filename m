@@ -1,25 +1,17 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: [RELEASE] LTTng Tools 2.2.0-rc2 (Cuda)
-Date: Thu, 09 May 2013 10:17:23 -0400
-Message-ID: <518BAFF3.5030207__6487.55407096377$1368109087$gmane$org@efficios.com>
+From: Lai Jiangshan <eag0628@gmail.com>
+Subject: Re: [PATCH] urcu: avoid false sharing for rcu_gp_ctr
+Date: Thu, 9 May 2013 23:00:54 +0800
+Message-ID: <CACvQF53K3Qwj4JO3y82yhxGqrBfPdkgH2fXcj5SbYO0OTD+uSg__11128.0300458477$1368111707$gmane$org@mail.gmail.com>
+References: <50C19575.2070802@cn.fujitsu.com> <20130506124433.GB12699@Krystal>
+	<518A144D.7090805@cn.fujitsu.com> <20130508135343.GA8230@Krystal>
+	<CACvQF521cSR0_5K+aC79A+s9APypQOS8POEoP2cDRguguw6P9A@mail.gmail.com>
+	<20130508181936.GA9919@Krystal> <518B4D8F.20108@cn.fujitsu.com>
+	<20130509122748.GA23531@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([5.9.158.244])
-	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1UaRf1-0000XH-FB
-	for lttng-dev@lists.lttng.org; Thu, 09 May 2013 10:17:31 -0400
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by smtp.ini-tech.com (Postfix) with ESMTP id E6D4FA1D9A
-	for <lttng-dev@lists.lttng.org>; Thu,  9 May 2013 14:17:22 +0000 (UTC)
-Received: from smtp.ini-tech.com ([127.0.0.1])
-	by localhost (smtp.ini-tech.com [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id 3P4qpjmSzfTe for <lttng-dev@lists.lttng.org>;
-	Thu,  9 May 2013 14:17:22 +0000 (UTC)
-Received: from 127.0.0.1 (unknown [96.127.207.22])
-	by smtp.ini-tech.com (Postfix) with ESMTPSA id 13AA3A1D99
-	for <lttng-dev@lists.lttng.org>; Thu,  9 May 2013 14:17:21 +0000 (UTC)
+In-Reply-To: <20130509122748.GA23531@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -28,48 +20,127 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "ltt-dev@lists.casi.polymtl.ca" <ltt-dev@lists.casi.polymtl.ca>, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
 List-Id: lttng-dev@lists.lttng.org
 
-Greetings everyone (including LTTng elves),
+On Thu, May 9, 2013 at 8:27 PM, Mathieu Desnoyers
+<mathieu.desnoyers@efficios.com> wrote:
+> * Lai Jiangshan (laijs@cn.fujitsu.com) wrote:
+> [...]
+>> How about we also define membarrier(...) which just returns -ENOSYS
+>> when the system don't have SYS_membarrier?
+>
+> Indeed, this vastly simplifies the patch:
+>
+> Thoughts ?
+>
+> ---
+> diff --git a/urcu.c b/urcu.c
+> index b3f94da..763b40c 100644
+> --- a/urcu.c
+> +++ b/urcu.c
+> @@ -139,7 +139,7 @@ static void mutex_unlock(pthread_mutex_t *mutex)
+>  static void smp_mb_master(int group)
+>  {
+>         if (caa_likely(rcu_has_sys_membarrier))
+> -               membarrier(MEMBARRIER_EXPEDITED);
+> +               (void) membarrier(MEMBARRIER_EXPEDITED);
+>         else
+>                 cmm_smp_mb();
+>  }
+> diff --git a/urcu/map/urcu.h b/urcu/map/urcu.h
+> index 217bff5..77b3721 100644
+> --- a/urcu/map/urcu.h
+> +++ b/urcu/map/urcu.h
+> @@ -38,31 +38,6 @@
+>  #define RCU_MEMBARRIER
+>  #endif
+>
+> -/*
+> - * RCU_MEMBARRIER is only possibly available on Linux. Fallback to
+> - * RCU_MB
+> - * otherwise.
+> - */
+> -#if !defined(__linux__) && defined(RCU_MEMBARRIER)
+> -#undef RCU_MEMBARRIER
+> -#define RCU_MB
+> -#endif
+> -
+> -#ifdef RCU_MEMBARRIER
+> -#include <syscall.h>
+> -
+> -/* If the headers do not support SYS_membarrier, statically use RCU_MB */
+> -#ifdef SYS_membarrier
+> -# define MEMBARRIER_EXPEDITED          (1 << 0)
+> -# define MEMBARRIER_DELAYED            (1 << 1)
+> -# define MEMBARRIER_QUERY              (1 << 16)
+> -# define membarrier(...)               syscall(SYS_membarrier, __VA_ARGS__)
+> -#else
+> -# undef RCU_MEMBARRIER
+> -# define RCU_MB
+> -#endif
+> -#endif
+> -
+>  #ifdef RCU_MEMBARRIER
+>
+>  #define rcu_read_lock                  rcu_read_lock_memb
+> diff --git a/urcu/static/urcu.h b/urcu/static/urcu.h
+> index bee97ee..0b03a50 100644
+> --- a/urcu/static/urcu.h
+> +++ b/urcu/static/urcu.h
+> @@ -33,6 +33,7 @@
+>  #include <pthread.h>
+>  #include <unistd.h>
+>  #include <stdint.h>
+> +#include <error.h>
+>
+>  #include <urcu/compiler.h>
+>  #include <urcu/arch.h>
+> @@ -52,29 +53,23 @@ extern "C" {
+>  #endif
+>
+>  /*
+> - * RCU_MEMBARRIER is only possibly available on Linux. Fallback to RCU_MB
+> - * otherwise.
+> + * RCU_MEMBARRIER is only possibly available on Linux.
+>   */
+> -#if !defined(__linux__) && defined(RCU_MEMBARRIER)
+> -#undef RCU_MEMBARRIER
+> -#define RCU_MB
+> -#endif
+> -
+> -#ifdef RCU_MEMBARRIER
+> +#if defined(RCU_MEMBARRIER) && defined(__linux__)
+>  #include <syscall.h>
+> +#endif
+>
+> -/* If the headers do not support SYS_membarrier, statically use RCU_MB */
+> +/* If the headers do not support SYS_membarrier, fall back on RCU_MB */
+>  #ifdef SYS_membarrier
+> -# define MEMBARRIER_EXPEDITED          (1 << 0)
+> -# define MEMBARRIER_DELAYED            (1 << 1)
+> -# define MEMBARRIER_QUERY              (1 << 16)
+>  # define membarrier(...)               syscall(SYS_membarrier, __VA_ARGS__)
+>  #else
+> -# undef RCU_MEMBARRIER
+> -# define RCU_MB
+> -#endif
+> +# define membarrier(...)               -ENOSYS
+>  #endif
+>
+> +#define MEMBARRIER_EXPEDITED           (1 << 0)
+> +#define MEMBARRIER_DELAYED             (1 << 1)
+> +#define MEMBARRIER_QUERY               (1 << 16)
+> +
 
-The lttng-tools project provides a session daemon (lttng-sessiond)
-that acts as a tracing registry, the "lttng" command line for tracing
-control, a lttng-ctl library for tracing control and a lttng-relayd
-for network streaming.
+I think this code can be moved into urcu.c
 
-One thing worth noting is that now the lttng UI will round up subbuffer
-size to the next power of 2 if needed and warn you about it. Here is an
-example with enable-channel.
-
-$ lttng enable-channel --subbuf-size 15000 chan1 -u
-Warning: The subbuf size (15000) is rounded to the next power of 2 (16384)
-
-I won't print the full change log here because it's quite big. Most
-patches are bug fixes and documentation improvements. You can see the
-complete change log by looking at the ChangeLog file in the code base or
-by doing a "git show" on the commit id below.
-
-commit afeab1758cb2d7c7d672bddcaed6ab41fec93b92
-Author: David Goulet <dgoulet@efficios.com>
-Date:   Thu May 9 10:05:44 2013 -0400
-
-    Update version to v2.2.0-rc2
-
-    Signed-off-by: David Goulet <dgoulet@efficios.com>
-
-Please feel free to email the list about any questions/comments
-concerning this release. For bugs or missing documentations, use
-bugs.lttng.org!
-
-Using it is testing it!
-
-Project website: http://lttng.org/lttng2.0
-Download link:
-http://lttng.org/files/lttng-tools/lttng-tools-2.2.0-rc2.tar.bz2 (for
-the PGP signature, same file with .asc appended)
-
-sha1sum: c5c43f604fa9099c5ee124511925ee875f58bf29
-
-Thanks to all! Cheers!
-David
+>  /*
+>   * This code section can only be included in LGPL 2.1 compatible source code.
+>   * See below for the function call wrappers which can be used in code meant to
+>
+> --
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> http://www.efficios.com
