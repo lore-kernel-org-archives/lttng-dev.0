@@ -1,17 +1,25 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH] urcu: avoid false sharing for rcu_gp_ctr
-Date: Thu, 9 May 2013 08:27:48 -0400
-Message-ID: <20130509122748.GA23531__12200.4914716401$1368102504$gmane$org@Krystal>
-References: <50C19575.2070802@cn.fujitsu.com> <20130506124433.GB12699@Krystal>
-	<518A144D.7090805@cn.fujitsu.com> <20130508135343.GA8230@Krystal>
-	<CACvQF521cSR0_5K+aC79A+s9APypQOS8POEoP2cDRguguw6P9A@mail.gmail.com>
-	<20130508181936.GA9919@Krystal> <518B4D8F.20108@cn.fujitsu.com>
+Subject: [RELEASE] LTTng-UST 2.2.0-rc2
+Date: Thu, 9 May 2013 08:55:14 -0400
+Message-ID: <20130509125514.GA26095__11186.4598504782$1368106252$gmane$org@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <compudj@mail.openrapids.net>) id 1UaQNQ-0008CQ-4g
+	for lttng-dev@lists.lttng.org; Thu, 09 May 2013 08:55:16 -0400
+Received: from localhost (localhost [127.0.0.1])
+	by blackscsi.openrapids.net (Postfix) with ESMTP id F1BAD14059E
+	for <lttng-dev@lists.lttng.org>; Thu,  9 May 2013 08:55:15 -0400 (EDT)
+Received: from blackscsi.openrapids.net ([127.0.0.1])
+	by localhost (blackscsi.openrapids.net [127.0.0.1]) (amavisd-new,
+	port 10024)
+	with ESMTP id F9CG3s2jNoVz for <lttng-dev@lists.lttng.org>;
+	Thu,  9 May 2013 08:55:15 -0400 (EDT)
 Content-Disposition: inline
-In-Reply-To: <518B4D8F.20108@cn.fujitsu.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,120 +28,40 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Lai Jiangshan <laijs@cn.fujitsu.com>
-Cc: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Lai Jiangshan <eag0628@gmail.com>, "ltt-dev@lists.casi.polymtl.ca" <ltt-dev@lists.casi.polymtl.ca>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Lai Jiangshan (laijs@cn.fujitsu.com) wrote:
-[...]
-> How about we also define membarrier(...) which just returns -ENOSYS
-> when the system don't have SYS_membarrier?
+LTTng-UST, the Linux Trace Toolkit Next Generation Userspace Tracer, is
+port of the low-overhead tracing capabilities of the LTTng kernel tracer
+to user-space. The library "liblttng-ust" enables tracing of
+applications and libraries.
 
-Indeed, this vastly simplifies the patch:
+Changelog:
+2013-05-09 lttng-ust 2.2.0-rc2
+        * manpage: Document probe provider compatibility
+        * Fix: add provider ABI compatibility check
+        * Cleanup: ignore mktemp return value
+        * Cleanup: documentation: argument vs field
+        * Documentation: document undefined behavior for NULL pointers
+        * Cleanup: silence cppcheck error
+        * Fix: add internal mutex for timer
+        * 32-bit warning fix for cyg profile fast
+        * Fix warnings for 32-bit in lttng-ust-cyg-profile
+        * Typo fix in README
+        * Fix: tracepoint.h incorrect assumption about constructor order
+        * Cleanup: comment mismatch with code
+        * Fix: ABI breakage between 2.1 and 2.2-rc1
+        * Documentation: document that sequence len field is unsigned
+        * connect: don't report EACCES
+        * connect: don't print error on EPERM
+        * Bump liblttng-ust-ctl lib version major number
+        * Optimisation: implement callsite hash table in tracepoint.c
+        * Optimisation: only update added library in tracepoint.c
+        * Optimisation: only fix pending events once per lazy update
 
-Thoughts ?
-
----
-diff --git a/urcu.c b/urcu.c
-index b3f94da..763b40c 100644
---- a/urcu.c
-+++ b/urcu.c
-@@ -139,7 +139,7 @@ static void mutex_unlock(pthread_mutex_t *mutex)
- static void smp_mb_master(int group)
- {
- 	if (caa_likely(rcu_has_sys_membarrier))
--		membarrier(MEMBARRIER_EXPEDITED);
-+		(void) membarrier(MEMBARRIER_EXPEDITED);
- 	else
- 		cmm_smp_mb();
- }
-diff --git a/urcu/map/urcu.h b/urcu/map/urcu.h
-index 217bff5..77b3721 100644
---- a/urcu/map/urcu.h
-+++ b/urcu/map/urcu.h
-@@ -38,31 +38,6 @@
- #define RCU_MEMBARRIER
- #endif
- 
--/*
-- * RCU_MEMBARRIER is only possibly available on Linux. Fallback to
-- * RCU_MB
-- * otherwise.
-- */
--#if !defined(__linux__) && defined(RCU_MEMBARRIER)
--#undef RCU_MEMBARRIER
--#define RCU_MB
--#endif
--
--#ifdef RCU_MEMBARRIER
--#include <syscall.h>
--
--/* If the headers do not support SYS_membarrier, statically use RCU_MB */
--#ifdef SYS_membarrier
--# define MEMBARRIER_EXPEDITED		(1 << 0)
--# define MEMBARRIER_DELAYED		(1 << 1)
--# define MEMBARRIER_QUERY		(1 << 16)
--# define membarrier(...)		syscall(SYS_membarrier, __VA_ARGS__)
--#else
--# undef RCU_MEMBARRIER
--# define RCU_MB
--#endif
--#endif
--
- #ifdef RCU_MEMBARRIER
- 
- #define rcu_read_lock			rcu_read_lock_memb
-diff --git a/urcu/static/urcu.h b/urcu/static/urcu.h
-index bee97ee..0b03a50 100644
---- a/urcu/static/urcu.h
-+++ b/urcu/static/urcu.h
-@@ -33,6 +33,7 @@
- #include <pthread.h>
- #include <unistd.h>
- #include <stdint.h>
-+#include <error.h>
- 
- #include <urcu/compiler.h>
- #include <urcu/arch.h>
-@@ -52,29 +53,23 @@ extern "C" {
- #endif
- 
- /*
-- * RCU_MEMBARRIER is only possibly available on Linux. Fallback to RCU_MB
-- * otherwise.
-+ * RCU_MEMBARRIER is only possibly available on Linux.
-  */
--#if !defined(__linux__) && defined(RCU_MEMBARRIER)
--#undef RCU_MEMBARRIER
--#define RCU_MB
--#endif
--
--#ifdef RCU_MEMBARRIER
-+#if defined(RCU_MEMBARRIER) && defined(__linux__)
- #include <syscall.h>
-+#endif
- 
--/* If the headers do not support SYS_membarrier, statically use RCU_MB */
-+/* If the headers do not support SYS_membarrier, fall back on RCU_MB */
- #ifdef SYS_membarrier
--# define MEMBARRIER_EXPEDITED		(1 << 0)
--# define MEMBARRIER_DELAYED		(1 << 1)
--# define MEMBARRIER_QUERY		(1 << 16)
- # define membarrier(...)		syscall(SYS_membarrier, __VA_ARGS__)
- #else
--# undef RCU_MEMBARRIER
--# define RCU_MB
--#endif
-+# define membarrier(...)		-ENOSYS
- #endif
- 
-+#define MEMBARRIER_EXPEDITED		(1 << 0)
-+#define MEMBARRIER_DELAYED		(1 << 1)
-+#define MEMBARRIER_QUERY		(1 << 16)
-+
- /*
-  * This code section can only be included in LGPL 2.1 compatible source code.
-  * See below for the function call wrappers which can be used in code meant to
+Project website: http://lttng.org
+Download link: http://lttng.org/download
+(please refer to the README file for installation instructions)
 
 -- 
 Mathieu Desnoyers
