@@ -1,25 +1,19 @@
-From: "Pelton, Dave" <dpelton@ciena.com>
-Subject: [PATCH userspace-rcu] use a filled signal mask to
- disable all signals
-Date: Fri, 10 May 2013 01:32:52 -0400
-Message-ID: <29C931202891DE4ABE913168E7AC43EC014227E029__43966.9813997627$1368164037$gmane$org@ONWVEXCHMB01.ciena.com>
+From: "Ikaheimonen, JP" <jp_ikaheimonen@mentor.com>
+Subject: Re: [PATCH babeltrace] Move memstream.h and uuid.h
+	to	include/babeltrace/compat directory
+Date: Fri, 10 May 2013 10:45:28 +0000
+Message-ID: <009B25148989C6458484484699278506E538252E__34385.037868242$1368182777$gmane$org@EU-MBX-01.mgc.mentorg.com>
+References: <009B25148989C6458484484699278506985C2118@EU-MBX-01.mgc.mentorg.com>
+	<20130507195527.GA8879@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mx0b-00103a01.pphosted.com ([67.231.152.227])
+Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <prvs=2842897bbe=dpelton@ciena.com>)
-	id 1UafxF-0002Bf-7X
-	for lttng-dev@lists.lttng.org; Fri, 10 May 2013 01:33:17 -0400
-Received: from pps.filterd (m0001124 [127.0.0.1])
-	by mx0b-00103a01.pphosted.com (8.14.4/8.14.4) with SMTP id
-	r4A5WMD7026500
-	for <lttng-dev@lists.lttng.org>; Fri, 10 May 2013 01:33:16 -0400
-Received: from mdwexght02.ciena.com (LIN1-118-36-29.ciena.com [63.118.36.29])
-	by mx0b-00103a01.pphosted.com with ESMTP id 1c8sc488eg-1
-	(version=TLSv1/SSLv3 cipher=AES128-SHA bits=128 verify=NOT)
-	for <lttng-dev@lists.lttng.org>; Fri, 10 May 2013 01:33:16 -0400
+	(envelope-from <jp_ikaheimonen@mentor.com>) id 1UakpV-0004ox-74
+	for lttng-dev@lists.lttng.org; Fri, 10 May 2013 06:45:37 -0400
+In-Reply-To: <20130507195527.GA8879@Krystal>
 Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -29,58 +23,154 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-While using lttng-ust with an application that was calling fork()
-with pending signals, I found that all signals were getting unmasked
-shortly before the underlying call to fork().  After some
-investigation, I found that the rcu_bp_before_fork() function was
-unmasking all signals.  Based on the comments for this function, it
-should be masking all signals.  Inspection of the rest of the code
-in urcu-bp.c revealed the same pattern in two other functions.
+Hi Mathieu:
+You're correct: the MinGW-related patch set incorporates the changes in this patch.
+I'm sorry I did not say this aloud when submitting the patch set - I'll try to be more informative in the future.
 
-This patch changes the code to use a filled signal mask to disable
-all signals.  The change to rcu_bp_before_fork() addressed the
-problem I was seeing while using lttng-ust.  The changes to the
-other two functions appear to fix other instances of the same
-problem.
+Thanks,
+JP
 
-Signed-off-by: David Pelton <dpelton@ciena.com>
----
- urcu-bp.c |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+-----Original Message-----
+From: Mathieu Desnoyers [mailto:mathieu.desnoyers@efficios.com] 
+Sent: 7. toukokuuta 2013 22:55
+To: Ikaheimonen, JP
+Cc: lttng-dev@lists.lttng.org
+Subject: Re: [PATCH babeltrace] Move memstream.h and uuid.h to include/babeltrace/compat directory
 
-diff --git a/urcu-bp.c b/urcu-bp.c
-index ef1e687..416a1b9 100644
---- a/urcu-bp.c
-+++ b/urcu-bp.c
-@@ -213,7 +213,7 @@ void synchronize_rcu(void)
- 	sigset_t newmask, oldmask;
- 	int ret;
- 
--	ret = sigemptyset(&newmask);
-+	ret = sigfillset(&newmask);
- 	assert(!ret);
- 	ret = pthread_sigmask(SIG_SETMASK, &newmask, &oldmask);
- 	assert(!ret);
-@@ -385,7 +385,7 @@ void rcu_bp_register(void)
- 	sigset_t newmask, oldmask;
- 	int ret;
- 
--	ret = sigemptyset(&newmask);
-+	ret = sigfillset(&newmask);
- 	assert(!ret);
- 	ret = pthread_sigmask(SIG_SETMASK, &newmask, &oldmask);
- 	assert(!ret);
-@@ -420,7 +420,7 @@ void rcu_bp_before_fork(void)
- 	sigset_t newmask, oldmask;
- 	int ret;
- 
--	ret = sigemptyset(&newmask);
-+	ret = sigfillset(&newmask);
- 	assert(!ret);
- 	ret = pthread_sigmask(SIG_SETMASK, &newmask, &oldmask);
- 	assert(!ret);
--- 
-1.6.2.5
+I see that this patch has been splitted into the windows support patchset, so I'll merge the version in the patchset.
+
+Thanks,
+
+Mathieu
+
+* Ikaheimonen, JP (jp_ikaheimonen@mentor.com) wrote:
+> As preparation for a new compatibility layer, the files memstream.h 
+> and uuid.h are moved to include/babeltrace/compat.
+> ---
+>  converter/babeltrace-log.c                             |    2 +-
+>  formats/ctf/Makefile.am                                |    3 +--
+>  formats/ctf/ctf.c                                      |    4 ++--
+>  formats/ctf/metadata/ctf-visitor-generate-io-struct.c  |    2 +-
+>  include/Makefile.am                                    |    3 ++-
+>  {formats/ctf => include/babeltrace/compat}/memstream.h |    0
+>  include/babeltrace/{ => compat}/uuid.h                 |    0
+>  include/babeltrace/ctf-ir/metadata.h                   |    2 +-
+>  8 files changed, 8 insertions(+), 8 deletions(-)  rename {formats/ctf 
+> => include/babeltrace/compat}/memstream.h (100%)  rename 
+> include/babeltrace/{ => compat}/uuid.h (100%)
+> 
+> diff --git a/converter/babeltrace-log.c b/converter/babeltrace-log.c 
+> index 2148711..0214e9a 100644
+> --- a/converter/babeltrace-log.c
+> +++ b/converter/babeltrace-log.c
+> @@ -45,7 +45,7 @@
+>  
+>  #include <babeltrace/babeltrace-internal.h>
+>  #include <babeltrace/ctf/types.h>
+> -#include <babeltrace/uuid.h>
+> +#include <babeltrace/compat/uuid.h>
+>  #include <babeltrace/endian.h>
+>  
+>  #define USEC_PER_SEC 1000000UL
+> diff --git a/formats/ctf/Makefile.am b/formats/ctf/Makefile.am index 
+> d803b69..6dcc1bb 100644
+> --- a/formats/ctf/Makefile.am
+> +++ b/formats/ctf/Makefile.am
+> @@ -9,8 +9,7 @@ libbabeltrace_ctf_la_SOURCES = \
+>  	events.c \
+>  	iterator.c \
+>  	callbacks.c \
+> -	events-private.h \
+> -	memstream.h
+> +	events-private.h
+>  
+>  # Request that the linker keeps all static libraries objects.
+>  libbabeltrace_ctf_la_LDFLAGS = \
+> diff --git a/formats/ctf/ctf.c b/formats/ctf/ctf.c index 
+> 5a51495..bb3ba83 100644
+> --- a/formats/ctf/ctf.c
+> +++ b/formats/ctf/ctf.c
+> @@ -33,7 +33,7 @@
+>  #include <babeltrace/ctf/events-internal.h>
+>  #include <babeltrace/trace-handle-internal.h>
+>  #include <babeltrace/context-internal.h> -#include 
+> <babeltrace/uuid.h>
+> +#include <babeltrace/compat/uuid.h>
+>  #include <babeltrace/endian.h>
+>  #include <inttypes.h>
+>  #include <stdio.h>
+> @@ -51,7 +51,7 @@
+>  #include "metadata/ctf-parser.h"
+>  #include "metadata/ctf-ast.h"
+>  #include "events-private.h"
+> -#include "memstream.h"
+> +#include <babeltrace/compat/memstream.h>"
+>  
+>  /*
+>   * We currently simply map a page to read the packet header and 
+> packet diff --git 
+> a/formats/ctf/metadata/ctf-visitor-generate-io-struct.c 
+> b/formats/ctf/metadata/ctf-visitor-generate-io-struct.c
+> index 9bcc170..3be054d 100644
+> --- a/formats/ctf/metadata/ctf-visitor-generate-io-struct.c
+> +++ b/formats/ctf/metadata/ctf-visitor-generate-io-struct.c
+> @@ -36,7 +36,7 @@
+>  #include <babeltrace/list.h>
+>  #include <babeltrace/types.h>
+>  #include <babeltrace/ctf/metadata.h>
+> -#include <babeltrace/uuid.h>
+> +#include <babeltrace/compat/uuid.h>
+>  #include <babeltrace/endian.h>
+>  #include <babeltrace/ctf/events-internal.h>
+>  #include "ctf-scanner.h"
+> diff --git a/include/Makefile.am b/include/Makefile.am index 
+> 824be61..0ade99b 100644
+> --- a/include/Makefile.am
+> +++ b/include/Makefile.am
+> @@ -30,6 +30,7 @@ noinst_HEADERS = \
+>  	babeltrace/ctf/types.h \
+>  	babeltrace/ctf/callbacks-internal.h \
+>  	babeltrace/trace-handle-internal.h \
+> -	babeltrace/uuid.h \
+> +	babeltrace/compat/uuid.h \
+> +	babeltrace/compat/memstream.h \
+>  	babeltrace/endian.h \
+>  	babeltrace/mmap-align.h
+> diff --git a/formats/ctf/memstream.h 
+> b/include/babeltrace/compat/memstream.h
+> similarity index 100%
+> rename from formats/ctf/memstream.h
+> rename to include/babeltrace/compat/memstream.h
+> diff --git a/include/babeltrace/uuid.h 
+> b/include/babeltrace/compat/uuid.h
+> similarity index 100%
+> rename from include/babeltrace/uuid.h
+> rename to include/babeltrace/compat/uuid.h diff --git 
+> a/include/babeltrace/ctf-ir/metadata.h 
+> b/include/babeltrace/ctf-ir/metadata.h
+> index 04e8945..fdb671a 100644
+> --- a/include/babeltrace/ctf-ir/metadata.h
+> +++ b/include/babeltrace/ctf-ir/metadata.h
+> @@ -32,7 +32,7 @@
+>  #include <babeltrace/ctf/types.h>
+>  #include <sys/types.h>
+>  #include <dirent.h>
+> -#include <babeltrace/uuid.h>
+> +#include <babeltrace/compat/uuid.h>
+>  #include <assert.h>
+>  #include <glib.h>
+>  
+> --
+> 1.7.10.4
+> 
+> 
+> 
+
+--
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
