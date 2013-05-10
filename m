@@ -1,19 +1,24 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: liblttng-ust finalizer oddity
-Date: Fri, 10 May 2013 10:27:33 -0400
-Message-ID: <20130510142733.GC20313__30763.0393458114$1368196084$gmane$org@Krystal>
-References: <48CF5AC71E61DB46B70D0F388054EFFD028EF8@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+Subject: Re: Is there a way to make LTTng use the
+	same	subbuffers for multiple processes?
+Date: Fri, 10 May 2013 10:50:32 -0400
+Message-ID: <20130510145032.GG20313__10248.2631606565$1368197468$gmane$org@Krystal>
+References: <OFDF63FF91.58AE5030-ONC2257B5B.004BA0B5-C2257B5B.004C083C@il.ibm.com>
+	<1871619348.1882721367199149384.JavaMail.root@srv11.zimbra.polymtl.ca>
+	<OF8C8BE38C.B94DDD3A-ONC2257B5C.004E2988-C2257B5C.004E3D1B@il.ibm.com>
+	<20130429162752.GB17859@Krystal>
+	<OF448C7914.DF62CA9B-ONC2257B5E.004813C8-C2257B5E.00485352@il.ibm.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UaoII-0006eZ-N7
-	for lttng-dev@lists.lttng.org; Fri, 10 May 2013 10:27:34 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1UaoeY-0006pe-CI
+	for lttng-dev@lists.lttng.org; Fri, 10 May 2013 10:50:34 -0400
 Content-Disposition: inline
-In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD028EF8@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+In-Reply-To: <OF448C7914.DF62CA9B-ONC2257B5E.004813C8-C2257B5E.00485352@il.ibm.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,154 +27,119 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, "Couture,
-	Mario" <Mario.Couture@drdc-rddc.gc.ca>, "Painchaud,
-	Frederic" <Frederic.Painchaud@drdc-rddc.gc.ca>
+To: Amit Margalit <AMITM@il.ibm.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-No idea.
+I expect we could let an environment variable control this.
+
+I would be tempted to make the default behavior switch to the new user
+ID buffers in the future though, for security reasons.
+
+Thoughts ?
 
 Thanks,
 
 Mathieu
 
-* Thibault, Daniel (Daniel.Thibault@drdc-rddc.gc.ca) wrote:
->    Below is an edited-for-brevity log that highlights an oddity of the li=
-blttng-ust finalizer: it triggers a load and initialization of libgcc_s, bu=
-t libgcc_s's finalizer doesn't run (I checked libgcc_s.so with readelf, and=
- there is indeed a FINI entry in there).  Is this a feature of libgcc_s?  O=
-f the Linux loader?  Or of LTTng?  Is it anything to worry about?
-> =
-
-> $ LD_DEBUG=3Dlibs LD_PRELOAD=3D.libs/liblttng-ust-provider-ust-tests-demo=
-.so:.libs/liblttng-ust-provider-ust-tests-demo3.so ./demo
->        805:	find library=3Dlibdl.so.2 [0]; searching
->        805:	 search cache=3D/etc/ld.so.cache
->        805:	  trying file=3D/lib/x86_64-linux-gnu/libdl.so.2
->        805:	=
-
->        805:	find library=3Dlibc.so.6 [0]; searching
->        805:	 search cache=3D/etc/ld.so.cache
->        805:	  trying file=3D/lib/x86_64-linux-gnu/libc.so.6
->        805:	=
-
-> [...]
->        805:	calling init: .libs/liblttng-ust-provider-ust-tests-demo.so
->        805:	=
-
->        805:	=
-
->        805:	initialize program: ./demo
->        805:	=
-
->        805:	=
-
->        805:	transferring control: ./demo
->        805:	=
-
-> Demo program starting.
-> Tracing...  done.
->        805:	=
-
->        805:	calling fini: ./demo [0]
->        805:	=
-
->        805:	=
-
->        805:	calling fini: .libs/liblttng-ust-provider-ust-tests-demo.so [=
-0]
->        805:	=
-
->        805:	=
-
->        805:	calling fini: .libs/liblttng-ust-provider-ust-tests-demo3.so =
-[0]
->        805:	=
-
->        805:	=
-
->        805:	calling fini: /lib/x86_64-linux-gnu/libdl.so.2 [0]
->        805:	=
-
->        805:	=
-
->        805:	calling fini: /home/daniel/Documents/lttng-ust-2.1.1+-08a3170=
-/liblttng-ust/.libs/liblttng-ust.so.0 [0]
->        805:	=
-
->        805:	find library=3Dlibgcc_s.so.1 [0]; searching
->        805:	 search path=3D/home/daniel/Documents/lttng-ust-2.1.1+-08a317=
-0/liblttng-ust/.libs		(RPATH from file .libs/liblttng-ust-provider-ust-test=
-s-demo.so)
->        805:	  trying file=3D/home/daniel/Documents/lttng-ust-2.1.1+-08a31=
-70/liblttng-ust/.libs/libgcc_s.so.1
->        805:	 search path=3D/home/daniel/Documents/lttng-ust-2.1.1+-08a317=
-0/liblttng-ust/.libs		(RPATH from file .libs/liblttng-ust-provider-ust-test=
-s-demo.so)
->        805:	  trying file=3D/home/daniel/Documents/lttng-ust-2.1.1+-08a31=
-70/liblttng-ust/.libs/libgcc_s.so.1
->        805:	 search cache=3D/etc/ld.so.cache
->        805:	  trying file=3D/lib/x86_64-linux-gnu/libgcc_s.so.1
->        805:	=
-
->        805:	=
-
->        805:	calling init: /lib/x86_64-linux-gnu/libgcc_s.so.1
->        805:	=
-
->        805:	=
-
->        805:	calling fini: /home/daniel/Documents/lttng-ust-2.1.1+-08a3170=
-/liblttng-ust/.libs/liblttng-ust-tracepoint.so.0 [0]
->        805:	=
-
->        805:	=
-
->        805:	calling fini: /lib/x86_64-linux-gnu/librt.so.1 [0]
->        805:	=
-
->        805:	=
-
->        805:	calling fini: /usr/local/lib/liburcu-bp.so.2 [0]
->        805:	=
-
->        805:	=
-
->        805:	calling fini: /usr/local/lib/liburcu-cds.so.2 [0]
->        805:	=
-
->        805:	=
-
->        805:	calling fini: /lib/x86_64-linux-gnu/libpthread.so.0 [0]
->        805:	=
-
-> =
-
-> Daniel U. Thibault
-> R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) / Defence R=
-&D Canada - Valcartier (DRDC Valcartier)
-> Cyber s=E9curit=E9 pour les missions essentielles (CME) / Mission Critica=
-l Cyber Security (MCCS)
-> Protection des syst=E8mes et contremesures (PSC) / Systems Protection & C=
-ountermeasures (SPC)
-> 2459 route de la Bravoure
-> Qu=E9bec, QC=A0 G3J 1X5
-> CANADA
-> Vox=A0: (418) 844-4000 x4245
-> Fax=A0: (418) 844-4538
-> NAC=A0: 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-> Gouvernement du Canada=A0/ Government of Canada
-> <http://www.valcartier.drdc-rddc.gc.ca/>
-> =
-
-> _______________________________________________
-> lttng-dev mailing list
+* Amit Margalit (AMITM@il.ibm.com) wrote:
+> This (current) behavior you describe is very suitable for our needs.
+> 
+> Is there an intention to insert a hook into setuid() in the future?
+> If yes - will the existing behavior remain as a default and the hook be 
+> used only if I choose to use it?
+> 
+> Thanks,
+> 
+> Amit Margalit
+> IBM XIV - Storage Reinvented
+> XIV-NAS Development Team
+> Tel. 03-689-7774
+> Fax. 03-689-7230
+> 
+> 
+> 
+> From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> To:     Amit Margalit/Israel/IBM@IBMIL
+> Cc:     Michel Dagenais <michel.dagenais@polymtl.ca>, 
 > lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> Date:   04/29/2013 07:27 PM
+> Subject:        Re: [lttng-dev] Is there a way to make LTTng use the same 
+> subbuffers for multiple processes?
+> 
+> 
+> 
+> * Amit Margalit (AMITM@il.ibm.com) wrote:
+> > Another 2.2 question -
+> > 
+> > What if I have a single process, that forks, and each child process then 
+> 
+> > changes its own UID. Will the tracing continue on the parent UID 
+> buffers?
+> 
+> Yes, we indeed currently keep the user ID that was effective at process
+> creation or last exec() encountered, because we don't have hooks in
+> libc's setuid() at the moment.
+> 
+> Thanks,
+> 
+> Mathieu
+> 
+> > 
+> > Thanks,
+> > 
+> > Amit Margalit
+> > IBM XIV - Storage Reinvented
+> > XIV-NAS Development Team
+> > Tel. 03-689-7774
+> > Fax. 03-689-7230
+> > 
+> > 
+> > 
+> > From:   Michel Dagenais <michel.dagenais@polymtl.ca>
+> > To:     Amit Margalit/Israel/IBM@IBMIL
+> > Cc:     lttng-dev@lists.lttng.org
+> > Date:   04/29/2013 04:32 AM
+> > Subject:        Re: [lttng-dev] Is there a way to make LTTng use the 
+> same 
+> > subbuffers for multiple processes?
+> > 
+> > 
+> > 
+> > 
+> > > Our system is a 12-core x86 (6-core + HT). If I take 4 subbuffers of 
+> > 1MB, this means 4MB per
+> > > process. As the number of processes rises, this becomes prohibitive. 
+> > > For example, we may need to support > 500 sub-processes ==> 500 * 4MB 
+> = 
+> > 2GB - 
+> > > which is a bit too much.  Is there a way to tell LTTng to share the 
+> > sub-buffers with forked processes? 
+> > 
+> > This is the number one feature listed in the changelog for lttng-tools 
+> and 
+> > UST for version 2.2. The first release candidate is out so you can try 
+> the 
+> > feature, and the final 2.2 version should not be too far away.
+> > 
+> > http://lttng.org/lttng-tools-220-rc1
+> > - Add UST per UID buffers support
+> > 
+> 
+> > _______________________________________________
+> > lttng-dev mailing list
+> > lttng-dev@lists.lttng.org
+> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> 
+> 
+> -- 
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> http://www.efficios.com
+> 
+> 
 
--- =
-
+-- 
 Mathieu Desnoyers
 EfficiOS Inc.
 http://www.efficios.com
