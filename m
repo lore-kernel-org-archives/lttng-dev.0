@@ -1,20 +1,20 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH userspace-rcu] use a filled signal mask
-	to	disable all signals
-Date: Fri, 10 May 2013 07:38:02 -0400
-Message-ID: <20130510113802.GA15131__46106.3447910876$1368185919$gmane$org@Krystal>
+From: "Brosseau, Yannick" <yannick.brosseau@gmail.com>
+Subject: Re: [PATCH userspace-rcu] use a filled signal mask to
+ disable all signals
+Date: Fri, 10 May 2013 07:57:25 -0400
+Message-ID: <CAEzWAeJToVnojuAqAOg8BV3kLekgcw2apOycHQf6M7m26OJueA__34188.0093598322$1368187087$gmane$org@mail.gmail.com>
 References: <29C931202891DE4ABE913168E7AC43EC014227E029@ONWVEXCHMB01.ciena.com>
+	<20130510113802.GA15131@Krystal>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1745381336=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from mail-vc0-f177.google.com ([209.85.220.177])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UaleH-0005Ec-Uk
-	for lttng-dev@lists.lttng.org; Fri, 10 May 2013 07:38:06 -0400
-Content-Disposition: inline
-In-Reply-To: <29C931202891DE4ABE913168E7AC43EC014227E029@ONWVEXCHMB01.ciena.com>
+	(envelope-from <yannick.brosseau@gmail.com>) id 1Ualx5-0005NJ-6v
+	for lttng-dev@lists.lttng.org; Fri, 10 May 2013 07:57:31 -0400
+Received: by mail-vc0-f177.google.com with SMTP id ha12so3555578vcb.22
+	for <lttng-dev@lists.lttng.org>; Fri, 10 May 2013 04:57:25 -0700 (PDT)
+In-Reply-To: <20130510113802.GA15131@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,110 +23,106 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Pelton, Dave" <dpelton@ciena.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Dave,
+--===============1745381336==
+Content-Type: multipart/alternative; boundary=bcaec501609bd85bb204dc5bde58
 
-Nice catch ! I've reworked the patch to also fix compat_arch_x86.c and
-use SIG_BLOCK at those sites (details in changelog). Here is the version
-I plan to merge into userspace rcu. Thanks for spotting this!
+--bcaec501609bd85bb204dc5bde58
+Content-Type: text/plain; charset=ISO-8859-1
 
-Mathieu
+On Fri, May 10, 2013 at 7:38 AM, Mathieu Desnoyers <
+mathieu.desnoyers@efficios.com> wrote:
 
-commit 6ed4b2e64c6cef5d6d1a1c1943f29dbf4edf026a
-Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Date:   Fri May 10 07:30:18 2013 -0400
+> Hi Dave,
+>
+> Nice catch ! I've reworked the patch to also fix compat_arch_x86.c and
+> use SIG_BLOCK at those sites (details in changelog). Here is the version
+> I plan to merge into userspace rcu. Thanks for spotting this!
+>
+> Mathieu
+>
+> commit 6ed4b2e64c6cef5d6d1a1c1943f29dbf4edf026a
+> Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> Date:   Fri May 10 07:30:18 2013 -0400
+>     Updates by Mathieu Desnoyers:
+>
+>     - Use SIG_BLOCK instead of SIG_SETMASK when setting a filled mask. This
+>       has the same behavior in this case (since we're blocking all
+> signals),
+>       but is semantically neater: if we ever some signals from that mask,
+>
 
-    Fix: Use a filled signal mask to disable all signals
-    
-    Changelog from David Pelton's original patch:
-    
-    While using lttng-ust with an application that was calling fork()
-    with pending signals, I found that all signals were getting unmasked
-    shortly before the underlying call to fork().  After some
-    investigation, I found that the rcu_bp_before_fork() function was
-    unmasking all signals.  Based on the comments for this function, it
-    should be masking all signals.  Inspection of the rest of the code
-    in urcu-bp.c revealed the same pattern in two other functions.
-    
-    This patch changes the code to use a filled signal mask to disable
-    all signals.  The change to rcu_bp_before_fork() addressed the
-    problem I was seeing while using lttng-ust.  The changes to the
-    other two functions appear to fix other instances of the same
-    problem.
-    
-    Updates by Mathieu Desnoyers:
-    
-    - Use SIG_BLOCK instead of SIG_SETMASK when setting a filled mask. This
-      has the same behavior in this case (since we're blocking all signals),
-      but is semantically neater: if we ever some signals from that mask,
-      we'd like to to a union with the signal mask already blocked by the
-      application.
-    - Also fix incorrect signal masking in compat_arch_x86.c.
-    
-    Reported-by: David Pelton <dpelton@ciena.com>
-    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+if we ever what? Looks like a missing word in this changelog.
 
-diff --git a/compat_arch_x86.c b/compat_arch_x86.c
-index 714201b..7d3b83a 100644
---- a/compat_arch_x86.c
-+++ b/compat_arch_x86.c
-@@ -80,9 +80,9 @@ static void mutex_lock_signal_save(pthread_mutex_t *mutex, sigset_t *oldmask)
- 	int ret;
- 
- 	/* Disable signals */
--	ret = sigemptyset(&newmask);
-+	ret = sigfillset(&newmask);
- 	assert(!ret);
--	ret = pthread_sigmask(SIG_SETMASK, &newmask, oldmask);
-+	ret = pthread_sigmask(SIG_BLOCK, &newmask, oldmask);
- 	assert(!ret);
- 	ret = pthread_mutex_lock(&compat_mutex);
- 	assert(!ret);
-diff --git a/urcu-bp.c b/urcu-bp.c
-index ef1e687..a823659 100644
---- a/urcu-bp.c
-+++ b/urcu-bp.c
-@@ -213,9 +213,9 @@ void synchronize_rcu(void)
- 	sigset_t newmask, oldmask;
- 	int ret;
- 
--	ret = sigemptyset(&newmask);
-+	ret = sigfillset(&newmask);
- 	assert(!ret);
--	ret = pthread_sigmask(SIG_SETMASK, &newmask, &oldmask);
-+	ret = pthread_sigmask(SIG_BLOCK, &newmask, &oldmask);
- 	assert(!ret);
- 
- 	mutex_lock(&rcu_gp_lock);
-@@ -385,9 +385,9 @@ void rcu_bp_register(void)
- 	sigset_t newmask, oldmask;
- 	int ret;
- 
--	ret = sigemptyset(&newmask);
-+	ret = sigfillset(&newmask);
- 	assert(!ret);
--	ret = pthread_sigmask(SIG_SETMASK, &newmask, &oldmask);
-+	ret = pthread_sigmask(SIG_BLOCK, &newmask, &oldmask);
- 	assert(!ret);
- 
- 	/*
-@@ -420,9 +420,9 @@ void rcu_bp_before_fork(void)
- 	sigset_t newmask, oldmask;
- 	int ret;
- 
--	ret = sigemptyset(&newmask);
-+	ret = sigfillset(&newmask);
- 	assert(!ret);
--	ret = pthread_sigmask(SIG_SETMASK, &newmask, &oldmask);
-+	ret = pthread_sigmask(SIG_BLOCK, &newmask, &oldmask);
- 	assert(!ret);
- 	mutex_lock(&rcu_gp_lock);
- 	saved_fork_signal_mask = oldmask;
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+>       we'd like to to a union with the signal mask already blocked by the
+>       application.
+>     - Also fix incorrect signal masking in compat_arch_x86.c.
+>
+>     Reported-by: David Pelton <dpelton@ciena.com>
+>     Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+
+--bcaec501609bd85bb204dc5bde58
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><br><div class=3D"gmail_extra"><br><br><div class=3D"gmail=
+_quote">On Fri, May 10, 2013 at 7:38 AM, Mathieu Desnoyers <span dir=3D"ltr=
+">&lt;<a href=3D"mailto:mathieu.desnoyers@efficios.com" target=3D"_blank">m=
+athieu.desnoyers@efficios.com</a>&gt;</span> wrote:<br>
+<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
+x #ccc solid;padding-left:1ex">Hi Dave,<br>
+<br>
+Nice catch ! I&#39;ve reworked the patch to also fix compat_arch_x86.c and<=
+br>
+use SIG_BLOCK at those sites (details in changelog). Here is the version<br=
+>
+I plan to merge into userspace rcu. Thanks for spotting this!<br>
+<br>
+Mathieu<br>
+<br>
+commit 6ed4b2e64c6cef5d6d1a1c1943f29dbf4edf026a<br>
+Author: Mathieu Desnoyers &lt;<a href=3D"mailto:mathieu.desnoyers@efficios.=
+com">mathieu.desnoyers@efficios.com</a>&gt;<br>
+Date: =A0 Fri May 10 07:30:18 2013 -0400<br>
+=A0 =A0 Updates by Mathieu Desnoyers:<br>
+<br>
+=A0 =A0 - Use SIG_BLOCK instead of SIG_SETMASK when setting a filled mask. =
+This<br>
+=A0 =A0 =A0 has the same behavior in this case (since we&#39;re blocking al=
+l signals),<br>
+=A0 =A0 =A0 but is semantically neater: if we ever some signals from that m=
+ask,<br></blockquote><div><br></div><div>if we ever what? Looks like a miss=
+ing word in this changelog. <br></div><div>=A0</div><blockquote class=3D"gm=
+ail_quote" style=3D"margin:0pt 0pt 0pt 0.8ex;border-left:1px solid rgb(204,=
+204,204);padding-left:1ex">
+
+=A0 =A0 =A0 we&#39;d like to to a union with the signal mask already blocke=
+d by the<br>
+=A0 =A0 =A0 application.<br>
+=A0 =A0 - Also fix incorrect signal masking in compat_arch_x86.c.<br>
+<br>
+=A0 =A0 Reported-by: David Pelton &lt;<a href=3D"mailto:dpelton@ciena.com">=
+dpelton@ciena.com</a>&gt;<br>
+=A0 =A0 Signed-off-by: Mathieu Desnoyers &lt;<a href=3D"mailto:mathieu.desn=
+oyers@efficios.com">mathieu.desnoyers@efficios.com</a>&gt;</blockquote></di=
+v></div></div>
+
+--bcaec501609bd85bb204dc5bde58--
+
+
+--===============1745381336==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1745381336==--
