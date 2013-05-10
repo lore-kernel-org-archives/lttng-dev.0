@@ -1,8 +1,8 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Updated easy-ust Makefile
-Date: Fri, 10 May 2013 10:25:35 -0400
-Message-ID: <20130510142534.GB20313__44831.3824403614$1368195976$gmane$org@Krystal>
-References: <48CF5AC71E61DB46B70D0F388054EFFD028E81@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+Subject: Re: liblttng-ust finalizer oddity
+Date: Fri, 10 May 2013 10:27:33 -0400
+Message-ID: <20130510142733.GC20313__30763.0393458114$1368196084$gmane$org@Krystal>
+References: <48CF5AC71E61DB46B70D0F388054EFFD028EF8@VAL-E-01.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
@@ -10,10 +10,10 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UaoGP-0006cr-IL
-	for lttng-dev@lists.lttng.org; Fri, 10 May 2013 10:25:37 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1UaoII-0006eZ-N7
+	for lttng-dev@lists.lttng.org; Fri, 10 May 2013 10:27:34 -0400
 Content-Disposition: inline
-In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD028E81@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD028EF8@VAL-E-01.valcartier.drdc-rddc.gc.ca>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,186 +22,128 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>, jeremie.galarneau@efficios.com
+To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, "Couture,
 	Mario" <Mario.Couture@drdc-rddc.gc.ca>, "Painchaud,
 	Frederic" <Frederic.Painchaud@drdc-rddc.gc.ca>
 List-Id: lttng-dev@lists.lttng.org
 
-Evey problem related to your distribution not having /usr/local/lib in
-ld.so.conf by default should be handled by adding documentation to the
-project, not modifying makefiles.
-
-Jeremie will take care of adding this info to the documentation.
+No idea.
 
 Thanks,
 
 Mathieu
 
 * Thibault, Daniel (Daniel.Thibault@drdc-rddc.gc.ca) wrote:
->    In my previous note on this mailing list, forget the bit about LD_PREL=
-OAD being beholden to the remaining library search.  I got fooled into thin=
-king that for unrelated reasons.  Turns out LD_PRELOAD loads the so regardl=
-ess of the search's outcome: it's just added to the list of dependencies to=
- load (traversal is breadth-first, it turns out), and its initializer calle=
-d last.
+>    Below is an edited-for-brevity log that highlights an oddity of the li=
+blttng-ust finalizer: it triggers a load and initialization of libgcc_s, bu=
+t libgcc_s's finalizer doesn't run (I checked libgcc_s.so with readelf, and=
+ there is indeed a FINI entry in there).  Is this a feature of libgcc_s?  O=
+f the Linux loader?  Or of LTTng?  Is it anything to worry about?
 > =
 
->    Here is a suggested updated lttng-ust/doc/examples/easy-ust/Makefile w=
-hich fixes a minor problem (missing LDFLAGS preventing make from succeeding=
- out-of-the-box) and adds additional targets demonstrating other ways trace=
-points can be compiled into an application.  Please review this for any fac=
-tual errors.
-> =
+> $ LD_DEBUG=3Dlibs LD_PRELOAD=3D.libs/liblttng-ust-provider-ust-tests-demo=
+.so:.libs/liblttng-ust-provider-ust-tests-demo3.so ./demo
+>        805:	find library=3Dlibdl.so.2 [0]; searching
+>        805:	 search cache=3D/etc/ld.so.cache
+>        805:	  trying file=3D/lib/x86_64-linux-gnu/libdl.so.2
+>        805:	=
 
-> - - - BEGIN - - -
-> # Copyright (C) 2011-2012  Matthew Khouzam <matthew.khouzam@ericsson.com> =
+>        805:	find library=3Dlibc.so.6 [0]; searching
+>        805:	 search cache=3D/etc/ld.so.cache
+>        805:	  trying file=3D/lib/x86_64-linux-gnu/libc.so.6
+>        805:	=
 
-> # Copyright (C) 2012  Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> #
-> # THIS MATERIAL IS PROVIDED AS IS, WITH ABSOLUTELY NO WARRANTY EXPRESSED
-> # OR IMPLIED.  ANY USE IS AT YOUR OWN RISK.
-> #
-> # Permission is hereby granted to use or copy this program for any
-> # purpose,  provided the above notices are retained on all copies.
-> # Permission to modify the code and to distribute modified code is
-> # granted, provided the above notices are retained, and a notice that
-> # the code was modified is included with the above copyright notice.
-> #
-> # This makefile is not using automake so that people can see how to make
-> # simply. It builds a sample program in any one of four (really three) wa=
-ys:
-> #
-> # ("static", default) with a statically embedded tracepoint provider prob=
-e,
-> # through inclusion.
-> #
-> # ("staticlib") with a statically embedded tracepoint provider probe, thr=
-ough
-> # a static library (libtp.a). The resulting samplestaticlib binary is ide=
-ntical
-> # to the samplestatic binary.
-> #
-> # ("dynamic", "dynamicfull") with a dynamically loaded shared library
-> # (libtp.so). The only difference between these two is that "dynamicfull"=
- sets
-> # the TRACEPOINT_PROBE_DYNAMIC_LINKAGE define in order to avoid needing t=
-o be
-> # linked statically with the shared library.
-> #
-> # Currently, an instrumented application that would use a dynamically lin=
-ked
-> # (as opposed to dynamically loaded) tracepoint provider shared library w=
-ould
-> # still dynamically load it (using the dlopen() system call), so the diff=
-erence
-> # is pointless.
-> #
-> # The dynamic samples must use LD_PRELOAD to run because the trace provid=
-er
-> # shared library (libtp.so) is not in the library search path; to obviate=
- this
-> # requirement, you can either install your trace provider shared library =
-in
-> # the library search path (e.g. /usr/local/lib) or add a DT_RUNPATH tag t=
-o your
-> # sample so it looks in its own directory for missing libraries (look for=
- the
-> # commented-out "$(CC) ... -Wl,-rpath,\$ORIGIN,--enable-new-dtags" lines =
-in
-> # the "dynamic" and "dynamicfull" targets). The latter option does have t=
-he
-> # disadvantage that the dynamic linker will look for all the required lib=
-raries
-> # (libdl.so, libc.so, liblttng-ust.so, etc.) in sample's directory first.
-> #
-> # The "html" target helps for documentation (req. code2html).
-> =
+> [...]
+>        805:	calling init: .libs/liblttng-ust-provider-ust-tests-demo.so
+>        805:	=
 
-> AR =3D ar
-> CC =3D gcc
-> LIBS =3D -ldl -llttng-ust # On Linux
-> #LIBS =3D -lc -llttng-ust # On BSD
-> CFLAGS =3D -I.
-> LDFLAGS =3D -L/usr/local/lib
-> SOFLAGS =3D -fPIC
-> SOVERSION_MAJOR =3D 1
-> SOVERSION_MINOR =3D 0
-> =
+>        805:	=
 
-> # default make is "all"
-> all: static
-> =
+>        805:	initialize program: ./demo
+>        805:	=
 
-> static: sample.o tp.o
-> 	$(CC) -o sample$@ $^ $(LDFLAGS) $(LIBS)
-> 	@echo "   Use './sample$@' to run sample$@"
-> =
+>        805:	=
 
-> staticlib: sample.o libtp.a
-> 	$(CC) -o sample$@ $^ $(LDFLAGS) $(LIBS) -L.
-> 	@echo "   Use './sample$@' to run sample$@"
-> =
+>        805:	transferring control: ./demo
+>        805:	=
 
-> dynamic: sample.o libtp.so
-> #	$(CC) -o sample$@ $< $(LDFLAGS) $(LIBS) -L. -ltp \
-> #	   -Wl,-rpath,\$ORIGIN,--enable-new-dtags
-> 	$(CC) -o sample$@ $< $(LDFLAGS) $(LIBS) -L. -ltp
-> 	@echo "   Use 'LD_PRELOAD=3D./libtp.so ./sample$@' to run sample$@"
-> =
+> Demo program starting.
+> Tracing...  done.
+>        805:	=
 
-> dynamicfull: sampledynamic.o libtp.so
-> #	$(CC) -o sample$@ $< $(LDFLAGS) $(LIBS) \
-> #	   -Wl,-rpath,\$ORIGIN,--enable-new-dtags
-> 	$(CC) -o sample$@ $< $(LDFLAGS) $(LIBS)
-> 	@echo "   Use 'LD_PRELOAD=3D./libtp.so ./sample$@' to run sample$@"
-> =
+>        805:	calling fini: ./demo [0]
+>        805:	=
 
-> sample.o: sample.c sample_component_provider.h
-> 	$(CC) $(CFLAGS) -c -o $@ $<
-> =
+>        805:	=
 
-> sampledynamic.o: sample.c sample_component_provider.h
-> 	$(CC) $(CFLAGS) -D TRACEPOINT_PROBE_DYNAMIC_LINKAGE -c -o $@ $<
-> =
+>        805:	calling fini: .libs/liblttng-ust-provider-ust-tests-demo.so [=
+0]
+>        805:	=
 
-> libtp.a: tp.o
-> 	$(AR) -cq $@ $<
-> =
+>        805:	=
 
-> libtp.so: libtp.o
-> 	$(CC) -shared -Wl,-soname,$@.$(SOVERSION_MAJOR) -o \
-> 	   $@.$(SOVERSION_MAJOR).$(SOVERSION_MINOR) $(LDFLAGS) $(LIBS) $<
-> 	ln -sf $@.$(SOVERSION_MAJOR).$(SOVERSION_MINOR) $@.$(SOVERSION_MAJOR)
-> 	ln -sf $@.$(SOVERSION_MAJOR) $@
-> =
+>        805:	calling fini: .libs/liblttng-ust-provider-ust-tests-demo3.so =
+[0]
+>        805:	=
 
-> libtp.o: tp.c sample_component_provider.h
-> 	$(CC) $(CFLAGS) $(SOFLAGS) -c -o $@ $<
-> =
+>        805:	=
 
-> tp.o: tp.c sample_component_provider.h
-> 	$(CC) $(CFLAGS) -c -o $@ $<
-> =
+>        805:	calling fini: /lib/x86_64-linux-gnu/libdl.so.2 [0]
+>        805:	=
 
-> html: sample_component_provider.html sample.html tp.html
-> =
+>        805:	=
 
-> %.html: %.c =
+>        805:	calling fini: /home/daniel/Documents/lttng-ust-2.1.1+-08a3170=
+/liblttng-ust/.libs/liblttng-ust.so.0 [0]
+>        805:	=
 
-> 	code2html -lc $< $@
-> =
+>        805:	find library=3Dlibgcc_s.so.1 [0]; searching
+>        805:	 search path=3D/home/daniel/Documents/lttng-ust-2.1.1+-08a317=
+0/liblttng-ust/.libs		(RPATH from file .libs/liblttng-ust-provider-ust-test=
+s-demo.so)
+>        805:	  trying file=3D/home/daniel/Documents/lttng-ust-2.1.1+-08a31=
+70/liblttng-ust/.libs/libgcc_s.so.1
+>        805:	 search path=3D/home/daniel/Documents/lttng-ust-2.1.1+-08a317=
+0/liblttng-ust/.libs		(RPATH from file .libs/liblttng-ust-provider-ust-test=
+s-demo.so)
+>        805:	  trying file=3D/home/daniel/Documents/lttng-ust-2.1.1+-08a31=
+70/liblttng-ust/.libs/libgcc_s.so.1
+>        805:	 search cache=3D/etc/ld.so.cache
+>        805:	  trying file=3D/lib/x86_64-linux-gnu/libgcc_s.so.1
+>        805:	=
 
-> %.html : %.h
-> 	code2html -lc $< $@
-> =
+>        805:	=
 
-> .PHONY: clean
-> clean:
-> 	rm -f *.html
-> 	rm -f *.o *.a *.so *.so.*
-> 	rm -f samplestatic* sampledynamic*
-> - - - END - - -
+>        805:	calling init: /lib/x86_64-linux-gnu/libgcc_s.so.1
+>        805:	=
+
+>        805:	=
+
+>        805:	calling fini: /home/daniel/Documents/lttng-ust-2.1.1+-08a3170=
+/liblttng-ust/.libs/liblttng-ust-tracepoint.so.0 [0]
+>        805:	=
+
+>        805:	=
+
+>        805:	calling fini: /lib/x86_64-linux-gnu/librt.so.1 [0]
+>        805:	=
+
+>        805:	=
+
+>        805:	calling fini: /usr/local/lib/liburcu-bp.so.2 [0]
+>        805:	=
+
+>        805:	=
+
+>        805:	calling fini: /usr/local/lib/liburcu-cds.so.2 [0]
+>        805:	=
+
+>        805:	=
+
+>        805:	calling fini: /lib/x86_64-linux-gnu/libpthread.so.0 [0]
+>        805:	=
+
 > =
 
 > Daniel U. Thibault
