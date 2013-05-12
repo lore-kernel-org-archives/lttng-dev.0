@@ -1,17 +1,17 @@
 From: Francis Giraldeau <francis.giraldeau@gmail.com>
-Subject: [PATCH] Fix typo in run script
-Date: Sat, 11 May 2013 20:31:52 -0400
-Message-ID: <1368318712-31852-1-git-send-email-francis.giraldeau__4371.75277988917$1368318786$gmane$org@gmail.com>
+Subject: [PATCH] Fix (another) linker library order
+Date: Sat, 11 May 2013 20:44:39 -0400
+Message-ID: <1368319479-7433-1-git-send-email-francis.giraldeau__35676.3362804942$1368319549$gmane$org@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qc0-f169.google.com ([209.85.216.169])
+Received: from mail-qa0-f41.google.com ([209.85.216.41])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <francis.giraldeau@gmail.com>) id 1UbKDK-0005cD-VK
-	for lttng-dev@lists.lttng.org; Sat, 11 May 2013 20:32:35 -0400
-Received: by mail-qc0-f169.google.com with SMTP id z10so2853871qcx.0
-	for <lttng-dev@lists.lttng.org>; Sat, 11 May 2013 17:32:29 -0700 (PDT)
+	(envelope-from <francis.giraldeau@gmail.com>) id 1UbKPf-0005im-7N
+	for lttng-dev@lists.lttng.org; Sat, 11 May 2013 20:45:19 -0400
+Received: by mail-qa0-f41.google.com with SMTP id bv4so888724qab.7
+	for <lttng-dev@lists.lttng.org>; Sat, 11 May 2013 17:45:13 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,21 +23,25 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-The actual library is liblttng-ust-libc-wrapper.so
+Libraries must be specified after the binary target.
 
 Signed-off-by: Francis Giraldeau <francis.giraldeau@gmail.com>
 ---
- liblttng-ust-libc-wrapper/run | 2 +-
+ doc/examples/hello-static-lib/Makefile | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/liblttng-ust-libc-wrapper/run b/liblttng-ust-libc-wrapper/run
-index 2583d23..80d4175 100755
---- a/liblttng-ust-libc-wrapper/run
-+++ b/liblttng-ust-libc-wrapper/run
-@@ -1,3 +1,3 @@
- #!/bin/sh
+diff --git a/doc/examples/hello-static-lib/Makefile b/doc/examples/hello-static-lib/Makefile
+index a5bf2df..dd246f7 100644
+--- a/doc/examples/hello-static-lib/Makefile
++++ b/doc/examples/hello-static-lib/Makefile
+@@ -46,7 +46,7 @@ hello.o: hello.c
+ 	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
  
--LD_VERBOSE=1 LD_PRELOAD=.libs/liblttng-ust-libc.so ${*}
-+LD_VERBOSE=1 LD_PRELOAD=.libs/liblttng-ust-libc-wrapper.so ${*}
+ hello: hello.o lttng-ust-provider-hello.a
+-	$(CC) -o $@ $(LDFLAGS) $(LIBS) $^
++	$(CC) -o $@ $(LDFLAGS) $^ $(LIBS)
+ 
+ .PHONY: clean
+ clean:
 -- 
 1.8.1.2
