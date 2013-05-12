@@ -1,19 +1,20 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: Zifei Tong <soariez@gmail.com>
 Subject: Re: UST context causes empty trace
-Date: Sat, 11 May 2013 23:08:02 -0400
-Message-ID: <20130512030802.GE405__13913.1306823858$1368328115$gmane$org@Krystal>
+Date: Sun, 12 May 2013 17:27:29 +0800
+Message-ID: <CAJ7wx-EoDjkgv=Pk8RjtbhyRy6eOM7RoJmhBEg5XA_xOxLMgWA__175.421292851929$1368350895$gmane$org@mail.gmail.com>
 References: <518EEC19.6080504@gmail.com>
+	<20130512030802.GE405@Krystal>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from mail-vb0-f41.google.com ([209.85.212.41])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UbMdo-0006qs-Fv
-	for lttng-dev@lists.lttng.org; Sat, 11 May 2013 23:08:04 -0400
-Content-Disposition: inline
-In-Reply-To: <518EEC19.6080504@gmail.com>
+	(envelope-from <soariez@gmail.com>) id 1UbSZ5-0001OO-Hf
+	for lttng-dev@lists.lttng.org; Sun, 12 May 2013 05:27:35 -0400
+Received: by mail-vb0-f41.google.com with SMTP id w8so4572705vbf.28
+	for <lttng-dev@lists.lttng.org>; Sun, 12 May 2013 02:27:30 -0700 (PDT)
+In-Reply-To: <20130512030802.GE405@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,64 +23,85 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Francis Giraldeau <francis.giraldeau@gmail.com>, dgoulet@efficios.com
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Yes, it's broken here too. Can you open a bug report against UST please?
-
-it looks like those are missing when we enable UST contexts:
-
-libust[26034/26049]: Sent register channel notification: chan_id 0, header_type 1
- (in ustcomm_register_channel() at lttng-ust-comm.c:1053)
-[...]
-libust[26034/26034]: Sent register event notification for name "ust_tests_hello:tptest": ret_code 0, event_id 0
- (in ustcomm_register_event() at lttng-ust-comm.c:948)
-libust[26034/26034]: Sent register event notification for name "ust_tests_hello:tptest_sighandler": ret_code 0, event_id 1
- (in ustcomm_register_event() at lttng-ust-comm.c:948)
-
-(I get those in a run where I don't enable any UST context, but not in
-the problematic case)
-
-the rest seems to be there when launching the app with LTTNG_UST_DEBUG=1
-env var set. So it looks like an issue within UST.
-
-Thanks,
-
-Mathieu
-
-* Francis Giraldeau (francis.giraldeau@gmail.com) wrote:
-> With 2.2.0-rc2, when enabling some context for UST, the generated trace
-> is empty. Here is a small script to reproduce the problem:
-> 
-> $ cat do.sh
-> lttng create
-> lttng enable-channel u -u
-> lttng enable-event -c u -a -u
-> lttng add-context -c u -u -t vpid -t vtid
-> lttng start
-> $@
-> lttng stop
-> lttng view
-> lttng destroy
-> 
-> When commenting out the "add-context" command, then the trace is
-> generated correctly. Does someone else is able to confirm the problem?
-> 
-> Thanks,
-> 
-> Francis Giraldeau
-> 
-
-
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+SGksCgpJIGRpZCBzb21lIGRlYnVnZ2luZyBvbmUgdGhpcyBpc3N1ZS4gVGhlIHByb2JsZW0gb25s
+eSBvY2N1cnMgd2hlbiB3ZQpoYXZlIG1vcmUgdGhhbiBvbmUgY29udGV4dCBmaWVsZC4KU28gdGhp
+cyB3aWxsIG5vdCB3b3JrLCB0b286CgpsdHRuZyBjcmVhdGUKbHR0bmcgZW5hYmxlLWV2ZW50IC1h
+IC11Cmx0dG5nIGFkZC1jb250ZXh0IC11IC10IHZwaWQKbHR0bmcgYWRkLWNvbnRleHQgLXUgLXQg
+dnRpZApsdHRuZyBzdGFydAokQApsdHRuZyBzdG9wCnNsZWVwIDEKbHR0bmcgdmlldwpsdHRuZyBk
+ZXN0cm95CgpUaGUgcHJvYmxlbSBJIGZvdW5kIG91dCBpcyB3cm9uZyBgZmllbGRzYCBhcmd1bWVu
+dCBwYXNzZWQgaW50bwpgdXN0Y29tbV9yZWdpc3Rlcl9jaGFubmVsYC4KVGhlIGBmaWVsZHNgIGFy
+Z3VtZW50IHBhc3NlZCBpcyBhIHBvaW50ZXIgdG8gdGhlIGBldmVudF9maWVsZGAgb2YgdGhlCmZp
+cnN0IGVsZW1lbnQgaW4gYSBgbHR0bmdfY3R4X2ZpZWxkYCBhcnJheSwKYnV0IG5vdCBhIGBsdHRu
+Z19ldmVudF9maWVsZGAgYXJyYXkgYXMgZXhwZWN0ZWQuCgpQbGVhc2Ugc2VlIHRoZSBwYXRjaCBm
+b3IgbW9yZSBkZXRhaWxzLgoKVGhlIHBhdGNoIHdvcmtzIG9uIG15IG1hY2hpbmUuIEJ1dCBJIHdv
+bmRlciBpZiB0aGVyZSBpcyBzb21ldGhpbmcKd3Jvbmcgb3IgbWF5YmUgYSBiZXR0ZXIgZml4LgpQ
+bGVhc2UgcmV2aWV3LgoKVGhhbmtzLAoKWmlmZWkgVG9uZwoKU2lnbmVkLW9mZi1ieTogWmlmZWkg
+VG9uZyA8c29hcmllekBnbWFpbC5jb20+Ci0tLQogbGlibHR0bmctdXN0L2x0dG5nLWV2ZW50cy5j
+IHwgOSArKysrKysrLS0KIDEgZmlsZSBjaGFuZ2VkLCA3IGluc2VydGlvbnMoKyksIDIgZGVsZXRp
+b25zKC0pCgpkaWZmIC0tZ2l0IGEvbGlibHR0bmctdXN0L2x0dG5nLWV2ZW50cy5jIGIvbGlibHR0
+bmctdXN0L2x0dG5nLWV2ZW50cy5jCmluZGV4IGU0ZmFmNjAuLjdhZmUxM2YgMTAwNjQ0Ci0tLSBh
+L2xpYmx0dG5nLXVzdC9sdHRuZy1ldmVudHMuYworKysgYi9saWJsdHRuZy11c3QvbHR0bmctZXZl
+bnRzLmMKQEAgLTI2MCw5ICsyNjAsMTAgQEAgaW50IGx0dG5nX3Nlc3Npb25fZW5hYmxlKHN0cnVj
+dCBsdHRuZ19zZXNzaW9uICpzZXNzaW9uKQogCSAqLwogCWNkc19saXN0X2Zvcl9lYWNoX2VudHJ5
+KGNoYW4sICZzZXNzaW9uLT5jaGFuX2hlYWQsIG5vZGUpIHsKIAkJY29uc3Qgc3RydWN0IGx0dG5n
+X2N0eCAqY3R4OwotCQljb25zdCBzdHJ1Y3QgbHR0bmdfZXZlbnRfZmllbGQgKmZpZWxkcyA9IE5V
+TEw7CisJCXN0cnVjdCBsdHRuZ19ldmVudF9maWVsZCAqZmllbGRzID0gTlVMTDsKIAkJc2l6ZV90
+IG5yX2ZpZWxkcyA9IDA7CiAJCXVpbnQzMl90IGNoYW5faWQ7CisJCWludCBpOwoKIAkJLyogZG9u
+J3QgY2hhbmdlIGl0IGlmIHNlc3Npb24gc3RvcC9yZXN0YXJ0ICovCiAJCWlmIChjaGFuLT5oZWFk
+ZXJfdHlwZSkKQEAgLTI3MCw3ICsyNzEsOSBAQCBpbnQgbHR0bmdfc2Vzc2lvbl9lbmFibGUoc3Ry
+dWN0IGx0dG5nX3Nlc3Npb24gKnNlc3Npb24pCiAJCWN0eCA9IGNoYW4tPmN0eDsKIAkJaWYgKGN0
+eCkgewogCQkJbnJfZmllbGRzID0gY3R4LT5ucl9maWVsZHM7Ci0JCQlmaWVsZHMgPSAmY3R4LT5m
+aWVsZHMtPmV2ZW50X2ZpZWxkOworCQkJZmllbGRzID0gbWFsbG9jKG5yX2ZpZWxkcyAqIHNpemVv
+ZihzdHJ1Y3QgbHR0bmdfZXZlbnRfZmllbGQpKTsKKwkJCWZvciAoaSA9IDA7IGkgPCBucl9maWVs
+ZHM7IGkrKykKKwkJCQlmaWVsZHNbaV0gPSBjdHgtPmZpZWxkc1tpXS5ldmVudF9maWVsZDsKIAkJ
+fQogCQlyZXQgPSB1c3Rjb21tX3JlZ2lzdGVyX2NoYW5uZWwobm90aWZ5X3NvY2tldCwKIAkJCXNl
+c3Npb24tPm9iamQsCkBAIC0yNzksNiArMjgyLDggQEAgaW50IGx0dG5nX3Nlc3Npb25fZW5hYmxl
+KHN0cnVjdCBsdHRuZ19zZXNzaW9uICpzZXNzaW9uKQogCQkJZmllbGRzLAogCQkJJmNoYW5faWQs
+CiAJCQkmY2hhbi0+aGVhZGVyX3R5cGUpOworCQlpZiAoZmllbGRzICE9IE5VTEwpCisJCQlmcmVl
+KGZpZWxkcyk7CiAJCWlmIChyZXQpIHsKIAkJCURCRygiRXJyb3IgKCVkKSByZWdpc3RlcmluZyBj
+aGFubmVsIHRvIHNlc3Npb25kIiwgcmV0KTsKIAkJCXJldHVybiByZXQ7Ci0tIAoxLjguMi4yCgpP
+biA1LzEyLzEzLCBNYXRoaWV1IERlc25veWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3Mu
+Y29tPiB3cm90ZToKPiBZZXMsIGl0J3MgYnJva2VuIGhlcmUgdG9vLiBDYW4geW91IG9wZW4gYSBi
+dWcgcmVwb3J0IGFnYWluc3QgVVNUIHBsZWFzZT8KPgo+IGl0IGxvb2tzIGxpa2UgdGhvc2UgYXJl
+IG1pc3Npbmcgd2hlbiB3ZSBlbmFibGUgVVNUIGNvbnRleHRzOgo+Cj4gbGlidXN0WzI2MDM0LzI2
+MDQ5XTogU2VudCByZWdpc3RlciBjaGFubmVsIG5vdGlmaWNhdGlvbjogY2hhbl9pZCAwLAo+IGhl
+YWRlcl90eXBlIDEKPiAgKGluIHVzdGNvbW1fcmVnaXN0ZXJfY2hhbm5lbCgpIGF0IGx0dG5nLXVz
+dC1jb21tLmM6MTA1MykKPiBbLi4uXQo+IGxpYnVzdFsyNjAzNC8yNjAzNF06IFNlbnQgcmVnaXN0
+ZXIgZXZlbnQgbm90aWZpY2F0aW9uIGZvciBuYW1lCj4gInVzdF90ZXN0c19oZWxsbzp0cHRlc3Qi
+OiByZXRfY29kZSAwLCBldmVudF9pZCAwCj4gIChpbiB1c3Rjb21tX3JlZ2lzdGVyX2V2ZW50KCkg
+YXQgbHR0bmctdXN0LWNvbW0uYzo5NDgpCj4gbGlidXN0WzI2MDM0LzI2MDM0XTogU2VudCByZWdp
+c3RlciBldmVudCBub3RpZmljYXRpb24gZm9yIG5hbWUKPiAidXN0X3Rlc3RzX2hlbGxvOnRwdGVz
+dF9zaWdoYW5kbGVyIjogcmV0X2NvZGUgMCwgZXZlbnRfaWQgMQo+ICAoaW4gdXN0Y29tbV9yZWdp
+c3Rlcl9ldmVudCgpIGF0IGx0dG5nLXVzdC1jb21tLmM6OTQ4KQo+Cj4gKEkgZ2V0IHRob3NlIGlu
+IGEgcnVuIHdoZXJlIEkgZG9uJ3QgZW5hYmxlIGFueSBVU1QgY29udGV4dCwgYnV0IG5vdCBpbgo+
+IHRoZSBwcm9ibGVtYXRpYyBjYXNlKQo+Cj4gdGhlIHJlc3Qgc2VlbXMgdG8gYmUgdGhlcmUgd2hl
+biBsYXVuY2hpbmcgdGhlIGFwcCB3aXRoIExUVE5HX1VTVF9ERUJVRz0xCj4gZW52IHZhciBzZXQu
+IFNvIGl0IGxvb2tzIGxpa2UgYW4gaXNzdWUgd2l0aGluIFVTVC4KPgo+IFRoYW5rcywKPgo+IE1h
+dGhpZXUKPgo+ICogRnJhbmNpcyBHaXJhbGRlYXUgKGZyYW5jaXMuZ2lyYWxkZWF1QGdtYWlsLmNv
+bSkgd3JvdGU6Cj4+IFdpdGggMi4yLjAtcmMyLCB3aGVuIGVuYWJsaW5nIHNvbWUgY29udGV4dCBm
+b3IgVVNULCB0aGUgZ2VuZXJhdGVkIHRyYWNlCj4+IGlzIGVtcHR5LiBIZXJlIGlzIGEgc21hbGwg
+c2NyaXB0IHRvIHJlcHJvZHVjZSB0aGUgcHJvYmxlbToKPj4KPj4gJCBjYXQgZG8uc2gKPj4gbHR0
+bmcgY3JlYXRlCj4+IGx0dG5nIGVuYWJsZS1jaGFubmVsIHUgLXUKPj4gbHR0bmcgZW5hYmxlLWV2
+ZW50IC1jIHUgLWEgLXUKPj4gbHR0bmcgYWRkLWNvbnRleHQgLWMgdSAtdSAtdCB2cGlkIC10IHZ0
+aWQKPj4gbHR0bmcgc3RhcnQKPj4gJEAKPj4gbHR0bmcgc3RvcAo+PiBsdHRuZyB2aWV3Cj4+IGx0
+dG5nIGRlc3Ryb3kKPj4KPj4gV2hlbiBjb21tZW50aW5nIG91dCB0aGUgImFkZC1jb250ZXh0IiBj
+b21tYW5kLCB0aGVuIHRoZSB0cmFjZSBpcwo+PiBnZW5lcmF0ZWQgY29ycmVjdGx5LiBEb2VzIHNv
+bWVvbmUgZWxzZSBpcyBhYmxlIHRvIGNvbmZpcm0gdGhlIHByb2JsZW0/Cj4+Cj4+IFRoYW5rcywK
+Pj4KPj4gRnJhbmNpcyBHaXJhbGRlYXUKPj4KPgo+Cj4KPj4gX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX18KPj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+PiBs
+dHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4+IGh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJp
+bi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo+Cj4KPiAtLQo+IE1hdGhpZXUgRGVzbm95ZXJz
+Cj4gRWZmaWNpT1MgSW5jLgo+IGh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCj4KPiBfX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5n
+IGxpc3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0cDovL2xpc3RzLmx0dG5nLm9y
+Zy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cj4KCgotLSAKLS0KQmVzdCBSZWdh
+cmRzLArku53lrZDpo54gKFppZmVpIFRvbmcpCkNvbGxlZ2Ugb2YgQ29tcHV0ZXIgU2NpZW5jZSBh
+bmQgVGVjaG5vbG9neSwgWmhlamlhbmcgVW5pdmVyc2l0eQoKc29hcmllekBnbWFpbC5jb20gLyB0
+b25nemlmZWlAemp1LmVkdS5jbgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcu
+b3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5n
+LWRldgo=
