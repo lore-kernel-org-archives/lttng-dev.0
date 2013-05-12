@@ -1,8 +1,8 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH] Fix typo in run script
-Date: Sat, 11 May 2013 22:59:54 -0400
-Message-ID: <20130512025954.GC405__34100.1505069018$1368327629$gmane$org@Krystal>
-References: <1368318712-31852-1-git-send-email-francis.giraldeau@gmail.com>
+Subject: Re: [PATCH] Fix (another) linker library order
+Date: Sat, 11 May 2013 23:00:25 -0400
+Message-ID: <20130512030024.GD405__43333.8820621886$1368327651$gmane$org@Krystal>
+References: <1368319479-7433-1-git-send-email-francis.giraldeau@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -10,10 +10,10 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UbMVv-0006kj-Vv
-	for lttng-dev@lists.lttng.org; Sat, 11 May 2013 22:59:56 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1UbMWP-0006nF-Vk
+	for lttng-dev@lists.lttng.org; Sat, 11 May 2013 23:00:26 -0400
 Content-Disposition: inline
-In-Reply-To: <1368318712-31852-1-git-send-email-francis.giraldeau@gmail.com>
+In-Reply-To: <1368319479-7433-1-git-send-email-francis.giraldeau@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -27,27 +27,31 @@ Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
 * Francis Giraldeau (francis.giraldeau@gmail.com) wrote:
-> The actual library is liblttng-ust-libc-wrapper.so
+> Libraries must be specified after the binary target.
 
-merged, thanks!
+merged, thanks,
 
 Mathieu
 
 > 
 > Signed-off-by: Francis Giraldeau <francis.giraldeau@gmail.com>
 > ---
->  liblttng-ust-libc-wrapper/run | 2 +-
+>  doc/examples/hello-static-lib/Makefile | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/liblttng-ust-libc-wrapper/run b/liblttng-ust-libc-wrapper/run
-> index 2583d23..80d4175 100755
-> --- a/liblttng-ust-libc-wrapper/run
-> +++ b/liblttng-ust-libc-wrapper/run
-> @@ -1,3 +1,3 @@
->  #!/bin/sh
+> diff --git a/doc/examples/hello-static-lib/Makefile b/doc/examples/hello-static-lib/Makefile
+> index a5bf2df..dd246f7 100644
+> --- a/doc/examples/hello-static-lib/Makefile
+> +++ b/doc/examples/hello-static-lib/Makefile
+> @@ -46,7 +46,7 @@ hello.o: hello.c
+>  	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
 >  
-> -LD_VERBOSE=1 LD_PRELOAD=.libs/liblttng-ust-libc.so ${*}
-> +LD_VERBOSE=1 LD_PRELOAD=.libs/liblttng-ust-libc-wrapper.so ${*}
+>  hello: hello.o lttng-ust-provider-hello.a
+> -	$(CC) -o $@ $(LDFLAGS) $(LIBS) $^
+> +	$(CC) -o $@ $(LDFLAGS) $^ $(LIBS)
+>  
+>  .PHONY: clean
+>  clean:
 > -- 
 > 1.8.1.2
 > 
