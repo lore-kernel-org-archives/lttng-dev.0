@@ -1,19 +1,19 @@
 From: Christian Babeux <christian.babeux@efficios.com>
-Subject: [PATCH lttng-tools 3/6] Tests: Replace usage of
-	gen-ust-events testapp in ust before-after test
-Date: Mon, 13 May 2013 18:30:53 -0400
-Message-ID: <1368484256-6666-3-git-send-email-christian.babeux__481.848468962376$1368484324$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools 4/6] Tests: Replace usage of
+	gen-ust-events testapp in ust buffers-uid test
+Date: Mon, 13 May 2013 18:30:54 -0400
+Message-ID: <1368484256-6666-4-git-send-email-christian.babeux__23935.6790007607$1368484329$gmane$org@efficios.com>
 References: <1368484256-6666-1-git-send-email-christian.babeux@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-vb0-f47.google.com ([209.85.212.47])
+Received: from mail-vc0-f172.google.com ([209.85.220.172])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <christian.babeux@0x80.ca>) id 1Uc1HJ-0002Vw-92
-	for lttng-dev@lists.lttng.org; Mon, 13 May 2013 18:31:33 -0400
-Received: by mail-vb0-f47.google.com with SMTP id x14so5584232vbb.20
-	for <lttng-dev@lists.lttng.org>; Mon, 13 May 2013 15:31:27 -0700 (PDT)
+	(envelope-from <christian.babeux@0x80.ca>) id 1Uc1HP-0002WR-43
+	for lttng-dev@lists.lttng.org; Mon, 13 May 2013 18:31:39 -0400
+Received: by mail-vc0-f172.google.com with SMTP id m17so6042680vca.3
+	for <lttng-dev@lists.lttng.org>; Mon, 13 May 2013 15:31:33 -0700 (PDT)
 In-Reply-To: <1368484256-6666-1-git-send-email-christian.babeux@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -31,20 +31,20 @@ Use the gen-ust-events binary found under tests/utils/testapp/gen-ust-events/.
 
 Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
 ---
- tests/regression/ust/before-after/Makefile.am      | 14 ------
- tests/regression/ust/before-after/gen-nevents.c    | 56 ----------------------
- .../regression/ust/before-after/test_before_after  | 14 +++---
- tests/regression/ust/before-after/tp.c             | 16 -------
- .../regression/ust/before-after/ust_gen_nevents.h  | 56 ----------------------
- 5 files changed, 8 insertions(+), 148 deletions(-)
- delete mode 100644 tests/regression/ust/before-after/gen-nevents.c
- delete mode 100644 tests/regression/ust/before-after/tp.c
- delete mode 100644 tests/regression/ust/before-after/ust_gen_nevents.h
+ tests/regression/ust/buffers-uid/Makefile.am       | 14 ------
+ tests/regression/ust/buffers-uid/gen-nevents.c     | 56 ----------------------
+ tests/regression/ust/buffers-uid/test_buffers_uid  | 24 ++++++----
+ tests/regression/ust/buffers-uid/tp.c              | 16 -------
+ tests/regression/ust/buffers-uid/ust_gen_nevents.h | 56 ----------------------
+ 5 files changed, 14 insertions(+), 152 deletions(-)
+ delete mode 100644 tests/regression/ust/buffers-uid/gen-nevents.c
+ delete mode 100644 tests/regression/ust/buffers-uid/tp.c
+ delete mode 100644 tests/regression/ust/buffers-uid/ust_gen_nevents.h
 
-diff --git a/tests/regression/ust/before-after/Makefile.am b/tests/regression/ust/before-after/Makefile.am
-index f883a32..e37fe96 100644
---- a/tests/regression/ust/before-after/Makefile.am
-+++ b/tests/regression/ust/before-after/Makefile.am
+diff --git a/tests/regression/ust/buffers-uid/Makefile.am b/tests/regression/ust/buffers-uid/Makefile.am
+index 31fb019..4fefd80 100644
+--- a/tests/regression/ust/buffers-uid/Makefile.am
++++ b/tests/regression/ust/buffers-uid/Makefile.am
 @@ -1,16 +1,2 @@
 -AM_CFLAGS = -I$(srcdir) -O2
 -AM_LDFLAGS = -llttng-ust
@@ -60,12 +60,12 @@ index f883a32..e37fe96 100644
 -gen_nevents_SOURCES = gen-nevents.c tp.c ust_gen_nevents.h
 -gen_nevents_LDADD = -llttng-ust
 -
- noinst_SCRIPTS = test_before_after
- EXTRA_DIST = test_before_after
-diff --git a/tests/regression/ust/before-after/gen-nevents.c b/tests/regression/ust/before-after/gen-nevents.c
+ noinst_SCRIPTS = test_buffers_uid
+ EXTRA_DIST = test_buffers_uid
+diff --git a/tests/regression/ust/buffers-uid/gen-nevents.c b/tests/regression/ust/buffers-uid/gen-nevents.c
 deleted file mode 100644
 index b2c1992..0000000
---- a/tests/regression/ust/before-after/gen-nevents.c
+--- a/tests/regression/ust/buffers-uid/gen-nevents.c
 +++ /dev/null
 @@ -1,56 +0,0 @@
 -/*
@@ -124,58 +124,92 @@ index b2c1992..0000000
 -
 -	return 0;
 -}
-diff --git a/tests/regression/ust/before-after/test_before_after b/tests/regression/ust/before-after/test_before_after
-index c3e24f7..6d45bb5 100755
---- a/tests/regression/ust/before-after/test_before_after
-+++ b/tests/regression/ust/before-after/test_before_after
-@@ -19,27 +19,29 @@ TEST_DESC="UST tracer - Start tracing before and after execution"
+diff --git a/tests/regression/ust/buffers-uid/test_buffers_uid b/tests/regression/ust/buffers-uid/test_buffers_uid
+index 3b5c7a6..6af675c 100755
+--- a/tests/regression/ust/buffers-uid/test_buffers_uid
++++ b/tests/regression/ust/buffers-uid/test_buffers_uid
+@@ -19,15 +19,19 @@ TEST_DESC="UST tracer - Tracing with per UID buffers"
  CURDIR=$(dirname $0)/
  TESTDIR=$CURDIR/../../..
  NR_ITER=100
 +NR_USEC_WAIT=100000
+ SESSION_NAME="buffers-uid"
+-EVENT_NAME="ust_gen_nevents:tptest"
+-BIN_NAME="gen-nevents"
++
 +TESTAPP_PATH="$TESTDIR/utils/testapp"
 +TESTAPP_NAME="gen-ust-events"
 +TESTAPP_BIN="$TESTAPP_PATH/$TESTAPP_NAME/$TESTAPP_NAME"
- SESSION_NAME="per-session"
--EVENT_NAME="ust_gen_nevents:tptest"
 +EVENT_NAME="tp:tptest"
- NUM_TESTS=16
+ NUM_TESTS=58
  
  source $TESTDIR/utils/utils.sh
  
 -if [ ! -x "$CURDIR/gen-nevents" ]; then
+-	BAIL_OUT "No UST nevents binary detected."
 +if [ ! -x "$TESTAPP_BIN" ]; then
- 	BAIL_OUT "No UST nevents binary detected."
++	BAIL_OUT "No UST events binary detected."
  fi
  
  # MUST set TESTDIR before calling those functions
+@@ -44,7 +48,7 @@ function enable_channel_per_uid()
+ function wait_apps
+ {
+ 	diag "Waiting for applications to end..."
+-	while [ -n "$(pidof $BIN_NAME)" ]; do
++	while [ -n "$(pidof $TESTAPP_NAME)" ]; do
+ 		sleep 1
+ 	done
+ }
+@@ -62,7 +66,7 @@ test_after_multiple_apps() {
+ 	start_lttng_tracing $SESSION_NAME
  
- test_before_apps() {
--	local out
--
- 	# BEFORE application is spawned
- 	create_lttng_session $SESSION_NAME $TRACE_PATH
+ 	for i in `seq 1 5`; do
+-		./$CURDIR/$BIN_NAME $NR_ITER & >/dev/null 2>&1
++		$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT & >/dev/null 2>&1
+ 		ok $? "Start application $i for tracing"
+ 	done
+ 	wait_apps
+@@ -82,7 +86,7 @@ test_before_multiple_apps() {
+ 	diag "Start multiple applications BEFORE tracing is started"
+ 
+ 	for i in `seq 1 5`; do
+-		./$CURDIR/$BIN_NAME $NR_ITER & >/dev/null 2>&1
++		$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT & >/dev/null 2>&1
+ 		ok $? "Start application $i for tracing"
+ 	done
+ 
+@@ -125,7 +129,7 @@ test_after_app() {
  	enable_ust_lttng_event $SESSION_NAME $EVENT_NAME
  	start_lttng_tracing $SESSION_NAME
  
--	./$CURDIR/gen-nevents $NR_ITER
+-	./$CURDIR/$BIN_NAME $NR_ITER
 +	$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT
  	ok $? "Start application to trace"
  
  	stop_lttng_tracing $SESSION_NAME
-@@ -53,7 +55,7 @@ test_before_apps() {
- test_after_apps() {
- 	local out
+@@ -141,7 +145,7 @@ test_before_app() {
  
--	./$CURDIR/gen-nevents 100 &
+ 	diag "Start application BEFORE tracing is started"
+ 
+-	./$CURDIR/$BIN_NAME $NR_ITER &
 +	$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT &
  	ok $? "Start application to trace"
  
  	# BEFORE application is spawned
-diff --git a/tests/regression/ust/before-after/tp.c b/tests/regression/ust/before-after/tp.c
+@@ -197,7 +201,7 @@ test_multiple_channels() {
+ 	ok $? "Enable event $EVENT_NAME for session $SESSION_NAME in channel4"
+ 	start_lttng_tracing $SESSION_NAME
+ 
+-	./$CURDIR/$BIN_NAME $NR_ITER
++	$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT
+ 	ok $? "Start application to trace"
+ 
+ 	stop_lttng_tracing $SESSION_NAME
+diff --git a/tests/regression/ust/buffers-uid/tp.c b/tests/regression/ust/buffers-uid/tp.c
 deleted file mode 100644
 index e291924..0000000
---- a/tests/regression/ust/before-after/tp.c
+--- a/tests/regression/ust/buffers-uid/tp.c
 +++ /dev/null
 @@ -1,16 +0,0 @@
 -/*
@@ -194,10 +228,10 @@ index e291924..0000000
 -
 -#define TRACEPOINT_CREATE_PROBES
 -#include "ust_gen_nevents.h"
-diff --git a/tests/regression/ust/before-after/ust_gen_nevents.h b/tests/regression/ust/before-after/ust_gen_nevents.h
+diff --git a/tests/regression/ust/buffers-uid/ust_gen_nevents.h b/tests/regression/ust/buffers-uid/ust_gen_nevents.h
 deleted file mode 100644
 index bc09c44..0000000
---- a/tests/regression/ust/before-after/ust_gen_nevents.h
+--- a/tests/regression/ust/buffers-uid/ust_gen_nevents.h
 +++ /dev/null
 @@ -1,56 +0,0 @@
 -#undef TRACEPOINT_PROVIDER
