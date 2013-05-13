@@ -1,18 +1,18 @@
-From: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
-Subject: Re: [PATCH] Fix linker library order
-Date: Mon, 13 May 2013 17:57:28 -0400
-Message-ID: <519161C8.5000305__30414.8071715192$1368482293$gmane$org@voxpopuli.im>
-References: <1368318333-31522-1-git-send-email-francis.giraldeau@gmail.com>
-	<20130512025917.GB405@Krystal>
+From: Christian Babeux <christian.babeux@efficios.com>
+Subject: [PATCH lttng-tools 1/6] Tests: Cleanup and move
+	gen-ust-events testapp under utils
+Date: Mon, 13 May 2013 18:30:51 -0400
+Message-ID: <1368484256-6666-1-git-send-email-christian.babeux__30222.74206528$1368484309$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from ironport2-out.teksavvy.com ([206.248.154.182])
+Received: from mail-vc0-f177.google.com ([209.85.220.177])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <alexmonthy@voxpopuli.im>) id 1Uc0kY-0002DW-TE
-	for lttng-dev@lists.lttng.org; Mon, 13 May 2013 17:57:42 -0400
-In-Reply-To: <20130512025917.GB405@Krystal>
+	(envelope-from <christian.babeux@0x80.ca>) id 1Uc1H3-0002UY-K1
+	for lttng-dev@lists.lttng.org; Mon, 13 May 2013 18:31:17 -0400
+Received: by mail-vc0-f177.google.com with SMTP id ha12so5936250vcb.36
+	for <lttng-dev@lists.lttng.org>; Mon, 13 May 2013 15:31:12 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,52 +21,229 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: dgoulet@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On 13-05-11 10:59 PM, Mathieu Desnoyers wrote:
-> * Francis Giraldeau (francis.giraldeau@gmail.com) wrote:
->> Libraries must be specified after the binary target.
-> merged, thanks!
->
-> Mathieu
+This will improve the maintainability and stop the copying madness going
+on in each test needing a UST sample application.
 
-This seems to have broken the daily PPA packages:
-https://launchpadlibrarian.net/139804087/buildlog_ubuntu-saucy-amd64.lttng-ust_2.2~pre-0%2Bbzr1574%2Bpack37%2B201305131247~saucy1_FAILEDTOBUILD.txt.gz
+Application under test should go in tests/utils/testapp/<testapp_name>/.
 
-That package has no particular patches. If I build it locally from
-source it builds fine, but if I build the package locally (with
-dpkg-buildpackage), I get the same error. It could be related to the
---as-needed problem we've had before...
+Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
+---
+ configure.ac                                       |  2 +
+ tests/utils/Makefile.am                            |  2 +-
+ tests/utils/testapp/Makefile.am                    |  2 +
+ tests/utils/testapp/gen-ust-events/Makefile.am     | 15 ++++++
+ .../utils/testapp/gen-ust-events/gen-ust-events.c  | 58 ++++++++++++++++++++++
+ tests/utils/testapp/gen-ust-events/tp.c            | 15 ++++++
+ tests/utils/testapp/gen-ust-events/tp.h            | 56 +++++++++++++++++++++
+ 7 files changed, 149 insertions(+), 1 deletion(-)
+ create mode 100644 tests/utils/testapp/Makefile.am
+ create mode 100644 tests/utils/testapp/gen-ust-events/Makefile.am
+ create mode 100644 tests/utils/testapp/gen-ust-events/gen-ust-events.c
+ create mode 100644 tests/utils/testapp/gen-ust-events/tp.c
+ create mode 100644 tests/utils/testapp/gen-ust-events/tp.h
 
-Cheers,
-Alex
-
->
->> Signed-off-by: Francis Giraldeau <francis.giraldeau@gmail.com>
->> ---
->>  doc/examples/demo/Makefile | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/doc/examples/demo/Makefile b/doc/examples/demo/Makefile
->> index 7ae6547..bbc8ccb 100644
->> --- a/doc/examples/demo/Makefile
->> +++ b/doc/examples/demo/Makefile
->> @@ -55,7 +55,7 @@ demo.o: demo.c
->>  	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
->>  
->>  demo: demo.o
->> -	$(CC) -o $@ $(LIBS) $^
->> +	$(CC) -o $@ $^ $(LIBS)
->>  
->>  .PHONY: clean
->>  clean:
->> -- 
->> 1.8.1.2
->>
->>
->> _______________________________________________
->> lttng-dev mailing list
->> lttng-dev@lists.lttng.org
->> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+diff --git a/configure.ac b/configure.ac
+index 650ae7f..9f14c12 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -341,6 +341,8 @@ AC_CONFIG_FILES([
+ 	tests/unit/Makefile
+ 	tests/utils/Makefile
+ 	tests/utils/tap/Makefile
++	tests/utils/testapp/Makefile
++	tests/utils/testapp/gen-ust-events/Makefile
+ ])
+ 
+ AC_OUTPUT
+diff --git a/tests/utils/Makefile.am b/tests/utils/Makefile.am
+index 25c6e04..e0de483 100644
+--- a/tests/utils/Makefile.am
++++ b/tests/utils/Makefile.am
+@@ -1,4 +1,4 @@
+-SUBDIRS = tap
++SUBDIRS = tap testapp
+ 
+ EXTRA_DIST = utils.sh test_utils.py
+ dist_noinst_SCRIPTS = utils.sh test_utils.py
+diff --git a/tests/utils/testapp/Makefile.am b/tests/utils/testapp/Makefile.am
+new file mode 100644
+index 0000000..8b631ee
+--- /dev/null
++++ b/tests/utils/testapp/Makefile.am
+@@ -0,0 +1,2 @@
++SUBDIRS = gen-ust-events
++
+diff --git a/tests/utils/testapp/gen-ust-events/Makefile.am b/tests/utils/testapp/gen-ust-events/Makefile.am
+new file mode 100644
+index 0000000..1be5835
+--- /dev/null
++++ b/tests/utils/testapp/gen-ust-events/Makefile.am
+@@ -0,0 +1,15 @@
++AM_CFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src -I$(srcdir) -O2 -g
++AM_LDFLAGS =
++
++if LTTNG_TOOLS_BUILD_WITH_LIBDL
++AM_LDFLAGS += -ldl
++endif
++if LTTNG_TOOLS_BUILD_WITH_LIBC_DL
++AM_LDFLAGS += -lc
++endif
++
++if HAVE_LIBLTTNG_UST_CTL
++noinst_PROGRAMS = gen-ust-events
++gen_ust_events_SOURCES = gen-ust-events.c tp.c tp.h
++gen_ust_events_LDADD = -llttng-ust
++endif
+diff --git a/tests/utils/testapp/gen-ust-events/gen-ust-events.c b/tests/utils/testapp/gen-ust-events/gen-ust-events.c
+new file mode 100644
+index 0000000..edf40ee
+--- /dev/null
++++ b/tests/utils/testapp/gen-ust-events/gen-ust-events.c
+@@ -0,0 +1,58 @@
++/*
++ * Copyright (C) - 2012 David Goulet <dgoulet@efficios.com>
++ *
++ * This library is free software; you can redistribute it and/or modify it
++ * under the terms of the GNU Lesser General Public License as published by the
++ * Free Software Foundation; version 2.1 of the License.
++ *
++ * This library is distributed in the hope that it will be useful, but WITHOUT
++ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
++ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
++ * for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public License
++ * along with this library; if not, write to the Free Software Foundation,
++ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
++ */
++
++#include <arpa/inet.h>
++#include <stdarg.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/mman.h>
++#include <sys/stat.h>
++#include <sys/types.h>
++#include <unistd.h>
++
++#define TRACEPOINT_DEFINE
++#include "tp.h"
++
++int main(int argc, char **argv)
++{
++	int i, netint;
++	long values[] = { 1, 2, 3 };
++	char text[10] = "test";
++	double dbl = 2.0;
++	float flt = 2222.0;
++	unsigned int nr_iter = 100;
++	useconds_t nr_usec = 0;
++
++	if (argc >= 2) {
++		nr_iter = atoi(argv[1]);
++	}
++
++	if (argc == 3) {
++		/* By default, don't wait unless user specifies. */
++		nr_usec = atoi(argv[2]);
++	}
++
++	for (i = 0; i < nr_iter; i++) {
++		netint = htonl(i);
++		tracepoint(tp, tptest, i, netint, values, text, strlen(text),
++			   dbl, flt);
++		usleep(nr_usec);
++	}
++
++	return 0;
++}
+diff --git a/tests/utils/testapp/gen-ust-events/tp.c b/tests/utils/testapp/gen-ust-events/tp.c
+new file mode 100644
+index 0000000..a09561d
+--- /dev/null
++++ b/tests/utils/testapp/gen-ust-events/tp.c
+@@ -0,0 +1,15 @@
++/*
++ * Copyright (c) - 2012 David Goulet <dgoulet@efficios.com>
++ *
++ * THIS MATERIAL IS PROVIDED AS IS, WITH ABSOLUTELY NO WARRANTY EXPRESSED OR
++ * IMPLIED. ANY USE IS AT YOUR OWN RISK.
++ *
++ * Permission is hereby granted to use or copy this program for any purpose,
++ * provided the above notices are retained on all copies.  Permission to modify
++ * the code and to distribute modified code is granted, provided the above
++ * notices are retained, and a notice that the code was modified is included
++ * with the above copyright notice.
++ */
++
++#define TRACEPOINT_CREATE_PROBES
++#include "tp.h"
+diff --git a/tests/utils/testapp/gen-ust-events/tp.h b/tests/utils/testapp/gen-ust-events/tp.h
+new file mode 100644
+index 0000000..6ffbc32
+--- /dev/null
++++ b/tests/utils/testapp/gen-ust-events/tp.h
+@@ -0,0 +1,56 @@
++#undef TRACEPOINT_PROVIDER
++#define TRACEPOINT_PROVIDER tp
++
++#if !defined(_TRACEPOINT_TP_H) || defined(TRACEPOINT_HEADER_MULTI_READ)
++#define _TRACEPOINT_TP_H
++
++#ifdef __cplusplus
++extern "C" {
++#endif
++
++/*
++ * Copyright (C) 2011  Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
++ *
++ * THIS MATERIAL IS PROVIDED AS IS, WITH ABSOLUTELY NO WARRANTY EXPRESSED
++ * OR IMPLIED.  ANY USE IS AT YOUR OWN RISK.
++ *
++ * Permission is hereby granted to use or copy this program
++ * for any purpose,  provided the above notices are retained on all copies.
++ * Permission to modify the code and to distribute modified code is granted,
++ * provided the above notices are retained, and a notice that the code was
++ * modified is included with the above copyright notice.
++ */
++
++#include <lttng/tracepoint.h>
++
++TRACEPOINT_EVENT(tp, tptest,
++	TP_ARGS(int, anint, int, netint, long *, values,
++		char *, text, size_t, textlen,
++		double, doublearg, float, floatarg),
++	TP_FIELDS(
++		ctf_integer(int, intfield, anint)
++		ctf_integer_hex(int, intfield2, anint)
++		ctf_integer(long, longfield, anint)
++		ctf_integer_network(int, netintfield, netint)
++		ctf_integer_network_hex(int, netintfieldhex, netint)
++		ctf_array(long, arrfield1, values, 3)
++		ctf_array_text(char, arrfield2, text, 10)
++		ctf_sequence(char, seqfield1, text, size_t, textlen)
++		ctf_sequence_text(char, seqfield2, text, size_t, textlen)
++		ctf_string(stringfield, text)
++		ctf_float(float, floatfield, floatarg)
++		ctf_float(double, doublefield, doublearg)
++	)
++)
++
++#endif /* _TRACEPOINT_TP_H */
++
++#undef TRACEPOINT_INCLUDE_FILE
++#define TRACEPOINT_INCLUDE_FILE ./tp.h
++
++/* This part must be outside ifdef protection */
++#include <lttng/tracepoint-event.h>
++
++#ifdef __cplusplus
++}
++#endif
+-- 
+1.8.2.2
