@@ -1,17 +1,18 @@
-From: Christian Babeux <christian.babeux@efficios.com>
-Subject: [PATCH lttng-tools] Tests: Remove unused utils.h header
-Date: Mon, 13 May 2013 17:51:03 -0400
-Message-ID: <1368481863-10412-1-git-send-email-christian.babeux__11233.5389633246$1368481918$gmane$org@efficios.com>
+From: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
+Subject: Re: [PATCH] Fix linker library order
+Date: Mon, 13 May 2013 17:57:28 -0400
+Message-ID: <519161C8.5000305__30414.8071715192$1368482293$gmane$org@voxpopuli.im>
+References: <1368318333-31522-1-git-send-email-francis.giraldeau@gmail.com>
+	<20130512025917.GB405@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-vc0-f182.google.com ([209.85.220.182])
+Received: from ironport2-out.teksavvy.com ([206.248.154.182])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <christian.babeux@0x80.ca>) id 1Uc0eW-0002A2-GB
-	for lttng-dev@lists.lttng.org; Mon, 13 May 2013 17:51:28 -0400
-Received: by mail-vc0-f182.google.com with SMTP id ia10so5875587vcb.41
-	for <lttng-dev@lists.lttng.org>; Mon, 13 May 2013 14:51:23 -0700 (PDT)
+	(envelope-from <alexmonthy@voxpopuli.im>) id 1Uc0kY-0002DW-TE
+	for lttng-dev@lists.lttng.org; Mon, 13 May 2013 17:57:42 -0400
+In-Reply-To: <20130512025917.GB405@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,77 +21,52 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: dgoulet@efficios.com
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
+On 13-05-11 10:59 PM, Mathieu Desnoyers wrote:
+> * Francis Giraldeau (francis.giraldeau@gmail.com) wrote:
+>> Libraries must be specified after the binary target.
+> merged, thanks!
+>
+> Mathieu
 
-Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
----
- tests/utils/Makefile.am |  4 ++--
- tests/utils/utils.h     | 43 -------------------------------------------
- 2 files changed, 2 insertions(+), 45 deletions(-)
- delete mode 100644 tests/utils/utils.h
+This seems to have broken the daily PPA packages:
+https://launchpadlibrarian.net/139804087/buildlog_ubuntu-saucy-amd64.lttng-ust_2.2~pre-0%2Bbzr1574%2Bpack37%2B201305131247~saucy1_FAILEDTOBUILD.txt.gz
 
-diff --git a/tests/utils/Makefile.am b/tests/utils/Makefile.am
-index 1b362fc..25c6e04 100644
---- a/tests/utils/Makefile.am
-+++ b/tests/utils/Makefile.am
-@@ -1,4 +1,4 @@
- SUBDIRS = tap
- 
--EXTRA_DIST = utils.sh utils.h test_utils.py
--dist_noinst_SCRIPTS = utils.sh utils.h test_utils.py
-+EXTRA_DIST = utils.sh test_utils.py
-+dist_noinst_SCRIPTS = utils.sh test_utils.py
-diff --git a/tests/utils/utils.h b/tests/utils/utils.h
-deleted file mode 100644
-index 94891c0..0000000
---- a/tests/utils/utils.h
-+++ /dev/null
-@@ -1,43 +0,0 @@
--/*
-- * Copyright (c) - 2011 David Goulet <david.goulet@polymtl.ca>
-- *
-- * This program is free software; you can redistribute it and/or modify it
-- * under the terms of the GNU General Public License as published by as
-- * published by the Free Software Foundation; only version 2 of the License.
-- *
-- * This program is distributed in the hope that it will be useful, but WITHOUT
-- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
-- * more details.
-- *
-- * You should have received a copy of the GNU General Public License along with
-- * this program; if not, write to the Free Software Foundation, Inc., 51
-- * Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-- */
--
--#include <stdio.h>
--#include <unistd.h>
--
--#define BRIGHT 1
--#define GREEN 32
--#define RED 31
--
--#define PRINT_OK()							\
--do {									\
--	/* Check for color support */					\
--	if (isatty(STDOUT_FILENO)) {					\
--		printf("%c[%d;%dmOK%c[%dm\n", 0x1B, BRIGHT, GREEN, 0x1B, 0); \
--	} else {							\
--		printf("OK\n");					\
--	}								\
--} while (0)
--
--#define PRINT_FAIL() \
--do {									\
--	/* Check for color support */					\
--	if (isatty(STDOUT_FILENO)) {					\
--		printf("%c[%d;%dmFAIL%c[%dm\n", 0x1B, BRIGHT, RED, 0x1B, 0); \
--	} else {							\
--		printf("FAIL\n");					\
--	}								\
--} while (0)
--- 
-1.8.2.2
+That package has no particular patches. If I build it locally from
+source it builds fine, but if I build the package locally (with
+dpkg-buildpackage), I get the same error. It could be related to the
+--as-needed problem we've had before...
+
+Cheers,
+Alex
+
+>
+>> Signed-off-by: Francis Giraldeau <francis.giraldeau@gmail.com>
+>> ---
+>>  doc/examples/demo/Makefile | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/doc/examples/demo/Makefile b/doc/examples/demo/Makefile
+>> index 7ae6547..bbc8ccb 100644
+>> --- a/doc/examples/demo/Makefile
+>> +++ b/doc/examples/demo/Makefile
+>> @@ -55,7 +55,7 @@ demo.o: demo.c
+>>  	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
+>>  
+>>  demo: demo.o
+>> -	$(CC) -o $@ $(LIBS) $^
+>> +	$(CC) -o $@ $^ $(LIBS)
+>>  
+>>  .PHONY: clean
+>>  clean:
+>> -- 
+>> 1.8.1.2
+>>
+>>
+>> _______________________________________________
+>> lttng-dev mailing list
+>> lttng-dev@lists.lttng.org
+>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
