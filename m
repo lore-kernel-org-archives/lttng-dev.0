@@ -1,19 +1,19 @@
 From: Christian Babeux <christian.babeux@efficios.com>
-Subject: [PATCH lttng-tools 2/6] Tests: Replace usage of
-	gen-ust-events testapp in streaming tests
-Date: Mon, 13 May 2013 18:30:52 -0400
-Message-ID: <1368484256-6666-2-git-send-email-christian.babeux__19985.3611215532$1368484314$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools 3/6] Tests: Replace usage of
+	gen-ust-events testapp in ust before-after test
+Date: Mon, 13 May 2013 18:30:53 -0400
+Message-ID: <1368484256-6666-3-git-send-email-christian.babeux__481.848468962376$1368484324$gmane$org@efficios.com>
 References: <1368484256-6666-1-git-send-email-christian.babeux@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-vb0-f41.google.com ([209.85.212.41])
+Received: from mail-vb0-f47.google.com ([209.85.212.47])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <christian.babeux@0x80.ca>) id 1Uc1HA-0002Ul-OH
-	for lttng-dev@lists.lttng.org; Mon, 13 May 2013 18:31:25 -0400
-Received: by mail-vb0-f41.google.com with SMTP id w8so5578439vbf.14
-	for <lttng-dev@lists.lttng.org>; Mon, 13 May 2013 15:31:19 -0700 (PDT)
+	(envelope-from <christian.babeux@0x80.ca>) id 1Uc1HJ-0002Vw-92
+	for lttng-dev@lists.lttng.org; Mon, 13 May 2013 18:31:33 -0400
+Received: by mail-vb0-f47.google.com with SMTP id x14so5584232vbb.20
+	for <lttng-dev@lists.lttng.org>; Mon, 13 May 2013 15:31:27 -0700 (PDT)
 In-Reply-To: <1368484256-6666-1-git-send-email-christian.babeux@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -31,24 +31,23 @@ Use the gen-ust-events binary found under tests/utils/testapp/gen-ust-events/.
 
 Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
 ---
- tests/regression/tools/streaming/Makefile.am       | 16 ------
- tests/regression/tools/streaming/gen-ust-events.c  | 59 ----------------------
- .../tools/streaming/test_high_throughput_limits    | 12 +++--
- tests/regression/tools/streaming/test_ust          | 16 +++---
- tests/regression/tools/streaming/tp.c              | 15 ------
- tests/regression/tools/streaming/tp.h              | 56 --------------------
- 6 files changed, 17 insertions(+), 157 deletions(-)
- delete mode 100644 tests/regression/tools/streaming/gen-ust-events.c
- delete mode 100644 tests/regression/tools/streaming/tp.c
- delete mode 100644 tests/regression/tools/streaming/tp.h
+ tests/regression/ust/before-after/Makefile.am      | 14 ------
+ tests/regression/ust/before-after/gen-nevents.c    | 56 ----------------------
+ .../regression/ust/before-after/test_before_after  | 14 +++---
+ tests/regression/ust/before-after/tp.c             | 16 -------
+ .../regression/ust/before-after/ust_gen_nevents.h  | 56 ----------------------
+ 5 files changed, 8 insertions(+), 148 deletions(-)
+ delete mode 100644 tests/regression/ust/before-after/gen-nevents.c
+ delete mode 100644 tests/regression/ust/before-after/tp.c
+ delete mode 100644 tests/regression/ust/before-after/ust_gen_nevents.h
 
-diff --git a/tests/regression/tools/streaming/Makefile.am b/tests/regression/tools/streaming/Makefile.am
-index e424350..050cdea 100644
---- a/tests/regression/tools/streaming/Makefile.am
-+++ b/tests/regression/tools/streaming/Makefile.am
-@@ -1,18 +1,2 @@
--AM_CFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src -I$(top_srcdir)/tests/utils -I$(srcdir) -O2 -g
--AM_LDFLAGS =
+diff --git a/tests/regression/ust/before-after/Makefile.am b/tests/regression/ust/before-after/Makefile.am
+index f883a32..e37fe96 100644
+--- a/tests/regression/ust/before-after/Makefile.am
++++ b/tests/regression/ust/before-after/Makefile.am
+@@ -1,16 +1,2 @@
+-AM_CFLAGS = -I$(srcdir) -O2
+-AM_LDFLAGS = -llttng-ust
 -
 -if LTTNG_TOOLS_BUILD_WITH_LIBDL
 -AM_LDFLAGS += -ldl
@@ -57,21 +56,21 @@ index e424350..050cdea 100644
 -AM_LDFLAGS += -lc
 -endif
 -
--if HAVE_LIBLTTNG_UST_CTL
--noinst_PROGRAMS = gen-ust-events
--gen_ust_events_SOURCES = gen-ust-events.c tp.c tp.h
--gen_ust_events_LDADD = -llttng-ust
--endif
+-noinst_PROGRAMS = gen-nevents
+-gen_nevents_SOURCES = gen-nevents.c tp.c ust_gen_nevents.h
+-gen_nevents_LDADD = -llttng-ust
 -
- noinst_SCRIPTS = test_ust test_kernel test_high_throughput_limits
- EXTRA_DIST = test_ust test_kernel test_high_throughput_limits
-diff --git a/tests/regression/tools/streaming/gen-ust-events.c b/tests/regression/tools/streaming/gen-ust-events.c
+ noinst_SCRIPTS = test_before_after
+ EXTRA_DIST = test_before_after
+diff --git a/tests/regression/ust/before-after/gen-nevents.c b/tests/regression/ust/before-after/gen-nevents.c
 deleted file mode 100644
-index 1385119..0000000
---- a/tests/regression/tools/streaming/gen-ust-events.c
+index b2c1992..0000000
+--- a/tests/regression/ust/before-after/gen-nevents.c
 +++ /dev/null
-@@ -1,59 +0,0 @@
+@@ -1,56 +0,0 @@
 -/*
+- * Copyright (C) - 2009 Pierre-Marc Fournier
+- * Copyright (C) - 2011 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 - * Copyright (C) - 2012 David Goulet <dgoulet@efficios.com>
 - *
 - * This library is free software; you can redistribute it and/or modify it
@@ -89,6 +88,8 @@ index 1385119..0000000
 - */
 -
 -#include <arpa/inet.h>
+-#include <fcntl.h>
+-#include <signal.h>
 -#include <stdarg.h>
 -#include <stdio.h>
 -#include <stdlib.h>
@@ -99,7 +100,7 @@ index 1385119..0000000
 -#include <unistd.h>
 -
 -#define TRACEPOINT_DEFINE
--#include "tp.h"
+-#include "ust_gen_nevents.h"
 -
 -int main(int argc, char **argv)
 -{
@@ -108,132 +109,77 @@ index 1385119..0000000
 -	char text[10] = "test";
 -	double dbl = 2.0;
 -	float flt = 2222.0;
--	/* Generate 30 events. */
 -	unsigned int nr_iter = 100;
--	useconds_t nr_usec = 0;
 -
--	if (argc >= 2) {
+-	if (argc == 2) {
 -		nr_iter = atoi(argv[1]);
--	}
--
--	if (argc == 3) {
--		/* By default, don't wait unless user specifies. */
--		nr_usec = atoi(argv[2]);
 -	}
 -
 -	for (i = 0; i < nr_iter; i++) {
 -		netint = htonl(i);
--		tracepoint(tp, tptest, i, netint, values, text, strlen(text), dbl,
--				flt);
--		usleep(nr_usec);
+-		tracepoint(ust_gen_nevents, tptest, i, netint, values, text,
+-				strlen(text), dbl, flt);
+-		usleep(100000);
 -	}
 -
 -	return 0;
 -}
-diff --git a/tests/regression/tools/streaming/test_high_throughput_limits b/tests/regression/tools/streaming/test_high_throughput_limits
-index f3885a8..b2c8864 100755
---- a/tests/regression/tools/streaming/test_high_throughput_limits
-+++ b/tests/regression/tools/streaming/test_high_throughput_limits
-@@ -22,7 +22,9 @@ CURDIR=$(dirname $0)/
- TESTDIR=$CURDIR/../../..
- NR_APP_ITER=10
- NR_ITER=1000000
--BIN_NAME="gen-ust-events"
-+TESTAPP_PATH="$TESTDIR/utils/testapp"
-+TESTAPP_NAME="gen-ust-events"
-+TESTAPP_BIN="$TESTAPP_PATH/$TESTAPP_NAME/$TESTAPP_NAME"
- SESSION_NAME="high-throughput"
- EVENT_NAME="tp:tptest"
- SESSIOND_CTRL_PORT=5342
-@@ -35,8 +37,8 @@ NUM_TESTS=112
- 
- source $TESTDIR/utils/utils.sh
- 
--if [ ! -x "$CURDIR/$BIN_NAME" ]; then
--	BAIL_OUT "No UST nevents binary detected."
-+if [ ! -x "$TESTAPP_BIN" ]; then
-+	BAIL_OUT "No UST events binary detected."
- fi
- 
- function set_bw_limit
-@@ -89,13 +91,13 @@ function run_apps
- 		# due to very slow communication between the consumer and relayd making
- 		# the status reply from the consumer quite slow thus delaying the
- 		# registration done message.
--		LTTNG_UST_REGISTER_TIMEOUT=-1 ./$CURDIR/$BIN_NAME $NR_ITER & >/dev/null 2>&1
-+		LTTNG_UST_REGISTER_TIMEOUT=-1 $TESTAPP_BIN $NR_ITER & >/dev/null 2>&1
- 	done
- }
- 
- function wait_apps
- {
--	while [ -n "$(pidof $BIN_NAME)" ]; do
-+	while [ -n "$(pidof $TESTAPP_NAME)" ]; do
- 		sleep 1
- 	done
- 	pass "Wait for applications to end"
-diff --git a/tests/regression/tools/streaming/test_ust b/tests/regression/tools/streaming/test_ust
-index 333b2e9..785a9a8 100755
---- a/tests/regression/tools/streaming/test_ust
-+++ b/tests/regression/tools/streaming/test_ust
-@@ -18,7 +18,11 @@ TEST_DESC="Streaming - User space tracing"
- 
+diff --git a/tests/regression/ust/before-after/test_before_after b/tests/regression/ust/before-after/test_before_after
+index c3e24f7..6d45bb5 100755
+--- a/tests/regression/ust/before-after/test_before_after
++++ b/tests/regression/ust/before-after/test_before_after
+@@ -19,27 +19,29 @@ TEST_DESC="UST tracer - Start tracing before and after execution"
  CURDIR=$(dirname $0)/
  TESTDIR=$CURDIR/../../..
--BIN_NAME="gen-ust-events"
-+NR_ITER=5
-+NR_USEC_WAIT=1000000
+ NR_ITER=100
++NR_USEC_WAIT=100000
 +TESTAPP_PATH="$TESTDIR/utils/testapp"
 +TESTAPP_NAME="gen-ust-events"
 +TESTAPP_BIN="$TESTAPP_PATH/$TESTAPP_NAME/$TESTAPP_NAME"
- SESSION_NAME="stream"
- EVENT_NAME="tp:tptest"
- PID_RELAYD=0
-@@ -29,8 +33,8 @@ NUM_TESTS=18
+ SESSION_NAME="per-session"
+-EVENT_NAME="ust_gen_nevents:tptest"
++EVENT_NAME="tp:tptest"
+ NUM_TESTS=16
  
  source $TESTDIR/utils/utils.sh
  
--if [ ! -x "$CURDIR/$BIN_NAME" ]; then
--	BAIL_OUT "No UST nevents binary detected."
+-if [ ! -x "$CURDIR/gen-nevents" ]; then
 +if [ ! -x "$TESTAPP_BIN" ]; then
-+	BAIL_OUT "No UST events binary detected."
+ 	BAIL_OUT "No UST nevents binary detected."
  fi
  
- function lttng_create_session_uri
-@@ -42,7 +46,7 @@ function lttng_create_session_uri
+ # MUST set TESTDIR before calling those functions
  
- function wait_apps
- {
--	while [ -n "$(pidof $BIN_NAME)" ]; do
-+	while [ -n "$(pidof $TESTAPP_NAME)" ]; do
- 		sleep 0.5
- 	done
- 	pass "Wait for applications to end"
-@@ -57,7 +61,7 @@ function test_ust_before_start ()
+ test_before_apps() {
+-	local out
+-
+ 	# BEFORE application is spawned
+ 	create_lttng_session $SESSION_NAME $TRACE_PATH
  	enable_ust_lttng_event $SESSION_NAME $EVENT_NAME
- 
- 	# Run 5 times with a 1 second delay
--	./$CURDIR/$BIN_NAME 5 1000000 >/dev/null 2>&1 &
-+	$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT >/dev/null 2>&1 &
- 
  	start_lttng_tracing $SESSION_NAME
  
-@@ -75,7 +79,7 @@ function test_ust_after_start ()
- 	start_lttng_tracing $SESSION_NAME
+-	./$CURDIR/gen-nevents $NR_ITER
++	$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT
+ 	ok $? "Start application to trace"
  
- 	# Run 5 times with a 1 second delay
--	./$CURDIR/$BIN_NAME 5 1000000 >/dev/null 2>&1 &
-+	$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT >/dev/null 2>&1 &
+ 	stop_lttng_tracing $SESSION_NAME
+@@ -53,7 +55,7 @@ test_before_apps() {
+ test_after_apps() {
+ 	local out
  
- 	wait_apps
+-	./$CURDIR/gen-nevents 100 &
++	$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT &
+ 	ok $? "Start application to trace"
  
-diff --git a/tests/regression/tools/streaming/tp.c b/tests/regression/tools/streaming/tp.c
+ 	# BEFORE application is spawned
+diff --git a/tests/regression/ust/before-after/tp.c b/tests/regression/ust/before-after/tp.c
 deleted file mode 100644
-index a09561d..0000000
---- a/tests/regression/tools/streaming/tp.c
+index e291924..0000000
+--- a/tests/regression/ust/before-after/tp.c
 +++ /dev/null
-@@ -1,15 +0,0 @@
+@@ -1,16 +0,0 @@
 -/*
+- * Copyright (c) - 2011 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 - * Copyright (c) - 2012 David Goulet <dgoulet@efficios.com>
 - *
 - * THIS MATERIAL IS PROVIDED AS IS, WITH ABSOLUTELY NO WARRANTY EXPRESSED OR
@@ -247,18 +193,18 @@ index a09561d..0000000
 - */
 -
 -#define TRACEPOINT_CREATE_PROBES
--#include "tp.h"
-diff --git a/tests/regression/tools/streaming/tp.h b/tests/regression/tools/streaming/tp.h
+-#include "ust_gen_nevents.h"
+diff --git a/tests/regression/ust/before-after/ust_gen_nevents.h b/tests/regression/ust/before-after/ust_gen_nevents.h
 deleted file mode 100644
-index 6ffbc32..0000000
---- a/tests/regression/tools/streaming/tp.h
+index bc09c44..0000000
+--- a/tests/regression/ust/before-after/ust_gen_nevents.h
 +++ /dev/null
 @@ -1,56 +0,0 @@
 -#undef TRACEPOINT_PROVIDER
--#define TRACEPOINT_PROVIDER tp
+-#define TRACEPOINT_PROVIDER ust_gen_nevents
 -
--#if !defined(_TRACEPOINT_TP_H) || defined(TRACEPOINT_HEADER_MULTI_READ)
--#define _TRACEPOINT_TP_H
+-#if !defined(_TRACEPOINT_UST_GEN_NEVENTS_H) || defined(TRACEPOINT_HEADER_MULTI_READ)
+-#define _TRACEPOINT_UST_GEN_NEVENTS_H
 -
 -#ifdef __cplusplus
 -extern "C" {
@@ -279,7 +225,7 @@ index 6ffbc32..0000000
 -
 -#include <lttng/tracepoint.h>
 -
--TRACEPOINT_EVENT(tp, tptest,
+-TRACEPOINT_EVENT(ust_gen_nevents, tptest,
 -	TP_ARGS(int, anint, int, netint, long *, values,
 -		char *, text, size_t, textlen,
 -		double, doublearg, float, floatarg),
@@ -299,10 +245,10 @@ index 6ffbc32..0000000
 -	)
 -)
 -
--#endif /* _TRACEPOINT_TP_H */
+-#endif /* _TRACEPOINT_UST_GEN_NEVENTS_H */
 -
 -#undef TRACEPOINT_INCLUDE_FILE
--#define TRACEPOINT_INCLUDE_FILE ./tp.h
+-#define TRACEPOINT_INCLUDE_FILE ./ust_gen_nevents.h
 -
 -/* This part must be outside ifdef protection */
 -#include <lttng/tracepoint-event.h>
