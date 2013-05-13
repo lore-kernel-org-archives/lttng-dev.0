@@ -1,19 +1,19 @@
 From: Christian Babeux <christian.babeux@efficios.com>
-Subject: [PATCH lttng-tools 5/6] Tests: Replace usage of
-	gen-ust-events testapp in ust nprocesses test
-Date: Mon, 13 May 2013 18:30:55 -0400
-Message-ID: <1368484256-6666-5-git-send-email-christian.babeux__10941.4286482663$1368484336$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools 6/6] Tests: Replace usage of
+	gen-ust-events testapp in ust metadata-flush test
+Date: Mon, 13 May 2013 18:30:56 -0400
+Message-ID: <1368484256-6666-6-git-send-email-christian.babeux__36379.5128454969$1368484344$gmane$org@efficios.com>
 References: <1368484256-6666-1-git-send-email-christian.babeux@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ve0-f170.google.com ([209.85.128.170])
+Received: from mail-vb0-f45.google.com ([209.85.212.45])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <christian.babeux@0x80.ca>) id 1Uc1HX-0002XG-EY
-	for lttng-dev@lists.lttng.org; Mon, 13 May 2013 18:31:47 -0400
-Received: by mail-ve0-f170.google.com with SMTP id 14so2239207vea.15
-	for <lttng-dev@lists.lttng.org>; Mon, 13 May 2013 15:31:42 -0700 (PDT)
+	(envelope-from <christian.babeux@0x80.ca>) id 1Uc1Hd-0002Y9-DA
+	for lttng-dev@lists.lttng.org; Mon, 13 May 2013 18:31:53 -0400
+Received: by mail-vb0-f45.google.com with SMTP id 12so5638305vbf.18
+	for <lttng-dev@lists.lttng.org>; Mon, 13 May 2013 15:31:48 -0700 (PDT)
 In-Reply-To: <1368484256-6666-1-git-send-email-christian.babeux@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -31,20 +31,20 @@ Use the gen-ust-events binary found under tests/utils/testapp/gen-ust-events/.
 
 Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
 ---
- tests/regression/ust/nprocesses/Makefile.am       | 14 ------
- tests/regression/ust/nprocesses/gen-events-time.c | 61 -----------------------
- tests/regression/ust/nprocesses/test_nprocesses   | 28 ++++++-----
- tests/regression/ust/nprocesses/tp.c              | 16 ------
- tests/regression/ust/nprocesses/ust_gen_event.h   | 56 ---------------------
- 5 files changed, 16 insertions(+), 159 deletions(-)
- delete mode 100644 tests/regression/ust/nprocesses/gen-events-time.c
- delete mode 100644 tests/regression/ust/nprocesses/tp.c
- delete mode 100644 tests/regression/ust/nprocesses/ust_gen_event.h
+ .../ust/periodical-metadata-flush/Makefile.am      | 14 ------
+ .../ust/periodical-metadata-flush/gen-nevents.c    | 56 ----------------------
+ .../test_periodical_metadata_flush                 | 20 ++++----
+ .../regression/ust/periodical-metadata-flush/tp.c  | 16 -------
+ .../periodical-metadata-flush/ust_gen_nevents.h    | 56 ----------------------
+ 5 files changed, 12 insertions(+), 150 deletions(-)
+ delete mode 100644 tests/regression/ust/periodical-metadata-flush/gen-nevents.c
+ delete mode 100644 tests/regression/ust/periodical-metadata-flush/tp.c
+ delete mode 100644 tests/regression/ust/periodical-metadata-flush/ust_gen_nevents.h
 
-diff --git a/tests/regression/ust/nprocesses/Makefile.am b/tests/regression/ust/nprocesses/Makefile.am
-index 3113a34..70a4eea 100644
---- a/tests/regression/ust/nprocesses/Makefile.am
-+++ b/tests/regression/ust/nprocesses/Makefile.am
+diff --git a/tests/regression/ust/periodical-metadata-flush/Makefile.am b/tests/regression/ust/periodical-metadata-flush/Makefile.am
+index 72013e8..c020920 100644
+--- a/tests/regression/ust/periodical-metadata-flush/Makefile.am
++++ b/tests/regression/ust/periodical-metadata-flush/Makefile.am
 @@ -1,16 +1,2 @@
 -AM_CFLAGS = -I$(srcdir) -O2
 -AM_LDFLAGS = -llttng-ust
@@ -56,18 +56,18 @@ index 3113a34..70a4eea 100644
 -AM_LDFLAGS += -lc
 -endif
 -
--noinst_PROGRAMS = gen-events-time
--gen_events_time_SOURCES = gen-events-time.c tp.c ust_gen_event.h
--gen_events_time_LDADD = -llttng-ust
+-noinst_PROGRAMS = gen-nevents
+-gen_nevents_SOURCES = gen-nevents.c tp.c ust_gen_nevents.h
+-gen_nevents_LDADD = -llttng-ust
 -
- noinst_SCRIPTS = test_nprocesses
- EXTRA_DIST = test_nprocesses
-diff --git a/tests/regression/ust/nprocesses/gen-events-time.c b/tests/regression/ust/nprocesses/gen-events-time.c
+ noinst_SCRIPTS = test_periodical_metadata_flush
+ EXTRA_DIST = test_periodical_metadata_flush
+diff --git a/tests/regression/ust/periodical-metadata-flush/gen-nevents.c b/tests/regression/ust/periodical-metadata-flush/gen-nevents.c
 deleted file mode 100644
-index bc5b68c..0000000
---- a/tests/regression/ust/nprocesses/gen-events-time.c
+index b2c1992..0000000
+--- a/tests/regression/ust/periodical-metadata-flush/gen-nevents.c
 +++ /dev/null
-@@ -1,61 +0,0 @@
+@@ -1,56 +0,0 @@
 -/*
 - * Copyright (C) - 2009 Pierre-Marc Fournier
 - * Copyright (C) - 2011 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
@@ -100,7 +100,7 @@ index bc5b68c..0000000
 -#include <unistd.h>
 -
 -#define TRACEPOINT_DEFINE
--#include "ust_gen_event.h"
+-#include "ust_gen_nevents.h"
 -
 -int main(int argc, char **argv)
 -{
@@ -109,12 +109,7 @@ index bc5b68c..0000000
 -	char text[10] = "test";
 -	double dbl = 2.0;
 -	float flt = 2222.0;
--	/* Default loop time is 60 sec since each round sleeps 1 sec */
--	unsigned int nr_iter = 60;
--
--	fclose(stdout);
--	fclose(stderr);
--	fclose(stdin);
+-	unsigned int nr_iter = 100;
 -
 -	if (argc == 2) {
 -		nr_iter = atoi(argv[1]);
@@ -122,84 +117,89 @@ index bc5b68c..0000000
 -
 -	for (i = 0; i < nr_iter; i++) {
 -		netint = htonl(i);
--		tracepoint(ust_gen_event, tptest, i, netint, values, text,
+-		tracepoint(ust_gen_nevents, tptest, i, netint, values, text,
 -				strlen(text), dbl, flt);
--		sleep(1);
+-		usleep(100000);
 -	}
 -
 -	return 0;
 -}
-diff --git a/tests/regression/ust/nprocesses/test_nprocesses b/tests/regression/ust/nprocesses/test_nprocesses
-index f9ed0b1..1660c21 100755
---- a/tests/regression/ust/nprocesses/test_nprocesses
-+++ b/tests/regression/ust/nprocesses/test_nprocesses
-@@ -14,21 +14,25 @@
- # You should have received a copy of the GNU Lesser General Public License
- # along with this library; if not, write to the Free Software Foundation, Inc.,
- # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
--NR_ITER=30
--TEST_DESC="UST tracer - Generate $NR_ITER process"
-+NUM_PROCESS=30
-+TEST_DESC="UST tracer - Generate $NUM_PROCESS process"
- 
+diff --git a/tests/regression/ust/periodical-metadata-flush/test_periodical_metadata_flush b/tests/regression/ust/periodical-metadata-flush/test_periodical_metadata_flush
+index 2d984d5..18d8a46 100755
+--- a/tests/regression/ust/periodical-metadata-flush/test_periodical_metadata_flush
++++ b/tests/regression/ust/periodical-metadata-flush/test_periodical_metadata_flush
+@@ -19,15 +19,19 @@ TEST_DESC="UST tracer - Tracing with per UID buffers and periodical flush"
  CURDIR=$(dirname $0)/
  TESTDIR=$CURDIR/../../..
--TEST_BIN_NAME="gen-events-time"
-+NR_ITER=1000
-+NR_USEC_WAIT=1000000
+ NR_ITER=100
++NR_USEC_WAIT=100000
 +TESTAPP_PATH="$TESTDIR/utils/testapp"
 +TESTAPP_NAME="gen-ust-events"
 +TESTAPP_BIN="$TESTAPP_PATH/$TESTAPP_NAME/$TESTAPP_NAME"
- SESSION_NAME="ust-nprocesses"
--EVENT_NAME="ust_gen_event:tptest"
+ SESSION_NAME="periodical-flush"
+-EVENT_NAME="ust_gen_nevents:tptest"
 +EVENT_NAME="tp:tptest"
- TEST_WAIT_SEC=5
- NUM_TESTS=9
+ BIN_NAME="gen-nevents"
+ NUM_TESTS=38
  
  source $TESTDIR/utils/utils.sh
  
--if [ ! -x "$CURDIR/$TEST_BIN_NAME" ]; then
--	BAIL_OUT "No UST $TEST_BIN_NAME binary detected."
+-if [ ! -x "$CURDIR/gen-nevents" ]; then
+-	BAIL_OUT "No UST nevents binary detected."
 +if [ ! -x "$TESTAPP_BIN" ]; then
-+	BAIL_OUT "No UST $TESTAPP_BIN binary detected."
++	BAIL_OUT "No UST events binary detected."
  fi
  
  # MUST set TESTDIR before calling those functions
-@@ -41,15 +45,15 @@ start_lttng_sessiond
+@@ -62,7 +66,7 @@ function enable_metadata_per_pid()
+ function wait_apps
+ {
+ 	diag "Waiting for applications to end..."
+-	while [ -n "$(pidof $BIN_NAME)" ]; do
++	while [ -n "$(pidof $TESTAPP_NAME)" ]; do
+ 		sleep 1
+ 	done
+ }
+@@ -79,7 +83,7 @@ test_after_app_pid() {
+ 	enable_ust_lttng_event $SESSION_NAME $EVENT_NAME
+ 	start_lttng_tracing $SESSION_NAME
  
- # Start test for 1000 seconds
+-	./$CURDIR/$BIN_NAME $NR_ITER
++	$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT
+ 	ok $? "Start application to trace"
  
--for i in `seq 1 $NR_ITER`
-+for i in `seq 1 $NUM_PROCESS`
- do
--	./$CURDIR/$TEST_BIN_NAME 1000 >/dev/null 2>&1 &
-+	$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT >/dev/null 2>&1 &
- done
+ 	stop_lttng_tracing $SESSION_NAME
+@@ -95,7 +99,7 @@ test_before_app_pid() {
  
- reg_app_count=0
--while [ $reg_app_count -ne $NR_ITER ]; do
-+while [ $reg_app_count -ne $NUM_PROCESS ]; do
- 	listing=$($TESTDIR/../src/bin/lttng/$LTTNG_BIN list -u)
--	reg_app_count=$(echo -n $listing | sed "s/$TEST_BIN_NAME/$TEST_BIN_NAME\n/g" | grep "$TEST_BIN_NAME" | wc -l)
-+	reg_app_count=$(echo -n $listing | sed "s#$TESTAPP_BIN#$TESTAPP_BIN\n#g" | grep "$TESTAPP_BIN" | wc -l)
- done
+ 	diag "Start application BEFORE tracing is started"
  
- pass "Trace validation"
-@@ -71,8 +75,8 @@ destroy_lttng_session $SESSION_NAME
+-	./$CURDIR/$BIN_NAME $NR_ITER &
++	$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT &
+ 	ok $? "Start application to trace"
  
- rm -rf $TRACE_PATH
+ 	# BEFORE application is spawned
+@@ -139,7 +143,7 @@ test_after_app_uid() {
+ 	enable_ust_lttng_event $SESSION_NAME $EVENT_NAME
+ 	start_lttng_tracing $SESSION_NAME
  
--while [ -n "$(pidof $TEST_BIN_NAME)" ]; do
--	killall -q $TEST_BIN_NAME >/dev/null 2>&1
-+while [ -n "$(pidof $TESTAPP_NAME)" ]; do
-+	killall -q $TESTAPP_NAME >/dev/null 2>&1
- 	sleep 0.5
- done
+-	./$CURDIR/$BIN_NAME $NR_ITER
++	$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT
+ 	ok $? "Start application to trace"
  
-diff --git a/tests/regression/ust/nprocesses/tp.c b/tests/regression/ust/nprocesses/tp.c
+ 	stop_lttng_tracing $SESSION_NAME
+@@ -155,7 +159,7 @@ test_before_app_uid() {
+ 
+ 	diag "Start application BEFORE tracing is started"
+ 
+-	./$CURDIR/$BIN_NAME $NR_ITER &
++	$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT &
+ 	ok $? "Start application to trace"
+ 
+ 	# BEFORE application is spawned
+diff --git a/tests/regression/ust/periodical-metadata-flush/tp.c b/tests/regression/ust/periodical-metadata-flush/tp.c
 deleted file mode 100644
-index 438139e..0000000
---- a/tests/regression/ust/nprocesses/tp.c
+index e291924..0000000
+--- a/tests/regression/ust/periodical-metadata-flush/tp.c
 +++ /dev/null
 @@ -1,16 +0,0 @@
 -/*
@@ -217,18 +217,18 @@ index 438139e..0000000
 - */
 -
 -#define TRACEPOINT_CREATE_PROBES
--#include "ust_gen_event.h"
-diff --git a/tests/regression/ust/nprocesses/ust_gen_event.h b/tests/regression/ust/nprocesses/ust_gen_event.h
+-#include "ust_gen_nevents.h"
+diff --git a/tests/regression/ust/periodical-metadata-flush/ust_gen_nevents.h b/tests/regression/ust/periodical-metadata-flush/ust_gen_nevents.h
 deleted file mode 100644
-index 5bdcb37..0000000
---- a/tests/regression/ust/nprocesses/ust_gen_event.h
+index bc09c44..0000000
+--- a/tests/regression/ust/periodical-metadata-flush/ust_gen_nevents.h
 +++ /dev/null
 @@ -1,56 +0,0 @@
 -#undef TRACEPOINT_PROVIDER
--#define TRACEPOINT_PROVIDER ust_gen_event
+-#define TRACEPOINT_PROVIDER ust_gen_nevents
 -
--#if !defined(_TRACEPOINT_UST_GEN_EVENT_H) || defined(TRACEPOINT_HEADER_MULTI_READ)
--#define _TRACEPOINT_UST_GEN_EVENT_H
+-#if !defined(_TRACEPOINT_UST_GEN_NEVENTS_H) || defined(TRACEPOINT_HEADER_MULTI_READ)
+-#define _TRACEPOINT_UST_GEN_NEVENTS_H
 -
 -#ifdef __cplusplus
 -extern "C" {
@@ -249,7 +249,7 @@ index 5bdcb37..0000000
 -
 -#include <lttng/tracepoint.h>
 -
--TRACEPOINT_EVENT(ust_gen_event, tptest,
+-TRACEPOINT_EVENT(ust_gen_nevents, tptest,
 -	TP_ARGS(int, anint, int, netint, long *, values,
 -		char *, text, size_t, textlen,
 -		double, doublearg, float, floatarg),
@@ -269,10 +269,10 @@ index 5bdcb37..0000000
 -	)
 -)
 -
--#endif /* _TRACEPOINT_UST_GEN_EVENT_H */
+-#endif /* _TRACEPOINT_UST_GEN_NEVENTS_H */
 -
 -#undef TRACEPOINT_INCLUDE_FILE
--#define TRACEPOINT_INCLUDE_FILE ./ust_gen_event.h
+-#define TRACEPOINT_INCLUDE_FILE ./ust_gen_nevents.h
 -
 -/* This part must be outside ifdef protection */
 -#include <lttng/tracepoint-event.h>
