@@ -1,29 +1,16 @@
-From: Mats Liljegren <liljegren.mats2@gmail.com>
-Subject: Re: Changed scheduling when using lttng
-Date: Mon, 13 May 2013 09:29:49 +0200
-Message-ID: <CA+xJJ19sTc7KBa+q+hVGveO3zWMTpCG5YuP-jj6HbzTnAV4A4Q__36871.6256497011$1368430231$gmane$org@mail.gmail.com>
-References: <CA+xJJ19OE=nrfpEoOEib-7=GrP9hD-RV7bc=aY7nqDwB59auXQ@mail.gmail.com>
-	<20130426151444.GA2260@Krystal>
-	<CA+xJJ199oic8pmnKM4c674Zf_NJe3AR1YxFtBTjLryv3S67nkQ@mail.gmail.com>
-	<20130426153819.GA3026@Krystal>
-	<CA+xJJ18ea02rKcfJmw9B2bTOBY0Mz_Wr6c+aszb3HWPDz2zRAQ@mail.gmail.com>
-	<20130426161439.GA5547@Krystal>
-	<CA+xJJ181-F-36Kw18Z5R9rvhzDeNfUgNQofHrowmY5raZA2Qtw@mail.gmail.com>
-	<CA+xJJ19UQ_hh-rfjhor8pHCDL0XRGyW+ZfPzQiYBfdBsj=r0xg@mail.gmail.com>
-	<20130430144323.GB31980@Krystal>
-	<CA+xJJ19Bg0=R0yGiu5vsDu_1nSSY1uQLK4c=oe-5=ASzxbqmOg@mail.gmail.com>
-	<20130510145620.GH20313@Krystal>
+From: Anna Dushistova <anna.dushistova@gmail.com>
+Subject: Re: [RFC PATCH 0/2] babeltrace legacy LTT 2.6 converter
+Date: Mon, 13 May 2013 10:16:04 +0400
+Message-ID: <CAKL3bWXEDr-YBPg-H+yZNQxPzh3qqjdRMSJNR9t8ehXP4KS_0A__26560.3130487309$1368437400$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============2014667830=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ea0-f172.google.com ([209.85.215.172])
+Received: from mail-pd0-f174.google.com ([209.85.192.174])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <liljegren.mats2@gmail.com>) id 1UbnCl-0003G4-DZ
-	for lttng-dev@lists.lttng.org; Mon, 13 May 2013 03:29:55 -0400
-Received: by mail-ea0-f172.google.com with SMTP id d10so240816eaj.3
-	for <lttng-dev@lists.lttng.org>; Mon, 13 May 2013 00:29:49 -0700 (PDT)
-In-Reply-To: <20130510145620.GH20313@Krystal>
+	(envelope-from <anna.dushistova@gmail.com>) id 1Ubm3O-0002g2-1K
+	for lttng-dev@lists.lttng.org; Mon, 13 May 2013 02:16:10 -0400
+Received: by mail-pd0-f174.google.com with SMTP id u10so4167871pdi.19
+	for <lttng-dev@lists.lttng.org>; Sun, 12 May 2013 23:16:04 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -32,67 +19,60 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: jan.glauber@gmail.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On Fri, May 10, 2013 at 4:56 PM, Mathieu Desnoyers
-<mathieu.desnoyers@efficios.com> wrote:
-> * Mats Liljegren (liljegren.mats2@gmail.com) wrote:
->> >>       --buffers-global     Use shared buffer for the whole system (-k only)
->> >
->> > This option would be clearer as "--buffers-per-cpu" maybe ?
->>
->> This makes me even more confused... The name "buffers-global" is very
->> clear to me. Opposites would be buffers private for a CPU, for a UID,
->> and so on. Is the option "--buffers-global" meant to be an opposite of
->> "--buffers-uid" and "--buffers-pid"? This would seems strange since
->> those two are only for user space tracing while "--buffers-global" is
->> for kernel tracing. By the way, isn't "--buffers-per-cpu" default? Oh
->> well...
->
-> Currently, we have:
->
-> kernel tracing: --buffers-global (those are per-cpu buffers)
->
-> ust tracing: --buffers-pid, --buffers-uid (those are also per-cpu buffers)
->
-> We currently don't implement "single buffer" shared across all CPUs.
->
-> By the way, the fact that e.g. --buffers-global is only available for
-> kernel tracing today does not mean it will never be available for ust in
-> future versions.
+--===============2014667830==
+Content-Type: multipart/alternative; boundary=047d7b6d812493b39304dc937303
 
-So for data buffers, you can have them per pid & cpu, per uid and cpu
-or only per cpu where the last option is the only option for kernel
-tracing. This was then according to my first belief then, it was the
-help text of the lttng command that made me believe otherwise.
+--047d7b6d812493b39304dc937303
+Content-Type: text/plain; charset=ISO-8859-1
 
-Then I'd vote for renaming --buffers-global to --buffers-per-cpu,
-which apparently is not only default but also the only available
-option for kernel tracing. If I've understood things correctly, there
-are plans for offering per-cpu buffers when tracing user space as
-well, which then would be the reason for keeping the option.
+Hi Jan,
 
->>
->> But the real confusion lies in the fact that I cannot see the option
->> being used for anything. It sets the file local variable
->> opt_buffers_global, and is used for a sanity check. But I can't see it
->> being used for anything else. Have I missed something here?
->
-> David ?
->
-> the "lttng" command passes it to liblttng-ctl, which asks lttng-sessiond
-> to allocate the buffer. Then, buffer allocation is handled by either
-> sessiond or consumerd (depending if kernel or ust tracing), using either
-> the lttng-modules ABI or liblttng-ust-ctl. This is where the allocation
-> really happens.
+I tried out your patch for the 2.6->ctf converter(
+http://lists.lttng.org/pipermail/lttng-dev/2013-April/020081.html)
+with the following trace:
+https://github.com/fchouinard/LTTng/blob/master/samples/trace-2.6-22K.tar.gz
 
-Thanks for the info. I'll take a deep dive into the design and see if
-I can make a more intelligent modification. When thinking about it, it
-might be possible to keep things per-cpu-ish, since I have no need for
-inter-cpu support when writing. It is only the flushing that needs to
-be done on another CPU. Not sure what that means yet since I haven't
-dived into the design yet.
+from
+http://wiki.eclipse.org/Linux_Tools_Project/LTTng/User_Guide#Downloading_Sample_Tracesand
+it crashed
+with segmentation fault.
 
-/Mats
+Anna.
+
+--047d7b6d812493b39304dc937303
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hi Jan,<div><br></div><div style>I tried out your patch fo=
+r the 2.6-&gt;ctf converter(<a href=3D"http://lists.lttng.org/pipermail/ltt=
+ng-dev/2013-April/020081.html">http://lists.lttng.org/pipermail/lttng-dev/2=
+013-April/020081.html</a>)</div>
+<div style>with the following trace:<a href=3D"https://github.com/fchouinar=
+d/LTTng/blob/master/samples/trace-2.6-22K.tar.gz">https://github.com/fchoui=
+nard/LTTng/blob/master/samples/trace-2.6-22K.tar.gz</a>=A0</div><div style>
+from <a href=3D"http://wiki.eclipse.org/Linux_Tools_Project/LTTng/User_Guid=
+e#Downloading_Sample_Traces">http://wiki.eclipse.org/Linux_Tools_Project/LT=
+Tng/User_Guide#Downloading_Sample_Traces</a> and it crashed=A0</div><div st=
+yle>
+with segmentation fault.</div><div style><br></div><div style>Anna.</div></=
+div>
+
+--047d7b6d812493b39304dc937303--
+
+
+--===============2014667830==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============2014667830==--
