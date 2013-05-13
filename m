@@ -1,20 +1,23 @@
-From: Jan Glauber <jan.glauber@gmail.com>
-Subject: Re: [RFC PATCH 0/2] babeltrace legacy LTT 2.6 converter
-Date: Mon, 13 May 2013 12:40:53 +0200
-Message-ID: <20130513104051.GA2802__35120.6974396065$1368441693$gmane$org@hal>
-References: <CAKL3bWXEDr-YBPg-H+yZNQxPzh3qqjdRMSJNR9t8ehXP4KS_0A@mail.gmail.com>
+From: Jon Bernard <jbernard@tuxion.com>
+Subject: [PATCH lttng-modules] Remove bashism in
+ lttng-syscalls-generate-headers.sh
+Date: Mon, 13 May 2013 10:33:18 -0400
+Message-ID: <20130513143318.GA18192__21209.6564275727$1368455642$gmane$org@quintessa>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ea0-f172.google.com ([209.85.215.172])
+Received: from out1-smtp.messagingengine.com ([66.111.4.25])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jan.glauber@gmail.com>) id 1UbqBj-00053h-3O
-	for lttng-dev@lists.lttng.org; Mon, 13 May 2013 06:41:03 -0400
-Received: by mail-ea0-f172.google.com with SMTP id d10so356204eaj.3
-	for <lttng-dev@lists.lttng.org>; Mon, 13 May 2013 03:40:57 -0700 (PDT)
+	(envelope-from <jbernard@tuxion.com>) id 1Ubtod-0006ua-Rl
+	for lttng-dev@lists.lttng.org; Mon, 13 May 2013 10:33:28 -0400
+Received: from compute4.internal (compute4.nyi.mail.srv.osa [10.202.2.44])
+	by gateway1.nyi.mail.srv.osa (Postfix) with ESMTP id 6B2752067F
+	for <lttng-dev@lists.lttng.org>; Mon, 13 May 2013 10:33:22 -0400 (EDT)
+Received: from localhost (unknown [216.252.204.142])
+	by mail.messagingengine.com (Postfix) with ESMTPA id 25C322000C5
+	for <lttng-dev@lists.lttng.org>; Mon, 13 May 2013 10:33:22 -0400 (EDT)
 Content-Disposition: inline
-In-Reply-To: <CAKL3bWXEDr-YBPg-H+yZNQxPzh3qqjdRMSJNR9t8ehXP4KS_0A@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,38 +26,35 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Anna Dushistova <anna.dushistova@gmail.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On Mon, May 13, 2013 at 10:16:04AM +0400, Anna Dushistova wrote:
-> Hi Jan,
-> 
-> I tried out your patch for the 2.6->ctf converter(
-> http://lists.lttng.org/pipermail/lttng-dev/2013-April/020081.html)
-> with the following trace:
-> https://github.com/fchouinard/LTTng/blob/master/samples/trace-2.6-22K.tar.gz
-> 
-> from
-> http://wiki.eclipse.org/Linux_Tools_Project/LTTng/User_Guide#Downloading_Sample_Tracesand
-> it crashed
-> with segmentation fault.
+Options to echo are not portable. In particular, the 'echo -e' option is
+implemented by some shells, including bash, to expand escape sequences. However,
+dash is one of the other family of shells that instead expands escape sequences
+by default.
 
-Hi Anna,
+The printf command is portable and much more reliable.
+---
+ instrumentation/syscalls/lttng-syscalls-generate-headers.sh |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-could it be that the tar file itself is in the trace directory when you run babeltrace-legacy?
-I think I've only implemented rudimentary file checking, so the legacy converter assumes
-all files in the directory belong to the trace. Please try removing any files that do not belong
-to the trace.
-
-That said, the converter should better check all files for the correct header...
-
-Regards, Jan
+diff --git a/instrumentation/syscalls/lttng-syscalls-generate-headers.sh b/instrumentation/syscalls/lttng-syscalls-generate-headers.sh
+index 046dc06..1754ae8 100755
+--- a/instrumentation/syscalls/lttng-syscalls-generate-headers.sh
++++ b/instrumentation/syscalls/lttng-syscalls-generate-headers.sh
+@@ -59,7 +59,7 @@ if [ "$CLASS" = integers ]; then
  
-> Anna.
+ NRARGS=0
+ 
+-echo -e \
++printf \
+ 'SC_DECLARE_EVENT_CLASS_NOARGS(syscalls_noargs,\n'\
+ '	TP_STRUCT__entry(),\n'\
+ '	TP_fast_assign(),\n'\
+-- 
+1.7.10.4
+
 
 -- 
-Jan Glauber
----
-Harman Becker Automotive GmbH
-System Profiling & Optimizing Team
+Jon
