@@ -1,20 +1,20 @@
 From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [Babeltrace RFC PATCH 19/28] Add MinGW
- implementation of posix_fallocate
-Date: Mon, 13 May 2013 16:20:32 -0400
-Message-ID: <CA+jJMxuojA2Lb65v1MGf-MZ7HN0dTn6otXKGjx+LiBe5JNg8Zg__25325.2107454047$1368476479$gmane$org@mail.gmail.com>
-References: <009B25148989C6458484484699278506E537E962@EU-MBX-01.mgc.mentorg.com>
+Subject: Re: [Babeltrace RFC PATCH 18/28] Add MinGW
+ implementation of strnlen
+Date: Mon, 13 May 2013 16:20:37 -0400
+Message-ID: <CA+jJMxsnW7hep8TwRa7pBxxXwKLMFQ75dGQARyqPMdjxUgwqqA__36143.3187187233$1368476481$gmane$org@mail.gmail.com>
+References: <009B25148989C6458484484699278506E537E951@EU-MBX-01.mgc.mentorg.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wg0-f54.google.com ([74.125.82.54])
+Received: from mail-wi0-f179.google.com ([209.85.212.179])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1UbzEc-0001Dg-Kr
-	for lttng-dev@lists.lttng.org; Mon, 13 May 2013 16:20:38 -0400
-Received: by mail-wg0-f54.google.com with SMTP id x12so6541511wgg.21
-	for <lttng-dev@lists.lttng.org>; Mon, 13 May 2013 13:20:32 -0700 (PDT)
-In-Reply-To: <009B25148989C6458484484699278506E537E962@EU-MBX-01.mgc.mentorg.com>
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1UbzEh-0001EW-Gk
+	for lttng-dev@lists.lttng.org; Mon, 13 May 2013 16:20:43 -0400
+Received: by mail-wi0-f179.google.com with SMTP id hq7so1621159wib.12
+	for <lttng-dev@lists.lttng.org>; Mon, 13 May 2013 13:20:37 -0700 (PDT)
+In-Reply-To: <009B25148989C6458484484699278506E537E951@EU-MBX-01.mgc.mentorg.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -29,52 +29,81 @@ List-Id: lttng-dev@lists.lttng.org
 
 On Thu, May 2, 2013 at 8:00 AM, Ikaheimonen, JP
 <jp_ikaheimonen@mentor.com> wrote:
-> Add dummy MinGW implementation of posix_fallocate.
-> The implementation does not do anything, and always returns zero.
 > ---
->  formats/ctf/ctf.c                 |  2 +-
->  include/babeltrace/compat/fcntl.h | 13 +++++++++++++
->  2 files changed, 14 insertions(+), 1 deletion(-)
->  create mode 100644 include/babeltrace/compat/fcntl.h
+>  compat/compat_strlib.c             | 23 +++++++++++++++++++++++
+>  formats/ctf/types/string.c         |  2 +-
+>  include/babeltrace/compat/string.h |  1 +
+>  3 files changed, 25 insertions(+), 1 deletion(-)
 >
-> diff --git a/formats/ctf/ctf.c b/formats/ctf/ctf.c
-> index c29fcd7..431b2d4 100644
-> --- a/formats/ctf/ctf.c
-> +++ b/formats/ctf/ctf.c
-> @@ -41,7 +41,7 @@
->  #include <errno.h>
->  #include <sys/types.h>
->  #include <sys/stat.h>
-> -#include <fcntl.h>
-> +#include <babeltrace/compat/fcntl.h>
->  #include <dirent.h>
->  #include <glib.h>
->  #include <babeltrace/compat/unistd.h>
-> diff --git a/include/babeltrace/compat/fcntl.h b/include/babeltrace/compa=
-t/fcntl.h
-> new file mode 100644
-> index 0000000..0707c28
-> --- /dev/null
-> +++ b/include/babeltrace/compat/fcntl.h
-> @@ -0,0 +1,13 @@
-> +#ifndef _BABELTRACE_INCLUDE_COMPAT_FCNTL_H
-> +#define _BABELTRACE_INCLUDE_COMPAT_FCNTL_H
+> diff --git a/compat/compat_strlib.c b/compat/compat_strlib.c
+> index 3cbd455..980a8f5 100644
+> --- a/compat/compat_strlib.c
+> +++ b/compat/compat_strlib.c
+> @@ -50,6 +50,29 @@ int strerror_r(int errnum, char *buf, size_t buflen)
+>         buf[buflen - 1] =3D '\0';
+>         return 0;
+>  }
 > +
-> +#include <fcntl.h>
-> +#ifdef __MINGW32__
-> +static inline
-> +int posix_fallocate(int fd, off_t offset, off_t len)
+> +size_t strnlen(const char *str, size_t maxlen)
 > +{
 
-This functionality can be achieved using SetFilePointerEx/SetEndOfFile
-on Windows.
+Any reason you are not using the native strnlen? I'm fairly sure it is
+available on Windows.
+I know MinGW does not provide some standard function prototypes (may
+or may not be the case here)... I think finding the function's address
+explicitly would be more appropriate here (using GetProcAddress on
+msvcrt.dll).
 
-> +       return 0;
-> +}
-> +#endif
+> +       char * ptr;
+> +       size_t len;
+> +       ptr =3D (char *)str;
+> +       len =3D 0;
 > +
-> +#endif
-> \ No newline at end of file
+> +       /* while there still are characters in the string */
+> +       while(*ptr !=3D '\0') {
+> +               /* increment counter */
+> +               len++;
+> +               /* check that we do not exceed the given maximum */
+> +               if (len =3D=3D maxlen) {
+> +                       return len;
+> +               }
+> +               /* next character */
+> +               ptr++;
+> +
+> +       }
+> +       return len;
+> +}
+> +
+>  #endif
+>
+>  int compat_strerror_r(int errnum, char *buf, size_t buflen)
+> diff --git a/formats/ctf/types/string.c b/formats/ctf/types/string.c
+> index a2433bf..a2f513d 100644
+> --- a/formats/ctf/types/string.c
+> +++ b/formats/ctf/types/string.c
+> @@ -29,7 +29,7 @@
+>  #include <babeltrace/babeltrace-internal.h>
+>  #include <babeltrace/ctf/types.h>
+>  #include <limits.h>            /* C99 limits */
+> -#include <string.h>
+> +#include <babeltrace/compat/string.h>
+>
+>  int ctf_string_read(struct bt_stream_pos *ppos, struct bt_definition *de=
+finition)
+>  {
+> diff --git a/include/babeltrace/compat/string.h b/include/babeltrace/comp=
+at/string.h
+> index 501d003..82f411e 100644
+> --- a/include/babeltrace/compat/string.h
+> +++ b/include/babeltrace/compat/string.h
+> @@ -5,6 +5,7 @@
+>
+>  #ifdef __MINGW32__
+>  char *strtok_r(char *str, const char *delim, char **nextp);
+> +size_t strnlen(const char *str, size_t maxlen);
+>  #endif
+>
+>  int compat_strerror_r(int errnum, char *buf, size_t buflen);
 > --
 > 1.8.1.msysgit.1
 >
