@@ -1,20 +1,15 @@
-From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [Babeltrace RFC PATCH 03/28] Move build-specific
- strerror_r to compat directory
-Date: Mon, 13 May 2013 16:21:08 -0400
-Message-ID: <CA+jJMxveqYEEqNeUJoqO50Te4k3hdF8_AHvuWFC=sRfJZjO=Zg__15684.2361706824$1368476519$gmane$org@mail.gmail.com>
-References: <009B25148989C6458484484699278506E537E844@EU-MBX-01.mgc.mentorg.com>
+From: David Goulet <dgoulet@efficios.com>
+Subject: [PATCH lttng-tools] Add wrappers for pipe
+Date: Mon, 13 May 2013 16:27:16 -0400
+Message-ID: <1368476836-13803-1-git-send-email-dgoulet__33047.1452129588$1368476883$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wg0-f47.google.com ([74.125.82.47])
+Received: from smtp.ini-tech.com ([5.9.158.244])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1UbzFD-0001JU-W7
-	for lttng-dev@lists.lttng.org; Mon, 13 May 2013 16:21:16 -0400
-Received: by mail-wg0-f47.google.com with SMTP id e11so6856530wgh.14
-	for <lttng-dev@lists.lttng.org>; Mon, 13 May 2013 13:21:09 -0700 (PDT)
-In-Reply-To: <009B25148989C6458484484699278506E537E844@EU-MBX-01.mgc.mentorg.com>
+	(envelope-from <dgoulet@efficios.com>) id 1UbzLE-0001Qu-Lp
+	for lttng-dev@lists.lttng.org; Mon, 13 May 2013 16:27:28 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,212 +18,490 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Ikaheimonen, JP" <jp_ikaheimonen@mentor.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On Thu, May 2, 2013 at 7:46 AM, Ikaheimonen, JP
-<jp_ikaheimonen@mentor.com> wrote:
-> Add a new source directory 'compat'.
-> In that directory, add a new file 'strlib.c'.
-> In that file, add a new function compat_strerror_r that encapsulates
-> the build-specific differences of strerror_r.
-> Where strerror_r is used, now use compat_strerror_r.
-> ---
->  Makefile.am                              |  2 +-
->  compat/Makefile.am                       | 10 ++++++++++
->  compat/compat_strlib.c                   | 17 +++++++++++++++++
->  configure.ac                             |  1 +
->  include/babeltrace/babeltrace-internal.h | 32 +++-----------------------=
-------
->  include/babeltrace/compat/string.h       |  9 +++++++++
->  lib/Makefile.am                          |  3 ++-
->  7 files changed, 43 insertions(+), 31 deletions(-)
->  create mode 100644 compat/Makefile.am
->  create mode 100644 compat/compat_strlib.c
->  create mode 100644 include/babeltrace/compat/string.h
->
-> diff --git a/Makefile.am b/Makefile.am
-> index b25b58f..cdfad5a 100644
-> --- a/Makefile.am
-> +++ b/Makefile.am
-> @@ -2,7 +2,7 @@ AM_CFLAGS =3D $(PACKAGE_CFLAGS) -I$(top_srcdir)/include
->
->  ACLOCAL_AMFLAGS =3D -I m4
->
-> -SUBDIRS =3D include types lib formats converter tests doc extras
-> +SUBDIRS =3D include types compat lib formats converter tests doc extras
->
->  dist_doc_DATA =3D ChangeLog LICENSE mit-license.txt gpl-2.0.txt \
->                 std-ext-lib.txt
-> diff --git a/compat/Makefile.am b/compat/Makefile.am
-> new file mode 100644
-> index 0000000..d756aa7
-> --- /dev/null
-> +++ b/compat/Makefile.am
-> @@ -0,0 +1,10 @@
-> +AM_CFLAGS =3D $(PACKAGE_CFLAGS) -I$(top_srcdir)/include
-> +
-> +lib_LTLIBRARIES =3D libcompat.la
-> +
-> +libcompat_la_SOURCES =3D \
-> +       compat_strlib.c
-> +
-> +libcompat_la_LDFLAGS =3D \
-> +       -Wl,--no-as-needed
-> +
-> diff --git a/compat/compat_strlib.c b/compat/compat_strlib.c
-> new file mode 100644
-> index 0000000..9aabb07
-> --- /dev/null
-> +++ b/compat/compat_strlib.c
-> @@ -0,0 +1,17 @@
-> +#include <babeltrace/compat/string.h>
-> +
-> +int compat_strerror_r(int errnum, char *buf, size_t buflen)
+This is to help use pipes in a way where partial read/write and EINTR
+are handled in one single call site.
 
-Is there a specific reason why you can't redefine this as a macro
-instead of changing the function's name?
+Two new files are created, pipe.c/.h which are part of libcommon. The
+open, close, read_close, write_close, read and write calls are
+implemented using a custom lttng_pipe data structure and protected by
+operation's mutex. A destroy function is also available to cleanup
+memory once done with a pipe.
 
-> +{
-> +#if !defined(__linux__) || ((_POSIX_C_SOURCE >=3D 200112L || _XOPEN_SOUR=
-CE >=3D 600) && !defined(_GNU_SOURCE))
-> +/* XSI-compliant strerror_r */
-> +       return strerror_r(errnum, buf, buflen);
-> +#else
-> +/* GNU-compliant strerror_r */
-> +       char * retbuf;
-> +       retbuf =3D strerror_r(errnum, buf, buflen);
-> +       if (retbuf !=3D buf)
-> +               strcpy(buf, retbuf);
-> +       return 0;
-> +#endif
-> +}
-> +
-> diff --git a/configure.ac b/configure.ac
-> index 83822d6..29366da 100644
-> --- a/configure.ac
-> +++ b/configure.ac
-> @@ -93,6 +93,7 @@ AC_SUBST(babeltracectfincludedir)
->  AC_CONFIG_FILES([
->         Makefile
->         types/Makefile
-> +       compat/Makefile
->         formats/Makefile
->         formats/ctf/Makefile
->         formats/ctf/types/Makefile
-> diff --git a/include/babeltrace/babeltrace-internal.h b/include/babeltrac=
-e/babeltrace-internal.h
-> index 22866bc..35382de 100644
-> --- a/include/babeltrace/babeltrace-internal.h
-> +++ b/include/babeltrace/babeltrace-internal.h
-> @@ -27,7 +27,7 @@
->  #include <stdio.h>
->  #include <glib.h>
->  #include <stdint.h>
-> -#include <string.h>
-> +#include <babeltrace/compat/string.h>
->
->  #define PERROR_BUFLEN  200
->
-> @@ -81,46 +81,20 @@ extern int babeltrace_verbose, babeltrace_debug;
->                 perrorstr,                                              \
->                 ## args)
->
-> -#if !defined(__linux__) || ((_POSIX_C_SOURCE >=3D 200112L || _XOPEN_SOUR=
-CE >=3D 600) && !defined(_GNU_SOURCE))
-> -
->  #define _bt_printf_perror(fp, fmt, args...)                            \
->         ({                                                              \
->                 char buf[PERROR_BUFLEN] =3D "Error in strerror_r()";     =
- \
-> -               strerror_r(errno, buf, sizeof(buf));                    \
-> +               compat_strerror_r(errno, buf, sizeof(buf));              =
-       \
->                 _bt_printfe(fp, "error", buf, fmt, ## args);            \
->         })
->
->  #define _bt_printfl_perror(fp, lineno, fmt, args...)                   \
->         ({                                                              \
->                 char buf[PERROR_BUFLEN] =3D "Error in strerror_r()";     =
- \
-> -               strerror_r(errno, buf, sizeof(buf));                    \
-> +               compat_strerror_r(errno, buf, sizeof(buf));              =
-       \
->                 _bt_printfle(fp, "error", lineno, buf, fmt, ## args);   \
->         })
->
-> -#else
-> -
-> -/*
-> - * Version using GNU strerror_r, for linux with appropriate defines.
-> - */
-> -
-> -#define _bt_printf_perror(fp, fmt, args...)                            \
-> -       ({                                                              \
-> -               char *buf;                                              \
-> -               char tmp[PERROR_BUFLEN] =3D "Error in strerror_r()";     =
- \
-> -               buf =3D strerror_r(errno, tmp, sizeof(tmp));             =
- \
-> -               _bt_printfe(fp, "error", buf, fmt, ## args);            \
-> -       })
-> -
-> -#define _bt_printfl_perror(fp, lineno, fmt, args...)                   \
-> -       ({                                                              \
-> -               char *buf;                                              \
-> -               char tmp[PERROR_BUFLEN] =3D "Error in strerror_r()";     =
- \
-> -               buf =3D strerror_r(errno, tmp, sizeof(tmp));             =
- \
-> -               _bt_printfle(fp, "error", lineno, buf, fmt, ## args);   \
-> -       })
-> -
-> -#endif
-> -
->  /* printf without lineno information */
->  #define printf_fatal(fmt, args...)                                     \
->         _bt_printf(stderr, "fatal", fmt, ## args)
-> diff --git a/include/babeltrace/compat/string.h b/include/babeltrace/comp=
-at/string.h
-> new file mode 100644
-> index 0000000..8591b7e
-> --- /dev/null
-> +++ b/include/babeltrace/compat/string.h
-> @@ -0,0 +1,9 @@
-> +#ifndef _BABELTRACE_COMPAT_STRING_H
-> +#define BABELTRACE_COMPAT_STRING_H
-> +
-> +#include <string.h>
-> +
-> +int compat_strerror_r(int errnum, char *buf, size_t buflen);
-> +
-> +#endif
-> +
-> diff --git a/lib/Makefile.am b/lib/Makefile.am
-> index 7ffb164..fa470c0 100644
-> --- a/lib/Makefile.am
-> +++ b/lib/Makefile.am
-> @@ -14,4 +14,5 @@ libbabeltrace_la_SOURCES =3D babeltrace.c \
->  libbabeltrace_la_LDFLAGS =3D \
->         -Wl,--no-as-needed \
->         prio_heap/libprio_heap.la \
-> -       $(top_builddir)/types/libbabeltrace_types.la
-> +       $(top_builddir)/types/libbabeltrace_types.la \
-> +       $(top_builddir)/compat/libcompat.la
-> --
-> 1.8.1.msysgit.1
->
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+Signed-off-by: David Goulet <dgoulet@efficios.com>
+---
+ src/common/Makefile.am |    3 +-
+ src/common/pipe.c      |  362 ++++++++++++++++++++++++++++++++++++++++++++++++
+ src/common/pipe.h      |   76 ++++++++++
+ 3 files changed, 440 insertions(+), 1 deletion(-)
+ create mode 100644 src/common/pipe.c
+ create mode 100644 src/common/pipe.h
 
-
-
--- =
-
-J=E9r=E9mie Galarneau
-EfficiOS Inc.
-http://www.efficios.com
+diff --git a/src/common/Makefile.am b/src/common/Makefile.am
+index f2ea40a..6ba6c2b 100644
+--- a/src/common/Makefile.am
++++ b/src/common/Makefile.am
+@@ -13,7 +13,8 @@ noinst_HEADERS = lttng-kernel.h defaults.h macros.h error.h futex.h \
+ noinst_LTLIBRARIES = libcommon.la
+ 
+ libcommon_la_SOURCES = error.h error.c utils.c utils.h runas.c runas.h \
+-                       common.h futex.c futex.h uri.c uri.h defaults.c
++                       common.h futex.c futex.h uri.c uri.h defaults.c \
++                       pipe.c pipe.h
+ libcommon_la_LIBADD = -luuid
+ 
+ # Consumer library
+diff --git a/src/common/pipe.c b/src/common/pipe.c
+new file mode 100644
+index 0000000..713db97
+--- /dev/null
++++ b/src/common/pipe.c
+@@ -0,0 +1,362 @@
++/*
++ * Copyright (C) 2013 - David Goulet <dgoulet@efficios.com>
++ *
++ * This program is free software; you can redistribute it and/or modify it
++ * under the terms of the GNU General Public License, version 2 only, as
++ * published by the Free Software Foundation.
++ *
++ * This program is distributed in the hope that it will be useful, but WITHOUT
++ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
++ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
++ * more details.
++ *
++ * You should have received a copy of the GNU General Public License along with
++ * this program; if not, write to the Free Software Foundation, Inc., 51
++ * Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
++ */
++
++#define _GNU_SOURCE
++#include <assert.h>
++#include <fcntl.h>
++#include <unistd.h>
++
++#include <common/common.h>
++
++#include "pipe.h"
++
++/*
++ * Lock read side of a pipe.
++ */
++static void lock_read_side(struct lttng_pipe *pipe)
++{
++	pthread_mutex_lock(&pipe->read_mutex);
++}
++
++/*
++ * Unlock read side of a pipe.
++ */
++static void unlock_read_side(struct lttng_pipe *pipe)
++{
++	pthread_mutex_unlock(&pipe->read_mutex);
++}
++
++/*
++ * Lock write side of a pipe.
++ */
++static void lock_write_side(struct lttng_pipe *pipe)
++{
++	pthread_mutex_lock(&pipe->write_mutex);
++}
++
++/*
++ * Unlock write side of a pipe.
++ */
++static void unlock_write_side(struct lttng_pipe *pipe)
++{
++	pthread_mutex_unlock(&pipe->write_mutex);
++}
++
++/*
++ * Internal function. Close read side of pipe WITHOUT locking the mutex.
++ *
++ * Return 0 on success else a negative errno from close(2).
++ */
++static int _pipe_read_close(struct lttng_pipe *pipe)
++{
++	int ret, ret_val = 0;
++
++	assert(pipe);
++
++	if (!lttng_pipe_is_read_open(pipe)) {
++		goto end;
++	}
++
++	do {
++		ret = close(pipe->fd[0]);
++	} while (ret < 0 && errno == EINTR);
++	if (ret < 0) {
++		PERROR("close lttng read pipe");
++		ret_val = -errno;
++	}
++	pipe->r_state = LTTNG_PIPE_STATE_CLOSED;
++
++end:
++	return ret_val;
++}
++
++/*
++ * Internal function. Close write side of pipe WITHOUT locking the mutex.
++ *
++ * Return 0 on success else a negative errno from close(2).
++ */
++static int _pipe_write_close(struct lttng_pipe *pipe)
++{
++	int ret, ret_val = 0;
++
++	assert(pipe);
++
++	if (!lttng_pipe_is_write_open(pipe)) {
++		goto end;
++	}
++
++	do {
++		ret = close(pipe->fd[1]);
++	} while (ret < 0 && errno == EINTR);
++	if (ret < 0) {
++		PERROR("close lttng write pipe");
++		ret_val = -errno;
++	}
++	pipe->w_state = LTTNG_PIPE_STATE_CLOSED;
++
++end:
++	return ret_val;
++}
++
++
++/*
++ * Open a new lttng pipe and set flags using fcntl().
++ *
++ * Return a newly allocated lttng pipe on success or else NULL.
++ */
++struct lttng_pipe *lttng_pipe_open(int flags)
++{
++	int ret;
++	struct lttng_pipe *p;
++
++	p = zmalloc(sizeof(*p));
++	if (!p) {
++		PERROR("zmalloc pipe open");
++		goto error;
++	}
++
++	ret = pipe(p->fd);
++	if (ret < 0) {
++		PERROR("lttng pipe");
++		goto error;
++	}
++
++	if (flags) {
++		int i;
++
++		for (i = 0; i < 2; i++) {
++			ret = fcntl(p->fd[i], F_SETFD, flags);
++			if (ret < 0) {
++				PERROR("fcntl lttng pipe %d", flags);
++				goto error;
++			}
++		}
++	}
++
++	pthread_mutex_init(&p->read_mutex, NULL);
++	pthread_mutex_init(&p->write_mutex, NULL);
++	p->r_state = LTTNG_PIPE_STATE_OPENED;
++	p->w_state = LTTNG_PIPE_STATE_OPENED;
++	p->flags = flags;
++
++	return p;
++
++error:
++	lttng_pipe_destroy(p);
++	return NULL;
++}
++
++/*
++ * Close read side of a lttng pipe.
++ *
++ * Return 0 on success else a negative value.
++ */
++int lttng_pipe_read_close(struct lttng_pipe *pipe)
++{
++	int ret;
++
++	assert(pipe);
++
++	/* Handle read side first. */
++	lock_read_side(pipe);
++	ret = _pipe_read_close(pipe);
++	unlock_read_side(pipe);
++
++	return ret;
++}
++
++/*
++ * Close write side of a lttng pipe.
++ *
++ * Return 0 on success else a negative value.
++ */
++int lttng_pipe_write_close(struct lttng_pipe *pipe)
++{
++	int ret;
++
++	assert(pipe);
++
++	lock_write_side(pipe);
++	ret = _pipe_write_close(pipe);
++	unlock_write_side(pipe);
++
++	return ret;
++}
++
++/*
++ * Close both read and write side of a lttng pipe.
++ *
++ * Return 0 on success else a negative value.
++ */
++int lttng_pipe_close(struct lttng_pipe *pipe)
++{
++	int ret, ret_val = 0;
++
++	assert(pipe);
++
++	ret = lttng_pipe_read_close(pipe);
++	if (ret < 0) {
++		ret_val = ret;
++	}
++
++	ret = lttng_pipe_write_close(pipe);
++	if (ret < 0) {
++		ret_val = ret;
++	}
++
++	return ret_val;
++}
++
++/*
++ * Close and destroy a lttng pipe object. Finally, pipe is freed.
++ */
++void lttng_pipe_destroy(struct lttng_pipe *pipe)
++{
++	int ret;
++
++	if (!pipe) {
++		return;
++	}
++
++	/*
++	 * Destroy should *never* be called with a locked mutex. These must always
++	 * succeed so we unlock them after the close pipe below.
++	 */
++	ret = pthread_mutex_trylock(&pipe->read_mutex);
++	assert(!ret);
++	ret = pthread_mutex_trylock(&pipe->write_mutex);
++	assert(!ret);
++
++	/* Close pipes WITHOUT trying to lock the pipes. */
++	(void) _pipe_read_close(pipe);
++	(void) _pipe_write_close(pipe);
++
++	unlock_read_side(pipe);
++	unlock_write_side(pipe);
++
++	(void) pthread_mutex_destroy(&pipe->read_mutex);
++	(void) pthread_mutex_destroy(&pipe->write_mutex);
++
++	free(pipe);
++}
++
++/*
++ * Read on a lttng pipe and put the data in buf of at least size count.
++ *
++ * Return 0 on success or else a negative errno message from read(2).
++ */
++ssize_t lttng_pipe_read(struct lttng_pipe *pipe, void *buf, size_t count)
++{
++	ssize_t ret, read_len, read_left, index;
++
++	assert(pipe);
++	assert(buf);
++
++	lock_read_side(pipe);
++
++	if (!lttng_pipe_is_read_open(pipe)) {
++		ret = -EBADF;
++		goto error;
++	}
++
++	read_left = count;
++	index = 0;
++	do {
++		read_len = read(pipe->fd[0], buf + index, read_left);
++		if (read_len < 0) {
++			ret = -errno;
++			if (errno == EINTR) {
++				/* Read again. */
++				continue;
++			} else if (errno == EAGAIN || errno == EWOULDBLOCK) {
++				/*
++				 * Return the number of bytes read up to this point if any.
++				 */
++				if (index) {
++					ret = index;
++				}
++				goto error;
++			} else {
++				PERROR("lttng pipe read");
++				goto error;
++			}
++		}
++		read_left -= read_len;
++		index += read_len;
++	} while (read_left > 0);
++
++	/* Everything went fine. */
++	ret = index;
++
++error:
++	unlock_read_side(pipe);
++	return ret;
++}
++
++/*
++ * Write on a lttng pipe using the data in buf and size of count.
++ *
++ * Return 0 on success or else a negative errno message from write(2).
++ */
++ssize_t lttng_pipe_write(struct lttng_pipe *pipe, const void *buf,
++		size_t count)
++{
++	ssize_t ret, write_len, write_left, index;
++
++	assert(pipe);
++	assert(buf);
++
++	lock_write_side(pipe);
++
++	if (!lttng_pipe_is_write_open(pipe)) {
++		ret = -EBADF;
++		goto error;
++	}
++
++	write_left = count;
++	index = 0;
++	do {
++		write_len = write(pipe->fd[1], buf + index, write_left);
++		if (write_len < 0) {
++			ret = -errno;
++			if (errno == EINTR) {
++				/* Read again. */
++				continue;
++			} else if (errno == EAGAIN || errno == EWOULDBLOCK) {
++				/*
++				 * Return the number of bytes read up to this point if any.
++				 */
++				if (index) {
++					ret = index;
++				}
++				goto error;
++			} else {
++				PERROR("lttng pipe write");
++				goto error;
++			}
++		}
++		write_left -= write_len;
++		index += write_len;
++	} while (write_left > 0);
++
++	/* Everything went fine. */
++	ret = index;
++
++error:
++	unlock_write_side(pipe);
++	return ret;
++}
+diff --git a/src/common/pipe.h b/src/common/pipe.h
+new file mode 100644
+index 0000000..acd05d8
+--- /dev/null
++++ b/src/common/pipe.h
+@@ -0,0 +1,76 @@
++/*
++ * Copyright (C) 2013 - David Goulet <dgoulet@efficios.com>
++ *
++ * This program is free software; you can redistribute it and/or modify it
++ * under the terms of the GNU General Public License, version 2 only, as
++ * published by the Free Software Foundation.
++ *
++ * This program is distributed in the hope that it will be useful, but WITHOUT
++ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
++ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
++ * more details.
++ *
++ * You should have received a copy of the GNU General Public License along with
++ * this program; if not, write to the Free Software Foundation, Inc., 51
++ * Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
++ */
++
++#ifndef LTTNG_PIPE_H
++#define LTTNG_PIPE_H
++
++#include <pthread.h>
++
++enum lttng_pipe_state {
++	LTTNG_PIPE_STATE_OPENED = 1,
++	LTTNG_PIPE_STATE_CLOSED = 2,
++};
++
++struct lttng_pipe {
++	/* Read: 0, Write: 1. */
++	int fd[2];
++	/*
++	 * Flags of the pipe once opened. pipe(2) specifies either O_NONBLOCK or
++	 * O_CLOEXEC can be used. Flags are set using fcntl(2) call.
++	 */
++	int flags;
++
++	/*
++	 * These states are protected by the operation mutex below.
++	 */
++	enum lttng_pipe_state r_state;
++	enum lttng_pipe_state w_state;
++
++	/* Held for each read(2) operation. */
++	pthread_mutex_t read_mutex;
++	/* Held for each write(2) operation. */
++	pthread_mutex_t write_mutex;
++};
++
++/*
++ * Return 1 if read side is open else 0.
++ */
++static inline int lttng_pipe_is_read_open(struct lttng_pipe *pipe)
++{
++	return pipe->r_state == LTTNG_PIPE_STATE_OPENED ? 1 : 0;
++}
++
++/*
++ * Return 1 if write side is open else 0.
++ */
++static inline int lttng_pipe_is_write_open(struct lttng_pipe *pipe)
++{
++	return pipe->w_state == LTTNG_PIPE_STATE_OPENED ? 1 : 0;
++}
++
++struct lttng_pipe *lttng_pipe_open(int flags);
++int lttng_pipe_write_close(struct lttng_pipe *pipe);
++int lttng_pipe_read_close(struct lttng_pipe *pipe);
++/* Close both side of pipe. */
++int lttng_pipe_close(struct lttng_pipe *pipe);
++void lttng_pipe_destroy(struct lttng_pipe *pipe);
++
++ssize_t lttng_pipe_read(struct lttng_pipe *pipe, void *buf, size_t count);
++ssize_t lttng_pipe_write(struct lttng_pipe *pipe, const void *buf,
++		size_t count);
++
++#endif /* LTTNG_PIPE_H */
+-- 
+1.7.10.4
