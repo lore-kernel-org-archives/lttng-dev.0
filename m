@@ -1,23 +1,18 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH] Fix linker library order
-Date: Tue, 14 May 2013 17:51:53 -0400
-Message-ID: <20130514215153.GB9634__27644.7636228569$1368568347$gmane$org@Krystal>
-References: <1368318333-31522-1-git-send-email-francis.giraldeau@gmail.com>
-	<20130512025917.GB405@Krystal> <519161C8.5000305@voxpopuli.im>
-	<20130514065244.GA5066@Krystal> <20130514123724.GA24238@Krystal>
-	<CAFXXi0nvJhHiiMK_FE=_OMkT4yK+0_WLv8h=Nanvh3g0E1re3g@mail.gmail.com>
-	<5192A3B5.6080302@voxpopuli.im> <20130514214608.GA9634@Krystal>
+From: Christian Babeux <christian.babeux@efficios.com>
+Subject: [PATCH lttng-tools 1/3] Tests: Move the babelstats
+	utility to tests/utils
+Date: Tue, 14 May 2013 17:53:45 -0400
+Message-ID: <1368568427-8289-1-git-send-email-christian.babeux__42293.9391959973$1368568480$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from mail-vc0-f170.google.com ([209.85.220.170])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UcN8V-0005t4-8i
-	for lttng-dev@lists.lttng.org; Tue, 14 May 2013 17:51:55 -0400
-Content-Disposition: inline
-In-Reply-To: <20130514214608.GA9634@Krystal>
+	(envelope-from <christian.babeux@0x80.ca>) id 1UcNAV-0005uX-05
+	for lttng-dev@lists.lttng.org; Tue, 14 May 2013 17:53:59 -0400
+Received: by mail-vc0-f170.google.com with SMTP id gf12so1209391vcb.29
+	for <lttng-dev@lists.lttng.org>; Tue, 14 May 2013 14:53:53 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -26,64 +21,416 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Simon Marchi <simon.marchi@polymtl.ca>
+To: dgoulet@efficios.com
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Mathieu Desnoyers (mathieu.desnoyers@efficios.com) wrote:
-> * Alexandre Montplaisir (alexmonthy@voxpopuli.im) wrote:
-> > On 13-05-14 01:38 PM, Simon Marchi wrote:
-> > > [...]
-> > >
-> > > If you read carefully the log sent by Alexandre, you see that it is
-> > > when building the shared libs in this directory
-> > > (lttng-ust-provider-ust-tests-demo.so) that the build fails. I don't
-> > > know why it fails, but Alexandre hinted that passing "-fPIE -pie" to
-> > > build a shared library is weird (it is usually -fPIC -pic). I am not
-> > > sure where that comes from. This behaviour only happens when building
-> > > the package, not when building manually.
-> > 
-> > We build the daily packages with all Debian security options (this is
-> > kind of a future-proofing to find problems like this one, I don't think
-> > the "real" Debian packages use it).
-> > 
-> > See
-> > http://wiki.debian.org/Hardening#DEB_BUILD_HARDENING_PIE_.28gcc.2Fg.2B-.2B-_-fPIE_-pie.29
-> > 
-> > So far it handled the autotools-powered Makefiles correctly (libraries
-> > are built with -fPIC, binaries with -fPIE), but it seems to cause
-> > problems with hand-written Makefiles like the one in doc/examples/demo.
-> > 
-> > We could fix it with a package-specific patch, either by using autotools
-> > to build this directory, or maybe not building it at all, since it's
-> > just an example that we don't install...
-> 
-> has this been fixed by the recent revert ?
+This utility will prove useful in trace validation for other tests,
+so put it in a common location accessible by the tests.
 
-ok, I read the rest of my mailbox. Let's discuss this tomorrow when my
-head is straightened up.
+Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
+---
+ tests/regression/tools/filtering/Makefile.am       |   4 +-
+ tests/regression/tools/filtering/babelstats.pl     | 174 ---------------------
+ tests/regression/tools/filtering/test_valid_filter |   4 +-
+ tests/utils/babelstats.pl                          | 174 +++++++++++++++++++++
+ 4 files changed, 178 insertions(+), 178 deletions(-)
+ delete mode 100755 tests/regression/tools/filtering/babelstats.pl
+ create mode 100755 tests/utils/babelstats.pl
 
-Thanks,
-
-Mathieu
-
-> 
-> > 
-> > 
-> > Thanks all,
-> > Alex
-> 
-> -- 
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> http://www.efficios.com
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
+diff --git a/tests/regression/tools/filtering/Makefile.am b/tests/regression/tools/filtering/Makefile.am
+index 5629da2..ca60dbf 100644
+--- a/tests/regression/tools/filtering/Makefile.am
++++ b/tests/regression/tools/filtering/Makefile.am
+@@ -14,5 +14,5 @@ gen_ust_events_SOURCES = gen-ust-events.c tp.c tp.h
+ gen_ust_events_LDADD = -llttng-ust
+ endif
+ 
+-noinst_SCRIPTS = test_unsupported_op test_invalid_filter test_valid_filter babelstats.pl
+-EXTRA_DIST = test_unsupported_op test_invalid_filter test_valid_filter babelstats.pl
++noinst_SCRIPTS = test_unsupported_op test_invalid_filter test_valid_filter
++EXTRA_DIST = test_unsupported_op test_invalid_filter test_valid_filter
+diff --git a/tests/regression/tools/filtering/babelstats.pl b/tests/regression/tools/filtering/babelstats.pl
+deleted file mode 100755
+index d8d4dd0..0000000
+--- a/tests/regression/tools/filtering/babelstats.pl
++++ /dev/null
+@@ -1,174 +0,0 @@
+-#!/usr/bin/perl
+-
+-# Copyright (C) - 2012 Christian Babeux <christian.babeux@efficios.com>
+-#
+-# This program is free software; you can redistribute it and/or modify it
+-# under the terms of the GNU General Public License, version 2 only, as
+-# published by the Free Software Foundation.
+-#
+-# This program is distributed in the hope that it will be useful, but WITHOUT
+-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+-# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+-# more details.
+-#
+-# You should have received a copy of the GNU General Public License along with
+-# this program; if not, write to the Free Software Foundation, Inc., 51
+-# Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+-
+-use strict;
+-use warnings;
+-
+-use Getopt::Long;
+-
+-my $opt_tracepoint;
+-
+-GetOptions('tracepoint=s' => \$opt_tracepoint)
+-	or die("Invalid command-line option\n");
+-
+-defined($opt_tracepoint)
+-	or die("Missing tracepoint, use --tracepoint <name>");
+-
+-# Parse an array string.
+-# The format is as follow: [ [index] = value, ... ]
+-sub parse_array
+-{
+-	my ($arr_str) = @_;
+-	my @array = ();
+-
+-	# Strip leading and ending brackets, remove whitespace
+-	$arr_str =~ s/^\[//;
+-	$arr_str =~ s/\]$//;
+-	$arr_str =~ s/\s//g;
+-
+-	my @entries = split(',', $arr_str);
+-
+-	foreach my $entry (@entries) {
+-		if ($entry =~ /^\[(\d+)\]=(\d+)$/) {
+-			my $index = $1;
+-			my $value = $2;
+-			splice @array, $index, 0, $value;
+-		}
+-	}
+-
+-	return \@array;
+-}
+-
+-# Parse fields values.
+-# Format can either be a name = array or a name = value pair.
+-sub parse_fields
+-{
+-	my ($fields_str) = @_;
+-	my %fields_hash;
+-
+-	my $field_name = '[\w\d_]+';
+-	my $field_value = '[\w\d_\\\*"]+';
+-	my $array = '\[(?:\s\[\d+\]\s=\s\d+,)*\s\[\d+\]\s=\s\d+\s\]';
+-
+-	# Split the various fields
+-	my @fields = ($fields_str =~ /$field_name\s=\s(?:$array|$field_value)/g);
+-
+-	foreach my $field (@fields) {
+-		if ($field =~ /($field_name)\s=\s($array)/) {
+-			my $name  = $1;
+-			my $value = parse_array($2);
+-			$fields_hash{$name} = $value;
+-		}
+-
+-		if ($field =~ /($field_name)\s=\s($field_value)/) {
+-			my $name  = $1;
+-			my $value = $2;
+-			$fields_hash{$name} = $value;
+-		}
+-	}
+-
+-	return \%fields_hash;
+-}
+-
+-# Using an event array, merge all the fields
+-# of a particular tracepoint.
+-sub merge_fields
+-{
+-	my ($events_ref) = @_;
+-	my %merged;
+-
+-	foreach my $event (@{$events_ref}) {
+-		my $tp_provider = $event->{'tp_provider'};
+-		my $tp_name     = $event->{'tp_name'};
+-		my $tracepoint  = "$tp_provider:$tp_name";
+-
+-		foreach my $key (keys %{$event->{'fields'}}) {
+-			my $val = $event->{'fields'}->{$key};
+-
+-			# TODO: Merge of array is not implemented.
+-			next if (ref($val) eq 'ARRAY');
+-			$merged{$tracepoint}{$key}{$val} = undef;
+-		}
+-	}
+-
+-	return \%merged;
+-}
+-
+-# Print the minimum and maximum of each fields
+-# for a particular tracepoint.
+-sub print_fields_stats
+-{
+-	my ($merged_ref, $tracepoint) = @_;
+-
+-	return unless ($tracepoint && exists $merged_ref->{$tracepoint});
+-
+-	foreach my $field (keys %{$merged_ref->{$tracepoint}}) {
+-		my @sorted;
+-		my @val = keys ($merged_ref->{$tracepoint}->{$field});
+-
+-		if ($val[0] =~ /^\d+$/) {
+-			# Sort numerically
+-			@sorted = sort { $a <=> $b } @val;
+-		} elsif ($val[0] =~ /^0x[\da-f]+$/i) {
+-			# Convert the hex values and sort numerically
+-			@sorted = sort { hex($a) <=> hex($b) } @val;
+-		} else {
+-			# Fallback, alphabetical sort
+-			@sorted = sort { lc($a) cmp lc($b) } @val;
+-		}
+-
+-		my $min = $sorted[0];
+-		my $max = $sorted[-1];
+-
+-		print "$field $min $max\n";
+-	}
+-}
+-
+-my @events;
+-
+-while (<>)
+-{
+-	my $timestamp   = '\[(.*)\]';
+-	my $elapsed     = '\((.*)\)';
+-	my $hostname    = '.*';
+-	my $pname       = '.*';
+-	my $pid         = '\d+';
+-	my $tp_provider = '.*';
+-	my $tp_name     = '.*';
+-	my $cpu_info    = '{\scpu_id\s=\s(\d+)\s\}';
+-	my $fields      = '{(.*)}';
+-
+-	# Parse babeltrace text output format
+-	if (/$timestamp\s$elapsed\s($hostname):($pname):($pid)\s($tp_provider):($tp_name):\s$cpu_info,\s$fields/) {
+-		my %event_hash;
+-
+-		$event_hash{'timestamp'}   = $1;
+-		$event_hash{'elapsed'}     = $2;
+-		$event_hash{'hostname'}    = $3;
+-		$event_hash{'pname'}       = $4;
+-		$event_hash{'pid'}         = $5;
+-		$event_hash{'tp_provider'} = $6;
+-		$event_hash{'tp_name'}     = $7;
+-		$event_hash{'cpu_id'}      = $8;
+-		$event_hash{'fields'}      = parse_fields($9);
+-
+-		push @events, \%event_hash;
+-	}
+-}
+-
+-my %merged_fields = %{merge_fields(\@{events})};
+-print_fields_stats(\%merged_fields, $opt_tracepoint);
+diff --git a/tests/regression/tools/filtering/test_valid_filter b/tests/regression/tools/filtering/test_valid_filter
+index 7170eb5..a62cc1e 100755
+--- a/tests/regression/tools/filtering/test_valid_filter
++++ b/tests/regression/tools/filtering/test_valid_filter
+@@ -21,7 +21,7 @@ CURDIR=$(dirname $0)/
+ TESTDIR=$CURDIR/../../..
+ LTTNG_BIN="lttng"
+ BIN_NAME="gen-ust-events"
+-STATS_BIN="babelstats.pl"
++STATS_BIN="$TESTDIR/utils/babelstats.pl"
+ SESSION_NAME="valid_filter"
+ EVENT_NAME="tp:tptest"
+ NR_ITER=100
+@@ -81,7 +81,7 @@ function test_valid_filter
+ 	# Destroy session
+ 	destroy_lttng_session $SESSION_NAME
+ 
+-	stats=`babeltrace $trace_path | $CURDIR/$STATS_BIN --tracepoint $EVENT_NAME`
++	stats=`babeltrace $trace_path | $STATS_BIN --tracepoint $EVENT_NAME`
+ 
+ 	rm -rf $trace_path
+ 
+diff --git a/tests/utils/babelstats.pl b/tests/utils/babelstats.pl
+new file mode 100755
+index 0000000..d8d4dd0
+--- /dev/null
++++ b/tests/utils/babelstats.pl
+@@ -0,0 +1,174 @@
++#!/usr/bin/perl
++
++# Copyright (C) - 2012 Christian Babeux <christian.babeux@efficios.com>
++#
++# This program is free software; you can redistribute it and/or modify it
++# under the terms of the GNU General Public License, version 2 only, as
++# published by the Free Software Foundation.
++#
++# This program is distributed in the hope that it will be useful, but WITHOUT
++# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
++# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
++# more details.
++#
++# You should have received a copy of the GNU General Public License along with
++# this program; if not, write to the Free Software Foundation, Inc., 51
++# Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
++
++use strict;
++use warnings;
++
++use Getopt::Long;
++
++my $opt_tracepoint;
++
++GetOptions('tracepoint=s' => \$opt_tracepoint)
++	or die("Invalid command-line option\n");
++
++defined($opt_tracepoint)
++	or die("Missing tracepoint, use --tracepoint <name>");
++
++# Parse an array string.
++# The format is as follow: [ [index] = value, ... ]
++sub parse_array
++{
++	my ($arr_str) = @_;
++	my @array = ();
++
++	# Strip leading and ending brackets, remove whitespace
++	$arr_str =~ s/^\[//;
++	$arr_str =~ s/\]$//;
++	$arr_str =~ s/\s//g;
++
++	my @entries = split(',', $arr_str);
++
++	foreach my $entry (@entries) {
++		if ($entry =~ /^\[(\d+)\]=(\d+)$/) {
++			my $index = $1;
++			my $value = $2;
++			splice @array, $index, 0, $value;
++		}
++	}
++
++	return \@array;
++}
++
++# Parse fields values.
++# Format can either be a name = array or a name = value pair.
++sub parse_fields
++{
++	my ($fields_str) = @_;
++	my %fields_hash;
++
++	my $field_name = '[\w\d_]+';
++	my $field_value = '[\w\d_\\\*"]+';
++	my $array = '\[(?:\s\[\d+\]\s=\s\d+,)*\s\[\d+\]\s=\s\d+\s\]';
++
++	# Split the various fields
++	my @fields = ($fields_str =~ /$field_name\s=\s(?:$array|$field_value)/g);
++
++	foreach my $field (@fields) {
++		if ($field =~ /($field_name)\s=\s($array)/) {
++			my $name  = $1;
++			my $value = parse_array($2);
++			$fields_hash{$name} = $value;
++		}
++
++		if ($field =~ /($field_name)\s=\s($field_value)/) {
++			my $name  = $1;
++			my $value = $2;
++			$fields_hash{$name} = $value;
++		}
++	}
++
++	return \%fields_hash;
++}
++
++# Using an event array, merge all the fields
++# of a particular tracepoint.
++sub merge_fields
++{
++	my ($events_ref) = @_;
++	my %merged;
++
++	foreach my $event (@{$events_ref}) {
++		my $tp_provider = $event->{'tp_provider'};
++		my $tp_name     = $event->{'tp_name'};
++		my $tracepoint  = "$tp_provider:$tp_name";
++
++		foreach my $key (keys %{$event->{'fields'}}) {
++			my $val = $event->{'fields'}->{$key};
++
++			# TODO: Merge of array is not implemented.
++			next if (ref($val) eq 'ARRAY');
++			$merged{$tracepoint}{$key}{$val} = undef;
++		}
++	}
++
++	return \%merged;
++}
++
++# Print the minimum and maximum of each fields
++# for a particular tracepoint.
++sub print_fields_stats
++{
++	my ($merged_ref, $tracepoint) = @_;
++
++	return unless ($tracepoint && exists $merged_ref->{$tracepoint});
++
++	foreach my $field (keys %{$merged_ref->{$tracepoint}}) {
++		my @sorted;
++		my @val = keys ($merged_ref->{$tracepoint}->{$field});
++
++		if ($val[0] =~ /^\d+$/) {
++			# Sort numerically
++			@sorted = sort { $a <=> $b } @val;
++		} elsif ($val[0] =~ /^0x[\da-f]+$/i) {
++			# Convert the hex values and sort numerically
++			@sorted = sort { hex($a) <=> hex($b) } @val;
++		} else {
++			# Fallback, alphabetical sort
++			@sorted = sort { lc($a) cmp lc($b) } @val;
++		}
++
++		my $min = $sorted[0];
++		my $max = $sorted[-1];
++
++		print "$field $min $max\n";
++	}
++}
++
++my @events;
++
++while (<>)
++{
++	my $timestamp   = '\[(.*)\]';
++	my $elapsed     = '\((.*)\)';
++	my $hostname    = '.*';
++	my $pname       = '.*';
++	my $pid         = '\d+';
++	my $tp_provider = '.*';
++	my $tp_name     = '.*';
++	my $cpu_info    = '{\scpu_id\s=\s(\d+)\s\}';
++	my $fields      = '{(.*)}';
++
++	# Parse babeltrace text output format
++	if (/$timestamp\s$elapsed\s($hostname):($pname):($pid)\s($tp_provider):($tp_name):\s$cpu_info,\s$fields/) {
++		my %event_hash;
++
++		$event_hash{'timestamp'}   = $1;
++		$event_hash{'elapsed'}     = $2;
++		$event_hash{'hostname'}    = $3;
++		$event_hash{'pname'}       = $4;
++		$event_hash{'pid'}         = $5;
++		$event_hash{'tp_provider'} = $6;
++		$event_hash{'tp_name'}     = $7;
++		$event_hash{'cpu_id'}      = $8;
++		$event_hash{'fields'}      = parse_fields($9);
++
++		push @events, \%event_hash;
++	}
++}
++
++my %merged_fields = %{merge_fields(\@{events})};
++print_fields_stats(\%merged_fields, $opt_tracepoint);
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+1.8.2.2
