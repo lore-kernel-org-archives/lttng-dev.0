@@ -1,8 +1,10 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: User-space tracing by the root lttng-sessiond
-Date: Tue, 14 May 2013 03:05:45 -0400
-Message-ID: <20130514070545.GA5213__39677.2607732148$1368515177$gmane$org@Krystal>
-References: <48CF5AC71E61DB46B70D0F388054EFFD12D1201A@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+Subject: Re: [Babeltrace RFC PATCH 03/28] Move
+	build-specific	strerror_r to compat directory
+Date: Tue, 14 May 2013 08:08:53 -0400
+Message-ID: <20130514120853.GD21745__49301.9544207074$1368533385$gmane$org@Krystal>
+References: <009B25148989C6458484484699278506E537E844@EU-MBX-01.mgc.mentorg.com>
+	<CA+jJMxveqYEEqNeUJoqO50Te4k3hdF8_AHvuWFC=sRfJZjO=Zg@mail.gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
@@ -10,10 +12,10 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1Uc9Ix-0006g4-5l
-	for lttng-dev@lists.lttng.org; Tue, 14 May 2013 03:05:47 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1UcE2M-00010o-L1
+	for lttng-dev@lists.lttng.org; Tue, 14 May 2013 08:08:59 -0400
 Content-Disposition: inline
-In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD12D1201A@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+In-Reply-To: <CA+jJMxveqYEEqNeUJoqO50Te4k3hdF8_AHvuWFC=sRfJZjO=Zg@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,86 +24,277 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, "Couture,
-	Mario" <Mario.Couture@drdc-rddc.gc.ca>, "Painchaud,
-	Frederic" <Frederic.Painchaud@drdc-rddc.gc.ca>
+To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-* Thibault, Daniel (Daniel.Thibault@drdc-rddc.gc.ca) wrote:
->    I ran a little experiment whose results surprised me.  Using a non-tra=
-cing group user account, I first made sure I had a root lttng-sessiond runn=
-ing and a user-space lttng-sessiond.  In the first I set up a trace for som=
-e kernel events plus all user-space events.  In the second I set up a trace=
- for all user-space events only.  Both traces were started, then the lttng-=
-ust/doc/examples/easy-ust/sample demo was run to generate the user-space ev=
-ents.  Then both traces were stopped and destroyed.
+* J=E9r=E9mie Galarneau (jeremie.galarneau@efficios.com) wrote:
+> On Thu, May 2, 2013 at 7:46 AM, Ikaheimonen, JP
+> <jp_ikaheimonen@mentor.com> wrote:
+> > Add a new source directory 'compat'.
+> > In that directory, add a new file 'strlib.c'.
+> > In that file, add a new function compat_strerror_r that encapsulates
+> > the build-specific differences of strerror_r.
+> > Where strerror_r is used, now use compat_strerror_r.
+> > ---
+> >  Makefile.am                              |  2 +-
+> >  compat/Makefile.am                       | 10 ++++++++++
+> >  compat/compat_strlib.c                   | 17 +++++++++++++++++
+> >  configure.ac                             |  1 +
+> >  include/babeltrace/babeltrace-internal.h | 32 +++---------------------=
+--------
+> >  include/babeltrace/compat/string.h       |  9 +++++++++
+> >  lib/Makefile.am                          |  3 ++-
+> >  7 files changed, 43 insertions(+), 31 deletions(-)
+> >  create mode 100644 compat/Makefile.am
+> >  create mode 100644 compat/compat_strlib.c
+> >  create mode 100644 include/babeltrace/compat/string.h
+> >
+> > diff --git a/Makefile.am b/Makefile.am
+> > index b25b58f..cdfad5a 100644
+> > --- a/Makefile.am
+> > +++ b/Makefile.am
+> > @@ -2,7 +2,7 @@ AM_CFLAGS =3D $(PACKAGE_CFLAGS) -I$(top_srcdir)/include
+> >
+> >  ACLOCAL_AMFLAGS =3D -I m4
+> >
+> > -SUBDIRS =3D include types lib formats converter tests doc extras
+> > +SUBDIRS =3D include types compat lib formats converter tests doc extras
+> >
+> >  dist_doc_DATA =3D ChangeLog LICENSE mit-license.txt gpl-2.0.txt \
+> >                 std-ext-lib.txt
+> > diff --git a/compat/Makefile.am b/compat/Makefile.am
+> > new file mode 100644
+> > index 0000000..d756aa7
+> > --- /dev/null
+> > +++ b/compat/Makefile.am
+> > @@ -0,0 +1,10 @@
+> > +AM_CFLAGS =3D $(PACKAGE_CFLAGS) -I$(top_srcdir)/include
+> > +
+> > +lib_LTLIBRARIES =3D libcompat.la
+> > +
+> > +libcompat_la_SOURCES =3D \
+> > +       compat_strlib.c
+> > +
+> > +libcompat_la_LDFLAGS =3D \
+> > +       -Wl,--no-as-needed
+> > +
+> > diff --git a/compat/compat_strlib.c b/compat/compat_strlib.c
+> > new file mode 100644
+> > index 0000000..9aabb07
+> > --- /dev/null
+> > +++ b/compat/compat_strlib.c
+> > @@ -0,0 +1,17 @@
+> > +#include <babeltrace/compat/string.h>
+> > +
+> > +int compat_strerror_r(int errnum, char *buf, size_t buflen)
 > =
 
->    I noted there were three lttng-consumerd daemons: one in user-space, t=
-he other two owned by root.  Presumably one is servicing the kernel events =
-while the other is servicing the user-space events.
+> Is there a specific reason why you can't redefine this as a macro
+> instead of changing the function's name?
 
-yes
+whenever possible, we try to use static inline rather than macros. This
+provides much better type verification, and cleaner compiler error
+reporting.
 
->  (Question: If there were several users active at once, would there be se=
-veral root user-space lttng-consumerd daemons or still just one?)
+however, a big note on how to make clean wrappers:
 
-no
+Do:
 
-> =
+#if something
+int myfct(args)
+{
+...
+}
+#else
+int myfct(args)
+{
+...
+}
+#endif
 
->    As expected, both traces show the sample user-space events (with no lo=
-sses, it turns out).  What surprised me, however, is that the pairs of even=
-ts were not in synch. Since they're all coming out of the same trace provid=
-er, I would expect the time-stamp to be issued once (by the tracepoint prov=
-ider), and then two copies of the event to go into the two trace buffers fo=
-r eventual storage.  Could it be that the tracepoint provider instead issue=
-s two separate events, one for each of its clients?
+and _not_ the glibc-style oddness:
 
-yes
+int myfct(args)
+{
+#if something
+...
+#else
+...
+#endif
+}
 
->  (For the record, the pairs of events were out of synch by at least 4187 =
-ns (670 times out of 100 000), and as much as 3 326 405 ns (once); in 93% o=
-f the time root event lags after the user-space event)
-
-can be caused by interruption (for 4k ns) and preemption (for the 3s
-hit).
-
-> =
-
->    This seems problematic to me, since multiple traces capturing the same=
- event won't be able to reconcile their copies with each other.
-
-since timestamps have to match the event physical order in the streams,
-we need to assign one timestamp for each buffer. no way around this.
-
-and yes, tracing is not stopping the world, so you can expect to have
-slight timing inaccuracy like this. It's a trade-off between perfect
-timing accuracy and tracer overhead.
+putting preprocessor conditions within functions is purely evil. ;-)
 
 Thanks,
 
 Mathieu
 
+> =
+
+> > +{
+> > +#if !defined(__linux__) || ((_POSIX_C_SOURCE >=3D 200112L || _XOPEN_SO=
+URCE >=3D 600) && !defined(_GNU_SOURCE))
+> > +/* XSI-compliant strerror_r */
+> > +       return strerror_r(errnum, buf, buflen);
+> > +#else
+> > +/* GNU-compliant strerror_r */
+> > +       char * retbuf;
+> > +       retbuf =3D strerror_r(errnum, buf, buflen);
+> > +       if (retbuf !=3D buf)
+> > +               strcpy(buf, retbuf);
+> > +       return 0;
+> > +#endif
+> > +}
+> > +
+> > diff --git a/configure.ac b/configure.ac
+> > index 83822d6..29366da 100644
+> > --- a/configure.ac
+> > +++ b/configure.ac
+> > @@ -93,6 +93,7 @@ AC_SUBST(babeltracectfincludedir)
+> >  AC_CONFIG_FILES([
+> >         Makefile
+> >         types/Makefile
+> > +       compat/Makefile
+> >         formats/Makefile
+> >         formats/ctf/Makefile
+> >         formats/ctf/types/Makefile
+> > diff --git a/include/babeltrace/babeltrace-internal.h b/include/babeltr=
+ace/babeltrace-internal.h
+> > index 22866bc..35382de 100644
+> > --- a/include/babeltrace/babeltrace-internal.h
+> > +++ b/include/babeltrace/babeltrace-internal.h
+> > @@ -27,7 +27,7 @@
+> >  #include <stdio.h>
+> >  #include <glib.h>
+> >  #include <stdint.h>
+> > -#include <string.h>
+> > +#include <babeltrace/compat/string.h>
+> >
+> >  #define PERROR_BUFLEN  200
+> >
+> > @@ -81,46 +81,20 @@ extern int babeltrace_verbose, babeltrace_debug;
+> >                 perrorstr,                                             =
+ \
+> >                 ## args)
+> >
+> > -#if !defined(__linux__) || ((_POSIX_C_SOURCE >=3D 200112L || _XOPEN_SO=
+URCE >=3D 600) && !defined(_GNU_SOURCE))
+> > -
+> >  #define _bt_printf_perror(fp, fmt, args...)                           =
+ \
+> >         ({                                                             =
+ \
+> >                 char buf[PERROR_BUFLEN] =3D "Error in strerror_r()";   =
+   \
+> > -               strerror_r(errno, buf, sizeof(buf));                   =
+ \
+> > +               compat_strerror_r(errno, buf, sizeof(buf));            =
+         \
+> >                 _bt_printfe(fp, "error", buf, fmt, ## args);           =
+ \
+> >         })
+> >
+> >  #define _bt_printfl_perror(fp, lineno, fmt, args...)                  =
+ \
+> >         ({                                                             =
+ \
+> >                 char buf[PERROR_BUFLEN] =3D "Error in strerror_r()";   =
+   \
+> > -               strerror_r(errno, buf, sizeof(buf));                   =
+ \
+> > +               compat_strerror_r(errno, buf, sizeof(buf));            =
+         \
+> >                 _bt_printfle(fp, "error", lineno, buf, fmt, ## args);  =
+ \
+> >         })
+> >
+> > -#else
+> > -
+> > -/*
+> > - * Version using GNU strerror_r, for linux with appropriate defines.
+> > - */
+> > -
+> > -#define _bt_printf_perror(fp, fmt, args...)                           =
+ \
+> > -       ({                                                             =
+ \
+> > -               char *buf;                                             =
+ \
+> > -               char tmp[PERROR_BUFLEN] =3D "Error in strerror_r()";   =
+   \
+> > -               buf =3D strerror_r(errno, tmp, sizeof(tmp));           =
+   \
+> > -               _bt_printfe(fp, "error", buf, fmt, ## args);           =
+ \
+> > -       })
+> > -
+> > -#define _bt_printfl_perror(fp, lineno, fmt, args...)                  =
+ \
+> > -       ({                                                             =
+ \
+> > -               char *buf;                                             =
+ \
+> > -               char tmp[PERROR_BUFLEN] =3D "Error in strerror_r()";   =
+   \
+> > -               buf =3D strerror_r(errno, tmp, sizeof(tmp));           =
+   \
+> > -               _bt_printfle(fp, "error", lineno, buf, fmt, ## args);  =
+ \
+> > -       })
+> > -
+> > -#endif
+> > -
+> >  /* printf without lineno information */
+> >  #define printf_fatal(fmt, args...)                                    =
+ \
+> >         _bt_printf(stderr, "fatal", fmt, ## args)
+> > diff --git a/include/babeltrace/compat/string.h b/include/babeltrace/co=
+mpat/string.h
+> > new file mode 100644
+> > index 0000000..8591b7e
+> > --- /dev/null
+> > +++ b/include/babeltrace/compat/string.h
+> > @@ -0,0 +1,9 @@
+> > +#ifndef _BABELTRACE_COMPAT_STRING_H
+> > +#define BABELTRACE_COMPAT_STRING_H
+> > +
+> > +#include <string.h>
+> > +
+> > +int compat_strerror_r(int errnum, char *buf, size_t buflen);
+> > +
+> > +#endif
+> > +
+> > diff --git a/lib/Makefile.am b/lib/Makefile.am
+> > index 7ffb164..fa470c0 100644
+> > --- a/lib/Makefile.am
+> > +++ b/lib/Makefile.am
+> > @@ -14,4 +14,5 @@ libbabeltrace_la_SOURCES =3D babeltrace.c \
+> >  libbabeltrace_la_LDFLAGS =3D \
+> >         -Wl,--no-as-needed \
+> >         prio_heap/libprio_heap.la \
+> > -       $(top_builddir)/types/libbabeltrace_types.la
+> > +       $(top_builddir)/types/libbabeltrace_types.la \
+> > +       $(top_builddir)/compat/libcompat.la
+> > --
+> > 1.8.1.msysgit.1
+> >
+> >
+> > _______________________________________________
+> > lttng-dev mailing list
+> > lttng-dev@lists.lttng.org
+> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> =
 
 > =
 
-> Daniel U. Thibault
-> Protection des syst=E8mes et contremesures (PSC) | Systems Protection & C=
-ountermeasures (SPC)
-> Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critica=
-l Cyber Security (MCCS)
-> R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R=
-&D Canada - Valcartier (DRDC Valcartier)
-> 2459 route de la Bravoure
-> Qu=E9bec QC=A0 G3J 1X5
-> CANADA
-> Vox=A0: (418) 844-4000 x4245
-> Fax=A0: (418) 844-4538
-> NAC=A0: 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-> Gouvernement du Canada=A0| Government of Canada
-> <http://www.valcartier.drdc-rddc.gc.ca/>
+> =
+
+> -- =
+
+> J=E9r=E9mie Galarneau
+> EfficiOS Inc.
+> http://www.efficios.com
 > =
 
 > _______________________________________________
