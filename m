@@ -1,23 +1,19 @@
-From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH] Fix linker library order
-Date: Tue, 14 May 2013 16:55:40 -0400
-Message-ID: <CA+jJMxuUKzWAxnMtYWs+Dxv_A7sAb9enh37kENt0WgDRmXGvmA__30056.9430961788$1368564979$gmane$org@mail.gmail.com>
-References: <1368318333-31522-1-git-send-email-francis.giraldeau@gmail.com>
-	<20130512025917.GB405@Krystal> <519161C8.5000305@voxpopuli.im>
-	<20130514065244.GA5066@Krystal> <20130514123724.GA24238@Krystal>
-	<CAFXXi0nvJhHiiMK_FE=_OMkT4yK+0_WLv8h=Nanvh3g0E1re3g@mail.gmail.com>
-	<5192A3B5.6080302@voxpopuli.im>
+From: Simon Marchi <simon.marchi@polymtl.ca>
+Subject: Re: [PATCH] Remove -pie flag for shared library
+Date: Tue, 14 May 2013 17:05:59 -0400
+Message-ID: <CAFXXi0=oySpm0iqkVD0j05z-aFmvNDmSC3HNwBpKCPnSn_M6pw__39891.0549622544$1368565636$gmane$org@mail.gmail.com>
+References: <1368562532-19566-1-git-send-email-francis.giraldeau@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wi0-f178.google.com ([209.85.212.178])
+Received: from mail-ie0-f175.google.com ([209.85.223.175])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1UcMGB-0005Q0-Cn
-	for lttng-dev@lists.lttng.org; Tue, 14 May 2013 16:55:47 -0400
-Received: by mail-wi0-f178.google.com with SMTP id ey16so937776wid.17
-	for <lttng-dev@lists.lttng.org>; Tue, 14 May 2013 13:55:41 -0700 (PDT)
-In-Reply-To: <5192A3B5.6080302@voxpopuli.im>
+	(envelope-from <thundersim@gmail.com>) id 1UcMQd-0005X0-DZ
+	for lttng-dev@lists.lttng.org; Tue, 14 May 2013 17:06:35 -0400
+Received: by mail-ie0-f175.google.com with SMTP id s9so2129769iec.34
+	for <lttng-dev@lists.lttng.org>; Tue, 14 May 2013 14:06:29 -0700 (PDT)
+In-Reply-To: <1368562532-19566-1-git-send-email-francis.giraldeau@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -26,56 +22,82 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Simon Marchi <simon.marchi@polymtl.ca>
+To: Francis Giraldeau <francis.giraldeau@gmail.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Francis has already submitted a patch but we could also add a
-"--disable-examples" switch to configure if hand-crafted Makefiles
-become a problem.
+Thank you Francis.
 
-On Tue, May 14, 2013 at 4:51 PM, Alexandre Montplaisir
-<alexmonthy@voxpopuli.im> wrote:
-> On 13-05-14 01:38 PM, Simon Marchi wrote:
->> [...]
->>
->> If you read carefully the log sent by Alexandre, you see that it is
->> when building the shared libs in this directory
->> (lttng-ust-provider-ust-tests-demo.so) that the build fails. I don't
->> know why it fails, but Alexandre hinted that passing "-fPIE -pie" to
->> build a shared library is weird (it is usually -fPIC -pic). I am not
->> sure where that comes from. This behaviour only happens when building
->> the package, not when building manually.
+I tested your patch locally and it works, so I included it in the
+packaging on Launchpad so that the package builds for now. However, it
+would be preferable if the problem could be addressed more gracefully
+upstream.
+
+Simon
+
+On 14 May 2013 16:15, Francis Giraldeau <francis.giraldeau@gmail.com> wrote:
+> Some build environment with hardening enabled adds -pie flags to LDFLAGS. While
+> it's required for ELF binaries, it doesn't make sens for shared libraries. For
+> this case, filter-out the erroneous option.
 >
-> We build the daily packages with all Debian security options (this is
-> kind of a future-proofing to find problems like this one, I don't think
-> the "real" Debian packages use it).
+> Signed-off-by: Francis Giraldeau <francis.giraldeau@gmail.com>
+> ---
+>  doc/examples/demo/Makefile     | 6 ++++--
+>  doc/examples/easy-ust/Makefile | 4 +++-
+>  2 files changed, 7 insertions(+), 3 deletions(-)
 >
-> See
-> http://wiki.debian.org/Hardening#DEB_BUILD_HARDENING_PIE_.28gcc.2Fg.2B-.2=
-B-_-fPIE_-pie.29
+> diff --git a/doc/examples/demo/Makefile b/doc/examples/demo/Makefile
+> index bbc8ccb..3145146 100644
+> --- a/doc/examples/demo/Makefile
+> +++ b/doc/examples/demo/Makefile
+> @@ -34,6 +34,8 @@ EMPTY_AUTOMAKE_TARGETS = distdir install install-data install-exec uninstall \
+>  $(EMPTY_AUTOMAKE_TARGETS):
+>  endif
 >
-> So far it handled the autotools-powered Makefiles correctly (libraries
-> are built with -fPIC, binaries with -fPIE), but it seems to cause
-> problems with hand-written Makefiles like the one in doc/examples/demo.
+> +CLEAN_LDFLAGS = $(filter-out -pie,$(LDFLAGS))
+> +
+>  all: demo lttng-ust-provider-ust-tests-demo.so lttng-ust-provider-ust-tests-demo3.so
 >
-> We could fix it with a package-specific patch, either by using autotools
-> to build this directory, or maybe not building it at all, since it's
-> just an example that we don't install...
+>  tp.o: tp.c ust_tests_demo.h
+> @@ -43,13 +45,13 @@ tp2.o: tp2.c ust_tests_demo2.h
+>         $(CC) $(CPPFLAGS) $(CFLAGS) -fpic -c -o $@ $<
 >
+>  lttng-ust-provider-ust-tests-demo.so: tp.o tp2.o
+> -       $(CC) -shared -o $@ $(LDFLAGS) -llttng-ust $^
+> +       $(CC) -shared -o $@ $(CLEAN_LDFLAGS) -llttng-ust $^
 >
-> Thanks all,
-> Alex
+>  tp3.o: tp3.c ust_tests_demo3.h
+>         $(CC) $(CPPFLAGS) $(CFLAGS) -fpic -c -o $@ $<
+>
+>  lttng-ust-provider-ust-tests-demo3.so: tp3.o
+> -       $(CC) -shared -o $@ $(LDFLAGS) -llttng-ust $^
+> +       $(CC) -shared -o $@ $(CLEAN_LDFLAGS) -llttng-ust $^
+>
+>  demo.o: demo.c
+>         $(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
+> diff --git a/doc/examples/easy-ust/Makefile b/doc/examples/easy-ust/Makefile
+> index e20e53a..e95a2c5 100644
+> --- a/doc/examples/easy-ust/Makefile
+> +++ b/doc/examples/easy-ust/Makefile
+> @@ -36,10 +36,12 @@ EMPTY_AUTOMAKE_TARGETS = distdir install install-data install-exec uninstall \
+>  $(EMPTY_AUTOMAKE_TARGETS):
+>  endif
+>
+> +CLEAN_LDFLAGS = $(filter-out -pie,$(LDFLAGS))
+> +
+>  all: sample
+>
+>  sample: sample.o tp.o
+> -       $(CC) -o $@ $^ $(LDFLAGS) $(LIBS)
+> +       $(CC) -o $@ $^ $(CLEAN_LDFLAGS) $(LIBS)
+>
+>  sample.o: sample.c sample_component_provider.h
+>         $(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
+> --
+> 1.8.1.2
+>
 >
 > _______________________________________________
 > lttng-dev mailing list
 > lttng-dev@lists.lttng.org
 > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
-
-
--- =
-
-J=E9r=E9mie Galarneau
-EfficiOS Inc.
-http://www.efficios.com
