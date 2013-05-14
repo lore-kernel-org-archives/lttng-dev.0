@@ -1,20 +1,20 @@
-From: Christian Babeux <christian.babeux@efficios.com>
-Subject: [PATCH lttng-tools 6/6] Tests: Replace usage of
-	gen-ust-events testapp in ust metadata-flush test
-Date: Mon, 13 May 2013 18:30:56 -0400
-Message-ID: <1368484256-6666-6-git-send-email-christian.babeux__36379.5128454969$1368484344$gmane$org@efficios.com>
-References: <1368484256-6666-1-git-send-email-christian.babeux@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH] Fix linker library order
+Date: Tue, 14 May 2013 02:52:44 -0400
+Message-ID: <20130514065244.GA5066__11831.9671870724$1368514403$gmane$org@Krystal>
+References: <1368318333-31522-1-git-send-email-francis.giraldeau@gmail.com>
+	<20130512025917.GB405@Krystal> <519161C8.5000305@voxpopuli.im>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-vb0-f45.google.com ([209.85.212.45])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <christian.babeux@0x80.ca>) id 1Uc1Hd-0002Y9-DA
-	for lttng-dev@lists.lttng.org; Mon, 13 May 2013 18:31:53 -0400
-Received: by mail-vb0-f45.google.com with SMTP id 12so5638305vbf.18
-	for <lttng-dev@lists.lttng.org>; Mon, 13 May 2013 15:31:48 -0700 (PDT)
-In-Reply-To: <1368484256-6666-1-git-send-email-christian.babeux@efficios.com>
+	(envelope-from <compudj@mail.openrapids.net>) id 1Uc96N-0006Xq-Uq
+	for lttng-dev@lists.lttng.org; Tue, 14 May 2013 02:52:48 -0400
+Content-Disposition: inline
+In-Reply-To: <519161C8.5000305@voxpopuli.im>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,262 +23,66 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: dgoulet@efficios.com
+To: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Use the gen-ust-events binary found under tests/utils/testapp/gen-ust-events/.
+* Alexandre Montplaisir (alexmonthy@voxpopuli.im) wrote:
+> On 13-05-11 10:59 PM, Mathieu Desnoyers wrote:
+> > * Francis Giraldeau (francis.giraldeau@gmail.com) wrote:
+> >> Libraries must be specified after the binary target.
+> > merged, thanks!
+> >
+> > Mathieu
+> 
+> This seems to have broken the daily PPA packages:
+> https://launchpadlibrarian.net/139804087/buildlog_ubuntu-saucy-amd64.lttng-ust_2.2~pre-0%2Bbzr1574%2Bpack37%2B201305131247~saucy1_FAILEDTOBUILD.txt.gz
+> 
+> That package has no particular patches. If I build it locally from
+> source it builds fine, but if I build the package locally (with
+> dpkg-buildpackage), I get the same error. It could be related to the
+> --as-needed problem we've had before...
 
-Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
----
- .../ust/periodical-metadata-flush/Makefile.am      | 14 ------
- .../ust/periodical-metadata-flush/gen-nevents.c    | 56 ----------------------
- .../test_periodical_metadata_flush                 | 20 ++++----
- .../regression/ust/periodical-metadata-flush/tp.c  | 16 -------
- .../periodical-metadata-flush/ust_gen_nevents.h    | 56 ----------------------
- 5 files changed, 12 insertions(+), 150 deletions(-)
- delete mode 100644 tests/regression/ust/periodical-metadata-flush/gen-nevents.c
- delete mode 100644 tests/regression/ust/periodical-metadata-flush/tp.c
- delete mode 100644 tests/regression/ust/periodical-metadata-flush/ust_gen_nevents.h
+Francis, can you explain why your change was needed in the first place ?
 
-diff --git a/tests/regression/ust/periodical-metadata-flush/Makefile.am b/tests/regression/ust/periodical-metadata-flush/Makefile.am
-index 72013e8..c020920 100644
---- a/tests/regression/ust/periodical-metadata-flush/Makefile.am
-+++ b/tests/regression/ust/periodical-metadata-flush/Makefile.am
-@@ -1,16 +1,2 @@
--AM_CFLAGS = -I$(srcdir) -O2
--AM_LDFLAGS = -llttng-ust
--
--if LTTNG_TOOLS_BUILD_WITH_LIBDL
--AM_LDFLAGS += -ldl
--endif
--if LTTNG_TOOLS_BUILD_WITH_LIBC_DL
--AM_LDFLAGS += -lc
--endif
--
--noinst_PROGRAMS = gen-nevents
--gen_nevents_SOURCES = gen-nevents.c tp.c ust_gen_nevents.h
--gen_nevents_LDADD = -llttng-ust
--
- noinst_SCRIPTS = test_periodical_metadata_flush
- EXTRA_DIST = test_periodical_metadata_flush
-diff --git a/tests/regression/ust/periodical-metadata-flush/gen-nevents.c b/tests/regression/ust/periodical-metadata-flush/gen-nevents.c
-deleted file mode 100644
-index b2c1992..0000000
---- a/tests/regression/ust/periodical-metadata-flush/gen-nevents.c
-+++ /dev/null
-@@ -1,56 +0,0 @@
--/*
-- * Copyright (C) - 2009 Pierre-Marc Fournier
-- * Copyright (C) - 2011 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-- * Copyright (C) - 2012 David Goulet <dgoulet@efficios.com>
-- *
-- * This library is free software; you can redistribute it and/or modify it
-- * under the terms of the GNU Lesser General Public License as published by the
-- * Free Software Foundation; version 2.1 of the License.
-- *
-- * This library is distributed in the hope that it will be useful, but WITHOUT
-- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
-- * for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public License
-- * along with this library; if not, write to the Free Software Foundation,
-- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
-- */
--
--#include <arpa/inet.h>
--#include <fcntl.h>
--#include <signal.h>
--#include <stdarg.h>
--#include <stdio.h>
--#include <stdlib.h>
--#include <string.h>
--#include <sys/mman.h>
--#include <sys/stat.h>
--#include <sys/types.h>
--#include <unistd.h>
--
--#define TRACEPOINT_DEFINE
--#include "ust_gen_nevents.h"
--
--int main(int argc, char **argv)
--{
--	int i, netint;
--	long values[] = { 1, 2, 3 };
--	char text[10] = "test";
--	double dbl = 2.0;
--	float flt = 2222.0;
--	unsigned int nr_iter = 100;
--
--	if (argc == 2) {
--		nr_iter = atoi(argv[1]);
--	}
--
--	for (i = 0; i < nr_iter; i++) {
--		netint = htonl(i);
--		tracepoint(ust_gen_nevents, tptest, i, netint, values, text,
--				strlen(text), dbl, flt);
--		usleep(100000);
--	}
--
--	return 0;
--}
-diff --git a/tests/regression/ust/periodical-metadata-flush/test_periodical_metadata_flush b/tests/regression/ust/periodical-metadata-flush/test_periodical_metadata_flush
-index 2d984d5..18d8a46 100755
---- a/tests/regression/ust/periodical-metadata-flush/test_periodical_metadata_flush
-+++ b/tests/regression/ust/periodical-metadata-flush/test_periodical_metadata_flush
-@@ -19,15 +19,19 @@ TEST_DESC="UST tracer - Tracing with per UID buffers and periodical flush"
- CURDIR=$(dirname $0)/
- TESTDIR=$CURDIR/../../..
- NR_ITER=100
-+NR_USEC_WAIT=100000
-+TESTAPP_PATH="$TESTDIR/utils/testapp"
-+TESTAPP_NAME="gen-ust-events"
-+TESTAPP_BIN="$TESTAPP_PATH/$TESTAPP_NAME/$TESTAPP_NAME"
- SESSION_NAME="periodical-flush"
--EVENT_NAME="ust_gen_nevents:tptest"
-+EVENT_NAME="tp:tptest"
- BIN_NAME="gen-nevents"
- NUM_TESTS=38
- 
- source $TESTDIR/utils/utils.sh
- 
--if [ ! -x "$CURDIR/gen-nevents" ]; then
--	BAIL_OUT "No UST nevents binary detected."
-+if [ ! -x "$TESTAPP_BIN" ]; then
-+	BAIL_OUT "No UST events binary detected."
- fi
- 
- # MUST set TESTDIR before calling those functions
-@@ -62,7 +66,7 @@ function enable_metadata_per_pid()
- function wait_apps
- {
- 	diag "Waiting for applications to end..."
--	while [ -n "$(pidof $BIN_NAME)" ]; do
-+	while [ -n "$(pidof $TESTAPP_NAME)" ]; do
- 		sleep 1
- 	done
- }
-@@ -79,7 +83,7 @@ test_after_app_pid() {
- 	enable_ust_lttng_event $SESSION_NAME $EVENT_NAME
- 	start_lttng_tracing $SESSION_NAME
- 
--	./$CURDIR/$BIN_NAME $NR_ITER
-+	$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT
- 	ok $? "Start application to trace"
- 
- 	stop_lttng_tracing $SESSION_NAME
-@@ -95,7 +99,7 @@ test_before_app_pid() {
- 
- 	diag "Start application BEFORE tracing is started"
- 
--	./$CURDIR/$BIN_NAME $NR_ITER &
-+	$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT &
- 	ok $? "Start application to trace"
- 
- 	# BEFORE application is spawned
-@@ -139,7 +143,7 @@ test_after_app_uid() {
- 	enable_ust_lttng_event $SESSION_NAME $EVENT_NAME
- 	start_lttng_tracing $SESSION_NAME
- 
--	./$CURDIR/$BIN_NAME $NR_ITER
-+	$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT
- 	ok $? "Start application to trace"
- 
- 	stop_lttng_tracing $SESSION_NAME
-@@ -155,7 +159,7 @@ test_before_app_uid() {
- 
- 	diag "Start application BEFORE tracing is started"
- 
--	./$CURDIR/$BIN_NAME $NR_ITER &
-+	$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT &
- 	ok $? "Start application to trace"
- 
- 	# BEFORE application is spawned
-diff --git a/tests/regression/ust/periodical-metadata-flush/tp.c b/tests/regression/ust/periodical-metadata-flush/tp.c
-deleted file mode 100644
-index e291924..0000000
---- a/tests/regression/ust/periodical-metadata-flush/tp.c
-+++ /dev/null
-@@ -1,16 +0,0 @@
--/*
-- * Copyright (c) - 2011 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-- * Copyright (c) - 2012 David Goulet <dgoulet@efficios.com>
-- *
-- * THIS MATERIAL IS PROVIDED AS IS, WITH ABSOLUTELY NO WARRANTY EXPRESSED OR
-- * IMPLIED. ANY USE IS AT YOUR OWN RISK.
-- *
-- * Permission is hereby granted to use or copy this program for any purpose,
-- * provided the above notices are retained on all copies.  Permission to modify
-- * the code and to distribute modified code is granted, provided the above
-- * notices are retained, and a notice that the code was modified is included
-- * with the above copyright notice.
-- */
--
--#define TRACEPOINT_CREATE_PROBES
--#include "ust_gen_nevents.h"
-diff --git a/tests/regression/ust/periodical-metadata-flush/ust_gen_nevents.h b/tests/regression/ust/periodical-metadata-flush/ust_gen_nevents.h
-deleted file mode 100644
-index bc09c44..0000000
---- a/tests/regression/ust/periodical-metadata-flush/ust_gen_nevents.h
-+++ /dev/null
-@@ -1,56 +0,0 @@
--#undef TRACEPOINT_PROVIDER
--#define TRACEPOINT_PROVIDER ust_gen_nevents
--
--#if !defined(_TRACEPOINT_UST_GEN_NEVENTS_H) || defined(TRACEPOINT_HEADER_MULTI_READ)
--#define _TRACEPOINT_UST_GEN_NEVENTS_H
--
--#ifdef __cplusplus
--extern "C" {
--#endif
--
--/*
-- * Copyright (C) 2011  Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-- *
-- * THIS MATERIAL IS PROVIDED AS IS, WITH ABSOLUTELY NO WARRANTY EXPRESSED
-- * OR IMPLIED.  ANY USE IS AT YOUR OWN RISK.
-- *
-- * Permission is hereby granted to use or copy this program
-- * for any purpose,  provided the above notices are retained on all copies.
-- * Permission to modify the code and to distribute modified code is granted,
-- * provided the above notices are retained, and a notice that the code was
-- * modified is included with the above copyright notice.
-- */
--
--#include <lttng/tracepoint.h>
--
--TRACEPOINT_EVENT(ust_gen_nevents, tptest,
--	TP_ARGS(int, anint, int, netint, long *, values,
--		char *, text, size_t, textlen,
--		double, doublearg, float, floatarg),
--	TP_FIELDS(
--		ctf_integer(int, intfield, anint)
--		ctf_integer_hex(int, intfield2, anint)
--		ctf_integer(long, longfield, anint)
--		ctf_integer_network(int, netintfield, netint)
--		ctf_integer_network_hex(int, netintfieldhex, netint)
--		ctf_array(long, arrfield1, values, 3)
--		ctf_array_text(char, arrfield2, text, 10)
--		ctf_sequence(char, seqfield1, text, size_t, textlen)
--		ctf_sequence_text(char, seqfield2, text, size_t, textlen)
--		ctf_string(stringfield, text)
--		ctf_float(float, floatfield, floatarg)
--		ctf_float(double, doublefield, doublearg)
--	)
--)
--
--#endif /* _TRACEPOINT_UST_GEN_NEVENTS_H */
--
--#undef TRACEPOINT_INCLUDE_FILE
--#define TRACEPOINT_INCLUDE_FILE ./ust_gen_nevents.h
--
--/* This part must be outside ifdef protection */
--#include <lttng/tracepoint-event.h>
--
--#ifdef __cplusplus
--}
--#endif
+Thanks,
+
+Mathieu
+
+> 
+> Cheers,
+> Alex
+> 
+> >
+> >> Signed-off-by: Francis Giraldeau <francis.giraldeau@gmail.com>
+> >> ---
+> >>  doc/examples/demo/Makefile | 2 +-
+> >>  1 file changed, 1 insertion(+), 1 deletion(-)
+> >>
+> >> diff --git a/doc/examples/demo/Makefile b/doc/examples/demo/Makefile
+> >> index 7ae6547..bbc8ccb 100644
+> >> --- a/doc/examples/demo/Makefile
+> >> +++ b/doc/examples/demo/Makefile
+> >> @@ -55,7 +55,7 @@ demo.o: demo.c
+> >>  	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
+> >>  
+> >>  demo: demo.o
+> >> -	$(CC) -o $@ $(LIBS) $^
+> >> +	$(CC) -o $@ $^ $(LIBS)
+> >>  
+> >>  .PHONY: clean
+> >>  clean:
+> >> -- 
+> >> 1.8.1.2
+> >>
+> >>
+> >> _______________________________________________
+> >> lttng-dev mailing list
+> >> lttng-dev@lists.lttng.org
+> >> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> 
+
 -- 
-1.8.2.2
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
