@@ -1,10 +1,10 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [Babeltrace RFC PATCH 03/28] Move
-	build-specific	strerror_r to compat directory
-Date: Tue, 14 May 2013 08:08:53 -0400
-Message-ID: <20130514120853.GD21745__49301.9544207074$1368533385$gmane$org@Krystal>
-References: <009B25148989C6458484484699278506E537E844@EU-MBX-01.mgc.mentorg.com>
-	<CA+jJMxveqYEEqNeUJoqO50Te4k3hdF8_AHvuWFC=sRfJZjO=Zg@mail.gmail.com>
+Subject: Re: [babeltrace RFC PATCH 06/28] Add
+	MinGW	implementation of UUID
+Date: Tue, 14 May 2013 08:12:01 -0400
+Message-ID: <20130514121201.GE21745__34913.8017198586$1368533554$gmane$org@Krystal>
+References: <009B25148989C6458484484699278506E537E866@EU-MBX-01.mgc.mentorg.com>
+	<CA+jJMxtgSOtb4eLTywoxyKuy19S1igCZQFaTTk7rAyYd6ZbFaA@mail.gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
@@ -12,10 +12,10 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UcE2M-00010o-L1
-	for lttng-dev@lists.lttng.org; Tue, 14 May 2013 08:08:59 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1UcE5L-00013b-JG
+	for lttng-dev@lists.lttng.org; Tue, 14 May 2013 08:12:03 -0400
 Content-Disposition: inline
-In-Reply-To: <CA+jJMxveqYEEqNeUJoqO50Te4k3hdF8_AHvuWFC=sRfJZjO=Zg@mail.gmail.com>
+In-Reply-To: <CA+jJMxtgSOtb4eLTywoxyKuy19S1igCZQFaTTk7rAyYd6ZbFaA@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -29,253 +29,199 @@ Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
 * J=E9r=E9mie Galarneau (jeremie.galarneau@efficios.com) wrote:
-> On Thu, May 2, 2013 at 7:46 AM, Ikaheimonen, JP
+> On Thu, May 2, 2013 at 7:47 AM, Ikaheimonen, JP
 > <jp_ikaheimonen@mentor.com> wrote:
-> > Add a new source directory 'compat'.
-> > In that directory, add a new file 'strlib.c'.
-> > In that file, add a new function compat_strerror_r that encapsulates
-> > the build-specific differences of strerror_r.
-> > Where strerror_r is used, now use compat_strerror_r.
+> > Implementation of UUID functions for MinGW32, using Windows API.
 > > ---
-> >  Makefile.am                              |  2 +-
-> >  compat/Makefile.am                       | 10 ++++++++++
-> >  compat/compat_strlib.c                   | 17 +++++++++++++++++
-> >  configure.ac                             |  1 +
-> >  include/babeltrace/babeltrace-internal.h | 32 +++---------------------=
---------
-> >  include/babeltrace/compat/string.h       |  9 +++++++++
-> >  lib/Makefile.am                          |  3 ++-
-> >  7 files changed, 43 insertions(+), 31 deletions(-)
-> >  create mode 100644 compat/Makefile.am
-> >  create mode 100644 compat/compat_strlib.c
-> >  create mode 100644 include/babeltrace/compat/string.h
+> >  compat/Makefile.am               |  3 ++
+> >  compat/compat_uuid.c             | 75 ++++++++++++++++++++++++++++++++=
+++++++++
+> >  configure.ac                     |  5 ++-
+> >  include/babeltrace/compat/uuid.h | 32 ++++++++++++++++-
+> >  4 files changed, 113 insertions(+), 2 deletions(-)
+> >  create mode 100644 compat/compat_uuid.c
 > >
-> > diff --git a/Makefile.am b/Makefile.am
-> > index b25b58f..cdfad5a 100644
-> > --- a/Makefile.am
-> > +++ b/Makefile.am
-> > @@ -2,7 +2,7 @@ AM_CFLAGS =3D $(PACKAGE_CFLAGS) -I$(top_srcdir)/include
-> >
-> >  ACLOCAL_AMFLAGS =3D -I m4
-> >
-> > -SUBDIRS =3D include types lib formats converter tests doc extras
-> > +SUBDIRS =3D include types compat lib formats converter tests doc extras
-> >
-> >  dist_doc_DATA =3D ChangeLog LICENSE mit-license.txt gpl-2.0.txt \
-> >                 std-ext-lib.txt
 > > diff --git a/compat/Makefile.am b/compat/Makefile.am
-> > new file mode 100644
-> > index 0000000..d756aa7
-> > --- /dev/null
+> > index d756aa7..e624a79 100644
+> > --- a/compat/Makefile.am
 > > +++ b/compat/Makefile.am
-> > @@ -0,0 +1,10 @@
-> > +AM_CFLAGS =3D $(PACKAGE_CFLAGS) -I$(top_srcdir)/include
-> > +
-> > +lib_LTLIBRARIES =3D libcompat.la
-> > +
-> > +libcompat_la_SOURCES =3D \
-> > +       compat_strlib.c
-> > +
-> > +libcompat_la_LDFLAGS =3D \
-> > +       -Wl,--no-as-needed
-> > +
-> > diff --git a/compat/compat_strlib.c b/compat/compat_strlib.c
+> > @@ -8,3 +8,6 @@ libcompat_la_SOURCES =3D \
+> >  libcompat_la_LDFLAGS =3D \
+> >         -Wl,--no-as-needed
+> >
+> > +if BABELTRACE_BUILD_WITH_MINGW
+> > +libcompat_la_SOURCES +=3D compat_uuid.c
+> > +endif
+> > \ No newline at end of file
+> > diff --git a/compat/compat_uuid.c b/compat/compat_uuid.c
 > > new file mode 100644
-> > index 0000000..9aabb07
+> > index 0000000..0e67f73
 > > --- /dev/null
-> > +++ b/compat/compat_strlib.c
-> > @@ -0,0 +1,17 @@
-> > +#include <babeltrace/compat/string.h>
+> > +++ b/compat/compat_uuid.c
+> > @@ -0,0 +1,75 @@
+> > +/* This file is only built under MINGW32 */
 > > +
-> > +int compat_strerror_r(int errnum, char *buf, size_t buflen)
-> =
+> > +#include <windows.h>
+> > +#include <stdlib.h>
+> > +#include <babeltrace/compat/uuid.h>
+> > +
+> > +static void fix_uuid_endian(struct UUID * uuid)
+> > +{
+> > +       unsigned char * ptr;
+> > +       unsigned char tmp;
+> > +       #define SWAP(p, i, j) tmp=3D*(p+i);*(p+i)=3D*(p+j);*(p+j)=3Dtmp;
 
-> Is there a specific reason why you can't redefine this as a macro
-> instead of changing the function's name?
+surprising. Isn't there a standard byteswap in windows ?
 
-whenever possible, we try to use static inline rather than macros. This
-provides much better type verification, and cleaner compiler error
-reporting.
+> > +       ptr =3D (unsigned char *)uuid;
+> > +       SWAP(ptr, 0, 3)
+> > +       SWAP(ptr, 1, 2)
+> > +       SWAP(ptr, 4, 5)
+> > +       SWAP(ptr, 6, 7)
+> > +
 
-however, a big note on how to make clean wrappers:
+Please remove whiteline.
 
-Do:
+> > +}
+> > +
+> > +int compat_uuid_generate(unsigned char *uuid_out)
+> > +{
+> > +       RPC_STATUS status;
 
-#if something
-int myfct(args)
-{
-...
-}
-#else
-int myfct(args)
-{
-...
-}
-#endif
-
-and _not_ the glibc-style oddness:
-
-int myfct(args)
-{
-#if something
-...
-#else
-...
-#endif
-}
-
-putting preprocessor conditions within functions is purely evil. ;-)
+valid here and elsewhere: please put an empty line between variable
+declarations and code.
 
 Thanks,
 
 Mathieu
 
-> =
-
-> > +{
-> > +#if !defined(__linux__) || ((_POSIX_C_SOURCE >=3D 200112L || _XOPEN_SO=
-URCE >=3D 600) && !defined(_GNU_SOURCE))
-> > +/* XSI-compliant strerror_r */
-> > +       return strerror_r(errnum, buf, buflen);
-> > +#else
-> > +/* GNU-compliant strerror_r */
-> > +       char * retbuf;
-> > +       retbuf =3D strerror_r(errnum, buf, buflen);
-> > +       if (retbuf !=3D buf)
-> > +               strcpy(buf, retbuf);
-> > +       return 0;
-> > +#endif
+> > +       status =3D UuidCreate((struct UUID *)uuid_out);
+> > +       if (status =3D=3D RPC_S_OK)
+> > +               return 0;
+> > +       else
+> > +               return -1;
 > > +}
 > > +
+> > +int compat_uuid_unparse(const unsigned char *uuid_in, char *str_out)
+> > +{
+> > +       RPC_STATUS status;
+> > +       unsigned char *alloc_str;
+> > +       int ret;
+> > +       fix_uuid_endian(uuid_in);
+> > +       status =3D UuidToString((struct UUID *)uuid_in, &alloc_str);
+> > +       fix_uuid_endian(uuid_in);
+> > +       if (status =3D=3D RPC_S_OK) {
+> > +               strcpy(str_out, alloc_str);
+> > +               ret =3D 0;
+> > +       } else {
+> > +               ret =3D -1;
+> > +       }
+> > +       RpcStringFree(alloc_str);
+> > +       return ret;
+> > +}
+> > +
+> > +int compat_uuid_parse(const char *str_in, unsigned char *uuid_out)
+> > +{
+> > +       RPC_STATUS status;
+> > +
+> > +       status =3D UuidFromString(str_in, (struct UUID *)uuid_out);
+> > +       fix_uuid_endian(uuid_out);
+> > +
+> > +       if (status =3D=3D RPC_S_OK)
+> > +               return 0;
+> > +       else
+> > +               return -1;
+> > +}
+> > +
+> > +int compat_uuid_compare(const unsigned char *uuid_a,
+> > +               const unsigned char *uuid_b)
+> > +{
+> > +       RPC_STATUS status;
+> > +       int ret;
+> > +
+> > +       if (UuidCompare((struct UUID *)uuid_a, (struct UUID *)uuid_b, &=
+status) =3D=3D 0)
+> > +               ret =3D 0;
+> > +       else
+> > +       {
+> > +               ret =3D -1;
+> > +       }
+> > +       return ret;
+> > +
+> > +}
 > > diff --git a/configure.ac b/configure.ac
-> > index 83822d6..29366da 100644
+> > index 65e867c..5f9e38d 100644
 > > --- a/configure.ac
 > > +++ b/configure.ac
-> > @@ -93,6 +93,7 @@ AC_SUBST(babeltracectfincludedir)
-> >  AC_CONFIG_FILES([
-> >         Makefile
-> >         types/Makefile
-> > +       compat/Makefile
-> >         formats/Makefile
-> >         formats/ctf/Makefile
-> >         formats/ctf/types/Makefile
-> > diff --git a/include/babeltrace/babeltrace-internal.h b/include/babeltr=
-ace/babeltrace-internal.h
-> > index 22866bc..35382de 100644
-> > --- a/include/babeltrace/babeltrace-internal.h
-> > +++ b/include/babeltrace/babeltrace-internal.h
-> > @@ -27,7 +27,7 @@
-> >  #include <stdio.h>
-> >  #include <glib.h>
-> >  #include <stdint.h>
-> > -#include <string.h>
-> > +#include <babeltrace/compat/string.h>
+> > @@ -60,7 +60,10 @@ AC_CHECK_LIB([uuid], [uuid_generate],
+> >                 have_libc_uuid=3Dyes
+> >         ],
+> >         [
+> > -               AC_MSG_ERROR([Cannot find libuuid uuid_generate nor lib=
+c uuid_create. Use [LDFLAGS]=3D-Ldir to specify their location.])
+> > +               # for MinGW32 we have our own internal implemenation of=
+ uuid using Windows functions.
+> > +               if test "x$MINGW32" =3D xno; then
+> > +                       AC_MSG_ERROR([Cannot find libuuid uuid_generate=
+ nor libc uuid_create. Use [LDFLAGS]=3D-Ldir to specify their location.])
+> > +               fi
+> >         ])
+> >  ]
+> >  )
+> > diff --git a/include/babeltrace/compat/uuid.h b/include/babeltrace/comp=
+at/uuid.h
+> > index 2ce7467..a916a49 100644
+> > --- a/include/babeltrace/compat/uuid.h
+> > +++ b/include/babeltrace/compat/uuid.h
+> > @@ -122,8 +122,38 @@ int babeltrace_uuid_compare(const unsigned char *u=
+uid_a,
+> >                 return -1;
+> >  }
 > >
-> >  #define PERROR_BUFLEN  200
-> >
-> > @@ -81,46 +81,20 @@ extern int babeltrace_verbose, babeltrace_debug;
-> >                 perrorstr,                                             =
- \
-> >                 ## args)
-> >
-> > -#if !defined(__linux__) || ((_POSIX_C_SOURCE >=3D 200112L || _XOPEN_SO=
-URCE >=3D 600) && !defined(_GNU_SOURCE))
-> > -
-> >  #define _bt_printf_perror(fp, fmt, args...)                           =
- \
-> >         ({                                                             =
- \
-> >                 char buf[PERROR_BUFLEN] =3D "Error in strerror_r()";   =
-   \
-> > -               strerror_r(errno, buf, sizeof(buf));                   =
- \
-> > +               compat_strerror_r(errno, buf, sizeof(buf));            =
-         \
-> >                 _bt_printfe(fp, "error", buf, fmt, ## args);           =
- \
-> >         })
-> >
-> >  #define _bt_printfl_perror(fp, lineno, fmt, args...)                  =
- \
-> >         ({                                                             =
- \
-> >                 char buf[PERROR_BUFLEN] =3D "Error in strerror_r()";   =
-   \
-> > -               strerror_r(errno, buf, sizeof(buf));                   =
- \
-> > +               compat_strerror_r(errno, buf, sizeof(buf));            =
-         \
-> >                 _bt_printfle(fp, "error", lineno, buf, fmt, ## args);  =
- \
-> >         })
-> >
-> > -#else
-> > -
-> > -/*
-> > - * Version using GNU strerror_r, for linux with appropriate defines.
-> > - */
-> > -
-> > -#define _bt_printf_perror(fp, fmt, args...)                           =
- \
-> > -       ({                                                             =
- \
-> > -               char *buf;                                             =
- \
-> > -               char tmp[PERROR_BUFLEN] =3D "Error in strerror_r()";   =
-   \
-> > -               buf =3D strerror_r(errno, tmp, sizeof(tmp));           =
-   \
-> > -               _bt_printfe(fp, "error", buf, fmt, ## args);           =
- \
-> > -       })
-> > -
-> > -#define _bt_printfl_perror(fp, lineno, fmt, args...)                  =
- \
-> > -       ({                                                             =
- \
-> > -               char *buf;                                             =
- \
-> > -               char tmp[PERROR_BUFLEN] =3D "Error in strerror_r()";   =
-   \
-> > -               buf =3D strerror_r(errno, tmp, sizeof(tmp));           =
-   \
-> > -               _bt_printfle(fp, "error", lineno, buf, fmt, ## args);  =
- \
-> > -       })
-> > -
-> > -#endif
-> > -
-> >  /* printf without lineno information */
-> >  #define printf_fatal(fmt, args...)                                    =
- \
-> >         _bt_printf(stderr, "fatal", fmt, ## args)
-> > diff --git a/include/babeltrace/compat/string.h b/include/babeltrace/co=
-mpat/string.h
-> > new file mode 100644
-> > index 0000000..8591b7e
-> > --- /dev/null
-> > +++ b/include/babeltrace/compat/string.h
-> > @@ -0,0 +1,9 @@
-> > +#ifndef _BABELTRACE_COMPAT_STRING_H
-> > +#define BABELTRACE_COMPAT_STRING_H
+> > +#elif defined(__MINGW32__)
+> > +static inline
+> > +int babeltrace_uuid_generate(unsigned char *uuid_out)
+> > +{
+> > +       extern int compat_uuid_generate(unsigned char *uuid_out);
+> > +       return compat_uuid_generate(uuid_out);
+> > +}
 > > +
-> > +#include <string.h>
+> > +static inline
+> > +int babeltrace_uuid_unparse(const unsigned char *uuid_in, char *str_ou=
+t)
+> > +{
+> > +       extern int compat_uuid_unparse(const unsigned char *uuid_in, ch=
+ar *str_out);
+> > +       return compat_uuid_unparse(uuid_in, str_out);
+> > +}
 > > +
-> > +int compat_strerror_r(int errnum, char *buf, size_t buflen);
+> > +static inline
+> > +int babeltrace_uuid_parse(const char *str_in, unsigned char *uuid_out)
+> > +{
+> > +       extern int compat_uuid_parse(const char *str_in, unsigned char =
+*uuid_out);
+> > +       return compat_uuid_parse(str_in, uuid_out);
+> > +}
 > > +
-> > +#endif
-> > +
-> > diff --git a/lib/Makefile.am b/lib/Makefile.am
-> > index 7ffb164..fa470c0 100644
-> > --- a/lib/Makefile.am
-> > +++ b/lib/Makefile.am
-> > @@ -14,4 +14,5 @@ libbabeltrace_la_SOURCES =3D babeltrace.c \
-> >  libbabeltrace_la_LDFLAGS =3D \
-> >         -Wl,--no-as-needed \
-> >         prio_heap/libprio_heap.la \
-> > -       $(top_builddir)/types/libbabeltrace_types.la
-> > +       $(top_builddir)/types/libbabeltrace_types.la \
-> > +       $(top_builddir)/compat/libcompat.la
+> > +static inline
+> > +int babeltrace_uuid_compare(const unsigned char *uuid_a,
+> > +               const unsigned char *uuid_b)
+> > +{
+> > +       extern int compat_uuid_compare(const unsigned char *uuid_a,
+> > +               const unsigned char *uuid_b);
+> > +       return compat_uuid_compare(uuid_a, uuid_b);
+> > +}
+> >  #else
+> >  #error "Babeltrace needs to have a UUID generator configured."
+> >  #endif
+> >
+> > -#endif /* _BABELTRACE_UUID_H */
+> > +#endif /* _BABELTRACE_INCLUDE_COMPAT_UUID_H */
+> =
+
+> Please change this at the beginning of the file too.
+> =
+
 > > --
 > > 1.8.1.msysgit.1
 > >
