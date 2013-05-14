@@ -1,21 +1,19 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH] Fix linker library order
-Date: Tue, 14 May 2013 08:37:24 -0400
-Message-ID: <20130514123724.GA24238__17722.5219937556$1368535079$gmane$org@Krystal>
-References: <1368318333-31522-1-git-send-email-francis.giraldeau@gmail.com>
-	<20130512025917.GB405@Krystal> <519161C8.5000305@voxpopuli.im>
-	<20130514065244.GA5066@Krystal>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Subject: Re: User-space tracing by the root lttng-sessiond
+Date: Tue, 14 May 2013 13:21:03 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD12D1210D__5543.0031884045$1368537762$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+References: <48CF5AC71E61DB46B70D0F388054EFFD12D1201A@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+	<20130514070545.GA5213@Krystal>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UcETt-0001Ga-Ux
-	for lttng-dev@lists.lttng.org; Tue, 14 May 2013 08:37:26 -0400
-Content-Disposition: inline
-In-Reply-To: <20130514065244.GA5066@Krystal>
+	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1UcFBA-0001eh-HH
+	for lttng-dev@lists.lttng.org; Tue, 14 May 2013 09:22:08 -0400
+In-Reply-To: <20130514070545.GA5213@Krystal>
+Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,126 +22,44 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
-Cc: lttng-dev@lists.lttng.org
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, "Couture,
+	Mario" <Mario.Couture@drdc-rddc.gc.ca>, "Painchaud,
+	Frederic" <Frederic.Painchaud@drdc-rddc.gc.ca>
 List-Id: lttng-dev@lists.lttng.org
 
-* Mathieu Desnoyers (mathieu.desnoyers@efficios.com) wrote:
-> * Alexandre Montplaisir (alexmonthy@voxpopuli.im) wrote:
-> > On 13-05-11 10:59 PM, Mathieu Desnoyers wrote:
-> > > * Francis Giraldeau (francis.giraldeau@gmail.com) wrote:
-> > >> Libraries must be specified after the binary target.
-> > > merged, thanks!
-> > >
-> > > Mathieu
-> > 
-> > This seems to have broken the daily PPA packages:
-> > https://launchpadlibrarian.net/139804087/buildlog_ubuntu-saucy-amd64.lttng-ust_2.2~pre-0%2Bbzr1574%2Bpack37%2B201305131247~saucy1_FAILEDTOBUILD.txt.gz
-> > 
-> > That package has no particular patches. If I build it locally from
-> > source it builds fine, but if I build the package locally (with
-> > dpkg-buildpackage), I get the same error. It could be related to the
-> > --as-needed problem we've had before...
-> 
-> Francis, can you explain why your change was needed in the first place ?
+> >  (Question: If there were several users active at once, would there be =
 
-Hrm, actually, these patches are wrong.
+> > several root user-space lttng-consumerd daemons or still just one?)
+>
+> no
 
-commit 725e63c5194bfdcde0a2a3507aca156ba36cf49f for instance:
+   Please clarify: no, there will be several root user-space lttng-consumer=
+d daemons or no, there will be just one root user-space lttng-consumerd dae=
+mon?
 
-"Libraries must be specified after the binary target."
+> >    This seems problematic to me, since multiple traces capturing the sa=
+me event won't be able to reconcile their copies with each other.
+>
+> since timestamps have to match the event physical order in the streams, w=
+e need to assign one timestamp for each buffer. no way around this.
 
- demo: demo.o
--       $(CC) -o $@ $(LIBS) $^
-+       $(CC) -o $@ $^ $(LIBS)
+   Are the time-stamps issued by the tracepoint provider or by the "buffer =
+registrar" (i.e. the time-stamp is looked up when the event is written to t=
+he buffer)?
 
-the binary target here is "$@".
-
-$^ is the source file name (demo.c).
-
-this patch moves the source file name prior to the libraries, which is
-incorrect (ref: gcc(1)). The input files should appear last.
-
-So it breaks builds where $(LIBS) is non-empty.
-
-I will revert commits:
-
-commit a51ac6d9a011ba10b0be396dc1e801b2fc829651
-Author: Francis Giraldeau <francis.giraldeau@gmail.com>
-Date:   Sat May 11 22:59:21 2013 -0400
-
-    Fix (another) linker library order
-    
-    Libraries must be specified after the binary target.
-    
-    Signed-off-by: Francis Giraldeau <francis.giraldeau@gmail.com>
-    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-
-commit 725e63c5194bfdcde0a2a3507aca156ba36cf49f
-Author: Francis Giraldeau <francis.giraldeau@gmail.com>
-Date:   Sat May 11 22:58:12 2013 -0400
-
-    Fix linker library order
-    
-    Libraries must be specified after the binary target.
-    
-    Signed-off-by: Francis Giraldeau <francis.giraldeau@gmail.com>
-    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-
-
-Thanks,
-
-Mathieu
-
-> 
-> Thanks,
-> 
-> Mathieu
-> 
-> > 
-> > Cheers,
-> > Alex
-> > 
-> > >
-> > >> Signed-off-by: Francis Giraldeau <francis.giraldeau@gmail.com>
-> > >> ---
-> > >>  doc/examples/demo/Makefile | 2 +-
-> > >>  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >>
-> > >> diff --git a/doc/examples/demo/Makefile b/doc/examples/demo/Makefile
-> > >> index 7ae6547..bbc8ccb 100644
-> > >> --- a/doc/examples/demo/Makefile
-> > >> +++ b/doc/examples/demo/Makefile
-> > >> @@ -55,7 +55,7 @@ demo.o: demo.c
-> > >>  	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
-> > >>  
-> > >>  demo: demo.o
-> > >> -	$(CC) -o $@ $(LIBS) $^
-> > >> +	$(CC) -o $@ $^ $(LIBS)
-> > >>  
-> > >>  .PHONY: clean
-> > >>  clean:
-> > >> -- 
-> > >> 1.8.1.2
-> > >>
-> > >>
-> > >> _______________________________________________
-> > >> lttng-dev mailing list
-> > >> lttng-dev@lists.lttng.org
-> > >> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> > 
-> 
-> -- 
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> http://www.efficios.com
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Daniel U. Thibault
+Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
+ntermeasures (SPC)
+Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
+Cyber Security (MCCS)
+R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
+ Canada - Valcartier (DRDC Valcartier)
+2459 route de la Bravoure
+Qu=E9bec QC  G3J 1X5
+CANADA
+Vox : (418) 844-4000 x4245
+Fax : (418) 844-4538
+NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+Gouvernement du Canada | Government of Canada
+<http://www.valcartier.drdc-rddc.gc.ca/>
