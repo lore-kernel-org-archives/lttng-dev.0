@@ -1,18 +1,20 @@
 From: Christian Babeux <christian.babeux@efficios.com>
-Subject: [PATCH lttng-tools 1/3] Tests: Move the babelstats
-	utility to tests/utils
-Date: Tue, 14 May 2013 17:53:45 -0400
-Message-ID: <1368568427-8289-1-git-send-email-christian.babeux__42293.9391959973$1368568480$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools 2/3] Tests: Add the tracefile count
+	test
+Date: Tue, 14 May 2013 17:53:46 -0400
+Message-ID: <1368568427-8289-2-git-send-email-christian.babeux__7714.62738416648$1368568494$gmane$org@efficios.com>
+References: <1368568427-8289-1-git-send-email-christian.babeux@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-vc0-f170.google.com ([209.85.220.170])
+Received: from mail-ve0-f169.google.com ([209.85.128.169])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <christian.babeux@0x80.ca>) id 1UcNAV-0005uX-05
-	for lttng-dev@lists.lttng.org; Tue, 14 May 2013 17:53:59 -0400
-Received: by mail-vc0-f170.google.com with SMTP id gf12so1209391vcb.29
-	for <lttng-dev@lists.lttng.org>; Tue, 14 May 2013 14:53:53 -0700 (PDT)
+	(envelope-from <christian.babeux@0x80.ca>) id 1UcNAZ-0005uY-V5
+	for lttng-dev@lists.lttng.org; Tue, 14 May 2013 17:54:04 -0400
+Received: by mail-ve0-f169.google.com with SMTP id jw11so986833veb.14
+	for <lttng-dev@lists.lttng.org>; Tue, 14 May 2013 14:53:58 -0700 (PDT)
+In-Reply-To: <1368568427-8289-1-git-send-email-christian.babeux@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -25,412 +27,250 @@ To: dgoulet@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-This utility will prove useful in trace validation for other tests,
-so put it in a common location accessible by the tests.
+This test validate the newly introduced tracefile count feature.
+In order to so, we enable a channel with the appropriate limits in
+overwrite mode. The later constraint is to ensure that at least the
+last few events are properly recorded and that we can validate that
+they are present in the resulting trace (with the help of babeltrace
+and babelstats).
+
+We also validate that the tracefile count (per stream) in the trace
+folder is conform to the one passed on the command line.
 
 Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
 ---
- tests/regression/tools/filtering/Makefile.am       |   4 +-
- tests/regression/tools/filtering/babelstats.pl     | 174 ---------------------
- tests/regression/tools/filtering/test_valid_filter |   4 +-
- tests/utils/babelstats.pl                          | 174 +++++++++++++++++++++
- 4 files changed, 178 insertions(+), 178 deletions(-)
- delete mode 100755 tests/regression/tools/filtering/babelstats.pl
- create mode 100755 tests/utils/babelstats.pl
+ configure.ac                                       |   1 +
+ tests/fast_regression                              |   1 +
+ tests/long_regression                              |   1 +
+ .../regression/tools/tracefile-limits/Makefile.am  |   2 +
+ .../tools/tracefile-limits/test_tracefile_count    | 174 +++++++++++++++++++++
+ 5 files changed, 179 insertions(+)
+ create mode 100644 tests/regression/tools/tracefile-limits/Makefile.am
+ create mode 100644 tests/regression/tools/tracefile-limits/test_tracefile_count
 
-diff --git a/tests/regression/tools/filtering/Makefile.am b/tests/regression/tools/filtering/Makefile.am
-index 5629da2..ca60dbf 100644
---- a/tests/regression/tools/filtering/Makefile.am
-+++ b/tests/regression/tools/filtering/Makefile.am
-@@ -14,5 +14,5 @@ gen_ust_events_SOURCES = gen-ust-events.c tp.c tp.h
- gen_ust_events_LDADD = -llttng-ust
- endif
- 
--noinst_SCRIPTS = test_unsupported_op test_invalid_filter test_valid_filter babelstats.pl
--EXTRA_DIST = test_unsupported_op test_invalid_filter test_valid_filter babelstats.pl
-+noinst_SCRIPTS = test_unsupported_op test_invalid_filter test_valid_filter
-+EXTRA_DIST = test_unsupported_op test_invalid_filter test_valid_filter
-diff --git a/tests/regression/tools/filtering/babelstats.pl b/tests/regression/tools/filtering/babelstats.pl
-deleted file mode 100755
-index d8d4dd0..0000000
---- a/tests/regression/tools/filtering/babelstats.pl
-+++ /dev/null
-@@ -1,174 +0,0 @@
--#!/usr/bin/perl
--
--# Copyright (C) - 2012 Christian Babeux <christian.babeux@efficios.com>
--#
--# This program is free software; you can redistribute it and/or modify it
--# under the terms of the GNU General Public License, version 2 only, as
--# published by the Free Software Foundation.
--#
--# This program is distributed in the hope that it will be useful, but WITHOUT
--# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
--# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
--# more details.
--#
--# You should have received a copy of the GNU General Public License along with
--# this program; if not, write to the Free Software Foundation, Inc., 51
--# Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
--
--use strict;
--use warnings;
--
--use Getopt::Long;
--
--my $opt_tracepoint;
--
--GetOptions('tracepoint=s' => \$opt_tracepoint)
--	or die("Invalid command-line option\n");
--
--defined($opt_tracepoint)
--	or die("Missing tracepoint, use --tracepoint <name>");
--
--# Parse an array string.
--# The format is as follow: [ [index] = value, ... ]
--sub parse_array
--{
--	my ($arr_str) = @_;
--	my @array = ();
--
--	# Strip leading and ending brackets, remove whitespace
--	$arr_str =~ s/^\[//;
--	$arr_str =~ s/\]$//;
--	$arr_str =~ s/\s//g;
--
--	my @entries = split(',', $arr_str);
--
--	foreach my $entry (@entries) {
--		if ($entry =~ /^\[(\d+)\]=(\d+)$/) {
--			my $index = $1;
--			my $value = $2;
--			splice @array, $index, 0, $value;
--		}
--	}
--
--	return \@array;
--}
--
--# Parse fields values.
--# Format can either be a name = array or a name = value pair.
--sub parse_fields
--{
--	my ($fields_str) = @_;
--	my %fields_hash;
--
--	my $field_name = '[\w\d_]+';
--	my $field_value = '[\w\d_\\\*"]+';
--	my $array = '\[(?:\s\[\d+\]\s=\s\d+,)*\s\[\d+\]\s=\s\d+\s\]';
--
--	# Split the various fields
--	my @fields = ($fields_str =~ /$field_name\s=\s(?:$array|$field_value)/g);
--
--	foreach my $field (@fields) {
--		if ($field =~ /($field_name)\s=\s($array)/) {
--			my $name  = $1;
--			my $value = parse_array($2);
--			$fields_hash{$name} = $value;
--		}
--
--		if ($field =~ /($field_name)\s=\s($field_value)/) {
--			my $name  = $1;
--			my $value = $2;
--			$fields_hash{$name} = $value;
--		}
--	}
--
--	return \%fields_hash;
--}
--
--# Using an event array, merge all the fields
--# of a particular tracepoint.
--sub merge_fields
--{
--	my ($events_ref) = @_;
--	my %merged;
--
--	foreach my $event (@{$events_ref}) {
--		my $tp_provider = $event->{'tp_provider'};
--		my $tp_name     = $event->{'tp_name'};
--		my $tracepoint  = "$tp_provider:$tp_name";
--
--		foreach my $key (keys %{$event->{'fields'}}) {
--			my $val = $event->{'fields'}->{$key};
--
--			# TODO: Merge of array is not implemented.
--			next if (ref($val) eq 'ARRAY');
--			$merged{$tracepoint}{$key}{$val} = undef;
--		}
--	}
--
--	return \%merged;
--}
--
--# Print the minimum and maximum of each fields
--# for a particular tracepoint.
--sub print_fields_stats
--{
--	my ($merged_ref, $tracepoint) = @_;
--
--	return unless ($tracepoint && exists $merged_ref->{$tracepoint});
--
--	foreach my $field (keys %{$merged_ref->{$tracepoint}}) {
--		my @sorted;
--		my @val = keys ($merged_ref->{$tracepoint}->{$field});
--
--		if ($val[0] =~ /^\d+$/) {
--			# Sort numerically
--			@sorted = sort { $a <=> $b } @val;
--		} elsif ($val[0] =~ /^0x[\da-f]+$/i) {
--			# Convert the hex values and sort numerically
--			@sorted = sort { hex($a) <=> hex($b) } @val;
--		} else {
--			# Fallback, alphabetical sort
--			@sorted = sort { lc($a) cmp lc($b) } @val;
--		}
--
--		my $min = $sorted[0];
--		my $max = $sorted[-1];
--
--		print "$field $min $max\n";
--	}
--}
--
--my @events;
--
--while (<>)
--{
--	my $timestamp   = '\[(.*)\]';
--	my $elapsed     = '\((.*)\)';
--	my $hostname    = '.*';
--	my $pname       = '.*';
--	my $pid         = '\d+';
--	my $tp_provider = '.*';
--	my $tp_name     = '.*';
--	my $cpu_info    = '{\scpu_id\s=\s(\d+)\s\}';
--	my $fields      = '{(.*)}';
--
--	# Parse babeltrace text output format
--	if (/$timestamp\s$elapsed\s($hostname):($pname):($pid)\s($tp_provider):($tp_name):\s$cpu_info,\s$fields/) {
--		my %event_hash;
--
--		$event_hash{'timestamp'}   = $1;
--		$event_hash{'elapsed'}     = $2;
--		$event_hash{'hostname'}    = $3;
--		$event_hash{'pname'}       = $4;
--		$event_hash{'pid'}         = $5;
--		$event_hash{'tp_provider'} = $6;
--		$event_hash{'tp_name'}     = $7;
--		$event_hash{'cpu_id'}      = $8;
--		$event_hash{'fields'}      = parse_fields($9);
--
--		push @events, \%event_hash;
--	}
--}
--
--my %merged_fields = %{merge_fields(\@{events})};
--print_fields_stats(\%merged_fields, $opt_tracepoint);
-diff --git a/tests/regression/tools/filtering/test_valid_filter b/tests/regression/tools/filtering/test_valid_filter
-index 7170eb5..a62cc1e 100755
---- a/tests/regression/tools/filtering/test_valid_filter
-+++ b/tests/regression/tools/filtering/test_valid_filter
-@@ -21,7 +21,7 @@ CURDIR=$(dirname $0)/
- TESTDIR=$CURDIR/../../..
- LTTNG_BIN="lttng"
- BIN_NAME="gen-ust-events"
--STATS_BIN="babelstats.pl"
-+STATS_BIN="$TESTDIR/utils/babelstats.pl"
- SESSION_NAME="valid_filter"
- EVENT_NAME="tp:tptest"
- NR_ITER=100
-@@ -81,7 +81,7 @@ function test_valid_filter
- 	# Destroy session
- 	destroy_lttng_session $SESSION_NAME
- 
--	stats=`babeltrace $trace_path | $CURDIR/$STATS_BIN --tracepoint $EVENT_NAME`
-+	stats=`babeltrace $trace_path | $STATS_BIN --tracepoint $EVENT_NAME`
- 
- 	rm -rf $trace_path
- 
-diff --git a/tests/utils/babelstats.pl b/tests/utils/babelstats.pl
-new file mode 100755
-index 0000000..d8d4dd0
+diff --git a/configure.ac b/configure.ac
+index 9f14c12..9bb5e67 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -323,6 +323,7 @@ AC_CONFIG_FILES([
+ 	tests/regression/tools/streaming/Makefile
+ 	tests/regression/tools/filtering/Makefile
+ 	tests/regression/tools/health/Makefile
++	tests/regression/tools/tracefile-limits/Makefile
+ 	tests/regression/ust/Makefile
+ 	tests/regression/ust/nprocesses/Makefile
+ 	tests/regression/ust/high-throughput/Makefile
+diff --git a/tests/fast_regression b/tests/fast_regression
+index e6a883b..db26f1c 100644
+--- a/tests/fast_regression
++++ b/tests/fast_regression
+@@ -5,6 +5,7 @@ regression/tools/health/test_thread_exit
+ regression/tools/health/test_thread_stall
+ regression/tools/health/test_tp_fail
+ regression/tools/streaming/test_ust
++regression/tools/tracefile-limits/test_tracefile_count
+ regression/ust/before-after/test_before_after
+ regression/ust/buffers-uid/test_buffers_uid
+ regression/ust/periodical-metadata-flush/test_periodical_metadata_flush
+diff --git a/tests/long_regression b/tests/long_regression
+index c198178..3780bd4 100644
+--- a/tests/long_regression
++++ b/tests/long_regression
+@@ -5,6 +5,7 @@ regression/tools/health/test_thread_exit
+ regression/tools/health/test_thread_stall
+ regression/tools/health/test_tp_fail
+ regression/tools/streaming/test_ust
++regression/tools/tracefile-limits/test_tracefile_count
+ regression/ust/before-after/test_before_after
+ regression/ust/buffers-uid/test_buffers_uid
+ regression/ust/high-throughput/test_high_throughput
+diff --git a/tests/regression/tools/tracefile-limits/Makefile.am b/tests/regression/tools/tracefile-limits/Makefile.am
+new file mode 100644
+index 0000000..441d2bd
 --- /dev/null
-+++ b/tests/utils/babelstats.pl
++++ b/tests/regression/tools/tracefile-limits/Makefile.am
+@@ -0,0 +1,2 @@
++noinst_SCRIPTS = test_tracefile_count
++EXTRA_DIST = test_tracefile_count
+diff --git a/tests/regression/tools/tracefile-limits/test_tracefile_count b/tests/regression/tools/tracefile-limits/test_tracefile_count
+new file mode 100644
+index 0000000..41b89f0
+--- /dev/null
++++ b/tests/regression/tools/tracefile-limits/test_tracefile_count
 @@ -0,0 +1,174 @@
-+#!/usr/bin/perl
-+
-+# Copyright (C) - 2012 Christian Babeux <christian.babeux@efficios.com>
++#!/bin/bash
 +#
-+# This program is free software; you can redistribute it and/or modify it
-+# under the terms of the GNU General Public License, version 2 only, as
-+# published by the Free Software Foundation.
++# Copyright (C) - 2013 Christian Babeux <christian.babeux@efficios.com>
 +#
-+# This program is distributed in the hope that it will be useful, but WITHOUT
-+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-+# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
-+# more details.
++# This library is free software; you can redistribute it and/or modify it under
++# the terms of the GNU Lesser General Public License as published by the Free
++# Software Foundation; version 2.1 of the License.
 +#
-+# You should have received a copy of the GNU General Public License along with
-+# this program; if not, write to the Free Software Foundation, Inc., 51
-+# Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
++# This library is distributed in the hope that it will be useful, but WITHOUT
++# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
++# FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
++# details.
++#
++# You should have received a copy of the GNU Lesser General Public License
++# along with this library; if not, write to the Free Software Foundation, Inc.,
++# 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
 +
-+use strict;
-+use warnings;
++TEST_DESC="Tracefile count limits"
 +
-+use Getopt::Long;
++CURDIR=$(dirname $0)/
++TESTDIR=$CURDIR/../../..
 +
-+my $opt_tracepoint;
++TESTAPP_PATH="$TESTDIR/utils/testapp"
++TESTAPP_NAME="gen-ust-events"
++TESTAPP_BIN="$TESTAPP_PATH/$TESTAPP_NAME/$TESTAPP_NAME"
 +
-+GetOptions('tracepoint=s' => \$opt_tracepoint)
-+	or die("Invalid command-line option\n");
++STATS_BIN="$TESTDIR/utils/babelstats.pl"
++NUM_TESTS=146
 +
-+defined($opt_tracepoint)
-+	or die("Missing tracepoint, use --tracepoint <name>");
++source $TESTDIR/utils/utils.sh
 +
-+# Parse an array string.
-+# The format is as follow: [ [index] = value, ... ]
-+sub parse_array
++if [ ! -x "$TESTAPP_BIN" ]; then
++	BAIL_OUT "No UST events binary detected."
++fi
++
++function wait_apps
 +{
-+	my ($arr_str) = @_;
-+	my @array = ();
-+
-+	# Strip leading and ending brackets, remove whitespace
-+	$arr_str =~ s/^\[//;
-+	$arr_str =~ s/\]$//;
-+	$arr_str =~ s/\s//g;
-+
-+	my @entries = split(',', $arr_str);
-+
-+	foreach my $entry (@entries) {
-+		if ($entry =~ /^\[(\d+)\]=(\d+)$/) {
-+			my $index = $1;
-+			my $value = $2;
-+			splice @array, $index, 0, $value;
-+		}
-+	}
-+
-+	return \@array;
++	while [ -n "$(pidof $TESTAPP_NAME)" ]; do
++		sleep 0.5
++	done
++	pass "Wait for applications to end"
 +}
 +
-+# Parse fields values.
-+# Format can either be a name = array or a name = value pair.
-+sub parse_fields
++function enable_lttng_channel_count_limit ()
 +{
-+	my ($fields_str) = @_;
-+	my %fields_hash;
++	sess_name="$1"
++	channel_name="$2"
++	tracefile_count_limit="$3"
 +
-+	my $field_name = '[\w\d_]+';
-+	my $field_value = '[\w\d_\\\*"]+';
-+	my $array = '\[(?:\s\[\d+\]\s=\s\d+,)*\s\[\d+\]\s=\s\d+\s\]';
++	test_name="Enable channel $channel_name "
++	test_name+="for session $sess_name: "
++	test_name+="$tracefile_count_limit tracefiles"
 +
-+	# Split the various fields
-+	my @fields = ($fields_str =~ /$field_name\s=\s(?:$array|$field_value)/g);
++	$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-channel \
++	    -u $channel_name -s $sess_name \
++	    -C 4096 -W $tracefile_count_limit \
++	    --overwrite >/dev/null 2>&1
 +
-+	foreach my $field (@fields) {
-+		if ($field =~ /($field_name)\s=\s($array)/) {
-+			my $name  = $1;
-+			my $value = parse_array($2);
-+			$fields_hash{$name} = $value;
-+		}
-+
-+		if ($field =~ /($field_name)\s=\s($field_value)/) {
-+			my $name  = $1;
-+			my $value = $2;
-+			$fields_hash{$name} = $value;
-+		}
-+	}
-+
-+	return \%fields_hash;
++	ok $? "$test_name"
 +}
 +
-+# Using an event array, merge all the fields
-+# of a particular tracepoint.
-+sub merge_fields
++function enable_ust_lttng_event_per_channel ()
 +{
-+	my ($events_ref) = @_;
-+	my %merged;
++	sess_name="$1"
++	event_name="$2"
++	channel_name="$3"
 +
-+	foreach my $event (@{$events_ref}) {
-+		my $tp_provider = $event->{'tp_provider'};
-+		my $tp_name     = $event->{'tp_name'};
-+		my $tracepoint  = "$tp_provider:$tp_name";
++	test_name="Enable event $event_name "
++	test_name+="for session $sess_name "
++	test_name+="in channel $channel_name"
 +
-+		foreach my $key (keys %{$event->{'fields'}}) {
-+			my $val = $event->{'fields'}->{$key};
++	$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-event "$event_name" \
++	    -s $sess_name -u -c $channel_name >/dev/null 2>&1
 +
-+			# TODO: Merge of array is not implemented.
-+			next if (ref($val) eq 'ARRAY');
-+			$merged{$tracepoint}{$key}{$val} = undef;
-+		}
-+	}
-+
-+	return \%merged;
++	ok $? "$test_name"
 +}
 +
-+# Print the minimum and maximum of each fields
-+# for a particular tracepoint.
-+sub print_fields_stats
++function validate_min_max
 +{
-+	my ($merged_ref, $tracepoint) = @_;
++	stats="$1"
++	field="$2"
++	expected_min="$3"
++	expected_max="$4"
 +
-+	return unless ($tracepoint && exists $merged_ref->{$tracepoint});
-+
-+	foreach my $field (keys %{$merged_ref->{$tracepoint}}) {
-+		my @sorted;
-+		my @val = keys ($merged_ref->{$tracepoint}->{$field});
-+
-+		if ($val[0] =~ /^\d+$/) {
-+			# Sort numerically
-+			@sorted = sort { $a <=> $b } @val;
-+		} elsif ($val[0] =~ /^0x[\da-f]+$/i) {
-+			# Convert the hex values and sort numerically
-+			@sorted = sort { hex($a) <=> hex($b) } @val;
-+		} else {
-+			# Fallback, alphabetical sort
-+			@sorted = sort { lc($a) cmp lc($b) } @val;
-+		}
-+
-+		my $min = $sorted[0];
-+		my $max = $sorted[-1];
-+
-+		print "$field $min $max\n";
-+	}
++	echo $stats | grep -q -E "$field $expected_min $expected_max"
++	return $?
 +}
 +
-+my @events;
-+
-+while (<>)
++function validate_file_count
 +{
-+	my $timestamp   = '\[(.*)\]';
-+	my $elapsed     = '\((.*)\)';
-+	my $hostname    = '.*';
-+	my $pname       = '.*';
-+	my $pid         = '\d+';
-+	my $tp_provider = '.*';
-+	my $tp_name     = '.*';
-+	my $cpu_info    = '{\scpu_id\s=\s(\d+)\s\}';
-+	my $fields      = '{(.*)}';
++	path="$1"
++	file_pattern="$2"
++	expected_max_count="$3"
 +
-+	# Parse babeltrace text output format
-+	if (/$timestamp\s$elapsed\s($hostname):($pname):($pid)\s($tp_provider):($tp_name):\s$cpu_info,\s$fields/) {
-+		my %event_hash;
++	count=`find $path -name "$file_pattern" -type f | wc -l`
 +
-+		$event_hash{'timestamp'}   = $1;
-+		$event_hash{'elapsed'}     = $2;
-+		$event_hash{'hostname'}    = $3;
-+		$event_hash{'pname'}       = $4;
-+		$event_hash{'pid'}         = $5;
-+		$event_hash{'tp_provider'} = $6;
-+		$event_hash{'tp_name'}     = $7;
-+		$event_hash{'cpu_id'}      = $8;
-+		$event_hash{'fields'}      = parse_fields($9);
-+
-+		push @events, \%event_hash;
-+	}
++	if [ "$count" -gt "$expected_max_count" ]; then
++	    fail "Validate file count: $file_pattern"
++	    diag "File count: $count expected: $expected_max_count"
++	else
++	    pass "Validate file count: $file_pattern"
++	fi
 +}
 +
-+my %merged_fields = %{merge_fields(\@{events})};
-+print_fields_stats(\%merged_fields, $opt_tracepoint);
++function test_tracefile_count_limit ()
++{
++	count_limit="$1"
++	trace_path=$(mktemp -d)
++	session_name=$(randstring 16 0)
++	channel_name="channel"
++	event_name="tp:tptest"
++	num_iter=1000
++	expected_max=$(($num_iter - 1))
++
++	diag "Test tracefile count limit : $count_limit tracefiles"
++
++	create_lttng_session $session_name $trace_path
++
++	enable_lttng_channel_count_limit \
++	    $session_name $channel_name $count_limit
++
++	enable_ust_lttng_event_per_channel \
++	    $session_name $event_name $channel_name
++
++	start_lttng_tracing $session_name
++
++	$TESTAPP_BIN $num_iter >/dev/null 2>&1 &
++
++	wait_apps
++
++	stop_lttng_tracing $session_name
++
++	destroy_lttng_session $session_name
++
++	# Validate tracing dir
++
++	num_cpu=`nproc`
++
++	for cpuno in $(seq 0 $(($num_cpu - 1)))
++	do
++		validate_file_count \
++		    $trace_path "${channel_name}_${cpuno}_*" $count_limit
++	done
++
++	# Validate tracing data
++
++	stats=`babeltrace $trace_path | $STATS_BIN --tracepoint $event_name`
++
++	validate_min_max "$stats" "intfield" "[0-9]+" "$expected_max"
++	ok $? "Trace validation - intfield"
++
++	validate_min_max "$stats" "netintfield" "[0-9]+" "$expected_max"
++	ok $? "Trace validation - netintfield"
++
++	validate_min_max "$stats" "longfield" "[0-9]+" "$expected_max"
++	ok $? "Trace validation - longfield"
++
++	rm -rf $trace_path
++}
++
++plan_tests $NUM_TESTS
++
++print_test_banner "$TEST_DESC"
++
++start_lttng_sessiond
++
++LIMITS=("1" "2" "4" "8" "10" "16" "32" "64")
++
++for limit in ${LIMITS[@]};
++do
++	test_tracefile_count_limit $limit
++done
++
++stop_lttng_sessiond
 -- 
 1.8.2.2
