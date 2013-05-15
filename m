@@ -1,19 +1,20 @@
-From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
-	<jeremie.galarneau@efficios.com>
-Subject: [PATCH babeltrace] Fix: Remove extra quote after an
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH babeltrace] Fix: Remove extra quote after	an
 	include directive
-Date: Wed, 15 May 2013 12:39:15 -0400
-Message-ID: <1368635955-13695-1-git-send-email-jeremie.galarneau__31427.2355674349$1368636000$gmane$org@efficios.com>
+Date: Wed, 15 May 2013 12:50:30 -0400
+Message-ID: <20130515165030.GA10924__18405.4871243008$1368636666$gmane$org@Krystal>
+References: <1368635955-13695-1-git-send-email-jeremie.galarneau@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-vc0-f177.google.com ([209.85.220.177])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1Ucejc-0006mk-LS
-	for lttng-dev@lists.lttng.org; Wed, 15 May 2013 12:39:24 -0400
-Received: by mail-vc0-f177.google.com with SMTP id ha12so1958497vcb.22
-	for <lttng-dev@lists.lttng.org>; Wed, 15 May 2013 09:39:19 -0700 (PDT)
+	(envelope-from <compudj@mail.openrapids.net>) id 1UceuQ-0006sx-2P
+	for lttng-dev@lists.lttng.org; Wed, 15 May 2013 12:50:34 -0400
+Content-Disposition: inline
+In-Reply-To: <1368635955-13695-1-git-send-email-jeremie.galarneau@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,18 +23,48 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-U2lnbmVkLW9mZi1ieTogSsOpcsOpbWllIEdhbGFybmVhdSA8amVyZW1pZS5nYWxhcm5lYXVAZWZm
-aWNpb3MuY29tPgotLS0KIGZvcm1hdHMvY3RmL2N0Zi5jIHwgMiArLQogMSBmaWxlIGNoYW5nZWQs
-IDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pCgpkaWZmIC0tZ2l0IGEvZm9ybWF0cy9jdGYv
-Y3RmLmMgYi9mb3JtYXRzL2N0Zi9jdGYuYwppbmRleCBiMjdmMmVjLi5iYjk0ZTUyIDEwMDY0NAot
-LS0gYS9mb3JtYXRzL2N0Zi9jdGYuYworKysgYi9mb3JtYXRzL2N0Zi9jdGYuYwpAQCAtNTEsNyAr
-NTEsNyBAQAogI2luY2x1ZGUgIm1ldGFkYXRhL2N0Zi1wYXJzZXIuaCIKICNpbmNsdWRlICJtZXRh
-ZGF0YS9jdGYtYXN0LmgiCiAjaW5jbHVkZSAiZXZlbnRzLXByaXZhdGUuaCIKLSNpbmNsdWRlIDxi
-YWJlbHRyYWNlL2NvbXBhdC9tZW1zdHJlYW0uaD4iCisjaW5jbHVkZSA8YmFiZWx0cmFjZS9jb21w
-YXQvbWVtc3RyZWFtLmg+CiAKICNkZWZpbmUgTE9HMl9DSEFSX0JJVAkzCiAKLS0gCjEuOC4yLjIK
-CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1k
-ZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0
-dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+in which tree did you find this ?
+
+* J=E9r=E9mie Galarneau (jeremie.galarneau@efficios.com) wrote:
+> Signed-off-by: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
+> ---
+>  formats/ctf/ctf.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> =
+
+> diff --git a/formats/ctf/ctf.c b/formats/ctf/ctf.c
+> index b27f2ec..bb94e52 100644
+> --- a/formats/ctf/ctf.c
+> +++ b/formats/ctf/ctf.c
+> @@ -51,7 +51,7 @@
+>  #include "metadata/ctf-parser.h"
+>  #include "metadata/ctf-ast.h"
+>  #include "events-private.h"
+> -#include <babeltrace/compat/memstream.h>"
+> +#include <babeltrace/compat/memstream.h>
+>  =
+
+>  #define LOG2_CHAR_BIT	3
+>  =
+
+> -- =
+
+> 1.8.2.2
+> =
+
+> =
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- =
+
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
