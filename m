@@ -1,22 +1,25 @@
-From: Jan Glauber <jan.glauber@gmail.com>
-Subject: Re: [RFC PATCH 1/2] Resurrect LTT type parser
-Date: Wed, 15 May 2013 10:55:41 +0200
-Message-ID: <20130515085540.GA26874__6076.20015875927$1368608193$gmane$org@hal>
-References: <cover.1366364119.git.jan.glauber@gmail.com>
-	<3401d96aafec4a5e2ca84879d0fe2d84599ccf6c.1366364119.git.jan.glauber@gmail.com>
-	<20130510151102.GI20313@Krystal>
+From: David OShea <David.OShea@quantum.com>
+Subject: Patches to enable building on CentOS 5.x (glibc 2.5)
+Date: Wed, 15 May 2013 11:38:10 +0000
+Message-ID: <20998D40D9A2B7499CA5A3A2666CB1EB23FDCE2B__2156.77353921837$1368617940$gmane$org@ZURMSG1.QUANTUM.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ee0-f45.google.com ([74.125.83.45])
+Received: from mx0b-000ceb01.pphosted.com ([67.231.152.126])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jan.glauber@gmail.com>) id 1UcXV1-0002ot-QL
-	for lttng-dev@lists.lttng.org; Wed, 15 May 2013 04:55:52 -0400
-Received: by mail-ee0-f45.google.com with SMTP id l10so913666eei.32
-	for <lttng-dev@lists.lttng.org>; Wed, 15 May 2013 01:55:45 -0700 (PDT)
-Content-Disposition: inline
-In-Reply-To: <20130510151102.GI20313@Krystal>
+	(envelope-from <prvs=3847b232ea=david.oshea@quantum.com>)
+	id 1Uca2C-0004Jy-Ln
+	for lttng-dev@lists.lttng.org; Wed, 15 May 2013 07:38:16 -0400
+Received: from pps.filterd (m0001151 [127.0.0.1])
+	by mx0b-000ceb01.pphosted.com (8.14.5/8.14.5) with SMTP id
+	r4FBXrRO021461
+	for <lttng-dev@lists.lttng.org>; Wed, 15 May 2013 04:38:15 -0700
+Received: from ppoxedge1.quantum.com ([146.174.252.27])
+	by mx0b-000ceb01.pphosted.com with ESMTP id 1cbkfesmth-1
+	(version=TLSv1/SSLv3 cipher=AES128-SHA bits=128 verify=NOT)
+	for <lttng-dev@lists.lttng.org>; Wed, 15 May 2013 04:38:15 -0700
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -25,386 +28,25 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-On Fri, May 10, 2013 at 11:11:02AM -0400, Mathieu Desnoyers wrote:
-> * Jan Glauber (jan.glauber@gmail.com) wrote:
-> > Parse legacy LTT trace type format strings.
-> > Resurrected from lttng-ust (serialize.c) git commit id: 31607b3
-> > and slightly adopted to be useable by babeltrace-legacy.
-> > 
-> > Signed-off-by: Jan Glauber <jan.glauber@gmail.com>
-> > ---
-> >  converter/ltt-type-parser.c          |  303 ++++++++++++++++++++++++++++++++++
-> >  include/babeltrace/ltt-type-parser.h |   17 ++
-> >  2 files changed, 320 insertions(+)
-> >  create mode 100644 converter/ltt-type-parser.c
-> >  create mode 100644 include/babeltrace/ltt-type-parser.h
-> > 
-> > diff --git a/converter/ltt-type-parser.c b/converter/ltt-type-parser.c
-> > new file mode 100644
-> > index 0000000..4290ee1
-> > --- /dev/null
-> > +++ b/converter/ltt-type-parser.c
-> > @@ -0,0 +1,303 @@
-> > +/*
-> > + * ltt-type-parser.c
-> > + *
-> > + * Parse legacy LTT trace type format strings.
-> > + * Resurrected from lttng-ust (serialize.c) git commit id: 31607b3
-> > + *   and slightly adopted to be useable by babeltrace-legacy.
-> > + *
-> > + * Copyright Mathieu Desnoyers, March 2007.
-> 
-> The original license of this code was LGPLv2.1+. It cannot be relicensed
-> to MIT-license without prior acceptance of each contributor.
+Hi,
 
-OK, so this code should stay LGPLv2.1+. Seems like I copied the license from the wrong
-place. Ideally this code would be provided by you, I just send it along so the converter
-can be compiled.
+Would contributions of patches to enable lttng-tools and lttng-ust to build with glibc 2.5 (as is shipped with CentOS 5.x) and to enable lttng-gen-tp to run with Python 2.4 (as shipped on CentOS 5.x) be accepted?
 
---Jan
- 
-> Thanks,
-> 
-> Mathieu
-> 
-> > + *
-> > + * Permission is hereby granted, free of charge, to any person obtaining a copy
-> > + * of this software and associated documentation files (the "Software"), to deal
-> > + * in the Software without restriction, including without limitation the rights
-> > + * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-> > + * copies of the Software, and to permit persons to whom the Software is
-> > + * furnished to do so, subject to the following conditions:
-> > + *
-> > + * The above copyright notice and this permission notice shall be included in
-> > + * all copies or substantial portions of the Software.
-> > + *
-> > + * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-> > + * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-> > + * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-> > + * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-> > + * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-> > + * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-> > + * SOFTWARE.
-> > + */
-> > +
-> > +#include <sys/types.h>
-> > +#include <stdint.h>
-> > +#include <string.h>
-> > +#include "babeltrace/ltt-type-parser.h"
-> > +
-> > +/*
-> > + * Restrictions:
-> > + * Field width and precision are *not* supported.
-> > + * %n not supported.
-> > + */
-> > +static const char *parse_c_type(const char *fmt, char *c_size,
-> > +				enum ltt_type *c_type, char *base,
-> > +				char *outfmt, int arch_size,
-> > +				int size_long, int size_size_t)
-> > +{
-> > +	int qualifier;
-> > +
-> > +	/* process flags : ignore standard print formats for now. */
-> > +repeat:
-> > +	switch (*fmt) {
-> > +	case '-':
-> > +	case '+':
-> > +	case ' ':
-> > +	case '#':
-> > +	case '0':
-> > +		++fmt;
-> > +		goto repeat;
-> > +	}
-> > +
-> > +	/* get the conversion qualifier */
-> > +	qualifier = -1;
-> > +	if (*fmt == 'h' || *fmt == 'l' || *fmt == 'L' ||
-> > +	    *fmt == 'Z' || *fmt == 'z' || *fmt == 't' ||
-> > +	    *fmt == 'S') {
-> > +		qualifier = *fmt;
-> > +		++fmt;
-> > +		if (qualifier == 'l' && *fmt == 'l') {
-> > +			qualifier = 'L';
-> > +			++fmt;
-> > +		}
-> > +	}
-> > +
-> > +	if (outfmt) {
-> > +		if (qualifier != -1)
-> > +			*outfmt++ = (char)qualifier;
-> > +		*outfmt++ = *fmt;
-> > +		*outfmt = 0;
-> > +	}
-> > +
-> > +	switch (*fmt) {
-> > +	case 'c':
-> > +		*base = 10;
-> > +		*c_type = LTT_TYPE_UNSIGNED_INT;
-> > +		*c_size = sizeof(unsigned char);
-> > +		goto parse_end;
-> > +	case 's':
-> > +		*c_type = LTT_TYPE_STRING;
-> > +		goto parse_end;
-> > +	case 'p':
-> > +		*base = 16;
-> > +		*c_type = LTT_TYPE_UNSIGNED_INT;
-> > +		*c_size = arch_size;
-> > +		goto parse_end;
-> > +	case 'd':
-> > +	case 'i':
-> > +		*base = 10;
-> > +		*c_type = LTT_TYPE_SIGNED_INT;
-> > +		break;
-> > +	case 'o':
-> > +		*base = 8;
-> > +		*c_type = LTT_TYPE_UNSIGNED_INT;
-> > +		break;
-> > +	case 'u':
-> > +		*base = 10;
-> > +		*c_type = LTT_TYPE_UNSIGNED_INT;
-> > +		break;
-> > +	case 'x':
-> > +	case 'X':
-> > +		*base = 16;
-> > +		*c_type = LTT_TYPE_UNSIGNED_INT;
-> > +		break;
-> > +	default:
-> > +		if (!*fmt)
-> > +			--fmt;
-> > +		goto parse_end;
-> > +	}
-> > +	switch (qualifier) {
-> > +	case 'L':
-> > +		*c_size = sizeof(long long);
-> > +		break;
-> > +	case 'l':
-> > +		*c_size = size_long;
-> > +		break;
-> > +	case 'Z':
-> > +	case 'z':
-> > +		*c_size = size_size_t;
-> > +		break;
-> > +	case 'h':
-> > +		*c_size = sizeof(short);
-> > +		break;
-> > +	default:
-> > +		*c_size = sizeof(int);
-> > +	}
-> > +
-> > +parse_end:
-> > +	return fmt;
-> > +}
-> > +
-> > +static inline const char *parse_trace_type(const char *fmt,
-> > +		char *trace_size, enum ltt_type *trace_type,
-> > +		char *base, unsigned long *attributes,
-> > +		int arch_size, int size_long, int size_size_t)
-> > +{
-> > +	int qualifier;
-> > +
-> > +	/* parse attributes. */
-> > +repeat:
-> > +	switch (*fmt) {
-> > +	case 'n':
-> > +		*attributes |= (1<<1);
-> > +		++fmt;
-> > +		goto repeat;
-> > +	}
-> > +
-> > +	/* get the conversion qualifier */
-> > +	qualifier = -1;
-> > +	if (*fmt == 'h' || *fmt == 'l' || *fmt == 'L' ||
-> > +	    *fmt == 'Z' || *fmt == 'z' || *fmt == 't' ||
-> > +	    *fmt == 'S' || *fmt == '1' || *fmt == '2' ||
-> > +	    *fmt == '4' || *fmt == 8) {
-> > +		qualifier = *fmt;
-> > +		++fmt;
-> > +		if (qualifier == 'l' && *fmt == 'l') {
-> > +			qualifier = 'L';
-> > +			++fmt;
-> > +		}
-> > +	}
-> > +
-> > +	switch (*fmt) {
-> > +	case 'c':
-> > +		*base = 10;
-> > +		*trace_type = LTT_TYPE_UNSIGNED_INT;
-> > +		*trace_size = sizeof(unsigned char);
-> > +		goto parse_end;
-> > +	case 's':
-> > +		*trace_type = LTT_TYPE_STRING;
-> > +		goto parse_end;
-> > +	case 'p':
-> > +		*base = 16;
-> > +		*trace_type = LTT_TYPE_UNSIGNED_INT;
-> > +		*trace_size = arch_size;
-> > +		goto parse_end;
-> > +	case 'd':
-> > +	case 'i':
-> > +		*base = 10;
-> > +		*trace_type = LTT_TYPE_SIGNED_INT;
-> > +		break;
-> > +	case 'o':
-> > +		*base = 8;
-> > +		*trace_type = LTT_TYPE_UNSIGNED_INT;
-> > +		break;
-> > +	case 'u':
-> > +		*base = 10;
-> > +		*trace_type = LTT_TYPE_UNSIGNED_INT;
-> > +		break;
-> > +	case 'x':
-> > +	case 'X':
-> > +		*base = 16;
-> > +		*trace_type = LTT_TYPE_UNSIGNED_INT;
-> > +		break;
-> > +	default:
-> > +		if (!*fmt)
-> > +			--fmt;
-> > +		goto parse_end;
-> > +	}
-> > +	switch (qualifier) {
-> > +	case 'L':
-> > +		*trace_size = sizeof(long long);
-> > +		break;
-> > +	case 'l':
-> > +		*trace_size = size_long;
-> > +		break;
-> > +	case 'Z':
-> > +	case 'z':
-> > +		*trace_size = size_size_t;
-> > +		break;
-> > +	case 'h':
-> > +		*trace_size = sizeof(short);
-> > +		break;
-> > +	case '1':
-> > +		*trace_size = sizeof(uint8_t);
-> > +		break;
-> > +	case '2':
-> > +		*trace_size = sizeof(uint16_t);
-> > +		break;
-> > +	case '4':
-> > +		*trace_size = sizeof(uint32_t);
-> > +		break;
-> > +	case '8':
-> > +		*trace_size = sizeof(uint64_t);
-> > +		break;
-> > +	default:
-> > +		*trace_size = sizeof(int);
-> > +	}
-> > +
-> > +parse_end:
-> > +	return fmt;
-> > +}
-> > +
-> > +int parse_format(char *out, const char *fmt,
-> > +		 int arch_size, int size_long, int size_size_t,
-> > +		 int (*write) (char *p, char trace_size, char c_size,
-> > +		 enum ltt_type c_type, char base, char *name))
-> > +{
-> > +	char trace_size = 0, c_size = 0;	/* 0 (unset), 1, 2, 4, 8 bytes */
-> > +	char base = 0;                          /* 0 (unset), 10, 16 */
-> > +	enum ltt_type trace_type = LTT_TYPE_NONE, c_type = LTT_TYPE_NONE;
-> > +	unsigned long attributes = 0;
-> > +	char name[256];
-> > +	char *pname = name;
-> > +	int len = 0;
-> > +
-> > +	memset(name, 0, sizeof(name));
-> > +
-> > +	for (; *fmt ; ++fmt) {
-> > +		switch (*fmt) {
-> > +		case '#':
-> > +			/* tracetypes (#) */
-> > +			++fmt;			/* skip first '#' */
-> > +			if (*fmt == '#')	/* Escaped ## */
-> > +				break;
-> > +			attributes = 0;
-> > +			fmt = parse_trace_type(fmt, &trace_size, &trace_type,
-> > +					       &base, &attributes,
-> > +					       arch_size, size_long, size_size_t);
-> > +			break;
-> > +		case '%':
-> > +			/* c types (%) */
-> > +			++fmt;			/* skip first '%' */
-> > +			if (*fmt == '%')	/* Escaped %% */
-> > +				break;
-> > +			fmt = parse_c_type(fmt, &c_size, &c_type, &base, NULL,
-> > +					   arch_size, size_long, size_size_t);
-> > +			/*
-> > +			 * Output c types if no trace types has been
-> > +			 * specified.
-> > +			 */
-> > +			if (!trace_size)
-> > +				trace_size = c_size;
-> > +			if (trace_type == LTT_TYPE_NONE)
-> > +				trace_type = c_type;
-> > +			if (c_type == LTT_TYPE_STRING)
-> > +				trace_type = LTT_TYPE_STRING;
-> > +			/* perform write */
-> > +			len += write(out + len, trace_size, c_size, trace_type,
-> > +				     base, name);
-> > +			trace_size = 0;
-> > +			c_size = 0;
-> > +			trace_type = LTT_TYPE_NONE;
-> > +			c_size = LTT_TYPE_NONE;
-> > +			attributes = 0;
-> > +			memset(name, 0, sizeof(name));
-> > +			pname = name;
-> > +			break;
-> > +		case ' ':
-> > +			/* skip spaces */
-> > +			continue;
-> > +		default:
-> > +			/* default is to copy the text as parameter name */
-> > +			*pname = *fmt;
-> > +			pname++;
-> > +		}
-> > +	}
-> > +	return len;
-> > +}
-> > diff --git a/include/babeltrace/ltt-type-parser.h b/include/babeltrace/ltt-type-parser.h
-> > new file mode 100644
-> > index 0000000..85d9a92
-> > --- /dev/null
-> > +++ b/include/babeltrace/ltt-type-parser.h
-> > @@ -0,0 +1,17 @@
-> > +#ifndef _LTT_TYPE_PARSER_H
-> > +#define _LTT_TYPE_PARSER_H
-> > +
-> > +#include <sys/types.h>
-> > +
-> > +enum ltt_type {
-> > +	LTT_TYPE_SIGNED_INT,
-> > +	LTT_TYPE_UNSIGNED_INT,
-> > +	LTT_TYPE_STRING,
-> > +	LTT_TYPE_NONE,
-> > +};
-> > +
-> > +int parse_format(char *out, const char *fmt, int arch_size,
-> > +		 int size_long, int size_size_t,
-> > +		 int (*write) (char *p, char trace_size, char c_size,
-> > +			       enum ltt_type c_type, char base, char *name));
-> > +#endif
-> > -- 
-> > 1.7.9.5
-> > 
-> > 
-> > _______________________________________________
-> > lttng-dev mailing list
-> > lttng-dev@lists.lttng.org
-> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> 
-> -- 
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> http://www.efficios.com
+What is missing from glibc 2.5 is:
 
--- 
-Jan Glauber
----
-Harman Becker Automotive GmbH
-System Profiling & Optimizing Team
+- a system call wrapper for sched_getcpu()
+- a system call wrapper for sync_file_range()
+- htobe32() and other similar endian conversion functions
+
+babeltrace and userspace-rcu did not require patching.
+
+Thanks in advance,
+David
+
+P.S. If you see this, thanks for all your recent replies, Mathieu, I will try to get back to you soon!
+
+----------------------------------------------------------------------
+The information contained in this transmission may be confidential. Any disclosure, copying, or further distribution of confidential information is not permitted unless such privilege is explicitly granted in writing by Quantum. Quantum reserves the right to have electronic communications, including email and attachments, sent across its networks filtered through anti virus and spam software programs and retain such messages in order to comply with applicable data security and retention requirements. Quantum is not responsible for the proper and complete transmission of the substance of this communication or for any delay in its receipt.
