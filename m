@@ -1,22 +1,20 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH] Fix linker library order
-Date: Wed, 15 May 2013 02:05:54 -0400
-Message-ID: <20130515060553.GA16332__35645.230257842$1368597994$gmane$org@Krystal>
-References: <1368318333-31522-1-git-send-email-francis.giraldeau@gmail.com>
-	<20130512025917.GB405@Krystal> <519161C8.5000305@voxpopuli.im>
-	<20130514065244.GA5066@Krystal> <20130514123724.GA24238@Krystal>
-	<CAFXXi0nvJhHiiMK_FE=_OMkT4yK+0_WLv8h=Nanvh3g0E1re3g@mail.gmail.com>
+Subject: Re: [PATCH lttng-ust] Add warning about default
+	prefix	and library paths to README
+Date: Wed, 15 May 2013 02:08:14 -0400
+Message-ID: <20130515060814.GA16392__33417.4231546514$1368598125$gmane$org@Krystal>
+References: <1368565886-20536-1-git-send-email-jeremie.galarneau@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UcUqc-0001Ow-11
-	for lttng-dev@lists.lttng.org; Wed, 15 May 2013 02:05:58 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1UcUsp-0001R8-K1
+	for lttng-dev@lists.lttng.org; Wed, 15 May 2013 02:08:15 -0400
 Content-Disposition: inline
-In-Reply-To: <CAFXXi0nvJhHiiMK_FE=_OMkT4yK+0_WLv8h=Nanvh3g0E1re3g@mail.gmail.com>
+In-Reply-To: <1368565886-20536-1-git-send-email-jeremie.galarneau@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -25,170 +23,60 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Simon Marchi <simon.marchi@polymtl.ca>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
+Cc: lttng-dev@lists.lttng.org, daniel.thibault@drdc-rddc.gc.ca
 List-Id: lttng-dev@lists.lttng.org
 
-* Simon Marchi (simon.marchi@polymtl.ca) wrote:
-> On 14 May 2013 08:37, Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
-> >
-> > * Mathieu Desnoyers (mathieu.desnoyers@efficios.com) wrote:
-> > > * Alexandre Montplaisir (alexmonthy@voxpopuli.im) wrote:
-> > > > On 13-05-11 10:59 PM, Mathieu Desnoyers wrote:
-> > > > > * Francis Giraldeau (francis.giraldeau@gmail.com) wrote:
-> > > > >> Libraries must be specified after the binary target.
-> > > > > merged, thanks!
-> > > > >
-> > > > > Mathieu
-> > > >
-> > > > This seems to have broken the daily PPA packages:
-> > > > https://launchpadlibrarian.net/139804087/buildlog_ubuntu-saucy-amd64.lttng-ust_2.2~pre-0%2Bbzr1574%2Bpack37%2B201305131247~saucy1_FAILEDTOBUILD.txt.gz
-> > > >
-> > > > That package has no particular patches. If I build it locally from
-> > > > source it builds fine, but if I build the package locally (with
-> > > > dpkg-buildpackage), I get the same error. It could be related to the
-> > > > --as-needed problem we've had before...
-> > >
-> > > Francis, can you explain why your change was needed in the first place ?
-> >
-> > Hrm, actually, these patches are wrong.
-> 
-> 
-> I believe these patches are correct.
-> 
-> >
-> > commit 725e63c5194bfdcde0a2a3507aca156ba36cf49f for instance:
-> >
-> > "Libraries must be specified after the binary target."
-> >
-> >  demo: demo.o
-> > -       $(CC) -o $@ $(LIBS) $^
-> > +       $(CC) -o $@ $^ $(LIBS)
-> >
-> > the binary target here is "$@".
-> >
-> > $^ is the source file name (demo.c).
-> >
-> > this patch moves the source file name prior to the libraries, which is
-> > incorrect (ref: gcc(1)). The input files should appear last.
-> >
-> > So it breaks builds where $(LIBS) is non-empty.
-> 
-> Actually, $^ here is "demo.o", not "demo. Also, the libs should appear
-> after the objects on the command line. See the "-l" section in
-> http://gcc.gnu.org/onlinedocs/gcc/Link-Options.html. On most setup
-> this doesn't matter, since -Wl,--no-as-needed was the default pretty
-> much everywhere. Ubuntu decided to use -Wl,--as-needed to avoid
-> unnecessary dependencies, so the order becomes important. If you try
-> to manual build on a recent Ubuntu you will get undefined references
-> to dlopen and such. So this patch is good.
-> 
-> If you read carefully the log sent by Alexandre, you see that it is
-> when building the shared libs in this directory
-> (lttng-ust-provider-ust-tests-demo.so) that the build fails. I don't
-> know why it fails, but Alexandre hinted that passing "-fPIE -pie" to
-> build a shared library is weird (it is usually -fPIC -pic). I am not
-> sure where that comes from. This behaviour only happens when building
-> the package, not when building manually.
-
-OK, I'm reverting the 2 reverts (now that's clumsy) ;-).
-
-I'm adding your explanation to the changelog of those reverts.
-
-Thanks,
+merged, thanks!
 
 Mathieu
 
-> 
-> >
-> > I will revert commits:
-> >
-> > commit a51ac6d9a011ba10b0be396dc1e801b2fc829651
-> > Author: Francis Giraldeau <francis.giraldeau@gmail.com>
-> > Date:   Sat May 11 22:59:21 2013 -0400
-> >
-> >     Fix (another) linker library order
-> >
-> >     Libraries must be specified after the binary target.
-> >
-> >     Signed-off-by: Francis Giraldeau <francis.giraldeau@gmail.com>
-> >     Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> >
-> > commit 725e63c5194bfdcde0a2a3507aca156ba36cf49f
-> > Author: Francis Giraldeau <francis.giraldeau@gmail.com>
-> > Date:   Sat May 11 22:58:12 2013 -0400
-> >
-> >     Fix linker library order
-> >
-> >     Libraries must be specified after the binary target.
-> >
-> >     Signed-off-by: Francis Giraldeau <francis.giraldeau@gmail.com>
-> >     Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> >
-> >
-> > Thanks,
-> >
-> > Mathieu
-> >
-> > >
-> > > Thanks,
-> > >
-> > > Mathieu
-> > >
-> > > >
-> > > > Cheers,
-> > > > Alex
-> > > >
-> > > > >
-> > > > >> Signed-off-by: Francis Giraldeau <francis.giraldeau@gmail.com>
-> > > > >> ---
-> > > > >>  doc/examples/demo/Makefile | 2 +-
-> > > > >>  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > > >>
-> > > > >> diff --git a/doc/examples/demo/Makefile b/doc/examples/demo/Makefile
-> > > > >> index 7ae6547..bbc8ccb 100644
-> > > > >> --- a/doc/examples/demo/Makefile
-> > > > >> +++ b/doc/examples/demo/Makefile
-> > > > >> @@ -55,7 +55,7 @@ demo.o: demo.c
-> > > > >>          $(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
-> > > > >>
-> > > > >>  demo: demo.o
-> > > > >> -        $(CC) -o $@ $(LIBS) $^
-> > > > >> +        $(CC) -o $@ $^ $(LIBS)
-> > > > >>
-> > > > >>  .PHONY: clean
-> > > > >>  clean:
-> > > > >> --
-> > > > >> 1.8.1.2
-> > > > >>
-> > > > >>
-> > > > >> _______________________________________________
-> > > > >> lttng-dev mailing list
-> > > > >> lttng-dev@lists.lttng.org
-> > > > >> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> > > >
-> > >
-> > > --
-> > > Mathieu Desnoyers
-> > > EfficiOS Inc.
-> > > http://www.efficios.com
-> > >
-> > > _______________________________________________
-> > > lttng-dev mailing list
-> > > lttng-dev@lists.lttng.org
-> > > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> >
-> > --
-> > Mathieu Desnoyers
-> > EfficiOS Inc.
-> > http://www.efficios.com
-> >
-> > _______________________________________________
-> > lttng-dev mailing list
-> > lttng-dev@lists.lttng.org
-> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+* J=E9r=E9mie Galarneau (jeremie.galarneau@efficios.com) wrote:
+> Fixes #467
+> =
 
--- 
+> Signed-off-by: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
+> ---
+>  README | 5 +++++
+>  1 file changed, 5 insertions(+)
+> =
+
+> diff --git a/README b/README
+> index 4b3053c..2a335ce 100644
+> --- a/README
+> +++ b/README
+> @@ -52,6 +52,11 @@ INSTALLATION INSTRUCTIONS:
+>    If compiling from the git repository, run ./bootstrap before running
+>    the configure script, to generate it.
+>  =
+
+> +  Note that configure sets '/usr/local' as the default prefix for files =
+it
+> +  installs. However, this path is not part of most distributions' default
+> +  library path which will cause builds depending on liblttng-ust to fail=
+ unless
+> +  '-L/usr/local/lib' is added to LDFLAGS. You may provide a custom prefi=
+x to
+> +  configure by using the --prefix switch.
+>  =
+
+>  USAGE:
+>  =
+
+> -- =
+
+> 1.8.2.2
+> =
+
+> =
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- =
+
 Mathieu Desnoyers
 EfficiOS Inc.
 http://www.efficios.com
