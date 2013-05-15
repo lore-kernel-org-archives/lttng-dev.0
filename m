@@ -1,19 +1,22 @@
-From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
-	<jeremie.galarneau@efficios.com>
-Subject: [PATCH babeltrace] Remove unused array in
-	bt_context_add_traces_recursive
-Date: Tue, 14 May 2013 18:13:40 -0400
-Message-ID: <1368569620-6774-1-git-send-email-jeremie.galarneau__43113.7432264679$1368569659$gmane$org@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH] Fix linker library order
+Date: Wed, 15 May 2013 02:05:54 -0400
+Message-ID: <20130515060553.GA16332__35645.230257842$1368597994$gmane$org@Krystal>
+References: <1368318333-31522-1-git-send-email-francis.giraldeau@gmail.com>
+	<20130512025917.GB405@Krystal> <519161C8.5000305@voxpopuli.im>
+	<20130514065244.GA5066@Krystal> <20130514123724.GA24238@Krystal>
+	<CAFXXi0nvJhHiiMK_FE=_OMkT4yK+0_WLv8h=Nanvh3g0E1re3g@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-vc0-f176.google.com ([209.85.220.176])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1UcNTh-00068T-Vd
-	for lttng-dev@lists.lttng.org; Tue, 14 May 2013 18:13:50 -0400
-Received: by mail-vc0-f176.google.com with SMTP id ib11so1191542vcb.21
-	for <lttng-dev@lists.lttng.org>; Tue, 14 May 2013 15:13:44 -0700 (PDT)
+	(envelope-from <compudj@mail.openrapids.net>) id 1UcUqc-0001Ow-11
+	for lttng-dev@lists.lttng.org; Wed, 15 May 2013 02:05:58 -0400
+Content-Disposition: inline
+In-Reply-To: <CAFXXi0nvJhHiiMK_FE=_OMkT4yK+0_WLv8h=Nanvh3g0E1re3g@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,36 +25,170 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Simon Marchi <simon.marchi@polymtl.ca>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-ClNpZ25lZC1vZmYtYnk6IErDqXLDqW1pZSBHYWxhcm5lYXUgPGplcmVtaWUuZ2FsYXJuZWF1QGVm
-ZmljaW9zLmNvbT4KLS0tCiBjb252ZXJ0ZXIvYmFiZWx0cmFjZS5jIHwgMTEgKysrLS0tLS0tLS0K
-IDEgZmlsZSBjaGFuZ2VkLCAzIGluc2VydGlvbnMoKyksIDggZGVsZXRpb25zKC0pCgpkaWZmIC0t
-Z2l0IGEvY29udmVydGVyL2JhYmVsdHJhY2UuYyBiL2NvbnZlcnRlci9iYWJlbHRyYWNlLmMKaW5k
-ZXggMmZkMzcxYy4uMTAwODM1MSAxMDA2NDQKLS0tIGEvY29udmVydGVyL2JhYmVsdHJhY2UuYwor
-KysgYi9jb252ZXJ0ZXIvYmFiZWx0cmFjZS5jCkBAIC00OTAsMTUgKzQ5MCwxMSBAQCBpbnQgYnRf
-Y29udGV4dF9hZGRfdHJhY2VzX3JlY3Vyc2l2ZShzdHJ1Y3QgYnRfY29udGV4dCAqY3R4LCBjb25z
-dCBjaGFyICpwYXRoLAogCQl2b2lkICgqcGFja2V0X3NlZWspKHN0cnVjdCBidF9zdHJlYW1fcG9z
-ICpwb3MsCiAJCQlzaXplX3Qgb2Zmc2V0LCBpbnQgd2hlbmNlKSkKIHsKLQotCUdBcnJheSAqdHJh
-Y2VfaWRzOwotCWludCByZXQgPSAwOworCWludCByZXQgPSAwLCB0cmFjZV9pZHMgPSAwOwogCiAJ
-LyogU2hvdWxkIGxvY2sgdHJhdmVyc2VkX3BhdGhzIG11dGV4IGhlcmUgaWYgdXNlZCBpbiBtdWx0
-aXRocmVhZCAqLwogCiAJdHJhdmVyc2VkX3BhdGhzID0gZ19wdHJfYXJyYXlfbmV3KCk7Ci0JdHJh
-Y2VfaWRzID0gZ19hcnJheV9uZXcoRkFMU0UsIFRSVUUsIHNpemVvZihpbnQpKTsKLQogCXJldCA9
-IG5mdHcocGF0aCwgdHJhdmVyc2VfdHJhY2VfZGlyLCAxMCwgMCk7CiAKIAkvKiBQcm9jZXNzIHRo
-ZSBhcnJheSBpZiBudGZ3IGRpZCBub3QgcmV0dXJuIGEgZmF0YWwgZXJyb3IgKi8KQEAgLTUyMCw3
-ICs1MTYsNyBAQCBpbnQgYnRfY29udGV4dF9hZGRfdHJhY2VzX3JlY3Vyc2l2ZShzdHJ1Y3QgYnRf
-Y29udGV4dCAqY3R4LCBjb25zdCBjaGFyICpwYXRoLAogCQkJCS8qIEFsbG93IHRvIHNraXAgZXJy
-b25lb3VzIHRyYWNlcy4gKi8KIAkJCQlyZXQgPSAxOwkvKiBwYXJ0aWFsIGVycm9yICovCiAJCQl9
-IGVsc2UgewotCQkJCWdfYXJyYXlfYXBwZW5kX3ZhbCh0cmFjZV9pZHMsIHRyYWNlX2lkKTsKKwkJ
-CQl0cmFjZV9pZHMrKzsKIAkJCX0KIAkJCWdfc3RyaW5nX2ZyZWUodHJhY2VfcGF0aCwgVFJVRSk7
-CiAJCX0KQEAgLTUzNCwxMSArNTMwLDEwIEBAIGludCBidF9jb250ZXh0X2FkZF90cmFjZXNfcmVj
-dXJzaXZlKHN0cnVjdCBidF9jb250ZXh0ICpjdHgsIGNvbnN0IGNoYXIgKnBhdGgsCiAJLyoKIAkg
-KiBSZXR1cm4gYW4gZXJyb3IgaWYgbm8gdHJhY2UgY2FuIGJlIG9wZW5lZC4KIAkgKi8KLQlpZiAo
-dHJhY2VfaWRzLT5sZW4gPT0gMCkgeworCWlmICh0cmFjZV9pZHMgPT0gMCkgewogCQlmcHJpbnRm
-KHN0ZGVyciwgIltlcnJvcl0gQ2Fubm90IG9wZW4gYW55IHRyYWNlIGZvciByZWFkaW5nLlxuXG4i
-KTsKIAkJcmV0ID0gLUVOT0VOVDsJCS8qIGZhaWx1cmUgKi8KIAl9Ci0JZ19hcnJheV9mcmVlKHRy
-YWNlX2lkcywgVFJVRSk7CiAJcmV0dXJuIHJldDsKIH0KIAotLSAKMS44LjIuMgoKCl9fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5n
-IGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2Nn
-aS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+* Simon Marchi (simon.marchi@polymtl.ca) wrote:
+> On 14 May 2013 08:37, Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
+> >
+> > * Mathieu Desnoyers (mathieu.desnoyers@efficios.com) wrote:
+> > > * Alexandre Montplaisir (alexmonthy@voxpopuli.im) wrote:
+> > > > On 13-05-11 10:59 PM, Mathieu Desnoyers wrote:
+> > > > > * Francis Giraldeau (francis.giraldeau@gmail.com) wrote:
+> > > > >> Libraries must be specified after the binary target.
+> > > > > merged, thanks!
+> > > > >
+> > > > > Mathieu
+> > > >
+> > > > This seems to have broken the daily PPA packages:
+> > > > https://launchpadlibrarian.net/139804087/buildlog_ubuntu-saucy-amd64.lttng-ust_2.2~pre-0%2Bbzr1574%2Bpack37%2B201305131247~saucy1_FAILEDTOBUILD.txt.gz
+> > > >
+> > > > That package has no particular patches. If I build it locally from
+> > > > source it builds fine, but if I build the package locally (with
+> > > > dpkg-buildpackage), I get the same error. It could be related to the
+> > > > --as-needed problem we've had before...
+> > >
+> > > Francis, can you explain why your change was needed in the first place ?
+> >
+> > Hrm, actually, these patches are wrong.
+> 
+> 
+> I believe these patches are correct.
+> 
+> >
+> > commit 725e63c5194bfdcde0a2a3507aca156ba36cf49f for instance:
+> >
+> > "Libraries must be specified after the binary target."
+> >
+> >  demo: demo.o
+> > -       $(CC) -o $@ $(LIBS) $^
+> > +       $(CC) -o $@ $^ $(LIBS)
+> >
+> > the binary target here is "$@".
+> >
+> > $^ is the source file name (demo.c).
+> >
+> > this patch moves the source file name prior to the libraries, which is
+> > incorrect (ref: gcc(1)). The input files should appear last.
+> >
+> > So it breaks builds where $(LIBS) is non-empty.
+> 
+> Actually, $^ here is "demo.o", not "demo. Also, the libs should appear
+> after the objects on the command line. See the "-l" section in
+> http://gcc.gnu.org/onlinedocs/gcc/Link-Options.html. On most setup
+> this doesn't matter, since -Wl,--no-as-needed was the default pretty
+> much everywhere. Ubuntu decided to use -Wl,--as-needed to avoid
+> unnecessary dependencies, so the order becomes important. If you try
+> to manual build on a recent Ubuntu you will get undefined references
+> to dlopen and such. So this patch is good.
+> 
+> If you read carefully the log sent by Alexandre, you see that it is
+> when building the shared libs in this directory
+> (lttng-ust-provider-ust-tests-demo.so) that the build fails. I don't
+> know why it fails, but Alexandre hinted that passing "-fPIE -pie" to
+> build a shared library is weird (it is usually -fPIC -pic). I am not
+> sure where that comes from. This behaviour only happens when building
+> the package, not when building manually.
+
+OK, I'm reverting the 2 reverts (now that's clumsy) ;-).
+
+I'm adding your explanation to the changelog of those reverts.
+
+Thanks,
+
+Mathieu
+
+> 
+> >
+> > I will revert commits:
+> >
+> > commit a51ac6d9a011ba10b0be396dc1e801b2fc829651
+> > Author: Francis Giraldeau <francis.giraldeau@gmail.com>
+> > Date:   Sat May 11 22:59:21 2013 -0400
+> >
+> >     Fix (another) linker library order
+> >
+> >     Libraries must be specified after the binary target.
+> >
+> >     Signed-off-by: Francis Giraldeau <francis.giraldeau@gmail.com>
+> >     Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> >
+> > commit 725e63c5194bfdcde0a2a3507aca156ba36cf49f
+> > Author: Francis Giraldeau <francis.giraldeau@gmail.com>
+> > Date:   Sat May 11 22:58:12 2013 -0400
+> >
+> >     Fix linker library order
+> >
+> >     Libraries must be specified after the binary target.
+> >
+> >     Signed-off-by: Francis Giraldeau <francis.giraldeau@gmail.com>
+> >     Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> >
+> >
+> > Thanks,
+> >
+> > Mathieu
+> >
+> > >
+> > > Thanks,
+> > >
+> > > Mathieu
+> > >
+> > > >
+> > > > Cheers,
+> > > > Alex
+> > > >
+> > > > >
+> > > > >> Signed-off-by: Francis Giraldeau <francis.giraldeau@gmail.com>
+> > > > >> ---
+> > > > >>  doc/examples/demo/Makefile | 2 +-
+> > > > >>  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > >>
+> > > > >> diff --git a/doc/examples/demo/Makefile b/doc/examples/demo/Makefile
+> > > > >> index 7ae6547..bbc8ccb 100644
+> > > > >> --- a/doc/examples/demo/Makefile
+> > > > >> +++ b/doc/examples/demo/Makefile
+> > > > >> @@ -55,7 +55,7 @@ demo.o: demo.c
+> > > > >>          $(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
+> > > > >>
+> > > > >>  demo: demo.o
+> > > > >> -        $(CC) -o $@ $(LIBS) $^
+> > > > >> +        $(CC) -o $@ $^ $(LIBS)
+> > > > >>
+> > > > >>  .PHONY: clean
+> > > > >>  clean:
+> > > > >> --
+> > > > >> 1.8.1.2
+> > > > >>
+> > > > >>
+> > > > >> _______________________________________________
+> > > > >> lttng-dev mailing list
+> > > > >> lttng-dev@lists.lttng.org
+> > > > >> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> > > >
+> > >
+> > > --
+> > > Mathieu Desnoyers
+> > > EfficiOS Inc.
+> > > http://www.efficios.com
+> > >
+> > > _______________________________________________
+> > > lttng-dev mailing list
+> > > lttng-dev@lists.lttng.org
+> > > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> >
+> > --
+> > Mathieu Desnoyers
+> > EfficiOS Inc.
+> > http://www.efficios.com
+> >
+> > _______________________________________________
+> > lttng-dev mailing list
+> > lttng-dev@lists.lttng.org
+> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
