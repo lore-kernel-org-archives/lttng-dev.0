@@ -1,21 +1,17 @@
-From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: Updated easy-ust Makefile
-Date: Wed, 15 May 2013 17:02:49 -0400
-Message-ID: <CA+jJMxt6Hf-EO-B2ZJ3ZJa3hyQB=iuGHGNm1b3mqw5o2aLsnoA__34870.3516684056$1368651806$gmane$org@mail.gmail.com>
-References: <48CF5AC71E61DB46B70D0F388054EFFD028E81@VAL-E-01.valcartier.drdc-rddc.gc.ca>
-	<20130510142534.GB20313@Krystal>
-	<48CF5AC71E61DB46B70D0F388054EFFD12D17FE9@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+From: Lai Jiangshan <laijs@cn.fujitsu.com>
+Subject: Re: [PATCH] urcu: avoid false sharing for rcu_gp_ctr
+Date: Thu, 16 May 2013 09:58:34 +0800
+Message-ID: <51943D4A.20907__47773.2301726521$1368669412$gmane$org@cn.fujitsu.com>
+References: <50C19575.2070802@cn.fujitsu.com>
+	<20130506124433.GB12699@Krystal>	<518A144D.7090805@cn.fujitsu.com>
+	<20130508135343.GA8230@Krystal>	<CACvQF521cSR0_5K+aC79A+s9APypQOS8POEoP2cDRguguw6P9A@mail.gmail.com>	<20130508181936.GA9919@Krystal>
+	<518B4D8F.20108@cn.fujitsu.com>	<20130509122748.GA23531@Krystal>	<CACvQF53K3Qwj4JO3y82yhxGqrBfPdkgH2fXcj5SbYO0OTD+uSg@mail.gmail.com>
+	<20130509151018.GC27168@Krystal>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wi0-f181.google.com ([209.85.212.181])
-	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1Uciqd-0000ZN-J0
-	for lttng-dev@lists.lttng.org; Wed, 15 May 2013 17:02:55 -0400
-Received: by mail-wi0-f181.google.com with SMTP id hi5so2080266wib.14
-	for <lttng-dev@lists.lttng.org>; Wed, 15 May 2013 14:02:49 -0700 (PDT)
-In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD12D17FE9@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+In-Reply-To: <20130509151018.GC27168@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,59 +20,134 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, "Couture,
-	Mario" <Mario.Couture@drdc-rddc.gc.ca>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, "Painchaud,
-	Frederic" <Frederic.Painchaud@drdc-rddc.gc.ca>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "ltt-dev@lists.casi.polymtl.ca" <ltt-dev@lists.casi.polymtl.ca>, Lai Jiangshan <eag0628@gmail.com>, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
 List-Id: lttng-dev@lists.lttng.org
 
-I'd prefer we keep documentation as distribution-agnostic as possible;
-that includes example Makefiles. It's not unreasonable to expect users
-to install the libraries in a location that is part of their library
-path.
+On 05/09/2013 11:10 PM, Mathieu Desnoyers wrote:
+> * Lai Jiangshan (eag0628@gmail.com) wrote:
+> [...]
+>> I think this code can be moved into urcu.c
+> 
+> good point! How about this ?
 
-Regards,
-J=E9r=E9mie
+Hi, I don't see any obvious bad thing, but I can't carefully check it
+currently, It seems OK for me.
 
-On Wed, May 15, 2013 at 4:34 PM, Thibault, Daniel
-<Daniel.Thibault@drdc-rddc.gc.ca> wrote:
-> -----Message d'origine-----
-> De : Mathieu Desnoyers [mailto:mathieu.desnoyers@efficios.com]
-> Envoy=E9 : 10 mai 2013 10:26
->
->> Every problem related to your distribution not having /usr/local/lib in =
-ld.so.conf by default should be handled by adding documentation to the proj=
-ect, not modifying makefiles.
->>
->> Jeremie will take care of adding this info to the documentation.
->
->    My understanding is that adding ' LDFLAGS =3D -L/usr/local/lib' to the=
- compilation calls will make no difference on distributions that do include=
- /usr/local/lib by default.  Ubuntu does not, so it needs that LDFLAGS in o=
-rder for its unmodified makefile to succeed.  Since this simple addition br=
-eaks no other distro (as far as I know), why not make lttng-ust/doc/example=
-s/easy-ust more inclusive?
->
-> Daniel U. Thibault
-> Protection des syst=E8mes et contremesures (PSC) | Systems Protection & C=
-ountermeasures (SPC)
-> Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critica=
-l Cyber Security (MCCS)
-> R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R=
-&D Canada - Valcartier (DRDC Valcartier)
-> 2459 route de la Bravoure
-> Qu=E9bec QC  G3J 1X5
-> CANADA
-> Vox : (418) 844-4000 x4245
-> Fax : (418) 844-4538
-> NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-> Gouvernement du Canada | Government of Canada
-> <http://www.valcartier.drdc-rddc.gc.ca/>
+Could you make it some progress.
 
+Thanks,
+Lai
 
-
--- =
-
-J=E9r=E9mie Galarneau
-EfficiOS Inc.
-http://www.efficios.com
+> 
+> ---
+> diff --git a/urcu.c b/urcu.c
+> index b3f94da..1d5c06f 100644
+> --- a/urcu.c
+> +++ b/urcu.c
+> @@ -62,6 +62,24 @@
+>   */
+>  #define RCU_QS_ACTIVE_ATTEMPTS 100
+>  
+> +/*
+> + * RCU_MEMBARRIER is only possibly available on Linux.
+> + */
+> +#if defined(RCU_MEMBARRIER) && defined(__linux__)
+> +#include <syscall.h>
+> +#endif
+> +
+> +/* If the headers do not support SYS_membarrier, fall back on RCU_MB */
+> +#ifdef SYS_membarrier
+> +# define membarrier(...)		syscall(SYS_membarrier, __VA_ARGS__)
+> +#else
+> +# define membarrier(...)		-ENOSYS
+> +#endif
+> +
+> +#define MEMBARRIER_EXPEDITED		(1 << 0)
+> +#define MEMBARRIER_DELAYED		(1 << 1)
+> +#define MEMBARRIER_QUERY		(1 << 16)
+> +
+>  #ifdef RCU_MEMBARRIER
+>  static int init_done;
+>  int rcu_has_sys_membarrier;
+> @@ -139,7 +157,7 @@ static void mutex_unlock(pthread_mutex_t *mutex)
+>  static void smp_mb_master(int group)
+>  {
+>  	if (caa_likely(rcu_has_sys_membarrier))
+> -		membarrier(MEMBARRIER_EXPEDITED);
+> +		(void) membarrier(MEMBARRIER_EXPEDITED);
+>  	else
+>  		cmm_smp_mb();
+>  }
+> diff --git a/urcu/map/urcu.h b/urcu/map/urcu.h
+> index 217bff5..77b3721 100644
+> --- a/urcu/map/urcu.h
+> +++ b/urcu/map/urcu.h
+> @@ -38,31 +38,6 @@
+>  #define RCU_MEMBARRIER
+>  #endif
+>  
+> -/*
+> - * RCU_MEMBARRIER is only possibly available on Linux. Fallback to
+> - * RCU_MB
+> - * otherwise.
+> - */
+> -#if !defined(__linux__) && defined(RCU_MEMBARRIER)
+> -#undef RCU_MEMBARRIER
+> -#define RCU_MB
+> -#endif
+> -
+> -#ifdef RCU_MEMBARRIER
+> -#include <syscall.h>
+> -
+> -/* If the headers do not support SYS_membarrier, statically use RCU_MB */
+> -#ifdef SYS_membarrier
+> -# define MEMBARRIER_EXPEDITED		(1 << 0)
+> -# define MEMBARRIER_DELAYED		(1 << 1)
+> -# define MEMBARRIER_QUERY		(1 << 16)
+> -# define membarrier(...)		syscall(SYS_membarrier, __VA_ARGS__)
+> -#else
+> -# undef RCU_MEMBARRIER
+> -# define RCU_MB
+> -#endif
+> -#endif
+> -
+>  #ifdef RCU_MEMBARRIER
+>  
+>  #define rcu_read_lock			rcu_read_lock_memb
+> diff --git a/urcu/static/urcu.h b/urcu/static/urcu.h
+> index bee97ee..53d2610 100644
+> --- a/urcu/static/urcu.h
+> +++ b/urcu/static/urcu.h
+> @@ -52,30 +52,6 @@ extern "C" {
+>  #endif
+>  
+>  /*
+> - * RCU_MEMBARRIER is only possibly available on Linux. Fallback to RCU_MB
+> - * otherwise.
+> - */
+> -#if !defined(__linux__) && defined(RCU_MEMBARRIER)
+> -#undef RCU_MEMBARRIER
+> -#define RCU_MB
+> -#endif
+> -
+> -#ifdef RCU_MEMBARRIER
+> -#include <syscall.h>
+> -
+> -/* If the headers do not support SYS_membarrier, statically use RCU_MB */
+> -#ifdef SYS_membarrier
+> -# define MEMBARRIER_EXPEDITED		(1 << 0)
+> -# define MEMBARRIER_DELAYED		(1 << 1)
+> -# define MEMBARRIER_QUERY		(1 << 16)
+> -# define membarrier(...)		syscall(SYS_membarrier, __VA_ARGS__)
+> -#else
+> -# undef RCU_MEMBARRIER
+> -# define RCU_MB
+> -#endif
+> -#endif
+> -
+> -/*
+>   * This code section can only be included in LGPL 2.1 compatible source code.
+>   * See below for the function call wrappers which can be used in code meant to
+>   * be only linked with the Userspace RCU library. This comes with a small
+> 
