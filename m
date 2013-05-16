@@ -1,16 +1,18 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: [PATCH 2/3 lttng-tools v2] Change
-	consumer_metadata_pipe to be a lttng_pipe
-Date: Thu, 16 May 2013 10:42:26 -0400
-Message-ID: <1368715346-28720-1-git-send-email-dgoulet__133.66073039851$1368715393$gmane$org@efficios.com>
+From: "Brosseau, Yannick" <yannick.brosseau@gmail.com>
+Subject: Re: Patches to enable building on CentOS 5.x (glibc 2.5)
+Date: Thu, 16 May 2013 11:14:14 -0400
+Message-ID: <CAEzWAeKCwo_OB=3LcDwrRw-NU3UTGbjtd+Hb82hMrj9fA5935w__42256.1453459368$1368717298$gmane$org@mail.gmail.com>
+References: <20998D40D9A2B7499CA5A3A2666CB1EB23FDCE2B@ZURMSG1.QUANTUM.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1176080999=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([5.9.158.244])
+Received: from mail-vb0-f45.google.com ([209.85.212.45])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1UczOA-0000jO-3x
-	for lttng-dev@lists.lttng.org; Thu, 16 May 2013 10:42:38 -0400
+	(envelope-from <yannick.brosseau@gmail.com>) id 1Uczsp-00010s-NO
+	for lttng-dev@lists.lttng.org; Thu, 16 May 2013 11:14:19 -0400
+Received: by mail-vb0-f45.google.com with SMTP id 12so619507vbf.18
+	for <lttng-dev@lists.lttng.org>; Thu, 16 May 2013 08:14:14 -0700 (PDT)
+In-Reply-To: <20998D40D9A2B7499CA5A3A2666CB1EB23FDCE2B@ZURMSG1.QUANTUM.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,185 +21,139 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: David OShea <David.OShea@quantum.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-The read() call in the metadata thread is also changed to use the lttng
-pipe read wrapper.
+--===============1176080999==
+Content-Type: multipart/alternative; boundary=20cf307d0284ba178004dcd751a0
 
-Signed-off-by: David Goulet <dgoulet@efficios.com>
----
- src/common/consumer.c                        |   58 +++++++++-----------------
- src/common/consumer.h                        |    2 +-
- src/common/kernel-consumer/kernel-consumer.c |    2 +-
- src/common/ust-consumer/ust-consumer.c       |    2 +-
- 4 files changed, 22 insertions(+), 42 deletions(-)
+--20cf307d0284ba178004dcd751a0
+Content-Type: text/plain; charset=ISO-8859-1
 
-diff --git a/src/common/consumer.c b/src/common/consumer.c
-index ca51ce0..c63e6e6 100644
---- a/src/common/consumer.c
-+++ b/src/common/consumer.c
-@@ -77,21 +77,6 @@ static struct lttng_ht *metadata_ht;
- static struct lttng_ht *data_ht;
- 
- /*
-- * Notify a thread pipe to poll back again. This usually means that some global
-- * state has changed so we just send back the thread in a poll wait call.
-- */
--static void notify_thread_pipe(int wpipe)
--{
--	int ret;
--
--	do {
--		struct lttng_consumer_stream *null_stream = NULL;
--
--		ret = write(wpipe, &null_stream, sizeof(null_stream));
--	} while (ret < 0 && errno == EINTR);
--}
--
--/*
-  * Notify a thread lttng pipe to poll back again. This usually means that some
-  * global state has changed so we just send back the thread in a poll wait
-  * call.
-@@ -423,7 +408,7 @@ static void cleanup_relayd(struct consumer_relayd_sock_pair *relayd,
- 	 */
- 	if (ctx) {
- 		notify_thread_lttng_pipe(ctx->consumer_data_pipe);
--		notify_thread_pipe(ctx->consumer_metadata_pipe[1]);
-+		notify_thread_lttng_pipe(ctx->consumer_metadata_pipe);
- 	}
- }
- 
-@@ -1206,8 +1191,8 @@ struct lttng_consumer_local_data *lttng_consumer_create(
- 		goto error_channel_pipe;
- 	}
- 
--	ret = utils_create_pipe(ctx->consumer_metadata_pipe);
--	if (ret < 0) {
-+	ctx->consumer_metadata_pipe = lttng_pipe_open(0);
-+	if (!ctx->consumer_metadata_pipe) {
- 		goto error_metadata_pipe;
- 	}
- 
-@@ -1219,7 +1204,7 @@ struct lttng_consumer_local_data *lttng_consumer_create(
- 	return ctx;
- 
- error_splice_pipe:
--	utils_close_pipe(ctx->consumer_metadata_pipe);
-+	lttng_pipe_destroy(ctx->consumer_metadata_pipe);
- error_metadata_pipe:
- 	utils_close_pipe(ctx->consumer_channel_pipe);
- error_channel_pipe:
-@@ -1254,6 +1239,7 @@ void lttng_consumer_destroy(struct lttng_consumer_local_data *ctx)
- 	utils_close_pipe(ctx->consumer_thread_pipe);
- 	utils_close_pipe(ctx->consumer_channel_pipe);
- 	lttng_pipe_destroy(ctx->consumer_data_pipe);
-+	lttng_pipe_destroy(ctx->consumer_metadata_pipe);
- 	utils_close_pipe(ctx->consumer_should_quit);
- 	utils_close_pipe(ctx->consumer_splice_metadata_pipe);
- 
-@@ -2134,7 +2120,8 @@ void *consumer_thread_metadata_poll(void *data)
- 		goto end_poll;
- 	}
- 
--	ret = lttng_poll_add(&events, ctx->consumer_metadata_pipe[0], LPOLLIN);
-+	ret = lttng_poll_add(&events,
-+			lttng_pipe_get_readfd(ctx->consumer_metadata_pipe), LPOLLIN);
- 	if (ret < 0) {
- 		goto end;
- 	}
-@@ -2172,30 +2159,26 @@ restart:
- 				continue;
- 			}
- 
--			if (pollfd == ctx->consumer_metadata_pipe[0]) {
-+			if (pollfd == lttng_pipe_get_readfd(ctx->consumer_metadata_pipe)) {
- 				if (revents & (LPOLLERR | LPOLLHUP )) {
- 					DBG("Metadata thread pipe hung up");
- 					/*
- 					 * Remove the pipe from the poll set and continue the loop
- 					 * since their might be data to consume.
- 					 */
--					lttng_poll_del(&events, ctx->consumer_metadata_pipe[0]);
--					ret = close(ctx->consumer_metadata_pipe[0]);
--					if (ret < 0) {
--						PERROR("close metadata pipe");
--					}
-+					lttng_poll_del(&events,
-+							lttng_pipe_get_readfd(ctx->consumer_metadata_pipe));
-+					lttng_pipe_read_close(ctx->consumer_metadata_pipe);
- 					continue;
- 				} else if (revents & LPOLLIN) {
--					do {
--						/* Get the stream pointer received */
--						ret = read(pollfd, &stream, sizeof(stream));
--					} while (ret < 0 && errno == EINTR);
--					if (ret < 0 ||
--							ret < sizeof(struct lttng_consumer_stream *)) {
--						PERROR("read metadata stream");
-+					ssize_t pipe_len;
-+
-+					pipe_len = lttng_pipe_read(ctx->consumer_metadata_pipe,
-+							&stream, sizeof(stream));
-+					if (pipe_len < 0) {
-+						ERR("read metadata stream, ret: %ld", pipe_len);
- 						/*
--						 * Let's continue here and hope we can still work
--						 * without stopping the consumer. XXX: Should we?
-+						 * Continue here to handle the rest of the streams.
- 						 */
- 						continue;
- 					}
-@@ -2543,10 +2526,7 @@ end:
- 	 * only tracked fd in the poll set. The thread will take care of closing
- 	 * the read side.
- 	 */
--	ret = close(ctx->consumer_metadata_pipe[1]);
--	if (ret < 0) {
--		PERROR("close data pipe");
--	}
-+	(void) lttng_pipe_write_close(ctx->consumer_metadata_pipe);
- 
- 	destroy_data_stream_ht(data_ht);
- 
-diff --git a/src/common/consumer.h b/src/common/consumer.h
-index 91039e8..3726fd1 100644
---- a/src/common/consumer.h
-+++ b/src/common/consumer.h
-@@ -351,7 +351,7 @@ struct lttng_consumer_local_data {
- 	/* to let the signal handler wake up the fd receiver thread */
- 	int consumer_should_quit[2];
- 	/* Metadata poll thread pipe. Transfer metadata stream to it */
--	int consumer_metadata_pipe[2];
-+	struct lttng_pipe *consumer_metadata_pipe;
- };
- 
- /*
-diff --git a/src/common/kernel-consumer/kernel-consumer.c b/src/common/kernel-consumer/kernel-consumer.c
-index d8aec49..f23fc9c 100644
---- a/src/common/kernel-consumer/kernel-consumer.c
-+++ b/src/common/kernel-consumer/kernel-consumer.c
-@@ -288,7 +288,7 @@ int lttng_kconsumer_recv_cmd(struct lttng_consumer_local_data *ctx,
- 
- 		/* Get the right pipe where the stream will be sent. */
- 		if (new_stream->metadata_flag) {
--			stream_pipe = ctx->consumer_metadata_pipe[1];
-+			stream_pipe = lttng_pipe_get_writefd(ctx->consumer_metadata_pipe);
- 		} else {
- 			stream_pipe = lttng_pipe_get_writefd(ctx->consumer_data_pipe);
- 		}
-diff --git a/src/common/ust-consumer/ust-consumer.c b/src/common/ust-consumer/ust-consumer.c
-index ddf80da..a81e9d4 100644
---- a/src/common/ust-consumer/ust-consumer.c
-+++ b/src/common/ust-consumer/ust-consumer.c
-@@ -189,7 +189,7 @@ static int send_stream_to_thread(struct lttng_consumer_stream *stream,
- 
- 	/* Get the right pipe where the stream will be sent. */
- 	if (stream->metadata_flag) {
--		stream_pipe = ctx->consumer_metadata_pipe[1];
-+		stream_pipe = lttng_pipe_get_writefd(ctx->consumer_metadata_pipe);
- 	} else {
- 		stream_pipe = lttng_pipe_get_writefd(ctx->consumer_data_pipe);
- 	}
+Hi,
+
+So you made it work with CentOS 5?
+I don't know if we want it upstream, but I could maybe use them to build a
+package for EPEL5.
+
+Yannick
+
+
+On Wed, May 15, 2013 at 7:38 AM, David OShea <David.OShea@quantum.com>wrote:
+
+> Hi,
+>
+> Would contributions of patches to enable lttng-tools and lttng-ust to
+> build with glibc 2.5 (as is shipped with CentOS 5.x) and to enable
+> lttng-gen-tp to run with Python 2.4 (as shipped on CentOS 5.x) be accepted?
+>
+> What is missing from glibc 2.5 is:
+>
+> - a system call wrapper for sched_getcpu()
+> - a system call wrapper for sync_file_range()
+> - htobe32() and other similar endian conversion functions
+>
+> babeltrace and userspace-rcu did not require patching.
+>
+> Thanks in advance,
+> David
+>
+> P.S. If you see this, thanks for all your recent replies, Mathieu, I will
+> try to get back to you soon!
+>
+> ----------------------------------------------------------------------
+> The information contained in this transmission may be confidential. Any
+> disclosure, copying, or further distribution of confidential information is
+> not permitted unless such privilege is explicitly granted in writing by
+> Quantum. Quantum reserves the right to have electronic communications,
+> including email and attachments, sent across its networks filtered through
+> anti virus and spam software programs and retain such messages in order to
+> comply with applicable data security and retention requirements. Quantum is
+> not responsible for the proper and complete transmission of the substance
+> of this communication or for any delay in its receipt.
+>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>
+
+
+
 -- 
-1.7.10.4
+Yannick Brosseau
+yannickbrosseau.com
+
+--20cf307d0284ba178004dcd751a0
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div><div>Hi,<br><br>So you made it work with CentOS 5?<br=
+></div>I don&#39;t know if we want it upstream, but I could maybe use them =
+to build a package for EPEL5.<br><br></div>Yannick<br></div><div class=3D"g=
+mail_extra">
+<br><br><div class=3D"gmail_quote">On Wed, May 15, 2013 at 7:38 AM, David O=
+Shea <span dir=3D"ltr">&lt;<a href=3D"mailto:David.OShea@quantum.com" targe=
+t=3D"_blank">David.OShea@quantum.com</a>&gt;</span> wrote:<br><blockquote c=
+lass=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;=
+padding-left:1ex">
+Hi,<br>
+<br>
+Would contributions of patches to enable lttng-tools and lttng-ust to build=
+ with glibc 2.5 (as is shipped with CentOS 5.x) and to enable lttng-gen-tp =
+to run with Python 2.4 (as shipped on CentOS 5.x) be accepted?<br>
+<br>
+What is missing from glibc 2.5 is:<br>
+<br>
+- a system call wrapper for sched_getcpu()<br>
+- a system call wrapper for sync_file_range()<br>
+- htobe32() and other similar endian conversion functions<br>
+<br>
+babeltrace and userspace-rcu did not require patching.<br>
+<br>
+Thanks in advance,<br>
+David<br>
+<br>
+P.S. If you see this, thanks for all your recent replies, Mathieu, I will t=
+ry to get back to you soon!<br>
+<br>
+----------------------------------------------------------------------<br>
+The information contained in this transmission may be confidential. Any dis=
+closure, copying, or further distribution of confidential information is no=
+t permitted unless such privilege is explicitly granted in writing by Quant=
+um. Quantum reserves the right to have electronic communications, including=
+ email and attachments, sent across its networks filtered through anti viru=
+s and spam software programs and retain such messages in order to comply wi=
+th applicable data security and retention requirements. Quantum is not resp=
+onsible for the proper and complete transmission of the substance of this c=
+ommunication or for any delay in its receipt.<br>
+
+<br>
+_______________________________________________<br>
+lttng-dev mailing list<br>
+<a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a><=
+br>
+<a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" targe=
+t=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><=
+br>
+</blockquote></div><br><br clear=3D"all"><br>-- <br>Yannick Brosseau<br><a =
+href=3D"http://yannickbrosseau.com" target=3D"_blank">yannickbrosseau.com</=
+a>
+</div>
+
+--20cf307d0284ba178004dcd751a0--
+
+
+--===============1176080999==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1176080999==--
