@@ -1,18 +1,16 @@
-From: "Brosseau, Yannick" <yannick.brosseau@gmail.com>
-Subject: Re: Patches to enable building on CentOS 5.x (glibc 2.5)
-Date: Thu, 16 May 2013 11:14:14 -0400
-Message-ID: <CAEzWAeKCwo_OB=3LcDwrRw-NU3UTGbjtd+Hb82hMrj9fA5935w__42256.1453459368$1368717298$gmane$org@mail.gmail.com>
-References: <20998D40D9A2B7499CA5A3A2666CB1EB23FDCE2B@ZURMSG1.QUANTUM.com>
+From: "Ionut D." <ionut5001@gmail.com>
+Subject: LTTNG on Android ICS
+Date: Fri, 17 May 2013 08:32:01 +0300
+Message-ID: <CAGNqz8L+Kat-C+3RLRknPHOiGXX8_1zYcKCm1j1s5tet3AsEqA__18710.8184014962$1368768766$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1176080999=="
+Content-Type: multipart/mixed; boundary="===============0149677705=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-vb0-f45.google.com ([209.85.212.45])
+Received: from mail-vc0-f196.google.com ([209.85.220.196])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <yannick.brosseau@gmail.com>) id 1Uczsp-00010s-NO
-	for lttng-dev@lists.lttng.org; Thu, 16 May 2013 11:14:19 -0400
-Received: by mail-vb0-f45.google.com with SMTP id 12so619507vbf.18
-	for <lttng-dev@lists.lttng.org>; Thu, 16 May 2013 08:14:14 -0700 (PDT)
-In-Reply-To: <20998D40D9A2B7499CA5A3A2666CB1EB23FDCE2B@ZURMSG1.QUANTUM.com>
+	(envelope-from <ionut5001@gmail.com>) id 1UdDGx-0007jv-5W
+	for lttng-dev@lists.lttng.org; Fri, 17 May 2013 01:32:07 -0400
+Received: by mail-vc0-f196.google.com with SMTP id m17so206314vca.11
+	for <lttng-dev@lists.lttng.org>; Thu, 16 May 2013 22:32:01 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,131 +19,72 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: David OShea <David.OShea@quantum.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============1176080999==
-Content-Type: multipart/alternative; boundary=20cf307d0284ba178004dcd751a0
+--===============0149677705==
+Content-Type: multipart/alternative; boundary=20cf3071cde26f025b04dce34d88
 
---20cf307d0284ba178004dcd751a0
+--20cf3071cde26f025b04dce34d88
 Content-Type: text/plain; charset=ISO-8859-1
 
-Hi,
+Hello all,
 
-So you made it work with CentOS 5?
-I don't know if we want it upstream, but I could maybe use them to build a
-package for EPEL5.
+Recently I started to integrate LTTNG in Android ICS by compiling each
+package, each dependency, by using the Android build system. It is a lot of
+work because I met different problems and to be sincere, I do not know if
+at the end will work and I do not know how much I will need to modify the
+sources in order to work.
 
-Yannick
+My questions are about this integration. I mention that I read a lot of
+discussions about this on Internet, on this mailing list, but the things
+are still not very clear for me.
 
+It is ok? what I am trying to do ? to integrate and build by using the
+Android build system.
+Could you give me some guidelines, indications about how I should proceed,
+maybe a tutorial or maybe some android make files/patches that would help
+me to see how the job must be done and if I am doing it right ?
 
-On Wed, May 15, 2013 at 7:38 AM, David OShea <David.OShea@quantum.com>wrote:
+Until now I managed to build lttng-modules, liburcu, libuuid from
+util-linux and configure lttng-ust by using the android toolchain for arm.
+I got a lot of errors but until now I managed to configure/make these
+packages.
 
-> Hi,
->
-> Would contributions of patches to enable lttng-tools and lttng-ust to
-> build with glibc 2.5 (as is shipped with CentOS 5.x) and to enable
-> lttng-gen-tp to run with Python 2.4 (as shipped on CentOS 5.x) be accepted?
->
-> What is missing from glibc 2.5 is:
->
-> - a system call wrapper for sched_getcpu()
-> - a system call wrapper for sync_file_range()
-> - htobe32() and other similar endian conversion functions
->
-> babeltrace and userspace-rcu did not require patching.
->
-> Thanks in advance,
-> David
->
-> P.S. If you see this, thanks for all your recent replies, Mathieu, I will
-> try to get back to you soon!
->
-> ----------------------------------------------------------------------
-> The information contained in this transmission may be confidential. Any
-> disclosure, copying, or further distribution of confidential information is
-> not permitted unless such privilege is explicitly granted in writing by
-> Quantum. Quantum reserves the right to have electronic communications,
-> including email and attachments, sent across its networks filtered through
-> anti virus and spam software programs and retain such messages in order to
-> comply with applicable data security and retention requirements. Quantum is
-> not responsible for the proper and complete transmission of the substance
-> of this communication or for any delay in its receipt.
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
+I mention that I am trying to build lttng 2.x on ICS 4.0.3.
 
+Would be great if you will give me a tutorial about how to do it.
 
+Ionut
 
--- 
-Yannick Brosseau
-yannickbrosseau.com
-
---20cf307d0284ba178004dcd751a0
+--20cf3071cde26f025b04dce34d88
 Content-Type: text/html; charset=ISO-8859-1
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr"><div><div>Hi,<br><br>So you made it work with CentOS 5?<br=
-></div>I don&#39;t know if we want it upstream, but I could maybe use them =
-to build a package for EPEL5.<br><br></div>Yannick<br></div><div class=3D"g=
-mail_extra">
-<br><br><div class=3D"gmail_quote">On Wed, May 15, 2013 at 7:38 AM, David O=
-Shea <span dir=3D"ltr">&lt;<a href=3D"mailto:David.OShea@quantum.com" targe=
-t=3D"_blank">David.OShea@quantum.com</a>&gt;</span> wrote:<br><blockquote c=
-lass=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;=
-padding-left:1ex">
-Hi,<br>
-<br>
-Would contributions of patches to enable lttng-tools and lttng-ust to build=
- with glibc 2.5 (as is shipped with CentOS 5.x) and to enable lttng-gen-tp =
-to run with Python 2.4 (as shipped on CentOS 5.x) be accepted?<br>
-<br>
-What is missing from glibc 2.5 is:<br>
-<br>
-- a system call wrapper for sched_getcpu()<br>
-- a system call wrapper for sync_file_range()<br>
-- htobe32() and other similar endian conversion functions<br>
-<br>
-babeltrace and userspace-rcu did not require patching.<br>
-<br>
-Thanks in advance,<br>
-David<br>
-<br>
-P.S. If you see this, thanks for all your recent replies, Mathieu, I will t=
-ry to get back to you soon!<br>
-<br>
-----------------------------------------------------------------------<br>
-The information contained in this transmission may be confidential. Any dis=
-closure, copying, or further distribution of confidential information is no=
-t permitted unless such privilege is explicitly granted in writing by Quant=
-um. Quantum reserves the right to have electronic communications, including=
- email and attachments, sent across its networks filtered through anti viru=
-s and spam software programs and retain such messages in order to comply wi=
-th applicable data security and retention requirements. Quantum is not resp=
-onsible for the proper and complete transmission of the substance of this c=
-ommunication or for any delay in its receipt.<br>
+<div dir=3D"ltr"><div>Hello all,</div><div><br></div><div>Recently I starte=
+d to integrate LTTNG in Android ICS by compiling each package, each depende=
+ncy, by using the Android build system. It is a lot of work because I met d=
+ifferent problems and to be sincere,  I do not know if at the end will work=
+ and I do not know how much I will need to modify the sources in order to w=
+ork.<br>
+</div><br>My questions are about this integration. I mention that I read a =
+lot of discussions about this on Internet, on this mailing list, but the th=
+ings are still not very clear for me.<br><br>It is ok? what I am trying to =
+do ? to integrate and build by using the Android build system.<br>
+Could you give me some guidelines, indications about how I should proceed, =
+maybe a tutorial or maybe some android make files/patches that would help m=
+e to see how the job must be done and if I am doing it right ?<br><br>Until=
+ now I managed to build lttng-modules, liburcu, libuuid from util-linux and=
+ configure lttng-ust by using the android toolchain for arm. I got a lot of=
+ errors but until now I managed to configure/make these packages.<br>
+<br>I mention that I am trying to build lttng 2.x on ICS 4.0.3.<br><br><div=
+>Would be great if you will give me a tutorial about how to do it.</div><di=
+v><br></div><div>Ionut</div></div>
 
-<br>
-_______________________________________________<br>
-lttng-dev mailing list<br>
-<a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a><=
-br>
-<a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" targe=
-t=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><=
-br>
-</blockquote></div><br><br clear=3D"all"><br>-- <br>Yannick Brosseau<br><a =
-href=3D"http://yannickbrosseau.com" target=3D"_blank">yannickbrosseau.com</=
-a>
-</div>
-
---20cf307d0284ba178004dcd751a0--
+--20cf3071cde26f025b04dce34d88--
 
 
---===============1176080999==
+--===============0149677705==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -156,4 +95,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============1176080999==--
+--===============0149677705==--
