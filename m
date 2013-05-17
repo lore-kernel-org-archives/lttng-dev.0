@@ -1,17 +1,17 @@
-From: Francis Giraldeau <francis.giraldeau@gmail.com>
+From: Pierre-Luc St-Charles <pierre-luc.st-charles@polymtl.ca>
 Subject: Re: LTTNG on Android ICS
-Date: Fri, 17 May 2013 07:50:40 -0400
-Message-ID: <51961990.5010801__38343.7785240405$1368791492$gmane$org@gmail.com>
+Date: Fri, 17 May 2013 09:47:48 -0400
+Message-ID: <CA+umk=qVWLKUymH9pvY9vSg_Hjf0Ynn1ccP+jyPYjtfvb3H2bg__15574.1311297335$1368798519$gmane$org@mail.gmail.com>
 References: <CAGNqz8L+Kat-C+3RLRknPHOiGXX8_1zYcKCm1j1s5tet3AsEqA@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1147000940=="
+Content-Type: multipart/mixed; boundary="===============0624366187=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qa0-f49.google.com ([209.85.216.49])
+Received: from mail-pa0-f46.google.com ([209.85.220.46])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <francis.giraldeau@gmail.com>) id 1UdJBW-0002Uf-Eo
-	for lttng-dev@lists.lttng.org; Fri, 17 May 2013 07:50:54 -0400
-Received: by mail-qa0-f49.google.com with SMTP id j11so327802qag.1
-	for <lttng-dev@lists.lttng.org>; Fri, 17 May 2013 04:50:49 -0700 (PDT)
+	(envelope-from <b0mb00z.it@gmail.com>) id 1UdL0k-0003Pp-Eo
+	for lttng-dev@lists.lttng.org; Fri, 17 May 2013 09:47:54 -0400
+Received: by mail-pa0-f46.google.com with SMTP id fa10so3560556pad.5
+	for <lttng-dev@lists.lttng.org>; Fri, 17 May 2013 06:47:48 -0700 (PDT)
 In-Reply-To: <CAGNqz8L+Kat-C+3RLRknPHOiGXX8_1zYcKCm1j1s5tet3AsEqA@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -25,251 +25,241 @@ To: "Ionut D." <ionut5001@gmail.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Ceci est un message signC) cryptographiquement au format MIME.
+--===============0624366187==
+Content-Type: multipart/alternative; boundary=047d7bdc90127cea6204dcea3aea
 
---===============1147000940==
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha1; boundary="------------ms000808040206070208060004"
-
-Ceci est un message signé cryptographiquement au format MIME.
-
---------------ms000808040206070208060004
-Content-Type: multipart/alternative;
- boundary="------------040206070107040303050604"
-
-This is a multi-part message in MIME format.
---------------040206070107040303050604
+--047d7bdc90127cea6204dcea3aea
 Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
 
-Le 2013-05-17 01:32, Ionut D. a =E9crit :
+Alright, small update for all following a quick (non-mailing-list) exchange:
+
+We did successfully complete a kernel-tracing port of LTTng for Android
+(somewhat old news), but we are still working on bringing our patches back
+up to date with the current version of the different projects (soon-ish
+still applies here, we're talking days). So far, we dwelled a little bit in
+LTTng-UST, but haven't done much changes, so userspace tracing is still not
+functional. Device that ran kernel traces successfully so far were the
+Nexus S and the Nexus 7 (example Nexus S trace available
+here<https://drive.google.com/folderview?id=0B55Ba7lWTLh4U0hGeTQ4bmRYRjQ&usp=sharing>;
+still not perfect).
+
+Basically, we cross-compiled everything via the Android NDK (no Android
+makefiles involved here), and pushed all required bins to a device without
+having to flash it (unless the default kernel config didn't allow tracing
+-- then we'd have to flash). This approach is not compatible with the
+official Android build system (meaning we wouldn't be able to add it to
+Android like this), but we might eventually get working on the damned
+Android makefiles (they're extremely painful to write, especially since
+LTTng uses Autotools).
+
+The librairies required by LTTng that are not already included in a regular
+Android build (uuid/popt) can actually be found/compiled from the official
+repo, in its 'external' directory (see oprofile and e2fsprog -- from
+memory). That might not be the easiest way to get them (full repo download
+is BIG), but compatibility is assured, and you can skip a full build by
+simply making those two individually for your device (if that's all you
+need).
+
+You'll also need your device to be rooted to use LTTng at all; then, most
+initializations are done via scripts (we'll also provide those with our
+patches). We still had some trouble automating everything via daemons, so
+we always ran the sessiond locally (with success).
+
+Major problems we encountered so far were missing posix functions, and sysv
+shared memory. Basically, Android relies on Bionic for its system calls and
+other low-level functions, and since Bionic is pretty 'lightweight', they
+trimmed most of the fat out for performance. We had to make some
+more-or-less sketchy replacements here and there, but everything seems to
+be working decently now.
+
+So, simple 'how do I put LTTng on Android' workflow would be this:
+
+  - Compile modules (using NDK) against device's kernel, making sure its
+config is appropriate, ship them over via ADB
+
+  - Compile required external libraries (using repo build system) for the
+device, ship them over via ADB
+
+  - Patch up LTTng-* (soon-ish! I could send you the outdated patches right
+now if you're interested though, they might be a month behind or so on the
+current trunks)
+
+  - Cross-compile LTTng-* for the device (using NDK), ship binaries over
+via ADB
+
+Then, on the device, start up the sessiond manually & start tracing.
+
+
+I think I went over everything, but if there's a part that's still cloudy,
+don't hesitate.
+
+
+-PL
+
+
+On May 17, 2013 1:32 AM, "Ionut D." <ionut5001@gmail.com> wrote:
+
 > Hello all,
 >
 > Recently I started to integrate LTTNG in Android ICS by compiling each
-> package, each dependency, by using the Android build system. It is a
-> lot of work because I met different problems and to be sincere, I do
-> not know if at the end will work and I do not know how much I will
-> need to modify the sources in order to work.
+> package, each dependency, by using the Android build system. It is a lot of
+> work because I met different problems and to be sincere, I do not know if
+> at the end will work and I do not know how much I will need to modify the
+> sources in order to work.
 >
-> My questions are about this integration. I mention that I read a lot
-> of discussions about this on Internet, on this mailing list, but the
-> things are still not very clear for me.
+> My questions are about this integration. I mention that I read a lot of
+> discussions about this on Internet, on this mailing list, but the things
+> are still not very clear for me.
 >
 > It is ok? what I am trying to do ? to integrate and build by using the
 > Android build system.
-> Could you give me some guidelines, indications about how I should
-> proceed, maybe a tutorial or maybe some android make files/patches
-> that would help me to see how the job must be done and if I am doing
-> it right ?
-Hi!
+> Could you give me some guidelines, indications about how I should proceed,
+> maybe a tutorial or maybe some android make files/patches that would help
+> me to see how the job must be done and if I am doing it right ?
+>
+> Until now I managed to build lttng-modules, liburcu, libuuid from
+> util-linux and configure lttng-ust by using the android toolchain for arm.
+> I got a lot of errors but until now I managed to configure/make these
+> packages.
+>
+> I mention that I am trying to build lttng 2.x on ICS 4.0.3.
+>
+> Would be great if you will give me a tutorial about how to do it.
+>
+> Ionut
+>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>
+>
 
-A group of students at Ecole Polytechnique of Montreal worked on that
-topic. They were able to get a kernel trace from Nexus 7 tablet. It
-required small modifications to tools, and cleanup is in process to
-merge patches upstream[1]. Kernel tracing is working, while UST requires
-still some work on few bugs. I received the confirmation from the
-students the build scripts they created will be released under open
-source licence soon.
-
-LTTng tools depends on two libraries libpopt and libuuid that are in
-android sources. It's simpler to just build the whole thing. Once tools
-are built, then they can be installed on the target.
-
-A tutorial would be a must! I'm installing it on my phone right now, if
-nobody else did the tutorial by then, I will do so. That would be great
-if this was to be integrated in the dev tools in the android source repo!=
-
-
-Cheers,
-
-Francis
-
-[1] http://git.dorsal.polymtl.ca/~cbriere?p=3Dlttng-tools.git;a=3Dsummary=
-
-<http://git.dorsal.polymtl.ca/%7Ecbriere?p=3Dlttng-tools.git;a=3Dsummary>=
-
-branch portAndroid-rebased-signed
-
---------------040206070107040303050604
+--047d7bdc90127cea6204dcea3aea
 Content-Type: text/html; charset=ISO-8859-1
 Content-Transfer-Encoding: quoted-printable
 
-<html>
-  <head>
-    <meta content=3D"text/html; charset=3DISO-8859-1"
-      http-equiv=3D"Content-Type">
-  </head>
-  <body bgcolor=3D"#FFFFFF" text=3D"#000000">
-    <div class=3D"moz-cite-prefix">Le 2013-05-17 01:32, Ionut D. a &eacut=
-e;crit&nbsp;:<br>
-    </div>
-    <blockquote
-cite=3D"mid:CAGNqz8L+Kat-C+3RLRknPHOiGXX8_1zYcKCm1j1s5tet3AsEqA@mail.gmai=
-l.com"
-      type=3D"cite">
-      <div dir=3D"ltr">
-        <div>Hello all,</div>
-        <div><br>
-        </div>
-        <div>Recently I started to integrate LTTNG in Android ICS by
-          compiling each package, each dependency, by using the Android
-          build system. It is a lot of work because I met different
-          problems and to be sincere, I do not know if at the end will
-          work and I do not know how much I will need to modify the
-          sources in order to work.<br>
-        </div>
-        <br>
-        My questions are about this integration. I mention that I read a
-        lot of discussions about this on Internet, on this mailing list,
-        but the things are still not very clear for me.<br>
-        <br>
-        It is ok? what I am trying to do ? to integrate and build by
-        using the Android build system.<br>
-        Could you give me some guidelines, indications about how I
-        should proceed, maybe a tutorial or maybe some android make
-        files/patches that would help me to see how the job must be done
-        and if I am doing it right ?<br>
-      </div>
-    </blockquote>
-    Hi!<br>
-    <br>
-    A group of students at Ecole Polytechnique of Montreal worked on
-    that topic. They were able to get a kernel trace from Nexus 7
-    tablet. It required small modifications to tools, and cleanup is in
-    process to merge patches upstream[1]. Kernel tracing is working,
-    while UST requires still some work on few bugs. I received the
-    confirmation from the students the build scripts they created will
-    be released under open source licence soon.<br>
-    <br>
-    LTTng tools depends on two libraries libpopt and libuuid that are in
-    android sources. It's simpler to just build the whole thing. Once
-    tools are built, then they can be installed on the target. <br>
-    <br>
-    A tutorial would be a must! I'm installing it on my phone right now,
-    if nobody else did the tutorial by then, I will do so. That would be
-    great if this was to be integrated in the dev tools in the android
-    source repo!<br>
-    <br>
-    Cheers,<br>
-    <br>
-    Francis<br>
-    <meta http-equiv=3D"content-type" content=3D"text/html;
-      charset=3DISO-8859-1">
-    <br>
-    [1]
-    <meta http-equiv=3D"content-type" content=3D"text/html;
-      charset=3DISO-8859-1">
-    <a
-href=3D"http://git.dorsal.polymtl.ca/%7Ecbriere?p=3Dlttng-tools.git;a=3Ds=
-ummary">http://git.dorsal.polymtl.ca/~cbriere?p=3Dlttng-tools.git;a=3Dsum=
-mary</a>
-    branch portAndroid-rebased-signed<br>
-  </body>
-</html>
-
---------------040206070107040303050604--
-
---------------ms000808040206070208060004
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: Signature cryptographique S/MIME
-
-MIAGCSqGSIb3DQEHAqCAMIACAQExCzAJBgUrDgMCGgUAMIAGCSqGSIb3DQEHAQAAoIIMUjCC
-BVwwggREoAMCAQICEGWn7N/yOaERpG8kZX1Cua0wDQYJKoZIhvcNAQEFBQAwgd0xCzAJBgNV
-BAYTAlVTMRcwFQYDVQQKEw5WZXJpU2lnbiwgSW5jLjEfMB0GA1UECxMWVmVyaVNpZ24gVHJ1
-c3QgTmV0d29yazE7MDkGA1UECxMyVGVybXMgb2YgdXNlIGF0IGh0dHBzOi8vd3d3LnZlcmlz
-aWduLmNvbS9ycGEgKGMpMDkxHjAcBgNVBAsTFVBlcnNvbmEgTm90IFZhbGlkYXRlZDE3MDUG
-A1UEAxMuVmVyaVNpZ24gQ2xhc3MgMSBJbmRpdmlkdWFsIFN1YnNjcmliZXIgQ0EgLSBHMzAe
-Fw0xMjA1MjgwMDAwMDBaFw0xMzA1MjgyMzU5NTlaMIIBHzEXMBUGA1UEChMOVmVyaVNpZ24s
-IEluYy4xHzAdBgNVBAsTFlZlcmlTaWduIFRydXN0IE5ldHdvcmsxRjBEBgNVBAsTPXd3dy52
-ZXJpc2lnbi5jb20vcmVwb3NpdG9yeS9SUEEgSW5jb3JwLiBieSBSZWYuLExJQUIuTFREKGMp
-OTgxHjAcBgNVBAsTFVBlcnNvbmEgTm90IFZhbGlkYXRlZDEzMDEGA1UECxMqRGlnaXRhbCBJ
-RCBDbGFzcyAxIC0gTmV0c2NhcGUgRnVsbCBTZXJ2aWNlMRowGAYDVQQDFBFGcmFuY2lzIEdp
-cmFsZGVhdTEqMCgGCSqGSIb3DQEJARYbZnJhbmNpcy5naXJhbGRlYXVAZ21haWwuY29tMIIB
-IjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqiOFH8B8262aBX5FMSzvA38NY4ekw6W+
-zThHjeI46j7VFPXJbK0BM7yAMu4DmybyE8b5IB4oKcjRGdGC8GaMZdx0+Je0CxR/+M4hMB9s
-g3JhgXLQ9RYDJKn9k0JZ59pbYsh6OMtYPX3WDCyEXBg3xkd2JQ9YiY46IJSEhfbHHE9CwaYa
-f3Pbl3Bp5oi5PUADYu76ItNdHBHzBGBrkkYFaGoI5Mh27oBABvDW6QNuGvrTkkWOmFeJPNAu
-AS52izUNriCmkMGNbGON3dMM7cNk1uoNXyV7vnIP0pwTm+xA5CLkvjt+/sxynJYWXqexwcer
-X0VCw5Hbaqa3IxzJKB8BYwIDAQABo4HSMIHPMAkGA1UdEwQCMAAwRAYDVR0gBD0wOzA5Bgtg
-hkgBhvhFAQcXATAqMCgGCCsGAQUFBwIBFhxodHRwczovL3d3dy52ZXJpc2lnbi5jb20vcnBh
-MAsGA1UdDwQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwUAYDVR0fBEkw
-RzBFoEOgQYY/aHR0cDovL2luZGMxZGlnaXRhbGlkLWczLWNybC52ZXJpc2lnbi5jb20vSW5k
-QzFEaWdpdGFsSUQtRzMuY3JsMA0GCSqGSIb3DQEBBQUAA4IBAQAMYnv8qG3qSGJYAn+PhjGx
-lbmbaxqYyD0QVRq6g8tXrZtBUqNO29mce+olKu7lHsrEHpIKwMfArh3BpxPYVhKMAP6GaCAn
-jdr8LJ6TZHTLeVo4BLU7ZEPR6qCGxUhIodqzzWoet0cardf6Ub0OknxxAymgQ8+pIGJmxOOr
-ypWp+3ba6dPmY/MJeXIWq08V+P6912vL6I+cwrS6e7rud0XeR9KEEqn/EpuqDpp1mNj5QeRo
-73zkl8G1nBnYbr42r2jSzqxRvefsfimWm6XX2L2K9WKp6TvJhFejZ7aP234pRDx9Ep0unSH4
-LR2o5p6Ik5RQaG0xu1c74KgDTyzZVn2+MIIG7jCCBdagAwIBAgIQcRVmBUrkkSFN6bxE+azT
-3DANBgkqhkiG9w0BAQUFADCByjELMAkGA1UEBhMCVVMxFzAVBgNVBAoTDlZlcmlTaWduLCBJ
-bmMuMR8wHQYDVQQLExZWZXJpU2lnbiBUcnVzdCBOZXR3b3JrMTowOAYDVQQLEzEoYykgMTk5
-OSBWZXJpU2lnbiwgSW5jLiAtIEZvciBhdXRob3JpemVkIHVzZSBvbmx5MUUwQwYDVQQDEzxW
-ZXJpU2lnbiBDbGFzcyAxIFB1YmxpYyBQcmltYXJ5IENlcnRpZmljYXRpb24gQXV0aG9yaXR5
-IC0gRzMwHhcNMDkwNTAxMDAwMDAwWhcNMTkwNDMwMjM1OTU5WjCB3TELMAkGA1UEBhMCVVMx
-FzAVBgNVBAoTDlZlcmlTaWduLCBJbmMuMR8wHQYDVQQLExZWZXJpU2lnbiBUcnVzdCBOZXR3
-b3JrMTswOQYDVQQLEzJUZXJtcyBvZiB1c2UgYXQgaHR0cHM6Ly93d3cudmVyaXNpZ24uY29t
-L3JwYSAoYykwOTEeMBwGA1UECxMVUGVyc29uYSBOb3QgVmFsaWRhdGVkMTcwNQYDVQQDEy5W
-ZXJpU2lnbiBDbGFzcyAxIEluZGl2aWR1YWwgU3Vic2NyaWJlciBDQSAtIEczMIIBIjANBgkq
-hkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA7cRH3yooHXwGa7vXITLJbBOP6bGNQU4099oL42r6
-ZYggCxET6ZvgSU6Lb9UB0F8NR5GKWkx0Pj/GkQm7TDSejW6hglFi92l2WJYHr54UGAdPWr2f
-0jGyVBlzRmoZQhHsEnMhjfXcMM3l2VYKMcU2bSkUl70t2olHGYjYSwQ967Y8Zx50ABMN0Iba
-k2f4MwOuGjxraXj2wCyO4YM/d/mZ//6fUlrCtIcK2GypR8FUKWVDPkrAlh/Brfd3r2yxBF6+
-wbaULZeQLSfSux7pg2qE9sSyriMGZSalJ1grByK0b6ZiSBp38tVQJ5op05b7KPW6JHZi44xZ
-6/tu1ULEvkHH9QIDAQABo4ICuTCCArUwNAYIKwYBBQUHAQEEKDAmMCQGCCsGAQUFBzABhhho
-dHRwOi8vb2NzcC52ZXJpc2lnbi5jb20wEgYDVR0TAQH/BAgwBgEB/wIBADBwBgNVHSAEaTBn
-MGUGC2CGSAGG+EUBBxcBMFYwKAYIKwYBBQUHAgEWHGh0dHBzOi8vd3d3LnZlcmlzaWduLmNv
-bS9jcHMwKgYIKwYBBQUHAgIwHhocaHR0cHM6Ly93d3cudmVyaXNpZ24uY29tL3JwYTA0BgNV
-HR8ELTArMCmgJ6AlhiNodHRwOi8vY3JsLnZlcmlzaWduLmNvbS9wY2ExLWczLmNybDAOBgNV
-HQ8BAf8EBAMCAQYwbgYIKwYBBQUHAQwEYjBgoV6gXDBaMFgwVhYJaW1hZ2UvZ2lmMCEwHzAH
-BgUrDgMCGgQUS2u5KJYGDLvQUjibKaxLB4shBRgwJhYkaHR0cDovL2xvZ28udmVyaXNpZ24u
-Y29tL3ZzbG9nbzEuZ2lmMC4GA1UdEQQnMCWkIzAhMR8wHQYDVQQDExZQcml2YXRlTGFiZWw0
-LTIwNDgtMTE4MB0GA1UdDgQWBBR5R2EIQf04BKJL57XM9UP2SSsR+DCB8QYDVR0jBIHpMIHm
-oYHQpIHNMIHKMQswCQYDVQQGEwJVUzEXMBUGA1UEChMOVmVyaVNpZ24sIEluYy4xHzAdBgNV
-BAsTFlZlcmlTaWduIFRydXN0IE5ldHdvcmsxOjA4BgNVBAsTMShjKSAxOTk5IFZlcmlTaWdu
-LCBJbmMuIC0gRm9yIGF1dGhvcml6ZWQgdXNlIG9ubHkxRTBDBgNVBAMTPFZlcmlTaWduIENs
-YXNzIDEgUHVibGljIFByaW1hcnkgQ2VydGlmaWNhdGlvbiBBdXRob3JpdHkgLSBHM4IRAItb
-dVaEVIULAM+vOEjOsaQwDQYJKoZIhvcNAQEFBQADggEBADlNz0GZgbWpBbVSOOk5hIls5DSo
-WufYbAlMJBq6WaSHO3Mh8ZOBz79oY1pn/jWFK6HDXaNKwjoZ3TDWzE3v8dKBl8pUWkO/N4t6
-jhmND0OojPKvYLMVirOVnDzgnrMnmKQ1chfl/Cpdh9OKDcLRRSr4wPSsKpM61a4ScAjr+zvi
-d+zoK2Q1ds262uDRyxTWcVibvtU+fbbZ6CTFJGZMXZEfdrMXPn8NxiGJL7M3uKH/XLJtSd5l
-UkL7DojS7Uodv0vj+Mxy+kgOZY5JyNb4mZg7t5Q+MXEGh/psWVMu198r7V9jAKwV7QO4VRaM
-xmgD5yKocwuxvKDaUljdCg5/wYIxggT5MIIE9QIBATCB8jCB3TELMAkGA1UEBhMCVVMxFzAV
-BgNVBAoTDlZlcmlTaWduLCBJbmMuMR8wHQYDVQQLExZWZXJpU2lnbiBUcnVzdCBOZXR3b3Jr
-MTswOQYDVQQLEzJUZXJtcyBvZiB1c2UgYXQgaHR0cHM6Ly93d3cudmVyaXNpZ24uY29tL3Jw
-YSAoYykwOTEeMBwGA1UECxMVUGVyc29uYSBOb3QgVmFsaWRhdGVkMTcwNQYDVQQDEy5WZXJp
-U2lnbiBDbGFzcyAxIEluZGl2aWR1YWwgU3Vic2NyaWJlciBDQSAtIEczAhBlp+zf8jmhEaRv
-JGV9QrmtMAkGBSsOAwIaBQCgggLbMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZI
-hvcNAQkFMQ8XDTEzMDUxNzExNTA0MFowIwYJKoZIhvcNAQkEMRYEFFuA2/atLiglUBh6A9zS
-ywkNg9yIMGwGCSqGSIb3DQEJDzFfMF0wCwYJYIZIAWUDBAEqMAsGCWCGSAFlAwQBAjAKBggq
-hkiG9w0DBzAOBggqhkiG9w0DAgICAIAwDQYIKoZIhvcNAwICAUAwBwYFKw4DAgcwDQYIKoZI
-hvcNAwICASgwggEDBgkrBgEEAYI3EAQxgfUwgfIwgd0xCzAJBgNVBAYTAlVTMRcwFQYDVQQK
-Ew5WZXJpU2lnbiwgSW5jLjEfMB0GA1UECxMWVmVyaVNpZ24gVHJ1c3QgTmV0d29yazE7MDkG
-A1UECxMyVGVybXMgb2YgdXNlIGF0IGh0dHBzOi8vd3d3LnZlcmlzaWduLmNvbS9ycGEgKGMp
-MDkxHjAcBgNVBAsTFVBlcnNvbmEgTm90IFZhbGlkYXRlZDE3MDUGA1UEAxMuVmVyaVNpZ24g
-Q2xhc3MgMSBJbmRpdmlkdWFsIFN1YnNjcmliZXIgQ0EgLSBHMwIQZafs3/I5oRGkbyRlfUK5
-rTCCAQUGCyqGSIb3DQEJEAILMYH1oIHyMIHdMQswCQYDVQQGEwJVUzEXMBUGA1UEChMOVmVy
-aVNpZ24sIEluYy4xHzAdBgNVBAsTFlZlcmlTaWduIFRydXN0IE5ldHdvcmsxOzA5BgNVBAsT
-MlRlcm1zIG9mIHVzZSBhdCBodHRwczovL3d3dy52ZXJpc2lnbi5jb20vcnBhIChjKTA5MR4w
-HAYDVQQLExVQZXJzb25hIE5vdCBWYWxpZGF0ZWQxNzA1BgNVBAMTLlZlcmlTaWduIENsYXNz
-IDEgSW5kaXZpZHVhbCBTdWJzY3JpYmVyIENBIC0gRzMCEGWn7N/yOaERpG8kZX1Cua0wDQYJ
-KoZIhvcNAQEBBQAEggEAfpvO5/NIuuluAkwkv93Lu2kz0YgzLEIWLduiks5cEfze57zJu1bk
-J/ikqjxwbkp5d/FTVkg+PLDdoA9lKp2Rv6Np9PPaSxFj1pAk4ECpCAr5Oi2OSQ/+9wQT1RRi
-he7sg++Cfl5EDq+FWeiLKDLLL9bsAcHuJTCn1M2DcIgrqcg4PSjWSKMV+PZixO7jwzaSWumJ
-z4maPr4MsLwhRKwvjXjPlRKKvbHVnSWR3UPPtH75nGAsStb2/Oj9VT0b6KLFNtRvcTgO9Dey
-hZm/AYV4wEmc8PlBgKnG/2bok/X3LJHmYYm+MDZ92GsAd/md7OwF+z002PDmy4VngqMaHreL
-jwAAAAAAAA==
---------------ms000808040206070208060004--
+<div dir=3D"ltr"><p dir=3D"ltr">Alright, small update for all following a q=
+uick (non-mailing-list) exchange:</p>
+<p dir=3D"ltr">We did successfully complete a kernel-tracing port of LTTng =
+for Android (somewhat old news), but we are still working on bringing our p=
+atches back up to date with the current version of the different projects (=
+soon-ish still applies here, we&#39;re talking days). So far, we dwelled a =
+little bit in LTTng-UST, but haven&#39;t done much changes, so userspace tr=
+acing is still not functional. Device that ran kernel traces successfully s=
+o far were the Nexus S and the Nexus 7 (example Nexus S trace available <a =
+href=3D"https://drive.google.com/folderview?id=3D0B55Ba7lWTLh4U0hGeTQ4bmRYR=
+jQ&amp;usp=3Dsharing">here</a>; still not perfect).</p>
 
 
---===============1147000940==
+
+<p dir=3D"ltr">Basically, we cross-compiled everything via the Android NDK =
+(no Android makefiles involved here), and pushed all required bins to a dev=
+ice without having to flash it (unless the default kernel config didn&#39;t=
+ allow tracing -- then we&#39;d have to flash). This approach is not compat=
+ible with the official Android build system (meaning we wouldn&#39;t be abl=
+e to add it to Android like this), but we might eventually get working on t=
+he damned Android makefiles (they&#39;re extremely painful to write, especi=
+ally since LTTng uses Autotools).</p>
+
+
+
+<p dir=3D"ltr">The librairies required by LTTng that are not already includ=
+ed in a regular Android build (uuid/popt) can actually be found/compiled fr=
+om the official repo, in its &#39;external&#39; directory (see oprofile and=
+ e2fsprog -- from memory). That might not be the easiest way to get them (f=
+ull repo download is BIG), but compatibility is assured, and you can skip a=
+ full build by simply making those two individually for your device (if tha=
+t&#39;s all you need).</p>
+
+
+
+<p dir=3D"ltr">You&#39;ll also need your device to be rooted to use LTTng a=
+t all; then, most initializations are done via scripts (we&#39;ll also prov=
+ide those with our patches). We still had some trouble automating everythin=
+g via daemons, so we always ran the sessiond locally (with success).</p>
+<p style>Major problems we encountered so far were missing posix functions,=
+ and sysv shared memory. Basically, Android relies on Bionic for its system=
+ calls and other low-level functions, and since Bionic is pretty &#39;light=
+weight&#39;, they trimmed most of the fat out for performance. We had to ma=
+ke some more-or-less sketchy replacements here and there, but everything se=
+ems to be working decently now.</p>
+<p style>So, simple &#39;how do I put LTTng on Android&#39; workflow would =
+be this:</p><p style>=A0 - Compile modules=A0(using NDK)=A0against device&#=
+39;s kernel, making sure its config is appropriate, ship them over via ADB<=
+/p>
+<p style>=A0 - Compile required external libraries (using repo build system=
+) for the device, ship them over via ADB</p><p style>=A0 - Patch up LTTng-*=
+ (soon-ish! I could send you the outdated patches right now if you&#39;re i=
+nterested though, they might be a month behind or so on the current trunks)=
+</p>
+<p style>=A0 - Cross-compile LTTng-* for the device (using NDK), ship binar=
+ies over via ADB</p><p style>Then, on the device, start up the sessiond man=
+ually &amp; start tracing.</p><p style><br></p><p style>I think I went over=
+ everything, but if there&#39;s a part that&#39;s still cloudy, don&#39;t h=
+esitate.</p>
+<p style><br></p><p style>-PL</p><p style>=A0=A0</p>
+
+
+<div class=3D"gmail_quote">On May 17, 2013 1:32 AM, &quot;Ionut D.&quot; &l=
+t;<a href=3D"mailto:ionut5001@gmail.com" target=3D"_blank">ionut5001@gmail.=
+com</a>&gt; wrote:<br type=3D"attribution"><blockquote class=3D"gmail_quote=
+" style=3D"margin:0px 0px 0px 0.8ex;border-left-width:1px;border-left-color=
+:rgb(204,204,204);border-left-style:solid;padding-left:1ex">
+
+
+<div dir=3D"ltr"><div>Hello all,</div><div><br></div><div>Recently I starte=
+d to integrate LTTNG in Android ICS by compiling each package, each depende=
+ncy, by using the Android build system. It is a lot of work because I met d=
+ifferent problems and to be sincere,  I do not know if at the end will work=
+ and I do not know how much I will need to modify the sources in order to w=
+ork.<br>
+
+
+
+</div><br>My questions are about this integration. I mention that I read a =
+lot of discussions about this on Internet, on this mailing list, but the th=
+ings are still not very clear for me.<br><br>It is ok? what I am trying to =
+do ? to integrate and build by using the Android build system.<br>
+
+
+
+Could you give me some guidelines, indications about how I should proceed, =
+maybe a tutorial or maybe some android make files/patches that would help m=
+e to see how the job must be done and if I am doing it right ?<br><br>
+
+
+Until now I managed to build lttng-modules, liburcu, libuuid from util-linu=
+x and configure lttng-ust by using the android toolchain for arm. I got a l=
+ot of errors but until now I managed to configure/make these packages.<br>
+
+
+
+<br>I mention that I am trying to build lttng 2.x on ICS 4.0.3.<br><br><div=
+>Would be great if you will give me a tutorial about how to do it.</div><di=
+v><br></div><div>Ionut</div></div>
+<br>_______________________________________________<br>
+lttng-dev mailing list<br>
+<a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-dev@li=
+sts.lttng.org</a><br>
+<a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" targe=
+t=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><=
+br>
+<br></blockquote></div>
+</div>
+
+--047d7bdc90127cea6204dcea3aea--
+
+
+--===============0624366187==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
-Content-Disposition: inline
 Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============1147000940==--
+--===============0624366187==--
