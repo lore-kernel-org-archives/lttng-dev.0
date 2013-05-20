@@ -1,20 +1,16 @@
-From: Yang Wang <yangw.wang5@unb.ca>
-Subject: Re: Mariadb+LTTng 2.x
-Date: Sat, 18 May 2013 17:18:45 +0000
-Message-ID: <8E0A14A4C9B95B459AE214584119C1EB417EFD06__17811.4868970171$1368897592$gmane$org@tulip.ad.unb.ca>
-References: <8E0A14A4C9B95B459AE214584119C1EB417EDCD7@tulip.ad.unb.ca>,
-	<20130517184604.GA2020@Krystal>
-	<8E0A14A4C9B95B459AE214584119C1EB417EFCEC@tulip.ad.unb.ca>,
-	<5196A107.7070706@voxpopuli.im>
+From: "Ikaheimonen, JP" <jp_ikaheimonen@mentor.com>
+Subject: [Babeltrace PATCH 01/01] Move strerror_r to compat
+	directory
+Date: Mon, 20 May 2013 08:34:56 +0000
+Message-ID: <009B25148989C6458484484699278506E5382C4B__29806.3644128435$1369039002$gmane$org@EU-MBX-01.mgc.mentorg.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from cadence.its.unb.ca ([131.202.1.23])
+Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <yangw.wang5@unb.ca>) id 1Udkmm-0007mB-JK
-	for lttng-dev@lists.lttng.org; Sat, 18 May 2013 13:19:12 -0400
-In-Reply-To: <5196A107.7070706@voxpopuli.im>
+	(envelope-from <jp_ikaheimonen@mentor.com>) id 1UeLYe-0000Nf-AR
+	for lttng-dev@lists.lttng.org; Mon, 20 May 2013 04:35:04 -0400
 Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -24,50 +20,128 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Graeme Johnson <Graeme_Johnson@ca.ibm.com>, Kenneth Kent <ken@unb.ca>, Yannick Brosseau <yannick.brosseau@polymtl.ca>
+To: "Mathieu Desnoyers (mathieu.desnoyers@efficios.com)" <mathieu.desnoyers@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hello Alex,
+The usage of strerror_r is platform dependent.
+Add new function compat_strerror_r to include/babeltrace/compat/string.h,
+and hide the platform-dependent usage there.
+Use the aforementioned header file instead of standard string.h where
+necessary.
+---
+ include/Makefile.am                      |  1 +
+ include/babeltrace/babeltrace-internal.h | 32 +++-----------------------------
+ include/babeltrace/compat/string.h       | 28 ++++++++++++++++++++++++++++
+ 3 files changed, 32 insertions(+), 29 deletions(-)
+ create mode 100644 include/babeltrace/compat/string.h
 
-I reinstalled lttng-tools-2.1.0 and compiled Mariadb with lttng-ust.2.1.2(now they work together)
-The following is related to lttng-tools-2.1.0 in /usr/local/lib after I reinstalled it.
-
--rw-r--r-- 1 root root  1018130 May 18 13:50 liblttng-ctl.a
--rwxr-xr-x 1 root root     1035 May 18 13:50 liblttng-ctl.la
-lrwxrwxrwx 1 root root       21 May 18 13:50 liblttng-ctl.so -> liblttng-ctl.so.0.0.0
-lrwxrwxrwx 1 root root       21 May 18 13:50 liblttng-ctl.so.0 -> liblttng-ctl.so.0.0.0
--rwxr-xr-x 1 root root   491876 May 18 13:50 liblttng-ctl.so.0.0.0
-
-But it reports the same error as before. If it is a compatibility problem, why my instrumented
-J9 VM with lttng-ust.2.1.2 has no this errors? 
-
-Yang
-
-________________________________________
-From: Alexandre Montplaisir [alexmonthy@voxpopuli.im]
-Sent: Friday, May 17, 2013 6:28 PM
-To: Yang Wang
-Cc: Mathieu Desnoyers; Yannick Brosseau; David Goulet; Graeme Johnson; Kenneth Kent; lttng-dev@lists.lttng.org
-Subject: Re: Mariadb+LTTng 2.x
-
-Hi Yang,
-
-On 13-05-17 05:21 PM, Yang Wang wrote:
-> It seems not this compatibility problem. I have removed all ust1.0 stuffs in the instrumented Mariadb code and
-> replaced with lttng-ust 2.x say, tracepoint statements, trancepoint provider files, probes files and use the lib -llttng-ust instead of -lust. Anything I missed?
-
-Mathieu was talking about 2.0 vs 2.1, not 0.x vs 2.x.
-
-If you compiled your application with lttng-ust 2.1, make sure you use
-lttng-tools 2.1 to trace it. lttng-tools 2.0 will not work.
-
->
-> Is "libust[7848/7853]: " reported from lttng-tools 2.0? Actually, this is printed from
-
-Yeah I think this is normal, this is old stuff that dates from the 0.x
-days, but lttng-ust still prints it that way.
-
-
-Cheers,
-Alex
+diff --git a/include/Makefile.am b/include/Makefile.am
+index eee2ac1..f121d84 100644
+--- a/include/Makefile.am
++++ b/include/Makefile.am
+@@ -33,5 +33,6 @@ noinst_HEADERS = \
+ 	babeltrace/trace-handle-internal.h \
+ 	babeltrace/compat/uuid.h \
+ 	babeltrace/compat/memstream.h \
++	babeltrace/compat/string.h \
+ 	babeltrace/endian.h \
+ 	babeltrace/mmap-align.h
+diff --git a/include/babeltrace/babeltrace-internal.h b/include/babeltrace/babeltrace-internal.h
+index 9b9ffbd..1f379ee 100644
+--- a/include/babeltrace/babeltrace-internal.h
++++ b/include/babeltrace/babeltrace-internal.h
+@@ -27,7 +27,7 @@
+ #include <stdio.h>
+ #include <glib.h>
+ #include <stdint.h>
+-#include <string.h>
++#include <babeltrace/compat/string.h>
+ 
+ #define PERROR_BUFLEN	200
+ 
+@@ -81,46 +81,20 @@ extern int babeltrace_verbose, babeltrace_debug;
+ 		perrorstr,						\
+ 		## args)
+ 
+-#if !defined(__linux__) || ((_POSIX_C_SOURCE >= 200112L || _XOPEN_SOURCE >= 600) && !defined(_GNU_SOURCE))
+-
+ #define _bt_printf_perror(fp, fmt, args...)				\
+ 	({								\
+ 		char buf[PERROR_BUFLEN] = "Error in strerror_r()";	\
+-		strerror_r(errno, buf, sizeof(buf));			\
++		compat_strerror_r(errno, buf, sizeof(buf));		\
+ 		_bt_printfe(fp, "error", buf, fmt, ## args);		\
+ 	})
+ 
+ #define _bt_printfl_perror(fp, lineno, fmt, args...)			\
+ 	({								\
+ 		char buf[PERROR_BUFLEN] = "Error in strerror_r()";	\
+-		strerror_r(errno, buf, sizeof(buf));			\
++		compat_strerror_r(errno, buf, sizeof(buf));		\
+ 		_bt_printfle(fp, "error", lineno, buf, fmt, ## args);	\
+ 	})
+ 
+-#else
+-
+-/*
+- * Version using GNU strerror_r, for linux with appropriate defines.
+- */
+-
+-#define _bt_printf_perror(fp, fmt, args...)				\
+-	({								\
+-		char *buf;						\
+-		char tmp[PERROR_BUFLEN] = "Error in strerror_r()";	\
+-		buf = strerror_r(errno, tmp, sizeof(tmp));		\
+-		_bt_printfe(fp, "error", buf, fmt, ## args);		\
+-	})
+-
+-#define _bt_printfl_perror(fp, lineno, fmt, args...)			\
+-	({								\
+-		char *buf;						\
+-		char tmp[PERROR_BUFLEN] = "Error in strerror_r()";	\
+-		buf = strerror_r(errno, tmp, sizeof(tmp));		\
+-		_bt_printfle(fp, "error", lineno, buf, fmt, ## args);	\
+-	})
+-
+-#endif
+-
+ /* printf without lineno information */
+ #define printf_fatal(fmt, args...)					\
+ 	_bt_printf(stderr, "fatal", fmt, ## args)
+diff --git a/include/babeltrace/compat/string.h b/include/babeltrace/compat/string.h
+new file mode 100644
+index 0000000..62cf1bf
+--- /dev/null
++++ b/include/babeltrace/compat/string.h
+@@ -0,0 +1,28 @@
++#ifndef _BABELTRACE_COMPAT_STRING_H
++#define _BABELTRACE_COMPAT_STRING_H
++
++#include <string.h>
++
++#if !defined(__linux__) || ((_POSIX_C_SOURCE >= 200112L || _XOPEN_SOURCE >= 600) && !defined(_GNU_SOURCE))
++
++/* XSI-compliant strerror_r */
++static inline int compat_strerror_r(int errnum, char *buf, size_t buflen)
++{
++	return strerror_r(errnum, buf, buflen);
++}
++
++#else
++
++/* GNU-compliant strerror_r */
++static inline int compat_strerror_r(int errnum, char *buf, size_t buflen)
++{
++	char * retbuf;
++	retbuf = strerror_r(errnum, buf, buflen);
++	if (retbuf != buf)
++		strcpy(buf, retbuf);
++	return 0;
++}
++
++#endif
++
++#endif /* _BABELTRACE_COMPAT_STRING_H */
+-- 
+1.8.1.msysgit.1
