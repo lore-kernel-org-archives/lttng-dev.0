@@ -1,16 +1,16 @@
 From: "Ikaheimonen, JP" <jp_ikaheimonen@mentor.com>
-Subject: [Babeltrace PATCH 13/23] Add MinGW implementation of
-	sleep
-Date: Wed, 22 May 2013 08:06:58 +0000
-Message-ID: <009B25148989C6458484484699278506E5382F7B__33509.487755555$1369210060$gmane$org@EU-MBX-01.mgc.mentorg.com>
+Subject: [Babeltrace PATCH 14/23] Add MinGW implementation of
+	strnlen
+Date: Wed, 22 May 2013 08:07:04 +0000
+Message-ID: <009B25148989C6458484484699278506E5382F8A__30421.9758873389$1369210067$gmane$org@EU-MBX-01.mgc.mentorg.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jp_ikaheimonen@mentor.com>) id 1Uf44g-0006WU-6j
-	for lttng-dev@lists.lttng.org; Wed, 22 May 2013 04:07:06 -0400
+	(envelope-from <jp_ikaheimonen@mentor.com>) id 1Uf44m-0006XU-Bd
+	for lttng-dev@lists.lttng.org; Wed, 22 May 2013 04:07:12 -0400
 Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -24,41 +24,46 @@ To: "Mathieu Desnoyers (mathieu.desnoyers@efficios.com)" <mathieu.desnoyers@effi
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Add new function sleep() that calls Windows Sleep() instead.
+Add an implementation of strnlen for MinGW, as it does not provide
+that function in its runtime library.
 ---
- converter/babeltrace.c             | 2 +-
- include/babeltrace/compat/unistd.h | 7 ++++++-
- 2 files changed, 7 insertions(+), 2 deletions(-)
+ include/babeltrace/compat/string.h | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-diff --git a/converter/babeltrace.c b/converter/babeltrace.c
-index b356c43..5cc9949 100644
---- a/converter/babeltrace.c
-+++ b/converter/babeltrace.c
-@@ -46,7 +46,7 @@
- #include <sys/stat.h>
- #include <sys/types.h>
- #include <fcntl.h>
--#include <unistd.h>
-+#include <babeltrace/compat/unistd.h>
- #include <inttypes.h>
- #include <babeltrace/compat/ftw.h>
- #include <string.h>
-diff --git a/include/babeltrace/compat/unistd.h b/include/babeltrace/compat/unistd.h
-index d39dd50..5a741a1 100644
---- a/include/babeltrace/compat/unistd.h
-+++ b/include/babeltrace/compat/unistd.h
-@@ -16,6 +16,11 @@ int fpathconf (int fd, int name)
- 	return MAX_PATH;
+diff --git a/include/babeltrace/compat/string.h b/include/babeltrace/compat/string.h
+index 1db5837..14e7b53 100644
+--- a/include/babeltrace/compat/string.h
++++ b/include/babeltrace/compat/string.h
+@@ -44,6 +44,30 @@ static inline char* strtok_r(
+ 	return ret;
  }
  
--#endif
 +static inline
-+void sleep(unsigned int x)
++size_t strnlen(const char *str, size_t maxlen)
 +{
-+	Sleep(1000 * x);
++	char * ptr;
++	size_t len;
++
++	ptr = (char *)str;
++	len = 0;
++
++	/* while there still are characters in the string */
++	while(*ptr != '\0') {
++		/* increment counter */
++		len++;
++		/* check that we do not exceed the given maximum */
++		if (len == maxlen) {
++			return len;
++		}
++		/* next character */
++		ptr++;
++
++	}
++	return len;
 +}
- 
- #endif
-+#endif
++
+ static inline int compat_strerror_r(int errnum, char *buf, size_t buflen)
+ {
+ 	/* non-recursive implementation of strerror_r */
 -- 
 1.8.1.msysgit.1
