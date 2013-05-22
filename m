@@ -1,15 +1,18 @@
-From: Suchakra Sharma <suchakrapani.sharma@polymtl.ca>
-Subject: Issue with dynamic load and UST
-Date: Wed, 22 May 2013 14:46:22 -0400
-Message-ID: <1369248382.1847.41.camel__40095.0576564812$1369248419$gmane$org@station15.dorsal.polymtl.ca>
+From: Christian Babeux <christian.babeux@efficios.com>
+Subject: [PATCH lttng-tools] Tests: Fix possible segfault in
+	health check thread exit test
+Date: Wed, 22 May 2013 16:29:33 -0400
+Message-ID: <1369254573-1342-1-git-send-email-christian.babeux__40578.5804534846$1369254634$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.polymtl.ca ([132.207.4.11])
+Received: from mail-gg0-f171.google.com ([209.85.161.171])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <suchakrapani.sharma@polymtl.ca>) id 1UfE3M-0003VI-3F
-	for lttng-dev@lists.lttng.org; Wed, 22 May 2013 14:46:24 -0400
+	(envelope-from <christian.babeux@0x80.ca>) id 1UfFfX-0004Im-TO
+	for lttng-dev@lists.lttng.org; Wed, 22 May 2013 16:29:56 -0400
+Received: by mail-gg0-f171.google.com with SMTP id h13so848189ggd.30
+	for <lttng-dev@lists.lttng.org>; Wed, 22 May 2013 13:29:50 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -18,30 +21,47 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: dgoulet@efficios.com
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
+The testpoints in the thread_manage_clients and thread_manage_apps
+are called after a rcu_register_thread() call. The testpoints were
+not unregistering their respective thread which could later on cause
+a segfault when shutting down the session daemon.
 
-Zifei recently did a demo of dynamic tracing using ust with dyninst [1] The traces are being generated 
-and I did some experiments by adding some more 'tracepoint types' too [2]. This seemed to be a promising 
-approach but then there's an error as follows when I start tracing on a fresh rebooted machine (if a 
-normal session of static userspace tracing is done once, the problem doesn't occur):
+Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
+---
+ tests/regression/tools/health/health_exit.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-libust[3429/3429]: Error: Timed out waiting for lttng-sessiond (in lttng_ust_init() at lttng-ust-comm.c:1072)
-
-This occurred even after separating the tracepoints [3] Backtrace is at [4]. I was able to reproduce it on my 
-two machines with UST 2.1.2 and dyninst 8.1 (Fedora 18) 
-
-Is it possible to circumvent this problem somehow? (it seems to be an inherent issue with dlopen w/ sessiond 
-but I may be wrong) 
-
-
-[1] https://gist.github.com/anonymous/5599765 
-[2] https://gist.github.com/tuxology/5602019
-[3] https://gist.github.com/anonymous/5605050
-[4] https://gist.github.com/5kg/5604931
-
-
---
-Suchakra
+diff --git a/tests/regression/tools/health/health_exit.c b/tests/regression/tools/health/health_exit.c
+index 8e41405..8d1d05c 100644
+--- a/tests/regression/tools/health/health_exit.c
++++ b/tests/regression/tools/health/health_exit.c
+@@ -18,6 +18,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <pthread.h>
++#include <urcu.h>
+ 
+ /*
+  * Check if the specified environment variable is set.
+@@ -40,6 +41,7 @@ int __testpoint_thread_manage_clients(void)
+ 	const char *var = "LTTNG_THREAD_MANAGE_CLIENTS_EXIT";
+ 
+ 	if (check_env_var(var)) {
++		rcu_unregister_thread();
+ 		pthread_exit(NULL);
+ 	}
+ 
+@@ -62,6 +64,7 @@ int __testpoint_thread_manage_apps(void)
+ 	const char *var = "LTTNG_THREAD_MANAGE_APPS_EXIT";
+ 
+ 	if (check_env_var(var)) {
++		rcu_unregister_thread();
+ 		pthread_exit(NULL);
+ 	}
+ 
+-- 
+1.8.2.2
