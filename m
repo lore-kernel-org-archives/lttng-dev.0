@@ -1,20 +1,21 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Mariadb+LTTng 2.x
-Date: Wed, 22 May 2013 08:54:29 -0400
-Message-ID: <20130522125429.GD1203__27845.540669705$1369227308$gmane$org@Krystal>
-References: <5196A107.7070706@voxpopuli.im>
-	<8E0A14A4C9B95B459AE214584119C1EB417EFD06@tulip.ad.unb.ca>
+Subject: Re: newbie and kernel trace
+Date: Wed, 22 May 2013 08:50:52 -0400
+Message-ID: <20130522125052.GC1203__10361.6165266887$1369227386$gmane$org@Krystal>
+References: <519645B2.5090709@free.fr>
+	<CA+jJMxt8jUGiVTBy-1tm0oSAzcvSKv8VuCTsvHnmEthUCO9ctQ@mail.gmail.com>
+	<519B4462.2030103@free.fr>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1Uf8Yp-0000hm-24
-	for lttng-dev@lists.lttng.org; Wed, 22 May 2013 08:54:31 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1Uf8VK-0000fG-AW
+	for lttng-dev@lists.lttng.org; Wed, 22 May 2013 08:50:54 -0400
 Content-Disposition: inline
-In-Reply-To: <8E0A14A4C9B95B459AE214584119C1EB417EFD06@tulip.ad.unb.ca>
+In-Reply-To: <519B4462.2030103@free.fr>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,68 +24,134 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Yang Wang <yangw.wang5@unb.ca>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Graeme Johnson <Graeme_Johnson@ca.ibm.com>, Kenneth Kent <ken@unb.ca>, Yannick Brosseau <yannick.brosseau@polymtl.ca>
+To: =?iso-8859-1?Q?St=E9phane?= ANCELOT <sancelot@free.fr>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Ensure that you don't have a old sessiond binary still running,
+* St=E9phane ANCELOT (sancelot@free.fr) wrote:
+> Hi,
+> I have read the Documentation/trace/tracepoints.txt file.
+>
+> I modified my code to acknowledge it.
+>
+> I am again unable to list my tracepoints using lttng list . (I also  =
 
-that you issue ldconfig as root,
+> tried lttng enable-channel before...).
+>
+> So , only one step I have not made :
+> Is it mandatory to register the probe functions ???
 
-that you don't have stale old libs in /usr/lib nor /usr/local/lib
+Remember that the probe provider module .ko needs to be loaded manually
+(if it is a new one that is not listed in the sessiond automatically
+loaded module list).
+
+Please provide the complete diff of the modifications you did to
+lttng-modules so we can provide further help.
 
 Thanks,
 
 Mathieu
 
-* Yang Wang (yangw.wang5@unb.ca) wrote:
-> Hello Alex,
-> 
-> I reinstalled lttng-tools-2.1.0 and compiled Mariadb with lttng-ust.2.1.2(now they work together)
-> The following is related to lttng-tools-2.1.0 in /usr/local/lib after I reinstalled it.
-> 
-> -rw-r--r-- 1 root root  1018130 May 18 13:50 liblttng-ctl.a
-> -rwxr-xr-x 1 root root     1035 May 18 13:50 liblttng-ctl.la
-> lrwxrwxrwx 1 root root       21 May 18 13:50 liblttng-ctl.so -> liblttng-ctl.so.0.0.0
-> lrwxrwxrwx 1 root root       21 May 18 13:50 liblttng-ctl.so.0 -> liblttng-ctl.so.0.0.0
-> -rwxr-xr-x 1 root root   491876 May 18 13:50 liblttng-ctl.so.0.0.0
-> 
-> But it reports the same error as before. If it is a compatibility problem, why my instrumented
-> J9 VM with lttng-ust.2.1.2 has no this errors? 
-> 
-> Yang
-> 
-> ________________________________________
-> From: Alexandre Montplaisir [alexmonthy@voxpopuli.im]
-> Sent: Friday, May 17, 2013 6:28 PM
-> To: Yang Wang
-> Cc: Mathieu Desnoyers; Yannick Brosseau; David Goulet; Graeme Johnson; Kenneth Kent; lttng-dev@lists.lttng.org
-> Subject: Re: Mariadb+LTTng 2.x
-> 
-> Hi Yang,
-> 
-> On 13-05-17 05:21 PM, Yang Wang wrote:
-> > It seems not this compatibility problem. I have removed all ust1.0 stuffs in the instrumented Mariadb code and
-> > replaced with lttng-ust 2.x say, tracepoint statements, trancepoint provider files, probes files and use the lib -llttng-ust instead of -lust. Anything I missed?
-> 
-> Mathieu was talking about 2.0 vs 2.1, not 0.x vs 2.x.
-> 
-> If you compiled your application with lttng-ust 2.1, make sure you use
-> lttng-tools 2.1 to trace it. lttng-tools 2.0 will not work.
-> 
-> >
-> > Is "libust[7848/7853]: " reported from lttng-tools 2.0? Actually, this is printed from
-> 
-> Yeah I think this is normal, this is old stuff that dates from the 0.x
-> days, but lttng-ust still prints it that way.
-> 
-> 
-> Cheers,
-> Alex
-> 
-> 
+>
+>
+> Regards,
+> S.Ancelot
+>
+>
+>
+>
+> On 17/05/2013 17:13, J=E9r=E9mie Galarneau wrote:
+>> Hi St=E9phane,
+>>
+>> We're going to need more details than that. Which kernel version are you=
+ using?
+>> Can you see the other kernel events in your trace? If not, can you
+>> show us how you are setting up your session?
+>>
+>> Thanks,
+>> J=E9r=E9mie
+>>
+>> On Fri, May 17, 2013 at 10:58 AM, St=E9phane ANCELOT <sancelot@free.fr> =
+wrote:
+>>> Hi,
+>>>
+>>> I am trying to reimplement LTTNG 2. in xenomai api.
+>>>
+>>> the main problem is that I do not sea any of my new events available in
+>>> lttng 2.
+>>>
+>>>
+>>> my kernel compiles fine and  here is what I done to set it up :
+>>>
+>>> file include/trace/events/pod.h :
+>>>
+>>> #undef TRACE_SYSTEM
+>>> #define TRACE_SYSTEM xenotrace
+>>>
+>>> #if !defined(_XENOTRACE_H) || defined(TRACE_HEADER_MULTI_READ)
+>>>
+>>> #define _XENOTRACE_H
+>>>
+>>> #include <linux/tracepoint.h>
+>>>
+>>>
+>>> TRACE_EVENT(    xn_nucleus_thread_init,
+>>>                  TP_PROTO(struct xnthread *thread,char *thread_name,xnf=
+lags_t
+>>> flags,const char *class,int prio),
+>>>                  TP_ARGS(thread,thread_name,flags,class,prio),
+>>>
+>>>                  TP_STRUCT__entry(
+>>>                   __field(struct xnthread *,thread)
+>>>                   __array(char ,thread_name,      XNOBJECT_NAME_LEN   )
+>>>                   __field(xnflags_t,flags)
+>>>                   __array(char,class,      XNOBJECT_NAME_LEN  )
+>>>                   __field(int,    prio                       )
+>>>                  ),
+>>>
+>>>                TP_fast_assign(
+>>>                 __entry->thread   =3D thread;
+>>>                 memcpy(__entry->thread_name,thread_name, XNOBJECT_NAME_=
+LEN);
+>>>                 __entry->flags   =3D flags;
+>>>                 memcpy(__entry->class,class, XNOBJECT_NAME_LEN);
+>>>                 __entry->prio   =3D prio;
+>>>                  ),
+>>>
+>>>                 TP_printk("thread %p thread_name %s flags %lu class %s =
+prio
+>>> %d",
+>>>                 __entry->thread, __entry->thread_name,
+>>> __entry->flags,__entry->class,
+>>>                 __entry->prio)
+>>> );
+>>>
+>>> #endif
+>>>
+>>> /* This part must be outside protection */
+>>> #include <trace/define_trace.h>
+>>>
+>>>
+>>>
+>>> in pod.h :
+>>> #define CREATE_TRACE_POINTS
+>>> #include <trace/events/pod.h>
+>>>
+>>> _______________________________________________
+>>> lttng-dev mailing list
+>>> lttng-dev@lists.lttng.org
+>>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>>
+>>
+>
+>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
--- 
+-- =
+
 Mathieu Desnoyers
 EfficiOS Inc.
 http://www.efficios.com
