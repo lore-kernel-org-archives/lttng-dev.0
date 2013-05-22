@@ -1,16 +1,16 @@
 From: "Ikaheimonen, JP" <jp_ikaheimonen@mentor.com>
-Subject: [Babeltrace PATCH 23/23] Open files as binary under
-	Windows
-Date: Wed, 22 May 2013 08:08:31 +0000
-Message-ID: <009B25148989C6458484484699278506E538301F__29152.6229623289$1369210147$gmane$org@EU-MBX-01.mgc.mentorg.com>
+Subject: [Babeltrace PATCH 00/23] Add MinGW32 libraries to
+	executables
+Date: Wed, 22 May 2013 08:04:58 +0000
+Message-ID: <009B25148989C6458484484699278506E5382EC1__5625.36670263416$1369210243$gmane$org@EU-MBX-01.mgc.mentorg.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jp_ikaheimonen@mentor.com>) id 1Uf46B-0006fP-9n
-	for lttng-dev@lists.lttng.org; Wed, 22 May 2013 04:08:39 -0400
+	(envelope-from <jp_ikaheimonen@mentor.com>) id 1Uf42m-0006Mi-K8
+	for lttng-dev@lists.lttng.org; Wed, 22 May 2013 04:05:08 -0400
 Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -24,47 +24,31 @@ To: "Mathieu Desnoyers (mathieu.desnoyers@efficios.com)" <mathieu.desnoyers@effi
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-When opening files with open() or fdopen(), use the "b" flag to
-avoid CR/LF transformations under Windows.
----
- formats/ctf/ctf.c                     | 2 +-
- include/babeltrace/compat/memstream.h | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hi,
 
-diff --git a/formats/ctf/ctf.c b/formats/ctf/ctf.c
-index ffa5387..5a7779f 100644
---- a/formats/ctf/ctf.c
-+++ b/formats/ctf/ctf.c
-@@ -1105,7 +1105,7 @@ int ctf_open_trace_metadata_read(struct ctf_trace *td,
- 			goto end_free;
- 		}
- 
--		fp = fdopen(metadata_stream->pos.fd, "r");
-+		fp = fdopen(metadata_stream->pos.fd, "rb");
- 		if (!fp) {
- 			fprintf(stderr, "[error] Unable to open metadata stream.\n");
- 			perror("Metadata stream open");
-diff --git a/include/babeltrace/compat/memstream.h b/include/babeltrace/compat/memstream.h
-index fb24ad9..cc5328d 100644
---- a/include/babeltrace/compat/memstream.h
-+++ b/include/babeltrace/compat/memstream.h
-@@ -70,7 +70,7 @@ FILE *babeltrace_fmemopen(void *buf, size_t size, const char *mode)
- 	/*
- 	 * We need to write to the file.
- 	 */
--	fp = fdopen(ret, "w+");
-+	fp = fdopen(ret, "w+b");
- 	if (!fp) {
- 		goto error_unlink;
- 	}
-@@ -149,7 +149,7 @@ FILE *babeltrace_open_memstream(char **ptr, size_t *sizeloc)
- 	if (ret < 0) {
- 		return NULL;
- 	}
--	fp = fdopen(ret, "w+");
-+	fp = fdopen(ret, "w+b");
- 	if (!fp) {
- 		goto error_unlink;
- 	}
--- 
-1.8.1.msysgit.1
+here is the new patch set that makes it possible to compile Babeltrace on MinGW32.
+I have taken your previous comments into account wherever possible.
+
+This patch set requires the patch I sent earlier, titled " [Babeltrace PATCH 01/01] Move strerror_r to compat directory " , and should be applied on top of that.
+
+Some notes:
+
+MinGW, especially MinGW32, is very lacking in library functions. (Indeed, 'minimal').
+Some functions that are found in Microsoft Visual Studio run time libraries are not accessible in MinGW32.
+These include any *_s functions such as strerror_s, gmtime_s, localtime_s and strtok_s; also strnlen is conspicuously missing.
+No byte-swapping function, either.
+
+It would have been possible to link to those functions dynamically, finding the function address from the DLL etc,
+but I'm not doing it, because in the end, my goal is to create a statically linked tool, with minimal dependencies to shared libraries.
+That is why, instead of using a well-known library function, I have resorted to implementing one on my own.
+
+I'm still open for any comments that you might have.
+
+Thanks,
+
+JP Ikaheimonen | SW Development Engineer http://go.mentor.com/sourceryanalyzer
+
+Mentor Embedded(tm) | Nucleus(r) | Linux(r) | Android(tm) | Services | UI | Multi-OS
+
+Android is a trademark of Google Inc. Use of this trademark is subject to Google Permissions.
+Linux is the registered trademark of Linus Torvalds in the U.S. and other countries.
