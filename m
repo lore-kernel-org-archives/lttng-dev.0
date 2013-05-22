@@ -1,16 +1,16 @@
 From: "Ikaheimonen, JP" <jp_ikaheimonen@mentor.com>
-Subject: [Babeltrace PATCH 15/23] Add MinGW implementation of
-	posix_fallocate
-Date: Wed, 22 May 2013 08:07:10 +0000
-Message-ID: <009B25148989C6458484484699278506E5382F92__12714.5935003229$1369210069$gmane$org@EU-MBX-01.mgc.mentorg.com>
+Subject: [Babeltrace PATCH 16/23] Add MinGW implementation of
+	readdir_r
+Date: Wed, 22 May 2013 08:07:16 +0000
+Message-ID: <009B25148989C6458484484699278506E5382F9E__42556.0815180235$1369210080$gmane$org@EU-MBX-01.mgc.mentorg.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jp_ikaheimonen@mentor.com>) id 1Uf44t-0006YS-20
-	for lttng-dev@lists.lttng.org; Wed, 22 May 2013 04:07:19 -0400
+	(envelope-from <jp_ikaheimonen@mentor.com>) id 1Uf44z-0006ZD-5O
+	for lttng-dev@lists.lttng.org; Wed, 22 May 2013 04:07:25 -0400
 Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -24,85 +24,48 @@ To: "Mathieu Desnoyers (mathieu.desnoyers@efficios.com)" <mathieu.desnoyers@effi
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Add MinGW implementation of posix_fallocate.
-The implementation is in a new source file (compat_fcntl.c).
-Add the new source file to the build.
 ---
- compat/Makefile.am                |  2 +-
- compat/compat_fcntl.c             | 23 +++++++++++++++++++++++
- formats/ctf/ctf.c                 |  2 +-
- include/babeltrace/compat/fcntl.h | 11 +++++++++++
- 4 files changed, 36 insertions(+), 2 deletions(-)
- create mode 100644 compat/compat_fcntl.c
- create mode 100644 include/babeltrace/compat/fcntl.h
+ formats/ctf/ctf.c                  |  2 +-
+ include/babeltrace/compat/dirent.h | 20 ++++++++++++++++++++
+ 2 files changed, 21 insertions(+), 1 deletion(-)
+ create mode 100644 include/babeltrace/compat/dirent.h
 
-diff --git a/compat/Makefile.am b/compat/Makefile.am
-index 16dd2e9..03b3daf 100644
---- a/compat/Makefile.am
-+++ b/compat/Makefile.am
-@@ -8,5 +8,5 @@ libcompat_la_LDFLAGS = \
- 	-Wl,--no-as-needed
- 
- if BABELTRACE_BUILD_WITH_MINGW
--libcompat_la_SOURCES += compat_mman.c compat_uuid.c compat_stdlib.c
-+libcompat_la_SOURCES += compat_mman.c compat_uuid.c compat_stdlib.c compat_fcntl.c
- endif
-diff --git a/compat/compat_fcntl.c b/compat/compat_fcntl.c
-new file mode 100644
-index 0000000..3fd23a9
---- /dev/null
-+++ b/compat/compat_fcntl.c
-@@ -0,0 +1,23 @@
-+/* This file is only built under MINGW32 */
-+
-+#include <windows.h>
-+#include <fcntl.h>
-+
-+int posix_fallocate(int fd, off_t offset, off_t len)
-+{
-+	HANDLE handle;
-+	LARGE_INTEGER current_pos;
-+	LARGE_INTEGER pos;
-+	BOOL ret;
-+
-+	handle = (HANDLE) _get_osfhandle(fd);
-+	pos.QuadPart = 0;
-+	SetFilePointerEx(handle, pos, &current_pos, FILE_CURRENT);
-+	pos.QuadPart = (__int64)offset + (__int64)len;
-+	SetFilePointerEx(handle, pos, NULL, FILE_BEGIN);
-+	ret = SetEndOfFile(handle);
-+	SetFilePointerEx(handle, current_pos, NULL, FILE_BEGIN);
-+	if (ret == 0)
-+		return -1;
-+	return 0;
-+}
 diff --git a/formats/ctf/ctf.c b/formats/ctf/ctf.c
-index b476a29..0db23c3 100644
+index 0db23c3..ad3c3b1 100644
 --- a/formats/ctf/ctf.c
 +++ b/formats/ctf/ctf.c
-@@ -41,7 +41,7 @@
- #include <errno.h>
+@@ -42,7 +42,7 @@
  #include <sys/types.h>
  #include <sys/stat.h>
--#include <fcntl.h>
-+#include <babeltrace/compat/fcntl.h>
- #include <dirent.h>
+ #include <babeltrace/compat/fcntl.h>
+-#include <dirent.h>
++#include <babeltrace/compat/dirent.h>
  #include <glib.h>
  #include <babeltrace/compat/unistd.h>
-diff --git a/include/babeltrace/compat/fcntl.h b/include/babeltrace/compat/fcntl.h
+ #include <stdlib.h>
+diff --git a/include/babeltrace/compat/dirent.h b/include/babeltrace/compat/dirent.h
 new file mode 100644
-index 0000000..9fc7539
+index 0000000..281f40b
 --- /dev/null
-+++ b/include/babeltrace/compat/fcntl.h
-@@ -0,0 +1,11 @@
-+#ifndef _BABELTRACE_INCLUDE_COMPAT_FCNTL_H
-+#define _BABELTRACE_INCLUDE_COMPAT_FCNTL_H
++++ b/include/babeltrace/compat/dirent.h
+@@ -0,0 +1,20 @@
++#ifndef _BABELTRACE_INCLUDE_COMPAT_DIRENT_H
++#define _BABELTRACE_INCLUDE_COMPAT_DIRENT_H
 +
-+#include <fcntl.h>
++#include <dirent.h>
++
 +#ifdef __MINGW32__
-+
-+int posix_fallocate(int fd, off_t offset, off_t len);
-+
++static inline
++int readdir_r (DIR *dirp, struct dirent *entry, struct dirent **result)
++{
++	errno = 0;
++	entry = readdir (dirp);
++	*result = entry;
++	if (entry == NULL && errno != 0) {
++		return -1;
++	}
++	return 0;
++}
 +#endif
 +
 +#endif
