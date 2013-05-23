@@ -1,18 +1,17 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: Re: [PATCH lttng-tools] Tests: Fix possible segfault in
- health check thread exit test
-Date: Wed, 22 May 2013 17:02:31 -0400
-Message-ID: <519D3267.3060101__23429.7622032047$1369256601$gmane$org@efficios.com>
-References: <1369254573-1342-1-git-send-email-christian.babeux@efficios.com>
+From: Jan Glauber <jan.glauber@gmail.com>
+Subject: [PATCH lttng-modules] Fix CPU hotplug section mismatches
+Date: Thu, 23 May 2013 13:02:36 +0200
+Message-ID: <1369306957-2562-1-git-send-email-jan.glauber__49366.6864502758$1369307099$gmane$org@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([5.9.158.244])
+Received: from mail-bk0-f46.google.com ([209.85.214.46])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1UfGBC-0004ak-Oz
-	for lttng-dev@lists.lttng.org; Wed, 22 May 2013 17:02:38 -0400
-In-Reply-To: <1369254573-1342-1-git-send-email-christian.babeux@efficios.com>
+	(envelope-from <jan.glauber@gmail.com>) id 1UfTJj-0003Ko-14
+	for lttng-dev@lists.lttng.org; Thu, 23 May 2013 07:04:19 -0400
+Received: by mail-bk0-f46.google.com with SMTP id my13so1741406bkb.5
+	for <lttng-dev@lists.lttng.org>; Thu, 23 May 2013 04:04:13 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,48 +20,94 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Christian Babeux <christian.babeux@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Merged!
+Get rid of the following section mismatches:
 
-Christian Babeux:
-> The testpoints in the thread_manage_clients and thread_manage_apps
-> are called after a rcu_register_thread() call. The testpoints were
-> not unregistering their respective thread which could later on cause
-> a segfault when shutting down the session daemon.
-> 
-> Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
-> ---
->  tests/regression/tools/health/health_exit.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/tests/regression/tools/health/health_exit.c b/tests/regression/tools/health/health_exit.c
-> index 8e41405..8d1d05c 100644
-> --- a/tests/regression/tools/health/health_exit.c
-> +++ b/tests/regression/tools/health/health_exit.c
-> @@ -18,6 +18,7 @@
->  #include <stdlib.h>
->  #include <string.h>
->  #include <pthread.h>
-> +#include <urcu.h>
->  
->  /*
->   * Check if the specified environment variable is set.
-> @@ -40,6 +41,7 @@ int __testpoint_thread_manage_clients(void)
->  	const char *var = "LTTNG_THREAD_MANAGE_CLIENTS_EXIT";
->  
->  	if (check_env_var(var)) {
-> +		rcu_unregister_thread();
->  		pthread_exit(NULL);
->  	}
->  
-> @@ -62,6 +64,7 @@ int __testpoint_thread_manage_apps(void)
->  	const char *var = "LTTNG_THREAD_MANAGE_APPS_EXIT";
->  
->  	if (check_env_var(var)) {
-> +		rcu_unregister_thread();
->  		pthread_exit(NULL);
->  	}
->  
+WARNING: /home/jang/temp/lttng-modules-2.2.0-r0/git/lttng-tracer.o(.text+0x19dc0): Section mismatch in reference from the function lttng_add_perf_counter_to_ctx() to the function .cpuinit.text:lttng_perf_counter_cpu_hp_callback()
+The function lttng_add_perf_counter_to_ctx() references
+the function __cpuinit lttng_perf_counter_cpu_hp_callback().
+This is often because lttng_add_perf_counter_to_ctx lacks a __cpuinit
+annotation or the annotation of lttng_perf_counter_cpu_hp_callback is wrong.
+
+WARNING: /home/jang/temp/lttng-modules-2.2.0-r0/git/lib/lttng-lib-ring-buffer.o(.text+0x1204): Section mismatch in reference from the function channel_backend_init() to the function .cpuinit.text:lib_ring_buffer_cpu_hp_callback()
+The function channel_backend_init() references
+the function __cpuinit lib_ring_buffer_cpu_hp_callback().
+This is often because channel_backend_init lacks a __cpuinit
+annotation or the annotation of lib_ring_buffer_cpu_hp_callback is wrong.
+
+WARNING: /home/jang/temp/lttng-modules-2.2.0-r0/git/lib/lttng-lib-ring-buffer.o(.text+0x269c): Section mismatch in reference from the function channel_create() to the function .cpuinit.text:lib_ring_buffer_cpu_hp_callback()
+The function channel_create() references
+the function __cpuinit lib_ring_buffer_cpu_hp_callback().
+This is often because channel_create lacks a __cpuinit
+annotation or the annotation of lib_ring_buffer_cpu_hp_callback is wrong.
+
+WARNING: /home/jang/temp/lttng-modules-2.2.0-r0/git/lib/lttng-lib-ring-buffer.o(.text+0x4a1c): Section mismatch in reference from the function channel_iterator_init() to the function .cpuinit.text:channel_iterator_cpu_hotplug()
+The function channel_iterator_init() references
+the function __cpuinit channel_iterator_cpu_hotplug().
+This is often because channel_iterator_init lacks a __cpuinit
+annotation or the annotation of channel_iterator_cpu_hotplug is wrong.
+
+Signed-off-by: Jan Glauber <jan.glauber@gmail.com>
+---
+ lib/ringbuffer/ring_buffer_backend.c  |    2 +-
+ lib/ringbuffer/ring_buffer_frontend.c |    2 +-
+ lib/ringbuffer/ring_buffer_iterator.c |    2 +-
+ lttng-context-perf-counters.c         |    2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/lib/ringbuffer/ring_buffer_backend.c b/lib/ringbuffer/ring_buffer_backend.c
+index 84e7dfb..69ad2a7 100644
+--- a/lib/ringbuffer/ring_buffer_backend.c
++++ b/lib/ringbuffer/ring_buffer_backend.c
+@@ -253,7 +253,7 @@ void channel_backend_reset(struct channel_backend *chanb)
+  *	Returns the success/failure of the operation. (%NOTIFY_OK, %NOTIFY_BAD)
+  */
+ static
+-int __cpuinit lib_ring_buffer_cpu_hp_callback(struct notifier_block *nb,
++int lib_ring_buffer_cpu_hp_callback(struct notifier_block *nb,
+ 					      unsigned long action,
+ 					      void *hcpu)
+ {
+diff --git a/lib/ringbuffer/ring_buffer_frontend.c b/lib/ringbuffer/ring_buffer_frontend.c
+index 2626afa..bff920d 100644
+--- a/lib/ringbuffer/ring_buffer_frontend.c
++++ b/lib/ringbuffer/ring_buffer_frontend.c
+@@ -402,7 +402,7 @@ static void lib_ring_buffer_stop_read_timer(struct lib_ring_buffer *buf)
+  *	Returns the success/failure of the operation. (%NOTIFY_OK, %NOTIFY_BAD)
+  */
+ static
+-int __cpuinit lib_ring_buffer_cpu_hp_callback(struct notifier_block *nb,
++int lib_ring_buffer_cpu_hp_callback(struct notifier_block *nb,
+ 					      unsigned long action,
+ 					      void *hcpu)
+ {
+diff --git a/lib/ringbuffer/ring_buffer_iterator.c b/lib/ringbuffer/ring_buffer_iterator.c
+index e7c6cb7..9d0197c 100644
+--- a/lib/ringbuffer/ring_buffer_iterator.c
++++ b/lib/ringbuffer/ring_buffer_iterator.c
+@@ -351,7 +351,7 @@ void lib_ring_buffer_iterator_init(struct channel *chan, struct lib_ring_buffer
+ 
+ #ifdef CONFIG_HOTPLUG_CPU
+ static
+-int __cpuinit channel_iterator_cpu_hotplug(struct notifier_block *nb,
++int channel_iterator_cpu_hotplug(struct notifier_block *nb,
+ 					   unsigned long action,
+ 					   void *hcpu)
+ {
+diff --git a/lttng-context-perf-counters.c b/lttng-context-perf-counters.c
+index e0714eb..73f4e95 100644
+--- a/lttng-context-perf-counters.c
++++ b/lttng-context-perf-counters.c
+@@ -120,7 +120,7 @@ void lttng_destroy_perf_counter_field(struct lttng_ctx_field *field)
+  * soon).
+  */
+ static
+-int __cpuinit lttng_perf_counter_cpu_hp_callback(struct notifier_block *nb,
++int lttng_perf_counter_cpu_hp_callback(struct notifier_block *nb,
+ 						 unsigned long action,
+ 						 void *hcpu)
+ {
+-- 
+1.7.9.5
