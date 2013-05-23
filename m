@@ -1,19 +1,16 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: Re: [LTTNG-TOOLS PATCH] Fix: increment channel refcount
- on add_stream
-Date: Thu, 23 May 2013 18:09:29 -0400
-Message-ID: <519E9399.1040109__26594.113049987$1369347007$gmane$org@efficios.com>
-References: <1369345431-15885-1-git-send-email-jdesfossez@efficios.com>
-	<20130523220716.GB16552@Krystal>
+From: Julien Desfossez <jdesfossez@efficios.com>
+Subject: [LTTNG-TOOLS PATCH v2] Fix: increment channel refcount
+	on add_stream
+Date: Thu, 23 May 2013 19:07:20 -0400
+Message-ID: <1369350440-30563-1-git-send-email-jdesfossez__23642.8104727112$1369350486$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from smtp.ini-tech.com ([5.9.158.244])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1UfdhZ-0000Se-Gr
-	for lttng-dev@lists.lttng.org; Thu, 23 May 2013 18:09:37 -0400
-In-Reply-To: <20130523220716.GB16552@Krystal>
+	(envelope-from <jdesfossez@efficios.com>) id 1Ufebd-0000vN-7P
+	for lttng-dev@lists.lttng.org; Thu, 23 May 2013 19:07:33 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,48 +19,31 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: dgoulet@efficios.com
 Cc: lttng-dev@lists.lttng.org, Julien Desfossez <jdesfossez@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-We can't merge that for UST. However, it needs to be done on the kernel
-side! Removing it from the add_stream did impact the kernel. This is a
-good fine but should not be done there.
+Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
+---
+ src/common/kernel-consumer/kernel-consumer.c |    6 ++++++
+ 1 file changed, 6 insertions(+)
 
-See commit: b31398bb2b3fa91a53dea3b36fd693da4b50e0d3
-
-David
-
-Mathieu Desnoyers:
-> * Julien Desfossez (jdesfossez@efficios.com) wrote:
->> Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
-> 
-> check the impact on the ust side ?
-> 
->> ---
->>  src/common/consumer.c |    3 +++
->>  1 file changed, 3 insertions(+)
->>
->> diff --git a/src/common/consumer.c b/src/common/consumer.c
->> index c9e4bae..bfb809a 100644
->> --- a/src/common/consumer.c
->> +++ b/src/common/consumer.c
->> @@ -663,6 +663,9 @@ static int add_stream(struct lttng_consumer_stream *stream,
->>  		uatomic_inc(&relayd->refcount);
->>  	}
->>  
->> +	/* Update channel refcount once added without error(s). */
->> +	uatomic_inc(&stream->chan->refcount);
->> +
->>  	/*
->>  	 * When nb_init_stream_left reaches 0, we don't need to trigger any action
->>  	 * in terms of destroying the associated channel, because the action that
->> -- 
->> 1.7.10.4
->>
->>
->> _______________________________________________
->> lttng-dev mailing list
->> lttng-dev@lists.lttng.org
->> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> 
+diff --git a/src/common/kernel-consumer/kernel-consumer.c b/src/common/kernel-consumer/kernel-consumer.c
+index f3a3a22..f47c498 100644
+--- a/src/common/kernel-consumer/kernel-consumer.c
++++ b/src/common/kernel-consumer/kernel-consumer.c
+@@ -255,6 +255,12 @@ int lttng_kconsumer_recv_cmd(struct lttng_consumer_local_data *ctx,
+ 		new_stream->chan = channel;
+ 		new_stream->wait_fd = fd;
+ 
++		/* Metadata chan refcount is increment in add_metadata_stream */
++		if (new_stream->chan->type != CONSUMER_CHANNEL_TYPE_METADATA) {
++			/* Update channel refcount */
++			uatomic_inc(&new_stream->chan->refcount);
++		}
++
+ 		/*
+ 		 * The buffer flush is done on the session daemon side for the kernel
+ 		 * so no need for the stream "hangup_flush_done" variable to be
+-- 
+1.7.10.4
