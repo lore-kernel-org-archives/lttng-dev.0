@@ -1,7 +1,7 @@
-From: Pierre-Luc St-Charles <pierre-luc.st-charles@polymtl.ca>
+From: Francis Giraldeau <francis.giraldeau@gmail.com>
 Subject: Re: LTTNG on Android ICS
-Date: Fri, 24 May 2013 09:46:59 -0400
-Message-ID: <CA+umk=p4R8tDfBXKRQ7O8EoafBu6R1TH7KnskP1QGnOJ_f+kjA__9008.36126315898$1369403266$gmane$org@mail.gmail.com>
+Date: Fri, 24 May 2013 15:04:10 -0400
+Message-ID: <CAC6yHM7H654Ox3PYPqLPNcfU-g=pENNzF-C5KBkRiA62GYpbug__45334.9639582031$1369422293$gmane$org@mail.gmail.com>
 References: <CAGNqz8L+Kat-C+3RLRknPHOiGXX8_1zYcKCm1j1s5tet3AsEqA@mail.gmail.com>
 	<CA+umk=qVWLKUymH9pvY9vSg_Hjf0Ynn1ccP+jyPYjtfvb3H2bg@mail.gmail.com>
 	<CAGNqz8L5oWTzq_g4McOWoU4e3TMpJnYDpD_5v9M1oQQaCSzCCA@mail.gmail.com>
@@ -14,16 +14,17 @@ References: <CAGNqz8L+Kat-C+3RLRknPHOiGXX8_1zYcKCm1j1s5tet3AsEqA@mail.gmail.com>
 	<CACnpWGSpcdOp0Y=5Yj_zAms2rOwP2Uai3HUZtzwRp1vYMeoY5g@mail.gmail.com>
 	<CAGNqz8LgNvc1KUeNKRi1rWBQg+qENJNmumPGA9Zc+yeHYQi_4Q@mail.gmail.com>
 	<CAGNqz8+Lq4GvD=nPosEj5+ppTfa+jXputMQcLrwnhs1s1LuQPQ@mail.gmail.com>
+	<CA+umk=p4R8tDfBXKRQ7O8EoafBu6R1TH7KnskP1QGnOJ_f+kjA@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1846237326=="
+Content-Type: multipart/mixed; boundary="===============1164306741=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-pa0-f49.google.com ([209.85.220.49])
+Received: from mail-ie0-f172.google.com ([209.85.223.172])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <b0mb00z.it@gmail.com>) id 1UfsKn-0006MG-8q
-	for lttng-dev@lists.lttng.org; Fri, 24 May 2013 09:47:05 -0400
-Received: by mail-pa0-f49.google.com with SMTP id bi5so4259916pad.8
-	for <lttng-dev@lists.lttng.org>; Fri, 24 May 2013 06:46:59 -0700 (PDT)
-In-Reply-To: <CAGNqz8+Lq4GvD=nPosEj5+ppTfa+jXputMQcLrwnhs1s1LuQPQ@mail.gmail.com>
+	(envelope-from <francis.giraldeau@gmail.com>) id 1UfxHk-0000Pz-Jy
+	for lttng-dev@lists.lttng.org; Fri, 24 May 2013 15:04:16 -0400
+Received: by mail-ie0-f172.google.com with SMTP id 16so13495662iea.3
+	for <lttng-dev@lists.lttng.org>; Fri, 24 May 2013 12:04:11 -0700 (PDT)
+In-Reply-To: <CA+umk=p4R8tDfBXKRQ7O8EoafBu6R1TH7KnskP1QGnOJ_f+kjA@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -32,416 +33,516 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Ionut D." <ionut5001@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============1846237326==
-Content-Type: multipart/alternative; boundary=047d7b10cd817367f704dd77088e
+--===============1164306741==
+Content-Type: multipart/alternative; boundary=089e0111c3c6d26ab904dd7b7676
 
---047d7b10cd817367f704dd77088e
+--089e0111c3c6d26ab904dd7b7676
 Content-Type: text/plain; charset=ISO-8859-1
 Content-Transfer-Encoding: quoted-printable
 
-The required kernel configuration options for the modules are listed in the
-lttng-module README file, located in its project root directory. Some of
-the 'optional' options also listed there are simply not supported by 3.0.x
-ARM kernels (such as HAVE_SYSCALL_TRACEPOINTS), so you might be missing
-some modules compared to what you would get on a (x86 arch w/ recent
-kernel) platform.
+Hi,
 
-You can find more information on syscall tracing on ARM here:
-http://comments.gmane.org/gmane.linux.kernel.tracing.lttng.devel/5086
+I got some problem compiling required libraries for lttng-tools. I did a
+full android build within repo:
+
+$ source build/envsetup.sh
+$ lunch # with full_maguro-eng
+$ m
+
+Build is fine, but when trying to run configure in lttng-tools, it can't
+find liboprofile_popt. Here is the error message in config.log:
+
+/home/francis/android/android-ndk-r8e/toolchains/arm-linux-androideabi-4.6/=
+prebuilt/linux-x86_64/bin/../lib/gcc/arm-linux-androideabi/4.6/../../../../=
+arm-linux-androideabi/bin/ld:
+/home/francis/android/repo/out/target/product/maguro/obj/STATIC_LIBRARIES/l=
+iboprofile_popt_intermediates/liboprofile_popt.a(popthelp.o):
+in function singleOptionHelp.isra.4:bionic/libc/include/stdio.h:483: error:
+undefined reference to '__sprintf_chk'
+
+It seems that only the static library of liboprofile_popt is compiled.
+
+The symbol is defined in libc.a and libc.so:
+
+$ nm
+./out/target/product/maguro/obj/SHARED_LIBRARIES/libc_intermediates/LINKED/=
+libc.so
+| grep -E "__strlen_chk|__sprintf_chk"
+0001395d T __sprintf_chk
+00012df1 T __strlen_chk
+
+I tried to compile the configtest.c file by hand and it worked, so it
+really seems to be some kind of environment variable that make it fail.
+
+For the people who managed to do the configure, what arguments should be
+supplied to configure? Or maybe it's my android build that is incomplete?
+Should I build sub-directories in addition to the build in the root android
+repo sources?
+
+Cheers!
+
+Francis
 
 
-On Fri, May 24, 2013 at 6:44 AM, Ionut D. <ionut5001@gmail.com> wrote:
+2013/5/24 Pierre-Luc St-Charles <pierre-luc.st-charles@polymtl.ca>
 
-> I managed to fix it. It was not finding `lttng-consumerd`, I fixed it by
-> configuring the package with the right path. But, about the kernel module=
-s
-> the question is still pertinent. What options should I check in the
-> kernel configuration? I saw that in my case not all the lttng kernel
-> modules have been compiled.
+> The required kernel configuration options for the modules are listed in
+> the lttng-module README file, located in its project root directory. Some
+> of the 'optional' options also listed there are simply not supported by
+> 3.0.x ARM kernels (such as HAVE_SYSCALL_TRACEPOINTS), so you might be
+> missing some modules compared to what you would get on a (x86 arch w/
+> recent kernel) platform.
+>
+> You can find more information on syscall tracing on ARM here:
+> http://comments.gmane.org/gmane.linux.kernel.tracing.lttng.devel/5086
 >
 >
-> On Fri, May 24, 2013 at 11:07 AM, Ionut D. <ionut5001@gmail.com> wrote:
+> On Fri, May 24, 2013 at 6:44 AM, Ionut D. <ionut5001@gmail.com> wrote:
 >
->> Hello,
->>
->> Thank you for the slides. I manged to build the kernel modules and I
->> insmod them manually. On the device I copied in /data/lttng following
->> binaries `lttng`, `lttng-relayd` and `lttng-sessiond`. If I execute
->> `./lttng list -k` it shows me a list of available kernel events. I creat=
-e a
->> session called mysession with `./lttng create mysession` and I enable
->> tracing on all the event with `./lttng enable-event -a -k`. But here sta=
-rts
->> my problem.
->>
->> The output of the last command is the following:
->>
->> root@android:/data/lttng # ./lttng enable-event -a -k
->> PERROR [3681/3681]: kernel start consumer exec: (null) (in
->> spawn_consumerd() at main.c:2007)
->> Error: Condition timed out. The consumer thread was never ready. Killing
->> it
->> Warning: Using pthread_kill as pthread_cancel is missing on the current
->> platform
->> PERROR [3608/3658]: write poll pipe: (null) (in notify_thread_pipe() at
->> utils.c:43)
->> Error: Events: Fatal error of the session daemon (channel channel0,
->> session mysession)
->>
->> Do you have any idea about what could be wrong? What options should I
->> check in the kernel configuration? (I checked all that is under Tracing)
->>
->> --Ionut
+>> I managed to fix it. It was not finding `lttng-consumerd`, I fixed it by
+>> configuring the package with the right path. But, about the kernel modul=
+es
+>> the question is still pertinent. What options should I check in the
+>> kernel configuration? I saw that in my case not all the lttng kernel
+>> modules have been compiled.
 >>
 >>
+>> On Fri, May 24, 2013 at 11:07 AM, Ionut D. <ionut5001@gmail.com> wrote:
 >>
->>
->>
->> On Thu, May 23, 2013 at 6:09 PM, Charles Bri=E8re <
->> charles.briere@polymtl.ca> wrote:
->>
->>> Module location doesn't really matter, we used to push them to /data/..=
-.
->>> or /sdcard/... .
+>>> Hello,
 >>>
->>>  Modprobe doesn't exists on Android so you'll need to use insmod. We
->>> used this script<https://docs.google.com/file/d/0B56W2viIJ4oqOU1qTHJZY0=
-V2MzQ/edit>in order to compile, push to device and load modules.
+>>> Thank you for the slides. I manged to build the kernel modules and I
+>>> insmod them manually. On the device I copied in /data/lttng following
+>>> binaries `lttng`, `lttng-relayd` and `lttng-sessiond`. If I execute
+>>> `./lttng list -k` it shows me a list of available kernel events. I crea=
+te a
+>>> session called mysession with `./lttng create mysession` and I enable
+>>> tracing on all the event with `./lttng enable-event -a -k`. But here st=
+arts
+>>> my problem.
 >>>
->>> We also made a presentation you might be interested in that can be
->>> viewed on
->>> https://docs.google.com/presentation/d/14lte2AchEAyxMk3WSQ53SdbBm2tfmAB=
-BFQojuUhxg7Y/pub?start=3Dfalse&loop=3Dfalse&delayms=3D3000
+>>> The output of the last command is the following:
 >>>
->>>
->>> On Thu, May 23, 2013 at 10:40 AM, Ionut D. <ionut5001@gmail.com> wrote:
->>>
->>>> About the kernel modules. Where should they be located on the target?
->>>> Should I have modprobe or insmod it is enough?
->>>>
->>>>
->>>> On Thu, May 23, 2013 at 2:19 PM, Ionut D. <ionut5001@gmail.com> wrote:
->>>>
->>>>> Sorry for my late response. At the end after different some adds
->>>>> (defines in libc) I managed to compile them for ICS with NDK r7c. I w=
-as a
->>>>> problem of environment.
->>>>>
->>>>>
->>>>> On Tue, May 21, 2013 at 9:26 PM, Pierre-Luc St-Charles <
->>>>> pierre-luc.st-charles@polymtl.ca> wrote:
->>>>>
->>>>>> Well, I cannot get my hands on a R7 NDK this very moment, but I'm
->>>>>> surprised there are no grep hits in the ./platforms/android-XX/arch-=
-arm
->>>>>> directory; can you verify that the NDK you have does include an ARM
->>>>>> architecture sysroot? That's the the one you should be compiling wit=
-h, and
->>>>>> I believe you'll find the asm/unistd.h header there (as there is no =
-32/64
->>>>>> bit difference on Android+ARM yet).
->>>>>>
->>>>>>
->>>>>> On Tue, May 21, 2013 at 11:29 AM, Ionut D. <ionut5001@gmail.com>wrot=
-e:
->>>>>>
->>>>>>> The problem is that I am trying to build it on ICS with NDK r7 and =
-I
->>>>>>> tried to build it in the both ways with the ndk and also by creatin=
+>>> root@android:/data/lttng # ./lttng enable-event -a -k
+>>> PERROR [3681/3681]: kernel start consumer exec: (null) (in
+>>> spawn_consumerd() at main.c:2007)
+>>> Error: Condition timed out. The consumer thread was never ready. Killin=
 g
->>>>>>> Android.mk files and it looks like is not working. I searched with =
-grep
->>>>>>> firstly through NDK and second through bionic and these are the res=
-ults:
->>>>>>>
->>>>>>> NDK:
->>>>>>> #grep -r __NR_splice .
->>>>>>> ./platforms/android-9/arch-x86/usr/include/asm/unistd_32.h:#define
->>>>>>> __NR_splice 313
->>>>>>> ./platforms/android-14/arch-x86/usr/include/asm/unistd_32.h:#define
->>>>>>> __NR_splice 313
->>>>>>>
->>>>>>> bionic:
->>>>>>> grep -r __NR_splice bionic
->>>>>>> bionic/libc/kernel/arch-sh/asm/unistd_32.h:#define __NR_splice 313
->>>>>>> bionic/libc/kernel/arch-sh/asm/unistd_64.h:#define __NR_splice 341
->>>>>>> bionic/libc/kernel/arch-x86/asm/unistd_32.h:#define __NR_splice 313
->>>>>>>
->>>>>>> Looking through results I see that '__NR_splice' it not in unistd.h
->>>>>>> and I know this is important.
->>>>>>>
->>>>>>> Ionut
->>>>>>>
->>>>>>>
->>>>>>> On Tue, May 21, 2013 at 5:15 PM, Pierre-Luc St-Charles <
->>>>>>> pierre-luc.st-charles@polymtl.ca> wrote:
->>>>>>>
->>>>>>>> The first error refers to __NR_splice, which should be declared
->>>>>>>> once asm/unistd.h is included; in this case, it is included right =
-above the
->>>>>>>> problematic line (src/common/compat/fcntl.h @ L35). Could you veri=
-fy that
->>>>>>>> __NR_splice is defined somewhere in that file? If not, it might be=
- a little
->>>>>>>> more problematic.
->>>>>>>>
->>>>>>>> As for the second error, I believe it is also caused by a missing
->>>>>>>> symbol that should be included in asm/signal.h, which is in turn u=
-sually
->>>>>>>> included via signal.h itself.
->>>>>>>>
->>>>>>>> Compiling with the NDK (v8, platform 14) is successful here, and I
->>>>>>>> can find all these missing symbols in the default system includes =
-there.
->>>>>>>> Are you sure you specified the target sysroot when compiling?
->>>>>>>>
->>>>>>>> -PL
->>>>>>>>
->>>>>>>>
->>>>>>>> On Tue, May 21, 2013 at 6:26 AM, Ionut D. <ionut5001@gmail.com>wro=
-te:
->>>>>>>>
->>>>>>>>> I tried to compile lttng-tools and at compile time exits with the
->>>>>>>>> bellow error. I looked in the sources and it looks like for arm t=
-his is not
->>>>>>>>> implemented. Do you have any idea about how could this be fixed?
->>>>>>>>>
->>>>>>>>>
->>>>>>>>> In file included from
->>>>>>>>> external/lttng-tools/src/common/compat/compat-fcntl.c:19:
->>>>>>>>> external/lttng-tools/src/common/compat/../../../src/common/compat=
-/fcntl.h:
->>>>>>>>> In function 'splice':
->>>>>>>>> external/lttng-tools/src/common/compat/../../../src/common/compat=
-/fcntl.h:44:
->>>>>>>>> error: '__NR_splice' undeclared (first use in this function)
->>>>>>>>> external/lttng-tools/src/common/compat/../../../src/common/compat=
-/fcntl.h:44:
->>>>>>>>> error: (Each undeclared identifier is reported only once
->>>>>>>>> external/lttng-tools/src/common/compat/../../../src/common/compat=
-/fcntl.h:44:
->>>>>>>>> error: for each function it appears in.)
->>>>>>>>> In file included from
->>>>>>>>> external/lttng-tools/src/common/compat/compat-fcntl.c:19:
->>>>>>>>> external/lttng-tools/src/common/compat/../../../src/common/compat=
-/fcntl.h:48:1:
->>>>>>>>> warning: "POSIX_FADV_DONTNEED" redefined
->>>>>>>>> In file included from
->>>>>>>>> external/lttng-tools/src/common/compat/../../../src/common/compat=
-/fcntl.h:47,
->>>>>>>>>                  from
->>>>>>>>> external/lttng-tools/src/common/compat/compat-fcntl.c:19:
->>>>>>>>> bionic/libc/kernel/common/linux/fadvise.h:24:1: warning: this is
->>>>>>>>> the location of the previous definition
->>>>>>>>> In file included from bionic/libc/include/sys/select.h:34,
->>>>>>>>>                  from bionic/libc/include/unistd.h:34,
->>>>>>>>>                  from
->>>>>>>>> external/lttng-tools/src/common/compat/compat-fcntl.c:20:
->>>>>>>>> external/lttng-tools/src/common/compat/signal.h: At top level:
->>>>>>>>> external/lttng-tools/src/common/compat/signal.h:27: error:
->>>>>>>>> expected ';', ',' or ')' before '*' token
->>>>>>>>> external/lttng-tools/src/common/compat/signal.h:28: error:
->>>>>>>>> expected ';', ',' or ')' before '*' token
->>>>>>>>> external/lttng-tools/src/common/compat/signal.h:29: error:
->>>>>>>>> expected ';', ',' or ')' before '*' token
->>>>>>>>> In file included from bionic/libc/include/unistd.h:34,
->>>>>>>>>                  from
->>>>>>>>> external/lttng-tools/src/common/compat/compat-fcntl.c:20:
->>>>>>>>> bionic/libc/include/sys/select.h:42: error: expected ';', ',' or
->>>>>>>>> ')' before '*' token
->>>>>>>>>
->>>>>>>>>
->>>>>>>>>
->>>>>>>>> On Sat, May 18, 2013 at 10:21 AM, Ionut D. <ionut5001@gmail.com>w=
-rote:
->>>>>>>>>
->>>>>>>>>> Great informations! I will post back the results.
->>>>>>>>>>
->>>>>>>>>>
->>>>>>>>>> On Fri, May 17, 2013 at 4:47 PM, Pierre-Luc St-Charles <
->>>>>>>>>> pierre-luc.st-charles@polymtl.ca> wrote:
->>>>>>>>>>
->>>>>>>>>>> Alright, small update for all following a quick
->>>>>>>>>>> (non-mailing-list) exchange:
->>>>>>>>>>>
->>>>>>>>>>> We did successfully complete a kernel-tracing port of LTTng for
->>>>>>>>>>> Android (somewhat old news), but we are still working on bringi=
-ng our
->>>>>>>>>>> patches back up to date with the current version of the differe=
-nt projects
->>>>>>>>>>> (soon-ish still applies here, we're talking days). So far, we d=
-welled a
->>>>>>>>>>> little bit in LTTng-UST, but haven't done much changes, so user=
-space
->>>>>>>>>>> tracing is still not functional. Device that ran kernel traces =
-successfully
->>>>>>>>>>> so far were the Nexus S and the Nexus 7 (example Nexus S trace =
-available
->>>>>>>>>>> here<https://drive.google.com/folderview?id=3D0B55Ba7lWTLh4U0hG=
-eTQ4bmRYRjQ&usp=3Dsharing>;
->>>>>>>>>>> still not perfect).
->>>>>>>>>>>
->>>>>>>>>>> Basically, we cross-compiled everything via the Android NDK (no
->>>>>>>>>>> Android makefiles involved here), and pushed all required bins =
-to a device
->>>>>>>>>>> without having to flash it (unless the default kernel config di=
-dn't allow
->>>>>>>>>>> tracing -- then we'd have to flash). This approach is not compa=
-tible with
->>>>>>>>>>> the official Android build system (meaning we wouldn't be able =
-to add it to
->>>>>>>>>>> Android like this), but we might eventually get working on the =
-damned
->>>>>>>>>>> Android makefiles (they're extremely painful to write, especial=
-ly since
->>>>>>>>>>> LTTng uses Autotools).
->>>>>>>>>>>
->>>>>>>>>>> The librairies required by LTTng that are not already included
->>>>>>>>>>> in a regular Android build (uuid/popt) can actually be found/co=
-mpiled from
->>>>>>>>>>> the official repo, in its 'external' directory (see oprofile an=
-d e2fsprog
->>>>>>>>>>> -- from memory). That might not be the easiest way to get them =
-(full repo
->>>>>>>>>>> download is BIG), but compatibility is assured, and you can ski=
-p a full
->>>>>>>>>>> build by simply making those two individually for your device (=
-if that's
->>>>>>>>>>> all you need).
->>>>>>>>>>>
->>>>>>>>>>> You'll also need your device to be rooted to use LTTng at all;
->>>>>>>>>>> then, most initializations are done via scripts (we'll also pro=
-vide those
->>>>>>>>>>> with our patches). We still had some trouble automating everyth=
-ing via
->>>>>>>>>>> daemons, so we always ran the sessiond locally (with success).
->>>>>>>>>>>
->>>>>>>>>>> Major problems we encountered so far were missing posix
->>>>>>>>>>> functions, and sysv shared memory. Basically, Android relies on=
- Bionic for
->>>>>>>>>>> its system calls and other low-level functions, and since Bioni=
-c is pretty
->>>>>>>>>>> 'lightweight', they trimmed most of the fat out for performance=
-. We had to
->>>>>>>>>>> make some more-or-less sketchy replacements here and there, but=
- everything
->>>>>>>>>>> seems to be working decently now.
->>>>>>>>>>>
->>>>>>>>>>> So, simple 'how do I put LTTng on Android' workflow would be
->>>>>>>>>>> this:
->>>>>>>>>>>
->>>>>>>>>>>   - Compile modules (using NDK) against device's kernel, making
->>>>>>>>>>> sure its config is appropriate, ship them over via ADB
->>>>>>>>>>>
->>>>>>>>>>>   - Compile required external libraries (using repo build
->>>>>>>>>>> system) for the device, ship them over via ADB
->>>>>>>>>>>
->>>>>>>>>>>   - Patch up LTTng-* (soon-ish! I could send you the outdated
->>>>>>>>>>> patches right now if you're interested though, they might be a =
-month behind
->>>>>>>>>>> or so on the current trunks)
->>>>>>>>>>>
->>>>>>>>>>>   - Cross-compile LTTng-* for the device (using NDK), ship
->>>>>>>>>>> binaries over via ADB
->>>>>>>>>>>
->>>>>>>>>>> Then, on the device, start up the sessiond manually & start
->>>>>>>>>>> tracing.
->>>>>>>>>>>
->>>>>>>>>>>
->>>>>>>>>>> I think I went over everything, but if there's a part that's
->>>>>>>>>>> still cloudy, don't hesitate.
->>>>>>>>>>>
->>>>>>>>>>>
->>>>>>>>>>> -PL
->>>>>>>>>>>
->>>>>>>>>>>
->>>>>>>>>>> On May 17, 2013 1:32 AM, "Ionut D." <ionut5001@gmail.com> wrote=
+>>> it
+>>> Warning: Using pthread_kill as pthread_cancel is missing on the current
+>>> platform
+>>> PERROR [3608/3658]: write poll pipe: (null) (in notify_thread_pipe() at
+>>> utils.c:43)
+>>> Error: Events: Fatal error of the session daemon (channel channel0,
+>>> session mysession)
+>>>
+>>> Do you have any idea about what could be wrong? What options should I
+>>> check in the kernel configuration? (I checked all that is under Tracing=
+)
+>>>
+>>> --Ionut
+>>>
+>>>
+>>>
+>>>
+>>>
+>>> On Thu, May 23, 2013 at 6:09 PM, Charles Bri=E8re <
+>>> charles.briere@polymtl.ca> wrote:
+>>>
+>>>> Module location doesn't really matter, we used to push them to
+>>>> /data/... or /sdcard/... .
+>>>>
+>>>>  Modprobe doesn't exists on Android so you'll need to use insmod. We
+>>>> used this script<https://docs.google.com/file/d/0B56W2viIJ4oqOU1qTHJZY=
+0V2MzQ/edit>in order to compile, push to device and load modules.
+>>>>
+>>>> We also made a presentation you might be interested in that can be
+>>>> viewed on
+>>>> https://docs.google.com/presentation/d/14lte2AchEAyxMk3WSQ53SdbBm2tfmA=
+BBFQojuUhxg7Y/pub?start=3Dfalse&loop=3Dfalse&delayms=3D3000
+>>>>
+>>>>
+>>>> On Thu, May 23, 2013 at 10:40 AM, Ionut D. <ionut5001@gmail.com> wrote=
 :
+>>>>
+>>>>> About the kernel modules. Where should they be located on the target?
+>>>>> Should I have modprobe or insmod it is enough?
+>>>>>
+>>>>>
+>>>>> On Thu, May 23, 2013 at 2:19 PM, Ionut D. <ionut5001@gmail.com> wrote=
+:
+>>>>>
+>>>>>> Sorry for my late response. At the end after different some adds
+>>>>>> (defines in libc) I managed to compile them for ICS with NDK r7c. I =
+was a
+>>>>>> problem of environment.
+>>>>>>
+>>>>>>
+>>>>>> On Tue, May 21, 2013 at 9:26 PM, Pierre-Luc St-Charles <
+>>>>>> pierre-luc.st-charles@polymtl.ca> wrote:
+>>>>>>
+>>>>>>> Well, I cannot get my hands on a R7 NDK this very moment, but I'm
+>>>>>>> surprised there are no grep hits in the ./platforms/android-XX/arch=
+-arm
+>>>>>>> directory; can you verify that the NDK you have does include an ARM
+>>>>>>> architecture sysroot? That's the the one you should be compiling wi=
+th, and
+>>>>>>> I believe you'll find the asm/unistd.h header there (as there is no=
+ 32/64
+>>>>>>> bit difference on Android+ARM yet).
+>>>>>>>
+>>>>>>>
+>>>>>>> On Tue, May 21, 2013 at 11:29 AM, Ionut D. <ionut5001@gmail.com>wro=
+te:
+>>>>>>>
+>>>>>>>> The problem is that I am trying to build it on ICS with NDK r7 and
+>>>>>>>> I tried to build it in the both ways with the ndk and also by crea=
+ting
+>>>>>>>> Android.mk files and it looks like is not working. I searched with=
+ grep
+>>>>>>>> firstly through NDK and second through bionic and these are the re=
+sults:
+>>>>>>>>
+>>>>>>>> NDK:
+>>>>>>>> #grep -r __NR_splice .
+>>>>>>>> ./platforms/android-9/arch-x86/usr/include/asm/unistd_32.h:#define
+>>>>>>>> __NR_splice 313
+>>>>>>>> ./platforms/android-14/arch-x86/usr/include/asm/unistd_32.h:#defin=
+e
+>>>>>>>> __NR_splice 313
+>>>>>>>>
+>>>>>>>> bionic:
+>>>>>>>> grep -r __NR_splice bionic
+>>>>>>>> bionic/libc/kernel/arch-sh/asm/unistd_32.h:#define __NR_splice 313
+>>>>>>>> bionic/libc/kernel/arch-sh/asm/unistd_64.h:#define __NR_splice 341
+>>>>>>>> bionic/libc/kernel/arch-x86/asm/unistd_32.h:#define __NR_splice 31=
+3
+>>>>>>>>
+>>>>>>>> Looking through results I see that '__NR_splice' it not in unistd.=
+h
+>>>>>>>> and I know this is important.
+>>>>>>>>
+>>>>>>>> Ionut
+>>>>>>>>
+>>>>>>>>
+>>>>>>>> On Tue, May 21, 2013 at 5:15 PM, Pierre-Luc St-Charles <
+>>>>>>>> pierre-luc.st-charles@polymtl.ca> wrote:
+>>>>>>>>
+>>>>>>>>> The first error refers to __NR_splice, which should be declared
+>>>>>>>>> once asm/unistd.h is included; in this case, it is included right=
+ above the
+>>>>>>>>> problematic line (src/common/compat/fcntl.h @ L35). Could you ver=
+ify that
+>>>>>>>>> __NR_splice is defined somewhere in that file? If not, it might b=
+e a little
+>>>>>>>>> more problematic.
+>>>>>>>>>
+>>>>>>>>> As for the second error, I believe it is also caused by a missing
+>>>>>>>>> symbol that should be included in asm/signal.h, which is in turn =
+usually
+>>>>>>>>> included via signal.h itself.
+>>>>>>>>>
+>>>>>>>>> Compiling with the NDK (v8, platform 14) is successful here, and =
+I
+>>>>>>>>> can find all these missing symbols in the default system includes=
+ there.
+>>>>>>>>> Are you sure you specified the target sysroot when compiling?
+>>>>>>>>>
+>>>>>>>>> -PL
+>>>>>>>>>
+>>>>>>>>>
+>>>>>>>>> On Tue, May 21, 2013 at 6:26 AM, Ionut D. <ionut5001@gmail.com>wr=
+ote:
+>>>>>>>>>
+>>>>>>>>>> I tried to compile lttng-tools and at compile time exits with th=
+e
+>>>>>>>>>> bellow error. I looked in the sources and it looks like for arm =
+this is not
+>>>>>>>>>> implemented. Do you have any idea about how could this be fixed?
+>>>>>>>>>>
+>>>>>>>>>>
+>>>>>>>>>> In file included from
+>>>>>>>>>> external/lttng-tools/src/common/compat/compat-fcntl.c:19:
+>>>>>>>>>> external/lttng-tools/src/common/compat/../../../src/common/compa=
+t/fcntl.h:
+>>>>>>>>>> In function 'splice':
+>>>>>>>>>> external/lttng-tools/src/common/compat/../../../src/common/compa=
+t/fcntl.h:44:
+>>>>>>>>>> error: '__NR_splice' undeclared (first use in this function)
+>>>>>>>>>> external/lttng-tools/src/common/compat/../../../src/common/compa=
+t/fcntl.h:44:
+>>>>>>>>>> error: (Each undeclared identifier is reported only once
+>>>>>>>>>> external/lttng-tools/src/common/compat/../../../src/common/compa=
+t/fcntl.h:44:
+>>>>>>>>>> error: for each function it appears in.)
+>>>>>>>>>> In file included from
+>>>>>>>>>> external/lttng-tools/src/common/compat/compat-fcntl.c:19:
+>>>>>>>>>> external/lttng-tools/src/common/compat/../../../src/common/compa=
+t/fcntl.h:48:1:
+>>>>>>>>>> warning: "POSIX_FADV_DONTNEED" redefined
+>>>>>>>>>> In file included from
+>>>>>>>>>> external/lttng-tools/src/common/compat/../../../src/common/compa=
+t/fcntl.h:47,
+>>>>>>>>>>                  from
+>>>>>>>>>> external/lttng-tools/src/common/compat/compat-fcntl.c:19:
+>>>>>>>>>> bionic/libc/kernel/common/linux/fadvise.h:24:1: warning: this is
+>>>>>>>>>> the location of the previous definition
+>>>>>>>>>> In file included from bionic/libc/include/sys/select.h:34,
+>>>>>>>>>>                  from bionic/libc/include/unistd.h:34,
+>>>>>>>>>>                  from
+>>>>>>>>>> external/lttng-tools/src/common/compat/compat-fcntl.c:20:
+>>>>>>>>>> external/lttng-tools/src/common/compat/signal.h: At top level:
+>>>>>>>>>> external/lttng-tools/src/common/compat/signal.h:27: error:
+>>>>>>>>>> expected ';', ',' or ')' before '*' token
+>>>>>>>>>> external/lttng-tools/src/common/compat/signal.h:28: error:
+>>>>>>>>>> expected ';', ',' or ')' before '*' token
+>>>>>>>>>> external/lttng-tools/src/common/compat/signal.h:29: error:
+>>>>>>>>>> expected ';', ',' or ')' before '*' token
+>>>>>>>>>> In file included from bionic/libc/include/unistd.h:34,
+>>>>>>>>>>                  from
+>>>>>>>>>> external/lttng-tools/src/common/compat/compat-fcntl.c:20:
+>>>>>>>>>> bionic/libc/include/sys/select.h:42: error: expected ';', ',' or
+>>>>>>>>>> ')' before '*' token
+>>>>>>>>>>
+>>>>>>>>>>
+>>>>>>>>>>
+>>>>>>>>>> On Sat, May 18, 2013 at 10:21 AM, Ionut D. <ionut5001@gmail.com>=
+wrote:
+>>>>>>>>>>
+>>>>>>>>>>> Great informations! I will post back the results.
 >>>>>>>>>>>
->>>>>>>>>>>> Hello all,
+>>>>>>>>>>>
+>>>>>>>>>>> On Fri, May 17, 2013 at 4:47 PM, Pierre-Luc St-Charles <
+>>>>>>>>>>> pierre-luc.st-charles@polymtl.ca> wrote:
+>>>>>>>>>>>
+>>>>>>>>>>>> Alright, small update for all following a quick
+>>>>>>>>>>>> (non-mailing-list) exchange:
 >>>>>>>>>>>>
->>>>>>>>>>>> Recently I started to integrate LTTNG in Android ICS by
->>>>>>>>>>>> compiling each package, each dependency, by using the Android =
-build system.
->>>>>>>>>>>> It is a lot of work because I met different problems and to be=
- sincere, I
->>>>>>>>>>>> do not know if at the end will work and I do not know how much=
- I will need
->>>>>>>>>>>> to modify the sources in order to work.
+>>>>>>>>>>>> We did successfully complete a kernel-tracing port of LTTng fo=
+r
+>>>>>>>>>>>> Android (somewhat old news), but we are still working on bring=
+ing our
+>>>>>>>>>>>> patches back up to date with the current version of the differ=
+ent projects
+>>>>>>>>>>>> (soon-ish still applies here, we're talking days). So far, we =
+dwelled a
+>>>>>>>>>>>> little bit in LTTng-UST, but haven't done much changes, so use=
+rspace
+>>>>>>>>>>>> tracing is still not functional. Device that ran kernel traces=
+ successfully
+>>>>>>>>>>>> so far were the Nexus S and the Nexus 7 (example Nexus S trace=
+ available
+>>>>>>>>>>>> here<https://drive.google.com/folderview?id=3D0B55Ba7lWTLh4U0h=
+GeTQ4bmRYRjQ&usp=3Dsharing>;
+>>>>>>>>>>>> still not perfect).
 >>>>>>>>>>>>
->>>>>>>>>>>> My questions are about this integration. I mention that I read
->>>>>>>>>>>> a lot of discussions about this on Internet, on this mailing l=
-ist, but the
->>>>>>>>>>>> things are still not very clear for me.
+>>>>>>>>>>>> Basically, we cross-compiled everything via the Android NDK (n=
+o
+>>>>>>>>>>>> Android makefiles involved here), and pushed all required bins=
+ to a device
+>>>>>>>>>>>> without having to flash it (unless the default kernel config d=
+idn't allow
+>>>>>>>>>>>> tracing -- then we'd have to flash). This approach is not comp=
+atible with
+>>>>>>>>>>>> the official Android build system (meaning we wouldn't be able=
+ to add it to
+>>>>>>>>>>>> Android like this), but we might eventually get working on the=
+ damned
+>>>>>>>>>>>> Android makefiles (they're extremely painful to write, especia=
+lly since
+>>>>>>>>>>>> LTTng uses Autotools).
 >>>>>>>>>>>>
->>>>>>>>>>>> It is ok? what I am trying to do ? to integrate and build by
->>>>>>>>>>>> using the Android build system.
->>>>>>>>>>>> Could you give me some guidelines, indications about how I
->>>>>>>>>>>> should proceed, maybe a tutorial or maybe some android make fi=
-les/patches
->>>>>>>>>>>> that would help me to see how the job must be done and if I am=
- doing it
->>>>>>>>>>>> right ?
+>>>>>>>>>>>> The librairies required by LTTng that are not already included
+>>>>>>>>>>>> in a regular Android build (uuid/popt) can actually be found/c=
+ompiled from
+>>>>>>>>>>>> the official repo, in its 'external' directory (see oprofile a=
+nd e2fsprog
+>>>>>>>>>>>> -- from memory). That might not be the easiest way to get them=
+ (full repo
+>>>>>>>>>>>> download is BIG), but compatibility is assured, and you can sk=
+ip a full
+>>>>>>>>>>>> build by simply making those two individually for your device =
+(if that's
+>>>>>>>>>>>> all you need).
 >>>>>>>>>>>>
->>>>>>>>>>>> Until now I managed to build lttng-modules, liburcu, libuuid
->>>>>>>>>>>> from util-linux and configure lttng-ust by using the android t=
-oolchain for
->>>>>>>>>>>> arm. I got a lot of errors but until now I managed to configur=
-e/make these
->>>>>>>>>>>> packages.
+>>>>>>>>>>>> You'll also need your device to be rooted to use LTTng at all;
+>>>>>>>>>>>> then, most initializations are done via scripts (we'll also pr=
+ovide those
+>>>>>>>>>>>> with our patches). We still had some trouble automating everyt=
+hing via
+>>>>>>>>>>>> daemons, so we always ran the sessiond locally (with success).
 >>>>>>>>>>>>
->>>>>>>>>>>> I mention that I am trying to build lttng 2.x on ICS 4.0.3.
+>>>>>>>>>>>> Major problems we encountered so far were missing posix
+>>>>>>>>>>>> functions, and sysv shared memory. Basically, Android relies o=
+n Bionic for
+>>>>>>>>>>>> its system calls and other low-level functions, and since Bion=
+ic is pretty
+>>>>>>>>>>>> 'lightweight', they trimmed most of the fat out for performanc=
+e. We had to
+>>>>>>>>>>>> make some more-or-less sketchy replacements here and there, bu=
+t everything
+>>>>>>>>>>>> seems to be working decently now.
 >>>>>>>>>>>>
->>>>>>>>>>>> Would be great if you will give me a tutorial about how to do
->>>>>>>>>>>> it.
+>>>>>>>>>>>> So, simple 'how do I put LTTng on Android' workflow would be
+>>>>>>>>>>>> this:
 >>>>>>>>>>>>
->>>>>>>>>>>> Ionut
+>>>>>>>>>>>>   - Compile modules (using NDK) against device's kernel, makin=
+g
+>>>>>>>>>>>> sure its config is appropriate, ship them over via ADB
 >>>>>>>>>>>>
->>>>>>>>>>>> _______________________________________________
->>>>>>>>>>>> lttng-dev mailing list
->>>>>>>>>>>> lttng-dev@lists.lttng.org
->>>>>>>>>>>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>>>>>>>>>>>>   - Compile required external libraries (using repo build
+>>>>>>>>>>>> system) for the device, ship them over via ADB
+>>>>>>>>>>>>
+>>>>>>>>>>>>   - Patch up LTTng-* (soon-ish! I could send you the outdated
+>>>>>>>>>>>> patches right now if you're interested though, they might be a=
+ month behind
+>>>>>>>>>>>> or so on the current trunks)
+>>>>>>>>>>>>
+>>>>>>>>>>>>   - Cross-compile LTTng-* for the device (using NDK), ship
+>>>>>>>>>>>> binaries over via ADB
+>>>>>>>>>>>>
+>>>>>>>>>>>> Then, on the device, start up the sessiond manually & start
+>>>>>>>>>>>> tracing.
 >>>>>>>>>>>>
 >>>>>>>>>>>>
+>>>>>>>>>>>> I think I went over everything, but if there's a part that's
+>>>>>>>>>>>> still cloudy, don't hesitate.
+>>>>>>>>>>>>
+>>>>>>>>>>>>
+>>>>>>>>>>>> -PL
+>>>>>>>>>>>>
+>>>>>>>>>>>>
+>>>>>>>>>>>> On May 17, 2013 1:32 AM, "Ionut D." <ionut5001@gmail.com>
+>>>>>>>>>>>> wrote:
+>>>>>>>>>>>>
+>>>>>>>>>>>>> Hello all,
+>>>>>>>>>>>>>
+>>>>>>>>>>>>> Recently I started to integrate LTTNG in Android ICS by
+>>>>>>>>>>>>> compiling each package, each dependency, by using the Android=
+ build system.
+>>>>>>>>>>>>> It is a lot of work because I met different problems and to b=
+e sincere, I
+>>>>>>>>>>>>> do not know if at the end will work and I do not know how muc=
+h I will need
+>>>>>>>>>>>>> to modify the sources in order to work.
+>>>>>>>>>>>>>
+>>>>>>>>>>>>> My questions are about this integration. I mention that I rea=
+d
+>>>>>>>>>>>>> a lot of discussions about this on Internet, on this mailing =
+list, but the
+>>>>>>>>>>>>> things are still not very clear for me.
+>>>>>>>>>>>>>
+>>>>>>>>>>>>> It is ok? what I am trying to do ? to integrate and build by
+>>>>>>>>>>>>> using the Android build system.
+>>>>>>>>>>>>> Could you give me some guidelines, indications about how I
+>>>>>>>>>>>>> should proceed, maybe a tutorial or maybe some android make f=
+iles/patches
+>>>>>>>>>>>>> that would help me to see how the job must be done and if I a=
+m doing it
+>>>>>>>>>>>>> right ?
+>>>>>>>>>>>>>
+>>>>>>>>>>>>> Until now I managed to build lttng-modules, liburcu, libuuid
+>>>>>>>>>>>>> from util-linux and configure lttng-ust by using the android =
+toolchain for
+>>>>>>>>>>>>> arm. I got a lot of errors but until now I managed to configu=
+re/make these
+>>>>>>>>>>>>> packages.
+>>>>>>>>>>>>>
+>>>>>>>>>>>>> I mention that I am trying to build lttng 2.x on ICS 4.0.3.
+>>>>>>>>>>>>>
+>>>>>>>>>>>>> Would be great if you will give me a tutorial about how to do
+>>>>>>>>>>>>> it.
+>>>>>>>>>>>>>
+>>>>>>>>>>>>> Ionut
+>>>>>>>>>>>>>
+>>>>>>>>>>>>> _______________________________________________
+>>>>>>>>>>>>> lttng-dev mailing list
+>>>>>>>>>>>>> lttng-dev@lists.lttng.org
+>>>>>>>>>>>>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>>>>>>>>>>>>>
+>>>>>>>>>>>>>
+>>>>>>>>>>>
 >>>>>>>>>>
 >>>>>>>>>
 >>>>>>>>
 >>>>>>>
 >>>>>>
 >>>>>
->>>>
->>>> _______________________________________________
->>>> lttng-dev mailing list
->>>> lttng-dev@lists.lttng.org
->>>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->>>>
+>>>>> _______________________________________________
+>>>>> lttng-dev mailing list
+>>>>> lttng-dev@lists.lttng.org
+>>>>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>>>>>
+>>>>>
 >>>>
 >>>
 >>
 >
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>
+>
 
---047d7b10cd817367f704dd77088e
+--089e0111c3c6d26ab904dd7b7676
 Content-Type: text/html; charset=ISO-8859-1
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr">The required kernel configuration options for the modules =
-are listed in the lttng-module README file, located in its project root dir=
-ectory. Some of the &#39;optional&#39; options also listed there are simply=
- not supported by 3.0.x ARM kernels (such as HAVE_SYSCALL_TRACEPOINTS), so =
-you might be missing some modules compared to what you would get on a (x86 =
-arch w/ recent kernel) platform.<div>
-<br></div><div style>You can find more information on syscall tracing on AR=
-M here:=A0<a href=3D"http://comments.gmane.org/gmane.linux.kernel.tracing.l=
-ttng.devel/5086">http://comments.gmane.org/gmane.linux.kernel.tracing.lttng=
-.devel/5086</a></div>
-</div><div class=3D"gmail_extra"><br><br><div class=3D"gmail_quote">On Fri,=
- May 24, 2013 at 6:44 AM, Ionut D. <span dir=3D"ltr">&lt;<a href=3D"mailto:=
-ionut5001@gmail.com" target=3D"_blank">ionut5001@gmail.com</a>&gt;</span> w=
-rote:<br>
+<div dir=3D"ltr">Hi,<div><br></div><div style>I got some problem compiling =
+required libraries for lttng-tools. I did a full android build within repo:=
+</div><div style><br></div><div style>$ source build/envsetup.sh</div><div =
+style>
+$ lunch # with full_maguro-eng</div><div style>$ m</div><div style><br></di=
+v><div style>Build is fine, but when trying to run configure in lttng-tools=
+, it can&#39;t find liboprofile_popt. Here is the error message in config.l=
+og:</div>
+<div style><br></div><div style><div>/home/francis/android/android-ndk-r8e/=
+toolchains/arm-linux-androideabi-4.6/prebuilt/linux-x86_64/bin/../lib/gcc/a=
+rm-linux-androideabi/4.6/../../../../arm-linux-androideabi/bin/ld: /home/fr=
+ancis/android/repo/out/target/product/maguro/obj/STATIC_LIBRARIES/liboprofi=
+le_popt_intermediates/liboprofile_popt.a(popthelp.o): in function singleOpt=
+ionHelp.isra.4:bionic/libc/include/stdio.h:483: error: undefined reference =
+to &#39;__sprintf_chk&#39;</div>
+<div><br></div><div style>It seems that only the static library of liboprof=
+ile_popt is compiled.</div><div><br></div><div style>The symbol is defined =
+in libc.a and libc.so:</div><div><br></div></div><div style><div>$ nm ./out=
+/target/product/maguro/obj/SHARED_LIBRARIES/libc_intermediates/LINKED/libc.=
+so | grep -E &quot;__strlen_chk|__sprintf_chk&quot;</div>
+<div>0001395d T __sprintf_chk</div><div>00012df1 T __strlen_chk</div><div><=
+br></div><div style>I tried to compile the configtest.c file by hand and it=
+ worked, so it really seems to be some kind of environment variable that ma=
+ke it fail.=A0</div>
+<div><br></div><div style>For the people who managed to do the configure, w=
+hat arguments should be supplied to configure? Or maybe it&#39;s my android=
+ build that is incomplete? Should I build sub-directories in addition to th=
+e build in the root android repo sources?</div>
+<div style><br></div><div style>Cheers!</div><div style><br></div><div styl=
+e>Francis</div></div></div><div class=3D"gmail_extra"><br><br><div class=3D=
+"gmail_quote">2013/5/24 Pierre-Luc St-Charles <span dir=3D"ltr">&lt;<a href=
+=3D"mailto:pierre-luc.st-charles@polymtl.ca" target=3D"_blank">pierre-luc.s=
+t-charles@polymtl.ca</a>&gt;</span><br>
+<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
+x #ccc solid;padding-left:1ex"><div dir=3D"ltr">The required kernel configu=
+ration options for the modules are listed in the lttng-module README file, =
+located in its project root directory. Some of the &#39;optional&#39; optio=
+ns also listed there are simply not supported by 3.0.x ARM kernels (such as=
+ HAVE_SYSCALL_TRACEPOINTS), so you might be missing some modules compared t=
+o what you would get on a (x86 arch w/ recent kernel) platform.<div>
+
+<br></div><div>You can find more information on syscall tracing on ARM here=
+:=A0<a href=3D"http://comments.gmane.org/gmane.linux.kernel.tracing.lttng.d=
+evel/5086" target=3D"_blank">http://comments.gmane.org/gmane.linux.kernel.t=
+racing.lttng.devel/5086</a></div>
+
+</div><div class=3D"HOEnZb"><div class=3D"h5"><div class=3D"gmail_extra"><b=
+r><br><div class=3D"gmail_quote">On Fri, May 24, 2013 at 6:44 AM, Ionut D. =
+<span dir=3D"ltr">&lt;<a href=3D"mailto:ionut5001@gmail.com" target=3D"_bla=
+nk">ionut5001@gmail.com</a>&gt;</span> wrote:<br>
+
 <blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
 x #ccc solid;padding-left:1ex"><div dir=3D"ltr">I managed to fix it. It was=
  not finding `lttng-consumerd`, I fixed it by configuring the package with =
@@ -449,12 +550,14 @@ the right path. But, about the kernel modules the question is still pertine=
 nt.=A0<span style=3D"font-family:arial,sans-serif;font-size:13px">What opti=
 ons should I check in the kernel configuration? I saw that in my case not a=
 ll the lttng kernel modules have been compiled.</span></div>
-<div class=3D"HOEnZb"><div class=3D"h5">
+
+<div><div>
 <div class=3D"gmail_extra"><br><br><div class=3D"gmail_quote">On Fri, May 2=
 4, 2013 at 11:07 AM, Ionut D. <span dir=3D"ltr">&lt;<a href=3D"mailto:ionut=
 5001@gmail.com" target=3D"_blank">ionut5001@gmail.com</a>&gt;</span> wrote:=
 <br><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-lef=
 t:1px #ccc solid;padding-left:1ex">
+
 
 <div dir=3D"ltr">Hello,<div><br></div><div>Thank you for the slides. I mang=
 ed to build the kernel modules and I insmod them manually. On the device I =
@@ -465,10 +568,12 @@ ession` and I enable tracing on all the event with `./lttng enable-event -a=
  -k`. But here starts my problem.</div>
 
 
+
 <div><br></div><div>The output of the last command is the following:</div><=
 div><br></div><div><div>root@android:/data/lttng # ./lttng enable-event -a =
 -k</div><div>PERROR [3681/3681]: kernel start consumer exec: (null) (in spa=
 wn_consumerd() at main.c:2007)</div>
+
 
 
 <div>Error: Condition timed out. The consumer thread was never ready. Killi=
@@ -477,10 +582,12 @@ ng it</div><div>Warning: Using pthread_kill as pthread_cancel is missing on=
  (in notify_thread_pipe() at utils.c:43)</div>
 
 
+
 <div>Error: Events: Fatal error of the session daemon (channel channel0, se=
 ssion mysession)</div><div><br></div><div>Do you have any idea about what c=
 ould be wrong? What options should I check in the kernel configuration? (I =
 checked all that is under Tracing)</div>
+
 
 
 <div><br></div><div>--Ionut</div><div><br></div></div><div><br></div><div><=
@@ -490,16 +597,19 @@ a href=3D"mailto:charles.briere@polymtl.ca" target=3D"_blank">charles.brier=
 e@polymtl.ca</a>&gt;</span> wrote:<br>
 
 
+
 <blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
 x #ccc solid;padding-left:1ex"><div dir=3D"ltr">Module location doesn&#39;t=
  really matter, we used to push them to /data/... or /sdcard/... .=A0<div><=
 br>
+
 
 <div>
 Modprobe doesn&#39;t exists on Android so you&#39;ll need to use insmod. We=
  used <a href=3D"https://docs.google.com/file/d/0B56W2viIJ4oqOU1qTHJZY0V2Mz=
 Q/edit" target=3D"_blank">this script</a> in order to compile, push to devi=
 ce and load modules.=A0</div>
+
 
 
 
@@ -512,10 +622,12 @@ mp;loop=3Dfalse&amp;delayms=3D3000</a></div>
 
 
 
+
 </div></div><div class=3D"gmail_extra"><br><br><div class=3D"gmail_quote">O=
 n Thu, May 23, 2013 at 10:40 AM, Ionut D. <span dir=3D"ltr">&lt;<a href=3D"=
 mailto:ionut5001@gmail.com" target=3D"_blank">ionut5001@gmail.com</a>&gt;</=
 span> wrote:<br>
+
 
 
 
@@ -526,10 +638,12 @@ here should they be located on the target? Should I have modprobe or insmod=
 
 
 
+
 <div><div><div class=3D"gmail_extra"><br><br><div class=3D"gmail_quote">On =
 Thu, May 23, 2013 at 2:19 PM, Ionut D. <span dir=3D"ltr">&lt;<a href=3D"mai=
 lto:ionut5001@gmail.com" target=3D"_blank">ionut5001@gmail.com</a>&gt;</spa=
 n> wrote:<br>
+
 
 
 
@@ -542,12 +656,14 @@ e them for ICS with NDK r7c. I was a problem of environment.</div>
 
 
 
+
 <div class=3D"gmail_extra"><br><br><div class=3D"gmail_quote">
 On Tue, May 21, 2013 at 9:26 PM, Pierre-Luc St-Charles <span dir=3D"ltr">&l=
 t;<a href=3D"mailto:pierre-luc.st-charles@polymtl.ca" target=3D"_blank">pie=
 rre-luc.st-charles@polymtl.ca</a>&gt;</span> wrote:<br><blockquote class=3D=
 "gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding=
 -left:1ex">
+
 
 
 
@@ -565,11 +681,13 @@ no 32/64 bit difference on Android+ARM yet).</div>
 
 
 
+
 <div class=3D"gmail_extra"><br><br><div class=3D"gmail_quote">On Tue, May 2=
 1, 2013 at 11:29 AM, Ionut D. <span dir=3D"ltr">&lt;<a href=3D"mailto:ionut=
 5001@gmail.com" target=3D"_blank">ionut5001@gmail.com</a>&gt;</span> wrote:=
 <br><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-lef=
 t:1px #ccc solid;padding-left:1ex">
+
 
 
 
@@ -589,10 +707,12 @@ through NDK and second through bionic and these are the results:</span><div=
 
 
 
+
 <br></div><div style=3D"font-family:arial,sans-serif;font-size:13px">NDK:</=
 div><div style=3D"font-family:arial,sans-serif;font-size:13px"><div>#grep -=
 r __NR_splice .</div><div>./platforms/android-9/arch-x86/usr/include/asm/un=
 istd_32.h:#define __NR_splice 313</div>
+
 
 
 
@@ -611,10 +731,12 @@ ne __NR_splice 313</div>
 
 
 
+
 <div>bionic/libc/kernel/arch-sh/asm/unistd_64.h:#define __NR_splice 341</di=
 v><div>bionic/libc/kernel/arch-x86/asm/unistd_32.h:#define __NR_splice 313<=
 /div><div><br></div><div>Looking through results I see that &#39;__NR_splic=
 e&#39; it not in unistd.h and I know this is important.</div>
+
 
 
 
@@ -634,12 +756,14 @@ mtl.ca</a>&gt;</span> wrote:<br>
 
 
 
+
 <blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
 x #ccc solid;padding-left:1ex"><div dir=3D"ltr"><div>The first error refers=
  to __NR_splice, which should be declared once asm/unistd.h is included; in=
  this case, it is included right above the problematic line (src/common/com=
 pat/fcntl.h @ L35). Could you verify that __NR_splice is defined somewhere =
 in that file? If not, it might be a little more problematic.<br>
+
 
 
 
@@ -666,6 +790,7 @@ class=3D"gmail_quote">On Tue, May 21, 2013 at 6:26 AM, Ionut D. <span dir=
 
 
 
+
 <blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
 x #ccc solid;padding-left:1ex"><div dir=3D"ltr"><div>I tried to compile ltt=
 ng-tools and at compile time exits with the bellow error. I looked in the s=
@@ -680,10 +805,12 @@ dea about how could this be fixed?</div>
 
 
 
+
 <div><br></div><div><br></div><div>In file included from external/lttng-too=
 ls/src/common/compat/compat-fcntl.c:19:</div><div>external/lttng-tools/src/=
 common/compat/../../../src/common/compat/fcntl.h: In function &#39;splice&#=
 39;:</div>
+
 
 
 
@@ -707,9 +834,11 @@ v>
 
 
 
+
 <div>external/lttng-tools/src/common/compat/../../../src/common/compat/fcnt=
 l.h:44: error: for each function it appears in.)</div><div>In file included=
  from external/lttng-tools/src/common/compat/compat-fcntl.c:19:</div><div>
+
 
 
 
@@ -732,10 +861,12 @@ pat/fcntl.h:47,</div>
 
 
 
+
 <div>=A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0from external/lttng-tools/src/commo=
 n/compat/compat-fcntl.c:19:</div><div>bionic/libc/kernel/common/linux/fadvi=
 se.h:24:1: warning: this is the location of the previous definition</div><d=
 iv>In file included from bionic/libc/include/sys/select.h:34,</div>
+
 
 
 
@@ -758,10 +889,12 @@ on/compat/signal.h: At top level:</div>
 
 
 
+
 <div>external/lttng-tools/src/common/compat/signal.h:27: error: expected &#=
 39;;&#39;, &#39;,&#39; or &#39;)&#39; before &#39;*&#39; token</div><div>ex=
 ternal/lttng-tools/src/common/compat/signal.h:28: error: expected &#39;;&#3=
 9;, &#39;,&#39; or &#39;)&#39; before &#39;*&#39; token</div>
+
 
 
 
@@ -785,6 +918,7 @@ cntl.c:20:</div>
 
 
 
+
 <div>bionic/libc/include/sys/select.h:42: error: expected &#39;;&#39;, &#39=
 ;,&#39; or &#39;)&#39; before &#39;*&#39; token</div><div><br></div></div><=
 div><div><div class=3D"gmail_extra"><br><br><div class=3D"gmail_quote">
@@ -795,6 +929,7 @@ On Sat, May 18, 2013 at 10:21 AM, Ionut D. <span dir=3D"ltr">&lt;<a href=3D=
 x #ccc solid;padding-left:1ex"><div dir=3D"ltr">Great informations! I will =
 post back the results.</div><div class=3D"gmail_extra"><br><br><div class=
 =3D"gmail_quote">
+
 
 
 
@@ -833,6 +968,7 @@ jQ&amp;usp=3Dsharing" target=3D"_blank">here</a>; still not perfect).</p>
 
 
 
+
 <p dir=3D"ltr">Basically, we cross-compiled everything via the Android NDK =
 (no Android makefiles involved here), and pushed all required bins to a dev=
 ice without having to flash it (unless the default kernel config didn&#39;t=
@@ -841,6 +977,7 @@ ible with the official Android build system (meaning we wouldn&#39;t be abl=
 e to add it to Android like this), but we might eventually get working on t=
 he damned Android makefiles (they&#39;re extremely painful to write, especi=
 ally since LTTng uses Autotools).</p>
+
 
 
 
@@ -876,10 +1013,12 @@ t&#39;s all you need).</p>
 
 
 
+
 <p dir=3D"ltr">You&#39;ll also need your device to be rooted to use LTTng a=
 t all; then, most initializations are done via scripts (we&#39;ll also prov=
 ide those with our patches). We still had some trouble automating everythin=
 g via daemons, so we always ran the sessiond locally (with success).</p>
+
 
 
 
@@ -897,6 +1036,7 @@ ysv shared memory. Basically, Android relies on Bionic for its system calls=
 &#39;, they trimmed most of the fat out for performance. We had to make som=
 e more-or-less sketchy replacements here and there, but everything seems to=
  be working decently now.</p>
+
 
 
 
@@ -926,10 +1066,12 @@ ough, they might be a month behind or so on the current trunks)</p>
 
 
 
+
 <p>=A0 - Cross-compile LTTng-* for the device (using NDK), ship binaries ov=
 er via ADB</p><p>Then, on the device, start up the sessiond manually &amp; =
 start tracing.</p><p><br></p><p>I think I went over everything, but if ther=
 e&#39;s a part that&#39;s still cloudy, don&#39;t hesitate.</p>
+
 
 
 
@@ -949,6 +1091,7 @@ t;<a href=3D"mailto:ionut5001@gmail.com" target=3D"_blank">ionut5001@gmail.=
 com</a>&gt; wrote:<br type=3D"attribution"><blockquote class=3D"gmail_quote=
 " style=3D"margin:0px 0px 0px 0.8ex;border-left-width:1px;border-left-color=
 :rgb(204,204,204);border-left-style:solid;padding-left:1ex">
+
 
 
 
@@ -982,10 +1125,12 @@ ork.<br>
 
 
 
+
 </div><br>My questions are about this integration. I mention that I read a =
 lot of discussions about this on Internet, on this mailing list, but the th=
 ings are still not very clear for me.<br><br>It is ok? what I am trying to =
 do ? to integrate and build by using the Android build system.<br>
+
 
 
 
@@ -1016,9 +1161,11 @@ e to see how the job must be done and if I am doing it right ?<br><br>
 
 
 
+
 Until now I managed to build lttng-modules, liburcu, libuuid from util-linu=
 x and configure lttng-ust by using the android toolchain for arm. I got a l=
 ot of errors but until now I managed to configure/make these packages.<br>
+
 
 
 
@@ -1063,11 +1210,19 @@ br>
 </blockquote></div><br></div>
 </blockquote></div><br></div>
 </div></div></blockquote></div><br></div>
+</div></div><br>_______________________________________________<br>
+lttng-dev mailing list<br>
+<a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a><=
+br>
+<a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" targe=
+t=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><=
+br>
+<br></blockquote></div><br></div>
 
---047d7b10cd817367f704dd77088e--
+--089e0111c3c6d26ab904dd7b7676--
 
 
---===============1846237326==
+--===============1164306741==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -1078,4 +1233,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============1846237326==--
+--===============1164306741==--
