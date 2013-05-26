@@ -1,16 +1,18 @@
-From: Aryeh Weinreb <weinrea@gmail.com>
-Subject: Getting started with UST
-Date: Sun, 26 May 2013 15:51:04 +0300
-Message-ID: <CAE5ibEneMm2D1=3Zy8hbtV42Y22TwW2rRAqimyMSfMPvtiYCiA__34523.0798506693$1369572714$gmane$org@mail.gmail.com>
+From: Yannick Brosseau <yannick.brosseau@gmail.com>
+Subject: Re: Getting started with UST
+Date: Sun, 26 May 2013 09:10:46 -0400
+Message-ID: <51A209D6.6010802__31933.9692163796$1369573887$gmane$org@gmail.com>
+References: <CAE5ibEneMm2D1=3Zy8hbtV42Y22TwW2rRAqimyMSfMPvtiYCiA@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary=bcaec544f02e31888204dd9e7c4a
+Content-Type: multipart/mixed; boundary="===============0311798464=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-pb0-f68.google.com ([209.85.160.68])
+Received: from mail-qc0-f169.google.com ([209.85.216.169])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <weinrea@gmail.com>) id 1UgaPm-00032x-UJ
-	for lttng-dev@lists.lttng.org; Sun, 26 May 2013 08:51:11 -0400
-Received: by mail-pb0-f68.google.com with SMTP id jt11so2376309pbb.11
-	for <lttng-dev@lists.lttng.org>; Sun, 26 May 2013 05:51:05 -0700 (PDT)
+	(envelope-from <yannick.brosseau@gmail.com>) id 1Ugais-0003Da-H6
+	for lttng-dev@lists.lttng.org; Sun, 26 May 2013 09:10:54 -0400
+Received: by mail-qc0-f169.google.com with SMTP id k15so3173956qcv.28
+	for <lttng-dev@lists.lttng.org>; Sun, 26 May 2013 06:10:49 -0700 (PDT)
+In-Reply-To: <CAE5ibEneMm2D1=3Zy8hbtV42Y22TwW2rRAqimyMSfMPvtiYCiA@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,13 +21,107 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Aryeh Weinreb <weinrea@gmail.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---bcaec544f02e31888204dd9e7c4a
+This is a multi-part message in MIME format.
+--===============0311798464==
+Content-Type: multipart/alternative;
+ boundary="------------000400080504060908070201"
+
+This is a multi-part message in MIME format.
+--------------000400080504060908070201
 Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
 
 Hi,
+
+Did you forgot to enable some event, for example:
+lttng enable-event -u -a
+(For all userspace events)
+
+On 2013-05-26 08:51, Aryeh Weinreb wrote:
+> Hi,
+> I'm trying to get UST working for the first time on RHEL 6.4.
+>
+> I compiled and installed the following packages:
+> userspace-rcu-0.7.6
+> lttng-ust-2.1.2
+> lttng-tools-2.0.5
+> babeltrace-1.1.0
+>
+> When I ran the sample app in lttng-ust/examples I couldn't see any traces.
+>
+> # lttng create test_session
+> Session test_session created.
+> Traces will be written in /root/lttng-traces/test_session-20130526-071315
+>
+> # lttng start
+> Tracing started for session test_session
+>
+> # cd /usr/local/share/doc/lttng-ust/examples/gen-tp/
+>
+> # make
+> lttng-gen-tp -o sample_tracepoint.h sample_tracepoint.tp
+> gcc  -c -o sample.o sample.c
+> lttng-gen-tp -o sample_tracepoint.c sample_tracepoint.tp
+> lttng-gen-tp -o sample_tracepoint.o sample_tracepoint.tp
+> gcc -o sample sample.o sample_tracepoint.o -ldl -llttng-ust
+> rm sample_tracepoint.c
+>
+> # ./sample
+>
+> # lttng stop
+> Tracing stopped for session test_session
+>
+> # lttng view
+> Trace directory: /root/lttng-traces/test_session-20130526-071315
+>
+> [error] Cannot open any trace for reading.
+>
+> [error] opening trace
+> "/root/lttng-traces/test_session-20130526-071315" for reading.
+>
+> [error] none of the specified trace paths could be opened.
+>
+> # ls -l /root/lttng-traces/test_session-20130526-071315
+> total 0
+>
+>
+> What am I doing wrong? I attached the debug log from the lttng-sessiond.
+>
+> Thanks,
+> Aryeh
+>
+>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+
+--------------000400080504060908070201
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
+
+<html>
+  <head>
+    <meta content="text/html; charset=ISO-8859-1"
+      http-equiv="Content-Type">
+  </head>
+  <body bgcolor="#FFFFFF" text="#000000">
+    Hi,<br>
+    <br>
+    Did you forgot to enable some event, for example:<br>
+    lttng enable-event -u -a<br>
+    (For all userspace events)<br>
+    <br>
+    On 2013-05-26 08:51, Aryeh Weinreb wrote:
+    <blockquote
+cite="mid:CAE5ibEneMm2D1=3Zy8hbtV42Y22TwW2rRAqimyMSfMPvtiYCiA@mail.gmail.com"
+      type="cite">
+      <pre wrap="">Hi,
 I'm trying to get UST working for the first time on RHEL 6.4.
 
 I compiled and installed the following packages:
@@ -76,171 +172,24 @@ What am I doing wrong? I attached the debug log from the lttng-sessiond.
 
 Thanks,
 Aryeh
+</pre>
+      <br>
+      <fieldset class="mimeAttachmentHeader"></fieldset>
+      <br>
+      <pre wrap="">_______________________________________________
+lttng-dev mailing list
+<a class="moz-txt-link-abbreviated" href="mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a>
+<a class="moz-txt-link-freetext" href="http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a>
+</pre>
+    </blockquote>
+    <br>
+  </body>
+</html>
 
---bcaec544f02e31888204dd9e7c4a
-Content-Type: text/plain; charset=US-ASCII; name="lttng-sessiond.txt"
-Content-Disposition: attachment; filename="lttng-sessiond.txt"
-Content-Transfer-Encoding: base64
-X-Attachment-Id: f_hh68111g0
+--------------000400080504060908070201--
 
-IyBsdHRuZy1zZXNzaW9uZCAtLXZlcmJvc2UgLS1uby1rZXJuZWwNCkRFQlVHMzogQ3JlYXRpbmcg
-TFRUbmcgcnVuIGRpcmVjdG9yeTogL3Zhci9ydW4vbHR0bmcgW2luIGNyZWF0ZV9sdHRuZ19ydW5k
-aXIoKSBhdCBtYWluLmM6NDMyNV0NCkRFQlVHMTogQ2xpZW50IHNvY2tldCBwYXRoIC92YXIvcnVu
-L2x0dG5nL2NsaWVudC1sdHRuZy1zZXNzaW9uZCBbaW4gbWFpbigpIGF0IG1haW4uYzo0NjE3XQ0K
-REVCVUcxOiBBcHBsaWNhdGlvbiBzb2NrZXQgcGF0aCAvdmFyL3J1bi9sdHRuZy9hcHBzLWx0dG5n
-LXNlc3Npb25kIFtpbiBtYWluKCkgYXQgbWFpbi5jOjQ2MThdDQpERUJVRzE6IExUVG5nIHJ1biBk
-aXJlY3RvcnkgcGF0aDogL3Zhci9ydW4vbHR0bmcgW2luIG1haW4oKSBhdCBtYWluLmM6NDYxOV0N
-CkRFQlVHMzogQ3JlYXRlZCBoYXNodGFibGUgc2l6ZSA0IGF0IDB4MjRjZTBhMCBvZiB0eXBlIDEg
-W2luIGx0dG5nX2h0X25ldygpIGF0IGhhc2h0YWJsZS5jOjk2XQ0KREVCVUczOiBDcmVhdGVkIGhh
-c2h0YWJsZSBzaXplIDQgYXQgMHgyNGNlMzQwIG9mIHR5cGUgMSBbaW4gbHR0bmdfaHRfbmV3KCkg
-YXQgaGFzaHRhYmxlLmM6OTZdDQpERUJVRzE6IFNpZ25hbCBoYW5kbGVyIHNldCBmb3IgU0lHVEVS
-TSwgU0lHUElQRSBhbmQgU0lHSU5UIFtpbiBzZXRfc2lnbmFsX2hhbmRsZXIoKSBhdCBtYWluLmM6
-NDQ1OV0NCldhcm5pbmc6IE5vIHRyYWNpbmcgZ3JvdXAgZGV0ZWN0ZWQNCkRFQlVHMTogZXBvbGwg
-c2V0IG1heCBzaXplIGlzIDM2MzU4MSBbaW4gY29tcGF0X2Vwb2xsX3NldF9tYXhfc2l6ZSgpIGF0
-IGNvbXBhdC1lcG9sbC5jOjIyNF0NCkRFQlVHMTogW3RocmVhZF0gTWFuYWdlIGFwcGxpY2F0aW9u
-IHN0YXJ0ZWQgW2luIHRocmVhZF9tYW5hZ2VfYXBwcygpIGF0IG1haW4uYzoxMTc5XQ0KREVCVUcx
-OiBBcHBzIHRocmVhZCBwb2xsaW5nIG9uIDIgZmRzIFtpbiB0aHJlYWRfbWFuYWdlX2FwcHMoKSBh
-dCBtYWluLmM6MTIwMF0NCkRFQlVHMTogVGhyZWFkIG1hbmFnZSBrZXJuZWwgc3RhcnRlZCBbaW4g
-dGhyZWFkX21hbmFnZV9rZXJuZWwoKSBhdCBtYWluLmM6ODc2XQ0KREVCVUcxOiBVcGRhdGluZyBr
-ZXJuZWwgcG9sbCBzZXQgW2luIHVwZGF0ZV9rZXJuZWxfcG9sbCgpIGF0IG1haW4uYzo3NDhdDQpE
-RUJVRzE6IFRocmVhZCBrZXJuZWwgcG9sbGluZyBvbiAyIGZkcyBbaW4gdGhyZWFkX21hbmFnZV9r
-ZXJuZWwoKSBhdCBtYWluLmM6OTA1XQ0KREVCVUcxOiBbdGhyZWFkXSBNYW5hZ2UgYXBwbGljYXRp
-b24gcmVnaXN0cmF0aW9uIHN0YXJ0ZWQgW2luIHRocmVhZF9yZWdpc3RyYXRpb25fYXBwcygpIGF0
-IG1haW4uYzoxMzkyXQ0KREVCVUcxOiBOb3RpZnlpbmcgYXBwbGljYXRpb25zIG9mIHNlc3Npb24g
-ZGFlbW9uIHN0YXRlOiAxIFtpbiBub3RpZnlfdXN0X2FwcHMoKSBhdCBtYWluLmM6Njg3XQ0KREVC
-VUcxOiBHb3QgdGhlIHdhaXQgc2htIGZkIDE3IFtpbiBnZXRfd2FpdF9zaG0oKSBhdCBzaG0uYzox
-MTddDQpERUJVRzE6IEZ1dGV4IHdhaXQgdXBkYXRlIGFjdGl2ZSAxIFtpbiBmdXRleF93YWl0X3Vw
-ZGF0ZSgpIGF0IGZ1dGV4LmM6NjJdDQpERUJVRzE6IEFjY2VwdGluZyBhcHBsaWNhdGlvbiByZWdp
-c3RyYXRpb24gW2luIHRocmVhZF9yZWdpc3RyYXRpb25fYXBwcygpIGF0IG1haW4uYzoxNDIzXQ0K
-REVCVUcxOiBbdGhyZWFkXSBEaXNwYXRjaCBVU1QgY29tbWFuZCBzdGFydGVkIFtpbiB0aHJlYWRf
-ZGlzcGF0Y2hfdXN0X3JlZ2lzdHJhdGlvbigpIGF0IG1haW4uYzoxMzI0XQ0KREVCVUcxOiBGdXRl
-eCBuIHRvIDEgcHJlcGFyZSBkb25lIFtpbiBmdXRleF9udG8xX3ByZXBhcmUoKSBhdCBmdXRleC5j
-OjczXQ0KREVCVUcxOiBXb2tlbiB1cCBidXQgbm90aGluZyBpbiB0aGUgVVNUIGNvbW1hbmQgcXVl
-dWUgW2luIHRocmVhZF9kaXNwYXRjaF91c3RfcmVnaXN0cmF0aW9uKCkgYXQgbWFpbi5jOjEzMzRd
-DQpERUJVRzE6IFt0aHJlYWRdIE1hbmFnZSBjbGllbnQgc3RhcnRlZCBbaW4gdGhyZWFkX21hbmFn
-ZV9jbGllbnRzKCkgYXQgbWFpbi5jOjM4MDJdDQpERUJVRzE6IEFjY2VwdGluZyBjbGllbnQgY29t
-bWFuZCAuLi4gW2luIHRocmVhZF9tYW5hZ2VfY2xpZW50cygpIGF0IG1haW4uYzozODM0XQ0KREVC
-VUcxOiBXYWl0IGZvciBjbGllbnQgcmVzcG9uc2UgW2luIHRocmVhZF9tYW5hZ2VfY2xpZW50cygp
-IGF0IG1haW4uYzozODcxXQ0KREVCVUcxOiBSZWNlaXZpbmcgZGF0YSBmcm9tIGNsaWVudCAuLi4g
-W2luIHRocmVhZF9tYW5hZ2VfY2xpZW50cygpIGF0IG1haW4uYzozOTA2XQ0KREVCVUcxOiBOb3Ro
-aW5nIHJlY3YoKSBmcm9tIGNsaWVudC4uLiBjb250aW51aW5nIFtpbiB0aHJlYWRfbWFuYWdlX2Ns
-aWVudHMoKSBhdCBtYWluLmM6MzkxMF0NCkRFQlVHMTogQ2xlYW4gY29tbWFuZCBjb250ZXh0IHN0
-cnVjdHVyZSBbaW4gY2xlYW5fY29tbWFuZF9jdHgoKSBhdCBtYWluLmM6NTM0XQ0KREVCVUcxOiBB
-Y2NlcHRpbmcgY2xpZW50IGNvbW1hbmQgLi4uIFtpbiB0aHJlYWRfbWFuYWdlX2NsaWVudHMoKSBh
-dCBtYWluLmM6MzgzNF0NCkRFQlVHMTogV2FpdCBmb3IgY2xpZW50IHJlc3BvbnNlIFtpbiB0aHJl
-YWRfbWFuYWdlX2NsaWVudHMoKSBhdCBtYWluLmM6Mzg3MV0NCkRFQlVHMTogUmVjZWl2aW5nIGRh
-dGEgZnJvbSBjbGllbnQgLi4uIFtpbiB0aHJlYWRfbWFuYWdlX2NsaWVudHMoKSBhdCBtYWluLmM6
-MzkwNl0NCkRFQlVHMTogUHJvY2Vzc2luZyBjbGllbnQgY29tbWFuZCA4IFtpbiBwcm9jZXNzX2Ns
-aWVudF9tc2coKSBhdCBtYWluLmM6MzMxN10NCkRFQlVHMzogbWtkaXIoKSByZWN1cnNpdmUgL3Jv
-b3QvbHR0bmctdHJhY2VzL3Rlc3Rfc2Vzc2lvbi0yMDEzMDUyNi0wNzEzMTUgd2l0aCBtb2RlIDUw
-NCBmb3IgdWlkIDAgYW5kIGdpZCAwIFtpbiBydW5fYXNfbWtkaXJfcmVjdXJzaXZlKCkgYXQgcnVu
-YXMuYzozMzldDQpERUJVRzE6IFVzaW5nIHJ1bl9hc19jbG9uZSBbaW4gcnVuX2FzKCkgYXQgcnVu
-YXMuYzozMjNdDQpERUJVRzE6IFRyYWNpbmcgc2Vzc2lvbiB0ZXN0X3Nlc3Npb24gY3JlYXRlZCBp
-biAvcm9vdC9sdHRuZy10cmFjZXMvdGVzdF9zZXNzaW9uLTIwMTMwNTI2LTA3MTMxNSB3aXRoIElE
-IDEgYnkgVUlEIDAgR0lEIDAgW2luIHNlc3Npb25fY3JlYXRlKCkgYXQgc2Vzc2lvbi5jOjIzMl0N
-CkRFQlVHMTogU2VuZGluZyByZXNwb25zZSAoc2l6ZTogMTYsIHJldGNvZGU6IFN1Y2Nlc3MpIFtp
-biB0aHJlYWRfbWFuYWdlX2NsaWVudHMoKSBhdCBtYWluLmM6Mzk0NF0NCkRFQlVHMTogQ2xlYW4g
-Y29tbWFuZCBjb250ZXh0IHN0cnVjdHVyZSBbaW4gY2xlYW5fY29tbWFuZF9jdHgoKSBhdCBtYWlu
-LmM6NTM0XQ0KREVCVUcxOiBBY2NlcHRpbmcgY2xpZW50IGNvbW1hbmQgLi4uIFtpbiB0aHJlYWRf
-bWFuYWdlX2NsaWVudHMoKSBhdCBtYWluLmM6MzgzNF0NCkRFQlVHMTogV2FpdCBmb3IgY2xpZW50
-IHJlc3BvbnNlIFtpbiB0aHJlYWRfbWFuYWdlX2NsaWVudHMoKSBhdCBtYWluLmM6Mzg3MV0NCkRF
-QlVHMTogUmVjZWl2aW5nIGRhdGEgZnJvbSBjbGllbnQgLi4uIFtpbiB0aHJlYWRfbWFuYWdlX2Ns
-aWVudHMoKSBhdCBtYWluLmM6MzkwNl0NCkRFQlVHMTogTm90aGluZyByZWN2KCkgZnJvbSBjbGll
-bnQuLi4gY29udGludWluZyBbaW4gdGhyZWFkX21hbmFnZV9jbGllbnRzKCkgYXQgbWFpbi5jOjM5
-MTBdDQpERUJVRzE6IENsZWFuIGNvbW1hbmQgY29udGV4dCBzdHJ1Y3R1cmUgW2luIGNsZWFuX2Nv
-bW1hbmRfY3R4KCkgYXQgbWFpbi5jOjUzNF0NCkRFQlVHMTogQWNjZXB0aW5nIGNsaWVudCBjb21t
-YW5kIC4uLiBbaW4gdGhyZWFkX21hbmFnZV9jbGllbnRzKCkgYXQgbWFpbi5jOjM4MzRdDQpERUJV
-RzE6IFdhaXQgZm9yIGNsaWVudCByZXNwb25zZSBbaW4gdGhyZWFkX21hbmFnZV9jbGllbnRzKCkg
-YXQgbWFpbi5jOjM4NzFdDQpERUJVRzE6IFJlY2VpdmluZyBkYXRhIGZyb20gY2xpZW50IC4uLiBb
-aW4gdGhyZWFkX21hbmFnZV9jbGllbnRzKCkgYXQgbWFpbi5jOjM5MDZdDQpERUJVRzE6IFByb2Nl
-c3NpbmcgY2xpZW50IGNvbW1hbmQgMTYgW2luIHByb2Nlc3NfY2xpZW50X21zZygpIGF0IG1haW4u
-YzozMzE3XQ0KREVCVUcxOiBHZXR0aW5nIHNlc3Npb24gdGVzdF9zZXNzaW9uIGJ5IG5hbWUgW2lu
-IHByb2Nlc3NfY2xpZW50X21zZygpIGF0IG1haW4uYzozMzcyXQ0KREVCVUcxOiBTZW5kaW5nIHJl
-c3BvbnNlIChzaXplOiAxNiwgcmV0Y29kZTogU3VjY2VzcykgW2luIHRocmVhZF9tYW5hZ2VfY2xp
-ZW50cygpIGF0IG1haW4uYzozOTQ0XQ0KREVCVUcxOiBDbGVhbiBjb21tYW5kIGNvbnRleHQgc3Ry
-dWN0dXJlIFtpbiBjbGVhbl9jb21tYW5kX2N0eCgpIGF0IG1haW4uYzo1MzRdDQpERUJVRzE6IEFj
-Y2VwdGluZyBjbGllbnQgY29tbWFuZCAuLi4gW2luIHRocmVhZF9tYW5hZ2VfY2xpZW50cygpIGF0
-IG1haW4uYzozODM0XQ0KREVCVUcxOiBVU1QgcmVnaXN0cmF0aW9uIHJlY2VpdmVkIHdpdGggcGlk
-Ojg0MzMgcHBpZDoyNTAyOCB1aWQ6MCBnaWQ6MCBzb2NrOjE4IG5hbWU6c2FtcGxlICh2ZXJzaW9u
-IDIuMSkgW2luIHRocmVhZF9yZWdpc3RyYXRpb25fYXBwcygpIGF0IG1haW4uYzoxNTEwXQ0KREVC
-VUcxOiBGdXRleCBuIHRvIDEgd2FrZSBkb25lIFtpbiBmdXRleF9udG8xX3dha2UoKSBhdCBmdXRl
-eC5jOjEwMF0NCkRFQlVHMTogQWNjZXB0aW5nIGFwcGxpY2F0aW9uIHJlZ2lzdHJhdGlvbiBbaW4g
-dGhyZWFkX3JlZ2lzdHJhdGlvbl9hcHBzKCkgYXQgbWFpbi5jOjE0MjNdDQpERUJVRzE6IEZ1dGV4
-IG4gdG8gMSB3YWl0IGRvbmUgW2luIGZ1dGV4X250bzFfd2FpdCgpIGF0IGZ1dGV4LmM6ODddDQpE
-RUJVRzE6IEZ1dGV4IG4gdG8gMSBwcmVwYXJlIGRvbmUgW2luIGZ1dGV4X250bzFfcHJlcGFyZSgp
-IGF0IGZ1dGV4LmM6NzNdDQpERUJVRzE6IERpc3BhdGNoaW5nIFVTVCByZWdpc3RyYXRpb24gcGlk
-Ojg0MzMgcHBpZDoyNTAyOCB1aWQ6MCBnaWQ6MCBzb2NrOjE4IG5hbWU6c2FtcGxlICh2ZXJzaW9u
-IDIuMSkgW2luIHRocmVhZF9kaXNwYXRjaF91c3RfcmVnaXN0cmF0aW9uKCkgYXQgbWFpbi5jOjEz
-NDZdDQpERUJVRzE6IFdva2VuIHVwIGJ1dCBub3RoaW5nIGluIHRoZSBVU1QgY29tbWFuZCBxdWV1
-ZSBbaW4gdGhyZWFkX2Rpc3BhdGNoX3VzdF9yZWdpc3RyYXRpb24oKSBhdCBtYWluLmM6MTMzNF0N
-CkRFQlVHMzogQ3JlYXRlZCBoYXNodGFibGUgc2l6ZSA0IGF0IDB4N2ZkZDZjMDAwOWQwIG9mIHR5
-cGUgMSBbaW4gbHR0bmdfaHRfbmV3KCkgYXQgaGFzaHRhYmxlLmM6OTZdDQpERUJVRzE6IEFwcCBy
-ZWdpc3RlcmVkIHdpdGggcGlkOjg0MzMgcHBpZDoyNTAyOCB1aWQ6MCBnaWQ6MCBzb2NrOjE4IG5h
-bWU6c2FtcGxlICh2ZXJzaW9uIDIuMSkgW2luIHVzdF9hcHBfcmVnaXN0ZXIoKSBhdCB1c3QtYXBw
-LmM6MTM2NV0NCkRFQlVHMTogQXBwcyB3aXRoIHNvY2sgMTggYWRkZWQgdG8gcG9sbCBzZXQgW2lu
-IHRocmVhZF9tYW5hZ2VfYXBwcygpIGF0IG1haW4uYzoxMjgwXQ0KREVCVUcxOiBBcHBzIHRocmVh
-ZCBwb2xsaW5nIG9uIDMgZmRzIFtpbiB0aHJlYWRfbWFuYWdlX2FwcHMoKSBhdCBtYWluLmM6MTIw
-MF0NCkRFQlVHMTogUElEIDg0MzMgdW5yZWdpc3RlcmluZyB3aXRoIHNvY2sgMTggW2luIHVzdF9h
-cHBfdW5yZWdpc3RlcigpIGF0IHVzdC1hcHAuYzoxMzk1XQ0KREVCVUcxOiBBcHBzIHRocmVhZCBw
-b2xsaW5nIG9uIDIgZmRzIFtpbiB0aHJlYWRfbWFuYWdlX2FwcHMoKSBhdCBtYWluLmM6MTIwMF0N
-CkRFQlVHMzogQ2FsbCBSQ1UgZGVsZXRpbmcgYXBwIFBJRCA4NDMzIFtpbiBkZWxldGVfdXN0X2Fw
-cF9yY3UoKSBhdCB1c3QtYXBwLmM6MjM3XQ0KREVCVUcxOiBXYWl0IGZvciBjbGllbnQgcmVzcG9u
-c2UgW2luIHRocmVhZF9tYW5hZ2VfY2xpZW50cygpIGF0IG1haW4uYzozODcxXQ0KREVCVUcxOiBS
-ZWNlaXZpbmcgZGF0YSBmcm9tIGNsaWVudCAuLi4gW2luIHRocmVhZF9tYW5hZ2VfY2xpZW50cygp
-IGF0IG1haW4uYzozOTA2XQ0KREVCVUcxOiBOb3RoaW5nIHJlY3YoKSBmcm9tIGNsaWVudC4uLiBj
-b250aW51aW5nIFtpbiB0aHJlYWRfbWFuYWdlX2NsaWVudHMoKSBhdCBtYWluLmM6MzkxMF0NCkRF
-QlVHMTogQ2xlYW4gY29tbWFuZCBjb250ZXh0IHN0cnVjdHVyZSBbaW4gY2xlYW5fY29tbWFuZF9j
-dHgoKSBhdCBtYWluLmM6NTM0XQ0KREVCVUcxOiBBY2NlcHRpbmcgY2xpZW50IGNvbW1hbmQgLi4u
-IFtpbiB0aHJlYWRfbWFuYWdlX2NsaWVudHMoKSBhdCBtYWluLmM6MzgzNF0NCkRFQlVHMTogV2Fp
-dCBmb3IgY2xpZW50IHJlc3BvbnNlIFtpbiB0aHJlYWRfbWFuYWdlX2NsaWVudHMoKSBhdCBtYWlu
-LmM6Mzg3MV0NCkRFQlVHMTogUmVjZWl2aW5nIGRhdGEgZnJvbSBjbGllbnQgLi4uIFtpbiB0aHJl
-YWRfbWFuYWdlX2NsaWVudHMoKSBhdCBtYWluLmM6MzkwNl0NCkRFQlVHMTogUHJvY2Vzc2luZyBj
-bGllbnQgY29tbWFuZCAxNyBbaW4gcHJvY2Vzc19jbGllbnRfbXNnKCkgYXQgbWFpbi5jOjMzMTdd
-DQpERUJVRzE6IEdldHRpbmcgc2Vzc2lvbiB0ZXN0X3Nlc3Npb24gYnkgbmFtZSBbaW4gcHJvY2Vz
-c19jbGllbnRfbXNnKCkgYXQgbWFpbi5jOjMzNzJdDQpERUJVRzE6IFNlbmRpbmcgcmVzcG9uc2Ug
-KHNpemU6IDE2LCByZXRjb2RlOiBTdWNjZXNzKSBbaW4gdGhyZWFkX21hbmFnZV9jbGllbnRzKCkg
-YXQgbWFpbi5jOjM5NDRdDQpERUJVRzE6IENsZWFuIGNvbW1hbmQgY29udGV4dCBzdHJ1Y3R1cmUg
-W2luIGNsZWFuX2NvbW1hbmRfY3R4KCkgYXQgbWFpbi5jOjUzNF0NCkRFQlVHMTogQWNjZXB0aW5n
-IGNsaWVudCBjb21tYW5kIC4uLiBbaW4gdGhyZWFkX21hbmFnZV9jbGllbnRzKCkgYXQgbWFpbi5j
-OjM4MzRdDQpERUJVRzE6IFdhaXQgZm9yIGNsaWVudCByZXNwb25zZSBbaW4gdGhyZWFkX21hbmFn
-ZV9jbGllbnRzKCkgYXQgbWFpbi5jOjM4NzFdDQpERUJVRzE6IFJlY2VpdmluZyBkYXRhIGZyb20g
-Y2xpZW50IC4uLiBbaW4gdGhyZWFkX21hbmFnZV9jbGllbnRzKCkgYXQgbWFpbi5jOjM5MDZdDQpE
-RUJVRzE6IFByb2Nlc3NpbmcgY2xpZW50IGNvbW1hbmQgMTMgW2luIHByb2Nlc3NfY2xpZW50X21z
-ZygpIGF0IG1haW4uYzozMzE3XQ0KREVCVUcxOiBDb3VudGluZyBudW1iZXIgb2YgYXZhaWxhYmxl
-IHNlc3Npb24gZm9yIFVJRCAwIEdJRCAwIFtpbiBsdHRuZ19zZXNzaW9uc19jb3VudCgpIGF0IG1h
-aW4uYzoyMDU3XQ0KREVCVUcxOiBHZXR0aW5nIGFsbCBhdmFpbGFibGUgc2Vzc2lvbiBmb3IgVUlE
-IDAgR0lEIDAgW2luIGxpc3RfbHR0bmdfc2Vzc2lvbnMoKSBhdCBtYWluLmM6MjA4NF0NCkRFQlVH
-MTogU2VuZGluZyByZXNwb25zZSAoc2l6ZTogNDM4OCwgcmV0Y29kZTogU3VjY2VzcykgW2luIHRo
-cmVhZF9tYW5hZ2VfY2xpZW50cygpIGF0IG1haW4uYzozOTQ0XQ0KREVCVUcxOiBDbGVhbiBjb21t
-YW5kIGNvbnRleHQgc3RydWN0dXJlIFtpbiBjbGVhbl9jb21tYW5kX2N0eCgpIGF0IG1haW4uYzo1
-MzRdDQpERUJVRzE6IEFjY2VwdGluZyBjbGllbnQgY29tbWFuZCAuLi4gW2luIHRocmVhZF9tYW5h
-Z2VfY2xpZW50cygpIGF0IG1haW4uYzozODM0XQ0KREVCVUcxOiBXYWl0IGZvciBjbGllbnQgcmVz
-cG9uc2UgW2luIHRocmVhZF9tYW5hZ2VfY2xpZW50cygpIGF0IG1haW4uYzozODcxXQ0KREVCVUcx
-OiBSZWNlaXZpbmcgZGF0YSBmcm9tIGNsaWVudCAuLi4gW2luIHRocmVhZF9tYW5hZ2VfY2xpZW50
-cygpIGF0IG1haW4uYzozOTA2XQ0KREVCVUcxOiBOb3RoaW5nIHJlY3YoKSBmcm9tIGNsaWVudC4u
-LiBjb250aW51aW5nIFtpbiB0aHJlYWRfbWFuYWdlX2NsaWVudHMoKSBhdCBtYWluLmM6MzkxMF0N
-CkRFQlVHMTogQ2xlYW4gY29tbWFuZCBjb250ZXh0IHN0cnVjdHVyZSBbaW4gY2xlYW5fY29tbWFu
-ZF9jdHgoKSBhdCBtYWluLmM6NTM0XQ0KREVCVUcxOiBBY2NlcHRpbmcgY2xpZW50IGNvbW1hbmQg
-Li4uIFtpbiB0aHJlYWRfbWFuYWdlX2NsaWVudHMoKSBhdCBtYWluLmM6MzgzNF0NCkRFQlVHMTog
-V2FpdCBmb3IgY2xpZW50IHJlc3BvbnNlIFtpbiB0aHJlYWRfbWFuYWdlX2NsaWVudHMoKSBhdCBt
-YWluLmM6Mzg3MV0NCkRFQlVHMTogUmVjZWl2aW5nIGRhdGEgZnJvbSBjbGllbnQgLi4uIFtpbiB0
-aHJlYWRfbWFuYWdlX2NsaWVudHMoKSBhdCBtYWluLmM6MzkwNl0NCkRFQlVHMTogUHJvY2Vzc2lu
-ZyBjbGllbnQgY29tbWFuZCA5IFtpbiBwcm9jZXNzX2NsaWVudF9tc2coKSBhdCBtYWluLmM6MzMx
-N10NCkRFQlVHMTogR2V0dGluZyBzZXNzaW9uIHRlc3Rfc2Vzc2lvbiBieSBuYW1lIFtpbiBwcm9j
-ZXNzX2NsaWVudF9tc2coKSBhdCBtYWluLmM6MzM3Ml0NCkRFQlVHMzogTm8ga2VybmVsIHNlc3Np
-b24gd2hlbiB0ZWFyaW5nIGRvd24gc2Vzc2lvbiBbaW4gdGVhcmRvd25fa2VybmVsX3Nlc3Npb24o
-KSBhdCBtYWluLmM6MzYzXQ0KREVCVUczOiBObyBVU1Qgc2Vzc2lvbiB3aGVuIHRlYXJpbmcgZG93
-biBzZXNzaW9uIFtpbiB0ZWFyZG93bl91c3Rfc2Vzc2lvbigpIGF0IG1haW4uYzozOTBdDQpERUJV
-RzE6IERlc3Ryb3lpbmcgc2Vzc2lvbiB0ZXN0X3Nlc3Npb24gW2luIHNlc3Npb25fZGVzdHJveSgp
-IGF0IHNlc3Npb24uYzoxNTFdDQpERUJVRzE6IFNlbmRpbmcgcmVzcG9uc2UgKHNpemU6IDE2LCBy
-ZXRjb2RlOiBTdWNjZXNzKSBbaW4gdGhyZWFkX21hbmFnZV9jbGllbnRzKCkgYXQgbWFpbi5jOjM5
-NDRdDQpERUJVRzE6IENsZWFuIGNvbW1hbmQgY29udGV4dCBzdHJ1Y3R1cmUgW2luIGNsZWFuX2Nv
-bW1hbmRfY3R4KCkgYXQgbWFpbi5jOjUzNF0NCkRFQlVHMTogQWNjZXB0aW5nIGNsaWVudCBjb21t
-YW5kIC4uLiBbaW4gdGhyZWFkX21hbmFnZV9jbGllbnRzKCkgYXQgbWFpbi5jOjM4MzRdDQpERUJV
-RzE6IFVwZGF0aW5nIGtlcm5lbCBwb2xsIHNldCBbaW4gdXBkYXRlX2tlcm5lbF9wb2xsKCkgYXQg
-bWFpbi5jOjc0OF0NCkRFQlVHMTogVGhyZWFkIGtlcm5lbCBwb2xsaW5nIG9uIDIgZmRzIFtpbiB0
-aHJlYWRfbWFuYWdlX2tlcm5lbCgpIGF0IG1haW4uYzo5MDVdDQo=
---bcaec544f02e31888204dd9e7c4a
+
+--===============0311798464==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -251,4 +200,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---bcaec544f02e31888204dd9e7c4a--
+--===============0311798464==--
