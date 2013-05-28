@@ -1,21 +1,21 @@
-From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
-	<jeremie.galarneau@efficios.com>
-Subject: [PATCH lttng-ust v2] Move include directive from CFLAGS
-	to LOCAL_CPPFLAGS in examples' Makefiles
-Date: Tue, 28 May 2013 18:19:18 -0400
-Message-ID: <1369779558-20747-1-git-send-email-jeremie.galarneau__23228.440542198$1369779606$gmane$org@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH lttng-ust v2] Move include directive
+	from	CFLAGS to LOCAL_CPPFLAGS in examples' Makefiles
+Date: Tue, 28 May 2013 18:26:16 -0400
+Message-ID: <20130528222616.GA1347__23096.1719331846$1369780009$gmane$org@Krystal>
 References: <1369771309-1773-1-git-send-email-jeremie.galarneau@efficios.com>
+	<1369779558-20747-1-git-send-email-jeremie.galarneau@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-vc0-f172.google.com ([209.85.220.172])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1UhSEt-0001LO-JV
-	for lttng-dev@lists.lttng.org; Tue, 28 May 2013 18:19:31 -0400
-Received: by mail-vc0-f172.google.com with SMTP id hf12so5897655vcb.17
-	for <lttng-dev@lists.lttng.org>; Tue, 28 May 2013 15:19:26 -0700 (PDT)
-In-Reply-To: <1369771309-1773-1-git-send-email-jeremie.galarneau@efficios.com>
+	(envelope-from <compudj@mail.openrapids.net>) id 1UhSLU-0001Ox-H7
+	for lttng-dev@lists.lttng.org; Tue, 28 May 2013 18:26:20 -0400
+Content-Disposition: inline
+In-Reply-To: <1369779558-20747-1-git-send-email-jeremie.galarneau@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,94 +24,203 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-VGhlIHVzZSBvZiBMT0NBTF8qIGZsYWdzIGFuZCBvdmVycmlkZSBkaXJlY3RpdmVzIGVuc3VyZXMg
-dGhhdCB0aGUgYnVpbGQKc3VjY2VlZHMgZXZlbiBpZiB0aGUgdXNlciBleHBsaWNpdGx5IG92ZXJy
-aWRlcyBDRkxBR1MvQ1BQRkxBR1MvTERGTEFHUy4KCkZpeGVzICM1MzcKClNpZ25lZC1vZmYtYnk6
-IErDqXLDqW1pZSBHYWxhcm5lYXUgPGplcmVtaWUuZ2FsYXJuZWF1QGVmZmljaW9zLmNvbT4KLS0t
-CiBkb2MvZXhhbXBsZXMvZGVtby9NYWtlZmlsZSAgICAgICAgICAgICB8IDE0ICsrKysrKystLS0t
-LS0tCiBkb2MvZXhhbXBsZXMvZWFzeS11c3QvTWFrZWZpbGUgICAgICAgICB8IDEwICsrKysrLS0t
-LS0KIGRvYy9leGFtcGxlcy9oZWxsby1zdGF0aWMtbGliL01ha2VmaWxlIHwgMTAgKysrKystLS0t
-LQogMyBmaWxlcyBjaGFuZ2VkLCAxNyBpbnNlcnRpb25zKCspLCAxNyBkZWxldGlvbnMoLSkKCmRp
-ZmYgLS1naXQgYS9kb2MvZXhhbXBsZXMvZGVtby9NYWtlZmlsZSBiL2RvYy9leGFtcGxlcy9kZW1v
-L01ha2VmaWxlCmluZGV4IGJiYzhjY2IuLjI3Y2E5MmIgMTAwNjQ0Ci0tLSBhL2RvYy9leGFtcGxl
-cy9kZW1vL01ha2VmaWxlCisrKyBiL2RvYy9leGFtcGxlcy9kZW1vL01ha2VmaWxlCkBAIC0xNSwx
-NCArMTUsMTQgQEAKIENDID0gZ2NjCiBMSUJTID0gLWxkbAkjIE9uIExpbnV4CiAjTElCUyA9IC1s
-YwkjIE9uIEJTRAotQ0ZMQUdTICs9IC1JLgorTE9DQUxfQ1BQRkxBR1MgKz0gLUkuCiAKICMgT25s
-eSBuZWNlc3Nhcnkgd2hlbiBidWlsZGluZyBmcm9tIHRoZSBzb3VyY2UgdHJlZSBhbmQgbHR0bmct
-dXN0IGlzIG5vdAogIyBpbnN0YWxsZWQKIGlmZGVmIEJVSUxEX0VYQU1QTEVTX0ZST01fVFJFRQot
-Q0ZMQUdTICs9IC1JLi4vLi4vLi4vaW5jbHVkZS8KK0xPQ0FMX0NQUEZMQUdTICs9IC1JLi4vLi4v
-Li4vaW5jbHVkZS8KIExJQkxUVE5HX1VTVF9QQVRIID0gLi4vLi4vLi4vbGlibHR0bmctdXN0Ly5s
-aWJzLwotTERGTEFHUyArPSAtTCQoTElCTFRUTkdfVVNUX1BBVEgpIC1XbCwtcnBhdGg9JyQkT1JJ
-R0lOLyQoTElCTFRUTkdfVVNUX1BBVEgpJworb3ZlcnJpZGUgTERGTEFHUyArPSAtTCQoTElCTFRU
-TkdfVVNUX1BBVEgpIC1XbCwtcnBhdGg9JyQkT1JJR0lOLyQoTElCTFRUTkdfVVNUX1BBVEgpJwog
-CiAjIFRoaXJkLXBhcnR5IE1ha2VmaWxlcyBoYXZlIHRvIGRlZmluZSB0aGVzZSB0YXJnZXRzIHRv
-IGludGVncmF0ZSB3aXRoIGFuCiAjIGF1dG9tYWtlIHByb2plY3QKQEAgLTM3LDIyICszNywyMiBA
-QCBlbmRpZgogYWxsOiBkZW1vIGx0dG5nLXVzdC1wcm92aWRlci11c3QtdGVzdHMtZGVtby5zbyBs
-dHRuZy11c3QtcHJvdmlkZXItdXN0LXRlc3RzLWRlbW8zLnNvCiAKIHRwLm86IHRwLmMgdXN0X3Rl
-c3RzX2RlbW8uaAotCSQoQ0MpICQoQ1BQRkxBR1MpICQoQ0ZMQUdTKSAtZnBpYyAtYyAtbyAkQCAk
-PAorCSQoQ0MpICQoQ1BQRkxBR1MpICQoTE9DQUxfQ1BQRkxBR1MpICQoQ0ZMQUdTKSAtZnBpYyAt
-YyAtbyAkQCAkPAogCiB0cDIubzogdHAyLmMgdXN0X3Rlc3RzX2RlbW8yLmgKLQkkKENDKSAkKENQ
-UEZMQUdTKSAkKENGTEFHUykgLWZwaWMgLWMgLW8gJEAgJDwKKwkkKENDKSAkKENQUEZMQUdTKSAk
-KExPQ0FMX0NQUEZMQUdTKSAkKENGTEFHUykgLWZwaWMgLWMgLW8gJEAgJDwKIAogbHR0bmctdXN0
-LXByb3ZpZGVyLXVzdC10ZXN0cy1kZW1vLnNvOiB0cC5vIHRwMi5vCiAJJChDQykgLXNoYXJlZCAt
-byAkQCAkKExERkxBR1MpIC1sbHR0bmctdXN0ICReCiAKIHRwMy5vOiB0cDMuYyB1c3RfdGVzdHNf
-ZGVtbzMuaAotCSQoQ0MpICQoQ1BQRkxBR1MpICQoQ0ZMQUdTKSAtZnBpYyAtYyAtbyAkQCAkPAor
-CSQoQ0MpICQoQ1BQRkxBR1MpICQoTE9DQUxfQ1BQRkxBR1MpICQoQ0ZMQUdTKSAtZnBpYyAtYyAt
-byAkQCAkPAogCiBsdHRuZy11c3QtcHJvdmlkZXItdXN0LXRlc3RzLWRlbW8zLnNvOiB0cDMubwog
-CSQoQ0MpIC1zaGFyZWQgLW8gJEAgJChMREZMQUdTKSAtbGx0dG5nLXVzdCAkXgogCiBkZW1vLm86
-IGRlbW8uYwotCSQoQ0MpICQoQ1BQRkxBR1MpICQoQ0ZMQUdTKSAtYyAtbyAkQCAkPAorCSQoQ0Mp
-ICQoQ1BQRkxBR1MpICQoTE9DQUxfQ1BQRkxBR1MpICQoQ0ZMQUdTKSAtYyAtbyAkQCAkPAogCiBk
-ZW1vOiBkZW1vLm8KIAkkKENDKSAtbyAkQCAkXiAkKExJQlMpCmRpZmYgLS1naXQgYS9kb2MvZXhh
-bXBsZXMvZWFzeS11c3QvTWFrZWZpbGUgYi9kb2MvZXhhbXBsZXMvZWFzeS11c3QvTWFrZWZpbGUK
-aW5kZXggZTIwZTUzYS4uZTM1NDZlMSAxMDA2NDQKLS0tIGEvZG9jL2V4YW1wbGVzL2Vhc3ktdXN0
-L01ha2VmaWxlCisrKyBiL2RvYy9leGFtcGxlcy9lYXN5LXVzdC9NYWtlZmlsZQpAQCAtMTcsMTQg
-KzE3LDE0IEBACiBDQyA9IGdjYwogTElCUyA9IC1sZGwgLWxsdHRuZy11c3QJCSMgT24gTGludXgK
-ICNMSUJTID0gLWxjIC1sbHR0bmctdXN0CQkjIE9uIEJTRAotQ0ZMQUdTICs9IC1JLgorTE9DQUxf
-Q1BQRkxBR1MgKz0gLUkuCiAKICMgT25seSBuZWNlc3Nhcnkgd2hlbiBidWlsZGluZyBmcm9tIHRo
-ZSBzb3VyY2UgdHJlZSBhbmQgbHR0bmctdXN0IGlzIG5vdAogIyBpbnN0YWxsZWQKIGlmZGVmIEJV
-SUxEX0VYQU1QTEVTX0ZST01fVFJFRQotQ0ZMQUdTICs9IC1JLi4vLi4vLi4vaW5jbHVkZS8KK0xP
-Q0FMX0NQUEZMQUdTICs9IC1JLi4vLi4vLi4vaW5jbHVkZS8KIExJQkxUVE5HX1VTVF9QQVRIID0g
-Li4vLi4vLi4vbGlibHR0bmctdXN0Ly5saWJzLwotTERGTEFHUyArPSAtTCQoTElCTFRUTkdfVVNU
-X1BBVEgpIC1XbCwtcnBhdGg9JyQkT1JJR0lOLyQoTElCTFRUTkdfVVNUX1BBVEgpJworb3ZlcnJp
-ZGUgTERGTEFHUyArPSAtTCQoTElCTFRUTkdfVVNUX1BBVEgpIC1XbCwtcnBhdGg9JyQkT1JJR0lO
-LyQoTElCTFRUTkdfVVNUX1BBVEgpJwogCiAjIFRoaXJkLXBhcnR5IE1ha2VmaWxlcyBoYXZlIHRv
-IGRlZmluZSB0aGVzZSB0YXJnZXRzIHRvIGludGVncmF0ZSB3aXRoIGFuCiAjIGF1dG9tYWtlIHBy
-b2plY3QKQEAgLTQyLDEwICs0MiwxMCBAQCBzYW1wbGU6IHNhbXBsZS5vIHRwLm8KIAkkKENDKSAt
-byAkQCAkXiAkKExERkxBR1MpICQoTElCUykKIAogc2FtcGxlLm86IHNhbXBsZS5jIHNhbXBsZV9j
-b21wb25lbnRfcHJvdmlkZXIuaAotCSQoQ0MpICQoQ1BQRkxBR1MpICQoQ0ZMQUdTKSAtYyAtbyAk
-QCAkPAorCSQoQ0MpICQoQ1BQRkxBR1MpICQoTE9DQUxfQ1BQRkxBR1MpICQoQ0ZMQUdTKSAtYyAt
-byAkQCAkPAogCiB0cC5vOiB0cC5jIHNhbXBsZV9jb21wb25lbnRfcHJvdmlkZXIuaAotCSQoQ0Mp
-ICQoQ1BQRkxBR1MpICQoQ0ZMQUdTKSAtYyAtbyAkQCAkPAorCSQoQ0MpICQoQ1BQRkxBR1MpICQo
-TE9DQUxfQ1BQRkxBR1MpICQoQ0ZMQUdTKSAtYyAtbyAkQCAkPAogCiBodG1sOiBzYW1wbGVfY29t
-cG9uZW50X3Byb3ZpZGVyLmh0bWwgc2FtcGxlLmh0bWwgdHAuaHRtbAogCmRpZmYgLS1naXQgYS9k
-b2MvZXhhbXBsZXMvaGVsbG8tc3RhdGljLWxpYi9NYWtlZmlsZSBiL2RvYy9leGFtcGxlcy9oZWxs
-by1zdGF0aWMtbGliL01ha2VmaWxlCmluZGV4IGRkMjQ2ZjcuLjg1YzY0YzEgMTAwNjQ0Ci0tLSBh
-L2RvYy9leGFtcGxlcy9oZWxsby1zdGF0aWMtbGliL01ha2VmaWxlCisrKyBiL2RvYy9leGFtcGxl
-cy9oZWxsby1zdGF0aWMtbGliL01ha2VmaWxlCkBAIC0xMywxNiArMTMsMTYgQEAKICMgYSBwcm9n
-cmFtIHdpdGggdHJhY2Vwb2ludCBwcm92aWRlciBwcm9iZXMgY29tcGlsZWQgYXMgc3RhdGljIGxp
-YnJhcmllcy4KIAogQ0MgPSBnY2MKLUNGTEFHUyArPSAtSS4KK0xPQ0FMX0NQUEZMQUdTICs9IC1J
-LgogTElCUyA9IC1sZGwgLWxsdHRuZy11c3QJIyBPbiBMaW51eAogI0xJQlMgPSAtbGMgLWxsdHRu
-Zy11c3QJIyBPbiBCU0QKIAogIyBPbmx5IG5lY2Vzc2FyeSB3aGVuIGJ1aWxkaW5nIGZyb20gdGhl
-IHNvdXJjZSB0cmVlIGFuZCBsdHRuZy11c3QgaXMgbm90CiAjIGluc3RhbGxlZAogaWZkZWYgQlVJ
-TERfRVhBTVBMRVNfRlJPTV9UUkVFCi1DRkxBR1MgKz0gLUkuLi8uLi8uLi9pbmNsdWRlLworTE9D
-QUxfQ1BQRkxBR1MgKz0gLUkuLi8uLi8uLi9pbmNsdWRlLwogTElCTFRUTkdfVVNUX1BBVEggPSAu
-Li8uLi8uLi9saWJsdHRuZy11c3QvLmxpYnMvCi1MREZMQUdTICs9IC1MJChMSUJMVFROR19VU1Rf
-UEFUSCkgLVdsLC1ycGF0aD0nJCRPUklHSU4vJChMSUJMVFROR19VU1RfUEFUSCknCitvdmVycmlk
-ZSBMREZMQUdTICs9IC1MJChMSUJMVFROR19VU1RfUEFUSCkgLVdsLC1ycGF0aD0nJCRPUklHSU4v
-JChMSUJMVFROR19VU1RfUEFUSCknCiAKICMgVGhpcmQtcGFydHkgTWFrZWZpbGVzIGhhdmUgdG8g
-ZGVmaW5lIHRoZXNlIHRhcmdldHMgdG8gaW50ZWdyYXRlIHdpdGggYW4KICMgYXV0b21ha2UgcHJv
-amVjdApAQCAtMzcsMTMgKzM3LDEzIEBAIGVuZGlmCiBhbGw6IGhlbGxvCiAKIGx0dG5nLXVzdC1w
-cm92aWRlci1oZWxsby5vOiB0cC5jIHVzdF90ZXN0c19oZWxsby5oCi0JJChDQykgJChDUFBGTEFH
-UykgJChDRkxBR1MpIC1jIC1vICRAICQ8CisJJChDQykgJChDUFBGTEFHUykgJChMT0NBTF9DUFBG
-TEFHUykgJChDRkxBR1MpIC1jIC1vICRAICQ8CiAKIGx0dG5nLXVzdC1wcm92aWRlci1oZWxsby5h
-OiBsdHRuZy11c3QtcHJvdmlkZXItaGVsbG8ubwogCWFyIC1yYyAkQCAkXgogCiBoZWxsby5vOiBo
-ZWxsby5jCi0JJChDQykgJChDUFBGTEFHUykgJChDRkxBR1MpIC1jIC1vICRAICQ8CisJJChDQykg
-JChDUFBGTEFHUykgJChMT0NBTF9DUFBGTEFHUykgJChDRkxBR1MpIC1jIC1vICRAICQ8CiAKIGhl
-bGxvOiBoZWxsby5vIGx0dG5nLXVzdC1wcm92aWRlci1oZWxsby5hCiAJJChDQykgLW8gJEAgJChM
-REZMQUdTKSAkXiAkKExJQlMpCi0tIAoxLjguMi4zCgoKX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZA
-bGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xp
-c3RpbmZvL2x0dG5nLWRldgo=
+* J=E9r=E9mie Galarneau (jeremie.galarneau@efficios.com) wrote:
+> The use of LOCAL_* flags and override directives ensures that the build
+> succeeds even if the user explicitly overrides CFLAGS/CPPFLAGS/LDFLAGS.
+
+why use LOCAL_CPPFLAGS on one hand, but "override LDFLAGS" on the other?
+What's the difference ? Why should it differ ?
+
+Thanks,
+
+Mathieu
+
+> =
+
+> Fixes #537
+> =
+
+> Signed-off-by: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
+> ---
+>  doc/examples/demo/Makefile             | 14 +++++++-------
+>  doc/examples/easy-ust/Makefile         | 10 +++++-----
+>  doc/examples/hello-static-lib/Makefile | 10 +++++-----
+>  3 files changed, 17 insertions(+), 17 deletions(-)
+> =
+
+> diff --git a/doc/examples/demo/Makefile b/doc/examples/demo/Makefile
+> index bbc8ccb..27ca92b 100644
+> --- a/doc/examples/demo/Makefile
+> +++ b/doc/examples/demo/Makefile
+> @@ -15,14 +15,14 @@
+>  CC =3D gcc
+>  LIBS =3D -ldl	# On Linux
+>  #LIBS =3D -lc	# On BSD
+> -CFLAGS +=3D -I.
+> +LOCAL_CPPFLAGS +=3D -I.
+>  =
+
+>  # Only necessary when building from the source tree and lttng-ust is not
+>  # installed
+>  ifdef BUILD_EXAMPLES_FROM_TREE
+> -CFLAGS +=3D -I../../../include/
+> +LOCAL_CPPFLAGS +=3D -I../../../include/
+>  LIBLTTNG_UST_PATH =3D ../../../liblttng-ust/.libs/
+> -LDFLAGS +=3D -L$(LIBLTTNG_UST_PATH) -Wl,-rpath=3D'$$ORIGIN/$(LIBLTTNG_US=
+T_PATH)'
+> +override LDFLAGS +=3D -L$(LIBLTTNG_UST_PATH) -Wl,-rpath=3D'$$ORIGIN/$(LI=
+BLTTNG_UST_PATH)'
+>  =
+
+>  # Third-party Makefiles have to define these targets to integrate with an
+>  # automake project
+> @@ -37,22 +37,22 @@ endif
+>  all: demo lttng-ust-provider-ust-tests-demo.so lttng-ust-provider-ust-te=
+sts-demo3.so
+>  =
+
+>  tp.o: tp.c ust_tests_demo.h
+> -	$(CC) $(CPPFLAGS) $(CFLAGS) -fpic -c -o $@ $<
+> +	$(CC) $(CPPFLAGS) $(LOCAL_CPPFLAGS) $(CFLAGS) -fpic -c -o $@ $<
+>  =
+
+>  tp2.o: tp2.c ust_tests_demo2.h
+> -	$(CC) $(CPPFLAGS) $(CFLAGS) -fpic -c -o $@ $<
+> +	$(CC) $(CPPFLAGS) $(LOCAL_CPPFLAGS) $(CFLAGS) -fpic -c -o $@ $<
+>  =
+
+>  lttng-ust-provider-ust-tests-demo.so: tp.o tp2.o
+>  	$(CC) -shared -o $@ $(LDFLAGS) -llttng-ust $^
+>  =
+
+>  tp3.o: tp3.c ust_tests_demo3.h
+> -	$(CC) $(CPPFLAGS) $(CFLAGS) -fpic -c -o $@ $<
+> +	$(CC) $(CPPFLAGS) $(LOCAL_CPPFLAGS) $(CFLAGS) -fpic -c -o $@ $<
+>  =
+
+>  lttng-ust-provider-ust-tests-demo3.so: tp3.o
+>  	$(CC) -shared -o $@ $(LDFLAGS) -llttng-ust $^
+>  =
+
+>  demo.o: demo.c
+> -	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
+> +	$(CC) $(CPPFLAGS) $(LOCAL_CPPFLAGS) $(CFLAGS) -c -o $@ $<
+>  =
+
+>  demo: demo.o
+>  	$(CC) -o $@ $^ $(LIBS)
+> diff --git a/doc/examples/easy-ust/Makefile b/doc/examples/easy-ust/Makef=
+ile
+> index e20e53a..e3546e1 100644
+> --- a/doc/examples/easy-ust/Makefile
+> +++ b/doc/examples/easy-ust/Makefile
+> @@ -17,14 +17,14 @@
+>  CC =3D gcc
+>  LIBS =3D -ldl -llttng-ust		# On Linux
+>  #LIBS =3D -lc -llttng-ust		# On BSD
+> -CFLAGS +=3D -I.
+> +LOCAL_CPPFLAGS +=3D -I.
+>  =
+
+>  # Only necessary when building from the source tree and lttng-ust is not
+>  # installed
+>  ifdef BUILD_EXAMPLES_FROM_TREE
+> -CFLAGS +=3D -I../../../include/
+> +LOCAL_CPPFLAGS +=3D -I../../../include/
+>  LIBLTTNG_UST_PATH =3D ../../../liblttng-ust/.libs/
+> -LDFLAGS +=3D -L$(LIBLTTNG_UST_PATH) -Wl,-rpath=3D'$$ORIGIN/$(LIBLTTNG_US=
+T_PATH)'
+> +override LDFLAGS +=3D -L$(LIBLTTNG_UST_PATH) -Wl,-rpath=3D'$$ORIGIN/$(LI=
+BLTTNG_UST_PATH)'
+>  =
+
+>  # Third-party Makefiles have to define these targets to integrate with an
+>  # automake project
+> @@ -42,10 +42,10 @@ sample: sample.o tp.o
+>  	$(CC) -o $@ $^ $(LDFLAGS) $(LIBS)
+>  =
+
+>  sample.o: sample.c sample_component_provider.h
+> -	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
+> +	$(CC) $(CPPFLAGS) $(LOCAL_CPPFLAGS) $(CFLAGS) -c -o $@ $<
+>  =
+
+>  tp.o: tp.c sample_component_provider.h
+> -	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
+> +	$(CC) $(CPPFLAGS) $(LOCAL_CPPFLAGS) $(CFLAGS) -c -o $@ $<
+>  =
+
+>  html: sample_component_provider.html sample.html tp.html
+>  =
+
+> diff --git a/doc/examples/hello-static-lib/Makefile b/doc/examples/hello-=
+static-lib/Makefile
+> index dd246f7..85c64c1 100644
+> --- a/doc/examples/hello-static-lib/Makefile
+> +++ b/doc/examples/hello-static-lib/Makefile
+> @@ -13,16 +13,16 @@
+>  # a program with tracepoint provider probes compiled as static libraries.
+>  =
+
+>  CC =3D gcc
+> -CFLAGS +=3D -I.
+> +LOCAL_CPPFLAGS +=3D -I.
+>  LIBS =3D -ldl -llttng-ust	# On Linux
+>  #LIBS =3D -lc -llttng-ust	# On BSD
+>  =
+
+>  # Only necessary when building from the source tree and lttng-ust is not
+>  # installed
+>  ifdef BUILD_EXAMPLES_FROM_TREE
+> -CFLAGS +=3D -I../../../include/
+> +LOCAL_CPPFLAGS +=3D -I../../../include/
+>  LIBLTTNG_UST_PATH =3D ../../../liblttng-ust/.libs/
+> -LDFLAGS +=3D -L$(LIBLTTNG_UST_PATH) -Wl,-rpath=3D'$$ORIGIN/$(LIBLTTNG_US=
+T_PATH)'
+> +override LDFLAGS +=3D -L$(LIBLTTNG_UST_PATH) -Wl,-rpath=3D'$$ORIGIN/$(LI=
+BLTTNG_UST_PATH)'
+>  =
+
+>  # Third-party Makefiles have to define these targets to integrate with an
+>  # automake project
+> @@ -37,13 +37,13 @@ endif
+>  all: hello
+>  =
+
+>  lttng-ust-provider-hello.o: tp.c ust_tests_hello.h
+> -	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
+> +	$(CC) $(CPPFLAGS) $(LOCAL_CPPFLAGS) $(CFLAGS) -c -o $@ $<
+>  =
+
+>  lttng-ust-provider-hello.a: lttng-ust-provider-hello.o
+>  	ar -rc $@ $^
+>  =
+
+>  hello.o: hello.c
+> -	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
+> +	$(CC) $(CPPFLAGS) $(LOCAL_CPPFLAGS) $(CFLAGS) -c -o $@ $<
+>  =
+
+>  hello: hello.o lttng-ust-provider-hello.a
+>  	$(CC) -o $@ $(LDFLAGS) $^ $(LIBS)
+> -- =
+
+> 1.8.2.3
+> =
+
+> =
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- =
+
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
