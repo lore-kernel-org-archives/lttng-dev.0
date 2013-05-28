@@ -1,20 +1,19 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH 2/2] Support old compilers
-Date: Tue, 28 May 2013 13:32:50 -0400
-Message-ID: <20130528173250.GE20859__29427.2677427672$1369762402$gmane$org@Krystal>
-References: <1369747627-21626-1-git-send-email-thomas.petazzoni@free-electrons.com>
-	<1369747627-21626-2-git-send-email-thomas.petazzoni@free-electrons.com>
+From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
+	<jeremie.galarneau@efficios.com>
+Subject: [PATCH lttng-ust] Move include directive from CFLAGS to
+	CPPFLAGS in examples' Makefiles
+Date: Tue, 28 May 2013 16:01:49 -0400
+Message-ID: <1369771309-1773-1-git-send-email-jeremie.galarneau__34251.5003438622$1369771360$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from mail-ve0-f175.google.com ([209.85.128.175])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UhNlV-00039e-15
-	for lttng-dev@lists.lttng.org; Tue, 28 May 2013 13:32:53 -0400
-Content-Disposition: inline
-In-Reply-To: <1369747627-21626-2-git-send-email-thomas.petazzoni@free-electrons.com>
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1UhQ5s-0004N2-VK
+	for lttng-dev@lists.lttng.org; Tue, 28 May 2013 16:02:05 -0400
+Received: by mail-ve0-f175.google.com with SMTP id da11so1645931veb.20
+	for <lttng-dev@lists.lttng.org>; Tue, 28 May 2013 13:01:59 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,54 +22,49 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Thomas Petazzoni (thomas.petazzoni@free-electrons.com) wrote:
-> Some old compilers do not use C99 as their default C language variant,
-> for example gcc 4.3.x, which is used on some old machines. When such a
-> compiler is used, by default, ULLONG_MAX is not visible. Adding
-> -std=gnu99 is needed to make this definition visible.
-> 
-> In autoconf speak, this translates into the need of using
-> AC_PROC_CC_STDC instead of AC_PROG_CC. See
-> http://www.gnu.org/software/autoconf/manual/autoconf-2.65/html_node/C-Compiler.html
-> for more details.
-
-merged, thanks!
-
-Mathieu
-
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  configure.ac |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/configure.ac b/configure.ac
-> index 83822d6..3ddcb7c 100644
-> --- a/configure.ac
-> +++ b/configure.ac
-> @@ -17,7 +17,7 @@ AC_CONFIG_HEADERS([config.h])
->  AC_SYS_LARGEFILE
->  
->  # Checks for programs.
-> -AC_PROG_CC
-> +AC_PROG_CC_STDC
->  AC_PROG_MAKE_SET
->  LT_INIT
->  AC_PROG_YACC
-> -- 
-> 1.7.9.5
-> 
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Rml4ZXMgIzUzNwoKU2lnbmVkLW9mZi1ieTogSsOpcsOpbWllIEdhbGFybmVhdSA8amVyZW1pZS5n
+YWxhcm5lYXVAZWZmaWNpb3MuY29tPgotLS0KIGRvYy9leGFtcGxlcy9kZW1vL01ha2VmaWxlICAg
+ICAgICAgICAgIHwgNCArKy0tCiBkb2MvZXhhbXBsZXMvZWFzeS11c3QvTWFrZWZpbGUgICAgICAg
+ICB8IDQgKystLQogZG9jL2V4YW1wbGVzL2hlbGxvLXN0YXRpYy1saWIvTWFrZWZpbGUgfCA0ICsr
+LS0KIDMgZmlsZXMgY2hhbmdlZCwgNiBpbnNlcnRpb25zKCspLCA2IGRlbGV0aW9ucygtKQoKZGlm
+ZiAtLWdpdCBhL2RvYy9leGFtcGxlcy9kZW1vL01ha2VmaWxlIGIvZG9jL2V4YW1wbGVzL2RlbW8v
+TWFrZWZpbGUKaW5kZXggYmJjOGNjYi4uZDVhY2Q0ZSAxMDA2NDQKLS0tIGEvZG9jL2V4YW1wbGVz
+L2RlbW8vTWFrZWZpbGUKKysrIGIvZG9jL2V4YW1wbGVzL2RlbW8vTWFrZWZpbGUKQEAgLTE1LDEy
+ICsxNSwxMiBAQAogQ0MgPSBnY2MKIExJQlMgPSAtbGRsCSMgT24gTGludXgKICNMSUJTID0gLWxj
+CSMgT24gQlNECi1DRkxBR1MgKz0gLUkuCitDUFBGTEFHUyArPSAtSS4KIAogIyBPbmx5IG5lY2Vz
+c2FyeSB3aGVuIGJ1aWxkaW5nIGZyb20gdGhlIHNvdXJjZSB0cmVlIGFuZCBsdHRuZy11c3QgaXMg
+bm90CiAjIGluc3RhbGxlZAogaWZkZWYgQlVJTERfRVhBTVBMRVNfRlJPTV9UUkVFCi1DRkxBR1Mg
+Kz0gLUkuLi8uLi8uLi9pbmNsdWRlLworQ1BQRkxBR1MgKz0gLUkuLi8uLi8uLi9pbmNsdWRlLwog
+TElCTFRUTkdfVVNUX1BBVEggPSAuLi8uLi8uLi9saWJsdHRuZy11c3QvLmxpYnMvCiBMREZMQUdT
+ICs9IC1MJChMSUJMVFROR19VU1RfUEFUSCkgLVdsLC1ycGF0aD0nJCRPUklHSU4vJChMSUJMVFRO
+R19VU1RfUEFUSCknCiAKZGlmZiAtLWdpdCBhL2RvYy9leGFtcGxlcy9lYXN5LXVzdC9NYWtlZmls
+ZSBiL2RvYy9leGFtcGxlcy9lYXN5LXVzdC9NYWtlZmlsZQppbmRleCBlMjBlNTNhLi4yYWM1ZjJl
+IDEwMDY0NAotLS0gYS9kb2MvZXhhbXBsZXMvZWFzeS11c3QvTWFrZWZpbGUKKysrIGIvZG9jL2V4
+YW1wbGVzL2Vhc3ktdXN0L01ha2VmaWxlCkBAIC0xNywxMiArMTcsMTIgQEAKIENDID0gZ2NjCiBM
+SUJTID0gLWxkbCAtbGx0dG5nLXVzdAkJIyBPbiBMaW51eAogI0xJQlMgPSAtbGMgLWxsdHRuZy11
+c3QJCSMgT24gQlNECi1DRkxBR1MgKz0gLUkuCitDUFBGTEFHUyArPSAtSS4KIAogIyBPbmx5IG5l
+Y2Vzc2FyeSB3aGVuIGJ1aWxkaW5nIGZyb20gdGhlIHNvdXJjZSB0cmVlIGFuZCBsdHRuZy11c3Qg
+aXMgbm90CiAjIGluc3RhbGxlZAogaWZkZWYgQlVJTERfRVhBTVBMRVNfRlJPTV9UUkVFCi1DRkxB
+R1MgKz0gLUkuLi8uLi8uLi9pbmNsdWRlLworQ1BQRkxBR1MgKz0gLUkuLi8uLi8uLi9pbmNsdWRl
+LwogTElCTFRUTkdfVVNUX1BBVEggPSAuLi8uLi8uLi9saWJsdHRuZy11c3QvLmxpYnMvCiBMREZM
+QUdTICs9IC1MJChMSUJMVFROR19VU1RfUEFUSCkgLVdsLC1ycGF0aD0nJCRPUklHSU4vJChMSUJM
+VFROR19VU1RfUEFUSCknCiAKZGlmZiAtLWdpdCBhL2RvYy9leGFtcGxlcy9oZWxsby1zdGF0aWMt
+bGliL01ha2VmaWxlIGIvZG9jL2V4YW1wbGVzL2hlbGxvLXN0YXRpYy1saWIvTWFrZWZpbGUKaW5k
+ZXggZGQyNDZmNy4uMTg3NTkxYiAxMDA2NDQKLS0tIGEvZG9jL2V4YW1wbGVzL2hlbGxvLXN0YXRp
+Yy1saWIvTWFrZWZpbGUKKysrIGIvZG9jL2V4YW1wbGVzL2hlbGxvLXN0YXRpYy1saWIvTWFrZWZp
+bGUKQEAgLTEzLDE0ICsxMywxNCBAQAogIyBhIHByb2dyYW0gd2l0aCB0cmFjZXBvaW50IHByb3Zp
+ZGVyIHByb2JlcyBjb21waWxlZCBhcyBzdGF0aWMgbGlicmFyaWVzLgogCiBDQyA9IGdjYwotQ0ZM
+QUdTICs9IC1JLgorQ1BQRkxBR1MgKz0gLUkuCiBMSUJTID0gLWxkbCAtbGx0dG5nLXVzdAkjIE9u
+IExpbnV4CiAjTElCUyA9IC1sYyAtbGx0dG5nLXVzdAkjIE9uIEJTRAogCiAjIE9ubHkgbmVjZXNz
+YXJ5IHdoZW4gYnVpbGRpbmcgZnJvbSB0aGUgc291cmNlIHRyZWUgYW5kIGx0dG5nLXVzdCBpcyBu
+b3QKICMgaW5zdGFsbGVkCiBpZmRlZiBCVUlMRF9FWEFNUExFU19GUk9NX1RSRUUKLUNGTEFHUyAr
+PSAtSS4uLy4uLy4uL2luY2x1ZGUvCitDUFBGTEFHUyArPSAtSS4uLy4uLy4uL2luY2x1ZGUvCiBM
+SUJMVFROR19VU1RfUEFUSCA9IC4uLy4uLy4uL2xpYmx0dG5nLXVzdC8ubGlicy8KIExERkxBR1Mg
+Kz0gLUwkKExJQkxUVE5HX1VTVF9QQVRIKSAtV2wsLXJwYXRoPSckJE9SSUdJTi8kKExJQkxUVE5H
+X1VTVF9QQVRIKScKIAotLSAKMS44LjIuMwoKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3Rz
+Lmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5m
+by9sdHRuZy1kZXYK
