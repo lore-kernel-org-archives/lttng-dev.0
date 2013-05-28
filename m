@@ -1,7 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Subject: [PATCH 1/2] Do not call posix_fallocate() on uClibc
-Date: Tue, 28 May 2013 15:27:06 +0200
-Message-ID: <1369747627-21626-1-git-send-email-thomas.petazzoni__29321.5475198396$1369747672$gmane$org@free-electrons.com>
+Subject: [PATCH 2/2] Support old compilers
+Date: Tue, 28 May 2013 15:27:07 +0200
+Message-ID: <1369747627-21626-2-git-send-email-thomas.petazzoni__23751.0911458687$1369747676$gmane$org@free-electrons.com>
+References: <1369747627-21626-1-git-send-email-thomas.petazzoni@free-electrons.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -9,11 +10,12 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.free-electrons.com ([94.23.35.102])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
 	(envelope-from <thomas.petazzoni@free-electrons.com>)
-	id 1UhJvm-00015D-GD
-	for lttng-dev@lists.lttng.org; Tue, 28 May 2013 09:27:14 -0400
+	id 1UhJvn-00015E-5e
+	for lttng-dev@lists.lttng.org; Tue, 28 May 2013 09:27:15 -0400
 Received: from localhost (col31-4-88-188-83-94.fbx.proxad.net [88.188.83.94])
-	by mail.free-electrons.com (Postfix) with ESMTPSA id B7658D
-	for <lttng-dev@lists.lttng.org>; Tue, 28 May 2013 15:27:06 +0200 (CEST)
+	by mail.free-electrons.com (Postfix) with ESMTPSA id D6FDBD
+	for <lttng-dev@lists.lttng.org>; Tue, 28 May 2013 15:27:07 +0200 (CEST)
+In-Reply-To: <1369747627-21626-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -25,39 +27,33 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-uClibc does not implement posix_fallocate(), and posix_fallocate() is
-mostly only an hint to the kernel that we will need such or such
-amount of space inside a file. So we just don't call posix_fallocate()
-when building against uClibc.
+Some old compilers do not use C99 as their default C language variant,
+for example gcc 4.3.x, which is used on some old machines. When such a
+compiler is used, by default, ULLONG_MAX is not visible. Adding
+-std=gnu99 is needed to make this definition visible.
+
+In autoconf speak, this translates into the need of using
+AC_PROC_CC_STDC instead of AC_PROG_CC. See
+http://www.gnu.org/software/autoconf/manual/autoconf-2.65/html_node/C-Compiler.html
+for more details.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- formats/ctf/ctf.c |    3 +++
- 1 file changed, 3 insertions(+)
+ configure.ac |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/formats/ctf/ctf.c b/formats/ctf/ctf.c
-index bb94e52..77aef28 100644
---- a/formats/ctf/ctf.c
-+++ b/formats/ctf/ctf.c
-@@ -43,6 +43,7 @@
- #include <sys/stat.h>
- #include <fcntl.h>
- #include <dirent.h>
-+#include <features.h>
- #include <glib.h>
- #include <unistd.h>
- #include <stdlib.h>
-@@ -723,9 +724,11 @@ void ctf_packet_seek(struct bt_stream_pos *stream_pos, size_t index, int whence)
- 		}
- 		pos->content_size = -1U;	/* Unknown at this point */
- 		pos->packet_size = WRITE_PACKET_LEN;
-+#ifndef __UCLIBC__
- 		off = posix_fallocate(pos->fd, pos->mmap_offset,
- 				      pos->packet_size / CHAR_BIT);
- 		assert(off >= 0);
-+#endif
- 		pos->offset = 0;
- 	} else {
- 	read_next_packet:
+diff --git a/configure.ac b/configure.ac
+index 83822d6..3ddcb7c 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -17,7 +17,7 @@ AC_CONFIG_HEADERS([config.h])
+ AC_SYS_LARGEFILE
+ 
+ # Checks for programs.
+-AC_PROG_CC
++AC_PROG_CC_STDC
+ AC_PROG_MAKE_SET
+ LT_INIT
+ AC_PROG_YACC
 -- 
 1.7.9.5
