@@ -1,19 +1,19 @@
 From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: lttng start error
-Date: Thu, 30 May 2013 13:14:49 -0400
-Message-ID: <CA+jJMxsPP1bx0X9ogssHytV==EFX37irBL-NbBoFO0Q0Tx2hcg__26972.3116457046$1369934129$gmane$org@mail.gmail.com>
-References: <CAFLer81syvApee-LE=azo25Rs6sq=ktH+PCzU9QCWWP0=KE-AA@mail.gmail.com>
+Subject: Re: using a custom channel
+Date: Thu, 30 May 2013 13:44:39 -0400
+Message-ID: <CA+jJMxtMxym3w+4KGPbHoLoEhM-GTuP3sCy-3uF07xiQBBsdfg__27227.5558593266$1369936888$gmane$org@mail.gmail.com>
+References: <51A4A3B9.7010303@free.fr>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wg0-f51.google.com ([74.125.82.51])
+Received: from mail-wg0-f49.google.com ([74.125.82.49])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1Ui6RD-0005DA-P2
-	for lttng-dev@lists.lttng.org; Thu, 30 May 2013 13:14:55 -0400
-Received: by mail-wg0-f51.google.com with SMTP id b13so465888wgh.6
-	for <lttng-dev@lists.lttng.org>; Thu, 30 May 2013 10:14:50 -0700 (PDT)
-In-Reply-To: <CAFLer81syvApee-LE=azo25Rs6sq=ktH+PCzU9QCWWP0=KE-AA@mail.gmail.com>
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1Ui73l-0005Vq-4U
+	for lttng-dev@lists.lttng.org; Thu, 30 May 2013 13:55:06 -0400
+Received: by mail-wg0-f49.google.com with SMTP id y10so500215wgg.4
+	for <lttng-dev@lists.lttng.org>; Thu, 30 May 2013 10:54:39 -0700 (PDT)
+In-Reply-To: <51A4A3B9.7010303@free.fr>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,44 +22,41 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Zheng Da <zhengda1936@gmail.com>
+To: =?ISO-8859-1?Q?St=E9phane_ANCELOT?= <sancelot@free.fr>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On Thu, May 30, 2013 at 12:32 PM, Zheng Da <zhengda1936@gmail.com> wrote:
-> Hello,
->
-> I just started to use lttng. I use Ubuntu 12.04 and the kernel version
-> 3.8.12. I use a customized kernel, so the lttng package in ubuntu
-> can't be installed correctly. I built lttng 2.0 myself.
+Hi,
 
-Did you build only the lttng-modules or the complete toolchain
-(lttng-tools, lttng-ust, lttng-modules)? Which versions of the
-different packages are you using?
+You have to create a new channel using
 
-Thanks,
+lttng --enable-channel MyNewChannel -k
+
+and then enable the events you wish to collect in this channel.
+
+lttng enable-event -k -a --channel MyNewChannel
+
+Hopefully this answers your question,
 J=E9r=E9mie
 
+On Tue, May 28, 2013 at 8:31 AM, St=E9phane ANCELOT <sancelot@free.fr> wrot=
+e:
+> Hi,
 >
-> Then I followed the steps in https://lttng.org/quickstart. When I run
-> lttng start, I got the errors:
-> root@ubuntu:~# lttng start
-> PERROR: sendmsg: Bad file descriptor [in lttcomm_send_unix_sock() at
-> sessiond-comm.c:311]
-> PERROR: send consumer channel: Bad file descriptor [in
-> send_kconsumer_session_streams() at main.c:636]
-> PERROR: ioctl start session: No buffer space available [in
-> kernel_start_session() at kernel.c:397]
-> Error: Starting kernel trace failed
+> I finally managed to create my trace events probes...
+> I copied my .h header in instrumentation/event/lttng-module and create a
+> lttng probe module
 >
-> Someone said in the mailing list that this problem may have something
-> to do with memory limit. But it shouldn't be my case as my machine has
-> 512GB memory.
+> but now, I would like to use other channels than channel0 , how to do thi=
+s,
+> I tried using xn_nucleus_blahblah as event name, but it has not helped , =
+it
+> is seen in channel0
 >
-> Can anyone help me troubleshoot the problem?
+> Regards,
+> Steph
 >
-> Thanks,
-> Da
+>
 >
 > _______________________________________________
 > lttng-dev mailing list
