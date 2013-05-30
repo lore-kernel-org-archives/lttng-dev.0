@@ -1,18 +1,18 @@
 From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
 Subject: Re: using a custom channel
 Date: Thu, 30 May 2013 13:44:39 -0400
-Message-ID: <CA+jJMxtMxym3w+4KGPbHoLoEhM-GTuP3sCy-3uF07xiQBBsdfg__27227.5558593266$1369936888$gmane$org@mail.gmail.com>
+Message-ID: <CA+jJMxtMxym3w+4KGPbHoLoEhM-GTuP3sCy-3uF07xiQBBsdfg__33339.7331684411$1369937169$gmane$org@mail.gmail.com>
 References: <51A4A3B9.7010303@free.fr>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wg0-f49.google.com ([74.125.82.49])
+Received: from mail-wi0-f180.google.com ([209.85.212.180])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1Ui73l-0005Vq-4U
-	for lttng-dev@lists.lttng.org; Thu, 30 May 2013 13:55:06 -0400
-Received: by mail-wg0-f49.google.com with SMTP id y10so500215wgg.4
-	for <lttng-dev@lists.lttng.org>; Thu, 30 May 2013 10:54:39 -0700 (PDT)
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1Ui6u5-0005RZ-4p
+	for lttng-dev@lists.lttng.org; Thu, 30 May 2013 14:00:17 -0400
+Received: by mail-wi0-f180.google.com with SMTP id hn14so490179wib.13
+	for <lttng-dev@lists.lttng.org>; Thu, 30 May 2013 10:44:39 -0700 (PDT)
 In-Reply-To: <51A4A3B9.7010303@free.fr>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
