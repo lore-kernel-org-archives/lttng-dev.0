@@ -1,20 +1,19 @@
-From: Zheng Da <zhengda1936@gmail.com>
-Subject: Re: lttng start error
-Date: Thu, 30 May 2013 15:05:47 -0400
-Message-ID: <CAFLer8350iF5bCY=jGJVF0Ps=6LQ1yXnkuk29Dtma-zLCgG5mA__39536.0786621042$1369940811$gmane$org@mail.gmail.com>
-References: <CAFLer81syvApee-LE=azo25Rs6sq=ktH+PCzU9QCWWP0=KE-AA@mail.gmail.com>
-	<CA+jJMxsPP1bx0X9ogssHytV==EFX37irBL-NbBoFO0Q0Tx2hcg@mail.gmail.com>
+From: Christian Babeux <christian.babeux@efficios.com>
+Subject: Re: Running lttng-tools tests?
+Date: Thu, 30 May 2013 15:16:08 -0400
+Message-ID: <CAGDH53k36vdDRECSym0s8WHAK33ZrMmCVwT4OJt-8kwxmCwQsQ__23882.1033308797$1369941406$gmane$org@mail.gmail.com>
+References: <48CF5AC71E61DB46B70D0F388054EFFD12D21ECF@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-pd0-f182.google.com ([209.85.192.182])
+Received: from mail-vc0-f178.google.com ([209.85.220.178])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <zhengda1936@gmail.com>) id 1Ui8Aw-000685-Ni
-	for lttng-dev@lists.lttng.org; Thu, 30 May 2013 15:06:14 -0400
-Received: by mail-pd0-f182.google.com with SMTP id g10so869010pdj.41
-	for <lttng-dev@lists.lttng.org>; Thu, 30 May 2013 12:06:09 -0700 (PDT)
-In-Reply-To: <CA+jJMxsPP1bx0X9ogssHytV==EFX37irBL-NbBoFO0Q0Tx2hcg@mail.gmail.com>
+	(envelope-from <christian.babeux@0x80.ca>) id 1Ui8Kc-0006Dx-4h
+	for lttng-dev@lists.lttng.org; Thu, 30 May 2013 15:16:14 -0400
+Received: by mail-vc0-f178.google.com with SMTP id id13so454771vcb.23
+	for <lttng-dev@lists.lttng.org>; Thu, 30 May 2013 12:16:08 -0700 (PDT)
+In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD12D21ECF@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,62 +22,73 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, "Couture,
+	Mario" <Mario.Couture@drdc-rddc.gc.ca>, "Painchaud,
+	Frederic" <Frederic.Painchaud@drdc-rddc.gc.ca>
 List-Id: lttng-dev@lists.lttng.org
 
-Hello,
-
-I built lttng-modules-2.0.6, lttng-tools-2.0.5 and lttng-ust-2.0.6.
-
-Best,
-Da
-
-On Thu, May 30, 2013 at 1:14 PM, J=E9r=E9mie Galarneau
-<jeremie.galarneau@efficios.com> wrote:
-> On Thu, May 30, 2013 at 12:32 PM, Zheng Da <zhengda1936@gmail.com> wrote:
->> Hello,
->>
->> I just started to use lttng. I use Ubuntu 12.04 and the kernel version
->> 3.8.12. I use a customized kernel, so the lttng package in ubuntu
->> can't be installed correctly. I built lttng 2.0 myself.
->
-> Did you build only the lttng-modules or the complete toolchain
-> (lttng-tools, lttng-ust, lttng-modules)? Which versions of the
-> different packages are you using?
->
-> Thanks,
-> J=E9r=E9mie
->
->>
->> Then I followed the steps in https://lttng.org/quickstart. When I run
->> lttng start, I got the errors:
->> root@ubuntu:~# lttng start
->> PERROR: sendmsg: Bad file descriptor [in lttcomm_send_unix_sock() at
->> sessiond-comm.c:311]
->> PERROR: send consumer channel: Bad file descriptor [in
->> send_kconsumer_session_streams() at main.c:636]
->> PERROR: ioctl start session: No buffer space available [in
->> kernel_start_session() at kernel.c:397]
->> Error: Starting kernel trace failed
->>
->> Someone said in the mailing list that this problem may have something
->> to do with memory limit. But it shouldn't be my case as my machine has
->> 512GB memory.
->>
->> Can anyone help me troubleshoot the problem?
->>
->> Thanks,
->> Da
->>
->> _______________________________________________
->> lttng-dev mailing list
->> lttng-dev@lists.lttng.org
->> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
->
->
-> --
-> J=E9r=E9mie Galarneau
-> EfficiOS Inc.
-> http://www.efficios.com
+SGkgRGFuaWVsLAoKPiBBZnRlciBpbnN0YWxsaW5nIGx0dG5nLXRvb2xzICgyLjIuMC1yYzIpIGlu
+IC91c3Ivc3JjLCBJIHRyaWVkIHRoaXM6Cj4KPiAkIGNkIC91c3Ivc3JjL2x0dG5nLXRvb2xzLTIu
+Mi4wLXJjMi90ZXN0cwo+ICQgIC4vcnVuLnNoIHVuaXRfdGVzdHMKClRoaXMgaXMgaW5kZWVkIHRo
+ZSByaWdodCB3YXkgdG8gcnVuIHRoZSB0ZXN0cy4gVXN1YWxseSBJIHJ1biB0aG9zZSBpbgp0aGUg
+c291cmNlIHRyZWUgX2JlZm9yZV8gaW5zdGFsbGF0aW9uIGUuZy46CgpbLi4uXQptYWtlCmNkIGx0
+dG5nLXRvb2xzL3Rlc3RzCi4vcnVuLnNoIHVuaXRfdGVzdHMKWy4uLl0KCk9yIHlvdSBjYW4gcnVu
+IHRoZSBtYWtlIGNoZWNrIHRhcmdldCBhZnRlciBidWlsZGluZzoKClsuLi5dCi4vY29uZmlndXJl
+Cm1ha2UKbWFrZSBjaGVjawpbLi4uXQoKUGVyaGFwcyB0aGVyZSBpcyBhbiBpc3N1ZSB3aGVuIHRo
+ZSB0ZXN0cyBhcmUgaW5zdGFsbGVkPyBNYWtlIHN1cmUgdGhlCnRlc3RzIGJpbmFyaWVzIGFyZSBw
+cm9wZXJseSBjb21waWxlZCBhbmQgYXJlIHByZXNlbnQgaW4gdGhlCmluc3RhbGxhdGlvbiBwYXRo
+cy4gSWYgbm90LCB3ZSBzaG91bGQgcmVtb3ZlIGFueSB0ZXN0cyBzY3JpcHRzL3Byb2dyYW0KaW5z
+dGFsbGF0aW9uIHdoZW4gaXNzdWluZyAnbWFrZSBpbnN0YWxsJy4uLgoKVGhhbmtzLAoKQ2hyaXN0
+aWFuCgpPbiBUaHUsIE1heSAzMCwgMjAxMyBhdCAyOjU5IFBNLCBUaGliYXVsdCwgRGFuaWVsCjxE
+YW5pZWwuVGhpYmF1bHRAZHJkYy1yZGRjLmdjLmNhPiB3cm90ZToKPiBBZnRlciBpbnN0YWxsaW5n
+IGx0dG5nLXRvb2xzICgyLjIuMC1yYzIpIGluIC91c3Ivc3JjLCBJIHRyaWVkIHRoaXM6Cj4KPiAk
+IGNkIC91c3Ivc3JjL2x0dG5nLXRvb2xzLTIuMi4wLXJjMi90ZXN0cwo+ICQgIC4vcnVuLnNoIHVu
+aXRfdGVzdHMKPgo+ICAgIEFuZCBJIGdvdCB0aGlzOgo+Cj4gdW5pdC90ZXN0X2tlcm5lbF9kYXRh
+IC4uLi4uLi4uLi4uLi4uIER1YmlvdXMsIHRlc3QgcmV0dXJuZWQgMSAod3N0YXQgMjU2LCAweDEw
+MCkKPiBObyBzdWJ0ZXN0cyBydW4KPiB1bml0L3Rlc3Rfc2Vzc2lvbiAuLi4uLi4uLi4uLi4uLi4u
+Li4gRHViaW91cywgdGVzdCByZXR1cm5lZCAxICh3c3RhdCAyNTYsIDB4MTAwKQo+IE5vIHN1YnRl
+c3RzIHJ1bgo+IHVuaXQvdGVzdF91cmkgLi4uLi4uLi4uLi4uLi4uLi4uLi4uLiBEdWJpb3VzLCB0
+ZXN0IHJldHVybmVkIDEgKHdzdGF0IDI1NiwgMHgxMDApCj4gTm8gc3VidGVzdHMgcnVuCj4gdW5p
+dC90ZXN0X3VzdF9kYXRhIC4uLi4uLi4uLi4uLi4uLi4uIER1YmlvdXMsIHRlc3QgcmV0dXJuZWQg
+MSAod3N0YXQgMjU2LCAweDEwMCkKPiBObyBzdWJ0ZXN0cyBydW4KPiB1bml0L3Rlc3RfdXRpbHNf
+cGFyc2Vfc2l6ZV9zdWZmaXggLi4gRHViaW91cywgdGVzdCByZXR1cm5lZCAxICh3c3RhdCAyNTYs
+IDB4MTAwKQo+IE5vIHN1YnRlc3RzIHJ1bgo+Cj4gVGVzdCBTdW1tYXJ5IFJlcG9ydAo+IC0tLS0t
+LS0tLS0tLS0tLS0tLS0KPiB1bml0L3Rlc3Rfa2VybmVsX2RhdGEgICAgICAgICAgICAoV3N0YXQ6
+IDI1NiBUZXN0czogMCBGYWlsZWQ6IDApCj4gICBOb24temVybyBleGl0IHN0YXR1czogMQo+ICAg
+UGFyc2UgZXJyb3JzOiBObyBwbGFuIGZvdW5kIGluIFRBUCBvdXRwdXQKPiB1bml0L3Rlc3Rfc2Vz
+c2lvbiAgICAgICAgICAgICAgICAoV3N0YXQ6IDI1NiBUZXN0czogMCBGYWlsZWQ6IDApCj4gICBO
+b24temVybyBleGl0IHN0YXR1czogMQo+ICAgUGFyc2UgZXJyb3JzOiBObyBwbGFuIGZvdW5kIGlu
+IFRBUCBvdXRwdXQKPiB1bml0L3Rlc3RfdXJpICAgICAgICAgICAgICAgICAgICAoV3N0YXQ6IDI1
+NiBUZXN0czogMCBGYWlsZWQ6IDApCj4gICBOb24temVybyBleGl0IHN0YXR1czogMQo+ICAgUGFy
+c2UgZXJyb3JzOiBObyBwbGFuIGZvdW5kIGluIFRBUCBvdXRwdXQKPiB1bml0L3Rlc3RfdXN0X2Rh
+dGEgICAgICAgICAgICAgICAoV3N0YXQ6IDI1NiBUZXN0czogMCBGYWlsZWQ6IDApCj4gICBOb24t
+emVybyBleGl0IHN0YXR1czogMQo+ICAgUGFyc2UgZXJyb3JzOiBObyBwbGFuIGZvdW5kIGluIFRB
+UCBvdXRwdXQKPiB1bml0L3Rlc3RfdXRpbHNfcGFyc2Vfc2l6ZV9zdWZmaXggKFdzdGF0OiAyNTYg
+VGVzdHM6IDAgRmFpbGVkOiAwKQo+ICAgTm9uLXplcm8gZXhpdCBzdGF0dXM6IDEKPiAgIFBhcnNl
+IGVycm9yczogTm8gcGxhbiBmb3VuZCBpbiBUQVAgb3V0cHV0Cj4gRmlsZXM9NSwgVGVzdHM9MCwg
+IDAgd2FsbGNsb2NrIHNlY3MgKCAwLjAzIHVzciAgMC4wMCBzeXMgKyAgMC4wNCBjdXNyICAwLjA0
+IGNzeXMgPSAgMC4xMSBDUFUpCj4gUmVzdWx0OiBGQUlMCj4KPiAgICBUaGVyZSBpcyBubyBSRUFE
+TUUgaW4gbHR0bmctdG9vbHMvdGVzdHMgKHVubGlrZSBsdHRuZy11c3QsIGJ1dCBzYWRseSBsaWtl
+IHVzZXJzcGFjZS1yY3UpLCBhbmQgdGhlIHNjcmlwdCBpcyBsYWNvbmljLCBzbyBJIGNhbid0IGJl
+IHN1cmUgaWYgdGhpcyBpcyBhIHRydWUgZmFpbHVyZSAobXkgaW5zdGFsbGF0aW9uIHdvcmtzKSBv
+ciBpZiBJIGp1c3QgcmFuIHRoZSB0ZXN0cyB3cm9uZy4gIEZvciB1c2Vyc3BhY2UtcmN1LCBJIHJh
+biAnIC4vcnVudGVzdHMuc2ggMiAyIDEwJywgYnV0IEkgZ290IG5vIFBBU1MvRkFJTCBldmFsdWF0
+aW9uIHNvIEknbSBub3QgMTAwJSBzdXJlIHRoZSB0ZXN0cyB3ZXJlIGEgc3VjY2Vzcy4KPgo+ICAg
+IEhvdyBhcmUgdGhlc2UgdGVzdHMgc3VwcG9zZWQgdG8gYmUgcnVuPwo+Cj4gRGFuaWVsIFUuIFRo
+aWJhdWx0Cj4gUHJvdGVjdGlvbiBkZXMgc3lzdMOobWVzIGV0IGNvbnRyZW1lc3VyZXMgKFBTQykg
+fCBTeXN0ZW1zIFByb3RlY3Rpb24gJiBDb3VudGVybWVhc3VyZXMgKFNQQykKPiBDeWJlciBzw6lj
+dXJpdMOpIHBvdXIgbGVzIG1pc3Npb25zIGVzc2VudGllbGxlcyAoQ01FKSB8IE1pc3Npb24gQ3Jp
+dGljYWwgQ3liZXIgU2VjdXJpdHkgKE1DQ1MpCj4gUiAmIEQgcG91ciBsYSBkw6lmZW5zZSBDYW5h
+ZGEgLSBWYWxjYXJ0aWVyIChSRERDIFZhbGNhcnRpZXIpIHwgRGVmZW5jZSBSJkQgQ2FuYWRhIC0g
+VmFsY2FydGllciAoRFJEQyBWYWxjYXJ0aWVyKQo+IDI0NTkgcm91dGUgZGUgbGEgQnJhdm91cmUK
+PiBRdcOpYmVjIFFDICBHM0ogMVg1Cj4gQ0FOQURBCj4gVm94IDogKDQxOCkgODQ0LTQwMDAgeDQy
+NDUKPiBGYXggOiAoNDE4KSA4NDQtNDUzOAo+IE5BQyA6IDkxOFYgUVNESiA8aHR0cDovL3d3dy50
+cmF2ZWxnaXMuY29tL21hcC5hc3A/YWRkcj05MThWJTIwUVNESj4KPiBHb3V2ZXJuZW1lbnQgZHUg
+Q2FuYWRhIHwgR292ZXJubWVudCBvZiBDYW5hZGEKPiA8aHR0cDovL3d3dy52YWxjYXJ0aWVyLmRy
+ZGMtcmRkYy5nYy5jYS8+Cj4KPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0
+bmcub3JnCj4gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8v
+bHR0bmctZGV2CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+XwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDov
+L2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
