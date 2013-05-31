@@ -1,18 +1,15 @@
 From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Subject: Re: Running lttng-tools tests?
-Date: Thu, 30 May 2013 20:52:22 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD12D22366__6168.80524107746$1369947255$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
-References: <48CF5AC71E61DB46B70D0F388054EFFD12D21ECF@VAL-E-02.valcartier.drdc-rddc.gc.ca>
-	<CAGDH53k36vdDRECSym0s8WHAK33ZrMmCVwT4OJt-8kwxmCwQsQ@mail.gmail.com>
+Subject: Dead code in lttng.c
+Date: Fri, 31 May 2013 14:34:34 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD12D2247A__27782.3214688853$1370011004$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1Ui9qw-0006wv-G5
-	for lttng-dev@lists.lttng.org; Thu, 30 May 2013 16:53:42 -0400
-In-Reply-To: <CAGDH53k36vdDRECSym0s8WHAK33ZrMmCVwT4OJt-8kwxmCwQsQ@mail.gmail.com>
+	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1UiQQt-00070Y-0w
+	for lttng-dev@lists.lttng.org; Fri, 31 May 2013 10:35:55 -0400
 Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -22,80 +19,47 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Christian Babeux <christian.babeux@efficios.com>, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 Cc: "Painchaud, Frederic" <Frederic.Painchaud@drdc-rddc.gc.ca>, "Couture,
 	Mario" <Mario.Couture@drdc-rddc.gc.ca>
 List-Id: lttng-dev@lists.lttng.org
 
-ICAgSSB0cmllZCBkZXBsb3lpbmcgdGhlIHRhcmJhbGwgdG8gYW5vdGhlciBkaXJlY3RvcnkgYW5k
-IGJ1aWxkaW5nLiAgVGhlIHRlc3RzIHJlZnVzZSB0byBydW4gKCJDb3VsZCBub3QgZXhlY3V0ZSAo
-dW5pdC90ZXN0X2tlcm5lbF9kYXRhKTogb3BlbjM6IGV4ZWMgb2YgdW5pdC90ZXN0X2tlcm5tZWxf
-ZGF0YSBmYWlsZWQgYXQgL3Vzci9zaGFyZS9wZXJsLzUuMTQvVEFQL1BhcnNlci9JdGVyYXRvci9Q
-cm9jZXNzLnBtIGxpbmUgMTY4IikgdW50aWwgYWZ0ZXIgdGhlIG1ha2Ugc3RlcCAobmF0dXJhbGx5
-KS4gIFRoaXMgdGltZSBJIGdvdDoNCg0KdW5pdC90ZXN0X2tlcm5lbF9kYXRhIC4uLi4uLi4uLi4u
-Li4uIG9rDQp1bml0L3Rlc3Rfc2Vzc2lvbiAuLi4uLi4uLi4uLi4uLi4uLi4gb2sNCnVuaXQvdGVz
-dF91cmkgLi4uLi4uLi4uLi4uLi4uLi4uLi4uLiBEdWJpb3VzLCB0ZXN0IHJldHVybmVkIDEgKHdz
-dGF0ID4gMjU2LCAweDEwMCkNCkZhaWxlZCAxLzExIHN1YnRlc3RzDQp1bml0L3Rlc3RfdXN0X2Rh
-dGEgLi4uLi4uLi4uLi4uLi4uLi4gb2sNCnVuaXQvdGVzdF91dGlsc19wYXJzZV9zaXplX3N1ZmZp
-eCAuLiBvaw0KDQpUZXN0IFN1bW1hcnkgUmVwb3J0DQotLS0tLS0tLS0tLS0tLS0tLS0tDQp1bml0
-L3Rlc3RfdXJpICAgICAgICAgICAgICAgICAgICAoV3N0YXQ6IDI1NiBUZXN0czogMTEgRmFpbGVk
-OiAxKQ0KICBGYWlsZWQgdGVzdDogIDQNCiAgTm9uLXplcm8gZXhpdCBzdGF0dXM6IDENCkZpbGVz
-PTUsIFRlc3RzPTU1LCAgNCB3YWxsY2xvY2sgc2VjcyAoIDAuMTMgdXNyICAwLjA4IHN5cyArICAx
-LjM0IGN1c3IgIDEuMDIgY3N5cyA9ICAyLjU3IENQVSkNClJlc3VsdDogRkFJTA0KDQogICBOb3cg
-SSBnZXQgZXhhY3RseSB0aGUgc2FtZSByZXBvcnQgaW4gdGhlIG9yaWdpbmFsIC91c3Ivc3JjLy4u
-LiBmb2xkZXIgaWYgSSBydW4gJ3N1ZG8gLi9ydW4uc2ggdW5pdF90ZXN0cycgaW5zdGVhZCBvZiAn
-c3VkbyAuL3J1bi5zaCB1bml0X3Rlc3RzJy4gIFRoZSBwcm9ibGVtIGlzIGNsZWFybHkgb25lIG9m
-IGZpbGUgb3duZXJzaGlwIChhIGxvdCBvZiB0aGUgL3Vzci9zcmMvLi4uIGZpbGVzIGFyZSByb290
-LW93bmVkIGJlY2F1c2Ugb2YgdGhlIHdheSB0aGV5IHdlcmUgaW5zdGFsbGVkKS4NCg0Kfn5+fn5+
-fn5+fg0KICAgSSB3YXMgbG9va2luZyBpbnRvIHRoZSBiYWJlbHRyYWNlIHRlc3RzIGFzIHdlbGwg
-KGNkIGJhYmVsdHJhY2UvdGVzdHMvLCAuL3J1bmFsbC5zaCkgYW5kIEkgd2FzIHN1cnByaXNlZCB0
-aGF0IGV2ZXJ5IHNpbmdsZSAic3VjY2VlZCIgdGVzdCBmYWlsZWQuICBJbnZlc3RpZ2F0aW9uIHJl
-dmVhbGVkIHRoYXQgdGhlIGJhYmVsdHJhY2UvY29udmVydGVyL2JhYmVsdHJhY2UgZXhlY3V0YWJs
-ZSB3YXMgcmVzcG9uc2libGU6IGl0IGZhaWxzIHdpdGggIi91c3IvYmluL2xkOiBmYXRhbCBlcnJv
-cjogL3Vzci9zcmMvYmFiZWx0cmFjZS0xLjEuMC9jb252ZXJ0ZXIvLmxpYnMvMjY2MjItbHQtYmFi
-ZWx0cmFjZTogb3BlbjogUGVybWlzc2lvbiBkZW5pZWQiICJjb2xsZWN0MjogbGQgYSByZXRvdXJu
-w6kgMSBjb2RlIGQnw6l0YXQgZCdleMOpY3V0aW9ubiIuICBTdXJwcmlzaW5nbHksIHRoZSBiYWJl
-bHRyYWNlL2NvbnZlcnRlci9iYWJlbHRyYWNlIGV4ZWN1dGFibGUgaXMgKmRpZmZlcmVudCogZnJv
-bSB0aGUgL3Vzci9sb2NhbC9iaW4vYmFiZWx0cmFjZSBleGVjdXRhYmxlIChhY2NvcmRpbmcgdG8g
-ZGlmZikuICBTbyBhcmUgdGhlIGJhYmVsdHJhY2UtbG9nIGV4ZWN1dGFibGVzLiAgVGhlIHRpbWVz
-dGFtcHMgYXJlIGZvdXIgc2Vjb25kcyBhcGFydC4NCg0KICAgVGhlIGluc3RhbGwgbG9nIHNob3dz
-IG5vdGhpbmcgc3RyYW5nZTogImxpYnRvb2w6IGluc3RhbGw6IC91c3IvYmluL2luc3RhbGwgLWMg
-LmxpYnMvYmFiZWx0cmFjZSAvdXNyL2xvY2FsL2Jpbi9iYWJlbHRyYWNlIi4gIC91c3IvYmluL2lu
-c3RhbGwgaXMgc3VwcG9zZWQgdG8gZG8gYSBwbGFpbiBjb3B5LCBubz8NCg0KICAgQ2hhbmdpbmcg
-cnVuYWxsLnNoIHNvIGl0IHJ1bnMgdGhlIGluc3RhbGxlZCAvdXNyL2xvY2FsL2Jpbi9iYWJlbHRy
-YWNlIHlpZWxkcyBzdWNjZXNzZnVsIHRlc3RzIGV4Y2VwdCBmb3IgdGhlIHN1Y2NlZWQzIHRyYWNl
-Og0KDQokIGJhYmVsdHJhY2UgL3Vzci9zcmMvYmFiZWx0cmFjZS0xLjEuMC90ZXN0cy9jdGYtdHJh
-Y2VzL3N1Y2NlZWQvc3VjY2VlZDMNCltlcnJvcl0gYXQgbGluZSA5OiB0b2tlbiAiIj9ceDIwXG8w
-NDA/IiI6IHN5bnRheCBlcnJvciwgdW5leHBlY3RlZCBFUlJPUg0KDQpbZXJyb3JdIEVycm9yIGNy
-ZWF0aW5nIEFTVA0KW3dhcm5pbmddIFVuYWJsZSB0byBvcGVuIHRyYWNlIG1ldGFkYXRhIGZvciBw
-YXRoICIvdXNyL3NyYy9iYWJlbHRyYWNlLTEuMS4wL3Rlc3RzL2N0Zi10cmFjZXMvc3VjY2VlZC9z
-dWNjZWVkMyIuDQpbd2FybmluZ10gW0NvbnRleHRdIENhbm5vdCBvcGVuX3RyYWNlIG9mIGZvcm1h
-dCBjdGYgYXQgcGF0aCAvdXNyL3NyYy9iYWJlbHRyYWNlLTEuMS4wL3Rlc3RzL2N0Zi10cmFjZXMv
-c3VjY2VlZC9zdWNjZWVkMy4NClt3YXJuaW5nXSBbQ29udGV4dF0gY2Fubm90IG9wZW4gdHJhY2Ug
-Ii91c3Ivc3JjL2JhYmVsdHJhY2UtMS4xLjAvdGVzdHMvY3RmLXRyYWNlcy9zdWNjZWVkL3N1Y2Nl
-ZWQzIiBmcm9tIC91c3Ivc3JjL2JhYmVsdHJhY2UtMS4xLjAvdGVzdHMvY3RmLXRyYWNlcy9zdWNj
-ZWVkL3N1Y2NlZWQzIGZvciByZWFkaW5nLg0KW2Vycm9yXSBDYW5ub3Qgb3BlbiBhbnkgdHJhY2Ug
-Zm9yIHJlYWRpbmcuDQoNCltlcnJvcl0gb3BlbmluZyB0cmFjZSAiL3Vzci9zcmMvYmFiZWx0cmFj
-ZS0xLjEuMC90ZXN0cy9jdGYtdHJhY2VzL3N1Y2NlZWQvc3VjY2VlZDMiIGZvciByZWFkaW5nLg0K
-DQpbZXJyb3JdIG5vbmUgb2YgdGhlIHNwZWNpZmllZCB0cmFjZSBwYXRocyBjb3VsZCBiZSBvcGVu
-ZWQuDQoNCiAgIEhlcmUgYWxzbywgb3duZXJzaGlwIGlzIHJlc3BvbnNpYmxlOiBydW5uaW5nICdz
-dWRvIC4vcnVuYWxsLnNoJyAob24gdGhlIG9yaWdpbmFsIHJ1bmFsbC5zaCkgeWllbGRzIHRoZSBz
-YW1lIHN1Y2Nlc3NlcyAoYW5kIHRoZSBzYW1lIHN1Y2NlZWQzIHRyYWNlIGZhaWx1cmUpLg0KDQog
-ICBTbyBhdCB0aGlzIHBvaW50IEkgaGF2ZSB0aHJlZSByZW1haW5pbmcgcXVlc3Rpb25zOg0KDQox
-KSBXaHkgZG9lcyB1bml0L3Rlc3RfdXJpIGZhaWwgb25lIG9mIGl0cyAxMSBzdWItdGVzdHM/DQoy
-KSBXaHkgZG9lcyBiYWJlbHRyYWNlIGZhaWwgd2hlbiByZWFkaW5nIHRoZSBzdWNjZWVkMyBjdGYg
-dHJhY2U/DQozKSBXaHkgb24gRWFydGggYXJlIHRoZSBiYWJlbHRyYWNlIGV4ZWN1dGFibGVzIHRh
-bXBlcmVkIHdpdGggd2hlbiBpbnN0YWxsZWQ/DQoNCkRhbmllbCBVLiBUaGliYXVsdA0KUHJvdGVj
-dGlvbiBkZXMgc3lzdMOobWVzIGV0IGNvbnRyZW1lc3VyZXMgKFBTQykgfCBTeXN0ZW1zIFByb3Rl
-Y3Rpb24gJiBDb3VudGVybWVhc3VyZXMgKFNQQykNCkN5YmVyIHPDqWN1cml0w6kgcG91ciBsZXMg
-bWlzc2lvbnMgZXNzZW50aWVsbGVzIChDTUUpIHwgTWlzc2lvbiBDcml0aWNhbCBDeWJlciBTZWN1
-cml0eSAoTUNDUykNClIgJiBEIHBvdXIgbGEgZMOpZmVuc2UgQ2FuYWRhIC0gVmFsY2FydGllciAo
-UkREQyBWYWxjYXJ0aWVyKSB8IERlZmVuY2UgUiZEIENhbmFkYSAtIFZhbGNhcnRpZXIgKERSREMg
-VmFsY2FydGllcikNCjI0NTkgcm91dGUgZGUgbGEgQnJhdm91cmUNClF1w6liZWMgUUPCoCBHM0og
-MVg1DQpDQU5BREENClZveMKgOiAoNDE4KSA4NDQtNDAwMCB4NDI0NQ0KRmF4wqA6ICg0MTgpIDg0
-NC00NTM4DQpOQUPCoDogOTE4ViBRU0RKIDxodHRwOi8vd3d3LnRyYXZlbGdpcy5jb20vbWFwLmFz
-cD9hZGRyPTkxOFYlMjBRU0RKPg0KR291dmVybmVtZW50IGR1IENhbmFkYcKgfCBHb3Zlcm5tZW50
-IG9mIENhbmFkYQ0KPGh0dHA6Ly93d3cudmFsY2FydGllci5kcmRjLXJkZGMuZ2MuY2EvPg0KX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1h
-aWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5v
-cmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+In lttng-tools/src/bin/lttng/lttng.c, the check_args_no_sessiond function c=
+hecks the command-line arguments for "specific options and commands that mu=
+st not trigger a session daemon". The function detects the options "-h", "-=
+-h" (for "--help"), "--list-options", and "--list-commands", and the comman=
+ds "version" and "view".
+
+The parse_args function, on the other hand, detects "-V", "-h", "--list-com=
+mands", "--list-options" at its outset and *does not* reach the session dae=
+mon spawning check ( if (opt_no_sessiond =3D=3D 0 && check_args_no_sessiond=
+(argc, argv) =3D=3D 0 && (check_sessiond() < 0)) ) in those cases.
+
+So, why is check_args_no_sessiond checking for options at all?  Considering=
+ the control flow of parse_args, check_args_no_sessiond should check *only*=
+ for the "version" and "view" commands.
+
+If check_args_no_sessiond is to check the command-line options anyway (for =
+completeness's sake, say), then it should check for the "-V"/"--version" op=
+tion as well.  And if the check for "--h" is satisfactory, the check for "-=
+-list-commands" and "--list-options" should be collapsed into a simple chec=
+k for "--l".
+
+(These observations are based on the May 23 commit, so my apologies if thes=
+e points have already been addressed)
+
+Daniel U. Thibault
+Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
+ntermeasures (SPC)
+Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
+Cyber Security (MCCS)
+R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
+ Canada - Valcartier (DRDC Valcartier)
+2459 route de la Bravoure
+Qu=E9bec QC=A0 G3J 1X5
+CANADA
+Vox=A0: (418) 844-4000 x4245
+Fax=A0: (418) 844-4538
+NAC=A0: 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+Gouvernement du Canada=A0| Government of Canada
+<http://www.valcartier.drdc-rddc.gc.ca/>
