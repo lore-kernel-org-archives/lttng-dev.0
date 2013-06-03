@@ -1,20 +1,19 @@
-From: Aryeh Weinreb <weinrea@gmail.com>
-Subject: Re: linking c++ with shared object tracepoints
-Date: Sun, 2 Jun 2013 10:47:24 +0300
-Message-ID: <CAE5ibEmsiqDZttzcoordhkrh=kQeULYyKdC6jSS8Tu9gWgpWcw__16881.0721407228$1370159288$gmane$org@mail.gmail.com>
-References: <CAE5ibEn5d479UzR4_zFt3nj2T6pbS94ZS50F=dkxZN3RzarvfQ@mail.gmail.com>
-	<CA+jJMxusCXn9=F3dQ+ss1mGYtjv0NPXWuYWb3tLukdS1QFwtBw@mail.gmail.com>
+From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
+	<jeremie.galarneau@efficios.com>
+Subject: [PATCH lttng-ust] Fix: Check for invalid commands in
+	print_cmd
+Date: Mon,  3 Jun 2013 16:59:20 -0400
+Message-ID: <1370293160-22212-1-git-send-email-jeremie.galarneau__44021.3774833412$1370293207$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-pd0-f178.google.com ([209.85.192.178])
+Received: from mail-vb0-f50.google.com ([209.85.212.50])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <weinrea@gmail.com>) id 1Uj30k-0000Xf-Fn
-	for lttng-dev@lists.lttng.org; Sun, 02 Jun 2013 03:47:30 -0400
-Received: by mail-pd0-f178.google.com with SMTP id w10so14914pde.37
-	for <lttng-dev@lists.lttng.org>; Sun, 02 Jun 2013 00:47:24 -0700 (PDT)
-In-Reply-To: <CA+jJMxusCXn9=F3dQ+ss1mGYtjv0NPXWuYWb3tLukdS1QFwtBw@mail.gmail.com>
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1Ujbqk-0001GK-Cj
+	for lttng-dev@lists.lttng.org; Mon, 03 Jun 2013 16:59:30 -0400
+Received: by mail-vb0-f50.google.com with SMTP id w16so896725vbb.37
+	for <lttng-dev@lists.lttng.org>; Mon, 03 Jun 2013 13:59:24 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,31 +22,28 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
->> Is supported to link c++ code with c compiled tracepoints put it a dynamic lib?
-
-I mean to say the tracepoints put _in_ a dynamic lib before linking
-with c++ code.
->
-> Yes, I just tried it here.
-
-Could you show me how with the easy-ust example?
-
-> The header is probably fine and I'd advise againt modifying it without
-> careful thought. Could you provide a short example reproducing the
-> problem?
-
-$cd doc/examples/easy-ust/
-$ g++ -DTRACEPOINT_PROBE_DYNAMIC_LINKAGE  -I. -c -o sample.o sample.c
-sample.c: In function 'int main(int, char**)':
-sample.c:38: warning: deprecated conversion from string constant to 'char*'
-$ gcc -fPIC -I. -c -o tp.o tp.c
-$ gcc -I. -shared -o libtp.so tp.o
-$ g++ -o sample sample.o -ldl -llttng-ust -L. -ltp
-/usr/bin/ld: sample: hidden symbol `tracepoint_dlopen' in sample.o is
-referenced by DSO
-/usr/bin/ld: final link failed: Nonrepresentable section on output
-collect2: ld returned 1 exit status
+Q29ycnVwdGVkICJ1c3Rjb21tX3VzdF9tc2ciIHJlY2VpdmVkIGJ5IHRoZSBsaXN0ZW5lciB0aHJl
+YWQgY291bGQgY2F1c2UgYW4gb3V0Cm9mIGJvdW5kcyBhY2Nlc3MgdG8gdGhlIGNtZF9uYW1lX21h
+cHBpbmcgYXJyYXkgaW4gdGhlIHRyYWNlZCBhcHBsaWNhdGlvbi4KCldoaWxlIHRoaXMgZG9lc24n
+dCBmaXggdGhlIHJvb3QgY2F1c2Ugb2YgdGhlIHByb2JsZW0sIHRoaXMgY2hlY2sgc2hvdWxkIGJl
+IHB1dAppbiBwbGFjZSBhbnl3YXkgc2luY2UgY29ycnVwdGVkIG1lc3NhZ2VzIGFyZSBub3QgY2hl
+Y2tlZCBmb3IgYW5kIG1heSBicmluZyBkb3duCnRoZSB0cmFjZWUuCgpGaXhlcyAjNTU2CgpTaWdu
+ZWQtb2ZmLWJ5OiBKw6lyw6ltaWUgR2FsYXJuZWF1IDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lv
+cy5jb20+Ci0tLQogbGlibHR0bmctdXN0L2x0dG5nLXVzdC1jb21tLmMgfCAzICsrLQogMSBmaWxl
+IGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQoKZGlmZiAtLWdpdCBhL2xp
+Ymx0dG5nLXVzdC9sdHRuZy11c3QtY29tbS5jIGIvbGlibHR0bmctdXN0L2x0dG5nLXVzdC1jb21t
+LmMKaW5kZXggYWUyZTUxOC4uMWJlNjkzZiAxMDA2NDQKLS0tIGEvbGlibHR0bmctdXN0L2x0dG5n
+LXVzdC1jb21tLmMKKysrIGIvbGlibHR0bmctdXN0L2x0dG5nLXVzdC1jb21tLmMKQEAgLTIwOCw4
+ICsyMDgsOSBAQCBzdGF0aWMKIHZvaWQgcHJpbnRfY21kKGludCBjbWQsIGludCBoYW5kbGUpCiB7
+CiAJY29uc3QgY2hhciAqY21kX25hbWUgPSAiVW5rbm93biI7CisJaW50IGNtZF9uYW1lX21hcHBp
+bmdfbGVuID0gc2l6ZW9mKGNtZF9uYW1lX21hcHBpbmcpIC8gc2l6ZW9mKGNoYXIgKik7CiAKLQlp
+ZiAoY21kX25hbWVfbWFwcGluZ1tjbWRdKSB7CisJaWYgKGNtZCA8IGNtZF9uYW1lX21hcHBpbmdf
+bGVuICYmIGNtZF9uYW1lX21hcHBpbmdbY21kXSkgewogCQljbWRfbmFtZSA9IGNtZF9uYW1lX21h
+cHBpbmdbY21kXTsKIAl9CiAJREJHKCJNZXNzYWdlIFJlY2VpdmVkIFwiJXNcIiwgSGFuZGxlIFwi
+JXNcIiAoJWQpIiwgY21kX25hbWUsCi0tIAoxLjguMi4zCgoKX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1k
+ZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFu
+L2xpc3RpbmZvL2x0dG5nLWRldgo=
