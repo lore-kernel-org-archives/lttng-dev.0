@@ -1,23 +1,16 @@
-From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: linking c++ with shared object tracepoints
-Date: Tue, 4 Jun 2013 11:44:57 -0400
-Message-ID: <CA+jJMxt=PiBs3H-1jAsCSwZTnQFTQ85_WTyUNYdD6tbGSD+dPQ__26946.5568279431$1370360735$gmane$org@mail.gmail.com>
-References: <CAE5ibEn5d479UzR4_zFt3nj2T6pbS94ZS50F=dkxZN3RzarvfQ@mail.gmail.com>
-	<CA+jJMxusCXn9=F3dQ+ss1mGYtjv0NPXWuYWb3tLukdS1QFwtBw@mail.gmail.com>
-	<CAE5ibEmsiqDZttzcoordhkrh=kQeULYyKdC6jSS8Tu9gWgpWcw@mail.gmail.com>
-	<CA+jJMxvNnYEQPdJhnLRKmFR=v-VVg5HNbn7-Z1yoYszTEk2XoA@mail.gmail.com>
-	<CAE5ibEn-qhRBzBz7bbF5uJWrJQQhVj=Unhymy_Uw-ye8jRpEJQ@mail.gmail.com>
+From: Francis Giraldeau <francis.giraldeau@gmail.com>
+Subject: LTTng on Fedora 19 beta
+Date: Tue, 4 Jun 2013 15:03:56 -0400
+Message-ID: <CAC6yHM5bEy2rJpMKZ=jUY-L3+JJFEfkmYv5WpJj61Xf2zYZPAQ__28649.0971841433$1370372685$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/mixed; boundary="===============1782202738=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-we0-f176.google.com ([74.125.82.176])
+Received: from mail-ie0-f179.google.com ([209.85.223.179])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1UjtPz-00029f-QC
-	for lttng-dev@lists.lttng.org; Tue, 04 Jun 2013 11:45:04 -0400
-Received: by mail-we0-f176.google.com with SMTP id t56so360199wes.7
-	for <lttng-dev@lists.lttng.org>; Tue, 04 Jun 2013 08:44:57 -0700 (PDT)
-In-Reply-To: <CAE5ibEn-qhRBzBz7bbF5uJWrJQQhVj=Unhymy_Uw-ye8jRpEJQ@mail.gmail.com>
+	(envelope-from <francis.giraldeau@gmail.com>) id 1UjwWX-0003j9-Td
+	for lttng-dev@lists.lttng.org; Tue, 04 Jun 2013 15:04:02 -0400
+Received: by mail-ie0-f179.google.com with SMTP id c13so1323991ieb.10
+	for <lttng-dev@lists.lttng.org>; Tue, 04 Jun 2013 12:03:56 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -26,69 +19,61 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Aryeh Weinreb <weinrea@gmail.com>
-Cc: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Just to isolate the problem further, can you give me the version of
-lttng-ust you have installed and which distribution you are using?
+--===============1782202738==
+Content-Type: multipart/alternative; boundary=089e013a2d803148eb04de58befc
 
-On Tue, Jun 4, 2013 at 11:37 AM, Aryeh Weinreb <weinrea@gmail.com> wrote:
->> I prepared a quick and dirty example based on the "demo" project.
->> Replace the Makefile and demo.c files with these:
->> https://gist.github.com/jgalar/5706595
->>
->> This will compile a C++ application which links against the
->> lttng-ust-provider-ust-tests-demo3.so provider.
->>
->> Resulting trace:
->> [10:59:42.399354875] (+?.?????????) mercury:demo:16256
->> ust_tests_demo3:done: { cpu_id =3D 4 }, { value =3D 42 }
->>
->> Regards,
->> J=E9r=E9mie
->
-> Thanks.
-> Unfortunately, this is not working for me.
->
-> Making all in demo
-> make[3]: Entering directory `/home/nkw643/lttng-ust-2.1.2/tests/demo'
-> g++   -c -o demo.o demo.cpp
-> gcc  -I.  -fpic -c -o tp3.o tp3.c
-> gcc -shared -o lttng-ust-provider-ust-tests-demo3.so  -llttng-ust tp3.o
-> g++ -o demo demo.o lttng-ust-provider-ust-tests-demo3.so -L. -ldl
->   -Wl,-rpath=3D.
-> /usr/bin/ld: demo: hidden symbol `tracepoint_dlopen' in demo.o is
-> referenced by DSO
-> /usr/bin/ld: final link failed: Nonrepresentable section on output
-> collect2: ld returned 1 exit status
->
-> $ nm -s demo.o | grep tracepoint_dlopen
-> 0000000000000020 V tracepoint_dlopen
-> $ nm -s .libs/liblttng-ust-provider-ust-tests-demo3.so   | grep
-> tracepoint_dlopen
->                  U tracepoint_dlopen
->
-> $ readelf -s demo.o  | grep tracepoint_dlopen
->     34: 0000000000000020    48 OBJECT  WEAK   HIDDEN     6 tracepoint_dlo=
-pen
-> $ readelf -s .libs/liblttng-ust-provider-ust-tests-demo3.so   | grep
-> tracepoint_dlopen
->      6: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND tracepoint_dlo=
-pen
->     67: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND tracepoint_dlo=
-pen
->
-> $readelf -d demo.o  | grep tracepoint_dlopen
-> $
-> $readelf -d .libs/liblttng-ust-provider-ust-tests-demo3.so  | grep
-> tracepoint_dlopen
-> $
+--089e013a2d803148eb04de58befc
+Content-Type: text/plain; charset=ISO-8859-1
+
+Hi,
+
+Here is a small blog entry on how to install lttng on Fedora 19 beta.
+
+http://multivax.blogspot.ca/2013/06/how-to-setup-lttng-on-fedora-19.html
+
+There is an issue: lttng-modules 2.2.0-rc2 is required for compatibility
+reasons with linux kernel 3.9.4, but packages of lttng-tools and lttng-ust
+in Fedora are version 2.1.1. While AFAIK they are compatibles, it's a
+bit awkward to have different versions installed. Are there any
+show-stoppers that prevent upgrading packages to 2.2.0-rc2 in Fedora?
+
+Thanks!
+
+Francis Giraldeau
+
+--089e013a2d803148eb04de58befc
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hi,<div><br></div><div style>Here is a small blog entry on=
+ how to install lttng on Fedora 19 beta.</div><div style><br></div><div sty=
+le><a href=3D"http://multivax.blogspot.ca/2013/06/how-to-setup-lttng-on-fed=
+ora-19.html">http://multivax.blogspot.ca/2013/06/how-to-setup-lttng-on-fedo=
+ra-19.html</a><br>
+</div><div style><br></div><div style>There is an issue: lttng-modules 2.2.=
+0-rc2 is required for compatibility reasons with linux kernel 3.9.4, but pa=
+ckages of lttng-tools and lttng-ust in Fedora are version 2.1.1. While AFAI=
+K they are compatibles, it&#39;s a bit=A0awkward=A0to have different versio=
+ns installed. Are there any show-stoppers that prevent upgrading packages t=
+o 2.2.0-rc2 in Fedora?</div>
+<div style><br></div><div style>Thanks!</div><div style><br></div><div styl=
+e>Francis Giraldeau</div></div>
+
+--089e013a2d803148eb04de58befc--
 
 
+--===============1782202738==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
--- =
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
-J=E9r=E9mie Galarneau
-EfficiOS Inc.
-http://www.efficios.com
+--===============1782202738==--
