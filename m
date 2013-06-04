@@ -1,22 +1,19 @@
-From: Zheng Da <zhengda1936@gmail.com>
-Subject: Re: lttng start error
-Date: Mon, 3 Jun 2013 22:37:11 -0400
-Message-ID: <CAFLer81ZQRP+6qePTDSeggx7+S5QTcx9r2z4y8o0Bt6NchbWKQ__2995.09342662549$1370313505$gmane$org@mail.gmail.com>
-References: <CAFLer81syvApee-LE=azo25Rs6sq=ktH+PCzU9QCWWP0=KE-AA@mail.gmail.com>
-	<CA+jJMxsPP1bx0X9ogssHytV==EFX37irBL-NbBoFO0Q0Tx2hcg@mail.gmail.com>
-	<CAFLer8350iF5bCY=jGJVF0Ps=6LQ1yXnkuk29Dtma-zLCgG5mA@mail.gmail.com>
-	<CA+jJMxsOPpvGA=ELYVZYYRXJtxUPbmGfqHMaLsAt1U7RKzKs0g@mail.gmail.com>
+From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
+	<jeremie.galarneau@efficios.com>
+Subject: [PATCH lttng-tools] Fix: Missing read locks on access
+	to consumerd's channel hash table
+Date: Mon,  3 Jun 2013 23:19:59 -0400
+Message-ID: <1370315999-8598-1-git-send-email-jeremie.galarneau__39795.5151078806$1370316062$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-bk0-f42.google.com ([209.85.214.42])
+Received: from mail-qa0-f52.google.com ([209.85.216.52])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <zhengda1936@gmail.com>) id 1Ujh7x-0003rl-Ma
-	for lttng-dev@lists.lttng.org; Mon, 03 Jun 2013 22:37:37 -0400
-Received: by mail-bk0-f42.google.com with SMTP id jk13so945101bkc.29
-	for <lttng-dev@lists.lttng.org>; Mon, 03 Jun 2013 19:37:31 -0700 (PDT)
-In-Reply-To: <CA+jJMxsOPpvGA=ELYVZYYRXJtxUPbmGfqHMaLsAt1U7RKzKs0g@mail.gmail.com>
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1UjhnB-0004D0-4r
+	for lttng-dev@lists.lttng.org; Mon, 03 Jun 2013 23:20:13 -0400
+Received: by mail-qa0-f52.google.com with SMTP id cr7so114931qab.11
+	for <lttng-dev@lists.lttng.org>; Mon, 03 Jun 2013 20:20:07 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -25,101 +22,30 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-I don't know. I tried with kernel 3.2.30 and didn't get any problems.
-
-Da
-
-On Mon, Jun 3, 2013 at 10:05 PM, J=E9r=E9mie Galarneau
-<jeremie.galarneau@efficios.com> wrote:
-> Hi Zeng,
->
-> Just tried the 2.0 release on a Ubuntu-12.04 VM and I could not
-> reproduce your problem. Any chance you have installed different
-> versions of LTTng (either built from source or from your package
-> manager)?
->
-> root@ubuntu1204-32:/home/jgalar# sudo lttng create
-> Spawning a session daemon
-> Warning: No tracing group detected
-> Session auto-20130603-220050 created.
-> Traces will be written in /root/lttng-traces/auto-20130603-220050
-> root@ubuntu1204-32:/home/jgalar# sudo lttng enable-event -k -a
-> All kernel events are enabled in channel channel0
-> root@ubuntu1204-32:/home/jgalar# sudo lttng start
-> Tracing started for session auto-20130603-220050
-> root@ubuntu1204-32:/home/jgalar# sudo lttng stop
-> Tracing stopped for session auto-20130603-220050
->
-> That produces a readable trace here.
->
-> Regards,
-> J=E9r=E9mie
->
-> On Thu, May 30, 2013 at 3:05 PM, Zheng Da <zhengda1936@gmail.com> wrote:
->> Hello,
->>
->> I built lttng-modules-2.0.6, lttng-tools-2.0.5 and lttng-ust-2.0.6.
->>
->> Best,
->> Da
->>
->> On Thu, May 30, 2013 at 1:14 PM, J=E9r=E9mie Galarneau
->> <jeremie.galarneau@efficios.com> wrote:
->>> On Thu, May 30, 2013 at 12:32 PM, Zheng Da <zhengda1936@gmail.com> wrot=
-e:
->>>> Hello,
->>>>
->>>> I just started to use lttng. I use Ubuntu 12.04 and the kernel version
->>>> 3.8.12. I use a customized kernel, so the lttng package in ubuntu
->>>> can't be installed correctly. I built lttng 2.0 myself.
->>>
->>> Did you build only the lttng-modules or the complete toolchain
->>> (lttng-tools, lttng-ust, lttng-modules)? Which versions of the
->>> different packages are you using?
->>>
->>> Thanks,
->>> J=E9r=E9mie
->>>
->>>>
->>>> Then I followed the steps in https://lttng.org/quickstart. When I run
->>>> lttng start, I got the errors:
->>>> root@ubuntu:~# lttng start
->>>> PERROR: sendmsg: Bad file descriptor [in lttcomm_send_unix_sock() at
->>>> sessiond-comm.c:311]
->>>> PERROR: send consumer channel: Bad file descriptor [in
->>>> send_kconsumer_session_streams() at main.c:636]
->>>> PERROR: ioctl start session: No buffer space available [in
->>>> kernel_start_session() at kernel.c:397]
->>>> Error: Starting kernel trace failed
->>>>
->>>> Someone said in the mailing list that this problem may have something
->>>> to do with memory limit. But it shouldn't be my case as my machine has
->>>> 512GB memory.
->>>>
->>>> Can anyone help me troubleshoot the problem?
->>>>
->>>> Thanks,
->>>> Da
->>>>
->>>> _______________________________________________
->>>> lttng-dev mailing list
->>>> lttng-dev@lists.lttng.org
->>>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->>>
->>>
->>>
->>> --
->>> J=E9r=E9mie Galarneau
->>> EfficiOS Inc.
->>> http://www.efficios.com
->
->
->
-> --
-> J=E9r=E9mie Galarneau
-> EfficiOS Inc.
-> http://www.efficios.com
+U2lnbmVkLW9mZi1ieTogSsOpcsOpbWllIEdhbGFybmVhdSA8amVyZW1pZS5nYWxhcm5lYXVAZWZm
+aWNpb3MuY29tPgotLS0KIHNyYy9jb21tb24vY29uc3VtZXIuYyB8IDYgKysrKysrCiAxIGZpbGUg
+Y2hhbmdlZCwgNiBpbnNlcnRpb25zKCspCgpkaWZmIC0tZ2l0IGEvc3JjL2NvbW1vbi9jb25zdW1l
+ci5jIGIvc3JjL2NvbW1vbi9jb25zdW1lci5jCmluZGV4IDM3MDkwOTIuLjVmMzgzNzUgMTAwNjQ0
+Ci0tLSBhL3NyYy9jb21tb24vY29uc3VtZXIuYworKysgYi9zcmMvY29tbW9uL2NvbnN1bWVyLmMK
+QEAgLTI3MTYsMTYgKzI3MTYsMjEgQEAgcmVzdGFydDoKIAogCQkJCQkJbHR0bmdfaHRfbm9kZV9p
+bml0X3U2NCgmY2hhbi0+d2FpdF9mZF9ub2RlLAogCQkJCQkJCWNoYW4tPndhaXRfZmQpOworCQkJ
+CQkJcmN1X3JlYWRfbG9jaygpOwogCQkJCQkJbHR0bmdfaHRfYWRkX3VuaXF1ZV91NjQoY2hhbm5l
+bF9odCwKIAkJCQkJCQkJJmNoYW4tPndhaXRfZmRfbm9kZSk7CisJCQkJCQlyY3VfcmVhZF91bmxv
+Y2soKTsKIAkJCQkJCS8qIEFkZCBjaGFubmVsIHRvIHRoZSBnbG9iYWwgcG9sbCBldmVudHMgbGlz
+dCAqLwogCQkJCQkJbHR0bmdfcG9sbF9hZGQoJmV2ZW50cywgY2hhbi0+d2FpdF9mZCwKIAkJCQkJ
+CQkJTFBPTExJTiB8IExQT0xMUFJJKTsKIAkJCQkJCWJyZWFrOwogCQkJCQljYXNlIENPTlNVTUVS
+X0NIQU5ORUxfREVMOgogCQkJCQl7CisJCQkJCQlyY3VfcmVhZF9sb2NrKCk7CiAJCQkJCQljaGFu
+ID0gY29uc3VtZXJfZmluZF9jaGFubmVsKGtleSk7CisKIAkJCQkJCWlmICghY2hhbikgeworCQkJ
+CQkJCXJjdV9yZWFkX3VubG9jaygpOwogCQkJCQkJCUVSUigiVVNUIGNvbnN1bWVyIGdldCBjaGFu
+bmVsIGtleSAlIiBQUkl1NjQgIiBub3QgZm91bmQgZm9yIGRlbCBjaGFubmVsIiwga2V5KTsKIAkJ
+CQkJCQlicmVhazsKIAkJCQkJCX0KQEAgLTI3NDEsNiArMjc0Niw3IEBAIHJlc3RhcnQ6CiAJCQkJ
+CQlpZiAoIXVhdG9taWNfc3ViX3JldHVybigmY2hhbi0+cmVmY291bnQsIDEpKSB7CiAJCQkJCQkJ
+Y29uc3VtZXJfZGVsX2NoYW5uZWwoY2hhbik7CiAJCQkJCQl9CisJCQkJCQlyY3VfcmVhZF91bmxv
+Y2soKTsKIAkJCQkJCWdvdG8gcmVzdGFydDsKIAkJCQkJfQogCQkJCQljYXNlIENPTlNVTUVSX0NI
+QU5ORUxfUVVJVDoKLS0gCjEuOC4yLjMKCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5s
+dHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8v
+bHR0bmctZGV2Cg==
