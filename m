@@ -1,16 +1,22 @@
-From: Francis Giraldeau <francis.giraldeau@gmail.com>
-Subject: LTTng on Fedora 19 beta
-Date: Tue, 4 Jun 2013 15:03:56 -0400
-Message-ID: <CAC6yHM5bEy2rJpMKZ=jUY-L3+JJFEfkmYv5WpJj61Xf2zYZPAQ__28649.0971841433$1370372685$gmane$org@mail.gmail.com>
+From: Yannick Brosseau <yannick.brosseau@gmail.com>
+Subject: [RELEASE] lttv 1.5-beta1
+Date: Tue, 04 Jun 2013 16:07:24 -0400
+Message-ID: <51AE48FC.3000306__45115.6000294306$1370376487$gmane$org@gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1782202738=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f179.google.com ([209.85.223.179])
+Received: from mail-ie0-f175.google.com ([209.85.223.175])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <francis.giraldeau@gmail.com>) id 1UjwWX-0003j9-Td
-	for lttng-dev@lists.lttng.org; Tue, 04 Jun 2013 15:04:02 -0400
-Received: by mail-ie0-f179.google.com with SMTP id c13so1323991ieb.10
-	for <lttng-dev@lists.lttng.org>; Tue, 04 Jun 2013 12:03:56 -0700 (PDT)
+	(envelope-from <yannick.brosseau@gmail.com>) id 1UjxVz-0004G1-UY
+	for lttng-dev@lists.lttng.org; Tue, 04 Jun 2013 16:07:32 -0400
+Received: by mail-ie0-f175.google.com with SMTP id a11so1460400iee.20
+	for <lttng-dev@lists.lttng.org>; Tue, 04 Jun 2013 13:07:26 -0700 (PDT)
+Received: from [132.207.72.30] (dyn30.dorsal.polymtl.ca. [132.207.72.30])
+	by mx.google.com with ESMTPSA id vc15sm3167977igb.7.2013.06.04.13.07.25
+	for <lttng-dev@lists.lttng.org>
+	(version=TLSv1 cipher=ECDHE-RSA-RC4-SHA bits=128/128);
+	Tue, 04 Jun 2013 13:07:25 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,58 +28,43 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============1782202738==
-Content-Type: multipart/alternative; boundary=089e013a2d803148eb04de58befc
 
---089e013a2d803148eb04de58befc
-Content-Type: text/plain; charset=ISO-8859-1
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-Hi,
+Hi all,
 
-Here is a small blog entry on how to install lttng on Fedora 19 beta.
+I'm glad to announce a first beta version of LTTV working with LTTng 2.x
+traces. It's a port of the old version which replace the internal trace
+reading library with libbabeltrace to read CTF traces.
 
-http://multivax.blogspot.ca/2013/06/how-to-setup-lttng-on-fedora-19.html
+The Linux Trace Toolkit Viewer (LTTV) is a trace visualization tool
+based on GTK and libbabeltrace. It can read and display traces generated
+by the LTTng tracers.
 
-There is an issue: lttng-modules 2.2.0-rc2 is required for compatibility
-reasons with linux kernel 3.9.4, but packages of lttng-tools and lttng-ust
-in Fedora are version 2.1.1. While AFAIK they are compatibles, it's a
-bit awkward to have different versions installed. Are there any
-show-stoppers that prevent upgrading packages to 2.2.0-rc2 in Fedora?
+Available features:
+- - Command line text dump
+- - GUI: Event view, State view (Control Flow view), Resource view and
+Histogram
 
-Thanks!
+Filters, statistics and trace synchronization are not available at this
+time.
 
-Francis Giraldeau
+Since it's a first beta, you will probably find some bugs. Please report
+them in our tracker: http://bugs.lttng.org/projects/lttv
 
---089e013a2d803148eb04de58befc
-Content-Type: text/html; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
+Project website: http://lttng.org/lttv
+Download link: http://lttng.org/download
 
-<div dir=3D"ltr">Hi,<div><br></div><div style>Here is a small blog entry on=
- how to install lttng on Fedora 19 beta.</div><div style><br></div><div sty=
-le><a href=3D"http://multivax.blogspot.ca/2013/06/how-to-setup-lttng-on-fed=
-ora-19.html">http://multivax.blogspot.ca/2013/06/how-to-setup-lttng-on-fedo=
-ra-19.html</a><br>
-</div><div style><br></div><div style>There is an issue: lttng-modules 2.2.=
-0-rc2 is required for compatibility reasons with linux kernel 3.9.4, but pa=
-ckages of lttng-tools and lttng-ust in Fedora are version 2.1.1. While AFAI=
-K they are compatibles, it&#39;s a bit=A0awkward=A0to have different versio=
-ns installed. Are there any show-stoppers that prevent upgrading packages t=
-o 2.2.0-rc2 in Fedora?</div>
-<div style><br></div><div style>Thanks!</div><div style><br></div><div styl=
-e>Francis Giraldeau</div></div>
+Complete changelog is available in the git repository:
+http://git.lttng.org/?p=lttv.git;a=summary
 
---089e013a2d803148eb04de58befc--
+Yannick Brosseau
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.12 (GNU/Linux)
+Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
 
-
---===============1782202738==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1782202738==--
+iEYEARECAAYFAlGuSM0ACgkQFQrZ7GzHX2qcugCfa0fQmCWUUmod1OLZ2nPBEgP3
+7tcAoLVUmE0wVm35T0ndZC2NyMQJ5U/M
+=+Sr0
+-----END PGP SIGNATURE-----
