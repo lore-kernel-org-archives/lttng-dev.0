@@ -1,20 +1,19 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [RFC PATCH urcu] Implement rcu_barrier()
-Date: Wed, 5 Jun 2013 09:32:10 -0400
-Message-ID: <20130605133210.GA1428__26807.0623897531$1370439281$gmane$org@Krystal>
-References: <20130531153517.GA12809@Krystal>
-	<20130605085928.GA3707@linux.vnet.ibm.com>
+From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
+	<jeremie.galarneau@efficios.com>
+Subject: [PATCH lttng-tools] Fix: Remove reference to
+	lttng-probe-lttng kernel module
+Date: Wed,  5 Jun 2013 15:39:15 -0400
+Message-ID: <1370461155-29598-1-git-send-email-jeremie.galarneau__5622.56174530393$1370461200$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from mail-qe0-f52.google.com ([209.85.128.52])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UkDox-0004Ic-Ee
-	for lttng-dev@lists.lttng.org; Wed, 05 Jun 2013 09:32:11 -0400
-Content-Disposition: inline
-In-Reply-To: <20130605085928.GA3707@linux.vnet.ibm.com>
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1UkJYK-0007BE-S0
+	for lttng-dev@lists.lttng.org; Wed, 05 Jun 2013 15:39:25 -0400
+Received: by mail-qe0-f52.google.com with SMTP id i11so1324133qej.25
+	for <lttng-dev@lists.lttng.org>; Wed, 05 Jun 2013 12:39:19 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,50 +22,24 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
-Cc: Alan Stern <stern@rowland.harvard.edu>, lttng-dev@lists.lttng.org, rp@svcs.cs.pdx.edu, Stephen Hemminger <shemminger@vyatta.com>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Paul E. McKenney (paulmck@linux.vnet.ibm.com) wrote:
-> On Fri, May 31, 2013 at 11:35:17AM -0400, Mathieu Desnoyers wrote:
-[...]
-> > +
-> > +	if (work_count != count)
-> > +		uatomic_sub(&completion.barrier_count, count - work_count);
-> 
-> If we have a subset, we could do the rcu_barrier() one piece at a time.
-> Another approach would be to pre-allocate the call_rcu_completion_work
-> structure within the call_rcu_data structure.  I strongly recommend the
-> latter -- though this will of course result in serializing concurrent
-> rcu_barrier() invocations.
-
-The issue I see with these approaches is that they require holding the
-call_rcu_mutex while waiting for completion. If a call_rcu thread ever
-needs to take the call_rcu_mutex (possibly caused by use of call_rcu in
-a call_rcu handler), this call_rcu thread could deadlock against the
-barrier.
-
-Doing rcu_barrier() piecewise requires holding the call_rcu_mutex
-against traversal of call_rcu_data_list, and preallocation of
-call_rcu_completion_work within call_rcu_data requires the
-call_rcu_mutex to protect against call_rcu_data teardown.
-
-By the way, we already have, in call_rcu_data_init():
-
-        crdp = malloc(sizeof(*crdp));
-        if (crdp == NULL)
-                urcu_die(errno);
-
-So one possibility would be to make rcu_barrier() kill the process if
-out of memory (although I'd hate to have to do this).
-
-Any suggestions ?
-
-Thanks,
-
-Mathieu
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+VGhlIGx0dG5nLXByb2JlLWx0dG5nIG1vZHVsZSB3YXMgcmVtb3ZlZCBhcyBwYXJ0IG9mIGx0dG5n
+LW1vZHVsZXMKY29tbWl0IDY2MmVkMTY2NTQyOGIzOGVlMDBkNGJlNTc1MTU4MTEwOGJmMzUzOTAK
+CkZpeGVzICM1NTMKClNpZ25lZC1vZmYtYnk6IErDqXLDqW1pZSBHYWxhcm5lYXUgPGplcmVtaWUu
+Z2FsYXJuZWF1QGVmZmljaW9zLmNvbT4KLS0tCiBzcmMvYmluL2x0dG5nLXNlc3Npb25kL21vZHBy
+b2JlLmMgfCAxIC0KIDEgZmlsZSBjaGFuZ2VkLCAxIGRlbGV0aW9uKC0pCgpkaWZmIC0tZ2l0IGEv
+c3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9tb2Rwcm9iZS5jIGIvc3JjL2Jpbi9sdHRuZy1zZXNzaW9u
+ZC9tb2Rwcm9iZS5jCmluZGV4IDFhNWExYjcuLjdlMDZkYWQgMTAwNjQ0Ci0tLSBhL3NyYy9iaW4v
+bHR0bmctc2Vzc2lvbmQvbW9kcHJvYmUuYworKysgYi9zcmMvYmluL2x0dG5nLXNlc3Npb25kL21v
+ZHByb2JlLmMKQEAgLTQyLDcgKzQyLDYgQEAgY29uc3Qgc3RydWN0IGtlcm5fbW9kdWxlc19wYXJh
+bSBrZXJuX21vZHVsZXNfbGlzdFtdID0gewogCXsgImx0dG5nLXJpbmctYnVmZmVyLWNsaWVudC1t
+bWFwLWRpc2NhcmQiLCAxIH0sCiAJeyAibHR0bmctcmluZy1idWZmZXItY2xpZW50LW1tYXAtb3Zl
+cndyaXRlIiwgMSB9LAogCXsgImx0dG5nLXJpbmctYnVmZmVyLW1ldGFkYXRhLW1tYXAtY2xpZW50
+IiwgMSB9LAotCXsgImx0dG5nLXByb2JlLWx0dG5nIiwgMSB9LAogCXsgImx0dG5nLXR5cGVzIiwg
+MCB9LAogCXsgImx0dG5nLXByb2JlLWFzb2MiLCAwIH0sCiAJeyAibHR0bmctcHJvYmUtYmxvY2si
+LCAwIH0sCi0tIAoxLjguMwoKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9y
+ZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1k
+ZXYK
