@@ -1,19 +1,19 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: Yannick Brosseau <yannick.brosseau@gmail.com>
 Subject: Re: Compiliing LTTng-modules 2.1 with a 3.9.4 kernel
-Date: Fri, 7 Jun 2013 14:12:35 -0400
-Message-ID: <20130607181235.GA32244__33942.030723165$1370628787$gmane$org@Krystal>
-References: <51B220F3.70901@gmail.com>
+Date: Fri, 07 Jun 2013 14:18:27 -0400
+Message-ID: <51B223F3.70204__12390.6926870861$1370629147$gmane$org@gmail.com>
+References: <51B220F3.70901@gmail.com> <20130607181235.GA32244@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from mail-ie0-f177.google.com ([209.85.223.177])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1Ul19T-0004HF-6t
-	for lttng-dev@lists.lttng.org; Fri, 07 Jun 2013 14:12:39 -0400
-Content-Disposition: inline
-In-Reply-To: <51B220F3.70901@gmail.com>
+	(envelope-from <yannick.brosseau@gmail.com>) id 1Ul1FC-0004Kk-HH
+	for lttng-dev@lists.lttng.org; Fri, 07 Jun 2013 14:18:34 -0400
+Received: by mail-ie0-f177.google.com with SMTP id u16so11451913iet.36
+	for <lttng-dev@lists.lttng.org>; Fri, 07 Jun 2013 11:18:29 -0700 (PDT)
+In-Reply-To: <20130607181235.GA32244@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,60 +22,13 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Yannick Brosseau <yannick.brosseau@gmail.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Yannick,
-
-I just cherry-picked the following 2 commits into stable-2.1:
-
-commit d8b08ae2853322bd9777024f35d1c35582b4ebb2
-Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Date:   Fri May 3 09:02:43 2013 -0400
-
-    Fix: warning kvm_trace_exit_reason redefined for 3.9 kernel
-    
-    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-
-commit 06c937989fe2919782533bcf92becfebe5910873
-Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Date:   Wed Mar 13 13:49:13 2013 -0400
-
-    Fix 3.8 kernel support: namespace lttng_is_signed_type()
-    
-    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-
-Please let me know if anything is missing,
-
-Thanks!
-
-Mathieu
-
-* Yannick Brosseau (yannick.brosseau@gmail.com) wrote:
-> Hi all,
-> 
-> I've cherry-picked the necessary fixes to build the 2.1 version of the
-> lttng-modules and I've put them in this branch:
-> 
-> http://git.dorsal.polymtl.ca/~ybrosseau?p=lttng-modules.git;a=shortlog;h=refs/heads/stable-2.1-3.9
-> 
-> You can get it with this git clone command:
-> git clone -b stable-2.1-3.9
-> git://git.dorsal.polymtl.ca/~ybrosseau/lttng-modules.git
-> 
-> Mathieu, maybe you can consider putting them in the stable-2.1 official
-> branch.
-> 
-> Yannick
-> 
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+On 2013-06-07 14:12, Mathieu Desnoyers wrote:
+> Please let me know if anything is missing,
+Good, now it just miss the changes on
+instrumentation/events/lttng-module/block.h
+There are scatered along a long suite of commit and revert on the master
+branch
