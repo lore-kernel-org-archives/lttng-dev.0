@@ -1,40 +1,21 @@
-From: Amit Margalit <AMITM@il.ibm.com>
-Subject: Re: Help debugging 2.2.0rc2 core dump in lttng-sessiond
-Date: Tue, 11 Jun 2013 15:24:10 +0300
-Message-ID: <OF8A79E16C.CFED3083-ONC2257B87.0043F36D-C2257B87.00440C33__40572.9829952635$1370953505$gmane$org@il.ibm.com>
-References: <OFDEF64EB6.0D8ED0C8-ONC2257B87.001DC43F-C2257B87.001E5219@il.ibm.com>
-	<20130611121801.GA28260@Krystal>
+From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: supporting new processor
+Date: Tue, 11 Jun 2013 09:20:00 -0400
+Message-ID: <CA+jJMxshwZh-6ysyAfFG6oFqx3KTmyDqRdmkxoHYzf0G_hqmJA__48404.2705073536$1370956885$gmane$org@mail.gmail.com>
+References: <CANJoRMRRWiHAL=fcP717Dv9QmZVJBjpLjB0pBEioewtni8QkLw@mail.gmail.com>
+	<CA+jJMxuvWRgyhzu4=QUh0+TR=9Lp1BV7PcHJHuj-LOgPDFTDUQ@mail.gmail.com>
+	<CANJoRMS1y+rdpwkO+F2UVc72FL4WVbqrUVXH8iMBt344U3h71Q@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1283453120=="
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from e06smtp14.uk.ibm.com ([195.75.94.110])
+Received: from mail-wi0-f178.google.com ([209.85.212.178])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <amitm@il.ibm.com>) id 1UmNck-0004f3-K9
-	for lttng-dev@lists.lttng.org; Tue, 11 Jun 2013 08:24:31 -0400
-Received: from /spool/local
-	by e06smtp14.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use
-	Only! Violators will be prosecuted
-	for <lttng-dev@lists.lttng.org> from <amitm@il.ibm.com>;
-	Tue, 11 Jun 2013 13:17:29 +0100
-Received: from b06cxnps4076.portsmouth.uk.ibm.com
-	(d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-	by d06dlp02.portsmouth.uk.ibm.com (Postfix) with ESMTP id 09B7F2190063
-	for <lttng-dev@lists.lttng.org>; Tue, 11 Jun 2013 13:27:42 +0100 (BST)
-Received: from d06av02.portsmouth.uk.ibm.com (d06av02.portsmouth.uk.ibm.com
-	[9.149.37.228])
-	by b06cxnps4076.portsmouth.uk.ibm.com (8.13.8/8.13.8/NCO v10.0) with
-	ESMTP id r5BCOBX242532922
-	for <lttng-dev@lists.lttng.org>; Tue, 11 Jun 2013 12:24:11 GMT
-Received: from d06av02.portsmouth.uk.ibm.com (localhost [127.0.0.1])
-	by d06av02.portsmouth.uk.ibm.com (8.14.4/8.14.4/NCO v10.0 AVout) with
-	ESMTP id r5BCOLO9022629
-	for <lttng-dev@lists.lttng.org>; Tue, 11 Jun 2013 06:24:22 -0600
-Received: from d06ml311.portsmouth.uk.ibm.com (d06ml311.portsmouth.uk.ibm.com
-	[9.149.104.181])
-	by d06av02.portsmouth.uk.ibm.com (8.14.4/8.14.4/NCO v10.0 AVin) with
-	ESMTP id r5BCOLkM022600
-	for <lttng-dev@lists.lttng.org>; Tue, 11 Jun 2013 06:24:21 -0600
-In-Reply-To: <20130611121801.GA28260@Krystal>
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1UmOUY-00057S-WC
+	for lttng-dev@lists.lttng.org; Tue, 11 Jun 2013 09:20:07 -0400
+Received: by mail-wi0-f178.google.com with SMTP id k10so4119386wiv.17
+	for <lttng-dev@lists.lttng.org>; Tue, 11 Jun 2013 06:20:01 -0700 (PDT)
+In-Reply-To: <CANJoRMS1y+rdpwkO+F2UVc72FL4WVbqrUVXH8iMBt344U3h71Q@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -43,380 +24,88 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: Madhusudan Bhat <madhu.b77@gmail.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-This is a multipart message in MIME format.
---===============1283453120==
-Content-Type: multipart/alternative; boundary="=_alternative 00440C05C2257B87_="
+MIPS support was added as part of the Userspace RCU 0.7.4 release.
+Can't say I have tried it myself though.
 
-This is a multipart message in MIME format.
---=_alternative 00440C05C2257B87_=
-Content-Type: text/plain; charset="US-ASCII"
+Regards,
+J=E9r=E9mie
 
-I will try but this will take me some time.
-
-In the meantime I can provide more information if you like.
-
-Amit Margalit
-IBM XIV - Storage Reinvented
-XIV-NAS Development Team
-Tel. 03-689-7774
-Fax. 03-689-7230
-
-
-
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Amit Margalit/Israel/IBM@IBMIL
-Cc:     lttng-dev@lists.lttng.org
-Date:   06/11/2013 03:17 PM
-Subject:        Re: [lttng-dev] Help debugging 2.2.0rc2 core dump in 
-lttng-sessiond
-
-
-
-Hi Amit,
-
-Can you reproduce this issue with the HEAD of lttng-tools master and
-lttng-ust stable-2.2 branches ?
-
-Thanks,
-
-Mathieu
-
-* Amit Margalit (AMITM@il.ibm.com) wrote:
-> Hello,
-> 
-> I've deployed 2.2.0rc2 on one of our systems, and I've getting a core 
-dump 
-> (due to segfault) on lttng-sessiond.
-> 
-> Should I post all the data here, or should this be done 1x1 with one of 
-> the developers?
-> 
-> Anyway, basic information:
-> 
-> Core was generated by `/usr/bin/lttng-sessiond -d --no-kernel -q'.
-> Program terminated with signal 11, Segmentation fault.
-> #0  ustctl_duplicate_ust_object_data (dest=dest@entry=0x7f958c000ad8, 
-> src=0x0) at ustctl.c:800
-> 800             if (src->handle != -1) {
-> (gdb) p *dest
-> $9 = (struct lttng_ust_object_data *) 0x0
-> (gdb) up
-> #1  0x00000000004182c6 in duplicate_channel_object 
-> (ua_chan=0x7f958c0009b0, reg_chan=0x679cd0) at ust-app.c:2000
-> 2000            ret = ustctl_duplicate_ust_object_data(&ua_chan->obj, 
-> reg_chan->obj.ust);
-> (gdb) p ua_chan->obj
-> $10 = (struct lttng_ust_object_data *) 0x0
-> (gdb) p *ua_chan
-> $11 = {enabled = 1, handle = -1, is_sent = 0, key = 2, 
-tracing_channel_id 
-> = 0, expected_stream_count = 0, name = "channel0", '\000' <repeats 247 
-> times>, obj = 0x0, attr = {
->     type = LTTNG_UST_CHAN_PER_CPU, subbuf_size = 262144, num_subbuf = 
-32, 
-> overwrite = 0, switch_timer_interval = 0, read_timer_interval = 0, 
-output 
-> = LTTNG_UST_MMAP, chan_id = 0, 
->     uuid = '\000' <repeats 15 times>}, streams = {count = 0, head = 
-{next 
-> = 0x7f958c000b20, prev = 0x7f958c000b20}}, session = 0x677320, ctx = 
-> 0x7f958c000bc0, events = 0x7f958c000920, 
->   tracefile_size = 0, tracefile_count = 0, node = {key = 0x7f958c0009d4 
-> "channel0", node = {next = 0x6763a0, reverse_hash = 261524217965576192}, 
-
-> head = {next = {next = 0x0}, func = 0}}, 
->   ust_objd_node = {key = 0, node = {next = 0x0, reverse_hash = 0}, head 
-= 
-> {next = {next = 0x0}, func = 0}}, rcu_head = {next = {next = 0x0}, func 
-= 
-> 0}}
-> (gdb) p *reg_chan
-> $12 = {key = 0, consumer_key = 1, streams = {next = 0x679ce0, prev = 
-> 0x679ce0}, stream_list_lock = {__data = {__lock = 0, __count = 0, 
-__owner 
-> = 0, __nusers = 0, __kind = 0, __spins = 0, 
->       __list = {__prev = 0x0, __next = 0x0}}, __size = '\000' <repeats 
-39 
-> times>, __align = 0}, node = {key = 0, node = {next = 0x0, reverse_hash 
-= 
-> 15577886586086949907}, head = {next = {
->         next = 0x0}, func = 0}}, obj = {ust = 0x0}}
-> (gdb) bt
-> #0  ustctl_duplicate_ust_object_data (dest=dest@entry=0x7f958c000ad8, 
-> src=0x0) at ustctl.c:800
-> #1  0x00000000004182c6 in duplicate_channel_object 
-> (ua_chan=0x7f958c0009b0, reg_chan=0x679cd0) at ust-app.c:2000
-> #2  send_channel_uid_to_ust (reg_chan=reg_chan@entry=0x679cd0, 
-> app=app@entry=0x664d00, ua_sess=ua_sess@entry=0x677320, 
-> ua_chan=ua_chan@entry=0x7f958c0009b0) at ust-app.c:2161
-> #3  0x0000000000418f78 in create_channel_per_uid 
-(ua_chan=0x7f958c0009b0, 
-> ua_sess=0x677320, usess=<optimized out>, app=0x664d00) at ust-app.c:2263
-> #4  do_create_channel (app=app@entry=0x664d00, 
-usess=usess@entry=0x666f80, 
-> ua_sess=0x677320, ua_chan=ua_chan@entry=0x7f958c0009b0) at 
-ust-app.c:2341
-> #5  0x000000000041df83 in ust_app_global_update (usess=0x666f80, 
-> sock=sock@entry=20) at ust-app.c:4043
-> #6  0x000000000042306f in update_ust_app (app_sock=20) at main.c:680
-> #7  thread_dispatch_ust_registration (data=<optimized out>) at 
-main.c:1465
-> #8  0x00007f95974dd5f0 in start_thread () from /lib64/libpthread.so.0
-> #9  0x00007f959724c87d in clone () from /lib64/libc.so.6
-> #10 0x0000000000000000 in ?? ()
-> (gdb) info threads
->   Id   Target Id         Frame 
->   9    Thread 0x7f9594357710 (LWP 967) 0x00007f959724cf03 in epoll_wait 
-() 
-> from /lib64/libc.so.6
->   8    Thread 0x7f9594558710 (LWP 966) 0x00007f959724cf03 in epoll_wait 
-() 
-> from /lib64/libc.so.6
->   7    Thread 0x7f9593b53710 (LWP 971) 0x00007f959724cf03 in epoll_wait 
-() 
-> from /lib64/libc.so.6
->   6    Thread 0x7f9593f55710 (LWP 969) 0x00007f959724cf03 in epoll_wait 
-() 
-> from /lib64/libc.so.6
->   5    Thread 0x7f9598d85900 (LWP 964) 0x00007f95974ddda5 in 
-pthread_join 
-> () from /lib64/libpthread.so.0
->   4    Thread 0x7f9593952710 (LWP 984) 0x00007f959724cf03 in epoll_wait 
-() 
-> from /lib64/libc.so.6
->   3    Thread 0x7f9593751710 (LWP 3941) 0x00007f95972492a9 in syscall () 
-
-> from /lib64/libc.so.6
->   2    Thread 0x7f9593d54710 (LWP 970) 0x00007f959724cf03 in epoll_wait 
-() 
-> from /lib64/libc.so.6
-> * 1    Thread 0x7f9594156710 (LWP 968) ustctl_duplicate_ust_object_data 
-> (dest=dest@entry=0x7f958c000ad8, src=0x0) at ustctl.c:800
-> 
-> Any help is appreciated.
-> 
-> 
-> Amit Margalit
-> IBM XIV - Storage Reinvented
-> XIV-NAS Development Team
-> Tel. 03-689-7774
-> Fax. 03-689-7230
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+On Tue, Jun 11, 2013 at 6:42 AM, Madhusudan Bhat <madhu.b77@gmail.com> wrot=
+e:
+> Hi J=E9r=E9mie,
+>
+> Thanks for the response. You have mentioned that MIPS is supported. Howev=
+er
+> README under U-RCU doesn't list the MIPS under the supported architecture.
+> Is it possible to confirm again?
+>
+> Is there any order in which I need to build the different components like
+> URCU, lttng-tools, kernel module and UST?
+> thanks,
+> Madhu.
+>
+>
+> On Mon, Apr 22, 2013 at 7:47 PM, J=E9r=E9mie Galarneau
+> <jeremie.galarneau@efficios.com> wrote:
+>>
+>> Hi,
+>>
+>> Generally speaking, URCU is the most architecture-specific library of
+>> the project and it does support MIPS. Once it is compiled and
+>> installed, you should be able to build lttng-ust, lttng-tools and the
+>> kernel modules.
+>>
+>> I'd recommend running each project's test suite since I don't think
+>> that architecture has been thoroughly tested. Let us know if you
+>> encounter any problem on your particular architecture.
+>>
+>> Regards,
+>> J=E9r=E9mie
+>>
+>> On Mon, Apr 22, 2013 at 1:30 AM, Madhusudan Bhat <madhu.b77@gmail.com>
+>> wrote:
+>> > Hi All,
+>> >
+>> > I need to support lttng tools, I have new MIPS based multi core
+>> > processor on
+>> > which 3.7 linux kernel boots up.
+>> >
+>> > To support lttng tools, does it require any drivers/kernel hook ups to
+>> > new
+>> > processor? Or is it independent of processor architecture?
+>> >
+>> > For ex, to support Oprofile tools, we need to provide oprofile driver
+>> > which
+>> > is specific to particular processor. In similar ways,any thing is
+>> > required
+>> > to support lttng tools?
+>> >
+>> > thanks,
+>> > Madhu.
+>> >
+>> > _______________________________________________
+>> > lttng-dev mailing list
+>> > lttng-dev@lists.lttng.org
+>> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>> >
+>>
+>>
+>>
+>> --
+>> J=E9r=E9mie Galarneau
+>> EfficiOS Inc.
+>> http://www.efficios.com
+>
+>
 
 
--- 
-Mathieu Desnoyers
+
+-- =
+
+J=E9r=E9mie Galarneau
 EfficiOS Inc.
 http://www.efficios.com
-
-
-
---=_alternative 00440C05C2257B87_=
-Content-Type: text/html; charset="US-ASCII"
-
-<font size=2 face="sans-serif">I will try but this will take me some time.</font>
-<br>
-<br><font size=2 face="sans-serif">In the meantime I can provide more information
-if you like.</font>
-<br>
-<br><font size=2 color=#000080 face="sans-serif">Amit Margalit</font>
-<br><font size=2 color=#808000 face="sans-serif">IBM XIV </font><font size=2 face="sans-serif">-
-<i>Storage Reinvented</i></font>
-<br><font size=2 face="sans-serif">XIV-NAS Development Team</font>
-<br><font size=2 face="sans-serif">Tel. 03</font><font size=2 face="Arial">-689-7774</font>
-<br><font size=2 face="Arial">Fax. 03-689-7230</font>
-<br>
-<br>
-<br>
-<br><font size=1 color=#5f5f5f face="sans-serif">From: &nbsp; &nbsp; &nbsp;
-&nbsp;</font><font size=1 face="sans-serif">Mathieu Desnoyers &lt;mathieu.desnoyers@efficios.com&gt;</font>
-<br><font size=1 color=#5f5f5f face="sans-serif">To: &nbsp; &nbsp; &nbsp;
-&nbsp;</font><font size=1 face="sans-serif">Amit Margalit/Israel/IBM@IBMIL</font>
-<br><font size=1 color=#5f5f5f face="sans-serif">Cc: &nbsp; &nbsp; &nbsp;
-&nbsp;</font><font size=1 face="sans-serif">lttng-dev@lists.lttng.org</font>
-<br><font size=1 color=#5f5f5f face="sans-serif">Date: &nbsp; &nbsp; &nbsp;
-&nbsp;</font><font size=1 face="sans-serif">06/11/2013 03:17 PM</font>
-<br><font size=1 color=#5f5f5f face="sans-serif">Subject: &nbsp; &nbsp;
-&nbsp; &nbsp;</font><font size=1 face="sans-serif">Re: [lttng-dev]
-Help debugging 2.2.0rc2 core dump in lttng-sessiond</font>
-<br>
-<hr noshade>
-<br>
-<br>
-<br><tt><font size=2>Hi Amit,<br>
-<br>
-Can you reproduce this issue with the HEAD of lttng-tools master and<br>
-lttng-ust stable-2.2 branches ?<br>
-<br>
-Thanks,<br>
-<br>
-Mathieu<br>
-<br>
-* Amit Margalit (AMITM@il.ibm.com) wrote:<br>
-&gt; Hello,<br>
-&gt; <br>
-&gt; I've deployed 2.2.0rc2 on one of our systems, and I've getting a core
-dump <br>
-&gt; (due to segfault) on lttng-sessiond.<br>
-&gt; <br>
-&gt; Should I post all the data here, or should this be done 1x1 with one
-of <br>
-&gt; the developers?<br>
-&gt; <br>
-&gt; Anyway, basic information:<br>
-&gt; <br>
-&gt; Core was generated by `/usr/bin/lttng-sessiond -d --no-kernel -q'.<br>
-&gt; Program terminated with signal 11, Segmentation fault.<br>
-&gt; #0 &nbsp;ustctl_duplicate_ust_object_data (dest=dest@entry=0x7f958c000ad8,
-<br>
-&gt; src=0x0) at ustctl.c:800<br>
-&gt; 800 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (src-&gt;handle !=
--1) {<br>
-&gt; (gdb) p *dest<br>
-&gt; $9 = (struct lttng_ust_object_data *) 0x0<br>
-&gt; (gdb) up<br>
-&gt; #1 &nbsp;0x00000000004182c6 in duplicate_channel_object <br>
-&gt; (ua_chan=0x7f958c0009b0, reg_chan=0x679cd0) at ust-app.c:2000<br>
-&gt; 2000 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;ret = ustctl_duplicate_ust_object_data(&amp;ua_chan-&gt;obj,
-<br>
-&gt; reg_chan-&gt;obj.ust);<br>
-&gt; (gdb) p ua_chan-&gt;obj<br>
-&gt; $10 = (struct lttng_ust_object_data *) 0x0<br>
-&gt; (gdb) p *ua_chan<br>
-&gt; $11 = {enabled = 1, handle = -1, is_sent = 0, key = 2, tracing_channel_id
-<br>
-&gt; = 0, expected_stream_count = 0, name = &quot;channel0&quot;, '\000'
-&lt;repeats 247 <br>
-&gt; times&gt;, obj = 0x0, attr = {<br>
-&gt; &nbsp; &nbsp; type = LTTNG_UST_CHAN_PER_CPU, subbuf_size = 262144,
-num_subbuf = 32, <br>
-&gt; overwrite = 0, switch_timer_interval = 0, read_timer_interval = 0,
-output <br>
-&gt; = LTTNG_UST_MMAP, chan_id = 0, <br>
-&gt; &nbsp; &nbsp; uuid = '\000' &lt;repeats 15 times&gt;}, streams = {count
-= 0, head = {next <br>
-&gt; = 0x7f958c000b20, prev = 0x7f958c000b20}}, session = 0x677320, ctx
-= <br>
-&gt; 0x7f958c000bc0, events = 0x7f958c000920, <br>
-&gt; &nbsp; tracefile_size = 0, tracefile_count = 0, node = {key = 0x7f958c0009d4
-<br>
-&gt; &quot;channel0&quot;, node = {next = 0x6763a0, reverse_hash = 261524217965576192},
-<br>
-&gt; head = {next = {next = 0x0}, func = 0}}, <br>
-&gt; &nbsp; ust_objd_node = {key = 0, node = {next = 0x0, reverse_hash
-= 0}, head = <br>
-&gt; {next = {next = 0x0}, func = 0}}, rcu_head = {next = {next = 0x0},
-func = <br>
-&gt; 0}}<br>
-&gt; (gdb) p *reg_chan<br>
-&gt; $12 = {key = 0, consumer_key = 1, streams = {next = 0x679ce0, prev
-= <br>
-&gt; 0x679ce0}, stream_list_lock = {__data = {__lock = 0, __count = 0,
-__owner <br>
-&gt; = 0, __nusers = 0, __kind = 0, __spins = 0, <br>
-&gt; &nbsp; &nbsp; &nbsp; __list = {__prev = 0x0, __next = 0x0}}, __size
-= '\000' &lt;repeats 39 <br>
-&gt; times&gt;, __align = 0}, node = {key = 0, node = {next = 0x0, reverse_hash
-= <br>
-&gt; 15577886586086949907}, head = {next = {<br>
-&gt; &nbsp; &nbsp; &nbsp; &nbsp; next = 0x0}, func = 0}}, obj = {ust =
-0x0}}<br>
-&gt; (gdb) bt<br>
-&gt; #0 &nbsp;ustctl_duplicate_ust_object_data (dest=dest@entry=0x7f958c000ad8,
-<br>
-&gt; src=0x0) at ustctl.c:800<br>
-&gt; #1 &nbsp;0x00000000004182c6 in duplicate_channel_object <br>
-&gt; (ua_chan=0x7f958c0009b0, reg_chan=0x679cd0) at ust-app.c:2000<br>
-&gt; #2 &nbsp;send_channel_uid_to_ust (reg_chan=reg_chan@entry=0x679cd0,
-<br>
-&gt; app=app@entry=0x664d00, ua_sess=ua_sess@entry=0x677320, <br>
-&gt; ua_chan=ua_chan@entry=0x7f958c0009b0) at ust-app.c:2161<br>
-&gt; #3 &nbsp;0x0000000000418f78 in create_channel_per_uid (ua_chan=0x7f958c0009b0,
-<br>
-&gt; ua_sess=0x677320, usess=&lt;optimized out&gt;, app=0x664d00) at ust-app.c:2263<br>
-&gt; #4 &nbsp;do_create_channel (app=app@entry=0x664d00, usess=usess@entry=0x666f80,
-<br>
-&gt; ua_sess=0x677320, ua_chan=ua_chan@entry=0x7f958c0009b0) at ust-app.c:2341<br>
-&gt; #5 &nbsp;0x000000000041df83 in ust_app_global_update (usess=0x666f80,
-<br>
-&gt; sock=sock@entry=20) at ust-app.c:4043<br>
-&gt; #6 &nbsp;0x000000000042306f in update_ust_app (app_sock=20) at main.c:680<br>
-&gt; #7 &nbsp;thread_dispatch_ust_registration (data=&lt;optimized out&gt;)
-at main.c:1465<br>
-&gt; #8 &nbsp;0x00007f95974dd5f0 in start_thread () from /lib64/libpthread.so.0<br>
-&gt; #9 &nbsp;0x00007f959724c87d in clone () from /lib64/libc.so.6<br>
-&gt; #10 0x0000000000000000 in ?? ()<br>
-&gt; (gdb) info threads<br>
-&gt; &nbsp; Id &nbsp; Target Id &nbsp; &nbsp; &nbsp; &nbsp; Frame <br>
-&gt; &nbsp; 9 &nbsp; &nbsp;Thread 0x7f9594357710 (LWP 967) 0x00007f959724cf03
-in epoll_wait () <br>
-&gt; from /lib64/libc.so.6<br>
-&gt; &nbsp; 8 &nbsp; &nbsp;Thread 0x7f9594558710 (LWP 966) 0x00007f959724cf03
-in epoll_wait () <br>
-&gt; from /lib64/libc.so.6<br>
-&gt; &nbsp; 7 &nbsp; &nbsp;Thread 0x7f9593b53710 (LWP 971) 0x00007f959724cf03
-in epoll_wait () <br>
-&gt; from /lib64/libc.so.6<br>
-&gt; &nbsp; 6 &nbsp; &nbsp;Thread 0x7f9593f55710 (LWP 969) 0x00007f959724cf03
-in epoll_wait () <br>
-&gt; from /lib64/libc.so.6<br>
-&gt; &nbsp; 5 &nbsp; &nbsp;Thread 0x7f9598d85900 (LWP 964) 0x00007f95974ddda5
-in pthread_join <br>
-&gt; () from /lib64/libpthread.so.0<br>
-&gt; &nbsp; 4 &nbsp; &nbsp;Thread 0x7f9593952710 (LWP 984) 0x00007f959724cf03
-in epoll_wait () <br>
-&gt; from /lib64/libc.so.6<br>
-&gt; &nbsp; 3 &nbsp; &nbsp;Thread 0x7f9593751710 (LWP 3941) 0x00007f95972492a9
-in syscall () <br>
-&gt; from /lib64/libc.so.6<br>
-&gt; &nbsp; 2 &nbsp; &nbsp;Thread 0x7f9593d54710 (LWP 970) 0x00007f959724cf03
-in epoll_wait () <br>
-&gt; from /lib64/libc.so.6<br>
-&gt; * 1 &nbsp; &nbsp;Thread 0x7f9594156710 (LWP 968) ustctl_duplicate_ust_object_data
-<br>
-&gt; (dest=dest@entry=0x7f958c000ad8, src=0x0) at ustctl.c:800<br>
-&gt; <br>
-&gt; Any help is appreciated.<br>
-&gt; <br>
-&gt; <br>
-&gt; Amit Margalit<br>
-&gt; IBM XIV - Storage Reinvented<br>
-&gt; XIV-NAS Development Team<br>
-&gt; Tel. 03-689-7774<br>
-&gt; Fax. 03-689-7230<br>
-&gt; _______________________________________________<br>
-&gt; lttng-dev mailing list<br>
-&gt; lttng-dev@lists.lttng.org<br>
-&gt; </font></tt><a href="http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev"><tt><font size=2>http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</font></tt></a><tt><font size=2><br>
-<br>
-<br>
--- <br>
-Mathieu Desnoyers<br>
-EfficiOS Inc.<br>
-</font></tt><a href=http://www.efficios.com/><tt><font size=2>http://www.efficios.com</font></tt></a><tt><font size=2><br>
-<br>
-</font></tt>
-<br>
---=_alternative 00440C05C2257B87_=--
-
-
-
---===============1283453120==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1283453120==--
