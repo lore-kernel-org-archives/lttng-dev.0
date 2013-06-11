@@ -1,39 +1,38 @@
 From: Amit Margalit <AMITM@il.ibm.com>
-Subject: Re: Help debugging 2.2.0rc2 core dump in lttng-sessiond
-Date: Tue, 11 Jun 2013 09:33:31 +0300
-Message-ID: <OF63B5397C.B013E1FF-ONC2257B87.0023A207-C2257B87.0023F1FD__549.374256707047$1370932467$gmane$org@il.ibm.com>
-References: <OFDEF64EB6.0D8ED0C8-ONC2257B87.001DC43F-C2257B87.001E5219@il.ibm.com>
+Subject: [RFC PATCH lttng-ust] Allow environment variable
+ LTTNG_HOME to override HOME
+Date: Tue, 11 Jun 2013 15:04:05 +0300
+Message-ID: <OFA5A3277B.87DDB05C-ONC2257B87.0041920C-C2257B87.0042359F__36603.3512320884$1370952303$gmane$org@il.ibm.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1133292282=="
+Content-Type: multipart/mixed; boundary="===============1758847860=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from e06smtp17.uk.ibm.com ([195.75.94.113])
+Received: from e06smtp14.uk.ibm.com ([195.75.94.110])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <amitm@il.ibm.com>) id 1UmI9O-0001Y1-VV
-	for lttng-dev@lists.lttng.org; Tue, 11 Jun 2013 02:33:51 -0400
+	(envelope-from <amitm@il.ibm.com>) id 1UmNJK-0004Sp-5L
+	for lttng-dev@lists.lttng.org; Tue, 11 Jun 2013 08:04:26 -0400
 Received: from /spool/local
-	by e06smtp17.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use
+	by e06smtp14.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use
 	Only! Violators will be prosecuted
 	for <lttng-dev@lists.lttng.org> from <amitm@il.ibm.com>;
-	Tue, 11 Jun 2013 07:30:06 +0100
+	Tue, 11 Jun 2013 12:57:24 +0100
 Received: from b06cxnps3074.portsmouth.uk.ibm.com
 	(d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-	by d06dlp01.portsmouth.uk.ibm.com (Postfix) with ESMTP id 87D3517D801A
-	for <lttng-dev@lists.lttng.org>; Tue, 11 Jun 2013 07:35:03 +0100 (BST)
-Received: from d06av09.portsmouth.uk.ibm.com (d06av09.portsmouth.uk.ibm.com
-	[9.149.37.250])
+	by d06dlp03.portsmouth.uk.ibm.com (Postfix) with ESMTP id 8FCBE1B08061
+	for <lttng-dev@lists.lttng.org>; Tue, 11 Jun 2013 13:04:17 +0100 (BST)
+Received: from d06av06.portsmouth.uk.ibm.com (d06av06.portsmouth.uk.ibm.com
+	[9.149.37.217])
 	by b06cxnps3074.portsmouth.uk.ibm.com (8.13.8/8.13.8/NCO v10.0) with
-	ESMTP id r5B6XWIZ15138942
-	for <lttng-dev@lists.lttng.org>; Tue, 11 Jun 2013 06:33:32 GMT
-Received: from d06av09.portsmouth.uk.ibm.com (localhost [127.0.0.1])
-	by d06av09.portsmouth.uk.ibm.com (8.14.4/8.14.4/NCO v10.0 AVout) with
-	ESMTP id r5B6XgLQ008806
-	for <lttng-dev@lists.lttng.org>; Tue, 11 Jun 2013 00:33:42 -0600
+	ESMTP id r5BC46hb26280096
+	for <lttng-dev@lists.lttng.org>; Tue, 11 Jun 2013 12:04:06 GMT
+Received: from d06av06.portsmouth.uk.ibm.com (localhost [127.0.0.1])
+	by d06av06.portsmouth.uk.ibm.com (8.14.4/8.14.4/NCO v10.0 AVout) with
+	ESMTP id r5BC4G2N016953
+	for <lttng-dev@lists.lttng.org>; Tue, 11 Jun 2013 06:04:16 -0600
 Received: from d06ml311.portsmouth.uk.ibm.com (d06ml311.portsmouth.uk.ibm.com
 	[9.149.104.181])
-	by d06av09.portsmouth.uk.ibm.com (8.14.4/8.14.4/NCO v10.0 AVin) with
-	ESMTP id r5B6XgJi008801
-	for <lttng-dev@lists.lttng.org>; Tue, 11 Jun 2013 00:33:42 -0600
-In-Reply-To: <OFDEF64EB6.0D8ED0C8-ONC2257B87.001DC43F-C2257B87.001E5219@il.ibm.com>
+	by d06av06.portsmouth.uk.ibm.com (8.14.4/8.14.4/NCO v10.0 AVin) with
+	ESMTP id r5BC4GHZ016944
+	for <lttng-dev@lists.lttng.org>; Tue, 11 Jun 2013 06:04:16 -0600
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -46,157 +45,147 @@ To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
 This is a multipart message in MIME format.
---===============1133292282==
-Content-Type: multipart/alternative; boundary="=_alternative 0023F18CC2257B87_="
+--===============1758847860==
+Content-Type: multipart/alternative; boundary="=_alternative 0042356DC2257B87_="
 
 This is a multipart message in MIME format.
---=_alternative 0023F18CC2257B87_=
+--=_alternative 0042356DC2257B87_=
 Content-Type: text/plain; charset="US-ASCII"
 
-Seems this only happens with --buffers-uid ...
+Hello all,
 
-Here's the sequence of activation I used:
+I tried to find some guide for contribution, but http://lttng.org/contrib 
+insists that page is not found, so please forgive me (and teach) where I 
+do things in a non-standard way.
 
-/usr/bin/lttng-sessiond -d --no-kernel -q
-/usr/bin/lttng create ${LTTNG_SESSION_NAME} -o ${LTTNG_TRACES_PATH}
-/usr/bin/lttng enable-channel channel0 -u --subbuf-size 262144 
---num-subbuf 32 --buffers-uid
-/usr/bin/lttng enable-event -u -a
-/usr/bin/lttng start ${LTTNG_SESSION_NAME}
+Patch functionality - If LTTNG_HOME environment variable exists, it is 
+used instead of HOME.
+Reason for patch - We are trying to deploy LTTng on a system where $HOME 
+is on a filesystem mounted read-only, but cannot afford to run lttng as a 
+different user and cannot move the home directories of users to writeable 
+locations.
+Patch baseline: 2.2.0 rc2 
+
+This patch handles only UST. The next email will be a patch against 
+lttng-tools.
+
+diff -ur lttng-ust-2.2.0-rc2-orig/liblttng-ust/lttng-ust-comm.c 
+lttng-ust-2.2.0-rc2/liblttng-ust/lttng-ust-comm.c
+--- lttng-ust-2.2.0-rc2-orig/liblttng-ust/lttng-ust-comm.c      2013-05-08 
+22:58:40.000000000 +0300
++++ lttng-ust-2.2.0-rc2/liblttng-ust/lttng-ust-comm.c   2013-06-11 
+14:12:55.921673678 +0300
+@@ -189,6 +189,20 @@
+ extern void lttng_ring_buffer_metadata_client_exit(void);
+ 
+ /*
++ * Returns the HOME directory path. Caller MUST NOT free(3) the return 
+pointer.
++ */
++static
++char *get_lttng_home_dir(void)
++{
++       char *val = NULL;
++       val = getenv("LTTNG_HOME");
++       if (val != NULL) {
++               return val;
++       }
++       return getenv("HOME");
++}
++
++/*
+  * Force a read (imply TLS fixup for dlopen) of TLS variables.
+  */
+ static
+@@ -230,7 +244,7 @@
+                assert(local_apps.allowed == 0);
+                return 0;
+        }
+-       home_dir = (const char *) getenv("HOME");
++       home_dir = (const char *) get_lttng_home_dir();
+        if (!home_dir) {
+                WARN("HOME environment variable not set. Disabling 
+LTTng-UST per-user tracing.");
+                assert(local_apps.allowed == 0);
+
+Thanks,
 
 Amit Margalit
 IBM XIV - Storage Reinvented
 XIV-NAS Development Team
 Tel. 03-689-7774
 Fax. 03-689-7230
-
-
-
-From:   Amit Margalit/Israel/IBM@IBMIL
-To:     lttng-dev@lists.lttng.org
-Date:   06/11/2013 08:32 AM
-Subject:        [lttng-dev] Help debugging 2.2.0rc2 core dump in 
-lttng-sessiond
-
-
-
-Hello, 
-
-I've deployed 2.2.0rc2 on one of our systems, and I've getting a core dump 
-(due to segfault) on lttng-sessiond. 
-
-Should I post all the data here, or should this be done 1x1 with one of 
-the developers? 
-
-Anyway, basic information: 
-
-Core was generated by `/usr/bin/lttng-sessiond -d --no-kernel -q'. 
-Program terminated with signal 11, Segmentation fault. 
-#0  ustctl_duplicate_ust_object_data (dest=dest@entry=0x7f958c000ad8, 
-src=0x0) at ustctl.c:800 
-800             if (src->handle != -1) { 
-(gdb) p *dest 
-$9 = (struct lttng_ust_object_data *) 0x0 
-(gdb) up 
-#1  0x00000000004182c6 in duplicate_channel_object 
-(ua_chan=0x7f958c0009b0, reg_chan=0x679cd0) at ust-app.c:2000 
-2000            ret = ustctl_duplicate_ust_object_data(&ua_chan->obj, 
-reg_chan->obj.ust); 
-(gdb) p ua_chan->obj 
-$10 = (struct lttng_ust_object_data *) 0x0 
-(gdb) p *ua_chan 
-$11 = {enabled = 1, handle = -1, is_sent = 0, key = 2, tracing_channel_id 
-= 0, expected_stream_count = 0, name = "channel0", '\000' <repeats 247 
-times>, obj = 0x0, attr = { 
-    type = LTTNG_UST_CHAN_PER_CPU, subbuf_size = 262144, num_subbuf = 32, 
-overwrite = 0, switch_timer_interval = 0, read_timer_interval = 0, output 
-= LTTNG_UST_MMAP, chan_id = 0, 
-    uuid = '\000' <repeats 15 times>}, streams = {count = 0, head = {next 
-= 0x7f958c000b20, prev = 0x7f958c000b20}}, session = 0x677320, ctx = 
-0x7f958c000bc0, events = 0x7f958c000920, 
-  tracefile_size = 0, tracefile_count = 0, node = {key = 0x7f958c0009d4 
-"channel0", node = {next = 0x6763a0, reverse_hash = 261524217965576192}, 
-head = {next = {next = 0x0}, func = 0}}, 
-  ust_objd_node = {key = 0, node = {next = 0x0, reverse_hash = 0}, head = 
-{next = {next = 0x0}, func = 0}}, rcu_head = {next = {next = 0x0}, func = 
-0}} 
-(gdb) p *reg_chan 
-$12 = {key = 0, consumer_key = 1, streams = {next = 0x679ce0, prev = 
-0x679ce0}, stream_list_lock = {__data = {__lock = 0, __count = 0, __owner 
-= 0, __nusers = 0, __kind = 0, __spins = 0, 
-      __list = {__prev = 0x0, __next = 0x0}}, __size = '\000' <repeats 39 
-times>, __align = 0}, node = {key = 0, node = {next = 0x0, reverse_hash = 
-15577886586086949907}, head = {next = { 
-        next = 0x0}, func = 0}}, obj = {ust = 0x0}} 
-(gdb) bt 
-#0  ustctl_duplicate_ust_object_data (dest=dest@entry=0x7f958c000ad8, 
-src=0x0) at ustctl.c:800 
-#1  0x00000000004182c6 in duplicate_channel_object 
-(ua_chan=0x7f958c0009b0, reg_chan=0x679cd0) at ust-app.c:2000 
-#2  send_channel_uid_to_ust (reg_chan=reg_chan@entry=0x679cd0, 
-app=app@entry=0x664d00, ua_sess=ua_sess@entry=0x677320, 
-ua_chan=ua_chan@entry=0x7f958c0009b0) at ust-app.c:2161 
-#3  0x0000000000418f78 in create_channel_per_uid (ua_chan=0x7f958c0009b0, 
-ua_sess=0x677320, usess=<optimized out>, app=0x664d00) at ust-app.c:2263 
-#4  do_create_channel (app=app@entry=0x664d00, usess=usess@entry=0x666f80, 
-ua_sess=0x677320, ua_chan=ua_chan@entry=0x7f958c0009b0) at ust-app.c:2341 
-#5  0x000000000041df83 in ust_app_global_update (usess=0x666f80, 
-sock=sock@entry=20) at ust-app.c:4043 
-#6  0x000000000042306f in update_ust_app (app_sock=20) at main.c:680 
-#7  thread_dispatch_ust_registration (data=<optimized out>) at main.c:1465 
-
-#8  0x00007f95974dd5f0 in start_thread () from /lib64/libpthread.so.0 
-#9  0x00007f959724c87d in clone () from /lib64/libc.so.6 
-#10 0x0000000000000000 in ?? () 
-(gdb) info threads 
-  Id   Target Id         Frame 
-  9    Thread 0x7f9594357710 (LWP 967) 0x00007f959724cf03 in epoll_wait () 
-from /lib64/libc.so.6 
-  8    Thread 0x7f9594558710 (LWP 966) 0x00007f959724cf03 in epoll_wait () 
-from /lib64/libc.so.6 
-  7    Thread 0x7f9593b53710 (LWP 971) 0x00007f959724cf03 in epoll_wait () 
-from /lib64/libc.so.6 
-  6    Thread 0x7f9593f55710 (LWP 969) 0x00007f959724cf03 in epoll_wait () 
-from /lib64/libc.so.6 
-  5    Thread 0x7f9598d85900 (LWP 964) 0x00007f95974ddda5 in pthread_join 
-() from /lib64/libpthread.so.0 
-  4    Thread 0x7f9593952710 (LWP 984) 0x00007f959724cf03 in epoll_wait () 
-from /lib64/libc.so.6 
-  3    Thread 0x7f9593751710 (LWP 3941) 0x00007f95972492a9 in syscall () 
-from /lib64/libc.so.6 
-  2    Thread 0x7f9593d54710 (LWP 970) 0x00007f959724cf03 in epoll_wait () 
-from /lib64/libc.so.6 
-* 1    Thread 0x7f9594156710 (LWP 968) ustctl_duplicate_ust_object_data 
-(dest=dest@entry=0x7f958c000ad8, src=0x0) at ustctl.c:800 
-
-Any help is appreciated. 
-
-
-Amit Margalit 
-IBM XIV - Storage Reinvented 
-XIV-NAS Development Team 
-Tel. 03-689-7774 
-Fax. 03-689-7230_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
-
---=_alternative 0023F18CC2257B87_=
+--=_alternative 0042356DC2257B87_=
 Content-Type: text/html; charset="US-ASCII"
 
-<font size=2 face="sans-serif">Seems this only happens with </font><tt><font size=2>--buffers-uid</font></tt><font size=2 face="sans-serif">
-...</font>
+<font size=2 face="sans-serif">Hello all,</font>
 <br>
-<br><font size=2 face="sans-serif">Here's the sequence of activation I
-used:</font>
+<br><font size=2 face="sans-serif">I tried to find some guide for contribution,
+but </font><a href=http://lttng.org/contrib><font size=3 color=blue><u>http://lttng.org/contrib</u></font></a><font size=3>
+</font><font size=2 face="sans-serif">insists that page is not found, so
+please forgive me (and teach) where I do things in a non-standard way.</font>
 <br>
-<br><tt><font size=2>/usr/bin/lttng-sessiond -d --no-kernel -q</font></tt>
-<br><tt><font size=2>/usr/bin/lttng create ${LTTNG_SESSION_NAME} -o ${LTTNG_TRACES_PATH}</font></tt>
-<br><tt><font size=2>/usr/bin/lttng enable-channel channel0 -u --subbuf-size
-262144 --num-subbuf 32 --buffers-uid</font></tt>
-<br><tt><font size=2>/usr/bin/lttng enable-event -u -a</font></tt>
-<br><tt><font size=2>/usr/bin/lttng start ${LTTNG_SESSION_NAME}</font></tt>
+<br><font size=2 face="sans-serif">Patch functionality - If LTTNG_HOME
+environment variable exists, it is used instead of HOME.</font>
+<br><font size=2 face="sans-serif">Reason for patch - We are trying to
+deploy LTTng on a system where $HOME is on a filesystem mounted read-only,
+but cannot afford to run lttng as a different user and cannot move the
+home directories of users to writeable locations.</font>
+<br><font size=2 face="sans-serif">Patch baseline: 2.2.0 rc2 </font>
+<br>
+<br><font size=2 face="sans-serif">This patch handles only UST. The next
+email will be a patch against lttng-tools.</font>
+<br>
+<br><tt><font size=2>diff -ur lttng-ust-2.2.0-rc2-orig/liblttng-ust/lttng-ust-comm.c
+lttng-ust-2.2.0-rc2/liblttng-ust/lttng-ust-comm.c</font></tt>
+<br><tt><font size=2>--- lttng-ust-2.2.0-rc2-orig/liblttng-ust/lttng-ust-comm.c
+&nbsp; &nbsp; &nbsp; &nbsp;2013-05-08 22:58:40.000000000 +0300</font></tt>
+<br><tt><font size=2>+++ lttng-ust-2.2.0-rc2/liblttng-ust/lttng-ust-comm.c
+&nbsp; &nbsp; &nbsp; &nbsp;2013-06-11 14:12:55.921673678 +0300</font></tt>
+<br><tt><font size=2>@@ -189,6 +189,20 @@</font></tt>
+<br><tt><font size=2>&nbsp;extern void lttng_ring_buffer_metadata_client_exit(void);</font></tt>
+<br><tt><font size=2>&nbsp;</font></tt>
+<br><tt><font size=2>&nbsp;/*</font></tt>
+<br><tt><font size=2>+ * Returns the HOME directory path. Caller MUST NOT
+free(3) the return pointer.</font></tt>
+<br><tt><font size=2>+ */</font></tt>
+<br><tt><font size=2>+static</font></tt>
+<br><tt><font size=2>+char *get_lttng_home_dir(void)</font></tt>
+<br><tt><font size=2>+{</font></tt>
+<br><tt><font size=2>+ &nbsp; &nbsp; &nbsp; &nbsp;char *val = NULL;</font></tt>
+<br><tt><font size=2>+ &nbsp; &nbsp; &nbsp; &nbsp;val = getenv(&quot;LTTNG_HOME&quot;);</font></tt>
+<br><tt><font size=2>+ &nbsp; &nbsp; &nbsp; &nbsp;if (val != NULL)
+{</font></tt>
+<br><tt><font size=2>+ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp;return val;</font></tt>
+<br><tt><font size=2>+ &nbsp; &nbsp; &nbsp; &nbsp;}</font></tt>
+<br><tt><font size=2>+ &nbsp; &nbsp; &nbsp; &nbsp;return getenv(&quot;HOME&quot;);</font></tt>
+<br><tt><font size=2>+}</font></tt>
+<br><tt><font size=2>+</font></tt>
+<br><tt><font size=2>+/*</font></tt>
+<br><tt><font size=2>&nbsp; * Force a read (imply TLS fixup for dlopen)
+of TLS variables.</font></tt>
+<br><tt><font size=2>&nbsp; */</font></tt>
+<br><tt><font size=2>&nbsp;static</font></tt>
+<br><tt><font size=2>@@ -230,7 +244,7 @@</font></tt>
+<br><tt><font size=2>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp;assert(local_apps.allowed == 0);</font></tt>
+<br><tt><font size=2>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp;return 0;</font></tt>
+<br><tt><font size=2>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;}</font></tt>
+<br><tt><font size=2>- &nbsp; &nbsp; &nbsp; &nbsp;home_dir = (const
+char *) getenv(&quot;HOME&quot;);</font></tt>
+<br><tt><font size=2>+ &nbsp; &nbsp; &nbsp; &nbsp;home_dir = (const
+char *) get_lttng_home_dir();</font></tt>
+<br><tt><font size=2>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;if (!home_dir)
+{</font></tt>
+<br><tt><font size=2>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp;WARN(&quot;HOME environment variable not set.
+Disabling LTTng-UST per-user tracing.&quot;);</font></tt>
+<br><tt><font size=2>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp;assert(local_apps.allowed == 0);</font></tt>
+<br>
+<br><font size=2 face="sans-serif">Thanks,</font>
 <br>
 <br><font size=2 color=#000080 face="sans-serif">Amit Margalit</font>
 <br><font size=2 color=#808000 face="sans-serif">IBM XIV </font><font size=2 face="sans-serif">-
@@ -204,142 +193,11 @@ used:</font>
 <br><font size=2 face="sans-serif">XIV-NAS Development Team</font>
 <br><font size=2 face="sans-serif">Tel. 03</font><font size=2 face="Arial">-689-7774</font>
 <br><font size=2 face="Arial">Fax. 03-689-7230</font>
-<br>
-<br>
-<br>
-<br><font size=1 color=#5f5f5f face="sans-serif">From: &nbsp; &nbsp; &nbsp;
-&nbsp;</font><font size=1 face="sans-serif">Amit Margalit/Israel/IBM@IBMIL</font>
-<br><font size=1 color=#5f5f5f face="sans-serif">To: &nbsp; &nbsp; &nbsp;
-&nbsp;</font><font size=1 face="sans-serif">lttng-dev@lists.lttng.org</font>
-<br><font size=1 color=#5f5f5f face="sans-serif">Date: &nbsp; &nbsp; &nbsp;
-&nbsp;</font><font size=1 face="sans-serif">06/11/2013 08:32 AM</font>
-<br><font size=1 color=#5f5f5f face="sans-serif">Subject: &nbsp; &nbsp;
-&nbsp; &nbsp;</font><font size=1 face="sans-serif">[lttng-dev]
-Help debugging 2.2.0rc2 core dump in lttng-sessiond</font>
-<br>
-<hr noshade>
-<br>
-<br>
-<br><font size=2 face="sans-serif">Hello,</font><font size=3> <br>
-</font><font size=2 face="sans-serif"><br>
-I've deployed 2.2.0rc2 on one of our systems, and I've getting a core dump
-(due to segfault) on lttng-sessiond.</font><font size=3> <br>
-</font><font size=2 face="sans-serif"><br>
-Should I post all the data here, or should this be done 1x1 with one of
-the developers?</font><font size=3> <br>
-</font><font size=2 face="sans-serif"><br>
-Anyway, basic information:</font><font size=3> <br>
-</font><tt><font size=2><br>
-Core was generated by `/usr/bin/lttng-sessiond -d --no-kernel -q'.</font></tt><font size=3>
-</font><tt><font size=2><br>
-Program terminated with signal 11, Segmentation fault.</font></tt><font size=3>
-</font><tt><font size=2><br>
-#0 &nbsp;ustctl_duplicate_ust_object_data (dest=dest@entry=0x7f958c000ad8,
-src=0x0) at ustctl.c:800</font></tt><font size=3> </font><tt><font size=2><br>
-800 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if (src-&gt;handle != -1)
-{</font></tt><font size=3> </font><tt><font size=2><br>
-(gdb) p *dest</font></tt><font size=3> </font><tt><font size=2><br>
-$9 = (struct lttng_ust_object_data *) 0x0</font></tt><font size=3> </font><tt><font size=2><br>
-(gdb) up</font></tt><font size=3> </font><tt><font size=2><br>
-#1 &nbsp;0x00000000004182c6 in duplicate_channel_object (ua_chan=0x7f958c0009b0,
-reg_chan=0x679cd0) at ust-app.c:2000</font></tt><font size=3> </font><tt><font size=2><br>
-2000 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;ret = ustctl_duplicate_ust_object_data(&amp;ua_chan-&gt;obj,
-reg_chan-&gt;obj.ust);</font></tt><font size=3> </font><tt><font size=2><br>
-(gdb) p ua_chan-&gt;obj</font></tt><font size=3> </font><tt><font size=2><br>
-$10 = (struct lttng_ust_object_data *) 0x0</font></tt><font size=3> </font><tt><font size=2><br>
-(gdb) p *ua_chan</font></tt><font size=3> </font><tt><font size=2><br>
-$11 = {enabled = 1, handle = -1, is_sent = 0, key = 2, tracing_channel_id
-= 0, expected_stream_count = 0, name = &quot;channel0&quot;, '\000' &lt;repeats
-247 times&gt;, obj = 0x0, attr = {</font></tt><font size=3> </font><tt><font size=2><br>
- &nbsp; &nbsp;type = LTTNG_UST_CHAN_PER_CPU, subbuf_size = 262144, num_subbuf
-= 32, overwrite = 0, switch_timer_interval = 0, read_timer_interval = 0,
-output = LTTNG_UST_MMAP, chan_id = 0, <br>
- &nbsp; &nbsp;uuid = '\000' &lt;repeats 15 times&gt;}, streams = {count
-= 0, head = {next = 0x7f958c000b20, prev = 0x7f958c000b20}}, session =
-0x677320, ctx = 0x7f958c000bc0, events = 0x7f958c000920, <br>
- &nbsp;tracefile_size = 0, tracefile_count = 0, node = {key = 0x7f958c0009d4
-&quot;channel0&quot;, node = {next = 0x6763a0, reverse_hash = 261524217965576192},
-head = {next = {next = 0x0}, func = 0}}, <br>
- &nbsp;ust_objd_node = {key = 0, node = {next = 0x0, reverse_hash = 0},
-head = {next = {next = 0x0}, func = 0}}, rcu_head = {next = {next = 0x0},
-func = 0}}</font></tt><font size=3> </font><tt><font size=2><br>
-(gdb) p *reg_chan</font></tt><font size=3> </font><tt><font size=2><br>
-$12 = {key = 0, consumer_key = 1, streams = {next = 0x679ce0, prev = 0x679ce0},
-stream_list_lock = {__data = {__lock = 0, __count = 0, __owner = 0, __nusers
-= 0, __kind = 0, __spins = 0, <br>
- &nbsp; &nbsp; &nbsp;__list = {__prev = 0x0, __next = 0x0}}, __size = '\000'
-&lt;repeats 39 times&gt;, __align = 0}, node = {key = 0, node = {next =
-0x0, reverse_hash = 15577886586086949907}, head = {next = {</font></tt><font size=3>
-</font><tt><font size=2><br>
- &nbsp; &nbsp; &nbsp; &nbsp;next = 0x0}, func = 0}}, obj = {ust = 0x0}}</font></tt><font size=3>
-</font><tt><font size=2><br>
-(gdb) bt</font></tt><font size=3> </font><tt><font size=2><br>
-#0 &nbsp;ustctl_duplicate_ust_object_data (dest=dest@entry=0x7f958c000ad8,
-src=0x0) at ustctl.c:800</font></tt><font size=3> </font><tt><font size=2><br>
-#1 &nbsp;0x00000000004182c6 in duplicate_channel_object (ua_chan=0x7f958c0009b0,
-reg_chan=0x679cd0) at ust-app.c:2000</font></tt><font size=3> </font><tt><font size=2><br>
-#2 &nbsp;send_channel_uid_to_ust (reg_chan=reg_chan@entry=0x679cd0, app=app@entry=0x664d00,
-ua_sess=ua_sess@entry=0x677320, ua_chan=ua_chan@entry=0x7f958c0009b0) at
-ust-app.c:2161</font></tt><font size=3> </font><tt><font size=2><br>
-#3 &nbsp;0x0000000000418f78 in create_channel_per_uid (ua_chan=0x7f958c0009b0,
-ua_sess=0x677320, usess=&lt;optimized out&gt;, app=0x664d00) at ust-app.c:2263</font></tt><font size=3>
-</font><tt><font size=2><br>
-#4 &nbsp;do_create_channel (app=app@entry=0x664d00, usess=usess@entry=0x666f80,
-ua_sess=0x677320, ua_chan=ua_chan@entry=0x7f958c0009b0) at ust-app.c:2341</font></tt><font size=3>
-</font><tt><font size=2><br>
-#5 &nbsp;0x000000000041df83 in ust_app_global_update (usess=0x666f80, sock=sock@entry=20)
-at ust-app.c:4043</font></tt><font size=3> </font><tt><font size=2><br>
-#6 &nbsp;0x000000000042306f in update_ust_app (app_sock=20) at main.c:680</font></tt><font size=3>
-</font><tt><font size=2><br>
-#7 &nbsp;thread_dispatch_ust_registration (data=&lt;optimized out&gt;)
-at main.c:1465</font></tt><font size=3> </font><tt><font size=2><br>
-#8 &nbsp;0x00007f95974dd5f0 in start_thread () from /lib64/libpthread.so.0</font></tt><font size=3>
-</font><tt><font size=2><br>
-#9 &nbsp;0x00007f959724c87d in clone () from /lib64/libc.so.6</font></tt><font size=3>
-</font><tt><font size=2><br>
-#10 0x0000000000000000 in ?? ()</font></tt><font size=3> </font><tt><font size=2><br>
-(gdb) info threads</font></tt><font size=3> </font><tt><font size=2><br>
- &nbsp;Id &nbsp; Target Id &nbsp; &nbsp; &nbsp; &nbsp; Frame <br>
- &nbsp;9 &nbsp; &nbsp;Thread 0x7f9594357710 (LWP 967) 0x00007f959724cf03
-in epoll_wait () from /lib64/libc.so.6</font></tt><font size=3> </font><tt><font size=2><br>
- &nbsp;8 &nbsp; &nbsp;Thread 0x7f9594558710 (LWP 966) 0x00007f959724cf03
-in epoll_wait () from /lib64/libc.so.6</font></tt><font size=3> </font><tt><font size=2><br>
- &nbsp;7 &nbsp; &nbsp;Thread 0x7f9593b53710 (LWP 971) 0x00007f959724cf03
-in epoll_wait () from /lib64/libc.so.6</font></tt><font size=3> </font><tt><font size=2><br>
- &nbsp;6 &nbsp; &nbsp;Thread 0x7f9593f55710 (LWP 969) 0x00007f959724cf03
-in epoll_wait () from /lib64/libc.so.6</font></tt><font size=3> </font><tt><font size=2><br>
- &nbsp;5 &nbsp; &nbsp;Thread 0x7f9598d85900 (LWP 964) 0x00007f95974ddda5
-in pthread_join () from /lib64/libpthread.so.0</font></tt><font size=3>
-</font><tt><font size=2><br>
- &nbsp;4 &nbsp; &nbsp;Thread 0x7f9593952710 (LWP 984) 0x00007f959724cf03
-in epoll_wait () from /lib64/libc.so.6</font></tt><font size=3> </font><tt><font size=2><br>
- &nbsp;3 &nbsp; &nbsp;Thread 0x7f9593751710 (LWP 3941) 0x00007f95972492a9
-in syscall () from /lib64/libc.so.6</font></tt><font size=3> </font><tt><font size=2><br>
- &nbsp;2 &nbsp; &nbsp;Thread 0x7f9593d54710 (LWP 970) 0x00007f959724cf03
-in epoll_wait () from /lib64/libc.so.6</font></tt><font size=3> </font><tt><font size=2><br>
-* 1 &nbsp; &nbsp;Thread 0x7f9594156710 (LWP 968) ustctl_duplicate_ust_object_data
-(dest=dest@entry=0x7f958c000ad8, src=0x0) at ustctl.c:800</font></tt><font size=3>
-<br>
-</font><font size=2 face="sans-serif"><br>
-Any help is appreciated.</font><font size=3> <br>
-<br>
-</font><font size=2 color=#000080 face="sans-serif"><br>
-Amit Margalit</font><font size=3> </font><font size=2 color=#808000 face="sans-serif"><br>
-IBM XIV </font><font size=2 face="sans-serif">- <i>Storage Reinvented</i></font><font size=3>
-</font><font size=2 face="sans-serif"><br>
-XIV-NAS Development Team</font><font size=3> </font><font size=2 face="sans-serif"><br>
-Tel. 03</font><font size=2 face="Arial">-689-7774</font><font size=3> </font><font size=2 face="Arial"><br>
-Fax. 03-689-7230</font><tt><font size=2>_______________________________________________<br>
-lttng-dev mailing list<br>
-lttng-dev@lists.lttng.org<br>
-</font></tt><a href="http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev"><tt><font size=2>http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</font></tt></a><tt><font size=2><br>
-</font></tt>
-<br>
---=_alternative 0023F18CC2257B87_=--
+--=_alternative 0042356DC2257B87_=--
 
 
 
---===============1133292282==
+--===============1758847860==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -350,4 +208,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============1133292282==--
+--===============1758847860==--
