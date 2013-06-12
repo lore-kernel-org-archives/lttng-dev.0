@@ -1,41 +1,41 @@
 From: Amit Margalit <AMITM@il.ibm.com>
-Subject: Re: [RFC PATCH lttng-tools] Allow environment variable
- LTTNG_HOME to override HOME - for lttng-tools
-Date: Wed, 12 Jun 2013 22:11:26 +0300
-Message-ID: <OF7B790C53.27565E2A-ONC2257B88.00695172-C2257B88.00695582__17873.8096532927$1371064355$gmane$org@il.ibm.com>
-References: <OF6896CCA9.D04FC8AB-ONC2257B87.00424736-C2257B87.00427FF3@il.ibm.com>
-	<51B889B6.6020200@efficios.com>
+Subject: Re: Will LTTng overwrite existing trace files after
+ reboot, or continue where the previous instance left off?
+Date: Wed, 12 Jun 2013 22:14:10 +0300
+Message-ID: <OF8E263FF5.555C4B70-ONC2257B88.0069603B-C2257B88.006995A6__7985.67374372414$1371064509$gmane$org@il.ibm.com>
+References: <OFBF5287EA.D7EE217E-ONC2257B88.004F3A88-C2257B88.004FF39E@il.ibm.com>
+	<51B88B11.3020401@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1237244065=="
+Content-Type: multipart/mixed; boundary="===============1432834638=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from e06smtp16.uk.ibm.com ([195.75.94.112])
+Received: from e06smtp17.uk.ibm.com ([195.75.94.113])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <amitm@il.ibm.com>) id 1UmqSP-0002we-JT
-	for lttng-dev@lists.lttng.org; Wed, 12 Jun 2013 15:11:45 -0400
+	(envelope-from <amitm@il.ibm.com>) id 1UmqV4-0002zJ-A7
+	for lttng-dev@lists.lttng.org; Wed, 12 Jun 2013 15:14:30 -0400
 Received: from /spool/local
-	by e06smtp16.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use
+	by e06smtp17.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use
 	Only! Violators will be prosecuted
 	for <lttng-dev@lists.lttng.org> from <amitm@il.ibm.com>;
-	Wed, 12 Jun 2013 20:06:45 +0100
-Received: from b06cxnps3075.portsmouth.uk.ibm.com
-	(d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-	by d06dlp02.portsmouth.uk.ibm.com (Postfix) with ESMTP id F342D2190023
-	for <lttng-dev@lists.lttng.org>; Wed, 12 Jun 2013 20:14:58 +0100 (BST)
-Received: from d06av06.portsmouth.uk.ibm.com (d06av06.portsmouth.uk.ibm.com
-	[9.149.37.217])
-	by b06cxnps3075.portsmouth.uk.ibm.com (8.13.8/8.13.8/NCO v10.0) with
-	ESMTP id r5CJBRMN52887744
-	for <lttng-dev@lists.lttng.org>; Wed, 12 Jun 2013 19:11:27 GMT
-Received: from d06av06.portsmouth.uk.ibm.com (localhost [127.0.0.1])
-	by d06av06.portsmouth.uk.ibm.com (8.14.4/8.14.4/NCO v10.0 AVout) with
-	ESMTP id r5CJBbgs024159
-	for <lttng-dev@lists.lttng.org>; Wed, 12 Jun 2013 13:11:37 -0600
+	Wed, 12 Jun 2013 20:10:43 +0100
+Received: from b06cxnps4075.portsmouth.uk.ibm.com
+	(d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+	by d06dlp01.portsmouth.uk.ibm.com (Postfix) with ESMTP id B006A17D801A
+	for <lttng-dev@lists.lttng.org>; Wed, 12 Jun 2013 20:15:43 +0100 (BST)
+Received: from d06av02.portsmouth.uk.ibm.com (d06av02.portsmouth.uk.ibm.com
+	[9.149.37.228])
+	by b06cxnps4075.portsmouth.uk.ibm.com (8.13.8/8.13.8/NCO v10.0) with
+	ESMTP id r5CJEB3M54198524
+	for <lttng-dev@lists.lttng.org>; Wed, 12 Jun 2013 19:14:11 GMT
+Received: from d06av02.portsmouth.uk.ibm.com (localhost [127.0.0.1])
+	by d06av02.portsmouth.uk.ibm.com (8.14.4/8.14.4/NCO v10.0 AVout) with
+	ESMTP id r5CJELGZ013973
+	for <lttng-dev@lists.lttng.org>; Wed, 12 Jun 2013 13:14:21 -0600
 Received: from d06ml311.portsmouth.uk.ibm.com (d06ml311.portsmouth.uk.ibm.com
 	[9.149.104.181])
-	by d06av06.portsmouth.uk.ibm.com (8.14.4/8.14.4/NCO v10.0 AVin) with
-	ESMTP id r5CJBbut024156
-	for <lttng-dev@lists.lttng.org>; Wed, 12 Jun 2013 13:11:37 -0600
-In-Reply-To: <51B889B6.6020200@efficios.com>
+	by d06av02.portsmouth.uk.ibm.com (8.14.4/8.14.4/NCO v10.0 AVin) with
+	ESMTP id r5CJELZT013969
+	for <lttng-dev@lists.lttng.org>; Wed, 12 Jun 2013 13:14:21 -0600
+In-Reply-To: <51B88B11.3020401@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -49,14 +49,22 @@ Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
 This is a multipart message in MIME format.
---===============1237244065==
-Content-Type: multipart/alternative; boundary="=_alternative 00695537C2257B88_="
+--===============1432834638==
+Content-Type: multipart/alternative; boundary="=_alternative 00699518C2257B88_="
 
 This is a multipart message in MIME format.
---=_alternative 00695537C2257B88_=
+--=_alternative 00699518C2257B88_=
 Content-Type: text/plain; charset="US-ASCII"
 
-I'll try to do that. Thanks.
+Indeed the path is not different. There is no date-part in the path. I 
+simply have ~/lttng-traces/ust/uid/<uid>/64-bit/ ...
+
+Please remember that I use 2.2.0rc2 and not the latest master. 
+Unfortunately, I must retain some level of stability, so if the addition 
+of the date part in the path for per-uid buffers is later than 2.2.0rc2 - 
+that would be the cause of the difference.
+
+Amit
 
 Amit Margalit
 IBM XIV - Storage Reinvented
@@ -69,155 +77,54 @@ Fax. 03-689-7230
 From:   David Goulet <dgoulet@efficios.com>
 To:     Amit Margalit/Israel/IBM@IBMIL
 Cc:     lttng-dev@lists.lttng.org
-Date:   06/12/2013 05:46 PM
-Subject:        Re: [lttng-dev] [RFC PATCH lttng-tools] Allow environment 
-variable LTTNG_HOME to override HOME - for lttng-tools
+Date:   06/12/2013 05:51 PM
+Subject:        Re: [lttng-dev] Will LTTng overwrite existing trace files 
+after reboot, or continue where the previous instance left off?
 
 
 
-This looks good! It appears that there are multiple callsites doing the 
-same
-thing... We might want to just put it in src/common/utils.c with something 
-like
-utils_get_home_dir() and use it from there.
+It's possible yes if the session path is exactly the same but this is why 
+we add
+the date and time to the session directory so we don't end up overwriting 
+old
+traces with the same session name.
 
-Also, adding "LTTNG_HOME" in defaults.h as a defined value for the env. 
-variable
-name. Finally, updating the man page would be also great. :)
+Can you tell me what is the full path of the session directory. It should 
+look
+something like (with some variations).
 
-Once you are ready to submit the patch, it would be good to use "git
-format-patch" or send me a pull request based on git HEAD master.
+~/lttng-traces/fo-20130612-104743/ust/uid/1000/64-bit
 
-Big thanks for this contribution!
+Upon reboot, can you confirm that the path is different ?
+
+Thanks!
 David
 
 Amit Margalit:
-> Hello all,
+> Hi,
 > 
-> Patch functionality - If LTTNG_HOME environment variable exists, it is 
-used
-> instead of HOME.
-> Reason for patch - We are trying to deploy LTTng on a system where $HOME 
-is on a
-> filesystem mounted read-only, but cannot afford to run lttng as a 
-different user
-> and cannot move the home directories of users to writeable locations.
-> Patch baseline: 2.2.0 rc2
+> My situation is this:
 > 
-> This patch handles only lttng-tools.
+> lttng-sessiond --no-kernel
+> lttng-create foo
+> lttng enable-channel channel0 -u --tracefile-size 67108864 
+--tracefile-count 13
+> --buffers-uid --switch-timer 1000000 --num-subbuf 32
+> lttng enable-event -u -a
+> lttng start foo
 > 
-> I can provide the same patches against git, if asked.
+> Now this runs for a while collecting traces. I've run du -s on the trace
+> directory, and saw that lttng-traces/ takes 2376KB.
 > 
-> diff -ur lttng-tools-2.2.0-rc2-orig/src/bin/lttng/conf.c
-> lttng-tools-2.2.0-rc2/src/bin/lttng/conf.c
-> --- lttng-tools-2.2.0-rc2-orig/src/bin/lttng/conf.c        2013-05-06
-> 21:50:59.000000000 +0300
-> +++ lttng-tools-2.2.0-rc2/src/bin/lttng/conf.c        2013-06-11
-> 14:17:34.681673309 +0300
-> @@ -127,6 +127,11 @@
->   */
->  char *config_get_default_path(void)
->  {
-> +        char *val = NULL;
-> +        val = getenv("LTTNG_HOME");
-> +        if (val != NULL) {
-> +                return val;
-> +        }
->          return getenv("HOME");
->  }
+> The system was reboot, and upon startup, the exact same scenario as 
+above is
+> reproduced.
 > 
-> diff -ur lttng-tools-2.2.0-rc2-orig/src/bin/lttng-relayd/utils.c
-> lttng-tools-2.2.0-rc2/src/bin/lttng-relayd/utils.c
-> --- lttng-tools-2.2.0-rc2-orig/src/bin/lttng-relayd/utils.c 2013-05-06
-> 21:50:59.000000000 +0300
-> +++ lttng-tools-2.2.0-rc2/src/bin/lttng-relayd/utils.c        2013-06-11
-> 14:15:52.553673444 +0300
-> @@ -34,7 +34,11 @@
->   */
->  static char *get_default_path(void)
->  {
-> -        return getenv("HOME");
-> +        char *val = NULL;
-> +        val = getenv("LTTNG_HOME");
-> +        if (val != NULL) {
-> +                return val;
-> +        }
->  }
+> When I ran du to see the size of the lttng-traces/ directory, it was 
+1740KB.
 > 
->  static char *create_output_path_auto(char *path_name)
-> diff -ur lttng-tools-2.2.0-rc2-orig/src/bin/lttng-sessiond/utils.c
-> lttng-tools-2.2.0-rc2/src/bin/lttng-sessiond/utils.c
-> --- lttng-tools-2.2.0-rc2-orig/src/bin/lttng-sessiond/utils.c 2013-01-07
-> 22:05:16.000000000 +0200
-> +++ lttng-tools-2.2.0-rc2/src/bin/lttng-sessiond/utils.c 2013-06-11
-> 14:16:16.697673412 +0300
-> @@ -53,5 +53,10 @@
->   */
->  const char *get_home_dir(void)
->  {
-> +        const char *val = NULL;
-> +        val = ((const char *) getenv("LTTNG_HOME"));
-> +        if (val != NULL) {
-> +                return val;
-> +        }
->          return ((const char *) getenv("HOME"));
->  }
-> diff -ur lttng-tools-2.2.0-rc2-orig/src/lib/lttng-ctl/lttng-ctl.c
-> lttng-tools-2.2.0-rc2/src/lib/lttng-ctl/lttng-ctl.c
-> --- lttng-tools-2.2.0-rc2-orig/src/lib/lttng-ctl/lttng-ctl.c 2013-05-07
-> 22:42:07.000000000 +0300
-> +++ lttng-tools-2.2.0-rc2/src/lib/lttng-ctl/lttng-ctl.c 2013-06-11
-> 14:19:15.177673176 +0300
-> @@ -74,6 +74,22 @@
->  int lttng_opt_verbose;
-> 
->  /*
-> + * Get the value of LTTNG_HOME if present, or HOME if not.
-> + * Caller must not free the returned pointer.
-> + * Used
-> + */
-> +static const char *get_lttng_home_dir(void)
-> +{
-> +        const char *val = NULL;
-> +        val = ((const char *) getenv("LTTNG_HOME"));
-> +        if (val != NULL) {
-> +                return val;
-> +        }
-> +        return ((const char *) getenv("HOME"));
-> +}
-> +
-> +
-> +/*
->   * Compare two URL destination.
->   *
->   * Return 0 is equal else is not equal.
-> @@ -485,7 +501,7 @@
->                   * With GNU C >= 2.1, snprintf returns the required 
-size
-> (excluding closing null)
->                   */
->                  ret = snprintf(sessiond_sock_path, 
-sizeof(sessiond_sock_path),
-> -                                DEFAULT_HOME_CLIENT_UNIX_SOCK, 
-getenv("HOME"));
-> +                                DEFAULT_HOME_CLIENT_UNIX_SOCK,
-> get_lttng_home_dir());
->                  if ((ret < 0) || (ret >= sizeof(sessiond_sock_path))) {
->                          goto error;
->                  }
-> @@ -1543,7 +1559,7 @@
->                   * With GNU C <  2.1, snprintf returns -1 if the target 
-buffer
-> is too small;
->                   * With GNU C >= 2.1, snprintf returns the required 
-size
-> (excluding closing null)
->                   */
-> -                home = getenv("HOME");
-> +                home = get_lttng_home_dir();
->                  if (home == NULL) {
->                          /* Fallback in /tmp .. */
->                          home = "/tmp";
+> Can you please help explain this? Is LTTng overwriting the existing 
+trace files?
 > 
 > Thanks,
 > 
@@ -232,10 +139,19 @@ size
 
 
 
---=_alternative 00695537C2257B88_=
+--=_alternative 00699518C2257B88_=
 Content-Type: text/html; charset="US-ASCII"
 
-<font size=2 face="sans-serif">I'll try to do that. Thanks.</font>
+<font size=2 face="sans-serif">Indeed the path is <u>not</u> different.
+There is no date-part in the path. I simply have ~/lttng-traces/ust/uid/&lt;uid&gt;/64-bit/
+...</font>
+<br>
+<br><font size=2 face="sans-serif">Please remember that I use 2.2.0rc2
+and not the latest master. Unfortunately, I must retain some level of stability,
+so if the addition of the date part in the path for per-uid buffers is
+later than 2.2.0rc2 - that would be the cause of the difference.</font>
+<br>
+<br><font size=2 face="sans-serif">Amit</font>
 <br>
 <br><font size=2 color=#000080 face="sans-serif">Amit Margalit</font>
 <br><font size=2 color=#808000 face="sans-serif">IBM XIV </font><font size=2 face="sans-serif">-
@@ -253,173 +169,58 @@ Content-Type: text/html; charset="US-ASCII"
 <br><font size=1 color=#5f5f5f face="sans-serif">Cc: &nbsp; &nbsp; &nbsp;
 &nbsp;</font><font size=1 face="sans-serif">lttng-dev@lists.lttng.org</font>
 <br><font size=1 color=#5f5f5f face="sans-serif">Date: &nbsp; &nbsp; &nbsp;
-&nbsp;</font><font size=1 face="sans-serif">06/12/2013 05:46 PM</font>
+&nbsp;</font><font size=1 face="sans-serif">06/12/2013 05:51 PM</font>
 <br><font size=1 color=#5f5f5f face="sans-serif">Subject: &nbsp; &nbsp;
 &nbsp; &nbsp;</font><font size=1 face="sans-serif">Re: [lttng-dev]
-[RFC PATCH lttng-tools] Allow environment variable LTTNG_HOME to override
-HOME - for lttng-tools</font>
+Will LTTng overwrite existing trace files after reboot, or continue where
+the previous instance left off?</font>
 <br>
 <hr noshade>
 <br>
 <br>
-<br><tt><font size=2>This looks good! It appears that there are multiple
-callsites doing the same<br>
-thing... We might want to just put it in src/common/utils.c with something
-like<br>
-utils_get_home_dir() and use it from there.<br>
+<br><tt><font size=2>It's possible yes if the session path is exactly the
+same but this is why we add<br>
+the date and time to the session directory so we don't end up overwriting
+old<br>
+traces with the same session name.<br>
 <br>
-Also, adding &quot;LTTNG_HOME&quot; in defaults.h as a defined value for
-the env. variable<br>
-name. Finally, updating the man page would be also great. :)<br>
+Can you tell me what is the full path of the session directory. It should
+look<br>
+something like (with some variations).<br>
 <br>
-Once you are ready to submit the patch, it would be good to use &quot;git<br>
-format-patch&quot; or send me a pull request based on git HEAD master.<br>
+~/lttng-traces/fo-20130612-104743/ust/uid/1000/64-bit<br>
 <br>
-Big thanks for this contribution!<br>
+Upon reboot, can you confirm that the path is different ?<br>
+<br>
+Thanks!<br>
 David<br>
 <br>
 Amit Margalit:<br>
-&gt; Hello all,<br>
+&gt; Hi,<br>
 &gt; <br>
-&gt; Patch functionality - If LTTNG_HOME environment variable exists, it
-is used<br>
-&gt; instead of HOME.<br>
-&gt; Reason for patch - We are trying to deploy LTTng on a system where
-$HOME is on a<br>
-&gt; filesystem mounted read-only, but cannot afford to run lttng as a
-different user<br>
-&gt; and cannot move the home directories of users to writeable locations.<br>
-&gt; Patch baseline: 2.2.0 rc2<br>
+&gt; My situation is this:<br>
 &gt; <br>
-&gt; This patch handles only lttng-tools.<br>
+&gt; lttng-sessiond --no-kernel<br>
+&gt; lttng-create foo<br>
+&gt; lttng enable-channel channel0 -u --tracefile-size 67108864 --tracefile-count
+13<br>
+&gt; --buffers-uid --switch-timer 1000000 --num-subbuf 32<br>
+&gt; lttng enable-event -u -a<br>
+&gt; lttng start foo<br>
 &gt; <br>
-&gt; I can provide the same patches against git, if asked.<br>
+&gt; Now this runs for a while collecting traces. I've run du -s on the
+trace<br>
+&gt; directory, and saw that lttng-traces/ takes 2376KB.<br>
 &gt; <br>
-&gt; diff -ur lttng-tools-2.2.0-rc2-orig/src/bin/lttng/conf.c<br>
-&gt; lttng-tools-2.2.0-rc2/src/bin/lttng/conf.c<br>
-&gt; --- lttng-tools-2.2.0-rc2-orig/src/bin/lttng/conf.c &nbsp; &nbsp;
-&nbsp; &nbsp;2013-05-06<br>
-&gt; 21:50:59.000000000 +0300<br>
-&gt; +++ lttng-tools-2.2.0-rc2/src/bin/lttng/conf.c &nbsp; &nbsp; &nbsp;
-&nbsp;2013-06-11<br>
-&gt; 14:17:34.681673309 +0300<br>
-&gt; @@ -127,6 +127,11 @@<br>
-&gt; &nbsp; */<br>
-&gt; &nbsp;char *config_get_default_path(void)<br>
-&gt; &nbsp;{<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp;char *val = NULL;<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp;val = getenv(&quot;LTTNG_HOME&quot;);<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp;if (val != NULL) {<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;return val;<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp;}<br>
-&gt; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;return getenv(&quot;HOME&quot;);<br>
-&gt; &nbsp;}<br>
-&gt; &nbsp;<br>
-&gt; diff -ur lttng-tools-2.2.0-rc2-orig/src/bin/lttng-relayd/utils.c<br>
-&gt; lttng-tools-2.2.0-rc2/src/bin/lttng-relayd/utils.c<br>
-&gt; --- lttng-tools-2.2.0-rc2-orig/src/bin/lttng-relayd/utils.c &nbsp;
-&nbsp; &nbsp; &nbsp;2013-05-06<br>
-&gt; 21:50:59.000000000 +0300<br>
-&gt; +++ lttng-tools-2.2.0-rc2/src/bin/lttng-relayd/utils.c &nbsp; &nbsp;
-&nbsp; &nbsp;2013-06-11<br>
-&gt; 14:15:52.553673444 +0300<br>
-&gt; @@ -34,7 +34,11 @@<br>
-&gt; &nbsp; */<br>
-&gt; &nbsp;static char *get_default_path(void)<br>
-&gt; &nbsp;{<br>
-&gt; - &nbsp; &nbsp; &nbsp; &nbsp;return getenv(&quot;HOME&quot;);<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp;char *val = NULL;<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp;val = getenv(&quot;LTTNG_HOME&quot;);<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp;if (val != NULL) {<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;return val;<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp;}<br>
-&gt; &nbsp;}<br>
-&gt; &nbsp;<br>
-&gt; &nbsp;static char *create_output_path_auto(char *path_name)<br>
-&gt; diff -ur lttng-tools-2.2.0-rc2-orig/src/bin/lttng-sessiond/utils.c<br>
-&gt; lttng-tools-2.2.0-rc2/src/bin/lttng-sessiond/utils.c<br>
-&gt; --- lttng-tools-2.2.0-rc2-orig/src/bin/lttng-sessiond/utils.c &nbsp;
-&nbsp; &nbsp; &nbsp;2013-01-07<br>
-&gt; 22:05:16.000000000 +0200<br>
-&gt; +++ lttng-tools-2.2.0-rc2/src/bin/lttng-sessiond/utils.c &nbsp; &nbsp;
-&nbsp; &nbsp;2013-06-11<br>
-&gt; 14:16:16.697673412 +0300<br>
-&gt; @@ -53,5 +53,10 @@<br>
-&gt; &nbsp; */<br>
-&gt; &nbsp;const char *get_home_dir(void)<br>
-&gt; &nbsp;{<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp;const char *val = NULL;<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp;val = ((const char *) getenv(&quot;LTTNG_HOME&quot;));<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp;if (val != NULL) {<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;return val;<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp;}<br>
-&gt; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;return ((const char *) getenv(&quot;HOME&quot;));<br>
-&gt; &nbsp;}<br>
-&gt; diff -ur lttng-tools-2.2.0-rc2-orig/src/lib/lttng-ctl/lttng-ctl.c<br>
-&gt; lttng-tools-2.2.0-rc2/src/lib/lttng-ctl/lttng-ctl.c<br>
-&gt; --- lttng-tools-2.2.0-rc2-orig/src/lib/lttng-ctl/lttng-ctl.c &nbsp;
-&nbsp; &nbsp; &nbsp;2013-05-07<br>
-&gt; 22:42:07.000000000 +0300<br>
-&gt; +++ lttng-tools-2.2.0-rc2/src/lib/lttng-ctl/lttng-ctl.c &nbsp; &nbsp;
-&nbsp; &nbsp;2013-06-11<br>
-&gt; 14:19:15.177673176 +0300<br>
-&gt; @@ -74,6 +74,22 @@<br>
-&gt; &nbsp;int lttng_opt_verbose;<br>
-&gt; &nbsp;<br>
-&gt; &nbsp;/*<br>
-&gt; + * Get the value of LTTNG_HOME if present, or HOME if not.<br>
-&gt; + * Caller must not free the returned pointer.<br>
-&gt; + * Used<br>
-&gt; + */<br>
-&gt; +static const char *get_lttng_home_dir(void)<br>
-&gt; +{<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp;const char *val = NULL;<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp;val = ((const char *) getenv(&quot;LTTNG_HOME&quot;));<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp;if (val != NULL) {<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;return val;<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp;}<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp;return ((const char *) getenv(&quot;HOME&quot;));<br>
-&gt; +}<br>
-&gt; +<br>
-&gt; +<br>
-&gt; +/*<br>
-&gt; &nbsp; * Compare two URL destination.<br>
-&gt; &nbsp; *<br>
-&gt; &nbsp; * Return 0 is equal else is not equal.<br>
-&gt; @@ -485,7 +501,7 @@<br>
-&gt; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; * With
-GNU C &gt;= 2.1, snprintf returns the required size<br>
-&gt; (excluding closing null)<br>
-&gt; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; */<br>
-&gt; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;ret
-= snprintf(sessiond_sock_path, sizeof(sessiond_sock_path),<br>
-&gt; - &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;DEFAULT_HOME_CLIENT_UNIX_SOCK,
-getenv(&quot;HOME&quot;));<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;DEFAULT_HOME_CLIENT_UNIX_SOCK,<br>
-&gt; get_lttng_home_dir());<br>
-&gt; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;if ((ret
-&lt; 0) || (ret &gt;= sizeof(sessiond_sock_path))) {<br>
-&gt; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-&nbsp; &nbsp; &nbsp;goto error;<br>
-&gt; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;}<br>
-&gt; @@ -1543,7 +1559,7 @@<br>
-&gt; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; * With
-GNU C &lt; &nbsp;2.1, snprintf returns -1 if the target buffer<br>
-&gt; is too small;<br>
-&gt; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; * With
-GNU C &gt;= 2.1, snprintf returns the required size<br>
-&gt; (excluding closing null)<br>
-&gt; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; */<br>
-&gt; - &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;home = getenv(&quot;HOME&quot;);<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;home = get_lttng_home_dir();<br>
-&gt; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;if (home
-== NULL) {<br>
-&gt; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-&nbsp; &nbsp; &nbsp;/* Fallback in /tmp .. */<br>
-&gt; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-&nbsp; &nbsp; &nbsp;home = &quot;/tmp&quot;;<br>
+&gt; The system was reboot, and upon startup, the exact same scenario as
+above is<br>
+&gt; reproduced.<br>
+&gt; <br>
+&gt; When I ran du to see the size of the lttng-traces/ directory, it was
+1740KB.<br>
+&gt; <br>
+&gt; Can you please help explain this? Is LTTng overwriting the existing
+trace files?<br>
 &gt; <br>
 &gt; Thanks,<br>
 &gt; <br>
@@ -434,11 +235,11 @@ GNU C &gt;= 2.1, snprintf returns the required size<br>
 <br>
 </font></tt>
 <br>
---=_alternative 00695537C2257B88_=--
+--=_alternative 00699518C2257B88_=--
 
 
 
---===============1237244065==
+--===============1432834638==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -449,4 +250,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============1237244065==--
+--===============1432834638==--
