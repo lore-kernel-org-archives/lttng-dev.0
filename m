@@ -1,38 +1,18 @@
-From: Amit Margalit <AMITM@il.ibm.com>
-Subject: Will LTTng overwrite existing trace files after reboot,
- or continue where the previous instance left off?
-Date: Wed, 12 Jun 2013 17:34:11 +0300
-Message-ID: <OFBF5287EA.D7EE217E-ONC2257B88.004F3A88-C2257B88.004FF39E__29164.9424740628$1371047712$gmane$org@il.ibm.com>
+From: David Goulet <dgoulet@efficios.com>
+Subject: Re: [RFC PATCH lttng-tools] Allow environment variable
+ LTTNG_HOME to override HOME - for lttng-tools
+Date: Wed, 12 Jun 2013 10:46:14 -0400
+Message-ID: <51B889B6.6020200__8340.92132649875$1371048418$gmane$org@efficios.com>
+References: <OF6896CCA9.D04FC8AB-ONC2257B87.00424736-C2257B87.00427FF3@il.ibm.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0182044643=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from e06smtp11.uk.ibm.com ([195.75.94.107])
+Received: from smtp.ini-tech.com ([5.9.158.244])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <amitm@il.ibm.com>) id 1Umm86-0000ka-Qi
-	for lttng-dev@lists.lttng.org; Wed, 12 Jun 2013 10:34:31 -0400
-Received: from /spool/local
-	by e06smtp11.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use
-	Only! Violators will be prosecuted
-	for <lttng-dev@lists.lttng.org> from <amitm@il.ibm.com>;
-	Wed, 12 Jun 2013 15:29:27 +0100
-Received: from b06cxnps3074.portsmouth.uk.ibm.com
-	(d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-	by d06dlp02.portsmouth.uk.ibm.com (Postfix) with ESMTP id 359312190019
-	for <lttng-dev@lists.lttng.org>; Wed, 12 Jun 2013 15:37:43 +0100 (BST)
-Received: from d06av04.portsmouth.uk.ibm.com (d06av04.portsmouth.uk.ibm.com
-	[9.149.37.216])
-	by b06cxnps3074.portsmouth.uk.ibm.com (8.13.8/8.13.8/NCO v10.0) with
-	ESMTP id r5CEYBuK52232234
-	for <lttng-dev@lists.lttng.org>; Wed, 12 Jun 2013 14:34:11 GMT
-Received: from d06av04.portsmouth.uk.ibm.com (localhost [127.0.0.1])
-	by d06av04.portsmouth.uk.ibm.com (8.14.4/8.14.4/NCO v10.0 AVout) with
-	ESMTP id r5CEYLoN010195
-	for <lttng-dev@lists.lttng.org>; Wed, 12 Jun 2013 08:34:22 -0600
-Received: from d06ml311.portsmouth.uk.ibm.com (d06ml311.portsmouth.uk.ibm.com
-	[9.149.104.181])
-	by d06av04.portsmouth.uk.ibm.com (8.14.4/8.14.4/NCO v10.0 AVin) with
-	ESMTP id r5CEYL6F010189
-	for <lttng-dev@lists.lttng.org>; Wed, 12 Jun 2013 08:34:21 -0600
+	(envelope-from <dgoulet@efficios.com>) id 1UmmJb-0000rM-JT
+	for lttng-dev@lists.lttng.org; Wed, 12 Jun 2013 10:46:23 -0400
+In-Reply-To: <OF6896CCA9.D04FC8AB-ONC2257B87.00424736-C2257B87.00427FF3@il.ibm.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -41,96 +21,150 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Amit Margalit <AMITM@il.ibm.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-This is a multipart message in MIME format.
---===============0182044643==
-Content-Type: multipart/alternative; boundary="=_alternative 004FF353C2257B88_="
+This looks good! It appears that there are multiple callsites doing the same
+thing... We might want to just put it in src/common/utils.c with something like
+utils_get_home_dir() and use it from there.
 
-This is a multipart message in MIME format.
---=_alternative 004FF353C2257B88_=
-Content-Type: text/plain; charset="US-ASCII"
+Also, adding "LTTNG_HOME" in defaults.h as a defined value for the env. variable
+name. Finally, updating the man page would be also great. :)
 
-Hi,
+Once you are ready to submit the patch, it would be good to use "git
+format-patch" or send me a pull request based on git HEAD master.
 
-My situation is this:
+Big thanks for this contribution!
+David
 
-lttng-sessiond --no-kernel
-lttng-create foo
-lttng enable-channel channel0 -u --tracefile-size 67108864 
---tracefile-count 13 --buffers-uid --switch-timer 1000000 --num-subbuf 32
-lttng enable-event -u -a
-lttng start foo
-
-Now this runs for a while collecting traces. I've run du -s on the trace 
-directory, and saw that lttng-traces/ takes 2376KB.
-
-The system was reboot, and upon startup, the exact same scenario as above 
-is reproduced.
-
-When I ran du to see the size of the lttng-traces/ directory, it was 
-1740KB.
-
-Can you please help explain this? Is LTTng overwriting the existing trace 
-files?
-
-Thanks,
-
-Amit Margalit
-IBM XIV - Storage Reinvented
-XIV-NAS Development Team
-Tel. 03-689-7774
-Fax. 03-689-7230
---=_alternative 004FF353C2257B88_=
-Content-Type: text/html; charset="US-ASCII"
-
-<font size=2 face="sans-serif">Hi,</font>
-<br>
-<br><font size=2 face="sans-serif">My situation is this:</font>
-<br>
-<br><font size=2 face="sans-serif">lttng-sessiond --no-kernel</font>
-<br><font size=2 face="sans-serif">lttng-create foo</font>
-<br><font size=2 face="sans-serif">lttng enable-channel channel0 -u --tracefile-size
-67108864 --tracefile-count 13 --buffers-uid --switch-timer 1000000 --num-subbuf
-32</font>
-<br><font size=2 face="sans-serif">lttng enable-event -u -a</font>
-<br><font size=2 face="sans-serif">lttng start foo</font>
-<br>
-<br><font size=2 face="sans-serif">Now this runs for a while collecting
-traces. I've run du -s on the trace directory, and saw that lttng-traces/
-takes 2376KB.</font>
-<br>
-<br><font size=2 face="sans-serif">The system was reboot, and upon startup,
-the exact same scenario as above is reproduced.</font>
-<br>
-<br><font size=2 face="sans-serif">When I ran du to see the size of the
-lttng-traces/ directory, it was 1740KB.</font>
-<br>
-<br><font size=2 face="sans-serif">Can you please help explain this? Is
-LTTng overwriting the existing trace files?</font>
-<br>
-<br><font size=2 face="sans-serif">Thanks,</font>
-<br>
-<br><font size=2 color=#000080 face="sans-serif">Amit Margalit</font>
-<br><font size=2 color=#808000 face="sans-serif">IBM XIV </font><font size=2 face="sans-serif">-
-<i>Storage Reinvented</i></font>
-<br><font size=2 face="sans-serif">XIV-NAS Development Team</font>
-<br><font size=2 face="sans-serif">Tel. 03</font><font size=2 face="Arial">-689-7774</font>
-<br><font size=2 face="Arial">Fax. 03-689-7230</font>
---=_alternative 004FF353C2257B88_=--
-
-
-
---===============0182044643==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0182044643==--
+Amit Margalit:
+> Hello all,
+> 
+> Patch functionality - If LTTNG_HOME environment variable exists, it is used
+> instead of HOME.
+> Reason for patch - We are trying to deploy LTTng on a system where $HOME is on a
+> filesystem mounted read-only, but cannot afford to run lttng as a different user
+> and cannot move the home directories of users to writeable locations.
+> Patch baseline: 2.2.0 rc2
+> 
+> This patch handles only lttng-tools.
+> 
+> I can provide the same patches against git, if asked.
+> 
+> diff -ur lttng-tools-2.2.0-rc2-orig/src/bin/lttng/conf.c
+> lttng-tools-2.2.0-rc2/src/bin/lttng/conf.c
+> --- lttng-tools-2.2.0-rc2-orig/src/bin/lttng/conf.c        2013-05-06
+> 21:50:59.000000000 +0300
+> +++ lttng-tools-2.2.0-rc2/src/bin/lttng/conf.c        2013-06-11
+> 14:17:34.681673309 +0300
+> @@ -127,6 +127,11 @@
+>   */
+>  char *config_get_default_path(void)
+>  {
+> +        char *val = NULL;
+> +        val = getenv("LTTNG_HOME");
+> +        if (val != NULL) {
+> +                return val;
+> +        }
+>          return getenv("HOME");
+>  }
+>  
+> diff -ur lttng-tools-2.2.0-rc2-orig/src/bin/lttng-relayd/utils.c
+> lttng-tools-2.2.0-rc2/src/bin/lttng-relayd/utils.c
+> --- lttng-tools-2.2.0-rc2-orig/src/bin/lttng-relayd/utils.c        2013-05-06
+> 21:50:59.000000000 +0300
+> +++ lttng-tools-2.2.0-rc2/src/bin/lttng-relayd/utils.c        2013-06-11
+> 14:15:52.553673444 +0300
+> @@ -34,7 +34,11 @@
+>   */
+>  static char *get_default_path(void)
+>  {
+> -        return getenv("HOME");
+> +        char *val = NULL;
+> +        val = getenv("LTTNG_HOME");
+> +        if (val != NULL) {
+> +                return val;
+> +        }
+>  }
+>  
+>  static char *create_output_path_auto(char *path_name)
+> diff -ur lttng-tools-2.2.0-rc2-orig/src/bin/lttng-sessiond/utils.c
+> lttng-tools-2.2.0-rc2/src/bin/lttng-sessiond/utils.c
+> --- lttng-tools-2.2.0-rc2-orig/src/bin/lttng-sessiond/utils.c        2013-01-07
+> 22:05:16.000000000 +0200
+> +++ lttng-tools-2.2.0-rc2/src/bin/lttng-sessiond/utils.c        2013-06-11
+> 14:16:16.697673412 +0300
+> @@ -53,5 +53,10 @@
+>   */
+>  const char *get_home_dir(void)
+>  {
+> +        const char *val = NULL;
+> +        val = ((const char *) getenv("LTTNG_HOME"));
+> +        if (val != NULL) {
+> +                return val;
+> +        }
+>          return ((const char *) getenv("HOME"));
+>  }
+> diff -ur lttng-tools-2.2.0-rc2-orig/src/lib/lttng-ctl/lttng-ctl.c
+> lttng-tools-2.2.0-rc2/src/lib/lttng-ctl/lttng-ctl.c
+> --- lttng-tools-2.2.0-rc2-orig/src/lib/lttng-ctl/lttng-ctl.c        2013-05-07
+> 22:42:07.000000000 +0300
+> +++ lttng-tools-2.2.0-rc2/src/lib/lttng-ctl/lttng-ctl.c        2013-06-11
+> 14:19:15.177673176 +0300
+> @@ -74,6 +74,22 @@
+>  int lttng_opt_verbose;
+>  
+>  /*
+> + * Get the value of LTTNG_HOME if present, or HOME if not.
+> + * Caller must not free the returned pointer.
+> + * Used
+> + */
+> +static const char *get_lttng_home_dir(void)
+> +{
+> +        const char *val = NULL;
+> +        val = ((const char *) getenv("LTTNG_HOME"));
+> +        if (val != NULL) {
+> +                return val;
+> +        }
+> +        return ((const char *) getenv("HOME"));
+> +}
+> +
+> +
+> +/*
+>   * Compare two URL destination.
+>   *
+>   * Return 0 is equal else is not equal.
+> @@ -485,7 +501,7 @@
+>                   * With GNU C >= 2.1, snprintf returns the required size
+> (excluding closing null)
+>                   */
+>                  ret = snprintf(sessiond_sock_path, sizeof(sessiond_sock_path),
+> -                                DEFAULT_HOME_CLIENT_UNIX_SOCK, getenv("HOME"));
+> +                                DEFAULT_HOME_CLIENT_UNIX_SOCK,
+> get_lttng_home_dir());
+>                  if ((ret < 0) || (ret >= sizeof(sessiond_sock_path))) {
+>                          goto error;
+>                  }
+> @@ -1543,7 +1559,7 @@
+>                   * With GNU C <  2.1, snprintf returns -1 if the target buffer
+> is too small;
+>                   * With GNU C >= 2.1, snprintf returns the required size
+> (excluding closing null)
+>                   */
+> -                home = getenv("HOME");
+> +                home = get_lttng_home_dir();
+>                  if (home == NULL) {
+>                          /* Fallback in /tmp .. */
+>                          home = "/tmp";
+> 
+> Thanks,
+> 
+> Amit Margalit
+> IBM XIV - /Storage Reinvented/
+> XIV-NAS Development Team
+> Tel. 03-689-7774
+> Fax. 03-689-7230
+> 
+> 
+> This body part will be downloaded on demand.
