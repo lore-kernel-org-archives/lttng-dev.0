@@ -1,24 +1,18 @@
-From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: supporting new processor
-Date: Thu, 13 Jun 2013 14:41:37 -0400
-Message-ID: <CA+jJMxu4U=r8XRj_BhMY5sy1BUN4j2qbWsBU4AX=P-qyq03tzQ__29368.7507779852$1371148943$gmane$org@mail.gmail.com>
-References: <CANJoRMRRWiHAL=fcP717Dv9QmZVJBjpLjB0pBEioewtni8QkLw@mail.gmail.com>
-	<CA+jJMxuvWRgyhzu4=QUh0+TR=9Lp1BV7PcHJHuj-LOgPDFTDUQ@mail.gmail.com>
-	<CANJoRMS1y+rdpwkO+F2UVc72FL4WVbqrUVXH8iMBt344U3h71Q@mail.gmail.com>
-	<CA+jJMxshwZh-6ysyAfFG6oFqx3KTmyDqRdmkxoHYzf0G_hqmJA@mail.gmail.com>
-	<20130611152011.GA31018@Krystal>
-	<CANJoRMTGQ5N5GiGWinWqoDfgML1RXfVb1ZN_i-OpgQa-+29S_w@mail.gmail.com>
+From: Yannick Brosseau <yannick.brosseau@gmail.com>
+Subject: [BABELTRACE PATCH] Move some validation in
+	ctf_packet_seek in the SEEK_CUR section
+Date: Thu, 13 Jun 2013 16:21:41 -0400
+Message-ID: <1371154901-5779-1-git-send-email-yannick.brosseau__12995.6358731308$1371154961$gmane$org@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wi0-f174.google.com ([209.85.212.174])
+Received: from mail-ie0-f178.google.com ([209.85.223.178])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1UnCSt-000371-3B
-	for lttng-dev@lists.lttng.org; Thu, 13 Jun 2013 14:41:43 -0400
-Received: by mail-wi0-f174.google.com with SMTP id k10so1872978wiv.1
-	for <lttng-dev@lists.lttng.org>; Thu, 13 Jun 2013 11:41:37 -0700 (PDT)
-In-Reply-To: <CANJoRMTGQ5N5GiGWinWqoDfgML1RXfVb1ZN_i-OpgQa-+29S_w@mail.gmail.com>
+	(envelope-from <yannick.brosseau@gmail.com>) id 1UnE21-0003uW-VW
+	for lttng-dev@lists.lttng.org; Thu, 13 Jun 2013 16:22:06 -0400
+Received: by mail-ie0-f178.google.com with SMTP id u16so4917879iet.23
+	for <lttng-dev@lists.lttng.org>; Thu, 13 Jun 2013 13:22:00 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -27,145 +21,149 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Madhusudan Bhat <madhu.b77@gmail.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On Thu, Jun 13, 2013 at 6:55 AM, Madhusudan Bhat <madhu.b77@gmail.com> wrot=
-e:
-> I would like to know that, is there any stable release, which contains all
-> the required components.
->
-> Currently I am trying to build URCU on linux on x86 host. Basic bootstrap
-> itself fails, I feel TOS may not be the good one?
+The test that the current position is not already over the end of the trace apply only
+for the SEEK_CUR (seek next packet) section. A SEEK_SET can bring back the current position
+pointer to a valid position.
 
-I'm not sure I understand your question. If you mean a release
-containing all required dependencies then unfortunately, no.
-You can find a list of dependencies in each project's README file.
+Also add a unit test to validate the seeking at the last event of the trace.
 
-However, you will also need libtool, automake and autoconf to use the
-current build system.
+Fixes #551
 
->
-> thanks,
-> Madhu.
->
->
-> On Tue, Jun 11, 2013 at 8:50 PM, Mathieu Desnoyers
-> <mathieu.desnoyers@efficios.com> wrote:
->>
->> I just added MIPS to the urcu README file in master.
->>
->> Thanks,
->>
->> Mathieu
->>
->> * J=E9r=E9mie Galarneau (jeremie.galarneau@efficios.com) wrote:
->> > MIPS support was added as part of the Userspace RCU 0.7.4 release.
->> > Can't say I have tried it myself though.
->> >
->> > Regards,
->> > J=E9r=E9mie
->> >
->> > On Tue, Jun 11, 2013 at 6:42 AM, Madhusudan Bhat <madhu.b77@gmail.com>
->> > wrote:
->> > > Hi J=E9r=E9mie,
->> > >
->> > > Thanks for the response. You have mentioned that MIPS is supported.
->> > > However
->> > > README under U-RCU doesn't list the MIPS under the supported
->> > > architecture.
->> > > Is it possible to confirm again?
->> > >
->> > > Is there any order in which I need to build the different components
->> > > like
->> > > URCU, lttng-tools, kernel module and UST?
->> > > thanks,
->> > > Madhu.
->> > >
->> > >
->> > > On Mon, Apr 22, 2013 at 7:47 PM, J=E9r=E9mie Galarneau
->> > > <jeremie.galarneau@efficios.com> wrote:
->> > >>
->> > >> Hi,
->> > >>
->> > >> Generally speaking, URCU is the most architecture-specific library =
-of
->> > >> the project and it does support MIPS. Once it is compiled and
->> > >> installed, you should be able to build lttng-ust, lttng-tools and t=
-he
->> > >> kernel modules.
->> > >>
->> > >> I'd recommend running each project's test suite since I don't think
->> > >> that architecture has been thoroughly tested. Let us know if you
->> > >> encounter any problem on your particular architecture.
->> > >>
->> > >> Regards,
->> > >> J=E9r=E9mie
->> > >>
->> > >> On Mon, Apr 22, 2013 at 1:30 AM, Madhusudan Bhat
->> > >> <madhu.b77@gmail.com>
->> > >> wrote:
->> > >> > Hi All,
->> > >> >
->> > >> > I need to support lttng tools, I have new MIPS based multi core
->> > >> > processor on
->> > >> > which 3.7 linux kernel boots up.
->> > >> >
->> > >> > To support lttng tools, does it require any drivers/kernel hook u=
-ps
->> > >> > to
->> > >> > new
->> > >> > processor? Or is it independent of processor architecture?
->> > >> >
->> > >> > For ex, to support Oprofile tools, we need to provide oprofile
->> > >> > driver
->> > >> > which
->> > >> > is specific to particular processor. In similar ways,any thing is
->> > >> > required
->> > >> > to support lttng tools?
->> > >> >
->> > >> > thanks,
->> > >> > Madhu.
->> > >> >
->> > >> > _______________________________________________
->> > >> > lttng-dev mailing list
->> > >> > lttng-dev@lists.lttng.org
->> > >> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->> > >> >
->> > >>
->> > >>
->> > >>
->> > >> --
->> > >> J=E9r=E9mie Galarneau
->> > >> EfficiOS Inc.
->> > >> http://www.efficios.com
->> > >
->> > >
->> >
->> >
->> >
->> > --
->> > J=E9r=E9mie Galarneau
->> > EfficiOS Inc.
->> > http://www.efficios.com
->> >
->> > _______________________________________________
->> > lttng-dev mailing list
->> > lttng-dev@lists.lttng.org
->> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->>
->> --
->> Mathieu Desnoyers
->> EfficiOS Inc.
->> http://www.efficios.com
->
->
+Signed-off-by: Yannick Brosseau <yannick.brosseau@gmail.com>
+---
+ formats/ctf/ctf.c      |   17 +++++++--------
+ tests/lib/test-seeks.c |   55 +++++++++++++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 62 insertions(+), 10 deletions(-)
 
-
-
--- =
-
-J=E9r=E9mie Galarneau
-EfficiOS Inc.
-http://www.efficios.com
+diff --git a/formats/ctf/ctf.c b/formats/ctf/ctf.c
+index bb94e52..ed3defd 100644
+--- a/formats/ctf/ctf.c
++++ b/formats/ctf/ctf.c
+@@ -670,7 +670,7 @@ int ctf_fini_pos(struct ctf_stream_pos *pos)
+ 
+ /*
+  * for SEEK_CUR: go to next packet.
+- * for SEEK_POS: go to packet numer (index).
++ * for SEEK_SET: go to packet numer (index).
+  */
+ void ctf_packet_seek(struct bt_stream_pos *stream_pos, size_t index, int whence)
+ {
+@@ -682,6 +682,7 @@ void ctf_packet_seek(struct bt_stream_pos *stream_pos, size_t index, int whence)
+ 	off_t off;
+ 	struct packet_index *packet_index;
+ 
++	/* Test precondition (whence valid values) */
+ 	switch (whence) {
+ 	case SEEK_CUR:
+ 	case SEEK_SET:	/* Fall-through */
+@@ -729,19 +730,17 @@ void ctf_packet_seek(struct bt_stream_pos *stream_pos, size_t index, int whence)
+ 		pos->offset = 0;
+ 	} else {
+ 	read_next_packet:
+-		if (pos->cur_index >= pos->packet_cycles_index->len) {
+-			pos->offset = EOF;
+-			return;
+-		}
+-		if (pos->cur_index >= pos->packet_real_index->len) {
+-			pos->offset = EOF;
+-			return;
+-		}
+ 		switch (whence) {
+ 		case SEEK_CUR:
+ 		{
+ 			uint64_t events_discarded_diff;
+ 
++			if (pos->cur_index >= pos->packet_cycles_index->len) {
++				pos->offset = EOF;
++			}
++			if (pos->cur_index >= pos->packet_real_index->len) {
++				pos->offset = EOF;
++			}
+ 			if (pos->offset == EOF) {
+ 				return;
+ 			}
+diff --git a/tests/lib/test-seeks.c b/tests/lib/test-seeks.c
+index 47bb42e..a7b1360 100644
+--- a/tests/lib/test-seeks.c
++++ b/tests/lib/test-seeks.c
+@@ -32,7 +32,7 @@
+ #include "common.h"
+ #include "tap.h"
+ 
+-#define NR_TESTS	23
++#define NR_TESTS	29
+ 
+ void run_seek_begin(char *path, uint64_t expected_begin)
+ {
+@@ -134,6 +134,58 @@ void run_seek_last(char *path, uint64_t expected_last)
+ 	bt_context_put(ctx);
+ }
+ 
++void run_seek_time_at_last(char *path, uint64_t expected_last)
++{
++	struct bt_context *ctx;
++	struct bt_ctf_iter *iter;
++	struct bt_ctf_event *event;
++	struct bt_iter_pos newpos;
++	int ret;
++	uint64_t timestamp_last;
++
++	/* Open the trace */
++	ctx = create_context_with_path(path);
++	if (!ctx) {
++		plan_skip_all("Cannot create valid context");
++	}
++
++	/* Create iterator with null last and end */
++	iter = bt_ctf_iter_create(ctx, NULL, NULL);
++	if (!iter) {
++		plan_skip_all("Cannot create valid iterator");
++	}
++
++	event = bt_ctf_iter_read_event(iter);
++
++	ok(event, "Event valid at beginning");
++
++	/* Seek to last */
++	newpos.type = BT_SEEK_TIME;
++	newpos.u.seek_time = expected_last;
++	ret = bt_iter_set_pos(bt_ctf_get_iter(iter), &newpos);
++
++	ok(ret == 0, "Seek time at last retval %d", ret);
++
++	event = bt_ctf_iter_read_event(iter);
++
++	ok(event, "Event valid at last position");
++
++	timestamp_last = bt_ctf_get_timestamp(event);
++
++	ok1(timestamp_last == expected_last);
++
++	/* Try to read next event */
++	ret = bt_iter_next(bt_ctf_get_iter(iter));
++
++	ok(ret == 0, "iter next should return an error");
++
++	event = bt_ctf_iter_read_event(iter);
++
++	ok(event == 0, "Event after last should be invalid");
++
++	bt_context_put(ctx);
++}
++
+ void run_seek_cycles(char *path,
+ 		uint64_t expected_begin,
+ 		uint64_t expected_last)
+@@ -242,6 +294,7 @@ int main(int argc, char **argv)
+ 	}
+ 
+ 	run_seek_begin(path, expected_begin);
++	run_seek_time_at_last(path, expected_last);
+ 	run_seek_last(path, expected_last);
+ 	run_seek_cycles(path, expected_begin, expected_last);
+ 
+-- 
+1.7.10.4
