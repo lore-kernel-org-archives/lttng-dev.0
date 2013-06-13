@@ -1,41 +1,41 @@
 From: Amit Margalit <AMITM@il.ibm.com>
 Subject: Re: [RFC PATCH lttng-tools] Allow environment variable
- LTTNG_HOME to override HOME - for lttng-tools
-Date: Thu, 13 Jun 2013 12:39:19 +0300
-Message-ID: <OFDDF6769F.EB68519B-ONC2257B89.0034BB76-C2257B89.0034F473__33485.5240457275$1371116429$gmane$org@il.ibm.com>
-References: <OF6896CCA9.D04FC8AB-ONC2257B87.00424736-C2257B87.00427FF3@il.ibm.com>
-	<51B889B6.6020200@efficios.com>
+ LTTNG_HOME to override HOME - for lttng-tools - UPDATED PATCH
+Date: Thu, 13 Jun 2013 15:15:39 +0300
+Message-ID: <OF0D9D1EAD.C7331410-ONC2257B89.00430C64-C2257B89.00434492__4761.71399136565$1371125856$gmane$org@il.ibm.com>
+References: <OF6896CCA9.D04FC8AB-ONC2257B87.00424736-C2257B87.00427FF3@il.ibm.com>	<51B889B6.6020200@efficios.com>
+	<OFDDF6769F.EB68519B-ONC2257B89.0034BB76-C2257B89.0034F473@il.ibm.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0183193147=="
+Content-Type: multipart/mixed; boundary="===============2088667516=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from e06smtp17.uk.ibm.com ([195.75.94.113])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <amitm@il.ibm.com>) id 1Un40O-0006vG-7c
-	for lttng-dev@lists.lttng.org; Thu, 13 Jun 2013 05:39:44 -0400
+	(envelope-from <amitm@il.ibm.com>) id 1Un6SU-0008P3-F2
+	for lttng-dev@lists.lttng.org; Thu, 13 Jun 2013 08:16:54 -0400
 Received: from /spool/local
 	by e06smtp17.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use
 	Only! Violators will be prosecuted
 	for <lttng-dev@lists.lttng.org> from <amitm@il.ibm.com>;
-	Thu, 13 Jun 2013 10:35:57 +0100
-Received: from b06cxnps4076.portsmouth.uk.ibm.com
-	(d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-	by d06dlp01.portsmouth.uk.ibm.com (Postfix) with ESMTP id B399C17D805D
-	for <lttng-dev@lists.lttng.org>; Thu, 13 Jun 2013 10:40:51 +0100 (BST)
-Received: from d06av12.portsmouth.uk.ibm.com (d06av12.portsmouth.uk.ibm.com
-	[9.149.37.247])
-	by b06cxnps4076.portsmouth.uk.ibm.com (8.13.8/8.13.8/NCO v10.0) with
-	ESMTP id r5D9dJEr36896880
-	for <lttng-dev@lists.lttng.org>; Thu, 13 Jun 2013 09:39:19 GMT
-Received: from d06av12.portsmouth.uk.ibm.com (localhost [127.0.0.1])
-	by d06av12.portsmouth.uk.ibm.com (8.14.4/8.14.4/NCO v10.0 AVout) with
-	ESMTP id r5D9dTuv020601
-	for <lttng-dev@lists.lttng.org>; Thu, 13 Jun 2013 03:39:29 -0600
+	Thu, 13 Jun 2013 13:13:07 +0100
+Received: from b06cxnps4075.portsmouth.uk.ibm.com
+	(d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+	by d06dlp01.portsmouth.uk.ibm.com (Postfix) with ESMTP id 2BA7917D805D
+	for <lttng-dev@lists.lttng.org>; Thu, 13 Jun 2013 13:18:08 +0100 (BST)
+Received: from d06av08.portsmouth.uk.ibm.com (d06av08.portsmouth.uk.ibm.com
+	[9.149.37.249])
+	by b06cxnps4075.portsmouth.uk.ibm.com (8.13.8/8.13.8/NCO v10.0) with
+	ESMTP id r5DCGZpm42926282
+	for <lttng-dev@lists.lttng.org>; Thu, 13 Jun 2013 12:16:35 GMT
+Received: from d06av08.portsmouth.uk.ibm.com (localhost [127.0.0.1])
+	by d06av08.portsmouth.uk.ibm.com (8.14.4/8.14.4/NCO v10.0 AVout) with
+	ESMTP id r5DCGUaw032143
+	for <lttng-dev@lists.lttng.org>; Thu, 13 Jun 2013 06:16:45 -0600
 Received: from d06ml311.portsmouth.uk.ibm.com (d06ml311.portsmouth.uk.ibm.com
 	[9.149.104.181])
-	by d06av12.portsmouth.uk.ibm.com (8.14.4/8.14.4/NCO v10.0 AVin) with
-	ESMTP id r5D9dTGH020595
-	for <lttng-dev@lists.lttng.org>; Thu, 13 Jun 2013 03:39:29 -0600
-In-Reply-To: <51B889B6.6020200@efficios.com>
+	by d06av08.portsmouth.uk.ibm.com (8.14.4/8.14.4/NCO v10.0 AVin) with
+	ESMTP id r5DCFnfl029053
+	for <lttng-dev@lists.lttng.org>; Thu, 13 Jun 2013 06:15:49 -0600
+In-Reply-To: <OFDDF6769F.EB68519B-ONC2257B89.0034BB76-C2257B89.0034F473@il.ibm.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -44,31 +44,30 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: David Goulet <dgoulet@efficios.com>
+To: Amit Margalit <AMITM@il.ibm.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
 This is a multipart message in MIME format.
---===============0183193147==
-Content-Type: multipart/alternative; boundary="=_alternative 0034F40BC2257B89_="
+--===============2088667516==
+Content-Type: multipart/alternative; boundary="=_alternative 0043446DC2257B89_="
 
 This is a multipart message in MIME format.
---=_alternative 0034F40BC2257B89_=
+--=_alternative 0043446DC2257B89_=
 Content-Type: text/plain; charset="US-ASCII"
 
-I think I've done all that you suggested, for lttng-tools only, though, 
-based on cfa9a5a2b4a96e0d6a9eeddd2622a6d7c173b7ac which is the latest 
-master as of right now.
+Hi,
 
-Here is the patch:
+I've added a paragraph to the man page. Here is the new patch:
 
-From 5881718a60608d640ac1124c9c1f439a2a084707 Mon Sep 17 00:00:00 2001
+From a72bd9dd6a58ac727280f2f9a85ee80607f1aba9 Mon Sep 17 00:00:00 2001
 From: Amit Margalit <amitm@il.ibm.com>
 Date: Thu, 13 Jun 2013 12:35:13 +0300
 Subject: [PATCH] Using LTTNG_HOME environment variable if exists, with
  fallback to HOME
 
 ---
+ doc/man/lttng.1                 |  4 ++++
  src/bin/lttng-relayd/utils.c    | 10 +---------
  src/bin/lttng-sessiond/main.c   |  2 +-
  src/bin/lttng-sessiond/utils.c  | 10 ----------
@@ -80,8 +79,26 @@ Subject: [PATCH] Using LTTNG_HOME environment variable if exists, with
  src/common/utils.c              | 15 +++++++++++++++
  src/common/utils.h              |  1 +
  src/lib/lttng-ctl/lttng-ctl.c   |  5 +++--
- 11 files changed, 29 insertions(+), 35 deletions(-)
+ 12 files changed, 33 insertions(+), 35 deletions(-)
 
+diff --git a/doc/man/lttng.1 b/doc/man/lttng.1
+index f472d38..26fd44a 100644
+--- a/doc/man/lttng.1
++++ b/doc/man/lttng.1
+@@ -214,6 +214,10 @@ automatically created having this form: 
+'auto-yyyymmdd-hhmmss'.
+ 
+ If no \fB\-o, \-\-output\fP is specified, the traces will be written in
+ $HOME/lttng-traces.
++
++The $HOME environment variable can be overridden by defining the 
+environment
++variable LTTNG_HOME. This is useful when the user running the commands 
+has
++a non-writeable home directory.
+ .fi
+ 
+ .B OPTIONS:
 diff --git a/src/bin/lttng-relayd/utils.c b/src/bin/lttng-relayd/utils.c
 index ad13d32..392fab6 100644
 --- a/src/bin/lttng-relayd/utils.c
@@ -345,182 +362,43 @@ Fax. 03-689-7230
 
 
 
-From:   David Goulet <dgoulet@efficios.com>
-To:     Amit Margalit/Israel/IBM@IBMIL
+From:   Amit Margalit/Israel/IBM@IBMIL
+To:     David Goulet <dgoulet@efficios.com>
 Cc:     lttng-dev@lists.lttng.org
-Date:   06/12/2013 05:46 PM
+Date:   06/13/2013 12:39 PM
 Subject:        Re: [lttng-dev] [RFC PATCH lttng-tools] Allow environment 
 variable LTTNG_HOME to override HOME - for lttng-tools
 
 
 
-This looks good! It appears that there are multiple callsites doing the 
-same
-thing... We might want to just put it in src/common/utils.c with something 
-like
-utils_get_home_dir() and use it from there.
+I think I've done all that you suggested, for lttng-tools only, though, 
+based on cfa9a5a2b4a96e0d6a9eeddd2622a6d7c173b7ac which is the latest 
+master as of right now. 
 
-Also, adding "LTTNG_HOME" in defaults.h as a defined value for the env. 
-variable
-name. Finally, updating the man page would be also great. :)
+Here is the patch: 
+From 5881718a60608d640ac1124c9c1f439a2a084707 Mon Sep 17 00:00:00 2001
+From: Amit Margalit <amitm@il.ibm.com>
+Date: Thu, 13 Jun 2013 12:35:13 +0300
+Subject: [PATCH] Using LTTNG_HOME environment variable if exists, with
+fallback to HOME 
 
-Once you are ready to submit the patch, it would be good to use "git
-format-patch" or send me a pull request based on git HEAD master.
-
-Big thanks for this contribution!
-David
-
-Amit Margalit:
-> Hello all,
-> 
-> Patch functionality - If LTTNG_HOME environment variable exists, it is 
-used
-> instead of HOME.
-> Reason for patch - We are trying to deploy LTTng on a system where $HOME 
-is on a
-> filesystem mounted read-only, but cannot afford to run lttng as a 
-different user
-> and cannot move the home directories of users to writeable locations.
-> Patch baseline: 2.2.0 rc2
-> 
-> This patch handles only lttng-tools.
-> 
-> I can provide the same patches against git, if asked.
-> 
-> diff -ur lttng-tools-2.2.0-rc2-orig/src/bin/lttng/conf.c
-> lttng-tools-2.2.0-rc2/src/bin/lttng/conf.c
-> --- lttng-tools-2.2.0-rc2-orig/src/bin/lttng/conf.c        2013-05-06
-> 21:50:59.000000000 +0300
-> +++ lttng-tools-2.2.0-rc2/src/bin/lttng/conf.c        2013-06-11
-> 14:17:34.681673309 +0300
-> @@ -127,6 +127,11 @@
->   */
->  char *config_get_default_path(void)
->  {
-> +        char *val = NULL;
-> +        val = getenv("LTTNG_HOME");
-> +        if (val != NULL) {
-> +                return val;
-> +        }
->          return getenv("HOME");
->  }
-> 
-> diff -ur lttng-tools-2.2.0-rc2-orig/src/bin/lttng-relayd/utils.c
-> lttng-tools-2.2.0-rc2/src/bin/lttng-relayd/utils.c
-> --- lttng-tools-2.2.0-rc2-orig/src/bin/lttng-relayd/utils.c 2013-05-06
-> 21:50:59.000000000 +0300
-> +++ lttng-tools-2.2.0-rc2/src/bin/lttng-relayd/utils.c        2013-06-11
-> 14:15:52.553673444 +0300
-> @@ -34,7 +34,11 @@
->   */
->  static char *get_default_path(void)
->  {
-> -        return getenv("HOME");
-> +        char *val = NULL;
-> +        val = getenv("LTTNG_HOME");
-> +        if (val != NULL) {
-> +                return val;
-> +        }
->  }
-> 
->  static char *create_output_path_auto(char *path_name)
-> diff -ur lttng-tools-2.2.0-rc2-orig/src/bin/lttng-sessiond/utils.c
-> lttng-tools-2.2.0-rc2/src/bin/lttng-sessiond/utils.c
-> --- lttng-tools-2.2.0-rc2-orig/src/bin/lttng-sessiond/utils.c 2013-01-07
-> 22:05:16.000000000 +0200
-> +++ lttng-tools-2.2.0-rc2/src/bin/lttng-sessiond/utils.c 2013-06-11
-> 14:16:16.697673412 +0300
-> @@ -53,5 +53,10 @@
->   */
->  const char *get_home_dir(void)
->  {
-> +        const char *val = NULL;
-> +        val = ((const char *) getenv("LTTNG_HOME"));
-> +        if (val != NULL) {
-> +                return val;
-> +        }
->          return ((const char *) getenv("HOME"));
->  }
-> diff -ur lttng-tools-2.2.0-rc2-orig/src/lib/lttng-ctl/lttng-ctl.c
-> lttng-tools-2.2.0-rc2/src/lib/lttng-ctl/lttng-ctl.c
-> --- lttng-tools-2.2.0-rc2-orig/src/lib/lttng-ctl/lttng-ctl.c 2013-05-07
-> 22:42:07.000000000 +0300
-> +++ lttng-tools-2.2.0-rc2/src/lib/lttng-ctl/lttng-ctl.c 2013-06-11
-> 14:19:15.177673176 +0300
-> @@ -74,6 +74,22 @@
->  int lttng_opt_verbose;
-> 
->  /*
-> + * Get the value of LTTNG_HOME if present, or HOME if not.
-> + * Caller must not free the returned pointer.
-> + * Used
-> + */
-> +static const char *get_lttng_home_dir(void)
-> +{
-> +        const char *val = NULL;
-> +        val = ((const char *) getenv("LTTNG_HOME"));
-> +        if (val != NULL) {
-> +                return val;
-> +        }
-> +        return ((const char *) getenv("HOME"));
-> +}
-> +
-> +
-> +/*
->   * Compare two URL destination.
->   *
->   * Return 0 is equal else is not equal.
-> @@ -485,7 +501,7 @@
->                   * With GNU C >= 2.1, snprintf returns the required 
-size
-> (excluding closing null)
->                   */
->                  ret = snprintf(sessiond_sock_path, 
-sizeof(sessiond_sock_path),
-> -                                DEFAULT_HOME_CLIENT_UNIX_SOCK, 
-getenv("HOME"));
-> +                                DEFAULT_HOME_CLIENT_UNIX_SOCK,
-> get_lttng_home_dir());
->                  if ((ret < 0) || (ret >= sizeof(sessiond_sock_path))) {
->                          goto error;
->                  }
-> @@ -1543,7 +1559,7 @@
->                   * With GNU C <  2.1, snprintf returns -1 if the target 
-buffer
-> is too small;
->                   * With GNU C >= 2.1, snprintf returns the required 
-size
-> (excluding closing null)
->                   */
-> -                home = getenv("HOME");
-> +                home = get_lttng_home_dir();
->                  if (home == NULL) {
->                          /* Fallback in /tmp .. */
->                          home = "/tmp";
-> 
-> Thanks,
-> 
-> Amit Margalit
-> IBM XIV - /Storage Reinvented/
-> XIV-NAS Development Team
-> Tel. 03-689-7774
-> Fax. 03-689-7230
-> 
-> 
-> This body part will be downloaded on demand.
+---
+[Old patch deleted]
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
 
-
---=_alternative 0034F40BC2257B89_=
+--=_alternative 0043446DC2257B89_=
 Content-Type: text/html; charset="US-ASCII"
 
-<font size=2 face="sans-serif">I think I've done all that you suggested,
-for lttng-tools only, though, based on cfa9a5a2b4a96e0d6a9eeddd2622a6d7c173b7ac
-which is the latest master as of right now.</font>
+<font size=2 face="sans-serif">Hi,</font>
 <br>
-<br><font size=2 face="sans-serif">Here is the patch:</font>
+<br><font size=2 face="sans-serif">I've added a paragraph to the man page.
+Here is the new patch:</font>
 <br>
-<div><tt><font size=2>From 5881718a60608d640ac1124c9c1f439a2a084707 Mon
+<div><tt><font size=2>From a72bd9dd6a58ac727280f2f9a85ee80607f1aba9 Mon
 Sep 17 00:00:00 2001<br>
 From: Amit Margalit &lt;amitm@il.ibm.com&gt;<br>
 Date: Thu, 13 Jun 2013 12:35:13 +0300<br>
@@ -528,6 +406,8 @@ Subject: [PATCH] Using LTTNG_HOME environment variable if exists, with<br>
  fallback to HOME</font></tt>
 <br>
 <br><tt><font size=2>---<br>
+ doc/man/lttng.1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+| &nbsp;4 ++++<br>
  src/bin/lttng-relayd/utils.c &nbsp; &nbsp;| 10 +---------<br>
  src/bin/lttng-sessiond/main.c &nbsp; | &nbsp;2 +-<br>
  src/bin/lttng-sessiond/utils.c &nbsp;| 10 ----------<br>
@@ -542,9 +422,25 @@ Subject: [PATCH] Using LTTNG_HOME environment variable if exists, with<br>
  src/common/utils.h &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;| &nbsp;1
 +<br>
  src/lib/lttng-ctl/lttng-ctl.c &nbsp; | &nbsp;5 +++--<br>
- 11 files changed, 29 insertions(+), 35 deletions(-)</font></tt>
+ 12 files changed, 33 insertions(+), 35 deletions(-)</font></tt>
 <br>
-<br><tt><font size=2>diff --git a/src/bin/lttng-relayd/utils.c b/src/bin/lttng-relayd/utils.c<br>
+<br><tt><font size=2>diff --git a/doc/man/lttng.1 b/doc/man/lttng.1<br>
+index f472d38..26fd44a 100644<br>
+--- a/doc/man/lttng.1<br>
++++ b/doc/man/lttng.1<br>
+@@ -214,6 +214,10 @@ automatically created having this form: 'auto-yyyymmdd-hhmmss'.<br>
+ <br>
+ If no \fB\-o, \-\-output\fP is specified, the traces will be written in<br>
+ $HOME/lttng-traces.<br>
++<br>
++The $HOME environment variable can be overridden by defining the environment<br>
++variable LTTNG_HOME. This is useful when the user running the commands
+has<br>
++a non-writeable home directory.<br>
+ .fi<br>
+ <br>
+ .B OPTIONS:<br>
+diff --git a/src/bin/lttng-relayd/utils.c b/src/bin/lttng-relayd/utils.c<br>
 index ad13d32..392fab6 100644<br>
 --- a/src/bin/lttng-relayd/utils.c<br>
 +++ b/src/bin/lttng-relayd/utils.c<br>
@@ -564,8 +460,9 @@ pointer.<br>
  static char *create_output_path_auto(char *path_name)<br>
  {<br>
  &nbsp; &nbsp; &nbsp; &nbsp; int ret;<br>
-@@ -44,7 +36,7 @@ static char *create_output_path_auto(char *path_name)<br>
- &nbsp; &nbsp; &nbsp; &nbsp; char *alloc_path = NULL;<br>
+@@ -44,7 +36,7 @@ static char *create_output_path_auto(char *path_name)</font></tt>
+<br><tt><font size=2>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;char *alloc_path
+= NULL;<br>
  &nbsp; &nbsp; &nbsp; &nbsp; char *default_path;<br>
  <br>
 - &nbsp; &nbsp; &nbsp; &nbsp;default_path = get_default_path();<br>
@@ -580,9 +477,9 @@ diff --git a/src/bin/lttng-sessiond/main.c b/src/bin/lttng-sessiond/main.c<br>
 index 4470afc..256ffba 100644<br>
 --- a/src/bin/lttng-sessiond/main.c<br>
 +++ b/src/bin/lttng-sessiond/main.c<br>
-@@ -4136,7 +4136,7 @@ int main(int argc, char **argv)</font></tt>
-<br><tt><font size=2>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-&nbsp; &nbsp; &nbsp;DBG2(&quot;Kernel consumer cmd path: %s&quot;,<br>
+@@ -4136,7 +4136,7 @@ int main(int argc, char **argv)<br>
+ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; DBG2(&quot;Kernel
+consumer cmd path: %s&quot;,<br>
  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; kconsumer_data.cmd_unix_sock_path);<br>
  &nbsp; &nbsp; &nbsp; &nbsp; } else {<br>
@@ -605,8 +502,8 @@ index 5ea3374..af42ad0 100644<br>
  <br>
  &nbsp; &nbsp; &nbsp; &nbsp; return ret;<br>
  }<br>
--<br>
--/*<br>
+-</font></tt>
+<br><tt><font size=2>-/*<br>
 - * Return pointer to home directory path using the env variable HOME.<br>
 - *<br>
 - * No home, NULL is returned.<br>
@@ -624,9 +521,9 @@ index 805cdb1..ddd2983 100644<br>
 = url;<br>
  &nbsp; &nbsp; &nbsp; &nbsp; } else {<br>
  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; /*
-Auto output path */</font></tt>
-<br><tt><font size=2>- &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-&nbsp; &nbsp;alloc_path = config_get_default_path();<br>
+Auto output path */<br>
+- &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;alloc_path
+= config_get_default_path();<br>
 + &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;alloc_path
 = utils_get_home_dir();<br>
  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if
@@ -654,8 +551,8 @@ index b6632fc..5a0da9d 100644<br>
  <br>
  /*<br>
 - * Returns the HOME directory path. Caller MUST NOT free(3) the return
-pointer.<br>
-- */<br>
+pointer.</font></tt>
+<br><tt><font size=2>- */<br>
 -char *config_get_default_path(void)<br>
 -{<br>
 - &nbsp; &nbsp; &nbsp; &nbsp;return getenv(&quot;HOME&quot;);<br>
@@ -678,8 +575,8 @@ pointer.<br>
  &nbsp; &nbsp; &nbsp; &nbsp; int ret;<br>
  &nbsp; &nbsp; &nbsp; &nbsp; char *path;<br>
  <br>
-- &nbsp; &nbsp; &nbsp; &nbsp;path = config_get_default_path();</font></tt>
-<br><tt><font size=2>+ &nbsp; &nbsp; &nbsp; &nbsp;path = utils_get_home_dir();<br>
+- &nbsp; &nbsp; &nbsp; &nbsp;path = config_get_default_path();<br>
++ &nbsp; &nbsp; &nbsp; &nbsp;path = utils_get_home_dir();<br>
  &nbsp; &nbsp; &nbsp; &nbsp; if (path == NULL) {<br>
  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ret
 = -1;<br>
@@ -697,8 +594,8 @@ index 2cb04b0..3bed59c 100644<br>
  <br>
  /* Must free() the return pointer */<br>
  char *config_read_session_name(char *path);<br>
-diff --git a/src/bin/lttng/utils.c b/src/bin/lttng/utils.c<br>
-index 94c4527..6041655 100644<br>
+diff --git a/src/bin/lttng/utils.c b/src/bin/lttng/utils.c</font></tt>
+<br><tt><font size=2>index 94c4527..6041655 100644<br>
 --- a/src/bin/lttng/utils.c<br>
 +++ b/src/bin/lttng/utils.c<br>
 @@ -21,6 +21,7 @@<br>
@@ -718,8 +615,8 @@ index 94c4527..6041655 100644<br>
  &nbsp; &nbsp; &nbsp; &nbsp; if (path == NULL) {<br>
  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; goto
 error;<br>
- &nbsp; &nbsp; &nbsp; &nbsp; }</font></tt>
-<br><tt><font size=2>diff --git a/src/common/defaults.h b/src/common/defaults.h<br>
+ &nbsp; &nbsp; &nbsp; &nbsp; }<br>
+diff --git a/src/common/defaults.h b/src/common/defaults.h<br>
 index 66bb972..c040634 100644<br>
 --- a/src/common/defaults.h<br>
 +++ b/src/common/defaults.h<br>
@@ -735,8 +632,8 @@ index 66bb972..c040634 100644<br>
 &nbsp; &nbsp; &nbsp; &nbsp;&quot;/var/run/lttng&quot;<br>
  #define DEFAULT_LTTNG_HOME_RUNDIR &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
 &nbsp; &quot;%s/.lttng&quot;<br>
- #define DEFAULT_LTTNG_SESSIOND_PIDFILE &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&quot;lttng-sessiond.pid&quot;<br>
-diff --git a/src/common/utils.c b/src/common/utils.c<br>
+ #define DEFAULT_LTTNG_SESSIOND_PIDFILE &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&quot;lttng-sessiond.pid&quot;</font></tt>
+<br><tt><font size=2>diff --git a/src/common/utils.c b/src/common/utils.c<br>
 index 38f78a7..436febe 100644<br>
 --- a/src/common/utils.c<br>
 +++ b/src/common/utils.c<br>
@@ -755,8 +652,8 @@ token does not<br>
  }<br>
 +<br>
 +/**<br>
-+ * Obtain the value of LTTNG_HOME environment variable, if exists.</font></tt>
-<br><tt><font size=2>+ * Otherwise returns the value of HOME.<br>
++ * Obtain the value of LTTNG_HOME environment variable, if exists.<br>
++ * Otherwise returns the value of HOME.<br>
 + */<br>
 +char *utils_get_home_dir(void)<br>
 +{<br>
@@ -776,8 +673,8 @@ index 083acef..9e6fb37 100644<br>
 uint64_t size,<br>
  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; uint64_t
 count, int uid, int gid, int out_fd, uint64_t *new_count);<br>
- int utils_parse_size_suffix(char *str, uint64_t *size);<br>
- int utils_get_count_order_u32(uint32_t x);<br>
+ int utils_parse_size_suffix(char *str, uint64_t *size);</font></tt>
+<br><tt><font size=2>&nbsp;int utils_get_count_order_u32(uint32_t x);<br>
 +char *utils_get_home_dir(void);<br>
  <br>
  #endif /* _COMMON_UTILS_H */<br>
@@ -789,8 +686,8 @@ index a7328eb..9d76f79 100644<br>
  #include &lt;common/defaults.h&gt;<br>
  #include &lt;common/sessiond-comm/sessiond-comm.h&gt;<br>
  #include &lt;common/uri.h&gt;<br>
-+#include &lt;common/utils.h&gt;</font></tt>
-<br><tt><font size=2>&nbsp;#include &lt;lttng/lttng.h&gt;<br>
++#include &lt;common/utils.h&gt;<br>
+ #include &lt;lttng/lttng.h&gt;<br>
  <br>
  #include &quot;filter/filter-ast.h&quot;<br>
 @@ -485,7 +486,7 @@ static int set_session_daemon_path(void)<br>
@@ -814,10 +711,10 @@ utils_get_home_dir());<br>
 @@ -1543,7 +1544,7 @@ static int set_health_socket_path(void)<br>
  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;*
 With GNU C &lt; &nbsp;2.1, snprintf returns -1 if the target buffer is
-too small;<br>
- &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;*
-With GNU C &gt;= 2.1, snprintf returns the required size (excluding closing
-null)<br>
+too small;</font></tt>
+<br><tt><font size=2>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; * With GNU C &gt;= 2.1, snprintf returns the
+required size (excluding closing null)<br>
  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;*/<br>
 - &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;home
 = getenv(&quot;HOME&quot;);<br>
@@ -843,13 +740,13 @@ null)<br>
 <br>
 <br>
 <br><font size=1 color=#5f5f5f face="sans-serif">From: &nbsp; &nbsp; &nbsp;
-&nbsp;</font><font size=1 face="sans-serif">David Goulet &lt;dgoulet@efficios.com&gt;</font>
-<br><font size=1 color=#5f5f5f face="sans-serif">To: &nbsp; &nbsp; &nbsp;
 &nbsp;</font><font size=1 face="sans-serif">Amit Margalit/Israel/IBM@IBMIL</font>
+<br><font size=1 color=#5f5f5f face="sans-serif">To: &nbsp; &nbsp; &nbsp;
+&nbsp;</font><font size=1 face="sans-serif">David Goulet &lt;dgoulet@efficios.com&gt;</font>
 <br><font size=1 color=#5f5f5f face="sans-serif">Cc: &nbsp; &nbsp; &nbsp;
 &nbsp;</font><font size=1 face="sans-serif">lttng-dev@lists.lttng.org</font>
 <br><font size=1 color=#5f5f5f face="sans-serif">Date: &nbsp; &nbsp; &nbsp;
-&nbsp;</font><font size=1 face="sans-serif">06/12/2013 05:46 PM</font>
+&nbsp;</font><font size=1 face="sans-serif">06/13/2013 12:39 PM</font>
 <br><font size=1 color=#5f5f5f face="sans-serif">Subject: &nbsp; &nbsp;
 &nbsp; &nbsp;</font><font size=1 face="sans-serif">Re: [lttng-dev]
 [RFC PATCH lttng-tools] Allow environment variable LTTNG_HOME to override
@@ -858,183 +755,31 @@ HOME - for lttng-tools</font>
 <hr noshade>
 <br>
 <br>
-<br><tt><font size=2>This looks good! It appears that there are multiple
-callsites doing the same<br>
-thing... We might want to just put it in src/common/utils.c with something
-like<br>
-utils_get_home_dir() and use it from there.<br>
-<br>
-Also, adding &quot;LTTNG_HOME&quot; in defaults.h as a defined value for
-the env. variable<br>
-name. Finally, updating the man page would be also great. :)<br>
-<br>
-Once you are ready to submit the patch, it would be good to use &quot;git<br>
-format-patch&quot; or send me a pull request based on git HEAD master.<br>
-<br>
-Big thanks for this contribution!<br>
-David<br>
-<br>
-Amit Margalit:<br>
-&gt; Hello all,<br>
-&gt; <br>
-&gt; Patch functionality - If LTTNG_HOME environment variable exists, it
-is used<br>
-&gt; instead of HOME.<br>
-&gt; Reason for patch - We are trying to deploy LTTng on a system where
-$HOME is on a<br>
-&gt; filesystem mounted read-only, but cannot afford to run lttng as a
-different user<br>
-&gt; and cannot move the home directories of users to writeable locations.<br>
-&gt; Patch baseline: 2.2.0 rc2<br>
-&gt; <br>
-&gt; This patch handles only lttng-tools.<br>
-&gt; <br>
-&gt; I can provide the same patches against git, if asked.<br>
-&gt; <br>
-&gt; diff -ur lttng-tools-2.2.0-rc2-orig/src/bin/lttng/conf.c<br>
-&gt; lttng-tools-2.2.0-rc2/src/bin/lttng/conf.c<br>
-&gt; --- lttng-tools-2.2.0-rc2-orig/src/bin/lttng/conf.c &nbsp; &nbsp;
-&nbsp; &nbsp;2013-05-06<br>
-&gt; 21:50:59.000000000 +0300<br>
-&gt; +++ lttng-tools-2.2.0-rc2/src/bin/lttng/conf.c &nbsp; &nbsp; &nbsp;
-&nbsp;2013-06-11<br>
-&gt; 14:17:34.681673309 +0300<br>
-&gt; @@ -127,6 +127,11 @@<br>
-&gt; &nbsp; */<br>
-&gt; &nbsp;char *config_get_default_path(void)<br>
-&gt; &nbsp;{<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp;char *val = NULL;<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp;val = getenv(&quot;LTTNG_HOME&quot;);<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp;if (val != NULL) {<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;return val;<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp;}<br>
-&gt; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;return getenv(&quot;HOME&quot;);<br>
-&gt; &nbsp;}<br>
-&gt; &nbsp;<br>
-&gt; diff -ur lttng-tools-2.2.0-rc2-orig/src/bin/lttng-relayd/utils.c<br>
-&gt; lttng-tools-2.2.0-rc2/src/bin/lttng-relayd/utils.c<br>
-&gt; --- lttng-tools-2.2.0-rc2-orig/src/bin/lttng-relayd/utils.c &nbsp;
-&nbsp; &nbsp; &nbsp;2013-05-06<br>
-&gt; 21:50:59.000000000 +0300<br>
-&gt; +++ lttng-tools-2.2.0-rc2/src/bin/lttng-relayd/utils.c &nbsp; &nbsp;
-&nbsp; &nbsp;2013-06-11<br>
-&gt; 14:15:52.553673444 +0300<br>
-&gt; @@ -34,7 +34,11 @@<br>
-&gt; &nbsp; */<br>
-&gt; &nbsp;static char *get_default_path(void)<br>
-&gt; &nbsp;{<br>
-&gt; - &nbsp; &nbsp; &nbsp; &nbsp;return getenv(&quot;HOME&quot;);<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp;char *val = NULL;<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp;val = getenv(&quot;LTTNG_HOME&quot;);<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp;if (val != NULL) {<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;return val;<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp;}<br>
-&gt; &nbsp;}<br>
-&gt; &nbsp;<br>
-&gt; &nbsp;static char *create_output_path_auto(char *path_name)<br>
-&gt; diff -ur lttng-tools-2.2.0-rc2-orig/src/bin/lttng-sessiond/utils.c<br>
-&gt; lttng-tools-2.2.0-rc2/src/bin/lttng-sessiond/utils.c<br>
-&gt; --- lttng-tools-2.2.0-rc2-orig/src/bin/lttng-sessiond/utils.c &nbsp;
-&nbsp; &nbsp; &nbsp;2013-01-07<br>
-&gt; 22:05:16.000000000 +0200<br>
-&gt; +++ lttng-tools-2.2.0-rc2/src/bin/lttng-sessiond/utils.c &nbsp; &nbsp;
-&nbsp; &nbsp;2013-06-11<br>
-&gt; 14:16:16.697673412 +0300<br>
-&gt; @@ -53,5 +53,10 @@<br>
-&gt; &nbsp; */<br>
-&gt; &nbsp;const char *get_home_dir(void)<br>
-&gt; &nbsp;{<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp;const char *val = NULL;<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp;val = ((const char *) getenv(&quot;LTTNG_HOME&quot;));<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp;if (val != NULL) {<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;return val;<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp;}<br>
-&gt; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;return ((const char *) getenv(&quot;HOME&quot;));<br>
-&gt; &nbsp;}<br>
-&gt; diff -ur lttng-tools-2.2.0-rc2-orig/src/lib/lttng-ctl/lttng-ctl.c<br>
-&gt; lttng-tools-2.2.0-rc2/src/lib/lttng-ctl/lttng-ctl.c<br>
-&gt; --- lttng-tools-2.2.0-rc2-orig/src/lib/lttng-ctl/lttng-ctl.c &nbsp;
-&nbsp; &nbsp; &nbsp;2013-05-07<br>
-&gt; 22:42:07.000000000 +0300<br>
-&gt; +++ lttng-tools-2.2.0-rc2/src/lib/lttng-ctl/lttng-ctl.c &nbsp; &nbsp;
-&nbsp; &nbsp;2013-06-11<br>
-&gt; 14:19:15.177673176 +0300<br>
-&gt; @@ -74,6 +74,22 @@<br>
-&gt; &nbsp;int lttng_opt_verbose;<br>
-&gt; &nbsp;<br>
-&gt; &nbsp;/*<br>
-&gt; + * Get the value of LTTNG_HOME if present, or HOME if not.<br>
-&gt; + * Caller must not free the returned pointer.<br>
-&gt; + * Used<br>
-&gt; + */<br>
-&gt; +static const char *get_lttng_home_dir(void)<br>
-&gt; +{<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp;const char *val = NULL;<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp;val = ((const char *) getenv(&quot;LTTNG_HOME&quot;));<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp;if (val != NULL) {<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;return val;<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp;}<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp;return ((const char *) getenv(&quot;HOME&quot;));<br>
-&gt; +}<br>
-&gt; +<br>
-&gt; +<br>
-&gt; +/*<br>
-&gt; &nbsp; * Compare two URL destination.<br>
-&gt; &nbsp; *<br>
-&gt; &nbsp; * Return 0 is equal else is not equal.<br>
-&gt; @@ -485,7 +501,7 @@<br>
-&gt; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; * With
-GNU C &gt;= 2.1, snprintf returns the required size<br>
-&gt; (excluding closing null)<br>
-&gt; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; */<br>
-&gt; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;ret
-= snprintf(sessiond_sock_path, sizeof(sessiond_sock_path),<br>
-&gt; - &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;DEFAULT_HOME_CLIENT_UNIX_SOCK,
-getenv(&quot;HOME&quot;));<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;DEFAULT_HOME_CLIENT_UNIX_SOCK,<br>
-&gt; get_lttng_home_dir());<br>
-&gt; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;if ((ret
-&lt; 0) || (ret &gt;= sizeof(sessiond_sock_path))) {<br>
-&gt; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-&nbsp; &nbsp; &nbsp;goto error;<br>
-&gt; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;}<br>
-&gt; @@ -1543,7 +1559,7 @@<br>
-&gt; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; * With
-GNU C &lt; &nbsp;2.1, snprintf returns -1 if the target buffer<br>
-&gt; is too small;<br>
-&gt; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; * With
-GNU C &gt;= 2.1, snprintf returns the required size<br>
-&gt; (excluding closing null)<br>
-&gt; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; */<br>
-&gt; - &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;home = getenv(&quot;HOME&quot;);<br>
-&gt; + &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;home = get_lttng_home_dir();<br>
-&gt; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;if (home
-== NULL) {<br>
-&gt; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-&nbsp; &nbsp; &nbsp;/* Fallback in /tmp .. */<br>
-&gt; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-&nbsp; &nbsp; &nbsp;home = &quot;/tmp&quot;;<br>
-&gt; <br>
-&gt; Thanks,<br>
-&gt; <br>
-&gt; Amit Margalit<br>
-&gt; IBM XIV - /Storage Reinvented/<br>
-&gt; XIV-NAS Development Team<br>
-&gt; Tel. 03-689-7774<br>
-&gt; Fax. 03-689-7230<br>
-&gt; <br>
-&gt; <br>
-&gt; This body part will be downloaded on demand.<br>
-<br>
+<br><font size=2 face="sans-serif">I think I've done all that you suggested,
+for lttng-tools only, though, based on cfa9a5a2b4a96e0d6a9eeddd2622a6d7c173b7ac
+which is the latest master as of right now.</font><font size=3> <br>
+</font><font size=2 face="sans-serif"><br>
+Here is the patch:</font><font size=3> </font>
+<br><tt><font size=2>From 5881718a60608d640ac1124c9c1f439a2a084707 Mon
+Sep 17 00:00:00 2001<br>
+From: Amit Margalit &lt;amitm@il.ibm.com&gt;<br>
+Date: Thu, 13 Jun 2013 12:35:13 +0300<br>
+Subject: [PATCH] Using LTTNG_HOME environment variable if exists, with<br>
+fallback to HOME</font></tt><font size=3> <br>
+</font><tt><font size=2><br>
+---<br>
+</font></tt><font size=3>[Old patch deleted]<br>
+</font><tt><font size=2>_______________________________________________<br>
+lttng-dev mailing list<br>
+lttng-dev@lists.lttng.org<br>
+</font></tt><a href="http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev"><tt><font size=2>http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</font></tt></a><tt><font size=2><br>
 </font></tt>
 <br></div>
---=_alternative 0034F40BC2257B89_=--
+--=_alternative 0043446DC2257B89_=--
 
 
 
---===============0183193147==
+--===============2088667516==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -1045,4 +790,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============0183193147==--
+--===============2088667516==--
