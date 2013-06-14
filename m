@@ -1,19 +1,17 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-tools] Fix: sanitize wait queue in	the
-	dispatch thread
-Date: Fri, 14 Jun 2013 10:55:53 -0400
-Message-ID: <20130614145553.GA26589__39878.7652877674$1371221785$gmane$org@Krystal>
+From: David Goulet <dgoulet@efficios.com>
+Subject: Re: [PATCH lttng-tools] Fix: sanitize wait queue in the
+ dispatch thread
+Date: Fri, 14 Jun 2013 11:05:06 -0400
+Message-ID: <51BB3122.7030100__41714.4602085047$1371222350$gmane$org@efficios.com>
 References: <1371220783-5652-1-git-send-email-dgoulet@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from smtp.ini-tech.com ([5.9.158.244])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UnVPv-0004Ma-LB
-	for lttng-dev@lists.lttng.org; Fri, 14 Jun 2013 10:55:55 -0400
-Content-Disposition: inline
+	(envelope-from <dgoulet@efficios.com>) id 1UnVYw-0004TA-Bz
+	for lttng-dev@lists.lttng.org; Fri, 14 Jun 2013 11:05:14 -0400
 In-Reply-To: <1371220783-5652-1-git-send-email-dgoulet@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -27,7 +25,12 @@ To: David Goulet <dgoulet@efficios.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* David Goulet (dgoulet@efficios.com) wrote:
+Ok so it's merged and pushed!
+
+Thanks!
+David
+
+David Goulet:
 > This is to avoid memory leaks when the notify socket is never received
 > thus cleaning the wait node for command socket that are invalid.
 > 
@@ -81,15 +84,6 @@ List-Id: lttng-dev@lists.lttng.org
 > + * invalid nodes from it. This is to avoid memory leaks for the case the UST
 > + * notify socket is never received.
 > + */
-
-should be "static".
-
-the rest looks good.
-
-Thanks,
-
-MAthieu
-
 > +void sanitize_wait_queue(struct ust_reg_wait_queue *wait_queue)
 > +{
 > +	int ret, nb_fd = 0, i;
@@ -289,16 +283,3 @@ MAthieu
 >  
 >  #endif /* HAVE_LIBLTTNG_UST_CTL */
 >  
-> -- 
-> 1.7.10.4
-> 
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
