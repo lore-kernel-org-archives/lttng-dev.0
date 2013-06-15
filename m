@@ -1,20 +1,18 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-ust] Fix: Add --no-as-needed to
-	the	demo example's Makefile
-Date: Fri, 14 Jun 2013 17:35:13 -0400
-Message-ID: <20130614213513.GA32213__32045.9566115916$1371245747$gmane$org@Krystal>
-References: <1371245506-4478-1-git-send-email-jeremie.galarneau@efficios.com>
+From: Zifei Tong <soariez@gmail.com>
+Subject: [PATCH lttng-ust] Fix: Check g++ version before
+	compiling 'hello.cxx' test
+Date: Sun, 16 Jun 2013 02:08:29 +0800
+Message-ID: <CAJ7wx-GFwfJ_yM6wSyydKuOxY3SQt37Zzs1UJTW3u7c7_cB8Uw__49829.0701689713$1371319753$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from mail-ve0-f175.google.com ([209.85.128.175])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UnbeP-0007W0-A9
-	for lttng-dev@lists.lttng.org; Fri, 14 Jun 2013 17:35:17 -0400
-Content-Disposition: inline
-In-Reply-To: <1371245506-4478-1-git-send-email-jeremie.galarneau@efficios.com>
+	(envelope-from <soariez@gmail.com>) id 1Unutv-00081l-Lf
+	for lttng-dev@lists.lttng.org; Sat, 15 Jun 2013 14:08:35 -0400
+Received: by mail-ve0-f175.google.com with SMTP id da11so1235657veb.20
+	for <lttng-dev@lists.lttng.org>; Sat, 15 Jun 2013 11:08:29 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,66 +21,42 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-* J=E9r=E9mie Galarneau (jeremie.galarneau@efficios.com) wrote:
-> Some distributions now ship with the --as-needed linker flag
-> set by default (Ubuntu 13.04). This will cause the linker to
-> remove the references to lttng-ust from the provider objects
-> thus causing the application to fail when preloading them.
-
-merged, thanks!
-
-Mathieu
-
-> =
-
-> Signed-off-by: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
-> ---
->  doc/examples/demo/Makefile | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> =
-
-> diff --git a/doc/examples/demo/Makefile b/doc/examples/demo/Makefile
-> index 27ca92b..d55a1b1 100644
-> --- a/doc/examples/demo/Makefile
-> +++ b/doc/examples/demo/Makefile
-> @@ -43,13 +43,13 @@ tp2.o: tp2.c ust_tests_demo2.h
->  	$(CC) $(CPPFLAGS) $(LOCAL_CPPFLAGS) $(CFLAGS) -fpic -c -o $@ $<
->  =
-
->  lttng-ust-provider-ust-tests-demo.so: tp.o tp2.o
-> -	$(CC) -shared -o $@ $(LDFLAGS) -llttng-ust $^
-> +	$(CC) -shared -Wl,--no-as-needed -o $@ $(LDFLAGS) -llttng-ust $^
->  =
-
->  tp3.o: tp3.c ust_tests_demo3.h
->  	$(CC) $(CPPFLAGS) $(LOCAL_CPPFLAGS) $(CFLAGS) -fpic -c -o $@ $<
->  =
-
->  lttng-ust-provider-ust-tests-demo3.so: tp3.o
-> -	$(CC) -shared -o $@ $(LDFLAGS) -llttng-ust $^
-> +	$(CC) -shared -Wl,--no-as-needed -o $@ $(LDFLAGS) -llttng-ust $^
->  =
-
->  demo.o: demo.c
->  	$(CC) $(CPPFLAGS) $(LOCAL_CPPFLAGS) $(CFLAGS) -c -o $@ $<
-> -- =
-
-> 1.8.3
-> =
-
-> =
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- =
-
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+RGVzaWduYXRlZCBpbml0aWFsaXplciBzdXBwb3J0IHRoYXQgaXMgcmVxdWlyZWQgdG8gY29tcGls
+ZSBjKysKdHJhY2Vwb2ludCBwcm9iZXMgaXMgb25seSBhdmFpbGFibGUgc2luY2UgZysrIDQuNy4K
+CkZpeGVzICM1NTcKClNpZ25lZC1vZmYtYnk6IFppZmVpIFRvbmcgPHNvYXJpZXpAZ21haWwuY29t
+PgotLS0KIFJFQURNRSAgICAgICB8ICAzICsrLQogY29uZmlndXJlLmFjIHwgMTYgKysrKysrKysr
+KysrKystLQogMiBmaWxlcyBjaGFuZ2VkLCAxNiBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygt
+KQoKZGlmZiAtLWdpdCBhL1JFQURNRSBiL1JFQURNRQppbmRleCAxZjZiOWQyLi4xYzdhMmY4IDEw
+MDY0NAotLS0gYS9SRUFETUUKKysrIGIvUkVBRE1FCkBAIC0xMTEsNyArMTExLDggQEAgVVNBR0U6
+CiAgIC0gRW5hYmxlIGluc3RydW1lbnRhdGlvbiBhbmQgY29udHJvbCB0cmFjaW5nIHdpdGggdGhl
+ICJsdHRuZyIgY29tbWFuZAogICAgIGZyb20gbHR0bmctdG9vbHMuIFNlZSBsdHRuZy10b29scyBk
+b2MvcXVpY2tzdGFydC50eHQuCiAgIC0gTm90ZSBmb3IgQysrIHN1cHBvcnQ6IHNpbmNlIExUVG5n
+LVVTVCAyLjMsIGJvdGggdHJhY2Vwb2ludHMgYW5kCi0gICAgdHJhY2Vwb2ludCBwcm9iZXMgY2Fu
+IGJlIGNvbXBpbGVkIHdpdGggZysrLgorICAgIHRyYWNlcG9pbnQgcHJvYmVzIGNhbiBiZSBjb21w
+aWxlZCB3aXRoIGcrKy4gVG8gY29tcGlsZSB0cmFjZXBvaW50IHByb2JlcworICAgIGluIGcrKywg
+eW91IG5lZWQgdmVyc2lvbiA0Ljcgb3IgYWJvdmUuCgoKIEVOVklST05NRU5UIFZBUklBQkxFUzoK
+ZGlmZiAtLWdpdCBhL2NvbmZpZ3VyZS5hYyBiL2NvbmZpZ3VyZS5hYwppbmRleCA4MDJjY2FhLi44
+NWE2NGExIDEwMDY0NAotLS0gYS9jb25maWd1cmUuYWMKKysrIGIvY29uZmlndXJlLmFjCkBAIC04
+Myw5ICs4MywyMSBAQCBBQ19DQUNIRV9DSEVDSyhbd2hldGhlciB0aGUgQysrIGNvbXBpbGVyIHdv
+cmtzXSwKIAkJW3J3X2N2X3Byb2dfY3h4X3dvcmtzXSwKIAkJW0FDX0xBTkdfUFVTSChbQysrXSkK
+IAkJQUNfTElOS19JRkVMU0UoW0FDX0xBTkdfUFJPR1JBTShbXSwgW10pXSwKLQkJCQlbcndfY3Zf
+cHJvZ19jeHhfd29ya3M9eWVzXSwKKwkJCQlbY2hlY2tfZ2NjX2N4eF92ZXJzaW9uPXllc10sCiAJ
+CQkJW3J3X2N2X3Byb2dfY3h4X3dvcmtzPW5vXSkKLQkJQUNfTEFOR19QT1AoW0MrK10pXSkKKwkJ
+QUNfTEFOR19QT1AoW0MrK10pCisJCWlmIHRlc3QgIiRjaGVja19nY2NfY3h4X3ZlcnNpb24iID0g
+InllcyI7IHRoZW4KKwkJCWdjY19jeHhfdmVyc2lvbj1gJENYWCAtZHVtcHZlcnNpb25gCisJCQln
+Y2NfY3h4X21ham9yX3ZlcnNpb249JChlY2hvICRnY2NfY3h4X3ZlcnNpb24gfCBzZWQKJ3MvXlwo
+W1swLTldXSpcKVwuW1swLTldXSouKiQvXDEvJykKKwkJCWdjY19jeHhfbWlub3JfdmVyc2lvbj0k
+KGVjaG8gJGdjY19jeHhfdmVyc2lvbiB8IHNlZAoncy9eW1swLTldXSpcLlwoW1swLTldXSpcKS4q
+JC9cMS8nKQorCQkJaWYgdGVzdCAiJGdjY19jeHhfbWFqb3JfdmVyc2lvbiIgLWd0IDQ7IHRoZW4K
+KwkJCQlyd19jdl9wcm9nX2N4eF93b3Jrcz0ieWVzIgorCQkJZWxpZiB0ZXN0ICIkZ2NjX2N4eF9t
+YWpvcl92ZXJzaW9uIiAtZXEgNCAtYQoiJGdjY19jeHhfbWlub3JfdmVyc2lvbiIgLWdlIDc7IHRo
+ZW4KKwkJCQlyd19jdl9wcm9nX2N4eF93b3Jrcz0ieWVzIgorCQkJZWxzZQorCQkJCXJ3X2N2X3By
+b2dfY3h4X3dvcmtzPSJubyIKKwkJCWZpCisJCWZpXSkKCiBBTV9DT05ESVRJT05BTChbQ1hYX1dP
+UktTXSwgW3Rlc3QgIngkcndfY3ZfcHJvZ19jeHhfd29ya3MiID0gInh5ZXMiXSkKCi0tIAoxLjgu
+My4xCgotLSAKQmVzdCBSZWdhcmRzLArku53lrZDpo54gKFppZmVpIFRvbmcpCgpfX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBs
+aXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2kt
+YmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
