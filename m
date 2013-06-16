@@ -1,21 +1,37 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-ust] Fix: Check g++ version
-	before	compiling 'hello.cxx' test
-Date: Sat, 15 Jun 2013 14:37:26 -0400
-Message-ID: <20130615183726.GA13832__2008.05219724334$1371321481$gmane$org@Krystal>
-References: <CAJ7wx-GFwfJ_yM6wSyydKuOxY3SQt37Zzs1UJTW3u7c7_cB8Uw@mail.gmail.com>
-	<CAGDH53m4VBdcMO1hk4EcPP4b4n38UtVt68g6OQsrihboZgsATw@mail.gmail.com>
+From: Amit Margalit <AMITM@il.ibm.com>
+Subject: Problem with adding vpid and vtid context to UST
+Date: Sun, 16 Jun 2013 11:06:19 +0300
+Message-ID: <OFA2B17967.FDD790B6-ONC2257B8C.002C000A-C2257B8C.002C70E3__18330.2071797245$1371370039$gmane$org@il.ibm.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============1163157387=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from e06smtp18.uk.ibm.com ([195.75.94.114])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UnvLs-0008He-W0
-	for lttng-dev@lists.lttng.org; Sat, 15 Jun 2013 14:37:29 -0400
-Content-Disposition: inline
-In-Reply-To: <CAGDH53m4VBdcMO1hk4EcPP4b4n38UtVt68g6OQsrihboZgsATw@mail.gmail.com>
+	(envelope-from <amitm@il.ibm.com>) id 1Uo7yx-0005yw-LW
+	for lttng-dev@lists.lttng.org; Sun, 16 Jun 2013 04:06:39 -0400
+Received: from /spool/local
+	by e06smtp18.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use
+	Only! Violators will be prosecuted
+	for <lttng-dev@lists.lttng.org> from <amitm@il.ibm.com>;
+	Sun, 16 Jun 2013 09:01:24 +0100
+Received: from b06cxnps4074.portsmouth.uk.ibm.com
+	(d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+	by d06dlp03.portsmouth.uk.ibm.com (Postfix) with ESMTP id 62D6A1B0805F
+	for <lttng-dev@lists.lttng.org>; Sun, 16 Jun 2013 09:06:30 +0100 (BST)
+Received: from d06av08.portsmouth.uk.ibm.com (d06av08.portsmouth.uk.ibm.com
+	[9.149.37.249])
+	by b06cxnps4074.portsmouth.uk.ibm.com (8.13.8/8.13.8/NCO v10.0) with
+	ESMTP id r5G86JWK55902276
+	for <lttng-dev@lists.lttng.org>; Sun, 16 Jun 2013 08:06:19 GMT
+Received: from d06av08.portsmouth.uk.ibm.com (localhost [127.0.0.1])
+	by d06av08.portsmouth.uk.ibm.com (8.14.4/8.14.4/NCO v10.0 AVout) with
+	ESMTP id r5G86T41024563
+	for <lttng-dev@lists.lttng.org>; Sun, 16 Jun 2013 02:06:29 -0600
+Received: from d06ml311.portsmouth.uk.ibm.com (d06ml311.portsmouth.uk.ibm.com
+	[9.149.104.181])
+	by d06av08.portsmouth.uk.ibm.com (8.14.4/8.14.4/NCO v10.0 AVin) with
+	ESMTP id r5G86TdJ024560
+	for <lttng-dev@lists.lttng.org>; Sun, 16 Jun 2013 02:06:29 -0600
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,74 +40,104 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Christian Babeux <christian.babeux@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-KiBDaHJpc3RpYW4gQmFiZXV4IChjaHJpc3RpYW4uYmFiZXV4QGVmZmljaW9zLmNvbSkgd3JvdGU6
-Cj4gSGkgWmlmZWksCj4gCj4gQ2hlY2tpbmcgc3BlY2lmaWMgdmVyc2lvbiBudW1iZXJzIG1pZ2h0
-IGJlIGEgYml0IGNvdW50ZXJwcm9kdWN0aXZlCj4gKGUuZy4gd2hhdCBpZiBzb21lIGVtYmVkZGVk
-IHBsYXRmb3JtIGFzIGEgR0NDIDQuNyB3aXRoIGRlc2lnbmF0ZWQKPiBpbml0aWFsaXplciBleHBs
-aWNpdGx5IHBhdGNoZWQgb3V0PykuCj4gCj4gR29pbmcgZm9yd2FyZCwgSSB0aGluayBjaGVja2lu
-ZyBmb3IgdGhlIGRlc2lnbmF0ZWQgaW5pdGlhbGl6ZXIgZmVhdHVyZQo+IHZpYSBhIHNtYWxsIEMr
-KyB0ZXN0ZmlsZSBpcyBtb3JlIGluIGxpbmUgd2l0aCB0aGUgQXV0b2NvbmYgcGhpbG9zb3BoeS4K
-PiBBbHNvLCB3ZSBzaG91bGQgY29uZGl0aW9uYWxseSBkaXNhYmxlIHRoZSBjb21waWxhdGlvbiBv
-ZiB0aGUKPiB0cmFjZXBvaW50IHByb2JlcyByZXF1aXJpbmcgZGVzaWduYXRlZCBpbml0aWFsaXpl
-cnMgaWYgbm90IHN1cHBvcnRlZC4KCk1vcmVvdmVyLCB0aGUgZG9jdW1lbnRhdGlvbiBhbmQgcGF0
-Y2hlcyBzaG91bGQgdGFrZSBMTFZNIGludG8gYWNjb3VudC4KClRoYW5rcywKCk1hdGhpZXUKCj4g
-Cj4gVGhhbmtzLAo+IAo+IENocmlzdGlhbgo+IAo+IE9uIFNhdCwgSnVuIDE1LCAyMDEzIGF0IDI6
-MDggUE0sIFppZmVpIFRvbmcgPHNvYXJpZXpAZ21haWwuY29tPiB3cm90ZToKPiA+IERlc2lnbmF0
-ZWQgaW5pdGlhbGl6ZXIgc3VwcG9ydCB0aGF0IGlzIHJlcXVpcmVkIHRvIGNvbXBpbGUgYysrCj4g
-PiB0cmFjZXBvaW50IHByb2JlcyBpcyBvbmx5IGF2YWlsYWJsZSBzaW5jZSBnKysgNC43Lgo+ID4K
-PiA+IEZpeGVzICM1NTcKPiA+Cj4gPiBTaWduZWQtb2ZmLWJ5OiBaaWZlaSBUb25nIDxzb2FyaWV6
-QGdtYWlsLmNvbT4KPiA+IC0tLQo+ID4gIFJFQURNRSAgICAgICB8ICAzICsrLQo+ID4gIGNvbmZp
-Z3VyZS5hYyB8IDE2ICsrKysrKysrKysrKysrLS0KPiA+ICAyIGZpbGVzIGNoYW5nZWQsIDE2IGlu
-c2VydGlvbnMoKyksIDMgZGVsZXRpb25zKC0pCj4gPgo+ID4gZGlmZiAtLWdpdCBhL1JFQURNRSBi
-L1JFQURNRQo+ID4gaW5kZXggMWY2YjlkMi4uMWM3YTJmOCAxMDA2NDQKPiA+IC0tLSBhL1JFQURN
-RQo+ID4gKysrIGIvUkVBRE1FCj4gPiBAQCAtMTExLDcgKzExMSw4IEBAIFVTQUdFOgo+ID4gICAg
-LSBFbmFibGUgaW5zdHJ1bWVudGF0aW9uIGFuZCBjb250cm9sIHRyYWNpbmcgd2l0aCB0aGUgImx0
-dG5nIiBjb21tYW5kCj4gPiAgICAgIGZyb20gbHR0bmctdG9vbHMuIFNlZSBsdHRuZy10b29scyBk
-b2MvcXVpY2tzdGFydC50eHQuCj4gPiAgICAtIE5vdGUgZm9yIEMrKyBzdXBwb3J0OiBzaW5jZSBM
-VFRuZy1VU1QgMi4zLCBib3RoIHRyYWNlcG9pbnRzIGFuZAo+ID4gLSAgICB0cmFjZXBvaW50IHBy
-b2JlcyBjYW4gYmUgY29tcGlsZWQgd2l0aCBnKysuCj4gPiArICAgIHRyYWNlcG9pbnQgcHJvYmVz
-IGNhbiBiZSBjb21waWxlZCB3aXRoIGcrKy4gVG8gY29tcGlsZSB0cmFjZXBvaW50IHByb2Jlcwo+
-ID4gKyAgICBpbiBnKyssIHlvdSBuZWVkIHZlcnNpb24gNC43IG9yIGFib3ZlLgo+ID4KPiA+Cj4g
-PiAgRU5WSVJPTk1FTlQgVkFSSUFCTEVTOgo+ID4gZGlmZiAtLWdpdCBhL2NvbmZpZ3VyZS5hYyBi
-L2NvbmZpZ3VyZS5hYwo+ID4gaW5kZXggODAyY2NhYS4uODVhNjRhMSAxMDA2NDQKPiA+IC0tLSBh
-L2NvbmZpZ3VyZS5hYwo+ID4gKysrIGIvY29uZmlndXJlLmFjCj4gPiBAQCAtODMsOSArODMsMjEg
-QEAgQUNfQ0FDSEVfQ0hFQ0soW3doZXRoZXIgdGhlIEMrKyBjb21waWxlciB3b3Jrc10sCj4gPiAg
-ICAgICAgICAgICAgICAgW3J3X2N2X3Byb2dfY3h4X3dvcmtzXSwKPiA+ICAgICAgICAgICAgICAg
-ICBbQUNfTEFOR19QVVNIKFtDKytdKQo+ID4gICAgICAgICAgICAgICAgIEFDX0xJTktfSUZFTFNF
-KFtBQ19MQU5HX1BST0dSQU0oW10sIFtdKV0sCj4gPiAtICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgIFtyd19jdl9wcm9nX2N4eF93b3Jrcz15ZXNdLAo+ID4gKyAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICBbY2hlY2tfZ2NjX2N4eF92ZXJzaW9uPXllc10sCj4gPiAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgIFtyd19jdl9wcm9nX2N4eF93b3Jrcz1ub10pCj4gPiAtICAg
-ICAgICAgICAgICAgQUNfTEFOR19QT1AoW0MrK10pXSkKPiA+ICsgICAgICAgICAgICAgICBBQ19M
-QU5HX1BPUChbQysrXSkKPiA+ICsgICAgICAgICAgICAgICBpZiB0ZXN0ICIkY2hlY2tfZ2NjX2N4
-eF92ZXJzaW9uIiA9ICJ5ZXMiOyB0aGVuCj4gPiArICAgICAgICAgICAgICAgICAgICAgICBnY2Nf
-Y3h4X3ZlcnNpb249YCRDWFggLWR1bXB2ZXJzaW9uYAo+ID4gKyAgICAgICAgICAgICAgICAgICAg
-ICAgZ2NjX2N4eF9tYWpvcl92ZXJzaW9uPSQoZWNobyAkZ2NjX2N4eF92ZXJzaW9uIHwgc2VkCj4g
-PiAncy9eXChbWzAtOV1dKlwpXC5bWzAtOV1dKi4qJC9cMS8nKQo+ID4gKyAgICAgICAgICAgICAg
-ICAgICAgICAgZ2NjX2N4eF9taW5vcl92ZXJzaW9uPSQoZWNobyAkZ2NjX2N4eF92ZXJzaW9uIHwg
-c2VkCj4gPiAncy9eW1swLTldXSpcLlwoW1swLTldXSpcKS4qJC9cMS8nKQo+ID4gKyAgICAgICAg
-ICAgICAgICAgICAgICAgaWYgdGVzdCAiJGdjY19jeHhfbWFqb3JfdmVyc2lvbiIgLWd0IDQ7IHRo
-ZW4KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgcndfY3ZfcHJvZ19jeHhfd29y
-a3M9InllcyIKPiA+ICsgICAgICAgICAgICAgICAgICAgICAgIGVsaWYgdGVzdCAiJGdjY19jeHhf
-bWFqb3JfdmVyc2lvbiIgLWVxIDQgLWEKPiA+ICIkZ2NjX2N4eF9taW5vcl92ZXJzaW9uIiAtZ2Ug
-NzsgdGhlbgo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICByd19jdl9wcm9nX2N4
-eF93b3Jrcz0ieWVzIgo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgZWxzZQo+ID4gKyAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICByd19jdl9wcm9nX2N4eF93b3Jrcz0ibm8iCj4gPiAr
-ICAgICAgICAgICAgICAgICAgICAgICBmaQo+ID4gKyAgICAgICAgICAgICAgIGZpXSkKPiA+Cj4g
-PiAgQU1fQ09ORElUSU9OQUwoW0NYWF9XT1JLU10sIFt0ZXN0ICJ4JHJ3X2N2X3Byb2dfY3h4X3dv
-cmtzIiA9ICJ4eWVzIl0pCj4gPgo+ID4gLS0KPiA+IDEuOC4zLjEKPiA+Cj4gPiAtLQo+ID4gQmVz
-dCBSZWdhcmRzLAo+ID4g5Lud5a2Q6aOeIChaaWZlaSBUb25nKQo+ID4KPiA+IF9fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gPiBsdHRuZy1kZXYgbWFpbGlu
-ZyBsaXN0Cj4gPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gPiBodHRwOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKPiAKPiBfX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5n
-IGxpc3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0cDovL2xpc3RzLmx0dG5nLm9y
-Zy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2CgotLSAKTWF0aGlldSBEZXNub3ll
-cnMKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdAps
-dHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9t
-YWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+This is a multipart message in MIME format.
+--===============1163157387==
+Content-Type: multipart/alternative; boundary="=_alternative 002C7090C2257B8C_="
+
+This is a multipart message in MIME format.
+--=_alternative 002C7090C2257B8C_=
+Content-Type: text/plain; charset="US-ASCII"
+
+Hi,
+
+Every time I try this, I get the following error:
+
+Error: Error starting tracing for app pid: 5663 (ret: -1027)
+
+Here's my sequence:
+
+lttng create foo -o /store/
+lttng enable-channel -u
+lttng add-context -u -t vpid -t vtid -t procname
+lttng enable-event -u -a
+lttng start foo
+
+At this point I start my application and get that error. When the 
+application exits, I stop the tracing, and run lttng view.
+
+The trace session seems to have worked just fine, and "procname" was 
+indeed added to the context, but vtid and vpid were not.
+
+And BTW, the documentation doesn't clearly state that pid and tid are 
+kernel-only contexts, and that one should use vtid and vpid.
+
+Any help is appreciated.
+
+Thanks,
+
+Amit Margalit
+IBM XIV - Storage Reinvented
+XIV-NAS Development Team
+Tel. 03-689-7774
+Fax. 03-689-7230
+--=_alternative 002C7090C2257B8C_=
+Content-Type: text/html; charset="US-ASCII"
+
+<font size=2 face="sans-serif">Hi,</font>
+<br>
+<br><font size=2 face="sans-serif">Every time I try this, I get the following
+error:</font>
+<br>
+<br><font size=2 face="sans-serif">Error: Error starting tracing for app
+pid: 5663 (ret: -1027)</font>
+<br>
+<br><font size=2 face="sans-serif">Here's my sequence:</font>
+<br>
+<br><font size=2 face="sans-serif">lttng create foo -o /store/</font>
+<br><font size=2 face="sans-serif">lttng enable-channel -u</font>
+<br><font size=2 face="sans-serif">lttng add-context -u -t vpid -t vtid
+-t procname</font>
+<br><font size=2 face="sans-serif">lttng enable-event -u -a</font>
+<br><font size=2 face="sans-serif">lttng start foo</font>
+<br>
+<br><font size=2 face="sans-serif">At this point I start my application
+and get that error. When the application exits, I stop the tracing, and
+run lttng view.</font>
+<br>
+<br><font size=2 face="sans-serif">The trace session seems to have worked
+just fine, and &quot;procname&quot; was indeed added to the context, but
+vtid and vpid were not.</font>
+<br>
+<br><font size=2 face="sans-serif">And BTW, the documentation doesn't clearly
+state that pid and tid are kernel-only contexts, and that one should use
+vtid and vpid.</font>
+<br>
+<br><font size=2 face="sans-serif">Any help is appreciated.</font>
+<br>
+<br><font size=2 face="sans-serif">Thanks,</font>
+<br>
+<br><font size=2 color=#000080 face="sans-serif">Amit Margalit</font>
+<br><font size=2 color=#808000 face="sans-serif">IBM XIV </font><font size=2 face="sans-serif">-
+<i>Storage Reinvented</i></font>
+<br><font size=2 face="sans-serif">XIV-NAS Development Team</font>
+<br><font size=2 face="sans-serif">Tel. 03</font><font size=2 face="Arial">-689-7774</font>
+<br><font size=2 face="Arial">Fax. 03-689-7230</font>
+--=_alternative 002C7090C2257B8C_=--
+
+
+
+--===============1163157387==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1163157387==--
