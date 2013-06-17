@@ -1,20 +1,17 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [LTTng-UST PATCH] lttng-gen-tp: Fix include guard
-	name with	file using non valid characters
-Date: Mon, 17 Jun 2013 12:11:25 -0400
-Message-ID: <20130617161125.GA7818__32734.2725046494$1371485518$gmane$org@Krystal>
-References: <1371484991-8578-1-git-send-email-yannick.brosseau@gmail.com>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Subject: Re: [PATCH lttng-ust] Fix: Check g++ version before
+	compiling
+Date: Mon, 17 Jun 2013 17:06:40 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD1314240A__31932.841303251$1371488943$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1Uoc1e-0002Dm-BY
-	for lttng-dev@lists.lttng.org; Mon, 17 Jun 2013 12:11:26 -0400
-Content-Disposition: inline
-In-Reply-To: <1371484991-8578-1-git-send-email-yannick.brosseau@gmail.com>
+	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1Uocui-0002gQ-Q0
+	for lttng-dev@lists.lttng.org; Mon, 17 Jun 2013 13:08:20 -0400
+Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,62 +20,658 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Yannick Brosseau <yannick.brosseau@gmail.com>
-Cc: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-* Yannick Brosseau (yannick.brosseau@gmail.com) wrote:
-> Now, the include guard will be generated with all the non
-> alpha-numeric characters replace with an '_'
+-----Message d'origine-----
+   1. Re: [PATCH lttng-ust] Fix: Check g++ version before compiling
+      'hello.cxx' test (Christian Babeux)
+   2. Re: [PATCH lttng-ust] Fix: Check g++ version	before	compiling
+      'hello.cxx' test (Mathieu Desnoyers)
+----------------------------------------------------------------------
+Message: 1
+Date: Sat, 15 Jun 2013 14:31:09 -0400
 
-merged in:
-- master
-- stable 2.2, 2.1, 2.0.
+Checking specific version numbers might be a bit counterproductive (e.g. wh=
+at if some embedded platform as a GCC 4.7 with designated initializer expli=
+citly patched out?).
 
-I also merged that commit into stable-2.0 so the current commit applies:
-
-commit f1d29bdce822f8432965b2db23d46ef79d2691a9
-Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Date:   Thu Dec 13 15:05:26 2012 -0500
-
-    Cleanup lttng-gen-tp: remove leading underscore before include guard
-    
-    Fixes #298
-    
-    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Going forward, I think checking for the designated initializer feature via =
+a small C++ testfile is more in line with the Autoconf philosophy.
+Also, we should conditionally disable the compilation of the tracepoint pro=
+bes requiring designated initializers if not supported.
 
 Thanks,
+Christian
+------------------------------
+Message: 2
+Date: Sat, 15 Jun 2013 14:37:26 -0400
 
+Moreover, the documentation and patches should take LLVM into account.
+
+Thanks,
 Mathieu
+------------------------------------------------------------
+   The lttng-ust (2.2.0-rc2-27 6e266bf) errors that arise with g++ 4.6 (g++=
+ 4.7 is not distributed on Ubuntu yet) are:
 
-> 
-> Fixes #511
-> 
-> Signed-off-by: Yannick Brosseau <yannick.brosseau@gmail.com>
-> ---
->  tools/lttng-gen-tp |    4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/lttng-gen-tp b/tools/lttng-gen-tp
-> index 2f468cb..5937dfd 100755
-> --- a/tools/lttng-gen-tp
-> +++ b/tools/lttng-gen-tp
-> @@ -61,7 +61,9 @@ extern "C"{{
->  
->      def write(self):
->          outputFile = open(self.outputFilename,"w")
-> -        includeGuard = self.outputFilename.upper().replace(".","_")
-> +        # Include guard macro will be created by uppercasing the filename and
-> +        # replacing all non alphanumeric characters with '_'
-> +        includeGuard = re.sub('[^0-9a-zA-Z]', '_', self.outputFilename.upper())
->  
->          outputFile.write(HeaderFile.HEADER_TPL.format(providerName=self.template.domain,
->                                             includeGuard = includeGuard,
-> -- 
-> 1.7.10.4
-> 
+make[3]: Entering directory `/home/daniel/Documents/lttng-ust-6e266bf/tests=
+/hello.cxx'
+  CXX    hello.o
+  CXX    tp.o
+In file included from ../../include/lttng/ust-tracepoint-event.h:206:0,
+                 from ../../include/lttng/tracepoint-event.h:62,
+                 from ust_tests_hello.h:64,
+                 from tp.cpp:26:
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+In file included from ../../include/lttng/ust-tracepoint-event.h:634:0,
+                 from ../../include/lttng/tracepoint-event.h:62,
+                 from ust_tests_hello.h:64,
+                 from tp.cpp:26:
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:31:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:53:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:53:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:53:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:53:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:53:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:53:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:53:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:53:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:53:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:53:1: error: expected primary-expression before '.' t=
+oken
+././ust_tests_hello.h:53:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+././ust_tests_hello.h:53:1: warning: extended initializer lists only availa=
+ble with -std=3Dc++0x or -std=3Dgnu++0x [enabled by default]
+In file included from ../../include/lttng/tracepoint-event.h:62:0,
+                 from ust_tests_hello.h:64,
+                 from tp.cpp:26:
+../../include/lttng/ust-tracepoint-event.h:662:2: error: expected primary-e=
+xpression before '.' token
+../../include/lttng/ust-tracepoint-event.h:663:2: error: expected primary-e=
+xpression before '.' token
+../../include/lttng/ust-tracepoint-event.h:664:2: error: expected primary-e=
+xpression before '.' token
+../../include/lttng/ust-tracepoint-event.h:665:2: error: expected primary-e=
+xpression before '.' token
+../../include/lttng/ust-tracepoint-event.h:665:23: warning: extended initia=
+lizer lists only available with -std=3Dc++0x or -std=3Dgnu++0x [enabled by =
+default]
+../../include/lttng/ust-tracepoint-event.h:666:2: error: expected primary-e=
+xpression before '.' token
+../../include/lttng/ust-tracepoint-event.h:666:33: warning: extended initia=
+lizer lists only available with -std=3Dc++0x or -std=3Dgnu++0x [enabled by =
+default]
+../../include/lttng/ust-tracepoint-event.h:667:2: error: expected primary-e=
+xpression before '.' token
+../../include/lttng/ust-tracepoint-event.h:668:2: error: expected primary-e=
+xpression before '.' token
+../../include/lttng/ust-tracepoint-event.h:669:2: error: expected primary-e=
+xpression before '.' token
+make[3]: *** [tp.o] Error 1
+make[3]: Leaving directory `/home/daniel/Documents/lttng-ust-6e266bf/tests/=
+hello.cxx'
+make[2]: *** [all-recursive] Error 1
+make[2]: Leaving directory `/home/daniel/Documents/lttng-ust-6e266bf/tests'
+make[1]: *** [all-recursive] Error 1
+make[1]: Leaving directory `/home/daniel/Documents/lttng-ust-6e266bf'
+make: *** [all] Error 2
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Daniel U. Thibault
+Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
+ntermeasures (SPC)
+Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
+Cyber Security (MCCS)
+R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
+ Canada - Valcartier (DRDC Valcartier)
+2459 route de la Bravoure
+Qu=E9bec QC  G3J 1X5
+CANADA
+Vox : (418) 844-4000 x4245
+Fax : (418) 844-4538
+NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+Gouvernement du Canada | Government of Canada
+<http://www.valcartier.drdc-rddc.gc.ca/>
