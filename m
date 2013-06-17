@@ -1,91 +1,68 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [-stable 3.8.1 performance regression] madvise POSIX_FADV_DONTNEED
-Date: Mon, 17 Jun 2013 10:13:57 -0400
-Message-ID: <20130617141357.GA6034@Krystal>
-References: <51BE1828.3060206@gmail.com>
+From: Samuel Martin <smartin@aldebaran-robotics.com>
+Subject: [PATCH lttng-modules] lttng-modules: fix build and load
+	against linux-2.6.33.x
+Date: Mon, 17 Jun 2013 16:16:37 +0200
+Message-ID: <1371478597-11938-1-git-send-email-smartin__38894.1419114873$1371478648$gmane$org@aldebaran-robotics.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Return-path: <linux-kernel-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <51BE1828.3060206@gmail.com>
-Sender: linux-kernel-owner@vger.kernel.org
-To: Yannick Brosseau <yannick.brosseau@gmail.com>, Mel Gorman <mgorman@suse.de>, Rob van der Heij <rvdheij@gmail.com>, stable@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail-wg0-f43.google.com ([74.125.82.43])
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <smartin@aldebaran-robotics.com>) id 1UoaDH-0001Dv-Pr
+	for lttng-dev@lists.lttng.org; Mon, 17 Jun 2013 10:15:20 -0400
+Received: by mail-wg0-f43.google.com with SMTP id z11so2388230wgg.34
+	for <lttng-dev@lists.lttng.org>; Mon, 17 Jun 2013 07:15:14 -0700 (PDT)
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
+* lttng-event.h declared but did not implement lttng_add_perf_counter_to_ctx
+  on kernel >=2.6.33, the implementation was in lttng-context-perf-counters.c,
+  which was only included for kernel >=2.6.34.
+  This prevented the module from being loaded.
 
-CCing lkml on this,
+* on kernel 2.6.33.x, lttng-context-perf-counters.c complains about implicit
+  declaration for {get,put}_online_cpus and {,un}register_cpu_notifier; so
+  fix header inclusion.
 
-* Yannick Brosseau (yannick.brosseau@gmail.com) wrote:
-> Hi all,
-> 
-> We discovered a performance regression in recent kernels with LTTng
-> related to the use of fadvise DONTNEED.
-> A call to this syscall is present in the LTTng consumer.
-> 
-> The following kernel commit cause the call to fadvise to be sometime
-> really slower.
-> 
-> Kernel commit info:
-> mm/fadvise.c: drain all pagevecs if POSIX_FADV_DONTNEED fails to discard
-> all pages
-> main tree: (since 3.9-rc1)
-> commit 67d46b296a1ba1477c0df8ff3bc5e0167a0b0732
-> stable tree: (since 3.8.1)
-> https://git.kernel.org/cgit/linux/kernel/git/stable/linux-stable.git/commit?id=bb01afe62feca1e7cdca60696f8b074416b0910d
-> 
-> On the workload test, we observe that the call to fadvise takes about
-> 4-5 us before this patch is applied. After applying the patch, The
-> syscall now takes values from 5 us up to 4 ms (4000 us) sometime. The
-> effect on lttng is that the consumer is frozen for this long period
-> which leads to dropped event in the trace.
+Signed-off-by: Samuel Martin <smartin@aldebaran-robotics.com>
+---
+ Makefile                      | 2 +-
+ lttng-context-perf-counters.c | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-We use POSIX_FADV_DONTNEED in LTTng so the kernel know it's not useful
-to keep the trace data around after it is flushed to disk. From what I
-gather from the commit changelog, it seems that the POSIX_FADV_DONTNEED
-operation now touches kernel data structures shared amongst processors
-that have much higher contention/overhead than previously.
-
-How does your page cache memory usage behave prior/after this kernel
-commit ?
-
-Also, can you try instrumenting the "count", "start_index" and
-"end_index" values within fadvise64_64 with commit
-67d46b296a1ba1477c0df8ff3bc5e0167a0b0732 applied and log this though
-LTTng ? This will tell us whether the lru_add_drain_all() hit is taken
-for a good reason, or due to an unforeseen off-by-one type of issue in
-the new test:
-
-  if (count < (end_index - start_index + 1)) {
-
-Thanks,
-
-Mathieu
-
-> 
-> If we remove the call to fadvise in src/common/consumer.c, we don't
-> have any dropped event and we don't observe any bad side effect.
-> (The added latency seem to come from the new call to
-> lru_add_drain_all(). We removed this line and the performance went back
-> to normal.)
-> 
-> It's obviously a problem in the kernel, but since it impacts LTTng, we
-> wanted to report it here first and ask advice on what should be the
-> next step to solve this problem.
-> 
-> If you want to see for youself, you can find the trace with the long
-> call to fadvise here:
-> http://www.dorsal.polymtl.ca/~rbeamonte/3.8.0~autocreated-4469887.tar.gz
-> 
-> Yannick and Raphael
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
+diff --git a/Makefile b/Makefile
+index 2da7298..66d94bc 100644
+--- a/Makefile
++++ b/Makefile
+@@ -33,7 +33,7 @@ endif
+ ifneq ($(CONFIG_PERF_EVENTS),)
+ lttng-tracer-objs += $(shell \
+ 	if [ $(VERSION) -ge 3 \
+-		-o \( $(VERSION) -eq 2 -a $(PATCHLEVEL) -ge 6 -a $(SUBLEVEL) -ge 34 \) ] ; then \
++		-o \( $(VERSION) -eq 2 -a $(PATCHLEVEL) -ge 6 -a $(SUBLEVEL) -ge 33 \) ] ; then \
+ 		echo "lttng-context-perf-counters.o" ; fi;)
+ endif
+ 
+diff --git a/lttng-context-perf-counters.c b/lttng-context-perf-counters.c
+index b97b40b..8c4a48a 100644
+--- a/lttng-context-perf-counters.c
++++ b/lttng-context-perf-counters.c
+@@ -25,6 +25,7 @@
+ #include <linux/perf_event.h>
+ #include <linux/list.h>
+ #include <linux/string.h>
++#include <linux/cpu.h>
+ #include "lttng-events.h"
+ #include "wrapper/ringbuffer/frontend_types.h"
+ #include "wrapper/vmalloc.h"
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+1.8.3.1
