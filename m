@@ -1,241 +1,134 @@
-From: Mel Gorman <mgorman@suse.de>
-Subject: Re: [-stable 3.8.1 performance regression] madvise
- POSIX_FADV_DONTNEED
-Date: Tue, 18 Jun 2013 11:11:47 +0100
-Message-ID: <20130618101147.GA7436@suse.de>
-References: <51BE1828.3060206@gmail.com>
- <20130617141357.GA6034@Krystal>
- <20130617142459.1d563072231ba269cdac8f11@linux-foundation.org>
- <20130618092925.GI1875@suse.de>
+From: Amit Margalit <AMITM@il.ibm.com>
+Subject: Weird assertion failure in
+	__lttng_events_init__provider () at
+	/usr/include/lttng/ust-tracepoint-event.h:687
+Date: Tue, 18 Jun 2013 13:57:03 +0300
+Message-ID: <OF02578AAF.2F483DCE-ONC2257B8E.003BBD95-C2257B8E.003C1290__5850.86854775927$1371553200$gmane$org@il.ibm.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Return-path: <stable-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <20130618092925.GI1875@suse.de>
-Sender: stable-owner@vger.kernel.org
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Yannick Brosseau <yannick.brosseau@gmail.com>, Rob van der Heij <rvdheij@gmail.com>, stable@vger.kernel.org, linux-kernel@vger.kernel.org, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+Content-Type: multipart/mixed; boundary="===============1738701757=="
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from e06smtp12.uk.ibm.com ([195.75.94.108])
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <amitm@il.ibm.com>) id 1UotbH-000339-BI
+	for lttng-dev@lists.lttng.org; Tue, 18 Jun 2013 06:57:23 -0400
+Received: from /spool/local
+	by e06smtp12.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use
+	Only! Violators will be prosecuted
+	for <lttng-dev@lists.lttng.org> from <amitm@il.ibm.com>;
+	Tue, 18 Jun 2013 11:52:33 +0100
+Received: from b06cxnps4074.portsmouth.uk.ibm.com
+	(d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+	by d06dlp03.portsmouth.uk.ibm.com (Postfix) with ESMTP id CDCC81B0805F
+	for <lttng-dev@lists.lttng.org>; Tue, 18 Jun 2013 11:57:15 +0100 (BST)
+Received: from d06av12.portsmouth.uk.ibm.com (d06av12.portsmouth.uk.ibm.com
+	[9.149.37.247])
+	by b06cxnps4074.portsmouth.uk.ibm.com (8.13.8/8.13.8/NCO v10.0) with
+	ESMTP id r5IAv4DI56230058
+	for <lttng-dev@lists.lttng.org>; Tue, 18 Jun 2013 10:57:04 GMT
+Received: from d06av12.portsmouth.uk.ibm.com (localhost [127.0.0.1])
+	by d06av12.portsmouth.uk.ibm.com (8.14.4/8.14.4/NCO v10.0 AVout) with
+	ESMTP id r5IAvEr5000951
+	for <lttng-dev@lists.lttng.org>; Tue, 18 Jun 2013 04:57:14 -0600
+Received: from d06ml311.portsmouth.uk.ibm.com (d06ml311.portsmouth.uk.ibm.com
+	[9.149.104.181])
+	by d06av12.portsmouth.uk.ibm.com (8.14.4/8.14.4/NCO v10.0 AVin) with
+	ESMTP id r5IAvE5r000941
+	for <lttng-dev@lists.lttng.org>; Tue, 18 Jun 2013 04:57:14 -0600
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On Tue, Jun 18, 2013 at 10:29:26AM +0100, Mel Gorman wrote:
-> On Mon, Jun 17, 2013 at 02:24:59PM -0700, Andrew Morton wrote:
-> > On Mon, 17 Jun 2013 10:13:57 -0400 Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
-> > 
-> > > Hi,
-> > > 
-> > > CCing lkml on this,
-> > > 
-> > > * Yannick Brosseau (yannick.brosseau@gmail.com) wrote:
-> > > > Hi all,
-> > > > 
-> > > > We discovered a performance regression in recent kernels with LTTng
-> > > > related to the use of fadvise DONTNEED.
-> > > > A call to this syscall is present in the LTTng consumer.
-> > > > 
-> > > > The following kernel commit cause the call to fadvise to be sometime
-> > > > really slower.
-> > > > 
-> > > > Kernel commit info:
-> > > > mm/fadvise.c: drain all pagevecs if POSIX_FADV_DONTNEED fails to discard
-> > > > all pages
-> > > > main tree: (since 3.9-rc1)
-> > > > commit 67d46b296a1ba1477c0df8ff3bc5e0167a0b0732
-> > > > stable tree: (since 3.8.1)
-> > > > https://git.kernel.org/cgit/linux/kernel/git/stable/linux-stable.git/commit?id=bb01afe62feca1e7cdca60696f8b074416b0910d
-> > > > 
-> > > > On the workload test, we observe that the call to fadvise takes about
-> > > > 4-5 us before this patch is applied. After applying the patch, The
-> > > > syscall now takes values from 5 us up to 4 ms (4000 us) sometime. The
-> > > > effect on lttng is that the consumer is frozen for this long period
-> > > > which leads to dropped event in the trace.
-> > 
-> > That change wasn't terribly efficient - if there are any unpopulated
-> > pages in the range (which is quite likely), fadvise() will now always
-> > call invalidate_mapping_pages() a second time.
-> > 
-> 
-> I did not view the path as being performance critical and did not anticipate
-> a delay that severe.
+This is a multipart message in MIME format.
+--===============1738701757==
+Content-Type: multipart/alternative; boundary="=_alternative 003C125EC2257B8E_="
 
-Which I should have, schedule_on_each_cpu is documented to be slow.
+This is a multipart message in MIME format.
+--=_alternative 003C125EC2257B8E_=
+Content-Type: text/plain; charset="US-ASCII"
 
-> The original test case as well was based on
-> sequential IO as part of a backup so I was also generally expecting the
-> range to be populated. I looked at the other users of lru_add_drain_all()
-> but there are fairly few. compaction uses them but only when used via sysfs
-> or proc. ksm uses it but it's not likely to be that noticable. mlock uses
-> it but it's unlikely it is being called frequently so I'm not going to
-> worry performance of lru_add_drain_all() in general. I'll look closer at
-> properly detecting when it's necessarily to call in the fadvise case.
-> 
+Hi,
 
-This compile-only tested prototype should detect remaining pages in the rage
-that were not invalidated. This will at least detect unpopulated pages but
-whether it has any impact depends on what lttng is invalidating. If it's
-invalidating a range of per-cpu traces then I doubt this will work because
-there will always be remaining pages. Similarly I wonder if passing down
-the mapping will really help if a large number of cpus are tracing as we
-end up scheduling work on every CPU regardless.
+I'm getting an assertion failure as listed above. Any idea what this is?
 
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index 2c28271..e2bb47e 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -2176,6 +2176,8 @@ extern int invalidate_partition(struct gendisk *, int);
- #endif
- unsigned long invalidate_mapping_pages(struct address_space *mapping,
- 					pgoff_t start, pgoff_t end);
-+unsigned long invalidate_mapping_pages_check(struct address_space *mapping,
-+					pgoff_t start, pgoff_t end);
- 
- static inline void invalidate_remote_inode(struct inode *inode)
- {
-diff --git a/mm/fadvise.c b/mm/fadvise.c
-index 7e09268..0579e60 100644
---- a/mm/fadvise.c
-+++ b/mm/fadvise.c
-@@ -122,7 +122,9 @@ SYSCALL_DEFINE(fadvise64_64)(int fd, loff_t offset, loff_t len, int advice)
- 		end_index = (endbyte >> PAGE_CACHE_SHIFT);
- 
- 		if (end_index >= start_index) {
--			unsigned long count = invalidate_mapping_pages(mapping,
-+			unsigned long nr_remaining;
-+
-+			nr_remaining = invalidate_mapping_pages_check(mapping,
- 						start_index, end_index);
- 
- 			/*
-@@ -131,7 +133,7 @@ SYSCALL_DEFINE(fadvise64_64)(int fd, loff_t offset, loff_t len, int advice)
- 			 * a per-cpu pagevec for a remote CPU. Drain all
- 			 * pagevecs and try again.
- 			 */
--			if (count < (end_index - start_index + 1)) {
-+			if (nr_remaining) {
- 				lru_add_drain_all();
- 				invalidate_mapping_pages(mapping, start_index,
- 						end_index);
-diff --git a/mm/truncate.c b/mm/truncate.c
-index c75b736..86cfc2e 100644
---- a/mm/truncate.c
-+++ b/mm/truncate.c
-@@ -312,26 +312,16 @@ void truncate_inode_pages(struct address_space *mapping, loff_t lstart)
- }
- EXPORT_SYMBOL(truncate_inode_pages);
- 
--/**
-- * invalidate_mapping_pages - Invalidate all the unlocked pages of one inode
-- * @mapping: the address_space which holds the pages to invalidate
-- * @start: the offset 'from' which to invalidate
-- * @end: the offset 'to' which to invalidate (inclusive)
-- *
-- * This function only removes the unlocked pages, if you want to
-- * remove all the pages of one inode, you must call truncate_inode_pages.
-- *
-- * invalidate_mapping_pages() will not block on IO activity. It will not
-- * invalidate pages which are dirty, locked, under writeback or mapped into
-- * pagetables.
-- */
--unsigned long invalidate_mapping_pages(struct address_space *mapping,
--		pgoff_t start, pgoff_t end)
-+static void __invalidate_mapping_pages(struct address_space *mapping,
-+		pgoff_t start, pgoff_t end,
-+		unsigned long *ret_nr_invalidated,
-+		unsigned long *ret_nr_remaining)
- {
- 	struct pagevec pvec;
- 	pgoff_t index = start;
- 	unsigned long ret;
--	unsigned long count = 0;
-+	unsigned long nr_invalidated = 0;
-+	unsigned long nr_remaining = 0;
- 	int i;
- 
- 	/*
-@@ -354,8 +344,10 @@ unsigned long invalidate_mapping_pages(struct address_space *mapping,
- 			if (index > end)
- 				break;
- 
--			if (!trylock_page(page))
-+			if (!trylock_page(page)) {
-+				nr_remaining++;
- 				continue;
-+			}
- 			WARN_ON(page->index != index);
- 			ret = invalidate_inode_page(page);
- 			unlock_page(page);
-@@ -365,17 +357,73 @@ unsigned long invalidate_mapping_pages(struct address_space *mapping,
- 			 */
- 			if (!ret)
- 				deactivate_page(page);
--			count += ret;
-+			else
-+				nr_remaining++;
-+			nr_invalidated += ret;
- 		}
- 		pagevec_release(&pvec);
- 		mem_cgroup_uncharge_end();
- 		cond_resched();
- 		index++;
- 	}
--	return count;
-+
-+	*ret_nr_invalidated = nr_invalidated;
-+	*ret_nr_remaining = nr_remaining;
- }
- EXPORT_SYMBOL(invalidate_mapping_pages);
- 
-+/**
-+ * invalidate_mapping_pages - Invalidate all the unlocked pages of one inode
-+ * @mapping: the address_space which holds the pages to invalidate
-+ * @start: the offset 'from' which to invalidate
-+ * @end: the offset 'to' which to invalidate (inclusive)
-+ *
-+ * This function only removes the unlocked pages, if you want to
-+ * remove all the pages of one inode, you must call truncate_inode_pages.
-+ *
-+ * invalidate_mapping_pages() will not block on IO activity. It will not
-+ * invalidate pages which are dirty, locked, under writeback or mapped into
-+ * pagetables.
-+ *
-+ * Returns the number of pages invalidated
-+ */
-+unsigned long invalidate_mapping_pages(struct address_space *mapping,
-+		pgoff_t start, pgoff_t end)
-+{
-+	unsigned long nr_invalidated, nr_remaining;
-+
-+	__invalidate_mapping_pages(mapping, start, end,
-+				   &nr_invalidated, &nr_remaining);
-+
-+	return nr_invalidated;
-+}
-+
-+/**
-+ * invalidate_mapping_pages_check - Invalidate all the unlocked pages of one inode and check for remaining pages.
-+ * @mapping: the address_space which holds the pages to invalidate
-+ * @start: the offset 'from' which to invalidate
-+ * @end: the offset 'to' which to invalidate (inclusive)
-+ *
-+ * This function only removes the unlocked pages, if you want to
-+ * remove all the pages of one inode, you must call truncate_inode_pages.
-+ *
-+ * invalidate_mapping_pages() will not block on IO activity. It will not
-+ * invalidate pages which are dirty, locked, under writeback or mapped into
-+ * pagetables.
-+ *
-+ * Returns the number of pages remaining in the invalidated range
-+ */
-+unsigned long invalidate_mapping_pages_check(struct address_space *mapping,
-+		pgoff_t start, pgoff_t end)
-+{
-+	unsigned long nr_invalidated, nr_remaining;
-+
-+	__invalidate_mapping_pages(mapping, start, end,
-+				   &nr_invalidated, &nr_remaining);
-+
-+	return nr_remaining;
-+}
-+
- /*
-  * This is like invalidate_complete_page(), except it ignores the page's
-  * refcount.  We do this because invalidate_inode_pages2() needs stronger
+Program terminated with signal 6, Aborted.
+#0  0x00007fc304edb945 in raise () from /lib64/libc.so.6
+(gdb) bt
+#0  0x00007fc304edb945 in raise () from /lib64/libc.so.6
+#1  0x00007fc304edcf21 in abort () from /lib64/libc.so.6
+#2  0x00007fc304ed4810 in __assert_fail () from /lib64/libc.so.6
+#3  0x00007fc30a48d58a in __lttng_events_init__provider () at 
+/usr/include/lttng/ust-tracepoint-event.h:687
+
+The change I made was to add 2 more tracepoints, in a separate file. The 
+provider is the same.
+
+I am using --buffers-uid, btw. The code is stock 2.2.0rc2 + my LTTNG_HOME 
+patch.
+
+Thanks,
+
+
+Amit Margalit
+IBM XIV - Storage Reinvented
+XIV-NAS Development Team
+Tel. 03-689-7774
+Fax. 03-689-7230
+--=_alternative 003C125EC2257B8E_=
+Content-Type: text/html; charset="US-ASCII"
+
+<font size=2 face="sans-serif">Hi,</font>
+<br>
+<br><font size=2 face="sans-serif">I'm getting an assertion failure as
+listed above. Any idea what this is?</font>
+<br>
+<br><font size=2 face="sans-serif">Program terminated with signal 6, Aborted.</font>
+<br><font size=2 face="sans-serif">#0 &nbsp;0x00007fc304edb945 in raise
+() from /lib64/libc.so.6</font>
+<br><font size=2 face="sans-serif">(gdb) bt</font>
+<br><font size=2 face="sans-serif">#0 &nbsp;0x00007fc304edb945 in raise
+() from /lib64/libc.so.6</font>
+<br><font size=2 face="sans-serif">#1 &nbsp;0x00007fc304edcf21 in abort
+() from /lib64/libc.so.6</font>
+<br><font size=2 face="sans-serif">#2 &nbsp;0x00007fc304ed4810 in __assert_fail
+() from /lib64/libc.so.6</font>
+<br><font size=2 face="sans-serif">#3 &nbsp;0x00007fc30a48d58a in __lttng_events_init__provider
+() at /usr/include/lttng/ust-tracepoint-event.h:687</font>
+<br>
+<br><font size=2 face="sans-serif">The change I made was to add 2 more
+tracepoints, in a separate file. The provider is the same.</font>
+<br>
+<br><font size=2 face="sans-serif">I am using --buffers-uid, btw. The code
+is stock 2.2.0rc2 + my LTTNG_HOME patch.</font>
+<br>
+<br><font size=2 face="sans-serif">Thanks,</font>
+<br>
+<br>
+<br><font size=2 color=#000080 face="sans-serif">Amit Margalit</font>
+<br><font size=2 color=#808000 face="sans-serif">IBM XIV </font><font size=2 face="sans-serif">-
+<i>Storage Reinvented</i></font>
+<br><font size=2 face="sans-serif">XIV-NAS Development Team</font>
+<br><font size=2 face="sans-serif">Tel. 03</font><font size=2 face="Arial">-689-7774</font>
+<br><font size=2 face="Arial">Fax. 03-689-7230</font>
+--=_alternative 003C125EC2257B8E_=--
+
+
+
+--===============1738701757==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1738701757==--
