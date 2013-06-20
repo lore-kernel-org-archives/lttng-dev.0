@@ -1,25 +1,16 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: [RELEASE] LTTng Tools 2.2.0-rc3 (Cuda)
-Date: Thu, 20 Jun 2013 14:48:28 -0400
-Message-ID: <51C34E7C.8030305__44066.4762318649$1371754150$gmane$org@efficios.com>
+From: Jessica Foest <jessica.foest@gmail.com>
+Subject: Question about Kprobe and function commandline options
+Date: Thu, 20 Jun 2013 15:02:11 -0400
+Message-ID: <CAPxN80BxSDSAEj9EmL_7weVx7nFy92xn3ax4zWTySTvM-wsanQ__24569.9977771894$1371754968$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0598464206=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([5.9.158.244])
+Received: from mail-oa0-f44.google.com ([209.85.219.44])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1UpjuN-0003Vp-Tg
-	for lttng-dev@lists.lttng.org; Thu, 20 Jun 2013 14:48:36 -0400
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by smtp.ini-tech.com (Postfix) with ESMTP id BD190A1DA0
-	for <lttng-dev@lists.lttng.org>; Thu, 20 Jun 2013 18:48:26 +0000 (UTC)
-Received: from smtp.ini-tech.com ([127.0.0.1])
-	by localhost (smtp.ini-tech.com [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id j6XVjnEFq2MQ for <lttng-dev@lists.lttng.org>;
-	Thu, 20 Jun 2013 18:48:26 +0000 (UTC)
-Received: from 127.0.0.1 (unknown [96.127.207.22])
-	by smtp.ini-tech.com (Postfix) with ESMTPSA id DE3B9A1D9C
-	for <lttng-dev@lists.lttng.org>; Thu, 20 Jun 2013 18:48:25 +0000 (UTC)
+	(envelope-from <jessica.foest@gmail.com>) id 1Upk7c-0003e5-RL
+	for lttng-dev@lists.lttng.org; Thu, 20 Jun 2013 15:02:16 -0400
+Received: by mail-oa0-f44.google.com with SMTP id l10so8467748oag.31
+	for <lttng-dev@lists.lttng.org>; Thu, 20 Jun 2013 12:02:11 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -28,45 +19,87 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Greetings everyone (including LTTng elves),
+--===============0598464206==
+Content-Type: multipart/alternative; boundary=001a11c339d2621e8b04df9a951e
 
-The lttng-tools project provides a session daemon (lttng-sessiond)
-that acts as a tracing registry, the "lttng" command line for tracing
-control, a lttng-ctl library for tracing control and a lttng-relayd
-for network streaming.
+--001a11c339d2621e8b04df9a951e
+Content-Type: text/plain; charset=ISO-8859-1
 
-Here is the release candidate 3 and hopefully the last one before the final release.
+Hi
 
-2013-06-20 lttng-tools 2.2.0-rc3
-    * Multiple memory and fd leak fixes in sessiond and consumerd
-    * Test: stress test added to the repository but not in make check
-    * Using LTTNG_HOME environment variable if exists, with fallback to HOME
-    * Implement health check for app registration dispatch
-    * Implement health check for app notification thread
-    * Revert "Improve channel listing output format"
-    * Fix: use lttng pipe to send new stream to thread
-    * Change consumer_metadata_pipe to be a lttng_pipe
-    * Change consumer_data_pipe to be a lttng_pipe
-    * Add wrappers for pipe
-    * Add --version command-line option to lttng.
-    * Add --with-lttng-ust-prefix config option.
-    * Fixes from coverity scan.
-    * Stability fixes
-    * RCU hash table are now destroyed in a seperate thread in sessiond
+i try to apply kprobe to a system call , so i used probe and function
+option :
 
-Please feel free to email the list about any questions/comments
-concerning this release. For bugs or missing documentations, use
-bugs.lttng.org!
+lttng enable-event aname -k --probe sys_open+0x0 : this command returns ip
+value
 
-Using it is testing it!
 
-Project website: http://lttng.org/lttng2.0
-Download link:
-http://lttng.org/files/lttng-tools/lttng-tools-2.2.0-rc3.tar.bz2 (for
-the PGP signature, same file with .asc appended)
+lttng enable-event aname -k --function sys_open : this command returns ip
+and parent_ip values .
 
-Thanks to all! Cheers!
-David
+what does these values ip and parent_ip means ?
+
+I try to apply probe and function options to some kernel symbols like
+initialized date (like xen_vcpu_info symbol), read only data (like
+linux_prob_banner symbol) and code (like reserve_ebda_region symbol) it
+displays to me : Enable kernel event failed ,warning some command went(s)
+wrong.
+Did i make a mistake or it's a limitation in LTTng ?
+
+regards.
+
+--001a11c339d2621e8b04df9a951e
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div><div><div><div>
+
+<p class=3D"" style=3D"margin-bottom:0.0001pt;line-height:normal"><span sty=
+le=3D"font-size:10pt;font-family:&quot;Courier New&quot;" lang=3D"EN-CA">Hi=
+=A0</span></p><p class=3D"" style=3D"margin-bottom:0.0001pt;line-height:nor=
+mal"><span style=3D"font-size:10pt;font-family:&quot;Courier New&quot;" lan=
+g=3D"EN-CA">i try to apply kprobe to a system call , so i used probe and fu=
+nction option : <br>
+</span></p><p class=3D"" style=3D"margin-bottom:0.0001pt;line-height:normal=
+"><span style=3D"font-size:10pt;font-family:&quot;Courier New&quot;" lang=
+=3D"EN-CA">lttng
+enable-event aname -k --probe sys_open+0x0 : this command returns ip value =
+<br></span></p><p class=3D"" style=3D"margin-bottom:0.0001pt;line-height:no=
+rmal"><span style=3D"font-size:10pt;font-family:&quot;Courier New&quot;" la=
+ng=3D"EN-CA"><br>
+</span></p><span style=3D"font-size:10pt;font-family:&quot;Courier New&quot=
+;" lang=3D"EN-CA"> lttng
+enable-event aname -k --function sys_open</span>
+: this command returns ip and parent_ip values .<br><br></div>what does the=
+se values ip and parent_ip means ?<br></div><br>I try to apply probe and fu=
+nction options to some kernel symbols like initialized date (like xen_vcpu_=
+info symbol), read only data (like linux_prob_banner symbol) and code (like=
+ reserve_ebda_region symbol) it displays to me : Enable kernel event failed=
+ ,warning some command went(s) wrong.<br>
+</div>Did i make a mistake or it&#39;s a limitation in LTTng ?<br><br></div=
+>regards.<br><div><div><div><div>
+
+<p class=3D"" style=3D"margin-bottom:0.0001pt;line-height:normal"><span sty=
+le=3D"font-family:URWPalladioL-Roma" lang=3D"EN-CA"><br></span><span style=
+=3D"font-family:URWPalladioL-Roma" lang=3D"EN-CA"></span></p>
+
+<br></div></div></div></div></div>
+
+--001a11c339d2621e8b04df9a951e--
+
+
+--===============0598464206==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0598464206==--
