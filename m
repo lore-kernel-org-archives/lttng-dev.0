@@ -1,20 +1,19 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [Babeltrace PATCH] Remove extra -I for python
-	bindings
-Date: Fri, 21 Jun 2013 11:21:38 -0400
-Message-ID: <20130621152138.GA7591__11119.1296171912$1371828136$gmane$org@Krystal>
-References: <1371826196-25578-1-git-send-email-yannick.brosseau@gmail.com>
+From: Anand Buddhdev <anandb@ripe.net>
+Subject: Compile failure on OSX 10.8
+Date: Fri, 21 Jun 2013 17:23:40 +0200
+Message-ID: <51C46FFC.7050407__49631.2007112012$1371828249$gmane$org@ripe.net>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from postgirl.ripe.net ([193.0.19.66])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1Uq39h-0004up-SO
-	for lttng-dev@lists.lttng.org; Fri, 21 Jun 2013 11:21:41 -0400
-Content-Disposition: inline
-In-Reply-To: <1371826196-25578-1-git-send-email-yannick.brosseau@gmail.com>
+	(envelope-from <anandb@ripe.net>) id 1Uq3BV-0004xA-VZ
+	for lttng-dev@lists.lttng.org; Fri, 21 Jun 2013 11:23:34 -0400
+Received: from ayeaye.ripe.net ([193.0.23.5])
+	by postgirl.ripe.net with esmtps (TLSv1:AES256-SHA:256) (Exim 4.72)
+	(envelope-from <anandb@ripe.net>) id 1Uq3BT-0001iz-Tj
+	for lttng-dev@lists.lttng.org; Fri, 21 Jun 2013 17:23:33 +0200
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,42 +22,48 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Yannick Brosseau <yannick.brosseau@gmail.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Merged into bindings/python branch.
+Hi people,
 
-Thanks,
+I'm trying to compile userspace-rcu 0.7.7 on OSX 10.8.4, and it's
+failing. The configure phase completes, but make fails like this:
 
-Mathieu
+$ make
+make  all-recursive
+Making all in .
+  CC     wfqueue.lo
+  CC     wfstack.lo
+  CC     compat_arch_x86.lo
+/var/folders/9f/pv25pv1j7k54m9q11sz79w0h0000gn/T//cc2LG2nk.s:44:suffix
+or operands invalid for `pushf'
+/var/folders/9f/pv25pv1j7k54m9q11sz79w0h0000gn/T//cc2LG2nk.s:44:suffix
+or operands invalid for `pop'
+/var/folders/9f/pv25pv1j7k54m9q11sz79w0h0000gn/T//cc2LG2nk.s:55:suffix
+or operands invalid for `push'
+/var/folders/9f/pv25pv1j7k54m9q11sz79w0h0000gn/T//cc2LG2nk.s:55:suffix
+or operands invalid for `popf'
+/var/folders/9f/pv25pv1j7k54m9q11sz79w0h0000gn/T//cc2LG2nk.s:60:suffix
+or operands invalid for `pushf'
+/var/folders/9f/pv25pv1j7k54m9q11sz79w0h0000gn/T//cc2LG2nk.s:60:suffix
+or operands invalid for `pop'
+/var/folders/9f/pv25pv1j7k54m9q11sz79w0h0000gn/T//cc2LG2nk.s:65:suffix
+or operands invalid for `push'
+/var/folders/9f/pv25pv1j7k54m9q11sz79w0h0000gn/T//cc2LG2nk.s:65:suffix
+or operands invalid for `popf'
+make[2]: *** [compat_arch_x86.lo] Error 1
+make[1]: *** [all-recursive] Error 1
+make: *** [all] Error 2
 
-* Yannick Brosseau (yannick.brosseau@gmail.com) wrote:
-> Same fix as for lttng-tools commit f7cbc765ad2526667f1f20b3a89c596b3422ac34
-> 
-> Signed-off-by: Yannick Brosseau <yannick.brosseau@gmail.com>
-> ---
->  bindings/python/Makefile.am |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/bindings/python/Makefile.am b/bindings/python/Makefile.am
-> index 536e07f..b25ce92 100644
-> --- a/bindings/python/Makefile.am
-> +++ b/bindings/python/Makefile.am
-> @@ -1,7 +1,7 @@
->  babeltrace.i: babeltrace.i.in
->  	sed "s/BABELTRACE_VERSION_STR/Babeltrace $(PACKAGE_VERSION)/g" <babeltrace.i.in >babeltrace.i
->  
-> -AM_CFLAGS = -I$(PYTHON_INCLUDE) -I$(top_srcdir)/include/
-> +AM_CFLAGS = $(PYTHON_INCLUDE) -I$(top_srcdir)/include/
->  
->  EXTRA_DIST = babeltrace.i
->  python_PYTHON = babeltrace.py
-> -- 
-> 1.7.10.4
-> 
+CC is just gcc, which is:
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+$ gcc --version
+i686-apple-darwin11-llvm-gcc-4.2 (GCC) 4.2.1 (Based on Apple Inc. build
+5658) (LLVM build 2336.11.00)
+
+Anyone know what the problem is, and how to fix it?
+
+Regards,
+
+Anand
