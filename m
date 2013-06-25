@@ -1,23 +1,27 @@
-From: Yannick Brosseau <yannick.brosseau@gmail.com>
-Subject: Re: [PATCH] lttng-gen-tp: remove support for # comments
-Date: Tue, 25 Jun 2013 11:02:06 -0400
-Message-ID: <51C9B0EE.90300__9386.09855152226$1372172575$gmane$org@gmail.com>
-References: <1371577764-7740-1-git-send-email-romain.lenglet@berabera.info>
-	<51C0B72F.2080404@gmail.com>
-	<A8D5A8E4-C2A2-4917-A6F1-0FE6C8BC115D@berabera.info>
-	<51C5E479.9060502@gmail.com>
-	<3C7142A8-A34C-4860-8451-3C99C02F417D@berabera.info>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [CFP] Tracing Summit 2013, October 23rd, 2013, Edinburgh,
+	UK
+Date: Tue, 25 Jun 2013 11:38:19 -0400
+Message-ID: <20130625153819.GB7304__131.058021406893$1372174731$gmane$org@Krystal>
+Reply-To: submission@tracingsummit.org
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-oa0-f49.google.com ([209.85.219.49])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <yannick.brosseau@gmail.com>) id 1UrUl9-0001jj-My
-	for lttng-dev@lists.lttng.org; Tue, 25 Jun 2013 11:02:19 -0400
-Received: by mail-oa0-f49.google.com with SMTP id n9so13687282oag.36
-	for <lttng-dev@lists.lttng.org>; Tue, 25 Jun 2013 08:02:14 -0700 (PDT)
-In-Reply-To: <3C7142A8-A34C-4860-8451-3C99C02F417D@berabera.info>
+	(envelope-from <compudj@mail.openrapids.net>) id 1UrVJz-00021X-VB
+	for lttng-dev@lists.lttng.org; Tue, 25 Jun 2013 11:38:20 -0400
+Received: from localhost (localhost [127.0.0.1])
+	by blackscsi.openrapids.net (Postfix) with ESMTP id AA49F1418CE
+	for <lttng-dev@lists.lttng.org>; Tue, 25 Jun 2013 11:38:19 -0400 (EDT)
+Received: from blackscsi.openrapids.net ([127.0.0.1])
+	by localhost (blackscsi.openrapids.net [127.0.0.1]) (amavisd-new,
+	port 10024)
+	with ESMTP id 3miHiS-Lnb5N for <lttng-dev@lists.lttng.org>;
+	Tue, 25 Jun 2013 11:38:19 -0400 (EDT)
+Content-Disposition: inline
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -26,87 +30,59 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Romain Lenglet <romain.lenglet@berabera.info>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On 2013-06-23 15:38, Romain Lenglet wrote:
-> Hi Yannick,
->
-> Your change does the job, thanks!
->
-> However, the regular expression "#[^include].*$" is incorrect, as [] matches a set of characters.
-> For instance, '#not an include' is not removed as you intended, as '#' is followed by 'n'.
->
-> I'd suggest using this regular expression instead:
-> '#(?!include).*$'
-Yeah, good point, I did it really quickly. I'll send a fix soon (with
-more test)
+Hi,
 
->
-> Thanks,
-> --
-> Romain Lenglet
->
-> On Jun 22, 2013, at 10:52 AM, Yannick Brosseau <yannick.brosseau@gmail.com> wrote:
->
->> Hi,
->>
->> I hope the latest commit on lttng-gen-tp which allows to add #include to
->> the .tp will be an appropriate fix for your needs
->>
->> On 2013-06-18 17:22, Romain Lenglet wrote:
->>> I need to use non-trivial types in TP_ARGS, e.g. uint64_t, or custom C++ classes.
->>> In the latter case, the motivation is to call accessors on C++ objects only when actually tracing, in TP_FIELDS.
->>> This absolutely requires including standard header files such as stdint.h, or header files defining C++ classes.
->>>
->>> What other solutions would you suggest to cleanly enable users to include header files from .tp files?
->>>
->>> Regards,
->>> --
->>> Romain Lenglet
->>>
->>> On Jun 18, 2013, at 12:38 PM, Yannick Brosseau <yannick.brosseau@gmail.com> wrote:
->>>
->>>> On 2013-06-18 13:49, Romain Lenglet wrote:
->>>>> Support #define, #include, etc. in tracepoint files.
->>>> Do you have a specific use case that demonstrate the need for that?
->>>>
->>>> The design goal of lttng-gen-tp included generating tracepoints for
->>>> other language than C, so we wanted a format more agnostics hence the
->>>> support for # comments
->>>>
->>>>> Signed-off-by: Romain Lenglet <romain.lenglet@berabera.info>
->>>>> ---
->>>>> doc/man/lttng-gen-tp.1 |    2 +-
->>>>> tools/lttng-gen-tp     |    3 ---
->>>>> 2 files changed, 1 insertion(+), 4 deletions(-)
->>>>>
->>>>> diff --git a/doc/man/lttng-gen-tp.1 b/doc/man/lttng-gen-tp.1
->>>>> index 84c05c9..96f02c4 100644
->>>>> --- a/doc/man/lttng-gen-tp.1
->>>>> +++ b/doc/man/lttng-gen-tp.1
->>>>> @@ -64,7 +64,7 @@ TRACEPOINT_LOGLEVEL.
->>>>> (See lttng-ust(3) for the complete list of available definition.)
->>>>>
->>>>> You write them as you would write them in a C header file. You can add
->>>>> -comments with \fB/* */\fP, \fB//\fP and \fB#\fP.
->>>>> +comments with \fB/* */\fP and \fB//\fP.
->>>>>
->>>>> The provider name (the first field of TRACEPOINT_EVENT) must be
->>>>> the same for the whole file.
->>>>> diff --git a/tools/lttng-gen-tp b/tools/lttng-gen-tp
->>>>> index 5937dfd..5ea221b 100755
->>>>> --- a/tools/lttng-gen-tp
->>>>> +++ b/tools/lttng-gen-tp
->>>>> @@ -159,9 +159,6 @@ class TemplateFile:
->>>>>
->>>>>        self.text = f.read()
->>>>>
->>>>> -        #Remove # comments (from input and output file
->>>>> -        removeComments = re.compile("#.*$",flags=re.MULTILINE)
->>>>> -        self.text = removeComments.sub("",self.text)
->>>>>        #Remove // comments
->>>>>        removeLineComment = re.compile("\/\/.*$",flags=re.MULTILINE)
->>>>>        nolinecomment = removeLineComment.sub("",self.text)
->>
+We are organizing a tracing summit taking place October 23rd in
+Edinburgh, UK, co-located with LinuxCon Europe. Our objective is to
+gather people involved in development and users of tracing tools and
+trace analysis tools to allow discussing the latest developments, allow
+users to express their needs, and generally ensure that developers and
+end users understand each other.
+
+If you are interested to present, please submit a proposal to
+submission@tracingsummit.org before August 21, 2013, at 23:59 EST.
+
+We are welcoming presentations from both end users and developers, on
+topics covering, but not limited to:
+
+ * Trace collection and extraction,
+ * Trace filtering,
+ * Trace aggregation,
+ * Trace formats,
+ * Tracing multi-core systems,
+ * Trace abstraction,
+ * Trace modeling,
+ * Automated trace analysis (e.g. dependency analysis),
+ * Tracing large clusters and distributed systems,
+ * Hardware-level tracing (e.g. DSP, GPU, bare-metal),
+ * Trace visualisation,
+ * Interaction between debugging and tracing,
+ * Tracing remote control,
+ * Analysis of large trace datasets,
+ * Cloud trace collection and analysis,
+ * Integration between trace tools,
+ * Live tracing & monitoring.
+
+Those can cover recently available technologies, ongoing work, and yet
+non-existing technologies (which are compellingly interesting to
+end-users).
+
+There will be a single track, containing presentations between 30 and 45
+minutes per subject with discussion.
+
+For those interested to attend, registration to LinuxCon Europe 2013 or
+Registration to CloudOpen Europe 2013 is required in order to register
+to the Tracing Summit 2013. See the Tracing Summit 2013 wiki at
+http://www.tracingsummit.org/wiki/TracingSummit2013 for details.
+
+Thank you,
+
+Dominique Toupin & Mathieu Desnoyers
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
