@@ -1,21 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [RELEASE] LTTng Tools 2.2.0 - Cuda (STABLE)
-Date: Wed, 26 Jun 2013 17:19:26 -0400
-Message-ID: <20130626211926.GC4725__16401.6844625168$1372281597$gmane$org@Krystal>
-References: <48CF5AC71E61DB46B70D0F388054EFFD131436D4@VAL-E-02.valcartier.drdc-rddc.gc.ca>
-	<20130626124914.GA28225@Krystal> <20130626145505.GB30675@Krystal>
-	<48CF5AC71E61DB46B70D0F388054EFFD131437FB@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+From: tarek slaymia <tarek.slaymia@gmail.com>
+Subject: issue when installing LTTng on ubuntu
+Date: Wed, 26 Jun 2013 18:01:51 -0400
+Message-ID: <CAP7TvLf0LFe0wrDK2qx+JYgVcfGFqQOJmbAiDvbon8o01EprsA__32741.1447339275$1372284152$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/mixed; boundary="===============1713751301=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from mail-vb0-f52.google.com ([209.85.212.52])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1Urx7f-0001vc-IL
-	for lttng-dev@lists.lttng.org; Wed, 26 Jun 2013 17:19:27 -0400
-Content-Disposition: inline
-In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD131437FB@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+	(envelope-from <tarek.slaymia@gmail.com>) id 1Urxmn-0002GB-Gw
+	for lttng-dev@lists.lttng.org; Wed, 26 Jun 2013 18:01:57 -0400
+Received: by mail-vb0-f52.google.com with SMTP id f12so1856vbg.39
+	for <lttng-dev@lists.lttng.org>; Wed, 26 Jun 2013 15:01:52 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,79 +19,60 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, "Couture,
-	Mario" <Mario.Couture@drdc-rddc.gc.ca>, "Painchaud,
-	Frederic" <Frederic.Painchaud@drdc-rddc.gc.ca>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Thibault, Daniel (Daniel.Thibault@drdc-rddc.gc.ca) wrote:
-> -----Message d'origine-----
-> Per UID buffers makes every application sharing the same UID to use the s=
-ame buffers.
-> [...]
-> Also, the buffers for UST application are now created in the consumer and=
- passed to the application. Thus, the buffer ownership has been transfered =
-from the UST tracer to the consumer.
-> -----Fin du message d'origine-----
-> =
+--===============1713751301==
+Content-Type: multipart/alternative; boundary=001a11339d9205880504e015cb43
 
->    So what David really meant was:
-> =
+--001a11339d9205880504e015cb43
+Content-Type: text/plain; charset=ISO-8859-1
 
-> Also, the per-PID buffers for UST application are now created in the cons=
-umer and passed to the application. Thus, the buffer ownership has been tra=
-nsferred from the UST tracer to the consumer in the per-PID case.
+hi all, when installing lttng on ubuntu12.04 an issue is displayed related
+to lttng-modules-dkms module.
 
-yes
+Title of displayed message :
+lttng-modules-dkms 2.0.2-0ubuntu1 : lttng-modules kernel module failed to
+build.
 
-> =
+in file included from
+/var/lib/dkms/lttng-modules/2.0.2/build/probes/../instrumentation/event/lttng-module/../../..probes/lttng-events.h:98:0
+/var/lib/dkms/lttng-modules/2.0.2/build/probes/../instrumentation/event/lttng-module/../../..probes/define_trace.h:117
+/var/lib/dkms/lttng-modules/2.0.2/build/probes/../instrumentation/event/lttng-module/signal.h:165
+/var/lib/dkms/lttng-modules/2.0.2/build/probes/lttng-probe-signal.c:38:
+/var/lib/dkms/lttng-modules/2.0.2/build/probes/../instrumentation/event/lttng-module/signal.h:61:1:erreur:conflicting
+types
 
->    And I presume the per-UID buffers remain owned by the user-space-servi=
-cing root consumer daemon?
+Environment:
+- on ubuntu 12.04.2 LTS - release amd64
+- Linux 3.5.0-23-genericx86_64
 
-yes, or whichever consumer daemon is used (e.g. per-user daemon if
-sessiond is run as a simple user rather than as root)
+BR
 
->    When lttng is being run as an unprivileged user (and can thus trace
->    only user-space), setting the buffering scheme to per-UID would
->    mean the trace uid folder would have just one subfolder, the
->    unprivileged user's uid (e.g.
->    $HOME/lttng-traces/session-20130611-1223344/ust/uid/1000/64-bit),
->    right? =
+--001a11339d9205880504e015cb43
+Content-Type: text/html; charset=ISO-8859-1
+
+<div dir="ltr"><div>hi all, when installing lttng on ubuntu12.04 an issue is displayed related to lttng-modules-dkms module.<br><br>Title of displayed message : <br>
+<div>lttng-modules-dkms 2.0.2-0ubuntu1 : lttng-modules kernel module failed to build.<br></div><div><br>in file included from /var/lib/dkms/lttng-modules/2.0.2/build/probes/../instrumentation/event/lttng-module/../../..probes/lttng-events.h:98:0<br>
+
+/var/lib/dkms/lttng-modules/2.0.2/build/probes/../instrumentation/event/lttng-module/../../..probes/define_trace.h:117<br>/var/lib/dkms/lttng-modules/2.0.2/build/probes/../instrumentation/event/lttng-module/signal.h:165<br>
+
+/var/lib/dkms/lttng-modules/2.0.2/build/probes/lttng-probe-signal.c:38:<br>/var/lib/dkms/lttng-modules/2.0.2/build/probes/../instrumentation/event/lttng-module/signal.h:61:1:erreur:conflicting types<br><br></div><div>Environment:<br>
+
+</div>- on ubuntu 12.04.2 LTS - release amd64<br>- Linux 3.5.0-23-genericx86_64 <br><br></div>BR<br></div>
+
+--001a11339d9205880504e015cb43--
 
 
-yes
+--===============1713751301==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-> I also presume the uid used is the real uid (ruid)?
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
-yes, this is correct. The one returned by getuid().
-
-Thanks,
-
-Mathieu
-
-> =
-
-> Daniel U. Thibault
-> Protection des syst=E8mes et contremesures (PSC) | Systems Protection & C=
-ountermeasures (SPC)
-> Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critica=
-l Cyber Security (MCCS)
-> R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R=
-&D Canada - Valcartier (DRDC Valcartier)
-> 2459 route de la Bravoure
-> Qu=E9bec QC  G3J 1X5
-> CANADA
-> Vox : (418) 844-4000 x4245
-> Fax : (418) 844-4538
-> [Valcartier]\\vsi-wdut-o980, [Valcartier]\\edge
-> NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-> Gouvernement du Canada | Government of Canada
-> <http://www.valcartier.drdc-rddc.gc.ca/>
-
--- =
-
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+--===============1713751301==--
