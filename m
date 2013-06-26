@@ -1,19 +1,20 @@
-From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
-	<jeremie.galarneau@efficios.com>
-Subject: [PATCH babeltrace] Remove unnused function
-	bt_trace_handle_get_id
-Date: Wed, 26 Jun 2013 13:27:37 -0400
-Message-ID: <1372267657-1956-1-git-send-email-jeremie.galarneau__34649.3755736903$1372267733$gmane$org@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH babeltrace] Remove unnused
+	function	bt_trace_handle_get_id
+Date: Wed, 26 Jun 2013 13:33:27 -0400
+Message-ID: <20130626173327.GA32627__22514.6023360596$1372268043$gmane$org@Krystal>
+References: <1372267657-1956-1-git-send-email-jeremie.galarneau@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qe0-f41.google.com ([209.85.128.41])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1UrtVy-0006Ww-SG
-	for lttng-dev@lists.lttng.org; Wed, 26 Jun 2013 13:28:19 -0400
-Received: by mail-qe0-f41.google.com with SMTP id b4so1061328qen.28
-	for <lttng-dev@lists.lttng.org>; Wed, 26 Jun 2013 10:28:13 -0700 (PDT)
+	(envelope-from <compudj@mail.openrapids.net>) id 1Urtay-0006Zj-VY
+	for lttng-dev@lists.lttng.org; Wed, 26 Jun 2013 13:33:29 -0400
+Content-Disposition: inline
+In-Reply-To: <1372267657-1956-1-git-send-email-jeremie.galarneau@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,24 +23,60 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
-Cc: mathieu.desnoyers@efficios.com, jdesfossez@efficios.com
+To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
+Cc: lttng-dev@lists.lttng.org, jdesfossez@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-VGhpcyBmdW5jdGlvbiB3YXMgcmVtb3ZlZCBmcm9tIHRyYWNlLWhhbmRsZS5oIGFzIHBhcnQgb2Yg
-Y29tbWl0CmUzZDEyY2Y5M2YwNjc2MDFkZjQxNzllZjRiN2UyYTMwYWEwMDY1Zjcgd2hpY2ggY2hh
-bmdlZCB0aGUgdHJhY2UtaGFuZGxlIEFQSSB0bwp1c2UgaGFuZGxlX2lkcyBpbnN0ZWFkIG9mIHBv
-aW50ZXJzIHRvIGEgc3RydWN0IGJ0X3RyYWNlX2hhbmRsZS4KClNpZ25lZC1vZmYtYnk6IErDqXLD
-qW1pZSBHYWxhcm5lYXUgPGplcmVtaWUuZ2FsYXJuZWF1QGVmZmljaW9zLmNvbT4KLS0tCiBsaWIv
-dHJhY2UtaGFuZGxlLmMgfCA4IC0tLS0tLS0tCiAxIGZpbGUgY2hhbmdlZCwgOCBkZWxldGlvbnMo
-LSkKCmRpZmYgLS1naXQgYS9saWIvdHJhY2UtaGFuZGxlLmMgYi9saWIvdHJhY2UtaGFuZGxlLmMK
-aW5kZXggNDU1ZTQ0MC4uZDViOTA2YSAxMDA2NDQKLS0tIGEvbGliL3RyYWNlLWhhbmRsZS5jCisr
-KyBiL2xpYi90cmFjZS1oYW5kbGUuYwpAQCAtNTIsMTQgKzUyLDYgQEAgdm9pZCBidF90cmFjZV9o
-YW5kbGVfZGVzdHJveShzdHJ1Y3QgYnRfdHJhY2VfaGFuZGxlICp0aCkKIAlnX2ZyZWUodGgpOwog
-fQogCi1pbnQgYnRfdHJhY2VfaGFuZGxlX2dldF9pZChzdHJ1Y3QgYnRfdHJhY2VfaGFuZGxlICp0
-aCkKLXsKLQlpZiAoIXRoKQotCQlyZXR1cm4gLTE7Ci0KLQlyZXR1cm4gdGgtPmlkOwotfQotCiBj
-b25zdCBjaGFyICpidF90cmFjZV9oYW5kbGVfZ2V0X3BhdGgoc3RydWN0IGJ0X2NvbnRleHQgKmN0
-eCwgaW50IGhhbmRsZV9pZCkKIHsKIAlzdHJ1Y3QgYnRfdHJhY2VfaGFuZGxlICpoYW5kbGU7Ci0t
-IAoxLjguMy4xCgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6
-Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+* J=E9r=E9mie Galarneau (jeremie.galarneau@efficios.com) wrote:
+> This function was removed from trace-handle.h as part of commit
+> e3d12cf93f067601df4179ef4b7e2a30aa0065f7 which changed the trace-handle A=
+PI to
+> use handle_ids instead of pointers to a struct bt_trace_handle.
+
+Merged, with "unnused" -> unused. ;-)
+
+Thanks,
+
+Mathieu
+
+> =
+
+> Signed-off-by: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
+> ---
+>  lib/trace-handle.c | 8 --------
+>  1 file changed, 8 deletions(-)
+> =
+
+> diff --git a/lib/trace-handle.c b/lib/trace-handle.c
+> index 455e440..d5b906a 100644
+> --- a/lib/trace-handle.c
+> +++ b/lib/trace-handle.c
+> @@ -52,14 +52,6 @@ void bt_trace_handle_destroy(struct bt_trace_handle *t=
+h)
+>  	g_free(th);
+>  }
+>  =
+
+> -int bt_trace_handle_get_id(struct bt_trace_handle *th)
+> -{
+> -	if (!th)
+> -		return -1;
+> -
+> -	return th->id;
+> -}
+> -
+>  const char *bt_trace_handle_get_path(struct bt_context *ctx, int handle_=
+id)
+>  {
+>  	struct bt_trace_handle *handle;
+> -- =
+
+> 1.8.3.1
+> =
+
+
+-- =
+
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
