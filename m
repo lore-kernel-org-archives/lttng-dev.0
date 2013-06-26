@@ -1,19 +1,18 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: issue when installing lttng on ubuntu 12.04
-Date: Wed, 26 Jun 2013 15:02:17 -0400
-Message-ID: <20130626190216.GA1365__19861.151968553$1372273372$gmane$org@Krystal>
-References: <CAP7TvLcQQuE2Knih=OKzr7UC-v84pm0t8-PW_bti9ngQK4ffrw@mail.gmail.com>
+From: Yannick Brosseau <yannick.brosseau@gmail.com>
+Subject: [LTTng-modules PATCH] Add header to fix compilation of
+	syscalls-extractor on 3.9 kernel
+Date: Wed, 26 Jun 2013 15:09:29 -0400
+Message-ID: <1372273769-10331-1-git-send-email-yannick.brosseau__24281.5476762646$1372273818$gmane$org@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from mail-ie0-f172.google.com ([209.85.223.172])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1Uruyw-0007JM-41
-	for lttng-dev@lists.lttng.org; Wed, 26 Jun 2013 15:02:18 -0400
-Content-Disposition: inline
-In-Reply-To: <CAP7TvLcQQuE2Knih=OKzr7UC-v84pm0t8-PW_bti9ngQK4ffrw@mail.gmail.com>
+	(envelope-from <yannick.brosseau@gmail.com>) id 1Urv67-0007NM-RX
+	for lttng-dev@lists.lttng.org; Wed, 26 Jun 2013 15:09:43 -0400
+Received: by mail-ie0-f172.google.com with SMTP id 16so32131667iea.17
+	for <lttng-dev@lists.lttng.org>; Wed, 26 Jun 2013 12:09:38 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,34 +21,25 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: tarek slaymia <tarek.slaymia@gmail.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org, mathieu.desnoyers@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-* tarek slaymia (tarek.slaymia@gmail.com) wrote:
-> hi all
-> when installing lttng on ubuntu12.04 an issue is displayed related to
-> lttng-modules-dkms module.
+Signed-off-by: Yannick Brosseau <yannick.brosseau@gmail.com>
+---
+ .../syscalls/lttng-syscalls-extractor/lttng-syscalls-extractor.c      |    1 +
+ 1 file changed, 1 insertion(+)
 
-TL;DR  :-P
-
-jokes appart, please provide at least _some_ output (error message
-maybe?) if you want us to investigate.
-
-Thanks,
-
-Mathieu
-
-> 
-> BR
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
-
+diff --git a/instrumentation/syscalls/lttng-syscalls-extractor/lttng-syscalls-extractor.c b/instrumentation/syscalls/lttng-syscalls-extractor/lttng-syscalls-extractor.c
+index a1d3085..7119746 100644
+--- a/instrumentation/syscalls/lttng-syscalls-extractor/lttng-syscalls-extractor.c
++++ b/instrumentation/syscalls/lttng-syscalls-extractor/lttng-syscalls-extractor.c
+@@ -31,6 +31,7 @@
+ #include <linux/dcache.h>
+ #include <linux/ftrace_event.h>
+ #include <trace/syscall.h>
++#include <asm/syscall.h>
+ 
+ #ifndef CONFIG_FTRACE_SYSCALLS
+ #error "You need to set CONFIG_FTRACE_SYSCALLS=y"
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+1.7.10.4
