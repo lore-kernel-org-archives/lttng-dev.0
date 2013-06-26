@@ -1,20 +1,21 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [RELEASE] LTTng Tools 2.2.0 - Cuda (STABLE)
-Date: Wed, 26 Jun 2013 10:55:05 -0400
-Message-ID: <20130626145505.GB30675__17645.6657275141$1372258537$gmane$org@Krystal>
-References: <48CF5AC71E61DB46B70D0F388054EFFD131436D4@VAL-E-02.valcartier.drdc-rddc.gc.ca>
-	<20130626124914.GA28225@Krystal>
+From: Anand Buddhdev <anandb@ripe.net>
+Subject: Re: Compile failure on OSX 10.8
+Date: Wed, 26 Jun 2013 17:50:07 +0200
+Message-ID: <51CB0DAF.6010507__22738.649036228$1372261849$gmane$org@ripe.net>
+References: <51C46FFC.7050407@ripe.net>
+	<CAGDH53k9wAeu6cBsSCtauX0ADgFW9B09vz7Cfq2B=Yhw3-pCNw@mail.gmail.com>
+	<51C47EE0.9080208@ripe.net>
+	<CAGDH53mD-8jWechmKhVWyS7nY_CJQQgdDXfLp1V=gsAkmw53eQ@mail.gmail.com>
+	<51C49E0C.8020808@ripe.net>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from postgirl.ripe.net ([193.0.19.66])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1Urr7j-0005Ge-Qg
-	for lttng-dev@lists.lttng.org; Wed, 26 Jun 2013 10:55:07 -0400
-Content-Disposition: inline
-In-Reply-To: <20130626124914.GA28225@Krystal>
+	(envelope-from <anandb@ripe.net>) id 1Urrz1-0005hw-AA
+	for lttng-dev@lists.lttng.org; Wed, 26 Jun 2013 11:50:11 -0400
+In-Reply-To: <51C49E0C.8020808@ripe.net>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,101 +24,30 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, "Couture,
-	Mario" <Mario.Couture@drdc-rddc.gc.ca>, "Painchaud,
-	Frederic" <Frederic.Painchaud@drdc-rddc.gc.ca>
+To: Christian Babeux <christian.babeux@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-* Mathieu Desnoyers (mathieu.desnoyers@efficios.com) wrote:
-> * Thibault, Daniel (Daniel.Thibault@drdc-rddc.gc.ca) wrote:
-> > -----Message d'origine-----
-> > Message: 5
-> > Date: Tue, 25 Jun 2013 17:37:57 -0400
-> > From: David Goulet <dgoulet@efficios.com>
-> > [...]
-> > Per UID buffers makes every application sharing the same UID to use the=
- same
-> > buffers.
-> > [...]
-> > Also, the buffers for UST application are now created in the consumer
-> > and passed to the application. Thus, the buffer ownership has been
-> > transfered from the UST tracer to the consumer.
-> > ------------------------------
-> > Message: 8
-> > Date: Tue, 25 Jun 2013 19:01:17 -0400
-> > From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> > [...]
-> > - Buffers shared across applications with same user id e.g.
-> >   lttng enable-channel -u mychan --buffers-uid
-> > ------------------------------
-> > =
+Hi Christian,
 
-> >    How can per-uid UST buffers be owned by any one application?
-> =
+Were you able to figure out from the config.log files why the
+architecture detection wasn't working properly?
 
-> It is not the case, I do not understand the question.
-> =
+Anand
 
-> Per-PID buffers are per "application", and per-PID buffers are shared
-> across all applications with the same user id.
+On 21/06/2013 20:40, Anand Buddhdev wrote:
 
-I actually meant:
-
-Per-PID buffers are per "application", and per-*UID* buffers are shared
-across all applications with the same user id.
-
-Thanks,
-
-Mathieu
-
-> =
-
-> Thanks,
-> =
-
-> Mathieu
-> =
-
-> > =
-
-> > Daniel U. Thibault
-> > Protection des syst=E8mes et contremesures (PSC) | Systems Protection &=
- Countermeasures (SPC)
-> > Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Criti=
-cal Cyber Security (MCCS)
-> > R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence=
- R&D Canada - Valcartier (DRDC Valcartier)
-> > 2459 route de la Bravoure
-> > Qu=E9bec QC  G3J 1X5
-> > CANADA
-> > Vox : (418) 844-4000 x4245
-> > Fax : (418) 844-4538
-> > NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-> > Gouvernement du Canada | Government of Canada
-> > <http://www.valcartier.drdc-rddc.gc.ca/>
-> > =
-
-> > _______________________________________________
-> > lttng-dev mailing list
-> > lttng-dev@lists.lttng.org
-> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> =
-
-> -- =
-
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> http://www.efficios.com
-> =
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- =
-
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+> Hi Christian,
+> 
+> I've attached both here.
+> 
+> Anand
+> 
+> On 21/06/2013 18:51, Christian Babeux wrote:
+> 
+>> Hmm that's really weird :/. For some reason configure detect an i386
+>> CPU which is certainly not right. Could you post your config.log with
+>> and without the --host flag (specifying which is which)?
+>>
+>> There might be some slight incompatibilities on OSX and the CPU
+>> detection mechanism we are using...
