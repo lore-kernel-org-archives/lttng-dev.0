@@ -1,10 +1,9 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Problem with adding vpid and vtid context to UST
-Date: Wed, 26 Jun 2013 14:36:50 -0400
-Message-ID: <20130626183650.GA1115__46533.5358203903$1372271851$gmane$org@Krystal>
-References: <OFA2B17967.FDD790B6-ONC2257B8C.002C000A-C2257B8C.002C70E3@il.ibm.com>
-	<51BF6B2C.1060509@efficios.com>
-	<OF1628A49E.BD456539-ONC2257B8E.0022531F-C2257B8E.0022D404@il.ibm.com>
+Subject: Re: [BABELTRACE PATCH] Move some validation
+	in	ctf_packet_seek in the SEEK_CUR section
+Date: Wed, 26 Jun 2013 14:48:55 -0400
+Message-ID: <20130626184855.GB1115__19632.9173668802$1372272570$gmane$org@Krystal>
+References: <1371154901-5779-1-git-send-email-yannick.brosseau@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -12,10 +11,10 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UruaM-00073f-Gv
-	for lttng-dev@lists.lttng.org; Wed, 26 Jun 2013 14:36:54 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1Urum0-00079r-Ry
+	for lttng-dev@lists.lttng.org; Wed, 26 Jun 2013 14:48:56 -0400
 Content-Disposition: inline
-In-Reply-To: <OF1628A49E.BD456539-ONC2257B8E.0022531F-C2257B8E.0022D404@il.ibm.com>
+In-Reply-To: <1371154901-5779-1-git-send-email-yannick.brosseau@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,143 +23,195 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Amit Margalit <AMITM@il.ibm.com>
+To: Yannick Brosseau <yannick.brosseau@gmail.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Amit Margalit (AMITM@il.ibm.com) wrote:
-> Thanks for the explanation.
+* Yannick Brosseau (yannick.brosseau@gmail.com) wrote:
+> The test that the current position is not already over the end of the trace apply only
+> for the SEEK_CUR (seek next packet) section. A SEEK_SET can bring back the current position
+> pointer to a valid position.
 > 
-> The reason I am running enable-channel is to add arguments like number of 
-> subbuffers, and to select per-uid buffers. The vtid / vpid context is 
-> something I'd like to have on every channel, and I really only want a 
-> single channel...
+> Also add a unit test to validate the seeking at the last event of the trace.
 > 
-> In fact, it is unclear to me how to tell an application which channel to 
-> use - is it even possible?
+> Fixes #551
 
-No. Currently, channels apply to all registered applications.
+oops, I missed this one.
 
-However, with per-PID channels, you have one set of buffers per process.
+I just merged the unit test part as:
 
-With per-UID channels, you have one set of buffers per user ID, shared
-amongst processes.
+commit 58cfc173d0b26dc11d05e22a30676b43593a98bd
+Author: Yannick Brosseau <yannick.brosseau@gmail.com>
+Date:   Wed Jun 26 14:44:34 2013 -0400
+
+    Add unit test validating seeking to last event of a trace
+    
+    [ Edited by Mathieu Desnoyers from patch "Move some validation in
+      ctf_packet_seek in the SEEK_CUR section" ]
+    
+    Signed-off-by: Yannick Brosseau <yannick.brosseau@gmail.com>
+    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+
+See commit:
+
+commit c309df1c8522c61ea9f4f108fa2d1eee3a828037
+Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Date:   Mon Jun 17 15:48:55 2013 -0400
+
+    Fix: use index, not cur_index, for SEEK_SET validation
+    
+    Fixes #551
+    
+    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+
+for the fix.
 
 Thanks,
 
 Mathieu
 
 > 
-> Thanks,
+> Signed-off-by: Yannick Brosseau <yannick.brosseau@gmail.com>
+> ---
+>  formats/ctf/ctf.c      |   17 +++++++--------
+>  tests/lib/test-seeks.c |   55 +++++++++++++++++++++++++++++++++++++++++++++++-
+>  2 files changed, 62 insertions(+), 10 deletions(-)
 > 
-> P.S. I intend to send a man-page patch for the domain separation as you 
-> suggested.
+> diff --git a/formats/ctf/ctf.c b/formats/ctf/ctf.c
+> index bb94e52..ed3defd 100644
+> --- a/formats/ctf/ctf.c
+> +++ b/formats/ctf/ctf.c
+> @@ -670,7 +670,7 @@ int ctf_fini_pos(struct ctf_stream_pos *pos)
+>  
+>  /*
+>   * for SEEK_CUR: go to next packet.
+> - * for SEEK_POS: go to packet numer (index).
+> + * for SEEK_SET: go to packet numer (index).
+>   */
+>  void ctf_packet_seek(struct bt_stream_pos *stream_pos, size_t index, int whence)
+>  {
+> @@ -682,6 +682,7 @@ void ctf_packet_seek(struct bt_stream_pos *stream_pos, size_t index, int whence)
+>  	off_t off;
+>  	struct packet_index *packet_index;
+>  
+> +	/* Test precondition (whence valid values) */
+>  	switch (whence) {
+>  	case SEEK_CUR:
+>  	case SEEK_SET:	/* Fall-through */
+> @@ -729,19 +730,17 @@ void ctf_packet_seek(struct bt_stream_pos *stream_pos, size_t index, int whence)
+>  		pos->offset = 0;
+>  	} else {
+>  	read_next_packet:
+> -		if (pos->cur_index >= pos->packet_cycles_index->len) {
+> -			pos->offset = EOF;
+> -			return;
+> -		}
+> -		if (pos->cur_index >= pos->packet_real_index->len) {
+> -			pos->offset = EOF;
+> -			return;
+> -		}
+>  		switch (whence) {
+>  		case SEEK_CUR:
+>  		{
+>  			uint64_t events_discarded_diff;
+>  
+> +			if (pos->cur_index >= pos->packet_cycles_index->len) {
+> +				pos->offset = EOF;
+> +			}
+> +			if (pos->cur_index >= pos->packet_real_index->len) {
+> +				pos->offset = EOF;
+> +			}
+>  			if (pos->offset == EOF) {
+>  				return;
+>  			}
+> diff --git a/tests/lib/test-seeks.c b/tests/lib/test-seeks.c
+> index 47bb42e..a7b1360 100644
+> --- a/tests/lib/test-seeks.c
+> +++ b/tests/lib/test-seeks.c
+> @@ -32,7 +32,7 @@
+>  #include "common.h"
+>  #include "tap.h"
+>  
+> -#define NR_TESTS	23
+> +#define NR_TESTS	29
+>  
+>  void run_seek_begin(char *path, uint64_t expected_begin)
+>  {
+> @@ -134,6 +134,58 @@ void run_seek_last(char *path, uint64_t expected_last)
+>  	bt_context_put(ctx);
+>  }
+>  
+> +void run_seek_time_at_last(char *path, uint64_t expected_last)
+> +{
+> +	struct bt_context *ctx;
+> +	struct bt_ctf_iter *iter;
+> +	struct bt_ctf_event *event;
+> +	struct bt_iter_pos newpos;
+> +	int ret;
+> +	uint64_t timestamp_last;
+> +
+> +	/* Open the trace */
+> +	ctx = create_context_with_path(path);
+> +	if (!ctx) {
+> +		plan_skip_all("Cannot create valid context");
+> +	}
+> +
+> +	/* Create iterator with null last and end */
+> +	iter = bt_ctf_iter_create(ctx, NULL, NULL);
+> +	if (!iter) {
+> +		plan_skip_all("Cannot create valid iterator");
+> +	}
+> +
+> +	event = bt_ctf_iter_read_event(iter);
+> +
+> +	ok(event, "Event valid at beginning");
+> +
+> +	/* Seek to last */
+> +	newpos.type = BT_SEEK_TIME;
+> +	newpos.u.seek_time = expected_last;
+> +	ret = bt_iter_set_pos(bt_ctf_get_iter(iter), &newpos);
+> +
+> +	ok(ret == 0, "Seek time at last retval %d", ret);
+> +
+> +	event = bt_ctf_iter_read_event(iter);
+> +
+> +	ok(event, "Event valid at last position");
+> +
+> +	timestamp_last = bt_ctf_get_timestamp(event);
+> +
+> +	ok1(timestamp_last == expected_last);
+> +
+> +	/* Try to read next event */
+> +	ret = bt_iter_next(bt_ctf_get_iter(iter));
+> +
+> +	ok(ret == 0, "iter next should return an error");
+> +
+> +	event = bt_ctf_iter_read_event(iter);
+> +
+> +	ok(event == 0, "Event after last should be invalid");
+> +
+> +	bt_context_put(ctx);
+> +}
+> +
+>  void run_seek_cycles(char *path,
+>  		uint64_t expected_begin,
+>  		uint64_t expected_last)
+> @@ -242,6 +294,7 @@ int main(int argc, char **argv)
+>  	}
+>  
+>  	run_seek_begin(path, expected_begin);
+> +	run_seek_time_at_last(path, expected_last);
+>  	run_seek_last(path, expected_last);
+>  	run_seek_cycles(path, expected_begin, expected_last);
+>  
+> -- 
+> 1.7.10.4
 > 
 > 
-> Amit Margalit
-> IBM XIV - Storage Reinvented
-> XIV-NAS Development Team
-> Tel. 03-689-7774
-> Fax. 03-689-7230
-> 
-> 
-> 
-> From:   David Goulet <dgoulet@efficios.com>
-> To:     Amit Margalit/Israel/IBM@IBMIL
-> Cc:     lttng-dev@lists.lttng.org
-> Date:   06/17/2013 11:01 PM
-> Subject:        Re: [lttng-dev] Problem with adding vpid and vtid context 
-> to UST
-> 
-> 
-> 
-> Hi Amit,
-> 
-> Amit Margalit:
-> > Hi,
-> > 
-> > Every time I try this, I get the following error:
-> > 
-> > Error: Error starting tracing for app pid: 5663 (ret: -1027)
-> > 
-> > Here's my sequence:
-> > 
-> > lttng create foo -o /store/
-> > lttng enable-channel -u
-> > lttng add-context -u -t vpid -t vtid -t procname
-> > lttng enable-event -u -a
-> > lttng start foo
-> > 
-> > At this point I start my application and get that error. When the 
-> application
-> > exits, I stop the tracing, and run lttng view.
-> > 
-> > The trace session seems to have worked just fine, and "procname" was 
-> indeed
-> > added to the context, but vtid and vpid were not.
-> 
-> What's going on here is that you enable a channel then add contexts. This 
-> is
-> perfectly OK (although your example is missing a channel name). So, the
-> following "lttng enable-event" creates a default channel "channel0" since 
-> no
-> "-c" was specified.
-> 
-> So basically, the contexts are available on the first channel and not the 
-> second
-> one.
-> 
-> This sequence should work:
-> 
-> lttng create foo -o /store/
-> lttng enable-event -u -a
-> lttng add-context -u -t vpid -t vtid -t procname
-> lttng start foo
-> 
-> We should detail that a bit better in the documentation that an 
-> add-context
-> needs to be done *after* a channel is enabled. This allows you to create
-> multiple channel with different contexts.
-> 
-> Now, an other issue here in terms of usability is that the enable-event 
-> *after*
-> an enable-channel should be apply to this channel. I think there is been a
-> discussion at some point on lttng-dev on in the bug tracker.
-> 
-> > 
-> > And BTW, the documentation doesn't clearly state that pid and tid are
-> > kernel-only contexts, and that one should use vtid and vpid.
-> 
-> Yes! The list of contexts accepted per domain would be quite useful and I 
-> do
-> agree with you that it's missing in the doc.
-> 
-> We would be *happy* to welcome a contribution for that :).
-> 
-> Cheers!
-> David
-> 
-> > 
-> > Any help is appreciated.
-> > 
-> > Thanks,
-> > 
-> > Amit Margalit
-> > IBM XIV - /Storage Reinvented/
-> > XIV-NAS Development Team
-> > Tel. 03-689-7774
-> > Fax. 03-689-7230
-> > 
-> > 
-> > This body part will be downloaded on demand.
-> 
-> 
-
 > _______________________________________________
 > lttng-dev mailing list
 > lttng-dev@lists.lttng.org
 > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
 
 -- 
 Mathieu Desnoyers
