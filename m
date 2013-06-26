@@ -1,18 +1,19 @@
-From: Jessica Foest <jessica.foest@gmail.com>
-Subject: Re: New LTTNG user
-Date: Wed, 26 Jun 2013 16:14:30 -0400
-Message-ID: <CAPxN80BrtX4Y7RT-O9FUc72TWj-9Oh7MtzbteoRNaMqwgEZB1Q__32050.3306029879$1372277711$gmane$org@mail.gmail.com>
-References: <CAPxN80A4-Fa3hhA8+zmmckhwRrp0qb2+xXcebw8tmB1QXGULzw@mail.gmail.com>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Subject: Re: [RELEASE] LTTng Tools 2.2.0 - Cuda (STABLE)
+Date: Wed, 26 Jun 2013 20:33:30 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD131437FB__48319.7868489244$1372278848$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+References: <48CF5AC71E61DB46B70D0F388054EFFD131436D4@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+	<20130626124914.GA28225@Krystal> <20130626145505.GB30675@Krystal>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1604151353=="
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-oa0-f41.google.com ([209.85.219.41])
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jessica.foest@gmail.com>) id 1Urw6u-0001O2-Eh
-	for lttng-dev@lists.lttng.org; Wed, 26 Jun 2013 16:14:36 -0400
-Received: by mail-oa0-f41.google.com with SMTP id n10so15649256oag.0
-	for <lttng-dev@lists.lttng.org>; Wed, 26 Jun 2013 13:14:30 -0700 (PDT)
-In-Reply-To: <CAPxN80A4-Fa3hhA8+zmmckhwRrp0qb2+xXcebw8tmB1QXGULzw@mail.gmail.com>
+	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1UrwPD-0001XU-W8
+	for lttng-dev@lists.lttng.org; Wed, 26 Jun 2013 16:33:32 -0400
+In-Reply-To: <20130626145505.GB30675@Krystal>
+Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,66 +22,49 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, "Couture,
+	Mario" <Mario.Couture@drdc-rddc.gc.ca>, "Painchaud,
+	Frederic" <Frederic.Painchaud@drdc-rddc.gc.ca>
 List-Id: lttng-dev@lists.lttng.org
 
---===============1604151353==
-Content-Type: multipart/alternative; boundary=047d7b471e5a170ccc04e0144b37
+-----Message d'origine-----
+Per UID buffers makes every application sharing the same UID to use the sam=
+e buffers.
+[...]
+Also, the buffers for UST application are now created in the consumer and p=
+assed to the application. Thus, the buffer ownership has been transfered fr=
+om the UST tracer to the consumer.
+-----Fin du message d'origine-----
 
---047d7b471e5a170ccc04e0144b37
-Content-Type: text/plain; charset=ISO-8859-1
+   So what David really meant was:
 
-Hi
+Also, the per-PID buffers for UST application are now created in the consum=
+er and passed to the application. Thus, the buffer ownership has been trans=
+ferred from the UST tracer to the consumer in the per-PID case.
 
-when use lttng network tracepoint it didn't display network interface mode
-(like promiscuous mode or other ) . did i miss some tracepoint option or
-it's a limitation ?
-regard
+   And I presume the per-UID buffers remain owned by the user-space-servici=
+ng root consumer daemon?
 
+   When lttng is being run as an unprivileged user (and can thus trace only=
+ user-space), setting the buffering scheme to per-UID would mean the trace =
+uid folder would have just one subfolder, the unprivileged user's uid (e.g.=
+ $HOME/lttng-traces/session-20130611-1223344/ust/uid/1000/64-bit), right?  =
+I also presume the uid used is the real uid (ruid)?
 
-2013/6/26 Jessica Foest <jessica.foest@gmail.com>
-
-> Hi
->
-> when use lttng network tracepoint it didn't display network interface mode
-> (like promiscuous mode or other ) . did i miss some tracepoint option or
-> it's a limitation ?
-> regard
->
-
---047d7b471e5a170ccc04e0144b37
-Content-Type: text/html; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div><div><div>Hi<br><br>when use lttng network=20
-tracepoint it didn&#39;t display network interface mode (like promiscuous=
-=20
-mode or other ) . did i miss some tracepoint option or it&#39;s a limitatio=
-n ?<br></div></div></div>regard</div><div class=3D"gmail_extra"><br><br><di=
-v class=3D"gmail_quote">2013/6/26 Jessica Foest <span dir=3D"ltr">&lt;<a hr=
-ef=3D"mailto:jessica.foest@gmail.com" target=3D"_blank">jessica.foest@gmail=
-.com</a>&gt;</span><br>
-<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
-x #ccc solid;padding-left:1ex"><div dir=3D"ltr"><div><div><div>Hi<br><br>wh=
-en use lttng network=20
-tracepoint it didn&#39;t display network interface mode (like promiscuous=
-=20
-mode or other ) . did i miss some tracepoint option or it&#39;s a limitatio=
-n ?<br></div></div></div>regard<br></div>
-</blockquote></div><br></div>
-
---047d7b471e5a170ccc04e0144b37--
-
-
---===============1604151353==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1604151353==--
+Daniel U. Thibault
+Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
+ntermeasures (SPC)
+Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
+Cyber Security (MCCS)
+R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
+ Canada - Valcartier (DRDC Valcartier)
+2459 route de la Bravoure
+Qu=E9bec QC  G3J 1X5
+CANADA
+Vox : (418) 844-4000 x4245
+Fax : (418) 844-4538
+[Valcartier]\\vsi-wdut-o980, [Valcartier]\\edge
+NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+Gouvernement du Canada | Government of Canada
+<http://www.valcartier.drdc-rddc.gc.ca/>
