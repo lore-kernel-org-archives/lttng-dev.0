@@ -1,21 +1,18 @@
 From: Yannick Brosseau <yannick.brosseau@gmail.com>
-Subject: Re: [LTTng-module patch] Update syscalls extraction
- with 3.10.0-rc7 version
-Date: Fri, 05 Jul 2013 11:38:20 -0400
-Message-ID: <51D6E86C.8080408__32635.834607254$1373038742$gmane$org@gmail.com>
-References: <1372692535-4910-1-git-send-email-yannick.brosseau@gmail.com>
-	<20130705151617.GA23889@Krystal>
+Subject: [LTTng-module patch] Improve documentation of the
+	syscall extractor script
+Date: Mon,  1 Jul 2013 12:24:27 -0400
+Message-ID: <1372695867-5068-1-git-send-email-yannick.brosseau__22578.091818332$1373039995$gmane$org@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f176.google.com ([209.85.223.176])
+Received: from mail-ob0-f179.google.com ([209.85.214.179])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <yannick.brosseau@gmail.com>) id 1Uv85c-00067P-0q
-	for lttng-dev@lists.lttng.org; Fri, 05 Jul 2013 11:38:28 -0400
-Received: by mail-ie0-f176.google.com with SMTP id ar20so5418806iec.7
-	for <lttng-dev@lists.lttng.org>; Fri, 05 Jul 2013 08:38:22 -0700 (PDT)
-In-Reply-To: <20130705151617.GA23889@Krystal>
+	(envelope-from <yannick.brosseau@gmail.com>) id 1Uv8Ps-0006HN-Di
+	for lttng-dev@lists.lttng.org; Fri, 05 Jul 2013 11:59:24 -0400
+Received: by mail-ob0-f179.google.com with SMTP id xk17so2996561obc.24
+	for <lttng-dev@lists.lttng.org>; Fri, 05 Jul 2013 08:59:19 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,15 +21,44 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On 2013-07-05 11:16, Mathieu Desnoyers wrote:
-> * Yannick Brosseau (yannick.brosseau@gmail.com) wrote:
->> > Add some previsously unknown syscalls
-> please submit the generate headers script modification in one patch,
-> then the automatically generated files into a different patch, and then
-> the updated override headers in another.
-I did not change the override, just renamed the file, do you still need
-that as a separate patch?
+Signed-off-by: Yannick Brosseau <yannick.brosseau@gmail.com>
+---
+ instrumentation/syscalls/README                             |    2 +-
+ instrumentation/syscalls/lttng-syscalls-generate-headers.sh |    4 ++++
+ 2 files changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/instrumentation/syscalls/README b/instrumentation/syscalls/README
+index 6c235e1..1e9bec4 100644
+--- a/instrumentation/syscalls/README
++++ b/instrumentation/syscalls/README
+@@ -12,7 +12,7 @@ is expected). See the dmesg output for system call metadata.
+ 
+ Take the dmesg metadata and feed it to lttng-syscalls-generate-headers.sh, e.g.,
+ from the instrumentation/syscalls directory. See the script header for
+-usage example.
++usage example. It should be run for both the integers and pointers types.
+ 
+ After these are created, we just need to follow the new system call additions,
+ no need to regenerate the whole thing, since system calls are only appended to.
+diff --git a/instrumentation/syscalls/lttng-syscalls-generate-headers.sh b/instrumentation/syscalls/lttng-syscalls-generate-headers.sh
+index 1754ae8..4ab4599 100755
+--- a/instrumentation/syscalls/lttng-syscalls-generate-headers.sh
++++ b/instrumentation/syscalls/lttng-syscalls-generate-headers.sh
+@@ -1,8 +1,12 @@
+ #!/bin/sh
+ 
+ # Generate system call probe description macros from syscall metadata dump file.
++# The resulting header will be written in the headers subdirectory, in a file name
++# based on the name of the input file. 
++#
+ # example usage:
+ #
++# lttng-syscalls-generate-headers.sh <type> <input_dir> <input_filename_in_dir> <bitness>
+ # lttng-syscalls-generate-headers.sh integers 3.0.4 x86-64-syscalls-3.0.4 64
+ # lttng-syscalls-generate-headers.sh pointers 3.0.4 x86-64-syscalls-3.0.4 64
+ 
+-- 
+1.7.10.4
