@@ -1,80 +1,113 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [LTTng-modules PATCH] The msg part of
-	the	printk:console event was 1 character too long
-Date: Sun, 30 Jun 2013 16:20:54 -0400
-Message-ID: <20130630202054.GA16058__49858.9100818664$1372623695$gmane$org@Krystal>
-References: <1372447954-4360-1-git-send-email-yannick.brosseau@gmail.com>
-	<20130628194304.GB24942@Krystal> <51CDE9C5.7060406@gmail.com>
+Subject: Re: [-stable 3.8.1 performance regression] madvise
+	POSIX_FADV_DONTNEED
+Date: Tue, 2 Jul 2013 09:58:58 -0400
+Message-ID: <20130702135858.GA30837@Krystal>
+References: <51BE1828.3060206@gmail.com> <20130617141357.GA6034@Krystal> <20130617142459.1d563072231ba269cdac8f11@linux-foundation.org> <20130618092925.GI1875@suse.de> <20130618101147.GA7436@suse.de> <20130619192508.GA666@Krystal> <CAJCc=kijujORhPUmPvzHj-MMdyVbf-iHEK0Jx-VHbTO8q4ESFA@mail.gmail.com> <20130620122016.GA12700@Krystal> <20130625015648.GO29376@dastard>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
-	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UtO7F-0004mp-Vo
-	for lttng-dev@lists.lttng.org; Sun, 30 Jun 2013 16:20:58 -0400
+Content-Type: text/plain; charset=us-ascii
+Return-path: <stable-owner@vger.kernel.org>
 Content-Disposition: inline
-In-Reply-To: <51CDE9C5.7060406@gmail.com>
-List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
-	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
-	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Yannick Brosseau <yannick.brosseau@gmail.com>, Andrew Gabbasov <andrew_gabbasov@mentor.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+In-Reply-To: <20130625015648.GO29376@dastard>
+Sender: stable-owner@vger.kernel.org
+To: Dave Chinner <david@fromorbit.com>
+Cc: Rob van der Heij <rvdheij@gmail.com>, Mel Gorman <mgorman@suse.de>, Andrew Morton <akpm@linux-foundation.org>, Yannick Brosseau <yannick.brosseau@gmail.com>, stable@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-* Yannick Brosseau (yannick.brosseau@gmail.com) wrote:
-> On 2013-06-28 15:43, Mathieu Desnoyers wrote:
-> > * Yannick Brosseau (yannick.brosseau@gmail.com) wrote:
-> >> Signed-off-by: Yannick Brosseau <yannick.brosseau@gmail.com>
-> >> ---
-> >>  instrumentation/events/lttng-module/printk.h |    2 +-
-> >>  1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >> diff --git a/instrumentation/events/lttng-module/printk.h b/instrumentation/events/lttng-module/printk.h
-> >> index 4c744f9..f4b6028 100644
-> >> --- a/instrumentation/events/lttng-module/printk.h
-> >> +++ b/instrumentation/events/lttng-module/printk.h
-> >> @@ -19,7 +19,7 @@ TRACE_EVENT_CONDITION(console,
-> >>  
-> >>  	TP_STRUCT__entry(
-> >>  		__dynamic_array_text(char, msg,
-> >> -			min_t(unsigned, end - start, MSG_TRACE_MAX_LEN) + 1)
-> > this was taken from the Linux kernel mainline instrumentation, no ?
-> >
-> > Has this been fixed upstream ? If so, can you cite the commit in the
-> > changelog ?
-> >
-> >
-> It's not changed upstream. From what I see, ftrace does the right thing,
-> but not LTTng. Will check perf and see if I can reproduce the problem
-> directly with the upstream kernel.
+* Dave Chinner (david@fromorbit.com) wrote:
+> On Thu, Jun 20, 2013 at 08:20:16AM -0400, Mathieu Desnoyers wrote:
+> > * Rob van der Heij (rvdheij@gmail.com) wrote:
+> > > Wouldn't you batch the calls to drop the pages from cache rather than drop
+> > > one packet at a time?
+> > 
+> > By default for kernel tracing, lttng's trace packets are 1MB, so I
+> > consider the call to fadvise to be already batched by applying it to 1MB
+> > packets rather than indivitual pages. Even there, it seems that the
+> > extra overhead added by the lru drain on each CPU is noticeable.
+> > 
+> > Another reason for not batching this in larger chunks is to limit the
+> > impact of the tracer on the kernel page cache. LTTng limits itself to
+> > its own set of buffers, and use the page cache for what is absolutely
+> > needed to perform I/O, but no more.
+> 
+> I think you are doing it wrong. This is a poster child case for
+> using Direct IO and completely avoiding the page cache altogether....
 
-in 3.9.8, I see:
+I just tried replacing my sync_file_range()+fadvise() calls and instead
+pass the O_DIRECT flag to open(). Unfortunately, I must be doing
+something very wrong, because I get only 1/3rd of the throughput, and
+the page cache fills up. Any idea why ?
 
-        TP_STRUCT__entry(
-                __dynamic_array(char, msg, end - start + 1)
-        ),
+Here are my results:
 
-(upstream)
+heavy-syscall.c: 30M sigaction() syscall with bad parameters (returns
+immediately). Used as high-throughput stress-test for the tracer.
+Tracing to disk with LTTng, all kernel tracepoints activated, including
+system calls.
 
-which has the +1.
+Tracer configuration: per-core buffers split into 4 sub-buffers of
+262kB. splice() is used to transfer data from buffers to disk. Runs on a
+8-core Intel machine.
 
-What effect of the off-by-one are you observing exactly ? Are you sure
-your fix is the right fix ? I wonder if modifying the TP_fast_assign()
-code would not be better. I'm not sure why #if (LINUX_VERSION_CODE >=
-KERNEL_VERSION(3,5,0)) has a different code from mainline. CCing Andrew
-Gabbasov who contributed this instrumentation.
+Writing to a software raid-1 ext3 partition.
+ext3 mount options: rw,errors=remount-ro
+
+* sync_file_range+fadvise 3.9.8
+  - with lru drain on fadvise
+
+Kernel cache usage:
+Before tracing: 56272k cached
+After tracing:  56388k cached
+
+939M	/root/lttng-traces/auto-20130702-090430
+time ./heavy-syscall 
+real	0m21.910s
+throughput: 42MB/s
+
+
+* sync_file_range+fadvise 3.9.8
+  - without lru drain on fadvise: manually reverted
+
+Kernel cache usage:
+Before tracing: 67968k cached
+After tracing:  67984k cached
+
+945M	/root/lttng-traces/auto-20130702-092505
+time ./heavy-syscall 
+real	0m21.872s
+throughput: 43MB/s
+
+
+* O_DIRECT 3.9.8
+  - O_DIRECT flag on open(), removed fadvise and sync_file_range calls
+
+Kernel cache usage:
+Before tracing:  99480k cached
+After tracing:  360132k cached
+
+258M	/root/lttng-traces/auto-20130702-090603
+time ./heavy-syscall 
+real	0m19.627s
+throughput: 13MB/s
+
+
+* No cache hints 3.9.8
+  - only removed fadvise and sync_file_range calls
+
+Kernel cache usage:
+Before tracing: 103556k cached
+After tracing:  363712k cached
+
+945M	/root/lttng-traces/auto-20130702-092505
+time ./heavy-syscall 
+real	0m19.672s
+throughput: 48MB/s
+
+Thoughts ?
 
 Thanks,
 
 Mathieu
-
 
 -- 
 Mathieu Desnoyers
