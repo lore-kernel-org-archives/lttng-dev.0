@@ -1,115 +1,89 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [-stable 3.8.1 performance regression] madvise
-	POSIX_FADV_DONTNEED
-Date: Tue, 2 Jul 2013 09:58:58 -0400
-Message-ID: <20130702135858.GA30837@Krystal>
-References: <51BE1828.3060206@gmail.com> <20130617141357.GA6034@Krystal> <20130617142459.1d563072231ba269cdac8f11@linux-foundation.org> <20130618092925.GI1875@suse.de> <20130618101147.GA7436@suse.de> <20130619192508.GA666@Krystal> <CAJCc=kijujORhPUmPvzHj-MMdyVbf-iHEK0Jx-VHbTO8q4ESFA@mail.gmail.com> <20130620122016.GA12700@Krystal> <20130625015648.GO29376@dastard>
+From: Bernd Hufmann <Bernd.Hufmann@ericsson.com>
+Subject: Re: Lttng Tools 2.2.0
+Date: Tue, 2 Jul 2013 10:08:30 -0400
+Message-ID: <51D2DEDE.1040201__47082.7838559218$1372774146$gmane$org@ericsson.com>
+References: <51CDC762.5050002@ericsson.com> <51CDEFC4.50008@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Return-path: <stable-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <20130625015648.GO29376@dastard>
-Sender: stable-owner@vger.kernel.org
-To: Dave Chinner <david@fromorbit.com>
-Cc: Rob van der Heij <rvdheij@gmail.com>, Mel Gorman <mgorman@suse.de>, Andrew Morton <akpm@linux-foundation.org>, Yannick Brosseau <yannick.brosseau@gmail.com>, stable@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Transfer-Encoding: 7bit
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from usevmg20.ericsson.net ([198.24.6.45])
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <bernd.hufmann@ericsson.com>) id 1Uu1G1-0007o8-7h
+	for lttng-dev@lists.lttng.org; Tue, 02 Jul 2013 10:08:37 -0400
+In-Reply-To: <51CDEFC4.50008@efficios.com>
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Dave Chinner (david@fromorbit.com) wrote:
-> On Thu, Jun 20, 2013 at 08:20:16AM -0400, Mathieu Desnoyers wrote:
-> > * Rob van der Heij (rvdheij@gmail.com) wrote:
-> > > Wouldn't you batch the calls to drop the pages from cache rather than drop
-> > > one packet at a time?
-> > 
-> > By default for kernel tracing, lttng's trace packets are 1MB, so I
-> > consider the call to fadvise to be already batched by applying it to 1MB
-> > packets rather than indivitual pages. Even there, it seems that the
-> > extra overhead added by the lru drain on each CPU is noticeable.
-> > 
-> > Another reason for not batching this in larger chunks is to limit the
-> > impact of the tracer on the kernel page cache. LTTng limits itself to
-> > its own set of buffers, and use the page cache for what is absolutely
-> > needed to perform I/O, but no more.
-> 
-> I think you are doing it wrong. This is a poster child case for
-> using Direct IO and completely avoiding the page cache altogether....
+Hi David
 
-I just tried replacing my sync_file_range()+fadvise() calls and instead
-pass the O_DIRECT flag to open(). Unfortunately, I must be doing
-something very wrong, because I get only 1/3rd of the throughput, and
-the page cache fills up. Any idea why ?
+I have a follow-up question for Simon's second questions:
 
-Here are my results:
+Initially, when reading the release notes I had the impression that only 
+the switch-timer for periodic flush can be configured for the metadata 
+channel. Then I tried to configure the read-timer, num-subbuf and 
+subbuf-size for the metadata channel and it seemed to be successful. 
+Does that mean that it is possible to configure the metadata channel 
+like a "regular" channel and all the command-line parameter are supported?
 
-heavy-syscall.c: 30M sigaction() syscall with bad parameters (returns
-immediately). Used as high-throughput stress-test for the tracer.
-Tracing to disk with LTTng, all kernel tracepoints activated, including
-system calls.
+In advance thank you very much.
 
-Tracer configuration: per-core buffers split into 4 sub-buffers of
-262kB. splice() is used to transfer data from buffers to disk. Runs on a
-8-core Intel machine.
-
-Writing to a software raid-1 ext3 partition.
-ext3 mount options: rw,errors=remount-ro
-
-* sync_file_range+fadvise 3.9.8
-  - with lru drain on fadvise
-
-Kernel cache usage:
-Before tracing: 56272k cached
-After tracing:  56388k cached
-
-939M	/root/lttng-traces/auto-20130702-090430
-time ./heavy-syscall 
-real	0m21.910s
-throughput: 42MB/s
+Best Regards
+Bernd
 
 
-* sync_file_range+fadvise 3.9.8
-  - without lru drain on fadvise: manually reverted
+On 06/28/2013 04:19 PM, David Goulet wrote:
+> CCing lttng-dev mailing list.
+>
+> Simon Delisle:
+>> Hi,
+>>
+>> I work  with the tracing team at Ericsson and I actually work on the lttng 2.2
+>> support in TMF, but I have two questions about the new feature.
+>> 1) Does the periodical metadata flush is only for UST or it work for kernel to ?
+> Both.
+>
+>> 2) What are the parameter for enable-channel command for the metadata ?
+> $ lttng enable-channel metadata ...
+>
+> David
+>
+>> Thank you
+>>
+>>
+>> Ericsson<http://www.ericsson.com/>
+>>
+>> *SIMON DELISLE*
+>> Software Developer Co-op
+>> QSI
+>>
+>> *Ericsson*
+>> 8400 Decarie Blvd
+>> Town of Mount-Royal, Qc, H4P 2N2, Canada
+>> Phone 514-345-7900 x45931
+>> simon.delisle@ericsson.com<mailto:simon.delisle@ericsson.com>
+>> www.ericsson.com<http://www.ericsson.com/>
+>>
+>> Ericsson<http://www.ericsson.com/current_campaign>
+>>
+>> Legal entity: Ericsson EMC, registered office in Canada. This Communication is
+>> Confidential. We only send and receive email on the basis of the terms set out
+>> at www.ericsson.com/email_disclaimer
+>>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
-Kernel cache usage:
-Before tracing: 67968k cached
-After tracing:  67984k cached
-
-945M	/root/lttng-traces/auto-20130702-092505
-time ./heavy-syscall 
-real	0m21.872s
-throughput: 43MB/s
-
-
-* O_DIRECT 3.9.8
-  - O_DIRECT flag on open(), removed fadvise and sync_file_range calls
-
-Kernel cache usage:
-Before tracing:  99480k cached
-After tracing:  360132k cached
-
-258M	/root/lttng-traces/auto-20130702-090603
-time ./heavy-syscall 
-real	0m19.627s
-throughput: 13MB/s
-
-
-* No cache hints 3.9.8
-  - only removed fadvise and sync_file_range calls
-
-Kernel cache usage:
-Before tracing: 103556k cached
-After tracing:  363712k cached
-
-945M	/root/lttng-traces/auto-20130702-092505
-time ./heavy-syscall 
-real	0m19.672s
-throughput: 48MB/s
-
-Thoughts ?
-
-Thanks,
-
-Mathieu
 
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+This Communication is Confidential. We only send and receive email on 
+the basis of the terms set out at www.ericsson.com/email_disclaimer
