@@ -1,7 +1,7 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Subject: [RFC PATCH lttng-tools] Fix printk instrumentation
-Date: Thu, 4 Jul 2013 12:57:45 -0400
-Message-ID: <20130704165745.GA31483__15869.166100356$1372957108$gmane$org@Krystal>
+Date: Thu, 4 Jul 2013 12:58:55 -0400
+Message-ID: <20130704165855.GB31483__21125.0053406276$1372957172$gmane$org@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -9,8 +9,8 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1Uumqq-0003TC-OI
-	for lttng-dev@lists.lttng.org; Thu, 04 Jul 2013 12:57:48 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1Uumrv-0003US-T1
+	for lttng-dev@lists.lttng.org; Thu, 04 Jul 2013 12:58:56 -0400
 Content-Disposition: inline
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -20,7 +20,7 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: yannick.brosseau@efficios.com
+To: yannick.brosseau@gmail.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
