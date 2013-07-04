@@ -1,20 +1,18 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Question about TRACEPOINT_FORMAT
-Date: Thu, 4 Jul 2013 09:06:30 -0400
-Message-ID: <20130704130630.GA26657__30391.1332427107$1372943223$gmane$org@Krystal>
-References: <OF4D6A58C0.10B26BF7-ONC2257B80.00269F6C-C2257B80.002A27FA@il.ibm.com>
-	<OFD0EE71AC.5944B0C7-ONC2257B9E.0046DDB5-C2257B9E.0046E746@il.ibm.com>
+From: David Goulet <dgoulet@efficios.com>
+Subject: Re: [PATCH lttng-tools] Fix:
+ consumer_add_relayd_socket() report errors to sessiond
+Date: Thu, 04 Jul 2013 12:26:15 -0400
+Message-ID: <51D5A227.6020408__30829.6651499861$1372955217$gmane$org@efficios.com>
+References: <20130702191402.GB10887@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from smtp.ini-tech.com ([5.9.158.244])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UujF2-0001La-1K
-	for lttng-dev@lists.lttng.org; Thu, 04 Jul 2013 09:06:32 -0400
-Content-Disposition: inline
-In-Reply-To: <OFD0EE71AC.5944B0C7-ONC2257B9E.0046DDB5-C2257B9E.0046E746@il.ibm.com>
+	(envelope-from <dgoulet@efficios.com>) id 1UumMQ-0003CZ-NT
+	for lttng-dev@lists.lttng.org; Thu, 04 Jul 2013 12:26:22 -0400
+In-Reply-To: <20130702191402.GB10887@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,94 +21,163 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Amit Margalit <AMITM@il.ibm.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Amit Margalit (AMITM@il.ibm.com) wrote:
-> Hi,
-> 
-> I never got any response to this. Anyone care to comment?
-> 
-> Thanks,
-> 
-> Amit Margalit
-> IBM XIV - Storage Reinvented
-> XIV-NAS Development Team
-> Tel. 03-689-7774
-> Fax. 03-689-7230
-> 
-> 
-> 
-> From:   Amit Margalit/Israel/IBM@IBMIL
-> To:     lttng-dev@lists.lttng.org
-> Date:   06/04/2013 10:41 AM
-> Subject:        [lttng-dev] Question about TRACEPOINT_FORMAT
-> 
-> 
-> 
-> Hello, 
-> 
-> I've read the discussion in the past about this suggested feature, and I'd 
-> like to ask what has become of this. Is this still being considered? Has 
-> anyone come up with an idea for a solution that does not include extending 
-> CTF? 
-> 
-> I understand that CTF doesn't support looking into the ELF binary, but 
-> perhaps there is a way around this. 
-> 
-> First, I'd like to explain what I wish to have, so that maybe a different 
-> solution could be suggested - 
-> In all, migration from an existing log-to-file system for existing 
-> projects may push the entire formatted string as the trace entry. 
-> We'd like to avoid storing the entire format string multiple times, as 
-> this is wasteful, of course, and we'd like the viewer to be in charge of 
-> performing the formatting. 
-> 
-> I was wondering whether we could use CTF enums. The CTF specification for 
-> enums doesn't say that the textual representation of the value has to be a 
-> valid identifier. In fact, the example includes a quoted string. 
-> 
-> An instrumentation tool could generate code that writes an enum 
-> description into the metadata, where each value corresponds to a different 
-> format string. 
+Merged!
 
-I have something quite simpler in mind for this, but it involves
-extending the CTF spec. Adding, to the event {} description within the
-metadata, something like:
-
-event {
-        ...
-        format = "This is the first field: %u and the second: %llu";
-        ...
-}
-
-Thoughts ?
-
-Thanks,
-
-Mathieu
-
+Mathieu Desnoyers:
+> Wait until the side-effect to relayd is actually performed before
+> replying that "all is fine" to sessiond.
 > 
-> Thanks, 
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> ---
+> diff --git a/src/common/consumer.c b/src/common/consumer.c
+> index 6830084..1f96fa9 100644
+> --- a/src/common/consumer.c
+> +++ b/src/common/consumer.c
+> @@ -3017,8 +3017,9 @@ int consumer_add_relayd_socket(uint64_t net_seq_idx, int sock_type,
+>  		/* Not found. Allocate one. */
+>  		relayd = consumer_allocate_relayd_sock_pair(net_seq_idx);
+>  		if (relayd == NULL) {
+> -			ret_code = LTTCOMM_CONSUMERD_ENOMEM;
+>  			ret = -ENOMEM;
+> +			ret_code = LTTCOMM_CONSUMERD_ENOMEM;
+> +			goto error;
+>  		} else {
+>  			relayd->sessiond_session_id = (uint64_t) sessiond_id;
+>  			relayd_created = 1;
+> @@ -3037,23 +3038,23 @@ int consumer_add_relayd_socket(uint64_t net_seq_idx, int sock_type,
+>  	}
+>  
+>  	/* First send a status message before receiving the fds. */
+> -	ret = consumer_send_status_msg(sock, ret_code);
+> -	if (ret < 0 || ret_code != LTTNG_OK) {
+> +	ret = consumer_send_status_msg(sock, LTTNG_OK);
+> +	if (ret < 0) {
+>  		/* Somehow, the session daemon is not responding anymore. */
+> -		goto error;
+> +		lttng_consumer_send_error(ctx, LTTCOMM_CONSUMERD_FATAL);
+> +		goto error_nosignal;
+>  	}
+>  
+>  	/* Poll on consumer socket. */
+>  	if (lttng_consumer_poll_socket(consumer_sockpoll) < 0) {
+>  		lttng_consumer_send_error(ctx, LTTCOMM_CONSUMERD_POLL_ERROR);
+>  		ret = -EINTR;
+> -		goto error;
+> +		goto error_nosignal;
+>  	}
+>  
+>  	/* Get relayd socket from session daemon */
+>  	ret = lttcomm_recv_fds_unix_sock(sock, &fd, 1);
+>  	if (ret != sizeof(fd)) {
+> -		ret_code = LTTCOMM_CONSUMERD_ERROR_RECV_FD;
+>  		ret = -1;
+>  		fd = -1;	/* Just in case it gets set with an invalid value. */
+>  
+> @@ -3067,18 +3068,7 @@ int consumer_add_relayd_socket(uint64_t net_seq_idx, int sock_type,
+>  		 * issue when reaching the fd limit.
+>  		 */
+>  		lttng_consumer_send_error(ctx, LTTCOMM_CONSUMERD_ERROR_RECV_FD);
+> -
+> -		/*
+> -		 * This code path MUST continue to the consumer send status message so
+> -		 * we can send the error to the thread expecting a reply. The above
+> -		 * call will make everything stop.
+> -		 */
+> -	}
+> -
+> -	/* We have the fds without error. Send status back. */
+> -	ret = consumer_send_status_msg(sock, ret_code);
+> -	if (ret < 0 || ret_code != LTTNG_OK) {
+> -		/* Somehow, the session daemon is not responding anymore. */
+> +		ret_code = LTTCOMM_CONSUMERD_ERROR_RECV_FD;
+>  		goto error;
+>  	}
+>  
+> @@ -3090,6 +3080,7 @@ int consumer_add_relayd_socket(uint64_t net_seq_idx, int sock_type,
+>  		ret = lttcomm_create_sock(&relayd->control_sock.sock);
+>  		/* Handle create_sock error. */
+>  		if (ret < 0) {
+> +			ret_code = LTTCOMM_CONSUMERD_ENOMEM;
+>  			goto error;
+>  		}
+>  		/*
+> @@ -3128,6 +3119,7 @@ int consumer_add_relayd_socket(uint64_t net_seq_idx, int sock_type,
+>  			 */
+>  			(void) relayd_close(&relayd->control_sock);
+>  			(void) relayd_close(&relayd->data_sock);
+> +			ret_code = LTTCOMM_CONSUMERD_RELAYD_FAIL;
+>  			goto error;
+>  		}
+>  
+> @@ -3138,6 +3130,7 @@ int consumer_add_relayd_socket(uint64_t net_seq_idx, int sock_type,
+>  		ret = lttcomm_create_sock(&relayd->data_sock.sock);
+>  		/* Handle create_sock error. */
+>  		if (ret < 0) {
+> +			ret_code = LTTCOMM_CONSUMERD_ENOMEM;
+>  			goto error;
+>  		}
+>  		/*
+> @@ -3159,6 +3152,7 @@ int consumer_add_relayd_socket(uint64_t net_seq_idx, int sock_type,
+>  	default:
+>  		ERR("Unknown relayd socket type (%d)", sock_type);
+>  		ret = -1;
+> +		ret_code = LTTCOMM_CONSUMERD_FATAL;
+>  		goto error;
+>  	}
+>  
+> @@ -3166,6 +3160,14 @@ int consumer_add_relayd_socket(uint64_t net_seq_idx, int sock_type,
+>  			sock_type == LTTNG_STREAM_CONTROL ? "control" : "data",
+>  			relayd->net_seq_idx, fd);
+>  
+> +	/* We successfully added the socket. Send status back. */
+> +	ret = consumer_send_status_msg(sock, ret_code);
+> +	if (ret < 0) {
+> +		/* Somehow, the session daemon is not responding anymore. */
+> +		lttng_consumer_send_error(ctx, LTTCOMM_CONSUMERD_FATAL);
+> +		goto error_nosignal;
+> +	}
+> +
+>  	/*
+>  	 * Add relayd socket pair to consumer data hashtable. If object already
+>  	 * exists or on error, the function gracefully returns.
+> @@ -3176,6 +3178,11 @@ int consumer_add_relayd_socket(uint64_t net_seq_idx, int sock_type,
+>  	return 0;
+>  
+>  error:
+> +	if (consumer_send_status_msg(sock, ret_code) < 0) {
+> +		lttng_consumer_send_error(ctx, LTTCOMM_CONSUMERD_FATAL);
+> +	}
+> +
+> +error_nosignal:
+>  	/* Close received socket if valid. */
+>  	if (fd >= 0) {
+>  		if (close(fd)) {
+> diff --git a/src/common/sessiond-comm/sessiond-comm.c b/src/common/sessiond-comm/sessiond-comm.c
+> index 738362c..9a13f41 100644
+> --- a/src/common/sessiond-comm/sessiond-comm.c
+> +++ b/src/common/sessiond-comm/sessiond-comm.c
+> @@ -64,6 +64,7 @@ static const char *lttcomm_readable_code[] = {
+>  	[ LTTCOMM_ERR_INDEX(LTTCOMM_CONSUMERD_ENOMEM) ] = "Consumer is out of memory",
+>  	[ LTTCOMM_ERR_INDEX(LTTCOMM_CONSUMERD_ERROR_METADATA) ] = "Error with metadata",
+>  	[ LTTCOMM_ERR_INDEX(LTTCOMM_CONSUMERD_FATAL) ] = "Fatal error",
+> +	[ LTTCOMM_ERR_INDEX(LTTCOMM_CONSUMERD_RELAYD_FAIL) ] = "Error on remote relayd",
+>  
+>  	/* Last element */
+>  	[ LTTCOMM_ERR_INDEX(LTTCOMM_NR) ] = "Unknown error code"
+> diff --git a/src/common/sessiond-comm/sessiond-comm.h b/src/common/sessiond-comm/sessiond-comm.h
+> index e984cb1..b76135e 100644
+> --- a/src/common/sessiond-comm/sessiond-comm.h
+> +++ b/src/common/sessiond-comm/sessiond-comm.h
+> @@ -124,6 +124,7 @@ enum lttcomm_return_code {
+>  	LTTCOMM_CONSUMERD_ENOMEM,                   /* Consumer is out of memory */
+>  	LTTCOMM_CONSUMERD_ERROR_METADATA,           /* Error with metadata. */
+>  	LTTCOMM_CONSUMERD_FATAL,                    /* Fatal error. */
+> +	LTTCOMM_CONSUMERD_RELAYD_FAIL,              /* Error on remote relayd */
+>  
+>  	/* MUST be last element */
+>  	LTTCOMM_NR,						/* Last element */
 > 
-> Amit Margalit 
-> IBM XIV - Storage Reinvented 
-> XIV-NAS Development Team 
-> Tel. 03-689-7774 
-> Fax. 03-689-7230_______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> 
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
