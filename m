@@ -1,21 +1,25 @@
-From: "Gabbasov, Andrew" <Andrew_Gabbasov@mentor.com>
-Subject: Re: [LTTng-modules PATCH] The msg part of
-	the	printk:console event was 1 character too long
-Date: Thu, 4 Jul 2013 19:58:47 +0000
-Message-ID: <6C5EA58090A5ED459815C4D04C2B466FD93341A6__15798.5080070377$1372967972$gmane$org@EU-MBX-01.mgc.mentorg.com>
-References: <1372447954-4360-1-git-send-email-yannick.brosseau@gmail.com>
-	<20130628194304.GB24942@Krystal>
-	<51CDE9C5.7060406@gmail.com>,<20130630202054.GA16058@Krystal>
+From: Rob van der Heij <rvdheij@gmail.com>
+Subject: Re: [-stable 3.8.1 performance regression] madvise
+	POSIX_FADV_DONTNEED
+Date: Thu, 4 Jul 2013 23:11:34 +0200
+Message-ID: <CAJCc=kjjAijXNtnDAsoS8tMvL9y+VDwovycJ82WS4gMJnQkFPQ__48939.4310316586$1372972345$gmane$org@mail.gmail.com>
+References: <20130618101147.GA7436@suse.de> <20130619192508.GA666@Krystal>
+	<CAJCc=kijujORhPUmPvzHj-MMdyVbf-iHEK0Jx-VHbTO8q4ESFA@mail.gmail.com>
+	<20130620122016.GA12700@Krystal> <20130625015648.GO29376@dastard>
+	<20130702135858.GA30837@Krystal> <20130703005514.GA17149@Krystal>
+	<20130703084715.GF1875@suse.de>
+	<x49wqp7puej.fsf@segfault.boston.devel.redhat.com>
+	<20130704000344.GG4072@dastard> <20130704003103.GA13899@Krystal>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============2117665083=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from relay1.mentorg.com ([192.94.38.131])
+Received: from mail-la0-f45.google.com ([209.85.215.45])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Andrew_Gabbasov@mentor.com>) id 1Uupg8-0004xo-Ki
-	for lttng-dev@lists.lttng.org; Thu, 04 Jul 2013 15:58:56 -0400
-In-Reply-To: <20130630202054.GA16058@Krystal>
-Content-Language: en-US
+	(envelope-from <rvdheij@gmail.com>) id 1UuqoW-0005Vw-TK
+	for lttng-dev@lists.lttng.org; Thu, 04 Jul 2013 17:11:41 -0400
+Received: by mail-la0-f45.google.com with SMTP id fr10so1556871lab.4
+	for <lttng-dev@lists.lttng.org>; Thu, 04 Jul 2013 14:11:34 -0700 (PDT)
+In-Reply-To: <20130704003103.GA13899@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,83 +28,251 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Yannick Brosseau <yannick.brosseau@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Dave Chinner <david@fromorbit.com>, LKML <linux-kernel@vger.kernel.org>, stable@vger.kernel.org, Jeff Moyer <jmoyer@redhat.com>, Mel Gorman <mgorman@suse.de>, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Andrew Morton <akpm@linux-foundation.org>
 List-Id: lttng-dev@lists.lttng.org
 
-> From: Mathieu Desnoyers [mathieu.desnoyers@efficios.com]
-> Sent: Monday, July 01, 2013 00:20
-> To: Yannick Brosseau; Gabbasov, Andrew
-> Cc: lttng-dev@lists.lttng.org
-> Subject: Re: [lttng-dev] [LTTng-modules PATCH] The msg part of the      printk:console event was 1 character too long
-> 
-> * Yannick Brosseau (yannick.brosseau@gmail.com) wrote:
-> > On 2013-06-28 15:43, Mathieu Desnoyers wrote:
-> > > * Yannick Brosseau (yannick.brosseau@gmail.com) wrote:
-> > >> Signed-off-by: Yannick Brosseau <yannick.brosseau@gmail.com>
-> > >> ---
-> > >>  instrumentation/events/lttng-module/printk.h |    2 +-
-> > >>  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >>
-> > >> diff --git a/instrumentation/events/lttng-module/printk.h b/instrumentation/events/lttng-module/printk.h
-> > >> index 4c744f9..f4b6028 100644
-> > >> --- a/instrumentation/events/lttng-module/printk.h
-> > >> +++ b/instrumentation/events/lttng-module/printk.h
-> > >> @@ -19,7 +19,7 @@ TRACE_EVENT_CONDITION(console,
-> > >>
-> > >>    TP_STRUCT__entry(
-> > >>            __dynamic_array_text(char, msg,
-> > >> -                  min_t(unsigned, end - start, MSG_TRACE_MAX_LEN) + 1)
-> > > this was taken from the Linux kernel mainline instrumentation, no ?
+--===============2117665083==
+Content-Type: multipart/alternative; boundary=089e0160bc34e715d404e0b60559
+
+--089e0160bc34e715d404e0b60559
+Content-Type: text/plain; charset=ISO-8859-1
+
+I would suggest that when O_DIRECT gives you less than optimal throughput,
+then your application is not getting the block size or concurrency that
+it's getting from buffered I/O. My limited experiments show that with
+larger block size with direct I/O an application can get the same
+throughput as with at lower CPU cost. Since you seem to be mainly writing,
+I'd imaging 64K is pretty small. Obviously you don't want every application
+to invent this on his own, which is why we have buffered I/O.
+
+Rob
+
+
+On 4 July 2013 02:31, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>wrote:
+
+> * Dave Chinner (david@fromorbit.com) wrote:
+> > On Wed, Jul 03, 2013 at 10:53:08AM -0400, Jeff Moyer wrote:
+> > > Mel Gorman <mgorman@suse.de> writes:
 > > >
-> > > Has this been fixed upstream ? If so, can you cite the commit in the
-> > > changelog ?
+> > > >> > I just tried replacing my sync_file_range()+fadvise() calls and
+> instead
+> > > >> > pass the O_DIRECT flag to open(). Unfortunately, I must be doing
+> > > >> > something very wrong, because I get only 1/3rd of the throughput,
+> and
+> > > >> > the page cache fills up. Any idea why ?
+> > > >>
+> > > >> Since O_DIRECT does not seem to provide acceptable throughput, it
+> may be
+> > > >> interesting to investigate other ways to lessen the latency impact
+> of
+> > > >> the fadvise DONTNEED hint.
+> > > >>
+> > > >
+> > > > There are cases where O_DIRECT falls back to buffered IO which is
+> why you
+> > > > might have found that page cache was still filling up. There are a
+> few
+> > > > reasons why this can happen but I would guess the common cause is
+> that
+> > > > the range of pages being written was in the page cache already and
+> could
+> > > > not be invalidated for some reason. I'm guessing this is the common
+> case
+> > > > for page cache filling even with O_DIRECT but would not bet money on
+> it
+> > > > as it's not a problem I investigated before.
 > > >
-> > >
-> > It's not changed upstream. From what I see, ftrace does the right thing,
-> > but not LTTng. Will check perf and see if I can reproduce the problem
-> > directly with the upstream kernel.
-> 
-> in 3.9.8, I see:
-> 
->         TP_STRUCT__entry(
->                 __dynamic_array(char, msg, end - start + 1)
->         ),
-> 
-> (upstream)
-> 
-> which has the +1.
-> 
-> What effect of the off-by-one are you observing exactly ? Are you sure
-> your fix is the right fix ? I wonder if modifying the TP_fast_assign()
-> code would not be better. I'm not sure why #if (LINUX_VERSION_CODE >=
-> KERNEL_VERSION(3,5,0)) has a different code from mainline. CCing Andrew
-> Gabbasov who contributed this instrumentation.
-> 
+> > > Even when O_DIRECT falls back to buffered I/O for writes, it will
+> > > invalidate the page cache range described by the buffered I/O once it
+> > > completes.  For reads, the range is written out synchronously before
+> the
+> > > direct I/O is issued.  Either way, you shouldn't see the page cache
+> > > filling up.
+> >
+> > <sigh>
+> >
+> > I keep forgetting that filesystems other than XFS have sub-optimal
+> > direct IO implementations. I wish that "silent fallback to buffered
+> > IO" idea had never seen the light of day, and that filesystems
+> > implemented direct IO properly.
+> >
+> > > Switching to O_DIRECT often incurs a performance hit, especially if the
+> > > application does not submit more than one I/O at a time.  Remember,
+> > > you're not getting readahead, and you're not getting the benefit of the
+> > > writeback code submitting batches of I/O.
+> >
+> > With the way IO is being done, there won't be any readahead (write
+> > only workload) and they are directly controlling writeback one chunk
+> > at a time, so there's not writeback caching to do batching, either.
+> > There's no obvious reason that direct IO should be any slower
+> > assuming that the application is actually doing 1MB sized and
+> > aligned IOs like was mentioned, because both methods are directly
+> > dispatching and then waiting for IO completion.
+>
+> As a clarification, I use 256kB "chunks" (sub-buffers) in my tests, not
+> 1MB. Also, please note that since I'm using splice(), each individual
+> splice call is internally limited to 16 pages worth of data transfer
+> (64kB).
+>
+> > What filesystem is in use here?
+>
+> My test was performed on ext3 filesystem, that was itself sitting on
+> raid-1 software raid.
+>
 > Thanks,
-> 
+>
 > Mathieu
+>
+> >
+> > Cheers,
+> >
+> > Dave.
+> > --
+> > Dave Chinner
+> > david@fromorbit.com
+>
+> --
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> http://www.efficios.com
+>
 
-Hi Mathieu, Yannick,
+--089e0160bc34e715d404e0b60559
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
 
-Actually I also don't see why having +1 is wrong. Trailing zero byte needs
-it in the message length. Removing it in entry and not changing
-TP_fast_assign (that explicitly adds a zero byte) looks doubtful.
-I join to the question what the exact problem is, since my testing
-(at least on version 3.5) didn't show any problem.
+<div dir=3D"ltr"><div>I would suggest that when O_DIRECT gives you less tha=
+n optimal throughput, then your application is not getting the block size o=
+r concurrency that it&#39;s getting from buffered I/O. My limited experimen=
+ts show that with larger block size with direct I/O an application can get =
+the same throughput as with at lower CPU cost. Since you seem to be mainly =
+writing, I&#39;d imaging 64K is pretty small. Obviously you don&#39;t want =
+every application to invent this on his own, which is why we have buffered =
+I/O. <br>
+<br></div><div>Rob<br></div></div><div class=3D"gmail_extra"><br><br><div c=
+lass=3D"gmail_quote">On 4 July 2013 02:31, Mathieu Desnoyers <span dir=3D"l=
+tr">&lt;<a href=3D"mailto:mathieu.desnoyers@efficios.com" target=3D"_blank"=
+>mathieu.desnoyers@efficios.com</a>&gt;</span> wrote:<br>
+<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
+x #ccc solid;padding-left:1ex"><div class=3D"im">* Dave Chinner (<a href=3D=
+"mailto:david@fromorbit.com">david@fromorbit.com</a>) wrote:<br>
+</div><div><div class=3D"h5">&gt; On Wed, Jul 03, 2013 at 10:53:08AM -0400,=
+ Jeff Moyer wrote:<br>
+&gt; &gt; Mel Gorman &lt;<a href=3D"mailto:mgorman@suse.de">mgorman@suse.de=
+</a>&gt; writes:<br>
+&gt; &gt;<br>
+&gt; &gt; &gt;&gt; &gt; I just tried replacing my sync_file_range()+fadvise=
+() calls and instead<br>
+&gt; &gt; &gt;&gt; &gt; pass the O_DIRECT flag to open(). Unfortunately, I =
+must be doing<br>
+&gt; &gt; &gt;&gt; &gt; something very wrong, because I get only 1/3rd of t=
+he throughput, and<br>
+&gt; &gt; &gt;&gt; &gt; the page cache fills up. Any idea why ?<br>
+&gt; &gt; &gt;&gt;<br>
+&gt; &gt; &gt;&gt; Since O_DIRECT does not seem to provide acceptable throu=
+ghput, it may be<br>
+&gt; &gt; &gt;&gt; interesting to investigate other ways to lessen the late=
+ncy impact of<br>
+&gt; &gt; &gt;&gt; the fadvise DONTNEED hint.<br>
+&gt; &gt; &gt;&gt;<br>
+&gt; &gt; &gt;<br>
+&gt; &gt; &gt; There are cases where O_DIRECT falls back to buffered IO whi=
+ch is why you<br>
+&gt; &gt; &gt; might have found that page cache was still filling up. There=
+ are a few<br>
+&gt; &gt; &gt; reasons why this can happen but I would guess the common cau=
+se is that<br>
+&gt; &gt; &gt; the range of pages being written was in the page cache alrea=
+dy and could<br>
+&gt; &gt; &gt; not be invalidated for some reason. I&#39;m guessing this is=
+ the common case<br>
+&gt; &gt; &gt; for page cache filling even with O_DIRECT but would not bet =
+money on it<br>
+&gt; &gt; &gt; as it&#39;s not a problem I investigated before.<br>
+&gt; &gt;<br>
+&gt; &gt; Even when O_DIRECT falls back to buffered I/O for writes, it will=
+<br>
+&gt; &gt; invalidate the page cache range described by the buffered I/O onc=
+e it<br>
+&gt; &gt; completes. =A0For reads, the range is written out synchronously b=
+efore the<br>
+&gt; &gt; direct I/O is issued. =A0Either way, you shouldn&#39;t see the pa=
+ge cache<br>
+&gt; &gt; filling up.<br>
+&gt;<br>
+&gt; &lt;sigh&gt;<br>
+&gt;<br>
+&gt; I keep forgetting that filesystems other than XFS have sub-optimal<br>
+&gt; direct IO implementations. I wish that &quot;silent fallback to buffer=
+ed<br>
+&gt; IO&quot; idea had never seen the light of day, and that filesystems<br=
+>
+&gt; implemented direct IO properly.<br>
+&gt;<br>
+&gt; &gt; Switching to O_DIRECT often incurs a performance hit, especially =
+if the<br>
+&gt; &gt; application does not submit more than one I/O at a time. =A0Remem=
+ber,<br>
+&gt; &gt; you&#39;re not getting readahead, and you&#39;re not getting the =
+benefit of the<br>
+&gt; &gt; writeback code submitting batches of I/O.<br>
+&gt;<br>
+&gt; With the way IO is being done, there won&#39;t be any readahead (write=
+<br>
+&gt; only workload) and they are directly controlling writeback one chunk<b=
+r>
+&gt; at a time, so there&#39;s not writeback caching to do batching, either=
+.<br>
+&gt; There&#39;s no obvious reason that direct IO should be any slower<br>
+&gt; assuming that the application is actually doing 1MB sized and<br>
+&gt; aligned IOs like was mentioned, because both methods are directly<br>
+&gt; dispatching and then waiting for IO completion.<br>
+<br>
+</div></div>As a clarification, I use 256kB &quot;chunks&quot; (sub-buffers=
+) in my tests, not<br>
+1MB. Also, please note that since I&#39;m using splice(), each individual<b=
+r>
+splice call is internally limited to 16 pages worth of data transfer<br>
+(64kB).<br>
+<div class=3D"im"><br>
+&gt; What filesystem is in use here?<br>
+<br>
+</div>My test was performed on ext3 filesystem, that was itself sitting on<=
+br>
+raid-1 software raid.<br>
+<br>
+Thanks,<br>
+<br>
+Mathieu<br>
+<div class=3D"im HOEnZb"><br>
+&gt;<br>
+&gt; Cheers,<br>
+&gt;<br>
+&gt; Dave.<br>
+&gt; --<br>
+&gt; Dave Chinner<br>
+&gt; <a href=3D"mailto:david@fromorbit.com">david@fromorbit.com</a><br>
+<br>
+</div><div class=3D"HOEnZb"><div class=3D"h5">--<br>
+Mathieu Desnoyers<br>
+EfficiOS Inc.<br>
+<a href=3D"http://www.efficios.com" target=3D"_blank">http://www.efficios.c=
+om</a><br>
+</div></div></blockquote></div><br></div>
 
-As for the different implementation code: starting version 3.5
-the kernel no longer use circular buffer for storing printk messages,
-and handling the message in 2 pieces what it crosses the boundary
-is no longer needed. Moreover, log_buf_len becomes not necessarily
-the power of 2, and previous implementation (based on what was
-in the kernel) just becomes incorrect. So, the newer and simpler
-implementation was introduced for later version. It also looks like
-this instrumentation needs to be further updated for version 3.10,
-since the whole tracepoint (even the parameters set) was changed
-there, becoming even more simple.
+--089e0160bc34e715d404e0b60559--
 
-Thanks.
 
-Best regards,
-Andrew
+--===============2117665083==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============2117665083==--
