@@ -1,17 +1,21 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: Re: session.id unsigned int vs. uint64_t
-Date: Thu, 04 Jul 2013 15:56:45 -0400
-Message-ID: <51D5D37D.1010503__7089.92281365699$1372967846$gmane$org@efficios.com>
-References: <48CF5AC71E61DB46B70D0F388054EFFD13422902@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+From: "Gabbasov, Andrew" <Andrew_Gabbasov@mentor.com>
+Subject: Re: [LTTng-modules PATCH] The msg part of
+	the	printk:console event was 1 character too long
+Date: Thu, 4 Jul 2013 19:58:47 +0000
+Message-ID: <6C5EA58090A5ED459815C4D04C2B466FD93341A6__15798.5080070377$1372967972$gmane$org@EU-MBX-01.mgc.mentorg.com>
+References: <1372447954-4360-1-git-send-email-yannick.brosseau@gmail.com>
+	<20130628194304.GB24942@Krystal>
+	<51CDE9C5.7060406@gmail.com>,<20130630202054.GA16058@Krystal>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([5.9.158.244])
+Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1Uupe9-0004ve-Rt
-	for lttng-dev@lists.lttng.org; Thu, 04 Jul 2013 15:56:54 -0400
-In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD13422902@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+	(envelope-from <Andrew_Gabbasov@mentor.com>) id 1Uupg8-0004xo-Ki
+	for lttng-dev@lists.lttng.org; Thu, 04 Jul 2013 15:58:56 -0400
+In-Reply-To: <20130630202054.GA16058@Krystal>
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,43 +24,83 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, "Couture,
-	Mario" <Mario.Couture@drdc-rddc.gc.ca>, "Painchaud,
-	Frederic" <Frederic.Painchaud@drdc-rddc.gc.ca>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Yannick Brosseau <yannick.brosseau@gmail.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-R29vZCBjYXRjaCEKClRoaXMgaXMgbm93IGZpeGVkIGluIG1hc3RlciBhbmQgc3RhYmxlLTIuMiEK
-ClRoYW5rcyEKRGF2aWQKClRoaWJhdWx0LCBEYW5pZWw6Cj4gfn5+fn5+c3JjL2Jpbi9sdHRuZy1z
-ZXNzaW9uZC9zZXNzaW9uLmg6NjA6Cj4gCj4gc3RydWN0IGx0dF9zZXNzaW9uIHsKPiAuLi4KPiAg
-ICAgICAgIHVuc2lnbmVkIGludCBpZDsKPiAKPiB+fn5+fn5zcmMvYmluL2x0dG5nLXNlc3Npb25k
-L3RyYWNlLXVzdC5jOjE4NToKPiAKPiBzdHJ1Y3QgbHR0X3VzdF9zZXNzaW9uICp0cmFjZV91c3Rf
-Y3JlYXRlX3Nlc3Npb24odWludDY0X3Qgc2Vzc2lvbl9pZCkKPiAKPiB+fn5+fn5zcmMvYmluL2x0
-dG5nLXNlc3Npb25kL21haW4uYzoyMzUyOgo+IAo+IHN0YXRpYyBpbnQgY3JlYXRlX3VzdF9zZXNz
-aW9uKHN0cnVjdCBsdHRfc2Vzc2lvbiAqc2Vzc2lvbiwKPiAgICAgICAgICAgICAgICBzdHJ1Y3Qg
-bHR0bmdfZG9tYWluICpkb21haW4pCj4gewo+IC4uLgo+ICAgICAgICAgbHVzID0gdHJhY2VfdXN0
-X2NyZWF0ZV9zZXNzaW9uKHNlc3Npb24tPmlkKTsKPiAKPiB+fn5+fn5zcmMvYmluL2x0dG5nLXNl
-c3Npb25kL3RyYWNlLXVzdC5oOgo+IAo+ICNpZmRlZiBIQVZFX0xJQkxUVE5HX1VTVF9DVEwKPiAu
-Li4KPiBzdHJ1Y3QgbHR0X3VzdF9zZXNzaW9uICp0cmFjZV91c3RfY3JlYXRlX3Nlc3Npb24odWlu
-dDY0X3Qgc2Vzc2lvbl9pZCk7Cj4gLi4uCj4gI2Vsc2UgLyogSEFWRV9MSUJMVFROR19VU1RfQ1RM
-ICovCj4gLi4uCj4gc3RhdGljIGlubGluZQo+IHN0cnVjdCBsdHRfdXN0X3Nlc3Npb24gKnRyYWNl
-X3VzdF9jcmVhdGVfc2Vzc2lvbih1bnNpZ25lZCBpbnQgc2Vzc2lvbl9pZCkKPiAKPiAKPiAgICAz
-Mi1iaXQtd2lkZSB1bnNpZ25lZCBpbnRzIGFuZCA2NC1iaXQtd2lkZSB1aW50NjRfdHMgYXJlIG5v
-dCB0cnVseSBpbnRlcmNoYW5nZWFibGUuICBUaGUgbHR0X3Nlc3Npb24uaWQgc2hvdWxkIGJlIHdp
-ZGVuZWQgdG8gdWludDY0X3QuCj4gCj4gRGFuaWVsIFUuIFRoaWJhdWx0Cj4gUHJvdGVjdGlvbiBk
-ZXMgc3lzdMOobWVzIGV0IGNvbnRyZW1lc3VyZXMgKFBTQykgfCBTeXN0ZW1zIFByb3RlY3Rpb24g
-JiBDb3VudGVybWVhc3VyZXMgKFNQQykKPiBDeWJlciBzw6ljdXJpdMOpIHBvdXIgbGVzIG1pc3Np
-b25zIGVzc2VudGllbGxlcyAoQ01FKSB8IE1pc3Npb24gQ3JpdGljYWwgQ3liZXIgU2VjdXJpdHkg
-KE1DQ1MpCj4gUiAmIEQgcG91ciBsYSBkw6lmZW5zZSBDYW5hZGEgLSBWYWxjYXJ0aWVyIChSRERD
-IFZhbGNhcnRpZXIpIHwgRGVmZW5jZSBSJkQgQ2FuYWRhIC0gVmFsY2FydGllciAoRFJEQyBWYWxj
-YXJ0aWVyKQo+IDI0NTkgcm91dGUgZGUgbGEgQnJhdm91cmUKPiBRdcOpYmVjIFFDICBHM0ogMVg1
-Cj4gQ0FOQURBCj4gVm94IDogKDQxOCkgODQ0LTQwMDAgeDQyNDUKPiBGYXggOiAoNDE4KSA4NDQt
-NDUzOAo+IE5BQyA6IDkxOFYgUVNESiA8aHR0cDovL3d3dy50cmF2ZWxnaXMuY29tL21hcC5hc3A/
-YWRkcj05MThWJTIwUVNESj4KPiBHb3V2ZXJuZW1lbnQgZHUgQ2FuYWRhIHwgR292ZXJubWVudCBv
-ZiBDYW5hZGEgPGh0dHA6Ly93d3cudmFsY2FydGllci5kcmRjLXJkZGMuZ2MuY2EvPgo+IAo+IF9f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gbHR0bmctZGV2
-IG1haWxpbmcgbGlzdAo+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBodHRwOi8vbGlzdHMu
-bHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKCl9fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxp
-c3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1i
-aW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+> From: Mathieu Desnoyers [mathieu.desnoyers@efficios.com]
+> Sent: Monday, July 01, 2013 00:20
+> To: Yannick Brosseau; Gabbasov, Andrew
+> Cc: lttng-dev@lists.lttng.org
+> Subject: Re: [lttng-dev] [LTTng-modules PATCH] The msg part of the      printk:console event was 1 character too long
+> 
+> * Yannick Brosseau (yannick.brosseau@gmail.com) wrote:
+> > On 2013-06-28 15:43, Mathieu Desnoyers wrote:
+> > > * Yannick Brosseau (yannick.brosseau@gmail.com) wrote:
+> > >> Signed-off-by: Yannick Brosseau <yannick.brosseau@gmail.com>
+> > >> ---
+> > >>  instrumentation/events/lttng-module/printk.h |    2 +-
+> > >>  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >>
+> > >> diff --git a/instrumentation/events/lttng-module/printk.h b/instrumentation/events/lttng-module/printk.h
+> > >> index 4c744f9..f4b6028 100644
+> > >> --- a/instrumentation/events/lttng-module/printk.h
+> > >> +++ b/instrumentation/events/lttng-module/printk.h
+> > >> @@ -19,7 +19,7 @@ TRACE_EVENT_CONDITION(console,
+> > >>
+> > >>    TP_STRUCT__entry(
+> > >>            __dynamic_array_text(char, msg,
+> > >> -                  min_t(unsigned, end - start, MSG_TRACE_MAX_LEN) + 1)
+> > > this was taken from the Linux kernel mainline instrumentation, no ?
+> > >
+> > > Has this been fixed upstream ? If so, can you cite the commit in the
+> > > changelog ?
+> > >
+> > >
+> > It's not changed upstream. From what I see, ftrace does the right thing,
+> > but not LTTng. Will check perf and see if I can reproduce the problem
+> > directly with the upstream kernel.
+> 
+> in 3.9.8, I see:
+> 
+>         TP_STRUCT__entry(
+>                 __dynamic_array(char, msg, end - start + 1)
+>         ),
+> 
+> (upstream)
+> 
+> which has the +1.
+> 
+> What effect of the off-by-one are you observing exactly ? Are you sure
+> your fix is the right fix ? I wonder if modifying the TP_fast_assign()
+> code would not be better. I'm not sure why #if (LINUX_VERSION_CODE >=
+> KERNEL_VERSION(3,5,0)) has a different code from mainline. CCing Andrew
+> Gabbasov who contributed this instrumentation.
+> 
+> Thanks,
+> 
+> Mathieu
+
+Hi Mathieu, Yannick,
+
+Actually I also don't see why having +1 is wrong. Trailing zero byte needs
+it in the message length. Removing it in entry and not changing
+TP_fast_assign (that explicitly adds a zero byte) looks doubtful.
+I join to the question what the exact problem is, since my testing
+(at least on version 3.5) didn't show any problem.
+
+As for the different implementation code: starting version 3.5
+the kernel no longer use circular buffer for storing printk messages,
+and handling the message in 2 pieces what it crosses the boundary
+is no longer needed. Moreover, log_buf_len becomes not necessarily
+the power of 2, and previous implementation (based on what was
+in the kernel) just becomes incorrect. So, the newer and simpler
+implementation was introduced for later version. It also looks like
+this instrumentation needs to be further updated for version 3.10,
+since the whole tracepoint (even the parameters set) was changed
+there, becoming even more simple.
+
+Thanks.
+
+Best regards,
+Andrew
