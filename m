@@ -1,9 +1,9 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [Babeltrace PATCH 00/23] Add MinGW32 libraries to
+Subject: Re: [Babeltrace PATCH 01/23] Add MinGW32 libraries to
 	executables
-Date: Mon, 8 Jul 2013 09:50:12 -0400
-Message-ID: <20130708135012.GA22703__11968.4595069431$1373291445$gmane$org@Krystal>
-References: <009B25148989C6458484484699278506E5382EC1@EU-MBX-01.mgc.mentorg.com>
+Date: Mon, 8 Jul 2013 10:11:59 -0400
+Message-ID: <20130708141159.GB22703__3031.5809687183$1373292752$gmane$org@Krystal>
+References: <009B25148989C6458484484699278506E5382EC9@EU-MBX-01.mgc.mentorg.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -11,10 +11,10 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UwBpV-000595-W0
-	for lttng-dev@lists.lttng.org; Mon, 08 Jul 2013 09:50:14 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1UwCAc-0005Kn-0S
+	for lttng-dev@lists.lttng.org; Mon, 08 Jul 2013 10:12:02 -0400
 Content-Disposition: inline
-In-Reply-To: <009B25148989C6458484484699278506E5382EC1@EU-MBX-01.mgc.mentorg.com>
+In-Reply-To: <009B25148989C6458484484699278506E5382EC9@EU-MBX-01.mgc.mentorg.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -27,43 +27,81 @@ To: "Ikaheimonen, JP" <jp_ikaheimonen@mentor.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
+Merged as:
+
+
+commit 5881989879e8bc9819c14c4ea8bd05b4d159be58
+Author: JP Ikaheimonen <jp_ikaheimonen@mentor.com>
+Date:   Mon Jul 8 09:48:24 2013 -0400
+
+    Add MinGW32 libraries to executables
+    
+    Make configure.ac aware of MinGW, and set up a variable we can use
+    in make files.
+    Under MinGW, add platform specific libraries to all link commands.
+    
+    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+
 * Ikaheimonen, JP (jp_ikaheimonen@mentor.com) wrote:
-> Hi,
+> Make configure.ac aware of MinGW, and set up a variable we can use
+> in make files.
+> Under MinGW, add platform specific libraries to all link commands.
+> ---
+>  configure.ac                     | 9 +++++++++
+>  converter/Makefile.am            | 5 +++++
+>  formats/ctf/metadata/Makefile.am | 3 +++
+>  3 files changed, 17 insertions(+)
 > 
-> here is the new patch set that makes it possible to compile Babeltrace on MinGW32.
-> I have taken your previous comments into account wherever possible.
+> diff --git a/configure.ac b/configure.ac
+> index 83822d6..17efc87 100644
+> --- a/configure.ac
+> +++ b/configure.ac
+> @@ -37,6 +37,15 @@ AC_FUNC_MALLOC
+>  AC_FUNC_MMAP
+>  AC_CHECK_FUNCS([bzero gettimeofday munmap strtoul])
+>  
+> +# Check for MinGW32.
+> +MINGW32=no
+> +case $host in
+> +  *-*-mingw*)
+> +	MINGW32=yes;;
+> +esac
+> +
+> +AM_CONDITIONAL([BABELTRACE_BUILD_WITH_MINGW], [test "x$MINGW32" = "xyes"])
+> +
+>  # Check for libuuid
+>  AC_CHECK_LIB([uuid], [uuid_generate],
+>  [
+> diff --git a/converter/Makefile.am b/converter/Makefile.am
+> index de70313..8ef71a2 100644
+> --- a/converter/Makefile.am
+> +++ b/converter/Makefile.am
+> @@ -29,3 +29,8 @@ endif
+>  if BABELTRACE_BUILD_WITH_LIBC_UUID
+>  babeltrace_log_LDADD += -lc
+>  endif
+> +
+> +if BABELTRACE_BUILD_WITH_MINGW
+> +babeltrace_log_LDADD += -lrpcrt4 -lintl -liconv -lole32 -lpopt -lpthread
+> +babeltrace_LDADD += -lrpcrt4 -lintl -liconv -lole32 -lpopt -lpthread
+> +endif
+> diff --git a/formats/ctf/metadata/Makefile.am b/formats/ctf/metadata/Makefile.am
+> index b33ce55..69f7127 100644
+> --- a/formats/ctf/metadata/Makefile.am
+> +++ b/formats/ctf/metadata/Makefile.am
+> @@ -27,6 +27,9 @@ endif
+>  if BABELTRACE_BUILD_WITH_LIBC_UUID
+>  libctf_ast_la_LIBADD += -lc
+>  endif
+> +if BABELTRACE_BUILD_WITH_MINGW
+> +libctf_ast_la_LIBADD += -lrpcrt4 -lintl -liconv -lole32 -lpopt
+> +endif
+>  
+>  noinst_PROGRAMS = ctf-parser-test
+>  ctf_parser_test_SOURCES = ctf-parser-test.c
+> -- 
+> 1.8.1.msysgit.1
 > 
-> This patch set requires the patch I sent earlier, titled " [Babeltrace PATCH 01/01] Move strerror_r to compat directory " , and should be applied on top of that.
-> 
-> Some notes:
-> 
-> MinGW, especially MinGW32, is very lacking in library functions. (Indeed, 'minimal').
-> Some functions that are found in Microsoft Visual Studio run time libraries are not accessible in MinGW32.
-> These include any *_s functions such as strerror_s, gmtime_s, localtime_s and strtok_s; also strnlen is conspicuously missing.
-> No byte-swapping function, either.
-> 
-> It would have been possible to link to those functions dynamically, finding the function address from the DLL etc,
-> but I'm not doing it, because in the end, my goal is to create a statically linked tool, with minimal dependencies to shared libraries.
-> That is why, instead of using a well-known library function, I have resorted to implementing one on my own.
-> 
-> I'm still open for any comments that you might have.
-
-I'll go through the patchset. First note: you forgot to add your
-Signed-off-by line to your patches (please do for next patches).
-
-Thanks,
-
-Mathieu
-
-> 
-> Thanks,
-> 
-> JP Ikaheimonen | SW Development Engineer http://go.mentor.com/sourceryanalyzer
-> 
-> Mentor Embedded(tm) | Nucleus(r) | Linux(r) | Android(tm) | Services | UI | Multi-OS
-> 
-> Android is a trademark of Google Inc. Use of this trademark is subject to Google Permissions.
-> Linux is the registered trademark of Linus Torvalds in the U.S. and other countries.
 
 -- 
 Mathieu Desnoyers
