@@ -1,19 +1,21 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Is lttng namespace-ready?
-Date: Mon, 8 Jul 2013 12:33:41 -0400
-Message-ID: <20130708163340.GS29362__32585.414828691$1373301254$gmane$org@Krystal>
-References: <48CF5AC71E61DB46B70D0F388054EFFD13143A3C@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+Subject: Re: On lost events
+Date: Mon, 8 Jul 2013 12:38:22 -0400
+Message-ID: <20130708163822.GB30942__2511.72266803241$1373301534$gmane$org@Krystal>
+References: <51D5ED4E.2000305@ericsson.com> <20130704222948.GB8852@Krystal>
+	<51D71672.8020804@ericsson.com> <20130705221312.GA28331@Krystal>
+	<51DAE0FE.2020809@ericsson.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UwENi-0006bm-Kv
-	for lttng-dev@lists.lttng.org; Mon, 08 Jul 2013 12:33:42 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1UwESF-0006f1-Ix
+	for lttng-dev@lists.lttng.org; Mon, 08 Jul 2013 12:38:23 -0400
 Content-Disposition: inline
-In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD13143A3C@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+In-Reply-To: <51DAE0FE.2020809@ericsson.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,92 +24,130 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, "Couture,
-	Mario" <Mario.Couture@drdc-rddc.gc.ca>, "Painchaud,
-	Frederic" <Frederic.Painchaud@drdc-rddc.gc.ca>
+To: Matthew Khouzam <matthew.khouzam@ericsson.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-* Thibault, Daniel (Daniel.Thibault@drdc-rddc.gc.ca) wrote:
->    I was reading Michael Kerrisk's "Namespaces in operation"
->    (http://lwn.net/Articles/531114/), which explains most of the
->    namespace functionalities, and this brings to mind a number of
->    questions.
-> =
+* Matthew Khouzam (matthew.khouzam@ericsson.com) wrote:
+> Some streams have overlapping packets. I was shocked.
 
->    Are trace paths namespace-ready?  Per-PID traces are apparently not
->    much at risk since a process can join a PID namespace only upon its
->    creation (that is to say, PIDs are immutable).  However, collisions
->    are still possible, such as if two user-space processes start
->    within the same one-second window in two sibling PID namespaces
->    such that they have the same virtual PID.
+Ah! yes. The time stamp begin is sampled at event space reservation, and
+time stamp end is sampled at commit.
 
-yes, this is a possible race indeed for per-PID tracing in UST, since I
-think we're using namespaced PIDs to identify programs.
+So you can have, with packets A and B in a stream:
 
-> =
+- reserve space at end of A
+- interrupted
+- reserve space at beginning of B (get timestamp begin)
+- commit at end of A (get timestamp end)
+- commit at beginning of B
 
->    But what of per-UID traces?  What happens to a trace in progress if
->    one or more processes switch user namespaces?
-
-nothing.
-
->  Presumably new
->    sub-directories would be created under "session-name/ust/uid/"?
-
-no.
-
->    What about the case where two processes run by two different users
->    (and thus being recorded under different uid subdirectories) switch
->    to private user namespaces which happen to both map to the same
->    numerical virtual uid?  We need to make sure the second process
->    switch does not overwrite the trace files of the first (recall that
->    per-uid trace paths do not include timestamps like per-pid trace
->    paths do).
-
-Disambiguation between different PIDs requires the vpid context if you
-use per-UID buffers.
-
-> =
-
->    Finally, in the case of a remote trace being received by the relay
->    daemon, could a network or UTS namespace switch of the traced
->    processes cause trouble?  I suspect not, since the daemons at
->    either end of the connection are lttng-owned and would presumably
->    not undergo namespace switches themselves.
-
-I don't see it causing an issue. It might be good to try it out though.
+So yes, the timestamps can very slightly overlap indeed.
 
 Thanks,
 
 Mathieu
 
-> =
+> 
+> 
+> On 13-07-05 06:13 PM, Mathieu Desnoyers wrote:
+> > * Matthew Khouzam (matthew.khouzam@ericsson.com) wrote:
+> >> Quick question. Some traces have overlapping packets, so in that case,
+> >> the lost events are between the last event of a previous packet and the
+> >> first event of the next packet, which just happens to be the previous
+> >> packet's end time?
+> > "Some traces have overlapping packets"
+> >
+> > do you mean
+> >
+> > "Some traces have overlapping packets"
+> >
+> > or
+> >
+> > "Some streams have overlapping packets"
+> >
+> > ?
+> >
+> >> On 13-07-04 06:29 PM, Mathieu Desnoyers wrote:
+> >>> * Matthew Khouzam (matthew.khouzam@ericsson.com) wrote:
+> >>>> Hi tracing werewolves,
+> >>>>
+> >>>> I want to clear up some stuff about lost events.
+> >>>>
+> >>>> Lost events are caused, in lttng 2.x when the tracer does not have
+> >>>> enough memory available to write an event. This can be due to:
+> >>>> * events coming in too fast (faster than we can write them)
+> >>>> * a given event being too large
+> >>>> * we have an event that does a nested wrap around
+> >>>>
+> >>>> LTTng will not write the whole packet that is lost.
+> >>> LTTng does not write an _event_ discarded at all. However, a packet
+> >>> "lost" is a different thing: it only happens in overwrite mode, when we
+> >>> overwrite a packet.
+> >>>
+> >>>> It uses a ring
+> >>>> buffer and the packet will just be overwritten in the buffer, but a
+> >>>> counter will be incremented.
+> >>> For an _event_ discarded, we're not even writing it into the buffer.
+> >>>
+> >>>> The counter is written in the packet header in the CTF trace.
+> >>> Indeed, the event lost counters are written in the packet in the ctf
+> >>> trace.
+> >>>
+> >>>> When reading a trace, if you just read the packet headers, you will see
+> >>>> something as follows:
+> >>>>
+> >>>> Packet 1:
+> >>>> ts_begin: 100
+> >>>> ts_end: 200
+> >>>> discarded: 0
+> >>>>
+> >>>> Packet 2:
+> >>>> ts_begin: 300
+> >>>> ts_end: 400
+> >>>> discarded: 100
+> >>>>
+> >>>> Packet 3:
+> >>>> ts_begin: 500
+> >>>> ts_end: 600
+> >>>> discarded: 100
+> >>>>
+> >>>> Packet 4:
+> >>>> ts_begin: 650
+> >>>> ts_end: 750
+> >>>> discarded: 200
+> >>>>
+> >>>> With this example, the lost events are located between packets 1, 2 and
+> >>>> packets 3,4.
+> >>>>
+> >>>> If the events are too large, they are discarded in the current packet,
+> >>>> lttng does not split events into packets (yet?), and this is lost during
+> >>>> a current packet.
+> >>>>
+> >>>> That means if the events are lost between 1 and 2, they are potentially
+> >>>> in the range of [200-400] but probably in [200-300]
+> >>>> The next lost event are between 3 and 4 (events discarded is a total
+> >>>> count, not local to that packet), so 100 events are also lost between
+> >>>> [600-750] but likely in between [600-650]. If you can confirm that all
+> >>>> events WITH CONTEXTS are smaller than the packet sizes, I think it's a
+> >>>> shoe in that it's between the packets and not containing the next packet.
+> >>> "and not contained in the next packet".
+> >>>
+> >>> Thanks,
+> >>>
+> >>> Mathieu
+> >>>
+> >>>> Hope this clarifies some issues, it did for me!
+> >>>>
+> >>>> Matthew
+> >>>>
+> >>>> _______________________________________________
+> >>>> lttng-dev mailing list
+> >>>> lttng-dev@lists.lttng.org
+> >>>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> 
 
-> Daniel U. Thibault
-> Protection des syst=E8mes et contremesures (PSC) | Systems Protection & C=
-ountermeasures (SPC)
-> Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critica=
-l Cyber Security (MCCS)
-> R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R=
-&D Canada - Valcartier (DRDC Valcartier)
-> 2459 route de la Bravoure
-> Qu=E9bec QC=A0 G3J 1X5
-> CANADA
-> Vox=A0: (418) 844-4000 x4245
-> Fax=A0: (418) 844-4538
-> NAC=A0: 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-> Gouvernement du Canada=A0| Government of Canada
-> <http://www.valcartier.drdc-rddc.gc.ca/>
-> =
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- =
-
+-- 
 Mathieu Desnoyers
 EfficiOS Inc.
 http://www.efficios.com
