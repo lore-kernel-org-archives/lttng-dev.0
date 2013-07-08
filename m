@@ -1,24 +1,19 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Compile failure on OSX 10.8
-Date: Mon, 8 Jul 2013 12:24:02 -0400
-Message-ID: <20130708162402.GR29362__24579.9410426573$1373300676$gmane$org@Krystal>
-References: <51C46FFC.7050407@ripe.net>
-	<CAGDH53k9wAeu6cBsSCtauX0ADgFW9B09vz7Cfq2B=Yhw3-pCNw@mail.gmail.com>
-	<51C47EE0.9080208@ripe.net>
-	<CAGDH53mD-8jWechmKhVWyS7nY_CJQQgdDXfLp1V=gsAkmw53eQ@mail.gmail.com>
-	<51C49E0C.8020808@ripe.net> <51CB0DAF.6010507@ripe.net>
-	<CAGDH53n_rqWRnYgKybz6FTbjQZrRyj-QMKDkR+KWJhA0gxGEnQ@mail.gmail.com>
+Subject: Re: Is lttng namespace-ready?
+Date: Mon, 8 Jul 2013 12:33:41 -0400
+Message-ID: <20130708163340.GS29362__32585.414828691$1373301254$gmane$org@Krystal>
+References: <48CF5AC71E61DB46B70D0F388054EFFD13143A3C@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UwEEO-0006Wz-Hi
-	for lttng-dev@lists.lttng.org; Mon, 08 Jul 2013 12:24:04 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1UwENi-0006bm-Kv
+	for lttng-dev@lists.lttng.org; Mon, 08 Jul 2013 12:33:42 -0400
 Content-Disposition: inline
-In-Reply-To: <CAGDH53n_rqWRnYgKybz6FTbjQZrRyj-QMKDkR+KWJhA0gxGEnQ@mail.gmail.com>
+In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD13143A3C@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -27,86 +22,92 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Christian Babeux <christian.babeux@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, "Couture,
+	Mario" <Mario.Couture@drdc-rddc.gc.ca>, "Painchaud,
+	Frederic" <Frederic.Painchaud@drdc-rddc.gc.ca>
 List-Id: lttng-dev@lists.lttng.org
 
-Documented in README file:
+* Thibault, Daniel (Daniel.Thibault@drdc-rddc.gc.ca) wrote:
+>    I was reading Michael Kerrisk's "Namespaces in operation"
+>    (http://lwn.net/Articles/531114/), which explains most of the
+>    namespace functionalities, and this brings to mind a number of
+>    questions.
+> =
 
-commit 9e6b9f8afa8e70854a4e09e326de45dbd7e63bef
-Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Date:   Mon Jul 8 12:22:00 2013 -0400
+>    Are trace paths namespace-ready?  Per-PID traces are apparently not
+>    much at risk since a process can join a PID namespace only upon its
+>    creation (that is to say, PIDs are immutable).  However, collisions
+>    are still possible, such as if two user-space processes start
+>    within the same one-second window in two sibling PID namespaces
+>    such that they have the same virtual PID.
 
-    Document build work-around on MacOS X
-    
-    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+yes, this is a possible race indeed for per-PID tracing in UST, since I
+think we're using namespaced PIDs to identify programs.
 
+> =
 
-* Christian Babeux (christian.babeux@efficios.com) wrote:
-> Hi Anand,
-> 
-> I've opened a bug for this issue [1]. My first diagnostic was incorrect.
-> Configure detect the CPU as a 386, which is quite wrong. This in turns
-> cause a lot of issues :
-> 
-> This enable the x86 compat layer in liburcu which in turns barf on these:
-> 
-> __asm__ __volatile__ ("pushfl; popl %0" : "=r" (res) : );
-> 
-> [...]
-> 
-> __asm__ __volatile__ ("pushl %0; popfl" : : "r" (newflags) : "cc");
-> 
-> 
-> The compiler on Mac OSX has specifically been compiled to run on
-> x86_64 (seen in config.log, --host=x86_64-apple-darwin11). The pushfl,
-> popfl instructions are not present on x86_64, so the assembler
-> fails...
-> 
-> The workaround would be to force the build/host flag at configure time
-> to this (similar to [2]) :
-> 
-> ./configure --build=x86_64-apple-darwin11
-> 
-> We will have to either fix this in the configure.ac script or document this bug.
-> 
-> Christian
-> 
-> 
-> [1] - http://bugs.lttng.org/issues/578
-> [2] - https://trac.macports.org/ticket/21011
-> 
-> On Wed, Jun 26, 2013 at 11:50 AM, Anand Buddhdev <anandb@ripe.net> wrote:
-> > Hi Christian,
-> >
-> > Were you able to figure out from the config.log files why the
-> > architecture detection wasn't working properly?
-> >
-> > Anand
-> >
-> > On 21/06/2013 20:40, Anand Buddhdev wrote:
-> >
-> >> Hi Christian,
-> >>
-> >> I've attached both here.
-> >>
-> >> Anand
-> >>
-> >> On 21/06/2013 18:51, Christian Babeux wrote:
-> >>
-> >>> Hmm that's really weird :/. For some reason configure detect an i386
-> >>> CPU which is certainly not right. Could you post your config.log with
-> >>> and without the --host flag (specifying which is which)?
-> >>>
-> >>> There might be some slight incompatibilities on OSX and the CPU
-> >>> detection mechanism we are using...
-> 
+>    But what of per-UID traces?  What happens to a trace in progress if
+>    one or more processes switch user namespaces?
+
+nothing.
+
+>  Presumably new
+>    sub-directories would be created under "session-name/ust/uid/"?
+
+no.
+
+>    What about the case where two processes run by two different users
+>    (and thus being recorded under different uid subdirectories) switch
+>    to private user namespaces which happen to both map to the same
+>    numerical virtual uid?  We need to make sure the second process
+>    switch does not overwrite the trace files of the first (recall that
+>    per-uid trace paths do not include timestamps like per-pid trace
+>    paths do).
+
+Disambiguation between different PIDs requires the vpid context if you
+use per-UID buffers.
+
+> =
+
+>    Finally, in the case of a remote trace being received by the relay
+>    daemon, could a network or UTS namespace switch of the traced
+>    processes cause trouble?  I suspect not, since the daemons at
+>    either end of the connection are lttng-owned and would presumably
+>    not undergo namespace switches themselves.
+
+I don't see it causing an issue. It might be good to try it out though.
+
+Thanks,
+
+Mathieu
+
+> =
+
+> Daniel U. Thibault
+> Protection des syst=E8mes et contremesures (PSC) | Systems Protection & C=
+ountermeasures (SPC)
+> Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critica=
+l Cyber Security (MCCS)
+> R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R=
+&D Canada - Valcartier (DRDC Valcartier)
+> 2459 route de la Bravoure
+> Qu=E9bec QC=A0 G3J 1X5
+> CANADA
+> Vox=A0: (418) 844-4000 x4245
+> Fax=A0: (418) 844-4538
+> NAC=A0: 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+> Gouvernement du Canada=A0| Government of Canada
+> <http://www.valcartier.drdc-rddc.gc.ca/>
+> =
+
 > _______________________________________________
 > lttng-dev mailing list
 > lttng-dev@lists.lttng.org
 > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
--- 
+-- =
+
 Mathieu Desnoyers
 EfficiOS Inc.
 http://www.efficios.com
