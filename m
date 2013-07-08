@@ -1,20 +1,18 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-tools] Fix: Missing read locks
-	on	access to consumerd's channel hash table
-Date: Mon, 8 Jul 2013 11:49:56 -0400
-Message-ID: <20130708154956.GL29362__45482.4627996006$1373298628$gmane$org@Krystal>
-References: <1370315999-8598-1-git-send-email-jeremie.galarneau@efficios.com>
+From: Matthew Khouzam <matthew.khouzam@ericsson.com>
+Subject: Re: On lost events
+Date: Mon, 8 Jul 2013 11:55:42 -0400
+Message-ID: <51DAE0FE.2020809__14615.2901849293$1373299006$gmane$org@ericsson.com>
+References: <51D5ED4E.2000305@ericsson.com> <20130704222948.GB8852@Krystal>
+	<51D71672.8020804@ericsson.com> <20130705221312.GA28331@Krystal>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from usevmg20.ericsson.net ([198.24.6.45])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UwDhN-0006Dx-TK
-	for lttng-dev@lists.lttng.org; Mon, 08 Jul 2013 11:49:57 -0400
-Content-Disposition: inline
-In-Reply-To: <1370315999-8598-1-git-send-email-jeremie.galarneau@efficios.com>
+	(envelope-from <matthew.khouzam@ericsson.com>) id 1UwDnO-0006He-Tm
+	for lttng-dev@lists.lttng.org; Mon, 08 Jul 2013 11:56:11 -0400
+In-Reply-To: <20130705221312.GA28331@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,83 +21,105 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-* J=E9r=E9mie Galarneau (jeremie.galarneau@efficios.com) wrote:
-> Signed-off-by: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
-
-this had been merged into lttng-tools as:
-
-commit c7260a81b6c99282da7c59b6124381f92c637658
-Author: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
-Date:   Mon Jun 3 23:19:59 2013 -0400
-
-    Fix: Missing RCU locks on access to consumerd's channel ht
-    =
-
-    Signed-off-by: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
-    Signed-off-by: David Goulet <dgoulet@efficios.com>
-
-For both stable-2.2 and master.
+Some streams have overlapping packets. I was shocked.
 
 
-> ---
->  src/common/consumer.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> =
-
-> diff --git a/src/common/consumer.c b/src/common/consumer.c
-> index 3709092..5f38375 100644
-> --- a/src/common/consumer.c
-> +++ b/src/common/consumer.c
-> @@ -2716,16 +2716,21 @@ restart:
->  =
-
->  						lttng_ht_node_init_u64(&chan->wait_fd_node,
->  							chan->wait_fd);
-> +						rcu_read_lock();
->  						lttng_ht_add_unique_u64(channel_ht,
->  								&chan->wait_fd_node);
-> +						rcu_read_unlock();
->  						/* Add channel to the global poll events list */
->  						lttng_poll_add(&events, chan->wait_fd,
->  								LPOLLIN | LPOLLPRI);
->  						break;
->  					case CONSUMER_CHANNEL_DEL:
->  					{
-> +						rcu_read_lock();
->  						chan =3D consumer_find_channel(key);
-> +
->  						if (!chan) {
-> +							rcu_read_unlock();
->  							ERR("UST consumer get channel key %" PRIu64 " not found for del c=
-hannel", key);
->  							break;
->  						}
-> @@ -2741,6 +2746,7 @@ restart:
->  						if (!uatomic_sub_return(&chan->refcount, 1)) {
->  							consumer_del_channel(chan);
->  						}
-> +						rcu_read_unlock();
->  						goto restart;
->  					}
->  					case CONSUMER_CHANNEL_QUIT:
-> -- =
-
-> 1.8.2.3
-> =
-
-> =
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- =
-
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+On 13-07-05 06:13 PM, Mathieu Desnoyers wrote:
+> * Matthew Khouzam (matthew.khouzam@ericsson.com) wrote:
+>> Quick question. Some traces have overlapping packets, so in that case,
+>> the lost events are between the last event of a previous packet and the
+>> first event of the next packet, which just happens to be the previous
+>> packet's end time?
+> "Some traces have overlapping packets"
+>
+> do you mean
+>
+> "Some traces have overlapping packets"
+>
+> or
+>
+> "Some streams have overlapping packets"
+>
+> ?
+>
+>> On 13-07-04 06:29 PM, Mathieu Desnoyers wrote:
+>>> * Matthew Khouzam (matthew.khouzam@ericsson.com) wrote:
+>>>> Hi tracing werewolves,
+>>>>
+>>>> I want to clear up some stuff about lost events.
+>>>>
+>>>> Lost events are caused, in lttng 2.x when the tracer does not have
+>>>> enough memory available to write an event. This can be due to:
+>>>> * events coming in too fast (faster than we can write them)
+>>>> * a given event being too large
+>>>> * we have an event that does a nested wrap around
+>>>>
+>>>> LTTng will not write the whole packet that is lost.
+>>> LTTng does not write an _event_ discarded at all. However, a packet
+>>> "lost" is a different thing: it only happens in overwrite mode, when we
+>>> overwrite a packet.
+>>>
+>>>> It uses a ring
+>>>> buffer and the packet will just be overwritten in the buffer, but a
+>>>> counter will be incremented.
+>>> For an _event_ discarded, we're not even writing it into the buffer.
+>>>
+>>>> The counter is written in the packet header in the CTF trace.
+>>> Indeed, the event lost counters are written in the packet in the ctf
+>>> trace.
+>>>
+>>>> When reading a trace, if you just read the packet headers, you will see
+>>>> something as follows:
+>>>>
+>>>> Packet 1:
+>>>> ts_begin: 100
+>>>> ts_end: 200
+>>>> discarded: 0
+>>>>
+>>>> Packet 2:
+>>>> ts_begin: 300
+>>>> ts_end: 400
+>>>> discarded: 100
+>>>>
+>>>> Packet 3:
+>>>> ts_begin: 500
+>>>> ts_end: 600
+>>>> discarded: 100
+>>>>
+>>>> Packet 4:
+>>>> ts_begin: 650
+>>>> ts_end: 750
+>>>> discarded: 200
+>>>>
+>>>> With this example, the lost events are located between packets 1, 2 and
+>>>> packets 3,4.
+>>>>
+>>>> If the events are too large, they are discarded in the current packet,
+>>>> lttng does not split events into packets (yet?), and this is lost during
+>>>> a current packet.
+>>>>
+>>>> That means if the events are lost between 1 and 2, they are potentially
+>>>> in the range of [200-400] but probably in [200-300]
+>>>> The next lost event are between 3 and 4 (events discarded is a total
+>>>> count, not local to that packet), so 100 events are also lost between
+>>>> [600-750] but likely in between [600-650]. If you can confirm that all
+>>>> events WITH CONTEXTS are smaller than the packet sizes, I think it's a
+>>>> shoe in that it's between the packets and not containing the next packet.
+>>> "and not contained in the next packet".
+>>>
+>>> Thanks,
+>>>
+>>> Mathieu
+>>>
+>>>> Hope this clarifies some issues, it did for me!
+>>>>
+>>>> Matthew
+>>>>
+>>>> _______________________________________________
+>>>> lttng-dev mailing list
+>>>> lttng-dev@lists.lttng.org
+>>>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
