@@ -1,9 +1,9 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-modules 1/2] Added mainline
-	headers	for kvm x86 tracepoints.
-Date: Mon, 8 Jul 2013 12:53:43 -0400
-Message-ID: <20130708165343.GY29362__40632.0147485987$1373302463$gmane$org@Krystal>
-References: <1372875187-17656-1-git-send-email-mohamad.gebai@polymtl.ca>
+Subject: Re: [PATCH lttng-modules 2/2] Added support for kvm	x86
+	specific tracepoints.
+Date: Mon, 8 Jul 2013 12:53:49 -0400
+Message-ID: <20130708165349.GZ29362__16338.5108732202$1373302467$gmane$org@Krystal>
+References: <1372875250-17733-1-git-send-email-mohamad.gebai@polymtl.ca>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -11,10 +11,10 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UwEh8-0006qD-MX
-	for lttng-dev@lists.lttng.org; Mon, 08 Jul 2013 12:53:46 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1UwEhF-0006r8-7B
+	for lttng-dev@lists.lttng.org; Mon, 08 Jul 2013 12:53:53 -0400
 Content-Disposition: inline
-In-Reply-To: <1372875187-17656-1-git-send-email-mohamad.gebai@polymtl.ca>
+In-Reply-To: <1372875250-17733-1-git-send-email-mohamad.gebai@polymtl.ca>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -30,19 +30,26 @@ List-Id: lttng-dev@lists.lttng.org
 merged, thanks!
 
 * Mohamad Gebai (mohamad.gebai@gmail.com) wrote:
+> Two new probes for kvm-x86 and kvm-x86-mmu.
+> 
 > Signed-off-by: Mohamad Gebai <mohamad.gebai@polymtl.ca>
 > ---
->  .../events/mainline/arch/x86/kvm/mmutrace.h        |  285 +++++++
->  .../events/mainline/arch/x86/kvm/trace.h           |  828 ++++++++++++++++++++
->  2 files changed, 1113 insertions(+)
->  create mode 100644 instrumentation/events/mainline/arch/x86/kvm/mmutrace.h
->  create mode 100644 instrumentation/events/mainline/arch/x86/kvm/trace.h
+>  .../events/lttng-module/arch/x86/kvm/mmutrace.h    |  285 +++++++
+>  .../events/lttng-module/arch/x86/kvm/trace.h       |  833 ++++++++++++++++++++
+>  probes/Makefile                                    |   17 +-
+>  probes/lttng-probe-kvm-x86-mmu.c                   |   43 +
+>  probes/lttng-probe-kvm-x86.c                       |   45 ++
+>  5 files changed, 1222 insertions(+), 1 deletion(-)
+>  create mode 100644 instrumentation/events/lttng-module/arch/x86/kvm/mmutrace.h
+>  create mode 100644 instrumentation/events/lttng-module/arch/x86/kvm/trace.h
+>  create mode 100644 probes/lttng-probe-kvm-x86-mmu.c
+>  create mode 100644 probes/lttng-probe-kvm-x86.c
 > 
-> diff --git a/instrumentation/events/mainline/arch/x86/kvm/mmutrace.h b/instrumentation/events/mainline/arch/x86/kvm/mmutrace.h
+> diff --git a/instrumentation/events/lttng-module/arch/x86/kvm/mmutrace.h b/instrumentation/events/lttng-module/arch/x86/kvm/mmutrace.h
 > new file mode 100644
-> index 0000000..b8f6172
+> index 0000000..56ddbab
 > --- /dev/null
-> +++ b/instrumentation/events/mainline/arch/x86/kvm/mmutrace.h
+> +++ b/instrumentation/events/lttng-module/arch/x86/kvm/mmutrace.h
 > @@ -0,0 +1,285 @@
 > +#if !defined(_TRACE_KVMMMU_H) || defined(TRACE_HEADER_MULTI_READ)
 > +#define _TRACE_KVMMMU_H
@@ -60,10 +67,10 @@ merged, thanks!
 > +	__field(bool, unsync)
 > +
 > +#define KVM_MMU_PAGE_ASSIGN(sp)			     \
-> +	__entry->gfn = sp->gfn;			     \
-> +	__entry->role = sp->role.word;		     \
-> +	__entry->root_count = sp->root_count;        \
-> +	__entry->unsync = sp->unsync;
+> +	tp_assign(gfn, sp->gfn)			     \
+> +	tp_assign(role, sp->role.word)		     \
+> +	tp_assign(root_count, sp->root_count)        \
+> +	tp_assign(unsync, sp->unsync)
 > +
 > +#define KVM_MMU_PAGE_PRINTK() ({				        \
 > +	const char *ret = p->buffer + p->len;				\
@@ -109,13 +116,13 @@ merged, thanks!
 > +	),
 > +
 > +	TP_fast_assign(
-> +		__entry->addr = addr;
-> +		__entry->pferr = pferr;
+> +		tp_assign(addr, addr)
+> +		tp_assign(pferr, pferr)
 > +	),
 > +
 > +	TP_printk("addr %llx pferr %x %s", __entry->addr, __entry->pferr,
 > +		  __print_flags(__entry->pferr, "|", kvm_mmu_trace_pferr_flags))
-> +);
+> +)
 > +
 > +
 > +/* We just walked a paging element */
@@ -130,12 +137,12 @@ merged, thanks!
 > +		),
 > +
 > +	TP_fast_assign(
-> +		__entry->pte = pte;
-> +		__entry->level = level;
+> +		tp_assign(pte, pte)
+> +		tp_assign(level, level)
 > +		),
 > +
 > +	TP_printk("pte %llx level %u", __entry->pte, __entry->level)
-> +);
+> +)
 > +
 > +DECLARE_EVENT_CLASS(kvm_mmu_set_bit_class,
 > +
@@ -148,12 +155,12 @@ merged, thanks!
 > +	),
 > +
 > +	TP_fast_assign(
-> +		__entry->gpa = ((u64)table_gfn << PAGE_SHIFT)
-> +				+ index * size;
+> +		tp_assign(gpa, ((u64)table_gfn << PAGE_SHIFT)
+> +				+ index * size)
 > +		),
 > +
 > +	TP_printk("gpa %llx", __entry->gpa)
-> +);
+> +)
 > +
 > +/* We set a pte accessed bit */
 > +DEFINE_EVENT(kvm_mmu_set_bit_class, kvm_mmu_set_accessed_bit,
@@ -161,7 +168,7 @@ merged, thanks!
 > +	TP_PROTO(unsigned long table_gfn, unsigned index, unsigned size),
 > +
 > +	TP_ARGS(table_gfn, index, size)
-> +);
+> +)
 > +
 > +/* We set a pte dirty bit */
 > +DEFINE_EVENT(kvm_mmu_set_bit_class, kvm_mmu_set_dirty_bit,
@@ -169,7 +176,7 @@ merged, thanks!
 > +	TP_PROTO(unsigned long table_gfn, unsigned index, unsigned size),
 > +
 > +	TP_ARGS(table_gfn, index, size)
-> +);
+> +)
 > +
 > +TRACE_EVENT(
 > +	kvm_mmu_walker_error,
@@ -181,12 +188,12 @@ merged, thanks!
 > +		),
 > +
 > +	TP_fast_assign(
-> +		__entry->pferr = pferr;
+> +		tp_assign(pferr, pferr)
 > +		),
 > +
 > +	TP_printk("pferr %x %s", __entry->pferr,
 > +		  __print_flags(__entry->pferr, "|", kvm_mmu_trace_pferr_flags))
-> +);
+> +)
 > +
 > +TRACE_EVENT(
 > +	kvm_mmu_get_page,
@@ -200,12 +207,12 @@ merged, thanks!
 > +
 > +	TP_fast_assign(
 > +		KVM_MMU_PAGE_ASSIGN(sp)
-> +		__entry->created = created;
+> +		tp_assign(created, created)
 > +		),
 > +
 > +	TP_printk("%s %s", KVM_MMU_PAGE_PRINTK(),
 > +		  __entry->created ? "new" : "existing")
-> +);
+> +)
 > +
 > +DECLARE_EVENT_CLASS(kvm_mmu_page_class,
 > +
@@ -221,25 +228,25 @@ merged, thanks!
 > +	),
 > +
 > +	TP_printk("%s", KVM_MMU_PAGE_PRINTK())
-> +);
+> +)
 > +
 > +DEFINE_EVENT(kvm_mmu_page_class, kvm_mmu_sync_page,
 > +	TP_PROTO(struct kvm_mmu_page *sp),
 > +
 > +	TP_ARGS(sp)
-> +);
+> +)
 > +
 > +DEFINE_EVENT(kvm_mmu_page_class, kvm_mmu_unsync_page,
 > +	TP_PROTO(struct kvm_mmu_page *sp),
 > +
 > +	TP_ARGS(sp)
-> +);
+> +)
 > +
 > +DEFINE_EVENT(kvm_mmu_page_class, kvm_mmu_prepare_zap_page,
 > +	TP_PROTO(struct kvm_mmu_page *sp),
 > +
 > +	TP_ARGS(sp)
-> +);
+> +)
 > +
 > +TRACE_EVENT(
 > +	mark_mmio_spte,
@@ -253,14 +260,14 @@ merged, thanks!
 > +	),
 > +
 > +	TP_fast_assign(
-> +		__entry->sptep = sptep;
-> +		__entry->gfn = gfn;
-> +		__entry->access = access;
+> +		tp_assign(sptep, sptep)
+> +		tp_assign(gfn, gfn)
+> +		tp_assign(access, access)
 > +	),
 > +
 > +	TP_printk("sptep:%p gfn %llx access %x", __entry->sptep, __entry->gfn,
 > +		  __entry->access)
-> +);
+> +)
 > +
 > +TRACE_EVENT(
 > +	handle_mmio_page_fault,
@@ -274,14 +281,14 @@ merged, thanks!
 > +	),
 > +
 > +	TP_fast_assign(
-> +		__entry->addr = addr;
-> +		__entry->gfn = gfn;
-> +		__entry->access = access;
+> +		tp_assign(addr, addr)
+> +		tp_assign(gfn, gfn)
+> +		tp_assign(access, access)
 > +	),
 > +
 > +	TP_printk("addr:%llx gfn %llx access %x", __entry->addr, __entry->gfn,
 > +		  __entry->access)
-> +);
+> +)
 > +
 > +#define __spte_satisfied(__spte)				\
 > +	(__entry->retry && is_writable_pte(__entry->__spte))
@@ -303,13 +310,13 @@ merged, thanks!
 > +	),
 > +
 > +	TP_fast_assign(
-> +		__entry->vcpu_id = vcpu->vcpu_id;
-> +		__entry->gva = gva;
-> +		__entry->error_code = error_code;
-> +		__entry->sptep = sptep;
-> +		__entry->old_spte = old_spte;
-> +		__entry->new_spte = *sptep;
-> +		__entry->retry = retry;
+> +		tp_assign(vcpu_id, vcpu->vcpu_id)
+> +		tp_assign(gva, gva)
+> +		tp_assign(error_code, error_code)
+> +		tp_assign(sptep, sptep)
+> +		tp_assign(old_spte, old_spte)
+> +		tp_assign(new_spte, *sptep)
+> +		tp_assign(retry, retry)
 > +	),
 > +
 > +	TP_printk("vcpu %d gva %lx error_code %s sptep %p old %#llx"
@@ -319,22 +326,22 @@ merged, thanks!
 > +		  __entry->old_spte, __entry->new_spte,
 > +		  __spte_satisfied(old_spte), __spte_satisfied(new_spte)
 > +	)
-> +);
+> +)
 > +#endif /* _TRACE_KVMMMU_H */
 > +
 > +#undef TRACE_INCLUDE_PATH
-> +#define TRACE_INCLUDE_PATH .
+> +#define TRACE_INCLUDE_PATH ../instrumentation/events/lttng-module/arch/x86/kvm
 > +#undef TRACE_INCLUDE_FILE
 > +#define TRACE_INCLUDE_FILE mmutrace
 > +
 > +/* This part must be outside protection */
-> +#include <trace/define_trace.h>
-> diff --git a/instrumentation/events/mainline/arch/x86/kvm/trace.h b/instrumentation/events/mainline/arch/x86/kvm/trace.h
+> +#include "../../../../../../probes/define_trace.h"
+> diff --git a/instrumentation/events/lttng-module/arch/x86/kvm/trace.h b/instrumentation/events/lttng-module/arch/x86/kvm/trace.h
 > new file mode 100644
-> index 0000000..fe5e00e
+> index 0000000..8e71a7f
 > --- /dev/null
-> +++ b/instrumentation/events/mainline/arch/x86/kvm/trace.h
-> @@ -0,0 +1,828 @@
+> +++ b/instrumentation/events/lttng-module/arch/x86/kvm/trace.h
+> @@ -0,0 +1,833 @@
 > +#if !defined(_TRACE_KVM_H) || defined(TRACE_HEADER_MULTI_READ)
 > +#define _TRACE_KVM_H
 > +
@@ -342,6 +349,9 @@ merged, thanks!
 > +#include <asm/vmx.h>
 > +#include <asm/svm.h>
 > +#include <asm/clocksource.h>
+> +#include <linux/version.h>
+> +#include <../arch/x86/kvm/lapic.h>
+> +#include <../arch/x86/kvm/kvm_cache_regs.h>
 > +
 > +#undef TRACE_SYSTEM
 > +#define TRACE_SYSTEM kvm
@@ -358,11 +368,11 @@ merged, thanks!
 > +	),
 > +
 > +	TP_fast_assign(
-> +		__entry->vcpu_id	= vcpu_id;
+> +		tp_assign(vcpu_id, vcpu_id)
 > +	),
 > +
 > +	TP_printk("vcpu %u", __entry->vcpu_id)
-> +);
+> +)
 > +
 > +/*
 > + * Tracepoint for hypercall.
@@ -381,17 +391,17 @@ merged, thanks!
 > +	),
 > +
 > +	TP_fast_assign(
-> +		__entry->nr		= nr;
-> +		__entry->a0		= a0;
-> +		__entry->a1		= a1;
-> +		__entry->a2		= a2;
-> +		__entry->a3		= a3;
+> +		tp_assign(nr, nr)
+> +		tp_assign(a0, a0)
+> +		tp_assign(a1, a1)
+> +		tp_assign(a2, a2)
+> +		tp_assign(a3, a3)
 > +	),
 > +
 > +	TP_printk("nr 0x%lx a0 0x%lx a1 0x%lx a2 0x%lx a3 0x%lx",
 > +		 __entry->nr, __entry->a0, __entry->a1,  __entry->a2,
 > +		 __entry->a3)
-> +);
+> +)
 > +
 > +/*
 > + * Tracepoint for hypercall.
@@ -411,19 +421,19 @@ merged, thanks!
 > +	),
 > +
 > +	TP_fast_assign(
-> +		__entry->rep_cnt	= rep_cnt;
-> +		__entry->rep_idx	= rep_idx;
-> +		__entry->ingpa		= ingpa;
-> +		__entry->outgpa		= outgpa;
-> +		__entry->code		= code;
-> +		__entry->fast		= fast;
+> +		tp_assign(rep_cnt, rep_cnt)
+> +		tp_assign(rep_idx, rep_idx)
+> +		tp_assign(ingpa, ingpa)
+> +		tp_assign(outgpa, outgpa)
+> +		tp_assign(code, code)
+> +		tp_assign(fast, fast)
 > +	),
 > +
 > +	TP_printk("code 0x%x %s cnt 0x%x idx 0x%x in 0x%llx out 0x%llx",
 > +		  __entry->code, __entry->fast ? "fast" : "slow",
 > +		  __entry->rep_cnt, __entry->rep_idx,  __entry->ingpa,
 > +		  __entry->outgpa)
-> +);
+> +)
 > +
 > +/*
 > + * Tracepoint for PIO.
@@ -441,16 +451,16 @@ merged, thanks!
 > +	),
 > +
 > +	TP_fast_assign(
-> +		__entry->rw		= rw;
-> +		__entry->port		= port;
-> +		__entry->size		= size;
-> +		__entry->count		= count;
+> +		tp_assign(rw, rw)
+> +		tp_assign(port, port)
+> +		tp_assign(size, size)
+> +		tp_assign(count, count)
 > +	),
 > +
 > +	TP_printk("pio_%s at 0x%x size %d count %d",
 > +		  __entry->rw ? "write" : "read",
 > +		  __entry->port, __entry->size, __entry->count)
-> +);
+> +)
 > +
 > +/*
 > + * Tracepoint for cpuid.
@@ -469,17 +479,17 @@ merged, thanks!
 > +	),
 > +
 > +	TP_fast_assign(
-> +		__entry->function	= function;
-> +		__entry->rax		= rax;
-> +		__entry->rbx		= rbx;
-> +		__entry->rcx		= rcx;
-> +		__entry->rdx		= rdx;
+> +		tp_assign(function, function)
+> +		tp_assign(rax, rax)
+> +		tp_assign(rbx, rbx)
+> +		tp_assign(rcx, rcx)
+> +		tp_assign(rdx, rdx)
 > +	),
 > +
 > +	TP_printk("func %x rax %lx rbx %lx rcx %lx rdx %lx",
 > +		  __entry->function, __entry->rax,
 > +		  __entry->rbx, __entry->rcx, __entry->rdx)
-> +);
+> +)
 > +
 > +#define AREG(x) { APIC_##x, "APIC_" #x }
 > +
@@ -504,16 +514,16 @@ merged, thanks!
 > +	),
 > +
 > +	TP_fast_assign(
-> +		__entry->rw		= rw;
-> +		__entry->reg		= reg;
-> +		__entry->val		= val;
+> +		tp_assign(rw, rw)
+> +		tp_assign(reg, reg)
+> +		tp_assign(val, val)
 > +	),
 > +
 > +	TP_printk("apic_%s %s = 0x%x",
 > +		  __entry->rw ? "write" : "read",
 > +		  __print_symbolic(__entry->reg, kvm_trace_symbol_apic),
 > +		  __entry->val)
-> +);
+> +)
 > +
 > +#define trace_kvm_apic_read(reg, val)		trace_kvm_apic(0, reg, val)
 > +#define trace_kvm_apic_write(reg, val)		trace_kvm_apic(1, reg, val)
@@ -525,8 +535,8 @@ merged, thanks!
 > + * Tracepoint for kvm guest exit:
 > + */
 > +TRACE_EVENT(kvm_exit,
-> +	TP_PROTO(unsigned int exit_reason, struct kvm_vcpu *vcpu, u32 isa),
-> +	TP_ARGS(exit_reason, vcpu, isa),
+> +	TP_PROTO(unsigned int exit_reason, struct kvm_vcpu *vcpu, u32 isa, u64 info1, u64 info2),
+> +	TP_ARGS(exit_reason, vcpu, isa, info1, info2),
 > +
 > +	TP_STRUCT__entry(
 > +		__field(	unsigned int,	exit_reason	)
@@ -537,19 +547,21 @@ merged, thanks!
 > +	),
 > +
 > +	TP_fast_assign(
-> +		__entry->exit_reason	= exit_reason;
-> +		__entry->guest_rip	= kvm_rip_read(vcpu);
-> +		__entry->isa            = isa;
-> +		kvm_x86_ops->get_exit_info(vcpu, &__entry->info1,
-> +					   &__entry->info2);
+> +		tp_assign(exit_reason, exit_reason)
+> +		tp_assign(guest_rip, kvm_rip_read(vcpu))
+> +		tp_assign(isa, isa)
+> +    kvm_x86_ops->get_exit_info(vcpu, &info1,
+> +              &info2);
+> +    tp_assign(info1, info1)
+> +    tp_assign(info2, info2)
 > +	),
 > +
-> +	TP_printk("reason %s rip 0x%lx info %llx %llx",
+> +	TP_printk("reason %s rip  info %llx %llx",
 > +		 (__entry->isa == KVM_ISA_VMX) ?
 > +		 __print_symbolic(__entry->exit_reason, VMX_EXIT_REASONS) :
 > +		 __print_symbolic(__entry->exit_reason, SVM_EXIT_REASONS),
-> +		 __entry->guest_rip, __entry->info1, __entry->info2)
-> +);
+> +		/* __entry->guest_rip,*/ __entry->info1, __entry->info2)
+> +)
 > +
 > +/*
 > + * Tracepoint for kvm interrupt injection:
@@ -563,11 +575,11 @@ merged, thanks!
 > +	),
 > +
 > +	TP_fast_assign(
-> +		__entry->irq		= irq;
+> +		tp_assign(irq, irq)
 > +	),
 > +
 > +	TP_printk("irq %u", __entry->irq)
-> +);
+> +)
 > +
 > +#define EXS(x) { x##_VECTOR, "#" #x }
 > +
@@ -590,16 +602,16 @@ merged, thanks!
 > +	),
 > +
 > +	TP_fast_assign(
-> +		__entry->exception	= exception;
-> +		__entry->has_error	= has_error;
-> +		__entry->error_code	= error_code;
+> +		tp_assign(exception, exception)
+> +		tp_assign(has_error, has_error)
+> +		tp_assign(error_code, error_code)
 > +	),
 > +
 > +	TP_printk("%s (0x%x)",
 > +		  __print_symbolic(__entry->exception, kvm_trace_sym_exc),
 > +		  /* FIXME: don't print error_code if not present */
 > +		  __entry->has_error ? __entry->error_code : 0)
-> +);
+> +)
 > +
 > +/*
 > + * Tracepoint for page fault.
@@ -614,13 +626,13 @@ merged, thanks!
 > +	),
 > +
 > +	TP_fast_assign(
-> +		__entry->fault_address	= fault_address;
-> +		__entry->error_code	= error_code;
+> +		tp_assign(fault_address, fault_address)
+> +		tp_assign(error_code, error_code)
 > +	),
 > +
 > +	TP_printk("address %lx error_code %x",
 > +		  __entry->fault_address, __entry->error_code)
-> +);
+> +)
 > +
 > +/*
 > + * Tracepoint for guest MSR access.
@@ -637,17 +649,17 @@ merged, thanks!
 > +	),
 > +
 > +	TP_fast_assign(
-> +		__entry->write		= write;
-> +		__entry->ecx		= ecx;
-> +		__entry->data		= data;
-> +		__entry->exception	= exception;
+> +		tp_assign(write, write)
+> +		tp_assign(ecx, ecx)
+> +		tp_assign(data, data)
+> +		tp_assign(exception, exception)
 > +	),
 > +
 > +	TP_printk("msr_%s %x = 0x%llx%s",
 > +		  __entry->write ? "write" : "read",
 > +		  __entry->ecx, __entry->data,
 > +		  __entry->exception ? " (#GP)" : "")
-> +);
+> +)
 > +
 > +#define trace_kvm_msr_read(ecx, data)      trace_kvm_msr(0, ecx, data, false)
 > +#define trace_kvm_msr_write(ecx, data)     trace_kvm_msr(1, ecx, data, false)
@@ -668,15 +680,15 @@ merged, thanks!
 > +	),
 > +
 > +	TP_fast_assign(
-> +		__entry->rw		= rw;
-> +		__entry->cr		= cr;
-> +		__entry->val		= val;
+> +		tp_assign(rw, rw)
+> +		tp_assign(cr, cr)
+> +		tp_assign(val, val)
 > +	),
 > +
 > +	TP_printk("cr_%s %x = 0x%lx",
 > +		  __entry->rw ? "write" : "read",
 > +		  __entry->cr, __entry->val)
-> +);
+> +)
 > +
 > +#define trace_kvm_cr_read(cr, val)		trace_kvm_cr(0, cr, val)
 > +#define trace_kvm_cr_write(cr, val)		trace_kvm_cr(1, cr, val)
@@ -694,11 +706,11 @@ merged, thanks!
 > +	),
 > +
 > +	TP_fast_assign(
-> +		__entry->chip		= chip;
-> +		__entry->pin		= pin;
-> +		__entry->elcr		= elcr;
-> +		__entry->imr		= imr;
-> +		__entry->coalesced	= coalesced;
+> +		tp_assign(chip, chip)
+> +		tp_assign(pin, pin)
+> +		tp_assign(elcr, elcr)
+> +		tp_assign(imr, imr)
+> +		tp_assign(coalesced, coalesced)
 > +	),
 > +
 > +	TP_printk("chip %u pin %u (%s%s)%s",
@@ -706,7 +718,7 @@ merged, thanks!
 > +		  (__entry->elcr & (1 << __entry->pin)) ? "level":"edge",
 > +		  (__entry->imr & (1 << __entry->pin)) ? "|masked":"",
 > +		  __entry->coalesced ? " (coalesced)" : "")
-> +);
+> +)
 > +
 > +#define kvm_apic_dst_shorthand		\
 > +	{0x0, "dst"},			\
@@ -724,8 +736,8 @@ merged, thanks!
 > +	),
 > +
 > +	TP_fast_assign(
-> +		__entry->icr_low	= icr_low;
-> +		__entry->dest_id	= dest_id;
+> +		tp_assign(icr_low, icr_low)
+> +		tp_assign(dest_id, dest_id)
 > +	),
 > +
 > +	TP_printk("dst %x vec %u (%s|%s|%s|%s|%s)",
@@ -737,7 +749,7 @@ merged, thanks!
 > +		  (__entry->icr_low & (1<<15)) ? "level" : "edge",
 > +		  __print_symbolic((__entry->icr_low >> 18 & 0x3),
 > +				   kvm_apic_dst_shorthand))
-> +);
+> +)
 > +
 > +TRACE_EVENT(kvm_apic_accept_irq,
 > +	    TP_PROTO(__u32 apicid, __u16 dm, __u8 tm, __u8 vec, bool coalesced),
@@ -752,11 +764,11 @@ merged, thanks!
 > +	),
 > +
 > +	TP_fast_assign(
-> +		__entry->apicid		= apicid;
-> +		__entry->dm		= dm;
-> +		__entry->tm		= tm;
-> +		__entry->vec		= vec;
-> +		__entry->coalesced	= coalesced;
+> +		tp_assign(apicid, apicid)
+> +		tp_assign(dm, dm)
+> +		tp_assign(tm, tm)
+> +		tp_assign(vec, vec)
+> +		tp_assign(coalesced, coalesced)
 > +	),
 > +
 > +	TP_printk("apicid %x vec %u (%s|%s)%s",
@@ -764,7 +776,7 @@ merged, thanks!
 > +		  __print_symbolic((__entry->dm >> 8 & 0x7), kvm_deliver_mode),
 > +		  __entry->tm ? "level" : "edge",
 > +		  __entry->coalesced ? " (coalesced)" : "")
-> +);
+> +)
 > +
 > +TRACE_EVENT(kvm_eoi,
 > +	    TP_PROTO(struct kvm_lapic *apic, int vector),
@@ -776,12 +788,12 @@ merged, thanks!
 > +	),
 > +
 > +	TP_fast_assign(
-> +		__entry->apicid		= apic->vcpu->vcpu_id;
-> +		__entry->vector		= vector;
+> +		tp_assign(apicid, apic->vcpu->vcpu_id)
+> +		tp_assign(vector, vector)
 > +	),
 > +
 > +	TP_printk("apicid %x vector %d", __entry->apicid, __entry->vector)
-> +);
+> +)
 > +
 > +TRACE_EVENT(kvm_pv_eoi,
 > +	    TP_PROTO(struct kvm_lapic *apic, int vector),
@@ -793,12 +805,12 @@ merged, thanks!
 > +	),
 > +
 > +	TP_fast_assign(
-> +		__entry->apicid		= apic->vcpu->vcpu_id;
-> +		__entry->vector		= vector;
+> +		tp_assign(apicid, apic->vcpu->vcpu_id)
+> +		tp_assign(vector, vector)
 > +	),
 > +
 > +	TP_printk("apicid %x vector %d", __entry->apicid, __entry->vector)
-> +);
+> +)
 > +
 > +/*
 > + * Tracepoint for nested VMRUN
@@ -818,12 +830,12 @@ merged, thanks!
 > +	),
 > +
 > +	TP_fast_assign(
-> +		__entry->rip		= rip;
-> +		__entry->vmcb		= vmcb;
-> +		__entry->nested_rip	= nested_rip;
-> +		__entry->int_ctl	= int_ctl;
-> +		__entry->event_inj	= event_inj;
-> +		__entry->npt		= npt;
+> +		tp_assign(rip, rip)
+> +		tp_assign(vmcb, vmcb)
+> +		tp_assign(nested_rip, nested_rip)
+> +		tp_assign(int_ctl, int_ctl)
+> +		tp_assign(event_inj, event_inj)
+> +		tp_assign(npt, npt)
 > +	),
 > +
 > +	TP_printk("rip: 0x%016llx vmcb: 0x%016llx nrip: 0x%016llx int_ctl: 0x%08x "
@@ -831,7 +843,7 @@ merged, thanks!
 > +		__entry->rip, __entry->vmcb, __entry->nested_rip,
 > +		__entry->int_ctl, __entry->event_inj,
 > +		__entry->npt ? "on" : "off")
-> +);
+> +)
 > +
 > +TRACE_EVENT(kvm_nested_intercepts,
 > +	    TP_PROTO(__u16 cr_read, __u16 cr_write, __u32 exceptions, __u64 intercept),
@@ -845,16 +857,16 @@ merged, thanks!
 > +	),
 > +
 > +	TP_fast_assign(
-> +		__entry->cr_read	= cr_read;
-> +		__entry->cr_write	= cr_write;
-> +		__entry->exceptions	= exceptions;
-> +		__entry->intercept	= intercept;
+> +		tp_assign(cr_read, cr_read)
+> +		tp_assign(cr_write, cr_write)
+> +		tp_assign(exceptions, exceptions)
+> +		tp_assign(intercept, intercept)
 > +	),
 > +
 > +	TP_printk("cr_read: %04x cr_write: %04x excp: %08x intercept: %016llx",
 > +		__entry->cr_read, __entry->cr_write, __entry->exceptions,
 > +		__entry->intercept)
-> +);
+> +)
 > +/*
 > + * Tracepoint for #VMEXIT while nested
 > + */
@@ -876,13 +888,13 @@ merged, thanks!
 > +	),
 > +
 > +	TP_fast_assign(
-> +		__entry->rip			= rip;
-> +		__entry->exit_code		= exit_code;
-> +		__entry->exit_info1		= exit_info1;
-> +		__entry->exit_info2		= exit_info2;
-> +		__entry->exit_int_info		= exit_int_info;
-> +		__entry->exit_int_info_err	= exit_int_info_err;
-> +		__entry->isa			= isa;
+> +		tp_assign(rip, rip)
+> +		tp_assign(exit_code, exit_code)
+> +		tp_assign(exit_info1, exit_info1)
+> +		tp_assign(exit_info2, exit_info2)
+> +		tp_assign(exit_int_info, exit_int_info)
+> +		tp_assign(exit_int_info_err, exit_int_info_err)
+> +		tp_assign(isa, isa)
 > +	),
 > +	TP_printk("rip: 0x%016llx reason: %s ext_inf1: 0x%016llx "
 > +		  "ext_inf2: 0x%016llx ext_int: 0x%08x ext_int_err: 0x%08x",
@@ -892,7 +904,7 @@ merged, thanks!
 > +		 __print_symbolic(__entry->exit_code, SVM_EXIT_REASONS),
 > +		  __entry->exit_info1, __entry->exit_info2,
 > +		  __entry->exit_int_info, __entry->exit_int_info_err)
-> +);
+> +)
 > +
 > +/*
 > + * Tracepoint for #VMEXIT reinjected to the guest
@@ -914,12 +926,12 @@ merged, thanks!
 > +	),
 > +
 > +	TP_fast_assign(
-> +		__entry->exit_code		= exit_code;
-> +		__entry->exit_info1		= exit_info1;
-> +		__entry->exit_info2		= exit_info2;
-> +		__entry->exit_int_info		= exit_int_info;
-> +		__entry->exit_int_info_err	= exit_int_info_err;
-> +		__entry->isa			= isa;
+> +		tp_assign(exit_code, exit_code)
+> +		tp_assign(exit_info1, exit_info1)
+> +		tp_assign(exit_info2, exit_info2)
+> +		tp_assign(exit_int_info, exit_int_info)
+> +		tp_assign(exit_int_info_err, exit_int_info_err)
+> +		tp_assign(isa, isa)
 > +	),
 > +
 > +	TP_printk("reason: %s ext_inf1: 0x%016llx "
@@ -929,7 +941,7 @@ merged, thanks!
 > +		 __print_symbolic(__entry->exit_code, SVM_EXIT_REASONS),
 > +		__entry->exit_info1, __entry->exit_info2,
 > +		__entry->exit_int_info, __entry->exit_int_info_err)
-> +);
+> +)
 > +
 > +/*
 > + * Tracepoint for nested #vmexit because of interrupt pending
@@ -943,11 +955,11 @@ merged, thanks!
 > +	),
 > +
 > +	TP_fast_assign(
-> +		__entry->rip	=	rip
+> +		tp_assign(rip,	rip)
 > +	),
 > +
 > +	TP_printk("rip: 0x%016llx", __entry->rip)
-> +);
+> +)
 > +
 > +/*
 > + * Tracepoint for nested #vmexit because of interrupt pending
@@ -963,14 +975,14 @@ merged, thanks!
 > +	),
 > +
 > +	TP_fast_assign(
-> +		__entry->rip		=	rip;
-> +		__entry->asid		=	asid;
-> +		__entry->address	=	address;
+> +		tp_assign(rip,	rip)
+> +		tp_assign(asid,	asid)
+> +		tp_assign(address,	address)
 > +	),
 > +
 > +	TP_printk("rip: 0x%016llx asid: %d address: 0x%016llx",
 > +		  __entry->rip, __entry->asid, __entry->address)
-> +);
+> +)
 > +
 > +/*
 > + * Tracepoint for nested #vmexit because of interrupt pending
@@ -985,13 +997,13 @@ merged, thanks!
 > +	),
 > +
 > +	TP_fast_assign(
-> +		__entry->rip		=	rip;
-> +		__entry->slb		=	slb;
+> +		tp_assign(rip,	rip)
+> +		tp_assign(slb,	slb)
 > +	),
 > +
 > +	TP_printk("rip: 0x%016llx slb: 0x%08x",
 > +		  __entry->rip, __entry->slb)
-> +);
+> +)
 > +
 > +#define KVM_EMUL_INSN_F_CR0_PE (1 << 0)
 > +#define KVM_EMUL_INSN_F_EFL_VM (1 << 1)
@@ -1046,15 +1058,15 @@ merged, thanks!
 > +		),
 > +
 > +	TP_fast_assign(
-> +		__entry->rip = vcpu->arch.emulate_ctxt.fetch.start;
-> +		__entry->csbase = kvm_x86_ops->get_segment_base(vcpu, VCPU_SREG_CS);
-> +		__entry->len = vcpu->arch.emulate_ctxt._eip
-> +			       - vcpu->arch.emulate_ctxt.fetch.start;
-> +		memcpy(__entry->insn,
+> +		tp_assign(rip, vcpu->arch.emulate_ctxt.fetch.start)
+> +	  tp_assign(csbase, kvm_x86_ops->get_segment_base(vcpu, VCPU_SREG_CS))
+> +		tp_assign(len, vcpu->arch.emulate_ctxt._eip
+> +			       - vcpu->arch.emulate_ctxt.fetch.start)
+> +		tp_memcpy(insn,
 > +		       vcpu->arch.emulate_ctxt.fetch.data,
-> +		       15);
-> +		__entry->flags = kei_decode_mode(vcpu->arch.emulate_ctxt.mode);
-> +		__entry->failed = failed;
+> +		       15)
+> +		tp_assign(flags, kei_decode_mode(vcpu->arch.emulate_ctxt.mode))
+> +		tp_assign(failed, failed)
 > +		),
 > +
 > +	TP_printk("%x:%llx:%s (%s)%s",
@@ -1064,7 +1076,7 @@ merged, thanks!
 > +				   kvm_trace_symbol_emul_flags),
 > +		  __entry->failed ? " failed" : ""
 > +		)
-> +	);
+> +	)
 > +
 > +#define trace_kvm_emulate_insn_start(vcpu) trace_kvm_emulate_insn(vcpu, 0)
 > +#define trace_kvm_emulate_insn_failed(vcpu) trace_kvm_emulate_insn(vcpu, 1)
@@ -1082,16 +1094,16 @@ merged, thanks!
 > +		),
 > +
 > +	TP_fast_assign(
-> +		__entry->gva = gva;
-> +		__entry->gpa = gpa;
-> +		__entry->write = write;
-> +		__entry->gpa_match = gpa_match
+> +		tp_assign(gva, gva)
+> +		tp_assign(gpa, gpa)
+> +		tp_assign(write, write)
+> +		tp_assign(gpa_match, gpa_match)
 > +		),
 > +
 > +	TP_printk("gva %#lx gpa %#llx %s %s", __entry->gva, __entry->gpa,
 > +		  __entry->write ? "Write" : "Read",
 > +		  __entry->gpa_match ? "GPA" : "GVA")
-> +);
+> +)
 > +
 > +#ifdef CONFIG_X86_64
 > +
@@ -1111,16 +1123,16 @@ merged, thanks!
 > +	),
 > +
 > +	TP_fast_assign(
-> +		__entry->use_master_clock	= use_master_clock;
-> +		__entry->host_clock		= host_clock;
-> +		__entry->offset_matched		= offset_matched;
+> +		tp_assign(use_master_clock, use_master_clock)
+> +		tp_assign(host_clock, host_clock)
+> +		tp_assign(offset_matched, offset_matched)
 > +	),
 > +
 > +	TP_printk("masterclock %d hostclock %s offsetmatched %u",
 > +		  __entry->use_master_clock,
 > +		  __print_symbolic(__entry->host_clock, host_clocks),
 > +		  __entry->offset_matched)
-> +);
+> +)
 > +
 > +TRACE_EVENT(kvm_track_tsc,
 > +	TP_PROTO(unsigned int vcpu_id, unsigned int nr_matched,
@@ -1138,11 +1150,11 @@ merged, thanks!
 > +	),
 > +
 > +	TP_fast_assign(
-> +		__entry->vcpu_id		= vcpu_id;
-> +		__entry->nr_vcpus_matched_tsc	= nr_matched;
-> +		__entry->online_vcpus		= online_vcpus;
-> +		__entry->use_master_clock	= use_master_clock;
-> +		__entry->host_clock		= host_clock;
+> +		tp_assign(vcpu_id, vcpu_id)
+> +		tp_assign(nr_vcpus_matched_tsc, nr_matched)
+> +		tp_assign(online_vcpus, online_vcpus)
+> +		tp_assign(use_master_clock, use_master_clock)
+> +		tp_assign(host_clock, host_clock)
 > +	),
 > +
 > +	TP_printk("vcpu_id %u masterclock %u offsetmatched %u nr_online %u"
@@ -1150,19 +1162,147 @@ merged, thanks!
 > +		  __entry->vcpu_id, __entry->use_master_clock,
 > +		  __entry->nr_vcpus_matched_tsc, __entry->online_vcpus,
 > +		  __print_symbolic(__entry->host_clock, host_clocks))
-> +);
+> +)
 > +
 > +#endif /* CONFIG_X86_64 */
 > +
 > +#endif /* _TRACE_KVM_H */
 > +
 > +#undef TRACE_INCLUDE_PATH
-> +#define TRACE_INCLUDE_PATH arch/x86/kvm
+> +#define TRACE_INCLUDE_PATH ../instrumentation/events/lttng-module/arch/x86/kvm
 > +#undef TRACE_INCLUDE_FILE
 > +#define TRACE_INCLUDE_FILE trace
 > +
 > +/* This part must be outside protection */
-> +#include <trace/define_trace.h>
+> +#include "../../../../../../probes/define_trace.h"
+> diff --git a/probes/Makefile b/probes/Makefile
+> index 225803c..13bf208 100644
+> --- a/probes/Makefile
+> +++ b/probes/Makefile
+> @@ -18,7 +18,22 @@ obj-m += lttng-probe-power.o
+>  obj-m += lttng-probe-statedump.o
+>  
+>  ifneq ($(CONFIG_KVM),)
+> -obj-m += lttng-probe-kvm.o
+> +kvm = lttng-probe-kvm.o
+> +ifneq ($(CONFIG_X86),)
+> +kvm_dep = $(srctree)/virt/kvm/iodev.h
+> +kvm_x86 = lttng-probe-kvm-x86.o
+> +kvm_x86_mmu = lttng-probe-kvm-x86-mmu.o
+> +kvm_path = $(srctree)/virt/kvm
+> +ifeq ($(wildcard $(kvm_dep)),)
+> +$(warning Files $(kvm_dep) not found. Probe "kvm" x86-specific is disabled. Use full kernel source tree to enable it.)
+> +kvm_x86 =
+> +kvm_path =
+> +endif
+> +obj-m += $(kvm_x86)
+> +obj-m += $(kvm_x86_mmu)
+> +ccflags-y += -I$(kvm_path)
+> +endif
+> +obj-m += $(kvm)
+>  endif
+>  
+>  obj-m +=  $(shell \
+> diff --git a/probes/lttng-probe-kvm-x86-mmu.c b/probes/lttng-probe-kvm-x86-mmu.c
+> new file mode 100644
+> index 0000000..f0cbf88
+> --- /dev/null
+> +++ b/probes/lttng-probe-kvm-x86-mmu.c
+> @@ -0,0 +1,43 @@
+> +/*
+> + * probes/lttng-probe-kvm.c
+> + *
+> + * LTTng kvm probes.
+> + *
+> + * Copyright (C) 2010-2012 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> + *
+> + * This library is free software; you can redistribute it and/or
+> + * modify it under the terms of the GNU Lesser General Public
+> + * License as published by the Free Software Foundation; only
+> + * version 2.1 of the License.
+> + *
+> + * This library is distributed in the hope that it will be useful,
+> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
+> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+> + * Lesser General Public License for more details.
+> + *
+> + * You should have received a copy of the GNU Lesser General Public
+> + * License along with this library; if not, write to the Free Software
+> + * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+> + */
+> +
+> +#include <linux/module.h>
+> +#include <linux/kvm_host.h>
+> +
+> +/*
+> + * Create the tracepoint static inlines from the kernel to validate that our
+> + * trace event macros match the kernel we run on.
+> + */
+> +#include "../wrapper/tracepoint.h"
+> +
+> +/*
+> + * Create LTTng tracepoint probes.
+> + */
+> +#define LTTNG_PACKAGE_BUILD
+> +#define CREATE_TRACE_POINTS
+> +
+> +#define TRACE_INCLUDE_PATH ../instrumentation/events/lttng-module/arch/x86/kvm
+> +#include "../instrumentation/events/lttng-module/arch/x86/kvm/mmutrace.h"
+> +
+> +MODULE_LICENSE("GPL and additional rights");
+> +MODULE_AUTHOR("Mathieu Desnoyers <mathieu.desnoyers@efficios.com>");
+> +MODULE_DESCRIPTION("LTTng kvm mmu probes");
+> diff --git a/probes/lttng-probe-kvm-x86.c b/probes/lttng-probe-kvm-x86.c
+> new file mode 100644
+> index 0000000..abc93a8
+> --- /dev/null
+> +++ b/probes/lttng-probe-kvm-x86.c
+> @@ -0,0 +1,45 @@
+> +/*
+> + * probes/lttng-probe-kvm.c
+> + *
+> + * LTTng kvm probes.
+> + *
+> + * Copyright (C) 2010-2012 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> + *
+> + * This library is free software; you can redistribute it and/or
+> + * modify it under the terms of the GNU Lesser General Public
+> + * License as published by the Free Software Foundation; only
+> + * version 2.1 of the License.
+> + *
+> + * This library is distributed in the hope that it will be useful,
+> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
+> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+> + * Lesser General Public License for more details.
+> + *
+> + * You should have received a copy of the GNU Lesser General Public
+> + * License along with this library; if not, write to the Free Software
+> + * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+> + */
+> +
+> +#include <linux/module.h>
+> +#include <linux/kvm_host.h>
+> +
+> +/*
+> + * Create the tracepoint static inlines from the kernel to validate that our
+> + * trace event macros match the kernel we run on.
+> + */
+> +#include <trace/events/kvm.h>
+> +
+> +#include "../wrapper/tracepoint.h"
+> +
+> +/*
+> + * Create LTTng tracepoint probes.
+> + */
+> +#define LTTNG_PACKAGE_BUILD
+> +#define CREATE_TRACE_POINTS
+> +
+> +#define TRACE_INCLUDE_PATH ../instrumentation/events/lttng-module/arch/x86/kvm
+> +#include "../instrumentation/events/lttng-module/arch/x86/kvm/trace.h"
+> +
+> +MODULE_LICENSE("GPL and additional rights");
+> +MODULE_AUTHOR("Mathieu Desnoyers <mathieu.desnoyers@efficios.com>");
+> +MODULE_DESCRIPTION("LTTng kvm probes");
 > -- 
 > 1.7.10.4
 > 
