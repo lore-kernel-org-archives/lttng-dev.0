@@ -1,17 +1,19 @@
-From: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
-Subject: Re: issue when installing LTTng on ubuntu
-Date: Mon, 08 Jul 2013 13:09:03 -0400
-Message-ID: <51DAF22F.4060503__31487.0805516422$1373303399$gmane$org@voxpopuli.im>
-References: <CAP7TvLf0LFe0wrDK2qx+JYgVcfGFqQOJmbAiDvbon8o01EprsA@mail.gmail.com>
+From: David Goulet <dgoulet@efficios.com>
+Subject: Re: [PATCH lttng-tools 2.2] Fix: consumer: use uint64_t
+ for all sessiond_id
+Date: Mon, 08 Jul 2013 15:21:52 -0400
+Message-ID: <51DB1150.8090409__22798.100350383$1373311367$gmane$org@efficios.com>
+References: <20130628161834.GA21417@Krystal> <20130705233116.GB28784@Krystal>
+	<20130705233351.GC28784@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from ironport2-out.teksavvy.com ([206.248.154.182])
+Received: from smtp.ini-tech.com ([5.9.158.244])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <alexmonthy@voxpopuli.im>) id 1UwEwG-000710-Pf
-	for lttng-dev@lists.lttng.org; Mon, 08 Jul 2013 13:09:24 -0400
-In-Reply-To: <CAP7TvLf0LFe0wrDK2qx+JYgVcfGFqQOJmbAiDvbon8o01EprsA@mail.gmail.com>
+	(envelope-from <dgoulet@efficios.com>) id 1UwH0b-00082b-3N
+	for lttng-dev@lists.lttng.org; Mon, 08 Jul 2013 15:22:01 -0400
+In-Reply-To: <20130705233351.GC28784@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,48 +22,112 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: tarek slaymia <tarek.slaymia@gmail.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
+I confirmed that this is already in stable-2.2
 
-On 13-06-26 06:01 PM, tarek slaymia wrote:
-> hi all, when installing lttng on ubuntu12.04 an issue is displayed related
-> to lttng-modules-dkms module.
->
-> Title of displayed message :
-> lttng-modules-dkms 2.0.2-0ubuntu1 : lttng-modules kernel module failed to
-> build.
->
-> in file included from
-> /var/lib/dkms/lttng-modules/2.0.2/build/probes/../instrumentation/event/lttng-module/../../..probes/lttng-events.h:98:0
-> /var/lib/dkms/lttng-modules/2.0.2/build/probes/../instrumentation/event/lttng-module/../../..probes/define_trace.h:117
-> /var/lib/dkms/lttng-modules/2.0.2/build/probes/../instrumentation/event/lttng-module/signal.h:165
-> /var/lib/dkms/lttng-modules/2.0.2/build/probes/lttng-probe-signal.c:38:
-> /var/lib/dkms/lttng-modules/2.0.2/build/probes/../instrumentation/event/lttng-module/signal.h:61:1:erreur:conflicting
-> types
->
-> Environment:
-> - on ubuntu 12.04.2 LTS - release amd64
-> - Linux 3.5.0-23-genericx86_64
+bcfa3ff
+77c5447
+98cf381
 
-When 12.04 came out, it came with kernel 3.2, and lttng-modules 2.0.2
-was tested with that kernel. Newer revisions of 12.04 come with a more
-recent kernel (see [1]). It's possible that the compatibility was broken
-since. I don't have a 12.04 install to test it here, but if that's the
-case, that bug should be reported to Ubuntu.
-
-In the meanwhile, your best bet is to use the latest version of LTTng.
-You can install the whole toolchain from the LTTng Stable PPA [2].
-
-Cheers,
-Alexandre
-
-
-[1] https://wiki.ubuntu.com/Kernel/LTSEnablementStack
-[2] https://launchpad.net/~lttng/+archive/ppa
-
->
-> BR
->
+Mathieu Desnoyers:
+> * Mathieu Desnoyers (mathieu.desnoyers@efficios.com) wrote:
+>> Ping ? This is still not merged.
+> 
+> As a precision: this bugfix applies to both master and stable-2.2.
+> 
+> It's only merged in stable-2.2, but should also be pulled into master.
+> 
+> Thanks,
+> 
+> Mathieu
+> 
+>>
+>> * Mathieu Desnoyers (mathieu.desnoyers@efficios.com) wrote:
+>>> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+>>> ---
+>>> diff --git a/src/common/consumer.c b/src/common/consumer.c
+>>> index d810de1..a1a99b4 100644
+>>> --- a/src/common/consumer.c
+>>> +++ b/src/common/consumer.c
+>>> @@ -1162,7 +1162,7 @@ struct lttng_consumer_local_data *lttng_consumer_create(
+>>>  			struct lttng_consumer_local_data *ctx),
+>>>  		int (*recv_channel)(struct lttng_consumer_channel *channel),
+>>>  		int (*recv_stream)(struct lttng_consumer_stream *stream),
+>>> -		int (*update_stream)(int stream_key, uint32_t state))
+>>> +		int (*update_stream)(uint64_t stream_key, uint32_t state))
+>>>  {
+>>>  	int ret;
+>>>  	struct lttng_consumer_local_data *ctx;
+>>> @@ -3074,7 +3074,7 @@ void lttng_consumer_init(void)
+>>>  int consumer_add_relayd_socket(uint64_t net_seq_idx, int sock_type,
+>>>  		struct lttng_consumer_local_data *ctx, int sock,
+>>>  		struct pollfd *consumer_sockpoll,
+>>> -		struct lttcomm_relayd_sock *relayd_sock, unsigned int sessiond_id)
+>>> +		struct lttcomm_relayd_sock *relayd_sock, uint64_t sessiond_id)
+>>>  {
+>>>  	int fd = -1, ret = -1, relayd_created = 0;
+>>>  	enum lttng_error_code ret_code = LTTNG_OK;
+>>> @@ -3095,7 +3095,7 @@ int consumer_add_relayd_socket(uint64_t net_seq_idx, int sock_type,
+>>>  			ret_code = LTTCOMM_CONSUMERD_ENOMEM;
+>>>  			ret = -ENOMEM;
+>>>  		} else {
+>>> -			relayd->sessiond_session_id = (uint64_t) sessiond_id;
+>>> +			relayd->sessiond_session_id = sessiond_id;
+>>>  			relayd_created = 1;
+>>>  		}
+>>>  
+>>> diff --git a/src/common/consumer.h b/src/common/consumer.h
+>>> index 3cfcb87..a5a758b 100644
+>>> --- a/src/common/consumer.h
+>>> +++ b/src/common/consumer.h
+>>> @@ -340,7 +340,7 @@ struct lttng_consumer_local_data {
+>>>  	 *   == 0 (success, FD is left to library)
+>>>  	 *    < 0 (error)
+>>>  	 */
+>>> -	int (*on_update_stream)(int sessiond_key, uint32_t state);
+>>> +	int (*on_update_stream)(uint64_t sessiond_key, uint32_t state);
+>>>  	enum lttng_consumer_type type;
+>>>  	/* socket to communicate errors with sessiond */
+>>>  	int consumer_error_socket;
+>>> @@ -502,7 +502,7 @@ struct lttng_consumer_local_data *lttng_consumer_create(
+>>>  			struct lttng_consumer_local_data *ctx),
+>>>  		int (*recv_channel)(struct lttng_consumer_channel *channel),
+>>>  		int (*recv_stream)(struct lttng_consumer_stream *stream),
+>>> -		int (*update_stream)(int sessiond_key, uint32_t state));
+>>> +		int (*update_stream)(uint64_t sessiond_key, uint32_t state));
+>>>  void lttng_consumer_destroy(struct lttng_consumer_local_data *ctx);
+>>>  ssize_t lttng_consumer_on_read_subbuffer_mmap(
+>>>  		struct lttng_consumer_local_data *ctx,
+>>> @@ -528,7 +528,7 @@ int lttng_consumer_on_recv_stream(struct lttng_consumer_stream *stream);
+>>>  int consumer_add_relayd_socket(uint64_t net_seq_idx, int sock_type,
+>>>  		struct lttng_consumer_local_data *ctx, int sock,
+>>>  		struct pollfd *consumer_sockpoll, struct lttcomm_relayd_sock *relayd_sock,
+>>> -		unsigned int sessiond_id);
+>>> +		uint64_t sessiond_id);
+>>>  void consumer_flag_relayd_for_destroy(
+>>>  		struct consumer_relayd_sock_pair *relayd);
+>>>  int consumer_data_pending(uint64_t id);
+>>>
+>>> -- 
+>>> Mathieu Desnoyers
+>>> EfficiOS Inc.
+>>> http://www.efficios.com
+>>>
+>>> _______________________________________________
+>>> lttng-dev mailing list
+>>> lttng-dev@lists.lttng.org
+>>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>>
+>> -- 
+>> Mathieu Desnoyers
+>> EfficiOS Inc.
+>> http://www.efficios.com
+>>
+>> _______________________________________________
+>> lttng-dev mailing list
+>> lttng-dev@lists.lttng.org
+>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> 
