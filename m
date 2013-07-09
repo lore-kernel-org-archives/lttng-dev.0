@@ -1,58 +1,89 @@
-From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+From: Aaron Spear <aspear-pghWNbHTmq7QT0dZR+AlfA@public.gmane.org>
 Subject: Re: View for virtual machine monitoring
-Date: Tue, 9 Jul 2013 19:12:19 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD13423326__42618.7049983584$1373397170$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+Date: Tue, 9 Jul 2013 12:23:56 -0700 (PDT)
+Message-ID: <77342852.21701313.1373397836659.JavaMail.root@vmware.com>
+References: <1373394774.51dc57569fe05@www.imp.polymtl.ca>
+Reply-To: Linux Tools developer discussions <linuxtools-dev-j9T/66MeVpFAfugRpC6u6w@public.gmane.org>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
-	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1UwdKl-0002lN-Sr
-	for lttng-dev@lists.lttng.org; Tue, 09 Jul 2013 15:12:20 -0400
-Content-Language: fr-FR
-List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
-	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
-	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
-Cc: Mohamad Gebai <mohamad.gebai@polymtl.ca>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Return-path: <linuxtools-dev-bounces-j9T/66MeVpFAfugRpC6u6w@public.gmane.org>
+In-Reply-To: <1373394774.51dc57569fe05-AbLIzcVVHEexwLxtslwksLDks+cytr/Z@public.gmane.org>
+List-Unsubscribe: <https://dev.eclipse.org/mailman/options/linuxtools-dev>,
+	<mailto:linuxtools-dev-request-j9T/66MeVpFAfugRpC6u6w@public.gmane.org?subject=unsubscribe>
+List-Archive: <https://dev.eclipse.org/mailman/private/linuxtools-dev>
+List-Post: <mailto:linuxtools-dev-j9T/66MeVpFAfugRpC6u6w@public.gmane.org>
+List-Help: <mailto:linuxtools-dev-request-j9T/66MeVpFAfugRpC6u6w@public.gmane.org?subject=help>
+List-Subscribe: <https://dev.eclipse.org/mailman/listinfo/linuxtools-dev>,
+	<mailto:linuxtools-dev-request-j9T/66MeVpFAfugRpC6u6w@public.gmane.org?subject=subscribe>
+Errors-To: linuxtools-dev-bounces-j9T/66MeVpFAfugRpC6u6w@public.gmane.org
+Sender: linuxtools-dev-bounces-j9T/66MeVpFAfugRpC6u6w@public.gmane.org
+To: Linux Tools developer discussions <linuxtools-dev-j9T/66MeVpFAfugRpC6u6w@public.gmane.org>
+Cc: lttng-dev-bnB2LGs2QVJ+nrgayQ7rhA@public.gmane.org
 List-Id: lttng-dev@lists.lttng.org
 
-----------------------------------------------------------------------
-Date: Tue, 09 Jul 2013 14:32:54 -0400
-From: Mohamad Gebai <mohamad.gebai@polymtl.ca>
-To: linuxtools-dev@eclipse.org, lttng-dev@lists.lttng.org
+Hello Mohamad!
 
-> For the sake of our experience, we pinned vCPU0 of VM1 and vCPU0 of VM2 o=
-n the same physical CPU, and ran a CPU-intensive workload for one second on=
-e each one of them.
-> We generated our traces using the low-overhead LTTng tracer. We can clear=
-ly see that during that second, both of the virtual CPUs are fighting over =
-the same physical CPU.
+Your work looks very interesting.  I have been forced to be away from it for a couple months now due to other work priorities, but I have been building something quite similar myself. 
 
-   You should have said "and ran a CPU-intensive workload for one second on=
- both of them simultaneously".  Otherwise you may be misconstrued as meanin=
-g you ran the workloads consecutively.  (The third sentence dispels this in=
-correct reading, but it's better to get the meaning across unambiguously th=
-e first time)
+----- Original Message -----
+> Hello,
+> We are currently working on a new view in Eclipse's TMF plugin (Tracing and
+> Monitoring Framework) specific to virtual machine analysis. This view
+> requires
+> kernel traces from the host and from each guest with a set of specific
+> tracepoints activated. The traces are then merged together and analysed in a
+> way that the real state of each system can be rebuilt, while taking into
+> account all the interactions between the different systems.
 
-Daniel U. Thibault
-Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
-ntermeasures (SPC)
-Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
-Cyber Security (MCCS)
-R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
- Canada - Valcartier (DRDC Valcartier)
-2459 route de la Bravoure
-Qu=E9bec QC  G3J 1X5
-CANADA
-Vox : (418) 844-4000 x4245
-Fax : (418) 844-4538
-NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-Gouvernement du Canada | Government of Canada
-<http://www.valcartier.drdc-rddc.gc.ca/>
+I assume you are using LTTng for Linux, are you using it for KVM as well?  
+
+I assume then that you are using CTF formatted traces?
+
+Are you using TMF's CTF parser?
+
+> The main purpose of this view is to easily point out latency problems due to
+> resource sharing. For now, we only consider CPU time, but more resources
+> (such
+> as memory allocation, disks...) will be added.
+> 
+> Two screenshots are attached. The first one shows the virtual machines and
+> the
+> state of their respective virtual CPUs. The second screenshot gives in-depth
+> information about one of the virtual CPUs, showing only the threads that
+> interacted with this vCPU and their state during the time of the trace. We
+> think that this approach of showing information across the layers (OS, KVM,
+> guest OS, and eventually JVM...) can be helpful to investigate
+> latency-related
+> problems specific to virtual machines.
+
+I agree!
+
+> Legend:
+> Green: user mode
+> Blue: kernel mode
+> Yellow: process blocked
+> Purple: vCPU preempted
+> Grey: vCPU idle
+> 
+> For the sake of our experience, we pinned vCPU0 of VM1 and vCPU0 of VM2 on
+> the
+> same physical CPU, and ran a CPU-intensive workload for one second one each
+> one
+> of them. We generated our traces using the low-overhead LTTng tracer. We can
+> clearly see that during that second, both of the virtual CPUs are fighting
+> over
+> the same physical CPU.
+> 
+> We seek any thoughts or suggestions on the effectiveness of this view or on
+> our approach. Any real life problems waiting for investigation are also welcome.
+
+I am interested to know how you setup your view under the hood.  Did you build from the code base that was already there with the ControlFlowView (which is what I did), and then using the TMF 
+state system infrastructure to model state of the various elements you wish to display?
+
+If you look through the history on this list you will see some links that I posted to the prototype that I was working with on github as well as some screenshots.  I went with an approach of trying to make the view a generic display of hierarchical state of objects vs time, and then pluggable code that understands the event schema, iterating the events and updating the view.  I like the idea of having a view that can be data driven and so it is then fairly straight forward to plug in any sort of state vs. time in context display.  My work is incomplete, it still lacks a number of features that I intend to add including the ability to have multiple instances of the view open at the same time, all syncronized and/or a single view that aggregates the contents of many different traces.  It loo
+ ks as though you are already doing that, though I can't help but wonder how you defined the hierarchy when different levels in the hierarchy have different traces.
+
+
+best regards,
+Aaron Spear
