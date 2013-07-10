@@ -1,10 +1,10 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Question about performance and tracepoint structure
-Date: Wed, 10 Jul 2013 15:24:43 -0400
-Message-ID: <20130710192443.GA10489__40830.6061676287$1373484322$gmane$org@Krystal>
-References: <OFA2CEA64A.AB33A759-ONC2257BA4.005E65A6-C2257BA4.005EDCF5@il.ibm.com>
-	<20130710172554.GA8938@Krystal>
-	<OF0B2972A5.1A6DD673-ONC2257BA4.00624452-C2257BA4.0069C420@il.ibm.com>
+Subject: Re: How much shared memory is used by LTTng (UST) ?
+Date: Wed, 10 Jul 2013 16:05:35 -0400
+Message-ID: <20130710200535.GA11096__46813.8697710403$1373486770$gmane$org@Krystal>
+References: <OFCCB7B255.8E21590D-ONC2257BA4.004A6CD2-C2257BA4.004B3116@il.ibm.com>
+	<20130710135939.GA2331@Krystal>
+	<OF915EC9C3.D105E64F-ONC2257BA4.004D98BF-C2257BA4.004E8DA6@il.ibm.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -12,10 +12,10 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1Ux00M-0006IK-RD
-	for lttng-dev@lists.lttng.org; Wed, 10 Jul 2013 15:24:46 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1Ux0ds-0006cF-Q5
+	for lttng-dev@lists.lttng.org; Wed, 10 Jul 2013 16:05:36 -0400
 Content-Disposition: inline
-In-Reply-To: <OF0B2972A5.1A6DD673-ONC2257BA4.00624452-C2257BA4.0069C420@il.ibm.com>
+In-Reply-To: <OF915EC9C3.D105E64F-ONC2257BA4.004D98BF-C2257BA4.004E8DA6@il.ibm.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -29,18 +29,33 @@ Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
 * Amit Margalit (AMITM@il.ibm.com) wrote:
-> Thanks, that helps a lot.
+> That explains a lot. Our SHM space is hard coded to 64MB, which limits me 
+> big-time.
 > 
-> By the way - how do strings fit in this? Is it best that they are last? 
-> Maybe best they are first being the largest?
+> It still doesn't explain why I was able to add procname to the context but 
+> adding also vpid and vtid failed when the number of cores was 24 rather 
+> than 12.
 
-last. Those are really an array of characters, terminated by '\0',
-therefore the alignment is that of a character (1-byte).
+No idea. These are unrelated.
 
 Thanks,
 
 Mathieu
 
+> 
+> I mean - the formula you give (and we use per-UID buffers) doesn't seem to 
+> be related to what's in context and what's not...
+> 
+> Now, on the 12 core (6+HT) system, I would need - 
+> 
+> nb_traced_users(=1) * subbuf_size(=256KB) * nr_subbuf(=16) * nb_cpus(=12) 
+> = 1*256KB*16*16 = 48MB
+> 
+> But the same arguments worked just fine on the 24-core system, including 
+> adding procname to context. Adding vtid + vpid worked on the 12-core, but 
+> failed on the 24-core system.
+> 
+> Any ideas why?
 > 
 > Amit Margalit
 > IBM XIV - Storage Reinvented
@@ -53,54 +68,64 @@ Mathieu
 > From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 > To:     Amit Margalit/Israel/IBM@IBMIL
 > Cc:     lttng-dev@lists.lttng.org
-> Date:   07/10/2013 08:25 PM
-> Subject:        Re: [lttng-dev] Question about performance and tracepoint 
-> structure
+> Date:   07/10/2013 04:59 PM
+> Subject:        Re: [lttng-dev] How much shared memory is used by LTTng 
+> (UST) ?
 > 
 > 
 > 
 > * Amit Margalit (AMITM@il.ibm.com) wrote:
 > > Hi,
 > > 
-> > This may be a bit of a noob question, and I think I read about this 
-> > somewhere but I can't find it now.
+> > Chasing down an issue with adding some context (see 
+> > https://bugs.lttng.org/issues/579), I've encountered something that 
+> makes 
+> > me think the failures I am seeing are related to amount of shared memory 
+> 
+> > that LTTng uses...
 > > 
-> > When I declare a tracepoint that's made up of a uint8_t, followed by a 
-> > uint16_t followed by a uint32_t, for example, there are 2 ways to handle 
-> 
-> > this - packed or unpacked.
+> > In short - when the subbuffers have a large enough size and number, 
+> adding 
+> > things to context on a multi-core system can cause libringbuffer/shm.c 
+> in 
+> > lttng-ust to complain about "No space left on device", leading to 
+> > everything looking OK, except that the trace directory stays empty.
 > > 
-> > If we're doing packed, then we have to include some code that does the 
-> > packing properly as alignment issues can creep up. This code causes us 
-> to 
-> > incur some CPU cycles at that point.
+> > I am working on a 6-core (12 with HT) system that has 24GB of RAM. This 
+> is 
+> > one configuration, but we also have dual-CPU systems (i.e. 12 cores / 24 
 > 
-> it's not code. it's just that cpus are slightly slower at doing
-> unaligned accesses than aligned accesses.
-> 
-> > If we're doing unpacked, then we incur some cycles on passing the event 
-> to 
-> > the sessiond, and sessiond suffers by having to write down some extra 
-> > bytes, which is less efficient.
-> 
-> yes
-> 
+> > with HT) with 96GB.
 > > 
-> > Either way, I think it means I can gain some minor performance 
-> > improvements if I reorder my tracepoint arguments to a more efficient 
-> > order - alignment-wise.
+> > I am using 16 subbuffers of 256KB. In this setup, I have no problem 
+> adding 
+> > procname, vpid and vtid to the context.
+> > 
+> > When I tried the same on the 12-core dual-CPU system, it failed as 
+> > explained above. I tried reducing the subbuffer sizes to 64KB, and the 
+> > problem disappeared.
+> > 
+> > So - how can I tell how much shared memory LTTng wants, and - if you 
+> know 
+> > - how can I configure my system to allow more than the default?
 > 
-> Well, yes. You will want to reorder the tracepoint "TP_FIELDS" so the
-> largest fields come first, followed by the smaller fields.
+> First thing, try using per-uid buffers rather than the 2.2 default
+> (per-pid buffers).
 > 
-> The order of arguments (TP_ARGS) does not matter.
+> If you do that, then you will need:
+>   nb_traced_users * subbuf_size * nr_subbuf * nb_cpus   as shm space.
+> 
+> If you stay with per-pid buffers, then you need
+>   nb_processes * subbuf_size * nr_subbuf * nb_cpus   as shm space.
+> 
+> On my system here, I notice that each shm creates files within /run/shm
+> (this location may differ on your system). It is a tmpfs filesystem. You
+> might want to increase its size. For instance, here, it is 1.6GB.
 > 
 > Thanks,
 > 
 > Mathieu
 > 
-> > 
-> > Am I barking up the wrong tree here?
 > > 
 > > Thanks,
 > > 
