@@ -1,16 +1,14 @@
-From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Subject: Is the lttng --group command option useless?
-Date: Tue, 9 Jul 2013 21:18:25 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD13423380__23848.6663824462$1373404741$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+From: tarek slaymia <tarek.slaymia@gmail.com>
+Subject: Re: New LTTNG user : Question about Kprobe and function
+ commandline options
+Date: Tue, 9 Jul 2013 22:00:22 -0400
+Message-ID: <CAP7TvLd1N98ttK5OK4tCsFGWxzN3ng07+QcEnP7POg47V=g-Sw__14328.8797735751$1373421665$gmane$org@mail.gmail.com>
+References: <CAPxN80BVxGkHob1CcQOZcSBcskiN5p3yC78+O5PHSSRr1HU=FA@mail.gmail.com>
+	<20130623142140.GC21999@Krystal>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/mixed; boundary="===============0154828881=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
-	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1UwfIo-0003qT-8v
-	for lttng-dev@lists.lttng.org; Tue, 09 Jul 2013 17:18:26 -0400
-Content-Language: fr-FR
+In-Reply-To: <20130623142140.GC21999@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,36 +17,158 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
-Cc: "Painchaud, Frederic" <Frederic.Painchaud@drdc-rddc.gc.ca>, "Couture,
-	Mario" <Mario.Couture@drdc-rddc.gc.ca>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev@lists.lttng.org, lttng-dev-request@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-   The lttng command has a --group option which the --help describes succin=
-ctly as the "Unix tracing group name".  I have yet to manage to get this to=
- work.  Is there a simple use case that showcases this?
+--===============0154828881==
+Content-Type: multipart/alternative; boundary=089e0158c3d4ec8d8d04e11ea3ff
 
-   I'm looking for a use case where 'lttng list' spawns a local session dae=
-mon while 'lttng -g tracinggroupname list' does not (i.e., gets its answer =
-from the root session daemon).  But as far as I can tell the algorithm, whe=
-n the root session daemon is running alone, consist purely of checking the =
-lttng process's group memberships for the session daemon's tracing group se=
-tting.  Any lttng process group setting is ignored.
+--089e0158c3d4ec8d8d04e11ea3ff
+Content-Type: text/plain; charset=ISO-8859-1
 
-   Or is the --group option's intent something else entirely?
+Hi,
 
-Daniel U. Thibault
-Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
-ntermeasures (SPC)
-Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
-Cyber Security (MCCS)
-R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
- Canada - Valcartier (DRDC Valcartier)
-2459 route de la Bravoure
-Qu=E9bec QC=A0 G3J 1X5
-CANADA
-Vox=A0: (418) 844-4000 x4245
-Fax=A0: (418) 844-4538
-NAC=A0: 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-Gouvernement du Canada=A0| Government of Canada
-<http://www.valcartier.drdc-rddc.gc.ca/>
+can we retrieve kernel data structures addresses or contents using LTTng ?
+
+regards.
+
+
+2013/6/23 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+
+> * Jessica Foest (jessica.foest@gmail.com) wrote:
+> > Hi,
+> > i tried to apply kprobe to a system call , so i used probe and function
+> > option :
+> >
+> > lttng enable-event aname -k --probe sys_open+0x0
+> > this command returns ip value
+> >
+> > lttng enable-event aname -k --function sys_open
+> > this command returns ip and parent_ip values .
+> >
+> > what does these values ip and parent_ip means ?
+>
+> ip: instruction pointer of the function,
+> parent_ip: instruction pointer of the caller.
+>
+> >
+> > I try to apply probe and function options to some kernel symbols like
+> > initialized date (like xen_vcpu_info symbol), read only data (like
+> > linux_prob_banner symbol) and code (like reserve_ebda_region symbol) it
+> > displays to me : Enable kernel event failed ,warning some command went(s)
+> > wrong.
+> > Did i make a mistake or it's a limitation in LTTng ?
+>
+> It's kprobes: you can only add breakpoints to code, not data.
+>
+> Thanks,
+>
+> Mathieu
+>
+> > regards.
+>
+> > _______________________________________________
+> > lttng-dev mailing list
+> > lttng-dev@lists.lttng.org
+> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>
+>
+> --
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> http://www.efficios.com
+>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>
+
+--089e0158c3d4ec8d8d04e11ea3ff
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div><div>Hi,<br><br></div>can we retrieve kernel data str=
+uctures addresses or contents using LTTng ?<br><br></div>regards.<br></div>=
+<div class=3D"gmail_extra"><br><br><div class=3D"gmail_quote">2013/6/23 Mat=
+hieu Desnoyers <span dir=3D"ltr">&lt;<a href=3D"mailto:mathieu.desnoyers@ef=
+ficios.com" target=3D"_blank">mathieu.desnoyers@efficios.com</a>&gt;</span>=
+<br>
+<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
+x #ccc solid;padding-left:1ex"><div class=3D"im">* Jessica Foest (<a href=
+=3D"mailto:jessica.foest@gmail.com">jessica.foest@gmail.com</a>) wrote:<br>
+&gt; Hi,<br>
+&gt; i tried to apply kprobe to a system call , so i used probe and functio=
+n<br>
+&gt; option :<br>
+&gt;<br>
+&gt; lttng enable-event aname -k --probe sys_open+0x0<br>
+&gt; this command returns ip value<br>
+&gt;<br>
+&gt; lttng enable-event aname -k --function sys_open<br>
+&gt; this command returns ip and parent_ip values .<br>
+&gt;<br>
+&gt; what does these values ip and parent_ip means ?<br>
+<br>
+</div>ip: instruction pointer of the function,<br>
+parent_ip: instruction pointer of the caller.<br>
+<div class=3D"im"><br>
+&gt;<br>
+&gt; I try to apply probe and function options to some kernel symbols like<=
+br>
+&gt; initialized date (like xen_vcpu_info symbol), read only data (like<br>
+&gt; linux_prob_banner symbol) and code (like reserve_ebda_region symbol) i=
+t<br>
+&gt; displays to me : Enable kernel event failed ,warning some command went=
+(s)<br>
+&gt; wrong.<br>
+&gt; Did i make a mistake or it&#39;s a limitation in LTTng ?<br>
+<br>
+</div>It&#39;s kprobes: you can only add breakpoints to code, not data.<br>
+<br>
+Thanks,<br>
+<br>
+Mathieu<br>
+<br>
+&gt; regards.<br>
+<br>
+&gt; _______________________________________________<br>
+&gt; lttng-dev mailing list<br>
+&gt; <a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org=
+</a><br>
+&gt; <a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" =
+target=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev=
+</a><br>
+<span class=3D"HOEnZb"><font color=3D"#888888"><br>
+<br>
+--<br>
+Mathieu Desnoyers<br>
+EfficiOS Inc.<br>
+<a href=3D"http://www.efficios.com" target=3D"_blank">http://www.efficios.c=
+om</a><br>
+<br>
+_______________________________________________<br>
+lttng-dev mailing list<br>
+<a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a><=
+br>
+<a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" targe=
+t=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><=
+br>
+</font></span></blockquote></div><br></div>
+
+--089e0158c3d4ec8d8d04e11ea3ff--
+
+
+--===============0154828881==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0154828881==--
