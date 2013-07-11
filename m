@@ -1,17 +1,25 @@
-From: Mohamad Gebai <mohamad.gebai@polymtl.ca>
-Subject: Re: View for virtual machine monitoring
-Date: Thu, 11 Jul 2013 14:08:34 -0400
-Message-ID: <1373566114.51def4a22ff9b__20544.9773384773$1373566154$gmane$org@www.imp.polymtl.ca>
-References: <48CF5AC71E61DB46B70D0F388054EFFD13423326@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [RELEASE] LTTng-UST 2.2.1
+Date: Thu, 11 Jul 2013 14:10:54 -0400
+Message-ID: <20130711181054.GA21827__19743.6754512184$1373566291$gmane$org@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.polymtl.ca ([132.207.4.11])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <mohamad.gebai@polymtl.ca>) id 1UxLIB-0000a2-GD
-	for lttng-dev@lists.lttng.org; Thu, 11 Jul 2013 14:08:35 -0400
-In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD13423326@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+	(envelope-from <compudj@mail.openrapids.net>) id 1UxLKU-0000cA-0i
+	for lttng-dev@lists.lttng.org; Thu, 11 Jul 2013 14:10:58 -0400
+Received: from localhost (localhost [127.0.0.1])
+	by blackscsi.openrapids.net (Postfix) with ESMTP id B8F1F140236
+	for <lttng-dev@lists.lttng.org>; Thu, 11 Jul 2013 14:10:55 -0400 (EDT)
+Received: from blackscsi.openrapids.net ([127.0.0.1])
+	by localhost (blackscsi.openrapids.net [127.0.0.1]) (amavisd-new,
+	port 10024)
+	with ESMTP id J3WnqmWEbmpe for <lttng-dev@lists.lttng.org>;
+	Thu, 11 Jul 2013 14:10:55 -0400 (EDT)
+Content-Disposition: inline
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,22 +28,29 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-> > For the sake of our experience, we pinned vCPU0 of VM1 and vCPU0 of VM2 on
-> > the same physical CPU, and ran a CPU-intensive workload for one second one
-> > each one of them.
-> > We generated our traces using the low-overhead LTTng tracer. We can clearly
-> > see that during that second, both of the virtual CPUs are fighting over the
-> > same physical CPU.
->
->    You should have said "and ran a CPU-intensive workload for one second on
-> both of them simultaneously".  Otherwise you may be misconstrued as meaning
-> you ran the workloads consecutively.  (The third sentence dispels this
-> incorrect reading, but it's better to get the meaning across unambiguously
-> the first time)
+LTTng-UST, the Linux Trace Toolkit Next Generation Userspace Tracer, is
+port of the low-overhead tracing capabilities of the LTTng kernel tracer
+to user-space. The library "liblttng-ust" enables tracing of
+applications and libraries.
 
-I agree! Thank you for the feedback,
-Mohamad.
+Changelog:
+2013-07-11 lttng-ust 2.2.1
+        * Fix: libs order in Makefile
+        * Fix: ring buffer: get_subbuf() checks should be performed on "consumed"
+        * build: Fix out-of-tree build
+        * Fix: SWITCH_FLUSH new sub-buffer checks
+        * Fix: ring buffer: handle concurrent update in nested buffer wrap around
+        * Fix: handle writes of length 0
+        * Fix: incorrect release dates in Changelog
+
+Project website: http://lttng.org
+Download link: http://lttng.org/download
+(please refer to the README file for installation instructions)
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
