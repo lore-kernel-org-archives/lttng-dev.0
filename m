@@ -1,8 +1,7 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Issues with "Add support for kvm x86 specific
-	tracepoints"
-Date: Thu, 11 Jul 2013 14:51:33 -0400
-Message-ID: <20130711185133.GA22455__795.803734991018$1373568729$gmane$org@Krystal>
+Subject: [RELEASE] LTTng-UST 2.0.8
+Date: Thu, 11 Jul 2013 16:18:23 -0400
+Message-ID: <20130711201823.GA23376__43369.3537758247$1373573939$gmane$org@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -10,8 +9,16 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UxLxn-0000yM-Ac
-	for lttng-dev@lists.lttng.org; Thu, 11 Jul 2013 14:51:35 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1UxNJp-0001fj-06
+	for lttng-dev@lists.lttng.org; Thu, 11 Jul 2013 16:18:25 -0400
+Received: from localhost (localhost [127.0.0.1])
+	by blackscsi.openrapids.net (Postfix) with ESMTP id BC35F140236
+	for <lttng-dev@lists.lttng.org>; Thu, 11 Jul 2013 16:18:24 -0400 (EDT)
+Received: from blackscsi.openrapids.net ([127.0.0.1])
+	by localhost (blackscsi.openrapids.net [127.0.0.1]) (amavisd-new,
+	port 10024)
+	with ESMTP id urmZspX9Iv1o for <lttng-dev@lists.lttng.org>;
+	Thu, 11 Jul 2013 16:18:23 -0400 (EDT)
 Content-Disposition: inline
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -21,20 +28,24 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mohamad Gebai <mohamad.gebai@gmail.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Mohamad,
+LTTng-UST, the Linux Trace Toolkit Next Generation Userspace Tracer, is
+port of the low-overhead tracing capabilities of the LTTng kernel tracer
+to user-space. The library "liblttng-ust" enables tracing of
+applications and libraries.
 
-There appears to be some kernel versions and/or configurations that are
-not behaving well with your patch. Can you look into this issue ?
+Changelog:
+2013-07-11 lttng-ust 2.0.8
+        * Fix: ring buffer: get_subbuf() checks should be performed on "consumed"
+        * Fix: SWITCH_FLUSH new sub-buffer checks
+        * Fix: ring buffer: handle concurrent update in nested buffer wrap around
+        * Fix: handle writes of length 0
 
-See https://bugs.lttng.org/issues/591
-
-Thanks,
-
-Mathieu
+Project website: http://lttng.org
+Download link: http://lttng.org/download
+(please refer to the README file for installation instructions)
 
 -- 
 Mathieu Desnoyers
