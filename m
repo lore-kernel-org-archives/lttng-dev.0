@@ -1,25 +1,25 @@
 From: David Goulet <dgoulet@efficios.com>
-Subject: [RELEASE] LTTng Tools 2.1.2
-Date: Thu, 11 Jul 2013 17:30:01 -0400
-Message-ID: <51DF23D9.7010807__16220.1893552721$1373578243$gmane$org@efficios.com>
+Subject: [RELEASE] LTTng Tools 2.2.1
+Date: Thu, 11 Jul 2013 17:42:38 -0400
+Message-ID: <51DF26CE.9050004__42797.8769796484$1373578998$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from smtp.ini-tech.com ([5.9.158.244])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1UxORH-0002Js-6t
-	for lttng-dev@lists.lttng.org; Thu, 11 Jul 2013 17:30:11 -0400
+	(envelope-from <dgoulet@efficios.com>) id 1UxOdS-0002QV-9S
+	for lttng-dev@lists.lttng.org; Thu, 11 Jul 2013 17:42:46 -0400
 Received: from localhost (localhost.localdomain [127.0.0.1])
-	by smtp.ini-tech.com (Postfix) with ESMTP id CD869A1DA0
-	for <lttng-dev@lists.lttng.org>; Thu, 11 Jul 2013 21:29:58 +0000 (UTC)
+	by smtp.ini-tech.com (Postfix) with ESMTP id DED42A1DA0
+	for <lttng-dev@lists.lttng.org>; Thu, 11 Jul 2013 21:42:33 +0000 (UTC)
 Received: from smtp.ini-tech.com ([127.0.0.1])
 	by localhost (smtp.ini-tech.com [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id Gq8rPGWjnhCs for <lttng-dev@lists.lttng.org>;
-	Thu, 11 Jul 2013 21:29:56 +0000 (UTC)
+	with ESMTP id mDWuCUtO-hiv for <lttng-dev@lists.lttng.org>;
+	Thu, 11 Jul 2013 21:42:33 +0000 (UTC)
 Received: from 127.0.0.1 (unknown [96.127.207.22])
-	by smtp.ini-tech.com (Postfix) with ESMTPSA id CEF9FA1D9C
-	for <lttng-dev@lists.lttng.org>; Thu, 11 Jul 2013 21:29:55 +0000 (UTC)
+	by smtp.ini-tech.com (Postfix) with ESMTPSA id 122EBA1D9C
+	for <lttng-dev@lists.lttng.org>; Thu, 11 Jul 2013 21:42:32 +0000 (UTC)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -38,42 +38,33 @@ that acts as a tracing registry, the "lttng" command line for tracing
 control, a lttng-ctl library for tracing control and a lttng-relayd
 for network streaming.
 
-2013-07-11 lttng-tools 2.1.2
-    * Fix: don't create a channel on an enable channel
-    * Fix: remove double consumer_del_stream in error path
-    * Fix: handle invalid ops pointer in relayd_close()
-    * Fix: lttng create default name check
-    * Fix: add missing error output
-    * Fix: minor errors in lttng.1 man page
-    * Fix: kernel function event was listed as probe
-    * Add unsupported error code to lttng cmd line
-    * Fix: typo in the create command help and man page
-    * Fix: session name max length was not handled correctly
-    * Fix: lttng UI failed to report error 19
-    * Fix: put session list lock around the app registration
-    * Fix: add poll entry/exit around relayd_connect()
-    * Fix: set relayd sock sent flag per consumer socket
-    * Fix: change health poll update to entry/exit calls
-    * Fix: support duplicate health type
-    * Fix: remove consumer health poll update on startup
-    * Fix: add missing unistd.h for fdatasync in compat-fcntl.c
-    * Cleanup unused health state reference
-    * Fix: health subsystem issues with shared code
-    * Fix: poll max size should be checked during resize
-    * Fix: wrong variable type for read() return value
-    * Fix: add missing rcu lock for UST lookup
-    * Fix: add missing rcu read side lock
-    * Fix: UST returns -LTTNG_UST_ERR_NOENT and not -ENOENT
-    * Fix: add missing fd put on stream creation error
-    * Fix: change function name for better meaning
-    * Fix: improve error handling for UST stream creation
-    * Fix: remove duplicate set ust event filter
+2013-07-11 lttng-tools 2.2.1
+    * Fix: consumer err_sock cloexec
+    * Fix: possible consumer sockets double close on cleanup
+    * Fix: add gpl and lgpl files to tarball
+    * Fix: don't install libtap system wide
+    * Fix: close consumer sockets in sessiond cleanup
+    * Fix: print errno message on connect() error
+    * Fix: possible double-close on stream out_fd
+    * Fix: session ID signess to uin64_t in sessiond
+    * Fix: consumer_add_relayd_socket() report errors to sessiond
+    * Fix: UST per-UID channels persist across application teardown
+    * Fix: add missing enum lttcomm_return_code entries
+    * Fix: detect the correct version of LTTng-UST
+    * Fix: sessiond: use uint64_t for all session ids
+    * Fix: consumer: use uint64_t for all sessiond_id
+    * Fix: periodical flush check trace before stop
+    * Fix: consumer: 64-bit index for relayd rather than 32-bit (v2)
+    * Fix: send per-pid session id in channel creation
+    * Fix: consumer double-close on error
+    * Update URCU detection to correctly check for a 0.7 version
+    * Fix: set hidden attribute to utils_* calls
 
 Using it is testing it!
 
 Project website: http://lttng.org/lttng2.0
 Download link:
-http://lttng.org/files/lttng-tools/lttng-tools-2.1.2.tar.bz2 (for
+http://lttng.org/files/lttng-tools/lttng-tools-2.2.1.tar.bz2 (for
 the PGP signature, same file with .asc appended)
 
 Cheers!
