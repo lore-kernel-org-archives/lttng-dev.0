@@ -1,7 +1,7 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] LTTng-UST 2.2.1
-Date: Thu, 11 Jul 2013 14:10:54 -0400
-Message-ID: <20130711181054.GA21827__19743.6754512184$1373566291$gmane$org@Krystal>
+Subject: [RELEASE] LTTng modules 2.2.1
+Date: Thu, 11 Jul 2013 14:11:53 -0400
+Message-ID: <20130711181153.GB21827__5533.08159946955$1373566392$gmane$org@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -9,16 +9,16 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UxLKU-0000cA-0i
-	for lttng-dev@lists.lttng.org; Thu, 11 Jul 2013 14:10:58 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1UxLLO-0000db-5P
+	for lttng-dev@lists.lttng.org; Thu, 11 Jul 2013 14:11:54 -0400
 Received: from localhost (localhost [127.0.0.1])
-	by blackscsi.openrapids.net (Postfix) with ESMTP id B8F1F140236
-	for <lttng-dev@lists.lttng.org>; Thu, 11 Jul 2013 14:10:55 -0400 (EDT)
+	by blackscsi.openrapids.net (Postfix) with ESMTP id 03667140236
+	for <lttng-dev@lists.lttng.org>; Thu, 11 Jul 2013 14:11:54 -0400 (EDT)
 Received: from blackscsi.openrapids.net ([127.0.0.1])
 	by localhost (blackscsi.openrapids.net [127.0.0.1]) (amavisd-new,
 	port 10024)
-	with ESMTP id J3WnqmWEbmpe for <lttng-dev@lists.lttng.org>;
-	Thu, 11 Jul 2013 14:10:55 -0400 (EDT)
+	with ESMTP id DDJiUXTbLVRA for <lttng-dev@lists.lttng.org>;
+	Thu, 11 Jul 2013 14:11:53 -0400 (EDT)
 Content-Disposition: inline
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -31,24 +31,24 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-LTTng-UST, the Linux Trace Toolkit Next Generation Userspace Tracer, is
-port of the low-overhead tracing capabilities of the LTTng kernel tracer
-to user-space. The library "liblttng-ust" enables tracing of
-applications and libraries.
+The LTTng modules provide Linux kernel tracing capability to the LTTng
+2.x tracer toolset.
 
 Changelog:
-2013-07-11 lttng-ust 2.2.1
-        * Fix: libs order in Makefile
+2013-07-11 LTTng modules 2.2.1
+        * Fix: double length of __dynamic_len array
+        * Fix printk instrumentation
+        * Introduce __dynamic_array_enc_ext_2() and tp_memcpy_dyn_2()
         * Fix: ring buffer: get_subbuf() checks should be performed on "consumed"
-        * build: Fix out-of-tree build
         * Fix: SWITCH_FLUSH new sub-buffer checks
         * Fix: ring buffer: handle concurrent update in nested buffer wrap around
         * Fix: handle writes of length 0
-        * Fix: incorrect release dates in Changelog
+        * Fix: ring buffer: RING_BUFFER_FLUSH ioctl buffer corruption
 
 Project website: http://lttng.org
 Download link: http://lttng.org/download
-(please refer to the README file for installation instructions)
+(please refer to the README files for installation instructions and
+lttng-tools doc/quickstart.txt for usage information)
 
 -- 
 Mathieu Desnoyers
