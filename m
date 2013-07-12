@@ -1,52 +1,76 @@
-From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
-	<jeremie.galarneau@efficios.com>
-Subject: [PATCH lttng-tools] Fix: Unchecked asprintf/vasprintf
-	return values
-Date: Fri, 12 Jul 2013 12:38:56 -0400
-Message-ID: <1373647136-5708-1-git-send-email-jeremie.galarneau__3466.19221750206$1373647175$gmane$org@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: Help adding trace events to xHCI
+Date: Fri, 12 Jul 2013 13:08:28 -0400
+Message-ID: <20130712170827.GA18819@Krystal>
+References: <51DB0257.1010709@gmail.com> <20130711162002.GA5240@xanatos> <1373562533.8201.33.camel@jlt4.sipsolutions.net> <20130711190035.GD5240@xanatos> <87y59c4d60.fsf@kamboji.qca.qualcomm.com> <20130712164104.GA15531@xanatos>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qa0-f49.google.com ([209.85.216.49])
-	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1UxgN6-00032c-FA
-	for lttng-dev@lists.lttng.org; Fri, 12 Jul 2013 12:39:04 -0400
-Received: by mail-qa0-f49.google.com with SMTP id hu16so445396qab.15
-	for <lttng-dev@lists.lttng.org>; Fri, 12 Jul 2013 09:38:59 -0700 (PDT)
-List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
-	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
-	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+Content-Type: text/plain; charset=us-ascii
+Return-path: <linux-trace-users-owner@vger.kernel.org>
+Content-Disposition: inline
+In-Reply-To: <20130712164104.GA15531@xanatos>
+Sender: linux-trace-users-owner@vger.kernel.org
+To: Sarah Sharp <sarah.a.sharp@linux.intel.com>
+Cc: Kalle Valo <kvalo@qca.qualcomm.com>, Johannes Berg <johannes@sipsolutions.net>, Xenia Ragiadakou <burzalodowa@gmail.com>, OPW Kernel Interns List <opw-kernel-interns@googlegroups.com>, linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>, linux-trace-users@vger.kernel.org, lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-c3RycMK3bWF5wrdiZcK3bW9kaWZpZWTCt2V2ZW7Ct2luwrdjYXNlwrdvZsK3ZmFpbHVyZcK3YWNj
-b3JkaW5nwrd0b8K3dGhlIEFTUFJJTlRGKDMpIG1hbgpwYWdlLgoKU2lnbmVkLW9mZi1ieTogSsOp
-csOpbWllIEdhbGFybmVhdSA8amVyZW1pZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29tPgotLS0KIHRl
-c3RzL3V0aWxzL3RhcC90YXAuYyB8IDEyICsrKysrKysrKy0tLQogMSBmaWxlIGNoYW5nZWQsIDkg
-aW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS90ZXN0cy91dGlscy90
-YXAvdGFwLmMgYi90ZXN0cy91dGlscy90YXAvdGFwLmMKaW5kZXggYTQzMDk1MS4uNWQ2NGQ4NCAx
-MDA2NDQKLS0tIGEvdGVzdHMvdXRpbHMvdGFwL3RhcC5jCisrKyBiL3Rlc3RzL3V0aWxzL3RhcC90
-YXAuYwpAQCAtODMsNyArODMsOSBAQCBfZ2VuX3Jlc3VsdChpbnQgb2ssIGNvbnN0IGNoYXIgKmZ1
-bmMsIGNoYXIgKmZpbGUsIHVuc2lnbmVkIGludCBsaW5lLAogCSAgIGV4cGFuc2lvbnMgb24gaXQg
-Ki8KIAlpZih0ZXN0X25hbWUgIT0gTlVMTCkgewogCQl2YV9zdGFydChhcCwgdGVzdF9uYW1lKTsK
-LQkJdmFzcHJpbnRmKCZsb2NhbF90ZXN0X25hbWUsIHRlc3RfbmFtZSwgYXApOworCQlpZiAodmFz
-cHJpbnRmKCZsb2NhbF90ZXN0X25hbWUsIHRlc3RfbmFtZSwgYXApID09IC0xKSB7CisJCQlsb2Nh
-bF90ZXN0X25hbWUgPSBOVUxMOworCQl9CiAJCXZhX2VuZChhcCk7CiAKIAkJLyogTWFrZSBzdXJl
-IHRoZSB0ZXN0IG5hbWUgY29udGFpbnMgbW9yZSB0aGFuIGRpZ2l0cwpAQCAtMjk5LDcgKzMwMSw5
-IEBAIHNraXAodW5zaWduZWQgaW50IG4sIGNoYXIgKmZtdCwgLi4uKQogCUxPQ0s7CiAKIAl2YV9z
-dGFydChhcCwgZm10KTsKLQlhc3ByaW50Zigmc2tpcF9tc2csIGZtdCwgYXApOworCWlmIChhc3By
-aW50Zigmc2tpcF9tc2csIGZtdCwgYXApID09IC0xKSB7CisJCXNraXBfbXNnID0gTlVMTDsKKwl9
-CiAJdmFfZW5kKGFwKTsKIAogCXdoaWxlKG4tLSA+IDApIHsKQEAgLTMyNCw3ICszMjgsOSBAQCB0
-b2RvX3N0YXJ0KGNoYXIgKmZtdCwgLi4uKQogCUxPQ0s7CiAKIAl2YV9zdGFydChhcCwgZm10KTsK
-LQl2YXNwcmludGYoJnRvZG9fbXNnLCBmbXQsIGFwKTsKKwlpZiAodmFzcHJpbnRmKCZ0b2RvX21z
-ZywgZm10LCBhcCkgPT0gLTEpIHsKKwkJdG9kb19tc2cgPSBOVUxMOworCX0KIAl2YV9lbmQoYXAp
-OwogCiAJdG9kbyA9IDE7Ci0tIAoxLjguMy4yCgoKX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlz
-dHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3Rp
-bmZvL2x0dG5nLWRldgo=
+* Sarah Sharp (sarah.a.sharp@linux.intel.com) wrote:
+> On Fri, Jul 12, 2013 at 07:25:59AM +0300, Kalle Valo wrote:
+> > Sarah Sharp <sarah.a.sharp@linux.intel.com> writes:
+> > 
+> > > My initial list of specific trace points was something like:
+> > >
+> > > 1. xHCI host initialization and shutdown
+> > >
+> > > 2. xHCI memory allocation (dynamic ring resizing, structure alloc, etc)
+> > >
+> > > 3. A few individual xHCI host controller command tracepoints:
+> > >    * status only for all completed commands
+> > >    * Address Device command status and output
+> > >    * Configure Endpoint and Evaluate Context output
+> > >    * individual trace points for other xHCI commands
+> > >
+> > > 4. Tracepoints for all USB transfer types:
+> > >    * Control TX output (only for non-successful transfers)
+> > >    * Bulk TX
+> > >    * Interrupt TX
+> > >    * Isoc TX
+> > >
+> > > 5. URB cancellation
+> > >
+> > > And probably more.  Basically, I want to be able to control what gets
+> > > printed, based on where I think the xHCI bug might be.  Does that sound
+> > > reasonable?
+> > 
+> > Instead of individual trace points for command I would recommend to
+> > consider just pushing the whole command buffer to the trace point and
+> > parse the command in trace-cmd plugin in user space. Kernel code would
+> > be simpler that way.
+> 
+> Thanks for the suggestion.  I'm not familiar with all the userspace
+> tools for trace events, so I didn't know about the command parser.  Is
+> there documentation or a list of resources for all the userspace trace
+> event plugins?  If so, can you give us a pointer to it?
+
+(CCing lttng-dev)
+
+You might want to try out LTTng-UST. It provides TRACEPOINT_EVENT() and
+tracepoint() for user-space instrumentation. See:
+
+- https://lttng.org/files/doc/man-pages/man3/lttng-ust.3.html
+- http://lttng.org
+
+Thanks,
+
+Mathieu
+
+> 
+> Sarah Sharp
+> --
+> To unsubscribe from this list: send the line "unsubscribe linux-trace-users" in
+> the body of a message to majordomo@vger.kernel.org
+> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
