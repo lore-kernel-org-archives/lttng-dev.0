@@ -1,76 +1,103 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Help adding trace events to xHCI
-Date: Fri, 12 Jul 2013 13:08:28 -0400
-Message-ID: <20130712170827.GA18819@Krystal>
-References: <51DB0257.1010709@gmail.com> <20130711162002.GA5240@xanatos> <1373562533.8201.33.camel@jlt4.sipsolutions.net> <20130711190035.GD5240@xanatos> <87y59c4d60.fsf@kamboji.qca.qualcomm.com> <20130712164104.GA15531@xanatos>
+Subject: Re: [PATCH babeltrace] Fix:
+	Unchecked	asprintf/vasprintf return values
+Date: Fri, 12 Jul 2013 13:10:09 -0400
+Message-ID: <20130712171009.GB18819__25963.608249049$1373649042$gmane$org@Krystal>
+References: <1373646996-5578-1-git-send-email-jeremie.galarneau@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Return-path: <linux-trace-users-owner@vger.kernel.org>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <compudj@mail.openrapids.net>) id 1UxgrC-0003IX-5e
+	for lttng-dev@lists.lttng.org; Fri, 12 Jul 2013 13:10:10 -0400
 Content-Disposition: inline
-In-Reply-To: <20130712164104.GA15531@xanatos>
-Sender: linux-trace-users-owner@vger.kernel.org
-To: Sarah Sharp <sarah.a.sharp@linux.intel.com>
-Cc: Kalle Valo <kvalo@qca.qualcomm.com>, Johannes Berg <johannes@sipsolutions.net>, Xenia Ragiadakou <burzalodowa@gmail.com>, OPW Kernel Interns List <opw-kernel-interns@googlegroups.com>, linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>, linux-trace-users@vger.kernel.org, lttng-dev@lists.lttng.org
+In-Reply-To: <1373646996-5578-1-git-send-email-jeremie.galarneau@efficios.com>
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Sarah Sharp (sarah.a.sharp@linux.intel.com) wrote:
-> On Fri, Jul 12, 2013 at 07:25:59AM +0300, Kalle Valo wrote:
-> > Sarah Sharp <sarah.a.sharp@linux.intel.com> writes:
-> > 
-> > > My initial list of specific trace points was something like:
-> > >
-> > > 1. xHCI host initialization and shutdown
-> > >
-> > > 2. xHCI memory allocation (dynamic ring resizing, structure alloc, etc)
-> > >
-> > > 3. A few individual xHCI host controller command tracepoints:
-> > >    * status only for all completed commands
-> > >    * Address Device command status and output
-> > >    * Configure Endpoint and Evaluate Context output
-> > >    * individual trace points for other xHCI commands
-> > >
-> > > 4. Tracepoints for all USB transfer types:
-> > >    * Control TX output (only for non-successful transfers)
-> > >    * Bulk TX
-> > >    * Interrupt TX
-> > >    * Isoc TX
-> > >
-> > > 5. URB cancellation
-> > >
-> > > And probably more.  Basically, I want to be able to control what gets
-> > > printed, based on where I think the xHCI bug might be.  Does that sound
-> > > reasonable?
-> > 
-> > Instead of individual trace points for command I would recommend to
-> > consider just pushing the whole command buffer to the trace point and
-> > parse the command in trace-cmd plugin in user space. Kernel code would
-> > be simpler that way.
-> 
-> Thanks for the suggestion.  I'm not familiar with all the userspace
-> tools for trace events, so I didn't know about the command parser.  Is
-> there documentation or a list of resources for all the userspace trace
-> event plugins?  If so, can you give us a pointer to it?
+merged
 
-(CCing lttng-dev)
+* J=E9r=E9mie Galarneau (jeremie.galarneau@efficios.com) wrote:
+> strp=B7may=B7be=B7modified=B7even=B7in=B7case=B7of=B7failure=B7according=
+=B7to=B7the ASPRINTF(3) man
+> page.
+> =
 
-You might want to try out LTTng-UST. It provides TRACEPOINT_EVENT() and
-tracepoint() for user-space instrumentation. See:
+> Signed-off-by: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
+> ---
+>  tests/lib/tap.c | 12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
+> =
 
-- https://lttng.org/files/doc/man-pages/man3/lttng-ust.3.html
-- http://lttng.org
+> diff --git a/tests/lib/tap.c b/tests/lib/tap.c
+> index 86c89a2..8bf72f6 100644
+> --- a/tests/lib/tap.c
+> +++ b/tests/lib/tap.c
+> @@ -83,7 +83,9 @@ _gen_result(int ok, const char *func, char *file, unsig=
+ned int line,
+>  	   expansions on it */
+>  	if(test_name !=3D NULL) {
+>  		va_start(ap, test_name);
+> -		vasprintf(&local_test_name, test_name, ap);
+> +		if (vasprintf(&local_test_name, test_name, ap) =3D=3D -1) {
+> +			local_test_name =3D NULL;
+> +		}
+>  		va_end(ap);
+>  =
 
-Thanks,
+>  		/* Make sure the test name contains more than digits
+> @@ -299,7 +301,9 @@ skip(unsigned int n, char *fmt, ...)
+>  	LOCK;
+>  =
 
-Mathieu
+>  	va_start(ap, fmt);
+> -	asprintf(&skip_msg, fmt, ap);
+> +	if (asprintf(&skip_msg, fmt, ap) =3D=3D -1) {
+> +		skip_msg =3D NULL;
+> +	}
+>  	va_end(ap);
+>  =
 
-> 
-> Sarah Sharp
-> --
-> To unsubscribe from this list: send the line "unsubscribe linux-trace-users" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
+>  	while(n-- > 0) {
+> @@ -324,7 +328,9 @@ todo_start(char *fmt, ...)
+>  	LOCK;
+>  =
 
--- 
+>  	va_start(ap, fmt);
+> -	vasprintf(&todo_msg, fmt, ap);
+> +	if (vasprintf(&todo_msg, fmt, ap) =3D=3D -1) {
+> +		todo_msg =3D NULL;
+> +	}
+>  	va_end(ap);
+>  =
+
+>  	todo =3D 1;
+> -- =
+
+> 1.8.3.2
+> =
+
+> =
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- =
+
 Mathieu Desnoyers
 EfficiOS Inc.
 http://www.efficios.com
