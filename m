@@ -1,9 +1,9 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH babeltrace] Fix:
-	Unchecked	asprintf/vasprintf return values
-Date: Fri, 12 Jul 2013 13:10:09 -0400
-Message-ID: <20130712171009.GB18819__25963.608249049$1373649042$gmane$org@Krystal>
-References: <1373646996-5578-1-git-send-email-jeremie.galarneau@efficios.com>
+Subject: Re: [PATCH lttng-ust] Fix: Unchecked	asprintf/vasprintf
+	return values
+Date: Fri, 12 Jul 2013 13:11:20 -0400
+Message-ID: <20130712171120.GC18819__6448.85726874254$1373649113$gmane$org@Krystal>
+References: <1373647048-5640-1-git-send-email-jeremie.galarneau@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
@@ -11,10 +11,10 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UxgrC-0003IX-5e
-	for lttng-dev@lists.lttng.org; Fri, 12 Jul 2013 13:10:10 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1UxgsL-0003K8-RB
+	for lttng-dev@lists.lttng.org; Fri, 12 Jul 2013 13:11:21 -0400
 Content-Disposition: inline
-In-Reply-To: <1373646996-5578-1-git-send-email-jeremie.galarneau@efficios.com>
+In-Reply-To: <1373647048-5640-1-git-send-email-jeremie.galarneau@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -37,14 +37,14 @@ merged
 
 > Signed-off-by: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
 > ---
->  tests/lib/tap.c | 12 +++++++++---
+>  tests/tap.c | 12 +++++++++---
 >  1 file changed, 9 insertions(+), 3 deletions(-)
 > =
 
-> diff --git a/tests/lib/tap.c b/tests/lib/tap.c
+> diff --git a/tests/tap.c b/tests/tap.c
 > index 86c89a2..8bf72f6 100644
-> --- a/tests/lib/tap.c
-> +++ b/tests/lib/tap.c
+> --- a/tests/tap.c
+> +++ b/tests/tap.c
 > @@ -83,7 +83,9 @@ _gen_result(int ok, const char *func, char *file, unsig=
 ned int line,
 >  	   expansions on it */
