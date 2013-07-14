@@ -1,16 +1,38 @@
-From: Matthew Khouzam <matthew.khouzam@ericsson.com>
-Subject: Re: question
-Date: Fri, 12 Jul 2013 16:22:45 -0400
-Message-ID: <51E06595.7030209__14092.4103245654$1373660626$gmane$org@ericsson.com>
-References: <CAEiarX0p47Cr4EC9k2PrgjrwR7X9_R4h0uoHcWPLH7KqLb2scg@mail.gmail.com>
+From: Amit Margalit <AMITM@il.ibm.com>
+Subject: Problem compiling Babeltrace 1.1.1 python bindings with
+	old Bison
+Date: Sun, 14 Jul 2013 15:21:03 +0300
+Message-ID: <OFAC6F4FD9.22CFFBB5-ONC2257BA8.0043725C-C2257BA8.0043C772__1060.28452651135$1373804520$gmane$org@il.ibm.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0023125622=="
+Content-Type: multipart/mixed; boundary="===============1478267215=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from usevmg21.ericsson.net ([198.24.6.65])
+Received: from e06smtp18.uk.ibm.com ([195.75.94.114])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <matthew.khouzam@ericsson.com>) id 1Uxjrw-0004om-B0
-	for lttng-dev@lists.lttng.org; Fri, 12 Jul 2013 16:23:08 -0400
-In-Reply-To: <CAEiarX0p47Cr4EC9k2PrgjrwR7X9_R4h0uoHcWPLH7KqLb2scg@mail.gmail.com>
+	(envelope-from <amitm@il.ibm.com>) id 1UyLIo-00081b-IH
+	for lttng-dev@lists.lttng.org; Sun, 14 Jul 2013 08:21:22 -0400
+Received: from /spool/local
+	by e06smtp18.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use
+	Only! Violators will be prosecuted
+	for <lttng-dev@lists.lttng.org> from <amitm@il.ibm.com>;
+	Sun, 14 Jul 2013 13:15:23 +0100
+Received: from b06cxnps4074.portsmouth.uk.ibm.com
+	(d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+	by d06dlp01.portsmouth.uk.ibm.com (Postfix) with ESMTP id D6F0217D801A
+	for <lttng-dev@lists.lttng.org>; Sun, 14 Jul 2013 13:22:50 +0100 (BST)
+Received: from d06av06.portsmouth.uk.ibm.com (d06av06.portsmouth.uk.ibm.com
+	[9.149.37.217])
+	by b06cxnps4074.portsmouth.uk.ibm.com (8.13.8/8.13.8/NCO v10.0) with
+	ESMTP id r6ECL3SR50331778
+	for <lttng-dev@lists.lttng.org>; Sun, 14 Jul 2013 12:21:03 GMT
+Received: from d06av06.portsmouth.uk.ibm.com (localhost [127.0.0.1])
+	by d06av06.portsmouth.uk.ibm.com (8.14.4/8.14.4/NCO v10.0 AVout) with
+	ESMTP id r6ECLEJZ023466
+	for <lttng-dev@lists.lttng.org>; Sun, 14 Jul 2013 06:21:14 -0600
+Received: from d06ml311.portsmouth.uk.ibm.com (d06ml311.portsmouth.uk.ibm.com
+	[9.149.104.181])
+	by d06av06.portsmouth.uk.ibm.com (8.14.4/8.14.4/NCO v10.0 AVin) with
+	ESMTP id r6ECLEQL023463
+	for <lttng-dev@lists.lttng.org>; Sun, 14 Jul 2013 06:21:14 -0600
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,118 +41,63 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: emy moore <emy.moore90@gmail.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============0023125622==
-Content-Type: multipart/alternative;
-	boundary="------------080304070701040309010505"
+This is a multipart message in MIME format.
+--===============1478267215==
+Content-Type: multipart/alternative; boundary="=_alternative 0043C722C2257BA8_="
 
---------------080304070701040309010505
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 7bit
+This is a multipart message in MIME format.
+--=_alternative 0043C722C2257BA8_=
+Content-Type: text/plain; charset="US-ASCII"
 
-Hi Emy,
+Hi,
 
-I'm a bit confused by your question, are you trying to modify an
-obsolete system call let's say you want to instrument old code, it
-should be moderately staightforward with kprobe. Lttng can read the
-kprobes after.
+Seems like the configure script doesn't fail when bison version is too 
+old. I am using bison 2.3, which doesn't support pure parser generation, 
+causing a failure in formats/ctf/metadata/ctf-parser.y :
 
-Lttng can read the probes like this
-http://lwn.net/Articles/491510/
-here's some more info on kprobes
-https://www.kernel.org/doc/Documentation/kprobes.txt
+The following line expects a value to the define:
 
-Hope this helps.
-Matt
+%define api.pure
 
+Adding "true" or "full" doesn't help either.
 
-On 13-07-10 05:51 PM, emy moore wrote:
-> hi all
->
-> i try to understand how a system call is implemented so i do some
-> modification in an obsolete system call.
->
-> i want to know can i trace this system call using lttng knowing that
-> it's an obsolete one ? if no how can i activate it's trace ?
->
->
->
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+Amit Margalit
+IBM XIV - Storage Reinvented
+XIV-NAS Development Team
+Tel. 03-689-7774
+Fax. 03-689-7230
+--=_alternative 0043C722C2257BA8_=
+Content-Type: text/html; charset="US-ASCII"
 
-
---------------080304070701040309010505
-Content-Type: text/html; charset="ISO-8859-1"
-Content-Transfer-Encoding: 7bit
-
-<html>
-  <head>
-    <meta content="text/html; charset=ISO-8859-1"
-      http-equiv="Content-Type">
-  </head>
-  <body text="#000000" bgcolor="#FFFFFF">
-    <tt>Hi Emy, <br>
-      <br>
-      I'm a bit confused by your question, are you trying to modify an
-      obsolete system call let's say you want to instrument old code, it
-      should be moderately staightforward with kprobe. Lttng can read
-      the kprobes after. <br>
-      <br>
-      Lttng can read the probes like this<br>
-      <a class="moz-txt-link-freetext" href="http://lwn.net/Articles/491510/">http://lwn.net/Articles/491510/</a><br>
-      here's some more info on kprobes<br>
-      <a class="moz-txt-link-freetext" href="https://www.kernel.org/doc/Documentation/kprobes.txt">https://www.kernel.org/doc/Documentation/kprobes.txt</a><br>
-      <br>
-      Hope this helps.<br>
-      Matt<br>
-      <br>
-      <br>
-    </tt>
-    <div class="moz-cite-prefix">On 13-07-10 05:51 PM, emy moore wrote:<br>
-    </div>
-    <blockquote
-cite="mid:CAEiarX0p47Cr4EC9k2PrgjrwR7X9_R4h0uoHcWPLH7KqLb2scg@mail.gmail.com"
-      type="cite">
-      <meta http-equiv="Content-Type" content="text/html;
-        charset=ISO-8859-1">
-      <div dir="ltr">
-        <div>
-          <div>hi all<br>
-            <br>
-          </div>
-          i try to understand how a system call is implemented so i do
-          some modification in an obsolete system call.<br>
-          <br>
-        </div>
-        i want to know can i trace this system call using lttng knowing
-        that it's an obsolete one ? if no how can i activate it's trace
-        ?<br>
-        <br>
-        <br>
-      </div>
-      <br>
-      <fieldset class="mimeAttachmentHeader"></fieldset>
-      <br>
-      <pre wrap="">_______________________________________________
-lttng-dev mailing list
-<a class="moz-txt-link-abbreviated" href="mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a>
-<a class="moz-txt-link-freetext" href="http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a>
-</pre>
-    </blockquote>
-    <br>
-  </body>
-</html>
-
---------------080304070701040309010505--
+<font size=2 face="sans-serif">Hi,</font>
+<br>
+<br><font size=2 face="sans-serif">Seems like the configure script doesn't
+fail when bison version is too old. I am using bison 2.3, which doesn't
+support pure parser generation, causing a failure in </font><tt><font size=2>formats/ctf/metadata/ctf-parser.y</font></tt><font size=2 face="sans-serif">
+:</font>
+<br>
+<br><font size=2 face="sans-serif">The following line expects a value to
+the define:</font>
+<br>
+<br><font size=2 face="sans-serif">%define api.pure</font>
+<br>
+<br><font size=2 face="sans-serif">Adding &quot;true&quot; or &quot;full&quot;
+doesn't help either.</font>
+<br>
+<br><font size=2 color=#000080 face="sans-serif">Amit Margalit</font>
+<br><font size=2 color=#808000 face="sans-serif">IBM XIV </font><font size=2 face="sans-serif">-
+<i>Storage Reinvented</i></font>
+<br><font size=2 face="sans-serif">XIV-NAS Development Team</font>
+<br><font size=2 face="sans-serif">Tel. 03</font><font size=2 face="Arial">-689-7774</font>
+<br><font size=2 face="Arial">Fax. 03-689-7230</font>
+--=_alternative 0043C722C2257BA8_=--
 
 
---===============0023125622==
+
+--===============1478267215==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -141,4 +108,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============0023125622==--
+--===============1478267215==--
