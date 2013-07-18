@@ -1,7 +1,7 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] LTTng modules 2.3.0-rc1 (snapshot feature)
-Date: Wed, 17 Jul 2013 21:44:53 -0400
-Message-ID: <20130718014453.GA5776__10928.6177591004$1374111945$gmane$org@Krystal>
+Subject: [RELEASE] LTTng-UST 2.3.0-rc1
+Date: Wed, 17 Jul 2013 21:50:00 -0400
+Message-ID: <20130718015000.GB5776__46963.3431559943$1374112248$gmane$org@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -9,16 +9,16 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UzdH7-0002cp-61
-	for lttng-dev@lists.lttng.org; Wed, 17 Jul 2013 21:45:01 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1UzdM1-0002g7-TZ
+	for lttng-dev@lists.lttng.org; Wed, 17 Jul 2013 21:50:05 -0400
 Received: from localhost (localhost [127.0.0.1])
-	by blackscsi.openrapids.net (Postfix) with ESMTP id EB8FB14191A
-	for <lttng-dev@lists.lttng.org>; Wed, 17 Jul 2013 21:44:54 -0400 (EDT)
+	by blackscsi.openrapids.net (Postfix) with ESMTP id B62FD14191A
+	for <lttng-dev@lists.lttng.org>; Wed, 17 Jul 2013 21:50:01 -0400 (EDT)
 Received: from blackscsi.openrapids.net ([127.0.0.1])
 	by localhost (blackscsi.openrapids.net [127.0.0.1]) (amavisd-new,
 	port 10024)
-	with ESMTP id L1afW6LutnSv for <lttng-dev@lists.lttng.org>;
-	Wed, 17 Jul 2013 21:44:53 -0400 (EDT)
+	with ESMTP id 9EFDgkk9IeRu for <lttng-dev@lists.lttng.org>;
+	Wed, 17 Jul 2013 21:50:00 -0400 (EDT)
 Content-Disposition: inline
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -31,56 +31,76 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-The LTTng modules provide Linux kernel tracing capability to the LTTng
-2.x tracer toolset.
+LTTng-UST, the Linux Trace Toolkit Next Generation Userspace Tracer, is
+port of the low-overhead tracing capabilities of the LTTng kernel tracer
+to user-space. The library "liblttng-ust" enables tracing of
+applications and libraries.
 
-This release provides a couple of new cool features, but the most
-interesting one is certainly support for flight recorder tracing and
-"snapshot" command of lttng tools.
-
-It also includes updates system call listings for ARM, PowerPC and
-Intel, as well as an enhanced x86 kvm instrumentation.
+As for lttng modules, lttng-ust 2.3.0-rc1 introduces support for flight
+recorder tracing, with the "snapshot" command of lttng tools.
 
 Changelog:
-2013-07-17 LTTng modules 2.3.0-rc1
-        * Fix: kvm x86 probes side-effect
-        * Fix: allow get/put subbuf in loop for metadata stream
-        * Add support for kvm x86 specific tracepoints
-        * Add mainline headers for kvm x86 tracepoints
-        * Remove old 3.0.4 x86-64 extracted syscall info
-        * Point the x86-64 overrides to newly extracted 3.10-rc7 files
-        * Add syscalls extracted files from a 3.10-rc7 kernel
-        * Improve documentation of the syscall extractor script
-        * Fix: double length of __dynamic_len array
-        * Fix printk instrumentation
-        * Introduce __dynamic_array_enc_ext_2() and tp_memcpy_dyn_2()
-        * Fix: ring buffer: get_subbuf() checks should be performed on "consumed" parameter
-        * Fix: SWITCH_FLUSH new sub-buffer checks
-        * Fix: ring buffer: handle concurrent update in nested buffer wrap around check
-        * Cleanup: lib_ring_buffer_switch_new_end() only calls subbuffer_set_data_size()
-        * Revert "Cleanup: ring buffer: remove lib_ring_buffer_switch_new_end()"
-        * Fix: handle writes of length 0
-        * Fix: ring buffer: RING_BUFFER_FLUSH ioctl buffer corruption
-        * Cleanup: ring buffer: remove lib_ring_buffer_switch_new_end()
-        * print warning and return -EBUSY on double get_subbuf()
-        * Add header to fix compilation of syscalls-extractor on 3.9 kernel
-        * Fix: don't do 0 byte event reservation
-        * Document that payload size need to be greater than 0
-        * Fix build and load against linux-2.6.33.x
-        * Fix: add missing CONFIG_COMPAT around lib_ring_buffer_compat_ioctl
-        * Metadata cache and multiple metadata channels
-        * fix block instrumentation probe signature mismatch for 3.9.x kernels
-        * fix: block instrumentation: NULL pointer dereference
-        * Update rcu instrumentation to 3.9.[0-4]
-        * Fix CPU hotplug section mismatches
-        * Add system calls definitions for powerpc-32
-        * Remove bashism in lttng-syscalls-generate-headers.sh
-        * Update ARM (32 bit) syscall tracepoints to 3.4
+2013-07-17 lttng-ust 2.3.0-rc1
+	* Fix: Unchecked asprintf/vasprintf return values
+	* Missing NULL pointer init in tap.c
+	* Disable doc/examples build
+	* Add python3 support to lttng-gen-tp
+	* Bump ABI major to 5
+	* callsite: add "ip" context
+	* Allow environment variable LTTNG_HOME to override HOME
+	* Fix: libs order in Makefile
+	* Fix: ring buffer: get_subbuf() checks should be performed on "consumed" parameter
+	* Introduce ustctl_write_one_packet_to_channel
+	* build: Fix out-of-tree build
+	* Fix: SWITCH_FLUSH new sub-buffer checks
+	* Fix: ring buffer: handle concurrent update in nested buffer wrap around check
+	* Cleanup: lib_ring_buffer_switch_new_end() only calls subbuffer_set_data_size()
+	* Fix: doc/examples: gen-tp path
+	* Revert "Cleanup: ring buffer: remove lib_ring_buffer_switch_new_end()"
+	* Fix: handle writes of length 0
+	* Cleanup: ring buffer: remove lib_ring_buffer_switch_new_end()
+	* Fix: lttng-events VPATH build
+	* Allow #include in template (.tp) file
+	* tests/hello.cxx: rename tp.cpp into tp-cpp.cpp
+	* doc/examples: build gen-tp example by default
+	* doc/examples: support BSD make
+	* Tracepoint.h: replace assertion by fprintf and abort()
+	* Remove unused assert.h from bitfield.h
+	* Clarify probe registration documentation/errors
+	* Fix: Check C++ designated initializers support before compiling 'hello.cxx' test
+	* Add mising include in ust.h
+	* lttng-gen-tp: Fix include guard name with file using non valid characters
+	* Fix: segfault when print invalid command
+	* Fix: Add --no-as-needed to the demo example's Makefile
+	* zmalloc: attribute always_inline
+	* Fix: liblttng-ust process startup hang when sessiond is stopped
+	* Move include directive from CFLAGS to LOCAL_CPPFLAGS in examples' Makefiles
+	* Allow tracepoint providers to be compiled with g++
+	* Add parameter -f to rm in Makefile clean target
+	* Fix: missing dependency for liblttng-ust-tracepoint.so
+	* Remove 0.x TODO
+	* Add warning about default prefix and library paths to README
+	* Revert "Revert "Fix (another) linker library order""
+	* Revert "Revert "Fix linker library order""
+	* snprintf: play nice with static checker
+	* tracepoint.c: Add coverity alloc/free annotations
+	* Fix: "fields" leak on register
+	* Fix: memory leak for events without fields
+	* Fix: memory leak on connection reset
+	* Revert "Fix linker library order"
+	* Revert "Fix (another) linker library order"
+	* Fix: incorrect support for multi-context
+	* Fix (another) linker library order
+	* Fix typo in run script
+	* Fix linker library order
+	* Fix examples: add missing CPPFLAGS
+	* example Makefiles: standardize on $^ for linking
+	* Fix demo example Makefile
+	* Move "hello-static-lib" to doc/examples and add non-automake Makefiles
 
 Project website: http://lttng.org
 Download link: http://lttng.org/download
-(please refer to the README files for installation instructions and
-lttng-tools doc/quickstart.txt for usage information)
+(please refer to the README file for installation instructions)
 
 -- 
 Mathieu Desnoyers
