@@ -1,7 +1,7 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] LTTng-UST 2.3.0-rc1
-Date: Wed, 17 Jul 2013 21:50:00 -0400
-Message-ID: <20130718015000.GB5776__46963.3431559943$1374112248$gmane$org@Krystal>
+Subject: [RELEASE] LTTng Tools 2.3.0-rc1
+Date: Wed, 17 Jul 2013 22:32:18 -0400
+Message-ID: <20130718023218.GA6551__44182.404902722$1374114790$gmane$org@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -9,16 +9,8 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1UzdM1-0002g7-TZ
-	for lttng-dev@lists.lttng.org; Wed, 17 Jul 2013 21:50:05 -0400
-Received: from localhost (localhost [127.0.0.1])
-	by blackscsi.openrapids.net (Postfix) with ESMTP id B62FD14191A
-	for <lttng-dev@lists.lttng.org>; Wed, 17 Jul 2013 21:50:01 -0400 (EDT)
-Received: from blackscsi.openrapids.net ([127.0.0.1])
-	by localhost (blackscsi.openrapids.net [127.0.0.1]) (amavisd-new,
-	port 10024)
-	with ESMTP id 9EFDgkk9IeRu for <lttng-dev@lists.lttng.org>;
-	Wed, 17 Jul 2013 21:50:00 -0400 (EDT)
+	(envelope-from <compudj@mail.openrapids.net>) id 1Uze0y-00032Z-Jk
+	for lttng-dev@lists.lttng.org; Wed, 17 Jul 2013 22:32:24 -0400
 Content-Disposition: inline
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -31,72 +23,136 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-LTTng-UST, the Linux Trace Toolkit Next Generation Userspace Tracer, is
-port of the low-overhead tracing capabilities of the LTTng kernel tracer
-to user-space. The library "liblttng-ust" enables tracing of
-applications and libraries.
+The lttng-tools project provides a session daemon (lttng-sessiond)
+that acts as a tracing registry, the "lttng" command line for tracing
+control, a lttng-ctl library for tracing control and a lttng-relayd
+for network streaming.
 
-As for lttng modules, lttng-ust 2.3.0-rc1 introduces support for flight
-recorder tracing, with the "snapshot" command of lttng tools.
+Since David Goulet is currently on vacation, I'm acting as backup
+maintainer for lttng-tools.
+
+Noteworthy feature in LTTng Tools 2.3.x: flight recorder and snapshot
+support !
+
+See lttng(1) for details on the "lttng snapshot" set of commands.
+
+LTTng Tools 2.3.x needs to be updated in locked-step with LTTng-UST and
+LTTng modules.
 
 Changelog:
-2013-07-17 lttng-ust 2.3.0-rc1
-	* Fix: Unchecked asprintf/vasprintf return values
+2013-07-17 lttng-tools 2.3.0-rc1
+	* Fix: add missing snapshot header to dist tarball
+	* Documentation: fix thread quit pipe comment
+	* Test for presence of bison and flex when building from git
+	* Test UST snapshot with large metadata
+	* Add test application with large metadata
+	* Cleanup: remove redundant assignment
+	* Fix: use per-uid buffer registry for UID buffer snapshots
+	* cmd.c: fix typos in snapshot commands
+	* Test snapshot per-uid post-mortem
+	* Remove leftover fprintf
+	* Fix deadlock: don't take channel lock in timer
+	* Introduce channel timer lock
+	* document lttng_ustconsumer_request_metadata locking constraints
+	* consumer: remove unused lttng_ustconsumer_push_metadata
+	* Document metadata_socket_lock nesting
+	* lttng_ustconsumer_recv_metadata does not need all those locks
+	* document metadata_switch_timer() deadlock
+	* Fix: add missing metadata socket lock
+	* document metadata_switch_timer() locking constraints
+	* consumer: remove timeout for UST metadata
+	* Introduce pipe for UST metadata cache and stream
+	* consumer: replace DBG2() instances by DBG()
+	* Introduce utils_create_pipe_cloexec_nonblock()
+	* ust consumer: data_pending check is endpoint active
+	* Fix: kernel consumer: data_pending check if endpoint active
+	* consumer: explicitly set endpoint status to active at init
+	* document consumer_metadata_cache_flushed use of consumer_data.lock
+	* consumer: introduce channel lock
+	* Merge branch 'master' of git://git.lttng.org/lttng-tools
+	* Fix: update lttng snapshot help output
+	* Man: fix part of snapshot documentation
+	* Fix: set tracefile size test with PID buffers
+	* Fix: Babelstats fail to parse output with no process name or pid
 	* Missing NULL pointer init in tap.c
-	* Disable doc/examples build
-	* Add python3 support to lttng-gen-tp
-	* Bump ABI major to 5
-	* callsite: add "ip" context
-	* Allow environment variable LTTNG_HOME to override HOME
-	* Fix: libs order in Makefile
-	* Fix: ring buffer: get_subbuf() checks should be performed on "consumed" parameter
-	* Introduce ustctl_write_one_packet_to_channel
-	* build: Fix out-of-tree build
-	* Fix: SWITCH_FLUSH new sub-buffer checks
-	* Fix: ring buffer: handle concurrent update in nested buffer wrap around check
-	* Cleanup: lib_ring_buffer_switch_new_end() only calls subbuffer_set_data_size()
-	* Fix: doc/examples: gen-tp path
-	* Revert "Cleanup: ring buffer: remove lib_ring_buffer_switch_new_end()"
-	* Fix: handle writes of length 0
-	* Cleanup: ring buffer: remove lib_ring_buffer_switch_new_end()
-	* Fix: lttng-events VPATH build
-	* Allow #include in template (.tp) file
-	* tests/hello.cxx: rename tp.cpp into tp-cpp.cpp
-	* doc/examples: build gen-tp example by default
-	* doc/examples: support BSD make
-	* Tracepoint.h: replace assertion by fprintf and abort()
-	* Remove unused assert.h from bitfield.h
-	* Clarify probe registration documentation/errors
-	* Fix: Check C++ designated initializers support before compiling 'hello.cxx' test
-	* Add mising include in ust.h
-	* lttng-gen-tp: Fix include guard name with file using non valid characters
-	* Fix: segfault when print invalid command
-	* Fix: Add --no-as-needed to the demo example's Makefile
-	* zmalloc: attribute always_inline
-	* Fix: liblttng-ust process startup hang when sessiond is stopped
-	* Move include directive from CFLAGS to LOCAL_CPPFLAGS in examples' Makefiles
-	* Allow tracepoint providers to be compiled with g++
-	* Add parameter -f to rm in Makefile clean target
-	* Fix: missing dependency for liblttng-ust-tracepoint.so
-	* Remove 0.x TODO
-	* Add warning about default prefix and library paths to README
-	* Revert "Revert "Fix (another) linker library order""
-	* Revert "Revert "Fix linker library order""
-	* snprintf: play nice with static checker
-	* tracepoint.c: Add coverity alloc/free annotations
-	* Fix: "fields" leak on register
-	* Fix: memory leak for events without fields
-	* Fix: memory leak on connection reset
-	* Revert "Fix linker library order"
-	* Revert "Fix (another) linker library order"
-	* Fix: incorrect support for multi-context
-	* Fix (another) linker library order
-	* Fix typo in run script
-	* Fix linker library order
-	* Fix examples: add missing CPPFLAGS
-	* example Makefiles: standardize on $^ for linking
-	* Fix demo example Makefile
-	* Move "hello-static-lib" to doc/examples and add non-automake Makefiles
+	* Fix: Unchecked asprintf/vasprintf return values
+	* Add snapshots test to fast regression
+	* Fix: kernel data unit test
+	* Fix: snapshot returned valid LTTNG_ERR code
+	* Add the number of snapshot taken to the output path
+	* Fix: RCU read side lock unbalanced
+	* Fix: zeroed snapshot output at init
+	* Support del-output with an output name
+	* Update man page with snapshot command
+	* New UST default buffers is now per UID
+	* Bump UST ABI major version for 2.3 release
+	* Add snapshot mode to lttng list session
+	* Fix: support temporary snapshot max size and name
+	* Support snapshot max-size limitation
+	* Tests: per-UID UST snapshot
+	* Fix: snapshot support for UST and kernel in same session
+	* Implement lttng create --snapshot command
+	* Add create session snapshot API in lttng-sessiond
+	* Add snapshot output init call that uses URIs
+	* Fix: consumer err_sock cloexec
+	* Callsite: add "ip" context
+	* Fix: possible consumer sockets double close on cleanup
+	* Automatically load kvm-x86 and kvm-x86-mmu probes.
+	* Fix: consumer: use uint64_t for all sessiond_id
+	* Fix: add gpl and lgpl files to tarball
+	* Fix: don't install libtap system wide
+	* Fix: close consumer sockets in sessiond cleanup
+	* Fix: set globally visible flag to kernel stream
+	* Fix: lttng: memory leak in snapshot record command
+	* Fix: kernel-consumer: double-close
+	* Fix: consumer: incorrect size zmalloc
+	* Fix: don't try to send stream to relayd if not in streaming
+	* Fix: relayd refcount updates for stream
+	* Fix: don't send error to sessiond on orderly shutdown
+	* Fix: bad pathname used when sending kernel stream to relayd
+	* Fix: add globally visible flag in stream
+	* Fix: destroy metadata stream on setup metadata error path
+	* Fix: send kernel stream to relayd only if needed
+	* Fix: destroy streams for kernel snapshot sessions as well
+	* Fix: close and destroy metadata stream after a kernel snapshot
+	* Fix: print errno message on connect() error
+	* Fix: possible double-close on stream out_fd
+	* Fix: session ID signess to uin64_t in sessiond
+	* Tests: fix validation trace path in kernel snapshot
+	* Tests: Add UST snapshot local and streaming
+	* Add UST snapshot support
+	* Fix: consumer_add_relayd_socket() report errors to sessiond
+	* Fix: add missing enum lttcomm_return_code entries
+	* Fix: UST per-UID channels persist across application teardown
+	* Fix: kernel snapshot metadata handling and error paths
+	* Fix: coding style and debug statement
+	* Fix: put subbuffer back in kernel snapshot error path
+	* Fix: overflow in uri_to_str_url
+	* Fix: detect the correct version of LTTng-UST
+	* Fix: sessiond: use uint64_t for all session ids
+	* Tests: add kernel snapshot streaming to root regression
+	* Tests: remove debug output from test
+	* Tests: Add kernel snapshot streaming
+	* Fix: use snapshot consumer output for kernel
+	* Fix: periodical flush check trace before stop
+	* Fix: consumer: 64-bit index for relayd rather than 32-bit (v2)
+	* Fix UST channel/stream output assignation
+	* Fix: send per-pid session id in channel creation
+	* Fix: consumer double-close on error
+	* Update URCU detection to correctly check for a 0.7 version
+	* Fix: snapshot path
+	* Add utils function to format current time as a string
+	* Fix: set hidden attribute to utils_* calls
+	* Fix: consumer handling of metadata for relayd
+	* Add kernel snapshot support
+	* Support flight recorder mode for a session
+	* Implement snapshot commands in lttng-sessiond
+	* Add snapshot command to lttng UI
+	* Initial import of the snapshot ABI/API in lttng-ctl
+	* Use the consumer stream API in consumer_del_stream()
+	* Add consumer-stream.c/.h in libconsumer
+	* Move multiple URLs parsing fct from lttng-ctl to uri.c
+	* Add a lttng-ctl header to facilitate code separation
 
 Project website: http://lttng.org
 Download link: http://lttng.org/download
