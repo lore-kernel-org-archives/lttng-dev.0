@@ -1,16 +1,19 @@
-From: Cao Gao <caogao@umich.edu>
-Subject: LTTng on Android: no session daemon available
-Date: Sat, 20 Jul 2013 15:49:27 -0400
-Message-ID: <CAFvbycV0UvcWBqKrHfawfDKEen8PSziX92eKf3bHoMDtts=+sg__23570.0164376341$1374349852$gmane$org@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: LTTng on Android: no session daemon available
+Date: Sat, 20 Jul 2013 16:06:06 -0400
+Message-ID: <20130720200605.GA23078__40498.2403306805$1374350816$gmane$org@Krystal>
+References: <CAFvbycV0UvcWBqKrHfawfDKEen8PSziX92eKf3bHoMDtts=+sg@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2021080163=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f171.google.com ([209.85.223.171])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <petergao3721@gmail.com>) id 1V0dA9-0002uO-2N
-	for lttng-dev@lists.lttng.org; Sat, 20 Jul 2013 15:49:58 -0400
-Received: by mail-ie0-f171.google.com with SMTP id qd12so12149902ieb.16
-	for <lttng-dev@lists.lttng.org>; Sat, 20 Jul 2013 12:49:47 -0700 (PDT)
+	(envelope-from <compudj@mail.openrapids.net>) id 1V0dPs-0003H5-Jo
+	for lttng-dev@lists.lttng.org; Sat, 20 Jul 2013 16:06:12 -0400
+Content-Disposition: inline
+In-Reply-To: <CAFvbycV0UvcWBqKrHfawfDKEen8PSziX92eKf3bHoMDtts=+sg@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,788 +22,296 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Cao Gao <caogao@umich.edu>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============2021080163==
-Content-Type: multipart/alternative; boundary=047d7bdca4cee1099e04e1f6be3a
-
---047d7bdca4cee1099e04e1f6be3a
-Content-Type: text/plain; charset=windows-1252
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-
-I=92m trying to use LTTng on Android 4.0.4 with Linux kernel version of
-3.0.15.
-I cross-compiled the LTTng modules and tools on my Ubuntu 12.04 machine.
-
-First I installed all the LTTng modules using *insmod*, because there is no
-*modprobe* in Android. It worked fine.
-However, when I tried to run *lttng*, it failed due to "No session daemon
-is available" error. I tried to run* lttng-sessiond*, then it just kept
-hanging and cannot finish.
- Even I kept *lttng-sessiond* hanging in a new terminal session and ran *
-lttng* in a separate terminal, it gave the same error.
-
-I'm posting the log below.
-
-Any help would be greatly appreciated!
-
-Thanks,
-Cao
-
-*root@android:/data/lttng/bin # ./lttng -vvv list -k*
-
-    DEBUG1 [2016/2016]: Session daemon at: /data/lttng/bin/lttng-sessiond
-> (in check_sessiond() at lttng.c:381)
->     Spawning a session daemon
->     sh: /sbin/modprobe: not found
->     Error: Unable to load module lttng-tracer
->     sh: /sbin/modprobe: not found
->     sh: /sbin/modprobe: not found
->     sh: /sbin/modprobe: not found
->     sh: /sbin/modprobe: not found
->     Error: Unable to load module lttng-lib-ring-buffer
->     sh: /sbin/modprobe: not found
->     Error: Unable to load module lttng-ring-buffer-client-discard
->     sh: /sbin/modprobe: not found
->     Error: Unable to load module lttng-ring-buffer-client-overwrite
->     sh: /sbin/modprobe: not found
->     Error: Unable to load module lttng-ring-buffer-metadata-client
->     sh: /sbin/modprobe: not found
->     Error: Unable to load module lttng-ring-buffer-client-mmap-discard
->     sh: /sbin/modprobe: not found
->     Error: Unable to load module lttng-ring-buffer-client-mmap-overwrite
->     sh: /sbin/modprobe: not found
->     Error: Unable to load module lttng-ring-buffer-metadata-mmap-client
->     sh: /sbin/modprobe: not found
->     Error: Unable to load module lttng-probe-lttng
->     sh: /sbin/modprobe: not found
->     sh: /sbin/modprobe: not found
->     sh: /sbin/modprobe: not found
->     sh: /sbin/modprobe: not found
->     sh: /sbin/modprobe: not found
->     sh: /sbin/modprobe: not found
->     sh: /sbin/modprobe: not found
->     sh: /sbin/modprobe: not found
->     sh: /sbin/modprobe: not found
->     sh: /sbin/modprobe: not found
->     sh: /sbin/modprobe: not found
->     sh: /sbin/modprobe: not found
->     sh: /sbin/modprobe: not found
->     sh: /sbin/modprobe: not found
->     sh: /sbin/modprobe: not found
->     sh: /sbin/modprobe: not found
->     sh: /sbin/modprobe: not found
->     sh: /sbin/modprobe: not found
->     sh: /sbin/modprobe: not found
->     sh: /sbin/modprobe: not found
->     sh: /sbin/modprobe: not found
->     sh: /sbin/modprobe: not found
->     sh: /sbin/modprobe: not found
->     sh: /sbin/modprobe: not found
->     sh: /sbin/modprobe: not found
->     sh: /sbin/modprobe: not found
->     sh: /sbin/modprobe: not found
->     sh: /sbin/modprobe: not found
->     sh: /sbin/modprobe: not found
->     sh: /sbin/modprobe: not found
->     sh: /sbin/modprobe: not found
->     sh: /sbin/modprobe: not found
->     sh: /sbin/modprobe: not found
->     sh: /sbin/modprobe: not found
->     sh: /sbin/modprobe: not found
->     sh: /sbin/modprobe: not found
->     Warning: No tracing group detected
->     DEBUG1 [2016/2016]: SIGUSR1 caught (in sighandler() at lttng.c:204)
->     DEBUG2 [2016/2016]: Session name: (null) (in cmd_list() at
-> commands/list.c:743)
->     DEBUG1 [2016/2016]: Getting kernel tracing events (in
-> list_kernel_events() at commands/list.c:433)
->     Error: Unable to list kernel events: No session daemon is available
->     Error: Command error
->     DEBUG1 [2016/2016]: Clean exit (in clean_exit() at lttng.c:175)
-
-
-
-*root@android:/data/lttng/bin # ./lttng-sessiond -vvv*
-
->
->     DEBUG3 [2132/2132]: Creating LTTng run directory: /data/lttng (in
-> create_lttng_rundir() at main.c:3853)
->     DEBUG2 [2132/2132]: Kernel consumer err path:
-> /data/lttng/kconsumerd/error (in main() at main.c:4140)
->     DEBUG2 [2132/2132]: Kernel consumer cmd path:
-> /data/lttng/kconsumerd/command (in main() at main.c:4142)
->     DEBUG1 [2132/2132]: Client socket path
-> /data/lttng/client-lttng-sessiond (in main() at main.c:4195)
->     DEBUG1 [2132/2132]: Application socket path
-> /data/lttng/lttng-ust-sock-4 (in main() at main.c:4196)
->     DEBUG1 [2132/2132]: Application wait path /lttng-ust-wait-4 (in main(=
-)
-> at main.c:4197)
->     DEBUG1 [2132/2132]: LTTng run directory path: /data/lttng (in main()
-> at main.c:4198)
->     DEBUG2 [2132/2132]: UST consumer 32 bits err path:
-> /data/lttng/ustconsumerd32/error (in main() at main.c:4207)
->     DEBUG2 [2132/2132]: UST consumer 32 bits cmd path:
-> /data/lttng/ustconsumerd32/command (in main() at main.c:4209)
->     DEBUG2 [2132/2132]: UST consumer 64 bits err path:
-> /data/lttng/ustconsumerd64/error (in main() at main.c:4218)
->     DEBUG2 [2132/2132]: UST consumer 64 bits cmd path:
-> /data/lttng/ustconsumerd64/command (in main() at main.c:4220)
->     DEBUG2 [2132/2132]: Creating consumer directory:
-> /data/lttng/kconsumerd (in set_consumer_sockets() at main.c:3895)
->     sh: /sbin/modprobe: not found
->     Error: Unable to load module lttng-tracer
->     DEBUG2 [2132/2132]: Kernel tracer version validated (major version 2)
-> (in kernel_validate_version() at kernel.c:688)
->     sh: /sbin/modprobe: not found
->     DEBUG1 [2132/2132]: Modprobe successfully lttng-ftrace (in
-> modprobe_lttng_data() at modprobe.c:227)
->     sh: /sbin/modprobe: not found
->     DEBUG1 [2132/2132]: Modprobe successfully lttng-kprobes (in
-> modprobe_lttng_data() at modprobe.c:227)
->     sh: /sbin/modprobe: not found
->     DEBUG1 [2132/2132]: Modprobe successfully lttng-kretprobes (in
-> modprobe_lttng_data() at modprobe.c:227)
->     sh: /sbin/modprobe: not found
->     Error: Unable to load module lttng-lib-ring-buffer
->     sh: /sbin/modprobe: not found
->     Error: Unable to load module lttng-ring-buffer-client-discard
->     sh: /sbin/modprobe: not found
->     Error: Unable to load module lttng-ring-buffer-client-overwrite
->     sh: /sbin/modprobe: not found
->     Error: Unable to load module lttng-ring-buffer-metadata-client
->     sh: /sbin/modprobe: not found
->     Error: Unable to load module lttng-ring-buffer-client-mmap-discard
->     sh: /sbin/modprobe: not found
->     Error: Unable to load module lttng-ring-buffer-client-mmap-overwrite
->     sh: /sbin/modprobe: not found
->     Error: Unable to load module lttng-ring-buffer-metadata-mmap-client
->     sh: /sbin/modprobe: not found
->     Error: Unable to load module lttng-probe-lttng
->     sh: /sbin/modprobe: not found
->     DEBUG1 [2132/2132]: Modprobe successfully lttng-types (in
-> modprobe_lttng_data() at modprobe.c:227)
->     sh: /sbin/modprobe: not found
->     DEBUG1 [2132/2132]: Modprobe successfully lttng-probe-asoc (in
-> modprobe_lttng_data() at modprobe.c:227)
->     sh: /sbin/modprobe: not found
->     DEBUG1 [2132/2132]: Modprobe successfully lttng-probe-block (in
-> modprobe_lttng_data() at modprobe.c:227)
->     sh: /sbin/modprobe: not found
->     DEBUG1 [2132/2132]: Modprobe successfully lttng-probe-btrfs (in
-> modprobe_lttng_data() at modprobe.c:227)
->     sh: /sbin/modprobe: not found
->     DEBUG1 [2132/2132]: Modprobe successfully lttng-probe-compaction (in
-> modprobe_lttng_data() at modprobe.c:227)
->     sh: /sbin/modprobe: not found
->     DEBUG1 [2132/2132]: Modprobe successfully lttng-probe-ext3 (in
-> modprobe_lttng_data() at modprobe.c:227)
->     sh: /sbin/modprobe: not found
->     DEBUG1 [2132/2132]: Modprobe successfully lttng-probe-ext4 (in
-> modprobe_lttng_data() at modprobe.c:227)
->     sh: /sbin/modprobe: not found
->     DEBUG1 [2132/2132]: Modprobe successfully lttng-probe-gpio (in
-> modprobe_lttng_data() at modprobe.c:227)
->     sh: /sbin/modprobe: not found
->     DEBUG1 [2132/2132]: Modprobe successfully lttng-probe-irq (in
-> modprobe_lttng_data() at modprobe.c:227)
->     sh: /sbin/modprobe: not found
->     DEBUG1 [2132/2132]: Modprobe successfully lttng-probe-jbd (in
-> modprobe_lttng_data() at modprobe.c:227)
->     sh: /sbin/modprobe: not found
->     DEBUG1 [2132/2132]: Modprobe successfully lttng-probe-jbd2 (in
-> modprobe_lttng_data() at modprobe.c:227)
->     sh: /sbin/modprobe: not found
->     DEBUG1 [2132/2132]: Modprobe successfully lttng-probe-kmem (in
-> modprobe_lttng_data() at modprobe.c:227)
->     sh: /sbin/modprobe: not found
->     DEBUG1 [2132/2132]: Modprobe successfully lttng-probe-kvm (in
-> modprobe_lttng_data() at modprobe.c:227)
->     sh: /sbin/modprobe: not found
->     DEBUG1 [2132/2132]: Modprobe successfully lttng-probe-lock (in
-> modprobe_lttng_data() at modprobe.c:227)
->     sh: /sbin/modprobe: not found
->     DEBUG1 [2132/2132]: Modprobe successfully lttng-probe-module (in
-> modprobe_lttng_data() at modprobe.c:227)
->     sh: /sbin/modprobe: not found
->     DEBUG1 [2132/2132]: Modprobe successfully lttng-probe-napi (in
-> modprobe_lttng_data() at modprobe.c:227)
->     sh: /sbin/modprobe: not found
->     DEBUG1 [2132/2132]: Modprobe successfully lttng-probe-net (in
-> modprobe_lttng_data() at modprobe.c:227)
->     sh: /sbin/modprobe: not found
->     DEBUG1 [2132/2132]: Modprobe successfully lttng-probe-power (in
-> modprobe_lttng_data() at modprobe.c:227)
->     sh: /sbin/modprobe: not found
->     DEBUG1 [2132/2132]: Modprobe successfully lttng-probe-printk (in
-> modprobe_lttng_data() at modprobe.c:227)
->     sh: /sbin/modprobe: not found
->     DEBUG1 [2132/2132]: Modprobe successfully lttng-probe-random (in
-> modprobe_lttng_data() at modprobe.c:227)
->     sh: /sbin/modprobe: not found
->     DEBUG1 [2132/2132]: Modprobe successfully lttng-probe-rcu (in
-> modprobe_lttng_data() at modprobe.c:227)
->     sh: /sbin/modprobe: not found
->     DEBUG1 [2132/2132]: Modprobe successfully lttng-probe-regmap (in
-> modprobe_lttng_data() at modprobe.c:227)
->     sh: /sbin/modprobe: not found
->     DEBUG1 [2132/2132]: Modprobe successfully lttng-probe-regulator (in
-> modprobe_lttng_data() at modprobe.c:227)
->     sh: /sbin/modprobe: not found
->     DEBUG1 [2132/2132]: Modprobe successfully lttng-probe-rpm (in
-> modprobe_lttng_data() at modprobe.c:227)
->     sh: /sbin/modprobe: not found
->     DEBUG1 [2132/2132]: Modprobe successfully lttng-probe-sched (in
-> modprobe_lttng_data() at modprobe.c:227)
->     sh: /sbin/modprobe: not found
->     DEBUG1 [2132/2132]: Modprobe successfully lttng-probe-scsi (in
-> modprobe_lttng_data() at modprobe.c:227)
->     sh: /sbin/modprobe: not found
->     DEBUG1 [2132/2132]: Modprobe successfully lttng-probe-signal (in
-> modprobe_lttng_data() at modprobe.c:227)
->     sh: /sbin/modprobe: not found
->     DEBUG1 [2132/2132]: Modprobe successfully lttng-probe-skb (in
-> modprobe_lttng_data() at modprobe.c:227)
->     sh: /sbin/modprobe: not found
->     DEBUG1 [2132/2132]: Modprobe successfully lttng-probe-sock (in
-> modprobe_lttng_data() at modprobe.c:227)
->     sh: /sbin/modprobe: not found
->     DEBUG1 [2132/2132]: Modprobe successfully lttng-probe-statedump (in
-> modprobe_lttng_data() at modprobe.c:227)
->     sh: /sbin/modprobe: not found
->     DEBUG1 [2132/2132]: Modprobe successfully lttng-probe-sunrpc (in
-> modprobe_lttng_data() at modprobe.c:227)
->     sh: /sbin/modprobe: not found
->     DEBUG1 [2132/2132]: Modprobe successfully lttng-probe-timer (in
-> modprobe_lttng_data() at modprobe.c:227)
->     sh: /sbin/modprobe: not found
->     DEBUG1 [2132/2132]: Modprobe successfully lttng-probe-udp (in
-> modprobe_lttng_data() at modprobe.c:227)
->     sh: /sbin/modprobe: not found
->     DEBUG1 [2132/2132]: Modprobe successfully lttng-probe-vmscan (in
-> modprobe_lttng_data() at modprobe.c:227)
->     sh: /sbin/modprobe: not found
->     DEBUG1 [2132/2132]: Modprobe successfully lttng-probe-workqueue (in
-> modprobe_lttng_data() at modprobe.c:227)
->     sh: /sbin/modprobe: not found
->     DEBUG1 [2132/2132]: Modprobe successfully lttng-probe-writeback (in
-> modprobe_lttng_data() at modprobe.c:227)
->     DEBUG1 [2132/2132]: Kernel tracer fd 6 (in init_kernel_tracer() at
-> main.c:2139)
->     DEBUG2 [2132/2132]: Creating consumer directory:
-> /data/lttng/ustconsumerd64 (in set_consumer_sockets() at main.c:3895)
->     DEBUG2 [2132/2132]: Creating consumer directory:
-> /data/lttng/ustconsumerd32 (in set_consumer_sockets() at main.c:3895)
->     DEBUG1 [2132/2132]: Signal handler set for SIGTERM, SIGPIPE and SIGIN=
-T
-> (in set_signal_handler() at main.c:3987)
->     DEBUG3 [2132/2132]: Session daemon client socket 10 and application
-> socket 11 created (in init_daemon_socket() at main.c:3757)
->     Warning: No tracing group detected
->     DEBUG3 [2132/2132]: Created hashtable size 4 at 0x1250208 of type 2
-> (in lttng_ht_new() at hashtable.c:112)
->     DEBUG3 [2132/2132]: Global buffer per UID registry initialized (in
-> buffer_reg_init_uid_registry() at buffer-registry.c:98)
->     DEBUG3 [2132/2132]: Created hashtable size 4 at 0x1250360 of type 1
-> (in lttng_ht_new() at hashtable.c:112)
->     DEBUG3 [2132/2132]: Global buffer per PID registry initialized (in
-> buffer_reg_init_pid_registry() at buffer-registry.c:219)
->     DEBUG1 [2132/2132]: epoll set max size is 153106 (in
-> compat_epoll_set_max_size() at compat-epoll.c:270)
->     DEBUG1 [2132/2132]: Command subsystem initialized (in cmd_init() at
-> cmd.c:2146)
->     DEBUG1 [2132/2132]: Pid 2132 written in file
-> /data/lttng/lttng-sessiond.pid (in utils_create_pid_file() at utils.c:237=
-)
->     DEBUG1 [2132/2182]: [thread] Manage health check started (in
-> thread_manage_health() at main.c:3106)
->     DEBUG1 [2132/2182]: Health check ready (in thread_manage_health() at
-> main.c:3148)
->     DEBUG1 [2132/2185]: [thread] Manage application registration started
-> (in thread_registration_apps() at main.c:1542)
->     DEBUG1 [2132/2185]: Notifying applications of session daemon state: 1
-> (in notify_ust_apps() at main.c:507)
->     DEBUG1 [2132/2185]: Got the wait shm fd 21 (in get_wait_shm() at
-> shm.c:122)
->     DEBUG1 [2132/2185]: Futex wait update active 1 (in futex_wait_update(=
-)
-> at futex.c:63)
->     DEBUG1 [2132/2185]: Accepting application registration (in
-> thread_registration_apps() at main.c:1579)
->     DEBUG1 [2132/2183]: [thread] Manage client started (in
-> thread_manage_clients() at main.c:3303)
->     DEBUG1 [2132/2183]: Accepting client command ... (in
-> thread_manage_clients() at main.c:3349)
->     DEBUG1 [2132/2186]: [thread] Manage application started (in
-> thread_manage_apps() at main.c:1152)
->     DEBUG1 [2132/2186]: Apps thread polling on 2 fds (in
-> thread_manage_apps() at main.c:1182)
->     DEBUG1 [2132/2188]: [thread] Thread manage kernel started (in
-> thread_manage_kernel() at main.c:702)
->     DEBUG1 [2132/2188]: Updating kernel poll set (in update_kernel_poll()
-> at main.c:568)
->     DEBUG1 [2132/2188]: Thread kernel polling on 2 fds (in
-> thread_manage_kernel() at main.c:747)
->     DEBUG1 [2132/2184]: [thread] Dispatch UST command started (in
-> thread_dispatch_ust_registration() at main.c:1352)
->     DEBUG1 [2132/2184]: Futex n to 1 prepare done (in futex_nto1_prepare(=
-)
-> at futex.c:75)
->     DEBUG1 [2132/2184]: Woken up but nothing in the UST command queue (in
-> thread_dispatch_ust_registration() at main.c:1365)
-
---047d7bdca4cee1099e04e1f6be3a
-Content-Type: text/html; charset=windows-1252
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div>Hi,</div><div><br></div><div>I=92m trying to use LTTn=
-g on Android 4.0.4 with Linux kernel version of 3.0.15.</div><div>I cross-c=
-ompiled the LTTng modules and tools on my Ubuntu 12.04 machine.</div><div><=
-br>
-
-
-
-</div><div>First I installed all the LTTng modules using <i>insmod</i>, bec=
-ause there is no <i>modprobe</i> in Android. It worked fine.=A0</div><div>H=
-owever, when I tried to run <i>lttng</i>, it failed due to &quot;No session=
- daemon is available&quot; error. I tried to run<i> lttng-sessiond</i>, the=
-n it just kept hanging and cannot finish.=A0<br>
-
-
-</div>
-<div>Even I kept <i>lttng-sessiond</i>=A0hanging in a new terminal session =
-and ran <i>lttng</i> in a separate terminal, it gave the same error.<br></d=
-iv><div><br></div><div>I&#39;m posting the log below.</div><div><br></div>
-
-
-
-<div>Any help would be greatly appreciated!</div><div><br></div><div>Thanks=
-,</div><div>Cao</div><div><br></div><div><b>root@android:/data/lttng/bin # =
-./lttng -vvv list -k</b></div><div><br></div><blockquote class=3D"gmail_quo=
-te" style=3D"margin:0px 0px 0px 0.8ex;border-left-width:1px;border-left-col=
-or:rgb(204,204,204);border-left-style:solid;padding-left:1ex">
-
-
-
-=A0 =A0 DEBUG1 [2016/2016]: Session daemon at: /data/lttng/bin/lttng-sessio=
-nd (in check_sessiond() at lttng.c:381)<br>=A0 =A0 Spawning a session daemo=
-n<br>=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 Error: Unable to load=
- module lttng-tracer<br>
-
-
-
-=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 sh: /sbin/modprobe: not fo=
-und<br>=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 sh: /sbin/modprobe:=
- not found<br>=A0 =A0 Error: Unable to load module lttng-lib-ring-buffer<br=
->=A0 =A0 sh: /sbin/modprobe: not found<br>
-
-
-
-=A0 =A0 Error: Unable to load module lttng-ring-buffer-client-discard<br>=
-=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 Error: Unable to load modu=
-le lttng-ring-buffer-client-overwrite<br>=A0 =A0 sh: /sbin/modprobe: not fo=
-und<br>=A0 =A0 Error: Unable to load module lttng-ring-buffer-metadata-clie=
-nt<br>
-
-
-
-=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 Error: Unable to load modu=
-le lttng-ring-buffer-client-mmap-discard<br>=A0 =A0 sh: /sbin/modprobe: not=
- found<br>=A0 =A0 Error: Unable to load module lttng-ring-buffer-client-mma=
-p-overwrite<br>
-
-
-
-=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 Error: Unable to load modu=
-le lttng-ring-buffer-metadata-mmap-client<br>=A0 =A0 sh: /sbin/modprobe: no=
-t found<br>=A0 =A0 Error: Unable to load module lttng-probe-lttng<br>=A0 =
-=A0 sh: /sbin/modprobe: not found<br>
-
-
-
-=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 sh: /sbin/modprobe: not fo=
-und<br>=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 sh: /sbin/modprobe:=
- not found<br>=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 sh: /sbin/mo=
-dprobe: not found<br>
-
-
-
-=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 sh: /sbin/modprobe: not fo=
-und<br>=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 sh: /sbin/modprobe:=
- not found<br>=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 sh: /sbin/mo=
-dprobe: not found<br>
-
-
-
-=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 sh: /sbin/modprobe: not fo=
-und<br>=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 sh: /sbin/modprobe:=
- not found<br>=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 sh: /sbin/mo=
-dprobe: not found<br>
-
-
-
-=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 sh: /sbin/modprobe: not fo=
-und<br>=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 sh: /sbin/modprobe:=
- not found<br>=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 sh: /sbin/mo=
-dprobe: not found<br>
-
-
-
-=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 sh: /sbin/modprobe: not fo=
-und<br>=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 sh: /sbin/modprobe:=
- not found<br>=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 sh: /sbin/mo=
-dprobe: not found<br>
-
-
-
-=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 sh: /sbin/modprobe: not fo=
-und<br>=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 sh: /sbin/modprobe:=
- not found<br>=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 Warning: No =
-tracing group detected<br>
-
-
-
-=A0 =A0 DEBUG1 [2016/2016]: SIGUSR1 caught (in sighandler() at lttng.c:204)=
-<br>=A0 =A0 DEBUG2 [2016/2016]: Session name: (null) (in cmd_list() at comm=
-ands/list.c:743)<br>=A0 =A0 DEBUG1 [2016/2016]: Getting kernel tracing even=
-ts (in list_kernel_events() at commands/list.c:433)<br>
-
-
-
-=A0 =A0 Error: Unable to list kernel events: No session daemon is available=
-<br>=A0 =A0 Error: Command error<br>=A0 =A0 DEBUG1 [2016/2016]: Clean exit =
-(in clean_exit() at lttng.c:175)</blockquote><div><br></div><div><br></div>=
-<div><b>root@android:/data/lttng/bin # ./lttng-sessiond -vvv</b></div>
-
-
-
-<blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-=
-left-width:1px;border-left-color:rgb(204,204,204);border-left-style:solid;p=
-adding-left:1ex"><br>=A0 =A0 DEBUG3 [2132/2132]: Creating LTTng run directo=
-ry: /data/lttng (in create_lttng_rundir() at main.c:3853)<br>
-
-
-
-=A0 =A0 DEBUG2 [2132/2132]: Kernel consumer err path: /data/lttng/kconsumer=
-d/error (in main() at main.c:4140)<br>=A0 =A0 DEBUG2 [2132/2132]: Kernel co=
-nsumer cmd path: /data/lttng/kconsumerd/command (in main() at main.c:4142)<=
-br>
-
-
-=A0 =A0 DEBUG1 [2132/2132]: Client socket path /data/lttng/client-lttng-ses=
-siond (in main() at main.c:4195)<br>
-=A0 =A0 DEBUG1 [2132/2132]: Application socket path /data/lttng/lttng-ust-s=
-ock-4 (in main() at main.c:4196)<br>=A0 =A0 DEBUG1 [2132/2132]: Application=
- wait path /lttng-ust-wait-4 (in main() at main.c:4197)<br>=A0 =A0 DEBUG1 [=
-2132/2132]: LTTng run directory path: /data/lttng (in main() at main.c:4198=
-)<br>
-
-
-
-=A0 =A0 DEBUG2 [2132/2132]: UST consumer 32 bits err path: /data/lttng/ustc=
-onsumerd32/error (in main() at main.c:4207)<br>=A0 =A0 DEBUG2 [2132/2132]: =
-UST consumer 32 bits cmd path: /data/lttng/ustconsumerd32/command (in main(=
-) at main.c:4209)<br>
-
-
-
-=A0 =A0 DEBUG2 [2132/2132]: UST consumer 64 bits err path: /data/lttng/ustc=
-onsumerd64/error (in main() at main.c:4218)<br>=A0 =A0 DEBUG2 [2132/2132]: =
-UST consumer 64 bits cmd path: /data/lttng/ustconsumerd64/command (in main(=
-) at main.c:4220)<br>
-
-
-
-=A0 =A0 DEBUG2 [2132/2132]: Creating consumer directory: /data/lttng/kconsu=
-merd (in set_consumer_sockets() at main.c:3895)<br>=A0 =A0 sh: /sbin/modpro=
-be: not found<br>=A0 =A0 Error: Unable to load module lttng-tracer<br>=A0 =
-=A0 DEBUG2 [2132/2132]: Kernel tracer version validated (major version 2) (=
-in kernel_validate_version() at kernel.c:688)<br>
-
-
-
-=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 DEBUG1 [2132/2132]: Modpro=
-be successfully lttng-ftrace (in modprobe_lttng_data() at modprobe.c:227)<b=
-r>=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 DEBUG1 [2132/2132]: Modp=
-robe successfully lttng-kprobes (in modprobe_lttng_data() at modprobe.c:227=
-)<br>
-
-
-
-=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 DEBUG1 [2132/2132]: Modpro=
-be successfully lttng-kretprobes (in modprobe_lttng_data() at modprobe.c:22=
-7)<br>=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 Error: Unable to loa=
-d module lttng-lib-ring-buffer<br>
-
-
-
-=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 Error: Unable to load modu=
-le lttng-ring-buffer-client-discard<br>=A0 =A0 sh: /sbin/modprobe: not foun=
-d<br>=A0 =A0 Error: Unable to load module lttng-ring-buffer-client-overwrit=
-e<br>=A0 =A0 sh: /sbin/modprobe: not found<br>
-
-
-
-=A0 =A0 Error: Unable to load module lttng-ring-buffer-metadata-client<br>=
-=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 Error: Unable to load modu=
-le lttng-ring-buffer-client-mmap-discard<br>=A0 =A0 sh: /sbin/modprobe: not=
- found<br>=A0 =A0 Error: Unable to load module lttng-ring-buffer-client-mma=
-p-overwrite<br>
-
-
-
-=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 Error: Unable to load modu=
-le lttng-ring-buffer-metadata-mmap-client<br>=A0 =A0 sh: /sbin/modprobe: no=
-t found<br>=A0 =A0 Error: Unable to load module lttng-probe-lttng<br>=A0 =
-=A0 sh: /sbin/modprobe: not found<br>
-
-
-
-=A0 =A0 DEBUG1 [2132/2132]: Modprobe successfully lttng-types (in modprobe_=
-lttng_data() at modprobe.c:227)<br>=A0 =A0 sh: /sbin/modprobe: not found<br=
->=A0 =A0 DEBUG1 [2132/2132]: Modprobe successfully lttng-probe-asoc (in mod=
-probe_lttng_data() at modprobe.c:227)<br>
-
-
-
-=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 DEBUG1 [2132/2132]: Modpro=
-be successfully lttng-probe-block (in modprobe_lttng_data() at modprobe.c:2=
-27)<br>=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 DEBUG1 [2132/2132]:=
- Modprobe successfully lttng-probe-btrfs (in modprobe_lttng_data() at modpr=
-obe.c:227)<br>
-
-
-
-=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 DEBUG1 [2132/2132]: Modpro=
-be successfully lttng-probe-compaction (in modprobe_lttng_data() at modprob=
-e.c:227)<br>=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 DEBUG1 [2132/2=
-132]: Modprobe successfully lttng-probe-ext3 (in modprobe_lttng_data() at m=
-odprobe.c:227)<br>
-
-
-
-=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 DEBUG1 [2132/2132]: Modpro=
-be successfully lttng-probe-ext4 (in modprobe_lttng_data() at modprobe.c:22=
-7)<br>=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 DEBUG1 [2132/2132]: =
-Modprobe successfully lttng-probe-gpio (in modprobe_lttng_data() at modprob=
-e.c:227)<br>
-
-
-
-=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 DEBUG1 [2132/2132]: Modpro=
-be successfully lttng-probe-irq (in modprobe_lttng_data() at modprobe.c:227=
-)<br>=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 DEBUG1 [2132/2132]: M=
-odprobe successfully lttng-probe-jbd (in modprobe_lttng_data() at modprobe.=
-c:227)<br>
-
-
-
-=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 DEBUG1 [2132/2132]: Modpro=
-be successfully lttng-probe-jbd2 (in modprobe_lttng_data() at modprobe.c:22=
-7)<br>=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 DEBUG1 [2132/2132]: =
-Modprobe successfully lttng-probe-kmem (in modprobe_lttng_data() at modprob=
-e.c:227)<br>
-
-
-
-=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 DEBUG1 [2132/2132]: Modpro=
-be successfully lttng-probe-kvm (in modprobe_lttng_data() at modprobe.c:227=
-)<br>=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 DEBUG1 [2132/2132]: M=
-odprobe successfully lttng-probe-lock (in modprobe_lttng_data() at modprobe=
-.c:227)<br>
-
-
-
-=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 DEBUG1 [2132/2132]: Modpro=
-be successfully lttng-probe-module (in modprobe_lttng_data() at modprobe.c:=
-227)<br>=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 DEBUG1 [2132/2132]=
-: Modprobe successfully lttng-probe-napi (in modprobe_lttng_data() at modpr=
-obe.c:227)<br>
-
-
-
-=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 DEBUG1 [2132/2132]: Modpro=
-be successfully lttng-probe-net (in modprobe_lttng_data() at modprobe.c:227=
-)<br>=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 DEBUG1 [2132/2132]: M=
-odprobe successfully lttng-probe-power (in modprobe_lttng_data() at modprob=
-e.c:227)<br>
-
-
-
-=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 DEBUG1 [2132/2132]: Modpro=
-be successfully lttng-probe-printk (in modprobe_lttng_data() at modprobe.c:=
-227)<br>=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 DEBUG1 [2132/2132]=
-: Modprobe successfully lttng-probe-random (in modprobe_lttng_data() at mod=
-probe.c:227)<br>
-
-
-
-=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 DEBUG1 [2132/2132]: Modpro=
-be successfully lttng-probe-rcu (in modprobe_lttng_data() at modprobe.c:227=
-)<br>=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 DEBUG1 [2132/2132]: M=
-odprobe successfully lttng-probe-regmap (in modprobe_lttng_data() at modpro=
-be.c:227)<br>
-
-
-
-=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 DEBUG1 [2132/2132]: Modpro=
-be successfully lttng-probe-regulator (in modprobe_lttng_data() at modprobe=
-.c:227)<br>=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 DEBUG1 [2132/21=
-32]: Modprobe successfully lttng-probe-rpm (in modprobe_lttng_data() at mod=
-probe.c:227)<br>
-
-
-
-=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 DEBUG1 [2132/2132]: Modpro=
-be successfully lttng-probe-sched (in modprobe_lttng_data() at modprobe.c:2=
-27)<br>=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 DEBUG1 [2132/2132]:=
- Modprobe successfully lttng-probe-scsi (in modprobe_lttng_data() at modpro=
-be.c:227)<br>
-
-
-
-=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 DEBUG1 [2132/2132]: Modpro=
-be successfully lttng-probe-signal (in modprobe_lttng_data() at modprobe.c:=
-227)<br>=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 DEBUG1 [2132/2132]=
-: Modprobe successfully lttng-probe-skb (in modprobe_lttng_data() at modpro=
-be.c:227)<br>
-
-
-
-=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 DEBUG1 [2132/2132]: Modpro=
-be successfully lttng-probe-sock (in modprobe_lttng_data() at modprobe.c:22=
-7)<br>=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 DEBUG1 [2132/2132]: =
-Modprobe successfully lttng-probe-statedump (in modprobe_lttng_data() at mo=
-dprobe.c:227)<br>
-
-
-
-=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 DEBUG1 [2132/2132]: Modpro=
-be successfully lttng-probe-sunrpc (in modprobe_lttng_data() at modprobe.c:=
-227)<br>=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 DEBUG1 [2132/2132]=
-: Modprobe successfully lttng-probe-timer (in modprobe_lttng_data() at modp=
-robe.c:227)<br>
-
-
-
-=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 DEBUG1 [2132/2132]: Modpro=
-be successfully lttng-probe-udp (in modprobe_lttng_data() at modprobe.c:227=
-)<br>=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 DEBUG1 [2132/2132]: M=
-odprobe successfully lttng-probe-vmscan (in modprobe_lttng_data() at modpro=
-be.c:227)<br>
-
-
-
-=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 DEBUG1 [2132/2132]: Modpro=
-be successfully lttng-probe-workqueue (in modprobe_lttng_data() at modprobe=
-.c:227)<br>=A0 =A0 sh: /sbin/modprobe: not found<br>=A0 =A0 DEBUG1 [2132/21=
-32]: Modprobe successfully lttng-probe-writeback (in modprobe_lttng_data() =
-at modprobe.c:227)<br>
-
-
-
-=A0 =A0 DEBUG1 [2132/2132]: Kernel tracer fd 6 (in init_kernel_tracer() at =
-main.c:2139)<br>=A0 =A0 DEBUG2 [2132/2132]: Creating consumer directory: /d=
-ata/lttng/ustconsumerd64 (in set_consumer_sockets() at main.c:3895)<br>=A0 =
-=A0 DEBUG2 [2132/2132]: Creating consumer directory: /data/lttng/ustconsume=
-rd32 (in set_consumer_sockets() at main.c:3895)<br>
-
-
-
-=A0 =A0 DEBUG1 [2132/2132]: Signal handler set for SIGTERM, SIGPIPE and SIG=
-INT (in set_signal_handler() at main.c:3987)<br>=A0 =A0 DEBUG3 [2132/2132]:=
- Session daemon client socket 10 and application socket 11 created (in init=
-_daemon_socket() at main.c:3757)<br>
-
-
-
-=A0 =A0 Warning: No tracing group detected<br>=A0 =A0 DEBUG3 [2132/2132]: C=
-reated hashtable size 4 at 0x1250208 of type 2 (in lttng_ht_new() at hashta=
-ble.c:112)<br>=A0 =A0 DEBUG3 [2132/2132]: Global buffer per UID registry in=
-itialized (in buffer_reg_init_uid_registry() at buffer-registry.c:98)<br>
-
-
-
-=A0 =A0 DEBUG3 [2132/2132]: Created hashtable size 4 at 0x1250360 of type 1=
- (in lttng_ht_new() at hashtable.c:112)<br>=A0 =A0 DEBUG3 [2132/2132]: Glob=
-al buffer per PID registry initialized (in buffer_reg_init_pid_registry() a=
-t buffer-registry.c:219)<br>
-
-
-
-=A0 =A0 DEBUG1 [2132/2132]: epoll set max size is 153106 (in compat_epoll_s=
-et_max_size() at compat-epoll.c:270)<br>=A0 =A0 DEBUG1 [2132/2132]: Command=
- subsystem initialized (in cmd_init() at cmd.c:2146)<br>=A0 =A0 DEBUG1 [213=
-2/2132]: Pid 2132 written in file /data/lttng/lttng-sessiond.pid (in utils_=
-create_pid_file() at utils.c:237)<br>
-
-
-
-=A0 =A0 DEBUG1 [2132/2182]: [thread] Manage health check started (in thread=
-_manage_health() at main.c:3106)<br>=A0 =A0 DEBUG1 [2132/2182]: Health chec=
-k ready (in thread_manage_health() at main.c:3148)<br>=A0 =A0 DEBUG1 [2132/=
-2185]: [thread] Manage application registration started (in thread_registra=
-tion_apps() at main.c:1542)<br>
-
-
-
-=A0 =A0 DEBUG1 [2132/2185]: Notifying applications of session daemon state:=
- 1 (in notify_ust_apps() at main.c:507)<br>=A0 =A0 DEBUG1 [2132/2185]: Got =
-the wait shm fd 21 (in get_wait_shm() at shm.c:122)<br>=A0 =A0 DEBUG1 [2132=
-/2185]: Futex wait update active 1 (in futex_wait_update() at futex.c:63)<b=
-r>
-
-
-
-=A0 =A0 DEBUG1 [2132/2185]: Accepting application registration (in thread_r=
-egistration_apps() at main.c:1579)<br>=A0 =A0 DEBUG1 [2132/2183]: [thread] =
-Manage client started (in thread_manage_clients() at main.c:3303)<br>=A0 =
-=A0 DEBUG1 [2132/2183]: Accepting client command ... (in thread_manage_clie=
-nts() at main.c:3349)<br>
-
-
-
-=A0 =A0 DEBUG1 [2132/2186]: [thread] Manage application started (in thread_=
-manage_apps() at main.c:1152)<br>=A0 =A0 DEBUG1 [2132/2186]: Apps thread po=
-lling on 2 fds (in thread_manage_apps() at main.c:1182)<br>=A0 =A0 DEBUG1 [=
-2132/2188]: [thread] Thread manage kernel started (in thread_manage_kernel(=
-) at main.c:702)<br>
-
-
-
-=A0 =A0 DEBUG1 [2132/2188]: Updating kernel poll set (in update_kernel_poll=
-() at main.c:568)<br>=A0 =A0 DEBUG1 [2132/2188]: Thread kernel polling on 2=
- fds (in thread_manage_kernel() at main.c:747)<br>=A0 =A0 DEBUG1 [2132/2184=
-]: [thread] Dispatch UST command started (in thread_dispatch_ust_registrati=
-on() at main.c:1352)<br>
-
-
-
-=A0 =A0 DEBUG1 [2132/2184]: Futex n to 1 prepare done (in futex_nto1_prepar=
-e() at futex.c:75)<br>=A0 =A0 DEBUG1 [2132/2184]: Woken up but nothing in t=
-he UST command queue (in thread_dispatch_ust_registration() at main.c:1365)=
-</blockquote>
-
-
-
-</div>
-
---047d7bdca4cee1099e04e1f6be3a--
-
-
---===============2021080163==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Disposition: inline
-Content-Transfer-Encoding: 7bit
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============2021080163==--
+WW91J2xsIHdhbnQgdG8gZGlnIGludG8gdGhlIHBhc3QgbW9udGgncyB0aHJlYWRzIHJlZmVycmlu
+ZyB0byBBbmRyb2lkIG9uCnRoZSBsdHRuZy1kZXYgbWFpbGluZyBsaXN0LgoKU29tZSB3b3JrIGhh
+cyBiZWVuIGRvbmUgb24gbHR0bmctdG9vbHMgdG8gc3VwcG9ydCBpdCwgYnV0IHRoZSBwYXRjaGVz
+CmhhdmUgbmV2ZXIgYmVlbiBjbGVhbmVkIHVwIGZvbGxvd2luZyBvdXIgZmVlZGJhY2ssIHNvIGl0
+IGlzIG5vdCBtZXJnZWQKeWV0LgoKVGhhbmtzLAoKTWF0aGlldQoKKiBDYW8gR2FvIChjYW9nYW9A
+dW1pY2guZWR1KSB3cm90ZToKPiBIaSwKPiAKPiBJ4oCZbSB0cnlpbmcgdG8gdXNlIExUVG5nIG9u
+IEFuZHJvaWQgNC4wLjQgd2l0aCBMaW51eCBrZXJuZWwgdmVyc2lvbiBvZgo+IDMuMC4xNS4KPiBJ
+IGNyb3NzLWNvbXBpbGVkIHRoZSBMVFRuZyBtb2R1bGVzIGFuZCB0b29scyBvbiBteSBVYnVudHUg
+MTIuMDQgbWFjaGluZS4KPiAKPiBGaXJzdCBJIGluc3RhbGxlZCBhbGwgdGhlIExUVG5nIG1vZHVs
+ZXMgdXNpbmcgKmluc21vZCosIGJlY2F1c2UgdGhlcmUgaXMgbm8KPiAqbW9kcHJvYmUqIGluIEFu
+ZHJvaWQuIEl0IHdvcmtlZCBmaW5lLgo+IEhvd2V2ZXIsIHdoZW4gSSB0cmllZCB0byBydW4gKmx0
+dG5nKiwgaXQgZmFpbGVkIGR1ZSB0byAiTm8gc2Vzc2lvbiBkYWVtb24KPiBpcyBhdmFpbGFibGUi
+IGVycm9yLiBJIHRyaWVkIHRvIHJ1biogbHR0bmctc2Vzc2lvbmQqLCB0aGVuIGl0IGp1c3Qga2Vw
+dAo+IGhhbmdpbmcgYW5kIGNhbm5vdCBmaW5pc2guCj4gIEV2ZW4gSSBrZXB0ICpsdHRuZy1zZXNz
+aW9uZCogaGFuZ2luZyBpbiBhIG5ldyB0ZXJtaW5hbCBzZXNzaW9uIGFuZCByYW4gKgo+IGx0dG5n
+KiBpbiBhIHNlcGFyYXRlIHRlcm1pbmFsLCBpdCBnYXZlIHRoZSBzYW1lIGVycm9yLgo+IAo+IEkn
+bSBwb3N0aW5nIHRoZSBsb2cgYmVsb3cuCj4gCj4gQW55IGhlbHAgd291bGQgYmUgZ3JlYXRseSBh
+cHByZWNpYXRlZCEKPiAKPiBUaGFua3MsCj4gQ2FvCj4gCj4gKnJvb3RAYW5kcm9pZDovZGF0YS9s
+dHRuZy9iaW4gIyAuL2x0dG5nIC12dnYgbGlzdCAtayoKPiAKPiAgICAgREVCVUcxIFsyMDE2LzIw
+MTZdOiBTZXNzaW9uIGRhZW1vbiBhdDogL2RhdGEvbHR0bmcvYmluL2x0dG5nLXNlc3Npb25kCj4g
+PiAoaW4gY2hlY2tfc2Vzc2lvbmQoKSBhdCBsdHRuZy5jOjM4MSkKPiA+ICAgICBTcGF3bmluZyBh
+IHNlc3Npb24gZGFlbW9uCj4gPiAgICAgc2g6IC9zYmluL21vZHByb2JlOiBub3QgZm91bmQKPiA+
+ICAgICBFcnJvcjogVW5hYmxlIHRvIGxvYWQgbW9kdWxlIGx0dG5nLXRyYWNlcgo+ID4gICAgIHNo
+OiAvc2Jpbi9tb2Rwcm9iZTogbm90IGZvdW5kCj4gPiAgICAgc2g6IC9zYmluL21vZHByb2JlOiBu
+b3QgZm91bmQKPiA+ICAgICBzaDogL3NiaW4vbW9kcHJvYmU6IG5vdCBmb3VuZAo+ID4gICAgIHNo
+OiAvc2Jpbi9tb2Rwcm9iZTogbm90IGZvdW5kCj4gPiAgICAgRXJyb3I6IFVuYWJsZSB0byBsb2Fk
+IG1vZHVsZSBsdHRuZy1saWItcmluZy1idWZmZXIKPiA+ICAgICBzaDogL3NiaW4vbW9kcHJvYmU6
+IG5vdCBmb3VuZAo+ID4gICAgIEVycm9yOiBVbmFibGUgdG8gbG9hZCBtb2R1bGUgbHR0bmctcmlu
+Zy1idWZmZXItY2xpZW50LWRpc2NhcmQKPiA+ICAgICBzaDogL3NiaW4vbW9kcHJvYmU6IG5vdCBm
+b3VuZAo+ID4gICAgIEVycm9yOiBVbmFibGUgdG8gbG9hZCBtb2R1bGUgbHR0bmctcmluZy1idWZm
+ZXItY2xpZW50LW92ZXJ3cml0ZQo+ID4gICAgIHNoOiAvc2Jpbi9tb2Rwcm9iZTogbm90IGZvdW5k
+Cj4gPiAgICAgRXJyb3I6IFVuYWJsZSB0byBsb2FkIG1vZHVsZSBsdHRuZy1yaW5nLWJ1ZmZlci1t
+ZXRhZGF0YS1jbGllbnQKPiA+ICAgICBzaDogL3NiaW4vbW9kcHJvYmU6IG5vdCBmb3VuZAo+ID4g
+ICAgIEVycm9yOiBVbmFibGUgdG8gbG9hZCBtb2R1bGUgbHR0bmctcmluZy1idWZmZXItY2xpZW50
+LW1tYXAtZGlzY2FyZAo+ID4gICAgIHNoOiAvc2Jpbi9tb2Rwcm9iZTogbm90IGZvdW5kCj4gPiAg
+ICAgRXJyb3I6IFVuYWJsZSB0byBsb2FkIG1vZHVsZSBsdHRuZy1yaW5nLWJ1ZmZlci1jbGllbnQt
+bW1hcC1vdmVyd3JpdGUKPiA+ICAgICBzaDogL3NiaW4vbW9kcHJvYmU6IG5vdCBmb3VuZAo+ID4g
+ICAgIEVycm9yOiBVbmFibGUgdG8gbG9hZCBtb2R1bGUgbHR0bmctcmluZy1idWZmZXItbWV0YWRh
+dGEtbW1hcC1jbGllbnQKPiA+ICAgICBzaDogL3NiaW4vbW9kcHJvYmU6IG5vdCBmb3VuZAo+ID4g
+ICAgIEVycm9yOiBVbmFibGUgdG8gbG9hZCBtb2R1bGUgbHR0bmctcHJvYmUtbHR0bmcKPiA+ICAg
+ICBzaDogL3NiaW4vbW9kcHJvYmU6IG5vdCBmb3VuZAo+ID4gICAgIHNoOiAvc2Jpbi9tb2Rwcm9i
+ZTogbm90IGZvdW5kCj4gPiAgICAgc2g6IC9zYmluL21vZHByb2JlOiBub3QgZm91bmQKPiA+ICAg
+ICBzaDogL3NiaW4vbW9kcHJvYmU6IG5vdCBmb3VuZAo+ID4gICAgIHNoOiAvc2Jpbi9tb2Rwcm9i
+ZTogbm90IGZvdW5kCj4gPiAgICAgc2g6IC9zYmluL21vZHByb2JlOiBub3QgZm91bmQKPiA+ICAg
+ICBzaDogL3NiaW4vbW9kcHJvYmU6IG5vdCBmb3VuZAo+ID4gICAgIHNoOiAvc2Jpbi9tb2Rwcm9i
+ZTogbm90IGZvdW5kCj4gPiAgICAgc2g6IC9zYmluL21vZHByb2JlOiBub3QgZm91bmQKPiA+ICAg
+ICBzaDogL3NiaW4vbW9kcHJvYmU6IG5vdCBmb3VuZAo+ID4gICAgIHNoOiAvc2Jpbi9tb2Rwcm9i
+ZTogbm90IGZvdW5kCj4gPiAgICAgc2g6IC9zYmluL21vZHByb2JlOiBub3QgZm91bmQKPiA+ICAg
+ICBzaDogL3NiaW4vbW9kcHJvYmU6IG5vdCBmb3VuZAo+ID4gICAgIHNoOiAvc2Jpbi9tb2Rwcm9i
+ZTogbm90IGZvdW5kCj4gPiAgICAgc2g6IC9zYmluL21vZHByb2JlOiBub3QgZm91bmQKPiA+ICAg
+ICBzaDogL3NiaW4vbW9kcHJvYmU6IG5vdCBmb3VuZAo+ID4gICAgIHNoOiAvc2Jpbi9tb2Rwcm9i
+ZTogbm90IGZvdW5kCj4gPiAgICAgc2g6IC9zYmluL21vZHByb2JlOiBub3QgZm91bmQKPiA+ICAg
+ICBzaDogL3NiaW4vbW9kcHJvYmU6IG5vdCBmb3VuZAo+ID4gICAgIHNoOiAvc2Jpbi9tb2Rwcm9i
+ZTogbm90IGZvdW5kCj4gPiAgICAgc2g6IC9zYmluL21vZHByb2JlOiBub3QgZm91bmQKPiA+ICAg
+ICBzaDogL3NiaW4vbW9kcHJvYmU6IG5vdCBmb3VuZAo+ID4gICAgIHNoOiAvc2Jpbi9tb2Rwcm9i
+ZTogbm90IGZvdW5kCj4gPiAgICAgc2g6IC9zYmluL21vZHByb2JlOiBub3QgZm91bmQKPiA+ICAg
+ICBzaDogL3NiaW4vbW9kcHJvYmU6IG5vdCBmb3VuZAo+ID4gICAgIHNoOiAvc2Jpbi9tb2Rwcm9i
+ZTogbm90IGZvdW5kCj4gPiAgICAgc2g6IC9zYmluL21vZHByb2JlOiBub3QgZm91bmQKPiA+ICAg
+ICBzaDogL3NiaW4vbW9kcHJvYmU6IG5vdCBmb3VuZAo+ID4gICAgIHNoOiAvc2Jpbi9tb2Rwcm9i
+ZTogbm90IGZvdW5kCj4gPiAgICAgc2g6IC9zYmluL21vZHByb2JlOiBub3QgZm91bmQKPiA+ICAg
+ICBzaDogL3NiaW4vbW9kcHJvYmU6IG5vdCBmb3VuZAo+ID4gICAgIHNoOiAvc2Jpbi9tb2Rwcm9i
+ZTogbm90IGZvdW5kCj4gPiAgICAgc2g6IC9zYmluL21vZHByb2JlOiBub3QgZm91bmQKPiA+ICAg
+ICBzaDogL3NiaW4vbW9kcHJvYmU6IG5vdCBmb3VuZAo+ID4gICAgIHNoOiAvc2Jpbi9tb2Rwcm9i
+ZTogbm90IGZvdW5kCj4gPiAgICAgc2g6IC9zYmluL21vZHByb2JlOiBub3QgZm91bmQKPiA+ICAg
+ICBXYXJuaW5nOiBObyB0cmFjaW5nIGdyb3VwIGRldGVjdGVkCj4gPiAgICAgREVCVUcxIFsyMDE2
+LzIwMTZdOiBTSUdVU1IxIGNhdWdodCAoaW4gc2lnaGFuZGxlcigpIGF0IGx0dG5nLmM6MjA0KQo+
+ID4gICAgIERFQlVHMiBbMjAxNi8yMDE2XTogU2Vzc2lvbiBuYW1lOiAobnVsbCkgKGluIGNtZF9s
+aXN0KCkgYXQKPiA+IGNvbW1hbmRzL2xpc3QuYzo3NDMpCj4gPiAgICAgREVCVUcxIFsyMDE2LzIw
+MTZdOiBHZXR0aW5nIGtlcm5lbCB0cmFjaW5nIGV2ZW50cyAoaW4KPiA+IGxpc3Rfa2VybmVsX2V2
+ZW50cygpIGF0IGNvbW1hbmRzL2xpc3QuYzo0MzMpCj4gPiAgICAgRXJyb3I6IFVuYWJsZSB0byBs
+aXN0IGtlcm5lbCBldmVudHM6IE5vIHNlc3Npb24gZGFlbW9uIGlzIGF2YWlsYWJsZQo+ID4gICAg
+IEVycm9yOiBDb21tYW5kIGVycm9yCj4gPiAgICAgREVCVUcxIFsyMDE2LzIwMTZdOiBDbGVhbiBl
+eGl0IChpbiBjbGVhbl9leGl0KCkgYXQgbHR0bmcuYzoxNzUpCj4gCj4gCj4gCj4gKnJvb3RAYW5k
+cm9pZDovZGF0YS9sdHRuZy9iaW4gIyAuL2x0dG5nLXNlc3Npb25kIC12dnYqCj4gCj4gPgo+ID4g
+ICAgIERFQlVHMyBbMjEzMi8yMTMyXTogQ3JlYXRpbmcgTFRUbmcgcnVuIGRpcmVjdG9yeTogL2Rh
+dGEvbHR0bmcgKGluCj4gPiBjcmVhdGVfbHR0bmdfcnVuZGlyKCkgYXQgbWFpbi5jOjM4NTMpCj4g
+PiAgICAgREVCVUcyIFsyMTMyLzIxMzJdOiBLZXJuZWwgY29uc3VtZXIgZXJyIHBhdGg6Cj4gPiAv
+ZGF0YS9sdHRuZy9rY29uc3VtZXJkL2Vycm9yIChpbiBtYWluKCkgYXQgbWFpbi5jOjQxNDApCj4g
+PiAgICAgREVCVUcyIFsyMTMyLzIxMzJdOiBLZXJuZWwgY29uc3VtZXIgY21kIHBhdGg6Cj4gPiAv
+ZGF0YS9sdHRuZy9rY29uc3VtZXJkL2NvbW1hbmQgKGluIG1haW4oKSBhdCBtYWluLmM6NDE0MikK
+PiA+ICAgICBERUJVRzEgWzIxMzIvMjEzMl06IENsaWVudCBzb2NrZXQgcGF0aAo+ID4gL2RhdGEv
+bHR0bmcvY2xpZW50LWx0dG5nLXNlc3Npb25kIChpbiBtYWluKCkgYXQgbWFpbi5jOjQxOTUpCj4g
+PiAgICAgREVCVUcxIFsyMTMyLzIxMzJdOiBBcHBsaWNhdGlvbiBzb2NrZXQgcGF0aAo+ID4gL2Rh
+dGEvbHR0bmcvbHR0bmctdXN0LXNvY2stNCAoaW4gbWFpbigpIGF0IG1haW4uYzo0MTk2KQo+ID4g
+ICAgIERFQlVHMSBbMjEzMi8yMTMyXTogQXBwbGljYXRpb24gd2FpdCBwYXRoIC9sdHRuZy11c3Qt
+d2FpdC00IChpbiBtYWluKCkKPiA+IGF0IG1haW4uYzo0MTk3KQo+ID4gICAgIERFQlVHMSBbMjEz
+Mi8yMTMyXTogTFRUbmcgcnVuIGRpcmVjdG9yeSBwYXRoOiAvZGF0YS9sdHRuZyAoaW4gbWFpbigp
+Cj4gPiBhdCBtYWluLmM6NDE5OCkKPiA+ICAgICBERUJVRzIgWzIxMzIvMjEzMl06IFVTVCBjb25z
+dW1lciAzMiBiaXRzIGVyciBwYXRoOgo+ID4gL2RhdGEvbHR0bmcvdXN0Y29uc3VtZXJkMzIvZXJy
+b3IgKGluIG1haW4oKSBhdCBtYWluLmM6NDIwNykKPiA+ICAgICBERUJVRzIgWzIxMzIvMjEzMl06
+IFVTVCBjb25zdW1lciAzMiBiaXRzIGNtZCBwYXRoOgo+ID4gL2RhdGEvbHR0bmcvdXN0Y29uc3Vt
+ZXJkMzIvY29tbWFuZCAoaW4gbWFpbigpIGF0IG1haW4uYzo0MjA5KQo+ID4gICAgIERFQlVHMiBb
+MjEzMi8yMTMyXTogVVNUIGNvbnN1bWVyIDY0IGJpdHMgZXJyIHBhdGg6Cj4gPiAvZGF0YS9sdHRu
+Zy91c3Rjb25zdW1lcmQ2NC9lcnJvciAoaW4gbWFpbigpIGF0IG1haW4uYzo0MjE4KQo+ID4gICAg
+IERFQlVHMiBbMjEzMi8yMTMyXTogVVNUIGNvbnN1bWVyIDY0IGJpdHMgY21kIHBhdGg6Cj4gPiAv
+ZGF0YS9sdHRuZy91c3Rjb25zdW1lcmQ2NC9jb21tYW5kIChpbiBtYWluKCkgYXQgbWFpbi5jOjQy
+MjApCj4gPiAgICAgREVCVUcyIFsyMTMyLzIxMzJdOiBDcmVhdGluZyBjb25zdW1lciBkaXJlY3Rv
+cnk6Cj4gPiAvZGF0YS9sdHRuZy9rY29uc3VtZXJkIChpbiBzZXRfY29uc3VtZXJfc29ja2V0cygp
+IGF0IG1haW4uYzozODk1KQo+ID4gICAgIHNoOiAvc2Jpbi9tb2Rwcm9iZTogbm90IGZvdW5kCj4g
+PiAgICAgRXJyb3I6IFVuYWJsZSB0byBsb2FkIG1vZHVsZSBsdHRuZy10cmFjZXIKPiA+ICAgICBE
+RUJVRzIgWzIxMzIvMjEzMl06IEtlcm5lbCB0cmFjZXIgdmVyc2lvbiB2YWxpZGF0ZWQgKG1ham9y
+IHZlcnNpb24gMikKPiA+IChpbiBrZXJuZWxfdmFsaWRhdGVfdmVyc2lvbigpIGF0IGtlcm5lbC5j
+OjY4OCkKPiA+ICAgICBzaDogL3NiaW4vbW9kcHJvYmU6IG5vdCBmb3VuZAo+ID4gICAgIERFQlVH
+MSBbMjEzMi8yMTMyXTogTW9kcHJvYmUgc3VjY2Vzc2Z1bGx5IGx0dG5nLWZ0cmFjZSAoaW4KPiA+
+IG1vZHByb2JlX2x0dG5nX2RhdGEoKSBhdCBtb2Rwcm9iZS5jOjIyNykKPiA+ICAgICBzaDogL3Ni
+aW4vbW9kcHJvYmU6IG5vdCBmb3VuZAo+ID4gICAgIERFQlVHMSBbMjEzMi8yMTMyXTogTW9kcHJv
+YmUgc3VjY2Vzc2Z1bGx5IGx0dG5nLWtwcm9iZXMgKGluCj4gPiBtb2Rwcm9iZV9sdHRuZ19kYXRh
+KCkgYXQgbW9kcHJvYmUuYzoyMjcpCj4gPiAgICAgc2g6IC9zYmluL21vZHByb2JlOiBub3QgZm91
+bmQKPiA+ICAgICBERUJVRzEgWzIxMzIvMjEzMl06IE1vZHByb2JlIHN1Y2Nlc3NmdWxseSBsdHRu
+Zy1rcmV0cHJvYmVzIChpbgo+ID4gbW9kcHJvYmVfbHR0bmdfZGF0YSgpIGF0IG1vZHByb2JlLmM6
+MjI3KQo+ID4gICAgIHNoOiAvc2Jpbi9tb2Rwcm9iZTogbm90IGZvdW5kCj4gPiAgICAgRXJyb3I6
+IFVuYWJsZSB0byBsb2FkIG1vZHVsZSBsdHRuZy1saWItcmluZy1idWZmZXIKPiA+ICAgICBzaDog
+L3NiaW4vbW9kcHJvYmU6IG5vdCBmb3VuZAo+ID4gICAgIEVycm9yOiBVbmFibGUgdG8gbG9hZCBt
+b2R1bGUgbHR0bmctcmluZy1idWZmZXItY2xpZW50LWRpc2NhcmQKPiA+ICAgICBzaDogL3NiaW4v
+bW9kcHJvYmU6IG5vdCBmb3VuZAo+ID4gICAgIEVycm9yOiBVbmFibGUgdG8gbG9hZCBtb2R1bGUg
+bHR0bmctcmluZy1idWZmZXItY2xpZW50LW92ZXJ3cml0ZQo+ID4gICAgIHNoOiAvc2Jpbi9tb2Rw
+cm9iZTogbm90IGZvdW5kCj4gPiAgICAgRXJyb3I6IFVuYWJsZSB0byBsb2FkIG1vZHVsZSBsdHRu
+Zy1yaW5nLWJ1ZmZlci1tZXRhZGF0YS1jbGllbnQKPiA+ICAgICBzaDogL3NiaW4vbW9kcHJvYmU6
+IG5vdCBmb3VuZAo+ID4gICAgIEVycm9yOiBVbmFibGUgdG8gbG9hZCBtb2R1bGUgbHR0bmctcmlu
+Zy1idWZmZXItY2xpZW50LW1tYXAtZGlzY2FyZAo+ID4gICAgIHNoOiAvc2Jpbi9tb2Rwcm9iZTog
+bm90IGZvdW5kCj4gPiAgICAgRXJyb3I6IFVuYWJsZSB0byBsb2FkIG1vZHVsZSBsdHRuZy1yaW5n
+LWJ1ZmZlci1jbGllbnQtbW1hcC1vdmVyd3JpdGUKPiA+ICAgICBzaDogL3NiaW4vbW9kcHJvYmU6
+IG5vdCBmb3VuZAo+ID4gICAgIEVycm9yOiBVbmFibGUgdG8gbG9hZCBtb2R1bGUgbHR0bmctcmlu
+Zy1idWZmZXItbWV0YWRhdGEtbW1hcC1jbGllbnQKPiA+ICAgICBzaDogL3NiaW4vbW9kcHJvYmU6
+IG5vdCBmb3VuZAo+ID4gICAgIEVycm9yOiBVbmFibGUgdG8gbG9hZCBtb2R1bGUgbHR0bmctcHJv
+YmUtbHR0bmcKPiA+ICAgICBzaDogL3NiaW4vbW9kcHJvYmU6IG5vdCBmb3VuZAo+ID4gICAgIERF
+QlVHMSBbMjEzMi8yMTMyXTogTW9kcHJvYmUgc3VjY2Vzc2Z1bGx5IGx0dG5nLXR5cGVzIChpbgo+
+ID4gbW9kcHJvYmVfbHR0bmdfZGF0YSgpIGF0IG1vZHByb2JlLmM6MjI3KQo+ID4gICAgIHNoOiAv
+c2Jpbi9tb2Rwcm9iZTogbm90IGZvdW5kCj4gPiAgICAgREVCVUcxIFsyMTMyLzIxMzJdOiBNb2Rw
+cm9iZSBzdWNjZXNzZnVsbHkgbHR0bmctcHJvYmUtYXNvYyAoaW4KPiA+IG1vZHByb2JlX2x0dG5n
+X2RhdGEoKSBhdCBtb2Rwcm9iZS5jOjIyNykKPiA+ICAgICBzaDogL3NiaW4vbW9kcHJvYmU6IG5v
+dCBmb3VuZAo+ID4gICAgIERFQlVHMSBbMjEzMi8yMTMyXTogTW9kcHJvYmUgc3VjY2Vzc2Z1bGx5
+IGx0dG5nLXByb2JlLWJsb2NrIChpbgo+ID4gbW9kcHJvYmVfbHR0bmdfZGF0YSgpIGF0IG1vZHBy
+b2JlLmM6MjI3KQo+ID4gICAgIHNoOiAvc2Jpbi9tb2Rwcm9iZTogbm90IGZvdW5kCj4gPiAgICAg
+REVCVUcxIFsyMTMyLzIxMzJdOiBNb2Rwcm9iZSBzdWNjZXNzZnVsbHkgbHR0bmctcHJvYmUtYnRy
+ZnMgKGluCj4gPiBtb2Rwcm9iZV9sdHRuZ19kYXRhKCkgYXQgbW9kcHJvYmUuYzoyMjcpCj4gPiAg
+ICAgc2g6IC9zYmluL21vZHByb2JlOiBub3QgZm91bmQKPiA+ICAgICBERUJVRzEgWzIxMzIvMjEz
+Ml06IE1vZHByb2JlIHN1Y2Nlc3NmdWxseSBsdHRuZy1wcm9iZS1jb21wYWN0aW9uIChpbgo+ID4g
+bW9kcHJvYmVfbHR0bmdfZGF0YSgpIGF0IG1vZHByb2JlLmM6MjI3KQo+ID4gICAgIHNoOiAvc2Jp
+bi9tb2Rwcm9iZTogbm90IGZvdW5kCj4gPiAgICAgREVCVUcxIFsyMTMyLzIxMzJdOiBNb2Rwcm9i
+ZSBzdWNjZXNzZnVsbHkgbHR0bmctcHJvYmUtZXh0MyAoaW4KPiA+IG1vZHByb2JlX2x0dG5nX2Rh
+dGEoKSBhdCBtb2Rwcm9iZS5jOjIyNykKPiA+ICAgICBzaDogL3NiaW4vbW9kcHJvYmU6IG5vdCBm
+b3VuZAo+ID4gICAgIERFQlVHMSBbMjEzMi8yMTMyXTogTW9kcHJvYmUgc3VjY2Vzc2Z1bGx5IGx0
+dG5nLXByb2JlLWV4dDQgKGluCj4gPiBtb2Rwcm9iZV9sdHRuZ19kYXRhKCkgYXQgbW9kcHJvYmUu
+YzoyMjcpCj4gPiAgICAgc2g6IC9zYmluL21vZHByb2JlOiBub3QgZm91bmQKPiA+ICAgICBERUJV
+RzEgWzIxMzIvMjEzMl06IE1vZHByb2JlIHN1Y2Nlc3NmdWxseSBsdHRuZy1wcm9iZS1ncGlvIChp
+bgo+ID4gbW9kcHJvYmVfbHR0bmdfZGF0YSgpIGF0IG1vZHByb2JlLmM6MjI3KQo+ID4gICAgIHNo
+OiAvc2Jpbi9tb2Rwcm9iZTogbm90IGZvdW5kCj4gPiAgICAgREVCVUcxIFsyMTMyLzIxMzJdOiBN
+b2Rwcm9iZSBzdWNjZXNzZnVsbHkgbHR0bmctcHJvYmUtaXJxIChpbgo+ID4gbW9kcHJvYmVfbHR0
+bmdfZGF0YSgpIGF0IG1vZHByb2JlLmM6MjI3KQo+ID4gICAgIHNoOiAvc2Jpbi9tb2Rwcm9iZTog
+bm90IGZvdW5kCj4gPiAgICAgREVCVUcxIFsyMTMyLzIxMzJdOiBNb2Rwcm9iZSBzdWNjZXNzZnVs
+bHkgbHR0bmctcHJvYmUtamJkIChpbgo+ID4gbW9kcHJvYmVfbHR0bmdfZGF0YSgpIGF0IG1vZHBy
+b2JlLmM6MjI3KQo+ID4gICAgIHNoOiAvc2Jpbi9tb2Rwcm9iZTogbm90IGZvdW5kCj4gPiAgICAg
+REVCVUcxIFsyMTMyLzIxMzJdOiBNb2Rwcm9iZSBzdWNjZXNzZnVsbHkgbHR0bmctcHJvYmUtamJk
+MiAoaW4KPiA+IG1vZHByb2JlX2x0dG5nX2RhdGEoKSBhdCBtb2Rwcm9iZS5jOjIyNykKPiA+ICAg
+ICBzaDogL3NiaW4vbW9kcHJvYmU6IG5vdCBmb3VuZAo+ID4gICAgIERFQlVHMSBbMjEzMi8yMTMy
+XTogTW9kcHJvYmUgc3VjY2Vzc2Z1bGx5IGx0dG5nLXByb2JlLWttZW0gKGluCj4gPiBtb2Rwcm9i
+ZV9sdHRuZ19kYXRhKCkgYXQgbW9kcHJvYmUuYzoyMjcpCj4gPiAgICAgc2g6IC9zYmluL21vZHBy
+b2JlOiBub3QgZm91bmQKPiA+ICAgICBERUJVRzEgWzIxMzIvMjEzMl06IE1vZHByb2JlIHN1Y2Nl
+c3NmdWxseSBsdHRuZy1wcm9iZS1rdm0gKGluCj4gPiBtb2Rwcm9iZV9sdHRuZ19kYXRhKCkgYXQg
+bW9kcHJvYmUuYzoyMjcpCj4gPiAgICAgc2g6IC9zYmluL21vZHByb2JlOiBub3QgZm91bmQKPiA+
+ICAgICBERUJVRzEgWzIxMzIvMjEzMl06IE1vZHByb2JlIHN1Y2Nlc3NmdWxseSBsdHRuZy1wcm9i
+ZS1sb2NrIChpbgo+ID4gbW9kcHJvYmVfbHR0bmdfZGF0YSgpIGF0IG1vZHByb2JlLmM6MjI3KQo+
+ID4gICAgIHNoOiAvc2Jpbi9tb2Rwcm9iZTogbm90IGZvdW5kCj4gPiAgICAgREVCVUcxIFsyMTMy
+LzIxMzJdOiBNb2Rwcm9iZSBzdWNjZXNzZnVsbHkgbHR0bmctcHJvYmUtbW9kdWxlIChpbgo+ID4g
+bW9kcHJvYmVfbHR0bmdfZGF0YSgpIGF0IG1vZHByb2JlLmM6MjI3KQo+ID4gICAgIHNoOiAvc2Jp
+bi9tb2Rwcm9iZTogbm90IGZvdW5kCj4gPiAgICAgREVCVUcxIFsyMTMyLzIxMzJdOiBNb2Rwcm9i
+ZSBzdWNjZXNzZnVsbHkgbHR0bmctcHJvYmUtbmFwaSAoaW4KPiA+IG1vZHByb2JlX2x0dG5nX2Rh
+dGEoKSBhdCBtb2Rwcm9iZS5jOjIyNykKPiA+ICAgICBzaDogL3NiaW4vbW9kcHJvYmU6IG5vdCBm
+b3VuZAo+ID4gICAgIERFQlVHMSBbMjEzMi8yMTMyXTogTW9kcHJvYmUgc3VjY2Vzc2Z1bGx5IGx0
+dG5nLXByb2JlLW5ldCAoaW4KPiA+IG1vZHByb2JlX2x0dG5nX2RhdGEoKSBhdCBtb2Rwcm9iZS5j
+OjIyNykKPiA+ICAgICBzaDogL3NiaW4vbW9kcHJvYmU6IG5vdCBmb3VuZAo+ID4gICAgIERFQlVH
+MSBbMjEzMi8yMTMyXTogTW9kcHJvYmUgc3VjY2Vzc2Z1bGx5IGx0dG5nLXByb2JlLXBvd2VyIChp
+bgo+ID4gbW9kcHJvYmVfbHR0bmdfZGF0YSgpIGF0IG1vZHByb2JlLmM6MjI3KQo+ID4gICAgIHNo
+OiAvc2Jpbi9tb2Rwcm9iZTogbm90IGZvdW5kCj4gPiAgICAgREVCVUcxIFsyMTMyLzIxMzJdOiBN
+b2Rwcm9iZSBzdWNjZXNzZnVsbHkgbHR0bmctcHJvYmUtcHJpbnRrIChpbgo+ID4gbW9kcHJvYmVf
+bHR0bmdfZGF0YSgpIGF0IG1vZHByb2JlLmM6MjI3KQo+ID4gICAgIHNoOiAvc2Jpbi9tb2Rwcm9i
+ZTogbm90IGZvdW5kCj4gPiAgICAgREVCVUcxIFsyMTMyLzIxMzJdOiBNb2Rwcm9iZSBzdWNjZXNz
+ZnVsbHkgbHR0bmctcHJvYmUtcmFuZG9tIChpbgo+ID4gbW9kcHJvYmVfbHR0bmdfZGF0YSgpIGF0
+IG1vZHByb2JlLmM6MjI3KQo+ID4gICAgIHNoOiAvc2Jpbi9tb2Rwcm9iZTogbm90IGZvdW5kCj4g
+PiAgICAgREVCVUcxIFsyMTMyLzIxMzJdOiBNb2Rwcm9iZSBzdWNjZXNzZnVsbHkgbHR0bmctcHJv
+YmUtcmN1IChpbgo+ID4gbW9kcHJvYmVfbHR0bmdfZGF0YSgpIGF0IG1vZHByb2JlLmM6MjI3KQo+
+ID4gICAgIHNoOiAvc2Jpbi9tb2Rwcm9iZTogbm90IGZvdW5kCj4gPiAgICAgREVCVUcxIFsyMTMy
+LzIxMzJdOiBNb2Rwcm9iZSBzdWNjZXNzZnVsbHkgbHR0bmctcHJvYmUtcmVnbWFwIChpbgo+ID4g
+bW9kcHJvYmVfbHR0bmdfZGF0YSgpIGF0IG1vZHByb2JlLmM6MjI3KQo+ID4gICAgIHNoOiAvc2Jp
+bi9tb2Rwcm9iZTogbm90IGZvdW5kCj4gPiAgICAgREVCVUcxIFsyMTMyLzIxMzJdOiBNb2Rwcm9i
+ZSBzdWNjZXNzZnVsbHkgbHR0bmctcHJvYmUtcmVndWxhdG9yIChpbgo+ID4gbW9kcHJvYmVfbHR0
+bmdfZGF0YSgpIGF0IG1vZHByb2JlLmM6MjI3KQo+ID4gICAgIHNoOiAvc2Jpbi9tb2Rwcm9iZTog
+bm90IGZvdW5kCj4gPiAgICAgREVCVUcxIFsyMTMyLzIxMzJdOiBNb2Rwcm9iZSBzdWNjZXNzZnVs
+bHkgbHR0bmctcHJvYmUtcnBtIChpbgo+ID4gbW9kcHJvYmVfbHR0bmdfZGF0YSgpIGF0IG1vZHBy
+b2JlLmM6MjI3KQo+ID4gICAgIHNoOiAvc2Jpbi9tb2Rwcm9iZTogbm90IGZvdW5kCj4gPiAgICAg
+REVCVUcxIFsyMTMyLzIxMzJdOiBNb2Rwcm9iZSBzdWNjZXNzZnVsbHkgbHR0bmctcHJvYmUtc2No
+ZWQgKGluCj4gPiBtb2Rwcm9iZV9sdHRuZ19kYXRhKCkgYXQgbW9kcHJvYmUuYzoyMjcpCj4gPiAg
+ICAgc2g6IC9zYmluL21vZHByb2JlOiBub3QgZm91bmQKPiA+ICAgICBERUJVRzEgWzIxMzIvMjEz
+Ml06IE1vZHByb2JlIHN1Y2Nlc3NmdWxseSBsdHRuZy1wcm9iZS1zY3NpIChpbgo+ID4gbW9kcHJv
+YmVfbHR0bmdfZGF0YSgpIGF0IG1vZHByb2JlLmM6MjI3KQo+ID4gICAgIHNoOiAvc2Jpbi9tb2Rw
+cm9iZTogbm90IGZvdW5kCj4gPiAgICAgREVCVUcxIFsyMTMyLzIxMzJdOiBNb2Rwcm9iZSBzdWNj
+ZXNzZnVsbHkgbHR0bmctcHJvYmUtc2lnbmFsIChpbgo+ID4gbW9kcHJvYmVfbHR0bmdfZGF0YSgp
+IGF0IG1vZHByb2JlLmM6MjI3KQo+ID4gICAgIHNoOiAvc2Jpbi9tb2Rwcm9iZTogbm90IGZvdW5k
+Cj4gPiAgICAgREVCVUcxIFsyMTMyLzIxMzJdOiBNb2Rwcm9iZSBzdWNjZXNzZnVsbHkgbHR0bmct
+cHJvYmUtc2tiIChpbgo+ID4gbW9kcHJvYmVfbHR0bmdfZGF0YSgpIGF0IG1vZHByb2JlLmM6MjI3
+KQo+ID4gICAgIHNoOiAvc2Jpbi9tb2Rwcm9iZTogbm90IGZvdW5kCj4gPiAgICAgREVCVUcxIFsy
+MTMyLzIxMzJdOiBNb2Rwcm9iZSBzdWNjZXNzZnVsbHkgbHR0bmctcHJvYmUtc29jayAoaW4KPiA+
+IG1vZHByb2JlX2x0dG5nX2RhdGEoKSBhdCBtb2Rwcm9iZS5jOjIyNykKPiA+ICAgICBzaDogL3Ni
+aW4vbW9kcHJvYmU6IG5vdCBmb3VuZAo+ID4gICAgIERFQlVHMSBbMjEzMi8yMTMyXTogTW9kcHJv
+YmUgc3VjY2Vzc2Z1bGx5IGx0dG5nLXByb2JlLXN0YXRlZHVtcCAoaW4KPiA+IG1vZHByb2JlX2x0
+dG5nX2RhdGEoKSBhdCBtb2Rwcm9iZS5jOjIyNykKPiA+ICAgICBzaDogL3NiaW4vbW9kcHJvYmU6
+IG5vdCBmb3VuZAo+ID4gICAgIERFQlVHMSBbMjEzMi8yMTMyXTogTW9kcHJvYmUgc3VjY2Vzc2Z1
+bGx5IGx0dG5nLXByb2JlLXN1bnJwYyAoaW4KPiA+IG1vZHByb2JlX2x0dG5nX2RhdGEoKSBhdCBt
+b2Rwcm9iZS5jOjIyNykKPiA+ICAgICBzaDogL3NiaW4vbW9kcHJvYmU6IG5vdCBmb3VuZAo+ID4g
+ICAgIERFQlVHMSBbMjEzMi8yMTMyXTogTW9kcHJvYmUgc3VjY2Vzc2Z1bGx5IGx0dG5nLXByb2Jl
+LXRpbWVyIChpbgo+ID4gbW9kcHJvYmVfbHR0bmdfZGF0YSgpIGF0IG1vZHByb2JlLmM6MjI3KQo+
+ID4gICAgIHNoOiAvc2Jpbi9tb2Rwcm9iZTogbm90IGZvdW5kCj4gPiAgICAgREVCVUcxIFsyMTMy
+LzIxMzJdOiBNb2Rwcm9iZSBzdWNjZXNzZnVsbHkgbHR0bmctcHJvYmUtdWRwIChpbgo+ID4gbW9k
+cHJvYmVfbHR0bmdfZGF0YSgpIGF0IG1vZHByb2JlLmM6MjI3KQo+ID4gICAgIHNoOiAvc2Jpbi9t
+b2Rwcm9iZTogbm90IGZvdW5kCj4gPiAgICAgREVCVUcxIFsyMTMyLzIxMzJdOiBNb2Rwcm9iZSBz
+dWNjZXNzZnVsbHkgbHR0bmctcHJvYmUtdm1zY2FuIChpbgo+ID4gbW9kcHJvYmVfbHR0bmdfZGF0
+YSgpIGF0IG1vZHByb2JlLmM6MjI3KQo+ID4gICAgIHNoOiAvc2Jpbi9tb2Rwcm9iZTogbm90IGZv
+dW5kCj4gPiAgICAgREVCVUcxIFsyMTMyLzIxMzJdOiBNb2Rwcm9iZSBzdWNjZXNzZnVsbHkgbHR0
+bmctcHJvYmUtd29ya3F1ZXVlIChpbgo+ID4gbW9kcHJvYmVfbHR0bmdfZGF0YSgpIGF0IG1vZHBy
+b2JlLmM6MjI3KQo+ID4gICAgIHNoOiAvc2Jpbi9tb2Rwcm9iZTogbm90IGZvdW5kCj4gPiAgICAg
+REVCVUcxIFsyMTMyLzIxMzJdOiBNb2Rwcm9iZSBzdWNjZXNzZnVsbHkgbHR0bmctcHJvYmUtd3Jp
+dGViYWNrIChpbgo+ID4gbW9kcHJvYmVfbHR0bmdfZGF0YSgpIGF0IG1vZHByb2JlLmM6MjI3KQo+
+ID4gICAgIERFQlVHMSBbMjEzMi8yMTMyXTogS2VybmVsIHRyYWNlciBmZCA2IChpbiBpbml0X2tl
+cm5lbF90cmFjZXIoKSBhdAo+ID4gbWFpbi5jOjIxMzkpCj4gPiAgICAgREVCVUcyIFsyMTMyLzIx
+MzJdOiBDcmVhdGluZyBjb25zdW1lciBkaXJlY3Rvcnk6Cj4gPiAvZGF0YS9sdHRuZy91c3Rjb25z
+dW1lcmQ2NCAoaW4gc2V0X2NvbnN1bWVyX3NvY2tldHMoKSBhdCBtYWluLmM6Mzg5NSkKPiA+ICAg
+ICBERUJVRzIgWzIxMzIvMjEzMl06IENyZWF0aW5nIGNvbnN1bWVyIGRpcmVjdG9yeToKPiA+IC9k
+YXRhL2x0dG5nL3VzdGNvbnN1bWVyZDMyIChpbiBzZXRfY29uc3VtZXJfc29ja2V0cygpIGF0IG1h
+aW4uYzozODk1KQo+ID4gICAgIERFQlVHMSBbMjEzMi8yMTMyXTogU2lnbmFsIGhhbmRsZXIgc2V0
+IGZvciBTSUdURVJNLCBTSUdQSVBFIGFuZCBTSUdJTlQKPiA+IChpbiBzZXRfc2lnbmFsX2hhbmRs
+ZXIoKSBhdCBtYWluLmM6Mzk4NykKPiA+ICAgICBERUJVRzMgWzIxMzIvMjEzMl06IFNlc3Npb24g
+ZGFlbW9uIGNsaWVudCBzb2NrZXQgMTAgYW5kIGFwcGxpY2F0aW9uCj4gPiBzb2NrZXQgMTEgY3Jl
+YXRlZCAoaW4gaW5pdF9kYWVtb25fc29ja2V0KCkgYXQgbWFpbi5jOjM3NTcpCj4gPiAgICAgV2Fy
+bmluZzogTm8gdHJhY2luZyBncm91cCBkZXRlY3RlZAo+ID4gICAgIERFQlVHMyBbMjEzMi8yMTMy
+XTogQ3JlYXRlZCBoYXNodGFibGUgc2l6ZSA0IGF0IDB4MTI1MDIwOCBvZiB0eXBlIDIKPiA+IChp
+biBsdHRuZ19odF9uZXcoKSBhdCBoYXNodGFibGUuYzoxMTIpCj4gPiAgICAgREVCVUczIFsyMTMy
+LzIxMzJdOiBHbG9iYWwgYnVmZmVyIHBlciBVSUQgcmVnaXN0cnkgaW5pdGlhbGl6ZWQgKGluCj4g
+PiBidWZmZXJfcmVnX2luaXRfdWlkX3JlZ2lzdHJ5KCkgYXQgYnVmZmVyLXJlZ2lzdHJ5LmM6OTgp
+Cj4gPiAgICAgREVCVUczIFsyMTMyLzIxMzJdOiBDcmVhdGVkIGhhc2h0YWJsZSBzaXplIDQgYXQg
+MHgxMjUwMzYwIG9mIHR5cGUgMQo+ID4gKGluIGx0dG5nX2h0X25ldygpIGF0IGhhc2h0YWJsZS5j
+OjExMikKPiA+ICAgICBERUJVRzMgWzIxMzIvMjEzMl06IEdsb2JhbCBidWZmZXIgcGVyIFBJRCBy
+ZWdpc3RyeSBpbml0aWFsaXplZCAoaW4KPiA+IGJ1ZmZlcl9yZWdfaW5pdF9waWRfcmVnaXN0cnko
+KSBhdCBidWZmZXItcmVnaXN0cnkuYzoyMTkpCj4gPiAgICAgREVCVUcxIFsyMTMyLzIxMzJdOiBl
+cG9sbCBzZXQgbWF4IHNpemUgaXMgMTUzMTA2IChpbgo+ID4gY29tcGF0X2Vwb2xsX3NldF9tYXhf
+c2l6ZSgpIGF0IGNvbXBhdC1lcG9sbC5jOjI3MCkKPiA+ICAgICBERUJVRzEgWzIxMzIvMjEzMl06
+IENvbW1hbmQgc3Vic3lzdGVtIGluaXRpYWxpemVkIChpbiBjbWRfaW5pdCgpIGF0Cj4gPiBjbWQu
+YzoyMTQ2KQo+ID4gICAgIERFQlVHMSBbMjEzMi8yMTMyXTogUGlkIDIxMzIgd3JpdHRlbiBpbiBm
+aWxlCj4gPiAvZGF0YS9sdHRuZy9sdHRuZy1zZXNzaW9uZC5waWQgKGluIHV0aWxzX2NyZWF0ZV9w
+aWRfZmlsZSgpIGF0IHV0aWxzLmM6MjM3KQo+ID4gICAgIERFQlVHMSBbMjEzMi8yMTgyXTogW3Ro
+cmVhZF0gTWFuYWdlIGhlYWx0aCBjaGVjayBzdGFydGVkIChpbgo+ID4gdGhyZWFkX21hbmFnZV9o
+ZWFsdGgoKSBhdCBtYWluLmM6MzEwNikKPiA+ICAgICBERUJVRzEgWzIxMzIvMjE4Ml06IEhlYWx0
+aCBjaGVjayByZWFkeSAoaW4gdGhyZWFkX21hbmFnZV9oZWFsdGgoKSBhdAo+ID4gbWFpbi5jOjMx
+NDgpCj4gPiAgICAgREVCVUcxIFsyMTMyLzIxODVdOiBbdGhyZWFkXSBNYW5hZ2UgYXBwbGljYXRp
+b24gcmVnaXN0cmF0aW9uIHN0YXJ0ZWQKPiA+IChpbiB0aHJlYWRfcmVnaXN0cmF0aW9uX2FwcHMo
+KSBhdCBtYWluLmM6MTU0MikKPiA+ICAgICBERUJVRzEgWzIxMzIvMjE4NV06IE5vdGlmeWluZyBh
+cHBsaWNhdGlvbnMgb2Ygc2Vzc2lvbiBkYWVtb24gc3RhdGU6IDEKPiA+IChpbiBub3RpZnlfdXN0
+X2FwcHMoKSBhdCBtYWluLmM6NTA3KQo+ID4gICAgIERFQlVHMSBbMjEzMi8yMTg1XTogR290IHRo
+ZSB3YWl0IHNobSBmZCAyMSAoaW4gZ2V0X3dhaXRfc2htKCkgYXQKPiA+IHNobS5jOjEyMikKPiA+
+ICAgICBERUJVRzEgWzIxMzIvMjE4NV06IEZ1dGV4IHdhaXQgdXBkYXRlIGFjdGl2ZSAxIChpbiBm
+dXRleF93YWl0X3VwZGF0ZSgpCj4gPiBhdCBmdXRleC5jOjYzKQo+ID4gICAgIERFQlVHMSBbMjEz
+Mi8yMTg1XTogQWNjZXB0aW5nIGFwcGxpY2F0aW9uIHJlZ2lzdHJhdGlvbiAoaW4KPiA+IHRocmVh
+ZF9yZWdpc3RyYXRpb25fYXBwcygpIGF0IG1haW4uYzoxNTc5KQo+ID4gICAgIERFQlVHMSBbMjEz
+Mi8yMTgzXTogW3RocmVhZF0gTWFuYWdlIGNsaWVudCBzdGFydGVkIChpbgo+ID4gdGhyZWFkX21h
+bmFnZV9jbGllbnRzKCkgYXQgbWFpbi5jOjMzMDMpCj4gPiAgICAgREVCVUcxIFsyMTMyLzIxODNd
+OiBBY2NlcHRpbmcgY2xpZW50IGNvbW1hbmQgLi4uIChpbgo+ID4gdGhyZWFkX21hbmFnZV9jbGll
+bnRzKCkgYXQgbWFpbi5jOjMzNDkpCj4gPiAgICAgREVCVUcxIFsyMTMyLzIxODZdOiBbdGhyZWFk
+XSBNYW5hZ2UgYXBwbGljYXRpb24gc3RhcnRlZCAoaW4KPiA+IHRocmVhZF9tYW5hZ2VfYXBwcygp
+IGF0IG1haW4uYzoxMTUyKQo+ID4gICAgIERFQlVHMSBbMjEzMi8yMTg2XTogQXBwcyB0aHJlYWQg
+cG9sbGluZyBvbiAyIGZkcyAoaW4KPiA+IHRocmVhZF9tYW5hZ2VfYXBwcygpIGF0IG1haW4uYzox
+MTgyKQo+ID4gICAgIERFQlVHMSBbMjEzMi8yMTg4XTogW3RocmVhZF0gVGhyZWFkIG1hbmFnZSBr
+ZXJuZWwgc3RhcnRlZCAoaW4KPiA+IHRocmVhZF9tYW5hZ2Vfa2VybmVsKCkgYXQgbWFpbi5jOjcw
+MikKPiA+ICAgICBERUJVRzEgWzIxMzIvMjE4OF06IFVwZGF0aW5nIGtlcm5lbCBwb2xsIHNldCAo
+aW4gdXBkYXRlX2tlcm5lbF9wb2xsKCkKPiA+IGF0IG1haW4uYzo1NjgpCj4gPiAgICAgREVCVUcx
+IFsyMTMyLzIxODhdOiBUaHJlYWQga2VybmVsIHBvbGxpbmcgb24gMiBmZHMgKGluCj4gPiB0aHJl
+YWRfbWFuYWdlX2tlcm5lbCgpIGF0IG1haW4uYzo3NDcpCj4gPiAgICAgREVCVUcxIFsyMTMyLzIx
+ODRdOiBbdGhyZWFkXSBEaXNwYXRjaCBVU1QgY29tbWFuZCBzdGFydGVkIChpbgo+ID4gdGhyZWFk
+X2Rpc3BhdGNoX3VzdF9yZWdpc3RyYXRpb24oKSBhdCBtYWluLmM6MTM1MikKPiA+ICAgICBERUJV
+RzEgWzIxMzIvMjE4NF06IEZ1dGV4IG4gdG8gMSBwcmVwYXJlIGRvbmUgKGluIGZ1dGV4X250bzFf
+cHJlcGFyZSgpCj4gPiBhdCBmdXRleC5jOjc1KQo+ID4gICAgIERFQlVHMSBbMjEzMi8yMTg0XTog
+V29rZW4gdXAgYnV0IG5vdGhpbmcgaW4gdGhlIFVTVCBjb21tYW5kIHF1ZXVlIChpbgo+ID4gdGhy
+ZWFkX2Rpc3BhdGNoX3VzdF9yZWdpc3RyYXRpb24oKSBhdCBtYWluLmM6MTM2NSkKCj4gX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBsdHRuZy1kZXYgbWFp
+bGluZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IGh0dHA6Ly9saXN0cy5sdHRu
+Zy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgoKCi0tIApNYXRoaWV1IERl
+c25veWVycwpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCgpfX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBs
+aXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2kt
+YmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
