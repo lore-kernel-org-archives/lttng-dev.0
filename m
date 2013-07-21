@@ -1,19 +1,21 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: LTTng snapshot howto
-Date: Sun, 21 Jul 2013 14:27:52 -0400
-Message-ID: <20130721182752.GA10255__27076.4232067906$1374431335$gmane$org@Krystal>
-References: <20130719225436.GA2488@Krystal>
+From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: Question about filtering bytecode
+Date: Sun, 21 Jul 2013 15:07:26 -0400
+Message-ID: <CA+jJMxtnmCvaz9K_7VqOuuiKx=cYcYaYeg11xn5Ko8LY20609g__2291.3376022645$1374433707$gmane$org@mail.gmail.com>
+References: <OFA394F5DC.943733C6-ONC2257BAC.00273BA0-C2257BAC.00277FA2@il.ibm.com>
+	<CA+jJMxtsA04qYmOiLeHEy2X03VK_Q0g3jf3Duj7Ax5ySBycC-Q@mail.gmail.com>
+	<OFD3697F49.CCBA3299-ONC2257BAF.001EE8B3-C2257BAF.00202779@il.ibm.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from mail-wi0-f181.google.com ([209.85.212.181])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1V0yMO-0004ay-Ju
-	for lttng-dev@lists.lttng.org; Sun, 21 Jul 2013 14:28:03 -0400
-Content-Disposition: inline
-In-Reply-To: <20130719225436.GA2488@Krystal>
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1V0yyi-0005qJ-IY
+	for lttng-dev@lists.lttng.org; Sun, 21 Jul 2013 15:07:38 -0400
+Received: by mail-wi0-f181.google.com with SMTP id hq4so1183376wib.14
+	for <lttng-dev@lists.lttng.org>; Sun, 21 Jul 2013 12:07:26 -0700 (PDT)
+In-Reply-To: <OFD3697F49.CCBA3299-ONC2257BAF.001EE8B3-C2257BAF.00202779@il.ibm.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,61 +24,173 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Amit Margalit <AMITM@il.ibm.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-SGksCgpJIGp1c3QgcHVzaGVkIGEgTFRUbmcgc25hcHNob3QgaG93dG8gKG5ldyBmZWF0dXJlIG9m
-IGx0dG5nIDIuMy1yYykuIEknbQpwb3N0aW5nIGl0IHRvIGx0dG5nLWRldiwgc2luY2UgaXQgcHJv
-dmlkZXMgYSBxdWljayBpbnNpZ2h0IG9uIGhvdyB0byB1c2UKdGhlIHNuYXBzaG90IGZlYXR1cmUu
-IENvbW1lbnRzIGFyZSB3ZWxjb21lIQoKVGhhbmtzLAoKTWF0aGlldQoKCkxUVG5nIEZsaWdodCBS
-ZWNvcmRlciBTbmFwc2hvdCBIT1dUTwoKTWF0aGlldSBEZXNub3llcnMKSnVseSAyMXN0LCAyMDEz
-CgpUaGlzIGRvY3VtZW50IHByZXNlbnRzIGhvdyB0byB1c2UgdGhlIHNuYXBzaG90IGZlYXR1cmUg
-b2YgTFRUbmcuCgpTbmFwc2hvdHMgYWxsb3cgdG8gZ3JhYiB0aGUgY29udGVudCBvZiBmbGlnaHQg
-cmVjb3JkZXIgdHJhY2luZyBidWZmZXJzCmF0IHRoZSB0aW1lIHRoZSBzbmFwc2hvdCByZWNvcmQg
-Y29tbWFuZCBpcyBpbnZva2VkLiBGbGlnaHQgcmVjb3JkZXIKdHJhY2luZyBnYXRoZXIgdHJhY2Ug
-ZGF0YSBpbiBtZW1vcnksIG92ZXJ3cml0aW5nIHRoZSBvbGRlc3QgaW5mb3JtYXRpb24sCndpdGhv
-dXQgcmVxdWlyaW5nIGFueSBkaXNrIEkvTy4gVGhlIHNuYXBzaG90IHJlY29yZCBjb21tYW5kIGV4
-cG9ydHMgdGhlCnNuYXBzaG90IHRvIHRoZSBkZXN0aW5hdGlvbiBzcGVjaWZpZWQgYnkgdGhlIHVz
-ZXIuCgpCYXNpYyB1c2FnZToKClNlc3Npb24gZGFlbW9uIHN0YXJ0ZWQgYXMgcm9vdCBmb3Iga2Vy
-bmVsIHRyYWNpbmc6CgojIGx0dG5nLXNlc3Npb25kIC1kCgpGcm9tIGEgdXNlciBwYXJ0IG9mIHRo
-ZSB0cmFjaW5nIGdyb3VwIChmb3Iga2VybmVsIHRyYWNpbmcpOgoKJCBsdHRuZyBjcmVhdGUgLS1z
-bmFwc2hvdAokIGx0dG5nIGVuYWJsZS1ldmVudCAtayAtYSAgICAgICMgZW5hYmxlIGtlcm5lbCB0
-cmFjaW5nCiQgbHR0bmcgZW5hYmxlLWV2ZW50IC11IC1hICAgICAgIyBlbmFibGUgdXNlci1zcGFj
-ZSB0cmFjaW5nCiQgbHR0bmcgc3RhcnQKCiAgICBbIGRvIHNvbWV0aGluZywgZ2VuZXJhdGUgYWN0
-aXZpdHkgb24gdGhlIHN5c3RlbSBdCgokIGx0dG5nIHNuYXBzaG90IHJlY29yZAoKICAgIFsgZG8g
-bW9yZSBzdHVmZi4uLiBdCgokIGx0dG5nIHNuYXBzaG90IHJlY29yZAoKJCBsdHRuZyBzdG9wCiQg
-bHR0bmcgZGVzdHJveQoKRWFjaCAibHR0bmcgc25hcHNob3QiIGNvbW1hbmQgcmVjb3JkcyBhIHNu
-YXBzaG90IG9mIHRoZSBjdXJyZW50IGJ1ZmZlcgpzdGF0ZS4gImx0dG5nIGVuYWJsZSAtLXNuYXBz
-aG90IiBhdXRvbWF0aWNhbGx5IHNldHVwcyB0aGUgYnVmZmVycyBpbgpvdmVyd3JpdGUgbW9kZSBm
-b3IgZmxpZ2h0IHJlY29yZGluZywgYW5kIGRvZXMgbm90IGF0dGFjaCBhbnkgb3V0cHV0IGZpbGUK
-dG8gdGhlIHRyYWNlLiBUaGUgImx0dG5nIHNuYXBzaG90IHJlY29yZCIgY29tbWFuZCBjYW4gYmUg
-cGVyZm9ybWVkCmVpdGhlciB3aGlsZSB0cmFjaW5nIGlzIHN0YXJ0ZWQgb3Igc3RvcHBlZC4KCkFz
-IGFuIGV4YW1wbGUsIHRoaXMgZ2VuZXJhdGVzIHRoZSBmb2xsb3dpbmcgaGllcmFyY2h5IHVuZGVy
-IHRoZQpkaXJlY3RvcnkgcmVwb3J0ZWQgYnkgdGhlICJjcmVhdGUiIGNvbW1hbmQgYWJvdmU6Cgou
-CuKUnOKUgOKUgCBzbmFwc2hvdC0xLTIwMTMwNzIxLTE0MTgzOC0wCuKUgsKgwqAg4pSc4pSA4pSA
-IGtlcm5lbArilILCoMKgIOKUgsKgwqAg4pSc4pSA4pSAIGNoYW5uZWwwXzAK4pSCwqDCoCDilILC
-oMKgIOKUnOKUgOKUgCBjaGFubmVsMF8xCuKUgsKgwqAg4pSCwqDCoCDilJzilIDilIAgY2hhbm5l
-bDBfMgrilILCoMKgIOKUgsKgwqAg4pSc4pSA4pSAIGNoYW5uZWwwXzMK4pSCwqDCoCDilILCoMKg
-IOKUlOKUgOKUgCBtZXRhZGF0YQrilILCoMKgIOKUlOKUgOKUgCB1c3QK4pSCwqDCoCAgICAg4pSU
-4pSA4pSAIHVpZArilILCoMKgICAgICAgICAg4pSU4pSA4pSAIDEwMDAK4pSCwqDCoCAgICAgICAg
-ICAgICDilJTilIDilIAgNjQtYml0CuKUgsKgwqAgICAgICAgICAgICAgICAgIOKUnOKUgOKUgCBj
-aGFubmVsMF8wCuKUgsKgwqAgICAgICAgICAgICAgICAgIOKUnOKUgOKUgCBjaGFubmVsMF8xCuKU
-gsKgwqAgICAgICAgICAgICAgICAgIOKUnOKUgOKUgCBjaGFubmVsMF8yCuKUgsKgwqAgICAgICAg
-ICAgICAgICAgIOKUnOKUgOKUgCBjaGFubmVsMF8zCuKUgsKgwqAgICAgICAgICAgICAgICAgIOKU
-lOKUgOKUgCBtZXRhZGF0YQrilJTilIDilIAgc25hcHNob3QtMS0yMDEzMDcyMS0xNDE4NDItMQog
-ICAg4pSc4pSA4pSAIGtlcm5lbAogICAg4pSCwqDCoCDilJzilIDilIAgY2hhbm5lbDBfMAogICAg
-4pSCwqDCoCDilJzilIDilIAgY2hhbm5lbDBfMQogICAg4pSCwqDCoCDilJzilIDilIAgY2hhbm5l
-bDBfMgogICAg4pSCwqDCoCDilJzilIDilIAgY2hhbm5lbDBfMwogICAg4pSCwqDCoCDilJTilIDi
-lIAgbWV0YWRhdGEKICAgIOKUlOKUgOKUgCB1c3QKICAgICAgICDilJTilIDilIAgdWlkCiAgICAg
-ICAgICAgIOKUlOKUgOKUgCAxMDAwCiAgICAgICAgICAgICAgICDilJTilIDilIAgNjQtYml0CiAg
-ICAgICAgICAgICAgICAgICAg4pSc4pSA4pSAIGNoYW5uZWwwXzAKICAgICAgICAgICAgICAgICAg
-ICDilJzilIDilIAgY2hhbm5lbDBfMQogICAgICAgICAgICAgICAgICAgIOKUnOKUgOKUgCBjaGFu
-bmVsMF8yCiAgICAgICAgICAgICAgICAgICAg4pSc4pSA4pSAIGNoYW5uZWwwXzMKICAgICAgICAg
-ICAgICAgICAgICDilJTilIDilIAgbWV0YWRhdGEKCgpUaGVuLCBydW5uaW5nIGJhYmVsdHJhY2Ug
-b24sIGUuZy4KCmJhYmVsdHJhY2Ugc25hcHNob3QtMS0yMDEzMDcyMS0xNDE4MzgtMAoKc2hvd3Mg
-dGhlIGNvbnRlbnQgb2YgdGhlIGZpcnN0IHNuYXBzaG90LgoKUGxlYXNlIHJlZmVyIHRvIHRoZSBs
-dHRuZygxKSBtYW5wYWdlIGZvciBkZXRhaWxzIG9uIHRoZSBzbmFwc2hvdCBtb2RlLgoKLS0gCk1h
-dGhpZXUgRGVzbm95ZXJzCkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KCl9f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBt
-YWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcu
-b3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+On Sun, Jul 21, 2013 at 1:51 AM, Amit Margalit <AMITM@il.ibm.com> wrote:
+> Hi,
+>
+> I was thinking more about a programmer's guide to using this mechanism.
+>
+
+Unfortunately there is no programmer's guide on filters, but feel free
+to ask about specifics.
+
+> What I'd like to do is to have Babeltrace filter events it is showing me
+> from an existing trace.
+>
+> Consider the following example:
+>
+> There are 3 types of tracepoints being captured (without filtering):
+>
+> A debug log message (occasionally) which includes a "debug_level" value
+> (1..10 with 1 being highest importance).
+> Function entry (via gcc -finstrument-functions or other instrumentation).
+> Function exit (similarly).
+>
+> During a 1-hour period, I have 2-3 GB of trace data captured.
+> The trace includes events from 4 different processes.
+>
+>
+> If I use Babeltrace to read the trace I will get an enormously big result=
+ in
+> text (~30-40GB at least).
+>
+> I would like to be able to do something like this:
+>
+> $ babeltrace --filter '$ctx.procname =3D=3D "smbd" || debug_level < 3'
+> /local/lttng-traces/ust/uid/2140/64-bit
+>
+> This would then let me see any events from the "smbd" process (since i ad=
+ded
+> procname to the context using lttng add-context) or debug messages from a=
+ll
+> processes where the debug level is 1 or 2.
+>
+
+That would be a neat feature! There are currently no plans to support
+filtering in Babeltrace, but that contribution would be welcome.
+lttng-ust's filtering code is licensed under LGPL v2.1 so it could be
+library-fied and used by the ctf-text plug-in. In the meantime, I
+guess you could work around this limitation with a combination of AWK
+and shell scripting...
+
+> Regarding linking - I am referring to the function
+> lttng_enabler_event_link_bytecode(), called from
+> lttng-ust/liblttng-ust/lttng-events.c around line 628.
+>
+
+Thanks for clarifying!
+
+Keep in mind that the filter's byte code is generated by the lttng
+binary without knowing the events' declarations. Thus, the byte code
+must go through a linking stage not completely unlike what is done by
+a regular linker. One of the objectives of the linking stage is
+setting the appropriate offsets to load an event's fields. The byte
+code is also "specialized" by resolving each field's type and making
+sure the appropriate implementation of each operator is used. For
+instance, the FILTER_OP_EQ (check for equality) op-code is not
+implemented the same way for integers, doubles and strings (see
+lttng_filter_specialize_bytecode in lttng-filter-specialize.c).
+
+You may want to have a look at _lttng_filter_event_link_bytecode
+(lttng-ust/liblttng-ust/lttng-filter.c, line 318) to see how each step
+of the linking process is implemented.
+
+Regards,
+J=E9r=E9mie
+
+> Thanks,
+>
+> Amit Margalit
+> IBM XIV - Storage Reinvented
+> XIV-NAS Development Team
+> Tel. 03-689-7774
+> Fax. 03-689-7230
+>
+>
+>
+> From:        J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
+> To:        Amit Margalit/Israel/IBM@IBMIL
+> Cc:        lttng-dev@lists.lttng.org
+> Date:        07/18/2013 07:10 PM
+> Subject:        Re: [lttng-dev] Question about filtering bytecode
+> Sent by:        jeremie.galarneau@gmail.com
+> ________________________________
+>
+>
+>
+> Hi Amit,
+>
+> You may find information on the Babeltrace API in babeltrace/doc/API.txt
+> The filtering mechanism used by the user space tracer is unrelated to
+> Babeltrace.
+>
+> As for the sequence of events, this is how I understand it.
+>
+> When invoking the "lttng" binary with --enable-event and a filter
+> option, a byte code is generated from the filtering rules
+> (lttng-tools/src/lib/lttng-ctl/lttng-ctl.c:704). This byte code is
+> then handed off to the session-daemon.
+>
+> Then, when an instrumented application is launched and connects to the
+> session-daemon, it receives the byte code while its events are being
+> enabled. To answer your question directly, that byte code will be
+> executed by the tracee when the event is "triggered"
+> (lttng-ust/liblttng-ust/lttng-filter-interpreter.c:175).
+>
+> I'm not sure I understand your question about filter/event linking. A
+> filter has to be linked to an event since its rules (expressions) are
+> applied on that event's values. Could you clarify if that's not what
+> you meant?
+>
+> Regards,
+> J=E9r=E9mie
+>
+> On Thu, Jul 18, 2013 at 3:12 AM, Amit Margalit <AMITM@il.ibm.com> wrote:
+>> Hi,
+>>
+>> I'm considering whether I can write a wrapper for the libbabeltrace ctf
+>> iterator which provides a filtered "next()" method.
+>>
+>> I've started reading the code in the hopes of understanding how to do
+>> this,
+>> and yet, I'd really appreciate a link to some ordered documentation, or -
+>> any other kind of explanation.
+>>
+>> For example, one thing I still don't understand is the exact sequence, a=
+nd
+>> where the bytecode is actually executed? What is the meaning and purpose
+>> of
+>> "linking" the filter to an event.
+>>
+>> Thanks,
+>>
+>> Amit Margalit
+>> IBM XIV - Storage Reinvented
+>> XIV-NAS Development Team
+>> Tel. 03-689-7774
+>> Fax. 03-689-7230
+>> _______________________________________________
+>> lttng-dev mailing list
+>> lttng-dev@lists.lttng.org
+>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>>
+>
+>
+>
+> --
+> J=E9r=E9mie Galarneau
+> EfficiOS Inc.
+> http://www.efficios.com
+>
+>
+
+
+
+-- =
+
+J=E9r=E9mie Galarneau
+EfficiOS Inc.
+http://www.efficios.com
