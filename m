@@ -1,19 +1,20 @@
-From: "Brosseau, Yannick" <yannick.brosseau@gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Subject: Re: LTTng snapshot howto
-Date: Tue, 23 Jul 2013 19:26:25 -0400
-Message-ID: <CAEzWAe+YgB6D-gMrDT6=4ZNFTvdvs3fV6bsG9siEmL4X7cpHKQ__704.231827012514$1374622051$gmane$org@mail.gmail.com>
-References: <20130719225436.GA2488@Krystal>
-	<20130721182752.GA10255@Krystal>
+Date: Tue, 23 Jul 2013 20:40:08 -0400
+Message-ID: <20130724004008.GA29212__39162.1784111068$1374626467$gmane$org@Krystal>
+References: <20130719225436.GA2488@Krystal> <20130721182752.GA10255@Krystal>
+	<CAEzWAe+YgB6D-gMrDT6=4ZNFTvdvs3fV6bsG9siEmL4X7cpHKQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1039204019=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-vc0-f170.google.com ([209.85.220.170])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <yannick.brosseau@gmail.com>) id 1V1lyR-0001p3-RY
-	for lttng-dev@lists.lttng.org; Tue, 23 Jul 2013 19:26:36 -0400
-Received: by mail-vc0-f170.google.com with SMTP id hv10so3502414vcb.1
-	for <lttng-dev@lists.lttng.org>; Tue, 23 Jul 2013 16:26:26 -0700 (PDT)
-In-Reply-To: <20130721182752.GA10255@Krystal>
+	(envelope-from <compudj@mail.openrapids.net>) id 1V1n7h-00060l-Hn
+	for lttng-dev@lists.lttng.org; Tue, 23 Jul 2013 20:40:15 -0400
+Content-Disposition: inline
+In-Reply-To: <CAEzWAe+YgB6D-gMrDT6=4ZNFTvdvs3fV6bsG9siEmL4X7cpHKQ@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,302 +23,77 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: "Brosseau, Yannick" <yannick.brosseau@gmail.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============1039204019==
-Content-Type: multipart/alternative; boundary=047d7b5d398e30ff3004e2361f07
-
---047d7b5d398e30ff3004e2361f07
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-A question about the snapshot: is there a way to trigger a new state dump?
-Le 2013-07-21 14:29, "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com> a
-=C3=A9crit :
-
-> Hi,
->
-> I just pushed a LTTng snapshot howto (new feature of lttng 2.3-rc). I'm
-> posting it to lttng-dev, since it provides a quick insight on how to use
-> the snapshot feature. Comments are welcome!
->
-> Thanks,
->
-> Mathieu
->
->
-> LTTng Flight Recorder Snapshot HOWTO
->
-> Mathieu Desnoyers
-> July 21st, 2013
->
-> This document presents how to use the snapshot feature of LTTng.
->
-> Snapshots allow to grab the content of flight recorder tracing buffers
-> at the time the snapshot record command is invoked. Flight recorder
-> tracing gather trace data in memory, overwriting the oldest information,
-> without requiring any disk I/O. The snapshot record command exports the
-> snapshot to the destination specified by the user.
->
-> Basic usage:
->
-> Session daemon started as root for kernel tracing:
->
-> # lttng-sessiond -d
->
-> From a user part of the tracing group (for kernel tracing):
->
-> $ lttng create --snapshot
-> $ lttng enable-event -k -a      # enable kernel tracing
-> $ lttng enable-event -u -a      # enable user-space tracing
-> $ lttng start
->
->     [ do something, generate activity on the system ]
->
-> $ lttng snapshot record
->
->     [ do more stuff... ]
->
-> $ lttng snapshot record
->
-> $ lttng stop
-> $ lttng destroy
->
-> Each "lttng snapshot" command records a snapshot of the current buffer
-> state. "lttng enable --snapshot" automatically setups the buffers in
-> overwrite mode for flight recording, and does not attach any output file
-> to the trace. The "lttng snapshot record" command can be performed
-> either while tracing is started or stopped.
->
-> As an example, this generates the following hierarchy under the
-> directory reported by the "create" command above:
->
-> .
-> =E2=94=9C=E2=94=80=E2=94=80 snapshot-1-20130721-141838-0
-> =E2=94=82   =E2=94=9C=E2=94=80=E2=94=80 kernel
-> =E2=94=82   =E2=94=82   =E2=94=9C=E2=94=80=E2=94=80 channel0_0
-> =E2=94=82   =E2=94=82   =E2=94=9C=E2=94=80=E2=94=80 channel0_1
-> =E2=94=82   =E2=94=82   =E2=94=9C=E2=94=80=E2=94=80 channel0_2
-> =E2=94=82   =E2=94=82   =E2=94=9C=E2=94=80=E2=94=80 channel0_3
-> =E2=94=82   =E2=94=82   =E2=94=94=E2=94=80=E2=94=80 metadata
-> =E2=94=82   =E2=94=94=E2=94=80=E2=94=80 ust
-> =E2=94=82       =E2=94=94=E2=94=80=E2=94=80 uid
-> =E2=94=82           =E2=94=94=E2=94=80=E2=94=80 1000
-> =E2=94=82               =E2=94=94=E2=94=80=E2=94=80 64-bit
-> =E2=94=82                   =E2=94=9C=E2=94=80=E2=94=80 channel0_0
-> =E2=94=82                   =E2=94=9C=E2=94=80=E2=94=80 channel0_1
-> =E2=94=82                   =E2=94=9C=E2=94=80=E2=94=80 channel0_2
-> =E2=94=82                   =E2=94=9C=E2=94=80=E2=94=80 channel0_3
-> =E2=94=82                   =E2=94=94=E2=94=80=E2=94=80 metadata
-> =E2=94=94=E2=94=80=E2=94=80 snapshot-1-20130721-141842-1
->     =E2=94=9C=E2=94=80=E2=94=80 kernel
->     =E2=94=82   =E2=94=9C=E2=94=80=E2=94=80 channel0_0
->     =E2=94=82   =E2=94=9C=E2=94=80=E2=94=80 channel0_1
->     =E2=94=82   =E2=94=9C=E2=94=80=E2=94=80 channel0_2
->     =E2=94=82   =E2=94=9C=E2=94=80=E2=94=80 channel0_3
->     =E2=94=82   =E2=94=94=E2=94=80=E2=94=80 metadata
->     =E2=94=94=E2=94=80=E2=94=80 ust
->         =E2=94=94=E2=94=80=E2=94=80 uid
->             =E2=94=94=E2=94=80=E2=94=80 1000
->                 =E2=94=94=E2=94=80=E2=94=80 64-bit
->                     =E2=94=9C=E2=94=80=E2=94=80 channel0_0
->                     =E2=94=9C=E2=94=80=E2=94=80 channel0_1
->                     =E2=94=9C=E2=94=80=E2=94=80 channel0_2
->                     =E2=94=9C=E2=94=80=E2=94=80 channel0_3
->                     =E2=94=94=E2=94=80=E2=94=80 metadata
->
->
-> Then, running babeltrace on, e.g.
->
-> babeltrace snapshot-1-20130721-141838-0
->
-> shows the content of the first snapshot.
->
-> Please refer to the lttng(1) manpage for details on the snapshot mode.
->
-> --
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> http://www.efficios.com
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
-
---047d7b5d398e30ff3004e2361f07
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<p dir=3D"ltr">A question about the snapshot: is there a way to trigger a n=
-ew state dump? </p>
-<div class=3D"gmail_quote">Le 2013-07-21 14:29, &quot;Mathieu Desnoyers&quo=
-t; &lt;<a href=3D"mailto:mathieu.desnoyers@efficios.com">mathieu.desnoyers@=
-efficios.com</a>&gt; a =C3=A9crit=C2=A0:<br type=3D"attribution"><blockquot=
-e class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc sol=
-id;padding-left:1ex">
-Hi,<br>
-<br>
-I just pushed a LTTng snapshot howto (new feature of lttng 2.3-rc). I&#39;m=
-<br>
-posting it to lttng-dev, since it provides a quick insight on how to use<br=
->
-the snapshot feature. Comments are welcome!<br>
-<br>
-Thanks,<br>
-<br>
-Mathieu<br>
-<br>
-<br>
-LTTng Flight Recorder Snapshot HOWTO<br>
-<br>
-Mathieu Desnoyers<br>
-July 21st, 2013<br>
-<br>
-This document presents how to use the snapshot feature of LTTng.<br>
-<br>
-Snapshots allow to grab the content of flight recorder tracing buffers<br>
-at the time the snapshot record command is invoked. Flight recorder<br>
-tracing gather trace data in memory, overwriting the oldest information,<br=
->
-without requiring any disk I/O. The snapshot record command exports the<br>
-snapshot to the destination specified by the user.<br>
-<br>
-Basic usage:<br>
-<br>
-Session daemon started as root for kernel tracing:<br>
-<br>
-# lttng-sessiond -d<br>
-<br>
-From a user part of the tracing group (for kernel tracing):<br>
-<br>
-$ lttng create --snapshot<br>
-$ lttng enable-event -k -a =C2=A0 =C2=A0 =C2=A0# enable kernel tracing<br>
-$ lttng enable-event -u -a =C2=A0 =C2=A0 =C2=A0# enable user-space tracing<=
-br>
-$ lttng start<br>
-<br>
-=C2=A0 =C2=A0 [ do something, generate activity on the system ]<br>
-<br>
-$ lttng snapshot record<br>
-<br>
-=C2=A0 =C2=A0 [ do more stuff... ]<br>
-<br>
-$ lttng snapshot record<br>
-<br>
-$ lttng stop<br>
-$ lttng destroy<br>
-<br>
-Each &quot;lttng snapshot&quot; command records a snapshot of the current b=
-uffer<br>
-state. &quot;lttng enable --snapshot&quot; automatically setups the buffers=
- in<br>
-overwrite mode for flight recording, and does not attach any output file<br=
->
-to the trace. The &quot;lttng snapshot record&quot; command can be performe=
-d<br>
-either while tracing is started or stopped.<br>
-<br>
-As an example, this generates the following hierarchy under the<br>
-directory reported by the &quot;create&quot; command above:<br>
-<br>
-.<br>
-=E2=94=9C=E2=94=80=E2=94=80 snapshot-1-20130721-141838-0<br>
-=E2=94=82=C2=A0=C2=A0 =E2=94=9C=E2=94=80=E2=94=80 kernel<br>
-=E2=94=82=C2=A0=C2=A0 =E2=94=82=C2=A0=C2=A0 =E2=94=9C=E2=94=80=E2=94=80 cha=
-nnel0_0<br>
-=E2=94=82=C2=A0=C2=A0 =E2=94=82=C2=A0=C2=A0 =E2=94=9C=E2=94=80=E2=94=80 cha=
-nnel0_1<br>
-=E2=94=82=C2=A0=C2=A0 =E2=94=82=C2=A0=C2=A0 =E2=94=9C=E2=94=80=E2=94=80 cha=
-nnel0_2<br>
-=E2=94=82=C2=A0=C2=A0 =E2=94=82=C2=A0=C2=A0 =E2=94=9C=E2=94=80=E2=94=80 cha=
-nnel0_3<br>
-=E2=94=82=C2=A0=C2=A0 =E2=94=82=C2=A0=C2=A0 =E2=94=94=E2=94=80=E2=94=80 met=
-adata<br>
-=E2=94=82=C2=A0=C2=A0 =E2=94=94=E2=94=80=E2=94=80 ust<br>
-=E2=94=82=C2=A0=C2=A0 =C2=A0 =C2=A0 =E2=94=94=E2=94=80=E2=94=80 uid<br>
-=E2=94=82=C2=A0=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =E2=94=94=E2=94=80=E2=94=
-=80 1000<br>
-=E2=94=82=C2=A0=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =E2=94=94=
-=E2=94=80=E2=94=80 64-bit<br>
-=E2=94=82=C2=A0=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =E2=94=9C=E2=94=80=E2=94=80 channel0_0<br>
-=E2=94=82=C2=A0=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =E2=94=9C=E2=94=80=E2=94=80 channel0_1<br>
-=E2=94=82=C2=A0=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =E2=94=9C=E2=94=80=E2=94=80 channel0_2<br>
-=E2=94=82=C2=A0=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =E2=94=9C=E2=94=80=E2=94=80 channel0_3<br>
-=E2=94=82=C2=A0=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =E2=94=94=E2=94=80=E2=94=80 metadata<br>
-=E2=94=94=E2=94=80=E2=94=80 snapshot-1-20130721-141842-1<br>
-=C2=A0 =C2=A0 =E2=94=9C=E2=94=80=E2=94=80 kernel<br>
-=C2=A0 =C2=A0 =E2=94=82=C2=A0=C2=A0 =E2=94=9C=E2=94=80=E2=94=80 channel0_0<=
-br>
-=C2=A0 =C2=A0 =E2=94=82=C2=A0=C2=A0 =E2=94=9C=E2=94=80=E2=94=80 channel0_1<=
-br>
-=C2=A0 =C2=A0 =E2=94=82=C2=A0=C2=A0 =E2=94=9C=E2=94=80=E2=94=80 channel0_2<=
-br>
-=C2=A0 =C2=A0 =E2=94=82=C2=A0=C2=A0 =E2=94=9C=E2=94=80=E2=94=80 channel0_3<=
-br>
-=C2=A0 =C2=A0 =E2=94=82=C2=A0=C2=A0 =E2=94=94=E2=94=80=E2=94=80 metadata<br=
->
-=C2=A0 =C2=A0 =E2=94=94=E2=94=80=E2=94=80 ust<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =E2=94=94=E2=94=80=E2=94=80 uid<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =E2=94=94=E2=94=80=E2=94=80 1000<=
-br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =E2=94=94=E2=94=80=
-=E2=94=80 64-bit<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =E2=
-=94=9C=E2=94=80=E2=94=80 channel0_0<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =E2=
-=94=9C=E2=94=80=E2=94=80 channel0_1<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =E2=
-=94=9C=E2=94=80=E2=94=80 channel0_2<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =E2=
-=94=9C=E2=94=80=E2=94=80 channel0_3<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =E2=
-=94=94=E2=94=80=E2=94=80 metadata<br>
-<br>
-<br>
-Then, running babeltrace on, e.g.<br>
-<br>
-babeltrace snapshot-1-20130721-141838-0<br>
-<br>
-shows the content of the first snapshot.<br>
-<br>
-Please refer to the lttng(1) manpage for details on the snapshot mode.<br>
-<br>
---<br>
-Mathieu Desnoyers<br>
-EfficiOS Inc.<br>
-<a href=3D"http://www.efficios.com" target=3D"_blank">http://www.efficios.c=
-om</a><br>
-<br>
-_______________________________________________<br>
-lttng-dev mailing list<br>
-<a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a><=
-br>
-<a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" targe=
-t=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><=
-br>
-</blockquote></div>
-
---047d7b5d398e30ff3004e2361f07--
-
-
---===============1039204019==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Disposition: inline
-Content-Transfer-Encoding: 7bit
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1039204019==--
+KiBCcm9zc2VhdSwgWWFubmljayAoeWFubmljay5icm9zc2VhdUBnbWFpbC5jb20pIHdyb3RlOgo+
+IEEgcXVlc3Rpb24gYWJvdXQgdGhlIHNuYXBzaG90OiBpcyB0aGVyZSBhIHdheSB0byB0cmlnZ2Vy
+IGEgbmV3IHN0YXRlIGR1bXA/CgpOb3QgYXQgdGhpcyBwb2ludCwgbm8uCgo+IExlIDIwMTMtMDct
+MjEgMTQ6MjksICJNYXRoaWV1IERlc25veWVycyIgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9z
+LmNvbT4gYQo+IMOpY3JpdCA6Cj4gCj4gPiBIaSwKPiA+Cj4gPiBJIGp1c3QgcHVzaGVkIGEgTFRU
+bmcgc25hcHNob3QgaG93dG8gKG5ldyBmZWF0dXJlIG9mIGx0dG5nIDIuMy1yYykuIEknbQo+ID4g
+cG9zdGluZyBpdCB0byBsdHRuZy1kZXYsIHNpbmNlIGl0IHByb3ZpZGVzIGEgcXVpY2sgaW5zaWdo
+dCBvbiBob3cgdG8gdXNlCj4gPiB0aGUgc25hcHNob3QgZmVhdHVyZS4gQ29tbWVudHMgYXJlIHdl
+bGNvbWUhCj4gPgo+ID4gVGhhbmtzLAo+ID4KPiA+IE1hdGhpZXUKPiA+Cj4gPgo+ID4gTFRUbmcg
+RmxpZ2h0IFJlY29yZGVyIFNuYXBzaG90IEhPV1RPCj4gPgo+ID4gTWF0aGlldSBEZXNub3llcnMK
+PiA+IEp1bHkgMjFzdCwgMjAxMwo+ID4KPiA+IFRoaXMgZG9jdW1lbnQgcHJlc2VudHMgaG93IHRv
+IHVzZSB0aGUgc25hcHNob3QgZmVhdHVyZSBvZiBMVFRuZy4KPiA+Cj4gPiBTbmFwc2hvdHMgYWxs
+b3cgdG8gZ3JhYiB0aGUgY29udGVudCBvZiBmbGlnaHQgcmVjb3JkZXIgdHJhY2luZyBidWZmZXJz
+Cj4gPiBhdCB0aGUgdGltZSB0aGUgc25hcHNob3QgcmVjb3JkIGNvbW1hbmQgaXMgaW52b2tlZC4g
+RmxpZ2h0IHJlY29yZGVyCj4gPiB0cmFjaW5nIGdhdGhlciB0cmFjZSBkYXRhIGluIG1lbW9yeSwg
+b3ZlcndyaXRpbmcgdGhlIG9sZGVzdCBpbmZvcm1hdGlvbiwKPiA+IHdpdGhvdXQgcmVxdWlyaW5n
+IGFueSBkaXNrIEkvTy4gVGhlIHNuYXBzaG90IHJlY29yZCBjb21tYW5kIGV4cG9ydHMgdGhlCj4g
+PiBzbmFwc2hvdCB0byB0aGUgZGVzdGluYXRpb24gc3BlY2lmaWVkIGJ5IHRoZSB1c2VyLgo+ID4K
+PiA+IEJhc2ljIHVzYWdlOgo+ID4KPiA+IFNlc3Npb24gZGFlbW9uIHN0YXJ0ZWQgYXMgcm9vdCBm
+b3Iga2VybmVsIHRyYWNpbmc6Cj4gPgo+ID4gIyBsdHRuZy1zZXNzaW9uZCAtZAo+ID4KPiA+IEZy
+b20gYSB1c2VyIHBhcnQgb2YgdGhlIHRyYWNpbmcgZ3JvdXAgKGZvciBrZXJuZWwgdHJhY2luZyk6
+Cj4gPgo+ID4gJCBsdHRuZyBjcmVhdGUgLS1zbmFwc2hvdAo+ID4gJCBsdHRuZyBlbmFibGUtZXZl
+bnQgLWsgLWEgICAgICAjIGVuYWJsZSBrZXJuZWwgdHJhY2luZwo+ID4gJCBsdHRuZyBlbmFibGUt
+ZXZlbnQgLXUgLWEgICAgICAjIGVuYWJsZSB1c2VyLXNwYWNlIHRyYWNpbmcKPiA+ICQgbHR0bmcg
+c3RhcnQKPiA+Cj4gPiAgICAgWyBkbyBzb21ldGhpbmcsIGdlbmVyYXRlIGFjdGl2aXR5IG9uIHRo
+ZSBzeXN0ZW0gXQo+ID4KPiA+ICQgbHR0bmcgc25hcHNob3QgcmVjb3JkCj4gPgo+ID4gICAgIFsg
+ZG8gbW9yZSBzdHVmZi4uLiBdCj4gPgo+ID4gJCBsdHRuZyBzbmFwc2hvdCByZWNvcmQKPiA+Cj4g
+PiAkIGx0dG5nIHN0b3AKPiA+ICQgbHR0bmcgZGVzdHJveQo+ID4KPiA+IEVhY2ggImx0dG5nIHNu
+YXBzaG90IiBjb21tYW5kIHJlY29yZHMgYSBzbmFwc2hvdCBvZiB0aGUgY3VycmVudCBidWZmZXIK
+PiA+IHN0YXRlLiAibHR0bmcgZW5hYmxlIC0tc25hcHNob3QiIGF1dG9tYXRpY2FsbHkgc2V0dXBz
+IHRoZSBidWZmZXJzIGluCj4gPiBvdmVyd3JpdGUgbW9kZSBmb3IgZmxpZ2h0IHJlY29yZGluZywg
+YW5kIGRvZXMgbm90IGF0dGFjaCBhbnkgb3V0cHV0IGZpbGUKPiA+IHRvIHRoZSB0cmFjZS4gVGhl
+ICJsdHRuZyBzbmFwc2hvdCByZWNvcmQiIGNvbW1hbmQgY2FuIGJlIHBlcmZvcm1lZAo+ID4gZWl0
+aGVyIHdoaWxlIHRyYWNpbmcgaXMgc3RhcnRlZCBvciBzdG9wcGVkLgo+ID4KPiA+IEFzIGFuIGV4
+YW1wbGUsIHRoaXMgZ2VuZXJhdGVzIHRoZSBmb2xsb3dpbmcgaGllcmFyY2h5IHVuZGVyIHRoZQo+
+ID4gZGlyZWN0b3J5IHJlcG9ydGVkIGJ5IHRoZSAiY3JlYXRlIiBjb21tYW5kIGFib3ZlOgo+ID4K
+PiA+IC4KPiA+IOKUnOKUgOKUgCBzbmFwc2hvdC0xLTIwMTMwNzIxLTE0MTgzOC0wCj4gPiDilIIg
+ICDilJzilIDilIAga2VybmVsCj4gPiDilIIgICDilIIgICDilJzilIDilIAgY2hhbm5lbDBfMAo+
+ID4g4pSCICAg4pSCICAg4pSc4pSA4pSAIGNoYW5uZWwwXzEKPiA+IOKUgiAgIOKUgiAgIOKUnOKU
+gOKUgCBjaGFubmVsMF8yCj4gPiDilIIgICDilIIgICDilJzilIDilIAgY2hhbm5lbDBfMwo+ID4g
+4pSCICAg4pSCICAg4pSU4pSA4pSAIG1ldGFkYXRhCj4gPiDilIIgICDilJTilIDilIAgdXN0Cj4g
+PiDilIIgICAgICAg4pSU4pSA4pSAIHVpZAo+ID4g4pSCICAgICAgICAgICDilJTilIDilIAgMTAw
+MAo+ID4g4pSCICAgICAgICAgICAgICAg4pSU4pSA4pSAIDY0LWJpdAo+ID4g4pSCICAgICAgICAg
+ICAgICAgICAgIOKUnOKUgOKUgCBjaGFubmVsMF8wCj4gPiDilIIgICAgICAgICAgICAgICAgICAg
+4pSc4pSA4pSAIGNoYW5uZWwwXzEKPiA+IOKUgiAgICAgICAgICAgICAgICAgICDilJzilIDilIAg
+Y2hhbm5lbDBfMgo+ID4g4pSCICAgICAgICAgICAgICAgICAgIOKUnOKUgOKUgCBjaGFubmVsMF8z
+Cj4gPiDilIIgICAgICAgICAgICAgICAgICAg4pSU4pSA4pSAIG1ldGFkYXRhCj4gPiDilJTilIDi
+lIAgc25hcHNob3QtMS0yMDEzMDcyMS0xNDE4NDItMQo+ID4gICAgIOKUnOKUgOKUgCBrZXJuZWwK
+PiA+ICAgICDilIIgICDilJzilIDilIAgY2hhbm5lbDBfMAo+ID4gICAgIOKUgiAgIOKUnOKUgOKU
+gCBjaGFubmVsMF8xCj4gPiAgICAg4pSCICAg4pSc4pSA4pSAIGNoYW5uZWwwXzIKPiA+ICAgICDi
+lIIgICDilJzilIDilIAgY2hhbm5lbDBfMwo+ID4gICAgIOKUgiAgIOKUlOKUgOKUgCBtZXRhZGF0
+YQo+ID4gICAgIOKUlOKUgOKUgCB1c3QKPiA+ICAgICAgICAg4pSU4pSA4pSAIHVpZAo+ID4gICAg
+ICAgICAgICAg4pSU4pSA4pSAIDEwMDAKPiA+ICAgICAgICAgICAgICAgICDilJTilIDilIAgNjQt
+Yml0Cj4gPiAgICAgICAgICAgICAgICAgICAgIOKUnOKUgOKUgCBjaGFubmVsMF8wCj4gPiAgICAg
+ICAgICAgICAgICAgICAgIOKUnOKUgOKUgCBjaGFubmVsMF8xCj4gPiAgICAgICAgICAgICAgICAg
+ICAgIOKUnOKUgOKUgCBjaGFubmVsMF8yCj4gPiAgICAgICAgICAgICAgICAgICAgIOKUnOKUgOKU
+gCBjaGFubmVsMF8zCj4gPiAgICAgICAgICAgICAgICAgICAgIOKUlOKUgOKUgCBtZXRhZGF0YQo+
+ID4KPiA+Cj4gPiBUaGVuLCBydW5uaW5nIGJhYmVsdHJhY2Ugb24sIGUuZy4KPiA+Cj4gPiBiYWJl
+bHRyYWNlIHNuYXBzaG90LTEtMjAxMzA3MjEtMTQxODM4LTAKPiA+Cj4gPiBzaG93cyB0aGUgY29u
+dGVudCBvZiB0aGUgZmlyc3Qgc25hcHNob3QuCj4gPgo+ID4gUGxlYXNlIHJlZmVyIHRvIHRoZSBs
+dHRuZygxKSBtYW5wYWdlIGZvciBkZXRhaWxzIG9uIHRoZSBzbmFwc2hvdCBtb2RlLgo+ID4KPiA+
+IC0tCj4gPiBNYXRoaWV1IERlc25veWVycwo+ID4gRWZmaWNpT1MgSW5jLgo+ID4gaHR0cDovL3d3
+dy5lZmZpY2lvcy5jb20KPiA+Cj4gPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fXwo+ID4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+ID4gbHR0bmctZGV2QGxp
+c3RzLmx0dG5nLm9yZwo+ID4gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4v
+bGlzdGluZm8vbHR0bmctZGV2Cj4gPgoKLS0gCk1hdGhpZXUgRGVzbm95ZXJzCkVmZmljaU9TIElu
+Yy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3Rz
+Lmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5m
+by9sdHRuZy1kZXYK
