@@ -1,20 +1,18 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: LTTng snapshot howto
-Date: Tue, 23 Jul 2013 20:40:08 -0400
-Message-ID: <20130724004008.GA29212__39162.1784111068$1374626467$gmane$org@Krystal>
-References: <20130719225436.GA2488@Krystal> <20130721182752.GA10255@Krystal>
-	<CAEzWAe+YgB6D-gMrDT6=4ZNFTvdvs3fV6bsG9siEmL4X7cpHKQ@mail.gmail.com>
+From: Xiaona Han <xiaonahappy13@163.com>
+Subject: [PATCH babeltrace] Use a unique name to get a field's
+	value
+Date: Wed, 24 Jul 2013 17:57:47 +0800
+Message-ID: <1374659868-6264-2-git-send-email-xiaonahappy13__18286.9355463938$1374631145$gmane$org@163.com>
+References: <1374659868-6264-1-git-send-email-xiaonahappy13@163.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from [124.16.141.1] (helo=host.localdomain)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1V1n7h-00060l-Hn
-	for lttng-dev@lists.lttng.org; Tue, 23 Jul 2013 20:40:15 -0400
-Content-Disposition: inline
-In-Reply-To: <CAEzWAe+YgB6D-gMrDT6=4ZNFTvdvs3fV6bsG9siEmL4X7cpHKQ@mail.gmail.com>
+	(envelope-from <root@host.localdomain>) id 1V1oLB-00023D-AD
+	for lttng-dev@lists.lttng.org; Tue, 23 Jul 2013 21:58:15 -0400
+In-Reply-To: <1374659868-6264-1-git-send-email-xiaonahappy13@163.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,77 +21,43 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Brosseau, Yannick" <yannick.brosseau@gmail.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-KiBCcm9zc2VhdSwgWWFubmljayAoeWFubmljay5icm9zc2VhdUBnbWFpbC5jb20pIHdyb3RlOgo+
-IEEgcXVlc3Rpb24gYWJvdXQgdGhlIHNuYXBzaG90OiBpcyB0aGVyZSBhIHdheSB0byB0cmlnZ2Vy
-IGEgbmV3IHN0YXRlIGR1bXA/CgpOb3QgYXQgdGhpcyBwb2ludCwgbm8uCgo+IExlIDIwMTMtMDct
-MjEgMTQ6MjksICJNYXRoaWV1IERlc25veWVycyIgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9z
-LmNvbT4gYQo+IMOpY3JpdCA6Cj4gCj4gPiBIaSwKPiA+Cj4gPiBJIGp1c3QgcHVzaGVkIGEgTFRU
-bmcgc25hcHNob3QgaG93dG8gKG5ldyBmZWF0dXJlIG9mIGx0dG5nIDIuMy1yYykuIEknbQo+ID4g
-cG9zdGluZyBpdCB0byBsdHRuZy1kZXYsIHNpbmNlIGl0IHByb3ZpZGVzIGEgcXVpY2sgaW5zaWdo
-dCBvbiBob3cgdG8gdXNlCj4gPiB0aGUgc25hcHNob3QgZmVhdHVyZS4gQ29tbWVudHMgYXJlIHdl
-bGNvbWUhCj4gPgo+ID4gVGhhbmtzLAo+ID4KPiA+IE1hdGhpZXUKPiA+Cj4gPgo+ID4gTFRUbmcg
-RmxpZ2h0IFJlY29yZGVyIFNuYXBzaG90IEhPV1RPCj4gPgo+ID4gTWF0aGlldSBEZXNub3llcnMK
-PiA+IEp1bHkgMjFzdCwgMjAxMwo+ID4KPiA+IFRoaXMgZG9jdW1lbnQgcHJlc2VudHMgaG93IHRv
-IHVzZSB0aGUgc25hcHNob3QgZmVhdHVyZSBvZiBMVFRuZy4KPiA+Cj4gPiBTbmFwc2hvdHMgYWxs
-b3cgdG8gZ3JhYiB0aGUgY29udGVudCBvZiBmbGlnaHQgcmVjb3JkZXIgdHJhY2luZyBidWZmZXJz
-Cj4gPiBhdCB0aGUgdGltZSB0aGUgc25hcHNob3QgcmVjb3JkIGNvbW1hbmQgaXMgaW52b2tlZC4g
-RmxpZ2h0IHJlY29yZGVyCj4gPiB0cmFjaW5nIGdhdGhlciB0cmFjZSBkYXRhIGluIG1lbW9yeSwg
-b3ZlcndyaXRpbmcgdGhlIG9sZGVzdCBpbmZvcm1hdGlvbiwKPiA+IHdpdGhvdXQgcmVxdWlyaW5n
-IGFueSBkaXNrIEkvTy4gVGhlIHNuYXBzaG90IHJlY29yZCBjb21tYW5kIGV4cG9ydHMgdGhlCj4g
-PiBzbmFwc2hvdCB0byB0aGUgZGVzdGluYXRpb24gc3BlY2lmaWVkIGJ5IHRoZSB1c2VyLgo+ID4K
-PiA+IEJhc2ljIHVzYWdlOgo+ID4KPiA+IFNlc3Npb24gZGFlbW9uIHN0YXJ0ZWQgYXMgcm9vdCBm
-b3Iga2VybmVsIHRyYWNpbmc6Cj4gPgo+ID4gIyBsdHRuZy1zZXNzaW9uZCAtZAo+ID4KPiA+IEZy
-b20gYSB1c2VyIHBhcnQgb2YgdGhlIHRyYWNpbmcgZ3JvdXAgKGZvciBrZXJuZWwgdHJhY2luZyk6
-Cj4gPgo+ID4gJCBsdHRuZyBjcmVhdGUgLS1zbmFwc2hvdAo+ID4gJCBsdHRuZyBlbmFibGUtZXZl
-bnQgLWsgLWEgICAgICAjIGVuYWJsZSBrZXJuZWwgdHJhY2luZwo+ID4gJCBsdHRuZyBlbmFibGUt
-ZXZlbnQgLXUgLWEgICAgICAjIGVuYWJsZSB1c2VyLXNwYWNlIHRyYWNpbmcKPiA+ICQgbHR0bmcg
-c3RhcnQKPiA+Cj4gPiAgICAgWyBkbyBzb21ldGhpbmcsIGdlbmVyYXRlIGFjdGl2aXR5IG9uIHRo
-ZSBzeXN0ZW0gXQo+ID4KPiA+ICQgbHR0bmcgc25hcHNob3QgcmVjb3JkCj4gPgo+ID4gICAgIFsg
-ZG8gbW9yZSBzdHVmZi4uLiBdCj4gPgo+ID4gJCBsdHRuZyBzbmFwc2hvdCByZWNvcmQKPiA+Cj4g
-PiAkIGx0dG5nIHN0b3AKPiA+ICQgbHR0bmcgZGVzdHJveQo+ID4KPiA+IEVhY2ggImx0dG5nIHNu
-YXBzaG90IiBjb21tYW5kIHJlY29yZHMgYSBzbmFwc2hvdCBvZiB0aGUgY3VycmVudCBidWZmZXIK
-PiA+IHN0YXRlLiAibHR0bmcgZW5hYmxlIC0tc25hcHNob3QiIGF1dG9tYXRpY2FsbHkgc2V0dXBz
-IHRoZSBidWZmZXJzIGluCj4gPiBvdmVyd3JpdGUgbW9kZSBmb3IgZmxpZ2h0IHJlY29yZGluZywg
-YW5kIGRvZXMgbm90IGF0dGFjaCBhbnkgb3V0cHV0IGZpbGUKPiA+IHRvIHRoZSB0cmFjZS4gVGhl
-ICJsdHRuZyBzbmFwc2hvdCByZWNvcmQiIGNvbW1hbmQgY2FuIGJlIHBlcmZvcm1lZAo+ID4gZWl0
-aGVyIHdoaWxlIHRyYWNpbmcgaXMgc3RhcnRlZCBvciBzdG9wcGVkLgo+ID4KPiA+IEFzIGFuIGV4
-YW1wbGUsIHRoaXMgZ2VuZXJhdGVzIHRoZSBmb2xsb3dpbmcgaGllcmFyY2h5IHVuZGVyIHRoZQo+
-ID4gZGlyZWN0b3J5IHJlcG9ydGVkIGJ5IHRoZSAiY3JlYXRlIiBjb21tYW5kIGFib3ZlOgo+ID4K
-PiA+IC4KPiA+IOKUnOKUgOKUgCBzbmFwc2hvdC0xLTIwMTMwNzIxLTE0MTgzOC0wCj4gPiDilIIg
-ICDilJzilIDilIAga2VybmVsCj4gPiDilIIgICDilIIgICDilJzilIDilIAgY2hhbm5lbDBfMAo+
-ID4g4pSCICAg4pSCICAg4pSc4pSA4pSAIGNoYW5uZWwwXzEKPiA+IOKUgiAgIOKUgiAgIOKUnOKU
-gOKUgCBjaGFubmVsMF8yCj4gPiDilIIgICDilIIgICDilJzilIDilIAgY2hhbm5lbDBfMwo+ID4g
-4pSCICAg4pSCICAg4pSU4pSA4pSAIG1ldGFkYXRhCj4gPiDilIIgICDilJTilIDilIAgdXN0Cj4g
-PiDilIIgICAgICAg4pSU4pSA4pSAIHVpZAo+ID4g4pSCICAgICAgICAgICDilJTilIDilIAgMTAw
-MAo+ID4g4pSCICAgICAgICAgICAgICAg4pSU4pSA4pSAIDY0LWJpdAo+ID4g4pSCICAgICAgICAg
-ICAgICAgICAgIOKUnOKUgOKUgCBjaGFubmVsMF8wCj4gPiDilIIgICAgICAgICAgICAgICAgICAg
-4pSc4pSA4pSAIGNoYW5uZWwwXzEKPiA+IOKUgiAgICAgICAgICAgICAgICAgICDilJzilIDilIAg
-Y2hhbm5lbDBfMgo+ID4g4pSCICAgICAgICAgICAgICAgICAgIOKUnOKUgOKUgCBjaGFubmVsMF8z
-Cj4gPiDilIIgICAgICAgICAgICAgICAgICAg4pSU4pSA4pSAIG1ldGFkYXRhCj4gPiDilJTilIDi
-lIAgc25hcHNob3QtMS0yMDEzMDcyMS0xNDE4NDItMQo+ID4gICAgIOKUnOKUgOKUgCBrZXJuZWwK
-PiA+ICAgICDilIIgICDilJzilIDilIAgY2hhbm5lbDBfMAo+ID4gICAgIOKUgiAgIOKUnOKUgOKU
-gCBjaGFubmVsMF8xCj4gPiAgICAg4pSCICAg4pSc4pSA4pSAIGNoYW5uZWwwXzIKPiA+ICAgICDi
-lIIgICDilJzilIDilIAgY2hhbm5lbDBfMwo+ID4gICAgIOKUgiAgIOKUlOKUgOKUgCBtZXRhZGF0
-YQo+ID4gICAgIOKUlOKUgOKUgCB1c3QKPiA+ICAgICAgICAg4pSU4pSA4pSAIHVpZAo+ID4gICAg
-ICAgICAgICAg4pSU4pSA4pSAIDEwMDAKPiA+ICAgICAgICAgICAgICAgICDilJTilIDilIAgNjQt
-Yml0Cj4gPiAgICAgICAgICAgICAgICAgICAgIOKUnOKUgOKUgCBjaGFubmVsMF8wCj4gPiAgICAg
-ICAgICAgICAgICAgICAgIOKUnOKUgOKUgCBjaGFubmVsMF8xCj4gPiAgICAgICAgICAgICAgICAg
-ICAgIOKUnOKUgOKUgCBjaGFubmVsMF8yCj4gPiAgICAgICAgICAgICAgICAgICAgIOKUnOKUgOKU
-gCBjaGFubmVsMF8zCj4gPiAgICAgICAgICAgICAgICAgICAgIOKUlOKUgOKUgCBtZXRhZGF0YQo+
-ID4KPiA+Cj4gPiBUaGVuLCBydW5uaW5nIGJhYmVsdHJhY2Ugb24sIGUuZy4KPiA+Cj4gPiBiYWJl
-bHRyYWNlIHNuYXBzaG90LTEtMjAxMzA3MjEtMTQxODM4LTAKPiA+Cj4gPiBzaG93cyB0aGUgY29u
-dGVudCBvZiB0aGUgZmlyc3Qgc25hcHNob3QuCj4gPgo+ID4gUGxlYXNlIHJlZmVyIHRvIHRoZSBs
-dHRuZygxKSBtYW5wYWdlIGZvciBkZXRhaWxzIG9uIHRoZSBzbmFwc2hvdCBtb2RlLgo+ID4KPiA+
-IC0tCj4gPiBNYXRoaWV1IERlc25veWVycwo+ID4gRWZmaWNpT1MgSW5jLgo+ID4gaHR0cDovL3d3
-dy5lZmZpY2lvcy5jb20KPiA+Cj4gPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fXwo+ID4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+ID4gbHR0bmctZGV2QGxp
-c3RzLmx0dG5nLm9yZwo+ID4gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4v
-bGlzdGluZm8vbHR0bmctZGV2Cj4gPgoKLS0gCk1hdGhpZXUgRGVzbm95ZXJzCkVmZmljaU9TIElu
-Yy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3Rz
-Lmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5m
-by9sdHRuZy1kZXYK
+Signed-off-by: Xiaona Han <xiaonahappy13@163.com>
+---
+ bindings/python/babeltrace.i.in |   19 +++++++++++++++++++
+ 1 files changed, 19 insertions(+), 0 deletions(-)
+
+diff --git a/bindings/python/babeltrace.i.in b/bindings/python/babeltrace.i.in
+index 880b23e..806cc73 100755
+--- a/bindings/python/babeltrace.i.in
++++ b/bindings/python/babeltrace.i.in
+@@ -986,6 +986,25 @@ class ctf:
+ 			"""
+ 			return _bt_ctf_get_string(self._d)
+ 
++		def get_value(self):
++			"""
++			Return the value associated with the field according to its type.
++			If the field does not exist, the value returned is undefined.
++			To check if an error occured, use the ctf.field_error() function
++			after accessing a field.
++			"""
++			id = self.field_type()
++			if id == ctf.type_id.STRING:
++				return self.get_str()
++			if type_id == ctf.type_id.ARRAY:
++				return self.get_char_array()
++			if type_id == ctf.type_id.INTEGER:
++				if self.get_int_signedness == 0:
++					return self.get_uint64()
++				else:
++					return self.get_int64()
++			return None
++
+ 		def get_scope(self):
+ 			"""Return the scope of a field or None on error."""
+ 			return self._s
+-- 
+1.7.1
