@@ -1,21 +1,21 @@
 From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH babeltrace] Return event fields by a field
- name. Since a field may be present both in an event and its stream's scope,
- this returns a list which contains all the fileds by the name
-Date: Wed, 24 Jul 2013 15:32:23 -0400
-Message-ID: <CA+jJMxsCLqJ=Uud7KvqqSRfqLOLM+118jq=mdyomu+CNgGsAxw__45853.2601282515$1374694490$gmane$org@mail.gmail.com>
+Subject: Re: [PATCH babeltrace] Use a unique name to get a
+	field's value
+Date: Wed, 24 Jul 2013 15:32:49 -0400
+Message-ID: <CA+jJMxs3pUtyq37KwdpJBJJ6GxpOtsJAdQu_WGh2CS8mZp_zQA__37783.3307524726$1374694634$gmane$org@mail.gmail.com>
 References: <1374659868-6264-1-git-send-email-xiaonahappy13@163.com>
+	<1374659868-6264-2-git-send-email-xiaonahappy13@163.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wg0-f43.google.com ([74.125.82.43])
+Received: from mail-wg0-f47.google.com ([74.125.82.47])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1V24nV-000192-9M
-	for lttng-dev@lists.lttng.org; Wed, 24 Jul 2013 15:32:35 -0400
-Received: by mail-wg0-f43.google.com with SMTP id z12so818234wgg.22
-	for <lttng-dev@lists.lttng.org>; Wed, 24 Jul 2013 12:32:23 -0700 (PDT)
-In-Reply-To: <1374659868-6264-1-git-send-email-xiaonahappy13@163.com>
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1V24nu-0001B8-SE
+	for lttng-dev@lists.lttng.org; Wed, 24 Jul 2013 15:33:00 -0400
+Received: by mail-wg0-f47.google.com with SMTP id j13so797083wgh.2
+	for <lttng-dev@lists.lttng.org>; Wed, 24 Jul 2013 12:32:49 -0700 (PDT)
+In-Reply-To: <1374659868-6264-2-git-send-email-xiaonahappy13@163.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -28,167 +28,57 @@ To: Xiaona Han <xiaonahappy13@163.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Please do not exceed 80-chars in your subject line and detail your
-changes in the rest of the commit message.
-
-See other remarks below.
-
 On Wed, Jul 24, 2013 at 5:57 AM, Xiaona Han <xiaonahappy13@163.com> wrote:
 > Signed-off-by: Xiaona Han <xiaonahappy13@163.com>
 > ---
->  bindings/python/babeltrace.i.in |   78 +++++++++++++++++++++++++++++++++=
-++++-
->  1 files changed, 75 insertions(+), 3 deletions(-)
->  mode change 100644 =3D> 100755 bindings/python/babeltrace.i.in
+>  bindings/python/babeltrace.i.in |   19 +++++++++++++++++++
+>  1 files changed, 19 insertions(+), 0 deletions(-)
 >
 > diff --git a/bindings/python/babeltrace.i.in b/bindings/python/babeltrace=
 .i.in
-> old mode 100644
-> new mode 100755
-
-Why the mode change?
-
-> index dd2dacc..880b23e
+> index 880b23e..806cc73 100755
 > --- a/bindings/python/babeltrace.i.in
 > +++ b/bindings/python/babeltrace.i.in
-> @@ -744,7 +744,7 @@ class ctf:
->                         """
->                         return _bt_ctf_get_timestamp(self._e)
->
-> -               def get_field(self, scope, field):
-> +               def get_field_with_scope(self, scope, field):
->                         """Return the definition of a specific field."""
->                         evDef =3D ctf.Definition.__new__(ctf.Definition)
->                         try:
-> @@ -754,9 +754,32 @@ class ctf:
->                                         "Definition (scope) instance")
->                         return evDef
->
-> -               def get_field_list(self, scope):
-> +               def get_field(self, field):
-> +                       """Return the definition of fields by a name"""
-> +                       eventScope =3D self.get_top_level_scope(ctf.scope=
-.EVENT_FIELDS)
-> +                       streamScope =3D self.get_top_level_scope(ctf.scop=
-e.STREAM_EVENT_CONTEXT)
-> +                       fields_by_name =3D []
-> +
-> +                       if eventScope is not None:
-> +                               evDef =3D ctf.Definition.__new__(ctf.Defi=
-nition)
-> +                               evDef._d =3D _bt_ctf_get_field(self._e, e=
-ventScope._d, field)
-> +
-> +                               if evDef._d is not None:
-> +                                       evDef._s =3D eventScope
-> +                                       fields_by_name.append(evDef);
-> +
-> +                       if streamScope is not None:
-> +                               stDef =3D ctf.Definition.__new__(ctf.Defi=
-nition)
-> +                               stDef._d =3D _bt_ctf_get_field(self._e, s=
-treamScope._d, field)
-> +
-> +                               if stDef._d is not None:
-> +                                       stDef._s =3D streamScope
-> +                                       fields_by_name.append(stDef);
-> +                       return fields_by_name
-> +
-> +               def get_field_list_with_scope(self, scope):
->                         """
-> -                       Return a list of Definitions
-> +                       Return a list of Definitions by a scope
-
-How about "Return a list of Definitions associated with the scope"
-
->                         Return None on error.
->                         """
->                         try:
-> @@ -783,6 +806,51 @@ class ctf:
->                                 i +=3D 1
->                         return def_list
->
-> +               def get_field_list(self):
-> +                       """
-> +                       Return a list of Definitions
-> +                       Return None on error.
-> +                       """
-> +                       event_field_lc =3D None
-> +                       stream_field_lc =3D None
-> +                       eventScope =3D self.get_top_level_scope(ctf.scope=
-.EVENT_FIELDS)
-> +                       streamScope =3D self.get_top_level_scope(ctf.scop=
-e.STREAM_EVENT_CONTEXT)
-> +
-> +                       if eventScope is not None:
-> +                               event_field_lc =3D _bt_python_field_listc=
-aller(self._e, eventScope._d)
-> +                       if streamScope is not None:
-> +                               stream_field_lc =3D _bt_python_field_list=
-caller(self._e, streamScope._d)
-> +
-> +                       if event_field_lc is None and stream_field_lc is =
-None:
-> +                               return None
-> +
-> +                       def_list =3D []
-> +                       if event_field_lc is not None:
-> +                               i =3D 0
-> +                               while True:
-> +                                       tmp =3D ctf.Definition.__new__(ct=
-f.Definition)
-> +                                       tmp._d =3D _bt_python_field_one_f=
-rom_list(event_field_lc, i)
-> +                                       if tmp._d is None:
-> +                                       #Last item of list is None, assur=
-ed in
-> +                                       #_bt_python_field_listcaller
-
-
-These last two lines introduce a single space before the tabs.
-
-> +                                               break
-> +                                       tmp._s =3D eventScope
-> +                                       def_list.append(tmp)
-> +                                       i +=3D 1
-> +                       if stream_field_lc is not None:
-> +                               i =3D 0
-> +                               while True:
-> +                                       tmp =3D ctf.Definition.__new__(ct=
-f.Definition)
-> +                                       tmp._d =3D _bt_python_field_one_f=
-rom_list(stream_field_lc, i)
-> +                                       if tmp._d is None:
-> +                                       #Last item of list is None, assur=
-ed in
-> +                                       #_bt_python_field_listcaller
-> +                                               break
-> +                                       tmp._s =3D streamScope
-> +                                       def_list.append(tmp)
-> +                                       i +=3D 1
-
-You are repeating the same code twice to build the list from both
-scopes. Please put it in a different helper function. The same could
-be said of "get_field".
-
-> +                       return def_list
-> +
->                 def get_index(self, field, index):
->                         """
->                         If the field is an array or a sequence, return th=
-e element
-> @@ -918,6 +986,10 @@ class ctf:
+> @@ -986,6 +986,25 @@ class ctf:
 >                         """
 >                         return _bt_ctf_get_string(self._d)
 >
-> +               def get_scope(self):
-> +                       """Return the scope of a field or None on error."=
-""
-> +                       return self._s
+> +               def get_value(self):
+> +                       """
+> +                       Return the value associated with the field accord=
+ing to its type.
+> +                       If the field does not exist, the value returned i=
+s undefined.
+> +                       To check if an error occured, use the ctf.field_e=
+rror() function
+> +                       after accessing a field.
+> +                       """
+> +                       id =3D self.field_type()
+> +                       if id =3D=3D ctf.type_id.STRING:
+> +                               return self.get_str()
+> +                       if type_id =3D=3D ctf.type_id.ARRAY:
+> +                               return self.get_char_array()
+> +                       if type_id =3D=3D ctf.type_id.INTEGER:
+> +                               if self.get_int_signedness =3D=3D 0:
+> +                                       return self.get_uint64()
+> +                               else:
+> +                                       return self.get_int64()
+> +                       return None
 > +
->
->         class EventDecl(object):
->                 """Event declaration class.  Do not instantiate."""
+
+You are assigning the field's type to "id" and then using "type_id".
+Did you test this?
+
+Also, while I can understand not supporting compound types right-away,
+please make sure it supports floating point and enums.
+
+Regards,
+J=E9r=E9mie
+
+>                 def get_scope(self):
+>                         """Return the scope of a field or None on error."=
+""
+>                         return self._s
 > --
 > 1.7.1
 >
