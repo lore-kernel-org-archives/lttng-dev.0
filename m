@@ -1,20 +1,20 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Getting SIGBUS in babeltrace - occasionally
-Date: Wed, 24 Jul 2013 09:20:12 -0400
-Message-ID: <20130724132012.GA16296__35760.3059187115$1374672067$gmane$org@Krystal>
-References: <OF7F44BB67.0C2115DF-ONC2257BB2.003205F9-C2257BB2.00323AF2@il.ibm.com>
-	<20130724123411.GA15791@Krystal>
+Subject: Re: [PATCH lttng-ust 3/3] Update .gitignore
+Date: Wed, 24 Jul 2013 09:52:48 -0400
+Message-ID: <20130724135248.GA16524__30730.6460723796$1374674021$gmane$org@Krystal>
+References: <1374645347-20312-1-git-send-email-soariez@gmail.com>
+	<1374645347-20312-3-git-send-email-soariez@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1V1yzG-0001ts-QU
-	for lttng-dev@lists.lttng.org; Wed, 24 Jul 2013 09:20:18 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1V1zUn-0003xb-MM
+	for lttng-dev@lists.lttng.org; Wed, 24 Jul 2013 09:52:54 -0400
 Content-Disposition: inline
-In-Reply-To: <20130724123411.GA15791@Krystal>
+In-Reply-To: <1374645347-20312-3-git-send-email-soariez@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,82 +23,43 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Amit Margalit <AMITM@il.ibm.com>
+To: Zifei Tong <soariez@gmail.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-KiBNYXRoaWV1IERlc25veWVycyAobWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tKSB3cm90
-ZToKPiAqIEFtaXQgTWFyZ2FsaXQgKEFNSVRNQGlsLmlibS5jb20pIHdyb3RlOgo+ID4gSGksCj4g
-PiAKPiA+IEkgYW0gZ2V0dGluZyBvY2Nhc2lvbmFsIFNJR0JVUyBpbnNpZGUgX2FsaWduZWRfaW50
-ZWdlcl9yZWFkKCkgaW4gCj4gPiAuL2Zvcm1hdHMvY3RmL3R5cGVzL2ludGVnZXIuYwo+ID4gCj4g
-PiBIZXJlIGlzIHRoZSBiYWNrdHJhY2UsIG1heWJlIHNvbWVvbmUgY291bGQgdGFrZSBhIGxvb2sg
-YW5kIHN1Z2dlc3QgCj4gPiBzb21ldGhpbmc6Cj4gCj4gSXQgbG9va3MgbGlrZSB5b3UncmUgaGl0
-dGluZyB0aGUgaW50ZXJuYWwgY2hlY2tzIGZvciBvdmVyZmxvdyBvbiB0aGUKPiBidWZmZXIgYm91
-bmRhcmllcy4KClBsZWFzZSBmb3JnZXQgYWJvdXQgbXkgcHJldmlvdXMgZW1haWwsIEknbSB1dHRl
-cmx5IHdyb25nLiBUaGF0IHNob3VsZAp0ZWFjaCBtZSB0byByZXBseSBiZWZvcmUgbXkgZmlyc3Qg
-bW9ybmluZyBjb2ZmZWUgOykKCldlIGluZGVlZCBoYXZlIGludGVybmFsIGNoZWNrcyBmb3Igb3Zl
-cmZsb3dzIGluIGJhYmVsdHJhY2UsIGJ1dCB0aG9zZQphcmUgbm90IHRyaWdnZXJpbmcgU0lHQlVT
-IGV2ZXIsIHRoZXkgcmV0dXJuIGZhaWx1cmUgZ3JhY2VmdWxseS4KCldoYXQgc2VlbXMgdG8gaGFw
-cGVuIGluIHlvdXIgY2FzZSBpcyBkb2N1bWVudGVkIGhlcmU6CgptbWFwKDIpIG1hbnBhZ2U6Cgog
-ICAgICAgU0lHQlVTIEF0dGVtcHRlZCBhY2Nlc3MgdG8gYSBwb3J0aW9uIG9mIHRoZSBidWZmZXIg
-dGhhdCBkb2VzIG5vdCBjb3JyZeKAkAogICAgICAgICAgICAgIHNwb25kICB0byAgdGhlICBmaWxl
-ICAoZm9yICBleGFtcGxlLCBiZXlvbmQgdGhlIGVuZCBvZiB0aGUgZmlsZSwKICAgICAgICAgICAg
-ICBpbmNsdWRpbmcgdGhlIGNhc2UgIHdoZXJlICBhbm90aGVyICBwcm9jZXNzICBoYXMgIHRydW5j
-YXRlZCAgdGhlCiAgICAgICAgICAgICAgZmlsZSkuCgpJJ20gY3VyaW91cyB0byBsZWFybiB3aGlj
-aCB2ZXJzaW9ucyBvZiBiYWJlbHRyYWNlL3VzdC9tb2R1bGVzIHlvdSBhcmUKdXNpbmcsIGlmIHlv
-dSBtb2RpZmllZCB0aGVtIChhbmQgaG93KSwgYW5kIGlmIHlvdSBjYW4gZ2V0IHVzIGEgc2FtcGxl
-CnRyYWNlIHRoYXQgdHJpZ2dlcnMgdGhlIGlzc3VlLgoKQWxzbywgYSBiaXQgb2YgY29udGV4dCBh
-Ym91dCB5b3VyIHNldHVwOiBpcyB0aGlzIDMyLWJpdCBvciA2NC1iaXQKdXNlci1zcGFjZSwgd2hp
-Y2ggT1MuCgpIcm0uCgpCeSBhbnkgY2hhbmNlLCBpcyBpdCBwb3NzaWJsZSB0aGF0IHlvdSByZWNv
-cmQgeW91ciB0cmFjZSBvbiBhIHBsYXRmb3JtCndpdGggNGtCIHBhZ2VzLCBhbmQgcnVuIGJhYmVs
-dHJhY2Ugb24gaXQgb24gYSBwbGF0Zm9ybSBoYXZpbmcgNjRrQgpwYWdlcz8gRXZlcnl0aGluZyBw
-b2ludHMgbWUgdG8gaW5jbHVkZS9iYWJlbHRyYWNlL21tYXAtYWxpZ24uaAptbWFwX2FsaWduX2Fk
-ZHIoKS4gV2UgbWlnaHQgYmUgbW1hcGluZyBiZXlvbmQgdGhlIGVuZCBvZiBmaWxlIGluIHRoaXMK
-Y2FzZS4KClRoYW5rcyEKCk1hdGhpZXUKCj4gCj4gT24gd2hpY2ggYmFiZWx0cmFjZSB2ZXJzaW9u
-IGNhbiB5b3UgcmVwcm9kdWNlIGl0ID8gRGlkIHlvdSBkbyBhbnkKPiBtb2RpZmljYXRpb24gdG8g
-YmFiZWx0cmFjZSBvbiB5b3VyIG93biBvbiB0b3AgPwo+IAo+IEFyZSB5b3UgZ2V0dGluZyB0aGlz
-IHdpdGggYSBsdHRuZy11c3Qgb3IgbHR0bmctbW9kdWxlcyB0cmFjZSA/IElmIHllcywKPiB3aGlj
-aCB2ZXJzaW9uIG9mIHRoZSB0b29sIGhhcyBnZW5lcmF0ZWQgdGhlIHRyYWNlID8KPiAKPiBDYW4g
-eW91IHByb3ZpZGUgYSBzYW1wbGUgdHJhY2UgdGhhdCB0cmlnZ2VycyB0aGlzIGlzc3VlID8KPiAK
-PiBDYW4geW91IGdpdmUgdXMgdGhlIGRldGFpbGVkIHNlcXVlbmNlIG9mIHN0ZXBzIHlvdSB1c2Ug
-dG8gcmVwcm9kdWNlID8KPiAKPiBUaGFua3MsCj4gCj4gTWF0aGlldQo+IAo+ID4gIzAgIF9hbGln
-bmVkX2ludGVnZXJfcmVhZCAoZGVmaW5pdGlvbj0weDk1NDMyMCwgcHBvcz0weDEwNmUwMjgpIGF0
-IAo+ID4gaW50ZWdlci5jOjgxCj4gPiAjMSAgY3RmX2ludGVnZXJfcmVhZCAocHBvcz0weDEwNmUw
-MjgsIGRlZmluaXRpb249MHg5NTQzMjApIGF0IAo+ID4gaW50ZWdlci5jOjIyNAo+ID4gIzIgIDB4
-MDAwMDdmZmZmMDcwZTM2ZSBpbiBnZW5lcmljX3J3IChkZWZpbml0aW9uPTxvcHRpbWl6ZWQgb3V0
-PiwgCj4gPiBwb3M9MHgxMDZlMDI4KSBhdCAuLi9pbmNsdWRlL2JhYmVsdHJhY2UvdHlwZXMuaDox
-MzMKPiA+ICMzICBidF9zdHJ1Y3RfcncgKHBwb3M9MHgxMDZlMDI4LCBkZWZpbml0aW9uPTB4OTU0
-MmUwKSBhdCBzdHJ1Y3QuYzo1Ngo+ID4gIzQgIDB4MDAwMDdmZmZmMTNmN2ZkYSBpbiBnZW5lcmlj
-X3J3IChkZWZpbml0aW9uPTxvcHRpbWl6ZWQgb3V0PiwgCj4gPiBwb3M9MHgxMDZlMDI4KSBhdCAu
-Li8uLi9pbmNsdWRlL2JhYmVsdHJhY2UvdHlwZXMuaDoxMzMKPiA+ICM1ICBjdGZfcGFja2V0X3Nl
-ZWsgKHN0cmVhbV9wb3M9MHgxMDZlMDI4LCBpbmRleD08b3B0aW1pemVkIG91dD4sIAo+ID4gd2hl
-bmNlPTxvcHRpbWl6ZWQgb3V0PikgYXQgY3RmLmM6ODYwCj4gPiAjNiAgMHgwMDAwN2ZmZmYwNzBh
-M2YxIGluIHNlZWtfZmlsZV9zdHJlYW1fYnlfdGltZXN0YW1wIAo+ID4gKGNmcz1jZnNAZW50cnk9
-MHgxMDZjZjkwLCB0aW1lc3RhbXA9dGltZXN0YW1wQGVudHJ5PTEzNzQ2MzY4MjE0OTg5NzI5MjYp
-IAo+ID4gYXQgaXRlcmF0b3IuYzoxNDEKPiA+ICM3ICAweDAwMDA3ZmZmZjA3MGFhOTYgaW4gc2Vl
-a19jdGZfdHJhY2VfYnlfdGltZXN0YW1wIAo+ID4gKHN0cmVhbV9oZWFwPTB4MTc2ZDMxMCwgdGlt
-ZXN0YW1wPTEzNzQ2MzY4MjE0OTg5NzI5MjYsIHRpbj08b3B0aW1pemVkIAo+ID4gb3V0PikgYXQg
-aXRlcmF0b3IuYzoxODgKPiA+ICM4ICBidF9pdGVyX3NldF9wb3MgKGl0ZXI9aXRlckBlbnRyeT0w
-eGZkYWZhMCwgaXRlcl9wb3M9MHgyYmY1OWYwKSBhdCAKPiA+IGl0ZXJhdG9yLmM6NDM5Cj4gPiAj
-OSAgMHgwMDAwN2ZmZmYxNjI0ZjAxIGluIF93cmFwX19idF9pdGVyX3NldF9wb3MgKHNlbGY9PG9w
-dGltaXplZCBvdXQ+LCAKPiA+IGFyZ3M9PG9wdGltaXplZCBvdXQ+KSBhdCBiYWJlbHRyYWNlX3dy
-YXAuYzozODA1Cj4gPiAjMTAgMHgwMDAwN2ZmZmY3YjI4YzBjIGluIGNhbGxfZnVuY3Rpb24gKG9w
-YXJnPTxvcHRpbWl6ZWQgb3V0PiwgCj4gPiBwcF9zdGFjaz08b3B0aW1pemVkIG91dD4pIGF0IFB5
-dGhvbi9jZXZhbC5jOjM2NzkKPiA+ICMxMSBQeUV2YWxfRXZhbEZyYW1lRXggKGY9MHgxYzI0M2Mw
-LCB0aHJvd2ZsYWc9PG9wdGltaXplZCBvdXQ+KSBhdCAKPiA+IFB5dGhvbi9jZXZhbC5jOjIzNzAK
-PiA+ICMxMiAweDAwMDA3ZmZmZjdiMmUwZDIgaW4gUHlFdmFsX0V2YWxDb2RlRXggKGNvPTB4YThl
-NWQwLCAKPiA+IGdsb2JhbHM9PG9wdGltaXplZCBvdXQ+LCBsb2NhbHM9PG9wdGltaXplZCBvdXQ+
-LCBhcmdzPTB4MjA4OGNjOCwgCj4gPiBhcmdjb3VudD0wLCBrd3M9MHgwLCBrd2NvdW50PTAsIGRl
-ZnM9MHgwLCBkZWZjb3VudD0wLCBjbG9zdXJlPTB4MCkKPiA+ICAgICBhdCBQeXRob24vY2V2YWwu
-YzoyOTQyCj4gPiAuCj4gPiAuCj4gPiAuCj4gPiAKPiA+IEFueSBzdWdnZXN0aW9ucyBhcmUgd2Vs
-Y29tZS4KPiA+IAo+ID4gQW1pdCBNYXJnYWxpdAo+ID4gSUJNIFhJViAtIFN0b3JhZ2UgUmVpbnZl
-bnRlZAo+ID4gWElWLU5BUyBEZXZlbG9wbWVudCBUZWFtCj4gPiBUZWwuIDAzLTY4OS03Nzc0Cj4g
-PiBGYXguIDAzLTY4OS03MjMwCj4gPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fXwo+ID4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+ID4gbHR0bmctZGV2QGxp
-c3RzLmx0dG5nLm9yZwo+ID4gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4v
-bGlzdGluZm8vbHR0bmctZGV2Cj4gCj4gCj4gLS0gCj4gTWF0aGlldSBEZXNub3llcnMKPiBFZmZp
-Y2lPUyBJbmMuCj4gaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KCi0tIApNYXRoaWV1IERlc25veWVy
-cwpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCgpfX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0
-dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21h
-aWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+* Zifei Tong (soariez@gmail.com) wrote:
+> Signed-off-by: Zifei Tong <soariez@gmail.com>
+> ---
+>  .gitignore | 4 ++++
+>  1 file changed, 4 insertions(+)
+
+there are some files missing from the .gitignore.
+
+> 
+> diff --git a/.gitignore b/.gitignore
+> index 3d17940..07d1306 100644
+> --- a/.gitignore
+> +++ b/.gitignore
+> @@ -34,6 +34,8 @@ ust-consumerd/ust-consumerd
+>  doc/examples/demo/demo
+>  doc/examples/easy-ust/sample
+>  doc/examples/hello-static-lib/hello
+> +doc/examples/gen-tp/sample
+> +doc/examples/gen-tp/sample_tracepoint.h
+>  
+>  tests/hello/hello
+>  tests/hello.cxx/hello
+> @@ -44,3 +46,5 @@ tests/trace_event/trace_event_test
+>  tests/tracepoint/benchmark/tracepoint_benchmark
+>  tests/tracepoint/tracepoint_test
+>  tests/snprintf/prog
+> +tests/benchmark/bench1
+> +tests/benchmark/bench2
+> -- 
+> 1.8.3.3
+> 
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
