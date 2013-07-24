@@ -1,17 +1,19 @@
-From: Matthew Khouzam <matthew.khouzam@ericsson.com>
+From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
 Subject: Re: Release strategy
-Date: Wed, 24 Jul 2013 10:26:39 -0400
-Message-ID: <51EFE41F.40909__44833.1114989289$1374676082$gmane$org@ericsson.com>
+Date: Wed, 24 Jul 2013 10:36:49 -0400
+Message-ID: <CA+jJMxsPH9s=OBEcD4+_92aoiDw6_EdePTZJMA9VtLPSrVzh_w__28925.4173556857$1374676671$gmane$org@mail.gmail.com>
 References: <51EEDF15.4090300@ericsson.com>
 	<CAGDH53=w6Wgat9vpL+iWd4mBfyM9CQuxGJEkN4095AeBB-LWog@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from usevmg21.ericsson.net ([198.24.6.65])
+Received: from mail-wg0-f50.google.com ([74.125.82.50])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <matthew.khouzam@ericsson.com>) id 1V201y-0006Eq-3J
-	for lttng-dev@lists.lttng.org; Wed, 24 Jul 2013 10:27:11 -0400
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1V20BT-0006sp-Up
+	for lttng-dev@lists.lttng.org; Wed, 24 Jul 2013 10:37:02 -0400
+Received: by mail-wg0-f50.google.com with SMTP id m15so485419wgh.17
+	for <lttng-dev@lists.lttng.org>; Wed, 24 Jul 2013 07:36:49 -0700 (PDT)
 In-Reply-To: <CAGDH53=w6Wgat9vpL+iWd4mBfyM9CQuxGJEkN4095AeBB-LWog@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -25,10 +27,8 @@ To: Christian Babeux <christian.babeux@efficios.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Thank you very much, this clears up a lot of stuff
-
-
-On 13-07-23 11:30 PM, Christian Babeux wrote:
+On Tue, Jul 23, 2013 at 11:30 PM, Christian Babeux
+<christian.babeux@efficios.com> wrote:
 > Hi Matthew,
 >
 > You certainly raise valid and interesting questions about our release
@@ -37,7 +37,8 @@ On 13-07-23 11:30 PM, Christian Babeux wrote:
 > 1) Branching policy (when do we branch master? after the first release
 > candidate or after a final release?)
 >
-> 2) Release roadmap (when the next release is planned? what does it contain?)
+> 2) Release roadmap (when the next release is planned? what does it contai=
+n?)
 >
 > 3) Tentative release dates
 >
@@ -52,12 +53,15 @@ On 13-07-23 11:30 PM, Christian Babeux wrote:
 > set of patches and getting no response or waiting for merge if a
 > release candidate cycle is in effect. Any ideas/suggestions on how we
 > could improve this?
-Could you add a 'staging' branch for features, kind of like a passing
-lane on a highway?
-A gerrit like system also could help. that way people will be able to
-push patches and get reviews. Does redmine have something similar?
-
 >
+
+We should create a separate branch at the first release candidate and
+stabilize it until the official release. The feature freeze would then
+only apply to that branch while invasive changes could be merged in
+master at all times. It would certainly make it easier on occasional
+contributors that may not be aware of the release schedule (at the
+expense of the maintainers' sanity...).
+
 > For 2), the release roadmap is available at [1]. The roadmap is kind
 > of a mess right now because bugs are assigned to older stable releases
 > giving the wrong impression that some stable releases are way late.
@@ -66,9 +70,18 @@ push patches and get reviews. Does redmine have something similar?
 > versions and features targeting future versions. Perhaps something
 > like [2-3] could be promising?
 >
+
+Disciplining ourselves in opening Features with reasonable target
+dates on the bug tracker may be enough to make the current "Roadmap"
+plug-in useful.
+
 > For 3), I would try to put tentative release dates on the roadmap on
 > Redmine or on a wiki article similar to [4]?
 >
+
+I'd prefer using the roadmap functionality. I'm afraid the wiki won't
+be maintained as releases slip.
+
 > Another point that you did not mention is how we plan minor releases.
 > I think we will need to define a clear policy for minor releases
 > sooner than later because it is becoming quite painful to support
@@ -86,6 +99,13 @@ push patches and get reviews. Does redmine have something similar?
 > releases, etc.)
 > - Etc.
 >
+
+Sounds good. It would also be a great opportunity to structure
+discussions around the planning.
+
+Regards,
+J=E9r=E9mie
+
 > Any ideas/suggestions/constructive criticism on how we can improve our
 > release process are quite welcome!
 >
@@ -119,3 +139,16 @@ push patches and get reviews. Does redmine have something similar?
 >> lttng-dev mailing list
 >> lttng-dev@lists.lttng.org
 >> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+
+
+-- =
+
+J=E9r=E9mie Galarneau
+EfficiOS Inc.
+http://www.efficios.com
