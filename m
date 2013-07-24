@@ -1,20 +1,21 @@
 From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH babeltrace] Make examples work
-Date: Wed, 24 Jul 2013 15:32:12 -0400
-Message-ID: <CA+jJMxuXo6sL1EnC8O_6D7fF33405Q44EJcFZPm5DzHz7nb=_A__4595.32039608366$1374694398$gmane$org@mail.gmail.com>
+Subject: Re: [PATCH babeltrace] Return event fields by a field
+ name. Since a field may be present both in an event and its stream's scope,
+ this returns a list which contains all the fileds by the name
+Date: Wed, 24 Jul 2013 15:32:23 -0400
+Message-ID: <CA+jJMxsCLqJ=Uud7KvqqSRfqLOLM+118jq=mdyomu+CNgGsAxw__45853.2601282515$1374694490$gmane$org@mail.gmail.com>
 References: <1374659868-6264-1-git-send-email-xiaonahappy13@163.com>
-	<1374659868-6264-3-git-send-email-xiaonahappy13@163.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wi0-f175.google.com ([209.85.212.175])
+Received: from mail-wg0-f43.google.com ([74.125.82.43])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1V24nK-00018L-4p
-	for lttng-dev@lists.lttng.org; Wed, 24 Jul 2013 15:32:24 -0400
-Received: by mail-wi0-f175.google.com with SMTP id m6so4719316wiv.8
-	for <lttng-dev@lists.lttng.org>; Wed, 24 Jul 2013 12:32:12 -0700 (PDT)
-In-Reply-To: <1374659868-6264-3-git-send-email-xiaonahappy13@163.com>
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1V24nV-000192-9M
+	for lttng-dev@lists.lttng.org; Wed, 24 Jul 2013 15:32:35 -0400
+Received: by mail-wg0-f43.google.com with SMTP id z12so818234wgg.22
+	for <lttng-dev@lists.lttng.org>; Wed, 24 Jul 2013 12:32:23 -0700 (PDT)
+In-Reply-To: <1374659868-6264-1-git-send-email-xiaonahappy13@163.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -27,150 +28,167 @@ To: Xiaona Han <xiaonahappy13@163.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-This patch depends on the other two you submitted. Resubmit them as a
-series. Use git format-patch's "-n" option for that.
+Please do not exceed 80-chars in your subject line and detail your
+changes in the rest of the commit message.
 
-Also, please provide a clearer commit message.
-
-Regards,
-J=E9r=E9mie
+See other remarks below.
 
 On Wed, Jul 24, 2013 at 5:57 AM, Xiaona Han <xiaonahappy13@163.com> wrote:
 > Signed-off-by: Xiaona Han <xiaonahappy13@163.com>
 > ---
->  bindings/python/examples/example-api-test.py |   16 +++++--------
->  bindings/python/examples/sched_switch.py     |   32 +++++++++++++-------=
-------
->  2 files changed, 22 insertions(+), 26 deletions(-)
+>  bindings/python/babeltrace.i.in |   78 +++++++++++++++++++++++++++++++++=
+++++-
+>  1 files changed, 75 insertions(+), 3 deletions(-)
+>  mode change 100644 =3D> 100755 bindings/python/babeltrace.i.in
 >
-> diff --git a/bindings/python/examples/example-api-test.py b/bindings/pyth=
-on/examples/example-api-test.py
-> index fc59e24..3c3527c 100644
-> --- a/bindings/python/examples/example-api-test.py
-> +++ b/bindings/python/examples/example-api-test.py
-> @@ -50,23 +50,19 @@ while(event is not None):
->                 event.get_cycles(), event.get_name()))
+> diff --git a/bindings/python/babeltrace.i.in b/bindings/python/babeltrace=
+.i.in
+> old mode 100644
+> new mode 100755
+
+Why the mode change?
+
+> index dd2dacc..880b23e
+> --- a/bindings/python/babeltrace.i.in
+> +++ b/bindings/python/babeltrace.i.in
+> @@ -744,7 +744,7 @@ class ctf:
+>                         """
+>                         return _bt_ctf_get_timestamp(self._e)
 >
->         if event.get_name() =3D=3D "sched_switch":
-> -               sco =3D event.get_top_level_scope(ctf.scope.EVENT_FIELDS)
-> -               prev_field =3D event.get_field(sco, "_prev_comm")
-> -               prev_comm =3D prev_field.get_char_array()
-> -
-> -               if ctf.field_error():
-> +               prev_field =3D event.get_field("_prev_comm")
-> +               if not prev_field:
->                         print("ERROR: Missing prev_comm context info")
->                 else:
-> +                       prev_comm =3D prev_field[0].getvalue()
->                         print("sched_switch prev_comm: {}".format(prev_co=
-mm))
+> -               def get_field(self, scope, field):
+> +               def get_field_with_scope(self, scope, field):
+>                         """Return the definition of a specific field."""
+>                         evDef =3D ctf.Definition.__new__(ctf.Definition)
+>                         try:
+> @@ -754,9 +754,32 @@ class ctf:
+>                                         "Definition (scope) instance")
+>                         return evDef
 >
->         if event.get_name() =3D=3D "exit_syscall":
-> -               sco =3D event.get_top_level_scope(ctf.scope.EVENT_FIELDS)
-> -               ret_field =3D event.get_field(sco, "_ret")
-> -               ret_code =3D ret_field.get_int64()
-> -
-> -               if ctf.field_error():
-> +               ret_field =3D event.get_field("_ret")
-> +               if not ret_field:
->                         print("ERROR: Unable to extract ret")
->                 else:
-> +                       ret_code =3D ret_field[0].get_value()
->                         print("exit_syscall ret: {}".format(ret_code))
+> -               def get_field_list(self, scope):
+> +               def get_field(self, field):
+> +                       """Return the definition of fields by a name"""
+> +                       eventScope =3D self.get_top_level_scope(ctf.scope=
+.EVENT_FIELDS)
+> +                       streamScope =3D self.get_top_level_scope(ctf.scop=
+e.STREAM_EVENT_CONTEXT)
+> +                       fields_by_name =3D []
+> +
+> +                       if eventScope is not None:
+> +                               evDef =3D ctf.Definition.__new__(ctf.Defi=
+nition)
+> +                               evDef._d =3D _bt_ctf_get_field(self._e, e=
+ventScope._d, field)
+> +
+> +                               if evDef._d is not None:
+> +                                       evDef._s =3D eventScope
+> +                                       fields_by_name.append(evDef);
+> +
+> +                       if streamScope is not None:
+> +                               stDef =3D ctf.Definition.__new__(ctf.Defi=
+nition)
+> +                               stDef._d =3D _bt_ctf_get_field(self._e, s=
+treamScope._d, field)
+> +
+> +                               if stDef._d is not None:
+> +                                       stDef._s =3D streamScope
+> +                                       fields_by_name.append(stDef);
+> +                       return fields_by_name
+> +
+> +               def get_field_list_with_scope(self, scope):
+>                         """
+> -                       Return a list of Definitions
+> +                       Return a list of Definitions by a scope
+
+How about "Return a list of Definitions associated with the scope"
+
+>                         Return None on error.
+>                         """
+>                         try:
+> @@ -783,6 +806,51 @@ class ctf:
+>                                 i +=3D 1
+>                         return def_list
 >
->         ret =3D ctf_it.next()
-> diff --git a/bindings/python/examples/sched_switch.py b/bindings/python/e=
-xamples/sched_switch.py
-> index d5ed25b..0e6947c 100644
-> --- a/bindings/python/examples/sched_switch.py
-> +++ b/bindings/python/examples/sched_switch.py
-> @@ -57,8 +57,8 @@ while event is not None:
->                                 break # Next event
+> +               def get_field_list(self):
+> +                       """
+> +                       Return a list of Definitions
+> +                       Return None on error.
+> +                       """
+> +                       event_field_lc =3D None
+> +                       stream_field_lc =3D None
+> +                       eventScope =3D self.get_top_level_scope(ctf.scope=
+.EVENT_FIELDS)
+> +                       streamScope =3D self.get_top_level_scope(ctf.scop=
+e.STREAM_EVENT_CONTEXT)
+> +
+> +                       if eventScope is not None:
+> +                               event_field_lc =3D _bt_python_field_listc=
+aller(self._e, eventScope._d)
+> +                       if streamScope is not None:
+> +                               stream_field_lc =3D _bt_python_field_list=
+caller(self._e, streamScope._d)
+> +
+> +                       if event_field_lc is None and stream_field_lc is =
+None:
+> +                               return None
+> +
+> +                       def_list =3D []
+> +                       if event_field_lc is not None:
+> +                               i =3D 0
+> +                               while True:
+> +                                       tmp =3D ctf.Definition.__new__(ct=
+f.Definition)
+> +                                       tmp._d =3D _bt_python_field_one_f=
+rom_list(event_field_lc, i)
+> +                                       if tmp._d is None:
+> +                                       #Last item of list is None, assur=
+ed in
+> +                                       #_bt_python_field_listcaller
+
+
+These last two lines introduce a single space before the tabs.
+
+> +                                               break
+> +                                       tmp._s =3D eventScope
+> +                                       def_list.append(tmp)
+> +                                       i +=3D 1
+> +                       if stream_field_lc is not None:
+> +                               i =3D 0
+> +                               while True:
+> +                                       tmp =3D ctf.Definition.__new__(ct=
+f.Definition)
+> +                                       tmp._d =3D _bt_python_field_one_f=
+rom_list(stream_field_lc, i)
+> +                                       if tmp._d is None:
+> +                                       #Last item of list is None, assur=
+ed in
+> +                                       #_bt_python_field_listcaller
+> +                                               break
+> +                                       tmp._s =3D streamScope
+> +                                       def_list.append(tmp)
+> +                                       i +=3D 1
+
+You are repeating the same code twice to build the list from both
+scopes. Please put it in a different helper function. The same could
+be said of "get_field".
+
+> +                       return def_list
+> +
+>                 def get_index(self, field, index):
+>                         """
+>                         If the field is an array or a sequence, return th=
+e element
+> @@ -918,6 +986,10 @@ class ctf:
+>                         """
+>                         return _bt_ctf_get_string(self._d)
 >
->                         # Getting PID
-> -                       pid_field =3D event.get_field(sco, "_pid")
-> -                       pid =3D pid_field.get_int64()
-> +                       pid_field =3D event.get_field_with_scope(sco, "_p=
-id")
-> +                       pid =3D pid_field.get_value()
+> +               def get_scope(self):
+> +                       """Return the scope of a field or None on error."=
+""
+> +                       return self._s
+> +
 >
->                         if ctf.field_error():
->                                 print("ERROR: Missing PID info for sched_=
-switch")
-> @@ -70,44 +70,44 @@ while event is not None:
->                         sco =3D event.get_top_level_scope(ctf.scope.EVENT=
-_FIELDS)
->
->                         # prev_comm
-> -                       field =3D event.get_field(sco, "_prev_comm")
-> -                       prev_comm =3D field.get_char_array()
-> +                       field =3D event.get_field_with_scope(sco, "_prev_=
-comm")
-> +                       prev_comm =3D field.get_value()
->                         if ctf.field_error():
->                                 print("ERROR: Missing prev_comm context i=
-nfo")
->
->                         # prev_tid
-> -                       field =3D event.get_field(sco, "_prev_tid")
-> -                       prev_tid =3D field.get_int64()
-> +                       field =3D event.get_field_with_scope(sco, "_prev_=
-tid")
-> +                       prev_tid =3D field.get_value()
->                         if ctf.field_error():
->                                 print("ERROR: Missing prev_tid context in=
-fo")
->
->                         # prev_prio
-> -                       field =3D event.get_field(sco, "_prev_prio")
-> -                       prev_prio =3D field.get_int64()
-> +                       field =3D event.get_field_with_scope(sco, "_prev_=
-prio")
-> +                       prev_prio =3D field.get_value()
->                         if ctf.field_error():
->                                 print("ERROR: Missing prev_prio context i=
-nfo")
->
->                         # prev_state
-> -                       field =3D event.get_field(sco, "_prev_state")
-> -                       prev_state =3D field.get_int64()
-> +                       field =3D event.get_field_with_scope(sco, "_prev_=
-state")
-> +                       prev_state =3D field.get_value()
->                         if ctf.field_error():
->                                 print("ERROR: Missing prev_state context =
-info")
->
->                         # next_comm
-> -                       field =3D event.get_field(sco, "_next_comm")
-> -                       next_comm =3D field.get_char_array()
-> +                       field =3D event.get_field_with_scope(sco, "_next_=
-comm")
-> +                       next_comm =3D field.get_value()
->                         if ctf.field_error():
->                                 print("ERROR: Missing next_comm context i=
-nfo")
->
->                         # next_tid
-> -                       field =3D event.get_field(sco, "_next_tid")
-> -                       next_tid =3D field.get_int64()
-> +                       field =3D event.get_field_with_scope(sco, "_next_=
-tid")
-> +                       next_tid =3D field.get_value()
->                         if ctf.field_error():
->                                 print("ERROR: Missing next_tid context in=
-fo")
->
->                         # next_prio
-> -                       field =3D event.get_field(sco, "_next_prio")
-> -                       next_prio =3D field.get_int64()
-> +                       field =3D event.get_field_with_scope(sco, "_next_=
-prio")
-> +                       next_prio =3D field.get_value()
->                         if ctf.field_error():
->                                 print("ERROR: Missing next_prio context i=
-nfo")
->
+>         class EventDecl(object):
+>                 """Event declaration class.  Do not instantiate."""
 > --
 > 1.7.1
 >
