@@ -1,21 +1,16 @@
-From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH babeltrace] Use a unique name to get a
-	field's value
-Date: Wed, 24 Jul 2013 15:32:49 -0400
-Message-ID: <CA+jJMxs3pUtyq37KwdpJBJJ6GxpOtsJAdQu_WGh2CS8mZp_zQA__37783.3307524726$1374694634$gmane$org@mail.gmail.com>
-References: <1374659868-6264-1-git-send-email-xiaonahappy13@163.com>
-	<1374659868-6264-2-git-send-email-xiaonahappy13@163.com>
+From: Jonnavithula Sharma <sarmajprs@gmail.com>
+Subject: List to insmod lttng modules
+Date: Thu, 25 Jul 2013 16:00:53 +0530
+Message-ID: <CAJD=Q56sC911-aY5jQpVDZ4Q-6JoxitEQQDvmp_N5TWfGbtyQg__34708.8872608312$1374756661$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/mixed; boundary="===============1849372073=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wg0-f47.google.com ([74.125.82.47])
+Received: from mail-we0-f180.google.com ([74.125.82.180])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1V24nu-0001B8-SE
-	for lttng-dev@lists.lttng.org; Wed, 24 Jul 2013 15:33:00 -0400
-Received: by mail-wg0-f47.google.com with SMTP id j13so797083wgh.2
-	for <lttng-dev@lists.lttng.org>; Wed, 24 Jul 2013 12:32:49 -0700 (PDT)
-In-Reply-To: <1374659868-6264-2-git-send-email-xiaonahappy13@163.com>
+	(envelope-from <sarmajprs@gmail.com>) id 1V2Ip2-0005Hq-3f
+	for lttng-dev@lists.lttng.org; Thu, 25 Jul 2013 06:31:04 -0400
+Received: by mail-we0-f180.google.com with SMTP id p61so287530wes.11
+	for <lttng-dev@lists.lttng.org>; Thu, 25 Jul 2013 03:30:54 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,74 +19,76 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Xiaona Han <xiaonahappy13@163.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On Wed, Jul 24, 2013 at 5:57 AM, Xiaona Han <xiaonahappy13@163.com> wrote:
-> Signed-off-by: Xiaona Han <xiaonahappy13@163.com>
-> ---
->  bindings/python/babeltrace.i.in |   19 +++++++++++++++++++
->  1 files changed, 19 insertions(+), 0 deletions(-)
->
-> diff --git a/bindings/python/babeltrace.i.in b/bindings/python/babeltrace=
-.i.in
-> index 880b23e..806cc73 100755
-> --- a/bindings/python/babeltrace.i.in
-> +++ b/bindings/python/babeltrace.i.in
-> @@ -986,6 +986,25 @@ class ctf:
->                         """
->                         return _bt_ctf_get_string(self._d)
->
-> +               def get_value(self):
-> +                       """
-> +                       Return the value associated with the field accord=
-ing to its type.
-> +                       If the field does not exist, the value returned i=
-s undefined.
-> +                       To check if an error occured, use the ctf.field_e=
-rror() function
-> +                       after accessing a field.
-> +                       """
-> +                       id =3D self.field_type()
-> +                       if id =3D=3D ctf.type_id.STRING:
-> +                               return self.get_str()
-> +                       if type_id =3D=3D ctf.type_id.ARRAY:
-> +                               return self.get_char_array()
-> +                       if type_id =3D=3D ctf.type_id.INTEGER:
-> +                               if self.get_int_signedness =3D=3D 0:
-> +                                       return self.get_uint64()
-> +                               else:
-> +                                       return self.get_int64()
-> +                       return None
-> +
+--===============1849372073==
+Content-Type: multipart/alternative; boundary=089e0103ecec54a1ea04e25385ee
 
-You are assigning the field's type to "id" and then using "type_id".
-Did you test this?
+--089e0103ecec54a1ea04e25385ee
+Content-Type: text/plain; charset=ISO-8859-1
 
-Also, while I can understand not supporting compound types right-away,
-please make sure it supports floating point and enums.
+Hi,
 
-Regards,
-J=E9r=E9mie
+I am using lttng-modules 2.2.1 for the kernel 3.8.13 version and i am
+successful in compiling it and i see there are lot of ".ko" generated in
+probes directory and top level lttng-modules directory.
 
->                 def get_scope(self):
->                         """Return the scope of a field or None on error."=
-""
->                         return self._s
-> --
-> 1.7.1
->
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+So now which module needs to insmod first?Can you provide me the list to
+which module needs to insmod first .
+
+I tried to insmod some of the .ko i am getting below error.Am i missing
+something here?
+
+root@ltqcpe:/ramdisk/tmp# insmod lttng-ring-buffer-client-discard.ko
+[94511.780000] lttng_ring_buffer_client_discard: Unknown symbol
+lttng_transport_unregister (err 0)
+[94511.790000] lttng_ring_buffer_client_discard: Unknown symbol
+lttng_transport_register (err 0)
+insmod: can't insert 'lttng-ring-buffer-client-discard.ko': unknown symbol
+in module, or unknown parameter
 
 
+Your response is highly aprreciated.
 
--- =
 
-J=E9r=E9mie Galarneau
-EfficiOS Inc.
-http://www.efficios.com
+Thanks & Regards,
+Sarma J
+
+--089e0103ecec54a1ea04e25385ee
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div><div>Hi,<br><br></div>I am using lttng-modules 2.2.1 =
+for the kernel 3.8.13 version and i am successful in compiling it and i see=
+ there are lot of &quot;.ko&quot; generated in probes directory and top lev=
+el lttng-modules directory.<br>
+<br></div><div>So now which module needs to insmod first?Can you provide me=
+ the list to which module needs to insmod first .<br><br></div><div>I tried=
+ to insmod some of the .ko i am getting below error.Am i missing something =
+here?<br>
+<br>root@ltqcpe:/ramdisk/tmp# insmod lttng-ring-buffer-client-discard.ko<br=
+>[94511.780000] lttng_ring_buffer_client_discard: Unknown symbol lttng_tran=
+sport_unregister (err 0)<br>[94511.790000] lttng_ring_buffer_client_discard=
+: Unknown symbol lttng_transport_register (err 0)<br>
+insmod: can&#39;t insert &#39;lttng-ring-buffer-client-discard.ko&#39;: unk=
+nown symbol in module, or unknown parameter<br><br><br></div><div>Your resp=
+onse is highly aprreciated.<br></div><div><br><br></div><div>Thanks &amp; R=
+egards,<br>
+Sarma J<br></div><div><br></div></div>
+
+--089e0103ecec54a1ea04e25385ee--
+
+
+--===============1849372073==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1849372073==--
