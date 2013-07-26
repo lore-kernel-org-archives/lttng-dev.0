@@ -1,16 +1,19 @@
-From: =?ISO-8859-1?Q?S=E9bastien_Barth=E9l=E9my?= <barthelemy@crans.org>
-Subject: Misc questions regarding kernel tracing
-Date: Fri, 26 Jul 2013 18:36:07 +0200
-Message-ID: <CAPkDDd4QX-Coj5rnqZp5pLjrzWOUDOvRu+6PWZW+EOYAEH0vtw__22716.9807804332$1374856629$gmane$org@mail.gmail.com>
+From: Simon Marchi <simon.marchi@polymtl.ca>
+Subject: Re: [RFC] Dynamic instrumentation support in UST
+Date: Fri, 26 Jul 2013 13:40:03 -0400
+Message-ID: <CAFXXi0kJaQwrcg81P159W9EPe6M+9hesNFj-haySyByncqF+fw__19144.7355239236$1374860508$gmane$org@mail.gmail.com>
+References: <CAJ7wx-FipDw6XVvYsugMhOrSEJVz5vASaJQnjX9HM5-ahu24bA@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1293240106=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-we0-f175.google.com ([74.125.82.175])
+Received: from mail-ob0-f175.google.com ([209.85.214.175])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <sebastien.barthelemy@gmail.com>) id 1V2l01-0008Ow-89
-	for lttng-dev@lists.lttng.org; Fri, 26 Jul 2013 12:36:19 -0400
-Received: by mail-we0-f175.google.com with SMTP id q58so2073542wes.20
-	for <lttng-dev@lists.lttng.org>; Fri, 26 Jul 2013 09:36:07 -0700 (PDT)
+	(envelope-from <thundersim@gmail.com>) id 1V2m0O-0005fa-VO
+	for lttng-dev@lists.lttng.org; Fri, 26 Jul 2013 13:40:46 -0400
+Received: by mail-ob0-f175.google.com with SMTP id xn12so4922225obc.34
+	for <lttng-dev@lists.lttng.org>; Fri, 26 Jul 2013 10:40:35 -0700 (PDT)
+In-Reply-To: <CAJ7wx-FipDw6XVvYsugMhOrSEJVz5vASaJQnjX9HM5-ahu24bA@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,93 +22,142 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Zifei Tong <soariez@gmail.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============1293240106==
-Content-Type: multipart/alternative; boundary=089e010d8a024cba2c04e26cbdd0
-
---089e010d8a024cba2c04e26cbdd0
-Content-Type: text/plain; charset=ISO-8859-1
-
-Hello all,
-
-I am investigating a problem on a rt system which misses deadlines under
-load. Yet another occasion to use LTTng! But this comes with a bunch of
-newcomer questions.
-
-I'd like to reconstruct the state of the scheduler (the control view in
-eclipse) with the minimum amount of traces from the kernel. So far I
-recorded only the sched* events and it seems ok. But I suspect I should
-also enable some lttng_statedump* to garantee a clean state at the very
-beginning of the trace. Could you confirm this?
-
-Also, I see threads which do "clone" a lot in the eclipse control view, but
-looking at the raw traces (only the sched* events) I do not understand how
-eclipse can figure it out. Is this an artefact of trying to use a kernel
-trace which misses the syscall events or can I trust these "clone"?
-
-More generally, is there a comprehensive guide somewhere that you would
-recommend in order to understand the precise meaning of these sched* events?
-
-Is there a way to trim a trace (remove the beginning and/or the end)
-without compromising the scheduler state reconstruction?
-
-I sometimes miss kernel events. Is there a point in using different
-channels for kernel and user space traces (besides giving them distinct
-sizes)? I suspect they're already effectively different even if they have
-the same name. Also, I have increased the subbuffer size a lot, but did not
-change the number of subbuffers. Would that help preventing missed events?
-
-Thanks!
-
---089e010d8a024cba2c04e26cbdd0
-Content-Type: text/html; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><p dir=3D"ltr">Hello all,<br></p><p dir=3D"ltr">I am inves=
-tigating a problem on a rt system which misses deadlines under load. Yet an=
-other occasion to use LTTng! But this comes with a bunch of newcomer questi=
-ons.<br>
-</p>
-<p dir=3D"ltr">I&#39;d like to reconstruct the state of the scheduler (the =
-control view in eclipse) with the minimum amount of traces from the kernel.=
- So far I recorded only the sched* events and it seems ok. But I suspect I =
-should also enable some lttng_statedump* to garantee a clean state at the v=
-ery beginning of the trace. Could you confirm this?</p>
-
-
-<p dir=3D"ltr">Also, I see threads which do &quot;clone&quot; a lot in the =
-eclipse control view, but looking at the raw traces (only the sched* events=
-) I do not understand how eclipse can figure it out. Is this an artefact of=
- trying to use a kernel trace which misses the syscall events or can I trus=
-t these &quot;clone&quot;?<br>
-</p>
-<p dir=3D"ltr">More generally, is there a comprehensive guide somewhere tha=
-t you would recommend in order to understand the precise meaning of these s=
-ched* events?<br></p><p dir=3D"ltr">Is there a way to trim a trace (remove =
-the beginning and/or the end) without compromising the scheduler state reco=
-nstruction?<br>
-</p>
-<p>I sometimes miss kernel events. Is there a point in using different chan=
-nels for kernel and user space traces (besides giving them distinct sizes)?=
- I suspect they&#39;re already effectively different even if they have the =
-same name. Also, I have increased the subbuffer size a lot, but did not cha=
-nge the number of subbuffers. Would that help preventing missed events?</p>
-<p></p><p>Thanks!<br></p></div>
-
---089e010d8a024cba2c04e26cbdd0--
-
-
---===============1293240106==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1293240106==--
+SGkgWmlmZWksCgpUaGF0IGxvb2tzIGdyZWF0ISBRdWVzdGlvbnMgYW5kIGNvbW1lbnRzIGJlbG93
+LgoKT24gMjYgSnVseSAyMDEzIDExOjQwLCBaaWZlaSBUb25nIDxzb2FyaWV6QGdtYWlsLmNvbT4g
+d3JvdGU6Cj4gSGkgZXZlcnlvbmUsCj4KPiBIZXJlIGlzIHRoZSBSRkMgZm9yIHRoZSBkeW5hbWlj
+IGluc3RydW1lbnRhdGlvbiBzdXBwb3J0IGluIFVTVC4KPgo+IEl0IGNvbnRhaW5zIGEgY29tbWFu
+ZCBsaW5lIGludGVyZmFjZSBwcm9wb3NhbCBhbmQgc29tZSBub3RlcyBvbgo+IGltcGxlbWVudGF0
+aW9uIGRldGFpbHMuCj4KPiBQbGVhc2UgcHJvdmlkZSB5b3VyIGNvbW1lbnRzLiBBbnkgcXVlc3Rp
+b25zLCBvciBmaXhlcyBhcmUgVkVSWSB3ZWxjb21lLgo+Cj4KPiBDb21tYW5kIExpbmUgSW50ZXJm
+YWNlCj4gLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQo+Cj4gVGhlIHByb3Bvc2VkIGNvbW1hbmQgbGlu
+ZSBpbnRlcmZhY2UgaXMgdmVyeSBzaW1pbGFyIHRvIHRoZSBjdXJyZW50IGx0dG5nIGtlcm5lbAo+
+IGR5bmFtaWMgcHJvYmUgaW50ZXJmYWNlIFsxXS4KPgo+IFRvIGVuYWJsZSBhIGR5bmFtaWMgcHJv
+YmUgaW4gYSBydW5uaW5nIHByb2Nlc3MgYXQgZ2l2ZW4gYWRkcmVzcywgeW91IGNhbiB1c2U6Cj4K
+PiAgICAgbHR0bmcgZW5hYmxlLWV2ZW50IE5BTUUgLXUgLS1waWQgUElECj4gICAgICAgICAtLXBy
+b2JlIChhZGRyIHwgc3ltYm9sIHwgc3ltYm9sK29mZnNldCkKPiAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgRHluYW1pYyBVU1QgcHJvYmUuCj4gICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgIEFkZHIgYW5kIG9mZnNldCBjYW4gYmUgb2N0YWwgKDBOTk4uLi4pLAo+ICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICBkZWNpbWFsIChOTk4uLi4pIG9yIGhleGFkZWNpbWFsICgw
+eE5OTi4uLikKPgo+IFRoaXMgd2lsbCBwbGFjZSBhIGJhcmUgcHJvYmUgYXQgY2VydGFpbiBhZGRy
+ZXNzLgo+Cj4gRXhhbXBsZXM6Cj4KPiAgICAgIyBsdHRuZyBlbmFibGUtZXZlbnQgYW5hbWUgLXUg
+LS1waWQgODk2NCAtLXByb2JlIGZvbysweDYKPiAgICAgIyBsdHRuZyBlbmFibGUtZXZlbnQgYW5h
+bWUgLXUgLS1waWQgODk2NCAtLXByb2JlIDB4ZGVhZGJlZWYKPgo+IFlvdSBjYW4gYWxzbyBlbmFi
+bGUgYSB0cmFjZXBvaW50IGF0IHRoZSBlbnRyeSBvZiBhIGdpdmVuIGZ1bmN0aW9uOgo+Cj4gICAg
+IGx0dG5nIGVuYWJsZS1ldmVudCBOQU1FIC11IC0tcGlkIFBJRAo+ICAgICAgICAgLS1mdW5jdGlv
+biAoYWRkciB8IHN5bWJvbCB8IHN5bWJvbCtvZmZzZXQpCj4gICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICBEeW5hbWljIFVTVCBmdW5jdGlvbiBlbnRyeSBwcm9iZS4KPiAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgIEFkZHIgYW5kIG9mZnNldCBjYW4gYmUgb2N0YWwgKDBOTk4uLi4pLAo+
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZGVjaW1hbCAoTk5OLi4uKSBvciBoZXhhZGVj
+aW1hbCAoMHhOTk4uLi4pCj4KPiBUaGlzIHdpbGwgcGxhY2UgYSBiYXJlIHByb2JlIGF0IHRoZSBl
+bnRyeSBwb2ludCBvZiBjZXJ0YWluIGZ1bmN0aW9uLgoKV2hhdCBpcyB0aGUgZGlmZmVyZW5jZSBp
+ZiBJIGRvCiAgLS1mdW5jdGlvbiBmb28KdnMKICAtLXByb2JlIGZvbwo/Cgo+IEV4YW1wbGVzOgo+
+Cj4gICAgICMgbHR0bmcgZW5hYmxlLWV2ZW50IGFuYW1lIC11IC0tcGlkIDg5NjQgLS1mdW5jdGlv
+biBmb28KPgo+IEJlaW5nIG9ubHkgYWJsZSB0byBhdHRhY2ggYW5kIGluc3RydW1lbnQgZXhpc3Rp
+bmcgcHJvY2Vzc2VzIGlzIHNvbWV0aW1lcwo+IHJlc3RyaWN0ZWQuIElmIHdlIGNhbiBoYXZlICMx
+NSBbMl0gaW1wbGVtZW50ZWQsIHRoZW4gd2UgY2FuIGV4dGVuZCB0aGUgY29tbWFuZAo+IHRvIHN1
+cHBvcnQgZHluYW1pYyBpbnN0cnVtZW50YXRpb24uCj4KPiAgICAgbHR0bmcgdHJhY2UgLWMgQ09N
+TUFORAo+ICAgICAgICAgLS1wcm9iZSAoYWRkciB8IHN5bWJvbCB8IHN5bWJvbCtvZmZzZXQpCj4g
+ICAgICAgICAtLWZ1bmN0aW9uIChhZGRyIHwgc3ltYm9sIHwgc3ltYm9sK29mZnNldCkKPgo+IFRo
+aXMgd2lsbCBleGVjdXRlIGdpdmVuIHByb2dyYW0gYW5kIHBsYWNlIHByb2JlcyBhdCBjZXJ0YWlu
+IHBsYWNlcy4KPgo+IEV4YW1wbGVzOgo+Cj4gICAgICMgbHR0bmcgdHJhY2UgLWMgImxzIC1sIiAt
+LXByb2JlIG1haW4rMHgxMAo+ICAgICAjIGx0dG5nIHRyYWNlIC1jICJscyAtbCIgLS1mdW5jdGlv
+biBtYWluCj4KPiBQcm9iZXMgY29sbGVjdGluZyBjb250ZXh0IGRhdGEgYXJlIG1vcmUgdXNlZnVs
+IHRoYW4gYmFyZSBvbmVzLiBXZSBjYW4gZXh0ZW5kCj4gdGhlIGFkZC1jb250ZXh0IGNvbW1hbmQg
+dG8gc3VwcG9ydCBtb3JlIGNvbnRleHQgdHlwZXMuCj4KPiAgICAgbHR0bmcgYWRkLWNvbnRleHQg
+LXUgLWUgTkFNRSAtLXBpZCBQSUQKPiAgICAgICAgIC10LCAtLXR5cGUgVFlQRSAgICAgQ29udGV4
+dCB0eXBlLgo+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICBUWVBFIGNhbiBiZSBvbmUgb2Yg
+dGhlIHN0cmluZ3MgYmVsb3c6Cj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICByZWdz
+Cj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgYWxsIHJlZ2lzdGVycwo+ICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgcmVnOnJlZ19uYW1lCj4gICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgcmVnaXN0ZXIgd2l0aCBuYW1lIHJlZ19uYW1lCj4gICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICB2YXJfdHlwZTp2YXJfbmFtZTphZGRyCj4gICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgdmFyaWFibGUgYXQgYWRkciB3aXRoIGZp
+ZWxkIG5hbWUgdmFyX25hbWUKPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGJhY2t0
+cmFjZQo+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHN0YWNrIGJhY2t0cmFj
+ZQo+Cj4gRXhhbXBsZXM6Cj4KPiAgICAgIyBsdHRuZyBhZGQtY29udGV4dCAtdSAtLXBpZCBQSUQg
+LWUgYW5hbWUgLXQgcmVnOnJheAo+ICAgICAjIGx0dG5nIGFkZC1jb250ZXh0IC11IC0tcGlkIFBJ
+RCAtZSBhbmFtZSAtdCBpbnQ6dmFybmFtZToweGRlYWRiZWVmCj4gICAgICMgbHR0bmcgYWRkLWNv
+bnRleHQgLXUgLS1waWQgUElEIC1lIGFuYW1lIC10IHN0cmluZzp2YXJuYW1lOjB4ZGVhZGJlZWYK
+PiAgICAgIyBsdHRuZyBhZGQtY29udGV4dCAtdSAtLXBpZCBQSUQgLWUgYW5hbWUgLXQgYmFja3Ry
+YWNlCgpEb2VzIGl0IG1ha2Ugc2Vuc2UgdG8gcHV0IGNvbGxlY3RlZCB2YXJpYWJsZSB2YWx1ZXMg
+aW4gdGhlIGNvbnRleHQ/IEkKd291bGQgaW5zdGluY3RpdmVseSBwdXQgdGhlbSBhcyBldmVudCBm
+aWVsZHMuIEJhY2t0cmFjZSBhbmQgcmVnaXN0ZXJzCmFyZSBwcm9iYWJseSBtb3JlIG9mIGEgY29u
+dGV4dCB0aG91Z2guIEVpdGhlciB3YXksIGl0IHdpbGwgcmVxdWlyZSB0aGUKdXNlIG9mIHBlci1l
+dmVudCBjb250ZXh0LiBJIGRvbid0IHRoaW5rIHRoYXQgdGhpcyBmZWF0dXJlIGhhcyBiZWVuCnZl
+cnkgbXVjaCB0ZXN0ZWQgaW4gdGhlIENURiBwYXJzZXJzIChsb29raW5nIGF0IHRoZSBjdGYgdGVz
+dHN1aXRlKSwgc28KaXQgd2lsbCBiZSBhIGdvb2QgdGVzdCA6KQoKPiBUaGVzZSBjb250ZXh0IHR5
+cGVzIGFwcGVhciBpbiBvdGhlciB0cmFjZXJzIFs0XSxbNV0sWzZdLCBob3dldmVyCj4gaW1wbGVt
+ZW50IGFsbCBvZgo+IHRoZW0gbWF5IGJlIG5vdCBwb3NzaWJsZSB3aXRoaW4gdGhlIEdTb0Mgc2No
+ZWR1bGUuCj4KPiBUaGUgYWJvdmUgcHJvcG9zZWQgY29tbWFuZCBsaW5lIGludGVyZmFjZSByZXF1
+aXJlIGRlZmluaW5nIHRyYWNlcG9pbnQgZXZlbnQgYXQKPiBydW50aW1lIHRodXMgZnJlZSB1c2Vy
+IGZvcm0gY29tcGlsaW5nIHRyYWNlcG9pbnQgcHJvYmVzIHRoZW1zZWx2ZXMuIEJ1dCBJIGhhdmUK
+PiBhIGNvbmNlcm4gc3VjaCBydW50aW1lIGRlZmluZWQgdHJhY2Vwb2ludCBldmVudCBtZWNoYW5p
+c20gbWF5IGV2ZW50dWFsbHkgZXZvbHZlCj4gdG8gYSB0aW55IGNvbXBpbGVyL2ludGVycHJldGVy
+IGxpa2UgU3lzdGVtdGFwIFs3XSBvciBnZGIgWzhdLgo+Cj4KPiBJbXBsZW1lbnRhdGlvbgo+IC0t
+LS0tLS0tLS0tLS0tCj4KPiBBZnRlciBjb21wYXJpbmcgZHluaW5zdCB3aXRoIGdkYidzIHRyYWNl
+cG9pbnQgY29kZSwgSSB0aGluayB1c2luZyBkeW5pbnN0IGFzCj4gY3VycmVudCBjaG9pY2Ugb2Yg
+aW1wbGVtZW50aW5nIGR5bmFtaWMgaW5zdHJ1bWVudGF0aW9uIGlzIG1vcmUgYXBwcm9wcmlhdGUu
+Cj4gZ2RiJ3MgdHJhY2Vwb2ludCBmdW5jdGlvbiByZWxpZXMgb24gYSBsb3Qgb2Ygc3VwcG9ydCBj
+b2RlIHRoZXkgYWxyZWFkeSBoYXZlLAo+IHN1Y2ggYXMgZGlzYXNzZW1ibGVyLCBlbGYvRFdBUkYg
+cGFyc2VyLiBXZSdsbCBuZWVkIHRvIGEgbG90IG9mIHdvcmsgdG8gcG9ydCBhbGwKPiB0aGUgc3Vw
+cG9ydCBjb2RlLgo+Cj4gVGhlIHVuZGVybHlpbmcgdGVjaG5pcXVlIG9mIHRoZXNlIHR3byBhcmUg
+cXVpdGUgc2ltaWxhci4gSSB3aWxsIHRyeSBpZiBJIGNhbgo+IGlzb2xhdGUgaW50ZXJmYWNlcyB0
+byBtYWtlIGNoYW5naW5nIGJhY2stZW5kIG9mIGR5bmFtaWMgaW5zdHJ1bWVudGF0aW9uIGVhc2ll
+cgo+IG9yIGV2ZW4gY29uZmlndXJhYmxlLgo+Cj4gVGhlIHRlY2huaXF1ZSBiZWhpbmQgc2NlbmUg
+aXMgc2ltcGxlLiBXZSByZXBsYWNlIHRoZSBpbnN0cnVtZW50ZWQgaW5zdHJ1Y3Rpb24KPiB3aXRo
+IGEgam1wIHRvIHJlZGlyZWN0IHRoZSBjb250cm9sIGZsb3cgdG8gYSB0cmFtcG9saW5lLiBBZnRl
+ciBzYXZpbmcgcmVnaXN0ZXJzCj4gaW4gdGhlIHRyYW1wb2xpbmUsIHdlIGNhbGwgdGhlIHByb2Jl
+IGNhbGxiYWNrIGZ1bmN0aW9uLiBUaGVuIHJlc3RvcmUgdGhlIHNhdmVkCj4gcmVnaXN0ZXJzLCBl
+eGVjdXRlIHRoZSBvcmlnaW5hbCBpbnN0cnVjdGlvbiBhbmQgam1wIGJhY2sgdG8gdGhlIG9yaWdp
+bmFsIHBsYWNlLgo+Cj4gSSB3aWxsIGdpdmUgYSBzaW1wbGUgZXhhbXBsZSBoZXJlLgo+Cj4gU3Vw
+cG9zZSBmdW5jdGlvbiBkb19zdHVmZiBoYXMgdGhlIGZvbGxvd2luZyBhc3NlbWJseSBjb2RlOgo+
+Cj4gICAgIDB4MDAwMDAwMDAwMDQwMGEzMCA8KzA+OiAgICAgcHVzaCAgICVyYngKPiAgICAgMHgw
+MDAwMDAwMDAwNDAwYTMxIDwrMT46ICAgICBtb3YgICAgJDB4NDAwYjM0LCVlc2kKPiAgICAgMHgw
+MDAwMDAwMDAwNDAwYTM2IDwrNj46ICAgICBtb3YgICAgJDB4NDAwYjM2LCVlZGkKPiAgICAgMHgw
+MDAwMDAwMDAwNDAwYTNiIDwrMTE+OiAgICBjYWxscSAgMHg0MDA3YjAgPGZvcGVuQHBsdD4KPiAg
+ICAgMHgwMDAwMDAwMDAwNDAwYTYyIDwrMTY+OiAgICByZXQKPgo+IEFmdGVyIGV4ZWN1dGluZyB0
+aGUgZm9sbG93aW5nIGNvbW1hbmQ6Cj4KPiAgICAgIyBsdHRuZyBlbmFibGUtZXZlbnQgYW5hbWUg
+LXUgLS1waWQgODk2NCAtLXByb2JlIGRvX3N0dWZmKzB4Ngo+Cj4gZnVuY3Rpb24gZG9fc3R1ZmYg
+d2lsbCBiZWNvbWU6Cj4KPiAgICAgMHgwMDAwMDAwMDAwNDAwYTMwIDwrMD46ICAgICBwdXNoICAg
+JXJieAo+ICAgICAweDAwMDAwMDAwMDA0MDBhMzEgPCsxPjogICAgIG1vdiAgICAkMHg0MDBiMzQs
+JWVzaQo+ICAgICAweDAwMDAwMDAwMDA0MDBhMzYgPCs2PjogICAgIGptcHEgICAweDEwMDJhICAg
+ICAgICAgICAgICMgam1wIHRvIHRyYW1wb2xpbmUKPiAgICAgMHgwMDAwMDAwMDAwNDAwYTNiIDwr
+MTE+OiAgICBjYWxscSAgMHg0MDA3YjAgPGZvcGVuQHBsdD4KPiAgICAgMHgwMDAwMDAwMDAwNDAw
+YTYyIDwrMTY+OiAgICByZXQKPgo+ICAgICAoZ2RiKSB4LzEwMGkgMHgxMDAyYQo+ICAgICAweDEw
+MDJhOiBwdXNoICAgJXJheCAgICAgICAgICAgICAgICAgICAgICMgc2F2ZSByZWdpc3RlcnMKPiAg
+ICAgLi4uLi4uLi4uLi4uLi4uLi4uLi4KPiAgICAgMHgxMDAzZTogcHVzaCAgICVyMTUKPiAgICAg
+MHgxMDA0ZjogbW92YWJzICQweDdmNjgyZjYxZWFjNywlcmJ4Cj4gICAgIDB4MTAwNTk6IGNhbGxx
+ICAqJXJieCAgICAgICAgICAgICAgICAgICAgIyBjYWxsIGx0dG5nIHByb2JlCj4gICAgIDB4MTAw
+NjA6IHBvcCAgICAlcjE1ICAgICAgICAgICAgICAgICAgICAgIyByZXN0b3JlIHJlZ2lzdGVycwo+
+ICAgICAuLi4uLi4uLi4uLi4uLi4uLi4uLgo+ICAgICAweDEwMDc1OiBwb3AgICAgJXJheAo+ICAg
+ICAweDEwMDdhOiBtb3YgICAgJDB4NDAwYjM2LCVlZGkgICAgICAgICAgICMgdGhpcyBpcyB0aGUg
+b3JpZ2luYWwgaW5zdHJ1Y3Rpb24KCllvdSBoYXZlIHRvIHRoaW5rIGFib3V0IGluc3RydWN0aW9u
+cyB0aGF0IGFjdCByZWxhdGl2ZWx5IHRvIHRoZQpjdXJyZW50IGlwLiBUaGVzZSBoYXZlIHRvIGJl
+IGFkanVzdGVkIHRvIGdpdmUgdGhlIGNvcnJlY3QgcmVzdWx0LiBTZWU6Cmh0dHBzOi8vZ2l0aHVi
+LmNvbS9NZW50b3JFbWJlZGRlZC9EZWJ1Zy1BZ2VudC1MaWJyYXJ5L2Jsb2IvbWFzdGVyL3g4Ni02
+NC1saW51eC1iYWNrZW5kLmMjTDIzOQoKPiAgICAgMHgxMDA3Zjogam1wcSAgIDB4MDAwMDAwMDAw
+MDQwMGEzYiAgICAgICAjIGptcCBiYWNrCj4KPiBUaGlzIGlzIGFuIG92ZXJzaW1wbGlmaWVkIGV4
+YW1wbGUuIEluIHJlYWxpdHksIHdlIG5lZWQgdG8gZG8gbW9yZSB0aGFuIHRoYXQsCj4gbGlrZSBh
+bGlnbmluZyBzdGFjay4gWW91IGNhbiByZWZlciBbM10gZm9yIGEgZGV0YWlsZWQgbGluZS1ieS1s
+aW5lIGFuYWx5c2lzCj4gb24gZHluaW5zdCdzIGJlaGF2aW9yLgo+Cj4KPiBbMV06IGh0dHA6Ly9i
+dWdzLmx0dG5nLm9yZy9wcm9qZWN0cy9sdHRuZy10b29scy93aWtpCj4gWzJdOiBodHRwOi8vYnVn
+cy5sdHRuZy5vcmcvaXNzdWVzLzE1Cj4gWzNdOiBodHRwczovL2dpdGh1Yi5jb20vNWtnL2x0dG5n
+LWdzb2MvYmxvYi9tYXN0ZXIvbm90ZXMvZHluaW5zdC5tZAo+IFs0XTogaHR0cDovL3NvdXJjZXdh
+cmUub3JnL3N5c3RlbXRhcC9TeXN0ZW1UYXBfQmVnaW5uZXJzX0d1aWRlL3V0YXJnZXR2YXJpYWJs
+ZS5odG1sCj4gWzVdOiBodHRwOi8vc291cmNld2FyZS5vcmcvc3lzdGVtdGFwL1N5c3RlbVRhcF9C
+ZWdpbm5lcnNfR3VpZGUvdXN0YWNrLmh0bWwKPiBbNl06IGh0dHA6Ly9zb3VyY2V3YXJlLm9yZy9n
+ZGIvb25saW5lZG9jcy9nZGIvVHJhY2Vwb2ludC1BY3Rpb25zLmh0bWwjVHJhY2Vwb2ludC1BY3Rp
+b25zCj4gWzddOiBodHRwOi8vc291cmNld2FyZS5vcmcvc3lzdGVtdGFwL1N5c3RlbVRhcF9CZWdp
+bm5lcnNfR3VpZGUvdW5kZXJzdGFuZGluZy1ob3ctc3lzdGVtdGFwLXdvcmtzLmh0bWwjdW5kZXJz
+dGFuZGluZy1hcmNoaXRlY3R1cmUtdG9vbHMKPiBbOF06IGh0dHA6Ly9zb3VyY2V3YXJlLm9yZy9n
+ZGIvb25saW5lZG9jcy9nZGIvQWdlbnQtRXhwcmVzc2lvbnMuaHRtbAo+Cj4gVGhhbmtzLAo+IOS7
+neWtkOmjniAoWmlmZWkgVG9uZykKPgo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fCj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+IGx0dG5nLWRldkBsaXN0
+cy5sdHRuZy5vcmcKPiBodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0
+aW5mby9sdHRuZy1kZXYKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpo
+dHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
