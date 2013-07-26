@@ -1,21 +1,18 @@
-From: Christian Babeux <christian.babeux@efficios.com>
-Subject: Re: Release strategy
-Date: Fri, 26 Jul 2013 16:29:21 -0400
-Message-ID: <CAGDH53mLbWjzfokb8F80=4w5YTHPAP5XsfT8N0o8CSP38jQerg__3813.4254435592$1374870626$gmane$org@mail.gmail.com>
-References: <51EEDF15.4090300@ericsson.com>
-	<CAGDH53=w6Wgat9vpL+iWd4mBfyM9CQuxGJEkN4095AeBB-LWog@mail.gmail.com>
-	<CA+jJMxsPH9s=OBEcD4+_92aoiDw6_EdePTZJMA9VtLPSrVzh_w@mail.gmail.com>
+From: Julien Desfossez <jdesfossez@efficios.com>
+Subject: Re: Misc questions regarding kernel tracing
+Date: Fri, 26 Jul 2013 17:41:23 -0400
+Message-ID: <51F2ED03.2040608__31781.8003976301$1374874945$gmane$org@efficios.com>
+References: <CAPkDDd4QX-Coj5rnqZp5pLjrzWOUDOvRu+6PWZW+EOYAEH0vtw@mail.gmail.com>
+	<51F2D902.80701@voxpopuli.im>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-vb0-f51.google.com ([209.85.212.51])
+Received: from fukushima.klipix.org ([194.250.102.243])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <christian.babeux@0x80.ca>) id 1V2odi-00042d-QP
-	for lttng-dev@lists.lttng.org; Fri, 26 Jul 2013 16:29:32 -0400
-Received: by mail-vb0-f51.google.com with SMTP id x17so1531998vbf.10
-	for <lttng-dev@lists.lttng.org>; Fri, 26 Jul 2013 13:29:21 -0700 (PDT)
-In-Reply-To: <CA+jJMxsPH9s=OBEcD4+_92aoiDw6_EdePTZJMA9VtLPSrVzh_w@mail.gmail.com>
+	(envelope-from <jdesfossez@efficios.com>) id 1V2plT-00027J-T2
+	for lttng-dev@lists.lttng.org; Fri, 26 Jul 2013 17:41:36 -0400
+In-Reply-To: <51F2D902.80701@voxpopuli.im>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,109 +21,42 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-U28gZmFyIG11bHRpcGxlIHN1Z2dlc3Rpb25zIGhhdmUgYmVlbiBwcm9wb3NlZCBmb3IgdGhlIGlz
-c3VlcyBvdXRsaW5lZDoKCjEpIEJyYW5jaGluZyBwb2xpY3kKCjEuIENyZWF0aW5nIGEgYnJhbmNo
-IHRvIHN0YWJpbGl6ZSBuZXcgZmVhdHVyZXMgKGZvciByZWxlYXNlCmNhbmRpZGF0ZXMpIHdoaWxl
-IGRldmVsb3BtZW50IGNvbnRpbnVlcyBpbiBtYXN0ZXIuCjIuIFN0YWdpbmcgYnJhbmNoIGZvciBu
-ZXcgZmVhdHVyZXMuCgpJIHRoaW5rIHdlIHdpbGwgbmVlZCB0byB3YWl0IGZvciBmZWVkYmFjayBm
-cm9tIERhdmlkIGFuZCBNYXRoaWV1IHNpbmNlCnRoZXkgYXJlIHRoZSBtYWludGFpbmVycyBvZiB0
-aGUgTFRUbmcgY29kZWJhc2VzLiBQZXJzb25hbGx5LCBzb2x1dGlvbgoxLiBnZXQgbXkgdm90ZS4K
-Ck1hdGhpZXUgJiBEYXZpZDogV2hhdCBicmFuY2hpbmcgcG9saWN5IHdvdWxkIHlvdSBsaWtlIHRv
-IGFkb3B0PwoKMikgUmVsZWFzZSByb2FkbWFwICYgMykgVGVudGF0aXZlIHJlbGVhc2UgZGF0ZXMK
-CkEgY2xlYW51cCBvZiB0aGUgYnVnIHRyYWNrZXIgYW5kIHNldHRpbmcgY2xlYXIgcmVsZWFzZXMg
-ZGF0ZXMgb24KZmVhdHVyZXMgd291bGQgbW9zdCBsaWtlbHkgc29sdmUgdGhpcyBpc3N1ZS4gUGVy
-aGFwcyB3ZSBzaG91bGQKc2NoZWR1bGUgYSBidWcgdHJhY2tlciBjbGVhbmluZyBldmVudCBpbiBB
-dWd1c3Q/CgpBcyBmb3IgdGhlIG1vbnRobHkgc3VtbWFyeSwgSSB2b2x1bnRlZXIgdG8gd3JpdGUg
-YW5kIG1haW50YWluIGl0IGlmCnRoZSBjb21tdW5pdHkgaXMgaW50ZXJlc3RlZC4KCkFsc28sIEkg
-cmVhbGx5IGxpa2UgdGhlIGlkZWEgcHJvcG9zZWQgYnkgTWF0dGhldyBmb3IgYSBzeXN0ZW0gbGlr
-ZQpHZXJyaXQgdG8gaGFuZGxlIHBhdGNoZXMgc3VibWlzc2lvbiBhbmQgcmV2aWV3LiBUaGUgaW50
-ZWdyYXRpb24gd2l0aApvdXIgSmVua2lucyBDSSB3b3VsZCBiZSBJTU8gcXVpdGUgdXNlZnVsIHRv
-IHJlZHVjZSB0aW1lIHNwZW50CnJldmlld2luZyBub24td29ya2luZyBvciBidWlsZCBicmVha2lu
-ZyBwYXRjaGVzLgoKTWF0aGlldSAmIERhdmlkOiBXb3VsZCB5b3UgYmUgb3BlbiB0byB1c2Ugc3Vj
-aCBhIHN5c3RlbSBmb3IgcGF0Y2hlcz8KClRoYW5rcywKCkNocmlzdGlhbgoKT24gV2VkLCBKdWwg
-MjQsIDIwMTMgYXQgMTA6MzYgQU0sIErDqXLDqW1pZSBHYWxhcm5lYXUKPGplcmVtaWUuZ2FsYXJu
-ZWF1QGVmZmljaW9zLmNvbT4gd3JvdGU6Cj4gT24gVHVlLCBKdWwgMjMsIDIwMTMgYXQgMTE6MzAg
-UE0sIENocmlzdGlhbiBCYWJldXgKPiA8Y2hyaXN0aWFuLmJhYmV1eEBlZmZpY2lvcy5jb20+IHdy
-b3RlOgo+PiBIaSBNYXR0aGV3LAo+Pgo+PiBZb3UgY2VydGFpbmx5IHJhaXNlIHZhbGlkIGFuZCBp
-bnRlcmVzdGluZyBxdWVzdGlvbnMgYWJvdXQgb3VyIHJlbGVhc2UKPj4gcHJvY2Vzcy4gSGVyZSBo
-b3cgSSB3b3VsZCBjYXRlZ29yaXplIHRoZXNlIHF1ZXN0aW9uczoKPj4KPj4gMSkgQnJhbmNoaW5n
-IHBvbGljeSAod2hlbiBkbyB3ZSBicmFuY2ggbWFzdGVyPyBhZnRlciB0aGUgZmlyc3QgcmVsZWFz
-ZQo+PiBjYW5kaWRhdGUgb3IgYWZ0ZXIgYSBmaW5hbCByZWxlYXNlPykKPj4KPj4gMikgUmVsZWFz
-ZSByb2FkbWFwICh3aGVuIHRoZSBuZXh0IHJlbGVhc2UgaXMgcGxhbm5lZD8gd2hhdCBkb2VzIGl0
-IGNvbnRhaW4/KQo+Pgo+PiAzKSBUZW50YXRpdmUgcmVsZWFzZSBkYXRlcwo+Pgo+PiBGb3IgMSks
-IHRoZSBjdXJyZW50IHdheSB3ZSBhcmUgZG9pbmcgdGhpbmdzIGlzIHRoYXQgZHVyaW5nIGEgcmVs
-ZWFzZQo+PiBjYW5kaWRhdGUgcGhhc2UgZm9yIGEgbmV3IHN0YWJsZSByZWxlYXNlLCBhIGNvbXBs
-ZXRlIGNvZGUgZnJlZXplIGlzIGluCj4+IGVmZmVjdCBlLmcuIG9ubHkgYnVnIGZpeGVzIHdpbGwg
-YmUgbWVyZ2VkIHVudGlsIGEgc3RhYmxlIHJlbGVhc2UgaXMKPj4gb3V0LiBOb3JtYWxseSwgYWZ0
-ZXIgbXVsdGlwbGUgcmVsZWFzZSBjYW5kaWRhdGVzLCBtYXN0ZXIgaXMgYnJhbmNoZWQKPj4gaW50
-byBhIHN0YWJsZSBicmFuY2ggYW5kIHRoZSBmaW5hbCBvZmZpY2lhbCBzdGFibGUgcmVsZWFzZSBp
-cyBjcmVhdGVkCj4+IGZyb20gdGhhdCBicmFuY2guCj4+Cj4+IFRoaXMgY291bGQgcG90ZW50aWFs
-bHkgY2F1c2UgdHJvdWJsZXMgZm9yIGNvbnRyaWJ1dG9ycywgZS5nLiBwb3N0aW5nIGEKPj4gc2V0
-IG9mIHBhdGNoZXMgYW5kIGdldHRpbmcgbm8gcmVzcG9uc2Ugb3Igd2FpdGluZyBmb3IgbWVyZ2Ug
-aWYgYQo+PiByZWxlYXNlIGNhbmRpZGF0ZSBjeWNsZSBpcyBpbiBlZmZlY3QuIEFueSBpZGVhcy9z
-dWdnZXN0aW9ucyBvbiBob3cgd2UKPj4gY291bGQgaW1wcm92ZSB0aGlzPwo+Pgo+Cj4gV2Ugc2hv
-dWxkIGNyZWF0ZSBhIHNlcGFyYXRlIGJyYW5jaCBhdCB0aGUgZmlyc3QgcmVsZWFzZSBjYW5kaWRh
-dGUgYW5kCj4gc3RhYmlsaXplIGl0IHVudGlsIHRoZSBvZmZpY2lhbCByZWxlYXNlLiBUaGUgZmVh
-dHVyZSBmcmVlemUgd291bGQgdGhlbgo+IG9ubHkgYXBwbHkgdG8gdGhhdCBicmFuY2ggd2hpbGUg
-aW52YXNpdmUgY2hhbmdlcyBjb3VsZCBiZSBtZXJnZWQgaW4KPiBtYXN0ZXIgYXQgYWxsIHRpbWVz
-LiBJdCB3b3VsZCBjZXJ0YWlubHkgbWFrZSBpdCBlYXNpZXIgb24gb2NjYXNpb25hbAo+IGNvbnRy
-aWJ1dG9ycyB0aGF0IG1heSBub3QgYmUgYXdhcmUgb2YgdGhlIHJlbGVhc2Ugc2NoZWR1bGUgKGF0
-IHRoZQo+IGV4cGVuc2Ugb2YgdGhlIG1haW50YWluZXJzJyBzYW5pdHkuLi4pLgo+Cj4+IEZvciAy
-KSwgdGhlIHJlbGVhc2Ugcm9hZG1hcCBpcyBhdmFpbGFibGUgYXQgWzFdLiBUaGUgcm9hZG1hcCBp
-cyBraW5kCj4+IG9mIGEgbWVzcyByaWdodCBub3cgYmVjYXVzZSBidWdzIGFyZSBhc3NpZ25lZCB0
-byBvbGRlciBzdGFibGUgcmVsZWFzZXMKPj4gZ2l2aW5nIHRoZSB3cm9uZyBpbXByZXNzaW9uIHRo
-YXQgc29tZSBzdGFibGUgcmVsZWFzZXMgYXJlIHdheSBsYXRlLgo+Pgo+PiBXZSB3b3VsZCBuZWVk
-IGEgd2F5IHRvIGRpc3Rpbmd1aXNoIGJldHdlZW4gYnVncyBvbiBhbHJlYWR5IHJlbGVhc2VkCj4+
-IHZlcnNpb25zIGFuZCBmZWF0dXJlcyB0YXJnZXRpbmcgZnV0dXJlIHZlcnNpb25zLiBQZXJoYXBz
-IHNvbWV0aGluZwo+PiBsaWtlIFsyLTNdIGNvdWxkIGJlIHByb21pc2luZz8KPj4KPgo+IERpc2Np
-cGxpbmluZyBvdXJzZWx2ZXMgaW4gb3BlbmluZyBGZWF0dXJlcyB3aXRoIHJlYXNvbmFibGUgdGFy
-Z2V0Cj4gZGF0ZXMgb24gdGhlIGJ1ZyB0cmFja2VyIG1heSBiZSBlbm91Z2ggdG8gbWFrZSB0aGUg
-Y3VycmVudCAiUm9hZG1hcCIKPiBwbHVnLWluIHVzZWZ1bC4KPgo+PiBGb3IgMyksIEkgd291bGQg
-dHJ5IHRvIHB1dCB0ZW50YXRpdmUgcmVsZWFzZSBkYXRlcyBvbiB0aGUgcm9hZG1hcCBvbgo+PiBS
-ZWRtaW5lIG9yIG9uIGEgd2lraSBhcnRpY2xlIHNpbWlsYXIgdG8gWzRdPwo+Pgo+Cj4gSSdkIHBy
-ZWZlciB1c2luZyB0aGUgcm9hZG1hcCBmdW5jdGlvbmFsaXR5LiBJJ20gYWZyYWlkIHRoZSB3aWtp
-IHdvbid0Cj4gYmUgbWFpbnRhaW5lZCBhcyByZWxlYXNlcyBzbGlwLgo+Cj4+IEFub3RoZXIgcG9p
-bnQgdGhhdCB5b3UgZGlkIG5vdCBtZW50aW9uIGlzIGhvdyB3ZSBwbGFuIG1pbm9yIHJlbGVhc2Vz
-Lgo+PiBJIHRoaW5rIHdlIHdpbGwgbmVlZCB0byBkZWZpbmUgYSBjbGVhciBwb2xpY3kgZm9yIG1p
-bm9yIHJlbGVhc2VzCj4+IHNvb25lciB0aGFuIGxhdGVyIGJlY2F1c2UgaXQgaXMgYmVjb21pbmcg
-cXVpdGUgcGFpbmZ1bCB0byBzdXBwb3J0Cj4+IHRocmVlIGNvZGViYXNlcyAobW9kdWxlcywgdXN0
-LCB0b29scykgd2l0aCB0aHJlZSBzdGFibGUgYnJhbmNoZXMuLi4KPj4gUGVyaGFwcyBpbiBhbm90
-aGVyIHRocmVhZD8KPj4KPj4gT24gYSBtb3JlIGdlbmVyYWwgbm90ZSwgSSB0aGluayBjbGVhciBj
-b21tdW5pY2F0aW9uIGlzIHRoZSBrZXkgaGVyZS4KPj4gSSdtIHdvbmRlcmluZyBpZiBhIG1vbnRo
-bHkgc3VtbWFyeSBvZiB0aGUgZGV2ZWxvcG1lbnQgYWN0aXZpdGllcyBvbgo+PiBMVFRuZyBhbmQg
-cmVsYXRlZCBwcm9qZWN0cyBjb3VsZCBiZSBpbnRlcmVzdGluZyBmb3IgdGhlIGNvbW11bml0eT8K
-Pj4gQ29udGVudCBleGFtcGxlOgo+Pgo+PiAtIFdoYXQgaGF2ZSB3ZSBhY2NvbXBsaXNoZWQgaW4g
-dGhlIHBhc3QgbW9udGguCj4+IC0gV2hhdCB3ZSBhcmUgcGxhbm5pbmcgZm9yIHRoZSBmb2xsb3dp
-bmcgbW9udGguCj4+IC0gUmVsZWFzZSBzdGF0dXMgKG5leHQgc3RhYmxlIHRlbnRhdGl2ZSByZWxl
-YXNlIGRhdGVzLCBwbGFubmVkIG1pbm9yCj4+IHJlbGVhc2VzLCBldGMuKQo+PiAtIEV0Yy4KPj4K
-Pgo+IFNvdW5kcyBnb29kLiBJdCB3b3VsZCBhbHNvIGJlIGEgZ3JlYXQgb3Bwb3J0dW5pdHkgdG8g
-c3RydWN0dXJlCj4gZGlzY3Vzc2lvbnMgYXJvdW5kIHRoZSBwbGFubmluZy4KPgo+IFJlZ2FyZHMs
-Cj4gSsOpcsOpbWllCj4KPj4gQW55IGlkZWFzL3N1Z2dlc3Rpb25zL2NvbnN0cnVjdGl2ZSBjcml0
-aWNpc20gb24gaG93IHdlIGNhbiBpbXByb3ZlIG91cgo+PiByZWxlYXNlIHByb2Nlc3MgYXJlIHF1
-aXRlIHdlbGNvbWUhCj4+Cj4+IFRoYW5rcywKPj4KPj4gQ2hyaXN0aWFuCj4+Cj4+IFsxXSAtIGh0
-dHA6Ly9idWdzLmx0dG5nLm9yZy9wcm9qZWN0cy9sdHRuZy9yb2FkbWFwCj4+IFsyXSAtIGh0dHA6
-Ly93d3cucmVkbWluZS5vcmcvcGx1Z2lucy9hZHZhbmNlZF9yb2FkbWFwCj4+IFszXSAtIGh0dHA6
-Ly93d3cucmVkbWluZS5vcmcvcGx1Z2lucy9yZWRtaW5lX21pbGVzdG9uZXMKPj4gWzRdIC0gaHR0
-cHM6Ly93d3cuZ251Lm9yZy9zb2Z0d2FyZS9nZGIvc2NoZWR1bGUvCj4+Cj4+IE9uIFR1ZSwgSnVs
-IDIzLCAyMDEzIGF0IDM6NTIgUE0sIE1hdHRoZXcgS2hvdXphbQo+PiA8bWF0dGhldy5raG91emFt
-QGVyaWNzc29uLmNvbT4gd3JvdGU6Cj4+PiBIZWxsbyB0cmFjaW5nIHJhbmdlcnMsCj4+Pgo+Pj4g
-SSBhbSBhIGJpdCBjb25mdXNlZCBhYm91dCB0aGUgd2hvbGUgcmVsZWFzZSBjeWNsZSBzeXN0ZW0u
-Cj4+Pgo+Pj4gSWYgeW91IGd1eXMgYXJlIGluIFJDLCBJIGhhdmUgYSBjb29sIGZlYXR1cmUgSSB3
-YXMgd29ya2luZyBvbiwgd2hlcmUgZG8KPj4+IEkgcHV0IGl0Pwo+Pj4KPj4+IFdoZW4gYXJlIHJl
-bGVhc2VzIGNvbWluZyBvdXQ/IGlzIGl0IHBsYW5uZWQgb3IgYSBzdXJwcmlzZSAoSSBrbm93IGl0
-J3MKPj4+IHBsYW5uZWQpCj4+Pgo+Pj4gV2hhdCBhcmUgeW91ciBoYXJkIC8gc29mdCBkZWFkbGlu
-ZXM/Cj4+Pgo+Pj4gVGhhbmtzLAo+Pj4gTWF0dGhldwo+Pj4KPj4+IF9fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4+PiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0
-Cj4+PiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4+PiBodHRwOi8vbGlzdHMubHR0bmcub3Jn
-L2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKPj4KPj4gX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPj4gbHR0bmctZGV2IG1haWxpbmcgbGlz
-dAo+PiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4+IGh0dHA6Ly9saXN0cy5sdHRuZy5vcmcv
-Y2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo+Cj4KPgo+IC0tCj4gSsOpcsOpbWll
-IEdhbGFybmVhdQo+IEVmZmljaU9TIEluYy4KPiBodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1h
-aWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5v
-cmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+Hi S=E9bastien,
+
+[...]
+
+>> I sometimes miss kernel events. Is there a point in using different
+>> channels for kernel and user space traces (besides giving them distinct
+>> sizes)? I suspect they're already effectively different even if they have
+>> the same name. Also, I have increased the subbuffer size a lot, but did =
+not
+>> change the number of subbuffers. Would that help preventing missed event=
+s?
+
+Indeed, kernel and user-space traces are already in different channels.
+Enabling different channels for the same domain (kernel or ust) is
+especially useful when you have different level of interest for
+different events.
+For example, if you absolutely want all the sched_switch events, you
+could have a dedicated channel for these events, with the appropriate
+size and number of subbuffers, and then enable other channels for the
+other events you are interested in, that way you limit the risk of
+loosing your most important events.
+
+Regarding your question about the state system, I don't know how TMF
+handles that, but the contexts are a good way to ensure a consistent
+state without any state system. For example, you can attach a pid or
+procname context to all the events in a specific channel. Every time an
+event is recorded in this channel, the tracer will fetch the current
+procname/pid information. That way you are sure to have a consistent
+state even if you don't have all the scheduling and statedump events.
+The drawback, is that it increases slightly the operations done by the
+tracer on the fast path and the trace is bigger.
+
+Hope this helps,
+
+Julien
