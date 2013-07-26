@@ -1,18 +1,20 @@
-From: Simon Marchi <simon.marchi@polymtl.ca>
+From: Suchakra Sharma <suchakrapani.sharma@polymtl.ca>
 Subject: Re: [RFC] Dynamic instrumentation support in UST
-Date: Fri, 26 Jul 2013 13:40:03 -0400
-Message-ID: <CAFXXi0kJaQwrcg81P159W9EPe6M+9hesNFj-haySyByncqF+fw__19144.7355239236$1374860508$gmane$org@mail.gmail.com>
+Date: Fri, 26 Jul 2013 14:14:56 -0400
+Message-ID: <1374862496.14606.54.camel__7535.22694944895$1374862557$gmane$org@station15.dorsal.polymtl.ca>
 References: <CAJ7wx-FipDw6XVvYsugMhOrSEJVz5vASaJQnjX9HM5-ahu24bA@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ob0-f175.google.com ([209.85.214.175])
+Received: from smtp.polymtl.ca ([132.207.4.11])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <thundersim@gmail.com>) id 1V2m0O-0005fa-VO
-	for lttng-dev@lists.lttng.org; Fri, 26 Jul 2013 13:40:46 -0400
-Received: by mail-ob0-f175.google.com with SMTP id xn12so4922225obc.34
-	for <lttng-dev@lists.lttng.org>; Fri, 26 Jul 2013 10:40:35 -0700 (PDT)
+	(envelope-from <suchakrapani.sharma@polymtl.ca>) id 1V2mXZ-0000Hf-Tb
+	for lttng-dev@lists.lttng.org; Fri, 26 Jul 2013 14:15:03 -0400
+Received: from [132.207.72.20] ([132.207.72.20])
+	by smtp.polymtl.ca (8.14.3/8.14.3) with ESMTP id r6QIEvc5017698
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-SHA bits=256 verify=NOT)
+	for <lttng-dev@lists.lttng.org>; Fri, 26 Jul 2013 14:14:57 -0400
 In-Reply-To: <CAJ7wx-FipDw6XVvYsugMhOrSEJVz5vASaJQnjX9HM5-ahu24bA@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -22,142 +24,76 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Zifei Tong <soariez@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-SGkgWmlmZWksCgpUaGF0IGxvb2tzIGdyZWF0ISBRdWVzdGlvbnMgYW5kIGNvbW1lbnRzIGJlbG93
-LgoKT24gMjYgSnVseSAyMDEzIDExOjQwLCBaaWZlaSBUb25nIDxzb2FyaWV6QGdtYWlsLmNvbT4g
-d3JvdGU6Cj4gSGkgZXZlcnlvbmUsCj4KPiBIZXJlIGlzIHRoZSBSRkMgZm9yIHRoZSBkeW5hbWlj
-IGluc3RydW1lbnRhdGlvbiBzdXBwb3J0IGluIFVTVC4KPgo+IEl0IGNvbnRhaW5zIGEgY29tbWFu
-ZCBsaW5lIGludGVyZmFjZSBwcm9wb3NhbCBhbmQgc29tZSBub3RlcyBvbgo+IGltcGxlbWVudGF0
-aW9uIGRldGFpbHMuCj4KPiBQbGVhc2UgcHJvdmlkZSB5b3VyIGNvbW1lbnRzLiBBbnkgcXVlc3Rp
-b25zLCBvciBmaXhlcyBhcmUgVkVSWSB3ZWxjb21lLgo+Cj4KPiBDb21tYW5kIExpbmUgSW50ZXJm
-YWNlCj4gLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQo+Cj4gVGhlIHByb3Bvc2VkIGNvbW1hbmQgbGlu
-ZSBpbnRlcmZhY2UgaXMgdmVyeSBzaW1pbGFyIHRvIHRoZSBjdXJyZW50IGx0dG5nIGtlcm5lbAo+
-IGR5bmFtaWMgcHJvYmUgaW50ZXJmYWNlIFsxXS4KPgo+IFRvIGVuYWJsZSBhIGR5bmFtaWMgcHJv
-YmUgaW4gYSBydW5uaW5nIHByb2Nlc3MgYXQgZ2l2ZW4gYWRkcmVzcywgeW91IGNhbiB1c2U6Cj4K
-PiAgICAgbHR0bmcgZW5hYmxlLWV2ZW50IE5BTUUgLXUgLS1waWQgUElECj4gICAgICAgICAtLXBy
-b2JlIChhZGRyIHwgc3ltYm9sIHwgc3ltYm9sK29mZnNldCkKPiAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgRHluYW1pYyBVU1QgcHJvYmUuCj4gICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgIEFkZHIgYW5kIG9mZnNldCBjYW4gYmUgb2N0YWwgKDBOTk4uLi4pLAo+ICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICBkZWNpbWFsIChOTk4uLi4pIG9yIGhleGFkZWNpbWFsICgw
-eE5OTi4uLikKPgo+IFRoaXMgd2lsbCBwbGFjZSBhIGJhcmUgcHJvYmUgYXQgY2VydGFpbiBhZGRy
-ZXNzLgo+Cj4gRXhhbXBsZXM6Cj4KPiAgICAgIyBsdHRuZyBlbmFibGUtZXZlbnQgYW5hbWUgLXUg
-LS1waWQgODk2NCAtLXByb2JlIGZvbysweDYKPiAgICAgIyBsdHRuZyBlbmFibGUtZXZlbnQgYW5h
-bWUgLXUgLS1waWQgODk2NCAtLXByb2JlIDB4ZGVhZGJlZWYKPgo+IFlvdSBjYW4gYWxzbyBlbmFi
-bGUgYSB0cmFjZXBvaW50IGF0IHRoZSBlbnRyeSBvZiBhIGdpdmVuIGZ1bmN0aW9uOgo+Cj4gICAg
-IGx0dG5nIGVuYWJsZS1ldmVudCBOQU1FIC11IC0tcGlkIFBJRAo+ICAgICAgICAgLS1mdW5jdGlv
-biAoYWRkciB8IHN5bWJvbCB8IHN5bWJvbCtvZmZzZXQpCj4gICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICBEeW5hbWljIFVTVCBmdW5jdGlvbiBlbnRyeSBwcm9iZS4KPiAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgIEFkZHIgYW5kIG9mZnNldCBjYW4gYmUgb2N0YWwgKDBOTk4uLi4pLAo+
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZGVjaW1hbCAoTk5OLi4uKSBvciBoZXhhZGVj
-aW1hbCAoMHhOTk4uLi4pCj4KPiBUaGlzIHdpbGwgcGxhY2UgYSBiYXJlIHByb2JlIGF0IHRoZSBl
-bnRyeSBwb2ludCBvZiBjZXJ0YWluIGZ1bmN0aW9uLgoKV2hhdCBpcyB0aGUgZGlmZmVyZW5jZSBp
-ZiBJIGRvCiAgLS1mdW5jdGlvbiBmb28KdnMKICAtLXByb2JlIGZvbwo/Cgo+IEV4YW1wbGVzOgo+
-Cj4gICAgICMgbHR0bmcgZW5hYmxlLWV2ZW50IGFuYW1lIC11IC0tcGlkIDg5NjQgLS1mdW5jdGlv
-biBmb28KPgo+IEJlaW5nIG9ubHkgYWJsZSB0byBhdHRhY2ggYW5kIGluc3RydW1lbnQgZXhpc3Rp
-bmcgcHJvY2Vzc2VzIGlzIHNvbWV0aW1lcwo+IHJlc3RyaWN0ZWQuIElmIHdlIGNhbiBoYXZlICMx
-NSBbMl0gaW1wbGVtZW50ZWQsIHRoZW4gd2UgY2FuIGV4dGVuZCB0aGUgY29tbWFuZAo+IHRvIHN1
-cHBvcnQgZHluYW1pYyBpbnN0cnVtZW50YXRpb24uCj4KPiAgICAgbHR0bmcgdHJhY2UgLWMgQ09N
-TUFORAo+ICAgICAgICAgLS1wcm9iZSAoYWRkciB8IHN5bWJvbCB8IHN5bWJvbCtvZmZzZXQpCj4g
-ICAgICAgICAtLWZ1bmN0aW9uIChhZGRyIHwgc3ltYm9sIHwgc3ltYm9sK29mZnNldCkKPgo+IFRo
-aXMgd2lsbCBleGVjdXRlIGdpdmVuIHByb2dyYW0gYW5kIHBsYWNlIHByb2JlcyBhdCBjZXJ0YWlu
-IHBsYWNlcy4KPgo+IEV4YW1wbGVzOgo+Cj4gICAgICMgbHR0bmcgdHJhY2UgLWMgImxzIC1sIiAt
-LXByb2JlIG1haW4rMHgxMAo+ICAgICAjIGx0dG5nIHRyYWNlIC1jICJscyAtbCIgLS1mdW5jdGlv
-biBtYWluCj4KPiBQcm9iZXMgY29sbGVjdGluZyBjb250ZXh0IGRhdGEgYXJlIG1vcmUgdXNlZnVs
-IHRoYW4gYmFyZSBvbmVzLiBXZSBjYW4gZXh0ZW5kCj4gdGhlIGFkZC1jb250ZXh0IGNvbW1hbmQg
-dG8gc3VwcG9ydCBtb3JlIGNvbnRleHQgdHlwZXMuCj4KPiAgICAgbHR0bmcgYWRkLWNvbnRleHQg
-LXUgLWUgTkFNRSAtLXBpZCBQSUQKPiAgICAgICAgIC10LCAtLXR5cGUgVFlQRSAgICAgQ29udGV4
-dCB0eXBlLgo+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICBUWVBFIGNhbiBiZSBvbmUgb2Yg
-dGhlIHN0cmluZ3MgYmVsb3c6Cj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICByZWdz
-Cj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgYWxsIHJlZ2lzdGVycwo+ICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgcmVnOnJlZ19uYW1lCj4gICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgcmVnaXN0ZXIgd2l0aCBuYW1lIHJlZ19uYW1lCj4gICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICB2YXJfdHlwZTp2YXJfbmFtZTphZGRyCj4gICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgdmFyaWFibGUgYXQgYWRkciB3aXRoIGZp
-ZWxkIG5hbWUgdmFyX25hbWUKPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGJhY2t0
-cmFjZQo+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHN0YWNrIGJhY2t0cmFj
-ZQo+Cj4gRXhhbXBsZXM6Cj4KPiAgICAgIyBsdHRuZyBhZGQtY29udGV4dCAtdSAtLXBpZCBQSUQg
-LWUgYW5hbWUgLXQgcmVnOnJheAo+ICAgICAjIGx0dG5nIGFkZC1jb250ZXh0IC11IC0tcGlkIFBJ
-RCAtZSBhbmFtZSAtdCBpbnQ6dmFybmFtZToweGRlYWRiZWVmCj4gICAgICMgbHR0bmcgYWRkLWNv
-bnRleHQgLXUgLS1waWQgUElEIC1lIGFuYW1lIC10IHN0cmluZzp2YXJuYW1lOjB4ZGVhZGJlZWYK
-PiAgICAgIyBsdHRuZyBhZGQtY29udGV4dCAtdSAtLXBpZCBQSUQgLWUgYW5hbWUgLXQgYmFja3Ry
-YWNlCgpEb2VzIGl0IG1ha2Ugc2Vuc2UgdG8gcHV0IGNvbGxlY3RlZCB2YXJpYWJsZSB2YWx1ZXMg
-aW4gdGhlIGNvbnRleHQ/IEkKd291bGQgaW5zdGluY3RpdmVseSBwdXQgdGhlbSBhcyBldmVudCBm
-aWVsZHMuIEJhY2t0cmFjZSBhbmQgcmVnaXN0ZXJzCmFyZSBwcm9iYWJseSBtb3JlIG9mIGEgY29u
-dGV4dCB0aG91Z2guIEVpdGhlciB3YXksIGl0IHdpbGwgcmVxdWlyZSB0aGUKdXNlIG9mIHBlci1l
-dmVudCBjb250ZXh0LiBJIGRvbid0IHRoaW5rIHRoYXQgdGhpcyBmZWF0dXJlIGhhcyBiZWVuCnZl
-cnkgbXVjaCB0ZXN0ZWQgaW4gdGhlIENURiBwYXJzZXJzIChsb29raW5nIGF0IHRoZSBjdGYgdGVz
-dHN1aXRlKSwgc28KaXQgd2lsbCBiZSBhIGdvb2QgdGVzdCA6KQoKPiBUaGVzZSBjb250ZXh0IHR5
-cGVzIGFwcGVhciBpbiBvdGhlciB0cmFjZXJzIFs0XSxbNV0sWzZdLCBob3dldmVyCj4gaW1wbGVt
-ZW50IGFsbCBvZgo+IHRoZW0gbWF5IGJlIG5vdCBwb3NzaWJsZSB3aXRoaW4gdGhlIEdTb0Mgc2No
-ZWR1bGUuCj4KPiBUaGUgYWJvdmUgcHJvcG9zZWQgY29tbWFuZCBsaW5lIGludGVyZmFjZSByZXF1
-aXJlIGRlZmluaW5nIHRyYWNlcG9pbnQgZXZlbnQgYXQKPiBydW50aW1lIHRodXMgZnJlZSB1c2Vy
-IGZvcm0gY29tcGlsaW5nIHRyYWNlcG9pbnQgcHJvYmVzIHRoZW1zZWx2ZXMuIEJ1dCBJIGhhdmUK
-PiBhIGNvbmNlcm4gc3VjaCBydW50aW1lIGRlZmluZWQgdHJhY2Vwb2ludCBldmVudCBtZWNoYW5p
-c20gbWF5IGV2ZW50dWFsbHkgZXZvbHZlCj4gdG8gYSB0aW55IGNvbXBpbGVyL2ludGVycHJldGVy
-IGxpa2UgU3lzdGVtdGFwIFs3XSBvciBnZGIgWzhdLgo+Cj4KPiBJbXBsZW1lbnRhdGlvbgo+IC0t
-LS0tLS0tLS0tLS0tCj4KPiBBZnRlciBjb21wYXJpbmcgZHluaW5zdCB3aXRoIGdkYidzIHRyYWNl
-cG9pbnQgY29kZSwgSSB0aGluayB1c2luZyBkeW5pbnN0IGFzCj4gY3VycmVudCBjaG9pY2Ugb2Yg
-aW1wbGVtZW50aW5nIGR5bmFtaWMgaW5zdHJ1bWVudGF0aW9uIGlzIG1vcmUgYXBwcm9wcmlhdGUu
-Cj4gZ2RiJ3MgdHJhY2Vwb2ludCBmdW5jdGlvbiByZWxpZXMgb24gYSBsb3Qgb2Ygc3VwcG9ydCBj
-b2RlIHRoZXkgYWxyZWFkeSBoYXZlLAo+IHN1Y2ggYXMgZGlzYXNzZW1ibGVyLCBlbGYvRFdBUkYg
-cGFyc2VyLiBXZSdsbCBuZWVkIHRvIGEgbG90IG9mIHdvcmsgdG8gcG9ydCBhbGwKPiB0aGUgc3Vw
-cG9ydCBjb2RlLgo+Cj4gVGhlIHVuZGVybHlpbmcgdGVjaG5pcXVlIG9mIHRoZXNlIHR3byBhcmUg
-cXVpdGUgc2ltaWxhci4gSSB3aWxsIHRyeSBpZiBJIGNhbgo+IGlzb2xhdGUgaW50ZXJmYWNlcyB0
-byBtYWtlIGNoYW5naW5nIGJhY2stZW5kIG9mIGR5bmFtaWMgaW5zdHJ1bWVudGF0aW9uIGVhc2ll
-cgo+IG9yIGV2ZW4gY29uZmlndXJhYmxlLgo+Cj4gVGhlIHRlY2huaXF1ZSBiZWhpbmQgc2NlbmUg
-aXMgc2ltcGxlLiBXZSByZXBsYWNlIHRoZSBpbnN0cnVtZW50ZWQgaW5zdHJ1Y3Rpb24KPiB3aXRo
-IGEgam1wIHRvIHJlZGlyZWN0IHRoZSBjb250cm9sIGZsb3cgdG8gYSB0cmFtcG9saW5lLiBBZnRl
-ciBzYXZpbmcgcmVnaXN0ZXJzCj4gaW4gdGhlIHRyYW1wb2xpbmUsIHdlIGNhbGwgdGhlIHByb2Jl
-IGNhbGxiYWNrIGZ1bmN0aW9uLiBUaGVuIHJlc3RvcmUgdGhlIHNhdmVkCj4gcmVnaXN0ZXJzLCBl
-eGVjdXRlIHRoZSBvcmlnaW5hbCBpbnN0cnVjdGlvbiBhbmQgam1wIGJhY2sgdG8gdGhlIG9yaWdp
-bmFsIHBsYWNlLgo+Cj4gSSB3aWxsIGdpdmUgYSBzaW1wbGUgZXhhbXBsZSBoZXJlLgo+Cj4gU3Vw
-cG9zZSBmdW5jdGlvbiBkb19zdHVmZiBoYXMgdGhlIGZvbGxvd2luZyBhc3NlbWJseSBjb2RlOgo+
-Cj4gICAgIDB4MDAwMDAwMDAwMDQwMGEzMCA8KzA+OiAgICAgcHVzaCAgICVyYngKPiAgICAgMHgw
-MDAwMDAwMDAwNDAwYTMxIDwrMT46ICAgICBtb3YgICAgJDB4NDAwYjM0LCVlc2kKPiAgICAgMHgw
-MDAwMDAwMDAwNDAwYTM2IDwrNj46ICAgICBtb3YgICAgJDB4NDAwYjM2LCVlZGkKPiAgICAgMHgw
-MDAwMDAwMDAwNDAwYTNiIDwrMTE+OiAgICBjYWxscSAgMHg0MDA3YjAgPGZvcGVuQHBsdD4KPiAg
-ICAgMHgwMDAwMDAwMDAwNDAwYTYyIDwrMTY+OiAgICByZXQKPgo+IEFmdGVyIGV4ZWN1dGluZyB0
-aGUgZm9sbG93aW5nIGNvbW1hbmQ6Cj4KPiAgICAgIyBsdHRuZyBlbmFibGUtZXZlbnQgYW5hbWUg
-LXUgLS1waWQgODk2NCAtLXByb2JlIGRvX3N0dWZmKzB4Ngo+Cj4gZnVuY3Rpb24gZG9fc3R1ZmYg
-d2lsbCBiZWNvbWU6Cj4KPiAgICAgMHgwMDAwMDAwMDAwNDAwYTMwIDwrMD46ICAgICBwdXNoICAg
-JXJieAo+ICAgICAweDAwMDAwMDAwMDA0MDBhMzEgPCsxPjogICAgIG1vdiAgICAkMHg0MDBiMzQs
-JWVzaQo+ICAgICAweDAwMDAwMDAwMDA0MDBhMzYgPCs2PjogICAgIGptcHEgICAweDEwMDJhICAg
-ICAgICAgICAgICMgam1wIHRvIHRyYW1wb2xpbmUKPiAgICAgMHgwMDAwMDAwMDAwNDAwYTNiIDwr
-MTE+OiAgICBjYWxscSAgMHg0MDA3YjAgPGZvcGVuQHBsdD4KPiAgICAgMHgwMDAwMDAwMDAwNDAw
-YTYyIDwrMTY+OiAgICByZXQKPgo+ICAgICAoZ2RiKSB4LzEwMGkgMHgxMDAyYQo+ICAgICAweDEw
-MDJhOiBwdXNoICAgJXJheCAgICAgICAgICAgICAgICAgICAgICMgc2F2ZSByZWdpc3RlcnMKPiAg
-ICAgLi4uLi4uLi4uLi4uLi4uLi4uLi4KPiAgICAgMHgxMDAzZTogcHVzaCAgICVyMTUKPiAgICAg
-MHgxMDA0ZjogbW92YWJzICQweDdmNjgyZjYxZWFjNywlcmJ4Cj4gICAgIDB4MTAwNTk6IGNhbGxx
-ICAqJXJieCAgICAgICAgICAgICAgICAgICAgIyBjYWxsIGx0dG5nIHByb2JlCj4gICAgIDB4MTAw
-NjA6IHBvcCAgICAlcjE1ICAgICAgICAgICAgICAgICAgICAgIyByZXN0b3JlIHJlZ2lzdGVycwo+
-ICAgICAuLi4uLi4uLi4uLi4uLi4uLi4uLgo+ICAgICAweDEwMDc1OiBwb3AgICAgJXJheAo+ICAg
-ICAweDEwMDdhOiBtb3YgICAgJDB4NDAwYjM2LCVlZGkgICAgICAgICAgICMgdGhpcyBpcyB0aGUg
-b3JpZ2luYWwgaW5zdHJ1Y3Rpb24KCllvdSBoYXZlIHRvIHRoaW5rIGFib3V0IGluc3RydWN0aW9u
-cyB0aGF0IGFjdCByZWxhdGl2ZWx5IHRvIHRoZQpjdXJyZW50IGlwLiBUaGVzZSBoYXZlIHRvIGJl
-IGFkanVzdGVkIHRvIGdpdmUgdGhlIGNvcnJlY3QgcmVzdWx0LiBTZWU6Cmh0dHBzOi8vZ2l0aHVi
-LmNvbS9NZW50b3JFbWJlZGRlZC9EZWJ1Zy1BZ2VudC1MaWJyYXJ5L2Jsb2IvbWFzdGVyL3g4Ni02
-NC1saW51eC1iYWNrZW5kLmMjTDIzOQoKPiAgICAgMHgxMDA3Zjogam1wcSAgIDB4MDAwMDAwMDAw
-MDQwMGEzYiAgICAgICAjIGptcCBiYWNrCj4KPiBUaGlzIGlzIGFuIG92ZXJzaW1wbGlmaWVkIGV4
-YW1wbGUuIEluIHJlYWxpdHksIHdlIG5lZWQgdG8gZG8gbW9yZSB0aGFuIHRoYXQsCj4gbGlrZSBh
-bGlnbmluZyBzdGFjay4gWW91IGNhbiByZWZlciBbM10gZm9yIGEgZGV0YWlsZWQgbGluZS1ieS1s
-aW5lIGFuYWx5c2lzCj4gb24gZHluaW5zdCdzIGJlaGF2aW9yLgo+Cj4KPiBbMV06IGh0dHA6Ly9i
-dWdzLmx0dG5nLm9yZy9wcm9qZWN0cy9sdHRuZy10b29scy93aWtpCj4gWzJdOiBodHRwOi8vYnVn
-cy5sdHRuZy5vcmcvaXNzdWVzLzE1Cj4gWzNdOiBodHRwczovL2dpdGh1Yi5jb20vNWtnL2x0dG5n
-LWdzb2MvYmxvYi9tYXN0ZXIvbm90ZXMvZHluaW5zdC5tZAo+IFs0XTogaHR0cDovL3NvdXJjZXdh
-cmUub3JnL3N5c3RlbXRhcC9TeXN0ZW1UYXBfQmVnaW5uZXJzX0d1aWRlL3V0YXJnZXR2YXJpYWJs
-ZS5odG1sCj4gWzVdOiBodHRwOi8vc291cmNld2FyZS5vcmcvc3lzdGVtdGFwL1N5c3RlbVRhcF9C
-ZWdpbm5lcnNfR3VpZGUvdXN0YWNrLmh0bWwKPiBbNl06IGh0dHA6Ly9zb3VyY2V3YXJlLm9yZy9n
-ZGIvb25saW5lZG9jcy9nZGIvVHJhY2Vwb2ludC1BY3Rpb25zLmh0bWwjVHJhY2Vwb2ludC1BY3Rp
-b25zCj4gWzddOiBodHRwOi8vc291cmNld2FyZS5vcmcvc3lzdGVtdGFwL1N5c3RlbVRhcF9CZWdp
-bm5lcnNfR3VpZGUvdW5kZXJzdGFuZGluZy1ob3ctc3lzdGVtdGFwLXdvcmtzLmh0bWwjdW5kZXJz
-dGFuZGluZy1hcmNoaXRlY3R1cmUtdG9vbHMKPiBbOF06IGh0dHA6Ly9zb3VyY2V3YXJlLm9yZy9n
-ZGIvb25saW5lZG9jcy9nZGIvQWdlbnQtRXhwcmVzc2lvbnMuaHRtbAo+Cj4gVGhhbmtzLAo+IOS7
-neWtkOmjniAoWmlmZWkgVG9uZykKPgo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fCj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+IGx0dG5nLWRldkBsaXN0
-cy5sdHRuZy5vcmcKPiBodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0
-aW5mby9sdHRuZy1kZXYKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpo
-dHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+Hi,
+
+First of all, I think its very well written :)
+
+On Fri, 2013-07-26 at 23:40 +0800, Zifei Tong wrote:
+
+>     lttng add-context -u -e NAME --pid PID
+>         -t, --type TYPE     Context type.
+>                             TYPE can be one of the strings below:
+>                                 regs
+>                                     all registers
+>                                 reg:reg_name
+>                                     register with name reg_name
+>                                 var_type:var_name:addr
+>                                     variable at addr with field name var_name
+>                                 backtrace
+>                                     stack backtrace
+> 
+> Examples:
+> 
+>     # lttng add-context -u --pid PID -e aname -t reg:rax
+>     # lttng add-context -u --pid PID -e aname -t int:varname:0xdeadbeef
+>     # lttng add-context -u --pid PID -e aname -t string:varname:0xdeadbeef
+>     # lttng add-context -u --pid PID -e aname -t backtrace
+
+I had an idea about having these 'preset' (or some other fancy name)
+types of events rather than different contexts. For eg.
+
+	#lttng enable-event -u --pid PID --preset reg:rax
+
+Thats how I had this is my mind. But I don't know a lot yet so I don't
+know which is better.
+
+> These context types appear in other tracers [4],[5],[6], however
+> implement all of
+> them may be not possible within the GSoC schedule.
+> 
+> The above proposed command line interface require defining tracepoint event at
+> runtime thus free user form compiling tracepoint probes themselves. But I have
+> a concern such runtime defined tracepoint event mechanism may eventually evolve
+> to a tiny compiler/interpreter like Systemtap [7] or gdb [8].
+
+Of course, to provide more flexibility it has to be evolved to a
+mechanism by which through a meta language or some scripts, the
+tracepoints can be compiled. Its going to be complex, but thats what
+this should evolve into slowly. I don't think it should be of concern.
+
+> 
+> Implementation
+> --------------
+> 
+> After comparing dyninst with gdb's tracepoint code, I think using dyninst as
+> current choice of implementing dynamic instrumentation is more appropriate.
+> gdb's tracepoint function relies on a lot of support code they already have,
+> such as disassembler, elf/DWARF parser. We'll need to a lot of work to port all
+> the support code.
+
+Of course, dyninst will definitely provide a fast and clean
+implementation (unless we have a library written from scratch to do
+instrumentation) 
+
+Not being overambitious but, eventually we may need to have options to
+dynamically instrument binaries based on performances of gdb's strategy
+as well as dyninst's strategy in different use cases. Systemtap already
+has --runtime=dyninst switch to use dyninst or uprobe based (default)
+instrumentation.
+
+
+--
+Suchakra
