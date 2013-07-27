@@ -1,18 +1,19 @@
-From: Julien Desfossez <jdesfossez@efficios.com>
-Subject: Re: Misc questions regarding kernel tracing
-Date: Fri, 26 Jul 2013 17:41:23 -0400
-Message-ID: <51F2ED03.2040608__31781.8003976301$1374874945$gmane$org@efficios.com>
-References: <CAPkDDd4QX-Coj5rnqZp5pLjrzWOUDOvRu+6PWZW+EOYAEH0vtw@mail.gmail.com>
-	<51F2D902.80701@voxpopuli.im>
+From: Stefan Seefeld <stefan_seefeld@mentor.com>
+Subject: [PATCH lttng-ust] Add trace support for calloc and
+	realloc.
+Date: Sat, 27 Jul 2013 01:19:26 -0400
+Message-ID: <51F3585E.20705__723.471065475856$1374902427$gmane$org@mentor.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/mixed; boundary="------------060900080308050908020009"
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fukushima.klipix.org ([194.250.102.243])
+Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jdesfossez@efficios.com>) id 1V2plT-00027J-T2
-	for lttng-dev@lists.lttng.org; Fri, 26 Jul 2013 17:41:36 -0400
-In-Reply-To: <51F2D902.80701@voxpopuli.im>
+	(envelope-from <Stefan_Seefeld@mentor.com>) id 1V2wuk-0002H4-D4
+	for lttng-dev@lists.lttng.org; Sat, 27 Jul 2013 01:19:38 -0400
+Received: from svr-orw-fem-01.mgc.mentorg.com ([147.34.98.93])
+	by relay1.mentorg.com with esmtp
+	id 1V2wue-0004HG-5b from Stefan_Seefeld@mentor.com
+	for lttng-dev@lists.lttng.org; Fri, 26 Jul 2013 22:19:28 -0700
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,42 +22,162 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi S=E9bastien,
+--------------060900080308050908020009
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 7bit
 
-[...]
+The attached patch adds support for calloc and realloc to the
+lttng-ust-libc-wrapper library.
 
->> I sometimes miss kernel events. Is there a point in using different
->> channels for kernel and user space traces (besides giving them distinct
->> sizes)? I suspect they're already effectively different even if they have
->> the same name. Also, I have increased the subbuffer size a lot, but did =
-not
->> change the number of subbuffers. Would that help preventing missed event=
-s?
+The implementation for calloc is slightly tricky, as dlsym calls calloc
+internally, so the library needs to provide a 'dummy' implementation for
+calloc to avoid an endless recursion. Testing has shown however that the
+object(s) allocated at that point are small, so a dummy static 'heap'
+suffices as a workaround.
 
-Indeed, kernel and user-space traces are already in different channels.
-Enabling different channels for the same domain (kernel or ust) is
-especially useful when you have different level of interest for
-different events.
-For example, if you absolutely want all the sched_switch events, you
-could have a dedicated channel for these events, with the appropriate
-size and number of subbuffers, and then enable other channels for the
-other events you are interested in, that way you limit the risk of
-loosing your most important events.
+-- 
+Stefan Seefeld
+CodeSourcery / Mentor Graphics
+http://www.mentor.com/embedded-software/
 
-Regarding your question about the state system, I don't know how TMF
-handles that, but the contexts are a good way to ensure a consistent
-state without any state system. For example, you can attach a pid or
-procname context to all the events in a specific channel. Every time an
-event is recorded in this channel, the tracer will fetch the current
-procname/pid information. That way you are sure to have a consistent
-state even if you don't have all the scheduling and statedump events.
-The drawback, is that it increases slightly the operations done by the
-tracer on the fast path and the trace is bigger.
 
-Hope this helps,
+--------------060900080308050908020009
+Content-Type: text/plain; charset="UTF-8"; name="patch"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename="patch"
 
-Julien
+From 78696689a46c13cdd2625c59348cbb1c03a32b0e Mon Sep 17 00:00:00 2001
+From: Stefan Seefeld <stefan_seefeld@mentor.com>
+Date: Sat, 27 Jul 2013 01:10:23 -0400
+Subject: [PATCH] Add trace support for calloc and realloc.
+
+Signed-off-by: Stefan Seefeld <stefan_seefeld@mentor.com>
+---
+ liblttng-ust-libc-wrapper/lttng-ust-malloc.c | 68 ++++++++++++++++++++++++++++
+ liblttng-ust-libc-wrapper/ust_libc.h         | 18 ++++++++
+ 2 files changed, 86 insertions(+)
+
+diff --git a/liblttng-ust-libc-wrapper/lttng-ust-malloc.c b/liblttng-ust-libc-wrapper/lttng-ust-malloc.c
+index 3212ff0..772663a 100644
+--- a/liblttng-ust-libc-wrapper/lttng-ust-malloc.c
++++ b/liblttng-ust-libc-wrapper/lttng-ust-malloc.c
+@@ -57,3 +57,71 @@ void free(void *ptr)
+ 	tracepoint(ust_libc, free, ptr);
+ 	plibc_free(ptr);
+ }
++
++/*
++   The following 'dummy' variables and functions are needed
++   to break out of an endless recursion:
++   dlsym itself appears to call calloc, so we need to provide
++   an implementation for the very first call to calloc to use.
++*/
++
++#define DUMMY_HEAP_SIZE 1024
++static char dummy_heap[DUMMY_HEAP_SIZE] = {0};
++static int dummy_end_of_heap = 0;
++
++static void *dummy_malloc(size_t size)
++{
++    if(size == 0)
++	return NULL;
++
++    size_t dummy_end_of_heap_reserved = dummy_end_of_heap + size;
++    if(dummy_end_of_heap_reserved >= DUMMY_HEAP_SIZE)
++	return NULL;
++
++    void *loc = (void*) &dummy_heap[dummy_end_of_heap];
++    dummy_end_of_heap = dummy_end_of_heap_reserved;
++    return loc;
++};
++
++static void *dummy_calloc(size_t nmemb, size_t size)
++{
++  return dummy_malloc(nmemb * size);
++}
++
++void *calloc(size_t nmemb, size_t size)
++{
++        static void *(* volatile plibc_calloc)(size_t nmemb, size_t size) = NULL;
++	void *retval;
++
++	if (plibc_calloc == NULL) {
++	        /* Temporarily redirect to dummy_calloc,
++		   until the dlsym lookup has completed. */
++                plibc_calloc = dummy_calloc;
++		plibc_calloc = dlsym(RTLD_NEXT, "calloc");
++		if (plibc_calloc == NULL) {
++			fprintf(stderr, "callocwrap: unable to find calloc\n");
++			return NULL;
++		}
++	}
++	retval = plibc_calloc(nmemb, size);
++	tracepoint(ust_libc, calloc, nmemb, size, retval);
++	return retval;
++}
++
++void *realloc(void *ptr, size_t size)
++{
++        static void *(*plibc_realloc)(void *ptr, size_t size) = NULL;
++	void *retval;
++
++	if (plibc_realloc == NULL) {
++		plibc_realloc = dlsym(RTLD_NEXT, "realloc");
++		if (plibc_realloc == NULL) {
++			fprintf(stderr, "reallocwrap: unable to find realloc\n");
++			return NULL;
++		}
++	}
++	retval = plibc_realloc(ptr, size);
++	tracepoint(ust_libc, realloc, ptr, size, retval);
++	return retval;
++}
++
+diff --git a/liblttng-ust-libc-wrapper/ust_libc.h b/liblttng-ust-libc-wrapper/ust_libc.h
+index af705aa..6b03a4d 100644
+--- a/liblttng-ust-libc-wrapper/ust_libc.h
++++ b/liblttng-ust-libc-wrapper/ust_libc.h
+@@ -47,6 +47,24 @@ TRACEPOINT_EVENT(ust_libc, free,
+ 	)
+ )
+ 
++TRACEPOINT_EVENT(ust_libc, calloc,
++	TP_ARGS(size_t, nmemb, size_t, size, void *, ptr),
++	TP_FIELDS(
++		ctf_integer(size_t, nmemb, nmemb)
++		ctf_integer(size_t, size, size)
++		ctf_integer_hex(unsigned long, ptr, (unsigned long) ptr)
++	)
++)
++
++TRACEPOINT_EVENT(ust_libc, realloc,
++	TP_ARGS(void *, in_ptr, size_t, size, void *, ptr),
++	TP_FIELDS(
++		ctf_integer_hex(unsigned long, in_ptr, (unsigned long) in_ptr)
++		ctf_integer(size_t, size, size)
++		ctf_integer_hex(unsigned long, ptr, (unsigned long) ptr)
++	)
++)
++
+ #endif /* _TRACEPOINT_UST_LIBC_H */
+ 
+ #undef TRACEPOINT_INCLUDE
+-- 
+1.8.3.1
+
+
+--------------060900080308050908020009
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--------------060900080308050908020009--
