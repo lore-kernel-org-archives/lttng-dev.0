@@ -1,16 +1,16 @@
-From: Jonnavithula Sharma <sarmajprs@gmail.com>
-Subject: lttng Crash seen after stopping the traces.
-Date: Mon, 29 Jul 2013 19:15:27 +0530
-Message-ID: <CAJD=Q56dkx1jCUF0n03XFCs64hFmuDYELy+FVF9joZ8nxDUpDw__19818.939563311$1375105593$gmane$org@mail.gmail.com>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Subject: Re: [RFC] Dynamic instrumentation support in UST
+Date: Mon, 29 Jul 2013 13:49:12 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD1BE24A83__2548.69616260311$1375105817$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary=089e0103ecec7d734904e2a6b437
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wi0-f173.google.com ([209.85.212.173])
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <sarmajprs@gmail.com>) id 1V3nlV-0005ZU-CI
-	for lttng-dev@lists.lttng.org; Mon, 29 Jul 2013 09:45:38 -0400
-Received: by mail-wi0-f173.google.com with SMTP id en1so3019297wid.6
-	for <lttng-dev@lists.lttng.org>; Mon, 29 Jul 2013 06:45:27 -0700 (PDT)
+	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1V3npN-00065p-GL
+	for lttng-dev@lists.lttng.org; Mon, 29 Jul 2013 09:49:34 -0400
+Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,246 +19,96 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
-Cc: suprasad.desai@gmail.com
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---089e0103ecec7d734904e2a6b437
-Content-Type: multipart/alternative; boundary=089e0103ecec7d734404e2a6b435
+----------------------------------------------------------------------
+> Date: Fri, 26 Jul 2013 23:40:33 +0800
+> From: Zifei Tong <soariez@gmail.com>
+>
+> Command Line Interface
+> ----------------------
+>
+> To enable a dynamic probe in a running process at given address, you can =
+use:
+>     lttng enable-event NAME -u --pid PID
+>         --probe (addr | symbol | symbol+offset)
+>                                Dynamic UST probe.
+>                                Addr and offset can be octal (0NNN...),
+>                                decimal (NNN...) or hexadecimal (0xNNN...)
+>
+> This will place a bare probe at certain address.
 
---089e0103ecec7d734404e2a6b435
-Content-Type: text/plain; charset=ISO-8859-1
+   Unless I'm mistaken, currently lttng's 'enable-event -u ...' works only =
+on already-running user-space processes.  It should be fairly easy to chang=
+e this so the event gets enabled for any new user-space process that regist=
+ers itself with the session daemon while the session is in existence.  This=
+ would be possible only for instrumented applications, of course.  It shoul=
+d also be possible to extend this to uninstrumented applications, as long a=
+s the session daemon watches for new processes being launched.
 
-Hi
+   I would allow the above command line to specify a process name instead o=
+f a process ID, in order to capture multi-threaded and multi-instance proce=
+sses.  When using process IDs, one also has to be careful of PID namespaces=
+: for a member of the 'tracing' group, a PID issued from a local lttng comm=
+and (e.g. '$ lttng enable-event --pid ...') may need to be translated by th=
+e time it reaches the root lttng-sessiond.  Similar concerns exist with use=
+r namespaces.  The implications of namespaces are not peculiar to this exte=
+nsion of lttng, however: I would expect lttng to provide namespace-handling=
+ utility functions or to otherwise handle namespaces consistently throughou=
+t its services.
 
-We are currently running lttng on our CPE with 64 MB RAM.We are observing a
-crash after stopping the traces and even if we leave our CPE for few min
-after starting the trace we are observing this crash.Please find the
-attachment for the crash log.
+> Being only able to attach and instrument existing processes is sometimes =
+restricted. If we can have #15 [2] implemented, then we can extend the comm=
+and to support dynamic instrumentation.
+>
+>    lttng trace -c COMMAND
+>        --probe (addr | symbol | symbol+offset)
+>        --function (addr | symbol | symbol+offset)
+>
+> This will execute given program and place probes at certain places.
 
-Let us know if any one has faced this issue and your help is highly
-appreciated in resolving this issue.
+   The -c command option by itself may be insufficient in some cases.  For =
+instance, if the lttng command is issued from an su shell (e.g. '# lttng tr=
+ace -c ...'), from a 'tracing' group member (e.g. '$ lttng trace -c ...'), =
+or from some ordinary account (e.g. '$ sudo -H lttng trace -c ...'), the in=
+tent may be to specify which user account to run the COMMAND as.  An 'lttng=
+ trace' command would be problematic anyway since it may need to specify se=
+veral events to enable, each assigned to a different channel and possibly w=
+ith a filter as well.  The overall command line could become very unwieldy.=
+  If enable-event is able to set up latent events (as described in my previ=
+ous comment block), then 'lttng trace' is unnecessary: the user need only s=
+et up his events, channels, etc., using --processname and then issue a prop=
+er 'sudo' command to launch the process (sudo has all the requisite options=
+ to assign the process to the proper user account with the proper environme=
+nt settings, etc.).
+------------------------------
+Date: Fri, 26 Jul 2013 13:40:03 -0400
+From: Simon Marchi <simon.marchi@polymtl.ca>
 
+> What is the difference if I do
+>  --function foo
+>vs
+>  --probe foo
+> ?
 
-Regards,
-Sarma J
+   If it follows the lttng kernel implementation, --function sets up a kret=
+probe and --probe sets up a kprobe, so in user-space this should work simil=
+arly: --probe sets up a function entry event while --function sets up a fun=
+ction entry AND a function return event.
 
---089e0103ecec7d734404e2a6b435
-Content-Type: text/html; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div><div>Hi <br><br></div>We are currently running lttng =
-on our CPE with 64 MB RAM.We are observing a crash after stopping the trace=
-s and even if we leave our CPE for few min after starting the trace we are =
-observing this crash.Please find the attachment for the crash log.<br>
-<br></div>Let us know if any one has faced this issue and your help is high=
-ly appreciated in resolving this issue.<br><br><br>Regards,<br>Sarma J <br>=
-</div>
-
---089e0103ecec7d734404e2a6b435--
-
---089e0103ecec7d734904e2a6b437
-Content-Type: text/plain; charset=US-ASCII; name="lttng-crash_2.2.0.txt"
-Content-Disposition: attachment; filename="lttng-crash_2.2.0.txt"
-Content-Transfer-Encoding: base64
-X-Attachment-Id: f_hjpq9xr70
-
-cm9vdEBsdHFjcGU6fiMgbHR0bmctc2Vzc2lvbmQgLWQgLXZ2dg0Kcm9vdEBsdHFjcGU6fiMgbHR0
-bmcgY3JlYXRlIGRlbW8NClNlc3Npb24gZGVtbyBjcmVhdGVkLg0KVHJhY2VzIHdpbGwgYmUgd3Jp
-dHRlbiBpbiAvcm9vdC9sdHRuZy10cmFjZXMvZGVtby0yMDEzMDcyMi0xOTEyMDcNCnJvb3RAbHRx
-Y3BlOn4jIGx0dG5nIGxpc3QgZGVtbw0KVHJhY2luZyBzZXNzaW9uIGRlbW86IFtpbmFjdGl2ZV0N
-CiAgICBUcmFjZSBwYXRoOiAvcm9vdC9sdHRuZy10cmFjZXMvZGVtby0yMDEzMDcyMi0xOTEyMDcN
-Cg0Kcm9vdEBsdHFjcGU6fiMgbHR0bmcgZW5hYmxlLWV2ZW50IHNjaGVkX3N3aXRjaCAtayAtLXRy
-YWNlcG9pbnQNCmtlcm5lbCBldmVudCBzY2hlZF9zd2l0Y2ggY3JlYXRlZCBpbiBjaGFubmVsIGNo
-YW5uZWwwDQpyb290QGx0cWNwZTp+IyBsdHRuZyBsaXN0IGRlbW8NClRyYWNpbmcgc2Vzc2lvbiBk
-ZW1vOiBbaW5hY3RpdmVdDQogICAgVHJhY2UgcGF0aDogL3Jvb3QvbHR0bmctdHJhY2VzL2RlbW8t
-MjAxMzA3MjItMTkxMjA3DQoNCj09PSBEb21haW46IEtlcm5lbCA9PT0NCg0KQ2hhbm5lbHM6DQot
-LS0tLS0tLS0tLS0tDQotIGNoYW5uZWwwOiBbZW5hYmxlZF0NCg0KICAgIEF0dHJpYnV0ZXM6DQog
-ICAgICBvdmVyd3JpdGUgbW9kZTogMA0KICAgICAgc3ViYnVmZXJzIHNpemU6IDI2MjE0NA0KICAg
-ICAgbnVtYmVyIG9mIHN1YmJ1ZmVyczogNA0KICAgICAgc3dpdGNoIHRpbWVyIGludGVydmFsOiAw
-DQogICAgICByZWFkIHRpbWVyIGludGVydmFsOiAyMDAwMDANCiAgICAgIG91dHB1dDogc3BsaWNl
-KCkNCg0KICAgIEV2ZW50czoNCiAgICAgIHNjaGVkX3N3aXRjaCAobG9nbGV2ZWw6IFRSQUNFX0VN
-RVJHICgwKSkgKHR5cGU6IHRyYWNlcG9pbnQpIFtlbmFibGVkXQ0KDQpyb290QGx0cWNwZTp+IyBs
-dHRuZyBkaXNhYmxlLWV2ZW50IHNjaGVkX3N3aXRjaCAtayAtLXRyYWNlcG9pbnQNCnVzYWdlOiBs
-dHRuZyBkaXNhYmxlLWV2ZW50IE5BTUVbLE5BTUUyLC4uLl0gWy1rfC11XSBbT1BUSU9OU10NCg0K
-T3B0aW9uczoNCiAgLWgsIC0taGVscCAgICAgICAgICAgICAgIFNob3cgdGhpcyBoZWxwDQogICAg
-ICAtLWxpc3Qtb3B0aW9ucyAgICAgICBTaW1wbGUgbGlzdGluZyBvZiBvcHRpb25zDQogIC1zLCAt
-LXNlc3Npb24gTkFNRSAgICAgICBBcHBseSB0byBzZXNzaW9uIG5hbWUNCiAgLWMsIC0tY2hhbm5l
-bCBOQU1FICAgICAgIEFwcGx5IHRvIHRoaXMgY2hhbm5lbA0KICAtYSwgLS1hbGwtZXZlbnRzICAg
-ICAgICAgRGlzYWJsZSBhbGwgdHJhY2Vwb2ludHMNCiAgLWssIC0ta2VybmVsICAgICAgICAgICAg
-IEFwcGx5IGZvciB0aGUga2VybmVsIHRyYWNlcg0KICAtdSwgLS11c2Vyc3BhY2UgICAgICAgICAg
-QXBwbHkgdG8gdGhlIHVzZXItc3BhY2UgdHJhY2VyDQoNCkVycm9yOiBVbmRlZmluZWQgY29tbWFu
-ZA0Kcm9vdEBsdHFjcGU6fiMgbHR0bmcgZGlzYWJsZS1ldmVudCBzY2hlZF9zd2l0Y2ggIC1rDQpr
-ZXJuZWwgZXZlbnQgc2NoZWRfc3dpdGNoIGRpc2FibGVkIGluIGNoYW5uZWwgY2hhbm5lbDAgZm9y
-IHNlc3Npb24gZGVtbw0Kcm9vdEBsdHFjcGU6fiMgbHR0bmcgbGlzdCBkZW1vDQpUcmFjaW5nIHNl
-c3Npb24gZGVtbzogW2luYWN0aXZlXQ0KICAgIFRyYWNlIHBhdGg6IC9yb290L2x0dG5nLXRyYWNl
-cy9kZW1vLTIwMTMwNzIyLTE5MTIwNw0KDQo9PT0gRG9tYWluOiBLZXJuZWwgPT09DQoNCkNoYW5u
-ZWxzOg0KLS0tLS0tLS0tLS0tLQ0KLSBjaGFubmVsMDogW2VuYWJsZWRdDQoNCiAgICBBdHRyaWJ1
-dGVzOg0KICAgICAgb3ZlcndyaXRlIG1vZGU6IDANCiAgICAgIHN1YmJ1ZmVycyBzaXplOiAyNjIx
-NDQNCiAgICAgIG51bWJlciBvZiBzdWJidWZlcnM6IDQNCiAgICAgIHN3aXRjaCB0aW1lciBpbnRl
-cnZhbDogMA0KICAgICAgcmVhZCB0aW1lciBpbnRlcnZhbDogMjAwMDAwDQogICAgICBvdXRwdXQ6
-IHNwbGljZSgpDQoNCiAgICBFdmVudHM6DQogICAgICBzY2hlZF9zd2l0Y2ggKGxvZ2xldmVsOiBU
-UkFDRV9FTUVSRyAoMCkpICh0eXBlOiB0cmFjZXBvaW50KSBbZGlzYWJsZWRdDQoNCnJvb3RAbHRx
-Y3BlOn4jIGx0dG5nIGVuYWJsZS1ldmVudCBzY2hlZF9zd2l0Y2ggLWsgLS1mdW5jdGlvbiBsdHRu
-Z19jYWxpYnJhdGVfa3JlDQp0cHJvYmUNCmtlcm5lbCBldmVudCBzY2hlZF9zd2l0Y2ggY3JlYXRl
-ZCBpbiBjaGFubmVsIGNoYW5uZWwwDQpyb290QGx0cWNwZTp+IyBsdHRuZyBsaXN0IGRlbW8NClRy
-YWNpbmcgc2Vzc2lvbiBkZW1vOiBbaW5hY3RpdmVdDQogICAgVHJhY2UgcGF0aDogL3Jvb3QvbHR0
-bmctdHJhY2VzL2RlbW8tMjAxMzA3MjItMTkxMjA3DQoNCj09PSBEb21haW46IEtlcm5lbCA9PT0N
-Cg0KQ2hhbm5lbHM6DQotLS0tLS0tLS0tLS0tDQotIGNoYW5uZWwwOiBbZW5hYmxlZF0NCg0KICAg
-IEF0dHJpYnV0ZXM6DQogICAgICBvdmVyd3JpdGUgbW9kZTogMA0KICAgICAgc3ViYnVmZXJzIHNp
-emU6IDI2MjE0NA0KICAgICAgbnVtYmVyIG9mIHN1YmJ1ZmVyczogNA0KICAgICAgc3dpdGNoIHRp
-bWVyIGludGVydmFsOiAwDQogICAgICByZWFkIHRpbWVyIGludGVydmFsOiAyMDAwMDANCiAgICAg
-IG91dHB1dDogc3BsaWNlKCkNCg0KICAgIEV2ZW50czoNCiAgICAgIHNjaGVkX3N3aXRjaCAobG9n
-bGV2ZWw6IFRSQUNFX0VNRVJHICgwKSkgKHR5cGU6IHRyYWNlcG9pbnQpIFtlbmFibGVkXQ0KDQpy
-b290QGx0cWNwZTp+IyBsdHRuZyBzdGFydA0KVHJhY2luZyBzdGFydGVkIGZvciBzZXNzaW9uIGRl
-bW8NCnJvb3RAbHRxY3BlOn4jIHBpbmcgMTkyLjE2OC4xLjMNClBJTkcgMTkyLjE2OC4xLjMgKDE5
-Mi4xNjguMS4zKTogNTYgZGF0YSBieXRlcw0KNjQgYnl0ZXMgZnJvbSAxOTIuMTY4LjEuMzogc2Vx
-PTAgdHRsPTEyOCB0aW1lPTEuMDgzIG1zDQo2NCBieXRlcyBmcm9tIDE5Mi4xNjguMS4zOiBzZXE9
-MSB0dGw9MTI4IHRpbWU9MC41NDEgbXMNCjY0IGJ5dGVzIGZyb20gMTkyLjE2OC4xLjM6IHNlcT0y
-IHR0bD0xMjggdGltZT0wLjQ5OCBtcw0KNjQgYnl0ZXMgZnJvbSAxOTIuMTY4LjEuMzogc2VxPTMg
-dHRsPTEyOCB0aW1lPTAuNTI3IG1zDQo2NCBieXRlcyBmcm9tIDE5Mi4xNjguMS4zOiBzZXE9NCB0
-dGw9MTI4IHRpbWU9MC41NTcgbXMNCjY0IGJ5dGVzIGZyb20gMTkyLjE2OC4xLjM6IHNlcT01IHR0
-bD0xMjggdGltZT0wLjUwNCBtcw0KNjQgYnl0ZXMgZnJvbSAxOTIuMTY4LjEuMzogc2VxPTYgdHRs
-PTEyOCB0aW1lPTAuNTE1IG1zDQoNCi0tLSAxOTIuMTY4LjEuMyBwaW5nIHN0YXRpc3RpY3MgLS0t
-DQo3IHBhY2tldHMgdHJhbnNtaXR0ZWQsIDcgcGFja2V0cyByZWNlaXZlZCwgMCUgcGFja2V0IGxv
-c3MNCnJvdW5kLXRyaXAgbWluL2F2Zy9tYXggPSAwLjQ5OC8wLjYwMy8xLjA4MyBtcw0Kcm9vdEBs
-dHFjcGU6fiMgbHR0bmcgc3RvcA0KWyAxMDQ1LjUyMDAwMF0gQ1BVIDAgVW5hYmxlIHRvIGhhbmRs
-ZSBrZXJuZWwgcGFnaW5nIHJlcXVlc3QgYXQgdmlydHVhbCBhZGRyZXNzIGZmZmY5NzljLCBlcGMg
-PT0gODMxYTk3OWMsIHJhID09IDgzMWE3ZmVjDQpbIDEwNDUuNTIwMDAwXSBPb3BzWyMxXToNClsg
-MTA0NS41MjAwMDBdIENwdSAwDQpbIDEwNDUuNTIwMDAwXSAkIDAgICA6IDAwMDAwMDAwIDc3NTFm
-ZWYwIDAwMDAwMDAxIDAwMDAwMDAwDQpbIDEwNDUuNTIwMDAwXSAkIDQgICA6IDgzMDdkYTAwIDgz
-MjA5ZTYwIDgwNDU1ZTQ4IDAwMDAwMDAwDQpbIDEwNDUuNTIwMDAwXSAkIDggICA6IDgwNDU1ZTRj
-IDAwMDAyNDg2IDAwMDAwMDAwIDAwMDAwMDA0DQpbIDEwNDUuNTIwMDAwXSAkMTIgICA6IDc3NTFm
-ZGU4IDAwMDAxMDAwIDAwMDAwMDAwIDAwNDA3OTQ4DQpbIDEwNDUuNTIwMDAwXSAkMTYgICA6IDgz
-MzNiMDAwIDAwMDAwMDAwIDAwMDAwMDAwIDAwMDAxMDAwDQpbIDEwNDUuNTIwMDAwXSAkMjAgICA6
-IDAwMDAxMDAwIDAwMDAwMDAxIDgwNDU1ZTQ4IDgzYjdiNjk0DQpbIDEwNDUuNTIwMDAwXSAkMjQg
-ICA6IDAwMDAwMDAwIDgzMWE5NzljDQpbIDEwNDUuNTIwMDAwXSAkMjggICA6IDgzMjA4MDAwIDgz
-MjA5ZDUwIDgwNTAwMDAwIDgzMWE3ZmVjDQpbIDEwNDUuNTIwMDAwXSBIaSAgICA6IDAwMDAwMjRk
-DQpbIDEwNDUuNTIwMDAwXSBMbyAgICA6IDAwMDFlNjc4DQpbIDEwNDUuNTIwMDAwXSBlcGMgICA6
-IDgzMWE5NzljIGNsZWFudXBfbW9kdWxlKzB4ZmJjLzB4MTggW2x0dG5nX2xpYl9yaW5nX2J1ZmZl
-cl0NClsgMTA0NS41MjAwMDBdICAgICBUYWludGVkOiBHICAgICAgICAgICBPDQpbIDEwNDUuNTIw
-MDAwXSByYSAgICA6IDgzMWE3ZmVjIGxpYl9yaW5nX2J1ZmZlcl9pb2N0bCsweDUzMC8weDU2MCBb
-bHR0bmdfbGliX3JpbmdfYnVmZmVyXQ0KWyAxMDQ1LjUyMDAwMF0gU3RhdHVzOiAxMTAwZmMwMyAg
-ICBLRVJORUwgRVhMIElFDQpbIDEwNDUuNTIwMDAwXSBDYXVzZSA6IDAwODAwMDA4DQpbIDEwNDUu
-NTIwMDAwXSBCYWRWQSA6IGZmZmY5NzljDQpbIDEwNDUuNTIwMDAwXSBQcklkICA6IDAwMDE5NTU2
-IChNSVBTIDM0S2MpDQpbIDEwNDUuNTIwMDAwXSBNb2R1bGVzIGxpbmtlZCBpbjogbHR0bmdfcHJv
-YmVfd29ya3F1ZXVlKE8pIGx0dG5nX3Byb2JlX3VkcChPKSBsdHRuZ19wcm9iZV90aW1lcihPKSBs
-dHRuZ19wcm9iZV9zdGF0ZWR1bXAoTykgbHR0bmdfcHJvYmVfc29jayhPKSBsdHRuZ19wcm9iZV9z
-a2IoTykgbHR0bmdfcHJvYmVfc2lnbmFsKE8pIGx0dG5nX3Byb2JlX3Njc2koTykgbHR0bmdfcHJv
-YmVfc2NoZWQoTykgbHR0bmdfcHJvYmVfcmN1KE8pIGx0dG5nX3Byb2JlX3JhbmRvbShPKSBsdHRu
-Z19wcm9iZV9wcmludGsoTykgbHR0bmdfcHJvYmVfcG93ZXIoTykgbHR0bmdfcHJvYmVfbmV0KE8p
-IGx0dG5nX3Byb2JlX25hcGkoTykgbHR0bmdfcHJvYmVfbW9kdWxlKE8pIGx0dG5nX3Byb2JlX2tt
-ZW0oTykgbHR0bmdfcHJvYmVfamJkMihPKSBsdHRuZ19wcm9iZV9pcnEoTykgbHR0bmdfcHJvYmVf
-Z3BpbyhPKSBsdHRuZ19wcm9iZV9leHQ0KE8pIGx0dG5nX3Byb2JlX2NvbXBhY3Rpb24oTykgbHR0
-bmdfcHJvYmVfYmxvY2soTykgbHR0bmdfdHlwZXMoTykgbHR0bmdfcmluZ19idWZmZXJfbWV0YWRh
-dGFfbW1hcF9jbGllbnQoTykgbHR0bmdfcmluZ19idWZmZXJfY2xpZW50X21tYXBfb3ZlcndyaXRl
-KE8pIGx0dG5nX3JpbmdfYnVmZmVyX2NsaWVudF9tbWFwX2Rpc2NhcmQoTykgbHR0bmdfcmluZ19i
-dWZmZXJfbWV0YWRhdGFfY2xpZW50KE8pIGx0dG5nX3JpbmdfYnVmZmVyX2NsaWVudF9vdmVyd3Jp
-dGUoTykgbHR0bmdfcmluZ19idWZmZXJfY2xpZW50X2Rpc2NhcmQoTykgbHR0bmdfdHJhY2VyKE8p
-IGx0dG5nX2xpYl9yaW5nX2J1ZmZlcihPKSBsdHRuZ19zdGF0ZWR1bXAoTykNClsgMTA0NS41MjAw
-MDBdIFByb2Nlc3MgbHR0bmctY29uc3VtZXJkIChwaWQ6IDE5NjMsIHRocmVhZGluZm89ODMyMDgw
-MDAsIHRhc2s9ODMyMTk1ZTgsIHRscz03NzUyNzk3MCkNClsgMTA0NS41MjAwMDBdIFN0YWNrIDog
-MDAwMDAwMDAgMDAwMDAwMjAgODMwZDUzYjggODMyMGM3NzQgMDAwMDAwMDAgMDAwMDEwMDAgODNi
-ODQ4NjAgMDAwMDAwMjkNCiAgICAgICAgODMwZDUzODAgODMyMTk1ZTggMDAwMDAwMDEgODAwYjI3
-MDQgODMxMmI3MDAgODAwMDI0MjAgODMwN2RhODAgODMxN2I4MDANCiAgICAgICAgODMyMGM3NzQg
-MDAwMDAwMjkgNzc1MjA1YjQgMDAwMDAwMjkgODNiODQ4NjAgNzc1MjA1YjQgMDAwMDAwMjkgODAw
-MWVhODgNCiAgICAgICAgMDAwMDAwMWIgMDAwMDAwMDAgMDBhY2MwMDAgODNiNzVkZWMgODMyMDlm
-ZTAgMDAwMGZjMDAgODAwNGFiMDAgMDAwMDAwMDQNCiAgICAgICAgN2Y4NGFlZDAgNzc1Y2EwMzAg
-N2Y4NGFmNDAgMDA0NjAwMDAgODNiNzVkZWMgODMyMDllOTggMDAwMDAwMDAgMDBhY2JmZjgNCiAg
-ICAgICAgLi4uDQpbIDEwNDUuNTIwMDAwXSBDYWxsIFRyYWNlOg0KWyAxMDQ1LjUyMDAwMF0gWzw4
-MDBiMjcwND5dIGhhbmRsZV9tbV9mYXVsdCsweGIwLzB4ZDANClsgMTA0NS41MjAwMDBdIFs8ODAw
-MDI0MjA+XSByZXRfZnJvbV9leGNlcHRpb24rMHgwLzB4MTANClsgMTA0NS41MjAwMDBdIFs8ODAw
-MWVhODg+XSBkb19wYWdlX2ZhdWx0KzB4MmY0LzB4NGRjDQpbIDEwNDUuNTIwMDAwXSBbPDgwMDRh
-YjAwPl0gc3lzX25pX3N5c2NhbGwrMHgwLzB4OA0KWyAxMDQ1LjUyMDAwMF0gWzw4MDEwMTZhYz5d
-IGVwX3NlbmRfZXZlbnRzX3Byb2MrMHg5NC8weDE2Yw0KWyAxMDQ1LjUyMDAwMF0gWzw4MDE3NzA5
-ND5dIHNlY3VyaXR5X2ZpbGVfcGVybWlzc2lvbisweGE0LzB4Y2MNClsgMTA0NS41MjAwMDBdIFs8
-ODMxYTdkZTA+XSBsaWJfcmluZ19idWZmZXJfaW9jdGwrMHgzMjQvMHg1NjAgW2x0dG5nX2xpYl9y
-aW5nX2J1ZmZlcl0NClsgMTA0NS41MjAwMDBdIFs8ODMxYTgwOTQ+XSBsaWJfcmluZ19idWZmZXJf
-c3BsaWNlX3JlYWQrMHg3OC8weDEwNCBbbHR0bmdfbGliX3JpbmdfYnVmZmVyXQ0KWyAxMDQ1LjUy
-MDAwMF0gWzw4MDBlZGFmOD5dIGRvX3NwbGljZV90bysweDRjLzB4Y2MNClsgMTA0NS41MjAwMDBd
-IFs8ODAxMDMwNzA+XSBzeXNfZXBvbGxfd2FpdCsweDMwYy8weDNhYw0KWyAxMDQ1LjUyMDAwMF0g
-Wzw4MDEwMmQxMD5dIHN5c19lcG9sbF9jdGwrMHg4MmMvMHg4ODANClsgMTA0NS41MjAwMDBdIFs8
-ODAwZWY3ZmM+XSBzeXNfc3BsaWNlKzB4NTU0LzB4NWE0DQpbIDEwNDUuNTIwMDAwXSBbPDgwMDU2
-ZDBjPl0gZGVmYXVsdF93YWtlX2Z1bmN0aW9uKzB4MC8weDgNClsgMTA0NS41MjAwMDBdIFs8ODAw
-ZDQ5ZjQ+XSBzeXNfaW9jdGwrMHg3NC8weGE0DQpbIDEwNDUuNTIwMDAwXSBbPDgwMDA0MWIwPl0g
-c3RhY2tfZG9uZSsweDIwLzB4NDQNClsgMTA0NS41MjAwMDBdIFs8ODAwNGFiMDA+XSBzeXNfbmlf
-c3lzY2FsbCsweDAvMHg4DQpbIDEwNDUuNTIwMDAwXQ0KWyAxMDQ1LjUyMDAwMF0NCkNvZGU6IDAw
-MDAwMDAwICA4MzE0NGE4MCAgODMxYWY0ODAgPDgzMWE5NzljPiA4MzFhOTc5YyAgODM5ZjExOTgg
-IDAwMDAwMDAwICA4MTA4Mjg4MCAgMDAwMDAwMDANClsgMTA0NS44MjAwMDBdIC0tLVsgZW5kIHRy
-YWNlIDE0ODlmODc1MjE5ZmNjNGUgXS0tLQ0KWyAxMDQ1Ljg0MDAwMF0gQ1BVIDAgVW5hYmxlIHRv
-IGhhbmRsZSBrZXJuZWwgcGFnaW5nIHJlcXVlc3QgYXQgdmlydHVhbCBhZGRyZXNzIGZmZmY5Nzlj
-LCBlcGMgPT0gODMxYTk3OWMsIHJhID09IDgzMWE3ZmVjDQpbIDEwNDUuODQwMDAwXSBPb3BzWyMy
-XToNClsgMTA0NS44NDAwMDBdIENwdSAwDQpbIDEwNDUuODQwMDAwXSAkIDAgICA6IDAwMDAwMDAw
-IDc3MzFmZTQ4IDAwMDAwMDEwIDAwMDAwMDAwDQpbIDEwNDUuODQwMDAwXSAkIDQgICA6IDgzMDdk
-NjgwIDgzMjFkZTYwIDgwNDU1ZTQ4IDAwMDAwMDAwDQpbIDEwNDUuODQwMDAwXSAkIDggICA6IDgw
-NDU1ZTRjIDAwMDAyNDc5IDAwMDAwMDAxIGZmZmZmZmZmDQpbIDEwNDUuODQwMDAwXSAkMTIgICA6
-IDAwMjAwMjAwIDAwMTAwMTAwIDAwMDAwMDAzIDAwNDYwMDAwDQpbIDEwNDUuODQwMDAwXSAkMTYg
-ICA6IDgzMzI2MDAwIDAwMDA2MDAwIDAwMDAwMDAwIDAwMDEwMDAwDQpbIDEwNDUuODQwMDAwXSAk
-MjAgICA6IDAwMDAxMDAwIDAwMDAwMDEwIDgwNDU1ZTQ4IDgxMDg0ZTZjDQpbIDEwNDUuODQwMDAw
-XSAkMjQgICA6IDAwMDAwMDAwIDgzMWE5NzljDQpbIDEwNDUuODQwMDAwXSAkMjggICA6IDgzMjFj
-MDAwIDgzMjFkZDUwIDgwNTAwMDAwIDgzMWE3ZmVjDQpbIDEwNDUuODQwMDAwXSBIaSAgICA6IDAw
-MDAwMGYzDQpbIDEwNDUuODQwMDAwXSBMbyAgICA6IDgwZWJmNDAwDQpbIDEwNDUuODQwMDAwXSBl
-cGMgICA6IDgzMWE5NzljIGNsZWFudXBfbW9kdWxlKzB4ZmJjLzB4MTggW2x0dG5nX2xpYl9yaW5n
-X2J1ZmZlcl0NClsgMTA0NS44NDAwMDBdICAgICBUYWludGVkOiBHICAgICAgRCAgICBPDQpbIDEw
-NDUuODQwMDAwXSByYSAgICA6IDgzMWE3ZmVjIGxpYl9yaW5nX2J1ZmZlcl9pb2N0bCsweDUzMC8w
-eDU2MCBbbHR0bmdfbGliX3JpbmdfYnVmZmVyXQ0KWyAxMDQ1Ljg0MDAwMF0gU3RhdHVzOiAxMTAw
-ZmMwMyAgICBLRVJORUwgRVhMIElFDQpbIDEwNDUuODQwMDAwXSBDYXVzZSA6IDAwODAwMDA4DQpb
-IDEwNDUuODQwMDAwXSBCYWRWQSA6IGZmZmY5NzljDQpbIDEwNDUuODQwMDAwXSBQcklkICA6IDAw
-MDE5NTU2IChNSVBTIDM0S2MpDQpbIDEwNDUuODQwMDAwXSBNb2R1bGVzIGxpbmtlZCBpbjogbHR0
-bmdfcHJvYmVfd29ya3F1ZXVlKE8pIGx0dG5nX3Byb2JlX3VkcChPKSBsdHRuZ19wcm9iZV90aW1l
-cihPKSBsdHRuZ19wcm9iZV9zdGF0ZWR1bXAoTykgbHR0bmdfcHJvYmVfc29jayhPKSBsdHRuZ19w
-cm9iZV9za2IoTykgbHR0bmdfcHJvYmVfc2lnbmFsKE8pIGx0dG5nX3Byb2JlX3Njc2koTykgbHR0
-bmdfcHJvYmVfc2NoZWQoTykgbHR0bmdfcHJvYmVfcmN1KE8pIGx0dG5nX3Byb2JlX3JhbmRvbShP
-KSBsdHRuZ19wcm9iZV9wcmludGsoTykgbHR0bmdfcHJvYmVfcG93ZXIoTykgbHR0bmdfcHJvYmVf
-bmV0KE8pIGx0dG5nX3Byb2JlX25hcGkoTykgbHR0bmdfcHJvYmVfbW9kdWxlKE8pIGx0dG5nX3By
-b2JlX2ttZW0oTykgbHR0bmdfcHJvYmVfamJkMihPKSBsdHRuZ19wcm9iZV9pcnEoTykgbHR0bmdf
-cHJvYmVfZ3BpbyhPKSBsdHRuZ19wcm9iZV9leHQ0KE8pIGx0dG5nX3Byb2JlX2NvbXBhY3Rpb24o
-TykgbHR0bmdfcHJvYmVfYmxvY2soTykgbHR0bmdfdHlwZXMoTykgbHR0bmdfcmluZ19idWZmZXJf
-bWV0YWRhdGFfbW1hcF9jbGllbnQoTykgbHR0bmdfcmluZ19idWZmZXJfY2xpZW50X21tYXBfb3Zl
-cndyaXRlKE8pIGx0dG5nX3JpbmdfYnVmZmVyX2NsaWVudF9tbWFwX2Rpc2NhcmQoTykgbHR0bmdf
-cmluZ19idWZmZXJfbWV0YWRhdGFfY2xpZW50KE8pIGx0dG5nX3JpbmdfYnVmZmVyX2NsaWVudF9v
-dmVyd3JpdGUoTykgbHR0bmdfcmluZ19idWZmZXJfY2xpZW50X2Rpc2NhcmQoTykgbHR0bmdfdHJh
-Y2VyKE8pIGx0dG5nX2xpYl9yaW5nX2J1ZmZlcihPKSBsdHRuZ19zdGF0ZWR1bXAoTykNClsgMTA0
-NS44NDAwMDBdIFByb2Nlc3MgbHR0bmctY29uc3VtZXJkIChwaWQ6IDE5NjQsIHRocmVhZGluZm89
-ODMyMWMwMDAsIHRhc2s9ODMyMTkxYjgsIHRscz03NzMyNzk3MCkNClsgMTA0NS44NDAwMDBdIFN0
-YWNrIDogMDAwMDAwMDAgMDAwMDAwMDAgMDAwMDAwMDAgODMyMGM3NzQgMDAwMDAwMDAgMDAwMDEw
-MDAgODMxMTU0OTggMDAwMDAwMDANCiAgICAgICAgMDAwMDEwMDAgODMyMTkxYjggMDAwMDAwMDAg
-MDAwMDEwMDAgODM4MGU1OTAgMDAwMDAwMDAgMDAwMDEwMDAgODMxN2IwMDANCiAgICAgICAgMDAw
-MDAwMDAgMDAwMDEwMDAgNzc3YjcwNWMgMDAwMDAwMDAgMDAwMDEwMDAgNzc3YjcwNWMgMDAwMDAw
-MDAgMDAwMDEwMDANCiAgICAgICAgNTFlZDg0YzAgMDAwMDAwMDAgMDAwMDEwMDAgMDAwMDAwMDAg
-MDAwMDAwMDAgMDAwMDEwMDAgMDAwMzAwMDEgMDAwMDAwMDANCiAgICAgICAgMDAwMDEwMDAgMDAw
-MDAwMDAgMDAwMDAwMDAgMDAwMDEwMDAgMDAwMDAwMDEgMDAwMDAwMDAgMDAwMDEwMDAgODMwN2Q3
-YjANCiAgICAgICAgLi4uDQpbIDEwNDUuODQwMDAwXSBDYWxsIFRyYWNlOg0KWyAxMDQ1Ljg0MDAw
-MF0gWzw4MDA1MmFjYz5dIF9fd2FrZV91cF9jb21tb24rMHg1OC8weGMwDQpbIDEwNDUuODQwMDAw
-XSBbPDgzMWE3ZGUwPl0gbGliX3JpbmdfYnVmZmVyX2lvY3RsKzB4MzI0LzB4NTYwIFtsdHRuZ19s
-aWJfcmluZ19idWZmZXJdDQpbIDEwNDUuODQwMDAwXSBbPDgzMWE4MDk0Pl0gbGliX3JpbmdfYnVm
-ZmVyX3NwbGljZV9yZWFkKzB4NzgvMHgxMDQgW2x0dG5nX2xpYl9yaW5nX2J1ZmZlcl0NClsgMTA0
-NS44NDAwMDBdIFs8ODAwZWRhZjg+XSBkb19zcGxpY2VfdG8rMHg0Yy8weGNjDQpbIDEwNDUuODQw
-MDAwXSBbPDgwMGVmN2ZjPl0gc3lzX3NwbGljZSsweDU1NC8weDVhNA0KWyAxMDQ1Ljg0MDAwMF0g
-Wzw4MDBkNDlmND5dIHN5c19pb2N0bCsweDc0LzB4YTQNClsgMTA0NS44NDAwMDBdIFs8ODAwZDY3
-NWM+XSBzeXNfcG9sbCsweDk0LzB4ZjgNClsgMTA0NS44NDAwMDBdIFs8ODAwMDQxYjA+XSBzdGFj
-a19kb25lKzB4MjAvMHg0NA0KWyAxMDQ1Ljg0MDAwMF0gWzw4MDAzZjc0OD5dIHN5c19nZXRjcHUr
-MHgwLzB4NzANClsgMTA0NS44NDAwMDBdDQpbIDEwNDUuODQwMDAwXQ0KQ29kZTogMDAwMDAwMDAg
-IDgzMTQ0YTgwICA4MzFhZjQ4MCA8ODMxYTk3OWM+IDgzMWE5NzljICA4MzlmMTE5OCAgMDAwMDAw
-MDAgIDgxMDgyODgwICAwMDAwMDAwMA0KWyAxMDQ2LjExMDAwMF0gLS0tWyBlbmQgdHJhY2UgMTQ4
-OWY4NzUyMTlmY2M0ZiBdLS0tDQoNCg0KDQpyb290QGx0cWNwZTp+IyBscyBsdHRuZy10cmFjZXMv
-DQpkZW1vLTIwMTMwNzIyLTE5MTIwNyAgdHItMjAxMzA3MjItMTkxOTExDQpyb290QGx0cWNwZTp+
-IyBscyBsdHRuZy10cmFjZXMvZGVtby0yMDEzMDcyMi0xOTEyMDcvDQprZXJuZWwNCnJvb3RAbHRx
-Y3BlOn4jIGxzIGx0dG5nLXRyYWNlcy9kZW1vLTIwMTMwNzIyLTE5MTIwNy9rZXJuZWwvDQpjaGFu
-bmVsMF8wICBtZXRhZGF0YQ0Kcm9vdEBsdHFjcGU6fiMgbHMgbHR0bmctdHJhY2VzL2RlbW8tMjAx
-MzA3MjItMTkxMjA3L2tlcm5lbC9jaGFubmVsMF8wDQpsdHRuZy10cmFjZXMvZGVtby0yMDEzMDcy
-Mi0xOTEyMDcva2VybmVsL2NoYW5uZWwwXzANCnJvb3RAbHRxY3BlOn4jIGxzIGx0dG5nLXRyYWNl
-cy9kZW1vLTIwMTMwNzIyLTE5MTIwNy9rZXJuZWwvY2hhbm5lbDBfMA0Kcm9vdEBsdHFjcGU6fiMN
-CnJvb3RAbHRxY3BlOn4j
---089e0103ecec7d734904e2a6b437
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---089e0103ecec7d734904e2a6b437--
+Daniel U. Thibault
+Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
+ntermeasures (SPC)
+Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
+Cyber Security (MCCS)
+R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
+ Canada - Valcartier (DRDC Valcartier)
+2459 route de la Bravoure
+Qu=E9bec QC  G3J 1X5
+CANADA
+Vox : (418) 844-4000 x4245
+Fax : (418) 844-4538
+NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+Gouvernement du Canada | Government of Canada
+<http://www.valcartier.drdc-rddc.gc.ca/>
