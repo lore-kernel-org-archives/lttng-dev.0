@@ -1,19 +1,22 @@
-From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Subject: Re: [RFC] Dynamic instrumentation support in UST
-Date: Tue, 30 Jul 2013 13:37:03 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD1BE24CEF__2029.50230236656$1375191506$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
-References: <48CF5AC71E61DB46B70D0F388054EFFD1BE24A83@VAL-E-02.valcartier.drdc-rddc.gc.ca>
-	<CAJ7wx-Hue-Y=Xm1TEtp7YfYfzVVGJgz0OE0iXXMvxhehwJ3bBw@mail.gmail.com>
+From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: lttng Crash seen after stopping the traces.
+Date: Tue, 30 Jul 2013 10:28:20 -0400
+Message-ID: <CA+jJMxvMBPOaxJJph0ht9SFUbywYRezWHgHncxQDiyR+pM6EGw__22255.7936482646$1375194572$gmane$org@mail.gmail.com>
+References: <CAJD=Q56dkx1jCUF0n03XFCs64hFmuDYELy+FVF9joZ8nxDUpDw@mail.gmail.com>
+	<CA+jJMxt0kJJv2F26Myzcvms_6tSXAo269Zg5fMXyeXEn5eH95A@mail.gmail.com>
+	<CAJD=Q56myG=OuBXv2At2NEB0eqXOqjtTqVAMA5SZf2BgmmZ3Cg@mail.gmail.com>
+	<CAJD=Q56CFSqfjGqiGUMN+Zq4WCFomuBNwbvGi=oTMjWM1hNZOA@mail.gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
+Received: from mail-wi0-f169.google.com ([209.85.212.169])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1V4A79-0003qx-HZ
-	for lttng-dev@lists.lttng.org; Tue, 30 Jul 2013 09:37:35 -0400
-In-Reply-To: <CAJ7wx-Hue-Y=Xm1TEtp7YfYfzVVGJgz0OE0iXXMvxhehwJ3bBw@mail.gmail.com>
-Content-Language: fr-FR
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1V4AuY-0002GS-Vg
+	for lttng-dev@lists.lttng.org; Tue, 30 Jul 2013 10:28:34 -0400
+Received: by mail-wi0-f169.google.com with SMTP id f14so2188802wiw.0
+	for <lttng-dev@lists.lttng.org>; Tue, 30 Jul 2013 07:28:21 -0700 (PDT)
+In-Reply-To: <CAJD=Q56CFSqfjGqiGUMN+Zq4WCFomuBNwbvGi=oTMjWM1hNZOA@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,43 +25,94 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Zifei Tong <soariez@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Jonnavithula Sharma <sarmajprs@gmail.com>
+Cc: lttng-dev@lists.lttng.org, suprasad.desai@gmail.com
 List-Id: lttng-dev@lists.lttng.org
 
------Message d'origine-----
-Envoy=E9=A0: 30 juillet 2013 09:26
+Can you open a new issue on the bug tracker? [1]
 
-> If we use the command line interface you described, like
->      lttng enable-event --processname a.out
-> Then we will need a mechanism to distinguish processes with the same name=
-. For example, I want to instrument my program for debugging but not touch =
-any processes in production.
+Please make sure you include your kernel version, details about your
+target's architecture and the logs you posted.
 
-   That's an odd use case you're describing.  If one wanted to trace specif=
-ic process instances, one would naturally use PIDs instead of process names=
-.  (Maybe the PID command option could accept enumerations of PIDs, i.e. so=
-mething like 'lttng whatever --pid=3D{123, 456, 789}')  If one did not know=
- the PIDs in advance (hence the reliance on process names), then the soluti=
-on would be to use filters on the events, no?  Your to-be-debugged program =
-could be run with an environment (or internal global variable) setting that=
- the filters could check, for instance.
+Thanks,
+J=E9r=E9mie
 
-   In the near future, one could use namespaces to isolate the production i=
-nstances from the experimental ones.
+[1] https://bugs.lttng.org/projects/lttng-modules
 
-Daniel U. Thibault
-Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
-ntermeasures (SPC)
-Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
-Cyber Security (MCCS)
-R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
- Canada - Valcartier (DRDC Valcartier)
-2459 route de la Bravoure
-Qu=E9bec QC  G3J 1X5
-CANADA
-Vox : (418) 844-4000 x4245
-Fax : (418) 844-4538
-NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-Gouvernement du Canada | Government of Canada
-<http://www.valcartier.drdc-rddc.gc.ca/>
+On Tue, Jul 30, 2013 at 5:39 AM, Jonnavithula Sharma
+<sarmajprs@gmail.com> wrote:
+> Sorry.Missed the attachment in previous mail.Enclosed here is the console
+> log for the crash with lttng-modules 2.2.1.
+>
+> Regards,
+> Sarma  j
+>
+>
+> On Tue, Jul 30, 2013 at 11:08 AM, Jonnavithula Sharma <sarmajprs@gmail.co=
+m>
+> wrote:
+>>
+>> Hi Jeremie,
+>>
+>> We tried with the latest version(2.2.1) of lttng-modules. We are able to
+>> reproduce the same crash with the same steps.
+>>
+>> Am i missing anything here?
+>>
+>> Regards,
+>> Sarma J
+>>
+>>
+>> On Mon, Jul 29, 2013 at 9:05 PM, J=E9r=E9mie Galarneau
+>> <jeremie.galarneau@efficios.com> wrote:
+>>>
+>>> Hi,
+>>>
+>>> Can you try to reproduce the problem with the latest version of
+>>> lttng-modules (v2.2.1)? There were some bug fixes to the ring buffer
+>>> that may correct your problem.
+>>>
+>>> Thanks for reporting,
+>>> J=E9r=E9mie
+>>>
+>>> On Mon, Jul 29, 2013 at 9:45 AM, Jonnavithula Sharma
+>>> <sarmajprs@gmail.com> wrote:
+>>> > Hi
+>>> >
+>>> > We are currently running lttng on our CPE with 64 MB RAM.We are
+>>> > observing a
+>>> > crash after stopping the traces and even if we leave our CPE for few
+>>> > min
+>>> > after starting the trace we are observing this crash.Please find the
+>>> > attachment for the crash log.
+>>> >
+>>> > Let us know if any one has faced this issue and your help is highly
+>>> > appreciated in resolving this issue.
+>>> >
+>>> >
+>>> > Regards,
+>>> > Sarma J
+>>> >
+>>> > _______________________________________________
+>>> > lttng-dev mailing list
+>>> > lttng-dev@lists.lttng.org
+>>> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>>> >
+>>>
+>>>
+>>>
+>>> --
+>>> J=E9r=E9mie Galarneau
+>>> EfficiOS Inc.
+>>> http://www.efficios.com
+>>
+>>
+>
+
+
+
+-- =
+
+J=E9r=E9mie Galarneau
+EfficiOS Inc.
+http://www.efficios.com
