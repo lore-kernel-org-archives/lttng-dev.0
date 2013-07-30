@@ -1,20 +1,19 @@
-From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-ust] Add trace support for calloc and
-	realloc.
-Date: Mon, 29 Jul 2013 19:19:41 -0400
-Message-ID: <CA+jJMxtn-DsBjzunLNE3_7KS4RCqAFLJfPL7fVkH3z62r0jPxw__24834.3311869123$1375140053$gmane$org@mail.gmail.com>
-References: <51F3585E.20705@mentor.com>
+From: Jonnavithula Sharma <sarmajprs@gmail.com>
+Subject: Re: lttng Crash seen after stopping the traces.
+Date: Tue, 30 Jul 2013 11:08:21 +0530
+Message-ID: <CAJD=Q56myG=OuBXv2At2NEB0eqXOqjtTqVAMA5SZf2BgmmZ3Cg__2628.5954205834$1375162761$gmane$org@mail.gmail.com>
+References: <CAJD=Q56dkx1jCUF0n03XFCs64hFmuDYELy+FVF9joZ8nxDUpDw@mail.gmail.com>
+	<CA+jJMxt0kJJv2F26Myzcvms_6tSXAo269Zg5fMXyeXEn5eH95A@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/mixed; boundary="===============0976017091=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-we0-f173.google.com ([74.125.82.173])
+Received: from mail-we0-f175.google.com ([74.125.82.175])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1V3wjD-0001Hh-Up
-	for lttng-dev@lists.lttng.org; Mon, 29 Jul 2013 19:19:54 -0400
-Received: by mail-we0-f173.google.com with SMTP id x55so4572423wes.32
-	for <lttng-dev@lists.lttng.org>; Mon, 29 Jul 2013 16:19:41 -0700 (PDT)
-In-Reply-To: <51F3585E.20705@mentor.com>
+	(envelope-from <sarmajprs@gmail.com>) id 1V42dg-0007iw-9V
+	for lttng-dev@lists.lttng.org; Tue, 30 Jul 2013 01:38:32 -0400
+Received: by mail-we0-f175.google.com with SMTP id q58so4776038wes.34
+	for <lttng-dev@lists.lttng.org>; Mon, 29 Jul 2013 22:38:22 -0700 (PDT)
+In-Reply-To: <CA+jJMxt0kJJv2F26Myzcvms_6tSXAo269Zg5fMXyeXEn5eH95A@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,205 +22,145 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Stefan Seefeld <stefan_seefeld@mentor.com>
-Cc: lttng-dev@lists.lttng.org
+To: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Cc: lttng-dev@lists.lttng.org, suprasad.desai@gmail.com
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Stefan,
+--===============0976017091==
+Content-Type: multipart/alternative; boundary=047d7bdc8e865cb6b904e2b40427
 
-I'm inlining your patch to make the review easier, see the following remark=
-s.
+--047d7bdc8e865cb6b904e2b40427
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
 
-> From 78696689a46c13cdd2625c59348cbb1c03a32b0e Mon Sep 17 00:00:00 2001
-> From: Stefan Seefeld <stefan_seefeld@mentor.com>
-> Date: Sat, 27 Jul 2013 01:10:23 -0400
-> Subject: [PATCH] Add trace support for calloc and realloc.
->
-> Signed-off-by: Stefan Seefeld <stefan_seefeld@mentor.com>
-> ---
->  liblttng-ust-libc-wrapper/lttng-ust-malloc.c | 68 ++++++++++++++++++++++=
-++++++
->  liblttng-ust-libc-wrapper/ust_libc.h         | 18 ++++++++
->  2 files changed, 86 insertions(+)
->
-> diff --git a/liblttng-ust-libc-wrapper/lttng-ust-malloc.c b/liblttng-ust-=
-libc-wrapper/lttng-ust-malloc.c
-> index 3212ff0..772663a 100644
-> --- a/liblttng-ust-libc-wrapper/lttng-ust-malloc.c
-> +++ b/liblttng-ust-libc-wrapper/lttng-ust-malloc.c
-> @@ -57,3 +57,71 @@ void free(void *ptr)
->  	tracepoint(ust_libc, free, ptr);
->  	plibc_free(ptr);
->  }
-> +
-> +/*
-> +   The following 'dummy' variables and functions are needed
-> +   to break out of an endless recursion:
-> +   dlsym itself appears to call calloc, so we need to provide
-> +   an implementation for the very first call to calloc to use.
-> +*/
+Hi Jeremie,
 
-Use a "*" on each line of the comment block; see the licence header
-for reference.
+We tried with the latest version(2.2.1) of lttng-modules. We are able to
+reproduce the same crash with the same steps.
 
-> +
-> +#define DUMMY_HEAP_SIZE 1024
-> +static char dummy_heap[DUMMY_HEAP_SIZE] =3D {0};
-> +static int dummy_end_of_heap =3D 0;
-
-No need to initialize these static variables to zero, it's already
-guaranteed by the C standard. These variables and definition should be
-placed after the includes and before any function.
-
-> +
-> +static void *dummy_malloc(size_t size)
-> +{
-> +    if(size =3D=3D 0)
-> +	return NULL;
-> +
-> +    size_t dummy_end_of_heap_reserved =3D dummy_end_of_heap + size;
-> +    if(dummy_end_of_heap_reserved >=3D DUMMY_HEAP_SIZE)
-> +	return NULL;
-> +
-
-Applies to the whole patch: put braces around conditional blocks, even
-if they only contain one statement. Also, please indent with tabs and
-not spaces.
-
-> +    void *loc =3D (void*) &dummy_heap[dummy_end_of_heap];
-> +    dummy_end_of_heap =3D dummy_end_of_heap_reserved;
-> +    return loc;
-> +};
-> +
-> +static void *dummy_calloc(size_t nmemb, size_t size)
-> +{
-> +  return dummy_malloc(nmemb * size);
-> +}
-> +
-> +void *calloc(size_t nmemb, size_t size)
-> +{
-> +        static void *(* volatile plibc_calloc)(size_t nmemb, size_t size=
-) =3D NULL;
-> +	void *retval;
-> +
-> +	if (plibc_calloc =3D=3D NULL) {
-> +	        /* Temporarily redirect to dummy_calloc,
-> +		   until the dlsym lookup has completed. */
-> +                plibc_calloc =3D dummy_calloc;
-
-I'm not a fan of this approach although it was recommended on the
-libc-help mailing list.
-http://sourceware.org/ml/libc-help/2008-11/msg00000.html
-
-Looking at the Glibc code, it appears dlsym() will cause the
-allocation of a dl_action_result structure for each calling thread,
-which will then be free'd when these threads terminate. I'm afraid
-your dummy_calloc() may cause a crash on exit when free() is called on
-the pointer to a static buffer it returns.
-
-I may be missing something, but since this structure is allocated only
-once per thread, subsequent calls from the same thread to dlsym()
-should not result in another call to calloc(). That should make it
-possible to call malloc() in dummy_calloc() without causing the
-recursion.
-
-Perhaps we could also forego this mechanism completely and initialize
-the symbols from a constructor since this library is meant to be
-LD_PRELOAD-ed?
+Am i missing anything here?
 
 Regards,
-J=E9r=E9mie
-
-> +		plibc_calloc =3D dlsym(RTLD_NEXT, "calloc");
-> +		if (plibc_calloc =3D=3D NULL) {
-> +			fprintf(stderr, "callocwrap: unable to find calloc\n");
-> +			return NULL;
-> +		}
-> +	}
-> +	retval =3D plibc_calloc(nmemb, size);
-> +	tracepoint(ust_libc, calloc, nmemb, size, retval);
-> +	return retval;
-> +}
-> +
-> +void *realloc(void *ptr, size_t size)
-> +{
-> +        static void *(*plibc_realloc)(void *ptr, size_t size) =3D NULL;
-> +	void *retval;
-> +
-> +	if (plibc_realloc =3D=3D NULL) {
-> +		plibc_realloc =3D dlsym(RTLD_NEXT, "realloc");
-> +		if (plibc_realloc =3D=3D NULL) {
-> +			fprintf(stderr, "reallocwrap: unable to find realloc\n");
-> +			return NULL;
-> +		}
-> +	}
-> +	retval =3D plibc_realloc(ptr, size);
-> +	tracepoint(ust_libc, realloc, ptr, size, retval);
-> +	return retval;
-> +}
-> +
-> diff --git a/liblttng-ust-libc-wrapper/ust_libc.h b/liblttng-ust-libc-wra=
-pper/ust_libc.h
-> index af705aa..6b03a4d 100644
-> --- a/liblttng-ust-libc-wrapper/ust_libc.h
-> +++ b/liblttng-ust-libc-wrapper/ust_libc.h
-> @@ -47,6 +47,24 @@ TRACEPOINT_EVENT(ust_libc, free,
->  	)
->  )
->
-> +TRACEPOINT_EVENT(ust_libc, calloc,
-> +	TP_ARGS(size_t, nmemb, size_t, size, void *, ptr),
-> +	TP_FIELDS(
-> +		ctf_integer(size_t, nmemb, nmemb)
-> +		ctf_integer(size_t, size, size)
-> +		ctf_integer_hex(unsigned long, ptr, (unsigned long) ptr)
-> +	)
-> +)
-> +
-> +TRACEPOINT_EVENT(ust_libc, realloc,
-> +	TP_ARGS(void *, in_ptr, size_t, size, void *, ptr),
-> +	TP_FIELDS(
-> +		ctf_integer_hex(unsigned long, in_ptr, (unsigned long) in_ptr)
-> +		ctf_integer(size_t, size, size)
-> +		ctf_integer_hex(unsigned long, ptr, (unsigned long) ptr)
-> +	)
-> +)
-> +
->  #endif /* _TRACEPOINT_UST_LIBC_H */
->
->  #undef TRACEPOINT_INCLUDE
-> --
-> 1.8.3.1
->
+Sarma J
 
 
-On Sat, Jul 27, 2013 at 1:19 AM, Stefan Seefeld
-<stefan_seefeld@mentor.com> wrote:
-> The attached patch adds support for calloc and realloc to the
-> lttng-ust-libc-wrapper library.
+On Mon, Jul 29, 2013 at 9:05 PM, J=E9r=E9mie Galarneau <
+jeremie.galarneau@efficios.com> wrote:
+
+> Hi,
 >
-> The implementation for calloc is slightly tricky, as dlsym calls calloc
-> internally, so the library needs to provide a 'dummy' implementation for
-> calloc to avoid an endless recursion. Testing has shown however that the
-> object(s) allocated at that point are small, so a dummy static 'heap'
-> suffices as a workaround.
+> Can you try to reproduce the problem with the latest version of
+> lttng-modules (v2.2.1)? There were some bug fixes to the ring buffer
+> that may correct your problem.
+>
+> Thanks for reporting,
+> J=E9r=E9mie
+>
+> On Mon, Jul 29, 2013 at 9:45 AM, Jonnavithula Sharma
+> <sarmajprs@gmail.com> wrote:
+> > Hi
+> >
+> > We are currently running lttng on our CPE with 64 MB RAM.We are
+> observing a
+> > crash after stopping the traces and even if we leave our CPE for few mi=
+n
+> > after starting the trace we are observing this crash.Please find the
+> > attachment for the crash log.
+> >
+> > Let us know if any one has faced this issue and your help is highly
+> > appreciated in resolving this issue.
+> >
+> >
+> > Regards,
+> > Sarma J
+> >
+> > _______________________________________________
+> > lttng-dev mailing list
+> > lttng-dev@lists.lttng.org
+> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> >
+>
+>
 >
 > --
-> Stefan Seefeld
-> CodeSourcery / Mentor Graphics
-> http://www.mentor.com/embedded-software/
->
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> J=E9r=E9mie Galarneau
+> EfficiOS Inc.
+> http://www.efficios.com
 >
 
+--047d7bdc8e865cb6b904e2b40427
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div><div><div><div>Hi Jeremie,<br><br></div>We tried with=
+ the latest version(2.2.1) of lttng-modules. We are able to reproduce the s=
+ame crash with the same steps.<br><br></div>Am i missing anything here?<br>
+<br></div>Regards,<br></div>Sarma J<br></div><div class=3D"gmail_extra"><br=
+><br><div class=3D"gmail_quote">On Mon, Jul 29, 2013 at 9:05 PM, J=E9r=E9mi=
+e Galarneau <span dir=3D"ltr">&lt;<a href=3D"mailto:jeremie.galarneau@effic=
+ios.com" target=3D"_blank">jeremie.galarneau@efficios.com</a>&gt;</span> wr=
+ote:<br>
+<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
+x #ccc solid;padding-left:1ex">Hi,<br>
+<br>
+Can you try to reproduce the problem with the latest version of<br>
+lttng-modules (v2.2.1)? There were some bug fixes to the ring buffer<br>
+that may correct your problem.<br>
+<br>
+Thanks for reporting,<br>
+J=E9r=E9mie<br>
+<div><div class=3D"h5"><br>
+On Mon, Jul 29, 2013 at 9:45 AM, Jonnavithula Sharma<br>
+&lt;<a href=3D"mailto:sarmajprs@gmail.com">sarmajprs@gmail.com</a>&gt; wrot=
+e:<br>
+&gt; Hi<br>
+&gt;<br>
+&gt; We are currently running lttng on our CPE with 64 MB RAM.We are observ=
+ing a<br>
+&gt; crash after stopping the traces and even if we leave our CPE for few m=
+in<br>
+&gt; after starting the trace we are observing this crash.Please find the<b=
+r>
+&gt; attachment for the crash log.<br>
+&gt;<br>
+&gt; Let us know if any one has faced this issue and your help is highly<br=
+>
+&gt; appreciated in resolving this issue.<br>
+&gt;<br>
+&gt;<br>
+&gt; Regards,<br>
+&gt; Sarma J<br>
+&gt;<br>
+</div></div>&gt; _______________________________________________<br>
+&gt; lttng-dev mailing list<br>
+&gt; <a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org=
+</a><br>
+&gt; <a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" =
+target=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev=
+</a><br>
+&gt;<br>
+<span class=3D"HOEnZb"><font color=3D"#888888"><br>
+<br>
+<br>
+--<br>
+J=E9r=E9mie Galarneau<br>
+EfficiOS Inc.<br>
+<a href=3D"http://www.efficios.com" target=3D"_blank">http://www.efficios.c=
+om</a><br>
+</font></span></blockquote></div><br></div>
+
+--047d7bdc8e865cb6b904e2b40427--
 
 
--- =
+--===============0976017091==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-J=E9r=E9mie Galarneau
-EfficiOS Inc.
-http://www.efficios.com
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0976017091==--
