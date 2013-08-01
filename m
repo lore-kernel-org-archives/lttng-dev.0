@@ -1,22 +1,19 @@
-From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-ust] Add trace instrumentation for
- some pthread functions.
-Date: Wed, 31 Jul 2013 23:16:43 -0400
-Message-ID: <CA+jJMxv4oS0SbMqUF247jS0s0E+6DfdepNT8yHimY=TULHD+tQ__7324.39792850545$1375327068$gmane$org@mail.gmail.com>
-References: <51F97688.30704@mentor.com>
-	<CA+jJMxsoH8Rz6fwZJOPnG-4xvB2w8GO5eqi0JDtHUy7iM-n2WA@mail.gmail.com>
-	<51F9A917.9010509@seefeld.name>
+From: Zifei Tong <soariez@gmail.com>
+Subject: Re: Names collisions with LTTng-UST
+Date: Thu, 1 Aug 2013 12:34:17 +0800
+Message-ID: <CAJ7wx-GAvEDd9sANkx-eapFPL6DWaErj7-vaF2CkUsKqfQ6Qzg__45893.4138915085$1375331767$gmane$org@mail.gmail.com>
+References: <CAFXXi0kt1KfRfEPm4T-NqPqEsKQO0n96P2df4Ds6TyJBJPh26Q@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-we0-f178.google.com ([74.125.82.178])
+Received: from mail-ve0-f180.google.com ([209.85.128.180])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1V4jNh-0003cJ-Vj
-	for lttng-dev@lists.lttng.org; Wed, 31 Jul 2013 23:16:53 -0400
-Received: by mail-we0-f178.google.com with SMTP id u57so1219952wes.23
-	for <lttng-dev@lists.lttng.org>; Wed, 31 Jul 2013 20:16:44 -0700 (PDT)
-In-Reply-To: <51F9A917.9010509@seefeld.name>
+	(envelope-from <soariez@gmail.com>) id 1V4kbP-0004PW-BB
+	for lttng-dev@lists.lttng.org; Thu, 01 Aug 2013 00:35:08 -0400
+Received: by mail-ve0-f180.google.com with SMTP id pb11so1755580veb.25
+	for <lttng-dev@lists.lttng.org>; Wed, 31 Jul 2013 21:34:57 -0700 (PDT)
+In-Reply-To: <CAFXXi0kt1KfRfEPm4T-NqPqEsKQO0n96P2df4Ds6TyJBJPh26Q@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -25,53 +22,38 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Stefan Seefeld <stefan@seefeld.name>
-Cc: lttng-dev@lists.lttng.org
+To: Simon Marchi <simon.marchi@polymtl.ca>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-On Wed, Jul 31, 2013 at 8:17 PM, Stefan Seefeld <stefan@seefeld.name> wrote:
-> On 07/31/2013 06:00 PM, J=E9r=E9mie Galarneau wrote:
->> Hi Stefan,
->>
->> Please inline your patches in the future as it makes the review process =
-simpler.
->> There are a number of stylistic problems, mostly misplaced braces.
->>
->> You can run your patches through the checkpatch.pl script found in
->> lttng-tools/extras. It will spot most coding-style related problems
->> right away.
->
-> OK, will do, once the patch is approved functionally.
->
->> Also, I think lttng-ust-pthread-mutex.c may be a more appropriate name
->> than pthread.c
->
-> Wouldn't that just be redundant ? (And I actually expect the file to
-> grow instrumentation that's not mutex-specific.)
+Hi,
 
-I'd keep the file name in line with what's already there, namely
-lttng-ust-malloc.c.
-If you plan on instrumenting other parts of the pthread API,
-lttng-ust-pthread.c would make sense.
+On Thu, Aug 1, 2013 at 2:29 AM, Simon Marchi <simon.marchi@polymtl.ca> wrote:
+> Hello tracing bending units,
+>
+> I encountered a problem while trying to put UST tracepoints in GDB
+> today. Since GDB defines a struct tracepoint, it conflicts with
+> LTTng's struct tracepoint. Renaming all struct tracepoint in UST to
+> struct ust_tracepoint, and rebuilding/installing, provided a simple
+> workaround. Would it be possible to do change something in LTTng to
+> avoid conflicts like this in the future?
+>
+> Thanks
 
->
-> Thanks,
->     Stefan
->
-> --
->
->       ...ich hab' noch einen Koffer in Berlin...
->
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+gdb used to work around this by the following snippet [1]:
+
+/* UST puts a "struct tracepoint" in the global namespace, which
+   conflicts with our tracepoint.  Arguably, being a library, it
+   shouldn't take ownership of such a generic name.  We work around it
+   here.  */
+#define tracepoint ust_tracepoint
+#include <ust/ust.h>
+#undef tracepoint
+
+I am not sure if it is still working with lttng 2.x API.
+
+[1]: https://github.com/5kg/gdb/blob/master/gdb/gdbserver/tracepoint.c#L6497
 
 
-
--- =
-
-J=E9r=E9mie Galarneau
-EfficiOS Inc.
-http://www.efficios.com
+Thanks,
+Zifei Tong
