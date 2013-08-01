@@ -1,8 +1,8 @@
-From: Stefan Seefeld <stefan_seefeld@mentor.com>
+From: Alexander Monakov <amonakov@ispras.ru>
 Subject: Re: [PATCH lttng-ust] Add trace support for calloc and
- realloc.
-Date: Thu, 1 Aug 2013 13:28:56 -0400
-Message-ID: <51FA9AD8.4010502__14697.4544892602$1375378206$gmane$org@mentor.com>
+	realloc.
+Date: Thu, 1 Aug 2013 21:57:28 +0400
+Message-ID: <CABtfrpDg_NOi+yP5GABmjBv6G9Zj+rvTwc1OdQ1s_9DM7uzeZg__37845.4732629054$1375379911$gmane$org@mail.gmail.com>
 References: <51F3585E.20705@mentor.com>
 	<CA+jJMxtn-DsBjzunLNE3_7KS4RCqAFLJfPL7fVkH3z62r0jPxw@mail.gmail.com>
 	<51F82C45.6020502@mentor.com>
@@ -11,15 +11,18 @@ References: <51F3585E.20705@mentor.com>
 	<51FA8DAE.3070409@mentor.com>
 	<alpine.LNX.2.00.1308012045570.9574@monopod.intra.ispras.ru>
 	<alpine.LNX.2.00.1308012115300.9574@monopod.intra.ispras.ru>
+	<51FA9AD8.4010502@mentor.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from relay1.mentorg.com ([192.94.38.131])
+Received: from mail-ob0-f170.google.com ([209.85.214.170])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Stefan_Seefeld@mentor.com>) id 1V4wgT-0007Bu-3s
-	for lttng-dev@lists.lttng.org; Thu, 01 Aug 2013 13:29:10 -0400
-In-Reply-To: <alpine.LNX.2.00.1308012115300.9574@monopod.intra.ispras.ru>
+	(envelope-from <amonakov@gmail.com>) id 1V4x81-0007gV-MV
+	for lttng-dev@lists.lttng.org; Thu, 01 Aug 2013 13:57:39 -0400
+Received: by mail-ob0-f170.google.com with SMTP id eh20so4533891obb.1
+	for <lttng-dev@lists.lttng.org>; Thu, 01 Aug 2013 10:57:28 -0700 (PDT)
+In-Reply-To: <51FA9AD8.4010502@mentor.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -28,40 +31,23 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Alexander Monakov <amonakov@ispras.ru>
+To: Stefan Seefeld <stefan_seefeld@mentor.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On 08/01/2013 01:19 PM, Alexander Monakov wrote:
-> =
-
-> =
-
-> On Thu, 1 Aug 2013, Alexander Monakov wrote:
-> =
-
->> Okay, one more hack :)
->>
->> Recurse *once* by calling dlsym inside your calloc, and terminate recurs=
-ion by
->> obtaining memory from mmap.
-> =
-
-> Correction: since there's no guarantee that the very first calloc invocat=
-ion
-> will happen from inside dlsym, you have to recurse twice, not once, to be=
- sure
-> that there are two dlsyms on the stack.
-
-I don't think any of this works. The ultimate problem is the one J=E9r=E9mie
-reported initially: dlsym will eventually call free() on the memory
-calloc() returned, so my calloc fallback needs to return something that
-can actually be freed.
-
-	Stefan
-
--- =
-
-Stefan Seefeld
-CodeSourcery / Mentor Graphics
-http://www.mentor.com/embedded-software/
+T24gVGh1LCBBdWcgMSwgMjAxMyBhdCA5OjI4IFBNLCBTdGVmYW4gU2VlZmVsZAo8c3RlZmFuX3Nl
+ZWZlbGRAbWVudG9yLmNvbT4gd3JvdGU6Cj4gSSBkb24ndCB0aGluayBhbnkgb2YgdGhpcyB3b3Jr
+cy4gVGhlIHVsdGltYXRlIHByb2JsZW0gaXMgdGhlIG9uZSBKw6lyw6ltaWUKPiByZXBvcnRlZCBp
+bml0aWFsbHk6IGRsc3ltIHdpbGwgZXZlbnR1YWxseSBjYWxsIGZyZWUoKSBvbiB0aGUgbWVtb3J5
+Cj4gY2FsbG9jKCkgcmV0dXJuZWQsIHNvIG15IGNhbGxvYyBmYWxsYmFjayBuZWVkcyB0byByZXR1
+cm4gc29tZXRoaW5nIHRoYXQKPiBjYW4gYWN0dWFsbHkgYmUgZnJlZWQuCgpJIHBvaW50ZWQgb3V0
+IGhvdyBmcmVlKCkgd2lsbCBiZSBzYWZlIHNwZWNpZmljYWxseToKCj4+IGRsc3ltIHN0b3JlcyBw
+b2ludGVyIHRvIGNhbGxvYydlZCBidWZmZXIsIG92ZXJ3cml0aW5nIHRoZSBwb2ludGVyIHRvIG1t
+YXAnZWQKPj4gYnVmZmVyLCBjb21wbGV0aW5nIGluaXRpYWxpemF0aW9uIGZvciB0aGUgc2Vjb25k
+IHRpbWUgYW5kIG1ha2luZyB0aGUKPj4gc3Vic2VxdWVudCBmcmVlKCkgc2FmZS4KCkJlc2lkZXMs
+IHlvdSdyZSBpbnRlcmNlcHRpbmcgZnJlZSgpIGluIHlvdXIgTERfUFJFTE9BRCBtb2R1bGUgYXMg
+d2VsbCwKc28geW91IGNhbiBqdXN0IGNhdGNoIGF0dGVtcHRzIHRvIGZyZWUgeW91ciBtbWFwJ2Vk
+IGJ1ZmZlcnMgdGhlcmUgYW5kCm11bm1hcCB0aGVtIHNhZmVseS4KCkFsZXhhbmRlcgoKX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxp
+bmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcv
+Y2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
