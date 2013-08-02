@@ -1,24 +1,15 @@
-From: Jessica Foest <jessica.foest@gmail.com>
-Subject: Re: New LTTNG user
-Date: Thu, 1 Aug 2013 14:18:32 -0400
-Message-ID: <CAPxN80BxhZ9xuzf38fg5zfQFZB=AyXFXOAvLTnt6jQPDWC-W8g__3639.84236396409$1375381173$gmane$org@mail.gmail.com>
-References: <CAPxN80A4-Fa3hhA8+zmmckhwRrp0qb2+xXcebw8tmB1QXGULzw@mail.gmail.com>
-	<CAPxN80BrtX4Y7RT-O9FUc72TWj-9Oh7MtzbteoRNaMqwgEZB1Q@mail.gmail.com>
-	<51CC65DD.8040804@ericsson.com>
-	<CAPxN80D7K-DXgxNcPOFrfmpOeEvL0q-sELmsUR8gF_8MWd2yfg@mail.gmail.com>
-	<51D31F1D.9020105@ericsson.com>
-	<CAPxN80AcqRyDndsRL9bWg69DYm-MBKQrjaRbnKAMk2fmcWdUYQ@mail.gmail.com>
-	<51EEF58B.7090603@ericsson.com>
+From: Stanislav Vovk <stanislav.vovk@ericsson.com>
+Subject: Lttng API
+Date: Fri, 2 Aug 2013 11:26:25 +0000
+Message-ID: <6DB83340B9D38C4A9C0ECD8B6FBABDFB1A222279__10961.2265289345$1375442863$gmane$org@ESESSMB105.ericsson.se>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1703982310=="
+Content-Type: multipart/mixed; boundary="===============2052479648=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ob0-f194.google.com ([209.85.214.194])
+Received: from mailgw7.ericsson.se ([193.180.251.48])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jessica.foest@gmail.com>) id 1V4xSQ-00084C-Eb
-	for lttng-dev@lists.lttng.org; Thu, 01 Aug 2013 14:18:43 -0400
-Received: by mail-ob0-f194.google.com with SMTP id up14so1565127obb.5
-	for <lttng-dev@lists.lttng.org>; Thu, 01 Aug 2013 11:18:33 -0700 (PDT)
-In-Reply-To: <51EEF58B.7090603@ericsson.com>
+	(envelope-from <stanislav.vovk@ericsson.com>) id 1V5DV7-0004pq-FK
+	for lttng-dev@lists.lttng.org; Fri, 02 Aug 2013 07:26:34 -0400
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -27,108 +18,95 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============1703982310==
-Content-Type: multipart/alternative; boundary=e89a8fb200e6a871c904e2e6deeb
+--===============2052479648==
+Content-Language: en-US
+Content-Type: multipart/alternative;
+	boundary="_000_6DB83340B9D38C4A9C0ECD8B6FBABDFB1A222279ESESSMB105erics_"
 
---e89a8fb200e6a871c904e2e6deeb
-Content-Type: text/plain; charset=ISO-8859-1
+--_000_6DB83340B9D38C4A9C0ECD8B6FBABDFB1A222279ESESSMB105erics_
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-i don't see any options in lttng that can list modules loaded into the
-kernel .
+I did not find any snapshot handling in the lttng.h! Only create session in=
+ a snapshot mode but nothing about taking a snapshot. Is it something that =
+will be added?
 
-did you know how to do it ?
-regards
+Cheers,
+Stanislav
 
-
-2013/7/23 Matthew Khouzam <matthew.khouzam@ericsson.com>
-
->  Hi Jessica,
->
-> I'm sorry, this is more a question for the list.
->
-> Off the top of my head, I would say just lsmod from an ssh.
->
-> Matt
->
->
->  On 13-07-23 04:26 PM, Jessica Foest wrote:
->
-> Hi Matthew,
->
->  i don't see any options in lttng that can list modules loaded into the
-> kernel .
->
-> did you know how to do it ?
->
-> regards
->
->
->
-
---e89a8fb200e6a871c904e2e6deeb
-Content-Type: text/html; charset=ISO-8859-1
+--_000_6DB83340B9D38C4A9C0ECD8B6FBABDFB1A222279ESESSMB105erics_
+Content-Type: text/html; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr"><div>Hi,<br><br></div>i don&#39;t see any options in lttng=
- that can=20
+<html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-micr=
+osoft-com:office:office" xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
+xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http:=
+//www.w3.org/TR/REC-html40">
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
+>
+<meta name=3D"Generator" content=3D"Microsoft Word 14 (filtered medium)">
+<style><!--
+/* Font Definitions */
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+/* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0cm;
+	margin-bottom:.0001pt;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+a:link, span.MsoHyperlink
+	{mso-style-priority:99;
+	color:blue;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{mso-style-priority:99;
+	color:purple;
+	text-decoration:underline;}
+span.EmailStyle17
+	{mso-style-type:personal-compose;
+	font-family:"Calibri","sans-serif";
+	color:windowtext;}
+.MsoChpDefault
+	{mso-style-type:export-only;
+	font-family:"Calibri","sans-serif";}
+@page WordSection1
+	{size:612.0pt 792.0pt;
+	margin:72.0pt 72.0pt 72.0pt 72.0pt;}
+div.WordSection1
+	{page:WordSection1;}
+--></style><!--[if gte mso 9]><xml>
+<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
+</xml><![endif]--><!--[if gte mso 9]><xml>
+<o:shapelayout v:ext=3D"edit">
+<o:idmap v:ext=3D"edit" data=3D"1" />
+</o:shapelayout></xml><![endif]-->
+</head>
+<body lang=3D"EN-US" link=3D"blue" vlink=3D"purple">
+<div class=3D"WordSection1">
+<p class=3D"MsoNormal"><span lang=3D"SV">Hi,<o:p></o:p></span></p>
+<p class=3D"MsoNormal"><span lang=3D"SV"><o:p>&nbsp;</o:p></span></p>
+<p class=3D"MsoNormal">I did not find any snapshot handling in the lttng.h!=
+ Only create session in a snapshot mode but nothing about taking a snapshot=
+. Is it something that will be added?<o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">Cheers,<o:p></o:p></p>
+<p class=3D"MsoNormal">Stanislav<o:p></o:p></p>
+</div>
+</body>
+</html>
+
+--_000_6DB83340B9D38C4A9C0ECD8B6FBABDFB1A222279ESESSMB105erics_--
 
 
-=09
-=09
-=09
-	list modules loaded into the kernel .<br>
-
-
-<p style=3D"margin-bottom:0cm" align=3D"LEFT"> did you know how to do it ?<=
-/p>regards</div><div class=3D"gmail_extra"><br><br><div class=3D"gmail_quot=
-e">2013/7/23 Matthew Khouzam <span dir=3D"ltr">&lt;<a href=3D"mailto:matthe=
-w.khouzam@ericsson.com" target=3D"_blank">matthew.khouzam@ericsson.com</a>&=
-gt;</span><br>
-<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
-x #ccc solid;padding-left:1ex">
- =20
-   =20
- =20
-  <div text=3D"#000000" bgcolor=3D"#FFFFFF">
-    <tt>Hi Jessica, <br>
-      <br>
-      I&#39;m sorry, this is more a question for the list. <br>
-      <br>
-      Off the top of my head, I would say just lsmod from an ssh. <br>
-      <br>
-      Matt<br>
-      <br>
-      <br>
-    </tt><div class=3D"im">
-    <div>On 13-07-23 04:26 PM, Jessica Foest
-      wrote:<br>
-    </div>
-    <blockquote type=3D"cite">
-      <div>Hi Matthew,<br>
-        <br>
-      </div>
-      i don&#39;t see any options in lttng that can list modules loaded int=
-o
-      the kernel .<br>
-     =20
-      <p style=3D"margin-bottom:0cm" align=3D"LEFT"> did you know how to do
-        it ?</p>
-      <p style=3D"margin-bottom:0cm" align=3D"LEFT">regards</p>
-    </blockquote>
-    <br>
-  </div></div>
-
-</blockquote></div><br></div>
-
---e89a8fb200e6a871c904e2e6deeb--
-
-
---===============1703982310==
+--===============2052479648==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -139,4 +117,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============1703982310==--
+--===============2052479648==--
