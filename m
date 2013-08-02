@@ -1,15 +1,18 @@
 From: Xiaona Han <xiaonahappy13@163.com>
-Subject: [PATCH babeltrace 1/3] Add sequence test
-Date: Sat,  3 Aug 2013 05:42:32 +0800
-Message-ID: <1375479754-22999-1-git-send-email-xiaonahappy13__16780.1130134196$1375451102$gmane$org@163.com>
+Subject: [PATCH babeltrace 3/3] Add a sequence test in the
+	python binding
+Date: Sat,  3 Aug 2013 05:42:34 +0800
+Message-ID: <1375479754-22999-3-git-send-email-xiaonahappy13__21326.6828949147$1375451174$gmane$org@163.com>
+References: <1375479754-22999-1-git-send-email-xiaonahappy13@163.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from [124.16.141.1] (helo=host.localdomain)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <root@host.localdomain>) id 1V5FdA-0008Pk-Ky
-	for lttng-dev@lists.lttng.org; Fri, 02 Aug 2013 09:43:02 -0400
+	(envelope-from <root@host.localdomain>) id 1V5FdB-0008Pp-0E
+	for lttng-dev@lists.lttng.org; Fri, 02 Aug 2013 09:43:05 -0400
+In-Reply-To: <1375479754-22999-1-git-send-email-xiaonahappy13@163.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,180 +24,85 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Current tests do not cover sequence type in the babeltrace tests. This patch
-adds an test that includes the sequence type.
+This example is to test whether we can get a sequence's value in
+the python binding well or not. It is used in conjunction with the
+sequence test in the dir tests/ctf-traces/succeed/sequence.
 
 Signed-off-by: Xiaona Han <xiaonahappy13@163.com>
 ---
- tests/ctf-traces/succeed/sequence/channel0_0 |  Bin 0 -> 4096 bytes
- tests/ctf-traces/succeed/sequence/channel0_1 |  Bin 0 -> 4096 bytes
- tests/ctf-traces/succeed/sequence/channel0_2 |  Bin 0 -> 4096 bytes
- tests/ctf-traces/succeed/sequence/channel0_3 |  Bin 0 -> 4096 bytes
- tests/ctf-traces/succeed/sequence/metadata   |  106 ++++++++++++++++++++++++++
- 5 files changed, 106 insertions(+), 0 deletions(-)
- create mode 100644 tests/ctf-traces/succeed/sequence/channel0_0
- create mode 100644 tests/ctf-traces/succeed/sequence/channel0_1
- create mode 100644 tests/ctf-traces/succeed/sequence/channel0_2
- create mode 100644 tests/ctf-traces/succeed/sequence/channel0_3
- create mode 100644 tests/ctf-traces/succeed/sequence/metadata
+ bindings/python/examples/sequence_test.py |   64 +++++++++++++++++++++++++++++
+ 1 files changed, 64 insertions(+), 0 deletions(-)
+ create mode 100644 bindings/python/examples/sequence_test.py
 
-diff --git a/tests/ctf-traces/succeed/sequence/channel0_0 b/tests/ctf-traces/succeed/sequence/channel0_0
+diff --git a/bindings/python/examples/sequence_test.py b/bindings/python/examples/sequence_test.py
 new file mode 100644
-index 0000000000000000000000000000000000000000..5038a2275f2c21864f12d52ab54a41da5a784f3b
-GIT binary patch
-literal 4096
-zcmX>o|L0&NtFrNv34S-%S8WS&uHQ9_0SMaVMa4}O7#L#sCkKOQ1tyRv5Hx_vQDQU%
-oMnhmU1V%$(Gz3ONU^E0qLtr!nMnhmU1V%$(Gz3ONU<ic(0A=$HqW}N^
-
-literal 0
-HcmV?d00001
-
-diff --git a/tests/ctf-traces/succeed/sequence/channel0_1 b/tests/ctf-traces/succeed/sequence/channel0_1
-new file mode 100644
-index 0000000000000000000000000000000000000000..fd947382cfe4b983424cfc1cc43fa3f1b3cc364e
-GIT binary patch
-literal 4096
-zcmX>o|L0&NtFrNv34S-%S8WS&uHQ9_0SM-H$cURNFfiCMP7Vgq3QQnTAZP%SaDoxe
-t8fA=zz-S1JhQMeDjE2By2#kinXb6mkz-S1JhQMeDjE2By2n^N`0091_4gCNB
-
-literal 0
-HcmV?d00001
-
-diff --git a/tests/ctf-traces/succeed/sequence/channel0_2 b/tests/ctf-traces/succeed/sequence/channel0_2
-new file mode 100644
-index 0000000000000000000000000000000000000000..9d848fcbc6f1df66cfb98b1b03006c572ac88249
-GIT binary patch
-literal 4096
-zcmX>o|L0&NtFrNv34S-%S8WS&uHQ9_0SLH1DvO&cFfh1^P7Vgq8uB1fAZP%SaDoZQ
-z0!x)%%9H>pWP?im2ZDb<{1=G-0P$}i{sqJ^c`m3r5hyJOr8S_m5tO!p(g|sCyfD2$
-zW2kEOflJjiGdtnf44Rqkuwg6h%-(m2W@a;7`#>|Z6}0*IXq8SLsA|*9>;<wOG&38T
-jg+{5-5Eu=C(GVC7fzc2c4S~@R7!85Z5Eu=CksSg6XVnzG
-
-literal 0
-HcmV?d00001
-
-diff --git a/tests/ctf-traces/succeed/sequence/channel0_3 b/tests/ctf-traces/succeed/sequence/channel0_3
-new file mode 100644
-index 0000000000000000000000000000000000000000..ef385c38a03f8d341d866016156087807e99e6c7
-GIT binary patch
-literal 4096
-zcmX>o|L0&NtFrNv34S-%S8WS&uHQ9_0SLa;Xp5UFFfdG!o*WFK6_`MxK+pgt;RG|B
-tHOd$bfzc2c4S~@R7!85Z5Eu=C(GVC7fzc2c4S~@R7!85Z5E!f>007tg4$J@m
-
-literal 0
-HcmV?d00001
-
-diff --git a/tests/ctf-traces/succeed/sequence/metadata b/tests/ctf-traces/succeed/sequence/metadata
-new file mode 100644
-index 0000000..2163abf
+index 0000000..382f48b
 --- /dev/null
-+++ b/tests/ctf-traces/succeed/sequence/metadata
-@@ -0,0 +1,106 @@
-+/* CTF 1.8 */
-+typealias integer { size = 8; align = 8; signed = false; } := uint8_t;
-+typealias integer { size = 16; align = 8; signed = false; } := uint16_t;
-+typealias integer { size = 32; align = 8; signed = false; } := uint32_t;
-+typealias integer { size = 64; align = 8; signed = false; } := uint64_t;
-+typealias integer { size = 64; align = 8; signed = false; } := unsigned long;
-+typealias integer { size = 5; align = 1; signed = false; } := uint5_t;
-+typealias integer { size = 27; align = 1; signed = false; } := uint27_t;
++++ b/bindings/python/examples/sequence_test.py
+@@ -0,0 +1,64 @@
++#!/usr/bin/env python3
++# sequence_test.py
++#
++# Babeltrace example script based on the Babeltrace API test script
++#
++# Copyright 2012 EfficiOS Inc.
++#
++# Author: Danny Serres <danny.serres@efficios.com>
++#
++# Permission is hereby granted, free of charge, to any person obtaining a copy
++# of this software and associated documentation files (the "Software"), to deal
++# in the Software without restriction, including without limitation the rights
++# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
++# copies of the Software, and to permit persons to whom the Software is
++# furnished to do so, subject to the following conditions:
++#
++# The above copyright notice and this permission notice shall be included in
++# all copies or substantial portions of the Software.
 +
-+trace {
-+	major = 1;
-+	minor = 8;
-+	uuid = "59052333-e490-4ed9-af7a-b652437fba9a";
-+	byte_order = le;
-+	packet.header := struct {
-+		uint32_t magic;
-+		uint8_t  uuid[16];
-+		uint32_t stream_id;
-+	};
-+};
++# This example uses the babeltrace python module
++# to partially test the api.
 +
-+env {
-+	hostname = "host";
-+	domain = "ust";
-+	tracer_name = "lttng-ust";
-+	tracer_major = 2;
-+	tracer_minor = 3;
-+};
++import sys
++from babeltrace import *
 +
-+clock {
-+	name = monotonic;
-+	uuid = "5f3ed925-9d73-4637-b8e4-02077abc8c8f";
-+	description = "Monotonic Clock";
-+	freq = 1000000000; /* Frequency, in Hz */
-+	/* clock value offset from Epoch is: offset * (1/freq) */
-+	offset = 1375437179542680815;
-+};
++# Check for path arg:
++if len(sys.argv) < 2:
++	raise TypeError("Usage: sequence_test.py path/to/file")
 +
-+typealias integer {
-+	size = 27; align = 1; signed = false;
-+	map = clock.monotonic.value;
-+} := uint27_clock_monotonic_t;
++# Create context and add trace:
++ctx = Context()
++trace_handle = ctx.add_trace(sys.argv[1], "ctf")
++if trace_handle is None:
++	raise IOError("Error adding trace")
 +
-+typealias integer {
-+	size = 32; align = 8; signed = false;
-+	map = clock.monotonic.value;
-+} := uint32_clock_monotonic_t;
++# Listing events
++lst = ctf.get_event_decl_list(trace_handle, ctx)
++print("--- Event list ---")
++for item in lst:
++	print("event : {}".format(item.get_name()))
++print("--- Done ---")
 +
-+typealias integer {
-+	size = 64; align = 8; signed = false;
-+	map = clock.monotonic.value;
-+} := uint64_clock_monotonic_t;
++# Iter trace
++bp = IterPos(SEEK_BEGIN)
++ctf_it = ctf.Iterator(ctx,bp)
++event = ctf_it.read_event()
 +
-+struct packet_context {
-+	uint64_clock_monotonic_t timestamp_begin;
-+	uint64_clock_monotonic_t timestamp_end;
-+	uint64_t content_size;
-+	uint64_t packet_size;
-+	unsigned long events_discarded;
-+	uint32_t cpu_id;
-+};
++while(event is not None):
++	print("TS: {}, {} : {}".format(event.get_timestamp(),
++		event.get_cycles(), event.get_name()))
++	field = event.get_field("seq_int_field")
++	if field is not None:
++		print("The int sequence value: {}". format(field[0].get_value()))
++	field = event.get_field("seq_long_field")
++	if field is not None:
++		print("The long sequence value: {}". format(field[0].get_value()))
 +
-+struct event_header_compact {
-+	enum : uint5_t { compact = 0 ... 30, extended = 31 } id;
-+	variant <id> {
-+		struct {
-+			uint27_clock_monotonic_t timestamp;
-+		} compact;
-+		struct {
-+			uint32_t id;
-+			uint64_clock_monotonic_t timestamp;
-+		} extended;
-+	} v;
-+} align(8);
++	ret = ctf_it.next()
++	if ret < 0:
++		break
++	else:
++		event = ctf_it.read_event()
 +
-+struct event_header_large {
-+	enum : uint16_t { compact = 0 ... 65534, extended = 65535 } id;
-+	variant <id> {
-+		struct {
-+			uint32_clock_monotonic_t timestamp;
-+		} compact;
-+		struct {
-+			uint32_t id;
-+			uint64_clock_monotonic_t timestamp;
-+		} extended;
-+	} v;
-+} align(8);
-+
-+stream {
-+	id = 0;
-+	event.header := struct event_header_compact;
-+	packet.context := struct packet_context;
-+};
-+
-+event {
-+	name = "sequence event";
-+	id = 0;
-+	stream_id = 0;
-+	loglevel = 1;
-+	fields := struct {
-+		integer { size = 64; align = 8; signed = 0; encoding = none; base = 10; } __seq_int_field_length;
-+		integer { size = 32; align = 8; signed = 1; encoding = none; base = 10; } _seq_int_field[ __seq_int_field_length ];
-+		integer { size = 64; align = 8; signed = 0; encoding = none; base = 10; } __seq_long_field_length;
-+		integer { size = 64; align = 8; signed = 1; encoding = none; base = 10; } _seq_long_field[ __seq_long_field_length ];
-+	};
-+};
++del ctf_it
 -- 
 1.7.1
