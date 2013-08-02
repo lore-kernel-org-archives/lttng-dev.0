@@ -1,17 +1,17 @@
 From: Xiaona Han <xiaonahappy13@163.com>
-Subject: [PATCH 2/3] Support for the sequence type
-Date: Sat,  3 Aug 2013 05:02:15 +0800
-Message-ID: <1375477336-22382-2-git-send-email-xiaonahappy13__38956.0157586404$1375448761$gmane$org@163.com>
-References: <1375477336-22382-1-git-send-email-xiaonahappy13@163.com>
+Subject: [PATCH babeltrace 2/3] Support for the sequence type
+Date: Sat,  3 Aug 2013 05:42:33 +0800
+Message-ID: <1375479754-22999-2-git-send-email-xiaonahappy13__23406.9070349962$1375451030$gmane$org@163.com>
+References: <1375479754-22999-1-git-send-email-xiaonahappy13@163.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from [124.16.141.1] (helo=host.localdomain)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <root@host.localdomain>) id 1V5F0D-0007JO-4B
-	for lttng-dev@lists.lttng.org; Fri, 02 Aug 2013 09:02:49 -0400
-In-Reply-To: <1375477336-22382-1-git-send-email-xiaonahappy13@163.com>
+	(envelope-from <root@host.localdomain>) id 1V5FdA-0008Po-Kz
+	for lttng-dev@lists.lttng.org; Fri, 02 Aug 2013 09:43:01 -0400
+In-Reply-To: <1375479754-22999-1-git-send-email-xiaonahappy13@163.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,6 +24,8 @@ To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
 Add support for getting a sequence's valule in the python binding.
+
+Signed-off-by: Xiaona Han <xiaonahappy13@163.com>
 ---
  bindings/python/babeltrace.i.in      |   34 ++++++++++++++++++++++++++++++++++
  bindings/python/python-complements.c |    8 ++++++++
