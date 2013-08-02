@@ -1,15 +1,17 @@
-From: Stanislav Vovk <stanislav.vovk@ericsson.com>
-Subject: Lttng API
-Date: Fri, 2 Aug 2013 11:26:25 +0000
-Message-ID: <6DB83340B9D38C4A9C0ECD8B6FBABDFB1A222279__10961.2265289345$1375442863$gmane$org@ESESSMB105.ericsson.se>
+From: Xiaona Han <xiaonahappy13@163.com>
+Subject: [PATCH 3/3] Add a sequence test in the python binding
+Date: Sat,  3 Aug 2013 05:02:16 +0800
+Message-ID: <1375477336-22382-3-git-send-email-xiaonahappy13__10039.5561931238$1375448631$gmane$org@163.com>
+References: <1375477336-22382-1-git-send-email-xiaonahappy13@163.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2052479648=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mailgw7.ericsson.se ([193.180.251.48])
+Received: from [124.16.141.1] (helo=host.localdomain)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <stanislav.vovk@ericsson.com>) id 1V5DV7-0004pq-FK
-	for lttng-dev@lists.lttng.org; Fri, 02 Aug 2013 07:26:34 -0400
-Content-Language: en-US
+	(envelope-from <root@host.localdomain>) id 1V5F0D-0007JS-4B
+	for lttng-dev@lists.lttng.org; Fri, 02 Aug 2013 09:02:45 -0400
+In-Reply-To: <1375477336-22382-1-git-send-email-xiaonahappy13@163.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -18,103 +20,86 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============2052479648==
-Content-Language: en-US
-Content-Type: multipart/alternative;
-	boundary="_000_6DB83340B9D38C4A9C0ECD8B6FBABDFB1A222279ESESSMB105erics_"
+This example is to test whether we can get a sequence's value in
+the python binding well or not. It is used in conjunction with the
+sequence test in the dir tests/ctf-traces/succeed/sequence.
+---
+ bindings/python/examples/sequence_test.py |   64 +++++++++++++++++++++++++++++
+ 1 files changed, 64 insertions(+), 0 deletions(-)
+ create mode 100644 bindings/python/examples/sequence_test.py
 
---_000_6DB83340B9D38C4A9C0ECD8B6FBABDFB1A222279ESESSMB105erics_
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-
-I did not find any snapshot handling in the lttng.h! Only create session in=
- a snapshot mode but nothing about taking a snapshot. Is it something that =
-will be added?
-
-Cheers,
-Stanislav
-
---_000_6DB83340B9D38C4A9C0ECD8B6FBABDFB1A222279ESESSMB105erics_
-Content-Type: text/html; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-
-<html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-micr=
-osoft-com:office:office" xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
-xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http:=
-//www.w3.org/TR/REC-html40">
-<head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
->
-<meta name=3D"Generator" content=3D"Microsoft Word 14 (filtered medium)">
-<style><!--
-/* Font Definitions */
-@font-face
-	{font-family:Calibri;
-	panose-1:2 15 5 2 2 2 4 3 2 4;}
-/* Style Definitions */
-p.MsoNormal, li.MsoNormal, div.MsoNormal
-	{margin:0cm;
-	margin-bottom:.0001pt;
-	font-size:11.0pt;
-	font-family:"Calibri","sans-serif";}
-a:link, span.MsoHyperlink
-	{mso-style-priority:99;
-	color:blue;
-	text-decoration:underline;}
-a:visited, span.MsoHyperlinkFollowed
-	{mso-style-priority:99;
-	color:purple;
-	text-decoration:underline;}
-span.EmailStyle17
-	{mso-style-type:personal-compose;
-	font-family:"Calibri","sans-serif";
-	color:windowtext;}
-.MsoChpDefault
-	{mso-style-type:export-only;
-	font-family:"Calibri","sans-serif";}
-@page WordSection1
-	{size:612.0pt 792.0pt;
-	margin:72.0pt 72.0pt 72.0pt 72.0pt;}
-div.WordSection1
-	{page:WordSection1;}
---></style><!--[if gte mso 9]><xml>
-<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
-</xml><![endif]--><!--[if gte mso 9]><xml>
-<o:shapelayout v:ext=3D"edit">
-<o:idmap v:ext=3D"edit" data=3D"1" />
-</o:shapelayout></xml><![endif]-->
-</head>
-<body lang=3D"EN-US" link=3D"blue" vlink=3D"purple">
-<div class=3D"WordSection1">
-<p class=3D"MsoNormal"><span lang=3D"SV">Hi,<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"SV"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal">I did not find any snapshot handling in the lttng.h!=
- Only create session in a snapshot mode but nothing about taking a snapshot=
-. Is it something that will be added?<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">Cheers,<o:p></o:p></p>
-<p class=3D"MsoNormal">Stanislav<o:p></o:p></p>
-</div>
-</body>
-</html>
-
---_000_6DB83340B9D38C4A9C0ECD8B6FBABDFB1A222279ESESSMB105erics_--
-
-
---===============2052479648==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============2052479648==--
+diff --git a/bindings/python/examples/sequence_test.py b/bindings/python/examples/sequence_test.py
+new file mode 100644
+index 0000000..382f48b
+--- /dev/null
++++ b/bindings/python/examples/sequence_test.py
+@@ -0,0 +1,64 @@
++#!/usr/bin/env python3
++# sequence_test.py
++#
++# Babeltrace example script based on the Babeltrace API test script
++#
++# Copyright 2012 EfficiOS Inc.
++#
++# Author: Danny Serres <danny.serres@efficios.com>
++#
++# Permission is hereby granted, free of charge, to any person obtaining a copy
++# of this software and associated documentation files (the "Software"), to deal
++# in the Software without restriction, including without limitation the rights
++# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
++# copies of the Software, and to permit persons to whom the Software is
++# furnished to do so, subject to the following conditions:
++#
++# The above copyright notice and this permission notice shall be included in
++# all copies or substantial portions of the Software.
++
++# This example uses the babeltrace python module
++# to partially test the api.
++
++import sys
++from babeltrace import *
++
++# Check for path arg:
++if len(sys.argv) < 2:
++	raise TypeError("Usage: sequence_test.py path/to/file")
++
++# Create context and add trace:
++ctx = Context()
++trace_handle = ctx.add_trace(sys.argv[1], "ctf")
++if trace_handle is None:
++	raise IOError("Error adding trace")
++
++# Listing events
++lst = ctf.get_event_decl_list(trace_handle, ctx)
++print("--- Event list ---")
++for item in lst:
++	print("event : {}".format(item.get_name()))
++print("--- Done ---")
++
++# Iter trace
++bp = IterPos(SEEK_BEGIN)
++ctf_it = ctf.Iterator(ctx,bp)
++event = ctf_it.read_event()
++
++while(event is not None):
++	print("TS: {}, {} : {}".format(event.get_timestamp(),
++		event.get_cycles(), event.get_name()))
++	field = event.get_field("seq_int_field")
++	if field is not None:
++		print("The int sequence value: {}". format(field[0].get_value()))
++	field = event.get_field("seq_long_field")
++	if field is not None:
++		print("The long sequence value: {}". format(field[0].get_value()))
++
++	ret = ctf_it.next()
++	if ret < 0:
++		break
++	else:
++		event = ctf_it.read_event()
++
++del ctf_it
+-- 
+1.7.1
