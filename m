@@ -1,18 +1,17 @@
-From: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
-Subject: Re: [PATCH lttv] Add build instructions for git tree
- pulls and use more standard formatting
-Date: Thu, 08 Aug 2013 15:06:44 -0400
-Message-ID: <5203EC44.7070402__16036.5662457936$1375988951$gmane$org@voxpopuli.im>
-References: <20130807194853.GA11032@ub8ca3a8c12a551e580d6.ant.amazon.com>
+From: Sebastiano Spicuglia <spicuglia.sebastiano@gmail.com>
+Subject: Extendend net
+Date: Fri, 2 Aug 2013 12:06:59 +0200
+Message-ID: <CAOSRKdQDo-95DDw1_KDkSSgNKRwWyFsmKqWuVErZfNZqpZK2gg__27130.1601468169$1375994945$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from ironport2-out.teksavvy.com ([206.248.154.182])
+Received: from mail-ea0-f177.google.com ([209.85.215.177])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <alexmonthy@voxpopuli.im>) id 1V7VYT-0008KV-Id
-	for lttng-dev@lists.lttng.org; Thu, 08 Aug 2013 15:07:30 -0400
-In-Reply-To: <20130807194853.GA11032@ub8ca3a8c12a551e580d6.ant.amazon.com>
+	(envelope-from <spicuglia.sebastiano@gmail.com>) id 1V5CGH-0002cb-H8
+	for lttng-dev@lists.lttng.org; Fri, 02 Aug 2013 06:07:09 -0400
+Received: by mail-ea0-f177.google.com with SMTP id f15so224521eak.22
+	for <lttng-dev@lists.lttng.org>; Fri, 02 Aug 2013 03:06:59 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,51 +21,35 @@ List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
-Cc: Vomlehn <vomlehnd@amazon.com>
 List-Id: lttng-dev@lists.lttng.org
 
-On 13-08-07 03:48 PM, Vomlehn wrote:
-> If the source is obtained directly from git, the file "configure" must be
-> built with the autoconf tools. In addition, example shell commands are
-> traditionally preceeded with a "$" instead of a "-", so this convention
-> is used.
-> ---
->  README |   13 ++++++++++---
->  1 file changed, 10 insertions(+), 3 deletions(-)
->
-> diff --git a/README b/README
-> index 98849b3..ac28f9e 100644
-> --- a/README
-> +++ b/README
-> @@ -31,9 +31,16 @@ libc6 development librairies
->  
->  To compile the source tree from a tarball, simply follow these steps :
->  
-> -- ./configure
-> -- make
-> -- make install
-> +  $ ./configure
-> +  $ make
-> +  $ make install
-> +
-> +To compile the source tree from a git checkout, use:
-> +
-> +  $ autoreconf
-> +  $ automake --add-missing --gnu
+Hello everyone,
 
-You should be able to use "autoreconf -i" instead of those two commands.
-It avoids the need to run autoconf, automake etc. manually.
+I am collecting traces using lttng from different machines.
+I saw here http://www.youtube.com/watch?v=YzgRglpXdxQ
+(around 24:06) that it is possible to trace with more details
+the network subsystem and then synchronise different traces.
 
-> +  $ make
-> +  $ make install
+Even the eclipse page says something about this
+("Integration of trace synchronization")
+http://www.eclipse.org/linuxtools/projectPages/lttng/
 
-As was mentioned in the other thread, this should be "# make install",
-since with the default configure options, it will install in /usr/local,
-and only root can write there.
+I read the man of lttng and I look around in the eclipse
+plugin but I didn't find anything about this two features
+(extended network instrumentation and traces sychnronization).
 
-Cheers,
-Alex
+Is the synchronization somehow performed automatically
+by the eclipse plugin and there is no need to enable the extended
+instrumentation of the network subsystem?
 
->  
->  After running ./configure, you can also go in specific subdirectories and
->  use make, make install.
+I have the impression that in the eclipse plugin the term
+"synchronization" is related to the the different sources of
+events on the same machine, am I right?
+
+Could you please me provide some resources where I can find
+more information about the synhcronization of traces coming
+from different machines?
+
+Thank you in advance for your help
+Regards
+Sebastiano
