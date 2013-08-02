@@ -1,15 +1,17 @@
 From: Xiaona Han <xiaonahappy13@163.com>
-Subject: [PATCH 1/3] Add sequence test
-Date: Sat,  3 Aug 2013 05:02:14 +0800
-Message-ID: <1375477336-22382-1-git-send-email-xiaonahappy13__16178.9079582833$1375448683$gmane$org@163.com>
+Subject: [PATCH 2/3] Support for the sequence type
+Date: Sat,  3 Aug 2013 05:02:15 +0800
+Message-ID: <1375477336-22382-2-git-send-email-xiaonahappy13__38956.0157586404$1375448761$gmane$org@163.com>
+References: <1375477336-22382-1-git-send-email-xiaonahappy13@163.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from [124.16.141.1] (helo=host.localdomain)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <root@host.localdomain>) id 1V5F0D-0007JN-49
-	for lttng-dev@lists.lttng.org; Fri, 02 Aug 2013 09:02:46 -0400
+	(envelope-from <root@host.localdomain>) id 1V5F0D-0007JO-4B
+	for lttng-dev@lists.lttng.org; Fri, 02 Aug 2013 09:02:49 -0400
+In-Reply-To: <1375477336-22382-1-git-send-email-xiaonahappy13@163.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,178 +23,104 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Current tests do not cover sequence type in the babeltrace tests. This patch
-adds an test that includes the sequence type.
+Add support for getting a sequence's valule in the python binding.
 ---
- tests/ctf-traces/succeed/sequence/channel0_0 |  Bin 0 -> 4096 bytes
- tests/ctf-traces/succeed/sequence/channel0_1 |  Bin 0 -> 4096 bytes
- tests/ctf-traces/succeed/sequence/channel0_2 |  Bin 0 -> 4096 bytes
- tests/ctf-traces/succeed/sequence/channel0_3 |  Bin 0 -> 4096 bytes
- tests/ctf-traces/succeed/sequence/metadata   |  106 ++++++++++++++++++++++++++
- 5 files changed, 106 insertions(+), 0 deletions(-)
- create mode 100644 tests/ctf-traces/succeed/sequence/channel0_0
- create mode 100644 tests/ctf-traces/succeed/sequence/channel0_1
- create mode 100644 tests/ctf-traces/succeed/sequence/channel0_2
- create mode 100644 tests/ctf-traces/succeed/sequence/channel0_3
- create mode 100644 tests/ctf-traces/succeed/sequence/metadata
+ bindings/python/babeltrace.i.in      |   34 ++++++++++++++++++++++++++++++++++
+ bindings/python/python-complements.c |    8 ++++++++
+ bindings/python/python-complements.h |    2 ++
+ 3 files changed, 44 insertions(+), 0 deletions(-)
 
-diff --git a/tests/ctf-traces/succeed/sequence/channel0_0 b/tests/ctf-traces/succeed/sequence/channel0_0
-new file mode 100644
-index 0000000000000000000000000000000000000000..5038a2275f2c21864f12d52ab54a41da5a784f3b
-GIT binary patch
-literal 4096
-zcmX>o|L0&NtFrNv34S-%S8WS&uHQ9_0SMaVMa4}O7#L#sCkKOQ1tyRv5Hx_vQDQU%
-oMnhmU1V%$(Gz3ONU^E0qLtr!nMnhmU1V%$(Gz3ONU<ic(0A=$HqW}N^
-
-literal 0
-HcmV?d00001
-
-diff --git a/tests/ctf-traces/succeed/sequence/channel0_1 b/tests/ctf-traces/succeed/sequence/channel0_1
-new file mode 100644
-index 0000000000000000000000000000000000000000..fd947382cfe4b983424cfc1cc43fa3f1b3cc364e
-GIT binary patch
-literal 4096
-zcmX>o|L0&NtFrNv34S-%S8WS&uHQ9_0SM-H$cURNFfiCMP7Vgq3QQnTAZP%SaDoxe
-t8fA=zz-S1JhQMeDjE2By2#kinXb6mkz-S1JhQMeDjE2By2n^N`0091_4gCNB
-
-literal 0
-HcmV?d00001
-
-diff --git a/tests/ctf-traces/succeed/sequence/channel0_2 b/tests/ctf-traces/succeed/sequence/channel0_2
-new file mode 100644
-index 0000000000000000000000000000000000000000..9d848fcbc6f1df66cfb98b1b03006c572ac88249
-GIT binary patch
-literal 4096
-zcmX>o|L0&NtFrNv34S-%S8WS&uHQ9_0SLH1DvO&cFfh1^P7Vgq8uB1fAZP%SaDoZQ
-z0!x)%%9H>pWP?im2ZDb<{1=G-0P$}i{sqJ^c`m3r5hyJOr8S_m5tO!p(g|sCyfD2$
-zW2kEOflJjiGdtnf44Rqkuwg6h%-(m2W@a;7`#>|Z6}0*IXq8SLsA|*9>;<wOG&38T
-jg+{5-5Eu=C(GVC7fzc2c4S~@R7!85Z5Eu=CksSg6XVnzG
-
-literal 0
-HcmV?d00001
-
-diff --git a/tests/ctf-traces/succeed/sequence/channel0_3 b/tests/ctf-traces/succeed/sequence/channel0_3
-new file mode 100644
-index 0000000000000000000000000000000000000000..ef385c38a03f8d341d866016156087807e99e6c7
-GIT binary patch
-literal 4096
-zcmX>o|L0&NtFrNv34S-%S8WS&uHQ9_0SLa;Xp5UFFfdG!o*WFK6_`MxK+pgt;RG|B
-tHOd$bfzc2c4S~@R7!85Z5Eu=C(GVC7fzc2c4S~@R7!85Z5E!f>007tg4$J@m
-
-literal 0
-HcmV?d00001
-
-diff --git a/tests/ctf-traces/succeed/sequence/metadata b/tests/ctf-traces/succeed/sequence/metadata
-new file mode 100644
-index 0000000..2163abf
---- /dev/null
-+++ b/tests/ctf-traces/succeed/sequence/metadata
-@@ -0,0 +1,106 @@
-+/* CTF 1.8 */
-+typealias integer { size = 8; align = 8; signed = false; } := uint8_t;
-+typealias integer { size = 16; align = 8; signed = false; } := uint16_t;
-+typealias integer { size = 32; align = 8; signed = false; } := uint32_t;
-+typealias integer { size = 64; align = 8; signed = false; } := uint64_t;
-+typealias integer { size = 64; align = 8; signed = false; } := unsigned long;
-+typealias integer { size = 5; align = 1; signed = false; } := uint5_t;
-+typealias integer { size = 27; align = 1; signed = false; } := uint27_t;
+diff --git a/bindings/python/babeltrace.i.in b/bindings/python/babeltrace.i.in
+index 98eea9b..209285e 100644
+--- a/bindings/python/babeltrace.i.in
++++ b/bindings/python/babeltrace.i.in
+@@ -575,6 +575,8 @@ struct bt_ctf_event *bt_ctf_iter_read_event(struct bt_ctf_iter *iter);
+ 		const struct bt_ctf_field_decl *field);
+ %rename("_bt_ctf_get_decl_from_def") bt_ctf_get_decl_from_def(
+ 		const struct bt_definition *field);
++%rename("_bt_sequence_len")  bt_sequence_len(struct definition_sequence *sequence);
++%rename("_bt_sequence_index") bt_sequence_index(struct definition_sequence *sequence, uint64_t i);
+ 
+ const struct bt_definition *bt_ctf_get_top_level_scope(const struct bt_ctf_event *ctf_event,
+ 		enum bt_ctf_scope scope);
+@@ -605,6 +607,8 @@ int bt_ctf_field_get_error(void);
+ const char *bt_ctf_get_decl_event_name(const struct bt_ctf_event_decl *event);
+ const char *bt_ctf_get_decl_field_name(const struct bt_ctf_field_decl *field);
+ const struct bt_declaration *bt_ctf_get_decl_from_def(const struct bt_definition *field);
++uint64_t bt_sequence_len(struct definition_sequence *sequence);
++struct bt_definition *bt_sequence_index(struct definition_sequence *sequence, uint64_t i);
+ 
+ %pythoncode%{
+ 
+@@ -943,6 +947,27 @@ class ctf:
+ 			"""
+ 			return _bt_ctf_get_array_len(_bt_ctf_get_decl_from_def(self._d))
+ 
++		def get_sequence_len(self):
++			"""
++			Return the len of a sequence or a negative
++			value on error.
++			"""
++			seq = _bt_python_from_def_to_sequence(self._d)
++			return _bt_sequence_len(seq)
 +
-+trace {
-+	major = 1;
-+	minor = 8;
-+	uuid = "59052333-e490-4ed9-af7a-b652437fba9a";
-+	byte_order = le;
-+	packet.header := struct {
-+		uint32_t magic;
-+		uint8_t  uuid[16];
-+		uint32_t stream_id;
-+	};
-+};
++		def get_sequence_index(self, index):
++			"""
++			Return the sequence's element at position index,
++			otherwise return None
++			"""
++			seq = _bt_python_from_def_to_sequence(self._d)
++			if seq is not None:
++				evDef = ctf.Definition.__new__(ctf.Definition)
++				evDef._d = _bt_sequence_index(seq, index)
++				if evDef._d is not None:
++					return evDef
++			return None
 +
-+env {
-+	hostname = "host";
-+	domain = "ust";
-+	tracer_name = "lttng-ust";
-+	tracer_major = 2;
-+	tracer_minor = 3;
-+};
-+
-+clock {
-+	name = monotonic;
-+	uuid = "5f3ed925-9d73-4637-b8e4-02077abc8c8f";
-+	description = "Monotonic Clock";
-+	freq = 1000000000; /* Frequency, in Hz */
-+	/* clock value offset from Epoch is: offset * (1/freq) */
-+	offset = 1375437179542680815;
-+};
-+
-+typealias integer {
-+	size = 27; align = 1; signed = false;
-+	map = clock.monotonic.value;
-+} := uint27_clock_monotonic_t;
-+
-+typealias integer {
-+	size = 32; align = 8; signed = false;
-+	map = clock.monotonic.value;
-+} := uint32_clock_monotonic_t;
-+
-+typealias integer {
-+	size = 64; align = 8; signed = false;
-+	map = clock.monotonic.value;
-+} := uint64_clock_monotonic_t;
-+
-+struct packet_context {
-+	uint64_clock_monotonic_t timestamp_begin;
-+	uint64_clock_monotonic_t timestamp_end;
-+	uint64_t content_size;
-+	uint64_t packet_size;
-+	unsigned long events_discarded;
-+	uint32_t cpu_id;
-+};
-+
-+struct event_header_compact {
-+	enum : uint5_t { compact = 0 ... 30, extended = 31 } id;
-+	variant <id> {
-+		struct {
-+			uint27_clock_monotonic_t timestamp;
-+		} compact;
-+		struct {
-+			uint32_t id;
-+			uint64_clock_monotonic_t timestamp;
-+		} extended;
-+	} v;
-+} align(8);
-+
-+struct event_header_large {
-+	enum : uint16_t { compact = 0 ... 65534, extended = 65535 } id;
-+	variant <id> {
-+		struct {
-+			uint32_clock_monotonic_t timestamp;
-+		} compact;
-+		struct {
-+			uint32_t id;
-+			uint64_clock_monotonic_t timestamp;
-+		} extended;
-+	} v;
-+} align(8);
-+
-+stream {
-+	id = 0;
-+	event.header := struct event_header_compact;
-+	packet.context := struct packet_context;
-+};
-+
-+event {
-+	name = "sequence event";
-+	id = 0;
-+	stream_id = 0;
-+	loglevel = 1;
-+	fields := struct {
-+		integer { size = 64; align = 8; signed = 0; encoding = none; base = 10; } __seq_int_field_length;
-+		integer { size = 32; align = 8; signed = 1; encoding = none; base = 10; } _seq_int_field[ __seq_int_field_length ];
-+		integer { size = 64; align = 8; signed = 0; encoding = none; base = 10; } __seq_long_field_length;
-+		integer { size = 64; align = 8; signed = 1; encoding = none; base = 10; } _seq_long_field[ __seq_long_field_length ];
-+	};
-+};
+ 		def get_uint64(self):
+ 			"""
+ 			Return the value associated with the field.
+@@ -996,6 +1021,15 @@ class ctf:
+ 					return self.get_int64()
+ 			if id == ctf.type_id.ENUM:
+ 				return self.get_enum_str()
++			if id == ctf.type_id.SEQUENCE:
++				seq_len = self.get_sequence_len()
++				i = 0
++				values = []
++				while (i < seq_len):
++					evDef = self.get_sequence_index(i)
++					values.append(evDef.get_value())
++					i += 1
++				return values
+ 			return None
+ 
+ 		def get_scope(self):
+diff --git a/bindings/python/python-complements.c b/bindings/python/python-complements.c
+index aa65555..612903b 100644
+--- a/bindings/python/python-complements.c
++++ b/bindings/python/python-complements.c
+@@ -119,3 +119,11 @@ struct bt_ctf_field_decl *_bt_python_field_decl_one_from_list(
+ {
+ 	return list[index];
+ }
++struct definition_sequence *_bt_python_from_def_to_sequence(
++		struct bt_definition *field)
++{
++	if (field && bt_ctf_field_type(
++		bt_ctf_get_decl_from_def(field)) == CTF_TYPE_SEQUENCE)
++		return container_of(field, struct definition_sequence, p);
++	return NULL;
++}
+diff --git a/bindings/python/python-complements.h b/bindings/python/python-complements.h
+index 4335d8a..37b37e3 100644
+--- a/bindings/python/python-complements.h
++++ b/bindings/python/python-complements.h
+@@ -50,3 +50,5 @@ struct bt_ctf_field_decl **_by_python_field_decl_listcaller(
+ 		enum bt_ctf_scope scope);
+ struct bt_ctf_field_decl *_bt_python_field_decl_one_from_list(
+ 		struct bt_ctf_field_decl **list, int index);
++struct definition_sequence *_bt_python_from_def_to_sequence(
++		struct bt_definition *field);
 -- 
 1.7.1
