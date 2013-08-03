@@ -1,23 +1,17 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-ust] Add trace instrumentation
-	for	some pthread functions.
-Date: Fri, 2 Aug 2013 21:28:44 -0400
-Message-ID: <20130803012844.GI9033__18698.3319501907$1375493425$gmane$org@Krystal>
-References: <51F97688.30704@mentor.com>
-	<CA+jJMxsoH8Rz6fwZJOPnG-4xvB2w8GO5eqi0JDtHUy7iM-n2WA@mail.gmail.com>
-	<51F9A917.9010509@seefeld.name>
-	<CA+jJMxv4oS0SbMqUF247jS0s0E+6DfdepNT8yHimY=TULHD+tQ@mail.gmail.com>
+From: Sebastiano Spicuglia <spicuglia.sebastiano@gmail.com>
+Subject: Trace synchronization
+Date: Sat, 3 Aug 2013 11:44:00 +0200
+Message-ID: <CAOSRKdQb3YwEHgasPWx2sHZHCbT5=EqcQSLOAE3ShQUTmqO19Q__25438.0286824473$1375523097$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from mail-ee0-f51.google.com ([74.125.83.51])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1V5QeD-0003fP-La
-	for lttng-dev@lists.lttng.org; Fri, 02 Aug 2013 21:28:49 -0400
-Content-Disposition: inline
-In-Reply-To: <CA+jJMxv4oS0SbMqUF247jS0s0E+6DfdepNT8yHimY=TULHD+tQ@mail.gmail.com>
+	(envelope-from <spicuglia.sebastiano@gmail.com>) id 1V5YNa-0003ZN-JK
+	for lttng-dev@lists.lttng.org; Sat, 03 Aug 2013 05:44:10 -0400
+Received: by mail-ee0-f51.google.com with SMTP id c1so720084eek.24
+	for <lttng-dev@lists.lttng.org>; Sat, 03 Aug 2013 02:44:00 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -26,77 +20,36 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* J=E9r=E9mie Galarneau (jeremie.galarneau@efficios.com) wrote:
-> On Wed, Jul 31, 2013 at 8:17 PM, Stefan Seefeld <stefan@seefeld.name> wro=
-te:
-> > On 07/31/2013 06:00 PM, J=E9r=E9mie Galarneau wrote:
-> >> Hi Stefan,
-> >>
-> >> Please inline your patches in the future as it makes the review proces=
-s simpler.
-> >> There are a number of stylistic problems, mostly misplaced braces.
-> >>
-> >> You can run your patches through the checkpatch.pl script found in
-> >> lttng-tools/extras. It will spot most coding-style related problems
-> >> right away.
-> >
-> > OK, will do, once the patch is approved functionally.
-> >
-> >> Also, I think lttng-ust-pthread-mutex.c may be a more appropriate name
-> >> than pthread.c
-> >
-> > Wouldn't that just be redundant ? (And I actually expect the file to
-> > grow instrumentation that's not mutex-specific.)
-> =
+Hello everyone,
 
-> I'd keep the file name in line with what's already there, namely
-> lttng-ust-malloc.c.
-> If you plan on instrumenting other parts of the pthread API,
-> lttng-ust-pthread.c would make sense.
+I am collecting traces using lttng from different machines.
+I saw here http://www.youtube.com/watch?v=YzgRglpXdxQ
+(around 24:06) that it is possible to trace with more details
+the network subsystem and then synchronise different traces.
 
-Agreed.
+Even the eclipse page says something about this
+("Integration of trace synchronization")
+http://www.eclipse.org/linuxtools/projectPages/lttng/
 
-Mathieu
+I read the man of lttng and I look around in the eclipse
+plugin but I didn't find anything about this two features
+(extended network instrumentation and traces sychnronization).
 
-> =
+Is the synchronization somehow performed automatically
+by the eclipse plugin and there is no need to enable the extended
+instrumentation of the network subsystem?
 
-> >
-> > Thanks,
-> >     Stefan
-> >
-> > --
-> >
-> >       ...ich hab' noch einen Koffer in Berlin...
-> >
-> >
-> > _______________________________________________
-> > lttng-dev mailing list
-> > lttng-dev@lists.lttng.org
-> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> =
+I have the impression that in the eclipse plugin the term
+"synchronization" is related to the the different sources of
+events on the same machine, am I right?
 
-> =
+Could you please me provide some resources where I can find
+more information about the synhcronization of traces coming
+from different machines?
 
-> =
-
-> -- =
-
-> J=E9r=E9mie Galarneau
-> EfficiOS Inc.
-> http://www.efficios.com
-> =
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- =
-
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Thank you in advance for your help
+Regards
+Sebastiano
