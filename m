@@ -1,17 +1,19 @@
-From: Julien Desfossez <jdesfossez@efficios.com>
-Subject: [LTTNG-TOOLS 2.3 PATCH 2/2] Test: enable kernel events
-	after start
-Date: Sun,  4 Aug 2013 14:46:26 -0400
-Message-ID: <1375641986-2278-2-git-send-email-jdesfossez__47775.8068162531$1375642082$gmane$org@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [LTTNG-TOOLS 2.3 PATCH 1/2] Fix: return code of
+	get_subbuff on	metadata stream
+Date: Sun, 4 Aug 2013 16:34:12 -0400
+Message-ID: <20130804203411.GA28914__32716.6013922126$1375648508$gmane$org@Krystal>
 References: <1375641986-2278-1-git-send-email-jdesfossez@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([5.9.158.244])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jdesfossez@efficios.com>) id 1V63KH-000428-QD
-	for lttng-dev@lists.lttng.org; Sun, 04 Aug 2013 14:46:49 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1V650H-0006WC-9b
+	for lttng-dev@lists.lttng.org; Sun, 04 Aug 2013 16:34:17 -0400
+Content-Disposition: inline
 In-Reply-To: <1375641986-2278-1-git-send-email-jdesfossez@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -21,66 +23,52 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: dgoulet@efficios.com, mathieu.desnoyers@efficios.com
-Cc: lttng-dev@lists.lttng.org, Julien Desfossez <jdesfossez@efficios.com>
+To: Julien Desfossez <jdesfossez@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-This test detects if we actually append new metadata when enabling a
-kernel event after a start.
+* Julien Desfossez (jdesfossez@efficios.com) wrote:
+> If no metadata is available on the kernel metadata stream when we
+> do a get_subbuff, the kernel returns -EPERM, the consumer was not
+> checking for this return code and closed the stream prematurely. It
+> worked if no new metadata was added during the session.
 
-Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
----
- tests/regression/kernel/test_event_basic |   24 +++++++++++++++++++++++-
- 1 file changed, 23 insertions(+), 1 deletion(-)
+Is the proper fix to change lttng-tools or lttng-modules ?
 
-diff --git a/tests/regression/kernel/test_event_basic b/tests/regression/kernel/test_event_basic
-index 5c19744..a182f9f 100755
---- a/tests/regression/kernel/test_event_basic
-+++ b/tests/regression/kernel/test_event_basic
-@@ -19,7 +19,7 @@ TEST_DESC="Kernel tracer - Basic event"
- 
- CURDIR=$(dirname $0)/
- TESTDIR=$CURDIR/../..
--NUM_TESTS=12
-+NUM_TESTS=20
- 
- source $TESTDIR/utils/utils.sh
- 
-@@ -46,6 +46,27 @@ function test_event_basic()
- 	rm -rf $TRACE_PATH
- }
- 
-+function test_enable_after_start()
-+{
-+	TRACE_PATH=$(mktemp -d)
-+	SESSION_NAME="kernel_enable_after_start"
-+
-+	create_lttng_session $SESSION_NAME $TRACE_PATH
-+
-+	lttng_enable_kernel_event $SESSION_NAME "sched_switch"
-+
-+	start_lttng_tracing
-+	lttng_enable_kernel_event $SESSION_NAME "sched_process_exit"
-+	stop_lttng_tracing
-+
-+	validate_trace "sched_switch" $TRACE_PATH
-+	validate_trace "sched_process_exit" $TRACE_PATH
-+
-+	destroy_lttng_session $SESSION_NAME
-+
-+	rm -rf $TRACE_PATH
-+}
-+
- # MUST set TESTDIR before calling those functions
- plan_tests $NUM_TESTS
- 
-@@ -62,6 +83,7 @@ skip $isroot "Root access is needed. Skipping all tests." $NUM_TESTS ||
- 	start_lttng_sessiond
- 
- 	test_event_basic
-+	test_enable_after_start
- 
- 	stop_lttng_sessiond
- }
+I would rather think that lttng-modules should return -ENODATA rather
+than -EPERM in this case. It's clearly not a permission issue.
+
+Thoughts ?
+
+Thanks,
+
+Mathieu
+
+> 
+> Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
+> ---
+>  src/common/consumer.c |    3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/src/common/consumer.c b/src/common/consumer.c
+> index 4b657f3..a070f36 100644
+> --- a/src/common/consumer.c
+> +++ b/src/common/consumer.c
+> @@ -2288,7 +2288,8 @@ restart:
+>  				} while (len > 0);
+>  
+>  				/* It's ok to have an unavailable sub-buffer */
+> -				if (len < 0 && len != -EAGAIN && len != -ENODATA) {
+> +				if (len < 0 && len != -EAGAIN && len != -ENODATA &&
+> +						len != -EPERM) {
+>  					/* Clean up stream from consumer and free it. */
+>  					lttng_poll_del(&events, stream->wait_fd);
+>  					consumer_del_metadata_stream(stream, metadata_ht);
+> -- 
+> 1.7.10.4
+> 
+
 -- 
-1.7.10.4
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
