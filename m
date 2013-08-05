@@ -1,21 +1,21 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Subject: Re: Release strategy
-Date: Mon, 5 Aug 2013 09:17:22 -0400
-Message-ID: <20130805131722.GA12410__48775.0873937786$1375708696$gmane$org@Krystal>
+Date: Mon, 5 Aug 2013 09:18:47 -0400
+Message-ID: <20130805131847.GB12410__18984.0988292874$1375708764$gmane$org@Krystal>
 References: <51EEDF15.4090300@ericsson.com>
 	<CAGDH53=w6Wgat9vpL+iWd4mBfyM9CQuxGJEkN4095AeBB-LWog@mail.gmail.com>
-	<51EFE41F.40909@ericsson.com>
+	<CA+jJMxsPH9s=OBEcD4+_92aoiDw6_EdePTZJMA9VtLPSrVzh_w@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1V6Kf6-0000T3-Kf
-	for lttng-dev@lists.lttng.org; Mon, 05 Aug 2013 09:17:28 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1V6KgS-0000XX-PB
+	for lttng-dev@lists.lttng.org; Mon, 05 Aug 2013 09:18:51 -0400
 Content-Disposition: inline
-In-Reply-To: <51EFE41F.40909@ericsson.com>
+In-Reply-To: <CA+jJMxsPH9s=OBEcD4+_92aoiDw6_EdePTZJMA9VtLPSrVzh_w@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,15 +24,13 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Matthew Khouzam <matthew.khouzam@ericsson.com>
+To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-* Matthew Khouzam (matthew.khouzam@ericsson.com) wrote:
-> Thank you very much, this clears up a lot of stuff
-> 
-> 
-> On 13-07-23 11:30 PM, Christian Babeux wrote:
+* J=E9r=E9mie Galarneau (jeremie.galarneau@efficios.com) wrote:
+> On Tue, Jul 23, 2013 at 11:30 PM, Christian Babeux
+> <christian.babeux@efficios.com> wrote:
 > > Hi Matthew,
 > >
 > > You certainly raise valid and interesting questions about our release
@@ -41,7 +39,8 @@ List-Id: lttng-dev@lists.lttng.org
 > > 1) Branching policy (when do we branch master? after the first release
 > > candidate or after a final release?)
 > >
-> > 2) Release roadmap (when the next release is planned? what does it contain?)
+> > 2) Release roadmap (when the next release is planned? what does it cont=
+ain?)
 > >
 > > 3) Tentative release dates
 > >
@@ -56,24 +55,25 @@ List-Id: lttng-dev@lists.lttng.org
 > > set of patches and getting no response or waiting for merge if a
 > > release candidate cycle is in effect. Any ideas/suggestions on how we
 > > could improve this?
-> Could you add a 'staging' branch for features, kind of like a passing
-> lane on a highway?
+> >
+> =
 
-The problem, as outlined by Jeremie in a separate email, is that it
-would add more burden on the maintainer, which I would like to avoid as
-much as possible. That is one reason why we are doing a feature freeze
-during rc cycles. The second reason is that it forces everyone to test
-the features that are in rc, rather than push new features without ever
-stopping feature implementation to focus on testing.
+> We should create a separate branch at the first release candidate and
+> stabilize it until the official release. The feature freeze would then
+> only apply to that branch while invasive changes could be merged in
+> master at all times. It would certainly make it easier on occasional
+> contributors that may not be aware of the release schedule (at the
+> expense of the maintainers' sanity...).
+
+Being on the maintainer side of lttng-ust, lttng-modules, babeltrace and
+userspace RCU, I vote for sanity ;)
 
 Thanks,
 
 Mathieu
 
-> A gerrit like system also could help. that way people will be able to
-> push patches and get reviews. Does redmine have something similar?
-> 
-> >
+> =
+
 > > For 2), the release roadmap is available at [1]. The roadmap is kind
 > > of a mess right now because bugs are assigned to older stable releases
 > > giving the wrong impression that some stable releases are way late.
@@ -82,9 +82,22 @@ Mathieu
 > > versions and features targeting future versions. Perhaps something
 > > like [2-3] could be promising?
 > >
+> =
+
+> Disciplining ourselves in opening Features with reasonable target
+> dates on the bug tracker may be enough to make the current "Roadmap"
+> plug-in useful.
+> =
+
 > > For 3), I would try to put tentative release dates on the roadmap on
 > > Redmine or on a wiki article similar to [4]?
 > >
+> =
+
+> I'd prefer using the roadmap functionality. I'm afraid the wiki won't
+> be maintained as releases slip.
+> =
+
 > > Another point that you did not mention is how we plan minor releases.
 > > I think we will need to define a clear policy for minor releases
 > > sooner than later because it is becoming quite painful to support
@@ -102,6 +115,16 @@ Mathieu
 > > releases, etc.)
 > > - Etc.
 > >
+> =
+
+> Sounds good. It would also be a great opportunity to structure
+> discussions around the planning.
+> =
+
+> Regards,
+> J=E9r=E9mie
+> =
+
 > > Any ideas/suggestions/constructive criticism on how we can improve our
 > > release process are quite welcome!
 > >
@@ -135,14 +158,31 @@ Mathieu
 > >> lttng-dev mailing list
 > >> lttng-dev@lists.lttng.org
 > >> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> 
-> 
+> >
+> > _______________________________________________
+> > lttng-dev mailing list
+> > lttng-dev@lists.lttng.org
+> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> =
+
+> =
+
+> =
+
+> -- =
+
+> J=E9r=E9mie Galarneau
+> EfficiOS Inc.
+> http://www.efficios.com
+> =
+
 > _______________________________________________
 > lttng-dev mailing list
 > lttng-dev@lists.lttng.org
 > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
--- 
+-- =
+
 Mathieu Desnoyers
 EfficiOS Inc.
 http://www.efficios.com
