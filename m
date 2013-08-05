@@ -1,22 +1,21 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Release strategy
-Date: Mon, 5 Aug 2013 09:33:26 -0400
-Message-ID: <20130805133326.GC12410__31003.0191591524$1375709657$gmane$org@Krystal>
-References: <51EEDF15.4090300@ericsson.com>
-	<CAGDH53=w6Wgat9vpL+iWd4mBfyM9CQuxGJEkN4095AeBB-LWog@mail.gmail.com>
-	<CA+jJMxsPH9s=OBEcD4+_92aoiDw6_EdePTZJMA9VtLPSrVzh_w@mail.gmail.com>
-	<CAGDH53mLbWjzfokb8F80=4w5YTHPAP5XsfT8N0o8CSP38jQerg@mail.gmail.com>
+From: Stefan Seefeld <stefan@seefeld.name>
+Subject: Re: [PATCH lttng-ust] Add trace instrumentation for
+ some pthread functions.
+Date: Mon, 05 Aug 2013 09:38:31 -0400
+Message-ID: <51FFAAD7.3000705__33443.2334559553$1375709958$gmane$org@seefeld.name>
+References: <51F97688.30704@mentor.com>
+	<CA+jJMxsoH8Rz6fwZJOPnG-4xvB2w8GO5eqi0JDtHUy7iM-n2WA@mail.gmail.com>
+	<51F9A917.9010509@seefeld.name> <20130803012831.GH9033@Krystal>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/mixed; boundary="------------070104060409060303060204"
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from mail-gh0-f177.google.com ([209.85.160.177])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1V6Kue-00011K-Uz
-	for lttng-dev@lists.lttng.org; Mon, 05 Aug 2013 09:33:32 -0400
-Content-Disposition: inline
-In-Reply-To: <CAGDH53mLbWjzfokb8F80=4w5YTHPAP5XsfT8N0o8CSP38jQerg@mail.gmail.com>
+	(envelope-from <stefan.seefeld@gmail.com>) id 1V6Kzg-0001CA-4m
+	for lttng-dev@lists.lttng.org; Mon, 05 Aug 2013 09:38:42 -0400
+Received: by mail-gh0-f177.google.com with SMTP id f20so1250039ghb.36
+	for <lttng-dev@lists.lttng.org>; Mon, 05 Aug 2013 06:38:34 -0700 (PDT)
+In-Reply-To: <20130803012831.GH9033@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -25,221 +24,280 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Christian Babeux <christian.babeux@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Etienne Bergeron <etienne.bergeron@gmail.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Christian Babeux (christian.babeux@efficios.com) wrote:
-> So far multiple suggestions have been proposed for the issues outlined:
-> =
+This is a multi-part message in MIME format.
+--------------070104060409060303060204
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
 
-> 1) Branching policy
-> =
+On 08/02/2013 09:28 PM, Mathieu Desnoyers wrote:
+> Jeremie is right: incorrect coding style makes the review process harder
+> for us. Once the coding style is right, we can do the functional review
+> of the patch more efficiently.
+>
+> Please resubmit after coding style fixes.
 
-> 1. Creating a branch to stabilize new features (for release
-> candidates) while development continues in master.
-> 2. Staging branch for new features.
-> =
+See attached.
 
-> I think we will need to wait for feedback from David and Mathieu since
-> they are the maintainers of the LTTng codebases. Personally, solution
-> 1. get my vote.
-> =
+    Stefan
 
-> Mathieu & David: What branching policy would you like to adopt?
 
-I would add a 3rd option:
+-- 
 
-3. Feature freeze during rc
+      ...ich hab' noch einen Koffer in Berlin...
 
-For two reasons:
 
-a) It forces people to test, and pushes back on introduction of new
-   code, thus improves quality,
-b) keeps maintainers sane. We already have one -rc branch to manage,
-   and at least one stable branch, per project (we'll have to decide how
-   many stable branches we want to keep active). Adding features into
-   master or a staging branch would add a 3rd branch to maintain for
-   each project.
+--------------070104060409060303060204
+Content-Type: text/x-patch;
+ name="patch"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="patch"
 
-I know the downside is that contributors may have to wait before seeing
-their features merged. As a side-effect, it forces them to do more
-testing than writing new actual code, but this is exactly what we are
-doing right now as maintainers.
+From cc39cdfbfca6d13121270eb9da3aed97be65586c Mon Sep 17 00:00:00 2001
+From: Stefan Seefeld <stefan_seefeld@mentor.com>
+Date: Wed, 31 Jul 2013 16:35:31 -0400
+Subject: [PATCH] Add tracing instrumentation for pthread mutex lock functions.
 
-> =
+Signed-off-by: Stefan Seefeld <stefan_seefeld@mentor.com>
+---
+ liblttng-ust-libc-wrapper/Makefile.am         | 12 +++-
+ liblttng-ust-libc-wrapper/lttng-ust-pthread.c | 91 +++++++++++++++++++++++++++
+ liblttng-ust-libc-wrapper/ust_pthread.h       | 76 ++++++++++++++++++++++
+ 3 files changed, 178 insertions(+), 1 deletion(-)
+ create mode 100644 liblttng-ust-libc-wrapper/lttng-ust-pthread.c
+ create mode 100644 liblttng-ust-libc-wrapper/ust_pthread.h
 
-> 2) Release roadmap & 3) Tentative release dates
-> =
+diff --git a/liblttng-ust-libc-wrapper/Makefile.am b/liblttng-ust-libc-wrapper/Makefile.am
+index 4fdcedb..d402d53 100644
+--- a/liblttng-ust-libc-wrapper/Makefile.am
++++ b/liblttng-ust-libc-wrapper/Makefile.am
+@@ -1,7 +1,8 @@
+ AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_builddir)/include
+ AM_CFLAGS = -fno-strict-aliasing
+ 
+-lib_LTLIBRARIES = liblttng-ust-libc-wrapper.la
++lib_LTLIBRARIES = liblttng-ust-libc-wrapper.la \
++  liblttng-ust-pthread-wrapper.la
+ liblttng_ust_libc_wrapper_la_SOURCES = \
+ 	lttng-ust-malloc.c \
+ 	ust_libc.h
+@@ -9,11 +10,20 @@ liblttng_ust_libc_wrapper_la_LIBADD = \
+ 	-L$(top_builddir)/liblttng-ust/.libs \
+ 	-llttng-ust
+ 
++liblttng_ust_pthread_wrapper_la_SOURCES = \
++	lttng-ust-pthread.c \
++	ust_pthread.h
++liblttng_ust_pthread_wrapper_la_LIBADD = \
++	-L$(top_builddir)/liblttng-ust/.libs \
++	-llttng-ust
++
+ if LTTNG_UST_BUILD_WITH_LIBDL
+ liblttng_ust_libc_wrapper_la_LIBADD += -ldl
++liblttng_ust_pthread_wrapper_la_LIBADD += -ldl
+ endif
+ if LTTNG_UST_BUILD_WITH_LIBC_DL
+ liblttng_ust_libc_wrapper_la_LIBADD += -lc
++liblttng_ust_pthread_wrapper_la_LIBADD += -lc
+ endif
+ 
+ noinst_SCRIPTS = run
+diff --git a/liblttng-ust-libc-wrapper/lttng-ust-pthread.c b/liblttng-ust-libc-wrapper/lttng-ust-pthread.c
+new file mode 100644
+index 0000000..98ce9bf
+--- /dev/null
++++ b/liblttng-ust-libc-wrapper/lttng-ust-pthread.c
+@@ -0,0 +1,91 @@
++/*
++ * Copyright (C) 2013  Mentor Graphics
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
++ */
++
++#define _GNU_SOURCE
++#include <dlfcn.h>
++#include <pthread.h>
++
++#define TRACEPOINT_DEFINE
++#define TRACEPOINT_CREATE_PROBES
++#include "ust_pthread.h"
++
++static __thread int thread_in_trace;
++
++int pthread_mutex_lock(pthread_mutex_t *mutex)
++{
++	static int (*mutex_lock)(pthread_mutex_t *);
++	if (!mutex_lock) {
++		mutex_lock = dlsym(RTLD_NEXT, "pthread_mutex_lock");
++		if (!mutex_lock) {
++			fprintf(stderr, "unable to initialize pthread wrapper library.\n");
++			return EINVAL;
++		}
++	}
++	if (!thread_in_trace) {
++		thread_in_trace = 1;
++		tracepoint(ust_pthread, pthread_mutex_lock_req, mutex);
++		int retval = mutex_lock(mutex);
++		tracepoint(ust_pthread, pthread_mutex_lock_acq, mutex, retval);
++		thread_in_trace = 0;
++		return retval;
++	} else {
++		return mutex_lock(mutex);
++	}
++}
++
++int pthread_mutex_trylock(pthread_mutex_t *mutex)
++{
++	static int (*mutex_trylock)(pthread_mutex_t *);
++	if (!mutex_trylock) {
++		mutex_trylock = dlsym(RTLD_NEXT, "pthread_mutex_trylock");
++		if (!mutex_trylock) {
++			fprintf(stderr, "unable to initialize pthread wrapper library.\n");
++			return EINVAL;
++		}
++	}
++	if (!thread_in_trace) {
++		thread_in_trace = 1;
++		int retval = mutex_trylock(mutex);
++		tracepoint(ust_pthread, pthread_mutex_trylock, mutex, retval);
++		thread_in_trace = 0;
++		return retval;
++	} else {
++		return mutex_trylock(mutex);
++	}
++}
++
++int pthread_mutex_unlock(pthread_mutex_t *mutex)
++{
++	static int (*mutex_unlock)(pthread_mutex_t *);
++	if (!mutex_unlock) {
++		mutex_unlock = dlsym(RTLD_NEXT, "pthread_mutex_unlock");
++		if (!mutex_unlock) {
++			fprintf(stderr, "unable to initialize pthread wrapper library.\n");
++			return EINVAL;
++		}
++	}
++	if (!thread_in_trace) {
++		thread_in_trace = 1;
++		int retval = mutex_unlock(mutex);
++		tracepoint(ust_pthread, pthread_mutex_unlock, mutex, retval);
++		thread_in_trace = 0;
++		return retval;
++	} else {
++		return mutex_unlock(mutex);
++	}
++}
+diff --git a/liblttng-ust-libc-wrapper/ust_pthread.h b/liblttng-ust-libc-wrapper/ust_pthread.h
+new file mode 100644
+index 0000000..86275b7
+--- /dev/null
++++ b/liblttng-ust-libc-wrapper/ust_pthread.h
+@@ -0,0 +1,76 @@
++#undef TRACEPOINT_PROVIDER
++#define TRACEPOINT_PROVIDER ust_pthread
++
++#if !defined(_TRACEPOINT_UST_PTHREAD_H) || defined(TRACEPOINT_HEADER_MULTI_READ)
++#define _TRACEPOINT_UST_PTHREAD_H
++
++#ifdef __cplusplus
++extern "C" {
++#endif
++
++/*
++ * Copyright (C) 2013  Mentor Graphics
++ *
++ * Permission is hereby granted, free of charge, to any person obtaining a copy
++ * of this software and associated documentation files (the "Software"), to deal
++ * in the Software without restriction, including without limitation the rights
++ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
++ * copies of the Software, and to permit persons to whom the Software is
++ * furnished to do so, subject to the following conditions:
++ *
++ * The above copyright notice and this permission notice shall be included in
++ * all copies or substantial portions of the Software.
++ *
++ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
++ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
++ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
++ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
++ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
++ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
++ * SOFTWARE.
++ */
++
++#include <lttng/tracepoint.h>
++
++TRACEPOINT_EVENT(ust_pthread, pthread_mutex_lock_req,
++	TP_ARGS(pthread_mutex_t *, mutex),
++	TP_FIELDS(
++		ctf_integer_hex(unsigned long, mutex, (unsigned long) mutex)
++	)
++)
++
++TRACEPOINT_EVENT(ust_pthread, pthread_mutex_lock_acq,
++	TP_ARGS(pthread_mutex_t *, mutex, int, status),
++	TP_FIELDS(
++		ctf_integer_hex(unsigned long, mutex, (unsigned long) mutex)
++		ctf_integer(int, status, status)
++	)
++)
++
++TRACEPOINT_EVENT(ust_pthread, pthread_mutex_trylock,
++	TP_ARGS(pthread_mutex_t *, mutex, int, status),
++	TP_FIELDS(
++		ctf_integer_hex(unsigned long, mutex, (unsigned long) mutex)
++		ctf_integer(int, status, status)
++	)
++)
++
++TRACEPOINT_EVENT(ust_pthread, pthread_mutex_unlock,
++	TP_ARGS(pthread_mutex_t *, mutex, int, status),
++	TP_FIELDS(
++		ctf_integer_hex(unsigned long, mutex, (unsigned long) mutex)
++		ctf_integer(int, status, status)
++	)
++)
++
++#endif /* _TRACEPOINT_UST_PTHREAD_H */
++
++#undef TRACEPOINT_INCLUDE
++#define TRACEPOINT_INCLUDE "./ust_pthread.h"
++
++/* This part must be outside ifdef protection */
++#include <lttng/tracepoint-event.h>
++
++#ifdef __cplusplus
++}
++#endif
+-- 
+1.8.3.1
 
-> A cleanup of the bug tracker and setting clear releases dates on
-> features would most likely solve this issue. Perhaps we should
-> schedule a bug tracker cleaning event in August?
 
-Sounds good.
+--------------070104060409060303060204
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-> =
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
-> As for the monthly summary, I volunteer to write and maintain it if
-> the community is interested.
-
-Good idea.
-
-> =
-
-> Also, I really like the idea proposed by Matthew for a system like
-> Gerrit to handle patches submission and review. The integration with
-> our Jenkins CI would be IMO quite useful to reduce time spent
-> reviewing non-working or build breaking patches.
-> =
-
-> Mathieu & David: Would you be open to use such a system for patches?
-
-Yes. We should compare this system with others used e.g. at Google.
-Etienne Bergeron has interesting feedback on this topic.
-
-Thanks,
-
-Mathieu
-
-> =
-
-> Thanks,
-> =
-
-> Christian
-> =
-
-> On Wed, Jul 24, 2013 at 10:36 AM, J=E9r=E9mie Galarneau
-> <jeremie.galarneau@efficios.com> wrote:
-> > On Tue, Jul 23, 2013 at 11:30 PM, Christian Babeux
-> > <christian.babeux@efficios.com> wrote:
-> >> Hi Matthew,
-> >>
-> >> You certainly raise valid and interesting questions about our release
-> >> process. Here how I would categorize these questions:
-> >>
-> >> 1) Branching policy (when do we branch master? after the first release
-> >> candidate or after a final release?)
-> >>
-> >> 2) Release roadmap (when the next release is planned? what does it con=
-tain?)
-> >>
-> >> 3) Tentative release dates
-> >>
-> >> For 1), the current way we are doing things is that during a release
-> >> candidate phase for a new stable release, a complete code freeze is in
-> >> effect e.g. only bug fixes will be merged until a stable release is
-> >> out. Normally, after multiple release candidates, master is branched
-> >> into a stable branch and the final official stable release is created
-> >> from that branch.
-> >>
-> >> This could potentially cause troubles for contributors, e.g. posting a
-> >> set of patches and getting no response or waiting for merge if a
-> >> release candidate cycle is in effect. Any ideas/suggestions on how we
-> >> could improve this?
-> >>
-> >
-> > We should create a separate branch at the first release candidate and
-> > stabilize it until the official release. The feature freeze would then
-> > only apply to that branch while invasive changes could be merged in
-> > master at all times. It would certainly make it easier on occasional
-> > contributors that may not be aware of the release schedule (at the
-> > expense of the maintainers' sanity...).
-> >
-> >> For 2), the release roadmap is available at [1]. The roadmap is kind
-> >> of a mess right now because bugs are assigned to older stable releases
-> >> giving the wrong impression that some stable releases are way late.
-> >>
-> >> We would need a way to distinguish between bugs on already released
-> >> versions and features targeting future versions. Perhaps something
-> >> like [2-3] could be promising?
-> >>
-> >
-> > Disciplining ourselves in opening Features with reasonable target
-> > dates on the bug tracker may be enough to make the current "Roadmap"
-> > plug-in useful.
-> >
-> >> For 3), I would try to put tentative release dates on the roadmap on
-> >> Redmine or on a wiki article similar to [4]?
-> >>
-> >
-> > I'd prefer using the roadmap functionality. I'm afraid the wiki won't
-> > be maintained as releases slip.
-> >
-> >> Another point that you did not mention is how we plan minor releases.
-> >> I think we will need to define a clear policy for minor releases
-> >> sooner than later because it is becoming quite painful to support
-> >> three codebases (modules, ust, tools) with three stable branches...
-> >> Perhaps in another thread?
-> >>
-> >> On a more general note, I think clear communication is the key here.
-> >> I'm wondering if a monthly summary of the development activities on
-> >> LTTng and related projects could be interesting for the community?
-> >> Content example:
-> >>
-> >> - What have we accomplished in the past month.
-> >> - What we are planning for the following month.
-> >> - Release status (next stable tentative release dates, planned minor
-> >> releases, etc.)
-> >> - Etc.
-> >>
-> >
-> > Sounds good. It would also be a great opportunity to structure
-> > discussions around the planning.
-> >
-> > Regards,
-> > J=E9r=E9mie
-> >
-> >> Any ideas/suggestions/constructive criticism on how we can improve our
-> >> release process are quite welcome!
-> >>
-> >> Thanks,
-> >>
-> >> Christian
-> >>
-> >> [1] - http://bugs.lttng.org/projects/lttng/roadmap
-> >> [2] - http://www.redmine.org/plugins/advanced_roadmap
-> >> [3] - http://www.redmine.org/plugins/redmine_milestones
-> >> [4] - https://www.gnu.org/software/gdb/schedule/
-> >>
-> >> On Tue, Jul 23, 2013 at 3:52 PM, Matthew Khouzam
-> >> <matthew.khouzam@ericsson.com> wrote:
-> >>> Hello tracing rangers,
-> >>>
-> >>> I am a bit confused about the whole release cycle system.
-> >>>
-> >>> If you guys are in RC, I have a cool feature I was working on, where =
-do
-> >>> I put it?
-> >>>
-> >>> When are releases coming out? is it planned or a surprise (I know it's
-> >>> planned)
-> >>>
-> >>> What are your hard / soft deadlines?
-> >>>
-> >>> Thanks,
-> >>> Matthew
-> >>>
-> >>> _______________________________________________
-> >>> lttng-dev mailing list
-> >>> lttng-dev@lists.lttng.org
-> >>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> >>
-> >> _______________________________________________
-> >> lttng-dev mailing list
-> >> lttng-dev@lists.lttng.org
-> >> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> >
-> >
-> >
-> > --
-> > J=E9r=E9mie Galarneau
-> > EfficiOS Inc.
-> > http://www.efficios.com
-
--- =
-
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+--------------070104060409060303060204--
