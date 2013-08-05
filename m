@@ -1,31 +1,27 @@
-From: Stefan Seefeld <stefan_seefeld@mentor.com>
-Subject: Re: [PATCH lttng-ust] Add trace support for calloc and
- realloc.
-Date: Mon, 5 Aug 2013 11:29:31 -0400
-Message-ID: <51FFC4DB.7080905__5180.69621543891$1375716715$gmane$org@mentor.com>
-References: <51F3585E.20705@mentor.com>
-	<CA+jJMxtn-DsBjzunLNE3_7KS4RCqAFLJfPL7fVkH3z62r0jPxw@mail.gmail.com>
-	<51F82C45.6020502@mentor.com>
-	<CA+jJMxtMH5Ajgoszg8pO8dq-KsrTg9NwS2YcYOz=FbLr0ijaEQ@mail.gmail.com>
-	<alpine.LNX.2.00.1308012013380.9574@monopod.intra.ispras.ru>
-	<51FA8DAE.3070409@mentor.com>
-	<alpine.LNX.2.00.1308012045570.9574@monopod.intra.ispras.ru>
-	<alpine.LNX.2.00.1308012115300.9574@monopod.intra.ispras.ru>
-	<51FA9AD8.4010502@mentor.com>
-	<CABtfrpDg_NOi+yP5GABmjBv6G9Zj+rvTwc1OdQ1s_9DM7uzeZg@mail.gmail.com>
-	<20130803011841.GE9033@Krystal>
+From: "=?utf-8?Q?David_Lindstr=C3=B6m?=" <david.lindstrom@percepio.se>
+Subject: Re: Looking for documentation on the old LTTng
+	traceformats, 2.3-2.6
+Date: Mon, 5 Aug 2013 17:47:10 +0200
+Message-ID: <1032F26CC0E841A4A4FEDD7D551F6147__38013.3658917204$1375717694$gmane$org@DVDMANDT5>
+References: <DB5A5975D1344A6DB258A4333FD8197E@DVDMANDT5>
+	<20130805143857.GA13372@Krystal>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="------------050500040206040405000206"
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from relay1.mentorg.com ([192.94.38.131])
+Received: from mail-lb0-f172.google.com ([209.85.217.172])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Stefan_Seefeld@mentor.com>) id 1V6Mj4-0004sx-Gm
-	for lttng-dev@lists.lttng.org; Mon, 05 Aug 2013 11:29:44 -0400
-Received: from svr-orw-exc-10.mgc.mentorg.com ([147.34.98.58])
-	by relay1.mentorg.com with esmtp
-	id 1V6Miy-0005WW-TN from Stefan_Seefeld@mentor.com
-	for lttng-dev@lists.lttng.org; Mon, 05 Aug 2013 08:29:32 -0700
-In-Reply-To: <20130803011841.GE9033@Krystal>
+	(envelope-from <david.lindstrom@percepio.se>) id 1V6N0A-0005Te-NZ
+	for lttng-dev@lists.lttng.org; Mon, 05 Aug 2013 11:47:24 -0400
+Received: by mail-lb0-f172.google.com with SMTP id o7so2243119lbv.31
+	for <lttng-dev@lists.lttng.org>; Mon, 05 Aug 2013 08:47:12 -0700 (PDT)
+Received: from DVDMANDT5 (h185n9.malarenergi.ias.bredband.telia.com.
+	[90.224.212.185])
+	by mx.google.com with ESMTPSA id ua4sm111542lbb.17.2013.08.05.08.47.11
+	for <lttng-dev@lists.lttng.org>
+	(version=TLSv1 cipher=RC4-SHA bits=128/128);
+	Mon, 05 Aug 2013 08:47:11 -0700 (PDT)
+In-Reply-To: <20130805143857.GA13372@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -37,184 +33,62 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---------------050500040206040405000206
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 7bit
-
-On 08/02/2013 09:18 PM, Mathieu Desnoyers wrote:
-
-[...]
-
-> Then, I recommend porting the code from memleak-finder.c to UST
-> liblttng-ust-libc-wrapper. The approach I used in memleak-finder.c seems
-> to work quite well, and is clearly more complete that what we find in
-> liblttng-ust-libc-wrapper currently.
-
-...and here is a revised patch to add calloc and realloc
-instrumentation, using the same technique as memleak-finder.
-
-I've ran the patch through the checkpatch.pl script, and made some minor
-adjustments to other code to fix coding style errors.
-
-Regards,
-    Stefan
-
--- 
-Stefan Seefeld
-CodeSourcery / Mentor Graphics
-http://www.mentor.com/embedded-software/
-
-
---------------050500040206040405000206
-Content-Type: text/x-patch; name="patch"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment; filename="patch"
-
-From 93da5d2be5ec3a3680449e186780ff7a08cec6d9 Mon Sep 17 00:00:00 2001
-From: Stefan Seefeld <stefan_seefeld@mentor.com>
-Date: Sat, 27 Jul 2013 01:10:23 -0400
-Subject: [PATCH] Add trace support for calloc and realloc.
-
-Signed-off-by: Stefan Seefeld <stefan_seefeld@mentor.com>
----
- liblttng-ust-libc-wrapper/lttng-ust-malloc.c | 68 +++++++++++++++++++++++++++-
- liblttng-ust-libc-wrapper/ust_libc.h         | 18 ++++++++
- 2 files changed, 84 insertions(+), 2 deletions(-)
-
-diff --git a/liblttng-ust-libc-wrapper/lttng-ust-malloc.c b/liblttng-ust-libc-wrapper/lttng-ust-malloc.c
-index 3212ff0..81beb78 100644
---- a/liblttng-ust-libc-wrapper/lttng-ust-malloc.c
-+++ b/liblttng-ust-libc-wrapper/lttng-ust-malloc.c
-@@ -26,9 +26,25 @@
- #define TRACEPOINT_CREATE_PROBES
- #include "ust_libc.h"
- 
-+#define STATIC_CALLOC_LEN 4096
-+static char static_calloc_buf[STATIC_CALLOC_LEN];
-+static size_t static_calloc_buf_offset;
-+
-+static void *static_calloc(size_t nmemb, size_t size)
-+{
-+	size_t prev_offset;
-+
-+	if (nmemb * size > sizeof(static_calloc_buf) - static_calloc_buf_offset) {
-+		return NULL;
-+	}
-+	prev_offset = static_calloc_buf_offset;
-+	static_calloc_buf_offset += nmemb * size;
-+	return &static_calloc_buf[prev_offset];
-+}
-+
- void *malloc(size_t size)
- {
--	static void *(*plibc_malloc)(size_t size) = NULL;
-+	static void *(*plibc_malloc)(size_t size);
- 	void *retval;
- 
- 	if (plibc_malloc == NULL) {
-@@ -45,7 +61,16 @@ void *malloc(size_t size)
- 
- void free(void *ptr)
- {
--	static void *(*plibc_free)(void *ptr) = NULL;
-+	static void (*plibc_free)(void *ptr);
-+
-+	/* Check whether the memory was allocated with
-+	 * static_calloc, in which case there is nothing
-+	 * to free.
-+	 */
-+	if ((char *)ptr >= static_calloc_buf &&
-+	    (char *)ptr < static_calloc_buf + STATIC_CALLOC_LEN) {
-+		return;
-+	}
- 
- 	if (plibc_free == NULL) {
- 		plibc_free = dlsym(RTLD_NEXT, "free");
-@@ -57,3 +82,42 @@ void free(void *ptr)
- 	tracepoint(ust_libc, free, ptr);
- 	plibc_free(ptr);
- }
-+
-+void *calloc(size_t nmemb, size_t size)
-+{
-+	static void *(*volatile plibc_calloc)(size_t nmemb, size_t size);
-+	void *retval;
-+
-+	if (plibc_calloc == NULL) {
-+		/*
-+		 * Temporarily redirect to static_calloc,
-+		 * until the dlsym lookup has completed.
-+		 */
-+		plibc_calloc = static_calloc;
-+		plibc_calloc = dlsym(RTLD_NEXT, "calloc");
-+		if (plibc_calloc == NULL) {
-+			fprintf(stderr, "callocwrap: unable to find calloc\n");
-+			return NULL;
-+		}
-+	}
-+	retval = plibc_calloc(nmemb, size);
-+	tracepoint(ust_libc, calloc, nmemb, size, retval);
-+	return retval;
-+}
-+
-+void *realloc(void *ptr, size_t size)
-+{
-+	static void *(*plibc_realloc)(void *ptr, size_t size);
-+	void *retval;
-+
-+	if (plibc_realloc == NULL) {
-+		plibc_realloc = dlsym(RTLD_NEXT, "realloc");
-+		if (plibc_realloc == NULL) {
-+			fprintf(stderr, "reallocwrap: unable to find realloc\n");
-+			return NULL;
-+		}
-+	}
-+	retval = plibc_realloc(ptr, size);
-+	tracepoint(ust_libc, realloc, ptr, size, retval);
-+	return retval;
-+}
-diff --git a/liblttng-ust-libc-wrapper/ust_libc.h b/liblttng-ust-libc-wrapper/ust_libc.h
-index af705aa..6b03a4d 100644
---- a/liblttng-ust-libc-wrapper/ust_libc.h
-+++ b/liblttng-ust-libc-wrapper/ust_libc.h
-@@ -47,6 +47,24 @@ TRACEPOINT_EVENT(ust_libc, free,
- 	)
- )
- 
-+TRACEPOINT_EVENT(ust_libc, calloc,
-+	TP_ARGS(size_t, nmemb, size_t, size, void *, ptr),
-+	TP_FIELDS(
-+		ctf_integer(size_t, nmemb, nmemb)
-+		ctf_integer(size_t, size, size)
-+		ctf_integer_hex(unsigned long, ptr, (unsigned long) ptr)
-+	)
-+)
-+
-+TRACEPOINT_EVENT(ust_libc, realloc,
-+	TP_ARGS(void *, in_ptr, size_t, size, void *, ptr),
-+	TP_FIELDS(
-+		ctf_integer_hex(unsigned long, in_ptr, (unsigned long) in_ptr)
-+		ctf_integer(size_t, size, size)
-+		ctf_integer_hex(unsigned long, ptr, (unsigned long) ptr)
-+	)
-+)
-+
- #endif /* _TRACEPOINT_UST_LIBC_H */
- 
- #undef TRACEPOINT_INCLUDE
--- 
-1.8.3.1
-
-
---------------050500040206040405000206
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---------------050500040206040405000206--
+SGksCgpUaGFuayB5b3UgZm9yIHlvdXIgcmVwbHksIGhvd2V2ZXIgdGhhdCBkb2N1bWVudCBhcHBl
+YXJzIHRvIGFwcGx5IHRvIHRoZSAwLngKb3IgMS4wIHZlcnNpb24gb2YgdGhlIExUVG5nIDAueCB0
+cmFjZSBmb3JtYXRzLgoKVGhlIDIuMyBkb2N1bWVudFsxXSBzZWVtcyB0byBtYXRjaCBhdCBsZWFz
+dCB0aGUgbWV0YWRhdGEgZm9ybWF0IG9mIGEgMi42CnRyYWNlIEkgaGF2ZSwgYnV0IGl0J3MgYSBi
+aXQgc2Nhcnkgbm90IGtub3dpbmcgd2hhdCBjaGFuZ2VzIHdlcmUgbWFkZSwKZXNwZWNpYWxseSBp
+ZiB0aGVzZSB3ZXJlIHJhdGhlciBzbWFsbCBvciByYXJlLWNhc2UgZml4ZXMuCgpGb3IgZXhhbXBs
+ZSwgdGhlIGZvcm1hdC92ZXJzaW9uIGNoYW5nZWxvZyBtZW50aW9ucyB0aGUgZm9sbG93aW5nIGZv
+ciB0aGUgMi40CnZlcnNpb24gb2YgdGhlIGZvcm1hdDoKCiJMVFRuZyAwLjE3MCBhbmQgTFRUViAw
+LjEyLjIxIGZpeGVzIGdjYyBzdHJ1Y3R1cmUgdHJhY2UgZm9ybWF0CmNvbXBhdGliaWxpdHkuICIK
+CldoYXQgZG9lcyB0aGF0IG1lYW4gYW5kIHdoYXQgY2FzZXMgZG9lcyBpdCBicmVhaz8gRG9lcyBp
+dCBldmVuIGJyZWFrCmFueXRoaW5nIG9yIHdhcyB0aGVyZSBqdXN0IHNsaWdodCBjaGFuZ2VzIHRv
+IHRoZSBjb2RlIHRvIGJldHRlciBjb3BlIHdpdGgKdGhlIGxhdGVzdCB2ZXJzaW9uIG9mIEdDQz8K
+CkZvciB2ZXJzaW9uIDIuNSwgdGhlIGZvbGxvd2luZyBpcyBub3RlZDoKCiJMVFRuZyAwLjE3Mywg
+bHR0LWNvbnRyb2wgMC43NiwgbHR0diAwLjEyLjIyLCB0cmFjZSBmb3JtYXQgMi41IGFkZCBzdXBw
+b3J0CmZvciB2YXJpYWJsZS1zaXplZCBzdWJidWZmZXIgdHJhbnNmZXJzLiBVc2VmdWwgZm9yIG5l
+dHdvcmsgdHJhY2Ugc3RyZWFtaW5nCndpdGggYSBwZXJpb2RpYyB0aW1lciB0byBmbHVzaCB0aGUg
+YnVmZmVycyBwZXJpb2RpY2FsbHk6IG9ubHkgdGhlIGFjdHVhbApwYXlsb2FkIChhbGlnbmVkIHRv
+IHRoZSBuZXh0IHBhZ2UpIHdpbGwgYmUgc2VudC4iCgpJIGRvbid0IHJlYWxseSB1bmRlcnN0YW5k
+IHdoeSB0aGlzIHdhcyBhIGJyZWFraW5nIGNoYW5nZSB0byB0aGUgYmluYXJ5CmZvcm1hdCBzaW5j
+ZSBpdCBhbHJlYWR5IGhhZCBmaWVsZHMgZm9yIHN1YmJ1ZmZlciBzaXplcyBhbmQgdXNhZ2VzLi4/
+CgoyLjYgbm90ZXMgdGhlIGZvbGxvd2luZzoKCiJMVFRuZyAwLjE5MSwgTFRUViAwLjEyLjMwIGNv
+bWluZyB3aXRoIHRyYWNlIGZvcm1hdCAyLjYgcmV2ZXJ0IHRvIHRoZQpwcmUtMi40IGJlaGF2aW9y
+IGZvciBhbGlnbm1lbnQgb2YgNjQtYml0IGZpZWxkcyBvbiAzMi1iaXQgYXJjaGl0ZWN0dXJlcy4g
+SXQKYWxpZ25zIHRoZW0gb24gMzItYml0IChtYXhpbXVtIGFsaWdubWVudCBpcyB0aGUgYXJjaGl0
+ZWN0dXJlIHNpemUpLiBUaGlzCmZvbGxvd3MgZ2NjIGJlaGF2aW9yLiIKClRoaXMgbWFrZXMgbWUg
+Z3Vlc3MgdGhlIGNoYW5nZXMgaW4gMi40IHdhcyB0byBhbGlnbiA2NC1iaXQgZmllbGRzIG9uIDY0
+LWJpdHMKZXZlbiBvbiAzMi1iaXQgcGxhdGZvcm1zLiBTbyBob3cgZG9lcyB0aGUgYWxpZ25tZW50
+IGZpZWxkIGluIHRoZSBoZWFkZXJzCmNvbWUgaW50byBwbGF5PwoKWzFdIExUVG5nIFRyYWNlIEJp
+bmFyeSBGb3JtYXQgdjIuMyBHdWlkZWxpbmVzLCBQaGlsaXBwZSBQcm91bHgsIDIwMDkgLQpodHRw
+Oi8vZ2l0LmRvcnNhbC5wb2x5bXRsLmNhLz9wPWx0dG5nLWRldi1kb2MuZ2l0O2E9YmxvYl9wbGFp
+bjtmPXRyYWNlLWZvcm1hdC9mb3JtYXQucGRmCgpNdmgKRGF2aWQgTGluZHN0csO2bQoKKFNvcnJ5
+IGZvciB0aGUgZG91YmxlIHJlcGx5LCBJIHRob3VnaHQgdGhlIGxpc3Qgd291bGQgYmUgdGhlIHJl
+cGx5LXRvIAphZGRyZXNzIGZvciBzb21lIHJlYXNvbikKCi0tLS0tT3JpZ2luYWwgTWVzc2FnZS0t
+LS0tIApGcm9tOiBNYXRoaWV1IERlc25veWVycwpTZW50OiBNb25kYXksIEF1Z3VzdCAwNSwgMjAx
+MyA0OjM4IFBNClRvOiBEYXZpZExpbmRzdHLDtm0KQ2M6IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5v
+cmcKU3ViamVjdDogUmU6IFtsdHRuZy1kZXZdIExvb2tpbmcgZm9yIGRvY3VtZW50YXRpb24gb24g
+dGhlIG9sZCBMVFRuZyAKdHJhY2Vmb3JtYXRzLCAyLjMtMi42CgoqIERhdmlkIExpbmRzdHLDtm0g
+KGRhdmlkLmxpbmRzdHJvbUBwZXJjZXBpby5zZSkgd3JvdGU6Cj4gSGksCj4KPiBJ4oCZbSBsb29r
+aW5nIGZvciBkb2N1bWVudGF0aW9uIG9uIHRoZSBvbGQvbGVnYWN5IExUVG5nIHRyYWNlIGZvcm1h
+dHMuCj4gQmVmb3JlIExUVG5nIDIueCBhbmQgQ1RGIHRoYXQgaXMuIEkgZm91bmQgYSBQREYgdGl0
+bGVkICJMVFRuZyBUcmFjZQo+IEJpbmFyeSBGb3JtYXQgdjIuMyBHdWlkZWxpbmVzIiB3aGljaCBk
+ZXRhaWxzIHRoZSAyLjMgZm9ybWF0IG5pY2VseS4KPiBIb3dldmVyLCBJIG5lZWQgdG8gc3VwcG9y
+dCB0aGUgbGF0ZXIgdmVyc2lvbnMgYXMgd2VsbCB3aGljaCBJJ20gdW5hYmxlIHRvCj4gZmluZCBh
+bnl0aGluZyBhdCBhbGwgYWJvdXQuIFdoYXQgY2hhbmdlZCBiZXR3ZWVuIDIuMyBhbmQgMi42Pwo+
+Cj4gRG9lcyBzdWNoIGRvY3VtZW50YXRpb24gZXZlbiBleGlzdHM/IElmIG5vdCwgd2hhdCB3b3Vs
+ZCBiZSBteSBiZXN0Cj4gb3B0aW9ucyB0byBmaWd1cmUgaXQgb3V0PwoKSSByZW1lbWJlciBzb21l
+b25lIGNvbnRyaWJ1dGVkIHRoaXMga2luZCBvZiBkb2N1bWVudGF0aW9uIGluIHRoZSBwYXN0LgpI
+ZXJlIGl0IGlzOgoKaHR0cDovL2Jlbm5vLmlkLmF1L2RvY3MvbHR0bmdfZGF0YV9mb3JtYXQucG1s
+CgpJJ20gdW5zdXJlIHdoaWNoIHZlcnNpb24gb2YgdGhlIGZvcm1hdCBpdCBhcHBsaWVzIHRvIHRo
+b3VnaC4gSXQncyBiZXN0CnRvIGNvbmZpcm0gaWYgaXQgbWF0Y2hlcyB0aGUgc291cmNlIGZpbGVz
+IGJlZm9yZSBhc3N1bWluZyBpdCBmaXRzIGx0dG5nCjAueCB0cmFjZSBmb3JtYXQgMi42LgoKR29v
+ZCBsdWNrIQoKTWF0aGlldQoKPgo+IE12aAo+IERhdmlkIExpbmRzdHLDtm0KPgo+Cj4gX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBsdHRuZy1kZXYgbWFp
+bGluZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IGh0dHA6Ly9saXN0cy5sdHRu
+Zy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgoKLS0gCk1hdGhpZXUgRGVz
+bm95ZXJzCkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20gCgoKX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcg
+bGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dp
+LWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
