@@ -1,19 +1,17 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [LTTNG-TOOLS PATCH] Fix: relayd protocol version
-Date: Mon, 5 Aug 2013 15:49:23 -0400
-Message-ID: <20130805194923.GB22120__2996.03516837141$1375732316$gmane$org@Krystal>
-References: <1375729818-6183-1-git-send-email-jdesfossez@efficios.com>
+From: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
+Subject: Re: Trace synchronization
+Date: Mon, 05 Aug 2013 15:56:10 -0400
+Message-ID: <5200035A.6030106__4660.42665434561$1375732661$gmane$org@voxpopuli.im>
+References: <CAOSRKdQb3YwEHgasPWx2sHZHCbT5=EqcQSLOAE3ShQUTmqO19Q@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from ironport2-out.teksavvy.com ([206.248.154.182])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1V6QmS-0005LQ-Pz
-	for lttng-dev@lists.lttng.org; Mon, 05 Aug 2013 15:49:30 -0400
-Content-Disposition: inline
-In-Reply-To: <1375729818-6183-1-git-send-email-jdesfossez@efficios.com>
+	(envelope-from <alexmonthy@voxpopuli.im>) id 1V6Qtb-0005dM-UH
+	for lttng-dev@lists.lttng.org; Mon, 05 Aug 2013 15:56:53 -0400
+In-Reply-To: <CAOSRKdQb3YwEHgasPWx2sHZHCbT5=EqcQSLOAE3ShQUTmqO19Q@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,92 +20,81 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Julien Desfossez <jdesfossez@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: Sebastiano Spicuglia <spicuglia.sebastiano@gmail.com>, Genevieve Bastien <gbastien+lttng@versatic.net>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-* Julien Desfossez (jdesfossez@efficios.com) wrote:
-> Since we heritate the relayd protocol version from the sessiond and
-> relayd version, use the VERSION macro instead of additionnal fields.
+Hi,
 
-I merged these instead:
+The trace synchronization feature hasn't been merged in the Eclipse
+plugin yet, although it's very close. You can look at the latest version
+of the patch by Genevi=E8ve Bastien here: https://git.eclipse.org/r/#/c/140=
+56/
 
-commit d83a952ce0d3a03bd3d36505d665db99b2c65fa2
-Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Date:   Mon Aug 5 15:26:41 2013 -0400
+However, we're currently considering doing a rework of how
+experiments/analyzes are defined in the viewer, so this is why some of
+those more advanced features are taking some time to land (we'd rather
+get the infrastructure right first, rather than having to update every
+single feature separately afterwards...)
+If you are interested, you can follow this discussion at:
+http://dev.eclipse.org/mhonarc/lists//linuxtools-dev/msg02758.html
 
-    relayd: use version macros from build rather than scanf
-    
-    Acked-by: Julien Desfossez <jdesfossez@efficios.com>
-    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Some more comments below,
 
-commit 6947778efd60badf06cec2bd5c39d7f96f5ba7ad
-Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Date:   Mon Aug 5 15:24:31 2013 -0400
+On 13-08-03 05:44 AM, Sebastiano Spicuglia wrote:
+> Hello everyone,
+>
+> I am collecting traces using lttng from different machines.
+> I saw here http://www.youtube.com/watch?v=3DYzgRglpXdxQ
+> (around 24:06) that it is possible to trace with more details
+> the network subsystem and then synchronise different traces.
+>
+> Even the eclipse page says something about this
+> ("Integration of trace synchronization")
+> http://www.eclipse.org/linuxtools/projectPages/lttng/
+> I read the man of lttng and I look around in the eclipse
+> plugin but I didn't find anything about this two features
+> (extended network instrumentation and traces sychnronization).
+>
+> Is the synchronization somehow performed automatically
+> by the eclipse plugin =
 
-    sessiond: use version major/minor from build for communication with relayd
-    
-    Acked-by: Julien Desfossez <jdesfossez@efficios.com>
-    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 
-commit 81265501f5370482b1ee9c24d3fa6537c5ca0389
-Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Date:   Mon Aug 5 15:23:27 2013 -0400
+This is still up in the air. It should be possible to take any two
+traces and synchronize them manually (which was the original idea).
+However, in the new "analysis" framework, an analysis could specify
+which types of traces it expects to have, and also specify if they have
+to be synchronized automatically or not.
 
-    build: export major/minor/patchlevel numbers
-    
-    Acked-by: Julien Desfossez <jdesfossez@efficios.com>
-    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> and there is no need to enable the extended
+> instrumentation of the network subsystem?
 
-> 
-> Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
-> ---
->  src/bin/lttng-sessiond/cmd.c      |   11 +++++++++--
->  src/common/sessiond-comm/relayd.h |    3 ---
->  2 files changed, 9 insertions(+), 5 deletions(-)
-> 
-> diff --git a/src/bin/lttng-sessiond/cmd.c b/src/bin/lttng-sessiond/cmd.c
-> index 84594ad..07366af 100644
-> --- a/src/bin/lttng-sessiond/cmd.c
-> +++ b/src/bin/lttng-sessiond/cmd.c
-> @@ -491,9 +491,16 @@ static int create_connect_relayd(struct lttng_uri *uri,
->  {
->  	int ret;
->  	struct lttcomm_relayd_sock *rsock;
-> +	uint32_t major, minor;
->  
-> -	rsock = lttcomm_alloc_relayd_sock(uri, RELAYD_VERSION_COMM_MAJOR,
-> -			RELAYD_VERSION_COMM_MINOR);
-> +	ret = sscanf(VERSION, "%10u.%10u", &major, &minor);
-> +	if (ret < 2) {
-> +		ERR("Error in scanning version");
-> +		ret = -1;
-> +		goto error;
-> +	}
-> +
-> +	rsock = lttcomm_alloc_relayd_sock(uri, major, minor);
->  	if (!rsock) {
->  		ret = LTTNG_ERR_FATAL;
->  		goto error;
-> diff --git a/src/common/sessiond-comm/relayd.h b/src/common/sessiond-comm/relayd.h
-> index aa99248..836327c 100644
-> --- a/src/common/sessiond-comm/relayd.h
-> +++ b/src/common/sessiond-comm/relayd.h
-> @@ -27,9 +27,6 @@
->  #include <lttng/lttng.h>
->  #include <common/defaults.h>
->  
-> -#define RELAYD_VERSION_COMM_MAJOR             2
-> -#define RELAYD_VERSION_COMM_MINOR             2
-> -
->  /*
->   * lttng-relayd communication header.
->   */
-> -- 
-> 1.7.10.4
-> 
+This I am not sure. I think the patch to lttng-modules was supposed to
+be merged upstream at some point, but I don't know if that was done yet.
+Can you enlighten us Genevi=E8ve?
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+> I have the impression that in the eclipse plugin the term
+> "synchronization" is related to the the different sources of
+> events on the same machine, am I right?
+
+It could be both on the same machine, or from other hosts. You may
+obviously want to synchronize traces from other hosts, which will have
+different clocks. But you might also want to synchronize a trace from a
+host and from a VM running on the same machine.
+
+> Could you please me provide some resources where I can find
+> more information about the synhcronization of traces coming
+> from different machines?
+
+I think a couple of articles were written on the subject. Genevi=E8ve has
+them stashed somewhere ;)
+
+
+Cheers,
+Alexandre
+
+>
+> Thank you in advance for your help
+> Regards
+> Sebastiano
+>
