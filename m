@@ -1,9 +1,10 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [LTTNG-TOOLS 2.3 PATCH 1/2] Fix: return code of
-	get_subbuff on	metadata stream
-Date: Sun, 4 Aug 2013 16:34:12 -0400
-Message-ID: <20130804203411.GA28914__32716.6013922126$1375648508$gmane$org@Krystal>
-References: <1375641986-2278-1-git-send-email-jdesfossez@efficios.com>
+Subject: Re: Release strategy
+Date: Mon, 5 Aug 2013 09:17:22 -0400
+Message-ID: <20130805131722.GA12410__48775.0873937786$1375708696$gmane$org@Krystal>
+References: <51EEDF15.4090300@ericsson.com>
+	<CAGDH53=w6Wgat9vpL+iWd4mBfyM9CQuxGJEkN4095AeBB-LWog@mail.gmail.com>
+	<51EFE41F.40909@ericsson.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -11,10 +12,10 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1V650H-0006WC-9b
-	for lttng-dev@lists.lttng.org; Sun, 04 Aug 2013 16:34:17 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1V6Kf6-0000T3-Kf
+	for lttng-dev@lists.lttng.org; Mon, 05 Aug 2013 09:17:28 -0400
 Content-Disposition: inline
-In-Reply-To: <1375641986-2278-1-git-send-email-jdesfossez@efficios.com>
+In-Reply-To: <51EFE41F.40909@ericsson.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,50 +24,123 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Julien Desfossez <jdesfossez@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: Matthew Khouzam <matthew.khouzam@ericsson.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-* Julien Desfossez (jdesfossez@efficios.com) wrote:
-> If no metadata is available on the kernel metadata stream when we
-> do a get_subbuff, the kernel returns -EPERM, the consumer was not
-> checking for this return code and closed the stream prematurely. It
-> worked if no new metadata was added during the session.
+* Matthew Khouzam (matthew.khouzam@ericsson.com) wrote:
+> Thank you very much, this clears up a lot of stuff
+> 
+> 
+> On 13-07-23 11:30 PM, Christian Babeux wrote:
+> > Hi Matthew,
+> >
+> > You certainly raise valid and interesting questions about our release
+> > process. Here how I would categorize these questions:
+> >
+> > 1) Branching policy (when do we branch master? after the first release
+> > candidate or after a final release?)
+> >
+> > 2) Release roadmap (when the next release is planned? what does it contain?)
+> >
+> > 3) Tentative release dates
+> >
+> > For 1), the current way we are doing things is that during a release
+> > candidate phase for a new stable release, a complete code freeze is in
+> > effect e.g. only bug fixes will be merged until a stable release is
+> > out. Normally, after multiple release candidates, master is branched
+> > into a stable branch and the final official stable release is created
+> > from that branch.
+> >
+> > This could potentially cause troubles for contributors, e.g. posting a
+> > set of patches and getting no response or waiting for merge if a
+> > release candidate cycle is in effect. Any ideas/suggestions on how we
+> > could improve this?
+> Could you add a 'staging' branch for features, kind of like a passing
+> lane on a highway?
 
-Is the proper fix to change lttng-tools or lttng-modules ?
-
-I would rather think that lttng-modules should return -ENODATA rather
-than -EPERM in this case. It's clearly not a permission issue.
-
-Thoughts ?
+The problem, as outlined by Jeremie in a separate email, is that it
+would add more burden on the maintainer, which I would like to avoid as
+much as possible. That is one reason why we are doing a feature freeze
+during rc cycles. The second reason is that it forces everyone to test
+the features that are in rc, rather than push new features without ever
+stopping feature implementation to focus on testing.
 
 Thanks,
 
 Mathieu
 
+> A gerrit like system also could help. that way people will be able to
+> push patches and get reviews. Does redmine have something similar?
 > 
-> Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
-> ---
->  src/common/consumer.c |    3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+> >
+> > For 2), the release roadmap is available at [1]. The roadmap is kind
+> > of a mess right now because bugs are assigned to older stable releases
+> > giving the wrong impression that some stable releases are way late.
+> >
+> > We would need a way to distinguish between bugs on already released
+> > versions and features targeting future versions. Perhaps something
+> > like [2-3] could be promising?
+> >
+> > For 3), I would try to put tentative release dates on the roadmap on
+> > Redmine or on a wiki article similar to [4]?
+> >
+> > Another point that you did not mention is how we plan minor releases.
+> > I think we will need to define a clear policy for minor releases
+> > sooner than later because it is becoming quite painful to support
+> > three codebases (modules, ust, tools) with three stable branches...
+> > Perhaps in another thread?
+> >
+> > On a more general note, I think clear communication is the key here.
+> > I'm wondering if a monthly summary of the development activities on
+> > LTTng and related projects could be interesting for the community?
+> > Content example:
+> >
+> > - What have we accomplished in the past month.
+> > - What we are planning for the following month.
+> > - Release status (next stable tentative release dates, planned minor
+> > releases, etc.)
+> > - Etc.
+> >
+> > Any ideas/suggestions/constructive criticism on how we can improve our
+> > release process are quite welcome!
+> >
+> > Thanks,
+> >
+> > Christian
+> >
+> > [1] - http://bugs.lttng.org/projects/lttng/roadmap
+> > [2] - http://www.redmine.org/plugins/advanced_roadmap
+> > [3] - http://www.redmine.org/plugins/redmine_milestones
+> > [4] - https://www.gnu.org/software/gdb/schedule/
+> >
+> > On Tue, Jul 23, 2013 at 3:52 PM, Matthew Khouzam
+> > <matthew.khouzam@ericsson.com> wrote:
+> >> Hello tracing rangers,
+> >>
+> >> I am a bit confused about the whole release cycle system.
+> >>
+> >> If you guys are in RC, I have a cool feature I was working on, where do
+> >> I put it?
+> >>
+> >> When are releases coming out? is it planned or a surprise (I know it's
+> >> planned)
+> >>
+> >> What are your hard / soft deadlines?
+> >>
+> >> Thanks,
+> >> Matthew
+> >>
+> >> _______________________________________________
+> >> lttng-dev mailing list
+> >> lttng-dev@lists.lttng.org
+> >> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 > 
-> diff --git a/src/common/consumer.c b/src/common/consumer.c
-> index 4b657f3..a070f36 100644
-> --- a/src/common/consumer.c
-> +++ b/src/common/consumer.c
-> @@ -2288,7 +2288,8 @@ restart:
->  				} while (len > 0);
->  
->  				/* It's ok to have an unavailable sub-buffer */
-> -				if (len < 0 && len != -EAGAIN && len != -ENODATA) {
-> +				if (len < 0 && len != -EAGAIN && len != -ENODATA &&
-> +						len != -EPERM) {
->  					/* Clean up stream from consumer and free it. */
->  					lttng_poll_del(&events, stream->wait_fd);
->  					consumer_del_metadata_stream(stream, metadata_ht);
-> -- 
-> 1.7.10.4
 > 
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
 -- 
 Mathieu Desnoyers
