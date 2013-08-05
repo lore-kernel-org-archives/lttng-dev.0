@@ -1,21 +1,24 @@
-From: Stefan Seefeld <stefan@seefeld.name>
-Subject: Re: [PATCH lttng-ust] Add trace instrumentation for
- some pthread functions.
-Date: Mon, 05 Aug 2013 09:38:31 -0400
-Message-ID: <51FFAAD7.3000705__33443.2334559553$1375709958$gmane$org@seefeld.name>
-References: <51F97688.30704@mentor.com>
-	<CA+jJMxsoH8Rz6fwZJOPnG-4xvB2w8GO5eqi0JDtHUy7iM-n2WA@mail.gmail.com>
-	<51F9A917.9010509@seefeld.name> <20130803012831.GH9033@Krystal>
+From: "=?utf-8?Q?David_Lindstr=C3=B6m?=" <david.lindstrom@percepio.se>
+Subject: Looking for documentation on the old LTTng trace
+	formats, 2.3-2.6
+Date: Mon, 5 Aug 2013 14:24:34 +0200
+Message-ID: <DB5A5975D1344A6DB258A4333FD8197E__5589.72035437382$1375710497$gmane$org@DVDMANDT5>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="------------070104060409060303060204"
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-gh0-f177.google.com ([209.85.160.177])
+Received: from mail-lb0-f169.google.com ([209.85.217.169])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <stefan.seefeld@gmail.com>) id 1V6Kzg-0001CA-4m
-	for lttng-dev@lists.lttng.org; Mon, 05 Aug 2013 09:38:42 -0400
-Received: by mail-gh0-f177.google.com with SMTP id f20so1250039ghb.36
-	for <lttng-dev@lists.lttng.org>; Mon, 05 Aug 2013 06:38:34 -0700 (PDT)
-In-Reply-To: <20130803012831.GH9033@Krystal>
+	(envelope-from <david.lindstrom@percepio.se>) id 1V6Jq6-0007Fw-Tt
+	for lttng-dev@lists.lttng.org; Mon, 05 Aug 2013 08:24:43 -0400
+Received: by mail-lb0-f169.google.com with SMTP id u10so2045519lbi.28
+	for <lttng-dev@lists.lttng.org>; Mon, 05 Aug 2013 05:24:36 -0700 (PDT)
+Received: from DVDMANDT5 (h185n9.malarenergi.ias.bredband.telia.com.
+	[90.224.212.185])
+	by mx.google.com with ESMTPSA id k9sm1058524lbe.6.2013.08.05.05.24.35
+	for <lttng-dev@lists.lttng.org>
+	(version=TLSv1 cipher=RC4-SHA bits=128/128);
+	Mon, 05 Aug 2013 05:24:35 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,280 +27,17 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-This is a multi-part message in MIME format.
---------------070104060409060303060204
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: 7bit
-
-On 08/02/2013 09:28 PM, Mathieu Desnoyers wrote:
-> Jeremie is right: incorrect coding style makes the review process harder
-> for us. Once the coding style is right, we can do the functional review
-> of the patch more efficiently.
->
-> Please resubmit after coding style fixes.
-
-See attached.
-
-    Stefan
-
-
--- 
-
-      ...ich hab' noch einen Koffer in Berlin...
-
-
---------------070104060409060303060204
-Content-Type: text/x-patch;
- name="patch"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
- filename="patch"
-
-From cc39cdfbfca6d13121270eb9da3aed97be65586c Mon Sep 17 00:00:00 2001
-From: Stefan Seefeld <stefan_seefeld@mentor.com>
-Date: Wed, 31 Jul 2013 16:35:31 -0400
-Subject: [PATCH] Add tracing instrumentation for pthread mutex lock functions.
-
-Signed-off-by: Stefan Seefeld <stefan_seefeld@mentor.com>
----
- liblttng-ust-libc-wrapper/Makefile.am         | 12 +++-
- liblttng-ust-libc-wrapper/lttng-ust-pthread.c | 91 +++++++++++++++++++++++++++
- liblttng-ust-libc-wrapper/ust_pthread.h       | 76 ++++++++++++++++++++++
- 3 files changed, 178 insertions(+), 1 deletion(-)
- create mode 100644 liblttng-ust-libc-wrapper/lttng-ust-pthread.c
- create mode 100644 liblttng-ust-libc-wrapper/ust_pthread.h
-
-diff --git a/liblttng-ust-libc-wrapper/Makefile.am b/liblttng-ust-libc-wrapper/Makefile.am
-index 4fdcedb..d402d53 100644
---- a/liblttng-ust-libc-wrapper/Makefile.am
-+++ b/liblttng-ust-libc-wrapper/Makefile.am
-@@ -1,7 +1,8 @@
- AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_builddir)/include
- AM_CFLAGS = -fno-strict-aliasing
- 
--lib_LTLIBRARIES = liblttng-ust-libc-wrapper.la
-+lib_LTLIBRARIES = liblttng-ust-libc-wrapper.la \
-+  liblttng-ust-pthread-wrapper.la
- liblttng_ust_libc_wrapper_la_SOURCES = \
- 	lttng-ust-malloc.c \
- 	ust_libc.h
-@@ -9,11 +10,20 @@ liblttng_ust_libc_wrapper_la_LIBADD = \
- 	-L$(top_builddir)/liblttng-ust/.libs \
- 	-llttng-ust
- 
-+liblttng_ust_pthread_wrapper_la_SOURCES = \
-+	lttng-ust-pthread.c \
-+	ust_pthread.h
-+liblttng_ust_pthread_wrapper_la_LIBADD = \
-+	-L$(top_builddir)/liblttng-ust/.libs \
-+	-llttng-ust
-+
- if LTTNG_UST_BUILD_WITH_LIBDL
- liblttng_ust_libc_wrapper_la_LIBADD += -ldl
-+liblttng_ust_pthread_wrapper_la_LIBADD += -ldl
- endif
- if LTTNG_UST_BUILD_WITH_LIBC_DL
- liblttng_ust_libc_wrapper_la_LIBADD += -lc
-+liblttng_ust_pthread_wrapper_la_LIBADD += -lc
- endif
- 
- noinst_SCRIPTS = run
-diff --git a/liblttng-ust-libc-wrapper/lttng-ust-pthread.c b/liblttng-ust-libc-wrapper/lttng-ust-pthread.c
-new file mode 100644
-index 0000000..98ce9bf
---- /dev/null
-+++ b/liblttng-ust-libc-wrapper/lttng-ust-pthread.c
-@@ -0,0 +1,91 @@
-+/*
-+ * Copyright (C) 2013  Mentor Graphics
-+ *
-+ * This library is free software; you can redistribute it and/or
-+ * modify it under the terms of the GNU Lesser General Public
-+ * License as published by the Free Software Foundation; either
-+ * version 2.1 of the License, or (at your option) any later version.
-+ *
-+ * This library is distributed in the hope that it will be useful,
-+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
-+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-+ * Lesser General Public License for more details.
-+ *
-+ * You should have received a copy of the GNU Lesser General Public
-+ * License along with this library; if not, write to the Free Software
-+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
-+ */
-+
-+#define _GNU_SOURCE
-+#include <dlfcn.h>
-+#include <pthread.h>
-+
-+#define TRACEPOINT_DEFINE
-+#define TRACEPOINT_CREATE_PROBES
-+#include "ust_pthread.h"
-+
-+static __thread int thread_in_trace;
-+
-+int pthread_mutex_lock(pthread_mutex_t *mutex)
-+{
-+	static int (*mutex_lock)(pthread_mutex_t *);
-+	if (!mutex_lock) {
-+		mutex_lock = dlsym(RTLD_NEXT, "pthread_mutex_lock");
-+		if (!mutex_lock) {
-+			fprintf(stderr, "unable to initialize pthread wrapper library.\n");
-+			return EINVAL;
-+		}
-+	}
-+	if (!thread_in_trace) {
-+		thread_in_trace = 1;
-+		tracepoint(ust_pthread, pthread_mutex_lock_req, mutex);
-+		int retval = mutex_lock(mutex);
-+		tracepoint(ust_pthread, pthread_mutex_lock_acq, mutex, retval);
-+		thread_in_trace = 0;
-+		return retval;
-+	} else {
-+		return mutex_lock(mutex);
-+	}
-+}
-+
-+int pthread_mutex_trylock(pthread_mutex_t *mutex)
-+{
-+	static int (*mutex_trylock)(pthread_mutex_t *);
-+	if (!mutex_trylock) {
-+		mutex_trylock = dlsym(RTLD_NEXT, "pthread_mutex_trylock");
-+		if (!mutex_trylock) {
-+			fprintf(stderr, "unable to initialize pthread wrapper library.\n");
-+			return EINVAL;
-+		}
-+	}
-+	if (!thread_in_trace) {
-+		thread_in_trace = 1;
-+		int retval = mutex_trylock(mutex);
-+		tracepoint(ust_pthread, pthread_mutex_trylock, mutex, retval);
-+		thread_in_trace = 0;
-+		return retval;
-+	} else {
-+		return mutex_trylock(mutex);
-+	}
-+}
-+
-+int pthread_mutex_unlock(pthread_mutex_t *mutex)
-+{
-+	static int (*mutex_unlock)(pthread_mutex_t *);
-+	if (!mutex_unlock) {
-+		mutex_unlock = dlsym(RTLD_NEXT, "pthread_mutex_unlock");
-+		if (!mutex_unlock) {
-+			fprintf(stderr, "unable to initialize pthread wrapper library.\n");
-+			return EINVAL;
-+		}
-+	}
-+	if (!thread_in_trace) {
-+		thread_in_trace = 1;
-+		int retval = mutex_unlock(mutex);
-+		tracepoint(ust_pthread, pthread_mutex_unlock, mutex, retval);
-+		thread_in_trace = 0;
-+		return retval;
-+	} else {
-+		return mutex_unlock(mutex);
-+	}
-+}
-diff --git a/liblttng-ust-libc-wrapper/ust_pthread.h b/liblttng-ust-libc-wrapper/ust_pthread.h
-new file mode 100644
-index 0000000..86275b7
---- /dev/null
-+++ b/liblttng-ust-libc-wrapper/ust_pthread.h
-@@ -0,0 +1,76 @@
-+#undef TRACEPOINT_PROVIDER
-+#define TRACEPOINT_PROVIDER ust_pthread
-+
-+#if !defined(_TRACEPOINT_UST_PTHREAD_H) || defined(TRACEPOINT_HEADER_MULTI_READ)
-+#define _TRACEPOINT_UST_PTHREAD_H
-+
-+#ifdef __cplusplus
-+extern "C" {
-+#endif
-+
-+/*
-+ * Copyright (C) 2013  Mentor Graphics
-+ *
-+ * Permission is hereby granted, free of charge, to any person obtaining a copy
-+ * of this software and associated documentation files (the "Software"), to deal
-+ * in the Software without restriction, including without limitation the rights
-+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-+ * copies of the Software, and to permit persons to whom the Software is
-+ * furnished to do so, subject to the following conditions:
-+ *
-+ * The above copyright notice and this permission notice shall be included in
-+ * all copies or substantial portions of the Software.
-+ *
-+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-+ * SOFTWARE.
-+ */
-+
-+#include <lttng/tracepoint.h>
-+
-+TRACEPOINT_EVENT(ust_pthread, pthread_mutex_lock_req,
-+	TP_ARGS(pthread_mutex_t *, mutex),
-+	TP_FIELDS(
-+		ctf_integer_hex(unsigned long, mutex, (unsigned long) mutex)
-+	)
-+)
-+
-+TRACEPOINT_EVENT(ust_pthread, pthread_mutex_lock_acq,
-+	TP_ARGS(pthread_mutex_t *, mutex, int, status),
-+	TP_FIELDS(
-+		ctf_integer_hex(unsigned long, mutex, (unsigned long) mutex)
-+		ctf_integer(int, status, status)
-+	)
-+)
-+
-+TRACEPOINT_EVENT(ust_pthread, pthread_mutex_trylock,
-+	TP_ARGS(pthread_mutex_t *, mutex, int, status),
-+	TP_FIELDS(
-+		ctf_integer_hex(unsigned long, mutex, (unsigned long) mutex)
-+		ctf_integer(int, status, status)
-+	)
-+)
-+
-+TRACEPOINT_EVENT(ust_pthread, pthread_mutex_unlock,
-+	TP_ARGS(pthread_mutex_t *, mutex, int, status),
-+	TP_FIELDS(
-+		ctf_integer_hex(unsigned long, mutex, (unsigned long) mutex)
-+		ctf_integer(int, status, status)
-+	)
-+)
-+
-+#endif /* _TRACEPOINT_UST_PTHREAD_H */
-+
-+#undef TRACEPOINT_INCLUDE
-+#define TRACEPOINT_INCLUDE "./ust_pthread.h"
-+
-+/* This part must be outside ifdef protection */
-+#include <lttng/tracepoint-event.h>
-+
-+#ifdef __cplusplus
-+}
-+#endif
--- 
-1.8.3.1
-
-
---------------070104060409060303060204
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---------------070104060409060303060204--
+SGksCgpJ4oCZbSBsb29raW5nIGZvciBkb2N1bWVudGF0aW9uIG9uIHRoZSBvbGQvbGVnYWN5IExU
+VG5nIHRyYWNlIGZvcm1hdHMuIEJlZm9yZSAKTFRUbmcgMi54IGFuZCBDVEYgdGhhdCBpcy4gSSBm
+b3VuZCBhIFBERiB0aXRsZWQgIkxUVG5nIFRyYWNlIEJpbmFyeSBGb3JtYXQgCnYyLjMgR3VpZGVs
+aW5lcyIgd2hpY2ggZGV0YWlscyB0aGUgMi4zIGZvcm1hdCBuaWNlbHkuIEhvd2V2ZXIsIEkgbmVl
+ZCB0byAKc3VwcG9ydCB0aGUgbGF0ZXIgdmVyc2lvbnMgYXMgd2VsbCB3aGljaCBJJ20gdW5hYmxl
+IHRvIGZpbmQgYW55dGhpbmcgYXQgYWxsIAphYm91dC4gV2hhdCBjaGFuZ2VkIGJldHdlZW4gMi4z
+IGFuZCAyLjY/CgpEb2VzIHN1Y2ggZG9jdW1lbnRhdGlvbiBldmVuIGV4aXN0cz8gSWYgbm90LCB3
+aGF0IHdvdWxkIGJlIG15IGJlc3Qgb3B0aW9ucyAKdG8gZmlndXJlIGl0IG91dD8KCk12aApEYXZp
+ZCBMaW5kc3Ryw7ZtIAoKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpo
+dHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
