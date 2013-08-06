@@ -1,18 +1,17 @@
-From: =?ISO-8859-1?Q?Genevi=E8ve_Bastien?= <gbastien+lttng@versatic.net>
-Subject: Re: Trace synchronization
-Date: Tue, 06 Aug 2013 09:46:46 -0400
-Message-ID: <5200FE46.3050501__27307.7052938335$1375796871$gmane$org@versatic.net>
-References: <CAOSRKdQb3YwEHgasPWx2sHZHCbT5=EqcQSLOAE3ShQUTmqO19Q@mail.gmail.com>
-	<5200035A.6030106@voxpopuli.im>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Subject: Re: Looking for documentation on the old LTTng trace
+ formats, 2.3-2.6
+Date: Tue, 6 Aug 2013 13:56:42 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD266610A0__45482.8887632631$1375797464$gmane$org@VAL-E-01.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"; Format="flowed"
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.polymtl.ca ([132.207.4.11])
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <gbastien+lttng@versatic.net>) id 1V6hb7-0005LL-J1
-	for lttng-dev@lists.lttng.org; Tue, 06 Aug 2013 09:46:55 -0400
-In-Reply-To: <5200035A.6030106@voxpopuli.im>
+	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1V6hki-0005my-D9
+	for lttng-dev@lists.lttng.org; Tue, 06 Aug 2013 09:56:50 -0400
+Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,146 +20,80 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Sebastiano Spicuglia <spicuglia.sebastiano@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+Cc: =?iso-8859-1?Q?David_Lindstr=F6m?= <david.lindstrom@percepio.se>, "Painchaud, Frederic" <Frederic.Painchaud@drdc-rddc.gc.ca>, "Couture, Mario" <Mario.Couture@drdc-rddc.gc.ca>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Sebastiano,
+----------------------------------------------------------------------
+Message: 1
+Date: Mon, 5 Aug 2013 14:24:34 +0200
+From: "=3D?utf-8?Q?David_Lindstr=3DC3=3DB6m?=3D" <david.lindstrom@percepio.=
+se>
 
-I think the video you mention refers to lttng 0.x, where the tracepoints =
+I?m looking for documentation on the old/legacy LTTng trace formats. Before=
+ LTTng 2.x and CTF that is. I found a PDF titled "LTTng Trace Binary Format
+v2.3 Guidelines" which details the 2.3 format nicely. However, I need to su=
+pport the later versions as well which I'm unable to find anything at all a=
+bout. What changed between 2.3 and 2.6?
 
-for the network subsystem were fully integrated in lttng-module and =
+Does such documentation even exists? If not, what would be my best options =
+to figure it out?
 
-trace synchronization had been implemented in lttv.
+Mvh
+David Lindstr=F6m =
 
-For lttng 2.x, it is still work in progress.  The patch here =
+------------------------------
 
-https://git.eclipse.org/r/#/c/14056/ is fully functionnal, it has just =
+   I had to deal with this when I wrote a RapidMiner plugin that could read=
+ LTTng Trace Format 2.6 traces.  The format does not even have a name or de=
+signation, so I started calling it LTF (LTTng Trace Format).  Here is the s=
+chedule of "LTTng 1" (a.k.a. LTTng 0.x) trace proprietary formats (indicati=
+ng lower bounds):
 
-not yet been merged in Eclipse, but you may use it.
+LTF 0.4 LTTV 0.6.9 LTTng 0.4.4
+LTF 0.5      0.7.0       0.4.5
+LTF 0.6      0.8.0       0.5.0
+LTF 0.7      0.8.6       0.5.7
+LTF 0.8      0.8.80      0.6.78
+LTF 1.0      0.10.0-pre1 0.10.0-pre5
+LTF 2.0      0.11.0      0.38
+LTF 2.1      0.11.1      0.39
+LTF 2.2      0.11.4      0.47
+LTF 2.3      0.12.0      0.65
+LTF 2.4      0.12.21     0.171
+LTF 2.5      0.12.22     0.173
+LTF 2.6      0.12.30     0.191
+LTF id.      0.12.38     0.249   (last versions)
 
-As for lttng-module, the tracepoint exists in master and latest =
+For instance, LTF 2.1 was used starting with LTTng 0.39, and was replaced b=
+y LTF 2.2 with LTTng 0.47.
 
-releases, but they do not contain enough information to perform =
+As you've seen, the pre-2.3 documentation is fragmentary and very poor, the=
+ *only* true documentation being Philippe Proulx (2009), "LTTng Trace Binar=
+y Format v2.3 Guidelines".
 
-synchronization.  There are two methods to have information to =
+One key difference between formats 2.3 and 2.5 is in the block header, wher=
+e the lost_size field (indicating how many bytes of padding are at the bloc=
+k's end) became its complement, used_size (indicating how many bytes of the=
+ block are useful).
 
-synchronize traces through network:
+I have not yet identified any differences of consequence between LTF 2.5 an=
+d 2.6.  If you have samples of traces in specific legacy formats (pre-2.3 i=
+n particular), I'd love to run my LTFReader on them and see if anything pop=
+s.
 
-1-  Use the net_data_experimental branch here =
-
-http://git.dorsal.polymtl.ca/~gbastien?p=3Dlttng-modules.git;a=3Dsummary It =
-
-adds data to the existing tracepoints netif_receive_skb and =
-
-net_dev_queue.  Those patches have been submitted on the lttng-dev =
-
-mailing list and are pending review.  In the meantime, I keep them on my =
-
-personal repository and rebase them once in a while.
-
-2-  Use Francis Giraldeau's addon module here =
-
-https://github.com/giraldeau/lttng-modules/tree/addons  It puts a =
-
-dynamic probe on tcp events so that synchronization uses =
-
-inet_sock_local_in and inet_sock_local_out.  You have to manually =
-
-modprobe lttng-addons and lttng-probe-addons to have those tracepoints =
-
-available.
-
-The trace synchronization patch of the Eclipse plugin includes =
-
-synchronization using the two mentioned methods of lttng kernel traces, =
-
-but it also allows to [easily] add about any other type of =
-
-synchronization, like for ust traces, it just needs events with data =
-
-that can be uniquely matches for both traces.
-
-Here's an article about how it has been implemented in lttv and lttng =
-
-0.x. http://www.dorsal.polymtl.ca/static/publications/poirier-aos.pdf =
-
-The synchronization method is about the same now, it just uses other =
-
-events.  Newer articles on the subject have been written, but they are =
-
-not published yet, so unfortunately I cannot share them here.
-
-Cheers,
-Genevi=E8ve
-
-
-On 08/05/2013 03:56 PM, Alexandre Montplaisir wrote:
-> Hi,
->
-> The trace synchronization feature hasn't been merged in the Eclipse
-> plugin yet, although it's very close. You can look at the latest version
-> of the patch by Genevi=E8ve Bastien here: https://git.eclipse.org/r/#/c/1=
-4056/
->
-> However, we're currently considering doing a rework of how
-> experiments/analyzes are defined in the viewer, so this is why some of
-> those more advanced features are taking some time to land (we'd rather
-> get the infrastructure right first, rather than having to update every
-> single feature separately afterwards...)
-> If you are interested, you can follow this discussion at:
-> http://dev.eclipse.org/mhonarc/lists//linuxtools-dev/msg02758.html
->
-> Some more comments below,
->
-> On 13-08-03 05:44 AM, Sebastiano Spicuglia wrote:
->> Hello everyone,
->>
->> I am collecting traces using lttng from different machines.
->> I saw here http://www.youtube.com/watch?v=3DYzgRglpXdxQ
->> (around 24:06) that it is possible to trace with more details
->> the network subsystem and then synchronise different traces.
->>
->> Even the eclipse page says something about this
->> ("Integration of trace synchronization")
->> http://www.eclipse.org/linuxtools/projectPages/lttng/
->> I read the man of lttng and I look around in the eclipse
->> plugin but I didn't find anything about this two features
->> (extended network instrumentation and traces sychnronization).
->>
->> Is the synchronization somehow performed automatically
->> by the eclipse plugin
-> This is still up in the air. It should be possible to take any two
-> traces and synchronize them manually (which was the original idea).
-> However, in the new "analysis" framework, an analysis could specify
-> which types of traces it expects to have, and also specify if they have
-> to be synchronized automatically or not.
->
->> and there is no need to enable the extended
->> instrumentation of the network subsystem?
-> This I am not sure. I think the patch to lttng-modules was supposed to
-> be merged upstream at some point, but I don't know if that was done yet.
-> Can you enlighten us Genevi=E8ve?
->
->> I have the impression that in the eclipse plugin the term
->> "synchronization" is related to the the different sources of
->> events on the same machine, am I right?
-> It could be both on the same machine, or from other hosts. You may
-> obviously want to synchronize traces from other hosts, which will have
-> different clocks. But you might also want to synchronize a trace from a
-> host and from a VM running on the same machine.
->
->> Could you please me provide some resources where I can find
->> more information about the synhcronization of traces coming
->> from different machines?
-> I think a couple of articles were written on the subject. Genevi=E8ve has
-> them stashed somewhere ;)
->
->
-> Cheers,
-> Alexandre
->
->> Thank you in advance for your help
->> Regards
->> Sebastiano
->>
+Daniel U. Thibault
+Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
+ntermeasures (SPC)
+Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
+Cyber Security (MCCS)
+R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
+ Canada - Valcartier (DRDC Valcartier)
+2459 route de la Bravoure
+Qu=E9bec QC  G3J 1X5
+CANADA
+Vox : (418) 844-4000 x4245
+Fax : (418) 844-4538
+NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+Gouvernement du Canada | Government of Canada
+<http://www.valcartier.drdc-rddc.gc.ca/>
