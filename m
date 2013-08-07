@@ -1,30 +1,27 @@
 From: Stefan Seefeld <stefan_seefeld@mentor.com>
-Subject: Re: [PATCH lttng-ust] Add trace support for calloc and
- realloc.
-Date: Wed, 7 Aug 2013 11:56:46 -0400
-Message-ID: <52026E3E.9040806__36716.9002457105$1375891068$gmane$org@mentor.com>
-References: <CA+jJMxtMH5Ajgoszg8pO8dq-KsrTg9NwS2YcYOz=FbLr0ijaEQ@mail.gmail.com>
-	<alpine.LNX.2.00.1308012013380.9574@monopod.intra.ispras.ru>
-	<51FA8DAE.3070409@mentor.com>
-	<alpine.LNX.2.00.1308012045570.9574@monopod.intra.ispras.ru>
-	<alpine.LNX.2.00.1308012115300.9574@monopod.intra.ispras.ru>
-	<51FA9AD8.4010502@mentor.com>
-	<CABtfrpDg_NOi+yP5GABmjBv6G9Zj+rvTwc1OdQ1s_9DM7uzeZg@mail.gmail.com>
-	<20130803011841.GE9033@Krystal> <51FFC4DB.7080905@mentor.com>
-	<52025E03.7090201@mentor.com> <20130807155057.GB1035@Krystal>
+Subject: Re: [PATCH lttng-ust] Add trace instrumentation for
+ some pthread functions.
+Date: Wed, 7 Aug 2013 12:01:06 -0400
+Message-ID: <52026F42.4050005__21875.4506124698$1375891327$gmane$org@mentor.com>
+References: <51F9A917.9010509@seefeld.name> <20130803012831.GH9033@Krystal>
+	<51FFAAD7.3000705@seefeld.name>
+	<20130807013159.GG19407@Krystal> <5202482B.2010705@mentor.com>
+	<52025427.5080002@mentor.com> <20130807143346.GA542@Krystal>
+	<520262E8.5010106@mentor.com> <20130807151903.GA1035@Krystal>
+	<52026AD7.7000103@mentor.com> <20130807155228.GC1035@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Stefan_Seefeld@mentor.com>) id 1V766Y-0007eF-VV
-	for lttng-dev@lists.lttng.org; Wed, 07 Aug 2013 11:57:00 -0400
-Received: from svr-orw-exc-10.mgc.mentorg.com ([147.34.98.58])
+	(envelope-from <Stefan_Seefeld@mentor.com>) id 1V76Aj-0007vl-3k
+	for lttng-dev@lists.lttng.org; Wed, 07 Aug 2013 12:01:18 -0400
+Received: from svr-orw-fem-01.mgc.mentorg.com ([147.34.98.93])
 	by relay1.mentorg.com with esmtp
-	id 1V766T-0002eL-5n from Stefan_Seefeld@mentor.com
-	for lttng-dev@lists.lttng.org; Wed, 07 Aug 2013 08:56:49 -0700
-In-Reply-To: <20130807155057.GB1035@Krystal>
+	id 1V76Ad-00039O-N4 from Stefan_Seefeld@mentor.com
+	for lttng-dev@lists.lttng.org; Wed, 07 Aug 2013 09:01:07 -0700
+In-Reply-To: <20130807155228.GC1035@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -36,33 +33,25 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On 08/07/2013 11:50 AM, Mathieu Desnoyers wrote:
+On 08/07/2013 11:52 AM, Mathieu Desnoyers wrote:
 > * Stefan Seefeld (stefan_seefeld@mentor.com) wrote:
->> ...and another revision of the previous patch, now with mutex-protected
->> static_calloc.
->> For consistency I have also adjusted the ust_libc.h header to use 'void
->> *' instead of 'unsigned long' in its tracepoint declaration.
-> merged.
-
-Thanks !
-
-> I also pushed the following on top:
+>> Sorry for the incomplete patch. Here is a corrected one.
+>>
+>> 	Stefan
+> You can add my
 >
-> commit 4c3536e01190b118e0889ebb991b0eea6f98260e
-> Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> Date:   Wed Aug 7 11:48:50 2013 -0400
+> Acked-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 >
->     malloc instrumentation: remove dependency on pthread
->     
->     Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> To you patch changelog.
 >
-> I notice that memalign and posix_memalign are missing. Do you have plans
-> to add them ?
+> Can you keep it around and resubmit after we release 2.3-final in a few
+> weeks ?
 
-Yes, I can certainly do that.
+Why can't this be comitted to a devel branch, if it isn't fit to go into
+master ? (Also, does this imply that the malloc patch made it into the
+2.3 release ?)
 
     Stefan
-
 
 
 -- 
