@@ -1,17 +1,32 @@
-From: Christian Babeux <christian.babeux@efficios.com>
-Subject: LTTng project development activities August 2013
-Date: Wed, 7 Aug 2013 15:39:58 -0400
-Message-ID: <CAGDH53my-CkbrEL+2_XGxkFqRXUUJGzYRt7SxEqbTp901Vng3w__24693.8590462834$1375904458$gmane$org@mail.gmail.com>
+From: Vomlehn <vomlehnd@amazon.com>
+Subject: [PATCH lttv] Add build instructions for git tree pulls
+ and use more standard formatting
+Date: Wed, 7 Aug 2013 12:48:53 -0700
+Message-ID: <20130807194853.GA11032__46991.6777023629$1375908400$gmane$org@ub8ca3a8c12a551e580d6.ant.amazon.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-vb0-f50.google.com ([209.85.212.50])
+Received: from smtp-fw-2101.amazon.com ([72.21.196.25])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <christian.babeux@0x80.ca>) id 1V79aW-0003ZK-If
-	for lttng-dev@lists.lttng.org; Wed, 07 Aug 2013 15:40:10 -0400
-Received: by mail-vb0-f50.google.com with SMTP id x14so2280021vbb.23
-	for <lttng-dev@lists.lttng.org>; Wed, 07 Aug 2013 12:39:59 -0700 (PDT)
+	(envelope-from <prvs=924a95d67=vomlehnd@amazon.com>)
+	id 1V79jA-00046g-GP
+	for lttng-dev@lists.lttng.org; Wed, 07 Aug 2013 15:49:05 -0400
+Received: from ub8ca3a8c12a551e580d6.ant.amazon.com
+	(ub8ca3a8c12a551e580d6.ant.amazon.com [10.49.76.115])
+	by smtp-in-1002.vdc.amazon.com (8.13.8/8.13.8) with ESMTP id
+	r77Jmvk5006550
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-SHA bits=256 verify=NO)
+	for <lttng-dev@lists.lttng.org>; Wed, 7 Aug 2013 19:48:58 GMT
+Received: from ub8ca3a8c12a551e580d6.ant.amazon.com (localhost [127.0.0.1])
+	by ub8ca3a8c12a551e580d6.ant.amazon.com (8.14.4/8.14.4/Debian-2ubuntu2)
+	with ESMTP id r77Jmssc011116
+	for <lttng-dev@lists.lttng.org>; Wed, 7 Aug 2013 12:48:54 -0700
+Received: (from vomlehnd@localhost)
+	by ub8ca3a8c12a551e580d6.ant.amazon.com (8.14.4/8.14.4/Submit) id
+	r77JmrAP011113
+	for lttng-dev@lists.lttng.org; Wed, 7 Aug 2013 12:48:53 -0700
+Content-Disposition: inline
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,45 +35,40 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-SGkgbHR0bmctYWZpY2lvbmFkb3MsCgpKdWx5IDIwMTMgc3VtbWFyeToKCi0gUmVsZWFzZSBjYW5k
-aWRhdGUgZm9yIDIuMyAoRG9taW51cyBWb2Jpc2N1bSkgOiB0aGUgc25hcHNob3RzIGFuZApjcmFz
-aCBoYW5kbGVyIGFyZSB0aGUgbmV3IGZlYXR1cmVzIGZvciB0aGlzIHZlcnNpb24uIFNlZSBhbm5v
-dW5jZW1lbnQKWzFdIGZvciBtb3JlIGluZm9ybWF0aW9uLgoKLSBNaW5vciByZWxlYXNlcyBnYWxv
-cmU6CgpMVFRuZy1VU1QgMi4yLjEKTFRUbmctVVNUIDIuMS40CkxUVG5nLVVTVCAyLjAuOAoKTFRU
-bmcgbW9kdWxlcyAyLjIuMQpMVFRuZyBtb2R1bGVzIDIuMS4zCkxUVG5nIG1vZHVsZXMgMi4wLjgK
-CkxUVG5nIFRvb2xzIDIuMi4zLCAyLjIuMiwgMi4yLjEKTFRUbmcgVG9vbHMgMi4xLjIKTFRUbmcg
-VG9vbHMgMi4wLjYKCk9uLWdvaW5nIHdvcms6CgotIFdlIGFyZSBjdXJyZW50bHkgaW4gY29kZSBm
-cmVlemUgZm9yIHRoZSByZWxlYXNlIGNhbmRpZGF0ZSBwaGFzZSBvZgp2ZXJzaW9uIDIuMy4gUGxl
-YXNlIHVzZSBhbmQgdGVzdCB0aGlzIHJlbGVhc2UgY2FuZGlkYXRlIGFuZCByZXBvcnQKYnVncyBv
-biBvdXIgYnVnIHRyYWNrZXIgWzJdLiBXZSBhcmUgYWltaW5nIGZvciBhIHN0YWJsZSByZWxlYXNl
-IGF0IHRoZQplbmQgb2YgQXVndXN0LgoKLSBKdWxpZW4gRGVzZm9zc2V6IGlzIGN1cnJlbnRseSB3
-b3JraW5nIG9uIGxpdmUgc3RyZWFtaW5nLiBXaXRoIHRoaXMKZmVhdHVyZSwgYSB1c2VyIHdpbGwg
-YmUgYWJsZSB0byBpbmdlc3QgdHJhY2luZyBkYXRhIGFzIGl0IGlzIHByb2R1Y2VkCndpdGggYSBz
-dWl0YWJsZSB2aWV3ZXIgc3VjaCBhcyBCYWJlbHRyYWNlLiBUaGlzIHdpbGwgYmUgdGhlIG1haW4K
-ZmVhdHVyZSBmb3IgdGhlIHVwY29taW5nIDIuNCByZWxlYXNlLiBTdGF5IHR1bmVkIGZvciAyLjQg
-cmVsZWFzZQpjYW5kaWRhdGUgYW5ub3VuY2VtZW50cy4KCi0gSsOpcsOpbWllIEdhbGFybmVhdSBp
-cyBjdXJyZW50bHkgd29ya2luZyBvbiBhIENvbW1vbiBUcmFjZSBGb3JtYXQKKENURikgd3JpdGVy
-IGluIHRoZSBCYWJlbHRyYWNlIGNvZGViYXNlLiBXaXRoIHRoaXMgZmVhdHVyZSwgdGhlCnByb2Nl
-c3Mgb2Ygd3JpdGluZyBDVEYgY29tcGxpYW50IHRyYWNlcyB3aWxsIGJlIG11Y2ggZWFzaWVyLiBU
-aGlzCmZlYXR1cmUgd2lsbCBwcm9iYWJseSBlbmQgdXAgaW4gQmFiZWx0cmFjZSAxLjIuCgotIENo
-cmlzdGlhbiBCYWJldXggaXMgY3VycmVudGx5IHdvcmtpbmcgb24gYSBOZXh1cyB0byBDVEYgdHJh
-Y2VzIGNvbnZlcnRlci4KCi0gT3VyIEdTb0Mgc3R1ZGVudCwgWmlmZWkgVG9uZywgaXMgY3VycmVu
-dGx5IHdvcmtpbmcgb24gYWRkaW5nIGR5bmFtaWMKdHJhY2luZyBjYXBhYmlsaXRpZXMgdG8gbHR0
-bmctdG9vbHMvdXN0LiBTZWUgdGhlICJbUkZDXSBEeW5hbWljCmluc3RydW1lbnRhdGlvbiBzdXBw
-b3J0IGluIFVTVCIgWzNdIGZvciBtb3JlIGluZm9ybWF0aW9uLiBZb3UgY2FuIHNlZQp0aGUgcHJv
-Z3Jlc3Mgb24gdGhhdCBmZWF0dXJlIG9uIFppZmVpJ3MgR2l0aHViIFs0XS4KCi0gQXMgc3VnZ2Vz
-dGVkIGluIGEgcHJldmlvdXMgdGhyZWFkLCBhIGNsZWFudXAgb24gdGhlIGJ1ZyB0cmFja2VyCnNo
-b3VsZCBvY2N1ciB0aGlzIG1vbnRoLgoKVGhpcyBpcyBhIGZpcnN0IGF0dGVtcHQgYXQgYSBtb250
-aGx5IHN1bW1hcnkgZm9yIHRoZSBkZXZlbG9wbWVudAphY3Rpdml0aWVzIHN1cnJvdW5kaW5nIHRo
-ZSBMVFRuZyBwcm9qZWN0LiBMZXQgbWUga25vdyBob3cgd2UgY2FuCmZ1cnRoZXIgaW1wcm92ZSBp
-dCBvciBpZiB5b3Ugd2FudCB0byBzaG93Y2FzZSB5b3VyIExUVG5nIHJlbGF0ZWQKcHJvamVjdHMu
-CgpUaGFua3MsCgpDaHJpc3RpYW4KClsxXSAtIGh0dHBzOi8vbHR0bmcub3JnL2x0dG5nLXRvb2xj
-aGFpbi0yMzAtcmMxLW5vdy1hdmFpbGFibGUKWzJdIC0gaHR0cHM6Ly9idWdzLmx0dG5nLm9yZy9w
-cm9qZWN0cy9sdHRuZwpbM10gLSBodHRwczovL2xpc3RzLmx0dG5nLm9yZy9waXBlcm1haWwvbHR0
-bmctZGV2LzIwMTMtSnVseS8wMjA5NjQuaHRtbApbNF0gLSBodHRwczovL2dpdGh1Yi5jb20vNWtn
-CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1k
-ZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0
-dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+If the source is obtained directly from git, the file "configure" must be
+built with the autoconf tools. In addition, example shell commands are
+traditionally preceeded with a "$" instead of a "-", so this convention
+is used.
+---
+ README |   13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
+
+diff --git a/README b/README
+index 98849b3..ac28f9e 100644
+--- a/README
++++ b/README
+@@ -31,9 +31,16 @@ libc6 development librairies
+ 
+ To compile the source tree from a tarball, simply follow these steps :
+ 
+-- ./configure
+-- make
+-- make install
++  $ ./configure
++  $ make
++  $ make install
++
++To compile the source tree from a git checkout, use:
++
++  $ autoreconf
++  $ automake --add-missing --gnu
++  $ make
++  $ make install
+ 
+ After running ./configure, you can also go in specific subdirectories and
+ use make, make install.
+-- 
+David VL
