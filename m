@@ -1,20 +1,17 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-tools]
-	Fix:	LTTNG_ERR_NEED_ROOT_SESSIOND error message
-Date: Wed, 7 Aug 2013 15:30:13 -0400
-Message-ID: <20130807193013.GA7623__30132.1191400804$1375903869$gmane$org@Krystal>
-References: <1375901885-23781-1-git-send-email-jeremie.galarneau@efficios.com>
+From: Christian Babeux <christian.babeux@efficios.com>
+Subject: LTTng project development activities August 2013
+Date: Wed, 7 Aug 2013 15:39:58 -0400
+Message-ID: <CAGDH53my-CkbrEL+2_XGxkFqRXUUJGzYRt7SxEqbTp901Vng3w__24693.8590462834$1375904458$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from mail-vb0-f50.google.com ([209.85.212.50])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1V79R0-000307-LD
-	for lttng-dev@lists.lttng.org; Wed, 07 Aug 2013 15:30:20 -0400
-Content-Disposition: inline
-In-Reply-To: <1375901885-23781-1-git-send-email-jeremie.galarneau@efficios.com>
+	(envelope-from <christian.babeux@0x80.ca>) id 1V79aW-0003ZK-If
+	for lttng-dev@lists.lttng.org; Wed, 07 Aug 2013 15:40:10 -0400
+Received: by mail-vb0-f50.google.com with SMTP id x14so2280021vbb.23
+	for <lttng-dev@lists.lttng.org>; Wed, 07 Aug 2013 12:39:59 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,63 +20,45 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-* J=E9r=E9mie Galarneau (jeremie.galarneau@efficios.com) wrote:
-> A root session daemon _and_ "tracing" group user membership are required
-> to trace the kernel.
-
-Acked-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-
-David, I'll let you merge it.
-
-Thanks,
-
-Mathieu
-
-> =
-
-> Signed-off-by: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
-> ---
->  src/common/error.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> =
-
-> diff --git a/src/common/error.c b/src/common/error.c
-> index acfd6c6..42ed06f 100644
-> --- a/src/common/error.c
-> +++ b/src/common/error.c
-> @@ -82,7 +82,7 @@ static const char *error_string_array[] =3D {
->  	[ ERROR_INDEX(LTTNG_ERR_UST_EVENT_NOT_FOUND)] =3D "UST event not found",
->  	[ ERROR_INDEX(LTTNG_ERR_UST_CONTEXT_EXIST)] =3D "UST context already ex=
-ist",
->  	[ ERROR_INDEX(LTTNG_ERR_UST_CONTEXT_INVAL)] =3D "UST invalid context",
-> -	[ ERROR_INDEX(LTTNG_ERR_NEED_ROOT_SESSIOND) ] =3D "Tracing the kernel r=
-equires a root lttng-sessiond daemon or \"tracing\" group user membership",
-> +	[ ERROR_INDEX(LTTNG_ERR_NEED_ROOT_SESSIOND) ] =3D "Tracing the kernel r=
-equires a root lttng-sessiond daemon and \"tracing\" group user membership",
->  	[ ERROR_INDEX(LTTNG_ERR_TRACE_ALREADY_STARTED) ] =3D "Tracing already s=
-tarted",
->  	[ ERROR_INDEX(LTTNG_ERR_TRACE_ALREADY_STOPPED) ] =3D "Tracing already s=
-topped",
->  	[ ERROR_INDEX(LTTNG_ERR_KERN_EVENT_ENOSYS) ] =3D "Kernel event type not=
- supported",
-> -- =
-
-> 1.8.3.4
-> =
-
-> =
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- =
-
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+SGkgbHR0bmctYWZpY2lvbmFkb3MsCgpKdWx5IDIwMTMgc3VtbWFyeToKCi0gUmVsZWFzZSBjYW5k
+aWRhdGUgZm9yIDIuMyAoRG9taW51cyBWb2Jpc2N1bSkgOiB0aGUgc25hcHNob3RzIGFuZApjcmFz
+aCBoYW5kbGVyIGFyZSB0aGUgbmV3IGZlYXR1cmVzIGZvciB0aGlzIHZlcnNpb24uIFNlZSBhbm5v
+dW5jZW1lbnQKWzFdIGZvciBtb3JlIGluZm9ybWF0aW9uLgoKLSBNaW5vciByZWxlYXNlcyBnYWxv
+cmU6CgpMVFRuZy1VU1QgMi4yLjEKTFRUbmctVVNUIDIuMS40CkxUVG5nLVVTVCAyLjAuOAoKTFRU
+bmcgbW9kdWxlcyAyLjIuMQpMVFRuZyBtb2R1bGVzIDIuMS4zCkxUVG5nIG1vZHVsZXMgMi4wLjgK
+CkxUVG5nIFRvb2xzIDIuMi4zLCAyLjIuMiwgMi4yLjEKTFRUbmcgVG9vbHMgMi4xLjIKTFRUbmcg
+VG9vbHMgMi4wLjYKCk9uLWdvaW5nIHdvcms6CgotIFdlIGFyZSBjdXJyZW50bHkgaW4gY29kZSBm
+cmVlemUgZm9yIHRoZSByZWxlYXNlIGNhbmRpZGF0ZSBwaGFzZSBvZgp2ZXJzaW9uIDIuMy4gUGxl
+YXNlIHVzZSBhbmQgdGVzdCB0aGlzIHJlbGVhc2UgY2FuZGlkYXRlIGFuZCByZXBvcnQKYnVncyBv
+biBvdXIgYnVnIHRyYWNrZXIgWzJdLiBXZSBhcmUgYWltaW5nIGZvciBhIHN0YWJsZSByZWxlYXNl
+IGF0IHRoZQplbmQgb2YgQXVndXN0LgoKLSBKdWxpZW4gRGVzZm9zc2V6IGlzIGN1cnJlbnRseSB3
+b3JraW5nIG9uIGxpdmUgc3RyZWFtaW5nLiBXaXRoIHRoaXMKZmVhdHVyZSwgYSB1c2VyIHdpbGwg
+YmUgYWJsZSB0byBpbmdlc3QgdHJhY2luZyBkYXRhIGFzIGl0IGlzIHByb2R1Y2VkCndpdGggYSBz
+dWl0YWJsZSB2aWV3ZXIgc3VjaCBhcyBCYWJlbHRyYWNlLiBUaGlzIHdpbGwgYmUgdGhlIG1haW4K
+ZmVhdHVyZSBmb3IgdGhlIHVwY29taW5nIDIuNCByZWxlYXNlLiBTdGF5IHR1bmVkIGZvciAyLjQg
+cmVsZWFzZQpjYW5kaWRhdGUgYW5ub3VuY2VtZW50cy4KCi0gSsOpcsOpbWllIEdhbGFybmVhdSBp
+cyBjdXJyZW50bHkgd29ya2luZyBvbiBhIENvbW1vbiBUcmFjZSBGb3JtYXQKKENURikgd3JpdGVy
+IGluIHRoZSBCYWJlbHRyYWNlIGNvZGViYXNlLiBXaXRoIHRoaXMgZmVhdHVyZSwgdGhlCnByb2Nl
+c3Mgb2Ygd3JpdGluZyBDVEYgY29tcGxpYW50IHRyYWNlcyB3aWxsIGJlIG11Y2ggZWFzaWVyLiBU
+aGlzCmZlYXR1cmUgd2lsbCBwcm9iYWJseSBlbmQgdXAgaW4gQmFiZWx0cmFjZSAxLjIuCgotIENo
+cmlzdGlhbiBCYWJldXggaXMgY3VycmVudGx5IHdvcmtpbmcgb24gYSBOZXh1cyB0byBDVEYgdHJh
+Y2VzIGNvbnZlcnRlci4KCi0gT3VyIEdTb0Mgc3R1ZGVudCwgWmlmZWkgVG9uZywgaXMgY3VycmVu
+dGx5IHdvcmtpbmcgb24gYWRkaW5nIGR5bmFtaWMKdHJhY2luZyBjYXBhYmlsaXRpZXMgdG8gbHR0
+bmctdG9vbHMvdXN0LiBTZWUgdGhlICJbUkZDXSBEeW5hbWljCmluc3RydW1lbnRhdGlvbiBzdXBw
+b3J0IGluIFVTVCIgWzNdIGZvciBtb3JlIGluZm9ybWF0aW9uLiBZb3UgY2FuIHNlZQp0aGUgcHJv
+Z3Jlc3Mgb24gdGhhdCBmZWF0dXJlIG9uIFppZmVpJ3MgR2l0aHViIFs0XS4KCi0gQXMgc3VnZ2Vz
+dGVkIGluIGEgcHJldmlvdXMgdGhyZWFkLCBhIGNsZWFudXAgb24gdGhlIGJ1ZyB0cmFja2VyCnNo
+b3VsZCBvY2N1ciB0aGlzIG1vbnRoLgoKVGhpcyBpcyBhIGZpcnN0IGF0dGVtcHQgYXQgYSBtb250
+aGx5IHN1bW1hcnkgZm9yIHRoZSBkZXZlbG9wbWVudAphY3Rpdml0aWVzIHN1cnJvdW5kaW5nIHRo
+ZSBMVFRuZyBwcm9qZWN0LiBMZXQgbWUga25vdyBob3cgd2UgY2FuCmZ1cnRoZXIgaW1wcm92ZSBp
+dCBvciBpZiB5b3Ugd2FudCB0byBzaG93Y2FzZSB5b3VyIExUVG5nIHJlbGF0ZWQKcHJvamVjdHMu
+CgpUaGFua3MsCgpDaHJpc3RpYW4KClsxXSAtIGh0dHBzOi8vbHR0bmcub3JnL2x0dG5nLXRvb2xj
+aGFpbi0yMzAtcmMxLW5vdy1hdmFpbGFibGUKWzJdIC0gaHR0cHM6Ly9idWdzLmx0dG5nLm9yZy9w
+cm9qZWN0cy9sdHRuZwpbM10gLSBodHRwczovL2xpc3RzLmx0dG5nLm9yZy9waXBlcm1haWwvbHR0
+bmctZGV2LzIwMTMtSnVseS8wMjA5NjQuaHRtbApbNF0gLSBodHRwczovL2dpdGh1Yi5jb20vNWtn
+CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1k
+ZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0
+dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
