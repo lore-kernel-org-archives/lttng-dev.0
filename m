@@ -1,27 +1,19 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-ust] Add trace support for calloc
-	and	realloc.
-Date: Wed, 7 Aug 2013 14:35:43 -0400
-Message-ID: <20130807183543.GA2517__12829.7005584047$1375900602$gmane$org@Krystal>
-References: <51FA8DAE.3070409@mentor.com>
-	<alpine.LNX.2.00.1308012045570.9574@monopod.intra.ispras.ru>
-	<alpine.LNX.2.00.1308012115300.9574@monopod.intra.ispras.ru>
-	<51FA9AD8.4010502@mentor.com>
-	<CABtfrpDg_NOi+yP5GABmjBv6G9Zj+rvTwc1OdQ1s_9DM7uzeZg@mail.gmail.com>
-	<20130803011841.GE9033@Krystal> <51FFC4DB.7080905@mentor.com>
-	<52025E03.7090201@mentor.com> <20130807155057.GB1035@Krystal>
-	<52027EE6.60704@mentor.com>
+From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
+	<jeremie.galarneau@efficios.com>
+Subject: [PATCH lttng-tools] Fix: LTTNG_ERR_NEED_ROOT_SESSIOND
+	error message
+Date: Wed,  7 Aug 2013 14:58:05 -0400
+Message-ID: <1375901885-23781-1-git-send-email-jeremie.galarneau__42220.5987423242$1375901947$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from mail-qc0-f176.google.com ([209.85.216.176])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1V78aG-0008G8-Tb
-	for lttng-dev@lists.lttng.org; Wed, 07 Aug 2013 14:35:50 -0400
-Content-Disposition: inline
-In-Reply-To: <52027EE6.60704@mentor.com>
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1V78w1-00017W-Oy
+	for lttng-dev@lists.lttng.org; Wed, 07 Aug 2013 14:58:19 -0400
+Received: by mail-qc0-f176.google.com with SMTP id u12so1091383qcx.7
+	for <lttng-dev@lists.lttng.org>; Wed, 07 Aug 2013 11:58:08 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -30,125 +22,30 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Stefan Seefeld <stefan_seefeld@mentor.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Stefan Seefeld (stefan_seefeld@mentor.com) wrote:
-> On 08/07/2013 11:50 AM, Mathieu Desnoyers wrote:
-> 
-> > I notice that memalign and posix_memalign are missing. Do you have plans
-> > to add them ?
-> 
-> Here is a patch adding those two.
-
-merged, thanks!
-
-By the way, we usually don't put "dots" at the end of the patch title.
-No biggie, I removed it from the changelog.
-
-Thanks,
-
-Mathieu
-
-> 
-> 	Stefan
-> 
-> 
-> -- 
-> Stefan Seefeld
-> CodeSourcery / Mentor Graphics
-> http://www.mentor.com/embedded-software/
-
-> From 10b4f91ea710b484a7e31fca68f55a2b58d026cd Mon Sep 17 00:00:00 2001
-> From: Stefan Seefeld <stefan_seefeld@mentor.com>
-> Date: Wed, 7 Aug 2013 13:05:34 -0400
-> Subject: [PATCH] Add trace support for memalign and posix_memalign.
-> 
-> Signed-off-by: Stefan Seefeld <stefan_seefeld@mentor.com>
-> ---
->  liblttng-ust-libc-wrapper/lttng-ust-malloc.c | 34 ++++++++++++++++++++++++++++
->  liblttng-ust-libc-wrapper/ust_libc.h         | 19 ++++++++++++++++
->  2 files changed, 53 insertions(+)
-> 
-> diff --git a/liblttng-ust-libc-wrapper/lttng-ust-malloc.c b/liblttng-ust-libc-wrapper/lttng-ust-malloc.c
-> index 4fe8fa9..33ed18b 100644
-> --- a/liblttng-ust-libc-wrapper/lttng-ust-malloc.c
-> +++ b/liblttng-ust-libc-wrapper/lttng-ust-malloc.c
-> @@ -133,3 +133,37 @@ void *realloc(void *ptr, size_t size)
->  	tracepoint(ust_libc, realloc, ptr, size, retval);
->  	return retval;
->  }
-> +
-> +void *memalign(size_t alignment, size_t size)
-> +{
-> +	static void *(*plibc_memalign)(size_t alignment, size_t size);
-> +	void *retval;
-> +
-> +	if (plibc_memalign == NULL) {
-> +		plibc_memalign = dlsym(RTLD_NEXT, "memalign");
-> +		if (plibc_memalign == NULL) {
-> +			fprintf(stderr, "memalignwrap: unable to find memalign\n");
-> +			return NULL;
-> +		}
-> +	}
-> +	retval = plibc_memalign(alignment, size);
-> +	tracepoint(ust_libc, memalign, alignment, size, retval);
-> +	return retval;
-> +}
-> +
-> +int posix_memalign(void **memptr, size_t alignment, size_t size)
-> +{
-> +	static int(*plibc_posix_memalign)(void **memptr, size_t alignment, size_t size);
-> +	int retval;
-> +
-> +	if (plibc_posix_memalign == NULL) {
-> +		plibc_posix_memalign = dlsym(RTLD_NEXT, "posix_memalign");
-> +		if (plibc_posix_memalign == NULL) {
-> +			fprintf(stderr, "posix_memalignwrap: unable to find posix_memalign\n");
-> +			return ENOMEM;
-> +		}
-> +	}
-> +	retval = plibc_posix_memalign(memptr, alignment, size);
-> +	tracepoint(ust_libc, posix_memalign, *memptr, alignment, size, retval);
-> +	return retval;
-> +}
-> diff --git a/liblttng-ust-libc-wrapper/ust_libc.h b/liblttng-ust-libc-wrapper/ust_libc.h
-> index d2096a3..a8ff9c6 100644
-> --- a/liblttng-ust-libc-wrapper/ust_libc.h
-> +++ b/liblttng-ust-libc-wrapper/ust_libc.h
-> @@ -65,6 +65,25 @@ TRACEPOINT_EVENT(ust_libc, realloc,
->  	)
->  )
->  
-> +TRACEPOINT_EVENT(ust_libc, memalign,
-> +	TP_ARGS(size_t, alignment, size_t, size, void *, ptr),
-> +	TP_FIELDS(
-> +		ctf_integer(size_t, alignment, alignment)
-> +		ctf_integer(size_t, size, size)
-> +		ctf_integer_hex(void *, ptr, ptr)
-> +	)
-> +)
-> +
-> +TRACEPOINT_EVENT(ust_libc, posix_memalign,
-> +	TP_ARGS(void *, out_ptr, size_t, alignment, size_t, size, int, result),
-> +	TP_FIELDS(
-> +		ctf_integer_hex(void *, out_ptr, out_ptr)
-> +		ctf_integer(size_t, alignment, alignment)
-> +		ctf_integer(size_t, size, size)
-> +		ctf_integer(int, result, result)
-> +	)
-> +)
-> +
->  #endif /* _TRACEPOINT_UST_LIBC_H */
->  
->  #undef TRACEPOINT_INCLUDE
-> -- 
-> 1.8.3.1
-> 
-
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+QSByb290IHNlc3Npb24gZGFlbW9uIF9hbmRfICJ0cmFjaW5nIiBncm91cCB1c2VyIG1lbWJlcnNo
+aXAgYXJlIHJlcXVpcmVkCnRvIHRyYWNlIHRoZSBrZXJuZWwuCgpTaWduZWQtb2ZmLWJ5OiBKw6ly
+w6ltaWUgR2FsYXJuZWF1IDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20+Ci0tLQogc3Jj
+L2NvbW1vbi9lcnJvci5jIHwgMiArLQogMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAx
+IGRlbGV0aW9uKC0pCgpkaWZmIC0tZ2l0IGEvc3JjL2NvbW1vbi9lcnJvci5jIGIvc3JjL2NvbW1v
+bi9lcnJvci5jCmluZGV4IGFjZmQ2YzYuLjQyZWQwNmYgMTAwNjQ0Ci0tLSBhL3NyYy9jb21tb24v
+ZXJyb3IuYworKysgYi9zcmMvY29tbW9uL2Vycm9yLmMKQEAgLTgyLDcgKzgyLDcgQEAgc3RhdGlj
+IGNvbnN0IGNoYXIgKmVycm9yX3N0cmluZ19hcnJheVtdID0gewogCVsgRVJST1JfSU5ERVgoTFRU
+TkdfRVJSX1VTVF9FVkVOVF9OT1RfRk9VTkQpXSA9ICJVU1QgZXZlbnQgbm90IGZvdW5kIiwKIAlb
+IEVSUk9SX0lOREVYKExUVE5HX0VSUl9VU1RfQ09OVEVYVF9FWElTVCldID0gIlVTVCBjb250ZXh0
+IGFscmVhZHkgZXhpc3QiLAogCVsgRVJST1JfSU5ERVgoTFRUTkdfRVJSX1VTVF9DT05URVhUX0lO
+VkFMKV0gPSAiVVNUIGludmFsaWQgY29udGV4dCIsCi0JWyBFUlJPUl9JTkRFWChMVFROR19FUlJf
+TkVFRF9ST09UX1NFU1NJT05EKSBdID0gIlRyYWNpbmcgdGhlIGtlcm5lbCByZXF1aXJlcyBhIHJv
+b3QgbHR0bmctc2Vzc2lvbmQgZGFlbW9uIG9yIFwidHJhY2luZ1wiIGdyb3VwIHVzZXIgbWVtYmVy
+c2hpcCIsCisJWyBFUlJPUl9JTkRFWChMVFROR19FUlJfTkVFRF9ST09UX1NFU1NJT05EKSBdID0g
+IlRyYWNpbmcgdGhlIGtlcm5lbCByZXF1aXJlcyBhIHJvb3QgbHR0bmctc2Vzc2lvbmQgZGFlbW9u
+IGFuZCBcInRyYWNpbmdcIiBncm91cCB1c2VyIG1lbWJlcnNoaXAiLAogCVsgRVJST1JfSU5ERVgo
+TFRUTkdfRVJSX1RSQUNFX0FMUkVBRFlfU1RBUlRFRCkgXSA9ICJUcmFjaW5nIGFscmVhZHkgc3Rh
+cnRlZCIsCiAJWyBFUlJPUl9JTkRFWChMVFROR19FUlJfVFJBQ0VfQUxSRUFEWV9TVE9QUEVEKSBd
+ID0gIlRyYWNpbmcgYWxyZWFkeSBzdG9wcGVkIiwKIAlbIEVSUk9SX0lOREVYKExUVE5HX0VSUl9L
+RVJOX0VWRU5UX0VOT1NZUykgXSA9ICJLZXJuZWwgZXZlbnQgdHlwZSBub3Qgc3VwcG9ydGVkIiwK
+LS0gCjEuOC4zLjQKCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0
+cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
