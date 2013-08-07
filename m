@@ -1,31 +1,25 @@
-From: Stefan Seefeld <stefan@seefeld.name>
-Subject: Re: [PATCH lttng-ust] Add trace instrumentation
- for	some pthread functions.
-Date: Wed, 07 Aug 2013 12:38:58 -0400
-Message-ID: <52027822.7000300__28799.9902423055$1375893602$gmane$org@seefeld.name>
-References: <5202482B.2010705@mentor.com> <52025427.5080002@mentor.com>
-	<20130807143346.GA542@Krystal> <520262E8.5010106@mentor.com>
-	<20130807151903.GA1035@Krystal> <52026AD7.7000103@mentor.com>
-	<20130807155228.GC1035@Krystal> <52026F42.4050005@mentor.com>
-	<20130807161241.GB1336@Krystal> <520274F3.3080505@mentor.com>
-	<20130807163153.GA2194@Krystal>
+From: Stefan Seefeld <stefan_seefeld@mentor.com>
+Subject: Re: [PATCH lttng-ust] Add trace support for calloc and
+ realloc.
+Date: Wed, 7 Aug 2013 13:07:50 -0400
+Message-ID: <52027EE6.60704__11038.0145641559$1375895475$gmane$org@mentor.com>
+References: <CA+jJMxtMH5Ajgoszg8pO8dq-KsrTg9NwS2YcYOz=FbLr0ijaEQ@mail.gmail.com>
+	<alpine.LNX.2.00.1308012013380.9574@monopod.intra.ispras.ru>
+	<51FA8DAE.3070409@mentor.com>
+	<alpine.LNX.2.00.1308012045570.9574@monopod.intra.ispras.ru>
+	<alpine.LNX.2.00.1308012115300.9574@monopod.intra.ispras.ru>
+	<51FA9AD8.4010502@mentor.com>
+	<CABtfrpDg_NOi+yP5GABmjBv6G9Zj+rvTwc1OdQ1s_9DM7uzeZg@mail.gmail.com>
+	<20130803011841.GE9033@Krystal> <51FFC4DB.7080905@mentor.com>
+	<52025E03.7090201@mentor.com> <20130807155057.GB1035@Krystal>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="------------030901080303030103080006"
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-pb0-f46.google.com ([209.85.160.46])
+Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <stefan.seefeld@gmail.com>) id 1V76lQ-0001fQ-5H
-	for lttng-dev@lists.lttng.org; Wed, 07 Aug 2013 12:39:16 -0400
-Received: by mail-pb0-f46.google.com with SMTP id rq2so2097801pbb.5
-	for <lttng-dev@lists.lttng.org>; Wed, 07 Aug 2013 09:39:02 -0700 (PDT)
-Received: from [192.168.2.10] (bas2-montreal29-1279583707.dsl.bell.ca.
-	[76.68.229.219])
-	by mx.google.com with ESMTPSA id a5sm9175683pbw.4.2013.08.07.09.39.00
-	for <lttng-dev@lists.lttng.org>
-	(version=TLSv1 cipher=RC4-SHA bits=128/128);
-	Wed, 07 Aug 2013 09:39:01 -0700 (PDT)
-In-Reply-To: <20130807163153.GA2194@Krystal>
+	(envelope-from <Stefan_Seefeld@mentor.com>) id 1V77DK-0003JP-IQ
+	for lttng-dev@lists.lttng.org; Wed, 07 Aug 2013 13:08:04 -0400
+In-Reply-To: <20130807155057.GB1035@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -34,41 +28,130 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On 08/07/2013 12:31 PM, Mathieu Desnoyers wrote:
-> * Stefan Seefeld (stefan_seefeld@mentor.com) wrote:
->> On 08/07/2013 12:12 PM, Mathieu Desnoyers wrote:
->>
->>> Please note that as soon as you get my acked-by, you can consider this
->>> patch accepted. It's just that we don't have the staging branches to
->>> keep them around, nor the manpower to maintain a 3rd branch in parallel
->>> with the current stable+rc.
->>>
->>> Thoughts ?
->> I understand if it makes things easier for you as maintainer if you ask
->> contributors to do the rebase before their (approved) patches are to be
->> merged. But your wording seemed to suggest that I should resend the
->> actual patch, not regenerate it after rebasing to a future master, which
->> confused me as in that case I'd need to keep around a free-floating
->> patch that is neither version-controlled nor archived.
-> I'm OK with contributors rebasing a patch before resubmission, of
-> course. However, if the rebase required any change at all to the patch,
-> the "acked-by" tags should be removed, and the fact that it's been
-> accepted and then rebased (with changes) should be pointed out in the
-> changelog, ideally with a quick summary of the changes required for the
-> rebase. This should make the merge process quick and straightforward,
-> without risks of us missing an issue introduced by the rebase.
->
-> Does it make sense ?
+--------------030901080303030103080006
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 7bit
 
-OK. You are right, the patch may not actually require any change, given
-that it's (mostly) new files.
+On 08/07/2013 11:50 AM, Mathieu Desnoyers wrote:
 
-Thanks,
-    Stefan
+> I notice that memalign and posix_memalign are missing. Do you have plans
+> to add them ?
+
+Here is a patch adding those two.
+
+	Stefan
+
 
 -- 
+Stefan Seefeld
+CodeSourcery / Mentor Graphics
+http://www.mentor.com/embedded-software/
 
-      ...ich hab' noch einen Koffer in Berlin...
+--------------030901080303030103080006
+Content-Type: text/x-patch; name="patch"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename="patch"
+
+From 10b4f91ea710b484a7e31fca68f55a2b58d026cd Mon Sep 17 00:00:00 2001
+From: Stefan Seefeld <stefan_seefeld@mentor.com>
+Date: Wed, 7 Aug 2013 13:05:34 -0400
+Subject: [PATCH] Add trace support for memalign and posix_memalign.
+
+Signed-off-by: Stefan Seefeld <stefan_seefeld@mentor.com>
+---
+ liblttng-ust-libc-wrapper/lttng-ust-malloc.c | 34 ++++++++++++++++++++++++++++
+ liblttng-ust-libc-wrapper/ust_libc.h         | 19 ++++++++++++++++
+ 2 files changed, 53 insertions(+)
+
+diff --git a/liblttng-ust-libc-wrapper/lttng-ust-malloc.c b/liblttng-ust-libc-wrapper/lttng-ust-malloc.c
+index 4fe8fa9..33ed18b 100644
+--- a/liblttng-ust-libc-wrapper/lttng-ust-malloc.c
++++ b/liblttng-ust-libc-wrapper/lttng-ust-malloc.c
+@@ -133,3 +133,37 @@ void *realloc(void *ptr, size_t size)
+ 	tracepoint(ust_libc, realloc, ptr, size, retval);
+ 	return retval;
+ }
++
++void *memalign(size_t alignment, size_t size)
++{
++	static void *(*plibc_memalign)(size_t alignment, size_t size);
++	void *retval;
++
++	if (plibc_memalign == NULL) {
++		plibc_memalign = dlsym(RTLD_NEXT, "memalign");
++		if (plibc_memalign == NULL) {
++			fprintf(stderr, "memalignwrap: unable to find memalign\n");
++			return NULL;
++		}
++	}
++	retval = plibc_memalign(alignment, size);
++	tracepoint(ust_libc, memalign, alignment, size, retval);
++	return retval;
++}
++
++int posix_memalign(void **memptr, size_t alignment, size_t size)
++{
++	static int(*plibc_posix_memalign)(void **memptr, size_t alignment, size_t size);
++	int retval;
++
++	if (plibc_posix_memalign == NULL) {
++		plibc_posix_memalign = dlsym(RTLD_NEXT, "posix_memalign");
++		if (plibc_posix_memalign == NULL) {
++			fprintf(stderr, "posix_memalignwrap: unable to find posix_memalign\n");
++			return ENOMEM;
++		}
++	}
++	retval = plibc_posix_memalign(memptr, alignment, size);
++	tracepoint(ust_libc, posix_memalign, *memptr, alignment, size, retval);
++	return retval;
++}
+diff --git a/liblttng-ust-libc-wrapper/ust_libc.h b/liblttng-ust-libc-wrapper/ust_libc.h
+index d2096a3..a8ff9c6 100644
+--- a/liblttng-ust-libc-wrapper/ust_libc.h
++++ b/liblttng-ust-libc-wrapper/ust_libc.h
+@@ -65,6 +65,25 @@ TRACEPOINT_EVENT(ust_libc, realloc,
+ 	)
+ )
+ 
++TRACEPOINT_EVENT(ust_libc, memalign,
++	TP_ARGS(size_t, alignment, size_t, size, void *, ptr),
++	TP_FIELDS(
++		ctf_integer(size_t, alignment, alignment)
++		ctf_integer(size_t, size, size)
++		ctf_integer_hex(void *, ptr, ptr)
++	)
++)
++
++TRACEPOINT_EVENT(ust_libc, posix_memalign,
++	TP_ARGS(void *, out_ptr, size_t, alignment, size_t, size, int, result),
++	TP_FIELDS(
++		ctf_integer_hex(void *, out_ptr, out_ptr)
++		ctf_integer(size_t, alignment, alignment)
++		ctf_integer(size_t, size, size)
++		ctf_integer(int, result, result)
++	)
++)
++
+ #endif /* _TRACEPOINT_UST_LIBC_H */
+ 
+ #undef TRACEPOINT_INCLUDE
+-- 
+1.8.3.1
+
+
+--------------030901080303030103080006
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--------------030901080303030103080006--
