@@ -1,23 +1,28 @@
-From: Stefan Seefeld <stefan_seefeld@mentor.com>
-Subject: Re: [PATCH lttng-ust] Add trace instrumentation for
- some pthread functions.
-Date: Wed, 7 Aug 2013 11:42:15 -0400
-Message-ID: <52026AD7.7000103__30473.2176512063$1375890206$gmane$org@mentor.com>
-References: <51F97688.30704@mentor.com>
-	<CA+jJMxsoH8Rz6fwZJOPnG-4xvB2w8GO5eqi0JDtHUy7iM-n2WA@mail.gmail.com>
-	<51F9A917.9010509@seefeld.name> <20130803012831.GH9033@Krystal>
-	<51FFAAD7.3000705@seefeld.name>
-	<20130807013159.GG19407@Krystal> <5202482B.2010705@mentor.com>
-	<52025427.5080002@mentor.com> <20130807143346.GA542@Krystal>
-	<520262E8.5010106@mentor.com> <20130807151903.GA1035@Krystal>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH lttng-ust] Add trace support for calloc
+	and	realloc.
+Date: Wed, 7 Aug 2013 11:50:57 -0400
+Message-ID: <20130807155057.GB1035__29101.7420044684$1375890715$gmane$org@Krystal>
+References: <CA+jJMxtMH5Ajgoszg8pO8dq-KsrTg9NwS2YcYOz=FbLr0ijaEQ@mail.gmail.com>
+	<alpine.LNX.2.00.1308012013380.9574@monopod.intra.ispras.ru>
+	<51FA8DAE.3070409@mentor.com>
+	<alpine.LNX.2.00.1308012045570.9574@monopod.intra.ispras.ru>
+	<alpine.LNX.2.00.1308012115300.9574@monopod.intra.ispras.ru>
+	<51FA9AD8.4010502@mentor.com>
+	<CABtfrpDg_NOi+yP5GABmjBv6G9Zj+rvTwc1OdQ1s_9DM7uzeZg@mail.gmail.com>
+	<20130803011841.GE9033@Krystal> <51FFC4DB.7080905@mentor.com>
+	<52025E03.7090201@mentor.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="------------030805020505070509000205"
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from relay1.mentorg.com ([192.94.38.131])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Stefan_Seefeld@mentor.com>) id 1V75sU-0006nM-Dj
-	for lttng-dev@lists.lttng.org; Wed, 07 Aug 2013 11:42:29 -0400
-In-Reply-To: <20130807151903.GA1035@Krystal>
+	(envelope-from <compudj@mail.openrapids.net>) id 1V760p-0007Hd-7p
+	for lttng-dev@lists.lttng.org; Wed, 07 Aug 2013 11:51:04 -0400
+Content-Disposition: inline
+In-Reply-To: <52025E03.7090201@mentor.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -26,286 +31,208 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: Stefan Seefeld <stefan_seefeld@mentor.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---------------030805020505070509000205
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 7bit
+* Stefan Seefeld (stefan_seefeld@mentor.com) wrote:
+> ...and another revision of the previous patch, now with mutex-protected
+> static_calloc.
+> For consistency I have also adjusted the ust_libc.h header to use 'void
+> *' instead of 'unsigned long' in its tracepoint declaration.
 
-Sorry for the incomplete patch. Here is a corrected one.
+merged.
 
-	Stefan
+I also pushed the following on top:
+
+commit 4c3536e01190b118e0889ebb991b0eea6f98260e
+Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Date:   Wed Aug 7 11:48:50 2013 -0400
+
+    malloc instrumentation: remove dependency on pthread
+    
+    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+
+I notice that memalign and posix_memalign are missing. Do you have plans
+to add them ?
+
+Thanks,
+
+Mathieu
+
+> 
+>     Stefan
+> 
+> 
+> -- 
+> Stefan Seefeld
+> CodeSourcery / Mentor Graphics
+> http://www.mentor.com/embedded-software/
+> 
+
+> From abbfdd44590876427a3fac463e8743afa7ceb149 Mon Sep 17 00:00:00 2001
+> From: Stefan Seefeld <stefan_seefeld@mentor.com>
+> Date: Sat, 27 Jul 2013 01:10:23 -0400
+> Subject: [PATCH] Add trace support for calloc and realloc.
+> 
+> Signed-off-by: Stefan Seefeld <stefan_seefeld@mentor.com>
+> ---
+>  liblttng-ust-libc-wrapper/lttng-ust-malloc.c | 73 +++++++++++++++++++++++++++-
+>  liblttng-ust-libc-wrapper/ust_libc.h         | 22 ++++++++-
+>  2 files changed, 91 insertions(+), 4 deletions(-)
+> 
+> diff --git a/liblttng-ust-libc-wrapper/lttng-ust-malloc.c b/liblttng-ust-libc-wrapper/lttng-ust-malloc.c
+> index 3212ff0..c7f747b 100644
+> --- a/liblttng-ust-libc-wrapper/lttng-ust-malloc.c
+> +++ b/liblttng-ust-libc-wrapper/lttng-ust-malloc.c
+> @@ -21,14 +21,35 @@
+>  #include <dlfcn.h>
+>  #include <sys/types.h>
+>  #include <stdio.h>
+> +#include <pthread.h>
+>  
+>  #define TRACEPOINT_DEFINE
+>  #define TRACEPOINT_CREATE_PROBES
+>  #include "ust_libc.h"
+>  
+> +#define STATIC_CALLOC_LEN 4096
+> +static char static_calloc_buf[STATIC_CALLOC_LEN];
+> +static size_t static_calloc_buf_offset;
+> +static pthread_mutex_t static_calloc_mutex = PTHREAD_MUTEX_INITIALIZER;
+> +
+> +static void *static_calloc(size_t nmemb, size_t size)
+> +{
+> +	size_t prev_offset;
+> +
+> +	pthread_mutex_lock(&static_calloc_mutex);
+> +	if (nmemb * size > sizeof(static_calloc_buf) - static_calloc_buf_offset) {
+> +		pthread_mutex_unlock(&static_calloc_mutex);
+> +		return NULL;
+> +	}
+> +	prev_offset = static_calloc_buf_offset;
+> +	static_calloc_buf_offset += nmemb * size;
+> +	pthread_mutex_unlock(&static_calloc_mutex);
+> +	return &static_calloc_buf[prev_offset];
+> +}
+> +
+>  void *malloc(size_t size)
+>  {
+> -	static void *(*plibc_malloc)(size_t size) = NULL;
+> +	static void *(*plibc_malloc)(size_t size);
+>  	void *retval;
+>  
+>  	if (plibc_malloc == NULL) {
+> @@ -45,7 +66,16 @@ void *malloc(size_t size)
+>  
+>  void free(void *ptr)
+>  {
+> -	static void *(*plibc_free)(void *ptr) = NULL;
+> +	static void (*plibc_free)(void *ptr);
+> +
+> +	/* Check whether the memory was allocated with
+> +	 * static_calloc, in which case there is nothing
+> +	 * to free.
+> +	 */
+> +	if ((char *)ptr >= static_calloc_buf &&
+> +	    (char *)ptr < static_calloc_buf + STATIC_CALLOC_LEN) {
+> +		return;
+> +	}
+>  
+>  	if (plibc_free == NULL) {
+>  		plibc_free = dlsym(RTLD_NEXT, "free");
+> @@ -57,3 +87,42 @@ void free(void *ptr)
+>  	tracepoint(ust_libc, free, ptr);
+>  	plibc_free(ptr);
+>  }
+> +
+> +void *calloc(size_t nmemb, size_t size)
+> +{
+> +	static void *(*volatile plibc_calloc)(size_t nmemb, size_t size);
+> +	void *retval;
+> +
+> +	if (plibc_calloc == NULL) {
+> +		/*
+> +		 * Temporarily redirect to static_calloc,
+> +		 * until the dlsym lookup has completed.
+> +		 */
+> +		plibc_calloc = static_calloc;
+> +		plibc_calloc = dlsym(RTLD_NEXT, "calloc");
+> +		if (plibc_calloc == NULL) {
+> +			fprintf(stderr, "callocwrap: unable to find calloc\n");
+> +			return NULL;
+> +		}
+> +	}
+> +	retval = plibc_calloc(nmemb, size);
+> +	tracepoint(ust_libc, calloc, nmemb, size, retval);
+> +	return retval;
+> +}
+> +
+> +void *realloc(void *ptr, size_t size)
+> +{
+> +	static void *(*plibc_realloc)(void *ptr, size_t size);
+> +	void *retval;
+> +
+> +	if (plibc_realloc == NULL) {
+> +		plibc_realloc = dlsym(RTLD_NEXT, "realloc");
+> +		if (plibc_realloc == NULL) {
+> +			fprintf(stderr, "reallocwrap: unable to find realloc\n");
+> +			return NULL;
+> +		}
+> +	}
+> +	retval = plibc_realloc(ptr, size);
+> +	tracepoint(ust_libc, realloc, ptr, size, retval);
+> +	return retval;
+> +}
+> diff --git a/liblttng-ust-libc-wrapper/ust_libc.h b/liblttng-ust-libc-wrapper/ust_libc.h
+> index af705aa..d2096a3 100644
+> --- a/liblttng-ust-libc-wrapper/ust_libc.h
+> +++ b/liblttng-ust-libc-wrapper/ust_libc.h
+> @@ -36,14 +36,32 @@ TRACEPOINT_EVENT(ust_libc, malloc,
+>  	TP_ARGS(size_t, size, void *, ptr),
+>  	TP_FIELDS(
+>  		ctf_integer(size_t, size, size)
+> -		ctf_integer_hex(unsigned long, ptr, (unsigned long) ptr)
+> +		ctf_integer_hex(void *, ptr, ptr)
+>  	)
+>  )
+>  
+>  TRACEPOINT_EVENT(ust_libc, free,
+>  	TP_ARGS(void *, ptr),
+>  	TP_FIELDS(
+> -		ctf_integer_hex(unsigned long, ptr, (unsigned long) ptr)
+> +		ctf_integer_hex(void *, ptr, ptr)
+> +	)
+> +)
+> +
+> +TRACEPOINT_EVENT(ust_libc, calloc,
+> +	TP_ARGS(size_t, nmemb, size_t, size, void *, ptr),
+> +	TP_FIELDS(
+> +		ctf_integer(size_t, nmemb, nmemb)
+> +		ctf_integer(size_t, size, size)
+> +		ctf_integer_hex(void *, ptr, ptr)
+> +	)
+> +)
+> +
+> +TRACEPOINT_EVENT(ust_libc, realloc,
+> +	TP_ARGS(void *, in_ptr, size_t, size, void *, ptr),
+> +	TP_FIELDS(
+> +		ctf_integer_hex(void *, in_ptr, in_ptr)
+> +		ctf_integer(size_t, size, size)
+> +		ctf_integer_hex(void *, ptr, ptr)
+>  	)
+>  )
+>  
+> -- 
+> 1.8.3.1
+> 
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
 
 -- 
-Stefan Seefeld
-CodeSourcery / Mentor Graphics
-http://www.mentor.com/embedded-software/
-
---------------030805020505070509000205
-Content-Type: text/x-patch; name="patch"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment; filename="patch"
-
-From 6fe9a0e8f1db73f688bebc37671d8397bd9094cc Mon Sep 17 00:00:00 2001
-From: Stefan Seefeld <stefan_seefeld@mentor.com>
-Date: Wed, 31 Jul 2013 16:35:31 -0400
-Subject: [PATCH] Add tracing instrumentation for pthread mutex lock functions.
-
-Signed-off-by: Stefan Seefeld <stefan_seefeld@mentor.com>
----
- liblttng-ust-libc-wrapper/Makefile.am         |  12 ++-
- liblttng-ust-libc-wrapper/lttng-ust-pthread.c | 106 ++++++++++++++++++++++++++
- liblttng-ust-libc-wrapper/ust_libc.h          |  10 +--
- liblttng-ust-libc-wrapper/ust_pthread.h       |  76 ++++++++++++++++++
- 4 files changed, 198 insertions(+), 6 deletions(-)
- create mode 100644 liblttng-ust-libc-wrapper/lttng-ust-pthread.c
- create mode 100644 liblttng-ust-libc-wrapper/ust_pthread.h
-
-diff --git a/liblttng-ust-libc-wrapper/Makefile.am b/liblttng-ust-libc-wrapper/Makefile.am
-index 4fdcedb..d402d53 100644
---- a/liblttng-ust-libc-wrapper/Makefile.am
-+++ b/liblttng-ust-libc-wrapper/Makefile.am
-@@ -1,7 +1,8 @@
- AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_builddir)/include
- AM_CFLAGS = -fno-strict-aliasing
- 
--lib_LTLIBRARIES = liblttng-ust-libc-wrapper.la
-+lib_LTLIBRARIES = liblttng-ust-libc-wrapper.la \
-+  liblttng-ust-pthread-wrapper.la
- liblttng_ust_libc_wrapper_la_SOURCES = \
- 	lttng-ust-malloc.c \
- 	ust_libc.h
-@@ -9,11 +10,20 @@ liblttng_ust_libc_wrapper_la_LIBADD = \
- 	-L$(top_builddir)/liblttng-ust/.libs \
- 	-llttng-ust
- 
-+liblttng_ust_pthread_wrapper_la_SOURCES = \
-+	lttng-ust-pthread.c \
-+	ust_pthread.h
-+liblttng_ust_pthread_wrapper_la_LIBADD = \
-+	-L$(top_builddir)/liblttng-ust/.libs \
-+	-llttng-ust
-+
- if LTTNG_UST_BUILD_WITH_LIBDL
- liblttng_ust_libc_wrapper_la_LIBADD += -ldl
-+liblttng_ust_pthread_wrapper_la_LIBADD += -ldl
- endif
- if LTTNG_UST_BUILD_WITH_LIBC_DL
- liblttng_ust_libc_wrapper_la_LIBADD += -lc
-+liblttng_ust_pthread_wrapper_la_LIBADD += -lc
- endif
- 
- noinst_SCRIPTS = run
-diff --git a/liblttng-ust-libc-wrapper/lttng-ust-pthread.c b/liblttng-ust-libc-wrapper/lttng-ust-pthread.c
-new file mode 100644
-index 0000000..e72b9b4
---- /dev/null
-+++ b/liblttng-ust-libc-wrapper/lttng-ust-pthread.c
-@@ -0,0 +1,106 @@
-+/*
-+ * Copyright (C) 2013  Mentor Graphics
-+ *
-+ * This library is free software; you can redistribute it and/or
-+ * modify it under the terms of the GNU Lesser General Public
-+ * License as published by the Free Software Foundation; either
-+ * version 2.1 of the License, or (at your option) any later version.
-+ *
-+ * This library is distributed in the hope that it will be useful,
-+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
-+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-+ * Lesser General Public License for more details.
-+ *
-+ * You should have received a copy of the GNU Lesser General Public
-+ * License along with this library; if not, write to the Free Software
-+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
-+ */
-+
-+#define _GNU_SOURCE
-+#include <dlfcn.h>
-+#include <pthread.h>
-+
-+#define TRACEPOINT_DEFINE
-+#define TRACEPOINT_CREATE_PROBES
-+#include "ust_pthread.h"
-+
-+static __thread int thread_in_trace;
-+
-+int pthread_mutex_lock(pthread_mutex_t *mutex)
-+{
-+	static int (*mutex_lock)(pthread_mutex_t *);
-+	int retval;
-+
-+	if (!mutex_lock) {
-+		mutex_lock = dlsym(RTLD_NEXT, "pthread_mutex_lock");
-+		if (!mutex_lock) {
-+			if (thread_in_trace) {
-+				abort();
-+			}
-+			fprintf(stderr, "unable to initialize pthread wrapper library.\n");
-+			return EINVAL;
-+		}
-+	}
-+	if (thread_in_trace) {
-+		return mutex_lock(mutex);
-+	}
-+
-+	thread_in_trace = 1;
-+	tracepoint(ust_pthread, pthread_mutex_lock_req, mutex);
-+	retval = mutex_lock(mutex);
-+	tracepoint(ust_pthread, pthread_mutex_lock_acq, mutex, retval);
-+	thread_in_trace = 0;
-+	return retval;
-+}
-+
-+int pthread_mutex_trylock(pthread_mutex_t *mutex)
-+{
-+	static int (*mutex_trylock)(pthread_mutex_t *);
-+	int retval;
-+
-+	if (!mutex_trylock) {
-+		mutex_trylock = dlsym(RTLD_NEXT, "pthread_mutex_trylock");
-+		if (!mutex_trylock) {
-+			if (thread_in_trace) {
-+				abort();
-+			}
-+			fprintf(stderr, "unable to initialize pthread wrapper library.\n");
-+			return EINVAL;
-+		}
-+	}
-+	if (thread_in_trace) {
-+		return mutex_trylock(mutex);
-+	}
-+
-+	thread_in_trace = 1;
-+	retval = mutex_trylock(mutex);
-+	tracepoint(ust_pthread, pthread_mutex_trylock, mutex, retval);
-+	thread_in_trace = 0;
-+	return retval;
-+}
-+
-+int pthread_mutex_unlock(pthread_mutex_t *mutex)
-+{
-+	static int (*mutex_unlock)(pthread_mutex_t *);
-+	int retval;
-+
-+	if (!mutex_unlock) {
-+		mutex_unlock = dlsym(RTLD_NEXT, "pthread_mutex_unlock");
-+		if (!mutex_unlock) {
-+			if (thread_in_trace) {
-+				abort();
-+			}
-+			fprintf(stderr, "unable to initialize pthread wrapper library.\n");
-+			return EINVAL;
-+		}
-+	}
-+	if (thread_in_trace) {
-+		return mutex_unlock(mutex);
-+	}
-+
-+	thread_in_trace = 1;
-+	retval = mutex_unlock(mutex);
-+	tracepoint(ust_pthread, pthread_mutex_unlock, mutex, retval);
-+	thread_in_trace = 0;
-+	return retval;
-+}
-diff --git a/liblttng-ust-libc-wrapper/ust_pthread.h b/liblttng-ust-libc-wrapper/ust_pthread.h
-new file mode 100644
-index 0000000..7d35c3a
---- /dev/null
-+++ b/liblttng-ust-libc-wrapper/ust_pthread.h
-@@ -0,0 +1,76 @@
-+#undef TRACEPOINT_PROVIDER
-+#define TRACEPOINT_PROVIDER ust_pthread
-+
-+#if !defined(_TRACEPOINT_UST_PTHREAD_H) || defined(TRACEPOINT_HEADER_MULTI_READ)
-+#define _TRACEPOINT_UST_PTHREAD_H
-+
-+#ifdef __cplusplus
-+extern "C" {
-+#endif
-+
-+/*
-+ * Copyright (C) 2013  Mentor Graphics
-+ *
-+ * Permission is hereby granted, free of charge, to any person obtaining a copy
-+ * of this software and associated documentation files (the "Software"), to deal
-+ * in the Software without restriction, including without limitation the rights
-+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-+ * copies of the Software, and to permit persons to whom the Software is
-+ * furnished to do so, subject to the following conditions:
-+ *
-+ * The above copyright notice and this permission notice shall be included in
-+ * all copies or substantial portions of the Software.
-+ *
-+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-+ * SOFTWARE.
-+ */
-+
-+#include <lttng/tracepoint.h>
-+
-+TRACEPOINT_EVENT(ust_pthread, pthread_mutex_lock_req,
-+	TP_ARGS(pthread_mutex_t *, mutex),
-+	TP_FIELDS(
-+		ctf_integer_hex(void *, mutex, mutex)
-+	)
-+)
-+
-+TRACEPOINT_EVENT(ust_pthread, pthread_mutex_lock_acq,
-+	TP_ARGS(pthread_mutex_t *, mutex, int, status),
-+	TP_FIELDS(
-+		ctf_integer_hex(void *, mutex, mutex)
-+		ctf_integer(int, status, status)
-+	)
-+)
-+
-+TRACEPOINT_EVENT(ust_pthread, pthread_mutex_trylock,
-+	TP_ARGS(pthread_mutex_t *, mutex, int, status),
-+	TP_FIELDS(
-+		ctf_integer_hex(void *, mutex, mutex)
-+		ctf_integer(int, status, status)
-+	)
-+)
-+
-+TRACEPOINT_EVENT(ust_pthread, pthread_mutex_unlock,
-+	TP_ARGS(pthread_mutex_t *, mutex, int, status),
-+	TP_FIELDS(
-+		ctf_integer_hex(void *, mutex, mutex)
-+		ctf_integer(int, status, status)
-+	)
-+)
-+
-+#endif /* _TRACEPOINT_UST_PTHREAD_H */
-+
-+#undef TRACEPOINT_INCLUDE
-+#define TRACEPOINT_INCLUDE "./ust_pthread.h"
-+
-+/* This part must be outside ifdef protection */
-+#include <lttng/tracepoint-event.h>
-+
-+#ifdef __cplusplus
-+}
-+#endif
--- 
-1.8.3.1
-
-
---------------030805020505070509000205
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---------------030805020505070509000205--
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
