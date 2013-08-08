@@ -1,22 +1,18 @@
-From: "VomLehn, David" <vomlehnd@lab126.com>
-Subject: Re: [PATCH lttv] Add build instructions for git
-	tree	pulls and use more standard formatting
-Date: Thu, 8 Aug 2013 18:52:15 +0000
-Message-ID: <91572C5BB21393469AE2804E6532971C010874C2__17900.4234065816$1375988033$gmane$org@ex10-mbx-9006.ant.amazon.com>
-References: <48CF5AC71E61DB46B70D0F388054EFFD26661385@VAL-E-01.valcartier.drdc-rddc.gc.ca>,
-	<20130808152320.GB26526@Krystal>,
-	<91572C5BB21393469AE2804E6532971C010874B7@ex10-mbx-9006.ant.amazon.com>
+From: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
+Subject: Re: [PATCH lttv] Add build instructions for git tree
+ pulls and use more standard formatting
+Date: Thu, 08 Aug 2013 15:06:44 -0400
+Message-ID: <5203EC44.7070402__16036.5662457936$1375988951$gmane$org@voxpopuli.im>
+References: <20130807194853.GA11032@ub8ca3a8c12a551e580d6.ant.amazon.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="windows-1256"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp-fw-2101.amazon.com ([72.21.196.25])
+Received: from ironport2-out.teksavvy.com ([206.248.154.182])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <prvs=9251b2fcd=vomlehnd@lab126.com>)
-	id 1V7VKS-0007Ix-75
-	for lttng-dev@lists.lttng.org; Thu, 08 Aug 2013 14:53:02 -0400
-In-Reply-To: <91572C5BB21393469AE2804E6532971C010874B7@ex10-mbx-9006.ant.amazon.com>
-Content-Language: en-US
+	(envelope-from <alexmonthy@voxpopuli.im>) id 1V7VYT-0008KV-Id
+	for lttng-dev@lists.lttng.org; Thu, 08 Aug 2013 15:07:30 -0400
+In-Reply-To: <20130807194853.GA11032@ub8ca3a8c12a551e580d6.ant.amazon.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -25,61 +21,52 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
+Cc: Vomlehn <vomlehnd@amazon.com>
 List-Id: lttng-dev@lists.lttng.org
 
-T29wcywgaGl0ICJSZXBseSIgaW5zdGVhZCBvZiAiUmVwbHkgQWxsIiwgc286CgorIFRoaWJhdWx0
-LCBEYW5pZWwg/VtEYW5pZWwuVGhpYmF1bHRAZHJkYy1yZGRjLmdjLmNhXf0KKyBsdHRuZy1kZXZA
-bGlzdHMubHR0bmcub3JnIAotLQpEYXZpZCBWTAoKX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fXwpGcm9tOiBWb21MZWhuLCBEYXZpZApTZW50OiBUaHVyc2RheSwgQXVndXN0
-IDA4LCAyMDEzIDExOjQ4IEFNClRvOiBNYXRoaWV1IERlc25veWVycwpTdWJqZWN0OiBSRTogW2x0
-dG5nLWRldl0gW1BBVENIIGx0dHZdIEFkZCBidWlsZCBpbnN0cnVjdGlvbnMgZm9yIGdpdCB0cmVl
-ICAgICAgIHB1bGxzIGFuZCB1c2UgbW9yZSBzdGFuZGFyZCBmb3JtYXR0aW5nCgpNeSBwYXRjaCB3
-YXMgb25seSBmb2N1c2VkIG9uIHRoZSBmYWN0IHRoYXQgdGhlIGJ1aWxkIHByb2NlZHVyZSBmb3Ig
-d2hhdCB5b3UgZ2V0IGFmdGVyIGEgZ2l0IHB1bGwgcmVxdWlyZXMgYSBkaWZmZXJlbnQgYnVpbGQg
-cHJvY2VkdXJlIHNpbmNlIGl0IGRvZXNuJ3QgaGF2ZSB0aGUgLi9jb25maWd1cmUgZmlsZSB5b3Ug
-d291bGQgZ2V0IGZyb20gYSB0YXIgcmVsZWFzZSBmaWxlLiBUaGUgc2VudGVuY2UgYWJvdXQgZ29p
-bmcgaW50byBzcGVjaWZpYyBzdWJkaXJlY3RvcmllcyB3YXMgcGFydCBvZiB0aGUgY29udGV4dCwg
-YW5kIG5vdCBwYXJ0IG9mIHRoZSBwYXRjaC4gSWYgd2Ugd2FudCB0byB1cGRhdGUgdGhhdCwgdG9v
-LCBJIHRoaW5rIGl0IHNob3VsZCBiZSBhIHNlcGFyYXRlIHBhdGNoLgotLQpEYXZpZCBWTAoKX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpGcm9tOiBNYXRoaWV1IERlc25v
-eWVycyBbbWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tXQpTZW50OiBUaHVyc2RheSwgQXVn
-dXN0IDA4LCAyMDEzIDg6MjMgQU0KVG86IFRoaWJhdWx0LCBEYW5pZWwKQ2M6IGx0dG5nLWRldkBs
-aXN0cy5sdHRuZy5vcmc7IFZvbUxlaG4sIERhdmlkClN1YmplY3Q6IFJlOiBbbHR0bmctZGV2XSBb
-UEFUQ0ggbHR0dl0gQWRkIGJ1aWxkIGluc3RydWN0aW9ucyBmb3IgZ2l0IHRyZWUgICAgICAgcHVs
-bHMgYW5kIHVzZSBtb3JlIHN0YW5kYXJkIGZvcm1hdHRpbmcKCiogVGhpYmF1bHQsIERhbmllbCAo
-RGFuaWVsLlRoaWJhdWx0QGRyZGMtcmRkYy5nYy5jYSkgd3JvdGU6Cj4gLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tCj4gRGF0ZTogV2VkLCA3IEF1ZyAyMDEzIDEyOjQ4OjUzIC0wNzAwCj4g
-RnJvbTogVm9tbGVobiA8dm9tbGVobmRAYW1hem9uLmNvbT4KPgo+IC0tIC4vY29uZmlndXJlCj4g
-LS0gbWFrZQo+IC0tIG1ha2UgaW5zdGFsbAo+ICsgICQgLi9jb25maWd1cmUKPiArICAkIG1ha2UK
-PiArICAkIG1ha2UgaW5zdGFsbAo+ICsKPiArVG8gY29tcGlsZSB0aGUgc291cmNlIHRyZWUgZnJv
-bSBhIGdpdCBjaGVja291dCwgdXNlOgo+ICsKPiArICAkIGF1dG9yZWNvbmYKPiArICAkIGF1dG9t
-YWtlIC0tYWRkLW1pc3NpbmcgLS1nbnUKPiArICAkIG1ha2UKPiArICAkIG1ha2UgaW5zdGFsbAo+
-Cj4gIEFmdGVyIHJ1bm5pbmcgLi9jb25maWd1cmUsIHlvdSBjYW4gYWxzbyBnbyBpbiBzcGVjaWZp
-YyBzdWJkaXJlY3RvcmllcyBhbmQKPiAgdXNlIG1ha2UsIG1ha2UgaW5zdGFsbC4KPiAtLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KPgo+ICAgIEFjdHVhbGx5LCBpbiBlYWNoIGluc3RhbmNl
-IG9mICdtYWtlIGluc3RhbGwnLCB5b3UnbGwgbmVlZCB0byB1c2UgJ3N1ZG8gbWFrZSBpbnN0YWxs
-Jy4KCihhcyByb290KQojIG1ha2UgaW5zdGFsbAoKd291bGQgYmUgdGhlIHByb3BlciB3YXkgdG8g
-ZG9jdW1lbnQgdGhpcy4KCnN1ZG8gaXMganVzdCBvbmUgd2F5IHRvIGdhaW4gcm9vdCBwcml2aWxl
-Z2VzLiAic3UiIGNhbiBiZSB1c2VkIG9uIG1hbnkKZGlzdHJpYnV0aW9ucyBmb3IgdGhpcyB0b28u
-IEFsc28sIGlmIGEgY29uZmlndXJlIC0tcHJlZml4IGlzIHVzZWQgdG8KdGFyZ2V0IGEgdXNlci13
-cml0ZWFibGUgZGlyZWN0b3J5LCByb290IGlzIG5vdCByZXF1aXJlZCAoYnV0IGl0J3MKZ2VuZXJh
-bGx5IG5vdCB0aGUgY2FzZSkuCgpUaGFua3MsCgpNYXRoaWV1CgoKPgo+IERhbmllbCBVLiBUaGli
-YXVsdAo+IFByb3RlY3Rpb24gZGVzIHN5c3TobWVzIGV0IGNvbnRyZW1lc3VyZXMgKFBTQykgfCBT
-eXN0ZW1zIFByb3RlY3Rpb24gJiBDb3VudGVybWVhc3VyZXMgKFNQQykKPiBDeWJlciBz6WN1cml0
-6SBwb3VyIGxlcyBtaXNzaW9ucyBlc3NlbnRpZWxsZXMgKENNRSkgfCBNaXNzaW9uIENyaXRpY2Fs
-IEN5YmVyIFNlY3VyaXR5IChNQ0NTKQo+IFIgJiBEIHBvdXIgbGEgZOlmZW5zZSBDYW5hZGEgLSBW
-YWxjYXJ0aWVyIChSRERDIFZhbGNhcnRpZXIpIHwgRGVmZW5jZSBSJkQgQ2FuYWRhIC0gVmFsY2Fy
-dGllciAoRFJEQyBWYWxjYXJ0aWVyKQo+IDI0NTkgcm91dGUgZGUgbGEgQnJhdm91cmUKPiBRdeli
-ZWMgUUMgIEczSiAxWDUKPiBDQU5BREEKPiBWb3ggOiAoNDE4KSA4NDQtNDAwMCB4NDI0NQo+IEZh
-eCA6ICg0MTgpIDg0NC00NTM4Cj4gTkFDIDogOTE4ViBRU0RKIDxodHRwOi8vd3d3LnRyYXZlbGdp
-cy5jb20vbWFwLmFzcD9hZGRyPTkxOFYlMjBRU0RKPgo+IEdvdXZlcm5lbWVudCBkdSBDYW5hZGEg
-fCBHb3Zlcm5tZW50IG9mIENhbmFkYQo+IDxodHRwOi8vd3d3LnZhbGNhcnRpZXIuZHJkYy1yZGRj
-LmdjLmNhLz4KPgo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fCj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcK
-PiBodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1k
-ZXYKCi0tCk1hdGhpZXUgRGVzbm95ZXJzCkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lv
-cy5jb20KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0
-dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlz
-dHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+On 13-08-07 03:48 PM, Vomlehn wrote:
+> If the source is obtained directly from git, the file "configure" must be
+> built with the autoconf tools. In addition, example shell commands are
+> traditionally preceeded with a "$" instead of a "-", so this convention
+> is used.
+> ---
+>  README |   13 ++++++++++---
+>  1 file changed, 10 insertions(+), 3 deletions(-)
+>
+> diff --git a/README b/README
+> index 98849b3..ac28f9e 100644
+> --- a/README
+> +++ b/README
+> @@ -31,9 +31,16 @@ libc6 development librairies
+>  
+>  To compile the source tree from a tarball, simply follow these steps :
+>  
+> -- ./configure
+> -- make
+> -- make install
+> +  $ ./configure
+> +  $ make
+> +  $ make install
+> +
+> +To compile the source tree from a git checkout, use:
+> +
+> +  $ autoreconf
+> +  $ automake --add-missing --gnu
+
+You should be able to use "autoreconf -i" instead of those two commands.
+It avoids the need to run autoconf, automake etc. manually.
+
+> +  $ make
+> +  $ make install
+
+As was mentioned in the other thread, this should be "# make install",
+since with the default configure options, it will install in /usr/local,
+and only root can write there.
+
+Cheers,
+Alex
+
+>  
+>  After running ./configure, you can also go in specific subdirectories and
+>  use make, make install.
