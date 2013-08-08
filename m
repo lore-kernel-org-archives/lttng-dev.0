@@ -1,18 +1,17 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: (forw) [jovi.zhangwei@huawei.com: [RFC] ktap: enable
-	scripting for	Linux tracing subsystem]
-Date: Thu, 8 Aug 2013 09:22:11 -0400
-Message-ID: <20130808132211.GA22364__3046.31834519586$1375968192$gmane$org@Krystal>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Subject: Re: [PATCH lttng-tools] Fix:
+ LTTNG_ERR_NEED_ROOT_SESSIOND error message
+Date: Thu, 8 Aug 2013 15:15:35 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD26661377__28165.2714279064$1375974994$gmane$org@VAL-E-01.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1V7QAR-0001oB-Sw
-	for lttng-dev@lists.lttng.org; Thu, 08 Aug 2013 09:22:22 -0400
-Content-Disposition: inline
+	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1V7Rw8-0000w4-UU
+	for lttng-dev@lists.lttng.org; Thu, 08 Aug 2013 11:15:42 -0400
+Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,192 +20,45 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
-Cc: "zhangwei(Jovi)" <jovi.zhangwei@huawei.com>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-We should probably look into integrating this with LTTng kernel and
-user-space tracers at some point.
+------------------------------
+Date: Wed,  7 Aug 2013 14:58:05 -0400
+From: J?r?mie Galarneau 	<jeremie.galarneau@efficios.com>
 
-Thanks,
+A root session daemon _and_ "tracing" group user membership are required to=
+ trace the kernel.
 
-Mathieu
+---
+ src/common/error.c | 2 +-
 
------ Forwarded message from "zhangwei(Jovi)" <jovi.zhangwei@huawei.com> -----
+-	[ ERROR_INDEX(LTTNG_ERR_NEED_ROOT_SESSIOND) ] =3D "Tracing the kernel req=
+uires a root lttng-sessiond daemon or \"tracing\" group user membership",
++	[ ERROR_INDEX(LTTNG_ERR_NEED_ROOT_SESSIOND) ] =3D "Tracing the kernel req=
+uires a root lttng-sessiond daemon and \"tracing\" group user membership",
+-- =
 
-Date: Thu, 8 Aug 2013 18:35:20 +0800
-To: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Masami Hiramatsu <masami.hiramatsu.pt@hitachi.com>,
-	"Frank Ch. Eigler" <fche@redhat.com>,
-	Peter Zijlstra <a.p.zijlstra@chello.nl>,
-	Frederic Weisbecker <fweisbec@gmail.com>,
-	Arnaldo Carvalho de Melo <acme@ghostprotocols.net>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>, jovi.zhangwei@gmail.com
-User-Agent: Mozilla/5.0 (Windows NT 6.1; rv:17.0) Gecko/17.0 Thunderbird/17.0
-From: "zhangwei(Jovi)" <jovi.zhangwei@huawei.com>
-Subject: [RFC] ktap: enable scripting for Linux tracing subsystem
+------------------------------
 
-Hi,
+   Unless there's been a change in the code, that is just not true.  You ca=
+n trace the kernel just fine without 'tracing' group membership, as long as=
+ you have sudo privileges (and can thus call 'sudo -H lttng').  The root da=
+emon is necessary either way: the text should just read "Tracing the kernel=
+ requires a root lttng-sessiond daemon".
 
-ktap was released 0.2 at several days ago, you can read the release note
-in: http://lwn.net/Articles/561568/
-
-The public location of ktap is in: https://github.com/ktap/ktap.git	
-
-ktap v0.2 release brought a lots of new valuable changes, in summary,
-the architecture of ktap is easy to integrate with current tracing
-infrastructure, that's why I want to start this RFC discussion now.
-
-The highlight features of ktap includes:
-
-   - support tracepoints, k(ret)probe, u(ret)probe, function tracing,
-     and timer
-   - support x86, x86-64, powerpc, arm, and preempt-rt kernel
-   - support kernel 3.1 and later versions, include Linux mainline
-   - similar event syntax interface with perf
-   - support event filter
-   - unified backend perf callback mechanism
-   - ring buffer transport (same with ftrace)
-   - oneline scripting
-
-To make us understand deeply on ktap, the contents splits into 5 parts:
-Introduction, The design, Implementation, Link, Upstream.
-
-1. Introduction
----------------
-
-ktap is a simple and lightweight dynamic tracing tool for Linux, it's
-similar with Linux mainstream dynamic tracing tool systemtap, and Dtrace
-in Solaris.
-ktap have different design principles from Linux mainstream dynamic
-tracing tool in that it's based on bytecode interpreter, so it doesn't
-depend upon GCC, doesn't require compiling kernel module for each
-script, fulfilling the embedded ecosystem's tracing needs.
-
-ktap doesn't invent any new tracing build-block, it leverage current
-tracing building blocks(tracepoint, kprobe, uprobe, function tracing,
-pmu)in Linux kernel, it just combine all these tracing building blocks
-together, to explore as a unified script tracing interface.
-
-
-2. The design
--------------
-
-                   ktap compiler      io thread
-                        |                ^
-                 -------|----------------|-----------
-                        |                |
-                        v                |
-                     ktapvm --------> ringbuffer
-                        |
-                        |
-                        v
-                 tracepoints kprobe uprobe
-                 pmu hw_breakpoint timer
-
-ktap compiler: responsible for compile source script to bytecode, then
-use ioctl to notify ktapvm load and execute bytecode.
-
-ktapvm: core script engine, responsible for load and execute bytecode,
-calling into built-in or library function, also interact with ringbuffer
-transport. ktapvm register perf event by id, the overflow callback will
-call by event is hit, then calling into ktap script engine.
-
-ringbuffer: this is based on ftrace ring buffer, responsible for
-transport to userspace. Possibly ktap will share same ring buffer output
-code with ftrace in future.
-
-io thread: reading the ring buffer, output to stdout.
-
-
-3. Implementation
------------------
-
-The script engine and compiler is based on lua initially, a widely used
-fast dynamic typed language, registered based, extendable interpreter,
-support associative array.
-(Note that ktap already changed a lot on interpreter core and compiler,
-so it's cannot call it as lua anymore :-))
-
-Language syntax is C-like, so it's easy to make us(kernel developers) to
-adapt it, smooth learning curve.
-
-ktapvm code of lines is only 5K+, and userspace compiler is only 4K+,
-code is very easy to read and review, especially ktapvm, easy to hack,
-it just have 40 bytecodes.
-
-One thing need to aware is ktap tracing core is heavily based on perf
-event, in this point of view, ktap is a kernel script interface for perf
-tool, there already have perf-script tools(based on python/perl), ktap
-differences with perf-script is we can programming each event when event
-is hit, in real time manner.
-
-Currently debuginfo is not handled, ktap just reuse perf-probe, in case
-some embedded Linux system don't have available debuginfo, they still
-could get local variable or register based on
-kprobe-tracer/uprobe-tracer, so debuginfo won't hurt the simplicity of
-ktap, which recognized as largest advantage of ktap.
-
-The event filter in ktap is based on kernel tracing event filter.
-
-Based on these design, I'm also willing to discuss perf-ktap integrating
-if others want too.
-
-This is the whole design overview for ktap, it reuse current tracing
-building block, to keep its simplicity.
-
-More info is available in ktap/doc/, and sample scripts is in scripts/
-
-4. Link
--------
-
-There have ktap v0.1 review on LWN(wrote by Corbet):
-http://lwn.net/Articles/551314/
-
-example in that link have a little out of date.
-
-
-5. Upstream
------------
-
-why I want to upstream ktap now?
-
-ktap is still in early stage, there have many items in my todo list, but
-small start is a good start, it would be good to shape and polish this
-tool under eyes of community, community collaboration will make ktap to
-be more valuable for all of us, it have been shown that ktap is very
-useful for embedded Linux system, and we are enter an age where embedded
-system is deployed to large user base than before.
-
-I hope in future we will have a robust, low overhead, mature, extendable
-kernel interpreter.
-
-I appreciate any feedback from you, thank you.
-
-jovi
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
------ End forwarded message -----
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Daniel U. Thibault
+Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
+ntermeasures (SPC)
+Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
+Cyber Security (MCCS)
+R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
+ Canada - Valcartier (DRDC Valcartier)
+2459 route de la Bravoure
+Qu=E9bec QC  G3J 1X5
+CANADA
+Vox : (418) 844-4000 x4245
+Fax : (418) 844-4538
+NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+Gouvernement du Canada | Government of Canada
+<http://www.valcartier.drdc-rddc.gc.ca/>
