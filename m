@@ -1,32 +1,18 @@
-From: Vomlehn <vomlehnd@amazon.com>
-Subject: [PATCH lttv] Add build instructions for git tree pulls
- and use more standard formatting
-Date: Wed, 7 Aug 2013 12:48:53 -0700
-Message-ID: <20130807194853.GA11032__46991.6777023629$1375908400$gmane$org@ub8ca3a8c12a551e580d6.ant.amazon.com>
+From: David Goulet <dgoulet@efficios.com>
+Subject: Re: [PATCH lttng-tools] Fix:
+ LTTNG_ERR_NEED_ROOT_SESSIOND error message
+Date: Thu, 08 Aug 2013 05:33:16 -0400
+Message-ID: <520365DC.40008__19667.3036473387$1375954465$gmane$org@efficios.com>
+References: <1375901885-23781-1-git-send-email-jeremie.galarneau@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp-fw-2101.amazon.com ([72.21.196.25])
+Received: from smtp.ini-tech.com ([5.9.158.244])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <prvs=924a95d67=vomlehnd@amazon.com>)
-	id 1V79jA-00046g-GP
-	for lttng-dev@lists.lttng.org; Wed, 07 Aug 2013 15:49:05 -0400
-Received: from ub8ca3a8c12a551e580d6.ant.amazon.com
-	(ub8ca3a8c12a551e580d6.ant.amazon.com [10.49.76.115])
-	by smtp-in-1002.vdc.amazon.com (8.13.8/8.13.8) with ESMTP id
-	r77Jmvk5006550
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-SHA bits=256 verify=NO)
-	for <lttng-dev@lists.lttng.org>; Wed, 7 Aug 2013 19:48:58 GMT
-Received: from ub8ca3a8c12a551e580d6.ant.amazon.com (localhost [127.0.0.1])
-	by ub8ca3a8c12a551e580d6.ant.amazon.com (8.14.4/8.14.4/Debian-2ubuntu2)
-	with ESMTP id r77Jmssc011116
-	for <lttng-dev@lists.lttng.org>; Wed, 7 Aug 2013 12:48:54 -0700
-Received: (from vomlehnd@localhost)
-	by ub8ca3a8c12a551e580d6.ant.amazon.com (8.14.4/8.14.4/Submit) id
-	r77JmrAP011113
-	for lttng-dev@lists.lttng.org; Wed, 7 Aug 2013 12:48:53 -0700
-Content-Disposition: inline
+	(envelope-from <dgoulet@efficios.com>) id 1V7May-0003Wx-2M
+	for lttng-dev@lists.lttng.org; Thu, 08 Aug 2013 05:33:26 -0400
+In-Reply-To: <1375901885-23781-1-git-send-email-jeremie.galarneau@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -35,40 +21,42 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: =?UTF-8?B?SsOpcsOpbWllIEdhbGFybmVhdQ==?= <jeremie.galarneau@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-If the source is obtained directly from git, the file "configure" must be
-built with the autoconf tools. In addition, example shell commands are
-traditionally preceeded with a "$" instead of a "-", so this convention
-is used.
----
- README |   13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
-
-diff --git a/README b/README
-index 98849b3..ac28f9e 100644
---- a/README
-+++ b/README
-@@ -31,9 +31,16 @@ libc6 development librairies
- 
- To compile the source tree from a tarball, simply follow these steps :
- 
--- ./configure
--- make
--- make install
-+  $ ./configure
-+  $ make
-+  $ make install
-+
-+To compile the source tree from a git checkout, use:
-+
-+  $ autoreconf
-+  $ automake --add-missing --gnu
-+  $ make
-+  $ make install
- 
- After running ./configure, you can also go in specific subdirectories and
- use make, make install.
--- 
-David VL
+LS0tLS1CRUdJTiBQR1AgU0lHTkVEIE1FU1NBR0UtLS0tLQpIYXNoOiBTSEE1MTIKCk1lcmdlZCEK
+CkrDqXLDqW1pZSBHYWxhcm5lYXU6Cj4gQSByb290IHNlc3Npb24gZGFlbW9uIF9hbmRfICJ0cmFj
+aW5nIiBncm91cCB1c2VyIG1lbWJlcnNoaXAgYXJlCj4gcmVxdWlyZWQgdG8gdHJhY2UgdGhlIGtl
+cm5lbC4KPiAKPiBTaWduZWQtb2ZmLWJ5OiBKw6lyw6ltaWUgR2FsYXJuZWF1IDxqZXJlbWllLmdh
+bGFybmVhdUBlZmZpY2lvcy5jb20+IAo+IC0tLSBzcmMvY29tbW9uL2Vycm9yLmMgfCAyICstIDEg
+ZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMQo+IGRlbGV0aW9uKC0pCj4gCj4gZGlmZiAt
+LWdpdCBhL3NyYy9jb21tb24vZXJyb3IuYyBiL3NyYy9jb21tb24vZXJyb3IuYyBpbmRleAo+IGFj
+ZmQ2YzYuLjQyZWQwNmYgMTAwNjQ0IC0tLSBhL3NyYy9jb21tb24vZXJyb3IuYyArKysKPiBiL3Ny
+Yy9jb21tb24vZXJyb3IuYyBAQCAtODIsNyArODIsNyBAQCBzdGF0aWMgY29uc3QgY2hhcgo+ICpl
+cnJvcl9zdHJpbmdfYXJyYXlbXSA9IHsgWwo+IEVSUk9SX0lOREVYKExUVE5HX0VSUl9VU1RfRVZF
+TlRfTk9UX0ZPVU5EKV0gPSAiVVNUIGV2ZW50IG5vdAo+IGZvdW5kIiwgWyBFUlJPUl9JTkRFWChM
+VFROR19FUlJfVVNUX0NPTlRFWFRfRVhJU1QpXSA9ICJVU1QgY29udGV4dAo+IGFscmVhZHkgZXhp
+c3QiLCBbIEVSUk9SX0lOREVYKExUVE5HX0VSUl9VU1RfQ09OVEVYVF9JTlZBTCldID0gIlVTVAo+
+IGludmFsaWQgY29udGV4dCIsIC0JWyBFUlJPUl9JTkRFWChMVFROR19FUlJfTkVFRF9ST09UX1NF
+U1NJT05EKSBdID0KPiAiVHJhY2luZyB0aGUga2VybmVsIHJlcXVpcmVzIGEgcm9vdCBsdHRuZy1z
+ZXNzaW9uZCBkYWVtb24gb3IKPiBcInRyYWNpbmdcIiBncm91cCB1c2VyIG1lbWJlcnNoaXAiLCAr
+CVsKPiBFUlJPUl9JTkRFWChMVFROR19FUlJfTkVFRF9ST09UX1NFU1NJT05EKSBdID0gIlRyYWNp
+bmcgdGhlIGtlcm5lbAo+IHJlcXVpcmVzIGEgcm9vdCBsdHRuZy1zZXNzaW9uZCBkYWVtb24gYW5k
+IFwidHJhY2luZ1wiIGdyb3VwIHVzZXIKPiBtZW1iZXJzaGlwIiwgWyBFUlJPUl9JTkRFWChMVFRO
+R19FUlJfVFJBQ0VfQUxSRUFEWV9TVEFSVEVEKSBdID0KPiAiVHJhY2luZyBhbHJlYWR5IHN0YXJ0
+ZWQiLCBbCj4gRVJST1JfSU5ERVgoTFRUTkdfRVJSX1RSQUNFX0FMUkVBRFlfU1RPUFBFRCkgXSA9
+ICJUcmFjaW5nIGFscmVhZHkKPiBzdG9wcGVkIiwgWyBFUlJPUl9JTkRFWChMVFROR19FUlJfS0VS
+Tl9FVkVOVF9FTk9TWVMpIF0gPSAiS2VybmVsCj4gZXZlbnQgdHlwZSBub3Qgc3VwcG9ydGVkIiwK
+LS0tLS1CRUdJTiBQR1AgU0lHTkFUVVJFLS0tLS0KVmVyc2lvbjogR251UEcgdjEuNC4xNCAoR05V
+L0xpbnV4KQoKaVFFY0JBRUJDZ0FHQlFKU0EyWFlBQW9KRUVMb2Fpb1I5STAyR05nSUFKRnAzZGh5
+TXNaK0VsZWdKRmRib2F3OQpnM3VDN3hrSEFVVjZjU1VJc3lCTEJsVm9QR1g5S3dMcjJHWlk5bXQy
+Vm0yQm9PS0J0RHRMRUlnQzV6aVdlM3FpCit4WmtMUEkrbHJ1cjhjMnhCYVRsZXhPZ0tXUHh5ZlZE
+UUxBSkwvZ2dac1VtcER6SEM0ZTJ5ekpyeGdaRVhHV3gKRUhPUzdpMWdRK2tvM3NYNWU1UXh5MjU4
+aWo3R3pLNngyeWdJazlLcS9FUmJ4dVZibTZDcldnMVRpSlBlNkFFegpNR1ZITGgrdTc4Unh4QmxR
+QUo3KzFkZS81eTF5YkFGMnlnWWt6VnhJZzhSblZ3WU0xNXFReHlkcDkwUWp6MUZxCks1K0ZXbWpn
+MWpCTmo1STRHVE0xZ3ZickI1aHR6bUQrUk9TRXdsUENZNFBsRXA0blc1d2Q5clZYM1ZzQndrcz0K
+PVV0U04KLS0tLS1FTkQgUEdQIFNJR05BVFVSRS0tLS0tCgpfX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRl
+dkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4v
+bGlzdGluZm8vbHR0bmctZGV2Cg==
