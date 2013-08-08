@@ -1,22 +1,18 @@
-From: Yannick Brosseau <yannick.brosseau@gmail.com>
-Subject: Re:
- =?iso-8859-1?q?/home/admin/lttng-modules-2=2E3=2E0-rc?=
- =?iso-8859-1?q?1/lttng-events=2Ec=3A388=3A_error=3A_too_many_arguments_to?=
- =?iso-8859-1?q?_function_=E2tracepoint=5Fprobe=5Fregister=E2?=
-Date: Thu, 08 Aug 2013 08:45:58 -0400
-Message-ID: <52039306.1070306__32850.5512596623$1375966018$gmane$org@gmail.com>
-References: <CAFa-mVWYapQuAYkrvTLUBdGibRugYXKBi5+dgkNwqDCTj1yvrQ@mail.gmail.com>
-	<CAFa-mVUWH29L0V-OXD8UaMgdH96tcxqNd1fgxOT=YX4b7cnzGQ@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: (forw) [jovi.zhangwei@huawei.com: [RFC] ktap: enable
+	scripting for	Linux tracing subsystem]
+Date: Thu, 8 Aug 2013 09:22:11 -0400
+Message-ID: <20130808132211.GA22364__3046.31834519586$1375968192$gmane$org@Krystal>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1853200934=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qa0-f48.google.com ([209.85.216.48])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <yannick.brosseau@gmail.com>) id 1V7PbV-0007ry-FH
-	for lttng-dev@lists.lttng.org; Thu, 08 Aug 2013 08:46:13 -0400
-Received: by mail-qa0-f48.google.com with SMTP id o19so260267qap.14
-	for <lttng-dev@lists.lttng.org>; Thu, 08 Aug 2013 05:46:04 -0700 (PDT)
-In-Reply-To: <CAFa-mVUWH29L0V-OXD8UaMgdH96tcxqNd1fgxOT=YX4b7cnzGQ@mail.gmail.com>
+	(envelope-from <compudj@mail.openrapids.net>) id 1V7QAR-0001oB-Sw
+	for lttng-dev@lists.lttng.org; Thu, 08 Aug 2013 09:22:22 -0400
+Content-Disposition: inline
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -25,211 +21,192 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Suraj Bagad <surajbagad@gmail.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
+Cc: "zhangwei(Jovi)" <jovi.zhangwei@huawei.com>
 List-Id: lttng-dev@lists.lttng.org
 
-This is a multi-part message in MIME format.
---===============1853200934==
-Content-Type: multipart/alternative;
- boundary="------------080903010107040303040605"
+We should probably look into integrating this with LTTng kernel and
+user-space tracers at some point.
 
-This is a multi-part message in MIME format.
---------------080903010107040303040605
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
-X-MIME-Autoconverted: from 8bit to quoted-printable by smtp.polymtl.ca id r78CkMEJ000415
+Thanks,
 
-On 2013-08-08 08:35, Suraj Bagad wrote:
-> HI Iam trying to install lttng-modules for kernel probing on CentOS
-> 6.4 2.6.32-358.6.1.el6.x86_64
-> iam getting error while running make as follows.
-> /home/admin/lttng-modules-2.3.0-rc1/lttng-events.c:388: error: too
-> many arguments to function =E2tracepoint_probe_register=E2
->
-> I have already installed lttng-tools (lttng-tools-2.0.4-2.el6.x86_
-> 64
-> ) for user space probing
->
-> It seems that the lttng-modules are not compatible for above mentioned
-> centOS .
-> Can u please let me know which version or how i can install
-> lttng-modules for kernel probing for my
-> mentioned CentOS version
-hi,
+Mathieu
 
-For this version of CentOS, you need to apply some patches to the
-kernel. See the linux-patches directory in the lttng-modules source tree.
+----- Forwarded message from "zhangwei(Jovi)" <jovi.zhangwei@huawei.com> -----
 
-Yannick
+Date: Thu, 8 Aug 2013 18:35:20 +0800
+To: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Masami Hiramatsu <masami.hiramatsu.pt@hitachi.com>,
+	"Frank Ch. Eigler" <fche@redhat.com>,
+	Peter Zijlstra <a.p.zijlstra@chello.nl>,
+	Frederic Weisbecker <fweisbec@gmail.com>,
+	Arnaldo Carvalho de Melo <acme@ghostprotocols.net>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>, jovi.zhangwei@gmail.com
+User-Agent: Mozilla/5.0 (Windows NT 6.1; rv:17.0) Gecko/17.0 Thunderbird/17.0
+From: "zhangwei(Jovi)" <jovi.zhangwei@huawei.com>
+Subject: [RFC] ktap: enable scripting for Linux tracing subsystem
 
->
->
-> On Thu, Aug 8, 2013 at 5:02 PM, Suraj Bagad <surajbagad@gmail.com
-> <mailto:surajbagad@gmail.com>> wrote:
->
->     HI Iam trying to install lttng-modules for kernel probing on
->     CentOS 6.4 2.6.32-358.6.1.el6.x86_64
->     iam getting error while running make as follows.
->     /home/admin/lttng-modules-2.3.0-rc1/lttng-events.c:388: error: too
->     many arguments to function =E2tracepoint_probe_register=E2
->
->     I have already installed lttng-tools (lttng-tools-2.0.4-2.el6.x86_6=
-4
->     ) for user space probing
->
->     It seems that the lttng-modules are not compatible for above
->     mentioned centOS .
->     Can u please let me know which version or how i can install
->     lttng-modules for kernel probing for my
->     mentioned CentOS version
->     --=20
->     Thanks
->     and Regards,
->     Suraj Bagad
->
->
->
->
-> --=20
-> Thanks
-> and Regards
->
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+Hi,
+
+ktap was released 0.2 at several days ago, you can read the release note
+in: http://lwn.net/Articles/561568/
+
+The public location of ktap is in: https://github.com/ktap/ktap.git	
+
+ktap v0.2 release brought a lots of new valuable changes, in summary,
+the architecture of ktap is easy to integrate with current tracing
+infrastructure, that's why I want to start this RFC discussion now.
+
+The highlight features of ktap includes:
+
+   - support tracepoints, k(ret)probe, u(ret)probe, function tracing,
+     and timer
+   - support x86, x86-64, powerpc, arm, and preempt-rt kernel
+   - support kernel 3.1 and later versions, include Linux mainline
+   - similar event syntax interface with perf
+   - support event filter
+   - unified backend perf callback mechanism
+   - ring buffer transport (same with ftrace)
+   - oneline scripting
+
+To make us understand deeply on ktap, the contents splits into 5 parts:
+Introduction, The design, Implementation, Link, Upstream.
+
+1. Introduction
+---------------
+
+ktap is a simple and lightweight dynamic tracing tool for Linux, it's
+similar with Linux mainstream dynamic tracing tool systemtap, and Dtrace
+in Solaris.
+ktap have different design principles from Linux mainstream dynamic
+tracing tool in that it's based on bytecode interpreter, so it doesn't
+depend upon GCC, doesn't require compiling kernel module for each
+script, fulfilling the embedded ecosystem's tracing needs.
+
+ktap doesn't invent any new tracing build-block, it leverage current
+tracing building blocks(tracepoint, kprobe, uprobe, function tracing,
+pmu)in Linux kernel, it just combine all these tracing building blocks
+together, to explore as a unified script tracing interface.
 
 
---------------080903010107040303040605
-Content-Type: text/html; charset=ISO-8859-1
-Content-Transfer-Encoding: 7bit
+2. The design
+-------------
 
-<html>
-  <head>
-    <meta content="text/html; charset=ISO-8859-1"
-      http-equiv="Content-Type">
-  </head>
-  <body bgcolor="#FFFFFF" text="#000000">
-    <div class="moz-cite-prefix">On 2013-08-08 08:35, Suraj Bagad wrote:<br>
-    </div>
-    <blockquote
-cite="mid:CAFa-mVUWH29L0V-OXD8UaMgdH96tcxqNd1fgxOT=YX4b7cnzGQ@mail.gmail.com"
-      type="cite">
-      <div dir="ltr">
-        <div>HI Iam trying to install lttng-modules for kernel probing
-          on CentOS 6.4 2.6.32-358.6.1.el6.x86_64<br>
-        </div>
-        <div>iam getting error while running make as follows. <br>
-          /home/admin/lttng-modules-2.3.0-rc1/lttng-events.c:388: error:
-          too many arguments to function &acirc;tracepoint_probe_register&acirc;<br>
-          <br>
-        </div>
-        I have already installed lttng-tools
-        (lttng-tools-2.0.4-2.el6.x86_
-        <div dir="ltr">64<br>
-          ) for user space probing<br clear="all">
-          <div>
-            <div><br>
-            </div>
-            <div>It seems that the lttng-modules are not compatible for
-              above mentioned centOS .<br>
-              Can u please let me know which version or how i can
-              install lttng-modules for kernel probing for my <br>
-            </div>
-            <div>mentioned CentOS version</div>
-          </div>
-        </div>
-      </div>
-    </blockquote>
-    hi, <br>
-    <br>
-    For this version of CentOS, you need to apply some patches to the
-    kernel. See the linux-patches directory in the lttng-modules source
-    tree. <br>
-    <br>
-    Yannick<br>
-    <br>
-    <blockquote
-cite="mid:CAFa-mVUWH29L0V-OXD8UaMgdH96tcxqNd1fgxOT=YX4b7cnzGQ@mail.gmail.com"
-      type="cite">
-      <div class="gmail_extra"><br>
-        <br>
-        <div class="gmail_quote">
-          On Thu, Aug 8, 2013 at 5:02 PM, Suraj Bagad <span dir="ltr">&lt;<a
-              moz-do-not-send="true" href="mailto:surajbagad@gmail.com"
-              target="_blank">surajbagad@gmail.com</a>&gt;</span> wrote:<br>
-          <blockquote class="gmail_quote" style="margin:0 0 0
-            .8ex;border-left:1px #ccc solid;padding-left:1ex">
-            <div dir="ltr">
-              <div>HI Iam trying to install lttng-modules for kernel
-                probing on CentOS 6.4 2.6.32-358.6.1.el6.x86_64<br>
-              </div>
-              <div>iam getting error while running make as follows. <br>
-                /home/admin/lttng-modules-2.3.0-rc1/lttng-events.c:388:
-                error: too many arguments to function
-                &acirc;tracepoint_probe_register&acirc;<br>
-                <br>
-              </div>
-              I have already installed lttng-tools
-              (lttng-tools-2.0.4-2.el6.x86_64<br>
-              ) for user space probing<br clear="all">
-              <div>
-                <div><br>
-                </div>
-                <div>It seems that the lttng-modules are not compatible
-                  for above mentioned centOS .<br>
-                  Can u please let me know which version or how i can
-                  install lttng-modules for kernel probing for my <br>
-                </div>
-                <div>mentioned CentOS version<span class="HOEnZb"><font
-                      color="#888888"><br>
-                    </font></span></div>
-                <span class="HOEnZb"><font color="#888888">
-                    <div>
-                      -- <br>
-                      Thanks <br>
-                      and Regards,<br>
-                    </div>
-                    <div>Suraj Bagad<br>
-                    </div>
-                  </font></span></div>
-            </div>
-          </blockquote>
-        </div>
-        <br>
-        <br clear="all">
-        <br>
-        -- <br>
-        Thanks <br>
-        and Regards
-      </div>
-      <br>
-      <fieldset class="mimeAttachmentHeader"></fieldset>
-      <br>
-      <pre wrap="">_______________________________________________
-lttng-dev mailing list
-<a class="moz-txt-link-abbreviated" href="mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a>
-<a class="moz-txt-link-freetext" href="http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a>
-</pre>
-    </blockquote>
-    <br>
-  </body>
-</html>
+                   ktap compiler      io thread
+                        |                ^
+                 -------|----------------|-----------
+                        |                |
+                        v                |
+                     ktapvm --------> ringbuffer
+                        |
+                        |
+                        v
+                 tracepoints kprobe uprobe
+                 pmu hw_breakpoint timer
 
---------------080903010107040303040605--
+ktap compiler: responsible for compile source script to bytecode, then
+use ioctl to notify ktapvm load and execute bytecode.
+
+ktapvm: core script engine, responsible for load and execute bytecode,
+calling into built-in or library function, also interact with ringbuffer
+transport. ktapvm register perf event by id, the overflow callback will
+call by event is hit, then calling into ktap script engine.
+
+ringbuffer: this is based on ftrace ring buffer, responsible for
+transport to userspace. Possibly ktap will share same ring buffer output
+code with ftrace in future.
+
+io thread: reading the ring buffer, output to stdout.
 
 
---===============1853200934==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Disposition: inline
-Content-Transfer-Encoding: 7bit
+3. Implementation
+-----------------
 
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+The script engine and compiler is based on lua initially, a widely used
+fast dynamic typed language, registered based, extendable interpreter,
+support associative array.
+(Note that ktap already changed a lot on interpreter core and compiler,
+so it's cannot call it as lua anymore :-))
 
---===============1853200934==--
+Language syntax is C-like, so it's easy to make us(kernel developers) to
+adapt it, smooth learning curve.
+
+ktapvm code of lines is only 5K+, and userspace compiler is only 4K+,
+code is very easy to read and review, especially ktapvm, easy to hack,
+it just have 40 bytecodes.
+
+One thing need to aware is ktap tracing core is heavily based on perf
+event, in this point of view, ktap is a kernel script interface for perf
+tool, there already have perf-script tools(based on python/perl), ktap
+differences with perf-script is we can programming each event when event
+is hit, in real time manner.
+
+Currently debuginfo is not handled, ktap just reuse perf-probe, in case
+some embedded Linux system don't have available debuginfo, they still
+could get local variable or register based on
+kprobe-tracer/uprobe-tracer, so debuginfo won't hurt the simplicity of
+ktap, which recognized as largest advantage of ktap.
+
+The event filter in ktap is based on kernel tracing event filter.
+
+Based on these design, I'm also willing to discuss perf-ktap integrating
+if others want too.
+
+This is the whole design overview for ktap, it reuse current tracing
+building block, to keep its simplicity.
+
+More info is available in ktap/doc/, and sample scripts is in scripts/
+
+4. Link
+-------
+
+There have ktap v0.1 review on LWN(wrote by Corbet):
+http://lwn.net/Articles/551314/
+
+example in that link have a little out of date.
+
+
+5. Upstream
+-----------
+
+why I want to upstream ktap now?
+
+ktap is still in early stage, there have many items in my todo list, but
+small start is a good start, it would be good to shape and polish this
+tool under eyes of community, community collaboration will make ktap to
+be more valuable for all of us, it have been shown that ktap is very
+useful for embedded Linux system, and we are enter an age where embedded
+system is deployed to large user base than before.
+
+I hope in future we will have a robust, low overhead, mature, extendable
+kernel interpreter.
+
+I appreciate any feedback from you, thank you.
+
+jovi
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----- End forwarded message -----
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
