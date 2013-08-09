@@ -1,19 +1,16 @@
-From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: one sessiond for multiuser system
-Date: Fri, 9 Aug 2013 10:54:49 -0400
-Message-ID: <CA+jJMxuJ2itGEqM0Y7VLabttNuwfogD448bUEPtQeuoz_RpWyA__30860.9983571388$1376060151$gmane$org@mail.gmail.com>
-References: <6DB83340B9D38C4A9C0ECD8B6FBABDFB1A223B68@ESESSMB105.ericsson.se>
+From: Julien Desfossez <jdesfossez@efficios.com>
+Subject: [MODULES PATCH 1/2] Prepare LTTng override of ring
+	buffer fops
+Date: Fri,  9 Aug 2013 11:14:49 -0400
+Message-ID: <1376061290-30116-1-git-send-email-jdesfossez__30919.9955118403$1376061362$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-we0-f172.google.com ([74.125.82.172])
+Received: from smtp.ini-tech.com ([5.9.158.244])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1V7o5f-0002zj-DW
-	for lttng-dev@lists.lttng.org; Fri, 09 Aug 2013 10:54:58 -0400
-Received: by mail-we0-f172.google.com with SMTP id t61so3615101wes.17
-	for <lttng-dev@lists.lttng.org>; Fri, 09 Aug 2013 07:54:49 -0700 (PDT)
-In-Reply-To: <6DB83340B9D38C4A9C0ECD8B6FBABDFB1A223B68@ESESSMB105.ericsson.se>
+	(envelope-from <jdesfossez@efficios.com>) id 1V7oP8-0004as-Su
+	for lttng-dev@lists.lttng.org; Fri, 09 Aug 2013 11:15:08 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,55 +19,101 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Stanislav Vovk <stanislav.vovk@ericsson.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: mathieu.desnoyers@efficios.com
+Cc: lttng-dev@lists.lttng.org, Julien Desfossez <jdesfossez@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-On Fri, Aug 9, 2013 at 4:01 AM, Stanislav Vovk
-<stanislav.vovk@ericsson.com> wrote:
-> Hi,
->
-> Have a few questions regarding lttng configuration in a multi user system.
->
-> In my system there are two users, root and Bob. I am starting sessiond at=
- boot as root user. And instrumented programs are started as either root or=
- Bob. I am logged in to the system and controlling lttng as root user.
->
-> - When executing "lttng list -u" I see events registered by programs star=
-ted as root. I don't see events from programs started as Bob. Why? Did I fo=
-rget something?
->
-> - Now I switch user to Bob in the shell. Executing "lttng list -u" does n=
-ot give any output at all, instead a new sessiond is started. How can I hav=
-e one sessiond for the whole system?
+This patch allows LTTng to override the file operations of the lib ring
+buffer.
+For now it does not provide any additional functions, but it prepares
+the work of adding LTTng-specific ioctls to the ring buffer.
 
-Hi Stanislav,
+Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
+---
+ lttng-abi.c |   50 +++++++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 49 insertions(+), 1 deletion(-)
 
-A non-privileged user can only interact with a root session daemon if
-he is part of the "tracing" group. Is it the case for "Bob" in this
-example?
-
-Reproducing your scenario here with "Bob" being part of the tracing group:
-- Root can list its own sessions as well as Bob's
-- Bob's user space events can also be seen by root
-- Bob can't see the sessions created by root.
-
-Regards,
-J=E9r=E9mie
-
->
-> Cheers,
-> Stanislav
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
-
-
--- =
-
-J=E9r=E9mie Galarneau
-EfficiOS Inc.
-http://www.efficios.com
+diff --git a/lttng-abi.c b/lttng-abi.c
+index ba8362b..9a25490 100644
+--- a/lttng-abi.c
++++ b/lttng-abi.c
+@@ -64,6 +64,7 @@ static const struct file_operations lttng_session_fops;
+ static const struct file_operations lttng_channel_fops;
+ static const struct file_operations lttng_metadata_fops;
+ static const struct file_operations lttng_event_fops;
++static struct file_operations lttng_stream_ring_buffer_file_operations;
+ 
+ /*
+  * Teardown management: opened file descriptors keep a refcount on the module,
+@@ -781,7 +782,7 @@ int lttng_abi_open_stream(struct file *channel_file)
+ 
+ 	stream_priv = buf;
+ 	ret = lttng_abi_create_stream_fd(channel_file, stream_priv,
+-			&lib_ring_buffer_file_operations);
++			&lttng_stream_ring_buffer_file_operations);
+ 	if (ret < 0)
+ 		goto fd_error;
+ 
+@@ -1293,6 +1294,51 @@ static const struct file_operations lttng_event_fops = {
+ #endif
+ };
+ 
++static long lttng_stream_ring_buffer_ioctl(struct file *filp,
++		unsigned int cmd, unsigned long arg)
++{
++	switch (cmd) {
++		default:
++			return lib_ring_buffer_file_operations.unlocked_ioctl(filp,
++					cmd, arg);
++	}
++}
++
++#ifdef CONFIG_COMPAT
++static long lttng_stream_ring_buffer_compat_ioctl(struct file *filp,
++		unsigned int cmd, unsigned long arg)
++{
++	switch (cmd) {
++		default:
++			return lib_ring_buffer_file_operations.compat_ioctl(filp,
++					cmd, arg);
++	}
++}
++#endif /* CONFIG_COMPAT */
++
++static void lttng_stream_override_ring_buffer_fops(void)
++{
++	lttng_stream_ring_buffer_file_operations.owner = THIS_MODULE;
++	lttng_stream_ring_buffer_file_operations.open =
++		lib_ring_buffer_file_operations.open;
++	lttng_stream_ring_buffer_file_operations.release =
++		lib_ring_buffer_file_operations.release;
++	lttng_stream_ring_buffer_file_operations.poll =
++		lib_ring_buffer_file_operations.poll;
++	lttng_stream_ring_buffer_file_operations.splice_read =
++		lib_ring_buffer_file_operations.splice_read;
++	lttng_stream_ring_buffer_file_operations.mmap =
++		lib_ring_buffer_file_operations.mmap;
++	lttng_stream_ring_buffer_file_operations.unlocked_ioctl =
++		lttng_stream_ring_buffer_ioctl;
++	lttng_stream_ring_buffer_file_operations.llseek =
++		lib_ring_buffer_file_operations.llseek;
++#ifdef CONFIG_COMPAT
++	lttng_stream_ring_buffer_file_operations.compat_ioctl =
++		lttng_stream_ring_buffer_compat_ioctl;
++#endif
++}
++
+ int __init lttng_abi_init(void)
+ {
+ 	int ret = 0;
+@@ -1306,6 +1352,8 @@ int __init lttng_abi_init(void)
+ 		ret = -ENOMEM;
+ 		goto error;
+ 	}
++	lttng_stream_override_ring_buffer_fops();
++
+ error:
+ 	return ret;
+ }
+-- 
+1.7.10.4
