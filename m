@@ -1,17 +1,16 @@
-From: Sebastiano Spicuglia <spicuglia.sebastiano@gmail.com>
-Subject: Extendend net
-Date: Fri, 2 Aug 2013 12:06:59 +0200
-Message-ID: <CAOSRKdQDo-95DDw1_KDkSSgNKRwWyFsmKqWuVErZfNZqpZK2gg__27130.1601468169$1375994945$gmane$org@mail.gmail.com>
+From: Stanislav Vovk <stanislav.vovk@ericsson.com>
+Subject: one sessiond for multiuser system
+Date: Fri, 9 Aug 2013 08:01:07 +0000
+Message-ID: <6DB83340B9D38C4A9C0ECD8B6FBABDFB1A223B68__47364.6069680855$1376035329$gmane$org@ESESSMB105.ericsson.se>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ea0-f177.google.com ([209.85.215.177])
+Received: from mailgw7.ericsson.se ([193.180.251.48])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <spicuglia.sebastiano@gmail.com>) id 1V5CGH-0002cb-H8
-	for lttng-dev@lists.lttng.org; Fri, 02 Aug 2013 06:07:09 -0400
-Received: by mail-ea0-f177.google.com with SMTP id f15so224521eak.22
-	for <lttng-dev@lists.lttng.org>; Fri, 02 Aug 2013 03:06:59 -0700 (PDT)
+	(envelope-from <stanislav.vovk@ericsson.com>) id 1V7hdG-0004rd-Op
+	for lttng-dev@lists.lttng.org; Fri, 09 Aug 2013 04:01:15 -0400
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,36 +19,18 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hello everyone,
+Hi,
 
-I am collecting traces using lttng from different machines.
-I saw here http://www.youtube.com/watch?v=YzgRglpXdxQ
-(around 24:06) that it is possible to trace with more details
-the network subsystem and then synchronise different traces.
+Have a few questions regarding lttng configuration in a multi user system.
 
-Even the eclipse page says something about this
-("Integration of trace synchronization")
-http://www.eclipse.org/linuxtools/projectPages/lttng/
+In my system there are two users, root and Bob. I am starting sessiond at boot as root user. And instrumented programs are started as either root or Bob. I am logged in to the system and controlling lttng as root user.
 
-I read the man of lttng and I look around in the eclipse
-plugin but I didn't find anything about this two features
-(extended network instrumentation and traces sychnronization).
+- When executing "lttng list -u" I see events registered by programs started as root. I don't see events from programs started as Bob. Why? Did I forget something?
 
-Is the synchronization somehow performed automatically
-by the eclipse plugin and there is no need to enable the extended
-instrumentation of the network subsystem?
+- Now I switch user to Bob in the shell. Executing "lttng list -u" does not give any output at all, instead a new sessiond is started. How can I have one sessiond for the whole system?
 
-I have the impression that in the eclipse plugin the term
-"synchronization" is related to the the different sources of
-events on the same machine, am I right?
-
-Could you please me provide some resources where I can find
-more information about the synhcronization of traces coming
-from different machines?
-
-Thank you in advance for your help
-Regards
-Sebastiano
+Cheers,
+Stanislav
