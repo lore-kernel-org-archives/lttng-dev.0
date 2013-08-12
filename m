@@ -1,19 +1,16 @@
-From: Stanislav Vovk <stanislav.vovk@ericsson.com>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
 Subject: Re: one sessiond for multiuser system
-Date: Mon, 12 Aug 2013 12:31:30 +0000
-Message-ID: <6DB83340B9D38C4A9C0ECD8B6FBABDFB1A22CB27__20861.2661961981$1376310745$gmane$org@ESESSMB105.ericsson.se>
-References: <6DB83340B9D38C4A9C0ECD8B6FBABDFB1A223B68@ESESSMB105.ericsson.se>
-	<CA+jJMxuJ2itGEqM0Y7VLabttNuwfogD448bUEPtQeuoz_RpWyA@mail.gmail.com>
+Date: Mon, 12 Aug 2013 13:23:20 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD26661827__28136.3354567022$1376313861$gmane$org@VAL-E-01.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mailgw2.ericsson.se ([193.180.251.37])
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <stanislav.vovk@ericsson.com>) id 1V8rHY-0003hl-R7
-	for lttng-dev@lists.lttng.org; Mon, 12 Aug 2013 08:31:35 -0400
-In-Reply-To: <CA+jJMxuJ2itGEqM0Y7VLabttNuwfogD448bUEPtQeuoz_RpWyA@mail.gmail.com>
-Content-Language: en-US
+	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1V8s5i-0000pu-0M
+	for lttng-dev@lists.lttng.org; Mon, 12 Aug 2013 09:23:27 -0400
+Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,107 +19,62 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?iso-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, =?iso-8859-1?Q?J=E9r=E9mie_Galarneau_=28jeremie=2Egalarneau=40efficios=2E?= =?iso-8859-1?Q?com=29?= <jeremie.galarneau@efficios.com>, Stanislav Vovk <stanislav.vovk@ericsson.com>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
+----------------------------------------------------------------------
+Message: 5
+Date: Fri, 9 Aug 2013 10:54:49 -0400
+From: J?r?mie Galarneau <jeremie.galarneau@efficios.com>
 
-No, "Bob" did not belong to group "tracing"!
-
-I created group "tracing", added Bob to it(as secondary group, "users" is p=
-rimary) and could successfully see all events registered by program run as =
-Bob. Thanks for that!
-One problem though, when I took a snapshot with "lttng snapshot record" con=
-sumerd crashed! See below for debug output from sessiond. Seems like a bug =
-to me, something to add to the bugtracker?
-
-Cheers,
-Stanislav
-
-DEBUG1 [2056/2061]: Sending metadata request to sessiond, session id 0, per=
--pid 6 (in lttng_ustconsumer_request_metadata() at ust-consumer.c:1867)
-DEBUG1 [1855/2057]: Metadata request received for session 0, key 8 (in ust_=
-consumer_metadata_request() at ust-consumer.c:455)
-DEBUG3 [1855/2057]: Buffer registry per UID find id: 0, ABI: 32, uid: 0 (in=
- buffer_reg_uid_find() at buffer-registry.c:195)
-DEBUG3 [1855/2057]: No metadata to push for metadata key 4 (in ust_app_push=
-_metadata() at ust-app.c:441)
-DEBUG1 [1855/2057]: No metadata to push (in ust_app_push_metadata() at ust-=
-app.c:444)
-DEBUG2 [1855/2057]: Consumer push metadata to consumer socket 33 (in consum=
-er_push_metadata() at consumer.c:1175)
-lttng-consumerd: ust-consumer.c:1907: lttng_ustconsumer_request_metadata: A=
-ssertion `key =3D=3D channel->key' failed.
-DEBUG1 [1855/1858]: Fail to receive status reply on sock 32 (in consumer_re=
-cv_status_reply() at consumer.c:58)
-DEBUG1 [1855/1858]: Sending response (size: 16, retcode: Snapshot record fa=
-iled) (in thread_manage_clients() at main.c:3765)
-DEBUG1 [1855/2057]: Fail to receive status reply on sock 33 (in consumer_re=
-cv_status_reply() at consumer.c:58)
-Error: Pushing metadata
-Error: Handling metadata request
-Error: Health error occurred in thread_manage_consumer
-DEBUG1 [1855/2057]: consumer thread cleanup completed (in thread_manage_con=
-sumer() at main.c:1194)
-DEBUG1 [1855/1858]: Clean command context structure (in clean_command_ctx()=
- at main.c:538)
-DEBUG1 [1855/1858]: Accepting client command ... (in thread_manage_clients(=
-) at main.c:3629)  =
-
-
-
------Original Message-----
-From: jeremie.galarneau@gmail.com [mailto:jeremie.galarneau@gmail.com] On B=
-ehalf Of J=E9r=E9mie Galarneau
-Sent: den 9 augusti 2013 16:55
-To: Stanislav Vovk
-Cc: lttng-dev@lists.lttng.org
-Subject: Re: [lttng-dev] one sessiond for multiuser system
-
-On Fri, Aug 9, 2013 at 4:01 AM, Stanislav Vovk <stanislav.vovk@ericsson.com=
-> wrote:
-> Hi,
+> On Fri, Aug 9, 2013 at 4:01 AM, Stanislav Vovk <stanislav.vovk@ericsson.c=
+om> wrote:
+> > In my system there are two users, root and Bob. I am starting sessiond =
+at boot as root user. And instrumented programs are started as either root =
+or Bob. I am logged in to the system and controlling lttng as root user.
+> > - When executing "lttng list -u" I see events registered by programs st=
+arted as root. I don't see events from programs started as Bob. Why? Did I =
+forget something?
+> > - Now I switch user to Bob in the shell. Executing "lttng list -u" does=
+ not give any output at all, instead a new sessiond is started. How can I h=
+ave one sessiond for the whole system?
 >
-> Have a few questions regarding lttng configuration in a multi user system.
+> A non-privileged user can only interact with a root session daemon if he =
+is part of the "tracing" group. Is it the case for "Bob" in this example?
 >
-> In my system there are two users, root and Bob. I am starting sessiond at=
- boot as root user. And instrumented programs are started as either root or=
- Bob. I am logged in to the system and controlling lttng as root user.
->
-> - When executing "lttng list -u" I see events registered by programs star=
-ted as root. I don't see events from programs started as Bob. Why? Did I fo=
-rget something?
->
-> - Now I switch user to Bob in the shell. Executing "lttng list -u" does n=
-ot give any output at all, instead a new sessiond is started. How can I hav=
-e one sessiond for the whole system?
+> Reproducing your scenario here with "Bob" being part of the tracing group:
+> - Root can list its own sessions as well as Bob's
+> - Bob's user space events can also be seen by root
+> - Bob can't see the sessions created by root.
 
-Hi Stanislav,
+   Actually, a non-root user can also access the root daemon if he has sudo=
+ privileges.
 
-A non-privileged user can only interact with a root session daemon if he is=
- part of the "tracing" group. Is it the case for "Bob" in this example?
+   The root daemon will see the various user-space events, but it will *not=
+* list the user sessions: the various lttng-sessiond daemons do not talk to=
+ each other.  (This may become possible with a later version of lttng)
 
-Reproducing your scenario here with "Bob" being part of the tracing group:
-- Root can list its own sessions as well as Bob's
-- Bob's user space events can also be seen by root
-- Bob can't see the sessions created by root.
+   To funnel all tracing through the root daemon, make sure any user lttng-=
+sessiond daemons are killed and only the root lttng-sessiond daemon is runn=
+ing, then either make your users members of the 'tracing' group, or systema=
+tically use 'sudo lttng ...' or 'sudo -H lttng ...' from the user shells.  =
+The first form will put the trace outputs in each user's ~/lttng-traces, th=
+e second form will combine all trace outputs in /root/lttng-traces.  You ma=
+y need to chmod the resulting folders and files if you want to later access=
+ them as non-root.
 
-Regards,
-J=E9r=E9mie
-
->
-> Cheers,
-> Stanislav
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
-
-
---
-J=E9r=E9mie Galarneau
-EfficiOS Inc.
-http://www.efficios.com
+Daniel U. Thibault
+Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
+ntermeasures (SPC)
+Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
+Cyber Security (MCCS)
+R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
+ Canada - Valcartier (DRDC Valcartier)
+2459 route de la Bravoure
+Qu=E9bec QC  G3J 1X5
+CANADA
+Vox : (418) 844-4000 x4245
+Fax : (418) 844-4538
+NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+Gouvernement du Canada | Government of Canada
+<http://www.valcartier.drdc-rddc.gc.ca/>
