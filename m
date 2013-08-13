@@ -1,21 +1,19 @@
-From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: one sessiond for multiuser system
-Date: Mon, 12 Aug 2013 18:47:39 -0400
-Message-ID: <CA+jJMxu4fZr2M2xG_JF60BH67JqKJ-ELKw8=BcnfBZVYZbnPSg__44966.1827915863$1376347730$gmane$org@mail.gmail.com>
-References: <48CF5AC71E61DB46B70D0F388054EFFD26661827@VAL-E-01.valcartier.drdc-rddc.gc.ca>
-	<CA+jJMxuWdmhzReR0Jy=y-tYFeGz3bod8FNUGBbY8mc0pdD_6LA@mail.gmail.com>
-	<48CF5AC71E61DB46B70D0F388054EFFD2666421B@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
+	<jeremie.galarneau@efficios.com>
+Subject: [PATCH babeltrace] Fix ctf_clock_declaration_visit
+	returning an error when reading a boolean
+Date: Mon, 12 Aug 2013 21:59:56 -0400
+Message-ID: <1376359196-25062-1-git-send-email-jeremie.galarneau__16864.1706499786$1376359267$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-we0-f172.google.com ([74.125.82.172])
+Received: from mail-qa0-f51.google.com ([209.85.216.51])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1V90tu-0006fN-2X
-	for lttng-dev@lists.lttng.org; Mon, 12 Aug 2013 18:47:52 -0400
-Received: by mail-we0-f172.google.com with SMTP id t61so5997165wes.17
-	for <lttng-dev@lists.lttng.org>; Mon, 12 Aug 2013 15:47:40 -0700 (PDT)
-In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD2666421B@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1V93u1-00040F-3F
+	for lttng-dev@lists.lttng.org; Mon, 12 Aug 2013 22:00:10 -0400
+Received: by mail-qa0-f51.google.com with SMTP id f11so52048qae.3
+	for <lttng-dev@lists.lttng.org>; Mon, 12 Aug 2013 18:59:59 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,85 +22,25 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On Mon, Aug 12, 2013 at 4:23 PM, Thibault, Daniel
-<Daniel.Thibault@drdc-rddc.gc.ca> wrote:
-> -----Message d'origine-----
-> Envoy=E9 : 12 ao=FBt 2013 16:11
->
-> On Mon, Aug 12, 2013 at 9:23 AM, Thibault, Daniel <Daniel.Thibault@drdc-r=
-ddc.gc.ca> wrote:
->> ----------------------------------------------------------------------
->>    Actually, a non-root user can also access the root daemon if he has s=
-udo privileges.
->>
->>    The root daemon will see the various user-space events, but it will
->> *not* list the user sessions: the various lttng-sessiond daemons do
->> not talk to each other.  (This may become possible with a later
->> version of lttng)
->>
->>    To funnel all tracing through the root daemon, make sure any user ltt=
-ng-sessiond daemons are killed and only the root lttng-sessiond daemon is r=
-unning, then either make your users members of the 'tracing' group, or syst=
-ematically use 'sudo lttng ...' or 'sudo -H lttng ...' from the user shells=
-.  The first form will put the trace outputs in each user's ~/lttng-traces,=
- the second form will combine all trace outputs in /root/lttng-traces.  You=
- may need to chmod the resulting folders and files if you want to later acc=
-ess them as non-root.
->
-> Keep in mind that in this scenario, setting up your traces as root (using=
- sudo) will still not let users that are not part of the 'tracing' group tr=
-ace their applications as no interactions with the session daemon are allow=
-ed; that includes application registration.
->
-> Getting around that would require that your users also launch the applica=
-tions themselves as root (using sudo) which is an unnecessary security risk.
->
-> J=E9r=E9mie Galarneau
-> EfficiOS Inc.
-> -----Fin du message d'origine-----
->
->    I'm not sure I understand what you're getting at when you say "setting=
- up your traces as root (using sudo) will still not let users that are not =
-part of the 'tracing' group trace their applications as no interactions wit=
-h the session daemon are allowed; that includes application registration." =
- Users that are not part of the 'tracing' group need take no special action=
- to get their apps traced: the root session daemon sees all user-spaces.
-
-You're right. There seems to be an unrelated problem on my system. So,
-to clarify:
-
-- A root session daemon can only be controlled (e.g. create and modify
-sessions) by root and members of the tracing group.
-- Applications do not need to run as a member of the tracing group to be tr=
-aced.
-
-J=E9r=E9mie
-
->
-> Daniel U. Thibault
-> Protection des syst=E8mes et contremesures (PSC) | Systems Protection & C=
-ountermeasures (SPC)
-> Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critica=
-l Cyber Security (MCCS)
-> R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R=
-&D Canada - Valcartier (DRDC Valcartier)
-> 2459 route de la Bravoure
-> Qu=E9bec QC  G3J 1X5
-> CANADA
-> Vox : (418) 844-4000 x4245
-> Fax : (418) 844-4538
-> NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-> Gouvernement du Canada | Government of Canada
-> <http://www.valcartier.drdc-rddc.gc.ca/>
-
-
-
--- =
-
-J=E9r=E9mie Galarneau
-EfficiOS Inc.
-http://www.efficios.com
+VGhlIHJldCB2YXJpYWJsZSBpcyB1c2VkIHRvIHJlYWQgdGhlICJhYnNvbHV0ZSIgZmllbGQncyB2
+YWx1ZSBhbmQgd2FzIG5vdCByZXNldAp0byB6ZXJvLCB0aHVzIHJldHVybmluZyBhbiBlcnJvciB3
+aGVuZXZlciB0aGF0IHZhbHVlIHdhcyBUUlVFLgoKU2lnbmVkLW9mZi1ieTogSsOpcsOpbWllIEdh
+bGFybmVhdSA8amVyZW1pZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29tPgotLS0KIGZvcm1hdHMvY3Rm
+L21ldGFkYXRhL2N0Zi12aXNpdG9yLWdlbmVyYXRlLWlvLXN0cnVjdC5jIHwgMSArCiAxIGZpbGUg
+Y2hhbmdlZCwgMSBpbnNlcnRpb24oKykKCmRpZmYgLS1naXQgYS9mb3JtYXRzL2N0Zi9tZXRhZGF0
+YS9jdGYtdmlzaXRvci1nZW5lcmF0ZS1pby1zdHJ1Y3QuYyBiL2Zvcm1hdHMvY3RmL21ldGFkYXRh
+L2N0Zi12aXNpdG9yLWdlbmVyYXRlLWlvLXN0cnVjdC5jCmluZGV4IDY2NGQwYWYuLmM3ZGU5MmUg
+MTAwNjQ0Ci0tLSBhL2Zvcm1hdHMvY3RmL21ldGFkYXRhL2N0Zi12aXNpdG9yLWdlbmVyYXRlLWlv
+LXN0cnVjdC5jCisrKyBiL2Zvcm1hdHMvY3RmL21ldGFkYXRhL2N0Zi12aXNpdG9yLWdlbmVyYXRl
+LWlvLXN0cnVjdC5jCkBAIC0yMzk5LDYgKzIzOTksNyBAQCBpbnQgY3RmX2Nsb2NrX2RlY2xhcmF0
+aW9uX3Zpc2l0KEZJTEUgKmZkLCBpbnQgZGVwdGgsIHN0cnVjdCBjdGZfbm9kZSAqbm9kZSwKIAkJ
+CQlnb3RvIGVycm9yOwogCQkJfQogCQkJY2xvY2stPmFic29sdXRlID0gcmV0OworCQkJcmV0ID0g
+MDsKIAkJfSBlbHNlIHsKIAkJCWZwcmludGYoZmQsICJbd2FybmluZ10gJXM6IGF0dHJpYnV0ZSBc
+IiVzXCIgaXMgdW5rbm93biBpbiBjbG9jayBkZWNsYXJhdGlvbi5cbiIsIF9fZnVuY19fLCBsZWZ0
+KTsKIAkJfQotLSAKMS44LjMuNAoKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5n
+Lm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRu
+Zy1kZXYK
