@@ -1,18 +1,18 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: Re: [PATCH lttng-tools] Fix: Snapshot should be taken
- asap in core handler script
-Date: Thu, 15 Aug 2013 13:33:11 -0400
-Message-ID: <520D10D7.7080302__19515.1977976368$1376588055$gmane$org@efficios.com>
-References: <1376586216-14065-1-git-send-email-christian.babeux@efficios.com>
+From: Yannick Brosseau <yannick.brosseau@gmail.com>
+Subject: [Babeltrace PATCH] Test for presence of bison and flex
+	when building from git
+Date: Thu, 15 Aug 2013 15:29:25 -0400
+Message-ID: <1376594965-30440-1-git-send-email-yannick.brosseau__37874.47412401$1376595039$gmane$org@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([5.9.158.244])
+Received: from mail-ie0-f172.google.com ([209.85.223.172])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1VA1QF-00074o-PY
-	for lttng-dev@lists.lttng.org; Thu, 15 Aug 2013 13:33:25 -0400
-In-Reply-To: <1376586216-14065-1-git-send-email-christian.babeux@efficios.com>
+	(envelope-from <yannick.brosseau@gmail.com>) id 1VA3Eq-0000f5-2R
+	for lttng-dev@lists.lttng.org; Thu, 15 Aug 2013 15:29:45 -0400
+Received: by mail-ie0-f172.google.com with SMTP id 17so1958145iea.17
+	for <lttng-dev@lists.lttng.org>; Thu, 15 Aug 2013 12:29:34 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,46 +21,41 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Christian Babeux <christian.babeux@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org, mathieu.desnoyers@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-Merged!
+Fixes #74
 
-Christian Babeux:
-> Taking a snapshot should be the first thing the core handler does.
-> An enormous core file write to disk could potentially discard a lot
-> of tracing data if done before the snapshot.
-> 
-> Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
-> ---
->  extras/core-handler/handler.sh | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/extras/core-handler/handler.sh b/extras/core-handler/handler.sh
-> index 7817282..c2d2402 100755
-> --- a/extras/core-handler/handler.sh
-> +++ b/extras/core-handler/handler.sh
-> @@ -29,6 +29,12 @@ SESSION_NAME="coredump-handler"
->  # Sessiond binary name.
->  SESSIOND_BIN_NAME="lttng-sessiond"
->  
-> +# TODO: Checking for a sessiond lockfile would be more appropriate.
-> +if $PGREP_BIN -u root "${SESSIOND_BIN_NAME}" > /dev/null 2>&1
-> +then
-> +    $LTTNG_BIN snapshot record -s ${SESSION_NAME} > /dev/null 2>&1
-> +fi
-> +
->  # Core file settings.
->  CORE_PATH="/tmp/lttng/core"
->  CORE_PREFIX="core"
-> @@ -54,9 +60,3 @@ $CAT_BIN - > "${CORE_PATH}/${CORE_PREFIX}.$p"
->  
->  # Optional, chain core dump handler with original systemd script.
->  #$CAT_BIN - | /usr/lib/systemd/systemd-coredump $p $u $g $s $t $e
-> -
-> -# TODO: Checking for a sessiond lockfile would be more appropriate.
-> -if $PGREP_BIN -u root "${SESSIOND_BIN_NAME}" > /dev/null 2>&1
-> -then
-> -    $LTTNG_BIN snapshot record -s ${SESSION_NAME} > /dev/null 2>&1
-> -fi
+Signed-off-by: Yannick Brosseau <yannick.brosseau@gmail.com>
+---
+ configure.ac |   15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index a22b1b9..2b9cc0d 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -23,7 +23,20 @@ LT_INIT
+ AC_PROG_YACC
+ AC_PROG_LEX
+ 
+-AC_DEFUN([AC_PROG_BISON], [AC_CHECK_PROGS(BISON, bison, bison)]) 
++if test ! -f "$srcdir/formats/ctf/metadata/ctf-parser.h"; then
++        if test x"$YACC" != "xbison -y"; then
++                AC_MSG_ERROR([[bison not found and is required when building from git.
++                Please install bison]])
++        fi
++fi
++
++if test ! -f "$srcdir/formats/ctf/metadata/ctf-lexer.c"; then
++        if test x"$LEX" != "xflex"; then
++                AC_MSG_ERROR([[flex not found and is required when building from git.
++                Please install flex]])
++        fi
++fi
++
+ 
+ AM_PATH_GLIB_2_0(2.22.0, ,AC_MSG_ERROR([glib is required in order to compile BabelTrace - download it from ftp://ftp.gtk.org/pub/gtk]) , gmodule)
+ 
+-- 
+1.7.10.4
