@@ -1,18 +1,16 @@
-From: Yannick Brosseau <yannick.brosseau@gmail.com>
-Subject: [babeltrace PATCH] Put the libbabeltrace-ctf specific
-	parts of babeltrace.pc into a babeltrace-ctf.pc file.
-Date: Thu, 15 Aug 2013 16:49:10 -0400
-Message-ID: <1376599750-12146-1-git-send-email-yannick.brosseau__10355.0180480399$1376599840$gmane$org@gmail.com>
+From: Julien Desfossez <jdesfossez@efficios.com>
+Subject: [UST PATCH 1/2] Specialize
+	lttng_ust_lib_ring_buffer_client_cb
+Date: Thu, 15 Aug 2013 17:46:27 -0400
+Message-ID: <1376603188-19344-1-git-send-email-jdesfossez__48786.1752314076$1376603259$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f169.google.com ([209.85.223.169])
+Received: from smtp.ini-tech.com ([5.9.158.244])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <yannick.brosseau@gmail.com>) id 1VA4U4-00028h-O2
-	for lttng-dev@lists.lttng.org; Thu, 15 Aug 2013 16:49:34 -0400
-Received: by mail-ie0-f169.google.com with SMTP id qd12so2101238ieb.14
-	for <lttng-dev@lists.lttng.org>; Thu, 15 Aug 2013 13:49:23 -0700 (PDT)
+	(envelope-from <jdesfossez@efficios.com>) id 1VA5NQ-0003CX-AK
+	for lttng-dev@lists.lttng.org; Thu, 15 Aug 2013 17:46:46 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,80 +19,157 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org, mathieu.desnoyers@efficios.com
+To: mathieu.desnoyers@efficios.com
+Cc: lttng-dev@lists.lttng.org, Julien Desfossez <jdesfossez@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-On some distributions libbabeltrace and libbabeltrace-ctf are packaged into separate
-packages. This means they should have their own pkg-config file.
+Prepare the ring-buffer config to have custom callbacks. These custom
+callbacks are not related to the ring-buffer operations but allow
+applications to add custom functions.
+No additional feature or change in behaviour in this patch.
 
-The babeltrace-ctf.pc file requires the babeltrace.pc one.
-
-With this change, to have the ctf support in libbabeltrace a pkg-config user
-will need to specify the babeltrace-ctf package. To compile and link with only
-the base libbabeltrace, the package babeltrace would be use.
-
-Fixes #550
-
-Signed-off-by: Yannick Brosseau <yannick.brosseau@gmail.com>
+Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
 ---
- Makefile.am          |    2 +-
- babeltrace-ctf.pc.in |   13 +++++++++++++
- babeltrace.pc.in     |    2 +-
- configure.ac         |    1 +
- 4 files changed, 16 insertions(+), 2 deletions(-)
- create mode 100644 babeltrace-ctf.pc.in
+ include/lttng/ringbuffer-config.h                |    1 +
+ include/lttng/ust-events.h                       |    6 +++---
+ liblttng-ust/lttng-rb-clients.h                  |    8 ++++++++
+ liblttng-ust/lttng-ring-buffer-client.h          |   18 +++++++++++++++++-
+ liblttng-ust/lttng-ring-buffer-metadata-client.h |   18 +++++++++++++++++-
+ 5 files changed, 46 insertions(+), 5 deletions(-)
+ create mode 100644 liblttng-ust/lttng-rb-clients.h
 
-diff --git a/Makefile.am b/Makefile.am
-index cdfad5a..e5eca77 100644
---- a/Makefile.am
-+++ b/Makefile.am
-@@ -10,4 +10,4 @@ dist_doc_DATA = ChangeLog LICENSE mit-license.txt gpl-2.0.txt \
- dist_noinst_DATA = CodingStyle
+diff --git a/include/lttng/ringbuffer-config.h b/include/lttng/ringbuffer-config.h
+index 3b7d348..e81b827 100644
+--- a/include/lttng/ringbuffer-config.h
++++ b/include/lttng/ringbuffer-config.h
+@@ -204,6 +204,7 @@ struct lttng_ust_lib_ring_buffer_config {
+ 	 * callbacks and update the cb pointers.
+ 	 */
+ 	int client_type;
++	const struct lttng_ust_lib_ring_buffer_client_cb *cb_ptr;
+ 	char padding[LTTNG_UST_RING_BUFFER_CONFIG_PADDING];
+ };
  
- pkgconfigdir = $(libdir)/pkgconfig
--pkgconfig_DATA = babeltrace.pc
-+pkgconfig_DATA = babeltrace.pc babeltrace-ctf.pc
-diff --git a/babeltrace-ctf.pc.in b/babeltrace-ctf.pc.in
+diff --git a/include/lttng/ust-events.h b/include/lttng/ust-events.h
+index f40c044..153c0ff 100644
+--- a/include/lttng/ust-events.h
++++ b/include/lttng/ust-events.h
+@@ -569,9 +569,9 @@ int lttng_add_ip_to_ctx(struct lttng_ctx **ctx);
+ void lttng_context_vtid_reset(void);
+ void lttng_context_vpid_reset(void);
+ 
+-extern const struct lttng_ust_lib_ring_buffer_client_cb *lttng_client_callbacks_metadata;
+-extern const struct lttng_ust_lib_ring_buffer_client_cb *lttng_client_callbacks_discard;
+-extern const struct lttng_ust_lib_ring_buffer_client_cb *lttng_client_callbacks_overwrite;
++extern const struct specialized_lttng_ust_lib_ring_buffer_client_cb *lttng_client_callbacks_metadata;
++extern const struct specialized_lttng_ust_lib_ring_buffer_client_cb *lttng_client_callbacks_discard;
++extern const struct specialized_lttng_ust_lib_ring_buffer_client_cb *lttng_client_callbacks_overwrite;
+ 
+ struct lttng_transport *lttng_transport_find(const char *name);
+ 
+diff --git a/liblttng-ust/lttng-rb-clients.h b/liblttng-ust/lttng-rb-clients.h
 new file mode 100644
-index 0000000..8237607
+index 0000000..37fd842
 --- /dev/null
-+++ b/babeltrace-ctf.pc.in
-@@ -0,0 +1,13 @@
-+prefix=@prefix@
-+exec_prefix=@exec_prefix@
-+libdir=@libdir@
-+includedir=@includedir@
++++ b/liblttng-ust/lttng-rb-clients.h
+@@ -0,0 +1,8 @@
++#ifndef _LTTNG_RB_CLIENT_H
++#define _LTTNG_RB_CLIENT_H
 +
-+Name: Babeltrace CTF parser
-+Description: libbabeltrace-ctf provides the specific bits necessary to read a Common Trace Format (CTF) trace.
-+Version: @PACKAGE_VERSION@
-+Requires: babeltrace
-+Requires.private: 
-+Libs: -L${libdir} -lbabeltrace-ctf
-+Cflags: -I${includedir} 
++struct specialized_lttng_ust_lib_ring_buffer_client_cb {
++	struct lttng_ust_lib_ring_buffer_client_cb parent;
++};
 +
-diff --git a/babeltrace.pc.in b/babeltrace.pc.in
-index 12349dd..7c33f28 100644
---- a/babeltrace.pc.in
-+++ b/babeltrace.pc.in
-@@ -9,6 +9,6 @@ Common Trace Format (CTF).
- Version: @PACKAGE_VERSION@
- Requires:
- Requires.private: uuid popt
--Libs: -L${libdir} -lbabeltrace -lbabeltrace-ctf
-+Libs: -L${libdir} -lbabeltrace
- Cflags: -I${includedir} 
++#endif /* _LTTNG_RB_CLIENT_H */
+diff --git a/liblttng-ust/lttng-ring-buffer-client.h b/liblttng-ust/lttng-ring-buffer-client.h
+index 72b6d2c..94db97e 100644
+--- a/liblttng-ust/lttng-ring-buffer-client.h
++++ b/liblttng-ust/lttng-ring-buffer-client.h
+@@ -161,6 +161,7 @@ unsigned char record_header_size(const struct lttng_ust_lib_ring_buffer_config *
+ }
  
-diff --git a/configure.ac b/configure.ac
-index a22b1b9..fc70453 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -124,5 +124,6 @@ AC_CONFIG_FILES([
- 	extras/Makefile
- 	extras/valgrind/Makefile
- 	babeltrace.pc
-+	babeltrace-ctf.pc
- ])
- AC_OUTPUT
+ #include "../libringbuffer/api.h"
++#include "lttng-rb-clients.h"
+ 
+ static
+ void lttng_write_event_header_slow(const struct lttng_ust_lib_ring_buffer_config *config,
+@@ -385,6 +386,19 @@ static void client_buffer_finalize(struct lttng_ust_lib_ring_buffer *buf, void *
+ {
+ }
+ 
++static const
++struct specialized_lttng_ust_lib_ring_buffer_client_cb client_cb = {
++	.parent = {
++		.ring_buffer_clock_read = client_ring_buffer_clock_read,
++		.record_header_size = client_record_header_size,
++		.subbuffer_header_size = client_packet_header_size,
++		.buffer_begin = client_buffer_begin,
++		.buffer_end = client_buffer_end,
++		.buffer_create = client_buffer_create,
++		.buffer_finalize = client_buffer_finalize,
++	},
++};
++
+ static const struct lttng_ust_lib_ring_buffer_config client_config = {
+ 	.cb.ring_buffer_clock_read = client_ring_buffer_clock_read,
+ 	.cb.record_header_size = client_record_header_size,
+@@ -404,9 +418,11 @@ static const struct lttng_ust_lib_ring_buffer_config client_config = {
+ 	.ipi = RING_BUFFER_NO_IPI_BARRIER,
+ 	.wakeup = LTTNG_CLIENT_WAKEUP,
+ 	.client_type = LTTNG_CLIENT_TYPE,
++
++	.cb_ptr = &client_cb.parent,
+ };
+ 
+-const struct lttng_ust_lib_ring_buffer_client_cb *LTTNG_CLIENT_CALLBACKS = &client_config.cb;
++const struct specialized_lttng_ust_lib_ring_buffer_client_cb *LTTNG_CLIENT_CALLBACKS = &client_cb;
+ 
+ static
+ struct lttng_channel *_channel_create(const char *name,
+diff --git a/liblttng-ust/lttng-ring-buffer-metadata-client.h b/liblttng-ust/lttng-ring-buffer-metadata-client.h
+index 89f2620..5098f21 100644
+--- a/liblttng-ust/lttng-ring-buffer-metadata-client.h
++++ b/liblttng-ust/lttng-ring-buffer-metadata-client.h
+@@ -61,6 +61,7 @@ unsigned char record_header_size(const struct lttng_ust_lib_ring_buffer_config *
+ }
+ 
+ #include "../libringbuffer/api.h"
++#include "lttng-rb-clients.h"
+ 
+ static uint64_t client_ring_buffer_clock_read(struct channel *chan)
+ {
+@@ -153,6 +154,19 @@ static void client_buffer_finalize(struct lttng_ust_lib_ring_buffer *buf,
+ {
+ }
+ 
++static const
++struct specialized_lttng_ust_lib_ring_buffer_client_cb client_cb = {
++	.parent = {
++		.ring_buffer_clock_read = client_ring_buffer_clock_read,
++		.record_header_size = client_record_header_size,
++		.subbuffer_header_size = client_packet_header_size,
++		.buffer_begin = client_buffer_begin,
++		.buffer_end = client_buffer_end,
++		.buffer_create = client_buffer_create,
++		.buffer_finalize = client_buffer_finalize,
++	},
++};
++
+ static const struct lttng_ust_lib_ring_buffer_config client_config = {
+ 	.cb.ring_buffer_clock_read = client_ring_buffer_clock_read,
+ 	.cb.record_header_size = client_record_header_size,
+@@ -172,9 +186,11 @@ static const struct lttng_ust_lib_ring_buffer_config client_config = {
+ 	.ipi = RING_BUFFER_NO_IPI_BARRIER,
+ 	.wakeup = RING_BUFFER_WAKEUP_BY_WRITER,
+ 	.client_type = LTTNG_CLIENT_TYPE,
++
++	 .cb_ptr = &client_cb.parent,
+ };
+ 
+-const struct lttng_ust_lib_ring_buffer_client_cb *LTTNG_CLIENT_CALLBACKS = &client_config.cb;
++const struct specialized_lttng_ust_lib_ring_buffer_client_cb *LTTNG_CLIENT_CALLBACKS = &client_cb;
+ 
+ static
+ struct lttng_channel *_channel_create(const char *name,
 -- 
 1.7.10.4
