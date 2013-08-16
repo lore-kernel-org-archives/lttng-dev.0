@@ -1,20 +1,19 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [lttng-tools PATCH] Fix filter parser
-	segmentation	fault with bison 3.0
-Date: Fri, 16 Aug 2013 11:23:31 -0400
-Message-ID: <20130816152331.GA28878__11433.1325902187$1376666665$gmane$org@Krystal>
+From: David Goulet <dgoulet@efficios.com>
+Subject: Re: [lttng-tools PATCH] Fix filter parser segmentation
+ fault with bison 3.0
+Date: Fri, 16 Aug 2013 11:25:40 -0400
+Message-ID: <520E4474.2070809__49036.1058422879$1376666803$gmane$org@efficios.com>
 References: <1376654725-31219-1-git-send-email-soariez@gmail.com>
+	<20130816152331.GA28878@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from smtp.ini-tech.com ([5.9.158.244])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1VALsD-0000Tz-FC
-	for lttng-dev@lists.lttng.org; Fri, 16 Aug 2013 11:23:38 -0400
-Content-Disposition: inline
-In-Reply-To: <1376654725-31219-1-git-send-email-soariez@gmail.com>
+	(envelope-from <dgoulet@efficios.com>) id 1VALuO-0000Wz-KX
+	for lttng-dev@lists.lttng.org; Fri, 16 Aug 2013 11:25:54 -0400
+In-Reply-To: <20130816152331.GA28878@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,107 +22,108 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Zifei Tong <soariez@gmail.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Zifei Tong (soariez@gmail.com) wrote:
-> Replace deprecated YYLEX_PARAM with %lex-param
+Ya sure! I was waiting for you Ack :)
+
+David
+
+Mathieu Desnoyers:
+> * Zifei Tong (soariez@gmail.com) wrote:
+>> Replace deprecated YYLEX_PARAM with %lex-param
+>>
+>> Tested with bison 2.7 and bison 3.0
+>>
+>> Signed-off-by: Zifei Tong <soariez@gmail.com>
 > 
-> Tested with bison 2.7 and bison 3.0
+> Acked-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 > 
-> Signed-off-by: Zifei Tong <soariez@gmail.com>
-
-Acked-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-
-David, can you take care of merging it ?
-
-Thanks,
-
-Mathieu
-
-> ---
->  src/lib/lttng-ctl/filter/filter-ast.h    |  3 ---
->  src/lib/lttng-ctl/filter/filter-parser.y | 13 +++++++------
->  2 files changed, 7 insertions(+), 9 deletions(-)
+> David, can you take care of merging it ?
 > 
-> diff --git a/src/lib/lttng-ctl/filter/filter-ast.h b/src/lib/lttng-ctl/filter/filter-ast.h
-> index 4fb60d0..405c668 100644
-> --- a/src/lib/lttng-ctl/filter/filter-ast.h
-> +++ b/src/lib/lttng-ctl/filter/filter-ast.h
-> @@ -39,9 +39,6 @@
->  // data is a pointer to a 'SParserParam' structure
->  //#define YYPARSE_PARAM	parser_ctx
->  
-> -// the argument for the 'yylex' function
-> -#define YYLEX_PARAM	((struct filter_parser_ctx *) parser_ctx)->scanner
-> -
->  #ifndef YY_TYPEDEF_YY_SCANNER_T
->  #define YY_TYPEDEF_YY_SCANNER_T
->  typedef void* yyscan_t;
-> diff --git a/src/lib/lttng-ctl/filter/filter-parser.y b/src/lib/lttng-ctl/filter/filter-parser.y
-> index 3f30134..29e2866 100644
-> --- a/src/lib/lttng-ctl/filter/filter-parser.y
-> +++ b/src/lib/lttng-ctl/filter/filter-parser.y
-> @@ -40,9 +40,9 @@ LTTNG_HIDDEN
->  int filter_parser_debug = 0;
->  
->  LTTNG_HIDDEN
-> -int yyparse(struct filter_parser_ctx *parser_ctx);
-> +int yyparse(struct filter_parser_ctx *parser_ctx, yyscan_t scanner);
->  LTTNG_HIDDEN
-> -int yylex(union YYSTYPE *yyval, struct filter_parser_ctx *parser_ctx);
-> +int yylex(union YYSTYPE *yyval, yyscan_t scanner);
->  LTTNG_HIDDEN
->  int yylex_init_extra(struct filter_parser_ctx *parser_ctx, yyscan_t * ptr_yy_globals);
->  LTTNG_HIDDEN
-> @@ -188,7 +188,7 @@ static struct filter_node *make_op_node(struct filter_parser_ctx *scanner,
->  }
->  
->  LTTNG_HIDDEN
-> -void yyerror(struct filter_parser_ctx *parser_ctx, const char *str)
-> +void yyerror(struct filter_parser_ctx *parser_ctx, yyscan_t scanner, const char *str)
->  {
->  	fprintf(stderr, "error %s\n", str);
->  }
-> @@ -201,7 +201,7 @@ int yywrap(void)
->  
->  #define parse_error(parser_ctx, str)				\
->  do {								\
-> -	yyerror(parser_ctx, YY_("parse error: " str "\n"));	\
-> +	yyerror(parser_ctx, parser_ctx->scanner, YY_("parse error: " str "\n"));	\
->  	YYERROR;						\
->  } while (0)
->  
-> @@ -238,7 +238,7 @@ static void filter_ast_free(struct filter_ast *ast)
->  LTTNG_HIDDEN
->  int filter_parser_ctx_append_ast(struct filter_parser_ctx *parser_ctx)
->  {
-> -	return yyparse(parser_ctx);
-> +	return yyparse(parser_ctx, parser_ctx->scanner);
->  }
->  
->  LTTNG_HIDDEN
-> @@ -301,7 +301,8 @@ void filter_parser_ctx_free(struct filter_parser_ctx *parser_ctx)
->  %define api.pure
->  	/* %locations */
->  %parse-param {struct filter_parser_ctx *parser_ctx}
-> -%lex-param {struct filter_parser_ctx *parser_ctx}
-> +%parse-param {yyscan_t scanner}
-> +%lex-param {yyscan_t scanner}
->  %start translation_unit
->  %token CHARACTER_CONSTANT_START SQUOTE STRING_LITERAL_START DQUOTE
->  %token ESCSEQ CHAR_STRING_TOKEN
-> -- 
-> 1.8.3.4
+> Thanks,
 > 
+> Mathieu
 > 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+>> ---
+>>  src/lib/lttng-ctl/filter/filter-ast.h    |  3 ---
+>>  src/lib/lttng-ctl/filter/filter-parser.y | 13 +++++++------
+>>  2 files changed, 7 insertions(+), 9 deletions(-)
+>>
+>> diff --git a/src/lib/lttng-ctl/filter/filter-ast.h b/src/lib/lttng-ctl/filter/filter-ast.h
+>> index 4fb60d0..405c668 100644
+>> --- a/src/lib/lttng-ctl/filter/filter-ast.h
+>> +++ b/src/lib/lttng-ctl/filter/filter-ast.h
+>> @@ -39,9 +39,6 @@
+>>  // data is a pointer to a 'SParserParam' structure
+>>  //#define YYPARSE_PARAM	parser_ctx
+>>  
+>> -// the argument for the 'yylex' function
+>> -#define YYLEX_PARAM	((struct filter_parser_ctx *) parser_ctx)->scanner
+>> -
+>>  #ifndef YY_TYPEDEF_YY_SCANNER_T
+>>  #define YY_TYPEDEF_YY_SCANNER_T
+>>  typedef void* yyscan_t;
+>> diff --git a/src/lib/lttng-ctl/filter/filter-parser.y b/src/lib/lttng-ctl/filter/filter-parser.y
+>> index 3f30134..29e2866 100644
+>> --- a/src/lib/lttng-ctl/filter/filter-parser.y
+>> +++ b/src/lib/lttng-ctl/filter/filter-parser.y
+>> @@ -40,9 +40,9 @@ LTTNG_HIDDEN
+>>  int filter_parser_debug = 0;
+>>  
+>>  LTTNG_HIDDEN
+>> -int yyparse(struct filter_parser_ctx *parser_ctx);
+>> +int yyparse(struct filter_parser_ctx *parser_ctx, yyscan_t scanner);
+>>  LTTNG_HIDDEN
+>> -int yylex(union YYSTYPE *yyval, struct filter_parser_ctx *parser_ctx);
+>> +int yylex(union YYSTYPE *yyval, yyscan_t scanner);
+>>  LTTNG_HIDDEN
+>>  int yylex_init_extra(struct filter_parser_ctx *parser_ctx, yyscan_t * ptr_yy_globals);
+>>  LTTNG_HIDDEN
+>> @@ -188,7 +188,7 @@ static struct filter_node *make_op_node(struct filter_parser_ctx *scanner,
+>>  }
+>>  
+>>  LTTNG_HIDDEN
+>> -void yyerror(struct filter_parser_ctx *parser_ctx, const char *str)
+>> +void yyerror(struct filter_parser_ctx *parser_ctx, yyscan_t scanner, const char *str)
+>>  {
+>>  	fprintf(stderr, "error %s\n", str);
+>>  }
+>> @@ -201,7 +201,7 @@ int yywrap(void)
+>>  
+>>  #define parse_error(parser_ctx, str)				\
+>>  do {								\
+>> -	yyerror(parser_ctx, YY_("parse error: " str "\n"));	\
+>> +	yyerror(parser_ctx, parser_ctx->scanner, YY_("parse error: " str "\n"));	\
+>>  	YYERROR;						\
+>>  } while (0)
+>>  
+>> @@ -238,7 +238,7 @@ static void filter_ast_free(struct filter_ast *ast)
+>>  LTTNG_HIDDEN
+>>  int filter_parser_ctx_append_ast(struct filter_parser_ctx *parser_ctx)
+>>  {
+>> -	return yyparse(parser_ctx);
+>> +	return yyparse(parser_ctx, parser_ctx->scanner);
+>>  }
+>>  
+>>  LTTNG_HIDDEN
+>> @@ -301,7 +301,8 @@ void filter_parser_ctx_free(struct filter_parser_ctx *parser_ctx)
+>>  %define api.pure
+>>  	/* %locations */
+>>  %parse-param {struct filter_parser_ctx *parser_ctx}
+>> -%lex-param {struct filter_parser_ctx *parser_ctx}
+>> +%parse-param {yyscan_t scanner}
+>> +%lex-param {yyscan_t scanner}
+>>  %start translation_unit
+>>  %token CHARACTER_CONSTANT_START SQUOTE STRING_LITERAL_START DQUOTE
+>>  %token ESCSEQ CHAR_STRING_TOKEN
+>> -- 
+>> 1.8.3.4
+>>
+>>
+>> _______________________________________________
+>> lttng-dev mailing list
+>> lttng-dev@lists.lttng.org
+>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> 
