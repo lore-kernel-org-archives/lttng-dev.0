@@ -1,18 +1,20 @@
-From: "Zvi Vered" <veredz72@gmail.com>
-Subject: Using LTTng to monitr several thread in one process
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: Using LTTng to monitr several thread in one	process
 	(under vanilla 3.4.7)
-Date: Fri, 16 Aug 2013 22:29:53 +0300
-Message-ID: <FF6E89F18E7D48F8A07EEA74C1E66CC5__1173.41220980069$1376681475$gmane$org@ZviVeredPC>
+Date: Fri, 16 Aug 2013 15:38:49 -0400
+Message-ID: <20130816193849.GA964__42804.9249844209$1376681983$gmane$org@Krystal>
+References: <FF6E89F18E7D48F8A07EEA74C1E66CC5@ZviVeredPC>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-we0-f179.google.com ([74.125.82.179])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <veredz72@gmail.com>) id 1VAPj1-00048P-VQ
-	for lttng-dev@lists.lttng.org; Fri, 16 Aug 2013 15:30:25 -0400
-Received: by mail-we0-f179.google.com with SMTP id t57so1956066wes.24
-	for <lttng-dev@lists.lttng.org>; Fri, 16 Aug 2013 12:30:13 -0700 (PDT)
+	(envelope-from <compudj@mail.openrapids.net>) id 1VAPrG-0004HZ-TD
+	for lttng-dev@lists.lttng.org; Fri, 16 Aug 2013 15:38:56 -0400
+Content-Disposition: inline
+In-Reply-To: <FF6E89F18E7D48F8A07EEA74C1E66CC5@ZviVeredPC>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,20 +23,39 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Zvi Vered <veredz72@gmail.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-SGVsbG8sCgpJ4oCZbSB1c2luZyB2YW5pbGxhIDMuNC43IG9uIGFuIEludGVsJ3MgSXZ5LUJyaWRn
-ZSAgUEMxMDQuClRoZSBhcHBsaWNhdGlvbiAoY29tcGlsZWQgYW5kIGJ1aWx0IHdpdGggaW50ZWwg
-Y29tcGlsZXIpIGNvbnRhaW5zIDggdGhyZWFkcy4KCk15IGdvYWwgaXQgdG8gdXNlICDigJxMVFRu
-ZyBQcm9qZWN04oCdIHRvIGRpc3BsYXkgYWxsIHRocmVhZHMgb24gYSBncmFwaC4KRWFjaCB0aHJl
-YWQgd2lsbCBoYXZlIGl0cyBvd24g4oCcbGluZeKAnSBhbmQgSSB3aWxsIGJlIGFibGUgdG8gc2Vl
-IHdoZW4gdGhlIENQVSAKaXMgaWRsZSBhbmQgd2hlbiBhIHNwZWNpZmljIHRocmVhZCB3b3Jrcy4K
-CkluIG15IFBDMTA0LCBJbnRlbOKAmXMgSXZ5LUJyaWRnZSBoYXMgNCBjb3Jlcy4gTFRUbmcgaGFz
-IHRvIGtub3cgb24gd2hpY2ggY29yZSAKYSB0aHJlYWQgaXMgY3VycmVudGx5IHJ1bm5pbmcuCgpJ
-cyBpdCBwb3NzaWJsZSB0byBkbyBzdWNoIHRoaW5ncyB3aXRoIEx0dG5nID8KSSBhc2tlZCB0aGlz
-IHF1ZXN0aW9uIGxvbmcgdGltZSBhZ28gYW5kIHRoZSBhbnN3ZXIgd2FzIC0gbm8KCklmIHllcywg
-c2hvdWxkIEkgcGF0Y2ggdGhlIGtlcm5lbCBmb3IgdGhpcyBwdXJwb3NlID8KClRoYW5rcywKWnZp
-a2EKCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRu
-Zy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3Rz
-Lmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+KiBadmkgVmVyZWQgKHZlcmVkejcyQGdtYWlsLmNvbSkgd3JvdGU6Cj4gSGVsbG8sCj4KPiBJ4oCZ
+bSB1c2luZyB2YW5pbGxhIDMuNC43IG9uIGFuIEludGVsJ3MgSXZ5LUJyaWRnZSAgUEMxMDQuCj4g
+VGhlIGFwcGxpY2F0aW9uIChjb21waWxlZCBhbmQgYnVpbHQgd2l0aCBpbnRlbCBjb21waWxlcikg
+Y29udGFpbnMgOCB0aHJlYWRzLgo+Cj4gTXkgZ29hbCBpdCB0byB1c2UgIOKAnExUVG5nIFByb2pl
+Y3TigJ0gdG8gZGlzcGxheSBhbGwgdGhyZWFkcyBvbiBhIGdyYXBoLgo+IEVhY2ggdGhyZWFkIHdp
+bGwgaGF2ZSBpdHMgb3duIOKAnGxpbmXigJ0gYW5kIEkgd2lsbCBiZSBhYmxlIHRvIHNlZSB3aGVu
+IHRoZSAKPiBDUFUgaXMgaWRsZSBhbmQgd2hlbiBhIHNwZWNpZmljIHRocmVhZCB3b3Jrcy4KPgo+
+IEluIG15IFBDMTA0LCBJbnRlbOKAmXMgSXZ5LUJyaWRnZSBoYXMgNCBjb3Jlcy4gTFRUbmcgaGFz
+IHRvIGtub3cgb24gd2hpY2ggCj4gY29yZSBhIHRocmVhZCBpcyBjdXJyZW50bHkgcnVubmluZy4K
+Pgo+IElzIGl0IHBvc3NpYmxlIHRvIGRvIHN1Y2ggdGhpbmdzIHdpdGggTHR0bmcgPwoKWWVzLCBM
+VFRuZy1VU1QgKHVzZXIgc3BhY2UgdHJhY2VyKSBrbm93cyB0aGlzIGluZm9ybWF0aW9uIGFscmVh
+ZHkuIEUuZy46CgpbMTU6MzM6MDIuNDE0MDk2NjU2XSAoKzAuMDAwMDAyNTQ2KSB0aGlua29zIHVz
+dF90ZXN0c19oZWxsbzp0cHRlc3Q6IHsgY3B1X2lkID0gMiB9LCB7IGludGZpZWxkID0gODMyLCBp
+bnRmaWVsZDIgPSAweDM0MCwgbG9uZ2ZpZWxkID0gODMyLCBuZXRpbnRmaWVsZCA9IDgzMiwgbmV0
+aW50ZmllbGRoZXggPSAweDM0MCwgYXJyZmllbGQxID0gWyBbMF0gPSAxLCBbMV0gPSAyLCBbMl0g
+PSAzIF0sIGFycmZpZWxkMiA9ICJ0ZXN0IiwgX3NlcWZpZWxkMV9sZW5ndGggPSA0LCBzZXFmaWVs
+ZDEgPSBbIFswXSA9IDExNiwgWzFdID0gMTAxLCBbMl0gPSAxMTUsIFszXSA9IDExNiBdLCBfc2Vx
+ZmllbGQyX2xlbmd0aCA9IDQsIHNlcWZpZWxkMiA9ICJ0ZXN0Iiwgc3RyaW5nZmllbGQgPSAidGVz
+dCIsIGZsb2F0ZmllbGQgPSAyMjIyLCBkb3VibGVmaWVsZCA9IDIsIGJvb2xmaWVsZCA9IDEgfQoK
+KHNlZSB0aGUgImNwdV9pZCIgZmllbGQgYWJvdmUpCgpZb3UgY2FuIGFsc28gcmVjb3JkIHRoZSB2
+dGlkIGNvbnRleHQgd2l0aCBlYWNoIGV2ZW50IGluIGx0dG5nLXVzdC4gU2VlCmx0dG5nKDEpIG1h
+biBwYWdlIGZvciBtb3JlIGluZm8uCgpCZXN0IHJlZ2FyZHMsCgpNYXRoaWV1CgoKCj4gSSBhc2tl
+ZCB0aGlzIHF1ZXN0aW9uIGxvbmcgdGltZSBhZ28gYW5kIHRoZSBhbnN3ZXIgd2FzIC0gbm8KPgo+
+IElmIHllcywgc2hvdWxkIEkgcGF0Y2ggdGhlIGtlcm5lbCBmb3IgdGhpcyBwdXJwb3NlID8KPgo+
+IFRoYW5rcywKPiBadmlrYQo+Cj4KPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZAbGlzdHMu
+bHR0bmcub3JnCj4gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGlu
+Zm8vbHR0bmctZGV2CgotLSAKTWF0aGlldSBEZXNub3llcnMKRWZmaWNpT1MgSW5jLgpodHRwOi8v
+d3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3Jn
+Cmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRl
+dgo=
