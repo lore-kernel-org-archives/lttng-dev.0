@@ -1,19 +1,19 @@
-From: Yannick Brosseau <yannick.brosseau@gmail.com>
-Subject: Re: [lttng-tools PATCH] Fix filter parser segmentation
- fault with bison 3.0
-Date: Fri, 16 Aug 2013 11:11:46 -0400
-Message-ID: <520E4132.1020109__35312.5712172643$1376665973$gmane$org@gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [lttng-tools PATCH] Fix filter parser
+	segmentation	fault with bison 3.0
+Date: Fri, 16 Aug 2013 11:23:31 -0400
+Message-ID: <20130816152331.GA28878__11433.1325902187$1376666665$gmane$org@Krystal>
 References: <1376654725-31219-1-git-send-email-soariez@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-gh0-f176.google.com ([209.85.160.176])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <yannick.brosseau@gmail.com>) id 1VALgw-0000Ia-CQ
-	for lttng-dev@lists.lttng.org; Fri, 16 Aug 2013 11:11:59 -0400
-Received: by mail-gh0-f176.google.com with SMTP id z17so291748ghb.35
-	for <lttng-dev@lists.lttng.org>; Fri, 16 Aug 2013 08:11:48 -0700 (PDT)
+	(envelope-from <compudj@mail.openrapids.net>) id 1VALsD-0000Tz-FC
+	for lttng-dev@lists.lttng.org; Fri, 16 Aug 2013 11:23:38 -0400
+Content-Disposition: inline
 In-Reply-To: <1376654725-31219-1-git-send-email-soariez@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -23,22 +23,30 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Zifei Tong <soariez@gmail.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Also tested on CentOS6 with bison 2.4
-
-On 2013-08-16 08:05, Zifei Tong wrote:
+* Zifei Tong (soariez@gmail.com) wrote:
 > Replace deprecated YYLEX_PARAM with %lex-param
->
+> 
 > Tested with bison 2.7 and bison 3.0
->
+> 
 > Signed-off-by: Zifei Tong <soariez@gmail.com>
+
+Acked-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+
+David, can you take care of merging it ?
+
+Thanks,
+
+Mathieu
+
 > ---
 >  src/lib/lttng-ctl/filter/filter-ast.h    |  3 ---
 >  src/lib/lttng-ctl/filter/filter-parser.y | 13 +++++++------
 >  2 files changed, 7 insertions(+), 9 deletions(-)
->
+> 
 > diff --git a/src/lib/lttng-ctl/filter/filter-ast.h b/src/lib/lttng-ctl/filter/filter-ast.h
 > index 4fb60d0..405c668 100644
 > --- a/src/lib/lttng-ctl/filter/filter-ast.h
@@ -106,3 +114,16 @@ On 2013-08-16 08:05, Zifei Tong wrote:
 >  %start translation_unit
 >  %token CHARACTER_CONSTANT_START SQUOTE STRING_LITERAL_START DQUOTE
 >  %token ESCSEQ CHAR_STRING_TOKEN
+> -- 
+> 1.8.3.4
+> 
+> 
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
