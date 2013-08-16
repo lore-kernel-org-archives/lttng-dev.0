@@ -1,20 +1,18 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [lttng-tools PATCH] Fix filter parser
-	segmentation	fault with bison 3.0
-Date: Fri, 16 Aug 2013 16:55:25 -0400
-Message-ID: <20130816205525.GA2757__9547.71669717065$1376686571$gmane$org@Krystal>
-References: <1376654725-31219-1-git-send-email-soariez@gmail.com>
+From: Julien Desfossez <jdesfossez@efficios.com>
+Subject: [UST PATCH 2/2] LTTng ringbuffer ABI calls for index
+	generation
+Date: Fri, 16 Aug 2013 19:36:06 -0400
+Message-ID: <1376696166-32632-2-git-send-email-jdesfossez__25142.0576627881$1376696224$gmane$org@efficios.com>
+References: <1376696166-32632-1-git-send-email-jdesfossez@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from smtp.ini-tech.com ([5.9.158.244])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1VAR3O-0005X4-Lj
-	for lttng-dev@lists.lttng.org; Fri, 16 Aug 2013 16:55:29 -0400
-Content-Disposition: inline
-In-Reply-To: <1376654725-31219-1-git-send-email-soariez@gmail.com>
+	(envelope-from <jdesfossez@efficios.com>) id 1VATZ4-0008Co-6m
+	for lttng-dev@lists.lttng.org; Fri, 16 Aug 2013 19:36:20 -0400
+In-Reply-To: <1376696166-32632-1-git-send-email-jdesfossez@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,115 +21,316 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Zifei Tong <soariez@gmail.com>
-Cc: lttng-dev@lists.lttng.org
+To: mathieu.desnoyers@efficios.com
+Cc: lttng-dev@lists.lttng.org, Julien Desfossez <jdesfossez@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-merged as:
+These new calls export the data required for the consumer to
+generate the index while tracing :
+- timestamp begin
+- timestamp end
+- events discarded
+- context size
+- packet size
+- stream id
 
-commit 9039edd4983b46fc45dae7ed42396ef7f7e5635a
-Author: Zifei Tong <soariez@gmail.com>
-Date:   Fri Aug 16 16:52:21 2013 -0400
+Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
+---
+ include/lttng/ust-ctl.h                 |   14 ++++
+ liblttng-ust-ctl/ustctl.c               |  110 +++++++++++++++++++++++++++++++
+ liblttng-ust/lttng-rb-clients.h         |   19 ++++++
+ liblttng-ust/lttng-ring-buffer-client.h |   89 +++++++++++++++++++++++++
+ 4 files changed, 232 insertions(+)
 
-    Fix filter parser segmentation fault with bison 3.0
-    
-    Replace deprecated YYLEX_PARAM with %lex-param
-    
-    Tested with bison 2.4, 2.5, 2.7 and 3.0.
-    
-    Signed-off-by: Zifei Tong <soariez@gmail.com>
-    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-
-and backported to stable-2.2
-
-* Zifei Tong (soariez@gmail.com) wrote:
-> Replace deprecated YYLEX_PARAM with %lex-param
-> 
-> Tested with bison 2.7 and bison 3.0
-> 
-> Signed-off-by: Zifei Tong <soariez@gmail.com>
-> ---
->  src/lib/lttng-ctl/filter/filter-ast.h    |  3 ---
->  src/lib/lttng-ctl/filter/filter-parser.y | 13 +++++++------
->  2 files changed, 7 insertions(+), 9 deletions(-)
-> 
-> diff --git a/src/lib/lttng-ctl/filter/filter-ast.h b/src/lib/lttng-ctl/filter/filter-ast.h
-> index 4fb60d0..405c668 100644
-> --- a/src/lib/lttng-ctl/filter/filter-ast.h
-> +++ b/src/lib/lttng-ctl/filter/filter-ast.h
-> @@ -39,9 +39,6 @@
->  // data is a pointer to a 'SParserParam' structure
->  //#define YYPARSE_PARAM	parser_ctx
->  
-> -// the argument for the 'yylex' function
-> -#define YYLEX_PARAM	((struct filter_parser_ctx *) parser_ctx)->scanner
-> -
->  #ifndef YY_TYPEDEF_YY_SCANNER_T
->  #define YY_TYPEDEF_YY_SCANNER_T
->  typedef void* yyscan_t;
-> diff --git a/src/lib/lttng-ctl/filter/filter-parser.y b/src/lib/lttng-ctl/filter/filter-parser.y
-> index 3f30134..29e2866 100644
-> --- a/src/lib/lttng-ctl/filter/filter-parser.y
-> +++ b/src/lib/lttng-ctl/filter/filter-parser.y
-> @@ -40,9 +40,9 @@ LTTNG_HIDDEN
->  int filter_parser_debug = 0;
->  
->  LTTNG_HIDDEN
-> -int yyparse(struct filter_parser_ctx *parser_ctx);
-> +int yyparse(struct filter_parser_ctx *parser_ctx, yyscan_t scanner);
->  LTTNG_HIDDEN
-> -int yylex(union YYSTYPE *yyval, struct filter_parser_ctx *parser_ctx);
-> +int yylex(union YYSTYPE *yyval, yyscan_t scanner);
->  LTTNG_HIDDEN
->  int yylex_init_extra(struct filter_parser_ctx *parser_ctx, yyscan_t * ptr_yy_globals);
->  LTTNG_HIDDEN
-> @@ -188,7 +188,7 @@ static struct filter_node *make_op_node(struct filter_parser_ctx *scanner,
->  }
->  
->  LTTNG_HIDDEN
-> -void yyerror(struct filter_parser_ctx *parser_ctx, const char *str)
-> +void yyerror(struct filter_parser_ctx *parser_ctx, yyscan_t scanner, const char *str)
->  {
->  	fprintf(stderr, "error %s\n", str);
->  }
-> @@ -201,7 +201,7 @@ int yywrap(void)
->  
->  #define parse_error(parser_ctx, str)				\
->  do {								\
-> -	yyerror(parser_ctx, YY_("parse error: " str "\n"));	\
-> +	yyerror(parser_ctx, parser_ctx->scanner, YY_("parse error: " str "\n"));	\
->  	YYERROR;						\
->  } while (0)
->  
-> @@ -238,7 +238,7 @@ static void filter_ast_free(struct filter_ast *ast)
->  LTTNG_HIDDEN
->  int filter_parser_ctx_append_ast(struct filter_parser_ctx *parser_ctx)
->  {
-> -	return yyparse(parser_ctx);
-> +	return yyparse(parser_ctx, parser_ctx->scanner);
->  }
->  
->  LTTNG_HIDDEN
-> @@ -301,7 +301,8 @@ void filter_parser_ctx_free(struct filter_parser_ctx *parser_ctx)
->  %define api.pure
->  	/* %locations */
->  %parse-param {struct filter_parser_ctx *parser_ctx}
-> -%lex-param {struct filter_parser_ctx *parser_ctx}
-> +%parse-param {yyscan_t scanner}
-> +%lex-param {yyscan_t scanner}
->  %start translation_unit
->  %token CHARACTER_CONSTANT_START SQUOTE STRING_LITERAL_START DQUOTE
->  %token ESCSEQ CHAR_STRING_TOKEN
-> -- 
-> 1.8.3.4
-> 
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
+diff --git a/include/lttng/ust-ctl.h b/include/lttng/ust-ctl.h
+index 3c81e50..88112ad 100644
+--- a/include/lttng/ust-ctl.h
++++ b/include/lttng/ust-ctl.h
+@@ -220,6 +220,20 @@ int ustctl_put_subbuf(struct ustctl_consumer_stream *stream);
+ void ustctl_flush_buffer(struct ustctl_consumer_stream *stream,
+ 		int producer_active);
+ 
++/* index */
++int ustctl_get_timestamp_begin(struct ustctl_consumer_stream *stream,
++		uint64_t *timestamp_begin);
++int ustctl_get_timestamp_end(struct ustctl_consumer_stream *stream,
++	uint64_t *timestamp_end);
++int ustctl_get_events_discarded(struct ustctl_consumer_stream *stream,
++	uint64_t *events_discarded);
++int ustctl_get_content_size(struct ustctl_consumer_stream *stream,
++	uint64_t *content_size);
++int ustctl_get_packet_size(struct ustctl_consumer_stream *stream,
++	uint64_t *packet_size);
++int ustctl_get_stream_id(struct ustctl_consumer_stream *stream,
++		uint64_t *stream_id);
++
+ /* event registry management */
+ 
+ enum ustctl_socket_type {
+diff --git a/liblttng-ust-ctl/ustctl.c b/liblttng-ust-ctl/ustctl.c
+index 28dee5e..7830132 100644
+--- a/liblttng-ust-ctl/ustctl.c
++++ b/liblttng-ust-ctl/ustctl.c
+@@ -31,6 +31,7 @@
+ #include "../libringbuffer/backend.h"
+ #include "../libringbuffer/frontend.h"
+ #include "../liblttng-ust/wait.h"
++#include "../liblttng-ust/lttng-rb-clients.h"
+ 
+ /*
+  * Number of milliseconds to retry before failing metadata writes on
+@@ -1461,6 +1462,115 @@ void ustctl_flush_buffer(struct ustctl_consumer_stream *stream,
+ 		consumer_chan->chan->handle);
+ }
+ 
++static
++struct lttng_ust_client_lib_ring_buffer_client_cb *get_client_cb(
++		struct lttng_ust_lib_ring_buffer *buf,
++		struct lttng_ust_shm_handle *handle)
++{
++	struct channel *chan;
++	const struct lttng_ust_lib_ring_buffer_config *config;
++	struct lttng_ust_client_lib_ring_buffer_client_cb *client_cb;
++
++	chan = shmp(handle, buf->backend.chan);
++	config = &chan->backend.config;
++	if (!config->cb_ptr)
++		return NULL;
++	client_cb = caa_container_of(config->cb_ptr,
++			struct lttng_ust_client_lib_ring_buffer_client_cb,
++			parent);
++	return client_cb;
++}
++
++int ustctl_get_timestamp_begin(struct ustctl_consumer_stream *stream,
++		uint64_t *timestamp_begin)
++{
++	struct lttng_ust_client_lib_ring_buffer_client_cb *client_cb;
++	struct lttng_ust_lib_ring_buffer *buf = stream->buf;
++	struct lttng_ust_shm_handle *handle = stream->chan->chan->handle;
++
++	if (!stream || !timestamp_begin)
++		return -EINVAL;
++	client_cb = get_client_cb(buf, handle);
++	if (!client_cb)
++		return -ENOSYS;
++	return client_cb->timestamp_begin(buf, handle, timestamp_begin);
++}
++
++int ustctl_get_timestamp_end(struct ustctl_consumer_stream *stream,
++	uint64_t *timestamp_end)
++{
++	struct lttng_ust_client_lib_ring_buffer_client_cb *client_cb;
++	struct lttng_ust_lib_ring_buffer *buf = stream->buf;
++	struct lttng_ust_shm_handle *handle = stream->chan->chan->handle;
++
++	if (!stream || !timestamp_end)
++		return -EINVAL;
++	client_cb = get_client_cb(buf, handle);
++	if (!client_cb)
++		return -ENOSYS;
++	return client_cb->timestamp_end(buf, handle, timestamp_end);
++}
++
++int ustctl_get_events_discarded(struct ustctl_consumer_stream *stream,
++	uint64_t *events_discarded)
++{
++	struct lttng_ust_client_lib_ring_buffer_client_cb *client_cb;
++	struct lttng_ust_lib_ring_buffer *buf = stream->buf;
++	struct lttng_ust_shm_handle *handle = stream->chan->chan->handle;
++
++	if (!stream || !events_discarded)
++		return -EINVAL;
++	client_cb = get_client_cb(buf, handle);
++	if (!client_cb)
++		return -ENOSYS;
++	return client_cb->events_discarded(buf, handle, events_discarded);
++}
++
++int ustctl_get_content_size(struct ustctl_consumer_stream *stream,
++	uint64_t *content_size)
++{
++	struct lttng_ust_client_lib_ring_buffer_client_cb *client_cb;
++	struct lttng_ust_lib_ring_buffer *buf = stream->buf;
++	struct lttng_ust_shm_handle *handle = stream->chan->chan->handle;
++
++	if (!stream || !content_size)
++		return -EINVAL;
++	client_cb = get_client_cb(buf, handle);
++	if (!client_cb)
++		return -ENOSYS;
++	return client_cb->content_size(buf, handle, content_size);
++}
++
++int ustctl_get_packet_size(struct ustctl_consumer_stream *stream,
++	uint64_t *packet_size)
++{
++	struct lttng_ust_client_lib_ring_buffer_client_cb *client_cb;
++	struct lttng_ust_lib_ring_buffer *buf = stream->buf;
++	struct lttng_ust_shm_handle *handle = stream->chan->chan->handle;
++
++	if (!stream || !packet_size)
++		return -EINVAL;
++	client_cb = get_client_cb(buf, handle);
++	if (!client_cb)
++		return -ENOSYS;
++	return client_cb->packet_size(buf, handle, packet_size);
++}
++
++int ustctl_get_stream_id(struct ustctl_consumer_stream *stream,
++		uint64_t *stream_id)
++{
++	struct lttng_ust_client_lib_ring_buffer_client_cb *client_cb;
++	struct lttng_ust_lib_ring_buffer *buf = stream->buf;
++	struct lttng_ust_shm_handle *handle = stream->chan->chan->handle;
++
++	if (!stream || !stream_id)
++		return -EINVAL;
++	client_cb = get_client_cb(buf, handle);
++	if (!client_cb)
++		return -ENOSYS;
++	return client_cb->stream_id(buf, handle, stream_id);
++}
++
+ /*
+  * Returns 0 on success, negative error value on error.
+  */
+diff --git a/liblttng-ust/lttng-rb-clients.h b/liblttng-ust/lttng-rb-clients.h
+index c9a1619..c43aa75 100644
+--- a/liblttng-ust/lttng-rb-clients.h
++++ b/liblttng-ust/lttng-rb-clients.h
+@@ -21,6 +21,25 @@
+ 
+ struct lttng_ust_client_lib_ring_buffer_client_cb {
+ 	struct lttng_ust_lib_ring_buffer_client_cb parent;
++
++	int (*timestamp_begin) (struct lttng_ust_lib_ring_buffer *buf,
++			struct lttng_ust_shm_handle *handle,
++			uint64_t *timestamp_begin);
++	int (*timestamp_end) (struct lttng_ust_lib_ring_buffer *buf,
++			struct lttng_ust_shm_handle *handle,
++			uint64_t *timestamp_end);
++	int (*events_discarded) (struct lttng_ust_lib_ring_buffer *buf,
++			struct lttng_ust_shm_handle *handle,
++			uint64_t *events_discarded);
++	int (*content_size) (struct lttng_ust_lib_ring_buffer *buf,
++			struct lttng_ust_shm_handle *handle,
++			uint64_t *content_size);
++	int (*packet_size) (struct lttng_ust_lib_ring_buffer *buf,
++			struct lttng_ust_shm_handle *handle,
++			uint64_t *packet_size);
++	int (*stream_id) (struct lttng_ust_lib_ring_buffer *buf,
++			struct lttng_ust_shm_handle *handle,
++			uint64_t *stream_id);
+ };
+ 
+ #endif /* _LTTNG_RB_CLIENT_H */
+diff --git a/liblttng-ust/lttng-ring-buffer-client.h b/liblttng-ust/lttng-ring-buffer-client.h
+index 383fce0..88ef43b 100644
+--- a/liblttng-ust/lttng-ring-buffer-client.h
++++ b/liblttng-ust/lttng-ring-buffer-client.h
+@@ -386,6 +386,89 @@ static void client_buffer_finalize(struct lttng_ust_lib_ring_buffer *buf, void *
+ {
+ }
+ 
++static struct packet_header *client_packet_header(struct lttng_ust_lib_ring_buffer *buf,
++		struct lttng_ust_shm_handle *handle)
++{
++	struct channel *chan = shmp(handle, buf->backend.chan);
++	struct lttng_channel *lttng_chan = channel_get_private(chan);
++	unsigned long sb_index;
++	struct lttng_ust_lib_ring_buffer_backend *bufb;
++	struct packet_header *header;
++
++	bufb = &buf->backend;
++	sb_index = subbuffer_id_get_index(&lttng_chan->chan->backend.config,
++			bufb->buf_rsb.id);
++	header = lib_ring_buffer_offset_address(bufb,
++			sb_index * lttng_chan->chan->backend.subbuf_size,
++			handle);
++	return header;
++}
++
++static int client_timestamp_begin(struct lttng_ust_lib_ring_buffer *buf,
++		struct lttng_ust_shm_handle *handle,
++		uint64_t *timestamp_begin)
++{
++	struct packet_header *header;
++	
++	header = client_packet_header(buf, handle);
++	*timestamp_begin = header->ctx.timestamp_begin;
++	return 0;
++}
++
++static int client_timestamp_end(struct lttng_ust_lib_ring_buffer *buf,
++		struct lttng_ust_shm_handle *handle,
++		uint64_t *timestamp_end)
++{
++	struct packet_header *header;
++
++	header = client_packet_header(buf, handle);
++	*timestamp_end = header->ctx.timestamp_end;
++	return 0;
++}
++
++static int client_events_discarded(struct lttng_ust_lib_ring_buffer *buf,
++		struct lttng_ust_shm_handle *handle,
++		uint64_t *events_discarded)
++{
++	struct packet_header *header;
++
++	header = client_packet_header(buf, handle);
++	*events_discarded = header->ctx.events_discarded;
++	return 0;
++}
++
++static int client_content_size(struct lttng_ust_lib_ring_buffer *buf,
++		struct lttng_ust_shm_handle *handle,
++		uint64_t *content_size)
++{
++	struct packet_header *header;
++
++	header = client_packet_header(buf, handle);
++	*content_size = header->ctx.content_size;
++	return 0;
++}
++
++static int client_packet_size(struct lttng_ust_lib_ring_buffer *buf,
++		struct lttng_ust_shm_handle *handle,
++		uint64_t *packet_size)
++{
++	struct packet_header *header;
++
++	header = client_packet_header(buf, handle);
++	*packet_size = header->ctx.packet_size;
++	return 0;
++}
++
++static int client_stream_id(struct lttng_ust_lib_ring_buffer *buf,
++		struct lttng_ust_shm_handle *handle,
++		uint64_t *stream_id)
++{
++	struct packet_header *header;
++
++	header = client_packet_header(buf, handle);
++	*stream_id = header->stream_id;
++	return 0;
++}
+ static const
+ struct lttng_ust_client_lib_ring_buffer_client_cb client_cb = {
+ 	.parent = {
+@@ -397,6 +480,12 @@ struct lttng_ust_client_lib_ring_buffer_client_cb client_cb = {
+ 		.buffer_create = client_buffer_create,
+ 		.buffer_finalize = client_buffer_finalize,
+ 	},
++	.timestamp_begin = client_timestamp_begin,
++	.timestamp_end = client_timestamp_end,
++	.events_discarded = client_events_discarded,
++	.content_size = client_content_size,
++	.packet_size = client_packet_size,
++	.stream_id = client_stream_id,
+ };
+ 
+ static const struct lttng_ust_lib_ring_buffer_config client_config = {
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+1.7.10.4
