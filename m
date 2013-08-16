@@ -1,20 +1,18 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [babeltrace PATCH] Put the libbabeltrace-ctf
-	specific parts of	babeltrace.pc into a babeltrace-ctf.pc file.
-Date: Thu, 15 Aug 2013 18:12:34 -0400
-Message-ID: <20130815221234.GB24819__26369.7450318888$1376604792$gmane$org@Krystal>
-References: <1376599750-12146-1-git-send-email-yannick.brosseau@gmail.com>
+From: Zifei Tong <soariez@gmail.com>
+Subject: [lttng-tools PATCH] Fix filter parser segmentation
+	fault with bison 3.0
+Date: Fri, 16 Aug 2013 20:05:25 +0800
+Message-ID: <1376654725-31219-1-git-send-email-soariez__180.767503525381$1376654782$gmane$org@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from mail-pa0-f42.google.com ([209.85.220.42])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1VA5mW-0003mo-Ts
-	for lttng-dev@lists.lttng.org; Thu, 15 Aug 2013 18:12:39 -0400
-Content-Disposition: inline
-In-Reply-To: <1376599750-12146-1-git-send-email-yannick.brosseau@gmail.com>
+	(envelope-from <soariez@gmail.com>) id 1VAImj-0006K3-Rs
+	for lttng-dev@lists.lttng.org; Fri, 16 Aug 2013 08:05:43 -0400
+Received: by mail-pa0-f42.google.com with SMTP id lj1so1817053pab.1
+	for <lttng-dev@lists.lttng.org>; Fri, 16 Aug 2013 05:05:36 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,93 +21,86 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Yannick Brosseau <yannick.brosseau@gmail.com>
+To: dgoulet@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Yannick Brosseau (yannick.brosseau@gmail.com) wrote:
-> On some distributions libbabeltrace and libbabeltrace-ctf are packaged into separate
-> packages. This means they should have their own pkg-config file.
-> 
-> The babeltrace-ctf.pc file requires the babeltrace.pc one.
-> 
-> With this change, to have the ctf support in libbabeltrace a pkg-config user
-> will need to specify the babeltrace-ctf package. To compile and link with only
-> the base libbabeltrace, the package babeltrace would be use.
-> 
-> Fixes #550
+Replace deprecated YYLEX_PARAM with %lex-param
 
-merged, thanks!
+Tested with bison 2.7 and bison 3.0
 
-Mathieu
+Signed-off-by: Zifei Tong <soariez@gmail.com>
+---
+ src/lib/lttng-ctl/filter/filter-ast.h    |  3 ---
+ src/lib/lttng-ctl/filter/filter-parser.y | 13 +++++++------
+ 2 files changed, 7 insertions(+), 9 deletions(-)
 
-> 
-> Signed-off-by: Yannick Brosseau <yannick.brosseau@gmail.com>
-> ---
->  Makefile.am          |    2 +-
->  babeltrace-ctf.pc.in |   13 +++++++++++++
->  babeltrace.pc.in     |    2 +-
->  configure.ac         |    1 +
->  4 files changed, 16 insertions(+), 2 deletions(-)
->  create mode 100644 babeltrace-ctf.pc.in
-> 
-> diff --git a/Makefile.am b/Makefile.am
-> index cdfad5a..e5eca77 100644
-> --- a/Makefile.am
-> +++ b/Makefile.am
-> @@ -10,4 +10,4 @@ dist_doc_DATA = ChangeLog LICENSE mit-license.txt gpl-2.0.txt \
->  dist_noinst_DATA = CodingStyle
->  
->  pkgconfigdir = $(libdir)/pkgconfig
-> -pkgconfig_DATA = babeltrace.pc
-> +pkgconfig_DATA = babeltrace.pc babeltrace-ctf.pc
-> diff --git a/babeltrace-ctf.pc.in b/babeltrace-ctf.pc.in
-> new file mode 100644
-> index 0000000..8237607
-> --- /dev/null
-> +++ b/babeltrace-ctf.pc.in
-> @@ -0,0 +1,13 @@
-> +prefix=@prefix@
-> +exec_prefix=@exec_prefix@
-> +libdir=@libdir@
-> +includedir=@includedir@
-> +
-> +Name: Babeltrace CTF parser
-> +Description: libbabeltrace-ctf provides the specific bits necessary to read a Common Trace Format (CTF) trace.
-> +Version: @PACKAGE_VERSION@
-> +Requires: babeltrace
-> +Requires.private: 
-> +Libs: -L${libdir} -lbabeltrace-ctf
-> +Cflags: -I${includedir} 
-> +
-> diff --git a/babeltrace.pc.in b/babeltrace.pc.in
-> index 12349dd..7c33f28 100644
-> --- a/babeltrace.pc.in
-> +++ b/babeltrace.pc.in
-> @@ -9,6 +9,6 @@ Common Trace Format (CTF).
->  Version: @PACKAGE_VERSION@
->  Requires:
->  Requires.private: uuid popt
-> -Libs: -L${libdir} -lbabeltrace -lbabeltrace-ctf
-> +Libs: -L${libdir} -lbabeltrace
->  Cflags: -I${includedir} 
->  
-> diff --git a/configure.ac b/configure.ac
-> index a22b1b9..fc70453 100644
-> --- a/configure.ac
-> +++ b/configure.ac
-> @@ -124,5 +124,6 @@ AC_CONFIG_FILES([
->  	extras/Makefile
->  	extras/valgrind/Makefile
->  	babeltrace.pc
-> +	babeltrace-ctf.pc
->  ])
->  AC_OUTPUT
-> -- 
-> 1.7.10.4
-> 
-
+diff --git a/src/lib/lttng-ctl/filter/filter-ast.h b/src/lib/lttng-ctl/filter/filter-ast.h
+index 4fb60d0..405c668 100644
+--- a/src/lib/lttng-ctl/filter/filter-ast.h
++++ b/src/lib/lttng-ctl/filter/filter-ast.h
+@@ -39,9 +39,6 @@
+ // data is a pointer to a 'SParserParam' structure
+ //#define YYPARSE_PARAM	parser_ctx
+ 
+-// the argument for the 'yylex' function
+-#define YYLEX_PARAM	((struct filter_parser_ctx *) parser_ctx)->scanner
+-
+ #ifndef YY_TYPEDEF_YY_SCANNER_T
+ #define YY_TYPEDEF_YY_SCANNER_T
+ typedef void* yyscan_t;
+diff --git a/src/lib/lttng-ctl/filter/filter-parser.y b/src/lib/lttng-ctl/filter/filter-parser.y
+index 3f30134..29e2866 100644
+--- a/src/lib/lttng-ctl/filter/filter-parser.y
++++ b/src/lib/lttng-ctl/filter/filter-parser.y
+@@ -40,9 +40,9 @@ LTTNG_HIDDEN
+ int filter_parser_debug = 0;
+ 
+ LTTNG_HIDDEN
+-int yyparse(struct filter_parser_ctx *parser_ctx);
++int yyparse(struct filter_parser_ctx *parser_ctx, yyscan_t scanner);
+ LTTNG_HIDDEN
+-int yylex(union YYSTYPE *yyval, struct filter_parser_ctx *parser_ctx);
++int yylex(union YYSTYPE *yyval, yyscan_t scanner);
+ LTTNG_HIDDEN
+ int yylex_init_extra(struct filter_parser_ctx *parser_ctx, yyscan_t * ptr_yy_globals);
+ LTTNG_HIDDEN
+@@ -188,7 +188,7 @@ static struct filter_node *make_op_node(struct filter_parser_ctx *scanner,
+ }
+ 
+ LTTNG_HIDDEN
+-void yyerror(struct filter_parser_ctx *parser_ctx, const char *str)
++void yyerror(struct filter_parser_ctx *parser_ctx, yyscan_t scanner, const char *str)
+ {
+ 	fprintf(stderr, "error %s\n", str);
+ }
+@@ -201,7 +201,7 @@ int yywrap(void)
+ 
+ #define parse_error(parser_ctx, str)				\
+ do {								\
+-	yyerror(parser_ctx, YY_("parse error: " str "\n"));	\
++	yyerror(parser_ctx, parser_ctx->scanner, YY_("parse error: " str "\n"));	\
+ 	YYERROR;						\
+ } while (0)
+ 
+@@ -238,7 +238,7 @@ static void filter_ast_free(struct filter_ast *ast)
+ LTTNG_HIDDEN
+ int filter_parser_ctx_append_ast(struct filter_parser_ctx *parser_ctx)
+ {
+-	return yyparse(parser_ctx);
++	return yyparse(parser_ctx, parser_ctx->scanner);
+ }
+ 
+ LTTNG_HIDDEN
+@@ -301,7 +301,8 @@ void filter_parser_ctx_free(struct filter_parser_ctx *parser_ctx)
+ %define api.pure
+ 	/* %locations */
+ %parse-param {struct filter_parser_ctx *parser_ctx}
+-%lex-param {struct filter_parser_ctx *parser_ctx}
++%parse-param {yyscan_t scanner}
++%lex-param {yyscan_t scanner}
+ %start translation_unit
+ %token CHARACTER_CONSTANT_START SQUOTE STRING_LITERAL_START DQUOTE
+ %token ESCSEQ CHAR_STRING_TOKEN
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+1.8.3.4
