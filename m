@@ -1,24 +1,22 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [RFC patch] [Babeltrace python bindings] Fixed
-	use	of braces in format strings,
-	to allow use with older Python	versions (e.g. 2.6)
-Date: Mon, 19 Aug 2013 12:28:44 -0400
-Message-ID: <20130819162844.GA26923__33976.1875373826$1376929782$gmane$org@Krystal>
-References: <OFE20CB39E.5E7B83A1-ONC2257BCC.003DD28C-C2257BCC.003E1AD5@il.ibm.com>
-	<CA+jJMxv=DxAivRkzRFg2sNWxNRSar6C09cTAjzFAG3u+YErqew@mail.gmail.com>
-	<20130819160127.GA25732@Krystal>
-	<CA+jJMxuTQ_Sh_rwftpNyAMpKdFNr-V+6opcdgnnC8c3rsZhgdg@mail.gmail.com>
+From: Vomlehn <vomlehnd@amazon.com>
+Subject: Re: [PATCH lttv] Add build instructions for git tree
+ pulls and use more standard formatting
+Date: Mon, 19 Aug 2013 12:20:59 -0700
+Message-ID: <20130819192059.GA8770__47465.8704399646$1376940154$gmane$org@ub8ca3a8c12a551e580d6.ant.amazon.com>
+References: <20130807194853.GA11032@ub8ca3a8c12a551e580d6.ant.amazon.com>
+	<5203EC44.7070402@voxpopuli.im>
+	<OF8E71E2C5.84B3C9C6-ONC2257BCC.0024AB99-C2257BCC.0024CCB4@il.ibm.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from smtp-fw-2101.amazon.com ([72.21.196.25])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1VBSJx-0000yh-EY
-	for lttng-dev@lists.lttng.org; Mon, 19 Aug 2013 12:28:50 -0400
+	(envelope-from <prvs=93604f4b1=vomlehnd@amazon.com>)
+	id 1VBV1D-00010G-7L
+	for lttng-dev@lists.lttng.org; Mon, 19 Aug 2013 15:21:41 -0400
 Content-Disposition: inline
-In-Reply-To: <CA+jJMxuTQ_Sh_rwftpNyAMpKdFNr-V+6opcdgnnC8c3rsZhgdg@mail.gmail.com>
+In-Reply-To: <OF8E71E2C5.84B3C9C6-ONC2257BCC.0024AB99-C2257BCC.0024CCB4@il.ibm.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -27,65 +25,90 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Amit Margalit <AMITM@il.ibm.com>
+Cc: lttng-dev@lists.lttng.org, Vomlehn <vomlehnd@amazon.com>
 List-Id: lttng-dev@lists.lttng.org
 
-* J=E9r=E9mie Galarneau (jeremie.galarneau@efficios.com) wrote:
-> On Mon, Aug 19, 2013 at 12:01 PM, Mathieu Desnoyers
-> <mathieu.desnoyers@efficios.com> wrote:
-> > * J=E9r=E9mie Galarneau (jeremie.galarneau@efficios.com) wrote:
-> >> Although merging this fix would do no harm, the bindings/python branch=
-'s
-> >> README indicates that we only support Python 3.0 and up for this proje=
-ct.
+Yes, I think you are right. Patch in following message.
+
+On Mon, Aug 19, 2013 at 09:42:25AM +0300, Amit Margalit wrote:
+> I thouhght that's what the 'bootstrap' script is for. I mean - it includes 
+> autoreconf -i plus creation of config directory... So maybe the doc should 
+> say "use the bootstrap script" instead of calling users to run autoreconf 
+> -i ...
+> 
+> Amit Margalit
+> IBM XIV - Storage Reinvented
+> XIV-NAS Development Team
+> Tel. 03-689-7774
+> Fax. 03-689-7230
+> 
+> 
+> 
+> From:   Alexandre Montplaisir <alexmonthy@voxpopuli.im>
+> To:     lttng-dev@lists.lttng.org
+> Cc:     Vomlehn <vomlehnd@amazon.com>
+> Date:   08/08/2013 10:08 PM
+> Subject:        Re: [lttng-dev] [PATCH lttv] Add build instructions for 
+> git tree pulls and use more standard formatting
+> 
+> 
+> 
+> On 13-08-07 03:48 PM, Vomlehn wrote:
+> > If the source is obtained directly from git, the file "configure" must 
+> be
+> > built with the autoconf tools. In addition, example shell commands are
+> > traditionally preceeded with a "$" instead of a "-", so this convention
+> > is used.
+> > ---
+> >  README |   13 ++++++++++---
+> >  1 file changed, 10 insertions(+), 3 deletions(-)
 > >
-> > Is it ready for merge ?
-> =
+> > diff --git a/README b/README
+> > index 98849b3..ac28f9e 100644
+> > --- a/README
+> > +++ b/README
+> > @@ -31,9 +31,16 @@ libc6 development librairies
+> > 
+> >  To compile the source tree from a tarball, simply follow these steps :
+> > 
+> > -- ./configure
+> > -- make
+> > -- make install
+> > +  $ ./configure
+> > +  $ make
+> > +  $ make install
+> > +
+> > +To compile the source tree from a git checkout, use:
+> > +
+> > +  $ autoreconf
+> > +  $ automake --add-missing --gnu
+> 
+> You should be able to use "autoreconf -i" instead of those two commands.
+> It avoids the need to run autoconf, automake etc. manually.
+> 
+> > +  $ make
+> > +  $ make install
+> 
+> As was mentioned in the other thread, this should be "# make install",
+> since with the default configure options, it will install in /usr/local,
+> and only root can write there.
+> 
+> Cheers,
+> Alex
+> 
+> > 
+> >  After running ./configure, you can also go in specific subdirectories 
+> and
+> >  use make, make install.
+> 
+> 
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> 
+> 
 
-> Yes, apart from the missing Signed-off-by line.
-
-OK, I'll wait for the resend from Amit.
-
-Thanks,
-
-Mathieu
-
-> =
-
-> >
-> > Thanks,
-> >
-> > Mathieu
-> >
-> >>
-> >> Regards,
-> >> J=E9r=E9mie
-> >
-> >> _______________________________________________
-> >> lttng-dev mailing list
-> >> lttng-dev@lists.lttng.org
-> >> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> >
-> >
-> > --
-> > Mathieu Desnoyers
-> > EfficiOS Inc.
-> > http://www.efficios.com
-> =
-
-> =
-
-> =
-
-> -- =
-
-> J=E9r=E9mie Galarneau
-> EfficiOS Inc.
-> http://www.efficios.com
-
--- =
-
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+-- 
+David VL
