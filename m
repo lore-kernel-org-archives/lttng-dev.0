@@ -1,20 +1,16 @@
-From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [RFC patch] [Babeltrace python bindings] Fixed use
- of braces in format strings,
- to allow use with older Python versions (e.g. 2.6)
-Date: Mon, 19 Aug 2013 09:56:44 -0400
-Message-ID: <CA+jJMxv=DxAivRkzRFg2sNWxNRSar6C09cTAjzFAG3u+YErqew__6535.35018577731$1376920670$gmane$org@mail.gmail.com>
-References: <OFE20CB39E.5E7B83A1-ONC2257BCC.003DD28C-C2257BCC.003E1AD5@il.ibm.com>
+From: Thuya Aung <thuyaaung2002@yahoo.com>
+Subject: babeltrace : Clock "monotonic" offset differs between
+	traces
+Date: Mon, 19 Aug 2013 07:32:06 -0700 (PDT)
+Message-ID: <1376922726.78813.YahooMailBasic__23475.5614227199$1376922995$gmane$org@web163905.mail.gq1.yahoo.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2144111715=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wg0-f43.google.com ([74.125.82.43])
+Received: from nm45-vm1.bullet.mail.gq1.yahoo.com ([67.195.87.87])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1VBPwx-000241-0V
-	for lttng-dev@lists.lttng.org; Mon, 19 Aug 2013 09:56:56 -0400
-Received: by mail-wg0-f43.google.com with SMTP id z12so3595335wgg.22
-	for <lttng-dev@lists.lttng.org>; Mon, 19 Aug 2013 06:56:44 -0700 (PDT)
-In-Reply-To: <OFE20CB39E.5E7B83A1-ONC2257BCC.003DD28C-C2257BCC.003E1AD5@il.ibm.com>
+	(envelope-from <thuyaaung2002@yahoo.com>) id 1VBQVB-0003kt-9b
+	for lttng-dev@lists.lttng.org; Mon, 19 Aug 2013 10:32:19 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,44 +19,29 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Amit Margalit <AMITM@il.ibm.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============2144111715==
-Content-Type: multipart/alternative; boundary=001a11c380b0862c3704e44d4fb8
+Hello lttng-dev,
 
---001a11c380b0862c3704e44d4fb8
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
+First of all, I like to thank LTTng development team for such a wonderful tracing tool for us to use.
 
-Although merging this fix would do no harm, the bindings/python branch's
-README indicates that we only support Python 3.0 and up for this project.
+I am having the following messages when I viewed the trace file in babeltrace.
+[warning] Clock "monotonic" offset differs between traces (delta 52116 ns). Using average.
+[warning] Clock "monotonic" offset differs between traces (delta 72396 ns). Using average.
 
-Regards,
-J=E9r=E9mie
+My questions are,
+1. Why am I having these warning? Can I reliably analyze traces after having these warning?
+2. How can I minimize or eliminate that kind of offset?
 
---001a11c380b0862c3704e44d4fb8
-Content-Type: text/html; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
+The version of LTTng tools we are using are,
+lttng-modules : 2.1.1
+lttng-tools   : 2.1.1
+lttng-ust     : 2.1.2
+userspace-rcu : 0.7.6
+babeltrace    : 1.0.3
 
-<div dir=3D"ltr">Although merging this fix would do no harm, the bindings/p=
-ython branch&#39;s README indicates that we only support Python 3.0 and up =
-for this project.<div><br></div><div>Regards,</div><div>J=E9r=E9mie</div></=
-div>
+kernel version : 2.6.37.6 for power-pc
 
---001a11c380b0862c3704e44d4fb8--
-
-
---===============2144111715==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Disposition: inline
-Content-Transfer-Encoding: 7bit
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============2144111715==--
+Best Regards,
+Thuya
