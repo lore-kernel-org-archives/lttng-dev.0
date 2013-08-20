@@ -1,18 +1,20 @@
 From: Christian Babeux <christian.babeux@efficios.com>
-Subject: [PATCH babeltrace 1/5] Tests: Move TAP helpers to
-	tests/utils/tap
-Date: Tue, 20 Aug 2013 17:38:17 -0400
-Message-ID: <1377034701-5142-1-git-send-email-christian.babeux__30566.1101280295$1377034790$gmane$org@efficios.com>
+Subject: [PATCH babeltrace 2/5] Tests: Rename tests under lib
+	with tests naming convention
+Date: Tue, 20 Aug 2013 17:38:18 -0400
+Message-ID: <1377034701-5142-2-git-send-email-christian.babeux__36734.0531935499$1377034984$gmane$org@efficios.com>
+References: <1377034701-5142-1-git-send-email-christian.babeux@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qa0-f42.google.com ([209.85.216.42])
+Received: from mail-qe0-f45.google.com ([209.85.128.45])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <christian.babeux@0x80.ca>) id 1VBtdL-0005Pf-77
-	for lttng-dev@lists.lttng.org; Tue, 20 Aug 2013 17:38:43 -0400
-Received: by mail-qa0-f42.google.com with SMTP id bv4so2827734qab.1
-	for <lttng-dev@lists.lttng.org>; Tue, 20 Aug 2013 14:38:29 -0700 (PDT)
+	(envelope-from <christian.babeux@0x80.ca>) id 1VBtdP-0005Pj-BA
+	for lttng-dev@lists.lttng.org; Tue, 20 Aug 2013 17:38:47 -0400
+Received: by mail-qe0-f45.google.com with SMTP id nc12so562584qeb.32
+	for <lttng-dev@lists.lttng.org>; Tue, 20 Aug 2013 14:38:33 -0700 (PDT)
+In-Reply-To: <1377034701-5142-1-git-send-email-christian.babeux@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -25,1680 +27,1415 @@ To: mathieu.desnoyers@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-tests/utils/tap/tap.{h,c}:
-For use in C tests. You can link against libtap with the usual automake
-mechanisms.
-
-New TAP helper:
-
-tests/utils/tap/tap.sh:
-For use in shell scripts tests. Source the script
-(e.g. source "tests/utils/tap/tap.sh") to use the relevants TAP functions.
-
 Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
 ---
- configure.ac                |   2 +
- tests/Makefile.am           |   2 +-
- tests/lib/Makefile.am       |  12 +-
- tests/lib/README.tap        |   2 -
- tests/lib/tap.c             | 433 -----------------------------------------
- tests/lib/tap.h             |  89 ---------
- tests/lib/test-bitfield.c   |   2 +-
- tests/lib/test-seeks.c      |   2 +-
- tests/utils/Makefile.am     |   1 +
- tests/utils/tap/Makefile.am |   4 +
- tests/utils/tap/tap.c       | 433 +++++++++++++++++++++++++++++++++++++++++
- tests/utils/tap/tap.h       |  89 +++++++++
- tests/utils/tap/tap.sh      | 456 ++++++++++++++++++++++++++++++++++++++++++++
- 13 files changed, 995 insertions(+), 532 deletions(-)
- delete mode 100644 tests/lib/README.tap
- delete mode 100644 tests/lib/tap.c
- delete mode 100644 tests/lib/tap.h
- create mode 100644 tests/utils/Makefile.am
- create mode 100644 tests/utils/tap/Makefile.am
- create mode 100644 tests/utils/tap/tap.c
- create mode 100644 tests/utils/tap/tap.h
- create mode 100755 tests/utils/tap/tap.sh
+ tests/lib/Makefile.am     |   8 +-
+ tests/lib/runall.sh       |   6 +-
+ tests/lib/test-bitfield.c | 363 ----------------------------------------------
+ tests/lib/test-seeks.c    | 302 --------------------------------------
+ tests/lib/test_bitfield.c | 363 ++++++++++++++++++++++++++++++++++++++++++++++
+ tests/lib/test_seek.c     | 302 ++++++++++++++++++++++++++++++++++++++
+ 6 files changed, 672 insertions(+), 672 deletions(-)
+ delete mode 100644 tests/lib/test-bitfield.c
+ delete mode 100644 tests/lib/test-seeks.c
+ create mode 100644 tests/lib/test_bitfield.c
+ create mode 100644 tests/lib/test_seek.c
 
-diff --git a/configure.ac b/configure.ac
-index fdefe2a..f38bfb7 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -134,6 +134,8 @@ AC_CONFIG_FILES([
- 	include/Makefile
- 	tests/Makefile
- 	tests/lib/Makefile
-+	tests/utils/Makefile
-+	tests/utils/tap/Makefile
- 	extras/Makefile
- 	extras/valgrind/Makefile
- 	babeltrace.pc
-diff --git a/tests/Makefile.am b/tests/Makefile.am
-index 816fa66..cf68aac 100644
---- a/tests/Makefile.am
-+++ b/tests/Makefile.am
-@@ -1,6 +1,6 @@
- AM_CFLAGS = $(PACKAGE_CFLAGS) -I$(top_srcdir)/include
- 
--SUBDIRS = lib
-+SUBDIRS = utils lib
- 
- EXTRA_DIST = runall.sh ctf-traces/**
- 
 diff --git a/tests/lib/Makefile.am b/tests/lib/Makefile.am
-index 01831de..6ae694d 100644
+index 6ae694d..a7de0a9 100644
 --- a/tests/lib/Makefile.am
 +++ b/tests/lib/Makefile.am
-@@ -1,21 +1,23 @@
--AM_CFLAGS = $(PACKAGE_CFLAGS) -I$(top_srcdir)/include
-+AM_CFLAGS = $(PACKAGE_CFLAGS) -I$(top_srcdir)/include -I$(top_srcdir)/tests/utils
+@@ -6,16 +6,16 @@ LIBTAP=$(top_builddir)/tests/utils/tap/libtap.la
  
- noinst_LIBRARIES = libtestcommon.a
+ libtestcommon_a_SOURCES = common.c common.h
  
--libtestcommon_a_SOURCES = tap.c tap.h common.c common.h
-+LIBTAP=$(top_builddir)/tests/utils/tap/libtap.la
- 
--test_seeks_LDADD = libtestcommon.a \
-+libtestcommon_a_SOURCES = common.c common.h
-+
-+test_seeks_LDADD = $(LIBTAP) libtestcommon.a \
+-test_seeks_LDADD = $(LIBTAP) libtestcommon.a \
++test_seek_LDADD = $(LIBTAP) libtestcommon.a \
  	$(top_builddir)/lib/libbabeltrace.la \
  	$(top_builddir)/formats/ctf/libbabeltrace-ctf.la
  
--test_bitfield_LDADD = libtestcommon.a
-+test_bitfield_LDADD = $(LIBTAP) libtestcommon.a
+ test_bitfield_LDADD = $(LIBTAP) libtestcommon.a
  
- noinst_PROGRAMS = test-seeks test-bitfield
+-noinst_PROGRAMS = test-seeks test-bitfield
++noinst_PROGRAMS = test_seek test_bitfield
  
- test_seeks_SOURCES = test-seeks.c
- test_bitfield_SOURCES = test-bitfield.c
+-test_seeks_SOURCES = test-seeks.c
+-test_bitfield_SOURCES = test-bitfield.c
++test_seek_SOURCES = test_seek.c
++test_bitfield_SOURCES = test_bitfield.c
  
--EXTRA_DIST = README.tap runall.sh
-+EXTRA_DIST = runall.sh
+ EXTRA_DIST = runall.sh
  
- check-am:
- 	./runall.sh
-diff --git a/tests/lib/README.tap b/tests/lib/README.tap
+diff --git a/tests/lib/runall.sh b/tests/lib/runall.sh
+index b5522ad..5c28299 100755
+--- a/tests/lib/runall.sh
++++ b/tests/lib/runall.sh
+@@ -1,9 +1,9 @@
+ #!/bin/sh
+ # run Seeks tests
+ # With a trace than contains empty packets
+-./test-seeks ../ctf-traces/succeed/wk-heartbeat-u/ 1351532897586558519 1351532897591331194
++./test_seek ../ctf-traces/succeed/wk-heartbeat-u/ 1351532897586558519 1351532897591331194
+ # With a bigger trace
+-./test-seeks ../ctf-traces/succeed/lttng-modules-2.0-pre5/ 61334174524234 61336381998396
++./test_seek ../ctf-traces/succeed/lttng-modules-2.0-pre5/ 61334174524234 61336381998396
+ 
+ # run bitfield tests
+-./test-bitfield
++./test_bitfield
+diff --git a/tests/lib/test-bitfield.c b/tests/lib/test-bitfield.c
 deleted file mode 100644
-index e99e7b2..0000000
---- a/tests/lib/README.tap
+index 16e8a57..0000000
+--- a/tests/lib/test-bitfield.c
 +++ /dev/null
-@@ -1,2 +0,0 @@
--tap.c and tap.h were taken from
--http://jc.ngo.org.uk/trac-bin/trac.cgi/wiki/LibTap
-diff --git a/tests/lib/tap.c b/tests/lib/tap.c
-deleted file mode 100644
-index 8bf72f6..0000000
---- a/tests/lib/tap.c
-+++ /dev/null
-@@ -1,433 +0,0 @@
--/*-
-- * Copyright (c) 2004 Nik Clayton
-- * All rights reserved.
+@@ -1,363 +0,0 @@
+-/*
+- * test-bitfield.c
 - *
-- * Redistribution and use in source and binary forms, with or without
-- * modification, are permitted provided that the following conditions
-- * are met:
-- * 1. Redistributions of source code must retain the above copyright
-- *    notice, this list of conditions and the following disclaimer.
-- * 2. Redistributions in binary form must reproduce the above copyright
-- *    notice, this list of conditions and the following disclaimer in the
-- *    documentation and/or other materials provided with the distribution.
+- * BabelTrace - bitfield test program
 - *
-- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
-- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-- * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
-- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-- * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-- * SUCH DAMAGE.
+- * Copyright 2010 - Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+- *
+- * This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation; under version 2 of the License.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+- *
+- * You should have received a copy of the GNU General Public License along
+- * with this program; if not, write to the Free Software Foundation, Inc.,
+- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 - */
 -
 -#define _GNU_SOURCE
--#include <ctype.h>
--#include <stdarg.h>
--#include <stdio.h>
+-#include <babeltrace/bitfield.h>
+-#include <time.h>
 -#include <stdlib.h>
+-#include <stdio.h>
 -
--#include "tap.h"
+-#include <tap/tap.h>
 -
--static int no_plan = 0;
--static int skip_all = 0;
--static int have_plan = 0;
--static unsigned int test_count = 0; /* Number of tests that have been run */
--static unsigned int e_tests = 0; /* Expected number of tests to run */
--static unsigned int failures = 0; /* Number of tests that failed */
--static char *todo_msg = NULL;
--static char *todo_msg_fixed = "libtap malloc issue";
--static int todo = 0;
--static int test_died = 0;
+-unsigned int glob;
 -
--/* Encapsulate the pthread code in a conditional.  In the absence of
--   libpthread the code does nothing */
--#ifdef HAVE_LIBPTHREAD
--#include <pthread.h>
--static pthread_mutex_t M = PTHREAD_MUTEX_INITIALIZER;
--# define LOCK pthread_mutex_lock(&M);
--# define UNLOCK pthread_mutex_unlock(&M);
+-/*
+- * This function is only declared to show the size of a bitfield write in
+- * objdump.
+- */
+-void fct(void)
+-{
+-	bt_bitfield_write(&glob, unsigned int, 12, 15, 0x12345678);
+-}
+-
+-/* Test array size, in bytes */
+-#define TEST_LEN 128
+-#define NR_TESTS 10
+-#define SIGNED_TEST_DESC_FMT_STR "Writing and reading back 0x%X, signed"
+-#define UNSIGNED_TEST_DESC_FMT_STR "Writing and reading back 0x%X, unsigned"
+-#define DIAG_FMT_STR "Failed reading value written \"%s\"-wise, with start=%i" \
+-	" and length=%i. Read %llX"
+-
+-unsigned int srcrand;
+-
+-#if defined(__i386) || defined(__x86_64)
+-
+-static inline int fls(int x)
+-{
+-	int r;
+-	asm("bsrl %1,%0\n\t"
+-	    "cmovzl %2,%0"
+-	    : "=&r" (r) : "rm" (x), "rm" (-1));
+-	return r + 1;
+-}
+-
+-#elif defined(__PPC__)
+-
+-static __inline__ int fls(unsigned int x)
+-{
+-	int lz;
+-
+-	asm ("cntlzw %0,%1" : "=r" (lz) : "r" (x));
+-	return 32 - lz;
+-}
+-
 -#else
--# define LOCK
--# define UNLOCK
+-
+-static int fls(unsigned int x)
+-{
+-	int r = 32;
+-
+-	if (!x)
+-		return 0;
+-	if (!(x & 0xFFFF0000U)) {
+-		x <<= 16;
+-		r -= 16;
+-	}
+-	if (!(x & 0xFF000000U)) {
+-		x <<= 8;
+-		r -= 8;
+-	}
+-	if (!(x & 0xF0000000U)) {
+-		x <<= 4;
+-		r -= 4;
+-	}
+-	if (!(x & 0xC0000000U)) {
+-		x <<= 2;
+-		r -= 2;
+-	}
+-	if (!(x & 0x80000000U)) {
+-		x <<= 1;
+-		r -= 1;
+-	}
+-	return r;
+-}
+-
 -#endif
 -
--static void _expected_tests(unsigned int);
--static void _tap_init(void);
--static void _cleanup(void);
+-#define print_byte_array(c, len)	\
+-do {					\
+-	unsigned long i;		\
+-					\
+-	for (i = 0; i < (len); i++) {	\
+-		printf("0x%X", (c)[i]);	\
+-		if (i != (len) - 1)	\
+-			printf(" ");	\
+-	}				\
+-	printf("\n");			\
+-} while (0)
 -
--/*
-- * Generate a test result.
-- *
-- * ok -- boolean, indicates whether or not the test passed.
-- * test_name -- the name of the test, may be NULL
-- * test_comment -- a comment to print afterwards, may be NULL
-- */
--unsigned int
--_gen_result(int ok, const char *func, char *file, unsigned int line,
--	    char *test_name, ...)
+-#define init_byte_array(c, len, val)	\
+-do {					\
+-	unsigned long i;		\
+-					\
+-	for (i = 0; i < (len); i++)	\
+-		(c)[i] = (val);		\
+-} while (0)
+-
+-#define check_result(ref, val, buffer, typename, start, len,		\
+-		     desc_fmt_str)					\
+-({									\
+-	if ((val) != (ref)) {						\
+-		fail(desc_fmt_str, ref);				\
+-		diag(DIAG_FMT_STR, #typename, start, len, val);		\
+-		printf("# ");						\
+-		print_byte_array(buffer, TEST_LEN);			\
+-	}								\
+-	(val) != (ref);							\
+-})
+-
+-void run_test_unsigned(void)
 -{
--	va_list ap;
--	char *local_test_name = NULL;
--	char *c;
--	int name_is_digits;
+-	unsigned int src, nrbits;
+-	union {
+-		unsigned char c[TEST_LEN];
+-		unsigned short s[TEST_LEN/sizeof(unsigned short)];
+-		unsigned int i[TEST_LEN/sizeof(unsigned int)];
+-		unsigned long l[TEST_LEN/sizeof(unsigned long)];
+-		unsigned long long ll[TEST_LEN/sizeof(unsigned long long)];
+-	} target;
+-	unsigned long long readval;
+-	unsigned int s, l;
 -
--	LOCK;
+-	src = srcrand;
+-	nrbits = fls(src);
 -
--	test_count++;
--
--	/* Start by taking the test name and performing any printf()
--	   expansions on it */
--	if(test_name != NULL) {
--		va_start(ap, test_name);
--		if (vasprintf(&local_test_name, test_name, ap) == -1) {
--			local_test_name = NULL;
--		}
--		va_end(ap);
--
--		/* Make sure the test name contains more than digits
--		   and spaces.  Emit an error message and exit if it
--		   does */
--		if(local_test_name) {
--			name_is_digits = 1;
--			for(c = local_test_name; *c != '\0'; c++) {
--				if(!isdigit(*c) && !isspace(*c)) {
--					name_is_digits = 0;
--					break;
--				}
+-	for (s = 0; s < CHAR_BIT * TEST_LEN; s++) {
+-		for (l = nrbits; l < (CHAR_BIT * TEST_LEN) - s; l++) {
+-			init_byte_array(target.c, TEST_LEN, 0xFF);
+-			bt_bitfield_write(target.c, unsigned char, s, l, src);
+-			bt_bitfield_read(target.c, unsigned char, s, l, &readval);
+-			if (check_result(src, readval, target.c, unsigned char,
+-					  s, l, UNSIGNED_TEST_DESC_FMT_STR)) {
+-				return;
 -			}
 -
--			if(name_is_digits) {
--				diag("    You named your test '%s'.  You shouldn't use numbers for your test names.", local_test_name);
--				diag("    Very confusing.");
+-			init_byte_array(target.c, TEST_LEN, 0xFF);
+-			bt_bitfield_write(target.s, unsigned short, s, l, src);
+-			bt_bitfield_read(target.c, unsigned char, s, l, &readval);
+-			if (check_result(src, readval, target.c, unsigned short,
+-					  s, l, UNSIGNED_TEST_DESC_FMT_STR)) {
+-				return;
+-			}
+-
+-			init_byte_array(target.c, TEST_LEN, 0xFF);
+-			bt_bitfield_write(target.i, unsigned int, s, l, src);
+-			bt_bitfield_read(target.c, unsigned char, s, l, &readval);
+-			if (check_result(src, readval, target.c, unsigned int,
+-					   s, l, UNSIGNED_TEST_DESC_FMT_STR)) {
+-				return;
+-			}
+-
+-			init_byte_array(target.c, TEST_LEN, 0xFF);
+-			bt_bitfield_write(target.l, unsigned long, s, l, src);
+-			bt_bitfield_read(target.c, unsigned char, s, l, &readval);
+-			if (check_result(src, readval, target.c, unsigned long,
+-					  s, l, UNSIGNED_TEST_DESC_FMT_STR)) {
+-				return;
+-			}
+-
+-			init_byte_array(target.c, TEST_LEN, 0xFF);
+-			bt_bitfield_write(target.ll, unsigned long long, s, l, src);
+-			bt_bitfield_read(target.c, unsigned char, s, l, &readval);
+-			if (check_result(src, readval, target.c, unsigned long long,
+-				     s, l, UNSIGNED_TEST_DESC_FMT_STR)) {
+-				return;
 -			}
 -		}
 -	}
 -
--	if(!ok) {
--		printf("not ");
--		failures++;
--	}
+-	pass(UNSIGNED_TEST_DESC_FMT_STR, src);
+-}
 -
--	printf("ok %d", test_count);
+-void run_test_signed(void)
+-{
+-	int src, nrbits;
+-	union {
+-		signed char c[TEST_LEN];
+-		short s[TEST_LEN/sizeof(short)];
+-		int i[TEST_LEN/sizeof(int)];
+-		long l[TEST_LEN/sizeof(long)];
+-		long long ll[TEST_LEN/sizeof(long long)];
+-	} target;
+-	long long readval;
+-	unsigned int s, l;
 -
--	if(test_name != NULL) {
--		printf(" - ");
+-	src = srcrand;
+-	if (src & 0x80000000U)
+-		nrbits = fls(~src) + 1;	/* Find least significant bit conveying sign */
+-	else
+-		nrbits = fls(src) + 1;	/* Keep sign at 0 */
 -
--		/* Print the test name, escaping any '#' characters it
--		   might contain */
--		if(local_test_name != NULL) {
--			flockfile(stdout);
--			for(c = local_test_name; *c != '\0'; c++) {
--				if(*c == '#')
--					fputc('\\', stdout);
--				fputc((int)*c, stdout);
+-	for (s = 0; s < CHAR_BIT * TEST_LEN; s++) {
+-		for (l = nrbits; l < (CHAR_BIT * TEST_LEN) - s; l++) {
+-			init_byte_array(target.c, TEST_LEN, 0x0);
+-			bt_bitfield_write(target.c, signed char, s, l, src);
+-			bt_bitfield_read(target.c, signed char, s, l, &readval);
+-			if (check_result(src, readval, target.c, signed char,
+-					  s, l, SIGNED_TEST_DESC_FMT_STR)) {
+-				return;
 -			}
--			funlockfile(stdout);
--		} else {	/* vasprintf() failed, use a fixed message */
--			printf("%s", todo_msg_fixed);
+-
+-			init_byte_array(target.c, TEST_LEN, 0x0);
+-			bt_bitfield_write(target.s, short, s, l, src);
+-			bt_bitfield_read(target.c, signed char, s, l, &readval);
+-			if (check_result(src, readval, target.c, short,
+-					  s, l, SIGNED_TEST_DESC_FMT_STR)) {
+-				return;
+-			}
+-
+-			init_byte_array(target.c, TEST_LEN, 0x0);
+-			bt_bitfield_write(target.i, int, s, l, src);
+-			bt_bitfield_read(target.c, signed char, s, l, &readval);
+-			if (check_result(src, readval, target.c, int,
+-					  s, l, SIGNED_TEST_DESC_FMT_STR)) {
+-				return;
+-			}
+-
+-			init_byte_array(target.c, TEST_LEN, 0x0);
+-			bt_bitfield_write(target.l, long, s, l, src);
+-			bt_bitfield_read(target.c, signed char, s, l, &readval);
+-			if (check_result(src, readval, target.c, long,
+-					  s, l, SIGNED_TEST_DESC_FMT_STR)) {
+-				return;
+-			}
+-
+-			init_byte_array(target.c, TEST_LEN, 0x0);
+-			bt_bitfield_write(target.ll, long long, s, l, src);
+-			bt_bitfield_read(target.c, signed char, s, l, &readval);
+-			if (check_result(src, readval, target.c, long long,
+-					  s, l, SIGNED_TEST_DESC_FMT_STR)) {
+-				return;
+-			}
 -		}
 -	}
 -
--	/* If we're in a todo_start() block then flag the test as being
--	   TODO.  todo_msg should contain the message to print at this
--	   point.  If it's NULL then asprintf() failed, and we should
--	   use the fixed message.
--
--	   This is not counted as a failure, so decrement the counter if
--	   the test failed. */
--	if(todo) {
--		printf(" # TODO %s", todo_msg ? todo_msg : todo_msg_fixed);
--		if(!ok)
--			failures--;
--	}
--
--	printf("\n");
--
--	if(!ok) {
--		if(getenv("HARNESS_ACTIVE") != NULL)
--			fputs("\n", stderr);
--
--		diag("    Failed %stest (%s:%s() at line %d)",
--		     todo ? "(TODO) " : "", file, func, line);
--	}
--	free(local_test_name);
--
--	UNLOCK;
--
--	/* We only care (when testing) that ok is positive, but here we
--	   specifically only want to return 1 or 0 */
--	return ok ? 1 : 0;
+-	pass(SIGNED_TEST_DESC_FMT_STR, src);
 -}
 -
--/*
-- * Initialise the TAP library.  Will only do so once, however many times it's
-- * called.
-- */
--void
--_tap_init(void)
+-void run_test(void)
 -{
--	static int run_once = 0;
+-	int i;
+-	plan_tests(NR_TESTS * 2 + 6);
 -
--	if(!run_once) {
--		atexit(_cleanup);
+-	srand(time(NULL));
 -
--		/* stdout needs to be unbuffered so that the output appears
--		   in the same place relative to stderr output as it does
--		   with Test::Harness */
--		setbuf(stdout, 0);
--		run_once = 1;
+-	srcrand = 0;
+-	run_test_unsigned();
+-	srcrand = 0;
+-	run_test_signed();
+-
+-	srcrand = 1;
+-	run_test_unsigned();
+-
+-	srcrand = ~0U;
+-	run_test_unsigned();
+-
+-	srcrand = -1;
+-	run_test_signed();
+-
+-	srcrand = (int)0x80000000U;
+-	run_test_signed();
+-
+-	for (i = 0; i < NR_TESTS; i++) {
+-		srcrand = rand();
+-		run_test_unsigned();
+-		run_test_signed();
 -	}
 -}
 -
--/*
-- * Note that there's no plan.
-- */
--int
--plan_no_plan(void)
+-static
+-int print_encodings(unsigned long src, unsigned int shift, unsigned int len)
 -{
+-	union {
+-		unsigned char c[8];
+-		unsigned short s[4];
+-		unsigned int i[2];
+-		unsigned long l[2];
+-		unsigned long long ll[1];
+-	} target;
+-	unsigned long long readval;
 -
--	LOCK;
+-	init_byte_array(target.c, 8, 0xFF);
+-	bt_bitfield_write(target.c, unsigned char, shift, len, src);
+-	printf("bytewise\n");
+-	print_byte_array(target.c, 8);
 -
--	_tap_init();
+-	init_byte_array(target.c, 8, 0xFF);
+-	bt_bitfield_write(target.s, unsigned short, shift, len, src);
+-	printf("shortwise\n");
+-	print_byte_array(target.c, 8);
 -
--	if(have_plan != 0) {
--		fprintf(stderr, "You tried to plan twice!\n");
--		test_died = 1;
--		UNLOCK;
--		exit(255);
--	}
+-	init_byte_array(target.c, 8, 0xFF);
+-	bt_bitfield_write(target.i, unsigned int, shift, len, src);
+-	printf("intwise\n");
+-	print_byte_array(target.c, 8);
 -
--	have_plan = 1;
--	no_plan = 1;
+-	init_byte_array(target.c, 8, 0xFF);
+-	bt_bitfield_write(target.l, unsigned long, shift, len, src);
+-	printf("longwise\n");
+-	print_byte_array(target.c, 8);
 -
--	UNLOCK;
+-	init_byte_array(target.c, 8, 0xFF);
+-	bt_bitfield_write(target.ll, unsigned long long, shift, len, src);
+-	printf("lluwise\n");
+-	print_byte_array(target.c, 8);
 -
--	return 1;
--}
--
--/*
-- * Note that the plan is to skip all tests
-- */
--int
--plan_skip_all(char *reason)
--{
--
--	LOCK;
--
--	_tap_init();
--
--	skip_all = 1;
--
--	printf("1..0");
--
--	if(reason != NULL)
--		printf(" # Skip %s", reason);
--
--	printf("\n");
--
--	UNLOCK;
--
--	exit(0);
--}
--
--/*
-- * Note the number of tests that will be run.
-- */
--int
--plan_tests(unsigned int tests)
--{
--
--	LOCK;
--
--	_tap_init();
--
--	if(have_plan != 0) {
--		fprintf(stderr, "You tried to plan twice!\n");
--		test_died = 1;
--		UNLOCK;
--		exit(255);
--	}
--
--	if(tests == 0) {
--		fprintf(stderr, "You said to run 0 tests!  You've got to run something.\n");
--		test_died = 1;
--		UNLOCK;
--		exit(255);
--	}
--
--	have_plan = 1;
--
--	_expected_tests(tests);
--
--	UNLOCK;
--
--	return e_tests;
--}
--
--unsigned int
--diag(char *fmt, ...)
--{
--	va_list ap;
--
--	fputs("# ", stderr);
--
--	va_start(ap, fmt);
--	vfprintf(stderr, fmt, ap);
--	va_end(ap);
--
--	fputs("\n", stderr);
+-	bt_bitfield_read(target.c, unsigned char, shift, len, &readval);
+-	printf("read: %llX\n", readval);
+-	print_byte_array(target.c, 8);
 -
 -	return 0;
 -}
 -
--void
--_expected_tests(unsigned int tests)
+-int main(int argc, char **argv)
 -{
+-	if (argc > 1) {
+-		/* Print encodings */
+-		unsigned long src;
+-		unsigned int shift, len;
 -
--	printf("1..%d\n", tests);
--	e_tests = tests;
+-		src = atoi(argv[1]);
+-		if (argc > 2)
+-			shift = atoi(argv[2]);
+-		else
+-			shift = 12;
+-		if (argc > 3)
+-			len = atoi(argv[3]);
+-		else
+-			len = 40;
+-		return print_encodings(src, shift, len);
+-	}
+-
+-	/* Run tap-formated tests */
+-	run_test();
+-	return exit_status();
 -}
--
--int
--skip(unsigned int n, char *fmt, ...)
--{
--	va_list ap;
--	char *skip_msg = NULL;
--
--	LOCK;
--
--	va_start(ap, fmt);
--	if (asprintf(&skip_msg, fmt, ap) == -1) {
--		skip_msg = NULL;
--	}
--	va_end(ap);
--
--	while(n-- > 0) {
--		test_count++;
--		printf("ok %d # skip %s\n", test_count,
--		       skip_msg != NULL ?
--		       skip_msg : "libtap():malloc() failed");
--	}
--
--	free(skip_msg);
--
--	UNLOCK;
--
--	return 1;
--}
--
--void
--todo_start(char *fmt, ...)
--{
--	va_list ap;
--
--	LOCK;
--
--	va_start(ap, fmt);
--	if (vasprintf(&todo_msg, fmt, ap) == -1) {
--		todo_msg = NULL;
--	}
--	va_end(ap);
--
--	todo = 1;
--
--	UNLOCK;
--}
--
--void
--todo_end(void)
--{
--
--	LOCK;
--
--	todo = 0;
--	free(todo_msg);
--
--	UNLOCK;
--}
--
--int
--exit_status(void)
--{
--	int r;
--
--	LOCK;
--
--	/* If there's no plan, just return the number of failures */
--	if(no_plan || !have_plan) {
--		UNLOCK;
--		return failures;
--	}
--
--	/* Ran too many tests?  Return the number of tests that were run
--	   that shouldn't have been */
--	if(e_tests < test_count) {
--		r = test_count - e_tests;
--		UNLOCK;
--		return r;
--	}
--
--	/* Return the number of tests that failed + the number of tests
--	   that weren't run */
--	r = failures + e_tests - test_count;
--	UNLOCK;
--
--	return r;
--}
--
--/*
-- * Cleanup at the end of the run, produce any final output that might be
-- * required.
-- */
--void
--_cleanup(void)
--{
--
--	LOCK;
--
--	/* If plan_no_plan() wasn't called, and we don't have a plan,
--	   and we're not skipping everything, then something happened
--	   before we could produce any output */
--	if(!no_plan && !have_plan && !skip_all) {
--		diag("Looks like your test died before it could output anything.");
--		UNLOCK;
--		return;
--	}
--
--	if(test_died) {
--		diag("Looks like your test died just after %d.", test_count);
--		UNLOCK;
--		return;
--	}
--
--
--	/* No plan provided, but now we know how many tests were run, and can
--	   print the header at the end */
--	if(!skip_all && (no_plan || !have_plan)) {
--		printf("1..%d\n", test_count);
--	}
--
--	if((have_plan && !no_plan) && e_tests < test_count) {
--		diag("Looks like you planned %d %s but ran %d extra.",
--		     e_tests, e_tests == 1 ? "test" : "tests", test_count - e_tests);
--		UNLOCK;
--		return;
--	}
--
--	if((have_plan || !no_plan) && e_tests > test_count) {
--		diag("Looks like you planned %d %s but only ran %d.",
--		     e_tests, e_tests == 1 ? "test" : "tests", test_count);
--		UNLOCK;
--		return;
--	}
--
--	if(failures)
--		diag("Looks like you failed %d %s of %d.",
--		     failures, failures == 1 ? "test" : "tests", test_count);
--
--	UNLOCK;
--}
-diff --git a/tests/lib/tap.h b/tests/lib/tap.h
-deleted file mode 100644
-index 0f05943..0000000
---- a/tests/lib/tap.h
-+++ /dev/null
-@@ -1,89 +0,0 @@
--/*-
-- * Copyright (c) 2004 Nik Clayton
-- * All rights reserved.
-- *
-- * Redistribution and use in source and binary forms, with or without
-- * modification, are permitted provided that the following conditions
-- * are met:
-- * 1. Redistributions of source code must retain the above copyright
-- *    notice, this list of conditions and the following disclaimer.
-- * 2. Redistributions in binary form must reproduce the above copyright
-- *    notice, this list of conditions and the following disclaimer in the
-- *    documentation and/or other materials provided with the distribution.
-- *
-- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
-- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-- * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
-- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-- * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-- * SUCH DAMAGE.
-- */
--
--/* '## __VA_ARGS__' is a gcc'ism. C99 doesn't allow the token pasting
--   and requires the caller to add the final comma if they've ommitted
--   the optional arguments */
--#ifdef __GNUC__
--# define ok(e, test, ...) ((e) ?					\
--			   _gen_result(1, __func__, __FILE__, __LINE__,	\
--				       test, ## __VA_ARGS__) :		\
--			   _gen_result(0, __func__, __FILE__, __LINE__,	\
--				       test, ## __VA_ARGS__))
--
--# define ok1(e) ((e) ?							\
--		 _gen_result(1, __func__, __FILE__, __LINE__, "%s", #e) : \
--		 _gen_result(0, __func__, __FILE__, __LINE__, "%s", #e))
--
--# define pass(test, ...) ok(1, test, ## __VA_ARGS__);
--# define fail(test, ...) ok(0, test, ## __VA_ARGS__);
--
--# define skip_start(test, n, fmt, ...)			\
--	do {						\
--		if((test)) {				\
--			skip(n, fmt, ## __VA_ARGS__);	\
--			continue;			\
--		}
--#elif __STDC_VERSION__ >= 199901L /* __GNUC__ */
--# define ok(e, ...) ((e) ?						\
--		     _gen_result(1, __func__, __FILE__, __LINE__,	\
--				 __VA_ARGS__) :				\
--		     _gen_result(0, __func__, __FILE__, __LINE__,	\
--				 __VA_ARGS__))
--
--# define ok1(e) ((e) ?							\
--		 _gen_result(1, __func__, __FILE__, __LINE__, "%s", #e) : \
--		 _gen_result(0, __func__, __FILE__, __LINE__, "%s", #e))
--
--# define pass(...) ok(1, __VA_ARGS__);
--# define fail(...) ok(0, __VA_ARGS__);
--
--# define skip_start(test, n, ...)			\
--	do {						\
--		if((test)) {				\
--			skip(n,  __VA_ARGS__);		\
--			continue;			\
--		}
--#else /* __STDC_VERSION__ */
--# error "Needs gcc or C99 compiler for variadic macros."
--#endif /* __STDC_VERSION__ */
--
--#define skip_end() } while(0);
--
--unsigned int _gen_result(int, const char *, char *, unsigned int, char *, ...);
--
--int plan_no_plan(void);
--int plan_skip_all(char *);
--int plan_tests(unsigned int);
--
--unsigned int diag(char *, ...);
--
--int skip(unsigned int, char *, ...);
--
--void todo_start(char *, ...);
--void todo_end(void);
--
--int exit_status(void);
-diff --git a/tests/lib/test-bitfield.c b/tests/lib/test-bitfield.c
-index 2cb7a74..16e8a57 100644
---- a/tests/lib/test-bitfield.c
-+++ b/tests/lib/test-bitfield.c
-@@ -25,7 +25,7 @@
- #include <stdlib.h>
- #include <stdio.h>
- 
--#include "tap.h"
-+#include <tap/tap.h>
- 
- unsigned int glob;
- 
 diff --git a/tests/lib/test-seeks.c b/tests/lib/test-seeks.c
-index a7b1360..b33f80d 100644
+deleted file mode 100644
+index b33f80d..0000000
 --- a/tests/lib/test-seeks.c
-+++ b/tests/lib/test-seeks.c
-@@ -29,8 +29,8 @@
- #include <errno.h>
- #include <limits.h>
- 
-+#include <tap/tap.h>
- #include "common.h"
--#include "tap.h"
- 
- #define NR_TESTS	29
- 
-diff --git a/tests/utils/Makefile.am b/tests/utils/Makefile.am
++++ /dev/null
+@@ -1,302 +0,0 @@
+-/*
+- * test-seeks.c
+- *
+- * Lib BabelTrace - Seeks test program
+- *
+- * Copyright 2012 - Yannick Brosseau <yannick.brosseau@gmail.com>
+- *
+- * This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation; under version 2 of the License.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+- *
+- * You should have received a copy of the GNU General Public License along
+- * with this program; if not, write to the Free Software Foundation, Inc.,
+- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+- */
+-#define _GNU_SOURCE
+-#include <babeltrace/context.h>
+-#include <babeltrace/iterator.h>
+-#include <babeltrace/ctf/iterator.h>
+-#include <babeltrace/ctf/events.h>
+-
+-#include <stdio.h>
+-#include <stdlib.h>
+-#include <errno.h>
+-#include <limits.h>
+-
+-#include <tap/tap.h>
+-#include "common.h"
+-
+-#define NR_TESTS	29
+-
+-void run_seek_begin(char *path, uint64_t expected_begin)
+-{
+-	struct bt_context *ctx;
+-	struct bt_ctf_iter *iter;
+-	struct bt_ctf_event *event;
+-	struct bt_iter_pos newpos;
+-	int ret;
+-	uint64_t timestamp_begin;
+-	uint64_t timestamp_seek_begin;
+-
+-	/* Open the trace */
+-	ctx = create_context_with_path(path);
+-	if (!ctx) {
+-		plan_skip_all("Cannot create valid context");
+-	}
+-
+-	/* Create iterator with null begin and end */
+-	iter = bt_ctf_iter_create(ctx, NULL, NULL);
+-	if (!iter) {
+-		plan_skip_all("Cannot create valid iterator");
+-	}
+-
+-	event = bt_ctf_iter_read_event(iter);
+-
+-	ok(event, "Event valid");
+-
+-	/* Validate that the first timestamp is right */
+-	timestamp_begin = bt_ctf_get_timestamp(event);
+-
+-	ok1(timestamp_begin == expected_begin);
+-
+-	/* Validate that we get the same value after a seek begin */
+-	newpos.type = BT_SEEK_BEGIN;
+-	ret = bt_iter_set_pos(bt_ctf_get_iter(iter), &newpos);
+-
+-	ok(ret == 0, "Seek begin retval %d", ret);
+-
+-	event = bt_ctf_iter_read_event(iter);
+-
+-	ok(event, "Event valid");
+-
+-	timestamp_seek_begin = bt_ctf_get_timestamp(event);
+-
+-	ok1(timestamp_begin == timestamp_seek_begin);
+-
+-	bt_context_put(ctx);
+-}
+-
+-
+-void run_seek_last(char *path, uint64_t expected_last)
+-{
+-	struct bt_context *ctx;
+-	struct bt_ctf_iter *iter;
+-	struct bt_ctf_event *event;
+-	struct bt_iter_pos newpos;
+-	int ret;
+-	uint64_t timestamp_last;
+-
+-	/* Open the trace */
+-	ctx = create_context_with_path(path);
+-	if (!ctx) {
+-		plan_skip_all("Cannot create valid context");
+-	}
+-
+-	/* Create iterator with null last and end */
+-	iter = bt_ctf_iter_create(ctx, NULL, NULL);
+-	if (!iter) {
+-		plan_skip_all("Cannot create valid iterator");
+-	}
+-
+-	event = bt_ctf_iter_read_event(iter);
+-
+-	ok(event, "Event valid at beginning");
+-
+-	/* Seek to last */
+-	newpos.type = BT_SEEK_LAST;
+-	ret = bt_iter_set_pos(bt_ctf_get_iter(iter), &newpos);
+-
+-	ok(ret == 0, "Seek last retval %d", ret);
+-
+-	event = bt_ctf_iter_read_event(iter);
+-
+-	ok(event, "Event valid at last position");
+-
+-	timestamp_last = bt_ctf_get_timestamp(event);
+-
+-	ok1(timestamp_last == expected_last);
+-
+-	/* Try to read next event */
+-	ret = bt_iter_next(bt_ctf_get_iter(iter));
+-
+-	ok(ret == 0, "iter next should return an error");
+-
+-	event = bt_ctf_iter_read_event(iter);
+-
+-	ok(event == 0, "Event after last should be invalid");
+-
+-	bt_context_put(ctx);
+-}
+-
+-void run_seek_time_at_last(char *path, uint64_t expected_last)
+-{
+-	struct bt_context *ctx;
+-	struct bt_ctf_iter *iter;
+-	struct bt_ctf_event *event;
+-	struct bt_iter_pos newpos;
+-	int ret;
+-	uint64_t timestamp_last;
+-
+-	/* Open the trace */
+-	ctx = create_context_with_path(path);
+-	if (!ctx) {
+-		plan_skip_all("Cannot create valid context");
+-	}
+-
+-	/* Create iterator with null last and end */
+-	iter = bt_ctf_iter_create(ctx, NULL, NULL);
+-	if (!iter) {
+-		plan_skip_all("Cannot create valid iterator");
+-	}
+-
+-	event = bt_ctf_iter_read_event(iter);
+-
+-	ok(event, "Event valid at beginning");
+-
+-	/* Seek to last */
+-	newpos.type = BT_SEEK_TIME;
+-	newpos.u.seek_time = expected_last;
+-	ret = bt_iter_set_pos(bt_ctf_get_iter(iter), &newpos);
+-
+-	ok(ret == 0, "Seek time at last retval %d", ret);
+-
+-	event = bt_ctf_iter_read_event(iter);
+-
+-	ok(event, "Event valid at last position");
+-
+-	timestamp_last = bt_ctf_get_timestamp(event);
+-
+-	ok1(timestamp_last == expected_last);
+-
+-	/* Try to read next event */
+-	ret = bt_iter_next(bt_ctf_get_iter(iter));
+-
+-	ok(ret == 0, "iter next should return an error");
+-
+-	event = bt_ctf_iter_read_event(iter);
+-
+-	ok(event == 0, "Event after last should be invalid");
+-
+-	bt_context_put(ctx);
+-}
+-
+-void run_seek_cycles(char *path,
+-		uint64_t expected_begin,
+-		uint64_t expected_last)
+-{
+-	struct bt_context *ctx;
+-	struct bt_ctf_iter *iter;
+-	struct bt_ctf_event *event;
+-	struct bt_iter_pos newpos;
+-	int ret;
+-	uint64_t timestamp;
+-
+-	/* Open the trace */
+-	ctx = create_context_with_path(path);
+-	if (!ctx) {
+-		plan_skip_all("Cannot create valid context");
+-	}
+-
+-	/* Create iterator with null last and end */
+-	iter = bt_ctf_iter_create(ctx, NULL, NULL);
+-	if (!iter) {
+-		plan_skip_all("Cannot create valid iterator");
+-	}
+-
+-	event = bt_ctf_iter_read_event(iter);
+-
+-	ok(event, "Event valid at beginning");
+-
+-	/* Seek to last */
+-	newpos.type = BT_SEEK_LAST;
+-	ret = bt_iter_set_pos(bt_ctf_get_iter(iter), &newpos);
+-
+-	ok(ret == 0, "Seek last retval %d", ret);
+-
+-	event = bt_ctf_iter_read_event(iter);
+-
+-	ok(event, "Event valid at last position");
+-
+-	timestamp = bt_ctf_get_timestamp(event);
+-
+-	ok1(timestamp == expected_last);
+-
+-	/* Try to read next event */
+-	ret = bt_iter_next(bt_ctf_get_iter(iter));
+-
+-	ok(ret == 0, "iter next should return an error");
+-
+-	event = bt_ctf_iter_read_event(iter);
+-
+-	ok(event == 0, "Event after last should be invalid");
+-
+-	/* Seek to BEGIN */
+-	newpos.type = BT_SEEK_BEGIN;
+-	ret = bt_iter_set_pos(bt_ctf_get_iter(iter), &newpos);
+-
+-	ok(ret == 0, "Seek begin retval %d", ret);
+-
+-	event = bt_ctf_iter_read_event(iter);
+-
+-	ok(event, "Event valid at first position");
+-
+-	timestamp = bt_ctf_get_timestamp(event);
+-
+-	ok1(timestamp == expected_begin);
+-
+-	/* Seek last again */
+-	newpos.type = BT_SEEK_LAST;
+-	ret = bt_iter_set_pos(bt_ctf_get_iter(iter), &newpos);
+-
+-	ok(ret == 0, "Seek last retval %d", ret);
+-
+-	event = bt_ctf_iter_read_event(iter);
+-
+-	ok(event, "Event valid at last position");
+-
+-	timestamp = bt_ctf_get_timestamp(event);
+-
+-	ok1(timestamp == expected_last);
+-
+-	bt_context_put(ctx);
+-}
+-
+-int main(int argc, char **argv)
+-{
+-	char *path;
+-	uint64_t expected_begin;
+-	uint64_t expected_last;
+-
+-	plan_tests(NR_TESTS);
+-
+-	if (argc < 4) {
+-		plan_skip_all("Invalid arguments: need a trace path and the start and last timestamp");
+-
+-	}
+-
+-	/* Parse arguments (Trace, begin timestamp) */
+-	path = argv[1];
+-
+-	expected_begin = strtoull(argv[2], NULL, 0);
+-	if (ULLONG_MAX == expected_begin && errno == ERANGE) {
+-		plan_skip_all("Invalid value for begin timestamp");
+-	}
+-
+-	expected_last = strtoull(argv[3], NULL, 0);
+-	if (ULLONG_MAX == expected_last && errno == ERANGE) {
+-		plan_skip_all("Invalid value for last timestamp");
+-	}
+-
+-	run_seek_begin(path, expected_begin);
+-	run_seek_time_at_last(path, expected_last);
+-	run_seek_last(path, expected_last);
+-	run_seek_cycles(path, expected_begin, expected_last);
+-
+-	return exit_status();
+-}
+diff --git a/tests/lib/test_bitfield.c b/tests/lib/test_bitfield.c
 new file mode 100644
-index 0000000..feae65a
+index 0000000..16e8a57
 --- /dev/null
-+++ b/tests/utils/Makefile.am
-@@ -0,0 +1 @@
-+SUBDIRS = tap
-diff --git a/tests/utils/tap/Makefile.am b/tests/utils/tap/Makefile.am
-new file mode 100644
-index 0000000..d3b5b58
---- /dev/null
-+++ b/tests/utils/tap/Makefile.am
-@@ -0,0 +1,4 @@
-+noinst_LTLIBRARIES = libtap.la
-+libtap_la_SOURCES = tap.c tap.h
-+dist_noinst_SCRIPTS = tap.sh
-+EXTRA_DIST = tap.sh
-diff --git a/tests/utils/tap/tap.c b/tests/utils/tap/tap.c
-new file mode 100644
-index 0000000..8bf72f6
---- /dev/null
-+++ b/tests/utils/tap/tap.c
-@@ -0,0 +1,433 @@
-+/*-
-+ * Copyright (c) 2004 Nik Clayton
-+ * All rights reserved.
++++ b/tests/lib/test_bitfield.c
+@@ -0,0 +1,363 @@
++/*
++ * test-bitfield.c
 + *
-+ * Redistribution and use in source and binary forms, with or without
-+ * modification, are permitted provided that the following conditions
-+ * are met:
-+ * 1. Redistributions of source code must retain the above copyright
-+ *    notice, this list of conditions and the following disclaimer.
-+ * 2. Redistributions in binary form must reproduce the above copyright
-+ *    notice, this list of conditions and the following disclaimer in the
-+ *    documentation and/or other materials provided with the distribution.
++ * BabelTrace - bitfield test program
 + *
-+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
-+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
-+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-+ * SUCH DAMAGE.
++ * Copyright 2010 - Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; under version 2 of the License.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License along
++ * with this program; if not, write to the Free Software Foundation, Inc.,
++ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 + */
 +
 +#define _GNU_SOURCE
-+#include <ctype.h>
-+#include <stdarg.h>
-+#include <stdio.h>
++#include <babeltrace/bitfield.h>
++#include <time.h>
 +#include <stdlib.h>
++#include <stdio.h>
 +
-+#include "tap.h"
++#include <tap/tap.h>
 +
-+static int no_plan = 0;
-+static int skip_all = 0;
-+static int have_plan = 0;
-+static unsigned int test_count = 0; /* Number of tests that have been run */
-+static unsigned int e_tests = 0; /* Expected number of tests to run */
-+static unsigned int failures = 0; /* Number of tests that failed */
-+static char *todo_msg = NULL;
-+static char *todo_msg_fixed = "libtap malloc issue";
-+static int todo = 0;
-+static int test_died = 0;
++unsigned int glob;
 +
-+/* Encapsulate the pthread code in a conditional.  In the absence of
-+   libpthread the code does nothing */
-+#ifdef HAVE_LIBPTHREAD
-+#include <pthread.h>
-+static pthread_mutex_t M = PTHREAD_MUTEX_INITIALIZER;
-+# define LOCK pthread_mutex_lock(&M);
-+# define UNLOCK pthread_mutex_unlock(&M);
++/*
++ * This function is only declared to show the size of a bitfield write in
++ * objdump.
++ */
++void fct(void)
++{
++	bt_bitfield_write(&glob, unsigned int, 12, 15, 0x12345678);
++}
++
++/* Test array size, in bytes */
++#define TEST_LEN 128
++#define NR_TESTS 10
++#define SIGNED_TEST_DESC_FMT_STR "Writing and reading back 0x%X, signed"
++#define UNSIGNED_TEST_DESC_FMT_STR "Writing and reading back 0x%X, unsigned"
++#define DIAG_FMT_STR "Failed reading value written \"%s\"-wise, with start=%i" \
++	" and length=%i. Read %llX"
++
++unsigned int srcrand;
++
++#if defined(__i386) || defined(__x86_64)
++
++static inline int fls(int x)
++{
++	int r;
++	asm("bsrl %1,%0\n\t"
++	    "cmovzl %2,%0"
++	    : "=&r" (r) : "rm" (x), "rm" (-1));
++	return r + 1;
++}
++
++#elif defined(__PPC__)
++
++static __inline__ int fls(unsigned int x)
++{
++	int lz;
++
++	asm ("cntlzw %0,%1" : "=r" (lz) : "r" (x));
++	return 32 - lz;
++}
++
 +#else
-+# define LOCK
-+# define UNLOCK
++
++static int fls(unsigned int x)
++{
++	int r = 32;
++
++	if (!x)
++		return 0;
++	if (!(x & 0xFFFF0000U)) {
++		x <<= 16;
++		r -= 16;
++	}
++	if (!(x & 0xFF000000U)) {
++		x <<= 8;
++		r -= 8;
++	}
++	if (!(x & 0xF0000000U)) {
++		x <<= 4;
++		r -= 4;
++	}
++	if (!(x & 0xC0000000U)) {
++		x <<= 2;
++		r -= 2;
++	}
++	if (!(x & 0x80000000U)) {
++		x <<= 1;
++		r -= 1;
++	}
++	return r;
++}
++
 +#endif
 +
-+static void _expected_tests(unsigned int);
-+static void _tap_init(void);
-+static void _cleanup(void);
++#define print_byte_array(c, len)	\
++do {					\
++	unsigned long i;		\
++					\
++	for (i = 0; i < (len); i++) {	\
++		printf("0x%X", (c)[i]);	\
++		if (i != (len) - 1)	\
++			printf(" ");	\
++	}				\
++	printf("\n");			\
++} while (0)
 +
-+/*
-+ * Generate a test result.
-+ *
-+ * ok -- boolean, indicates whether or not the test passed.
-+ * test_name -- the name of the test, may be NULL
-+ * test_comment -- a comment to print afterwards, may be NULL
-+ */
-+unsigned int
-+_gen_result(int ok, const char *func, char *file, unsigned int line,
-+	    char *test_name, ...)
++#define init_byte_array(c, len, val)	\
++do {					\
++	unsigned long i;		\
++					\
++	for (i = 0; i < (len); i++)	\
++		(c)[i] = (val);		\
++} while (0)
++
++#define check_result(ref, val, buffer, typename, start, len,		\
++		     desc_fmt_str)					\
++({									\
++	if ((val) != (ref)) {						\
++		fail(desc_fmt_str, ref);				\
++		diag(DIAG_FMT_STR, #typename, start, len, val);		\
++		printf("# ");						\
++		print_byte_array(buffer, TEST_LEN);			\
++	}								\
++	(val) != (ref);							\
++})
++
++void run_test_unsigned(void)
 +{
-+	va_list ap;
-+	char *local_test_name = NULL;
-+	char *c;
-+	int name_is_digits;
++	unsigned int src, nrbits;
++	union {
++		unsigned char c[TEST_LEN];
++		unsigned short s[TEST_LEN/sizeof(unsigned short)];
++		unsigned int i[TEST_LEN/sizeof(unsigned int)];
++		unsigned long l[TEST_LEN/sizeof(unsigned long)];
++		unsigned long long ll[TEST_LEN/sizeof(unsigned long long)];
++	} target;
++	unsigned long long readval;
++	unsigned int s, l;
 +
-+	LOCK;
++	src = srcrand;
++	nrbits = fls(src);
 +
-+	test_count++;
-+
-+	/* Start by taking the test name and performing any printf()
-+	   expansions on it */
-+	if(test_name != NULL) {
-+		va_start(ap, test_name);
-+		if (vasprintf(&local_test_name, test_name, ap) == -1) {
-+			local_test_name = NULL;
-+		}
-+		va_end(ap);
-+
-+		/* Make sure the test name contains more than digits
-+		   and spaces.  Emit an error message and exit if it
-+		   does */
-+		if(local_test_name) {
-+			name_is_digits = 1;
-+			for(c = local_test_name; *c != '\0'; c++) {
-+				if(!isdigit(*c) && !isspace(*c)) {
-+					name_is_digits = 0;
-+					break;
-+				}
++	for (s = 0; s < CHAR_BIT * TEST_LEN; s++) {
++		for (l = nrbits; l < (CHAR_BIT * TEST_LEN) - s; l++) {
++			init_byte_array(target.c, TEST_LEN, 0xFF);
++			bt_bitfield_write(target.c, unsigned char, s, l, src);
++			bt_bitfield_read(target.c, unsigned char, s, l, &readval);
++			if (check_result(src, readval, target.c, unsigned char,
++					  s, l, UNSIGNED_TEST_DESC_FMT_STR)) {
++				return;
 +			}
 +
-+			if(name_is_digits) {
-+				diag("    You named your test '%s'.  You shouldn't use numbers for your test names.", local_test_name);
-+				diag("    Very confusing.");
++			init_byte_array(target.c, TEST_LEN, 0xFF);
++			bt_bitfield_write(target.s, unsigned short, s, l, src);
++			bt_bitfield_read(target.c, unsigned char, s, l, &readval);
++			if (check_result(src, readval, target.c, unsigned short,
++					  s, l, UNSIGNED_TEST_DESC_FMT_STR)) {
++				return;
++			}
++
++			init_byte_array(target.c, TEST_LEN, 0xFF);
++			bt_bitfield_write(target.i, unsigned int, s, l, src);
++			bt_bitfield_read(target.c, unsigned char, s, l, &readval);
++			if (check_result(src, readval, target.c, unsigned int,
++					   s, l, UNSIGNED_TEST_DESC_FMT_STR)) {
++				return;
++			}
++
++			init_byte_array(target.c, TEST_LEN, 0xFF);
++			bt_bitfield_write(target.l, unsigned long, s, l, src);
++			bt_bitfield_read(target.c, unsigned char, s, l, &readval);
++			if (check_result(src, readval, target.c, unsigned long,
++					  s, l, UNSIGNED_TEST_DESC_FMT_STR)) {
++				return;
++			}
++
++			init_byte_array(target.c, TEST_LEN, 0xFF);
++			bt_bitfield_write(target.ll, unsigned long long, s, l, src);
++			bt_bitfield_read(target.c, unsigned char, s, l, &readval);
++			if (check_result(src, readval, target.c, unsigned long long,
++				     s, l, UNSIGNED_TEST_DESC_FMT_STR)) {
++				return;
 +			}
 +		}
 +	}
 +
-+	if(!ok) {
-+		printf("not ");
-+		failures++;
-+	}
++	pass(UNSIGNED_TEST_DESC_FMT_STR, src);
++}
 +
-+	printf("ok %d", test_count);
++void run_test_signed(void)
++{
++	int src, nrbits;
++	union {
++		signed char c[TEST_LEN];
++		short s[TEST_LEN/sizeof(short)];
++		int i[TEST_LEN/sizeof(int)];
++		long l[TEST_LEN/sizeof(long)];
++		long long ll[TEST_LEN/sizeof(long long)];
++	} target;
++	long long readval;
++	unsigned int s, l;
 +
-+	if(test_name != NULL) {
-+		printf(" - ");
++	src = srcrand;
++	if (src & 0x80000000U)
++		nrbits = fls(~src) + 1;	/* Find least significant bit conveying sign */
++	else
++		nrbits = fls(src) + 1;	/* Keep sign at 0 */
 +
-+		/* Print the test name, escaping any '#' characters it
-+		   might contain */
-+		if(local_test_name != NULL) {
-+			flockfile(stdout);
-+			for(c = local_test_name; *c != '\0'; c++) {
-+				if(*c == '#')
-+					fputc('\\', stdout);
-+				fputc((int)*c, stdout);
++	for (s = 0; s < CHAR_BIT * TEST_LEN; s++) {
++		for (l = nrbits; l < (CHAR_BIT * TEST_LEN) - s; l++) {
++			init_byte_array(target.c, TEST_LEN, 0x0);
++			bt_bitfield_write(target.c, signed char, s, l, src);
++			bt_bitfield_read(target.c, signed char, s, l, &readval);
++			if (check_result(src, readval, target.c, signed char,
++					  s, l, SIGNED_TEST_DESC_FMT_STR)) {
++				return;
 +			}
-+			funlockfile(stdout);
-+		} else {	/* vasprintf() failed, use a fixed message */
-+			printf("%s", todo_msg_fixed);
++
++			init_byte_array(target.c, TEST_LEN, 0x0);
++			bt_bitfield_write(target.s, short, s, l, src);
++			bt_bitfield_read(target.c, signed char, s, l, &readval);
++			if (check_result(src, readval, target.c, short,
++					  s, l, SIGNED_TEST_DESC_FMT_STR)) {
++				return;
++			}
++
++			init_byte_array(target.c, TEST_LEN, 0x0);
++			bt_bitfield_write(target.i, int, s, l, src);
++			bt_bitfield_read(target.c, signed char, s, l, &readval);
++			if (check_result(src, readval, target.c, int,
++					  s, l, SIGNED_TEST_DESC_FMT_STR)) {
++				return;
++			}
++
++			init_byte_array(target.c, TEST_LEN, 0x0);
++			bt_bitfield_write(target.l, long, s, l, src);
++			bt_bitfield_read(target.c, signed char, s, l, &readval);
++			if (check_result(src, readval, target.c, long,
++					  s, l, SIGNED_TEST_DESC_FMT_STR)) {
++				return;
++			}
++
++			init_byte_array(target.c, TEST_LEN, 0x0);
++			bt_bitfield_write(target.ll, long long, s, l, src);
++			bt_bitfield_read(target.c, signed char, s, l, &readval);
++			if (check_result(src, readval, target.c, long long,
++					  s, l, SIGNED_TEST_DESC_FMT_STR)) {
++				return;
++			}
 +		}
 +	}
 +
-+	/* If we're in a todo_start() block then flag the test as being
-+	   TODO.  todo_msg should contain the message to print at this
-+	   point.  If it's NULL then asprintf() failed, and we should
-+	   use the fixed message.
-+
-+	   This is not counted as a failure, so decrement the counter if
-+	   the test failed. */
-+	if(todo) {
-+		printf(" # TODO %s", todo_msg ? todo_msg : todo_msg_fixed);
-+		if(!ok)
-+			failures--;
-+	}
-+
-+	printf("\n");
-+
-+	if(!ok) {
-+		if(getenv("HARNESS_ACTIVE") != NULL)
-+			fputs("\n", stderr);
-+
-+		diag("    Failed %stest (%s:%s() at line %d)",
-+		     todo ? "(TODO) " : "", file, func, line);
-+	}
-+	free(local_test_name);
-+
-+	UNLOCK;
-+
-+	/* We only care (when testing) that ok is positive, but here we
-+	   specifically only want to return 1 or 0 */
-+	return ok ? 1 : 0;
++	pass(SIGNED_TEST_DESC_FMT_STR, src);
 +}
 +
-+/*
-+ * Initialise the TAP library.  Will only do so once, however many times it's
-+ * called.
-+ */
-+void
-+_tap_init(void)
++void run_test(void)
 +{
-+	static int run_once = 0;
++	int i;
++	plan_tests(NR_TESTS * 2 + 6);
 +
-+	if(!run_once) {
-+		atexit(_cleanup);
++	srand(time(NULL));
 +
-+		/* stdout needs to be unbuffered so that the output appears
-+		   in the same place relative to stderr output as it does
-+		   with Test::Harness */
-+		setbuf(stdout, 0);
-+		run_once = 1;
++	srcrand = 0;
++	run_test_unsigned();
++	srcrand = 0;
++	run_test_signed();
++
++	srcrand = 1;
++	run_test_unsigned();
++
++	srcrand = ~0U;
++	run_test_unsigned();
++
++	srcrand = -1;
++	run_test_signed();
++
++	srcrand = (int)0x80000000U;
++	run_test_signed();
++
++	for (i = 0; i < NR_TESTS; i++) {
++		srcrand = rand();
++		run_test_unsigned();
++		run_test_signed();
 +	}
 +}
 +
-+/*
-+ * Note that there's no plan.
-+ */
-+int
-+plan_no_plan(void)
++static
++int print_encodings(unsigned long src, unsigned int shift, unsigned int len)
 +{
++	union {
++		unsigned char c[8];
++		unsigned short s[4];
++		unsigned int i[2];
++		unsigned long l[2];
++		unsigned long long ll[1];
++	} target;
++	unsigned long long readval;
 +
-+	LOCK;
++	init_byte_array(target.c, 8, 0xFF);
++	bt_bitfield_write(target.c, unsigned char, shift, len, src);
++	printf("bytewise\n");
++	print_byte_array(target.c, 8);
 +
-+	_tap_init();
++	init_byte_array(target.c, 8, 0xFF);
++	bt_bitfield_write(target.s, unsigned short, shift, len, src);
++	printf("shortwise\n");
++	print_byte_array(target.c, 8);
 +
-+	if(have_plan != 0) {
-+		fprintf(stderr, "You tried to plan twice!\n");
-+		test_died = 1;
-+		UNLOCK;
-+		exit(255);
-+	}
++	init_byte_array(target.c, 8, 0xFF);
++	bt_bitfield_write(target.i, unsigned int, shift, len, src);
++	printf("intwise\n");
++	print_byte_array(target.c, 8);
 +
-+	have_plan = 1;
-+	no_plan = 1;
++	init_byte_array(target.c, 8, 0xFF);
++	bt_bitfield_write(target.l, unsigned long, shift, len, src);
++	printf("longwise\n");
++	print_byte_array(target.c, 8);
 +
-+	UNLOCK;
++	init_byte_array(target.c, 8, 0xFF);
++	bt_bitfield_write(target.ll, unsigned long long, shift, len, src);
++	printf("lluwise\n");
++	print_byte_array(target.c, 8);
 +
-+	return 1;
-+}
-+
-+/*
-+ * Note that the plan is to skip all tests
-+ */
-+int
-+plan_skip_all(char *reason)
-+{
-+
-+	LOCK;
-+
-+	_tap_init();
-+
-+	skip_all = 1;
-+
-+	printf("1..0");
-+
-+	if(reason != NULL)
-+		printf(" # Skip %s", reason);
-+
-+	printf("\n");
-+
-+	UNLOCK;
-+
-+	exit(0);
-+}
-+
-+/*
-+ * Note the number of tests that will be run.
-+ */
-+int
-+plan_tests(unsigned int tests)
-+{
-+
-+	LOCK;
-+
-+	_tap_init();
-+
-+	if(have_plan != 0) {
-+		fprintf(stderr, "You tried to plan twice!\n");
-+		test_died = 1;
-+		UNLOCK;
-+		exit(255);
-+	}
-+
-+	if(tests == 0) {
-+		fprintf(stderr, "You said to run 0 tests!  You've got to run something.\n");
-+		test_died = 1;
-+		UNLOCK;
-+		exit(255);
-+	}
-+
-+	have_plan = 1;
-+
-+	_expected_tests(tests);
-+
-+	UNLOCK;
-+
-+	return e_tests;
-+}
-+
-+unsigned int
-+diag(char *fmt, ...)
-+{
-+	va_list ap;
-+
-+	fputs("# ", stderr);
-+
-+	va_start(ap, fmt);
-+	vfprintf(stderr, fmt, ap);
-+	va_end(ap);
-+
-+	fputs("\n", stderr);
++	bt_bitfield_read(target.c, unsigned char, shift, len, &readval);
++	printf("read: %llX\n", readval);
++	print_byte_array(target.c, 8);
 +
 +	return 0;
 +}
 +
-+void
-+_expected_tests(unsigned int tests)
++int main(int argc, char **argv)
 +{
++	if (argc > 1) {
++		/* Print encodings */
++		unsigned long src;
++		unsigned int shift, len;
 +
-+	printf("1..%d\n", tests);
-+	e_tests = tests;
++		src = atoi(argv[1]);
++		if (argc > 2)
++			shift = atoi(argv[2]);
++		else
++			shift = 12;
++		if (argc > 3)
++			len = atoi(argv[3]);
++		else
++			len = 40;
++		return print_encodings(src, shift, len);
++	}
++
++	/* Run tap-formated tests */
++	run_test();
++	return exit_status();
 +}
-+
-+int
-+skip(unsigned int n, char *fmt, ...)
-+{
-+	va_list ap;
-+	char *skip_msg = NULL;
-+
-+	LOCK;
-+
-+	va_start(ap, fmt);
-+	if (asprintf(&skip_msg, fmt, ap) == -1) {
-+		skip_msg = NULL;
-+	}
-+	va_end(ap);
-+
-+	while(n-- > 0) {
-+		test_count++;
-+		printf("ok %d # skip %s\n", test_count,
-+		       skip_msg != NULL ?
-+		       skip_msg : "libtap():malloc() failed");
-+	}
-+
-+	free(skip_msg);
-+
-+	UNLOCK;
-+
-+	return 1;
-+}
-+
-+void
-+todo_start(char *fmt, ...)
-+{
-+	va_list ap;
-+
-+	LOCK;
-+
-+	va_start(ap, fmt);
-+	if (vasprintf(&todo_msg, fmt, ap) == -1) {
-+		todo_msg = NULL;
-+	}
-+	va_end(ap);
-+
-+	todo = 1;
-+
-+	UNLOCK;
-+}
-+
-+void
-+todo_end(void)
-+{
-+
-+	LOCK;
-+
-+	todo = 0;
-+	free(todo_msg);
-+
-+	UNLOCK;
-+}
-+
-+int
-+exit_status(void)
-+{
-+	int r;
-+
-+	LOCK;
-+
-+	/* If there's no plan, just return the number of failures */
-+	if(no_plan || !have_plan) {
-+		UNLOCK;
-+		return failures;
-+	}
-+
-+	/* Ran too many tests?  Return the number of tests that were run
-+	   that shouldn't have been */
-+	if(e_tests < test_count) {
-+		r = test_count - e_tests;
-+		UNLOCK;
-+		return r;
-+	}
-+
-+	/* Return the number of tests that failed + the number of tests
-+	   that weren't run */
-+	r = failures + e_tests - test_count;
-+	UNLOCK;
-+
-+	return r;
-+}
-+
-+/*
-+ * Cleanup at the end of the run, produce any final output that might be
-+ * required.
-+ */
-+void
-+_cleanup(void)
-+{
-+
-+	LOCK;
-+
-+	/* If plan_no_plan() wasn't called, and we don't have a plan,
-+	   and we're not skipping everything, then something happened
-+	   before we could produce any output */
-+	if(!no_plan && !have_plan && !skip_all) {
-+		diag("Looks like your test died before it could output anything.");
-+		UNLOCK;
-+		return;
-+	}
-+
-+	if(test_died) {
-+		diag("Looks like your test died just after %d.", test_count);
-+		UNLOCK;
-+		return;
-+	}
-+
-+
-+	/* No plan provided, but now we know how many tests were run, and can
-+	   print the header at the end */
-+	if(!skip_all && (no_plan || !have_plan)) {
-+		printf("1..%d\n", test_count);
-+	}
-+
-+	if((have_plan && !no_plan) && e_tests < test_count) {
-+		diag("Looks like you planned %d %s but ran %d extra.",
-+		     e_tests, e_tests == 1 ? "test" : "tests", test_count - e_tests);
-+		UNLOCK;
-+		return;
-+	}
-+
-+	if((have_plan || !no_plan) && e_tests > test_count) {
-+		diag("Looks like you planned %d %s but only ran %d.",
-+		     e_tests, e_tests == 1 ? "test" : "tests", test_count);
-+		UNLOCK;
-+		return;
-+	}
-+
-+	if(failures)
-+		diag("Looks like you failed %d %s of %d.",
-+		     failures, failures == 1 ? "test" : "tests", test_count);
-+
-+	UNLOCK;
-+}
-diff --git a/tests/utils/tap/tap.h b/tests/utils/tap/tap.h
+diff --git a/tests/lib/test_seek.c b/tests/lib/test_seek.c
 new file mode 100644
-index 0000000..0f05943
+index 0000000..b33f80d
 --- /dev/null
-+++ b/tests/utils/tap/tap.h
-@@ -0,0 +1,89 @@
-+/*-
-+ * Copyright (c) 2004 Nik Clayton
-+ * All rights reserved.
++++ b/tests/lib/test_seek.c
+@@ -0,0 +1,302 @@
++/*
++ * test-seeks.c
 + *
-+ * Redistribution and use in source and binary forms, with or without
-+ * modification, are permitted provided that the following conditions
-+ * are met:
-+ * 1. Redistributions of source code must retain the above copyright
-+ *    notice, this list of conditions and the following disclaimer.
-+ * 2. Redistributions in binary form must reproduce the above copyright
-+ *    notice, this list of conditions and the following disclaimer in the
-+ *    documentation and/or other materials provided with the distribution.
++ * Lib BabelTrace - Seeks test program
 + *
-+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
-+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
-+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-+ * SUCH DAMAGE.
++ * Copyright 2012 - Yannick Brosseau <yannick.brosseau@gmail.com>
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; under version 2 of the License.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License along
++ * with this program; if not, write to the Free Software Foundation, Inc.,
++ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 + */
++#define _GNU_SOURCE
++#include <babeltrace/context.h>
++#include <babeltrace/iterator.h>
++#include <babeltrace/ctf/iterator.h>
++#include <babeltrace/ctf/events.h>
 +
-+/* '## __VA_ARGS__' is a gcc'ism. C99 doesn't allow the token pasting
-+   and requires the caller to add the final comma if they've ommitted
-+   the optional arguments */
-+#ifdef __GNUC__
-+# define ok(e, test, ...) ((e) ?					\
-+			   _gen_result(1, __func__, __FILE__, __LINE__,	\
-+				       test, ## __VA_ARGS__) :		\
-+			   _gen_result(0, __func__, __FILE__, __LINE__,	\
-+				       test, ## __VA_ARGS__))
++#include <stdio.h>
++#include <stdlib.h>
++#include <errno.h>
++#include <limits.h>
 +
-+# define ok1(e) ((e) ?							\
-+		 _gen_result(1, __func__, __FILE__, __LINE__, "%s", #e) : \
-+		 _gen_result(0, __func__, __FILE__, __LINE__, "%s", #e))
++#include <tap/tap.h>
++#include "common.h"
 +
-+# define pass(test, ...) ok(1, test, ## __VA_ARGS__);
-+# define fail(test, ...) ok(0, test, ## __VA_ARGS__);
++#define NR_TESTS	29
 +
-+# define skip_start(test, n, fmt, ...)			\
-+	do {						\
-+		if((test)) {				\
-+			skip(n, fmt, ## __VA_ARGS__);	\
-+			continue;			\
-+		}
-+#elif __STDC_VERSION__ >= 199901L /* __GNUC__ */
-+# define ok(e, ...) ((e) ?						\
-+		     _gen_result(1, __func__, __FILE__, __LINE__,	\
-+				 __VA_ARGS__) :				\
-+		     _gen_result(0, __func__, __FILE__, __LINE__,	\
-+				 __VA_ARGS__))
++void run_seek_begin(char *path, uint64_t expected_begin)
++{
++	struct bt_context *ctx;
++	struct bt_ctf_iter *iter;
++	struct bt_ctf_event *event;
++	struct bt_iter_pos newpos;
++	int ret;
++	uint64_t timestamp_begin;
++	uint64_t timestamp_seek_begin;
 +
-+# define ok1(e) ((e) ?							\
-+		 _gen_result(1, __func__, __FILE__, __LINE__, "%s", #e) : \
-+		 _gen_result(0, __func__, __FILE__, __LINE__, "%s", #e))
++	/* Open the trace */
++	ctx = create_context_with_path(path);
++	if (!ctx) {
++		plan_skip_all("Cannot create valid context");
++	}
 +
-+# define pass(...) ok(1, __VA_ARGS__);
-+# define fail(...) ok(0, __VA_ARGS__);
++	/* Create iterator with null begin and end */
++	iter = bt_ctf_iter_create(ctx, NULL, NULL);
++	if (!iter) {
++		plan_skip_all("Cannot create valid iterator");
++	}
 +
-+# define skip_start(test, n, ...)			\
-+	do {						\
-+		if((test)) {				\
-+			skip(n,  __VA_ARGS__);		\
-+			continue;			\
-+		}
-+#else /* __STDC_VERSION__ */
-+# error "Needs gcc or C99 compiler for variadic macros."
-+#endif /* __STDC_VERSION__ */
++	event = bt_ctf_iter_read_event(iter);
 +
-+#define skip_end() } while(0);
++	ok(event, "Event valid");
 +
-+unsigned int _gen_result(int, const char *, char *, unsigned int, char *, ...);
++	/* Validate that the first timestamp is right */
++	timestamp_begin = bt_ctf_get_timestamp(event);
 +
-+int plan_no_plan(void);
-+int plan_skip_all(char *);
-+int plan_tests(unsigned int);
++	ok1(timestamp_begin == expected_begin);
 +
-+unsigned int diag(char *, ...);
++	/* Validate that we get the same value after a seek begin */
++	newpos.type = BT_SEEK_BEGIN;
++	ret = bt_iter_set_pos(bt_ctf_get_iter(iter), &newpos);
 +
-+int skip(unsigned int, char *, ...);
++	ok(ret == 0, "Seek begin retval %d", ret);
 +
-+void todo_start(char *, ...);
-+void todo_end(void);
++	event = bt_ctf_iter_read_event(iter);
 +
-+int exit_status(void);
-diff --git a/tests/utils/tap/tap.sh b/tests/utils/tap/tap.sh
-new file mode 100755
-index 0000000..24ac1aa
---- /dev/null
-+++ b/tests/utils/tap/tap.sh
-@@ -0,0 +1,456 @@
-+#!/bin/bash
-+#
-+# Copyright 2010 Patrick LeBoutillier <patrick.leboutillier@gmail.com>
-+#
-+#    This program is free software: you can redistribute it and/or modify
-+#    it under the terms of the GNU General Public License as published by
-+#    the Free Software Foundation, either version 3 of the License, or
-+#    (at your option) any later version.
-+#
-+#    This program is distributed in the hope that it will be useful,
-+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-+#    GNU General Public License for more details.
-+#
-+#    You should have received a copy of the GNU General Public License
-+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
++	ok(event, "Event valid");
 +
++	timestamp_seek_begin = bt_ctf_get_timestamp(event);
 +
-+_version='1.01'
++	ok1(timestamp_begin == timestamp_seek_begin);
 +
-+_plan_set=0
-+_no_plan=0
-+_skip_all=0
-+_test_died=0
-+_expected_tests=0
-+_executed_tests=0
-+_failed_tests=0
-+TODO=
-+
-+
-+usage(){
-+    cat <<'USAGE'
-+tap-functions: A TAP-producing BASH library
-+
-+PLAN:
-+  plan_no_plan
-+  plan_skip_all [REASON]
-+  plan_tests NB_TESTS
-+
-+TEST:
-+  ok RESULT [NAME]
-+  okx COMMAND
-+  is RESULT EXPECTED [NAME]
-+  isnt RESULT EXPECTED [NAME]
-+  like RESULT PATTERN [NAME]
-+  unlike RESULT PATTERN [NAME]
-+  pass [NAME]
-+  fail [NAME]
-+
-+SKIP:
-+  skip [CONDITION] [REASON] [NB_TESTS=1]
-+
-+  skip $feature_not_present "feature not present" 2 || {
-+      is $a "a"
-+      is $b "b"
-+  }
-+
-+TODO:
-+  Specify TODO mode by setting $TODO:
-+    TODO="not implemented yet"
-+    ok $result "some not implemented test"
-+    unset TODO
-+
-+OTHER:
-+  diag MSG
-+
-+EXAMPLE:
-+  #!/bin/bash
-+
-+  . tap-functions
-+
-+  plan_tests 7
-+
-+  me=$USER
-+  is $USER $me "I am myself"
-+  like $HOME $me "My home is mine"
-+  like "`id`" $me "My id matches myself"
-+
-+  /bin/ls $HOME 1>&2
-+  ok $? "/bin/ls $HOME"
-+  # Same thing using okx shortcut
-+  okx /bin/ls $HOME
-+
-+  [[ "`id -u`" != "0" ]]
-+  i_am_not_root=$?
-+  skip $i_am_not_root "Must be root" || {
-+    okx ls /root
-+  }
-+
-+  TODO="figure out how to become root..."
-+  okx [ "$HOME" == "/root" ]
-+  unset TODO
-+USAGE
-+    exit
-+}
-+
-+opt=
-+set_u=
-+while getopts ":sx" opt ; do
-+    case $_opt in
-+        u) set_u=1 ;;
-+        *) usage ;;
-+    esac
-+done
-+shift $(( OPTIND - 1 ))
-+# Don't allow uninitialized variables if requested
-+[[ -n "$set_u" ]] && set -u
-+unset opt set_u
-+
-+# Used to call _cleanup on shell exit
-+trap _exit EXIT
-+
-+
-+plan_no_plan(){
-+    (( _plan_set != 0 )) && "You tried to plan twice!"
-+
-+    _plan_set=1
-+    _no_plan=1
-+
-+    return 0
++	bt_context_put(ctx);
 +}
 +
 +
-+plan_skip_all(){
-+    local reason=${1:-''}
++void run_seek_last(char *path, uint64_t expected_last)
++{
++	struct bt_context *ctx;
++	struct bt_ctf_iter *iter;
++	struct bt_ctf_event *event;
++	struct bt_iter_pos newpos;
++	int ret;
++	uint64_t timestamp_last;
 +
-+    (( _plan_set != 0 )) && _die "You tried to plan twice!"
++	/* Open the trace */
++	ctx = create_context_with_path(path);
++	if (!ctx) {
++		plan_skip_all("Cannot create valid context");
++	}
 +
-+    _print_plan 0 "Skip $reason"
++	/* Create iterator with null last and end */
++	iter = bt_ctf_iter_create(ctx, NULL, NULL);
++	if (!iter) {
++		plan_skip_all("Cannot create valid iterator");
++	}
 +
-+    _skip_all=1
-+    _plan_set=1
-+    _exit 0
++	event = bt_ctf_iter_read_event(iter);
 +
-+    return 0
++	ok(event, "Event valid at beginning");
++
++	/* Seek to last */
++	newpos.type = BT_SEEK_LAST;
++	ret = bt_iter_set_pos(bt_ctf_get_iter(iter), &newpos);
++
++	ok(ret == 0, "Seek last retval %d", ret);
++
++	event = bt_ctf_iter_read_event(iter);
++
++	ok(event, "Event valid at last position");
++
++	timestamp_last = bt_ctf_get_timestamp(event);
++
++	ok1(timestamp_last == expected_last);
++
++	/* Try to read next event */
++	ret = bt_iter_next(bt_ctf_get_iter(iter));
++
++	ok(ret == 0, "iter next should return an error");
++
++	event = bt_ctf_iter_read_event(iter);
++
++	ok(event == 0, "Event after last should be invalid");
++
++	bt_context_put(ctx);
 +}
 +
-+plan_tests(){
-+    local tests=${1:?}
++void run_seek_time_at_last(char *path, uint64_t expected_last)
++{
++	struct bt_context *ctx;
++	struct bt_ctf_iter *iter;
++	struct bt_ctf_event *event;
++	struct bt_iter_pos newpos;
++	int ret;
++	uint64_t timestamp_last;
 +
-+    (( _plan_set != 0 )) && _die "You tried to plan twice!"
-+    (( tests == 0 )) && _die "You said to run 0 tests!  You've got to run something."
++	/* Open the trace */
++	ctx = create_context_with_path(path);
++	if (!ctx) {
++		plan_skip_all("Cannot create valid context");
++	}
 +
-+    _print_plan $tests
-+    _expected_tests=$tests
-+    _plan_set=1
++	/* Create iterator with null last and end */
++	iter = bt_ctf_iter_create(ctx, NULL, NULL);
++	if (!iter) {
++		plan_skip_all("Cannot create valid iterator");
++	}
 +
-+    return $tests
++	event = bt_ctf_iter_read_event(iter);
++
++	ok(event, "Event valid at beginning");
++
++	/* Seek to last */
++	newpos.type = BT_SEEK_TIME;
++	newpos.u.seek_time = expected_last;
++	ret = bt_iter_set_pos(bt_ctf_get_iter(iter), &newpos);
++
++	ok(ret == 0, "Seek time at last retval %d", ret);
++
++	event = bt_ctf_iter_read_event(iter);
++
++	ok(event, "Event valid at last position");
++
++	timestamp_last = bt_ctf_get_timestamp(event);
++
++	ok1(timestamp_last == expected_last);
++
++	/* Try to read next event */
++	ret = bt_iter_next(bt_ctf_get_iter(iter));
++
++	ok(ret == 0, "iter next should return an error");
++
++	event = bt_ctf_iter_read_event(iter);
++
++	ok(event == 0, "Event after last should be invalid");
++
++	bt_context_put(ctx);
 +}
 +
++void run_seek_cycles(char *path,
++		uint64_t expected_begin,
++		uint64_t expected_last)
++{
++	struct bt_context *ctx;
++	struct bt_ctf_iter *iter;
++	struct bt_ctf_event *event;
++	struct bt_iter_pos newpos;
++	int ret;
++	uint64_t timestamp;
 +
-+_print_plan(){
-+    local tests=${1:?}
-+    local directive=${2:-''}
++	/* Open the trace */
++	ctx = create_context_with_path(path);
++	if (!ctx) {
++		plan_skip_all("Cannot create valid context");
++	}
 +
-+    echo -n "1..$tests"
-+    [[ -n "$directive" ]] && echo -n " # $directive"
-+    echo
++	/* Create iterator with null last and end */
++	iter = bt_ctf_iter_create(ctx, NULL, NULL);
++	if (!iter) {
++		plan_skip_all("Cannot create valid iterator");
++	}
++
++	event = bt_ctf_iter_read_event(iter);
++
++	ok(event, "Event valid at beginning");
++
++	/* Seek to last */
++	newpos.type = BT_SEEK_LAST;
++	ret = bt_iter_set_pos(bt_ctf_get_iter(iter), &newpos);
++
++	ok(ret == 0, "Seek last retval %d", ret);
++
++	event = bt_ctf_iter_read_event(iter);
++
++	ok(event, "Event valid at last position");
++
++	timestamp = bt_ctf_get_timestamp(event);
++
++	ok1(timestamp == expected_last);
++
++	/* Try to read next event */
++	ret = bt_iter_next(bt_ctf_get_iter(iter));
++
++	ok(ret == 0, "iter next should return an error");
++
++	event = bt_ctf_iter_read_event(iter);
++
++	ok(event == 0, "Event after last should be invalid");
++
++	/* Seek to BEGIN */
++	newpos.type = BT_SEEK_BEGIN;
++	ret = bt_iter_set_pos(bt_ctf_get_iter(iter), &newpos);
++
++	ok(ret == 0, "Seek begin retval %d", ret);
++
++	event = bt_ctf_iter_read_event(iter);
++
++	ok(event, "Event valid at first position");
++
++	timestamp = bt_ctf_get_timestamp(event);
++
++	ok1(timestamp == expected_begin);
++
++	/* Seek last again */
++	newpos.type = BT_SEEK_LAST;
++	ret = bt_iter_set_pos(bt_ctf_get_iter(iter), &newpos);
++
++	ok(ret == 0, "Seek last retval %d", ret);
++
++	event = bt_ctf_iter_read_event(iter);
++
++	ok(event, "Event valid at last position");
++
++	timestamp = bt_ctf_get_timestamp(event);
++
++	ok1(timestamp == expected_last);
++
++	bt_context_put(ctx);
 +}
 +
++int main(int argc, char **argv)
++{
++	char *path;
++	uint64_t expected_begin;
++	uint64_t expected_last;
 +
-+pass(){
-+    local name=$1
-+    ok 0 "$name"
-+}
++	plan_tests(NR_TESTS);
 +
++	if (argc < 4) {
++		plan_skip_all("Invalid arguments: need a trace path and the start and last timestamp");
 +
-+fail(){
-+    local name=$1
-+    ok 1 "$name"
-+}
++	}
 +
-+# This is the workhorse method that actually
-+# prints the tests result.
-+ok(){
-+    local result=${1:?}
-+    local name=${2:-''}
++	/* Parse arguments (Trace, begin timestamp) */
++	path = argv[1];
 +
-+    (( _plan_set == 0 )) && _die "You tried to run a test without a plan!  Gotta have a plan."
++	expected_begin = strtoull(argv[2], NULL, 0);
++	if (ULLONG_MAX == expected_begin && errno == ERANGE) {
++		plan_skip_all("Invalid value for begin timestamp");
++	}
 +
-+    _executed_tests=$(( $_executed_tests + 1 ))
++	expected_last = strtoull(argv[3], NULL, 0);
++	if (ULLONG_MAX == expected_last && errno == ERANGE) {
++		plan_skip_all("Invalid value for last timestamp");
++	}
 +
-+    if [[ -n "$name" ]] ; then
-+        if _matches "$name" "^[0-9]+$" ; then
-+            diag "    You named your test '$name'.  You shouldn't use numbers for your test names."
-+            diag "    Very confusing."
-+        fi
-+    fi
++	run_seek_begin(path, expected_begin);
++	run_seek_time_at_last(path, expected_last);
++	run_seek_last(path, expected_last);
++	run_seek_cycles(path, expected_begin, expected_last);
 +
-+    if (( result != 0 )) ; then
-+        echo -n "not "
-+        _failed_tests=$(( _failed_tests + 1 ))
-+    fi
-+    echo -n "ok $_executed_tests"
-+
-+    if [[ -n "$name" ]] ; then
-+        local ename=${name//\#/\\#}
-+        echo -n " - $ename"
-+    fi
-+
-+    if [[ -n "$TODO" ]] ; then
-+        echo -n " # TODO $TODO" ;
-+        if (( result != 0 )) ; then
-+            _failed_tests=$(( _failed_tests - 1 ))
-+        fi
-+    fi
-+
-+    echo
-+    if (( result != 0 )) ; then
-+        local file='tap-functions'
-+        local func=
-+        local line=
-+
-+        local i=0
-+        local bt=$(caller $i)
-+        while _matches "$bt" "tap-functions$" ; do
-+            i=$(( $i + 1 ))
-+            bt=$(caller $i)
-+        done
-+        local backtrace=
-+        eval $(caller $i | (read line func file ; echo "backtrace=\"$file:$func() at line $line.\""))
-+
-+        local t=
-+        [[ -n "$TODO" ]] && t="(TODO) "
-+
-+        if [[ -n "$name" ]] ; then
-+            diag "  Failed ${t}test '$name'"
-+            diag "  in $backtrace"
-+        else
-+            diag "  Failed ${t}test in $backtrace"
-+        fi
-+    fi
-+
-+    return $result
-+}
-+
-+
-+okx(){
-+    local command="$@"
-+
-+    local line=
-+    diag "Output of '$command':"
-+    "$@" | while read line ; do
-+        diag "$line"
-+    done
-+    ok ${PIPESTATUS[0]} "$command"
-+}
-+
-+
-+_equals(){
-+    local result=${1:?}
-+    local expected=${2:?}
-+
-+    if [[ "$result" == "$expected" ]] ; then
-+        return 0
-+    else
-+        return 1
-+    fi
-+}
-+
-+
-+# Thanks to Aaron Kangas for the patch to allow regexp matching
-+# under bash < 3.
-+ _bash_major_version=${BASH_VERSION%%.*}
-+_matches(){
-+    local result=${1:?}
-+    local pattern=${2:?}
-+
-+    if [[ -z "$result" || -z "$pattern" ]] ; then
-+        return 1
-+    else
-+        if (( _bash_major_version >= 3 )) ; then
-+            [[ "$result" =~ "$pattern" ]]
-+        else
-+            echo "$result" | egrep -q "$pattern"
-+        fi
-+    fi
-+}
-+
-+
-+_is_diag(){
-+    local result=${1:?}
-+    local expected=${2:?}
-+
-+    diag "         got: '$result'"
-+    diag "    expected: '$expected'"
-+}
-+
-+
-+is(){
-+    local result=${1:?}
-+    local expected=${2:?}
-+    local name=${3:-''}
-+
-+    _equals "$result" "$expected"
-+    (( $? == 0 ))
-+    ok $? "$name"
-+    local r=$?
-+    (( r != 0 )) && _is_diag "$result" "$expected"
-+    return $r
-+}
-+
-+
-+isnt(){
-+    local result=${1:?}
-+    local expected=${2:?}
-+    local name=${3:-''}
-+
-+    _equals "$result" "$expected"
-+    (( $? != 0 ))
-+    ok $? "$name"
-+    local r=$?
-+    (( r != 0 )) && _is_diag "$result" "$expected"
-+    return $r
-+}
-+
-+
-+like(){
-+    local result=${1:?}
-+    local pattern=${2:?}
-+    local name=${3:-''}
-+
-+    _matches "$result" "$pattern"
-+    (( $? == 0 ))
-+    ok $? "$name"
-+    local r=$?
-+    (( r != 0 )) && diag "    '$result' doesn't match '$pattern'"
-+    return $r
-+}
-+
-+
-+unlike(){
-+    local result=${1:?}
-+    local pattern=${2:?}
-+    local name=${3:-''}
-+
-+    _matches "$result" "$pattern"
-+    (( $? != 0 ))
-+    ok $? "$name"
-+    local r=$?
-+    (( r != 0 )) && diag "    '$result' matches '$pattern'"
-+    return $r
-+}
-+
-+
-+skip(){
-+    local condition=${1:?}
-+    local reason=${2:-''}
-+    local n=${3:-1}
-+
-+    if (( condition == 0 )) ; then
-+        local i=
-+        for (( i=0 ; i<$n ; i++ )) ; do
-+            _executed_tests=$(( _executed_tests + 1 ))
-+            echo "ok $_executed_tests # skip: $reason"
-+        done
-+        return 0
-+    else
-+        return
-+    fi
-+}
-+
-+
-+diag(){
-+    local msg=${1:?}
-+
-+    if [[ -n "$msg" ]] ; then
-+        echo "# $msg"
-+    fi
-+
-+    return 1
-+}
-+
-+
-+_die(){
-+    local reason=${1:-'<unspecified error>'}
-+
-+    echo "$reason" >&2
-+    _test_died=1
-+    _exit 255
-+}
-+
-+
-+BAIL_OUT(){
-+    local reason=${1:-''}
-+
-+    echo "Bail out! $reason" >&2
-+    _exit 255
-+}
-+
-+
-+_cleanup(){
-+    local rc=0
-+
-+    if (( _plan_set == 0 )) ; then
-+        diag "Looks like your test died before it could output anything."
-+        return $rc
-+    fi
-+
-+    if (( _test_died != 0 )) ; then
-+        diag "Looks like your test died just after $_executed_tests."
-+        return $rc
-+    fi
-+
-+    if (( _skip_all == 0 && _no_plan != 0 )) ; then
-+        _print_plan $_executed_tests
-+    fi
-+
-+    local s=
-+    if (( _no_plan == 0 && _expected_tests < _executed_tests )) ; then
-+        s= ; (( _expected_tests > 1 )) && s=s
-+        local extra=$(( _executed_tests - _expected_tests ))
-+        diag "Looks like you planned $_expected_tests test$s but ran $extra extra."
-+        rc=1 ;
-+    fi
-+
-+    if (( _no_plan == 0 && _expected_tests > _executed_tests )) ; then
-+        s= ; (( _expected_tests > 1 )) && s=s
-+        diag "Looks like you planned $_expected_tests test$s but only ran $_executed_tests."
-+    fi
-+
-+    if (( _failed_tests > 0 )) ; then
-+        s= ; (( _failed_tests > 1 )) && s=s
-+        diag "Looks like you failed $_failed_tests test$s of $_executed_tests."
-+    fi
-+
-+    return $rc
-+}
-+
-+
-+_exit_status(){
-+    if (( _no_plan != 0 || _plan_set == 0 )) ; then
-+        return $_failed_tests
-+    fi
-+
-+    if (( _expected_tests < _executed_tests )) ; then
-+        return $(( _executed_tests - _expected_tests  ))
-+    fi
-+
-+    return $(( _failed_tests + ( _expected_tests - _executed_tests )))
-+}
-+
-+
-+_exit(){
-+    local rc=${1:-''}
-+    if [[ -z "$rc" ]] ; then
-+        _exit_status
-+        rc=$?
-+    fi
-+
-+    _cleanup
-+    local alt_rc=$?
-+    (( alt_rc != 0 )) && rc=$alt_rc
-+    trap - EXIT
-+    exit $rc
++	return exit_status();
 +}
 -- 
 1.8.3.4
