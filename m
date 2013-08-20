@@ -1,17 +1,17 @@
-From: Matthew Khouzam <matthew.khouzam@ericsson.com>
-Subject: Re: LTTng UST vs Syslog, Printf...
-Date: Tue, 20 Aug 2013 14:18:46 -0400
-Message-ID: <5213B306.4040706__47109.8970658661$1377022820$gmane$org@ericsson.com>
-References: <63008C666A72BB4F892767155D012B30114CD6F0@eusaamb105.ericsson.se>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [RFC] Babeltrace: LGPL plugins
+Date: Tue, 20 Aug 2013 15:56:09 -0400
+Message-ID: <20130820195609.GA3684__8536.25908862359$1377028627$gmane$org@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from usevmg21.ericsson.net ([198.24.6.65])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <matthew.khouzam@ericsson.com>) id 1VBqWb-0001Zd-Ib
-	for lttng-dev@lists.lttng.org; Tue, 20 Aug 2013 14:19:31 -0400
-In-Reply-To: <63008C666A72BB4F892767155D012B30114CD6F0@eusaamb105.ericsson.se>
+	(envelope-from <compudj@mail.openrapids.net>) id 1VBs2E-0007VX-A4
+	for lttng-dev@lists.lttng.org; Tue, 20 Aug 2013 15:56:15 -0400
+Content-Disposition: inline
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,41 +20,40 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: tiwg@multicore-association.org, lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-I would like to see if the UST logs were ("message %s", string)  of the
-printf'ed function.
+Hi,
 
-I remember testing it a while ago and getting about 20x less space for a
-trace for 10m events where it was int i=0 ; for(i < 10000000; i++)
-trace("val %d", i++);
+Babeltrace is currently MIT/BSD-style licensed (except list.h, a header
+containing trivial 10-lines-or-less functions which does not make the
+code using it derived work).
 
-I formatted recently so I will have to dig a bit but I think the graph
-on page 11 discards the fact that since the logs in LTTng are deferred,
-they will be logged without stopping the program.
+We've been considering allowing LGPL plugins into babeltrace for a while
+now for a few reasons. Mainly, we'd like to be able to take code like
+the filter bytecode interpreter from LTTng-UST (which is LGPLv2.1) and
+merge it into Babeltrace.
 
-My 0.02c... oh wait, the penny was retired.
+One possible way to deal with this is to allow LGPL plugins in the
+babeltrace tree. We could even have configure options to disable build
+of LGPL plugins entirely, pretty much like ffmpeg is doing for GPL.
 
-Matt
+The goal here is to ensure that Babeltrace can still be used as a
+reference implementation of CTF writer/reader under a BSD-style license
+without inhibiting development of other features that would make it more
+useful.
 
+Creating a separate project for the LGPL plugins seems like a lot of
+overhead, and, frankly, I don't think the licensing question is
+sufficient to justify the overhead of creating another project.
 
+Comments/feedback is welcome,
 
-On 13-08-20 02:05 PM, Jim Dumont wrote:
-> Hi there,
->
-> Has anyone done a recent performance and characteristics comparison between lttngust with syslog and printf?   Things like memory & cpu footprint, tps, i/o, disk space...
->
-> I found this Windriver comparison from 2011: https://www.google.ca/url?sa=t&rct=j&q=&esrc=s&frm=1&source=web&cd=1&cad=rja&ved=0CCoQFjAA&url=https%3A%2F%2Fevents.linuxfoundation.org%2Fslides%2F2011%2Flinuxcon%2Flcna2011_wessel.pdf&ei=Y64TUu6qJqS62AXIqYCYCg&usg=AFQjCNF0Q05MytPYVNWBPnUjB9LEGJfQZA
->
-> And if I recall correctly, LTTng UST team also did a printf comparison a while back, but was wondering if someone has done more recent prototyping?   Any comparisons with syslog?
->
-> Regards,
->
-> /Jim Dumont
->
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+Thanks,
+
+Mathieu
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
