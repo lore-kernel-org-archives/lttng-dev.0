@@ -1,21 +1,16 @@
-From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [RFC patch 2/3] [Babeltrace python bindings] Fixed
- use of braces in format strings,
- to allow use with older Python versions (e.g. 2.6)
-Date: Tue, 20 Aug 2013 12:32:57 -0400
-Message-ID: <CA+jJMxs6XNjJZBFv68pzM34VUgiCKvgbB1mBjLpwWHZN2cG=ZA__26322.7359428585$1377016486$gmane$org@mail.gmail.com>
-References: <OF9136DF48.7319E766-ONC2257BCD.002AA76A-C2257BCD.002AFEDA@il.ibm.com>
+From: Jim Dumont <jim.dumont@ericsson.com>
+Subject: LTTng UST vs Syslog, Printf...
+Date: Tue, 20 Aug 2013 18:05:01 +0000
+Message-ID: <63008C666A72BB4F892767155D012B30114CD6F0__25318.0502950729$1377021968$gmane$org@eusaamb105.ericsson.se>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wi0-f170.google.com ([209.85.212.170])
+Received: from usevmg20.ericsson.net ([198.24.6.45])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1VBorf-0003Yj-U3
-	for lttng-dev@lists.lttng.org; Tue, 20 Aug 2013 12:33:09 -0400
-Received: by mail-wi0-f170.google.com with SMTP id hi8so5093875wib.3
-	for <lttng-dev@lists.lttng.org>; Tue, 20 Aug 2013 09:32:58 -0700 (PDT)
-In-Reply-To: <OF9136DF48.7319E766-ONC2257BCD.002AA76A-C2257BCD.002AFEDA@il.ibm.com>
+	(envelope-from <jim.dumont@ericsson.com>) id 1VBqIm-0000gL-TR
+	for lttng-dev@lists.lttng.org; Tue, 20 Aug 2013 14:05:14 -0400
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,38 +19,17 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Amit Margalit <AMITM@il.ibm.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: "'lttng-dev@lists.lttng.org'" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Acked-by: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
+Hi there,
 
-On Tue, Aug 20, 2013 at 3:50 AM, Amit Margalit <AMITM@il.ibm.com> wrote:
-> Using braces in format strings without specifying a number (e.g. "The num=
-ber
-> {} is incorrect".format(some_variable)) is available since Python 2.7, and
-> older Python 2.6 required a number, zero-based (e.g. "The number {0} is
-> incorrect").
->
-> This patch adds these numbers for the sake of older systems.
->
->
->
-> Amit Margalit
-> IBM XIV - Storage Reinvented
-> XIV-NAS Development Team
-> Tel. 03-689-7774
-> Fax. 03-689-7230
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
+Has anyone done a recent performance and characteristics comparison between lttngust with syslog and printf?   Things like memory & cpu footprint, tps, i/o, disk space...
 
+I found this Windriver comparison from 2011: https://www.google.ca/url?sa=t&rct=j&q=&esrc=s&frm=1&source=web&cd=1&cad=rja&ved=0CCoQFjAA&url=https%3A%2F%2Fevents.linuxfoundation.org%2Fslides%2F2011%2Flinuxcon%2Flcna2011_wessel.pdf&ei=Y64TUu6qJqS62AXIqYCYCg&usg=AFQjCNF0Q05MytPYVNWBPnUjB9LEGJfQZA
 
+And if I recall correctly, LTTng UST team also did a printf comparison a while back, but was wondering if someone has done more recent prototyping?   Any comparisons with syslog?
 
--- =
+Regards,
 
-J=E9r=E9mie Galarneau
-EfficiOS Inc.
-http://www.efficios.com
+/Jim Dumont
