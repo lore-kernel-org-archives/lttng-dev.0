@@ -1,19 +1,20 @@
 From: Jimmy Durand Wesolowski <jimmy.durand.wesolowski@gmail.com>
-Subject: [PATCH 1/2] Introduce configure --with-urcu-prefix
-Date: Thu, 22 Aug 2013 10:27:30 +0200
-Message-ID: <1377160051-12449-2-git-send-email-jimmy.durand.wesolowski__46558.5579201162$1377160140$gmane$org@gmail.com>
+Subject: [PATCH 2/2] Add the CFLAGS for an "out of system"
+	building of the gen-tp example files.
+Date: Thu, 22 Aug 2013 10:27:31 +0200
+Message-ID: <1377160051-12449-3-git-send-email-jimmy.durand.wesolowski__6403.71421254731$1377160161$gmane$org@gmail.com>
 References: <1377160051-12449-1-git-send-email-jimmy.durand.wesolowski@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-we0-f181.google.com ([74.125.82.181])
+Received: from mail-we0-f180.google.com ([74.125.82.180])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
 	(envelope-from <jimmy.durand.wesolowski@gmail.com>)
-	id 1VCQFG-0001e2-Ma
-	for lttng-dev@lists.lttng.org; Thu, 22 Aug 2013 04:27:59 -0400
-Received: by mail-we0-f181.google.com with SMTP id q57so1364309wes.12
-	for <lttng-dev@lists.lttng.org>; Thu, 22 Aug 2013 01:27:49 -0700 (PDT)
+	id 1VCQFI-0001e3-D8
+	for lttng-dev@lists.lttng.org; Thu, 22 Aug 2013 04:28:01 -0400
+Received: by mail-we0-f180.google.com with SMTP id q58so837917wes.25
+	for <lttng-dev@lists.lttng.org>; Thu, 22 Aug 2013 01:27:50 -0700 (PDT)
 In-Reply-To: <1377160051-12449-1-git-send-email-jimmy.durand.wesolowski@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -30,74 +31,59 @@ List-Id: lttng-dev@lists.lttng.org
 From: Jimmy Durand Wesolowski <jimmy.durand-wesolowski-ext@oneaccess-net.com>
 
 ---
- configure.ac |   42 ++++++++++++++++++++++++++++++++++++------
- 1 file changed, 36 insertions(+), 6 deletions(-)
+ doc/examples/Makefile.am     |    2 +-
+ doc/examples/gen-tp/Makefile |    9 ++++++---
+ 2 files changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/configure.ac b/configure.ac
-index 94f8182..164174d 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -149,14 +149,34 @@ CFLAGS="-Wall $CFLAGS"
+diff --git a/doc/examples/Makefile.am b/doc/examples/Makefile.am
+index 8c4901b..303a11e 100644
+--- a/doc/examples/Makefile.am
++++ b/doc/examples/Makefile.am
+@@ -45,7 +45,7 @@ all-local:
+ 		done; \
+ 	fi
+ 	for subdir in $(SUBDIRS_PROXY); do \
+-		cd $$subdir && $(MAKE) AM_CPPFLAGS="-I../../../include/" AM_LDFLAGS='-L../../../liblttng-ust/.libs/ -Wl,-rpath="$(PWD)/../../liblttng-ust/.libs/"' LTTNG_GEN_TP_PATH="../../../tools/" $(AM_MAKEFLAGS) all; cd ..; \
++		cd $$subdir && $(MAKE) AM_CPPFLAGS="${CPPFLAGS} -I../../../include/" AM_LDFLAGS='${LDFLAGS} -L../../../liblttng-ust/.libs/ -Wl,-rpath="$(PWD)/../../liblttng-ust/.libs/"' LTTNG_GEN_TP_PATH="../../../tools/" $(AM_MAKEFLAGS) all; cd ..; \
+ 	done
  
- # URCU
+ clean-local:
+diff --git a/doc/examples/gen-tp/Makefile b/doc/examples/gen-tp/Makefile
+index e5e3cd3..c2dd05d 100644
+--- a/doc/examples/gen-tp/Makefile
++++ b/doc/examples/gen-tp/Makefile
+@@ -1,6 +1,8 @@
+ # Copyright (C) 2011-2012  Matthew Khouzam <matthew.khouzam@ericsson.com>
+ # Copyright (C) 2012  Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+ # Copyright (C) 2012  Yannick Brosseau <yannick.brosseau@gmail.com>
++# Copyright (C) 2013  Jimmy Durand Wesolowski
++#                       <jimmy.durand.wesolowski@gmail.com>
+ #
+ # THIS MATERIAL IS PROVIDED AS IS, WITH ABSOLUTELY NO WARRANTY EXPRESSED
+ # OR IMPLIED.  ANY USE IS AT YOUR OWN RISK.
+@@ -39,8 +41,9 @@ sample.o: sample.c sample_tracepoint.h
  
-+AC_ARG_WITH([urcu-prefix],
-+	AS_HELP_STRING([--with-urcu-prefix=PREFIX],
-+                       [Specify the installation prefix of the URCU library.
-+		        Headers must be in PREFIX/include; libraries in
-+			PREFIX/lib.]),
-+			[
-+			  CPPFLAGS="$CPPFLAGS -I${withval}/include"
-+			  LDFLAGS="$LDFLAGS -L${withval}/lib"
-+			])
+ # This rule generate .o only and depends on rules for generating
+ # the .h and .c
 +
- # urcu - check if we just find the headers it out of the box.
--AC_CHECK_HEADERS([urcu-bp.h], [], [AC_MSG_ERROR([Cannot find [URCU] headers (urcu-bp.h). Use [CPPFLAGS]=-Idir to specify their location.
--This error can also occur when the liburcu package's configure script has not been run.])])
-+AC_CHECK_HEADERS([urcu-bp.h],
-+                 [],
-+                 [
-+			AC_MSG_ERROR([Cannot find [URCU] headers (urcu-bp.h).
-+			              Use --with-urcu-prefix=PREFIX to
-+				      specify its location.])
-+                 ])
+ %.o: %.tp %.c %.h
+-	$(LTTNG_GEN_TP_PATH)lttng-gen-tp -o $@ $<
++	CFLAGS="$(AM_CPPFLAGS)" $(LTTNG_GEN_TP_PATH)lttng-gen-tp -o $@ $<
  
- # urcu-cds - check that URCU Concurrent Data Structure lib is available to compilation
- # Part of Userspace RCU library 0.7.2 or better.
--AC_CHECK_LIB([urcu-cds], [_cds_lfht_new], [], [AC_MSG_ERROR([Cannot find
--liburcu-cds lib, part of Userspace RCU 0.7 or better. Use [LDFLAGS]=-Ldir to specify its location.])])
-+AC_CHECK_LIB([urcu-cds], [_cds_lfht_new], [],
-+             [
-+		AC_MSG_ERROR([Cannot find liburcu-cds lib, part of Userspace
-+		              RCU 0.7 or better.
-+		              Use --with-urcu-prefix=PREFIX to
-+			      specify its location.])
-+             ])
+ # The following rule can be used to generate all files instead of having one
+ # for each file type. Note that the sample.o has a dependency on the
+@@ -49,10 +52,10 @@ sample.o: sample.c sample_tracepoint.h
+ #	lttng-gen-tp $<
  
- AC_MSG_CHECKING([caa_likely()])
- AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
-@@ -175,10 +195,20 @@ void fct(void)
- ])
+ %.h: %.tp
+-	$(LTTNG_GEN_TP_PATH)lttng-gen-tp -o $@ $<
++	CFLAGS="$(AM_CPPFLAGS)" $(LTTNG_GEN_TP_PATH)lttng-gen-tp -o $@ $<
  
- # urcu - check that URCU lib is available to compilation
--AC_CHECK_LIB([urcu-bp], [synchronize_rcu_bp], [], [AC_MSG_ERROR([Cannot find liburcu-bp lib. Use [LDFLAGS]=-Ldir to specify its location.])])
-+AC_CHECK_LIB([urcu-bp], [synchronize_rcu_bp], [],
-+             [
-+		AC_MSG_ERROR([Cannot find liburcu-bp lib.
-+		              Use Use --with-urcu-prefix=PREFIX to
-+			      specify its location.])
-+             ])
+ %.c: %.tp
+-	$(LTTNG_GEN_TP_PATH)lttng-gen-tp -o $@ $<
++	CFLAGS="$(AM_CPPFLAGS)" $(LTTNG_GEN_TP_PATH)lttng-gen-tp -o $@ $<
  
- # urcu - check that URCU lib is at least version 0.6
--AC_CHECK_LIB([urcu-bp], [call_rcu_bp], [], [AC_MSG_ERROR([liburcu 0.6 or newer is needed, please update your version or use [LDFLAGS]=-Ldir to specify the right location.])])
-+AC_CHECK_LIB([urcu-bp], [call_rcu_bp], [],
-+             [
-+		AC_MSG_ERROR([liburcu 0.6 or newer is needed, please update
-+		              your version or use --with-urcu-prefix=PREFIX to
-+			      specify its location.])
-+             ])
- 
- AC_MSG_CHECKING([host system alignment requirements])
- case $host_cpu in
+ .PHONY: clean
+ clean:
 -- 
 1.7.10.4
