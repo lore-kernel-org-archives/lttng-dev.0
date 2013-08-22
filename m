@@ -1,19 +1,17 @@
 From: Philippe Proulx <eeppeliteloop@gmail.com>
-Subject: [RFC] Add support for CTF trace files
-Date: Thu, 22 Aug 2013 17:38:17 -0400
-Message-ID: <1377207497-26822-2-git-send-email-eeppeliteloop__11906.3438884497$1377208202$gmane$org@gmail.com>
-References: <1377207497-26822-1-git-send-email-eeppeliteloop@gmail.com>
+Subject: [RFC] CTF files support
+Date: Thu, 22 Aug 2013 17:38:16 -0400
+Message-ID: <1377207497-26822-1-git-send-email-eeppeliteloop__6230.2176644609$1377208223$gmane$org@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qc0-f169.google.com ([209.85.216.169])
+Received: from mail-qe0-f52.google.com ([209.85.128.52])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <eeppeliteloop@gmail.com>) id 1VCcae-00083n-T6
+	(envelope-from <eeppeliteloop@gmail.com>) id 1VCcae-00083U-6e
 	for lttng-dev@lists.lttng.org; Thu, 22 Aug 2013 17:38:50 -0400
-Received: by mail-qc0-f169.google.com with SMTP id m15so1349232qcq.28
-	for <lttng-dev@lists.lttng.org>; Thu, 22 Aug 2013 14:38:43 -0700 (PDT)
-In-Reply-To: <1377207497-26822-1-git-send-email-eeppeliteloop@gmail.com>
+Received: by mail-qe0-f52.google.com with SMTP id a11so1448429qen.25
+	for <lttng-dev@lists.lttng.org>; Thu, 22 Aug 2013 14:38:42 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -26,47 +24,37 @@ To: file@mx.gw.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
----
+This patch adds support for CTF trace files. CTF is a trace format
+that's gaining popularity amongst trace producers. It's the format used
+by the LTTng tracer <http://lttng.org/>.
+
+Details about the format can be found here: <http://www.efficios.com/ctf>.
+
+The CTF metadata can also be found in an alternative text form. In this
+case, it starts with exactly "/* CTF " followed by the version number.
+Looks like this currently:
+
+    /* CTF 1.8
+
+Of course it's easy to write a magic file for file(1) to detect it.
+However, the CTF metadata language looks very much like the C language
+(it has lots of shared keywords with C) so file(1) will detect it as
+a C file first.
+
+Knowing this, would you accept a patch merging the C and CTF text
+metadata magics? This would be similar to Mach-O and Java having common
+detection code in "cafebabe".
+
+Thank you,
+Phil
+
+Philippe Proulx (1):
+  Add support for CTF trace files
+
  magic/Magdir/ctf  | 18 ++++++++++++++++++
  magic/Makefile.am |  1 +
  2 files changed, 19 insertions(+)
  create mode 100644 magic/Magdir/ctf
 
-diff --git a/magic/Magdir/ctf b/magic/Magdir/ctf
-new file mode 100644
-index 0000000..1848422
---- /dev/null
-+++ b/magic/Magdir/ctf
-@@ -0,0 +1,18 @@
-+
-+#--------------------------------------------------------------
-+# ctf:  file(1) magic for CTF (Common Trace Format) trace files
-+#
-+# Specs. available here: <http://www.efficios.com/ctf>
-+#--------------------------------------------------------------
-+
-+# CTF trace data
-+0	lelong	0xc1fc1fc1	Common Trace Format (CTF) trace data (LE)
-+0	belong	0xc1fc1fc1	Common Trace Format (CTF) trace data (BE)
-+
-+# CTF metadata
-+0	lelong	0x75d11d57	Common Trace Format (CTF) metadata (LE)
-+>35	byte	x		\b, v%d
-+>36	byte	x		\b.%d
-+0	belong	0x75d11d57	Common Trace Format (CTF) metadata (BE)
-+>35	byte	x		\b, v%d
-+>36	byte	x		\b.%d
-diff --git a/magic/Makefile.am b/magic/Makefile.am
-index 31b8de2..b83b02b 100644
---- a/magic/Makefile.am
-+++ b/magic/Makefile.am
-@@ -54,6 +54,7 @@ $(MAGIC_FRAGMENT_DIR)/console \
- $(MAGIC_FRAGMENT_DIR)/convex \
- $(MAGIC_FRAGMENT_DIR)/cracklib \
- $(MAGIC_FRAGMENT_DIR)/ctags \
-+$(MAGIC_FRAGMENT_DIR)/ctf \
- $(MAGIC_FRAGMENT_DIR)/cubemap \
- $(MAGIC_FRAGMENT_DIR)/cups \
- $(MAGIC_FRAGMENT_DIR)/dact \
 -- 
 1.8.3.4
