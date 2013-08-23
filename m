@@ -1,17 +1,17 @@
-From: Philippe Proulx <eeppeliteloop@gmail.com>
-Subject: [RFC] CTF files support
-Date: Thu, 22 Aug 2013 17:38:16 -0400
-Message-ID: <1377207497-26822-1-git-send-email-eeppeliteloop__6230.2176644609$1377208223$gmane$org@gmail.com>
+From: Stephen Hemminger <stephen@networkplumber.org>
+Subject: [RFC] adding into middle of RCU list
+Date: Thu, 22 Aug 2013 21:33:18 -0700
+Message-ID: <20130822213318.49a57fa2__49478.7789219574$1377268241$gmane$org@nehalam.linuxnetplumber.net>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qe0-f52.google.com ([209.85.128.52])
+Received: from mail-pb0-f53.google.com ([209.85.160.53])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <eeppeliteloop@gmail.com>) id 1VCcae-00083U-6e
-	for lttng-dev@lists.lttng.org; Thu, 22 Aug 2013 17:38:50 -0400
-Received: by mail-qe0-f52.google.com with SMTP id a11so1448429qen.25
-	for <lttng-dev@lists.lttng.org>; Thu, 22 Aug 2013 14:38:42 -0700 (PDT)
+	(envelope-from <stephen@networkplumber.org>) id 1VCj3v-0001sp-LA
+	for lttng-dev@lists.lttng.org; Fri, 23 Aug 2013 00:33:31 -0400
+Received: by mail-pb0-f53.google.com with SMTP id up15so184799pbc.12
+	for <lttng-dev@lists.lttng.org>; Thu, 22 Aug 2013 21:33:22 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,41 +20,65 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: file@mx.gw.com
-Cc: lttng-dev@lists.lttng.org
+To: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-This patch adds support for CTF trace files. CTF is a trace format
-that's gaining popularity amongst trace producers. It's the format used
-by the LTTng tracer <http://lttng.org/>.
+I needed to add into the middle of an RCU list, does this make sense.
 
-Details about the format can be found here: <http://www.efficios.com/ctf>.
 
-The CTF metadata can also be found in an alternative text form. In this
-case, it starts with exactly "/* CTF " followed by the version number.
-Looks like this currently:
 
-    /* CTF 1.8
+From a45892b0d49ac5fe449ba7e19c646cb17f7cee57 Mon Sep 17 00:00:00 2001
+From: Stephen Hemminger <stephen@networkplumber.org>
+Date: Thu, 22 Aug 2013 21:27:04 -0700
+Subject: [PATCH] Add list_splice_init_rcu to allow insertion into a RCU list
 
-Of course it's easy to write a magic file for file(1) to detect it.
-However, the CTF metadata language looks very much like the C language
-(it has lots of shared keywords with C) so file(1) will detect it as
-a C file first.
+Simplified version of the version in kernel.
+---
+ urcu/rculist.h |   32 ++++++++++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
-Knowing this, would you accept a patch merging the C and CTF text
-metadata magics? This would be similar to Mach-O and Java having common
-detection code in "cafebabe".
-
-Thank you,
-Phil
-
-Philippe Proulx (1):
-  Add support for CTF trace files
-
- magic/Magdir/ctf  | 18 ++++++++++++++++++
- magic/Makefile.am |  1 +
- 2 files changed, 19 insertions(+)
- create mode 100644 magic/Magdir/ctf
-
+diff --git a/urcu/rculist.h b/urcu/rculist.h
+index 1fd2df3..2e8a5a0 100644
+--- a/urcu/rculist.h
++++ b/urcu/rculist.h
+@@ -72,6 +72,38 @@ void cds_list_del_rcu(struct cds_list_head *elem)
+ 	CMM_STORE_SHARED(elem->prev->next, elem->next);
+ }
+ 
++
++/**
++ * Splice an RCU-protected list into an existing list.
++ *
++ * Note that this function blocks in synchronize_rcu()
++ *
++ * Important note: this function is not called concurrently
++ *       with other updates to the list.
++ */
++static inline void caa_list_splice_init_rcu(struct cds_list_head *list,
++					    struct cds_list_head *head)
++{
++	struct cds_list_head *first = list->next;
++	struct cds_list_head *last = list->prev;
++	struct cds_list_head *at = head->next;
++
++	if (cds_list_empty(list))
++		return;
++
++	/* "first" and "last" tracking list, so initialize it. */
++	CDS_INIT_LIST_HEAD(list);
++
++	/* Wait for any readers to finish using the list before splicing */
++	synchronize_rcu();
++
++	/* Readers are finished with the source list, so perform splice. */
++	last->next = at;
++	rcu_assign_pointer(head->next, first);
++	first->prev = head;
++	at->prev = last;
++}
++
+ /*
+  * Iteration through all elements of the list must be done while rcu_read_lock()
+  * is held.
 -- 
-1.8.3.4
+1.7.10.4
