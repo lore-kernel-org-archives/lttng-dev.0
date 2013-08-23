@@ -1,17 +1,34 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
 Subject: Re: [RFC] adding into middle of RCU list
-Date: Fri, 23 Aug 2013 11:07:10 -0400
-Message-ID: <20130823150710.GA11162__17730.9041530409$1377272009$gmane$org@Krystal>
+Date: Fri, 23 Aug 2013 09:46:37 -0700
+Message-ID: <20130823164637.GB3871__91.5402699776635$1377276475$gmane$org@linux.vnet.ibm.com>
 References: <20130822213318.49a57fa2@nehalam.linuxnetplumber.net>
+Reply-To: paulmck@linux.vnet.ibm.com
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from e38.co.us.ibm.com ([32.97.110.159])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1VCtLe-0000ra-3Y
-	for lttng-dev@lists.lttng.org; Fri, 23 Aug 2013 11:32:31 -0400
+	(envelope-from <paulmck@linux.vnet.ibm.com>) id 1VCuVc-0001Uy-Un
+	for lttng-dev@lists.lttng.org; Fri, 23 Aug 2013 12:46:55 -0400
+Received: from /spool/local
+	by e38.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only!
+	Violators will be prosecuted
+	for <lttng-dev@lists.lttng.org> from <paulmck@linux.vnet.ibm.com>;
+	Fri, 23 Aug 2013 10:46:42 -0600
+Received: from d03relay02.boulder.ibm.com (d03relay02.boulder.ibm.com
+	[9.17.195.227])
+	by d03dlp01.boulder.ibm.com (Postfix) with ESMTP id D9EB01FF004A
+	for <lttng-dev@lists.lttng.org>; Fri, 23 Aug 2013 10:41:10 -0600 (MDT)
+Received: from d03av06.boulder.ibm.com (d03av06.boulder.ibm.com [9.17.195.245])
+	by d03relay02.boulder.ibm.com (8.13.8/8.13.8/NCO v10.0) with ESMTP id
+	r7NGkcUl201272
+	for <lttng-dev@lists.lttng.org>; Fri, 23 Aug 2013 10:46:38 -0600
+Received: from d03av06.boulder.ibm.com (loopback [127.0.0.1])
+	by d03av06.boulder.ibm.com (8.14.4/8.13.1/NCO v10.0 AVout) with ESMTP
+	id r7NGnTqC016655
+	for <lttng-dev@lists.lttng.org>; Fri, 23 Aug 2013 10:49:29 -0600
 Content-Disposition: inline
 In-Reply-To: <20130822213318.49a57fa2@nehalam.linuxnetplumber.net>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
@@ -23,17 +40,12 @@ List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 To: Stephen Hemminger <stephen@networkplumber.org>
-Cc: lttng-dev@lists.lttng.org, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
+Cc: lttng-dev@lists.lttng.org, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Stephen,
-
-* Stephen Hemminger (stephen@networkplumber.org) wrote:
+On Thu, Aug 22, 2013 at 09:33:18PM -0700, Stephen Hemminger wrote:
 > I needed to add into the middle of an RCU list, does this make sense.
 > 
-
-Yes, it makes sense. I'm adding a couple of comments below,
-
 > 
 > 
 > From a45892b0d49ac5fe449ba7e19c646cb17f7cee57 Mon Sep 17 00:00:00 2001
@@ -61,22 +73,7 @@ Yes, it makes sense. I'm adding a couple of comments below,
 > + * Note that this function blocks in synchronize_rcu()
 > + *
 > + * Important note: this function is not called concurrently
-
-is not -> should not be
-
 > + *       with other updates to the list.
-
-We might also want to start documenting the parameters in the list
-headers, since it's unclear to someone who want to use the API which of
-list and head is the list we want to splice, and which is the target,
-e.g.:
-
- * @list: RCU-protected list to splice into @head.
- * @head: existing and initialized list to splice into.
-
-We might want to state more clearly that @head can be any node within a
-target list, including the list head.
-
 > + */
 > +static inline void caa_list_splice_init_rcu(struct cds_list_head *list,
 > +					    struct cds_list_head *head)
@@ -90,6 +87,17 @@ target list, including the list head.
 > +
 > +	/* "first" and "last" tracking list, so initialize it. */
 > +	CDS_INIT_LIST_HEAD(list);
+
+This change is happening in the presence of readers on the list, right?
+For this to work reliably in the presence of mischievous compilers,
+wouldn't CDS_INIT_LIST_HEAD() need to use CMM_ACCESS_ONCE() for its
+pointer accesses?
+
+Hmmm...  The kernel version seems to have the same issue...
+Patch below, FWIW.
+
+							Thanx, Paul
+
 > +
 > +	/* Wait for any readers to finish using the list before splicing */
 > +	synchronize_rcu();
@@ -100,33 +108,70 @@ target list, including the list head.
 > +	first->prev = head;
 > +	at->prev = last;
 > +}
-
-Comment about style for LGPL headers: we really want to keep the
-functions at 10 lines or less, otherwise they will need to be moved into
-a library call or split into two static inline functions. So here, I
-recommend moving the comments into the comment above the function, and
-split the part starting at "last->next = at;" (4 lines) into a helper
-function. Along with merging the 3 lines of local variables declaration
-into 2, and removing empty white spaces and comments, we should be able
-to fit this in 10 lines for caa_list_splice_init_rcu().
-
-Thoughts ?
-
-Thanks,
-
-Mathieu
-
-
-
 > +
 >  /*
 >   * Iteration through all elements of the list must be done while rcu_read_lock()
 >   * is held.
 > -- 
 > 1.7.10.4
-> 
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+rcu: Make list_splice_init_rcu() account for RCU readers
+
+The list_splice_init_rcu() function allows a list visible to RCU readers
+to be spliced into another list visible to RCU readers.  This is OK,
+except for the use of INIT_LIST_HEAD(), which does pointer updates
+without doing anything to make those updates safe for concurrent readers.
+
+Of course, most of the time INIT_LIST_HEAD() is being used in reader-free
+contexts, such as initialization or cleanup, so it is OK for it to update
+pointers in an unsafe-for-RCU-readers manner.  This commit therefore
+creates an INIT_LIST_HEAD_RCU() that uses ACCESS_ONCE() to make the updates
+reader-safe.  The reason that we can use ACCESS_ONCE() instead of the more
+typical rcu_assign_pointer() is that list_splice_init_rcu() is updating the
+pointers to reference something that is already visible to readers, so
+that there is no problem with pre-initialized values.
+
+Signed-off-by: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
+
+diff --git a/include/linux/rculist.h b/include/linux/rculist.h
+index 4106721..45a0a9e 100644
+--- a/include/linux/rculist.h
++++ b/include/linux/rculist.h
+@@ -19,6 +19,21 @@
+  */
+ 
+ /*
++ * INIT_LIST_HEAD_RCU - Initialize a list_head visible to RCU readers
++ * @list: list to be initialized
++ *
++ * You should instead use INIT_LIST_HEAD() for normal initialization and
++ * cleanup tasks, when readers have no access to the list being initialized.
++ * However, if the list being initialized is visible to readers, you
++ * need to keep the compiler from being too mischievous.
++ */
++static inline void INIT_LIST_HEAD_RCU(struct list_head *list)
++{
++	ACCESS_ONCE(list->next) = list;
++	ACCESS_ONCE(list->prev) = list;
++}
++
++/*
+  * return the ->next pointer of a list_head in an rcu safe
+  * way, we must not access it directly
+  */
+@@ -191,9 +206,13 @@ static inline void list_splice_init_rcu(struct list_head *list,
+ 	if (list_empty(list))
+ 		return;
+ 
+-	/* "first" and "last" tracking list, so initialize it. */
++	/*
++	 * "first" and "last" tracking list, so initialize it.  RCU readers
++	 * have access to this list, so we must use INIT_LIST_HEAD_RCU()
++	 * instead of INIT_LIST_HEAD().
++	 */
+ 
+-	INIT_LIST_HEAD(list);
++	INIT_LIST_HEAD_RCU(list);
+ 
+ 	/*
+ 	 * At this point, the list body still points to the source list.
