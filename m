@@ -1,20 +1,18 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH babeltrace] Fix: test_seek should only
-	output one TAP	plan
-Date: Mon, 26 Aug 2013 14:37:48 -0400
-Message-ID: <20130826183748.GA19170__16693.7183509164$1377542326$gmane$org@Krystal>
-References: <1377540914-17523-1-git-send-email-christian.babeux@efficios.com>
+From: David Goulet <dgoulet@efficios.com>
+Subject: Re: [PATCH lttng-tools 1/5] Add --mi option to the list
+ command
+Date: Mon, 26 Aug 2013 14:42:15 -0400
+Message-ID: <521BA187.2010604__1910.63542520187$1377542598$gmane$org@efficios.com>
+References: <1376425585-31636-1-git-send-email-simon.marchi@polymtl.ca>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from smtp.ini-tech.com ([5.9.158.244])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1VE1fi-0007EM-B0
-	for lttng-dev@lists.lttng.org; Mon, 26 Aug 2013 14:37:56 -0400
-Content-Disposition: inline
-In-Reply-To: <1377540914-17523-1-git-send-email-christian.babeux@efficios.com>
+	(envelope-from <dgoulet@efficios.com>) id 1VE1k6-0007RS-D5
+	for lttng-dev@lists.lttng.org; Mon, 26 Aug 2013 14:42:28 -0400
+In-Reply-To: <1376425585-31636-1-git-send-email-simon.marchi@polymtl.ca>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,158 +21,129 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Christian Babeux <christian.babeux@efficios.com>
+To: simon.marchi@polymtl.ca
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Christian Babeux (christian.babeux@efficios.com) wrote:
-> On critical failure paths, the test_seek test was outputting multiple TAP plans,
-> which according to the specification [1] is invalid. This causes parsing
-> issues on very strict TAP parsers.
+Like we spoke the other day on IRC, the --mi patch needs more work for the
+output format so we come up with something standard and documented.
 
-Merged, but please cut your changelog to 72 columns in the future.
+So I've merged the 3 other patches that do not uses --mi option.
 
-Thanks,
+Cheers!
+David
 
-Mathieu
-
+simon.marchi@polymtl.ca:
+> From: Simon Marchi <simon.marchi@polymtl.ca>
 > 
-> [1] - http://podwiki.hexten.net/TAP/TAP.html?page=TAP
+> The --mi option is used to ask lttng to print information in a format
+> easily understandable by another program. Currently, only session
+> printing is affected: it prints session names one per line.
 > 
-> Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
+> The term mi stands for machine interface, and is stolen without any
+> remorse from GDB's lexicon.
+> 
+> Signed-off-by: Simon Marchi <simon.marchi@polymtl.ca>
 > ---
->  tests/lib/test_seek.c | 43 +++++++++++++++++++++++++++++++++----------
->  1 file changed, 33 insertions(+), 10 deletions(-)
+>  src/bin/lttng/commands/list.c |   35 ++++++++++++++++++++++++++---------
+>  1 files changed, 26 insertions(+), 9 deletions(-)
 > 
-> diff --git a/tests/lib/test_seek.c b/tests/lib/test_seek.c
-> index 170c830..4e1a823 100644
-> --- a/tests/lib/test_seek.c
-> +++ b/tests/lib/test_seek.c
-> @@ -44,17 +44,22 @@ void run_seek_begin(char *path, uint64_t expected_begin)
->  	int ret;
->  	uint64_t timestamp_begin;
->  	uint64_t timestamp_seek_begin;
-> +	unsigned int nr_seek_begin_test;
+> diff --git a/src/bin/lttng/commands/list.c b/src/bin/lttng/commands/list.c
+> index 1c7085d..9e13e6b 100644
+> --- a/src/bin/lttng/commands/list.c
+> +++ b/src/bin/lttng/commands/list.c
+> @@ -30,6 +30,7 @@ static int opt_kernel;
+>  static char *opt_channel;
+>  static int opt_domain;
+>  static int opt_fields;
+> +static int opt_mi;
+>  #if 0
+>  /* Not implemented yet */
+>  static char *opt_cmd_name;
+> @@ -44,6 +45,7 @@ enum {
+>  	OPT_HELP = 1,
+>  	OPT_USERSPACE,
+>  	OPT_LIST_OPTIONS,
+> +	OPT_MI,
+>  };
+>  
+>  static struct lttng_handle *handle;
+> @@ -63,6 +65,7 @@ static struct poptOption long_options[] = {
+>  	{"domain",    'd', POPT_ARG_VAL, &opt_domain, 1, 0, 0},
+>  	{"fields",    'f', POPT_ARG_VAL, &opt_fields, 1, 0, 0},
+>  	{"list-options", 0, POPT_ARG_NONE, NULL, OPT_LIST_OPTIONS, NULL, NULL},
+> +	{"mi", 0, POPT_ARG_NONE, &opt_mi, 0, NULL, NULL},
+>  	{0, 0, 0, 0, 0, 0, 0}
+>  };
+>  
+> @@ -80,6 +83,7 @@ static void usage(FILE *ofp)
+>  	fprintf(ofp, "\n");
+>  	fprintf(ofp, "  -h, --help              Show this help\n");
+>  	fprintf(ofp, "      --list-options      Simple listing of options\n");
+> +	fprintf(ofp, "      --mi                Prints data in a format suitable for parsing\n");
+>  	fprintf(ofp, "  -k, --kernel            Select kernel domain\n");
+>  	fprintf(ofp, "  -u, --userspace         Select user-space domain.\n");
+>  	fprintf(ofp, "  -f, --fields            List event fields.\n");
+> @@ -618,40 +622,53 @@ static int list_sessions(const char *session_name)
+>  		ERR("%s", lttng_strerror(ret));
+>  		goto error;
+>  	} else if (count == 0) {
+> -		MSG("Currently no available tracing session");
+> +		if (!opt_mi) {
+> +			MSG("Currently no available tracing session");
+> +		}
+>  		goto end;
+>  	}
+>  
+> -	if (session_name == NULL) {
+> +	if (session_name == NULL && !opt_mi) {
+>  		MSG("Available tracing sessions:");
+>  	}
+>  
+>  	for (i = 0; i < count; i++) {
 > +
-> +	nr_seek_begin_test = 5;
->  
->  	/* Open the trace */
->  	ctx = create_context_with_path(path);
->  	if (!ctx) {
-> -		plan_skip_all("Cannot create valid context");
-> +		skip(nr_seek_begin_test, "Cannot create valid context");
-> +		return;
->  	}
->  
->  	/* Create iterator with null begin and end */
->  	iter = bt_ctf_iter_create(ctx, NULL, NULL);
->  	if (!iter) {
-> -		plan_skip_all("Cannot create valid iterator");
-> +		skip(nr_seek_begin_test, "Cannot create valid iterator");
-> +		return;
->  	}
->  
->  	event = bt_ctf_iter_read_event(iter);
-> @@ -92,17 +97,22 @@ void run_seek_last(char *path, uint64_t expected_last)
->  	struct bt_iter_pos newpos;
->  	int ret;
->  	uint64_t timestamp_last;
-> +	unsigned int nr_seek_last_tests;
+>  		if (session_name != NULL) {
+>  			if (strncmp(sessions[i].name, session_name, NAME_MAX) == 0) {
+>  				session_found = 1;
+> -				MSG("Tracing session %s: [%s%s]", session_name,
 > +
-> +	nr_seek_last_tests = 6;
->  
->  	/* Open the trace */
->  	ctx = create_context_with_path(path);
->  	if (!ctx) {
-> -		plan_skip_all("Cannot create valid context");
-> +		skip(nr_seek_last_tests, "Cannot create valid context");
-> +		return;
->  	}
->  
->  	/* Create iterator with null last and end */
->  	iter = bt_ctf_iter_create(ctx, NULL, NULL);
->  	if (!iter) {
-> -		plan_skip_all("Cannot create valid iterator");
-> +		skip(nr_seek_last_tests, "Cannot create valid iterator");
-> +		return;
->  	}
->  
->  	event = bt_ctf_iter_read_event(iter);
-> @@ -143,17 +153,24 @@ void run_seek_time_at_last(char *path, uint64_t expected_last)
->  	struct bt_iter_pos newpos;
->  	int ret;
->  	uint64_t timestamp_last;
-> +	unsigned int nr_seek_time_at_last_tests;
+> +				if (opt_mi) {
+> +					MSG("%s", session_name);
+> +				} else {
+> +					MSG("Tracing session %s: [%s%s]", session_name,
+>  						active_string(sessions[i].enabled),
+>  						snapshot_string(sessions[i].snapshot_mode));
+> -				MSG("%sTrace path: %s\n", indent4, sessions[i].path);
+> +					MSG("%sTrace path: %s\n", indent4, sessions[i].path);
+> +				}
 > +
-> +	nr_seek_time_at_last_tests = 6;
->  
->  	/* Open the trace */
->  	ctx = create_context_with_path(path);
->  	if (!ctx) {
-> -		plan_skip_all("Cannot create valid context");
-> +		skip(nr_seek_time_at_last_tests,
-> +		     "Cannot create valid context");
-> +		return;
+>  				break;
+>  			}
+>  		} else {
+> -			MSG("  %d) %s (%s) [%s%s]", i + 1, sessions[i].name, sessions[i].path,
+> -					active_string(sessions[i].enabled),
+> -					snapshot_string(sessions[i].snapshot_mode));
+> +			if (opt_mi) {
+> +				MSG("%s", sessions[i].name);
+> +			} else {
+> +				MSG("  %d) %s (%s) [%s%s]", i + 1, sessions[i].name, sessions[i].path,
+> +						active_string(sessions[i].enabled),
+> +						snapshot_string(sessions[i].snapshot_mode));
+> +			}
+>  		}
 >  	}
 >  
->  	/* Create iterator with null last and end */
->  	iter = bt_ctf_iter_create(ctx, NULL, NULL);
->  	if (!iter) {
-> -		plan_skip_all("Cannot create valid iterator");
-> +		skip(nr_seek_time_at_last_tests,
-> +		     "Cannot create valid iterator");
-> +		return;
+>  	free(sessions);
+>  
+> -	if (!session_found && session_name != NULL) {
+> +	if (!session_found && session_name != NULL && !opt_mi) {
+>  		ERR("Session '%s' not found", session_name);
+>  		ret = CMD_ERROR;
+>  		goto error;
 >  	}
 >  
->  	event = bt_ctf_iter_read_event(iter);
-> @@ -198,16 +215,22 @@ void run_seek_cycles(char *path,
->  	int ret;
->  	uint64_t timestamp;
->  
-> +	unsigned int nr_seek_cycles_tests;
-> +
-> +	nr_seek_cycles_tests = 12;
-> +
->  	/* Open the trace */
->  	ctx = create_context_with_path(path);
->  	if (!ctx) {
-> -		plan_skip_all("Cannot create valid context");
-> +		skip(nr_seek_cycles_tests, "Cannot create valid context");
-> +		return;
+> -	if (session_name == NULL) {
+> +	if (session_name == NULL && !opt_mi) {
+>  		MSG("\nUse lttng list <session_name> for more details");
 >  	}
 >  
->  	/* Create iterator with null last and end */
->  	iter = bt_ctf_iter_create(ctx, NULL, NULL);
->  	if (!iter) {
-> -		plan_skip_all("Cannot create valid iterator");
-> +		skip(nr_seek_cycles_tests, "Cannot create valid iterator");
-> +		return;
->  	}
->  
->  	event = bt_ctf_iter_read_event(iter);
-> @@ -281,8 +304,6 @@ int main(int argc, char **argv)
->  	babeltrace_debug = 0;	/* libbabeltrace.la */
->  	opt_clock_offset = 0;	/* libbabeltrace-ctf.la */
->  
-> -	plan_tests(NR_TESTS);
-> -
->  	if (argc < 4) {
->  		plan_skip_all("Invalid arguments: need a trace path and the start and last timestamp");
->  
-> @@ -301,6 +322,8 @@ int main(int argc, char **argv)
->  		plan_skip_all("Invalid value for last timestamp");
->  	}
->  
-> +	plan_tests(NR_TESTS);
-> +
->  	run_seek_begin(path, expected_begin);
->  	run_seek_time_at_last(path, expected_last);
->  	run_seek_last(path, expected_last);
-> -- 
-> 1.8.3.4
-> 
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
