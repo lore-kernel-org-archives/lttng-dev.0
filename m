@@ -1,18 +1,19 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: Re: [PATCH lttng-tools 1/5] Add --mi option to the list
- command
-Date: Mon, 26 Aug 2013 14:42:15 -0400
-Message-ID: <521BA187.2010604__1910.63542520187$1377542598$gmane$org@efficios.com>
-References: <1376425585-31636-1-git-send-email-simon.marchi@polymtl.ca>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [RFC] LTTng Contributor's guide
+Date: Mon, 26 Aug 2013 14:48:57 -0400
+Message-ID: <20130826184857.GA19364__28883.2924714827$1377542995$gmane$org@Krystal>
+References: <CA+jJMxt2AB1MdARo3suHGgnvJmBL-No-YpTWZWQeMfqFUADOtw@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([5.9.158.244])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1VE1k6-0007RS-D5
-	for lttng-dev@lists.lttng.org; Mon, 26 Aug 2013 14:42:28 -0400
-In-Reply-To: <1376425585-31636-1-git-send-email-simon.marchi@polymtl.ca>
+	(envelope-from <compudj@mail.openrapids.net>) id 1VE1qV-0007k5-AW
+	for lttng-dev@lists.lttng.org; Mon, 26 Aug 2013 14:49:05 -0400
+Content-Disposition: inline
+In-Reply-To: <CA+jJMxt2AB1MdARo3suHGgnvJmBL-No-YpTWZWQeMfqFUADOtw@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,129 +22,213 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: simon.marchi@polymtl.ca
-Cc: lttng-dev@lists.lttng.org
+To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Like we spoke the other day on IRC, the --mi patch needs more work for the
-output format so we come up with something standard and documented.
+* J=E9r=E9mie Galarneau (jeremie.galarneau@efficios.com) wrote:
+> Hi,
+> =
 
-So I've merged the 3 other patches that do not uses --mi option.
+> There was some talk on the IRC channel last week about the need for a
+> contributor's guide. I have worked on a quick first draft which you
+> may find below. Ideally, this would be posted on the LTTng website.
+> =
 
-Cheers!
-David
+> Feedback would be greatly appreciated.
 
-simon.marchi@polymtl.ca:
-> From: Simon Marchi <simon.marchi@polymtl.ca>
-> 
-> The --mi option is used to ask lttng to print information in a format
-> easily understandable by another program. Currently, only session
-> printing is affected: it prints session names one per line.
-> 
-> The term mi stands for machine interface, and is stolen without any
-> remorse from GDB's lexicon.
-> 
-> Signed-off-by: Simon Marchi <simon.marchi@polymtl.ca>
-> ---
->  src/bin/lttng/commands/list.c |   35 ++++++++++++++++++++++++++---------
->  1 files changed, 26 insertions(+), 9 deletions(-)
-> 
-> diff --git a/src/bin/lttng/commands/list.c b/src/bin/lttng/commands/list.c
-> index 1c7085d..9e13e6b 100644
-> --- a/src/bin/lttng/commands/list.c
-> +++ b/src/bin/lttng/commands/list.c
-> @@ -30,6 +30,7 @@ static int opt_kernel;
->  static char *opt_channel;
->  static int opt_domain;
->  static int opt_fields;
-> +static int opt_mi;
->  #if 0
->  /* Not implemented yet */
->  static char *opt_cmd_name;
-> @@ -44,6 +45,7 @@ enum {
->  	OPT_HELP = 1,
->  	OPT_USERSPACE,
->  	OPT_LIST_OPTIONS,
-> +	OPT_MI,
->  };
->  
->  static struct lttng_handle *handle;
-> @@ -63,6 +65,7 @@ static struct poptOption long_options[] = {
->  	{"domain",    'd', POPT_ARG_VAL, &opt_domain, 1, 0, 0},
->  	{"fields",    'f', POPT_ARG_VAL, &opt_fields, 1, 0, 0},
->  	{"list-options", 0, POPT_ARG_NONE, NULL, OPT_LIST_OPTIONS, NULL, NULL},
-> +	{"mi", 0, POPT_ARG_NONE, &opt_mi, 0, NULL, NULL},
->  	{0, 0, 0, 0, 0, 0, 0}
->  };
->  
-> @@ -80,6 +83,7 @@ static void usage(FILE *ofp)
->  	fprintf(ofp, "\n");
->  	fprintf(ofp, "  -h, --help              Show this help\n");
->  	fprintf(ofp, "      --list-options      Simple listing of options\n");
-> +	fprintf(ofp, "      --mi                Prints data in a format suitable for parsing\n");
->  	fprintf(ofp, "  -k, --kernel            Select kernel domain\n");
->  	fprintf(ofp, "  -u, --userspace         Select user-space domain.\n");
->  	fprintf(ofp, "  -f, --fields            List event fields.\n");
-> @@ -618,40 +622,53 @@ static int list_sessions(const char *session_name)
->  		ERR("%s", lttng_strerror(ret));
->  		goto error;
->  	} else if (count == 0) {
-> -		MSG("Currently no available tracing session");
-> +		if (!opt_mi) {
-> +			MSG("Currently no available tracing session");
-> +		}
->  		goto end;
->  	}
->  
-> -	if (session_name == NULL) {
-> +	if (session_name == NULL && !opt_mi) {
->  		MSG("Available tracing sessions:");
->  	}
->  
->  	for (i = 0; i < count; i++) {
-> +
->  		if (session_name != NULL) {
->  			if (strncmp(sessions[i].name, session_name, NAME_MAX) == 0) {
->  				session_found = 1;
-> -				MSG("Tracing session %s: [%s%s]", session_name,
-> +
-> +				if (opt_mi) {
-> +					MSG("%s", session_name);
-> +				} else {
-> +					MSG("Tracing session %s: [%s%s]", session_name,
->  						active_string(sessions[i].enabled),
->  						snapshot_string(sessions[i].snapshot_mode));
-> -				MSG("%sTrace path: %s\n", indent4, sessions[i].path);
-> +					MSG("%sTrace path: %s\n", indent4, sessions[i].path);
-> +				}
-> +
->  				break;
->  			}
->  		} else {
-> -			MSG("  %d) %s (%s) [%s%s]", i + 1, sessions[i].name, sessions[i].path,
-> -					active_string(sessions[i].enabled),
-> -					snapshot_string(sessions[i].snapshot_mode));
-> +			if (opt_mi) {
-> +				MSG("%s", sessions[i].name);
-> +			} else {
-> +				MSG("  %d) %s (%s) [%s%s]", i + 1, sessions[i].name, sessions[i].path,
-> +						active_string(sessions[i].enabled),
-> +						snapshot_string(sessions[i].snapshot_mode));
-> +			}
->  		}
->  	}
->  
->  	free(sessions);
->  
-> -	if (!session_found && session_name != NULL) {
-> +	if (!session_found && session_name != NULL && !opt_mi) {
->  		ERR("Session '%s' not found", session_name);
->  		ret = CMD_ERROR;
->  		goto error;
->  	}
->  
-> -	if (session_name == NULL) {
-> +	if (session_name == NULL && !opt_mi) {
->  		MSG("\nUse lttng list <session_name> for more details");
->  	}
->  
+It looks great ! A couple of minor comments below,
+
+> =
+
+> Thanks,
+> J=E9r=E9mie
+> =
+
+> =
+
+> *** Contributor's guide ***
+> =
+
+> Being an open source project, the LTTng project welcomes contributions
+> from everyone.
+> This guide will walk you through the process of contributing a patch to L=
+TTng.
+> =
+
+> Getting the source code
+> -----------------------
+> =
+
+> The LTTng project uses Git for source control. How to use Git is
+> beyond the scope of this guide, but its official website[1] provides
+> many great tutorials.
+> Please refer to the download[2] page for links to LTTng's Git repositorie=
+s.
+> =
+
+> Fixes and features should generally be developed against the master
+> branch. If you intend on submitting a patch that addresses an issue in
+> a specific stable branch or a development branch, make sure you
+> mention it in the commit's description or the subject prefix.
+> =
+
+> Coding standard
+> -------------
+> =
+
+> LTTng uses the Linux kernel coding style[3] with one addition: single
+> line if-statements must be wrapped in braces.
+> =
+
+> Although the LTTng code base is primarily written in C, it does
+> contain Perl, Python and Java code. There are no official coding
+> standards for these languages. However, using a style consistent with
+> the rest of the code written in that language is strongly encouraged.
+> =
+
+> Creating and sending a patch
+> -------------
+> =
+
+> LTTng's development flow is primarily e-mail based. Like a lot of open
+> source projects, patches are submitted and reviewed on the project's
+> mailing list (lttng-dev@lists.lttng.org). This list is also used to
+> share and comment on RFCs and answer users' questions.
+> =
+
+> To make patch management and reviews as painless as possible, we
+> encourage contributors to follow a uniform patch submission process.
+> =
+
+> Once your changes have been committed to your local branch, use Git's
+> format-patch command to generate a patch file. The following command
+> line will generate a patch from the latest commit: git format-patch
+> -N1 -s --subject-prefix=3D"PATCH project_name"
+> =
+
+> The patch's subject (the commit message's first line) should be
+> written in the present tense and not exceed 72 characters in length.
+> =
+
+> The commit message's body should be as detailed as possible and
+> explain the reasons behind the proposed change. Any related bug
+> report(s) should be mentioned at the end of the message.
+> =
+
+> The lttng-tools project provides a script (checkpatch.pl) as part of
+> the "extras" that performs a number of checks on a patch to ensure it
+> is ready for submission. Run this script on your patch and correct any
+> reported errors before posting it to the mailing list.
+> =
+
+> You may find an example of a patch suitable for submission here[4].
+> =
+
+> Note that patches should be as focused as possible. Do not, for
+> instance, fix a bug and correct the indentation of an unrelated block
+> of code as part of the same patch.
+
+We should also point out that patches should focus on a single "logical"
+change at a time. The basic questions to think about whenever choosing
+how to split changes into separate patches is:
+- making sure that each patch build on its own (bissectability),
+- if the feature needs to be reverted, only the feature should be
+  taken away by a git revert. Not, e.g., cleanups, nor unrelated
+  fixes.
+
+We might also want to point out a set of testing guide lines before
+submitting. e.g.
+
+build
+make check
+
+and also VPATH build, as well as make dist testing if the patch touches
+automake files (for instance).
+
+> =
+
+> Once you are confident your patch meets the required guide lines, you
+> may use Git's send-email command to send your patch on the mailing
+> list. Make sure you are subscribed[5] to the mailing list to follow
+> and take part in discussions about your changes.
+> =
+
+> You may join the file to an e-mail as an attachment if you can't send
+> the patch directly using send-email.
+> =
+
+> Reviews
+> -------------
+> =
+
+> Once your patch has been posted to the mailing list, other
+> contributors may propose modifications to your patch. This is
+> completely normal. This collaborative code review is an integral part
+> of our development process.
+> =
+
+> Keep in mind that reviewing patches is a time-consuming process and,
+> as such, may not be done right away. The delays may be affected by the
+> current release cycle phase and the complexity of the proposed
+> changes. If you think your patch might have been forgotten, please
+> mention it on the #lttng[6] IRC channel rather than resubmitting.
+> =
+
+> Release cycle
+> -------------
+> =
+
+> The LTTng project follows a release cycle that alternates between
+> development and release candidate (RC) phases. The master branch is
+> feature-frozen during RC phases; only bug fixes will be accepted
+> during this period. However, patches adding new functionality may
+> still be submitted and reviewed during the RC.
+
+We should point out that when a feature patch submitted for review
+(during a rc) is considered acceptable, the
+
+Acked-by
+
+tag will be given by maintainers. It should be added to the patch
+changelog for resubmission. However, if the patch needs to be changed
+compared to the ack'd version when resubmitted at the end of the release
+candidate cycle, the acked-by tag should be removed, and a description
+of the changes since the acked version should be written in the
+changelog.
+
+Thanks,
+
+Mathieu
+
+> The upcoming features and release dates are announced in a monthly
+> digest posted on the mailing list.
+> =
+
+> =
+
+> [1] http://git-scm.com
+> [2] http://lttng.org/download
+> [3] http://www.kernel.org/doc/Documentation/CodingStyle
+> [4] http://lists.lttng.org/pipermail/lttng-dev/2013-June/020574.html
+> [5] http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> [6] irc://irc.oftc.net/lttng
+> =
+
+> -- =
+
+> J=E9r=E9mie Galarneau
+> EfficiOS Inc.
+> http://www.efficios.com
+> =
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- =
+
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
