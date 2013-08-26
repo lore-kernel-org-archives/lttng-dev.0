@@ -1,19 +1,20 @@
-From: Christian Babeux <christian.babeux@efficios.com>
+From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
 Subject: Re: [RFC] LTTng Contributor's guide
-Date: Mon, 26 Aug 2013 13:49:05 -0400
-Message-ID: <CAGDH53mxfW0Dn6r=mT20dLtJusu8tA7ibnom_1jEX5GTSxedww__47217.7706928507$1377539545$gmane$org@mail.gmail.com>
+Date: Mon, 26 Aug 2013 13:57:29 -0400
+Message-ID: <CA+jJMxs4jBu3vmRoAUzNgjovdg+9hWEP-TNi1fN9RicYrLaYJg__21332.5937315405$1377539910$gmane$org@mail.gmail.com>
 References: <CA+jJMxt2AB1MdARo3suHGgnvJmBL-No-YpTWZWQeMfqFUADOtw@mail.gmail.com>
+	<521B94E5.3020402@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-vb0-f44.google.com ([209.85.212.44])
+Received: from mail-we0-f182.google.com ([74.125.82.182])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <christian.babeux@0x80.ca>) id 1VE0ud-00051m-1m
-	for lttng-dev@lists.lttng.org; Mon, 26 Aug 2013 13:49:17 -0400
-Received: by mail-vb0-f44.google.com with SMTP id e13so2329010vbg.3
-	for <lttng-dev@lists.lttng.org>; Mon, 26 Aug 2013 10:49:05 -0700 (PDT)
-In-Reply-To: <CA+jJMxt2AB1MdARo3suHGgnvJmBL-No-YpTWZWQeMfqFUADOtw@mail.gmail.com>
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1VE12m-0005QB-AE
+	for lttng-dev@lists.lttng.org; Mon, 26 Aug 2013 13:57:42 -0400
+Received: by mail-we0-f182.google.com with SMTP id q59so2979310wes.41
+	for <lttng-dev@lists.lttng.org>; Mon, 26 Aug 2013 10:57:30 -0700 (PDT)
+In-Reply-To: <521B94E5.3020402@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,102 +23,157 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+To: David Goulet <dgoulet@efficios.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-TG9va3MgZ29vZCB0byBtZSEKClBlcmhhcHMgd2UgY291bGQgYWRkIGEgc2VjdGlvbiBhYm91dCBn
-dWlkZWxpbmVzIHRvIGFkZCB0ZXN0cz8KClRoYW5rcywKCkNocmlzdGlhbgoKT24gTW9uLCBBdWcg
-MjYsIDIwMTMgYXQgMTozOSBQTSwgSsOpcsOpbWllIEdhbGFybmVhdQo8amVyZW1pZS5nYWxhcm5l
-YXVAZWZmaWNpb3MuY29tPiB3cm90ZToKPiBIaSwKPgo+IFRoZXJlIHdhcyBzb21lIHRhbGsgb24g
-dGhlIElSQyBjaGFubmVsIGxhc3Qgd2VlayBhYm91dCB0aGUgbmVlZCBmb3IgYQo+IGNvbnRyaWJ1
-dG9yJ3MgZ3VpZGUuIEkgaGF2ZSB3b3JrZWQgb24gYSBxdWljayBmaXJzdCBkcmFmdCB3aGljaCB5
-b3UKPiBtYXkgZmluZCBiZWxvdy4gSWRlYWxseSwgdGhpcyB3b3VsZCBiZSBwb3N0ZWQgb24gdGhl
-IExUVG5nIHdlYnNpdGUuCj4KPiBGZWVkYmFjayB3b3VsZCBiZSBncmVhdGx5IGFwcHJlY2lhdGVk
-Lgo+Cj4gVGhhbmtzLAo+IErDqXLDqW1pZQo+Cj4KPiAqKiogQ29udHJpYnV0b3IncyBndWlkZSAq
-KioKPgo+IEJlaW5nIGFuIG9wZW4gc291cmNlIHByb2plY3QsIHRoZSBMVFRuZyBwcm9qZWN0IHdl
-bGNvbWVzIGNvbnRyaWJ1dGlvbnMKPiBmcm9tIGV2ZXJ5b25lLgo+IFRoaXMgZ3VpZGUgd2lsbCB3
-YWxrIHlvdSB0aHJvdWdoIHRoZSBwcm9jZXNzIG9mIGNvbnRyaWJ1dGluZyBhIHBhdGNoIHRvIExU
-VG5nLgo+Cj4gR2V0dGluZyB0aGUgc291cmNlIGNvZGUKPiAtLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LQo+Cj4gVGhlIExUVG5nIHByb2plY3QgdXNlcyBHaXQgZm9yIHNvdXJjZSBjb250cm9sLiBIb3cg
-dG8gdXNlIEdpdCBpcwo+IGJleW9uZCB0aGUgc2NvcGUgb2YgdGhpcyBndWlkZSwgYnV0IGl0cyBv
-ZmZpY2lhbCB3ZWJzaXRlWzFdIHByb3ZpZGVzCj4gbWFueSBncmVhdCB0dXRvcmlhbHMuCj4gUGxl
-YXNlIHJlZmVyIHRvIHRoZSBkb3dubG9hZFsyXSBwYWdlIGZvciBsaW5rcyB0byBMVFRuZydzIEdp
-dCByZXBvc2l0b3JpZXMuCj4KPiBGaXhlcyBhbmQgZmVhdHVyZXMgc2hvdWxkIGdlbmVyYWxseSBi
-ZSBkZXZlbG9wZWQgYWdhaW5zdCB0aGUgbWFzdGVyCj4gYnJhbmNoLiBJZiB5b3UgaW50ZW5kIG9u
-IHN1Ym1pdHRpbmcgYSBwYXRjaCB0aGF0IGFkZHJlc3NlcyBhbiBpc3N1ZSBpbgo+IGEgc3BlY2lm
-aWMgc3RhYmxlIGJyYW5jaCBvciBhIGRldmVsb3BtZW50IGJyYW5jaCwgbWFrZSBzdXJlIHlvdQo+
-IG1lbnRpb24gaXQgaW4gdGhlIGNvbW1pdCdzIGRlc2NyaXB0aW9uIG9yIHRoZSBzdWJqZWN0IHBy
-ZWZpeC4KPgo+IENvZGluZyBzdGFuZGFyZAo+IC0tLS0tLS0tLS0tLS0KPgo+IExUVG5nIHVzZXMg
-dGhlIExpbnV4IGtlcm5lbCBjb2Rpbmcgc3R5bGVbM10gd2l0aCBvbmUgYWRkaXRpb246IHNpbmds
-ZQo+IGxpbmUgaWYtc3RhdGVtZW50cyBtdXN0IGJlIHdyYXBwZWQgaW4gYnJhY2VzLgo+Cj4gQWx0
-aG91Z2ggdGhlIExUVG5nIGNvZGUgYmFzZSBpcyBwcmltYXJpbHkgd3JpdHRlbiBpbiBDLCBpdCBk
-b2VzCj4gY29udGFpbiBQZXJsLCBQeXRob24gYW5kIEphdmEgY29kZS4gVGhlcmUgYXJlIG5vIG9m
-ZmljaWFsIGNvZGluZwo+IHN0YW5kYXJkcyBmb3IgdGhlc2UgbGFuZ3VhZ2VzLiBIb3dldmVyLCB1
-c2luZyBhIHN0eWxlIGNvbnNpc3RlbnQgd2l0aAo+IHRoZSByZXN0IG9mIHRoZSBjb2RlIHdyaXR0
-ZW4gaW4gdGhhdCBsYW5ndWFnZSBpcyBzdHJvbmdseSBlbmNvdXJhZ2VkLgo+Cj4gQ3JlYXRpbmcg
-YW5kIHNlbmRpbmcgYSBwYXRjaAo+IC0tLS0tLS0tLS0tLS0KPgo+IExUVG5nJ3MgZGV2ZWxvcG1l
-bnQgZmxvdyBpcyBwcmltYXJpbHkgZS1tYWlsIGJhc2VkLiBMaWtlIGEgbG90IG9mIG9wZW4KPiBz
-b3VyY2UgcHJvamVjdHMsIHBhdGNoZXMgYXJlIHN1Ym1pdHRlZCBhbmQgcmV2aWV3ZWQgb24gdGhl
-IHByb2plY3Qncwo+IG1haWxpbmcgbGlzdCAobHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZykuIFRo
-aXMgbGlzdCBpcyBhbHNvIHVzZWQgdG8KPiBzaGFyZSBhbmQgY29tbWVudCBvbiBSRkNzIGFuZCBh
-bnN3ZXIgdXNlcnMnIHF1ZXN0aW9ucy4KPgo+IFRvIG1ha2UgcGF0Y2ggbWFuYWdlbWVudCBhbmQg
-cmV2aWV3cyBhcyBwYWlubGVzcyBhcyBwb3NzaWJsZSwgd2UKPiBlbmNvdXJhZ2UgY29udHJpYnV0
-b3JzIHRvIGZvbGxvdyBhIHVuaWZvcm0gcGF0Y2ggc3VibWlzc2lvbiBwcm9jZXNzLgo+Cj4gT25j
-ZSB5b3VyIGNoYW5nZXMgaGF2ZSBiZWVuIGNvbW1pdHRlZCB0byB5b3VyIGxvY2FsIGJyYW5jaCwg
-dXNlIEdpdCdzCj4gZm9ybWF0LXBhdGNoIGNvbW1hbmQgdG8gZ2VuZXJhdGUgYSBwYXRjaCBmaWxl
-LiBUaGUgZm9sbG93aW5nIGNvbW1hbmQKPiBsaW5lIHdpbGwgZ2VuZXJhdGUgYSBwYXRjaCBmcm9t
-IHRoZSBsYXRlc3QgY29tbWl0OiBnaXQgZm9ybWF0LXBhdGNoCj4gLU4xIC1zIC0tc3ViamVjdC1w
-cmVmaXg9IlBBVENIIHByb2plY3RfbmFtZSIKPgo+IFRoZSBwYXRjaCdzIHN1YmplY3QgKHRoZSBj
-b21taXQgbWVzc2FnZSdzIGZpcnN0IGxpbmUpIHNob3VsZCBiZQo+IHdyaXR0ZW4gaW4gdGhlIHBy
-ZXNlbnQgdGVuc2UgYW5kIG5vdCBleGNlZWQgNzIgY2hhcmFjdGVycyBpbiBsZW5ndGguCj4KPiBU
-aGUgY29tbWl0IG1lc3NhZ2UncyBib2R5IHNob3VsZCBiZSBhcyBkZXRhaWxlZCBhcyBwb3NzaWJs
-ZSBhbmQKPiBleHBsYWluIHRoZSByZWFzb25zIGJlaGluZCB0aGUgcHJvcG9zZWQgY2hhbmdlLiBB
-bnkgcmVsYXRlZCBidWcKPiByZXBvcnQocykgc2hvdWxkIGJlIG1lbnRpb25lZCBhdCB0aGUgZW5k
-IG9mIHRoZSBtZXNzYWdlLgo+Cj4gVGhlIGx0dG5nLXRvb2xzIHByb2plY3QgcHJvdmlkZXMgYSBz
-Y3JpcHQgKGNoZWNrcGF0Y2gucGwpIGFzIHBhcnQgb2YKPiB0aGUgImV4dHJhcyIgdGhhdCBwZXJm
-b3JtcyBhIG51bWJlciBvZiBjaGVja3Mgb24gYSBwYXRjaCB0byBlbnN1cmUgaXQKPiBpcyByZWFk
-eSBmb3Igc3VibWlzc2lvbi4gUnVuIHRoaXMgc2NyaXB0IG9uIHlvdXIgcGF0Y2ggYW5kIGNvcnJl
-Y3QgYW55Cj4gcmVwb3J0ZWQgZXJyb3JzIGJlZm9yZSBwb3N0aW5nIGl0IHRvIHRoZSBtYWlsaW5n
-IGxpc3QuCj4KPiBZb3UgbWF5IGZpbmQgYW4gZXhhbXBsZSBvZiBhIHBhdGNoIHN1aXRhYmxlIGZv
-ciBzdWJtaXNzaW9uIGhlcmVbNF0uCj4KPiBOb3RlIHRoYXQgcGF0Y2hlcyBzaG91bGQgYmUgYXMg
-Zm9jdXNlZCBhcyBwb3NzaWJsZS4gRG8gbm90LCBmb3IKPiBpbnN0YW5jZSwgZml4IGEgYnVnIGFu
-ZCBjb3JyZWN0IHRoZSBpbmRlbnRhdGlvbiBvZiBhbiB1bnJlbGF0ZWQgYmxvY2sKPiBvZiBjb2Rl
-IGFzIHBhcnQgb2YgdGhlIHNhbWUgcGF0Y2guCj4KPiBPbmNlIHlvdSBhcmUgY29uZmlkZW50IHlv
-dXIgcGF0Y2ggbWVldHMgdGhlIHJlcXVpcmVkIGd1aWRlIGxpbmVzLCB5b3UKPiBtYXkgdXNlIEdp
-dCdzIHNlbmQtZW1haWwgY29tbWFuZCB0byBzZW5kIHlvdXIgcGF0Y2ggb24gdGhlIG1haWxpbmcK
-PiBsaXN0LiBNYWtlIHN1cmUgeW91IGFyZSBzdWJzY3JpYmVkWzVdIHRvIHRoZSBtYWlsaW5nIGxp
-c3QgdG8gZm9sbG93Cj4gYW5kIHRha2UgcGFydCBpbiBkaXNjdXNzaW9ucyBhYm91dCB5b3VyIGNo
-YW5nZXMuCj4KPiBZb3UgbWF5IGpvaW4gdGhlIGZpbGUgdG8gYW4gZS1tYWlsIGFzIGFuIGF0dGFj
-aG1lbnQgaWYgeW91IGNhbid0IHNlbmQKPiB0aGUgcGF0Y2ggZGlyZWN0bHkgdXNpbmcgc2VuZC1l
-bWFpbC4KPgo+IFJldmlld3MKPiAtLS0tLS0tLS0tLS0tCj4KPiBPbmNlIHlvdXIgcGF0Y2ggaGFz
-IGJlZW4gcG9zdGVkIHRvIHRoZSBtYWlsaW5nIGxpc3QsIG90aGVyCj4gY29udHJpYnV0b3JzIG1h
-eSBwcm9wb3NlIG1vZGlmaWNhdGlvbnMgdG8geW91ciBwYXRjaC4gVGhpcyBpcwo+IGNvbXBsZXRl
-bHkgbm9ybWFsLiBUaGlzIGNvbGxhYm9yYXRpdmUgY29kZSByZXZpZXcgaXMgYW4gaW50ZWdyYWwg
-cGFydAo+IG9mIG91ciBkZXZlbG9wbWVudCBwcm9jZXNzLgo+Cj4gS2VlcCBpbiBtaW5kIHRoYXQg
-cmV2aWV3aW5nIHBhdGNoZXMgaXMgYSB0aW1lLWNvbnN1bWluZyBwcm9jZXNzIGFuZCwKPiBhcyBz
-dWNoLCBtYXkgbm90IGJlIGRvbmUgcmlnaHQgYXdheS4gVGhlIGRlbGF5cyBtYXkgYmUgYWZmZWN0
-ZWQgYnkgdGhlCj4gY3VycmVudCByZWxlYXNlIGN5Y2xlIHBoYXNlIGFuZCB0aGUgY29tcGxleGl0
-eSBvZiB0aGUgcHJvcG9zZWQKPiBjaGFuZ2VzLiBJZiB5b3UgdGhpbmsgeW91ciBwYXRjaCBtaWdo
-dCBoYXZlIGJlZW4gZm9yZ290dGVuLCBwbGVhc2UKPiBtZW50aW9uIGl0IG9uIHRoZSAjbHR0bmdb
-Nl0gSVJDIGNoYW5uZWwgcmF0aGVyIHRoYW4gcmVzdWJtaXR0aW5nLgo+Cj4gUmVsZWFzZSBjeWNs
-ZQo+IC0tLS0tLS0tLS0tLS0KPgo+IFRoZSBMVFRuZyBwcm9qZWN0IGZvbGxvd3MgYSByZWxlYXNl
-IGN5Y2xlIHRoYXQgYWx0ZXJuYXRlcyBiZXR3ZWVuCj4gZGV2ZWxvcG1lbnQgYW5kIHJlbGVhc2Ug
-Y2FuZGlkYXRlIChSQykgcGhhc2VzLiBUaGUgbWFzdGVyIGJyYW5jaCBpcwo+IGZlYXR1cmUtZnJv
-emVuIGR1cmluZyBSQyBwaGFzZXM7IG9ubHkgYnVnIGZpeGVzIHdpbGwgYmUgYWNjZXB0ZWQKPiBk
-dXJpbmcgdGhpcyBwZXJpb2QuIEhvd2V2ZXIsIHBhdGNoZXMgYWRkaW5nIG5ldyBmdW5jdGlvbmFs
-aXR5IG1heQo+IHN0aWxsIGJlIHN1Ym1pdHRlZCBhbmQgcmV2aWV3ZWQgZHVyaW5nIHRoZSBSQy4K
-PiBUaGUgdXBjb21pbmcgZmVhdHVyZXMgYW5kIHJlbGVhc2UgZGF0ZXMgYXJlIGFubm91bmNlZCBp
-biBhIG1vbnRobHkKPiBkaWdlc3QgcG9zdGVkIG9uIHRoZSBtYWlsaW5nIGxpc3QuCj4KPgo+IFsx
-XSBodHRwOi8vZ2l0LXNjbS5jb20KPiBbMl0gaHR0cDovL2x0dG5nLm9yZy9kb3dubG9hZAo+IFsz
-XSBodHRwOi8vd3d3Lmtlcm5lbC5vcmcvZG9jL0RvY3VtZW50YXRpb24vQ29kaW5nU3R5bGUKPiBb
-NF0gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9waXBlcm1haWwvbHR0bmctZGV2LzIwMTMtSnVuZS8w
-MjA1NzQuaHRtbAo+IFs1XSBodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9s
-aXN0aW5mby9sdHRuZy1kZXYKPiBbNl0gaXJjOi8vaXJjLm9mdGMubmV0L2x0dG5nCj4KPiAtLQo+
-IErDqXLDqW1pZSBHYWxhcm5lYXUKPiBFZmZpY2lPUyBJbmMuCj4gaHR0cDovL3d3dy5lZmZpY2lv
-cy5jb20KPgo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-Cj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBo
-dHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRl
-diBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+On Mon, Aug 26, 2013 at 1:48 PM, David Goulet <dgoulet@efficios.com> wrote:
+>
+>
+> J=E9r=E9mie Galarneau:
+>> Hi,
+>>
+>> There was some talk on the IRC channel last week about the need for a
+>> contributor's guide. I have worked on a quick first draft which you
+>> may find below. Ideally, this would be posted on the LTTng website.
+>>
+>> Feedback would be greatly appreciated.
+>>
+>> Thanks,
+>> J=E9r=E9mie
+>>
+>>
+>> *** Contributor's guide ***
+>>
+>> Being an open source project, the LTTng project welcomes contributions
+>> from everyone.
+>> This guide will walk you through the process of contributing a patch to =
+LTTng.
+>>
+>> Getting the source code
+>> -----------------------
+>>
+>> The LTTng project uses Git for source control. How to use Git is
+>> beyond the scope of this guide, but its official website[1] provides
+>> many great tutorials.
+>> Please refer to the download[2] page for links to LTTng's Git repositori=
+es.
+>>
+>> Fixes and features should generally be developed against the master
+>> branch. If you intend on submitting a patch that addresses an issue in
+>> a specific stable branch or a development branch, make sure you
+>> mention it in the commit's description or the subject prefix.
+>>
+>> Coding standard
+>> -------------
+>>
+>> LTTng uses the Linux kernel coding style[3] with one addition: single
+>> line if-statements must be wrapped in braces.
+>>
+>> Although the LTTng code base is primarily written in C, it does
+>> contain Perl, Python and Java code. There are no official coding
+>> standards for these languages. However, using a style consistent with
+>> the rest of the code written in that language is strongly encouraged.
+>
+> Hmmm, for lttng-tools there is a CodingStyle file in the source repositor=
+y that
+> should be used that includes more than just the if-statement wrapping.
+
+Absolutely and as far as I know, it applies to the other projects as
+well. Thanks for mentioning it.
+
+Also, I just noticed the CodingStyle file refers to the
+scripts/checkpatch.pl in the kernel tree. Perhaps it should point to
+the version Christian modified in extras?
+
+Regards,
+J=E9r=E9mie
+
+>
+> Thanks
+> David
+>
+>>
+>> Creating and sending a patch
+>> -------------
+>>
+>> LTTng's development flow is primarily e-mail based. Like a lot of open
+>> source projects, patches are submitted and reviewed on the project's
+>> mailing list (lttng-dev@lists.lttng.org). This list is also used to
+>> share and comment on RFCs and answer users' questions.
+>>
+>> To make patch management and reviews as painless as possible, we
+>> encourage contributors to follow a uniform patch submission process.
+>>
+>> Once your changes have been committed to your local branch, use Git's
+>> format-patch command to generate a patch file. The following command
+>> line will generate a patch from the latest commit: git format-patch
+>> -N1 -s --subject-prefix=3D"PATCH project_name"
+>>
+>> The patch's subject (the commit message's first line) should be
+>> written in the present tense and not exceed 72 characters in length.
+>>
+>> The commit message's body should be as detailed as possible and
+>> explain the reasons behind the proposed change. Any related bug
+>> report(s) should be mentioned at the end of the message.
+>>
+>> The lttng-tools project provides a script (checkpatch.pl) as part of
+>> the "extras" that performs a number of checks on a patch to ensure it
+>> is ready for submission. Run this script on your patch and correct any
+>> reported errors before posting it to the mailing list.
+>>
+>> You may find an example of a patch suitable for submission here[4].
+>>
+>> Note that patches should be as focused as possible. Do not, for
+>> instance, fix a bug and correct the indentation of an unrelated block
+>> of code as part of the same patch.
+>>
+>> Once you are confident your patch meets the required guide lines, you
+>> may use Git's send-email command to send your patch on the mailing
+>> list. Make sure you are subscribed[5] to the mailing list to follow
+>> and take part in discussions about your changes.
+>>
+>> You may join the file to an e-mail as an attachment if you can't send
+>> the patch directly using send-email.
+>>
+>> Reviews
+>> -------------
+>>
+>> Once your patch has been posted to the mailing list, other
+>> contributors may propose modifications to your patch. This is
+>> completely normal. This collaborative code review is an integral part
+>> of our development process.
+>>
+>> Keep in mind that reviewing patches is a time-consuming process and,
+>> as such, may not be done right away. The delays may be affected by the
+>> current release cycle phase and the complexity of the proposed
+>> changes. If you think your patch might have been forgotten, please
+>> mention it on the #lttng[6] IRC channel rather than resubmitting.
+>>
+>> Release cycle
+>> -------------
+>>
+>> The LTTng project follows a release cycle that alternates between
+>> development and release candidate (RC) phases. The master branch is
+>> feature-frozen during RC phases; only bug fixes will be accepted
+>> during this period. However, patches adding new functionality may
+>> still be submitted and reviewed during the RC.
+>> The upcoming features and release dates are announced in a monthly
+>> digest posted on the mailing list.
+>>
+>>
+>> [1] http://git-scm.com
+>> [2] http://lttng.org/download
+>> [3] http://www.kernel.org/doc/Documentation/CodingStyle
+>> [4] http://lists.lttng.org/pipermail/lttng-dev/2013-June/020574.html
+>> [5] http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>> [6] irc://irc.oftc.net/lttng
+>>
+
+
+
+-- =
+
+J=E9r=E9mie Galarneau
+EfficiOS Inc.
+http://www.efficios.com
