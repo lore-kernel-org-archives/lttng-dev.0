@@ -1,26 +1,18 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [LTTNG][LTTng-ust] "Out of system" building	patches.
-Date: Mon, 26 Aug 2013 11:19:17 -0400
-Message-ID: <20130826151917.GA16924__16681.7716359676$1377530421$gmane$org@Krystal>
-References: <1377160051-12449-1-git-send-email-jimmy.durand.wesolowski@gmail.com>
-	<20130822125523.GB26852@Krystal>
-	<CAMaFG-3HCsKngNE1cNv9PfCFuhnHwsON=T-q084ZjD+1Aj2Zqg@mail.gmail.com>
-	<20130824175909.GA12409@Krystal>
-	<CAMaFG-2cJ+uGdwC5hHMBHUs+HBciaPXtYQ6YAkwan5bL9O=9Og@mail.gmail.com>
-	<CAD7SSK7_sNYZE5knPEJuJwnj+OXmpcXg1EGGThnT4HW5+s5+KQ@mail.gmail.com>
-	<20130826162407.1996f085@skate> <20130826151147.GA16659@Krystal>
-	<CAD7SSK6FBSEyAzdAmq0Wfr8xyDt6vF9Na6TVdQh_GEUtqqPa6A@mail.gmail.com>
+From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: [REVIEW REQUEST babeltrace] Provide generic event
+ payload accessors to the Python bindings
+Date: Mon, 26 Aug 2013 11:23:47 -0400
+Message-ID: <CA+jJMxvw6sK3GVadKw2jt8mpciwV8Ts-A441wFJiesEbadj0Sg__40069.2936884754$1377530686$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from mail-wi0-f172.google.com ([209.85.212.172])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1VDyZa-0006sc-QF
-	for lttng-dev@lists.lttng.org; Mon, 26 Aug 2013 11:19:24 -0400
-Content-Disposition: inline
-In-Reply-To: <CAD7SSK6FBSEyAzdAmq0Wfr8xyDt6vF9Na6TVdQh_GEUtqqPa6A@mail.gmail.com>
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1VDye2-00075d-0j
+	for lttng-dev@lists.lttng.org; Mon, 26 Aug 2013 11:23:59 -0400
+Received: by mail-wi0-f172.google.com with SMTP id ex4so1136554wid.11
+	for <lttng-dev@lists.lttng.org>; Mon, 26 Aug 2013 08:23:48 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -29,43 +21,24 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Jimmy Durand Wesolowski <jimmy.durand.wesolowski@gmail.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-* Jimmy Durand Wesolowski (jimmy.durand.wesolowski@gmail.com) wrote:
-> 2013/8/26 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> 
-> > Now I just have to figure out how to teach lttng-gen-tp about CPPFLAGS
-> > :-/
-> >
-> 
-> My patch is correcting this, and the new version does take your
-> comment into account.
+Hi all,
 
-Actually, I just pushed a fix for this into master (I had to test all
-this myself to understand what happens):
+I'd like to submit a review request for commits 34cf520 .. 3c5bb23 of
+my bindings/python branch[1]. These are patches that were originally
+contributed by Xiaona Han, that I have reviewed and to which I have
+made minor changes (fixed typos and clarified some commit messages).
 
-commit 9ec23f2e52b3b0bd8b80afbe2e8e8ae1ab222c6b
-Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Date:   Mon Aug 26 11:14:56 2013 -0400
+Thanks,
+J=E9r=E9mie
 
-    Fix: doc/examples cross-build
-    
-    We need to pass automake's CPPFLAGS and LDFLAGS to examples. Add CFLAGS
-    too for completeness.
-    
-    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+[1] git://github.com/jgalar/babeltrace.git -b bindings/python
+Web: https://github.com/jgalar/babeltrace/tree/bindings/python
 
-We still have issues with lttng-gen-tp though: I'm looking for a way to
-change its Makefile so it adds "AM_CPPFLAGS" to the CFLAGS passed to the
-compiler. Ideas ?
+-- =
 
-Thanks for pointing out this issue,
-
-Mathieu
-
--- 
-Mathieu Desnoyers
+J=E9r=E9mie Galarneau
 EfficiOS Inc.
 http://www.efficios.com
