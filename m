@@ -1,234 +1,97 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [RFC] LTTng Contributor's guide
-Date: Mon, 26 Aug 2013 14:48:57 -0400
-Message-ID: <20130826184857.GA19364__28883.2924714827$1377542995$gmane$org@Krystal>
-References: <CA+jJMxt2AB1MdARo3suHGgnvJmBL-No-YpTWZWQeMfqFUADOtw@mail.gmail.com>
+From: Mike Day <ncmike@ncultra.org>
+Subject: Re: [RFC PATCH] Introduce RCU-enabled DQs (v2)
+Date: Mon, 26 Aug 2013 17:48:12 -0400
+Message-ID: <CAGaKXu1V5Cz+9b=v=HEt2kn=2sJiD+ORm_9SyB7v35zNXWWUOw@mail.gmail.com>
+References: <1377371209-2017-1-git-send-email-ncmike@ncultra.org>
+	<20130825191835.GA1073@Krystal>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
-	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1VE1qV-0007k5-AW
-	for lttng-dev@lists.lttng.org; Mon, 26 Aug 2013 14:49:05 -0400
-Content-Disposition: inline
-In-Reply-To: <CA+jJMxt2AB1MdARo3suHGgnvJmBL-No-YpTWZWQeMfqFUADOtw@mail.gmail.com>
-List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
-	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
-	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+Content-Type: multipart/alternative; boundary=089e0149d0ac88833204e4e0b696
+Return-path: <qemu-devel-bounces+gceq-qemu-devel=gmane.org@nongnu.org>
+In-Reply-To: <20130825191835.GA1073@Krystal>
+List-Unsubscribe: <https://lists.nongnu.org/mailman/options/qemu-devel>,
+	<mailto:qemu-devel-request@nongnu.org?subject=unsubscribe>
+List-Archive: <http://lists.nongnu.org/archive/html/qemu-devel>
+List-Post: <mailto:qemu-devel@nongnu.org>
+List-Help: <mailto:qemu-devel-request@nongnu.org?subject=help>
+List-Subscribe: <https://lists.nongnu.org/mailman/listinfo/qemu-devel>,
+	<mailto:qemu-devel-request@nongnu.org?subject=subscribe>
+Errors-To: qemu-devel-bounces+gceq-qemu-devel=gmane.org@nongnu.org
+Sender: qemu-devel-bounces+gceq-qemu-devel=gmane.org@nongnu.org
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: rp@svcs.cs.pdx.edu, qemu-devel@nongnu.org, lttng-dev@lists.lttng.org, Anthony Liguori <anthony@codemonkey.ws>, Paolo Bonzini <pbonzini@redhat.com>, Paul Mckenney <paulmck@linux.vnet.ibm.com>
 List-Id: lttng-dev@lists.lttng.org
 
-* J=E9r=E9mie Galarneau (jeremie.galarneau@efficios.com) wrote:
-> Hi,
-> =
+--089e0149d0ac88833204e4e0b696
+Content-Type: text/plain; charset=ISO-8859-1
 
-> There was some talk on the IRC channel last week about the need for a
-> contributor's guide. I have worked on a quick first draft which you
-> may find below. Ideally, this would be posted on the LTTng website.
-> =
+On Sun, Aug 25, 2013 at 3:18 PM, Mathieu Desnoyers <
+mathieu.desnoyers@efficios.com> wrote:
+>
+> I'm not very comfortable with your DQ implementation not providing any
+> kind of guarantee to a forward traversal followed by backward traversal,
+> nor for backward followed by forward traversal. If a list add is
+> executed concurrently with traversals, and we can ensure there are no
+> list del of the node, if a traversal sees the added node when doing
+> forward iteration, I would clearly expect to still see it if a backward
+> iteration follows.
+>
+> I took the liberty of implementing a couple of ideas I had to provide
+> a RCU DQ with those guarantees. I just pushed the code here (beware, I
+> just did some basic single-threaded unit tests so far, so consider this
+> code as largely untested concurrency-wise):
+>
+>   git clone git://git.urcu.io/urcu.git
+>   branch: rcudq
+>   file: urcu/rcudq.h
+>
+> Direct link to the file via gitweb:
+>
+http://git.lttng.org/?p=userspace-rcu.git;a=blob;f=urcu/rcudq.h;h=4a8d7b0d5143a958514cf130b1c124d99f3194ca;hb=refs/heads/rcudq
 
-> Feedback would be greatly appreciated.
+Mathieu - Thanks for the review! And thanks for the code, I'm working with
+it right now. I like the idea of using a flag to provide a form of
+atomicity for the doubly-linked list elements. I'm also planning on running
+some timing tests to see of the additional memory barriers and atomic
+accesses make *any* difference whatsoever.
 
-It looks great ! A couple of minor comments below,
+Mike
 
-> =
+Mike Day | ncmike@ncultra.org | +1 919 371-8786
 
-> Thanks,
-> J=E9r=E9mie
-> =
+--089e0149d0ac88833204e4e0b696
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
 
-> =
+<div dir=3D"ltr">On Sun, Aug 25, 2013 at 3:18 PM, Mathieu Desnoyers &lt;<a =
+href=3D"mailto:mathieu.desnoyers@efficios.com">mathieu.desnoyers@efficios.c=
+om</a>&gt; wrote:<br>&gt;<br>&gt; I&#39;m not very comfortable with your DQ=
+ implementation not providing any<br>
+&gt; kind of guarantee to a forward traversal followed by backward traversa=
+l,<br>&gt; nor for backward followed by forward traversal. If a list add is=
+<br>&gt; executed concurrently with traversals, and we can ensure there are=
+ no<br>
+&gt; list del of the node, if a traversal sees the added node when doing<br=
+>&gt; forward iteration, I would clearly expect to still see it if a backwa=
+rd<br>&gt; iteration follows.<br>&gt;<br>&gt; I took the liberty of impleme=
+nting a couple of ideas I had to provide<br>
+&gt; a RCU DQ with those guarantees. I just pushed the code here (beware, I=
+<br>&gt; just did some basic single-threaded unit tests so far, so consider=
+ this<br>&gt; code as largely untested concurrency-wise):<br>&gt;<br>&gt; =
+=A0 git clone git://<a href=3D"http://git.urcu.io/urcu.git">git.urcu.io/urc=
+u.git</a><br>
+&gt; =A0 branch: rcudq<br>&gt; =A0 file: urcu/rcudq.h<br>&gt;<br>&gt; Direc=
+t link to the file via gitweb:<br>&gt; =A0 <a href=3D"http://git.lttng.org/=
+?p=3Duserspace-rcu.git;a=3Dblob;f=3Durcu/rcudq.h;h=3D4a8d7b0d5143a958514cf1=
+30b1c124d99f3194ca;hb=3Drefs/heads/rcudq">http://git.lttng.org/?p=3Duserspa=
+ce-rcu.git;a=3Dblob;f=3Durcu/rcudq.h;h=3D4a8d7b0d5143a958514cf130b1c124d99f=
+3194ca;hb=3Drefs/heads/rcudq</a><br>
+<br><div style>Mathieu - Thanks for the review! And thanks for the code, I&=
+#39;m working with it right now. I like the idea of using a flag to provide=
+ a form of atomicity for the doubly-linked list elements. I&#39;m also plan=
+ning on running some timing tests to see of the additional memory barriers =
+and atomic accesses make *any* difference whatsoever.=A0</div>
+<div style><br></div><div style>Mike</div><div style><br></div><div style>M=
+ike Day | <a href=3D"mailto:ncmike@ncultra.org">ncmike@ncultra.org</a> | +1=
+ 919 371-8786=A0</div></div>
 
-> *** Contributor's guide ***
-> =
-
-> Being an open source project, the LTTng project welcomes contributions
-> from everyone.
-> This guide will walk you through the process of contributing a patch to L=
-TTng.
-> =
-
-> Getting the source code
-> -----------------------
-> =
-
-> The LTTng project uses Git for source control. How to use Git is
-> beyond the scope of this guide, but its official website[1] provides
-> many great tutorials.
-> Please refer to the download[2] page for links to LTTng's Git repositorie=
-s.
-> =
-
-> Fixes and features should generally be developed against the master
-> branch. If you intend on submitting a patch that addresses an issue in
-> a specific stable branch or a development branch, make sure you
-> mention it in the commit's description or the subject prefix.
-> =
-
-> Coding standard
-> -------------
-> =
-
-> LTTng uses the Linux kernel coding style[3] with one addition: single
-> line if-statements must be wrapped in braces.
-> =
-
-> Although the LTTng code base is primarily written in C, it does
-> contain Perl, Python and Java code. There are no official coding
-> standards for these languages. However, using a style consistent with
-> the rest of the code written in that language is strongly encouraged.
-> =
-
-> Creating and sending a patch
-> -------------
-> =
-
-> LTTng's development flow is primarily e-mail based. Like a lot of open
-> source projects, patches are submitted and reviewed on the project's
-> mailing list (lttng-dev@lists.lttng.org). This list is also used to
-> share and comment on RFCs and answer users' questions.
-> =
-
-> To make patch management and reviews as painless as possible, we
-> encourage contributors to follow a uniform patch submission process.
-> =
-
-> Once your changes have been committed to your local branch, use Git's
-> format-patch command to generate a patch file. The following command
-> line will generate a patch from the latest commit: git format-patch
-> -N1 -s --subject-prefix=3D"PATCH project_name"
-> =
-
-> The patch's subject (the commit message's first line) should be
-> written in the present tense and not exceed 72 characters in length.
-> =
-
-> The commit message's body should be as detailed as possible and
-> explain the reasons behind the proposed change. Any related bug
-> report(s) should be mentioned at the end of the message.
-> =
-
-> The lttng-tools project provides a script (checkpatch.pl) as part of
-> the "extras" that performs a number of checks on a patch to ensure it
-> is ready for submission. Run this script on your patch and correct any
-> reported errors before posting it to the mailing list.
-> =
-
-> You may find an example of a patch suitable for submission here[4].
-> =
-
-> Note that patches should be as focused as possible. Do not, for
-> instance, fix a bug and correct the indentation of an unrelated block
-> of code as part of the same patch.
-
-We should also point out that patches should focus on a single "logical"
-change at a time. The basic questions to think about whenever choosing
-how to split changes into separate patches is:
-- making sure that each patch build on its own (bissectability),
-- if the feature needs to be reverted, only the feature should be
-  taken away by a git revert. Not, e.g., cleanups, nor unrelated
-  fixes.
-
-We might also want to point out a set of testing guide lines before
-submitting. e.g.
-
-build
-make check
-
-and also VPATH build, as well as make dist testing if the patch touches
-automake files (for instance).
-
-> =
-
-> Once you are confident your patch meets the required guide lines, you
-> may use Git's send-email command to send your patch on the mailing
-> list. Make sure you are subscribed[5] to the mailing list to follow
-> and take part in discussions about your changes.
-> =
-
-> You may join the file to an e-mail as an attachment if you can't send
-> the patch directly using send-email.
-> =
-
-> Reviews
-> -------------
-> =
-
-> Once your patch has been posted to the mailing list, other
-> contributors may propose modifications to your patch. This is
-> completely normal. This collaborative code review is an integral part
-> of our development process.
-> =
-
-> Keep in mind that reviewing patches is a time-consuming process and,
-> as such, may not be done right away. The delays may be affected by the
-> current release cycle phase and the complexity of the proposed
-> changes. If you think your patch might have been forgotten, please
-> mention it on the #lttng[6] IRC channel rather than resubmitting.
-> =
-
-> Release cycle
-> -------------
-> =
-
-> The LTTng project follows a release cycle that alternates between
-> development and release candidate (RC) phases. The master branch is
-> feature-frozen during RC phases; only bug fixes will be accepted
-> during this period. However, patches adding new functionality may
-> still be submitted and reviewed during the RC.
-
-We should point out that when a feature patch submitted for review
-(during a rc) is considered acceptable, the
-
-Acked-by
-
-tag will be given by maintainers. It should be added to the patch
-changelog for resubmission. However, if the patch needs to be changed
-compared to the ack'd version when resubmitted at the end of the release
-candidate cycle, the acked-by tag should be removed, and a description
-of the changes since the acked version should be written in the
-changelog.
-
-Thanks,
-
-Mathieu
-
-> The upcoming features and release dates are announced in a monthly
-> digest posted on the mailing list.
-> =
-
-> =
-
-> [1] http://git-scm.com
-> [2] http://lttng.org/download
-> [3] http://www.kernel.org/doc/Documentation/CodingStyle
-> [4] http://lists.lttng.org/pipermail/lttng-dev/2013-June/020574.html
-> [5] http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> [6] irc://irc.oftc.net/lttng
-> =
-
-> -- =
-
-> J=E9r=E9mie Galarneau
-> EfficiOS Inc.
-> http://www.efficios.com
-> =
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- =
-
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+--089e0149d0ac88833204e4e0b696--
