@@ -1,27 +1,20 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [LTTNG][LTTng-ust] "Out of system" building	patches.
-Date: Mon, 26 Aug 2013 11:27:59 -0400
-Message-ID: <20130826152759.GA17057__41210.1154136055$1377530934$gmane$org@Krystal>
-References: <1377160051-12449-1-git-send-email-jimmy.durand.wesolowski@gmail.com>
-	<20130822125523.GB26852@Krystal>
-	<CAMaFG-3HCsKngNE1cNv9PfCFuhnHwsON=T-q084ZjD+1Aj2Zqg@mail.gmail.com>
-	<20130824175909.GA12409@Krystal>
-	<CAMaFG-2cJ+uGdwC5hHMBHUs+HBciaPXtYQ6YAkwan5bL9O=9Og@mail.gmail.com>
-	<CAD7SSK7_sNYZE5knPEJuJwnj+OXmpcXg1EGGThnT4HW5+s5+KQ@mail.gmail.com>
-	<20130826162407.1996f085@skate> <20130826151147.GA16659@Krystal>
-	<CAD7SSK6FBSEyAzdAmq0Wfr8xyDt6vF9Na6TVdQh_GEUtqqPa6A@mail.gmail.com>
-	<20130826151917.GA16924@Krystal>
+Subject: Re: [REVIEW REQUEST babeltrace] Provide generic
+	event	payload accessors to the Python bindings
+Date: Mon, 26 Aug 2013 11:48:55 -0400
+Message-ID: <20130826154855.GA17119__29352.9080380269$1377532192$gmane$org@Krystal>
+References: <CA+jJMxvw6sK3GVadKw2jt8mpciwV8Ts-A441wFJiesEbadj0Sg@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1VDyi0-0007Hj-OS
-	for lttng-dev@lists.lttng.org; Mon, 26 Aug 2013 11:28:06 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1VDz2H-0008BA-6S
+	for lttng-dev@lists.lttng.org; Mon, 26 Aug 2013 11:49:02 -0400
 Content-Disposition: inline
-In-Reply-To: <20130826151917.GA16924@Krystal>
+In-Reply-To: <CA+jJMxvw6sK3GVadKw2jt8mpciwV8Ts-A441wFJiesEbadj0Sg@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -30,64 +23,89 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Jimmy Durand Wesolowski <jimmy.durand.wesolowski@gmail.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-* Mathieu Desnoyers (mathieu.desnoyers@efficios.com) wrote:
-> * Jimmy Durand Wesolowski (jimmy.durand.wesolowski@gmail.com) wrote:
-> > 2013/8/26 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> > 
-> > > Now I just have to figure out how to teach lttng-gen-tp about CPPFLAGS
-> > > :-/
-> > >
-> > 
-> > My patch is correcting this, and the new version does take your
-> > comment into account.
-> 
-> Actually, I just pushed a fix for this into master (I had to test all
-> this myself to understand what happens):
-> 
-> commit 9ec23f2e52b3b0bd8b80afbe2e8e8ae1ab222c6b
-> Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> Date:   Mon Aug 26 11:14:56 2013 -0400
-> 
->     Fix: doc/examples cross-build
->     
->     We need to pass automake's CPPFLAGS and LDFLAGS to examples. Add CFLAGS
->     too for completeness.
->     
->     Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> 
-> We still have issues with lttng-gen-tp though: I'm looking for a way to
-> change its Makefile so it adds "AM_CPPFLAGS" to the CFLAGS passed to the
-> compiler. Ideas ?
+* J=E9r=E9mie Galarneau (jeremie.galarneau@efficios.com) wrote:
+> Hi all,
+> =
 
-I got it to work. See those commits in master:
+> I'd like to submit a review request for commits 34cf520 .. 3c5bb23 of
+> my bindings/python branch[1]. These are patches that were originally
+> contributed by Xiaona Han, that I have reviewed and to which I have
+> made minor changes (fixed typos and clarified some commit messages).
 
-commit 256175cffb00b15543bd49a4268e6c528bd51fce
-Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Date:   Mon Aug 26 11:26:09 2013 -0400
+Some comments:
 
-    doc/examples/gen-tp: pass automake CPPFLAGS/CFLAGS/LDFLAGS
-    
-    Fix cross-build.
-    
-    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+I notice e.g. in commit
+34cf520df2f1df84a74a495a6f9a8d991f168c2e
+Return event fields by field name
 
-commit 170423b056ecdef441820a54be350605e4dc8951
-Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Date:   Mon Aug 26 11:24:26 2013 -0400
+that the changelog appears to be really wide. In "git show", it goes
+beyond a 80-col screen. Please ensure that those changelogs are max 72
+lines in length, to make it easier to look at them in git show, and also
+to facilitate patch review, where they can easily become indented in
+reply messages,
 
-    tools/lttng-gen-tp: honor CPPFLAGS and LDFLAGS
-    
-    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+6002606 Remove the unnecessary underscore prefix
+looks OK.
+
+fb0936d Support getting the value of enums
+looks OK.
+
+
+fb0ecd1c138a0b903090521406d239cf68b7e5e1
+Use a unique name to get a field's value
+
++                       if id =3D=3D ctf.type_id.ARRAY:
++                               return self.get_char_array()
+
+I not sure if it is already checked somewhere, but if we have an array
+of e.g. uint64_t elements (not characters), is it OK to return a char
+array ?
+
+I'd be tempted to return a char array only if the encoding is ASCII or
+UTF8, and only if the array contains 8-bit characters. But maybe this is
+validated elsewhere ?
+
+5891c4d Support for the sequence type
+looks OK
+
+3c5bb23 Add a python bindings sequence test
+looks OK
 
 Thanks,
 
 Mathieu
 
--- 
+
+
+
+> =
+
+> Thanks,
+> J=E9r=E9mie
+> =
+
+> [1] git://github.com/jgalar/babeltrace.git -b bindings/python
+> Web: https://github.com/jgalar/babeltrace/tree/bindings/python
+> =
+
+> -- =
+
+> J=E9r=E9mie Galarneau
+> EfficiOS Inc.
+> http://www.efficios.com
+> =
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- =
+
 Mathieu Desnoyers
 EfficiOS Inc.
 http://www.efficios.com
