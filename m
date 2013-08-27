@@ -1,8 +1,9 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Subject: [PATCH lttng-tools] Fix: hash table growth (for small
-	tables)	should be limited
-Date: Tue, 27 Aug 2013 18:01:42 -0400
-Message-ID: <20130827220142.GA13424__37588.4872781627$1377640968$gmane$org@Krystal>
+	tables)	should be limited (v2)
+Date: Tue, 27 Aug 2013 18:11:04 -0400
+Message-ID: <20130827221104.GA13930__16785.7674918652$1377641519$gmane$org@Krystal>
+References: <20130827220142.GA13424@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -10,9 +11,10 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1VERKc-0005Vg-2n
-	for lttng-dev@lists.lttng.org; Tue, 27 Aug 2013 18:01:51 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1VERTd-000641-Jg
+	for lttng-dev@lists.lttng.org; Tue, 27 Aug 2013 18:11:11 -0400
 Content-Disposition: inline
+In-Reply-To: <20130827220142.GA13424@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -40,7 +42,7 @@ keys).
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
 diff --git a/src/common/hashtable/rculfhash.c b/src/common/hashtable/rculfhash.c
-index b430a3d..eeb5c43 100644
+index b430a3d..ebdc4ff 100644
 --- a/src/common/hashtable/rculfhash.c
 +++ b/src/common/hashtable/rculfhash.c
 @@ -726,9 +726,32 @@ void check_resize(struct cds_lfht *ht, unsigned long size, uint32_t chain_len)
@@ -58,7 +60,7 @@ index b430a3d..eeb5c43 100644
 +		 */
 +		growth = cds_lfht_get_count_order_u32(chain_len
 +				- (CHAIN_LEN_TARGET - 1));
-+		if (!(ht->flags & CDS_LFHT_ACCOUNTING)
++		if ((ht->flags & CDS_LFHT_ACCOUNTING)
 +				&& (size << growth) >= (1UL << COUNT_COMMIT_ORDER)) {
 +			/*
 +			 * If ideal growth expands the hash table size
