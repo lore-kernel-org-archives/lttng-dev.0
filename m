@@ -1,9 +1,8 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH lttng-tools] Fix: hash table growth (for small
-	tables)	should be limited (v2)
-Date: Tue, 27 Aug 2013 18:11:04 -0400
-Message-ID: <20130827221104.GA13930__16785.7674918652$1377641519$gmane$org@Krystal>
-References: <20130827220142.GA13424@Krystal>
+Subject: [PATCH urcu] Fix: hash table growth (for small tables)
+	should be	limited
+Date: Tue, 27 Aug 2013 18:18:50 -0400
+Message-ID: <20130827221850.GA14036__15003.6664250822$1377641988$gmane$org@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -11,10 +10,9 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1VERTd-000641-Jg
-	for lttng-dev@lists.lttng.org; Tue, 27 Aug 2013 18:11:11 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1VERb9-0006W9-9N
+	for lttng-dev@lists.lttng.org; Tue, 27 Aug 2013 18:18:57 -0400
 Content-Disposition: inline
-In-Reply-To: <20130827220142.GA13424@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,8 +21,8 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: dgoulet@efficios.com
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org, rp@svcs.cs.pdx.edu
+Cc: Stephen Hemminger <shemminger@vyatta.com>, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Alan Stern <stern@rowland.harvard.edu>
 List-Id: lttng-dev@lists.lttng.org
 
 Buckets with many entries encountered in a hash table could cause it to
@@ -41,11 +39,11 @@ keys).
 
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
-diff --git a/src/common/hashtable/rculfhash.c b/src/common/hashtable/rculfhash.c
-index b430a3d..ebdc4ff 100644
---- a/src/common/hashtable/rculfhash.c
-+++ b/src/common/hashtable/rculfhash.c
-@@ -726,9 +726,32 @@ void check_resize(struct cds_lfht *ht, unsigned long size, uint32_t chain_len)
+diff --git a/rculfhash.c b/rculfhash.c
+index 423609d..283cd2d 100644
+--- a/rculfhash.c
++++ b/rculfhash.c
+@@ -718,9 +718,32 @@ void check_resize(struct cds_lfht *ht, unsigned long size, uint32_t chain_len)
  	if (chain_len > 100)
  		dbg_printf("WARNING: large chain length: %u.\n",
  			   chain_len);
