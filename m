@@ -1,18 +1,18 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: Re: [PATCH lttng-tools] Fix: run_as gid/uid test should
- return result to parent
-Date: Tue, 27 Aug 2013 17:43:10 -0400
-Message-ID: <521D1D6E.7010405__14586.6692685106$1377639857$gmane$org@efficios.com>
-References: <20130827202455.GA12616@Krystal>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [PATCH lttng-tools] Fix: hash table growth (for small
+	tables)	should be limited
+Date: Tue, 27 Aug 2013 18:01:42 -0400
+Message-ID: <20130827220142.GA13424__37588.4872781627$1377640968$gmane$org@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([5.9.158.244])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1VER2k-0004Rm-HD
-	for lttng-dev@lists.lttng.org; Tue, 27 Aug 2013 17:43:24 -0400
-In-Reply-To: <20130827202455.GA12616@Krystal>
+	(envelope-from <compudj@mail.openrapids.net>) id 1VERKc-0005Vg-2n
+	for lttng-dev@lists.lttng.org; Tue, 27 Aug 2013 18:01:51 -0400
+Content-Disposition: inline
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,52 +21,66 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: dgoulet@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Merged!
+Buckets with many entries encountered in a hash table could cause it to
+grow to a large size, beyond the scope for which this mechanism is
+expected to play a role when node accounting is available. Indeed, when
+the hash table grows to larger size, split-counter node accounting is
+expected to deal with resize/shrink rather than relying on an heuristic
+based on the largest bucket size.
 
-David
+This is fixing an issue where we see hash tables sometimes reaching 65k
+entries index (65536*8 = 524288 bytes) for a workload limited to adding
+1000 entries and then removing all of them, done in a loop (random
+keys).
 
-Mathieu Desnoyers:
-> Failure to do so could cause the parent to hang on read() waiting for
-> the return value from the child.
-> 
-> Targets: 2.3-rc and stable-2.2 branches.
->  
-> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> ---
-> diff --git a/src/common/runas.c b/src/common/runas.c
-> index bd51cd4..6979ad3 100644
-> --- a/src/common/runas.c
-> +++ b/src/common/runas.c
-> @@ -130,14 +130,16 @@ int child_run_as(void *_data)
->  		ret = setegid(data->gid);
->  		if (ret < 0) {
->  			PERROR("setegid");
-> -			return EXIT_FAILURE;
-> +			sendret.i = -1;
-> +			goto write_return;
->  		}
->  	}
->  	if (data->uid != geteuid()) {
->  		ret = seteuid(data->uid);
->  		if (ret < 0) {
->  			PERROR("seteuid");
-> -			return EXIT_FAILURE;
-> +			sendret.i = -1;
-> +			goto write_return;
->  		}
->  	}
->  	/*
-> @@ -145,6 +147,8 @@ int child_run_as(void *_data)
->  	 */
->  	umask(0);
->  	sendret.i = (*data->cmd)(data->data);
-> +
-> +write_return:
->  	/* send back return value */
->  	writeleft = sizeof(sendret);
->  	index = 0;
-> 
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+---
+diff --git a/src/common/hashtable/rculfhash.c b/src/common/hashtable/rculfhash.c
+index b430a3d..eeb5c43 100644
+--- a/src/common/hashtable/rculfhash.c
++++ b/src/common/hashtable/rculfhash.c
+@@ -726,9 +726,32 @@ void check_resize(struct cds_lfht *ht, unsigned long size, uint32_t chain_len)
+ 	if (chain_len > 100)
+ 		dbg_printf("WARNING: large chain length: %u.\n",
+ 			   chain_len);
+-	if (chain_len >= CHAIN_LEN_RESIZE_THRESHOLD)
+-		cds_lfht_resize_lazy_grow(ht, size,
+-			cds_lfht_get_count_order_u32(chain_len - (CHAIN_LEN_TARGET - 1)));
++	if (chain_len >= CHAIN_LEN_RESIZE_THRESHOLD) {
++		int growth;
++
++		/*
++		 * Ideal growth calculated based on chain length.
++		 */
++		growth = cds_lfht_get_count_order_u32(chain_len
++				- (CHAIN_LEN_TARGET - 1));
++		if (!(ht->flags & CDS_LFHT_ACCOUNTING)
++				&& (size << growth) >= (1UL << COUNT_COMMIT_ORDER)) {
++			/*
++			 * If ideal growth expands the hash table size
++			 * beyond the "small hash table" sizes, use the
++			 * maximum small hash table size to attempt
++			 * expanding the hash table. This only applies
++			 * when node accounting is available, otherwise
++			 * the chain length is used to expand the hash
++			 * table in every case.
++			 */
++			growth = COUNT_COMMIT_ORDER -
++				cds_lfht_get_count_order_u32(size);
++			if (growth <= 0)
++				return;
++		}
++		cds_lfht_resize_lazy_grow(ht, size, growth);
++	}
+ }
+ 
+ static
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
