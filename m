@@ -1,17 +1,18 @@
-From: Matthew Khouzam <matthew.khouzam@ericsson.com>
-Subject: Re: [Solved] ust libc and fork wrapper question
-Date: Wed, 28 Aug 2013 14:47:53 -0400
-Message-ID: <521E45D9.9000909__8608.87850071794$1377715774$gmane$org@ericsson.com>
-References: <521E3BCF.5060500@ericsson.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [PATCH lttng-tools] Fix: consumer data pending for
+	empty streams
+Date: Wed, 28 Aug 2013 22:47:20 -0400
+Message-ID: <20130829024720.GA20271__33720.5626572997$1377744494$gmane$org@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from usevmg21.ericsson.net ([198.24.6.65])
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <matthew.khouzam@ericsson.com>) id 1VEknD-0006cx-Jp
-	for lttng-dev@lists.lttng.org; Wed, 28 Aug 2013 14:48:41 -0400
-In-Reply-To: <521E3BCF.5060500@ericsson.com>
+	(envelope-from <compudj@mail.openrapids.net>) id 1VEsGX-0005WJ-Rr
+	for lttng-dev@lists.lttng.org; Wed, 28 Aug 2013 22:47:24 -0400
+Content-Disposition: inline
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,40 +21,83 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: dgoulet@efficios.com
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Firefox uses its owm memory manager. After running tux-racer, it appears
-all is well.
+We should at least output one packet before a stream can be considered
+as readable. So far, for PID buffers, if an application exits at the
+wrong timing before a stop waiting for data pending, empty streams could
+be visible by a babeltrace executed after data pending incorrectly
+returned false.
 
+Fix it by considering a stream for which the consumerd has written 0
+bytes to the output as having data pending.
 
-On 13-08-28 02:05 PM, Matthew Khouzam wrote:
-> Hello tracing sages,
->
-> I was trying out the libc wrapper in ust. It works very well but does
-> not follow forks. (to be expected)
->
-> So I copied "liblttng-ust-fork.so" into my .libs directory along with
-> "liblttng-libc-wrapper.so".
->
-> I then run
->
-> $lttng create thing
-> $lttng enable-channel chan --buffer-uid
-> $lttng enable-event -a -u <for david>
-> $lttng start
-> $LD_PRELOAD="liblttng-ust-fork.so liblttng-libc-wrapper.so" firefox
-> $lttng stop
-> $lttng destroy
->
-> Aaaaaaaaaaand my trace has no events!
->
-> I am certain I am doing something wrong, any suggestions?
->
-> Matthew
->
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+This applies to 2.3-rc and stable-2.2.
+
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+---
+diff --git a/src/common/consumer.c b/src/common/consumer.c
+index 59207da..e64e2e2 100644
+--- a/src/common/consumer.c
++++ b/src/common/consumer.c
+@@ -498,6 +498,7 @@ struct lttng_consumer_stream *consumer_allocate_stream(uint64_t channel_key,
+ 	stream->key = stream_key;
+ 	stream->out_fd = -1;
+ 	stream->out_fd_offset = 0;
++	stream->output_written = 0;
+ 	stream->state = state;
+ 	stream->uid = uid;
+ 	stream->gid = gid;
+@@ -1475,6 +1476,7 @@ ssize_t lttng_consumer_on_read_subbuffer_mmap(
+ 					SYNC_FILE_RANGE_WRITE);
+ 			stream->out_fd_offset += ret;
+ 		}
++		stream->output_written += ret;
+ 		written += ret;
+ 	}
+ 	lttng_consumer_sync_trace_file(stream, orig_offset);
+@@ -1688,6 +1690,7 @@ ssize_t lttng_consumer_on_read_subbuffer_splice(
+ 					SYNC_FILE_RANGE_WRITE);
+ 			stream->out_fd_offset += ret_splice;
+ 		}
++		stream->output_written += ret_splice;
+ 		written += ret_splice;
+ 	}
+ 	lttng_consumer_sync_trace_file(stream, orig_offset);
+@@ -3400,6 +3403,16 @@ int consumer_data_pending(uint64_t id)
+ 		 */
+ 		ret = cds_lfht_is_node_deleted(&stream->node.node);
+ 		if (!ret) {
++			/*
++			 * An empty output file is not valid. We need at
++			 * least one packet generated per stream, even
++			 * if it contains no event, so it contains at
++			 * least one packet header.
++			 */
++			if (stream->output_written == 0) {
++				pthread_mutex_unlock(&stream->lock);
++				goto data_pending;
++			}
+ 			/* Check the stream if there is data in the buffers. */
+ 			ret = data_pending(stream);
+ 			if (ret == 1) {
+diff --git a/src/common/consumer.h b/src/common/consumer.h
+index 2003cbe..91f6b5c 100644
+--- a/src/common/consumer.h
++++ b/src/common/consumer.h
+@@ -221,6 +221,8 @@ struct lttng_consumer_stream {
+ 	int out_fd; /* output file to write the data */
+ 	/* Write position in the output file descriptor */
+ 	off_t out_fd_offset;
++	/* Amount of bytes written to the output */
++	uint64_t output_written;
+ 	enum lttng_consumer_stream_state state;
+ 	int shm_fd_is_copy;
+ 	int data_read;
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
