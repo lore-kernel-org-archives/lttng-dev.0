@@ -1,18 +1,18 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH lttng-tools] Fix: consumer data pending for
-	empty streams
-Date: Wed, 28 Aug 2013 22:47:20 -0400
-Message-ID: <20130829024720.GA20271__33720.5626572997$1377744494$gmane$org@Krystal>
+From: David Goulet <dgoulet@efficios.com>
+Subject: Re: [PATCH lttng-tools] Fix: hash table growth (for
+ small tables) should be limited (v2)
+Date: Thu, 29 Aug 2013 12:54:51 -0400
+Message-ID: <521F7CDB.7050504__5922.00995092771$1377795426$gmane$org@efficios.com>
+References: <20130827220142.GA13424@Krystal> <20130827221104.GA13930@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from smtp.ini-tech.com ([5.9.158.244])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1VEsGX-0005WJ-Rr
-	for lttng-dev@lists.lttng.org; Wed, 28 Aug 2013 22:47:24 -0400
-Content-Disposition: inline
+	(envelope-from <dgoulet@efficios.com>) id 1VF5Ut-00010Y-Vp
+	for lttng-dev@lists.lttng.org; Thu, 29 Aug 2013 12:55:09 -0400
+In-Reply-To: <20130827221104.GA13930@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,83 +21,65 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: dgoulet@efficios.com
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-We should at least output one packet before a stream can be considered
-as readable. So far, for PID buffers, if an application exits at the
-wrong timing before a stop waiting for data pending, empty streams could
-be visible by a babeltrace executed after data pending incorrectly
-returned false.
+Merged!
 
-Fix it by considering a stream for which the consumerd has written 0
-bytes to the output as having data pending.
-
-This applies to 2.3-rc and stable-2.2.
-
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
----
-diff --git a/src/common/consumer.c b/src/common/consumer.c
-index 59207da..e64e2e2 100644
---- a/src/common/consumer.c
-+++ b/src/common/consumer.c
-@@ -498,6 +498,7 @@ struct lttng_consumer_stream *consumer_allocate_stream(uint64_t channel_key,
- 	stream->key = stream_key;
- 	stream->out_fd = -1;
- 	stream->out_fd_offset = 0;
-+	stream->output_written = 0;
- 	stream->state = state;
- 	stream->uid = uid;
- 	stream->gid = gid;
-@@ -1475,6 +1476,7 @@ ssize_t lttng_consumer_on_read_subbuffer_mmap(
- 					SYNC_FILE_RANGE_WRITE);
- 			stream->out_fd_offset += ret;
- 		}
-+		stream->output_written += ret;
- 		written += ret;
- 	}
- 	lttng_consumer_sync_trace_file(stream, orig_offset);
-@@ -1688,6 +1690,7 @@ ssize_t lttng_consumer_on_read_subbuffer_splice(
- 					SYNC_FILE_RANGE_WRITE);
- 			stream->out_fd_offset += ret_splice;
- 		}
-+		stream->output_written += ret_splice;
- 		written += ret_splice;
- 	}
- 	lttng_consumer_sync_trace_file(stream, orig_offset);
-@@ -3400,6 +3403,16 @@ int consumer_data_pending(uint64_t id)
- 		 */
- 		ret = cds_lfht_is_node_deleted(&stream->node.node);
- 		if (!ret) {
-+			/*
-+			 * An empty output file is not valid. We need at
-+			 * least one packet generated per stream, even
-+			 * if it contains no event, so it contains at
-+			 * least one packet header.
-+			 */
-+			if (stream->output_written == 0) {
-+				pthread_mutex_unlock(&stream->lock);
-+				goto data_pending;
-+			}
- 			/* Check the stream if there is data in the buffers. */
- 			ret = data_pending(stream);
- 			if (ret == 1) {
-diff --git a/src/common/consumer.h b/src/common/consumer.h
-index 2003cbe..91f6b5c 100644
---- a/src/common/consumer.h
-+++ b/src/common/consumer.h
-@@ -221,6 +221,8 @@ struct lttng_consumer_stream {
- 	int out_fd; /* output file to write the data */
- 	/* Write position in the output file descriptor */
- 	off_t out_fd_offset;
-+	/* Amount of bytes written to the output */
-+	uint64_t output_written;
- 	enum lttng_consumer_stream_state state;
- 	int shm_fd_is_copy;
- 	int data_read;
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Mathieu Desnoyers:
+> Buckets with many entries encountered in a hash table could cause it to
+> grow to a large size, beyond the scope for which this mechanism is
+> expected to play a role when node accounting is available. Indeed, when
+> the hash table grows to larger size, split-counter node accounting is
+> expected to deal with resize/shrink rather than relying on an heuristic
+> based on the largest bucket size.
+> 
+> This is fixing an issue where we see hash tables sometimes reaching 65k
+> entries index (65536*8 = 524288 bytes) for a workload limited to adding
+> 1000 entries and then removing all of them, done in a loop (random
+> keys).
+> 
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> ---
+> diff --git a/src/common/hashtable/rculfhash.c b/src/common/hashtable/rculfhash.c
+> index b430a3d..ebdc4ff 100644
+> --- a/src/common/hashtable/rculfhash.c
+> +++ b/src/common/hashtable/rculfhash.c
+> @@ -726,9 +726,32 @@ void check_resize(struct cds_lfht *ht, unsigned long size, uint32_t chain_len)
+>  	if (chain_len > 100)
+>  		dbg_printf("WARNING: large chain length: %u.\n",
+>  			   chain_len);
+> -	if (chain_len >= CHAIN_LEN_RESIZE_THRESHOLD)
+> -		cds_lfht_resize_lazy_grow(ht, size,
+> -			cds_lfht_get_count_order_u32(chain_len - (CHAIN_LEN_TARGET - 1)));
+> +	if (chain_len >= CHAIN_LEN_RESIZE_THRESHOLD) {
+> +		int growth;
+> +
+> +		/*
+> +		 * Ideal growth calculated based on chain length.
+> +		 */
+> +		growth = cds_lfht_get_count_order_u32(chain_len
+> +				- (CHAIN_LEN_TARGET - 1));
+> +		if ((ht->flags & CDS_LFHT_ACCOUNTING)
+> +				&& (size << growth) >= (1UL << COUNT_COMMIT_ORDER)) {
+> +			/*
+> +			 * If ideal growth expands the hash table size
+> +			 * beyond the "small hash table" sizes, use the
+> +			 * maximum small hash table size to attempt
+> +			 * expanding the hash table. This only applies
+> +			 * when node accounting is available, otherwise
+> +			 * the chain length is used to expand the hash
+> +			 * table in every case.
+> +			 */
+> +			growth = COUNT_COMMIT_ORDER -
+> +				cds_lfht_get_count_order_u32(size);
+> +			if (growth <= 0)
+> +				return;
+> +		}
+> +		cds_lfht_resize_lazy_grow(ht, size, growth);
+> +	}
+>  }
+>  
+>  static
+> 
