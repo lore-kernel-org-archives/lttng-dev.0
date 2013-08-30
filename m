@@ -1,25 +1,17 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] LTTng modules 2.3.0-rc2
-Date: Fri, 30 Aug 2013 14:45:46 -0400
-Message-ID: <20130830184546.GB12134__14710.7668607079$1377888400$gmane$org@Krystal>
+From: Matthew Khouzam <matthew.khouzam@ericsson.com>
+Subject: Re: [RELEASE] LTTng-UST 2.3.0-rc2
+Date: Fri, 30 Aug 2013 15:01:33 -0400
+Message-ID: <5220EC0D.1040301__36176.0744046935$1377889364$gmane$org@ericsson.com>
+References: <20130830184103.GA12134@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from usevmg21.ericsson.net ([198.24.6.65])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1VFThb-0004Hs-FG
-	for lttng-dev@lists.lttng.org; Fri, 30 Aug 2013 14:45:52 -0400
-Received: from localhost (localhost [127.0.0.1])
-	by blackscsi.openrapids.net (Postfix) with ESMTP id 2C08F1401ED
-	for <lttng-dev@lists.lttng.org>; Fri, 30 Aug 2013 14:45:47 -0400 (EDT)
-Received: from blackscsi.openrapids.net ([127.0.0.1])
-	by localhost (blackscsi.openrapids.net [127.0.0.1]) (amavisd-new,
-	port 10024)
-	with ESMTP id sAIR5Jpi5kU7 for <lttng-dev@lists.lttng.org>;
-	Fri, 30 Aug 2013 14:45:46 -0400 (EDT)
-Content-Disposition: inline
+	(envelope-from <matthew.khouzam@ericsson.com>) id 1VFTx0-0005nF-5z
+	for lttng-dev@lists.lttng.org; Fri, 30 Aug 2013 15:01:47 -0400
+In-Reply-To: <20130830184103.GA12134@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -31,20 +23,40 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-The LTTng modules provide Linux kernel tracing capability to the LTTng
-2.x tracer toolset.
+I would like to highlight that this means you are releasing on a
+statutory holiday in canada. Also, you are announcing this Friday
+afternoon. :)
 
-Changelog:
-2013-08-30 LTTng modules 2.3.0-rc2
-        * Fix: metadata lttng channel refcount
-        * README: lttng-modules incompatible with lttng 0.x patchset
 
-Project website: http://lttng.org
-Download link: http://lttng.org/download
-(please refer to the README files for installation instructions and
-lttng-tools doc/quickstart.txt for usage information)
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+On 13-08-30 02:41 PM, Mathieu Desnoyers wrote:
+> LTTng-UST, the Linux Trace Toolkit Next Generation Userspace Tracer, is
+> port of the low-overhead tracing capabilities of the LTTng kernel tracer
+> to user-space. The library "liblttng-ust" enables tracing of
+> applications and libraries.
+>
+> We plan a final release on Monday, September 1st. Please let us know
+> quickly if you find issues!
+>
+> Changelog:
+> 2013-08-30 lttng-ust 2.3.0-rc2
+>         * doc/examples/gen-tp: pass automake CPPFLAGS/CFLAGS/LDFLAGS
+>         * tools/lttng-gen-tp: honor CPPFLAGS and LDFLAGS
+>         * Fix: doc/examples cross-build
+>         * Fix: liblttng_ust.la should depend on liblttng-ust-tracepoint.la
+>         * Introduce configure --with-lttng-system-rundir
+>         * examples: tracepoint probes don't need extern C
+>         * Tracepoint probes don't need extern C
+>         * Add trace support for memalign and posix_memalign
+>         * malloc instrumentation: remove dependency on pthread
+>         * Add trace support for calloc and realloc.
+>         * Fix: allow make check to run in VPATH build
+>         * Update .gitignore
+>         * Update obsolete benchmark test
+>         * Cleanup tests (2nd commit)
+>         * Cleanup tests
+>         * Fix: doc/examples VPATH build
+>
+> Project website: http://lttng.org
+> Download link: http://lttng.org/download
+> (please refer to the README file for installation instructions)
+>
