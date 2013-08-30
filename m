@@ -1,19 +1,27 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [RELEASE] LTTng-UST 2.3.0-rc2
-Date: Fri, 30 Aug 2013 15:06:10 -0400
-Message-ID: <20130830190610.GB12294__27847.2853046425$1377889629$gmane$org@Krystal>
-References: <20130830184103.GA12134@Krystal> <5220EC0D.1040301@ericsson.com>
+From: David Goulet <dgoulet@efficios.com>
+Subject: [RELEASE] LTTng-Tools 2.2.4 stable
+Date: Fri, 30 Aug 2013 15:06:33 -0400
+Message-ID: <20130830190633.GA26151__28029.7377882109$1377889772$gmane$org@ev0ke.net>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from smtp.ini-tech.com ([5.9.158.244])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1VFU1O-0006Da-6g
-	for lttng-dev@lists.lttng.org; Fri, 30 Aug 2013 15:06:19 -0400
+	(envelope-from <dgoulet@efficios.com>) id 1VFU2U-0006Jw-Ld
+	for lttng-dev@lists.lttng.org; Fri, 30 Aug 2013 15:07:28 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by smtp.ini-tech.com (Postfix) with ESMTP id 19DB0A1DC5
+	for <lttng-dev@lists.lttng.org>; Fri, 30 Aug 2013 19:06:20 +0000 (UTC)
+Received: from smtp.ini-tech.com ([127.0.0.1])
+	by localhost (smtp.ini-tech.com [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id M5anyFMRZMAz for <lttng-dev@lists.lttng.org>;
+	Fri, 30 Aug 2013 19:06:19 +0000 (UTC)
+Received: from ev0ke.net (cable-10.246.173-146.electronicbox.net
+	[173.246.10.146])
+	by smtp.ini-tech.com (Postfix) with ESMTPSA id 049A8A1D9C
+	for <lttng-dev@lists.lttng.org>; Fri, 30 Aug 2013 19:06:18 +0000 (UTC)
 Content-Disposition: inline
-In-Reply-To: <5220EC0D.1040301@ericsson.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,58 +30,49 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Matthew Khouzam <matthew.khouzam@ericsson.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Yep :) So hobbyists can test it ;)
+Greetings everyone (including LTTng elves),
 
-* Matthew Khouzam (matthew.khouzam@ericsson.com) wrote:
-> I would like to highlight that this means you are releasing on a
-> statutory holiday in canada. Also, you are announcing this Friday
-> afternoon. :)
-> 
-> 
-> On 13-08-30 02:41 PM, Mathieu Desnoyers wrote:
-> > LTTng-UST, the Linux Trace Toolkit Next Generation Userspace Tracer, is
-> > port of the low-overhead tracing capabilities of the LTTng kernel tracer
-> > to user-space. The library "liblttng-ust" enables tracing of
-> > applications and libraries.
-> >
-> > We plan a final release on Monday, September 1st. Please let us know
-> > quickly if you find issues!
-> >
-> > Changelog:
-> > 2013-08-30 lttng-ust 2.3.0-rc2
-> >         * doc/examples/gen-tp: pass automake CPPFLAGS/CFLAGS/LDFLAGS
-> >         * tools/lttng-gen-tp: honor CPPFLAGS and LDFLAGS
-> >         * Fix: doc/examples cross-build
-> >         * Fix: liblttng_ust.la should depend on liblttng-ust-tracepoint.la
-> >         * Introduce configure --with-lttng-system-rundir
-> >         * examples: tracepoint probes don't need extern C
-> >         * Tracepoint probes don't need extern C
-> >         * Add trace support for memalign and posix_memalign
-> >         * malloc instrumentation: remove dependency on pthread
-> >         * Add trace support for calloc and realloc.
-> >         * Fix: allow make check to run in VPATH build
-> >         * Update .gitignore
-> >         * Update obsolete benchmark test
-> >         * Cleanup tests (2nd commit)
-> >         * Cleanup tests
-> >         * Fix: doc/examples VPATH build
-> >
-> > Project website: http://lttng.org
-> > Download link: http://lttng.org/download
-> > (please refer to the README file for installation instructions)
-> >
-> 
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+The lttng-tools project provides a session daemon (lttng-sessiond) that
+acts as a tracing registry, the "lttng" command line for tracing
+control, a lttng-ctl library for tracing control and a lttng-relayd for
+network streaming.
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+2013-08-30 lttng-tools 2.2.4
+	* Fix: hashtable: take split_count_order into account
+	* Fix: remove wrong doing asserts in sessiond
+	* Fix: delete the trace directory used for the test
+	* Fix: remove bad check after epoll wait in consumer
+	* Fix: consumer data pending for empty streams
+	* Fix: hash table growth (for small tables) should be limited (v2)
+	* Fix: run_as gid/uid test should return result to parent
+	* Fix: remove health test from fast regression
+	* Fix: set the health delta tcp timeout aware
+	* Get the maximum TCP timeout in sessiond
+	* Fix: don't report error if UST app dies
+	* Fix: improve error message when UST support is disabled
+	* Fix: remove calibrate syscall option from code
+	* Fix: check UST float field mantissa length
+	* Fix: add UST context in the same order the user enabled them
+	* Prepare for automake deprecation of missing subdir-objects
+	* Fix: channels can be _enabled_ after tracing is started, but not created
+	* Fix filter parser segmentation fault with bison 3.0
+	* Fix: typo in error msg
+	* Fix: imprecise error message about root sessiond/tracing group
+	* Fix: LTTNG_ERR_NEED_ROOT_SESSIOND error message
+	* Fix: don't skip chmod if tracing group is not found
+	* Tracepoint probes don't need extern C
+	* Fix: reset out_fd_offset when we rotate the trace file
+	* Fix: kernel ctl error codes are based on errno
+
+Using it is testing it!
+
+Project website: http://lttng.org/lttng2.0
+Download link:
+http://lttng.org/files/lttng-tools/lttng-tools-2.2.4.tar.bz2 (for
+the PGP signature, same file with .asc appended)
+
+Cheers!
+David
