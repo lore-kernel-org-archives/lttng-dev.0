@@ -1,8 +1,7 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH lttng-tools] Fix: hashtable: take
-	split_count_order into	account
-Date: Fri, 30 Aug 2013 14:31:48 -0400
-Message-ID: <20130830183148.GA12014__13660.1561717272$1377887567$gmane$org@Krystal>
+Subject: [RELEASE] LTTng-UST 2.3.0-rc2
+Date: Fri, 30 Aug 2013 14:41:03 -0400
+Message-ID: <20130830184103.GA12134__17477.4748193615$1377888117$gmane$org@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -10,8 +9,16 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1VFTU5-00030B-SF
-	for lttng-dev@lists.lttng.org; Fri, 30 Aug 2013 14:31:55 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1VFTd2-0003rE-N4
+	for lttng-dev@lists.lttng.org; Fri, 30 Aug 2013 14:41:10 -0400
+Received: from localhost (localhost [127.0.0.1])
+	by blackscsi.openrapids.net (Postfix) with ESMTP id 820DC1401ED
+	for <lttng-dev@lists.lttng.org>; Fri, 30 Aug 2013 14:41:04 -0400 (EDT)
+Received: from blackscsi.openrapids.net ([127.0.0.1])
+	by localhost (blackscsi.openrapids.net [127.0.0.1]) (amavisd-new,
+	port 10024)
+	with ESMTP id QUxTPNSRRrWe for <lttng-dev@lists.lttng.org>;
+	Fri, 30 Aug 2013 14:41:03 -0400 (EDT)
 Content-Disposition: inline
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -21,66 +28,39 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: dgoulet@efficios.com
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-This makes check_resize() handle split-counters more precisely.
+LTTng-UST, the Linux Trace Toolkit Next Generation Userspace Tracer, is
+port of the low-overhead tracing capabilities of the LTTng kernel tracer
+to user-space. The library "liblttng-ust" enables tracing of
+applications and libraries.
 
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
----
-diff --git a/src/common/hashtable/rculfhash.c b/src/common/hashtable/rculfhash.c
-index ebdc4ff..0ddd21a 100644
---- a/src/common/hashtable/rculfhash.c
-+++ b/src/common/hashtable/rculfhash.c
-@@ -570,6 +570,7 @@ void cds_lfht_resize_lazy_count(struct cds_lfht *ht, unsigned long size,
- 
- static long nr_cpus_mask = -1;
- static long split_count_mask = -1;
-+static int split_count_order = -1;
- 
- #if defined(HAVE_SYSCONF)
- static void ht_init_nr_cpus_mask(void)
-@@ -606,6 +607,8 @@ void alloc_split_items_count(struct cds_lfht *ht)
- 			split_count_mask = DEFAULT_SPLIT_COUNT_MASK;
- 		else
- 			split_count_mask = nr_cpus_mask;
-+		split_count_order =
-+			cds_lfht_get_count_order_ulong(split_count_mask + 1);
- 	}
- 
- 	assert(split_count_mask >= 0);
-@@ -721,7 +724,7 @@ void check_resize(struct cds_lfht *ht, unsigned long size, uint32_t chain_len)
- 	 * Use bucket-local length for small table expand and for
- 	 * environments lacking per-cpu data support.
- 	 */
--	if (count >= (1UL << COUNT_COMMIT_ORDER))
-+	if (count >= (1UL << (COUNT_COMMIT_ORDER + split_count_order)))
- 		return;
- 	if (chain_len > 100)
- 		dbg_printf("WARNING: large chain length: %u.\n",
-@@ -735,7 +738,9 @@ void check_resize(struct cds_lfht *ht, unsigned long size, uint32_t chain_len)
- 		growth = cds_lfht_get_count_order_u32(chain_len
- 				- (CHAIN_LEN_TARGET - 1));
- 		if ((ht->flags & CDS_LFHT_ACCOUNTING)
--				&& (size << growth) >= (1UL << COUNT_COMMIT_ORDER)) {
-+				&& (size << growth)
-+					>= (1UL << (COUNT_COMMIT_ORDER
-+						+ split_count_order))) {
- 			/*
- 			 * If ideal growth expands the hash table size
- 			 * beyond the "small hash table" sizes, use the
-@@ -745,8 +750,8 @@ void check_resize(struct cds_lfht *ht, unsigned long size, uint32_t chain_len)
- 			 * the chain length is used to expand the hash
- 			 * table in every case.
- 			 */
--			growth = COUNT_COMMIT_ORDER -
--				cds_lfht_get_count_order_u32(size);
-+			growth = COUNT_COMMIT_ORDER + split_count_order
-+				- cds_lfht_get_count_order_ulong(size);
- 			if (growth <= 0)
- 				return;
- 		}
+We plan a final release on Monday, September 1st. Please let us know
+quickly if you find issues!
+
+Changelog:
+2013-08-30 lttng-ust 2.3.0-rc2
+        * doc/examples/gen-tp: pass automake CPPFLAGS/CFLAGS/LDFLAGS
+        * tools/lttng-gen-tp: honor CPPFLAGS and LDFLAGS
+        * Fix: doc/examples cross-build
+        * Fix: liblttng_ust.la should depend on liblttng-ust-tracepoint.la
+        * Introduce configure --with-lttng-system-rundir
+        * examples: tracepoint probes don't need extern C
+        * Tracepoint probes don't need extern C
+        * Add trace support for memalign and posix_memalign
+        * malloc instrumentation: remove dependency on pthread
+        * Add trace support for calloc and realloc.
+        * Fix: allow make check to run in VPATH build
+        * Update .gitignore
+        * Update obsolete benchmark test
+        * Cleanup tests (2nd commit)
+        * Cleanup tests
+        * Fix: doc/examples VPATH build
+
+Project website: http://lttng.org
+Download link: http://lttng.org/download
+(please refer to the README file for installation instructions)
 
 -- 
 Mathieu Desnoyers
