@@ -1,91 +1,76 @@
-From: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
-Subject: Re: [PATCH] rcu: Make rcu_assign_pointer's assignment volatile and
- type-safe
-Date: Sun, 1 Sep 2013 19:01:37 -0700
-Message-ID: <20130902020137.GI3871@linux.vnet.ibm.com>
-References: <20130823164637.GB3871@linux.vnet.ibm.com>
- <20130823171653.GA16558@Krystal>
- <20130823210822.GD3871@linux.vnet.ibm.com>
- <20130830005733.GA20664@linux.vnet.ibm.com>
- <20130830021637.GA21862@leaf>
- <20130831213228.GF3871@linux.vnet.ibm.com>
- <20130901204209.GA20802@leaf>
- <20130901222619.GH3871@linux.vnet.ibm.com>
- <20130901224317.GA25057@leaf>
- <20130901234251.GB25057@leaf>
-Reply-To: paulmck@linux.vnet.ibm.com
+From: Dror Granot <dror@reduxio.com>
+Subject: Request information on "Live" view of traces
+Date: Mon, 2 Sep 2013 10:30:01 +0300
+Message-ID: <CAFw4v59-2FvgVtQ=YCNhYXX3B9+y+hNdFpb0JnpOHxNCvc5vCA__33140.4434786693$1378107060$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Return-path: <linux-kernel-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <20130901234251.GB25057@leaf>
-Sender: linux-kernel-owner@vger.kernel.org
-To: Josh Triplett <josh@joshtriplett.org>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Stephen Hemminger <stephen@networkplumber.org>, lttng-dev@lists.lttng.org, sparse@chrisli.org, linux-sparse@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: multipart/mixed; boundary="===============0623287711=="
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail-oa0-f44.google.com ([209.85.219.44])
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <dror@reduxio.com>) id 1VGOaM-0005PT-Nq
+	for lttng-dev@lists.lttng.org; Mon, 02 Sep 2013 03:30:11 -0400
+Received: by mail-oa0-f44.google.com with SMTP id l17so4944253oag.3
+	for <lttng-dev@lists.lttng.org>; Mon, 02 Sep 2013 00:30:01 -0700 (PDT)
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On Sun, Sep 01, 2013 at 04:42:52PM -0700, Josh Triplett wrote:
-> rcu_assign_pointer needs to use ACCESS_ONCE to make the assignment to
-> the destination pointer volatile, to protect against compilers too
-> clever for their own good.
-> 
-> In addition, since rcu_assign_pointer force-casts the source pointer to
-> add the __rcu address space (overriding any existing address space), add
-> an explicit check that the source pointer has the __kernel address space
-> to start with.
-> 
-> This new check produces warnings like this, when attempting to assign
-> from a __user pointer:
-> 
-> test.c:25:9: warning: incorrect type in argument 2 (different address spaces)
-> test.c:25:9:    expected struct foo *<noident>
-> test.c:25:9:    got struct foo [noderef] <asn:1>*badsrc
-> 
-> Signed-off-by: Josh Triplett <josh@joshtriplett.org>
+--===============0623287711==
+Content-Type: multipart/alternative; boundary=089e0111be7643ed3504e5618a36
 
-Queued for 3.13, thank you very much!
+--089e0111be7643ed3504e5618a36
+Content-Type: text/plain; charset=ISO-8859-1
 
-							Thanx, Paul
+Hi,
+We are using now lttng in our development and want to have it on our
+product for customers.
+The one thing that we are really missing on lttng is the fact that we
+cannot "live" view traces. The fact that we cannot have "tail -f" like
+option or "less" like capabilities might be the decision factor of moving
+out from lttng use.
+I would really appreciate if you can update me on the time frame of "live"
+view of traces. If you know, what will it include and when it is supposed
+to be, it can help us much in our decision. If there is any other option to
+use in the mean time instead, it will be great to know as well..
+Thanks in advance
+Dror Granot
 
-> ---
->  include/linux/rcupdate.h | 12 +++++++++++-
->  1 file changed, 11 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
-> index 4b14bdc..3f62def 100644
-> --- a/include/linux/rcupdate.h
-> +++ b/include/linux/rcupdate.h
-> @@ -510,8 +510,17 @@ static inline void rcu_preempt_sleep_check(void)
->  #ifdef __CHECKER__
->  #define rcu_dereference_sparse(p, space) \
->  	((void)(((typeof(*p) space *)p) == p))
-> +/* The dummy first argument in __rcu_assign_pointer_typecheck makes the
-> + * typechecked pointer the second argument, matching rcu_assign_pointer itself;
-> + * this avoids confusion about argument numbers in warning messages. */
-> +#define __rcu_assign_pointer_check_kernel(v) \
-> +	do { \
-> +		extern void __rcu_assign_pointer_typecheck(int, typeof(*(v)) __kernel *); \
-> +		__rcu_assign_pointer_typecheck(0, v); \
-> +	} while (0)
->  #else /* #ifdef __CHECKER__ */
->  #define rcu_dereference_sparse(p, space)
-> +#define __rcu_assign_pointer_check_kernel(v) do { } while (0)
->  #endif /* #else #ifdef __CHECKER__ */
-> 
->  #define __rcu_access_pointer(p, space) \
-> @@ -555,7 +564,8 @@ static inline void rcu_preempt_sleep_check(void)
->  #define __rcu_assign_pointer(p, v, space) \
->  	do { \
->  		smp_wmb(); \
-> -		(p) = (typeof(*v) __force space *)(v); \
-> +		__rcu_assign_pointer_check_kernel(v); \
-> +		ACCESS_ONCE(p) = (typeof(*(v)) __force space *)(v); \
->  	} while (0)
-> 
-> 
-> --
-> To unsubscribe from this list: send the line "unsubscribe linux-kernel" in
-> the body of a message to majordomo@vger.kernel.org
-> More majordomo info at  http://vger.kernel.org/majordomo-info.html
-> Please read the FAQ at  http://www.tux.org/lkml/
-> 
+--089e0111be7643ed3504e5618a36
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hi,=A0<div>We are using now lttng in our development and w=
+ant to have it on our product for customers.</div><div>The one thing that w=
+e are really missing on lttng is the fact that we cannot &quot;live&quot; v=
+iew traces. The fact that we cannot have &quot;tail -f&quot; like option or=
+ &quot;less&quot; like capabilities might be the decision factor of moving =
+out from lttng use.</div>
+<div>I would really appreciate if you can update me on the time frame of &q=
+uot;live&quot; view of traces. If you know, what will it include and when i=
+t is supposed to be, it can help us much in our decision. If there is any o=
+ther option to use in the mean time instead, it will be great to know as we=
+ll..</div>
+<div>Thanks in advance</div><div>Dror Granot</div></div>
+
+--089e0111be7643ed3504e5618a36--
+
+
+--===============0623287711==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0623287711==--
