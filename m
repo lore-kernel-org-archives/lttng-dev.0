@@ -1,18 +1,17 @@
-From: Wang Shilong <wangshilong1991@gmail.com>
-Subject: Re: rcu: Make rcu_assign_pointer's assignment volatile
-	and type-safe
-Date: Mon, 02 Sep 2013 07:50:09 +0800
-Message-ID: <5223d2b1.W0Uf1KjUIaBOcCMH%wangshilong1991__33332.9616267749$1378157520$gmane$org@gmail.com>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Subject: Re: How to disable an event that's been enabled by a
+ wildcard selection or -a? (lttng-dev Digest, Vol 64, Issues 30, 38)
+Date: Tue, 3 Sep 2013 15:05:45 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD2678BEB2__25470.3407561921$1378220823$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-pb0-f52.google.com ([209.85.160.52])
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <wangshilong1991@gmail.com>) id 1VGHPT-0001zc-54
-	for lttng-dev@lists.lttng.org; Sun, 01 Sep 2013 19:50:27 -0400
-Received: by mail-pb0-f52.google.com with SMTP id wz12so4014843pbc.39
-	for <lttng-dev@lists.lttng.org>; Sun, 01 Sep 2013 16:50:17 -0700 (PDT)
+	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1VGsAs-0002PK-KQ
+	for lttng-dev@lists.lttng.org; Tue, 03 Sep 2013 11:05:52 -0400
+Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,28 +20,91 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Josh Triplett <josh@joshtriplett.org>
-Cc: linux-kernel@vger.kernel.org, sparse@chrisli.org, linux-sparse@vger.kernel.org, Wang Shilong <wangshilong1991@gmail.com>, Stephen Hemminger <stephen@networkplumber.org>, lttng-dev@lists.lttng.org, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hello, Using checkpatch.pl, i get the following warnings(errors):
-WARNING: line over 80 characters
-#57: FILE: include/linux/rcupdate.h:518:
-+		extern void __rcu_assign_pointer_typecheck(int, typeof(*(v)) __kernel *); \
+----------------------------------------------------------------------
+> Date: Fri, 16 Aug 2013 12:08:56 +0000
+>
+> A question on the suggested feature below:
+>
+> If we do the following set of commands:
+>
+> lttng enable-event "a*" -u
+> lttng enable-event "!ab" -u
+>
+> The intention is to enable all events starting with the letter 'a' except=
+ the event 'ab'.
+> However, if the event 'ab' is already registered in the session, the firs=
+t command would enable the event 'ab'.
+>
+> Should the second command now disable the event 'ab', or should the comma=
+nd only apply to future registrations of events ?
+>
+> JP Ikaheimonen
+> Mentor Graphics
+----------------------------------------------------------------------
 
-ERROR: need consistent spacing around '*' (ctx:WxB)
-#72: FILE: include/linux/rcupdate.h:568:
-+		ACCESS_ONCE(p) = (typeof(*(v)) __force space *)(v); \
- 		                                             ^
+   The second command should definitely disable event 'ab'.  Otherwise the =
+effect of any given command sequence becomes undefined because the system i=
+s 'too stateful'.
 
-total: 1 errors, 1 warnings, 26 lines checked
+----------------------------------------------------------------------
+> Date: Tue, 20 Aug 2013 11:27:46 +0200
+>
+> If that is the intention, then it would be better to specify the commands=
+ in reverse order:
+>
+> # lttng enable-event "!ab" -u
+> # lttng enable-event "a*" -u
+>
+> or even better:
+>
+> # lttng enable-event "!ab" "a*" -u
+>
+> > However, if the event 'ab' is already registered in the session, the fi=
+rst command would enable the event 'ab'.
+> > Should the second command now disable the event 'ab', or should the com=
+mand only apply to future registrations of events ?
+>
+> That is exactly what would happen in an *active* *session* if you issue
+> the commands in the order you originally suggested.
+> Incoming events matching "a*" are recorded up to the point where 'lttng
+> enable-event "!ab"' is executed. From then on,  'ab'-events are excluded
+> from recording.
+>
+> Paul Woegerer, SW Development Engineer
+----------------------------------------------------------------------
 
-patch has style problems, please review.
+   It makes little sense to me that the sequence:
 
-If any of these errors are false positives, please report
-them to the maintainer, see CHECKPATCH in MAINTAINERS.
+# lttng enable-event "!ab" -u
+# lttng enable-event "a*" -u
 
-Thanks, Wang
+should "enable all events except 'ab'"  (the original intent).  There would=
+ be no way of ever turning 'ab' back on, unless the command treated the wil=
+d card differently from its equivalent expansion.  To illustrate my point, =
+assume the alphabet consists of just {a, b, c}; then "a*" expands to "aa", =
+"ab", "ac", "aaa", "aab", etc.  Issuing the command with the "a*" argument =
+or its equivalent expansion (which is possible here since event names are l=
+ength-limited) should yield the same result.
 
-Notice: this is an automatically generated by shell script
-Any problems please contact: wangshilong1991@gmail.com
+I note that the "!" special character was not used in older versions of ena=
+ble-event, leading to limited backward compatibility of this new interface =
+convention.  Is the intent to remove the disable-event command entirely?
+
+Daniel U. Thibault
+Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
+ntermeasures (SPC)
+Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
+Cyber Security (MCCS)
+R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
+ Canada - Valcartier (DRDC Valcartier)
+2459 route de la Bravoure
+Qu=E9bec QC  G3J 1X5
+CANADA
+Vox : (418) 844-4000 x4245
+Fax : (418) 844-4538
+NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+Gouvernement du Canada | Government of Canada
+<http://www.valcartier.drdc-rddc.gc.ca/>
