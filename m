@@ -1,19 +1,18 @@
-From: Christian Babeux <christian.babeux@efficios.com>
-Subject: Re: Request information on "Live" view of traces
-Date: Tue, 3 Sep 2013 11:36:23 -0400
-Message-ID: <CAGDH53n23sZ30Uh+7DUmfM2oujb3R6yu-CroROztqhDchffJKA__11310.3939839222$1378222649$gmane$org@mail.gmail.com>
-References: <CAFw4v59-2FvgVtQ=YCNhYXX3B9+y+hNdFpb0JnpOHxNCvc5vCA@mail.gmail.com>
+From: <Paul_Woegerer@mentor.com>
+Subject: Re: How to disable an event that's been enabled by a
+	wildcard selection or -a? (lttng-dev Digest, Vol 64, Issues 30, 38)
+Date: Tue, 3 Sep 2013 18:55:38 +0200
+Message-ID: <1986194.AcrmLPglby__31331.8934328437$1378227408$gmane$org@atv-pwoegere-l3.atv.mentorg.com>
+References: <48CF5AC71E61DB46B70D0F388054EFFD2678BEB2@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-vc0-f171.google.com ([209.85.220.171])
+Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <christian.babeux@0x80.ca>) id 1VGseb-0006XQ-2U
-	for lttng-dev@lists.lttng.org; Tue, 03 Sep 2013 11:36:35 -0400
-Received: by mail-vc0-f171.google.com with SMTP id ij15so4038570vcb.16
-	for <lttng-dev@lists.lttng.org>; Tue, 03 Sep 2013 08:36:23 -0700 (PDT)
-In-Reply-To: <CAFw4v59-2FvgVtQ=YCNhYXX3B9+y+hNdFpb0JnpOHxNCvc5vCA@mail.gmail.com>
+	(envelope-from <Paul_Woegerer@mentor.com>) id 1VGttL-0000Of-Ba
+	for lttng-dev@lists.lttng.org; Tue, 03 Sep 2013 12:55:53 -0400
+In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD2678BEB2@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,50 +21,68 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Dror Granot <dror@reduxio.com>
+To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Dror,
+On Tuesday 03 September 2013 15:05:45 Thibault, Daniel wrote:
+> ----------------------------------------------------------------------
+> > Date: Tue, 20 Aug 2013 11:27:46 +0200
+> >
+> > If that is the intention, then it would be better to specify the commands 
+in reverse order:
+> >
+> > # lttng enable-event "!ab" -u
+> > # lttng enable-event "a*" -u
+> >
+> > or even better:
+> >
+> > # lttng enable-event "!ab" "a*" -u
+> >
+> > > However, if the event 'ab' is already registered in the session, the 
+first command would enable the event 'ab'.
+> > > Should the second command now disable the event 'ab', or should the 
+command only apply to future registrations of events ?
+> >
+> > That is exactly what would happen in an *active* *session* if you issue
+> > the commands in the order you originally suggested.
+> > Incoming events matching "a*" are recorded up to the point where 'lttng
+> > enable-event "!ab"' is executed. From then on,  'ab'-events are excluded
+> > from recording.
+> >
+> > Paul Woegerer, SW Development Engineer
+> ----------------------------------------------------------------------
+> 
+>    It makes little sense to me that the sequence:
+> 
+> # lttng enable-event "!ab" -u
+> # lttng enable-event "a*" -u
+> 
+> should "enable all events except 'ab'"  (the original intent).  There would
+> be no way of ever turning 'ab' back on, unless the command treated the wild
 
-> We are using now lttng in our development and want to have it on our product
-> for customers.
+To reenable event 'ab' you would simply invoke:
 
-Awesome!
+lttng disable-event "!ab" -u
 
-> I would really appreciate if you can update me on the time frame of "live"
-> view of traces. If you know, what will it include and when it is supposed to
-> be, it can help us much in our decision.
+This would effectively remove the exclusion and let again any event matching 
+"a*" (like 'ab') in.
 
-The live streaming/view of traces has been under development for a
-while. We intend to merge it in the master branch this month. As for
-the release candidate cycle and final release (2.4), we are aiming for
-mid-november.
+> I note that the "!" special character was not used in older versions of 
+enable-event, leading to limited backward compatibility of this new interface 
+convention.  Is the intent to remove the disable-event command entirely?
 
-Maybe Julien can fill you in with more details on what the live
-release will contain.
+Not at all. This is orthogonal to enable-event/disable-event.
+
+Regarding the "!" ... we are open for suggestions here.
+We would even prefer to use a character that is rejected by current versions 
+of lttng (i.e. results in an error when used in "lttng enable-event", because 
+this would make checking if the exclusion feature is available much easier).
 
 Thanks,
+Paul
 
-Christian
-
-On Mon, Sep 2, 2013 at 3:30 AM, Dror Granot <dror@reduxio.com> wrote:
-> Hi,
-> We are using now lttng in our development and want to have it on our product
-> for customers.
-> The one thing that we are really missing on lttng is the fact that we cannot
-> "live" view traces. The fact that we cannot have "tail -f" like option or
-> "less" like capabilities might be the decision factor of moving out from
-> lttng use.
-> I would really appreciate if you can update me on the time frame of "live"
-> view of traces. If you know, what will it include and when it is supposed to
-> be, it can help us much in our decision. If there is any other option to use
-> in the mean time instead, it will be great to know as well..
-> Thanks in advance
-> Dror Granot
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
+-- 
+Paul Woegerer, SW Development Engineer
+Sourcery Analyzer <http://go.mentor.com/sourceryanalyzer>
+Mentor Graphics, Embedded Software Division
