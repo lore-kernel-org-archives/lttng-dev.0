@@ -1,26 +1,20 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: LTTng Tools Development - FUN
-Date: Tue, 3 Sep 2013 22:35:06 -0400
-Message-ID: <20130904023506.GA23655__33849.0048925907$1378262155$gmane$org@ev0ke.net>
+From: "Ikaheimonen, JP" <jp_ikaheimonen@mentor.com>
+Subject: Re: How to disable an event that's been enabled by a
+ wildcard selection or -a? (lttng-dev Digest, Vol 64, Issues 30, 38)
+Date: Wed, 4 Sep 2013 09:02:31 +0000
+Message-ID: <009B25148989C6458484484699278506E5387790__30550.2744894058$1378285408$gmane$org@EU-MBX-01.mgc.mentorg.com>
+References: <48CF5AC71E61DB46B70D0F388054EFFD2678BEB2@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+	<1986194.AcrmLPglby@atv-pwoegere-l3.atv.mentorg.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([5.9.158.244])
+Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1VH2w7-0004d3-CL
-	for lttng-dev@lists.lttng.org; Tue, 03 Sep 2013 22:35:16 -0400
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by smtp.ini-tech.com (Postfix) with ESMTP id 479E5A1DBA
-	for <lttng-dev@lists.lttng.org>; Wed,  4 Sep 2013 02:34:53 +0000 (UTC)
-Received: from smtp.ini-tech.com ([127.0.0.1])
-	by localhost (smtp.ini-tech.com [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id 5RE7_z_xk2fi for <lttng-dev@lists.lttng.org>;
-	Wed,  4 Sep 2013 02:34:52 +0000 (UTC)
-Received: from ev0ke.net (unknown [96.127.200.221])
-	by smtp.ini-tech.com (Postfix) with ESMTPSA id 27BEDA1DAA
-	for <lttng-dev@lists.lttng.org>; Wed,  4 Sep 2013 02:34:52 +0000 (UTC)
-Content-Disposition: inline
+	(envelope-from <jp_ikaheimonen@mentor.com>) id 1VH8z3-0000oZ-Lm
+	for lttng-dev@lists.lttng.org; Wed, 04 Sep 2013 05:02:46 -0400
+In-Reply-To: <1986194.AcrmLPglby@atv-pwoegere-l3.atv.mentorg.com>
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -29,9 +23,22 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev <lttng-dev@lists.lttng.org>
+To: "Woegerer, Paul" <Paul_Woegerer@mentor.com>, "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Yes this looks like me! :P
+What I would like to see is a new command option --exclude as in 
 
-http://www.quickmeme.com/meme/3vojwp/
+lttng enable-event -u "a*" --exclude "ab*,ac*"
+
+In this syntax, the exclusions would apply to this one enabler only, so you could then call
+
+lttng enable-event -u "abc*"
+
+After these two commands, events such as 'abc' would be enabled (via the second enabler) but an event 'abd' would not get enabled (as it only matches the first enabler but is excluded in it).
+
+However, when I looked into how to implement this, it seemed that the most reasonable solution would require changes to the event interface down to the tracer level structures, which I would not want to have.
+For the particular use case that I have in mind, the enable-event "!ab*,!ac*" syntax will be quite sufficient. Using this syntax, the "!"-events override any other enablers. That is, if a new event matches with any "!"-event enabler, the event will not be enabled at all, even if it matches any non-"!"-enablers. In a UST patch I sent earlier, the functionality is exactly this. I also submitted a TOOLS patch for the --exclude option, but that is implemented only as a convenient shortcut to "!" - that is, lttng enable-event -u "a*" --exclude "ab*,ac*" will be interpreted as lttng enable-event -u "!ab*,!ac*,a*" .
+
+Cheers,
+JP
