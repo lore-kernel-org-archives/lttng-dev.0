@@ -1,20 +1,17 @@
-From: "Ikaheimonen, JP" <jp_ikaheimonen@mentor.com>
-Subject: Re: How to disable an event that's been enabled by a
- wildcard selection or -a? (lttng-dev Digest, Vol 64, Issues 30, 38)
-Date: Wed, 4 Sep 2013 09:02:31 +0000
-Message-ID: <009B25148989C6458484484699278506E5387790__30550.2744894058$1378285408$gmane$org@EU-MBX-01.mgc.mentorg.com>
-References: <48CF5AC71E61DB46B70D0F388054EFFD2678BEB2@VAL-E-02.valcartier.drdc-rddc.gc.ca>
-	<1986194.AcrmLPglby@atv-pwoegere-l3.atv.mentorg.com>
+From: Zifei Tong <soariez@gmail.com>
+Subject: [RFC PATCH] Basic support of UST dynamic instrumentation
+Date: Wed, 4 Sep 2013 18:54:51 +0800
+Message-ID: <CAJ7wx-EDBibZ-MO7pWfGGBdx+2yzN7pENpWpEoWAj7r5hDSGSA__38393.3245823302$1378292177$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from relay1.mentorg.com ([192.94.38.131])
+Received: from mail-ve0-f181.google.com ([209.85.128.181])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jp_ikaheimonen@mentor.com>) id 1VH8z3-0000oZ-Lm
-	for lttng-dev@lists.lttng.org; Wed, 04 Sep 2013 05:02:46 -0400
-In-Reply-To: <1986194.AcrmLPglby@atv-pwoegere-l3.atv.mentorg.com>
-Content-Language: en-US
+	(envelope-from <soariez@gmail.com>) id 1VHAkL-0000PX-1h
+	for lttng-dev@lists.lttng.org; Wed, 04 Sep 2013 06:55:39 -0400
+Received: by mail-ve0-f181.google.com with SMTP id jz10so99153veb.12
+	for <lttng-dev@lists.lttng.org>; Wed, 04 Sep 2013 03:55:31 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,22 +20,50 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Woegerer, Paul" <Paul_Woegerer@mentor.com>, "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-What I would like to see is a new command option --exclude as in 
-
-lttng enable-event -u "a*" --exclude "ab*,ac*"
-
-In this syntax, the exclusions would apply to this one enabler only, so you could then call
-
-lttng enable-event -u "abc*"
-
-After these two commands, events such as 'abc' would be enabled (via the second enabler) but an event 'abd' would not get enabled (as it only matches the first enabler but is excluded in it).
-
-However, when I looked into how to implement this, it seemed that the most reasonable solution would require changes to the event interface down to the tracer level structures, which I would not want to have.
-For the particular use case that I have in mind, the enable-event "!ab*,!ac*" syntax will be quite sufficient. Using this syntax, the "!"-events override any other enablers. That is, if a new event matches with any "!"-event enabler, the event will not be enabled at all, even if it matches any non-"!"-enablers. In a UST patch I sent earlier, the functionality is exactly this. I also submitted a TOOLS patch for the --exclude option, but that is implemented only as a convenient shortcut to "!" - that is, lttng enable-event -u "a*" --exclude "ab*,ac*" will be interpreted as lttng enable-event -u "!ab*,!ac*,a*" .
-
-Cheers,
-JP
+SGksCgpJIGFtIHdyaXRpbmcgdG8gc3VibWl0IGEgcGF0Y2ggc2V0IHRvIGltcGxlbWVudCBiYXNp
+YyBzdXBwb3J0IG9mIFVTVApkeW5hbWljIGluc3RydW1lbnRhdGlvbi4KCkJhc2VkIG9uIHRoZSBk
+aXNjdXNzaW9uIGluIHByZXZpb3VzIHRocmVhZCAgWzFdOgpNYXRoaWV1IERlc25veWVycyA8bWF0
+aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPiB3cm90ZToKPiBCYXNpY2FsbHksIHdlIGVuYWJs
+ZSBhbiBldmVudCB0YXJnZXRpbmc6Cj4KPiAgIC0gYW4gZXhlY3V0YWJsZSBvciBhIHNoYXJlZCBv
+YmplY3QsCj4gICAtIGEgc3ltYm9sIG9yIG9mZnNldCB3aXRoaW4gdGhpcyBleGVjdXRhYmxlIG9y
+IG9iamVjdC4KPgo+IFRoaXMgd291bGQgYmUgdGhlIGJhc2ljIGluc3RydW1lbnRhdGlvbiBtb2Rl
+IHRoYXQgd291bGQgYWxsb3cKPiBkeW5hbWljIGluc3RydW1lbnRhdGlvbiBhY3Jvc3MgYWxsIHBy
+b2Nlc3NlcyB1c2luZyB0aGUgZXhlY3V0YWJsZSBvcgo+IC5zby4KCkkndmUgY2hhbmdlZCB0aGUg
+cHJvcG9zZWQgY29tbWFuZCBsaW5lIGludGVyZmFjZSBhcyBmb2xsb3dzOgoKIyBsdHRuZyBlbmFi
+bGUtZXZlbnQgYW5hbWUgLXUKRXZlbnQgb3B0aW9uczoKICAgIC0tcHJvYmUgW29iamVjdEBdKGFk
+ZHIgfCBzeW1ib2wgfCBzeW1ib2wrb2Zmc2V0KQogICAgICAgICAgICAgICAgICAgICAgICAgICBE
+eW5hbWljIHByb2JlLgogICAgICAgICAgICAgICAgICAgICAgICAgICAtIHVzZXJzcGFjZSB0cmFj
+ZXIgcmVxdWlyZXMgc3BlY2lmeWluZyBhbgpvYmplY3QgdG8gaW5zdHJ1bWVudC4KICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgLSBBZGRyIGFuZCBvZmZzZXQgY2FuIGJlIG9jdGFsICgwTk5OLi4u
+KSwKICAgICAgICAgICAgICAgICAgICAgICAgICAgICBkZWNpbWFsIChOTk4uLi4pIG9yIGhleGFk
+ZWNpbWFsICgweE5OTi4uLikKICAgIC0tZnVuY3Rpb24gW29iamVjdEBdKGFkZHIgfCBzeW1ib2wg
+fCBzeW1ib2wrb2Zmc2V0KQogICAgICAgICAgICAgICAgICAgICAgICAgICBEeW5hbWljIGZ1bmN0
+aW9uIGVudHJ5L3JldHVybiBwcm9iZS4KICAgICAgICAgICAgICAgICAgICAgICAgICAgLSB1c2Vy
+c3BhY2UgdHJhY2VyIHJlcXVpcmVzIHNwZWNpZnlpbmcgYW4Kb2JqZWN0IHRvIGluc3RydW1lbnQu
+CiAgICAgICAgICAgICAgICAgICAgICAgICAgIC0gQWRkciBhbmQgb2Zmc2V0IGNhbiBiZSBvY3Rh
+bCAoME5OTi4uLiksCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZGVjaW1hbCAoTk5OLi4u
+KSBvciBoZXhhZGVjaW1hbCAoMHhOTk4uLi4pCgpTbyB0aGUgdXNlciBuZWVkIHRvIHByb3ZpZGUg
+YSBwYXRoIG9mIHRoZSBleGVjdXRhYmxlIG9mIHNoYXJlZCBsaWJyYXJ5CnRvIGluc3RydW1lbnQu
+CgpFeGFtcGxlOgojIGx0dG5nIGVuYWJsZS1ldmVudCBhZXZlbnQgLXUgLS1wcm9iZT0vdG1wL2Eu
+b3V0QG1haW4KIyBsdHRuZyBlbmFibGUtZXZlbnQgYWV2ZW50IC11IC0tZnVuY3Rpb249L3RtcC9h
+Lm91dEBtYWluKzB4NDIKClRoZSBiYXNpYyBwcm9jZWR1cmUgaW1wbGVtZW50ZWQgaXM6CkFmdGVy
+IHRoZSB1c2VyIGV4ZWN1dGUgdGhlIGx0dG5nIGVuYWJsZS1ldmVudCBjb21tYW5kLCBsdHRuZy1z
+ZXNzaW9uZCB3aWxsIHNlbmQKdGhlIGNvbW1hbmQgdG8gYWxsIHJlZ2lzdGVyZWQgYXBwbGljYXRp
+b25zLiBUaGUgYXBwbGljYXRpb25zIHdpbGwgdGhlbiBjaGVjayBpZgp0aGVtc2VsdmVzIGFyZSB0
+byBiZSBpbnN0cnVtZW50ZWQgKHRoZXkgYXJlIHRoZSBleGVjdXRhYmxlIHNwZWNpZmllZCBieSB1
+c2VyIG9yCnRoZXkgbG9hZGVkIHRoZSBzaGFyZWQgbGlicmFyeSBzcGVjaWZpZWQgYnkgdXNlciku
+IElmIHNvLCB0aGUgYXBwIHdpbGwKbm90aWZ5IHRoZQpzZXNzaW9uZCB0byBkbyB0aGUgYWN0dWFs
+IGluc3RydW1lbnRhdGlvbi4KClR3byBpc3N1ZXMgZm9yIG5vdzoKKiAgVGhlIHBhdGNoZXMgbm93
+IGFzc3VtZSB0aGUgZXZlbnQgYXNzb2NpYXRlZCB3aXRoIHRoZSBwcm9iZSB0byBpbnN0cnVtZW50
+CmlzIGFscmVhZHkgcmVnaXN0ZXJlZC4gSSBhbSB3b3JraW5nIG9uIHRvIGVsaW1pbmF0ZSB0aGlz
+IGxpbWl0YXRpb24uCiogIE1ldGhvZHMgdG8gaW5zdHJ1bWVudCBzaGFyZWQgbGlicmFyaWVzIGFy
+ZSBub3QgaW1wbGVtZW50ZWQgeWV0LgoKVGhlIHBhdGNoIHNldCBmb2xsb3dzIGluIHNlcGFyYXRl
+ZCBtYWlscy4gUGxlYXNlIHByb3ZpZGUgeW91ciBjb21tZW50cy4KClRoYW5rIHlvdSEKClsxXSBo
+dHRwOi8vbGlzdHMubHR0bmcub3JnL3BpcGVybWFpbC9sdHRuZy1kZXYvMjAxMy1BdWd1c3QvMDIx
+MDU2Lmh0bWwKLS0KQmVzdCBSZWdhcmRzLArku53lrZDpo54gKFppZmVpIFRvbmcpCgpfX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGlu
+ZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9j
+Z2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
