@@ -1,18 +1,16 @@
-From: "Woegerer, Paul" <Paul_Woegerer@mentor.com>
-Subject: Re: Getting function names with	lttng-ust-cyg-profile.so
-Date: Tue, 10 Sep 2013 17:45:25 +0200
-Message-ID: <522F3E95.7000203__29112.5382799239$1378827993$gmane$org@mentor.com>
-References: <522E4FCE.7070000@voxpopuli.im> <20130909234409.GA11082@Krystal>
-	<522EC38B.6000501@mentor.com> <522F3CC1.5060005@ericsson.com>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Subject: Re: Request information on "Live" view of traces
+Date: Tue, 10 Sep 2013 16:39:24 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD2678EC98__13844.6661913351$1378831224$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from relay1.mentorg.com ([192.94.38.131])
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Paul_Woegerer@mentor.com>) id 1VJQ8E-0002FW-Vm
-	for lttng-dev@lists.lttng.org; Tue, 10 Sep 2013 11:45:40 -0400
-In-Reply-To: <522F3CC1.5060005@ericsson.com>
+	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1VJQyK-00059m-Uw
+	for lttng-dev@lists.lttng.org; Tue, 10 Sep 2013 12:39:30 -0400
+Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,32 +19,60 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Matthew Khouzam <matthew.khouzam@ericsson.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-On 09/10/2013 05:37 PM, Matthew Khouzam wrote:
-> On 13-09-10 03:00 AM, Woegerer, Paul wrote:
->> Hi Alexandre,
->>
->> For trivial examples you can go with 'nm -CS' (or the like), but when
->> you start to use liblttng-ust-cyg-profile.so in combination with shared
->> objects you will need to record base address information as well (to
->> allow you map a virtual memory address at a given point in time to
->> offset and path of a shared object (or executable)).
->>
->> That is one of the reasons why I have submitted:
->> http://lists.lttng.org/pipermail/lttng-dev/2013-August/021264.html
-> This is a very interesting approach, +1 from me on that.
+Date: Tue, 10 Sep 2013 11:28:53 -0400
+From: Julien Desfossez <jdesfossez@efficios.com>
 
-Thanks.
+> > -----Message d'origine-----
+> > The live trace reading mechanism offers guarantees that the viewer can =
+never be in a position where it has to assume that it can read the trace sa=
+fely. =
 
-With that approach no redundant data (that is already available as
-debuginfo) gets replicated in the actual trace data.
-Only the bare minimum of information gets traced to allow you at any
-time to map a VM address to a debuginfo address + debuginfo location.
+> > ------------------------------
+>
+> There are two risks when reading an active trace : reading a trace withou=
+t the complete metadata, and assuming a stream is inactive.
+>
+> If the viewer tries to read a trace for which it does not have the full m=
+etadata (which is not known during normal tracing), it risks to crash readi=
+ng the trace. The live trace reading
+> feature prevents the viewer from getting trace packets if there is new me=
+tadata appended between two packets read.
+>
+> Also, if a stream is inactive, usually the viewer would have to wait unti=
+l it is active again to continue processing the trace. The live trace readi=
+ng feature informs the viewer that it can
+> safely consider a stream inactive up to a certain point in time. That way=
+, it can continue to process the trace without waiting indefinitely for an =
+inactive stream. The live-timer
+> parameter, configured during the session creation by the user, defines th=
+e sending rate of these inactivity beacons.
+>
+> I hope it clarifies the situation.
+>
+> Julien
 
--- 
-Paul Woegerer, SW Development Engineer
-Sourcery Analyzer <http://go.mentor.com/sourceryanalyzer>
-Mentor Graphics, Embedded Software Division
+   Then maybe what should have been said is:
+
+The live trace reading mechanism offers guarantees that the viewer can neve=
+r be in a position where it cannot read the trace safely.
+
+   Right?
+
+Daniel U. Thibault
+Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
+ntermeasures (SPC)
+Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
+Cyber Security (MCCS)
+R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
+ Canada - Valcartier (DRDC Valcartier)
+2459 route de la Bravoure
+Qu=E9bec QC  G3J 1X5
+CANADA
+Vox : (418) 844-4000 x4245
+Fax : (418) 844-4538
+NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+Gouvernement du Canada | Government of Canada
+<http://www.valcartier.drdc-rddc.gc.ca/>
