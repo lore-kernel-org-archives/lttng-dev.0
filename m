@@ -1,17 +1,17 @@
 From: Matthew Khouzam <matthew.khouzam@ericsson.com>
-Subject: Re: LTTng 2.4 code name
-Date: Tue, 10 Sep 2013 10:55:34 -0400
-Message-ID: <522F32E6.7000809__19316.1766663708$1378825003$gmane$org@ericsson.com>
-References: <475933778.4601775.1378758234649.JavaMail.root@polymtl.ca>
+Subject: Re: Getting function names with	lttng-ust-cyg-profile.so
+Date: Tue, 10 Sep 2013 11:15:38 -0400
+Message-ID: <522F379A.9010308__10218.9269768589$1378826206$gmane$org@ericsson.com>
+References: <522E4FCE.7070000@voxpopuli.im> <20130909234409.GA11082@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from usevmg20.ericsson.net ([198.24.6.45])
+Received: from usevmg21.ericsson.net ([198.24.6.65])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <matthew.khouzam@ericsson.com>) id 1VJPM6-0007s7-2y
-	for lttng-dev@lists.lttng.org; Tue, 10 Sep 2013 10:55:55 -0400
-In-Reply-To: <475933778.4601775.1378758234649.JavaMail.root@polymtl.ca>
+	(envelope-from <matthew.khouzam@ericsson.com>) id 1VJPfQ-0000XL-Fv
+	for lttng-dev@lists.lttng.org; Tue, 10 Sep 2013 11:15:54 -0400
+In-Reply-To: <20130909234409.GA11082@Krystal>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,23 +20,85 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Michel Dagenais <michel.dagenais@polymtl.ca>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-I would +1 Ephemere, it goes well with live trace reading.
+Hi Alex and Mathieu,
 
-On 13-09-09 04:23 PM, Michel Dagenais wrote:
+A year ago we discussed this and said iirc: "the addresses are a good
+first step, we'll do more later." and "It would be nice to dump the
+stabs into the metadata of the ctf trace"
+
+I would still maintain that this seems to be the way to go.
+
+A technical hurdle that is probably trivial to our high level tracing
+vanguards would be to handle dlopens and libs that replace other libs.
+
+I would suggest something like this in TSDL:
+
+location {
+    address = 0xdeadbeef;
+    name = "get_actual_lost_events";
+}
+
+location {
+    address = 0xf00ff00f;
+    name = "get_pretend_lost_events";
+    // optional
+    timestart = 123456;
+    timeend = 123457;
+}
+
+
+The metadata will get big and dynamic though.
+
+On 13-09-09 07:44 PM, Mathieu Desnoyers wrote:
+> We might want to investigate doing a side-program that gathers the
+> executables on the system, and lookup the symbols from the ELF. We could
+> save those in a bin/ subdirectory of a CTF trace. All we need is
+> instrumentation of the dynamic linker, and to know the executable names
+> associated with PIDs. There is a UST feature request for dynamic linker
+> instrumentation.
 >
->> Don't forget, it's a beer that must be made in the Quebec province and
->> from a microbrewery. For 2.4, the beer must begin with the letter "E".
-> Some help:
+> Thanks,
 >
-> http://www.bieresduquebec.ca/bieres
+> Mathieu
 >
-> There is quite a choice, Ete indien, Elixir celeste, Ephemere... Any indication on the character of this release to find a more suitable name?
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> * Alexandre Montplaisir (alexmonthy@voxpopuli.im) wrote:
+>> Hi all,
+>>
+>> I've recently started playing with liblttng-ust-cyg-profile.so (aka,
+>> getting UST events from -finstrument-functions), and I have to say it's
+>> pretty nifty! I haven't done any benchmarks, but it's certainly faster
+>> than the typical printf() that people use with it...
+>>
+>> However, in the resulting trace, one only gets the addresses of the
+>> functions. I understand how it's relatively "easy" for the seasoned user
+>> to use nm or addr2line to get the actual function names, but would it
+>> possible - and how hard would it be - to have this information (function
+>> names) directly in the trace?
+>>
+>>
+>> I'm trying to leverage this feature in Eclipse TMF to display a call
+>> stack for such UST traces. And to be honest, displaying a call stack
+>> with only the function addresses is completely useless, we need the
+>> function names.
+>>
+>> We could have the user import a text file (which he can generate with
+>> "nm appname > file.txt" for example). But then he needs the original
+>> binary, which he might not have. And that binary needs to be compiled
+>> with debugging symbols. If the function name information was already in
+>> the trace, it would make the user experience much better, and our job
+>> much easier! ;)
+>>
+>>
+>> Thoughts?
+>>
+>> Thanks,
+>> Alex
+>>
+>> _______________________________________________
+>> lttng-dev mailing list
+>> lttng-dev@lists.lttng.org
+>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
