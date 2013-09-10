@@ -1,17 +1,17 @@
-From: Christian Babeux <christian.babeux@efficios.com>
-Subject: LTTng project development activities September 2013
-Date: Tue, 10 Sep 2013 15:09:15 -0400
-Message-ID: <CAGDH53k-O+mnr+Jsu3kKVP-pRD4sDW42imETmPBiWzXVyQMCCg__44688.6447993622$1378840275$gmane$org@mail.gmail.com>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Subject: Difference in metadata between per-PID and per-UID
+	traces
+Date: Tue, 10 Sep 2013 20:07:24 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD2678ED56__28.2723260626838$1378843711$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ve0-f180.google.com ([209.85.128.180])
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <christian.babeux@0x80.ca>) id 1VJTJR-0004wp-2n
-	for lttng-dev@lists.lttng.org; Tue, 10 Sep 2013 15:09:26 -0400
-Received: by mail-ve0-f180.google.com with SMTP id jz11so4789575veb.39
-	for <lttng-dev@lists.lttng.org>; Tue, 10 Sep 2013 12:09:15 -0700 (PDT)
+	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1VJUDc-0008Ak-Kw
+	for lttng-dev@lists.lttng.org; Tue, 10 Sep 2013 16:07:30 -0400
+Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,34 +23,52 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-SGkgbHR0bmctYWZpY2lvbmFkb3MsCgpBdWd1c3QgMjAxMyBzdW1tYXJ5OgoKLSBTdGFibGUgcmVs
-ZWFzZSBmb3IgMi4zIChEb21pbnVzIFZvYmlzY3VtKSA6IHRoZSBzbmFwc2hvdHMgYW5kIGNyYXNo
-CmhhbmRsZXIgYXJlIHRoZSBuZXcgZmVhdHVyZXMgZm9yIHRoaXMgdmVyc2lvbi4gU2VlIGFubm91
-bmNlbWVudCBbMV0KZm9yIG1vcmUgaW5mb3JtYXRpb24uCgotIEJ1ZyB0cmFja2VyIGNsZWFudXAg
-aGFzIGJlZW4gZG9uZS4gVGhhbmtzIHRvIGFsbCBwYXJ0aWNpcGFudHMuCgotIE1pbm9yIHJlbGVh
-c2VzOgoKbHR0bmctdG9vbHMgMi4yLjQKCk9uLWdvaW5nIHdvcms6CgotIFdlIGFyZSBjdXJyZW50
-bHkgc3RhcnRpbmcgdGhlIGRldmVsb3BtZW50IGN5Y2xlIGZvciAyLjQgKGNvZGVuYW1lCnVua25v
-d24gYXQgdGhpcyBtb21lbnQsIHNlZSB0aHJlYWQgWzJdKS4gVGhpcyByZWxlYXNlIHdpbGwgY29u
-dGFpbiB0aGUKbGl2ZSBzdHJlYW1pbmcvdmlld2luZyBvZiB0cmFjZXMgYW5kIGFsc28gYSBKYXZh
-IFV0aWwgTG9nZ2luZyAoSlVMKQpiYWNrZW5kIHVzaW5nIFVTVC4gV2UgYXJlIGFpbWluZyBmb3Ig
-YSByZWxlYXNlIGNhbmRpZGF0ZSBpbiBOb3ZlbWJlci4KCi0gRGF2aWQgR291bGV0IGlzIGN1cnJl
-bnRseSB3b3JraW5nIG9uIHRoZSBKVUwgYmFja2VuZCB1c2luZyBVU1QuIFRoaXMKZmVhdHVyZSB3
-aWxsIGJlIHBhcnQgb2YgdGhlIDIuNCByZWxlYXNlLgoKLSBKdWxpZW4gRGVzZm9zc2V6IGlzIGN1
-cnJlbnRseSB3b3JraW5nIG9uIGxpdmUgc3RyZWFtaW5nLiBUaGlzCmZlYXR1cmUgd2lsbCBiZSBw
-YXJ0IG9mIHRoZSAyLjQgcmVsZWFzZS4KCi0gSsOpcsOpbWllIEdhbGFybmVhdSBoYXMgZmluaXNo
-ZWQgdGhlIGltcGxlbWVudGF0aW9uL3Rlc3Rpbmcgb2YgdGhlCkNvbW1vbiBUcmFjZSBGb3JtYXQK
-KENURikgd3JpdGVyIGluIHRoZSBCYWJlbHRyYWNlIGNvZGViYXNlLiBZb3UgY2FuIHNlZSB0aGUg
-cGVuZGluZwpwYXRjaGVzIGhlcmUgWzNdLgpUaGlzIGZlYXR1cmUgd2lsbCBwcm9iYWJseSBlbmQg
-dXAgaW4gQmFiZWx0cmFjZSAxLjIuCgotIENocmlzdGlhbiBCYWJldXggaXMgY3VycmVudGx5IHdv
-cmtpbmcgb24gYSBOZXh1cyB0byBDVEYgdHJhY2VzIGNvbnZlcnRlci4KCi0gT3VyIEdTb0Mgc3R1
-ZGVudCwgWmlmZWkgVG9uZywgaXMgY3VycmVudGx5IHdvcmtpbmcgb24gYWRkaW5nIGR5bmFtaWMK
-dHJhY2luZyBjYXBhYmlsaXRpZXMgdG8gbHR0bmctdG9vbHMvdXN0LiBFYXJseSBwYXRjaGVzIGZv
-ciBjb21tZW50cwpoYXZlIGJlZW4gc2VudCBbNF0uCgpUaGFua3MsCgpDaHJpc3RpYW4KClsxXSAt
-IGh0dHA6Ly9sdHRuZy5vcmcvbHR0bmctdG9vbGNoYWluLTIzMC1vdXQKWzJdIC0gaHR0cDovL2xp
-c3RzLmx0dG5nLm9yZy9waXBlcm1haWwvbHR0bmctZGV2LzIwMTMtU2VwdGVtYmVyLzAyMTMyOS5o
-dG1sClszXSAtIGh0dHBzOi8vZ2l0aHViLmNvbS9qZ2FsYXIvYmFiZWx0cmFjZS9jb21taXRzL2N0
-Zi13cml0ZXItcmV2aWV3Cls0XSAtIGh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvcGlwZXJtYWlsL2x0
-dG5nLWRldi8yMDEzLVNlcHRlbWJlci8wMjEzMTUuaHRtbAoKX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1k
-ZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFu
-L2xpc3RpbmZvL2x0dG5nLWRldgo=
+   I notice that the metadata of per-PID user-space traces has three attrib=
+utes which are dropped from the equivalent per-UID trace:
+
+Per-PID trace:
+
+env {
+	hostname =3D "sds-dut-vb";
+	domain =3D "ust";
+	tracer_name =3D "lttng-ust";
+	tracer_major =3D 2;
+	tracer_minor =3D 3;
+	tracer_patchlevel =3D 0;
+	vpid =3D 7024;
+	procname =3D "simple";
+};
+
+Per-UID trace:
+
+env {
+	hostname =3D "sds-dut-vb";
+	domain =3D "ust";
+	tracer_name =3D "lttng-ust";
+	tracer_major =3D 2;
+	tracer_minor =3D 3;
+};
+
+   The trace data are the same in this case (two trace sessions capturing t=
+he same events in parallel), so this change in metadata only shows up in ba=
+beltrace's output (when using '-f all -n all' for example).
+
+   Is this intentional?  It does mean per-UID traces "anonymize" the event =
+data slightly.  And why is "tracer_patchlevel" dropped alongside the proces=
+s-related attributes?
+
+Daniel U. Thibault
+Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
+ntermeasures (SPC)
+Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
+Cyber Security (MCCS)
+R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
+ Canada - Valcartier (DRDC Valcartier)
+2459 route de la Bravoure
+Qu=E9bec QC=A0 G3J 1X5
+CANADA
+Vox=A0: (418) 844-4000 x4245
+Fax=A0: (418) 844-4538
+NAC=A0: 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+Gouvernement du Canada=A0| Government of Canada
+<http://www.valcartier.drdc-rddc.gc.ca/>
