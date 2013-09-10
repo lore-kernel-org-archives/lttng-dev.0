@@ -1,17 +1,17 @@
-From: Julien Desfossez <jdesfossez@efficios.com>
-Subject: Re: Request information on "Live" view of traces
-Date: Tue, 10 Sep 2013 13:48:48 -0400
-Message-ID: <522F5B80.6030204__32217.0482286767$1378835404$gmane$org@efficios.com>
-References: <48CF5AC71E61DB46B70D0F388054EFFD2678EC98@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+From: Christian Babeux <christian.babeux@efficios.com>
+Subject: LTTng project development activities September 2013
+Date: Tue, 10 Sep 2013 15:09:15 -0400
+Message-ID: <CAGDH53k-O+mnr+Jsu3kKVP-pRD4sDW42imETmPBiWzXVyQMCCg__44688.6447993622$1378840275$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fukushima.klipix.org ([93.20.26.243])
+Received: from mail-ve0-f180.google.com ([209.85.128.180])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jdesfossez@efficios.com>) id 1VJS3b-0000Tg-BF
-	for lttng-dev@lists.lttng.org; Tue, 10 Sep 2013 13:49:01 -0400
-In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD2678EC98@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+	(envelope-from <christian.babeux@0x80.ca>) id 1VJTJR-0004wp-2n
+	for lttng-dev@lists.lttng.org; Tue, 10 Sep 2013 15:09:26 -0400
+Received: by mail-ve0-f180.google.com with SMTP id jz11so4789575veb.39
+	for <lttng-dev@lists.lttng.org>; Tue, 10 Sep 2013 12:09:15 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,83 +20,37 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-
-
-On 13-09-10 12:39 PM, Thibault, Daniel wrote:
-> Date: Tue, 10 Sep 2013 11:28:53 -0400
-> From: Julien Desfossez <jdesfossez@efficios.com>
-> =
-
->>> -----Message d'origine-----
->>> The live trace reading mechanism offers guarantees that the viewer can =
-never be in a position where it has to assume that it can read the trace sa=
-fely. =
-
->>> ------------------------------
->>
->> There are two risks when reading an active trace : reading a trace witho=
-ut the complete metadata, and assuming a stream is inactive.
->>
->> If the viewer tries to read a trace for which it does not have the full =
-metadata (which is not known during normal tracing), it risks to crash read=
-ing the trace. The live trace reading
->> feature prevents the viewer from getting trace packets if there is new m=
-etadata appended between two packets read.
->>
->> Also, if a stream is inactive, usually the viewer would have to wait unt=
-il it is active again to continue processing the trace. The live trace read=
-ing feature informs the viewer that it can
->> safely consider a stream inactive up to a certain point in time. That wa=
-y, it can continue to process the trace without waiting indefinitely for an=
- inactive stream. The live-timer
->> parameter, configured during the session creation by the user, defines t=
-he sending rate of these inactivity beacons.
->>
->> I hope it clarifies the situation.
->>
->> Julien
-> =
-
->    Then maybe what should have been said is:
-> =
-
-> The live trace reading mechanism offers guarantees that the viewer can ne=
-ver be in a position where it cannot read the trace safely.
-> =
-
->    Right?
-Yes, that is especially true for the metadata part, for the inactive
-streams the viewer could have assumed a stream was terminated.
-
-But yes, in the end, the viewer knows it can read the trace safely.
-
-Julien
-
-> =
-
-> Daniel U. Thibault
-> Protection des syst=E8mes et contremesures (PSC) | Systems Protection & C=
-ountermeasures (SPC)
-> Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critica=
-l Cyber Security (MCCS)
-> R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R=
-&D Canada - Valcartier (DRDC Valcartier)
-> 2459 route de la Bravoure
-> Qu=E9bec QC  G3J 1X5
-> CANADA
-> Vox : (418) 844-4000 x4245
-> Fax : (418) 844-4538
-> NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-> Gouvernement du Canada | Government of Canada
-> <http://www.valcartier.drdc-rddc.gc.ca/>
-> =
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> =
+SGkgbHR0bmctYWZpY2lvbmFkb3MsCgpBdWd1c3QgMjAxMyBzdW1tYXJ5OgoKLSBTdGFibGUgcmVs
+ZWFzZSBmb3IgMi4zIChEb21pbnVzIFZvYmlzY3VtKSA6IHRoZSBzbmFwc2hvdHMgYW5kIGNyYXNo
+CmhhbmRsZXIgYXJlIHRoZSBuZXcgZmVhdHVyZXMgZm9yIHRoaXMgdmVyc2lvbi4gU2VlIGFubm91
+bmNlbWVudCBbMV0KZm9yIG1vcmUgaW5mb3JtYXRpb24uCgotIEJ1ZyB0cmFja2VyIGNsZWFudXAg
+aGFzIGJlZW4gZG9uZS4gVGhhbmtzIHRvIGFsbCBwYXJ0aWNpcGFudHMuCgotIE1pbm9yIHJlbGVh
+c2VzOgoKbHR0bmctdG9vbHMgMi4yLjQKCk9uLWdvaW5nIHdvcms6CgotIFdlIGFyZSBjdXJyZW50
+bHkgc3RhcnRpbmcgdGhlIGRldmVsb3BtZW50IGN5Y2xlIGZvciAyLjQgKGNvZGVuYW1lCnVua25v
+d24gYXQgdGhpcyBtb21lbnQsIHNlZSB0aHJlYWQgWzJdKS4gVGhpcyByZWxlYXNlIHdpbGwgY29u
+dGFpbiB0aGUKbGl2ZSBzdHJlYW1pbmcvdmlld2luZyBvZiB0cmFjZXMgYW5kIGFsc28gYSBKYXZh
+IFV0aWwgTG9nZ2luZyAoSlVMKQpiYWNrZW5kIHVzaW5nIFVTVC4gV2UgYXJlIGFpbWluZyBmb3Ig
+YSByZWxlYXNlIGNhbmRpZGF0ZSBpbiBOb3ZlbWJlci4KCi0gRGF2aWQgR291bGV0IGlzIGN1cnJl
+bnRseSB3b3JraW5nIG9uIHRoZSBKVUwgYmFja2VuZCB1c2luZyBVU1QuIFRoaXMKZmVhdHVyZSB3
+aWxsIGJlIHBhcnQgb2YgdGhlIDIuNCByZWxlYXNlLgoKLSBKdWxpZW4gRGVzZm9zc2V6IGlzIGN1
+cnJlbnRseSB3b3JraW5nIG9uIGxpdmUgc3RyZWFtaW5nLiBUaGlzCmZlYXR1cmUgd2lsbCBiZSBw
+YXJ0IG9mIHRoZSAyLjQgcmVsZWFzZS4KCi0gSsOpcsOpbWllIEdhbGFybmVhdSBoYXMgZmluaXNo
+ZWQgdGhlIGltcGxlbWVudGF0aW9uL3Rlc3Rpbmcgb2YgdGhlCkNvbW1vbiBUcmFjZSBGb3JtYXQK
+KENURikgd3JpdGVyIGluIHRoZSBCYWJlbHRyYWNlIGNvZGViYXNlLiBZb3UgY2FuIHNlZSB0aGUg
+cGVuZGluZwpwYXRjaGVzIGhlcmUgWzNdLgpUaGlzIGZlYXR1cmUgd2lsbCBwcm9iYWJseSBlbmQg
+dXAgaW4gQmFiZWx0cmFjZSAxLjIuCgotIENocmlzdGlhbiBCYWJldXggaXMgY3VycmVudGx5IHdv
+cmtpbmcgb24gYSBOZXh1cyB0byBDVEYgdHJhY2VzIGNvbnZlcnRlci4KCi0gT3VyIEdTb0Mgc3R1
+ZGVudCwgWmlmZWkgVG9uZywgaXMgY3VycmVudGx5IHdvcmtpbmcgb24gYWRkaW5nIGR5bmFtaWMK
+dHJhY2luZyBjYXBhYmlsaXRpZXMgdG8gbHR0bmctdG9vbHMvdXN0LiBFYXJseSBwYXRjaGVzIGZv
+ciBjb21tZW50cwpoYXZlIGJlZW4gc2VudCBbNF0uCgpUaGFua3MsCgpDaHJpc3RpYW4KClsxXSAt
+IGh0dHA6Ly9sdHRuZy5vcmcvbHR0bmctdG9vbGNoYWluLTIzMC1vdXQKWzJdIC0gaHR0cDovL2xp
+c3RzLmx0dG5nLm9yZy9waXBlcm1haWwvbHR0bmctZGV2LzIwMTMtU2VwdGVtYmVyLzAyMTMyOS5o
+dG1sClszXSAtIGh0dHBzOi8vZ2l0aHViLmNvbS9qZ2FsYXIvYmFiZWx0cmFjZS9jb21taXRzL2N0
+Zi13cml0ZXItcmV2aWV3Cls0XSAtIGh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvcGlwZXJtYWlsL2x0
+dG5nLWRldi8yMDEzLVNlcHRlbWJlci8wMjEzMTUuaHRtbAoKX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1k
+ZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFu
+L2xpc3RpbmZvL2x0dG5nLWRldgo=
