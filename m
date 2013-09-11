@@ -1,406 +1,163 @@
-From: Amit Margalit <AMITM@il.ibm.com>
-Subject: Re: Getting function names with	lttng-ust-cyg-profile.so
-Date: Wed, 11 Sep 2013 16:30:04 +0200
-Message-ID: <OFC3A1E1D4.1FA9A997-ONC2257BE3.004DF99B-C2257BE3.004FA103__29423.3982022435$1378909916$gmane$org@il.ibm.com>
-References: <522E4FCE.7070000@voxpopuli.im>
-	<20130909234409.GA11082@Krystal>	<522EC38B.6000501@mentor.com>
-	<522F3CC1.5060005@ericsson.com> <522F3E95.7000203@mentor.com>
-	<OFD1B4818C.1C2E4DBC-ONC2257BE3.002FD513-C2257BE3.00328DCA@il.ibm.com>
-	<523060FD.9020504@mentor.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [RFC PATCH] timekeeping: introduce timekeeping_is_busy()
+Date: Wed, 11 Sep 2013 11:08:53 -0400
+Message-ID: <20130911150853.GA19800@Krystal>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0547907194=="
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from e06smtp15.uk.ibm.com ([195.75.94.111])
-	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <amitm@il.ibm.com>) id 1VJlRH-0007Sv-IC
-	for lttng-dev@lists.lttng.org; Wed, 11 Sep 2013 10:30:49 -0400
-Received: from /spool/local
-	by e06smtp15.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use
-	Only! Violators will be prosecuted
-	for <lttng-dev@lists.lttng.org> from <amitm@il.ibm.com>;
-	Wed, 11 Sep 2013 15:24:23 +0100
-Received: from b06cxnps4075.portsmouth.uk.ibm.com
-	(d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-	by d06dlp02.portsmouth.uk.ibm.com (Postfix) with ESMTP id 117762190074
-	for <lttng-dev@lists.lttng.org>; Wed, 11 Sep 2013 15:30:25 +0100 (BST)
-Received: from d06av04.portsmouth.uk.ibm.com (d06av04.portsmouth.uk.ibm.com
-	[9.149.37.216])
-	by b06cxnps4075.portsmouth.uk.ibm.com (8.13.8/8.13.8/NCO v10.0) with
-	ESMTP id r8BEU7tj66846876
-	for <lttng-dev@lists.lttng.org>; Wed, 11 Sep 2013 14:30:08 GMT
-Received: from d06av04.portsmouth.uk.ibm.com (localhost [127.0.0.1])
-	by d06av04.portsmouth.uk.ibm.com (8.14.4/8.14.4/NCO v10.0 AVout) with
-	ESMTP id r8BEUJGj030208
-	for <lttng-dev@lists.lttng.org>; Wed, 11 Sep 2013 08:30:19 -0600
-In-Reply-To: <523060FD.9020504@mentor.com>
-List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
-	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
-	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Woegerer, Paul" <Paul_Woegerer@mentor.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Content-Type: text/plain; charset=us-ascii
+Return-path: <linux-kernel-owner@vger.kernel.org>
+Content-Disposition: inline
+Sender: linux-kernel-owner@vger.kernel.org
+To: Thomas Gleixner <tglx@linutronix.de>, Richard Cochran <richardcochran@gmail.com>, Prarit Bhargava <prarit@redhat.com>, John Stultz <john.stultz@linaro.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Peter Zijlstra <peterz@infradead.org>, Steven Rostedt <rostedt@goodmis.org>, Ingo Molnar <mingo@elte.hu>, linux-kernel@vger.kernel.org, lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-This is a multipart message in MIME format.
---===============0547907194==
-Content-Type: multipart/alternative; boundary="=_alternative 004FA0ACC2257BE3_="
+Starting from commit 06c017fdd4dc48451a29ac37fc1db4a3f86b7f40
+"timekeeping: Hold timekeepering locks in do_adjtimex and hardpps"
+(3.10 kernels), the xtime write seqlock is held across calls to
+__do_adjtimex(), which includes a call to notify_cmos_timer(), and hence
+schedule_delayed_work().
 
-This is a multipart message in MIME format.
---=_alternative 004FA0ACC2257BE3_=
-Content-Type: text/plain; charset="ISO-2022-JP"
+This introduces a side-effect for a set of tracepoints, including mainly
+the workqueue tracepoints: a tracer hooking on those tracepoints and
+reading current time with ktime_get() will cause hard system LOCKUP such
+as:
 
-This kind of a solution is viable.
+WARNING: CPU: 6 PID: 2258 at kernel/watchdog.c:245 watchdog_overflow_callback+0x93/0x9e()
+Watchdog detected hard LOCKUP on cpu 6
+Modules linked in: lttng_probe_workqueue(O) lttng_probe_vmscan(O) lttng_probe_udp(O) lttng_probe_timer(O) lttng_probe_s]
+CPU: 6 PID: 2258 Comm: ntpd Tainted: G           O 3.11.0 #158
+Hardware name: Supermicro X7DAL/X7DAL, BIOS 6.00 12/03/2007
+0000000000000000 ffffffff814f83eb ffffffff813b206a ffff88042fd87c78
+ffffffff8106a07c 0000000000000000 ffffffff810c94c2 0000000000000000
+ffff88041f31bc00 0000000000000000 ffff88042fd87d68 ffff88042fd87ef8
+Call Trace:
+<NMI>  [<ffffffff813b206a>] ? dump_stack+0x41/0x51
+[<ffffffff8106a07c>] ? warn_slowpath_common+0x79/0x92
+[<ffffffff810c94c2>] ? watchdog_overflow_callback+0x93/0x9e
+[<ffffffff8106a12d>] ? warn_slowpath_fmt+0x45/0x4a
+[<ffffffff810c94c2>] ? watchdog_overflow_callback+0x93/0x9e
+[<ffffffff810c942f>] ? watchdog_enable_all_cpus.part.2+0x31/0x31
+[<ffffffff810ecc66>] ? __perf_event_overflow+0x12c/0x1ae
+[<ffffffff810eab60>] ? perf_event_update_userpage+0x13/0xc2
+[<ffffffff81016820>] ? intel_pmu_handle_irq+0x26a/0x2fd
+[<ffffffff813b7a0b>] ? perf_event_nmi_handler+0x24/0x3d
+[<ffffffff813b728f>] ? nmi_handle.isra.3+0x58/0x12f
+[<ffffffff813b7a59>] ? perf_ibs_nmi_handler+0x35/0x35
+[<ffffffff813b7404>] ? do_nmi+0x9e/0x2bc
+[<ffffffff813b6af7>] ? end_repeat_nmi+0x1e/0x2e
+[<ffffffff810a2a33>] ? read_seqcount_begin.constprop.4+0x8/0xf
+[<ffffffff810a2a33>] ? read_seqcount_begin.constprop.4+0x8/0xf
+[<ffffffff810a2a33>] ? read_seqcount_begin.constprop.4+0x8/0xf
+<<EOE>>  [<ffffffff810a2d6c>] ? ktime_get+0x23/0x5e
+[<ffffffffa0314670>] ? lib_ring_buffer_clock_read.isra.28+0x1f/0x21 [lttng_ring_buffer_client_discard]
+[<ffffffffa0314786>] ? lttng_event_reserve+0x112/0x3f3 [lttng_ring_buffer_client_discard]
+[<ffffffffa045b1c5>] ? __event_probe__workqueue_queue_work+0x72/0xe0 [lttng_probe_workqueue]
+[<ffffffff812ef7e9>] ? sock_aio_read.part.10+0x110/0x124
+[<ffffffff81133a36>] ? do_sync_readv_writev+0x50/0x76
+[<ffffffff8107d514>] ? __queue_work+0x1ab/0x265
+[<ffffffff8107da7e>] ? queue_delayed_work_on+0x3f/0x4e
+[<ffffffff810a473d>] ? __do_adjtimex+0x408/0x413
+[<ffffffff810a3e9a>] ? do_adjtimex+0x98/0xee
+[<ffffffff8106cec6>] ? SYSC_adjtimex+0x32/0x5d
+[<ffffffff813bb74b>] ? tracesys+0xdd/0xe2
 
-Here are the concerns we still need to hammer out for this -
-Seeking to an arbitrary time means that our events (P frames by analogy) 
-need to point to the full shared object state dump (the I-frame) somehow.
-In video compression, the decoder (trace viewer in our analogy) is assumed 
-to be receiving the stream sequentially and therefore keeps a copy of N 
-previous frames (and the last I-frame).
-Perhaps in CTF we can circumvent this problem by storing a field in one of 
-the context headers that will allow us to quickly seek to the trace 
-position where the full state dump is stored.
-Emitting such a large set of events could happen at the same time that the 
-system tries to emit high rate of events, which could cause loss of 
-events.
-While loss of events is something we have to consider "possible", I don't 
-like to add to the chances of this happening.
+LTTng uses ktime to have the same time-base across kernel and
+user-space, so traces gathered from LTTng-modules and LTTng-UST can be
+correlated. We plan on using ktime until a fast, scalable, and
+fine-grained time-source for tracing that can be used across kernel and
+user-space, and which does not rely on read seqlock for kernel-level
+synchronization, makes its way into the kernel.
 
-The reason I think putting this in the metadata is preferable is that this 
-keeps things (IMHO) more in the spirit of the CTF format - 
-=> The trace files are self-contained, the metadata is in the metadata 
-stream, and in my humble opinion, the symbolic name of a function is 
-metadata.
-=> The writing of pure application events / tracepoints is not burdened by 
-writing some overhead (albeit an important kind of overhead).
-=> The viewers retain the same type of simplicity that already exists.
-
-This is why I really liked Matthew Khouzam's concept of writing the 
-symbols in the metadata with validity start-time.
-
-Amit
-
-Amit Margalit
-IBM XIV - Storage Reinvented
-XIV-NAS Development Team
-Tel. 03-689-7774
-Fax. 03-689-7230
-
-
-
-From:   "Woegerer, Paul" <Paul_Woegerer@mentor.com>
-To:     Amit Margalit/Israel/IBM@IBMIL
-Cc:     lttng-dev <lttng-dev@lists.lttng.org>, Mathieu Desnoyers 
-<mathieu.desnoyers@efficios.com>, Matthew Khouzam 
-<matthew.khouzam@ericsson.com>
-Date:   09/11/2013 03:24 PM
-Subject:        Re: [lttng-dev] Getting function names with 
-lttng-ust-cyg-profile.so
-
-
-
-On 09/11/2013 11:12 AM, Amit Margalit wrote:
-I agree with Paul, that no redundant data gets replicated with his 
-approach, and my only concern is that this approach really forces a viewer 
-to be sequential. 
-
-Maybe "forces" is too strong a word - but a viewer than wants to let you 
-"roam" the trace freely will have to read the entire trace to figure out 
-the mapping between address and symbol at each point in time. 
-
-At this time, we keep 10GB worth of LTTng traces in our system, but future 
-models will certainly use more. A user asking to go to the end of the 
-trace will have to wait until the entire trace is read in order to see 
-correct translations. 
-
-We could provide a solution to this problem with my approach by emitting 
-an update of the shared object state info every n x K events 
-(configurable).
-
-Assuming we have a 10GB trace data set, we could emit a full shared object 
-state dump after every 100K events of regular trace data (with the same 
-baddr_init events we emit at session_start time). By doing so you don't 
-need to start reading the entire trace from the beginning. Just start 
-reading 100K events before the events you are interested in, and you can 
-guarantee to find a "key frame" for shared object state info.
-
-Note that this is the same concept as used by video compression/streaming:
-I?frame, P?frame, P?frame, P?frame, ..., I?frame, P?frame, P?frame, 
-P?frame, ...
-See: http://en.wikipedia.org/wiki/Video_compression_picture_types
-
-Best,
-Paul
-
-
-I have a different solution, which I think I have explained here before: 
-http://lists.lttng.org/pipermail/lttng-dev/2013-August/021263.html 
-
-I vote for adding this to the metadata. It can be in addition to the 
-ust_baddr events suggeted by Paul. 
-
-Amit 
-
-Amit Margalit 
-IBM XIV - Storage Reinvented 
-XIV-NAS Development Team 
-Tel. 03-689-7774 
-Fax. 03-689-7230 
-
-
-
-From:        "Woegerer, Paul" <Paul_Woegerer@mentor.com> 
-To:        Matthew Khouzam <matthew.khouzam@ericsson.com> 
-Cc:        lttng-dev <lttng-dev@lists.lttng.org>, Mathieu Desnoyers 
-<mathieu.desnoyers@efficios.com> 
-Date:        09/10/2013 06:47 PM 
-Subject:        Re: [lttng-dev] Getting function names with 
-lttng-ust-cyg-profile.so 
-
-
-
-On 09/10/2013 05:37 PM, Matthew Khouzam wrote:
-> On 13-09-10 03:00 AM, Woegerer, Paul wrote:
->> Hi Alexandre,
->>
->> For trivial examples you can go with 'nm -CS' (or the like), but when
->> you start to use liblttng-ust-cyg-profile.so in combination with shared
->> objects you will need to record base address information as well (to
->> allow you map a virtual memory address at a given point in time to
->> offset and path of a shared object (or executable)).
->>
->> That is one of the reasons why I have submitted:
->> http://lists.lttng.org/pipermail/lttng-dev/2013-August/021264.html
-> This is a very interesting approach, +1 from me on that.
-
-Thanks.
-
-With that approach no redundant data (that is already available as
-debuginfo) gets replicated in the actual trace data.
-Only the bare minimum of information gets traced to allow you at any
-time to map a VM address to a debuginfo address + debuginfo location.
-
--- 
-Paul Woegerer, SW Development Engineer
-Sourcery Analyzer <http://go.mentor.com/sourceryanalyzer>
-Mentor Graphics, Embedded Software Division
-
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
-
-
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Richard Cochran <richardcochran@gmail.com>
+Cc: Prarit Bhargava <prarit@redhat.com>
+Cc: John Stultz <john.stultz@linaro.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Ingo Molnar <mingo@elte.hu>
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+---
+diff --git a/include/linux/time.h b/include/linux/time.h
+index d5d229b..f2cec6b 100644
+--- a/include/linux/time.h
++++ b/include/linux/time.h
+@@ -267,4 +267,11 @@ static __always_inline void timespec_add_ns(struct timespec *a, u64 ns)
+ 	a->tv_nsec = ns;
+ }
+ 
++/**
++ * timekeeping_is_busy - is timekeeping busy ?
++ *
++ * Returns 0 if the current execution context can safely read time.
++ */
++extern int timekeeping_is_busy(void);
++
+ #endif
+diff --git a/kernel/time/timekeeping.c b/kernel/time/timekeeping.c
+index 48b9fff..8ec2b5f 100644
+--- a/kernel/time/timekeeping.c
++++ b/kernel/time/timekeeping.c
+@@ -34,6 +34,7 @@
+ static struct timekeeper timekeeper;
+ static DEFINE_RAW_SPINLOCK(timekeeper_lock);
+ static seqcount_t timekeeper_seq;
++static int timekeeper_seq_owner = -1;
+ static struct timekeeper shadow_timekeeper;
+ 
+ /* flag for if timekeeping is suspended */
+@@ -1690,6 +1691,9 @@ int do_adjtimex(struct timex *txc)
+ 	getnstimeofday(&ts);
+ 
+ 	raw_spin_lock_irqsave(&timekeeper_lock, flags);
++	timekeeper_seq_owner = smp_processor_id();
++	/* store to timekeeper_seq_owner before seqcount */
++	barrier();
+ 	write_seqcount_begin(&timekeeper_seq);
+ 
+ 	orig_tai = tai = tk->tai_offset;
+@@ -1701,6 +1705,9 @@ int do_adjtimex(struct timex *txc)
+ 		clock_was_set_delayed();
+ 	}
+ 	write_seqcount_end(&timekeeper_seq);
++	/* store to seqcount before timekeeper_seq_owner */
++	barrier();
++	timekeeper_seq_owner = -1;
+ 	raw_spin_unlock_irqrestore(&timekeeper_lock, flags);
+ 
+ 	return ret;
+@@ -1715,11 +1722,17 @@ void hardpps(const struct timespec *phase_ts, const struct timespec *raw_ts)
+ 	unsigned long flags;
+ 
+ 	raw_spin_lock_irqsave(&timekeeper_lock, flags);
++	timekeeper_seq_owner = smp_processor_id();
++	/* store to timekeeper_seq_owner before seqcount */
++	barrier();
+ 	write_seqcount_begin(&timekeeper_seq);
+ 
+ 	__hardpps(phase_ts, raw_ts);
+ 
+ 	write_seqcount_end(&timekeeper_seq);
++	/* store to seqcount before timekeeper_seq_owner */
++	barrier();
++	timekeeper_seq_owner = -1;
+ 	raw_spin_unlock_irqrestore(&timekeeper_lock, flags);
+ }
+ EXPORT_SYMBOL(hardpps);
+@@ -1737,3 +1750,11 @@ void xtime_update(unsigned long ticks)
+ 	do_timer(ticks);
+ 	write_sequnlock(&jiffies_lock);
+ }
++
++int timekeeping_is_busy(void)
++{
++	if (timekeeper_seq_owner == raw_smp_processor_id())
++		return 1;
++	return 0;
++}
++EXPORT_SYMBOL_GPL(timekeeping_is_busy);
 
 -- 
-Paul Woegerer, SW Development Engineer
-Sourcery Analyzer <http://go.mentor.com/sourceryanalyzer>
-Mentor Graphics, Embedded Software Division
-
---=_alternative 004FA0ACC2257BE3_=
-Content-Type: text/html; charset="ISO-2022-JP"
-
-<font size=2 face="sans-serif">This kind of a solution is viable.</font>
-<br>
-<br><font size=2 face="sans-serif">Here are the concerns we still need
-to hammer out for this -</font>
-<ul>
-<li><font size=2 face="sans-serif">Seeking to an arbitrary time means that
-our events (P frames by analogy) need to point to the full shared object
-state dump (the I-frame) somehow.</font>
-<ul>
-<li><font size=2 face="sans-serif">In video compression, the decoder (trace
-viewer in our analogy) is assumed to be receiving the stream sequentially
-and therefore keeps a copy of N previous frames (and the last I-frame).</font>
-<li><font size=2 face="sans-serif">Perhaps in CTF we can circumvent this
-problem by storing a field in one of the context headers that will allow
-us to quickly seek to the trace position where the full state dump is stored.</font></ul>
-<li><font size=2 face="sans-serif">Emitting such a large set of events
-could happen at the same time that the system tries to emit high rate of
-events, which could cause loss of events.</font>
-<ul>
-<li><font size=2 face="sans-serif">While loss of events is something we
-have to consider &quot;possible&quot;, I don't like to add to the chances
-of this happening.</font></ul></ul>
-<br><font size=2 face="sans-serif">The reason I think putting this in the
-metadata is preferable is that this keeps things (IMHO) more in the spirit
-of the CTF format - </font>
-<br><font size=2 face="sans-serif">=&gt; The trace files are self-contained,
-the metadata is in the metadata stream, and in my humble opinion, the symbolic
-name of a function is metadata.</font>
-<br><font size=2 face="sans-serif">=&gt; The writing of pure application
-events / tracepoints is not burdened by writing some overhead (albeit an
-important kind of overhead).</font>
-<br><font size=2 face="sans-serif">=&gt; The viewers retain the same type
-of simplicity that already exists.</font>
-<br>
-<br><font size=2 face="sans-serif">This is why I really liked Matthew Khouzam's
-concept of writing the symbols in the metadata with validity start-time.</font>
-<br>
-<br><font size=2 face="sans-serif">Amit</font>
-<br>
-<br><font size=2 color=#000080 face="sans-serif">Amit Margalit</font>
-<br><font size=2 color=#808000 face="sans-serif">IBM XIV </font><font size=2 face="sans-serif">-
-<i>Storage Reinvented</i></font>
-<br><font size=2 face="sans-serif">XIV-NAS Development Team</font>
-<br><font size=2 face="sans-serif">Tel. 03</font><font size=2 face="Arial">-689-7774</font>
-<br><font size=2 face="Arial">Fax. 03-689-7230</font>
-<br>
-<br>
-<br>
-<br><font size=1 color=#5f5f5f face="sans-serif">From: &nbsp; &nbsp; &nbsp;
-&nbsp;</font><font size=1 face="sans-serif">&quot;Woegerer, Paul&quot;
-&lt;Paul_Woegerer@mentor.com&gt;</font>
-<br><font size=1 color=#5f5f5f face="sans-serif">To: &nbsp; &nbsp; &nbsp;
-&nbsp;</font><font size=1 face="sans-serif">Amit Margalit/Israel/IBM@IBMIL</font>
-<br><font size=1 color=#5f5f5f face="sans-serif">Cc: &nbsp; &nbsp; &nbsp;
-&nbsp;</font><font size=1 face="sans-serif">lttng-dev &lt;lttng-dev@lists.lttng.org&gt;,
-Mathieu Desnoyers &lt;mathieu.desnoyers@efficios.com&gt;, Matthew Khouzam
-&lt;matthew.khouzam@ericsson.com&gt;</font>
-<br><font size=1 color=#5f5f5f face="sans-serif">Date: &nbsp; &nbsp; &nbsp;
-&nbsp;</font><font size=1 face="sans-serif">09/11/2013 03:24 PM</font>
-<br><font size=1 color=#5f5f5f face="sans-serif">Subject: &nbsp; &nbsp;
-&nbsp; &nbsp;</font><font size=1 face="sans-serif">Re: [lttng-dev]
-Getting function names with &nbsp; &nbsp; &nbsp; &nbsp;lttng-ust-cyg-profile.so</font>
-<br>
-<hr noshade>
-<br>
-<br>
-<br><font size=3>On 09/11/2013 11:12 AM, Amit Margalit wrote:</font>
-<br><font size=2 face="sans-serif">I agree with Paul, that no redundant
-data gets replicated with his approach, and my only concern is that this
-approach really forces a viewer to be sequential.</font><font size=3> <br>
-</font><font size=2 face="sans-serif"><br>
-Maybe &quot;forces&quot; is too strong a word - but a viewer than wants
-to let you &quot;roam&quot; the trace freely will have to read the entire
-trace to figure out the mapping between address and symbol at each point
-in time.</font><font size=3> <br>
-</font><font size=2 face="sans-serif"><br>
-At this time, we keep 10GB worth of LTTng traces in our system, but future
-models will certainly use more. A user asking to go to the end of the trace
-will have to wait until the entire trace is read in order to see correct
-translations.</font><font size=3> </font>
-<br><font size=3><br>
-We could provide a solution to this problem with my approach by emitting
-an update of the shared object state info every n x K events (configurable).<br>
-<br>
-Assuming we have a 10GB trace data set, we could emit a full shared object
-state dump after every 100K events of regular trace data (with the same
-baddr_init events we emit at session_start time). By doing so you don't
-need to start reading the entire trace from the beginning. Just start reading
-100K events before the events you are interested in, and you can guarantee
-to find a &quot;key frame&quot; for shared object state info.<br>
-<br>
-Note that this is the same concept as used by video compression/streaming:<br>
-I&#8209;frame, P&#8209;frame, P&#8209;frame, P&#8209;frame, ..., I&#8209;frame, P&#8209;frame,
-P&#8209;frame, P&#8209;frame, ...<br>
-See: </font><a href=http://en.wikipedia.org/wiki/Video_compression_picture_types><font size=3 color=blue><u>http://en.wikipedia.org/wiki/Video_compression_picture_types</u></font></a><font size=3><br>
-<br>
-Best,<br>
-Paul<b><br>
-</b></font>
-<br><font size=2 face="sans-serif"><b><br>
-I have a different solution, which I think I have explained here before:
-</b></font><a href="http://lists.lttng.org/pipermail/lttng-dev/2013-August/021263.html"><font size=3 color=blue><b><u>http://lists.lttng.org/pipermail/lttng-dev/2013-August/021263.html</u></b></font></a><font size=3><b>
-<br>
-</b></font><font size=2 face="sans-serif"><b><br>
-I vote for adding this to the metadata. It can be in addition to the ust_baddr
-events suggeted by Paul.</b></font><font size=3><b> <br>
-</b></font><font size=2 face="sans-serif"><b><br>
-Amit</b></font><font size=3><b> <br>
-</b></font><font size=2 color=#000080 face="sans-serif"><b><br>
-Amit Margalit</b></font><font size=3><b> </b></font><font size=2 color=#808000 face="sans-serif"><b><br>
-IBM XIV </b></font><font size=2 face="sans-serif"><b>- <i>Storage Reinvented</i></b></font><font size=3><b>
-</b></font><font size=2 face="sans-serif"><b><br>
-XIV-NAS Development Team</b></font><font size=3><b> </b></font><font size=2 face="sans-serif"><b><br>
-Tel. 03</b></font><font size=2 face="Arial"><b>-689-7774</b></font><font size=3><b>
-</b></font><font size=2 face="Arial"><b><br>
-Fax. 03-689-7230</b></font><font size=3><b> <br>
-<br>
-<br>
-</b></font><font size=1 color=#5f5f5f face="sans-serif"><b><br>
-From: &nbsp; &nbsp; &nbsp; &nbsp;</b></font><font size=1 face="sans-serif"><b>&quot;Woegerer,
-Paul&quot; </b></font><a href=mailto:Paul_Woegerer@mentor.com><font size=1 color=blue face="sans-serif"><b><u>&lt;Paul_Woegerer@mentor.com&gt;</u></b></font></a><font size=3><b>
-</b></font><font size=1 color=#5f5f5f face="sans-serif"><b><br>
-To: &nbsp; &nbsp; &nbsp; &nbsp;</b></font><font size=1 face="sans-serif"><b>Matthew
-Khouzam </b></font><a href=mailto:matthew.khouzam@ericsson.com><font size=1 color=blue face="sans-serif"><b><u>&lt;matthew.khouzam@ericsson.com&gt;</u></b></font></a><font size=3><b>
-</b></font><font size=1 color=#5f5f5f face="sans-serif"><b><br>
-Cc: &nbsp; &nbsp; &nbsp; &nbsp;</b></font><font size=1 face="sans-serif"><b>lttng-dev
-</b></font><a href="mailto:lttng-dev@lists.lttng.org"><font size=1 color=blue face="sans-serif"><b><u>&lt;lttng-dev@lists.lttng.org&gt;</u></b></font></a><font size=1 face="sans-serif"><b>,
-Mathieu Desnoyers </b></font><a href=mailto:mathieu.desnoyers@efficios.com><font size=1 color=blue face="sans-serif"><b><u>&lt;mathieu.desnoyers@efficios.com&gt;</u></b></font></a><font size=3><b>
-</b></font><font size=1 color=#5f5f5f face="sans-serif"><b><br>
-Date: &nbsp; &nbsp; &nbsp; &nbsp;</b></font><font size=1 face="sans-serif"><b>09/10/2013
-06:47 PM</b></font><font size=3><b> </b></font><font size=1 color=#5f5f5f face="sans-serif"><b><br>
-Subject: &nbsp; &nbsp; &nbsp; &nbsp;</b></font><font size=1 face="sans-serif"><b>Re:
-[lttng-dev] Getting function names with &nbsp; &nbsp; &nbsp; &nbsp;lttng-ust-cyg-profile.so</b></font><font size=3><b>
-</b><br>
-</font>
-<hr noshade><font size=3><b><br>
-<br>
-</b></font><tt><font size=2><b><br>
-On 09/10/2013 05:37 PM, Matthew Khouzam wrote:<br>
-&gt; On 13-09-10 03:00 AM, Woegerer, Paul wrote:<br>
-&gt;&gt; Hi Alexandre,<br>
-&gt;&gt;<br>
-&gt;&gt; For trivial examples you can go with 'nm -CS' (or the like), but
-when<br>
-&gt;&gt; you start to use liblttng-ust-cyg-profile.so in combination with
-shared<br>
-&gt;&gt; objects you will need to record base address information as well
-(to<br>
-&gt;&gt; allow you map a virtual memory address at a given point in time
-to<br>
-&gt;&gt; offset and path of a shared object (or executable)).<br>
-&gt;&gt;<br>
-&gt;&gt; That is one of the reasons why I have submitted:<br>
-&gt;&gt; </b></font></tt><a href="http://lists.lttng.org/pipermail/lttng-dev/2013-August/021264.html"><tt><font size=2 color=blue><b><u>http://lists.lttng.org/pipermail/lttng-dev/2013-August/021264.html</u></b></font></tt></a><tt><font size=2><b><br>
-&gt; This is a very interesting approach, +1 from me on that.<br>
-<br>
-Thanks.<br>
-<br>
-With that approach no redundant data (that is already available as<br>
-debuginfo) gets replicated in the actual trace data.<br>
-Only the bare minimum of information gets traced to allow you at any<br>
-time to map a VM address to a debuginfo address + debuginfo location.<br>
-<br>
--- <br>
-Paul Woegerer, SW Development Engineer<br>
-Sourcery Analyzer &lt;</b></font></tt><a href=http://go.mentor.com/sourceryanalyzer><tt><font size=2 color=blue><b><u>http://go.mentor.com/sourceryanalyzer</u></b></font></tt></a><tt><font size=2><b>&gt;<br>
-Mentor Graphics, Embedded Software Division<br>
-<br>
-<br>
-_______________________________________________<br>
-lttng-dev mailing list</b></font></tt><tt><font size=2 color=blue><b><u><br>
-</u></b></font></tt><a href="mailto:lttng-dev@lists.lttng.org"><tt><font size=2 color=blue><b><u>lttng-dev@lists.lttng.org</u></b></font></tt></a><font size=3 color=blue><b><u><br>
-</u></b></font><a href="http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev"><tt><font size=2 color=blue><b><u>http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</u></b></font></tt></a><tt><font size=2><b><br>
-</b></font></tt><font size=3><b><br>
-</b></font>
-<br><font size=3><b><br>
-</b></font>
-<br><tt><font size=3>-- <br>
-Paul Woegerer, SW Development Engineer<br>
-Sourcery Analyzer </font></tt><a href=http://go.mentor.com/sourceryanalyzer><tt><font size=3 color=blue><u>&lt;http://go.mentor.com/sourceryanalyzer&gt;</u></font></tt></a><tt><font size=3><br>
-Mentor Graphics, Embedded Software Division</font></tt>
-<br>
---=_alternative 004FA0ACC2257BE3_=--
-
-
-
---===============0547907194==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0547907194==--
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
