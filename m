@@ -1,88 +1,33 @@
-From: Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [RFC PATCH lttng-modules] Fix: use timekeeping_is_busy() to fix
- ktime_get() hard lockup
-Date: Thu, 12 Sep 2013 21:53:48 +0200 (CEST)
-Message-ID: <alpine.DEB.2.02.1309122146360.4089@ionos.tec.linutronix.de>
-References: <20130911151200.GB19800@Krystal> <52309DB0.4020403@linaro.org> <20130911190124.GA31443@Krystal>
+From: =?ISO-8859-1?Q?Rapha=EBl_Beamonte?= <raphael.beamonte@polymtl.ca>
+Subject: Re: LTTng 2.4 code name
+Date: Thu, 12 Sep 2013 16:02:40 -0400
+Message-ID: <CAE_Gge3Kirdj5fUgOx9UJer3Wnen+Z2MOG6nAiAws0uBmkybJA__4567.15672412447$1379016246$gmane$org@mail.gmail.com>
+References: <475933778.4601775.1378758234649.JavaMail.root@polymtl.ca>
+	<522F32E6.7000809@ericsson.com>
 Mime-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-Return-path: <linux-kernel-owner@vger.kernel.org>
-In-Reply-To: <20130911190124.GA31443@Krystal>
-Sender: linux-kernel-owner@vger.kernel.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: John Stultz <john.stultz@linaro.org>, Richard Cochran <richardcochran@gmail.com>, Prarit Bhargava <prarit@redhat.com>, lttng-dev@lists.lttng.org, linux-kernel@vger.kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Peter Zijlstra <peterz@infradead.org>, Steven Rostedt <rostedt@goodmis.org>, Ingo Molnar <mingo@elte.hu>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail-oa0-f47.google.com ([209.85.219.47])
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <nashii@gmail.com>) id 1VKD6Y-0000Xf-BO
+	for lttng-dev@lists.lttng.org; Thu, 12 Sep 2013 16:03:12 -0400
+Received: by mail-oa0-f47.google.com with SMTP id g12so319512oah.6
+	for <lttng-dev@lists.lttng.org>; Thu, 12 Sep 2013 13:03:00 -0700 (PDT)
+In-Reply-To: <522F32E6.7000809@ericsson.com>
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-On Wed, 11 Sep 2013, Mathieu Desnoyers wrote:
-> * John Stultz (john.stultz@linaro.org) wrote:
-> > On 09/11/2013 08:12 AM, Mathieu Desnoyers wrote:
-> > > LTTng uses ktime to have the same time-base across kernel and
-> > > user-space, so traces gathered from LTTng-modules and LTTng-UST can be
-> > > correlated. We plan on using ktime until a fast, scalable, and
-> > > fine-grained time-source for tracing that can be used across kernel and
-> > > user-space, and which does not rely on read seqlock for kernel-level
-> > > synchronization, makes its way into the kernel.
-> > >
-> > > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > > Cc: Richard Cochran <richardcochran@gmail.com>
-> > > Cc: Prarit Bhargava <prarit@redhat.com>
-> > > Cc: John Stultz <john.stultz@linaro.org>
-> > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > Cc: Peter Zijlstra <peterz@infradead.org>
-> > > Cc: Steven Rostedt <rostedt@goodmis.org>
-> > > Cc: Ingo Molnar <mingo@elte.hu>
-> > > Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> > > ---
-> > > diff --git a/wrapper/trace-clock.h b/wrapper/trace-clock.h
-> > > index bced61c..2f9df7a 100644
-> > > --- a/wrapper/trace-clock.h
-> > > +++ b/wrapper/trace-clock.h
-> > > @@ -32,6 +32,7 @@
-> > >  #include <linux/ktime.h>
-> > >  #include <linux/time.h>
-> > >  #include <linux/hrtimer.h>
-> > > +#include <linux/version.h>
-> > >  #include "random.h"
-> > >  
-> > >  static inline u64 trace_clock_monotonic_wrapper(void)
-> > > @@ -45,6 +46,10 @@ static inline u64 trace_clock_monotonic_wrapper(void)
-> > >  	if (in_nmi())
-> > >  		return (u64) -EIO;
-> > >  
-> > > +#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,10,0))
-> > > +	if (timekeeping_is_busy())
-> > > +		return (u64) -EIO;
-> > > +#endif
-> > >  	ktime = ktime_get();
-> > >  	return ktime_to_ns(ktime);
-> > >  }
-> > 
-> > 
-> > I guess the other question here is should this functionality be pushed
-> > down into the timekeeping accessors themselves?
-> > 
-> > I know any extra checks would probably be considered overhead in some
-> > uses, but if we do the check only when we hit contention then it might
-> > not be so bad.
-> 
-> I thought about the exact same thing, but wanted to keep my initial
-> kernel patch minimal, so I chose not to touch the fast paths initially.
-> 
-> Indeed, if we only do this check after the seqretry has failed, we
-> should be able to add this check without touching the fast-path.
-> 
-> It might be cleaner to make ktime_get() return an error rather than
-> cause a hard lockup in those cases. Especially if it can be done without
-> performance regression.
+2013/9/10 Matthew Khouzam <matthew.khouzam@ericsson.com>:
+> I would +1 Ephemere, it goes well with live trace reading.
 
-Nope. ktime_get() is not going to fail ever. We want to deadlock when
-its called from inside xtime_lock held code. Simply because it's wrong
-to do so.
-
-If there are special use cases, i.e. tracing, which need this kind of
-check, then we rather add a new interface, e.g. ktime_get_tracetime(),
-than adding a tasteless bogosity like timekeeping_busy().
-
-Thanks,
-
-	tglx
+Ephemere seems a good idea, but we'll have to have another release
+very soon, right ?
