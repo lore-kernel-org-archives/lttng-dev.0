@@ -1,24 +1,42 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: Thomas Gleixner <tglx@linutronix.de>
 Subject: Re: [RFC PATCH] Introduce timekeeper latch synchronization
-Date: Fri, 13 Sep 2013 11:30:20 -0400
-Message-ID: <20130913153020.GA24383@Krystal>
+Date: Fri, 13 Sep 2013 18:13:22 +0200 (CEST)
+Message-ID: <alpine.DEB.2.02.1309131803360.4089@ionos.tec.linutronix.de>
 References: <20130913025253.GA17218@Krystal>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Return-path: <linux-kernel-owner@vger.kernel.org>
-Content-Disposition: inline
 In-Reply-To: <20130913025253.GA17218@Krystal>
 Sender: linux-kernel-owner@vger.kernel.org
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, John Stultz <john.stultz@linaro.org>, Thomas Gleixner <tglx@linutronix.de>, Richard Cochran <richardcochran@gmail.com>, Prarit Bhargava <prarit@redhat.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Steven Rostedt <rostedt@goodmis.org>, Ingo Molnar <mingo@elte.hu>, linux-kernel@vger.kernel.org, lttng-dev@lists.lttng.org
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, John Stultz <john.stultz@linaro.org>, Richard Cochran <richardcochran@gmail.com>, Prarit Bhargava <prarit@redhat.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Steven Rostedt <rostedt@goodmis.org>, Ingo Molnar <mingo@elte.hu>, linux-kernel@vger.kernel.org, lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Mathieu Desnoyers (mathieu.desnoyers@efficios.com) wrote:
-[...]
-> @@ -1362,29 +1398,31 @@ static inline void old_vsyscall_fixup(struct timekeeper *tk)
+On Thu, 12 Sep 2013, Mathieu Desnoyers wrote:
+> * Peter Zijlstra (peterz@infradead.org) wrote:
+> [...]
+> > Yep, that's good. I suppose if there's multiple use sites we can jump
+> > through another few hoops to get rid of the specific struct foo
+> > assumptions by storing sizeof() whatever we do use and playing pointer
+> > math games.
+> > 
+> > But for now with the time stuff as only user this looks ok.
+> 
+> OK! Here is the full implementation of the idea against Linux
+> timekeeper, ntp, and PPS. It appears that ntp and PPS were relying on
+> the timekeeper seqlock too. And guess what, after booting my laptop with
+> this kernel there still no smoke coming out of it after a good 5 minutes
+> of testing. ;-)
+> 
+> Comments are welcome.
+
+First of all this needs to be split into several patches.
+
 >  static void update_wall_time(void)
->  {
-[...]
+ ...
+> -	write_seqcount_begin(&timekeeper_seq);
+>  	/* Update clock->cycle_last with the new value */
+>  	clock->cycle_last = tk->cycle_last;
 > -	/*
 > -	 * Update the real timekeeper.
 > -	 *
@@ -32,24 +50,15 @@ List-Id: lttng-dev@lists.lttng.org
 > -	memcpy(real_tk, tk, sizeof(*tk));
 > -	timekeeping_update(real_tk, action);
 
-This line above appears to be important ;-) Let's see if my screensaver
-stops misbehaving if I put it back. I will of course send a v2 after
-some more testing.
+So you're dropping the timekeeping_update() call here. I wonder how
+this works.
 
-By the way, if there are some standard test-bench for timekeeping, I'd
-be very interested to hear about them.
+> +	timekeeper_write_begin(&latch_timekeeper, &prev, &tk);
+> +	*tk = *prev;
 
-Thanks!
+Do we really need to do the copy on all call sites, instead of doing
+it in timekeeper_write_begin() ?
 
-Mathieu
+Thanks,
 
-> -	write_seqcount_end(&timekeeper_seq);
->  out:
-> +	timekeeper_write_end(&latch_timekeeper);
->  	raw_spin_unlock_irqrestore(&timekeeper_lock, flags);
->  }
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+	tglx
