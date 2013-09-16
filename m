@@ -1,8 +1,7 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Can userspace RCU be used with shared memory?
-Date: Sun, 15 Sep 2013 15:34:29 -0400
-Message-ID: <20130915193429.GA22171__12700.8290416144$1379273726$gmane$org@Krystal>
-References: <CAD2ZD83X2hV0hqkN-ADsMJZch5B8wJwR4bwTxP=jYgPrRnTu=A@mail.gmail.com>
+Subject: [RFC] API/ABI for consumerd and relayd health check
+Date: Mon, 16 Sep 2013 08:56:10 -0400
+Message-ID: <20130916125609.GA22237__10043.342333711$1379336231$gmane$org@Krystal>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -10,10 +9,9 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1VLI5X-0000Wb-0M
-	for lttng-dev@lists.lttng.org; Sun, 15 Sep 2013 15:34:36 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1VLYLb-0005LE-5O
+	for lttng-dev@lists.lttng.org; Mon, 16 Sep 2013 08:56:17 -0400
 Content-Disposition: inline
-In-Reply-To: <CAD2ZD83X2hV0hqkN-ADsMJZch5B8wJwR4bwTxP=jYgPrRnTu=A@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,76 +20,34 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Devanjan Choudhury <devanjan.dev@gmail.com>
+To: dgoulet@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Devanjan Choudhury (devanjan.dev@gmail.com) wrote:
-> Hello Mathieu,
-> 
-> We are interested in using userspace rcu for one of our projects.
+Hi!
 
-Great!
+I'd need some feedback on how you think would be best to present the API
+to users for health check, as well as the ABI.
 
-> Our main requirement is that we have some hash tables stored in shared
-> memory which will be accessed by multiple reader processes. We have one
-> single writer process. Since our use case is more read intensive compared
-> to write, we have choosen to use RCU to synchronize the shared data.
-> 
-> Now, when our writer process updates some nodes(lets say delete some node)
-> in hash tables stored in shared memory, it must call synchronize_rcu(),
-> before it can actually free up the node. However, one note in the
-> discussion (
-> http://lists.lttng.org/pipermail/lttng-dev/2012-December/019295.html)
-> states that synchronize_rcu() (or call_rcu()) executing in the context of
-> one process will not see the RCU read-side locks of another process. If
-> this is the case, then how/when can the writer process delete the node
-> permanently. Should we need to consider doing garbage collection on our own?
+I got the instrumentation part pretty much straightened out, but we need
+to make some decisions for the user API.
 
-The currently existing flavors of userspace RCU don't support
-multi-process use of shared data structures through shared memory.
-Currently, we require that all threads of a process that can access data
-under RCU read-side critical section be registered
-(rcu_register_thread). This adds them to a linked list of threads
-monitored by synchronize_rcu().
+Do you think we should extend enum lttng_health_component or introduce a
+new API function besides lttng_health_check() ? Should we continue
+extending lttng/lttng.h, or introduce these in a lttng/health.h ?
 
-We could very well create a new flavor specifically for this use-case
-though. It would rely on a shared memory area to store the linked list
-of threads registered as RCU readers, so this list could be shared
-between processes.
+One thing that makes matters a bit difficult is that there may be
+multiple concurrent e.g. root relayd running, which is not the case for
+sessiond nor consumerd.
 
-> 
-> Also, if I undertsand correctly, shyncronize_rcu() does the following
-> basically:
-> 
-> void synchronize_rcu(void) { int cpu; for_each_online_cpu(cpu) run_on(cpu);
+Also, how do you think we should organize the named unix socket for
+communication (file names and so on ?).
 
-Not exactly: it performs synchronization with each registered thread
-(not cpu). The synchronization is not a "run on", but rather monitoring
-variables (which updates are surrounded by memory barriers) that ensure
-each monitored thread has passed through a quiescent state before
-synchronize_rcu() is allowed to complete.
+Ideas are appreciated,
 
-> }
-> 
-> So, when our writer process call synchronize_rcu(), it will basically be
-> made to run on all the CPUs. Shouldn't this be sufficient to ensure that
-> any other reader process which had started a read rcu critical section has
-> completed?
-
-No, because we cannot disable preemption from user-space, and therefore
-even if you happen to run on every CPU, it does not mean that there are
-no RCU critical sections still in progress within preempted threads.
-
-Best regards,
+Thanks,
 
 Mathieu
-
-> 
-> 
-> -- 
-> Regards,
-> Devanjan
 
 -- 
 Mathieu Desnoyers
