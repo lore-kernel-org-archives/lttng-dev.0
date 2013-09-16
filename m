@@ -1,225 +1,171 @@
-From: Stefan Hajnoczi <stefanha@redhat.com>
-Subject: [PATCH] trace: drop LTTng Userspace Tracer backend
-Date: Wed, 25 Sep 2013 11:28:39 +0200
-Message-ID: <1380101319-29435-1-git-send-email-stefanha@redhat.com>
+From: "Steffen, Kai-Uwe (Kai-Uwe)" <kai-uwe.steffen@alcatel-lucent.com>
+Subject: Tracing page waits with LTTng 2.3.0
+Date: Mon, 16 Sep 2013 13:23:09 +0000
+Message-ID: <211FA304CEAAEE4AA25085F0CEB43BD70812D210__43537.8617993139$1380114229$gmane$org@FR711WXCHMBA02.zeu.alcatel-lucent.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-Return-path: <qemu-devel-bounces+gceq-qemu-devel=gmane.org@nongnu.org>
-List-Unsubscribe: <https://lists.nongnu.org/mailman/options/qemu-devel>,
-	<mailto:qemu-devel-request@nongnu.org?subject=unsubscribe>
-List-Archive: <http://lists.nongnu.org/archive/html/qemu-devel>
-List-Post: <mailto:qemu-devel@nongnu.org>
-List-Help: <mailto:qemu-devel-request@nongnu.org?subject=help>
-List-Subscribe: <https://lists.nongnu.org/mailman/listinfo/qemu-devel>,
-	<mailto:qemu-devel-request@nongnu.org?subject=subscribe>
-Errors-To: qemu-devel-bounces+gceq-qemu-devel=gmane.org@nongnu.org
-Sender: qemu-devel-bounces+gceq-qemu-devel=gmane.org@nongnu.org
-To: qemu-devel@nongnu.org
-Cc: lttng-dev@lists.lttng.org, =?UTF-8?q?Alex=20Benn=C3=A9e?= <alex.bennee@linaro.org>, =?UTF-8?q?Llu=C3=ADs=20Vilanova?= <vilanova@ac.upc.edu>, Stefan Hajnoczi <stefanha@redhat.com>
+Content-Type: multipart/mixed; boundary="===============0093412517=="
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from ihemail1.lucent.com ([135.245.0.33])
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <kai-uwe.steffen@alcatel-lucent.com>)
+	id 1VLYlq-0000Et-Kj
+	for lttng-dev@lists.lttng.org; Mon, 16 Sep 2013 09:23:25 -0400
+Received: from fr712usmtp2.zeu.alcatel-lucent.com (h135-239-2-42.lucent.com
+	[135.239.2.42])
+	by ihemail1.lucent.com (8.13.8/IER-o) with ESMTP id r8GDNCMq019672
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-SHA bits=256 verify=FAIL)
+	for <lttng-dev@lists.lttng.org>; Mon, 16 Sep 2013 08:23:14 -0500 (CDT)
+Received: from FR711WXCHHUB02.zeu.alcatel-lucent.com
+	(fr711wxchhub02.zeu.alcatel-lucent.com [135.239.2.112])
+	by fr712usmtp2.zeu.alcatel-lucent.com (GMO) with ESMTP id
+	r8GDNAtX014857
+	(version=TLSv1/SSLv3 cipher=AES128-SHA bits=128 verify=FAIL)
+	for <lttng-dev@lists.lttng.org>; Mon, 16 Sep 2013 15:23:10 +0200
+Content-Language: en-US
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-The current LTTng Userspace Tracer backend does not build against modern
-libraries.  LTTng has changed the library ABI several times, making it
-difficult to support this backend.
+--===============0093412517==
+Content-Language: en-US
+Content-Type: multipart/alternative;
+	boundary="_000_211FA304CEAAEE4AA25085F0CEB43BD70812D210FR711WXCHMBA02z_"
 
-Due to lack of users, remove this trace backend until someone turns up
-who is willing to actively maintain it.
+--_000_211FA304CEAAEE4AA25085F0CEB43BD70812D210FR711WXCHMBA02z_
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 
-Details for anyone wishing to contribute an updated backend:
+Hi.
 
- * Header files have been renamed from <ust/*> to <lttng/*>
- * Tracepoint macros are no longer DECLARE_TRACE(name, TP_PROTO(args),
-   TP_ARGS(argnames))
- * Probably more breakage
+Currently I'm working with LTTng 2.3.0 for Ubuntu 12.4, to see if this vers=
+ion would meet our requirements.
+With old LTT and LTTng 0.x it was possible to trace page waits.
+Tracepoints were called "Page Wait" for LTT and "buffer_wait_start" "buffer=
+_wait_end" for LTTng 0.x.
 
-Signed-off-by: Stefan Hajnoczi <stefanha@redhat.com>
----
- configure                        | 19 --------
- docs/tracing.txt                 | 11 +----
- scripts/tracetool/backend/ust.py | 93 ----------------------------------=
-------
- 3 files changed, 2 insertions(+), 121 deletions(-)
- delete mode 100644 scripts/tracetool/backend/ust.py
+Now I looked for the tracepoints available with 2.3.0 and didn't find trace=
+point for the page waits.
 
-diff --git a/configure b/configure
-index 05e16da..95a8a4f 100755
---- a/configure
-+++ b/configure
-@@ -3280,22 +3280,6 @@ if test "$?" -ne 0 ; then
- fi
-=20
- ##########################################
--# For 'ust' backend, test if ust headers are present
--if test "$trace_backend" =3D "ust"; then
--  cat > $TMPC << EOF
--#include <ust/tracepoint.h>
--#include <ust/marker.h>
--int main(void) { return 0; }
--EOF
--  if compile_prog "" "" ; then
--    LIBS=3D"-lust -lurcu-bp $LIBS"
--    libs_qga=3D"-lust -lurcu-bp $libs_qga"
--  else
--    error_exit "Trace backend 'ust' missing libust header files"
--  fi
--fi
--
--##########################################
- # For 'dtrace' backend, test if 'dtrace' command is present
- if test "$trace_backend" =3D "dtrace"; then
-   if ! has 'dtrace' ; then
-@@ -4191,9 +4175,6 @@ if test "$trace_backend" =3D "stderr"; then
-   echo "CONFIG_TRACE_STDERR=3Dy" >> $config_host_mak
-   trace_default=3Dno
- fi
--if test "$trace_backend" =3D "ust"; then
--  echo "CONFIG_TRACE_UST=3Dy" >> $config_host_mak
--fi
- if test "$trace_backend" =3D "dtrace"; then
-   echo "CONFIG_TRACE_DTRACE=3Dy" >> $config_host_mak
-   if test "$trace_backend_stap" =3D "yes" ; then
-diff --git a/docs/tracing.txt b/docs/tracing.txt
-index bfc261b..3d0d620 100644
---- a/docs/tracing.txt
-+++ b/docs/tracing.txt
-@@ -135,9 +135,8 @@ the following monitor command:
-=20
- The "tracetool" script automates tedious trace event code generation and=
- also
- keeps the trace event declarations independent of the trace backend.  Th=
-e trace
--events are not tightly coupled to a specific trace backend, such as LTTn=
-g or
--SystemTap.  Support for trace backends can be added by extending the "tr=
-acetool"
--script.
-+events are not tightly coupled to a specific trace backend, such as Syst=
-emTap.
-+Support for trace backends can be added by extending the "tracetool" scr=
-ipt.
-=20
- The trace backend is chosen at configure time and only one trace backend=
- can
- be built into the binary:
-@@ -208,12 +207,6 @@ You must ensure that the same "trace-events" file wa=
-s used to build QEMU,
- otherwise trace event declarations may have changed and output will not =
-be
- consistent.
-=20
--=3D=3D=3D LTTng Userspace Tracer =3D=3D=3D
--
--The "ust" backend uses the LTTng Userspace Tracer library.  There are no
--monitor commands built into QEMU, instead UST utilities should be used t=
-o list,
--enable/disable, and dump traces.
--
- =3D=3D=3D SystemTap =3D=3D=3D
-=20
- The "dtrace" backend uses DTrace sdt probes but has only been tested wit=
-h
-diff --git a/scripts/tracetool/backend/ust.py b/scripts/tracetool/backend=
-/ust.py
-deleted file mode 100644
-index ea36995..0000000
---- a/scripts/tracetool/backend/ust.py
-+++ /dev/null
-@@ -1,93 +0,0 @@
--#!/usr/bin/env python
--# -*- coding: utf-8 -*-
--
--"""
--LTTng User Space Tracing backend.
--"""
--
--__author__     =3D "Llu=C3=ADs Vilanova <vilanova@ac.upc.edu>"
--__copyright__  =3D "Copyright 2012, Llu=C3=ADs Vilanova <vilanova@ac.upc=
-.edu>"
--__license__    =3D "GPL version 2 or (at your option) any later version"
--
--__maintainer__ =3D "Stefan Hajnoczi"
--__email__      =3D "stefanha@linux.vnet.ibm.com"
--
--
--from tracetool import out
--
--
--PUBLIC =3D True
--
--
--def c(events):
--    out('#include <ust/marker.h>',
--        '#undef mutex_lock',
--        '#undef mutex_unlock',
--        '#undef inline',
--        '#undef wmb',
--        '#include "trace.h"')
--
--    for e in events:
--        argnames =3D ", ".join(e.args.names())
--        if len(e.args) > 0:
--            argnames =3D ', ' + argnames
--
--            out('DEFINE_TRACE(ust_%(name)s);',
--                '',
--                'static void ust_%(name)s_probe(%(args)s)',
--                '{',
--                '    trace_mark(ust, %(name)s, %(fmt)s%(argnames)s);',
--                '}',
--                name =3D e.name,
--                args =3D e.args,
--                fmt =3D e.fmt,
--                argnames =3D argnames,
--                )
--
--        else:
--            out('DEFINE_TRACE(ust_%(name)s);',
--                '',
--                'static void ust_%(name)s_probe(%(args)s)',
--                '{',
--                '    trace_mark(ust, %(name)s, UST_MARKER_NOARGS);',
--                '}',
--                name =3D e.name,
--                args =3D e.args,
--                )
--
--    # register probes
--    out('',
--        'static void __attribute__((constructor)) trace_init(void)',
--        '{')
--
--    for e in events:
--        out('    register_trace_ust_%(name)s(ust_%(name)s_probe);',
--            name =3D e.name,
--            )
--
--    out('}')
--
--
--def h(events):
--    out('#include <ust/tracepoint.h>',
--        '#undef mutex_lock',
--        '#undef mutex_unlock',
--        '#undef inline',
--        '#undef wmb')
--
--    for e in events:
--        if len(e.args) > 0:
--            out('DECLARE_TRACE(ust_%(name)s, TP_PROTO(%(args)s), TP_ARGS=
-(%(argnames)s));',
--                '#define trace_%(name)s trace_ust_%(name)s',
--                name =3D e.name,
--                args =3D e.args,
--                argnames =3D ", ".join(e.args.names()),
--                )
--
--        else:
--            out('_DECLARE_TRACEPOINT_NOARGS(ust_%(name)s);',
--                '#define trace_%(name)s trace_ust_%(name)s',
--                name =3D e.name,
--                )
--
--    out()
---=20
-1.8.3.1
+Lttng list -k
+
+Can you tell me if there is a tracepoint available in LTTng 2.3 or is it no=
+t supported yet?
+
+Thanks Kai
+
+--_000_211FA304CEAAEE4AA25085F0CEB43BD70812D210FR711WXCHMBA02z_
+Content-Type: text/html; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+<html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-micr=
+osoft-com:office:office" xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
+xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http:=
+//www.w3.org/TR/REC-html40">
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
+>
+<meta name=3D"Generator" content=3D"Microsoft Word 12 (filtered medium)">
+<style><!--
+/* Font Definitions */
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+@font-face
+	{font-family:Tahoma;
+	panose-1:2 11 6 4 3 5 4 4 2 4;}
+/* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0cm;
+	margin-bottom:.0001pt;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+a:link, span.MsoHyperlink
+	{mso-style-priority:99;
+	color:blue;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{mso-style-priority:99;
+	color:purple;
+	text-decoration:underline;}
+p.MsoAcetate, li.MsoAcetate, div.MsoAcetate
+	{mso-style-priority:99;
+	mso-style-link:"Balloon Text Char";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	font-size:8.0pt;
+	font-family:"Tahoma","sans-serif";}
+span.EmailStyle17
+	{mso-style-type:personal-compose;
+	font-family:"Calibri","sans-serif";
+	color:windowtext;}
+span.BalloonTextChar
+	{mso-style-name:"Balloon Text Char";
+	mso-style-priority:99;
+	mso-style-link:"Balloon Text";
+	font-family:"Tahoma","sans-serif";}
+.MsoChpDefault
+	{mso-style-type:export-only;}
+@page WordSection1
+	{size:612.0pt 792.0pt;
+	margin:70.85pt 70.85pt 2.0cm 70.85pt;}
+div.WordSection1
+	{page:WordSection1;}
+--></style><!--[if gte mso 9]><xml>
+<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
+</xml><![endif]--><!--[if gte mso 9]><xml>
+<o:shapelayout v:ext=3D"edit">
+<o:idmap v:ext=3D"edit" data=3D"1" />
+</o:shapelayout></xml><![endif]-->
+</head>
+<body lang=3D"DE" link=3D"blue" vlink=3D"purple">
+<div class=3D"WordSection1">
+<p class=3D"MsoNormal">Hi.<o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal"><span lang=3D"EN-US">Currently I&#8217;m working wit=
+h LTTng 2.3.0 for Ubuntu 12.4, to see if this version would meet our requir=
+ements.<o:p></o:p></span></p>
+<p class=3D"MsoNormal"><span lang=3D"EN-US">With old LTT and LTTng 0.x it w=
+as possible to trace page waits.<o:p></o:p></span></p>
+<p class=3D"MsoNormal"><span lang=3D"EN-US">Tracepoints were called &#8220;=
+Page Wait&#8221; for LTT and &#8220;buffer_wait_start&#8221; &#8220;buffer_=
+wait_end&#8221; for LTTng 0.x.<o:p></o:p></span></p>
+<p class=3D"MsoNormal"><span lang=3D"EN-US"><o:p>&nbsp;</o:p></span></p>
+<p class=3D"MsoNormal"><span lang=3D"EN-US">Now I looked for the tracepoint=
+s available with 2.3.0 and didn&#8217;t find tracepoint for the page waits.=
+<o:p></o:p></span></p>
+<p class=3D"MsoNormal"><span lang=3D"EN-US"><o:p>&nbsp;</o:p></span></p>
+<p class=3D"MsoNormal"><span lang=3D"EN-US">Lttng list &#8211;k<o:p></o:p><=
+/span></p>
+<p class=3D"MsoNormal"><span lang=3D"EN-US"><o:p>&nbsp;</o:p></span></p>
+<p class=3D"MsoNormal"><span lang=3D"EN-US">Can you tell me if there is a t=
+racepoint available in LTTng 2.3 or is it not supported yet?<o:p></o:p></sp=
+an></p>
+<p class=3D"MsoNormal"><span lang=3D"EN-US"><o:p>&nbsp;</o:p></span></p>
+<p class=3D"MsoNormal"><span lang=3D"EN-US">Thanks Kai<o:p></o:p></span></p=
+>
+</div>
+</body>
+</html>
+
+--_000_211FA304CEAAEE4AA25085F0CEB43BD70812D210FR711WXCHMBA02z_--
+
+
+--===============0093412517==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0093412517==--
