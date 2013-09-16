@@ -1,10 +1,10 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [MODULES PATCH 3/4] Per-stream ioctl to get the
-	current	timestamp
-Date: Mon, 16 Sep 2013 12:35:09 -0400
-Message-ID: <20130916163509.GC25275__42647.5457185463$1379349617$gmane$org@Krystal>
+Subject: Re: [MODULES PATCH 4/4] Metadata flush writes data from
+	the cache
+Date: Mon, 16 Sep 2013 12:36:32 -0400
+Message-ID: <20130916163632.GD25275__7376.66919962994$1379349723$gmane$org@Krystal>
 References: <1379344713-9185-1-git-send-email-jdesfossez@efficios.com>
-	<1379344713-9185-3-git-send-email-jdesfossez@efficios.com>
+	<1379344713-9185-4-git-send-email-jdesfossez@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -12,10 +12,10 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.openrapids.net ([64.15.138.104]
 	helo=blackscsi.openrapids.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1VLblW-00077T-8Q
-	for lttng-dev@lists.lttng.org; Mon, 16 Sep 2013 12:35:16 -0400
+	(envelope-from <compudj@mail.openrapids.net>) id 1VLbmr-0007In-SQ
+	for lttng-dev@lists.lttng.org; Mon, 16 Sep 2013 12:36:39 -0400
 Content-Disposition: inline
-In-Reply-To: <1379344713-9185-3-git-send-email-jdesfossez@efficios.com>
+In-Reply-To: <1379344713-9185-4-git-send-email-jdesfossez@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -28,151 +28,131 @@ To: Julien Desfossez <jdesfossez@efficios.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Merged, thanks!
+* Julien Desfossez (jdesfossez@efficios.com) wrote:
+> When doing a flush on a metadata stream we first check if we can fill
+> the current subbuffer with data from the cache before doing the actual
+> flush.
+
+Comments below,
+
+> 
+> Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
+> ---
+>  lttng-abi.c    | 56 +++++++++++++++++++++++++++++++++-----------------------
+>  lttng-events.c |  2 ++
+>  2 files changed, 35 insertions(+), 23 deletions(-)
+> 
+> diff --git a/lttng-abi.c b/lttng-abi.c
+> index 224b352..a373504 100644
+> --- a/lttng-abi.c
+> +++ b/lttng-abi.c
+> @@ -549,23 +549,6 @@ unsigned int lttng_metadata_ring_buffer_poll(struct file *filp,
+>  }
+>  
+>  static
+> -int lttng_metadata_ring_buffer_ioctl_get_next_subbuf(struct file *filp,
+> -		unsigned int cmd, unsigned long arg)
+> -{
+> -	struct lttng_metadata_stream *stream = filp->private_data;
+> -	struct lib_ring_buffer *buf = stream->priv;
+> -	struct channel *chan = buf->backend.chan;
+> -	int ret;
+> -
+> -	ret = lttng_metadata_output_channel(stream, chan);
+> -	if (ret > 0) {
+> -		lib_ring_buffer_switch_slow(buf, SWITCH_ACTIVE);
+> -		ret = 0;
+> -	}
+> -	return ret;
+> -}
+> -
+> -static
+>  void lttng_metadata_ring_buffer_ioctl_put_next_subbuf(struct file *filp,
+>  		unsigned int cmd, unsigned long arg)
+>  {
+> @@ -585,9 +568,15 @@ long lttng_metadata_ring_buffer_ioctl(struct file *filp,
+>  	switch (cmd) {
+>  	case RING_BUFFER_GET_NEXT_SUBBUF:
+>  	{
+> -		ret = lttng_metadata_ring_buffer_ioctl_get_next_subbuf(filp,
+> -				cmd, arg);
+> -		if (ret < 0)
+> +		struct lttng_metadata_stream *stream = filp->private_data;
+> +		struct lib_ring_buffer *buf = stream->priv;
+> +		struct channel *chan = buf->backend.chan;
+> +
+> +		ret = lttng_metadata_output_channel(stream, chan);
+> +		if (ret > 0) {
+> +			lib_ring_buffer_switch_slow(buf, SWITCH_ACTIVE);
+> +			ret = 0;
+> +		} else if (ret < 0)
+>  			goto err;
+>  		break;
+>  	}
+> @@ -598,6 +587,21 @@ long lttng_metadata_ring_buffer_ioctl(struct file *filp,
+>  		 */
+>  		return -ENOSYS;
+>  	}
+> +	case RING_BUFFER_FLUSH:
+> +	{
+> +		struct lttng_metadata_stream *stream = filp->private_data;
+> +		struct lib_ring_buffer *buf = stream->priv;
+> +		struct channel *chan = buf->backend.chan;
+> +
+> +		/*
+> +		 * Before doing the actual ring buffer flush, write up to one
+> +		 * packet of metadata in the ring buffer.
+
+This comment says "Before doing the actual rb flush". But where is it
+done ? Do we need it at all, or is it done by the following get_subbuf ?
+I think the code might be right, but the comment does not match the
+implementation.
+
+Thanks,
 
 Mathieu
 
-* Julien Desfossez (jdesfossez@efficios.com) wrote:
-> Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
-> ---
->  lttng-abi.c                         | 22 ++++++++++++++++++++++
->  lttng-abi.h                         |  5 +++++
->  lttng-events.h                      |  3 +++
->  lttng-ring-buffer-client.h          | 10 ++++++++++
->  lttng-ring-buffer-metadata-client.h |  8 ++++++++
->  5 files changed, 48 insertions(+)
-> 
-> diff --git a/lttng-abi.c b/lttng-abi.c
-> index c2560e0..224b352 100644
-> --- a/lttng-abi.c
-> +++ b/lttng-abi.c
-> @@ -1408,6 +1408,17 @@ static long lttng_stream_ring_buffer_ioctl(struct file *filp,
->  			goto error;
->  		return put_u64(si, arg);
->  	}
-> +	case LTTNG_RING_BUFFER_GET_CURRENT_TIMESTAMP:
-> +	{
-> +		uint64_t ts;
-> +
-> +		if (!lttng_chan->ops)
-> +			goto error;
-> +		ret = lttng_chan->ops->current_timestamp(config, buf, &ts);
+> +		 */
+> +		ret = lttng_metadata_output_channel(stream, chan);
 > +		if (ret < 0)
-> +			goto error;
-> +		return put_u64(ts, arg);
+> +			goto err;
+> +		break;
 > +	}
 >  	default:
->  		return lib_ring_buffer_file_operations.unlocked_ioctl(filp,
->  				cmd, arg);
-> @@ -1497,6 +1508,17 @@ static long lttng_stream_ring_buffer_compat_ioctl(struct file *filp,
->  			goto error;
->  		return put_u64(si, arg);
+>  		break;
 >  	}
-> +	case LTTNG_RING_BUFFER_GET_CURRENT_TIMESTAMP:
-> +	{
-> +		uint64_t ts;
+> @@ -634,9 +638,15 @@ long lttng_metadata_ring_buffer_compat_ioctl(struct file *filp,
+>  	switch (cmd) {
+>  	case RING_BUFFER_GET_NEXT_SUBBUF:
+>  	{
+> -		ret = lttng_metadata_ring_buffer_ioctl_get_next_subbuf(filp,
+> -				cmd, arg);
+> -		if (ret < 0)
+> +		struct lttng_metadata_stream *stream = filp->private_data;
+> +		struct lib_ring_buffer *buf = stream->priv;
+> +		struct channel *chan = buf->backend.chan;
 > +
-> +		if (!lttng_chan->ops)
-> +			goto error;
-> +		ret = lttng_chan->ops->current_timestamp(config, buf, &ts);
-> +		if (ret < 0)
-> +			goto error;
-> +		return put_u64(ts, arg);
-> +	}
->  	default:
->  		return lib_ring_buffer_file_operations.compat_ioctl(filp,
->  				cmd, arg);
-> diff --git a/lttng-abi.h b/lttng-abi.h
-> index b028f1e..3f2aefb 100644
-> --- a/lttng-abi.h
-> +++ b/lttng-abi.h
-> @@ -187,6 +187,8 @@ struct lttng_kernel_context {
->  #define LTTNG_RING_BUFFER_GET_PACKET_SIZE	_IOR(0xF6, 0x24, uint64_t)
->  /* returns the stream id */
->  #define LTTNG_RING_BUFFER_GET_STREAM_ID		_IOR(0xF6, 0x25, uint64_t)
-> +/* returns the current timestamp */
-> +#define LTTNG_RING_BUFFER_GET_CURRENT_TIMESTAMP	_IOR(0xF6, 0x26, uint64_t)
->  
->  #ifdef CONFIG_COMPAT
->  /* returns the timestamp begin of the current sub-buffer */
-> @@ -207,6 +209,9 @@ struct lttng_kernel_context {
->  /* returns the stream id */
->  #define LTTNG_RING_BUFFER_COMPAT_GET_STREAM_ID \
->  	LTTNG_RING_BUFFER_GET_STREAM_ID
-> +/* returns the current timestamp */
-> +#define LTTNG_RING_BUFFER_COMPAT_GET_CURRENT_TIMESTAMP \
-> +	LTTNG_RING_BUFFER_GET_CURRENT_TIMESTAMP
->  #endif /* CONFIG_COMPAT */
->  
->  #endif /* _LTTNG_ABI_H */
-> diff --git a/lttng-events.h b/lttng-events.h
-> index bce6507..f0628c4 100644
-> --- a/lttng-events.h
-> +++ b/lttng-events.h
-> @@ -263,6 +263,9 @@ struct lttng_channel_ops {
->  	int (*stream_id) (const struct lib_ring_buffer_config *config,
->  			struct lib_ring_buffer *bufb,
->  			uint64_t *stream_id);
-> +	int (*current_timestamp) (const struct lib_ring_buffer_config *config,
-> +			struct lib_ring_buffer *bufb,
-> +			uint64_t *ts);
->  };
->  
->  struct lttng_transport {
-> diff --git a/lttng-ring-buffer-client.h b/lttng-ring-buffer-client.h
-> index 167000a..50c47b3 100644
-> --- a/lttng-ring-buffer-client.h
-> +++ b/lttng-ring-buffer-client.h
-> @@ -467,6 +467,15 @@ static int client_stream_id(const struct lib_ring_buffer_config *config,
->  	return 0;
->  }
->  
-> +static int client_current_timestamp(const struct lib_ring_buffer_config *config,
-> +		struct lib_ring_buffer *bufb,
-> +		uint64_t *ts)
-> +{
-> +	*ts = config->cb.ring_buffer_clock_read(bufb->backend.chan);
-> +
-> +	return 0;
-> +}
-> +
->  static const struct lib_ring_buffer_config client_config = {
->  	.cb.ring_buffer_clock_read = client_ring_buffer_clock_read,
->  	.cb.record_header_size = client_record_header_size,
-> @@ -500,6 +509,7 @@ struct channel *_channel_create(const char *name,
->  	lttng_chan->ops->content_size = client_content_size;
->  	lttng_chan->ops->packet_size = client_packet_size;
->  	lttng_chan->ops->stream_id = client_stream_id;
-> +	lttng_chan->ops->current_timestamp = client_current_timestamp;
->  
->  	return channel_create(&client_config, name, lttng_chan, buf_addr,
->  			      subbuf_size, num_subbuf, switch_timer_interval,
-> diff --git a/lttng-ring-buffer-metadata-client.h b/lttng-ring-buffer-metadata-client.h
-> index 6130715..bea482b 100644
-> --- a/lttng-ring-buffer-metadata-client.h
-> +++ b/lttng-ring-buffer-metadata-client.h
-> @@ -168,6 +168,13 @@ static int client_events_discarded(const struct lib_ring_buffer_config *config,
->  	return -ENOSYS;
->  }
->  
-> +static int client_current_timestamp(const struct lib_ring_buffer_config *config,
-> +		struct lib_ring_buffer *bufb,
-> +		uint64_t *ts)
-> +{
-> +	return -ENOSYS;
-> +}
-> +
->  static int client_content_size(const struct lib_ring_buffer_config *config,
->  			struct lib_ring_buffer *bufb,
->  			uint64_t *content_size)
-> @@ -222,6 +229,7 @@ struct channel *_channel_create(const char *name,
->  	lttng_chan->ops->content_size = client_content_size;
->  	lttng_chan->ops->packet_size = client_packet_size;
->  	lttng_chan->ops->stream_id = client_stream_id;
-> +	lttng_chan->ops->current_timestamp = client_current_timestamp;
->  
->  	return channel_create(&client_config, name, lttng_chan, buf_addr,
->  			      subbuf_size, num_subbuf, switch_timer_interval,
+> +		ret = lttng_metadata_output_channel(stream, chan);
+> +		if (ret > 0) {
+> +			lib_ring_buffer_switch_slow(buf, SWITCH_ACTIVE);
+> +			ret = 0;
+> +		} else if (ret < 0)
+>  			goto err;
+>  		break;
+>  	}
+> diff --git a/lttng-events.c b/lttng-events.c
+> index 879097b..b7e4422 100644
+> --- a/lttng-events.c
+> +++ b/lttng-events.c
+> @@ -553,6 +553,8 @@ void _lttng_event_destroy(struct lttng_event *event)
+>   * sessions_mutex), so we can do racy operations such as looking for
+>   * remaining space left in packet and write, since mutual exclusion
+>   * protects us from concurrent writes.
+> + * Returns the number of bytes written in the channel, 0 if no data
+> + * was written and a negative value on error.
+>   */
+>  int lttng_metadata_output_channel(struct lttng_metadata_stream *stream,
+>  		struct channel *chan)
 > -- 
 > 1.8.3.2
 > 
