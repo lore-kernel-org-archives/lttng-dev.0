@@ -1,22 +1,17 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [MODULES PATCH 4/4] Metadata flush writes data from
-	the cache
-Date: Mon, 16 Sep 2013 13:29:42 -0400
-Message-ID: <20130916172942.GA25658__28617.0511194088$1379352637$gmane$org@Krystal>
-References: <1379344713-9185-1-git-send-email-jdesfossez@efficios.com>
-	<1379344713-9185-4-git-send-email-jdesfossez@efficios.com>
-	<20130916163632.GD25275@Krystal> <52373E6B.3050109@efficios.com>
+From: Stefan Seefeld <stefan@seefeld.name>
+Subject: [PATCH lttng-tools 0/2] Improve testing.
+Date: Mon, 16 Sep 2013 19:50:38 -0400
+Message-ID: <1379375440-24087-1-git-send-email-stefan_seefeld__6641.09100257537$1379375516$gmane$org@mentor.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from mail-pa0-f48.google.com ([209.85.220.48])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1VLccL-0005Wu-LT
-	for lttng-dev@lists.lttng.org; Mon, 16 Sep 2013 13:29:51 -0400
-Content-Disposition: inline
-In-Reply-To: <52373E6B.3050109@efficios.com>
+	(envelope-from <stefan.seefeld@gmail.com>) id 1VLiZ8-0002tq-OL
+	for lttng-dev@lists.lttng.org; Mon, 16 Sep 2013 19:50:56 -0400
+Received: by mail-pa0-f48.google.com with SMTP id kp13so5975849pab.21
+	for <lttng-dev@lists.lttng.org>; Mon, 16 Sep 2013 16:50:45 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -25,32 +20,50 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Julien Desfossez <jdesfossez@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Julien Desfossez (jdesfossez@efficios.com) wrote:
-> Hi,
-> 
-> On 13-09-16 12:36 PM, Mathieu Desnoyers wrote:
-[...]
-> > This comment says "Before doing the actual rb flush". But where is it
-> > done ? Do we need it at all, or is it done by the following get_subbuf ?
-> > I think the code might be right, but the comment does not match the
-> > implementation.
-> When we exit this switch, we end up in lib_ring_buffer_ioctl() performs
-> the RB flush.
-> 
-> Is it ok ?
+The first of these two patches is a minor improvement I had meant to send out 
+much earlier. It allows to configure / build against an lttng-ust in a non-default
+location.
 
-yep, I missed that. All good then, merging,
+The second patch follows up on our previous discussion about support for 'make check'
+vs. 'make installcheck'. It sets the PATH variable appropriately from within the
+Makefile, and then removes the hard-coding from the various tests and support scripts.
 
-Thanks,
+Stefan Seefeld (2):
+  Add --with-lttng-ust-prefix config option.
+  Robustify tests.
 
-Mathieu
-
+ configure.ac                                       |  9 +++
+ tests/Makefile.am                                  |  5 ++
+ .../regression/tools/filtering/test_invalid_filter |  3 +-
+ .../regression/tools/filtering/test_unsupported_op |  3 +-
+ tests/regression/tools/filtering/test_valid_filter |  3 +-
+ tests/regression/tools/health/test_thread_exit     |  1 -
+ tests/regression/tools/health/test_thread_stall    |  1 -
+ .../tools/snapshots/test_kernel_streaming          |  2 +-
+ tests/regression/tools/snapshots/test_ust          |  2 +-
+ .../regression/tools/snapshots/test_ust_streaming  |  2 +-
+ .../tools/streaming/test_high_throughput_limits    |  2 +-
+ tests/regression/tools/streaming/test_kernel       |  2 +-
+ tests/regression/tools/streaming/test_ust          |  2 +-
+ .../tools/tracefile-limits/test_tracefile_count    |  4 +-
+ .../tools/tracefile-limits/test_tracefile_size     |  4 +-
+ tests/regression/ust/buffers-pid/test_buffers_pid  | 12 ++--
+ tests/regression/ust/daemon/test_daemon            |  4 +-
+ tests/regression/ust/exit-fast/test_exit-fast      |  4 +-
+ tests/regression/ust/fork/test_fork                |  4 +-
+ .../regression/ust/libc-wrapper/test_libc-wrapper  |  4 +-
+ tests/regression/ust/linking/test_linking          |  4 +-
+ tests/regression/ust/nprocesses/test_nprocesses    |  2 +-
+ tests/regression/ust/overlap/test_overlap          |  2 +-
+ .../test_periodical_metadata_flush                 |  8 +--
+ tests/regression/ust/test_event_basic              |  7 +--
+ tests/regression/ust/test_event_wildcard           |  1 -
+ tests/run.sh                                       |  2 +-
+ tests/utils/utils.sh                               | 72 ++++++++++------------
+ 28 files changed, 82 insertions(+), 89 deletions(-)
 
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+1.8.3.1
