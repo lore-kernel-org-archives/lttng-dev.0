@@ -1,145 +1,133 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [tip:timers/urgent] timekeeping: Fix HRTICK related deadlock
-	from ntp lock changes
-Date: Mon, 16 Sep 2013 12:04:26 -0400
-Message-ID: <20130916160426.GA24669@Krystal>
-References: <1378943457-27314-1-git-send-email-john.stultz@linaro.org> <tip-7bd36014460f793c19e7d6c94dab67b0afcfcb7f@git.kernel.org>
+Subject: Re: [MODULES PATCH 1/4] Prepare LTTng override of ring
+	buffer fops
+Date: Mon, 16 Sep 2013 12:34:49 -0400
+Message-ID: <20130916163449.GA25275__16480.5639106364$1379349353$gmane$org@Krystal>
+References: <1379344713-9185-1-git-send-email-jdesfossez@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Return-path: <linux-kernel-owner@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail.openrapids.net ([64.15.138.104]
+	helo=blackscsi.openrapids.net)
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <compudj@mail.openrapids.net>) id 1VLblC-00074b-Lw
+	for lttng-dev@lists.lttng.org; Mon, 16 Sep 2013 12:34:58 -0400
 Content-Disposition: inline
-In-Reply-To: <tip-7bd36014460f793c19e7d6c94dab67b0afcfcb7f@git.kernel.org>
-Sender: linux-kernel-owner@vger.kernel.org
-To: mingo@kernel.org, hpa@zytor.com, linux-kernel@vger.kernel.org, gerlando.falauto@keymile.com, john.stultz@linaro.org, minggr@gmail.com, tglx@linutronix.de
-Cc: linux-tip-commits@vger.kernel.org, lttng-dev@lists.lttng.org
+In-Reply-To: <1379344713-9185-1-git-send-email-jdesfossez@efficios.com>
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+To: Julien Desfossez <jdesfossez@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Ingo,
-
-Do you have an estimate of the time it will take for this fix to hit
-mainline, stable-3.10 and stable-3.11 ? Meanwhile, I'm marking 3.10 and
-3.11 as broken for LTTng with a kernel version at compile-time, since
-this kernel regression currently triggers hard system lockup when people
-use LTTng on those kernels, and this is certainly something nobody
-wants.
-
-Thanks,
+merged, thanks!
 
 Mathieu
 
-* tip-bot for John Stultz (tipbot@zytor.com) wrote:
-> Commit-ID:  7bd36014460f793c19e7d6c94dab67b0afcfcb7f
-> Gitweb:     http://git.kernel.org/tip/7bd36014460f793c19e7d6c94dab67b0afcfcb7f
-> Author:     John Stultz <john.stultz@linaro.org>
-> AuthorDate: Wed, 11 Sep 2013 16:50:56 -0700
-> Committer:  Ingo Molnar <mingo@kernel.org>
-> CommitDate: Thu, 12 Sep 2013 07:49:51 +0200
+* Julien Desfossez (jdesfossez@efficios.com) wrote:
+> This patch allows LTTng to override the file operations of the lib ring
+> buffer.
+> For now it does not provide any additional functions, but it prepares
+> the work of adding LTTng-specific ioctls to the ring buffer.
 > 
-> timekeeping: Fix HRTICK related deadlock from ntp lock changes
-> 
-> Gerlando Falauto reported that when HRTICK is enabled, it is
-> possible to trigger system deadlocks. These were hard to
-> reproduce, as HRTICK has been broken in the past, but seemed
-> to be connected to the timekeeping_seq lock.
-> 
-> Since seqlock/seqcount's aren't supported w/ lockdep, I added
-> some extra spinlock based locking and triggered the following
-> lockdep output:
-> 
-> [   15.849182] ntpd/4062 is trying to acquire lock:
-> [   15.849765]  (&(&pool->lock)->rlock){..-...}, at: [<ffffffff810aa9b5>] __queue_work+0x145/0x480
-> [   15.850051]
-> [   15.850051] but task is already holding lock:
-> [   15.850051]  (timekeeper_lock){-.-.-.}, at: [<ffffffff810df6df>] do_adjtimex+0x7f/0x100
-> 
-> <snip>
-> 
-> [   15.850051] Chain exists of: &(&pool->lock)->rlock --> &p->pi_lock --> timekeeper_lock
-> [   15.850051]  Possible unsafe locking scenario:
-> [   15.850051]
-> [   15.850051]        CPU0                    CPU1
-> [   15.850051]        ----                    ----
-> [   15.850051]   lock(timekeeper_lock);
-> [   15.850051]                                lock(&p->pi_lock);
-> [   15.850051] lock(timekeeper_lock);
-> [   15.850051] lock(&(&pool->lock)->rlock);
-> [   15.850051]
-> [   15.850051]  *** DEADLOCK ***
-> 
-> The deadlock was introduced by 06c017fdd4dc48451a ("timekeeping:
-> Hold timekeepering locks in do_adjtimex and hardpps") in 3.10
-> 
-> This patch avoids this deadlock, by moving the call to
-> schedule_delayed_work() outside of the timekeeper lock
-> critical section.
-> 
-> Reported-by: Gerlando Falauto <gerlando.falauto@keymile.com>
-> Tested-by: Lin Ming <minggr@gmail.com>
-> Signed-off-by: John Stultz <john.stultz@linaro.org>
-> Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> Cc: stable <stable@vger.kernel.org> #3.11, 3.10
-> Link: http://lkml.kernel.org/r/1378943457-27314-1-git-send-email-john.stultz@linaro.org
-> Signed-off-by: Ingo Molnar <mingo@kernel.org>
+> Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
+> Acked-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 > ---
->  include/linux/timex.h     | 1 +
->  kernel/time/ntp.c         | 6 ++----
->  kernel/time/timekeeping.c | 2 ++
->  3 files changed, 5 insertions(+), 4 deletions(-)
+>  lttng-abi.c | 50 +++++++++++++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 49 insertions(+), 1 deletion(-)
 > 
-> diff --git a/include/linux/timex.h b/include/linux/timex.h
-> index b3726e6..dd3edd7 100644
-> --- a/include/linux/timex.h
-> +++ b/include/linux/timex.h
-> @@ -141,6 +141,7 @@ extern int do_adjtimex(struct timex *);
->  extern void hardpps(const struct timespec *, const struct timespec *);
+> diff --git a/lttng-abi.c b/lttng-abi.c
+> index 1be6802..7cc4b52 100644
+> --- a/lttng-abi.c
+> +++ b/lttng-abi.c
+> @@ -64,6 +64,7 @@ static const struct file_operations lttng_session_fops;
+>  static const struct file_operations lttng_channel_fops;
+>  static const struct file_operations lttng_metadata_fops;
+>  static const struct file_operations lttng_event_fops;
+> +static struct file_operations lttng_stream_ring_buffer_file_operations;
 >  
->  int read_current_timer(unsigned long *timer_val);
-> +void ntp_notify_cmos_timer(void);
+>  /*
+>   * Teardown management: opened file descriptors keep a refcount on the module,
+> @@ -792,7 +793,7 @@ int lttng_abi_open_stream(struct file *channel_file)
 >  
->  /* The clock frequency of the i8253/i8254 PIT */
->  #define PIT_TICK_RATE 1193182ul
-> diff --git a/kernel/time/ntp.c b/kernel/time/ntp.c
-> index 8f5b3b9..bb22151 100644
-> --- a/kernel/time/ntp.c
-> +++ b/kernel/time/ntp.c
-> @@ -516,13 +516,13 @@ static void sync_cmos_clock(struct work_struct *work)
->  	schedule_delayed_work(&sync_cmos_work, timespec_to_jiffies(&next));
->  }
+>  	stream_priv = buf;
+>  	ret = lttng_abi_create_stream_fd(channel_file, stream_priv,
+> -			&lib_ring_buffer_file_operations);
+> +			&lttng_stream_ring_buffer_file_operations);
+>  	if (ret < 0)
+>  		goto fd_error;
 >  
-> -static void notify_cmos_timer(void)
-> +void ntp_notify_cmos_timer(void)
->  {
->  	schedule_delayed_work(&sync_cmos_work, 0);
->  }
->  
->  #else
-> -static inline void notify_cmos_timer(void) { }
-> +void ntp_notify_cmos_timer(void) { }
+> @@ -1322,6 +1323,51 @@ static const struct file_operations lttng_event_fops = {
 >  #endif
+>  };
 >  
->  
-> @@ -687,8 +687,6 @@ int __do_adjtimex(struct timex *txc, struct timespec *ts, s32 *time_tai)
->  	if (!(time_status & STA_NANO))
->  		txc->time.tv_usec /= NSEC_PER_USEC;
->  
-> -	notify_cmos_timer();
-> -
->  	return result;
->  }
->  
-> diff --git a/kernel/time/timekeeping.c b/kernel/time/timekeeping.c
-> index 48b9fff..947ba25 100644
-> --- a/kernel/time/timekeeping.c
-> +++ b/kernel/time/timekeeping.c
-> @@ -1703,6 +1703,8 @@ int do_adjtimex(struct timex *txc)
->  	write_seqcount_end(&timekeeper_seq);
->  	raw_spin_unlock_irqrestore(&timekeeper_lock, flags);
->  
-> +	ntp_notify_cmos_timer();
+> +static long lttng_stream_ring_buffer_ioctl(struct file *filp,
+> +		unsigned int cmd, unsigned long arg)
+> +{
+> +	switch (cmd) {
+> +		default:
+> +			return lib_ring_buffer_file_operations.unlocked_ioctl(filp,
+> +					cmd, arg);
+> +	}
+> +}
 > +
+> +#ifdef CONFIG_COMPAT
+> +static long lttng_stream_ring_buffer_compat_ioctl(struct file *filp,
+> +		unsigned int cmd, unsigned long arg)
+> +{
+> +	switch (cmd) {
+> +		default:
+> +			return lib_ring_buffer_file_operations.compat_ioctl(filp,
+> +					cmd, arg);
+> +	}
+> +}
+> +#endif /* CONFIG_COMPAT */
+> +
+> +static void lttng_stream_override_ring_buffer_fops(void)
+> +{
+> +	lttng_stream_ring_buffer_file_operations.owner = THIS_MODULE;
+> +	lttng_stream_ring_buffer_file_operations.open =
+> +		lib_ring_buffer_file_operations.open;
+> +	lttng_stream_ring_buffer_file_operations.release =
+> +		lib_ring_buffer_file_operations.release;
+> +	lttng_stream_ring_buffer_file_operations.poll =
+> +		lib_ring_buffer_file_operations.poll;
+> +	lttng_stream_ring_buffer_file_operations.splice_read =
+> +		lib_ring_buffer_file_operations.splice_read;
+> +	lttng_stream_ring_buffer_file_operations.mmap =
+> +		lib_ring_buffer_file_operations.mmap;
+> +	lttng_stream_ring_buffer_file_operations.unlocked_ioctl =
+> +		lttng_stream_ring_buffer_ioctl;
+> +	lttng_stream_ring_buffer_file_operations.llseek =
+> +		lib_ring_buffer_file_operations.llseek;
+> +#ifdef CONFIG_COMPAT
+> +	lttng_stream_ring_buffer_file_operations.compat_ioctl =
+> +		lttng_stream_ring_buffer_compat_ioctl;
+> +#endif
+> +}
+> +
+>  int __init lttng_abi_init(void)
+>  {
+>  	int ret = 0;
+> @@ -1335,6 +1381,8 @@ int __init lttng_abi_init(void)
+>  		ret = -ENOMEM;
+>  		goto error;
+>  	}
+> +	lttng_stream_override_ring_buffer_fops();
+> +
+>  error:
 >  	return ret;
 >  }
->  
+> -- 
+> 1.8.3.2
+> 
 
 -- 
 Mathieu Desnoyers
