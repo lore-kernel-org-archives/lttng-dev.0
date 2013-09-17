@@ -1,81 +1,80 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [tip:timers/urgent] timekeeping: Fix HRTICK related deadlock
-	from ntp lock changes
-Date: Tue, 17 Sep 2013 12:33:03 -0400
-Message-ID: <20130917163303.GA10491@Krystal>
-References: <1378943457-27314-1-git-send-email-john.stultz@linaro.org> <tip-7bd36014460f793c19e7d6c94dab67b0afcfcb7f@git.kernel.org> <20130916160426.GA24669@Krystal> <20130917070728.GC20661@gmail.com> <20130917080941.GA4675@Krystal> <20130917082649.GE20661@gmail.com>
+From: David Goulet <dgoulet@efficios.com>
+Subject: Re: [PATCH lttng-tools 0/2] Improve testing.
+Date: Tue, 17 Sep 2013 13:38:09 -0400
+Message-ID: <52389381.20500__23743.0603047416$1379439558$gmane$org@efficios.com>
+References: <1379375440-24087-1-git-send-email-stefan_seefeld@mentor.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Return-path: <linux-kernel-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <20130917082649.GE20661@gmail.com>
-Sender: linux-kernel-owner@vger.kernel.org
-To: Ingo Molnar <mingo@kernel.org>
-Cc: hpa@zytor.com, linux-kernel@vger.kernel.org, gerlando.falauto@keymile.com, john.stultz@linaro.org, minggr@gmail.com, tglx@linutronix.de, linux-tip-commits@vger.kernel.org, lttng-dev@lists.lttng.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from smtp.ini-tech.com ([5.9.158.244])
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <dgoulet@efficios.com>) id 1VLzEB-0003aQ-SE
+	for lttng-dev@lists.lttng.org; Tue, 17 Sep 2013 13:38:25 -0400
+In-Reply-To: <1379375440-24087-1-git-send-email-stefan_seefeld@mentor.com>
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+To: Stefan Seefeld <stefan@seefeld.name>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Ingo Molnar (mingo@kernel.org) wrote:
-> 
-> * Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
-> 
-> > * Ingo Molnar (mingo@kernel.org) wrote:
-> > > 
-> > > * Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
-> > > 
-> > > > Hi Ingo,
-> > > > 
-> > > > Do you have an estimate of the time it will take for this fix to hit 
-> > > > mainline, stable-3.10 and stable-3.11 ? Meanwhile, I'm marking 3.10 and 
-> > > > 3.11 as broken for LTTng with a kernel version at compile-time, since 
-> > > > this kernel regression currently triggers hard system lockup when people 
-> > > > use LTTng on those kernels, and this is certainly something nobody 
-> > > > wants.
-> > > 
-> > > So, at least as per the description of John, this should only trigger if 
-> > > SCHED_HRTICK is enabled in sched_features - which is disabled by default, 
-> > > it's a debug-only development feature. Does the bug trigger on more 
-> > > regular kernels as well?
-> > 
-> > Unfortunately, it does happen on a pretty standard kernel config (giving
-> > my x230 config as example below). Pasting relevant bug description from
-> > http://bugs.lttng.org/issues/631 :
-> > 
-> > "Starting from Linux kernel commit
-> > 06c017fdd4dc48451a29ac37fc1db4a3f86b7f40 "timekeeping: Hold
-> > timekeepering locks in do_adjtimex and hardpps" (3.10 kernels), the
-> > xtime write seqlock is held across calls to __do_adjtimex(), which
-> > includes a call to notify_cmos_timer(), and hence
-> > schedule_delayed_work().
-> > 
-> > This introduces a side-effect for a set of tracepoints, including mainly 
-> > the workqueue tracepoints: a tracer hooking on those tracepoints and 
-> > reading current time with ktime_get() will cause hard system LOCKUP"
-> 
-> It's the LTTng tracepoint 'hooking' in something that does something 
-> invalid in that context that is causing the hang, not the vanilla kernel 
-> itself, right?
+Hi Stefan!
 
-Yes, that's correct. In order to ensure this kind of problem is entirely
-taken care of, I've started working on a synchronization scheme proposed
-by Peter Zijlstra that would allow ktime() to be called from any
-execution context (see:
-http://www.mail-archive.com/linux-kernel@vger.kernel.org/msg504089.html).
+So, two things I observed here. First, the kill* command from utils.sh now fails
+because they use "lt-lttng-*" rather then "lttng-*". Changing that fixes the issue.
 
+The second thing, the verbose mode is active for the tests now. Is it something
+you forgot to remove or is there a purpose?
+
+Cheers!
+David
+
+Stefan Seefeld:
+> The first of these two patches is a minor improvement I had meant to send out 
+> much earlier. It allows to configure / build against an lttng-ust in a non-default
+> location.
 > 
-> In that case the 'you get to keep both pieces' policy of out of tree code 
-> applies - but the HRTICK fix should solve your problem as well, 
-> incidentally.
-
-Thanks,
-
-Mathieu
-
+> The second patch follows up on our previous discussion about support for 'make check'
+> vs. 'make installcheck'. It sets the PATH variable appropriately from within the
+> Makefile, and then removes the hard-coding from the various tests and support scripts.
 > 
-> Thanks,
+> Stefan Seefeld (2):
+>   Add --with-lttng-ust-prefix config option.
+>   Robustify tests.
 > 
-> 	Ingo
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+>  configure.ac                                       |  9 +++
+>  tests/Makefile.am                                  |  5 ++
+>  .../regression/tools/filtering/test_invalid_filter |  3 +-
+>  .../regression/tools/filtering/test_unsupported_op |  3 +-
+>  tests/regression/tools/filtering/test_valid_filter |  3 +-
+>  tests/regression/tools/health/test_thread_exit     |  1 -
+>  tests/regression/tools/health/test_thread_stall    |  1 -
+>  .../tools/snapshots/test_kernel_streaming          |  2 +-
+>  tests/regression/tools/snapshots/test_ust          |  2 +-
+>  .../regression/tools/snapshots/test_ust_streaming  |  2 +-
+>  .../tools/streaming/test_high_throughput_limits    |  2 +-
+>  tests/regression/tools/streaming/test_kernel       |  2 +-
+>  tests/regression/tools/streaming/test_ust          |  2 +-
+>  .../tools/tracefile-limits/test_tracefile_count    |  4 +-
+>  .../tools/tracefile-limits/test_tracefile_size     |  4 +-
+>  tests/regression/ust/buffers-pid/test_buffers_pid  | 12 ++--
+>  tests/regression/ust/daemon/test_daemon            |  4 +-
+>  tests/regression/ust/exit-fast/test_exit-fast      |  4 +-
+>  tests/regression/ust/fork/test_fork                |  4 +-
+>  .../regression/ust/libc-wrapper/test_libc-wrapper  |  4 +-
+>  tests/regression/ust/linking/test_linking          |  4 +-
+>  tests/regression/ust/nprocesses/test_nprocesses    |  2 +-
+>  tests/regression/ust/overlap/test_overlap          |  2 +-
+>  .../test_periodical_metadata_flush                 |  8 +--
+>  tests/regression/ust/test_event_basic              |  7 +--
+>  tests/regression/ust/test_event_wildcard           |  1 -
+>  tests/run.sh                                       |  2 +-
+>  tests/utils/utils.sh                               | 72 ++++++++++------------
+>  28 files changed, 82 insertions(+), 89 deletions(-)
+> 
