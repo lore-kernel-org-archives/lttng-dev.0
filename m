@@ -1,8 +1,8 @@
 From: Julien Desfossez <jdesfossez@efficios.com>
-Subject: [UST PATCH 2/3] LTTng ringbuffer ABI calls for index
-	generation
-Date: Thu, 19 Sep 2013 13:51:54 -0400
-Message-ID: <1379613115-28789-2-git-send-email-jdesfossez__12316.3024349653$1379613344$gmane$org@efficios.com>
+Subject: [UST PATCH 3/3] Per-stream ioctl to get the current
+	timestamp
+Date: Thu, 19 Sep 2013 13:51:55 -0400
+Message-ID: <1379613115-28789-3-git-send-email-jdesfossez__41423.1447539807$1379613456$gmane$org@efficios.com>
 References: <1379613115-28789-1-git-send-email-jdesfossez@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,8 +10,8 @@ Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from smtp.ini-tech.com ([5.9.158.244])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jdesfossez@efficios.com>) id 1VMiOm-0002wQ-Ch
-	for lttng-dev@lists.lttng.org; Thu, 19 Sep 2013 13:52:22 -0400
+	(envelope-from <jdesfossez@efficios.com>) id 1VMiOn-0002wR-9k
+	for lttng-dev@lists.lttng.org; Thu, 19 Sep 2013 13:52:27 -0400
 In-Reply-To: <1379613115-28789-1-git-send-email-jdesfossez@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -25,312 +25,95 @@ To: mathieu.desnoyers@efficios.com
 Cc: lttng-dev@lists.lttng.org, Julien Desfossez <jdesfossez@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-These new calls export the data required for the consumer to
-generate the index while tracing :
-- timestamp begin
-- timestamp end
-- events discarded
-- context size
-- packet size
-- stream id
-
 Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
-Acked-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- include/lttng/ust-ctl.h                 |  14 ++++
- liblttng-ust-ctl/ustctl.c               | 110 ++++++++++++++++++++++++++++++++
- liblttng-ust/lttng-rb-clients.h         |  19 ++++++
- liblttng-ust/lttng-ring-buffer-client.h |  90 ++++++++++++++++++++++++++
- 4 files changed, 233 insertions(+)
+ include/lttng/ust-ctl.h                 |  2 ++
+ liblttng-ust-ctl/ustctl.c               | 15 +++++++++++++++
+ liblttng-ust/lttng-rb-clients.h         |  3 +++
+ liblttng-ust/lttng-ring-buffer-client.h | 13 +++++++++++++
+ 4 files changed, 33 insertions(+)
 
 diff --git a/include/lttng/ust-ctl.h b/include/lttng/ust-ctl.h
-index 3c81e50..88112ad 100644
+index 88112ad..c8ac3f9 100644
 --- a/include/lttng/ust-ctl.h
 +++ b/include/lttng/ust-ctl.h
-@@ -220,6 +220,20 @@ int ustctl_put_subbuf(struct ustctl_consumer_stream *stream);
- void ustctl_flush_buffer(struct ustctl_consumer_stream *stream,
- 		int producer_active);
+@@ -233,6 +233,8 @@ int ustctl_get_packet_size(struct ustctl_consumer_stream *stream,
+ 	uint64_t *packet_size);
+ int ustctl_get_stream_id(struct ustctl_consumer_stream *stream,
+ 		uint64_t *stream_id);
++int ustctl_get_current_timestamp(struct ustctl_consumer_stream *stream,
++		uint64_t *ts);
  
-+/* index */
-+int ustctl_get_timestamp_begin(struct ustctl_consumer_stream *stream,
-+		uint64_t *timestamp_begin);
-+int ustctl_get_timestamp_end(struct ustctl_consumer_stream *stream,
-+	uint64_t *timestamp_end);
-+int ustctl_get_events_discarded(struct ustctl_consumer_stream *stream,
-+	uint64_t *events_discarded);
-+int ustctl_get_content_size(struct ustctl_consumer_stream *stream,
-+	uint64_t *content_size);
-+int ustctl_get_packet_size(struct ustctl_consumer_stream *stream,
-+	uint64_t *packet_size);
-+int ustctl_get_stream_id(struct ustctl_consumer_stream *stream,
-+		uint64_t *stream_id);
-+
  /* event registry management */
  
- enum ustctl_socket_type {
 diff --git a/liblttng-ust-ctl/ustctl.c b/liblttng-ust-ctl/ustctl.c
-index 28dee5e..7830132 100644
+index 7830132..11fc704 100644
 --- a/liblttng-ust-ctl/ustctl.c
 +++ b/liblttng-ust-ctl/ustctl.c
-@@ -31,6 +31,7 @@
- #include "../libringbuffer/backend.h"
- #include "../libringbuffer/frontend.h"
- #include "../liblttng-ust/wait.h"
-+#include "../liblttng-ust/lttng-rb-clients.h"
- 
- /*
-  * Number of milliseconds to retry before failing metadata writes on
-@@ -1461,6 +1462,115 @@ void ustctl_flush_buffer(struct ustctl_consumer_stream *stream,
- 		consumer_chan->chan->handle);
+@@ -1571,6 +1571,21 @@ int ustctl_get_stream_id(struct ustctl_consumer_stream *stream,
+ 	return client_cb->stream_id(buf, handle, stream_id);
  }
  
-+static
-+struct lttng_ust_client_lib_ring_buffer_client_cb *get_client_cb(
-+		struct lttng_ust_lib_ring_buffer *buf,
-+		struct lttng_ust_shm_handle *handle)
-+{
-+	struct channel *chan;
-+	const struct lttng_ust_lib_ring_buffer_config *config;
-+	struct lttng_ust_client_lib_ring_buffer_client_cb *client_cb;
-+
-+	chan = shmp(handle, buf->backend.chan);
-+	config = &chan->backend.config;
-+	if (!config->cb_ptr)
-+		return NULL;
-+	client_cb = caa_container_of(config->cb_ptr,
-+			struct lttng_ust_client_lib_ring_buffer_client_cb,
-+			parent);
-+	return client_cb;
-+}
-+
-+int ustctl_get_timestamp_begin(struct ustctl_consumer_stream *stream,
-+		uint64_t *timestamp_begin)
++int ustctl_get_current_timestamp(struct ustctl_consumer_stream *stream,
++		uint64_t *ts)
 +{
 +	struct lttng_ust_client_lib_ring_buffer_client_cb *client_cb;
 +	struct lttng_ust_lib_ring_buffer *buf = stream->buf;
 +	struct lttng_ust_shm_handle *handle = stream->chan->chan->handle;
 +
-+	if (!stream || !timestamp_begin)
++	if (!stream || !ts)
 +		return -EINVAL;
 +	client_cb = get_client_cb(buf, handle);
-+	if (!client_cb)
++	if (!client_cb || !client_cb->current_timestamp)
 +		return -ENOSYS;
-+	return client_cb->timestamp_begin(buf, handle, timestamp_begin);
-+}
-+
-+int ustctl_get_timestamp_end(struct ustctl_consumer_stream *stream,
-+	uint64_t *timestamp_end)
-+{
-+	struct lttng_ust_client_lib_ring_buffer_client_cb *client_cb;
-+	struct lttng_ust_lib_ring_buffer *buf = stream->buf;
-+	struct lttng_ust_shm_handle *handle = stream->chan->chan->handle;
-+
-+	if (!stream || !timestamp_end)
-+		return -EINVAL;
-+	client_cb = get_client_cb(buf, handle);
-+	if (!client_cb)
-+		return -ENOSYS;
-+	return client_cb->timestamp_end(buf, handle, timestamp_end);
-+}
-+
-+int ustctl_get_events_discarded(struct ustctl_consumer_stream *stream,
-+	uint64_t *events_discarded)
-+{
-+	struct lttng_ust_client_lib_ring_buffer_client_cb *client_cb;
-+	struct lttng_ust_lib_ring_buffer *buf = stream->buf;
-+	struct lttng_ust_shm_handle *handle = stream->chan->chan->handle;
-+
-+	if (!stream || !events_discarded)
-+		return -EINVAL;
-+	client_cb = get_client_cb(buf, handle);
-+	if (!client_cb)
-+		return -ENOSYS;
-+	return client_cb->events_discarded(buf, handle, events_discarded);
-+}
-+
-+int ustctl_get_content_size(struct ustctl_consumer_stream *stream,
-+	uint64_t *content_size)
-+{
-+	struct lttng_ust_client_lib_ring_buffer_client_cb *client_cb;
-+	struct lttng_ust_lib_ring_buffer *buf = stream->buf;
-+	struct lttng_ust_shm_handle *handle = stream->chan->chan->handle;
-+
-+	if (!stream || !content_size)
-+		return -EINVAL;
-+	client_cb = get_client_cb(buf, handle);
-+	if (!client_cb)
-+		return -ENOSYS;
-+	return client_cb->content_size(buf, handle, content_size);
-+}
-+
-+int ustctl_get_packet_size(struct ustctl_consumer_stream *stream,
-+	uint64_t *packet_size)
-+{
-+	struct lttng_ust_client_lib_ring_buffer_client_cb *client_cb;
-+	struct lttng_ust_lib_ring_buffer *buf = stream->buf;
-+	struct lttng_ust_shm_handle *handle = stream->chan->chan->handle;
-+
-+	if (!stream || !packet_size)
-+		return -EINVAL;
-+	client_cb = get_client_cb(buf, handle);
-+	if (!client_cb)
-+		return -ENOSYS;
-+	return client_cb->packet_size(buf, handle, packet_size);
-+}
-+
-+int ustctl_get_stream_id(struct ustctl_consumer_stream *stream,
-+		uint64_t *stream_id)
-+{
-+	struct lttng_ust_client_lib_ring_buffer_client_cb *client_cb;
-+	struct lttng_ust_lib_ring_buffer *buf = stream->buf;
-+	struct lttng_ust_shm_handle *handle = stream->chan->chan->handle;
-+
-+	if (!stream || !stream_id)
-+		return -EINVAL;
-+	client_cb = get_client_cb(buf, handle);
-+	if (!client_cb)
-+		return -ENOSYS;
-+	return client_cb->stream_id(buf, handle, stream_id);
++	return client_cb->current_timestamp(buf, handle, ts);
 +}
 +
  /*
   * Returns 0 on success, negative error value on error.
   */
 diff --git a/liblttng-ust/lttng-rb-clients.h b/liblttng-ust/lttng-rb-clients.h
-index c9a1619..c43aa75 100644
+index c43aa75..85d4e1b 100644
 --- a/liblttng-ust/lttng-rb-clients.h
 +++ b/liblttng-ust/lttng-rb-clients.h
-@@ -21,6 +21,25 @@
- 
- struct lttng_ust_client_lib_ring_buffer_client_cb {
- 	struct lttng_ust_lib_ring_buffer_client_cb parent;
-+
-+	int (*timestamp_begin) (struct lttng_ust_lib_ring_buffer *buf,
+@@ -40,6 +40,9 @@ struct lttng_ust_client_lib_ring_buffer_client_cb {
+ 	int (*stream_id) (struct lttng_ust_lib_ring_buffer *buf,
+ 			struct lttng_ust_shm_handle *handle,
+ 			uint64_t *stream_id);
++	int (*current_timestamp) (struct lttng_ust_lib_ring_buffer *buf,
 +			struct lttng_ust_shm_handle *handle,
-+			uint64_t *timestamp_begin);
-+	int (*timestamp_end) (struct lttng_ust_lib_ring_buffer *buf,
-+			struct lttng_ust_shm_handle *handle,
-+			uint64_t *timestamp_end);
-+	int (*events_discarded) (struct lttng_ust_lib_ring_buffer *buf,
-+			struct lttng_ust_shm_handle *handle,
-+			uint64_t *events_discarded);
-+	int (*content_size) (struct lttng_ust_lib_ring_buffer *buf,
-+			struct lttng_ust_shm_handle *handle,
-+			uint64_t *content_size);
-+	int (*packet_size) (struct lttng_ust_lib_ring_buffer *buf,
-+			struct lttng_ust_shm_handle *handle,
-+			uint64_t *packet_size);
-+	int (*stream_id) (struct lttng_ust_lib_ring_buffer *buf,
-+			struct lttng_ust_shm_handle *handle,
-+			uint64_t *stream_id);
++			uint64_t *ts);
  };
  
  #endif /* _LTTNG_RB_CLIENT_H */
 diff --git a/liblttng-ust/lttng-ring-buffer-client.h b/liblttng-ust/lttng-ring-buffer-client.h
-index 383fce0..4671713 100644
+index 4671713..2cdecbe 100644
 --- a/liblttng-ust/lttng-ring-buffer-client.h
 +++ b/liblttng-ust/lttng-ring-buffer-client.h
-@@ -386,6 +386,90 @@ static void client_buffer_finalize(struct lttng_ust_lib_ring_buffer *buf, void *
- {
+@@ -470,6 +470,18 @@ static int client_stream_id(struct lttng_ust_lib_ring_buffer *buf,
+ 	return 0;
  }
  
-+static struct packet_header *client_packet_header(struct lttng_ust_lib_ring_buffer *buf,
-+		struct lttng_ust_shm_handle *handle)
-+{
-+	struct channel *chan = shmp(handle, buf->backend.chan);
-+	struct lttng_channel *lttng_chan = channel_get_private(chan);
-+	unsigned long sb_index;
-+	struct lttng_ust_lib_ring_buffer_backend *bufb;
-+	struct packet_header *header;
-+
-+	bufb = &buf->backend;
-+	sb_index = subbuffer_id_get_index(&lttng_chan->chan->backend.config,
-+			bufb->buf_rsb.id);
-+	header = lib_ring_buffer_offset_address(bufb,
-+			sb_index * lttng_chan->chan->backend.subbuf_size,
-+			handle);
-+	return header;
-+}
-+
-+static int client_timestamp_begin(struct lttng_ust_lib_ring_buffer *buf,
++static int client_current_timestamp(struct lttng_ust_lib_ring_buffer *buf,
 +		struct lttng_ust_shm_handle *handle,
-+		uint64_t *timestamp_begin)
++		uint64_t *ts)
 +{
-+	struct packet_header *header;
++	struct channel *chan;
 +
-+	header = client_packet_header(buf, handle);
-+	*timestamp_begin = header->ctx.timestamp_begin;
-+	return 0;
-+}
++	chan = shmp(handle, handle->chan);
++	*ts = client_ring_buffer_clock_read(chan);
 +
-+static int client_timestamp_end(struct lttng_ust_lib_ring_buffer *buf,
-+		struct lttng_ust_shm_handle *handle,
-+		uint64_t *timestamp_end)
-+{
-+	struct packet_header *header;
-+
-+	header = client_packet_header(buf, handle);
-+	*timestamp_end = header->ctx.timestamp_end;
-+	return 0;
-+}
-+
-+static int client_events_discarded(struct lttng_ust_lib_ring_buffer *buf,
-+		struct lttng_ust_shm_handle *handle,
-+		uint64_t *events_discarded)
-+{
-+	struct packet_header *header;
-+
-+	header = client_packet_header(buf, handle);
-+	*events_discarded = header->ctx.events_discarded;
-+	return 0;
-+}
-+
-+static int client_content_size(struct lttng_ust_lib_ring_buffer *buf,
-+		struct lttng_ust_shm_handle *handle,
-+		uint64_t *content_size)
-+{
-+	struct packet_header *header;
-+
-+	header = client_packet_header(buf, handle);
-+	*content_size = header->ctx.content_size;
-+	return 0;
-+}
-+
-+static int client_packet_size(struct lttng_ust_lib_ring_buffer *buf,
-+		struct lttng_ust_shm_handle *handle,
-+		uint64_t *packet_size)
-+{
-+	struct packet_header *header;
-+
-+	header = client_packet_header(buf, handle);
-+	*packet_size = header->ctx.packet_size;
-+	return 0;
-+}
-+
-+static int client_stream_id(struct lttng_ust_lib_ring_buffer *buf,
-+		struct lttng_ust_shm_handle *handle,
-+		uint64_t *stream_id)
-+{
-+	struct packet_header *header;
-+
-+	header = client_packet_header(buf, handle);
-+	*stream_id = header->stream_id;
 +	return 0;
 +}
 +
  static const
  struct lttng_ust_client_lib_ring_buffer_client_cb client_cb = {
  	.parent = {
-@@ -397,6 +481,12 @@ struct lttng_ust_client_lib_ring_buffer_client_cb client_cb = {
- 		.buffer_create = client_buffer_create,
- 		.buffer_finalize = client_buffer_finalize,
- 	},
-+	.timestamp_begin = client_timestamp_begin,
-+	.timestamp_end = client_timestamp_end,
-+	.events_discarded = client_events_discarded,
-+	.content_size = client_content_size,
-+	.packet_size = client_packet_size,
-+	.stream_id = client_stream_id,
+@@ -487,6 +499,7 @@ struct lttng_ust_client_lib_ring_buffer_client_cb client_cb = {
+ 	.content_size = client_content_size,
+ 	.packet_size = client_packet_size,
+ 	.stream_id = client_stream_id,
++	.current_timestamp = client_current_timestamp,
  };
  
  static const struct lttng_ust_lib_ring_buffer_config client_config = {
