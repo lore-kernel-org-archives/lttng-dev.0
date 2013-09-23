@@ -1,25 +1,20 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] LTTng modules 2.3.1
-Date: Fri, 20 Sep 2013 15:01:15 -0400
-Message-ID: <20130920190115.GA23578__13471.2929292165$1379703741$gmane$org@Krystal>
+From: "Ikaheimonen, JP" <jp_ikaheimonen@mentor.com>
+Subject: [LTTng UST] [RFC] Event exclusion feature
+Date: Mon, 23 Sep 2013 08:01:17 +0000
+Message-ID: <009B25148989C6458484484699278506E5389EBC__34862.0651093826$1379923337$gmane$org@EU-MBX-01.mgc.mentorg.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.openrapids.net ([64.15.138.104]
-	helo=blackscsi.openrapids.net)
+Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@mail.openrapids.net>) id 1VN5x8-0002p1-0z
-	for lttng-dev@lists.lttng.org; Fri, 20 Sep 2013 15:01:23 -0400
-Received: from localhost (localhost [127.0.0.1])
-	by blackscsi.openrapids.net (Postfix) with ESMTP id D5A09140008
-	for <lttng-dev@lists.lttng.org>; Fri, 20 Sep 2013 15:01:17 -0400 (EDT)
-Received: from blackscsi.openrapids.net ([127.0.0.1])
-	by localhost (blackscsi.openrapids.net [127.0.0.1]) (amavisd-new,
-	port 10024)
-	with ESMTP id oWJaGqaLg7kK for <lttng-dev@lists.lttng.org>;
-	Fri, 20 Sep 2013 15:01:15 -0400 (EDT)
-Content-Disposition: inline
+	(envelope-from <jp_ikaheimonen@mentor.com>) id 1VO15C-0007fV-Mx
+	for lttng-dev@lists.lttng.org; Mon, 23 Sep 2013 04:01:29 -0400
+Received: from svr-orw-exc-10.mgc.mentorg.com ([147.34.98.58])
+	by relay1.mentorg.com with esmtp
+	id 1VO156-0001sM-Kz from jp_ikaheimonen@mentor.com
+	for lttng-dev@lists.lttng.org; Mon, 23 Sep 2013 01:01:20 -0700
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -28,34 +23,60 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-The LTTng modules provide Linux kernel tracing capability to the LTTng
-2.x tracer toolset.
+After some discussion on and off this mailing list, I present the interface to the event exclusion feature.
 
-The important change from 2.3.0 to 2.3.1 is that kernel versions in
-these ranges:
+Use case:
+We are providing libraries for an application developer. The libraries contain LTTng UST tracepoints, and we use them to get information about how the application uses the library.
+The application developer also uses LTTng UST tracepoints, for their own use, over which we have no control. We also do not know the names of their tracepoints.
+We want to use LTTng to separate the events to two different channels. One would contain all our library events, whereas the other would contain all other events.
 
-- 3.10.0 to 3.10.12 (inclusive)
-- 3.11.0 to 3.11.1  (inclusive)
+Currently there is no way in LTTng to trace 'all events except these ones whose names I know'.
+I suggest the following:
 
-are blacklisted to ensure lttng-modules is not compiled against a buggy
-kernel which can lead to hard system lockup when enabling LTTng tracing
-of some subsystems, including but not limited to workqueues. This Linux
-bug is timekeeper related. See latest lttng-modules commits for details.
+1) Enhance enable-event command for UST tracepoint events. Add an --exclude parameter to specify exclusions to enabling wildcards.
 
-Changelog:
-2013-09-20 LTTng modules 2.3.1
-        * LTTng trace-clock: shrink kernel blacklist
-        * Blacklist Linux kernels 3.10+
+$ lttng enable-event -u -c mychan 'myapp*' --exclude myapp_comp1  
+UST event myapp* excluding myapp_comp1* created in channel mychan
 
-Project website: http://lttng.org
-Download link: http://lttng.org/download
-(please refer to the README files for installation instructions and
-lttng-tools doc/quickstart.txt for usage information)
+This command enabled all events starting with myapp, except those starting with myapp_comp1.
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+2) You can specify multiple exclusions. The following is valid:
+
+$ lttng enable-event 'myapp*' --exclude 'myapp_comp1*, myapp_comp2*'
+ UST event myapp* excluding myapp_comp1*, myapp_comp2* created in channel mychan
+
+3) The -exclude option applies to all given events in the command. That is, the command 
+
+$ lttng enable-event 'myap*,m*' --exclude 'myapp_comp1*'
+
+would be equivalent to
+
+$ lttng enable-event 'myap*' --exclude 'myapp_comp1*'
+ $ lttng enable-event 'm*' --exclude 'myapp_comp1*'
+
+4) When using --exclude, the event name should be a wildcard specification, and the excluded events should be a proper subset of the event specification. Otherwise, a warning is given, and the excluder is discarded. If the excluder fully covers the given event so that no events would be enabled, an error is given.
+
+$ lttng enable-event 'myap2*' --exclude 'myapp_comp1*'
+Warning: Event myap2*: myapp_comp1* does not exclude any events from myap2* 
+UST event myap2* created in channel mychan
+
+$ lttng enable-event 'myap2*' --exclude 'my*'
+Error: Event myap2*: my* excludes all events from myap2*.
+
+5) When disabling an event that has been enabled with exclusions, the exclusions do not need to be specified again. 
+
+$ lttng enable-event -u -c mychan 'myapp2*' --exclude 'myapp2_comp1*' 
+UST event myapp2* excluding myapp2_comp1* created in channel mychan 
+$ lttng disable-event -u -c mychan 'myapp2*' 
+UST event myapp2* disabled in channel mychan
+
+
+JP Ikaheimonen | SW Development Engineer http://go.mentor.com/sourceryanalyzer
+
+Mentor Embedded(tm) | Nucleus(r) | Linux(r) | Android(tm) | Services | UI | Multi-OS
+
+Android is a trademark of Google Inc. Use of this trademark is subject to Google Permissions.
+Linux is the registered trademark of Linus Torvalds in the U.S. and other countries.
