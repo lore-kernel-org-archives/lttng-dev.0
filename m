@@ -1,15 +1,15 @@
 From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
 Subject: Re: snapshot issue in lttng 2.3.0
-Date: Wed, 25 Sep 2013 13:26:52 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD26792E04__36624.3810546168$1380115685$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+Date: Wed, 25 Sep 2013 13:07:50 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD26792DE6__38782.4375452057$1380116800$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1VOp7F-0006fg-Mg
-	for lttng-dev@lists.lttng.org; Wed, 25 Sep 2013 09:26:59 -0400
+	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1VOoop-0005vJ-2n
+	for lttng-dev@lists.lttng.org; Wed, 25 Sep 2013 09:07:56 -0400
 Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -30,10 +30,49 @@ From: Thuya Aung <thuyaaung2002@yahoo.com>
 l folder with snapshot mode. I do not see anything for userspace tracepoint=
 s. =
 
+> The following is the way I setup for lttng session
+>
+> lttng create mySession --snapshot
+> lttng enable-channel kCh --buffers-global --subbuf-size=3D1048576 -k
+> lttng enable-event -a -k
+> lttng enable-channel uCh --buffers-uid --subbuf-size=3D1048576 -u
+> lttng enable-event -a -u
+> sleep 1
+> lttng start mySession
+> sleep 60
+> lttng snapshot record
+> lttng stop mySession
+> lttng destroy mySession
+>
+> I got the error message saying "Undefined command" with the following
+>
+> lttng add-output -n myNewOutput file:///home/taung/output (<--- following=
+ the examples of man 1 lttng)
+>
+> Did I do something wrong? What else I should be doing in order to use sna=
+pshot feature?
+>
+> Thuya Aung
 
-   I've tried setting the UST as --buffers-pid, and also running the snapsh=
-ot without any kernel events.  Same problem: no UST snapshot is produced, E=
-XCEPT when I run UST per-UID without a kernel component.
+   I can confirm this problem (I ran my usual user-space event generator an=
+d got nothing for UST in the snapshot).  Regarding your script, there is on=
+e mistake made twice: when you enable-event, you need to specify the channe=
+l.  You should have gotten an error ("Error: Events: Non-default channel ex=
+ists within session").  The correct script lines are:
+
+lttng enable-event -a -k -c kCh
+lttng enable-event -a -u -c uCh
+
+   As for the output, the mistake is simple.  The correct line is:
+
+lttng snapshot add-output -n myNewOutput file:///home/taung/output
+
+   add-output is a snapshot action, not an lttng command.  Additionally, be=
+cause a snapshot output is created by default, you must delete it first (cu=
+rrently there is just one output slot):
+
+lttng snapshot del-output 1
+lttng snapshot add-output -n myNewOutput file:///home/taung/output
 
 Daniel U. Thibault
 Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
