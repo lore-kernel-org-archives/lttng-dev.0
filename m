@@ -1,17 +1,19 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: Re: [PATCH lttng-tools] Fix typo in lttng snapshot
- add-output example of lttng(1)
-Date: Wed, 25 Sep 2013 10:20:46 -0400
-Message-ID: <5242F13E.4070202__41862.1020312004$1380118918$gmane$org@efficios.com>
-References: <1380117966-30710-1-git-send-email-christian.babeux@efficios.com>
+From: Christian Babeux <christian.babeux@efficios.com>
+Subject: Re: snapshot issue in lttng 2.3.0
+Date: Wed, 25 Sep 2013 10:28:21 -0400
+Message-ID: <CAGDH53m0F3DTUo0vjkJu7m2NtqF_Xa1hcVuO6c9gR8rqECDCxQ__19075.1132708558$1380119370$gmane$org@mail.gmail.com>
+References: <1380055364.86398.YahooMailBasic@web163905.mail.gq1.yahoo.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2091439722=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([5.9.158.244])
+Received: from mail-ve0-f170.google.com ([209.85.128.170])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1VOpxY-0000O9-1J
-	for lttng-dev@lists.lttng.org; Wed, 25 Sep 2013 10:21:01 -0400
-In-Reply-To: <1380117966-30710-1-git-send-email-christian.babeux@efficios.com>
+	(envelope-from <christian.babeux@0x80.ca>) id 1VOq4p-0000hK-Bq
+	for lttng-dev@lists.lttng.org; Wed, 25 Sep 2013 10:28:32 -0400
+Received: by mail-ve0-f170.google.com with SMTP id c14so4743808vea.15
+	for <lttng-dev@lists.lttng.org>; Wed, 25 Sep 2013 07:28:21 -0700 (PDT)
+In-Reply-To: <1380055364.86398.YahooMailBasic@web163905.mail.gq1.yahoo.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,76 +22,69 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Christian Babeux <christian.babeux@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: Thuya Aung <thuyaaung2002@yahoo.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-This is an OpenPGP/MIME signed message (RFC 2440 and 3156)
---===============2091439722==
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="------------enig5773C36E36E1A1B2FBBDAEEB"
+Hi Thuya,
 
-This is an OpenPGP/MIME signed message (RFC 2440 and 3156)
---------------enig5773C36E36E1A1B2FBBDAEEB
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+> I got the error message saying "Undefined command" with the following
+>
+> lttng add-output -n myNewOutput file:///home/taung/output (<--- following the examples of man 1 lttng)
 
-Merged!
+There was an error in the man page, the command should be "lttng
+snapshot add-output". I've just sent a patch to fix this.
 
-Christian Babeux:
-> Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
-> ---
->  doc/man/lttng.1 | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/doc/man/lttng.1 b/doc/man/lttng.1
-> index 57c89f0..659a27c 100644
-> --- a/doc/man/lttng.1
-> +++ b/doc/man/lttng.1
-> @@ -742,7 +742,7 @@ size will override the current output values. For i=
-nstance, you can record a
->  snapshot with a custom maximum size or with a different name.
-> =20
->  .nf
-> -$ lttng add-output -n mysnapshot file:///data/snapshot
-> +$ lttng snapshot add-output -n mysnapshot file:///data/snapshot
->  [...]
->  $ lttng snapshot record -n new_name_snapshot
->  .fi
+Also you don't need to use add-output/del-output if you want to change
+to default snapshot output location. It can be specified with the
+create session command and -U option:
 
+lttng create mySession --snapshot -U file:///home/taung/output
 
---------------enig5773C36E36E1A1B2FBBDAEEB
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
+[...]
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.14 (GNU/Linux)
+lttng snapshot record -n snapshot_name
 
-iQF8BAEBCgBmBQJSQvE+XxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
-ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
-MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02g0QH/A94xx1Kr+QTN32mFbocbR9Q
-OS8Uo/ylFGlpELmQ2S9sr5vD3U3pOxGBlGA+ACjqUpOwuD26awx90E/yrx34z2c6
-OqJMdZmW4oyYCTrp0XATCBLr2c7oLcTlckro4mLku7TSezlm2mhEE5sUkMt2u2g4
-E9B3gmA6MBrnp83/a57NYzWtbVUz6UZyqtV/p3l44YD0FOxgOdiLsHBj2YqPW/bK
-5BXWGknH9O1y6zPFVDwPEZeWxFNx2Tg0GbTXuehEeBIiQIx3L7KFmFrMu0cIc/y+
-CTxzAdRWVgh0F4KmZhhp0ttwM0maz3MIxTvJ9+fAS0gkg3HBDkNs6qvRI1AaTuc=
-=S9ME
------END PGP SIGNATURE-----
+Also see doc/snapshot-howto.txt for a complete example.
 
---------------enig5773C36E36E1A1B2FBBDAEEB--
+Thanks,
 
+Christian
 
---===============2091439722==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============2091439722==--
+On Tue, Sep 24, 2013 at 4:42 PM, Thuya Aung <thuyaaung2002@yahoo.com> wrote:
+> Hello lttng-dev,
+>
+> With lttng 2.3.0 in Ubuntu 12.04 LTS, I only get the tracepoints in kernel folder with snapshot mode. I do not see anything for userspace tracepoints.
+> The following is the way I setup for lttng session
+>
+> lttng create mySession --snapshot
+>
+> lttng enable-channel kCh --buffers-global --subbuf-size=1048576 -k
+> lttng enable-event -a -k
+>
+> lttng enable-channel uCh --buffers-uid --subbuf-size=1048576 -u
+> lttng enable-event -a -u
+>
+> sleep 1
+> lttng start mySession
+> sleep 60
+>
+> lttng snapshot record
+>
+>
+> lttng stop mySession
+> lttng destroy mySession
+>
+> I got the error message saying "Undefined command" with the following
+>
+> lttng add-output -n myNewOutput file:///home/taung/output (<--- following the examples of man 1 lttng)
+>
+> Did I do something wrong? What else I should be doing in order to use snapshot feature?
+>
+> Thanks in advance,
+> Thuya Aung
+>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
