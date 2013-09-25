@@ -1,27 +1,25 @@
-From: "Steffen, Kai-Uwe (Kai-Uwe)" <kai-uwe.steffen@alcatel-lucent.com>
-Subject: Tracing page waits with LTTng 2.3.0
-Date: Mon, 16 Sep 2013 13:23:09 +0000
-Message-ID: <211FA304CEAAEE4AA25085F0CEB43BD70812D210__43537.8617993139$1380114229$gmane$org@FR711WXCHMBA02.zeu.alcatel-lucent.com>
+From: Arthur LAMBERT <arthur.lambert@sagemcom.com>
+Subject: Compilation error with openwrt and uclibc 0.9.31
+Date: Wed, 25 Sep 2013 13:06:44 +0200
+Message-ID: <5242C3C4.3060207__46775.6989216015$1380114323$gmane$org@sagemcom.com>
+Reply-To: arthur.lambert@sagemcom.com
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0093412517=="
+Content-Type: text/plain; charset="iso-8859-1"; Format="flowed"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from ihemail1.lucent.com ([135.245.0.33])
+Received: from sgc-chev-fe1.sgc.gmessaging.net ([194.51.18.91]
+	helo=sgc-rueil-fe1.sgc.gmessaging.net)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <kai-uwe.steffen@alcatel-lucent.com>)
-	id 1VLYlq-0000Et-Kj
-	for lttng-dev@lists.lttng.org; Mon, 16 Sep 2013 09:23:25 -0400
-Received: from fr712usmtp2.zeu.alcatel-lucent.com (h135-239-2-42.lucent.com
-	[135.239.2.42])
-	by ihemail1.lucent.com (8.13.8/IER-o) with ESMTP id r8GDNCMq019672
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-SHA bits=256 verify=FAIL)
-	for <lttng-dev@lists.lttng.org>; Mon, 16 Sep 2013 08:23:14 -0500 (CDT)
-Received: from FR711WXCHHUB02.zeu.alcatel-lucent.com
-	(fr711wxchhub02.zeu.alcatel-lucent.com [135.239.2.112])
-	by fr712usmtp2.zeu.alcatel-lucent.com (GMO) with ESMTP id
-	r8GDNAtX014857
-	(version=TLSv1/SSLv3 cipher=AES128-SHA bits=128 verify=FAIL)
-	for <lttng-dev@lists.lttng.org>; Mon, 16 Sep 2013 15:23:10 +0200
-Content-Language: en-US
+	(envelope-from <arthur.lambert-ext@sagemcom.com>) id 1VOn0E-0001SE-Eb
+	for lttng-dev@lists.lttng.org; Wed, 25 Sep 2013 07:11:33 -0400
+Received: from sgc-rueil-fe1.sgc.gmessaging.net (localhost.localdomain
+	[127.0.0.1])
+	by localhost.sgc.gmessaging.net (Postfix) with SMTP id 70E4814B84E4
+	for <lttng-dev@lists.lttng.org>; Wed, 25 Sep 2013 13:11:24 +0200 (CEST)
+Received: from EXDCVYARSGC003.eq1sgc.local (unknown [10.67.4.73])
+	by sgc-rueil-fe1.sgc.gmessaging.net (Postfix) with ESMTP id
+	E06E914B84E3
+	for <lttng-dev@lists.lttng.org>; Wed, 25 Sep 2013 13:11:23 +0200 (CEST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -30,142 +28,422 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============0093412517==
-Content-Language: en-US
-Content-Type: multipart/alternative;
-	boundary="_000_211FA304CEAAEE4AA25085F0CEB43BD70812D210FR711WXCHMBA02z_"
+Hi,
 
---_000_211FA304CEAAEE4AA25085F0CEB43BD70812D210FR711WXCHMBA02z_
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+I am using backfire version of Openwrt and would like to try to use =
 
-Hi.
+profiling features bring by tools like lttng. I found some Makefile =
 
-Currently I'm working with LTTng 2.3.0 for Ubuntu 12.4, to see if this vers=
-ion would meet our requirements.
-With old LTT and LTTng 0.x it was possible to trace page waits.
-Tracepoints were called "Page Wait" for LTT and "buffer_wait_start" "buffer=
-_wait_end" for LTTng 0.x.
+packages on openwrt website to build lttng-tools and lttng-ust with =
 
-Now I looked for the tracepoints available with 2.3.0 and didn't find trace=
-point for the page waits.
+recent version of openwrt version but I am not able to compile lttng =
 
-Lttng list -k
+without error. with mine..
 
-Can you tell me if there is a tracepoint available in LTTng 2.3 or is it no=
-t supported yet?
+Environment :
 
-Thanks Kai
+Openwrt Backfire
+UCLIBC 0.9.31
+Linux kernel 2.6.28
+ARCH mips32
+lttng version : 2.3.0
+librcu version : 0.8
 
---_000_211FA304CEAAEE4AA25085F0CEB43BD70812D210FR711WXCHMBA02z_
-Content-Type: text/html; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+First problem was related to lttng-ust-2.3.0/libringbuffer/getcpu.h. I =
 
-<html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-micr=
-osoft-com:office:office" xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
-xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http:=
-//www.w3.org/TR/REC-html40">
-<head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
->
-<meta name=3D"Generator" content=3D"Microsoft Word 12 (filtered medium)">
-<style><!--
-/* Font Definitions */
-@font-face
-	{font-family:Calibri;
-	panose-1:2 15 5 2 2 2 4 3 2 4;}
-@font-face
-	{font-family:Tahoma;
-	panose-1:2 11 6 4 3 5 4 4 2 4;}
-/* Style Definitions */
-p.MsoNormal, li.MsoNormal, div.MsoNormal
-	{margin:0cm;
-	margin-bottom:.0001pt;
-	font-size:11.0pt;
-	font-family:"Calibri","sans-serif";}
-a:link, span.MsoHyperlink
-	{mso-style-priority:99;
-	color:blue;
-	text-decoration:underline;}
-a:visited, span.MsoHyperlinkFollowed
-	{mso-style-priority:99;
-	color:purple;
-	text-decoration:underline;}
-p.MsoAcetate, li.MsoAcetate, div.MsoAcetate
-	{mso-style-priority:99;
-	mso-style-link:"Balloon Text Char";
-	margin:0cm;
-	margin-bottom:.0001pt;
-	font-size:8.0pt;
-	font-family:"Tahoma","sans-serif";}
-span.EmailStyle17
-	{mso-style-type:personal-compose;
-	font-family:"Calibri","sans-serif";
-	color:windowtext;}
-span.BalloonTextChar
-	{mso-style-name:"Balloon Text Char";
-	mso-style-priority:99;
-	mso-style-link:"Balloon Text";
-	font-family:"Tahoma","sans-serif";}
-.MsoChpDefault
-	{mso-style-type:export-only;}
-@page WordSection1
-	{size:612.0pt 792.0pt;
-	margin:70.85pt 70.85pt 2.0cm 70.85pt;}
-div.WordSection1
-	{page:WordSection1;}
---></style><!--[if gte mso 9]><xml>
-<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
-</xml><![endif]--><!--[if gte mso 9]><xml>
-<o:shapelayout v:ext=3D"edit">
-<o:idmap v:ext=3D"edit" data=3D"1" />
-</o:shapelayout></xml><![endif]-->
-</head>
-<body lang=3D"DE" link=3D"blue" vlink=3D"purple">
-<div class=3D"WordSection1">
-<p class=3D"MsoNormal">Hi.<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">Currently I&#8217;m working wit=
-h LTTng 2.3.0 for Ubuntu 12.4, to see if this version would meet our requir=
-ements.<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">With old LTT and LTTng 0.x it w=
-as possible to trace page waits.<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">Tracepoints were called &#8220;=
-Page Wait&#8221; for LTT and &#8220;buffer_wait_start&#8221; &#8220;buffer_=
-wait_end&#8221; for LTTng 0.x.<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">Now I looked for the tracepoint=
-s available with 2.3.0 and didn&#8217;t find tracepoint for the page waits.=
-<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">Lttng list &#8211;k<o:p></o:p><=
-/span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">Can you tell me if there is a t=
-racepoint available in LTTng 2.3 or is it not supported yet?<o:p></o:p></sp=
-an></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">Thanks Kai<o:p></o:p></span></p=
->
-</div>
-</body>
-</html>
+get an undefined reference to c variable in lttng_ust_get_cpu function. =
 
---_000_211FA304CEAAEE4AA25085F0CEB43BD70812D210FR711WXCHMBA02z_--
+After some research I was not able to find a solution about this point =
+
+even if I seem to be up to date since I found some patch related to =
+
+issue with old version of uclibc than 0.9.32. This patch seems to be =
+
+already integrated in my lttng ust version. Anyway, I found a workaround =
+
+to check that the next step on the compilation is find... but it is not...
+
+Compilation result :
+
+make package/lttng-tools/compile V=3D99
+
+make[1]: Entering directory =
+
+`/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt'
+make[2]: Entering directory =
+
+`/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/feeds/tools/libs/li=
+burcu'
+make[2]: Leaving directory =
+
+`/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/feeds/tools/libs/li=
+burcu'
+make[2]: Entering directory =
+
+`/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/package/e2fsprogs'
+WARNING: skipping e2fsprogs -- package not selected
+WARNING: skipping uuidgen -- package not selected
+WARNING: skipping libext2fs -- package not selected
+WARNING: skipping tune2fs -- package not selected
+WARNING: skipping resize2fs -- package not selected
+WARNING: skipping badblocks -- package not selected
+WARNING: skipping blkid -- package not selected
+make[2]: Leaving directory =
+
+`/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/package/e2fsprogs'
+make[2]: Entering directory =
+
+`/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/feeds/tools/devel/l=
+ttng-ust'
+CFLAGS=3D"-Os -pipe -mabi=3D32 -mtune=3Dmips32 -fno-strict-aliasing -g3 =
+
+-fhonour-copts -msoft-float =
+
+-I/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/staging_dir/target=
+-mips_uClibc-0.9.30.1/usr/include =
+
+-I/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/staging_dir/target=
+-mips_uClibc-0.9.30.1/include =
+
+-I/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/staging_dir/toolch=
+ain-mips_gcc-4.4.2_uClibc-0.9.30.1/usr/include =
+
+-I/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/staging_dir/toolch=
+ain-mips_gcc-4.4.2_uClibc-0.9.30.1/include =
+
+" CXXFLAGS=3D"-Os -pipe -mabi=3D32 -mtune=3Dmips32 -fno-strict-aliasing -g3 =
+
+-fhonour-copts -msoft-float =
+
+-I/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/staging_dir/target=
+-mips_uClibc-0.9.30.1/usr/include =
+
+-I/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/staging_dir/target=
+-mips_uClibc-0.9.30.1/include =
+
+-I/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/staging_dir/toolch=
+ain-mips_gcc-4.4.2_uClibc-0.9.30.1/usr/include =
+
+-I/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/staging_dir/toolch=
+ain-mips_gcc-4.4.2_uClibc-0.9.30.1/include =
+
+" =
+
+LDFLAGS=3D"-L/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/staging=
+_dir/target-mips_uClibc-0.9.30.1/usr/lib =
+
+-L/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/staging_dir/target=
+-mips_uClibc-0.9.30.1/lib =
+
+-L/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/staging_dir/toolch=
+ain-mips_gcc-4.4.2_uClibc-0.9.30.1/usr/lib =
+
+-L/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/staging_dir/toolch=
+ain-mips_gcc-4.4.2_uClibc-0.9.30.1/lib =
+
+" make  -j2 -C =
+
+/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/build_dir/target-mip=
+s_uClibc-0.9.30.1/lttng-ust-2.3.0/. =
+
+AR=3Dmips-openwrt-linux-uclibc-ar AS=3D"mips-openwrt-linux-uclibc-gcc -c -O=
+s =
+
+-pipe -mabi=3D32 -mtune=3Dmips32 -fno-strict-aliasing -g3 -fhonour-copts =
+
+-msoft-float" LD=3Dmips-openwrt-linux-uclibc-ld =
+
+NM=3Dmips-openwrt-linux-uclibc-nm CC=3D"mips-openwrt-linux-uclibc-gcc" =
+
+GCC=3D"mips-openwrt-linux-uclibc-gcc" CXX=3D"mips-openwrt-linux-uclibc-g++" =
+
+RANLIB=3Dmips-openwrt-linux-uclibc-ranlib =
+
+STRIP=3Dmips-openwrt-linux-uclibc-strip =
+
+OBJCOPY=3Dmips-openwrt-linux-uclibc-objcopy =
+
+OBJDUMP=3Dmips-openwrt-linux-uclibc-objdump =
+
+SIZE=3Dmips-openwrt-linux-uclibc-size CROSS=3D"mips-openwrt-linux-uclibc-" =
+
+ARCH=3D"mips" ;
+make[3]: Entering directory =
+
+`/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/build_dir/target-mi=
+ps_uClibc-0.9.30.1/lttng-ust-2.3.0'
+make  all-recursive
+make[4]: Entering directory =
+
+`/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/build_dir/target-mi=
+ps_uClibc-0.9.30.1/lttng-ust-2.3.0'
+Making all in .
+make[5]: Entering directory =
+
+`/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/build_dir/target-mi=
+ps_uClibc-0.9.30.1/lttng-ust-2.3.0'
+make[5]: Nothing to be done for `all-am'.
+make[5]: Leaving directory =
+
+`/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/build_dir/target-mi=
+ps_uClibc-0.9.30.1/lttng-ust-2.3.0'
+Making all in include
+make[5]: Entering directory =
+
+`/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/build_dir/target-mi=
+ps_uClibc-0.9.30.1/lttng-ust-2.3.0/include'
+make[5]: Nothing to be done for `all'.
+make[5]: Leaving directory =
+
+`/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/build_dir/target-mi=
+ps_uClibc-0.9.30.1/lttng-ust-2.3.0/include'
+Making all in snprintf
+make[5]: Entering directory =
+
+`/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/build_dir/target-mi=
+ps_uClibc-0.9.30.1/lttng-ust-2.3.0/snprintf'
+make[5]: Nothing to be done for `all'.
+make[5]: Leaving directory =
+
+`/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/build_dir/target-mi=
+ps_uClibc-0.9.30.1/lttng-ust-2.3.0/snprintf'
+Making all in libringbuffer
+make[5]: Entering directory =
+
+`/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/build_dir/target-mi=
+ps_uClibc-0.9.30.1/lttng-ust-2.3.0/libringbuffer'
+make[5]: Nothing to be done for `all'.
+make[5]: Leaving directory =
+
+`/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/build_dir/target-mi=
+ps_uClibc-0.9.30.1/lttng-ust-2.3.0/libringbuffer'
+Making all in liblttng-ust-comm
+make[5]: Entering directory =
+
+`/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/build_dir/target-mi=
+ps_uClibc-0.9.30.1/lttng-ust-2.3.0/liblttng-ust-comm'
+make[5]: Nothing to be done for `all'.
+make[5]: Leaving directory =
+
+`/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/build_dir/target-mi=
+ps_uClibc-0.9.30.1/lttng-ust-2.3.0/liblttng-ust-comm'
+Making all in liblttng-ust
+make[5]: Entering directory =
+
+`/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/build_dir/target-mi=
+ps_uClibc-0.9.30.1/lttng-ust-2.3.0/liblttng-ust'
+make[5]: Nothing to be done for `all'.
+make[5]: Leaving directory =
+
+`/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/build_dir/target-mi=
+ps_uClibc-0.9.30.1/lttng-ust-2.3.0/liblttng-ust'
+Making all in liblttng-ust-ctl
+make[5]: Entering directory =
+
+`/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/build_dir/target-mi=
+ps_uClibc-0.9.30.1/lttng-ust-2.3.0/liblttng-ust-ctl'
+make[5]: Nothing to be done for `all'.
+make[5]: Leaving directory =
+
+`/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/build_dir/target-mi=
+ps_uClibc-0.9.30.1/lttng-ust-2.3.0/liblttng-ust-ctl'
+Making all in liblttng-ust-fork
+make[5]: Entering directory =
+
+`/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/build_dir/target-mi=
+ps_uClibc-0.9.30.1/lttng-ust-2.3.0/liblttng-ust-fork'
+make[5]: Nothing to be done for `all'.
+make[5]: Leaving directory =
+
+`/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/build_dir/target-mi=
+ps_uClibc-0.9.30.1/lttng-ust-2.3.0/liblttng-ust-fork'
+Making all in liblttng-ust-libc-wrapper
+make[5]: Entering directory =
+
+`/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/build_dir/target-mi=
+ps_uClibc-0.9.30.1/lttng-ust-2.3.0/liblttng-ust-libc-wrapper'
+make[5]: Nothing to be done for `all'.
+make[5]: Leaving directory =
+
+`/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/build_dir/target-mi=
+ps_uClibc-0.9.30.1/lttng-ust-2.3.0/liblttng-ust-libc-wrapper'
+Making all in liblttng-ust-cyg-profile
+make[5]: Entering directory =
+
+`/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/build_dir/target-mi=
+ps_uClibc-0.9.30.1/lttng-ust-2.3.0/liblttng-ust-cyg-profile'
+make[5]: Nothing to be done for `all'.
+make[5]: Leaving directory =
+
+`/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/build_dir/target-mi=
+ps_uClibc-0.9.30.1/lttng-ust-2.3.0/liblttng-ust-cyg-profile'
+Making all in tools
+make[5]: Entering directory =
+
+`/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/build_dir/target-mi=
+ps_uClibc-0.9.30.1/lttng-ust-2.3.0/tools'
+make[5]: Nothing to be done for `all'.
+make[5]: Leaving directory =
+
+`/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/build_dir/target-mi=
+ps_uClibc-0.9.30.1/lttng-ust-2.3.0/tools'
+Making all in tests
+make[5]: Entering directory =
+
+`/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/build_dir/target-mi=
+ps_uClibc-0.9.30.1/lttng-ust-2.3.0/tests'
+Making all in utils
+make[6]: Entering directory =
+
+`/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/build_dir/target-mi=
+ps_uClibc-0.9.30.1/lttng-ust-2.3.0/tests/utils'
+make[6]: Nothing to be done for `all'.
+make[6]: Leaving directory =
+
+`/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/build_dir/target-mi=
+ps_uClibc-0.9.30.1/lttng-ust-2.3.0/tests/utils'
+Making all in hello
+make[6]: Entering directory =
+
+`/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/build_dir/target-mi=
+ps_uClibc-0.9.30.1/lttng-ust-2.3.0/tests/hello'
+/bin/bash ../../libtool  --tag=3DCC   --mode=3Dlink =
+
+mips-openwrt-linux-uclibc-gcc -Werror=3Dold-style-definition -Wall -Os =
+
+-pipe -mabi=3D32 -mtune=3Dmips32 -fno-strict-aliasing -g3 -fhonour-copts =
+
+-msoft-float =
+
+-L/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/staging_dir/target=
+-mips_uClibc-0.9.30.1/usr/lib =
+
+-L/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/staging_dir/target=
+-mips_uClibc-0.9.30.1/lib =
+
+-L/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/staging_dir/toolch=
+ain-mips_gcc-4.4.2_uClibc-0.9.30.1/usr/lib =
+
+-L/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/staging_dir/toolch=
+ain-mips_gcc-4.4.2_uClibc-0.9.30.1/lib =
+
+-o hello hello-hello.o hello-tp.o ../../liblttng-ust/liblttng-ust.la =
+
+-ldl  -lurcu-bp -lurcu-bp -lurcu-cds -lpthread
+libtool: link: mips-openwrt-linux-uclibc-gcc =
+
+-Werror=3Dold-style-definition -Wall -Os -pipe -mabi=3D32 -mtune=3Dmips32 =
+
+-fno-strict-aliasing -g3 -fhonour-copts -msoft-float -o .libs/hello =
+
+hello-hello.o hello-tp.o =
+
+-L/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/staging_dir/target=
+-mips_uClibc-0.9.30.1/usr/lib =
+
+-L/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/staging_dir/target=
+-mips_uClibc-0.9.30.1/lib =
+
+-L/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/staging_dir/toolch=
+ain-mips_gcc-4.4.2_uClibc-0.9.30.1/usr/lib =
+
+-L/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/staging_dir/toolch=
+ain-mips_gcc-4.4.2_uClibc-0.9.30.1/lib =
+
+../../liblttng-ust/.libs/liblttng-ust.so =
+
+/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/build_dir/target-mip=
+s_uClibc-0.9.30.1/lttng-ust-2.3.0/liblttng-ust/.libs/liblttng-ust-tracepoin=
+t.so =
+
+-lrt -ldl -lurcu-bp -lurcu-cds -lpthread
+../../liblttng-ust/.libs/liblttng-ust.so: warning: the use of `mktemp' =
+
+is dangerous, better use `mkstemp'
+/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/staging_dir/toolchai=
+n-mips_gcc-4.4.2_uClibc-0.9.30.1/lib/gcc/mips-openwrt-linux-uclibc/4.4.2/..=
+/../../../mips-openwrt-linux-uclibc/bin/ld: =
+
+warning: liburcu-common.so.2, needed by =
+
+/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/staging_dir/target-m=
+ips_uClibc-0.9.30.1/usr/lib/liburcu-bp.so, =
+
+not found (try using -rpath or -rpath-link)
+../../liblttng-ust/.libs/liblttng-ust.so: undefined reference to `shm_open'
+../../liblttng-ust/.libs/liblttng-ust.so: undefined reference to =
+
+`shm_unlink'
+collect2: ld returned 1 exit status
+make[6]: *** [hello] Error 1
+make[6]: Leaving directory =
+
+`/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/build_dir/target-mi=
+ps_uClibc-0.9.30.1/lttng-ust-2.3.0/tests/hello'
+make[5]: *** [all-recursive] Error 1
+make[5]: Leaving directory =
+
+`/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/build_dir/target-mi=
+ps_uClibc-0.9.30.1/lttng-ust-2.3.0/tests'
+make[4]: *** [all-recursive] Error 1
+make[4]: Leaving directory =
+
+`/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/build_dir/target-mi=
+ps_uClibc-0.9.30.1/lttng-ust-2.3.0'
+make[3]: *** [all] Error 2
+make[3]: Leaving directory =
+
+`/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/build_dir/target-mi=
+ps_uClibc-0.9.30.1/lttng-ust-2.3.0'
+make[2]: *** =
+
+[/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/build_dir/target-mi=
+ps_uClibc-0.9.30.1/lttng-ust-2.3.0/.built] =
+
+Error 2
+make[2]: Leaving directory =
+
+`/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt/feeds/tools/devel/l=
+ttng-ust'
+make[1]: *** [package/feeds/tools/lttng-ust/compile] Error 2
+make[1]: Leaving directory =
+
+`/home/g179168/middleware/dev/TELEFONICA_3_32_X/openwrt'
+make: *** [package/lttng-ust/compile] Erreur 2
+
+I am not very confortable with autotools but I am not able to understand =
+
+this error. Is it relared to the missing liburcu-common.so.2 library ? =
+
+shm functions are define by uclibc ? missing include ?
+
+Thanks,
+Arthur.
 
 
---===============0093412517==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+#
+" Ce courriel et les documents qui lui sont joints peuvent contenir des
+informations confidentielles ou ayant un caract=C3=A8 priv=C3=A9S'ils ne vo=
+us sont
+pas destin=C3=A9 nous vous signalons qu'il est strictement interdit de les
+divulguer, de les reproduire ou d'en utiliser de quelque mani=C3=A8 que ce
+soit le contenu. Si ce message vous a =C3=A9 transmis par erreur, merci d'en
+informer l'exp=C3=A9teur et de supprimer imm=C3=A9atement de votre syst=C3=
+=A8
+informatique ce courriel ainsi que tous les documents qui y sont attach=C3=
+=A9"
 
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============0093412517==--
+                               ******
+
+" This e-mail and any attached documents may contain confidential or
+proprietary information. If you are not the intended recipient, you are
+notified that any dissemination, copying of this e-mail and any attachments
+thereto or use of their contents by any means whatsoever is strictly
+prohibited. If you have received this e-mail in error, please advise the
+sender immediately and delete this e-mail and all attached documents
+from your computer system."
+#
