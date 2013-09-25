@@ -1,16 +1,18 @@
-From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Subject: Re: snapshot issue in lttng 2.3.0
-Date: Wed, 25 Sep 2013 13:07:50 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD26792DE6__38782.4375452057$1380116800$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+From: Christian Babeux <christian.babeux@efficios.com>
+Subject: [PATCH lttng-tools] Fix typo in lttng snapshot
+	add-output example of lttng(1)
+Date: Wed, 25 Sep 2013 10:06:05 -0400
+Message-ID: <1380117966-30710-1-git-send-email-christian.babeux__20714.1551109546$1380118045$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
+Received: from mail-qa0-f48.google.com ([209.85.216.48])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1VOoop-0005vJ-2n
-	for lttng-dev@lists.lttng.org; Wed, 25 Sep 2013 09:07:56 -0400
-Content-Language: fr-FR
+	(envelope-from <christian.babeux@0x80.ca>) id 1VOpjS-0008DL-Tn
+	for lttng-dev@lists.lttng.org; Wed, 25 Sep 2013 10:06:28 -0400
+Received: by mail-qa0-f48.google.com with SMTP id hu16so3484272qab.0
+	for <lttng-dev@lists.lttng.org>; Wed, 25 Sep 2013 07:06:17 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,73 +21,26 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
-Cc: Thuya Aung <thuyaaung2002@yahoo.com>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Date: Tue, 24 Sep 2013 13:42:44 -0700 (PDT)
-From: Thuya Aung <thuyaaung2002@yahoo.com>
+Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
+---
+ doc/man/lttng.1 | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> With lttng 2.3.0 in Ubuntu 12.04 LTS, I only get the tracepoints in kerne=
-l folder with snapshot mode. I do not see anything for userspace tracepoint=
-s. =
-
-> The following is the way I setup for lttng session
->
-> lttng create mySession --snapshot
-> lttng enable-channel kCh --buffers-global --subbuf-size=3D1048576 -k
-> lttng enable-event -a -k
-> lttng enable-channel uCh --buffers-uid --subbuf-size=3D1048576 -u
-> lttng enable-event -a -u
-> sleep 1
-> lttng start mySession
-> sleep 60
-> lttng snapshot record
-> lttng stop mySession
-> lttng destroy mySession
->
-> I got the error message saying "Undefined command" with the following
->
-> lttng add-output -n myNewOutput file:///home/taung/output (<--- following=
- the examples of man 1 lttng)
->
-> Did I do something wrong? What else I should be doing in order to use sna=
-pshot feature?
->
-> Thuya Aung
-
-   I can confirm this problem (I ran my usual user-space event generator an=
-d got nothing for UST in the snapshot).  Regarding your script, there is on=
-e mistake made twice: when you enable-event, you need to specify the channe=
-l.  You should have gotten an error ("Error: Events: Non-default channel ex=
-ists within session").  The correct script lines are:
-
-lttng enable-event -a -k -c kCh
-lttng enable-event -a -u -c uCh
-
-   As for the output, the mistake is simple.  The correct line is:
-
-lttng snapshot add-output -n myNewOutput file:///home/taung/output
-
-   add-output is a snapshot action, not an lttng command.  Additionally, be=
-cause a snapshot output is created by default, you must delete it first (cu=
-rrently there is just one output slot):
-
-lttng snapshot del-output 1
-lttng snapshot add-output -n myNewOutput file:///home/taung/output
-
-Daniel U. Thibault
-Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
-ntermeasures (SPC)
-Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
-Cyber Security (MCCS)
-R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
- Canada - Valcartier (DRDC Valcartier)
-2459 route de la Bravoure
-Qu=E9bec QC  G3J 1X5
-CANADA
-Vox : (418) 844-4000 x4245
-Fax : (418) 844-4538
-NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-Gouvernement du Canada | Government of Canada
-<http://www.valcartier.drdc-rddc.gc.ca/>
+diff --git a/doc/man/lttng.1 b/doc/man/lttng.1
+index 57c89f0..659a27c 100644
+--- a/doc/man/lttng.1
++++ b/doc/man/lttng.1
+@@ -742,7 +742,7 @@ size will override the current output values. For instance, you can record a
+ snapshot with a custom maximum size or with a different name.
+ 
+ .nf
+-$ lttng add-output -n mysnapshot file:///data/snapshot
++$ lttng snapshot add-output -n mysnapshot file:///data/snapshot
+ [...]
+ $ lttng snapshot record -n new_name_snapshot
+ .fi
+-- 
+1.8.4
