@@ -1,17 +1,17 @@
-From: Zifei Tong <soariez@gmail.com>
-Subject: Dynamic instrumentation GSoC project summary
-Date: Thu, 26 Sep 2013 23:15:48 +0800
-Message-ID: <CAJ7wx-GHnGA_7OgZr5gBrfWywPkEfp5JKgCuftqDrGkU3dQUXg__26004.9521144994$1380208653$gmane$org@mail.gmail.com>
+From: Julien Desfossez <jdesfossez@efficios.com>
+Subject: Re: lttng snapshots and running traces
+Date: Thu, 26 Sep 2013 11:18:19 -0400
+Message-ID: <5244503B.9040605__27415.0457270027$1380208767$gmane$org@efficios.com>
+References: <48CF5AC71E61DB46B70D0F388054EFFD2679374E@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-vc0-f174.google.com ([209.85.220.174])
+Received: from fukushima.klipix.org ([93.20.26.243])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <soariez@gmail.com>) id 1VPDIw-0000KM-3O
-	for lttng-dev@lists.lttng.org; Thu, 26 Sep 2013 11:16:39 -0400
-Received: by mail-vc0-f174.google.com with SMTP id gd11so942097vcb.33
-	for <lttng-dev@lists.lttng.org>; Thu, 26 Sep 2013 08:16:28 -0700 (PDT)
+	(envelope-from <jdesfossez@efficios.com>) id 1VPDKn-0000S0-5I
+	for lttng-dev@lists.lttng.org; Thu, 26 Sep 2013 11:18:35 -0400
+In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD2679374E@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,51 +20,75 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-SGksCgpJIGFtIHdyaXRpbmcgdG8gc3VtbWFyaXplIHRoZSBkeW5hbWljIGluc3RydW1lbnRhdGlv
-biBHU29DIHByb2plY3QKdGhhdCBJJ3ZlIGJlZW4gd29ya2luZyBvbiB0aGVzZSBtb250aHMgYXMg
-R1NvQyB0aGlzIHllYXIgaXMgZW5kaW5nCnRvbW9ycm93LgoKVGw7ZHIsIE5vdyBJJ3ZlIGdvdCBm
-dW5jdGlvbiBlbnRyeS9yZXR1cm4gcHJvYmUgd29ya2luZy4KCkhlcmUgaXMgYSBkZW1vOgoKIyBs
-dHRuZyBjcmVhdGUKIyBsdHRuZyBlbmFibGUtZXZlbnQgdGVzdDpjYWxsX2ZvbyAtdSAtLWZ1bmN0
-aW9uPWEub3V0QGZvbwojIGx0dG5nIHN0YXJ0CiMgLi9hLm91dAojIGx0dG5nIHN0b3AKIyBsdHRu
-ZyB2aWV3CgpbMjM6Mzk6MjAuNTMyNjU3NTM3XSAoKz8uPz8/Pz8/Pz8/KSBsb2NhbGhvc3QgdGVz
-dDpjYWxsX2Zvb19lbnRyeTogewpjcHVfaWQgPSAyIH0sIHsgfQpbMjM6Mzk6MjEuNTMyNzU0NDU3
-XSAoKzEuMDAwMDk2OTIwKSBsb2NhbGhvc3QgdGVzdDpjYWxsX2Zvb19leGl0OiB7CmNwdV9pZCA9
-IDMgfSwgeyB9ClsyMzozOToyMS41MzI3NjAyODldICgrMC4wMDAwMDU4MzIpIGxvY2FsaG9zdCB0
-ZXN0OmNhbGxfZm9vX2VudHJ5OiB7CmNwdV9pZCA9IDMgfSwgeyB9ClsyMzozOToyMi41MzI4NDgx
-NjZdICgrMS4wMDAwODc4NzcpIGxvY2FsaG9zdCB0ZXN0OmNhbGxfZm9vX2V4aXQ6IHsKY3B1X2lk
-ID0gMyB9LCB7IH0KWzIzOjM5OjIyLjUzMjg1MTIzNV0gKCswLjAwMDAwMzA2OSkgbG9jYWxob3N0
-IHRlc3Q6Y2FsbF9mb29fZW50cnk6IHsKY3B1X2lkID0gMyB9LCB7IH0KWzIzOjM5OjIzLjUzMjkz
-NjI4M10gKCsxLjAwMDA4NTA0OCkgbG9jYWxob3N0IHRlc3Q6Y2FsbF9mb29fZXhpdDogewpjcHVf
-aWQgPSAzIH0sIHsgfQouLi4uLi4uLgoKWW91IGNhbiBmaW5kIHRoZSBmdWxsIGRlbW8gYXQgWzQs
-IDVdLgoKSWYgeW91IHdhbnQgdG8gdHJ5IGFuZCB0ZXN0IGl0IG5vdywgeW91IGNhbiBwdWxsIHRo
-ZSBjb2RlIGZvcm0gWzAsIDFdCihpbiBkeW5hbWljLWluc3QgYnJhbmNoKS4gTWFrZSBzdXJlIHlv
-dSBoYXZlIGR5bmluc3QgWzJdIGluc3RhbGxlZCBhbmQKY29uZmlndXJlIGx0dG5nLXRvb2xzIHdp
-dGggJy0td2l0aC1keW5pbnN0JyBvcHRpb24uCgpBZnRlciBJIGRvIHNvbWUgbW9yZSB0ZXN0cyBh
-bmQgcmV2aWV3L3JlZmFjdG9yIHRoZSBjb2RlLCBJJ2xsIHNlbmQKcGF0Y2hlcyBmb3IgcmV2aWV3
-LgoKSSBhbSBzb3JyeSB0aGF0IHRoZSBwcm9ncmVzcyBpcyBiZWhpbmQgc2NoZWR1bGUuIFRoZSBu
-ZXh0IHR3byB0aGluZ3MKb24gbXkgVE9ETyBsaXN0IGlzIHNoYXJlZCBsaWJyYXJ5IGluc3RydW1l
-bnRhdGlvbiBhbmQgZHluYW1pYyBwcm9iZQoobGlrZSBrcHJvYmVzKS4KCk1lYW53aGlsZSwgSSBh
-bmQgU3VjaGFrcmEgYXJlIHdvcmtpbmcgb24gbWV0aG9kcyB0byBkbyBkeW5hbWljCmluc3RydW1l
-bnRhdGlvbiB3aXRob3V0IGR5bmluc3QgKGNvZGVuYW1lIGthamkpIFszXSAoaW5zcGlyZWQgYnkg
-Z2RiJ3MKdHJhY2Vwb2ludCBhbmQgRGVidWctQWdlbnQtTGlicmFyeSBbNl0pLiBJdCBub3cgd29y
-a3MgYXMgYQpwcm9vZi1vZi1jb25jZXB0IHdpdGggc29tZSBsaW1pdGF0aW9ucyB3ZSBhcmUgdHJ5
-aW5nIHRvIHNvbHZlLiBXZSBob3BlCndlIGNhbiBtYWtlIGthamkgbWF0dXJlIGVub3VnaCB0byBw
-cm92aWRlIGFuIGFsdGVybmF0aXZlIHdheSB0byBkbwpkeW5hbWljIGluc3RydW1lbnRhdGlvbiBi
-ZXNpZGVzIGR5bmluc3QuCgpJJ2QgbGlrZSB0byB0aGFuayB0aGUgTFRUbmcgdGVhbSBmb3IgZ2l2
-aW5nIG1lIHRoZSBjaGFuY2UgdG8gd29yayBvbgp0aGlzIGdyZWF0IHByb2plY3QgYW5kIHRoZSBz
-dXBwb3J0IGFsbCB0aGUgd2F5LgoKU3BlY2lhbCB0aGFua3MgZ28gdG8gQ2hyaXN0aWFuIGZvciBt
-ZW50b3JpbmcgbWUgdGhpcyBzdW1tZXIsIGFuZCBhbHNvClN1Y2hha3JhIGZvciB0aGUgZGlzY3Vz
-c2lvbiBhbmQgY29sbGFib3JhdGlvbiBvbiBrYWppLgoKVGhhbmsgeW91IQoKWzBdOiBodHRwczov
-L2dpdGh1Yi5jb20vNWtnL2x0dG5nLXRvb2xzClsxXTogaHR0cHM6Ly9naXRodWIuY29tLzVrZy9s
-dHRuZy11c3QKWzJdOiBodHRwOi8vd3d3LmR5bmluc3Qub3JnL2Rvd25sb2Fkcy9keW5pbnN0LTgu
-eApbM106IGh0dHBzOi8vZ2l0aHViLmNvbS81a2cva2FqaQpbNF06IGh0dHBzOi8vZ2lzdC5naXRo
-dWIuY29tLzVrZy82NTcwODk4Cls1XTogaHR0cHM6Ly9naXRodWIuY29tLzVrZy9sdHRuZy10b29s
-cy90cmVlL2R5bmFtaWMtaW5zdC90ZXN0cy9yZWdyZXNzaW9uL3VzdC9keW5hbWljLWluc3RydW1l
-bnQKWzZdOiBodHRwczovL2dpdGh1Yi5jb20vTWVudG9yRW1iZWRkZWQvRGVidWctQWdlbnQtTGli
-cmFyeQotLQrku53lrZDpo54gKFppZmVpIFRvbmcpCgpfX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBs
-aXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlz
-dGluZm8vbHR0bmctZGV2Cg==
+Hello,
+
+On 13-09-25 05:18 PM, Thibault, Daniel wrote:
+>    How does the 'lttng snapshot record' command affect a running (active)=
+ trace?  I presume very little, only to the extent that the consumer daemon=
+ servicing the request "steals" CPU cycles from the session daemon busily s=
+hoving records into the buffer.
+Correct, but it is not the session daemon that is responsible for
+writing records into the buffers, it is the tracer (either in the
+application or in the kernel).
+
+>    Say we have a trace running in flight recorder mode and a heavy flow o=
+f events into its buffers.  When the 'lttng snapshot record' command is iss=
+ued, a consumer starts at the earliest (oldest) sub-buffer and starts dumpi=
+ng the records to a trace directory.  As its "cursor" advances around the r=
+ing of buffers, tracing continues.  By the time it wraps around the ring, t=
+he tracer may very well have re-used a number of sub-buffers, so the consum=
+er keeps going, trying to catch up.  Am I right in supposing that if the re=
+ading and writing speeds are well matched, this could theoretically go on n=
+early forever, generating a huge trace?  (That's what the snapshot --max-si=
+ze option is for, along with the enable-channel --tracefile-size and --trac=
+efile-count options)
+When we issue the "snapshot record" command, the consumer takes the
+current reading and writing positions in the ring-buffer, and will only
+try to consume the data between these boundaries.
+It will start at the reading position and consume subbuffer by subbuffer
+up to the writing position. Unlike in a normal tracing session, the
+reading position is not pushed by the consumer, it is pushed by the
+tracer, it corresponds to the last subbuffer not yet reused (or 0 before
+the first ring-buffer wrap-up).
+If the tracer is quickly filling up subbuffers and we don't have enough
+subbuffers (or they are too small) to give us enough time to extract
+them, they will be overridden (default mode in snapshot mode) and we
+will skip these subbuffers.
+So there is no race between the consumer and tracer, we rely on the
+absolute position (free-running counter) and we detect and skip if a
+subbuffer has been reused.
+
+The --max-size option allows to limit the size of the snapshot if the
+"gap" between the reading and writing position is too big.
+
+I hope it clarifies the situation,
+
+Julien
+
+> =
+
+> Daniel U. Thibault
+> Protection des syst=E8mes et contremesures (PSC) | Systems Protection & C=
+ountermeasures (SPC)
+> Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critica=
+l Cyber Security (MCCS)
+> R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R=
+&D Canada - Valcartier (DRDC Valcartier)
+> 2459 route de la Bravoure
+> Qu=E9bec QC  G3J 1X5
+> CANADA
+> Vox : (418) 844-4000 x4245
+> Fax : (418) 844-4538
+> NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+> Gouvernement du Canada | Government of Canada
+> <http://www.valcartier.drdc-rddc.gc.ca/>
+> =
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> =
