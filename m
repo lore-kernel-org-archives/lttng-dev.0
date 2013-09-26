@@ -1,19 +1,21 @@
-From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: Tracing page waits with LTTng 2.3.0
-Date: Thu, 26 Sep 2013 15:27:40 -0400
-Message-ID: <CA+jJMxvdy0z_Xs+aJ0BZZckXs3+ovOuSLzKu2woM4vGe_gSQ+Q__23781.7541267306$1380223726$gmane$org@mail.gmail.com>
-References: <211FA304CEAAEE4AA25085F0CEB43BD70812D210@FR711WXCHMBA02.zeu.alcatel-lucent.com>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Subject: Re: lttng snapshots and running traces
+Date: Thu, 26 Sep 2013 19:36:27 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD267939F7__39343.2065415711$1380224249$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+References: <48CF5AC71E61DB46B70D0F388054EFFD26793929@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+	<52445DDD.9050808@efficios.com>
+	<48CF5AC71E61DB46B70D0F388054EFFD2679396E@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+	<52447DEF.5030005@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="windows-1252"
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wi0-f173.google.com ([209.85.212.173])
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1VPHE2-00056W-2S
-	for lttng-dev@lists.lttng.org; Thu, 26 Sep 2013 15:27:51 -0400
-Received: by mail-wi0-f173.google.com with SMTP id hq15so7588922wib.0
-	for <lttng-dev@lists.lttng.org>; Thu, 26 Sep 2013 12:27:40 -0700 (PDT)
-In-Reply-To: <211FA304CEAAEE4AA25085F0CEB43BD70812D210@FR711WXCHMBA02.zeu.alcatel-lucent.com>
+	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1VPHMS-0005bC-ES
+	for lttng-dev@lists.lttng.org; Thu, 26 Sep 2013 15:36:34 -0400
+In-Reply-To: <52447DEF.5030005@efficios.com>
+Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,62 +24,84 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Steffen, Kai-Uwe (Kai-Uwe)" <kai-uwe.steffen@alcatel-lucent.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Julien Desfossez <jdesfossez@efficios.com>, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-buffer_wait_start and buffer_wait_end were available because
-__wait_on_buffer() (linux/fs/buffer.c:124) was instrumented. It is not
-the case anymore so I'm afraid there are no equivalents.
+Envoy=E9=A0: 26 septembre 2013 14:33
 
-Regards,
-J=E9r=E9mie
+>>    Is the following scenario possible?  The consumer tries to get_subbuf=
+, and is denied access (because tracers
+>> are writing into it).  It then tries to get the next sub-buffer, but the=
+ luck of task scheduling is such that by the =
 
-On Mon, Sep 16, 2013 at 9:23 AM, Steffen, Kai-Uwe (Kai-Uwe)
-<kai-uwe.steffen@alcatel-lucent.com> wrote:
-> Hi.
->
->
->
-> Currently I=92m working with LTTng 2.3.0 for Ubuntu 12.4, to see if this
-> version would meet our requirements.
->
-> With old LTT and LTTng 0.x it was possible to trace page waits.
->
-> Tracepoints were called =93Page Wait=94 for LTT and =93buffer_wait_start=
-=94
-> =93buffer_wait_end=94 for LTTng 0.x.
->
->
->
-> Now I looked for the tracepoints available with 2.3.0 and didn=92t find
-> tracepoint for the page waits.
->
->
->
-> Lttng list =96k
->
->
->
-> Can you tell me if there is a tracepoint available in LTTng 2.3 or is it =
-not
-> supported yet?
->
->
->
-> Thanks Kai
->
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
+>> time it actually calls the request routine, the tracers have already ove=
+rwritten the sub-buffer in question and =
 
+>> gone on to the next one.  The get_subbuf succeeds and the consumer keeps=
+ doing its thing (the timestamps =
 
+>> remain monotonically increasing, so there is no corruption).  The result=
+ing snapshot on disk has a large jump =
 
--- =
+>> in its timestamps, having lost a whole buffer cycle's worth of event rec=
+ords.
+>> =
 
-J=E9r=E9mie Galarneau
-EfficiOS Inc.
-http://www.efficios.com
+>>    To complicate things, the tracers then stop (for lack of event occurr=
+ences) in some sub-buffer ahead of the =
+
+>> consumer's current position, but still short of the consumer's stop goal=
+.  When the consumer skips over the =
+
+>> busy sub-buffer (where the tracers are "stuck"), it would read events th=
+at apparently jump back in time (a =
+
+>> whole buffer cycle's worth of time), so I guess it would stop there and =
+close the snapshot?
+>
+> One important design note to understand this situation: even though we wr=
+ite in a ring-buffer, the positions =
+
+> are free-running counters, they "never" wrap-around (well, we are dealing=
+ with 64-bit counters). In order to =
+
+> map a position to an actual subbuffer, we use a sort of modulo. This oper=
+ation gives us the actual subbuffer =
+
+> to use and also allows us to detect if the tracer has already reused this=
+ subbuffer.
+
+   Good to know, but it doesn't answer the question.   :-)
+
+   If the tracers pass the consumer, and then the consumer passes the trace=
+rs, does the consumer stop copying =
+
+the buffer contents to the snapshot trace?
+
+* consumer reads a number of "pass n" sub-buffers (where n is the number of=
+ times the tracers have gone around)
+* tracers catch up with the consumer, skip ahead, write at least one whole =
+"pass n+1" sub-buffer
+* tracers then stop or slow down
+* consumer reads the "pass n+1" sub-buffer(s), then overtakes the tracers
+* consumer skips over the sub-buffer where the tracers are, finds a "pass n=
+" sub-buffer
+
+   If the consumer doesn't close the trace at that point, it would corrupt =
+the snapshot.
+
+Daniel U. Thibault
+Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
+ntermeasures (SPC)
+Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
+Cyber Security (MCCS)
+R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
+ Canada - Valcartier (DRDC Valcartier)
+2459 route de la Bravoure
+Qu=E9bec QC  G3J 1X5
+CANADA
+Vox : (418) 844-4000 x4245
+Fax : (418) 844-4538
+NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+Gouvernement du Canada | Government of Canada
+<http://www.valcartier.drdc-rddc.gc.ca/>
