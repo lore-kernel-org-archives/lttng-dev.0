@@ -1,16 +1,17 @@
-From: Stanislav Vovk <stanislav.vovk@ericsson.com>
-Subject: Running 32bit sessiond on 64bit host
-Date: Thu, 26 Sep 2013 13:44:07 +0000
-Message-ID: <6DB83340B9D38C4A9C0ECD8B6FBABDFB1A251458__10580.0582365648$1380203187$gmane$org@ESESSMB105.ericsson.se>
+From: Zifei Tong <soariez@gmail.com>
+Subject: Dynamic instrumentation GSoC project summary
+Date: Thu, 26 Sep 2013 23:15:48 +0800
+Message-ID: <CAJ7wx-GHnGA_7OgZr5gBrfWywPkEfp5JKgCuftqDrGkU3dQUXg__26004.9521144994$1380208653$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mailgw1.ericsson.se ([193.180.251.45])
+Received: from mail-vc0-f174.google.com ([209.85.220.174])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <stanislav.vovk@ericsson.com>) id 1VPBsh-00047m-FW
-	for lttng-dev@lists.lttng.org; Thu, 26 Sep 2013 09:45:28 -0400
-Content-Language: en-US
+	(envelope-from <soariez@gmail.com>) id 1VPDIw-0000KM-3O
+	for lttng-dev@lists.lttng.org; Thu, 26 Sep 2013 11:16:39 -0400
+Received: by mail-vc0-f174.google.com with SMTP id gd11so942097vcb.33
+	for <lttng-dev@lists.lttng.org>; Thu, 26 Sep 2013 08:16:28 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,20 +23,48 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
-
-Running a 32bit session deamon on a 64 bit host fails when creating a channel. The following  error message is given,
-
-Default snapshot output set to: /tmp/ltt
-Snapshot mode set. Every channel enabled for that session will be set in overwrite mode and mmap output.
-Error: Channel ch_tri: 32-bit UST consumer start failed (session tri)
-Warning: Some command(s) went wrong
-
-Running on,
-uname -a
-Linux esekilxxen3020 3.0.13-0.27-xen #1 SMP Wed Feb 15 13:33:49 UTC 2012 (d73692b) x86_64 x86_64 x86_64 GNU/Linux
-
-Is this intended to work or are there some limitations for this scenario?
-
-Thanks,
-Stanislav
+SGksCgpJIGFtIHdyaXRpbmcgdG8gc3VtbWFyaXplIHRoZSBkeW5hbWljIGluc3RydW1lbnRhdGlv
+biBHU29DIHByb2plY3QKdGhhdCBJJ3ZlIGJlZW4gd29ya2luZyBvbiB0aGVzZSBtb250aHMgYXMg
+R1NvQyB0aGlzIHllYXIgaXMgZW5kaW5nCnRvbW9ycm93LgoKVGw7ZHIsIE5vdyBJJ3ZlIGdvdCBm
+dW5jdGlvbiBlbnRyeS9yZXR1cm4gcHJvYmUgd29ya2luZy4KCkhlcmUgaXMgYSBkZW1vOgoKIyBs
+dHRuZyBjcmVhdGUKIyBsdHRuZyBlbmFibGUtZXZlbnQgdGVzdDpjYWxsX2ZvbyAtdSAtLWZ1bmN0
+aW9uPWEub3V0QGZvbwojIGx0dG5nIHN0YXJ0CiMgLi9hLm91dAojIGx0dG5nIHN0b3AKIyBsdHRu
+ZyB2aWV3CgpbMjM6Mzk6MjAuNTMyNjU3NTM3XSAoKz8uPz8/Pz8/Pz8/KSBsb2NhbGhvc3QgdGVz
+dDpjYWxsX2Zvb19lbnRyeTogewpjcHVfaWQgPSAyIH0sIHsgfQpbMjM6Mzk6MjEuNTMyNzU0NDU3
+XSAoKzEuMDAwMDk2OTIwKSBsb2NhbGhvc3QgdGVzdDpjYWxsX2Zvb19leGl0OiB7CmNwdV9pZCA9
+IDMgfSwgeyB9ClsyMzozOToyMS41MzI3NjAyODldICgrMC4wMDAwMDU4MzIpIGxvY2FsaG9zdCB0
+ZXN0OmNhbGxfZm9vX2VudHJ5OiB7CmNwdV9pZCA9IDMgfSwgeyB9ClsyMzozOToyMi41MzI4NDgx
+NjZdICgrMS4wMDAwODc4NzcpIGxvY2FsaG9zdCB0ZXN0OmNhbGxfZm9vX2V4aXQ6IHsKY3B1X2lk
+ID0gMyB9LCB7IH0KWzIzOjM5OjIyLjUzMjg1MTIzNV0gKCswLjAwMDAwMzA2OSkgbG9jYWxob3N0
+IHRlc3Q6Y2FsbF9mb29fZW50cnk6IHsKY3B1X2lkID0gMyB9LCB7IH0KWzIzOjM5OjIzLjUzMjkz
+NjI4M10gKCsxLjAwMDA4NTA0OCkgbG9jYWxob3N0IHRlc3Q6Y2FsbF9mb29fZXhpdDogewpjcHVf
+aWQgPSAzIH0sIHsgfQouLi4uLi4uLgoKWW91IGNhbiBmaW5kIHRoZSBmdWxsIGRlbW8gYXQgWzQs
+IDVdLgoKSWYgeW91IHdhbnQgdG8gdHJ5IGFuZCB0ZXN0IGl0IG5vdywgeW91IGNhbiBwdWxsIHRo
+ZSBjb2RlIGZvcm0gWzAsIDFdCihpbiBkeW5hbWljLWluc3QgYnJhbmNoKS4gTWFrZSBzdXJlIHlv
+dSBoYXZlIGR5bmluc3QgWzJdIGluc3RhbGxlZCBhbmQKY29uZmlndXJlIGx0dG5nLXRvb2xzIHdp
+dGggJy0td2l0aC1keW5pbnN0JyBvcHRpb24uCgpBZnRlciBJIGRvIHNvbWUgbW9yZSB0ZXN0cyBh
+bmQgcmV2aWV3L3JlZmFjdG9yIHRoZSBjb2RlLCBJJ2xsIHNlbmQKcGF0Y2hlcyBmb3IgcmV2aWV3
+LgoKSSBhbSBzb3JyeSB0aGF0IHRoZSBwcm9ncmVzcyBpcyBiZWhpbmQgc2NoZWR1bGUuIFRoZSBu
+ZXh0IHR3byB0aGluZ3MKb24gbXkgVE9ETyBsaXN0IGlzIHNoYXJlZCBsaWJyYXJ5IGluc3RydW1l
+bnRhdGlvbiBhbmQgZHluYW1pYyBwcm9iZQoobGlrZSBrcHJvYmVzKS4KCk1lYW53aGlsZSwgSSBh
+bmQgU3VjaGFrcmEgYXJlIHdvcmtpbmcgb24gbWV0aG9kcyB0byBkbyBkeW5hbWljCmluc3RydW1l
+bnRhdGlvbiB3aXRob3V0IGR5bmluc3QgKGNvZGVuYW1lIGthamkpIFszXSAoaW5zcGlyZWQgYnkg
+Z2RiJ3MKdHJhY2Vwb2ludCBhbmQgRGVidWctQWdlbnQtTGlicmFyeSBbNl0pLiBJdCBub3cgd29y
+a3MgYXMgYQpwcm9vZi1vZi1jb25jZXB0IHdpdGggc29tZSBsaW1pdGF0aW9ucyB3ZSBhcmUgdHJ5
+aW5nIHRvIHNvbHZlLiBXZSBob3BlCndlIGNhbiBtYWtlIGthamkgbWF0dXJlIGVub3VnaCB0byBw
+cm92aWRlIGFuIGFsdGVybmF0aXZlIHdheSB0byBkbwpkeW5hbWljIGluc3RydW1lbnRhdGlvbiBi
+ZXNpZGVzIGR5bmluc3QuCgpJJ2QgbGlrZSB0byB0aGFuayB0aGUgTFRUbmcgdGVhbSBmb3IgZ2l2
+aW5nIG1lIHRoZSBjaGFuY2UgdG8gd29yayBvbgp0aGlzIGdyZWF0IHByb2plY3QgYW5kIHRoZSBz
+dXBwb3J0IGFsbCB0aGUgd2F5LgoKU3BlY2lhbCB0aGFua3MgZ28gdG8gQ2hyaXN0aWFuIGZvciBt
+ZW50b3JpbmcgbWUgdGhpcyBzdW1tZXIsIGFuZCBhbHNvClN1Y2hha3JhIGZvciB0aGUgZGlzY3Vz
+c2lvbiBhbmQgY29sbGFib3JhdGlvbiBvbiBrYWppLgoKVGhhbmsgeW91IQoKWzBdOiBodHRwczov
+L2dpdGh1Yi5jb20vNWtnL2x0dG5nLXRvb2xzClsxXTogaHR0cHM6Ly9naXRodWIuY29tLzVrZy9s
+dHRuZy11c3QKWzJdOiBodHRwOi8vd3d3LmR5bmluc3Qub3JnL2Rvd25sb2Fkcy9keW5pbnN0LTgu
+eApbM106IGh0dHBzOi8vZ2l0aHViLmNvbS81a2cva2FqaQpbNF06IGh0dHBzOi8vZ2lzdC5naXRo
+dWIuY29tLzVrZy82NTcwODk4Cls1XTogaHR0cHM6Ly9naXRodWIuY29tLzVrZy9sdHRuZy10b29s
+cy90cmVlL2R5bmFtaWMtaW5zdC90ZXN0cy9yZWdyZXNzaW9uL3VzdC9keW5hbWljLWluc3RydW1l
+bnQKWzZdOiBodHRwczovL2dpdGh1Yi5jb20vTWVudG9yRW1iZWRkZWQvRGVidWctQWdlbnQtTGli
+cmFyeQotLQrku53lrZDpo54gKFppZmVpIFRvbmcpCgpfX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBs
+aXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlz
+dGluZm8vbHR0bmctZGV2Cg==
