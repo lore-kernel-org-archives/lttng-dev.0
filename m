@@ -1,17 +1,19 @@
-From: Julien Desfossez <julien.desfossez@polymtl.ca>
-Subject: Re: lttng snapshots and running traces
-Date: Thu, 26 Sep 2013 15:03:33 -0400
-Message-ID: <52448505.10205__12779.7887697399$1380222279$gmane$org@polymtl.ca>
-References: <48CF5AC71E61DB46B70D0F388054EFFD26793984@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: Lttng start failure
+Date: Thu, 26 Sep 2013 15:20:21 -0400
+Message-ID: <CA+jJMxufMMTVkmW2VX9eP8s6bz5jWewHBct4a33Nf6O8SWWOXw__35788.5311045267$1380223296$gmane$org@mail.gmail.com>
+References: <loom.20130926T144725-840@post.gmane.org>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fukushima.klipix.org ([93.20.26.243])
+Received: from mail-wg0-f51.google.com ([74.125.82.51])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <julien.desfossez@polymtl.ca>) id 1VPGqh-0003o4-LD
-	for lttng-dev@lists.lttng.org; Thu, 26 Sep 2013 15:03:45 -0400
-In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD26793984@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1VPH6y-0004hs-3N
+	for lttng-dev@lists.lttng.org; Thu, 26 Sep 2013 15:20:34 -0400
+Received: by mail-wg0-f51.google.com with SMTP id c11so1649255wgh.18
+	for <lttng-dev@lists.lttng.org>; Thu, 26 Sep 2013 12:20:22 -0700 (PDT)
+In-Reply-To: <loom.20130926T144725-840@post.gmane.org>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,60 +22,288 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Manikandan <email@manikandan.co.in>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
+On Thu, Sep 26, 2013 at 8:47 AM, Manikandan <email@manikandan.co.in> wrote:
+> Hi,
+>
+> I'm using arm cortex 9 processor and I build the lttng modules, userspace
+> rcu and tools using arm-linux-gnueabi toolchain.
+>
+> After I compile and deployed on the target
+> 1.
+> ./lttng-sessiond -vvv --consumer32-path /tmp/lt
+> tng-build-root/lib/lttng/libexec -d
+> ./lttng-sessiond: unrecognized option '--consumer32-path'
+> root@/tmp/lttng-build-root/bin # ./lttng-sessiond -vvv --consumerd32-path
+> /tmp/l
+> ttng-build-root/lib/lttng/libexec
+> DEBUG3: Creating LTTng run directory: /tmp/lttng [in create_lttng_rundir()
+> at ma
+> in.c:3692]
+> DEBUG2: Kernel consumer err path: /tmp/lttng/kconsumerd/error [in main() =
+at
+> main
+> .c:3940]
+> DEBUG2: Kernel consumer cmd path: /tmp/lttng/kconsumerd/command [in main()
+> at ma
+> in.c:3942]
+> DEBUG1: Client socket path /tmp/lttng/client-lttng-slttng_tracer: Unknown
+> symbol
+>  lttng_statedump_start (err 0)
+> essiond [in main() at main.c:3995]
+> DEBUG1: Application socket plttng_tracer: Unknown symbol
+> lib_ring_buffer_file_op
+> erations (err 0)
+> ath /tmp/lttng/apps-lttng-sessiond [in main() at main.c:3996]
+> DEBUG1: LTTng run directory path: /tmp/lttng [in main() at main.c:3997]
+> DEBUG2: UST consumer 32 bits err path: /tmp/lttng/ustconsumerd32/error [in
+> main(
+> ) at main.c:4006]
+> DEBUG2: UST consumer 32 bits cmd path: /tmp/lttng/ustconsumerd32/command =
+[in
+> mai
+> n() at main.c:4008]
+> DEBUG2: UST consumer 64 bits err path: /tmp/lttng/ustconsumerd64/error [in
+> main(
+> ) at main.c:4017]
+> DEBUG2: UST consumer 64 bits cmd path: /tmp/lttng/ustconsumerd64/command =
+[in
+> mai
+> n() at main.c:4019]
+> DEBUG2: Creating consumer directory: /tmp/lttng/kconsumerd [in
+> set_consumer_sock
+> ets() at main.c:3734]
+> DEBUG1: Modprobe successfully lttng-tracer [in modprobe_lttng_control() at
+> modpr
+> obe.c:180]
+> DEBUG2: Kernel tracer version validated (major version 2) [in
+> kernel_validate_ve
+> rsion() at kernel.c:649]
+> modprobe: module 'lttng_ftrace' not found
+> DEBUG1: Modprobe successfully lttng-ftrace [in modprobe_lttng_data() at
+> modprobe
+> .c:216]
+> modprobe: module 'lttng_kprobes' not found
+> DEBUG1: Modprobe successfully lttng-kprobes [in modprobe_lttng_data() at
+> modprob
+> e.c:216]
+> modprobe: module 'lttng_kretprobes' not found
+> DEBUG1: Modprobe successfully lttng-kretprobes [in modprobe_lttng_data() =
+at
+> modp
+> robe.c:216]
+> DEBUG1: Modprobe successfully lttng-lib-ring-buffer [in
+> modprobe_lttng_data() at
+>  modprobe.c:216]
+> DEBUG1: Modprobe successfully lttng-ring-buffer-client-discard [in
+> modprobe_lttn
+> g_data() at modprobe.c:216]
+> DEBUG1: Modprobe successfully lttng-ring-buffer-client-overwrite [in
+> modprobe_lt
+> tng_data() at modprobe.c:216]
+> DEBUG1: Modprobe successfully lttng-ring-buffer-metadata-client [in
+> modprobe_ltt
+> ng_data() at modprobe.c:216]
+> DEBUG1: Modprobe successfully lttng-ring-buffer-client-mmap-discard [in
+> modprobe
+> _lttng_data() at modprobe.c:216]
+> DEBUG1: Modprobe successfully lttng-ring-buffer-client-mmap-overwrite [in
+> modpro
+> be_lttng_data() at modprobe.c:216]
+> DEBUG1: Modprobe successfully lttng-ring-buffer-metadata-mmap-client [in
+> modprob
+> e_lttng_data() at modprobe.c:216]
+> modprobe: module 'lttng_probe_lttng' not found
+> DEBUG1: Modprobe successfully lttng-probe-lttng [in modprobe_lttng_data()=
+ at
+> mod
+> probe.c:216]
+> DEBUG1: Modprobe successfully lttng-types [in modprobe_lttng_data() at
+> modprobe.
+> c:216]
+> modprobe: module 'lttng_probe_asoc' not found
+> DEBUG1: Modprobe successfully lttng-probe-asoc [in modprobe_lttng_data() =
+at
+> modp
+> robe.c:216]
+> modprobe: module 'lttng_probe_block' not found
+> DEBUG1: Modprobe successfully lttng-probe-block [in modprobe_lttng_data()=
+ at
+> mod
+> probe.c:216]
+> DEBUG1: Modprobe successfully lttng-probe-ext3 [in modprobe_lttng_data() =
+at
+> modp
+> robe.c:216]
+> DEBUG1: Modprobe successfully lttng-probe-gpio [in modprobe_lttng_data() =
+at
+> modp
+> robe.c:216]
+> DEBUG1: Modprobe successfully lttng-probe-irq [in modprobe_lttng_data() at
+> modpr
+> obe.c:216]
+> DEBUG1: Modprobe successfully lttng-probe-jbd [in modprobe_lttng_data() at
+> modpr
+> obe.c:216]
+> DEBUG1: Modprobe successfully lttng-probe-jbd2 [in modprobe_lttng_data() =
+at
+> modp
+> robe.c:216]
+> DEBUG1: Modprobe successfully lttng-probe-kmem [in modprobe_lttng_data() =
+at
+> modp
+> robe.c:216]
+> modprobe: module 'lttng_probe_kvm' not found
+> DEBUG1: Modprobe successfully lttng-probe-kvm [in modprobe_lttng_data() at
+> modpr
+> obe.c:216]
+> modprobe: module 'lttng_probe_lock' not found
+> DEBUG1: Modprobe successfully lttng-probe-lock [in modprobe_lttng_data() =
+at
+> modp
+> robe.c:216]
+> DEBUG1: Modprobe successfully lttng-probe-module [in modprobe_lttng_data()
+> at mo
+> dprobe.c:216]
+> DEBUG1: Modprobe successfully lttng-probe-napi [in modprobe_lttng_data() =
+at
+> modp
+> robe.c:216]
+> DEBUG1: Modprobe successfully lttng-probe-net [in modprobe_lttng_data() at
+> modpr
+> obe.c:216]
+> DEBUG1: Modprobe successfully lttng-probe-power [in modprobe_lttng_data()=
+ at
+> mod
+> probe.c:216]
+> modprobe: module 'lttng_probe_regulator' not found
+> DEBUG1: Modprobe successfully lttng-probe-regulator [in
+> modprobe_lttng_data() at
+>  modprobe.c:216]
+> DEBUG1: Modprobe successfully lttng-probe-sched [in modprobe_lttng_data()=
+ at
+> mod
+> probe.c:216]
+> DEBUG1: Modprobe successfully lttng-probe-scsi [in modprobe_lttng_data() =
+at
+> modp
+> robe.c:216]
+> DEBUG1: Modprobe successfully lttng-probe-signal [in modprobe_lttng_data()
+> at mo
+> dprobe.c:216]
+> DEBUG1: Modprobe successfully lttng-probe-skb [in modprobe_lttng_data() at
+> modpr
+> obe.c:216]
+> DEBUG1: Modprobe successfully lttng-probe-sock [in modprobe_lttng_data() =
+at
+> modp
+> robe.c:216]
+> DEBUG1: Modprobe successfully lttng-probe-statedump [in
+> modprobe_lttng_data() at
+>  modprobe.c:216]
+> DEBUG1: Modprobe successfully lttng-probe-timer [in modprobe_lttng_data()=
+ at
+> mod
+> probe.c:216]
+> DEBUG1: Modprobe successfully lttng-probe-udp [in modprobe_lttng_data() at
+> modpr
+> obe.c:216]
+> DEBUG1: Modprobe successfully lttng-probe-vmscan [in modprobe_lttng_data()
+> at mo
+> dprobe.c:216]
+> DEBUG1: Kernel tracer fd 6 [in init_kernel_tracer() at main.c:1978]
+> DEBUG2: Creating consumer directory: /tmp/lttng/ustconsumerd64 [in
+> set_consumer_
+> sockets() at main.c:3734]
+> DEBUG2: Creating consumer directory: /tmp/lttng/ustconsumerd32 [in
+> set_consumer_
+> sockets() at main.c:3734]
+> DEBUG1: Signal handler set for SIGTERM, SIGPIPE and SIGINT [in
+> set_signal_handle
+> r() at main.c:3826]
+> DEBUG3: Session daemon client socket 9 and application socket 10 created =
+[in
+> ini
+> t_daemon_socket() at main.c:3596]
+> Warning: No tracing group detected
+> DEBUG1: epoll set max size is 268040 [in compat_epoll_set_max_size() at
+> compat-e
+> poll.c:270]
+> DEBUG1: Command subsystem initialized [in cmd_init() at cmd.c:2423]
+> DEBUG1: [thread] Manage health check started [in thread_manage_health() at
+> main.
+> c:2953]
+> DEBUG1: [thread] Dispatch UST command started [in
+> thread_dispatch_ust_registrati
+> on() at main.c:1300]
+> DEBUG1: Futex n to 1 prepare done [in futex_nto1_prepare() at futex.c:75]
+> DEBUG1: Woken up but nothing in the UST command queue [in
+> thread_dispatch_ust_re
+> gistration() at main.c:1310]
+> DEBUG1: [thread] Manage application registration started [in
+> thread_registration
+> _apps() at main.c:1378]
+> DEBUG1: [thread] Thread manage kernel started [in thread_manage_kernel() =
+at
+> main
+> .c:692]
+> DEBUG1: Health check ready [in thread_manage_health() at main.c:2992]
+> DEBUG1: [thread] Manage client started [in thread_manage_clients() at
+> main.c:314
+> 7]
+> DEBUG1: Notifying applications of session daemon state: 1 [in
+> notify_ust_apps()
+> at main.c:496]
+> DEBUG1: Accepting client command ... [in thread_manage_clients() at
+> main.c:3191]
+> DEBUG1: [thread] Manage application started [in thread_manage_apps() at
+> main.c:1
+> 107]
+> DEBUG1: Apps thread polling on 2 fds [in thread_manage_apps() at
+> main.c:1135]
+> DEBUG1: Got the wait shm fd 20 [in get_wait_shm() at shm.c:117]
+> DEBUG1: Futex wait update active 1 [in futex_wait_update() at futex.c:63]
+> DEBUG1: Accepting application registration [in thread_registration_apps()=
+ at
+> mai
+> n.c:1413]
+> DEBUG1: Updating kernel poll set [in update_kernel_poll() at main.c:557]
+> DEBUG1: Thread kernel polling on 2 fds [in thread_manage_kernel() at
+> main.c:735]
+>
+>
+> 2. I run "./lttng create test"
+> 3. ./lttng enable-event -a -k
+> All kernel events are enabled in channel channel0
+>
+> 4. ./lttng start
+> LTTng: Failure to write metadata to buffers (timeout)
+> Error: Starting kernel trace failed
+>
+>
+> And I'm using linux 3.9.0 kernel for my testing.
 
+Which version of LTTng are you building?
 
-On 13-09-26 02:20 PM, Thibault, Daniel wrote:
-> Date: Thu, 26 Sep 2013 12:16:29 -0400
-> From: Julien Desfossez <jdesfossez@efficios.com>
-> =
+J=E9r=E9mie
 
->> When the consumer needs to read a subbuffer, it performs a get_subbuf op=
-eration. If this operation succeeds, =
-
->> the consumer has exclusive access to this subbuffer and so it can read i=
-t safely. If it fails, it means the tracer is =
-
->> currently using it and in the case of snapshots, the consumer will just =
-skip to the next one (up to the end =
-
->> position it defined at the beginning of the snapshot).
->>
->> Julien
-> =
-
->    Presumably the tracers also use get_subbuf, so what happens if they ar=
-e refused access because the consumer =
-
-> got the sub-buffer first?  Do they wait for the consumer to relinquish th=
-e sub-buffer, or do they skip ahead?
-They skip ahead.
-
-Julien
-
-> =
-
-> Daniel U. Thibault
-> Protection des syst=E8mes et contremesures (PSC) | Systems Protection & C=
-ountermeasures (SPC)
-> Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critica=
-l Cyber Security (MCCS)
-> R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R=
-&D Canada - Valcartier (DRDC Valcartier)
-> 2459 route de la Bravoure
-> Qu=E9bec QC  G3J 1X5
-> CANADA
-> Vox : (418) 844-4000 x4245
-> Fax : (418) 844-4538
-> NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-> Gouvernement du Canada | Government of Canada
-> <http://www.valcartier.drdc-rddc.gc.ca/>
-> =
-
+>
+> Please tell me why this error is coming.
+> /Manikandan G
+>
+>
 > _______________________________________________
 > lttng-dev mailing list
 > lttng-dev@lists.lttng.org
 > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> =
+
+
+
+-- =
+
+J=E9r=E9mie Galarneau
+EfficiOS Inc.
+http://www.efficios.com
