@@ -1,15 +1,16 @@
 From: "Ikaheimonen, JP" <jp_ikaheimonen@mentor.com>
-Subject: [PATCH lttng-ust] Add exclusion checking
-Date: Fri, 27 Sep 2013 07:14:30 +0000
-Message-ID: <009B25148989C6458484484699278506E538A669__16649.7147795328$1380266151$gmane$org@EU-MBX-01.mgc.mentorg.com>
+Subject: [PATCH lttng-tools 1/3] Make disable-event ignore
+ exclusions in the event.
+Date: Fri, 27 Sep 2013 07:14:39 +0000
+Message-ID: <009B25148989C6458484484699278506E538A670__1640.23136389932$1380266174$gmane$org@EU-MBX-01.mgc.mentorg.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jp_ikaheimonen@mentor.com>) id 1VPSGA-0002JW-TL
-	for lttng-dev@lists.lttng.org; Fri, 27 Sep 2013 03:14:46 -0400
+	(envelope-from <jp_ikaheimonen@mentor.com>) id 1VPSGF-0002Jn-Fm
+	for lttng-dev@lists.lttng.org; Fri, 27 Sep 2013 03:14:51 -0400
 Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -22,116 +23,126 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-If event enabler name contains wildcards, it's a wildcarded enabler.
-Wildcarded enablers can now have exceptions to the rule; these are
-called excluders. Excluders are embedded in the name of the enabler,
-trailing the base name. If there are multiple excluders, they are
-separated with a separator character (',').
+When looking for suitable events in disable-event,
+ignore the exclusion parts of the enabled event names.
 ---
- include/lttng/ust-events.h   |  6 ++++++
- liblttng-ust/lttng-events.c  | 43 ++++++++++++++++++++++++++++++++++++++++---
- liblttng-ust/lttng-ust-abi.c |  7 +++----
- 3 files changed, 49 insertions(+), 7 deletions(-)
+ src/bin/lttng-sessiond/event.c     | 57 ++++++++++++++++----------------------
+ src/bin/lttng-sessiond/trace-ust.c | 20 +++++++------
+ 2 files changed, 36 insertions(+), 41 deletions(-)
 
-diff --git a/include/lttng/ust-events.h b/include/lttng/ust-events.h
-index 74a3bc6..ca7be56 100644
---- a/include/lttng/ust-events.h
-+++ b/include/lttng/ust-events.h
-@@ -292,6 +292,12 @@ enum lttng_enabler_type {
- 	LTTNG_ENABLER_EVENT,
- };
+diff --git a/src/bin/lttng-sessiond/event.c b/src/bin/lttng-sessiond/event.c
+index 9a8ed63..55501b5 100644
+--- a/src/bin/lttng-sessiond/event.c
++++ b/src/bin/lttng-sessiond/event.c
+@@ -505,48 +505,39 @@ int event_ust_disable_tracepoint(struct ltt_ust_session *usess,
+ 	assert(event_name);
  
-+/* special characters for event enablers. */
-+#define LTTNG_ENABLER_WILDCARD_CHARACTER '*'
-+#define LTTNG_ENABLER_WILDCARD_STRING "*"
-+#define LTTNG_ENABLER_SEPARATOR_CHARACTER ','
-+#define LTTNG_ENABLER_SEPARATOR_STRING ","
-+
- /*
-  * Enabler field, within whatever object is enabling an event. Target of
-  * backward reference.
-diff --git a/liblttng-ust/lttng-events.c b/liblttng-ust/lttng-events.c
-index 26601a6..b1d3d1a 100644
---- a/liblttng-ust/lttng-events.c
-+++ b/liblttng-ust/lttng-events.c
-@@ -442,6 +442,43 @@ exist:
- }
+ 	ht = uchan->events;
++	int none_found = 1;
  
- static
-+int match_enabler_with_exclusions(const char * eventname,
-+		const char * enablername)
-+{
+ 	rcu_read_lock();
+ 
+-	/*
+-	 * We use a custom lookup since we need the iterator for the next_duplicate
+-	 * call in the do while loop below.
+-	 */
+-	cds_lfht_lookup(ht->ht, ht->hash_fct((void *) event_name, lttng_ht_seed),
+-			trace_ust_ht_match_event_by_name, event_name, &iter.iter);
++	cds_lfht_first(ht->ht, &iter.iter);
+ 	node = lttng_ht_iter_get_node_str(&iter);
+-	if (node == NULL) {
++	while (node != NULL) {
++		if (trace_ust_ht_match_event_by_name(&(node->node), event_name)) {
++			none_found = 0;
++			uevent = caa_container_of(node, struct ltt_ust_event, node);
++			assert(uevent);
++			if (uevent->enabled == 1) {
 +
-+	/* first check if matches the enabler name */
-+	int name_length = strcspn(enablername, LTTNG_ENABLER_WILDCARD_STRING) + 1;
-+	int matches = strncmp(enablername, eventname, name_length - 1);
-+	if (matches != 0)
-+		return 0;
-+	matches = 1;
-+	enablername = enablername + name_length;
-+	while (*enablername != 0) {
-+		/* find end of excluder */
-+		name_length = strcspn(enablername, LTTNG_ENABLER_SEPARATOR_STRING);
-+		if (strcspn(enablername, LTTNG_ENABLER_WILDCARD_STRING) < name_length) {
-+			/* excluder has a wildcard */
-+			if (strncmp(enablername, eventname, name_length - 1) == 0) {
-+				matches = 0;
-+				break;
-+			}
-+		} else {
-+			/* no wildcard in excluder */
-+			if (name_length == strlen(eventname)
-+					&& strncmp(enablername, eventname, name_length) == 0) {
-+				matches = 0;
-+				break;
++				ret = ust_app_disable_event_glb(usess, uchan, uevent);
++				if (ret < 0 && ret != -LTTNG_UST_ERR_EXIST) {
++					ret = LTTNG_ERR_UST_DISABLE_FAIL;
++					goto error;
++				}
++				uevent->enabled = 0;
++
++				DBG2("Event UST %s disabled in channel %s", uevent->attr.name,
++					uchan->name);
 +			}
 +		}
-+		/* next excluder */
-+		enablername = enablername + name_length;
-+		if (*enablername == LTTNG_ENABLER_SEPARATOR_CHARACTER)
-+			enablername++;
++		cds_lfht_next(ht->ht, &iter.iter);
++		node = lttng_ht_iter_get_node_str(&iter);
 +	}
-+	return matches;
-+}
-+
-+static
- int lttng_desc_match_wildcard_enabler(const struct lttng_event_desc *desc,
- 		struct lttng_enabler *enabler)
- {
-@@ -449,9 +486,9 @@ int lttng_desc_match_wildcard_enabler(const struct lttng_event_desc *desc,
- 	unsigned int has_loglevel = 0;
- 
- 	assert(enabler->type == LTTNG_ENABLER_WILDCARD);
--	/* Compare excluding final '*' */
--	if (strncmp(desc->name, enabler->event_param.name,
--			strlen(enabler->event_param.name) - 1))
-+
-+	/* Compare against the enabler specification */
-+	if (!match_enabler_with_exclusions(desc->name, enabler->event_param.name))
- 		return 0;
- 	if (desc->loglevel) {
- 		loglevel = *(*desc->loglevel);
-diff --git a/liblttng-ust/lttng-ust-abi.c b/liblttng-ust/lttng-ust-abi.c
-index a852aae..462eb82 100644
---- a/liblttng-ust/lttng-ust-abi.c
-+++ b/liblttng-ust/lttng-ust-abi.c
-@@ -875,14 +875,13 @@ long lttng_channel_cmd(int objd, unsigned int cmd, unsigned long arg,
- 	{
- 		struct lttng_ust_event *event_param =
- 			(struct lttng_ust_event *) arg;
--		if (event_param->name[strlen(event_param->name) - 1] == '*') {
--			/* If ends with wildcard, create wildcard. */
-+		/* if event name contains a wildcard, it's a wildcard event. */
-+		if (strchr(event_param->name, LTTNG_ENABLER_WILDCARD_CHARACTER) != NULL)
- 			return lttng_abi_create_enabler(objd, event_param,
- 					owner, LTTNG_ENABLER_WILDCARD);
--		} else {
-+		else
- 			return lttng_abi_create_enabler(objd, event_param,
- 					owner, LTTNG_ENABLER_EVENT);
--		}
++	if (none_found == 1) {
+ 		DBG2("Trace UST event NOT found by name %s", event_name);
+ 		ret = LTTNG_ERR_UST_EVENT_NOT_FOUND;
+ 		goto error;
  	}
- 	case LTTNG_UST_CONTEXT:
- 		return lttng_abi_add_context(objd,
+ 
+-	do {
+-		uevent = caa_container_of(node, struct ltt_ust_event, node);
+-		assert(uevent);
+-
+-		if (uevent->enabled == 0) {
+-			/* It's already disabled so everything is OK */
+-			goto next;
+-		}
+-
+-		ret = ust_app_disable_event_glb(usess, uchan, uevent);
+-		if (ret < 0 && ret != -LTTNG_UST_ERR_EXIST) {
+-			ret = LTTNG_ERR_UST_DISABLE_FAIL;
+-			goto error;
+-		}
+-		uevent->enabled = 0;
+-
+-		DBG2("Event UST %s disabled in channel %s", uevent->attr.name,
+-				uchan->name);
+-
+-next:
+-		/* Get next duplicate event by name. */
+-		cds_lfht_next_duplicate(ht->ht, trace_ust_ht_match_event_by_name,
+-				event_name, &iter.iter);
+-		node = lttng_ht_iter_get_node_str(&iter);
+-	} while (node);
+-
+ 	ret = LTTNG_OK;
+ 
+ error:
+diff --git a/src/bin/lttng-sessiond/trace-ust.c b/src/bin/lttng-sessiond/trace-ust.c
+index 8363ae2..8ba6f92 100644
+--- a/src/bin/lttng-sessiond/trace-ust.c
++++ b/src/bin/lttng-sessiond/trace-ust.c
+@@ -38,20 +38,24 @@ int trace_ust_ht_match_event_by_name(struct cds_lfht_node *node,
+ 		const void *_key)
+ {
+ 	struct ltt_ust_event *event;
+-	const char *name;
+-
++	int length;
+ 	assert(node);
+ 	assert(_key);
+-
+ 	event = caa_container_of(node, struct ltt_ust_event, node.node);
+-	name = _key;
+-
+-	/* Event name */
+-	if (strncmp(event->attr.name, name, sizeof(event->attr.name)) != 0) {
++	/* a full name match is accepted */
++	if (strncmp(event->attr.name, _key, sizeof(event->attr.name) == 0))
++		goto match;
++	/* compare to event name up to the first wildcard character or NUL */
++	length = strcspn(event->attr.name, "*");
++	if (event->attr.name[length] == '*')
++		length++;
++	if (length != strlen(_key))
++		goto no_match;
++	if (strncmp(event->attr.name, _key, length) != 0)
+ 		goto no_match;
+-	}
+ 
+ 	/* Match */
++match:
+ 	return 1;
+ 
+ no_match:
 -- 
 1.8.1.2
