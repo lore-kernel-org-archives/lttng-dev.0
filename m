@@ -1,17 +1,16 @@
-From: Mohamad Gebai <mohamad.gebai@gmail.com>
-Subject: [PATCH lttng-ust] Fix linking warning.
-Date: Fri, 27 Sep 2013 15:44:08 -0400
-Message-ID: <1380311048-2013-1-git-send-email-mohamad.gebai__32941.6284141645$1380311115$gmane$org@polymtl.ca>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Subject: Making 32-bit user-space events on a 64-bit Linux system
+Date: Fri, 27 Sep 2013 19:48:39 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD26793CA3__5778.4121636816$1380311362$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f175.google.com ([209.85.223.175])
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <mohamad.gebai@gmail.com>) id 1VPdxf-0001j2-SK
-	for lttng-dev@lists.lttng.org; Fri, 27 Sep 2013 15:44:26 -0400
-Received: by mail-ie0-f175.google.com with SMTP id e14so4841253iej.20
-	for <lttng-dev@lists.lttng.org>; Fri, 27 Sep 2013 12:44:16 -0700 (PDT)
+	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1VPe1o-0001m0-W3
+	for lttng-dev@lists.lttng.org; Fri, 27 Sep 2013 15:48:43 -0400
+Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,32 +19,68 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
-Cc: Mohamad Gebai <mohamad.gebai@polymtl.ca>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-lttng_static_ctx should be extern in this header to avoid getting a
-warning when --warn-common is used.
+   I wanted to test the 32-bit UST event stream (to see if one can indeed h=
+ave two consumer daemons serving the session, one for 64-bit user-space eve=
+nts, another for 32-bit user-space events), so I adapted the lttng-ust/doc/=
+examples/easy-ust Makefile by making a new target:
 
-PS: Thanks to Yannick Brosseau for his help.
+static32: static32.o tp32.o
+	@echo "~~~~~~Linking sample_$@:"
+	$(CC) -m32 -o sample_$@ $^ $(LDFLAGS) $(LIBDL) $(LIBUST)
+	@echo "   Use './sample_$@' to run sample_$@"
 
-Signed-off-by: Mohamad Gebai <mohamad.gebai@polymtl.ca>
----
- include/lttng/ust-events.h |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+static32.o: sample.c tp.h
+	@echo "~~~~~~Compiling $@:"
+	$(CC) -m32 $(CPPFLAGS) $(LOCAL_CPPFLAGS) $(TP_DEFINE) -c -o $@ $<
 
-diff --git a/include/lttng/ust-events.h b/include/lttng/ust-events.h
-index 74a3bc6..c563511 100644
---- a/include/lttng/ust-events.h
-+++ b/include/lttng/ust-events.h
-@@ -543,7 +543,7 @@ int lttng_attach_context(struct lttng_ust_context *context_param,
- 		struct lttng_ctx **ctx, struct lttng_session *session);
- void lttng_context_init(void);
- void lttng_context_exit(void);
--struct lttng_ctx *lttng_static_ctx;	/* Used by filtering */
-+extern struct lttng_ctx *lttng_static_ctx;	/* Used by filtering */
- 
- void lttng_transport_register(struct lttng_transport *transport);
- void lttng_transport_unregister(struct lttng_transport *transport);
--- 
-1.7.10.4
+tp32.o: tp.c tp.h
+	@echo "~~~~~~Compiling $@:"
+	$(CC) -m32 $(CPPFLAGS) $(LOCAL_CPPFLAGS) -c -o $@ $<
+
+   Simply put, the .c files are compiled and linked with an additional -m32=
+ gcc option.  The gcc-multilib package is installed.
+
+   However, I get:
+
+$ make static32
+~~~~~~Compiling static32.o:
+gcc -m32  -I. -D TRACEPOINT_DEFINE -c -o static32.o sample.c
+~~~~~~Compiling tp32.o:
+gcc -m32  -I. -c -o tp32.o tp.c
+~~~~~~Linking sample_static32:
+gcc -m32 -o sample_static32 static32.o tp32.o -L/usr/local/lib -ldl  -llttn=
+g-ust
+/usr/bin/ld: warning: skipping incompatible /usr/local/lib/liblttng-ust.so =
+while searching for lttng-ust
+/usr/bin/ld: error: cannot find -llttng-ust
+tp32.o:tp.c:function __lttng_events_init__sample_component: error: undefine=
+d reference to 'lttng_probe_register'
+tp32.o:tp.c:function __lttng_events_exit__sample_component: error: undefine=
+d reference to 'lttng_probe_unregister'
+collect2: ld a retourn=E9 1 code d'=E9tat d'ex=E9cution
+make: *** [static32] Erreur 1
+
+   The problem is the "incompatible /usr/local/lib/liblttng-ust.so".  I eve=
+n tried rebuilding the entire lttng suite (originally built *before* gcc-mu=
+ltilib was added), but that changed nothing.  How do I do this?  More gener=
+ally, how does one add tracepoints to a 32-bit application running on a 64-=
+bit system?
+
+Daniel U. Thibault
+Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
+ntermeasures (SPC)
+Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
+Cyber Security (MCCS)
+R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
+ Canada - Valcartier (DRDC Valcartier)
+2459 route de la Bravoure
+Qu=E9bec QC=A0 G3J 1X5
+CANADA
+Vox=A0: (418) 844-4000 x4245
+Fax=A0: (418) 844-4538
+NAC=A0: 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+Gouvernement du Canada=A0| Government of Canada
+<http://www.valcartier.drdc-rddc.gc.ca/>
