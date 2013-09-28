@@ -1,36 +1,34 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] LTTng modules 2.2.2
-Date: Sat, 28 Sep 2013 22:35:23 +0000 (UTC)
-Message-ID: <157768639.25521.1380407723011.JavaMail.zimbra__595.85658968917$1380407792$gmane$org@efficios.com>
-References: <1178967435.25517.1380407640478.JavaMail.zimbra@efficios.com>
+Subject: [RELEASE] LTTng modules 2.3.2
+Date: Sat, 28 Sep 2013 22:36:29 +0000 (UTC)
+Message-ID: <1176553191.25522.1380407789990.JavaMail.zimbra__44354.5268652544$1380407839$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1VQ36o-0000Db-9F
-	for lttng-dev@lists.lttng.org; Sat, 28 Sep 2013 18:35:36 -0400
+	(envelope-from <compudj@efficios.com>) id 1VQ37s-0000GE-2t
+	for lttng-dev@lists.lttng.org; Sat, 28 Sep 2013 18:36:38 -0400
 Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.efficios.com (Postfix) with ESMTP id ACF4C3400B5
-	for <lttng-dev@lists.lttng.org>; Sat, 28 Sep 2013 22:35:24 +0000 (UTC)
+	by mail.efficios.com (Postfix) with ESMTP id 1A5013400B5
+	for <lttng-dev@lists.lttng.org>; Sat, 28 Sep 2013 22:36:31 +0000 (UTC)
 Received: from mail.efficios.com ([127.0.0.1])
 	by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new,
 	port 10032)
-	with ESMTP id Kqh66PUn2JTJ for <lttng-dev@lists.lttng.org>;
-	Sat, 28 Sep 2013 22:35:23 +0000 (UTC)
+	with ESMTP id S0IgmiNNIT4W for <lttng-dev@lists.lttng.org>;
+	Sat, 28 Sep 2013 22:36:30 +0000 (UTC)
 Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.efficios.com (Postfix) with ESMTP id 939863400EA
-	for <lttng-dev@lists.lttng.org>; Sat, 28 Sep 2013 22:35:23 +0000 (UTC)
+	by mail.efficios.com (Postfix) with ESMTP id 51A39340197
+	for <lttng-dev@lists.lttng.org>; Sat, 28 Sep 2013 22:36:30 +0000 (UTC)
 Received: from mail.efficios.com ([127.0.0.1])
 	by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new,
 	port 10026)
-	with ESMTP id ux3SYhnHc_Om for <lttng-dev@lists.lttng.org>;
-	Sat, 28 Sep 2013 22:35:23 +0000 (UTC)
+	with ESMTP id qcWZJWgpZYzG for <lttng-dev@lists.lttng.org>;
+	Sat, 28 Sep 2013 22:36:30 +0000 (UTC)
 Received: from evm-mail-1.efficios.com (evm-mail-1.efficios.com [78.47.125.74])
-	by mail.efficios.com (Postfix) with ESMTP id 4D6973400B5
-	for <lttng-dev@lists.lttng.org>; Sat, 28 Sep 2013 22:35:23 +0000 (UTC)
-In-Reply-To: <1178967435.25517.1380407640478.JavaMail.zimbra@efficios.com>
+	by mail.efficios.com (Postfix) with ESMTP id 30D983400B5
+	for <lttng-dev@lists.lttng.org>; Sat, 28 Sep 2013 22:36:30 +0000 (UTC)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -47,10 +45,8 @@ The LTTng modules provide Linux kernel tracing capability to the LTTng 2.x trace
 Blacklisting kernels 3.10.0 to 3.10.13 and 3.11.0 to 3.11.2. Greg KH has the Linux patches queued for the upcoming stable kernel releases.
 
 Changelog:
-2013-09-28 LTTng modules 2.2.2
+2013-09-28 LTTng modules 2.3.2
         * Blacklist kernels 3.10.13 and 3.11.2
-        * LTTng trace-clock: shrink kernel blacklist
-        * Blacklist Linux kernels 3.10+
 
 Project website: http://lttng.org
 Download link: http://lttng.org/download
