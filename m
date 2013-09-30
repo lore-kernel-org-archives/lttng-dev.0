@@ -1,34 +1,18 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] LTTng modules 2.3.2
-Date: Sat, 28 Sep 2013 22:36:29 +0000 (UTC)
-Message-ID: <1176553191.25522.1380407789990.JavaMail.zimbra__44354.5268652544$1380407839$gmane$org@efficios.com>
+From: "Ikaheimonen, JP" <jp_ikaheimonen@mentor.com>
+Subject: Re: Exclusion event support patches
+Date: Mon, 30 Sep 2013 05:16:02 +0000
+Message-ID: <009B25148989C6458484484699278506E538A822__34920.6512830735$1380518223$gmane$org@EU-MBX-01.mgc.mentorg.com>
+References: <48CF5AC71E61DB46B70D0F388054EFFD26793BF7@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1VQ37s-0000GE-2t
-	for lttng-dev@lists.lttng.org; Sat, 28 Sep 2013 18:36:38 -0400
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.efficios.com (Postfix) with ESMTP id 1A5013400B5
-	for <lttng-dev@lists.lttng.org>; Sat, 28 Sep 2013 22:36:31 +0000 (UTC)
-Received: from mail.efficios.com ([127.0.0.1])
-	by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new,
-	port 10032)
-	with ESMTP id S0IgmiNNIT4W for <lttng-dev@lists.lttng.org>;
-	Sat, 28 Sep 2013 22:36:30 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.efficios.com (Postfix) with ESMTP id 51A39340197
-	for <lttng-dev@lists.lttng.org>; Sat, 28 Sep 2013 22:36:30 +0000 (UTC)
-Received: from mail.efficios.com ([127.0.0.1])
-	by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new,
-	port 10026)
-	with ESMTP id qcWZJWgpZYzG for <lttng-dev@lists.lttng.org>;
-	Sat, 28 Sep 2013 22:36:30 +0000 (UTC)
-Received: from evm-mail-1.efficios.com (evm-mail-1.efficios.com [78.47.125.74])
-	by mail.efficios.com (Postfix) with ESMTP id 30D983400B5
-	for <lttng-dev@lists.lttng.org>; Sat, 28 Sep 2013 22:36:30 +0000 (UTC)
+	(envelope-from <jp_ikaheimonen@mentor.com>) id 1VQVq7-0003iq-L9
+	for lttng-dev@lists.lttng.org; Mon, 30 Sep 2013 01:16:16 -0400
+In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD26793BF7@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -37,23 +21,42 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-The LTTng modules provide Linux kernel tracing capability to the LTTng 2.x tracer toolset.
+-----Original Message-----
+From: Thibault, Daniel [mailto:Daniel.Thibault@drdc-rddc.gc.ca] 
+Sent: 27. syyskuuta 2013 16:14
+To: lttng-dev@lists.lttng.org
+Cc: Ikaheimonen, JP
+Subject: RE: [lttng-dev] Exclusion event support patches
 
-Blacklisting kernels 3.10.0 to 3.10.13 and 3.11.0 to 3.11.2. Greg KH has the Linux patches queued for the upcoming stable kernel releases.
+-----Message d'origine-----
+Date: Fri, 27 Sep 2013 07:14:24 +0000
+From: "Ikaheimonen, JP" <jp_ikaheimonen@mentor.com>
 
-Changelog:
-2013-09-28 LTTng modules 2.3.2
-        * Blacklist kernels 3.10.13 and 3.11.2
+>> The exclusions are embedded into the event name so that internally, 
+>> the event name will be
+>>
+>> 'a*ac*,ad*'
 
-Project website: http://lttng.org
-Download link: http://lttng.org/download
-(please refer to the README files for installation instructions and
-lttng-tools doc/quickstart.txt for usage information)
+>   This takes advantage of the current wildcard restriction: the asterisk can only appear once in the name, at the end of the string -an asterisk is thus a string terminator.  This means that the exclusions in the name actually don't need a comma either!  The internal event name for 'a*' --exclude 'ac*,ad*' could thus be:
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+>'a*ac*ad*'
+
+>> This new scheme of the event name string is parsed and handled wherever necessary. This implementation poses new restrictions to event names:
+>> 1) An event name must not contain the character '*'.
+>> 2) An event name can contain a ',' character, but you cannot use it in the exclusion specification.
+
+>   If we used this format, this restriction on comma use would be dropped.
+
+The excluded events may be single events, and not necessarily end in wildcards.
+Consider
+lttng enable-event 'a*' --exclude 'a1,a2,a3'
+
+Here we need some sort of separator.
+
+JP Ikaheimonen | SW Development Engineer http://go.mentor.com/sourceryanalyzer
+Mentor Embedded(tm) | Nucleus(r) | Linux(r) | Android(tm) | Services | UI | Multi-OS
+Android is a trademark of Google Inc. Use of this trademark is subject to Google Permissions.
+Linux is the registered trademark of Linus Torvalds in the U.S. and other countries.
