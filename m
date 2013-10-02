@@ -1,20 +1,16 @@
-From: "Woegerer, Paul" <Paul_Woegerer@mentor.com>
-Subject: Re: Making 32-bit user-space events on a 64-bit Linux
- system
-Date: Wed, 2 Oct 2013 17:46:13 +0200
-Message-ID: <524C3FC5.6090600__41884.9064190455$1380728844$gmane$org@mentor.com>
-References: <48CF5AC71E61DB46B70D0F388054EFFD2679540E@VAL-E-02.valcartier.drdc-rddc.gc.ca>
-	<524BCD4B.2020501@mentor.com>
-	<48CF5AC71E61DB46B70D0F388054EFFD267955A8@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+From: Salman Rafiq <salman.rafiq@esk.fraunhofer.de>
+Subject: Reading CTF trace using Babeltrace API
+Date: Wed, 2 Oct 2013 18:55:17 +0200
+Message-ID: <E537659DE2B2C54EBD9FC9180F059880395D85FEA2__7880.5175646723$1380732997$gmane$org@zulu.esk.fraunhofer.de>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from relay1.mentorg.com ([192.94.38.131])
+Received: from mx-relay12-dus.antispameurope.com ([94.100.134.212])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Paul_Woegerer@mentor.com>) id 1VROd7-0004la-2B
-	for lttng-dev@lists.lttng.org; Wed, 02 Oct 2013 11:46:30 -0400
-In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD267955A8@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+	(envelope-from <salman.rafiq@esk.fraunhofer.de>) id 1VRPi2-00071r-Pv
+	for lttng-dev@lists.lttng.org; Wed, 02 Oct 2013 12:55:40 -0400
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,103 +19,70 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>, "jeremie.galarneau@gmail.com" <jeremie.galarneau@gmail.com>
+To: =?iso-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>, "jdesfossez@efficios.com" <jdesfossez@efficios.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-ling On 10/02/2013 04:35 PM, Thibault, Daniel wrote:
-> -----Message d'origine-----
-> De : Woegerer, Paul [mailto:Paul_Woegerer@mentor.com] =
+Dear LTTngers,
 
-> Envoy=E9 : 2 octobre 2013 03:38
->
->> The 64-bit version of lttng-tools works just fine with both, 32-bit and =
-64-bit userspace applications. No need to compile it as 32-bit variant.
->> Instrumented 32-bit applications automatically use the 32-bit lttng-cons=
-umerd (from the lttng-ust 32-bit build), instrumented 64-bit =
+I would like to ask few questions related to the API's for reading CTF trac=
+es.
 
->> applications automatically use the 64-bit lttng-consumerd (from the lttn=
-g-ust 64-bit build).
->    But lttng-consumerd is in the lttng-tools package, not lttng-ust ?!  T=
-his prevents my lttng-sessiond from using a 32-bit lttng-consumerd, as you'=
-ll see below.
+1.  Is there any way to read CTF metadata independently, like we have certa=
+in API's to read the events.
 
-Right. Now that you say it, I DO remember compiling lttng-tools twice. I
-took only the lttng-consumerd from the 32-bit variant and copied it over
-into the 64-bit install tree and recompiled for 64-bit with
---with-consumerd32-bin=3D<lttng_install_root>/lib/lttng/libexec/lttng-consu=
-merd
---with-consumerd64-bin=3D<lttng_install_root>/lib64/lttng/libexec/lttng-con=
-sumerd.
-I think, this did the trick (if I remember correctly).
+2. There are certain scopes defined in ctf/events.h like:
+	BT_TRACE_PACKET_HEADER          =3D 0,
+	BT_STREAM_PACKET_CONTEXT        =3D 1,
+	BT_STREAM_EVENT_HEADER          =3D 2,
+	BT_STREAM_EVENT_CONTEXT         =3D 3,
+	BT_EVENT_CONTEXT                =3D 4,
+	BT_EVENT_FIELDS                 =3D 5,
+
+I could not figure out the way to ready the fields 'id' and 'stream_id', fo=
+r a particular event while iterating through the trace.
+Though I can ready the event name using an API and fields using BT_EVENT_FI=
+ELDS as a scope.
+For e.g. consider the =
+
+
+event {
+	name =3D sched_migrate_task;
+	id =3D 1;
+	stream_id =3D 0;
+	fields :=3D struct {
+		integer { size =3D 8; align =3D 8; signed =3D 1; encoding =3D UTF8; base =
+=3D 10; } _comm[16];
+		integer { size =3D 32; align =3D 8; signed =3D 1; encoding =3D none; base=
+ =3D 10; } _tid;
+		integer { size =3D 32; align =3D 8; signed =3D 1; encoding =3D none; base=
+ =3D 10; } _prio;
+		integer { size =3D 32; align =3D 8; signed =3D 1; encoding =3D none; base=
+ =3D 10; } _orig_cpu;
+		integer { size =3D 32; align =3D 8; signed =3D 1; encoding =3D none; base=
+ =3D 10; } _dest_cpu;
+	};
+};
+
+
+Any help or suggestion related to this issue will be really appreciated.
+Thanks!
+
+Regards,
+Salman
 
 --
-Paul
+Salman Rafiq
+Gesch=E4ftsfeld Industrial Communication
+Fraunhofer-Institut  f=FCr Eingebettete Systeme und Kommunikationstechnik E=
+SK
 
->
->> BTW, when you compile for the "-m32" multilib, it's better to use the fo=
-llowing:
->> $ ./configure CC=3D"gcc -m32"
->> This way also the linking steps (performed by libtool) of your build wil=
-l know that you are building for m32 (on your x86_64 system) and you don't =
-need e.g. "--libdir ....".
->    That's what I did, but I still felt I needed to specify libdir so the =
-install did not overwrite the 64-bit libraries (liblttng-ctl.so, liblttng-u=
-st.so, etc.).
->
->> For more information see:
->> http://doc.opensuse.org/documentation/html/openSUSE/opensuse-reference/c=
-ha.64bit.html#sec.64bit.biarch
->> or
->> https://developer.mozilla.org/en/docs/Compiling_32-bit_Firefox_on_a_Linu=
-x_64-bit_OS
->    I have seen the second one, which was moderately useul.  I'll look int=
-o the first one, thanks.
->
->>> More generally, how does one add tracepoints to a 32-bit application ru=
-nning on a 64-bit system?
->> You simply compile your instrumented application to 32-bit the same way =
-you did it for the lttng-ust package (CC=3D"gcc -m32").
->>
->> Paul Woegerer, SW Development Engineer
->    Indeed, once lttng-ust has been done in 32-bits, I can use the 'make s=
-tatic32' I quoted at the beginning of the thread like this:
->
-> $ LDFLAGS=3D-L/usr/local/lib32 make static 32
->
->    And then run the sample app like this:
->
-> $ LD_PRELOAD=3D/usr/local/lib32/liblttng-ust.so ./sample_static32
->
->    (I could dump the LD_PRELOAD by adding /usr/local/lib32 to my PATH)
->
->    But my running lttng-sessiond (enable-event -u -a) complains:
->
-> Error: Consumer socket fd -1 not found in consumer obj 0x7ffd4000b650
->
->    My guess is I'll need to launch lttng-sessiond with the -u and -U opti=
-ons to point it to the 32-bit lttng-consumerd...Once I can get the 32-bit l=
-ttng-tools to compile and install it.
->
-> Daniel U. Thibault
-> Protection des syst=E8mes et contremesures (PSC) | Systems Protection & C=
-ountermeasures (SPC)
-> Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critica=
-l Cyber Security (MCCS)
-> R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R=
-&D Canada - Valcartier (DRDC Valcartier)
-> 2459 route de la Bravoure
-> Qu=E9bec QC  G3J 1X5
-> CANADA
-> Vox : (418) 844-4000 x4245
-> Fax : (418) 844-4538
-> NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-> Gouvernement du Canada | Government of Canada
-> <http://www.valcartier.drdc-rddc.gc.ca/>
+Hansastra=DFe 32 | 80686 M=FCnchen
+Telefon, Fax:=A0 +49 89 547088-356 | +49 89 547088-221
+E-Mail:=A0=A0 salman.rafiq@esk.fraunhofer.de
+=A0 =
 
+Internet: =
 
--- =
-
-Paul Woegerer, SW Development Engineer
-Sourcery Analyzer <http://go.mentor.com/sourceryanalyzer>
-Mentor Graphics, Embedded Software Division
+http://www.esk.fraunhofer.de
+http://www.twitter.com/FraunhoferESK
