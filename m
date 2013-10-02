@@ -1,18 +1,20 @@
-From: "Woegerer, Paul" <Paul_Woegerer@mentor.com>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
 Subject: Re: Making 32-bit user-space events on a 64-bit Linux
  system
-Date: Wed, 2 Oct 2013 09:37:47 +0200
-Message-ID: <524BCD4B.2020501__49340.9292227172$1380699524$gmane$org@mentor.com>
+Date: Wed, 2 Oct 2013 14:35:04 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD267955A8__41970.554754562$1380724570$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 References: <48CF5AC71E61DB46B70D0F388054EFFD2679540E@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+	<524BCD4B.2020501@mentor.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from relay1.mentorg.com ([192.94.38.131])
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Paul_Woegerer@mentor.com>) id 1VRH0P-0003mv-2x
-	for lttng-dev@lists.lttng.org; Wed, 02 Oct 2013 03:38:01 -0400
-In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD2679540E@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1VRNW6-00025j-0n
+	for lttng-dev@lists.lttng.org; Wed, 02 Oct 2013 10:35:11 -0400
+In-Reply-To: <524BCD4B.2020501@mentor.com>
+Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,50 +23,87 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>, jeremie.galarneau@gmail.com
+To: "Woegerer, Paul" <Paul_Woegerer@mentor.com>, "jeremie.galarneau@gmail.com" <jeremie.galarneau@gmail.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Daniel, Hi Jeremie
+-----Message d'origine-----
+De=A0: Woegerer, Paul [mailto:Paul_Woegerer@mentor.com] =
 
-I tried this on my x86_64 system some time ago (with 2.2.0-rc2) and it
-worked just fine.
+Envoy=E9=A0: 2 octobre 2013 03:38
 
-The only thing that was needed was to build 32-bit variants of urcu and
-lttng-ust (and also having all dependend libs as 32-bit variants on the
-system).
+> The 64-bit version of lttng-tools works just fine with both, 32-bit and 6=
+4-bit userspace applications. No need to compile it as 32-bit variant.
+> Instrumented 32-bit applications automatically use the 32-bit lttng-consu=
+merd (from the lttng-ust 32-bit build), instrumented 64-bit =
 
-The 64-bit version of lttng-tools works just fine with both, 32-bit and
-64-bit userspace applications. No need to compile it as 32-bit variant.
+> applications automatically use the 64-bit lttng-consumerd (from the lttng=
+-ust 64-bit build).
 
-Instrumented 32-bit applications automatically use the 32-bit
-lttng-consumerd (from the lttng-ust 32-bit build),
-instrumented 64-bit applications automatically use the 64-bit
-lttng-consumerd (from the lttng-ust 64-bit build).
+   But lttng-consumerd is in the lttng-tools package, not lttng-ust ?!  Thi=
+s prevents my lttng-sessiond from using a 32-bit lttng-consumerd, as you'll=
+ see below.
 
-BTW, when you compile for the "-m32" multilib, it's better to use the
-following:
+> BTW, when you compile for the "-m32" multilib, it's better to use the fol=
+lowing:
+> $ ./configure CC=3D"gcc -m32"
+> This way also the linking steps (performed by libtool) of your build will=
+ know that you are building for m32 (on your x86_64 system) and you don't n=
+eed e.g. "--libdir ....".
 
-$ ./configure CC="gcc -m32"
+   That's what I did, but I still felt I needed to specify libdir so the in=
+stall did not overwrite the 64-bit libraries (liblttng-ctl.so, liblttng-ust=
+.so, etc.).
 
-This way also the linking steps (performed by libtool) of your build
-will know that you are building for m32 (on your x86_64 system) and you
-don't need e.g. "--libdir ....".
-For more information see:
-http://doc.opensuse.org/documentation/html/openSUSE/opensuse-reference/cha.64bit.html#sec.64bit.biarch
-or
-https://developer.mozilla.org/en/docs/Compiling_32-bit_Firefox_on_a_Linux_64-bit_OS
+> For more information see:
+> http://doc.opensuse.org/documentation/html/openSUSE/opensuse-reference/ch=
+a.64bit.html#sec.64bit.biarch
+> or
+> https://developer.mozilla.org/en/docs/Compiling_32-bit_Firefox_on_a_Linux=
+_64-bit_OS
 
-> More generally, how does one add tracepoints to a 32-bit application running on a 64-bit system?
+   I have seen the second one, which was moderately useul.  I'll look into =
+the first one, thanks.
 
-You simply compile your instrumented application to 32-bit the same way
-you did it for the lttng-ust package (CC="gcc -m32").
+> > More generally, how does one add tracepoints to a 32-bit application ru=
+nning on a 64-bit system?
+>
+> You simply compile your instrumented application to 32-bit the same way y=
+ou did it for the lttng-ust package (CC=3D"gcc -m32").
+>
+> Paul Woegerer, SW Development Engineer
 
+   Indeed, once lttng-ust has been done in 32-bits, I can use the 'make sta=
+tic32' I quoted at the beginning of the thread like this:
 
-Best,
-Paul
+$ LDFLAGS=3D-L/usr/local/lib32 make static 32
 
--- 
-Paul Woegerer, SW Development Engineer
-Sourcery Analyzer <http://go.mentor.com/sourceryanalyzer>
-Mentor Graphics, Embedded Software Division
+   And then run the sample app like this:
+
+$ LD_PRELOAD=3D/usr/local/lib32/liblttng-ust.so ./sample_static32
+
+   (I could dump the LD_PRELOAD by adding /usr/local/lib32 to my PATH)
+
+   But my running lttng-sessiond (enable-event -u -a) complains:
+
+Error: Consumer socket fd -1 not found in consumer obj 0x7ffd4000b650
+
+   My guess is I'll need to launch lttng-sessiond with the -u and -U option=
+s to point it to the 32-bit lttng-consumerd...Once I can get the 32-bit ltt=
+ng-tools to compile and install it.
+
+Daniel U. Thibault
+Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
+ntermeasures (SPC)
+Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
+Cyber Security (MCCS)
+R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
+ Canada - Valcartier (DRDC Valcartier)
+2459 route de la Bravoure
+Qu=E9bec QC  G3J 1X5
+CANADA
+Vox : (418) 844-4000 x4245
+Fax : (418) 844-4538
+NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+Gouvernement du Canada | Government of Canada
+<http://www.valcartier.drdc-rddc.gc.ca/>
