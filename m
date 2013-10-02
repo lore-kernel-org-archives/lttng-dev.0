@@ -1,19 +1,19 @@
-From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: Reading CTF trace using Babeltrace API
-Date: Wed, 2 Oct 2013 14:24:37 -0400
-Message-ID: <CA+jJMxtmqSLA9wpyCMxCo5i7k2=ndL_GZNi8Dbw8YsSbQ15qeQ__1923.79280129007$1380738359$gmane$org@mail.gmail.com>
-References: <E537659DE2B2C54EBD9FC9180F059880395D85FEA2@zulu.esk.fraunhofer.de>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: Bulletproof RCU arena resize bug
+Date: Wed, 2 Oct 2013 18:38:31 +0000 (UTC)
+Message-ID: <578974230.27805.1380739111680.JavaMail.zimbra__8095.90684152699$1380739176$gmane$org@efficios.com>
+References: <CANP1eJFy4Ro4J-_pUtVPp3tm7a9ZoySZe+puJ1YotM=6QhLoOw@mail.gmail.com>
+	<1070351062.26103.1380556151276.JavaMail.zimbra@efficios.com>
+	<1994626768.26110.1380557399580.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wg0-f52.google.com ([74.125.82.52])
+Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1VRR6K-0001zF-8R
-	for lttng-dev@lists.lttng.org; Wed, 02 Oct 2013 14:24:49 -0400
-Received: by mail-wg0-f52.google.com with SMTP id m15so1355240wgh.19
-	for <lttng-dev@lists.lttng.org>; Wed, 02 Oct 2013 11:24:37 -0700 (PDT)
-In-Reply-To: <E537659DE2B2C54EBD9FC9180F059880395D85FEA2@zulu.esk.fraunhofer.de>
+	(envelope-from <compudj@efficios.com>) id 1VRRJl-0002XU-Uc
+	for lttng-dev@lists.lttng.org; Wed, 02 Oct 2013 14:38:43 -0400
+In-Reply-To: <1994626768.26110.1380557399580.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,114 +22,148 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Salman Rafiq <salman.rafiq@esk.fraunhofer.de>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, "jdesfossez@efficios.com" <jdesfossez@efficios.com>
+To: Milosz Tanski <milosz@adfin.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On Wed, Oct 2, 2013 at 12:55 PM, Salman Rafiq
-<salman.rafiq@esk.fraunhofer.de> wrote:
-> Dear LTTngers,
->
-> I would like to ask few questions related to the API's for reading CTF tr=
-aces.
->
-> 1.  Is there any way to read CTF metadata independently, like we have cer=
-tain API's to read the events.
->
+FYI, this fix uncovered other issues, fixed by the following master branch commits:
 
-Not from the public API, unfortunately.
+c1be8fb Fix: urcu-bp segfault in glibc pthread_kill()
+95b9424 Fix urcu-bp: don't move registry
+5c02e37 Fix: compat futex duplicated lock and completion
+976720e Fix: i386 compat code duplicated mutex instances
+9d8612b Fix: urcu-bp: Bulletproof RCU arena resize bug
+f61dfd9 Fix: test_mutex.c uninitialized mutex
 
-> 2. There are certain scopes defined in ctf/events.h like:
->         BT_TRACE_PACKET_HEADER          =3D 0,
->         BT_STREAM_PACKET_CONTEXT        =3D 1,
->         BT_STREAM_EVENT_HEADER          =3D 2,
->         BT_STREAM_EVENT_CONTEXT         =3D 3,
->         BT_EVENT_CONTEXT                =3D 4,
->         BT_EVENT_FIELDS                 =3D 5,
->
-> I could not figure out the way to ready the fields 'id' and 'stream_id', =
-for a particular event while iterating through the trace.
-> Though I can ready the event name using an API and fields using BT_EVENT_=
-FIELDS as a scope.
-> For e.g. consider the
->
-> event {
->         name =3D sched_migrate_task;
->         id =3D 1;
->         stream_id =3D 0;
->         fields :=3D struct {
->                 integer { size =3D 8; align =3D 8; signed =3D 1; encoding=
- =3D UTF8; base =3D 10; } _comm[16];
->                 integer { size =3D 32; align =3D 8; signed =3D 1; encodin=
-g =3D none; base =3D 10; } _tid;
->                 integer { size =3D 32; align =3D 8; signed =3D 1; encodin=
-g =3D none; base =3D 10; } _prio;
->                 integer { size =3D 32; align =3D 8; signed =3D 1; encodin=
-g =3D none; base =3D 10; } _orig_cpu;
->                 integer { size =3D 32; align =3D 8; signed =3D 1; encodin=
-g =3D none; base =3D 10; } _dest_cpu;
->         };
-> };
->
+Comments are welcome,
 
-The "id" field is part of the BT_STREAM_EVENT_HEADER scope, while the
-"stream_id" field is part of the BT_TRACE_PACKET_HEADER scope.
+Thanks,
 
-The code below is adapted from converter/babeltrace.c's
-convert_trace() loop to print both values.
+Mathieu
 
-while ((ctf_event =3D bt_ctf_iter_read_event(iter))) {
-
-        const struct bt_definition *stream_event_header_scope =3D
-                bt_ctf_get_top_level_scope(
-                        ctf_event, BT_STREAM_EVENT_HEADER);
-        const struct bt_definition *id_field =3D
-                bt_ctf_get_field(
-                        ctf_event, stream_event_header_scope, "id");
-
-        printf("id =3D %" PRIu64 "\n", bt_ctf_get_uint64(id_field));
-
-        const struct bt_definition *packet_header_scope =3D
-                bt_ctf_get_top_level_scope(
-                        ctf_event, BT_TRACE_PACKET_HEADER);
-        const struct bt_definition *stream_id_field =3D
-                bt_ctf_get_field(
-                        ctf_event, packet_header_scope, "stream_id");
-
-        printf("stream_id =3D %" PRIu64 "\n", bt_ctf_get_uint64(
-                       stream_id_field));
-[...]
-}
-
-Regards,
-J=E9r=E9mie
-
->
-> Any help or suggestion related to this issue will be really appreciated.
-> Thanks!
->
-> Regards,
-> Salman
->
+----- Original Message -----
+> From: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+> To: "Milosz Tanski" <milosz@adfin.com>
+> Cc: lttng-dev@lists.lttng.org
+> Sent: Monday, September 30, 2013 12:09:59 PM
+> Subject: Re: [lttng-dev] Bulletproof RCU arena resize bug
+> 
+> 
+> 
+> ----- Original Message -----
+> > From: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+> > To: "Milosz Tanski" <milosz@adfin.com>
+> > Cc: lttng-dev@lists.lttng.org
+> > Sent: Monday, September 30, 2013 11:49:11 AM
+> > Subject: Re: [lttng-dev] Bulletproof RCU arena resize bug
+> > 
+> > ----- Original Message -----
+> > > From: "Milosz Tanski" <milosz@adfin.com>
+> > > To: lttng-dev@lists.lttng.org
+> > > Sent: Monday, September 30, 2013 11:16:37 AM
+> > > Subject: [lttng-dev] Bulletproof RCU arena resize bug
+> > > 
+> > > Hi,
+> > > 
+> > > While trying to use the BP flavor of RCU I ran into random crashes. I
+> > > tracked it down to issues with resizing of the BP RCU memory pool.
+> > > 
+> > > The problem is in the urcu-bp.c file in the resize_arena() function.
+> > > On successful allocation / remapping the len member of the
+> > > registry_arena struct is never set anywhere function. On the second
+> > > resize of the arena the code in resize_arena() still thinks the
+> > > previous size is equal to the original mapping size. I've fixed this
+> > > issue locally by just adding the following code at the bottom of
+> > > resize_arena().
+> > > 
+> > > I hope this helps,
+> > 
+> > Good catch !!
+> > 
+> > However, I think your fix misses one case: if we happen to re-use the same
+> > region, we want to update the length right ? I propose:
+> 
+> Sorry, my previous patch was wrong: I updated arena->len before it was used
+> (expecting old value).
+> 
+> Here is an updated fix. It includes a bit of cleanup so we can make some
+> sense of the variables there.
+> 
+> diff --git a/urcu-bp.c b/urcu-bp.c
+> index 34bd14e..93d781f 100644
+> --- a/urcu-bp.c
+> +++ b/urcu-bp.c
+> @@ -305,27 +305,37 @@ int rcu_read_ongoing(void)
+>   */
+>  static void resize_arena(struct registry_arena *arena, size_t len)
+>  {
+> -       void *new_arena;
+> +       void *new_p;
+> +       size_t old_len;
+> +
+> +       old_len = arena->len;
+> 
+>         if (!arena->p)
+> -               new_arena = mmap(arena->p, len,
+> -                                PROT_READ | PROT_WRITE,
+> -                                MAP_ANONYMOUS | MAP_PRIVATE,
+> -                                -1, 0);
+> +               new_p = mmap(arena->p, len,
+> +                       PROT_READ | PROT_WRITE,
+> +                       MAP_ANONYMOUS | MAP_PRIVATE,
+> +                       -1, 0);
+>         else
+> -               new_arena = mremap_wrapper(arena->p, arena->len,
+> -                                       len, MREMAP_MAYMOVE);
+> -       assert(new_arena != MAP_FAILED);
+> -       arena->len = len;
+> +               new_p = mremap_wrapper(arena->p, old_len,
+> +                       len, MREMAP_MAYMOVE);
+> +       assert(new_p != MAP_FAILED);
+> +
+> +       /*
+> +        * Zero the newly allocated memory. Since mmap() does not
+> +        * clearly specify if memory is zeroed or not (although it is
+> +        * very likely that it is), be extra careful by not expecting
+> +        * the new range to be zeroed by mremap.
+> +        */
+> +       bzero(new_p + old_len, len - old_len);
+> 
+>         /*
+> -        * re-used the same region ?
+> +        * If we did not re-use the same region, we need to update the
+> +        * arena pointer.
+>          */
+> -       if (new_arena == arena->p)
+> -               return;
+> +       if (new_p != arena->p)
+> +               arena->p = new_p;
+> 
+> -       bzero(new_arena + arena->len, len - arena->len);
+> -       arena->p = new_arena;
+> +       arena->len = len;
+>  }
+> 
+>  /* Called with signals off and mutex locked */
+> 
+> Thoughts ?
+> 
+> Thanks,
+> 
+> Mathieu
+> 
 > --
-> Salman Rafiq
-> Gesch=E4ftsfeld Industrial Communication
-> Fraunhofer-Institut  f=FCr Eingebettete Systeme und Kommunikationstechnik=
- ESK
->
-> Hansastra=DFe 32 | 80686 M=FCnchen
-> Telefon, Fax:  +49 89 547088-356 | +49 89 547088-221
-> E-Mail:   salman.rafiq@esk.fraunhofer.de
->
-> Internet:
-> http://www.esk.fraunhofer.de
-> http://www.twitter.com/FraunhoferESK
->
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> http://www.efficios.com
+> 
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> 
 
-
-
--- =
-
-J=E9r=E9mie Galarneau
+-- 
+Mathieu Desnoyers
 EfficiOS Inc.
 http://www.efficios.com
