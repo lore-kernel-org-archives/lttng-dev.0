@@ -1,19 +1,18 @@
-From: Simon Marchi <simon.marchi@polymtl.ca>
-Subject: Re: [PATCH lttng-modules 1/1] Add new tracepoint in KVM.
-Date: Thu, 3 Oct 2013 11:39:33 -0400
-Message-ID: <CAFXXi0=Hv_jWB9SO=kKhKuUy7YHbbaf1KA1M2LNDy5JT_yzf6w__49346.7687433169$1380814871$gmane$org@mail.gmail.com>
-References: <1380773483-9088-1-git-send-email-mohamad.gebai@polymtl.ca>
+From: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
+Subject: Re: Making 32-bit user-space events on a 64-bit Linux
+ system
+Date: Thu, 03 Oct 2013 11:54:15 -0400
+Message-ID: <524D9327.5080704__43058.5359376439$1380815794$gmane$org@voxpopuli.im>
+References: <48CF5AC71E61DB46B70D0F388054EFFD2679582B@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f170.google.com ([209.85.223.170])
+Received: from ironport2-out.teksavvy.com ([206.248.154.182])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <thundersim@gmail.com>) id 1VRl0b-0008I1-75
-	for lttng-dev@lists.lttng.org; Thu, 03 Oct 2013 11:40:14 -0400
-Received: by mail-ie0-f170.google.com with SMTP id x13so6075186ief.29
-	for <lttng-dev@lists.lttng.org>; Thu, 03 Oct 2013 08:40:03 -0700 (PDT)
-In-Reply-To: <1380773483-9088-1-git-send-email-mohamad.gebai@polymtl.ca>
+	(envelope-from <alexmonthy@voxpopuli.im>) id 1VRlFV-0000dr-Fg
+	for lttng-dev@lists.lttng.org; Thu, 03 Oct 2013 11:55:38 -0400
+In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD2679582B@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,96 +21,30 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mohamad Gebai <mohamad.gebai@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Mohamad Gebai <mohamad.gebai@polymtl.ca>
+To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Mohamad,
+>> The Debian/Ubuntu packages for liblttng-ust and liburcu are multiarch-enabled, so you can install the :i386 and :amd64 versions in
+>> parallel. That way they will be tracked by the package manager, and won't "linger around".
+>    Except that the Ubuntu LTTng packages are hopelessly behind right now.  I wanted to do everything with the 2.3.0 release.
 
-Since this tracepoint was not present in previous kernel versions, I
-think you should use ifdefs to enable the tracepoint only for the
-versions that have it. Grep for LINUX_VERSION_CODE in the other files.
+The packages from the official repo are often behind, yes. But we have
+an Ubuntu PPA which follows the stable releases:
+https://launchpad.net/~lttng/+archive/ppa
 
-Simon
+It's updated daily with the contents of the stable-* git branches.
 
-On 3 October 2013 00:11, Mohamad Gebai <mohamad.gebai@gmail.com> wrote:
-> New tracepoint added in kvm: kvm_write_tsc_offset.
->
-> Signed-off-by: Mohamad Gebai <mohamad.gebai@polymtl.ca>
-> ---
->  .../events/lttng-module/arch/x86/kvm/trace.h       |   21 ++++++++++++++++++++
->  .../events/mainline/arch/x86/kvm/trace.h           |   21 ++++++++++++++++++++
->  2 files changed, 42 insertions(+)
->
-> diff --git a/instrumentation/events/lttng-module/arch/x86/kvm/trace.h b/instrumentation/events/lttng-module/arch/x86/kvm/trace.h
-> index 8e71a7f..0823a9d 100644
-> --- a/instrumentation/events/lttng-module/arch/x86/kvm/trace.h
-> +++ b/instrumentation/events/lttng-module/arch/x86/kvm/trace.h
-> @@ -761,6 +761,27 @@ TRACE_EVENT(
->                   __entry->gpa_match ? "GPA" : "GVA")
->  )
->
-> +TRACE_EVENT(kvm_write_tsc_offset,
-> +       TP_PROTO(unsigned int vcpu_id, __u64 previous_tsc_offset,
-> +                __u64 next_tsc_offset),
-> +       TP_ARGS(vcpu_id, previous_tsc_offset, next_tsc_offset),
-> +
-> +       TP_STRUCT__entry(
-> +               __field( unsigned int,  vcpu_id                         )
-> +               __field(        __u64,  previous_tsc_offset             )
-> +               __field(        __u64,  next_tsc_offset                 )
-> +       ),
-> +
-> +       TP_fast_assign(
-> +               tp_assign(vcpu_id, vcpu_id)
-> +               tp_assign(previous_tsc_offset, previous_tsc_offset)
-> +               tp_assign(next_tsc_offset, next_tsc_offset)
-> +       ),
-> +
-> +       TP_printk("vcpu=%u prev=%llu next=%llu", __entry->vcpu_id,
-> +                 __entry->previous_tsc_offset, __entry->next_tsc_offset)
-> +)
-> +
->  #ifdef CONFIG_X86_64
->
->  #define host_clocks                                    \
-> diff --git a/instrumentation/events/mainline/arch/x86/kvm/trace.h b/instrumentation/events/mainline/arch/x86/kvm/trace.h
-> index fe5e00e..545245d 100644
-> --- a/instrumentation/events/mainline/arch/x86/kvm/trace.h
-> +++ b/instrumentation/events/mainline/arch/x86/kvm/trace.h
-> @@ -756,6 +756,27 @@ TRACE_EVENT(
->                   __entry->gpa_match ? "GPA" : "GVA")
->  );
->
-> +TRACE_EVENT(kvm_write_tsc_offset,
-> +       TP_PROTO(unsigned int vcpu_id, __u64 previous_tsc_offset,
-> +                __u64 next_tsc_offset),
-> +       TP_ARGS(vcpu_id, previous_tsc_offset, next_tsc_offset),
-> +
-> +       TP_STRUCT__entry(
-> +               __field( unsigned int,  vcpu_id                         )
-> +               __field(        __u64,  previous_tsc_offset             )
-> +               __field(        __u64,  next_tsc_offset                 )
-> +       ),
-> +
-> +       TP_fast_assign(
-> +               __entry->vcpu_id                = vcpu_id;
-> +               __entry->previous_tsc_offset    = previous_tsc_offset;
-> +               __entry->next_tsc_offset        = next_tsc_offset;
-> +       ),
-> +
-> +       TP_printk("vcpu=%u prev=%llu next=%llu", __entry->vcpu_id,
-> +                 __entry->previous_tsc_offset, __entry->next_tsc_offset)
-> +);
-> +
->  #ifdef CONFIG_X86_64
->
->  #define host_clocks                                    \
-> --
-> 1.7.10.4
->
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>    On a different note, why does LTTng have 32- and 64-bit consumers anyway?  The only possible difference between a 32-bit tracer and a 
+> 64-bit tracer is that the latter could generate event record fields that are 64-bit longs and floats, while the former cannot (but will never 
+> have to, since the application it is tracing won't have such beasts anyway).  So the 64-bit consumer should be backward compatible with the
+> 32-bit consumer, because it deals with a super-set of the 32-bit consumer requirements.  If this were the only difference, LTTng would not
+> need a separate 32-bit consumer daemon.  Is there some sort of context-switching overhead associated with a 64-bit daemon accessing a
+> buffer that exists in a 32-bit process context?  The performance gain would justify the existence of a 32-bit consumer, I suppose.
+
+The consumer shares memory space with the traced process, so they have
+to use the same ABI. If they talked only through let's say a pipe, that
+wouldn't be necessary, but performance would indeed be much worse.
+
+
+Cheers,
+Alex
