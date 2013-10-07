@@ -1,18 +1,21 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [LTTng UST PATCH 0/2] Bug fixes for
-	callsite	unregistering
-Date: Mon, 7 Oct 2013 13:43:06 +0000 (UTC)
-Message-ID: <832048350.29760.1381153386842.JavaMail.zimbra__43485.4057188661$1381155408$gmane$org@efficios.com>
-References: <009B25148989C6458484484699278506E538AF34@EU-MBX-01.mgc.mentorg.com>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Subject: Re: Making 32-bit user-space events on a 64-bit Linux
+ system
+Date: Mon, 7 Oct 2013 14:40:28 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD2679AD20__21915.5988227159$1381156891$gmane$org@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+References: <48CF5AC71E61DB46B70D0F388054EFFD2679582B@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+	<524D9327.5080704@voxpopuli.im>
+	<1310242451.29692.1381150600398.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1VTB5c-0007jS-TF
-	for lttng-dev@lists.lttng.org; Mon, 07 Oct 2013 09:43:19 -0400
-In-Reply-To: <009B25148989C6458484484699278506E538AF34@EU-MBX-01.mgc.mentorg.com>
+	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1VTBz4-0001c6-Dd
+	for lttng-dev@lists.lttng.org; Mon, 07 Oct 2013 10:40:36 -0400
+In-Reply-To: <1310242451.29692.1381150600398.JavaMail.zimbra@efficios.com>
+Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,101 +24,67 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: JP Ikaheimonen <jp_ikaheimonen@mentor.com>
-Cc: lttng-dev@lists.lttng.org
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Alexandre Montplaisir <alexmonthy@voxpopuli.im>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Both patches merged into master, stable-2.2, stable-2.3 (with slight changes). These become the following master commits:
-
-commit 8a7ad54be134997ab5985968ac6ada9ea58cafb9
-Author: Ikaheimonen, JP <jp_ikaheimonen@mentor.com>
-Date:   Mon Oct 7 09:33:02 2013 -0400
-
-    Add usage reference count for tracepoints
-    
-    Keep track of how many libraries use a tracepoint, and disable the
-    tracepoint when the number of users drops to zero.
-    
-    A new reference counter is added to tracepoint_entry. This keeps track
-    of how many callsites use that tracepoint.
-    
-    When you have libraries and/or executables sharing tracepoints, you
-    cannot just disable your tracepoints when the library is unregistered.
-    You must check that the tracepoint is not used by any other libraries
-    before you disable it.
-    
-    Function lib_disable_tracepoints becomes unnecessary, and is removed.
-    
-    Signed-off-by: Ikaheimonen, JP <jp_ikaheimonen@mentor.com>
-    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-
-commit 33f8ed8734a97e749206ec0e856ba2c28a56dcef
-Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Date:   Mon Oct 7 09:30:52 2013 -0400
-
-    tracepoint.c: Move add_callsite/remove_callsite further down in file
-    
-    In preparation for calling disable_tracepoint() from those functions.
-    
-    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-
-commit 60d8702955d702f95053b0355d156ae032ac2bc8
-Author: Ikaheimonen, JP <jp_ikaheimonen@mentor.com>
-Date:   Thu Oct 3 06:46:27 2013 +0000
-
-    Store the callsites into the library callsite list
-    
-    Fix the issue where the callsites are registered but never
-    properly unregistered.
-    
-    [ Edit by Mathieu Desnoyers: minor coding style fix: remove parenthesis. ]
-    
-    Signed-off-by: Ikaheimonen, JP <jp_ikaheimonen@mentor.com>
-    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-
-Thanks a lot for those fixes!!
-
-Mathieu
-
------ Original Message -----
-> From: "JP Ikaheimonen" <jp_ikaheimonen@mentor.com>
-> To: lttng-dev@lists.lttng.org
-> Sent: Thursday, October 3, 2013 2:46:20 AM
-> Subject: [lttng-dev] [LTTng UST PATCH 0/2] Bug fixes for callsite	unregistering
-> 
-> The following two patches fix one bug each in LTTng UST.
-> 
-> The first patch makes sure that when a library registers callsites, those
-> callsites are also properly unregistered.
-> It is only a matter of actually updating the list of callsites during
-> registration.
-> 
-> The second patch deals with nested dynamic libraries. The current code
-> disables tracepoints whenever a library destructor gets called.
-> But if those tracepoints are also used by some other open library, then they
-> stop working.
-> The solution in the patch keeps track of how many callsites use a tracepoint,
-> and disables the tracepoint only after the last library logs off.
-> To work, the first patch must be applied first.
-> 
-> JP Ikaheimonen | SW Development Engineer
-> http://go.mentor.com/sourceryanalyzer
-> Mentor Embedded(tm) | Nucleus(r) | Linux(r) | Android(tm) | Services | UI |
-> Multi-OS
-> Android is a trademark of Google Inc. Use of this trademark is subject to
-> Google Permissions.
-> Linux is the registered trademark of Linus Torvalds in the U.S. and other
-> countries.
-> 
-> 
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> 
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+LS0tLS1NZXNzYWdlIGQnb3JpZ2luZS0tLS0tDQpEZcKgOiBNYXRoaWV1IERlc25veWVycyBbbWFp
+bHRvOm1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbV0gDQpFbnZvecOpwqA6IDcgb2N0b2Jy
+ZSAyMDEzIDA4OjU3DQoNCi0tLS0tIE9yaWdpbmFsIE1lc3NhZ2UgLS0tLS0NCj4gRnJvbTogIkFs
+ZXhhbmRyZSBNb250cGxhaXNpciIgPGFsZXhtb250aHlAdm94cG9wdWxpLmltPg0KPiBTZW50OiBU
+aHVyc2RheSwgT2N0b2JlciAzLCAyMDEzIDExOjU0OjE1IEFNDQo+IA0KPiA+ICAgIE9uIGEgZGlm
+ZmVyZW50IG5vdGUsIHdoeSBkb2VzIExUVG5nIGhhdmUgMzItIGFuZCA2NC1iaXQgY29uc3VtZXJz
+DQo+ID4gICAgYW55d2F5PyAgVGhlIG9ubHkgcG9zc2libGUgZGlmZmVyZW5jZSBiZXR3ZWVuIGEg
+MzItYml0IHRyYWNlciBhbmQgDQo+ID4gYSA2NC1iaXQgdHJhY2VyIGlzIHRoYXQgdGhlIGxhdHRl
+ciBjb3VsZCBnZW5lcmF0ZSBldmVudCByZWNvcmQgDQo+ID4gZmllbGRzIHRoYXQgYXJlIDY0LWJp
+dCBsb25ncyBhbmQgZmxvYXRzLCB3aGlsZSB0aGUgZm9ybWVyIGNhbm5vdCANCj4gPiAoYnV0IHdp
+bGwgbmV2ZXIgaGF2ZSB0bywgc2luY2UgdGhlIGFwcGxpY2F0aW9uIGl0IGlzIHRyYWNpbmcgd29u
+J3QgDQo+ID4gaGF2ZSBzdWNoIGJlYXN0cyBhbnl3YXkpLg0KPg0KPiBObywgdGhpcyBpcyBub3Qg
+aXQgYXQgYWxsLiAzMi1iaXQgYXBwcyBjYW4gZ2VuZXJhdGUgNjQtYml0IGludGVnZXJzIHRvbywg
+YW5kIGRvdWJsZS1wcmVjaXNpb24gZmxvYXRzLg0KDQogICBJIHJlYWxpc2VkIHRoYXQgc29vbiBh
+ZnRlciBoYXZpbmcgd3JpdHRlbiB0aGUgYWJvdmUsIHdoZW4gSSBsb29rZWQgdXAgdGhlIEMgc3Bl
+Yy4gIENsZWFybHksIHRoZSBldmVudCByZWNvcmRzIGFyZSBwcmVjaXNlbHkgdGhlIHNhbWUgaW4g
+MzItIGFuZCA2NC1iaXQgbW9kZXMuICBCdXQgaWYgdGhlIGV2ZW50IGJ1ZmZlcnMgZG9uJ3QgaGF2
+ZSBpbnRyaW5zaWMgYml0bmVzcywgc29tZXRoaW5nIGVsc2UgbXVzdCBiZSByZXNwb25zaWJsZSBm
+b3IgdGhlIHJlcXVpcmVtZW50IGZvciAzMi1iaXQgY29uc3VtZXJzLiAgRG9lcyBtbWFwIGhhdmUg
+YSBiaXRuZXNzIGJhcnJpZXI/ICBPciBkbyB0aGUgZXZlbnQgYnVmZmVycyBoYXZlIGludHJpbnNp
+YyBiaXRuZXNzIGluIHRoZSBzZW5zZSB0aGF0IHRoZSBidWZmZXIgbWFuYWdlbWVudCBmaWVsZHMg
+Y2hhbmdlPw0KDQo+IFRoZSBkaWZmZXJlbmNlIGJldHdlZW4gMzIgYW5kIDY0LWJpdCBjb25zdW1l
+cnMgbWFpbmx5IGNvbWVzIGZvciBhdG9taWMgb3BlcmF0aW9uczogb24gNjQtYml0LA0KPiBjb25z
+dW1lciBhbmQgYXBwbGljYXRpb24gY2FuIGludGVyYWN0IHRocm91Z2ggYXRvbWljIG9wZXJhdGlv
+bnMgb24gNjQtYml0IGludGVnZXJzLCB3aGljaCBhbGxvdw0KPiBkZXRlY3Rpb24gb2YgZnJlZS1y
+dW5uaW5nIGNvdW50ZXIgb3ZlcmZsb3cgbXVjaCBsYXJnZXIgdGhhbiB3aXRoIDMyLWJpdCBjb3Vu
+dGVyLg0KPg0KPiBNYXRoaWV1DQoNCiAgIElmIEkgdW5kZXJzdGFuZCB5b3UgY29ycmVjdGx5LCB0
+aGUgNjQtYml0IGF0b21pYyBvcGVyYXRpb25zIG5lZWRlZCBhcmUgbm90IGF2YWlsYWJsZSBpbiB0
+aGUgMzItYml0IGFzc2VtYmx5IGNvZGUuICBNYWtlcyBzZW5zZS4gIE9uZSBhbHNvIHNlZXMgdGhh
+dCB0aGUgZHluYW1pYyBsb2FkZXIgaGFzIDMyLSBhbmQgNjQtYml0IG9wZXJhdGluZyBtb2Rlcywg
+ZHVlIG1vc3RseSB0byBkaWZmZXJlbnQgRUxGIGZvcm1hdHMuICBCdXQgaXMgdGhlcmUgYW55dGhp
+bmcgaW4gdGhlIHByb2Nlc3NvciBhcmNoaXRlY3R1cmUgdGhhdCBtYWtlcyBpdCBpbXBvc3NpYmxl
+IChvciB1bmRlc2lyYWJsZSBiZWNhdXNlIG9mLCBzYXksIHNvbWUgc29ydCBvZiBjb250ZXh0LXN3
+aXRjaGluZykgZm9yIGEgNjQtYml0IHByb2Nlc3NvciBydW5uaW5nIDMyLWJpdCBjb2RlIHRvIGlu
+c2VydCA2NC1iaXQgaW5zdHJ1Y3Rpb25zIGluIHRoZSBjb2RlIGZsb3c/ICBBbHRlcm5hdGVseSwg
+aG93IGhhcmQgaXMgaXQgZm9yIDMyLWJpdCBjb2RlIHRvIGNhbGwgYSA2NC1iaXQgbGlicmFyeT8g
+IChJbiBzb21lIHdheXMsIHRoaXMgaXMgc2ltaWxhciB0byBpbnNlcnRpbmcgYW4gZXh0ZXJuYWwg
+Y2FsbCBvciBhIHBpZWNlIG9mIGFzc2VtYmx5IGNvZGUgaW4gaGlnaC1sZXZlbCBsYW5ndWFnZSBj
+b2RlIHN1Y2ggYXMgT2JqZWN0IFBhc2NhbCkgIFRha2luZyB5ZXQgYW5vdGhlciBzdGVwIGJhY2ss
+IHdoYXQgaXMgaXQgYWJvdXQgdGhlIGV2ZW50IGJ1ZmZlciBseWluZyBpbiBhIDMyLWJpdCBwcm9j
+ZXNzJ3Mgc3BhY2UgdGhhdCBtYWtlcyBpdCB1bmRlc2lyYWJsZS9kaWZmaWN1bHQvaW1wb3NzaWJs
+ZSBmb3IgYSA2NC1iaXQgY29uc3VtZXIgdG8gYWNjZXNzIGl0Pw0KICAgT2J2aW91c2x5LCB3aGVu
+IHJ1bm5pbmcgb24gYSAzMi1iaXQgcHJvY2Vzc29yIExUVG5nIGhhcyBubyBjaG9pY2UgYnV0IHRv
+IGJlIDMyLWJpdCB3aWRlIHRocm91Z2hvdXQsIGFuZCB0aGVyZWZvcmUgaXQgY2Fubm90IHVzZSB0
+aGUgZGVzaXJhYmxlIDY0LWJpdCBpbnRlZ2VyIGF0b21pYyBjb21wYXJpc29ucy4gIFJ1bm5pbmcg
+b24gYSA2NC1iaXQgcHJvY2Vzc29yIHNob3VsZCBiZSBhIHdob2xseSBkaWZmZXJlbnQga2V0dGxl
+IG9mIGZpc2gsIGhvd2V2ZXIuDQoNCkRhbmllbCBVLiBUaGliYXVsdA0KUHJvdGVjdGlvbiBkZXMg
+c3lzdMOobWVzIGV0IGNvbnRyZW1lc3VyZXMgKFBTQykgfCBTeXN0ZW1zIFByb3RlY3Rpb24gJiBD
+b3VudGVybWVhc3VyZXMgKFNQQykNCkN5YmVyIHPDqWN1cml0w6kgcG91ciBsZXMgbWlzc2lvbnMg
+ZXNzZW50aWVsbGVzIChDTUUpIHwgTWlzc2lvbiBDcml0aWNhbCBDeWJlciBTZWN1cml0eSAoTUND
+UykNClIgJiBEIHBvdXIgbGEgZMOpZmVuc2UgQ2FuYWRhIC0gVmFsY2FydGllciAoUkREQyBWYWxj
+YXJ0aWVyKSB8IERlZmVuY2UgUiZEIENhbmFkYSAtIFZhbGNhcnRpZXIgKERSREMgVmFsY2FydGll
+cikNCjI0NTkgcm91dGUgZGUgbGEgQnJhdm91cmUNClF1w6liZWMgUUMgIEczSiAxWDUNCkNBTkFE
+QQ0KVm94IDogKDQxOCkgODQ0LTQwMDAgeDQyNDUNCkZheCA6ICg0MTgpIDg0NC00NTM4DQpOQUMg
+OiA5MThWIFFTREogPGh0dHA6Ly93d3cudHJhdmVsZ2lzLmNvbS9tYXAuYXNwP2FkZHI9OTE4ViUy
+MFFTREo+DQpHb3V2ZXJuZW1lbnQgZHUgQ2FuYWRhIHwgR292ZXJubWVudCBvZiBDYW5hZGENCjxo
+dHRwOi8vd3d3LnZhbGNhcnRpZXIuZHJkYy1yZGRjLmdjLmNhLz4NCl9fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0
+bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFp
+bG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
