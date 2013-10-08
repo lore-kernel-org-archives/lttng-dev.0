@@ -1,22 +1,17 @@
-From: Francis Giraldeau <francis.giraldeau@gmail.com>
-Subject: Re: Use lttng for my own module which already has trace
- events
-Date: Tue, 08 Oct 2013 09:10:26 -0400
-Message-ID: <52540442.2070808__38772.8144335144$1381237906$gmane$org@gmail.com>
-References: <6B3AC2788014DD49B43AF9611365BBAA21CACCA460@mary.at.omicron.at>
-	<5253EBA8.2050205@mentor.com>
-	<6B3AC2788014DD49B43AF9611365BBAA21CACCA461@mary.at.omicron.at>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: Typo in urcu_qsbr.h ?
+Date: Tue, 8 Oct 2013 13:26:33 +0000 (UTC)
+Message-ID: <581636879.35810.1381238793937.JavaMail.zimbra__37450.6421074786$1381238865$gmane$org@efficios.com>
+References: <5253BDC1.2000506@tbricks.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-yh0-f48.google.com ([209.85.213.48])
+Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <francis.giraldeau@gmail.com>) id 1VTX48-0003JE-Tp
-	for lttng-dev@lists.lttng.org; Tue, 08 Oct 2013 09:11:11 -0400
-Received: by mail-yh0-f48.google.com with SMTP id f11so2072668yha.21
-	for <lttng-dev@lists.lttng.org>; Tue, 08 Oct 2013 06:11:03 -0700 (PDT)
-In-Reply-To: <6B3AC2788014DD49B43AF9611365BBAA21CACCA461@mary.at.omicron.at>
+	(envelope-from <compudj@efficios.com>) id 1VTXJA-00045Z-4F
+	for lttng-dev@lists.lttng.org; Tue, 08 Oct 2013 09:26:45 -0400
+In-Reply-To: <5253BDC1.2000506@tbricks.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -25,51 +20,94 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Dmitri Shubin <sbn@tbricks.com>
+Cc: lttng-dev@lists.lttng.org, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
 List-Id: lttng-dev@lists.lttng.org
 
-Le 2013-10-08 08:42, Michael Lausch a =E9crit :
-> On Tue, 2013-10-08 at 13:25 +0200, Woegerer, Paul wrote:
->> On 10/08/2013 01:03 PM, Michael Lausch wrote:
->>> Hi,
->>>
->>> I've developed a kernel module which defines TRACE_EVENTS. These events
->>> are shown in /sys/kernel/debug/tracing/events and i can read them
->>> from /sys/kernel/debug/tracing/trace if they are enabled.
->>>
->>> But i want to use these events in lttng. =
+----- Original Message -----
+> From: "Dmitri Shubin" <sbn@tbricks.com>
+> To: lttng-dev@lists.lttng.org
+> Sent: Tuesday, October 8, 2013 4:09:37 AM
+> Subject: [lttng-dev] Typo in urcu_qsbr.h ?
+> 
+> Hi,
+> 
+> In urcu_qsbr.h I can see the following
+> 
+>      85  /*
+>      86   * QSBR read lock/unlock are guaranteed to be no-ops.
+> Therefore, we expose them
+>      87   * in the LGPL header for any code to use. However, the debug
+> version is not
+>      88   * nops and may contain sanity checks. To activate it,
+> applications must be
+>      89   * recompiled with -DRCU_DEBUG (even non-LGPL/GPL
+> applications). This is the
+>      90   * best trade-off between license/performance/code triviality and
+>      91   * library debugging & tracing features we could come up with.
+>      92   */
+>      93
+>      94  #if (!defined(BUILD_QSBR_LIB) && defined(RCU_DEBUG))
+>      95
+>      96  static inline void rcu_read_lock(void)
+>      97  {
+>      98  }
+>      99
+>     100  static inline void rcu_read_unlock(void)
+>     101  {
+>     102  }
+>     103
+>     104  #else /* !RCU_DEBUG */
+>     105
+>     106  extern void rcu_read_lock(void);
+>     107  extern void rcu_read_unlock(void);
+>     108
+>     109  #endif /* !RCU_DEBUG */
+> 
+> Shouldn't the condition in line 94 actually be
+> 
+>      94  #if (!defined(BUILD_QSBR_LIB) && !defined(RCU_DEBUG))
+> 
+> So when RCU_DEBUG is _not_ defined we get static inlines for
+> rcu_read_{,un}lock() ?
 
->>> # lttng list -k =
+Indeed! Commit pushed:
 
->>> does not show them. =
+commit d47b05cb05b91bb9679d127c51bc4beac12b899d
+Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Date:   Tue Oct 8 09:23:10 2013 -0400
 
->>
->> You need to add an lttng probe in lttng-modules to expose your ftrace
->> events as lttng kernel events.
-> =
+    Fix: urcu-qsbr: reversed logic on RCU_DEBUG
+    
+    * Dmitri Shubin <sbn@tbricks.com> wrote:
+    > Shouldn't the condition in line 94 actually be
+    >
+    >      94  #if (!defined(BUILD_QSBR_LIB) && !defined(RCU_DEBUG))
+    >
+    > So when RCU_DEBUG is _not_ defined we get static inlines for
+    > rcu_read_{,un}lock() ?
+    
+    Indeed!
+    
+    Reported-by: Dmitri Shubin <sbn@tbricks.com>
+    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 
-> I did this, but this has some maintenance problems. I'd like not to
-> change or add something to the lttng-module source. I'd like to compile
-> the lttng tracepoints, depending on some config variable int he same
-> step as the kernel module.
-> =
+Thanks for reporting!
 
-> If that's not possible, maintenannce of the module get's a little bit
-> harder. =
+Mathieu
 
 
-I do maintain an "addons" module branch for experimental purposes. When
-the utility of the tracepoints are demonstrated, then it becomes easier
-to push them upstream. Your contributions are welcome.
+> 
+> Thanks!
+> 
+> 
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> 
 
-https://github.com/giraldeau/lttng-modules
-
-BTW, if the kernel has CONFIG_MODULE_SIG=3Dy (from Ubuntu with kernel
-3.8), then it won't load tracepoints defined in modules. The addons
-branch has the necessary steps to create a x509 certificate and load the
-key, such that the tracepoints are visible. It doesn't seems you are
-affected by this, but still good to know ;-)
-
-Cheers,
-
-Francis
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
