@@ -1,20 +1,23 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
 Subject: Re: Reading CTF trace using Babeltrace API
-Date: Tue, 8 Oct 2013 23:14:26 +0000 (UTC)
-Message-ID: <439534666.36114.1381274066505.JavaMail.zimbra__47158.2700418823$1381274133$gmane$org@efficios.com>
+Date: Tue, 8 Oct 2013 19:50:21 -0400
+Message-ID: <CA+jJMxtK8ZHvXKw3Ea6wxF_6f8_LwmkDahbxCg=rBu3SXjBMWg__3452.71936753324$1381276285$gmane$org@mail.gmail.com>
 References: <E537659DE2B2C54EBD9FC9180F059880395D85FEA2@zulu.esk.fraunhofer.de>
 	<CA+jJMxtmqSLA9wpyCMxCo5i7k2=ndL_GZNi8Dbw8YsSbQ15qeQ@mail.gmail.com>
 	<E537659DE2B2C54EBD9FC9180F059880395D860010@zulu.esk.fraunhofer.de>
 	<CA+jJMxsMU5u_4m3pUPJ6EBQVKTL_4+PNSj8iHvRcn6CJ=bt6Ag@mail.gmail.com>
+	<439534666.36114.1381274066505.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-wi0-f169.google.com ([209.85.212.169])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1VTgU7-0001Dn-J7
-	for lttng-dev@lists.lttng.org; Tue, 08 Oct 2013 19:14:41 -0400
-In-Reply-To: <CA+jJMxsMU5u_4m3pUPJ6EBQVKTL_4+PNSj8iHvRcn6CJ=bt6Ag@mail.gmail.com>
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1VTh2p-0003Ck-Qc
+	for lttng-dev@lists.lttng.org; Tue, 08 Oct 2013 19:50:34 -0400
+Received: by mail-wi0-f169.google.com with SMTP id hj3so7819694wib.4
+	for <lttng-dev@lists.lttng.org>; Tue, 08 Oct 2013 16:50:21 -0700 (PDT)
+In-Reply-To: <439534666.36114.1381274066505.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,154 +26,279 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?utf-8?B?SsOpcsOpbWll?= Galarneau <jeremie.galarneau@efficios.com>
-Cc: lttng-dev@lists.lttng.org, jdesfossez@efficios.com
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Julien Desfossez <jdesfossez@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJKw6lyw6ltaWUgR2FsYXJuZWF1
-IiA8amVyZW1pZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29tPgo+IFRvOiAiU2FsbWFuIFJhZmlxIiA8
-c2FsbWFuLnJhZmlxQGVzay5mcmF1bmhvZmVyLmRlPgo+IENjOiBqZGVzZm9zc2V6QGVmZmljaW9z
-LmNvbSwgbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZywgIk1hdGhpZXUgRGVzbm95ZXJzIiA8bWF0
-aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPgo+IFNlbnQ6IFR1ZXNkYXksIE9jdG9iZXIgOCwg
-MjAxMyAyOjUyOjM4IFBNCj4gU3ViamVjdDogUmU6IFJlYWRpbmcgQ1RGIHRyYWNlIHVzaW5nIEJh
-YmVsdHJhY2UgQVBJClsuLi5dCj4gCj4gVGhlIHByb2JsZW0gaXMgdGhhdCB0aGUgImlkIiBmaWVs
-ZHMgaW4gYm90aCBzdHJ1Y3QKPiBldmVudF9oZWFkZXJfY29tcGFjdCBhbmQgZXZlbnRfaGVhZGVy
-X2xhcmdlIGFjdHMgYXMgYSB2YXJpYW50J3MgdGFnCj4gZW51bWVyYXRpb24uCj4gCj4gRm9yIGlu
-c3RhbmNlLCBpZiB3ZSB0YWtlIGEgbG9vayBhdCB0aGUgZXZlbnRfaGVhZGVyX2NvbXBhY3Qgc3Ry
-dWN0dXJlLAo+IAo+IHN0cnVjdCBldmVudF9oZWFkZXJfY29tcGFjdCB7Cj4gICAgICAgICBlbnVt
-IDogdWludDVfdCB7IGNvbXBhY3QgPSAwIC4uLiAzMCwgZXh0ZW5kZWQgPSAzMSB9IGlkOwo+ICAg
-ICAgICAgdmFyaWFudCA8aWQ+IHsKPiAgICAgICAgICAgICAgICAgc3RydWN0IHsKPiAgICAgICAg
-ICAgICAgICAgICAgICAgICB1aW50MjdfY2xvY2tfbW9ub3RvbmljX3QgdGltZXN0YW1wOwo+ICAg
-ICAgICAgICAgICAgICB9IGNvbXBhY3Q7Cj4gICAgICAgICAgICAgICAgIHN0cnVjdCB7Cj4gICAg
-ICAgICAgICAgICAgICAgICAgICAgdWludDMyX3QgaWQ7Cj4gICAgICAgICAgICAgICAgICAgICAg
-ICAgdWludDY0X2Nsb2NrX21vbm90b25pY190IHRpbWVzdGFtcDsKPiAgICAgICAgICAgICAgICAg
-fSBleHRlbmRlZDsKPiAgICAgICAgIH0gdjsKPiB9IGFsaWduKDgpOwo+IAo+IFRoZSAiZW51bSBp
-ZCIgZmllbGQgd2lsbCBpbmRpY2F0ZSB0aGUgZXZlbnQncyBpZCBpZiBpdCBoYXMgYSB2YWx1ZSBv
-Zgo+IFswLCAzMF0uIEl0IGFsc28gaW5kaWNhdGVzIHRoYXQgdGhlICJjb21wYWN0IiBzdHJ1Y3R1
-cmUgaXMgc2VsZWN0ZWQgaW4KPiB0aGUgdmFyaWFudCB0aGF0IGZvbGxvd3MuIElmIGlkID09IDMx
-LCB0aGUgImV4dGVuZGVkIiBzdHJ1Y3R1cmUgaXMKPiBzZWxlY3RlZCwgd2hpY2ggbWVhbnMgdGhh
-dCB5b3Ugc2hvdWxkIHJldHJpZXZlIHRoZSAiaWQiIGZpZWxkJ3MgdmFsdWUKPiBmcm9tIHRoYXQg
-c3RydWN0dXJlLgo+IAo+IFNpbmNlIGNvZGUgaXMgd29ydGggYSB0aG91c2FuZCB3b3JkcywgaGVy
-ZSdzIGEgbW9yZSBjb21wbGV0ZSBjb2RlCj4gc2FtcGxlIHRvIHJlYWQgdGhlIGlkIGZpZWxkcy4K
-PiAKPiB3aGlsZSAoKGN0Zl9ldmVudCA9IGJ0X2N0Zl9pdGVyX3JlYWRfZXZlbnQoaXRlcikpKSB7
-Cj4gICAgICAgICB1aW50NjRfdCBldmVudF9pZCA9IDA7Cj4gICAgICAgICBjb25zdCBzdHJ1Y3Qg
-YnRfZGVmaW5pdGlvbiAqc3RyZWFtX2V2ZW50X2hlYWRlcl9zY29wZSA9Cj4gICAgICAgICAgICAg
-ICAgIGJ0X2N0Zl9nZXRfdG9wX2xldmVsX3Njb3BlKAo+ICAgICAgICAgICAgICAgICAgICAgICAg
-IGN0Zl9ldmVudCwgQlRfU1RSRUFNX0VWRU5UX0hFQURFUik7Cj4gICAgICAgICBjb25zdCBzdHJ1
-Y3QgYnRfZGVmaW5pdGlvbiAqaWRfZGVmaW5pdGlvbiA9Cj4gICAgICAgICAgICAgICAgIGJ0X2N0
-Zl9nZXRfZmllbGQoY3RmX2V2ZW50LCBzdHJlYW1fZXZlbnRfaGVhZGVyX3Njb3BlLAo+ICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICJpZCIpOwo+ICAgICAgICAgY29uc3Qgc3RydWN0
-IGJ0X2RlZmluaXRpb24gKnZfZGVmaW5pdGlvbiA9Cj4gICAgICAgICAgICAgICAgIGJ0X2N0Zl9n
-ZXRfZmllbGQoY3RmX2V2ZW50LCBzdHJlYW1fZXZlbnRfaGVhZGVyX3Njb3BlLAo+ICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICJ2Iik7Cj4gCj4gICAgICAgICAvKiAiaWQgbWF5IGJl
-IGFuIGVudW0sIGdldCB0aGUgdW5kZXJseWluZyBpbnRlZ2VyIGlmIGl0J3MgdGhlIGNhc2UgKi8K
-PiAgICAgICAgIGlmIChpZF9kZWZpbml0aW9uICYmCj4gYnRfY3RmX2ZpZWxkX3R5cGUoYnRfY3Rm
-X2dldF9kZWNsX2Zyb21fZGVmKGlkX2RlZmluaXRpb24pKSA9PQo+IENURl9UWVBFX0VOVU0pIHsK
-PiAgICAgICAgICAgICAgICAgaWRfZGVmaW5pdGlvbiA9IGJ0X2N0Zl9nZXRfZW51bV9pbnQoaWRf
-ZGVmaW5pdGlvbik7Cj4gICAgICAgICB9Cj4gCj4gICAgICAgICAvKiBDaGVjayBpZiB0aGVyZSBp
-cyBhICJ2IiBmaWVsZCBhbmQgaWYgaXQgY29udGFpbnMgYW4gImlkIiBmaWVsZCAqLwo+ICAgICAg
-ICAgaWYgKHZfZGVmaW5pdGlvbiAmJgo+IGJ0X2N0Zl9maWVsZF90eXBlKGJ0X2N0Zl9nZXRfZGVj
-bF9mcm9tX2RlZih2X2RlZmluaXRpb24pKSA9PQo+IENURl9UWVBFX1NUUlVDVCkgewo+ICAgICAg
-ICAgICAgICAgICBzdHJ1Y3QgYnRfZGVmaW5pdGlvbiBjb25zdCAqIGNvbnN0ICpsaXN0ID0gTlVM
-TDsKPiAgICAgICAgICAgICAgICAgdW5zaWduZWQgaW50IGNvdW50ID0gMDsKPiAgICAgICAgICAg
-ICAgICAgdW5zaWduZWQgaW50IGk7Cj4gCj4gICAgICAgICAgICAgICAgIHJldCA9IGJ0X2N0Zl9n
-ZXRfZmllbGRfbGlzdChjdGZfZXZlbnQsIHZfZGVmaW5pdGlvbiwKPiAmbGlzdCwgJmNvdW50KTsK
-PiAgICAgICAgICAgICAgICAgaWYgKHJldCkgewo+ICAgICAgICAgICAgICAgICAgICAgICAgIGdv
-dG8gZW5kOwo+ICAgICAgICAgICAgICAgICB9Cj4gCj4gICAgICAgICAgICAgICAgIGZvciAoaSA9
-IDA7IGkgPCBjb3VudDsgaSsrKSB7Cj4gICAgICAgICAgICAgICAgICAgICAgICAgY29uc3QgY2hh
-ciAqbmFtZSA9IGJ0X2N0Zl9maWVsZF9uYW1lKGxpc3RbaV0pOwo+IAo+ICAgICAgICAgICAgICAg
-ICAgICAgICAgIGlmIChzdHJjbXAoImlkIiwgbmFtZSkgPT0gMCkgewo+ICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgaWRfZGVmaW5pdGlvbiA9IGxpc3RbaV07Cj4gICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICBicmVhazsKPiAgICAgICAgICAgICAgICAgICAgICAgICB9Cj4g
-ICAgICAgICAgICAgICAgIH0KCkluc3RlYWQgb2YgZG9pbmcgdGhpcyBidF9jdGZfZ2V0X2ZpZWxk
-X2xpc3QoKSBhbmQgaXRlcmF0aW9uLCBjYW4ndCB3ZSBzaW1wbHkgdXNlIGJ0X2N0Zl9nZXRfZmll
-bGQoKSB0byB0cnkgZ2V0dGluZyB0aGUgc3RydWN0IGJ0X2RlZmluaXRpb24gPwoKVGhhbmtzLAoK
-TWF0aGlldQoKPiAgICAgICAgIH0KPiAKPiAgICAgICAgIGlmIChpZF9kZWZpbml0aW9uICYmCj4g
-YnRfY3RmX2ZpZWxkX3R5cGUoYnRfY3RmX2dldF9kZWNsX2Zyb21fZGVmKGlkX2RlZmluaXRpb24p
-KSA9PQo+IENURl9UWVBFX0lOVEVHRVIpIHsKPiAgICAgICAgICAgICAgICAgZXZlbnRfaWQgPSBi
-dF9jdGZfZ2V0X3VpbnQ2NChpZF9kZWZpbml0aW9uKTsKPiAgICAgICAgIH0KPiAKPiAgICAgICAg
-IHByaW50ZigiaWQgPSAlIiBQUkl1NjQgIlxuIiwgZXZlbnRfaWQpOwo+IH0KPiAKPiBSZWdhcmRz
-LAo+IErDqXLDqW1pZQo+IAo+ID4gVGhhbmtzIGEgbG90IQo+ID4KPiA+IFJlZ2FyZHMsCj4gPiBT
-YWxtYW4KPiA+Cj4gPiAtLQo+ID4gU2FsbWFuIFJhZmlxCj4gPiBHZXNjaMOkZnRzZmVsZCBJbmR1
-c3RyaWFsIENvbW11bmljYXRpb24KPiA+IEZyYXVuaG9mZXItSW5zdGl0dXQgIGbDvHIgRWluZ2Vi
-ZXR0ZXRlIFN5c3RlbWUgdW5kIEtvbW11bmlrYXRpb25zdGVjaG5payBFU0sKPiA+Cj4gPiBIYW5z
-YXN0cmHDn2UgMzIgfCA4MDY4NiBNw7xuY2hlbgo+ID4gVGVsZWZvbiwgRmF4OiAgKzQ5IDg5IDU0
-NzA4OC0zNTYgfCArNDkgODkgNTQ3MDg4LTIyMQo+ID4gRS1NYWlsOiAgIHNhbG1hbi5yYWZpcUBl
-c2suZnJhdW5ob2Zlci5kZQo+ID4KPiA+IEludGVybmV0Ogo+ID4gaHR0cDovL3d3dy5lc2suZnJh
-dW5ob2Zlci5kZQo+ID4gaHR0cDovL3d3dy50d2l0dGVyLmNvbS9GcmF1bmhvZmVyRVNLCj4gPgo+
-ID4KPiA+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tCj4gPiBGcm9tOiBqZXJlbWllLmdhbGFy
-bmVhdUBnbWFpbC5jb20gW21haWx0bzpqZXJlbWllLmdhbGFybmVhdUBnbWFpbC5jb21dIE9uCj4g
-PiBCZWhhbGYgT2YgSsOpcsOpbWllIEdhbGFybmVhdQo+ID4gU2VudDogTWl0dHdvY2gsIDIuIE9r
-dG9iZXIgMjAxMyAyMDoyNQo+ID4gVG86IFNhbG1hbiBSYWZpcQo+ID4gQ2M6IGpkZXNmb3NzZXpA
-ZWZmaWNpb3MuY29tOyBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnOyBNYXRoaWV1IERlc25veWVy
-cwo+ID4gU3ViamVjdDogUmU6IFJlYWRpbmcgQ1RGIHRyYWNlIHVzaW5nIEJhYmVsdHJhY2UgQVBJ
-Cj4gPgo+ID4gT24gV2VkLCBPY3QgMiwgMjAxMyBhdCAxMjo1NSBQTSwgU2FsbWFuIFJhZmlxCj4g
-PiA8c2FsbWFuLnJhZmlxQGVzay5mcmF1bmhvZmVyLmRlPiB3cm90ZToKPiA+PiBEZWFyIExUVG5n
-ZXJzLAo+ID4+Cj4gPj4gSSB3b3VsZCBsaWtlIHRvIGFzayBmZXcgcXVlc3Rpb25zIHJlbGF0ZWQg
-dG8gdGhlIEFQSSdzIGZvciByZWFkaW5nIENURgo+ID4+IHRyYWNlcy4KPiA+Pgo+ID4+IDEuICBJ
-cyB0aGVyZSBhbnkgd2F5IHRvIHJlYWQgQ1RGIG1ldGFkYXRhIGluZGVwZW5kZW50bHksIGxpa2Ug
-d2UgaGF2ZQo+ID4+IGNlcnRhaW4gQVBJJ3MgdG8gcmVhZCB0aGUgZXZlbnRzLgo+ID4+Cj4gPgo+
-ID4gTm90IGZyb20gdGhlIHB1YmxpYyBBUEksIHVuZm9ydHVuYXRlbHkuCj4gPgo+ID4+IDIuIFRo
-ZXJlIGFyZSBjZXJ0YWluIHNjb3BlcyBkZWZpbmVkIGluIGN0Zi9ldmVudHMuaCBsaWtlOgo+ID4+
-ICAgICAgICAgQlRfVFJBQ0VfUEFDS0VUX0hFQURFUiAgICAgICAgICA9IDAsCj4gPj4gICAgICAg
-ICBCVF9TVFJFQU1fUEFDS0VUX0NPTlRFWFQgICAgICAgID0gMSwKPiA+PiAgICAgICAgIEJUX1NU
-UkVBTV9FVkVOVF9IRUFERVIgICAgICAgICAgPSAyLAo+ID4+ICAgICAgICAgQlRfU1RSRUFNX0VW
-RU5UX0NPTlRFWFQgICAgICAgICA9IDMsCj4gPj4gICAgICAgICBCVF9FVkVOVF9DT05URVhUICAg
-ICAgICAgICAgICAgID0gNCwKPiA+PiAgICAgICAgIEJUX0VWRU5UX0ZJRUxEUyAgICAgICAgICAg
-ICAgICAgPSA1LAo+ID4+Cj4gPj4gSSBjb3VsZCBub3QgZmlndXJlIG91dCB0aGUgd2F5IHRvIHJl
-YWR5IHRoZSBmaWVsZHMgJ2lkJyBhbmQgJ3N0cmVhbV9pZCcsCj4gPj4gZm9yIGEgcGFydGljdWxh
-ciBldmVudCB3aGlsZSBpdGVyYXRpbmcgdGhyb3VnaCB0aGUgdHJhY2UuCj4gPj4gVGhvdWdoIEkg
-Y2FuIHJlYWR5IHRoZSBldmVudCBuYW1lIHVzaW5nIGFuIEFQSSBhbmQgZmllbGRzIHVzaW5nCj4g
-Pj4gQlRfRVZFTlRfRklFTERTIGFzIGEgc2NvcGUuCj4gPj4gRm9yIGUuZy4gY29uc2lkZXIgdGhl
-Cj4gPj4KPiA+PiBldmVudCB7Cj4gPj4gICAgICAgICBuYW1lID0gc2NoZWRfbWlncmF0ZV90YXNr
-Owo+ID4+ICAgICAgICAgaWQgPSAxOwo+ID4+ICAgICAgICAgc3RyZWFtX2lkID0gMDsKPiA+PiAg
-ICAgICAgIGZpZWxkcyA6PSBzdHJ1Y3Qgewo+ID4+ICAgICAgICAgICAgICAgICBpbnRlZ2VyIHsg
-c2l6ZSA9IDg7IGFsaWduID0gODsgc2lnbmVkID0gMTsgZW5jb2RpbmcgPQo+ID4+ICAgICAgICAg
-ICAgICAgICBVVEY4OyBiYXNlID0gMTA7IH0gX2NvbW1bMTZdOwo+ID4+ICAgICAgICAgICAgICAg
-ICBpbnRlZ2VyIHsgc2l6ZSA9IDMyOyBhbGlnbiA9IDg7IHNpZ25lZCA9IDE7IGVuY29kaW5nID0K
-PiA+PiAgICAgICAgICAgICAgICAgbm9uZTsgYmFzZSA9IDEwOyB9IF90aWQ7Cj4gPj4gICAgICAg
-ICAgICAgICAgIGludGVnZXIgeyBzaXplID0gMzI7IGFsaWduID0gODsgc2lnbmVkID0gMTsgZW5j
-b2RpbmcgPQo+ID4+ICAgICAgICAgICAgICAgICBub25lOyBiYXNlID0gMTA7IH0gX3ByaW87Cj4g
-Pj4gICAgICAgICAgICAgICAgIGludGVnZXIgeyBzaXplID0gMzI7IGFsaWduID0gODsgc2lnbmVk
-ID0gMTsgZW5jb2RpbmcgPQo+ID4+ICAgICAgICAgICAgICAgICBub25lOyBiYXNlID0gMTA7IH0g
-X29yaWdfY3B1Owo+ID4+ICAgICAgICAgICAgICAgICBpbnRlZ2VyIHsgc2l6ZSA9IDMyOyBhbGln
-biA9IDg7IHNpZ25lZCA9IDE7IGVuY29kaW5nID0KPiA+PiAgICAgICAgICAgICAgICAgbm9uZTsg
-YmFzZSA9IDEwOyB9IF9kZXN0X2NwdTsKPiA+PiAgICAgICAgIH07Cj4gPj4gfTsKPiA+Pgo+ID4K
-PiA+IFRoZSAiaWQiIGZpZWxkIGlzIHBhcnQgb2YgdGhlIEJUX1NUUkVBTV9FVkVOVF9IRUFERVIg
-c2NvcGUsIHdoaWxlIHRoZQo+ID4gInN0cmVhbV9pZCIgZmllbGQgaXMgcGFydCBvZiB0aGUgQlRf
-VFJBQ0VfUEFDS0VUX0hFQURFUiBzY29wZS4KPiA+Cj4gPiBUaGUgY29kZSBiZWxvdyBpcyBhZGFw
-dGVkIGZyb20gY29udmVydGVyL2JhYmVsdHJhY2UuYydzCj4gPiBjb252ZXJ0X3RyYWNlKCkgbG9v
-cCB0byBwcmludCBib3RoIHZhbHVlcy4KPiA+Cj4gPiB3aGlsZSAoKGN0Zl9ldmVudCA9IGJ0X2N0
-Zl9pdGVyX3JlYWRfZXZlbnQoaXRlcikpKSB7Cj4gPgo+ID4gICAgICAgICBjb25zdCBzdHJ1Y3Qg
-YnRfZGVmaW5pdGlvbiAqc3RyZWFtX2V2ZW50X2hlYWRlcl9zY29wZSA9Cj4gPiAgICAgICAgICAg
-ICAgICAgYnRfY3RmX2dldF90b3BfbGV2ZWxfc2NvcGUoCj4gPiAgICAgICAgICAgICAgICAgICAg
-ICAgICBjdGZfZXZlbnQsIEJUX1NUUkVBTV9FVkVOVF9IRUFERVIpOwo+ID4gICAgICAgICBjb25z
-dCBzdHJ1Y3QgYnRfZGVmaW5pdGlvbiAqaWRfZmllbGQgPQo+ID4gICAgICAgICAgICAgICAgIGJ0
-X2N0Zl9nZXRfZmllbGQoCj4gPiAgICAgICAgICAgICAgICAgICAgICAgICBjdGZfZXZlbnQsIHN0
-cmVhbV9ldmVudF9oZWFkZXJfc2NvcGUsICJpZCIpOwo+ID4KPiA+ICAgICAgICAgcHJpbnRmKCJp
-ZCA9ICUiIFBSSXU2NCAiXG4iLCBidF9jdGZfZ2V0X3VpbnQ2NChpZF9maWVsZCkpOwo+ID4KPiA+
-ICAgICAgICAgY29uc3Qgc3RydWN0IGJ0X2RlZmluaXRpb24gKnBhY2tldF9oZWFkZXJfc2NvcGUg
-PQo+ID4gICAgICAgICAgICAgICAgIGJ0X2N0Zl9nZXRfdG9wX2xldmVsX3Njb3BlKAo+ID4gICAg
-ICAgICAgICAgICAgICAgICAgICAgY3RmX2V2ZW50LCBCVF9UUkFDRV9QQUNLRVRfSEVBREVSKTsK
-PiA+ICAgICAgICAgY29uc3Qgc3RydWN0IGJ0X2RlZmluaXRpb24gKnN0cmVhbV9pZF9maWVsZCA9
-Cj4gPiAgICAgICAgICAgICAgICAgYnRfY3RmX2dldF9maWVsZCgKPiA+ICAgICAgICAgICAgICAg
-ICAgICAgICAgIGN0Zl9ldmVudCwgcGFja2V0X2hlYWRlcl9zY29wZSwgInN0cmVhbV9pZCIpOwo+
-ID4KPiA+ICAgICAgICAgcHJpbnRmKCJzdHJlYW1faWQgPSAlIiBQUkl1NjQgIlxuIiwgYnRfY3Rm
-X2dldF91aW50NjQoCj4gPiAgICAgICAgICAgICAgICAgICAgICAgIHN0cmVhbV9pZF9maWVsZCkp
-OyBbLi4uXSB9Cj4gPgo+ID4gUmVnYXJkcywKPiA+IErDqXLDqW1pZQo+ID4KPiA+Pgo+ID4+IEFu
-eSBoZWxwIG9yIHN1Z2dlc3Rpb24gcmVsYXRlZCB0byB0aGlzIGlzc3VlIHdpbGwgYmUgcmVhbGx5
-IGFwcHJlY2lhdGVkLgo+ID4+IFRoYW5rcyEKPiA+Pgo+ID4+IFJlZ2FyZHMsCj4gPj4gU2FsbWFu
-Cj4gPj4KPiA+PiAtLQo+ID4+IFNhbG1hbiBSYWZpcQo+ID4+IEdlc2Now6RmdHNmZWxkIEluZHVz
-dHJpYWwgQ29tbXVuaWNhdGlvbiBGcmF1bmhvZmVyLUluc3RpdHV0ICBmw7xyCj4gPj4gRWluZ2Vi
-ZXR0ZXRlIFN5c3RlbWUgdW5kIEtvbW11bmlrYXRpb25zdGVjaG5payBFU0sKPiA+Pgo+ID4+IEhh
-bnNhc3RyYcOfZSAzMiB8IDgwNjg2IE3DvG5jaGVuCj4gPj4gVGVsZWZvbiwgRmF4OiAgKzQ5IDg5
-IDU0NzA4OC0zNTYgfCArNDkgODkgNTQ3MDg4LTIyMQo+ID4+IEUtTWFpbDogICBzYWxtYW4ucmFm
-aXFAZXNrLmZyYXVuaG9mZXIuZGUKPiA+Pgo+ID4+IEludGVybmV0Ogo+ID4+IGh0dHA6Ly93d3cu
-ZXNrLmZyYXVuaG9mZXIuZGUKPiA+PiBodHRwOi8vd3d3LnR3aXR0ZXIuY29tL0ZyYXVuaG9mZXJF
-U0sKPiA+Pgo+ID4KPiA+Cj4gPgo+ID4gLS0KPiA+IErDqXLDqW1pZSBHYWxhcm5lYXUKPiA+IEVm
-ZmljaU9TIEluYy4KPiA+IGh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCj4gCj4gCj4gCj4gLS0KPiBK
-w6lyw6ltaWUgR2FsYXJuZWF1Cj4gRWZmaWNpT1MgSW5jLgo+IGh0dHA6Ly93d3cuZWZmaWNpb3Mu
-Y29tCj4gCgotLSAKTWF0aGlldSBEZXNub3llcnMKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVm
-ZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6
-Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+On Tue, Oct 8, 2013 at 7:14 PM, Mathieu Desnoyers
+<mathieu.desnoyers@efficios.com> wrote:
+> ----- Original Message -----
+>> From: "J=E9r=E9mie Galarneau" <jeremie.galarneau@efficios.com>
+>> To: "Salman Rafiq" <salman.rafiq@esk.fraunhofer.de>
+>> Cc: jdesfossez@efficios.com, lttng-dev@lists.lttng.org, "Mathieu Desnoye=
+rs" <mathieu.desnoyers@efficios.com>
+>> Sent: Tuesday, October 8, 2013 2:52:38 PM
+>> Subject: Re: Reading CTF trace using Babeltrace API
+> [...]
+>>
+>> The problem is that the "id" fields in both struct
+>> event_header_compact and event_header_large acts as a variant's tag
+>> enumeration.
+>>
+>> For instance, if we take a look at the event_header_compact structure,
+>>
+>> struct event_header_compact {
+>>         enum : uint5_t { compact =3D 0 ... 30, extended =3D 31 } id;
+>>         variant <id> {
+>>                 struct {
+>>                         uint27_clock_monotonic_t timestamp;
+>>                 } compact;
+>>                 struct {
+>>                         uint32_t id;
+>>                         uint64_clock_monotonic_t timestamp;
+>>                 } extended;
+>>         } v;
+>> } align(8);
+>>
+>> The "enum id" field will indicate the event's id if it has a value of
+>> [0, 30]. It also indicates that the "compact" structure is selected in
+>> the variant that follows. If id =3D=3D 31, the "extended" structure is
+>> selected, which means that you should retrieve the "id" field's value
+>> from that structure.
+>>
+>> Since code is worth a thousand words, here's a more complete code
+>> sample to read the id fields.
+>>
+>> while ((ctf_event =3D bt_ctf_iter_read_event(iter))) {
+>>         uint64_t event_id =3D 0;
+>>         const struct bt_definition *stream_event_header_scope =3D
+>>                 bt_ctf_get_top_level_scope(
+>>                         ctf_event, BT_STREAM_EVENT_HEADER);
+>>         const struct bt_definition *id_definition =3D
+>>                 bt_ctf_get_field(ctf_event, stream_event_header_scope,
+>>                                  "id");
+>>         const struct bt_definition *v_definition =3D
+>>                 bt_ctf_get_field(ctf_event, stream_event_header_scope,
+>>                                  "v");
+>>
+>>         /* "id may be an enum, get the underlying integer if it's the ca=
+se */
+>>         if (id_definition &&
+>> bt_ctf_field_type(bt_ctf_get_decl_from_def(id_definition)) =3D=3D
+>> CTF_TYPE_ENUM) {
+>>                 id_definition =3D bt_ctf_get_enum_int(id_definition);
+>>         }
+>>
+>>         /* Check if there is a "v" field and if it contains an "id" fiel=
+d */
+>>         if (v_definition &&
+>> bt_ctf_field_type(bt_ctf_get_decl_from_def(v_definition)) =3D=3D
+>> CTF_TYPE_STRUCT) {
+>>                 struct bt_definition const * const *list =3D NULL;
+>>                 unsigned int count =3D 0;
+>>                 unsigned int i;
+>>
+>>                 ret =3D bt_ctf_get_field_list(ctf_event, v_definition,
+>> &list, &count);
+>>                 if (ret) {
+>>                         goto end;
+>>                 }
+>>
+>>                 for (i =3D 0; i < count; i++) {
+>>                         const char *name =3D bt_ctf_field_name(list[i]);
+>>
+>>                         if (strcmp("id", name) =3D=3D 0) {
+>>                                 id_definition =3D list[i];
+>>                                 break;
+>>                         }
+>>                 }
+>
+> Instead of doing this bt_ctf_get_field_list() and iteration, can't we sim=
+ply use bt_ctf_get_field() to try getting the struct bt_definition ?
+
+Right. I was under the impression the bt_ctf_get_field() would only
+work on scopes, but it's not the case.
+
+Thanks!
+J=E9r=E9mie
+
+>
+> Thanks,
+>
+> Mathieu
+>
+>>         }
+>>
+>>         if (id_definition &&
+>> bt_ctf_field_type(bt_ctf_get_decl_from_def(id_definition)) =3D=3D
+>> CTF_TYPE_INTEGER) {
+>>                 event_id =3D bt_ctf_get_uint64(id_definition);
+>>         }
+>>
+>>         printf("id =3D %" PRIu64 "\n", event_id);
+>> }
+>>
+>> Regards,
+>> J=E9r=E9mie
+>>
+>> > Thanks a lot!
+>> >
+>> > Regards,
+>> > Salman
+>> >
+>> > --
+>> > Salman Rafiq
+>> > Gesch=E4ftsfeld Industrial Communication
+>> > Fraunhofer-Institut  f=FCr Eingebettete Systeme und Kommunikationstech=
+nik ESK
+>> >
+>> > Hansastra=DFe 32 | 80686 M=FCnchen
+>> > Telefon, Fax:  +49 89 547088-356 | +49 89 547088-221
+>> > E-Mail:   salman.rafiq@esk.fraunhofer.de
+>> >
+>> > Internet:
+>> > http://www.esk.fraunhofer.de
+>> > http://www.twitter.com/FraunhoferESK
+>> >
+>> >
+>> > -----Original Message-----
+>> > From: jeremie.galarneau@gmail.com [mailto:jeremie.galarneau@gmail.com]=
+ On
+>> > Behalf Of J=E9r=E9mie Galarneau
+>> > Sent: Mittwoch, 2. Oktober 2013 20:25
+>> > To: Salman Rafiq
+>> > Cc: jdesfossez@efficios.com; lttng-dev@lists.lttng.org; Mathieu Desnoy=
+ers
+>> > Subject: Re: Reading CTF trace using Babeltrace API
+>> >
+>> > On Wed, Oct 2, 2013 at 12:55 PM, Salman Rafiq
+>> > <salman.rafiq@esk.fraunhofer.de> wrote:
+>> >> Dear LTTngers,
+>> >>
+>> >> I would like to ask few questions related to the API's for reading CTF
+>> >> traces.
+>> >>
+>> >> 1.  Is there any way to read CTF metadata independently, like we have
+>> >> certain API's to read the events.
+>> >>
+>> >
+>> > Not from the public API, unfortunately.
+>> >
+>> >> 2. There are certain scopes defined in ctf/events.h like:
+>> >>         BT_TRACE_PACKET_HEADER          =3D 0,
+>> >>         BT_STREAM_PACKET_CONTEXT        =3D 1,
+>> >>         BT_STREAM_EVENT_HEADER          =3D 2,
+>> >>         BT_STREAM_EVENT_CONTEXT         =3D 3,
+>> >>         BT_EVENT_CONTEXT                =3D 4,
+>> >>         BT_EVENT_FIELDS                 =3D 5,
+>> >>
+>> >> I could not figure out the way to ready the fields 'id' and 'stream_i=
+d',
+>> >> for a particular event while iterating through the trace.
+>> >> Though I can ready the event name using an API and fields using
+>> >> BT_EVENT_FIELDS as a scope.
+>> >> For e.g. consider the
+>> >>
+>> >> event {
+>> >>         name =3D sched_migrate_task;
+>> >>         id =3D 1;
+>> >>         stream_id =3D 0;
+>> >>         fields :=3D struct {
+>> >>                 integer { size =3D 8; align =3D 8; signed =3D 1; enco=
+ding =3D
+>> >>                 UTF8; base =3D 10; } _comm[16];
+>> >>                 integer { size =3D 32; align =3D 8; signed =3D 1; enc=
+oding =3D
+>> >>                 none; base =3D 10; } _tid;
+>> >>                 integer { size =3D 32; align =3D 8; signed =3D 1; enc=
+oding =3D
+>> >>                 none; base =3D 10; } _prio;
+>> >>                 integer { size =3D 32; align =3D 8; signed =3D 1; enc=
+oding =3D
+>> >>                 none; base =3D 10; } _orig_cpu;
+>> >>                 integer { size =3D 32; align =3D 8; signed =3D 1; enc=
+oding =3D
+>> >>                 none; base =3D 10; } _dest_cpu;
+>> >>         };
+>> >> };
+>> >>
+>> >
+>> > The "id" field is part of the BT_STREAM_EVENT_HEADER scope, while the
+>> > "stream_id" field is part of the BT_TRACE_PACKET_HEADER scope.
+>> >
+>> > The code below is adapted from converter/babeltrace.c's
+>> > convert_trace() loop to print both values.
+>> >
+>> > while ((ctf_event =3D bt_ctf_iter_read_event(iter))) {
+>> >
+>> >         const struct bt_definition *stream_event_header_scope =3D
+>> >                 bt_ctf_get_top_level_scope(
+>> >                         ctf_event, BT_STREAM_EVENT_HEADER);
+>> >         const struct bt_definition *id_field =3D
+>> >                 bt_ctf_get_field(
+>> >                         ctf_event, stream_event_header_scope, "id");
+>> >
+>> >         printf("id =3D %" PRIu64 "\n", bt_ctf_get_uint64(id_field));
+>> >
+>> >         const struct bt_definition *packet_header_scope =3D
+>> >                 bt_ctf_get_top_level_scope(
+>> >                         ctf_event, BT_TRACE_PACKET_HEADER);
+>> >         const struct bt_definition *stream_id_field =3D
+>> >                 bt_ctf_get_field(
+>> >                         ctf_event, packet_header_scope, "stream_id");
+>> >
+>> >         printf("stream_id =3D %" PRIu64 "\n", bt_ctf_get_uint64(
+>> >                        stream_id_field)); [...] }
+>> >
+>> > Regards,
+>> > J=E9r=E9mie
+>> >
+>> >>
+>> >> Any help or suggestion related to this issue will be really appreciat=
+ed.
+>> >> Thanks!
+>> >>
+>> >> Regards,
+>> >> Salman
+>> >>
+>> >> --
+>> >> Salman Rafiq
+>> >> Gesch=E4ftsfeld Industrial Communication Fraunhofer-Institut  f=FCr
+>> >> Eingebettete Systeme und Kommunikationstechnik ESK
+>> >>
+>> >> Hansastra=DFe 32 | 80686 M=FCnchen
+>> >> Telefon, Fax:  +49 89 547088-356 | +49 89 547088-221
+>> >> E-Mail:   salman.rafiq@esk.fraunhofer.de
+>> >>
+>> >> Internet:
+>> >> http://www.esk.fraunhofer.de
+>> >> http://www.twitter.com/FraunhoferESK
+>> >>
+>> >
+>> >
+>> >
+>> > --
+>> > J=E9r=E9mie Galarneau
+>> > EfficiOS Inc.
+>> > http://www.efficios.com
+>>
+>>
+>>
+>> --
+>> J=E9r=E9mie Galarneau
+>> EfficiOS Inc.
+>> http://www.efficios.com
+>>
+>
+> --
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> http://www.efficios.com
+
+
+
+-- =
+
+J=E9r=E9mie Galarneau
+EfficiOS Inc.
+http://www.efficios.com
