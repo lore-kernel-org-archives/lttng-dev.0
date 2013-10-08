@@ -1,17 +1,21 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Typo in urcu_qsbr.h ?
-Date: Tue, 8 Oct 2013 13:26:33 +0000 (UTC)
-Message-ID: <581636879.35810.1381238793937.JavaMail.zimbra__37450.6421074786$1381238865$gmane$org@efficios.com>
-References: <5253BDC1.2000506@tbricks.com>
+Subject: Re: Making 32-bit user-space events on a 64-bit Linux
+ system
+Date: Tue, 8 Oct 2013 13:45:04 +0000 (UTC)
+Message-ID: <1459925802.35841.1381239904188.JavaMail.zimbra__33032.3374867023$1381239967$gmane$org@efficios.com>
+References: <48CF5AC71E61DB46B70D0F388054EFFD2679582B@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+	<524D9327.5080704@voxpopuli.im>
+	<1310242451.29692.1381150600398.JavaMail.zimbra@efficios.com>
+	<48CF5AC71E61DB46B70D0F388054EFFD2679AD20@VAL-E-01.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1VTXJA-00045Z-4F
-	for lttng-dev@lists.lttng.org; Tue, 08 Oct 2013 09:26:45 -0400
-In-Reply-To: <5253BDC1.2000506@tbricks.com>
+	(envelope-from <compudj@efficios.com>) id 1VTXb5-00052Y-2m
+	for lttng-dev@lists.lttng.org; Tue, 08 Oct 2013 09:45:17 -0400
+In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD2679AD20@VAL-E-01.valcartier.drdc-rddc.gc.ca>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,94 +24,98 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Dmitri Shubin <sbn@tbricks.com>
-Cc: lttng-dev@lists.lttng.org, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
+To: Daniel Thibault <Daniel.Thibault@drdc-rddc.gc.ca>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
------ Original Message -----
-> From: "Dmitri Shubin" <sbn@tbricks.com>
-> To: lttng-dev@lists.lttng.org
-> Sent: Tuesday, October 8, 2013 4:09:37 AM
-> Subject: [lttng-dev] Typo in urcu_qsbr.h ?
-> 
-> Hi,
-> 
-> In urcu_qsbr.h I can see the following
-> 
->      85  /*
->      86   * QSBR read lock/unlock are guaranteed to be no-ops.
-> Therefore, we expose them
->      87   * in the LGPL header for any code to use. However, the debug
-> version is not
->      88   * nops and may contain sanity checks. To activate it,
-> applications must be
->      89   * recompiled with -DRCU_DEBUG (even non-LGPL/GPL
-> applications). This is the
->      90   * best trade-off between license/performance/code triviality and
->      91   * library debugging & tracing features we could come up with.
->      92   */
->      93
->      94  #if (!defined(BUILD_QSBR_LIB) && defined(RCU_DEBUG))
->      95
->      96  static inline void rcu_read_lock(void)
->      97  {
->      98  }
->      99
->     100  static inline void rcu_read_unlock(void)
->     101  {
->     102  }
->     103
->     104  #else /* !RCU_DEBUG */
->     105
->     106  extern void rcu_read_lock(void);
->     107  extern void rcu_read_unlock(void);
->     108
->     109  #endif /* !RCU_DEBUG */
-> 
-> Shouldn't the condition in line 94 actually be
-> 
->      94  #if (!defined(BUILD_QSBR_LIB) && !defined(RCU_DEBUG))
-> 
-> So when RCU_DEBUG is _not_ defined we get static inlines for
-> rcu_read_{,un}lock() ?
-
-Indeed! Commit pushed:
-
-commit d47b05cb05b91bb9679d127c51bc4beac12b899d
-Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Date:   Tue Oct 8 09:23:10 2013 -0400
-
-    Fix: urcu-qsbr: reversed logic on RCU_DEBUG
-    
-    * Dmitri Shubin <sbn@tbricks.com> wrote:
-    > Shouldn't the condition in line 94 actually be
-    >
-    >      94  #if (!defined(BUILD_QSBR_LIB) && !defined(RCU_DEBUG))
-    >
-    > So when RCU_DEBUG is _not_ defined we get static inlines for
-    > rcu_read_{,un}lock() ?
-    
-    Indeed!
-    
-    Reported-by: Dmitri Shubin <sbn@tbricks.com>
-    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-
-Thanks for reporting!
-
-Mathieu
-
-
-> 
-> Thanks!
-> 
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> 
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+CgotLS0tLSBPcmlnaW5hbCBNZXNzYWdlIC0tLS0tCj4gRnJvbTogIkRhbmllbCBUaGliYXVsdCIg
+PERhbmllbC5UaGliYXVsdEBkcmRjLXJkZGMuZ2MuY2E+Cj4gVG86ICJNYXRoaWV1IERlc25veWVy
+cyIgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4sICJBbGV4YW5kcmUgTW9udHBsYWlz
+aXIiIDxhbGV4bW9udGh5QHZveHBvcHVsaS5pbT4KPiBDYzogbHR0bmctZGV2QGxpc3RzLmx0dG5n
+Lm9yZwo+IFNlbnQ6IE1vbmRheSwgT2N0b2JlciA3LCAyMDEzIDEwOjQwOjI4IEFNCj4gU3ViamVj
+dDogUkU6IFtsdHRuZy1kZXZdIE1ha2luZyAzMi1iaXQgdXNlci1zcGFjZSBldmVudHMgb24gYSA2
+NC1iaXQgTGludXggc3lzdGVtCj4gCj4gLS0tLS1NZXNzYWdlIGQnb3JpZ2luZS0tLS0tCj4gRGXC
+oDogTWF0aGlldSBEZXNub3llcnMgW21haWx0bzptYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5j
+b21dCj4gRW52b3nDqcKgOiA3IG9jdG9icmUgMjAxMyAwODo1Nwo+IAo+IC0tLS0tIE9yaWdpbmFs
+IE1lc3NhZ2UgLS0tLS0KPiA+IEZyb206ICJBbGV4YW5kcmUgTW9udHBsYWlzaXIiIDxhbGV4bW9u
+dGh5QHZveHBvcHVsaS5pbT4KPiA+IFNlbnQ6IFRodXJzZGF5LCBPY3RvYmVyIDMsIDIwMTMgMTE6
+NTQ6MTUgQU0KPiA+IAo+ID4gPiAgICBPbiBhIGRpZmZlcmVudCBub3RlLCB3aHkgZG9lcyBMVFRu
+ZyBoYXZlIDMyLSBhbmQgNjQtYml0IGNvbnN1bWVycwo+ID4gPiAgICBhbnl3YXk/ICBUaGUgb25s
+eSBwb3NzaWJsZSBkaWZmZXJlbmNlIGJldHdlZW4gYSAzMi1iaXQgdHJhY2VyIGFuZAo+ID4gPiBh
+IDY0LWJpdCB0cmFjZXIgaXMgdGhhdCB0aGUgbGF0dGVyIGNvdWxkIGdlbmVyYXRlIGV2ZW50IHJl
+Y29yZAo+ID4gPiBmaWVsZHMgdGhhdCBhcmUgNjQtYml0IGxvbmdzIGFuZCBmbG9hdHMsIHdoaWxl
+IHRoZSBmb3JtZXIgY2Fubm90Cj4gPiA+IChidXQgd2lsbCBuZXZlciBoYXZlIHRvLCBzaW5jZSB0
+aGUgYXBwbGljYXRpb24gaXQgaXMgdHJhY2luZyB3b24ndAo+ID4gPiBoYXZlIHN1Y2ggYmVhc3Rz
+IGFueXdheSkuCj4gPgo+ID4gTm8sIHRoaXMgaXMgbm90IGl0IGF0IGFsbC4gMzItYml0IGFwcHMg
+Y2FuIGdlbmVyYXRlIDY0LWJpdCBpbnRlZ2VycyB0b28sCj4gPiBhbmQgZG91YmxlLXByZWNpc2lv
+biBmbG9hdHMuCj4gCj4gICAgSSByZWFsaXNlZCB0aGF0IHNvb24gYWZ0ZXIgaGF2aW5nIHdyaXR0
+ZW4gdGhlIGFib3ZlLCB3aGVuIEkgbG9va2VkIHVwIHRoZQo+ICAgIEMgc3BlYy4gIENsZWFybHks
+IHRoZSBldmVudCByZWNvcmRzIGFyZSBwcmVjaXNlbHkgdGhlIHNhbWUgaW4gMzItIGFuZAo+ICAg
+IDY0LWJpdCBtb2Rlcy4gIEJ1dCBpZiB0aGUgZXZlbnQgYnVmZmVycyBkb24ndCBoYXZlIGludHJp
+bnNpYyBiaXRuZXNzLAo+ICAgIHNvbWV0aGluZyBlbHNlIG11c3QgYmUgcmVzcG9uc2libGUgZm9y
+IHRoZSByZXF1aXJlbWVudCBmb3IgMzItYml0Cj4gICAgY29uc3VtZXJzLiAgRG9lcyBtbWFwIGhh
+dmUgYSBiaXRuZXNzIGJhcnJpZXI/ICBPciBkbyB0aGUgZXZlbnQgYnVmZmVycwo+ICAgIGhhdmUg
+aW50cmluc2ljIGJpdG5lc3MgaW4gdGhlIHNlbnNlIHRoYXQgdGhlIGJ1ZmZlciBtYW5hZ2VtZW50
+IGZpZWxkcwo+ICAgIGNoYW5nZT8KPiAKPiA+IFRoZSBkaWZmZXJlbmNlIGJldHdlZW4gMzIgYW5k
+IDY0LWJpdCBjb25zdW1lcnMgbWFpbmx5IGNvbWVzIGZvciBhdG9taWMKPiA+IG9wZXJhdGlvbnM6
+IG9uIDY0LWJpdCwKPiA+IGNvbnN1bWVyIGFuZCBhcHBsaWNhdGlvbiBjYW4gaW50ZXJhY3QgdGhy
+b3VnaCBhdG9taWMgb3BlcmF0aW9ucyBvbiA2NC1iaXQKPiA+IGludGVnZXJzLCB3aGljaCBhbGxv
+dwo+ID4gZGV0ZWN0aW9uIG9mIGZyZWUtcnVubmluZyBjb3VudGVyIG92ZXJmbG93IG11Y2ggbGFy
+Z2VyIHRoYW4gd2l0aCAzMi1iaXQKPiA+IGNvdW50ZXIuCj4gPgo+ID4gTWF0aGlldQo+IAo+ICAg
+IElmIEkgdW5kZXJzdGFuZCB5b3UgY29ycmVjdGx5LCB0aGUgNjQtYml0IGF0b21pYyBvcGVyYXRp
+b25zIG5lZWRlZCBhcmUgbm90Cj4gICAgYXZhaWxhYmxlIGluIHRoZSAzMi1iaXQgYXNzZW1ibHkg
+Y29kZS4gIE1ha2VzIHNlbnNlLiAgT25lIGFsc28gc2VlcyB0aGF0Cj4gICAgdGhlIGR5bmFtaWMg
+bG9hZGVyIGhhcyAzMi0gYW5kIDY0LWJpdCBvcGVyYXRpbmcgbW9kZXMsIGR1ZSBtb3N0bHkgdG8K
+PiAgICBkaWZmZXJlbnQgRUxGIGZvcm1hdHMuICBCdXQgaXMgdGhlcmUgYW55dGhpbmcgaW4gdGhl
+IHByb2Nlc3Nvcgo+ICAgIGFyY2hpdGVjdHVyZSB0aGF0IG1ha2VzIGl0IGltcG9zc2libGUgKG9y
+IHVuZGVzaXJhYmxlIGJlY2F1c2Ugb2YsIHNheSwKPiAgICBzb21lIHNvcnQgb2YgY29udGV4dC1z
+d2l0Y2hpbmcpIGZvciBhIDY0LWJpdCBwcm9jZXNzb3IgcnVubmluZyAzMi1iaXQKPiAgICBjb2Rl
+IHRvIGluc2VydCA2NC1iaXQgaW5zdHJ1Y3Rpb25zIGluIHRoZSBjb2RlIGZsb3c/ICBBbHRlcm5h
+dGVseSwgaG93Cj4gICAgaGFyZCBpcyBpdCBmb3IgMzItYml0IGNvZGUgdG8gY2FsbCBhIDY0LWJp
+dCBsaWJyYXJ5PyAgKEluIHNvbWUgd2F5cywgdGhpcwo+ICAgIGlzIHNpbWlsYXIgdG8gaW5zZXJ0
+aW5nIGFuIGV4dGVybmFsIGNhbGwgb3IgYSBwaWVjZSBvZiBhc3NlbWJseSBjb2RlIGluCj4gICAg
+aGlnaC1sZXZlbCBsYW5ndWFnZSBjb2RlIHN1Y2ggYXMgT2JqZWN0IFBhc2NhbCkgIFRha2luZyB5
+ZXQgYW5vdGhlciBzdGVwCj4gICAgYmFjaywgd2hhdCBpcyBpdCBhYm91dCB0aGUgZXZlbnQgYnVm
+ZmVyIGx5aW5nIGluIGEgMzItYml0IHByb2Nlc3MncyBzcGFjZQo+ICAgIHRoYXQgbWFrZXMgaXQg
+dW5kZXNpcmFibGUvZGlmZmljdWx0L2ltcG9zc2libGUgZm9yIGEgNjQtYml0IGNvbnN1bWVyIHRv
+Cj4gICAgYWNjZXNzIGl0Pwo+ICAgIE9idmlvdXNseSwgd2hlbiBydW5uaW5nIG9uIGEgMzItYml0
+IHByb2Nlc3NvciBMVFRuZyBoYXMgbm8gY2hvaWNlIGJ1dCB0bwo+ICAgIGJlIDMyLWJpdCB3aWRl
+IHRocm91Z2hvdXQsIGFuZCB0aGVyZWZvcmUgaXQgY2Fubm90IHVzZSB0aGUgZGVzaXJhYmxlCj4g
+ICAgNjQtYml0IGludGVnZXIgYXRvbWljIGNvbXBhcmlzb25zLiAgUnVubmluZyBvbiBhIDY0LWJp
+dCBwcm9jZXNzb3Igc2hvdWxkCj4gICAgYmUgYSB3aG9sbHkgZGlmZmVyZW50IGtldHRsZSBvZiBm
+aXNoLCBob3dldmVyLgoKVHlwaWNhbGx5IE9TZXMgZG9uJ3QgYWxsb3cgMzItYml0IGNvbXBhdGli
+aWxpdHkgcHJvY2Vzc2VzIHRvIHVzZSB0aGUgdXBwZXIgcmVnaXN0ZXIgYml0cyAodGhvc2UgYXJl
+IGNsZWFyZWQgdXBvbiBlbnRyeSBpbnRvIHRoZSBPUykuIFNvIDMyLWJpdCBwcm9jZXNzZXMgdHlw
+aWNhbGx5IG5ldmVyIGNhbGwgYSA2NC1iaXQgbGlicmFyeS4KCldlIGNob3NlIHRvIGhhdmUgYSBj
+b25zdW1lciBkYWVtb24gdGhhdCBtYXRjaCB0aGUgdHJhY2VkIGFwcGxpY2F0aW9uIEFCSSBiaXRu
+ZXNzIHNvIHRoZSBjb25zdW1lciBjYW4gbGluayB0byB0aGUgbGlibHR0bmctdXN0IHJpbmcgYnVm
+ZmVyIGltcGxlbWVudGF0aW9uLCBzbyB3ZSBkb24ndCBoYXZlIHRvIGR1cGxpY2F0ZSBjb2RlIGFj
+cm9zcyBtdWx0aXBsZSBjb2RlLWJhc2VzLCBhbmQgZG9uJ3QgaGF2ZSB0byBwYXJ0aWFsbHkgaW1w
+bGVtZW50IHBpZWNlcyBvZiB0aGUgcmluZyBidWZmZXIgaW50byBkaWZmZXJlbnQgY29kZS1iYXNl
+cywgY29tcGlsZWQgYWNyb3NzIGRpZmZlcmVudCBBQklzLCB0YWxraW5nIHRvIGVhY2ggb3RoZXIg
+dGhyb3VnaCBzaGFyZWQgZGF0YSBzdHJ1Y3R1cmVzIG92ZXIgc2hhcmVkIG1lbW9yeSAocG9zaXgg
+c2htKS4gSW4gc3VtbWFyeSwgdGhpcyBkZWNpc2lvbiBoYXMgYmVlbiBkb25lIGZvciBzaW1wbGlj
+aXR5IG9mIGltcGxlbWVudGF0aW9uLgoKSGF2aW5nIGEgNjQtYml0IGNvbnN1bWVyIHRoYXQgY291
+bGQgZGVhbCB3aXRoIGJvdGggMzItYml0IGFuZCA2NC1iaXQgcHJvY2Vzc2VzIGNvdWxkIGV2ZW50
+dWFsbHkgYmUgZG9uZS4gVGhlIG1haW4gcmVhc29uIHdoeSBpdCBoYXMgbm90IGJlZW4gZG9uZSBv
+cmlnaW5hbGx5IHdhcyB0aGF0IHdlIGV4cGVjdGVkIGEgbGFyZ2UgY2hhbmdlIGluIHRoZSBVU1Qg
+Y29uc3VtZXIgKGl0IGNhbWUgaW4gdGhlIDIuMiByZWxlYXNlIHdpdGggcGVyLVVJRCBVU1QgYnVm
+ZmVycyksIHdoaWNoIHdhcyBtdWNoIGVhc2llciB0byBkbyBpZiB0aGUgcmluZyBidWZmZXIgd2Fz
+IHNpdHRpbmcgaW4gaXRzIG93biBsaWJyYXJ5LCB1c2VkIGJ5IHRoZSBjb25zdW1lciBkYWVtb24u
+IFdlIGNvdWxkIHJldmlzaXQgdGhpcyBldmVudHVhbGx5IGlmIHRoZXJlIGlzIHN1ZmZpY2llbnQg
+aW50ZXJlc3QgZm9yIHRoaXMgYW5kIGZ1bmRpbmcgYXZhaWxhYmxlLgoKVGhhbmtzLAoKTWF0aGll
+dQoKCj4gCj4gRGFuaWVsIFUuIFRoaWJhdWx0Cj4gUHJvdGVjdGlvbiBkZXMgc3lzdMOobWVzIGV0
+IGNvbnRyZW1lc3VyZXMgKFBTQykgfCBTeXN0ZW1zIFByb3RlY3Rpb24gJgo+IENvdW50ZXJtZWFz
+dXJlcyAoU1BDKQo+IEN5YmVyIHPDqWN1cml0w6kgcG91ciBsZXMgbWlzc2lvbnMgZXNzZW50aWVs
+bGVzIChDTUUpIHwgTWlzc2lvbiBDcml0aWNhbCBDeWJlcgo+IFNlY3VyaXR5IChNQ0NTKQo+IFIg
+JiBEIHBvdXIgbGEgZMOpZmVuc2UgQ2FuYWRhIC0gVmFsY2FydGllciAoUkREQyBWYWxjYXJ0aWVy
+KSB8IERlZmVuY2UgUiZECj4gQ2FuYWRhIC0gVmFsY2FydGllciAoRFJEQyBWYWxjYXJ0aWVyKQo+
+IDI0NTkgcm91dGUgZGUgbGEgQnJhdm91cmUKPiBRdcOpYmVjIFFDICBHM0ogMVg1Cj4gQ0FOQURB
+Cj4gVm94IDogKDQxOCkgODQ0LTQwMDAgeDQyNDUKPiBGYXggOiAoNDE4KSA4NDQtNDUzOAo+IE5B
+QyA6IDkxOFYgUVNESiA8aHR0cDovL3d3dy50cmF2ZWxnaXMuY29tL21hcC5hc3A/YWRkcj05MThW
+JTIwUVNESj4KPiBHb3V2ZXJuZW1lbnQgZHUgQ2FuYWRhIHwgR292ZXJubWVudCBvZiBDYW5hZGEK
+PiA8aHR0cDovL3d3dy52YWxjYXJ0aWVyLmRyZGMtcmRkYy5nYy5jYS8+Cj4gCgotLSAKTWF0aGll
+dSBEZXNub3llcnMKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxp
+bmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcv
+Y2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
