@@ -1,17 +1,19 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-modules v2] Add new tracepoint in KVM.
-Date: Thu, 10 Oct 2013 14:38:21 +0000 (UTC)
-Message-ID: <2117286113.37152.1381415901023.JavaMail.zimbra__8735.72057248584$1381415963$gmane$org@efficios.com>
-References: <1381283373-25699-1-git-send-email-mohamad.gebai@polymtl.ca>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Subject: Re: Sub-buffer multiplicity on multi-core systems
+Date: Thu, 10 Oct 2013 14:41:18 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD2679C499__23928.0540300117$1381416133$gmane$org@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+References: <48CF5AC71E61DB46B70D0F388054EFFD2679C443@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+	<1788169622.37097.1381415460145.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1VUHNi-0002Pd-Fd
-	for lttng-dev@lists.lttng.org; Thu, 10 Oct 2013 10:38:32 -0400
-In-Reply-To: <1381283373-25699-1-git-send-email-mohamad.gebai@polymtl.ca>
+	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1VUHQW-0002eo-NA
+	for lttng-dev@lists.lttng.org; Thu, 10 Oct 2013 10:41:26 -0400
+In-Reply-To: <1788169622.37097.1381415460145.JavaMail.zimbra@efficios.com>
+Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,118 +22,39 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mohamad Gebai <mohamad.gebai@gmail.com>
-Cc: lttng-dev@lists.lttng.org, Mohamad Gebai <mohamad.gebai@polymtl.ca>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
------ Original Message -----
-> From: "Mohamad Gebai" <mohamad.gebai@gmail.com>
-> To: lttng-dev@lists.lttng.org
-> Cc: "Mohamad Gebai" <mohamad.gebai@polymtl.ca>
-> Sent: Tuesday, October 8, 2013 9:49:32 PM
-> Subject: [lttng-dev] [PATCH lttng-modules v2] Add new tracepoint in KVM.
-
-For next patches, please remove the dot from the end of patch title.
-
-Also, since your email "From" is @gmail.com, it does not match your polymtl address. I'm assuming the Author is from polymtl.
-
-I think you could add a From field within the patch header next time to correct this.
-
-Merged,
-
-Thanks!
-
-Mathieu
-
-> 
-> New tracepoint added in kvm: kvm_write_tsc_offset.
-> 
-> Signed-off-by: Mohamad Gebai <mohamad.gebai@polymtl.ca>
-> ---
->  .../events/lttng-module/arch/x86/kvm/trace.h       |   23
->  ++++++++++++++++++++
->  .../events/mainline/arch/x86/kvm/trace.h           |   21 ++++++++++++++++++
->  2 files changed, 44 insertions(+)
-> 
-> diff --git a/instrumentation/events/lttng-module/arch/x86/kvm/trace.h
-> b/instrumentation/events/lttng-module/arch/x86/kvm/trace.h
-> index 8e71a7f..5eec169 100644
-> --- a/instrumentation/events/lttng-module/arch/x86/kvm/trace.h
-> +++ b/instrumentation/events/lttng-module/arch/x86/kvm/trace.h
-> @@ -761,6 +761,29 @@ TRACE_EVENT(
->  		  __entry->gpa_match ? "GPA" : "GVA")
->  )
->  
-> +#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,11,0))
-> +TRACE_EVENT(kvm_write_tsc_offset,
-> +	TP_PROTO(unsigned int vcpu_id, __u64 previous_tsc_offset,
-> +		 __u64 next_tsc_offset),
-> +	TP_ARGS(vcpu_id, previous_tsc_offset, next_tsc_offset),
-> +
-> +	TP_STRUCT__entry(
-> +		__field( unsigned int,	vcpu_id				)
-> +		__field(	__u64,	previous_tsc_offset		)
-> +		__field(	__u64,	next_tsc_offset			)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		tp_assign(vcpu_id, vcpu_id)
-> +		tp_assign(previous_tsc_offset, previous_tsc_offset)
-> +		tp_assign(next_tsc_offset, next_tsc_offset)
-> +	),
-> +
-> +	TP_printk("vcpu=%u prev=%llu next=%llu", __entry->vcpu_id,
-> +		  __entry->previous_tsc_offset, __entry->next_tsc_offset)
-> +)
-> +#endif
-> +
->  #ifdef CONFIG_X86_64
->  
->  #define host_clocks					\
-> diff --git a/instrumentation/events/mainline/arch/x86/kvm/trace.h
-> b/instrumentation/events/mainline/arch/x86/kvm/trace.h
-> index fe5e00e..545245d 100644
-> --- a/instrumentation/events/mainline/arch/x86/kvm/trace.h
-> +++ b/instrumentation/events/mainline/arch/x86/kvm/trace.h
-> @@ -756,6 +756,27 @@ TRACE_EVENT(
->  		  __entry->gpa_match ? "GPA" : "GVA")
->  );
->  
-> +TRACE_EVENT(kvm_write_tsc_offset,
-> +	TP_PROTO(unsigned int vcpu_id, __u64 previous_tsc_offset,
-> +		 __u64 next_tsc_offset),
-> +	TP_ARGS(vcpu_id, previous_tsc_offset, next_tsc_offset),
-> +
-> +	TP_STRUCT__entry(
-> +		__field( unsigned int,	vcpu_id				)
-> +		__field(	__u64,	previous_tsc_offset		)
-> +		__field(	__u64,	next_tsc_offset			)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__entry->vcpu_id		= vcpu_id;
-> +		__entry->previous_tsc_offset	= previous_tsc_offset;
-> +		__entry->next_tsc_offset	= next_tsc_offset;
-> +	),
-> +
-> +	TP_printk("vcpu=%u prev=%llu next=%llu", __entry->vcpu_id,
-> +		  __entry->previous_tsc_offset, __entry->next_tsc_offset)
-> +);
-> +
->  #ifdef CONFIG_X86_64
->  
->  #define host_clocks					\
-> --
-> 1.7.10.4
-> 
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> 
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+PiA+ICAgIFRoYW5rcyBmb3IgY29uZmlybWluZyB0aGUgMToxIGNvcnJlc3BvbmRlbmNlIGJldHdl
+ZW4gY2hhbm5lbHMgYW5kIGZpbGVzLg0KPiA+ICAgIEkgd2FudGVkIHRvIG1ha2Ugc3VyZSBJIHVu
+ZGVyc3Rvb2QgdGhlIGlucyBhbmQgb3V0cyBwcm9wZXJseS4NCj4NCj4gTm90IHF1aXRlLA0KPg0K
+PiBJdCdzIGEgMToxIGNvcnJlc3BvbmRlbmNlIGJldHdlZW4gcmluZyBidWZmZXIgYW5kIGZpbGUu
+DQo+IDE6TiBjb3JyZXNwb25kZW5jZSBiZXR3ZWVuIGNoYW5uZWwgYW5kIHJpbmcgYnVmZmVycy4g
+KHR5cGljYWxseSwgTiBiZWluZyB0aGUgbnVtYmVyIG9mIGNwdXMpICh0aGVyZWZvcmUgMTpOIGNv
+cnJlc3BvbmRlbmNlIGJldHdlZW4gY2hhbm5lbCBhbmQgZmlsZXMpDQo+IDE6TSBjb3JyZXNwb25k
+ZW5jZSBiZXR3ZWVuIHJpbmcgYnVmZmVyIGFuZCBzdWItYnVmZmVycy4gKE0gYmVpbmcgdGhlIG51
+bWJlciBvZiBzdWJidWZmZXJzIHBlciBidWZmZXJzLCBjb25maWd1cmFibGUgb24gYSBwZXItY2hh
+bm5lbCBiYXNpcykNCj4gMToxIGNvcnJlc3BvbmRlbmNlIGJldHdlZW4gc3ViLWJ1ZmZlciBhbmQg
+Q1RGIHRyYWNlIHBhY2tldC4NCj4NCj4gTWF0aGlldQ0KDQogICBJIG1lYW50IDE6MSBjb3JyZXNw
+b25kZW5jZSBiZXR3ZWVuIGNoYW5uZWwrY3B1IGFuZCBmaWxlLCBhcyB5b3Ugc2FpZCAoSSBzaG91
+bGQgaGF2ZSBzdGF5ZWQgaW4gYmVkIHRoaXMgbW9ybmluZyA6LSkgKS4NCg0KICAgSW4gYSBzaXR1
+YXRpb24gd2hlcmUgYWxsIHVzZXItc3BhY2UgZXZlbnRzIGFyZSBiZWluZyB0cmFjZWQgcGVyIFVJ
+RCwgYXJlbid0IHRoZSByaW5nIGJ1ZmZlcnMgZnVydGhlciBkdXBsaWNhdGVkIGlmIHRoZXJlIGFy
+ZSBib3RoIDMyLSBhbmQgNjQtYml0IGV2ZW50cz8gIEl0IHdvdWxkIHNlZW0gc28gc2luY2UgeW91
+IHdpbGwgZ2V0IGJvdGggYSBzZXNzaW9uL3VzdC91aWQvMTAwMC82NC1iaXQvY2hhbm5lbDBfMCBm
+aWxlIGFuZCBhIHNlc3Npb24vdXN0L3VpZC8xMDAwLzMyLWJpdC9jaGFubmVsMF8wIGZpbGUuDQoN
+CkRhbmllbCBVLiBUaGliYXVsdA0KUHJvdGVjdGlvbiBkZXMgc3lzdMOobWVzIGV0IGNvbnRyZW1l
+c3VyZXMgKFBTQykgfCBTeXN0ZW1zIFByb3RlY3Rpb24gJiBDb3VudGVybWVhc3VyZXMgKFNQQykN
+CkN5YmVyIHPDqWN1cml0w6kgcG91ciBsZXMgbWlzc2lvbnMgZXNzZW50aWVsbGVzIChDTUUpIHwg
+TWlzc2lvbiBDcml0aWNhbCBDeWJlciBTZWN1cml0eSAoTUNDUykNClIgJiBEIHBvdXIgbGEgZMOp
+ZmVuc2UgQ2FuYWRhIC0gVmFsY2FydGllciAoUkREQyBWYWxjYXJ0aWVyKSB8IERlZmVuY2UgUiZE
+IENhbmFkYSAtIFZhbGNhcnRpZXIgKERSREMgVmFsY2FydGllcikNCjI0NTkgcm91dGUgZGUgbGEg
+QnJhdm91cmUNClF1w6liZWMgUUMgIEczSiAxWDUNCkNBTkFEQQ0KVm94IDogKDQxOCkgODQ0LTQw
+MDAgeDQyNDUNCkZheCA6ICg0MTgpIDg0NC00NTM4DQpOQUMgOiA5MThWIFFTREogPGh0dHA6Ly93
+d3cudHJhdmVsZ2lzLmNvbS9tYXAuYXNwP2FkZHI9OTE4ViUyMFFTREo+DQpHb3V2ZXJuZW1lbnQg
+ZHUgQ2FuYWRhIHwgR292ZXJubWVudCBvZiBDYW5hZGENCjxodHRwOi8vd3d3LnZhbGNhcnRpZXIu
+ZHJkYy1yZGRjLmdjLmNhLz4NCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9y
+ZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1k
+ZXYK
