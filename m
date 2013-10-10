@@ -1,17 +1,16 @@
-From: Mohamad Gebai <mohamad.gebai@gmail.com>
-Subject: [PATCH lttng-modules v2] Add new tracepoint in KVM.
-Date: Tue,  8 Oct 2013 21:49:32 -0400
-Message-ID: <1381283373-25699-1-git-send-email-mohamad.gebai__19070.2329426587$1381283460$gmane$org@polymtl.ca>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Subject: Re: Sub-buffer multiplicity on multi-core systems
+Date: Thu, 10 Oct 2013 12:33:56 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD2679C443__39890.0242093534$1381408487$gmane$org@VAL-E-01.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-vc0-f172.google.com ([209.85.220.172])
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <mohamad.gebai@gmail.com>) id 1VTium-0001Rh-Bj
-	for lttng-dev@lists.lttng.org; Tue, 08 Oct 2013 21:50:20 -0400
-Received: by mail-vc0-f172.google.com with SMTP id hu8so86462vcb.3
-	for <lttng-dev@lists.lttng.org>; Tue, 08 Oct 2013 18:50:10 -0700 (PDT)
+	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1VUFRG-0001ex-8M
+	for lttng-dev@lists.lttng.org; Thu, 10 Oct 2013 08:34:02 -0400
+Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,83 +19,34 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
-Cc: Mohamad Gebai <mohamad.gebai@polymtl.ca>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-New tracepoint added in kvm: kvm_write_tsc_offset.
+Date: Tue, 8 Oct 2013 17:57:23 -0400
+From: J?r?mie Galarneau <jeremie.galarneau@efficios.com>
 
-Signed-off-by: Mohamad Gebai <mohamad.gebai@polymtl.ca>
----
- .../events/lttng-module/arch/x86/kvm/trace.h       |   23 ++++++++++++++++++++
- .../events/mainline/arch/x86/kvm/trace.h           |   21 ++++++++++++++++++
- 2 files changed, 44 insertions(+)
+> In kernel tracing, ring buffers are separate per CPU, per channel.
+> Each ring buffer is flushed into its own CTF data stream file. These
+> streams are only "merged" by Babeltrace (or any other reader) while
+> reading the trace.
+>
+> J?r?mie
 
-diff --git a/instrumentation/events/lttng-module/arch/x86/kvm/trace.h b/instrumentation/events/lttng-module/arch/x86/kvm/trace.h
-index 8e71a7f..5eec169 100644
---- a/instrumentation/events/lttng-module/arch/x86/kvm/trace.h
-+++ b/instrumentation/events/lttng-module/arch/x86/kvm/trace.h
-@@ -761,6 +761,29 @@ TRACE_EVENT(
- 		  __entry->gpa_match ? "GPA" : "GVA")
- )
- 
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,11,0))
-+TRACE_EVENT(kvm_write_tsc_offset,
-+	TP_PROTO(unsigned int vcpu_id, __u64 previous_tsc_offset,
-+		 __u64 next_tsc_offset),
-+	TP_ARGS(vcpu_id, previous_tsc_offset, next_tsc_offset),
-+
-+	TP_STRUCT__entry(
-+		__field( unsigned int,	vcpu_id				)
-+		__field(	__u64,	previous_tsc_offset		)
-+		__field(	__u64,	next_tsc_offset			)
-+	),
-+
-+	TP_fast_assign(
-+		tp_assign(vcpu_id, vcpu_id)
-+		tp_assign(previous_tsc_offset, previous_tsc_offset)
-+		tp_assign(next_tsc_offset, next_tsc_offset)
-+	),
-+
-+	TP_printk("vcpu=%u prev=%llu next=%llu", __entry->vcpu_id,
-+		  __entry->previous_tsc_offset, __entry->next_tsc_offset)
-+)
-+#endif
-+
- #ifdef CONFIG_X86_64
- 
- #define host_clocks					\
-diff --git a/instrumentation/events/mainline/arch/x86/kvm/trace.h b/instrumentation/events/mainline/arch/x86/kvm/trace.h
-index fe5e00e..545245d 100644
---- a/instrumentation/events/mainline/arch/x86/kvm/trace.h
-+++ b/instrumentation/events/mainline/arch/x86/kvm/trace.h
-@@ -756,6 +756,27 @@ TRACE_EVENT(
- 		  __entry->gpa_match ? "GPA" : "GVA")
- );
- 
-+TRACE_EVENT(kvm_write_tsc_offset,
-+	TP_PROTO(unsigned int vcpu_id, __u64 previous_tsc_offset,
-+		 __u64 next_tsc_offset),
-+	TP_ARGS(vcpu_id, previous_tsc_offset, next_tsc_offset),
-+
-+	TP_STRUCT__entry(
-+		__field( unsigned int,	vcpu_id				)
-+		__field(	__u64,	previous_tsc_offset		)
-+		__field(	__u64,	next_tsc_offset			)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->vcpu_id		= vcpu_id;
-+		__entry->previous_tsc_offset	= previous_tsc_offset;
-+		__entry->next_tsc_offset	= next_tsc_offset;
-+	),
-+
-+	TP_printk("vcpu=%u prev=%llu next=%llu", __entry->vcpu_id,
-+		  __entry->previous_tsc_offset, __entry->next_tsc_offset)
-+);
-+
- #ifdef CONFIG_X86_64
- 
- #define host_clocks					\
--- 
-1.7.10.4
+   Thanks for confirming the 1:1 correspondence between channels and files.=
+  I wanted to make sure I understood the ins and outs properly.
+
+Daniel U. Thibault
+Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
+ntermeasures (SPC)
+Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
+Cyber Security (MCCS)
+R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
+ Canada - Valcartier (DRDC Valcartier)
+2459 route de la Bravoure
+Qu=E9bec QC  G3J 1X5
+CANADA
+Vox : (418) 844-4000 x4245
+Fax : (418) 844-4538
+NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+Gouvernement du Canada | Government of Canada
+<http://www.valcartier.drdc-rddc.gc.ca/>
