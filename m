@@ -1,16 +1,17 @@
-From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Subject: Re: Sub-buffer multiplicity on multi-core systems
-Date: Thu, 10 Oct 2013 12:33:56 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD2679C443__39890.0242093534$1381408487$gmane$org@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+Date: Thu, 10 Oct 2013 14:31:00 +0000 (UTC)
+Message-ID: <1788169622.37097.1381415460145.JavaMail.zimbra__31602.6089982644$1381415523$gmane$org@efficios.com>
+References: <48CF5AC71E61DB46B70D0F388054EFFD2679C443@VAL-E-01.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
+Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1VUFRG-0001ex-8M
-	for lttng-dev@lists.lttng.org; Thu, 10 Oct 2013 08:34:02 -0400
-Content-Language: fr-FR
+	(envelope-from <compudj@efficios.com>) id 1VUHGd-0001qa-57
+	for lttng-dev@lists.lttng.org; Thu, 10 Oct 2013 10:31:12 -0400
+In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD2679C443@VAL-E-01.valcartier.drdc-rddc.gc.ca>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,34 +20,46 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Daniel Thibault <Daniel.Thibault@drdc-rddc.gc.ca>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Date: Tue, 8 Oct 2013 17:57:23 -0400
-From: J?r?mie Galarneau <jeremie.galarneau@efficios.com>
-
-> In kernel tracing, ring buffers are separate per CPU, per channel.
-> Each ring buffer is flushed into its own CTF data stream file. These
-> streams are only "merged" by Babeltrace (or any other reader) while
-> reading the trace.
->
-> J?r?mie
-
-   Thanks for confirming the 1:1 correspondence between channels and files.=
-  I wanted to make sure I understood the ins and outs properly.
-
-Daniel U. Thibault
-Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
-ntermeasures (SPC)
-Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
-Cyber Security (MCCS)
-R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
- Canada - Valcartier (DRDC Valcartier)
-2459 route de la Bravoure
-Qu=E9bec QC  G3J 1X5
-CANADA
-Vox : (418) 844-4000 x4245
-Fax : (418) 844-4538
-NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-Gouvernement du Canada | Government of Canada
-<http://www.valcartier.drdc-rddc.gc.ca/>
+CgotLS0tLSBPcmlnaW5hbCBNZXNzYWdlIC0tLS0tCj4gRnJvbTogIkRhbmllbCBUaGliYXVsdCIg
+PERhbmllbC5UaGliYXVsdEBkcmRjLXJkZGMuZ2MuY2E+Cj4gVG86IGx0dG5nLWRldkBsaXN0cy5s
+dHRuZy5vcmcKPiBTZW50OiBUaHVyc2RheSwgT2N0b2JlciAxMCwgMjAxMyA4OjMzOjU2IEFNCj4g
+U3ViamVjdDogUmU6IFtsdHRuZy1kZXZdIFN1Yi1idWZmZXIgbXVsdGlwbGljaXR5IG9uIG11bHRp
+LWNvcmUgc3lzdGVtcwo+IAo+IERhdGU6IFR1ZSwgOCBPY3QgMjAxMyAxNzo1NzoyMyAtMDQwMAo+
+IEZyb206IEo/cj9taWUgR2FsYXJuZWF1IDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20+
+Cj4gCj4gPiBJbiBrZXJuZWwgdHJhY2luZywgcmluZyBidWZmZXJzIGFyZSBzZXBhcmF0ZSBwZXIg
+Q1BVLCBwZXIgY2hhbm5lbC4KPiA+IEVhY2ggcmluZyBidWZmZXIgaXMgZmx1c2hlZCBpbnRvIGl0
+cyBvd24gQ1RGIGRhdGEgc3RyZWFtIGZpbGUuIFRoZXNlCj4gPiBzdHJlYW1zIGFyZSBvbmx5ICJt
+ZXJnZWQiIGJ5IEJhYmVsdHJhY2UgKG9yIGFueSBvdGhlciByZWFkZXIpIHdoaWxlCj4gPiByZWFk
+aW5nIHRoZSB0cmFjZS4KPiA+Cj4gPiBKP3I/bWllCj4gCj4gICAgVGhhbmtzIGZvciBjb25maXJt
+aW5nIHRoZSAxOjEgY29ycmVzcG9uZGVuY2UgYmV0d2VlbiBjaGFubmVscyBhbmQgZmlsZXMuCj4g
+ICAgSSB3YW50ZWQgdG8gbWFrZSBzdXJlIEkgdW5kZXJzdG9vZCB0aGUgaW5zIGFuZCBvdXRzIHBy
+b3Blcmx5LgoKTm90IHF1aXRlLAoKSXQncyBhIDE6MSBjb3JyZXNwb25kZW5jZSBiZXR3ZWVuIHJp
+bmcgYnVmZmVyIGFuZCBmaWxlLgoKMTpOIGNvcnJlc3BvbmRlbmNlIGJldHdlZW4gY2hhbm5lbCBh
+bmQgcmluZyBidWZmZXJzLiAodHlwaWNhbGx5LCBOIGJlaW5nIHRoZSBudW1iZXIgb2YgY3B1cykK
+KHRoZXJlZm9yZSAxOk4gY29ycmVzcG9uZGVuY2UgYmV0d2VlbiBjaGFubmVsIGFuZCBmaWxlcykK
+CjE6TSBjb3JyZXNwb25kZW5jZSBiZXR3ZWVuIHJpbmcgYnVmZmVyIGFuZCBzdWItYnVmZmVycy4g
+KE0gYmVpbmcgdGhlIG51bWJlciBvZiBzdWJidWZmZXJzIHBlciBidWZmZXJzLCBjb25maWd1cmFi
+bGUgb24gYSBwZXItY2hhbm5lbCBiYXNpcykKMToxIGNvcnJlc3BvbmRlbmNlIGJldHdlZW4gc3Vi
+LWJ1ZmZlciBhbmQgQ1RGIHRyYWNlIHBhY2tldC4KClRoYW5rcywKCk1hdGhpZXUKCj4gCj4gRGFu
+aWVsIFUuIFRoaWJhdWx0Cj4gUHJvdGVjdGlvbiBkZXMgc3lzdMOobWVzIGV0IGNvbnRyZW1lc3Vy
+ZXMgKFBTQykgfCBTeXN0ZW1zIFByb3RlY3Rpb24gJgo+IENvdW50ZXJtZWFzdXJlcyAoU1BDKQo+
+IEN5YmVyIHPDqWN1cml0w6kgcG91ciBsZXMgbWlzc2lvbnMgZXNzZW50aWVsbGVzIChDTUUpIHwg
+TWlzc2lvbiBDcml0aWNhbCBDeWJlcgo+IFNlY3VyaXR5IChNQ0NTKQo+IFIgJiBEIHBvdXIgbGEg
+ZMOpZmVuc2UgQ2FuYWRhIC0gVmFsY2FydGllciAoUkREQyBWYWxjYXJ0aWVyKSB8IERlZmVuY2Ug
+UiZECj4gQ2FuYWRhIC0gVmFsY2FydGllciAoRFJEQyBWYWxjYXJ0aWVyKQo+IDI0NTkgcm91dGUg
+ZGUgbGEgQnJhdm91cmUKPiBRdcOpYmVjIFFDICBHM0ogMVg1Cj4gQ0FOQURBCj4gVm94IDogKDQx
+OCkgODQ0LTQwMDAgeDQyNDUKPiBGYXggOiAoNDE4KSA4NDQtNDUzOAo+IE5BQyA6IDkxOFYgUVNE
+SiA8aHR0cDovL3d3dy50cmF2ZWxnaXMuY29tL21hcC5hc3A/YWRkcj05MThWJTIwUVNESj4KPiBH
+b3V2ZXJuZW1lbnQgZHUgQ2FuYWRhIHwgR292ZXJubWVudCBvZiBDYW5hZGEKPiA8aHR0cDovL3d3
+dy52YWxjYXJ0aWVyLmRyZGMtcmRkYy5nYy5jYS8+Cj4gCj4gX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX18KPiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4gbHR0
+bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IGh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9t
+YWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo+IAoKLS0gCk1hdGhpZXUgRGVzbm95ZXJzCkVmZmlj
+aU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KCl9fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2
+QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9s
+aXN0aW5mby9sdHRuZy1kZXYK
