@@ -1,103 +1,73 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH babeltrace] Fix: Close traces on
-	context	destruction
-Date: Fri, 11 Oct 2013 20:36:53 +0000 (UTC)
-Message-ID: <1057564991.38082.1381523813765.JavaMail.zimbra__14230.5698748261$1381523887$gmane$org@efficios.com>
-References: <1381421310-9811-1-git-send-email-jeremie.galarneau@efficios.com>
+From: =?ISO-8859-1?Q?Rapha=EBl_Beamonte?= <raphael.beamonte@gmail.com>
+Subject: Non-Preempt Test v1.01
+Date: Mon, 14 Oct 2013 15:05:14 -0400
+Message-ID: <525C406A.5050000@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
-	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1VUjSF-0007ou-TN
-	for lttng-dev@lists.lttng.org; Fri, 11 Oct 2013 16:37:05 -0400
-In-Reply-To: <1381421310-9811-1-git-send-email-jeremie.galarneau@efficios.com>
-List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
-	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
-	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?utf-8?B?SsOpcsOpbWll?= Galarneau <jeremie.galarneau@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+Content-Type: multipart/signed; micalg=pgp-sha1;
+ protocol="application/pgp-signature";
+ boundary="lS6hG23oIGNS4FIqLSM83tHIUXlRTSpDg"
+Return-path: <linux-rt-users-owner@vger.kernel.org>
+Sender: linux-rt-users-owner@vger.kernel.org
+To: linux-rt-users@vger.kernel.org, lttng-dev@lists.lttng.org
+Cc: lwn@lwn.net
 List-Id: lttng-dev@lists.lttng.org
 
-TWVyZ2VkLCB0aGFua3MhCgpNYXRoaWV1CgotLS0tLSBPcmlnaW5hbCBNZXNzYWdlIC0tLS0tCj4g
-RnJvbTogIkrDqXLDqW1pZSBHYWxhcm5lYXUiIDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5j
-b20+Cj4gVG86IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBTZW50OiBUaHVyc2RheSwgT2N0
-b2JlciAxMCwgMjAxMyAxMjowODozMCBQTQo+IFN1YmplY3Q6IFtsdHRuZy1kZXZdIFtQQVRDSCBi
-YWJlbHRyYWNlXSBGaXg6IENsb3NlIHRyYWNlcyBvbiBjb250ZXh0CWRlc3RydWN0aW9uCj4gCj4g
-YnRfdHJhY2VfaGFuZGxlX2Rlc3Ryb3kgaXMgY2FsbGVkIG9uIGRlc3RydWN0aW9uIG9mIHRoZSB0
-cmFjZV9oYW5kbGUKPiBoYXNoIHRhYmxlJ3MgZWxlbWVudHMuIFRoaXMgZnVuY3Rpb24gb25seSBm
-cmVlcyB0aGUgdHJhY2UgaGFuZGxlLAo+IGxlYXZpbmcgdGhlIGlucHV0IHRyYWNlcyBvcGVuLgo+
-IAo+IFRoaXMgZml4IHNldHMgcmVtb3ZlX3RyYWNlX2hhbmRsZSBhcyB0aGUgdmFsdWVfZGVzdHJv
-eV9mdW5jIGVuc3VyaW5nCj4gdGhhdCB0aGUgZm9ybWF0J3MgY2xvc2VfdHJhY2UgZnVuY3Rpb24g
-aXMgY2FsbGVkIGJlZm9yZSB0aGUgdHJhY2VfaGFuZGxlCj4gaXMgZGVzdHJveWVkLgo+IAo+IFNp
-Z25lZC1vZmYtYnk6IErDqXLDqW1pZSBHYWxhcm5lYXUgPGplcmVtaWUuZ2FsYXJuZWF1QGVmZmlj
-aW9zLmNvbT4KPiAtLS0KPiAgbGliL2NvbnRleHQuYyB8IDU4Cj4gICsrKysrKysrKysrKysrKysr
-KysrKysrKysrKysrKysrKysrKy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KPiAgMSBmaWxlIGNoYW5n
-ZWQsIDM2IGluc2VydGlvbnMoKyksIDIyIGRlbGV0aW9ucygtKQo+IAo+IGRpZmYgLS1naXQgYS9s
-aWIvY29udGV4dC5jIGIvbGliL2NvbnRleHQuYwo+IGluZGV4IGRjNzczNjYuLjVkYzQxMTkgMTAw
-NjQ0Cj4gLS0tIGEvbGliL2NvbnRleHQuYwo+ICsrKyBiL2xpYi9jb250ZXh0LmMKPiBAQCAtMzQs
-NiArMzQsNyBAQAo+ICAjaW5jbHVkZSA8YmFiZWx0cmFjZS90cmFjZS1oYW5kbGUtaW50ZXJuYWwu
-aD4KPiAgI2luY2x1ZGUgPGJhYmVsdHJhY2UvdHJhY2UtY29sbGVjdGlvbi5oPgo+ICAjaW5jbHVk
-ZSA8YmFiZWx0cmFjZS9mb3JtYXQuaD4KPiArI2luY2x1ZGUgPGJhYmVsdHJhY2UvZm9ybWF0LWlu
-dGVybmFsLmg+Cj4gICNpbmNsdWRlIDxiYWJlbHRyYWNlL2JhYmVsdHJhY2UtaW50ZXJuYWwuaD4K
-PiAgI2luY2x1ZGUgPHN0ZGxpYi5oPgo+ICAjaW5jbHVkZSA8c3RyaW5nLmg+Cj4gQEAgLTQ0LDYg
-KzQ1LDggQEAKPiAgCj4gICNpbmNsdWRlIDxnbGliLmg+Cj4gIAo+ICtzdGF0aWMgdm9pZCByZW1v
-dmVfdHJhY2VfaGFuZGxlKHN0cnVjdCBidF90cmFjZV9oYW5kbGUgKmhhbmRsZSk7Cj4gKwo+ICBz
-dHJ1Y3QgYnRfY29udGV4dCAqYnRfY29udGV4dF9jcmVhdGUodm9pZCkKPiAgewo+ICAJc3RydWN0
-IGJ0X2NvbnRleHQgKmN0eDsKPiBAQCAtNTYsNyArNTksNyBAQCBzdHJ1Y3QgYnRfY29udGV4dCAq
-YnRfY29udGV4dF9jcmVhdGUodm9pZCkKPiAgCS8qIEluc3RhbmNpYXRlIHRoZSB0cmFjZSBoYW5k
-bGUgY29udGFpbmVyICovCj4gIAljdHgtPnRyYWNlX2hhbmRsZXMgPSBnX2hhc2hfdGFibGVfbmV3
-X2Z1bGwoZ19kaXJlY3RfaGFzaCwKPiAgCQkJCWdfZGlyZWN0X2VxdWFsLCBOVUxMLAo+IC0JCQkJ
-KEdEZXN0cm95Tm90aWZ5KSBidF90cmFjZV9oYW5kbGVfZGVzdHJveSk7Cj4gKwkJCQkoR0Rlc3Ry
-b3lOb3RpZnkpIHJlbW92ZV90cmFjZV9oYW5kbGUpOwo+ICAKPiAgCWN0eC0+Y3VycmVudF9pdGVy
-YXRvciA9IE5VTEw7Cj4gIAljdHgtPnRjID0gZ19uZXcwKHN0cnVjdCB0cmFjZV9jb2xsZWN0aW9u
-LCAxKTsKPiBAQCAtMTU1LDQzICsxNTgsMzkgQEAgZW5kOgo+ICAKPiAgaW50IGJ0X2NvbnRleHRf
-cmVtb3ZlX3RyYWNlKHN0cnVjdCBidF9jb250ZXh0ICpjdHgsIGludCBoYW5kbGVfaWQpCj4gIHsK
-PiAtCXN0cnVjdCBidF90cmFjZV9oYW5kbGUgKmhhbmRsZTsKPiAgCWludCByZXQ7Cj4gIAo+IC0J
-aWYgKCFjdHgpCj4gLQkJcmV0dXJuIC1FSU5WQUw7Cj4gLQo+IC0JaGFuZGxlID0gZ19oYXNoX3Rh
-YmxlX2xvb2t1cChjdHgtPnRyYWNlX2hhbmRsZXMsCj4gLQkJKGdwb2ludGVyKSAodW5zaWduZWQg
-bG9uZykgaGFuZGxlX2lkKTsKPiAtCWlmICghaGFuZGxlKQo+IC0JCXJldHVybiAtRU5PRU5UOwo+
-ICsJaWYgKCFjdHgpIHsKPiArCQlyZXQgPSAtRUlOVkFMOwo+ICsJCWdvdG8gZW5kOwo+ICsJfQo+
-ICAKPiAtCS8qIFJlbW92ZSBmcm9tIGNvbnRhaW5lcnMgKi8KPiAtCWJ0X3RyYWNlX2NvbGxlY3Rp
-b25fcmVtb3ZlKGN0eC0+dGMsIGhhbmRsZS0+dGQpOwo+IC0JLyogQ2xvc2UgdGhlIHRyYWNlICov
-Cj4gLQlyZXQgPSBoYW5kbGUtPmZvcm1hdC0+Y2xvc2VfdHJhY2UoaGFuZGxlLT50ZCk7Cj4gLQlp
-ZiAocmV0KSB7Cj4gLQkJZnByaW50ZihzdGRlcnIsICJFcnJvciBpbiBjbG9zZV90cmFjZSBjYWxs
-YmFja1xuIik7Cj4gLQkJcmV0dXJuIHJldDsKPiArCS8qCj4gKwkgKiBSZW1vdmUgdGhlIGhhbmRs
-ZS4gcmVtb3ZlX3RyYWNlX2hhbmRsZSB3aWxsIGJlIGNhbGxlZAo+ICsJICogYXV0b21hdGljYWxs
-eS4KPiArCSAqLwo+ICsJaWYgKCFnX2hhc2hfdGFibGVfcmVtb3ZlKGN0eC0+dHJhY2VfaGFuZGxl
-cywKPiArCQkoZ3BvaW50ZXIpICh1bnNpZ25lZCBsb25nKSBoYW5kbGVfaWQpKSB7Cj4gKwkJcmV0
-ID0gLUVOT0VOVDsKPiArCQlnb3RvIGVuZDsKPiAgCX0KPiAtCS8qIFJlbW92ZSBhbmQgZnJlZSB0
-aGUgaGFuZGxlICovCj4gLQlnX2hhc2hfdGFibGVfcmVtb3ZlKGN0eC0+dHJhY2VfaGFuZGxlcywK
-PiAtCQkJKGdwb2ludGVyKSAodW5zaWduZWQgbG9uZykgaGFuZGxlX2lkKTsKPiAtCXJldHVybiAw
-Owo+ICtlbmQ6Cj4gKwlyZXR1cm4gcmV0Owo+ICB9Cj4gIAo+ICBzdGF0aWMKPiAgdm9pZCBidF9j
-b250ZXh0X2Rlc3Ryb3koc3RydWN0IGJ0X2NvbnRleHQgKmN0eCkKPiAgewo+ICAJYXNzZXJ0KGN0
-eCk7Cj4gLQlidF9maW5hbGl6ZV90cmFjZV9jb2xsZWN0aW9uKGN0eC0+dGMpOwo+ICAKPiAgCS8q
-Cj4gIAkgKiBSZW1vdmUgYWxsIHRyYWNlcy4gVGhlIGdfaGFzaF90YWJsZV9kZXN0cm95IHdpbGwg
-Y2FsbAo+IC0JICogYnRfdHJhY2VfaGFuZGxlX2Rlc3Ryb3kgb24gZWFjaCBlbGVtZW50cy4KPiAr
-CSAqIHJlbW92ZV90cmFjZV9oYW5kbGUgb24gZWFjaCBlbGVtZW50Lgo+ICAJICovCj4gIAlnX2hh
-c2hfdGFibGVfZGVzdHJveShjdHgtPnRyYWNlX2hhbmRsZXMpOwo+ICAKPiArCWJ0X2ZpbmFsaXpl
-X3RyYWNlX2NvbGxlY3Rpb24oY3R4LT50Yyk7Cj4gKwo+ICAJLyogY3R4LT50YyBzaG91bGQgYWx3
-YXlzIGJlIHZhbGlkICovCj4gIAlhc3NlcnQoY3R4LT50YyAhPSBOVUxMKTsKPiAgCWdfZnJlZShj
-dHgtPnRjKTsKPiBAQCAtMjExLDMgKzIxMCwxOCBAQCB2b2lkIGJ0X2NvbnRleHRfcHV0KHN0cnVj
-dCBidF9jb250ZXh0ICpjdHgpCj4gIAlpZiAoY3R4LT5yZWZjb3VudCA9PSAwKQo+ICAJCWJ0X2Nv
-bnRleHRfZGVzdHJveShjdHgpOwo+ICB9Cj4gKwo+ICt2b2lkIHJlbW92ZV90cmFjZV9oYW5kbGUo
-c3RydWN0IGJ0X3RyYWNlX2hhbmRsZSAqaGFuZGxlKQo+ICt7Cj4gKwlpbnQgcmV0Owo+ICsKPiAr
-CS8qIFJlbW92ZSBmcm9tIGNvbnRhaW5lcnMgKi8KPiArCWJ0X3RyYWNlX2NvbGxlY3Rpb25fcmVt
-b3ZlKGhhbmRsZS0+dGQtPmN0eC0+dGMsIGhhbmRsZS0+dGQpOwo+ICsJLyogQ2xvc2UgdGhlIHRy
-YWNlICovCj4gKwlyZXQgPSBoYW5kbGUtPmZvcm1hdC0+Y2xvc2VfdHJhY2UoaGFuZGxlLT50ZCk7
-Cj4gKwlpZiAocmV0KSB7Cj4gKwkJZnByaW50ZihzdGRlcnIsICJFcnJvciBpbiBjbG9zZV90cmFj
-ZSBjYWxsYmFja1xuIik7Cj4gKwl9Cj4gKwo+ICsJYnRfdHJhY2VfaGFuZGxlX2Rlc3Ryb3koaGFu
-ZGxlKTsKPiArfQo+IC0tCj4gMS44LjQKPiAKPiAKPiBfX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1k
-ZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxt
-YW4vbGlzdGluZm8vbHR0bmctZGV2Cj4gCgotLSAKTWF0aGlldSBEZXNub3llcnMKRWZmaWNpT1Mg
-SW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlz
-dHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3Rp
-bmZvL2x0dG5nLWRldgo=
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--lS6hG23oIGNS4FIqLSM83tHIUXlRTSpDg
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+Hi all !
+
+I just released the Non-Preempt Test (npt) version 1.01 which is
+available here: http://git.dorsal.polymtl.ca/?p=3Dnpt.git
+
+The purpose of this tool is to simulate a small real-time system that
+runs with a high priority without being stopped or preempted. To do so,
+it first sets its environment (cpu affinity, RT scheduler, memory locked
+into RAM with mlockall) and can optionally disable the local IRQs if
+compiled with the right options (not defined by default).
+
+The core of the application is a loop that calculates the time gap
+between the start of two consecutive loops using the rdtsc asm
+instruction, thus a similarity with the hwlat_detector kernel module for
+kernel analysis. At the end of its execution, npt computes latencies
+statistics for each loop and generates a histogram showing the different
+latencies reached and the number of time it reached each one.
+
+This tool can be used to analyse and identify overhead of different
+realtime applications as we can compare the latencies in each loops and
+thus identify the added latency from a "blank" run. It is released
+LTTng-ready and can thus be easily traced. Next versions could include
+other userspace tracers ability.
+
+Feedback, collaborations and contributions are welcome!
+
+Regards,
+Rapha=EBl Beamonte
+
+
+--lS6hG23oIGNS4FIqLSM83tHIUXlRTSpDg
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.14 (GNU/Linux)
+
+iQIcBAEBAgAGBQJSXEBvAAoJECV+8Ygg/tEowx8QAJJrYrd6LmhH4OMKlGer9vp8
+M0Lj2tXDCuAS6fij8SdE3JAcv37zSP6+k12YHTZDjX3UjOIqPGMJSVgjw249zuYr
+WIcFAcaNpEpZF3r3gNzsGDD/EbvM+HM7Sw5psed7VXSgq2a7v4C63kCVVKEzWsvy
+jfmDLy2TeiD5WVKRjdEsFSQFASFflEV+NaewFEZNT5ApfJlcZfAOpY9tapU6r8z+
+qHuQAeZ2DAEBz9+BNMpTKSVt4ycEeCdcGK0f9pwgfvI2wp3+TYsw/y6U+Cz8UMdQ
+byRtCj7K2VDNqk8vXgBGAKV60NQSO6wu6VrRH1YA/50cjMxjaTPTjqlzur2hkGK8
+PX6qM8k/oCs2sU1aDapV3cdn6DjIHva+c/dOgKkuQ8fQAS4WX4uXCJFXPrg4sIJ6
+WiDoM4wIMNBScThn/ztHnZRlja0rSWM6a7v09QIOitY03QiYqDG+VSUYyKi3rcz0
+rOZQ57Z6+89XLJOwZxe+UWkAPkwLg5w6xW+eHCcPuIEhG9+VnoiyeB8+k8r3o3po
+7GZxzTyp8lGqtnwWkF0wE1MeVeLPr/3/OAVwai9J/3R+D9Rx0/f07r5Cfd16ma2+
+9nbyQCd+8UAwBQTFjilWqfWFi2WAvxaBpQb4Bf7lcbOM9bDG4+OjF05zk320xD7r
+rkmA4vPeNdf9T1R8xTW9
+=rjm/
+-----END PGP SIGNATURE-----
+
+--lS6hG23oIGNS4FIqLSM83tHIUXlRTSpDg--
