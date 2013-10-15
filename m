@@ -1,61 +1,32 @@
-From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
-	<jeremie.galarneau@efficios.com>
-Subject: [PATCH babeltrace] Fix: Don't create a new packet if
-	ctf_move_pos() seeks out of a packet
-Date: Tue, 15 Oct 2013 13:23:46 -0400
-Message-ID: <1381857826-6948-1-git-send-email-jeremie.galarneau__34591.7839360938$1381858058$gmane$org@efficios.com>
+From: =?ISO-8859-1?Q?Rapha=EBl_Beamonte?= <raphael.beamonte@gmail.com>
+Subject: Re: Non-Preempt Test v1.01
+Date: Tue, 15 Oct 2013 14:46:07 -0400
+Message-ID: <525D8D6F.5000207@gmail.com>
+References: <525C406A.5050000@gmail.com> <CAF+KLxtaqEg9Z+cEwcALEHQ-D6kkKXbj0E100pTz5PxQKwd+0g@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qa0-f45.google.com ([209.85.216.45])
-	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1VW8Lb-0001lG-1r
-	for lttng-dev@lists.lttng.org; Tue, 15 Oct 2013 13:24:00 -0400
-Received: by mail-qa0-f45.google.com with SMTP id ii20so3395741qab.18
-	for <lttng-dev@lists.lttng.org>; Tue, 15 Oct 2013 10:23:49 -0700 (PDT)
-List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
-	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
-	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: QUOTED-PRINTABLE
+Return-path: <linux-rt-users-owner@vger.kernel.org>
+In-Reply-To: <CAF+KLxtaqEg9Z+cEwcALEHQ-D6kkKXbj0E100pTz5PxQKwd+0g@mail.gmail.com>
+Sender: linux-rt-users-owner@vger.kernel.org
+To: Aaron Fabbri <ajfabbri@gmail.com>
+Cc: linux-rt-users@vger.kernel.org, lttng-dev@lists.lttng.org, lwn@lwn.net
 List-Id: lttng-dev@lists.lttng.org
 
-VGhpcyBjaGFuZ2UgZW5zdXJlcyB0aGF0IGN0Zl9tb3ZlX3BvcygpIGRvZXMgbm90IGNyZWF0ZSBh
-IG5ldyBwYWNrZXQKd2hlbiBjdGZfbW92ZV9wb3MoKSBtb3ZlcyBvdXQgb2YgdGhlIGN1cnJlbnQg
-cGFja2V0J3MgYm91bmRzLiBUaGUgbmV4dApjYWxsIHRvIGN0Zl9wb3NfYWNjZXNzX29rKCkgd2ls
-bCByZXBvcnQgRUZBVUxUIHdoaWNoIGNhbiB0aGVuIGJlCmhhbmRsZWQgYXBwcm9wcmlhdGVseSBi
-eSB0aGUgY2FsbGVyLgoKU2lnbmVkLW9mZi1ieTogSsOpcsOpbWllIEdhbGFybmVhdSA8amVyZW1p
-ZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29tPgpSZXZpZXdlZC1ieTogTWF0aGlldSBEZXNub3llcnMg
-PG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4KLS0tCiBpbmNsdWRlL2JhYmVsdHJhY2Uv
-Y3RmL3R5cGVzLmggfCAxOSArLS0tLS0tLS0tLS0tLS0tLS0tCiAxIGZpbGUgY2hhbmdlZCwgMSBp
-bnNlcnRpb24oKyksIDE4IGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL2luY2x1ZGUvYmFiZWx0
-cmFjZS9jdGYvdHlwZXMuaCBiL2luY2x1ZGUvYmFiZWx0cmFjZS9jdGYvdHlwZXMuaAppbmRleCA3
-MTVjZGJkLi45NmM1MDgzIDEwMDY0NAotLS0gYS9pbmNsdWRlL2JhYmVsdHJhY2UvY3RmL3R5cGVz
-LmgKKysrIGIvaW5jbHVkZS9iYWJlbHRyYWNlL2N0Zi90eXBlcy5oCkBAIC0xMzcsMjMgKzEzNyw2
-IEBAIHZvaWQgY3RmX21vdmVfcG9zKHN0cnVjdCBjdGZfc3RyZWFtX3BvcyAqcG9zLCB1aW50NjRf
-dCBiaXRfb2Zmc2V0KQogCWlmICh1bmxpa2VseShwb3MtPm9mZnNldCA9PSBFT0YpKQogCQlyZXR1
-cm47CiAKLQlpZiAocG9zLT5mZCA+PSAwKSB7Ci0JCS8qCi0JCSAqIFBST1RfUkVBRCBjdGZfcGFj
-a2V0X3NlZWsgaXMgY2FsbGVkIGZyb20gd2l0aGluCi0JCSAqIGN0Zl9wb3NfZ2V0X2V2ZW50IHNv
-IGVuZCBvZiBwYWNrZXQgZG9lcyBub3QgY2hhbmdlCi0JCSAqIHRoZSBwYWNrZXQgY29udGV4dCBv
-biBmb3IgdGhlIGxhc3QgZXZlbnQgb2YgdGhlCi0JCSAqIHBhY2tldC4KLQkJICovCi0JCWlmICgo
-cG9zLT5wcm90ID09IFBST1RfV1JJVEUpCi0JCSAgICAJJiYgKHVubGlrZWx5KHBvcy0+b2Zmc2V0
-ICsgYml0X29mZnNldCA+PSBwb3MtPnBhY2tldF9zaXplKSkpIHsKLQkJCXByaW50Zl9kZWJ1Zygi
-Y3RmX3BhY2tldF9zZWVrIChiZWZvcmUgY2FsbCk6ICUiIFBSSWQ2NCAiXG4iLAotCQkJCSAgICAg
-cG9zLT5vZmZzZXQpOwotCQkJY3RmX3BhY2tldF9zZWVrKCZwb3MtPnBhcmVudCwgMCwgU0VFS19D
-VVIpOwotCQkJcHJpbnRmX2RlYnVnKCJjdGZfcGFja2V0X3NlZWsgKGFmdGVyIGNhbGwpOiAlIiBQ
-UklkNjQgIlxuIiwKLQkJCQkgICAgIHBvcy0+b2Zmc2V0KTsKLQkJCXJldHVybjsKLQkJfQotCX0K
-IAlwb3MtPm9mZnNldCArPSBiaXRfb2Zmc2V0OwogCXByaW50Zl9kZWJ1ZygiY3RmX21vdmVfcG9z
-IGFmdGVyIGluY3JlbWVudDogJSIgUFJJZDY0ICJcbiIsIHBvcy0+b2Zmc2V0KTsKIH0KQEAgLTIw
-MSw3ICsxODQsNyBAQCBpbnQgY3RmX3Bvc19wYWNrZXQoc3RydWN0IGN0Zl9zdHJlYW1fcG9zICpk
-dW1teSkKIHN0YXRpYyBpbmxpbmUKIHZvaWQgY3RmX3Bvc19wYWRfcGFja2V0KHN0cnVjdCBjdGZf
-c3RyZWFtX3BvcyAqcG9zKQogewotCWN0Zl9tb3ZlX3Bvcyhwb3MsIHBvcy0+cGFja2V0X3NpemUg
-LSBwb3MtPm9mZnNldCk7CisJY3RmX3BhY2tldF9zZWVrKCZwb3MtPnBhcmVudCwgMCwgU0VFS19D
-VVIpOwogfQogCiBzdGF0aWMgaW5saW5lCi0tIAoxLjguNAoKCl9fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmct
-ZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1h
-bi9saXN0aW5mby9sdHRuZy1kZXYK
+On 2013-10-14 18:04, Aaron Fabbri wrote:
+> Thanks for sharing this, will check it out if I get a chance.  Do you
+> have a http git url that I can clone?  I'm behind a firewall.
+
+Hello Aaron,
+
+Thanks for your interest!
+It is now possible to clone the repository using http:
+	git clone http://git.dorsal.polymtl.ca/git/npt.git
+
+Regards,
+Rapha=EBl
+--
+To unsubscribe from this list: send the line "unsubscribe linux-rt-user=
+s" in
+the body of a message to majordomo@vger.kernel.org
+More majordomo info at  http://vger.kernel.org/majordomo-info.html
