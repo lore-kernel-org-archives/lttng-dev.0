@@ -1,19 +1,19 @@
 From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
 	<jeremie.galarneau@efficios.com>
-Subject: [PATCH babeltrace] Fix: Use the packet's final size
-	when mmap-ing the next packet
-Date: Tue, 15 Oct 2013 13:23:18 -0400
-Message-ID: <1381857798-6859-1-git-send-email-jeremie.galarneau__28988.4079284549$1381857868$gmane$org@efficios.com>
+Subject: [PATCH babeltrace] Fix: Uninitialized ctf_stream_pos
+	structure in ctf_float_write()
+Date: Tue, 15 Oct 2013 13:23:33 -0400
+Message-ID: <1381857813-6904-1-git-send-email-jeremie.galarneau__2071.44902456111$1381857963$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qc0-f173.google.com ([209.85.216.173])
+Received: from mail-qc0-f179.google.com ([209.85.216.179])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1VW8LA-0001jL-1p
-	for lttng-dev@lists.lttng.org; Tue, 15 Oct 2013 13:23:33 -0400
-Received: by mail-qc0-f173.google.com with SMTP id l13so4877830qcy.18
-	for <lttng-dev@lists.lttng.org>; Tue, 15 Oct 2013 10:23:22 -0700 (PDT)
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1VW8LN-0001k6-Vf
+	for lttng-dev@lists.lttng.org; Tue, 15 Oct 2013 13:23:47 -0400
+Received: by mail-qc0-f179.google.com with SMTP id l4so6163405qcv.38
+	for <lttng-dev@lists.lttng.org>; Tue, 15 Oct 2013 10:23:36 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -25,22 +25,21 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Y3RmX3BhY2tldF9zZWVrKCkgYXNzdW1lZCB0aGF0IGEgcGFja2V0IHdvdWxkIGJlIG9mIGZpeGVk
-IHNpemUKIldSSVRFX1BBQ0tFVF9MRU4iIHdoZW4gc2Vla2luZyB0byB0aGUgbmV4dCBwYWNrZXQg
-aW4gd3JpdGUgbW9kZS4KVGhpcyBlbnN1cmVzIHRoYXQgdGhlIHJlYWwgc2l6ZSB1c2VkLgoKU2ln
-bmVkLW9mZi1ieTogSsOpcsOpbWllIEdhbGFybmVhdSA8amVyZW1pZS5nYWxhcm5lYXVAZWZmaWNp
-b3MuY29tPgpSZXZpZXdlZC1ieTogTWF0aGlldSBEZXNub3llcnMgPG1hdGhpZXUuZGVzbm95ZXJz
-QGVmZmljaW9zLmNvbT4KLS0tCiBmb3JtYXRzL2N0Zi9jdGYuYyB8IDIgKy0KIDEgZmlsZSBjaGFu
-Z2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQoKZGlmZiAtLWdpdCBhL2Zvcm1hdHMv
-Y3RmL2N0Zi5jIGIvZm9ybWF0cy9jdGYvY3RmLmMKaW5kZXggOTQ3YjQzOS4uNjBkOWM5ZiAxMDA2
-NDQKLS0tIGEvZm9ybWF0cy9jdGYvY3RmLmMKKysrIGIvZm9ybWF0cy9jdGYvY3RmLmMKQEAgLTcx
-Miw3ICs3MTIsNyBAQCB2b2lkIGN0Zl9wYWNrZXRfc2VlayhzdHJ1Y3QgYnRfc3RyZWFtX3BvcyAq
-c3RyZWFtX3Bvcywgc2l6ZV90IGluZGV4LCBpbnQgd2hlbmNlKQogCQlzd2l0Y2ggKHdoZW5jZSkg
-ewogCQljYXNlIFNFRUtfQ1VSOgogCQkJLyogVGhlIHdyaXRlciB3aWxsIGFkZCBwYWRkaW5nICov
-Ci0JCQlwb3MtPm1tYXBfb2Zmc2V0ICs9IFdSSVRFX1BBQ0tFVF9MRU4gLyBDSEFSX0JJVDsKKwkJ
-CXBvcy0+bW1hcF9vZmZzZXQgKz0gcG9zLT5wYWNrZXRfc2l6ZSAvIENIQVJfQklUOwogCQkJYnJl
-YWs7CiAJCWNhc2UgU0VFS19TRVQ6CiAJCQlhc3NlcnQoaW5kZXggPT0gMCk7CS8qIG9ubHkgc2Vl
-ayBzdXBwb3J0ZWQgZm9yIG5vdyAqLwotLSAKMS44LjQKCgpfX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRl
-dkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4v
-bGlzdGluZm8vbHR0bmctZGV2Cg==
+VGhpcyBzdHJ1Y3R1cmUgaXMgcGFzc2VkIHRvIF9jdGZfZmxvYXRfY29weSgpIHdoaWNoIHVzZXMg
+dGhlCnVuaW5pdGlhbGl6ZWQgbW1hcF9vZmZzZXQgYW5kIG9mZnNldCB2YWx1ZXMgdG8gcmVhZCB0
+aGUgc291cmNlCmZsb2F0aW5nIHBvaW50IHZhbHVlLgoKU2lnbmVkLW9mZi1ieTogSsOpcsOpbWll
+IEdhbGFybmVhdSA8amVyZW1pZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29tPgpSZXZpZXdlZC1ieTog
+TWF0aGlldSBEZXNub3llcnMgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4KLS0tCiBm
+b3JtYXRzL2N0Zi90eXBlcy9mbG9hdC5jIHwgMiArLQogMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0
+aW9uKCspLCAxIGRlbGV0aW9uKC0pCgpkaWZmIC0tZ2l0IGEvZm9ybWF0cy9jdGYvdHlwZXMvZmxv
+YXQuYyBiL2Zvcm1hdHMvY3RmL3R5cGVzL2Zsb2F0LmMKaW5kZXggMmRhYWRmOS4uNjg5MDI4MyAx
+MDA2NDQKLS0tIGEvZm9ybWF0cy9jdGYvdHlwZXMvZmxvYXQuYworKysgYi9mb3JtYXRzL2N0Zi90
+eXBlcy9mbG9hdC5jCkBAIC0yMzIsNyArMjMyLDcgQEAgaW50IGN0Zl9mbG9hdF93cml0ZShzdHJ1
+Y3QgYnRfc3RyZWFtX3BvcyAqcHBvcywgc3RydWN0IGJ0X2RlZmluaXRpb24gKmRlZmluaXRpb24K
+IAl1bmlvbiBkb3VibGVJRUVFNzU0IHU7CiAJc3RydWN0IGJ0X2RlZmluaXRpb24gKnRtcGRlZjsK
+IAlzdHJ1Y3QgZGVmaW5pdGlvbl9mbG9hdCAqdG1wZmxvYXQ7Ci0Jc3RydWN0IGN0Zl9zdHJlYW1f
+cG9zIHNyY3A7CisJc3RydWN0IGN0Zl9zdHJlYW1fcG9zIHNyY3AgPSB7IHsgMCB9IH07CiAJc3Ry
+dWN0IG1tYXBfYWxpZ24gbW1hOwogCWludCByZXQ7CiAKLS0gCjEuOC40CgoKX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlz
+dApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJp
+bi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
