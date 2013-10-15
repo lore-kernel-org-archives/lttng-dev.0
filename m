@@ -1,60 +1,46 @@
-From: Aaron Fabbri <ajfabbri@gmail.com>
-Subject: Re: Non-Preempt Test v1.01
-Date: Mon, 14 Oct 2013 15:04:09 -0700
-Message-ID: <CAF+KLxtaqEg9Z+cEwcALEHQ-D6kkKXbj0E100pTz5PxQKwd+0g@mail.gmail.com>
-References: <525C406A.5050000@gmail.com>
+From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
+	<jeremie.galarneau@efficios.com>
+Subject: [PATCH babeltrace] Fix: Use the packet's final size
+	when mmap-ing the next packet
+Date: Tue, 15 Oct 2013 13:23:18 -0400
+Message-ID: <1381857798-6859-1-git-send-email-jeremie.galarneau__28988.4079284549$1381857868$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: QUOTED-PRINTABLE
-Return-path: <linux-rt-users-owner@vger.kernel.org>
-In-Reply-To: <525C406A.5050000@gmail.com>
-Sender: linux-rt-users-owner@vger.kernel.org
-To: =?ISO-8859-1?Q?Rapha=EBl_Beamonte?= <raphael.beamonte@gmail.com>
-Cc: linux-rt-users@vger.kernel.org, lttng-dev@lists.lttng.org, lwn@lwn.net
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail-qc0-f173.google.com ([209.85.216.173])
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1VW8LA-0001jL-1p
+	for lttng-dev@lists.lttng.org; Tue, 15 Oct 2013 13:23:33 -0400
+Received: by mail-qc0-f173.google.com with SMTP id l13so4877830qcy.18
+	for <lttng-dev@lists.lttng.org>; Tue, 15 Oct 2013 10:23:22 -0700 (PDT)
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Thanks for sharing this, will check it out if I get a chance.  Do you
-have a http git url that I can clone?  I'm behind a firewall.
-
-On Mon, Oct 14, 2013 at 12:05 PM, Rapha=EBl Beamonte
-<raphael.beamonte@gmail.com> wrote:
-> Hi all !
->
-> I just released the Non-Preempt Test (npt) version 1.01 which is
-> available here: http://git.dorsal.polymtl.ca/?p=3Dnpt.git
->
-> The purpose of this tool is to simulate a small real-time system that
-> runs with a high priority without being stopped or preempted. To do s=
-o,
-> it first sets its environment (cpu affinity, RT scheduler, memory loc=
-ked
-> into RAM with mlockall) and can optionally disable the local IRQs if
-> compiled with the right options (not defined by default).
->
-> The core of the application is a loop that calculates the time gap
-> between the start of two consecutive loops using the rdtsc asm
-> instruction, thus a similarity with the hwlat_detector kernel module =
-for
-> kernel analysis. At the end of its execution, npt computes latencies
-> statistics for each loop and generates a histogram showing the differ=
-ent
-> latencies reached and the number of time it reached each one.
->
-> This tool can be used to analyse and identify overhead of different
-> realtime applications as we can compare the latencies in each loops a=
-nd
-> thus identify the added latency from a "blank" run. It is released
-> LTTng-ready and can thus be easily traced. Next versions could includ=
-e
-> other userspace tracers ability.
->
-> Feedback, collaborations and contributions are welcome!
->
-> Regards,
-> Rapha=EBl Beamonte
->
---
-To unsubscribe from this list: send the line "unsubscribe linux-rt-user=
-s" in
-the body of a message to majordomo@vger.kernel.org
-More majordomo info at  http://vger.kernel.org/majordomo-info.html
+Y3RmX3BhY2tldF9zZWVrKCkgYXNzdW1lZCB0aGF0IGEgcGFja2V0IHdvdWxkIGJlIG9mIGZpeGVk
+IHNpemUKIldSSVRFX1BBQ0tFVF9MRU4iIHdoZW4gc2Vla2luZyB0byB0aGUgbmV4dCBwYWNrZXQg
+aW4gd3JpdGUgbW9kZS4KVGhpcyBlbnN1cmVzIHRoYXQgdGhlIHJlYWwgc2l6ZSB1c2VkLgoKU2ln
+bmVkLW9mZi1ieTogSsOpcsOpbWllIEdhbGFybmVhdSA8amVyZW1pZS5nYWxhcm5lYXVAZWZmaWNp
+b3MuY29tPgpSZXZpZXdlZC1ieTogTWF0aGlldSBEZXNub3llcnMgPG1hdGhpZXUuZGVzbm95ZXJz
+QGVmZmljaW9zLmNvbT4KLS0tCiBmb3JtYXRzL2N0Zi9jdGYuYyB8IDIgKy0KIDEgZmlsZSBjaGFu
+Z2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQoKZGlmZiAtLWdpdCBhL2Zvcm1hdHMv
+Y3RmL2N0Zi5jIGIvZm9ybWF0cy9jdGYvY3RmLmMKaW5kZXggOTQ3YjQzOS4uNjBkOWM5ZiAxMDA2
+NDQKLS0tIGEvZm9ybWF0cy9jdGYvY3RmLmMKKysrIGIvZm9ybWF0cy9jdGYvY3RmLmMKQEAgLTcx
+Miw3ICs3MTIsNyBAQCB2b2lkIGN0Zl9wYWNrZXRfc2VlayhzdHJ1Y3QgYnRfc3RyZWFtX3BvcyAq
+c3RyZWFtX3Bvcywgc2l6ZV90IGluZGV4LCBpbnQgd2hlbmNlKQogCQlzd2l0Y2ggKHdoZW5jZSkg
+ewogCQljYXNlIFNFRUtfQ1VSOgogCQkJLyogVGhlIHdyaXRlciB3aWxsIGFkZCBwYWRkaW5nICov
+Ci0JCQlwb3MtPm1tYXBfb2Zmc2V0ICs9IFdSSVRFX1BBQ0tFVF9MRU4gLyBDSEFSX0JJVDsKKwkJ
+CXBvcy0+bW1hcF9vZmZzZXQgKz0gcG9zLT5wYWNrZXRfc2l6ZSAvIENIQVJfQklUOwogCQkJYnJl
+YWs7CiAJCWNhc2UgU0VFS19TRVQ6CiAJCQlhc3NlcnQoaW5kZXggPT0gMCk7CS8qIG9ubHkgc2Vl
+ayBzdXBwb3J0ZWQgZm9yIG5vdyAqLwotLSAKMS44LjQKCgpfX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRl
+dkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4v
+bGlzdGluZm8vbHR0bmctZGV2Cg==
