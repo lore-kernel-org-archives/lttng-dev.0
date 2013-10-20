@@ -1,21 +1,20 @@
-From: Yannick Brosseau <yannick.brosseau@gmail.com>
+From: Jon Bernard <jbernard@debian.org>
 Subject: Re: LTTng packages in Debian sid out of sync
-Date: Sun, 20 Oct 2013 01:25:33 -0400
-Message-ID: <5263694D.1020000__43432.5358750813$1382246770$gmane$org@gmail.com>
+Date: Sun, 20 Oct 2013 09:45:21 -0400
+Message-ID: <20131020134521.GA97360__17034.7303887413$1382276773$gmane$org@helmut.local>
 References: <630558869.45441.1382211345502.JavaMail.zimbra@efficios.com>
 	<856849325.45462.1382211994767.JavaMail.zimbra@efficios.com>
 	<20131019211009.GA83292@helmut.local>
 	<300817690.45707.1382242504740.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f182.google.com ([209.85.223.182])
+Received: from out3-smtp.messagingengine.com ([66.111.4.27])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <yannick.brosseau@gmail.com>) id 1VXlW8-0002mF-BJ
-	for lttng-dev@lists.lttng.org; Sun, 20 Oct 2013 01:25:33 -0400
-Received: by mail-ie0-f182.google.com with SMTP id as1so9253284iec.41
-	for <lttng-dev@lists.lttng.org>; Sat, 19 Oct 2013 22:25:26 -0700 (PDT)
+	(envelope-from <jbernard@debian.org>) id 1VXtJv-0005o0-Vz
+	for lttng-dev@lists.lttng.org; Sun, 20 Oct 2013 09:45:30 -0400
+Content-Disposition: inline
 In-Reply-To: <300817690.45707.1382242504740.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -26,70 +25,145 @@ List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+Cc: lttng-dev@lists.lttng.org, =?iso-8859-1?Q?St=E9phane?= Graber <stgraber@ubuntu.com>
 List-Id: lttng-dev@lists.lttng.org
 
-T24gMjAxMy0xMC0yMCAwMDoxNSwgTWF0aGlldSBEZXNub3llcnMgd3JvdGU6Cj4gLS0tLS0gT3Jp
-Z2luYWwgTWVzc2FnZSAtLS0tLQo+PiBGcm9tOiAiSm9uIEJlcm5hcmQiIDxqYmVybmFyZEBkZWJp
-YW4ub3JnPgo+PiBUbzogIk1hdGhpZXUgRGVzbm95ZXJzIiA8bWF0aGlldS5kZXNub3llcnNAZWZm
-aWNpb3MuY29tPgo+PiBDYzogIlN0w6lwaGFuZSBHcmFiZXIiIDxzdGdyYWJlckB1YnVudHUuY29t
-PiwgIkFsZXhhbmRyZSBNb250cGxhaXNpciIgPGFsZXhtb250aHlAdm94cG9wdWxpLmltPiwKPj4g
-bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+PiBTZW50OiBTYXR1cmRheSwgT2N0b2JlciAxOSwg
-MjAxMyA1OjEwOjA5IFBNCj4+IFN1YmplY3Q6IFJlOiBMVFRuZyBwYWNrYWdlcyBpbiBEZWJpYW4g
-c2lkIG91dCBvZiBzeW5jCj4+Cj4+ICogTWF0aGlldSBEZXNub3llcnMgPG1hdGhpZXUuZGVzbm95
-ZXJzQGVmZmljaW9zLmNvbT4gd3JvdGU6Cj4+PiBIaSBKb24sCj4+Pgo+Pj4gV2UndmUgaGFkIGEg
-Y291cGxlIG9mIHVzZXIgcmVwb3J0cyBhYm91dCBsdHRuZyB2ZXJzaW9ucyBub3Qgd29ya2luZyBp
-bgo+Pj4gRGViaWFuLgo+Pj4KPj4+IEknbSBsb29raW5nIGF0IHRoZSBjdXJyZW50IERlYmlhbiBz
-aWQsIGFuZCBoZXJlIGlzIHRoZSBzaXR1YXRpb246Cj4+Pgo+Pj4gaHR0cDovL3BhY2thZ2VzLmRl
-Ymlhbi5vcmcvc2lkL2x0dG5nLXRvb2xzIDogdmVyc2lvbiAyLjEuMS0yCj4+PiBodHRwOi8vcGFj
-a2FnZXMuZGViaWFuLm9yZy9zaWQvdXRpbHMvbHR0LWJpbiA6IHZlcnNpb24gMi4xLjEtMgo+Pj4g
-aHR0cDovL3BhY2thZ2VzLmRlYmlhbi5vcmcvc2lkL2x0dG5nLW1vZHVsZXMtZGttcyA6IHZlcnNp
-b24gMi4zLjAtMQo+Pj4KPj4+IEFsdGhvdWdoIGl0J3MgcG9zc2libGUgdGhhdCBsdHRuZy1tb2R1
-bGVzIDIuMy54IHdpbGwgd29yayB3aXRoIGx0dG5nLXRvb2xzCj4+PiAyLjEueCwgdGhpcyBjb21i
-aW5hdGlvbiBvZiB2ZXJzaW9ucyBpcyB1bnN1cHBvcnRlZC4gV2UgcmVxdWlyZSB0aGF0Cj4+PiB1
-c3QvdG9vbHMvbW9kdWxlcyBiZSB1cGRhdGVkIGluIGxvY2tlZCBzdGVwIGJldHdlZW4gbWlub3Ig
-dmVyc2lvbnMgKDIuMQo+Pj4gd2l0aAo+Pj4gMi4xLCAyLjIgd2l0aCAyLjIsIGFuZCBzbyBvbiku
-IEFsc28sIDIuMSBpcyBzdGFydGluZyB0byBiZSBxdWl0ZSBvbGQ6IHdlJ3JlCj4+PiBjdXJyZW50
-bHkgd29ya2luZyBvbiBhbiB1cGNvbWluZyAyLjQsIGFuZCB0aGUgbGFzdCB2ZXJzaW9uICgyLjMp
-IHByb3ZpZGVzCj4+PiBsb3RzCj4+PiBvZiBjb29sIGZlYXR1cmVzIGluY2x1ZGluZyBmbGlnaHQg
-cmVjb3JkZXIgdHJhY2luZyBhbmQgc25hcHNob3Qgc3VwcG9ydC4KPj4gWWVzLCBJIGRvIGFwb2xv
-Z2l6ZSBmb3IgdGhlIGN1cnJlbnQgc3RhdGUuICBNeSBmaXJzdCBwcmlvcml0eSB3YXMgdG8gcmVz
-b2x2ZQo+PiB0aGUKPj4gYmxvY2tlZCB0ZXN0aW5nIG1pZ3JhdGlvbiBmb3IgdXN0IGFuZCBsdHRu
-Zy10b29scy4gIE15IHVwbG9hZCB5ZXN0ZXJkYXkgc2VlbXMKPj4gdG8KPj4gaGF2ZSByZXNvbHZl
-ZCB0aGUgbGFzdCBvZiB0aGUgdXN0IHBhY2thZ2UgaXNzdWVzLCBhbmQgc28gbm93IEkgbmVlZCBv
-bmx5IHRvCj4+IHVwbG9hZCB0aGUgcmVtYWluaW5nIGZpeGVzIGZvciBsdHRuZy10b29scyBhbmQg
-dGhlIHR3byBzaG91bGQgYmUgZWxpZ2libGUgZm9yCj4+IG1pZ3JhdGlvbiB0byB0ZXN0aW5nLiAg
-SSBkZWNpZGVkIGl0IHdvdWxkIGJlIGVhc2llciB0byBmaXggdGhlIG1pZ3JhdGlvbgo+PiBwcm9i
-bGVtCj4+IGZpcnN0LCBhbmQgdGhlbiB1cGRhdGUgYWxsIG9mIHRoZSB2ZXJzaW9ucyB0byAyLjMu
-eCAtIGl0IG1ha2VzIHBlcmZlY3Qgc2Vuc2UKPj4gdG8KPj4gbWUgYXMgYSBwYWNrYWdlciwgYnV0
-IEkgYWxzbyBzZWUgaXQncyBjb21wbGV0ZWx5IGJhY2t3YXJkcyBmcm9tIGEgdXNlcidzCj4+IHBl
-cnNwZWN0aXZlLgo+Pgo+PiBTaWQgc2hvdWxkIGhhdmUgMi4zLnggaW1tZWRpYXRlbHkgYW5kIEkg
-d2lsbCBwdXNoIHRoZXNlIHZlcnNpb25zIGJlZm9yZSB0aGUKPj4gd2Vla2VuZCBlbmRzLgo+Pgo+
-PiBUaGUgbWlncmF0aW9uIGlzIGFsc28gdmVyeSBpbXBvcnRhbnQgdG8gbWUsIGFzIEplc3NpZSB3
-aWxsIGZyZWV6ZSBzb29uLiAgSQo+PiB3aWxsCj4+IGNvbnRpbnVlIG9uIHRoYXQgZnJvbnQgYWZ0
-ZXIgMi4zLnggaXMgaW4gc2lkLgo+Pgo+PiBEb2VzIHRoaXMgc291bmQgbGlrZSBhIHJlYXNvbmFi
-bGUgcGxhbj8KPiBIaSBKb24sCj4KPiBXZSBzZWVtIHRvIGhhdmUgYSBwcm9ibGVtIGhlcmUuIFRo
-ZSBwYWNlIG9mIHBhY2thZ2luZyBvbiBEZWJpYW4gY3VycmVudGx5IGRvZXMgbm90IHNlZW0gdG8g
-bWF0Y2ggb3VyIHN1cHBvcnQgY3ljbGUgYXQgYWxsLiBZb3UgYXJlIGN1cnJlbnRseSB0YXJnZXRp
-bmcgTFRUbmcgMi4xIGZvciB0ZXN0aW5nIChhbmQgdGhlcmVmb3JlIG5leHQgc3RhYmxlKSwgd2hp
-bGUgd2Ugc3BlY2lmaWVkIGEgcmVsZWFzZSBwb2xpY3kgYmFjayBpbiBBdWd1c3Q6IGh0dHA6Ly9s
-aXN0cy5sdHRuZy5vcmcvcGlwZXJtYWlsL2x0dG5nLWRldi8yMDEzLUF1Z3VzdC8wMjExMzIuaHRt
-bCB3aGljaCBjbGVhcmx5IHN0YXRlcyB0aGF0IHdlIGN1cnJlbnRseSBzdXBwb3J0IExUVG5nIDIu
-MywgYW5kIG9ubHkgZG8gc2VjdXJpdHkgZml4IGJhY2twb3J0cyBmb3IgMi4yLiBUaGVyZWZvcmUs
-IDIuMSBpcyBjbGVhcmx5IHVuc3VwcG9ydGVkIGF0IHRoaXMgcG9pbnQuCj4KPiBJIHN0cm9uZ2x5
-IGFkdmlzZSB0byB1cGRhdGUgcGFja2FnZXMgaW4gc2lkIEFTQVAgdG8gTFRUbmcgMi4zLCBhbmQg
-d2UgbmVlZCB0byBrbm93IGhvdyBtdWNoIHRpbWUgaXQgdGFrZXMgdG8gZ2V0IGl0IGludG8gdGVz
-dGluZywgYW5kIGZpZ3VyZSBvdXQgaWYgaXQgbWFrZXMgaW50byB0aGUgdXBjb21pbmcgc3RhYmxl
-LiBJIHJlc3RhdGUgaGVscCBvZmZlciBvbiBiZWhhbGYgb2YgdGhlIExUVG5nIGNvbW11bml0eTog
-aWYgeW91IGxhY2sgdGltZSB0byB1cGRhdGUgdGhvc2UgcGFja2FnZXMsIHBsZWFzZSBsZXQgdXMg
-a25vdywgYW5kIHdlIHdpbGwgZ2l2ZSBhIGhhbmQgZW5zdXJpbmcgdGhhdCB0aG9zZSBhcmUgdXBk
-YXRlZCBpbiBzaWQgc29vbiBhZnRlciB0aGUgdXBzdHJlYW0gcmVsZWFzZXMuCj4KPiBUaG91Z2h0
-cyA/Cj4KPiBUaGFua3MsCj4KTWF0aGlldSwgSSB0aGluayB5b3UgbWlzdW5kZXJzdG9vZCBKb24s
-CkhlIHBsYW5zIHRvIHVwbG9hZCAyLjMgdG8gc2lkIHRoaXMgd2Vla2VuZCBhbmQgdGhleSB3aWxs
-IGdldCBpbnRvCnRlc3RpbmcgYWZ0ZXIgdGhlIG5vcm1hbCBtaWdyYXRpb24gcGVyaW9kIChub3Jt
-YWxseSAxMCBkYXlzKS4KClRoZXJlIHdhcyBhbiBpc3N1ZSBiZWZvcmUgdGhhdCB3YXMgYmxvY2tp
-bmcgdGhpcyBtaWdyYXRpb24gYW5kIGl0IHNlZW0KdGhhdCBKb24gd2FzIGFibGUgdG8gZml4IGl0
-IHJlY2VudGx5LgoKWWFubmljawoKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5n
-Lm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRu
-Zy1kZXYK
+* Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
+> ----- Original Message -----
+> > From: "Jon Bernard" <jbernard@debian.org>
+> > To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+> > Cc: "St=E9phane Graber" <stgraber@ubuntu.com>, "Alexandre Montplaisir" =
+<alexmonthy@voxpopuli.im>,
+> > lttng-dev@lists.lttng.org
+> > Sent: Saturday, October 19, 2013 5:10:09 PM
+> > Subject: Re: LTTng packages in Debian sid out of sync
+> > =
+
+> > * Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
+> > > Hi Jon,
+> > > =
+
+> > > We've had a couple of user reports about lttng versions not working in
+> > > Debian.
+> > > =
+
+> > > I'm looking at the current Debian sid, and here is the situation:
+> > > =
+
+> > > http://packages.debian.org/sid/lttng-tools : version 2.1.1-2
+> > > http://packages.debian.org/sid/utils/ltt-bin : version 2.1.1-2
+> > > http://packages.debian.org/sid/lttng-modules-dkms : version 2.3.0-1
+> > > =
+
+> > > Although it's possible that lttng-modules 2.3.x will work with lttng-=
+tools
+> > > 2.1.x, this combination of versions is unsupported. We require that
+> > > ust/tools/modules be updated in locked step between minor versions (2=
+.1
+> > > with
+> > > 2.1, 2.2 with 2.2, and so on). Also, 2.1 is starting to be quite old:=
+ we're
+> > > currently working on an upcoming 2.4, and the last version (2.3) prov=
+ides
+> > > lots
+> > > of cool features including flight recorder tracing and snapshot suppo=
+rt.
+> > =
+
+> > Yes, I do apologize for the current state.  My first priority was to re=
+solve
+> > the
+> > blocked testing migration for ust and lttng-tools.  My upload yesterday=
+ seems
+> > to
+> > have resolved the last of the ust package issues, and so now I need onl=
+y to
+> > upload the remaining fixes for lttng-tools and the two should be eligib=
+le for
+> > migration to testing.  I decided it would be easier to fix the migration
+> > problem
+> > first, and then update all of the versions to 2.3.x - it makes perfect =
+sense
+> > to
+> > me as a packager, but I also see it's completely backwards from a user's
+> > perspective.
+> > =
+
+> > Sid should have 2.3.x immediately and I will push these versions before=
+ the
+> > weekend ends.
+> > =
+
+> > The migration is also very important to me, as Jessie will freeze soon.=
+  I
+> > will
+> > continue on that front after 2.3.x is in sid.
+> > =
+
+> > Does this sound like a reasonable plan?
+> =
+
+> Hi Jon,
+> =
+
+> We seem to have a problem here. The pace of packaging on Debian currently=
+ does
+> not seem to match our support cycle at all. You are currently targeting L=
+TTng
+> 2.1 for testing (and therefore next stable), while we specified a release
+> policy back in August:
+> http://lists.lttng.org/pipermail/lttng-dev/2013-August/021132.html which
+> clearly states that we currently support LTTng 2.3, and only do security =
+fix
+> backports for 2.2. Therefore, 2.1 is clearly unsupported at this point.
+> =
+
+> I strongly advise to update packages in sid ASAP to LTTng 2.3, and we nee=
+d to
+> know how much time it takes to get it into testing, and figure out if it =
+makes
+> into the upcoming stable. I restate help offer on behalf of the LTTng
+> community: if you lack time to update those packages, please let us know,=
+ and
+> we will give a hand ensuring that those are updated in sid soon after the
+> upstream releases.
+> =
+
+> Thoughts ?
+
+That is not exactly what I intended to convey, let me be more direct about =
+my
+view.  I completely agree that sid should have 2.3.x immediately.  I also a=
+gree
+that 2.3 should be targeted for testing, and therefore the next stable rele=
+ase.
+
+Last night I uploaded a lttng-modules update (2.3.2).  Just earlier I uploa=
+ded
+ust 2.3.0.  Once ust is accepted and available, I will upload lttng-tools 2=
+.3.0
+(since lttng-tools depends on ust to build successfully).  So I expect sid =
+to
+have a complete 2.3 suite very soon.  The only thing that will slow me down=
+ are
+the ftp masters - ust saw a soname bump which introduces a new package and
+therefore requires human intervention - this can take up to a week for
+processing.
+
+If all goes well, these packages will move to testing after 10 days, and wi=
+ll be
+included in the next stable release.  There could be a problem with the tes=
+ting
+upgrade process, but that shouldn't be a difficult problem to solve.  I wil=
+l try
+to test the transition myself while I wait for the packages to land in sid.
+
+In summary I think I'm very close to having everything in good order for bo=
+th
+sid and jessie.
+
+Does this all make sense?
+
+-- =
+
+Jon
