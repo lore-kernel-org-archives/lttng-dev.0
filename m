@@ -1,19 +1,23 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: LTTng packages in Debian sid out of sync
-Date: Sun, 20 Oct 2013 04:15:04 +0000 (UTC)
-Message-ID: <300817690.45707.1382242504740.JavaMail.zimbra__7269.43628765202$1382242552$gmane$org@efficios.com>
-References: <630558869.45441.1382211345502.JavaMail.zimbra@efficios.com>
-	<856849325.45462.1382211994767.JavaMail.zimbra@efficios.com>
-	<20131019211009.GA83292@helmut.local>
+From: Yannick Brosseau <yannick.brosseau@gmail.com>
+Subject: [RELEASE] lttv 1.5
+Date: Sun, 20 Oct 2013 00:57:51 -0400
+Message-ID: <526362CF.7010909__4523.74908277324$1382245108$gmane$org@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-ie0-f173.google.com ([209.85.223.173])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1VXkQ1-0008OS-Pc
-	for lttng-dev@lists.lttng.org; Sun, 20 Oct 2013 00:15:12 -0400
-In-Reply-To: <20131019211009.GA83292@helmut.local>
+	(envelope-from <yannick.brosseau@gmail.com>) id 1VXl5L-0001Y4-AS
+	for lttng-dev@lists.lttng.org; Sun, 20 Oct 2013 00:57:52 -0400
+Received: by mail-ie0-f173.google.com with SMTP id u16so9222230iet.18
+	for <lttng-dev@lists.lttng.org>; Sat, 19 Oct 2013 21:57:45 -0700 (PDT)
+Received: from [192.168.10.27] (c66.110.155-117.clta.globetrotter.net.
+	[66.110.155.117])
+	by mx.google.com with ESMTPSA id p5sm10816299igj.10.2013.10.19.21.57.44
+	for <lttng-dev@lists.lttng.org>
+	(version=TLSv1 cipher=ECDHE-RSA-RC4-SHA bits=128/128);
+	Sat, 19 Oct 2013 21:57:45 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,66 +26,51 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Jon Bernard <jbernard@debian.org>
-Cc: lttng-dev@lists.lttng.org, =?utf-8?Q?St=C3=A9phane?= Graber <stgraber@ubuntu.com>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJKb24gQmVybmFyZCIgPGpiZXJu
-YXJkQGRlYmlhbi5vcmc+Cj4gVG86ICJNYXRoaWV1IERlc25veWVycyIgPG1hdGhpZXUuZGVzbm95
-ZXJzQGVmZmljaW9zLmNvbT4KPiBDYzogIlN0w6lwaGFuZSBHcmFiZXIiIDxzdGdyYWJlckB1YnVu
-dHUuY29tPiwgIkFsZXhhbmRyZSBNb250cGxhaXNpciIgPGFsZXhtb250aHlAdm94cG9wdWxpLmlt
-PiwKPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gU2VudDogU2F0dXJkYXksIE9jdG9iZXIg
-MTksIDIwMTMgNToxMDowOSBQTQo+IFN1YmplY3Q6IFJlOiBMVFRuZyBwYWNrYWdlcyBpbiBEZWJp
-YW4gc2lkIG91dCBvZiBzeW5jCj4gCj4gKiBNYXRoaWV1IERlc25veWVycyA8bWF0aGlldS5kZXNu
-b3llcnNAZWZmaWNpb3MuY29tPiB3cm90ZToKPiA+IEhpIEpvbiwKPiA+IAo+ID4gV2UndmUgaGFk
-IGEgY291cGxlIG9mIHVzZXIgcmVwb3J0cyBhYm91dCBsdHRuZyB2ZXJzaW9ucyBub3Qgd29ya2lu
-ZyBpbgo+ID4gRGViaWFuLgo+ID4gCj4gPiBJJ20gbG9va2luZyBhdCB0aGUgY3VycmVudCBEZWJp
-YW4gc2lkLCBhbmQgaGVyZSBpcyB0aGUgc2l0dWF0aW9uOgo+ID4gCj4gPiBodHRwOi8vcGFja2Fn
-ZXMuZGViaWFuLm9yZy9zaWQvbHR0bmctdG9vbHMgOiB2ZXJzaW9uIDIuMS4xLTIKPiA+IGh0dHA6
-Ly9wYWNrYWdlcy5kZWJpYW4ub3JnL3NpZC91dGlscy9sdHQtYmluIDogdmVyc2lvbiAyLjEuMS0y
-Cj4gPiBodHRwOi8vcGFja2FnZXMuZGViaWFuLm9yZy9zaWQvbHR0bmctbW9kdWxlcy1ka21zIDog
-dmVyc2lvbiAyLjMuMC0xCj4gPiAKPiA+IEFsdGhvdWdoIGl0J3MgcG9zc2libGUgdGhhdCBsdHRu
-Zy1tb2R1bGVzIDIuMy54IHdpbGwgd29yayB3aXRoIGx0dG5nLXRvb2xzCj4gPiAyLjEueCwgdGhp
-cyBjb21iaW5hdGlvbiBvZiB2ZXJzaW9ucyBpcyB1bnN1cHBvcnRlZC4gV2UgcmVxdWlyZSB0aGF0
-Cj4gPiB1c3QvdG9vbHMvbW9kdWxlcyBiZSB1cGRhdGVkIGluIGxvY2tlZCBzdGVwIGJldHdlZW4g
-bWlub3IgdmVyc2lvbnMgKDIuMQo+ID4gd2l0aAo+ID4gMi4xLCAyLjIgd2l0aCAyLjIsIGFuZCBz
-byBvbikuIEFsc28sIDIuMSBpcyBzdGFydGluZyB0byBiZSBxdWl0ZSBvbGQ6IHdlJ3JlCj4gPiBj
-dXJyZW50bHkgd29ya2luZyBvbiBhbiB1cGNvbWluZyAyLjQsIGFuZCB0aGUgbGFzdCB2ZXJzaW9u
-ICgyLjMpIHByb3ZpZGVzCj4gPiBsb3RzCj4gPiBvZiBjb29sIGZlYXR1cmVzIGluY2x1ZGluZyBm
-bGlnaHQgcmVjb3JkZXIgdHJhY2luZyBhbmQgc25hcHNob3Qgc3VwcG9ydC4KPiAKPiBZZXMsIEkg
-ZG8gYXBvbG9naXplIGZvciB0aGUgY3VycmVudCBzdGF0ZS4gIE15IGZpcnN0IHByaW9yaXR5IHdh
-cyB0byByZXNvbHZlCj4gdGhlCj4gYmxvY2tlZCB0ZXN0aW5nIG1pZ3JhdGlvbiBmb3IgdXN0IGFu
-ZCBsdHRuZy10b29scy4gIE15IHVwbG9hZCB5ZXN0ZXJkYXkgc2VlbXMKPiB0bwo+IGhhdmUgcmVz
-b2x2ZWQgdGhlIGxhc3Qgb2YgdGhlIHVzdCBwYWNrYWdlIGlzc3VlcywgYW5kIHNvIG5vdyBJIG5l
-ZWQgb25seSB0bwo+IHVwbG9hZCB0aGUgcmVtYWluaW5nIGZpeGVzIGZvciBsdHRuZy10b29scyBh
-bmQgdGhlIHR3byBzaG91bGQgYmUgZWxpZ2libGUgZm9yCj4gbWlncmF0aW9uIHRvIHRlc3Rpbmcu
-ICBJIGRlY2lkZWQgaXQgd291bGQgYmUgZWFzaWVyIHRvIGZpeCB0aGUgbWlncmF0aW9uCj4gcHJv
-YmxlbQo+IGZpcnN0LCBhbmQgdGhlbiB1cGRhdGUgYWxsIG9mIHRoZSB2ZXJzaW9ucyB0byAyLjMu
-eCAtIGl0IG1ha2VzIHBlcmZlY3Qgc2Vuc2UKPiB0bwo+IG1lIGFzIGEgcGFja2FnZXIsIGJ1dCBJ
-IGFsc28gc2VlIGl0J3MgY29tcGxldGVseSBiYWNrd2FyZHMgZnJvbSBhIHVzZXIncwo+IHBlcnNw
-ZWN0aXZlLgo+IAo+IFNpZCBzaG91bGQgaGF2ZSAyLjMueCBpbW1lZGlhdGVseSBhbmQgSSB3aWxs
-IHB1c2ggdGhlc2UgdmVyc2lvbnMgYmVmb3JlIHRoZQo+IHdlZWtlbmQgZW5kcy4KPiAKPiBUaGUg
-bWlncmF0aW9uIGlzIGFsc28gdmVyeSBpbXBvcnRhbnQgdG8gbWUsIGFzIEplc3NpZSB3aWxsIGZy
-ZWV6ZSBzb29uLiAgSQo+IHdpbGwKPiBjb250aW51ZSBvbiB0aGF0IGZyb250IGFmdGVyIDIuMy54
-IGlzIGluIHNpZC4KPiAKPiBEb2VzIHRoaXMgc291bmQgbGlrZSBhIHJlYXNvbmFibGUgcGxhbj8K
-CkhpIEpvbiwKCldlIHNlZW0gdG8gaGF2ZSBhIHByb2JsZW0gaGVyZS4gVGhlIHBhY2Ugb2YgcGFj
-a2FnaW5nIG9uIERlYmlhbiBjdXJyZW50bHkgZG9lcyBub3Qgc2VlbSB0byBtYXRjaCBvdXIgc3Vw
-cG9ydCBjeWNsZSBhdCBhbGwuIFlvdSBhcmUgY3VycmVudGx5IHRhcmdldGluZyBMVFRuZyAyLjEg
-Zm9yIHRlc3RpbmcgKGFuZCB0aGVyZWZvcmUgbmV4dCBzdGFibGUpLCB3aGlsZSB3ZSBzcGVjaWZp
-ZWQgYSByZWxlYXNlIHBvbGljeSBiYWNrIGluIEF1Z3VzdDogaHR0cDovL2xpc3RzLmx0dG5nLm9y
-Zy9waXBlcm1haWwvbHR0bmctZGV2LzIwMTMtQXVndXN0LzAyMTEzMi5odG1sIHdoaWNoIGNsZWFy
-bHkgc3RhdGVzIHRoYXQgd2UgY3VycmVudGx5IHN1cHBvcnQgTFRUbmcgMi4zLCBhbmQgb25seSBk
-byBzZWN1cml0eSBmaXggYmFja3BvcnRzIGZvciAyLjIuIFRoZXJlZm9yZSwgMi4xIGlzIGNsZWFy
-bHkgdW5zdXBwb3J0ZWQgYXQgdGhpcyBwb2ludC4KCkkgc3Ryb25nbHkgYWR2aXNlIHRvIHVwZGF0
-ZSBwYWNrYWdlcyBpbiBzaWQgQVNBUCB0byBMVFRuZyAyLjMsIGFuZCB3ZSBuZWVkIHRvIGtub3cg
-aG93IG11Y2ggdGltZSBpdCB0YWtlcyB0byBnZXQgaXQgaW50byB0ZXN0aW5nLCBhbmQgZmlndXJl
-IG91dCBpZiBpdCBtYWtlcyBpbnRvIHRoZSB1cGNvbWluZyBzdGFibGUuIEkgcmVzdGF0ZSBoZWxw
-IG9mZmVyIG9uIGJlaGFsZiBvZiB0aGUgTFRUbmcgY29tbXVuaXR5OiBpZiB5b3UgbGFjayB0aW1l
-IHRvIHVwZGF0ZSB0aG9zZSBwYWNrYWdlcywgcGxlYXNlIGxldCB1cyBrbm93LCBhbmQgd2Ugd2ls
-bCBnaXZlIGEgaGFuZCBlbnN1cmluZyB0aGF0IHRob3NlIGFyZSB1cGRhdGVkIGluIHNpZCBzb29u
-IGFmdGVyIHRoZSB1cHN0cmVhbSByZWxlYXNlcy4KClRob3VnaHRzID8KClRoYW5rcywKCk1hdGhp
-ZXUKCgo+IAo+IC0tCj4gSm9uCj4gCgotLSAKTWF0aGlldSBEZXNub3llcnMKRWZmaWNpT1MgSW5j
-LgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMu
-bHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZv
-L2x0dG5nLWRldgo=
+
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+Hi all,
+
+I'm releasing today lttv version 1.5. This version replace the internal
+trace
+reading library with libbabeltrace to read CTF/lttng 2.x traces.
+
+Direct download:
+http://lttng.org/files/packages/lttv-1.5-beta1.tar.bz2
+
+The changes since the last beta release are mostly some small bug fixes
+and code cleanup.
+Complete changelog is available in the git repository:
+http://git.lttng.org/?p=lttv.git;a=summary
+
+The Linux Trace Toolkit Viewer (LTTV) is a trace visualization tool
+based on GTK and libbabeltrace. It can read and display traces generated
+by the LTTng tracers.
+
+Available features:
+- - Command line text dump
+- - GUI: Event view, State view (Control Flow view), Resource view and
+Histogram
+
+Filters, statistics and trace synchronization are not available at this
+time.
+
+If you find bugs, please report them in our tracker:
+http://bugs.lttng.org/projects/lttv
+
+Project website: http://lttng.org/lttv
+Download link: http://lttng.org/download
+
+Yannick Brosseau
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.15 (GNU/Linux)
+Comment: Using GnuPG with Icedove - http://www.enigmail.net/
+
+iEYEARECAAYFAlJjYsMACgkQFQrZ7GzHX2q15QCdF7hpdJ4Bu0sL8a3QBUSf93ah
+ff0AoJAZDpnof5QJacmrLseP2vj63e4q
+=XGwq
+-----END PGP SIGNATURE-----
