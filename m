@@ -1,23 +1,22 @@
 From: Yannick Brosseau <yannick.brosseau@gmail.com>
-Subject: [RELEASE] lttv 1.5
-Date: Sun, 20 Oct 2013 00:57:51 -0400
-Message-ID: <526362CF.7010909__4523.74908277324$1382245108$gmane$org@gmail.com>
+Subject: Re: LTTng packages in Debian sid out of sync
+Date: Sun, 20 Oct 2013 01:25:33 -0400
+Message-ID: <5263694D.1020000__43432.5358750813$1382246770$gmane$org@gmail.com>
+References: <630558869.45441.1382211345502.JavaMail.zimbra@efficios.com>
+	<856849325.45462.1382211994767.JavaMail.zimbra@efficios.com>
+	<20131019211009.GA83292@helmut.local>
+	<300817690.45707.1382242504740.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f173.google.com ([209.85.223.173])
+Received: from mail-ie0-f182.google.com ([209.85.223.182])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <yannick.brosseau@gmail.com>) id 1VXl5L-0001Y4-AS
-	for lttng-dev@lists.lttng.org; Sun, 20 Oct 2013 00:57:52 -0400
-Received: by mail-ie0-f173.google.com with SMTP id u16so9222230iet.18
-	for <lttng-dev@lists.lttng.org>; Sat, 19 Oct 2013 21:57:45 -0700 (PDT)
-Received: from [192.168.10.27] (c66.110.155-117.clta.globetrotter.net.
-	[66.110.155.117])
-	by mx.google.com with ESMTPSA id p5sm10816299igj.10.2013.10.19.21.57.44
-	for <lttng-dev@lists.lttng.org>
-	(version=TLSv1 cipher=ECDHE-RSA-RC4-SHA bits=128/128);
-	Sat, 19 Oct 2013 21:57:45 -0700 (PDT)
+	(envelope-from <yannick.brosseau@gmail.com>) id 1VXlW8-0002mF-BJ
+	for lttng-dev@lists.lttng.org; Sun, 20 Oct 2013 01:25:33 -0400
+Received: by mail-ie0-f182.google.com with SMTP id as1so9253284iec.41
+	for <lttng-dev@lists.lttng.org>; Sat, 19 Oct 2013 22:25:26 -0700 (PDT)
+In-Reply-To: <300817690.45707.1382242504740.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -26,51 +25,71 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
-
-Hi all,
-
-I'm releasing today lttv version 1.5. This version replace the internal
-trace
-reading library with libbabeltrace to read CTF/lttng 2.x traces.
-
-Direct download:
-http://lttng.org/files/packages/lttv-1.5-beta1.tar.bz2
-
-The changes since the last beta release are mostly some small bug fixes
-and code cleanup.
-Complete changelog is available in the git repository:
-http://git.lttng.org/?p=lttv.git;a=summary
-
-The Linux Trace Toolkit Viewer (LTTV) is a trace visualization tool
-based on GTK and libbabeltrace. It can read and display traces generated
-by the LTTng tracers.
-
-Available features:
-- - Command line text dump
-- - GUI: Event view, State view (Control Flow view), Resource view and
-Histogram
-
-Filters, statistics and trace synchronization are not available at this
-time.
-
-If you find bugs, please report them in our tracker:
-http://bugs.lttng.org/projects/lttv
-
-Project website: http://lttng.org/lttv
-Download link: http://lttng.org/download
-
-Yannick Brosseau
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.15 (GNU/Linux)
-Comment: Using GnuPG with Icedove - http://www.enigmail.net/
-
-iEYEARECAAYFAlJjYsMACgkQFQrZ7GzHX2q15QCdF7hpdJ4Bu0sL8a3QBUSf93ah
-ff0AoJAZDpnof5QJacmrLseP2vj63e4q
-=XGwq
------END PGP SIGNATURE-----
+T24gMjAxMy0xMC0yMCAwMDoxNSwgTWF0aGlldSBEZXNub3llcnMgd3JvdGU6Cj4gLS0tLS0gT3Jp
+Z2luYWwgTWVzc2FnZSAtLS0tLQo+PiBGcm9tOiAiSm9uIEJlcm5hcmQiIDxqYmVybmFyZEBkZWJp
+YW4ub3JnPgo+PiBUbzogIk1hdGhpZXUgRGVzbm95ZXJzIiA8bWF0aGlldS5kZXNub3llcnNAZWZm
+aWNpb3MuY29tPgo+PiBDYzogIlN0w6lwaGFuZSBHcmFiZXIiIDxzdGdyYWJlckB1YnVudHUuY29t
+PiwgIkFsZXhhbmRyZSBNb250cGxhaXNpciIgPGFsZXhtb250aHlAdm94cG9wdWxpLmltPiwKPj4g
+bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+PiBTZW50OiBTYXR1cmRheSwgT2N0b2JlciAxOSwg
+MjAxMyA1OjEwOjA5IFBNCj4+IFN1YmplY3Q6IFJlOiBMVFRuZyBwYWNrYWdlcyBpbiBEZWJpYW4g
+c2lkIG91dCBvZiBzeW5jCj4+Cj4+ICogTWF0aGlldSBEZXNub3llcnMgPG1hdGhpZXUuZGVzbm95
+ZXJzQGVmZmljaW9zLmNvbT4gd3JvdGU6Cj4+PiBIaSBKb24sCj4+Pgo+Pj4gV2UndmUgaGFkIGEg
+Y291cGxlIG9mIHVzZXIgcmVwb3J0cyBhYm91dCBsdHRuZyB2ZXJzaW9ucyBub3Qgd29ya2luZyBp
+bgo+Pj4gRGViaWFuLgo+Pj4KPj4+IEknbSBsb29raW5nIGF0IHRoZSBjdXJyZW50IERlYmlhbiBz
+aWQsIGFuZCBoZXJlIGlzIHRoZSBzaXR1YXRpb246Cj4+Pgo+Pj4gaHR0cDovL3BhY2thZ2VzLmRl
+Ymlhbi5vcmcvc2lkL2x0dG5nLXRvb2xzIDogdmVyc2lvbiAyLjEuMS0yCj4+PiBodHRwOi8vcGFj
+a2FnZXMuZGViaWFuLm9yZy9zaWQvdXRpbHMvbHR0LWJpbiA6IHZlcnNpb24gMi4xLjEtMgo+Pj4g
+aHR0cDovL3BhY2thZ2VzLmRlYmlhbi5vcmcvc2lkL2x0dG5nLW1vZHVsZXMtZGttcyA6IHZlcnNp
+b24gMi4zLjAtMQo+Pj4KPj4+IEFsdGhvdWdoIGl0J3MgcG9zc2libGUgdGhhdCBsdHRuZy1tb2R1
+bGVzIDIuMy54IHdpbGwgd29yayB3aXRoIGx0dG5nLXRvb2xzCj4+PiAyLjEueCwgdGhpcyBjb21i
+aW5hdGlvbiBvZiB2ZXJzaW9ucyBpcyB1bnN1cHBvcnRlZC4gV2UgcmVxdWlyZSB0aGF0Cj4+PiB1
+c3QvdG9vbHMvbW9kdWxlcyBiZSB1cGRhdGVkIGluIGxvY2tlZCBzdGVwIGJldHdlZW4gbWlub3Ig
+dmVyc2lvbnMgKDIuMQo+Pj4gd2l0aAo+Pj4gMi4xLCAyLjIgd2l0aCAyLjIsIGFuZCBzbyBvbiku
+IEFsc28sIDIuMSBpcyBzdGFydGluZyB0byBiZSBxdWl0ZSBvbGQ6IHdlJ3JlCj4+PiBjdXJyZW50
+bHkgd29ya2luZyBvbiBhbiB1cGNvbWluZyAyLjQsIGFuZCB0aGUgbGFzdCB2ZXJzaW9uICgyLjMp
+IHByb3ZpZGVzCj4+PiBsb3RzCj4+PiBvZiBjb29sIGZlYXR1cmVzIGluY2x1ZGluZyBmbGlnaHQg
+cmVjb3JkZXIgdHJhY2luZyBhbmQgc25hcHNob3Qgc3VwcG9ydC4KPj4gWWVzLCBJIGRvIGFwb2xv
+Z2l6ZSBmb3IgdGhlIGN1cnJlbnQgc3RhdGUuICBNeSBmaXJzdCBwcmlvcml0eSB3YXMgdG8gcmVz
+b2x2ZQo+PiB0aGUKPj4gYmxvY2tlZCB0ZXN0aW5nIG1pZ3JhdGlvbiBmb3IgdXN0IGFuZCBsdHRu
+Zy10b29scy4gIE15IHVwbG9hZCB5ZXN0ZXJkYXkgc2VlbXMKPj4gdG8KPj4gaGF2ZSByZXNvbHZl
+ZCB0aGUgbGFzdCBvZiB0aGUgdXN0IHBhY2thZ2UgaXNzdWVzLCBhbmQgc28gbm93IEkgbmVlZCBv
+bmx5IHRvCj4+IHVwbG9hZCB0aGUgcmVtYWluaW5nIGZpeGVzIGZvciBsdHRuZy10b29scyBhbmQg
+dGhlIHR3byBzaG91bGQgYmUgZWxpZ2libGUgZm9yCj4+IG1pZ3JhdGlvbiB0byB0ZXN0aW5nLiAg
+SSBkZWNpZGVkIGl0IHdvdWxkIGJlIGVhc2llciB0byBmaXggdGhlIG1pZ3JhdGlvbgo+PiBwcm9i
+bGVtCj4+IGZpcnN0LCBhbmQgdGhlbiB1cGRhdGUgYWxsIG9mIHRoZSB2ZXJzaW9ucyB0byAyLjMu
+eCAtIGl0IG1ha2VzIHBlcmZlY3Qgc2Vuc2UKPj4gdG8KPj4gbWUgYXMgYSBwYWNrYWdlciwgYnV0
+IEkgYWxzbyBzZWUgaXQncyBjb21wbGV0ZWx5IGJhY2t3YXJkcyBmcm9tIGEgdXNlcidzCj4+IHBl
+cnNwZWN0aXZlLgo+Pgo+PiBTaWQgc2hvdWxkIGhhdmUgMi4zLnggaW1tZWRpYXRlbHkgYW5kIEkg
+d2lsbCBwdXNoIHRoZXNlIHZlcnNpb25zIGJlZm9yZSB0aGUKPj4gd2Vla2VuZCBlbmRzLgo+Pgo+
+PiBUaGUgbWlncmF0aW9uIGlzIGFsc28gdmVyeSBpbXBvcnRhbnQgdG8gbWUsIGFzIEplc3NpZSB3
+aWxsIGZyZWV6ZSBzb29uLiAgSQo+PiB3aWxsCj4+IGNvbnRpbnVlIG9uIHRoYXQgZnJvbnQgYWZ0
+ZXIgMi4zLnggaXMgaW4gc2lkLgo+Pgo+PiBEb2VzIHRoaXMgc291bmQgbGlrZSBhIHJlYXNvbmFi
+bGUgcGxhbj8KPiBIaSBKb24sCj4KPiBXZSBzZWVtIHRvIGhhdmUgYSBwcm9ibGVtIGhlcmUuIFRo
+ZSBwYWNlIG9mIHBhY2thZ2luZyBvbiBEZWJpYW4gY3VycmVudGx5IGRvZXMgbm90IHNlZW0gdG8g
+bWF0Y2ggb3VyIHN1cHBvcnQgY3ljbGUgYXQgYWxsLiBZb3UgYXJlIGN1cnJlbnRseSB0YXJnZXRp
+bmcgTFRUbmcgMi4xIGZvciB0ZXN0aW5nIChhbmQgdGhlcmVmb3JlIG5leHQgc3RhYmxlKSwgd2hp
+bGUgd2Ugc3BlY2lmaWVkIGEgcmVsZWFzZSBwb2xpY3kgYmFjayBpbiBBdWd1c3Q6IGh0dHA6Ly9s
+aXN0cy5sdHRuZy5vcmcvcGlwZXJtYWlsL2x0dG5nLWRldi8yMDEzLUF1Z3VzdC8wMjExMzIuaHRt
+bCB3aGljaCBjbGVhcmx5IHN0YXRlcyB0aGF0IHdlIGN1cnJlbnRseSBzdXBwb3J0IExUVG5nIDIu
+MywgYW5kIG9ubHkgZG8gc2VjdXJpdHkgZml4IGJhY2twb3J0cyBmb3IgMi4yLiBUaGVyZWZvcmUs
+IDIuMSBpcyBjbGVhcmx5IHVuc3VwcG9ydGVkIGF0IHRoaXMgcG9pbnQuCj4KPiBJIHN0cm9uZ2x5
+IGFkdmlzZSB0byB1cGRhdGUgcGFja2FnZXMgaW4gc2lkIEFTQVAgdG8gTFRUbmcgMi4zLCBhbmQg
+d2UgbmVlZCB0byBrbm93IGhvdyBtdWNoIHRpbWUgaXQgdGFrZXMgdG8gZ2V0IGl0IGludG8gdGVz
+dGluZywgYW5kIGZpZ3VyZSBvdXQgaWYgaXQgbWFrZXMgaW50byB0aGUgdXBjb21pbmcgc3RhYmxl
+LiBJIHJlc3RhdGUgaGVscCBvZmZlciBvbiBiZWhhbGYgb2YgdGhlIExUVG5nIGNvbW11bml0eTog
+aWYgeW91IGxhY2sgdGltZSB0byB1cGRhdGUgdGhvc2UgcGFja2FnZXMsIHBsZWFzZSBsZXQgdXMg
+a25vdywgYW5kIHdlIHdpbGwgZ2l2ZSBhIGhhbmQgZW5zdXJpbmcgdGhhdCB0aG9zZSBhcmUgdXBk
+YXRlZCBpbiBzaWQgc29vbiBhZnRlciB0aGUgdXBzdHJlYW0gcmVsZWFzZXMuCj4KPiBUaG91Z2h0
+cyA/Cj4KPiBUaGFua3MsCj4KTWF0aGlldSwgSSB0aGluayB5b3UgbWlzdW5kZXJzdG9vZCBKb24s
+CkhlIHBsYW5zIHRvIHVwbG9hZCAyLjMgdG8gc2lkIHRoaXMgd2Vla2VuZCBhbmQgdGhleSB3aWxs
+IGdldCBpbnRvCnRlc3RpbmcgYWZ0ZXIgdGhlIG5vcm1hbCBtaWdyYXRpb24gcGVyaW9kIChub3Jt
+YWxseSAxMCBkYXlzKS4KClRoZXJlIHdhcyBhbiBpc3N1ZSBiZWZvcmUgdGhhdCB3YXMgYmxvY2tp
+bmcgdGhpcyBtaWdyYXRpb24gYW5kIGl0IHNlZW0KdGhhdCBKb24gd2FzIGFibGUgdG8gZml4IGl0
+IHJlY2VudGx5LgoKWWFubmljawoKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5n
+Lm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRu
+Zy1kZXYK
