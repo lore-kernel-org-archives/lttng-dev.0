@@ -1,21 +1,23 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: Jon Bernard <jbernard@debian.org>
 Subject: Re: LTTng packages in Debian sid out of sync
-Date: Sun, 20 Oct 2013 15:00:19 +0000 (UTC)
-Message-ID: <1084047903.45979.1382281219903.JavaMail.zimbra__49689.5953933292$1382281305$gmane$org@efficios.com>
+Date: Sun, 20 Oct 2013 12:04:34 -0400
+Message-ID: <20131020160434.GA2011__39216.8920291171$1382285138$gmane$org@helmut.local>
 References: <630558869.45441.1382211345502.JavaMail.zimbra@efficios.com>
 	<856849325.45462.1382211994767.JavaMail.zimbra@efficios.com>
 	<20131019211009.GA83292@helmut.local>
 	<300817690.45707.1382242504740.JavaMail.zimbra@efficios.com>
 	<20131020134521.GA97360@helmut.local>
+	<1084047903.45979.1382281219903.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from out3-smtp.messagingengine.com ([66.111.4.27])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1VXuUU-0000X1-R5
-	for lttng-dev@lists.lttng.org; Sun, 20 Oct 2013 11:00:32 -0400
-In-Reply-To: <20131020134521.GA97360@helmut.local>
+	(envelope-from <jbernard@debian.org>) id 1VXvUe-0003Gc-BO
+	for lttng-dev@lists.lttng.org; Sun, 20 Oct 2013 12:04:45 -0400
+Content-Disposition: inline
+In-Reply-To: <1084047903.45979.1382281219903.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,44 +26,47 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Jon Bernard <jbernard@debian.org>
-Cc: lttng-dev@lists.lttng.org, =?utf-8?Q?St=C3=A9phane?= Graber <stgraber@ubuntu.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev@lists.lttng.org, =?iso-8859-1?Q?St=E9phane?= Graber <stgraber@ubuntu.com>
 List-Id: lttng-dev@lists.lttng.org
 
-LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJKb24gQmVybmFyZCIgPGpiZXJu
-YXJkQGRlYmlhbi5vcmc+Cj4gVG86ICJNYXRoaWV1IERlc25veWVycyIgPG1hdGhpZXUuZGVzbm95
-ZXJzQGVmZmljaW9zLmNvbT4KPiBDYzogIlN0w6lwaGFuZSBHcmFiZXIiIDxzdGdyYWJlckB1YnVu
-dHUuY29tPiwgIkFsZXhhbmRyZSBNb250cGxhaXNpciIgPGFsZXhtb250aHlAdm94cG9wdWxpLmlt
-PiwKPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gU2VudDogU3VuZGF5LCBPY3RvYmVyIDIw
-LCAyMDEzIDk6NDU6MjEgQU0KPiBTdWJqZWN0OiBSZTogTFRUbmcgcGFja2FnZXMgaW4gRGViaWFu
-IHNpZCBvdXQgb2Ygc3luYwo+IApbLi4uXQo+IAo+IFRoYXQgaXMgbm90IGV4YWN0bHkgd2hhdCBJ
-IGludGVuZGVkIHRvIGNvbnZleSwgbGV0IG1lIGJlIG1vcmUgZGlyZWN0IGFib3V0IG15Cj4gdmll
-dy4gIEkgY29tcGxldGVseSBhZ3JlZSB0aGF0IHNpZCBzaG91bGQgaGF2ZSAyLjMueCBpbW1lZGlh
-dGVseS4gIEkgYWxzbwo+IGFncmVlCj4gdGhhdCAyLjMgc2hvdWxkIGJlIHRhcmdldGVkIGZvciB0
-ZXN0aW5nLCBhbmQgdGhlcmVmb3JlIHRoZSBuZXh0IHN0YWJsZQo+IHJlbGVhc2UuCgpBbGxyaWdo
-dCA6KSBJJ20gZ2xhZCB3ZSdyZSBvbiB0aGUgc2FtZSBwYWdlLCBzb3JyeSBmb3IgdGhlIG1pc3Vu
-ZGVyc3RhbmRpbmcuCgo+IAo+IExhc3QgbmlnaHQgSSB1cGxvYWRlZCBhIGx0dG5nLW1vZHVsZXMg
-dXBkYXRlICgyLjMuMikuICBKdXN0IGVhcmxpZXIgSQo+IHVwbG9hZGVkCj4gdXN0IDIuMy4wLiAg
-T25jZSB1c3QgaXMgYWNjZXB0ZWQgYW5kIGF2YWlsYWJsZSwgSSB3aWxsIHVwbG9hZCBsdHRuZy10
-b29scwo+IDIuMy4wCj4gKHNpbmNlIGx0dG5nLXRvb2xzIGRlcGVuZHMgb24gdXN0IHRvIGJ1aWxk
-IHN1Y2Nlc3NmdWxseSkuICBTbyBJIGV4cGVjdCBzaWQgdG8KPiBoYXZlIGEgY29tcGxldGUgMi4z
-IHN1aXRlIHZlcnkgc29vbi4gIFRoZSBvbmx5IHRoaW5nIHRoYXQgd2lsbCBzbG93IG1lIGRvd24K
-PiBhcmUKPiB0aGUgZnRwIG1hc3RlcnMgLSB1c3Qgc2F3IGEgc29uYW1lIGJ1bXAgd2hpY2ggaW50
-cm9kdWNlcyBhIG5ldyBwYWNrYWdlIGFuZAo+IHRoZXJlZm9yZSByZXF1aXJlcyBodW1hbiBpbnRl
-cnZlbnRpb24gLSB0aGlzIGNhbiB0YWtlIHVwIHRvIGEgd2VlayBmb3IKPiBwcm9jZXNzaW5nLgoK
-U291bmRzIGdvb2QhIExldCdzIGtlZXAgb3VyIGZpbmdlcnMgY3Jvc3NlZC4KCj4gCj4gSWYgYWxs
-IGdvZXMgd2VsbCwgdGhlc2UgcGFja2FnZXMgd2lsbCBtb3ZlIHRvIHRlc3RpbmcgYWZ0ZXIgMTAg
-ZGF5cywgYW5kIHdpbGwKPiBiZQo+IGluY2x1ZGVkIGluIHRoZSBuZXh0IHN0YWJsZSByZWxlYXNl
-LiAgVGhlcmUgY291bGQgYmUgYSBwcm9ibGVtIHdpdGggdGhlCj4gdGVzdGluZwo+IHVwZ3JhZGUg
-cHJvY2VzcywgYnV0IHRoYXQgc2hvdWxkbid0IGJlIGEgZGlmZmljdWx0IHByb2JsZW0gdG8gc29s
-dmUuICBJIHdpbGwKPiB0cnkKPiB0byB0ZXN0IHRoZSB0cmFuc2l0aW9uIG15c2VsZiB3aGlsZSBJ
-IHdhaXQgZm9yIHRoZSBwYWNrYWdlcyB0byBsYW5kIGluIHNpZC4KPiAKPiBJbiBzdW1tYXJ5IEkg
-dGhpbmsgSSdtIHZlcnkgY2xvc2UgdG8gaGF2aW5nIGV2ZXJ5dGhpbmcgaW4gZ29vZCBvcmRlciBm
-b3IgYm90aAo+IHNpZCBhbmQgamVzc2llLgoKR3JlYXQhCgo+IAo+IERvZXMgdGhpcyBhbGwgbWFr
-ZSBzZW5zZT8KClllcywgdGhhbmsgeW91IHNvIG11Y2ggZm9yIHlvdXIgZWZmb3J0LiBBZ2Fpbiwg
-c29ycnkgYWJvdXQgdGhlIG1pc3VuZGVyc3RhbmRpbmcuCgpCZXN0IHJlZ2FyZHMsCgpNYXRoaWV1
-Cgo+IAo+IC0tCj4gSm9uCj4gCgotLSAKTWF0aGlldSBEZXNub3llcnMKRWZmaWNpT1MgSW5jLgpo
-dHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0
-bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0
-dG5nLWRldgo=
+* Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
+> ----- Original Message -----
+> > From: "Jon Bernard" <jbernard@debian.org>
+> > To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+> > Cc: "St=E9phane Graber" <stgraber@ubuntu.com>, "Alexandre Montplaisir" =
+<alexmonthy@voxpopuli.im>,
+> > lttng-dev@lists.lttng.org
+> > Sent: Sunday, October 20, 2013 9:45:21 AM
+> > Subject: Re: LTTng packages in Debian sid out of sync
+> > =
+
+> [...]
+> > =
+
+> > That is not exactly what I intended to convey, let me be more direct ab=
+out my
+> > view.  I completely agree that sid should have 2.3.x immediately.  I al=
+so
+> > agree
+> > that 2.3 should be targeted for testing, and therefore the next stable
+> > release.
+> =
+
+> Allright :) I'm glad we're on the same page, sorry for the misunderstandi=
+ng.
+
+No worries.  I'll add that future releases (like the upcoming 2.4) will
+be prepared and tested all together prior to upload - to hopefully avoid
+the previous situation/nightmare that I managed to get myself into.
+
+There can still be a sizable amount of work for 2.3 to fully land into
+testing, so that is my primary focus.  The freeze deadline is fast
+approaching, so I will be keeping a close eye on things as they
+progress.  As things settle I'll post status here.
+
+Cheers,
+
+-- =
+
+Jon
