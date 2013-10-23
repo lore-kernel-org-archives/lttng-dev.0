@@ -1,40 +1,23 @@
-From: Amit Margalit <AMITM@il.ibm.com>
-Subject: Re: UST - Is it possible to merge my source file and
- the tracepoint file?
-Date: Wed, 23 Oct 2013 09:58:13 +0300
-Message-ID: <OFA6B46C1E.7B0717D8-ONC2257C0D.0020ECA2-C2257C0D.00264735__18305.2459302873$1382511561$gmane$org@il.ibm.com>
-References: <48CF5AC71E61DB46B70D0F388054EFFD2679F56D@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+From: Salman Rafiq <salman.rafiq@esk.fraunhofer.de>
+Subject: Re: Reading CTF trace using Babeltrace API
+Date: Wed, 23 Oct 2013 16:50:03 +0200
+Message-ID: <E537659DE2B2C54EBD9FC9180F059880395D955070__26340.3503028259$1382539892$gmane$org@zulu.esk.fraunhofer.de>
+References: <E537659DE2B2C54EBD9FC9180F059880395D85FEA2@zulu.esk.fraunhofer.de>
+	<CA+jJMxtmqSLA9wpyCMxCo5i7k2=ndL_GZNi8Dbw8YsSbQ15qeQ@mail.gmail.com>
+	<E537659DE2B2C54EBD9FC9180F059880395D860010@zulu.esk.fraunhofer.de>
+	<CA+jJMxsMU5u_4m3pUPJ6EBQVKTL_4+PNSj8iHvRcn6CJ=bt6Ag@mail.gmail.com>
+	<439534666.36114.1381274066505.JavaMail.zimbra@efficios.com>
+	<CA+jJMxtK8ZHvXKw3Ea6wxF_6f8_LwmkDahbxCg=rBu3SXjBMWg@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0345324114=="
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from e06smtp13.uk.ibm.com ([195.75.94.109])
+Received: from mx-relay28-haj2.antispameurope.com ([83.246.65.228])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <amitm@il.ibm.com>) id 1VYsOo-0001tB-Vr
-	for lttng-dev@lists.lttng.org; Wed, 23 Oct 2013 02:58:36 -0400
-Received: from /spool/local
-	by e06smtp13.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use
-	Only! Violators will be prosecuted
-	for <lttng-dev@lists.lttng.org> from <amitm@il.ibm.com>;
-	Wed, 23 Oct 2013 07:58:29 +0100
-Received: from b06cxnps4076.portsmouth.uk.ibm.com
-	(d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-	by d06dlp02.portsmouth.uk.ibm.com (Postfix) with ESMTP id 78A4E2190066
-	for <lttng-dev@lists.lttng.org>; Wed, 23 Oct 2013 07:58:26 +0100 (BST)
-Received: from d06av09.portsmouth.uk.ibm.com (d06av09.portsmouth.uk.ibm.com
-	[9.149.37.250])
-	by b06cxnps4076.portsmouth.uk.ibm.com (8.13.8/8.13.8/NCO v10.0) with
-	ESMTP id r9N6wDTQ36831296
-	for <lttng-dev@lists.lttng.org>; Wed, 23 Oct 2013 06:58:13 GMT
-Received: from d06av09.portsmouth.uk.ibm.com (localhost [127.0.0.1])
-	by d06av09.portsmouth.uk.ibm.com (8.14.4/8.14.4/NCO v10.0 AVout) with
-	ESMTP id r9N6wQYq012880
-	for <lttng-dev@lists.lttng.org>; Wed, 23 Oct 2013 00:58:26 -0600
-Received: from d06ml311.portsmouth.uk.ibm.com (d06ml311.portsmouth.uk.ibm.com
-	[9.149.104.181])
-	by d06av09.portsmouth.uk.ibm.com (8.14.4/8.14.4/NCO v10.0 AVin) with
-	ESMTP id r9N6wQ24012874
-	for <lttng-dev@lists.lttng.org>; Wed, 23 Oct 2013 00:58:26 -0600
-In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD2679F56D@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+	(envelope-from <salman.rafiq@esk.fraunhofer.de>) id 1VYzlG-0007ba-BZ
+	for lttng-dev@lists.lttng.org; Wed, 23 Oct 2013 10:50:20 -0400
+In-Reply-To: <CA+jJMxtK8ZHvXKw3Ea6wxF_6f8_LwmkDahbxCg=rBu3SXjBMWg@mail.gmail.com>
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -43,389 +26,373 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: =?iso-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Julien Desfossez <jdesfossez@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-This is a multipart message in MIME format.
---===============0345324114==
-Content-Type: multipart/alternative; boundary="=_alternative 00264697C2257C0D_="
+Hello again :)
 
-This is a multipart message in MIME format.
---=_alternative 00264697C2257C0D_=
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: quoted-printable
+While reading Kernel trace events (system calls), I came across an issue re=
+lated to reading the field 'args' inside 'sys_unknown' system call event.
 
-Hi,
+Below is the information I get using public babeltrace API's for the event =
+field type.
+Ctf_type_id =3D 8  (CTF_TYPE_ARRAY)
 
-> Presumably source.c contains at least the tracepoint() calls?
 
-Not at first. This file begins as a simple C file, and my instrumentor is=20
-parsing it, automatically generating source=5Ftp.h and source=5Ftp.c, and t=
-hen=20
-embeds the #include line and the tracepoint() calls into source.c itself.
+But when I try to read the value for the field using the following API
+char * bt_ctf_get_char_array(const struct bt_definition *field);
 
-> Do you wish the tracepoint provider (lttng=5Ftp=5Fhdr.h + lttng=5Ftp=5Fsr=
-c.c) to=20
-be statically included in each linked object (possibly through a shared=20
-static library (.a))
+I receive null value. Also it gives me warning that I am instead extracting=
+ a String.
+[warning] Extracting String
 
-I want to compile a single C file into a single object file, so that I do=20
-not need to change anything in my project's existing build, except to tell =
-
-it to use my automated instrumentation tool before compiling.
-
-Here's what I mean -
-
-In the standard work mode, I use 2 C files: (1) my source.c which=20
-contains:
-
-Headers + Declarations
-Include of source=5Ftp.h (which gives declarations tracepoint functions=20
-=5F=5Ftracepoint=5Fcb=5F<provider>=5F=5F=5F<tp-name>() among other things)
-My own function definitions with calls to tracepoint()
-
-And (2) is source=5Ftp.c which contains (by defining TRACEPOINT=5FDEFINE an=
-d=20
-including source=5Ftp.h):
-
-Various declarations
-Definitions, for example the functions named=20
-=5F=5Ftracepoint=5Fcb=5F<provider>=5F=5F=5F<tp-name>(), etc.
-
-This means that I need to add source=5Ftp.c as a dependency of my build and=
-=20
-explain how to create it, but also, to have manually added the=20
-tracepoint() calls and the include of source=5Ftp.h.
-
-What I would like, is to take a pre-processed version of source.c (after=20
-cpp but before the addition of tracepoint calls), and to end up with a new =
-
-file that contains:
-
-Headers + Declarations
-Declarations of tracepoint functions=20
-=5F=5Ftracepoint=5Fcb=5F<provider>=5F=5F=5F<tp-name>() among other things)
-My own function definitions with the macro calls to tracepoint() already=20
-"unrolled".
-Lttng function definitions, i.e. the functions named=20
-=5F=5Ftracepoint=5Fcb=5F<provider>=5F=5F=5F<tp-name>(), etc.
-
-This file can then be compiled directly to a single .o file which contains =
-
-everything I need, and is a single unit containing my code and tracepoint=20
-provider code.
-
-Right now, I have a working instrumentor, which requires a rather complex=20
-(read - slow...) procedure in order to end up with a unified .o file.
-
-I am looking to streamline this process and make it faster.
-
-Amit Margalit
-IBM XIV - Storage Reinvented
-XIV-NAS Development Team
-Tel. 03-689-7774
-Fax. 03-689-7230
+Also, I am unable to read the value using the following API.
+char *bt_ctf_get_string(const struct bt_definition *field); =
 
 
 
-From:   "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-To:     "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
-Date:   10/22/2013 10:31 PM
-Subject:        Re: [lttng-dev] UST - Is it possible to merge my source=20
-file and the tracepoint file?
+below is the sample event recorded:
+[00002934900435406801] (+0.000009630) sys_unknown: { cpu_id =3D 3 }, { id =
+=3D 277, args =3D [ [0] =3D 22, [1] =3D 0, [2] =3D 4096, [3] =3D 2, [4] =3D=
+ 4096, [5] =3D 5 ] }
+
+AND the event definition:
+event {
+	name =3D sys_unknown;
+	id =3D 2;
+	stream_id =3D 0;
+	fields :=3D struct {
+		integer { size =3D 32; align =3D 8; signed =3D 0; encoding =3D none; base=
+ =3D 10; } _id
+		integer { size =3D 64; align =3D 8; signed =3D 0; encoding =3D none; base=
+ =3D 10; } _args[6];
+	};
+};
+
+
+Any suggestion related to that will be very helpful.
+Thanks!
+
+Best Regards,
+Salman
+--
+Salman Rafiq
+Gesch=E4ftsfeld Industrial Communication
+Fraunhofer-Institut  f=FCr Eingebettete Systeme und Kommunikationstechnik E=
+SK
+
+Hansastra=DFe 32 | 80686 M=FCnchen
+Telefon, Fax:=A0 +49 89 547088-356 | +49 89 547088-221
+E-Mail:=A0=A0 salman.rafiq@esk.fraunhofer.de
+=A0 =
+
+Internet: =
+
+http://www.esk.fraunhofer.de
+http://www.twitter.com/FraunhoferESK
+
+
+-----Original Message-----
+From: jeremie.galarneau@gmail.com [mailto:jeremie.galarneau@gmail.com] On B=
+ehalf Of J=E9r=E9mie Galarneau
+Sent: Mittwoch, 9. Oktober 2013 01:50
+To: Mathieu Desnoyers
+Cc: Salman Rafiq; Julien Desfossez; lttng-dev@lists.lttng.org
+Subject: Re: Reading CTF trace using Babeltrace API
+
+On Tue, Oct 8, 2013 at 7:14 PM, Mathieu Desnoyers <mathieu.desnoyers@effici=
+os.com> wrote:
+> ----- Original Message -----
+>> From: "J=E9r=E9mie Galarneau" <jeremie.galarneau@efficios.com>
+>> To: "Salman Rafiq" <salman.rafiq@esk.fraunhofer.de>
+>> Cc: jdesfossez@efficios.com, lttng-dev@lists.lttng.org, "Mathieu =
+
+>> Desnoyers" <mathieu.desnoyers@efficios.com>
+>> Sent: Tuesday, October 8, 2013 2:52:38 PM
+>> Subject: Re: Reading CTF trace using Babeltrace API
+> [...]
+>>
+>> The problem is that the "id" fields in both struct =
+
+>> event_header_compact and event_header_large acts as a variant's tag =
+
+>> enumeration.
+>>
+>> For instance, if we take a look at the event_header_compact =
+
+>> structure,
+>>
+>> struct event_header_compact {
+>>         enum : uint5_t { compact =3D 0 ... 30, extended =3D 31 } id;
+>>         variant <id> {
+>>                 struct {
+>>                         uint27_clock_monotonic_t timestamp;
+>>                 } compact;
+>>                 struct {
+>>                         uint32_t id;
+>>                         uint64_clock_monotonic_t timestamp;
+>>                 } extended;
+>>         } v;
+>> } align(8);
+>>
+>> The "enum id" field will indicate the event's id if it has a value of =
+
+>> [0, 30]. It also indicates that the "compact" structure is selected =
+
+>> in the variant that follows. If id =3D=3D 31, the "extended" structure i=
+s =
+
+>> selected, which means that you should retrieve the "id" field's value =
+
+>> from that structure.
+>>
+>> Since code is worth a thousand words, here's a more complete code =
+
+>> sample to read the id fields.
+>>
+>> while ((ctf_event =3D bt_ctf_iter_read_event(iter))) {
+>>         uint64_t event_id =3D 0;
+>>         const struct bt_definition *stream_event_header_scope =3D
+>>                 bt_ctf_get_top_level_scope(
+>>                         ctf_event, BT_STREAM_EVENT_HEADER);
+>>         const struct bt_definition *id_definition =3D
+>>                 bt_ctf_get_field(ctf_event, stream_event_header_scope,
+>>                                  "id");
+>>         const struct bt_definition *v_definition =3D
+>>                 bt_ctf_get_field(ctf_event, stream_event_header_scope,
+>>                                  "v");
+>>
+>>         /* "id may be an enum, get the underlying integer if it's the ca=
+se */
+>>         if (id_definition &&
+>> bt_ctf_field_type(bt_ctf_get_decl_from_def(id_definition)) =3D=3D
+>> CTF_TYPE_ENUM) {
+>>                 id_definition =3D bt_ctf_get_enum_int(id_definition);
+>>         }
+>>
+>>         /* Check if there is a "v" field and if it contains an "id" fiel=
+d */
+>>         if (v_definition &&
+>> bt_ctf_field_type(bt_ctf_get_decl_from_def(v_definition)) =3D=3D
+>> CTF_TYPE_STRUCT) {
+>>                 struct bt_definition const * const *list =3D NULL;
+>>                 unsigned int count =3D 0;
+>>                 unsigned int i;
+>>
+>>                 ret =3D bt_ctf_get_field_list(ctf_event, v_definition, =
+
+>> &list, &count);
+>>                 if (ret) {
+>>                         goto end;
+>>                 }
+>>
+>>                 for (i =3D 0; i < count; i++) {
+>>                         const char *name =3D =
+
+>> bt_ctf_field_name(list[i]);
+>>
+>>                         if (strcmp("id", name) =3D=3D 0) {
+>>                                 id_definition =3D list[i];
+>>                                 break;
+>>                         }
+>>                 }
+>
+> Instead of doing this bt_ctf_get_field_list() and iteration, can't we sim=
+ply use bt_ctf_get_field() to try getting the struct bt_definition ?
+
+Right. I was under the impression the bt_ctf_get_field() would only work on=
+ scopes, but it's not the case.
+
+Thanks!
+J=E9r=E9mie
+
+>
+> Thanks,
+>
+> Mathieu
+>
+>>         }
+>>
+>>         if (id_definition &&
+>> bt_ctf_field_type(bt_ctf_get_decl_from_def(id_definition)) =3D=3D
+>> CTF_TYPE_INTEGER) {
+>>                 event_id =3D bt_ctf_get_uint64(id_definition);
+>>         }
+>>
+>>         printf("id =3D %" PRIu64 "\n", event_id); }
+>>
+>> Regards,
+>> J=E9r=E9mie
+>>
+>> > Thanks a lot!
+>> >
+>> > Regards,
+>> > Salman
+>> >
+>> > --
+>> > Salman Rafiq
+>> > Gesch=E4ftsfeld Industrial Communication Fraunhofer-Institut  f=FCr =
+
+>> > Eingebettete Systeme und Kommunikationstechnik ESK
+>> >
+>> > Hansastra=DFe 32 | 80686 M=FCnchen
+>> > Telefon, Fax:  +49 89 547088-356 | +49 89 547088-221
+>> > E-Mail:   salman.rafiq@esk.fraunhofer.de
+>> >
+>> > Internet:
+>> > http://www.esk.fraunhofer.de
+>> > http://www.twitter.com/FraunhoferESK
+>> >
+>> >
+>> > -----Original Message-----
+>> > From: jeremie.galarneau@gmail.com =
+
+>> > [mailto:jeremie.galarneau@gmail.com] On Behalf Of J=E9r=E9mie Galarneau
+>> > Sent: Mittwoch, 2. Oktober 2013 20:25
+>> > To: Salman Rafiq
+>> > Cc: jdesfossez@efficios.com; lttng-dev@lists.lttng.org; Mathieu =
+
+>> > Desnoyers
+>> > Subject: Re: Reading CTF trace using Babeltrace API
+>> >
+>> > On Wed, Oct 2, 2013 at 12:55 PM, Salman Rafiq =
+
+>> > <salman.rafiq@esk.fraunhofer.de> wrote:
+>> >> Dear LTTngers,
+>> >>
+>> >> I would like to ask few questions related to the API's for reading =
+
+>> >> CTF traces.
+>> >>
+>> >> 1.  Is there any way to read CTF metadata independently, like we =
+
+>> >> have certain API's to read the events.
+>> >>
+>> >
+>> > Not from the public API, unfortunately.
+>> >
+>> >> 2. There are certain scopes defined in ctf/events.h like:
+>> >>         BT_TRACE_PACKET_HEADER          =3D 0,
+>> >>         BT_STREAM_PACKET_CONTEXT        =3D 1,
+>> >>         BT_STREAM_EVENT_HEADER          =3D 2,
+>> >>         BT_STREAM_EVENT_CONTEXT         =3D 3,
+>> >>         BT_EVENT_CONTEXT                =3D 4,
+>> >>         BT_EVENT_FIELDS                 =3D 5,
+>> >>
+>> >> I could not figure out the way to ready the fields 'id' and =
+
+>> >> 'stream_id', for a particular event while iterating through the trace.
+>> >> Though I can ready the event name using an API and fields using =
+
+>> >> BT_EVENT_FIELDS as a scope.
+>> >> For e.g. consider the
+>> >>
+>> >> event {
+>> >>         name =3D sched_migrate_task;
+>> >>         id =3D 1;
+>> >>         stream_id =3D 0;
+>> >>         fields :=3D struct {
+>> >>                 integer { size =3D 8; align =3D 8; signed =3D 1; enco=
+ding =3D
+>> >>                 UTF8; base =3D 10; } _comm[16];
+>> >>                 integer { size =3D 32; align =3D 8; signed =3D 1; enc=
+oding =3D
+>> >>                 none; base =3D 10; } _tid;
+>> >>                 integer { size =3D 32; align =3D 8; signed =3D 1; enc=
+oding =3D
+>> >>                 none; base =3D 10; } _prio;
+>> >>                 integer { size =3D 32; align =3D 8; signed =3D 1; enc=
+oding =3D
+>> >>                 none; base =3D 10; } _orig_cpu;
+>> >>                 integer { size =3D 32; align =3D 8; signed =3D 1; enc=
+oding =3D
+>> >>                 none; base =3D 10; } _dest_cpu;
+>> >>         };
+>> >> };
+>> >>
+>> >
+>> > The "id" field is part of the BT_STREAM_EVENT_HEADER scope, while =
+
+>> > the "stream_id" field is part of the BT_TRACE_PACKET_HEADER scope.
+>> >
+>> > The code below is adapted from converter/babeltrace.c's
+>> > convert_trace() loop to print both values.
+>> >
+>> > while ((ctf_event =3D bt_ctf_iter_read_event(iter))) {
+>> >
+>> >         const struct bt_definition *stream_event_header_scope =3D
+>> >                 bt_ctf_get_top_level_scope(
+>> >                         ctf_event, BT_STREAM_EVENT_HEADER);
+>> >         const struct bt_definition *id_field =3D
+>> >                 bt_ctf_get_field(
+>> >                         ctf_event, stream_event_header_scope, =
+
+>> > "id");
+>> >
+>> >         printf("id =3D %" PRIu64 "\n", bt_ctf_get_uint64(id_field));
+>> >
+>> >         const struct bt_definition *packet_header_scope =3D
+>> >                 bt_ctf_get_top_level_scope(
+>> >                         ctf_event, BT_TRACE_PACKET_HEADER);
+>> >         const struct bt_definition *stream_id_field =3D
+>> >                 bt_ctf_get_field(
+>> >                         ctf_event, packet_header_scope, =
+
+>> > "stream_id");
+>> >
+>> >         printf("stream_id =3D %" PRIu64 "\n", bt_ctf_get_uint64(
+>> >                        stream_id_field)); [...] }
+>> >
+>> > Regards,
+>> > J=E9r=E9mie
+>> >
+>> >>
+>> >> Any help or suggestion related to this issue will be really appreciat=
+ed.
+>> >> Thanks!
+>> >>
+>> >> Regards,
+>> >> Salman
+>> >>
+>> >> --
+>> >> Salman Rafiq
+>> >> Gesch=E4ftsfeld Industrial Communication Fraunhofer-Institut  f=FCr =
+
+>> >> Eingebettete Systeme und Kommunikationstechnik ESK
+>> >>
+>> >> Hansastra=DFe 32 | 80686 M=FCnchen
+>> >> Telefon, Fax:  +49 89 547088-356 | +49 89 547088-221
+>> >> E-Mail:   salman.rafiq@esk.fraunhofer.de
+>> >>
+>> >> Internet:
+>> >> http://www.esk.fraunhofer.de
+>> >> http://www.twitter.com/FraunhoferESK
+>> >>
+>> >
+>> >
+>> >
+>> > --
+>> > J=E9r=E9mie Galarneau
+>> > EfficiOS Inc.
+>> > http://www.efficios.com
+>>
+>>
+>>
+>> --
+>> J=E9r=E9mie Galarneau
+>> EfficiOS Inc.
+>> http://www.efficios.com
+>>
+>
+> --
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> http://www.efficios.com
 
 
 
------Message d'origine-----
-Date: Mon, 21 Oct 2013 16:16:30 +0300
-From: Amit Margalit <AMITM@il.ibm.com>
-
-Consider the following situation:
-
-I wrote a header (lttng=5Ftp=5Fhdr.h) containing several tracepoints, match=
-ing=20
-some locations I want to instrument in one of my source files (let's call=20
-it source.c). I created a C file for this header (lttng=5Ftp=5Fsrc.c) and=20
-compiled it into object. I then compiled source.c into source.o and I link =
-
-the two objects together.
-
-This is the standard work mode.
-
-Now I want to automate this procedure, which will cause me to generate new =
-
-C files, and new headers for many of my sources.
-
-How can I rewrite my source.c so it contains everything I need?
-
-Amit Margalit
-------------------------------
-   Presumably source.c contains at least the tracepoint() calls?  Do you=20
-wish the tracepoint provider (lttng=5Ftp=5Fhdr.h + lttng=5Ftp=5Fsrc.c) to b=
-e=20
-statically included in each linked object (possibly through a shared=20
-static library (.a)), or would you rather have your various objects all=20
-share a tracepoint provider library (.so)?  In the latter case, would you=20
-prefer the tracepoint provider library to be a dependency (static=20
-awareness: the instrumented apps won't run at all unless they can find the =
-
-.so) or not (meaning you'll need to LD=5FPRELOAD the .so to turn tracing=20
-on)?  (There's also the case where the apps control their own traceability =
-
-by using dlopen() and dlclose() with the tracepoint provider .so)
-
-   Typically, you need add just the tracepoint() calls and an "#include=20
-tracepointprovider.h" in the sources, and you control compilation with the =
-
--D TRACEPOINT=5FDEFINE and -D TRACEPOINT=5FPROBE=5FDYNAMIC=5FLINKAGE switch=
-es.
-
-Daniel U. Thibault
-Protection des syst=E8mes et contremesures (PSC) | Systems Protection &=20
-Countermeasures (SPC)
-Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
-
-Cyber Security (MCCS)
-R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
-=20
-Canada - Valcartier (DRDC Valcartier)
-2459 route de la Bravoure
-Qu=E9bec QC  G3J 1X5
-CANADA
-Vox : (418) 844-4000 x4245
-Fax : (418) 844-4538
-NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-Gouvernement du Canada | Government of Canada
-<http://www.valcartier.drdc-rddc.gc.ca/>
- LinkedIn: <http://ca.linkedin.com/in/daniel-u-thibault/>
- Research Gate: <https://www.researchgate.net/profile/Daniel=5FThibault/>
-
-=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=
-=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
-
-
---=_alternative 00264697C2257C0D_=
-Content-Type: text/html; charset="ISO-8859-1"
-Content-Transfer-Encoding: quoted-printable
-
-<font size=3D2 face=3D"sans-serif">Hi,</font>
-<br>
-<br><font size=3D2 face=3D"sans-serif">&gt; </font><tt><font size=3D2>Presu=
-mably
-source.c contains at least the tracepoint() calls?</font></tt>
-<br>
-<br><font size=3D2 face=3D"sans-serif">Not at first. This file begins as a
-simple C file, and my instrumentor is parsing it, automatically generating
-source=5Ftp.h and source=5Ftp.c, and then embeds the #include line and the
-tracepoint() calls into source.c itself.</font>
-<br>
-<br><font size=3D2 face=3D"sans-serif">&gt; </font><tt><font size=3D2>Do you
-wish the tracepoint provider (lttng=5Ftp=5Fhdr.h + lttng=5Ftp=5Fsrc.c) to b=
-e statically
-included in each linked object (possibly through a shared static library
-(.a))</font></tt>
-<br>
-<br><font size=3D2 face=3D"sans-serif">I want to compile a single C file in=
-to
-a single object file, so that I do not need to change anything in my projec=
-t's
-existing build, except to tell it to use my automated instrumentation tool
-before compiling.</font>
-<br>
-<br><font size=3D2 face=3D"sans-serif">Here's what I mean -</font>
-<br>
-<br><font size=3D2 face=3D"sans-serif">In the standard work mode, I use 2 C
-files: (1) my source.c which contains:</font>
-<br>
-<ol>
-<li value=3D1><font size=3D2 face=3D"sans-serif">Headers + Declarations</fo=
-nt>
-<li value=3D2><font size=3D2 face=3D"sans-serif">Include of source=5Ftp.h (=
-which
-gives declarations tracepoint functions =5F=5Ftracepoint=5Fcb=5F&lt;provide=
-r&gt;=5F=5F=5F&lt;tp-name&gt;()
-among other things)</font>
-<li value=3D3><font size=3D2 face=3D"sans-serif">My own function definitions
-with calls to tracepoint()</font></ol>
-<br><font size=3D2 face=3D"sans-serif">And (2) is source=5Ftp.c which conta=
-ins
-(by defining </font><tt><font size=3D2>TRACEPOINT=5FDEFINE</font></tt><font=
- size=3D2 face=3D"sans-serif">
-and including source=5Ftp.h):</font>
-<br>
-<ol>
-<li value=3D1><font size=3D2 face=3D"sans-serif">Various declarations</font>
-<li value=3D2><font size=3D2 face=3D"sans-serif">Definitions, for example t=
-he
-functions named =5F=5Ftracepoint=5Fcb=5F&lt;provider&gt;=5F=5F=5F&lt;tp-nam=
-e&gt;(), etc.</font></ol>
-<br><font size=3D2 face=3D"sans-serif">This means that I need to add source=
-=5Ftp.c
-as a dependency of my build and explain how to create it, but also, to
-have manually added the tracepoint() calls and the include of source=5Ftp.h=
-.</font>
-<br>
-<br><font size=3D2 face=3D"sans-serif">What I would like, is to take a pre-=
-processed
-version of source.c (after cpp but before the addition of tracepoint calls),
-and to end up with a new file that contains:</font>
-<br>
-<ol>
-<li value=3D1><font size=3D2 face=3D"sans-serif">Headers + Declarations</fo=
-nt>
-<li value=3D2><font size=3D2 face=3D"sans-serif">Declarations of tracepoint=
- functions
-=5F=5Ftracepoint=5Fcb=5F&lt;provider&gt;=5F=5F=5F&lt;tp-name&gt;() among ot=
-her things)</font>
-<li value=3D3><font size=3D2 face=3D"sans-serif">My own function definitions
-with the macro calls to tracepoint() already &quot;unrolled&quot;.</font>
-<li value=3D4><font size=3D2 face=3D"sans-serif">Lttng function definitions,
-i.e. the functions named =5F=5Ftracepoint=5Fcb=5F&lt;provider&gt;=5F=5F=5F&=
-lt;tp-name&gt;(),
-etc.</font>
-<li value=3D5></ol><font size=3D2 face=3D"sans-serif">This file can then be=
- compiled
-directly to a single .o file which contains everything I need, and is a
-single unit containing my code and tracepoint provider code.</font>
-<br>
-<br><font size=3D2 face=3D"sans-serif">Right now, I have a working instrume=
-ntor,
-which requires a rather complex (read - slow...) procedure in order to
-end up with a unified .o file.</font>
-<br>
-<br><font size=3D2 face=3D"sans-serif">I am looking to streamline this proc=
-ess
-and make it faster.</font>
-<br>
-<br><font size=3D2 color=3D#000080 face=3D"sans-serif">Amit Margalit</font>
-<br><font size=3D2 color=3D#808000 face=3D"sans-serif">IBM XIV </font><font=
- size=3D2 face=3D"sans-serif">-
-<i>Storage Reinvented</i></font>
-<br><font size=3D2 face=3D"sans-serif">XIV-NAS Development Team</font>
-<br><font size=3D2 face=3D"sans-serif">Tel. 03</font><font size=3D2 face=3D=
-"Arial">-689-7774</font>
-<br><font size=3D2 face=3D"Arial">Fax. 03-689-7230</font>
-<br>
-<br>
-<br>
-<br><font size=3D1 color=3D#5f5f5f face=3D"sans-serif">From: &nbsp; &nbsp; =
-&nbsp;
-&nbsp;</font><font size=3D1 face=3D"sans-serif">&quot;Thibault, Daniel&quot;
-&lt;Daniel.Thibault@drdc-rddc.gc.ca&gt;</font>
-<br><font size=3D1 color=3D#5f5f5f face=3D"sans-serif">To: &nbsp; &nbsp; &n=
-bsp;
-&nbsp;</font><font size=3D1 face=3D"sans-serif">&quot;lttng-dev@lists.lttng=
-.org&quot;
-&lt;lttng-dev@lists.lttng.org&gt;</font>
-<br><font size=3D1 color=3D#5f5f5f face=3D"sans-serif">Date: &nbsp; &nbsp; =
-&nbsp;
-&nbsp;</font><font size=3D1 face=3D"sans-serif">10/22/2013 10:31 PM</font>
-<br><font size=3D1 color=3D#5f5f5f face=3D"sans-serif">Subject: &nbsp; &nbs=
-p;
-&nbsp; &nbsp;</font><font size=3D1 face=3D"sans-serif">Re: [lttng-dev]
-UST - Is it possible to merge my source file and the tracepoint file?</font>
-<br>
-<hr noshade>
-<br>
-<br>
-<br><tt><font size=3D2>-----Message d'origine-----<br>
-Date: Mon, 21 Oct 2013 16:16:30 +0300<br>
-From: Amit Margalit &lt;AMITM@il.ibm.com&gt;<br>
-<br>
-Consider the following situation:<br>
-<br>
-I wrote a header (lttng=5Ftp=5Fhdr.h) containing several tracepoints, match=
-ing
-some locations I want to instrument in one of my source files (let's call
-it source.c). I created a C file for this header (lttng=5Ftp=5Fsrc.c) and c=
-ompiled
-it into object. I then compiled source.c into source.o and I link the two
-objects together.<br>
-<br>
-This is the standard work mode.<br>
-<br>
-Now I want to automate this procedure, which will cause me to generate
-new C files, and new headers for many of my sources.<br>
-<br>
-How can I rewrite my source.c so it contains everything I need?<br>
-<br>
-Amit Margalit<br>
-------------------------------<br>
- &nbsp; Presumably source.c contains at least the tracepoint() calls? &nbsp=
-;Do
-you wish the tracepoint provider (lttng=5Ftp=5Fhdr.h + lttng=5Ftp=5Fsrc.c) =
-to be
-statically included in each linked object (possibly through a shared static
-library (.a)), or would you rather have your various objects all share
-a tracepoint provider library (.so)? &nbsp;In the latter case, would you
-prefer the tracepoint provider library to be a dependency (static awareness:
-the instrumented apps won't run at all unless they can find the .so) or
-not (meaning you'll need to LD=5FPRELOAD the .so to turn tracing on)? &nbsp=
-;(There's
-also the case where the apps control their own traceability by using dlopen=
-()
-and dlclose() with the tracepoint provider .so)<br>
-<br>
- &nbsp; Typically, you need add just the tracepoint() calls and an &quot;#i=
-nclude
-tracepointprovider.h&quot; in the sources, and you control compilation
-with the -D TRACEPOINT=5FDEFINE and -D TRACEPOINT=5FPROBE=5FDYNAMIC=5FLINKA=
-GE switches.<br>
-<br>
-Daniel U. Thibault<br>
-Protection des syst=E8mes et contremesures (PSC) | Systems Protection &amp;
-Countermeasures (SPC)<br>
-Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical
-Cyber Security (MCCS)<br>
-R &amp; D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence
-R&amp;D Canada - Valcartier (DRDC Valcartier)<br>
-2459 route de la Bravoure<br>
-Qu=E9bec QC &nbsp;G3J 1X5<br>
-CANADA<br>
-Vox : (418) 844-4000 x4245<br>
-Fax : (418) 844-4538<br>
-NAC : 918V QSDJ &lt;</font></tt><a href=3D"http://www.travelgis.com/map.asp=
-?addr=3D918V%20QSDJ"><tt><font size=3D2>http://www.travelgis.com/map.asp?ad=
-dr=3D918V%20QSDJ</font></tt></a><tt><font size=3D2>&gt;<br>
-Gouvernement du Canada | Government of Canada<br>
-&lt;</font></tt><a href=3D"http://www.valcartier.drdc-rddc.gc.ca/"><tt><fon=
-t size=3D2>http://www.valcartier.drdc-rddc.gc.ca/</font></tt></a><tt><font =
-size=3D2>&gt;<br>
- LinkedIn: &lt;</font></tt><a href=3D"http://ca.linkedin.com/in/daniel-u-th=
-ibault/"><tt><font size=3D2>http://ca.linkedin.com/in/daniel-u-thibault/</f=
-ont></tt></a><tt><font size=3D2>&gt;<br>
- Research Gate: &lt;</font></tt><a href=3Dhttps://www.researchgate.net/prof=
-ile/Daniel=5FThibault/><tt><font size=3D2>https://www.researchgate.net/prof=
-ile/Daniel=5FThibault/</font></tt></a><tt><font size=3D2>&gt;<br>
-<br>
-=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=
-=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F=5F<br>
-lttng-dev mailing list<br>
-lttng-dev@lists.lttng.org<br>
-</font></tt><a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttn=
-g-dev"><tt><font size=3D2>http://lists.lttng.org/cgi-bin/mailman/listinfo/l=
-ttng-dev</font></tt></a><tt><font size=3D2><br>
-<br>
-</font></tt>
-<br>
---=_alternative 00264697C2257C0D_=--
-
-
-
---===============0345324114==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0345324114==--
+--
+J=E9r=E9mie Galarneau
+EfficiOS Inc.
+http://www.efficios.com
