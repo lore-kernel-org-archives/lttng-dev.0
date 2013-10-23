@@ -1,23 +1,19 @@
-From: Salman Rafiq <salman.rafiq@esk.fraunhofer.de>
-Subject: Re: Reading CTF trace using Babeltrace API
-Date: Wed, 23 Oct 2013 16:50:03 +0200
-Message-ID: <E537659DE2B2C54EBD9FC9180F059880395D955070__26340.3503028259$1382539892$gmane$org@zulu.esk.fraunhofer.de>
-References: <E537659DE2B2C54EBD9FC9180F059880395D85FEA2@zulu.esk.fraunhofer.de>
-	<CA+jJMxtmqSLA9wpyCMxCo5i7k2=ndL_GZNi8Dbw8YsSbQ15qeQ@mail.gmail.com>
-	<E537659DE2B2C54EBD9FC9180F059880395D860010@zulu.esk.fraunhofer.de>
-	<CA+jJMxsMU5u_4m3pUPJ6EBQVKTL_4+PNSj8iHvRcn6CJ=bt6Ag@mail.gmail.com>
-	<439534666.36114.1381274066505.JavaMail.zimbra@efficios.com>
-	<CA+jJMxtK8ZHvXKw3Ea6wxF_6f8_LwmkDahbxCg=rBu3SXjBMWg@mail.gmail.com>
+From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
+	<jeremie.galarneau@efficios.com>
+Subject: [PATCH lttng-ust] Fix: Overhaul of the lttng-gen-tp man
+	page
+Date: Wed, 23 Oct 2013 12:08:15 -0400
+Message-ID: <1382544495-10548-1-git-send-email-jeremie.galarneau__35225.2838238657$1382544566$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mx-relay28-haj2.antispameurope.com ([83.246.65.228])
+Received: from mail-qc0-f169.google.com ([209.85.216.169])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <salman.rafiq@esk.fraunhofer.de>) id 1VYzlG-0007ba-BZ
-	for lttng-dev@lists.lttng.org; Wed, 23 Oct 2013 10:50:20 -0400
-In-Reply-To: <CA+jJMxtK8ZHvXKw3Ea6wxF_6f8_LwmkDahbxCg=rBu3SXjBMWg@mail.gmail.com>
-Content-Language: en-US
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1VZ0yy-0001hP-8l
+	for lttng-dev@lists.lttng.org; Wed, 23 Oct 2013 12:08:33 -0400
+Received: by mail-qc0-f169.google.com with SMTP id x12so593240qcv.0
+	for <lttng-dev@lists.lttng.org>; Wed, 23 Oct 2013 09:08:22 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -26,373 +22,66 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?iso-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Julien Desfossez <jdesfossez@efficios.com>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hello again :)
-
-While reading Kernel trace events (system calls), I came across an issue re=
-lated to reading the field 'args' inside 'sys_unknown' system call event.
-
-Below is the information I get using public babeltrace API's for the event =
-field type.
-Ctf_type_id =3D 8  (CTF_TYPE_ARRAY)
-
-
-But when I try to read the value for the field using the following API
-char * bt_ctf_get_char_array(const struct bt_definition *field);
-
-I receive null value. Also it gives me warning that I am instead extracting=
- a String.
-[warning] Extracting String
-
-Also, I am unable to read the value using the following API.
-char *bt_ctf_get_string(const struct bt_definition *field); =
-
-
-
-below is the sample event recorded:
-[00002934900435406801] (+0.000009630) sys_unknown: { cpu_id =3D 3 }, { id =
-=3D 277, args =3D [ [0] =3D 22, [1] =3D 0, [2] =3D 4096, [3] =3D 2, [4] =3D=
- 4096, [5] =3D 5 ] }
-
-AND the event definition:
-event {
-	name =3D sys_unknown;
-	id =3D 2;
-	stream_id =3D 0;
-	fields :=3D struct {
-		integer { size =3D 32; align =3D 8; signed =3D 0; encoding =3D none; base=
- =3D 10; } _id
-		integer { size =3D 64; align =3D 8; signed =3D 0; encoding =3D none; base=
- =3D 10; } _args[6];
-	};
-};
-
-
-Any suggestion related to that will be very helpful.
-Thanks!
-
-Best Regards,
-Salman
---
-Salman Rafiq
-Gesch=E4ftsfeld Industrial Communication
-Fraunhofer-Institut  f=FCr Eingebettete Systeme und Kommunikationstechnik E=
-SK
-
-Hansastra=DFe 32 | 80686 M=FCnchen
-Telefon, Fax:=A0 +49 89 547088-356 | +49 89 547088-221
-E-Mail:=A0=A0 salman.rafiq@esk.fraunhofer.de
-=A0 =
-
-Internet: =
-
-http://www.esk.fraunhofer.de
-http://www.twitter.com/FraunhoferESK
-
-
------Original Message-----
-From: jeremie.galarneau@gmail.com [mailto:jeremie.galarneau@gmail.com] On B=
-ehalf Of J=E9r=E9mie Galarneau
-Sent: Mittwoch, 9. Oktober 2013 01:50
-To: Mathieu Desnoyers
-Cc: Salman Rafiq; Julien Desfossez; lttng-dev@lists.lttng.org
-Subject: Re: Reading CTF trace using Babeltrace API
-
-On Tue, Oct 8, 2013 at 7:14 PM, Mathieu Desnoyers <mathieu.desnoyers@effici=
-os.com> wrote:
-> ----- Original Message -----
->> From: "J=E9r=E9mie Galarneau" <jeremie.galarneau@efficios.com>
->> To: "Salman Rafiq" <salman.rafiq@esk.fraunhofer.de>
->> Cc: jdesfossez@efficios.com, lttng-dev@lists.lttng.org, "Mathieu =
-
->> Desnoyers" <mathieu.desnoyers@efficios.com>
->> Sent: Tuesday, October 8, 2013 2:52:38 PM
->> Subject: Re: Reading CTF trace using Babeltrace API
-> [...]
->>
->> The problem is that the "id" fields in both struct =
-
->> event_header_compact and event_header_large acts as a variant's tag =
-
->> enumeration.
->>
->> For instance, if we take a look at the event_header_compact =
-
->> structure,
->>
->> struct event_header_compact {
->>         enum : uint5_t { compact =3D 0 ... 30, extended =3D 31 } id;
->>         variant <id> {
->>                 struct {
->>                         uint27_clock_monotonic_t timestamp;
->>                 } compact;
->>                 struct {
->>                         uint32_t id;
->>                         uint64_clock_monotonic_t timestamp;
->>                 } extended;
->>         } v;
->> } align(8);
->>
->> The "enum id" field will indicate the event's id if it has a value of =
-
->> [0, 30]. It also indicates that the "compact" structure is selected =
-
->> in the variant that follows. If id =3D=3D 31, the "extended" structure i=
-s =
-
->> selected, which means that you should retrieve the "id" field's value =
-
->> from that structure.
->>
->> Since code is worth a thousand words, here's a more complete code =
-
->> sample to read the id fields.
->>
->> while ((ctf_event =3D bt_ctf_iter_read_event(iter))) {
->>         uint64_t event_id =3D 0;
->>         const struct bt_definition *stream_event_header_scope =3D
->>                 bt_ctf_get_top_level_scope(
->>                         ctf_event, BT_STREAM_EVENT_HEADER);
->>         const struct bt_definition *id_definition =3D
->>                 bt_ctf_get_field(ctf_event, stream_event_header_scope,
->>                                  "id");
->>         const struct bt_definition *v_definition =3D
->>                 bt_ctf_get_field(ctf_event, stream_event_header_scope,
->>                                  "v");
->>
->>         /* "id may be an enum, get the underlying integer if it's the ca=
-se */
->>         if (id_definition &&
->> bt_ctf_field_type(bt_ctf_get_decl_from_def(id_definition)) =3D=3D
->> CTF_TYPE_ENUM) {
->>                 id_definition =3D bt_ctf_get_enum_int(id_definition);
->>         }
->>
->>         /* Check if there is a "v" field and if it contains an "id" fiel=
-d */
->>         if (v_definition &&
->> bt_ctf_field_type(bt_ctf_get_decl_from_def(v_definition)) =3D=3D
->> CTF_TYPE_STRUCT) {
->>                 struct bt_definition const * const *list =3D NULL;
->>                 unsigned int count =3D 0;
->>                 unsigned int i;
->>
->>                 ret =3D bt_ctf_get_field_list(ctf_event, v_definition, =
-
->> &list, &count);
->>                 if (ret) {
->>                         goto end;
->>                 }
->>
->>                 for (i =3D 0; i < count; i++) {
->>                         const char *name =3D =
-
->> bt_ctf_field_name(list[i]);
->>
->>                         if (strcmp("id", name) =3D=3D 0) {
->>                                 id_definition =3D list[i];
->>                                 break;
->>                         }
->>                 }
->
-> Instead of doing this bt_ctf_get_field_list() and iteration, can't we sim=
-ply use bt_ctf_get_field() to try getting the struct bt_definition ?
-
-Right. I was under the impression the bt_ctf_get_field() would only work on=
- scopes, but it's not the case.
-
-Thanks!
-J=E9r=E9mie
-
->
-> Thanks,
->
-> Mathieu
->
->>         }
->>
->>         if (id_definition &&
->> bt_ctf_field_type(bt_ctf_get_decl_from_def(id_definition)) =3D=3D
->> CTF_TYPE_INTEGER) {
->>                 event_id =3D bt_ctf_get_uint64(id_definition);
->>         }
->>
->>         printf("id =3D %" PRIu64 "\n", event_id); }
->>
->> Regards,
->> J=E9r=E9mie
->>
->> > Thanks a lot!
->> >
->> > Regards,
->> > Salman
->> >
->> > --
->> > Salman Rafiq
->> > Gesch=E4ftsfeld Industrial Communication Fraunhofer-Institut  f=FCr =
-
->> > Eingebettete Systeme und Kommunikationstechnik ESK
->> >
->> > Hansastra=DFe 32 | 80686 M=FCnchen
->> > Telefon, Fax:  +49 89 547088-356 | +49 89 547088-221
->> > E-Mail:   salman.rafiq@esk.fraunhofer.de
->> >
->> > Internet:
->> > http://www.esk.fraunhofer.de
->> > http://www.twitter.com/FraunhoferESK
->> >
->> >
->> > -----Original Message-----
->> > From: jeremie.galarneau@gmail.com =
-
->> > [mailto:jeremie.galarneau@gmail.com] On Behalf Of J=E9r=E9mie Galarneau
->> > Sent: Mittwoch, 2. Oktober 2013 20:25
->> > To: Salman Rafiq
->> > Cc: jdesfossez@efficios.com; lttng-dev@lists.lttng.org; Mathieu =
-
->> > Desnoyers
->> > Subject: Re: Reading CTF trace using Babeltrace API
->> >
->> > On Wed, Oct 2, 2013 at 12:55 PM, Salman Rafiq =
-
->> > <salman.rafiq@esk.fraunhofer.de> wrote:
->> >> Dear LTTngers,
->> >>
->> >> I would like to ask few questions related to the API's for reading =
-
->> >> CTF traces.
->> >>
->> >> 1.  Is there any way to read CTF metadata independently, like we =
-
->> >> have certain API's to read the events.
->> >>
->> >
->> > Not from the public API, unfortunately.
->> >
->> >> 2. There are certain scopes defined in ctf/events.h like:
->> >>         BT_TRACE_PACKET_HEADER          =3D 0,
->> >>         BT_STREAM_PACKET_CONTEXT        =3D 1,
->> >>         BT_STREAM_EVENT_HEADER          =3D 2,
->> >>         BT_STREAM_EVENT_CONTEXT         =3D 3,
->> >>         BT_EVENT_CONTEXT                =3D 4,
->> >>         BT_EVENT_FIELDS                 =3D 5,
->> >>
->> >> I could not figure out the way to ready the fields 'id' and =
-
->> >> 'stream_id', for a particular event while iterating through the trace.
->> >> Though I can ready the event name using an API and fields using =
-
->> >> BT_EVENT_FIELDS as a scope.
->> >> For e.g. consider the
->> >>
->> >> event {
->> >>         name =3D sched_migrate_task;
->> >>         id =3D 1;
->> >>         stream_id =3D 0;
->> >>         fields :=3D struct {
->> >>                 integer { size =3D 8; align =3D 8; signed =3D 1; enco=
-ding =3D
->> >>                 UTF8; base =3D 10; } _comm[16];
->> >>                 integer { size =3D 32; align =3D 8; signed =3D 1; enc=
-oding =3D
->> >>                 none; base =3D 10; } _tid;
->> >>                 integer { size =3D 32; align =3D 8; signed =3D 1; enc=
-oding =3D
->> >>                 none; base =3D 10; } _prio;
->> >>                 integer { size =3D 32; align =3D 8; signed =3D 1; enc=
-oding =3D
->> >>                 none; base =3D 10; } _orig_cpu;
->> >>                 integer { size =3D 32; align =3D 8; signed =3D 1; enc=
-oding =3D
->> >>                 none; base =3D 10; } _dest_cpu;
->> >>         };
->> >> };
->> >>
->> >
->> > The "id" field is part of the BT_STREAM_EVENT_HEADER scope, while =
-
->> > the "stream_id" field is part of the BT_TRACE_PACKET_HEADER scope.
->> >
->> > The code below is adapted from converter/babeltrace.c's
->> > convert_trace() loop to print both values.
->> >
->> > while ((ctf_event =3D bt_ctf_iter_read_event(iter))) {
->> >
->> >         const struct bt_definition *stream_event_header_scope =3D
->> >                 bt_ctf_get_top_level_scope(
->> >                         ctf_event, BT_STREAM_EVENT_HEADER);
->> >         const struct bt_definition *id_field =3D
->> >                 bt_ctf_get_field(
->> >                         ctf_event, stream_event_header_scope, =
-
->> > "id");
->> >
->> >         printf("id =3D %" PRIu64 "\n", bt_ctf_get_uint64(id_field));
->> >
->> >         const struct bt_definition *packet_header_scope =3D
->> >                 bt_ctf_get_top_level_scope(
->> >                         ctf_event, BT_TRACE_PACKET_HEADER);
->> >         const struct bt_definition *stream_id_field =3D
->> >                 bt_ctf_get_field(
->> >                         ctf_event, packet_header_scope, =
-
->> > "stream_id");
->> >
->> >         printf("stream_id =3D %" PRIu64 "\n", bt_ctf_get_uint64(
->> >                        stream_id_field)); [...] }
->> >
->> > Regards,
->> > J=E9r=E9mie
->> >
->> >>
->> >> Any help or suggestion related to this issue will be really appreciat=
-ed.
->> >> Thanks!
->> >>
->> >> Regards,
->> >> Salman
->> >>
->> >> --
->> >> Salman Rafiq
->> >> Gesch=E4ftsfeld Industrial Communication Fraunhofer-Institut  f=FCr =
-
->> >> Eingebettete Systeme und Kommunikationstechnik ESK
->> >>
->> >> Hansastra=DFe 32 | 80686 M=FCnchen
->> >> Telefon, Fax:  +49 89 547088-356 | +49 89 547088-221
->> >> E-Mail:   salman.rafiq@esk.fraunhofer.de
->> >>
->> >> Internet:
->> >> http://www.esk.fraunhofer.de
->> >> http://www.twitter.com/FraunhoferESK
->> >>
->> >
->> >
->> >
->> > --
->> > J=E9r=E9mie Galarneau
->> > EfficiOS Inc.
->> > http://www.efficios.com
->>
->>
->>
->> --
->> J=E9r=E9mie Galarneau
->> EfficiOS Inc.
->> http://www.efficios.com
->>
->
-> --
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> http://www.efficios.com
-
-
-
---
-J=E9r=E9mie Galarneau
-EfficiOS Inc.
-http://www.efficios.com
+Rml4IGEgY291cGxlIG9mIHR5cG9zLCBtaXN0YWtlcyBhbmQgb3V0LW9mIGRhdGUgaW5mb3JtYXRp
+b25zLgoKU2lnbmVkLW9mZi1ieTogSsOpcsOpbWllIEdhbGFybmVhdSA8amVyZW1pZS5nYWxhcm5l
+YXVAZWZmaWNpb3MuY29tPgotLS0KIGRvYy9tYW4vbHR0bmctZ2VuLXRwLjEgfCAyMSArKysrKysr
+KystLS0tLS0tLS0tLS0KIDEgZmlsZSBjaGFuZ2VkLCA5IGluc2VydGlvbnMoKyksIDEyIGRlbGV0
+aW9ucygtKQoKZGlmZiAtLWdpdCBhL2RvYy9tYW4vbHR0bmctZ2VuLXRwLjEgYi9kb2MvbWFuL2x0
+dG5nLWdlbi10cC4xCmluZGV4IDg0YzA1YzkuLjU2NGMzMTcgMTAwNjQ0Ci0tLSBhL2RvYy9tYW4v
+bHR0bmctZ2VuLXRwLjEKKysrIGIvZG9jL21hbi9sdHRuZy1nZW4tdHAuMQpAQCAtMTMsMTUgKzEz
+LDE1IEBAIGx0dG5nXC1nZW5cLXRwIFtPUFRJT05TXSBURU1QTEFURV9GSUxFCiAKIC5QUAogVGhl
+IExUVG5nIHByb2plY3QgYWltcyBhdCBwcm92aWRpbmcgaGlnaGx5IGVmZmljaWVudCB0cmFjaW5n
+IHRvb2xzIGZvciBMaW51eC4KLUl0J3MgdHJhY2VycyBoZWxwIHRyYWNraW5nIGRvd24gcGVyZm9y
+bWFuY2UgaXNzdWVzIGFuZCBkZWJ1Z2dpbmcgcHJvYmxlbXMKK0l0cyB0cmFjZXJzIGhlbHAgaW4g
+dHJhY2tpbmcgZG93biBwZXJmb3JtYW5jZSBpc3N1ZXMgYW5kIGRlYnVnZ2luZyBwcm9ibGVtcwog
+aW52b2x2aW5nIG11bHRpcGxlIGNvbmN1cnJlbnQgcHJvY2Vzc2VzIGFuZCB0aHJlYWRzLiBUcmFj
+aW5nIGFjcm9zcyBtdWx0aXBsZQogc3lzdGVtcyBpcyBhbHNvIHBvc3NpYmxlLgogCi1UaGUgXGZC
+bHR0bmdcLWdlblwtdHBcZlAgdG9vbCBzaW1wbGlmeSB0aGUgZ2VuZXJhdGlvbiBvZiB0aGUgVVNU
+IHRyYWNlcG9pbnQKLWZpbGVzLiBJdCB0YWtlcyBhIHNpbXBsZSB0ZW1wbGF0ZSBmaWxlIGFuZCBn
+ZW5lcmF0ZSB0aGUgbmVjZXNzYXJ5IGNvZGUgdG8gdXNlIHRoZSBkZWZpbmVkIHRyYWNlcG9pbnRz
+IGluIHlvdXIgYXBwbGljYXRpb24uCi1UaGUgc2VjdGlvbiBURU1QTEFURSBGSUxFIEZPUk1BVCBk
+ZXNjcmliZSB0aGUgY29udGVudCBvZiB0aGUgdGVtcGxhdGUgZmlsZS4KK1RoZSBcZkJsdHRuZ1wt
+Z2VuXC10cFxmUCB0b29sIHNpbXBsaWZpZXMgdGhlIGdlbmVyYXRpb24gb2YgdGhlIFVTVCB0cmFj
+ZXBvaW50CitmaWxlcy4gSXQgdGFrZXMgYSBzaW1wbGUgdGVtcGxhdGUgZmlsZSBhbmQgZ2VuZXJh
+dGVzIHRoZSBuZWNlc3NhcnkgY29kZSB0byB1c2UgdGhlIGRlZmluZWQgdHJhY2Vwb2ludHMgaW4g
+eW91ciBhcHBsaWNhdGlvbi4KK1RoZSBzZWN0aW9uIFRFTVBMQVRFIEZJTEUgRk9STUFUIGRlc2Ny
+aWJlcyB0aGUgY29udGVudCBvZiB0aGUgdGVtcGxhdGUgZmlsZS4KIAotQ3VycmVudGx5LCB0aGUg
+dG9vbCBjYW4gZ2VuZXJhdGUgdGhlIC5oLCAuYyBhbmQgLm8gYXNzb2NpYXRlZCB0byB5b3VyCitD
+dXJyZW50bHksIHRoZSB0b29sIGNhbiBnZW5lcmF0ZSB0aGUgLmgsIC5jIGFuZCAubyBhc3NvY2lh
+dGVkIHdpdGggeW91cgogdHJhY2Vwb2ludC4gVGhlIGdlbmVyYXRlZCAuaCBjYW4gYmUgZGlyZWN0
+bHkgaW5jbHVkZWQgaW4geW91ciBhcHBsaWNhdGlvbi4KIFlvdSBjYW4gbGV0IHRoZSB0b29sIGdl
+bmVyYXRlIHRoZSAubyBvciBjb21waWxlIHRoZSAuYyB5b3Vyc2VsZi4KIFlvdSBjYW4gY29tcGls
+ZSB0aGUgLmMgaW50byBhIC5vLCAuYSBvciAuc28gYXQgeW91ciBjaG9pY2UgYW5kCkBAIC0zMCwx
+NCArMzAsMTEgQEAgUmVmZXIgdG8gdGhlIFVTVCBkb2N1bWVudGF0aW9uIGZvciB0aGUKIGFkdmFu
+dGFnZXMgYW5kIGRpc2FkdmFudGFnZSBvZiBlYWNoIGZvcm0uCiBUbyBjb21waWxlIHRoZSByZXN1
+bHRpbmcgLmMgZmlsZSwgeW91IG5lZWQgdG8gYWRkIHRoZSBvcHRpb25zCiAiXC1sbHR0bmctdXN0
+IFwtSS4iLgotTm90ZSBmb3IgQysrIHN1cHBvcnQ6IGFsdGhvdWdoIGFuIGFwcGxpY2F0aW9uIGlu
+c3RydW1lbnRlZCB3aXRoCi10cmFjZXBvaW50cyBjYW4gYmUgY29tcGlsZWQgd2l0aCBnKyssIHRy
+YWNlcG9pbnQgcHJvYmVzIHNob3VsZCBiZQotY29tcGlsZWQgd2l0aCBnY2MgKG9ubHkgdGVzdGVk
+IHdpdGggZ2NjIHNvIGZhcikuCiAKIC5TSCAiT1BUSU9OUyIKIAogLlBQCi1UaGlzIHByb2dyYW0g
+Zm9sbG93IHRoZSB1c3VhbCBHTlUgY29tbWFuZCBsaW5lIHN5bnRheCB3aXRoIGxvbmcgb3B0aW9u
+cyBzdGFydGluZyB3aXRoCitUaGlzIHByb2dyYW0gZm9sbG93cyB0aGUgdXN1YWwgR05VIGNvbW1h
+bmQgbGluZSBzeW50YXggd2l0aCBsb25nIG9wdGlvbnMgc3RhcnRpbmcgd2l0aAogdHdvIGRhc2hl
+cy4gQmVsb3cgaXMgYSBzdW1tYXJ5IG9mIHRoZSBhdmFpbGFibGUgb3B0aW9ucy4KIC5QUAogCkBA
+IC01NCw3ICs1MSw3IEBAIGV4dGVuc2lvbiAoLmgsIC5jLCAubykuCiBUaGlzIG9wdGlvbiBjYW4g
+YmUgc3BlY2ZpZWQgbXVsdGlwbGUgdGltZXMgdG8gZ2VuZXJhdGUgZGlmZmVyZW50IGZpbGUgdHlw
+ZS4KIAogLlBQCi1XaGVuIG5vIG91dHB1dCBpcyBzcGVjaWZpZWQgZGUgZGVmYXVsdCBmaWxlcyBh
+cmUgZ2VuZXJhdGVkIHdpdGggdGhlIHNhbWUgYmFzZSBmaWxlbmFtZSBhcyB0aGUgdGVtcGxhdGUg
+ZmlsZS4gVGhlIGRlZmF1bHQgZmlsZXMgYXJlOiAuaCwgLmMsIC5vLgorV2hlbiBubyBvdXRwdXQg
+aXMgc3BlY2lmaWVkIHRoZSBkZWZhdWx0IGZpbGVzIGFyZSBnZW5lcmF0ZWQgd2l0aCB0aGUgc2Ft
+ZSBiYXNlIGZpbGVuYW1lIGFzIHRoZSB0ZW1wbGF0ZSBmaWxlLiBUaGUgZGVmYXVsdCBmaWxlcyBh
+cmU6IC5oLCAuYywgLm8uCiAKIC5TSCAiVEVNUExBVEUgRklMRSBGT1JNQVQiCiAKQEAgLTg1LDEy
+ICs4MiwxMiBAQCBUUkFDRVBPSU5UX0VWRU5UKAogLlNIICJFTlZJUk9OTUVOVCBWQVJJQUJMRVMi
+CiAKIC5QUAotV2hlbiB0aGUgdG9vbCBnZW5lcmF0ZSBhbiAubyBmaWxlLCBpdCB3aWxsIGxvb2sg
+Zm9yIHRoZSBmb2xsb3dpbmcgZW52aXJvbm1lbnQgdmFyaWFibGVzCitXaGVuIHRoZSB0b29sIGdl
+bmVyYXRlcyBhIC5vIGZpbGUsIGl0IHdpbGwgbG9vayBmb3IgdGhlIGZvbGxvd2luZyBlbnZpcm9u
+bWVudCB2YXJpYWJsZXMKIC5QUAogCiAuUFAKIC5JUCAiQ0MiCi1TcGVjaWZlciB3aGljaCBDIGNv
+bXBpbGVyIHRvIHVzZS4gSWYgdGhlIHZhcmlhYmxlIGlzIG5vdCBzcGVjaWZpZWQsIHRoZQorU3Bl
+Y2lmeSB3aGljaCBDIGNvbXBpbGVyIHRvIHVzZS4gSWYgdGhlIHZhcmlhYmxlIGlzIG5vdCBzcGVj
+aWZpZWQsIHRoZQogdG9vbCB3aWxsIHRyeSAiY2MiIGFuZCAiZ2NjIgogCiAuSVAgIkNGTEFHUyIK
+LS0gCjEuOC40CgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6
+Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
