@@ -1,530 +1,84 @@
-From: Rainer Gerhards <rgerhards@hq.adiscon.com>
-Subject: Re: [PATCH] Add output module which write to an LTTng-UST
-	tracepoint
-Date: Fri, 25 Oct 2013 08:11:41 +0200
-Message-ID: <CADk+mPAUdpZWDqBx81SCqXWhR6=QHqD5WxiNOrdWphkRDOM2Lg@mail.gmail.com>
-References: <1382643933-26681-1-git-send-email-yannick.brosseau@gmail.com>
-Reply-To: rsyslog-users <rsyslog@lists.adiscon.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: lttng-modules compatibility for 3.12 kernels
+Date: Mon, 28 Oct 2013 12:22:19 +0000 (UTC)
+Message-ID: <1419038926.51588.1382962939138.JavaMail.zimbra__10500.2594682903$1382963008$gmane$org@efficios.com>
+References: <CAP9ODKoJN1gp4pUjf5MioR_EScYR2ZKUyQ5njfVjUUjcZhY_4w@mail.gmail.com>
+	<CAP9ODKo+OReXTk9wFMCYoe79WtJEw6iPVz1b_ToSMJY0mn47Rg@mail.gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Return-path: <rsyslog-bounces@lists.adiscon.com>
-In-Reply-To: <1382643933-26681-1-git-send-email-yannick.brosseau@gmail.com>
-List-Unsubscribe: <http://lists.adiscon.net/mailman/options/rsyslog>,
-	<mailto:rsyslog-request@lists.adiscon.com?subject=unsubscribe>
-List-Archive: <http://lists.adiscon.net/pipermail/rsyslog>
-List-Post: <mailto:rsyslog@lists.adiscon.com>
-List-Help: <mailto:rsyslog-request@lists.adiscon.com?subject=help>
-List-Subscribe: <http://lists.adiscon.net/mailman/listinfo/rsyslog>,
-	<mailto:rsyslog-request@lists.adiscon.com?subject=subscribe>
-Sender: rsyslog-bounces@lists.adiscon.com
-Errors-To: rsyslog-bounces@lists.adiscon.com
-To: rsyslog-users <rsyslog@lists.adiscon.com>
-Cc: lttng-dev@lists.lttng.org
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail.efficios.com ([78.47.125.74])
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <compudj@efficios.com>) id 1Valq4-0001t0-Sf
+	for lttng-dev@lists.lttng.org; Mon, 28 Oct 2013 08:22:36 -0400
+In-Reply-To: <CAP9ODKo+OReXTk9wFMCYoe79WtJEw6iPVz1b_ToSMJY0mn47Rg@mail.gmail.com>
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+To: Otavio Salvador <otavio@ossystems.com.br>
+Cc: Fabio Estevam <fabio.estevam@freescale.com>, lttng-dev <lttng-dev@lists.lttng.org>, Philippe Mangaud <R49081@freescale.com>, Daiane Angolini <daiane.angolini@freescale.com>
 List-Id: lttng-dev@lists.lttng.org
 
-Thanks a lot, will see that I can merge asap. In order to be useful, there
-would need to be at least some minimal doc (so that users at least know
-this module exists). Would you mind adding a basic doc page for the module?
-You could use e.g. ./doc/omsnmp as an example.
+----- Original Message -----
+> From: "Otavio Salvador" <otavio@ossystems.com.br>
+> To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+> Cc: "Philippe Mangaud" <R49081@freescale.com>, "Daiane Angolini" <daiane.angolini@freescale.com>, "Fabio Estevam"
+> <fabio.estevam@freescale.com>
+> Sent: Saturday, October 26, 2013 10:05:23 PM
+> Subject: Re: lttng-modules compatibility for 3.12 kernels
+> 
+> Hello Mathieu,
+> 
+> On Sat, Oct 26, 2013 at 5:43 PM, Otavio Salvador
+> <otavio@ossystems.com.br> wrote:
+> > I hope you don't mind I send the patches directly for you, as I don't
+> > know where to send it ;-)
+> >
+> > We've been using Linux 3.12 in Freescale's ARM BSP for Yocto and it
+> > includes lttng support. Philippe reported a build error after we
+> > upgraded to 3.12 kernel and investigating it, it turns to be a very
+> > easy fix.
+> >
+> > I am attaching both patches I will be sending for Yocto inclusion.
+> >
+> > Please review those and let me know if they need any adjustment to be
+> > applied.
+> 
+> Fabio kindly reviewed the patchset and found I mistakenly used the
+> wrong compare operator for the macro definition; hence the v2 is
+> attached. I used the opportunity the rework the commit log a bit.
 
-Thanks,
-Rainer
+Hi Otavio,
+
+Thanks for the patches !
+
+I merged patch 0001 as is (lttng-statedump-impl: Fix lttng_list_interrupts for empty implementation) into lttng-modules master, stable-2.3, stable-2.2.
+
+For patch 0002, I reworked it so it now introduces a wrapper/irq.h header. This will help us not crumble under the weight of version tracking ifdefs in the long run. I'm pulling them into lttng-modules master branch. Please let me know if they work fine for you! I'm currently traveling without fast internet connectivity, so testing on 3.12 rc is not easy for me at the moment, hence the importance of your feedback.
+
+Thanks!
+
+Mathieu
 
 
-On Thu, Oct 24, 2013 at 9:45 PM, Yannick Brosseau <
-yannick.brosseau@gmail.com> wrote:
-
-> This module will call a LTTng-UST tracepoint with each syslog entry.
-> When LTTng is activated, this will write the entries in a CTF
-> (Common Trace Format) file. This allow the correlating of other trace
-> sources (kernel traces, other userspace traces) with system events
-> logged with the syslog deamon.
->
-> 3 differents tracepoints are available (msg_string, msg_detailled and
-> msg_detailled_time) and they are selected with the boolean
-> configuration variables actionomlttngustmsgdetailled and
-> actionomlttngustlogsyslogtime. The msg_detailled is the default one.
->
-> An option to enable its compilation was added to the configure script
-> (--enable-omlttngust)
->
-> Once you load the module, you can activate the tracing with
-> the lttng command line tool.
->
-> Signed-off-by: Yannick Brosseau <yannick.brosseau@gmail.com>
-> ---
->  Makefile.am                             |   4 +
->  configure.ac                            |  20 +++
->  plugins/omlttngust/Makefile.am          |   8 ++
->  plugins/omlttngust/omlttngust.c         | 244
-> ++++++++++++++++++++++++++++++++
->  plugins/omlttngust/rsyslog-tracepoint.h |  79 +++++++++++
->  5 files changed, 355 insertions(+)
->  create mode 100644 plugins/omlttngust/Makefile.am
->  create mode 100644 plugins/omlttngust/omlttngust.c
->  create mode 100644 plugins/omlttngust/rsyslog-tracepoint.h
->
-> diff --git a/Makefile.am b/Makefile.am
-> index c5e41c7..341e2b8 100644
-> --- a/Makefile.am
-> +++ b/Makefile.am
-> @@ -265,6 +265,10 @@ if ENABLE_ORACLE
->  SUBDIRS += plugins/omoracle
->  endif
->
-> +if ENABLE_OMLTTNGUST
-> +SUBDIRS += plugins/omlttngust
-> +endif
-> +
->  if ENABLE_GUI
->  SUBDIRS += java
->  endif
-> diff --git a/configure.ac b/configure.ac
-> index 2f23147..cd94b3e 100644
-> --- a/configure.ac
-> +++ b/configure.ac
-> @@ -1425,6 +1425,24 @@ fi
->  AM_CONDITIONAL(ENABLE_OMMONGODB, test x$enable_ommongodb = xyes)
->  # end of mongodb code
->
-> +
-> +#LTTng-ust output SUPPORT
-> +
-> +AC_ARG_ENABLE(omlttngust,
-> +        [AS_HELP_STRING([--enable-omlttngust],[Compiles omlttngust
-> template module @<:@default=no@:>@])],
-> +        [case "${enableval}" in
-> +         yes) enable_omlttngust="yes" ;;
-> +          no) enable_omlttngust="no" ;;
-> +           *) AC_MSG_ERROR(bad value ${enableval} for
-> --enable-omlttngust) ;;
-> +         esac],
-> +        [enable_omlttngust=no]
-> +)
-> +if test "x$enable_omlttngust" = "xyes"; then
-> +       PKG_CHECK_MODULES(LIBLTTNG_UST, lttng-ust >= 2.0)
-> +fi
-> +AM_CONDITIONAL(ENABLE_OMLTTNGUST, test x$enable_omlttngust = xyes)
-> +# end of lttng-ust code
-> +
->  # BEGIN ZMQ3 INPUT SUPPORT
->  AC_ARG_ENABLE(imzmq3,
->          [AS_HELP_STRING([--enable-imzmq3],[Compiles imzmq3 output module
-> @<:@default=no@:>@])],
-> @@ -1558,6 +1576,7 @@ AC_CONFIG_FILES([Makefile \
->                 plugins/omelasticsearch/Makefile \
->                 plugins/sm_cust_bindcdr/Makefile \
->                 plugins/mmsnmptrapd/Makefile \
-> +               plugins/omlttngust/Makefile \
->                 java/Makefile \
->                 tests/Makefile])
->  AC_OUTPUT
-> @@ -1605,6 +1624,7 @@ echo "    omudpspoof module will be compiled:
-> $enable_omudpspoof"
->  echo "    omuxsock module will be compiled:         $enable_omuxsock"
->  echo "    omzmq3 module will be compiled:           $enable_omzmq3"
->  echo "    omrabbitmq module will be compiled:       $enable_omrabbitmq"
-> +echo "    omlttngust module will be compiled:       $enable_omlttngust"
->  echo
->  echo "---{ parser modules }---"
->  echo "    pmrfc3164sd module will be compiled:      $enable_pmrfc3164sd"
-> diff --git a/plugins/omlttngust/Makefile.am
-> b/plugins/omlttngust/Makefile.am
-> new file mode 100644
-> index 0000000..8a2f2c3
-> --- /dev/null
-> +++ b/plugins/omlttngust/Makefile.am
-> @@ -0,0 +1,8 @@
-> +pkglib_LTLIBRARIES = omlttngust.la
-> +
-> +omlttngust_la_SOURCES = omlttngust.c
-> +omlttngust_la_CPPFLAGS =  $(RSRT_CFLAGS) $(PTHREADS_CFLAGS)
-> $(LIBLTTNG_UST_CFLAGS)
-> +omlttngust_la_LDFLAGS = -module -avoid-version
-> +omlttngust_la_LIBADD =  $(LIBLTTNG_UST_LIBS)
-> +
-> +EXTRA_DIST =
-> diff --git a/plugins/omlttngust/omlttngust.c
-> b/plugins/omlttngust/omlttngust.c
-> new file mode 100644
-> index 0000000..cb4639f
-> --- /dev/null
-> +++ b/plugins/omlttngust/omlttngust.c
-> @@ -0,0 +1,244 @@
-> +/* omlttngust.c
-> + * send all output to an LTTng-UST tracepoint
-> + *
-> + * Copyright 2013 Yannick Brosseau
-> + *
-> + * This file is part of rsyslog.
-> + *
-> + * Licensed under the Apache License, Version 2.0 (the "License");
-> + * you may not use this file except in compliance with the License.
-> + * You may obtain a copy of the License at
-> + *
-> + *       http://www.apache.org/licenses/LICENSE-2.0
-> + *       -or-
-> + *       see COPYING.ASL20 in the source distribution
-> + *
-> + * Unless required by applicable law or agreed to in writing, software
-> + * distributed under the License is distributed on an "AS IS" BASIS,
-> + * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
-> implied.
-> + * See the License for the specific language governing permissions and
-> + * limitations under the License.
-> + */
-> +#include "config.h"
-> +#include "rsyslog.h"
-> +#include <stdio.h>
-> +#include <stdarg.h>
-> +#include <stdlib.h>
-> +#include <string.h>
-> +#include <assert.h>
-> +#include <signal.h>
-> +#include <errno.h>
-> +#include <unistd.h>
-> +#include "conf.h"
-> +#include "syslogd-types.h"
-> +#include "srUtils.h"
-> +#include "template.h"
-> +#include "module-template.h"
-> +#include "errmsg.h"
-> +#include "cfsysline.h"
-> +
-> +#include <lttng/ust.h>
-> +
-> +#define TRACEPOINT_DEFINE
-> +#define TRACEPOINT_CREATE_PROBES
-> +/*
-> + * The header containing our TRACEPOINT_EVENTs.
-> + */
-> +
-> +#include "rsyslog-tracepoint.h"
-> +
-> +MODULE_TYPE_OUTPUT
-> +MODULE_TYPE_NOKEEP
-> +MODULE_CNFNAME("omlttngust")
-> +
-> +static rsRetVal resetConfigVariables(uchar __attribute__((unused)) *pp,
-> void __attribute__((unused)) *pVal);
-> +
-> +/* internal structures
-> + */
-> +DEF_OMOD_STATIC_DATA
-> +
-> +/* config variables */
-> +
-> +
-> +typedef struct _instanceData {
-> +       int bUseMsgInterface; /* 1 - Use the msg interface and write to
-> detailled tracepoint 0 - Write the whole entry as a string */
-> +       int bLogSyslogTime; /* 1 - With the detailled tracepoint, write a
-> time string with the syslog timestamp */
-> +} instanceData;
-> +
-> +typedef struct configSettings_s {
-> +       int bUseMsgInterface;
-> +       int bLogSyslogTime;
-> +} configSettings_t;
-> +static configSettings_t cs;
-> +
-> +BEGINinitConfVars              /* (re)set config variables to default
-> values */
-> +CODESTARTinitConfVars
-> +       resetConfigVariables(NULL, NULL);
-> +ENDinitConfVars
-> +
-> +BEGINcreateInstance
-> +CODESTARTcreateInstance
-> +ENDcreateInstance
-> +
-> +
-> +BEGINisCompatibleWithFeature
-> +CODESTARTisCompatibleWithFeature
-> +       if(eFeat == sFEATURERepeatedMsgReduction)
-> +               iRet = RS_RET_OK;
-> +ENDisCompatibleWithFeature
-> +
-> +
-> +BEGINfreeInstance
-> +CODESTARTfreeInstance
-> +ENDfreeInstance
-> +
-> +
-> +BEGINdbgPrintInstInfo
-> +CODESTARTdbgPrintInstInfo
-> +ENDdbgPrintInstInfo
-> +
-> +
-> +BEGINtryResume
-> +CODESTARTtryResume
-> +ENDtryResume
-> +
-> +static int
-> +processMsg(msg_t *pMsg, int bWantTimestampField)
-> +{
-> +       uchar *msg; short unsigned msg_free; rs_size_t msg_len;
-> +       uchar *procid; short unsigned procid_free; rs_size_t procid_len;
-> +       int severity, facil;
-> +       uchar *hostname; short unsigned sys_free; rs_size_t sys_len;
-> +       uchar *timestamp; short unsigned timestamp_free; rs_size_t
-> timestamp_len;
-> +       uchar *time_gen; short unsigned time_gen_free; rs_size_t
-> time_gen_len;
-> +       uchar *pid; short unsigned pid_free; rs_size_t pid_len;
-> +
-> +       msg = MsgGetProp(pMsg, NULL, PROP_MSG, NULL, &msg_len, &msg_free,
-> NULL);
-> +       procid = MsgGetProp(pMsg, NULL, PROP_PROGRAMNAME, NULL,
-> &procid_len, &procid_free, NULL);
-> +       hostname = MsgGetProp(pMsg, NULL, PROP_HOSTNAME, NULL, &sys_len,
-> &sys_free, NULL);
-> +
-> +       pid = MsgGetProp(pMsg, NULL, PROP_PROCID, NULL, &pid_len,
-> &pid_free, NULL);
-> +
-> +       severity = pMsg->iSeverity;
-> +       facil = pMsg->iFacility;
-> +
-> +       if(bWantTimestampField) {
-> +               /* TODO Set a template format to get the miliseconds? */
-> +               timestamp = MsgGetProp(pMsg, NULL, PROP_TIMESTAMP, NULL,
-> &timestamp_len, &timestamp_free, NULL);
-> +
-> +               time_gen = MsgGetProp(pMsg, NULL, PROP_TIMEGENERATED,
-> NULL, &time_gen_len, &time_gen_free, NULL);
-> +
-> +               tracepoint(rsyslog, msg_detailled_time, (char *) msg,
-> severity, facil, hostname, procid, pid, timestamp, time_gen);
-> +       } else {
-> +               tracepoint(rsyslog, msg_detailled, (char *) msg, severity,
-> facil, hostname, procid, pid);
-> +       }
-> +
-> +
-> +       return 0;
-> +}
-> +BEGINdoAction
-> +       char *toWrite;
-> +CODESTARTdoAction
-> +
-> +
-> +        if(pData->bUseMsgInterface) {
-> +               processMsg((msg_t*)ppString[0], pData->bLogSyslogTime);
-> +       } else {
-> +               /* Use the simple formated string when msg parsing is not
-> used */
-> +               toWrite = (char*) ppString[0];
-> +
-> +               tracepoint(rsyslog, msg_string, toWrite);
-> +
-> +       }
-> +ENDdoAction
-> +
-> +
-> +BEGINparseSelectorAct
-> +       int iTplOpts;
-> +CODESTARTparseSelectorAct
-> +CODE_STD_STRING_REQUESTparseSelectorAct(1)
-> +       /* first check if this config line is actually for us */
-> +       if(strncmp((char*) p, ":omlttngust:", sizeof(":omlttngust:") - 1))
-> {
-> +               ABORT_FINALIZE(RS_RET_CONFLINE_UNPROCESSED);
-> +       }
-> +
-> +       /* ok, if we reach this point, we have something for us */
-> +       p += sizeof(":omlttngust:") - 1; /* eat indicator sequence  (-1
-> because of '\0'!) */
-> +       CHKiRet(createInstance(&pData));
-> +
-> +       /* check if a non-standard template is to be applied */
-> +       if(*(p-1) == ';')
-> +               --p;
-> +       iTplOpts = (cs.bUseMsgInterface == 0) ? 0 : OMSR_TPL_AS_MSG ;
-> +
-> +       CHKiRet(cflineParseTemplateName(&p, *ppOMSR, 0, iTplOpts, (uchar*)
-> "RSYSLOG_FileFormat"));
-> +       pData->bUseMsgInterface = cs.bUseMsgInterface;
-> +        pData->bLogSyslogTime = cs.bLogSyslogTime;
-> +CODE_STD_FINALIZERparseSelectorAct
-> +ENDparseSelectorAct
-> +
-> +
-> +BEGINmodExit
-> +CODESTARTmodExit
-> +ENDmodExit
-> +
-> +
-> +BEGINqueryEtryPt
-> +CODESTARTqueryEtryPt
-> +CODEqueryEtryPt_STD_OMOD_QUERIES
-> +CODEqueryEtryPt_STD_CONF2_CNFNAME_QUERIES
-> +ENDqueryEtryPt
-> +
-> +
-> +
-> +/* Reset config variables for this module to default values.
-> + */
-> +static rsRetVal resetConfigVariables(uchar __attribute__((unused)) *pp,
-> void __attribute__((unused)) *pVal)
-> +{
-> +       DEFiRet;
-> +       cs.bUseMsgInterface = 1;
-> +       cs.bLogSyslogTime = 0;
-> +       RETiRet;
-> +}
-> +
-> +
-> +BEGINmodInit()
-> +       rsRetVal localRet;
-> +       rsRetVal (*pomsrGetSupportedTplOpts)(unsigned long *pOpts);
-> +       unsigned long opts;
-> +       int bMsgPassingSupported;
-> +CODESTARTmodInit
-> +INITLegCnfVars
-> +       *ipIFVersProvided = CURR_MOD_IF_VERSION; /* we only support the
-> current interface specification */
-> +CODEmodInit_QueryRegCFSLineHdlr
-> +
-> +       /* check if the rsyslog core supports parameter passing code */
-> +        bMsgPassingSupported = 0;
-> +       localRet = pHostQueryEtryPt((uchar*)"OMSRgetSupportedTplOpts",
-> &pomsrGetSupportedTplOpts);
-> +       if(localRet == RS_RET_OK) {
-> +               /* found entry point, so let's see if core supports array
-> passing */
-> +               CHKiRet((*pomsrGetSupportedTplOpts)(&opts));
-> +               if(opts & OMSR_TPL_AS_MSG)
-> +                       bMsgPassingSupported = 1;
-> +       } else if(localRet != RS_RET_ENTRY_POINT_NOT_FOUND) {
-> +               ABORT_FINALIZE(localRet); /* Something else went wrong,
-> what is not acceptable */
-> +       }
-> +       DBGPRINTF("omlttngust: msg-passing is %ssupported by rsyslog
-> core.\n", bMsgPassingSupported ? "" : "not ");
-> +
-> +       if(bMsgPassingSupported) {
-> +               /* enable config command only if core supports msg passing
-> */
-> +               CHKiRet(omsdRegCFSLineHdlr((uchar
-> *)"actionomlttngustmsgdetailled", 0, eCmdHdlrBinary, NULL,
-> +                                          &cs.bUseMsgInterface,
-> STD_LOADABLE_MODULE_ID));
-> +
-> +
-> +               CHKiRet(omsdRegCFSLineHdlr((uchar
-> *)"actionomlttngustlogsyslogtime", 0, eCmdHdlrBinary, NULL,
-> +                                          &cs.bLogSyslogTime,
-> STD_LOADABLE_MODULE_ID));
-> +       }
-> +
-> +       CHKiRet(omsdRegCFSLineHdlr((uchar *)"resetconfigvariables", 1,
-> eCmdHdlrCustomHandler,
-> +                                   resetConfigVariables, NULL,
-> STD_LOADABLE_MODULE_ID));
-> +
-> +ENDmodInit
-> +
-> +/* vi:set ai:
-> + */
-> diff --git a/plugins/omlttngust/rsyslog-tracepoint.h
-> b/plugins/omlttngust/rsyslog-tracepoint.h
-> new file mode 100644
-> index 0000000..037364b
-> --- /dev/null
-> +++ b/plugins/omlttngust/rsyslog-tracepoint.h
-> @@ -0,0 +1,79 @@
-> +
-> +#undef TRACEPOINT_PROVIDER
-> +#define TRACEPOINT_PROVIDER rsyslog
-> +
-> +#undef TRACEPOINT_INCLUDE
-> +#define TRACEPOINT_INCLUDE "./rsyslog-tracepoint.h"
-> +
-> +
-> +#ifdef __cplusplus
-> +extern "C"{
-> +#endif /* __cplusplus */
-> +
-> +
-> +#if !defined(RSYSLOG_H) || defined(TRACEPOINT_HEADER_MULTI_READ)
-> +#define RSYSLOG_H
-> +
-> +#include <lttng/tracepoint.h>
-> +
-> +TRACEPOINT_EVENT(
-> +       rsyslog,
-> +       msg_string,
-> +       TP_ARGS(char *, text),
-> +       TP_FIELDS(
-> +               ctf_string(message, text)
-> +                 )
-> +)
-> +
-> +TRACEPOINT_EVENT(
-> +       rsyslog,
-> +       msg_detailled,
-> +       TP_ARGS(char *, text, int, severity, int, facility, uchar*,
-> hostname, uchar*, progname, uchar *, pid ),
-> +       TP_FIELDS(
-> +               ctf_string(message, text)
-> +               ctf_integer(int, severity, severity)
-> +               ctf_integer(int, facility, facility)
-> +               ctf_string(hostname, hostname)
-> +               ctf_string(progname, progname)
-> +               ctf_string(pid, pid)
-> +                 )
-> +)
-> +
-> +TRACEPOINT_EVENT(
-> +       rsyslog,
-> +       msg_detailled_time,
-> +       TP_ARGS(char *, text, int, severity, int, facility, uchar*,
-> hostname, uchar*, progname,  uchar *, pid, uchar *, time, uchar*, time_gen),
-> +       TP_FIELDS(
-> +               ctf_string(message, text)
-> +               ctf_integer(int, severity, severity)
-> +               ctf_integer(int, facility, facility)
-> +               ctf_string(hostname, hostname)
-> +               ctf_string(progname, progname)
-> +               ctf_string(pid, pid)
-> +               ctf_string(time_str, time)
-> +               ctf_string(time_gen_str, time_gen)
-> +                 )
-> +)
-> +
-> +TRACEPOINT_EVENT(
-> +                rsyslog,
-> +                init,
-> +                TP_ARGS(),
-> +                TP_FIELDS()
-> +                )
-> +
-> +TRACEPOINT_EVENT(
-> +                rsyslog,
-> +                config,
-> +                TP_ARGS(),
-> +                TP_FIELDS()
-> +                )
-> +
-> +#endif /* RSYSLOG_H */
-> +
-> +#include <lttng/tracepoint-event.h>
-> +
-> +#ifdef __cplusplus
-> +}
-> +#endif /* __cplusplus */
-> +
+> 
+> Thanks in advance,
+> 
+> Regards,
+> 
 > --
-> 1.8.4.rc3
->
-> _______________________________________________
-> rsyslog mailing list
-> http://lists.adiscon.net/mailman/listinfo/rsyslog
-> http://www.rsyslog.com/professional-services/
-> What's up with rsyslog? Follow https://twitter.com/rgerhards
-> NOTE WELL: This is a PUBLIC mailing list, posts are ARCHIVED by a myriad
-> of sites beyond our control. PLEASE UNSUBSCRIBE and DO NOT POST if you
-> DON'T LIKE THAT.
->
+> Otavio Salvador                             O.S. Systems
+> http://www.ossystems.com.br        http://code.ossystems.com.br
+> Mobile: +55 (53) 9981-7854            Mobile: +1 (347) 903-9750
+> 
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
