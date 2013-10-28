@@ -1,21 +1,17 @@
 From: Otavio Salvador <otavio@ossystems.com.br>
-Subject: Re: lttng-modules compatibility for 3.12 kernels
-Date: Mon, 28 Oct 2013 11:43:39 -0200
-Message-ID: <CAP9ODKoLAKyuiCEP34_AFUp9MnSFfqtTiAtWzoJ6OvXC7KV4iw__31310.5605928742$1382971419$gmane$org@mail.gmail.com>
-References: <CAP9ODKoJN1gp4pUjf5MioR_EScYR2ZKUyQ5njfVjUUjcZhY_4w@mail.gmail.com>
-	<CAP9ODKo+OReXTk9wFMCYoe79WtJEw6iPVz1b_ToSMJY0mn47Rg@mail.gmail.com>
-	<1419038926.51588.1382962939138.JavaMail.zimbra@efficios.com>
+Subject: lttng-modules build failure for 3.12-rc6
+Date: Mon, 28 Oct 2013 11:47:01 -0200
+Message-ID: <CAP9ODKoqhtXmS94ZtV8hNPs=kUXWLU9msN+GR7Zf9DQrdQUmSg__14621.1821855561$1382971522$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-oa0-f44.google.com ([209.85.219.44])
+Received: from mail-ob0-f170.google.com ([209.85.214.170])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <otavio.salvador@gmail.com>) id 1Van6f-0000eg-DO
-	for lttng-dev@lists.lttng.org; Mon, 28 Oct 2013 09:43:50 -0400
-Received: by mail-oa0-f44.google.com with SMTP id l20so3598250oag.3
-	for <lttng-dev@lists.lttng.org>; Mon, 28 Oct 2013 06:43:39 -0700 (PDT)
-In-Reply-To: <1419038926.51588.1382962939138.JavaMail.zimbra@efficios.com>
+	(envelope-from <otavio.salvador@gmail.com>) id 1Van9v-0000yD-8X
+	for lttng-dev@lists.lttng.org; Mon, 28 Oct 2013 09:47:12 -0400
+Received: by mail-ob0-f170.google.com with SMTP id wp18so3597462obc.15
+	for <lttng-dev@lists.lttng.org>; Mon, 28 Oct 2013 06:47:01 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,28 +20,67 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Fabio Estevam <fabio.estevam@freescale.com>, lttng-dev <lttng-dev@lists.lttng.org>, Philippe Mangaud <R49081@freescale.com>, Daiane Angolini <daiane.angolini@freescale.com>
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hello Mathieu,
+Hello,
 
-On Mon, Oct 28, 2013 at 10:22 AM, Mathieu Desnoyers
-<mathieu.desnoyers@efficios.com> wrote:
-> Thanks for the patches !
+Part of build issues are now fixed in master (thanks Mathieu for
+applying the need changes) but we're still not good:
 
-You're welcome.
+  CC [M]  /home/otavio/hacking/fsl-community-bsp/build-mx23evk/tmp/work/imx23evk-poky-linux-gnueabi/lttng-modules/2.3.2+gitAUTOINC+4f1217f8ce-r0/git/probes/lttng-probe-kmem.o
+In file included from
+/home/otavio/hacking/fsl-community-bsp/build-mx23evk/tmp/work/imx23evk-poky-linux-gnueabi/lttng-modules/2.3.2+gitAUTOINC+4f1217f8ce-r0/git/probes/../instrumentation/events/lttng-module/../../../probes/define_trace.h:148:0,
+                 from
+/home/otavio/hacking/fsl-community-bsp/build-mx23evk/tmp/work/imx23evk-poky-linux-gnueabi/lttng-modules/2.3.2+gitAUTOINC+4f1217f8ce-r0/git/probes/../instrumentation/events/lttng-module/kmem.h:331,
+                 from
+/home/otavio/hacking/fsl-community-bsp/build-mx23evk/tmp/work/imx23evk-poky-linux-gnueabi/lttng-modules/2.3.2+gitAUTOINC+4f1217f8ce-r0/git/probes/lttng-probe-kmem.c:41:
+/home/otavio/hacking/fsl-community-bsp/build-mx23evk/tmp/work/imx23evk-poky-linux-gnueabi/lttng-modules/2.3.2+gitAUTOINC+4f1217f8ce-r0/git/probes/../instrumentation/events/lttng-module/../../../probes/lttng-events.h:151:6:
+error: conflicting types for 'trace_mm_page_alloc_extfrag'
+ void trace_##_name(_proto);
+      ^
+/home/otavio/hacking/fsl-community-bsp/build-mx23evk/tmp/work/imx23evk-poky-linux-gnueabi/lttng-modules/2.3.2+gitAUTOINC+4f1217f8ce-r0/git/probes/../instrumentation/events/lttng-module/../../../probes/lttng-events.h:47:2:
+note: in expansion of macro 'DEFINE_EVENT_MAP'
+  DEFINE_EVENT_MAP(map, name, map, PARAMS(proto), PARAMS(args))
+  ^
+/home/otavio/hacking/fsl-community-bsp/build-mx23evk/tmp/work/imx23evk-poky-linux-gnueabi/lttng-modules/2.3.2+gitAUTOINC+4f1217f8ce-r0/git/probes/../instrumentation/events/lttng-module/../../../probes/lttng-events.h:89:2:
+note: in expansion of macro 'TRACE_EVENT_MAP'
+  TRACE_EVENT_MAP(name, name,    \
+  ^
+/home/otavio/hacking/fsl-community-bsp/build-mx23evk/tmp/work/imx23evk-poky-linux-gnueabi/lttng-modules/2.3.2+gitAUTOINC+4f1217f8ce-r0/git/probes/../instrumentation/events/lttng-module/../../../probes/../instrumentation/events/lttng-module/kmem.h:289:1:
+note: in expansion of macro 'TRACE_EVENT'
+ TRACE_EVENT(mm_page_alloc_extfrag,
+ ^
+In file included from include/linux/module.h:18:0,
+                 from
+/home/otavio/hacking/fsl-community-bsp/build-mx23evk/tmp/work/imx23evk-poky-linux-gnueabi/lttng-modules/2.3.2+gitAUTOINC+4f1217f8ce-r0/git/probes/lttng-probe-kmem.c:24:
+include/linux/tracepoint.h:162:21: note: previous definition of
+'trace_mm_page_alloc_extfrag' was here
+  static inline void trace_##name(proto)    \
+                     ^
+include/linux/tracepoint.h:259:3: note: in expansion of macro '__DECLARE_TRACE'
+   __DECLARE_TRACE(name, PARAMS(proto), PARAMS(args), 1, \
+   ^
+include/linux/tracepoint.h:391:2: note: in expansion of macro 'DECLARE_TRACE'
+  DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))
+  ^
+include/trace/events/kmem.h:267:1: note: in expansion of macro 'TRACE_EVENT'
+ TRACE_EVENT(mm_page_alloc_extfrag,
+ ^
+make[3]: *** [/home/otavio/hacking/fsl-community-bsp/build-mx23evk/tmp/work/imx23evk-poky-linux-gnueabi/lttng-modules/2.3.2+gitAUTOINC+4f1217f8ce-r0/git/probes/lttng-probe-kmem.o]
+Error 1
+make[2]: *** [/home/otavio/hacking/fsl-community-bsp/build-mx23evk/tmp/work/imx23evk-poky-linux-gnueabi/lttng-modules/2.3.2+gitAUTOINC+4f1217f8ce-r0/git/probes]
+Error 2
+make[1]: *** [_module_/home/otavio/hacking/fsl-community-bsp/build-mx23evk/tmp/work/imx23evk-poky-linux-gnueabi/lttng-modules/2.3.2+gitAUTOINC+4f1217f8ce-r0/git]
+Error 2
+make[1]: Leaving directory
+`/home/otavio/hacking/fsl-community-bsp/build-mx23evk/tmp/sysroots/imx23evk/usr/src/kernel'
+make: *** [default] Error 2
+ERROR: oe_runmake failed
 
-> I merged patch 0001 as is (lttng-statedump-impl: Fix lttng_list_interrupts for empty implementation) into lttng-modules master, stable-2.3, stable-2.2.
-
-Great.
-
-> For patch 0002, I reworked it so it now introduces a wrapper/irq.h header. This will help us not crumble under the weight of version tracking ifdefs in the long run. I'm pulling them into lttng-modules master branch. Please let me know if they work fine for you! I'm currently traveling without fast internet connectivity, so testing on 3.12 rc is not easy for me at the moment, hence the importance of your feedback.
-
-Great. The patch works as intended.
-
-I am going to send the next failure we need to fix with 3.12-rc6 to
-the mailing list.
+This is 'too advanced' for me to grasp in a small amount of time and
+being new to lttng I think I'd end doing the wrong thing anyway. Could
+someone advice?
 
 -- 
 Otavio Salvador                             O.S. Systems
