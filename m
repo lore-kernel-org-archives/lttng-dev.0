@@ -1,17 +1,25 @@
-From: Otavio Salvador <otavio@ossystems.com.br>
-Subject: lttng-modules build failure for 3.12-rc6
-Date: Mon, 28 Oct 2013 11:47:01 -0200
-Message-ID: <CAP9ODKoqhtXmS94ZtV8hNPs=kUXWLU9msN+GR7Zf9DQrdQUmSg__14621.1821855561$1382971522$gmane$org@mail.gmail.com>
-Mime-Version: 1.0
+From: Vlad <vlad@demoninsight.com>
+Subject: Re: CTF: trying to understand "missing fields"
+Date: Mon, 28 Oct 2013 17:34:28 -0400
+Message-ID: <D87F4B5A-7F81-4A57-B9C2-5B871B8F2445__28587.2139539153$1382996139$gmane$org@demoninsight.com>
+References: <D45D38CA-AFA7-41E7-8D63-BDD96DBA4E42@demoninsight.com>
+Mime-Version: 1.0 (Mac OS X Mail 6.6 \(1510\))
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ob0-f170.google.com ([209.85.214.170])
+Received: from mail-qc0-f179.google.com ([209.85.216.179])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <otavio.salvador@gmail.com>) id 1Van9v-0000yD-8X
-	for lttng-dev@lists.lttng.org; Mon, 28 Oct 2013 09:47:12 -0400
-Received: by mail-ob0-f170.google.com with SMTP id wp18so3597462obc.15
-	for <lttng-dev@lists.lttng.org>; Mon, 28 Oct 2013 06:47:01 -0700 (PDT)
+	(envelope-from <vlad@demoninsight.com>) id 1VauSK-0000zr-3C
+	for lttng-dev@lists.lttng.org; Mon, 28 Oct 2013 17:34:41 -0400
+Received: by mail-qc0-f179.google.com with SMTP id k18so4220667qcv.10
+	for <lttng-dev@lists.lttng.org>; Mon, 28 Oct 2013 14:34:30 -0700 (PDT)
+Received: from [10.52.5.106] (msmc-64-72-75-194.customer.hvdata.net.
+	[64.72.75.194])
+	by mx.google.com with ESMTPSA id og1sm47123751qeb.3.2013.10.28.14.34.29
+	for <lttng-dev@lists.lttng.org>
+	(version=TLSv1 cipher=ECDHE-RSA-RC4-SHA bits=128/128);
+	Mon, 28 Oct 2013 14:34:29 -0700 (PDT)
+In-Reply-To: <D45D38CA-AFA7-41E7-8D63-BDD96DBA4E42@demoninsight.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,66 +31,42 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hello,
 
-Part of build issues are now fixed in master (thanks Mathieu for
-applying the need changes) but we're still not good:
+On Oct 21, 2013, at 6:53 PM, Vlad <VLAD@DEMONINSIGHT.COM> wrote:
 
-  CC [M]  /home/otavio/hacking/fsl-community-bsp/build-mx23evk/tmp/work/imx23evk-poky-linux-gnueabi/lttng-modules/2.3.2+gitAUTOINC+4f1217f8ce-r0/git/probes/lttng-probe-kmem.o
-In file included from
-/home/otavio/hacking/fsl-community-bsp/build-mx23evk/tmp/work/imx23evk-poky-linux-gnueabi/lttng-modules/2.3.2+gitAUTOINC+4f1217f8ce-r0/git/probes/../instrumentation/events/lttng-module/../../../probes/define_trace.h:148:0,
-                 from
-/home/otavio/hacking/fsl-community-bsp/build-mx23evk/tmp/work/imx23evk-poky-linux-gnueabi/lttng-modules/2.3.2+gitAUTOINC+4f1217f8ce-r0/git/probes/../instrumentation/events/lttng-module/kmem.h:331,
-                 from
-/home/otavio/hacking/fsl-community-bsp/build-mx23evk/tmp/work/imx23evk-poky-linux-gnueabi/lttng-modules/2.3.2+gitAUTOINC+4f1217f8ce-r0/git/probes/lttng-probe-kmem.c:41:
-/home/otavio/hacking/fsl-community-bsp/build-mx23evk/tmp/work/imx23evk-poky-linux-gnueabi/lttng-modules/2.3.2+gitAUTOINC+4f1217f8ce-r0/git/probes/../instrumentation/events/lttng-module/../../../probes/lttng-events.h:151:6:
-error: conflicting types for 'trace_mm_page_alloc_extfrag'
- void trace_##_name(_proto);
-      ^
-/home/otavio/hacking/fsl-community-bsp/build-mx23evk/tmp/work/imx23evk-poky-linux-gnueabi/lttng-modules/2.3.2+gitAUTOINC+4f1217f8ce-r0/git/probes/../instrumentation/events/lttng-module/../../../probes/lttng-events.h:47:2:
-note: in expansion of macro 'DEFINE_EVENT_MAP'
-  DEFINE_EVENT_MAP(map, name, map, PARAMS(proto), PARAMS(args))
-  ^
-/home/otavio/hacking/fsl-community-bsp/build-mx23evk/tmp/work/imx23evk-poky-linux-gnueabi/lttng-modules/2.3.2+gitAUTOINC+4f1217f8ce-r0/git/probes/../instrumentation/events/lttng-module/../../../probes/lttng-events.h:89:2:
-note: in expansion of macro 'TRACE_EVENT_MAP'
-  TRACE_EVENT_MAP(name, name,    \
-  ^
-/home/otavio/hacking/fsl-community-bsp/build-mx23evk/tmp/work/imx23evk-poky-linux-gnueabi/lttng-modules/2.3.2+gitAUTOINC+4f1217f8ce-r0/git/probes/../instrumentation/events/lttng-module/../../../probes/../instrumentation/events/lttng-module/kmem.h:289:1:
-note: in expansion of macro 'TRACE_EVENT'
- TRACE_EVENT(mm_page_alloc_extfrag,
- ^
-In file included from include/linux/module.h:18:0,
-                 from
-/home/otavio/hacking/fsl-community-bsp/build-mx23evk/tmp/work/imx23evk-poky-linux-gnueabi/lttng-modules/2.3.2+gitAUTOINC+4f1217f8ce-r0/git/probes/lttng-probe-kmem.c:24:
-include/linux/tracepoint.h:162:21: note: previous definition of
-'trace_mm_page_alloc_extfrag' was here
-  static inline void trace_##name(proto)    \
-                     ^
-include/linux/tracepoint.h:259:3: note: in expansion of macro '__DECLARE_TRACE'
-   __DECLARE_TRACE(name, PARAMS(proto), PARAMS(args), 1, \
-   ^
-include/linux/tracepoint.h:391:2: note: in expansion of macro 'DECLARE_TRACE'
-  DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))
-  ^
-include/trace/events/kmem.h:267:1: note: in expansion of macro 'TRACE_EVENT'
- TRACE_EVENT(mm_page_alloc_extfrag,
- ^
-make[3]: *** [/home/otavio/hacking/fsl-community-bsp/build-mx23evk/tmp/work/imx23evk-poky-linux-gnueabi/lttng-modules/2.3.2+gitAUTOINC+4f1217f8ce-r0/git/probes/lttng-probe-kmem.o]
-Error 1
-make[2]: *** [/home/otavio/hacking/fsl-community-bsp/build-mx23evk/tmp/work/imx23evk-poky-linux-gnueabi/lttng-modules/2.3.2+gitAUTOINC+4f1217f8ce-r0/git/probes]
-Error 2
-make[1]: *** [_module_/home/otavio/hacking/fsl-community-bsp/build-mx23evk/tmp/work/imx23evk-poky-linux-gnueabi/lttng-modules/2.3.2+gitAUTOINC+4f1217f8ce-r0/git]
-Error 2
-make[1]: Leaving directory
-`/home/otavio/hacking/fsl-community-bsp/build-mx23evk/tmp/sysroots/imx23evk/usr/src/kernel'
-make: *** [default] Error 2
-ERROR: oe_runmake failed
+> Greetings,
+> 
+> 	The CTF spec contains a couple of mentions of how one could define a missing field bitmask:
+> 
+> "The header is extended in the rare occasions where the information cannot be
+> represented in the ranges available in the standard event header. They are also
+> used in the rare occasions where the data required for a field could not be
+> collected: the flag corresponding to the missing field within the missing_fields
+> array is then set to 1"
+> 
+> and
+> 
+> "An example of event-specific event context is to declare a bitmap of missing
+> fields, only appended after the stream event context if the extended event
+> header is selected. NR_FIELDS is the number of fields within the event (a
+> numeric value).
+> 
+>  event {
+>    context = struct {
+>      variant <id> {
+>        struct { } compact;
+>        struct {
+>          uint1_t missing_fields[NR_FIELDS]; /* missing event fields bitmap */
+>        } extended;
+>      } v;
+>    };
+>    ...
+>  }"
+> 
+> Is this capability reflected in the current lttng builds? My understanding so far is that "missingness" is not part of CTF grammar per se but is rather a convention (i.e. declaring an array of uint1_t's with a particular name "missing_fields") -- is this correct? In the extended header example above, how is a missing_fields slot mapped to its corresponding field -- are the fields assumed to be ordered, with a slot per field in that ordering?
 
-This is 'too advanced' for me to grasp in a small amount of time and
-being new to lttng I think I'd end doing the wrong thing anyway. Could
-someone advice?
 
--- 
-Otavio Salvador                             O.S. Systems
-http://www.ossystems.com.br        http://code.ossystems.com.br
-Mobile: +55 (53) 9981-7854            Mobile: +1 (347) 903-9750
+Ok, lack of response probably means I'd stumbled on an unsupported feature.
+
+Cheers,
+Vlad
