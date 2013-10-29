@@ -1,25 +1,25 @@
-From: Vlad <vlad@demoninsight.com>
-Subject: Re: What is the size overhead of UST tracepoints?
-	(hint: very large indeed)
-Date: Tue, 29 Oct 2013 10:32:55 -0400
-Message-ID: <A651D048-3BA0-419E-9A6A-9EDED86ED34C__23185.072563547$1383057253$gmane$org@demoninsight.com>
-References: <OF98A3476E.B164A434-ONC2257C13.003269EB-C2257C13.00354EB7@il.ibm.com>
-Mime-Version: 1.0 (Mac OS X Mail 6.6 \(1510\))
-Content-Type: multipart/mixed; boundary="===============0631390140=="
+From: Yannick Brosseau <yannick.brosseau@gmail.com>
+Subject: Re: [PATCH lttng-ust] Fix: Overhaul of the lttng-gen-tp
+ man page
+Date: Tue, 29 Oct 2013 11:51:55 -0400
+Message-ID: <526FD99B.8040405__29897.5724181675$1383061994$gmane$org@gmail.com>
+References: <1382544495-10548-1-git-send-email-jeremie.galarneau@efficios.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qa0-f47.google.com ([209.85.216.47])
+Received: from mail-ie0-f170.google.com ([209.85.223.170])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <vlad@demoninsight.com>) id 1VbALv-0006CH-55
-	for lttng-dev@lists.lttng.org; Tue, 29 Oct 2013 10:33:08 -0400
-Received: by mail-qa0-f47.google.com with SMTP id k15so2925985qaq.20
-	for <lttng-dev@lists.lttng.org>; Tue, 29 Oct 2013 07:32:57 -0700 (PDT)
-Received: from [10.52.5.106] (msmc-64-72-75-194.customer.hvdata.net.
-	[64.72.75.194])
-	by mx.google.com with ESMTPSA id r5sm65733881qaj.13.2013.10.29.07.32.55
+	(envelope-from <yannick.brosseau@gmail.com>) id 1VbBaU-0005je-Ax
+	for lttng-dev@lists.lttng.org; Tue, 29 Oct 2013 11:52:16 -0400
+Received: by mail-ie0-f170.google.com with SMTP id at1so73129iec.15
+	for <lttng-dev@lists.lttng.org>; Tue, 29 Oct 2013 08:52:04 -0700 (PDT)
+Received: from [132.207.72.47] (dyn47.dorsal.polymtl.ca. [132.207.72.47])
+	by mx.google.com with ESMTPSA id i11sm3036006igh.0.2013.10.29.08.51.56
 	for <lttng-dev@lists.lttng.org>
 	(version=TLSv1 cipher=ECDHE-RSA-RC4-SHA bits=128/128);
-	Tue, 29 Oct 2013 07:32:56 -0700 (PDT)
-In-Reply-To: <OF98A3476E.B164A434-ONC2257C13.003269EB-C2257C13.00354EB7@il.ibm.com>
+	Tue, 29 Oct 2013 08:52:03 -0700 (PDT)
+In-Reply-To: <1382544495-10548-1-git-send-email-jeremie.galarneau@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -28,97 +28,71 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-
---===============0631390140==
-Content-Type: multipart/alternative; boundary="Apple-Mail=_B7594D2C-0E5F-448B-B823-166B8BC3B40F"
-
-
---Apple-Mail=_B7594D2C-0E5F-448B-B823-166B8BC3B40F
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain;
-	charset=us-ascii
-
-
-On Oct 29, 2013, at 4:42 AM, Amit Margalit <AMITM@il.ibm.com> wrote:
-
-> Additionally, there is a ton of code to calculate the event size, its =
-alignment, and to verify that the names are not longer than the 256 byte =
-buffer, and more.=20
-
-A couple of thoughts:
-
-(a) there may be a way to share fewer definitions of events across more =
-event emit sites. Especially if LTTng supported optional/missing fields =
-:) For example, define a single "function.entry" and a single =
-"function.exit" instead of a unique definition for each function you =
-have. Disambiguate using a parameter.
-
-(b) this is not something that could be done in kernel but in a C++ user =
-app it's fairly easy to statically compute everything that depends on =
-information known at compile time. I use a custom EDSL implemented via =
-boost.proto. As a result, only the stuff that gets used is embedded in =
-object code and all event emit calls inline in very fast assembly that's =
-optimal for each particular combination of actual argument values.
-
-Cheers,
-Vlad=
-
---Apple-Mail=_B7594D2C-0E5F-448B-B823-166B8BC3B40F
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/html;
-	charset=us-ascii
-
-<html><head><meta http-equiv=3D"Content-Type" content=3D"text/html =
-charset=3Dus-ascii"></head><body style=3D"word-wrap: break-word; =
--webkit-nbsp-mode: space; -webkit-line-break: after-white-space; =
-"><br><div><div>On Oct 29, 2013, at 4:42 AM, Amit Margalit &lt;<a =
-href=3D"mailto:AMITM@il.ibm.com">AMITM@il.ibm.com</a>&gt; =
-wrote:</div><br class=3D"Apple-interchange-newline"><blockquote =
-type=3D"cite"><font size=3D"2" face=3D"sans-serif" style=3D"font-style: =
-normal; font-variant: normal; font-weight: normal; letter-spacing: =
-normal; line-height: normal; orphans: 2; text-align: -webkit-auto; =
-text-indent: 0px; text-transform: none; white-space: normal; widows: 2; =
-word-spacing: 0px; -webkit-text-size-adjust: auto; =
--webkit-text-stroke-width: 0px; ">Additionally, there is a ton of code =
-to calculate the event size, its alignment, and to verify that the names =
-are not longer than the 256 byte buffer, and more.</font><span =
-style=3D"font-family: Helvetica; font-size: medium; font-style: normal; =
-font-variant: normal; font-weight: normal; letter-spacing: normal; =
-line-height: normal; orphans: 2; text-align: -webkit-auto; text-indent: =
-0px; text-transform: none; white-space: normal; widows: 2; word-spacing: =
-0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; =
-display: inline !important; float: none; =
-">&nbsp;</span></blockquote></div><br><div>A couple of =
-thoughts:</div><div><br></div><div>(a) there may be a way to share fewer =
-definitions of events across more event emit sites. Especially if LTTng =
-supported optional/missing fields :) For example, define a single =
-"function.entry" and a single "function.exit" instead of a unique =
-definition for each function you have. Disambiguate using a =
-parameter.</div><div><br></div><div>(b) this is not something that could =
-be done in kernel but in a C++ user app it's fairly easy to statically =
-compute everything that depends on information known at compile time. I =
-use a custom EDSL implemented via boost.proto. As a result, only the =
-stuff that gets used is embedded in object code and all event emit calls =
-inline in very fast assembly that's optimal for each particular =
-combination of actual argument =
-values.</div><div><br></div><div>Cheers,</div><div>Vlad</div></body></html=
->=
-
---Apple-Mail=_B7594D2C-0E5F-448B-B823-166B8BC3B40F--
-
-
---===============0631390140==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0631390140==--
+SXQncyBzaGFtZWZ1bCB0byBzZWUgc29tZSBvZiB0aGVzZSBtaXN0YWtlcy4KCkFja2VkLWJ5OiBZ
+YW5uaWNrIEJyb3NzZWF1IDx5YW5uaWNrLmJyb3NzZWF1QGdtYWlsLmNvbT4KCk9uIDEwLzIzLzEz
+IDEyOjA4LCBKw6lyw6ltaWUgR2FsYXJuZWF1IHdyb3RlOgo+IEZpeCBhIGNvdXBsZSBvZiB0eXBv
+cywgbWlzdGFrZXMgYW5kIG91dC1vZiBkYXRlIGluZm9ybWF0aW9ucy4KPgo+IFNpZ25lZC1vZmYt
+Ynk6IErDqXLDqW1pZSBHYWxhcm5lYXUgPGplcmVtaWUuZ2FsYXJuZWF1QGVmZmljaW9zLmNvbT4K
+PiAtLS0KPiAgZG9jL21hbi9sdHRuZy1nZW4tdHAuMSB8IDIxICsrKysrKysrKy0tLS0tLS0tLS0t
+LQo+ICAxIGZpbGUgY2hhbmdlZCwgOSBpbnNlcnRpb25zKCspLCAxMiBkZWxldGlvbnMoLSkKPgo+
+IGRpZmYgLS1naXQgYS9kb2MvbWFuL2x0dG5nLWdlbi10cC4xIGIvZG9jL21hbi9sdHRuZy1nZW4t
+dHAuMQo+IGluZGV4IDg0YzA1YzkuLjU2NGMzMTcgMTAwNjQ0Cj4gLS0tIGEvZG9jL21hbi9sdHRu
+Zy1nZW4tdHAuMQo+ICsrKyBiL2RvYy9tYW4vbHR0bmctZ2VuLXRwLjEKPiBAQCAtMTMsMTUgKzEz
+LDE1IEBAIGx0dG5nXC1nZW5cLXRwIFtPUFRJT05TXSBURU1QTEFURV9GSUxFCj4gIAo+ICAuUFAK
+PiAgVGhlIExUVG5nIHByb2plY3QgYWltcyBhdCBwcm92aWRpbmcgaGlnaGx5IGVmZmljaWVudCB0
+cmFjaW5nIHRvb2xzIGZvciBMaW51eC4KPiAtSXQncyB0cmFjZXJzIGhlbHAgdHJhY2tpbmcgZG93
+biBwZXJmb3JtYW5jZSBpc3N1ZXMgYW5kIGRlYnVnZ2luZyBwcm9ibGVtcwo+ICtJdHMgdHJhY2Vy
+cyBoZWxwIGluIHRyYWNraW5nIGRvd24gcGVyZm9ybWFuY2UgaXNzdWVzIGFuZCBkZWJ1Z2dpbmcg
+cHJvYmxlbXMKPiAgaW52b2x2aW5nIG11bHRpcGxlIGNvbmN1cnJlbnQgcHJvY2Vzc2VzIGFuZCB0
+aHJlYWRzLiBUcmFjaW5nIGFjcm9zcyBtdWx0aXBsZQo+ICBzeXN0ZW1zIGlzIGFsc28gcG9zc2li
+bGUuCj4gIAo+IC1UaGUgXGZCbHR0bmdcLWdlblwtdHBcZlAgdG9vbCBzaW1wbGlmeSB0aGUgZ2Vu
+ZXJhdGlvbiBvZiB0aGUgVVNUIHRyYWNlcG9pbnQKPiAtZmlsZXMuIEl0IHRha2VzIGEgc2ltcGxl
+IHRlbXBsYXRlIGZpbGUgYW5kIGdlbmVyYXRlIHRoZSBuZWNlc3NhcnkgY29kZSB0byB1c2UgdGhl
+IGRlZmluZWQgdHJhY2Vwb2ludHMgaW4geW91ciBhcHBsaWNhdGlvbi4KPiAtVGhlIHNlY3Rpb24g
+VEVNUExBVEUgRklMRSBGT1JNQVQgZGVzY3JpYmUgdGhlIGNvbnRlbnQgb2YgdGhlIHRlbXBsYXRl
+IGZpbGUuCj4gK1RoZSBcZkJsdHRuZ1wtZ2VuXC10cFxmUCB0b29sIHNpbXBsaWZpZXMgdGhlIGdl
+bmVyYXRpb24gb2YgdGhlIFVTVCB0cmFjZXBvaW50Cj4gK2ZpbGVzLiBJdCB0YWtlcyBhIHNpbXBs
+ZSB0ZW1wbGF0ZSBmaWxlIGFuZCBnZW5lcmF0ZXMgdGhlIG5lY2Vzc2FyeSBjb2RlIHRvIHVzZSB0
+aGUgZGVmaW5lZCB0cmFjZXBvaW50cyBpbiB5b3VyIGFwcGxpY2F0aW9uLgo+ICtUaGUgc2VjdGlv
+biBURU1QTEFURSBGSUxFIEZPUk1BVCBkZXNjcmliZXMgdGhlIGNvbnRlbnQgb2YgdGhlIHRlbXBs
+YXRlIGZpbGUuCj4gIAo+IC1DdXJyZW50bHksIHRoZSB0b29sIGNhbiBnZW5lcmF0ZSB0aGUgLmgs
+IC5jIGFuZCAubyBhc3NvY2lhdGVkIHRvIHlvdXIKPiArQ3VycmVudGx5LCB0aGUgdG9vbCBjYW4g
+Z2VuZXJhdGUgdGhlIC5oLCAuYyBhbmQgLm8gYXNzb2NpYXRlZCB3aXRoIHlvdXIKPiAgdHJhY2Vw
+b2ludC4gVGhlIGdlbmVyYXRlZCAuaCBjYW4gYmUgZGlyZWN0bHkgaW5jbHVkZWQgaW4geW91ciBh
+cHBsaWNhdGlvbi4KPiAgWW91IGNhbiBsZXQgdGhlIHRvb2wgZ2VuZXJhdGUgdGhlIC5vIG9yIGNv
+bXBpbGUgdGhlIC5jIHlvdXJzZWxmLgo+ICBZb3UgY2FuIGNvbXBpbGUgdGhlIC5jIGludG8gYSAu
+bywgLmEgb3IgLnNvIGF0IHlvdXIgY2hvaWNlIGFuZAo+IEBAIC0zMCwxNCArMzAsMTEgQEAgUmVm
+ZXIgdG8gdGhlIFVTVCBkb2N1bWVudGF0aW9uIGZvciB0aGUKPiAgYWR2YW50YWdlcyBhbmQgZGlz
+YWR2YW50YWdlIG9mIGVhY2ggZm9ybS4KPiAgVG8gY29tcGlsZSB0aGUgcmVzdWx0aW5nIC5jIGZp
+bGUsIHlvdSBuZWVkIHRvIGFkZCB0aGUgb3B0aW9ucwo+ICAiXC1sbHR0bmctdXN0IFwtSS4iLgo+
+IC1Ob3RlIGZvciBDKysgc3VwcG9ydDogYWx0aG91Z2ggYW4gYXBwbGljYXRpb24gaW5zdHJ1bWVu
+dGVkIHdpdGgKPiAtdHJhY2Vwb2ludHMgY2FuIGJlIGNvbXBpbGVkIHdpdGggZysrLCB0cmFjZXBv
+aW50IHByb2JlcyBzaG91bGQgYmUKPiAtY29tcGlsZWQgd2l0aCBnY2MgKG9ubHkgdGVzdGVkIHdp
+dGggZ2NjIHNvIGZhcikuCj4gIAo+ICAuU0ggIk9QVElPTlMiCj4gIAo+ICAuUFAKPiAtVGhpcyBw
+cm9ncmFtIGZvbGxvdyB0aGUgdXN1YWwgR05VIGNvbW1hbmQgbGluZSBzeW50YXggd2l0aCBsb25n
+IG9wdGlvbnMgc3RhcnRpbmcgd2l0aAo+ICtUaGlzIHByb2dyYW0gZm9sbG93cyB0aGUgdXN1YWwg
+R05VIGNvbW1hbmQgbGluZSBzeW50YXggd2l0aCBsb25nIG9wdGlvbnMgc3RhcnRpbmcgd2l0aAo+
+ICB0d28gZGFzaGVzLiBCZWxvdyBpcyBhIHN1bW1hcnkgb2YgdGhlIGF2YWlsYWJsZSBvcHRpb25z
+Lgo+ICAuUFAKPiAgCj4gQEAgLTU0LDcgKzUxLDcgQEAgZXh0ZW5zaW9uICguaCwgLmMsIC5vKS4K
+PiAgVGhpcyBvcHRpb24gY2FuIGJlIHNwZWNmaWVkIG11bHRpcGxlIHRpbWVzIHRvIGdlbmVyYXRl
+IGRpZmZlcmVudCBmaWxlIHR5cGUuCj4gIAo+ICAuUFAKPiAtV2hlbiBubyBvdXRwdXQgaXMgc3Bl
+Y2lmaWVkIGRlIGRlZmF1bHQgZmlsZXMgYXJlIGdlbmVyYXRlZCB3aXRoIHRoZSBzYW1lIGJhc2Ug
+ZmlsZW5hbWUgYXMgdGhlIHRlbXBsYXRlIGZpbGUuIFRoZSBkZWZhdWx0IGZpbGVzIGFyZTogLmgs
+IC5jLCAuby4KPiArV2hlbiBubyBvdXRwdXQgaXMgc3BlY2lmaWVkIHRoZSBkZWZhdWx0IGZpbGVz
+IGFyZSBnZW5lcmF0ZWQgd2l0aCB0aGUgc2FtZSBiYXNlIGZpbGVuYW1lIGFzIHRoZSB0ZW1wbGF0
+ZSBmaWxlLiBUaGUgZGVmYXVsdCBmaWxlcyBhcmU6IC5oLCAuYywgLm8uCj4gIAo+ICAuU0ggIlRF
+TVBMQVRFIEZJTEUgRk9STUFUIgo+ICAKPiBAQCAtODUsMTIgKzgyLDEyIEBAIFRSQUNFUE9JTlRf
+RVZFTlQoCj4gIC5TSCAiRU5WSVJPTk1FTlQgVkFSSUFCTEVTIgo+ICAKPiAgLlBQCj4gLVdoZW4g
+dGhlIHRvb2wgZ2VuZXJhdGUgYW4gLm8gZmlsZSwgaXQgd2lsbCBsb29rIGZvciB0aGUgZm9sbG93
+aW5nIGVudmlyb25tZW50IHZhcmlhYmxlcwo+ICtXaGVuIHRoZSB0b29sIGdlbmVyYXRlcyBhIC5v
+IGZpbGUsIGl0IHdpbGwgbG9vayBmb3IgdGhlIGZvbGxvd2luZyBlbnZpcm9ubWVudCB2YXJpYWJs
+ZXMKPiAgLlBQCj4gIAo+ICAuUFAKPiAgLklQICJDQyIKPiAtU3BlY2lmZXIgd2hpY2ggQyBjb21w
+aWxlciB0byB1c2UuIElmIHRoZSB2YXJpYWJsZSBpcyBub3Qgc3BlY2lmaWVkLCB0aGUKPiArU3Bl
+Y2lmeSB3aGljaCBDIGNvbXBpbGVyIHRvIHVzZS4gSWYgdGhlIHZhcmlhYmxlIGlzIG5vdCBzcGVj
+aWZpZWQsIHRoZQo+ICB0b29sIHdpbGwgdHJ5ICJjYyIgYW5kICJnY2MiCj4gIAo+ICAuSVAgIkNG
+TEFHUyIKCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwps
+dHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xp
+c3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
