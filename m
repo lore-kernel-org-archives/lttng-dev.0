@@ -1,16 +1,15 @@
 From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Subject: Re: [PATCH lttng-ust] Fix: Overhaul of the lttng-gen-tp
- man page
-Date: Tue, 29 Oct 2013 16:47:12 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD267A034F__32423.5253189274$1383065292$gmane$org@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+Subject: Re: Current Trace File Location
+Date: Tue, 29 Oct 2013 16:49:43 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD267A035D__8356.23749667338$1383065453$gmane$org@VAL-E-01.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1VbCRl-0002zu-Nr
-	for lttng-dev@lists.lttng.org; Tue, 29 Oct 2013 12:47:19 -0400
+	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1VbCUP-0003JF-9E
+	for lttng-dev@lists.lttng.org; Tue, 29 Oct 2013 12:50:02 -0400
 Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -23,16 +22,21 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Date: Tue, 29 Oct 2013 11:51:55 -0400
-From: Yannick Brosseau <yannick.brosseau@gmail.com>
+From: Michael Steppe <msteppe91@gmail.com>
 
-> @@ -54,7 +51,7 @@ extension (.h, .c, .o).
->  This option can be specfied multiple times to generate different file ty=
-pe.
+> As I am sure you know, the .lttngrc file is populated with ONLY the lates=
+t created trace name (trace3).
+>
+> My question to you is, where are all the traces stored until they are des=
+troyed? LTT obviously knows that trace1 and trace2 are still "running"
+> because it won't let me create another with the same name until I destroy=
+ it. I know that I could say:
 
-   You missed one:
+   The sessions are in the session manager's memory (lttng-sessiond).
 
-This option can be specified multiple times to generate different file type.
+   You can obtain a list of sessions with 'lttng list'.
+
+   You can specify the "current" session using 'lttng set-session'.
 
 Daniel U. Thibault
 Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
