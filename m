@@ -1,38 +1,22 @@
-From: Amit Margalit <AMITM@il.ibm.com>
-Subject: What is the size overhead of UST tracepoints? (hint:
-	very large indeed)
-Date: Tue, 29 Oct 2013 10:42:20 +0200
-Message-ID: <OF98A3476E.B164A434-ONC2257C13.003269EB-C2257C13.00354EB7__10366.2249086939$1383036299$gmane$org@il.ibm.com>
-Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1445720096=="
+From: Marcus Tomlinson <themarcustomlinson@gmail.com>
+Subject: VERY EASY one-liner fix to LTTng
+Date: Tue, 29 Oct 2013 15:45:53 +0200
+Message-ID: <E79B4F21-5D60-4AE0-BEBD-CA8DEF079300__47754.2498418645$1383054625$gmane$org@gmail.com>
+Mime-Version: 1.0 (Mac OS X Mail 7.0 \(1816\))
+Content-Type: multipart/mixed; boundary="===============2125924992=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from e06smtp13.uk.ibm.com ([195.75.94.109])
+Received: from mail-wi0-f171.google.com ([209.85.212.171])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <amitm@il.ibm.com>) id 1Vb4uI-0005Dq-9F
-	for lttng-dev@lists.lttng.org; Tue, 29 Oct 2013 04:44:12 -0400
-Received: from /spool/local
-	by e06smtp13.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use
-	Only! Violators will be prosecuted
-	for <lttng-dev@lists.lttng.org> from <amitm@il.ibm.com>;
-	Tue, 29 Oct 2013 08:44:04 -0000
-Received: from b06cxnps3074.portsmouth.uk.ibm.com
-	(d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-	by d06dlp01.portsmouth.uk.ibm.com (Postfix) with ESMTP id 8436817D8062
-	for <lttng-dev@lists.lttng.org>; Tue, 29 Oct 2013 08:43:30 +0000 (GMT)
-Received: from d06av07.portsmouth.uk.ibm.com (d06av07.portsmouth.uk.ibm.com
-	[9.149.37.248])
-	by b06cxnps3074.portsmouth.uk.ibm.com (8.13.8/8.13.8/NCO v10.0) with
-	ESMTP id r9T8gTgs54395086
-	for <lttng-dev@lists.lttng.org>; Tue, 29 Oct 2013 08:42:29 GMT
-Received: from d06av07.portsmouth.uk.ibm.com (localhost [127.0.0.1])
-	by d06av07.portsmouth.uk.ibm.com (8.14.4/8.14.4/NCO v10.0 AVout) with
-	ESMTP id r9T8gXPg025250
-	for <lttng-dev@lists.lttng.org>; Tue, 29 Oct 2013 04:42:33 -0400
-Received: from d06ml311.portsmouth.uk.ibm.com (d06ml311.portsmouth.uk.ibm.com
-	[9.149.104.181])
-	by d06av07.portsmouth.uk.ibm.com (8.14.4/8.14.4/NCO v10.0 AVin) with
-	ESMTP id r9T8gXAw025245
-	for <lttng-dev@lists.lttng.org>; Tue, 29 Oct 2013 04:42:33 -0400
+	(envelope-from <themarcustomlinson@gmail.com>) id 1Vb9cU-0001PL-FU
+	for lttng-dev@lists.lttng.org; Tue, 29 Oct 2013 09:46:12 -0400
+Received: by mail-wi0-f171.google.com with SMTP id f4so1264920wiw.4
+	for <lttng-dev@lists.lttng.org>; Tue, 29 Oct 2013 06:45:58 -0700 (PDT)
+Received: from [192.168.0.101] (41-133-125-195.dsl.mweb.co.za.
+	[41.133.125.195])
+	by mx.google.com with ESMTPSA id dn2sm5044423wid.1.2013.10.29.06.45.56
+	for <lttng-dev@lists.lttng.org>
+	(version=TLSv1 cipher=ECDHE-RSA-RC4-SHA bits=128/128);
+	Tue, 29 Oct 2013 06:45:57 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -41,156 +25,102 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-This is a multipart message in MIME format.
---===============1445720096==
-Content-Type: multipart/alternative; boundary="=_alternative 00354E7BC2257C13_="
 
-This is a multipart message in MIME format.
---=_alternative 00354E7BC2257C13_=
-Content-Type: text/plain; charset="US-ASCII"
-
-Hello all,
-
-Let me start with my bottom line conclusions, and then explain them:
-
-LTTng's size overhead and start-up time overhead is huge! An application 
-cannot use (directly or through linking in shared libraries with TPs) more 
-than about 1000-2000 tracepoints.
-
-I am working on incorporating LTTng as an alternative logging method for 
-an existing project, which already has many thousands of places in the 
-code that do logging of some data.
-
-By many thousands, I mean > 15K.
-
-I have basically written an automated instrumentor that generates custom 
-tracepoints, for every log location plus 1 entry-tracepoints and 1 
-exit-tracepoint for every function.
-
-This totals about 100K tracepoints, with approximately 600K different 
-fields, and has increased the size of the project's resulting executables 
-from ~100MB to ~900MB (!!) - although this is with debug symbols.
-
-Analysis of the reasons for this has revealed some interesting (but 
-discouraging) facts:
-Each tracepoint name is stored in a static buffer sized 256 bytes, 
-regardless of how long the name actually is (contributing some 25MB to the 
-size)
-Each trace event field name is store also in a 256-byte buffer 
-(contirbuting another 150MB)
-Each event / tracepoint holds an event structure which holds the fields, 
-etc. and is padded generously.
-
-Additionally, there is a ton of code to calculate the event size, its 
-alignment, and to verify that the names are not longer than the 256 byte 
-buffer, and more.
-
-Some of this is either used just once, or even never used, merely compiled 
-to let the compiler complain if the sizes are wrong, etc.
-
-Now this code won't be included if you compile a statically linked 
-executable, but my project compiles almost everything into shared libs.
-
-Another big big problem is the time it takes to register all of these 
-tracepoints. For one of my executables which includes ~10K tracepoints, it 
-took over 5 seconds just to get to "main()" due to tracepoint constructor 
-code registering the tracepoints...
-
-I've started working on an alternative method of doing the same...
-
-Is anyone already aware of this? Is anyone already working on improving 
-this? I'd be very happy to work together on this.
+--===============2125924992==
+Content-Type: multipart/signed; boundary="Apple-Mail=_B8B43024-4556-4BD9-9ED1-252C61E10703"; protocol="application/pgp-signature"; micalg=pgp-sha512
 
 
-Amit Margalit
-IBM XIV - Storage Reinvented
-XIV-NAS Development Team
-Tel. 03-689-7774
-Fax. 03-689-7230
---=_alternative 00354E7BC2257C13_=
-Content-Type: text/html; charset="US-ASCII"
-
-<font size=2 face="sans-serif">Hello all,</font>
-<br>
-<br><font size=2 face="sans-serif">Let me start with my bottom line conclusions,
-and then explain them:</font>
-<br>
-<br><font size=2 face="sans-serif">LTTng's size overhead and start-up time
-overhead is huge! An application cannot use (directly or through linking
-in shared libraries with TPs) more than about 1000-2000 tracepoints.</font>
-<br>
-<br><font size=2 face="sans-serif">I am working on incorporating LTTng
-as an alternative logging method for an existing project, which already
-has many thousands of places in the code that do logging of some data.</font>
-<br>
-<br><font size=2 face="sans-serif">By many thousands, I mean &gt; 15K.</font>
-<br>
-<br><font size=2 face="sans-serif">I have basically written an automated
-instrumentor that generates custom tracepoints, for every log location
-plus 1 entry-tracepoints and 1 exit-tracepoint for every function.</font>
-<br>
-<br><font size=2 face="sans-serif">This totals about 100K tracepoints,
-with approximately 600K different fields, and has increased the size of
-the project's resulting executables from ~100MB to ~900MB (!!) - although
-this is with debug symbols.</font>
-<br>
-<br><font size=2 face="sans-serif">Analysis of the reasons for this has
-revealed some interesting (but discouraging) facts:</font>
-<ol>
-<li value=1><font size=2 face="sans-serif">Each tracepoint name is stored
-in a static buffer sized 256 bytes, regardless of how long the name actually
-is (contributing some 25MB to the size)</font>
-<li value=2><font size=2 face="sans-serif">Each trace event field name
-is store also in a 256-byte buffer (contirbuting another 150MB)</font>
-<li value=3><font size=2 face="sans-serif">Each event / tracepoint holds
-an event structure which holds the fields, etc. and is padded generously.</font></ol>
-<br><font size=2 face="sans-serif">Additionally, there is a ton of code
-to calculate the event size, its alignment, and to verify that the names
-are not longer than the 256 byte buffer, and more.</font>
-<br>
-<br><font size=2 face="sans-serif">Some of this is either used just once,
-or even never used, merely compiled to let the compiler complain if the
-sizes are wrong, etc.</font>
-<br>
-<br><font size=2 face="sans-serif">Now this code won't be included if you
-compile a statically linked executable, but my project compiles almost
-everything into shared libs.</font>
-<br>
-<br><font size=2 face="sans-serif">Another big big problem is the time
-it takes to register all of these tracepoints. For one of my executables
-which includes ~10K tracepoints, it took over 5 seconds just to get to
-&quot;main()&quot; due to tracepoint constructor code registering the tracepoints...</font>
-<br>
-<br><font size=2 face="sans-serif">I've started working on an alternative
-method of doing the same...<br>
-</font>
-<br><font size=2 face="sans-serif">Is anyone already aware of this? Is
-anyone already working on improving this? I'd be very happy to work together
-on this.</font>
-<br>
-<br>
-<br><font size=2 color=#000080 face="sans-serif">Amit Margalit</font>
-<br><font size=2 color=#808000 face="sans-serif">IBM XIV </font><font size=2 face="sans-serif">-
-<i>Storage Reinvented</i></font>
-<br><font size=2 face="sans-serif">XIV-NAS Development Team</font>
-<br><font size=2 face="sans-serif">Tel. 03</font><font size=2 face="Arial">-689-7774</font>
-<br><font size=2 face="Arial">Fax. 03-689-7230</font>
---=_alternative 00354E7BC2257C13_=--
+--Apple-Mail=_B8B43024-4556-4BD9-9ED1-252C61E10703
+Content-Type: multipart/alternative;
+	boundary="Apple-Mail=_5843B902-9A5B-46CD-A1CF-F532B3B791EE"
 
 
+--Apple-Mail=_5843B902-9A5B-46CD-A1CF-F532B3B791EE
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain;
+	charset=windows-1252
 
---===============1445720096==
+Hi, could I ask that somebody please make a VERY EASY fix to LTTng and =
+push it for me.
+
+I get compiler warnings about a missing initialiser for member =91padding=92=
+ in tracepoint.
+Removing these warnings is really simple:
+
+line 252 of =93tracepoint.h=94 needs to change from:
+			_TP_EXTRACT_STRING(_args),				=
+\
+to:
+			_TP_EXTRACT_STRING(_args), {}				=
+\
+
+Thanks in advance!
+
+--Apple-Mail=_5843B902-9A5B-46CD-A1CF-F532B3B791EE
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/html;
+	charset=windows-1252
+
+<html><head><meta http-equiv=3D"Content-Type" content=3D"text/html =
+charset=3Dwindows-1252"></head><body style=3D"word-wrap: break-word; =
+-webkit-nbsp-mode: space; -webkit-line-break: after-white-space;">Hi, =
+could I ask that somebody please make a VERY EASY fix to LTTng and push =
+it for me.<div><br></div><div>I get compiler warnings about a missing =
+initialiser for member =91padding=92 in tracepoint.</div><div>Removing =
+these warnings is really simple:</div><div><br></div><div>line 252 of =
+=93tracepoint.h=94 needs to change from:</div><div>
+<pre style=3D"margin-top: 0px; margin-bottom: =
+0px;"><!--StartFragment--><span style=3D" color:#c0c0c0;">			=
+</span>_TP_EXTRACT_STRING(_args),<span style=3D" color:#c0c0c0;">		=
+		</span><span style=3D" =
+color:#c0c0c0;">\</span></pre></div><div>to:</div><div>
+<pre style=3D"margin-top: 0px; margin-bottom: =
+0px;"><!--StartFragment--><span style=3D" color:#c0c0c0;">			=
+</span>_TP_EXTRACT_STRING(_args), {}<span style=3D" color:#c0c0c0;">		=
+		</span><span style=3D" =
+color:#c0c0c0;">\</span></pre><pre style=3D"margin-top: 0px; =
+margin-bottom: 0px;"><span style=3D" =
+color:#c0c0c0;"><br></span></pre><pre style=3D"margin-top: 0px; =
+margin-bottom: 0px;"><div style=3D"font-family: Helvetica; white-space: =
+normal;">Thanks in advance!</div></pre></div></body></html>=
+
+--Apple-Mail=_5843B902-9A5B-46CD-A1CF-F532B3B791EE--
+
+--Apple-Mail=_B8B43024-4556-4BD9-9ED1-252C61E10703
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+	filename=signature.asc
+Content-Type: application/pgp-signature;
+	name=signature.asc
+Content-Description: Message signed with OpenPGP using GPGMail
+
+-----BEGIN PGP SIGNATURE-----
+Comment: GPGTools - https://gpgtools.org
+
+iQEcBAEBCgAGBQJSb7wRAAoJECemNjAZ749kleEH/2RuNkaMecaL8ESVGV5HUR9r
+yrIyEbx2HQWo/K+c6YWy2TDIl2xmvcaSYEGX+DCI4g8NUyeuoLRbfLtxjbKPDnS9
+oXpCs4PPF+5iiJirXdUX780tLgMJAbT0cnWTS8tTrVuJbqfpe1MUGd6QsIlTPUFf
+u3PR7UtKZVccfZdWbM1/Q/tZ6EuPmHq9V9iUmHisQ2F5bmrIWR9uuSEfcXrofF7p
+jtxro62wC1JUx2PIb9lxi33aX6V5b16BZjhTiJ+NCrwMEIAA69deRjbO8cIRRCkR
+jhKTjlJeTGS9+fJ0Yk0Y5f4WDFBS6mairXxHCQHZwPcWBjrBP1brONjVGa28Sjk=
+=4ZUi
+-----END PGP SIGNATURE-----
+
+--Apple-Mail=_B8B43024-4556-4BD9-9ED1-252C61E10703--
+
+
+--===============2125924992==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
 
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============1445720096==--
+--===============2125924992==--
