@@ -1,24 +1,25 @@
-From: Jon Bernard <jbernard@debian.org>
-Subject: Re: LTTng packages in Debian sid out of sync
-Date: Tue, 29 Oct 2013 10:13:33 -0400
-Message-ID: <20131029141238.GA9169__24767.7445448518$1383056080$gmane$org@shaniqua>
-References: <630558869.45441.1382211345502.JavaMail.zimbra@efficios.com>
-	<856849325.45462.1382211994767.JavaMail.zimbra@efficios.com>
-	<20131019211009.GA83292@helmut.local>
-	<300817690.45707.1382242504740.JavaMail.zimbra@efficios.com>
-	<20131020134521.GA97360@helmut.local>
-	<1084047903.45979.1382281219903.JavaMail.zimbra@efficios.com>
-	<20131020160434.GA2011@helmut.local>
-Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+From: Vlad <vlad@demoninsight.com>
+Subject: Re: What is the size overhead of UST tracepoints?
+	(hint: very large indeed)
+Date: Tue, 29 Oct 2013 10:32:55 -0400
+Message-ID: <A651D048-3BA0-419E-9A6A-9EDED86ED34C__23185.072563547$1383057253$gmane$org@demoninsight.com>
+References: <OF98A3476E.B164A434-ONC2257C13.003269EB-C2257C13.00354EB7@il.ibm.com>
+Mime-Version: 1.0 (Mac OS X Mail 6.6 \(1510\))
+Content-Type: multipart/mixed; boundary="===============0631390140=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from out4-smtp.messagingengine.com ([66.111.4.28])
+Received: from mail-qa0-f47.google.com ([209.85.216.47])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jbernard@debian.org>) id 1VbA3B-0004E6-A9
-	for lttng-dev@lists.lttng.org; Tue, 29 Oct 2013 10:13:47 -0400
-Content-Disposition: inline
-In-Reply-To: <20131020160434.GA2011@helmut.local>
+	(envelope-from <vlad@demoninsight.com>) id 1VbALv-0006CH-55
+	for lttng-dev@lists.lttng.org; Tue, 29 Oct 2013 10:33:08 -0400
+Received: by mail-qa0-f47.google.com with SMTP id k15so2925985qaq.20
+	for <lttng-dev@lists.lttng.org>; Tue, 29 Oct 2013 07:32:57 -0700 (PDT)
+Received: from [10.52.5.106] (msmc-64-72-75-194.customer.hvdata.net.
+	[64.72.75.194])
+	by mx.google.com with ESMTPSA id r5sm65733881qaj.13.2013.10.29.07.32.55
+	for <lttng-dev@lists.lttng.org>
+	(version=TLSv1 cipher=ECDHE-RSA-RC4-SHA bits=128/128);
+	Tue, 29 Oct 2013 07:32:56 -0700 (PDT)
+In-Reply-To: <OF98A3476E.B164A434-ONC2257C13.003269EB-C2257C13.00354EB7@il.ibm.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -27,71 +28,97 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, =?iso-8859-1?Q?St=E9phane?= Graber <stgraber@ubuntu.com>, Alexandre Montplaisir <alexmonthy@voxpopuli.im>, lttng-dev@lists.lttng.org
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-* Jon Bernard <jbernard@debian.org> wrote:
-> * Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
-> > ----- Original Message -----
-> > > From: "Jon Bernard" <jbernard@debian.org>
-> > > To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-> > > Cc: "St=E9phane Graber" <stgraber@ubuntu.com>, "Alexandre Montplaisir=
-" <alexmonthy@voxpopuli.im>,
-> > > lttng-dev@lists.lttng.org
-> > > Sent: Sunday, October 20, 2013 9:45:21 AM
-> > > Subject: Re: LTTng packages in Debian sid out of sync
-> > > =
 
-> > [...]
-> > > =
+--===============0631390140==
+Content-Type: multipart/alternative; boundary="Apple-Mail=_B7594D2C-0E5F-448B-B823-166B8BC3B40F"
 
-> > > That is not exactly what I intended to convey, let me be more direct =
-about my
-> > > view.  I completely agree that sid should have 2.3.x immediately.  I =
-also
-> > > agree
-> > > that 2.3 should be targeted for testing, and therefore the next stable
-> > > release.
-> > =
 
-> > Allright :) I'm glad we're on the same page, sorry for the misunderstan=
-ding.
-> =
+--Apple-Mail=_B7594D2C-0E5F-448B-B823-166B8BC3B40F
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain;
+	charset=us-ascii
 
-> No worries.  I'll add that future releases (like the upcoming 2.4) will
-> be prepared and tested all together prior to upload - to hopefully avoid
-> the previous situation/nightmare that I managed to get myself into.
-> =
 
-> There can still be a sizable amount of work for 2.3 to fully land into
-> testing, so that is my primary focus.  The freeze deadline is fast
-> approaching, so I will be keeping a close eye on things as they
-> progress.  As things settle I'll post status here.
+On Oct 29, 2013, at 4:42 AM, Amit Margalit <AMITM@il.ibm.com> wrote:
 
-UST 2.3.0 was accepted into unstable (debian) this morning.  There are
-a few points to be aware of:
+> Additionally, there is a ton of code to calculate the event size, its =
+alignment, and to verify that the names are not longer than the 256 byte =
+buffer, and more.=20
 
-  * I will now prepare an lttng-tools upload (2.3.0) so there will be
-    a complete 2.3.0 stack in unstable hopefully very soon.
+A couple of thoughts:
 
-  * I have broken the upgrade path, which I started looking at last
-    week.  It will be necessary for existing unstable users to first
-    uninstall ust before upgrading.  The reason for this is the soname
-    bump on liblttng-ust-ctl while the other libs remain unchanged
-    - this will cause file collisions until I craft a smooth upgrade
-    process.  This will likely mean breaking the ust libraries into
-    separate packages (I see no better way, but if there are suggestions
-    then please let me know).
+(a) there may be a way to share fewer definitions of events across more =
+event emit sites. Especially if LTTng supported optional/missing fields =
+:) For example, define a single "function.entry" and a single =
+"function.exit" instead of a unique definition for each function you =
+have. Disambiguate using a parameter.
 
-    I realize this kinda sucks and I'll get it sorted as soon as I can.
-
-  * I will block any possible testing migrations of the 2.3.0 packages
-    until the upgrade path is sorted out.  Containing this problem in
-    unstable and fixing there will cause the least amount of pain for
-    all involved, that I can see.
+(b) this is not something that could be done in kernel but in a C++ user =
+app it's fairly easy to statically compute everything that depends on =
+information known at compile time. I use a custom EDSL implemented via =
+boost.proto. As a result, only the stuff that gets used is embedded in =
+object code and all event emit calls inline in very fast assembly that's =
+optimal for each particular combination of actual argument values.
 
 Cheers,
+Vlad=
 
--- =
+--Apple-Mail=_B7594D2C-0E5F-448B-B823-166B8BC3B40F
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/html;
+	charset=us-ascii
 
-Jon
+<html><head><meta http-equiv=3D"Content-Type" content=3D"text/html =
+charset=3Dus-ascii"></head><body style=3D"word-wrap: break-word; =
+-webkit-nbsp-mode: space; -webkit-line-break: after-white-space; =
+"><br><div><div>On Oct 29, 2013, at 4:42 AM, Amit Margalit &lt;<a =
+href=3D"mailto:AMITM@il.ibm.com">AMITM@il.ibm.com</a>&gt; =
+wrote:</div><br class=3D"Apple-interchange-newline"><blockquote =
+type=3D"cite"><font size=3D"2" face=3D"sans-serif" style=3D"font-style: =
+normal; font-variant: normal; font-weight: normal; letter-spacing: =
+normal; line-height: normal; orphans: 2; text-align: -webkit-auto; =
+text-indent: 0px; text-transform: none; white-space: normal; widows: 2; =
+word-spacing: 0px; -webkit-text-size-adjust: auto; =
+-webkit-text-stroke-width: 0px; ">Additionally, there is a ton of code =
+to calculate the event size, its alignment, and to verify that the names =
+are not longer than the 256 byte buffer, and more.</font><span =
+style=3D"font-family: Helvetica; font-size: medium; font-style: normal; =
+font-variant: normal; font-weight: normal; letter-spacing: normal; =
+line-height: normal; orphans: 2; text-align: -webkit-auto; text-indent: =
+0px; text-transform: none; white-space: normal; widows: 2; word-spacing: =
+0px; -webkit-text-size-adjust: auto; -webkit-text-stroke-width: 0px; =
+display: inline !important; float: none; =
+">&nbsp;</span></blockquote></div><br><div>A couple of =
+thoughts:</div><div><br></div><div>(a) there may be a way to share fewer =
+definitions of events across more event emit sites. Especially if LTTng =
+supported optional/missing fields :) For example, define a single =
+"function.entry" and a single "function.exit" instead of a unique =
+definition for each function you have. Disambiguate using a =
+parameter.</div><div><br></div><div>(b) this is not something that could =
+be done in kernel but in a C++ user app it's fairly easy to statically =
+compute everything that depends on information known at compile time. I =
+use a custom EDSL implemented via boost.proto. As a result, only the =
+stuff that gets used is embedded in object code and all event emit calls =
+inline in very fast assembly that's optimal for each particular =
+combination of actual argument =
+values.</div><div><br></div><div>Cheers,</div><div>Vlad</div></body></html=
+>=
+
+--Apple-Mail=_B7594D2C-0E5F-448B-B823-166B8BC3B40F--
+
+
+--===============0631390140==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0631390140==--
