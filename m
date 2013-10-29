@@ -1,16 +1,38 @@
-From: "zhenyu.ren" <zhenyu.ren@aliyun.com>
-Subject: =?utf-8?q?The_problem_with_compiling_multiple_tracepo?=
- =?utf-8?q?int_sources_with_app_directly?=
-Date: Tue, 29 Oct 2013 09:50:05 +0800
-Message-ID: <73a74f67-0109-4724-93b9-96b8ef72ee03__9143.85986184261$1383011482$gmane$org@aliyun.com>
-Reply-To: "zhenyu.ren" <zhenyu.ren@aliyun.com>
+From: Amit Margalit <AMITM@il.ibm.com>
+Subject: What is the size overhead of UST tracepoints? (hint:
+	very large indeed)
+Date: Tue, 29 Oct 2013 10:42:20 +0200
+Message-ID: <OF98A3476E.B164A434-ONC2257C13.003269EB-C2257C13.00354EB7__10366.2249086939$1383036299$gmane$org@il.ibm.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0852682105=="
+Content-Type: multipart/mixed; boundary="===============1445720096=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtpcm9-316.freemail.mail.aliyun.com ([110.75.46.16])
+Received: from e06smtp13.uk.ibm.com ([195.75.94.109])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <zhenyu.ren@aliyun.com>) id 1VayRo-0007pa-6c
-	for lttng-dev@lists.lttng.org; Mon, 28 Oct 2013 21:50:27 -0400
+	(envelope-from <amitm@il.ibm.com>) id 1Vb4uI-0005Dq-9F
+	for lttng-dev@lists.lttng.org; Tue, 29 Oct 2013 04:44:12 -0400
+Received: from /spool/local
+	by e06smtp13.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use
+	Only! Violators will be prosecuted
+	for <lttng-dev@lists.lttng.org> from <amitm@il.ibm.com>;
+	Tue, 29 Oct 2013 08:44:04 -0000
+Received: from b06cxnps3074.portsmouth.uk.ibm.com
+	(d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+	by d06dlp01.portsmouth.uk.ibm.com (Postfix) with ESMTP id 8436817D8062
+	for <lttng-dev@lists.lttng.org>; Tue, 29 Oct 2013 08:43:30 +0000 (GMT)
+Received: from d06av07.portsmouth.uk.ibm.com (d06av07.portsmouth.uk.ibm.com
+	[9.149.37.248])
+	by b06cxnps3074.portsmouth.uk.ibm.com (8.13.8/8.13.8/NCO v10.0) with
+	ESMTP id r9T8gTgs54395086
+	for <lttng-dev@lists.lttng.org>; Tue, 29 Oct 2013 08:42:29 GMT
+Received: from d06av07.portsmouth.uk.ibm.com (localhost [127.0.0.1])
+	by d06av07.portsmouth.uk.ibm.com (8.14.4/8.14.4/NCO v10.0 AVout) with
+	ESMTP id r9T8gXPg025250
+	for <lttng-dev@lists.lttng.org>; Tue, 29 Oct 2013 04:42:33 -0400
+Received: from d06ml311.portsmouth.uk.ibm.com (d06ml311.portsmouth.uk.ibm.com
+	[9.149.104.181])
+	by d06av07.portsmouth.uk.ibm.com (8.14.4/8.14.4/NCO v10.0 AVin) with
+	ESMTP id r9T8gXAw025245
+	for <lttng-dev@lists.lttng.org>; Tue, 29 Oct 2013 04:42:33 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,158 +41,156 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0852682105==
-Content-Type: multipart/alternative;
-  boundary="----=ALIBOUNDARY_28991_54ef1940_526f144d_2971c"
+This is a multipart message in MIME format.
+--===============1445720096==
+Content-Type: multipart/alternative; boundary="=_alternative 00354E7BC2257C13_="
 
-------=ALIBOUNDARY_28991_54ef1940_526f144d_2971c
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+This is a multipart message in MIME format.
+--=_alternative 00354E7BC2257C13_=
+Content-Type: text/plain; charset="US-ASCII"
 
-SGksZGV2LWxpc3QKwqDCoCBJdCBzZWVtcyB3b3JrIHdlbGwgaWYgdGhlcmUgaXMgb25seSBvbmUg
-dHJhY2Vwb2ludCBmaWxlKHNhbXBsZV90cmFjZXBvaW50LmgpIGluY2x1ZGluZyBpbiBhcHAgLmku
-ZXNhbXBsZV90cmFjZXBvaW50LmgjdW5kZWYgVFJBQ0VQT0lOVF9QUk9WSURFUgojZGVmaW5lIFRS
-QUNFUE9JTlRfUFJPVklERVIgc2FtcGxlCgojaWYgIWRlZmluZWQoU0FNUExFX1RSQUNFUE9JTlRf
-SCkgfHwgZGVmaW5lZChUUkFDRVBPSU5UX0hFQURFUl9NVUxUSV9SRUFEKQojZGVmaW5lIFNBTVBM
-RV9UUkFDRVBPSU5UX0gKCiNpbmNsdWRlIDxsdHRuZy90cmFjZXBvaW50Lmg+CgpUUkFDRVBPSU5U
-X0VWRU5UKArCoMKgwqDCoMKgwqDCoCBzYW1wbGUsCsKgwqDCoMKgwqDCoMKgIGJ5dGVzX2luLCAv
-LyBDKysgU3R5bGUgY29tbWVudArCoMKgwqDCoMKgwqDCoCBUUF9BUkdTKGNoYXIgKiwgdGV4dCks
-CsKgwqDCoMKgwqDCoMKgIFRQX0ZJRUxEUygKwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-IGN0Zl9zdHJpbmcobWVzc2FnZSwgdGV4dCkKwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoCApCikKI2VuZGlmIC8qIFNBTVBMRV9UUkFDRVBPSU5UX0ggKi8KI3VuZGVmIFRSQUNFUE9J
-TlRfSU5DTFVERQojZGVmaW5lIFRSQUNFUE9JTlRfSU5DTFVERSAiLi9zYW1wbGVfdHJhY2Vwb2lu
-dC5oIgoKI2luY2x1ZGUgPGx0dG5nL3RyYWNlcG9pbnQtZXZlbnQuaD4Kc2FtcGxlLmMjaW5jbHVk
-ZSA8dW5pc3RkLmg+CiNkZWZpbmUgVFJBQ0VQT0lOVF9ERUZJTkUKI2RlZmluZSBUUkFDRVBPSU5U
-X0NSRUFURV9QUk9CRVMKI2luY2x1ZGUgInNhbXBsZV90cmFjZXBvaW50LmgiCmludCBtYWluKGlu
-dCBhcmdjLCBjaGFyICoqYXJndikKewrCoMKgwqDCoMKgwqDCoCBpbnQgaSA9IDA7CsKgwqDCoMKg
-wqDCoMKgIGZvciAoaSA9IDA7IGkgPCAxMDAwMDA7IGkrKykgewrCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqAgdHJhY2Vwb2ludChzYW1wbGUsIGJ5dGVzX2luLMKgICJieXRlcyBpbiIpOwrC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgc2xlZXAoMSk7CsKgwqDCoMKgwqDCoMKgIH0K
-wqDCoMKgwqDCoMKgwqAgcmV0dXJuIDA7Cn0KY29tcGlsZTrCoGdjYyAtSS4gLW8gc2FtcGxlIHNh
-bXBsZS5jIC1sZGwgLWxsdHRuZy11c3RIb3dldmVyLElmIG9uZSBtb3JlIHRyYWNlcG9pbnQgaW5j
-bHVkZSBmaWxlKHNhbXBsZV90cmFjZXBvaW50Mi5oKSBhZGRlZCBpbiBhcHAsY29tcGlsZSBmYWls
-ZWQuc2FtcGxlX3RyYWNlcG9pbnQyLmgjdW5kZWYgVFJBQ0VQT0lOVF9QUk9WSURFUgojZGVmaW5l
-IFRSQUNFUE9JTlRfUFJPVklERVIgc2FtcGxlMgojaWYgIWRlZmluZWQoU0FNUExFX1RSQUNFUE9J
-TlQyX0gpIHx8IGRlZmluZWQoVFJBQ0VQT0lOVF9IRUFERVJfTVVMVElfUkVBRCkKI2RlZmluZSBT
-QU1QTEVfVFJBQ0VQT0lOVDJfSAoKI2luY2x1ZGUgPGx0dG5nL3RyYWNlcG9pbnQuaD4KClRSQUNF
-UE9JTlRfRVZFTlQoCsKgwqDCoMKgwqDCoMKgIHNhbXBsZTIsCsKgwqDCoMKgwqDCoMKgIGJ5dGVz
-X2luLCAvLyBDKysgU3R5bGUgY29tbWVudArCoMKgwqDCoMKgwqDCoCBUUF9BUkdTKGNoYXIgKiwg
-dGV4dCksCsKgwqDCoMKgwqDCoMKgIFRQX0ZJRUxEUygKwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgIGN0Zl9zdHJpbmcobWVzc2FnZSwgdGV4dCkKwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoCApCikKI2VuZGlmIC8qIFNBTVBMRV9UUkFDRVBPSU5UMl9IICovCiN1bmRlZiBU
-UkFDRVBPSU5UX0lOQ0xVREUKI2RlZmluZSBUUkFDRVBPSU5UX0lOQ0xVREUgIi4vc2FtcGxlX3Ry
-YWNlcG9pbnQyLmgiCiNpbmNsdWRlIDxsdHRuZy90cmFjZXBvaW50LWV2ZW50Lmg+CnNhbXBsZS5j
-I2luY2x1ZGUgPHVuaXN0ZC5oPgojZGVmaW5lIFRSQUNFUE9JTlRfREVGSU5FCiNkZWZpbmUgVFJB
-Q0VQT0lOVF9DUkVBVEVfUFJPQkVTCiNpbmNsdWRlICJzYW1wbGVfdHJhY2Vwb2ludC5oIgojaW5j
-bHVkZSAic2FtcGxlX3RyYWNlcG9pbnQyLmgiCgppbnQgbWFpbihpbnQgYXJnYywgY2hhciAqKmFy
-Z3YpCnsKwqDCoMKgwqDCoMKgwqAgaW50IGkgPSAwOwrCoMKgwqDCoMKgwqDCoCBmb3IgKGkgPSAw
-OyBpIDwgMTAwMDAwOyBpKyspIHsKwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHRyYWNl
-cG9pbnQoc2FtcGxlLCBieXRlc19pbizCoCAiYnl0ZXMgaW4iKTsKwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgIHRyYWNlcG9pbnQoc2FtcGxlMiwgYnl0ZXNfaW4swqAgImJ5dGVzIGluIik7
-CsKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBzbGVlcCgxKTsKwqDCoMKgwqDCoMKgwqAg
-fQrCoMKgwqDCoMKgwqDCoCByZXR1cm4gMDsKfQpjb21waWxlOmdjYyAtSS4gLW8gc2FtcGxlIHNh
-bXBsZS5jIC1sZGwgLWxsdHRuZy11c3RzYW1wbGUuYzogSW4gZnVuY3Rpb27LnG1haW46CnNhbXBs
-ZS5jOjEyOiBlcnJvcjogX190cmFjZXBvaW50X3NhbXBsZTJfX19ieXRlc19pbiB1bmRlY2xhcmVk
-IChmaXJzdCB1c2UgaW4gdGhpcyBmdW5jdGlvbikKc2FtcGxlLmM6MTI6IGVycm9yOiAoRWFjaCB1
-bmRlY2xhcmVkIGlkZW50aWZpZXIgaXMgcmVwb3J0ZWQgb25seSBvbmNlCnNhbXBsZS5jOjEyOiBl
-cnJvcjogZm9yIGVhY2ggZnVuY3Rpb24gaXQgYXBwZWFycyBpbi4pwqDCoCBEb2VzIExUVG5nIHN1
-cHBvcnQgY29tcGlsaW5nIG11bHRpcGxlIHRyYWNlcG9pbnQgc291cmNlcyB3aXRoIGFwcCBkaXJl
-Y3RseT/CoMKgIFllcyxJIGNhbiBjb21waWxlIG11bHRpcGxlIHRyYWNlcG9pbnQgcHJvdmlkZXJz
-IHRvIHNoYXJlIGxpYnMgYW5kIGxpbmsgdGhlbSB0byBhcHAgdGhyb3VnaMKgVFJBQ0VQT0lOVF9Q
-Uk9CRV9EWU5BTUlDX0xJTktBR0XCoCBzdWNoIGFzIHdoYXQgZG9jL2V4YW1wbGVzL2RlbW8gZG9l
-cy4gVGhhbmtzemhlbnl1LnJlbgoK
-------=ALIBOUNDARY_28991_54ef1940_526f144d_2971c
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Hello all,
 
-<div class=3D"__aliyun_email_body_block"><div style=3D"">Hi,dev-list<br></div>=
-<div style=3D""><br data-mce-bogus=3D"1"></div><div style=3D"">&nbsp;&nbsp; It=
- seems work well if there is only one tracepoint file(sample_tracepoint.h) inc=
-luding in app .i.e<br data-mce-bogus=3D"1"></div><div style=3D""><br data-mce-=
-bogus=3D"1"></div><div style=3D"">sample_tracepoint.h<br data-mce-bogus=3D"1">=
-</div><div style=3D""><br data-mce-bogus=3D"1"></div><div style=3D"">#undef TR=
-ACEPOINT_PROVIDER<br>#define TRACEPOINT_PROVIDER sample<br><br>#if !defined(SA=
-MPLE_TRACEPOINT_H) || defined(TRACEPOINT_HEADER_MULTI_READ)<br>#define SAMPLE_=
-TRACEPOINT_H<br><br>#include &lt;lttng/tracepoint.h&gt;<br><br>TRACEPOINT_EVEN=
-T(<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sample,<br>&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp;&nbsp; bytes_in, // C++ Style comment<br>&nbsp;&nbsp;&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp; TP_ARGS(char *, text),<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p;&nbsp;&nbsp; TP_FIELDS(<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ctf_string(message, text)<br>&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
-nbsp;&nbsp;&nbsp; )<br>)<br>#endif /* SAMPLE_TRACEPOINT_H */<br>#undef TRACEPO=
-INT_INCLUDE<br>#define TRACEPOINT_INCLUDE "./sample_tracepoint.h"<br><br>#incl=
-ude &lt;lttng/tracepoint-event.h&gt;<br></div><div style=3D""><br data-mce-bog=
-us=3D"1"></div><div style=3D"">sample.c<br data-mce-bogus=3D"1"></div><div sty=
-le=3D"">#include &lt;unistd.h&gt;<br>#define TRACEPOINT_DEFINE<br>#define TRAC=
-EPOINT_CREATE_PROBES<br>#include "sample_tracepoint.h"<br>int main(int argc, c=
-har **argv)<br>{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; int i =3D 0;<br=
->&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for (i =3D 0; i &lt; 100000; i++) =
-{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
-nbsp;&nbsp;&nbsp; tracepoint(sample, bytes_in,&nbsp; "bytes in");<br>&nbsp;&nb=
-sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
-sp; sleep(1);<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>&nbsp;&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return 0;<br>}<br></div><div style=3D"">compile:=
-<br data-mce-bogus=3D"1"></div><div style=3D"">&nbsp;gcc -I. -o sample sample.=
-c -ldl -llttng-ust</div><div style=3D""><br data-mce-bogus=3D"1"></div><div st=
-yle=3D"">However,If one more tracepoint include file(sample_tracepoint2.h) add=
-ed in app,compile failed.<br data-mce-bogus=3D"1"></div><div style=3D""><br da=
-ta-mce-bogus=3D"1"></div><div style=3D"">sample_tracepoint2.h<br data-mce-bogu=
-s=3D"1"></div><div style=3D"">#undef TRACEPOINT_PROVIDER<br>#define TRACEPOINT=
-_PROVIDER sample2<br>#if !defined(SAMPLE_TRACEPOINT2_H) || defined(TRACEPOINT_=
-HEADER_MULTI_READ)<br>#define SAMPLE_TRACEPOINT2_H<br><br>#include &lt;lttng/t=
-racepoint.h&gt;<br><br>TRACEPOINT_EVENT(<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p;&nbsp; sample2,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; bytes_in, // C=
-++ Style comment<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TP_ARGS(char *,=
- text),<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TP_FIELDS(<br>&nbsp;&nbs=
-p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p; ctf_string(message, text)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; )<br>)<br>#endif /* S=
-AMPLE_TRACEPOINT2_H */<br>#undef TRACEPOINT_INCLUDE<br>#define TRACEPOINT_INCL=
-UDE "./sample_tracepoint2.h"<br>#include &lt;lttng/tracepoint-event.h&gt;<br><=
-/div><div style=3D""><br data-mce-bogus=3D"1"></div><div style=3D"">sample.c<b=
-r data-mce-bogus=3D"1"></div><div style=3D"">#include &lt;unistd.h&gt;<br>#def=
-ine TRACEPOINT_DEFINE<br>#define TRACEPOINT_CREATE_PROBES<br>#include "sample_=
-tracepoint.h"<br>#include "sample_tracepoint2.h"<br><br>int main(int argc, cha=
-r **argv)<br>{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; int i =3D 0;<br>&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for (i =3D 0; i &lt; 100000; i++) {<=
-br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
-sp;&nbsp;&nbsp; tracepoint(sample, bytes_in,&nbsp; "bytes in");<br>&nbsp;&nbsp=
-;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
-; tracepoint(sample2, bytes_in,&nbsp; "bytes in");<br>&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sleep(1);<b=
-r>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p;&nbsp;&nbsp; return 0;<br>}<br></div><div style=3D""><br data-mce-bogus=3D"1=
-"></div><div style=3D"">compile:<br data-mce-bogus=3D"1"></div><div style=3D""=
->gcc -I. -o sample sample.c -ldl -llttng-ust</div><div style=3D"">sample.c: In=
- function=CB=9Cmain:<br>sample.c:12: error: __tracepoint_sample2___bytes_in un=
-declared (first use in this function)<br>sample.c:12: error: (Each undeclared =
-identifier is reported only once<br>sample.c:12: error: for each function it a=
-ppears in.)</div><div style=3D""><br data-mce-bogus=3D"1"></div><div style=3D"=
-">&nbsp;&nbsp; Does LTTng support compiling multiple tracepoint sources with a=
-pp directly?</div><div style=3D""><br data-mce-bogus=3D"1"></div><div style=3D=
-"">&nbsp;&nbsp; Yes,I can compile multiple tracepoint providers to share libs =
-and link them to app through&nbsp;TRACEPOINT_PROBE_DYNAMIC_LINKAGE&nbsp; such =
-as what doc/examples/demo does. <br data-mce-bogus=3D"1"></div><div style=3D""=
-><br data-mce-bogus=3D"1"></div><div style=3D"">Thanks<br data-mce-bogus=3D"1"=
-></div><div style=3D"">zhenyu.ren<br data-mce-bogus=3D"1"></div><div class=3D"=
-__aliyun_signature_wrap"><br><br></div></div>
-------=ALIBOUNDARY_28991_54ef1940_526f144d_2971c--
+Let me start with my bottom line conclusions, and then explain them:
+
+LTTng's size overhead and start-up time overhead is huge! An application 
+cannot use (directly or through linking in shared libraries with TPs) more 
+than about 1000-2000 tracepoints.
+
+I am working on incorporating LTTng as an alternative logging method for 
+an existing project, which already has many thousands of places in the 
+code that do logging of some data.
+
+By many thousands, I mean > 15K.
+
+I have basically written an automated instrumentor that generates custom 
+tracepoints, for every log location plus 1 entry-tracepoints and 1 
+exit-tracepoint for every function.
+
+This totals about 100K tracepoints, with approximately 600K different 
+fields, and has increased the size of the project's resulting executables 
+from ~100MB to ~900MB (!!) - although this is with debug symbols.
+
+Analysis of the reasons for this has revealed some interesting (but 
+discouraging) facts:
+Each tracepoint name is stored in a static buffer sized 256 bytes, 
+regardless of how long the name actually is (contributing some 25MB to the 
+size)
+Each trace event field name is store also in a 256-byte buffer 
+(contirbuting another 150MB)
+Each event / tracepoint holds an event structure which holds the fields, 
+etc. and is padded generously.
+
+Additionally, there is a ton of code to calculate the event size, its 
+alignment, and to verify that the names are not longer than the 256 byte 
+buffer, and more.
+
+Some of this is either used just once, or even never used, merely compiled 
+to let the compiler complain if the sizes are wrong, etc.
+
+Now this code won't be included if you compile a statically linked 
+executable, but my project compiles almost everything into shared libs.
+
+Another big big problem is the time it takes to register all of these 
+tracepoints. For one of my executables which includes ~10K tracepoints, it 
+took over 5 seconds just to get to "main()" due to tracepoint constructor 
+code registering the tracepoints...
+
+I've started working on an alternative method of doing the same...
+
+Is anyone already aware of this? Is anyone already working on improving 
+this? I'd be very happy to work together on this.
+
+
+Amit Margalit
+IBM XIV - Storage Reinvented
+XIV-NAS Development Team
+Tel. 03-689-7774
+Fax. 03-689-7230
+--=_alternative 00354E7BC2257C13_=
+Content-Type: text/html; charset="US-ASCII"
+
+<font size=2 face="sans-serif">Hello all,</font>
+<br>
+<br><font size=2 face="sans-serif">Let me start with my bottom line conclusions,
+and then explain them:</font>
+<br>
+<br><font size=2 face="sans-serif">LTTng's size overhead and start-up time
+overhead is huge! An application cannot use (directly or through linking
+in shared libraries with TPs) more than about 1000-2000 tracepoints.</font>
+<br>
+<br><font size=2 face="sans-serif">I am working on incorporating LTTng
+as an alternative logging method for an existing project, which already
+has many thousands of places in the code that do logging of some data.</font>
+<br>
+<br><font size=2 face="sans-serif">By many thousands, I mean &gt; 15K.</font>
+<br>
+<br><font size=2 face="sans-serif">I have basically written an automated
+instrumentor that generates custom tracepoints, for every log location
+plus 1 entry-tracepoints and 1 exit-tracepoint for every function.</font>
+<br>
+<br><font size=2 face="sans-serif">This totals about 100K tracepoints,
+with approximately 600K different fields, and has increased the size of
+the project's resulting executables from ~100MB to ~900MB (!!) - although
+this is with debug symbols.</font>
+<br>
+<br><font size=2 face="sans-serif">Analysis of the reasons for this has
+revealed some interesting (but discouraging) facts:</font>
+<ol>
+<li value=1><font size=2 face="sans-serif">Each tracepoint name is stored
+in a static buffer sized 256 bytes, regardless of how long the name actually
+is (contributing some 25MB to the size)</font>
+<li value=2><font size=2 face="sans-serif">Each trace event field name
+is store also in a 256-byte buffer (contirbuting another 150MB)</font>
+<li value=3><font size=2 face="sans-serif">Each event / tracepoint holds
+an event structure which holds the fields, etc. and is padded generously.</font></ol>
+<br><font size=2 face="sans-serif">Additionally, there is a ton of code
+to calculate the event size, its alignment, and to verify that the names
+are not longer than the 256 byte buffer, and more.</font>
+<br>
+<br><font size=2 face="sans-serif">Some of this is either used just once,
+or even never used, merely compiled to let the compiler complain if the
+sizes are wrong, etc.</font>
+<br>
+<br><font size=2 face="sans-serif">Now this code won't be included if you
+compile a statically linked executable, but my project compiles almost
+everything into shared libs.</font>
+<br>
+<br><font size=2 face="sans-serif">Another big big problem is the time
+it takes to register all of these tracepoints. For one of my executables
+which includes ~10K tracepoints, it took over 5 seconds just to get to
+&quot;main()&quot; due to tracepoint constructor code registering the tracepoints...</font>
+<br>
+<br><font size=2 face="sans-serif">I've started working on an alternative
+method of doing the same...<br>
+</font>
+<br><font size=2 face="sans-serif">Is anyone already aware of this? Is
+anyone already working on improving this? I'd be very happy to work together
+on this.</font>
+<br>
+<br>
+<br><font size=2 color=#000080 face="sans-serif">Amit Margalit</font>
+<br><font size=2 color=#808000 face="sans-serif">IBM XIV </font><font size=2 face="sans-serif">-
+<i>Storage Reinvented</i></font>
+<br><font size=2 face="sans-serif">XIV-NAS Development Team</font>
+<br><font size=2 face="sans-serif">Tel. 03</font><font size=2 face="Arial">-689-7774</font>
+<br><font size=2 face="Arial">Fax. 03-689-7230</font>
+--=_alternative 00354E7BC2257C13_=--
 
 
 
---===============0852682105==
+--===============1445720096==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
-Content-Disposition: inline
 Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============0852682105==--
+--===============1445720096==--
