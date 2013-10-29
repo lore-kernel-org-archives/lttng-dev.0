@@ -1,25 +1,16 @@
-From: Yannick Brosseau <yannick.brosseau@gmail.com>
-Subject: Re: [PATCH lttng-ust] Fix: Overhaul of the lttng-gen-tp
- man page
-Date: Tue, 29 Oct 2013 11:51:55 -0400
-Message-ID: <526FD99B.8040405__29897.5724181675$1383061994$gmane$org@gmail.com>
-References: <1382544495-10548-1-git-send-email-jeremie.galarneau@efficios.com>
+From: Michael Steppe <msteppe91@gmail.com>
+Subject: Current Trace File Location
+Date: Tue, 29 Oct 2013 11:59:04 -0400
+Message-ID: <CAN7pGtu1BtOibd4nj--7z45ye7QeBHCpCRmavwBL52AnNg-y7g__35013.9965572909$1383062410$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============0367448844=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f170.google.com ([209.85.223.170])
+Received: from mail-qc0-f174.google.com ([209.85.216.174])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <yannick.brosseau@gmail.com>) id 1VbBaU-0005je-Ax
-	for lttng-dev@lists.lttng.org; Tue, 29 Oct 2013 11:52:16 -0400
-Received: by mail-ie0-f170.google.com with SMTP id at1so73129iec.15
-	for <lttng-dev@lists.lttng.org>; Tue, 29 Oct 2013 08:52:04 -0700 (PDT)
-Received: from [132.207.72.47] (dyn47.dorsal.polymtl.ca. [132.207.72.47])
-	by mx.google.com with ESMTPSA id i11sm3036006igh.0.2013.10.29.08.51.56
-	for <lttng-dev@lists.lttng.org>
-	(version=TLSv1 cipher=ECDHE-RSA-RC4-SHA bits=128/128);
-	Tue, 29 Oct 2013 08:52:03 -0700 (PDT)
-In-Reply-To: <1382544495-10548-1-git-send-email-jeremie.galarneau@efficios.com>
+	(envelope-from <msteppe91@gmail.com>) id 1VbBhG-0006Rf-6y
+	for lttng-dev@lists.lttng.org; Tue, 29 Oct 2013 11:59:16 -0400
+Received: by mail-qc0-f174.google.com with SMTP id v1so29379qcw.33
+	for <lttng-dev@lists.lttng.org>; Tue, 29 Oct 2013 08:59:04 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -31,68 +22,109 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-SXQncyBzaGFtZWZ1bCB0byBzZWUgc29tZSBvZiB0aGVzZSBtaXN0YWtlcy4KCkFja2VkLWJ5OiBZ
-YW5uaWNrIEJyb3NzZWF1IDx5YW5uaWNrLmJyb3NzZWF1QGdtYWlsLmNvbT4KCk9uIDEwLzIzLzEz
-IDEyOjA4LCBKw6lyw6ltaWUgR2FsYXJuZWF1IHdyb3RlOgo+IEZpeCBhIGNvdXBsZSBvZiB0eXBv
-cywgbWlzdGFrZXMgYW5kIG91dC1vZiBkYXRlIGluZm9ybWF0aW9ucy4KPgo+IFNpZ25lZC1vZmYt
-Ynk6IErDqXLDqW1pZSBHYWxhcm5lYXUgPGplcmVtaWUuZ2FsYXJuZWF1QGVmZmljaW9zLmNvbT4K
-PiAtLS0KPiAgZG9jL21hbi9sdHRuZy1nZW4tdHAuMSB8IDIxICsrKysrKysrKy0tLS0tLS0tLS0t
-LQo+ICAxIGZpbGUgY2hhbmdlZCwgOSBpbnNlcnRpb25zKCspLCAxMiBkZWxldGlvbnMoLSkKPgo+
-IGRpZmYgLS1naXQgYS9kb2MvbWFuL2x0dG5nLWdlbi10cC4xIGIvZG9jL21hbi9sdHRuZy1nZW4t
-dHAuMQo+IGluZGV4IDg0YzA1YzkuLjU2NGMzMTcgMTAwNjQ0Cj4gLS0tIGEvZG9jL21hbi9sdHRu
-Zy1nZW4tdHAuMQo+ICsrKyBiL2RvYy9tYW4vbHR0bmctZ2VuLXRwLjEKPiBAQCAtMTMsMTUgKzEz
-LDE1IEBAIGx0dG5nXC1nZW5cLXRwIFtPUFRJT05TXSBURU1QTEFURV9GSUxFCj4gIAo+ICAuUFAK
-PiAgVGhlIExUVG5nIHByb2plY3QgYWltcyBhdCBwcm92aWRpbmcgaGlnaGx5IGVmZmljaWVudCB0
-cmFjaW5nIHRvb2xzIGZvciBMaW51eC4KPiAtSXQncyB0cmFjZXJzIGhlbHAgdHJhY2tpbmcgZG93
-biBwZXJmb3JtYW5jZSBpc3N1ZXMgYW5kIGRlYnVnZ2luZyBwcm9ibGVtcwo+ICtJdHMgdHJhY2Vy
-cyBoZWxwIGluIHRyYWNraW5nIGRvd24gcGVyZm9ybWFuY2UgaXNzdWVzIGFuZCBkZWJ1Z2dpbmcg
-cHJvYmxlbXMKPiAgaW52b2x2aW5nIG11bHRpcGxlIGNvbmN1cnJlbnQgcHJvY2Vzc2VzIGFuZCB0
-aHJlYWRzLiBUcmFjaW5nIGFjcm9zcyBtdWx0aXBsZQo+ICBzeXN0ZW1zIGlzIGFsc28gcG9zc2li
-bGUuCj4gIAo+IC1UaGUgXGZCbHR0bmdcLWdlblwtdHBcZlAgdG9vbCBzaW1wbGlmeSB0aGUgZ2Vu
-ZXJhdGlvbiBvZiB0aGUgVVNUIHRyYWNlcG9pbnQKPiAtZmlsZXMuIEl0IHRha2VzIGEgc2ltcGxl
-IHRlbXBsYXRlIGZpbGUgYW5kIGdlbmVyYXRlIHRoZSBuZWNlc3NhcnkgY29kZSB0byB1c2UgdGhl
-IGRlZmluZWQgdHJhY2Vwb2ludHMgaW4geW91ciBhcHBsaWNhdGlvbi4KPiAtVGhlIHNlY3Rpb24g
-VEVNUExBVEUgRklMRSBGT1JNQVQgZGVzY3JpYmUgdGhlIGNvbnRlbnQgb2YgdGhlIHRlbXBsYXRl
-IGZpbGUuCj4gK1RoZSBcZkJsdHRuZ1wtZ2VuXC10cFxmUCB0b29sIHNpbXBsaWZpZXMgdGhlIGdl
-bmVyYXRpb24gb2YgdGhlIFVTVCB0cmFjZXBvaW50Cj4gK2ZpbGVzLiBJdCB0YWtlcyBhIHNpbXBs
-ZSB0ZW1wbGF0ZSBmaWxlIGFuZCBnZW5lcmF0ZXMgdGhlIG5lY2Vzc2FyeSBjb2RlIHRvIHVzZSB0
-aGUgZGVmaW5lZCB0cmFjZXBvaW50cyBpbiB5b3VyIGFwcGxpY2F0aW9uLgo+ICtUaGUgc2VjdGlv
-biBURU1QTEFURSBGSUxFIEZPUk1BVCBkZXNjcmliZXMgdGhlIGNvbnRlbnQgb2YgdGhlIHRlbXBs
-YXRlIGZpbGUuCj4gIAo+IC1DdXJyZW50bHksIHRoZSB0b29sIGNhbiBnZW5lcmF0ZSB0aGUgLmgs
-IC5jIGFuZCAubyBhc3NvY2lhdGVkIHRvIHlvdXIKPiArQ3VycmVudGx5LCB0aGUgdG9vbCBjYW4g
-Z2VuZXJhdGUgdGhlIC5oLCAuYyBhbmQgLm8gYXNzb2NpYXRlZCB3aXRoIHlvdXIKPiAgdHJhY2Vw
-b2ludC4gVGhlIGdlbmVyYXRlZCAuaCBjYW4gYmUgZGlyZWN0bHkgaW5jbHVkZWQgaW4geW91ciBh
-cHBsaWNhdGlvbi4KPiAgWW91IGNhbiBsZXQgdGhlIHRvb2wgZ2VuZXJhdGUgdGhlIC5vIG9yIGNv
-bXBpbGUgdGhlIC5jIHlvdXJzZWxmLgo+ICBZb3UgY2FuIGNvbXBpbGUgdGhlIC5jIGludG8gYSAu
-bywgLmEgb3IgLnNvIGF0IHlvdXIgY2hvaWNlIGFuZAo+IEBAIC0zMCwxNCArMzAsMTEgQEAgUmVm
-ZXIgdG8gdGhlIFVTVCBkb2N1bWVudGF0aW9uIGZvciB0aGUKPiAgYWR2YW50YWdlcyBhbmQgZGlz
-YWR2YW50YWdlIG9mIGVhY2ggZm9ybS4KPiAgVG8gY29tcGlsZSB0aGUgcmVzdWx0aW5nIC5jIGZp
-bGUsIHlvdSBuZWVkIHRvIGFkZCB0aGUgb3B0aW9ucwo+ICAiXC1sbHR0bmctdXN0IFwtSS4iLgo+
-IC1Ob3RlIGZvciBDKysgc3VwcG9ydDogYWx0aG91Z2ggYW4gYXBwbGljYXRpb24gaW5zdHJ1bWVu
-dGVkIHdpdGgKPiAtdHJhY2Vwb2ludHMgY2FuIGJlIGNvbXBpbGVkIHdpdGggZysrLCB0cmFjZXBv
-aW50IHByb2JlcyBzaG91bGQgYmUKPiAtY29tcGlsZWQgd2l0aCBnY2MgKG9ubHkgdGVzdGVkIHdp
-dGggZ2NjIHNvIGZhcikuCj4gIAo+ICAuU0ggIk9QVElPTlMiCj4gIAo+ICAuUFAKPiAtVGhpcyBw
-cm9ncmFtIGZvbGxvdyB0aGUgdXN1YWwgR05VIGNvbW1hbmQgbGluZSBzeW50YXggd2l0aCBsb25n
-IG9wdGlvbnMgc3RhcnRpbmcgd2l0aAo+ICtUaGlzIHByb2dyYW0gZm9sbG93cyB0aGUgdXN1YWwg
-R05VIGNvbW1hbmQgbGluZSBzeW50YXggd2l0aCBsb25nIG9wdGlvbnMgc3RhcnRpbmcgd2l0aAo+
-ICB0d28gZGFzaGVzLiBCZWxvdyBpcyBhIHN1bW1hcnkgb2YgdGhlIGF2YWlsYWJsZSBvcHRpb25z
-Lgo+ICAuUFAKPiAgCj4gQEAgLTU0LDcgKzUxLDcgQEAgZXh0ZW5zaW9uICguaCwgLmMsIC5vKS4K
-PiAgVGhpcyBvcHRpb24gY2FuIGJlIHNwZWNmaWVkIG11bHRpcGxlIHRpbWVzIHRvIGdlbmVyYXRl
-IGRpZmZlcmVudCBmaWxlIHR5cGUuCj4gIAo+ICAuUFAKPiAtV2hlbiBubyBvdXRwdXQgaXMgc3Bl
-Y2lmaWVkIGRlIGRlZmF1bHQgZmlsZXMgYXJlIGdlbmVyYXRlZCB3aXRoIHRoZSBzYW1lIGJhc2Ug
-ZmlsZW5hbWUgYXMgdGhlIHRlbXBsYXRlIGZpbGUuIFRoZSBkZWZhdWx0IGZpbGVzIGFyZTogLmgs
-IC5jLCAuby4KPiArV2hlbiBubyBvdXRwdXQgaXMgc3BlY2lmaWVkIHRoZSBkZWZhdWx0IGZpbGVz
-IGFyZSBnZW5lcmF0ZWQgd2l0aCB0aGUgc2FtZSBiYXNlIGZpbGVuYW1lIGFzIHRoZSB0ZW1wbGF0
-ZSBmaWxlLiBUaGUgZGVmYXVsdCBmaWxlcyBhcmU6IC5oLCAuYywgLm8uCj4gIAo+ICAuU0ggIlRF
-TVBMQVRFIEZJTEUgRk9STUFUIgo+ICAKPiBAQCAtODUsMTIgKzgyLDEyIEBAIFRSQUNFUE9JTlRf
-RVZFTlQoCj4gIC5TSCAiRU5WSVJPTk1FTlQgVkFSSUFCTEVTIgo+ICAKPiAgLlBQCj4gLVdoZW4g
-dGhlIHRvb2wgZ2VuZXJhdGUgYW4gLm8gZmlsZSwgaXQgd2lsbCBsb29rIGZvciB0aGUgZm9sbG93
-aW5nIGVudmlyb25tZW50IHZhcmlhYmxlcwo+ICtXaGVuIHRoZSB0b29sIGdlbmVyYXRlcyBhIC5v
-IGZpbGUsIGl0IHdpbGwgbG9vayBmb3IgdGhlIGZvbGxvd2luZyBlbnZpcm9ubWVudCB2YXJpYWJs
-ZXMKPiAgLlBQCj4gIAo+ICAuUFAKPiAgLklQICJDQyIKPiAtU3BlY2lmZXIgd2hpY2ggQyBjb21w
-aWxlciB0byB1c2UuIElmIHRoZSB2YXJpYWJsZSBpcyBub3Qgc3BlY2lmaWVkLCB0aGUKPiArU3Bl
-Y2lmeSB3aGljaCBDIGNvbXBpbGVyIHRvIHVzZS4gSWYgdGhlIHZhcmlhYmxlIGlzIG5vdCBzcGVj
-aWZpZWQsIHRoZQo+ICB0b29sIHdpbGwgdHJ5ICJjYyIgYW5kICJnY2MiCj4gIAo+ICAuSVAgIkNG
-TEFHUyIKCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwps
-dHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xp
-c3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+--===============0367448844==
+Content-Type: multipart/alternative; boundary=047d7b6dcbe0c27e1c04e9e34bed
+
+--047d7b6dcbe0c27e1c04e9e34bed
+Content-Type: text/plain; charset=ISO-8859-1
+
+Hello,
+
+I am not sure if this is where I ask my questions to the developers but I
+thought I'd give it a go.
+
+I am able to create a kernel trace, enable all events for the trace, start,
+stop and destroy the trace. But let's say I have two traces running on the
+same machine:
+
+[user@localhost ~]$ lttng create trace1
+[user@localhost ~]$ lttng create trace2
+[user@localhost ~]$ lttng create trace3
+
+As I am sure you know, the .lttngrc file is populated with ONLY the latest
+created trace name (trace3).
+
+Now let's say I change my mind after creating these traces and wish to
+destroy them all. If I use the destroy command...
+
+[user@localhost ~]$ lttng destroy
+
+...with no argument, it defaults to the .lttngrc file and destroys trace3 as
+well as the .lttngrc file. This means that the next time I run lttng
+destroy I get the error that it cannot find the .lttngrc file and asks if I
+created a session. Well we still have trace1 and trace2 in the background
+somewhere because if I try to:
+
+[user@localhost ~]$ lttng create trace1
+
+I get told that there is already a trace with that name.
+
+My question to you is, where are all the traces stored until they are
+destroyed? LTT obviously knows that trace1 and trace2 are still "running"
+because it won't let me create another with the same name until I destroy
+it. I know that I could say:
+
+[user@localhost ~]$ lttng destroy trace1
+[user@localhost ~]$ lttng destroy trace2
+
+but I am writing an Eclipse plugin to do this tracing without the terminal
+so the trace name will be based off of the time of day the user runs it and
+therefore I cannot hardcode the name in.
+
+Is there a "destroy all" command that I am missing?
+
+Thanks!!
+Michael
+
+--047d7b6dcbe0c27e1c04e9e34bed
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div><div><div><div><div><div><div><div><div><div>Hello,<b=
+r><br>I am not sure if this is where I ask my questions to the developers b=
+ut I thought I&#39;d give it a go.<br><br></div>I am able to create a kerne=
+l trace, enable all events for the trace, start, stop and destroy the trace=
+. But let&#39;s say I have two traces running on the same machine:<br>
+<br></div>[user@localhost ~]$ lttng create trace1<br>[user@localhost ~]$ lt=
+tng create trace2<br>[user@localhost ~]$ lttng create trace3<br><br></div>A=
+s I am sure you know, the .lttngrc file is populated with ONLY the latest c=
+reated trace name (<span style=3D"color:rgb(255,0,0)">trace3</span>). <br>
+<br>Now let&#39;s say I change my mind after creating these traces and wish=
+ to destroy them all. If I use the destroy command...<br><br></div>[user@lo=
+calhost ~]$ lttng destroy<br><br></div>...with no argument, it defaults to =
+the .lttngrc file and destroys <span style=3D"color:rgb(255,0,0)">trace3 </=
+span>as well as the .lttngrc file. This means that the next time I run lttn=
+g destroy I get the error that it cannot find the .lttngrc file and asks if=
+ I created a session. Well we still have <span style=3D"color:rgb(255,0,0)"=
+>trace1 </span>and <span style=3D"color:rgb(255,0,0)">trace2 </span>in the =
+background somewhere because if I try to:<br>
+<br>[user@localhost ~]$ lttng create trace1<br><br></div>I get told that th=
+ere is already a trace with that name.<br><br></div>My question to you is, =
+where are all the traces stored until they are destroyed? LTT obviously kno=
+ws that <span style=3D"color:rgb(255,0,0)">trace1 </span>and <span style=3D=
+"color:rgb(255,0,0)">trace2 </span>are still &quot;running&quot; because it=
+ won&#39;t let me create another with the same name until I destroy it. I k=
+now that I could say:<br>
+<br>[user@localhost ~]$ lttng destroy trace1<br>[user@localhost ~]$ lttng d=
+estroy trace2<br><br>but I am writing an Eclipse plugin to do this tracing =
+without the terminal so the trace name will be based off of the time of day=
+ the user runs it and therefore I cannot hardcode the name in.<br>
+<br></div>Is there a &quot;destroy all&quot; command that I am missing?<br>=
+<br></div>Thanks!!<br></div>Michael<br><div><div><div><div><div><div><br><b=
+r></div></div></div></div></div></div></div>
+
+--047d7b6dcbe0c27e1c04e9e34bed--
+
+
+--===============0367448844==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0367448844==--
