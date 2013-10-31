@@ -1,15 +1,17 @@
-From: Cristiana Voicu <cristiana.voicu@intel.com>
-Subject: [PATCH] Use cross compiler for doc exemples too
-Date: Thu, 31 Oct 2013 10:10:44 +0200
-Message-ID: <1383207044-30477-1-git-send-email-cristiana.voicu__15515.1214603849$1383206801$gmane$org@intel.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: Userspace RCU VS spin locks
+Date: Thu, 31 Oct 2013 11:36:01 +0000 (UTC)
+Message-ID: <990689914.54025.1383219361284.JavaMail.zimbra__9653.6120785915$1383219406$gmane$org@efficios.com>
+References: <CAO6Ho0ch2U2r5Ept2qFkOh1_Hxm6FcawsrzEmRQDEVi+KM5+tA@mail.gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mga09.intel.com ([134.134.136.24])
+Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <cristiana.voicu@intel.com>) id 1VbnGJ-0002af-07
-	for lttng-dev@lists.lttng.org; Thu, 31 Oct 2013 04:05:52 -0400
+	(envelope-from <compudj@efficios.com>) id 1VbqXk-0002zX-QD
+	for lttng-dev@lists.lttng.org; Thu, 31 Oct 2013 07:36:07 -0400
+In-Reply-To: <CAO6Ho0ch2U2r5Ept2qFkOh1_Hxm6FcawsrzEmRQDEVi+KM5+tA@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -18,23 +20,50 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
-Cc: Cristiana Voicu <cristiana.voicu@intel.com>
+To: Evgeniy Ivanov <lolkaantimat@gmail.com>
+Cc: lttng-dev@lists.lttng.org, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
 List-Id: lttng-dev@lists.lttng.org
 
-Signed-off-by: Cristiana Voicu <cristiana.voicu@intel.com>
+----- Original Message -----
+> From: "Evgeniy Ivanov" <lolkaantimat@gmail.com>
+> To: lttng-dev@lists.lttng.org
+> Sent: Wednesday, October 30, 2013 9:11:47 AM
+> Subject: [lttng-dev] Userspace RCU VS spin locks
+> 
+> Hi,
+> 
+> I'm very interested in RCU performance, especially applied to hash
+> tables (rculfhash in particular). Did any body compare performance of
+> QSBR or signal RCU VS scalable and non-scalable spin locks?
+> 
 
-Index: userspace-rcu-0.8.0/doc/examples/Makefile.examples.template
-===================================================================
---- userspace-rcu-0.8.0.orig/doc/examples/Makefile.examples.template	2013-08-30 21:25:20.000000000 +0300
-+++ userspace-rcu-0.8.0/doc/examples/Makefile.examples.template	2013-10-23 13:34:30.405550556 +0300
-@@ -11,7 +11,9 @@
- #
- # This makefile is purposefully kept simple to support GNU and BSD make.
- 
-+ifndef CC
- CC = gcc
-+endif
- CFLAGS = -g -O2 -Wall
- 
- all: $(BINARY)
+Hi Evgeniy,
+
+You'll probably want to start by looking at my Linux Plumbers slides presenting rculfhash:
+
+https://www.efficios.com/lpc2011-urcu
+
+Also, Paul McKenney's slides of the Userspace RCU tutorial here present other numbers of a hash table example (including bucket-locks), AFAIK using his own statically sized hash table implementation (not rculfhash):
+
+https://events.linuxfoundation.org/sites/events/files/slides/userspace-rcu-tutorial-linuxcon-2013.pdf
+
+Thanks,
+
+Mathieu
+
+
+
+> --
+> Cheers,
+> Evgeniy
+> 
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> 
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
