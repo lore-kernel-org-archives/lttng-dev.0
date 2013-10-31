@@ -1,19 +1,21 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: lttng-modules build failure for 3.12-rc6
-Date: Thu, 31 Oct 2013 14:38:08 +0000 (UTC)
-Message-ID: <544819642.54467.1383230288963.JavaMail.zimbra__26760.4115805172$1383230352$gmane$org@efficios.com>
-References: <CAP9ODKoqhtXmS94ZtV8hNPs=kUXWLU9msN+GR7Zf9DQrdQUmSg@mail.gmail.com>
-	<1567008261.54443.1383229577346.JavaMail.zimbra@efficios.com>
-	<CAP9ODKrLtSuFJUKryO9RJ5BHri9d7gL+5vZqOAw-o_OZ7cZn6A@mail.gmail.com>
+From: Simon Marchi <simon.marchi@polymtl.ca>
+Subject: Re: [PATCH babeltrace] Introduce shows_interest
+ callback for format plugins
+Date: Thu, 31 Oct 2013 10:39:41 -0400
+Message-ID: <CAFXXi0kj4hJYnpvSSv4YdX8ReC4hYzfeJLs8w0JkZuDVDBn_Yw__26388.4203545333$1383230479$gmane$org@mail.gmail.com>
+References: <1382627967-32696-1-git-send-email-simon.marchi@polymtl.ca>
+	<876920495.54342.1383224813874.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-ie0-f171.google.com ([209.85.223.171])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1VbtO0-0000Tl-7Z
-	for lttng-dev@lists.lttng.org; Thu, 31 Oct 2013 10:38:17 -0400
-In-Reply-To: <CAP9ODKrLtSuFJUKryO9RJ5BHri9d7gL+5vZqOAw-o_OZ7cZn6A@mail.gmail.com>
+	(envelope-from <thundersim@gmail.com>) id 1VbtQ1-0000kL-CS
+	for lttng-dev@lists.lttng.org; Thu, 31 Oct 2013 10:40:23 -0400
+Received: by mail-ie0-f171.google.com with SMTP id tp5so5128149ieb.16
+	for <lttng-dev@lists.lttng.org>; Thu, 31 Oct 2013 07:40:12 -0700 (PDT)
+In-Reply-To: <876920495.54342.1383224813874.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,57 +24,338 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Otavio Salvador <otavio@ossystems.com.br>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
------ Original Message -----
-> From: "Otavio Salvador" <otavio@ossystems.com.br>
-> To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-> Cc: "lttng-dev" <lttng-dev@lists.lttng.org>
-> Sent: Thursday, October 31, 2013 10:30:24 AM
-> Subject: Re: lttng-modules build failure for 3.12-rc6
-> 
-> On Thu, Oct 31, 2013 at 12:26 PM, Mathieu Desnoyers
-> <mathieu.desnoyers@efficios.com> wrote:
-> > ----- Original Message -----
-> >> From: "Otavio Salvador" <otavio@ossystems.com.br>
-> >> To: "lttng-dev" <lttng-dev@lists.lttng.org>
-> >> Cc: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-> >> Sent: Monday, October 28, 2013 9:47:01 AM
-> >> Subject: lttng-modules build failure for 3.12-rc6
-> >>
-> >> Hello,
-> >>
-> >> Part of build issues are now fixed in master (thanks Mathieu for
-> >> applying the need changes) but we're still not good:
-> >
-> > All fixed by this string of commits in lttng-modules master:
-> ...
-> >
-> > Thanks for reporting these issues. 3.12 seems to build fine now.
-> 
-> Great; can you backport those to stable-2.3? I'd like to send the
-> update for Yocto including these changes and fix it for us directly
-> there.
+On 31 October 2013 09:06, Mathieu Desnoyers
+<mathieu.desnoyers@efficios.com> wrote:
+> ----- Original Message -----
+>> From: "simon marchi" <simon.marchi@polymtl.ca>
+>> To: lttng-dev@lists.lttng.org
+>> Sent: Thursday, October 24, 2013 11:19:27 AM
+>> Subject: [lttng-dev] [PATCH babeltrace] Introduce shows_interest callback     for format plugins
+>>
+>> From: Simon Marchi <simon.marchi@polymtl.ca>
+>>
+>> The format plugins should implement this callback to tell whether they
+>> are interested (capable) in processing the given path or not. This
+>> allows to move CTF-specific code from the core to ctf.c. This should
+>> be a step towards having more than one input plugin.
+>>
+>> The callback should return 1 if it wants to handle this path, 0 otherwise. It
+>> also return 0 in case of catastrophic failure.
+>
+> This feature makes sense. Comments below,
+>
+>>
+>> Signed-off-by: Simon Marchi <simon.marchi@polymtl.ca>
+>> ---
+>>  converter/babeltrace.c      | 73
+>>  ++++++++++++++++++++-------------------------
+>>  formats/ctf/ctf.c           | 50 +++++++++++++++++++++++++++++++
+>>  include/babeltrace/format.h |  1 +
+>>  3 files changed, 84 insertions(+), 40 deletions(-)
+>>
+>>
+>> Hellooooo,
+>>
+>> There is a little problem with babeltrace currently, which is that the
+>> core of the converter contains CTF-specific code, in particular in the
+>> recursive trace adding code. What the traverse_trace_dir function does
+>> is simply tell whether a certain path looks like a CTF trace. The
+>> solution I see is to move that code in the plugins by having a callback
+>> through which the plugin can tell us if a given path is interesting for
+>> him. I am notoriously bad at naming stuff, so I'd be happy if you found
+>> a better clear name for the callback.
+>
+> Not sure why an email is embedded in the patch ? Can you merge the relevant pieces of info with the patch changelog ?
 
-Strictly speaking, supporting a new kernel can be seen as a new feature. stable-2.3 was released for 3.11. Moreover, 3.12 kernel is still in rc stage, so things can still change (and even be reverted, this has happened in the past).
+Documentation/SubmittingPatches in the kernel says:
 
-Unfortunately, we don't add features in the stable branches, only bug fixes. But keep in mind that 2.4 should come within the coming weeks.
+One good use for the additional comments after the "---" marker is for
+a diffstat, to show what files have changed, and the number of
+inserted and deleted lines per file.  A diffstat is especially useful
+on bigger patches.  Other comments relevant only to the moment or the
+maintainer, not suitable for the permanent changelog, should also go
+here.
 
-Thanks,
+So I thought I'd try to put the message there, but I agree it looks
+weird. The relevant info should already be in the commit log.
 
-Mathieu
+>>
+>> Thanks,
+>>
+>> Simon
+>>
+>> diff --git a/converter/babeltrace.c b/converter/babeltrace.c
+>> index d5a7040..7489f35 100644
+>> --- a/converter/babeltrace.c
+>> +++ b/converter/babeltrace.c
+>> @@ -416,6 +416,11 @@ end:
+>>       return ret;
+>>  }
+>>
+>> +/*
+>> + * Oh noes! Since nftw doesn't pass a user data pointer to its callbacks, we
+>> + * have to resort to global variables.
+>
+> Please remove "Oh noes!" (not proper English, and does not add useful information).
+>
+> Could you change this to e.g.
+>
+> /*
+>  * Since nftw doesn't pass a user data pointer to its callbacks, we
+>  * have to resort to global variables.
+>  */
 
+Of course.
 
-> 
+>
+>> + */
+>> +static struct bt_format *traverse_trace_dir_format = NULL;
+>>  static GPtrArray *traversed_paths = 0;
+>
+> Since we now have more than one global variable, we should at least put them in a structure (can be declared in the C file), and have only a single global object containing the bt_format and GPtrArray fields.
+
+Yep.
+
+>>
+>>  /*
+>> @@ -429,53 +434,32 @@ static GPtrArray *traversed_paths = 0;
+>>  static int traverse_trace_dir(const char *fpath, const struct stat *sb,
+>>                       int tflag, struct FTW *ftwbuf)
+>>  {
+>> -     int dirfd, metafd;
+>> -     int closeret;
+>> +     int ret;
+>>
+>> -     if (tflag != FTW_D)
+>> -             return 0;
+>> +     assert(traverse_trace_dir_format != NULL);
+>> +     assert(traversed_paths != NULL);
+>>
+>> -     dirfd = open(fpath, 0);
+>> -     if (dirfd < 0) {
+>> -             fprintf(stderr, "[error] [Context] Unable to open trace "
+>> -                     "directory file descriptor.\n");
+>> -             return 0;       /* partial error */
+>> +     if (!traverse_trace_dir_format->shows_interest) {
+>
+> We could rename "shows_interest" to "read_fit" ? Then the plugin can return 0 if "no fit", and a positive integer e.g. between 1 and 10, where 10 is "best fit", and 1 is "bad fit, but can read anyway". This will be usable in the future if a user does not specify any input plugin, and we would have to choose, for each trace, which input plugin is the best.
+
+Not sure 10 levels are necessary, but I like the idea. We could
+provide 3-4 enum values ranging from NO_FIT to BEST_FIT. It would give
+a meaning to each level, whereas with numbers, you don't really know
+what "4" means.
+
+>> +             /* Mr plug-in, if you don't implement the shows_interest callback, how
+>> +              * should we know if you are interested in a path? */
+>
+> The comment format is:
+>
+> /*
+>  * blah blah
+>  */
+>
+> Please remove "Mr plug-in", and change to:
+>
+> If the plugin does not implement...........
+>
+> ("Mr" here does not add useful information)
+
+Indeed.
+
+> Thanks,
+>
+> Mathieu
+>
+>> +             return -1;
+>>       }
+>> -     metafd = openat(dirfd, "metadata", O_RDONLY);
+>> -     if (metafd < 0) {
+>> -             closeret = close(dirfd);
+>> -             if (closeret < 0) {
+>> -                     perror("close");
+>> -                     return -1;
+>> -             }
+>> -             /* No meta data, just return */
+>> -             return 0;
+>> -     } else {
+>> -             int err_close = 0;
+>>
+>> -             closeret = close(metafd);
+>> -             if (closeret < 0) {
+>> -                     perror("close");
+>> -                     err_close = 1;
+>> -             }
+>> -             closeret = close(dirfd);
+>> -             if (closeret < 0) {
+>> -                     perror("close");
+>> -                     err_close = 1;
+>> -             }
+>> -             if (err_close) {
+>> -                     return -1;
+>> -             }
+>> +     ret = traverse_trace_dir_format->shows_interest(fpath, tflag == FTW_D);
+>>
+>> -             /* Add path to the global list */
+>> -             if (traversed_paths == NULL) {
+>> -                     fprintf(stderr, "[error] [Context] Invalid open path array.\n");
+>> -                     return -1;
+>> -             }
+>> +     /*
+>> +      * If ret is negative (means error), we return directly. This will
+>> +      * interrupt the file tree walk. If ret is 0, the format is not interested
+>> +      * by the path, we also return directly.
+>> +      */
+>> +
+>> +     if (ret > 0) {
+>> +             /* Format is interested. Add path to the global list */
+>>               g_ptr_array_add(traversed_paths, g_string_new(fpath));
+>> +             ret = 0;
+>>       }
+>>
+>> -     return 0;
+>> +     return ret;
+>>  }
+>>
+>>  /*
+>> @@ -499,7 +483,14 @@ int bt_context_add_traces_recursive(struct bt_context
+>> *ctx, const char *path,
+>>
+>>       /* Should lock traversed_paths mutex here if used in multithread */
+>>
+>> +     struct bt_format *format =
+>> bt_lookup_format(g_quark_from_string(format_str));
+>> +     if (!format) {
+>> +             ret = -1;
+>> +             goto error;
+>> +     }
+>> +
+>>       traversed_paths = g_ptr_array_new();
+>> +     traverse_trace_dir_format = format;
+>>       ret = nftw(path, traverse_trace_dir, 10, 0);
+>>
+>>       /* Process the array if ntfw did not return a fatal error */
+>> @@ -539,6 +530,8 @@ int bt_context_add_traces_recursive(struct bt_context
+>> *ctx, const char *path,
+>>               fprintf(stderr, "[error] Cannot open any trace for reading.\n\n");
+>>               ret = -ENOENT;          /* failure */
+>>       }
+>> +
+>> +error:
+>>       return ret;
+>>  }
+>>
+>> @@ -697,7 +690,7 @@ int main(int argc, char **argv)
+>>               }
+>>       }
+>>       fmt_read = bt_lookup_format(g_quark_from_static_string(opt_input_format));
+>> -     if (!fmt_read || fmt_read->name != g_quark_from_static_string("ctf")) {
+>> +     if (!fmt_read) {
+>>               fprintf(stderr, "[error] Format \"%s\" is not supported.\n\n",
+>>                       opt_input_format);
+>>               partial_error = 1;
+>> diff --git a/formats/ctf/ctf.c b/formats/ctf/ctf.c
+>> index 947b439..e6babc1 100644
+>> --- a/formats/ctf/ctf.c
+>> +++ b/formats/ctf/ctf.c
+>> @@ -111,6 +111,9 @@ static
+>>  int ctf_convert_index_timestamp(struct bt_trace_descriptor *tdp);
+>>
+>>  static
+>> +int ctf_shows_interest(const char *fpath, int is_dir);
+>> +
+>> +static
+>>  rw_dispatch read_dispatch_table[] = {
+>>       [ CTF_TYPE_INTEGER ] = ctf_integer_read,
+>>       [ CTF_TYPE_FLOAT ] = ctf_float_read,
+>> @@ -144,6 +147,7 @@ struct bt_format ctf_format = {
+>>       .timestamp_begin = ctf_timestamp_begin,
+>>       .timestamp_end = ctf_timestamp_end,
+>>       .convert_index_timestamp = ctf_convert_index_timestamp,
+>> +     .shows_interest = ctf_shows_interest,
+>>  };
+>>
+>>  static
+>> @@ -2095,6 +2099,52 @@ int ctf_convert_index_timestamp(struct
+>> bt_trace_descriptor *tdp)
+>>  }
+>>
+>>  static
+>> +int ctf_shows_interest(const char *fpath, int is_dir)
+>> +{
+>> +     int dirfd, metafd;
+>> +     int closeret;
+>> +
+>> +     if (!is_dir)
+>> +                     return 0;
+>> +
+>> +     dirfd = open(fpath, 0);
+>> +     if (dirfd < 0) {
+>> +             fprintf(stderr, "[error] [Context] Unable to open trace "
+>> +                     "directory file descriptor.\n");
+>> +             return 0;       /* partial error */
+>> +     }
+>> +     metafd = openat(dirfd, "metadata", O_RDONLY);
+>> +     if (metafd < 0) {
+>> +             closeret = close(dirfd);
+>> +             if (closeret < 0) {
+>> +                     perror("close");
+>> +                     return -1;
+>> +             }
+>> +             /* No meta data, just return */
+>> +             return 0;
+>> +     } else {
+>> +             int err_close = 0;
+>> +
+>> +             closeret = close(metafd);
+>> +             if (closeret < 0) {
+>> +                     perror("close");
+>> +                     err_close = 1;
+>> +             }
+>> +             closeret = close(dirfd);
+>> +             if (closeret < 0) {
+>> +                     perror("close");
+>> +                     err_close = 1;
+>> +             }
+>> +             if (err_close) {
+>> +                     return -1;
+>> +             }
+>> +     }
+>> +
+>> +     /* This path is interesting. */
+>> +     return 1;
+>> +}
+>> +
+>> +static
+>>  int ctf_close_file_stream(struct ctf_file_stream *file_stream)
+>>  {
+>>       int ret;
+>> diff --git a/include/babeltrace/format.h b/include/babeltrace/format.h
+>> index 07e854f..b039abc 100644
+>> --- a/include/babeltrace/format.h
+>> +++ b/include/babeltrace/format.h
+>> @@ -77,6 +77,7 @@ struct bt_format {
+>>       uint64_t (*timestamp_end)(struct bt_trace_descriptor *descriptor,
+>>                       struct bt_trace_handle *handle, enum bt_clock_type type);
+>>       int (*convert_index_timestamp)(struct bt_trace_descriptor *descriptor);
+>> +     int (*shows_interest)(const char *path, int is_dir);
+>>  };
+>>
+>>  extern struct bt_format *bt_lookup_format(bt_intern_str qname);
+>> --
+>> 1.8.3.2
+>>
+>>
+>> _______________________________________________
+>> lttng-dev mailing list
+>> lttng-dev@lists.lttng.org
+>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>>
+>
 > --
-> Otavio Salvador                             O.S. Systems
-> http://www.ossystems.com.br        http://code.ossystems.com.br
-> Mobile: +55 (53) 9981-7854            Mobile: +1 (347) 903-9750
-> 
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> http://www.efficios.com
