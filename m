@@ -1,17 +1,15 @@
-From: Evgeniy Ivanov <lolkaantimat@gmail.com>
-Subject: Userspace RCU VS spin locks
-Date: Wed, 30 Oct 2013 17:11:47 +0400
-Message-ID: <CAO6Ho0ch2U2r5Ept2qFkOh1_Hxm6FcawsrzEmRQDEVi+KM5+tA__29514.4543787048$1383138774$gmane$org@mail.gmail.com>
+From: Cristiana Voicu <cristiana.voicu@intel.com>
+Subject: [PATCH] Use cross compiler for doc exemples too
+Date: Thu, 31 Oct 2013 10:10:44 +0200
+Message-ID: <1383207044-30477-1-git-send-email-cristiana.voicu__15515.1214603849$1383206801$gmane$org@intel.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f169.google.com ([209.85.223.169])
+Received: from mga09.intel.com ([134.134.136.24])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <lolkaantimat@gmail.com>) id 1VbVYv-0006Y5-CI
-	for lttng-dev@lists.lttng.org; Wed, 30 Oct 2013 09:11:58 -0400
-Received: by mail-ie0-f169.google.com with SMTP id ar20so2276349iec.28
-	for <lttng-dev@lists.lttng.org>; Wed, 30 Oct 2013 06:11:47 -0700 (PDT)
+	(envelope-from <cristiana.voicu@intel.com>) id 1VbnGJ-0002af-07
+	for lttng-dev@lists.lttng.org; Thu, 31 Oct 2013 04:05:52 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,14 +19,22 @@ List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
+Cc: Cristiana Voicu <cristiana.voicu@intel.com>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
+Signed-off-by: Cristiana Voicu <cristiana.voicu@intel.com>
 
-I'm very interested in RCU performance, especially applied to hash
-tables (rculfhash in particular). Did any body compare performance of
-QSBR or signal RCU VS scalable and non-scalable spin locks?
-
--- 
-Cheers,
-Evgeniy
+Index: userspace-rcu-0.8.0/doc/examples/Makefile.examples.template
+===================================================================
+--- userspace-rcu-0.8.0.orig/doc/examples/Makefile.examples.template	2013-08-30 21:25:20.000000000 +0300
++++ userspace-rcu-0.8.0/doc/examples/Makefile.examples.template	2013-10-23 13:34:30.405550556 +0300
+@@ -11,7 +11,9 @@
+ #
+ # This makefile is purposefully kept simple to support GNU and BSD make.
+ 
++ifndef CC
+ CC = gcc
++endif
+ CFLAGS = -g -O2 -Wall
+ 
+ all: $(BINARY)
