@@ -1,17 +1,18 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: CTF: trying to understand "missing fields"
-Date: Thu, 31 Oct 2013 12:34:56 +0000 (UTC)
-Message-ID: <106087714.54272.1383222895991.JavaMail.zimbra__7841.50391486964$1383222944$gmane$org@efficios.com>
-References: <D45D38CA-AFA7-41E7-8D63-BDD96DBA4E42@demoninsight.com>
+Subject: Re: [PATCH lttng-ust] Fix: Overhaul of the lttng-gen-tp
+ man	page
+Date: Thu, 31 Oct 2013 12:38:32 +0000 (UTC)
+Message-ID: <1070395365.54273.1383223112084.JavaMail.zimbra__46923.2599520639$1383223156$gmane$org@efficios.com>
+References: <1382544495-10548-1-git-send-email-jeremie.galarneau@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1VbrSl-0001sj-HB
-	for lttng-dev@lists.lttng.org; Thu, 31 Oct 2013 08:35:01 -0400
-In-Reply-To: <D45D38CA-AFA7-41E7-8D63-BDD96DBA4E42@demoninsight.com>
+	(envelope-from <compudj@efficios.com>) id 1VbrWF-0002LF-Nu
+	for lttng-dev@lists.lttng.org; Thu, 31 Oct 2013 08:38:37 -0400
+In-Reply-To: <1382544495-10548-1-git-send-email-jeremie.galarneau@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,101 +21,89 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Vlad <vlad@demoninsight.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: =?utf-8?B?SsOpcsOpbWll?= Galarneau <jeremie.galarneau@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-
-
------ Original Message -----
-> From: "Vlad" <vlad@demoninsight.com>
-> To: "lttng-dev" <lttng-dev@lists.lttng.org>
-> Sent: Monday, October 21, 2013 6:53:21 PM
-> Subject: [lttng-dev] CTF: trying to understand "missing fields"
-> 
-> Greetings,
-> 
-> 	The CTF spec contains a couple of mentions of how one could define a missing
-> 	field bitmask:
-> 
-> "The header is extended in the rare occasions where the information cannot be
-> represented in the ranges available in the standard event header. They are
-> also
-> used in the rare occasions where the data required for a field could not be
-> collected: the flag corresponding to the missing field within the
-> missing_fields
-> array is then set to 1"
-> 
-> and
-> 
-> "An example of event-specific event context is to declare a bitmap of missing
-> fields, only appended after the stream event context if the extended event
-> header is selected. NR_FIELDS is the number of fields within the event (a
-> numeric value).
-> 
->   event {
->     context = struct {
->       variant <id> {
->         struct { } compact;
->         struct {
->           uint1_t missing_fields[NR_FIELDS]; /* missing event fields bitmap
->           */
->         } extended;
->       } v;
->     };
->     ...
->   }"
-> 
-> Is this capability reflected in the current lttng builds?
-
-LTTng does not use this CTF feature at the moment, and the reference implementations don't understand it neither. This was meant mainly for debuggers (gdb), which can have missing data (e.g. caused by optimizations).
-
-> My understanding so
-> far is that "missingness" is not part of CTF grammar per se but is rather a
-> convention (i.e. declaring an array of uint1_t's with a particular name
-> "missing_fields") -- is this correct?
-
-Yes.
-
-> In the extended header example above,
-> how is a missing_fields slot mapped to its corresponding field -- are the
-> fields assumed to be ordered, with a slot per field in that ordering?
-
-Yes.
-
-> 
-> To give some context for my use case:
-> 
-> - I generate my own binary data and I would like to leverage TMF and/or
-> babeltrace to view it
-> - my in-memory event format is roughly <event ID> + <missing field bitmap> +
-> <fields that are present> (with certain alignment constraints) and I would
-> like to understand whether I can describe it using CTF
-> - in principle, I can post-process my data as needed so it fits some CTF
-> grammar but I simply don't quite understand how this missing fields feature
-> works
-
-Extensions to babeltrace and TMF to make them understand the "missing fields" bitfield would be very welcome!
-
-Thanks,
-
-Mathieu
-
-> 
-> Any help would be much appreciated.
-> 
-> Thanks,
-> Vlad
-> 
-> 
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> 
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+TWVyZ2VkIGFzOgoKY29tbWl0IDNmZjVkYzgwYmRlNjBkNTNiNmQ4ZTBlZGI0YzJkZmI3MDEwYzJj
+NDYKQXV0aG9yOiBKw6lyw6ltaWUgR2FsYXJuZWF1IDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lv
+cy5jb20+CkRhdGU6ICAgV2VkIE9jdCAyMyAxMjowODoxNSAyMDEzIC0wNDAwCgogICAgRG9jdW1l
+bnRhdGlvbiBjbGVhbnVwOiBPdmVyaGF1bCBvZiB0aGUgbHR0bmctZ2VuLXRwIG1hbiBwYWdlCiAg
+ICAKICAgIEZpeCBhIGNvdXBsZSBvZiB0eXBvcywgbWlzdGFrZXMgYW5kIG91dC1vZiBkYXRlIGlu
+Zm9ybWF0aW9ucy4KICAgIAogICAgW01hdGhpZXU6IGFkZGVkIGV4dHJhIGZpeCByZWNvbW1lbmRl
+ZCBieSBEYW5pZWwgVGhpYmF1bHRdCiAgICAKICAgIEFja2VkLWJ5OiBZYW5uaWNrIEJyb3NzZWF1
+IDx5YW5uaWNrLmJyb3NzZWF1QGdtYWlsLmNvbT4KICAgIFNpZ25lZC1vZmYtYnk6IErDqXLDqW1p
+ZSBHYWxhcm5lYXUgPGplcmVtaWUuZ2FsYXJuZWF1QGVmZmljaW9zLmNvbT4KICAgIFNpZ25lZC1v
+ZmYtYnk6IE1hdGhpZXUgRGVzbm95ZXJzIDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+
+CgpUaGFua3MhCgpNYXRoaWV1CgotLS0tLSBPcmlnaW5hbCBNZXNzYWdlIC0tLS0tCj4gRnJvbTog
+IkrDqXLDqW1pZSBHYWxhcm5lYXUiIDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20+Cj4g
+VG86IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBTZW50OiBXZWRuZXNkYXksIE9jdG9iZXIg
+MjMsIDIwMTMgMTI6MDg6MTUgUE0KPiBTdWJqZWN0OiBbbHR0bmctZGV2XSBbUEFUQ0ggbHR0bmct
+dXN0XSBGaXg6IE92ZXJoYXVsIG9mIHRoZSBsdHRuZy1nZW4tdHAgbWFuCXBhZ2UKPiAKPiBGaXgg
+YSBjb3VwbGUgb2YgdHlwb3MsIG1pc3Rha2VzIGFuZCBvdXQtb2YgZGF0ZSBpbmZvcm1hdGlvbnMu
+Cj4gCj4gU2lnbmVkLW9mZi1ieTogSsOpcsOpbWllIEdhbGFybmVhdSA8amVyZW1pZS5nYWxhcm5l
+YXVAZWZmaWNpb3MuY29tPgo+IC0tLQo+ICBkb2MvbWFuL2x0dG5nLWdlbi10cC4xIHwgMjEgKysr
+KysrKysrLS0tLS0tLS0tLS0tCj4gIDEgZmlsZSBjaGFuZ2VkLCA5IGluc2VydGlvbnMoKyksIDEy
+IGRlbGV0aW9ucygtKQo+IAo+IGRpZmYgLS1naXQgYS9kb2MvbWFuL2x0dG5nLWdlbi10cC4xIGIv
+ZG9jL21hbi9sdHRuZy1nZW4tdHAuMQo+IGluZGV4IDg0YzA1YzkuLjU2NGMzMTcgMTAwNjQ0Cj4g
+LS0tIGEvZG9jL21hbi9sdHRuZy1nZW4tdHAuMQo+ICsrKyBiL2RvYy9tYW4vbHR0bmctZ2VuLXRw
+LjEKPiBAQCAtMTMsMTUgKzEzLDE1IEBAIGx0dG5nXC1nZW5cLXRwIFtPUFRJT05TXSBURU1QTEFU
+RV9GSUxFCj4gIAo+ICAuUFAKPiAgVGhlIExUVG5nIHByb2plY3QgYWltcyBhdCBwcm92aWRpbmcg
+aGlnaGx5IGVmZmljaWVudCB0cmFjaW5nIHRvb2xzIGZvcgo+ICBMaW51eC4KPiAtSXQncyB0cmFj
+ZXJzIGhlbHAgdHJhY2tpbmcgZG93biBwZXJmb3JtYW5jZSBpc3N1ZXMgYW5kIGRlYnVnZ2luZyBw
+cm9ibGVtcwo+ICtJdHMgdHJhY2VycyBoZWxwIGluIHRyYWNraW5nIGRvd24gcGVyZm9ybWFuY2Ug
+aXNzdWVzIGFuZCBkZWJ1Z2dpbmcgcHJvYmxlbXMKPiAgaW52b2x2aW5nIG11bHRpcGxlIGNvbmN1
+cnJlbnQgcHJvY2Vzc2VzIGFuZCB0aHJlYWRzLiBUcmFjaW5nIGFjcm9zcyBtdWx0aXBsZQo+ICBz
+eXN0ZW1zIGlzIGFsc28gcG9zc2libGUuCj4gIAo+IC1UaGUgXGZCbHR0bmdcLWdlblwtdHBcZlAg
+dG9vbCBzaW1wbGlmeSB0aGUgZ2VuZXJhdGlvbiBvZiB0aGUgVVNUIHRyYWNlcG9pbnQKPiAtZmls
+ZXMuIEl0IHRha2VzIGEgc2ltcGxlIHRlbXBsYXRlIGZpbGUgYW5kIGdlbmVyYXRlIHRoZSBuZWNl
+c3NhcnkgY29kZSB0bwo+IHVzZSB0aGUgZGVmaW5lZCB0cmFjZXBvaW50cyBpbiB5b3VyIGFwcGxp
+Y2F0aW9uLgo+IC1UaGUgc2VjdGlvbiBURU1QTEFURSBGSUxFIEZPUk1BVCBkZXNjcmliZSB0aGUg
+Y29udGVudCBvZiB0aGUgdGVtcGxhdGUgZmlsZS4KPiArVGhlIFxmQmx0dG5nXC1nZW5cLXRwXGZQ
+IHRvb2wgc2ltcGxpZmllcyB0aGUgZ2VuZXJhdGlvbiBvZiB0aGUgVVNUCj4gdHJhY2Vwb2ludAo+
+ICtmaWxlcy4gSXQgdGFrZXMgYSBzaW1wbGUgdGVtcGxhdGUgZmlsZSBhbmQgZ2VuZXJhdGVzIHRo
+ZSBuZWNlc3NhcnkgY29kZSB0bwo+IHVzZSB0aGUgZGVmaW5lZCB0cmFjZXBvaW50cyBpbiB5b3Vy
+IGFwcGxpY2F0aW9uLgo+ICtUaGUgc2VjdGlvbiBURU1QTEFURSBGSUxFIEZPUk1BVCBkZXNjcmli
+ZXMgdGhlIGNvbnRlbnQgb2YgdGhlIHRlbXBsYXRlIGZpbGUuCj4gIAo+IC1DdXJyZW50bHksIHRo
+ZSB0b29sIGNhbiBnZW5lcmF0ZSB0aGUgLmgsIC5jIGFuZCAubyBhc3NvY2lhdGVkIHRvIHlvdXIK
+PiArQ3VycmVudGx5LCB0aGUgdG9vbCBjYW4gZ2VuZXJhdGUgdGhlIC5oLCAuYyBhbmQgLm8gYXNz
+b2NpYXRlZCB3aXRoIHlvdXIKPiAgdHJhY2Vwb2ludC4gVGhlIGdlbmVyYXRlZCAuaCBjYW4gYmUg
+ZGlyZWN0bHkgaW5jbHVkZWQgaW4geW91ciBhcHBsaWNhdGlvbi4KPiAgWW91IGNhbiBsZXQgdGhl
+IHRvb2wgZ2VuZXJhdGUgdGhlIC5vIG9yIGNvbXBpbGUgdGhlIC5jIHlvdXJzZWxmLgo+ICBZb3Ug
+Y2FuIGNvbXBpbGUgdGhlIC5jIGludG8gYSAubywgLmEgb3IgLnNvIGF0IHlvdXIgY2hvaWNlIGFu
+ZAo+IEBAIC0zMCwxNCArMzAsMTEgQEAgUmVmZXIgdG8gdGhlIFVTVCBkb2N1bWVudGF0aW9uIGZv
+ciB0aGUKPiAgYWR2YW50YWdlcyBhbmQgZGlzYWR2YW50YWdlIG9mIGVhY2ggZm9ybS4KPiAgVG8g
+Y29tcGlsZSB0aGUgcmVzdWx0aW5nIC5jIGZpbGUsIHlvdSBuZWVkIHRvIGFkZCB0aGUgb3B0aW9u
+cwo+ICAiXC1sbHR0bmctdXN0IFwtSS4iLgo+IC1Ob3RlIGZvciBDKysgc3VwcG9ydDogYWx0aG91
+Z2ggYW4gYXBwbGljYXRpb24gaW5zdHJ1bWVudGVkIHdpdGgKPiAtdHJhY2Vwb2ludHMgY2FuIGJl
+IGNvbXBpbGVkIHdpdGggZysrLCB0cmFjZXBvaW50IHByb2JlcyBzaG91bGQgYmUKPiAtY29tcGls
+ZWQgd2l0aCBnY2MgKG9ubHkgdGVzdGVkIHdpdGggZ2NjIHNvIGZhcikuCj4gIAo+ICAuU0ggIk9Q
+VElPTlMiCj4gIAo+ICAuUFAKPiAtVGhpcyBwcm9ncmFtIGZvbGxvdyB0aGUgdXN1YWwgR05VIGNv
+bW1hbmQgbGluZSBzeW50YXggd2l0aCBsb25nIG9wdGlvbnMKPiBzdGFydGluZyB3aXRoCj4gK1Ro
+aXMgcHJvZ3JhbSBmb2xsb3dzIHRoZSB1c3VhbCBHTlUgY29tbWFuZCBsaW5lIHN5bnRheCB3aXRo
+IGxvbmcgb3B0aW9ucwo+IHN0YXJ0aW5nIHdpdGgKPiAgdHdvIGRhc2hlcy4gQmVsb3cgaXMgYSBz
+dW1tYXJ5IG9mIHRoZSBhdmFpbGFibGUgb3B0aW9ucy4KPiAgLlBQCj4gIAo+IEBAIC01NCw3ICs1
+MSw3IEBAIGV4dGVuc2lvbiAoLmgsIC5jLCAubykuCj4gIFRoaXMgb3B0aW9uIGNhbiBiZSBzcGVj
+ZmllZCBtdWx0aXBsZSB0aW1lcyB0byBnZW5lcmF0ZSBkaWZmZXJlbnQgZmlsZSB0eXBlLgo+ICAK
+PiAgLlBQCj4gLVdoZW4gbm8gb3V0cHV0IGlzIHNwZWNpZmllZCBkZSBkZWZhdWx0IGZpbGVzIGFy
+ZSBnZW5lcmF0ZWQgd2l0aCB0aGUgc2FtZQo+IGJhc2UgZmlsZW5hbWUgYXMgdGhlIHRlbXBsYXRl
+IGZpbGUuIFRoZSBkZWZhdWx0IGZpbGVzIGFyZTogLmgsIC5jLCAuby4KPiArV2hlbiBubyBvdXRw
+dXQgaXMgc3BlY2lmaWVkIHRoZSBkZWZhdWx0IGZpbGVzIGFyZSBnZW5lcmF0ZWQgd2l0aCB0aGUg
+c2FtZQo+IGJhc2UgZmlsZW5hbWUgYXMgdGhlIHRlbXBsYXRlIGZpbGUuIFRoZSBkZWZhdWx0IGZp
+bGVzIGFyZTogLmgsIC5jLCAuby4KPiAgCj4gIC5TSCAiVEVNUExBVEUgRklMRSBGT1JNQVQiCj4g
+IAo+IEBAIC04NSwxMiArODIsMTIgQEAgVFJBQ0VQT0lOVF9FVkVOVCgKPiAgLlNIICJFTlZJUk9O
+TUVOVCBWQVJJQUJMRVMiCj4gIAo+ICAuUFAKPiAtV2hlbiB0aGUgdG9vbCBnZW5lcmF0ZSBhbiAu
+byBmaWxlLCBpdCB3aWxsIGxvb2sgZm9yIHRoZSBmb2xsb3dpbmcKPiBlbnZpcm9ubWVudCB2YXJp
+YWJsZXMKPiArV2hlbiB0aGUgdG9vbCBnZW5lcmF0ZXMgYSAubyBmaWxlLCBpdCB3aWxsIGxvb2sg
+Zm9yIHRoZSBmb2xsb3dpbmcKPiBlbnZpcm9ubWVudCB2YXJpYWJsZXMKPiAgLlBQCj4gIAo+ICAu
+UFAKPiAgLklQICJDQyIKPiAtU3BlY2lmZXIgd2hpY2ggQyBjb21waWxlciB0byB1c2UuIElmIHRo
+ZSB2YXJpYWJsZSBpcyBub3Qgc3BlY2lmaWVkLCB0aGUKPiArU3BlY2lmeSB3aGljaCBDIGNvbXBp
+bGVyIHRvIHVzZS4gSWYgdGhlIHZhcmlhYmxlIGlzIG5vdCBzcGVjaWZpZWQsIHRoZQo+ICB0b29s
+IHdpbGwgdHJ5ICJjYyIgYW5kICJnY2MiCj4gIAo+ICAuSVAgIkNGTEFHUyIKPiAtLQo+IDEuOC40
+Cj4gCj4gCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
+PiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IGh0
+dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo+
+IAoKLS0gCk1hdGhpZXUgRGVzbm95ZXJzCkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lv
+cy5jb20KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0
+dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlz
+dHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
