@@ -1,24 +1,16 @@
-From: Otavio Salvador <otavio@ossystems.com.br>
-Subject: Re: lttng-modules build failure for 3.12-rc6
-Date: Thu, 31 Oct 2013 16:21:21 -0200
-Message-ID: <CAP9ODKrdOhk9o=3yxo0189Xtzgpx=Fo5MLDTq9C7Zt9Y8e2a2Q__18352.1859501072$1383243748$gmane$org@mail.gmail.com>
-References: <CAP9ODKoqhtXmS94ZtV8hNPs=kUXWLU9msN+GR7Zf9DQrdQUmSg@mail.gmail.com>
-	<1567008261.54443.1383229577346.JavaMail.zimbra@efficios.com>
-	<CAP9ODKrLtSuFJUKryO9RJ5BHri9d7gL+5vZqOAw-o_OZ7cZn6A@mail.gmail.com>
-	<544819642.54467.1383230288963.JavaMail.zimbra@efficios.com>
-	<CAP9ODKokvCH16Qwq6ftBvWLpRHo+=T_1SggJa-3GOcy7aE2yeA@mail.gmail.com>
-	<1328648078.54590.1383242720354.JavaMail.zimbra@efficios.com>
+From: Simon Marchi <simon.marchi@polymtl.ca>
+Subject: [PATCH babeltrace v2] Introduce read_fit callback for
+	format plugins
+Date: Thu, 31 Oct 2013 23:49:23 -0400
+Message-ID: <1383277763-21488-1-git-send-email-simon.marchi__14027.0773358226$1383277818$gmane$org@polymtl.ca>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-oa0-f42.google.com ([209.85.219.42])
+Received: from smtp.electronicbox.net ([96.127.255.82])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <otavio.salvador@gmail.com>) id 1Vbws3-00037S-Ca
-	for lttng-dev@lists.lttng.org; Thu, 31 Oct 2013 14:21:33 -0400
-Received: by mail-oa0-f42.google.com with SMTP id k14so3517526oag.1
-	for <lttng-dev@lists.lttng.org>; Thu, 31 Oct 2013 11:21:21 -0700 (PDT)
-In-Reply-To: <1328648078.54590.1383242720354.JavaMail.zimbra@efficios.com>
+	(envelope-from <simon.marchi@polymtl.ca>) id 1Vc5jm-0007vE-AD
+	for lttng-dev@lists.lttng.org; Thu, 31 Oct 2013 23:49:31 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -27,42 +19,260 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On Thu, Oct 31, 2013 at 4:05 PM, Mathieu Desnoyers
-<mathieu.desnoyers@efficios.com> wrote:
-...
->> >> Great; can you backport those to stable-2.3? I'd like to send the
->> >> update for Yocto including these changes and fix it for us directly
->> >> there.
->> >
->> > Strictly speaking, supporting a new kernel can be seen as a new feature.
->> > stable-2.3 was released for 3.11. Moreover, 3.12 kernel is still in rc
->> > stage, so things can still change (and even be reverted, this has happened
->> > in the past).
->> >
->> > Unfortunately, we don't add features in the stable branches, only bug
->> > fixes. But keep in mind that 2.4 should come within the coming weeks.
->>
->> Humm in this case stable-2.3 should had a #warning saying it support
->> kernels up to 3.11 only. As it does not state it somewhere it seems
->> like a fix for me.
->>
->> I will end doing the backport in  this case, but it is something which
->> could be fixed for 2.4 than and include such warning.
->
-> I just discussed this with David and Julien, and here is what we came up with:
->
-> - when a final kernel release comes up (e.g. 3.12), it makes sense to add support for it into a stable release if the modifications are small,
-> - however, it does not make sense to add support for a release candidate Linux kernel, since those are known to change a lot during the RC cycle, (chasing a moving target is never fun)
->
-> Therefore, I'd be open to cherry-pick the master commits into stable-2.3 when 3.12 final comes out. I don't promise I'll remember to do so, so a gentle "ping" when 3.12 final comes out to remind me which commit ID I should cherry-pick from master into stable-2.3 would be welcome,
+The format plugins should implement this callback to tell whether they
+are a good fit to read the given path or not. This allows to move
+CTF-specific code from the core to ctf.c. This should be a step towards
+having more than one input plugin.
 
-Right; it is fine with me. We're close to it as we're in 3.12-rc7.
+The callback should return 1 if it wants to handle this path, 0 otherwise. It
+should return -1 in case of catastrophic failure.
 
+Signed-off-by: Simon Marchi <simon.marchi@polymtl.ca>
+---
+ converter/babeltrace.c      | 91 ++++++++++++++++++++++-----------------------
+ formats/ctf/ctf.c           | 50 +++++++++++++++++++++++++
+ include/babeltrace/format.h |  1 +
+ 3 files changed, 95 insertions(+), 47 deletions(-)
+
+diff --git a/converter/babeltrace.c b/converter/babeltrace.c
+index d5a7040..d1a8aa3 100644
+--- a/converter/babeltrace.c
++++ b/converter/babeltrace.c
+@@ -416,7 +416,16 @@ end:
+ 	return ret;
+ }
+ 
+-static GPtrArray *traversed_paths = 0;
++/*
++ * Since nftw doesn't pass a user data pointer to its callbacks, we
++ * have to resort to global variables.
++ */
++struct traverse_trace_dir_args {
++	struct bt_format *format;
++	GPtrArray *paths;
++};
++
++static struct traverse_trace_dir_args traverse_trace_dir_args = {NULL, NULL};
+ 
+ /*
+  * traverse_trace_dir() is the callback function for File Tree Walk (nftw).
+@@ -429,53 +438,32 @@ static GPtrArray *traversed_paths = 0;
+ static int traverse_trace_dir(const char *fpath, const struct stat *sb,
+ 			int tflag, struct FTW *ftwbuf)
+ {
+-	int dirfd, metafd;
+-	int closeret;
++	int ret;
++	struct traverse_trace_dir_args args = traverse_trace_dir_args;
+ 
+-	if (tflag != FTW_D)
+-		return 0;
++	assert(args.format != NULL);
++	assert(args.paths != NULL);
+ 
+-	dirfd = open(fpath, 0);
+-	if (dirfd < 0) {
+-		fprintf(stderr, "[error] [Context] Unable to open trace "
+-			"directory file descriptor.\n");
+-		return 0;	/* partial error */
++	if (!args.format->read_fit) {
++		/* The plug-in needs to implement read_fit. */
++		return -1;
+ 	}
+-	metafd = openat(dirfd, "metadata", O_RDONLY);
+-	if (metafd < 0) {
+-		closeret = close(dirfd);
+-		if (closeret < 0) {
+-			perror("close");
+-			return -1;
+-		}
+-		/* No meta data, just return */
+-		return 0;
+-	} else {
+-		int err_close = 0;
+ 
+-		closeret = close(metafd);
+-		if (closeret < 0) {
+-			perror("close");
+-			err_close = 1;
+-		}
+-		closeret = close(dirfd);
+-		if (closeret < 0) {
+-			perror("close");
+-			err_close = 1;
+-		}
+-		if (err_close) {
+-			return -1;
+-		}
++	ret = args.format->read_fit(fpath, tflag == FTW_D);
+ 
+-		/* Add path to the global list */
+-		if (traversed_paths == NULL) {
+-			fprintf(stderr, "[error] [Context] Invalid open path array.\n");	
+-			return -1;
+-		}
+-		g_ptr_array_add(traversed_paths, g_string_new(fpath));
++	/*
++	 * If ret is negative (means error), we return directly. This will
++	 * interrupt the file tree walk. If ret is 0, the format is not interested
++	 * by the path, we also return directly.
++	 */
++
++	if (ret > 0) {
++		/* Format is interested. Add path to the global list */
++		g_ptr_array_add(args.paths, g_string_new(fpath));
++		ret = 0;
+ 	}
+ 
+-	return 0;
++	return ret;
+ }
+ 
+ /*
+@@ -499,15 +487,22 @@ int bt_context_add_traces_recursive(struct bt_context *ctx, const char *path,
+ 
+ 	/* Should lock traversed_paths mutex here if used in multithread */
+ 
+-	traversed_paths = g_ptr_array_new();
++	struct bt_format *format = bt_lookup_format(g_quark_from_string(format_str));
++	if (!format) {
++		ret = -1;
++		goto error;
++	}
++
++	traverse_trace_dir_args.paths = g_ptr_array_new();
++	traverse_trace_dir_args.format = format;
+ 	ret = nftw(path, traverse_trace_dir, 10, 0);
+ 
+ 	/* Process the array if ntfw did not return a fatal error */
+ 	if (ret >= 0) {
+ 		int i;
+ 
+-		for (i = 0; i < traversed_paths->len; i++) {
+-			GString *trace_path = g_ptr_array_index(traversed_paths,
++		for (i = 0; i < traverse_trace_dir_args.paths->len; i++) {
++			GString *trace_path = g_ptr_array_index(traverse_trace_dir_args.paths,
+ 								i);
+ 			int trace_id = bt_context_add_trace(ctx,
+ 							    trace_path->str,
+@@ -527,8 +522,8 @@ int bt_context_add_traces_recursive(struct bt_context *ctx, const char *path,
+ 		}
+ 	}
+ 
+-	g_ptr_array_free(traversed_paths, TRUE);
+-	traversed_paths = NULL;
++	g_ptr_array_free(traverse_trace_dir_args.paths, TRUE);
++	traverse_trace_dir_args.paths = NULL;
+ 
+ 	/* Should unlock traversed paths mutex here if used in multithread */
+ 
+@@ -539,6 +534,8 @@ int bt_context_add_traces_recursive(struct bt_context *ctx, const char *path,
+ 		fprintf(stderr, "[error] Cannot open any trace for reading.\n\n");
+ 		ret = -ENOENT;		/* failure */
+ 	}
++
++error:
+ 	return ret;
+ }
+ 
+@@ -697,7 +694,7 @@ int main(int argc, char **argv)
+ 		}
+ 	}
+ 	fmt_read = bt_lookup_format(g_quark_from_static_string(opt_input_format));
+-	if (!fmt_read || fmt_read->name != g_quark_from_static_string("ctf")) {
++	if (!fmt_read) {
+ 		fprintf(stderr, "[error] Format \"%s\" is not supported.\n\n",
+ 			opt_input_format);
+ 		partial_error = 1;
+diff --git a/formats/ctf/ctf.c b/formats/ctf/ctf.c
+index 5fcfcdd..101eafb 100644
+--- a/formats/ctf/ctf.c
++++ b/formats/ctf/ctf.c
+@@ -111,6 +111,9 @@ static
+ int ctf_convert_index_timestamp(struct bt_trace_descriptor *tdp);
+ 
+ static
++int ctf_read_fit(const char *fpath, int is_dir);
++
++static
+ rw_dispatch read_dispatch_table[] = {
+ 	[ CTF_TYPE_INTEGER ] = ctf_integer_read,
+ 	[ CTF_TYPE_FLOAT ] = ctf_float_read,
+@@ -144,6 +147,7 @@ struct bt_format ctf_format = {
+ 	.timestamp_begin = ctf_timestamp_begin,
+ 	.timestamp_end = ctf_timestamp_end,
+ 	.convert_index_timestamp = ctf_convert_index_timestamp,
++	.read_fit = ctf_read_fit,
+ };
+ 
+ static
+@@ -2095,6 +2099,52 @@ int ctf_convert_index_timestamp(struct bt_trace_descriptor *tdp)
+ }
+ 
+ static
++int ctf_read_fit(const char *fpath, int is_dir)
++{
++	int dirfd, metafd;
++	int closeret;
++
++	if (!is_dir)
++			return 0;
++
++	dirfd = open(fpath, 0);
++	if (dirfd < 0) {
++		fprintf(stderr, "[error] [Context] Unable to open trace "
++			"directory file descriptor.\n");
++		return 0;	/* partial error */
++	}
++	metafd = openat(dirfd, "metadata", O_RDONLY);
++	if (metafd < 0) {
++		closeret = close(dirfd);
++		if (closeret < 0) {
++			perror("close");
++			return -1;
++		}
++		/* No meta data, just return */
++		return 0;
++	} else {
++		int err_close = 0;
++
++		closeret = close(metafd);
++		if (closeret < 0) {
++			perror("close");
++			err_close = 1;
++		}
++		closeret = close(dirfd);
++		if (closeret < 0) {
++			perror("close");
++			err_close = 1;
++		}
++		if (err_close) {
++			return -1;
++		}
++	}
++
++	/* This path is interesting. */
++	return 1;
++}
++
++static
+ int ctf_close_file_stream(struct ctf_file_stream *file_stream)
+ {
+ 	int ret;
+diff --git a/include/babeltrace/format.h b/include/babeltrace/format.h
+index 07e854f..588c0ff 100644
+--- a/include/babeltrace/format.h
++++ b/include/babeltrace/format.h
+@@ -77,6 +77,7 @@ struct bt_format {
+ 	uint64_t (*timestamp_end)(struct bt_trace_descriptor *descriptor,
+ 			struct bt_trace_handle *handle, enum bt_clock_type type);
+ 	int (*convert_index_timestamp)(struct bt_trace_descriptor *descriptor);
++	int (*read_fit)(const char *path, int is_dir);
+ };
+ 
+ extern struct bt_format *bt_lookup_format(bt_intern_str qname);
 -- 
-Otavio Salvador                             O.S. Systems
-http://www.ossystems.com.br        http://code.ossystems.com.br
-Mobile: +55 (53) 9981-7854            Mobile: +1 (347) 903-9750
+1.8.3.2
