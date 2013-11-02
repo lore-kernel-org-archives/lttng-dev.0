@@ -1,8 +1,9 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
 Subject: Re: bug in urcu
-Date: Fri, 1 Nov 2013 20:18:59 +0000 (UTC)
-Message-ID: <1062453941.55297.1383337139657.JavaMail.zimbra__49193.2750250728$1383337210$gmane$org@efficios.com>
+Date: Sat, 2 Nov 2013 08:07:00 -0700
+Message-ID: <20131102150700.GH4067__20760.9752812006$1383451537$gmane$org@linux.vnet.ibm.com>
 References: <5738160F-42EA-4A55-A14B-EF6FAEE94370@tbricks.com>
+	<566219112.25948.1380551836699.JavaMail.zimbra@efficios.com>
 	<1203928674.26171.1380567524442.JavaMail.zimbra@efficios.com>
 	<1040821789.27804.1380739060553.JavaMail.zimbra@efficios.com>
 	<6644DF0F-88BA-4092-825C-ABBA2A81FD97@tbricks.com>
@@ -10,14 +11,33 @@ References: <5738160F-42EA-4A55-A14B-EF6FAEE94370@tbricks.com>
 	<8EF7F1B0-56D0-4209-ADBA-D7C9852537D8@tbricks.com>
 	<1732913493.55082.1383313336612.JavaMail.zimbra@efficios.com>
 	<762373048.55095.1383314114453.JavaMail.zimbra@efficios.com>
+Reply-To: paulmck@linux.vnet.ibm.com
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from e36.co.us.ibm.com ([32.97.110.154])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1VcLBO-0005sW-IR
-	for lttng-dev@lists.lttng.org; Fri, 01 Nov 2013 16:19:09 -0400
+	(envelope-from <paulmck@linux.vnet.ibm.com>) id 1Vcovc-0004uv-V8
+	for lttng-dev@lists.lttng.org; Sun, 03 Nov 2013 00:04:47 -0400
+Received: from /spool/local
+	by e36.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only!
+	Violators will be prosecuted
+	for <lttng-dev@lists.lttng.org> from <paulmck@linux.vnet.ibm.com>;
+	Sat, 2 Nov 2013 22:04:38 -0600
+Received: from d03relay05.boulder.ibm.com (d03relay05.boulder.ibm.com
+	[9.17.195.107])
+	by d03dlp01.boulder.ibm.com (Postfix) with ESMTP id 192A01FF0055
+	for <lttng-dev@lists.lttng.org>; Sat,  2 Nov 2013 22:04:22 -0600 (MDT)
+Received: from d03av06.boulder.ibm.com (d03av06.boulder.ibm.com [9.17.195.245])
+	by d03relay05.boulder.ibm.com (8.13.8/8.13.8/NCO v10.0) with ESMTP id
+	rA344Z7N422498
+	for <lttng-dev@lists.lttng.org>; Sat, 2 Nov 2013 22:04:35 -0600
+Received: from d03av06.boulder.ibm.com (loopback [127.0.0.1])
+	by d03av06.boulder.ibm.com (8.14.4/8.13.1/NCO v10.0 AVout) with ESMTP
+	id rA347R8V002178
+	for <lttng-dev@lists.lttng.org>; Sat, 2 Nov 2013 22:07:27 -0600
+Content-Disposition: inline
 In-Reply-To: <762373048.55095.1383314114453.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -27,17 +47,11 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Vladimir Nikulichev <nvs@tbricks.com>
-Cc: lttng-dev@lists.lttng.org, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev@lists.lttng.org, Vladimir Nikulichev <nvs@tbricks.com>
 List-Id: lttng-dev@lists.lttng.org
 
------ Original Message -----
-> From: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-> To: "Vladimir Nikulichev" <nvs@tbricks.com>
-> Cc: lttng-dev@lists.lttng.org, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
-> Sent: Friday, November 1, 2013 9:55:14 AM
-> Subject: Re: [lttng-dev] bug in urcu
-> 
+On Fri, Nov 01, 2013 at 01:55:14PM +0000, Mathieu Desnoyers wrote:
 > ----- Original Message -----
 > > From: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
 > > To: "Vladimir Nikulichev" <nvs@tbricks.com>
@@ -53,8 +67,7 @@ List-Id: lttng-dev@lists.lttng.org
 > > > Subject: Re: bug in urcu
 > > > 
 > > > > 
-> > > > It looks like an issue with the thread-local storage (TLS)
-> > > > compatibility
+> > > > It looks like an issue with the thread-local storage (TLS) compatibility
 > > > > layer.
 > > > > 
 > > > > Can you show me the output of ./configure on that machine ? I'm
@@ -96,17 +109,14 @@ List-Id: lttng-dev@lists.lttng.org
 > really do this in a stable version fix (0.7, 0.8), or do we need to push
 > a 0.9 out and document the limitation for 0.7 and 0.8 ?
 
-I just found a way to keep ABI compatibility for 0.7 and 0.8, and abort() the application if it's using the old ABI (with symbol clash) when there are multiple instances of this symbol loaded. This involves tricks with weak symbols, a constructor, a reference count, and a wrapper around the bogus symbol, but it works !! Note that it only affects users of urcu that have _LGPL_SOURCE defined.
+If it doesn't work on those unusual configurations now, it is hard to
+argue that they are broken by the change.  ;-)
 
-I'm pulling this work-around (which keeps ABI compatibility) into stable-0.7 and 0.8, and I'm bumping the soname to 3.0.0 within master (upcoming 0.9).
+So I advocate leaving the major number the same and putting out the
+bug fix.
 
-Feedback is welcome,
+							Thanx, Paul
 
-Thanks!
-
-Mathieu
-
-> 
 > Thanks,
 > 
 > Mathieu
@@ -284,12 +294,10 @@ Mathieu
 > > > * thread #1: tid = 0x1c03, 0x00007fff8a5c0224
 > > > libsystem_c.dylib`pthread_key_create, stop reason = breakpoint 1.1
 > > >     frame #0: 0x00007fff8a5c0224 libsystem_c.dylib`pthread_key_create
-> > >     frame #1: 0x0000000100004cea liburcu.2.dylib`__tls_access_rcu_reader
-> > >     +
+> > >     frame #1: 0x0000000100004cea liburcu.2.dylib`__tls_access_rcu_reader +
 > > >     58
 > > >     at urcu.c:110
-> > >     frame #2: 0x0000000100000c5e test_urcu_multiflavor`test_mf_bp
-> > >     [inlined]
+> > >     frame #2: 0x0000000100000c5e test_urcu_multiflavor`test_mf_bp [inlined]
 > > >     _rcu_read_lock_bp + 10 at urcu-bp.h:210
 > > >     frame #3: 0x0000000100000c54 test_urcu_multiflavor`test_mf_bp + 4 at
 > > >     test_urcu_multiflavor-bp.c:34
@@ -308,12 +316,10 @@ Mathieu
 > > > * thread #1: tid = 0x1c03, 0x00007fff8a5a6128
 > > > libsystem_c.dylib`pthread_getspecific, stop reason = breakpoint 2.1
 > > >     frame #0: 0x00007fff8a5a6128 libsystem_c.dylib`pthread_getspecific
-> > >     frame #1: 0x0000000100004d0c liburcu.2.dylib`__tls_access_rcu_reader
-> > >     +
+> > >     frame #1: 0x0000000100004d0c liburcu.2.dylib`__tls_access_rcu_reader +
 > > >     92
 > > >     at urcu.c:110
-> > >     frame #2: 0x0000000100000c5e test_urcu_multiflavor`test_mf_bp
-> > >     [inlined]
+> > >     frame #2: 0x0000000100000c5e test_urcu_multiflavor`test_mf_bp [inlined]
 > > >     _rcu_read_lock_bp + 10 at urcu-bp.h:210
 > > >     frame #3: 0x0000000100000c54 test_urcu_multiflavor`test_mf_bp + 4 at
 > > >     test_urcu_multiflavor-bp.c:34
@@ -330,11 +336,9 @@ Mathieu
 > > > * thread #1: tid = 0x1c03, 0x00007fff8a5c03a0
 > > > libsystem_c.dylib`pthread_setspecific, stop reason = breakpoint 3.1
 > > >     frame #0: 0x00007fff8a5c03a0 libsystem_c.dylib`pthread_setspecific
-> > >     frame #1: 0x0000000100004d32 liburcu.2.dylib`__tls_access_rcu_reader
-> > >     +
+> > >     frame #1: 0x0000000100004d32 liburcu.2.dylib`__tls_access_rcu_reader +
 > > >     130 at urcu.c:110
-> > >     frame #2: 0x0000000100000c5e test_urcu_multiflavor`test_mf_bp
-> > >     [inlined]
+> > >     frame #2: 0x0000000100000c5e test_urcu_multiflavor`test_mf_bp [inlined]
 > > >     _rcu_read_lock_bp + 10 at urcu-bp.h:210
 > > >     frame #3: 0x0000000100000c54 test_urcu_multiflavor`test_mf_bp + 4 at
 > > >     test_urcu_multiflavor-bp.c:34
@@ -354,15 +358,12 @@ Mathieu
 > > > * thread #1: tid = 0x1c03, 0x00007fff8a5c0224
 > > > libsystem_c.dylib`pthread_key_create, stop reason = breakpoint 1.1
 > > >     frame #0: 0x00007fff8a5c0224 libsystem_c.dylib`pthread_key_create
-> > >     frame #1: 0x00000001000288ca
-> > >     liburcu-bp.2.dylib`__tls_access_rcu_reader
+> > >     frame #1: 0x00000001000288ca liburcu-bp.2.dylib`__tls_access_rcu_reader
 > > >     +
 > > >     58 at urcu-bp.c:117
-> > >     frame #2: 0x0000000100029bc5 liburcu-bp.2.dylib`rcu_bp_register + 53
-> > >     at
+> > >     frame #2: 0x0000000100029bc5 liburcu-bp.2.dylib`rcu_bp_register + 53 at
 > > >     urcu-bp.c:483
-> > >     frame #3: 0x0000000100000c69 test_urcu_multiflavor`test_mf_bp
-> > >     [inlined]
+> > >     frame #3: 0x0000000100000c69 test_urcu_multiflavor`test_mf_bp [inlined]
 > > >     _rcu_read_lock_bp + 21 at urcu-bp.h:211
 > > >     frame #4: 0x0000000100000c54 test_urcu_multiflavor`test_mf_bp + 4 at
 > > >     test_urcu_multiflavor-bp.c:34
@@ -393,17 +394,13 @@ Mathieu
 > > > * thread #1: tid = 0x1c03, 0x00007fff8a5a6131
 > > > libsystem_c.dylib`pthread_getspecific + 9, stop reason = instruction step
 > > > over
-> > >     frame #0: 0x00007fff8a5a6131 libsystem_c.dylib`pthread_getspecific +
-> > >     9
-> > >     frame #1: 0x00000001000288ec
-> > >     liburcu-bp.2.dylib`__tls_access_rcu_reader
+> > >     frame #0: 0x00007fff8a5a6131 libsystem_c.dylib`pthread_getspecific + 9
+> > >     frame #1: 0x00000001000288ec liburcu-bp.2.dylib`__tls_access_rcu_reader
 > > >     +
 > > >     92 at urcu-bp.c:117
-> > >     frame #2: 0x0000000100029bc5 liburcu-bp.2.dylib`rcu_bp_register + 53
-> > >     at
+> > >     frame #2: 0x0000000100029bc5 liburcu-bp.2.dylib`rcu_bp_register + 53 at
 > > >     urcu-bp.c:483
-> > >     frame #3: 0x0000000100000c69 test_urcu_multiflavor`test_mf_bp
-> > >     [inlined]
+> > >     frame #3: 0x0000000100000c69 test_urcu_multiflavor`test_mf_bp [inlined]
 > > >     _rcu_read_lock_bp + 21 at urcu-bp.h:211
 > > >     frame #4: 0x0000000100000c54 test_urcu_multiflavor`test_mf_bp + 4 at
 > > >     test_urcu_multiflavor-bp.c:34
@@ -421,15 +418,12 @@ Mathieu
 > > > * thread #1: tid = 0x1c03, 0x00007fff8a5c03a0
 > > > libsystem_c.dylib`pthread_setspecific, stop reason = breakpoint 3.1
 > > >     frame #0: 0x00007fff8a5c03a0 libsystem_c.dylib`pthread_setspecific
-> > >     frame #1: 0x0000000100028912
-> > >     liburcu-bp.2.dylib`__tls_access_rcu_reader
+> > >     frame #1: 0x0000000100028912 liburcu-bp.2.dylib`__tls_access_rcu_reader
 > > >     +
 > > >     130 at urcu-bp.c:117
-> > >     frame #2: 0x0000000100029bc5 liburcu-bp.2.dylib`rcu_bp_register + 53
-> > >     at
+> > >     frame #2: 0x0000000100029bc5 liburcu-bp.2.dylib`rcu_bp_register + 53 at
 > > >     urcu-bp.c:483
-> > >     frame #3: 0x0000000100000c69 test_urcu_multiflavor`test_mf_bp
-> > >     [inlined]
+> > >     frame #3: 0x0000000100000c69 test_urcu_multiflavor`test_mf_bp [inlined]
 > > >     _rcu_read_lock_bp + 21 at urcu-bp.h:211
 > > >     frame #4: 0x0000000100000c54 test_urcu_multiflavor`test_mf_bp + 4 at
 > > >     test_urcu_multiflavor-bp.c:34
@@ -448,8 +442,7 @@ Mathieu
 > > > * thread #1: tid = 0x1c03, 0x00007fff8a5a6128
 > > > libsystem_c.dylib`pthread_getspecific, stop reason = breakpoint 2.1
 > > >     frame #0: 0x00007fff8a5a6128 libsystem_c.dylib`pthread_getspecific
-> > >     frame #1: 0x00000001000288ec
-> > >     liburcu-bp.2.dylib`__tls_access_rcu_reader
+> > >     frame #1: 0x00000001000288ec liburcu-bp.2.dylib`__tls_access_rcu_reader
 > > >     +
 > > >     92 at urcu-bp.c:117
 > > >     frame #2: 0x0000000100029e46 liburcu-bp.2.dylib`rcu_bp_register
@@ -458,8 +451,7 @@ Mathieu
 > > >     frame #3: 0x0000000100029c70 liburcu-bp.2.dylib`rcu_bp_register + 224
 > > >     at
 > > >     urcu-bp.c:492
-> > >     frame #4: 0x0000000100000c69 test_urcu_multiflavor`test_mf_bp
-> > >     [inlined]
+> > >     frame #4: 0x0000000100000c69 test_urcu_multiflavor`test_mf_bp [inlined]
 > > >     _rcu_read_lock_bp + 21 at urcu-bp.h:211
 > > >     frame #5: 0x0000000100000c54 test_urcu_multiflavor`test_mf_bp + 4 at
 > > >     test_urcu_multiflavor-bp.c:34
@@ -475,8 +467,7 @@ Mathieu
 > > > * thread #1: tid = 0x1c03, 0x00007fff8a5a6131
 > > > libsystem_c.dylib`pthread_getspecific + 9, stop reason = instruction step
 > > > over
-> > >     frame #0: 0x00007fff8a5a6131 libsystem_c.dylib`pthread_getspecific +
-> > >     9
+> > >     frame #0: 0x00007fff8a5a6131 libsystem_c.dylib`pthread_getspecific + 9
 > > > libsystem_c.dylib`pthread_getspecific + 9:
 > > > -> 0x7fff8a5a6131:  ret
 > > > 
@@ -493,12 +484,10 @@ Mathieu
 > > > * thread #1: tid = 0x1c03, 0x00007fff8a5a6128
 > > > libsystem_c.dylib`pthread_getspecific, stop reason = breakpoint 2.1
 > > >     frame #0: 0x00007fff8a5a6128 libsystem_c.dylib`pthread_getspecific
-> > >     frame #1: 0x0000000100004d0c liburcu.2.dylib`__tls_access_rcu_reader
-> > >     +
+> > >     frame #1: 0x0000000100004d0c liburcu.2.dylib`__tls_access_rcu_reader +
 > > >     92
 > > >     at urcu.c:110
-> > >     frame #2: 0x0000000100000c6e test_urcu_multiflavor`test_mf_bp
-> > >     [inlined]
+> > >     frame #2: 0x0000000100000c6e test_urcu_multiflavor`test_mf_bp [inlined]
 > > >     _rcu_read_lock_bp + 26 at urcu-bp.h:213
 > > >     frame #3: 0x0000000100000c54 test_urcu_multiflavor`test_mf_bp + 4 at
 > > >     test_urcu_multiflavor-bp.c:34
@@ -513,13 +502,11 @@ Mathieu
 > > > * thread #1: tid = 0x1c03, 0x0000000100000c71
 > > > test_urcu_multiflavor`test_mf_bp [inlined] _rcu_read_lock_bp + 29 at
 > > > urcu-bp.h:213, stop reason = EXC_BAD_ACCESS (code=1, address=0x0)
-> > >     frame #0: 0x0000000100000c71 test_urcu_multiflavor`test_mf_bp
-> > >     [inlined]
+> > >     frame #0: 0x0000000100000c71 test_urcu_multiflavor`test_mf_bp [inlined]
 > > >     _rcu_read_lock_bp + 29 at urcu-bp.h:213
 > > >    210      if (caa_unlikely(!URCU_TLS(rcu_reader)))
 > > >    211          rcu_bp_register(); /* If not yet registered. */
-> > >    212      cmm_barrier();  /* Ensure the compiler does not reorder us
-> > >    with
+> > >    212      cmm_barrier();  /* Ensure the compiler does not reorder us with
 > > >    mutex */
 > > > -> 213      tmp = URCU_TLS(rcu_reader)->ctr;
 > > >    214      _rcu_read_lock_update(tmp);
@@ -534,18 +521,56 @@ Mathieu
 > > http://www.efficios.com
 > > 
 > 
-> --
+> -- 
 > Mathieu Desnoyers
 > EfficiOS Inc.
 > http://www.efficios.com
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> 
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+> diff --git a/urcu/tls-compat.h b/urcu/tls-compat.h
+> index a44b88d..8ac1ea0 100644
+> --- a/urcu/tls-compat.h
+> +++ b/urcu/tls-compat.h
+> @@ -74,6 +74,10 @@ extern "C" {
+>  
+>  #else /* #ifndef CONFIG_RCU_TLS */
+>  
+> +/*
+> + * The *_1() macros ensure macro parameters are expanded.
+> + */
+> +
+>  # include <pthread.h>
+>  
+>  struct urcu_tls {
+> @@ -82,14 +86,16 @@ struct urcu_tls {
+>  	int init_done;
+>  };
+>  
+> -# define DECLARE_URCU_TLS(type, name)				\
+> +# define DECLARE_URCU_TLS_1(type, name)				\
+>  	type *__tls_access_ ## name(void)
+> +# define DECLARE_URCU_TLS(type, name)				\
+> +	DECLARE_URCU_TLS_1(type, name)
+>  
+>  /*
+>   * Note: we don't free memory at process exit, since it will be dealt
+>   * with by the OS.
+>   */
+> -# define DEFINE_URCU_TLS(type, name)				\
+> +# define DEFINE_URCU_TLS_1(type, name)				\
+>  	type *__tls_access_ ## name(void)			\
+>  	{							\
+>  		static struct urcu_tls __tls_ ## name = {	\
+> @@ -118,7 +124,12 @@ struct urcu_tls {
+>  		return __tls_p;					\
+>  	}
+>  
+> -# define URCU_TLS(name)		(*__tls_access_ ## name())
+> +# define DEFINE_URCU_TLS(type, name)				\
+> +	DEFINE_URCU_TLS_1(type, name)
+> +
+> +# define URCU_TLS_1(name)	(*__tls_access_ ## name())
+> +
+> +# define URCU_TLS(name)		URCU_TLS_1(name)
+>  
+>  #endif	/* #else #ifndef CONFIG_RCU_TLS */
+>  
