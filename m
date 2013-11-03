@@ -1,24 +1,24 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: bug in urcu
-Date: Sun, 3 Nov 2013 14:13:52 +0000 (UTC)
-Message-ID: <1667340498.55993.1383488032176.JavaMail.zimbra__18128.10985507$1383488084$gmane$org@efficios.com>
-References: <5738160F-42EA-4A55-A14B-EF6FAEE94370@tbricks.com>
-	<6644DF0F-88BA-4092-825C-ABBA2A81FD97@tbricks.com>
-	<31742818.47278.1382421362600.JavaMail.zimbra@efficios.com>
-	<8EF7F1B0-56D0-4209-ADBA-D7C9852537D8@tbricks.com>
-	<1732913493.55082.1383313336612.JavaMail.zimbra@efficios.com>
-	<762373048.55095.1383314114453.JavaMail.zimbra@efficios.com>
-	<1062453941.55297.1383337139657.JavaMail.zimbra@efficios.com>
-	<20131103140359.GE3947@linux.vnet.ibm.com>
+From: Salman Rafiq <salman.rafiq@esk.fraunhofer.de>
+Subject: Re: Reading CTF trace using Babeltrace API
+Date: Sun, 3 Nov 2013 20:39:30 +0100
+Message-ID: <E537659DE2B2C54EBD9FC9180F059880395D9265B1__36099.802729632$1383507944$gmane$org@zulu.esk.fraunhofer.de>
+References: <E537659DE2B2C54EBD9FC9180F059880395D85FEA2@zulu.esk.fraunhofer.de>
+	<CA+jJMxtmqSLA9wpyCMxCo5i7k2=ndL_GZNi8Dbw8YsSbQ15qeQ@mail.gmail.com>
+	<E537659DE2B2C54EBD9FC9180F059880395D860010@zulu.esk.fraunhofer.de>
+	<CA+jJMxsMU5u_4m3pUPJ6EBQVKTL_4+PNSj8iHvRcn6CJ=bt6Ag@mail.gmail.com>
+	<439534666.36114.1381274066505.JavaMail.zimbra@efficios.com>
+	<CA+jJMxtK8ZHvXKw3Ea6wxF_6f8_LwmkDahbxCg=rBu3SXjBMWg@mail.gmail.com>,
+	<E537659DE2B2C54EBD9FC9180F059880395D955070@zulu.esk.fraunhofer.de>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mx-relay14-dus.antispameurope.com ([94.100.134.214])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1VcyRC-0005uV-6V
-	for lttng-dev@lists.lttng.org; Sun, 03 Nov 2013 09:14:01 -0500
-In-Reply-To: <20131103140359.GE3947@linux.vnet.ibm.com>
+	(envelope-from <salman.rafiq@esk.fraunhofer.de>) id 1Vd3b5-00083P-CE
+	for lttng-dev@lists.lttng.org; Sun, 03 Nov 2013 14:44:37 -0500
+In-Reply-To: <E537659DE2B2C54EBD9FC9180F059880395D955070@zulu.esk.fraunhofer.de>
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -27,571 +27,382 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: paulmck@linux.vnet.ibm.com
-Cc: lttng-dev@lists.lttng.org, Vladimir Nikulichev <nvs@tbricks.com>
+To: =?iso-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Julien Desfossez <jdesfossez@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
------ Original Message -----
-> From: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
-> To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-> Cc: "Vladimir Nikulichev" <nvs@tbricks.com>, lttng-dev@lists.lttng.org
-> Sent: Sunday, November 3, 2013 9:03:59 AM
-> Subject: Re: [lttng-dev] bug in urcu
-> 
-> On Fri, Nov 01, 2013 at 08:18:59PM +0000, Mathieu Desnoyers wrote:
-> > ----- Original Message -----
-> > > From: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-> > > To: "Vladimir Nikulichev" <nvs@tbricks.com>
-> > > Cc: lttng-dev@lists.lttng.org, "Paul E. McKenney"
-> > > <paulmck@linux.vnet.ibm.com>
-> > > Sent: Friday, November 1, 2013 9:55:14 AM
-> > > Subject: Re: [lttng-dev] bug in urcu
-> > > 
-> > > ----- Original Message -----
-> > > > From: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-> > > > To: "Vladimir Nikulichev" <nvs@tbricks.com>
-> > > > Cc: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
-> > > > Sent: Friday, November 1, 2013 9:42:16 AM
-> > > > Subject: Re: bug in urcu
-> > > > 
-> > > > ----- Original Message -----
-> > > > > From: "Vladimir Nikulichev" <nvs@tbricks.com>
-> > > > > To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-> > > > > Cc: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
-> > > > > Sent: Tuesday, October 22, 2013 1:32:11 PM
-> > > > > Subject: Re: bug in urcu
-> > > > > 
-> > > > > > 
-> > > > > > It looks like an issue with the thread-local storage (TLS)
-> > > > > > compatibility
-> > > > > > layer.
-> > > > > > 
-> > > > > > Can you show me the output of ./configure on that machine ? I'm
-> > > > > > especially
-> > > > > > interested in the output of:
-> > > > > > 
-> > > > > > Thread Local Storage (TLS): __thread.     (example on my machine)
-> > > > > 
-> > > > > It uses pthread_getspecific() by default:
-> > > > 
-> > > > Good catch!
-> > > > 
-> > > > looking at the output of
-> > > > 
-> > > > nm tests/unit/.libs/test_urcu_multiflavor :
-> > > > 
-> > > >                  U __tls_access_rcu_reader
-> > > > 
-> > > > seems to be the issue. We're missing macro expansion in tls-compat.h.
-> > > > With
-> > > > the patch attached:
-> > > > 
-> > > >                  U __tls_access_rcu_reader_bp
-> > > >                  U __tls_access_rcu_reader_mb
-> > > >                  U __tls_access_rcu_reader_memb
-> > > >                  U __tls_access_rcu_reader_sig
-> > > > 
-> > > > which should fix your issue. Can you try it out and let me know if it
-> > > > fixes
-> > > > your problem ?
-> > > 
-> > > Extra question (Paul ? Adding lttng-dev in CC):
-> > > 
-> > > Please note that this affects an unusual configuration of userspace RCU
-> > > (with TLS pthread key fallback), needed for some BSD that don't support
-> > > compiler TLS. Strictly speaking, this should require bumping the URCU
-> > > library soname version major number, because it breaks the ABI presented
-> > > to applications on those unusual configurations. However, since this is
-> > > only for unusual configurations, I wonder if we should bump the soname
-> > > version major number or not ? If we do need to bump the soname, can we
-> > > really do this in a stable version fix (0.7, 0.8), or do we need to push
-> > > a 0.9 out and document the limitation for 0.7 and 0.8 ?
-> > 
-> > I just found a way to keep ABI compatibility for 0.7 and 0.8, and abort()
-> > the application if it's using the old ABI (with symbol clash) when there
-> > are multiple instances of this symbol loaded. This involves tricks with
-> > weak symbols, a constructor, a reference count, and a wrapper around the
-> > bogus symbol, but it works !! Note that it only affects users of urcu that
-> > have _LGPL_SOURCE defined.
-> 
-> Sounds good to me!  ;-)
-> 
-> I trust that you have also added copious comments...
+Hi J=E9r=E9mie,
 
-Yes, especially within the 0.7 and 0.8 branches, within urcu/tls-compat.h:
+Sorry for being a little impatient. =
 
-/*
- * The *_1() macros ensure macro parameters are expanded.
- *
- * __DEFINE_URCU_TLS_GLOBAL and __URCU_TLS_CALL exist for the sole
- * purpose of notifying applications compiled against non-fixed 0.7 and
- * 0.8 userspace RCU headers and using multiple flavors concurrently to
- * recompile against fixed userspace RCU headers.
- */
+Please do let me know if you can provide some information regarding my prev=
+ious email.
 
-as well as
+Thanks!
+Salman
 
-/*
- * Define with and without macro expansion to handle erroneous callers.
- * Trigger an abort() if the caller application uses the clashing symbol
- * if a weak symbol is overridden.
- */
+--
+Salman Rafiq
+Gesch=E4ftsfeld Industrial Communication
+Fraunhofer-Institut  f=FCr Eingebettete Systeme und Kommunikationstechnik E=
+SK
 
-For the master branch, I added a much simpler comment:
+Hansastra=DFe 32 | 80686 M=FCnchen
+Telefon, Fax:  +49 89 547088-356 | +49 89 547088-221
+E-Mail:   salman.rafiq@esk.fraunhofer.de
 
-/*
- * The *_1() macros ensure macro parameters are expanded.
- */
+Internet:
+http://www.esk.fraunhofer.de
+http://www.twitter.com/FraunhoferESK
 
-Thanks,
+________________________________________
+From: Salman Rafiq [salman.rafiq@esk.fraunhofer.de]
+Sent: Wednesday, October 23, 2013 4:50 PM
+To: J=E9r=E9mie Galarneau; Mathieu Desnoyers
+Cc: lttng-dev@lists.lttng.org; Julien Desfossez
+Subject: Re: [lttng-dev] Reading CTF trace using Babeltrace API
 
-Mathieu
+Hello again :)
 
-> 
-> 							Thanx, Paul
-> 
-> > > > > checking whether gcc accepts -g... (cached) yes
-> > > > > checking for gcc option to accept ISO C89... (cached) none needed
-> > > > > checking whether gcc understands -c and -o together... (cached) yes
-> > > > > checking dependency style of gcc... (cached) gcc3
-> > > > > checking whether make sets $(MAKE)... (cached) yes
-> > > > > checking how to print strings... printf
-> > > > > checking for a sed that does not truncate output... /usr/bin/sed
-> > > > > checking for grep that handles long lines and -e... /usr/bin/grep
-> > > > > checking for egrep... /usr/bin/grep -E
-> > > > > checking for fgrep... /usr/bin/grep -F
-> > > > > checking for ld used by gcc...
-> > > > > /usr/llvm-gcc-4.2/libexec/gcc/i686-apple-darwin11/4.2.1/ld
-> > > > > checking if the linker
-> > > > > (/usr/llvm-gcc-4.2/libexec/gcc/i686-apple-darwin11/4.2.1/ld) is GNU
-> > > > > ld...
-> > > > > no
-> > > > > checking for BSD- or MS-compatible name lister (nm)... /usr/bin/nm
-> > > > > checking the name lister (/usr/bin/nm) interface... BSD nm
-> > > > > checking whether ln -s works... yes
-> > > > > checking the maximum length of command line arguments... 196608
-> > > > > checking whether the shell understands some XSI constructs... yes
-> > > > > checking whether the shell understands "+="... yes
-> > > > > checking how to convert x86_64-apple-darwin12.5.0 file names to
-> > > > > x86_64-apple-darwin12.5.0 format... func_convert_file_noop
-> > > > > checking how to convert x86_64-apple-darwin12.5.0 file names to
-> > > > > toolchain
-> > > > > format... func_convert_file_noop
-> > > > > checking for
-> > > > > /usr/llvm-gcc-4.2/libexec/gcc/i686-apple-darwin11/4.2.1/ld
-> > > > > option to reload object files... -r
-> > > > > checking for objdump... no
-> > > > > checking how to recognize dependent libraries... pass_all
-> > > > > checking for dlltool... no
-> > > > > checking how to associate runtime and link libraries... printf %s\n
-> > > > > checking for ar... ar
-> > > > > checking for archiver @FILE support... no
-> > > > > checking for strip... strip
-> > > > > checking for ranlib... ranlib
-> > > > > checking command to parse /usr/bin/nm output from gcc object... ok
-> > > > > checking for sysroot... no
-> > > > > checking for mt... no
-> > > > > checking if : is a manifest tool... no
-> > > > > checking for dsymutil... dsymutil
-> > > > > checking for nmedit... nmedit
-> > > > > checking for lipo... lipo
-> > > > > checking for otool... otool
-> > > > > checking for otool64... no
-> > > > > checking for -single_module linker flag... yes
-> > > > > checking for -exported_symbols_list linker flag... yes
-> > > > > checking for -force_load linker flag... yes
-> > > > > checking how to run the C preprocessor... gcc -E
-> > > > > checking for ANSI C header files... yes
-> > > > > checking for sys/types.h... yes
-> > > > > checking for sys/stat.h... yes
-> > > > > checking for stdlib.h... yes
-> > > > > checking for string.h... yes
-> > > > > checking for memory.h... yes
-> > > > > checking for strings.h... yes
-> > > > > checking for inttypes.h... yes
-> > > > > checking for stdint.h... yes
-> > > > > checking for unistd.h... yes
-> > > > > checking for dlfcn.h... yes
-> > > > > checking for objdir... .libs
-> > > > > checking if gcc supports -fno-rtti -fno-exceptions... no
-> > > > > checking for gcc option to produce PIC... -fno-common -DPIC
-> > > > > checking if gcc PIC flag -fno-common -DPIC works... yes
-> > > > > checking if gcc static flag -static works... no
-> > > > > checking if gcc supports -c -o file.o... yes
-> > > > > checking if gcc supports -c -o file.o... (cached) yes
-> > > > > checking whether the gcc linker
-> > > > > (/usr/llvm-gcc-4.2/libexec/gcc/i686-apple-darwin11/4.2.1/ld) supports
-> > > > > shared
-> > > > > libraries... yes
-> > > > > checking dynamic linker characteristics... darwin12.5.0 dyld
-> > > > > checking how to hardcode library paths into programs... immediate
-> > > > > checking whether stripping libraries is possible... yes
-> > > > > checking if libtool supports shared libraries... yes
-> > > > > checking whether to build shared libraries... yes
-> > > > > checking whether to build static libraries... yes
-> > > > > checking for inline... inline
-> > > > > checking for pid_t... yes
-> > > > > checking for size_t... yes
-> > > > > checking for stdlib.h... (cached) yes
-> > > > > checking for GNU libc compatible malloc... yes
-> > > > > checking for stdlib.h... (cached) yes
-> > > > > checking for unistd.h... (cached) yes
-> > > > > checking for sys/param.h... yes
-> > > > > checking for getpagesize... yes
-> > > > > checking for working mmap... yes
-> > > > > checking for bzero... yes
-> > > > > checking for gettimeofday... yes
-> > > > > checking for munmap... yes
-> > > > > checking for sched_getcpu... no
-> > > > > checking for strtoul... yes
-> > > > > checking for sysconf... yes
-> > > > > checking if architecture really supports the mfence instruction...
-> > > > > yes
-> > > > > checking for sys_futex()... no
-> > > > > checking for cpu_set_t... no
-> > > > > checking whether CPU_ZERO works... no
-> > > > > checking whether CPU_SET works... no
-> > > > > checking for sched_setaffinity... no
-> > > > > checking that generated files are newer than configure... done
-> > > > > configure: creating ./config.status
-> > > > > config.status: creating Makefile
-> > > > > config.status: creating doc/Makefile
-> > > > > config.status: creating doc/examples/Makefile
-> > > > > config.status: creating tests/Makefile
-> > > > > config.status: creating tests/common/Makefile
-> > > > > config.status: creating tests/unit/Makefile
-> > > > > config.status: creating tests/benchmark/Makefile
-> > > > > config.status: creating tests/regression/Makefile
-> > > > > config.status: creating liburcu.pc
-> > > > > config.status: creating liburcu-bp.pc
-> > > > > config.status: creating liburcu-cds.pc
-> > > > > config.status: creating liburcu-qsbr.pc
-> > > > > config.status: creating liburcu-mb.pc
-> > > > > config.status: creating liburcu-signal.pc
-> > > > > config.status: creating config.h
-> > > > > config.status: creating urcu/config.h
-> > > > > config.status: linking urcu/arch/x86.h to urcu/arch.h
-> > > > > config.status: linking urcu/uatomic/x86.h to urcu/uatomic.h
-> > > > > config.status: executing depfiles commands
-> > > > > config.status: executing libtool commands
-> > > > > SMP support enabled.
-> > > > > Thread Local Storage (TLS): pthread_getspecific().
-> > > > > 
-> > > > > 
-> > > > > 
-> > > > > It seems to be another object file/static data issue. When it works
-> > > > > with
-> > > > > rcu_reader, it first initializes it (pthread_key_create) from
-> > > > > liburcu.2,
-> > > > > but
-> > > > > latter stacks come from liburcu-bp.2.
-> > > > > I ran it in debugger with breakpoints at pthread_key_create(),
-> > > > > pthread_getspecific(), pthread_setspecific(). Each hit I recorded key
-> > > > > numbers, values, etc. First time a library assigns the key number
-> > > > > 0x103,
-> > > > > second time 0x104.
-> > > > > 
-> > > > > (lldb) bt
-> > > > > * thread #1: tid = 0x1c03, 0x00007fff8a5c0224
-> > > > > libsystem_c.dylib`pthread_key_create, stop reason = breakpoint 1.1
-> > > > >     frame #0: 0x00007fff8a5c0224 libsystem_c.dylib`pthread_key_create
-> > > > >     frame #1: 0x0000000100004cea
-> > > > >     liburcu.2.dylib`__tls_access_rcu_reader
-> > > > >     +
-> > > > >     58
-> > > > >     at urcu.c:110
-> > > > >     frame #2: 0x0000000100000c5e test_urcu_multiflavor`test_mf_bp
-> > > > >     [inlined]
-> > > > >     _rcu_read_lock_bp + 10 at urcu-bp.h:210
-> > > > >     frame #3: 0x0000000100000c54 test_urcu_multiflavor`test_mf_bp + 4
-> > > > >     at
-> > > > >     test_urcu_multiflavor-bp.c:34
-> > > > >     frame #4: 0x0000000100000989 test_urcu_multiflavor`main() + 9 at
-> > > > >     test_urcu_multiflavor.c:44
-> > > > >     frame #5: 0x00007fff8d8d67e1 libdyld.dylib`start + 1
-> > > > > 
-> > > > > (lldb) register read rdi rsi
-> > > > >      rdi = 0x0000000100008300  __tls_rcu_reader.5085
-> > > > >      rsi = 0x00007fff8a5d2801  libsystem_c.dylib`free
-> > > > > 
-> > > > > ... continue ...
-> > > > > 
-> > > > > 
-> > > > > (lldb) bt
-> > > > > * thread #1: tid = 0x1c03, 0x00007fff8a5a6128
-> > > > > libsystem_c.dylib`pthread_getspecific, stop reason = breakpoint 2.1
-> > > > >     frame #0: 0x00007fff8a5a6128
-> > > > >     libsystem_c.dylib`pthread_getspecific
-> > > > >     frame #1: 0x0000000100004d0c
-> > > > >     liburcu.2.dylib`__tls_access_rcu_reader
-> > > > >     +
-> > > > >     92
-> > > > >     at urcu.c:110
-> > > > >     frame #2: 0x0000000100000c5e test_urcu_multiflavor`test_mf_bp
-> > > > >     [inlined]
-> > > > >     _rcu_read_lock_bp + 10 at urcu-bp.h:210
-> > > > >     frame #3: 0x0000000100000c54 test_urcu_multiflavor`test_mf_bp + 4
-> > > > >     at
-> > > > >     test_urcu_multiflavor-bp.c:34
-> > > > >     frame #4: 0x0000000100000989 test_urcu_multiflavor`main() + 9 at
-> > > > >     test_urcu_multiflavor.c:44
-> > > > >     frame #5: 0x00007fff8d8d67e1 libdyld.dylib`start + 1
-> > > > > (lldb) register read rdi
-> > > > >      rdi = 0x0000000000000103
-> > > > > 
-> > > > > ... continue ...
-> > > > > 
-> > > > > 
-> > > > > (lldb) bt
-> > > > > * thread #1: tid = 0x1c03, 0x00007fff8a5c03a0
-> > > > > libsystem_c.dylib`pthread_setspecific, stop reason = breakpoint 3.1
-> > > > >     frame #0: 0x00007fff8a5c03a0
-> > > > >     libsystem_c.dylib`pthread_setspecific
-> > > > >     frame #1: 0x0000000100004d32
-> > > > >     liburcu.2.dylib`__tls_access_rcu_reader
-> > > > >     +
-> > > > >     130 at urcu.c:110
-> > > > >     frame #2: 0x0000000100000c5e test_urcu_multiflavor`test_mf_bp
-> > > > >     [inlined]
-> > > > >     _rcu_read_lock_bp + 10 at urcu-bp.h:210
-> > > > >     frame #3: 0x0000000100000c54 test_urcu_multiflavor`test_mf_bp + 4
-> > > > >     at
-> > > > >     test_urcu_multiflavor-bp.c:34
-> > > > >     frame #4: 0x0000000100000989 test_urcu_multiflavor`main() + 9 at
-> > > > >     test_urcu_multiflavor.c:44
-> > > > >     frame #5: 0x00007fff8d8d67e1 libdyld.dylib`start + 1
-> > > > > 
-> > > > > 
-> > > > > (lldb) register read rdi rsi
-> > > > >      rdi = 0x0000000000000103
-> > > > >      rsi = 0x00000001001038d0
-> > > > > 
-> > > > > ... continue ...
-> > > > > 
-> > > > > 
-> > > > > (lldb) bt
-> > > > > * thread #1: tid = 0x1c03, 0x00007fff8a5c0224
-> > > > > libsystem_c.dylib`pthread_key_create, stop reason = breakpoint 1.1
-> > > > >     frame #0: 0x00007fff8a5c0224 libsystem_c.dylib`pthread_key_create
-> > > > >     frame #1: 0x00000001000288ca
-> > > > >     liburcu-bp.2.dylib`__tls_access_rcu_reader
-> > > > >     +
-> > > > >     58 at urcu-bp.c:117
-> > > > >     frame #2: 0x0000000100029bc5 liburcu-bp.2.dylib`rcu_bp_register +
-> > > > >     53
-> > > > >     at
-> > > > >     urcu-bp.c:483
-> > > > >     frame #3: 0x0000000100000c69 test_urcu_multiflavor`test_mf_bp
-> > > > >     [inlined]
-> > > > >     _rcu_read_lock_bp + 21 at urcu-bp.h:211
-> > > > >     frame #4: 0x0000000100000c54 test_urcu_multiflavor`test_mf_bp + 4
-> > > > >     at
-> > > > >     test_urcu_multiflavor-bp.c:34
-> > > > >     frame #5: 0x0000000100000989 test_urcu_multiflavor`main() + 9 at
-> > > > >     test_urcu_multiflavor.c:44
-> > > > >     frame #6: 0x00007fff8d8d67e1 libdyld.dylib`start + 1
-> > > > > 
-> > > > > 
-> > > > > static/urcu-bp.h:
-> > > > > 206 static inline void _rcu_read_lock(void)
-> > > > > 207 {
-> > > > > 208     unsigned long tmp;
-> > > > > 209
-> > > > > 210     if (caa_unlikely(!URCU_TLS(rcu_reader)))
-> > > > > 211         rcu_bp_register(); /* If not yet registered. */
-> > > > > 212     cmm_barrier();  /* Ensure the compiler does not reorder us
-> > > > > with
-> > > > > mutex
-> > > > > */
-> > > > > 213     tmp = URCU_TLS(rcu_reader)->ctr;
-> > > > > 214     _rcu_read_lock_update(tmp);
-> > > > > 215 }
-> > > > > 
-> > > > > 
-> > > > > ... continue ...
-> > > > > 
-> > > > > 
-> > > > > (lldb) bt
-> > > > > * thread #1: tid = 0x1c03, 0x00007fff8a5a6131
-> > > > > libsystem_c.dylib`pthread_getspecific + 9, stop reason = instruction
-> > > > > step
-> > > > > over
-> > > > >     frame #0: 0x00007fff8a5a6131
-> > > > >     libsystem_c.dylib`pthread_getspecific +
-> > > > >     9
-> > > > >     frame #1: 0x00000001000288ec
-> > > > >     liburcu-bp.2.dylib`__tls_access_rcu_reader
-> > > > >     +
-> > > > >     92 at urcu-bp.c:117
-> > > > >     frame #2: 0x0000000100029bc5 liburcu-bp.2.dylib`rcu_bp_register +
-> > > > >     53
-> > > > >     at
-> > > > >     urcu-bp.c:483
-> > > > >     frame #3: 0x0000000100000c69 test_urcu_multiflavor`test_mf_bp
-> > > > >     [inlined]
-> > > > >     _rcu_read_lock_bp + 21 at urcu-bp.h:211
-> > > > >     frame #4: 0x0000000100000c54 test_urcu_multiflavor`test_mf_bp + 4
-> > > > >     at
-> > > > >     test_urcu_multiflavor-bp.c:34
-> > > > >     frame #5: 0x0000000100000989 test_urcu_multiflavor`main() + 9 at
-> > > > >     test_urcu_multiflavor.c:44
-> > > > >     frame #6: 0x00007fff8d8d67e1 libdyld.dylib`start + 1
-> > > > > 
-> > > > > (lldb) register read rdi
-> > > > >      rdi = 0x0000000000000104
-> > > > > 
-> > > > > ... continue ...
-> > > > > 
-> > > > > 
-> > > > > (lldb) bt
-> > > > > * thread #1: tid = 0x1c03, 0x00007fff8a5c03a0
-> > > > > libsystem_c.dylib`pthread_setspecific, stop reason = breakpoint 3.1
-> > > > >     frame #0: 0x00007fff8a5c03a0
-> > > > >     libsystem_c.dylib`pthread_setspecific
-> > > > >     frame #1: 0x0000000100028912
-> > > > >     liburcu-bp.2.dylib`__tls_access_rcu_reader
-> > > > >     +
-> > > > >     130 at urcu-bp.c:117
-> > > > >     frame #2: 0x0000000100029bc5 liburcu-bp.2.dylib`rcu_bp_register +
-> > > > >     53
-> > > > >     at
-> > > > >     urcu-bp.c:483
-> > > > >     frame #3: 0x0000000100000c69 test_urcu_multiflavor`test_mf_bp
-> > > > >     [inlined]
-> > > > >     _rcu_read_lock_bp + 21 at urcu-bp.h:211
-> > > > >     frame #4: 0x0000000100000c54 test_urcu_multiflavor`test_mf_bp + 4
-> > > > >     at
-> > > > >     test_urcu_multiflavor-bp.c:34
-> > > > >     frame #5: 0x0000000100000989 test_urcu_multiflavor`main() + 9 at
-> > > > >     test_urcu_multiflavor.c:44
-> > > > >     frame #6: 0x00007fff8d8d67e1 libdyld.dylib`start + 1
-> > > > > 
-> > > > > (lldb) register read rdi rsi
-> > > > >      rdi = 0x0000000000000104
-> > > > >      rsi = 0x00000001001000e0
-> > > > > 
-> > > > > ... continue, skip add_thread() ...
-> > > > > 
-> > > > > 
-> > > > > (lldb) bt
-> > > > > * thread #1: tid = 0x1c03, 0x00007fff8a5a6128
-> > > > > libsystem_c.dylib`pthread_getspecific, stop reason = breakpoint 2.1
-> > > > >     frame #0: 0x00007fff8a5a6128
-> > > > >     libsystem_c.dylib`pthread_getspecific
-> > > > >     frame #1: 0x00000001000288ec
-> > > > >     liburcu-bp.2.dylib`__tls_access_rcu_reader
-> > > > >     +
-> > > > >     92 at urcu-bp.c:117
-> > > > >     frame #2: 0x0000000100029e46 liburcu-bp.2.dylib`rcu_bp_register
-> > > > >     [inlined]
-> > > > >     add_thread + 470 at urcu-bp.c:425
-> > > > >     frame #3: 0x0000000100029c70 liburcu-bp.2.dylib`rcu_bp_register +
-> > > > >     224
-> > > > >     at
-> > > > >     urcu-bp.c:492
-> > > > >     frame #4: 0x0000000100000c69 test_urcu_multiflavor`test_mf_bp
-> > > > >     [inlined]
-> > > > >     _rcu_read_lock_bp + 21 at urcu-bp.h:211
-> > > > >     frame #5: 0x0000000100000c54 test_urcu_multiflavor`test_mf_bp + 4
-> > > > >     at
-> > > > >     test_urcu_multiflavor-bp.c:34
-> > > > >     frame #6: 0x0000000100000989 test_urcu_multiflavor`main() + 9 at
-> > > > >     test_urcu_multiflavor.c:44
-> > > > >     frame #7: 0x00007fff8d8d67e1 libdyld.dylib`start + 1
-> > > > > 
-> > > > > (lldb) register read rdi
-> > > > >      rdi = 0x0000000000000104
-> > > > > 
-> > > > > (lldb) n
-> > > > > Process 59961 stopped
-> > > > > * thread #1: tid = 0x1c03, 0x00007fff8a5a6131
-> > > > > libsystem_c.dylib`pthread_getspecific + 9, stop reason = instruction
-> > > > > step
-> > > > > over
-> > > > >     frame #0: 0x00007fff8a5a6131
-> > > > >     libsystem_c.dylib`pthread_getspecific +
-> > > > >     9
-> > > > > libsystem_c.dylib`pthread_getspecific + 9:
-> > > > > -> 0x7fff8a5a6131:  ret
-> > > > > 
-> > > > > (lldb) register read rax
-> > > > >      rax = 0x00000001001000e0
-> > > > > 
-> > > > > ... next ...
-> > > > > -> 425      URCU_TLS(rcu_reader) = rcu_reader_reg;
-> > > > > ... next ...
-> > > > > ... continue ...
-> > > > > 
-> > > > > 
-> > > > > (lldb) bt
-> > > > > * thread #1: tid = 0x1c03, 0x00007fff8a5a6128
-> > > > > libsystem_c.dylib`pthread_getspecific, stop reason = breakpoint 2.1
-> > > > >     frame #0: 0x00007fff8a5a6128
-> > > > >     libsystem_c.dylib`pthread_getspecific
-> > > > >     frame #1: 0x0000000100004d0c
-> > > > >     liburcu.2.dylib`__tls_access_rcu_reader
-> > > > >     +
-> > > > >     92
-> > > > >     at urcu.c:110
-> > > > >     frame #2: 0x0000000100000c6e test_urcu_multiflavor`test_mf_bp
-> > > > >     [inlined]
-> > > > >     _rcu_read_lock_bp + 26 at urcu-bp.h:213
-> > > > >     frame #3: 0x0000000100000c54 test_urcu_multiflavor`test_mf_bp + 4
-> > > > >     at
-> > > > >     test_urcu_multiflavor-bp.c:34
-> > > > >     frame #4: 0x0000000100000989 test_urcu_multiflavor`main() + 9 at
-> > > > >     test_urcu_multiflavor.c:44
-> > > > >     frame #5: 0x00007fff8d8d67e1 libdyld.dylib`start + 1
-> > > > > (lldb) register read rdi
-> > > > >      rdi = 0x0000000000000103
-> > > > > (lldb) c
-> > > > > Process 59961 resuming
-> > > > > Process 59961 stopped
-> > > > > * thread #1: tid = 0x1c03, 0x0000000100000c71
-> > > > > test_urcu_multiflavor`test_mf_bp [inlined] _rcu_read_lock_bp + 29 at
-> > > > > urcu-bp.h:213, stop reason = EXC_BAD_ACCESS (code=1, address=0x0)
-> > > > >     frame #0: 0x0000000100000c71 test_urcu_multiflavor`test_mf_bp
-> > > > >     [inlined]
-> > > > >     _rcu_read_lock_bp + 29 at urcu-bp.h:213
-> > > > >    210      if (caa_unlikely(!URCU_TLS(rcu_reader)))
-> > > > >    211          rcu_bp_register(); /* If not yet registered. */
-> > > > >    212      cmm_barrier();  /* Ensure the compiler does not reorder
-> > > > >    us
-> > > > >    with
-> > > > >    mutex */
-> > > > > -> 213      tmp = URCU_TLS(rcu_reader)->ctr;
-> > > > >    214      _rcu_read_lock_update(tmp);
-> > > > >    215  }
-> > > > >    216
-> > > > > 
-> > > > > CRASH
-> > > > 
-> > > > --
-> > > > Mathieu Desnoyers
-> > > > EfficiOS Inc.
-> > > > http://www.efficios.com
-> > > > 
-> > > 
-> > > --
-> > > Mathieu Desnoyers
-> > > EfficiOS Inc.
-> > > http://www.efficios.com
-> > > 
-> > > _______________________________________________
-> > > lttng-dev mailing list
-> > > lttng-dev@lists.lttng.org
-> > > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> > > 
-> > 
-> > --
-> > Mathieu Desnoyers
-> > EfficiOS Inc.
-> > http://www.efficios.com
-> > 
-> 
-> 
+While reading Kernel trace events (system calls), I came across an issue re=
+lated to reading the field 'args' inside 'sys_unknown' system call event.
 
--- 
-Mathieu Desnoyers
+Below is the information I get using public babeltrace API's for the event =
+field type.
+Ctf_type_id =3D 8  (CTF_TYPE_ARRAY)
+
+
+But when I try to read the value for the field using the following API
+char * bt_ctf_get_char_array(const struct bt_definition *field);
+
+I receive null value. Also it gives me warning that I am instead extracting=
+ a String.
+[warning] Extracting String
+
+Also, I am unable to read the value using the following API.
+char *bt_ctf_get_string(const struct bt_definition *field);
+
+
+below is the sample event recorded:
+[00002934900435406801] (+0.000009630) sys_unknown: { cpu_id =3D 3 }, { id =
+=3D 277, args =3D [ [0] =3D 22, [1] =3D 0, [2] =3D 4096, [3] =3D 2, [4] =3D=
+ 4096, [5] =3D 5 ] }
+
+AND the event definition:
+event {
+        name =3D sys_unknown;
+        id =3D 2;
+        stream_id =3D 0;
+        fields :=3D struct {
+                integer { size =3D 32; align =3D 8; signed =3D 0; encoding =
+=3D none; base =3D 10; } _id
+                integer { size =3D 64; align =3D 8; signed =3D 0; encoding =
+=3D none; base =3D 10; } _args[6];
+        };
+};
+
+
+Any suggestion related to that will be very helpful.
+Thanks!
+
+Best Regards,
+Salman
+--
+Salman Rafiq
+Gesch=E4ftsfeld Industrial Communication
+Fraunhofer-Institut  f=FCr Eingebettete Systeme und Kommunikationstechnik E=
+SK
+
+Hansastra=DFe 32 | 80686 M=FCnchen
+Telefon, Fax:  +49 89 547088-356 | +49 89 547088-221
+E-Mail:   salman.rafiq@esk.fraunhofer.de
+
+Internet:
+http://www.esk.fraunhofer.de
+http://www.twitter.com/FraunhoferESK
+
+
+-----Original Message-----
+From: jeremie.galarneau@gmail.com [mailto:jeremie.galarneau@gmail.com] On B=
+ehalf Of J=E9r=E9mie Galarneau
+Sent: Mittwoch, 9. Oktober 2013 01:50
+To: Mathieu Desnoyers
+Cc: Salman Rafiq; Julien Desfossez; lttng-dev@lists.lttng.org
+Subject: Re: Reading CTF trace using Babeltrace API
+
+On Tue, Oct 8, 2013 at 7:14 PM, Mathieu Desnoyers <mathieu.desnoyers@effici=
+os.com> wrote:
+> ----- Original Message -----
+>> From: "J=E9r=E9mie Galarneau" <jeremie.galarneau@efficios.com>
+>> To: "Salman Rafiq" <salman.rafiq@esk.fraunhofer.de>
+>> Cc: jdesfossez@efficios.com, lttng-dev@lists.lttng.org, "Mathieu
+>> Desnoyers" <mathieu.desnoyers@efficios.com>
+>> Sent: Tuesday, October 8, 2013 2:52:38 PM
+>> Subject: Re: Reading CTF trace using Babeltrace API
+> [...]
+>>
+>> The problem is that the "id" fields in both struct
+>> event_header_compact and event_header_large acts as a variant's tag
+>> enumeration.
+>>
+>> For instance, if we take a look at the event_header_compact
+>> structure,
+>>
+>> struct event_header_compact {
+>>         enum : uint5_t { compact =3D 0 ... 30, extended =3D 31 } id;
+>>         variant <id> {
+>>                 struct {
+>>                         uint27_clock_monotonic_t timestamp;
+>>                 } compact;
+>>                 struct {
+>>                         uint32_t id;
+>>                         uint64_clock_monotonic_t timestamp;
+>>                 } extended;
+>>         } v;
+>> } align(8);
+>>
+>> The "enum id" field will indicate the event's id if it has a value of
+>> [0, 30]. It also indicates that the "compact" structure is selected
+>> in the variant that follows. If id =3D=3D 31, the "extended" structure is
+>> selected, which means that you should retrieve the "id" field's value
+>> from that structure.
+>>
+>> Since code is worth a thousand words, here's a more complete code
+>> sample to read the id fields.
+>>
+>> while ((ctf_event =3D bt_ctf_iter_read_event(iter))) {
+>>         uint64_t event_id =3D 0;
+>>         const struct bt_definition *stream_event_header_scope =3D
+>>                 bt_ctf_get_top_level_scope(
+>>                         ctf_event, BT_STREAM_EVENT_HEADER);
+>>         const struct bt_definition *id_definition =3D
+>>                 bt_ctf_get_field(ctf_event, stream_event_header_scope,
+>>                                  "id");
+>>         const struct bt_definition *v_definition =3D
+>>                 bt_ctf_get_field(ctf_event, stream_event_header_scope,
+>>                                  "v");
+>>
+>>         /* "id may be an enum, get the underlying integer if it's the ca=
+se */
+>>         if (id_definition &&
+>> bt_ctf_field_type(bt_ctf_get_decl_from_def(id_definition)) =3D=3D
+>> CTF_TYPE_ENUM) {
+>>                 id_definition =3D bt_ctf_get_enum_int(id_definition);
+>>         }
+>>
+>>         /* Check if there is a "v" field and if it contains an "id" fiel=
+d */
+>>         if (v_definition &&
+>> bt_ctf_field_type(bt_ctf_get_decl_from_def(v_definition)) =3D=3D
+>> CTF_TYPE_STRUCT) {
+>>                 struct bt_definition const * const *list =3D NULL;
+>>                 unsigned int count =3D 0;
+>>                 unsigned int i;
+>>
+>>                 ret =3D bt_ctf_get_field_list(ctf_event, v_definition,
+>> &list, &count);
+>>                 if (ret) {
+>>                         goto end;
+>>                 }
+>>
+>>                 for (i =3D 0; i < count; i++) {
+>>                         const char *name =3D
+>> bt_ctf_field_name(list[i]);
+>>
+>>                         if (strcmp("id", name) =3D=3D 0) {
+>>                                 id_definition =3D list[i];
+>>                                 break;
+>>                         }
+>>                 }
+>
+> Instead of doing this bt_ctf_get_field_list() and iteration, can't we sim=
+ply use bt_ctf_get_field() to try getting the struct bt_definition ?
+
+Right. I was under the impression the bt_ctf_get_field() would only work on=
+ scopes, but it's not the case.
+
+Thanks!
+J=E9r=E9mie
+
+>
+> Thanks,
+>
+> Mathieu
+>
+>>         }
+>>
+>>         if (id_definition &&
+>> bt_ctf_field_type(bt_ctf_get_decl_from_def(id_definition)) =3D=3D
+>> CTF_TYPE_INTEGER) {
+>>                 event_id =3D bt_ctf_get_uint64(id_definition);
+>>         }
+>>
+>>         printf("id =3D %" PRIu64 "\n", event_id); }
+>>
+>> Regards,
+>> J=E9r=E9mie
+>>
+>> > Thanks a lot!
+>> >
+>> > Regards,
+>> > Salman
+>> >
+>> > --
+>> > Salman Rafiq
+>> > Gesch=E4ftsfeld Industrial Communication Fraunhofer-Institut  f=FCr
+>> > Eingebettete Systeme und Kommunikationstechnik ESK
+>> >
+>> > Hansastra=DFe 32 | 80686 M=FCnchen
+>> > Telefon, Fax:  +49 89 547088-356 | +49 89 547088-221
+>> > E-Mail:   salman.rafiq@esk.fraunhofer.de
+>> >
+>> > Internet:
+>> > http://www.esk.fraunhofer.de
+>> > http://www.twitter.com/FraunhoferESK
+>> >
+>> >
+>> > -----Original Message-----
+>> > From: jeremie.galarneau@gmail.com
+>> > [mailto:jeremie.galarneau@gmail.com] On Behalf Of J=E9r=E9mie Galarneau
+>> > Sent: Mittwoch, 2. Oktober 2013 20:25
+>> > To: Salman Rafiq
+>> > Cc: jdesfossez@efficios.com; lttng-dev@lists.lttng.org; Mathieu
+>> > Desnoyers
+>> > Subject: Re: Reading CTF trace using Babeltrace API
+>> >
+>> > On Wed, Oct 2, 2013 at 12:55 PM, Salman Rafiq
+>> > <salman.rafiq@esk.fraunhofer.de> wrote:
+>> >> Dear LTTngers,
+>> >>
+>> >> I would like to ask few questions related to the API's for reading
+>> >> CTF traces.
+>> >>
+>> >> 1.  Is there any way to read CTF metadata independently, like we
+>> >> have certain API's to read the events.
+>> >>
+>> >
+>> > Not from the public API, unfortunately.
+>> >
+>> >> 2. There are certain scopes defined in ctf/events.h like:
+>> >>         BT_TRACE_PACKET_HEADER          =3D 0,
+>> >>         BT_STREAM_PACKET_CONTEXT        =3D 1,
+>> >>         BT_STREAM_EVENT_HEADER          =3D 2,
+>> >>         BT_STREAM_EVENT_CONTEXT         =3D 3,
+>> >>         BT_EVENT_CONTEXT                =3D 4,
+>> >>         BT_EVENT_FIELDS                 =3D 5,
+>> >>
+>> >> I could not figure out the way to ready the fields 'id' and
+>> >> 'stream_id', for a particular event while iterating through the trace.
+>> >> Though I can ready the event name using an API and fields using
+>> >> BT_EVENT_FIELDS as a scope.
+>> >> For e.g. consider the
+>> >>
+>> >> event {
+>> >>         name =3D sched_migrate_task;
+>> >>         id =3D 1;
+>> >>         stream_id =3D 0;
+>> >>         fields :=3D struct {
+>> >>                 integer { size =3D 8; align =3D 8; signed =3D 1; enco=
+ding =3D
+>> >>                 UTF8; base =3D 10; } _comm[16];
+>> >>                 integer { size =3D 32; align =3D 8; signed =3D 1; enc=
+oding =3D
+>> >>                 none; base =3D 10; } _tid;
+>> >>                 integer { size =3D 32; align =3D 8; signed =3D 1; enc=
+oding =3D
+>> >>                 none; base =3D 10; } _prio;
+>> >>                 integer { size =3D 32; align =3D 8; signed =3D 1; enc=
+oding =3D
+>> >>                 none; base =3D 10; } _orig_cpu;
+>> >>                 integer { size =3D 32; align =3D 8; signed =3D 1; enc=
+oding =3D
+>> >>                 none; base =3D 10; } _dest_cpu;
+>> >>         };
+>> >> };
+>> >>
+>> >
+>> > The "id" field is part of the BT_STREAM_EVENT_HEADER scope, while
+>> > the "stream_id" field is part of the BT_TRACE_PACKET_HEADER scope.
+>> >
+>> > The code below is adapted from converter/babeltrace.c's
+>> > convert_trace() loop to print both values.
+>> >
+>> > while ((ctf_event =3D bt_ctf_iter_read_event(iter))) {
+>> >
+>> >         const struct bt_definition *stream_event_header_scope =3D
+>> >                 bt_ctf_get_top_level_scope(
+>> >                         ctf_event, BT_STREAM_EVENT_HEADER);
+>> >         const struct bt_definition *id_field =3D
+>> >                 bt_ctf_get_field(
+>> >                         ctf_event, stream_event_header_scope,
+>> > "id");
+>> >
+>> >         printf("id =3D %" PRIu64 "\n", bt_ctf_get_uint64(id_field));
+>> >
+>> >         const struct bt_definition *packet_header_scope =3D
+>> >                 bt_ctf_get_top_level_scope(
+>> >                         ctf_event, BT_TRACE_PACKET_HEADER);
+>> >         const struct bt_definition *stream_id_field =3D
+>> >                 bt_ctf_get_field(
+>> >                         ctf_event, packet_header_scope,
+>> > "stream_id");
+>> >
+>> >         printf("stream_id =3D %" PRIu64 "\n", bt_ctf_get_uint64(
+>> >                        stream_id_field)); [...] }
+>> >
+>> > Regards,
+>> > J=E9r=E9mie
+>> >
+>> >>
+>> >> Any help or suggestion related to this issue will be really appreciat=
+ed.
+>> >> Thanks!
+>> >>
+>> >> Regards,
+>> >> Salman
+>> >>
+>> >> --
+>> >> Salman Rafiq
+>> >> Gesch=E4ftsfeld Industrial Communication Fraunhofer-Institut  f=FCr
+>> >> Eingebettete Systeme und Kommunikationstechnik ESK
+>> >>
+>> >> Hansastra=DFe 32 | 80686 M=FCnchen
+>> >> Telefon, Fax:  +49 89 547088-356 | +49 89 547088-221
+>> >> E-Mail:   salman.rafiq@esk.fraunhofer.de
+>> >>
+>> >> Internet:
+>> >> http://www.esk.fraunhofer.de
+>> >> http://www.twitter.com/FraunhoferESK
+>> >>
+>> >
+>> >
+>> >
+>> > --
+>> > J=E9r=E9mie Galarneau
+>> > EfficiOS Inc.
+>> > http://www.efficios.com
+>>
+>>
+>>
+>> --
+>> J=E9r=E9mie Galarneau
+>> EfficiOS Inc.
+>> http://www.efficios.com
+>>
+>
+> --
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> http://www.efficios.com
+
+
+
+--
+J=E9r=E9mie Galarneau
 EfficiOS Inc.
 http://www.efficios.com
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
