@@ -1,14 +1,23 @@
-From: Matthew Khouzam <matthew.khouzam@ericsson.com>
-Subject: Broken patch for a wrapping libdl
-Date: Mon, 4 Nov 2013 11:55:10 -0500
-Message-ID: <5277D16E.4080603__9795.5884681598$1383584211$gmane$org@ericsson.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: lttng-modules build failure for 3.12-rc6
+Date: Mon, 4 Nov 2013 17:34:43 +0000 (UTC)
+Message-ID: <468459233.56635.1383586483940.JavaMail.zimbra__43836.4381822341$1383586553$gmane$org@efficios.com>
+References: <CAP9ODKoqhtXmS94ZtV8hNPs=kUXWLU9msN+GR7Zf9DQrdQUmSg@mail.gmail.com>
+	<1567008261.54443.1383229577346.JavaMail.zimbra@efficios.com>
+	<CAP9ODKrLtSuFJUKryO9RJ5BHri9d7gL+5vZqOAw-o_OZ7cZn6A@mail.gmail.com>
+	<544819642.54467.1383230288963.JavaMail.zimbra@efficios.com>
+	<CAP9ODKokvCH16Qwq6ftBvWLpRHo+=T_1SggJa-3GOcy7aE2yeA@mail.gmail.com>
+	<1328648078.54590.1383242720354.JavaMail.zimbra@efficios.com>
+	<CAP9ODKrdOhk9o=3yxo0189Xtzgpx=Fo5MLDTq9C7Zt9Y8e2a2Q@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="------------050706020308020106080800"
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from usevmg21.ericsson.net ([198.24.6.65])
+Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <matthew.khouzam@ericsson.com>) id 1VdNRO-0007ra-Dr
-	for lttng-dev@lists.lttng.org; Mon, 04 Nov 2013 11:55:56 -0500
+	(envelope-from <compudj@efficios.com>) id 1VdO36-0006BT-8Q
+	for lttng-dev@lists.lttng.org; Mon, 04 Nov 2013 12:34:56 -0500
+In-Reply-To: <CAP9ODKrdOhk9o=3yxo0189Xtzgpx=Fo5MLDTq9C7Zt9Y8e2a2Q@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -17,251 +26,70 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Otavio Salvador <otavio@ossystems.com.br>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---------------050706020308020106080800
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 7bit
+----- Original Message -----
+> From: "Otavio Salvador" <otavio@ossystems.com.br>
+> To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+> Cc: "lttng-dev" <lttng-dev@lists.lttng.org>
+> Sent: Thursday, October 31, 2013 2:21:21 PM
+> Subject: Re: lttng-modules build failure for 3.12-rc6
+> 
+> On Thu, Oct 31, 2013 at 4:05 PM, Mathieu Desnoyers
+> <mathieu.desnoyers@efficios.com> wrote:
+> ...
+> >> >> Great; can you backport those to stable-2.3? I'd like to send the
+> >> >> update for Yocto including these changes and fix it for us directly
+> >> >> there.
+> >> >
+> >> > Strictly speaking, supporting a new kernel can be seen as a new feature.
+> >> > stable-2.3 was released for 3.11. Moreover, 3.12 kernel is still in rc
+> >> > stage, so things can still change (and even be reverted, this has
+> >> > happened
+> >> > in the past).
+> >> >
+> >> > Unfortunately, we don't add features in the stable branches, only bug
+> >> > fixes. But keep in mind that 2.4 should come within the coming weeks.
+> >>
+> >> Humm in this case stable-2.3 should had a #warning saying it support
+> >> kernels up to 3.11 only. As it does not state it somewhere it seems
+> >> like a fix for me.
+> >>
+> >> I will end doing the backport in  this case, but it is something which
+> >> could be fixed for 2.4 than and include such warning.
+> >
+> > I just discussed this with David and Julien, and here is what we came up
+> > with:
+> >
+> > - when a final kernel release comes up (e.g. 3.12), it makes sense to add
+> > support for it into a stable release if the modifications are small,
+> > - however, it does not make sense to add support for a release candidate
+> > Linux kernel, since those are known to change a lot during the RC cycle,
+> > (chasing a moving target is never fun)
+> >
+> > Therefore, I'd be open to cherry-pick the master commits into stable-2.3
+> > when 3.12 final comes out. I don't promise I'll remember to do so, so a
+> > gentle "ping" when 3.12 final comes out to remind me which commit ID I
+> > should cherry-pick from master into stable-2.3 would be welcome,
+> 
+> Right; it is fine with me. We're close to it as we're in 3.12-rc7.
 
-Hello tracing arch-wizards,
+FYI, I just pushed 3.12 linux kernel support in lttng-modules master and stable-2.3 branches. Please let me know if you see any issue.
 
-I was working a bit on a trace with the cyg_profile stuff, and an issue
-that would arise is when you dynamically lync a library, you don't have
-it's name in the symbol tables of the executable, so you cannot nm it to
-have something human readable in the callstack.
+Thanks!
 
-The easy solution is to wrap libdl, that way you get the handle of the
-lib i dlopen, and from that you get the function name in dlsym, it also
-handles seamlessly if a lib is closed, and another would replace the
-addresses used.
+Mathieu
 
-The only problem is, it doesn't work and I don't have time to get it
-working (in the short term).
+> 
+> --
+> Otavio Salvador                             O.S. Systems
+> http://www.ossystems.com.br        http://code.ossystems.com.br
+> Mobile: +55 (53) 9981-7854            Mobile: +1 (347) 903-9750
+> 
 
-I am posting this beginning idea to see if it generates any
-interest/solutions.
-
-Hope this works out,
-
-Matthew
-
---------------050706020308020106080800
-Content-Type: text/x-patch; name="0001-Add-libdl-wrapper.patch"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment; filename="0001-Add-libdl-wrapper.patch"
-
-From 5c833f68b1e7007b7c5ee425d71bbae79067c695 Mon Sep 17 00:00:00 2001
-From: Matthew Khouzam <matthew.khouzam@ericsson.com>
-Date: Mon, 4 Nov 2013 00:06:32 -0500
-Subject: [PATCH] Add libdl wrapper
-
----
- liblttng-ust-libc-wrapper/Makefile.am    |   13 +++++-
- liblttng-ust-libc-wrapper/lttng-ust-dl.c |   51 ++++++++++++++++++++++
- liblttng-ust-libc-wrapper/run            |    2 +-
- liblttng-ust-libc-wrapper/ust_libc_dl.h  |   70 ++++++++++++++++++++++++++++++
- 4 files changed, 134 insertions(+), 2 deletions(-)
- create mode 100644 liblttng-ust-libc-wrapper/lttng-ust-dl.c
- create mode 100644 liblttng-ust-libc-wrapper/ust_libc_dl.h
-
-diff --git a/liblttng-ust-libc-wrapper/Makefile.am b/liblttng-ust-libc-wrapper/Makefile.am
-index d402d53..2dffecd 100644
---- a/liblttng-ust-libc-wrapper/Makefile.am
-+++ b/liblttng-ust-libc-wrapper/Makefile.am
-@@ -2,7 +2,9 @@ AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_builddir)/include
- AM_CFLAGS = -fno-strict-aliasing
- 
- lib_LTLIBRARIES = liblttng-ust-libc-wrapper.la \
--  liblttng-ust-pthread-wrapper.la
-+  liblttng-ust-pthread-wrapper.la \ 
-+  liblttng-ust-libc-dl-wrapper.la 
-+
- liblttng_ust_libc_wrapper_la_SOURCES = \
- 	lttng-ust-malloc.c \
- 	ust_libc.h
-@@ -10,6 +12,13 @@ liblttng_ust_libc_wrapper_la_LIBADD = \
- 	-L$(top_builddir)/liblttng-ust/.libs \
- 	-llttng-ust
- 
-+liblttng_ust_libc_dl_wrapper_la_SOURCES = \
-+	lttng-ust-dl.c \
-+	ust_libc_dl.h
-+liblttng_ust_libc_dl_wrapper_la_LIBADD = \
-+	-L$(top_builddir)/liblttng-ust/.libs \
-+	-llttng-ust
-+
- liblttng_ust_pthread_wrapper_la_SOURCES = \
- 	lttng-ust-pthread.c \
- 	ust_pthread.h
-@@ -20,10 +29,12 @@ liblttng_ust_pthread_wrapper_la_LIBADD = \
- if LTTNG_UST_BUILD_WITH_LIBDL
- liblttng_ust_libc_wrapper_la_LIBADD += -ldl
- liblttng_ust_pthread_wrapper_la_LIBADD += -ldl
-+liblttng_ust_libc_dl_wrapper_la_LIBADD += -ldl
- endif
- if LTTNG_UST_BUILD_WITH_LIBC_DL
- liblttng_ust_libc_wrapper_la_LIBADD += -lc
- liblttng_ust_pthread_wrapper_la_LIBADD += -lc
-+liblttng_ust_libc_dl_wrapper_la_LIBADD += -lc
- endif
- 
- noinst_SCRIPTS = run
-diff --git a/liblttng-ust-libc-wrapper/lttng-ust-dl.c b/liblttng-ust-libc-wrapper/lttng-ust-dl.c
-new file mode 100644
-index 0000000..637bbac
---- /dev/null
-+++ b/liblttng-ust-libc-wrapper/lttng-ust-dl.c
-@@ -0,0 +1,51 @@
-+/*
-+ * Copyright (C) 2009  Pierre-Marc Fournier
-+ * Copyright (C) 2011  Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-+ *
-+ * This library is free software; you can redistribute it and/or
-+ * modify it under the terms of the GNU Lesser General Public
-+ * License as published by the Free Software Foundation; either
-+ * version 2.1 of the License, or (at your option) any later version.
-+ *
-+ * This library is distributed in the hope that it will be useful,
-+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
-+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-+ * Lesser General Public License for more details.
-+ *
-+ * You should have received a copy of the GNU Lesser General Public
-+ * License along with this library; if not, write to the Free Software
-+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
-+ */
-+
-+#define _GNU_SOURCE
-+#include <dlfcn.h>
-+
-+#define TRACEPOINT_DEFINE
-+#define TRACEPOINT_CREATE_PROBES
-+#include "ust_libc_dl.h"
-+
-+extern void *__libc_dlopen (const char *, int);
-+extern void *__libc_dlsym (void *, const char *);
-+
-+extern void *__libc_dlclose (void *);
-+
-+
-+void *dlopen(const char *filename, int flag){
-+	void* result = __libc_dlopen(filename, flag);
-+	tracepoint(ust_libc, dlopen, filename, flag, result);
-+	return result;
-+}
-+
-+void *dlsym(void *handle, const char *symbol)
-+{
-+	void* result = __libc_dlsym(handle, symbol); 
-+	tracepoint(ust_libc, dlsym, handle, symbol, result);
-+	return result;
-+}
-+
-+int dlclose(void *handle){
-+	int result = __libc_dlclose(handle);
-+	tracepoint(ust_libc, dlclose, handle, result);
-+	return result;
-+}
-+
-diff --git a/liblttng-ust-libc-wrapper/run b/liblttng-ust-libc-wrapper/run
-index 80d4175..f5ea79b 100755
---- a/liblttng-ust-libc-wrapper/run
-+++ b/liblttng-ust-libc-wrapper/run
-@@ -1,3 +1,3 @@
- #!/bin/sh
- 
--LD_VERBOSE=1 LD_PRELOAD=.libs/liblttng-ust-libc-wrapper.so ${*}
-+LD_VERBOSE=1 LD_PRELOAD=".libs/liblttng-ust-libc-wrapper.so .libs/liblttng-ust-libc-dl-wrapper.so" ${*}
-diff --git a/liblttng-ust-libc-wrapper/ust_libc_dl.h b/liblttng-ust-libc-wrapper/ust_libc_dl.h
-new file mode 100644
-index 0000000..387fb7f
---- /dev/null
-+++ b/liblttng-ust-libc-wrapper/ust_libc_dl.h
-@@ -0,0 +1,70 @@
-+#undef TRACEPOINT_PROVIDER
-+#define TRACEPOINT_PROVIDER ust_libc_dl
-+
-+#if !defined(_TRACEPOINT_UST_LIBC_DL_H) || defined(TRACEPOINT_HEADER_MULTI_READ)
-+#define _TRACEPOINT_UST_LIBC_DL_H
-+
-+#ifdef __cplusplus
-+extern "C" {
-+#endif
-+
-+/*
-+ * Copyright (C) 2011  Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-+ *
-+ * Permission is hereby granted, free of charge, to any person obtaining a copy
-+ * of this software and associated documentation files (the "Software"), to deal
-+ * in the Software without restriction, including without limitation the rights
-+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-+ * copies of the Software, and to permit persons to whom the Software is
-+ * furnished to do so, subject to the following conditions:
-+ *
-+ * The above copyright notice and this permission notice shall be included in
-+ * all copies or substantial portions of the Software.
-+ *
-+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-+ * SOFTWARE.
-+ */
-+
-+#include <lttng/tracepoint.h>
-+
-+TRACEPOINT_EVENT(ust_libc, dlopen,
-+	TP_ARGS( const char*, filename, int, flag,void *, opaque_handle),
-+	TP_FIELDS(
-+		ctf_string(filename, filename)
-+		ctf_integer(int, flag, flag)
-+		ctf_integer_hex(void *, opaque_handle, opaque_handle)
-+	)
-+)
-+
-+TRACEPOINT_EVENT(ust_libc, dlsym,
-+	TP_ARGS(void *, opaque_handle, const char*, symbol, void*, result),
-+	TP_FIELDS(
-+		ctf_integer_hex(void *, opaque_handle, opaque_handle)
-+		ctf_string(symbol, symbol)
-+		ctf_integer_hex(void *, result, result)
-+	)
-+)
-+
-+TRACEPOINT_EVENT(ust_libc, dlclose,
-+	TP_ARGS(void *, opaque_handle , int, result),
-+	TP_FIELDS(
-+		ctf_integer_hex(void *, opaque_handle, opaque_handle)
-+		ctf_integer(int, result, result)
-+	)
-+)
-+#endif /* _TRACEPOINT_UST_LIBC_DL_H */
-+
-+#undef TRACEPOINT_INCLUDE
-+#define TRACEPOINT_INCLUDE "./ust_libc_dl.h"
-+
-+/* This part must be outside ifdef protection */
-+#include <lttng/tracepoint-event.h>
-+
-+#ifdef __cplusplus
-+}
-+#endif
 -- 
-1.7.9.5
-
-
---------------050706020308020106080800
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---------------050706020308020106080800--
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
