@@ -1,24 +1,23 @@
-From: Jon Bernard <jbernard@debian.org>
-Subject: Re: LTTng packages in Debian sid out of sync
-Date: Sun, 3 Nov 2013 18:19:21 -0500
-Message-ID: <20131103231921.GA6958__3740.43265260315$1383520826$gmane$org@shaniqua>
-References: <630558869.45441.1382211345502.JavaMail.zimbra@efficios.com>
-	<856849325.45462.1382211994767.JavaMail.zimbra@efficios.com>
-	<20131019211009.GA83292@helmut.local>
-	<300817690.45707.1382242504740.JavaMail.zimbra@efficios.com>
-	<20131020134521.GA97360@helmut.local>
-	<1084047903.45979.1382281219903.JavaMail.zimbra@efficios.com>
-	<20131020160434.GA2011@helmut.local>
+From: "=?iso-8859-1?Q?David_Lindstr=F6m?=" <david.lindstrom@percepio.se>
+Subject: Quick question about discarded events
+Date: Mon, 4 Nov 2013 14:32:02 +0100
+Message-ID: <0933C0CB348B439382FA527A480D7695__36678.1984958381$1383571987$gmane$org@DVDMANDT5>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Type: text/plain; charset="iso-8859-1"; Format="flowed"
 Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from out4-smtp.messagingengine.com ([66.111.4.28])
+Received: from mail-lb0-f176.google.com ([209.85.217.176])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jbernard@debian.org>) id 1Vd6x6-0000fl-J6
-	for lttng-dev@lists.lttng.org; Sun, 03 Nov 2013 18:19:34 -0500
-Content-Disposition: inline
-In-Reply-To: <20131020160434.GA2011@helmut.local>
+	(envelope-from <david.lindstrom@percepio.se>) id 1VdKGJ-0006i2-5r
+	for lttng-dev@lists.lttng.org; Mon, 04 Nov 2013 08:32:13 -0500
+Received: by mail-lb0-f176.google.com with SMTP id z5so5326435lbh.21
+	for <lttng-dev@lists.lttng.org>; Mon, 04 Nov 2013 05:32:05 -0800 (PST)
+Received: from DVDMANDT5 (h185n9.malarenergi.ias.bredband.telia.com.
+	[90.224.212.185])
+	by mx.google.com with ESMTPSA id oc1sm16586855lbb.3.2013.11.04.05.32.03
+	for <lttng-dev@lists.lttng.org>
+	(version=TLSv1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+	Mon, 04 Nov 2013 05:32:04 -0800 (PST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -27,57 +26,20 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, =?iso-8859-1?Q?St=E9phane?= Graber <stgraber@ubuntu.com>, Alexandre Montplaisir <alexmonthy@voxpopuli.im>, lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Jon Bernard <jbernard@debian.org> wrote:
-> * Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
-> > ----- Original Message -----
-> > > From: "Jon Bernard" <jbernard@debian.org>
-> > > To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-> > > Cc: "St=E9phane Graber" <stgraber@ubuntu.com>, "Alexandre Montplaisir=
-" <alexmonthy@voxpopuli.im>,
-> > > lttng-dev@lists.lttng.org
-> > > Sent: Sunday, October 20, 2013 9:45:21 AM
-> > > Subject: Re: LTTng packages in Debian sid out of sync
-> > > =
+Hi everyone,
 
-> > [...]
-> > > =
+If I encounter a trace where a packet contains the events_discarded field =
 
-> > > That is not exactly what I intended to convey, let me be more direct =
-about my
-> > > view.  I completely agree that sid should have 2.3.x immediately.  I =
-also
-> > > agree
-> > > that 2.3 should be targeted for testing, and therefore the next stable
-> > > release.
-> > =
+with a non-zero value, I want to warn/notify the user. Were the events =
 
-> > Allright :) I'm glad we're on the same page, sorry for the misunderstan=
-ding.
-> =
+discarded before the timestamp_begin of the packet, after timestamp_end or =
 
-> No worries.  I'll add that future releases (like the upcoming 2.4) will
-> be prepared and tested all together prior to upload - to hopefully avoid
-> the previous situation/nightmare that I managed to get myself into.
-> =
+in between? I basically want to plot some symbol on my timeline =
 
-> There can still be a sizable amount of work for 2.3 to fully land into
-> testing, so that is my primary focus.  The freeze deadline is fast
-> approaching, so I will be keeping a close eye on things as they
-> progress.  As things settle I'll post status here.
+approximately where the user can expect bad/missing data.
 
-lttng-tools 2.3.0 was just accepted, so on sid (unstable) we should now be =
-at
-version 2.3.0 across the board.  Things look pretty good to me, but if anyo=
-ne
-has time to test the packages and let me know if something's missing, struc=
-tured
-incorrectly, or not behaving as expected - that would be awesome.
-
-Cheers,
-
--- =
-
-Jon
+Mvh
+David Lindstr=F6m =
