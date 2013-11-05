@@ -1,16 +1,23 @@
-From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Subject: Re: Quick question about discarded events
-Date: Tue, 5 Nov 2013 13:38:47 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD267A0FA7__30951.8935544931$1383658777$gmane$org@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+From: "=?UTF-8?Q?David_Lindstr=C3=B6m?=" <david.lindstrom@percepio.se>
+Subject: Tagging traces with arbitrary data (as in custom
+	metadata)
+Date: Tue, 5 Nov 2013 15:15:14 +0100
+Message-ID: <C62A2692A7474EDFAB0AD54DA97D77E8__21677.6966969066$1383660971$gmane$org@DVDMANDT5>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/mixed; boundary="===============0153618935=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
+Received: from mail-la0-f53.google.com ([209.85.215.53])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1VdgqH-0000vw-3n
-	for lttng-dev@lists.lttng.org; Tue, 05 Nov 2013 08:38:52 -0500
-Content-Language: fr-FR
+	(envelope-from <david.lindstrom@percepio.se>) id 1VdhPg-0007ev-17
+	for lttng-dev@lists.lttng.org; Tue, 05 Nov 2013 09:15:25 -0500
+Received: by mail-la0-f53.google.com with SMTP id eh20so4358657lab.12
+	for <lttng-dev@lists.lttng.org>; Tue, 05 Nov 2013 06:15:17 -0800 (PST)
+Received: from DVDMANDT5 (h185n9.malarenergi.ias.bredband.telia.com.
+	[90.224.212.185])
+	by mx.google.com with ESMTPSA id n15sm28137896laa.2.2013.11.05.06.15.16
+	for <lttng-dev@lists.lttng.org>
+	(version=TLSv1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+	Tue, 05 Nov 2013 06:15:17 -0800 (PST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,45 +26,75 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
-Cc: "david.lindstrom@percepio.se" <david.lindstrom@percepio.se>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-------------------------------
-Date: Mon, 4 Nov 2013 14:32:02 +0100
-From: "=3D?iso-8859-1?Q?David_Lindstr=3DF6m?=3D"
-	<david.lindstrom@percepio.se>
+This is a multi-part message in MIME format.
 
-> If I encounter a trace where a packet contains the events_discarded field =
+--===============0153618935==
+Content-Type: multipart/alternative;
+	boundary="----=_NextPart_000_0B87_01CEDA39.D44B9FC0"
 
-> with a non-zero value, I want to warn/notify the user. Were the events =
+This is a multi-part message in MIME format.
 
-> discarded before the timestamp_begin of the packet, after timestamp_end o=
-r =
+------=_NextPart_000_0B87_01CEDA39.D44B9FC0
+Content-Type: text/plain;
+	charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> in between? I basically want to plot some symbol on my timeline =
+Hi, I was wondering if there=E2=80=99s a way to tag a trace with some =
+additional information. A general example would be to include a =
+description of the current experiment. One way to do this currently =
+would be to create a custom lttng-message application with some UST =
+tracepoint and then just log that to a separate channel, but that would =
+be pretty ugly. It would be much cleaner to insert extra fields into the =
+metadata stream. Is something like that possible in current versions of =
+LTTng and/or would it be possible to add it for a future version?
 
-> approximately where the user can expect bad/missing data.
->
-> Mvh
-> David Lindstr?m =
+Mvh
+David Lindstr=C3=B6m
+------=_NextPart_000_0B87_01CEDA39.D44B9FC0
+Content-Type: text/html;
+	charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<HTML><HEAD></HEAD>
+<BODY dir=3Dltr>
+<DIV dir=3Dltr>
+<DIV style=3D"FONT-SIZE: 12pt; FONT-FAMILY: 'Calibri'; COLOR: #000000">
+<DIV>Hi, I was wondering if there=E2=80=99s a way to tag a trace with =
+some additional=20
+information. A general example would be to include a description of the =
+current=20
+experiment. One way to do this currently would be to create a custom=20
+lttng-message application with some UST tracepoint and then just log =
+that to a=20
+separate channel, but that would be pretty ugly. It would be much =
+cleaner to=20
+insert extra fields into the metadata stream. Is something like that =
+possible in=20
+current versions of LTTng and/or would it be possible to add it for a =
+future=20
+version?</DIV>
+<DIV>&nbsp;</DIV>
+<DIV=20
+style=3D"FONT-SIZE: 12pt; FONT-FAMILY: 'Calibri'; COLOR: =
+#000000">Mvh<BR>David=20
+Lindstr=C3=B6m</DIV></DIV></DIV></BODY></HTML>
+
+------=_NextPart_000_0B87_01CEDA39.D44B9FC0--
 
 
-   I do believe the events were lost in between the begin and end packet ti=
-mestamps.
 
-Daniel U. Thibault
-Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
-ntermeasures (SPC)
-Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
-Cyber Security (MCCS)
-R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
- Canada - Valcartier (DRDC Valcartier)
-2459 route de la Bravoure
-Qu=E9bec QC  G3J 1X5
-CANADA
-Vox : (418) 844-4000 x4245
-Fax : (418) 844-4538
-NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-Gouvernement du Canada | Government of Canada
-<http://www.valcartier.drdc-rddc.gc.ca/>
+--===============0153618935==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0153618935==--
