@@ -1,21 +1,17 @@
-From: Paul Thomas <paul.thomas@ise.bc.ca>
-Subject: Re: Building Babeltrace
-Date: Wed, 6 Nov 2013 20:22:47 +0000
-Message-ID: <F98AC8DFC04DC741915F3DFB00515DBEE8972799__34393.1801653982$1383769474$gmane$org@Thetis.ISE-DOM.local>
-References: <F98AC8DFC04DC741915F3DFB00515DBEE8972716@Thetis.ISE-DOM.local>
-	<F98AC8DFC04DC741915F3DFB00515DBEE897275C@Thetis.ISE-DOM.local>
-	<CA+jJMxt1ANnowdofJweazFts5f+Rarnx0gwwmDUh-UyMvRYjVg@mail.gmail.com>
+From: Christian Babeux <christian.babeux@efficios.com>
+Subject: LTTng project development activities November 2013
+Date: Wed, 6 Nov 2013 17:19:45 -0500
+Message-ID: <CAGDH53nLiu8CZnONuONSNz-c2+T0b2phBFx2H4wOZqAuZFHP6A__15299.4679673158$1383776467$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from co9ehsobe005.messaging.microsoft.com ([207.46.163.28]
-	helo=co9outboundpool.messaging.microsoft.com)
+Received: from mail-vb0-f44.google.com ([209.85.212.44])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <paul.thomas@ise.bc.ca>) id 1Ve9d2-0006x9-4h
-	for lttng-dev@lists.lttng.org; Wed, 06 Nov 2013 15:23:09 -0500
-In-Reply-To: <CA+jJMxt1ANnowdofJweazFts5f+Rarnx0gwwmDUh-UyMvRYjVg@mail.gmail.com>
-Content-Language: en-US
+	(envelope-from <christian.babeux@0x80.ca>) id 1VeBS2-0004pu-Sp
+	for lttng-dev@lists.lttng.org; Wed, 06 Nov 2013 17:19:57 -0500
+Received: by mail-vb0-f44.google.com with SMTP id 11so104792vbe.31
+	for <lttng-dev@lists.lttng.org>; Wed, 06 Nov 2013 14:19:45 -0800 (PST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,81 +20,54 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?iso-8859-1?Q?=27J=E9r=E9mie_Galarneau=27?= <jeremie.galarneau@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-> -----Original Message-----
-> From: jeremie.galarneau@gmail.com =
-
-> [mailto:jeremie.galarneau@gmail.com] On Behalf Of J=E9r=E9mie Galarneau
-> Sent: Wednesday, November 06, 2013 11:58 AM
-> To: Paul Thomas
-> Cc: lttng-dev@lists.lttng.org
-> Subject: Re: [lttng-dev] Building Babeltrace
-> =
-
-~~snip~~
-> =
-
-> Let me know if you still can't build babeltrace with the =
-
-> latest master.
-> =
-
-> J=E9r=E9mie
-> =
-
-> >
-> > Thanks,
-> >
-> > Paul
-> >
-> >
-> > _______________________________________________
-> > lttng-dev mailing list
-> > lttng-dev@lists.lttng.org
-> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> =
-
-> =
-
-> =
-
-> =
-
-> -- =
-
-> J=E9r=E9mie Galarneau
-> EfficiOS Inc.
-> http://www.efficios.com
-> =
-
-
-Hi,
-
-Encountered this link error:
-
-Making all in converter
-make[2]: Entering directory `/rt_linux/babeltrace/converter'
-  CC     babeltrace.o
-  CCLD   babeltrace
-../formats/ctf/.libs/libbabeltrace-ctf.so: undefined reference to `g_hash_t=
-able_add'
-../formats/ctf/.libs/libbabeltrace-ctf.so: undefined reference to `g_ptr_ar=
-ray_new_full'
-../formats/ctf/.libs/libbabeltrace-ctf.so: undefined reference to `g_hash_t=
-able_contains'
-collect2: ld returned 1 exit status
-make[2]: *** [babeltrace] Error 1
-make[2]: Leaving directory `/rt_linux/babeltrace/converter'
-make[1]: *** [all-recursive] Error 1
-make[1]: Leaving directory `/rt_linux/babeltrace'
-make: *** [all] Error 2
-
-Good advice, then I will switch to compiling from tarball,
-maybe try rebuilding from git master sometime later.
-
-Thanks,
-
-Paul =
+SGkgbHR0bmctYWZpY2lvbmFkb3MsCgpNeSBhcG9sb2dpZXMgZm9yIHRoZSBtaXNzaW5nIE9jdG9i
+ZXIgc3VtbWFyeSwgdGhlIHByZXZpb3VzIG1vbnRocyBoYXZlCmJlZW4gcHJldHR5IGludGVuc2Uh
+Cgp0bDtkciA6IEEgbG90IG9mIHRhbGtzIGF0IExpbnV4Q29uL0Nsb3VkT3Blbi9UcmFjaW5nIFN1
+bW1pdC9FTENFIG9uCkxUVG5nOyBPbiB0cmFjayBmb3IgbWlkLW5vdmVtYmVyIDIuNCByZWxlYXNl
+IGNhbmRpZGF0ZSB3aXRoIGxpdmUKc3RyZWFtaW5nLCBKYXZhIEpVTCBhbmQgaGVhbHRoIGNoZWNr
+IGluIHJlbGF5ZC9jb25zdW1lcmQ7CgpTZXB0ZW1iZXIgMjAxMyBzdW1tYXJ5OgoKLSBNaW5vciBy
+ZWxlYXNlczoKCmx0dG5nLW1vZHVsZXMgMi4zLjIsIDIuMy4xIGFuZCAyLjIuMjoKCkEgdGltZWtl
+ZXBpbmcgcmVncmVzc2lvbiB3YXMgaW50cm9kdWNlZCBpbiB0aGUgTGludXgga2VybmVsIHZlcnNp
+b24KMy4xMC4xMyB0byAzLjExLjIgd2hpY2ggY291bGQgbGVhZCB0byBoYXJkIHN5c3RlbSBsb2Nr
+dXAgd2hlbiBlbmFibGluZwp0aGUgdHJhY2luZyBvZiBzb21lIHN1YnN5c3RlbXMsIGluY2x1ZGlu
+ZyBidXQgbm90IGxpbWl0ZWQgdG8Kd29ya3F1ZXVlcy4gVGhlIGZpeCBmb3IgdGhpcyBpc3N1ZSB3
+YXMgbWVyZ2VkIGluIGtlcm5lbCAzLjEwLjE0IGFuZAozLjExLjMrLgoKLSBQYXRjaGVzIGZvciB0
+aGUgbGl2ZSBzdHJlYW1pbmcgc3VwcG9ydCBoYXZlIGJlZW4gbWVyZ2VkIGluIGx0dG5nLXRvb2xz
+LgoKT2N0b2JlciAyMDEzIHN1bW1hcnk6CgotIFBhdGNoZXMgZm9yIEphdmEgVXRpbCBMb2dnaW5n
+IChKVUwpIHN1cHBvcnQgaGF2ZSBiZWVuIG1lcmdlZCBpbiBsdHRuZy10b29scy4KCi0gUGF0Y2hl
+cyBmb3IgQ1RGIHdyaXRlciBoYXZlIGJlZW4gbWVyZ2VkIGluIEJhYmVsdHJhY2UuIFRoaXMgbmV3
+IEFQSQphbGxvdyBwcm9ncmFtbWF0aWMgY3JlYXRpb24gb2YgQ1RGIHRyYWNlcy4KCi0gSGVhbHRo
+IGNoZWNrIG92ZXJoYXVsIHBhdGNoZXMgaGF2ZSBiZWVuIG1lcmdlZCBpbiBsdHRuZy10b29scy4g
+SXQgaXMKbm93IHBvc3NpYmxlIHRvIHF1ZXJ5IHRvIGhlYWx0aCBzdGF0dXMgb2YgdGhlIGNvbnN1
+bWVyIGRhZW1vbiBhbmQgdGhlCnJlbGF5IGRhZW1vbi4KCkNvbmZlcmVuY2VzIGFjdGl2aXRpZXM6
+CgoqIEdvb2dsZSBTdW1tZXIgb2YgQ29kZSBNZW50b3IgU3VtbWl0IDIwMTM6CgotIErDqXLDqW1p
+ZSBHYWxhcm5lYXUgYW5kIENocmlzdGlhbiBCYWJldXggd2VudCB0byB0aGUgR1NvQyBNZW50b3IK
+U3VtbWl0IHRvIHJlcHJlc2VudCB0aGUgTFRUbmcgcHJvamVjdC4KCiogTGludXhDb24gRXVyb3Bl
+IDIwMTM6CgotIERhdmlkIEdvdWxldCBnYXZlIGEgdGFsayBlbnRpdGxlZCAiTFRUbmcgYXMgYSBu
+ZXcgbW9uaXRvcmluZyB0b29sIiBbMV0uCgoqIENsb3VkT3BlbiBFdXJvcGUgMjAxMzoKCi0gSnVs
+aWVuIERlc2Zvc3NleiBnYXZlIGEgdGFsayBlbnRpdGxlZCAiRWZmaWNpZW50IGFuZCBMYXJnZS1z
+Y2FsZQpJbmZyYXN0cnVjdHVyZSBNb25pdG9yaW5nIHdpdGggVHJhY2luZyIgWzJdLgoKKiBUcmFj
+aW5nIFN1bW1pdCAyMDEzOgoKLSBBbGV4YW5kcmUgTW9udHBsYWlzaXIgZ2F2ZSBhIHRhbGsgZW50
+aXRsZWQgIkFuYWx5emluZyBhbGwga2luZHMgb2YKdHJhY2VzIHdpdGggVE1GIiBbM10KCi0gTWF0
+aGlldSBEZXNub3llcnMgZ2F2ZSBhIHRhbGsgZW50aXRsZWQgIkxUVG5nOiBDbG91ZCBNb25pdG9y
+aW5nIGFuZApEaXN0cmlidXRpb24gQnVnIFJlcG9ydGluZyB3aXRoIExpdmUgU3RyZWFtaW5nIGFu
+ZCBTbmFwc2hvdHMiIFs0XQoKKiBFbWJlZGRlZCBMaW51eCBDb25mZXJlbmNlIEV1cm9wZSAyMDEz
+OgoKLSBDaHJpc3RpYW4gQmFiZXV4IGdhdmUgYSB0YWxrIGVudGl0bGVkICJCcmlkZ2luZyB0aGUg
+Z2FwIGJldHdlZW4KaGFyZHdhcmUgYW5kIHNvZnR3YXJlIHRyYWNpbmciIFs1XQoKT24tZ29pbmcg
+d29yazoKCldlIGFyZSBvbiB0cmFjayBmb3IgYSBtaWQtbm92ZW1iZXIgMi40IHJlbGVhc2UgY2Fu
+ZGlkYXRlIGluY2x1ZGluZyB0aGUKbGl2ZSBzdHJlYW1pbmcsIEphdmEgSlVMIGxvZ2dpbmcgc3Vw
+cG9ydCBhbmQgaGVhbHRoIGNoZWNrIGluIHRoZQpjb25zdW1lcmQvcmVsYXlkLgoKVGhhbmtzLAoK
+Q2hyaXN0aWFuCgpbMV0gLSBodHRwczovL2V2ZW50cy5saW51eGZvdW5kYXRpb24ub3JnL3NpdGVz
+L2V2ZW50cy9maWxlcy9zbGlkZXMvc2xpZGVzXzIucGRmClsyXSAtIGh0dHBzOi8vZXZlbnRzLmxp
+bnV4Zm91bmRhdGlvbi5vcmcvc2l0ZXMvZXZlbnRzL2ZpbGVzL3NsaWRlcy9wcmVzZW50YXRpb24t
+Y2xvdWRvcGVuLnBkZgpbM10gLSBodHRwOi8vd3d3LnRyYWNpbmdzdW1taXQub3JnL3cvaW1hZ2Vz
+LzIvMmEvVE1GX0FNR19UcmFjaW5nU3VtbWl0MjAxMy5wZGYKWzRdIC0gaHR0cDovL3d3dy50cmFj
+aW5nc3VtbWl0Lm9yZy93L2ltYWdlcy9iL2IzL0x0dG5nLWRlc25veWVycy10cmFjaW5nLXN1bW1p
+dC0yMDEzLnBkZgpbNV0gLSBodHRwOi8vd3d3LnNsaWRlc2hhcmUubmV0L0NocmlzdGlhbkJhYmV1
+eC9zbGlkZXMtMjc5Nzk5MjUKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9y
+ZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1k
+ZXYK
