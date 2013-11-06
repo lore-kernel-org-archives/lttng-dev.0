@@ -1,21 +1,18 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Fix: application SIGBUS when starting in parallel with
-	sessiond
-Date: Wed, 6 Nov 2013 12:18:47 +0000 (UTC)
-Message-ID: <347494784.57942.1383740327175.JavaMail.zimbra__11758.1654376865$1383740382$gmane$org@efficios.com>
+From: David Goulet <dgoulet@efficios.com>
+Subject: Re: Fix: application SIGBUS when starting in parallel
+	with sessiond
+Date: Wed, 6 Nov 2013 10:50:59 -0500
+Message-ID: <20131106155059.GA8133__46154.23146538$1383753130$gmane$org@thessa>
 References: <1078635254.57937.1383740230847.JavaMail.zimbra@efficios.com>
+	<347494784.57942.1383740327175.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed;
-	boundary="----=_Part_57940_2080225266.1383740327170"
+Content-Type: multipart/mixed; boundary="===============2109935139=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from smtp.ini-tech.com ([144.76.53.219])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1Ve24S-0004eh-AQ
-	for lttng-dev@lists.lttng.org; Wed, 06 Nov 2013 07:18:53 -0500
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.efficios.com (Postfix) with ESMTP id 21753340178
-	for <lttng-dev@lists.lttng.org>; Wed,  6 Nov 2013 12:18:51 +0000 (UTC)
-In-Reply-To: <1078635254.57937.1383740230847.JavaMail.zimbra@efficios.com>
+	(envelope-from <dgoulet@efficios.com>) id 1Ve5Ns-0003sq-9k
+	for lttng-dev@lists.lttng.org; Wed, 06 Nov 2013 10:51:14 -0500
+In-Reply-To: <347494784.57942.1383740327175.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,90 +21,179 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: David Goulet <dgoulet@efficios.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-------=_Part_57940_2080225266.1383740327170
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
 
-Should be applied to master, stable-2.3, stable-2.2.
+--===============2109935139==
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="5vNYLRcllDrimb99"
+Content-Disposition: inline
 
-Thanks,
 
-Mathieu
+--5vNYLRcllDrimb99
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+On 06 Nov (12:18:47), Mathieu Desnoyers wrote:
+> Should be applied to master, stable-2.3, stable-2.2.
 
-------=_Part_57940_2080225266.1383740327170
-Content-Type: text/x-patch; name=fix-sigbus-race.patch
-Content-Disposition: attachment; filename=fix-sigbus-race.patch
-Content-Transfer-Encoding: base64
+Merged!
 
-Y29tbWl0IGJlMmJjYzdlOWEwMmU1YmQ3OGRjMjYxNTg4NmFmMzJkZGQ4NzAzMmIKQXV0aG9yOiBN
-YXRoaWV1IERlc25veWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPgpEYXRlOiAg
-IFdlZCBOb3YgNiAwNzowNjo1MSAyMDEzIC0wNTAwCgogICAgRml4OiBhcHBsaWNhdGlvbiBTSUdC
-VVMgd2hlbiBzdGFydGluZyBpbiBwYXJhbGxlbCB3aXRoIHNlc3Npb25kCiAgICAKICAgIFRoZXJl
-IGlzIGEgcmFjZSBiZXR3ZWVuIGFwcGxpY2F0aW9uIHN0YXJ0dXAgYW5kIHNlc3Npb25kIHN0YXJ0
-dXAsIHdoZXJlCiAgICB0aGVyZSBpcyBhbiBpbnRlcm1lZGlhdGUgc3RhdGUgd2hlcmUgYXBwbGlj
-YXRpb25zIGNhbiBTSUdCVVMgaWYgdGhleSBzZWUKICAgIGEgemVyby1zaXplZCBzaG0sIGlmIHRo
-ZSBzaG0gaGFzIGJlZW4gY3JlYXRlZCwgYnV0IG5vdCBmdHJ1bmNhdGVkIHlldC4KICAgIAogICAg
-T24gdGhlIHNlc3Npb25kIHNpZGUsIHdlIG5lZWQgdG8gZW5zdXJlIHRoYXQgdGhlIHNoYXJlZCBt
-ZW1vcnkgaXMKICAgIHdyaXRlYWJsZSBieSBhcHBsaWNhdGlvbnMgYXMgbG9uZyBhcyBpdHMgc2l6
-ZSBpcyAwLCB3aGljaCBhbGxvdwogICAgYXBwbGljYXRpb25zIHRvIHBlcmZvcm0gZnRydW5jYXRl
-IGFuZCBleHRlbmQgaXRzIHNpemUuCiAgICAKICAgIE9uIHRoZSBVU1Qgc2lkZSwgYW5vdGhlciBj
-b21taXQgbmVlZHMgdG8gZW5zdXJlIHRoYXQgVVNUIGNhbiByZWFkIHRoZQogICAgc2hhcmVkIG1l
-bW9yeSBmaWxlIGRlc2NyaXB0b3Igd2l0aCBhIHJlYWQoKSBzeXN0ZW0gY2FsbCBiZWZvcmUgdGhl
-eQogICAgdHJ5IGFjY2Vzc2luZyBpdCB0aHJvdWdoIGEgbWVtb3J5IG1hcCAod2hpY2ggdHJpZ2dl
-cnMgdGhlIFNJR0JVUyBpZgogICAgdGhlIGFjY2VzcyBnb2VzIGJleW9uZCB0aGUgZmlsZSBzaXpl
-KQogICAgCiAgICBTaWduZWQtb2ZmLWJ5OiBNYXRoaWV1IERlc25veWVycyA8bWF0aGlldS5kZXNu
-b3llcnNAZWZmaWNpb3MuY29tPgoKZGlmZiAtLWdpdCBhL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQv
-c2htLmMgYi9zcmMvYmluL2x0dG5nLXNlc3Npb25kL3NobS5jCmluZGV4IGI5NGY0ZWIuLjdiYjUy
-ZDQgMTAwNjQ0Ci0tLSBhL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvc2htLmMKKysrIGIvc3JjL2Jp
-bi9sdHRuZy1zZXNzaW9uZC9zaG0uYwpAQCAtNDgsNDAgKzQ4LDE3IEBAIHN0YXRpYyBpbnQgZ2V0
-X3dhaXRfc2htKGNoYXIgKnNobV9wYXRoLCBzaXplX3QgbW1hcF9zaXplLCBpbnQgZ2xvYmFsKQog
-CS8qIERlZmF1bHQgcGVybWlzc2lvbnMgKi8KIAltb2RlID0gU19JUlVTUiB8IFNfSVdVU1IgfCBT
-X0lSR1JQIHwgU19JV0dSUDsKIAotCS8qIENoYW5nZSBvd25lciBvZiB0aGUgc2htIHBhdGggKi8K
-KwkvKgorCSAqIENoYW5nZSBvd25lciBvZiB0aGUgc2htIHBhdGguCisJICovCiAJaWYgKGdsb2Jh
-bCkgewotCQlyZXQgPSBjaG93bihzaG1fcGF0aCwgMCwgMCk7Ci0JCWlmIChyZXQgPCAwKSB7Ci0J
-CQlpZiAoZXJybm8gIT0gRU5PRU5UKSB7Ci0JCQkJUEVSUk9SKCJjaG93biB3YWl0IHNobSIpOwot
-CQkJCWdvdG8gZXJyb3I7Ci0JCQl9Ci0JCX0KLQogCQkvKgotCQkgKiBJZiBnbG9iYWwgc2Vzc2lv
-biBkYWVtb24sIGFueSBhcHBsaWNhdGlvbiBjYW4gcmVnaXN0ZXIgc28gdGhlIHNobQotCQkgKiBu
-ZWVkcyB0byBiZSBzZXQgaW4gcmVhZC1vbmx5IG1vZGUgZm9yIG90aGVycy4KKwkJICogSWYgZ2xv
-YmFsIHNlc3Npb24gZGFlbW9uLCBhbnkgYXBwbGljYXRpb24gY2FuCisJCSAqIHJlZ2lzdGVyLiBN
-YWtlIGl0IGluaXRpYWxseSB3cml0ZWFibGUgc28gYXBwbGljYXRpb25zCisJCSAqIHJlZ2lzdGVy
-aW5nIGNvbmN1cnJlbnRseSBjYW4gZG8gZnRydW5jYXRlKCkgYnkKKwkJICogdGhlbXNlbHZlcy4K
-IAkJICovCi0JCW1vZGUgfD0gU19JUk9USDsKLQl9IGVsc2UgewotCQlyZXQgPSBjaG93bihzaG1f
-cGF0aCwgZ2V0dWlkKCksIGdldGdpZCgpKTsKLQkJaWYgKHJldCA8IDApIHsKLQkJCWlmIChlcnJu
-byAhPSBFTk9FTlQpIHsKLQkJCQlQRVJST1IoImNob3duIHdhaXQgc2htIik7Ci0JCQkJZ290byBl
-cnJvcjsKLQkJCX0KLQkJfQotCX0KLQotCS8qCi0JICogU2V0IHBlcm1pc3Npb25zIHRvIHRoZSBz
-aG0gZXZlbiBpZiB3ZSBkaWQgbm90IGNyZWF0ZSB0aGUgc2htLgotCSAqLwotCXJldCA9IGNobW9k
-KHNobV9wYXRoLCBtb2RlKTsKLQlpZiAocmV0IDwgMCkgewotCQlpZiAoZXJybm8gIT0gRU5PRU5U
-KSB7Ci0JCQlQRVJST1IoImNobW9kIHdhaXQgc2htIik7Ci0JCQlnb3RvIGVycm9yOwotCQl9CisJ
-CW1vZGUgfD0gU19JUk9USCB8IFNfSVdPVEg7CiAJfQogCiAJLyoKQEAgLTEwNywxMyArODQsMzIg
-QEAgc3RhdGljIGludCBnZXRfd2FpdF9zaG0oY2hhciAqc2htX3BhdGgsIHNpemVfdCBtbWFwX3Np
-emUsIGludCBnbG9iYWwpCiAJfQogCiAjaWZuZGVmIF9fRnJlZUJTRF9fCi0JcmV0ID0gZmNobW9k
-KHdhaXRfc2htX2ZkLCBtb2RlKTsKLQlpZiAocmV0IDwgMCkgewotCQlQRVJST1IoImZjaG1vZCIp
-OwotCQlleGl0KEVYSVRfRkFJTFVSRSk7CisJaWYgKGdsb2JhbCkgeworCQlyZXQgPSBmY2hvd24o
-d2FpdF9zaG1fZmQsIDAsIDApOworCQlpZiAocmV0IDwgMCkgeworCQkJUEVSUk9SKCJmY2hvd24i
-KTsKKwkJCWV4aXQoRVhJVF9GQUlMVVJFKTsKKwkJfQorCQkvKgorCQkgKiBJZiBnbG9iYWwgc2Vz
-c2lvbiBkYWVtb24sIGFueSBhcHBsaWNhdGlvbiBjYW4KKwkJICogcmVnaXN0ZXIgc28gdGhlIHNo
-bSBuZWVkcyB0byBiZSBzZXQgaW4gcmVhZC1vbmx5IG1vZGUKKwkJICogZm9yIG90aGVycy4KKwkJ
-ICovCisJCW1vZGUgJj0gflNfSVdPVEg7CisJCXJldCA9IGZjaG1vZCh3YWl0X3NobV9mZCwgbW9k
-ZSk7CisJCWlmIChyZXQgPCAwKSB7CisJCQlQRVJST1IoImZjaG1vZCIpOworCQkJZXhpdChFWElU
-X0ZBSUxVUkUpOworCQl9CisJfSBlbHNlIHsKKwkJcmV0ID0gZmNob3duKHdhaXRfc2htX2ZkLCBn
-ZXR1aWQoKSwgZ2V0Z2lkKCkpOworCQlpZiAocmV0IDwgMCkgeworCQkJUEVSUk9SKCJmY2hvd24i
-KTsKKwkJCWV4aXQoRVhJVF9GQUlMVVJFKTsKKwkJfQogCX0KICNlbHNlCi0jd2FybmluZyAiRnJl
-ZUJTRCBkb2VzIG5vdCBzdXBwb3J0IHNldHRpbmcgZmlsZSBtb2RlIG9uIHNobSBGRC4gUmVtZW1i
-ZXIgdGhhdCBmb3Igc2VjdXJlIHVzZSwgbHR0bmctc2Vzc2lvbmQgc2hvdWxkIGJlIHN0YXJ0ZWQg
-YmVmb3JlIGFwcGxpY2F0aW9ucyBsaW5rZWQgb24gbHR0bmctdXN0LiIKKyN3YXJuaW5nICJGcmVl
-QlNEIGRvZXMgbm90IHN1cHBvcnQgc2V0dGluZyBmaWxlIG1vZGUgb24gc2htIEZELiIKICNlbmRp
-ZgogCiAJREJHKCJHb3QgdGhlIHdhaXQgc2htIGZkICVkIiwgd2FpdF9zaG1fZmQpOwo=
-------=_Part_57940_2080225266.1383740327170
+>=20
+> Thanks,
+>=20
+> Mathieu
+>=20
+> --=20
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> http://www.efficios.com
+
+> commit be2bcc7e9a02e5bd78dc2615886af32ddd87032b
+> Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> Date:   Wed Nov 6 07:06:51 2013 -0500
+>=20
+>     Fix: application SIGBUS when starting in parallel with sessiond
+>    =20
+>     There is a race between application startup and sessiond startup, whe=
+re
+>     there is an intermediate state where applications can SIGBUS if they =
+see
+>     a zero-sized shm, if the shm has been created, but not ftruncated yet.
+>    =20
+>     On the sessiond side, we need to ensure that the shared memory is
+>     writeable by applications as long as its size is 0, which allow
+>     applications to perform ftruncate and extend its size.
+>    =20
+>     On the UST side, another commit needs to ensure that UST can read the
+>     shared memory file descriptor with a read() system call before they
+>     try accessing it through a memory map (which triggers the SIGBUS if
+>     the access goes beyond the file size)
+>    =20
+>     Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+>=20
+> diff --git a/src/bin/lttng-sessiond/shm.c b/src/bin/lttng-sessiond/shm.c
+> index b94f4eb..7bb52d4 100644
+> --- a/src/bin/lttng-sessiond/shm.c
+> +++ b/src/bin/lttng-sessiond/shm.c
+> @@ -48,40 +48,17 @@ static int get_wait_shm(char *shm_path, size_t mmap_s=
+ize, int global)
+>  	/* Default permissions */
+>  	mode =3D S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP;
+> =20
+> -	/* Change owner of the shm path */
+> +	/*
+> +	 * Change owner of the shm path.
+> +	 */
+>  	if (global) {
+> -		ret =3D chown(shm_path, 0, 0);
+> -		if (ret < 0) {
+> -			if (errno !=3D ENOENT) {
+> -				PERROR("chown wait shm");
+> -				goto error;
+> -			}
+> -		}
+> -
+>  		/*
+> -		 * If global session daemon, any application can register so the shm
+> -		 * needs to be set in read-only mode for others.
+> +		 * If global session daemon, any application can
+> +		 * register. Make it initially writeable so applications
+> +		 * registering concurrently can do ftruncate() by
+> +		 * themselves.
+>  		 */
+> -		mode |=3D S_IROTH;
+> -	} else {
+> -		ret =3D chown(shm_path, getuid(), getgid());
+> -		if (ret < 0) {
+> -			if (errno !=3D ENOENT) {
+> -				PERROR("chown wait shm");
+> -				goto error;
+> -			}
+> -		}
+> -	}
+> -
+> -	/*
+> -	 * Set permissions to the shm even if we did not create the shm.
+> -	 */
+> -	ret =3D chmod(shm_path, mode);
+> -	if (ret < 0) {
+> -		if (errno !=3D ENOENT) {
+> -			PERROR("chmod wait shm");
+> -			goto error;
+> -		}
+> +		mode |=3D S_IROTH | S_IWOTH;
+>  	}
+> =20
+>  	/*
+> @@ -107,13 +84,32 @@ static int get_wait_shm(char *shm_path, size_t mmap_=
+size, int global)
+>  	}
+> =20
+>  #ifndef __FreeBSD__
+> -	ret =3D fchmod(wait_shm_fd, mode);
+> -	if (ret < 0) {
+> -		PERROR("fchmod");
+> -		exit(EXIT_FAILURE);
+> +	if (global) {
+> +		ret =3D fchown(wait_shm_fd, 0, 0);
+> +		if (ret < 0) {
+> +			PERROR("fchown");
+> +			exit(EXIT_FAILURE);
+> +		}
+> +		/*
+> +		 * If global session daemon, any application can
+> +		 * register so the shm needs to be set in read-only mode
+> +		 * for others.
+> +		 */
+> +		mode &=3D ~S_IWOTH;
+> +		ret =3D fchmod(wait_shm_fd, mode);
+> +		if (ret < 0) {
+> +			PERROR("fchmod");
+> +			exit(EXIT_FAILURE);
+> +		}
+> +	} else {
+> +		ret =3D fchown(wait_shm_fd, getuid(), getgid());
+> +		if (ret < 0) {
+> +			PERROR("fchown");
+> +			exit(EXIT_FAILURE);
+> +		}
+>  	}
+>  #else
+> -#warning "FreeBSD does not support setting file mode on shm FD. Remember=
+ that for secure use, lttng-sessiond should be started before applications =
+linked on lttng-ust."
+> +#warning "FreeBSD does not support setting file mode on shm FD."
+>  #endif
+> =20
+>  	DBG("Got the wait shm fd %d", wait_shm_fd);
+
+
+--5vNYLRcllDrimb99
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.15 (GNU/Linux)
+
+iQF8BAEBAgBmBQJSemVjXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
+ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
+MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02a4QIAJhagWw+52Qy6Ar30JNZ0T5v
+p3CNqGqh8TWsU+E0j1oBHjjLLiHnKrCXogbSXmAwPx1kJOovNuRf8XHmqlMT6nC0
++2WEKCSSjbkRtfGKpNRNLhqewEhwbctt2t8R0pn17aW6OvvCprWvZilbaIW+MLxV
+Pljlb3eun/L8Q5FwaD8QMGhDh8qSbFtfTCl3yaDY1TggDKM+DrTv1sly7nyFr8W1
+2HdO9cow9ibqTfE6KrQQLSPWV6F1cwgVh4bni7jrtwKNNrZMmNo5mazvdw0PQBEu
+kUhzJdlp4boQ1c53lHFG/ByoOobX0xALwswtkqwlqBtQzcuzU2Z8hEprVDAN9Ms=
+=NSeB
+-----END PGP SIGNATURE-----
+
+--5vNYLRcllDrimb99--
+
+
+--===============2109935139==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -118,4 +204,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
-------=_Part_57940_2080225266.1383740327170--
+--===============2109935139==--
