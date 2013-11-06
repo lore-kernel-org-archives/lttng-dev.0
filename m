@@ -1,16 +1,24 @@
-From: Shreyas Joshi <shreyasjoshi11@gmail.com>
-Subject: Is lttctl being depriciated now?
-Date: Wed, 6 Nov 2013 19:01:08 +0530
-Message-ID: <CAP0pN0uciSNXNmF=+Obdg2soDi2QESVL3hFzin5qdrL=8W8+RQ__21063.498981721$1383762833$gmane$org@mail.gmail.com>
+From: Paul Thomas <paul.thomas@ise.bc.ca>
+Subject: Unable to configure babeltrace, lttv
+Date: Wed, 6 Nov 2013 18:09:18 +0000
+Message-ID: <F98AC8DFC04DC741915F3DFB00515DBEE8972716__49306.6041650765$1383762918$gmane$org@Thetis.ISE-DOM.local>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0634537941=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f174.google.com ([209.85.223.174])
+Received: from ch1ehsobe005.messaging.microsoft.com ([216.32.181.185]
+	helo=ch1outboundpool.messaging.microsoft.com)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <shreyasjoshi11@gmail.com>) id 1Ve3CU-0001t3-7W
-	for lttng-dev@lists.lttng.org; Wed, 06 Nov 2013 08:31:16 -0500
-Received: by mail-ie0-f174.google.com with SMTP id qd12so17256388ieb.5
-	for <lttng-dev@lists.lttng.org>; Wed, 06 Nov 2013 05:31:08 -0800 (PST)
+	(envelope-from <paul.thomas@ise.bc.ca>) id 1Ve7Xo-0005kx-1c
+	for lttng-dev@lists.lttng.org; Wed, 06 Nov 2013 13:09:37 -0500
+Received: from mail35-ch1 (localhost [127.0.0.1])	by mail35-ch1-R.bigfish.com
+	(Postfix) with ESMTP id E484840031D	for <lttng-dev@lists.lttng.org>;
+	Wed,  6 Nov 2013 18:09:22 +0000 (UTC)
+Received: from CH1EHSMHS013.bigfish.com (snatpool1.int.messaging.microsoft.com
+	[10.43.68.242])	by mail35-ch1.bigfish.com (Postfix) with ESMTP id
+	22FFC1C00C2
+	for <lttng-dev@lists.lttng.org>; Wed,  6 Nov 2013 18:09:21 +0000 (UTC)
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,63 +27,21 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: "'lttng-dev@lists.lttng.org'" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0634537941==
-Content-Type: multipart/alternative; boundary=047d7bdc10ec6bb44004ea82294a
 
---047d7bdc10ec6bb44004ea82294a
-Content-Type: text/plain; charset=ISO-8859-1
+Running ./bootstrap for babeltrace or lttv produces
+a fatal message, namely, 
 
-Hi,
+configure.ac:48: warning: macro `AM_PATH_GTK_2_0' not found in library
 
-I don't see the download link for the
+I am running Debian:
+Linux debian-rt 2.6.31.51 #1 SMP PREEMPT i686 GNU/Linux
 
-lttctl. Is it being depreciated now?
+Can you advise me about this problem, or what steps I should
+take to find an answer to this problem?
 
-Here, I don't see the lttclt -
-http://lttng.org/download
+Thanks,
 
-Can you please comment on it?
-
-Do I need to have only three tools and their dependencies?
-
-1) lttng-tools
-
-2)lttng-ust
-
-3) lttng-modules
-
-
-Looks like there is no need of lttcl. Can you please throw some light on it?
-
-
--- 
-Thanks & regards
-
-Shreyas Joshi
-
---047d7bdc10ec6bb44004ea82294a
-Content-Type: text/html; charset=ISO-8859-1
-
-<div dir="ltr">Hi,<br><br>I don&#39;t see the download link for the <br clear="all"><pre>lttctl. Is it being depreciated now?<br><br></pre><pre>Here, I don&#39;t see the lttclt - <br><a href="http://lttng.org/download">http://lttng.org/download</a> <br>
-<br></pre><pre>Can you please comment on it?<br><br></pre><pre>Do I need to have only three tools and their dependencies?<br><br></pre><pre>1) lttng-tools<br></pre><pre>2)lttng-ust<br></pre><pre>3) lttng-modules<br><br><br>
-</pre><pre>Looks like there is no need of lttcl. Can you please throw some light on it?<br></pre><div><br>-- <br>Thanks &amp; regards<br><br>Shreyas Joshi
-</div></div>
-
---047d7bdc10ec6bb44004ea82294a--
-
-
---===============0634537941==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0634537941==--
+Paul
