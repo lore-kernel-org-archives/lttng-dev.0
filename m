@@ -1,7 +1,7 @@
-From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+From: Paul Thomas <paul.thomas@ise.bc.ca>
 Subject: Re: Building Babeltrace
-Date: Wed, 6 Nov 2013 15:17:35 -0500
-Message-ID: <CA+jJMxujbk_c2YxHM1NXLssB4irRz2maAWHYU3eDApAJTtRCig__19881.7641394728$1383769131$gmane$org@mail.gmail.com>
+Date: Wed, 6 Nov 2013 20:22:47 +0000
+Message-ID: <F98AC8DFC04DC741915F3DFB00515DBEE8972799__34393.1801653982$1383769474$gmane$org@Thetis.ISE-DOM.local>
 References: <F98AC8DFC04DC741915F3DFB00515DBEE8972716@Thetis.ISE-DOM.local>
 	<F98AC8DFC04DC741915F3DFB00515DBEE897275C@Thetis.ISE-DOM.local>
 	<CA+jJMxt1ANnowdofJweazFts5f+Rarnx0gwwmDUh-UyMvRYjVg@mail.gmail.com>
@@ -9,13 +9,13 @@ Mime-Version: 1.0
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qa0-f45.google.com ([209.85.216.45])
+Received: from co9ehsobe005.messaging.microsoft.com ([207.46.163.28]
+	helo=co9outboundpool.messaging.microsoft.com)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1Ve9Xp-0005s3-3B
-	for lttng-dev@lists.lttng.org; Wed, 06 Nov 2013 15:17:46 -0500
-Received: by mail-qa0-f45.google.com with SMTP id hu16so2484360qab.11
-	for <lttng-dev@lists.lttng.org>; Wed, 06 Nov 2013 12:17:35 -0800 (PST)
+	(envelope-from <paul.thomas@ise.bc.ca>) id 1Ve9d2-0006x9-4h
+	for lttng-dev@lists.lttng.org; Wed, 06 Nov 2013 15:23:09 -0500
 In-Reply-To: <CA+jJMxt1ANnowdofJweazFts5f+Rarnx0gwwmDUh-UyMvRYjVg@mail.gmail.com>
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,96 +24,81 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Paul Thomas <paul.thomas@ise.bc.ca>
+To: =?iso-8859-1?Q?=27J=E9r=E9mie_Galarneau=27?= <jeremie.galarneau@efficios.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Just as a heads-up, you may want to use the latest tarball release
-since it appears that I have used glib functions that were not
-available in glib 2.22. I'm currently working on a patch to address
-this problem.
+> -----Original Message-----
+> From: jeremie.galarneau@gmail.com =
 
-Cheers,
-J=E9r=E9mie
+> [mailto:jeremie.galarneau@gmail.com] On Behalf Of J=E9r=E9mie Galarneau
+> Sent: Wednesday, November 06, 2013 11:58 AM
+> To: Paul Thomas
+> Cc: lttng-dev@lists.lttng.org
+> Subject: Re: [lttng-dev] Building Babeltrace
+> =
 
-On Wed, Nov 6, 2013 at 2:57 PM, J=E9r=E9mie Galarneau
-<jeremie.galarneau@efficios.com> wrote:
-> On Wed, Nov 6, 2013 at 2:00 PM, Paul Thomas <paul.thomas@ise.bc.ca> wrote:
->>
->> Hello:
->>
->> I get the following when building babeltrace from git:
->>
->> make[4]: Entering directory `/rt_linux/babeltrace/formats/ctf/writer'
->>   CC     writer.lo
->> writer.c: In function 'bt_ctf_writer_create':
->> writer.c:118: error: 'O_DIRECTORY' undeclared (first use in this functio=
-n)
->> writer.c:118: error: (Each undeclared identifier is reported only once
->> writer.c:118: error: for each function it appears in.)
->> writer.c: In function 'validate_identifier':
->> writer.c:564: warning: implicit declaration of function 'g_hash_table_co=
-ntains'
->> writer.c: In function 'writer_init':
->> writer.c:741: warning: implicit declaration of function 'g_hash_table_ad=
-d'
->> make[4]: *** [writer.lo] Error 1
->> make[4]: Leaving directory `/rt_linux/babeltrace/formats/ctf/writer'
->> make[3]: *** [all-recursive] Error 1
->> make[3]: Leaving directory `/rt_linux/babeltrace/formats/ctf'
->> make[2]: *** [all-recursive] Error 1
->> make[2]: Leaving directory `/rt_linux/babeltrace/formats'
->> make[1]: *** [all-recursive] Error 1
->> make[1]: Leaving directory `/rt_linux/babeltrace'
->> make: *** [all] Error 2
->>
->> I am running Debian:  gcc/g++ 4.4.5-8
->> Linux debian-rt 2.6.31.51 #1 SMP PREEMPT i686 GNU/Linux
->>
->> Should I be compiling from a tarball instead?
->>
->
-> Thanks for reporting. This commit should fix the error.
->
-> commit 1b8180b91647e07b243c472e1f0c6ae198f82585
-> Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> Date:   Wed Nov 6 14:52:59 2013 -0500
->
->     ctf writer BSD compatibily: remove O_DIRECTORY
->
->     Not strictly needed, especially since we are creating the directory
->     ourself.
->
->     Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
->
->
-> Let me know if you still can't build babeltrace with the latest master.
->
+~~snip~~
+> =
+
+> Let me know if you still can't build babeltrace with the =
+
+> latest master.
+> =
+
 > J=E9r=E9mie
->
->>
->> Thanks,
->>
->> Paul
->>
->>
->> _______________________________________________
->> lttng-dev mailing list
->> lttng-dev@lists.lttng.org
->> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
->
->
->
-> --
+> =
+
+> >
+> > Thanks,
+> >
+> > Paul
+> >
+> >
+> > _______________________________________________
+> > lttng-dev mailing list
+> > lttng-dev@lists.lttng.org
+> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> =
+
+> =
+
+> =
+
+> =
+
+> -- =
+
 > J=E9r=E9mie Galarneau
 > EfficiOS Inc.
 > http://www.efficios.com
+> =
 
 
+Hi,
 
--- =
+Encountered this link error:
 
-J=E9r=E9mie Galarneau
-EfficiOS Inc.
-http://www.efficios.com
+Making all in converter
+make[2]: Entering directory `/rt_linux/babeltrace/converter'
+  CC     babeltrace.o
+  CCLD   babeltrace
+../formats/ctf/.libs/libbabeltrace-ctf.so: undefined reference to `g_hash_t=
+able_add'
+../formats/ctf/.libs/libbabeltrace-ctf.so: undefined reference to `g_ptr_ar=
+ray_new_full'
+../formats/ctf/.libs/libbabeltrace-ctf.so: undefined reference to `g_hash_t=
+able_contains'
+collect2: ld returned 1 exit status
+make[2]: *** [babeltrace] Error 1
+make[2]: Leaving directory `/rt_linux/babeltrace/converter'
+make[1]: *** [all-recursive] Error 1
+make[1]: Leaving directory `/rt_linux/babeltrace'
+make: *** [all] Error 2
+
+Good advice, then I will switch to compiling from tarball,
+maybe try rebuilding from git master sometime later.
+
+Thanks,
+
+Paul =
