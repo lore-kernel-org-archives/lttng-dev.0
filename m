@@ -1,18 +1,21 @@
-From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: Quick question about discarded events
-Date: Tue, 5 Nov 2013 20:44:13 -0500
-Message-ID: <CA+jJMxubqyOfqwJpsxOh9rX=BZkvck_bBRR9xGQjT3BLNP7eKw__27462.7601299018$1383702313$gmane$org@mail.gmail.com>
-References: <48CF5AC71E61DB46B70D0F388054EFFD267A0FA7@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Fix: application SIGBUS when starting in parallel with
+	sessiond
+Date: Wed, 6 Nov 2013 12:18:47 +0000 (UTC)
+Message-ID: <347494784.57942.1383740327175.JavaMail.zimbra__11758.1654376865$1383740382$gmane$org@efficios.com>
+References: <1078635254.57937.1383740230847.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0663373759=="
+Content-Type: multipart/mixed;
+	boundary="----=_Part_57940_2080225266.1383740327170"
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qe0-f51.google.com ([209.85.128.51])
+Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1VdsAM-0000xo-QE
-	for lttng-dev@lists.lttng.org; Tue, 05 Nov 2013 20:44:24 -0500
-Received: by mail-qe0-f51.google.com with SMTP id q19so5686512qeb.10
-	for <lttng-dev@lists.lttng.org>; Tue, 05 Nov 2013 17:44:13 -0800 (PST)
-In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD267A0FA7@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+	(envelope-from <compudj@efficios.com>) id 1Ve24S-0004eh-AQ
+	for lttng-dev@lists.lttng.org; Wed, 06 Nov 2013 07:18:53 -0500
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.efficios.com (Postfix) with ESMTP id 21753340178
+	for <lttng-dev@lists.lttng.org>; Wed,  6 Nov 2013 12:18:51 +0000 (UTC)
+In-Reply-To: <1078635254.57937.1383740230847.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,163 +24,90 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Cc: "david.lindstrom@percepio.se" <david.lindstrom@percepio.se>, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: David Goulet <dgoulet@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0663373759==
-Content-Type: multipart/alternative; boundary=089e0149cd3a484eb804ea7849d9
+------=_Part_57940_2080225266.1383740327170
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
 
---089e0149cd3a484eb804ea7849d9
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
+Should be applied to master, stable-2.3, stable-2.2.
 
-On Tue, Nov 5, 2013 at 8:38 AM, Thibault, Daniel <
-Daniel.Thibault@drdc-rddc.gc.ca> wrote:
+Thanks,
 
-> ------------------------------
-> Date: Mon, 4 Nov 2013 14:32:02 +0100
-> From: "=3D?iso-8859-1?Q?David_Lindstr=3DF6m?=3D"
->         <david.lindstrom@percepio.se>
->
-> > If I encounter a trace where a packet contains the events_discarded fie=
-ld
-> > with a non-zero value, I want to warn/notify the user. Were the events
-> > discarded before the timestamp_begin of the packet, after timestamp_end
-> or
-> > in between? I basically want to plot some symbol on my timeline
-> > approximately where the user can expect bad/missing data.
-> >
-> > Mvh
-> > David Lindstr?m
->
->    I do believe the events were lost in between the begin and end packet
-> timestamps.
->
->
-That's my interpretation too... which gives me an opportunity to bump bug
-#589 [1].
-It seems Babeltrace and TMF's interpretation of the specification differ on
-this point. Mathieu can probably settle the debate ;)
+Mathieu
 
-Cheers,
-J=E9r=E9mie
-
-[1] https://bugs.lttng.org/issues/589
-
-
-
-> Daniel U. Thibault
-> Protection des syst=E8mes et contremesures (PSC) | Systems Protection &
-> Countermeasures (SPC)
-> Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critica=
-l
-> Cyber Security (MCCS)
-> R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R=
-&D
-> Canada - Valcartier (DRDC Valcartier)
-> 2459 route de la Bravoure
-> Qu=E9bec QC  G3J 1X5
-> CANADA
-> Vox : (418) 844-4000 x4245
-> Fax : (418) 844-4538
-> NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-> Gouvernement du Canada | Government of Canada
-> <http://www.valcartier.drdc-rddc.gc.ca/>
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
-
-
-
---=20
-J=E9r=E9mie Galarneau
+-- 
+Mathieu Desnoyers
 EfficiOS Inc.
 http://www.efficios.com
 
---089e0149cd3a484eb804ea7849d9
-Content-Type: text/html; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
+------=_Part_57940_2080225266.1383740327170
+Content-Type: text/x-patch; name=fix-sigbus-race.patch
+Content-Disposition: attachment; filename=fix-sigbus-race.patch
+Content-Transfer-Encoding: base64
 
-<div dir=3D"ltr"><div>On Tue, Nov 5, 2013 at 8:38 AM, Thibault, Daniel <spa=
-n dir=3D"ltr">&lt;<a href=3D"mailto:Daniel.Thibault@drdc-rddc.gc.ca" target=
-=3D"_blank">Daniel.Thibault@drdc-rddc.gc.ca</a>&gt;</span> wrote:<br></div>=
-<div class=3D"gmail_extra">
-<div class=3D"gmail_quote"><blockquote class=3D"gmail_quote" style=3D"margi=
-n:0px 0px 0px 0.8ex;border-left-width:1px;border-left-color:rgb(204,204,204=
-);border-left-style:solid;padding-left:1ex">------------------------------<=
-br>
-
-Date: Mon, 4 Nov 2013 14:32:02 +0100<br>
-From: &quot;=3D?iso-8859-1?Q?David_Lindstr=3DF6m?=3D&quot;<br>
-=A0 =A0 =A0 =A0 &lt;<a href=3D"mailto:david.lindstrom@percepio.se">david.li=
-ndstrom@percepio.se</a>&gt;<br>
-<div class=3D"im"><br>
-&gt; If I encounter a trace where a packet contains the events_discarded fi=
-eld<br>
-&gt; with a non-zero value, I want to warn/notify the user. Were the events=
-<br>
-&gt; discarded before the timestamp_begin of the packet, after timestamp_en=
-d or<br>
-&gt; in between? I basically want to plot some symbol on my timeline<br>
-&gt; approximately where the user can expect bad/missing data.<br>
-&gt;<br>
-&gt; Mvh<br>
-</div>&gt; David Lindstr?m<br>
-<br>
-=A0 =A0I do believe the events were lost in between the begin and end packe=
-t timestamps.<br>
-<br></blockquote><div><br></div><div>That&#39;s my interpretation too... wh=
-ich gives me an opportunity to bump bug #589 [1].</div><div><div>It seems B=
-abeltrace and TMF&#39;s interpretation of the specification differ on this =
-point. Mathieu can probably settle the debate ;)</div>
-<div><br></div><div>Cheers,</div><div>J=E9r=E9mie</div><div><br></div><div>=
-[1]=A0<a href=3D"https://bugs.lttng.org/issues/589">https://bugs.lttng.org/=
-issues/589</a><br></div></div><div><br></div><div>=A0</div><blockquote clas=
-s=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left-width:1px;b=
-order-left-color:rgb(204,204,204);border-left-style:solid;padding-left:1ex"=
->
-
-Daniel U. Thibault<br>
-Protection des syst=E8mes et contremesures (PSC) | Systems Protection &amp;=
- Countermeasures (SPC)<br>
-Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
-Cyber Security (MCCS)<br>
-R &amp; D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence=
- R&amp;D Canada - Valcartier (DRDC Valcartier)<br>
-2459 route de la Bravoure<br>
-Qu=E9bec QC =A0G3J 1X5<br>
-CANADA<br>
-Vox : <a href=3D"tel:%28418%29%20844-4000%20x4245" value=3D"+14188444000">(=
-418) 844-4000 x4245</a><br>
-Fax : <a href=3D"tel:%28418%29%20844-4538" value=3D"+14188444538">(418) 844=
--4538</a><br>
-NAC : 918V QSDJ &lt;<a href=3D"http://www.travelgis.com/map.asp?addr=3D918V=
-%20QSDJ" target=3D"_blank">http://www.travelgis.com/map.asp?addr=3D918V%20Q=
-SDJ</a>&gt;<br>
-Gouvernement du Canada | Government of Canada<br>
-&lt;<a href=3D"http://www.valcartier.drdc-rddc.gc.ca/" target=3D"_blank">ht=
-tp://www.valcartier.drdc-rddc.gc.ca/</a>&gt;<br>
-<div class=3D""><div class=3D"h5"><br>
-_______________________________________________<br>
-lttng-dev mailing list<br>
-<a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a><=
-br>
-<a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" targe=
-t=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><=
-br>
-</div></div></blockquote></div><br><br clear=3D"all"><div><br></div>-- <br>=
-J=E9r=E9mie Galarneau<br>EfficiOS Inc.<br><a href=3D"http://www.efficios.co=
-m" target=3D"_blank">http://www.efficios.com</a>
-</div></div>
-
---089e0149cd3a484eb804ea7849d9--
-
-
---===============0663373759==
+Y29tbWl0IGJlMmJjYzdlOWEwMmU1YmQ3OGRjMjYxNTg4NmFmMzJkZGQ4NzAzMmIKQXV0aG9yOiBN
+YXRoaWV1IERlc25veWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPgpEYXRlOiAg
+IFdlZCBOb3YgNiAwNzowNjo1MSAyMDEzIC0wNTAwCgogICAgRml4OiBhcHBsaWNhdGlvbiBTSUdC
+VVMgd2hlbiBzdGFydGluZyBpbiBwYXJhbGxlbCB3aXRoIHNlc3Npb25kCiAgICAKICAgIFRoZXJl
+IGlzIGEgcmFjZSBiZXR3ZWVuIGFwcGxpY2F0aW9uIHN0YXJ0dXAgYW5kIHNlc3Npb25kIHN0YXJ0
+dXAsIHdoZXJlCiAgICB0aGVyZSBpcyBhbiBpbnRlcm1lZGlhdGUgc3RhdGUgd2hlcmUgYXBwbGlj
+YXRpb25zIGNhbiBTSUdCVVMgaWYgdGhleSBzZWUKICAgIGEgemVyby1zaXplZCBzaG0sIGlmIHRo
+ZSBzaG0gaGFzIGJlZW4gY3JlYXRlZCwgYnV0IG5vdCBmdHJ1bmNhdGVkIHlldC4KICAgIAogICAg
+T24gdGhlIHNlc3Npb25kIHNpZGUsIHdlIG5lZWQgdG8gZW5zdXJlIHRoYXQgdGhlIHNoYXJlZCBt
+ZW1vcnkgaXMKICAgIHdyaXRlYWJsZSBieSBhcHBsaWNhdGlvbnMgYXMgbG9uZyBhcyBpdHMgc2l6
+ZSBpcyAwLCB3aGljaCBhbGxvdwogICAgYXBwbGljYXRpb25zIHRvIHBlcmZvcm0gZnRydW5jYXRl
+IGFuZCBleHRlbmQgaXRzIHNpemUuCiAgICAKICAgIE9uIHRoZSBVU1Qgc2lkZSwgYW5vdGhlciBj
+b21taXQgbmVlZHMgdG8gZW5zdXJlIHRoYXQgVVNUIGNhbiByZWFkIHRoZQogICAgc2hhcmVkIG1l
+bW9yeSBmaWxlIGRlc2NyaXB0b3Igd2l0aCBhIHJlYWQoKSBzeXN0ZW0gY2FsbCBiZWZvcmUgdGhl
+eQogICAgdHJ5IGFjY2Vzc2luZyBpdCB0aHJvdWdoIGEgbWVtb3J5IG1hcCAod2hpY2ggdHJpZ2dl
+cnMgdGhlIFNJR0JVUyBpZgogICAgdGhlIGFjY2VzcyBnb2VzIGJleW9uZCB0aGUgZmlsZSBzaXpl
+KQogICAgCiAgICBTaWduZWQtb2ZmLWJ5OiBNYXRoaWV1IERlc25veWVycyA8bWF0aGlldS5kZXNu
+b3llcnNAZWZmaWNpb3MuY29tPgoKZGlmZiAtLWdpdCBhL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQv
+c2htLmMgYi9zcmMvYmluL2x0dG5nLXNlc3Npb25kL3NobS5jCmluZGV4IGI5NGY0ZWIuLjdiYjUy
+ZDQgMTAwNjQ0Ci0tLSBhL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvc2htLmMKKysrIGIvc3JjL2Jp
+bi9sdHRuZy1zZXNzaW9uZC9zaG0uYwpAQCAtNDgsNDAgKzQ4LDE3IEBAIHN0YXRpYyBpbnQgZ2V0
+X3dhaXRfc2htKGNoYXIgKnNobV9wYXRoLCBzaXplX3QgbW1hcF9zaXplLCBpbnQgZ2xvYmFsKQog
+CS8qIERlZmF1bHQgcGVybWlzc2lvbnMgKi8KIAltb2RlID0gU19JUlVTUiB8IFNfSVdVU1IgfCBT
+X0lSR1JQIHwgU19JV0dSUDsKIAotCS8qIENoYW5nZSBvd25lciBvZiB0aGUgc2htIHBhdGggKi8K
+KwkvKgorCSAqIENoYW5nZSBvd25lciBvZiB0aGUgc2htIHBhdGguCisJICovCiAJaWYgKGdsb2Jh
+bCkgewotCQlyZXQgPSBjaG93bihzaG1fcGF0aCwgMCwgMCk7Ci0JCWlmIChyZXQgPCAwKSB7Ci0J
+CQlpZiAoZXJybm8gIT0gRU5PRU5UKSB7Ci0JCQkJUEVSUk9SKCJjaG93biB3YWl0IHNobSIpOwot
+CQkJCWdvdG8gZXJyb3I7Ci0JCQl9Ci0JCX0KLQogCQkvKgotCQkgKiBJZiBnbG9iYWwgc2Vzc2lv
+biBkYWVtb24sIGFueSBhcHBsaWNhdGlvbiBjYW4gcmVnaXN0ZXIgc28gdGhlIHNobQotCQkgKiBu
+ZWVkcyB0byBiZSBzZXQgaW4gcmVhZC1vbmx5IG1vZGUgZm9yIG90aGVycy4KKwkJICogSWYgZ2xv
+YmFsIHNlc3Npb24gZGFlbW9uLCBhbnkgYXBwbGljYXRpb24gY2FuCisJCSAqIHJlZ2lzdGVyLiBN
+YWtlIGl0IGluaXRpYWxseSB3cml0ZWFibGUgc28gYXBwbGljYXRpb25zCisJCSAqIHJlZ2lzdGVy
+aW5nIGNvbmN1cnJlbnRseSBjYW4gZG8gZnRydW5jYXRlKCkgYnkKKwkJICogdGhlbXNlbHZlcy4K
+IAkJICovCi0JCW1vZGUgfD0gU19JUk9USDsKLQl9IGVsc2UgewotCQlyZXQgPSBjaG93bihzaG1f
+cGF0aCwgZ2V0dWlkKCksIGdldGdpZCgpKTsKLQkJaWYgKHJldCA8IDApIHsKLQkJCWlmIChlcnJu
+byAhPSBFTk9FTlQpIHsKLQkJCQlQRVJST1IoImNob3duIHdhaXQgc2htIik7Ci0JCQkJZ290byBl
+cnJvcjsKLQkJCX0KLQkJfQotCX0KLQotCS8qCi0JICogU2V0IHBlcm1pc3Npb25zIHRvIHRoZSBz
+aG0gZXZlbiBpZiB3ZSBkaWQgbm90IGNyZWF0ZSB0aGUgc2htLgotCSAqLwotCXJldCA9IGNobW9k
+KHNobV9wYXRoLCBtb2RlKTsKLQlpZiAocmV0IDwgMCkgewotCQlpZiAoZXJybm8gIT0gRU5PRU5U
+KSB7Ci0JCQlQRVJST1IoImNobW9kIHdhaXQgc2htIik7Ci0JCQlnb3RvIGVycm9yOwotCQl9CisJ
+CW1vZGUgfD0gU19JUk9USCB8IFNfSVdPVEg7CiAJfQogCiAJLyoKQEAgLTEwNywxMyArODQsMzIg
+QEAgc3RhdGljIGludCBnZXRfd2FpdF9zaG0oY2hhciAqc2htX3BhdGgsIHNpemVfdCBtbWFwX3Np
+emUsIGludCBnbG9iYWwpCiAJfQogCiAjaWZuZGVmIF9fRnJlZUJTRF9fCi0JcmV0ID0gZmNobW9k
+KHdhaXRfc2htX2ZkLCBtb2RlKTsKLQlpZiAocmV0IDwgMCkgewotCQlQRVJST1IoImZjaG1vZCIp
+OwotCQlleGl0KEVYSVRfRkFJTFVSRSk7CisJaWYgKGdsb2JhbCkgeworCQlyZXQgPSBmY2hvd24o
+d2FpdF9zaG1fZmQsIDAsIDApOworCQlpZiAocmV0IDwgMCkgeworCQkJUEVSUk9SKCJmY2hvd24i
+KTsKKwkJCWV4aXQoRVhJVF9GQUlMVVJFKTsKKwkJfQorCQkvKgorCQkgKiBJZiBnbG9iYWwgc2Vz
+c2lvbiBkYWVtb24sIGFueSBhcHBsaWNhdGlvbiBjYW4KKwkJICogcmVnaXN0ZXIgc28gdGhlIHNo
+bSBuZWVkcyB0byBiZSBzZXQgaW4gcmVhZC1vbmx5IG1vZGUKKwkJICogZm9yIG90aGVycy4KKwkJ
+ICovCisJCW1vZGUgJj0gflNfSVdPVEg7CisJCXJldCA9IGZjaG1vZCh3YWl0X3NobV9mZCwgbW9k
+ZSk7CisJCWlmIChyZXQgPCAwKSB7CisJCQlQRVJST1IoImZjaG1vZCIpOworCQkJZXhpdChFWElU
+X0ZBSUxVUkUpOworCQl9CisJfSBlbHNlIHsKKwkJcmV0ID0gZmNob3duKHdhaXRfc2htX2ZkLCBn
+ZXR1aWQoKSwgZ2V0Z2lkKCkpOworCQlpZiAocmV0IDwgMCkgeworCQkJUEVSUk9SKCJmY2hvd24i
+KTsKKwkJCWV4aXQoRVhJVF9GQUlMVVJFKTsKKwkJfQogCX0KICNlbHNlCi0jd2FybmluZyAiRnJl
+ZUJTRCBkb2VzIG5vdCBzdXBwb3J0IHNldHRpbmcgZmlsZSBtb2RlIG9uIHNobSBGRC4gUmVtZW1i
+ZXIgdGhhdCBmb3Igc2VjdXJlIHVzZSwgbHR0bmctc2Vzc2lvbmQgc2hvdWxkIGJlIHN0YXJ0ZWQg
+YmVmb3JlIGFwcGxpY2F0aW9ucyBsaW5rZWQgb24gbHR0bmctdXN0LiIKKyN3YXJuaW5nICJGcmVl
+QlNEIGRvZXMgbm90IHN1cHBvcnQgc2V0dGluZyBmaWxlIG1vZGUgb24gc2htIEZELiIKICNlbmRp
+ZgogCiAJREJHKCJHb3QgdGhlIHdhaXQgc2htIGZkICVkIiwgd2FpdF9zaG1fZmQpOwo=
+------=_Part_57940_2080225266.1383740327170
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -188,4 +118,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============0663373759==--
+------=_Part_57940_2080225266.1383740327170--
