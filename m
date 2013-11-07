@@ -1,8 +1,8 @@
 From: JP Ikaheimonen <jp_ikaheimonen@mentor.com>
-Subject: [PATCH lttng-tools 27/28] Add exclusion names to
-	diagnostic printouts
-Date: Thu,  7 Nov 2013 12:22:06 +0200
-Message-ID: <1383819727-6843-8-git-send-email-jp_ikaheimonen__47172.1050249927$1383820148$gmane$org@mentor.com>
+Subject: [PATCH lttng-tools 28/28] When listing events,
+	show exclusions if they exist
+Date: Thu,  7 Nov 2013 12:22:07 +0200
+Message-ID: <1383819727-6843-9-git-send-email-jp_ikaheimonen__25101.1801105507$1383820172$gmane$org@mentor.com>
 References: <1383819727-6843-1-git-send-email-jp_ikaheimonen@mentor.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,12 +10,12 @@ Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jp_ikaheimonen@mentor.com>) id 1VeMjN-0007fk-SF
-	for lttng-dev@lists.lttng.org; Thu, 07 Nov 2013 05:22:31 -0500
+	(envelope-from <jp_ikaheimonen@mentor.com>) id 1VeMjP-0007gL-5G
+	for lttng-dev@lists.lttng.org; Thu, 07 Nov 2013 05:22:33 -0500
 Received: from svr-orw-fem-01.mgc.mentorg.com ([147.34.98.93])
 	by relay1.mentorg.com with esmtp
-	id 1VeMjI-0006G2-DT from jp_ikaheimonen@mentor.com
-	for lttng-dev@lists.lttng.org; Thu, 07 Nov 2013 02:22:24 -0800
+	id 1VeMjJ-0006GP-NK from jp_ikaheimonen@mentor.com
+	for lttng-dev@lists.lttng.org; Thu, 07 Nov 2013 02:22:25 -0800
 In-Reply-To: <1383819727-6843-1-git-send-email-jp_ikaheimonen@mentor.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -28,178 +28,93 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
+Add "[has exclusions]" to the printout of an event, if that
+event has exclusions added.
+
 Signed-off-by: JP Ikaheimonen <jp_ikaheimonen@mentor.com>
 ---
- src/bin/lttng/commands/enable_events.c | 82 +++++++++++++++++++++++++++++-----
- 1 file changed, 71 insertions(+), 11 deletions(-)
+ include/lttng/lttng.h         |  3 ++-
+ src/bin/lttng-sessiond/cmd.c  |  3 +++
+ src/bin/lttng/commands/list.c | 15 +++++++++++++--
+ 3 files changed, 18 insertions(+), 3 deletions(-)
 
-diff --git a/src/bin/lttng/commands/enable_events.c b/src/bin/lttng/commands/enable_events.c
-index 7009df7..42cd022 100644
---- a/src/bin/lttng/commands/enable_events.c
-+++ b/src/bin/lttng/commands/enable_events.c
-@@ -337,6 +337,39 @@ const char *print_raw_channel_name(const char *name)
+diff --git a/include/lttng/lttng.h b/include/lttng/lttng.h
+index 255f7c4..85fdfaa 100644
+--- a/include/lttng/lttng.h
++++ b/include/lttng/lttng.h
+@@ -226,7 +226,7 @@ struct lttng_event_function_attr {
+  *
+  * The structures should be initialized to zero before use.
+  */
+-#define LTTNG_EVENT_PADDING1               15
++#define LTTNG_EVENT_PADDING1               14
+ #define LTTNG_EVENT_PADDING2               LTTNG_SYMBOL_NAME_LEN + 32
+ struct lttng_event {
+ 	enum lttng_event_type type;
+@@ -238,6 +238,7 @@ struct lttng_event {
+ 	int32_t enabled;	/* Does not apply: -1 */
+ 	pid_t pid;
+ 	unsigned char filter;	/* filter enabled ? */
++	unsigned char exclusion; /* exclusions added ? */
+ 
+ 	char padding[LTTNG_EVENT_PADDING1];
+ 
+diff --git a/src/bin/lttng-sessiond/cmd.c b/src/bin/lttng-sessiond/cmd.c
+index 69dfda6..d00bf1e 100644
+--- a/src/bin/lttng-sessiond/cmd.c
++++ b/src/bin/lttng-sessiond/cmd.c
+@@ -305,6 +305,9 @@ static int list_lttng_ust_global_events(char *channel_name,
+ 		if (uevent->filter) {
+ 			tmp[i].filter = 1;
+ 		}
++		if (uevent->exclusion) {
++			tmp[i].exclusion = 1;
++		}
+ 		i++;
+ 	}
+ 
+diff --git a/src/bin/lttng/commands/list.c b/src/bin/lttng/commands/list.c
+index bca06e7..6a54279 100644
+--- a/src/bin/lttng/commands/list.c
++++ b/src/bin/lttng/commands/list.c
+@@ -168,6 +168,15 @@ const char *filter_string(int value)
+ 	}
  }
  
- /*
-+ * Return allocated string for pretty-printing exclusion names.
-+ */
 +static
-+char *print_exclusions(int count, char **names)
++const char *exclusion_string(int value)
 +{
-+	int length = 0;
-+	int i;
-+	const char *preamble = " excluding ";
-+	char *ret;
-+
-+	if (count == 0) {
-+		return strdup("");
++	switch (value) {
++	case 1: return " [has exclusions]";
++	default: return "";
 +	}
-+
-+	/* calculate total required length */
-+	for (i = 0; i < count; i++) {
-+		length += strlen(names[i]) + 1;
-+	}
-+
-+	/* add length of preamble + one for NUL - one for last (missing) comma */
-+	length += strlen(preamble);
-+	ret = malloc(length);
-+	strcpy(ret, preamble);
-+	for (i = 0; i < count; i++) {
-+		strcat(ret, names[i]);
-+		if (i != count - 1) {
-+			strcat(ret, ",");
-+		}
-+	}
-+	return ret;
 +}
 +
-+/*
-  * Compare list of exclusions against an event name.
-  * Return a list of legal exclusion names.
-  * Produce an error or a warning about others (depending on the situation)
-@@ -535,15 +568,20 @@ static int enable_events(char *session_name)
- 			switch (opt_event_type) {
- 			case LTTNG_EVENT_TRACEPOINT:
- 				if (opt_loglevel) {
--					MSG("All %s tracepoints are enabled in channel %s for loglevel %s",
-+					char *exclusion_string = print_exclusions(exclusion_count, exclusion_list);
-+					MSG("All %s tracepoints%s are enabled in channel %s for loglevel %s",
- 							get_domain_str(dom.type),
-+							exclusion_string,
- 							print_channel_name(channel_name),
- 							opt_loglevel);
-+					free(exclusion_string);
- 				} else {
--					MSG("All %s tracepoints are enabled in channel %s",
-+					char *exclusion_string = print_exclusions(exclusion_count, exclusion_list);
-+					MSG("All %s tracepoints%s are enabled in channel %s",
- 							get_domain_str(dom.type),
-+							exclusion_string,
- 							print_channel_name(channel_name));
--
-+					free(exclusion_string);
- 				}
- 				break;
- 			case LTTNG_EVENT_SYSCALL:
-@@ -554,14 +592,20 @@ static int enable_events(char *session_name)
- 				break;
- 			case LTTNG_EVENT_ALL:
- 				if (opt_loglevel) {
--					MSG("All %s events are enabled in channel %s for loglevel %s",
-+					char *exclusion_string = print_exclusions(exclusion_count, exclusion_list);
-+					MSG("All %s events%s are enabled in channel %s for loglevel %s",
- 							get_domain_str(dom.type),
-+							exclusion_string,
- 							print_channel_name(channel_name),
- 							opt_loglevel);
-+					free(exclusion_string);
- 				} else {
--					MSG("All %s events are enabled in channel %s",
-+					char *exclusion_string = print_exclusions(exclusion_count, exclusion_list);
-+					MSG("All %s events%s are enabled in channel %s",
- 							get_domain_str(dom.type),
-+							exclusion_string,
- 							print_channel_name(channel_name));
-+					free(exclusion_string);
- 				}
- 				break;
- 			default:
-@@ -737,19 +781,24 @@ static int enable_events(char *session_name)
+ static const char *loglevel_string(int value)
+ {
+ 	switch (value) {
+@@ -217,18 +226,20 @@ static void print_events(struct lttng_event *event)
+ 	case LTTNG_EVENT_TRACEPOINT:
+ 	{
+ 		if (event->loglevel != -1) {
+-			MSG("%s%s (loglevel: %s (%d)) (type: tracepoint)%s%s",
++			MSG("%s%s (loglevel: %s (%d)) (type: tracepoint)%s%s%s",
+ 				indent6,
+ 				event->name,
+ 				loglevel_string(event->loglevel),
+ 				event->loglevel,
+ 				enabled_string(event->enabled),
++				exclusion_string(event->exclusion),
+ 				filter_string(event->filter));
+ 		} else {
+-			MSG("%s%s (type: tracepoint)%s%s",
++			MSG("%s%s (type: tracepoint)%s%s%s",
+ 				indent6,
+ 				event->name,
+ 				enabled_string(event->enabled),
++				exclusion_string(event->exclusion),
+ 				filter_string(event->filter));
  		}
- 
- 		if (!opt_filter) {
-+			char *exclusion_string;
-+
- 			ret = lttng_enable_event_with_exclusions(handle,
- 					&ev, channel_name,
- 					NULL, exclusion_count, exclusion_list);
-+			exclusion_string = print_exclusions(exclusion_count, exclusion_list);
- 			if (ret < 0) {
- 				/* Turn ret to positive value to handle the positive error code */
- 				switch (-ret) {
- 				case LTTNG_ERR_KERN_EVENT_EXIST:
--					WARN("Kernel event %s already enabled (channel %s, session %s)",
-+					WARN("Kernel event %s%s already enabled (channel %s, session %s)",
- 							event_name,
-+							exclusion_string,
- 							print_channel_name(channel_name), session_name);
- 					break;
- 				default:
--					ERR("Event %s: %s (channel %s, session %s)", event_name,
-+					ERR("Event %s%s: %s (channel %s, session %s)", event_name,
-+							exclusion_string,
- 							lttng_strerror(ret),
- 							ret == -LTTNG_ERR_NEED_CHANNEL_NAME
- 								? print_raw_channel_name(channel_name)
-@@ -759,25 +808,33 @@ static int enable_events(char *session_name)
- 				}
- 				warn = 1;
- 			} else {
--				MSG("%s event %s created in channel %s",
-+				MSG("%s event %s%s created in channel %s",
- 						get_domain_str(dom.type), event_name,
-+						exclusion_string,
- 						print_channel_name(channel_name));
- 			}
-+			free(exclusion_string);
- 		}
- 
- 		if (opt_filter) {
-+			char *exclusion_string;
-+
- 			ret = lttng_enable_event_with_exclusions(handle, &ev, channel_name,
- 					opt_filter, exclusion_count, exclusion_list);
-+			exclusion_string = print_exclusions(exclusion_count, exclusion_list);
-+
- 			if (ret < 0) {
- 				switch (-ret) {
- 				case LTTNG_ERR_FILTER_EXIST:
--					WARN("Filter on event %s is already enabled"
-+					WARN("Filter on event %s%s is already enabled"
- 							" (channel %s, session %s)",
- 						event_name,
-+						exclusion_string,
- 						print_channel_name(channel_name), session_name);
- 					break;
- 				default:
--					ERR("Event %s: %s (channel %s, session %s, filter \'%s\')", ev.name,
-+					ERR("Event %s%s: %s (channel %s, session %s, filter \'%s\')", ev.name,
-+							exclusion_string,
- 							lttng_strerror(ret),
- 							ret == -LTTNG_ERR_NEED_CHANNEL_NAME
- 								? print_raw_channel_name(channel_name)
-@@ -787,8 +844,11 @@ static int enable_events(char *session_name)
- 				}
- 				goto error;
- 			} else {
--				MSG("Filter '%s' successfully set", opt_filter);
-+				MSG("Event %s%s: Filter '%s' successfully set",
-+						event_name, exclusion_string,
-+						opt_filter);
- 			}
-+			free(exclusion_string);
- 		}
- 
- 		/* Next event */
+ 		break;
 -- 
 1.8.1.2
