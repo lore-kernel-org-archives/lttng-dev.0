@@ -1,17 +1,19 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: LTTng project development activities November 2013
-Date: Wed, 6 Nov 2013 23:17:49 +0000 (UTC)
-Message-ID: <1328980988.58469.1383779869235.JavaMail.zimbra__23306.4894135625$1383779929$gmane$org@efficios.com>
-References: <CAGDH53nLiu8CZnONuONSNz-c2+T0b2phBFx2H4wOZqAuZFHP6A@mail.gmail.com>
+From: JP Ikaheimonen <jp_ikaheimonen@mentor.com>
+Subject: [PATCH lttng-tools 00/28] UST Event exclusions
+Date: Thu,  7 Nov 2013 12:16:43 +0200
+Message-ID: <1383819403-6386-1-git-send-email-jp_ikaheimonen__10607.0915506736$1383819473$gmane$org@mentor.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1VeCMC-0007zP-3O
-	for lttng-dev@lists.lttng.org; Wed, 06 Nov 2013 18:17:58 -0500
-In-Reply-To: <CAGDH53nLiu8CZnONuONSNz-c2+T0b2phBFx2H4wOZqAuZFHP6A@mail.gmail.com>
+	(envelope-from <jp_ikaheimonen@mentor.com>) id 1VeMe4-0006I5-Rk
+	for lttng-dev@lists.lttng.org; Thu, 07 Nov 2013 05:17:03 -0500
+Received: from svr-orw-fem-01.mgc.mentorg.com ([147.34.98.93])
+	by relay1.mentorg.com with esmtp
+	id 1VeMdy-0004tz-Jb from jp_ikaheimonen@mentor.com
+	for lttng-dev@lists.lttng.org; Thu, 07 Nov 2013 02:16:54 -0800
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,70 +22,72 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Christian Babeux <christian.babeux@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJDaHJpc3RpYW4gQmFiZXV4IiA8
-Y2hyaXN0aWFuLmJhYmV1eEBlZmZpY2lvcy5jb20+Cj4gVG86IGx0dG5nLWRldkBsaXN0cy5sdHRu
-Zy5vcmcKPiBTZW50OiBXZWRuZXNkYXksIE5vdmVtYmVyIDYsIDIwMTMgNToxOTo0NSBQTQo+IFN1
-YmplY3Q6IFtsdHRuZy1kZXZdIExUVG5nIHByb2plY3QgZGV2ZWxvcG1lbnQgYWN0aXZpdGllcyBO
-b3ZlbWJlciAyMDEzCj4gCj4gSGkgbHR0bmctYWZpY2lvbmFkb3MsCj4gCj4gTXkgYXBvbG9naWVz
-IGZvciB0aGUgbWlzc2luZyBPY3RvYmVyIHN1bW1hcnksIHRoZSBwcmV2aW91cyBtb250aHMgaGF2
-ZQo+IGJlZW4gcHJldHR5IGludGVuc2UhCj4gCj4gdGw7ZHIgOiBBIGxvdCBvZiB0YWxrcyBhdCBM
-aW51eENvbi9DbG91ZE9wZW4vVHJhY2luZyBTdW1taXQvRUxDRSBvbgo+IExUVG5nOyBPbiB0cmFj
-ayBmb3IgbWlkLW5vdmVtYmVyIDIuNCByZWxlYXNlIGNhbmRpZGF0ZSB3aXRoIGxpdmUKPiBzdHJl
-YW1pbmcsIEphdmEgSlVMIGFuZCBoZWFsdGggY2hlY2sgaW4gcmVsYXlkL2NvbnN1bWVyZDsKPiAK
-PiBTZXB0ZW1iZXIgMjAxMyBzdW1tYXJ5Ogo+IAo+IC0gTWlub3IgcmVsZWFzZXM6Cj4gCj4gbHR0
-bmctbW9kdWxlcyAyLjMuMiwgMi4zLjEgYW5kIDIuMi4yOgo+IAo+IEEgdGltZWtlZXBpbmcgcmVn
-cmVzc2lvbiB3YXMgaW50cm9kdWNlZCBpbiB0aGUgTGludXgga2VybmVsIHZlcnNpb24KPiAzLjEw
-LjEzIHRvIDMuMTEuMiB3aGljaCBjb3VsZCBsZWFkIHRvIGhhcmQgc3lzdGVtIGxvY2t1cCB3aGVu
-IGVuYWJsaW5nCj4gdGhlIHRyYWNpbmcgb2Ygc29tZSBzdWJzeXN0ZW1zLCBpbmNsdWRpbmcgYnV0
-IG5vdCBsaW1pdGVkIHRvCj4gd29ya3F1ZXVlcy4gVGhlIGZpeCBmb3IgdGhpcyBpc3N1ZSB3YXMg
-bWVyZ2VkIGluIGtlcm5lbCAzLjEwLjE0IGFuZAo+IDMuMTEuMysuCgpTbWFsbCBwcmVjaXNpb246
-IHRoZSBMaW51eCBrZXJuZWwgcmVncmVzc2lvbiBoYXMgYmVlbiBpbnRyb2R1Y2VkIGluIDMuMTAu
-IEl0IGhhcyBiZWVuIGZpeGVkIGluIDMuMTAuMTQsIDMuMTEuMywgYW5kIDMuMTIgKGFuZCBiZXR0
-ZXIpLgoKTFRUbmcgbW9kdWxlcyBoYXMgYSBibGFja2xpc3QgdGhhdCByZWZ1c2VzIHRvIGNvbXBp
-bGUgYWdhaW5zdCB0aGUgYmFkIGtlcm5lbCB2ZXJzaW9ucy4KClRoYW5rcywKCk1hdGhpZXUKCj4g
-Cj4gLSBQYXRjaGVzIGZvciB0aGUgbGl2ZSBzdHJlYW1pbmcgc3VwcG9ydCBoYXZlIGJlZW4gbWVy
-Z2VkIGluIGx0dG5nLXRvb2xzLgo+IAo+IE9jdG9iZXIgMjAxMyBzdW1tYXJ5Ogo+IAo+IC0gUGF0
-Y2hlcyBmb3IgSmF2YSBVdGlsIExvZ2dpbmcgKEpVTCkgc3VwcG9ydCBoYXZlIGJlZW4gbWVyZ2Vk
-IGluCj4gbHR0bmctdG9vbHMuCj4gCj4gLSBQYXRjaGVzIGZvciBDVEYgd3JpdGVyIGhhdmUgYmVl
-biBtZXJnZWQgaW4gQmFiZWx0cmFjZS4gVGhpcyBuZXcgQVBJCj4gYWxsb3cgcHJvZ3JhbW1hdGlj
-IGNyZWF0aW9uIG9mIENURiB0cmFjZXMuCj4gCj4gLSBIZWFsdGggY2hlY2sgb3ZlcmhhdWwgcGF0
-Y2hlcyBoYXZlIGJlZW4gbWVyZ2VkIGluIGx0dG5nLXRvb2xzLiBJdCBpcwo+IG5vdyBwb3NzaWJs
-ZSB0byBxdWVyeSB0byBoZWFsdGggc3RhdHVzIG9mIHRoZSBjb25zdW1lciBkYWVtb24gYW5kIHRo
-ZQo+IHJlbGF5IGRhZW1vbi4KPiAKPiBDb25mZXJlbmNlcyBhY3Rpdml0aWVzOgo+IAo+ICogR29v
-Z2xlIFN1bW1lciBvZiBDb2RlIE1lbnRvciBTdW1taXQgMjAxMzoKPiAKPiAtIErDqXLDqW1pZSBH
-YWxhcm5lYXUgYW5kIENocmlzdGlhbiBCYWJldXggd2VudCB0byB0aGUgR1NvQyBNZW50b3IKPiBT
-dW1taXQgdG8gcmVwcmVzZW50IHRoZSBMVFRuZyBwcm9qZWN0Lgo+IAo+ICogTGludXhDb24gRXVy
-b3BlIDIwMTM6Cj4gCj4gLSBEYXZpZCBHb3VsZXQgZ2F2ZSBhIHRhbGsgZW50aXRsZWQgIkxUVG5n
-IGFzIGEgbmV3IG1vbml0b3JpbmcgdG9vbCIgWzFdLgo+IAo+ICogQ2xvdWRPcGVuIEV1cm9wZSAy
-MDEzOgo+IAo+IC0gSnVsaWVuIERlc2Zvc3NleiBnYXZlIGEgdGFsayBlbnRpdGxlZCAiRWZmaWNp
-ZW50IGFuZCBMYXJnZS1zY2FsZQo+IEluZnJhc3RydWN0dXJlIE1vbml0b3Jpbmcgd2l0aCBUcmFj
-aW5nIiBbMl0uCj4gCj4gKiBUcmFjaW5nIFN1bW1pdCAyMDEzOgo+IAo+IC0gQWxleGFuZHJlIE1v
-bnRwbGFpc2lyIGdhdmUgYSB0YWxrIGVudGl0bGVkICJBbmFseXppbmcgYWxsIGtpbmRzIG9mCj4g
-dHJhY2VzIHdpdGggVE1GIiBbM10KPiAKPiAtIE1hdGhpZXUgRGVzbm95ZXJzIGdhdmUgYSB0YWxr
-IGVudGl0bGVkICJMVFRuZzogQ2xvdWQgTW9uaXRvcmluZyBhbmQKPiBEaXN0cmlidXRpb24gQnVn
-IFJlcG9ydGluZyB3aXRoIExpdmUgU3RyZWFtaW5nIGFuZCBTbmFwc2hvdHMiIFs0XQo+IAo+ICog
-RW1iZWRkZWQgTGludXggQ29uZmVyZW5jZSBFdXJvcGUgMjAxMzoKPiAKPiAtIENocmlzdGlhbiBC
-YWJldXggZ2F2ZSBhIHRhbGsgZW50aXRsZWQgIkJyaWRnaW5nIHRoZSBnYXAgYmV0d2Vlbgo+IGhh
-cmR3YXJlIGFuZCBzb2Z0d2FyZSB0cmFjaW5nIiBbNV0KPiAKPiBPbi1nb2luZyB3b3JrOgo+IAo+
-IFdlIGFyZSBvbiB0cmFjayBmb3IgYSBtaWQtbm92ZW1iZXIgMi40IHJlbGVhc2UgY2FuZGlkYXRl
-IGluY2x1ZGluZyB0aGUKPiBsaXZlIHN0cmVhbWluZywgSmF2YSBKVUwgbG9nZ2luZyBzdXBwb3J0
-IGFuZCBoZWFsdGggY2hlY2sgaW4gdGhlCj4gY29uc3VtZXJkL3JlbGF5ZC4KPiAKPiBUaGFua3Ms
-Cj4gCj4gQ2hyaXN0aWFuCj4gCj4gWzFdIC0KPiBodHRwczovL2V2ZW50cy5saW51eGZvdW5kYXRp
-b24ub3JnL3NpdGVzL2V2ZW50cy9maWxlcy9zbGlkZXMvc2xpZGVzXzIucGRmCj4gWzJdIC0KPiBo
-dHRwczovL2V2ZW50cy5saW51eGZvdW5kYXRpb24ub3JnL3NpdGVzL2V2ZW50cy9maWxlcy9zbGlk
-ZXMvcHJlc2VudGF0aW9uLWNsb3Vkb3Blbi5wZGYKPiBbM10gLQo+IGh0dHA6Ly93d3cudHJhY2lu
-Z3N1bW1pdC5vcmcvdy9pbWFnZXMvMi8yYS9UTUZfQU1HX1RyYWNpbmdTdW1taXQyMDEzLnBkZgo+
-IFs0XSAtCj4gaHR0cDovL3d3dy50cmFjaW5nc3VtbWl0Lm9yZy93L2ltYWdlcy9iL2IzL0x0dG5n
-LWRlc25veWVycy10cmFjaW5nLXN1bW1pdC0yMDEzLnBkZgo+IFs1XSAtIGh0dHA6Ly93d3cuc2xp
-ZGVzaGFyZS5uZXQvQ2hyaXN0aWFuQmFiZXV4L3NsaWRlcy0yNzk3OTkyNQo+IAo+IF9fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gbHR0bmctZGV2IG1haWxp
-bmcgbGlzdAo+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBodHRwOi8vbGlzdHMubHR0bmcu
-b3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKPiAKCi0tIApNYXRoaWV1IERl
-c25veWVycwpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCgpfX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBs
-aXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2kt
-YmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+This patch set, along with a patch set for lttng-ust, implements
+a new option for lttng enable-event command.
+
+The new option makes it possible to exclude events from a wildcarded
+event definition.
+
+That is, running command
+
+lttng enable-event -u -c c1 'myevents*' -x 'myevents:dbg*'
+
+would enable all UST tracepoint events whose names start with 'myevents'
+except those that start with 'myevents:dbg'.
+
+The lttng list command is also updated, so that it points out the
+fact that an event has some exclusions.
+
+JP Ikaheimonen (28):
+  Add exclusion data to enable-command
+  Define a structure for event exclusion data
+  Add exclusion data to cmd_enable_event
+  Add exclusions to event_ust_enable_tracepoint
+  Add event exclusion data to ltt_ust_event structure
+  Add exclusion matching logic to trace_ust_ht_match_event
+  Add exclusion data to trace_ust_create_event
+  Add exclusion data to trace_ust_find_event
+  Copy exclusion data in add_unique_ust_event.
+  Add new error codes for exclusion processing
+  Add handling of LTTNG_ENABLE_EVENT_WITH_EXCLUSION
+  Collate handling of LTTNG_ENABLE_EVENT_WITH_FILTER
+  Add exclusion data to ust_app_event structure
+  Compare also exclusions in ht_match_ust_app_event
+  Copy event exclusion data in add_unique_ust_app_event
+  Free exclusion data when ust_app_event is deleted
+  Add exclusion data to find_ust_app_event
+  Copy exclusion data in shadow_copy_event
+  Set event exclusions in the target when event is created
+  Send enable-event commands with exclusion data
+  Collate lttng_enable_event* code
+  Add -exclude option to enable-event command
+  Add usage for --exclude option
+  Add a function to check for legal exclusions
+  Parse exclusions and forward them to the control handler
+  Detect and report exclusion option errors
+  Add exclusion names to diagnostic printouts
+  When listing events, show exclusions if they exist
+
+ include/lttng/lttng-error.h              |   2 +
+ include/lttng/lttng.h                    |  20 ++-
+ src/bin/lttng-sessiond/cmd.c             |  13 +-
+ src/bin/lttng-sessiond/cmd.h             |   4 +-
+ src/bin/lttng-sessiond/event.c           |  12 +-
+ src/bin/lttng-sessiond/event.h           |   3 +-
+ src/bin/lttng-sessiond/main.c            | 110 +++++++-----
+ src/bin/lttng-sessiond/trace-ust.c       |  23 ++-
+ src/bin/lttng-sessiond/trace-ust.h       |  14 +-
+ src/bin/lttng-sessiond/ust-app.c         |  95 +++++++++-
+ src/bin/lttng-sessiond/ust-app.h         |   2 +
+ src/bin/lttng/commands/enable_events.c   | 242 +++++++++++++++++++++++--
+ src/bin/lttng/commands/list.c            |  15 +-
+ src/common/sessiond-comm/sessiond-comm.h |  22 ++-
+ src/lib/lttng-ctl/lttng-ctl.c            | 291 ++++++++++++++++++-------------
+ tests/unit/test_ust_data.c               |   2 +-
+ 16 files changed, 657 insertions(+), 213 deletions(-)
+
+-- 
+1.8.1.2
