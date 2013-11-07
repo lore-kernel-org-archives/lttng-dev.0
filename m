@@ -1,16 +1,25 @@
-From: Danny Serres <serres@live.ca>
-Subject: [babeltrace PATCH] Python: Fix some examples for Python
-	3
-Date: Thu, 7 Nov 2013 15:51:39 -0500
-Message-ID: <BLU0-SMTP579E39C31907D03FDB09FEC0F30__10559.6221438192$1383857628$gmane$org@phx.gbl>
+From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: Reading CTF trace using Babeltrace API
+Date: Thu, 7 Nov 2013 16:40:30 -0500
+Message-ID: <CA+jJMxuC+NUrGdo4kespb+7u7E3etPoE--0UmekFqyYr3Jzkwg__31318.0087054663$1383860497$gmane$org@mail.gmail.com>
+References: <E537659DE2B2C54EBD9FC9180F059880395D85FEA2@zulu.esk.fraunhofer.de>
+	<CA+jJMxtmqSLA9wpyCMxCo5i7k2=ndL_GZNi8Dbw8YsSbQ15qeQ@mail.gmail.com>
+	<E537659DE2B2C54EBD9FC9180F059880395D860010@zulu.esk.fraunhofer.de>
+	<CA+jJMxsMU5u_4m3pUPJ6EBQVKTL_4+PNSj8iHvRcn6CJ=bt6Ag@mail.gmail.com>
+	<439534666.36114.1381274066505.JavaMail.zimbra@efficios.com>
+	<CA+jJMxtK8ZHvXKw3Ea6wxF_6f8_LwmkDahbxCg=rBu3SXjBMWg@mail.gmail.com>
+	<E537659DE2B2C54EBD9FC9180F059880395D955070@zulu.esk.fraunhofer.de>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from blu0-omc3-s25.blu0.hotmail.com ([65.55.116.100])
+Received: from mail-qa0-f52.google.com ([209.85.216.52])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <serres@live.ca>) id 1VeWYn-0004Pa-Gi
-	for lttng-dev@lists.lttng.org; Thu, 07 Nov 2013 15:52:20 -0500
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1VeXJc-00069H-GP
+	for lttng-dev@lists.lttng.org; Thu, 07 Nov 2013 16:40:43 -0500
+Received: by mail-qa0-f52.google.com with SMTP id ii20so988751qab.11
+	for <lttng-dev@lists.lttng.org>; Thu, 07 Nov 2013 13:40:31 -0800 (PST)
+In-Reply-To: <E537659DE2B2C54EBD9FC9180F059880395D955070@zulu.esk.fraunhofer.de>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,763 +28,367 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
-Cc: Danny Serres <danny.serres@efficios.com>
+To: Salman Rafiq <salman.rafiq@esk.fraunhofer.de>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Julien Desfossez <jdesfossez@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-New pprint_table module for outputting tables
-without using print as statement
+On Wed, Oct 23, 2013 at 10:50 AM, Salman Rafiq
+<salman.rafiq@esk.fraunhofer.de> wrote:
+> Hello again :)
+>
+> While reading Kernel trace events (system calls), I came across an issue =
+related to reading the field 'args' inside 'sys_unknown' system call event.
+>
+> Below is the information I get using public babeltrace API's for the even=
+t field type.
+> Ctf_type_id =3D 8  (CTF_TYPE_ARRAY)
+>
+>
+> But when I try to read the value for the field using the following API
+> char * bt_ctf_get_char_array(const struct bt_definition *field);
+>
+> I receive null value. Also it gives me warning that I am instead extracti=
+ng a String.
+> [warning] Extracting String
+>
+> Also, I am unable to read the value using the following API.
+> char *bt_ctf_get_string(const struct bt_definition *field);
+>
 
-Signed-off-by: Danny Serres <danny.serres@efficios.com>
+You should be using the bt_ctf_get_index() function to access the
+individual elements of _args. Let me know how that works out.
 
----
- bindings/python/examples/eventcount.py             |   85 +++++++++++++++++
- bindings/python/examples/events_per_cpu.py         |  100 ++++++++++++++++++++
- .../examples/output_format_modules/pprint_table.py |   58 ++++++++++++
- bindings/python/examples/python2/eventcount.py     |   85 -----------------
- bindings/python/examples/python2/events_per_cpu.py |  100 --------------------
- .../python2/output_format_modules/pprint_table.py  |   69 +++++++++-----
- .../python/examples/python2/syscalls_by_pid.py     |   85 -----------------
- bindings/python/examples/syscalls_by_pid.py        |   85 +++++++++++++++++
- 8 files changed, 373 insertions(+), 294 deletions(-)
- create mode 100644 bindings/python/examples/eventcount.py
- create mode 100644 bindings/python/examples/events_per_cpu.py
- create mode 100644 bindings/python/examples/output_format_modules/__init__.py
- create mode 100644 bindings/python/examples/output_format_modules/pprint_table.py
- delete mode 100644 bindings/python/examples/python2/eventcount.py
- delete mode 100644 bindings/python/examples/python2/events_per_cpu.py
- delete mode 100644 bindings/python/examples/python2/syscalls_by_pid.py
- create mode 100644 bindings/python/examples/syscalls_by_pid.py
+As for the "Extracting string" message, it can indeed be misleading...
 
-diff --git a/bindings/python/examples/eventcount.py b/bindings/python/examples/eventcount.py
-new file mode 100644
-index 0000000..c088508
---- /dev/null
-+++ b/bindings/python/examples/eventcount.py
-@@ -0,0 +1,85 @@
-+#!/usr/bin/env python3
-+# eventcount.py
-+#
-+# Babeltrace event count example script
-+#
-+# Copyright 2012 EfficiOS Inc.
-+#
-+# Author: Danny Serres <danny.serres@efficios.com>
-+#
-+# Permission is hereby granted, free of charge, to any person obtaining a copy
-+# of this software and associated documentation files (the "Software"), to deal
-+# in the Software without restriction, including without limitation the rights
-+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-+# copies of the Software, and to permit persons to whom the Software is
-+# furnished to do so, subject to the following conditions:
-+#
-+# The above copyright notice and this permission notice shall be included in
-+# all copies or substantial portions of the Software.
-+
-+# The script prints a count of specified events and
-+# their related tid's in a given trace.
-+# The trace needs TID context (lttng add-context -k -t tid)
-+
-+import sys
-+from babeltrace import *
-+from output_format_modules.pprint_table import pprint_table as pprint
-+
-+if len(sys.argv) < 3:
-+	raise TypeError("Usage: python eventcount.py event1 [event2 ...] path/to/trace")
-+
-+ctx = Context()
-+ret = ctx.add_trace(sys.argv[len(sys.argv)-1], "ctf")
-+if ret is None:
-+	raise IOError("Error adding trace")
-+
-+counts = {}
-+
-+# Setting iterator
-+bp = IterPos(SEEK_BEGIN)
-+ctf_it = ctf.Iterator(ctx, bp)
-+
-+# Reading events
-+event = ctf_it.read_event()
-+while(event is not None):
-+	for event_type in sys.argv[1:len(sys.argv)-1]:
-+		if event_type == event.get_name():
-+
-+			# Getting scope definition
-+			sco = event.get_top_level_scope(ctf.scope.STREAM_EVENT_CONTEXT)
-+			if sco is None:
-+				print("ERROR: Cannot get definition scope for {}".format(
-+					event.get_name()))
-+				continue
-+
-+			# Getting TID
-+			tid_field = event.get_field(sco, "_tid")
-+			tid = tid_field.get_int64()
-+
-+			if ctf.field_error():
-+				print("ERROR: Missing TID info for {}".format(
-+					event.get_name()))
-+				continue
-+
-+			tmp = (tid, event.get_name())
-+
-+			if tmp in counts:
-+				counts[tmp] += 1
-+			else:
-+				counts[tmp] = 1
-+
-+	# Next event
-+	ret = ctf_it.next()
-+	if ret < 0:
-+		break
-+	event = ctf_it.read_event()
-+
-+del ctf_it
-+
-+# Appending data to table for output
-+table = []
-+for item in counts:
-+	table.append([item[0], item[1], counts[item]])
-+table = sorted(table)
-+table.insert(0,["TID", "EVENT", "COUNT"])
-+pprint(table, 2)
-diff --git a/bindings/python/examples/events_per_cpu.py b/bindings/python/examples/events_per_cpu.py
-new file mode 100644
-index 0000000..fa0417c
---- /dev/null
-+++ b/bindings/python/examples/events_per_cpu.py
-@@ -0,0 +1,100 @@
-+#!/usr/bin/env python3
-+# events_per_cpu.py
-+#
-+# Babeltrace events per cpu example script
-+#
-+# Copyright 2012 EfficiOS Inc.
-+#
-+# Author: Danny Serres <danny.serres@efficios.com>
-+#
-+# Permission is hereby granted, free of charge, to any person obtaining a copy
-+# of this software and associated documentation files (the "Software"), to deal
-+# in the Software without restriction, including without limitation the rights
-+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-+# copies of the Software, and to permit persons to whom the Software is
-+# furnished to do so, subject to the following conditions:
-+#
-+# The above copyright notice and this permission notice shall be included in
-+# all copies or substantial portions of the Software.
-+
-+# The script opens a trace and prints out CPU statistics
-+# for the given trace (event count per CPU, total active
-+# time and % of time processing events).
-+# It also outputs a .txt file showing each time interval
-+# (since the beginning of the trace) in which each CPU
-+# was active and the corresponding event.
-+
-+import sys, multiprocessing
-+from output_format_modules.pprint_table import pprint_table as pprint
-+from babeltrace import *
-+
-+if len(sys.argv) < 2:
-+	raise TypeError("Usage: python events_per_cpu.py path/to/trace")
-+
-+# Adding trace
-+ctx = Context()
-+ret = ctx.add_trace(sys.argv[1], "ctf")
-+if ret is None:
-+	raise IOError("Error adding trace")
-+
-+cpu_usage = []
-+nbEvents = 0
-+i = 0
-+while i < multiprocessing.cpu_count():
-+	cpu_usage.append([])
-+	i += 1
-+
-+# Setting iterator
-+bp = IterPos(SEEK_BEGIN)
-+ctf_it = ctf.Iterator(ctx, bp)
-+
-+# Reading events
-+event = ctf_it.read_event()
-+start_time = event.get_timestamp()
-+
-+while(event is not None):
-+
-+	event_name = event.get_name()
-+	ts = event.get_timestamp()
-+
-+	# Getting cpu_id
-+	scope = event.get_top_level_scope(ctf.scope.STREAM_PACKET_CONTEXT)
-+	field = event.get_field(scope, "cpu_id")
-+	cpu_id = field.get_uint64()
-+	if ctf.field_error():
-+		print("ERROR: Missing cpu_id info for {}".format(event.get_name()))
-+	else:
-+		cpu_usage[cpu_id].append( (int(ts), event_name) )
-+		nbEvents += 1
-+
-+	# Next Event
-+	ret = ctf_it.next()
-+	if ret < 0:
-+		break
-+	event = ctf_it.read_event()
-+
-+
-+# Outputting
-+table = []
-+output = open("events_per_cpu.txt", "wt")
-+output.write("(timestamp, event)\n")
-+
-+for cpu in range(len(cpu_usage)):
-+	# Setting table
-+	event_str = str(100.0 * len(cpu_usage[cpu]) / nbEvents) + '000'
-+	# % is printed with 2 decimals
-+	table.append([cpu, len(cpu_usage[cpu]), event_str[0:event_str.find('.') + 3] + ' %'])
-+
-+	# Writing to file
-+	output.write("\n\n\n----------------------\n")
-+	output.write("CPU {}\n\n".format(cpu))
-+	for event in cpu_usage[cpu]:
-+		output.write(str(event) + '\n')
-+
-+# Printing table
-+table.insert(0, ["CPU ID", "EVENT COUNT", "TRACE EVENT %"])
-+pprint(table)
-+print("Total event count: {}".format(nbEvents))
-+print("Total trace time: {} ns".format(ts - start_time))
-+
-+output.close()
-diff --git a/bindings/python/examples/output_format_modules/__init__.py b/bindings/python/examples/output_format_modules/__init__.py
-new file mode 100644
-index 0000000..e69de29
-diff --git a/bindings/python/examples/output_format_modules/pprint_table.py b/bindings/python/examples/output_format_modules/pprint_table.py
-new file mode 100644
-index 0000000..495a217
---- /dev/null
-+++ b/bindings/python/examples/output_format_modules/pprint_table.py
-@@ -0,0 +1,58 @@
-+# pprint_table.py
-+#
-+# This module is used to pretty-print a table
-+#
-+# Copyright 2013 EfficiOS Inc.
-+#
-+# Author: Danny Serres <danny.serres@efficios.com>
-+#
-+# Permission is hereby granted, free of charge, to any person obtaining a copy
-+# of this software and associated documentation files (the "Software"), to deal
-+# in the Software without restriction, including without limitation the rights
-+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-+# copies of the Software, and to permit persons to whom the Software is
-+# furnished to do so, subject to the following conditions:
-+#
-+# The above copyright notice and this permission notice shall be included in
-+# all copies or substantial portions of the Software.
-+
-+import sys
-+
-+def pprint_table(table, nbLeft=1, out=sys.stdout):
-+	"""
-+	Prints a nice table of data.
-+	table is the table to print.  It must be a list of lists of equal lenghts.
-+	nbLeft is the number of columns aligned left.
-+	out is the output stream (a file-like object).
-+	Returns None.
-+	"""
-+
-+	# Returns the largest entry in column col of the table
-+	max_width = lambda tbl, col : max([len(str(line[col])) for line in tbl])
-+
-+	col_widths = []
-+	nbColumns = len(table[0])
-+
-+	# For each column, get its max width
-+	i = 0
-+	while i < nbColumns :
-+		col_widths.append(max_width(table, i))
-+		i += 1
-+
-+	out_string = ""
-+
-+	for line in table:
-+		# For columns aligned left
-+		for i in range(nbLeft):
-+			out_string += str(line[i]).ljust(col_widths[i] + 1)
-+		# For other columns (aligned right)
-+		for i in range(nbLeft, nbColumns):
-+			out_string += str(line[i]).rjust(col_widths[i] + 2)
-+
-+		# Print line
-+		out.write(out_string + '\n')
-+
-+		# Clear string
-+		out_string = ""
-+
-+	return None
-diff --git a/bindings/python/examples/python2/eventcount.py b/bindings/python/examples/python2/eventcount.py
-deleted file mode 100644
-index 079633c..0000000
---- a/bindings/python/examples/python2/eventcount.py
-+++ /dev/null
-@@ -1,85 +0,0 @@
--#!/usr/bin/env python2
--# eventcount.py
--#
--# Babeltrace event count example script
--#
--# Copyright 2012 EfficiOS Inc.
--#
--# Author: Danny Serres <danny.serres@efficios.com>
--#
--# Permission is hereby granted, free of charge, to any person obtaining a copy
--# of this software and associated documentation files (the "Software"), to deal
--# in the Software without restriction, including without limitation the rights
--# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
--# copies of the Software, and to permit persons to whom the Software is
--# furnished to do so, subject to the following conditions:
--#
--# The above copyright notice and this permission notice shall be included in
--# all copies or substantial portions of the Software.
--
--# The script prints a count of specified events and
--# their related tid's in a given trace.
--# The trace needs TID context (lttng add-context -k -t tid)
--
--import sys
--from babeltrace import *
--from output_format_modules.pprint_table import pprint_table as pprint
--
--if len(sys.argv) < 3:
--	raise TypeError("Usage: python eventcount.py event1 [event2 ...] path/to/trace")
--
--ctx = Context()
--ret = ctx.add_trace(sys.argv[len(sys.argv)-1], "ctf")
--if ret is None:
--	raise IOError("Error adding trace")
--
--counts = {}
--
--# Setting iterator
--bp = IterPos(SEEK_BEGIN)
--ctf_it = ctf.Iterator(ctx, bp)
--
--# Reading events
--event = ctf_it.read_event()
--while(event is not None):
--	for event_type in sys.argv[1:len(sys.argv)-1]:
--		if event_type == event.get_name():
--
--			# Getting scope definition
--			sco = event.get_top_level_scope(ctf.scope.STREAM_EVENT_CONTEXT)
--			if sco is None:
--				print("ERROR: Cannot get definition scope for {}".format(
--					event.get_name()))
--				continue
--
--			# Getting TID
--			tid_field = event.get_field(sco, "_tid")
--			tid = tid_field.get_int64()
--
--			if ctf.field_error():
--				print("ERROR: Missing TID info for {}".format(
--					event.get_name()))
--				continue
--
--			tmp = (tid, event.get_name())
--
--			if tmp in counts:
--				counts[tmp] += 1
--			else:
--				counts[tmp] = 1
--
--	# Next event
--	ret = ctf_it.next()
--	if ret < 0:
--		break
--	event = ctf_it.read_event()
--
--del ctf_it
--
--# Appending data to table for output
--table = []
--for item in counts:
--	table.append([item[0], item[1], counts[item]])
--table = sorted(table)
--table.insert(0,["TID", "EVENT", "COUNT"])
--pprint(table, 2)
-diff --git a/bindings/python/examples/python2/events_per_cpu.py b/bindings/python/examples/python2/events_per_cpu.py
-deleted file mode 100644
-index 6425b2d..0000000
---- a/bindings/python/examples/python2/events_per_cpu.py
-+++ /dev/null
-@@ -1,100 +0,0 @@
--#!/usr/bin/env python2
--# events_per_cpu.py
--#
--# Babeltrace events per cpu example script
--#
--# Copyright 2012 EfficiOS Inc.
--#
--# Author: Danny Serres <danny.serres@efficios.com>
--#
--# Permission is hereby granted, free of charge, to any person obtaining a copy
--# of this software and associated documentation files (the "Software"), to deal
--# in the Software without restriction, including without limitation the rights
--# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
--# copies of the Software, and to permit persons to whom the Software is
--# furnished to do so, subject to the following conditions:
--#
--# The above copyright notice and this permission notice shall be included in
--# all copies or substantial portions of the Software.
--
--# The script opens a trace and prints out CPU statistics
--# for the given trace (event count per CPU, total active
--# time and % of time processing events).
--# It also outputs a .txt file showing each time interval
--# (since the beginning of the trace) in which each CPU
--# was active and the corresponding event.
--
--import sys, multiprocessing
--from output_format_modules.pprint_table import pprint_table as pprint
--from babeltrace import *
--
--if len(sys.argv) < 2:
--	raise TypeError("Usage: python events_per_cpu.py path/to/trace")
--
--# Adding trace
--ctx = Context()
--ret = ctx.add_trace(sys.argv[1], "ctf")
--if ret is None:
--	raise IOError("Error adding trace")
--
--cpu_usage = []
--nbEvents = 0
--i = 0
--while i < multiprocessing.cpu_count():
--	cpu_usage.append([])
--	i += 1
--
--# Setting iterator
--bp = IterPos(SEEK_BEGIN)
--ctf_it = ctf.Iterator(ctx, bp)
--
--# Reading events
--event = ctf_it.read_event()
--start_time = event.get_timestamp()
--
--while(event is not None):
--
--	event_name = event.get_name()
--	ts = event.get_timestamp()
--
--	# Getting cpu_id
--	scope = event.get_top_level_scope(ctf.scope.STREAM_PACKET_CONTEXT)
--	field = event.get_field(scope, "cpu_id")
--	cpu_id = field.get_uint64()
--	if ctf.field_error():
--		print("ERROR: Missing cpu_id info for {}".format(event.get_name()))
--	else:
--		cpu_usage[cpu_id].append( (int(ts), event_name) )
--		nbEvents += 1
--
--	# Next Event
--	ret = ctf_it.next()
--	if ret < 0:
--		break
--	event = ctf_it.read_event()
--
--
--# Outputting
--table = []
--output = open("events_per_cpu.txt", "wt")
--output.write("(timestamp, event)\n")
--
--for cpu in range(len(cpu_usage)):
--	# Setting table
--	event_str = str(100.0 * len(cpu_usage[cpu]) / nbEvents) + '000'
--	# % is printed with 2 decimals
--	table.append([cpu, len(cpu_usage[cpu]), event_str[0:event_str.find('.') + 3] + ' %'])
--
--	# Writing to file
--	output.write("\n\n\n----------------------\n")
--	output.write("CPU {}\n\n".format(cpu))
--	for event in cpu_usage[cpu]:
--		output.write(str(event) + '\n')
--
--# Printing table
--table.insert(0, ["CPU ID", "EVENT COUNT", "TRACE EVENT %"])
--pprint(table)
--print("Total event count: {}".format(nbEvents))
--print("Total trace time: {} ns".format(ts - start_time))
--
--output.close()
-diff --git a/bindings/python/examples/python2/output_format_modules/pprint_table.py b/bindings/python/examples/python2/output_format_modules/pprint_table.py
-index 3a63d62..495a217 100644
---- a/bindings/python/examples/python2/output_format_modules/pprint_table.py
-+++ b/bindings/python/examples/python2/output_format_modules/pprint_table.py
-@@ -1,37 +1,58 @@
- # pprint_table.py
- #
- # This module is used to pretty-print a table
--# Adapted from
--# http://ginstrom.com/scribbles/2007/09/04/pretty-printing-a-table-in-python/
-+#
-+# Copyright 2013 EfficiOS Inc.
-+#
-+# Author: Danny Serres <danny.serres@efficios.com>
-+#
-+# Permission is hereby granted, free of charge, to any person obtaining a copy
-+# of this software and associated documentation files (the "Software"), to deal
-+# in the Software without restriction, including without limitation the rights
-+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-+# copies of the Software, and to permit persons to whom the Software is
-+# furnished to do so, subject to the following conditions:
-+#
-+# The above copyright notice and this permission notice shall be included in
-+# all copies or substantial portions of the Software.
- 
- import sys
- 
--def get_max_width(table, index):
--	"""Get the maximum width of the given column index"""
--
--	return max([len(str(row[index])) for row in table])
--
--
- def pprint_table(table, nbLeft=1, out=sys.stdout):
- 	"""
--	Prints out a table of data, padded for alignment
--	@param table: The table to print. A list of lists.
--	Each row must have the same number of columns.
--	@param nbLeft: The number of columns aligned left
--	@param out: Output stream (file-like object)
-+	Prints a nice table of data.
-+	table is the table to print.  It must be a list of lists of equal lenghts.
-+	nbLeft is the number of columns aligned left.
-+	out is the output stream (a file-like object).
-+	Returns None.
- 	"""
+J=E9r=E9mie
 
--	col_paddings = []
-+	# Returns the largest entry in column col of the table
-+	max_width = lambda tbl, col : max([len(str(line[col])) for line in tbl])
-+
-+	col_widths = []
-+	nbColumns = len(table[0])
- 
--	for i in range(len(table[0])):
--		col_paddings.append(get_max_width(table, i))
-+	# For each column, get its max width
-+	i = 0
-+	while i < nbColumns :
-+		col_widths.append(max_width(table, i))
-+		i += 1
- 
--	for row in table:
--		# left cols
-+	out_string = ""
-+
-+	for line in table:
-+		# For columns aligned left
- 		for i in range(nbLeft):
--			print >> out, str(row[i]).ljust(col_paddings[i] + 1),
--		# rest of the cols
--		for i in range(nbLeft, len(row)):
--			col = str(row[i]).rjust(col_paddings[i] + 2)
--			print >> out, col,
--		print >> out
-+			out_string += str(line[i]).ljust(col_widths[i] + 1)
-+		# For other columns (aligned right)
-+		for i in range(nbLeft, nbColumns):
-+			out_string += str(line[i]).rjust(col_widths[i] + 2)
-+
-+		# Print line
-+		out.write(out_string + '\n')
-+
-+		# Clear string
-+		out_string = ""
-+
-+	return None
-diff --git a/bindings/python/examples/python2/syscalls_by_pid.py b/bindings/python/examples/python2/syscalls_by_pid.py
-deleted file mode 100644
-index cf1d581..0000000
---- a/bindings/python/examples/python2/syscalls_by_pid.py
-+++ /dev/null
-@@ -1,85 +0,0 @@
--#!/usr/bin/env python2
--# syscall_by_pid.py
--#
--# Babeltrace syscall by pid example script
--#
--# Copyright 2012 EfficiOS Inc.
--#
--# Author: Danny Serres <danny.serres@efficios.com>
--#
--# Permission is hereby granted, free of charge, to any person obtaining a copy
--# of this software and associated documentation files (the "Software"), to deal
--# in the Software without restriction, including without limitation the rights
--# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
--# copies of the Software, and to permit persons to whom the Software is
--# furnished to do so, subject to the following conditions:
--#
--# The above copyright notice and this permission notice shall be included in
--# all copies or substantial portions of the Software.
--
--# The script checks the number of events in the trace
--# and outputs a table and a .svg histogram for the specified
--# range (microseconds) or the total trace if no range specified.
--# The graph is generated using the cairoplot module.
--
--# The script checks all syscall in the trace and prints a list
--# showing the number of systemcalls executed by each PID
--# ordered from greatest to least number of syscalls.
--# The trace needs PID context (lttng add-context -k -t pid)
--
--import sys
--from babeltrace import *
--from output_format_modules.pprint_table import pprint_table as pprint
--
--if len(sys.argv) < 2 :
--	raise TypeError("Usage: python syscalls_by_pid.py path/to/trace")
--
--ctx = Context()
--ret = ctx.add_trace(sys.argv[1], "ctf")
--if ret is None:
--	raise IOError("Error adding trace")
--
--data = {}
--
--# Setting iterator
--bp = IterPos(SEEK_BEGIN)
--ctf_it = ctf.Iterator(ctx, bp)
--
--# Reading events
--event = ctf_it.read_event()
--while event is not None:
--	if event.get_name().find("sys") >= 0:
--		# Getting scope definition
--		sco = event.get_top_level_scope(ctf.scope.STREAM_EVENT_CONTEXT)
--		if sco is None:
--			print("ERROR: Cannot get definition scope for {}".format(
--				event.get_name()))
--		else:
--			# Getting PID
--			pid_field = event.get_field(sco, "_pid")
--			pid = pid_field.get_int64()
--
--			if ctf.field_error():
--				print("ERROR: Missing PID info for sched_switch".format(
--					event.get_name()))
--			elif pid in data:
--				data[pid] += 1
--			else:
--				data[pid] = 1
--	# Next event
--	ret = ctf_it.next()
--	if ret < 0:
--		break
--	event = ctf_it.read_event()
--
--del ctf_it
--
--# Setting table for output
--table = []
--for item in data:
--	table.append([data[item], item])  # [count, pid]
--table.sort(reverse = True)	# [big count first, pid]
--for i in range(len(table)):
--	table[i].reverse()	# [pid, big count first]
--table.insert(0, ["PID", "SYSCALL COUNT"])
--pprint(table)
-diff --git a/bindings/python/examples/syscalls_by_pid.py b/bindings/python/examples/syscalls_by_pid.py
-new file mode 100644
-index 0000000..2d16ae2
---- /dev/null
-+++ b/bindings/python/examples/syscalls_by_pid.py
-@@ -0,0 +1,85 @@
-+#!/usr/bin/env python3
-+# syscall_by_pid.py
-+#
-+# Babeltrace syscall by pid example script
-+#
-+# Copyright 2012 EfficiOS Inc.
-+#
-+# Author: Danny Serres <danny.serres@efficios.com>
-+#
-+# Permission is hereby granted, free of charge, to any person obtaining a copy
-+# of this software and associated documentation files (the "Software"), to deal
-+# in the Software without restriction, including without limitation the rights
-+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-+# copies of the Software, and to permit persons to whom the Software is
-+# furnished to do so, subject to the following conditions:
-+#
-+# The above copyright notice and this permission notice shall be included in
-+# all copies or substantial portions of the Software.
-+
-+# The script checks the number of events in the trace
-+# and outputs a table and a .svg histogram for the specified
-+# range (microseconds) or the total trace if no range specified.
-+# The graph is generated using the cairoplot module.
-+
-+# The script checks all syscall in the trace and prints a list
-+# showing the number of systemcalls executed by each PID
-+# ordered from greatest to least number of syscalls.
-+# The trace needs PID context (lttng add-context -k -t pid)
-+
-+import sys
-+from babeltrace import *
-+from output_format_modules.pprint_table import pprint_table as pprint
-+
-+if len(sys.argv) < 2 :
-+	raise TypeError("Usage: python syscalls_by_pid.py path/to/trace")
-+
-+ctx = Context()
-+ret = ctx.add_trace(sys.argv[1], "ctf")
-+if ret is None:
-+	raise IOError("Error adding trace")
-+
-+data = {}
-+
-+# Setting iterator
-+bp = IterPos(SEEK_BEGIN)
-+ctf_it = ctf.Iterator(ctx, bp)
-+
-+# Reading events
-+event = ctf_it.read_event()
-+while event is not None:
-+	if event.get_name().find("sys") >= 0:
-+		# Getting scope definition
-+		sco = event.get_top_level_scope(ctf.scope.STREAM_EVENT_CONTEXT)
-+		if sco is None:
-+			print("ERROR: Cannot get definition scope for {}".format(
-+				event.get_name()))
-+		else:
-+			# Getting PID
-+			pid_field = event.get_field(sco, "_pid")
-+			pid = pid_field.get_int64()
-+
-+			if ctf.field_error():
-+				print("ERROR: Missing PID info for sched_switch".format(
-+					event.get_name()))
-+			elif pid in data:
-+				data[pid] += 1
-+			else:
-+				data[pid] = 1
-+	# Next event
-+	ret = ctf_it.next()
-+	if ret < 0:
-+		break
-+	event = ctf_it.read_event()
-+
-+del ctf_it
-+
-+# Setting table for output
-+table = []
-+for item in data:
-+	table.append([data[item], item])  # [count, pid]
-+table.sort(reverse = True)	# [big count first, pid]
-+for i in range(len(table)):
-+	table[i].reverse()	# [pid, big count first]
-+table.insert(0, ["PID", "SYSCALL COUNT"])
-+pprint(table)
--- 
-1.7.9.5
+>
+> below is the sample event recorded:
+> [00002934900435406801] (+0.000009630) sys_unknown: { cpu_id =3D 3 }, { id=
+ =3D 277, args =3D [ [0] =3D 22, [1] =3D 0, [2] =3D 4096, [3] =3D 2, [4] =
+=3D 4096, [5] =3D 5 ] }
+>
+> AND the event definition:
+> event {
+>         name =3D sys_unknown;
+>         id =3D 2;
+>         stream_id =3D 0;
+>         fields :=3D struct {
+>                 integer { size =3D 32; align =3D 8; signed =3D 0; encodin=
+g =3D none; base =3D 10; } _id
+>                 integer { size =3D 64; align =3D 8; signed =3D 0; encodin=
+g =3D none; base =3D 10; } _args[6];
+>         };
+> };
+>
+>
+> Any suggestion related to that will be very helpful.
+> Thanks!
+>
+> Best Regards,
+> Salman
+> --
+> Salman Rafiq
+> Gesch=E4ftsfeld Industrial Communication
+> Fraunhofer-Institut  f=FCr Eingebettete Systeme und Kommunikationstechnik=
+ ESK
+>
+> Hansastra=DFe 32 | 80686 M=FCnchen
+> Telefon, Fax:  +49 89 547088-356 | +49 89 547088-221
+> E-Mail:   salman.rafiq@esk.fraunhofer.de
+>
+> Internet:
+> http://www.esk.fraunhofer.de
+> http://www.twitter.com/FraunhoferESK
+>
+>
+> -----Original Message-----
+> From: jeremie.galarneau@gmail.com [mailto:jeremie.galarneau@gmail.com] On=
+ Behalf Of J=E9r=E9mie Galarneau
+> Sent: Mittwoch, 9. Oktober 2013 01:50
+> To: Mathieu Desnoyers
+> Cc: Salman Rafiq; Julien Desfossez; lttng-dev@lists.lttng.org
+> Subject: Re: Reading CTF trace using Babeltrace API
+>
+> On Tue, Oct 8, 2013 at 7:14 PM, Mathieu Desnoyers <mathieu.desnoyers@effi=
+cios.com> wrote:
+>> ----- Original Message -----
+>>> From: "J=E9r=E9mie Galarneau" <jeremie.galarneau@efficios.com>
+>>> To: "Salman Rafiq" <salman.rafiq@esk.fraunhofer.de>
+>>> Cc: jdesfossez@efficios.com, lttng-dev@lists.lttng.org, "Mathieu
+>>> Desnoyers" <mathieu.desnoyers@efficios.com>
+>>> Sent: Tuesday, October 8, 2013 2:52:38 PM
+>>> Subject: Re: Reading CTF trace using Babeltrace API
+>> [...]
+>>>
+>>> The problem is that the "id" fields in both struct
+>>> event_header_compact and event_header_large acts as a variant's tag
+>>> enumeration.
+>>>
+>>> For instance, if we take a look at the event_header_compact
+>>> structure,
+>>>
+>>> struct event_header_compact {
+>>>         enum : uint5_t { compact =3D 0 ... 30, extended =3D 31 } id;
+>>>         variant <id> {
+>>>                 struct {
+>>>                         uint27_clock_monotonic_t timestamp;
+>>>                 } compact;
+>>>                 struct {
+>>>                         uint32_t id;
+>>>                         uint64_clock_monotonic_t timestamp;
+>>>                 } extended;
+>>>         } v;
+>>> } align(8);
+>>>
+>>> The "enum id" field will indicate the event's id if it has a value of
+>>> [0, 30]. It also indicates that the "compact" structure is selected
+>>> in the variant that follows. If id =3D=3D 31, the "extended" structure =
+is
+>>> selected, which means that you should retrieve the "id" field's value
+>>> from that structure.
+>>>
+>>> Since code is worth a thousand words, here's a more complete code
+>>> sample to read the id fields.
+>>>
+>>> while ((ctf_event =3D bt_ctf_iter_read_event(iter))) {
+>>>         uint64_t event_id =3D 0;
+>>>         const struct bt_definition *stream_event_header_scope =3D
+>>>                 bt_ctf_get_top_level_scope(
+>>>                         ctf_event, BT_STREAM_EVENT_HEADER);
+>>>         const struct bt_definition *id_definition =3D
+>>>                 bt_ctf_get_field(ctf_event, stream_event_header_scope,
+>>>                                  "id");
+>>>         const struct bt_definition *v_definition =3D
+>>>                 bt_ctf_get_field(ctf_event, stream_event_header_scope,
+>>>                                  "v");
+>>>
+>>>         /* "id may be an enum, get the underlying integer if it's the c=
+ase */
+>>>         if (id_definition &&
+>>> bt_ctf_field_type(bt_ctf_get_decl_from_def(id_definition)) =3D=3D
+>>> CTF_TYPE_ENUM) {
+>>>                 id_definition =3D bt_ctf_get_enum_int(id_definition);
+>>>         }
+>>>
+>>>         /* Check if there is a "v" field and if it contains an "id" fie=
+ld */
+>>>         if (v_definition &&
+>>> bt_ctf_field_type(bt_ctf_get_decl_from_def(v_definition)) =3D=3D
+>>> CTF_TYPE_STRUCT) {
+>>>                 struct bt_definition const * const *list =3D NULL;
+>>>                 unsigned int count =3D 0;
+>>>                 unsigned int i;
+>>>
+>>>                 ret =3D bt_ctf_get_field_list(ctf_event, v_definition,
+>>> &list, &count);
+>>>                 if (ret) {
+>>>                         goto end;
+>>>                 }
+>>>
+>>>                 for (i =3D 0; i < count; i++) {
+>>>                         const char *name =3D
+>>> bt_ctf_field_name(list[i]);
+>>>
+>>>                         if (strcmp("id", name) =3D=3D 0) {
+>>>                                 id_definition =3D list[i];
+>>>                                 break;
+>>>                         }
+>>>                 }
+>>
+>> Instead of doing this bt_ctf_get_field_list() and iteration, can't we si=
+mply use bt_ctf_get_field() to try getting the struct bt_definition ?
+>
+> Right. I was under the impression the bt_ctf_get_field() would only work =
+on scopes, but it's not the case.
+>
+> Thanks!
+> J=E9r=E9mie
+>
+>>
+>> Thanks,
+>>
+>> Mathieu
+>>
+>>>         }
+>>>
+>>>         if (id_definition &&
+>>> bt_ctf_field_type(bt_ctf_get_decl_from_def(id_definition)) =3D=3D
+>>> CTF_TYPE_INTEGER) {
+>>>                 event_id =3D bt_ctf_get_uint64(id_definition);
+>>>         }
+>>>
+>>>         printf("id =3D %" PRIu64 "\n", event_id); }
+>>>
+>>> Regards,
+>>> J=E9r=E9mie
+>>>
+>>> > Thanks a lot!
+>>> >
+>>> > Regards,
+>>> > Salman
+>>> >
+>>> > --
+>>> > Salman Rafiq
+>>> > Gesch=E4ftsfeld Industrial Communication Fraunhofer-Institut  f=FCr
+>>> > Eingebettete Systeme und Kommunikationstechnik ESK
+>>> >
+>>> > Hansastra=DFe 32 | 80686 M=FCnchen
+>>> > Telefon, Fax:  +49 89 547088-356 | +49 89 547088-221
+>>> > E-Mail:   salman.rafiq@esk.fraunhofer.de
+>>> >
+>>> > Internet:
+>>> > http://www.esk.fraunhofer.de
+>>> > http://www.twitter.com/FraunhoferESK
+>>> >
+>>> >
+>>> > -----Original Message-----
+>>> > From: jeremie.galarneau@gmail.com
+>>> > [mailto:jeremie.galarneau@gmail.com] On Behalf Of J=E9r=E9mie Galarne=
+au
+>>> > Sent: Mittwoch, 2. Oktober 2013 20:25
+>>> > To: Salman Rafiq
+>>> > Cc: jdesfossez@efficios.com; lttng-dev@lists.lttng.org; Mathieu
+>>> > Desnoyers
+>>> > Subject: Re: Reading CTF trace using Babeltrace API
+>>> >
+>>> > On Wed, Oct 2, 2013 at 12:55 PM, Salman Rafiq
+>>> > <salman.rafiq@esk.fraunhofer.de> wrote:
+>>> >> Dear LTTngers,
+>>> >>
+>>> >> I would like to ask few questions related to the API's for reading
+>>> >> CTF traces.
+>>> >>
+>>> >> 1.  Is there any way to read CTF metadata independently, like we
+>>> >> have certain API's to read the events.
+>>> >>
+>>> >
+>>> > Not from the public API, unfortunately.
+>>> >
+>>> >> 2. There are certain scopes defined in ctf/events.h like:
+>>> >>         BT_TRACE_PACKET_HEADER          =3D 0,
+>>> >>         BT_STREAM_PACKET_CONTEXT        =3D 1,
+>>> >>         BT_STREAM_EVENT_HEADER          =3D 2,
+>>> >>         BT_STREAM_EVENT_CONTEXT         =3D 3,
+>>> >>         BT_EVENT_CONTEXT                =3D 4,
+>>> >>         BT_EVENT_FIELDS                 =3D 5,
+>>> >>
+>>> >> I could not figure out the way to ready the fields 'id' and
+>>> >> 'stream_id', for a particular event while iterating through the trac=
+e.
+>>> >> Though I can ready the event name using an API and fields using
+>>> >> BT_EVENT_FIELDS as a scope.
+>>> >> For e.g. consider the
+>>> >>
+>>> >> event {
+>>> >>         name =3D sched_migrate_task;
+>>> >>         id =3D 1;
+>>> >>         stream_id =3D 0;
+>>> >>         fields :=3D struct {
+>>> >>                 integer { size =3D 8; align =3D 8; signed =3D 1; enc=
+oding =3D
+>>> >>                 UTF8; base =3D 10; } _comm[16];
+>>> >>                 integer { size =3D 32; align =3D 8; signed =3D 1; en=
+coding =3D
+>>> >>                 none; base =3D 10; } _tid;
+>>> >>                 integer { size =3D 32; align =3D 8; signed =3D 1; en=
+coding =3D
+>>> >>                 none; base =3D 10; } _prio;
+>>> >>                 integer { size =3D 32; align =3D 8; signed =3D 1; en=
+coding =3D
+>>> >>                 none; base =3D 10; } _orig_cpu;
+>>> >>                 integer { size =3D 32; align =3D 8; signed =3D 1; en=
+coding =3D
+>>> >>                 none; base =3D 10; } _dest_cpu;
+>>> >>         };
+>>> >> };
+>>> >>
+>>> >
+>>> > The "id" field is part of the BT_STREAM_EVENT_HEADER scope, while
+>>> > the "stream_id" field is part of the BT_TRACE_PACKET_HEADER scope.
+>>> >
+>>> > The code below is adapted from converter/babeltrace.c's
+>>> > convert_trace() loop to print both values.
+>>> >
+>>> > while ((ctf_event =3D bt_ctf_iter_read_event(iter))) {
+>>> >
+>>> >         const struct bt_definition *stream_event_header_scope =3D
+>>> >                 bt_ctf_get_top_level_scope(
+>>> >                         ctf_event, BT_STREAM_EVENT_HEADER);
+>>> >         const struct bt_definition *id_field =3D
+>>> >                 bt_ctf_get_field(
+>>> >                         ctf_event, stream_event_header_scope,
+>>> > "id");
+>>> >
+>>> >         printf("id =3D %" PRIu64 "\n", bt_ctf_get_uint64(id_field));
+>>> >
+>>> >         const struct bt_definition *packet_header_scope =3D
+>>> >                 bt_ctf_get_top_level_scope(
+>>> >                         ctf_event, BT_TRACE_PACKET_HEADER);
+>>> >         const struct bt_definition *stream_id_field =3D
+>>> >                 bt_ctf_get_field(
+>>> >                         ctf_event, packet_header_scope,
+>>> > "stream_id");
+>>> >
+>>> >         printf("stream_id =3D %" PRIu64 "\n", bt_ctf_get_uint64(
+>>> >                        stream_id_field)); [...] }
+>>> >
+>>> > Regards,
+>>> > J=E9r=E9mie
+>>> >
+>>> >>
+>>> >> Any help or suggestion related to this issue will be really apprecia=
+ted.
+>>> >> Thanks!
+>>> >>
+>>> >> Regards,
+>>> >> Salman
+>>> >>
+>>> >> --
+>>> >> Salman Rafiq
+>>> >> Gesch=E4ftsfeld Industrial Communication Fraunhofer-Institut  f=FCr
+>>> >> Eingebettete Systeme und Kommunikationstechnik ESK
+>>> >>
+>>> >> Hansastra=DFe 32 | 80686 M=FCnchen
+>>> >> Telefon, Fax:  +49 89 547088-356 | +49 89 547088-221
+>>> >> E-Mail:   salman.rafiq@esk.fraunhofer.de
+>>> >>
+>>> >> Internet:
+>>> >> http://www.esk.fraunhofer.de
+>>> >> http://www.twitter.com/FraunhoferESK
+>>> >>
+>>> >
+>>> >
+>>> >
+>>> > --
+>>> > J=E9r=E9mie Galarneau
+>>> > EfficiOS Inc.
+>>> > http://www.efficios.com
+>>>
+>>>
+>>>
+>>> --
+>>> J=E9r=E9mie Galarneau
+>>> EfficiOS Inc.
+>>> http://www.efficios.com
+>>>
+>>
+>> --
+>> Mathieu Desnoyers
+>> EfficiOS Inc.
+>> http://www.efficios.com
+>
+>
+>
+> --
+> J=E9r=E9mie Galarneau
+> EfficiOS Inc.
+> http://www.efficios.com
+
+
+
+-- =
+
+J=E9r=E9mie Galarneau
+EfficiOS Inc.
+http://www.efficios.com
