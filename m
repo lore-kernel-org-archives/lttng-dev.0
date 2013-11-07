@@ -1,20 +1,20 @@
 From: JP Ikaheimonen <jp_ikaheimonen@mentor.com>
-Subject: [PATCH lttng-tools 03/28] Add exclusion data to
-	cmd_enable_event
-Date: Thu,  7 Nov 2013 12:18:52 +0200
-Message-ID: <1383819532-6512-1-git-send-email-jp_ikaheimonen__12099.5126119398$1383819605$gmane$org@mentor.com>
+Subject: [PATCH lttng-tools 04/28] Add exclusions to
+	event_ust_enable_tracepoint
+Date: Thu,  7 Nov 2013 12:19:26 +0200
+Message-ID: <1383819566-6553-1-git-send-email-jp_ikaheimonen__8705.32013145766$1383819624$gmane$org@mentor.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jp_ikaheimonen@mentor.com>) id 1VeMgS-0006sw-Rw
-	for lttng-dev@lists.lttng.org; Thu, 07 Nov 2013 05:19:29 -0500
+	(envelope-from <jp_ikaheimonen@mentor.com>) id 1VeMgf-0006vs-Hr
+	for lttng-dev@lists.lttng.org; Thu, 07 Nov 2013 05:19:42 -0500
 Received: from svr-orw-fem-01.mgc.mentorg.com ([147.34.98.93])
 	by relay1.mentorg.com with esmtp
-	id 1VeMgN-0005vP-Da from jp_ikaheimonen@mentor.com
-	for lttng-dev@lists.lttng.org; Thu, 07 Nov 2013 02:19:23 -0800
+	id 1VeMga-0005vt-3J from jp_ikaheimonen@mentor.com
+	for lttng-dev@lists.lttng.org; Thu, 07 Nov 2013 02:19:36 -0800
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -26,84 +26,55 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Add exclusion data to the prototype of cmd_enable_event().
+Add exclusion data to prototype of event_ust_enable_tracepoint()
 
 Signed-off-by: JP Ikaheimonen <jp_ikaheimonen@mentor.com>
 ---
- src/bin/lttng-sessiond/cmd.c  | 8 +++++---
- src/bin/lttng-sessiond/cmd.h  | 4 +++-
- src/bin/lttng-sessiond/main.c | 4 ++--
- 3 files changed, 10 insertions(+), 6 deletions(-)
+ src/bin/lttng-sessiond/cmd.c   | 2 +-
+ src/bin/lttng-sessiond/event.c | 3 ++-
+ src/bin/lttng-sessiond/event.h | 3 ++-
+ 3 files changed, 5 insertions(+), 3 deletions(-)
 
 diff --git a/src/bin/lttng-sessiond/cmd.c b/src/bin/lttng-sessiond/cmd.c
-index 082e345..dca4859 100644
+index dca4859..69dfda6 100644
 --- a/src/bin/lttng-sessiond/cmd.c
 +++ b/src/bin/lttng-sessiond/cmd.c
-@@ -1306,7 +1306,9 @@ error:
+@@ -1421,7 +1421,7 @@ int cmd_enable_event(struct ltt_session *session, struct lttng_domain *domain,
+ 		}
+ 
+ 		/* At this point, the session and channel exist on the tracer */
+-		ret = event_ust_enable_tracepoint(usess, uchan, event, filter);
++		ret = event_ust_enable_tracepoint(usess, uchan, event, filter, exclusion);
+ 		if (ret != LTTNG_OK) {
+ 			goto error;
+ 		}
+diff --git a/src/bin/lttng-sessiond/event.c b/src/bin/lttng-sessiond/event.c
+index f22b812..791251e 100644
+--- a/src/bin/lttng-sessiond/event.c
++++ b/src/bin/lttng-sessiond/event.c
+@@ -408,7 +408,8 @@ error:
   */
- int cmd_enable_event(struct ltt_session *session, struct lttng_domain *domain,
- 		char *channel_name, struct lttng_event *event,
--		struct lttng_filter_bytecode *filter, int wpipe)
+ int event_ust_enable_tracepoint(struct ltt_ust_session *usess,
+ 		struct ltt_ust_channel *uchan, struct lttng_event *event,
+-		struct lttng_filter_bytecode *filter)
 +		struct lttng_filter_bytecode *filter,
-+		struct lttng_event_exclusion *exclusion,
-+		int wpipe)
++		struct lttng_event_exclusion *exclusion)
  {
- 	int ret, channel_created = 0;
- 	struct lttng_channel *attr;
-@@ -1448,7 +1450,7 @@ int cmd_enable_event(struct ltt_session *session, struct lttng_domain *domain,
- 		tmp_dom.type = LTTNG_DOMAIN_UST;
+ 	int ret = LTTNG_OK, to_create = 0;
+ 	struct ltt_ust_event *uevent;
+diff --git a/src/bin/lttng-sessiond/event.h b/src/bin/lttng-sessiond/event.h
+index 1b92a6a..dba2266 100644
+--- a/src/bin/lttng-sessiond/event.h
++++ b/src/bin/lttng-sessiond/event.h
+@@ -37,7 +37,8 @@ int event_kernel_enable_all(struct ltt_kernel_channel *kchan,
  
- 		ret = cmd_enable_event(session, &tmp_dom, DEFAULT_JUL_CHANNEL_NAME,
--				&uevent, NULL, wpipe);
-+				&uevent, NULL, NULL, wpipe);
- 		if (ret != LTTNG_OK && ret != LTTNG_ERR_UST_EVENT_ENABLED) {
- 			goto error;
- 		}
-@@ -1660,7 +1662,7 @@ int cmd_enable_event_all(struct ltt_session *session,
- 		tmp_dom.type = LTTNG_DOMAIN_UST;
- 
- 		ret = cmd_enable_event(session, &tmp_dom, DEFAULT_JUL_CHANNEL_NAME,
--				&uevent, NULL, wpipe);
-+				&uevent, NULL, NULL, wpipe);
- 		if (ret != LTTNG_OK && ret != LTTNG_ERR_UST_EVENT_ENABLED) {
- 			goto error;
- 		}
-diff --git a/src/bin/lttng-sessiond/cmd.h b/src/bin/lttng-sessiond/cmd.h
-index 6502a58..b5264f7 100644
---- a/src/bin/lttng-sessiond/cmd.h
-+++ b/src/bin/lttng-sessiond/cmd.h
-@@ -53,7 +53,9 @@ int cmd_set_filter(struct ltt_session *session, int domain,
- 		struct lttng_filter_bytecode *bytecode);
- int cmd_enable_event(struct ltt_session *session, struct lttng_domain *domain,
- 		char *channel_name, struct lttng_event *event,
--		struct lttng_filter_bytecode *filter, int wpipe);
+ int event_ust_enable_tracepoint(struct ltt_ust_session *usess,
+ 		struct ltt_ust_channel *uchan, struct lttng_event *event,
+-		struct lttng_filter_bytecode *filter);
 +		struct lttng_filter_bytecode *filter,
-+		struct lttng_event_exclusion *exclusion,
-+		int wpipe);
- int cmd_enable_event_all(struct ltt_session *session,
- 		struct lttng_domain *domain, char *channel_name, int event_type,
- 		struct lttng_filter_bytecode *filter, int wpipe);
-diff --git a/src/bin/lttng-sessiond/main.c b/src/bin/lttng-sessiond/main.c
-index 35007b7..71e1a9b 100644
---- a/src/bin/lttng-sessiond/main.c
-+++ b/src/bin/lttng-sessiond/main.c
-@@ -2933,7 +2933,7 @@ skip_domain:
- 	{
- 		ret = cmd_enable_event(cmd_ctx->session, &cmd_ctx->lsm->domain,
- 				cmd_ctx->lsm->u.enable.channel_name,
--				&cmd_ctx->lsm->u.enable.event, NULL, kernel_poll_pipe[1]);
-+				&cmd_ctx->lsm->u.enable.event, NULL, NULL, kernel_poll_pipe[1]);
- 		break;
- 	}
- 	case LTTNG_ENABLE_ALL_EVENT:
-@@ -3294,7 +3294,7 @@ skip_domain:
- 
- 		ret = cmd_enable_event(cmd_ctx->session, &cmd_ctx->lsm->domain,
- 				cmd_ctx->lsm->u.enable.channel_name,
--				&cmd_ctx->lsm->u.enable.event, bytecode, kernel_poll_pipe[1]);
-+				&cmd_ctx->lsm->u.enable.event, bytecode, NULL, kernel_poll_pipe[1]);
- 		break;
- 	}
- 	case LTTNG_DATA_PENDING:
++		struct lttng_event_exclusion *exclusion);
+ int event_ust_disable_tracepoint(struct ltt_ust_session *usess,
+ 		struct ltt_ust_channel *uchan, char *event_name);
+ int event_ust_enable_all_tracepoints(struct ltt_ust_session *usess,
 -- 
 1.8.1.2
