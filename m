@@ -1,8 +1,8 @@
 From: JP Ikaheimonen <jp_ikaheimonen@mentor.com>
-Subject: [PATCH lttng-ust 1/7] Define a new command
-	LTTNG_UST_EXCLUSION
-Date: Thu,  7 Nov 2013 12:22:29 +0200
-Message-ID: <1383819755-6891-2-git-send-email-jp_ikaheimonen__4.00388748875713$1383820229$gmane$org@mentor.com>
+Subject: [PATCH lttng-ust 2/7] Define exclusion structure for
+	UST ABI
+Date: Thu,  7 Nov 2013 12:22:30 +0200
+Message-ID: <1383819755-6891-3-git-send-email-jp_ikaheimonen__38712.4885841787$1383820248$gmane$org@mentor.com>
 References: <1383819755-6891-1-git-send-email-jp_ikaheimonen@mentor.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,12 +10,12 @@ Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jp_ikaheimonen@mentor.com>) id 1VeMjm-0007mP-Mh
-	for lttng-dev@lists.lttng.org; Thu, 07 Nov 2013 05:22:55 -0500
-Received: from svr-orw-exc-10.mgc.mentorg.com ([147.34.98.58])
+	(envelope-from <jp_ikaheimonen@mentor.com>) id 1VeMjn-0007nC-UX
+	for lttng-dev@lists.lttng.org; Thu, 07 Nov 2013 05:22:56 -0500
+Received: from svr-orw-fem-01.mgc.mentorg.com ([147.34.98.93])
 	by relay1.mentorg.com with esmtp
-	id 1VeMjh-0006Hx-8W from jp_ikaheimonen@mentor.com
-	for lttng-dev@lists.lttng.org; Thu, 07 Nov 2013 02:22:49 -0800
+	id 1VeMji-0006I8-Gm from jp_ikaheimonen@mentor.com
+	for lttng-dev@lists.lttng.org; Thu, 07 Nov 2013 02:22:50 -0800
 In-Reply-To: <1383819755-6891-1-git-send-email-jp_ikaheimonen@mentor.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -28,53 +28,32 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Define a new command id for attaching exclusions to enablers.
-Define the structure for passing the command.
+Define a structure for holding exception data. The last data item
+is a flexible array that contains a variable number of
+exclusions names.
 
 Signed-off-by: JP Ikaheimonen <jp_ikaheimonen@mentor.com>
 ---
- include/lttng/ust-abi.h       | 1 +
- include/ust-comm.h            | 3 +++
- liblttng-ust/lttng-ust-comm.c | 1 +
- 3 files changed, 5 insertions(+)
+ include/lttng/ust-abi.h | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/include/lttng/ust-abi.h b/include/lttng/ust-abi.h
-index 6630332..ab70d57 100644
+index ab70d57..0287466 100644
 --- a/include/lttng/ust-abi.h
 +++ b/include/lttng/ust-abi.h
-@@ -273,6 +273,7 @@ struct lttng_ust_filter_bytecode {
- 
- /* Event FD commands */
- #define LTTNG_UST_FILTER			_UST_CMD(0xA0)
-+#define LTTNG_UST_EXCLUSION			_UST_CMD(0xA1)
- 
- #define LTTNG_UST_ROOT_HANDLE	0
- 
-diff --git a/include/ust-comm.h b/include/ust-comm.h
-index ae53f15..b9bbb39 100644
---- a/include/ust-comm.h
-+++ b/include/ust-comm.h
-@@ -91,6 +91,9 @@ struct ustcomm_ust_msg {
- 			uint32_t reloc_offset;
- 			uint64_t seqnum;
- 		} LTTNG_PACKED filter;
-+		struct {
-+			uint32_t count;	/* how many names follow */
-+		} LTTNG_PACKED exclusion;
- 		char padding[USTCOMM_MSG_PADDING2];
- 	} u;
+@@ -228,6 +228,13 @@ struct lttng_ust_filter_bytecode {
+ 	char data[0];
  } LTTNG_PACKED;
-diff --git a/liblttng-ust/lttng-ust-comm.c b/liblttng-ust/lttng-ust-comm.c
-index a6e4ba3..bf2750c 100644
---- a/liblttng-ust/lttng-ust-comm.c
-+++ b/liblttng-ust/lttng-ust-comm.c
-@@ -172,6 +172,7 @@ static const char *cmd_name_mapping[] = {
  
- 	/* Event FD commands */
- 	[ LTTNG_UST_FILTER ] = "Create Filter",
-+	[ LTTNG_UST_EXCLUSION ] = "Add exclusions to event",
- };
- 
- static const char *str_timeout;
++#define LTTNG_UST_EXCLUSION_PADDING	32
++struct lttng_ust_event_exclusion {
++	uint32_t count;
++	char padding[LTTNG_UST_EXCLUSION_PADDING];
++	char names[LTTNG_UST_SYM_NAME_LEN][0];
++} LTTNG_PACKED;
++
+ #define _UST_CMD(minor)				(minor)
+ #define _UST_CMDR(minor, type)			(minor)
+ #define _UST_CMDW(minor, type)			(minor)
 -- 
 1.8.1.2
