@@ -1,18 +1,17 @@
-From: Klaus Dannecker <klaus.dannecker@gmx.de>
-Subject: make a trace_event in a modul (driver)
-Date: Sat, 09 Nov 2013 09:33:45 +0100
-Message-ID: <527DF369.4020704__45114.5151201219$1383986068$gmane$org@gmx.de>
+From: Shreyas Joshi <shreyasjoshi11@gmail.com>
+Subject: Build Issue - lttng-modules - cross compiling for
+	MIPSEL - syscall.h
+Date: Fri, 8 Nov 2013 12:41:55 +0530
+Message-ID: <CAP0pN0uFfyA1GFjcDrqQ+QML_c0eLT-jksqYS0ZAt=C+==Lo7A__7295.40086254037$1384090450$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0801535130=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mout.gmx.net ([212.227.17.22])
+Received: from mail-ie0-f180.google.com ([209.85.223.180])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <klaus.dannecker@gmx.de>) id 1Vf3z2-0002N7-AL
-	for lttng-dev@lists.lttng.org; Sat, 09 Nov 2013 03:33:33 -0500
-Received: from [192.168.178.21] ([94.217.92.33]) by mail.gmx.com (mrgmx103)
-	with ESMTPSA (Nemesis) id 0LeNGL-1VxJJD04B3-00q9IX for
-	<lttng-dev@lists.lttng.org>; Sat, 09 Nov 2013 09:33:26 +0100
+	(envelope-from <shreyasjoshi11@gmail.com>) id 1VegEb-0001fp-5w
+	for lttng-dev@lists.lttng.org; Fri, 08 Nov 2013 02:12:02 -0500
+Received: by mail-ie0-f180.google.com with SMTP id e14so2679055iej.11
+	for <lttng-dev@lists.lttng.org>; Thu, 07 Nov 2013 23:11:55 -0800 (PST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,35 +23,61 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
+--===============0801535130==
+Content-Type: multipart/alternative; boundary=047d7bd75920edc7de04eaa518fd
+
+--047d7bd75920edc7de04eaa518fd
+Content-Type: text/plain; charset=ISO-8859-1
+
 Hi,
-I want to write a driver with trace events.
-In the first step i compile the example  trace-events-sample.c with the 
-makefile:
 
-ifneq ($(KERNELRELEASE),)
-     obj-m  := modul_trace-events-sample.o
-     modul_trace-events-sample-y := trace-events-sample.o
-     ccflags-y := -I$(src)
-else
-     KDIR ?= /lib/modules/`uname -r`/build
-default:
-     $(MAKE) -C $(KDIR) M=$$PWD
-endif
+As you are aware that in mips linux there is no such file called -
 
-now i get the modul_trace-events-sample.ko File.
-now:
-insmod modul_trace-events-sample.ko
-lttng create
-lttng enable-event -k -a
-lttng start
-...wait...
-lttng stop
-lttng destroy
+#include <asm/syscall.h>
 
-now i look the result in the eclise viewer, but i found event 
-"trace_foo_bar" not in the session!
-what am I doing wrong?
+If I comment this line, then it get the issue for this function -
 
-I use ubuntu 13.04 in a vmware
+error: implicit declaration of function 'syscall_get_arguments'
 
-Thanks
+
+It cannot find the syscall_get_arguments. Do you support lttng-modules for
+mips platform?
+Is there any patch for it? I am stuck at the moment. Any help will be much
+appreciated.
+
+-- 
+Thanks & regards
+
+Shreyas Joshi
+
+--047d7bd75920edc7de04eaa518fd
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div><div><div>Hi,<br><br>As you are aware that in mips li=
+nux there is no such file called - <br><br>#include &lt;asm/syscall.h&gt;<b=
+r><br></div>If I comment this line, then it get the issue for this function=
+ - <br>
+<br>error: implicit declaration of function &#39;syscall_get_arguments&#39;=
+<br><br><br></div>It cannot find the syscall_get_arguments. Do you support =
+lttng-modules for mips platform?<br></div>Is there any patch for it? I am s=
+tuck at the moment. Any help will be much appreciated. <br clear=3D"all">
+<div><div><div><div><div><br>-- <br>Thanks &amp; regards<br><br>Shreyas Jos=
+hi
+</div></div></div></div></div></div>
+
+--047d7bd75920edc7de04eaa518fd--
+
+
+--===============0801535130==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0801535130==--
