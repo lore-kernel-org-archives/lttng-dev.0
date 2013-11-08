@@ -1,20 +1,23 @@
-From: =?UTF-8?q?Rapha=C3=ABl=20Beamonte?= <raphael.beamonte@gmail.com>
-Subject: [lttng-tools PATCH 2/2] Correct the behavior of the
-	utils_expand_path function
-Date: Thu,  7 Nov 2013 23:32:14 -0500
-Message-ID: <1383885134-21397-3-git-send-email-raphael.beamonte__19900.9591866799$1383885241$gmane$org@gmail.com>
-References: <1383885134-21397-1-git-send-email-raphael.beamonte@gmail.com>
+From: =?ISO-8859-1?Q?Rapha=EBl_Beamonte?= <raphael.beamonte@gmail.com>
+Subject: Using userspace tracepoints with icc
+Date: Thu, 07 Nov 2013 23:50:21 -0500
+Message-ID: <527C6D8D.1010103__26914.4013910138$1383886268$gmane$org@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f182.google.com ([209.85.223.182])
+Received: from mail-ie0-f170.google.com ([209.85.223.170])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <raphael.beamonte@gmail.com>) id 1VedkT-0000ti-Qz
-	for lttng-dev@lists.lttng.org; Thu, 07 Nov 2013 23:32:48 -0500
-Received: by mail-ie0-f182.google.com with SMTP id as1so2490098iec.41
-	for <lttng-dev@lists.lttng.org>; Thu, 07 Nov 2013 20:32:40 -0800 (PST)
-In-Reply-To: <1383885134-21397-1-git-send-email-raphael.beamonte@gmail.com>
+	(envelope-from <raphael.beamonte@gmail.com>) id 1Vee1c-0004mE-Dd
+	for lttng-dev@lists.lttng.org; Thu, 07 Nov 2013 23:50:29 -0500
+Received: by mail-ie0-f170.google.com with SMTP id at1so2510194iec.1
+	for <lttng-dev@lists.lttng.org>; Thu, 07 Nov 2013 20:50:22 -0800 (PST)
+Received: from sparrow.sbird.org (69-165-208-83.cable.teksavvy.com.
+	[69.165.208.83])
+	by mx.google.com with ESMTPSA id cl4sm2100565igc.1.2013.11.07.20.50.22
+	for <lttng-dev@lists.lttng.org>
+	(version=TLSv1 cipher=ECDHE-RSA-RC4-SHA bits=128/128);
+	Thu, 07 Nov 2013 20:50:22 -0800 (PST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,71 +26,23 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: dgoulet@efficios.com
-Cc: =?UTF-8?q?Rapha=C3=ABl=20Beamonte?= <raphael.beamonte@gmail.com>, lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-RXZlbiBpZiB0aGUgdXRpbHNfZXhwYW5kX3BhdGggZnVuY3Rpb24gd2FzIGludGVuZGVkIHRvIGFs
-bG93IHRvCnVzZSB1bmV4aXN0ZW50IGRpcmVjdG9yeSBwYXRocywgaXQgd2FzIGluIGZhY3Qgb25s
-eSB3b3JraW5nIGZvcgpzb21lIGtpbmQgb2YgYXJndW1lbnRzLiBQYXRocyBsaWtlICJmb28iLCAi
-YmFyLyIgb3IgImJhci9mb28iCndoZW4gdGhlICJiYXIiIGRpcmVjdG9yeSBkb2VzIG5vdCBleGlz
-dCB3YXNuJ3Qgd29ya2luZy4gVGhpcwpwYXRjaCBpbnRyb2R1Y2UgYSBuZXcgd2F5IHRvIGV4cGFu
-ZCBwYXRocyBpbiB0aGlzIGZ1bmN0aW9uIHRoYXQKYWxzbyB3b3JrcyBwcm9wZXJseSBmb3IgdGhl
-c2Uga2luZCBvZiBhcmd1bWVudHMuCgpTaWduZWQtb2ZmLWJ5OiBSYXBoYcOrbCBCZWFtb250ZSA8
-cmFwaGFlbC5iZWFtb250ZUBnbWFpbC5jb20+Ci0tLQogc3JjL2NvbW1vbi91dGlscy5jIHwgICA3
-MiArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrLS0tLS0tLS0tLS0tLS0tCiAx
-IGZpbGUgY2hhbmdlZCwgNTEgaW5zZXJ0aW9ucygrKSwgMjEgZGVsZXRpb25zKC0pCgpkaWZmIC0t
-Z2l0IGEvc3JjL2NvbW1vbi91dGlscy5jIGIvc3JjL2NvbW1vbi91dGlscy5jCmluZGV4IDdiNTI3
-NjAuLmI2OGYxMmUgMTAwNjQ0Ci0tLSBhL3NyYy9jb21tb24vdXRpbHMuYworKysgYi9zcmMvY29t
-bW9uL3V0aWxzLmMKQEAgLTkyLDcgKzkyLDcgQEAgaW50IHV0aWxzX3Jlc29sdmVfcmVsYXRpdmUo
-Y2hhciAqcGF0aCkKIExUVE5HX0hJRERFTgogY2hhciAqdXRpbHNfZXhwYW5kX3BhdGgoY29uc3Qg
-Y2hhciAqcGF0aCkKIHsKLQljb25zdCBjaGFyICplbmRfcGF0aCA9IHBhdGg7CisJY29uc3QgY2hh
-ciAqZW5kX3BhdGggPSBOVUxMOwogCWNoYXIgKm5leHQsICpjdXRfcGF0aCA9IE5VTEwsICpleHBh
-bmRlZF9wYXRoID0gTlVMTDsKIAogCS8qIFNhZmV0eSBuZXQgKi8KQEAgLTEwMCwzNSArMTAwLDY1
-IEBAIGNoYXIgKnV0aWxzX2V4cGFuZF9wYXRoKGNvbnN0IGNoYXIgKnBhdGgpCiAJCWdvdG8gZXJy
-b3I7CiAJfQogCi0JLyogRmluZCBsYXN0IHRva2VuIGRlbGltaXRlZCBieSAnLycgKi8KLQl3aGls
-ZSAoKG5leHQgPSBzdHJwYnJrKGVuZF9wYXRoICsgMSwgIi8iKSkpIHsKLQkJZW5kX3BhdGggPSBu
-ZXh0OwotCX0KLQotCS8qIEN1dCBsYXN0IHRva2VuIGZyb20gb3JpZ2luYWwgcGF0aCAqLwotCWN1
-dF9wYXRoID0gc3RybmR1cChwYXRoLCBlbmRfcGF0aCAtIHBhdGgpOwotCisJLyogQWxsb2NhdGUg
-bWVtb3J5IGZvciB0aGUgZXhwYW5kZWQgcGF0aCAqLwogCWV4cGFuZGVkX3BhdGggPSB6bWFsbG9j
-KFBBVEhfTUFYKTsKIAlpZiAoZXhwYW5kZWRfcGF0aCA9PSBOVUxMKSB7CiAJCVBFUlJPUigiem1h
-bGxvYyBleHBhbmQgcGF0aCIpOwogCQlnb3RvIGVycm9yOwogCX0KIAotCWV4cGFuZGVkX3BhdGgg
-PSByZWFscGF0aCgoY2hhciAqKWN1dF9wYXRoLCBleHBhbmRlZF9wYXRoKTsKLQlpZiAoZXhwYW5k
-ZWRfcGF0aCA9PSBOVUxMKSB7Ci0JCXN3aXRjaCAoZXJybm8pIHsKLQkJY2FzZSBFTk9FTlQ6Ci0J
-CQlFUlIoIiVzOiBObyBzdWNoIGZpbGUgb3IgZGlyZWN0b3J5IiwgY3V0X3BhdGgpOwotCQkJYnJl
-YWs7Ci0JCWRlZmF1bHQ6Ci0JCQlQRVJST1IoInJlYWxwYXRoIHV0aWxzIGV4cGFuZCBwYXRoIik7
-Ci0JCQlicmVhazsKKwkvKiBJZiBnaXZlbiBwYXRoIGlzIGFscmVhZHkgYWJzb2x1dGUgKi8KKwlp
-ZiAoKnBhdGggPT0gJy8nKSB7CisJCXN0cm5jcHkoZXhwYW5kZWRfcGF0aCwgcGF0aCwgUEFUSF9N
-QVgpOworCS8qIEVsc2UsIHdlIGhhdmUgc29tZSB3b3JrIHRvIGRvICovCisJfSBlbHNlIHsKKwkJ
-LyogUG9pbnRlciB0byB0aGUgbGFzdCBjaGFyIG9mIHRoZSBwYXRoICovCisJCWNvbnN0IGNoYXIg
-Kmxhc3RfY2hhciA9IHBhdGgrc3RybGVuKHBhdGgpLTE7CisKKwkJZW5kX3BhdGggPSBwYXRoOwor
-CQkvKiBJZiB0aGUgcGF0aCBpcyBqdXN0IGEgZGlyZWN0b3J5IG5hbWUgKi8KKwkJaWYgKHN0cmNo
-cihwYXRoLCAnLycpID09IE5VTEwgfHwgc3RyY2hyKHBhdGgsICcvJykgPT0gbGFzdF9jaGFyKSB7
-CisJCQljdXRfcGF0aCA9IHN0cmR1cCgiLiIpOworCQkvKiBFbHNlLCB3ZSBoYXZlIHRvIGFuYWx5
-c2UgdGhlIGZ1bGwgcGF0aCAqLworCQl9IGVsc2UgeworCQkJLyogU3BsaXQgcGFydCB0aGF0IHdp
-bGwgYmUgcmVzb2x2ZWQgYnkgcmVhbHBhdGggKHJlbGF0aXZlIHBhdGggZnJvbQorCQkJICogY3Vy
-cmVudCBkaXJlY3RvcnkgdXNpbmcgLi8gb3IgLi4vIG9ubHkpIGFuZCBwYXJ0IHRoYXQgY291bGQg
-bm90CisJCQkgKiAoZGlyZWN0b3J5IG5hbWVzKQorCQkJICovCisJCQl3aGlsZSAoKG5leHQgPSBz
-dHJwYnJrKGVuZF9wYXRoLCAiLyIpKSAmJiAobmV4dCAhPSBsYXN0X2NoYXIpKSB7CisJCQkJZW5k
-X3BhdGggPSBuZXh0ICsgMTsKKwkJCQlpZiAoc3RybmNtcChlbmRfcGF0aCwgIi4vIiwgMikgIT0g
-MCAmJiBzdHJuY21wKGVuZF9wYXRoLCAiLi4vIiwgMykgIT0gMCkgeworCQkJCQlicmVhazsKKwkJ
-CQl9CisJCQl9CisKKwkJCS8qIEN1dCBsYXN0IHRva2VuIGZyb20gb3JpZ2luYWwgcGF0aCAqLwor
-CQkJY3V0X3BhdGggPSBzdHJuZHVwKHBhdGgsIGVuZF9wYXRoIC0gcGF0aCk7CiAJCX0KLQkJZ290
-byBlcnJvcjsKKworCQkvKiBSZXNvbHZlIHRoZSBjYW5vbmljYWwgcGF0aCBvZiB0aGUgZmlyc3Qg
-cGFydCBvZiB0aGUgcGF0aCAqLworCQlleHBhbmRlZF9wYXRoID0gcmVhbHBhdGgoKGNoYXIgKilj
-dXRfcGF0aCwgZXhwYW5kZWRfcGF0aCk7CisJCWlmIChleHBhbmRlZF9wYXRoID09IE5VTEwpIHsK
-KwkJCXN3aXRjaCAoZXJybm8pIHsKKwkJCWNhc2UgRU5PRU5UOgorCQkJCUVSUigiJXM6IE5vIHN1
-Y2ggZmlsZSBvciBkaXJlY3RvcnkiLCBjdXRfcGF0aCk7CisJCQkJYnJlYWs7CisJCQlkZWZhdWx0
-OgorCQkJCVBFUlJPUigicmVhbHBhdGggdXRpbHMgZXhwYW5kIHBhdGgiKTsKKwkJCQlicmVhazsK
-KwkJCX0KKwkJCWdvdG8gZXJyb3I7CisJCX0KKworCQkvKiBBZGQgZW5kIHBhcnQgdG8gZXhwYW5k
-ZWQgcGF0aCAqLworCQlzdHJuY2F0KGV4cGFuZGVkX3BhdGgsICIvIiwgUEFUSF9NQVggLSBzdHJs
-ZW4oZXhwYW5kZWRfcGF0aCkgLSAxKTsKKwkJc3RybmNhdChleHBhbmRlZF9wYXRoLCBlbmRfcGF0
-aCwgUEFUSF9NQVggLSBzdHJsZW4oZXhwYW5kZWRfcGF0aCkgLSAxKTsKIAl9CiAKLQkvKiBBZGQg
-ZW5kIHBhcnQgdG8gZXhwYW5kZWQgcGF0aCAqLwotCXN0cm5jYXQoZXhwYW5kZWRfcGF0aCwgZW5k
-X3BhdGgsIFBBVEhfTUFYIC0gc3RybGVuKGV4cGFuZGVkX3BhdGgpIC0gMSk7CisJLyogUmVzb2x2
-ZSB0aGUgaW50ZXJuYWwgJy4vJyBhbmQgJy4uLycgc3RyaW5ncyAqLworCWlmICh1dGlsc19yZXNv
-bHZlX3JlbGF0aXZlKGV4cGFuZGVkX3BhdGgpICE9IDApIHsKKwkJZ290byBlcnJvcjsKKwl9CiAK
-IAlmcmVlKGN1dF9wYXRoKTsKIAlyZXR1cm4gZXhwYW5kZWRfcGF0aDsKLS0gCjEuNy4xMC40CgoK
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRu
-Zy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+Hello folks,
+
+A few weeks ago, I was working on an application which used icc (the
+Intel C Compiler) to compile its sources. I wanted to trace it but
+wasn't able to compile with the tracepoints, the ".c" file was spawning
+a ": internal error: backend signal" from icc. Still, there is a
+workaround to be able to trace.
+
+Using gcc to compile the tracepoints (or using the object file generated
+by lttng-gen-tp, which uses gcc) and linking the object file to the
+application worked like a charm. It is not the best way as it forces to
+use two different compilers, but it still allows to trace.
+
+Just thought I'd share this workaround if someone else search how to use
+LTTng-UST with icc.
+
+Rapha=EBl
