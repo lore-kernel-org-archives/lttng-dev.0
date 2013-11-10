@@ -1,7 +1,7 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: Jon Bernard <jbernard@debian.org>
 Subject: Re: LTTng packages in Debian sid out of sync
-Date: Sun, 10 Nov 2013 14:52:20 +0000 (UTC)
-Message-ID: <376195559.63764.1384095140775.JavaMail.zimbra__30248.9522881389$1384095191$gmane$org@efficios.com>
+Date: Sun, 10 Nov 2013 10:21:50 -0500
+Message-ID: <20131110152150.GA22826__35467.2139081687$1384096965$gmane$org@shaniqua>
 References: <630558869.45441.1382211345502.JavaMail.zimbra@efficios.com>
 	<856849325.45462.1382211994767.JavaMail.zimbra@efficios.com>
 	<20131019211009.GA83292@helmut.local>
@@ -10,15 +10,17 @@ References: <630558869.45441.1382211345502.JavaMail.zimbra@efficios.com>
 	<1084047903.45979.1382281219903.JavaMail.zimbra@efficios.com>
 	<20131020160434.GA2011@helmut.local>
 	<20131103231921.GA6958@shaniqua>
+	<376195559.63764.1384095140775.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from out2-smtp.messagingengine.com ([66.111.4.26])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1VfWND-00027s-AZ
-	for lttng-dev@lists.lttng.org; Sun, 10 Nov 2013 09:52:26 -0500
-In-Reply-To: <20131103231921.GA6958@shaniqua>
+	(envelope-from <jbernard@debian.org>) id 1VfWpp-0000wG-NZ
+	for lttng-dev@lists.lttng.org; Sun, 10 Nov 2013 10:21:58 -0500
+Content-Disposition: inline
+In-Reply-To: <376195559.63764.1384095140775.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -27,52 +29,23 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Jon Bernard <jbernard@debian.org>
-Cc: lttng-dev@lists.lttng.org, =?utf-8?Q?St=C3=A9phane?= Graber <stgraber@ubuntu.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev@lists.lttng.org, =?iso-8859-1?Q?St=E9phane?= Graber <stgraber@ubuntu.com>
 List-Id: lttng-dev@lists.lttng.org
 
-SGkgSm9uLAoKVGhhbmtzIGZvciB0aGUgdXBkYXRlcy4gRGlkIHlvdSBtYW5hZ2UgdG8gZ2V0IHRo
-ZSB1cGdyYWRlIHBhdGggZnJvbSBvbGRlciBsdHRuZyB2ZXJzaW9ucyB0byB3b3JrLCBvciBkbyB1
-c2VycyBzdGlsbCBuZWVkIHRvIHVuaW5zdGFsbCB0aGUgb2xkIHBhY2thZ2UgbWFudWFsbHkgPwoK
-VGhhbmtzLAoKTWF0aGlldQoKLS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJK
-b24gQmVybmFyZCIgPGpiZXJuYXJkQGRlYmlhbi5vcmc+Cj4gVG86ICJNYXRoaWV1IERlc25veWVy
-cyIgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4sICJTdMOpcGhhbmUgR3JhYmVyIiA8
-c3RncmFiZXJAdWJ1bnR1LmNvbT4sICJBbGV4YW5kcmUKPiBNb250cGxhaXNpciIgPGFsZXhtb250
-aHlAdm94cG9wdWxpLmltPiwgbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IFNlbnQ6IFN1bmRh
-eSwgTm92ZW1iZXIgMywgMjAxMyA2OjE5OjIxIFBNCj4gU3ViamVjdDogUmU6IFtsdHRuZy1kZXZd
-IExUVG5nIHBhY2thZ2VzIGluIERlYmlhbiBzaWQgb3V0IG9mIHN5bmMKPiAKPiAqIEpvbiBCZXJu
-YXJkIDxqYmVybmFyZEBkZWJpYW4ub3JnPiB3cm90ZToKPiA+ICogTWF0aGlldSBEZXNub3llcnMg
-PG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4gd3JvdGU6Cj4gPiA+IC0tLS0tIE9yaWdp
-bmFsIE1lc3NhZ2UgLS0tLS0KPiA+ID4gPiBGcm9tOiAiSm9uIEJlcm5hcmQiIDxqYmVybmFyZEBk
-ZWJpYW4ub3JnPgo+ID4gPiA+IFRvOiAiTWF0aGlldSBEZXNub3llcnMiIDxtYXRoaWV1LmRlc25v
-eWVyc0BlZmZpY2lvcy5jb20+Cj4gPiA+ID4gQ2M6ICJTdMOpcGhhbmUgR3JhYmVyIiA8c3RncmFi
-ZXJAdWJ1bnR1LmNvbT4sICJBbGV4YW5kcmUgTW9udHBsYWlzaXIiCj4gPiA+ID4gPGFsZXhtb250
-aHlAdm94cG9wdWxpLmltPiwKPiA+ID4gPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gPiA+
-ID4gU2VudDogU3VuZGF5LCBPY3RvYmVyIDIwLCAyMDEzIDk6NDU6MjEgQU0KPiA+ID4gPiBTdWJq
-ZWN0OiBSZTogTFRUbmcgcGFja2FnZXMgaW4gRGViaWFuIHNpZCBvdXQgb2Ygc3luYwo+ID4gPiA+
-IAo+ID4gPiBbLi4uXQo+ID4gPiA+IAo+ID4gPiA+IFRoYXQgaXMgbm90IGV4YWN0bHkgd2hhdCBJ
-IGludGVuZGVkIHRvIGNvbnZleSwgbGV0IG1lIGJlIG1vcmUgZGlyZWN0Cj4gPiA+ID4gYWJvdXQg
-bXkKPiA+ID4gPiB2aWV3LiAgSSBjb21wbGV0ZWx5IGFncmVlIHRoYXQgc2lkIHNob3VsZCBoYXZl
-IDIuMy54IGltbWVkaWF0ZWx5LiAgSQo+ID4gPiA+IGFsc28KPiA+ID4gPiBhZ3JlZQo+ID4gPiA+
-IHRoYXQgMi4zIHNob3VsZCBiZSB0YXJnZXRlZCBmb3IgdGVzdGluZywgYW5kIHRoZXJlZm9yZSB0
-aGUgbmV4dCBzdGFibGUKPiA+ID4gPiByZWxlYXNlLgo+ID4gPiAKPiA+ID4gQWxscmlnaHQgOikg
-SSdtIGdsYWQgd2UncmUgb24gdGhlIHNhbWUgcGFnZSwgc29ycnkgZm9yIHRoZQo+ID4gPiBtaXN1
-bmRlcnN0YW5kaW5nLgo+ID4gCj4gPiBObyB3b3JyaWVzLiAgSSdsbCBhZGQgdGhhdCBmdXR1cmUg
-cmVsZWFzZXMgKGxpa2UgdGhlIHVwY29taW5nIDIuNCkgd2lsbAo+ID4gYmUgcHJlcGFyZWQgYW5k
-IHRlc3RlZCBhbGwgdG9nZXRoZXIgcHJpb3IgdG8gdXBsb2FkIC0gdG8gaG9wZWZ1bGx5IGF2b2lk
-Cj4gPiB0aGUgcHJldmlvdXMgc2l0dWF0aW9uL25pZ2h0bWFyZSB0aGF0IEkgbWFuYWdlZCB0byBn
-ZXQgbXlzZWxmIGludG8uCj4gPiAKPiA+IFRoZXJlIGNhbiBzdGlsbCBiZSBhIHNpemFibGUgYW1v
-dW50IG9mIHdvcmsgZm9yIDIuMyB0byBmdWxseSBsYW5kIGludG8KPiA+IHRlc3RpbmcsIHNvIHRo
-YXQgaXMgbXkgcHJpbWFyeSBmb2N1cy4gIFRoZSBmcmVlemUgZGVhZGxpbmUgaXMgZmFzdAo+ID4g
-YXBwcm9hY2hpbmcsIHNvIEkgd2lsbCBiZSBrZWVwaW5nIGEgY2xvc2UgZXllIG9uIHRoaW5ncyBh
-cyB0aGV5Cj4gPiBwcm9ncmVzcy4gIEFzIHRoaW5ncyBzZXR0bGUgSSdsbCBwb3N0IHN0YXR1cyBo
-ZXJlLgo+IAo+IGx0dG5nLXRvb2xzIDIuMy4wIHdhcyBqdXN0IGFjY2VwdGVkLCBzbyBvbiBzaWQg
-KHVuc3RhYmxlKSB3ZSBzaG91bGQgbm93IGJlIGF0Cj4gdmVyc2lvbiAyLjMuMCBhY3Jvc3MgdGhl
-IGJvYXJkLiAgVGhpbmdzIGxvb2sgcHJldHR5IGdvb2QgdG8gbWUsIGJ1dCBpZiBhbnlvbmUKPiBo
-YXMgdGltZSB0byB0ZXN0IHRoZSBwYWNrYWdlcyBhbmQgbGV0IG1lIGtub3cgaWYgc29tZXRoaW5n
-J3MgbWlzc2luZywKPiBzdHJ1Y3R1cmVkCj4gaW5jb3JyZWN0bHksIG9yIG5vdCBiZWhhdmluZyBh
-cyBleHBlY3RlZCAtIHRoYXQgd291bGQgYmUgYXdlc29tZS4KPiAKPiBDaGVlcnMsCj4gCj4gLS0K
-PiBKb24KPiAKCi0tIApNYXRoaWV1IERlc25veWVycwpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cu
-ZWZmaWNpb3MuY29tCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0
-cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+* Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
+> Hi Jon,
+> 
+> Thanks for the updates. Did you manage to get the upgrade path from
+> older lttng versions to work, or do users still need to uninstall the
+> old package manually ?
+
+I'm working on the upgrade packages now.  I also just noticed a build
+failure on armel[1] for lttng-tools.  It could be a debian-specific
+problem in the compiler/toolchain, but I haven't had a chance to look
+into it yet.  Let me know if you have any thoughts about this.
+
+[1]: https://buildd.debian.org/status/fetch.php?pkg=ltt-control&arch=armel&ver=2.3.0-1&stamp=1383525831
+
+-- 
+Jon
