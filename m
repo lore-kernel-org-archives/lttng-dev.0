@@ -1,17 +1,24 @@
-From: Shreyas Joshi <shreyasjoshi11@gmail.com>
-Subject: Build Issue - lttng-modules - cross compiling for
-	MIPSEL - syscall.h
-Date: Fri, 8 Nov 2013 12:41:55 +0530
-Message-ID: <CAP0pN0uFfyA1GFjcDrqQ+QML_c0eLT-jksqYS0ZAt=C+==Lo7A__7295.40086254037$1384090450$gmane$org@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: LTTng packages in Debian sid out of sync
+Date: Sun, 10 Nov 2013 14:52:20 +0000 (UTC)
+Message-ID: <376195559.63764.1384095140775.JavaMail.zimbra__30248.9522881389$1384095191$gmane$org@efficios.com>
+References: <630558869.45441.1382211345502.JavaMail.zimbra@efficios.com>
+	<856849325.45462.1382211994767.JavaMail.zimbra@efficios.com>
+	<20131019211009.GA83292@helmut.local>
+	<300817690.45707.1382242504740.JavaMail.zimbra@efficios.com>
+	<20131020134521.GA97360@helmut.local>
+	<1084047903.45979.1382281219903.JavaMail.zimbra@efficios.com>
+	<20131020160434.GA2011@helmut.local>
+	<20131103231921.GA6958@shaniqua>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0801535130=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f180.google.com ([209.85.223.180])
+Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <shreyasjoshi11@gmail.com>) id 1VegEb-0001fp-5w
-	for lttng-dev@lists.lttng.org; Fri, 08 Nov 2013 02:12:02 -0500
-Received: by mail-ie0-f180.google.com with SMTP id e14so2679055iej.11
-	for <lttng-dev@lists.lttng.org>; Thu, 07 Nov 2013 23:11:55 -0800 (PST)
+	(envelope-from <compudj@efficios.com>) id 1VfWND-00027s-AZ
+	for lttng-dev@lists.lttng.org; Sun, 10 Nov 2013 09:52:26 -0500
+In-Reply-To: <20131103231921.GA6958@shaniqua>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,64 +27,52 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Jon Bernard <jbernard@debian.org>
+Cc: lttng-dev@lists.lttng.org, =?utf-8?Q?St=C3=A9phane?= Graber <stgraber@ubuntu.com>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0801535130==
-Content-Type: multipart/alternative; boundary=047d7bd75920edc7de04eaa518fd
-
---047d7bd75920edc7de04eaa518fd
-Content-Type: text/plain; charset=ISO-8859-1
-
-Hi,
-
-As you are aware that in mips linux there is no such file called -
-
-#include <asm/syscall.h>
-
-If I comment this line, then it get the issue for this function -
-
-error: implicit declaration of function 'syscall_get_arguments'
-
-
-It cannot find the syscall_get_arguments. Do you support lttng-modules for
-mips platform?
-Is there any patch for it? I am stuck at the moment. Any help will be much
-appreciated.
-
--- 
-Thanks & regards
-
-Shreyas Joshi
-
---047d7bd75920edc7de04eaa518fd
-Content-Type: text/html; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div><div><div>Hi,<br><br>As you are aware that in mips li=
-nux there is no such file called - <br><br>#include &lt;asm/syscall.h&gt;<b=
-r><br></div>If I comment this line, then it get the issue for this function=
- - <br>
-<br>error: implicit declaration of function &#39;syscall_get_arguments&#39;=
-<br><br><br></div>It cannot find the syscall_get_arguments. Do you support =
-lttng-modules for mips platform?<br></div>Is there any patch for it? I am s=
-tuck at the moment. Any help will be much appreciated. <br clear=3D"all">
-<div><div><div><div><div><br>-- <br>Thanks &amp; regards<br><br>Shreyas Jos=
-hi
-</div></div></div></div></div></div>
-
---047d7bd75920edc7de04eaa518fd--
-
-
---===============0801535130==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0801535130==--
+SGkgSm9uLAoKVGhhbmtzIGZvciB0aGUgdXBkYXRlcy4gRGlkIHlvdSBtYW5hZ2UgdG8gZ2V0IHRo
+ZSB1cGdyYWRlIHBhdGggZnJvbSBvbGRlciBsdHRuZyB2ZXJzaW9ucyB0byB3b3JrLCBvciBkbyB1
+c2VycyBzdGlsbCBuZWVkIHRvIHVuaW5zdGFsbCB0aGUgb2xkIHBhY2thZ2UgbWFudWFsbHkgPwoK
+VGhhbmtzLAoKTWF0aGlldQoKLS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJK
+b24gQmVybmFyZCIgPGpiZXJuYXJkQGRlYmlhbi5vcmc+Cj4gVG86ICJNYXRoaWV1IERlc25veWVy
+cyIgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4sICJTdMOpcGhhbmUgR3JhYmVyIiA8
+c3RncmFiZXJAdWJ1bnR1LmNvbT4sICJBbGV4YW5kcmUKPiBNb250cGxhaXNpciIgPGFsZXhtb250
+aHlAdm94cG9wdWxpLmltPiwgbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IFNlbnQ6IFN1bmRh
+eSwgTm92ZW1iZXIgMywgMjAxMyA2OjE5OjIxIFBNCj4gU3ViamVjdDogUmU6IFtsdHRuZy1kZXZd
+IExUVG5nIHBhY2thZ2VzIGluIERlYmlhbiBzaWQgb3V0IG9mIHN5bmMKPiAKPiAqIEpvbiBCZXJu
+YXJkIDxqYmVybmFyZEBkZWJpYW4ub3JnPiB3cm90ZToKPiA+ICogTWF0aGlldSBEZXNub3llcnMg
+PG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4gd3JvdGU6Cj4gPiA+IC0tLS0tIE9yaWdp
+bmFsIE1lc3NhZ2UgLS0tLS0KPiA+ID4gPiBGcm9tOiAiSm9uIEJlcm5hcmQiIDxqYmVybmFyZEBk
+ZWJpYW4ub3JnPgo+ID4gPiA+IFRvOiAiTWF0aGlldSBEZXNub3llcnMiIDxtYXRoaWV1LmRlc25v
+eWVyc0BlZmZpY2lvcy5jb20+Cj4gPiA+ID4gQ2M6ICJTdMOpcGhhbmUgR3JhYmVyIiA8c3RncmFi
+ZXJAdWJ1bnR1LmNvbT4sICJBbGV4YW5kcmUgTW9udHBsYWlzaXIiCj4gPiA+ID4gPGFsZXhtb250
+aHlAdm94cG9wdWxpLmltPiwKPiA+ID4gPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gPiA+
+ID4gU2VudDogU3VuZGF5LCBPY3RvYmVyIDIwLCAyMDEzIDk6NDU6MjEgQU0KPiA+ID4gPiBTdWJq
+ZWN0OiBSZTogTFRUbmcgcGFja2FnZXMgaW4gRGViaWFuIHNpZCBvdXQgb2Ygc3luYwo+ID4gPiA+
+IAo+ID4gPiBbLi4uXQo+ID4gPiA+IAo+ID4gPiA+IFRoYXQgaXMgbm90IGV4YWN0bHkgd2hhdCBJ
+IGludGVuZGVkIHRvIGNvbnZleSwgbGV0IG1lIGJlIG1vcmUgZGlyZWN0Cj4gPiA+ID4gYWJvdXQg
+bXkKPiA+ID4gPiB2aWV3LiAgSSBjb21wbGV0ZWx5IGFncmVlIHRoYXQgc2lkIHNob3VsZCBoYXZl
+IDIuMy54IGltbWVkaWF0ZWx5LiAgSQo+ID4gPiA+IGFsc28KPiA+ID4gPiBhZ3JlZQo+ID4gPiA+
+IHRoYXQgMi4zIHNob3VsZCBiZSB0YXJnZXRlZCBmb3IgdGVzdGluZywgYW5kIHRoZXJlZm9yZSB0
+aGUgbmV4dCBzdGFibGUKPiA+ID4gPiByZWxlYXNlLgo+ID4gPiAKPiA+ID4gQWxscmlnaHQgOikg
+SSdtIGdsYWQgd2UncmUgb24gdGhlIHNhbWUgcGFnZSwgc29ycnkgZm9yIHRoZQo+ID4gPiBtaXN1
+bmRlcnN0YW5kaW5nLgo+ID4gCj4gPiBObyB3b3JyaWVzLiAgSSdsbCBhZGQgdGhhdCBmdXR1cmUg
+cmVsZWFzZXMgKGxpa2UgdGhlIHVwY29taW5nIDIuNCkgd2lsbAo+ID4gYmUgcHJlcGFyZWQgYW5k
+IHRlc3RlZCBhbGwgdG9nZXRoZXIgcHJpb3IgdG8gdXBsb2FkIC0gdG8gaG9wZWZ1bGx5IGF2b2lk
+Cj4gPiB0aGUgcHJldmlvdXMgc2l0dWF0aW9uL25pZ2h0bWFyZSB0aGF0IEkgbWFuYWdlZCB0byBn
+ZXQgbXlzZWxmIGludG8uCj4gPiAKPiA+IFRoZXJlIGNhbiBzdGlsbCBiZSBhIHNpemFibGUgYW1v
+dW50IG9mIHdvcmsgZm9yIDIuMyB0byBmdWxseSBsYW5kIGludG8KPiA+IHRlc3RpbmcsIHNvIHRo
+YXQgaXMgbXkgcHJpbWFyeSBmb2N1cy4gIFRoZSBmcmVlemUgZGVhZGxpbmUgaXMgZmFzdAo+ID4g
+YXBwcm9hY2hpbmcsIHNvIEkgd2lsbCBiZSBrZWVwaW5nIGEgY2xvc2UgZXllIG9uIHRoaW5ncyBh
+cyB0aGV5Cj4gPiBwcm9ncmVzcy4gIEFzIHRoaW5ncyBzZXR0bGUgSSdsbCBwb3N0IHN0YXR1cyBo
+ZXJlLgo+IAo+IGx0dG5nLXRvb2xzIDIuMy4wIHdhcyBqdXN0IGFjY2VwdGVkLCBzbyBvbiBzaWQg
+KHVuc3RhYmxlKSB3ZSBzaG91bGQgbm93IGJlIGF0Cj4gdmVyc2lvbiAyLjMuMCBhY3Jvc3MgdGhl
+IGJvYXJkLiAgVGhpbmdzIGxvb2sgcHJldHR5IGdvb2QgdG8gbWUsIGJ1dCBpZiBhbnlvbmUKPiBo
+YXMgdGltZSB0byB0ZXN0IHRoZSBwYWNrYWdlcyBhbmQgbGV0IG1lIGtub3cgaWYgc29tZXRoaW5n
+J3MgbWlzc2luZywKPiBzdHJ1Y3R1cmVkCj4gaW5jb3JyZWN0bHksIG9yIG5vdCBiZWhhdmluZyBh
+cyBleHBlY3RlZCAtIHRoYXQgd291bGQgYmUgYXdlc29tZS4KPiAKPiBDaGVlcnMsCj4gCj4gLS0K
+PiBKb24KPiAKCi0tIApNYXRoaWV1IERlc25veWVycwpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cu
+ZWZmaWNpb3MuY29tCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0
+cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
