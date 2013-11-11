@@ -1,21 +1,19 @@
-From: Nathan Lynch <Nathan_Lynch@mentor.com>
-Subject: Re: might_sleep warnings in overwrite mode
-Date: Mon, 11 Nov 2013 09:47:21 -0600
-Message-ID: <5280FC09.7030208__22966.3294660442$1384184911$gmane$org@mentor.com>
-References: <52803E5D.3050109@mentor.com>
+From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
+	<jeremie.galarneau@efficios.com>
+Subject: [PATCH babeltrace] Fix: Use of functions not provided
+	by glib 2.22
+Date: Mon, 11 Nov 2013 11:16:41 -0500
+Message-ID: <1384186601-6272-1-git-send-email-jeremie.galarneau__470.195260322903$1384186672$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from relay1.mentorg.com ([192.94.38.131])
+Received: from mail-qe0-f49.google.com ([209.85.128.49])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Nathan_Lynch@mentor.com>) id 1Vfti4-0005rp-S8
-	for lttng-dev@lists.lttng.org; Mon, 11 Nov 2013 10:47:34 -0500
-Received: from svr-orw-fem-01.mgc.mentorg.com ([147.34.98.93])
-	by relay1.mentorg.com with esmtp
-	id 1Vfthz-0000Ui-EN from Nathan_Lynch@mentor.com
-	for lttng-dev@lists.lttng.org; Mon, 11 Nov 2013 07:47:23 -0800
-In-Reply-To: <52803E5D.3050109@mentor.com>
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1VfuAY-00054j-W1
+	for lttng-dev@lists.lttng.org; Mon, 11 Nov 2013 11:17:00 -0500
+Received: by mail-qe0-f49.google.com with SMTP id i11so172956qej.36
+	for <lttng-dev@lists.lttng.org>; Mon, 11 Nov 2013 08:16:49 -0800 (PST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -27,16 +25,63 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On 11/10/2013 08:18 PM, Nathan Lynch wrote:
-> At this point I cannot trigger the issue without overwrite mode on
-> 3.11.6, but on a 3.8-based vendor kernel I can recreate it regardless of
-> the mode.
-> 
-> Is it possible that the lttng module code is messing up the current
-> task's preempt count somehow?
-
-Here's another manifestation of the issue -- when flood-pinging the
-board during tracing, I get this warning from __do_softirq:
-
-huh, entered softirq 3 NET_RX 804ae528 preempt_count 00000101, exited
-with 00000102?
+U2lnbmVkLW9mZi1ieTogSsOpcsOpbWllIEdhbGFybmVhdSA8amVyZW1pZS5nYWxhcm5lYXVAZWZm
+aWNpb3MuY29tPgotLS0KIGZvcm1hdHMvY3RmL3dyaXRlci9ldmVudC1maWVsZHMuYyB8IDEwICsr
+KysrKy0tLS0KIGZvcm1hdHMvY3RmL3dyaXRlci9ldmVudC10eXBlcy5jICB8ICA0ICsrLS0KIGZv
+cm1hdHMvY3RmL3dyaXRlci93cml0ZXIuYyAgICAgICB8IDExICsrKysrKystLS0tCiAzIGZpbGVz
+IGNoYW5nZWQsIDE1IGluc2VydGlvbnMoKyksIDEwIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBh
+L2Zvcm1hdHMvY3RmL3dyaXRlci9ldmVudC1maWVsZHMuYyBiL2Zvcm1hdHMvY3RmL3dyaXRlci9l
+dmVudC1maWVsZHMuYwppbmRleCBhYTM4OWZkLi4zMGZlNTc4IDEwMDY0NAotLS0gYS9mb3JtYXRz
+L2N0Zi93cml0ZXIvZXZlbnQtZmllbGRzLmMKKysrIGIvZm9ybWF0cy9jdGYvd3JpdGVyL2V2ZW50
+LWZpZWxkcy5jCkBAIC0yNDcsMTMgKzI0NywxNCBAQCBpbnQgYnRfY3RmX2ZpZWxkX3NlcXVlbmNl
+X3NldF9sZW5ndGgoc3RydWN0IGJ0X2N0Zl9maWVsZCAqZmllbGQsCiAJCWJ0X2N0Zl9maWVsZF9w
+dXQoc2VxdWVuY2UtPmxlbmd0aCk7CiAJfQogCi0Jc2VxdWVuY2UtPmVsZW1lbnRzID0gZ19wdHJf
+YXJyYXlfbmV3X2Z1bGwoKHNpemVfdClzZXF1ZW5jZV9sZW5ndGgsCi0JCShHRGVzdHJveU5vdGlm
+eSlidF9jdGZfZmllbGRfcHV0KTsKKwlzZXF1ZW5jZS0+ZWxlbWVudHMgPSBnX3B0cl9hcnJheV9z
+aXplZF9uZXcoKHNpemVfdClzZXF1ZW5jZV9sZW5ndGgpOwogCWlmICghc2VxdWVuY2UtPmVsZW1l
+bnRzKSB7CiAJCXJldCA9IC0xOwogCQlnb3RvIGVuZDsKIAl9CiAKKwlnX3B0cl9hcnJheV9zZXRf
+ZnJlZV9mdW5jKHNlcXVlbmNlLT5lbGVtZW50cywKKwkJKEdEZXN0cm95Tm90aWZ5KWJ0X2N0Zl9m
+aWVsZF9wdXQpOwogCWdfcHRyX2FycmF5X3NldF9zaXplKHNlcXVlbmNlLT5lbGVtZW50cywgKHNp
+emVfdClzZXF1ZW5jZV9sZW5ndGgpOwogCWJ0X2N0Zl9maWVsZF9nZXQobGVuZ3RoX2ZpZWxkKTsK
+IAlzZXF1ZW5jZS0+bGVuZ3RoID0gbGVuZ3RoX2ZpZWxkOwpAQCAtNzY4LDEyICs3NjksMTMgQEAg
+c3RydWN0IGJ0X2N0Zl9maWVsZCAqYnRfY3RmX2ZpZWxkX2FycmF5X2NyZWF0ZShzdHJ1Y3QgYnRf
+Y3RmX2ZpZWxkX3R5cGUgKnR5cGUpCiAKIAlhcnJheV90eXBlID0gY29udGFpbmVyX29mKHR5cGUs
+IHN0cnVjdCBidF9jdGZfZmllbGRfdHlwZV9hcnJheSwgcGFyZW50KTsKIAlhcnJheV9sZW5ndGgg
+PSBhcnJheV90eXBlLT5sZW5ndGg7Ci0JYXJyYXktPmVsZW1lbnRzID0gZ19wdHJfYXJyYXlfbmV3
+X2Z1bGwoYXJyYXlfbGVuZ3RoLAotCQkoR0Rlc3Ryb3lOb3RpZnkpYnRfY3RmX2ZpZWxkX3B1dCk7
+CisJYXJyYXktPmVsZW1lbnRzID0gZ19wdHJfYXJyYXlfc2l6ZWRfbmV3KGFycmF5X2xlbmd0aCk7
+CiAJaWYgKCFhcnJheS0+ZWxlbWVudHMpIHsKIAkJZ290byBlcnJvcjsKIAl9CiAKKwlnX3B0cl9h
+cnJheV9zZXRfZnJlZV9mdW5jKGFycmF5LT5lbGVtZW50cywKKwkJKEdEZXN0cm95Tm90aWZ5KWJ0
+X2N0Zl9maWVsZF9wdXQpOwogCWdfcHRyX2FycmF5X3NldF9zaXplKGFycmF5LT5lbGVtZW50cywg
+YXJyYXlfbGVuZ3RoKTsKIAlyZXR1cm4gJmFycmF5LT5wYXJlbnQ7CiBlcnJvcjoKZGlmZiAtLWdp
+dCBhL2Zvcm1hdHMvY3RmL3dyaXRlci9ldmVudC10eXBlcy5jIGIvZm9ybWF0cy9jdGYvd3JpdGVy
+L2V2ZW50LXR5cGVzLmMKaW5kZXggMDkxYjMyMC4uZmE0ZTcxMyAxMDA2NDQKLS0tIGEvZm9ybWF0
+cy9jdGYvd3JpdGVyL2V2ZW50LXR5cGVzLmMKKysrIGIvZm9ybWF0cy9jdGYvd3JpdGVyL2V2ZW50
+LXR5cGVzLmMKQEAgLTIxNCw4ICsyMTQsOCBAQCBpbnQgYWRkX3N0cnVjdHVyZV9maWVsZChHUHRy
+QXJyYXkgKmZpZWxkcywKIAlzdHJ1Y3Qgc3RydWN0dXJlX2ZpZWxkICpmaWVsZDsKIAogCS8qIE1h
+a2Ugc3VyZSBzdHJ1Y3R1cmUgZG9lcyBub3QgY29udGFpbiBhIGZpZWxkIG9mIHRoZSBzYW1lIG5h
+bWUgKi8KLQlpZiAoZ19oYXNoX3RhYmxlX2NvbnRhaW5zKGZpZWxkX25hbWVfdG9faW5kZXgsCi0J
+CQlHVUlOVF9UT19QT0lOVEVSKG5hbWVfcXVhcmspKSkgeworCWlmIChnX2hhc2hfdGFibGVfbG9v
+a3VwX2V4dGVuZGVkKGZpZWxkX25hbWVfdG9faW5kZXgsCisJCUdVSU5UX1RPX1BPSU5URVIobmFt
+ZV9xdWFyayksIE5VTEwsIE5VTEwpKSB7CiAJCXJldCA9IC0xOwogCQlnb3RvIGVuZDsKIAl9CmRp
+ZmYgLS1naXQgYS9mb3JtYXRzL2N0Zi93cml0ZXIvd3JpdGVyLmMgYi9mb3JtYXRzL2N0Zi93cml0
+ZXIvd3JpdGVyLmMKaW5kZXggNTYwMGE5Mi4uYTNjYTI2MyAxMDA2NDQKLS0tIGEvZm9ybWF0cy9j
+dGYvd3JpdGVyL3dyaXRlci5jCisrKyBiL2Zvcm1hdHMvY3RmL3dyaXRlci93cml0ZXIuYwpAQCAt
+NTYwLDggKzU2MCw5IEBAIGludCB2YWxpZGF0ZV9pZGVudGlmaWVyKGNvbnN0IGNoYXIgKmlucHV0
+X3N0cmluZykKIAogCXRva2VuID0gc3RydG9rX3Ioc3RyaW5nLCAiICIsICZzYXZlX3B0cik7CiAJ
+d2hpbGUgKHRva2VuKSB7Ci0JCWlmIChnX2hhc2hfdGFibGVfY29udGFpbnMocmVzZXJ2ZWRfa2V5
+d29yZHNfc2V0LAotCQkJR0lOVF9UT19QT0lOVEVSKGdfcXVhcmtfZnJvbV9zdHJpbmcodG9rZW4p
+KSkpIHsKKwkJaWYgKGdfaGFzaF90YWJsZV9sb29rdXBfZXh0ZW5kZWQocmVzZXJ2ZWRfa2V5d29y
+ZHNfc2V0LAorCQkJR0lOVF9UT19QT0lOVEVSKGdfcXVhcmtfZnJvbV9zdHJpbmcodG9rZW4pKSwK
+KwkJCU5VTEwsIE5VTEwpKSB7CiAJCQlyZXQgPSAtMTsKIAkJCWdvdG8gZW5kOwogCQl9CkBAIC03
+MzcsOCArNzM4LDEwIEBAIHZvaWQgd3JpdGVyX2luaXQodm9pZCkKIAogCXJlc2VydmVkX2tleXdv
+cmRzX3NldCA9IGdfaGFzaF90YWJsZV9uZXcoZ19kaXJlY3RfaGFzaCwgZ19kaXJlY3RfZXF1YWwp
+OwogCWZvciAoaSA9IDA7IGkgPCByZXNlcnZlZF9rZXl3b3Jkc19jb3VudDsgaSsrKSB7Ci0JCWdf
+aGFzaF90YWJsZV9hZGQocmVzZXJ2ZWRfa2V5d29yZHNfc2V0LAotCQlHSU5UX1RPX1BPSU5URVIo
+Z19xdWFya19mcm9tX3N0cmluZyhyZXNlcnZlZF9rZXl3b3Jkc19zdHJbaV0pKSk7CisJCWdwb2lu
+dGVyIHF1YXJrID0gR0lOVF9UT19QT0lOVEVSKGdfcXVhcmtfZnJvbV9zdHJpbmcoCisJCQlyZXNl
+cnZlZF9rZXl3b3Jkc19zdHJbaV0pKTsKKworCQlnX2hhc2hfdGFibGVfaW5zZXJ0KHJlc2VydmVk
+X2tleXdvcmRzX3NldCwgcXVhcmssIHF1YXJrKTsKIAl9CiAKIAlpbml0X2RvbmUgPSAxOwotLSAK
+MS44LjQuMgoKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+Cmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8v
+bGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
