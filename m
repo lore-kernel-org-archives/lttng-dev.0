@@ -1,7 +1,7 @@
 From: Paul Woegerer <paul_woegerer@mentor.com>
-Subject: [PATCH 1/2] Base-address tracing for dlopen and dlclose
-Date: Mon, 11 Nov 2013 16:28:07 +0100
-Message-ID: <1384183688-19038-2-git-send-email-paul_woegerer__49587.4021588408$1384183871$gmane$org@mentor.com>
+Subject: [PATCH 2/2] Implement base-address-state tracing
+Date: Mon, 11 Nov 2013 16:28:08 +0100
+Message-ID: <1384183688-19038-3-git-send-email-paul_woegerer__11736.6827595562$1384183989$gmane$org@mentor.com>
 References: <1384183688-19038-1-git-send-email-paul_woegerer@mentor.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,8 +9,8 @@ Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Paul_Woegerer@mentor.com>) id 1VftPX-0000rg-7r
-	for lttng-dev@lists.lttng.org; Mon, 11 Nov 2013 10:28:26 -0500
+	(envelope-from <Paul_Woegerer@mentor.com>) id 1VftPY-0000rh-IN
+	for lttng-dev@lists.lttng.org; Mon, 11 Nov 2013 10:28:31 -0500
 In-Reply-To: <1384183688-19038-1-git-send-email-paul_woegerer@mentor.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -23,284 +23,138 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org, mathieu.desnoyers@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-Provide an LD_PRELOAD library to allow tracing of calls to dlopen and
-dlclose.  Tracing the lttng-ust internal use of dlopen and dlclose is
-prevented.
+Dump the base-address state (executable and shared objects) into session
+on session-enable (per-session events).
 
 Signed-off-by: Paul Woegerer <paul_woegerer@mentor.com>
 ---
- Makefile.am                          |   2 +
- configure.ac                         |   2 +
- include/Makefile.am                  |   1 +
- include/lttng/tracepoint.h           |  12 +--
- include/lttng/ust-dl.h               |  54 +++++++++++++
- liblttng-ust-baddr/Makefile.am       |  18 +++++
- liblttng-ust-baddr/lttng-ust-baddr.c |  64 ++++++++++++++++
- liblttng-ust-baddr/ust_baddr.c       |  20 +++++
- liblttng-ust-baddr/ust_baddr.h       |  66 ++++++++++++++++
- liblttng-ust-dl/Makefile.am          |  17 +++++
- liblttng-ust-dl/ustdl.c              | 144 +++++++++++++++++++++++++++++++++++
- 11 files changed, 395 insertions(+), 5 deletions(-)
- create mode 100644 include/lttng/ust-dl.h
- create mode 100644 liblttng-ust-baddr/Makefile.am
- create mode 100644 liblttng-ust-baddr/lttng-ust-baddr.c
- create mode 100644 liblttng-ust-baddr/ust_baddr.c
- create mode 100644 liblttng-ust-baddr/ust_baddr.h
- create mode 100644 liblttng-ust-dl/Makefile.am
- create mode 100644 liblttng-ust-dl/ustdl.c
+ include/lttng/ust-tracepoint-event.h     | 14 ++++++++
+ liblttng-ust-baddr/Makefile.am           |  4 ++-
+ liblttng-ust-baddr/lttng-ust-baddr.c     | 47 +++++++++++++++++++++++++
+ liblttng-ust-baddr/ust_baddr_statedump.c | 21 +++++++++++
+ liblttng-ust-baddr/ust_baddr_statedump.h | 60 ++++++++++++++++++++++++++++++++
+ liblttng-ust/lttng-events.c              | 10 ++++++
+ liblttng-ust/lttng-tracer-core.h         |  2 ++
+ liblttng-ust/lttng-ust-comm.c            | 52 +++++++++++++++++++++++++++
+ 8 files changed, 209 insertions(+), 1 deletion(-)
+ create mode 100644 liblttng-ust-baddr/ust_baddr_statedump.c
+ create mode 100644 liblttng-ust-baddr/ust_baddr_statedump.h
 
-diff --git a/Makefile.am b/Makefile.am
-index dc88c46..6a82e4d 100644
---- a/Makefile.am
-+++ b/Makefile.am
-@@ -4,6 +4,8 @@ SUBDIRS = . include snprintf libringbuffer liblttng-ust-comm \
- 		liblttng-ust \
- 		liblttng-ust-ctl \
- 		liblttng-ust-fork \
-+		liblttng-ust-baddr \
-+		liblttng-ust-dl \
- 		liblttng-ust-libc-wrapper \
- 		liblttng-ust-cyg-profile \
- 		tools \
-diff --git a/configure.ac b/configure.ac
-index cc28205..bac6030 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -282,6 +282,8 @@ AC_CONFIG_FILES([
- 	liblttng-ust/Makefile
- 	liblttng-ust-ctl/Makefile
- 	liblttng-ust-fork/Makefile
-+	liblttng-ust-baddr/Makefile
-+	liblttng-ust-dl/Makefile
- 	liblttng-ust-java/Makefile
- 	liblttng-ust-libc-wrapper/Makefile
- 	liblttng-ust-cyg-profile/Makefile
-diff --git a/include/Makefile.am b/include/Makefile.am
-index 4f028db..b3243bf 100644
---- a/include/Makefile.am
-+++ b/include/Makefile.am
-@@ -13,6 +13,7 @@ nobase_include_HEADERS = \
- 	lttng/ringbuffer-abi.h \
- 	lttng/ust-tracer.h \
- 	lttng/ust-compiler.h \
-+	lttng/ust-dl.h \
- 	lttng/ust.h \
- 	lttng/ust-endian.h \
- 	lttng/ringbuffer-config.h \
-diff --git a/include/lttng/tracepoint.h b/include/lttng/tracepoint.h
-index 66e2abd..c1550ec 100644
---- a/include/lttng/tracepoint.h
-+++ b/include/lttng/tracepoint.h
-@@ -28,10 +28,10 @@
- #include <lttng/tracepoint-types.h>
- #include <lttng/tracepoint-rcu.h>
- #include <urcu/compiler.h>
--#include <dlfcn.h>	/* for dlopen */
- #include <string.h>	/* for memset */
- #include <lttng/ust-config.h>	/* for sdt */
- #include <lttng/ust-compiler.h>
-+#include <lttng/ust-dl.h>	/* for lttng_ust_dlopen */
+diff --git a/include/lttng/ust-tracepoint-event.h b/include/lttng/ust-tracepoint-event.h
+index bb3a05d..be58030 100644
+--- a/include/lttng/ust-tracepoint-event.h
++++ b/include/lttng/ust-tracepoint-event.h
+@@ -480,6 +480,18 @@ size_t __event_get_align__##_provider##___##_name(_TP_ARGS_PROTO(_args))      \
+ #define TP_FIELDS(...) __VA_ARGS__
  
- #ifdef LTTNG_UST_HAVE_SDT_INTEGRATION
- #define SDT_USE_VARIADIC
-@@ -278,7 +278,8 @@ __tracepoints__init(void)
- 
- 	if (!tracepoint_dlopen.liblttngust_handle)
- 		tracepoint_dlopen.liblttngust_handle =
--			dlopen("liblttng-ust-tracepoint.so.0", RTLD_NOW | RTLD_GLOBAL);
-+			lttng_ust_dlopen("liblttng-ust-tracepoint.so.0",
-+				RTLD_NOW | RTLD_GLOBAL);
- 	if (!tracepoint_dlopen.liblttngust_handle)
- 		return;
- 	__tracepoint__init_urcu_sym();
-@@ -294,7 +295,7 @@ __tracepoints__destroy(void)
- 	if (--__tracepoint_registered)
- 		return;
- 	if (tracepoint_dlopen.liblttngust_handle && !__tracepoint_ptrs_registered) {
--		ret = dlclose(tracepoint_dlopen.liblttngust_handle);
-+		ret = lttng_ust_dlclose(tracepoint_dlopen.liblttngust_handle);
- 		if (ret) {
- 			fprintf(stderr, "Error (%d) in dlclose\n", ret);
- 			abort();
-@@ -367,7 +368,8 @@ __tracepoints__ptrs_init(void)
- 		return;
- 	if (!tracepoint_dlopen.liblttngust_handle)
- 		tracepoint_dlopen.liblttngust_handle =
--			dlopen("liblttng-ust-tracepoint.so.0", RTLD_NOW | RTLD_GLOBAL);
-+			lttng_ust_dlopen("liblttng-ust-tracepoint.so.0",
-+				RTLD_NOW | RTLD_GLOBAL);
- 	if (!tracepoint_dlopen.liblttngust_handle)
- 		return;
- 	tracepoint_dlopen.tracepoint_register_lib =
-@@ -398,7 +400,7 @@ __tracepoints__ptrs_destroy(void)
- 	if (tracepoint_dlopen.tracepoint_unregister_lib)
- 		tracepoint_dlopen.tracepoint_unregister_lib(__start___tracepoints_ptrs);
- 	if (tracepoint_dlopen.liblttngust_handle && !__tracepoint_registered) {
--		ret = dlclose(tracepoint_dlopen.liblttngust_handle);
-+		ret = lttng_ust_dlclose(tracepoint_dlopen.liblttngust_handle);
- 		if (ret) {
- 			fprintf(stderr, "Error (%d) in dlclose\n", ret);
- 			abort();
-diff --git a/include/lttng/ust-dl.h b/include/lttng/ust-dl.h
-new file mode 100644
-index 0000000..f447ff4
---- /dev/null
-+++ b/include/lttng/ust-dl.h
-@@ -0,0 +1,54 @@
-+#ifndef _LTTNG_UST_DL_H
-+#define _LTTNG_UST_DL_H
+ /*
++ * For state dump, check that "session" argument (mandatory) matches the
++ * session this event belongs to. Ensures that we write state dump data only
++ * into the started session, not into all sessions.
++ */
++#undef _TP_SESSION_CHECK
++#ifdef TP_SESSION_CHECK
++#define _TP_SESSION_CHECK(session, csession)   (session == csession)
++#else /* TP_SESSION_CHECK */
++#define _TP_SESSION_CHECK(session, csession)   1
++#endif /* TP_SESSION_CHECK */
 +
 +/*
-+ * Copyright (C) 2013 - Paul Woegerer <paul.woegerer@mentor.com>
-+ *
-+ * Permission is hereby granted, free of charge, to any person obtaining a copy
-+ * of this software and associated documentation files (the "Software"), to deal
-+ * in the Software without restriction, including without limitation the rights
-+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-+ * copies of the Software, and to permit persons to whom the Software is
-+ * furnished to do so, subject to the following conditions:
-+ *
-+ * The above copyright notice and this permission notice shall be included in
-+ * all copies or substantial portions of the Software.
-+ *
-+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-+ * SOFTWARE.
-+ */
-+
-+#include <dlfcn.h>
-+#include <lttng/ust-compiler.h>
-+
-+void *__attribute__((weak)) lttng_ust_notrace
-+_lttng_ust_dl_libc_dlopen(const char *filename, int flag);
-+int __attribute__((weak)) lttng_ust_notrace
-+_lttng_ust_dl_libc_dlclose(void *handle);
-+
-+static inline __attribute__((always_inline)) lttng_ust_notrace void *
-+lttng_ust_dlopen(const char *filename, int flag);
-+static void *
-+lttng_ust_dlopen(const char *filename, int flag)
-+{
-+	if (_lttng_ust_dl_libc_dlopen)
-+		return _lttng_ust_dl_libc_dlopen(filename, flag);
-+	return dlopen(filename, flag);
-+}
-+
-+static inline __attribute__((always_inline)) lttng_ust_notrace int
-+lttng_ust_dlclose(void *handle);
-+static int
-+lttng_ust_dlclose(void *handle)
-+{
-+	if (_lttng_ust_dl_libc_dlclose)
-+		return _lttng_ust_dl_libc_dlclose(handle);
-+	return dlclose(handle);
-+}
-+
-+#endif	/* _LTTNG_UST_DL_H */
+  * Using twice size for filter stack data to hold size and pointer for
+  * each field (worse case). For integers, max size required is 64-bit.
+  * Same for double-precision floats. Those fit within
+@@ -506,6 +518,8 @@ void __event_probe__##_provider##___##_name(_TP_ARGS_DATA_PROTO(_args))	      \
+ 									      \
+ 	if (0)								      \
+ 		(void) __dynamic_len_idx;	/* don't warn if unused */    \
++	if (!_TP_SESSION_CHECK(session, __chan->session))		      \
++		return;							      \
+ 	if (caa_unlikely(!CMM_ACCESS_ONCE(__chan->session->active)))	      \
+ 		return;							      \
+ 	if (caa_unlikely(!CMM_ACCESS_ONCE(__chan->enabled)))		      \
 diff --git a/liblttng-ust-baddr/Makefile.am b/liblttng-ust-baddr/Makefile.am
-new file mode 100644
-index 0000000..afa9489
---- /dev/null
+index afa9489..0d3cf28 100644
+--- a/liblttng-ust-baddr/Makefile.am
 +++ b/liblttng-ust-baddr/Makefile.am
-@@ -0,0 +1,18 @@
-+AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_builddir)/include
-+AM_CFLAGS = -fno-strict-aliasing
-+
-+lib_LTLIBRARIES = liblttng-ust-baddr.la
-+liblttng_ust_baddr_la_SOURCES = \
-+	lttng-ust-baddr.c \
-+	ust_baddr.c \
-+	ust_baddr.h
-+liblttng_ust_baddr_la_LIBADD = \
-+	-L$(top_builddir)/liblttng-ust/.libs \
-+	-llttng-ust
-+
-+if LTTNG_UST_BUILD_WITH_LIBDL
-+liblttng_ust_baddr_la_LIBADD += -ldl
-+endif
-+if LTTNG_UST_BUILD_WITH_LIBC_DL
-+liblttng_ust_baddr_la_LIBADD += -lc
-+endif
+@@ -5,7 +5,9 @@ lib_LTLIBRARIES = liblttng-ust-baddr.la
+ liblttng_ust_baddr_la_SOURCES = \
+ 	lttng-ust-baddr.c \
+ 	ust_baddr.c \
+-	ust_baddr.h
++	ust_baddr.h \
++	ust_baddr_statedump.c \
++	ust_baddr_statedump.h
+ liblttng_ust_baddr_la_LIBADD = \
+ 	-L$(top_builddir)/liblttng-ust/.libs \
+ 	-llttng-ust
 diff --git a/liblttng-ust-baddr/lttng-ust-baddr.c b/liblttng-ust-baddr/lttng-ust-baddr.c
-new file mode 100644
-index 0000000..21c22a2
---- /dev/null
+index 21c22a2..92b5cca 100644
+--- a/liblttng-ust-baddr/lttng-ust-baddr.c
 +++ b/liblttng-ust-baddr/lttng-ust-baddr.c
-@@ -0,0 +1,64 @@
-+/*
-+ * Copyright (C) 2013  Paul Woegerer <paul_woegerer@mentor.com>
-+ *
-+ * This library is free software; you can redistribute it and/or
-+ * modify it under the terms of the GNU Lesser General Public
-+ * License as published by the Free Software Foundation; either
-+ * version 2.1 of the License, or (at your option) any later version.
-+ *
-+ * This library is distributed in the hope that it will be useful,
-+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
-+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-+ * Lesser General Public License for more details.
-+ *
-+ * You should have received a copy of the GNU Lesser General Public
-+ * License along with this library; if not, write to the Free Software
-+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
-+ */
+@@ -34,6 +34,7 @@
+ 
+ #define TRACEPOINT_DEFINE
+ #include "ust_baddr.h"
++#include "ust_baddr_statedump.h"
+ 
+ int
+ push_baddr(void *so_base, const char *so_name)
+@@ -62,3 +63,49 @@ pop_baddr(void *so_base)
+ 	tracepoint(ust_baddr, pop, so_base);
+ 	return 0;
+ }
 +
-+#define _GNU_SOURCE
-+#include <dlfcn.h>
-+#include <link.h>
-+
-+#include <sys/types.h>
-+#include <sys/stat.h>
-+#include <sys/stat.h>
-+#include <unistd.h>
-+#include <limits.h>
-+#include <stdlib.h>
-+#include <errno.h>
-+#include <stdint.h>
-+#include <stddef.h>
-+#include <stdio.h>
-+#include "usterr.h"
-+
-+#define TRACEPOINT_DEFINE
-+#include "ust_baddr.h"
-+
-+int
-+push_baddr(void *so_base, const char *so_name)
++static int
++_dl_iterate_write_memregion(struct dl_phdr_info *info, size_t size, void *data)
 +{
-+	char resolved_path[PATH_MAX];
-+	struct stat sostat;
++	int j;
++	int num_loadable_segment = 0;
 +
-+	if (!realpath(so_name, resolved_path)) {
-+		ERR("could not resolve path '%s'", so_name);
-+		return 0;
++	for (j = 0; j < info->dlpi_phnum; j++) {
++		if (info->dlpi_phdr[j].p_type == PT_LOAD) {
++			char resolved_path[PATH_MAX];
++			struct stat sostat;
++			void *base_addr_ptr = (void *) info->dlpi_addr
++				+ info->dlpi_phdr[j].p_vaddr;
++
++			num_loadable_segment += 1;
++			if ((info->dlpi_name == NULL || info->dlpi_name[0] == 0)
++				&& num_loadable_segment == 1) {
++				Dl_info dl_info = { 0 };
++				if (!dladdr(base_addr_ptr, &dl_info))
++					return 0;
++				if (!realpath(dl_info.dli_fname, resolved_path))
++					return 0;
++			} else if (!realpath(info->dlpi_name, resolved_path))
++				snprintf(resolved_path, PATH_MAX - 1, "[%s]",
++					info->dlpi_name);
++
++			if (stat(resolved_path, &sostat)) {
++				sostat.st_size = 0;
++				sostat.st_mtime = -1;
++			}
++
++			tracepoint(ust_baddr_statedump, soinfo,
++				(struct lttng_session *) data, base_addr_ptr,
++				resolved_path, sostat.st_size, sostat.st_mtime);
++			break;
++		}
 +	}
-+
-+	if (stat(resolved_path, &sostat)) {
-+		ERR("could not access file status for %s", resolved_path);
-+		return 0;
-+	}
-+
-+	tracepoint(ust_baddr, push,
-+		so_base, resolved_path, sostat.st_size, sostat.st_mtime);
 +	return 0;
 +}
 +
 +int
-+pop_baddr(void *so_base)
++baddr_statedump(struct lttng_session *session)
 +{
-+	tracepoint(ust_baddr, pop, so_base);
++	dl_iterate_phdr(_dl_iterate_write_memregion, session);
 +	return 0;
 +}
-diff --git a/liblttng-ust-baddr/ust_baddr.c b/liblttng-ust-baddr/ust_baddr.c
+diff --git a/liblttng-ust-baddr/ust_baddr_statedump.c b/liblttng-ust-baddr/ust_baddr_statedump.c
 new file mode 100644
-index 0000000..bfbb7bf
+index 0000000..75f74ca
 --- /dev/null
-+++ b/liblttng-ust-baddr/ust_baddr.c
-@@ -0,0 +1,20 @@
++++ b/liblttng-ust-baddr/ust_baddr_statedump.c
+@@ -0,0 +1,21 @@
 +/*
 + * Copyright (C) 2013  Paul Woegerer <paul_woegerer@mentor.com>
 + *
@@ -320,18 +174,19 @@ index 0000000..bfbb7bf
 + */
 +
 +#define TRACEPOINT_CREATE_PROBES
-+#include "ust_baddr.h"
-diff --git a/liblttng-ust-baddr/ust_baddr.h b/liblttng-ust-baddr/ust_baddr.h
++#define TP_SESSION_CHECK
++#include "ust_baddr_statedump.h"
+diff --git a/liblttng-ust-baddr/ust_baddr_statedump.h b/liblttng-ust-baddr/ust_baddr_statedump.h
 new file mode 100644
-index 0000000..2c757f7
+index 0000000..77a9af4
 --- /dev/null
-+++ b/liblttng-ust-baddr/ust_baddr.h
-@@ -0,0 +1,66 @@
++++ b/liblttng-ust-baddr/ust_baddr_statedump.h
+@@ -0,0 +1,60 @@
 +#undef TRACEPOINT_PROVIDER
-+#define TRACEPOINT_PROVIDER ust_baddr
++#define TRACEPOINT_PROVIDER ust_baddr_statedump
 +
-+#if !defined(_TRACEPOINT_UST_BADDR_H) || defined(TRACEPOINT_HEADER_MULTI_READ)
-+#define _TRACEPOINT_UST_BADDR_H
++#if !defined(_TRACEPOINT_UST_BADDR_STATEDUMP_H) || defined(TRACEPOINT_HEADER_MULTI_READ)
++#define _TRACEPOINT_UST_BADDR_STATEDUMP_H
 +
 +#ifdef __cplusplus
 +extern "C" {
@@ -361,12 +216,13 @@ index 0000000..2c757f7
 +
 +#include <stdint.h>
 +#include <unistd.h>
++#include <lttng/ust-events.h>
 +
-+#define LTTNG_UST_BADDR_PROVIDER
++#define LTTNG_UST_BADDR_STATEDUMP_PROVIDER
 +#include <lttng/tracepoint.h>
 +
-+TRACEPOINT_EVENT(ust_baddr, push,
-+	TP_ARGS(void *, baddr, const char*, sopath, int64_t, size, int64_t, mtime),
++TRACEPOINT_EVENT(ust_baddr_statedump, soinfo,
++	TP_ARGS(struct lttng_session *, session, void *, baddr, const char*, sopath, int64_t, size, int64_t, mtime),
 +	TP_FIELDS(
 +		ctf_integer_hex(void *, baddr, baddr)
 +		ctf_string(sopath, sopath)
@@ -375,17 +231,10 @@ index 0000000..2c757f7
 +	)
 +)
 +
-+TRACEPOINT_EVENT(ust_baddr, pop,
-+	TP_ARGS(void *, baddr),
-+	TP_FIELDS(
-+		ctf_integer_hex(void *, baddr, baddr)
-+	)
-+)
-+
-+#endif /* _TRACEPOINT_UST_BADDR_H */
++#endif /* _TRACEPOINT_UST_BADDR_STATEDUMP_H */
 +
 +#undef TRACEPOINT_INCLUDE
-+#define TRACEPOINT_INCLUDE "./ust_baddr.h"
++#define TRACEPOINT_INCLUDE "./ust_baddr_statedump.h"
 +
 +/* This part must be outside ifdef protection */
 +#include <lttng/tracepoint-event.h>
@@ -393,166 +242,78 @@ index 0000000..2c757f7
 +#ifdef __cplusplus
 +}
 +#endif
-diff --git a/liblttng-ust-dl/Makefile.am b/liblttng-ust-dl/Makefile.am
-new file mode 100644
-index 0000000..14d8abf
---- /dev/null
-+++ b/liblttng-ust-dl/Makefile.am
-@@ -0,0 +1,17 @@
-+AM_CPPFLAGS = -I$(top_srcdir)/include
-+AM_CFLAGS = -fno-strict-aliasing
-+
-+lib_LTLIBRARIES = liblttng-ust-dl.la
-+liblttng_ust_dl_la_SOURCES = ustdl.c
-+liblttng_ust_dl_la_LIBADD = \
-+	$(top_builddir)/liblttng-ust/liblttng-ust.la
-+
-+if LTTNG_UST_BUILD_WITH_LIBDL
-+liblttng_ust_dl_la_LIBADD += -ldl
-+endif
-+if LTTNG_UST_BUILD_WITH_LIBC_DL
-+liblttng_ust_dl_la_LIBADD += -lc
-+endif
-+
-+libustdl_CFLAGS = -DUST_COMPONENT=liblttng-ust-dl -fno-strict-aliasing
-+
-diff --git a/liblttng-ust-dl/ustdl.c b/liblttng-ust-dl/ustdl.c
-new file mode 100644
-index 0000000..314e272
---- /dev/null
-+++ b/liblttng-ust-dl/ustdl.c
-@@ -0,0 +1,144 @@
-+/*
-+ * Copyright (C) 2013  Paul Woegerer <paul.woegerer@mentor.com>
-+ *
-+ * This library is free software; you can redistribute it and/or
-+ * modify it under the terms of the GNU Lesser General Public
-+ * License as published by the Free Software Foundation; version 2.1 of
-+ * the License.
-+ *
-+ * This library is distributed in the hope that it will be useful,
-+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
-+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-+ * Lesser General Public License for more details.
-+ *
-+ * You should have received a copy of the GNU Lesser General Public
-+ * License along with this library; if not, write to the Free Software
-+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
-+ */
-+
-+#define _GNU_SOURCE
-+#include <inttypes.h>
-+#include <dlfcn.h>
-+#include <link.h>
-+#include <unistd.h>
-+#include <stdio.h>
-+#include <signal.h>
-+#include <sched.h>
-+#include <stdarg.h>
-+#include "usterr.h"
-+
-+#include <lttng/ust-compiler.h>
-+#include <lttng/ust.h>
-+
-+static void *(*__lttng_ust_plibc_dlopen)(const char *filename, int flag);
-+static int (*__lttng_ust_plibc_dlclose)(void *handle);
-+static void *__lttng_ust_baddr_handle;
-+
-+void *_lttng_ust_dl_libc_dlopen(const char *filename, int flag)
+diff --git a/liblttng-ust/lttng-events.c b/liblttng-ust/lttng-events.c
+index 26601a6..814549e 100644
+--- a/liblttng-ust/lttng-events.c
++++ b/liblttng-ust/lttng-events.c
+@@ -86,6 +86,14 @@ void lttng_session_sync_enablers(struct lttng_session *session);
+ static
+ void lttng_enabler_destroy(struct lttng_enabler *enabler);
+ 
++static struct lttng_session *_lttng_session_enabled_transition;
++struct lttng_session *lttng_session_enabled_transition(void)
 +{
-+	if (!__lttng_ust_plibc_dlopen) {
-+		__lttng_ust_plibc_dlopen = dlsym(RTLD_NEXT, "dlopen");
-+		if (__lttng_ust_plibc_dlopen == NULL) {
-+			fprintf(stderr, "%s\n", dlerror());
-+			return NULL;
-+		}
-+	}
-+	return __lttng_ust_plibc_dlopen(filename, flag);
++	struct lttng_session *ret = _lttng_session_enabled_transition;
++	_lttng_session_enabled_transition = NULL;
++	return ret;
 +}
 +
-+int _lttng_ust_dl_libc_dlclose(void *handle)
-+{
-+	if (!__lttng_ust_plibc_dlclose) {
-+		__lttng_ust_plibc_dlclose = dlsym(RTLD_NEXT, "dlclose");
-+		if (__lttng_ust_plibc_dlclose == NULL) {
-+			fprintf(stderr, "%s\n", dlerror());
-+			return -1;
-+		}
-+	}
-+	return __lttng_ust_plibc_dlclose(handle);
-+}
+ /*
+  * Called with ust lock held.
+  */
+@@ -293,6 +301,8 @@ int lttng_session_enable(struct lttng_session *session)
+ 	/* Set atomically the state to "active" */
+ 	CMM_ACCESS_ONCE(session->active) = 1;
+ 	CMM_ACCESS_ONCE(session->been_active) = 1;
 +
-+static
++	_lttng_session_enabled_transition = session;
+ end:
+ 	return ret;
+ }
+diff --git a/liblttng-ust/lttng-tracer-core.h b/liblttng-ust/lttng-tracer-core.h
+index f643a7e..f77ebaf 100644
+--- a/liblttng-ust/lttng-tracer-core.h
++++ b/liblttng-ust/lttng-tracer-core.h
+@@ -45,4 +45,6 @@ const char *lttng_ust_obj_get_name(int id);
+ 
+ int lttng_get_notify_socket(void *owner);
+ 
++struct lttng_session *lttng_session_enabled_transition(void);
++
+ #endif /* _LTTNG_TRACER_CORE_H */
+diff --git a/liblttng-ust/lttng-ust-comm.c b/liblttng-ust/lttng-ust-comm.c
+index a6e4ba3..a0f1b42 100644
+--- a/liblttng-ust/lttng-ust-comm.c
++++ b/liblttng-ust/lttng-ust-comm.c
+@@ -43,6 +43,7 @@
+ #include <lttng/ust.h>
+ #include <lttng/ust-error.h>
+ #include <lttng/ust-ctl.h>
++#include <lttng/ust-dl.h>
+ #include <urcu/tls-compat.h>
+ #include <ust-comm.h>
+ #include <usterr-signal-safe.h>
+@@ -176,6 +177,7 @@ static const char *cmd_name_mapping[] = {
+ 
+ static const char *str_timeout;
+ static int got_timeout_env;
++static void *ust_baddr_handle;
+ 
+ extern void lttng_ring_buffer_client_overwrite_init(void);
+ extern void lttng_ring_buffer_client_overwrite_rt_init(void);
+@@ -235,6 +237,51 @@ void print_cmd(int cmd, int handle)
+ }
+ 
+ static
 +void *lttng_ust_baddr_handle(void)
 +{
-+	if (!__lttng_ust_baddr_handle) {
-+		__lttng_ust_baddr_handle = _lttng_ust_dl_libc_dlopen(
++	if (!ust_baddr_handle) {
++		ust_baddr_handle = lttng_ust_dlopen(
 +			"liblttng-ust-baddr.so.0", RTLD_NOW | RTLD_GLOBAL);
-+		if (__lttng_ust_baddr_handle == NULL)
-+			fprintf(stderr, "%s\n", dlerror());
++		if (ust_baddr_handle == NULL)
++			ERR("%s", dlerror());
 +	}
-+	return __lttng_ust_baddr_handle;
-+}
-+
-+static
-+int lttng_ust_baddr_push(void *so_base, const char *so_name)
-+{
-+	static int
-+	(*lttng_ust_baddr_push_fn)(void *so_base, const char *so_name);
-+	if (!lttng_ust_baddr_push_fn) {
-+		void *baddr_handle = lttng_ust_baddr_handle();
-+		if (baddr_handle) {
-+			lttng_ust_baddr_push_fn = dlsym(baddr_handle,
-+				"push_baddr");
-+			if (lttng_ust_baddr_push_fn == NULL)
-+				fprintf(stderr, "%s\n", dlerror());
-+		}
-+		if (!lttng_ust_baddr_push_fn)
-+			return -1;
-+	}
-+	return lttng_ust_baddr_push_fn(so_base, so_name);
-+}
-+
-+static
-+int lttng_ust_baddr_pop(void *so_base)
-+{
-+	static int
-+	(*lttng_ust_baddr_pop_fn)(void *so_base);
-+	if (!lttng_ust_baddr_pop_fn) {
-+		void *baddr_handle = lttng_ust_baddr_handle();
-+		if (baddr_handle) {
-+			lttng_ust_baddr_pop_fn = dlsym(baddr_handle,
-+				"pop_baddr");
-+			if (lttng_ust_baddr_pop_fn == NULL)
-+				fprintf(stderr, "%s\n", dlerror());
-+		}
-+		if (!lttng_ust_baddr_pop_fn)
-+			return -1;
-+	}
-+	return lttng_ust_baddr_pop_fn(so_base);
-+}
-+
-+void *dlopen(const char *filename, int flag)
-+{
-+	void *handle = _lttng_ust_dl_libc_dlopen(filename, flag);
-+	if (handle) {
-+		struct link_map *p = NULL;
-+		if (dlinfo(handle, RTLD_DI_LINKMAP, &p) != -1 && p != NULL
-+			&& p->l_addr != 0)
-+			lttng_ust_baddr_push((void *) p->l_addr, p->l_name);
-+	}
-+	return handle;
-+}
-+
-+int dlclose(void *handle)
-+{
-+	if (handle) {
-+		struct link_map *p = NULL;
-+		if (dlinfo(handle, RTLD_DI_LINKMAP, &p) != -1 && p != NULL
-+			&& p->l_addr != 0)
-+			lttng_ust_baddr_pop((void *) p->l_addr);
-+	}
-+	return _lttng_ust_dl_libc_dlclose(handle);
++	return ust_baddr_handle;
 +}
 +
 +static void __attribute__((destructor))
@@ -560,11 +321,49 @@ index 0000000..314e272
 +static void
 +lttng_ust_baddr_handle_fini(void)
 +{
-+	if (__lttng_ust_baddr_handle) {
-+		int ret = _lttng_ust_dl_libc_dlclose(__lttng_ust_baddr_handle);
++	if (ust_baddr_handle) {
++		int ret = lttng_ust_dlclose(ust_baddr_handle);
 +		if (ret)
-+			fprintf(stderr, "%s\n", dlerror());
++			ERR("%s", dlerror());
 +	}
 +}
++
++static
++int lttng_ust_baddr_statedump(struct lttng_session *session)
++{
++	static
++	int (*lttng_ust_baddr_init_fn)(struct lttng_session *);
++
++	if (!lttng_ust_baddr_init_fn) {
++		void *baddr_handle = lttng_ust_baddr_handle();
++		if (baddr_handle) {
++			lttng_ust_baddr_init_fn = dlsym(baddr_handle,
++				"baddr_statedump");
++			if (lttng_ust_baddr_init_fn == NULL)
++				ERR("%s", dlerror());
++		}
++		if (!lttng_ust_baddr_init_fn)
++			return -1;
++	}
++
++	return lttng_ust_baddr_init_fn(session);
++}
++
++static
+ int setup_local_apps(void)
+ {
+ 	const char *home_dir;
+@@ -1143,6 +1190,11 @@ restart:
+ 			ret = handle_message(sock_info, sock, &lum);
+ 			if (ret) {
+ 				ERR("Error handling message for %s socket", sock_info->name);
++			} else {
++				struct lttng_session *session =
++					lttng_session_enabled_transition();
++				if (session)
++					lttng_ust_baddr_statedump(session);
+ 			}
+ 			continue;
+ 		default:
 -- 
 1.8.4.2
