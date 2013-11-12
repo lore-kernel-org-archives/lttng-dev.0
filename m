@@ -1,13 +1,13 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] Userspace RCU 0.7.9
-Date: Tue, 12 Nov 2013 17:24:19 +0000 (UTC)
-Message-ID: <1977064126.65236.1384277059506.JavaMail.zimbra@efficios.com>
-References: <119843495.65234.1384277039175.JavaMail.zimbra@efficios.com>
+Subject: [RELEASE] Userspace RCU 0.8.1
+Date: Tue, 12 Nov 2013 17:26:05 +0000 (UTC)
+Message-ID: <70373848.65240.1384277165049.JavaMail.zimbra@efficios.com>
+References: <765234983.65237.1384277100566.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-kernel-owner@vger.kernel.org>
-In-Reply-To: <119843495.65234.1384277039175.JavaMail.zimbra@efficios.com>
+In-Reply-To: <765234983.65237.1384277100566.JavaMail.zimbra@efficios.com>
 Sender: linux-kernel-owner@vger.kernel.org
 To: linux-kernel@vger.kernel.org, lttng-dev@lists.lttng.org, rp@svcs.cs.pdx.edu
 Cc: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Lai Jiangshan <laijs@cn.fujitsu.com>, Stephen Hemminger <shemminger@vyatta.com>, Alan Stern <stern@rowland.harvard.edu>
@@ -25,10 +25,11 @@ lock-free algorithms. Those structures include hash tables, queues,
 stacks, and doubly-linked lists.
 
 Changelog:
-2013-11-12 Userspace RCU 0.7.9
+2013-11-12 Userspace RCU 0.8.1
         * tls-compat: fix comment typo
         * Keep ABI compatible with already compiled LGPL applications
         * Fix: tls-compat multi-lib conflict
+        * Use cross compiler for doc examples
         * gcc warning fixes: -Wsign-compare and -Wextra
         * Fix: urcu-qsbr: reversed logic on RCU_DEBUG
         * Fix: urcu-bp segfault in glibc pthread_kill()
