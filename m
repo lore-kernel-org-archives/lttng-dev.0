@@ -1,36 +1,18 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] LTTng modules 2.3.3
-Date: Tue, 12 Nov 2013 17:31:20 +0000 (UTC)
-Message-ID: <1018693349.65250.1384277480244.JavaMail.zimbra__26745.8942289979$1384277793$gmane$org@efficios.com>
-References: <879286490.65249.1384277470478.JavaMail.zimbra@efficios.com>
+Subject: Re: [PATCH babeltrace] Fix: Use of functions not
+ provided	by glib 2.22
+Date: Tue, 12 Nov 2013 19:35:34 +0000 (UTC)
+Message-ID: <398628086.65309.1384284934792.JavaMail.zimbra__4047.63723859123$1384284999$gmane$org@efficios.com>
+References: <1384186601-6272-1-git-send-email-jeremie.galarneau@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1VgHo9-0000C2-QH
-	for lttng-dev@lists.lttng.org; Tue, 12 Nov 2013 12:31:27 -0500
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.efficios.com (Postfix) with ESMTP id F29C1340104
-	for <lttng-dev@lists.lttng.org>; Tue, 12 Nov 2013 17:31:21 +0000 (UTC)
-Received: from mail.efficios.com ([127.0.0.1])
-	by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new,
-	port 10032)
-	with ESMTP id tw9_wZRicC5L for <lttng-dev@lists.lttng.org>;
-	Tue, 12 Nov 2013 17:31:20 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.efficios.com (Postfix) with ESMTP id 955AC340239
-	for <lttng-dev@lists.lttng.org>; Tue, 12 Nov 2013 17:31:20 +0000 (UTC)
-Received: from mail.efficios.com ([127.0.0.1])
-	by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new,
-	port 10026)
-	with ESMTP id VuVXZvr0-NYS for <lttng-dev@lists.lttng.org>;
-	Tue, 12 Nov 2013 17:31:20 +0000 (UTC)
-Received: from evm-mail-1.efficios.com (evm-mail-1.efficios.com [78.47.125.74])
-	by mail.efficios.com (Postfix) with ESMTP id 70F75340104
-	for <lttng-dev@lists.lttng.org>; Tue, 12 Nov 2013 17:31:20 +0000 (UTC)
-In-Reply-To: <879286490.65249.1384277470478.JavaMail.zimbra@efficios.com>
+	(envelope-from <compudj@efficios.com>) id 1VgJkP-0000FI-E7
+	for lttng-dev@lists.lttng.org; Tue, 12 Nov 2013 14:35:43 -0500
+In-Reply-To: <1384186601-6272-1-git-send-email-jeremie.galarneau@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -39,29 +21,80 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: =?utf-8?B?SsOpcsOpbWll?= Galarneau <jeremie.galarneau@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-The LTTng modules provide Linux kernel tracing capability to the LTTng
-2.x tracer toolset.
-
-Changelog:
-2013-11-12 LTTng modules 2.3.3
-        * Update ext4 instrumentation to Linux 3.12
-        * Update RCU instrumentation to Linux 3.12
-        * Update btrfs instrumentation to 3.12 kernel
-        * Update vmscan instrumentation to Linux 3.12
-        * update: kmem instrumentation 3.12 kernel support
-        * lttng-statedump-impl: Use generic hard irqs for Linux >= 3.12
-        * lttng-statedump-impl: Fix lttng_list_interrupts for empty implementation
-        * Import fix from LTSI: 3.4+ RT kernels use CONFIG_PREEMPT_RT_FULL
-
-Project website: http://lttng.org
-Download link: http://lttng.org/download
-(please refer to the README files for installation instructions and
-lttng-tools doc/quickstart.txt for usage information)
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+TWVyZ2VkLCB0aGFua3MhCgpNYXRoaWV1CgotLS0tLSBPcmlnaW5hbCBNZXNzYWdlIC0tLS0tCj4g
+RnJvbTogIkrDqXLDqW1pZSBHYWxhcm5lYXUiIDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5j
+b20+Cj4gVG86IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBTZW50OiBNb25kYXksIE5vdmVt
+YmVyIDExLCAyMDEzIDExOjE2OjQxIEFNCj4gU3ViamVjdDogW2x0dG5nLWRldl0gW1BBVENIIGJh
+YmVsdHJhY2VdIEZpeDogVXNlIG9mIGZ1bmN0aW9ucyBub3QgcHJvdmlkZWQJYnkgZ2xpYiAyLjIy
+Cj4gCj4gU2lnbmVkLW9mZi1ieTogSsOpcsOpbWllIEdhbGFybmVhdSA8amVyZW1pZS5nYWxhcm5l
+YXVAZWZmaWNpb3MuY29tPgo+IC0tLQo+ICBmb3JtYXRzL2N0Zi93cml0ZXIvZXZlbnQtZmllbGRz
+LmMgfCAxMCArKysrKystLS0tCj4gIGZvcm1hdHMvY3RmL3dyaXRlci9ldmVudC10eXBlcy5jICB8
+ICA0ICsrLS0KPiAgZm9ybWF0cy9jdGYvd3JpdGVyL3dyaXRlci5jICAgICAgIHwgMTEgKysrKysr
+Ky0tLS0KPiAgMyBmaWxlcyBjaGFuZ2VkLCAxNSBpbnNlcnRpb25zKCspLCAxMCBkZWxldGlvbnMo
+LSkKPiAKPiBkaWZmIC0tZ2l0IGEvZm9ybWF0cy9jdGYvd3JpdGVyL2V2ZW50LWZpZWxkcy5jCj4g
+Yi9mb3JtYXRzL2N0Zi93cml0ZXIvZXZlbnQtZmllbGRzLmMKPiBpbmRleCBhYTM4OWZkLi4zMGZl
+NTc4IDEwMDY0NAo+IC0tLSBhL2Zvcm1hdHMvY3RmL3dyaXRlci9ldmVudC1maWVsZHMuYwo+ICsr
+KyBiL2Zvcm1hdHMvY3RmL3dyaXRlci9ldmVudC1maWVsZHMuYwo+IEBAIC0yNDcsMTMgKzI0Nywx
+NCBAQCBpbnQgYnRfY3RmX2ZpZWxkX3NlcXVlbmNlX3NldF9sZW5ndGgoc3RydWN0Cj4gYnRfY3Rm
+X2ZpZWxkICpmaWVsZCwKPiAgCQlidF9jdGZfZmllbGRfcHV0KHNlcXVlbmNlLT5sZW5ndGgpOwo+
+ICAJfQo+ICAKPiAtCXNlcXVlbmNlLT5lbGVtZW50cyA9IGdfcHRyX2FycmF5X25ld19mdWxsKChz
+aXplX3Qpc2VxdWVuY2VfbGVuZ3RoLAo+IC0JCShHRGVzdHJveU5vdGlmeSlidF9jdGZfZmllbGRf
+cHV0KTsKPiArCXNlcXVlbmNlLT5lbGVtZW50cyA9IGdfcHRyX2FycmF5X3NpemVkX25ldygoc2l6
+ZV90KXNlcXVlbmNlX2xlbmd0aCk7Cj4gIAlpZiAoIXNlcXVlbmNlLT5lbGVtZW50cykgewo+ICAJ
+CXJldCA9IC0xOwo+ICAJCWdvdG8gZW5kOwo+ICAJfQo+ICAKPiArCWdfcHRyX2FycmF5X3NldF9m
+cmVlX2Z1bmMoc2VxdWVuY2UtPmVsZW1lbnRzLAo+ICsJCShHRGVzdHJveU5vdGlmeSlidF9jdGZf
+ZmllbGRfcHV0KTsKPiAgCWdfcHRyX2FycmF5X3NldF9zaXplKHNlcXVlbmNlLT5lbGVtZW50cywg
+KHNpemVfdClzZXF1ZW5jZV9sZW5ndGgpOwo+ICAJYnRfY3RmX2ZpZWxkX2dldChsZW5ndGhfZmll
+bGQpOwo+ICAJc2VxdWVuY2UtPmxlbmd0aCA9IGxlbmd0aF9maWVsZDsKPiBAQCAtNzY4LDEyICs3
+NjksMTMgQEAgc3RydWN0IGJ0X2N0Zl9maWVsZCAqYnRfY3RmX2ZpZWxkX2FycmF5X2NyZWF0ZShz
+dHJ1Y3QKPiBidF9jdGZfZmllbGRfdHlwZSAqdHlwZSkKPiAgCj4gIAlhcnJheV90eXBlID0gY29u
+dGFpbmVyX29mKHR5cGUsIHN0cnVjdCBidF9jdGZfZmllbGRfdHlwZV9hcnJheSwgcGFyZW50KTsK
+PiAgCWFycmF5X2xlbmd0aCA9IGFycmF5X3R5cGUtPmxlbmd0aDsKPiAtCWFycmF5LT5lbGVtZW50
+cyA9IGdfcHRyX2FycmF5X25ld19mdWxsKGFycmF5X2xlbmd0aCwKPiAtCQkoR0Rlc3Ryb3lOb3Rp
+ZnkpYnRfY3RmX2ZpZWxkX3B1dCk7Cj4gKwlhcnJheS0+ZWxlbWVudHMgPSBnX3B0cl9hcnJheV9z
+aXplZF9uZXcoYXJyYXlfbGVuZ3RoKTsKPiAgCWlmICghYXJyYXktPmVsZW1lbnRzKSB7Cj4gIAkJ
+Z290byBlcnJvcjsKPiAgCX0KPiAgCj4gKwlnX3B0cl9hcnJheV9zZXRfZnJlZV9mdW5jKGFycmF5
+LT5lbGVtZW50cywKPiArCQkoR0Rlc3Ryb3lOb3RpZnkpYnRfY3RmX2ZpZWxkX3B1dCk7Cj4gIAln
+X3B0cl9hcnJheV9zZXRfc2l6ZShhcnJheS0+ZWxlbWVudHMsIGFycmF5X2xlbmd0aCk7Cj4gIAly
+ZXR1cm4gJmFycmF5LT5wYXJlbnQ7Cj4gIGVycm9yOgo+IGRpZmYgLS1naXQgYS9mb3JtYXRzL2N0
+Zi93cml0ZXIvZXZlbnQtdHlwZXMuYwo+IGIvZm9ybWF0cy9jdGYvd3JpdGVyL2V2ZW50LXR5cGVz
+LmMKPiBpbmRleCAwOTFiMzIwLi5mYTRlNzEzIDEwMDY0NAo+IC0tLSBhL2Zvcm1hdHMvY3RmL3dy
+aXRlci9ldmVudC10eXBlcy5jCj4gKysrIGIvZm9ybWF0cy9jdGYvd3JpdGVyL2V2ZW50LXR5cGVz
+LmMKPiBAQCAtMjE0LDggKzIxNCw4IEBAIGludCBhZGRfc3RydWN0dXJlX2ZpZWxkKEdQdHJBcnJh
+eSAqZmllbGRzLAo+ICAJc3RydWN0IHN0cnVjdHVyZV9maWVsZCAqZmllbGQ7Cj4gIAo+ICAJLyog
+TWFrZSBzdXJlIHN0cnVjdHVyZSBkb2VzIG5vdCBjb250YWluIGEgZmllbGQgb2YgdGhlIHNhbWUg
+bmFtZSAqLwo+IC0JaWYgKGdfaGFzaF90YWJsZV9jb250YWlucyhmaWVsZF9uYW1lX3RvX2luZGV4
+LAo+IC0JCQlHVUlOVF9UT19QT0lOVEVSKG5hbWVfcXVhcmspKSkgewo+ICsJaWYgKGdfaGFzaF90
+YWJsZV9sb29rdXBfZXh0ZW5kZWQoZmllbGRfbmFtZV90b19pbmRleCwKPiArCQlHVUlOVF9UT19Q
+T0lOVEVSKG5hbWVfcXVhcmspLCBOVUxMLCBOVUxMKSkgewo+ICAJCXJldCA9IC0xOwo+ICAJCWdv
+dG8gZW5kOwo+ICAJfQo+IGRpZmYgLS1naXQgYS9mb3JtYXRzL2N0Zi93cml0ZXIvd3JpdGVyLmMg
+Yi9mb3JtYXRzL2N0Zi93cml0ZXIvd3JpdGVyLmMKPiBpbmRleCA1NjAwYTkyLi5hM2NhMjYzIDEw
+MDY0NAo+IC0tLSBhL2Zvcm1hdHMvY3RmL3dyaXRlci93cml0ZXIuYwo+ICsrKyBiL2Zvcm1hdHMv
+Y3RmL3dyaXRlci93cml0ZXIuYwo+IEBAIC01NjAsOCArNTYwLDkgQEAgaW50IHZhbGlkYXRlX2lk
+ZW50aWZpZXIoY29uc3QgY2hhciAqaW5wdXRfc3RyaW5nKQo+ICAKPiAgCXRva2VuID0gc3RydG9r
+X3Ioc3RyaW5nLCAiICIsICZzYXZlX3B0cik7Cj4gIAl3aGlsZSAodG9rZW4pIHsKPiAtCQlpZiAo
+Z19oYXNoX3RhYmxlX2NvbnRhaW5zKHJlc2VydmVkX2tleXdvcmRzX3NldCwKPiAtCQkJR0lOVF9U
+T19QT0lOVEVSKGdfcXVhcmtfZnJvbV9zdHJpbmcodG9rZW4pKSkpIHsKPiArCQlpZiAoZ19oYXNo
+X3RhYmxlX2xvb2t1cF9leHRlbmRlZChyZXNlcnZlZF9rZXl3b3Jkc19zZXQsCj4gKwkJCUdJTlRf
+VE9fUE9JTlRFUihnX3F1YXJrX2Zyb21fc3RyaW5nKHRva2VuKSksCj4gKwkJCU5VTEwsIE5VTEwp
+KSB7Cj4gIAkJCXJldCA9IC0xOwo+ICAJCQlnb3RvIGVuZDsKPiAgCQl9Cj4gQEAgLTczNyw4ICs3
+MzgsMTAgQEAgdm9pZCB3cml0ZXJfaW5pdCh2b2lkKQo+ICAKPiAgCXJlc2VydmVkX2tleXdvcmRz
+X3NldCA9IGdfaGFzaF90YWJsZV9uZXcoZ19kaXJlY3RfaGFzaCwgZ19kaXJlY3RfZXF1YWwpOwo+
+ICAJZm9yIChpID0gMDsgaSA8IHJlc2VydmVkX2tleXdvcmRzX2NvdW50OyBpKyspIHsKPiAtCQln
+X2hhc2hfdGFibGVfYWRkKHJlc2VydmVkX2tleXdvcmRzX3NldCwKPiAtCQlHSU5UX1RPX1BPSU5U
+RVIoZ19xdWFya19mcm9tX3N0cmluZyhyZXNlcnZlZF9rZXl3b3Jkc19zdHJbaV0pKSk7Cj4gKwkJ
+Z3BvaW50ZXIgcXVhcmsgPSBHSU5UX1RPX1BPSU5URVIoZ19xdWFya19mcm9tX3N0cmluZygKPiAr
+CQkJcmVzZXJ2ZWRfa2V5d29yZHNfc3RyW2ldKSk7Cj4gKwo+ICsJCWdfaGFzaF90YWJsZV9pbnNl
+cnQocmVzZXJ2ZWRfa2V5d29yZHNfc2V0LCBxdWFyaywgcXVhcmspOwo+ICAJfQo+ICAKPiAgCWlu
+aXRfZG9uZSA9IDE7Cj4gLS0KPiAxLjguNC4yCj4gCj4gCj4gX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX18KPiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4gbHR0
+bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IGh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9t
+YWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo+IAoKLS0gCk1hdGhpZXUgRGVzbm95ZXJzCkVmZmlj
+aU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KCl9fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2
+QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9s
+aXN0aW5mby9sdHRuZy1kZXYK
