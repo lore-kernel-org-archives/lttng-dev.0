@@ -1,19 +1,25 @@
-From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
-	<jeremie.galarneau@efficios.com>
-Subject: [PATCH lttng-tools] Fix: Warn that kernel loglevels are
-	unsupported
-Date: Wed, 13 Nov 2013 15:43:58 -0500
-Message-ID: <1384375438-5095-1-git-send-email-jeremie.galarneau__7558.58156267113$1384375504$gmane$org@efficios.com>
+From: Jon Bernard <jbernard@debian.org>
+Subject: Re: LTTng packages in Debian sid out of sync
+Date: Wed, 13 Nov 2013 16:02:23 -0500
+Message-ID: <20131113210223.GA6682__33278.3387195834$1384376611$gmane$org@shaniqua>
+References: <630558869.45441.1382211345502.JavaMail.zimbra@efficios.com>
+	<856849325.45462.1382211994767.JavaMail.zimbra@efficios.com>
+	<20131019211009.GA83292@helmut.local>
+	<300817690.45707.1382242504740.JavaMail.zimbra@efficios.com>
+	<20131020134521.GA97360@helmut.local>
+	<1084047903.45979.1382281219903.JavaMail.zimbra@efficios.com>
+	<20131020160434.GA2011@helmut.local>
+	<20131103231921.GA6958@shaniqua> <20131112153903.GC7321@thessa>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qa0-f44.google.com ([209.85.216.44])
+Received: from out3-smtp.messagingengine.com ([66.111.4.27])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1VghID-0007dp-PF
-	for lttng-dev@lists.lttng.org; Wed, 13 Nov 2013 15:44:11 -0500
-Received: by mail-qa0-f44.google.com with SMTP id f11so4112034qae.3
-	for <lttng-dev@lists.lttng.org>; Wed, 13 Nov 2013 12:44:00 -0800 (PST)
+	(envelope-from <jbernard@debian.org>) id 1Vgha2-0004WR-Sy
+	for lttng-dev@lists.lttng.org; Wed, 13 Nov 2013 16:02:36 -0500
+Content-Disposition: inline
+In-Reply-To: <20131112153903.GC7321@thessa>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,47 +28,76 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: David Goulet <dgoulet@efficios.com>
+Cc: lttng-dev@lists.lttng.org, =?iso-8859-1?Q?St=E9phane?= Graber <stgraber@ubuntu.com>
 List-Id: lttng-dev@lists.lttng.org
 
-V2FybiB0aGUgdXNlciB3aGVuIHRoZSBsb2cgbGV2ZWwgb3B0aW9uIGlzIHVzZWQgd2hlbiB0aGUg
-a2VybmVsIGRvbWFpbgppcyBzZWxlY3RlZC4gQWxzbywgZG9uJ3Qgc2hvdyB0aGUgbG9nIGxldmVs
-IGluIHRoZSBjb25maXJtYXRpb24gbWVzc2FnZQp3aGVuIGtlcm5lbCBldmVudHMgYXJlIHNlbGVj
-dGVkLgoKRml4ZXMgQnVnICM2NDUKClNpZ25lZC1vZmYtYnk6IErDqXLDqW1pZSBHYWxhcm5lYXUg
-PGplcmVtaWUuZ2FsYXJuZWF1QGVmZmljaW9zLmNvbT4KLS0tCiBzcmMvYmluL2x0dG5nL2NvbW1h
-bmRzL2VuYWJsZV9ldmVudHMuYyB8IDE0ICsrKysrLS0tLS0tLS0tCiAxIGZpbGUgY2hhbmdlZCwg
-NSBpbnNlcnRpb25zKCspLCA5IGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL3NyYy9iaW4vbHR0
-bmcvY29tbWFuZHMvZW5hYmxlX2V2ZW50cy5jIGIvc3JjL2Jpbi9sdHRuZy9jb21tYW5kcy9lbmFi
-bGVfZXZlbnRzLmMKaW5kZXggYTdiNzBjMy4uMmRmZjYzYiAxMDA2NDQKLS0tIGEvc3JjL2Jpbi9s
-dHRuZy9jb21tYW5kcy9lbmFibGVfZXZlbnRzLmMKKysrIGIvc3JjL2Jpbi9sdHRuZy9jb21tYW5k
-cy9lbmFibGVfZXZlbnRzLmMKQEAgLTM0Niw2ICszNDYsOSBAQCBzdGF0aWMgaW50IGVuYWJsZV9l
-dmVudHMoY2hhciAqc2Vzc2lvbl9uYW1lKQogCQkJcmV0ID0gQ01EX0VSUk9SOwogCQkJZ290byBl
-cnJvcjsKIAkJfQorCQlpZiAob3B0X2xvZ2xldmVsKSB7CisJCQlXQVJOKCJLZXJuZWwgbG9nbGV2
-ZWxzIGFyZSBub3Qgc3VwcG9ydGVkLiIpOworCQl9CiAJfQogCiAJLyogQ3JlYXRlIGx0dG5nIGRv
-bWFpbiAqLwpAQCAtNDE5LDcgKzQyMiw3IEBAIHN0YXRpYyBpbnQgZW5hYmxlX2V2ZW50cyhjaGFy
-ICpzZXNzaW9uX25hbWUpCiAKIAkJCXN3aXRjaCAob3B0X2V2ZW50X3R5cGUpIHsKIAkJCWNhc2Ug
-TFRUTkdfRVZFTlRfVFJBQ0VQT0lOVDoKLQkJCQlpZiAob3B0X2xvZ2xldmVsKSB7CisJCQkJaWYg
-KG9wdF9sb2dsZXZlbCAmJiBkb20udHlwZSAhPSBMVFROR19ET01BSU5fS0VSTkVMKSB7CiAJCQkJ
-CU1TRygiQWxsICVzIHRyYWNlcG9pbnRzIGFyZSBlbmFibGVkIGluIGNoYW5uZWwgJXMgZm9yIGxv
-Z2xldmVsICVzIiwKIAkJCQkJCQlnZXRfZG9tYWluX3N0cihkb20udHlwZSksCiAJCQkJCQkJcHJp
-bnRfY2hhbm5lbF9uYW1lKGNoYW5uZWxfbmFtZSksCkBAIC00MjgsNyArNDMxLDYgQEAgc3RhdGlj
-IGludCBlbmFibGVfZXZlbnRzKGNoYXIgKnNlc3Npb25fbmFtZSkKIAkJCQkJTVNHKCJBbGwgJXMg
-dHJhY2Vwb2ludHMgYXJlIGVuYWJsZWQgaW4gY2hhbm5lbCAlcyIsCiAJCQkJCQkJZ2V0X2RvbWFp
-bl9zdHIoZG9tLnR5cGUpLAogCQkJCQkJCXByaW50X2NoYW5uZWxfbmFtZShjaGFubmVsX25hbWUp
-KTsKLQogCQkJCX0KIAkJCQlicmVhazsKIAkJCWNhc2UgTFRUTkdfRVZFTlRfU1lTQ0FMTDoKQEAg
-LTQzOCw3ICs0NDAsNyBAQCBzdGF0aWMgaW50IGVuYWJsZV9ldmVudHMoY2hhciAqc2Vzc2lvbl9u
-YW1lKQogCQkJCX0KIAkJCQlicmVhazsKIAkJCWNhc2UgTFRUTkdfRVZFTlRfQUxMOgotCQkJCWlm
-IChvcHRfbG9nbGV2ZWwpIHsKKwkJCQlpZiAob3B0X2xvZ2xldmVsICYmIGRvbS50eXBlICE9IExU
-VE5HX0RPTUFJTl9LRVJORUwpIHsKIAkJCQkJTVNHKCJBbGwgJXMgZXZlbnRzIGFyZSBlbmFibGVk
-IGluIGNoYW5uZWwgJXMgZm9yIGxvZ2xldmVsICVzIiwKIAkJCQkJCQlnZXRfZG9tYWluX3N0cihk
-b20udHlwZSksCiAJCQkJCQkJcHJpbnRfY2hhbm5lbF9uYW1lKGNoYW5uZWxfbmFtZSksCkBAIC01
-MzMsMTIgKzUzNSw2IEBAIHN0YXRpYyBpbnQgZW5hYmxlX2V2ZW50cyhjaGFyICpzZXNzaW9uX25h
-bWUpCiAJCQkJZ290byBlcnJvcjsKIAkJCX0KIAotCQkJaWYgKG9wdF9sb2dsZXZlbCkgewotCQkJ
-CU1TRygiS2VybmVsIGxvZ2xldmVscyBhcmUgbm90IHN1cHBvcnRlZC4iKTsKLQkJCQlyZXQgPSBD
-TURfVU5TVVBQT1JURUQ7Ci0JCQkJZ290byBlcnJvcjsKLQkJCX0KLQogCQkJLyoga2VybmVsIGxv
-Z2xldmVscyBub3QgaW1wbGVtZW50ZWQgKi8KIAkJCWV2LmxvZ2xldmVsX3R5cGUgPSBMVFROR19F
-VkVOVF9MT0dMRVZFTF9BTEw7CiAJCX0gZWxzZSBpZiAob3B0X3VzZXJzcGFjZSkgewkJLyogVXNl
-ci1zcGFjZSB0cmFjZXIgYWN0aW9uICovCi0tIAoxLjguNC4yCgoKX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRu
-Zy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWls
-bWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+* David Goulet <dgoulet@efficios.com> wrote:
+> On 03 Nov (18:19:21), Jon Bernard wrote:
+> > * Jon Bernard <jbernard@debian.org> wrote:
+> > > * Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
+> > > > ----- Original Message -----
+> > > > > From: "Jon Bernard" <jbernard@debian.org>
+> > > > > To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+> > > > > Cc: "St=E9phane Graber" <stgraber@ubuntu.com>, "Alexandre Montpla=
+isir" <alexmonthy@voxpopuli.im>,
+> > > > > lttng-dev@lists.lttng.org
+> > > > > Sent: Sunday, October 20, 2013 9:45:21 AM
+> > > > > Subject: Re: LTTng packages in Debian sid out of sync
+> > > > > =
+
+> > > > [...]
+> > > > > =
+
+> > > > > That is not exactly what I intended to convey, let me be more dir=
+ect about my
+> > > > > view.  I completely agree that sid should have 2.3.x immediately.=
+  I also
+> > > > > agree
+> > > > > that 2.3 should be targeted for testing, and therefore the next s=
+table
+> > > > > release.
+> > > > =
+
+> > > > Allright :) I'm glad we're on the same page, sorry for the misunder=
+standing.
+> > > =
+
+> > > No worries.  I'll add that future releases (like the upcoming 2.4) wi=
+ll
+> > > be prepared and tested all together prior to upload - to hopefully av=
+oid
+> > > the previous situation/nightmare that I managed to get myself into.
+> > > =
+
+> > > There can still be a sizable amount of work for 2.3 to fully land into
+> > > testing, so that is my primary focus.  The freeze deadline is fast
+> > > approaching, so I will be keeping a close eye on things as they
+> > > progress.  As things settle I'll post status here.
+> > =
+
+> > lttng-tools 2.3.0 was just accepted, so on sid (unstable) we should now=
+ be at
+> > version 2.3.0 across the board.  Things look pretty good to me, but if =
+anyone
+> > has time to test the packages and let me know if something's missing, s=
+tructured
+> > incorrectly, or not behaving as expected - that would be awesome.
+> =
+
+> Why is lttng-tools depending on "lttng-modules-dkms"? It should not, it
+> should only be a suggested package.
+> =
+
+> http://packages.debian.org/sid/lttng-tools
+
+If you scroll down a bit, you'll see that it is a suggestion for all of
+the current architectures.  I fixed this in the last upload, but the
+packages view is misleading.  The powerpcspe should be removed, and
+armel is failing - so the latest version is not being considered.
+
+Once things settle, that view will look as it should.
+
+-- =
+
+Jon
