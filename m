@@ -1,31 +1,17 @@
 From: David Goulet <dgoulet@efficios.com>
-Subject: [RELEASE] LTTng-tools 2.3.1
-Date: Wed, 13 Nov 2013 16:55:23 -0500
-Message-ID: <20131113215523.GE7694__43983.3210003146$1384379791$gmane$org@dalia>
+Subject: Re: [PATCH lttng-tools] Fix: Warn that kernel loglevels
+ are unsupported
+Date: Wed, 13 Nov 2013 16:59:51 -0500
+Message-ID: <20131113215951.GF7694__29843.5391429395$1384380060$gmane$org@dalia>
+References: <1384375438-5095-1-git-send-email-jeremie.galarneau@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1034692226=="
+Content-Type: multipart/mixed; boundary="===============1645667379=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from smtp.ini-tech.com ([144.76.53.219])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1VgiPM-0002uq-A9
-	for lttng-dev@lists.lttng.org; Wed, 13 Nov 2013 16:55:38 -0500
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by smtp.ini-tech.com (Postfix) with ESMTP id BB7B5A1D7A
-	for <lttng-dev@lists.lttng.org>; Wed, 13 Nov 2013 21:55:26 +0000 (UTC)
-Received: from smtp.ini-tech.com ([127.0.0.1])
-	by localhost (smtp.ini-tech.com [127.0.0.1]) (amavisd-new, port 10032)
-	with ESMTP id lBRkzgVWAkjV for <lttng-dev@lists.lttng.org>;
-	Wed, 13 Nov 2013 21:55:26 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by smtp.ini-tech.com (Postfix) with ESMTP id 36987A1D9C
-	for <lttng-dev@lists.lttng.org>; Wed, 13 Nov 2013 21:55:26 +0000 (UTC)
-Received: from smtp.ini-tech.com ([127.0.0.1])
-	by localhost (smtp.ini-tech.com [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id K8gHXaatKe3O for <lttng-dev@lists.lttng.org>;
-	Wed, 13 Nov 2013 21:55:26 +0000 (UTC)
-Received: from dalia (bas3-montreal42-1168091155.dsl.bell.ca [69.159.168.19])
-	by smtp.ini-tech.com (Postfix) with ESMTPSA id 79F6DA1D7A
-	for <lttng-dev@lists.lttng.org>; Wed, 13 Nov 2013 21:55:25 +0000 (UTC)
+	(envelope-from <dgoulet@efficios.com>) id 1VgiTf-0004Cd-VZ
+	for lttng-dev@lists.lttng.org; Wed, 13 Nov 2013 17:00:05 -0500
+In-Reply-To: <1384375438-5095-1-git-send-email-jeremie.galarneau@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -34,78 +20,129 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev <lttng-dev@lists.lttng.org>
+To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
 
---===============1034692226==
+--===============1645667379==
 Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="ep0oHQY+/Gbo/zt0"
+	protocol="application/pgp-signature"; boundary="ChQOR20MqfxkMJg9"
 Content-Disposition: inline
 
 
---ep0oHQY+/Gbo/zt0
-Content-Type: text/plain; charset=us-ascii
+--ChQOR20MqfxkMJg9
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Greetings everyone (including LTTng elves),
+Merged!
 
-The lttng-tools project provides a session daemon (lttng-sessiond) that acts as
-a tracing registry, the "lttng" command line for tracing control, a lttng-ctl
-library for tracing control and a lttng-relayd for network streaming.
+On 13 Nov (15:43:58), J=E9r=E9mie Galarneau wrote:
+> Warn the user when the log level option is used when the kernel domain
+> is selected. Also, don't show the log level in the confirmation message
+> when kernel events are selected.
+>=20
+> Fixes Bug #645
+>=20
+> Signed-off-by: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
+> ---
+>  src/bin/lttng/commands/enable_events.c | 14 +++++---------
+>  1 file changed, 5 insertions(+), 9 deletions(-)
+>=20
+> diff --git a/src/bin/lttng/commands/enable_events.c b/src/bin/lttng/comma=
+nds/enable_events.c
+> index a7b70c3..2dff63b 100644
+> --- a/src/bin/lttng/commands/enable_events.c
+> +++ b/src/bin/lttng/commands/enable_events.c
+> @@ -346,6 +346,9 @@ static int enable_events(char *session_name)
+>  			ret =3D CMD_ERROR;
+>  			goto error;
+>  		}
+> +		if (opt_loglevel) {
+> +			WARN("Kernel loglevels are not supported.");
+> +		}
+>  	}
+> =20
+>  	/* Create lttng domain */
+> @@ -419,7 +422,7 @@ static int enable_events(char *session_name)
+> =20
+>  			switch (opt_event_type) {
+>  			case LTTNG_EVENT_TRACEPOINT:
+> -				if (opt_loglevel) {
+> +				if (opt_loglevel && dom.type !=3D LTTNG_DOMAIN_KERNEL) {
+>  					MSG("All %s tracepoints are enabled in channel %s for loglevel %s",
+>  							get_domain_str(dom.type),
+>  							print_channel_name(channel_name),
+> @@ -428,7 +431,6 @@ static int enable_events(char *session_name)
+>  					MSG("All %s tracepoints are enabled in channel %s",
+>  							get_domain_str(dom.type),
+>  							print_channel_name(channel_name));
+> -
+>  				}
+>  				break;
+>  			case LTTNG_EVENT_SYSCALL:
+> @@ -438,7 +440,7 @@ static int enable_events(char *session_name)
+>  				}
+>  				break;
+>  			case LTTNG_EVENT_ALL:
+> -				if (opt_loglevel) {
+> +				if (opt_loglevel && dom.type !=3D LTTNG_DOMAIN_KERNEL) {
+>  					MSG("All %s events are enabled in channel %s for loglevel %s",
+>  							get_domain_str(dom.type),
+>  							print_channel_name(channel_name),
+> @@ -533,12 +535,6 @@ static int enable_events(char *session_name)
+>  				goto error;
+>  			}
+> =20
+> -			if (opt_loglevel) {
+> -				MSG("Kernel loglevels are not supported.");
+> -				ret =3D CMD_UNSUPPORTED;
+> -				goto error;
+> -			}
+> -
+>  			/* kernel loglevels not implemented */
+>  			ev.loglevel_type =3D LTTNG_EVENT_LOGLEVEL_ALL;
+>  		} else if (opt_userspace) {		/* User-space tracer action */
+> --=20
+> 1.8.4.2
+>=20
+>=20
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
-A stable release for the LTTng RELEASE TRAIN! :) Here is the ChangeLog.
-
-2013-11-13 lttng-tools 2.3.1
-    * Fix: typo in --sig-parent help
-    * Fix: application SIGBUS when starting in parallel with sessiond
-    * Fix: missing LTTNG_OK return value for snapshot
-    * Fix: arguments in the wrong order for fd-limit
-    * Fix: Some corrections to the lttng man page
-    * Fix: recv creds comm should handle partial receive
-    * Fix: set app socket timeout just after accept()
-    * Fix typo in lttng snapshot add-output example of lttng(1)
-
-Using it is testing it!
-
-Project website: http://lttng.org/lttng2.0
-Download link:
-http://lttng.org/files/lttng-tools/lttng-tools-2.3.1.tar.bz2 (for
-the PGP signature, same file with .asc appended)
-
-Cheers!
-David
-
---ep0oHQY+/Gbo/zt0
+--ChQOR20MqfxkMJg9
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: Digital signature
 
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.15 (GNU/Linux)
 
-iQF8BAEBAgBmBQJSg/VLXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
+iQF8BAEBAgBmBQJSg/ZXXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
 ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
-MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02T3cH/jW1+hjLNUqCYWLJApH81k0r
-wSoj/xsITsEFV9HOcU5W38k2QquatX8Ra8lbcGXHzWipqT5SiuXlQdqHYu0sTyjS
-m/YIG2G7fJH6zUohiIRzhtB0K1/8hf2GqYVaju4RViS2CbAavljc9i6EsfLKAGsk
-b3b8ubLrcSsscyMC4ucW+QXqavVuzYuGbroyD82oevJkV6hq2mkam/kQnsW9GUHp
-k92GS39VKRfmPHU3gyvoDJ9zEJcJSjvJEr9K+hDAcKBn5UwGzoQkA2wHzI7ixB1C
-H4Ara6Yo/ODkmBngZ+IYnkUOS+8Q3piCJuhTrmY/4DD/bG6wneCEMJpaLi6fXp4=
-=TOW2
+MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02glAH/2MuSBzrb7xuODb421qDZoMC
+q3xT2gcwhgQqbUBoyUcbwN5K2pJMFDCbG8IzAymp2ItB+hzNPfTcKd1ah8OAkHKG
+/m5XnaG9DLVyw4PT2tCNcNxTNGihoX+p2u6CZ83laU9KylxDqYmhpfk8xkTzYAp3
+Yxwd1fJTTrMfuH1aKOnAvgb0U7TZmToPDrxmxoHG6uvqzesUTjCBdJAC1TzVLq5+
+dj3I3ylhNN1Zi2PisepBUw7d0WTSke4jXl4kkI0vwvVok7+134/dy7ey9FGfjXQX
+78k9RzQzyxDEheMWE9HxgJgAkeaHVbl/eRw7VONDk/b7Pf44dcnTnDQJNxm0Q18=
+=dAD0
 -----END PGP SIGNATURE-----
 
---ep0oHQY+/Gbo/zt0--
+--ChQOR20MqfxkMJg9--
 
 
---===============1034692226==
+--===============1645667379==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
 
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============1034692226==--
+--===============1645667379==--
