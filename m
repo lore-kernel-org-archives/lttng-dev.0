@@ -1,17 +1,27 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PULL REQUEST babeltrace] Python bindings update
-Date: Wed, 13 Nov 2013 14:17:42 +0000 (UTC)
-Message-ID: <1801200686.66283.1384352262423.JavaMail.zimbra__13634.2139835053$1384355541$gmane$org@efficios.com>
-References: <CA+jJMxsZLrpRXhgZDLqVfGgqjkz6_d=7NKPgRHr5gGc0vmc4TQ@mail.gmail.com>
+From: Jon Bernard <jbernard@debian.org>
+Subject: Re: LTTng packages in Debian sid out of sync
+Date: Wed, 13 Nov 2013 12:01:01 -0500
+Message-ID: <20131113170101.GA10480__18553.9051577964$1384362147$gmane$org@shaniqua>
+References: <630558869.45441.1382211345502.JavaMail.zimbra@efficios.com>
+	<300817690.45707.1382242504740.JavaMail.zimbra@efficios.com>
+	<20131020134521.GA97360@helmut.local>
+	<1084047903.45979.1382281219903.JavaMail.zimbra@efficios.com>
+	<20131020160434.GA2011@helmut.local>
+	<20131103231921.GA6958@shaniqua>
+	<376195559.63764.1384095140775.JavaMail.zimbra@efficios.com>
+	<20131110152150.GA22826@shaniqua>
+	<1699827701.63862.1384097350158.JavaMail.zimbra@efficios.com>
+	<5282D901.2090509@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from out3-smtp.messagingengine.com ([66.111.4.27])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1VgbGL-0007em-Dw
-	for lttng-dev@lists.lttng.org; Wed, 13 Nov 2013 09:17:51 -0500
-In-Reply-To: <CA+jJMxsZLrpRXhgZDLqVfGgqjkz6_d=7NKPgRHr5gGc0vmc4TQ@mail.gmail.com>
+	(envelope-from <jbernard@debian.org>) id 1VgdoT-0003K1-Vb
+	for lttng-dev@lists.lttng.org; Wed, 13 Nov 2013 12:01:15 -0500
+Content-Disposition: inline
+In-Reply-To: <5282D901.2090509@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,47 +30,55 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?utf-8?B?SsOpcsOpbWll?= Galarneau <jeremie.galarneau@efficios.com>
+To: Yannick Brosseau <yannick.brosseau@gmail.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJKw6lyw6ltaWUgR2FsYXJuZWF1
-IiA8amVyZW1pZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29tPgo+IFRvOiBsdHRuZy1kZXZAbGlzdHMu
-bHR0bmcub3JnCj4gQ2M6ICJNYXRoaWV1IERlc25veWVycyIgPG1hdGhpZXUuZGVzbm95ZXJzQGVm
-ZmljaW9zLmNvbT4KPiBTZW50OiBUdWVzZGF5LCBOb3ZlbWJlciAxMiwgMjAxMyAxMDowNjo0MSBQ
-TQo+IFN1YmplY3Q6IFtQVUxMIFJFUVVFU1QgYmFiZWx0cmFjZV0gUHl0aG9uIGJpbmRpbmdzIHVw
-ZGF0ZQo+IAo+IEhpIGFsbCwKPiAKPiBIZXJlIGFyZSBzb21lIHBhdGNoZXMgdG8gYWRkIHJlYWQg
-c3VwcG9ydCBvZiBldmVyeSBDVEYgdHlwZSB1c2luZyB0aGUKPiBCYWJlbHRyYWNlIFB5dGhvbiBi
-aW5kaW5ncy4gSXQgaXMgbm93IHBvc3NpYmxlIHRvIHJldHJpZXZlIGZpZWxkcyBhbmQKPiBhY2Nl
-c3MgdGhlaXIgdmFsdWVzIHVzaW5nIGEgc2luZ2xlIGdldF92YWx1ZSgpIG1ldGhvZCByZXR1cm5p
-bmcgbmF0aXZlCj4gUHl0aG9uIG9iamVjdHMuIFRoaXMgaXMgbWFkZSBwb3NzaWJsZSB1c2luZyB0
-aGUgd29yayBjb250cmlidXRlZCBieQo+IG9uZSBvZiBvdXIgR1NvQyBzdHVkZW50cywgWGlhb25h
-IEhhbi4KPiAKPiBUaGVzZSBwYXRjaGVzIGFsc28gbWFrZSBpdCBwb3NzaWJsZSB0byBnZW5lcmF0
-ZSBDVEYgZnJvbSBQeXRob24gY29kZSwKPiBiYXNlZCBvbiB0aGUgQ1RGIFdyaXRlciBBUEkgdGhh
-dCB3YXMgbWVyZ2VkIHJlY2VudGx5LgoKTWVyZ2VkIGludG8gYmluZGluZ3MvcHl0aG9uIGJyYW5j
-aC4gUGxlYXNlIGxldCBtZSBrbm93IGlmIEkgc2hvdWxkIG1lcmdlIHRoZXNlIGludG8gbWFzdGVy
-LgoKVGhhbmtzLAoKTWF0aGlldQoKPiAKPiBUaGUgcGF0Y2hlcyBhcmUgYXZhaWxhYmxlIGhlcmU6
-Cj4gaHR0cHM6Ly9naXRodWIuY29tL2pnYWxhci9iYWJlbHRyYWNlL2NvbW1pdHMvYmluZGluZ3Mv
-cHl0aG9uCj4gCj4gN2EzMGE2NiBSZXR1cm4gZXZlbnQgZmllbGRzIGJ5IGZpZWxkIG5hbWUKPiBk
-YjU1MWYyIFJlbW92ZSB0aGUgdW5uZWNlc3NhcnkgdW5kZXJzY29yZSBwcmVmaXgKPiA0MTkxYmNk
-IFN1cHBvcnQgZ2V0dGluZyB0aGUgdmFsdWUgb2YgZW51bXMKPiAzYzJjZTc3IEFkZCBhIGdlbmVy
-aWMgZ2V0X3ZhbHVlKCkgaW1wbGVtZW50YXRpb24KPiA3ODYyMDdlIFN1cHBvcnQgZm9yIHRoZSBz
-ZXF1ZW5jZSB0eXBlCj4gODEwYTk3YiBBZGQgYSBweXRob24gYmluZGluZ3Mgc2VxdWVuY2UgdGVz
-dAo+IDMwNDNlZTAgUmVtb3ZlIFB5dGhvbiAyIHNwZWNpZmljIGV4YW1wbGVzCj4gOTAxMzFhMyBG
-aXg6IFRocm93IGEgRmllbGRFcnJvciBleGNlcHRpb24gd2hlbiBnZXRfdmFsdWUoKSBmYWlscwo+
-IGU1YTczYjkgQWRkIHN1cHBvcnQgZm9yIGZsb2F0aW5nIHBvaW50IGZpZWxkcyBpbiB0aGUgUHl0
-aG9uIGJpbmRpbmdzCj4gODEyZTY2OCBBZGQgc3VwcG9ydCBmb3IgdmFyaWFudCBmaWVsZHMgaW4g
-dGhlIFB5dGhvbiBiaW5kaW5ncwo+IDNhMDY4OTEgQWRkIHN1cHBvcnQgZm9yIHN0cnVjdHVyZSBm
-aWVsZHMgaW4gdGhlIFB5dGhvbiBiaW5kaW5ncwo+IGNlYmFlOGMgRml4OiBQeXRob24gYmluZGlu
-Z3MgYXJyYXkgYWNjZXNzIGZ1bmN0aW9ucyB3cml0ZSBvdXQgb2YgYm91bmRzCj4gMjRkNWM5NCBS
-ZW5hbWUgdGhlIGN0ZiBjbGFzcyB0byBDVEZSZWFkZXIKPiBlYzhjODhkIEFkZCBDVEYgV3JpdGVy
-IFB5dGhvbiBiaW5kaW5ncwo+IDAzM2ZiMGEgQWRkIGEgdXNhZ2UgZXhhbXBsZSBmb3IgdGhlIENU
-RiBXcml0ZXIgUHl0aG9uIGJpbmRpbmdzCj4gOTRhNmNlYSBEb24ndCBnZW5lcmF0ZSBQeXRob24g
-YmluZGluZ3MgYnkgZGVmYXVsdAo+IDU0OTE0NzYgRXhwb3NlIHRleHQgYXJyYXlzIHRoZSBzYW1l
-IHdheSBhcyByZWd1bGFyIGFycmF5cwo+IAo+IExvb2tpbmcgZm9yd2FyZCB0byB5b3VyIGNvbW1l
-bnRzLAo+IErDqXLDqW1pZQo+IAo+IC0tCj4gSsOpcsOpbWllIEdhbGFybmVhdQo+IEVmZmljaU9T
-IEluYy4KPiBodHRwOi8vd3d3LmVmZmljaW9zLmNvbQo+IAoKLS0gCk1hdGhpZXUgRGVzbm95ZXJz
-CkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KCl9fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0
-bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFp
-bG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+* Yannick Brosseau <yannick.brosseau@gmail.com> wrote:
+> On 11/10/13 10:29, Mathieu Desnoyers wrote:
+> > ----- Original Message -----
+> >> From: "Jon Bernard" <jbernard@debian.org>
+> >> To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+> >> Cc: "St=E9phane Graber" <stgraber@ubuntu.com>, "Alexandre Montplaisir"=
+ <alexmonthy@voxpopuli.im>,
+> >> lttng-dev@lists.lttng.org
+> >> Sent: Sunday, November 10, 2013 10:21:50 AM
+> >> Subject: Re: [lttng-dev] LTTng packages in Debian sid out of sync
+> >>
+> >> * Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
+> >>> Hi Jon,
+> >>>
+> >>> Thanks for the updates. Did you manage to get the upgrade path from
+> >>> older lttng versions to work, or do users still need to uninstall the
+> >>> old package manually ?
+> >> I'm working on the upgrade packages now.
+> > Great!
+> >
+> >> I also just noticed a build
+> >> failure on armel[1] for lttng-tools.  It could be a debian-specific
+> >> problem in the compiler/toolchain, but I haven't had a chance to look
+> >> into it yet.  Let me know if you have any thoughts about this.
+> > We've already hit this one:
+> >
+> > https://bugs.lttng.org/issues/640
+> >
+> Yes, I've hit it in the fedora packages.
+> I've simply disabled the hardening Fedora option, so this temporary fix
+> might need another way to do it in debian:
+> (What it does is removing the -fPIE flag from the build option on arm)
+> =
+
+> http://pkgs.fedoraproject.org/cgit/lttng-tools.git/commit/?id=3Da9d92b435=
+48ec807b3b5485be092711c4c97f835
+
+Yep, I'll have to do the same thing - should be easy enough.
+
+I've finished the ust upgrade packages, I need only to test the possible
+scenarios to make sure all is well and I can upload.  And then I'll fix
+the arm issue.
+
+Cheers,
+
+-- =
+
+Jon
