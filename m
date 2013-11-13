@@ -1,17 +1,20 @@
-From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: [PULL REQUEST babeltrace] Python bindings update
-Date: Tue, 12 Nov 2013 22:06:41 -0500
-Message-ID: <CA+jJMxsZLrpRXhgZDLqVfGgqjkz6_d=7NKPgRHr5gGc0vmc4TQ__22651.0011627854$1384312049$gmane$org@mail.gmail.com>
+From: =?UTF-8?q?Rapha=C3=ABl=20Beamonte?= <raphael.beamonte@gmail.com>
+Subject: [lttng-tools PATCH 0/4] Update to utils_expand_path as
+	realpath(3) for non-existing directories
+Date: Wed, 13 Nov 2013 00:34:34 -0500
+Message-ID: <1384320878-28808-1-git-send-email-raphael.beamonte__9206.64075897566$1384320953$gmane$org@gmail.com>
+References: <20131112195134.GB12183@thessa>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qe0-f54.google.com ([209.85.128.54])
+Received: from mail-ie0-f173.google.com ([209.85.223.173])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1VgQn1-0005aL-En
-	for lttng-dev@lists.lttng.org; Tue, 12 Nov 2013 22:06:50 -0500
-Received: by mail-qe0-f54.google.com with SMTP id 1so6242835qec.41
-	for <lttng-dev@lists.lttng.org>; Tue, 12 Nov 2013 19:06:42 -0800 (PST)
+	(envelope-from <raphael.beamonte@gmail.com>) id 1VgT6N-0004KD-8f
+	for lttng-dev@lists.lttng.org; Wed, 13 Nov 2013 00:34:57 -0500
+Received: by mail-ie0-f173.google.com with SMTP id x13so8889791ief.32
+	for <lttng-dev@lists.lttng.org>; Tue, 12 Nov 2013 21:34:49 -0800 (PST)
+In-Reply-To: <20131112195134.GB12183@thessa>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,46 +23,30 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: dgoulet@efficios.com
+Cc: =?UTF-8?q?Rapha=C3=ABl=20Beamonte?= <raphael.beamonte@gmail.com>, lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi all,
-
-Here are some patches to add read support of every CTF type using the
-Babeltrace Python bindings. It is now possible to retrieve fields and
-access their values using a single get_value() method returning native
-Python objects. This is made possible using the work contributed by
-one of our GSoC students, Xiaona Han.
-
-These patches also make it possible to generate CTF from Python code,
-based on the CTF Writer API that was merged recently.
-
-The patches are available here:
-https://github.com/jgalar/babeltrace/commits/bindings/python
-
-7a30a66 Return event fields by field name
-db551f2 Remove the unnecessary underscore prefix
-4191bcd Support getting the value of enums
-3c2ce77 Add a generic get_value() implementation
-786207e Support for the sequence type
-810a97b Add a python bindings sequence test
-3043ee0 Remove Python 2 specific examples
-90131a3 Fix: Throw a FieldError exception when get_value() fails
-e5a73b9 Add support for floating point fields in the Python bindings
-812e668 Add support for variant fields in the Python bindings
-3a06891 Add support for structure fields in the Python bindings
-cebae8c Fix: Python bindings array access functions write out of bounds
-24d5c94 Rename the ctf class to CTFReader
-ec8c88d Add CTF Writer Python bindings
-033fb0a Add a usage example for the CTF Writer Python bindings
-94a6cea Don't generate Python bindings by default
-5491476 Expose text arrays the same way as regular arrays
-
-Looking forward to your comments,
-J=E9r=E9mie
-
--- =
-
-J=E9r=E9mie Galarneau
-EfficiOS Inc.
-http://www.efficios.com
+RGF2aWQsCgpQbGVhc2UgZmluZCBoZXJlIGFuIHVwZGF0ZWQgc2VyaWVzIG9mIHBhdGNoZXMgZm9s
+bG93aW5nIHlvdXIKcHJldmlvdXMgY29tbWVudHMuIFRoZXNlIHBhdGNoZXMgaW50cm9kdWNlIHVw
+ZGF0ZWQgdmVyc2lvbnMgb2YgdGhlCnV0aWxzX3Jlc29sdmVfcmVsYXRpdmUgYW5kIHV0aWxzX2V4
+cGFuZF9wYXRoIGZ1bmN0aW9ucywgYXMgd2VsbCBhcwp1bml0IHRlc3RzIHRvIHZlcmlmeSB0aGVp
+ciBiZWhhdmlvci4KClRoYW5rcywKUmFwaGHDq2wKCgpSYXBoYcOrbCBCZWFtb250ZSAoNCk6CiAg
+SW50cm9kdWNlIGEgbmV3IHV0aWxzX3Jlc29sdmVfcmVsYXRpdmUgZnVuY3Rpb24KICBUZXN0czog
+QWRkIHRlc3RfdXRpbHNfcmVzb2x2ZV9yZWxhdGl2ZSB0byB1bml0IHRlc3RzCiAgQ29ycmVjdCB0
+aGUgYmVoYXZpb3Igb2YgdGhlIHV0aWxzX2V4cGFuZF9wYXRoIGZ1bmN0aW9uCiAgVGVzdHM6IEFk
+ZCB0ZXN0X3V0aWxzX2V4cGFuZF9wYXRoIHRvIHVuaXQgdGVzdHMKCiAuZ2l0aWdub3JlICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgIHwgICAgMiArCiBzcmMvY29tbW9uL3V0aWxzLmMgICAg
+ICAgICAgICAgICAgICAgICAgIHwgIDE1NCArKysrKysrKysrKysrKysrKysrKysrKy0tLS0KIHNy
+Yy9jb21tb24vdXRpbHMuaCAgICAgICAgICAgICAgICAgICAgICAgfCAgICAxICsKIHRlc3RzL3Vu
+aXQvTWFrZWZpbGUuYW0gICAgICAgICAgICAgICAgICAgfCAgIDIwICsrKy0KIHRlc3RzL3VuaXQv
+dGVzdF91dGlsc19leHBhbmRfcGF0aC5jICAgICAgfCAgMTcwICsrKysrKysrKysrKysrKysrKysr
+KysrKysrKysrKwogdGVzdHMvdW5pdC90ZXN0X3V0aWxzX3Jlc29sdmVfcmVsYXRpdmUuYyB8ICAg
+OTggKysrKysrKysrKysrKysrKysKIHRlc3RzL3VuaXRfdGVzdHMgICAgICAgICAgICAgICAgICAg
+ICAgICAgfCAgICAyICsKIDcgZmlsZXMgY2hhbmdlZCwgNDIxIGluc2VydGlvbnMoKyksIDI2IGRl
+bGV0aW9ucygtKQogY3JlYXRlIG1vZGUgMTAwNjQ0IHRlc3RzL3VuaXQvdGVzdF91dGlsc19leHBh
+bmRfcGF0aC5jCiBjcmVhdGUgbW9kZSAxMDA2NDQgdGVzdHMvdW5pdC90ZXN0X3V0aWxzX3Jlc29s
+dmVfcmVsYXRpdmUuYwoKLS0gCjEuNy4xMC40CgoKX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlz
+dHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3Rp
+bmZvL2x0dG5nLWRldgo=
