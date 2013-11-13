@@ -1,16 +1,24 @@
 From: David Goulet <dgoulet@efficios.com>
-Subject: Re: [PATCH lttng-tools 00/28] UST Event exclusions
-Date: Wed, 13 Nov 2013 16:07:58 -0500
-Message-ID: <20131113210758.GB7694__18002.9344316155$1384376945$gmane$org@dalia>
-References: <1383819403-6386-1-git-send-email-jp_ikaheimonen@mentor.com>
+Subject: Re: LTTng packages in Debian sid out of sync
+Date: Wed, 13 Nov 2013 16:09:38 -0500
+Message-ID: <20131113210938.GC7694__21344.9611714625$1384377059$gmane$org@dalia>
+References: <630558869.45441.1382211345502.JavaMail.zimbra@efficios.com>
+	<856849325.45462.1382211994767.JavaMail.zimbra@efficios.com>
+	<20131019211009.GA83292@helmut.local>
+	<300817690.45707.1382242504740.JavaMail.zimbra@efficios.com>
+	<20131020134521.GA97360@helmut.local>
+	<1084047903.45979.1382281219903.JavaMail.zimbra@efficios.com>
+	<20131020160434.GA2011@helmut.local>
+	<20131103231921.GA6958@shaniqua> <20131112153903.GC7321@thessa>
+	<20131113210223.GA6682@shaniqua>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1273221413=="
+Content-Type: multipart/mixed; boundary="===============1763591942=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from smtp.ini-tech.com ([144.76.53.219])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1VghfT-00067x-EA
-	for lttng-dev@lists.lttng.org; Wed, 13 Nov 2013 16:08:13 -0500
-In-Reply-To: <1383819403-6386-1-git-send-email-jp_ikaheimonen@mentor.com>
+	(envelope-from <dgoulet@efficios.com>) id 1Vghh4-0006cq-TD
+	for lttng-dev@lists.lttng.org; Wed, 13 Nov 2013 16:09:53 -0500
+In-Reply-To: <20131113210223.GA6682@shaniqua>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,177 +27,119 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: JP Ikaheimonen <jp_ikaheimonen@mentor.com>
-Cc: lttng-dev@lists.lttng.org
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, =?iso-8859-1?Q?St=E9phane?= Graber <stgraber@ubuntu.com>, Alexandre Montplaisir <alexmonthy@voxpopuli.im>, lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
 
---===============1273221413==
+--===============1763591942==
 Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="4bRzO86E/ozDv8r1"
+	protocol="application/pgp-signature"; boundary="Qbvjkv9qwOGw/5Fx"
 Content-Disposition: inline
 
 
---4bRzO86E/ozDv8r1
-Content-Type: text/plain; charset=us-ascii
+--Qbvjkv9qwOGw/5Fx
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hey JP!
+On 13 Nov (16:02:23), Jon Bernard wrote:
+> * David Goulet <dgoulet@efficios.com> wrote:
+> > On 03 Nov (18:19:21), Jon Bernard wrote:
+> > > * Jon Bernard <jbernard@debian.org> wrote:
+> > > > * Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
+> > > > > ----- Original Message -----
+> > > > > > From: "Jon Bernard" <jbernard@debian.org>
+> > > > > > To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+> > > > > > Cc: "St=E9phane Graber" <stgraber@ubuntu.com>, "Alexandre Montp=
+laisir" <alexmonthy@voxpopuli.im>,
+> > > > > > lttng-dev@lists.lttng.org
+> > > > > > Sent: Sunday, October 20, 2013 9:45:21 AM
+> > > > > > Subject: Re: LTTng packages in Debian sid out of sync
+> > > > > >=20
+> > > > > [...]
+> > > > > >=20
+> > > > > > That is not exactly what I intended to convey, let me be more d=
+irect about my
+> > > > > > view.  I completely agree that sid should have 2.3.x immediatel=
+y.  I also
+> > > > > > agree
+> > > > > > that 2.3 should be targeted for testing, and therefore the next=
+ stable
+> > > > > > release.
+> > > > >=20
+> > > > > Allright :) I'm glad we're on the same page, sorry for the misund=
+erstanding.
+> > > >=20
+> > > > No worries.  I'll add that future releases (like the upcoming 2.4) =
+will
+> > > > be prepared and tested all together prior to upload - to hopefully =
+avoid
+> > > > the previous situation/nightmare that I managed to get myself into.
+> > > >=20
+> > > > There can still be a sizable amount of work for 2.3 to fully land i=
+nto
+> > > > testing, so that is my primary focus.  The freeze deadline is fast
+> > > > approaching, so I will be keeping a close eye on things as they
+> > > > progress.  As things settle I'll post status here.
+> > >=20
+> > > lttng-tools 2.3.0 was just accepted, so on sid (unstable) we should n=
+ow be at
+> > > version 2.3.0 across the board.  Things look pretty good to me, but i=
+f anyone
+> > > has time to test the packages and let me know if something's missing,=
+ structured
+> > > incorrectly, or not behaving as expected - that would be awesome.
+> >=20
+> > Why is lttng-tools depending on "lttng-modules-dkms"? It should not, it
+> > should only be a suggested package.
+> >=20
+> > http://packages.debian.org/sid/lttng-tools
+>=20
+> If you scroll down a bit, you'll see that it is a suggestion for all of
+> the current architectures.  I fixed this in the last upload, but the
+> packages view is misleading.  The powerpcspe should be removed, and
+> armel is failing - so the latest version is not being considered.
+>=20
+> Once things settle, that view will look as it should.
 
-So here is the deal with this big patch set and the 2.4-rc ;).
+Awesome Jon, thanks!
 
-I've checked the patches and they are OK in terms of code and structure.
-The feature seems to work fine also! Which is a good news. However, we
-are a couple hours before the release candidate! and there is still
-issues with all this :S.
-
-We know that you guys have been putting a lot of efforts in this and the
-code looks good so what we are going to do is merge this in the next RC
-release (meaning 2.4-rc2) considering that right now the feature works
-and thus is freezed for the next version.
-
-For that to happen, I'll ask you to fix the following issues as soon as
-you can so we can merge it quickly thus having more testing. Not getting
-this in time, unfortunately we won't be able to merge that for 2.4.
-Usually, the RC process cycle is around 1 month maximum.
-
-Issues:
-
-1) "make check" fails here so it *has* to pass in order to accept this
-patch set. I didn't investiguate thoroughly but it might be that you
-broke some existing feature or small adjustement to the tests.
-
-2) For this kind of big feature, we *need* at least one test that makes
-sure that in further release there is no regression for that exclusion
-feature.
-
-3) A patch for the man page (lttng.1) would be *very* appreciated.
-
-4) Commit id: 78bef43205f5296cb6cae81b6e264b849fe94988
-Please add a PERROR() if the zmalloc returns NULL so we can at least
-report it somewhere.
-
-I've fixed small issues also so please look at my dev branch for the two
-small commits on top of the 28 patches.
-
-https://github.com/dgoulet/lttng-tools-dev/tree/ev-exclusion
-
-Considering that, either you send back the patches *ON TOP* of that dev
-branch or you can also provide me with a pull request because with that
-amount of patches, by email is kind of a pain :).
-
-Hope this seems fair enough with you guys. It's the best we can do to
-make sure this feature gets in 2.4 :).
-
-Cheers!
 David
 
-On 07 Nov (12:16:43), JP Ikaheimonen wrote:
-> This patch set, along with a patch set for lttng-ust, implements
-> a new option for lttng enable-event command.
->=20
-> The new option makes it possible to exclude events from a wildcarded
-> event definition.
->=20
-> That is, running command
->=20
-> lttng enable-event -u -c c1 'myevents*' -x 'myevents:dbg*'
->=20
-> would enable all UST tracepoint events whose names start with 'myevents'
-> except those that start with 'myevents:dbg'.
->=20
-> The lttng list command is also updated, so that it points out the
-> fact that an event has some exclusions.
->=20
-> JP Ikaheimonen (28):
->   Add exclusion data to enable-command
->   Define a structure for event exclusion data
->   Add exclusion data to cmd_enable_event
->   Add exclusions to event_ust_enable_tracepoint
->   Add event exclusion data to ltt_ust_event structure
->   Add exclusion matching logic to trace_ust_ht_match_event
->   Add exclusion data to trace_ust_create_event
->   Add exclusion data to trace_ust_find_event
->   Copy exclusion data in add_unique_ust_event.
->   Add new error codes for exclusion processing
->   Add handling of LTTNG_ENABLE_EVENT_WITH_EXCLUSION
->   Collate handling of LTTNG_ENABLE_EVENT_WITH_FILTER
->   Add exclusion data to ust_app_event structure
->   Compare also exclusions in ht_match_ust_app_event
->   Copy event exclusion data in add_unique_ust_app_event
->   Free exclusion data when ust_app_event is deleted
->   Add exclusion data to find_ust_app_event
->   Copy exclusion data in shadow_copy_event
->   Set event exclusions in the target when event is created
->   Send enable-event commands with exclusion data
->   Collate lttng_enable_event* code
->   Add -exclude option to enable-event command
->   Add usage for --exclude option
->   Add a function to check for legal exclusions
->   Parse exclusions and forward them to the control handler
->   Detect and report exclusion option errors
->   Add exclusion names to diagnostic printouts
->   When listing events, show exclusions if they exist
->=20
->  include/lttng/lttng-error.h              |   2 +
->  include/lttng/lttng.h                    |  20 ++-
->  src/bin/lttng-sessiond/cmd.c             |  13 +-
->  src/bin/lttng-sessiond/cmd.h             |   4 +-
->  src/bin/lttng-sessiond/event.c           |  12 +-
->  src/bin/lttng-sessiond/event.h           |   3 +-
->  src/bin/lttng-sessiond/main.c            | 110 +++++++-----
->  src/bin/lttng-sessiond/trace-ust.c       |  23 ++-
->  src/bin/lttng-sessiond/trace-ust.h       |  14 +-
->  src/bin/lttng-sessiond/ust-app.c         |  95 +++++++++-
->  src/bin/lttng-sessiond/ust-app.h         |   2 +
->  src/bin/lttng/commands/enable_events.c   | 242 +++++++++++++++++++++++--
->  src/bin/lttng/commands/list.c            |  15 +-
->  src/common/sessiond-comm/sessiond-comm.h |  22 ++-
->  src/lib/lttng-ctl/lttng-ctl.c            | 291 ++++++++++++++++++-------=
-------
->  tests/unit/test_ust_data.c               |   2 +-
->  16 files changed, 657 insertions(+), 213 deletions(-)
 >=20
 > --=20
-> 1.8.1.2
->=20
->=20
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> Jon
 
---4bRzO86E/ozDv8r1
+--Qbvjkv9qwOGw/5Fx
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: Digital signature
 
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.15 (GNU/Linux)
 
-iQF8BAEBAgBmBQJSg+ouXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
+iQF8BAEBAgBmBQJSg+qSXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
 ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
-MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02onYH/1aknRZ3ua50hfd9RbyMUy73
-B+pDHI/2d8imCKBrmmx4XZH7/H82IaYCWQCSu96JzXz9oaeSP0dSRCLEaZTPztf5
-46cLZCX+Iuf2wWIubaZLjTWmcciZQyWYJ8OpKIHglw7xqeTIoqiKCvA7H0BUwsfR
-vMEGMVMQJTNRQ+YYSH6T9F4uYk/R3KII4wXRqn35V4LrTLR3yorVhLyi0fNS22r4
-nGsowKDIPrPEV86zB/lnmoeQnU2s0FI9quo5O9nnDUsiZyYMsOWBuklVrSdpRn4q
-Sf1oIAHq+OPQscvMJf6we33ZZ7KTjGlEVtKsTf7kF2dGvIbFUBhOlQshBR9a7NY=
-=uxjO
+MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I023mEH/RanY4PVe4kN06hsPkqZdTmU
+MiQmeL4pctDcQIU+pvaPXZL0rFPiDrTWssKAkE+7BDQKWX+BSs9pSPaTj8vRtUU6
+x+vvH+uYFMukgNfeNFMIk2UzgTYdHSroQof1Rb7ujCA8BdaQV7e7WBzGSf/r6Q/a
+MA6Qf2ozsohLtNjYh9/xqQYpuE8JL3h4oQEKU4HLdcOGjgCuRkW/r5W+d0eH7Yyg
+vLPbdjTPlLAXW75aXTzbAH9bGdcLLCM11ar294+OkrT//r4u7Jilc3hlEP5XS0UR
++OSrihTKdusvLDZQZ/oz7hQ3veP/tbrrIvSHF0eJnhzd4ahZqfmPVDpX564bQYY=
+=ZoFm
 -----END PGP SIGNATURE-----
 
---4bRzO86E/ozDv8r1--
+--Qbvjkv9qwOGw/5Fx--
 
 
---===============1273221413==
+--===============1763591942==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
 
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============1273221413==--
+--===============1763591942==--
