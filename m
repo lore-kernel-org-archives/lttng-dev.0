@@ -1,21 +1,17 @@
-From: =?ISO-8859-1?Q?Rapha=EBl_Beamonte?= <raphael.beamonte@gmail.com>
-Subject: Re: [PATCH] checkpatch: change status of warning from
- "BRACES" to "BRACES_SINGLE_STMT"
-Date: Wed, 13 Nov 2013 09:52:32 -0500
-Message-ID: <CAE_Gge0wR7L6_SqP6YkWGiHK-Q3o-w=CR9oN9u86+wrgUxmxwQ__32965.1615386412$1384355266$gmane$org@mail.gmail.com>
-References: <1384321468-29220-1-git-send-email-raphael.beamonte@gmail.com>
-	<CAGDH53=vS-+mfjsJo8HFNGYsi+UbYgJDNZqd7bxQAYMpJhPf-w@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PULL REQUEST babeltrace] Python bindings update
+Date: Wed, 13 Nov 2013 14:17:42 +0000 (UTC)
+Message-ID: <1801200686.66283.1384352262423.JavaMail.zimbra__13634.2139835053$1384355541$gmane$org@efficios.com>
+References: <CA+jJMxsZLrpRXhgZDLqVfGgqjkz6_d=7NKPgRHr5gGc0vmc4TQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-oa0-f50.google.com ([209.85.219.50])
+Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <nashii@gmail.com>) id 1VgboQ-0000lf-HQ
-	for lttng-dev@lists.lttng.org; Wed, 13 Nov 2013 09:53:04 -0500
-Received: by mail-oa0-f50.google.com with SMTP id k1so550661oag.37
-	for <lttng-dev@lists.lttng.org>; Wed, 13 Nov 2013 06:52:53 -0800 (PST)
-In-Reply-To: <CAGDH53=vS-+mfjsJo8HFNGYsi+UbYgJDNZqd7bxQAYMpJhPf-w@mail.gmail.com>
+	(envelope-from <compudj@efficios.com>) id 1VgbGL-0007em-Dw
+	for lttng-dev@lists.lttng.org; Wed, 13 Nov 2013 09:17:51 -0500
+In-Reply-To: <CA+jJMxsZLrpRXhgZDLqVfGgqjkz6_d=7NKPgRHr5gGc0vmc4TQ@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,87 +20,47 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Christian Babeux <christian.babeux@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: =?utf-8?B?SsOpcsOpbWll?= Galarneau <jeremie.galarneau@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hello Christian,
-
-You can try to use checkpatch on the patch I sent yesterday about the
-expand_path unit test. You'll see that it shows a warning for the
-following lines :
-
-+               if (strcmp(valid_tests_inputs[i].
-relative_part, ".") =3D=3D 0) {
-+                       relative =3D cur_path;
-+               } else if (strcmp(valid_tests_inputs[i].relative_part,
-"..") =3D=3D 0) {
-+                       relative =3D prev_path;
-+               } else if (strcmp(valid_tests_inputs[i].relative_part,
-"../..") =3D=3D 0) {
-+                       relative =3D pprev_path;
-+               } else {
-+                       relative =3D empty;
-+               }
-
-As I understood from a discussion with Julien, singles braces are
-recommended for LTTng source code to limit the number of modified
-lines in case of change. In this very case, the warning that is shown
-is not the one about "single statement", but the one about "braces
-[that] are not necessary for any arm of this statement".
-It seems that the single statement check you patched is only about
-single ifs. If we use else or else-if, that's not the same check that
-is used.
-
-Thanks,
-Rapha=EBl
-
-
-
-2013/11/13 Christian Babeux <christian.babeux@efficios.com>:
-> Hi Rapha=EBl,
->
-> Do you have a specific example that is failing for this case of braces
-> detection? I patched checkpatch a while ago in a similar way for
-> braces around single statement blocks, I don't remember the intention
-> behind the particular check you are patching.
->
-> Thanks,
->
-> Christian
->
-> On Wed, Nov 13, 2013 at 12:44 AM, Rapha=EBl Beamonte
-> <raphael.beamonte@gmail.com> wrote:
->> The warning about braces that are not necessary for any arm of a stateme=
-nt
->> should be interpreted as a warning about braces around single statements.
->>
->> Signed-off-by: Rapha=EBl Beamonte <raphael.beamonte@gmail.com>
->> ---
->>  extras/checkpatch.pl |    2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/extras/checkpatch.pl b/extras/checkpatch.pl
->> index fdd8484..5a67704 100755
->> --- a/extras/checkpatch.pl
->> +++ b/extras/checkpatch.pl
->> @@ -3138,7 +3138,7 @@ sub process {
->>                                                 $sum_allowed +=3D $_;
->>                                         }
->>                                         if ($sum_allowed =3D=3D 0) {
->> -                                               WARN("BRACES",
->> +                                               WARN("BRACES_SINGLE_STMT=
-",
->>                                                      "braces {} are not =
-necessary for any arm of this statement\n" . $herectx);
->>                                         } elsif ($sum_allowed !=3D $allo=
-w &&
->>                                                  $seen !=3D $allow) {
->> --
->> 1.7.10.4
->>
->>
->> _______________________________________________
->> lttng-dev mailing list
->> lttng-dev@lists.lttng.org
->> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJKw6lyw6ltaWUgR2FsYXJuZWF1
+IiA8amVyZW1pZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29tPgo+IFRvOiBsdHRuZy1kZXZAbGlzdHMu
+bHR0bmcub3JnCj4gQ2M6ICJNYXRoaWV1IERlc25veWVycyIgPG1hdGhpZXUuZGVzbm95ZXJzQGVm
+ZmljaW9zLmNvbT4KPiBTZW50OiBUdWVzZGF5LCBOb3ZlbWJlciAxMiwgMjAxMyAxMDowNjo0MSBQ
+TQo+IFN1YmplY3Q6IFtQVUxMIFJFUVVFU1QgYmFiZWx0cmFjZV0gUHl0aG9uIGJpbmRpbmdzIHVw
+ZGF0ZQo+IAo+IEhpIGFsbCwKPiAKPiBIZXJlIGFyZSBzb21lIHBhdGNoZXMgdG8gYWRkIHJlYWQg
+c3VwcG9ydCBvZiBldmVyeSBDVEYgdHlwZSB1c2luZyB0aGUKPiBCYWJlbHRyYWNlIFB5dGhvbiBi
+aW5kaW5ncy4gSXQgaXMgbm93IHBvc3NpYmxlIHRvIHJldHJpZXZlIGZpZWxkcyBhbmQKPiBhY2Nl
+c3MgdGhlaXIgdmFsdWVzIHVzaW5nIGEgc2luZ2xlIGdldF92YWx1ZSgpIG1ldGhvZCByZXR1cm5p
+bmcgbmF0aXZlCj4gUHl0aG9uIG9iamVjdHMuIFRoaXMgaXMgbWFkZSBwb3NzaWJsZSB1c2luZyB0
+aGUgd29yayBjb250cmlidXRlZCBieQo+IG9uZSBvZiBvdXIgR1NvQyBzdHVkZW50cywgWGlhb25h
+IEhhbi4KPiAKPiBUaGVzZSBwYXRjaGVzIGFsc28gbWFrZSBpdCBwb3NzaWJsZSB0byBnZW5lcmF0
+ZSBDVEYgZnJvbSBQeXRob24gY29kZSwKPiBiYXNlZCBvbiB0aGUgQ1RGIFdyaXRlciBBUEkgdGhh
+dCB3YXMgbWVyZ2VkIHJlY2VudGx5LgoKTWVyZ2VkIGludG8gYmluZGluZ3MvcHl0aG9uIGJyYW5j
+aC4gUGxlYXNlIGxldCBtZSBrbm93IGlmIEkgc2hvdWxkIG1lcmdlIHRoZXNlIGludG8gbWFzdGVy
+LgoKVGhhbmtzLAoKTWF0aGlldQoKPiAKPiBUaGUgcGF0Y2hlcyBhcmUgYXZhaWxhYmxlIGhlcmU6
+Cj4gaHR0cHM6Ly9naXRodWIuY29tL2pnYWxhci9iYWJlbHRyYWNlL2NvbW1pdHMvYmluZGluZ3Mv
+cHl0aG9uCj4gCj4gN2EzMGE2NiBSZXR1cm4gZXZlbnQgZmllbGRzIGJ5IGZpZWxkIG5hbWUKPiBk
+YjU1MWYyIFJlbW92ZSB0aGUgdW5uZWNlc3NhcnkgdW5kZXJzY29yZSBwcmVmaXgKPiA0MTkxYmNk
+IFN1cHBvcnQgZ2V0dGluZyB0aGUgdmFsdWUgb2YgZW51bXMKPiAzYzJjZTc3IEFkZCBhIGdlbmVy
+aWMgZ2V0X3ZhbHVlKCkgaW1wbGVtZW50YXRpb24KPiA3ODYyMDdlIFN1cHBvcnQgZm9yIHRoZSBz
+ZXF1ZW5jZSB0eXBlCj4gODEwYTk3YiBBZGQgYSBweXRob24gYmluZGluZ3Mgc2VxdWVuY2UgdGVz
+dAo+IDMwNDNlZTAgUmVtb3ZlIFB5dGhvbiAyIHNwZWNpZmljIGV4YW1wbGVzCj4gOTAxMzFhMyBG
+aXg6IFRocm93IGEgRmllbGRFcnJvciBleGNlcHRpb24gd2hlbiBnZXRfdmFsdWUoKSBmYWlscwo+
+IGU1YTczYjkgQWRkIHN1cHBvcnQgZm9yIGZsb2F0aW5nIHBvaW50IGZpZWxkcyBpbiB0aGUgUHl0
+aG9uIGJpbmRpbmdzCj4gODEyZTY2OCBBZGQgc3VwcG9ydCBmb3IgdmFyaWFudCBmaWVsZHMgaW4g
+dGhlIFB5dGhvbiBiaW5kaW5ncwo+IDNhMDY4OTEgQWRkIHN1cHBvcnQgZm9yIHN0cnVjdHVyZSBm
+aWVsZHMgaW4gdGhlIFB5dGhvbiBiaW5kaW5ncwo+IGNlYmFlOGMgRml4OiBQeXRob24gYmluZGlu
+Z3MgYXJyYXkgYWNjZXNzIGZ1bmN0aW9ucyB3cml0ZSBvdXQgb2YgYm91bmRzCj4gMjRkNWM5NCBS
+ZW5hbWUgdGhlIGN0ZiBjbGFzcyB0byBDVEZSZWFkZXIKPiBlYzhjODhkIEFkZCBDVEYgV3JpdGVy
+IFB5dGhvbiBiaW5kaW5ncwo+IDAzM2ZiMGEgQWRkIGEgdXNhZ2UgZXhhbXBsZSBmb3IgdGhlIENU
+RiBXcml0ZXIgUHl0aG9uIGJpbmRpbmdzCj4gOTRhNmNlYSBEb24ndCBnZW5lcmF0ZSBQeXRob24g
+YmluZGluZ3MgYnkgZGVmYXVsdAo+IDU0OTE0NzYgRXhwb3NlIHRleHQgYXJyYXlzIHRoZSBzYW1l
+IHdheSBhcyByZWd1bGFyIGFycmF5cwo+IAo+IExvb2tpbmcgZm9yd2FyZCB0byB5b3VyIGNvbW1l
+bnRzLAo+IErDqXLDqW1pZQo+IAo+IC0tCj4gSsOpcsOpbWllIEdhbGFybmVhdQo+IEVmZmljaU9T
+IEluYy4KPiBodHRwOi8vd3d3LmVmZmljaW9zLmNvbQo+IAoKLS0gCk1hdGhpZXUgRGVzbm95ZXJz
+CkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KCl9fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0
+bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFp
+bG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
