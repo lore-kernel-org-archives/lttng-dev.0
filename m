@@ -1,19 +1,19 @@
-From: Klaus Dannecker <klaus.dannecker@gmx.de>
-Subject: Re: make a trace_event in a modul (driver)
-Date: Wed, 13 Nov 2013 18:37:01 +0100
-Message-ID: <5283B8BD.9020703__34725.9322101765$1384364264$gmane$org@gmx.de>
-References: <527DF369.4020704@gmx.de>
+From: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
+Subject: Re: [PATCH lttng-ust 0/2] Shared object base address
+ tracing
+Date: Wed, 13 Nov 2013 13:09:13 -0500
+Message-ID: <5283C049.1060204__47686.4891978495$1384366222$gmane$org@voxpopuli.im>
+References: <1384183688-19038-1-git-send-email-paul_woegerer@mentor.com>
+	<52828889.6030403@voxpopuli.im> <52834DB8.5030004@mentor.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0976820043=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mout.gmx.net ([212.227.15.15])
+Received: from ironport2-out.teksavvy.com ([206.248.154.182])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <klaus.dannecker@gmx.de>) id 1VgeMt-0004xG-W1
-	for lttng-dev@lists.lttng.org; Wed, 13 Nov 2013 12:36:50 -0500
-Received: from [192.168.178.21] ([178.2.14.1]) by mail.gmx.com (mrgmx002) with
-	ESMTPSA (Nemesis) id 0Llm9w-1V7JY52L9E-00ZLC0 for
-	<lttng-dev@lists.lttng.org>; Wed, 13 Nov 2013 18:36:37 +0100
-In-Reply-To: <527DF369.4020704@gmx.de>
+	(envelope-from <alexmonthy@voxpopuli.im>) id 1VgesW-0005pd-9I
+	for lttng-dev@lists.lttng.org; Wed, 13 Nov 2013 13:09:30 -0500
+In-Reply-To: <52834DB8.5030004@mentor.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,194 +22,49 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: "Woegerer, Paul" <Paul_Woegerer@mentor.com>, mathieu.desnoyers@efficios.com, Matthew Khouzam <matthew.khouzam@ericsson.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-This is a multi-part message in MIME format.
---===============0976820043==
-Content-Type: multipart/alternative;
- boundary="------------040507030003000706000208"
+On 13-11-13 05:00 AM, Woegerer, Paul wrote:
+>> - Why does the "statedump" event seem to give many more libs than the
+>> "push" events? Could we be missing some dlopen's? For example, I traced
+>> glxgears by preloading liblttng-ust-dl.so: http://pastebin.com/HKVa9a4T
+> Since ust_baddr:push/pop is based on LD_PRELOAD'ing dlopen/dlclose it
+> can only tell you what shared libraries were opened/closed during the
+> time you are actually tracing the application. Whatever is
+> dlopen'ed/dlclose'ed before the tracing infrastructure that is part of
+> the userspace application (lttng-ust) is becoming fully functional
+> therefore cannot be captured as ust_baddr:push/pop events.
 
-This is a multi-part message in MIME format.
---------------040507030003000706000208
-Content-Type: text/plain; charset=ISO-8859-1; format=flowed
-Content-Transfer-Encoding: 7bit
+Ah true, it's possible for the application to dlopen libraries before
+it's even registered to UST. In my glxgears example I was expecting to
+see the dlopen of libGL, but I would only get it in the statedump.
+Although you do see it in your log, I wonder why too. I'll try to run
+some more tests to see how repeatable the behavior is.
 
+>> - As Matthew suggested, we could also hijack dlsym(), and with its
+>> parameters we could match a symbol name to an address. This becomes
+>> immensely useful when coupled with the ust-cyg-profile instrumentation,
+>> so we can get information about about function names directly in the
+>> trace! (but ironically, only for the dlopened libraries, and not the
+>> main binary). What do you think of this approach?
+> IMHO, hijacking dlsym() is not helping. The only thing you would know is
+> that somewhere in your code for some reason the address for some symbol
+> was requested via dlsym(). This will not help you to get symbol
+> resolution for ust-cyg-profile instrumentation.
 
-Am 09.11.2013 09:33, schrieb Klaus Dannecker:
-> Hi,
-> I want to write a driver with trace events.
-> In the first step i compile the example  trace-events-sample.c with 
-> the makefile:
->
-> ifneq ($(KERNELRELEASE),)
->     obj-m  := modul_trace-events-sample.o
->     modul_trace-events-sample-y := trace-events-sample.o
->     ccflags-y := -I$(src)
-> else
->     KDIR ?= /lib/modules/`uname -r`/build
-> default:
->     $(MAKE) -C $(KDIR) M=$$PWD
-> endif
->
-> now i get the modul_trace-events-sample.ko File.
-> now:
-> insmod modul_trace-events-sample.ko
-> lttng create
-> lttng enable-event -k -a
-> lttng start
-> ...wait...
-> lttng stop
-> lttng destroy
->
-> now i look the result in the eclise viewer, but i found event 
-> "trace_foo_bar" not in the session!
-> what am I doing wrong?
->
-> I use ubuntu 13.04 in a vmware
->
-> Thanks
->
-> _______________________________________________
-Hi,
+I was thinking of the case where you cyg-profile the dynamic libraries
+also. But yeah, I didn't realize it would only give us the function
+names for one call "deep". If the library calls others of its own
+functions (which it does most of the time), then we would still need
+standard symbol resolution to get the function names for those calls.
+And since standard symbol resolution gives us all the information,
+dlsym() doesn't bring anything new in that case.
 
-now i found a answer:
-http://lists.lttng.org/pipermail/lttng-dev/2013-October/021540.html
-now i download the lttng-module and compiled it.
-
-|$ git clone git://git.lttng.org/lttng-modules.git
-||$ cd lttng-tools|
-|$ make|
-|$ sudo make modules_install
-|here I get  error
-INSTALL /mnt/hgfs/shared_Folder/lttng-modules/lib/lttng-lib-ring-buffer.ko
-Can't read private key
-...
-what does that mean?
-what  should I do?
-
-please help me!
-
-another question:
-when i create atrace events in module_a,
-can i use it in module_b?
-if yes,what  should I do?
-
-thanks Klaus
-
---------------040507030003000706000208
-Content-Type: text/html; charset=ISO-8859-1
-Content-Transfer-Encoding: 7bit
-
-<html>
-  <head>
-    <meta content="text/html; charset=ISO-8859-1"
-      http-equiv="Content-Type">
-  </head>
-  <body text="#000000" bgcolor="#FFFFFF">
-    <br>
-    <div class="moz-cite-prefix">Am 09.11.2013 09:33, schrieb Klaus
-      Dannecker:<br>
-    </div>
-    <blockquote cite="mid:527DF369.4020704@gmx.de" type="cite">Hi,
-      <br>
-      I want to write a driver with trace events.
-      <br>
-      In the first step i compile the example&nbsp; trace-events-sample.c
-      with the makefile:
-      <br>
-      <br>
-      ifneq ($(KERNELRELEASE),)
-      <br>
-      &nbsp;&nbsp;&nbsp; obj-m&nbsp; := modul_trace-events-sample.o
-      <br>
-      &nbsp;&nbsp;&nbsp; modul_trace-events-sample-y := trace-events-sample.o
-      <br>
-      &nbsp;&nbsp;&nbsp; ccflags-y := -I$(src)
-      <br>
-      else
-      <br>
-      &nbsp;&nbsp;&nbsp; KDIR ?= /lib/modules/`uname -r`/build
-      <br>
-      default:
-      <br>
-      &nbsp;&nbsp;&nbsp; $(MAKE) -C $(KDIR) M=$$PWD
-      <br>
-      endif
-      <br>
-      <br>
-      now i get the modul_trace-events-sample.ko File.
-      <br>
-      now:
-      <br>
-      insmod modul_trace-events-sample.ko
-      <br>
-      lttng create
-      <br>
-      lttng enable-event -k -a
-      <br>
-      lttng start
-      <br>
-      ...wait...
-      <br>
-      lttng stop
-      <br>
-      lttng destroy
-      <br>
-      <br>
-      now i look the result in the eclise viewer, but i found event
-      "trace_foo_bar" not in the session!
-      <br>
-      what am I doing wrong?
-      <br>
-      <br>
-      I use ubuntu 13.04 in a vmware
-      <br>
-      <br>
-      Thanks
-      <br>
-      <br>
-      _______________________________________________
-      <br>
-    </blockquote>
-    Hi,<br>
-    <br>
-    now i found a answer:<br>
-    <a class="moz-txt-link-freetext" href="http://lists.lttng.org/pipermail/lttng-dev/2013-October/021540.html">http://lists.lttng.org/pipermail/lttng-dev/2013-October/021540.html</a><br>
-    now i download the lttng-module and compiled it.<br>
-    <pre><code>$ git clone git:<wbr>//gi<wbr>t.lt<wbr>tng.<wbr>org/<wbr>lttn<wbr>g-mo<wbr>dule<wbr>s.gi<wbr>t
-</code><code>$ cd lttng-tools</code>
-<code>$ make</code>
-<code>$ sudo make modules_install
-</code><span id="result_box" class="short_text" lang="en"><span class="hps">here I get</span> <span class="hps">error
-INSTALL /mnt/hgfs/shared_Folder/lttng-modules/lib/lttng-lib-ring-buffer.ko
-Can't read private key
-...
-</span></span><span id="result_box" class="short_text" lang="en"><span class="hps">what does that mean?
-</span></span><span id="result_box" class="short_text" lang="en"><span class="hps"><span id="result_box" class="short_text" lang="en"><span class="hps"><span id="result_box" class="short_text" lang="en"><span class="hps"><span id="result_box" class="short_text" lang="en"><span class="hps">what</span> <span class="hps">should I do?</span></span></span></span></span></span>
-
-please help me!
-
-</span></span><span id="result_box" class="short_text" lang="en"><span class="hps"><span id="result_box" class="short_text" lang="en"><span class="hps">another question:
-when i create a </span></span></span></span><span id="result_box" class="short_text" lang="en"><span class="hps"><span id="result_box" class="short_text" lang="en"><span class="hps">trace events in module_a,
-can i use it in module_b?
-if yes, </span></span></span></span><span id="result_box" class="short_text" lang="en"><span class="hps"><span id="result_box" class="short_text" lang="en"><span class="hps"><span id="result_box" class="short_text" lang="en"><span class="hps">what</span> <span class="hps">should I do?</span></span></span></span></span></span></pre>
-    thanks Klaus<br>
-  </body>
-</html>
-
---------------040507030003000706000208--
+But I think we all agree that it would be much easier for us (and for
+the users) if the function name information was directly in the trace ;)
 
 
---===============0976820043==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0976820043==--
+Thanks for your explanations!
+Alexandre
