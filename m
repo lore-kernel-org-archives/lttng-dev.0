@@ -1,20 +1,22 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: "Ikaheimonen, JP" <jp_ikaheimonen@mentor.com>
 Subject: Re: [PATCH lttng-ust 7/7] Add a check against excluders
-Date: Thu, 14 Nov 2013 14:25:17 +0000 (UTC)
-Message-ID: <692188761.67141.1384439117906.JavaMail.zimbra__45425.1558556736$1384439193$gmane$org@efficios.com>
+Date: Thu, 14 Nov 2013 14:26:14 +0000
+Message-ID: <009B25148989C6458484484699278506E539FBC7__45933.0458696515$1384439411$gmane$org@EU-MBX-01.mgc.mentorg.com>
 References: <1383819755-6891-1-git-send-email-jp_ikaheimonen@mentor.com>
 	<1383819755-6891-8-git-send-email-jp_ikaheimonen@mentor.com>
 	<682132616.66259.1384351513959.JavaMail.zimbra@efficios.com>
 	<009B25148989C6458484484699278506E539FA81@EU-MBX-01.mgc.mentorg.com>
+	<692188761.67141.1384439117906.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1VgxrE-0003Sc-Sb
-	for lttng-dev@lists.lttng.org; Thu, 14 Nov 2013 09:25:26 -0500
-In-Reply-To: <009B25148989C6458484484699278506E539FA81@EU-MBX-01.mgc.mentorg.com>
+	(envelope-from <jp_ikaheimonen@mentor.com>) id 1VgxsF-0003lP-PL
+	for lttng-dev@lists.lttng.org; Thu, 14 Nov 2013 09:26:29 -0500
+In-Reply-To: <692188761.67141.1384439117906.JavaMail.zimbra@efficios.com>
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,9 +25,19 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: JP Ikaheimonen <jp_ikaheimonen@mentor.com>
-Cc: lttng-dev@lists.lttng.org
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
+
+Thank you!
+JP
+
+-----Original Message-----
+From: Mathieu Desnoyers [mailto:mathieu.desnoyers@efficios.com] 
+Sent: 14. marraskuuta 2013 16:25
+To: Ikaheimonen, JP
+Cc: lttng-dev@lists.lttng.org
+Subject: Re: [lttng-dev] [PATCH lttng-ust 7/7] Add a check against excluders
 
 Not needed, I already fixed it.
 
@@ -38,7 +50,8 @@ Mathieu
 > To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
 > Cc: lttng-dev@lists.lttng.org
 > Sent: Thursday, November 14, 2013 2:26:33 AM
-> Subject: RE: [lttng-dev] [PATCH lttng-ust 7/7] Add a check against excluders
+> Subject: RE: [lttng-dev] [PATCH lttng-ust 7/7] Add a check against 
+> excluders
 > 
 > Thank you Mathieu!
 > I will make these changes and resubmit this one patch.
@@ -51,26 +64,27 @@ Mathieu
 > Sent: 13. marraskuuta 2013 16:05
 > To: Ikaheimonen, JP
 > Cc: lttng-dev@lists.lttng.org
-> Subject: Re: [lttng-dev] [PATCH lttng-ust 7/7] Add a check against excluders
+> Subject: Re: [lttng-dev] [PATCH lttng-ust 7/7] Add a check against 
+> excluders
 > 
 > ----- Original Message -----
 > > From: "JP Ikaheimonen" <jp_ikaheimonen@mentor.com>
 > > To: lttng-dev@lists.lttng.org
 > > Sent: Thursday, November 7, 2013 5:22:35 AM
-> > Subject: [lttng-dev] [PATCH lttng-ust 7/7] Add a check against
+> > Subject: [lttng-dev] [PATCH lttng-ust 7/7] Add a check against 
 > > excluders
 > > 
-> > When matching enablers with events, first check against all excluders
-> > of the enabler. If the event matches with any of the excluders, then
-> > the event does not match with the enabler.
+> > When matching enablers with events, first check against all 
+> > excluders of the enabler. If the event matches with any of the 
+> > excluders, then the event does not match with the enabler.
 > > 
 > > Signed-off-by: JP Ikaheimonen <jp_ikaheimonen@mentor.com>
 > > ---
 > >  liblttng-ust/lttng-events.c | 23 +++++++++++++++++++++++
 > >  1 file changed, 23 insertions(+)
 > > 
-> > diff --git a/liblttng-ust/lttng-events.c b/liblttng-ust/lttng-events.c
-> > index 915cffb..fa5596c 100644
+> > diff --git a/liblttng-ust/lttng-events.c 
+> > b/liblttng-ust/lttng-events.c index 915cffb..fa5596c 100644
 > > --- a/liblttng-ust/lttng-events.c
 > > +++ b/liblttng-ust/lttng-events.c
 > > @@ -491,6 +491,29 @@ static
@@ -139,7 +153,7 @@ Mathieu
 > http://www.efficios.com
 > 
 
--- 
+--
 Mathieu Desnoyers
 EfficiOS Inc.
 http://www.efficios.com
