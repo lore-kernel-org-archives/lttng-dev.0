@@ -1,22 +1,18 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [lttng-tools PATCH 3/4] Correct the behavior of the
- utils_expand_path function
-Date: Thu, 14 Nov 2013 16:14:20 +0000 (UTC)
-Message-ID: <1517784416.67313.1384445660213.JavaMail.zimbra__14595.5440741547$1384445723$gmane$org@efficios.com>
-References: <1384320878-28808-1-git-send-email-raphael.beamonte@gmail.com>
-	<20131112195134.GB12183@thessa>
-	<1384320878-28808-4-git-send-email-raphael.beamonte@gmail.com>
-	<722861522.67118.1384438214771.JavaMail.zimbra@efficios.com>
-	<CAE_Gge30J9GEssQoKSO-KL=gm22HRhfCXJXFBorqYSHekEfVqQ@mail.gmail.com>
+Subject: Re: [PATCH v2] Base-address tracing for dlopen and
+	dlclose
+Date: Thu, 14 Nov 2013 16:20:48 +0000 (UTC)
+Message-ID: <1583845794.67317.1384446048785.JavaMail.zimbra__2386.62250708348$1384446112$gmane$org@efficios.com>
+References: <1384362841-16111-1-git-send-email-paul_woegerer@mentor.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1VgzYl-00021C-IA
-	for lttng-dev@lists.lttng.org; Thu, 14 Nov 2013 11:14:29 -0500
-In-Reply-To: <CAE_Gge30J9GEssQoKSO-KL=gm22HRhfCXJXFBorqYSHekEfVqQ@mail.gmail.com>
+	(envelope-from <compudj@efficios.com>) id 1Vgzf0-0003vG-Qe
+	for lttng-dev@lists.lttng.org; Thu, 14 Nov 2013 11:20:57 -0500
+In-Reply-To: <1384362841-16111-1-git-send-email-paul_woegerer@mentor.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -25,57 +21,460 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?utf-8?Q?Rapha=C3=ABl?= Beamonte <raphael.beamonte@gmail.com>
+To: Paul Woegerer <paul_woegerer@mentor.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJSYXBoYcOrbCBCZWFtb250ZSIg
-PHJhcGhhZWwuYmVhbW9udGVAZ21haWwuY29tPgo+IFRvOiAiTWF0aGlldSBEZXNub3llcnMiIDxt
-YXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+Cj4gQ2M6ICJEYXZpZCBHb3VsZXQiIDxkZ291
-bGV0QGVmZmljaW9zLmNvbT4sIGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBTZW50OiBUaHVy
-c2RheSwgTm92ZW1iZXIgMTQsIDIwMTMgMTE6MDA6MTIgQU0KPiBTdWJqZWN0OiBSZTogW2x0dG5n
-LWRldl0gW2x0dG5nLXRvb2xzIFBBVENIIDMvNF0gQ29ycmVjdCB0aGUgYmVoYXZpb3Igb2YgdGhl
-IHV0aWxzX2V4cGFuZF9wYXRoIGZ1bmN0aW9uCj4gCj4gMjAxMy8xMS8xNCBNYXRoaWV1IERlc25v
-eWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPjoKPiA+IENvbW1lbnRzIHNob3Vs
-ZCBzdGFydCB3aXRoIGE6Cj4gPgo+ID4gIC8qCj4gPiAgICogVGhlbiBzdGFydCBvZiBjb21tZW50
-Li4uCj4gCj4gUmlnaHQuIFNob3VsZCBJIHN1Ym1pdCBhIG5ldyBwYXRjaCBmb3IgdGhhdCA/CgpB
-IHBhdGNoIHRoYXQgYXBwbHkgb24gdG9wIG9mIGx0dG5nLXRvb2xzIG1hc3Rlci4KCj4gCj4gPiBU
-aGVyZSBpcyBubyBwb2ludCBpbiBlbmRpbmcgYSAiIiB3aXRoIFwwLCBpdCBpbXBsaWNpdGx5IGVu
-ZHMgd2l0aCBhIFwwCj4gPiBhbHJlYWR5Lgo+ID4KPiA+PiArICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICBzdHJuY21wKGVuZF9wYXRoLCAiLlwwIiwgMikgPT0gMCkgewo+ID4KPiA+IFNhbWUg
-aGVyZS4KPiAKPiBXYXMgZG9uZSBsaWtlIHRoYXQgZm9yIGNsYXJpdHksIGFzICJpbXBsaWNpdCIg
-aXMgbm90ICJjbGVhciIuCgoiIiB3aXRoIFwwIGlzIGp1c3Qgc2lnbiB0aGF0IHNvbWVvbmUgZG9l
-cyBub3QgdW5kZXJzdGFuZCB3aGF0IGhlIGlzIGRvaW5nLiBJdCdzIG5vdCBjbGVhcmVyLgoKPiBX
-b3VsZCBpdAo+IGJlIHByZWZlcmFibGUgdG8gaGlkZSBpdCBidXQgc3RpbGwgY29tcGFyZSB0aGUg
-Zmlyc3QgMiBjaGFycyBvZiBhIDEKPiBjaGFyIHN0cmluZyA/IChyZXNwZWN0aXZlbHkgMyBjaGFy
-cyBvZiBhIDIgY2hhcnMgc3RyaW5nKQoKSSB0aGluayB5b3Ugd2FudCB0byBrZWVwIHRoZSBjb21w
-YXJpc29uIHdpdGggMyBjaGFycywgYnV0IHlvdSBtaWdodCB3YW50IHRvIHRlc3QgaXQgZnVydGhl
-ciB0byBjb25maXJtLiBUaGUgY29tcGFyaXNvbiBiZXR3ZWVuIHRoZSBpbXBsaWVkIFwwIGFuZCBh
-IGNoYXJhY3RlciBpbiB0aGUgb3RoZXIgc3RyaW5nIHNob3VsZCBkbyB3aGF0IHlvdSBhcmUgbG9v
-a2luZyBmb3IuCgo+IAo+ID4gTm90IG5lY2Vzc2FyaWx5LiBXaGF0IGhhcHBlbnMgaW4gdGhlIHVu
-bGlrZWx5IGNhc2Ugc29tZW9uZSBwYXNzZXMgYSBwYXRoCj4gPiB3aXRoIHNpbXBseSAiLyIgPwo+
-IAo+IFRoZW4gd2UncmUgbm90IGluIHRoaXMgYXJtIG9mIHRoZSAiaWYiLiBJZiB0aGUgcGF0aCBz
-dGFydHMgYnkgKG9yIGlzKQo+ICcvJywgaXQgaXMgY29uc2lkZXJlZCBhcyBhICJhYnNvbHV0ZSBw
-YXRoIiwgYW5kIHdlJ3JlIGp1c3QgaW4gdGhlIGFybQo+IG9mIHRoZSAiaWYiIHRoYXQgc3RhcnRz
-IHdpdGggdGhlIGNvbW1lbnQgIi8qIElmIGdpdmVuIHBhdGggaXMgYWxyZWFkeQo+IGFic29sdXRl
-ICovIgo+IAo+ID4gU28gbGV0J3Mgc2F5IHdlIGhhdmU6Cj4gPgo+ID4gIi4uL2JsYWgvLi4vYmxh
-aCIKPiA+Cj4gPiBzbyBvbmx5ICIuLi8iIHBhc3NlZCB0byByZWFscGF0aCwgb3IgdGhlIGVudGly
-ZSAiLi4vYmxhaC8uLi9ibGFoIiA/IChsZXQncwo+ID4gc3VwcG9zZSBibGFoLyBleGlzdHMpLCBy
-aWdodCA/Cj4gCj4gUGVyaGFwcyAiYmxhaC8iIGV4aXN0cywgcGVyaGFwcyAiYmxhaC8iIGRvZXNu
-J3QgZXhpc3QuIEluIGJvdGggY2FzZXMsCj4gaXQgc2hvdWxkIG5vdCBtYXR0ZXIgZm9yIG91ciBm
-dW5jdGlvbi4gQXMgd2UgZG9uJ3QgaGF2ZSBhbnkgZWFzeSB3YXkKPiB0byBrbm93IHRoYXQgZGly
-ZWN0bHksIHdlIGFyZSBub3QgY29uc2lkZXJpbmcgaXQgZm9yIHRoZSByZWFscGF0aAo+IGNhbGws
-IGJ1dCBvbmx5IHRoZSAicmVsYXRpdmUgcGF0aHMiIHRoYXQgd2UgY2FuIGV2YWx1YXRlICgiLi8i
-IG9yCj4gIi4uLyIpLgo+IFlvdSBjYW4gbG9vayBhdCB0aGUgbG9vcCB0aGF0IHN0YXJ0cyB3aXRo
-IHRoZSBjb21tZW50ICIvKiBTcGxpdCBwYXJ0Cj4gdGhhdCB3aWxsIGJlIHJlc29sdmVkIGJ5IHJl
-YWxwYXRoIiwgYW5kIHNlZSB0aGF0IGluIHRoaXMgY2FzZSwgb25seQo+ICIuLi8iIHdpbGwgYmUg
-cGFzc2VkIHRvIHJlYWxwYXRoLgo+IAo+ID4gSW4gdGhlICIuLi9ibGFoLy4uL2JsYWgiIGNhc2Us
-IGhlcmUgdGhlIG90aGVyIC4uLyB3b3VsZCBiZSBkZWFsdCB3aXRoIGJ5Cj4gPiB1dGlsc19yZXNv
-bHZlX3JlbGF0aXZlLCBpcyB0aGF0IGl0ID8KPiAKPiBFeGFjdGx5LCBhcyB3ZSBjYW4ndCBwYXNz
-IGl0IHRvIHJlYWxwYXRoIGluIGNhc2UgdGhlIGRpcmVjdG9yeSBkb2VzIG5vdAo+IGV4aXN0LgoK
-T0suIEkgbG9vayBmb3J3YXJkIHRvIHNlZWluZyB5b3VyIHJlcGx5IGZvciB0aGUgb3RoZXIgcGF0
-Y2guCgpUaGFua3MsCgpNYXRoaWV1Cgo+IAo+IFJhcGhhw6tsCj4gCgotLSAKTWF0aGlldSBEZXNu
-b3llcnMKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlz
-dApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJp
-bi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+----- Original Message -----
+> From: "Paul Woegerer" <paul_woegerer@mentor.com>
+> To: lttng-dev@lists.lttng.org, "mathieu desnoyers" <mathieu.desnoyers@efficios.com>
+> Sent: Wednesday, November 13, 2013 12:14:01 PM
+> Subject: [PATCH v2] Base-address tracing for dlopen and dlclose
+> 
+> Provide an LD_PRELOAD library to allow tracing of calls to dlopen and
+> dlclose.
+> 
+> Signed-off-by: Paul Woegerer <paul_woegerer@mentor.com>
+> ---
+>  Makefile.am                          |   2 +
+>  configure.ac                         |   2 +
+>  liblttng-ust-baddr/Makefile.am       |  18 +++++
+>  liblttng-ust-baddr/lttng-ust-baddr.c |  64 +++++++++++++++
+>  liblttng-ust-baddr/ust_baddr.c       |  20 +++++
+>  liblttng-ust-baddr/ust_baddr.h       |  66 ++++++++++++++++
+>  liblttng-ust-dl/Makefile.am          |  17 ++++
+>  liblttng-ust-dl/ustdl.c              | 146
+>  +++++++++++++++++++++++++++++++++++
+>  8 files changed, 335 insertions(+)
+>  create mode 100644 liblttng-ust-baddr/Makefile.am
+>  create mode 100644 liblttng-ust-baddr/lttng-ust-baddr.c
+>  create mode 100644 liblttng-ust-baddr/ust_baddr.c
+>  create mode 100644 liblttng-ust-baddr/ust_baddr.h
+>  create mode 100644 liblttng-ust-dl/Makefile.am
+>  create mode 100644 liblttng-ust-dl/ustdl.c
+> 
+> diff --git a/Makefile.am b/Makefile.am
+> index edb1a85..00dd576 100644
+> --- a/Makefile.am
+> +++ b/Makefile.am
+> @@ -4,6 +4,8 @@ SUBDIRS = . include snprintf libringbuffer liblttng-ust-comm
+> \
+>  		liblttng-ust \
+>  		liblttng-ust-ctl \
+>  		liblttng-ust-fork \
+> +		liblttng-ust-baddr \
+> +		liblttng-ust-dl \
+>  		liblttng-ust-libc-wrapper \
+>  		liblttng-ust-cyg-profile \
+>  		tools \
+> diff --git a/configure.ac b/configure.ac
+> index c5802ee..37ea8c6 100644
+> --- a/configure.ac
+> +++ b/configure.ac
+> @@ -285,6 +285,8 @@ AC_CONFIG_FILES([
+>  	liblttng-ust/Makefile
+>  	liblttng-ust-ctl/Makefile
+>  	liblttng-ust-fork/Makefile
+> +	liblttng-ust-baddr/Makefile
+> +	liblttng-ust-dl/Makefile
+>  	liblttng-ust-java/Makefile
+>  	liblttng-ust-jul/Makefile
+>  	liblttng-ust-libc-wrapper/Makefile
+> diff --git a/liblttng-ust-baddr/Makefile.am b/liblttng-ust-baddr/Makefile.am
+> new file mode 100644
+> index 0000000..afa9489
+> --- /dev/null
+> +++ b/liblttng-ust-baddr/Makefile.am
+> @@ -0,0 +1,18 @@
+> +AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_builddir)/include
+> +AM_CFLAGS = -fno-strict-aliasing
+> +
+> +lib_LTLIBRARIES = liblttng-ust-baddr.la
+> +liblttng_ust_baddr_la_SOURCES = \
+> +	lttng-ust-baddr.c \
+> +	ust_baddr.c \
+> +	ust_baddr.h
+> +liblttng_ust_baddr_la_LIBADD = \
+> +	-L$(top_builddir)/liblttng-ust/.libs \
+> +	-llttng-ust
+> +
+> +if LTTNG_UST_BUILD_WITH_LIBDL
+> +liblttng_ust_baddr_la_LIBADD += -ldl
+> +endif
+> +if LTTNG_UST_BUILD_WITH_LIBC_DL
+> +liblttng_ust_baddr_la_LIBADD += -lc
+> +endif
+> diff --git a/liblttng-ust-baddr/lttng-ust-baddr.c
+> b/liblttng-ust-baddr/lttng-ust-baddr.c
+> new file mode 100644
+> index 0000000..21c22a2
+> --- /dev/null
+> +++ b/liblttng-ust-baddr/lttng-ust-baddr.c
+> @@ -0,0 +1,64 @@
+> +/*
+> + * Copyright (C) 2013  Paul Woegerer <paul_woegerer@mentor.com>
+> + *
+> + * This library is free software; you can redistribute it and/or
+> + * modify it under the terms of the GNU Lesser General Public
+> + * License as published by the Free Software Foundation; either
+> + * version 2.1 of the License, or (at your option) any later version.
+> + *
+> + * This library is distributed in the hope that it will be useful,
+> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
+> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> + * Lesser General Public License for more details.
+> + *
+> + * You should have received a copy of the GNU Lesser General Public
+> + * License along with this library; if not, write to the Free Software
+> + * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
+> USA
+> + */
+> +
+> +#define _GNU_SOURCE
+> +#include <dlfcn.h>
+> +#include <link.h>
+> +
+> +#include <sys/types.h>
+> +#include <sys/stat.h>
+> +#include <sys/stat.h>
+> +#include <unistd.h>
+> +#include <limits.h>
+> +#include <stdlib.h>
+> +#include <errno.h>
+> +#include <stdint.h>
+> +#include <stddef.h>
+> +#include <stdio.h>
+> +#include "usterr.h"
+> +
+> +#define TRACEPOINT_DEFINE
+> +#include "ust_baddr.h"
+> +
+> +int
+> +push_baddr(void *so_base, const char *so_name)
+
+for these push and pop symbols, do we really need to expose them to the outside world ? If we to, then we need a lttng_ust_ prefix. Else, we could put a hidden visibility on them.
+
+The rest of this patch looks good.
+
+Thanks,
+
+Mathieu
+
+> +{
+> +	char resolved_path[PATH_MAX];
+> +	struct stat sostat;
+> +
+> +	if (!realpath(so_name, resolved_path)) {
+> +		ERR("could not resolve path '%s'", so_name);
+> +		return 0;
+> +	}
+> +
+> +	if (stat(resolved_path, &sostat)) {
+> +		ERR("could not access file status for %s", resolved_path);
+> +		return 0;
+> +	}
+> +
+> +	tracepoint(ust_baddr, push,
+> +		so_base, resolved_path, sostat.st_size, sostat.st_mtime);
+> +	return 0;
+> +}
+> +
+> +int
+> +pop_baddr(void *so_base)
+> +{
+> +	tracepoint(ust_baddr, pop, so_base);
+> +	return 0;
+> +}
+> diff --git a/liblttng-ust-baddr/ust_baddr.c b/liblttng-ust-baddr/ust_baddr.c
+> new file mode 100644
+> index 0000000..bfbb7bf
+> --- /dev/null
+> +++ b/liblttng-ust-baddr/ust_baddr.c
+> @@ -0,0 +1,20 @@
+> +/*
+> + * Copyright (C) 2013  Paul Woegerer <paul_woegerer@mentor.com>
+> + *
+> + * This library is free software; you can redistribute it and/or
+> + * modify it under the terms of the GNU Lesser General Public
+> + * License as published by the Free Software Foundation; either
+> + * version 2.1 of the License, or (at your option) any later version.
+> + *
+> + * This library is distributed in the hope that it will be useful,
+> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
+> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> + * Lesser General Public License for more details.
+> + *
+> + * You should have received a copy of the GNU Lesser General Public
+> + * License along with this library; if not, write to the Free Software
+> + * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
+> USA
+> + */
+> +
+> +#define TRACEPOINT_CREATE_PROBES
+> +#include "ust_baddr.h"
+> diff --git a/liblttng-ust-baddr/ust_baddr.h b/liblttng-ust-baddr/ust_baddr.h
+> new file mode 100644
+> index 0000000..2c757f7
+> --- /dev/null
+> +++ b/liblttng-ust-baddr/ust_baddr.h
+> @@ -0,0 +1,66 @@
+> +#undef TRACEPOINT_PROVIDER
+> +#define TRACEPOINT_PROVIDER ust_baddr
+> +
+> +#if !defined(_TRACEPOINT_UST_BADDR_H) ||
+> defined(TRACEPOINT_HEADER_MULTI_READ)
+> +#define _TRACEPOINT_UST_BADDR_H
+> +
+> +#ifdef __cplusplus
+> +extern "C" {
+> +#endif
+> +
+> +/*
+> + * Copyright (C) 2013  Paul Woegerer <paul_woegerer@mentor.com>
+> + *
+> + * Permission is hereby granted, free of charge, to any person obtaining a
+> copy
+> + * of this software and associated documentation files (the "Software"), to
+> deal
+> + * in the Software without restriction, including without limitation the
+> rights
+> + * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+> + * copies of the Software, and to permit persons to whom the Software is
+> + * furnished to do so, subject to the following conditions:
+> + *
+> + * The above copyright notice and this permission notice shall be included
+> in
+> + * all copies or substantial portions of the Software.
+> + *
+> + * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+> OR
+> + * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+> + * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+> THE
+> + * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+> + * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+> FROM,
+> + * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+> THE
+> + * SOFTWARE.
+> + */
+> +
+> +#include <stdint.h>
+> +#include <unistd.h>
+> +
+> +#define LTTNG_UST_BADDR_PROVIDER
+> +#include <lttng/tracepoint.h>
+> +
+> +TRACEPOINT_EVENT(ust_baddr, push,
+> +	TP_ARGS(void *, baddr, const char*, sopath, int64_t, size, int64_t, mtime),
+> +	TP_FIELDS(
+> +		ctf_integer_hex(void *, baddr, baddr)
+> +		ctf_string(sopath, sopath)
+> +		ctf_integer(int64_t, size, size)
+> +		ctf_integer(int64_t, mtime, mtime)
+> +	)
+> +)
+> +
+> +TRACEPOINT_EVENT(ust_baddr, pop,
+> +	TP_ARGS(void *, baddr),
+> +	TP_FIELDS(
+> +		ctf_integer_hex(void *, baddr, baddr)
+> +	)
+> +)
+> +
+> +#endif /* _TRACEPOINT_UST_BADDR_H */
+> +
+> +#undef TRACEPOINT_INCLUDE
+> +#define TRACEPOINT_INCLUDE "./ust_baddr.h"
+> +
+> +/* This part must be outside ifdef protection */
+> +#include <lttng/tracepoint-event.h>
+> +
+> +#ifdef __cplusplus
+> +}
+> +#endif
+> diff --git a/liblttng-ust-dl/Makefile.am b/liblttng-ust-dl/Makefile.am
+> new file mode 100644
+> index 0000000..14d8abf
+> --- /dev/null
+> +++ b/liblttng-ust-dl/Makefile.am
+> @@ -0,0 +1,17 @@
+> +AM_CPPFLAGS = -I$(top_srcdir)/include
+> +AM_CFLAGS = -fno-strict-aliasing
+> +
+> +lib_LTLIBRARIES = liblttng-ust-dl.la
+> +liblttng_ust_dl_la_SOURCES = ustdl.c
+> +liblttng_ust_dl_la_LIBADD = \
+> +	$(top_builddir)/liblttng-ust/liblttng-ust.la
+> +
+> +if LTTNG_UST_BUILD_WITH_LIBDL
+> +liblttng_ust_dl_la_LIBADD += -ldl
+> +endif
+> +if LTTNG_UST_BUILD_WITH_LIBC_DL
+> +liblttng_ust_dl_la_LIBADD += -lc
+> +endif
+> +
+> +libustdl_CFLAGS = -DUST_COMPONENT=liblttng-ust-dl -fno-strict-aliasing
+> +
+> diff --git a/liblttng-ust-dl/ustdl.c b/liblttng-ust-dl/ustdl.c
+> new file mode 100644
+> index 0000000..8f22b91
+> --- /dev/null
+> +++ b/liblttng-ust-dl/ustdl.c
+> @@ -0,0 +1,146 @@
+> +/*
+> + * Copyright (C) 2013  Paul Woegerer <paul.woegerer@mentor.com>
+> + *
+> + * This library is free software; you can redistribute it and/or
+> + * modify it under the terms of the GNU Lesser General Public
+> + * License as published by the Free Software Foundation; version 2.1 of
+> + * the License.
+> + *
+> + * This library is distributed in the hope that it will be useful,
+> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
+> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> + * Lesser General Public License for more details.
+> + *
+> + * You should have received a copy of the GNU Lesser General Public
+> + * License along with this library; if not, write to the Free Software
+> + * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
+> USA
+> + */
+> +
+> +#define _GNU_SOURCE
+> +#include <inttypes.h>
+> +#include <dlfcn.h>
+> +#include <link.h>
+> +#include <unistd.h>
+> +#include <stdio.h>
+> +#include <signal.h>
+> +#include <sched.h>
+> +#include <stdarg.h>
+> +#include "usterr.h"
+> +
+> +#include <lttng/ust-compiler.h>
+> +#include <lttng/ust.h>
+> +
+> +static void *(*__lttng_ust_plibc_dlopen)(const char *filename, int flag);
+> +static int (*__lttng_ust_plibc_dlclose)(void *handle);
+> +static void *__lttng_ust_baddr_handle;
+> +
+> +static
+> +void *_lttng_ust_dl_libc_dlopen(const char *filename, int flag)
+> +{
+> +	if (!__lttng_ust_plibc_dlopen) {
+> +		__lttng_ust_plibc_dlopen = dlsym(RTLD_NEXT, "dlopen");
+> +		if (__lttng_ust_plibc_dlopen == NULL) {
+> +			fprintf(stderr, "%s\n", dlerror());
+> +			return NULL;
+> +		}
+> +	}
+> +	return __lttng_ust_plibc_dlopen(filename, flag);
+> +}
+> +
+> +static
+> +int _lttng_ust_dl_libc_dlclose(void *handle)
+> +{
+> +	if (!__lttng_ust_plibc_dlclose) {
+> +		__lttng_ust_plibc_dlclose = dlsym(RTLD_NEXT, "dlclose");
+> +		if (__lttng_ust_plibc_dlclose == NULL) {
+> +			fprintf(stderr, "%s\n", dlerror());
+> +			return -1;
+> +		}
+> +	}
+> +	return __lttng_ust_plibc_dlclose(handle);
+> +}
+> +
+> +static
+> +void *lttng_ust_baddr_handle(void)
+> +{
+> +	if (!__lttng_ust_baddr_handle) {
+> +		__lttng_ust_baddr_handle = _lttng_ust_dl_libc_dlopen(
+> +			"liblttng-ust-baddr.so.0", RTLD_NOW | RTLD_GLOBAL);
+> +		if (__lttng_ust_baddr_handle == NULL)
+> +			fprintf(stderr, "%s\n", dlerror());
+> +	}
+> +	return __lttng_ust_baddr_handle;
+> +}
+> +
+> +static
+> +int lttng_ust_baddr_push(void *so_base, const char *so_name)
+> +{
+> +	static int
+> +	(*lttng_ust_baddr_push_fn)(void *so_base, const char *so_name);
+> +	if (!lttng_ust_baddr_push_fn) {
+> +		void *baddr_handle = lttng_ust_baddr_handle();
+> +		if (baddr_handle) {
+> +			lttng_ust_baddr_push_fn = dlsym(baddr_handle,
+> +				"push_baddr");
+> +			if (lttng_ust_baddr_push_fn == NULL)
+> +				fprintf(stderr, "%s\n", dlerror());
+> +		}
+> +		if (!lttng_ust_baddr_push_fn)
+> +			return -1;
+> +	}
+> +	return lttng_ust_baddr_push_fn(so_base, so_name);
+> +}
+> +
+> +static
+> +int lttng_ust_baddr_pop(void *so_base)
+> +{
+> +	static int
+> +	(*lttng_ust_baddr_pop_fn)(void *so_base);
+> +	if (!lttng_ust_baddr_pop_fn) {
+> +		void *baddr_handle = lttng_ust_baddr_handle();
+> +		if (baddr_handle) {
+> +			lttng_ust_baddr_pop_fn = dlsym(baddr_handle,
+> +				"pop_baddr");
+> +			if (lttng_ust_baddr_pop_fn == NULL)
+> +				fprintf(stderr, "%s\n", dlerror());
+> +		}
+> +		if (!lttng_ust_baddr_pop_fn)
+> +			return -1;
+> +	}
+> +	return lttng_ust_baddr_pop_fn(so_base);
+> +}
+> +
+> +void *dlopen(const char *filename, int flag)
+> +{
+> +	void *handle = _lttng_ust_dl_libc_dlopen(filename, flag);
+> +	if (handle) {
+> +		struct link_map *p = NULL;
+> +		if (dlinfo(handle, RTLD_DI_LINKMAP, &p) != -1 && p != NULL
+> +				&& p->l_addr != 0)
+> +			lttng_ust_baddr_push((void *) p->l_addr, p->l_name);
+> +	}
+> +	return handle;
+> +}
+> +
+> +int dlclose(void *handle)
+> +{
+> +	if (handle) {
+> +		struct link_map *p = NULL;
+> +		if (dlinfo(handle, RTLD_DI_LINKMAP, &p) != -1 && p != NULL
+> +				&& p->l_addr != 0)
+> +			lttng_ust_baddr_pop((void *) p->l_addr);
+> +	}
+> +	return _lttng_ust_dl_libc_dlclose(handle);
+> +}
+> +
+> +static void __attribute__((destructor))
+> +lttng_ust_baddr_handle_fini(void);
+> +static void
+> +lttng_ust_baddr_handle_fini(void)
+> +{
+> +	if (__lttng_ust_baddr_handle) {
+> +		int ret = _lttng_ust_dl_libc_dlclose(__lttng_ust_baddr_handle);
+> +		if (ret)
+> +			fprintf(stderr, "%s\n", dlerror());
+> +	}
+> +}
+> --
+> 1.8.4.2
+> 
+> 
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
