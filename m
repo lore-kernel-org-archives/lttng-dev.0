@@ -1,18 +1,24 @@
-From: "Ikaheimonen, JP" <jp_ikaheimonen@mentor.com>
-Subject: Re: [PATCH lttng-tools 00/28] UST Event exclusions
-Date: Thu, 14 Nov 2013 07:29:04 +0000
-Message-ID: <009B25148989C6458484484699278506E539FA93__43759.4458730475$1384414196$gmane$org@EU-MBX-01.mgc.mentorg.com>
-References: <1383819403-6386-1-git-send-email-jp_ikaheimonen@mentor.com>
-	<20131113210758.GB7694@dalia>
+From: Michael Lausch <michael.lausch@omicron.at>
+Subject: Re: Python bindings update
+Date: Thu, 14 Nov 2013 10:48:49 +0100
+Message-ID: <6B3AC2788014DD49B43AF9611365BBAA21CB78FD26__25279.8225767494$1384422577$gmane$org@mary.at.omicron.at>
+References: <CA+jJMxsZLrpRXhgZDLqVfGgqjkz6_d=7NKPgRHr5gGc0vmc4TQ@mail.gmail.com>
+	<1801200686.66283.1384352262423.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from relay1.mentorg.com ([192.94.38.131])
+Received: from ns.omicron.at ([212.183.10.25])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jp_ikaheimonen@mentor.com>) id 1VgrMX-0007xe-6R
-	for lttng-dev@lists.lttng.org; Thu, 14 Nov 2013 02:29:14 -0500
-In-Reply-To: <20131113210758.GB7694@dalia>
+	(envelope-from <michael.lausch@omicron.at>) id 1VgtXm-0006TX-3c
+	for lttng-dev@lists.lttng.org; Thu, 14 Nov 2013 04:48:59 -0500
+Received: from counter.omicron.at ([212.183.10.29])
+	by ns.omicron.at (8.13.1/8.13.1) with ESMTP id rAE9mpsb029739
+	for <lttng-dev@lists.lttng.org>; Thu, 14 Nov 2013 10:48:56 +0100
+Received: from mary.at.omicron.at (mary.at.omicron.at [172.22.100.48])
+	by counter.omicron.at (8.14.4/8.14.4) with ESMTP id rAE9mpWY021319
+	for <lttng-dev@lists.lttng.org>; Thu, 14 Nov 2013 10:48:51 +0100
+In-Reply-To: <1801200686.66283.1384352262423.JavaMail.zimbra@efficios.com>
 Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -22,129 +28,57 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: David Goulet <dgoulet@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Thanks David!
-I'll add your changes, figure out what goes wrong with the test, add a new test, and patch the man page.
-Then I will submit a pull request.
-I aim to have done this by the end of this week.
-
-Thanks again,
-JP
-
------Original Message-----
-From: David Goulet [mailto:dgoulet@efficios.com] 
-Sent: 13. marraskuuta 2013 23:08
-To: Ikaheimonen, JP
-Cc: lttng-dev@lists.lttng.org
-Subject: Re: [lttng-dev] [PATCH lttng-tools 00/28] UST Event exclusions
-
-Hey JP!
-
-So here is the deal with this big patch set and the 2.4-rc ;).
-
-I've checked the patches and they are OK in terms of code and structure.
-The feature seems to work fine also! Which is a good news. However, we are a couple hours before the release candidate! and there is still issues with all this :S.
-
-We know that you guys have been putting a lot of efforts in this and the code looks good so what we are going to do is merge this in the next RC release (meaning 2.4-rc2) considering that right now the feature works and thus is freezed for the next version.
-
-For that to happen, I'll ask you to fix the following issues as soon as you can so we can merge it quickly thus having more testing. Not getting this in time, unfortunately we won't be able to merge that for 2.4.
-Usually, the RC process cycle is around 1 month maximum.
-
-Issues:
-
-1) "make check" fails here so it *has* to pass in order to accept this patch set. I didn't investiguate thoroughly but it might be that you broke some existing feature or small adjustement to the tests.
-
-2) For this kind of big feature, we *need* at least one test that makes sure that in further release there is no regression for that exclusion feature.
-
-3) A patch for the man page (lttng.1) would be *very* appreciated.
-
-4) Commit id: 78bef43205f5296cb6cae81b6e264b849fe94988
-Please add a PERROR() if the zmalloc returns NULL so we can at least report it somewhere.
-
-I've fixed small issues also so please look at my dev branch for the two small commits on top of the 28 patches.
-
-https://github.com/dgoulet/lttng-tools-dev/tree/ev-exclusion
-
-Considering that, either you send back the patches *ON TOP* of that dev branch or you can also provide me with a pull request because with that amount of patches, by email is kind of a pain :).
-
-Hope this seems fair enough with you guys. It's the best we can do to make sure this feature gets in 2.4 :).
-
-Cheers!
-David
-
-On 07 Nov (12:16:43), JP Ikaheimonen wrote:
-> This patch set, along with a patch set for lttng-ust, implements a new 
-> option for lttng enable-event command.
-> 
-> The new option makes it possible to exclude events from a wildcarded 
-> event definition.
-> 
-> That is, running command
-> 
-> lttng enable-event -u -c c1 'myevents*' -x 'myevents:dbg*'
-> 
-> would enable all UST tracepoint events whose names start with 'myevents'
-> except those that start with 'myevents:dbg'.
-> 
-> The lttng list command is also updated, so that it points out the fact 
-> that an event has some exclusions.
-> 
-> JP Ikaheimonen (28):
->   Add exclusion data to enable-command
->   Define a structure for event exclusion data
->   Add exclusion data to cmd_enable_event
->   Add exclusions to event_ust_enable_tracepoint
->   Add event exclusion data to ltt_ust_event structure
->   Add exclusion matching logic to trace_ust_ht_match_event
->   Add exclusion data to trace_ust_create_event
->   Add exclusion data to trace_ust_find_event
->   Copy exclusion data in add_unique_ust_event.
->   Add new error codes for exclusion processing
->   Add handling of LTTNG_ENABLE_EVENT_WITH_EXCLUSION
->   Collate handling of LTTNG_ENABLE_EVENT_WITH_FILTER
->   Add exclusion data to ust_app_event structure
->   Compare also exclusions in ht_match_ust_app_event
->   Copy event exclusion data in add_unique_ust_app_event
->   Free exclusion data when ust_app_event is deleted
->   Add exclusion data to find_ust_app_event
->   Copy exclusion data in shadow_copy_event
->   Set event exclusions in the target when event is created
->   Send enable-event commands with exclusion data
->   Collate lttng_enable_event* code
->   Add -exclude option to enable-event command
->   Add usage for --exclude option
->   Add a function to check for legal exclusions
->   Parse exclusions and forward them to the control handler
->   Detect and report exclusion option errors
->   Add exclusion names to diagnostic printouts
->   When listing events, show exclusions if they exist
-> 
->  include/lttng/lttng-error.h              |   2 +
->  include/lttng/lttng.h                    |  20 ++-
->  src/bin/lttng-sessiond/cmd.c             |  13 +-
->  src/bin/lttng-sessiond/cmd.h             |   4 +-
->  src/bin/lttng-sessiond/event.c           |  12 +-
->  src/bin/lttng-sessiond/event.h           |   3 +-
->  src/bin/lttng-sessiond/main.c            | 110 +++++++-----
->  src/bin/lttng-sessiond/trace-ust.c       |  23 ++-
->  src/bin/lttng-sessiond/trace-ust.h       |  14 +-
->  src/bin/lttng-sessiond/ust-app.c         |  95 +++++++++-
->  src/bin/lttng-sessiond/ust-app.h         |   2 +
->  src/bin/lttng/commands/enable_events.c   | 242 +++++++++++++++++++++++--
->  src/bin/lttng/commands/list.c            |  15 +-
->  src/common/sessiond-comm/sessiond-comm.h |  22 ++-
->  src/lib/lttng-ctl/lttng-ctl.c            | 291 ++++++++++++++++++-------------
->  tests/unit/test_ust_data.c               |   2 +-
->  16 files changed, 657 insertions(+), 213 deletions(-)
-> 
-> --
-> 1.8.1.2
-> 
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+SGksDQpJIGp1c3QgZmluaXNoZWQgYSBzZXR1cC5weS5pbi4gSXQgbmVlZHMgc29tZSB0ZXN0aW5n
+IChpIGNhbiBkbyB1YnVudHUsIGZlZG9yYSB0ZXN0cykuIA0KSWYgeW91IGFyZSBpbnRlcmVzdGVk
+LCBJIGNhbiBwcm92aWRlIGEgcGF0Y2ggb24gdGhlIG1haWxpbmcgbGlzdC4gDQoNCi0tLS0tT3Jp
+Z2luYWwgTWVzc2FnZS0tLS0tDQpGcm9tOiBNYXRoaWV1IERlc25veWVycyBbbWFpbHRvOm1hdGhp
+ZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbV0gDQpTZW50OiBXZWRuZXNkYXksIE5vdmVtYmVyIDEz
+LCAyMDEzIDM6MTggUE0NClRvOiBKw6lyw6ltaWUgR2FsYXJuZWF1DQpDYzogbHR0bmctZGV2QGxp
+c3RzLmx0dG5nLm9yZw0KU3ViamVjdDogUmU6IFtsdHRuZy1kZXZdIFtQVUxMIFJFUVVFU1QgYmFi
+ZWx0cmFjZV0gUHl0aG9uIGJpbmRpbmdzIHVwZGF0ZQ0KDQotLS0tLSBPcmlnaW5hbCBNZXNzYWdl
+IC0tLS0tDQo+IEZyb206ICJKw6lyw6ltaWUgR2FsYXJuZWF1IiA8amVyZW1pZS5nYWxhcm5lYXVA
+ZWZmaWNpb3MuY29tPg0KPiBUbzogbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZw0KPiBDYzogIk1h
+dGhpZXUgRGVzbm95ZXJzIiA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPg0KPiBTZW50
+OiBUdWVzZGF5LCBOb3ZlbWJlciAxMiwgMjAxMyAxMDowNjo0MSBQTQ0KPiBTdWJqZWN0OiBbUFVM
+TCBSRVFVRVNUIGJhYmVsdHJhY2VdIFB5dGhvbiBiaW5kaW5ncyB1cGRhdGUNCj4gDQo+IEhpIGFs
+bCwNCj4gDQo+IEhlcmUgYXJlIHNvbWUgcGF0Y2hlcyB0byBhZGQgcmVhZCBzdXBwb3J0IG9mIGV2
+ZXJ5IENURiB0eXBlIHVzaW5nIHRoZQ0KPiBCYWJlbHRyYWNlIFB5dGhvbiBiaW5kaW5ncy4gSXQg
+aXMgbm93IHBvc3NpYmxlIHRvIHJldHJpZXZlIGZpZWxkcyBhbmQNCj4gYWNjZXNzIHRoZWlyIHZh
+bHVlcyB1c2luZyBhIHNpbmdsZSBnZXRfdmFsdWUoKSBtZXRob2QgcmV0dXJuaW5nIG5hdGl2ZQ0K
+PiBQeXRob24gb2JqZWN0cy4gVGhpcyBpcyBtYWRlIHBvc3NpYmxlIHVzaW5nIHRoZSB3b3JrIGNv
+bnRyaWJ1dGVkIGJ5DQo+IG9uZSBvZiBvdXIgR1NvQyBzdHVkZW50cywgWGlhb25hIEhhbi4NCj4g
+DQo+IFRoZXNlIHBhdGNoZXMgYWxzbyBtYWtlIGl0IHBvc3NpYmxlIHRvIGdlbmVyYXRlIENURiBm
+cm9tIFB5dGhvbiBjb2RlLA0KPiBiYXNlZCBvbiB0aGUgQ1RGIFdyaXRlciBBUEkgdGhhdCB3YXMg
+bWVyZ2VkIHJlY2VudGx5Lg0KDQpNZXJnZWQgaW50byBiaW5kaW5ncy9weXRob24gYnJhbmNoLiBQ
+bGVhc2UgbGV0IG1lIGtub3cgaWYgSSBzaG91bGQgbWVyZ2UgdGhlc2UgaW50byBtYXN0ZXIuDQoN
+ClRoYW5rcywNCg0KTWF0aGlldQ0KDQo+IA0KPiBUaGUgcGF0Y2hlcyBhcmUgYXZhaWxhYmxlIGhl
+cmU6DQo+IGh0dHBzOi8vZ2l0aHViLmNvbS9qZ2FsYXIvYmFiZWx0cmFjZS9jb21taXRzL2JpbmRp
+bmdzL3B5dGhvbg0KPiANCj4gN2EzMGE2NiBSZXR1cm4gZXZlbnQgZmllbGRzIGJ5IGZpZWxkIG5h
+bWUNCj4gZGI1NTFmMiBSZW1vdmUgdGhlIHVubmVjZXNzYXJ5IHVuZGVyc2NvcmUgcHJlZml4DQo+
+IDQxOTFiY2QgU3VwcG9ydCBnZXR0aW5nIHRoZSB2YWx1ZSBvZiBlbnVtcw0KPiAzYzJjZTc3IEFk
+ZCBhIGdlbmVyaWMgZ2V0X3ZhbHVlKCkgaW1wbGVtZW50YXRpb24NCj4gNzg2MjA3ZSBTdXBwb3J0
+IGZvciB0aGUgc2VxdWVuY2UgdHlwZQ0KPiA4MTBhOTdiIEFkZCBhIHB5dGhvbiBiaW5kaW5ncyBz
+ZXF1ZW5jZSB0ZXN0DQo+IDMwNDNlZTAgUmVtb3ZlIFB5dGhvbiAyIHNwZWNpZmljIGV4YW1wbGVz
+DQo+IDkwMTMxYTMgRml4OiBUaHJvdyBhIEZpZWxkRXJyb3IgZXhjZXB0aW9uIHdoZW4gZ2V0X3Zh
+bHVlKCkgZmFpbHMNCj4gZTVhNzNiOSBBZGQgc3VwcG9ydCBmb3IgZmxvYXRpbmcgcG9pbnQgZmll
+bGRzIGluIHRoZSBQeXRob24gYmluZGluZ3MNCj4gODEyZTY2OCBBZGQgc3VwcG9ydCBmb3IgdmFy
+aWFudCBmaWVsZHMgaW4gdGhlIFB5dGhvbiBiaW5kaW5ncw0KPiAzYTA2ODkxIEFkZCBzdXBwb3J0
+IGZvciBzdHJ1Y3R1cmUgZmllbGRzIGluIHRoZSBQeXRob24gYmluZGluZ3MNCj4gY2ViYWU4YyBG
+aXg6IFB5dGhvbiBiaW5kaW5ncyBhcnJheSBhY2Nlc3MgZnVuY3Rpb25zIHdyaXRlIG91dCBvZiBi
+b3VuZHMNCj4gMjRkNWM5NCBSZW5hbWUgdGhlIGN0ZiBjbGFzcyB0byBDVEZSZWFkZXINCj4gZWM4
+Yzg4ZCBBZGQgQ1RGIFdyaXRlciBQeXRob24gYmluZGluZ3MNCj4gMDMzZmIwYSBBZGQgYSB1c2Fn
+ZSBleGFtcGxlIGZvciB0aGUgQ1RGIFdyaXRlciBQeXRob24gYmluZGluZ3MNCj4gOTRhNmNlYSBE
+b24ndCBnZW5lcmF0ZSBQeXRob24gYmluZGluZ3MgYnkgZGVmYXVsdA0KPiA1NDkxNDc2IEV4cG9z
+ZSB0ZXh0IGFycmF5cyB0aGUgc2FtZSB3YXkgYXMgcmVndWxhciBhcnJheXMNCj4gDQo+IExvb2tp
+bmcgZm9yd2FyZCB0byB5b3VyIGNvbW1lbnRzLA0KPiBKw6lyw6ltaWUNCj4gDQo+IC0tDQo+IErD
+qXLDqW1pZSBHYWxhcm5lYXUNCj4gRWZmaWNpT1MgSW5jLg0KPiBodHRwOi8vd3d3LmVmZmljaW9z
+LmNvbQ0KPiANCg0KLS0gDQpNYXRoaWV1IERlc25veWVycw0KRWZmaWNpT1MgSW5jLg0KaHR0cDov
+L3d3dy5lZmZpY2lvcy5jb20NCg0KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX18NCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QNCmx0dG5nLWRldkBsaXN0cy5sdHRu
+Zy5vcmcNCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0
+dG5nLWRldg0KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
+bHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9s
+aXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
