@@ -1,19 +1,18 @@
 From: "Ikaheimonen, JP" <jp_ikaheimonen@mentor.com>
-Subject: Re: [PATCH lttng-ust 7/7] Add a check against excluders
-Date: Thu, 14 Nov 2013 07:26:33 +0000
-Message-ID: <009B25148989C6458484484699278506E539FA81__43689.3903337934$1384414044$gmane$org@EU-MBX-01.mgc.mentorg.com>
-References: <1383819755-6891-1-git-send-email-jp_ikaheimonen@mentor.com>
-	<1383819755-6891-8-git-send-email-jp_ikaheimonen@mentor.com>
-	<682132616.66259.1384351513959.JavaMail.zimbra@efficios.com>
+Subject: Re: [PATCH lttng-tools 00/28] UST Event exclusions
+Date: Thu, 14 Nov 2013 07:29:04 +0000
+Message-ID: <009B25148989C6458484484699278506E539FA93__43759.4458730475$1384414196$gmane$org@EU-MBX-01.mgc.mentorg.com>
+References: <1383819403-6386-1-git-send-email-jp_ikaheimonen@mentor.com>
+	<20131113210758.GB7694@dalia>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jp_ikaheimonen@mentor.com>) id 1VgrK6-0007CJ-N8
-	for lttng-dev@lists.lttng.org; Thu, 14 Nov 2013 02:26:44 -0500
-In-Reply-To: <682132616.66259.1384351513959.JavaMail.zimbra@efficios.com>
+	(envelope-from <jp_ikaheimonen@mentor.com>) id 1VgrMX-0007xe-6R
+	for lttng-dev@lists.lttng.org; Thu, 14 Nov 2013 02:29:14 -0500
+In-Reply-To: <20131113210758.GB7694@dalia>
 Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -23,93 +22,124 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: David Goulet <dgoulet@efficios.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Thank you Mathieu!
-I will make these changes and resubmit this one patch.
+Thanks David!
+I'll add your changes, figure out what goes wrong with the test, add a new test, and patch the man page.
+Then I will submit a pull request.
+I aim to have done this by the end of this week.
 
-Cheers,
+Thanks again,
 JP
 
 -----Original Message-----
-From: Mathieu Desnoyers [mailto:mathieu.desnoyers@efficios.com] 
-Sent: 13. marraskuuta 2013 16:05
+From: David Goulet [mailto:dgoulet@efficios.com] 
+Sent: 13. marraskuuta 2013 23:08
 To: Ikaheimonen, JP
 Cc: lttng-dev@lists.lttng.org
-Subject: Re: [lttng-dev] [PATCH lttng-ust 7/7] Add a check against excluders
+Subject: Re: [lttng-dev] [PATCH lttng-tools 00/28] UST Event exclusions
 
------ Original Message -----
-> From: "JP Ikaheimonen" <jp_ikaheimonen@mentor.com>
-> To: lttng-dev@lists.lttng.org
-> Sent: Thursday, November 7, 2013 5:22:35 AM
-> Subject: [lttng-dev] [PATCH lttng-ust 7/7] Add a check against 
-> excluders
+Hey JP!
+
+So here is the deal with this big patch set and the 2.4-rc ;).
+
+I've checked the patches and they are OK in terms of code and structure.
+The feature seems to work fine also! Which is a good news. However, we are a couple hours before the release candidate! and there is still issues with all this :S.
+
+We know that you guys have been putting a lot of efforts in this and the code looks good so what we are going to do is merge this in the next RC release (meaning 2.4-rc2) considering that right now the feature works and thus is freezed for the next version.
+
+For that to happen, I'll ask you to fix the following issues as soon as you can so we can merge it quickly thus having more testing. Not getting this in time, unfortunately we won't be able to merge that for 2.4.
+Usually, the RC process cycle is around 1 month maximum.
+
+Issues:
+
+1) "make check" fails here so it *has* to pass in order to accept this patch set. I didn't investiguate thoroughly but it might be that you broke some existing feature or small adjustement to the tests.
+
+2) For this kind of big feature, we *need* at least one test that makes sure that in further release there is no regression for that exclusion feature.
+
+3) A patch for the man page (lttng.1) would be *very* appreciated.
+
+4) Commit id: 78bef43205f5296cb6cae81b6e264b849fe94988
+Please add a PERROR() if the zmalloc returns NULL so we can at least report it somewhere.
+
+I've fixed small issues also so please look at my dev branch for the two small commits on top of the 28 patches.
+
+https://github.com/dgoulet/lttng-tools-dev/tree/ev-exclusion
+
+Considering that, either you send back the patches *ON TOP* of that dev branch or you can also provide me with a pull request because with that amount of patches, by email is kind of a pain :).
+
+Hope this seems fair enough with you guys. It's the best we can do to make sure this feature gets in 2.4 :).
+
+Cheers!
+David
+
+On 07 Nov (12:16:43), JP Ikaheimonen wrote:
+> This patch set, along with a patch set for lttng-ust, implements a new 
+> option for lttng enable-event command.
 > 
-> When matching enablers with events, first check against all excluders 
-> of the enabler. If the event matches with any of the excluders, then 
-> the event does not match with the enabler.
+> The new option makes it possible to exclude events from a wildcarded 
+> event definition.
 > 
-> Signed-off-by: JP Ikaheimonen <jp_ikaheimonen@mentor.com>
-> ---
->  liblttng-ust/lttng-events.c | 23 +++++++++++++++++++++++
->  1 file changed, 23 insertions(+)
+> That is, running command
 > 
-> diff --git a/liblttng-ust/lttng-events.c b/liblttng-ust/lttng-events.c 
-> index 915cffb..fa5596c 100644
-> --- a/liblttng-ust/lttng-events.c
-> +++ b/liblttng-ust/lttng-events.c
-> @@ -491,6 +491,29 @@ static
->  int lttng_desc_match_enabler(const struct lttng_event_desc *desc,
->  		struct lttng_enabler *enabler)
->  {
-> +	struct lttng_ust_excluder_node *excluder;
-> +
-> +	/* If event matches with an excluder, return 'does not match' */
-> +	cds_list_for_each_entry(excluder, &enabler->excluder_head, node) {
-> +		int found = 0;
-
-Why is "found" declared here ? Why is it initialized to 0 ?
-
-
-> +		int count, len;
-> +		char *excluder_name;
-> +
-> +		for (count = 0; count < excluder->excluder.count; count++) {
-
-Rather than declared here ?
-
-
-> +			excluder_name = (char *)(excluder->excluder.names)
-> +					+ count * LTTNG_UST_SYM_NAME_LEN;
-> +			len = strnlen(excluder_name, LTTNG_UST_SYM_NAME_LEN);
-> +			if (len > 0 && excluder_name[len - 1] == '*') {
-> +				found = strncmp(desc->name, excluder_name, len - 1);
-
-strncmp and "found" have reversed logic. I'd assign found = !strncmp(....).
-
-> +			} else {
-> +				found = strncmp(desc->name, excluder_name,
-> +						LTTNG_UST_SYM_NAME_LEN - 1);
-> +			}
-> +			if (!found) {
-
-and reverse this condition.
-
-The other patches in this patchset look good !! Good job !!
-
-Thanks,
-
-Mathieu
-
-> +				return 0;
-> +			}
-> +		}
-> +	}
->  	switch (enabler->type) {
->  	case LTTNG_ENABLER_WILDCARD:
->  		return lttng_desc_match_wildcard_enabler(desc, enabler);
+> lttng enable-event -u -c c1 'myevents*' -x 'myevents:dbg*'
+> 
+> would enable all UST tracepoint events whose names start with 'myevents'
+> except those that start with 'myevents:dbg'.
+> 
+> The lttng list command is also updated, so that it points out the fact 
+> that an event has some exclusions.
+> 
+> JP Ikaheimonen (28):
+>   Add exclusion data to enable-command
+>   Define a structure for event exclusion data
+>   Add exclusion data to cmd_enable_event
+>   Add exclusions to event_ust_enable_tracepoint
+>   Add event exclusion data to ltt_ust_event structure
+>   Add exclusion matching logic to trace_ust_ht_match_event
+>   Add exclusion data to trace_ust_create_event
+>   Add exclusion data to trace_ust_find_event
+>   Copy exclusion data in add_unique_ust_event.
+>   Add new error codes for exclusion processing
+>   Add handling of LTTNG_ENABLE_EVENT_WITH_EXCLUSION
+>   Collate handling of LTTNG_ENABLE_EVENT_WITH_FILTER
+>   Add exclusion data to ust_app_event structure
+>   Compare also exclusions in ht_match_ust_app_event
+>   Copy event exclusion data in add_unique_ust_app_event
+>   Free exclusion data when ust_app_event is deleted
+>   Add exclusion data to find_ust_app_event
+>   Copy exclusion data in shadow_copy_event
+>   Set event exclusions in the target when event is created
+>   Send enable-event commands with exclusion data
+>   Collate lttng_enable_event* code
+>   Add -exclude option to enable-event command
+>   Add usage for --exclude option
+>   Add a function to check for legal exclusions
+>   Parse exclusions and forward them to the control handler
+>   Detect and report exclusion option errors
+>   Add exclusion names to diagnostic printouts
+>   When listing events, show exclusions if they exist
+> 
+>  include/lttng/lttng-error.h              |   2 +
+>  include/lttng/lttng.h                    |  20 ++-
+>  src/bin/lttng-sessiond/cmd.c             |  13 +-
+>  src/bin/lttng-sessiond/cmd.h             |   4 +-
+>  src/bin/lttng-sessiond/event.c           |  12 +-
+>  src/bin/lttng-sessiond/event.h           |   3 +-
+>  src/bin/lttng-sessiond/main.c            | 110 +++++++-----
+>  src/bin/lttng-sessiond/trace-ust.c       |  23 ++-
+>  src/bin/lttng-sessiond/trace-ust.h       |  14 +-
+>  src/bin/lttng-sessiond/ust-app.c         |  95 +++++++++-
+>  src/bin/lttng-sessiond/ust-app.h         |   2 +
+>  src/bin/lttng/commands/enable_events.c   | 242 +++++++++++++++++++++++--
+>  src/bin/lttng/commands/list.c            |  15 +-
+>  src/common/sessiond-comm/sessiond-comm.h |  22 ++-
+>  src/lib/lttng-ctl/lttng-ctl.c            | 291 ++++++++++++++++++-------------
+>  tests/unit/test_ust_data.c               |   2 +-
+>  16 files changed, 657 insertions(+), 213 deletions(-)
+> 
 > --
 > 1.8.1.2
 > 
@@ -118,9 +148,3 @@ Mathieu
 > lttng-dev mailing list
 > lttng-dev@lists.lttng.org
 > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> 
-
---
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
