@@ -1,23 +1,20 @@
-From: =?ISO-8859-1?Q?Rapha=EBl_Beamonte?= <raphael.beamonte@gmail.com>
-Subject: Re: [lttng-tools PATCH 3/4] Correct the behavior of the
- utils_expand_path function
-Date: Wed, 13 Nov 2013 22:27:03 -0500
-Message-ID: <CAE_Gge2rcE7-pH9KBh9WAkfcQYM-aNw1iAb2brUeyjVvA=Nn3Q__41883.7583078586$1384399694$gmane$org@mail.gmail.com>
-References: <1384320878-28808-1-git-send-email-raphael.beamonte@gmail.com>
-	<20131112195134.GB12183@thessa>
-	<1384320878-28808-4-git-send-email-raphael.beamonte@gmail.com>
-	<647704866.66921.1384397059144.JavaMail.zimbra@efficios.com>
+From: "Ikaheimonen, JP" <jp_ikaheimonen@mentor.com>
+Subject: Re: [PATCH lttng-ust 7/7] Add a check against excluders
+Date: Thu, 14 Nov 2013 07:26:33 +0000
+Message-ID: <009B25148989C6458484484699278506E539FA81__43689.3903337934$1384414044$gmane$org@EU-MBX-01.mgc.mentorg.com>
+References: <1383819755-6891-1-git-send-email-jp_ikaheimonen@mentor.com>
+	<1383819755-6891-8-git-send-email-jp_ikaheimonen@mentor.com>
+	<682132616.66259.1384351513959.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ob0-f177.google.com ([209.85.214.177])
+Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <nashii@gmail.com>) id 1Vgnab-0005M8-E7
-	for lttng-dev@lists.lttng.org; Wed, 13 Nov 2013 22:27:30 -0500
-Received: by mail-ob0-f177.google.com with SMTP id wp4so1548793obc.36
-	for <lttng-dev@lists.lttng.org>; Wed, 13 Nov 2013 19:27:23 -0800 (PST)
-In-Reply-To: <647704866.66921.1384397059144.JavaMail.zimbra@efficios.com>
+	(envelope-from <jp_ikaheimonen@mentor.com>) id 1VgrK6-0007CJ-N8
+	for lttng-dev@lists.lttng.org; Thu, 14 Nov 2013 02:26:44 -0500
+In-Reply-To: <682132616.66259.1384351513959.JavaMail.zimbra@efficios.com>
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -30,28 +27,100 @@ To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-> I might be missing something, but how about, instead:
->
-> 1) if path start with /, directly pass it to realpath()
-> 2) if path does not start with /, prepend getcwd() to it, and then call r=
-ealpath() on the result.
->
-> If we can do the same result as this patch without reimplementing tricky =
-string handling, we should really aim for re-using existing libraries.
->
-> Thoughts ?
+Thank you Mathieu!
+I will make these changes and resubmit this one patch.
 
-Hello Mathieu,
+Cheers,
+JP
 
-Thing is realpath only works if the path exists (realpath(3)). I
-perhaps want to give as argument an absolute path that does not exist,
-or a path containing strings such as '../' or './'. In such cases,
-realpath would do no good, and if we don't accept to use unexisting
-paths, then there is no point in using a recursive mkdir.
-If fact, if realpath would work in such cases, using an 'if' would not
-even be necessary, we could just call realpath and let it resolve the
-current directory if necessary.
+-----Original Message-----
+From: Mathieu Desnoyers [mailto:mathieu.desnoyers@efficios.com] 
+Sent: 13. marraskuuta 2013 16:05
+To: Ikaheimonen, JP
+Cc: lttng-dev@lists.lttng.org
+Subject: Re: [lttng-dev] [PATCH lttng-ust 7/7] Add a check against excluders
 
-Hope it helps to understand,
+----- Original Message -----
+> From: "JP Ikaheimonen" <jp_ikaheimonen@mentor.com>
+> To: lttng-dev@lists.lttng.org
+> Sent: Thursday, November 7, 2013 5:22:35 AM
+> Subject: [lttng-dev] [PATCH lttng-ust 7/7] Add a check against 
+> excluders
+> 
+> When matching enablers with events, first check against all excluders 
+> of the enabler. If the event matches with any of the excluders, then 
+> the event does not match with the enabler.
+> 
+> Signed-off-by: JP Ikaheimonen <jp_ikaheimonen@mentor.com>
+> ---
+>  liblttng-ust/lttng-events.c | 23 +++++++++++++++++++++++
+>  1 file changed, 23 insertions(+)
+> 
+> diff --git a/liblttng-ust/lttng-events.c b/liblttng-ust/lttng-events.c 
+> index 915cffb..fa5596c 100644
+> --- a/liblttng-ust/lttng-events.c
+> +++ b/liblttng-ust/lttng-events.c
+> @@ -491,6 +491,29 @@ static
+>  int lttng_desc_match_enabler(const struct lttng_event_desc *desc,
+>  		struct lttng_enabler *enabler)
+>  {
+> +	struct lttng_ust_excluder_node *excluder;
+> +
+> +	/* If event matches with an excluder, return 'does not match' */
+> +	cds_list_for_each_entry(excluder, &enabler->excluder_head, node) {
+> +		int found = 0;
 
-Rapha=EBl
+Why is "found" declared here ? Why is it initialized to 0 ?
+
+
+> +		int count, len;
+> +		char *excluder_name;
+> +
+> +		for (count = 0; count < excluder->excluder.count; count++) {
+
+Rather than declared here ?
+
+
+> +			excluder_name = (char *)(excluder->excluder.names)
+> +					+ count * LTTNG_UST_SYM_NAME_LEN;
+> +			len = strnlen(excluder_name, LTTNG_UST_SYM_NAME_LEN);
+> +			if (len > 0 && excluder_name[len - 1] == '*') {
+> +				found = strncmp(desc->name, excluder_name, len - 1);
+
+strncmp and "found" have reversed logic. I'd assign found = !strncmp(....).
+
+> +			} else {
+> +				found = strncmp(desc->name, excluder_name,
+> +						LTTNG_UST_SYM_NAME_LEN - 1);
+> +			}
+> +			if (!found) {
+
+and reverse this condition.
+
+The other patches in this patchset look good !! Good job !!
+
+Thanks,
+
+Mathieu
+
+> +				return 0;
+> +			}
+> +		}
+> +	}
+>  	switch (enabler->type) {
+>  	case LTTNG_ENABLER_WILDCARD:
+>  		return lttng_desc_match_wildcard_enabler(desc, enabler);
+> --
+> 1.8.1.2
+> 
+> 
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> 
+
+--
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
