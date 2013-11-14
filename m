@@ -1,17 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH v2 2/2] Implement base-address-state tracing
-Date: Thu, 14 Nov 2013 16:30:57 +0000 (UTC)
-Message-ID: <1543483751.67338.1384446657019.JavaMail.zimbra__41380.267966497$1384446719$gmane$org@efficios.com>
-References: <1384367860-2411-1-git-send-email-paul_woegerer@mentor.com>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Subject: Re: About Lttng trace mode
+Date: Thu, 14 Nov 2013 17:01:25 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD267A22BC__29622.548147063$1384448563$gmane$org@VAL-E-01.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1Vgzop-0006ty-6t
-	for lttng-dev@lists.lttng.org; Thu, 14 Nov 2013 11:31:05 -0500
-In-Reply-To: <1384367860-2411-1-git-send-email-paul_woegerer@mentor.com>
+	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1Vh0IP-0007YN-Pm
+	for lttng-dev@lists.lttng.org; Thu, 14 Nov 2013 12:01:39 -0500
+Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,459 +19,79 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Paul Woegerer <paul_woegerer@mentor.com>
-Cc: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+Cc: XIANG Hao <Hao.Xiang@alcatel-sbell.com.cn>
 List-Id: lttng-dev@lists.lttng.org
 
------ Original Message -----
-> From: "Paul Woegerer" <paul_woegerer@mentor.com>
-> To: lttng-dev@lists.lttng.org, "mathieu desnoyers" <mathieu.desnoyers@efficios.com>
-> Sent: Wednesday, November 13, 2013 1:37:40 PM
-> Subject: [PATCH v2 2/2] Implement base-address-state tracing
-> 
-> Dump the base-address state (executable and shared objects) into session
-> on session-enable (per-session events).
-> 
-> Signed-off-by: Paul Woegerer <paul_woegerer@mentor.com>
-> ---
->  include/lttng/ust-tracepoint-event.h     | 14 +++++++
->  liblttng-ust-baddr/Makefile.am           |  4 +-
->  liblttng-ust-baddr/lttng-ust-baddr.c     | 64
->  ++++++++++++++++++++++++++++++++
->  liblttng-ust-baddr/ust_baddr_statedump.c | 21 +++++++++++
->  liblttng-ust-baddr/ust_baddr_statedump.h | 60 ++++++++++++++++++++++++++++++
->  liblttng-ust/lttng-events.c              |  4 ++
->  liblttng-ust/lttng-ust-comm.c            | 62
->  +++++++++++++++++++++++++++++++
->  7 files changed, 228 insertions(+), 1 deletion(-)
->  create mode 100644 liblttng-ust-baddr/ust_baddr_statedump.c
->  create mode 100644 liblttng-ust-baddr/ust_baddr_statedump.h
-> 
-> diff --git a/include/lttng/ust-tracepoint-event.h
-> b/include/lttng/ust-tracepoint-event.h
-> index bb3a05d..be58030 100644
-> --- a/include/lttng/ust-tracepoint-event.h
-> +++ b/include/lttng/ust-tracepoint-event.h
-> @@ -480,6 +480,18 @@ size_t
-> __event_get_align__##_provider##___##_name(_TP_ARGS_PROTO(_args))      \
->  #define TP_FIELDS(...) __VA_ARGS__
->  
->  /*
-> + * For state dump, check that "session" argument (mandatory) matches the
-> + * session this event belongs to. Ensures that we write state dump data only
-> + * into the started session, not into all sessions.
-> + */
-> +#undef _TP_SESSION_CHECK
-> +#ifdef TP_SESSION_CHECK
-> +#define _TP_SESSION_CHECK(session, csession)   (session == csession)
-> +#else /* TP_SESSION_CHECK */
-> +#define _TP_SESSION_CHECK(session, csession)   1
-> +#endif /* TP_SESSION_CHECK */
-> +
-> +/*
->   * Using twice size for filter stack data to hold size and pointer for
->   * each field (worse case). For integers, max size required is 64-bit.
->   * Same for double-precision floats. Those fit within
-> @@ -506,6 +518,8 @@ void
-> __event_probe__##_provider##___##_name(_TP_ARGS_DATA_PROTO(_args))	      \
->  									      \
->  	if (0)								      \
->  		(void) __dynamic_len_idx;	/* don't warn if unused */    \
-> +	if (!_TP_SESSION_CHECK(session, __chan->session))		      \
-> +		return;							      \
->  	if (caa_unlikely(!CMM_ACCESS_ONCE(__chan->session->active)))	      \
->  		return;							      \
->  	if (caa_unlikely(!CMM_ACCESS_ONCE(__chan->enabled)))		      \
-> diff --git a/liblttng-ust-baddr/Makefile.am b/liblttng-ust-baddr/Makefile.am
-> index afa9489..0d3cf28 100644
-> --- a/liblttng-ust-baddr/Makefile.am
-> +++ b/liblttng-ust-baddr/Makefile.am
-> @@ -5,7 +5,9 @@ lib_LTLIBRARIES = liblttng-ust-baddr.la
->  liblttng_ust_baddr_la_SOURCES = \
->  	lttng-ust-baddr.c \
->  	ust_baddr.c \
-> -	ust_baddr.h
-> +	ust_baddr.h \
-> +	ust_baddr_statedump.c \
-> +	ust_baddr_statedump.h
->  liblttng_ust_baddr_la_LIBADD = \
->  	-L$(top_builddir)/liblttng-ust/.libs \
->  	-llttng-ust
-> diff --git a/liblttng-ust-baddr/lttng-ust-baddr.c
-> b/liblttng-ust-baddr/lttng-ust-baddr.c
-> index 21c22a2..f73bf0d 100644
-> --- a/liblttng-ust-baddr/lttng-ust-baddr.c
-> +++ b/liblttng-ust-baddr/lttng-ust-baddr.c
-> @@ -34,6 +34,7 @@
->  
->  #define TRACEPOINT_DEFINE
->  #include "ust_baddr.h"
-> +#include "ust_baddr_statedump.h"
->  
->  int
->  push_baddr(void *so_base, const char *so_name)
-> @@ -62,3 +63,66 @@ pop_baddr(void *so_base)
->  	tracepoint(ust_baddr, pop, so_base);
->  	return 0;
->  }
-> +
-> +static int
-> +extract_soinfo_events(struct dl_phdr_info *info, size_t size, void *data)
-> +{
-> +	int j;
-> +	int num_loadable_segment = 0;
-> +
-> +	for (j = 0; j < info->dlpi_phnum; j++) {
-> +		char resolved_path[PATH_MAX];
-> +		struct stat sostat;
-> +		void *base_addr_ptr;
-> +
-> +		if (info->dlpi_phdr[j].p_type != PT_LOAD)
-> +			continue;
-> +
-> +		/* Calculate virtual memory address of the loadable segment */
-> +		base_addr_ptr = (void *) info->dlpi_addr
-> +			+ info->dlpi_phdr[j].p_vaddr;
-> +
-> +		num_loadable_segment += 1;
-> +		if ((info->dlpi_name == NULL || info->dlpi_name[0] == 0)
-> +				&& num_loadable_segment == 1) {
-> +			/* If the iterated element is the executable itself we
-> +			 * have to use Dl_info to determine its full path */
+-----Message d'origine-----
+Date: Thu, 14 Nov 2013 13:24:16 +0000
+From: XIANG Hao <Hao.Xiang@alcatel-sbell.com.cn>
 
-small nit: multi line comments should be like this:
+>   Could Lttng support transmit trace to host PC in a "live mode" or "fly =
+mode" now? So as to reduce the buffer size requirement on the target board.
+>
+>   BTW, I read some material mentioned:
+>   The discard mode is used by default. In this mode, new trace data arriv=
+ing to a full buffer are discarded. In overwrite mode, the oldest trace dat=
+a in the buffer are discarded.
+>   This mode is also known as flight-recorder mode. Note however, that thi=
+s refers to the internal buffers, not to the trace log storage. The discard=
+ing of events is marked in
+>   the trace log and can be noticed when the trace is analyzed. In this wa=
+y the user can interactively adjust his trace settings.
+>
+>   What is the difference between "internal buffers" and "trace log storag=
+e"? Could the trace log storage be located in the host PC?
+>   For example: the target board transmit the trace to Host PC via TCP/UDP=
+, and only a very little internal flight-recorder buffer is required in the=
+ target device. Is it feasible?
 
-/*
- * Comment..
- * continue....
- */
+   Live mode is nearly ready; expect it with version 2.4.
 
-(throughout the patch)
+   The difference between internal buffers and trace log storage goes like =
+this: the event providers write into a memory buffer (the internal buffers)=
+, and at the same time the consumer daemon(s) withdraw event records from t=
+he buffer and commit them to permanent storage (trace log storage).  The bu=
+ffer is broken down into a number of sub-buffers, and each sub-buffer can o=
+nly be accessed either by the writers (collectively) or by the consumer.  I=
+n discard mode, while a sub-buffer is locked for consumer access, should th=
+e writers go around the set of sub-buffers and come up behind the consumer,=
+ their request to write into the consumer's sub-buffer will be denied, and =
+they will then discard the event they wanted to record.  The "not to the tr=
+ace log storage" bit is there to clarify that no event record may ever be l=
+ost from the trace files once it has been written into them: they can neith=
+er be discarded nor overwritten.  (Actually, using the enable-channel trace=
+file-size and tracefile-count options, you *can* set up an on-disk flight r=
+ecorder, but that is a different scenario)
 
-> +			Dl_info dl_info = { 0 };
-> +			if (!dladdr(base_addr_ptr, &dl_info))
-> +				return 0;
-> +			if (!realpath(dl_info.dli_fname, resolved_path))
-> +				return 0;
-> +		} else {
-> +			/* For regular dl_phdr_info entries we have to check if
-> +			 * the path to the shared object really exists */
-> +			if (!realpath(info->dlpi_name, resolved_path)) {
-> +				/* Found vDSO, put the 'path' into brackets */
-> +				snprintf(resolved_path, PATH_MAX - 1, "[%s]",
-> +						info->dlpi_name);
-> +			}
-> +		}
-> +
-> +		if (stat(resolved_path, &sostat)) {
-> +			sostat.st_size = 0;
-> +			sostat.st_mtime = -1;
-> +		}
-> +
-> +		tracepoint(ust_baddr_statedump, soinfo,
-> +				(struct lttng_session *) data, base_addr_ptr,
-> +				resolved_path, sostat.st_size, sostat.st_mtime);
-> +
-> +		/* We are only interrested in the base address (lowest virtual
+   LTTng can already transmit the trace events to a host machine.  Going ba=
+ck to the example of the writers writing into a memory buffer while the con=
+sumer withdraws events from it, the consumer can be instructed to transmit =
+the records to a TCP address instead of writing them to local file storage.=
+  At that address, a relay daemon receives the records and writes them to f=
+ile storage.  Example:
 
-interrested -> interested
+(on the host machine:)
+$ lttng-relayd &
+(on the traced machine:)
+$ lttng create mysession --set-url net://host
+(enable events and channels, etc.)
+$ lttng start
+(.)
+$ lttng destroy
 
-> +		 * address associated with the memory image), skip the rest */
-
-Ah that makes the "break" much clearer now :)
-
-> +		break;
-> +	}
-> +	return 0;
-> +}
-> +
-> +int
-> +baddr_statedump(struct lttng_session *session)
-> +{
-> +	/* Iterate through the list of currently loaded shared objects and
-> +	 * generate events for loadable segments using extract_soinfo_events */
-> +	dl_iterate_phdr(extract_soinfo_events, session);
-> +	return 0;
-> +}
-> diff --git a/liblttng-ust-baddr/ust_baddr_statedump.c
-> b/liblttng-ust-baddr/ust_baddr_statedump.c
-> new file mode 100644
-> index 0000000..75f74ca
-> --- /dev/null
-> +++ b/liblttng-ust-baddr/ust_baddr_statedump.c
-> @@ -0,0 +1,21 @@
-> +/*
-> + * Copyright (C) 2013  Paul Woegerer <paul_woegerer@mentor.com>
-> + *
-> + * This library is free software; you can redistribute it and/or
-> + * modify it under the terms of the GNU Lesser General Public
-> + * License as published by the Free Software Foundation; either
-> + * version 2.1 of the License, or (at your option) any later version.
-> + *
-> + * This library is distributed in the hope that it will be useful,
-> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
-> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-> + * Lesser General Public License for more details.
-> + *
-> + * You should have received a copy of the GNU Lesser General Public
-> + * License along with this library; if not, write to the Free Software
-> + * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
-> USA
-> + */
-> +
-> +#define TRACEPOINT_CREATE_PROBES
-> +#define TP_SESSION_CHECK
-> +#include "ust_baddr_statedump.h"
-> diff --git a/liblttng-ust-baddr/ust_baddr_statedump.h
-> b/liblttng-ust-baddr/ust_baddr_statedump.h
-> new file mode 100644
-> index 0000000..77a9af4
-> --- /dev/null
-> +++ b/liblttng-ust-baddr/ust_baddr_statedump.h
-> @@ -0,0 +1,60 @@
-> +#undef TRACEPOINT_PROVIDER
-> +#define TRACEPOINT_PROVIDER ust_baddr_statedump
-> +
-> +#if !defined(_TRACEPOINT_UST_BADDR_STATEDUMP_H) ||
-> defined(TRACEPOINT_HEADER_MULTI_READ)
-> +#define _TRACEPOINT_UST_BADDR_STATEDUMP_H
-> +
-> +#ifdef __cplusplus
-> +extern "C" {
-> +#endif
-> +
-> +/*
-> + * Copyright (C) 2013  Paul Woegerer <paul_woegerer@mentor.com>
-> + *
-> + * Permission is hereby granted, free of charge, to any person obtaining a
-> copy
-> + * of this software and associated documentation files (the "Software"), to
-> deal
-> + * in the Software without restriction, including without limitation the
-> rights
-> + * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-> + * copies of the Software, and to permit persons to whom the Software is
-> + * furnished to do so, subject to the following conditions:
-> + *
-> + * The above copyright notice and this permission notice shall be included
-> in
-> + * all copies or substantial portions of the Software.
-> + *
-> + * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-> OR
-> + * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-> + * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-> THE
-> + * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-> + * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-> FROM,
-> + * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-> THE
-> + * SOFTWARE.
-> + */
-> +
-> +#include <stdint.h>
-> +#include <unistd.h>
-> +#include <lttng/ust-events.h>
-> +
-> +#define LTTNG_UST_BADDR_STATEDUMP_PROVIDER
-> +#include <lttng/tracepoint.h>
-> +
-> +TRACEPOINT_EVENT(ust_baddr_statedump, soinfo,
-> +	TP_ARGS(struct lttng_session *, session, void *, baddr, const char*,
-> sopath, int64_t, size, int64_t, mtime),
-> +	TP_FIELDS(
-> +		ctf_integer_hex(void *, baddr, baddr)
-> +		ctf_string(sopath, sopath)
-> +		ctf_integer(int64_t, size, size)
-> +		ctf_integer(int64_t, mtime, mtime)
-> +	)
-> +)
-> +
-> +#endif /* _TRACEPOINT_UST_BADDR_STATEDUMP_H */
-> +
-> +#undef TRACEPOINT_INCLUDE
-> +#define TRACEPOINT_INCLUDE "./ust_baddr_statedump.h"
-> +
-> +/* This part must be outside ifdef protection */
-> +#include <lttng/tracepoint-event.h>
-> +
-> +#ifdef __cplusplus
-> +}
-> +#endif
-> diff --git a/liblttng-ust/lttng-events.c b/liblttng-ust/lttng-events.c
-> index 26601a6..65ae320 100644
-> --- a/liblttng-ust/lttng-events.c
-> +++ b/liblttng-ust/lttng-events.c
-> @@ -86,6 +86,8 @@ void lttng_session_sync_enablers(struct lttng_session
-> *session);
->  static
->  void lttng_enabler_destroy(struct lttng_enabler *enabler);
->  
-> +void _lttng_ust_sockinfo_session_enabled(struct lttng_session
-> *session_enabled);
-> +
->  /*
->   * Called with ust lock held.
->   */
-> @@ -293,6 +295,8 @@ int lttng_session_enable(struct lttng_session *session)
->  	/* Set atomically the state to "active" */
->  	CMM_ACCESS_ONCE(session->active) = 1;
->  	CMM_ACCESS_ONCE(session->been_active) = 1;
-> +
-> +	_lttng_ust_sockinfo_session_enabled(session);
->  end:
->  	return ret;
->  }
-> diff --git a/liblttng-ust/lttng-ust-comm.c b/liblttng-ust/lttng-ust-comm.c
-> index a6e4ba3..3968804 100644
-> --- a/liblttng-ust/lttng-ust-comm.c
-> +++ b/liblttng-ust/lttng-ust-comm.c
-> @@ -34,6 +34,7 @@
->  #include <time.h>
->  #include <assert.h>
->  #include <signal.h>
-> +#include <dlfcn.h>
->  #include <urcu/uatomic.h>
->  #include <urcu/futex.h>
->  #include <urcu/compiler.h>
-> @@ -106,6 +107,7 @@ struct sock_info {
->  
->  	char wait_shm_path[PATH_MAX];
->  	char *wait_shm_mmap;
-> +	struct lttng_session *session_enabled;
-
-OK
-
->  };
->  
->  /* Socket from app (connect) to session daemon (listen) for communication */
-> @@ -122,6 +124,8 @@ struct sock_info global_apps = {
->  	.notify_socket = -1,
->  
->  	.wait_shm_path = "/" LTTNG_UST_WAIT_FILENAME,
-> +
-> +	.session_enabled = NULL,
-
-If have this NULL field spelled out (not strictly needed, but I understand that we're already putting them = 0 for other fields) for global_apps, we also need it for local_apps (just below).
-
->  };
->  
->  /* TODO: allow global_apps_sock_path override */
-> @@ -176,6 +180,7 @@ static const char *cmd_name_mapping[] = {
->  
->  static const char *str_timeout;
->  static int got_timeout_env;
-> +static void *ust_baddr_handle;
->  
->  extern void lttng_ring_buffer_client_overwrite_init(void);
->  extern void lttng_ring_buffer_client_overwrite_rt_init(void);
-> @@ -235,6 +240,51 @@ void print_cmd(int cmd, int handle)
->  }
->  
->  static
-> +void *lttng_ust_baddr_handle(void)
-> +{
-> +	if (!ust_baddr_handle) {
-> +		ust_baddr_handle = dlopen(
-> +			"liblttng-ust-baddr.so.0", RTLD_NOW | RTLD_GLOBAL);
-> +		if (ust_baddr_handle == NULL)
-> +			ERR("%s", dlerror());
-> +	}
-> +	return ust_baddr_handle;
-> +}
-> +
-> +static void __attribute__((destructor))
-> +lttng_ust_baddr_handle_fini(void);
-> +static void
-> +lttng_ust_baddr_handle_fini(void)
-> +{
-> +	if (ust_baddr_handle) {
-> +		int ret = dlclose(ust_baddr_handle);
-> +		if (ret)
-> +			ERR("%s", dlerror());
-> +	}
-> +}
-
-Rather than adding another destructor to the same file (which can be executed in any order wrt other destructors), could you instead make lttng_ust_exit() call this teardown function ?
-
-> +
-> +static
-> +int lttng_ust_baddr_statedump(struct lttng_session *session)
-> +{
-> +	static
-> +	int (*lttng_ust_baddr_init_fn)(struct lttng_session *);
-> +
-> +	if (!lttng_ust_baddr_init_fn) {
-> +		void *baddr_handle = lttng_ust_baddr_handle();
-> +		if (baddr_handle) {
-> +			lttng_ust_baddr_init_fn = dlsym(baddr_handle,
-> +				"baddr_statedump");
-> +			if (lttng_ust_baddr_init_fn == NULL)
-> +				ERR("%s", dlerror());
-> +		}
-> +		if (!lttng_ust_baddr_init_fn)
-> +			return -1;
-> +	}
-> +
-> +	return lttng_ust_baddr_init_fn(session);
-> +}
-> +
-> +static
->  int setup_local_apps(void)
->  {
->  	const char *home_dir;
-> @@ -1143,6 +1193,13 @@ restart:
->  			ret = handle_message(sock_info, sock, &lum);
->  			if (ret) {
->  				ERR("Error handling message for %s socket", sock_info->name);
-> +			} else {
-> +				struct lttng_session *session =
-> +					global_apps.session_enabled;
-
-This does not handle local_apps (per-user sessiond).
-
-What you want here is e.g.:
-
-struct lttng_session *session = sock_info->session_enabled;
-
-> +				if (session) {
-
-sock_info->session_enabled = NULL;
-lttng_ust_baddr_statedump(session);
-
-> +					global_apps.session_enabled = NULL;
-> +					lttng_ust_baddr_statedump(session);
-> +				}
->  			}
->  			continue;
->  		default:
-> @@ -1456,3 +1513,8 @@ void ust_after_fork_child(sigset_t *restore_sigset)
->  	ust_after_fork_common(restore_sigset);
->  	lttng_ust_init();
->  }
-> +
-> +void _lttng_ust_sockinfo_session_enabled(struct lttng_session
-> *session_enabled)
-> +{
-> +	global_apps.session_enabled = session_enabled;
-> +}
-
-void _lttng_ust_sockinfo_session_enabled(struct sock_info *sock_info, struct lttng_session *session_enabled)
-{
-    sock_info->session_enabled = session_enabled;
-}
-
-Thanks,
-
-Mathieu
-
-> --
-> 1.8.4.2
-> 
-> 
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Daniel U. Thibault
+Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
+ntermeasures (SPC)
+Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
+Cyber Security (MCCS)
+R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
+ Canada - Valcartier (DRDC Valcartier)
+2459 route de la Bravoure
+Qu=E9bec QC  G3J 1X5
+CANADA
+Vox : (418) 844-4000 x4245
+Fax : (418) 844-4538
+NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+Gouvernement du Canada | Government of Canada
+<http://www.valcartier.drdc-rddc.gc.ca/>
