@@ -1,20 +1,20 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [lttng-tools PATCH 1/4] Introduce a
-	new	utils_resolve_relative function
-Date: Thu, 14 Nov 2013 14:19:21 +0000 (UTC)
-Message-ID: <254665384.67131.1384438761175.JavaMail.zimbra__33090.2966707528$1384438843$gmane$org@efficios.com>
-References: <1384320878-28808-1-git-send-email-raphael.beamonte@gmail.com>
-	<20131112195134.GB12183@thessa>
-	<1384320878-28808-2-git-send-email-raphael.beamonte@gmail.com>
+Subject: Re: [PATCH lttng-ust 7/7] Add a check against excluders
+Date: Thu, 14 Nov 2013 14:25:17 +0000 (UTC)
+Message-ID: <692188761.67141.1384439117906.JavaMail.zimbra__45425.1558556736$1384439193$gmane$org@efficios.com>
+References: <1383819755-6891-1-git-send-email-jp_ikaheimonen@mentor.com>
+	<1383819755-6891-8-git-send-email-jp_ikaheimonen@mentor.com>
+	<682132616.66259.1384351513959.JavaMail.zimbra@efficios.com>
+	<009B25148989C6458484484699278506E539FA81@EU-MBX-01.mgc.mentorg.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1VgxlT-0001fy-0t
-	for lttng-dev@lists.lttng.org; Thu, 14 Nov 2013 09:19:25 -0500
-In-Reply-To: <1384320878-28808-2-git-send-email-raphael.beamonte@gmail.com>
+	(envelope-from <compudj@efficios.com>) id 1VgxrE-0003Sc-Sb
+	for lttng-dev@lists.lttng.org; Thu, 14 Nov 2013 09:25:26 -0500
+In-Reply-To: <009B25148989C6458484484699278506E539FA81@EU-MBX-01.mgc.mentorg.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,94 +23,123 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?utf-8?Q?Rapha=C3=ABl?= Beamonte <raphael.beamonte@gmail.com>
+To: JP Ikaheimonen <jp_ikaheimonen@mentor.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-U29tZSBjb21tZW50cy4uLgoKLS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJS
-YXBoYcOrbCBCZWFtb250ZSIgPHJhcGhhZWwuYmVhbW9udGVAZ21haWwuY29tPgo+IFRvOiBkZ291
-bGV0QGVmZmljaW9zLmNvbQo+IENjOiAiUmFwaGHDq2wgQmVhbW9udGUiIDxyYXBoYWVsLmJlYW1v
-bnRlQGdtYWlsLmNvbT4sIGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBTZW50OiBXZWRuZXNk
-YXksIE5vdmVtYmVyIDEzLCAyMDEzIDEyOjM0OjM1IEFNCj4gU3ViamVjdDogW2x0dG5nLWRldl0g
-W2x0dG5nLXRvb2xzIFBBVENIIDEvNF0gSW50cm9kdWNlIGEgbmV3CXV0aWxzX3Jlc29sdmVfcmVs
-YXRpdmUgZnVuY3Rpb24KPiAKPiBUaGlzIGZ1bmN0aW9uIGFpbXMgdG8gcmVzb2x2ZSByZWxhdGl2
-ZSBwYXRoIHN1Y2ggYXMgJy4vJyBhbmQKPiAnLi4vJyBpbiB0aGUgbWlkZGxlIG9mIGEgcGF0aCBz
-dHJpbmcuIFRoaXMgYWxsb3dzIHRvIHVzZSBwYXRocwo+IHN1Y2ggYXMgJ34vLi4vdGVzdCcgdGhh
-dCBhcmUgcmVjZWl2ZWQgYXMgJy9ob21lL3gvLi4vdGVzdCcgZm9yCj4gaW5zdGFuY2UuCj4gCj4g
-U2lnbmVkLW9mZi1ieTogUmFwaGHDq2wgQmVhbW9udGUgPHJhcGhhZWwuYmVhbW9udGVAZ21haWwu
-Y29tPgo+IC0tLQo+ICBzcmMvY29tbW9uL3V0aWxzLmMgfCAgIDY4Cj4gICsrKysrKysrKysrKysr
-KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysKPiAgc3JjL2NvbW1vbi91dGls
-cy5oIHwgICAgMSArCj4gIDIgZmlsZXMgY2hhbmdlZCwgNjkgaW5zZXJ0aW9ucygrKQo+IAo+IGRp
-ZmYgLS1naXQgYS9zcmMvY29tbW9uL3V0aWxzLmMgYi9zcmMvY29tbW9uL3V0aWxzLmMKPiBpbmRl
-eCBkYTRjMDM2Li40Y2NmMzZhIDEwMDY0NAo+IC0tLSBhL3NyYy9jb21tb24vdXRpbHMuYwo+ICsr
-KyBiL3NyYy9jb21tb24vdXRpbHMuYwo+IEBAIC0zNiw2ICszNiw3NCBAQAo+ICAjaW5jbHVkZSAi
-ZGVmYXVsdHMuaCIKPiAgCj4gIC8qCj4gKyAqIFJlc29sdmUgdGhlICcuLycgYW5kICcuLi8nIHN0
-cmluZ3MgaW4gdGhlIG1pZGRsZSBvZiBhIHBhdGggdXNpbmcKPiArICogb3VyIHZlcnkgb3duIHdh
-eSB0byBkbyBpdCwgc28gdGhhdCBpdCB3b3JrcyBldmVuIGlmIHRoZSBkaXJlY3RvcnkKPiArICog
-ZG9lcyBub3QgZXhpc3QKCldlIHNob3VsZCBkb2N1bWVudCB0aGF0IHRoaXMgcmV0dXJucyBhbGxv
-Y2F0ZWQgbWVtb3J5IHdoaWNoIG5lZWRzIHRvIGJlIGZyZWVkIGJ5IHRoZSBjYWxsZXIuCgpBbHNv
-LCB3ZSBzaG91bGQgY2xlYXJseSBzdGF0ZSB0aGF0IHRoZSBvbmx5IHJlYXNvbiB3aHkgd2UgaW1w
-bGVtZW50IHRoaXMgaXMgdGhhdCByZWFscGF0aCgpIG9ubHkgd29ya3Mgb24gZXhpc3RpbmcgcGF0
-aHMsIHdoaWNoIGRvZXMgbm90IGNvdmVyIG91ciB1c2UtY2FzZSBvZiBoYXZpbmcgdG8gcmVzb2x2
-ZSBwYXJ0aWFsbHkgdW5leGlzdGluZyBwYXRocy4KCj4gKyAqLwo+ICtMVFROR19ISURERU4KPiAr
-Y2hhciAqdXRpbHNfcmVzb2x2ZV9yZWxhdGl2ZShjb25zdCBjaGFyICpwYXRoKQo+ICt7Cj4gKwlj
-aGFyICpuZXh0LCAqcHJldmlvdXMsICpzbGFzaCwgKnN0YXJ0X3BhdGgsICphYnNvbHV0ZV9wYXRo
-ID0gTlVMTDsKPiArCj4gKwkvKiBTYWZldHkgbmV0ICovCj4gKwlpZiAocGF0aCA9PSBOVUxMKSB7
-Cj4gKwkJZ290byBlcnJvcjsKPiArCX0KPiArCj4gKwkvKiBBbGxvY2F0ZSBtZW1vcnkgZm9yIHRo
-ZSBhYnNvbHV0ZSBwYXRoICovCj4gKwlhYnNvbHV0ZV9wYXRoID0gem1hbGxvYyhQQVRIX01BWCk7
-Cj4gKwlpZiAoYWJzb2x1dGVfcGF0aCA9PSBOVUxMKSB7Cj4gKwkJUEVSUk9SKCJ6bWFsbG9jIGV4
-cGFuZCBwYXRoIik7Cj4gKwkJZ290byBlcnJvcjsKPiArCX0KPiArCj4gKwkvKiBDb3B5IHRoZSBw
-YXRoIGluIHRoZSBhYnNvbHV0ZSBwYXRoICovCj4gKwlzdHJuY3B5KGFic29sdXRlX3BhdGgsIHBh
-dGgsIFBBVEhfTUFYKTsKPiArCj4gKwkvKiBBcyBsb25nIGFzIHdlIGZpbmQgJy8uLycgaW4gdGhl
-IHBhdGggc3RyaW5nICovCj4gKwl3aGlsZSAoKG5leHQgPSBzdHJzdHIoYWJzb2x1dGVfcGF0aCwg
-Ii8uLyIpKSkgewo+ICsKPiArCQkvKiBXZSBwcmVwYXJlIHRoZSBzdGFydF9wYXRoIG5vdCBjb250
-YWluaW5nIGl0ICovCj4gKwkJc3RhcnRfcGF0aCA9IHN0cm5kdXAoYWJzb2x1dGVfcGF0aCwgbmV4
-dCAtIGFic29sdXRlX3BhdGgpOwo+ICsKPiArCQkvKiBBbmQgd2UgY29uY2F0ZW5hdGUgaXQgd2l0
-aCB0aGUgcGFydCBhZnRlciB0aGlzIHN0cmluZyAqLwo+ICsJCXNucHJpbnRmKGFic29sdXRlX3Bh
-dGgsIFBBVEhfTUFYLCAiJXMlcyIsIHN0YXJ0X3BhdGgsIG5leHQgKyAyKTsKPiArCj4gKwkJZnJl
-ZShzdGFydF9wYXRoKTsKPiArCX0KPiArCj4gKwkvKiBBcyBsb25nIGFzIHdlIGZpbmQgJy8uLi8n
-IGluIHRoZSBwYXRoIHN0cmluZyAqLwo+ICsJd2hpbGUgKChuZXh0ID0gc3Ryc3RyKGFic29sdXRl
-X3BhdGgsICIvLi4vIikpKSB7Cj4gKwkJLyogSWYgdGhlIHBhdGggc3RhcnRzIHdpdGggJy8uLi8n
-LCB0aGVyZSdzIGEgcHJvYmxlbSAqLwo+ICsJCWlmIChuZXh0ID09IGFic29sdXRlX3BhdGgpIHsK
-PiArCQkJRVJSKCIlczogUGF0aCBjYW5ub3QgYmUgcmVzb2x2ZWQiLCBwYXRoKTsKPiArCQkJZ290
-byBlcnJvcjsKPiArCQl9Cj4gKwo+ICsJCS8qIFdlIGZpbmQgdGhlIGxhc3QgbGV2ZWwgb2YgZGly
-ZWN0b3J5ICovCj4gKwkJcHJldmlvdXMgPSBhYnNvbHV0ZV9wYXRoOwo+ICsJCXdoaWxlICgoc2xh
-c2ggPSBzdHJwYnJrKHByZXZpb3VzICsgMSwgIi8iKSkgJiYgc2xhc2ggIT0gbmV4dCkgewo+ICsJ
-CQlwcmV2aW91cyA9IHNsYXNoOwo+ICsJCX0KPiArCj4gKwkJLyogVGhlbiB3ZSBwcmVwYXJlIHRo
-ZSBzdGFydF9wYXRoIG5vdCBjb250YWluaW5nIGl0ICovCj4gKwkJc3RhcnRfcGF0aCA9IHN0cm5k
-dXAoYWJzb2x1dGVfcGF0aCwgcHJldmlvdXMgLSBhYnNvbHV0ZV9wYXRoKTsKPiArCj4gKwkJLyog
-QW5kIHdlIGNvbmNhdGVuYXRlIGl0IHdpdGggdGhlIHBhcnQgYWZ0ZXIgdGhlICcvLi4vJyAqLwo+
-ICsJCXNucHJpbnRmKGFic29sdXRlX3BhdGgsIFBBVEhfTUFYLCAiJXMlcyIsIHN0YXJ0X3BhdGgs
-IG5leHQgKyAzKTsKPiArCj4gKwkJZnJlZShzdGFydF9wYXRoKTsKPiArCX0KCkkgbWlnaHQgYmUg
-bWlzc2luZyBzb21ldGhpbmcsIGJ1dCBob3cgY2FuIHRoaXMgd29yayBvbiBwYXRocyBsaWtlIHRo
-aXMgPwoKIi4vYS8uLi9iLy4vYy8uLi9kLy4vZSIgPwoKQXQgZmlyc3QgZ2xhbmNlLCBpdCBsb29r
-cyBsaWtlIHRoZSBvbmx5IGNhc2VzIHRoYXQgd29yayBjb3JyZWN0bHkgYXJlIHRob3NlIGluIHRo
-ZSB0ZXN0IGNhc2UsIGJ1dCB0aGVyZSBhcmUgdmFyaW91cyB2YXJpYW50cyB0aGF0IHdvbid0LgoK
-T25lIHBvc3NpYmxlIGFsdGVybmF0aXZlIGFwcHJvYWNoIHRvIGFsbCB0aGlzIHBhdGggbWFuZ2xp
-bmcgd291bGQgYmUgdG8gdXNlIHJlYWxwYXRoKCkgb24gc2VjdGlvbnMgb2YgcGF0aHMgKHVzaW5n
-IC8gYXMgc2VwYXJhdG9yLCBmcm9tIHRoZSBzdGFydCBvZiBwYXRoKSwgdW50aWwgcmVhbHBhdGgo
-KSBmYWlscyB0byBsb29rdXAgdGhlIGZpbmFsIHBhdGhzLiBNYXliZSB0aGVuIGNvdWxkIHdlIHNp
-bXBseSBhcHBlbmQgdGhlIHBhdGhzIGFzIGlzIHdpdGhvdXQgcmVzb2x2aW5nLiBVc2VycyB3b3Vs
-ZCBoYXZlIHRvIGtub3cgdGhhdCB0aGV5IHNob3VsZCBub3QgcHV0ICIuIiBvciAiLi4iIGluIHRo
-ZSB1bmV4aXN0aW5nIHBhcnQgb2YgdGhlaXIgcGF0aHMuIFRob3VnaHRzID8KClRoYW5rcywKCk1h
-dGhpZXUKCj4gKwo+ICsJcmV0dXJuIGFic29sdXRlX3BhdGg7Cj4gKwo+ICtlcnJvcjoKPiArCWZy
-ZWUoYWJzb2x1dGVfcGF0aCk7Cj4gKwlyZXR1cm4gTlVMTDsKPiArfQo+ICsKPiArCj4gKy8qCj4g
-ICAqIFJldHVybiB0aGUgcmVhbHBhdGgoMykgb2YgdGhlIHBhdGggZXZlbiBpZiB0aGUgbGFzdCBk
-aXJlY3RvcnkgdG9rZW4gZG9lcwo+ICAgbm90Cj4gICAqIGV4aXN0LiBGb3IgZXhhbXBsZSwgd2l0
-aCAvdG1wL3Rlc3QxL3Rlc3QyLCBpZiB0ZXN0Mi8gZG9lcyBub3QgZXhpc3QgYnV0Cj4gICB0aGUK
-PiAgICogL3RtcC90ZXN0MSBkb2VzLCB0aGUgcmVhbCBwYXRoIGlzIHJldHVybmVkLiBJbiBub3Jt
-YWwgdGltZSwgcmVhbHBhdGgoMykKPiBkaWZmIC0tZ2l0IGEvc3JjL2NvbW1vbi91dGlscy5oIGIv
-c3JjL2NvbW1vbi91dGlscy5oCj4gaW5kZXggNTJmMjc5OC4uYzU2OTQyZiAxMDA2NDQKPiAtLS0g
-YS9zcmMvY29tbW9uL3V0aWxzLmgKPiArKysgYi9zcmMvY29tbW9uL3V0aWxzLmgKPiBAQCAtMjYs
-NiArMjYsNyBAQAo+ICAjZGVmaW5lIE1FQklfTE9HMiAyMAo+ICAjZGVmaW5lIEdJQklfTE9HMiAz
-MAo+ICAKPiArY2hhciAqdXRpbHNfcmVzb2x2ZV9yZWxhdGl2ZShjb25zdCBjaGFyICpwYXRoKTsK
-PiAgY2hhciAqdXRpbHNfZXhwYW5kX3BhdGgoY29uc3QgY2hhciAqcGF0aCk7Cj4gIGludCB1dGls
-c19jcmVhdGVfcGlwZShpbnQgKmRzdCk7Cj4gIGludCB1dGlsc19jcmVhdGVfcGlwZV9jbG9leGVj
-KGludCAqZHN0KTsKPiAtLQo+IDEuNy4xMC40Cj4gCj4gCj4gX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX18KPiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4gbHR0
-bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IGh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9t
-YWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo+IAoKLS0gCk1hdGhpZXUgRGVzbm95ZXJzCkVmZmlj
-aU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KCl9fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2
-QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9s
-aXN0aW5mby9sdHRuZy1kZXYK
+Not needed, I already fixed it.
+
+Thanks,
+
+Mathieu
+
+----- Original Message -----
+> From: "JP Ikaheimonen" <jp_ikaheimonen@mentor.com>
+> To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+> Cc: lttng-dev@lists.lttng.org
+> Sent: Thursday, November 14, 2013 2:26:33 AM
+> Subject: RE: [lttng-dev] [PATCH lttng-ust 7/7] Add a check against excluders
+> 
+> Thank you Mathieu!
+> I will make these changes and resubmit this one patch.
+> 
+> Cheers,
+> JP
+> 
+> -----Original Message-----
+> From: Mathieu Desnoyers [mailto:mathieu.desnoyers@efficios.com]
+> Sent: 13. marraskuuta 2013 16:05
+> To: Ikaheimonen, JP
+> Cc: lttng-dev@lists.lttng.org
+> Subject: Re: [lttng-dev] [PATCH lttng-ust 7/7] Add a check against excluders
+> 
+> ----- Original Message -----
+> > From: "JP Ikaheimonen" <jp_ikaheimonen@mentor.com>
+> > To: lttng-dev@lists.lttng.org
+> > Sent: Thursday, November 7, 2013 5:22:35 AM
+> > Subject: [lttng-dev] [PATCH lttng-ust 7/7] Add a check against
+> > excluders
+> > 
+> > When matching enablers with events, first check against all excluders
+> > of the enabler. If the event matches with any of the excluders, then
+> > the event does not match with the enabler.
+> > 
+> > Signed-off-by: JP Ikaheimonen <jp_ikaheimonen@mentor.com>
+> > ---
+> >  liblttng-ust/lttng-events.c | 23 +++++++++++++++++++++++
+> >  1 file changed, 23 insertions(+)
+> > 
+> > diff --git a/liblttng-ust/lttng-events.c b/liblttng-ust/lttng-events.c
+> > index 915cffb..fa5596c 100644
+> > --- a/liblttng-ust/lttng-events.c
+> > +++ b/liblttng-ust/lttng-events.c
+> > @@ -491,6 +491,29 @@ static
+> >  int lttng_desc_match_enabler(const struct lttng_event_desc *desc,
+> >  		struct lttng_enabler *enabler)
+> >  {
+> > +	struct lttng_ust_excluder_node *excluder;
+> > +
+> > +	/* If event matches with an excluder, return 'does not match' */
+> > +	cds_list_for_each_entry(excluder, &enabler->excluder_head, node) {
+> > +		int found = 0;
+> 
+> Why is "found" declared here ? Why is it initialized to 0 ?
+> 
+> 
+> > +		int count, len;
+> > +		char *excluder_name;
+> > +
+> > +		for (count = 0; count < excluder->excluder.count; count++) {
+> 
+> Rather than declared here ?
+> 
+> 
+> > +			excluder_name = (char *)(excluder->excluder.names)
+> > +					+ count * LTTNG_UST_SYM_NAME_LEN;
+> > +			len = strnlen(excluder_name, LTTNG_UST_SYM_NAME_LEN);
+> > +			if (len > 0 && excluder_name[len - 1] == '*') {
+> > +				found = strncmp(desc->name, excluder_name, len - 1);
+> 
+> strncmp and "found" have reversed logic. I'd assign found = !strncmp(....).
+> 
+> > +			} else {
+> > +				found = strncmp(desc->name, excluder_name,
+> > +						LTTNG_UST_SYM_NAME_LEN - 1);
+> > +			}
+> > +			if (!found) {
+> 
+> and reverse this condition.
+> 
+> The other patches in this patchset look good !! Good job !!
+> 
+> Thanks,
+> 
+> Mathieu
+> 
+> > +				return 0;
+> > +			}
+> > +		}
+> > +	}
+> >  	switch (enabler->type) {
+> >  	case LTTNG_ENABLER_WILDCARD:
+> >  		return lttng_desc_match_wildcard_enabler(desc, enabler);
+> > --
+> > 1.8.1.2
+> > 
+> > 
+> > _______________________________________________
+> > lttng-dev mailing list
+> > lttng-dev@lists.lttng.org
+> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> > 
+> 
+> --
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> http://www.efficios.com
+> 
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
