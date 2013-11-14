@@ -1,17 +1,20 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: Re: [PATCH lttng-tools] Fix: Warn that kernel loglevels
- are unsupported
-Date: Wed, 13 Nov 2013 16:59:51 -0500
-Message-ID: <20131113215951.GF7694__29843.5391429395$1384380060$gmane$org@dalia>
-References: <1384375438-5095-1-git-send-email-jeremie.galarneau@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [lttng-tools PATCH 3/4] Correct the behavior of
+	the	utils_expand_path function
+Date: Thu, 14 Nov 2013 02:44:19 +0000 (UTC)
+Message-ID: <647704866.66921.1384397059144.JavaMail.zimbra__4925.62966323948$1384397118$gmane$org@efficios.com>
+References: <1384320878-28808-1-git-send-email-raphael.beamonte@gmail.com>
+	<20131112195134.GB12183@thessa>
+	<1384320878-28808-4-git-send-email-raphael.beamonte@gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1645667379=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([144.76.53.219])
+Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1VgiTf-0004Cd-VZ
-	for lttng-dev@lists.lttng.org; Wed, 13 Nov 2013 17:00:05 -0500
-In-Reply-To: <1384375438-5095-1-git-send-email-jeremie.galarneau@efficios.com>
+	(envelope-from <compudj@efficios.com>) id 1Vgmur-0001MO-JT
+	for lttng-dev@lists.lttng.org; Wed, 13 Nov 2013 21:44:27 -0500
+In-Reply-To: <1384320878-28808-4-git-send-email-raphael.beamonte@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,129 +23,97 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
+To: =?utf-8?Q?Rapha=C3=ABl?= Beamonte <raphael.beamonte@gmail.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-
---===============1645667379==
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="ChQOR20MqfxkMJg9"
-Content-Disposition: inline
-
-
---ChQOR20MqfxkMJg9
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Merged!
-
-On 13 Nov (15:43:58), J=E9r=E9mie Galarneau wrote:
-> Warn the user when the log level option is used when the kernel domain
-> is selected. Also, don't show the log level in the confirmation message
-> when kernel events are selected.
->=20
-> Fixes Bug #645
->=20
-> Signed-off-by: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
-> ---
->  src/bin/lttng/commands/enable_events.c | 14 +++++---------
->  1 file changed, 5 insertions(+), 9 deletions(-)
->=20
-> diff --git a/src/bin/lttng/commands/enable_events.c b/src/bin/lttng/comma=
-nds/enable_events.c
-> index a7b70c3..2dff63b 100644
-> --- a/src/bin/lttng/commands/enable_events.c
-> +++ b/src/bin/lttng/commands/enable_events.c
-> @@ -346,6 +346,9 @@ static int enable_events(char *session_name)
->  			ret =3D CMD_ERROR;
->  			goto error;
->  		}
-> +		if (opt_loglevel) {
-> +			WARN("Kernel loglevels are not supported.");
-> +		}
->  	}
-> =20
->  	/* Create lttng domain */
-> @@ -419,7 +422,7 @@ static int enable_events(char *session_name)
-> =20
->  			switch (opt_event_type) {
->  			case LTTNG_EVENT_TRACEPOINT:
-> -				if (opt_loglevel) {
-> +				if (opt_loglevel && dom.type !=3D LTTNG_DOMAIN_KERNEL) {
->  					MSG("All %s tracepoints are enabled in channel %s for loglevel %s",
->  							get_domain_str(dom.type),
->  							print_channel_name(channel_name),
-> @@ -428,7 +431,6 @@ static int enable_events(char *session_name)
->  					MSG("All %s tracepoints are enabled in channel %s",
->  							get_domain_str(dom.type),
->  							print_channel_name(channel_name));
-> -
->  				}
->  				break;
->  			case LTTNG_EVENT_SYSCALL:
-> @@ -438,7 +440,7 @@ static int enable_events(char *session_name)
->  				}
->  				break;
->  			case LTTNG_EVENT_ALL:
-> -				if (opt_loglevel) {
-> +				if (opt_loglevel && dom.type !=3D LTTNG_DOMAIN_KERNEL) {
->  					MSG("All %s events are enabled in channel %s for loglevel %s",
->  							get_domain_str(dom.type),
->  							print_channel_name(channel_name),
-> @@ -533,12 +535,6 @@ static int enable_events(char *session_name)
->  				goto error;
->  			}
-> =20
-> -			if (opt_loglevel) {
-> -				MSG("Kernel loglevels are not supported.");
-> -				ret =3D CMD_UNSUPPORTED;
-> -				goto error;
-> -			}
-> -
->  			/* kernel loglevels not implemented */
->  			ev.loglevel_type =3D LTTNG_EVENT_LOGLEVEL_ALL;
->  		} else if (opt_userspace) {		/* User-space tracer action */
-> --=20
-> 1.8.4.2
->=20
->=20
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---ChQOR20MqfxkMJg9
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.15 (GNU/Linux)
-
-iQF8BAEBAgBmBQJSg/ZXXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
-ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
-MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02glAH/2MuSBzrb7xuODb421qDZoMC
-q3xT2gcwhgQqbUBoyUcbwN5K2pJMFDCbG8IzAymp2ItB+hzNPfTcKd1ah8OAkHKG
-/m5XnaG9DLVyw4PT2tCNcNxTNGihoX+p2u6CZ83laU9KylxDqYmhpfk8xkTzYAp3
-Yxwd1fJTTrMfuH1aKOnAvgb0U7TZmToPDrxmxoHG6uvqzesUTjCBdJAC1TzVLq5+
-dj3I3ylhNN1Zi2PisepBUw7d0WTSke4jXl4kkI0vwvVok7+134/dy7ey9FGfjXQX
-78k9RzQzyxDEheMWE9HxgJgAkeaHVbl/eRw7VONDk/b7Pf44dcnTnDQJNxm0Q18=
-=dAD0
------END PGP SIGNATURE-----
-
---ChQOR20MqfxkMJg9--
-
-
---===============1645667379==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Disposition: inline
-Content-Transfer-Encoding: 7bit
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1645667379==--
+LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJSYXBoYcOrbCBCZWFtb250ZSIg
+PHJhcGhhZWwuYmVhbW9udGVAZ21haWwuY29tPgo+IFRvOiBkZ291bGV0QGVmZmljaW9zLmNvbQo+
+IENjOiAiUmFwaGHDq2wgQmVhbW9udGUiIDxyYXBoYWVsLmJlYW1vbnRlQGdtYWlsLmNvbT4sIGx0
+dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBTZW50OiBXZWRuZXNkYXksIE5vdmVtYmVyIDEzLCAy
+MDEzIDEyOjM0OjM3IEFNCj4gU3ViamVjdDogW2x0dG5nLWRldl0gW2x0dG5nLXRvb2xzIFBBVENI
+IDMvNF0gQ29ycmVjdCB0aGUgYmVoYXZpb3Igb2YgdGhlCXV0aWxzX2V4cGFuZF9wYXRoIGZ1bmN0
+aW9uCj4gCj4gRXZlbiBpZiB0aGUgdXRpbHNfZXhwYW5kX3BhdGggZnVuY3Rpb24gd2FzIGludGVu
+ZGVkIHRvIGFsbG93IHRvCj4gdXNlIHVuZXhpc3RlbnQgZGlyZWN0b3J5IHBhdGhzLCBpdCB3YXMg
+aW4gZmFjdCBvbmx5IHdvcmtpbmcgZm9yCj4gc29tZSBraW5kIG9mIGFyZ3VtZW50cy4gUGF0aHMg
+bGlrZSAiZm9vIiwgImJhci8iIG9yICJiYXIvZm9vIgo+IHdoZW4gdGhlICJiYXIiIGRpcmVjdG9y
+eSBkb2VzIG5vdCBleGlzdCB3YXNuJ3Qgd29ya2luZy4gVGhpcwo+IHBhdGNoIGludHJvZHVjZSBh
+IG5ldyB3YXkgdG8gZXhwYW5kIHBhdGhzIGluIHRoaXMgZnVuY3Rpb24gdGhhdAo+IGFsc28gd29y
+a3MgcHJvcGVybHkgZm9yIHRoZXNlIGtpbmQgb2YgYXJndW1lbnRzLgoKSSBtaWdodCBiZSBtaXNz
+aW5nIHNvbWV0aGluZywgYnV0IGhvdyBhYm91dCwgaW5zdGVhZDoKCjEpIGlmIHBhdGggc3RhcnQg
+d2l0aCAvLCBkaXJlY3RseSBwYXNzIGl0IHRvIHJlYWxwYXRoKCkKMikgaWYgcGF0aCBkb2VzIG5v
+dCBzdGFydCB3aXRoIC8sIHByZXBlbmQgZ2V0Y3dkKCkgdG8gaXQsIGFuZCB0aGVuIGNhbGwgcmVh
+bHBhdGgoKSBvbiB0aGUgcmVzdWx0LgoKSWYgd2UgY2FuIGRvIHRoZSBzYW1lIHJlc3VsdCBhcyB0
+aGlzIHBhdGNoIHdpdGhvdXQgcmVpbXBsZW1lbnRpbmcgdHJpY2t5IHN0cmluZyBoYW5kbGluZywg
+d2Ugc2hvdWxkIHJlYWxseSBhaW0gZm9yIHJlLXVzaW5nIGV4aXN0aW5nIGxpYnJhcmllcy4KClRo
+b3VnaHRzID8KClRoYW5rcywKCk1hdGhpZXUKCj4gCj4gU2lnbmVkLW9mZi1ieTogUmFwaGHDq2wg
+QmVhbW9udGUgPHJhcGhhZWwuYmVhbW9udGVAZ21haWwuY29tPgo+IC0tLQo+ICBzcmMvY29tbW9u
+L3V0aWxzLmMgfCAgIDg2Cj4gICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysr
+LS0tLS0tLS0tLS0tLS0KPiAgMSBmaWxlIGNoYW5nZWQsIDY0IGluc2VydGlvbnMoKyksIDIyIGRl
+bGV0aW9ucygtKQo+IAo+IGRpZmYgLS1naXQgYS9zcmMvY29tbW9uL3V0aWxzLmMgYi9zcmMvY29t
+bW9uL3V0aWxzLmMKPiBpbmRleCA0Y2NmMzZhLi42OTM4YTVhIDEwMDY0NAo+IC0tLSBhL3NyYy9j
+b21tb24vdXRpbHMuYwo+ICsrKyBiL3NyYy9jb21tb24vdXRpbHMuYwo+IEBAIC0xMTIsNyArMTEy
+LDcgQEAgZXJyb3I6Cj4gIExUVE5HX0hJRERFTgo+ICBjaGFyICp1dGlsc19leHBhbmRfcGF0aChj
+b25zdCBjaGFyICpwYXRoKQo+ICB7Cj4gLQljb25zdCBjaGFyICplbmRfcGF0aCA9IHBhdGg7Cj4g
+Kwljb25zdCBjaGFyICplbmRfcGF0aCA9IE5VTEw7Cj4gIAljaGFyICpuZXh0LCAqY3V0X3BhdGgg
+PSBOVUxMLCAqZXhwYW5kZWRfcGF0aCA9IE5VTEw7Cj4gIAo+ICAJLyogU2FmZXR5IG5ldCAqLwo+
+IEBAIC0xMjAsMzggKzEyMCw4MCBAQCBjaGFyICp1dGlsc19leHBhbmRfcGF0aChjb25zdCBjaGFy
+ICpwYXRoKQo+ICAJCWdvdG8gZXJyb3I7Cj4gIAl9Cj4gIAo+IC0JLyogRmluZCBsYXN0IHRva2Vu
+IGRlbGltaXRlZCBieSAnLycgKi8KPiAtCXdoaWxlICgobmV4dCA9IHN0cnBicmsoZW5kX3BhdGgg
+KyAxLCAiLyIpKSkgewo+IC0JCWVuZF9wYXRoID0gbmV4dDsKPiAtCX0KPiAtCj4gLQkvKiBDdXQg
+bGFzdCB0b2tlbiBmcm9tIG9yaWdpbmFsIHBhdGggKi8KPiAtCWN1dF9wYXRoID0gc3RybmR1cChw
+YXRoLCBlbmRfcGF0aCAtIHBhdGgpOwo+IC0KPiArCS8qIEFsbG9jYXRlIG1lbW9yeSBmb3IgdGhl
+IGV4cGFuZGVkIHBhdGggKi8KPiAgCWV4cGFuZGVkX3BhdGggPSB6bWFsbG9jKFBBVEhfTUFYKTsK
+PiAgCWlmIChleHBhbmRlZF9wYXRoID09IE5VTEwpIHsKPiAgCQlQRVJST1IoInptYWxsb2MgZXhw
+YW5kIHBhdGgiKTsKPiAgCQlnb3RvIGVycm9yOwo+ICAJfQo+ICAKPiAtCWV4cGFuZGVkX3BhdGgg
+PSByZWFscGF0aCgoY2hhciAqKWN1dF9wYXRoLCBleHBhbmRlZF9wYXRoKTsKPiAtCWlmIChleHBh
+bmRlZF9wYXRoID09IE5VTEwpIHsKPiAtCQlzd2l0Y2ggKGVycm5vKSB7Cj4gLQkJY2FzZSBFTk9F
+TlQ6Cj4gLQkJCUVSUigiJXM6IE5vIHN1Y2ggZmlsZSBvciBkaXJlY3RvcnkiLCBjdXRfcGF0aCk7
+Cj4gLQkJCWJyZWFrOwo+IC0JCWRlZmF1bHQ6Cj4gLQkJCVBFUlJPUigicmVhbHBhdGggdXRpbHMg
+ZXhwYW5kIHBhdGgiKTsKPiAtCQkJYnJlYWs7Cj4gKwkvKiBJZiBnaXZlbiBwYXRoIGlzIGFscmVh
+ZHkgYWJzb2x1dGUgKi8KPiArCWlmICgqcGF0aCA9PSAnLycpIHsKPiArCQlzdHJuY3B5KGV4cGFu
+ZGVkX3BhdGgsIHBhdGgsIFBBVEhfTUFYKTsKPiArCS8qIEVsc2UsIHdlIGhhdmUgc29tZSB3b3Jr
+IHRvIGRvICovCj4gKwl9IGVsc2Ugewo+ICsJCS8qIFBvaW50ZXIgdG8gdGhlIGxhc3QgY2hhciBv
+ZiB0aGUgcGF0aCAqLwo+ICsJCWNvbnN0IGNoYXIgKmxhc3RfY2hhciA9IHBhdGggKyBzdHJsZW4o
+cGF0aCkgLSAxOwo+ICsKPiArCQllbmRfcGF0aCA9IHBhdGg7Cj4gKwo+ICsJCS8qIFNwbGl0IHBh
+cnQgdGhhdCB3aWxsIGJlIHJlc29sdmVkIGJ5IHJlYWxwYXRoIChyZWxhdGl2ZSBwYXRoIGZyb20K
+PiArCQkgKiBjdXJyZW50IGRpcmVjdG9yeSB1c2luZyAuLyBvciAuLi8gb25seSkgYW5kIHBhcnQg
+dGhhdCBjb3VsZCBub3QKPiArCQkgKiAoZGlyZWN0b3J5IG5hbWVzKQo+ICsJCSAqLwo+ICsJCXdo
+aWxlICgobmV4dCA9IHN0cnBicmsoZW5kX3BhdGgsICIvIikpICYmIChuZXh0ICE9IGxhc3RfY2hh
+cikpIHsKPiArCQkJZW5kX3BhdGggPSBuZXh0ICsgMTsKPiArCQkJaWYgKHN0cm5jbXAoZW5kX3Bh
+dGgsICIuLyIsIDIpICE9IDAgJiYKPiArCQkJCQlzdHJuY21wKGVuZF9wYXRoLCAiLi4vIiwgMykg
+IT0gMCkgewo+ICsJCQkJYnJlYWs7Cj4gKwkJCX0KPiArCQl9Cj4gKwo+ICsJCS8qIElmIHRoaXMg
+aXMgdGhlIGVuZCBvZiB0aGUgc3RyaW5nLCBhbmQgd2Ugc3RpbGwgY2FuIHJlc29sdmUgaXQgKi8K
+PiArCQlpZiAoc3RybmNtcChlbmRfcGF0aCwgIi4uXDAiLCAzKSA9PSAwIHx8Cj4gKwkJCQlzdHJu
+Y21wKGVuZF9wYXRoLCAiLlwwIiwgMikgPT0gMCkgewo+ICsJCQllbmRfcGF0aCArPSBzdHJsZW4o
+ZW5kX3BhdGgpOwo+ICsJCX0KPiArCj4gKwkJLyogSWYgdGhlIGVuZCBwYXJ0IGlzIHRoZSB3aG9s
+ZSBwYXRoLCB3ZSBhcmUgaW4gdGhlIGN1cnJlbnQgZGlyICovCj4gKwkJaWYgKGVuZF9wYXRoID09
+IHBhdGgpIHsKPiArCQkJY3V0X3BhdGggPSBzdHJkdXAoIi4iKTsKPiArCQkvKiBFbHNlLCBjdXQg
+dGhlIHJlc29sdmFibGUgcGFydCBmcm9tIG9yaWdpbmFsIHBhdGggKi8KPiArCQl9IGVsc2Ugewo+
+ICsJCQljdXRfcGF0aCA9IHN0cm5kdXAocGF0aCwgZW5kX3BhdGggLSBwYXRoKTsKPiArCQl9Cj4g
+Kwo+ICsJCS8qIFJlc29sdmUgdGhlIGNhbm9uaWNhbCBwYXRoIG9mIHRoZSBmaXJzdCBwYXJ0IG9m
+IHRoZSBwYXRoICovCj4gKwkJZXhwYW5kZWRfcGF0aCA9IHJlYWxwYXRoKChjaGFyICopY3V0X3Bh
+dGgsIGV4cGFuZGVkX3BhdGgpOwo+ICsJCWlmIChleHBhbmRlZF9wYXRoID09IE5VTEwpIHsKPiAr
+CQkJc3dpdGNoIChlcnJubykgewo+ICsJCQljYXNlIEVOT0VOVDoKPiArCQkJCUVSUigiJXM6IE5v
+IHN1Y2ggZmlsZSBvciBkaXJlY3RvcnkiLCBjdXRfcGF0aCk7Cj4gKwkJCQlicmVhazsKPiArCQkJ
+ZGVmYXVsdDoKPiArCQkJCVBFUlJPUigicmVhbHBhdGggdXRpbHMgZXhwYW5kIHBhdGgiKTsKPiAr
+CQkJCWJyZWFrOwo+ICsJCQl9Cj4gKwkJCWdvdG8gZXJyb3I7Cj4gKwkJfQo+ICsKPiArCQkvKiBB
+ZGQgZW5kIHBhcnQgdG8gZXhwYW5kZWQgcGF0aCBpZiBub3QgZW1wdHkgKi8KPiArCQlpZiAoKmVu
+ZF9wYXRoICE9IDApIHsKPiArCQkJc3RybmNhdChleHBhbmRlZF9wYXRoLCAiLyIsIFBBVEhfTUFY
+IC0gc3RybGVuKGV4cGFuZGVkX3BhdGgpIC0gMSk7Cj4gKwkJCXN0cm5jYXQoZXhwYW5kZWRfcGF0
+aCwgZW5kX3BhdGgsCj4gKwkJCQkJUEFUSF9NQVggLSBzdHJsZW4oZXhwYW5kZWRfcGF0aCkgLSAx
+KTsKPiAgCQl9Cj4gLQkJZ290byBlcnJvcjsKPiAgCX0KPiAgCj4gLQkvKiBBZGQgZW5kIHBhcnQg
+dG8gZXhwYW5kZWQgcGF0aCAqLwo+IC0Jc3RybmNhdChleHBhbmRlZF9wYXRoLCBlbmRfcGF0aCwg
+UEFUSF9NQVggLSBzdHJsZW4oZXhwYW5kZWRfcGF0aCkgLSAxKTsKPiArCS8qIFJlc29sdmUgdGhl
+IGludGVybmFsICcuLycgYW5kICcuLi8nIHN0cmluZ3MgKi8KPiArCW5leHQgPSB1dGlsc19yZXNv
+bHZlX3JlbGF0aXZlKGV4cGFuZGVkX3BhdGgpOwo+ICsJaWYgKG5leHQgPT0gTlVMTCkgewo+ICsJ
+CWdvdG8gZXJyb3I7Cj4gKwl9Cj4gIAo+ICsJZnJlZShleHBhbmRlZF9wYXRoKTsKPiAgCWZyZWUo
+Y3V0X3BhdGgpOwo+IC0JcmV0dXJuIGV4cGFuZGVkX3BhdGg7Cj4gKwlyZXR1cm4gbmV4dDsKPiAg
+Cj4gIGVycm9yOgo+ICAJZnJlZShleHBhbmRlZF9wYXRoKTsKPiAtLQo+IDEuNy4xMC40Cj4gCj4g
+Cj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBsdHRu
+Zy1kZXYgbWFpbGluZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IGh0dHA6Ly9s
+aXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo+IAoKLS0g
+Ck1hdGhpZXUgRGVzbm95ZXJzCkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20K
+Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRl
+diBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
