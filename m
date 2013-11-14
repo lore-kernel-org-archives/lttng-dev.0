@@ -1,25 +1,22 @@
-From: Michael Lausch <michael.lausch@omicron.at>
-Subject: Re: Python bindings update
-Date: Thu, 14 Nov 2013 10:48:49 +0100
-Message-ID: <6B3AC2788014DD49B43AF9611365BBAA21CB78FD26__25279.8225767494$1384422577$gmane$org@mary.at.omicron.at>
-References: <CA+jJMxsZLrpRXhgZDLqVfGgqjkz6_d=7NKPgRHr5gGc0vmc4TQ@mail.gmail.com>
-	<1801200686.66283.1384352262423.JavaMail.zimbra@efficios.com>
+From: "=?iso-8859-1?Q?David_Lindstr=F6m?=" <david.lindstrom@percepio.se>
+Subject: Broken download link on website?
+Date: Thu, 14 Nov 2013 11:49:50 +0100
+Message-ID: <C8BB4F4ECA36410582A83EFD65569435__15077.7596085847$1384426249$gmane$org@DVDMANDT5>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============1889499455=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from ns.omicron.at ([212.183.10.25])
+Received: from mail-lb0-f180.google.com ([209.85.217.180])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <michael.lausch@omicron.at>) id 1VgtXm-0006TX-3c
-	for lttng-dev@lists.lttng.org; Thu, 14 Nov 2013 04:48:59 -0500
-Received: from counter.omicron.at ([212.183.10.29])
-	by ns.omicron.at (8.13.1/8.13.1) with ESMTP id rAE9mpsb029739
-	for <lttng-dev@lists.lttng.org>; Thu, 14 Nov 2013 10:48:56 +0100
-Received: from mary.at.omicron.at (mary.at.omicron.at [172.22.100.48])
-	by counter.omicron.at (8.14.4/8.14.4) with ESMTP id rAE9mpWY021319
-	for <lttng-dev@lists.lttng.org>; Thu, 14 Nov 2013 10:48:51 +0100
-In-Reply-To: <1801200686.66283.1384352262423.JavaMail.zimbra@efficios.com>
-Content-Language: en-US
+	(envelope-from <david.lindstrom@percepio.se>) id 1VguUr-0007Q3-2V
+	for lttng-dev@lists.lttng.org; Thu, 14 Nov 2013 05:50:01 -0500
+Received: by mail-lb0-f180.google.com with SMTP id u14so1341598lbd.25
+	for <lttng-dev@lists.lttng.org>; Thu, 14 Nov 2013 02:49:54 -0800 (PST)
+Received: from DVDMANDT5 (h185n9.malarenergi.ias.bredband.telia.com.
+	[90.224.212.185])
+	by mx.google.com with ESMTPSA id b1sm9445535laa.10.2013.11.14.02.49.52
+	for <lttng-dev@lists.lttng.org>
+	(version=TLSv1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+	Thu, 14 Nov 2013 02:49:53 -0800 (PST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -28,57 +25,59 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-SGksDQpJIGp1c3QgZmluaXNoZWQgYSBzZXR1cC5weS5pbi4gSXQgbmVlZHMgc29tZSB0ZXN0aW5n
-IChpIGNhbiBkbyB1YnVudHUsIGZlZG9yYSB0ZXN0cykuIA0KSWYgeW91IGFyZSBpbnRlcmVzdGVk
-LCBJIGNhbiBwcm92aWRlIGEgcGF0Y2ggb24gdGhlIG1haWxpbmcgbGlzdC4gDQoNCi0tLS0tT3Jp
-Z2luYWwgTWVzc2FnZS0tLS0tDQpGcm9tOiBNYXRoaWV1IERlc25veWVycyBbbWFpbHRvOm1hdGhp
-ZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbV0gDQpTZW50OiBXZWRuZXNkYXksIE5vdmVtYmVyIDEz
-LCAyMDEzIDM6MTggUE0NClRvOiBKw6lyw6ltaWUgR2FsYXJuZWF1DQpDYzogbHR0bmctZGV2QGxp
-c3RzLmx0dG5nLm9yZw0KU3ViamVjdDogUmU6IFtsdHRuZy1kZXZdIFtQVUxMIFJFUVVFU1QgYmFi
-ZWx0cmFjZV0gUHl0aG9uIGJpbmRpbmdzIHVwZGF0ZQ0KDQotLS0tLSBPcmlnaW5hbCBNZXNzYWdl
-IC0tLS0tDQo+IEZyb206ICJKw6lyw6ltaWUgR2FsYXJuZWF1IiA8amVyZW1pZS5nYWxhcm5lYXVA
-ZWZmaWNpb3MuY29tPg0KPiBUbzogbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZw0KPiBDYzogIk1h
-dGhpZXUgRGVzbm95ZXJzIiA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPg0KPiBTZW50
-OiBUdWVzZGF5LCBOb3ZlbWJlciAxMiwgMjAxMyAxMDowNjo0MSBQTQ0KPiBTdWJqZWN0OiBbUFVM
-TCBSRVFVRVNUIGJhYmVsdHJhY2VdIFB5dGhvbiBiaW5kaW5ncyB1cGRhdGUNCj4gDQo+IEhpIGFs
-bCwNCj4gDQo+IEhlcmUgYXJlIHNvbWUgcGF0Y2hlcyB0byBhZGQgcmVhZCBzdXBwb3J0IG9mIGV2
-ZXJ5IENURiB0eXBlIHVzaW5nIHRoZQ0KPiBCYWJlbHRyYWNlIFB5dGhvbiBiaW5kaW5ncy4gSXQg
-aXMgbm93IHBvc3NpYmxlIHRvIHJldHJpZXZlIGZpZWxkcyBhbmQNCj4gYWNjZXNzIHRoZWlyIHZh
-bHVlcyB1c2luZyBhIHNpbmdsZSBnZXRfdmFsdWUoKSBtZXRob2QgcmV0dXJuaW5nIG5hdGl2ZQ0K
-PiBQeXRob24gb2JqZWN0cy4gVGhpcyBpcyBtYWRlIHBvc3NpYmxlIHVzaW5nIHRoZSB3b3JrIGNv
-bnRyaWJ1dGVkIGJ5DQo+IG9uZSBvZiBvdXIgR1NvQyBzdHVkZW50cywgWGlhb25hIEhhbi4NCj4g
-DQo+IFRoZXNlIHBhdGNoZXMgYWxzbyBtYWtlIGl0IHBvc3NpYmxlIHRvIGdlbmVyYXRlIENURiBm
-cm9tIFB5dGhvbiBjb2RlLA0KPiBiYXNlZCBvbiB0aGUgQ1RGIFdyaXRlciBBUEkgdGhhdCB3YXMg
-bWVyZ2VkIHJlY2VudGx5Lg0KDQpNZXJnZWQgaW50byBiaW5kaW5ncy9weXRob24gYnJhbmNoLiBQ
-bGVhc2UgbGV0IG1lIGtub3cgaWYgSSBzaG91bGQgbWVyZ2UgdGhlc2UgaW50byBtYXN0ZXIuDQoN
-ClRoYW5rcywNCg0KTWF0aGlldQ0KDQo+IA0KPiBUaGUgcGF0Y2hlcyBhcmUgYXZhaWxhYmxlIGhl
-cmU6DQo+IGh0dHBzOi8vZ2l0aHViLmNvbS9qZ2FsYXIvYmFiZWx0cmFjZS9jb21taXRzL2JpbmRp
-bmdzL3B5dGhvbg0KPiANCj4gN2EzMGE2NiBSZXR1cm4gZXZlbnQgZmllbGRzIGJ5IGZpZWxkIG5h
-bWUNCj4gZGI1NTFmMiBSZW1vdmUgdGhlIHVubmVjZXNzYXJ5IHVuZGVyc2NvcmUgcHJlZml4DQo+
-IDQxOTFiY2QgU3VwcG9ydCBnZXR0aW5nIHRoZSB2YWx1ZSBvZiBlbnVtcw0KPiAzYzJjZTc3IEFk
-ZCBhIGdlbmVyaWMgZ2V0X3ZhbHVlKCkgaW1wbGVtZW50YXRpb24NCj4gNzg2MjA3ZSBTdXBwb3J0
-IGZvciB0aGUgc2VxdWVuY2UgdHlwZQ0KPiA4MTBhOTdiIEFkZCBhIHB5dGhvbiBiaW5kaW5ncyBz
-ZXF1ZW5jZSB0ZXN0DQo+IDMwNDNlZTAgUmVtb3ZlIFB5dGhvbiAyIHNwZWNpZmljIGV4YW1wbGVz
-DQo+IDkwMTMxYTMgRml4OiBUaHJvdyBhIEZpZWxkRXJyb3IgZXhjZXB0aW9uIHdoZW4gZ2V0X3Zh
-bHVlKCkgZmFpbHMNCj4gZTVhNzNiOSBBZGQgc3VwcG9ydCBmb3IgZmxvYXRpbmcgcG9pbnQgZmll
-bGRzIGluIHRoZSBQeXRob24gYmluZGluZ3MNCj4gODEyZTY2OCBBZGQgc3VwcG9ydCBmb3IgdmFy
-aWFudCBmaWVsZHMgaW4gdGhlIFB5dGhvbiBiaW5kaW5ncw0KPiAzYTA2ODkxIEFkZCBzdXBwb3J0
-IGZvciBzdHJ1Y3R1cmUgZmllbGRzIGluIHRoZSBQeXRob24gYmluZGluZ3MNCj4gY2ViYWU4YyBG
-aXg6IFB5dGhvbiBiaW5kaW5ncyBhcnJheSBhY2Nlc3MgZnVuY3Rpb25zIHdyaXRlIG91dCBvZiBi
-b3VuZHMNCj4gMjRkNWM5NCBSZW5hbWUgdGhlIGN0ZiBjbGFzcyB0byBDVEZSZWFkZXINCj4gZWM4
-Yzg4ZCBBZGQgQ1RGIFdyaXRlciBQeXRob24gYmluZGluZ3MNCj4gMDMzZmIwYSBBZGQgYSB1c2Fn
-ZSBleGFtcGxlIGZvciB0aGUgQ1RGIFdyaXRlciBQeXRob24gYmluZGluZ3MNCj4gOTRhNmNlYSBE
-b24ndCBnZW5lcmF0ZSBQeXRob24gYmluZGluZ3MgYnkgZGVmYXVsdA0KPiA1NDkxNDc2IEV4cG9z
-ZSB0ZXh0IGFycmF5cyB0aGUgc2FtZSB3YXkgYXMgcmVndWxhciBhcnJheXMNCj4gDQo+IExvb2tp
-bmcgZm9yd2FyZCB0byB5b3VyIGNvbW1lbnRzLA0KPiBKw6lyw6ltaWUNCj4gDQo+IC0tDQo+IErD
-qXLDqW1pZSBHYWxhcm5lYXUNCj4gRWZmaWNpT1MgSW5jLg0KPiBodHRwOi8vd3d3LmVmZmljaW9z
-LmNvbQ0KPiANCg0KLS0gDQpNYXRoaWV1IERlc25veWVycw0KRWZmaWNpT1MgSW5jLg0KaHR0cDov
-L3d3dy5lZmZpY2lvcy5jb20NCg0KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX18NCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QNCmx0dG5nLWRldkBsaXN0cy5sdHRu
-Zy5vcmcNCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0
-dG5nLWRldg0KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
-bHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9s
-aXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+This is a multi-part message in MIME format.
+
+--===============1889499455==
+Content-Type: multipart/alternative;
+	boundary="----=_NextPart_000_278C_01CEE12F.A0052F90"
+
+This is a multi-part message in MIME format.
+
+------=_NextPart_000_278C_01CEE12F.A0052F90
+Content-Type: text/plain;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+Hi, there appears to be a broken link on the lttng.org download page, =
+lttng-modules-2.3.3.tar.bz2 seems to be lttng-modules-2.3.23.tar.bz2.
+
+Mvh
+David Lindstr=F6m
+------=_NextPart_000_278C_01CEE12F.A0052F90
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+<HTML><HEAD></HEAD>
+<BODY dir=3Dltr>
+<DIV dir=3Dltr>
+<DIV style=3D"FONT-SIZE: 12pt; FONT-FAMILY: 'Calibri'; COLOR: #000000">
+<DIV>Hi, there appears to be a broken link on the lttng.org download =
+page,=20
+lttng-modules-2.3.3.tar.bz2 seems to be =
+lttng-modules-2.3.23.tar.bz2.</DIV>
+<DIV>&nbsp;</DIV>
+<DIV=20
+style=3D"FONT-SIZE: 12pt; FONT-FAMILY: 'Calibri'; COLOR: =
+#000000">Mvh<BR>David=20
+Lindstr=F6m</DIV></DIV></DIV></BODY></HTML>
+
+------=_NextPart_000_278C_01CEE12F.A0052F90--
+
+
+
+--===============1889499455==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1889499455==--
