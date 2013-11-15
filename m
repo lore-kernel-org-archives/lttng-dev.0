@@ -1,17 +1,18 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: might_sleep warnings in overwrite mode
-Date: Fri, 15 Nov 2013 02:34:09 +0000 (UTC)
-Message-ID: <67652521.68027.1384482849638.JavaMail.zimbra__11747.5853687667$1384482905$gmane$org@efficios.com>
-References: <52803E5D.3050109@mentor.com> <52851395.3010306@mentor.com>
+From: XIANG Hao <Hao.Xiang@alcatel-sbell.com.cn>
+Subject: Re: About Lttng trace mode
+Date: Fri, 15 Nov 2013 03:39:28 +0000
+Message-ID: <04EE1C9C9D9EBF479DA6C9E23723D8E901373DF1__1572.64635568044$1384486835$gmane$org@cnshjmbx01>
+References: <48CF5AC71E61DB46B70D0F388054EFFD267A22BC@VAL-E-01.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from cnshjsmin03.alcatel-sbell.com.cn ([211.144.215.47])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1Vh9Ea-0001D4-P5
-	for lttng-dev@lists.lttng.org; Thu, 14 Nov 2013 21:34:18 -0500
-In-Reply-To: <52851395.3010306@mentor.com>
+	(envelope-from <Hao.Xiang@alcatel-sbell.com.cn>) id 1VhAFx-0003ye-SC
+	for lttng-dev@lists.lttng.org; Thu, 14 Nov 2013 22:39:44 -0500
+In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD267A22BC@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,95 +21,76 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Nathan Lynch <Nathan_Lynch@mentor.com>
-Cc: lttng-dev@lists.lttng.org
+To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
------ Original Message -----
-> From: "Nathan Lynch" <Nathan_Lynch@mentor.com>
-> To: lttng-dev@lists.lttng.org
-> Sent: Thursday, November 14, 2013 1:16:53 PM
-> Subject: Re: [lttng-dev] might_sleep warnings in overwrite mode
-> 
-> On 11/10/2013 08:18 PM, Nathan Lynch wrote:
-> > At this point I cannot trigger the issue without overwrite mode on
-> > 3.11.6, but on a 3.8-based vendor kernel I can recreate it regardless of
-> > the mode.
-> 
-> Some updates on this:
-> - It's not specific to overwrite mode; I was able to provoke it on
-> 3.11.6 without --overwrite.  Overwrite mode does seem to recreate the
-> issue more readily.
-> - It seems to be GCC version-dependent.  4.8.1 and 4.8.2 produce code
-> which warns/bugs; 4.7.3 does not.
-
-Allright! This info is really useful. Sorry for taking time to look into this, I was busy with preparation for 2.4-rc1.
-
-Looking at:
-
-fs/ext3/incode.c:
-
-__ext3_get_inode_loc()
-
-we can see that a use of the inlined sb_getblk() appears close to a tracepoint.
-
-The tracepoint includes preempt disable/enable, exactly those:
-
-include/linux/preempt.h:
-
-#define preempt_disable_notrace() \
-do { \
-        inc_preempt_count_notrace(); \
-        barrier(); \
-} while (0)
-
-#define preempt_enable_notrace() \
-do { \
-        preempt_enable_no_resched_notrace(); \
-        barrier(); \
-        preempt_check_resched_context(); \
-} while (0)
-
-
-Can you try wrapping the _outside_ of those macros with barrier(), e.g.
-
-
-#define preempt_disable_notrace() \
-do { \
-        barrier(); \
-        inc_preempt_count_notrace(); \
-        barrier(); \
-} while (0)
-
-#define preempt_enable_notrace() \
-do { \
-        preempt_enable_no_resched_notrace(); \
-        barrier(); \
-        preempt_check_resched_context(); \
-        barrier(); \
-} while (0)
-
-and try it out with the apparently buggy compiler to see if it helps ? It does look like the preempt inc or dec is slipping out and somehow triggers the might_sleep() warning. I don't see clearly how this could happen yet, since each of the inc/dec and the test are touching preempt_count(), but it's worth a try.
-
-Maybe on ARM the current_thread_info() macro somehow hides important info from the compiler and it mistakenly reorders inc/dec vs the test. Another thing to try out (in addition to the first one) would be to try changing current_thread_info(), e.g., by turning asm ("sp") into a volatile inline assembly, and by adding "memory" clobbers to it.
-
-Thoughts ?
-
-Thanks,
-
-Mathieu
-
-
-> 
-> 
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> 
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+SGksIERhbmllbA0KDQoJVmVyeSBjbGVhciwgdGhhbmsgeW91IHZlcnkgbXVjaCBmb3IgdGhlIHZl
+cnkgdmFsdWFibGUgaW5mb3JtYXRpb24uDQoNCkJSJlRoYW5rcw0KWGlhbmdIYW8NCg0KDQoNCi0t
+LS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQpGcm9tOiBUaGliYXVsdCwgRGFuaWVsIFttYWlsdG86
+RGFuaWVsLlRoaWJhdWx0QGRyZGMtcmRkYy5nYy5jYV0gDQpTZW50OiAyMDEzxOoxMdTCMTXI1SAx
+OjAxDQpUbzogbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZw0KQ2M6IFhJQU5HIEhhbw0KU3ViamVj
+dDogUkU6IFtsdHRuZy1kZXZdIEFib3V0IEx0dG5nIHRyYWNlIG1vZGUNCg0KLS0tLS1NZXNzYWdl
+IGQnb3JpZ2luZS0tLS0tDQpEYXRlOiBUaHUsIDE0IE5vdiAyMDEzIDEzOjI0OjE2ICswMDAwDQpG
+cm9tOiBYSUFORyBIYW8gPEhhby5YaWFuZ0BhbGNhdGVsLXNiZWxsLmNvbS5jbj4NCg0KPiAgIENv
+dWxkIEx0dG5nIHN1cHBvcnQgdHJhbnNtaXQgdHJhY2UgdG8gaG9zdCBQQyBpbiBhICJsaXZlIG1v
+ZGUiIG9yICJmbHkgbW9kZSIgbm93PyBTbyBhcyB0byByZWR1Y2UgdGhlIGJ1ZmZlciBzaXplIHJl
+cXVpcmVtZW50IG9uIHRoZSB0YXJnZXQgYm9hcmQuDQo+DQo+ICAgQlRXLCBJIHJlYWQgc29tZSBt
+YXRlcmlhbCBtZW50aW9uZWQ6DQo+ICAgVGhlIGRpc2NhcmQgbW9kZSBpcyB1c2VkIGJ5IGRlZmF1
+bHQuIEluIHRoaXMgbW9kZSwgbmV3IHRyYWNlIGRhdGEgYXJyaXZpbmcgdG8gYSBmdWxsIGJ1ZmZl
+ciBhcmUgZGlzY2FyZGVkLiBJbiBvdmVyd3JpdGUgbW9kZSwgdGhlIG9sZGVzdCB0cmFjZSBkYXRh
+IGluIHRoZSBidWZmZXIgYXJlIGRpc2NhcmRlZC4NCj4gICBUaGlzIG1vZGUgaXMgYWxzbyBrbm93
+biBhcyBmbGlnaHQtcmVjb3JkZXIgbW9kZS4gTm90ZSBob3dldmVyLCB0aGF0IHRoaXMgcmVmZXJz
+IHRvIHRoZSBpbnRlcm5hbCBidWZmZXJzLCBub3QgdG8gdGhlIHRyYWNlIGxvZyBzdG9yYWdlLiBU
+aGUgZGlzY2FyZGluZyBvZiBldmVudHMgaXMgbWFya2VkIGluDQo+ICAgdGhlIHRyYWNlIGxvZyBh
+bmQgY2FuIGJlIG5vdGljZWQgd2hlbiB0aGUgdHJhY2UgaXMgYW5hbHl6ZWQuIEluIHRoaXMgd2F5
+IHRoZSB1c2VyIGNhbiBpbnRlcmFjdGl2ZWx5IGFkanVzdCBoaXMgdHJhY2Ugc2V0dGluZ3MuDQo+
+DQo+ICAgV2hhdCBpcyB0aGUgZGlmZmVyZW5jZSBiZXR3ZWVuICJpbnRlcm5hbCBidWZmZXJzIiBh
+bmQgInRyYWNlIGxvZyBzdG9yYWdlIj8gQ291bGQgdGhlIHRyYWNlIGxvZyBzdG9yYWdlIGJlIGxv
+Y2F0ZWQgaW4gdGhlIGhvc3QgUEM/DQo+ICAgRm9yIGV4YW1wbGU6IHRoZSB0YXJnZXQgYm9hcmQg
+dHJhbnNtaXQgdGhlIHRyYWNlIHRvIEhvc3QgUEMgdmlhIFRDUC9VRFAsIGFuZCBvbmx5IGEgdmVy
+eSBsaXR0bGUgaW50ZXJuYWwgZmxpZ2h0LXJlY29yZGVyIGJ1ZmZlciBpcyByZXF1aXJlZCBpbiB0
+aGUgdGFyZ2V0IGRldmljZS4gSXMgaXQgZmVhc2libGU/DQoNCiAgIExpdmUgbW9kZSBpcyBuZWFy
+bHkgcmVhZHk7IGV4cGVjdCBpdCB3aXRoIHZlcnNpb24gMi40Lg0KDQogICBUaGUgZGlmZmVyZW5j
+ZSBiZXR3ZWVuIGludGVybmFsIGJ1ZmZlcnMgYW5kIHRyYWNlIGxvZyBzdG9yYWdlIGdvZXMgbGlr
+ZSB0aGlzOiB0aGUgZXZlbnQgcHJvdmlkZXJzIHdyaXRlIGludG8gYSBtZW1vcnkgYnVmZmVyICh0
+aGUgaW50ZXJuYWwgYnVmZmVycyksIGFuZCBhdCB0aGUgc2FtZSB0aW1lIHRoZSBjb25zdW1lciBk
+YWVtb24ocykgd2l0aGRyYXcgZXZlbnQgcmVjb3JkcyBmcm9tIHRoZSBidWZmZXIgYW5kIGNvbW1p
+dCB0aGVtIHRvIHBlcm1hbmVudCBzdG9yYWdlICh0cmFjZSBsb2cgc3RvcmFnZSkuICBUaGUgYnVm
+ZmVyIGlzIGJyb2tlbiBkb3duIGludG8gYSBudW1iZXIgb2Ygc3ViLWJ1ZmZlcnMsIGFuZCBlYWNo
+IHN1Yi1idWZmZXIgY2FuIG9ubHkgYmUgYWNjZXNzZWQgZWl0aGVyIGJ5IHRoZSB3cml0ZXJzIChj
+b2xsZWN0aXZlbHkpIG9yIGJ5IHRoZSBjb25zdW1lci4gIEluIGRpc2NhcmQgbW9kZSwgd2hpbGUg
+YSBzdWItYnVmZmVyIGlzIGxvY2tlZCBmb3IgY29uc3VtZXIgYWNjZXNzLCBzaG91bGQgdGhlIHdy
+aXRlcnMgZ28gYXJvdW5kIHRoZSBzZXQgb2Ygc3ViLWJ1ZmZlcnMgYW5kIGNvbWUgdXAgYmVoaW5k
+IHRoZSBjb25zdW1lciwgdGhlaXIgcmVxdWVzdCB0byB3cml0ZSBpbnRvIHRoZSBjb25zdW1lcidz
+IHN1Yi1idWZmZXIgd2lsbCBiZSBkZW5pZWQsIGFuZCB0aGV5IHdpbGwgdGhlbiBkaXNjYXJkIHRo
+ZSBldmVudCB0aGV5IHdhbnRlZCB0byByZWNvcmQuICBUaGUgIm5vdCB0byB0aGUgdHJhY2UgbG9n
+IHN0b3JhZ2UiIGJpdCBpcyB0aGVyZSB0byBjbGFyaWZ5IHRoYXQgbm8gZXZlbnQgcmVjb3JkIG1h
+eSBldmVyIGJlIGxvc3QgZnJvbSB0aGUgdHJhY2UgZmlsZXMgb25jZSBpdCBoYXMgYmVlbiB3cml0
+dGVuIGludG8gdGhlbTogdGhleSBjYW4gbmVpdGhlciBiZSBkaXNjYXJkZWQgbm9yIG92ZXJ3cml0
+dGVuLiAgKEFjdHVhbGx5LCB1c2luZyB0aGUgZW5hYmxlLWNoYW5uZWwgdHJhY2VmaWxlLXNpemUg
+YW5kIHRyYWNlZmlsZS1jb3VudCBvcHRpb25zLCB5b3UgKmNhbiogc2V0IHVwIGFuIG9uLWRpc2sg
+ZmxpZ2h0IHJlY29yZGVyLCBidXQgdGhhdCBpcyBhIGRpZmZlcmVudCBzY2VuYXJpbykNCg0KICAg
+TFRUbmcgY2FuIGFscmVhZHkgdHJhbnNtaXQgdGhlIHRyYWNlIGV2ZW50cyB0byBhIGhvc3QgbWFj
+aGluZS4gIEdvaW5nIGJhY2sgdG8gdGhlIGV4YW1wbGUgb2YgdGhlIHdyaXRlcnMgd3JpdGluZyBp
+bnRvIGEgbWVtb3J5IGJ1ZmZlciB3aGlsZSB0aGUgY29uc3VtZXIgd2l0aGRyYXdzIGV2ZW50cyBm
+cm9tIGl0LCB0aGUgY29uc3VtZXIgY2FuIGJlIGluc3RydWN0ZWQgdG8gdHJhbnNtaXQgdGhlIHJl
+Y29yZHMgdG8gYSBUQ1AgYWRkcmVzcyBpbnN0ZWFkIG9mIHdyaXRpbmcgdGhlbSB0byBsb2NhbCBm
+aWxlIHN0b3JhZ2UuICBBdCB0aGF0IGFkZHJlc3MsIGEgcmVsYXkgZGFlbW9uIHJlY2VpdmVzIHRo
+ZSByZWNvcmRzIGFuZCB3cml0ZXMgdGhlbSB0byBmaWxlIHN0b3JhZ2UuICBFeGFtcGxlOg0KDQoo
+b24gdGhlIGhvc3QgbWFjaGluZTopDQokIGx0dG5nLXJlbGF5ZCAmDQoob24gdGhlIHRyYWNlZCBt
+YWNoaW5lOikNCiQgbHR0bmcgY3JlYXRlIG15c2Vzc2lvbiAtLXNldC11cmwgbmV0Oi8vaG9zdCAo
+ZW5hYmxlIGV2ZW50cyBhbmQgY2hhbm5lbHMsIGV0Yy4pICQgbHR0bmcgc3RhcnQNCiguKQ0KJCBs
+dHRuZyBkZXN0cm95DQoNCkRhbmllbCBVLiBUaGliYXVsdA0KUHJvdGVjdGlvbiBkZXMgc3lzdKio
+bWVzIGV0IGNvbnRyZW1lc3VyZXMgKFBTQykgfCBTeXN0ZW1zIFByb3RlY3Rpb24gJiBDb3VudGVy
+bWVhc3VyZXMgKFNQQykgQ3liZXIgc6imY3VyaXSopiBwb3VyIGxlcyBtaXNzaW9ucyBlc3NlbnRp
+ZWxsZXMgKENNRSkgfCBNaXNzaW9uIENyaXRpY2FsIEN5YmVyIFNlY3VyaXR5IChNQ0NTKSBSICYg
+RCBwb3VyIGxhIGSopmZlbnNlIENhbmFkYSAtIFZhbGNhcnRpZXIgKFJEREMgVmFsY2FydGllcikg
+fCBEZWZlbmNlIFImRCBDYW5hZGEgLSBWYWxjYXJ0aWVyIChEUkRDIFZhbGNhcnRpZXIpDQoyNDU5
+IHJvdXRlIGRlIGxhIEJyYXZvdXJlDQpRdaimYmVjIFFDICBHM0ogMVg1DQpDQU5BREENClZveCA6
+ICg0MTgpIDg0NC00MDAwIHg0MjQ1DQpGYXggOiAoNDE4KSA4NDQtNDUzOA0KTkFDIDogOTE4ViBR
+U0RKIDxodHRwOi8vd3d3LnRyYXZlbGdpcy5jb20vbWFwLmFzcD9hZGRyPTkxOFYlMjBRU0RKPg0K
+R291dmVybmVtZW50IGR1IENhbmFkYSB8IEdvdmVybm1lbnQgb2YgQ2FuYWRhIDxodHRwOi8vd3d3
+LnZhbGNhcnRpZXIuZHJkYy1yZGRjLmdjLmNhLz4NCl9fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxp
+c3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0
+aW5mby9sdHRuZy1kZXYK
