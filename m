@@ -1,18 +1,36 @@
-From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Subject: Re:
- =?iso-8859-1?q?=5BRELEASE=5D_LTTng-Tools_2=2E4=2E0-rc?=
- =?iso-8859-1?q?1_-_=C9poque_Opaque?=
-Date: Fri, 15 Nov 2013 20:22:34 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD267A2503__17909.6372602091$1384547015$gmane$org@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [RELEASE] LTTng-UST 2.4.0-rc1
+Date: Fri, 15 Nov 2013 21:10:00 +0000 (UTC)
+Message-ID: <661952664.68956.1384549800533.JavaMail.zimbra__41294.9404716075$1384549863$gmane$org@efficios.com>
+References: <1031736026.68948.1384549673024.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
+Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1VhPuW-0007Je-S2
-	for lttng-dev@lists.lttng.org; Fri, 15 Nov 2013 15:22:42 -0500
-Content-Language: fr-FR
+	(envelope-from <compudj@efficios.com>) id 1VhQeR-000594-Dg
+	for lttng-dev@lists.lttng.org; Fri, 15 Nov 2013 16:10:09 -0500
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.efficios.com (Postfix) with ESMTP id AA5313400CA
+	for <lttng-dev@lists.lttng.org>; Fri, 15 Nov 2013 21:10:02 +0000 (UTC)
+Received: from mail.efficios.com ([127.0.0.1])
+	by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new,
+	port 10032)
+	with ESMTP id hk3BDSmD3_9x for <lttng-dev@lists.lttng.org>;
+	Fri, 15 Nov 2013 21:10:00 +0000 (UTC)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.efficios.com (Postfix) with ESMTP id CEA4234011B
+	for <lttng-dev@lists.lttng.org>; Fri, 15 Nov 2013 21:10:00 +0000 (UTC)
+Received: from mail.efficios.com ([127.0.0.1])
+	by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new,
+	port 10026)
+	with ESMTP id lj5VaiUmo4P6 for <lttng-dev@lists.lttng.org>;
+	Fri, 15 Nov 2013 21:10:00 +0000 (UTC)
+Received: from evm-mail-1.efficios.com (evm-mail-1.efficios.com [78.47.125.74])
+	by mail.efficios.com (Postfix) with ESMTP id AAD303400CA
+	for <lttng-dev@lists.lttng.org>; Fri, 15 Nov 2013 21:10:00 +0000 (UTC)
+In-Reply-To: <1031736026.68948.1384549673024.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,71 +39,61 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
------Message d'origine-----
-Date: Fri, 15 Nov 2013 12:27:01 -0500
-From: David Goulet <dgoulet@efficios.com>
+LTTng-UST, the Linux Trace Toolkit Next Generation Userspace Tracer, is
+port of the low-overhead tracing capabilities of the LTTng kernel tracer
+to user-space. The library "liblttng-ust" enables tracing of
+applications and libraries.
 
-> 1) Live support. It's now possible to stream traces (kernel and UST)
-> while they being extracted meaning a relayd can now receive traces live
-> and a viewer can attach to it to process the trace while running. The
-> "--live" has been added to lttng create command that sets up a live
-> tracing session.
->
-> See doc/live-reading-howto.txt and doc/live-reading-protocol.txt for
-> more detail on that feature.
+Main changes: Java Util Logging support, live streaming support, event "excluders" (courtesy of Mentor), base address tracing for symbol lookup (courtesy of Mentor).
 
-   Does this mean you can't do a "live" trace to local storage?
+Changelog:
+2013-11-15 lttng-ust 2.4.0-rc1
+        * doc/examples: error out when a subdir make fails
+        * JUL: fix out of tree build
+        * Java/jul: fix make dist
+        * JUL: install documentation and jar file
+        * Add missing copyrights to test scripts
+        * Escape minus signs in lttng-ust-cyg-profile manpage
+        * Fix spelling mistake in lttng-ust manpage
+        * Fix tests/benchmark
+        * Implement base-address-state tracing
+        * Base-address tracing for dlopen and dlclose
+        * Add a check against excluders
+        * Add handler for LTTNG_UST_EXCLUSION in UST ABI
+        * Store exclusions to enablers
+        * Add excluders to enabler structure
+        * Send exclusion data through ustcomm
+        * Define exclusion structure for UST ABI
+        * Define a new command LTTNG_UST_EXCLUSION
+        * Fix: package of LTTngUst.h was renamed without renaming target in makefile
+        * Fix: check for java .class in package subfolders
+        * Fix: java library to use user define JDK at compile time
+        * Add liblttng-ust-jul for JUL support
+        * Fix: application SIGBUS when starting in parallel with sessiond
+        * Fix: Minor corrections to the lttng-ust man page
+        * Documentation cleanup: Overhaul of the lttng-gen-tp man page
+        * Warning cleanup: add missing padding initializer
+        * Fix: socket connect hang on heavy loads
+        * Cleanup: fix typo
+        * Fix: ust-comm recvmsg should handle partial receive
+        * gcc warning fix: -Wextra
+        * Add usage reference count for tracepoints
+        * tracepoint.c: Move add_callsite/remove_callsite further down in file
+        * Store the callsites into the library callsite list
+        * Fix linking warning
+        * Per-stream ioctl to get the current timestamp
+        * LTTng ringbuffer ABI calls for index generation
+        * Specialize lttng_ust_lib_ring_buffer_client_cb
+        * Add tracing instrumentation for pthread mutex lock functions
 
-> 2) Java Util Logging support. With a special LTTngAgent located in
-> lttng-ust project (liblttng-ust-jul) to trace JUL events and gather UST
-> traces with them.
->
-> The -j/--jul domain has been added to lttng command line so you can list
-> the possible JUL Logger object and enable/disable them. It is the same
-> as using the UST or Kernel domain.
->
-> As of now, filters and loglevel are ignored with the JUL domain.
+Project website: http://lttng.org
+Download link: http://lttng.org/download
+(please refer to the README file for installation instructions)
 
-   Saying "It is the same as using the UST or Kernel domain" leaves a lot o=
-f questions unanswered, since the kernel and user-space behave *very* diffe=
-rently on a lot of points.
-
-1) Does --jul require root privileges?
-2) I suppose the various commands have --kernel pre-empting --userspace pre=
--empting --ul?
-3) add-context: does --jul have the same possible context types as --usersp=
-ace (i.e. ip, pthread_id, procname, vpid, vtid)?
-4) enable-channel:
-4.1) Are the --jul --subbuf-size, --num-subbuf and --read-timer defaults th=
-e same as with --userspace?
-4.2) Presumably --output can only be mmap?
-4.3) Are the --jul buffering schemes the same as with --userspace (i.e. --b=
-uffers-pid and --buffers-uid)?
-4.4) If yes, won't they all degenerate to the virtual machine's user and pr=
-ocess IDs?
-5) enable-event:
-5.1) Can you assign --jul events to multiple channels like you can in --use=
-rspace?
-5.2) Is the --jul event type --tracepoint or something else entirely?
-5.3) Can the trailing wild card (and exclusion option) be used in the event=
- name when enabling/disabling --jul events?
-6) list: Does bug #654 also apply to --jul?
-
-Daniel U. Thibault
-Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
-ntermeasures (SPC)
-Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
-Cyber Security (MCCS)
-R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
- Canada - Valcartier (DRDC Valcartier)
-2459 route de la Bravoure
-Qu=E9bec QC  G3J 1X5
-CANADA
-Vox : (418) 844-4000 x4245
-Fax : (418) 844-4538
-NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-Gouvernement du Canada | Government of Canada
-<http://www.valcartier.drdc-rddc.gc.ca/>
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
