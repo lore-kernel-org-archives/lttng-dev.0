@@ -1,23 +1,17 @@
-From: Jon Bernard <jbernard@tuxion.com>
-Subject: [PATCH 2/2] Escape minus signs in lttng-ust-cyg-profile
-	manpage
-Date: Fri, 15 Nov 2013 09:12:47 -0500
-Message-ID: <20131115141247.GA1634__5001.95876597918$1384524920$gmane$org@shaniqua>
+From: Zifei Tong <soariez@gmail.com>
+Subject: [lttng-ust PATCH] Fix tests/benchmark
+Date: Fri, 15 Nov 2013 23:04:55 +0800
+Message-ID: <1384527895-8458-1-git-send-email-soariez__45404.4495513246$1384527998$gmane$org@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from out3-smtp.messagingengine.com ([66.111.4.27])
+Received: from mail-pa0-f47.google.com ([209.85.220.47])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jbernard@tuxion.com>) id 1VhK8m-0002lY-Cz
-	for lttng-dev@lists.lttng.org; Fri, 15 Nov 2013 09:13:03 -0500
-Received: from compute6.internal (compute6.nyi.mail.srv.osa [10.202.2.46])
-	by gateway1.nyi.mail.srv.osa (Postfix) with ESMTP id 544BE2102C
-	for <lttng-dev@lists.lttng.org>; Fri, 15 Nov 2013 09:12:50 -0500 (EST)
-Received: from localhost (unknown [108.15.195.199])
-	by mail.messagingengine.com (Postfix) with ESMTPA id AD6ED6800F8
-	for <lttng-dev@lists.lttng.org>; Fri, 15 Nov 2013 09:12:49 -0500 (EST)
-Content-Disposition: inline
+	(envelope-from <soariez@gmail.com>) id 1VhKxg-00026W-QQ
+	for lttng-dev@lists.lttng.org; Fri, 15 Nov 2013 10:05:38 -0500
+Received: by mail-pa0-f47.google.com with SMTP id ld10so3713236pab.20
+	for <lttng-dev@lists.lttng.org>; Fri, 15 Nov 2013 07:05:27 -0800 (PST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -26,37 +20,93 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: mathieu.desnoyers@efficios.com
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-By default, "-" chars are interpreted as hyphens (U+2010) by groff, not
-as minus signs (U+002D). Since options to programs use minus signs
-(U+002D), this means for example in UTF-8 locales that you cannot cut
-and paste options, nor search for them easily.
+Add copyright notice.
 
-Source: http://lintian.debian.org/tags/hyphen-used-as-minus-sign.html
+Remove extern C guard with respect to #597.
 
-Signed-off-by: Jon Bernard <jbernard@tuxion.com>
+Signed-off-by: Zifei Tong <soariez@gmail.com>
 ---
- doc/man/lttng-ust-cyg-profile.3 | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tests/benchmark/tp.c                  | 24 ++++++++++++++++++++++++
+ tests/benchmark/ust_tests_benchmark.h | 28 +++++++++++++++++++++-------
+ 2 files changed, 45 insertions(+), 7 deletions(-)
 
-diff --git a/doc/man/lttng-ust-cyg-profile.3 b/doc/man/lttng-ust-cyg-profile.3
-index fa8cf4f..341d3ae 100644
---- a/doc/man/lttng-ust-cyg-profile.3
-+++ b/doc/man/lttng-ust-cyg-profile.3
-@@ -43,7 +43,7 @@ call site address are recorded as lttng_ust_cyg_profile:func_entry and
- lttng_ust_cyg_profile:func_exit.
- .SH "USAGE"
- To use function tracing you need to make sure the sources of your application
--are compiled with -finstrument-functions. It might be necessary to limit
-+are compiled with \-finstrument\-functions. It might be necessary to limit
- the number of source files where this option is used to prevent excessive
- amount of trace data to be generated during run time. Usually there are
- additional compiler flags that allow you to specify more fine grained selection
+diff --git a/tests/benchmark/tp.c b/tests/benchmark/tp.c
+index a4f5352..4a5aa36 100644
+--- a/tests/benchmark/tp.c
++++ b/tests/benchmark/tp.c
+@@ -1,2 +1,26 @@
++/*
++ * tp.c
++ *
++ * Copyright (c) 2013 Zifei Tong <soariez@gmail.com>
++ *
++ * Permission is hereby granted, free of charge, to any person obtaining a copy
++ * of this software and associated documentation files (the "Software"), to deal
++ * in the Software without restriction, including without limitation the rights
++ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
++ * copies of the Software, and to permit persons to whom the Software is
++ * furnished to do so, subject to the following conditions:
++ *
++ * The above copyright notice and this permission notice shall be included in
++ * all copies or substantial portions of the Software.
++ *
++ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
++ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
++ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
++ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
++ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
++ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
++ * SOFTWARE.
++ */
++
+ #define TRACEPOINT_CREATE_PROBES
+ #include "ust_tests_benchmark.h"
+diff --git a/tests/benchmark/ust_tests_benchmark.h b/tests/benchmark/ust_tests_benchmark.h
+index 0ee986f..f7d7864 100644
+--- a/tests/benchmark/ust_tests_benchmark.h
++++ b/tests/benchmark/ust_tests_benchmark.h
+@@ -4,9 +4,27 @@
+ #if !defined(_TRACEPOINT_UST_TESTS_BENCHMARK_H) || defined(TRACEPOINT_HEADER_MULTI_READ)
+ #define _TRACEPOINT_UST_TESTS_BENCHMARK_H
+ 
+-#ifdef __cplusplus
+-extern "C" {
+-#endif
++/*
++ * Copyright (C) 2013  Zifei Tong <soariez@gmail.com>
++ *
++ * Permission is hereby granted, free of charge, to any person obtaining a copy
++ * of this software and associated documentation files (the "Software"), to deal
++ * in the Software without restriction, including without limitation the rights
++ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
++ * copies of the Software, and to permit persons to whom the Software is
++ * furnished to do so, subject to the following conditions:
++ *
++ * The above copyright notice and this permission notice shall be included in
++ * all copies or substantial portions of the Software.
++ *
++ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
++ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
++ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
++ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
++ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
++ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
++ * SOFTWARE.
++ */
+ 
+ #include <lttng/tracepoint.h>
+ 
+@@ -24,7 +42,3 @@ TRACEPOINT_EVENT(ust_tests_benchmark, tpbench,
+ 
+ /* This part must be outside ifdef protection */
+ #include <lttng/tracepoint-event.h>
+-
+-#ifdef __cplusplus
+-}
+-#endif
 -- 
-1.8.4.rc3
-
-
--- 
-Jon
+1.8.4.2
