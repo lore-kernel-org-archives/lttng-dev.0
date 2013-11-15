@@ -1,20 +1,21 @@
 From: =?UTF-8?q?Rapha=C3=ABl=20Beamonte?= <raphael.beamonte@gmail.com>
-Subject: [lttng-tools PATCH 0/5] Follow up to the realpath(3)
-	for unexistent paths
-Date: Thu, 14 Nov 2013 19:58:30 -0500
-Message-ID: <1384477115-18809-1-git-send-email-raphael.beamonte__2702.12223190374$1384477185$gmane$org@gmail.com>
+Subject: [lttng-tools PATCH 1/5] Tests: add a check in
+	test_utils_expand_path to avoid segfault if result is NULL
+Date: Thu, 14 Nov 2013 19:58:31 -0500
+Message-ID: <1384477115-18809-2-git-send-email-raphael.beamonte__12963.7263752103$1384477288$gmane$org@gmail.com>
 References: <1517784416.67313.1384445660213.JavaMail.zimbra@efficios.com>
+	<1384477115-18809-1-git-send-email-raphael.beamonte@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f179.google.com ([209.85.223.179])
+Received: from mail-ie0-f174.google.com ([209.85.223.174])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <raphael.beamonte@gmail.com>) id 1Vh7kH-0006Au-94
-	for lttng-dev@lists.lttng.org; Thu, 14 Nov 2013 19:58:54 -0500
-Received: by mail-ie0-f179.google.com with SMTP id u16so3992820iet.10
-	for <lttng-dev@lists.lttng.org>; Thu, 14 Nov 2013 16:58:43 -0800 (PST)
-In-Reply-To: <1517784416.67313.1384445660213.JavaMail.zimbra@efficios.com>
+	(envelope-from <raphael.beamonte@gmail.com>) id 1Vh7kI-0006B7-2I
+	for lttng-dev@lists.lttng.org; Thu, 14 Nov 2013 19:58:55 -0500
+Received: by mail-ie0-f174.google.com with SMTP id ar20so3865700iec.5
+	for <lttng-dev@lists.lttng.org>; Thu, 14 Nov 2013 16:58:44 -0800 (PST)
+In-Reply-To: <1384477115-18809-1-git-send-email-raphael.beamonte@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -27,35 +28,19 @@ To: dgoulet@efficios.com
 Cc: =?UTF-8?q?Rapha=C3=ABl=20Beamonte?= <raphael.beamonte@gmail.com>, lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-RGF2aWQsCgpGb2xsb3dpbmcgdGhlIGRpc2N1c3Npb25zIHdlIGhhZCBvbiBJUkMgd2l0aCBNYXRo
-aWV1IGFuZCB0aGUgbGFzdAptYWlsIGV4Y2hhbmdlLCBoZXJlIGlzIGEgc2VyaWVzIG9mIHBhdGNo
-IHRoYXQgc2hvdWxkIGFuc3dlciB0byBvdXIKZW5xdWlyaWVzLgoKVGhlIGZpcnN0IHR3byBwYXRj
-aGVzIGFyZSBsaW5rZWQgdG8gdGhlIHV0aWxzX2V4cGFuZF9wYXRoIHVuaXQgdGVzdAphbmQgY29y
-cmVjdCBpdHMgYmVoYXZpb3IgYW5kIHRoZSBleHBlY3RlZCByZXN1bHRzIChzb21lIGlucHV0IHdh
-cwphdCBmaXJzdCBjb25zaWRlcmVkIGludmFsaWQsIGJ1dCBkdXJpbmcgb3VyIGRpc2N1c3Npb25z
-IGl0IHdhcwptZW50aW9ubmVkIHRoYXQgaXQgc2hvdWxkIGJlIGNvbnNpZGVyZWQgdmFsaWQpLgoK
-VGhlIG5leHQgdGhyZWUgb25lcyBpbnRyb2R1Y2UgYSBuZXcgdXRpbHNfcGFydGlhbF9yZWFscGF0
-aCB0aGF0LAphcyBpdHMgbmFtZSBzYXlzIGl0LCBhbGxvd3MgdG8gcGFydGlhbGx5IHJlc29sdmUg
-YSByZWFsIHBhdGggZm9yCmEgZ2l2ZW4gcGF0aC4gVGhpcyBmdW5jdGlvbiBpcyB0aGVuIHVzZWQg
-aW4gdXRpbHNfZXhwYW5kX3BhdGggdG8KcmVzb2x2ZSB0aGUgcGF0aHMsIGFuZCB0aGUgdXRpbHNf
-cmVzb2x2ZV9yZWxhdGl2ZSBmdW5jdGlvbiBpcwpyZW1vdmVkIGFzIGl0IGlzIG5vdCBuZWNlc3Nh
-cnkgYW55bW9yZSBpbiB0aGlzIG5ldyAic2V0dXAiLgoKV2FpdGluZyBmb3IgeW91ciBjb21tZW50
-cywKUmFwaGHDq2wKClJhcGhhw6tsIEJlYW1vbnRlICg1KToKICBUZXN0czogYWRkIGEgY2hlY2sg
-aW4gdGVzdF91dGlsc19leHBhbmRfcGF0aCB0byBhdm9pZCBzZWdmYXVsdCBpZgogICAgcmVzdWx0
-IGlzIE5VTEwKICBUZXN0czogbW92ZSBpbnZhbGlkIHRlc3RzIGluIHRlc3RfdXRpbHNfZXhwYW5k
-X3BhdGggdGhhdCBzaG91bGQgYmUKICAgIHZhbGlkCiAgSW50cm9kdWNlIGEgbmV3IHV0aWxzX3Bh
-cnRpYWxfcmVhbHBhdGggZnVuY3Rpb24KICBDaGFuZ2UgdGhlIHV0aWxzX2V4cGFuZF9wYXRoIGZ1
-bmN0aW9uIHRvIHVzZSB1dGlsc19wYXJ0aWFsX3JlYWxwYXRoCiAgUmVtb3ZlIHRoZSB1dGlsc19y
-ZXNvbHZlX3JlbGF0aXZlIGZ1bmN0aW9uIHRoYXQgaXMgbm90IHVzZWZ1bCBhbnltb3JlCgogLmdp
-dGlnbm9yZSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgIDEgLQogc3JjL2NvbW1v
-bi91dGlscy5jICAgICAgICAgICAgICAgICAgICAgICB8ICAyNTYgKysrKysrKysrKysrKysrKysr
-LS0tLS0tLS0tLS0tCiBzcmMvY29tbW9uL3V0aWxzLmggICAgICAgICAgICAgICAgICAgICAgIHwg
-ICAgMyArLQogdGVzdHMvdW5pdC9NYWtlZmlsZS5hbSAgICAgICAgICAgICAgICAgICB8ICAgIDcg
-Ky0KIHRlc3RzL3VuaXQvdGVzdF91dGlsc19leHBhbmRfcGF0aC5jICAgICAgfCAgICA3ICstCiB0
-ZXN0cy91bml0L3Rlc3RfdXRpbHNfcmVzb2x2ZV9yZWxhdGl2ZS5jIHwgICA5OCAtLS0tLS0tLS0t
-LS0KIHRlc3RzL3VuaXRfdGVzdHMgICAgICAgICAgICAgICAgICAgICAgICAgfCAgICAxIC0KIDcg
-ZmlsZXMgY2hhbmdlZCwgMTU4IGluc2VydGlvbnMoKyksIDIxNSBkZWxldGlvbnMoLSkKIGRlbGV0
-ZSBtb2RlIDEwMDY0NCB0ZXN0cy91bml0L3Rlc3RfdXRpbHNfcmVzb2x2ZV9yZWxhdGl2ZS5jCgot
-LSAKMS43LjEwLjQKCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0
-cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+U2lnbmVkLW9mZi1ieTogUmFwaGHDq2wgQmVhbW9udGUgPHJhcGhhZWwuYmVhbW9udGVAZ21haWwu
+Y29tPgotLS0KIHRlc3RzL3VuaXQvdGVzdF91dGlsc19leHBhbmRfcGF0aC5jIHwgICAgMyArKy0K
+IDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkKCmRpZmYgLS1n
+aXQgYS90ZXN0cy91bml0L3Rlc3RfdXRpbHNfZXhwYW5kX3BhdGguYyBiL3Rlc3RzL3VuaXQvdGVz
+dF91dGlsc19leHBhbmRfcGF0aC5jCmluZGV4IDI3YmZlOGYuLmI3OTc0NGIgMTAwNjQ0Ci0tLSBh
+L3Rlc3RzL3VuaXQvdGVzdF91dGlsc19leHBhbmRfcGF0aC5jCisrKyBiL3Rlc3RzL3VuaXQvdGVz
+dF91dGlsc19leHBhbmRfcGF0aC5jCkBAIC0xMzUsNyArMTM1LDggQEAgc3RhdGljIHZvaWQgdGVz
+dF91dGlsc19leHBhbmRfcGF0aCh2b2lkKQogCQlzcHJpbnRmKG5hbWUsICJ2YWxpZCB0ZXN0IGNh
+c2U6ICVzIiwgdmFsaWRfdGVzdHNfaW5wdXRzW2ldLmlucHV0KTsKIAogCQlyZXN1bHQgPSB1dGls
+c19leHBhbmRfcGF0aCh2YWxpZF90ZXN0c19pbnB1dHNbaV0uaW5wdXQpOwotCQlvayhzdHJjbXAo
+cmVzdWx0LCB2YWxpZF90ZXN0c19leHBlY3RlZF9yZXN1bHRzW2ldKSA9PSAwLCBuYW1lKTsKKwkJ
+b2socmVzdWx0ICE9IE5VTEwgJiYKKwkJCQlzdHJjbXAocmVzdWx0LCB2YWxpZF90ZXN0c19leHBl
+Y3RlZF9yZXN1bHRzW2ldKSA9PSAwLCBuYW1lKTsKIAogCQlmcmVlKHJlc3VsdCk7CiAJfQotLSAK
+MS43LjEwLjQKCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+XwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDov
+L2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
