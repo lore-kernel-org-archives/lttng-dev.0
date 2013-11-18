@@ -1,17 +1,19 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: New article about Userspace RCU on LWN
-Date: Mon, 18 Nov 2013 16:20:46 +0000 (UTC)
-Message-ID: <226335696.70249.1384791646740.JavaMail.zimbra__15924.9054537669$1384791708$gmane$org@efficios.com>
-References: <1461373672.70240.1384791399260.JavaMail.zimbra@efficios.com>
+Subject: Re: Python bindings update
+Date: Mon, 18 Nov 2013 16:31:26 +0000 (UTC)
+Message-ID: <6831094.70329.1384792286485.JavaMail.zimbra__23088.7957652614$1384792347$gmane$org@efficios.com>
+References: <CA+jJMxsZLrpRXhgZDLqVfGgqjkz6_d=7NKPgRHr5gGc0vmc4TQ@mail.gmail.com>
+	<1801200686.66283.1384352262423.JavaMail.zimbra@efficios.com>
+	<6B3AC2788014DD49B43AF9611365BBAA21CB78FD26@mary.at.omicron.at>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1ViRZA-0002Lc-G3
-	for lttng-dev@lists.lttng.org; Mon, 18 Nov 2013 11:20:54 -0500
-In-Reply-To: <1461373672.70240.1384791399260.JavaMail.zimbra@efficios.com>
+	(envelope-from <compudj@efficios.com>) id 1ViRjT-00062Y-Vs
+	for lttng-dev@lists.lttng.org; Mon, 18 Nov 2013 11:31:34 -0500
+In-Reply-To: <6B3AC2788014DD49B43AF9611365BBAA21CB78FD26@mary.at.omicron.at>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,25 +22,69 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
-Cc: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Josh Triplett <josh@joshtriplett.org>
+To: Michael Lausch <michael.lausch@omicron.at>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
-
-Paul McKenney, Lai Jianshan, Josh Triplett and myself just published a series of articles on Userspace RCU on Linux Weekly News. You can find the top-level article at this URL:
-
-https://lwn.net/Articles/573424/
-
-Those articles introduce the Userspace RCU library, explaining how to use RCU and the data structures it contains. Access to those articles is restricted to LWN subscribers for a week after publication, and should be freely available afterward.
-
-Feedback is welcome!
-
-Thanks,
-
-Mathieu
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Tm90IHN1cmUgd2hhdCBpdCBwcm92aWRlcywgYnV0IGJ5IGFsbCBtZWFucyBzZW5kIGl0IHRvIHRo
+ZSBNTC4KClRoYW5rcywKCk1hdGhpZXUKCi0tLS0tIE9yaWdpbmFsIE1lc3NhZ2UgLS0tLS0KPiBG
+cm9tOiAiTWljaGFlbCBMYXVzY2giIDxtaWNoYWVsLmxhdXNjaEBvbWljcm9uLmF0Pgo+IFRvOiBs
+dHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gU2VudDogVGh1cnNkYXksIE5vdmVtYmVyIDE0LCAy
+MDEzIDQ6NDg6NDkgQU0KPiBTdWJqZWN0OiBSZTogW2x0dG5nLWRldl0gUHl0aG9uIGJpbmRpbmdz
+IHVwZGF0ZQo+IAo+IEhpLAo+IEkganVzdCBmaW5pc2hlZCBhIHNldHVwLnB5LmluLiBJdCBuZWVk
+cyBzb21lIHRlc3RpbmcgKGkgY2FuIGRvIHVidW50dSwgZmVkb3JhCj4gdGVzdHMpLgo+IElmIHlv
+dSBhcmUgaW50ZXJlc3RlZCwgSSBjYW4gcHJvdmlkZSBhIHBhdGNoIG9uIHRoZSBtYWlsaW5nIGxp
+c3QuCj4gCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0KPiBGcm9tOiBNYXRoaWV1IERlc25v
+eWVycyBbbWFpbHRvOm1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbV0KPiBTZW50OiBXZWRu
+ZXNkYXksIE5vdmVtYmVyIDEzLCAyMDEzIDM6MTggUE0KPiBUbzogSsOpcsOpbWllIEdhbGFybmVh
+dQo+IENjOiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gU3ViamVjdDogUmU6IFtsdHRuZy1k
+ZXZdIFtQVUxMIFJFUVVFU1QgYmFiZWx0cmFjZV0gUHl0aG9uIGJpbmRpbmdzIHVwZGF0ZQo+IAo+
+IC0tLS0tIE9yaWdpbmFsIE1lc3NhZ2UgLS0tLS0KPiA+IEZyb206ICJKw6lyw6ltaWUgR2FsYXJu
+ZWF1IiA8amVyZW1pZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29tPgo+ID4gVG86IGx0dG5nLWRldkBs
+aXN0cy5sdHRuZy5vcmcKPiA+IENjOiAiTWF0aGlldSBEZXNub3llcnMiIDxtYXRoaWV1LmRlc25v
+eWVyc0BlZmZpY2lvcy5jb20+Cj4gPiBTZW50OiBUdWVzZGF5LCBOb3ZlbWJlciAxMiwgMjAxMyAx
+MDowNjo0MSBQTQo+ID4gU3ViamVjdDogW1BVTEwgUkVRVUVTVCBiYWJlbHRyYWNlXSBQeXRob24g
+YmluZGluZ3MgdXBkYXRlCj4gPiAKPiA+IEhpIGFsbCwKPiA+IAo+ID4gSGVyZSBhcmUgc29tZSBw
+YXRjaGVzIHRvIGFkZCByZWFkIHN1cHBvcnQgb2YgZXZlcnkgQ1RGIHR5cGUgdXNpbmcgdGhlCj4g
+PiBCYWJlbHRyYWNlIFB5dGhvbiBiaW5kaW5ncy4gSXQgaXMgbm93IHBvc3NpYmxlIHRvIHJldHJp
+ZXZlIGZpZWxkcyBhbmQKPiA+IGFjY2VzcyB0aGVpciB2YWx1ZXMgdXNpbmcgYSBzaW5nbGUgZ2V0
+X3ZhbHVlKCkgbWV0aG9kIHJldHVybmluZyBuYXRpdmUKPiA+IFB5dGhvbiBvYmplY3RzLiBUaGlz
+IGlzIG1hZGUgcG9zc2libGUgdXNpbmcgdGhlIHdvcmsgY29udHJpYnV0ZWQgYnkKPiA+IG9uZSBv
+ZiBvdXIgR1NvQyBzdHVkZW50cywgWGlhb25hIEhhbi4KPiA+IAo+ID4gVGhlc2UgcGF0Y2hlcyBh
+bHNvIG1ha2UgaXQgcG9zc2libGUgdG8gZ2VuZXJhdGUgQ1RGIGZyb20gUHl0aG9uIGNvZGUsCj4g
+PiBiYXNlZCBvbiB0aGUgQ1RGIFdyaXRlciBBUEkgdGhhdCB3YXMgbWVyZ2VkIHJlY2VudGx5Lgo+
+IAo+IE1lcmdlZCBpbnRvIGJpbmRpbmdzL3B5dGhvbiBicmFuY2guIFBsZWFzZSBsZXQgbWUga25v
+dyBpZiBJIHNob3VsZCBtZXJnZQo+IHRoZXNlIGludG8gbWFzdGVyLgo+IAo+IFRoYW5rcywKPiAK
+PiBNYXRoaWV1Cj4gCj4gPiAKPiA+IFRoZSBwYXRjaGVzIGFyZSBhdmFpbGFibGUgaGVyZToKPiA+
+IGh0dHBzOi8vZ2l0aHViLmNvbS9qZ2FsYXIvYmFiZWx0cmFjZS9jb21taXRzL2JpbmRpbmdzL3B5
+dGhvbgo+ID4gCj4gPiA3YTMwYTY2IFJldHVybiBldmVudCBmaWVsZHMgYnkgZmllbGQgbmFtZQo+
+ID4gZGI1NTFmMiBSZW1vdmUgdGhlIHVubmVjZXNzYXJ5IHVuZGVyc2NvcmUgcHJlZml4Cj4gPiA0
+MTkxYmNkIFN1cHBvcnQgZ2V0dGluZyB0aGUgdmFsdWUgb2YgZW51bXMKPiA+IDNjMmNlNzcgQWRk
+IGEgZ2VuZXJpYyBnZXRfdmFsdWUoKSBpbXBsZW1lbnRhdGlvbgo+ID4gNzg2MjA3ZSBTdXBwb3J0
+IGZvciB0aGUgc2VxdWVuY2UgdHlwZQo+ID4gODEwYTk3YiBBZGQgYSBweXRob24gYmluZGluZ3Mg
+c2VxdWVuY2UgdGVzdAo+ID4gMzA0M2VlMCBSZW1vdmUgUHl0aG9uIDIgc3BlY2lmaWMgZXhhbXBs
+ZXMKPiA+IDkwMTMxYTMgRml4OiBUaHJvdyBhIEZpZWxkRXJyb3IgZXhjZXB0aW9uIHdoZW4gZ2V0
+X3ZhbHVlKCkgZmFpbHMKPiA+IGU1YTczYjkgQWRkIHN1cHBvcnQgZm9yIGZsb2F0aW5nIHBvaW50
+IGZpZWxkcyBpbiB0aGUgUHl0aG9uIGJpbmRpbmdzCj4gPiA4MTJlNjY4IEFkZCBzdXBwb3J0IGZv
+ciB2YXJpYW50IGZpZWxkcyBpbiB0aGUgUHl0aG9uIGJpbmRpbmdzCj4gPiAzYTA2ODkxIEFkZCBz
+dXBwb3J0IGZvciBzdHJ1Y3R1cmUgZmllbGRzIGluIHRoZSBQeXRob24gYmluZGluZ3MKPiA+IGNl
+YmFlOGMgRml4OiBQeXRob24gYmluZGluZ3MgYXJyYXkgYWNjZXNzIGZ1bmN0aW9ucyB3cml0ZSBv
+dXQgb2YgYm91bmRzCj4gPiAyNGQ1Yzk0IFJlbmFtZSB0aGUgY3RmIGNsYXNzIHRvIENURlJlYWRl
+cgo+ID4gZWM4Yzg4ZCBBZGQgQ1RGIFdyaXRlciBQeXRob24gYmluZGluZ3MKPiA+IDAzM2ZiMGEg
+QWRkIGEgdXNhZ2UgZXhhbXBsZSBmb3IgdGhlIENURiBXcml0ZXIgUHl0aG9uIGJpbmRpbmdzCj4g
+PiA5NGE2Y2VhIERvbid0IGdlbmVyYXRlIFB5dGhvbiBiaW5kaW5ncyBieSBkZWZhdWx0Cj4gPiA1
+NDkxNDc2IEV4cG9zZSB0ZXh0IGFycmF5cyB0aGUgc2FtZSB3YXkgYXMgcmVndWxhciBhcnJheXMK
+PiA+IAo+ID4gTG9va2luZyBmb3J3YXJkIHRvIHlvdXIgY29tbWVudHMsCj4gPiBKw6lyw6ltaWUK
+PiA+IAo+ID4gLS0KPiA+IErDqXLDqW1pZSBHYWxhcm5lYXUKPiA+IEVmZmljaU9TIEluYy4KPiA+
+IGh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCj4gPiAKPiAKPiAtLQo+IE1hdGhpZXUgRGVzbm95ZXJz
+Cj4gRWZmaWNpT1MgSW5jLgo+IGh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCj4gCj4gX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBsdHRuZy1kZXYgbWFpbGlu
+ZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IGh0dHA6Ly9saXN0cy5sdHRuZy5v
+cmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo+IF9fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+
+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1i
+aW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKPiAKCi0tIApNYXRoaWV1IERlc25veWVycwpF
+ZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCgpfX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5n
+LWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxt
+YW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
