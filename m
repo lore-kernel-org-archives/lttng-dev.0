@@ -1,18 +1,18 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: New article about Userspace RCU on LWN
-Date: Tue, 19 Nov 2013 14:55:44 +0000 (UTC)
-Message-ID: <68750827.70735.1384872944475.JavaMail.zimbra__48782.4123389602$1384873031$gmane$org@efficios.com>
-References: <226335696.70249.1384791646740.JavaMail.zimbra@efficios.com>
-	<528B265F.1000500@free.fr>
+Subject: Re: [PATCH babeltrace] Fix ctf-writer: Reject
+ enumerations	containing no mappings
+Date: Tue, 19 Nov 2013 14:57:54 +0000 (UTC)
+Message-ID: <5486679.70739.1384873074652.JavaMail.zimbra__16002.6994803504$1384873132$gmane$org@efficios.com>
+References: <1384748583-21352-1-git-send-email-jeremie.galarneau@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1VimiV-00078n-90
-	for lttng-dev@lists.lttng.org; Tue, 19 Nov 2013 09:55:57 -0500
-In-Reply-To: <528B265F.1000500@free.fr>
+	(envelope-from <compudj@efficios.com>) id 1VimkV-0007tj-EK
+	for lttng-dev@lists.lttng.org; Tue, 19 Nov 2013 09:58:01 -0500
+In-Reply-To: <1384748583-21352-1-git-send-email-jeremie.galarneau@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,79 +21,94 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Duncan Sands <baldrick@free.fr>
+To: =?utf-8?B?SsOpcsOpbWll?= Galarneau <jeremie.galarneau@efficios.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
------ Original Message -----
-> From: "Duncan Sands" <baldrick@free.fr>
-> To: lttng-dev@lists.lttng.org
-> Sent: Tuesday, November 19, 2013 3:50:39 AM
-> Subject: Re: [lttng-dev] New article about Userspace RCU on LWN
-> 
-> Hi Mathieu, nice articles, now I can point my co-workers at it when they ask
-> me
-> what this RCU stuff is all about :)  I noticed that the article
->   http://lwn.net/Articles/573431/
-> says
-> 
-> "The hash table can then be allocated:
-> 
->      ht = cds_lfht_new(1, 1, 0, CDS_LFHT_AUTO_RESIZE, NULL);
->   The first 1 specifies the initial number of hash buckets in the table, the
->   second 1 specifies the minimum number of hash buckets, and the 0 specifies
->   the
->   maximum number of hash buckets. All three quantities must be powers of two,
->   except for the special case of 0 for the third argument, which specifies an
->   unlimited maximum number of hash buckets."
-> 
-> However the rculfhash.h header doesn't say that the third argument can be
-> zero.
-> All it says is:
-> 
->   * @max_nr_buckets: the maximum number of hash table buckets allowed.
->   *                  (must be power of two)
-
-Hi Duncan,
-
-I'm glad you like the paper! Indeed, this info was missing from the source code. I just pushed a commit that fixes things up.
-
-Thanks!
-
-Mathieu
-
-> 
-> Best wishes, Duncan.
-> 
-> On 18/11/13 17:20, Mathieu Desnoyers wrote:
-> > Hi,
-> >
-> > Paul McKenney, Lai Jianshan, Josh Triplett and myself just published a
-> > series of articles on Userspace RCU on Linux Weekly News. You can find the
-> > top-level article at this URL:
-> >
-> > https://lwn.net/Articles/573424/
-> >
-> > Those articles introduce the Userspace RCU library, explaining how to use
-> > RCU and the data structures it contains. Access to those articles is
-> > restricted to LWN subscribers for a week after publication, and should be
-> > freely available afterward.
-> >
-> > Feedback is welcome!
-> >
-> > Thanks,
-> >
-> > Mathieu
-> >
-> 
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> 
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+TWVyZ2VkLCB0aGFua3MhCgpNYXRoaWV1CgotLS0tLSBPcmlnaW5hbCBNZXNzYWdlIC0tLS0tCj4g
+RnJvbTogIkrDqXLDqW1pZSBHYWxhcm5lYXUiIDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5j
+b20+Cj4gVG86IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBTZW50OiBTdW5kYXksIE5vdmVt
+YmVyIDE3LCAyMDEzIDExOjIzOjAzIFBNCj4gU3ViamVjdDogW2x0dG5nLWRldl0gW1BBVENIIGJh
+YmVsdHJhY2VdIEZpeCBjdGYtd3JpdGVyOiBSZWplY3QgZW51bWVyYXRpb25zCWNvbnRhaW5pbmcg
+bm8gbWFwcGluZ3MKPiAKPiBTaWduZWQtb2ZmLWJ5OiBKw6lyw6ltaWUgR2FsYXJuZWF1IDxqZXJl
+bWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20+Cj4gLS0tCj4gIGZvcm1hdHMvY3RmL3dyaXRlci9l
+dmVudC1maWVsZHMuYyAgICAgICAgICAgICAgICAgIHwgIDQgKy0tCj4gIGZvcm1hdHMvY3RmL3dy
+aXRlci9ldmVudC10eXBlcy5jICAgICAgICAgICAgICAgICAgIHwgNDAKPiAgKysrKysrKysrKysr
+KysrKysrKy0tLQo+ICAuLi4vYmFiZWx0cmFjZS9jdGYtd3JpdGVyL2V2ZW50LXR5cGVzLWludGVy
+bmFsLmggICB8ICAzICsrCj4gIDMgZmlsZXMgY2hhbmdlZCwgNDAgaW5zZXJ0aW9ucygrKSwgNyBk
+ZWxldGlvbnMoLSkKPiAKPiBkaWZmIC0tZ2l0IGEvZm9ybWF0cy9jdGYvd3JpdGVyL2V2ZW50LWZp
+ZWxkcy5jCj4gYi9mb3JtYXRzL2N0Zi93cml0ZXIvZXZlbnQtZmllbGRzLmMKPiBpbmRleCBmZjk3
+MGMwLi5hZDRmY2I1IDEwMDY0NAo+IC0tLSBhL2Zvcm1hdHMvY3RmL3dyaXRlci9ldmVudC1maWVs
+ZHMuYwo+ICsrKyBiL2Zvcm1hdHMvY3RmL3dyaXRlci9ldmVudC1maWVsZHMuYwo+IEBAIC0xNzks
+OCArMTc5LDggQEAgc3RydWN0IGJ0X2N0Zl9maWVsZCAqYnRfY3RmX2ZpZWxkX2NyZWF0ZShzdHJ1
+Y3QKPiBidF9jdGZfZmllbGRfdHlwZSAqdHlwZSkKPiAgCX0KPiAgCj4gIAl0eXBlX2lkID0gYnRf
+Y3RmX2ZpZWxkX3R5cGVfZ2V0X3R5cGVfaWQodHlwZSk7Cj4gLQlpZiAodHlwZV9pZCA8PSBDVEZf
+VFlQRV9VTktOT1dOIHx8Cj4gLQkJdHlwZV9pZCA+PSBOUl9DVEZfVFlQRVMpIHsKPiArCWlmICh0
+eXBlX2lkIDw9IENURl9UWVBFX1VOS05PV04gfHwgdHlwZV9pZCA+PSBOUl9DVEZfVFlQRVMgfHwK
+PiArCQlidF9jdGZfZmllbGRfdHlwZV92YWxpZGF0ZSh0eXBlKSkgewo+ICAJCWdvdG8gZXJyb3I7
+Cj4gIAl9Cj4gIAo+IGRpZmYgLS1naXQgYS9mb3JtYXRzL2N0Zi93cml0ZXIvZXZlbnQtdHlwZXMu
+Ywo+IGIvZm9ybWF0cy9jdGYvd3JpdGVyL2V2ZW50LXR5cGVzLmMKPiBpbmRleCBmYTRlNzEzLi40
+ZWQ5ZmVkIDEwMDY0NAo+IC0tLSBhL2Zvcm1hdHMvY3RmL3dyaXRlci9ldmVudC10eXBlcy5jCj4g
+KysrIGIvZm9ybWF0cy9jdGYvd3JpdGVyL2V2ZW50LXR5cGVzLmMKPiBAQCAtMjM4LDYgKzIzOCwy
+NyBAQCBlbmQ6Cj4gIAlyZXR1cm4gcmV0Owo+ICB9Cj4gIAo+ICtCVF9ISURERU4KPiAraW50IGJ0
+X2N0Zl9maWVsZF90eXBlX3ZhbGlkYXRlKHN0cnVjdCBidF9jdGZfZmllbGRfdHlwZSAqdHlwZSkK
+PiArewo+ICsJaW50IHJldCA9IDA7Cj4gKwo+ICsJaWYgKCF0eXBlKSB7Cj4gKwkJcmV0ID0gLTE7
+Cj4gKwkJZ290byBlbmQ7Cj4gKwl9Cj4gKwo+ICsJaWYgKHR5cGUtPmRlY2xhcmF0aW9uLT5pZCA9
+PSBDVEZfVFlQRV9FTlVNKSB7Cj4gKwkJc3RydWN0IGJ0X2N0Zl9maWVsZF90eXBlX2VudW1lcmF0
+aW9uICplbnVtZXJhdGlvbiA9Cj4gKwkJCWNvbnRhaW5lcl9vZih0eXBlLCBzdHJ1Y3QgYnRfY3Rm
+X2ZpZWxkX3R5cGVfZW51bWVyYXRpb24sCj4gKwkJCXBhcmVudCk7Cj4gKwo+ICsJCXJldCA9IGVu
+dW1lcmF0aW9uLT5lbnRyaWVzLT5sZW4gPyAwIDogLTE7Cj4gKwl9Cj4gK2VuZDoKPiArCXJldHVy
+biByZXQ7Cj4gK30KPiArCj4gIHN0cnVjdCBidF9jdGZfZmllbGRfdHlwZSAqYnRfY3RmX2ZpZWxk
+X3R5cGVfaW50ZWdlcl9jcmVhdGUodW5zaWduZWQgaW50Cj4gIHNpemUpCj4gIHsKPiAgCXN0cnVj
+dCBidF9jdGZfZmllbGRfdHlwZV9pbnRlZ2VyICppbnRlZ2VyID0KPiBAQCAtNTE3LDcgKzUzOCw4
+IEBAIGludCBidF9jdGZfZmllbGRfdHlwZV9zdHJ1Y3R1cmVfYWRkX2ZpZWxkKHN0cnVjdAo+IGJ0
+X2N0Zl9maWVsZF90eXBlICp0eXBlLAo+ICAKPiAgCWlmICghdHlwZSB8fCAhZmllbGRfdHlwZSB8
+fCB0eXBlLT5mcm96ZW4gfHwKPiAgCQl2YWxpZGF0ZV9pZGVudGlmaWVyKGZpZWxkX25hbWUpIHx8
+Cj4gLQkJKHR5cGUtPmRlY2xhcmF0aW9uLT5pZCAhPSBDVEZfVFlQRV9TVFJVQ1QpKSB7Cj4gKwkJ
+KHR5cGUtPmRlY2xhcmF0aW9uLT5pZCAhPSBDVEZfVFlQRV9TVFJVQ1QpIHx8Cj4gKwkJYnRfY3Rm
+X2ZpZWxkX3R5cGVfdmFsaWRhdGUoZmllbGRfdHlwZSkpIHsKPiAgCQlnb3RvIGVuZDsKPiAgCX0K
+PiAgCj4gQEAgLTU3OSw3ICs2MDEsOCBAQCBpbnQgYnRfY3RmX2ZpZWxkX3R5cGVfdmFyaWFudF9h
+ZGRfZmllbGQoc3RydWN0Cj4gYnRfY3RmX2ZpZWxkX3R5cGUgKnR5cGUsCj4gIAo+ICAJaWYgKCF0
+eXBlIHx8ICFmaWVsZF90eXBlIHx8IHR5cGUtPmZyb3plbiB8fAo+ICAJCXZhbGlkYXRlX2lkZW50
+aWZpZXIoZmllbGRfbmFtZSkgfHwKPiAtCQkodHlwZS0+ZGVjbGFyYXRpb24tPmlkICE9IENURl9U
+WVBFX1ZBUklBTlQpKSB7Cj4gKwkJKHR5cGUtPmRlY2xhcmF0aW9uLT5pZCAhPSBDVEZfVFlQRV9W
+QVJJQU5UKSB8fAo+ICsJCWJ0X2N0Zl9maWVsZF90eXBlX3ZhbGlkYXRlKGZpZWxkX3R5cGUpKSB7
+Cj4gIAkJcmV0ID0gLTE7Cj4gIAkJZ290byBlbmQ7Cj4gIAl9Cj4gQEAgLTYxMSw3ICs2MzQsOCBA
+QCBzdHJ1Y3QgYnRfY3RmX2ZpZWxkX3R5cGUgKmJ0X2N0Zl9maWVsZF90eXBlX2FycmF5X2NyZWF0
+ZSgKPiAgewo+ICAJc3RydWN0IGJ0X2N0Zl9maWVsZF90eXBlX2FycmF5ICphcnJheSA9IE5VTEw7
+Cj4gIAo+IC0JaWYgKCFlbGVtZW50X3R5cGUgfHwgbGVuZ3RoID09IDApIHsKPiArCWlmICghZWxl
+bWVudF90eXBlIHx8IGxlbmd0aCA9PSAwIHx8Cj4gKwkJYnRfY3RmX2ZpZWxkX3R5cGVfdmFsaWRh
+dGUoZWxlbWVudF90eXBlKSkgewo+ICAJCWdvdG8gZXJyb3I7Cj4gIAl9Cj4gIAo+IEBAIC02Mzks
+NyArNjYzLDggQEAgc3RydWN0IGJ0X2N0Zl9maWVsZF90eXBlCj4gKmJ0X2N0Zl9maWVsZF90eXBl
+X3NlcXVlbmNlX2NyZWF0ZSgKPiAgewo+ICAJc3RydWN0IGJ0X2N0Zl9maWVsZF90eXBlX3NlcXVl
+bmNlICpzZXF1ZW5jZSA9IE5VTEw7Cj4gIAo+IC0JaWYgKCFlbGVtZW50X3R5cGUgfHwgdmFsaWRh
+dGVfaWRlbnRpZmllcihsZW5ndGhfZmllbGRfbmFtZSkpIHsKPiArCWlmICghZWxlbWVudF90eXBl
+IHx8IHZhbGlkYXRlX2lkZW50aWZpZXIobGVuZ3RoX2ZpZWxkX25hbWUpIHx8Cj4gKwkJYnRfY3Rm
+X2ZpZWxkX3R5cGVfdmFsaWRhdGUoZWxlbWVudF90eXBlKSkgewo+ICAJCWdvdG8gZXJyb3I7Cj4g
+IAl9Cj4gIAo+IEBAIC0xMTU0LDEwICsxMTc5LDE1IEBAIGludCBidF9jdGZfZmllbGRfdHlwZV9l
+bnVtZXJhdGlvbl9zZXJpYWxpemUoc3RydWN0Cj4gYnRfY3RmX2ZpZWxkX3R5cGUgKnR5cGUsCj4g
+IAkJc3RydWN0IG1ldGFkYXRhX2NvbnRleHQgKmNvbnRleHQpCj4gIHsKPiAgCXNpemVfdCBlbnRy
+eTsKPiAtCWludCByZXQgPSAwOwo+ICsJaW50IHJldDsKPiAgCXN0cnVjdCBidF9jdGZfZmllbGRf
+dHlwZV9lbnVtZXJhdGlvbiAqZW51bWVyYXRpb24gPSBjb250YWluZXJfb2YodHlwZSwKPiAgCQlz
+dHJ1Y3QgYnRfY3RmX2ZpZWxkX3R5cGVfZW51bWVyYXRpb24sIHBhcmVudCk7Cj4gIAo+ICsJcmV0
+ID0gYnRfY3RmX2ZpZWxkX3R5cGVfdmFsaWRhdGUodHlwZSk7Cj4gKwlpZiAocmV0KSB7Cj4gKwkJ
+Z290byBlbmQ7Cj4gKwl9Cj4gKwo+ICAJZ19zdHJpbmdfYXBwZW5kKGNvbnRleHQtPnN0cmluZywg
+ImVudW0gOiAiKTsKPiAgCXJldCA9IGJ0X2N0Zl9maWVsZF90eXBlX3NlcmlhbGl6ZShlbnVtZXJh
+dGlvbi0+Y29udGFpbmVyLCBjb250ZXh0KTsKPiAgCWlmIChyZXQpIHsKPiBkaWZmIC0tZ2l0IGEv
+aW5jbHVkZS9iYWJlbHRyYWNlL2N0Zi13cml0ZXIvZXZlbnQtdHlwZXMtaW50ZXJuYWwuaAo+IGIv
+aW5jbHVkZS9iYWJlbHRyYWNlL2N0Zi13cml0ZXIvZXZlbnQtdHlwZXMtaW50ZXJuYWwuaAo+IGlu
+ZGV4IGQ5YWNkZDMuLmE5MzdjNzggMTAwNjQ0Cj4gLS0tIGEvaW5jbHVkZS9iYWJlbHRyYWNlL2N0
+Zi13cml0ZXIvZXZlbnQtdHlwZXMtaW50ZXJuYWwuaAo+ICsrKyBiL2luY2x1ZGUvYmFiZWx0cmFj
+ZS9jdGYtd3JpdGVyL2V2ZW50LXR5cGVzLWludGVybmFsLmgKPiBAQCAtMTQ3LDQgKzE0Nyw3IEBA
+IEJUX0hJRERFTgo+ICBpbnQgYnRfY3RmX2ZpZWxkX3R5cGVfc2VyaWFsaXplKHN0cnVjdCBidF9j
+dGZfZmllbGRfdHlwZSAqdHlwZSwKPiAgCQlzdHJ1Y3QgbWV0YWRhdGFfY29udGV4dCAqY29udGV4
+dCk7Cj4gIAo+ICtCVF9ISURERU4KPiAraW50IGJ0X2N0Zl9maWVsZF90eXBlX3ZhbGlkYXRlKHN0
+cnVjdCBidF9jdGZfZmllbGRfdHlwZSAqdHlwZSk7Cj4gKwo+ICAjZW5kaWYgLyogQkFCRUxUUkFD
+RV9DVEZfV1JJVEVSX0VWRU5UX1RZUEVTX0lOVEVSTkFMX0ggKi8KPiAtLQo+IDEuOC40LjIKPiAK
+PiAKPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGx0
+dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0cDov
+L2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cj4gCgot
+LSAKTWF0aGlldSBEZXNub3llcnMKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNv
+bQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmct
+ZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5s
+dHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
