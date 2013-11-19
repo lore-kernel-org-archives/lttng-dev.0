@@ -1,18 +1,17 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH babeltrace] Test ctf-writer: Verify
-	that	enumerations are validated before use
-Date: Tue, 19 Nov 2013 14:58:32 +0000 (UTC)
-Message-ID: <1516856868.70740.1384873112693.JavaMail.zimbra__2313.07406579635$1384873249$gmane$org@efficios.com>
-References: <1384748610-21396-1-git-send-email-jeremie.galarneau@efficios.com>
+From: Simon Marchi <simon.marchi@polymtl.ca>
+Subject: Xeon Phi memory barriers
+Date: Tue, 19 Nov 2013 10:26:06 -0500
+Message-ID: <CAFXXi0n784=HA5RKX91OM8=CTpgofd1dkqnC_b4avo0aAYBnOQ__15666.011212352$1384874861$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-la0-f49.google.com ([209.85.215.49])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1VimlD-0008AM-4d
-	for lttng-dev@lists.lttng.org; Tue, 19 Nov 2013 09:58:44 -0500
-In-Reply-To: <1384748610-21396-1-git-send-email-jeremie.galarneau@efficios.com>
+	(envelope-from <thundersim@gmail.com>) id 1VinCN-0001NH-7M
+	for lttng-dev@lists.lttng.org; Tue, 19 Nov 2013 10:26:49 -0500
+Received: by mail-la0-f49.google.com with SMTP id er20so6139622lab.36
+	for <lttng-dev@lists.lttng.org>; Tue, 19 Nov 2013 07:26:36 -0800 (PST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,70 +20,53 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?utf-8?B?SsOpcsOpbWll?= Galarneau <jeremie.galarneau@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-TWVyZ2VkLCB0aGFua3MhCgpNYXRoaWV1CgotLS0tLSBPcmlnaW5hbCBNZXNzYWdlIC0tLS0tCj4g
-RnJvbTogIkrDqXLDqW1pZSBHYWxhcm5lYXUiIDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5j
-b20+Cj4gVG86IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBTZW50OiBTdW5kYXksIE5vdmVt
-YmVyIDE3LCAyMDEzIDExOjIzOjMwIFBNCj4gU3ViamVjdDogW2x0dG5nLWRldl0gW1BBVENIIGJh
-YmVsdHJhY2VdIFRlc3QgY3RmLXdyaXRlcjogVmVyaWZ5IHRoYXQJZW51bWVyYXRpb25zIGFyZSB2
-YWxpZGF0ZWQgYmVmb3JlIHVzZQo+IAo+IFNpZ25lZC1vZmYtYnk6IErDqXLDqW1pZSBHYWxhcm5l
-YXUgPGplcmVtaWUuZ2FsYXJuZWF1QGVmZmljaW9zLmNvbT4KPiAtLS0KPiAgdGVzdHMvbGliL3Rl
-c3RfY3RmX3dyaXRlci5jIHwgMjYgKysrKysrKysrKysrKysrKysrKysrKysrKysKPiAgMSBmaWxl
-IGNoYW5nZWQsIDI2IGluc2VydGlvbnMoKykKPiAKPiBkaWZmIC0tZ2l0IGEvdGVzdHMvbGliL3Rl
-c3RfY3RmX3dyaXRlci5jIGIvdGVzdHMvbGliL3Rlc3RfY3RmX3dyaXRlci5jCj4gaW5kZXggZDU1
-YzYyOS4uZDdmN2RiNyAxMDA2NDQKPiAtLS0gYS90ZXN0cy9saWIvdGVzdF9jdGZfd3JpdGVyLmMK
-PiArKysgYi90ZXN0cy9saWIvdGVzdF9jdGZfd3JpdGVyLmMKPiBAQCAtNDY5LDYgKzQ2OSw3IEBA
-IHZvaWQgdHlwZV9maWVsZF90ZXN0cygpCj4gIAlzdHJ1Y3QgYnRfY3RmX2ZpZWxkICp1aW50XzEy
-Owo+ICAJc3RydWN0IGJ0X2N0Zl9maWVsZCAqaW50XzE2Owo+ICAJc3RydWN0IGJ0X2N0Zl9maWVs
-ZCAqc3RyaW5nOwo+ICsJc3RydWN0IGJ0X2N0Zl9maWVsZCAqZW51bWVyYXRpb247Cj4gIAlzdHJ1
-Y3QgYnRfY3RmX2ZpZWxkX3R5cGUgKmNvbXBvc2l0ZV9zdHJ1Y3R1cmVfdHlwZTsKPiAgCXN0cnVj
-dCBidF9jdGZfZmllbGRfdHlwZSAqc3RydWN0dXJlX3NlcV90eXBlOwo+ICAJc3RydWN0IGJ0X2N0
-Zl9maWVsZF90eXBlICpzdHJpbmdfdHlwZTsKPiBAQCAtNDc3LDYgKzQ3OCw5IEBAIHZvaWQgdHlw
-ZV9maWVsZF90ZXN0cygpCj4gIAlzdHJ1Y3QgYnRfY3RmX2ZpZWxkX3R5cGUgKmludF8xNl90eXBl
-Owo+ICAJc3RydWN0IGJ0X2N0Zl9maWVsZF90eXBlICp1aW50XzEyX3R5cGUgPQo+ICAJCWJ0X2N0
-Zl9maWVsZF90eXBlX2ludGVnZXJfY3JlYXRlKDEyKTsKPiArCXN0cnVjdCBidF9jdGZfZmllbGRf
-dHlwZSAqZW51bWVyYXRpb25fdHlwZTsKPiArCXN0cnVjdCBidF9jdGZfZmllbGRfdHlwZSAqZW51
-bWVyYXRpb25fc2VxdWVuY2VfdHlwZTsKPiArCXN0cnVjdCBidF9jdGZfZmllbGRfdHlwZSAqZW51
-bWVyYXRpb25fYXJyYXlfdHlwZTsKPiAgCj4gIAlvayh1aW50XzEyX3R5cGUsICJDcmVhdGUgYW4g
-dW5zaWduZWQgaW50ZWdlciB0eXBlIik7Cj4gIAlvayhidF9jdGZfZmllbGRfdHlwZV9pbnRlZ2Vy
-X3NldF9iYXNlKHVpbnRfMTJfdHlwZSwKPiBAQCAtNTc4LDkgKzU4MiwyOCBAQCB2b2lkIHR5cGVf
-ZmllbGRfdGVzdHMoKQo+ICAJb2soYnRfY3RmX2ZpZWxkX3N0cmluZ19zZXRfdmFsdWUoc3RyaW5n
-LCAiQSB2YWx1ZSIpID09IDAsCj4gIAkJIlNldCBhIHN0cmluZydzIHZhbHVlIik7Cj4gIAo+ICsJ
-ZW51bWVyYXRpb25fdHlwZSA9IGJ0X2N0Zl9maWVsZF90eXBlX2VudW1lcmF0aW9uX2NyZWF0ZSh1
-aW50XzEyX3R5cGUpOwo+ICsJb2soZW51bWVyYXRpb25fdHlwZSwKPiArCQkiQ3JlYXRlIGFuIGVu
-dW1lcmF0aW9uIHR5cGUgd2l0aCBhbiB1bnNpZ25lZCAxMi1iaXQgaW50ZWdlciBhcwo+IGNvbnRh
-aW5lciIpOwo+ICsJZW51bWVyYXRpb25fc2VxdWVuY2VfdHlwZSA9IGJ0X2N0Zl9maWVsZF90eXBl
-X3NlcXVlbmNlX2NyZWF0ZSgKPiArCQllbnVtZXJhdGlvbl90eXBlLCAiY291bnQiKTsKPiArCW9r
-KCFlbnVtZXJhdGlvbl9zZXF1ZW5jZV90eXBlLAo+ICsJCSJDaGVjayBlbnVtZXJhdGlvbiB0eXBl
-cyBhcmUgdmFsaWRhdGVkIHdoZW4gY3JlYXRpbmcgYSBzZXF1ZW5jZSIpOwo+ICsJZW51bWVyYXRp
-b25fYXJyYXlfdHlwZSA9IGJ0X2N0Zl9maWVsZF90eXBlX2FycmF5X2NyZWF0ZSgKPiArCQllbnVt
-ZXJhdGlvbl90eXBlLCAxMCk7Cj4gKwlvayghZW51bWVyYXRpb25fYXJyYXlfdHlwZSwKPiArCQki
-Q2hlY2sgZW51bWVyYXRpb24gdHlwZXMgYXJlIHZhbGlkYXRlZCB3aGVuIGNyZWF0aW5nIGFuIGFy
-cmF5Iik7Cj4gKwlvayhidF9jdGZfZmllbGRfdHlwZV9zdHJ1Y3R1cmVfYWRkX2ZpZWxkKGNvbXBv
-c2l0ZV9zdHJ1Y3R1cmVfdHlwZSwKPiArCQllbnVtZXJhdGlvbl90eXBlLCAiZW51bWVyYXRpb24i
-KSA9PSAwLAo+ICsJCSJDaGVjayBlbnVtZXJhdGlvbiB0eXBlcyBhcmUgdmFsaWRhdGVkIHdoZW4g
-YWRkaW5nIHRoZW0gYXMgc3RydWN0dXJlCj4gbWVtYmVycyIpOwo+ICsJZW51bWVyYXRpb24gPSBi
-dF9jdGZfZmllbGRfY3JlYXRlKGVudW1lcmF0aW9uX3R5cGUpOwo+ICsJb2soIWVudW1lcmF0aW9u
-LAo+ICsJCSJDaGVjayBlbnVtZXJhdGlvbiB0eXBlcyBhcmUgdmFsaWRhdGVkIGJlZm9yZSBpbnN0
-YW50aWF0aW9uIik7Cj4gKwo+ICAJYnRfY3RmX2ZpZWxkX3B1dChzdHJpbmcpOwo+ICAJYnRfY3Rm
-X2ZpZWxkX3B1dCh1aW50XzEyKTsKPiAgCWJ0X2N0Zl9maWVsZF9wdXQoaW50XzE2KTsKPiArCWJ0
-X2N0Zl9maWVsZF9wdXQoZW51bWVyYXRpb24pOwo+ICAJYnRfY3RmX2ZpZWxkX3R5cGVfcHV0KGNv
-bXBvc2l0ZV9zdHJ1Y3R1cmVfdHlwZSk7Cj4gIAlidF9jdGZfZmllbGRfdHlwZV9wdXQoc3RydWN0
-dXJlX3NlcV90eXBlKTsKPiAgCWJ0X2N0Zl9maWVsZF90eXBlX3B1dChzdHJpbmdfdHlwZSk7Cj4g
-QEAgLTU4OCw2ICs2MTEsOSBAQCB2b2lkIHR5cGVfZmllbGRfdGVzdHMoKQo+ICAJYnRfY3RmX2Zp
-ZWxkX3R5cGVfcHV0KHVpbnRfOF90eXBlKTsKPiAgCWJ0X2N0Zl9maWVsZF90eXBlX3B1dChpbnRf
-MTZfdHlwZSk7Cj4gIAlidF9jdGZfZmllbGRfdHlwZV9wdXQodWludF8xMl90eXBlKTsKPiArCWJ0
-X2N0Zl9maWVsZF90eXBlX3B1dChlbnVtZXJhdGlvbl90eXBlKTsKPiArCWJ0X2N0Zl9maWVsZF90
-eXBlX3B1dChlbnVtZXJhdGlvbl9zZXF1ZW5jZV90eXBlKTsKPiArCWJ0X2N0Zl9maWVsZF90eXBl
-X3B1dChlbnVtZXJhdGlvbl9hcnJheV90eXBlKTsKPiAgfQo+ICAKPiAgdm9pZCBwYWNrZXRfcmVz
-aXplX3Rlc3Qoc3RydWN0IGJ0X2N0Zl9zdHJlYW1fY2xhc3MgKnN0cmVhbV9jbGFzcywKPiAtLQo+
-IDEuOC40LjIKPiAKPiAKPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcu
-b3JnCj4gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0
-bmctZGV2Cj4gCgotLSAKTWF0aGlldSBEZXNub3llcnMKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3
-LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0
-dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+Hello there,
+
+liburcu does not build on the Intel Xeon Phi, because the chip is
+recognized as x86_64, but lacks the {s,l,m}fence instructions found on
+usual x86_64 processors. The following is taken from the Xeon Phi dev
+guide:
+
+The Intel=AE Xeon PhiTM coprocessor memory model is the same as that of
+the Intel=AE Pentium processor. The reads and writes always appear in
+programmed order at the system bus (or the ring interconnect in the
+case of the Intel=AE Xeon PhiTM coprocessor); the exception being that
+read misses are permitted to go ahead of buffered writes on the system
+bus when all the buffered writes are cached hits and are, therefore,
+not directed to the same address being accessed by the read miss.
+
+As a consequence of its stricter memory ordering model, the Intel=AE
+Xeon PhiTM coprocessor does not support the SFENCE, LFENCE, and MFENCE
+instructions that provide a more efficient way of controlling memory
+ordering on other Intel processors.
+
+While reads and writes from an Intel=AE Xeon PhiTM coprocessor appear in
+program order on the system bus, the compiler can still reorder
+unrelated memory operations while maintaining program order on a
+single Intel=AE Xeon PhiTM coprocessor (hardware thread). If software
+running on an Intel=AE Xeon PhiTM coprocessor is dependent on the order
+of memory operations on another Intel=AE Xeon PhiTM coprocessor then a
+serializing instruction (e.g., CPUID, instruction with a LOCK prefix)
+between the memory operations is required to guarantee completion of
+all memory accesses issued prior to the serializing instruction before
+any subsequent memory operations are started.
+
+(end of quote)
+
+From what I understand, it is safe to leave out any run-time memory
+barriers, but we still need barriers that prevent the compiler from
+reordering (using __asm__ __volatile__ ("":::"memory")). In
+urcu/arch/x86.h, I see that when CONFIG_RCU_HAVE_FENCE is false,
+memory barriers result in both compile-time and run-time memory
+barriers:  __asm__ __volatile__ ("lock; addl $0,0(%%esp)":::"memory").
+I guess this would work for the Phi, but the lock instruction does not
+seem necessary.
+
+So, should we just set CONFIG_RCU_HAVE_FENCE to false when compiling
+for the Phi and go on with our lives, or should we add a specific
+config for this case?
+
+Simon
