@@ -1,57 +1,172 @@
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: current_thread_info() not respecting program order with gcc 4.8.x
-Date: Thu, 21 Nov 2013 14:32:34 -0800
-Message-ID: <CA+55aFyNZun07BLoD2KQFT7cN1xsiQ2gE6hYwRvOGa3tCap4CQ@mail.gmail.com>
-References: <52803E5D.3050109@mentor.com>
-	<52851395.3010306@mentor.com>
-	<67652521.68027.1384482849638.JavaMail.zimbra@efficios.com>
-	<1691607547.70809.1384874952002.JavaMail.zimbra@efficios.com>
-	<CA+55aFw923sA0E1RQNxFF0OWFtAfcaG-dBUc-0YYZGDSAsaQyg@mail.gmail.com>
-	<528E2E8E.8080004@ahsoftware.de>
+From: Michael Steppe <msteppe91@gmail.com>
+Subject: Having trouble with LTTng folders
+Date: Tue, 19 Nov 2013 08:38:53 -0500
+Message-ID: <CAN7pGtsavSCJsx7dmHH4_gdAY=qDd6GUjw+tagmftPcYNSZD8Q__24081.614733632$1385073321$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Return-path: <linux-kernel-owner@vger.kernel.org>
-In-Reply-To: <528E2E8E.8080004@ahsoftware.de>
-Sender: linux-kernel-owner@vger.kernel.org
-To: Alexander Holler <holler@ahsoftware.de>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Jakub Jelinek <jakub@redhat.com>, Richard Henderson <rth@twiddle.net>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Will Deacon <will.deacon@arm.com>, Catalin Marinas <catalin.marinas@arm.com>, Peter Zijlstra <peterz@infradead.org>, lttng-dev@lists.lttng.org, Nathan Lynch <Nathan_Lynch@mentor.com>, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Andrew Morton <akpm@linux-foundation.org>, Luis Lozano <llozano@chromium.org>, Bhaskar Janakiraman <bjanakiraman@chromium.org>, Han Shen <shenhan@chromium.org>
+Content-Type: multipart/mixed; boundary="===============0672987481=="
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail-qc0-f169.google.com ([209.85.216.169])
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <msteppe91@gmail.com>) id 1VilW7-0004r3-0V
+	for lttng-dev@lists.lttng.org; Tue, 19 Nov 2013 08:39:00 -0500
+Received: by mail-qc0-f169.google.com with SMTP id u18so4833788qcx.0
+	for <lttng-dev@lists.lttng.org>; Tue, 19 Nov 2013 05:38:53 -0800 (PST)
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On Thu, Nov 21, 2013 at 8:02 AM, Alexander Holler <holler@ahsoftware.de> wrote:
->
-> Luis Lozano just noted (see https://lkml.org/lkml/2013/11/20/625) that
-> current_thread_info() has the prototype
->
-> static inline struct thread_info *current_thread_info(void)
-> __attribute_const__;
->
-> on arm (and arm64 and unicore32, something the paste from Mathieu missed so
-> most people here might have missed that detail too). It's a very good
-> finding from Luis.
+--===============0672987481==
+Content-Type: multipart/alternative; boundary=001a113308a414090604eb87c921
 
-No, because it is immaterial.
+--001a113308a414090604eb87c921
+Content-Type: text/plain; charset=ISO-8859-1
 
-We *want* gcc to optimize away multiple accesses to "sp". Because it
-doesn't *matter* whether "sp" changes or not, the *result* is always
-the same. That's what the "const" means.
+Hello!
 
-The "& ~(THREAD_SIZE - 1)" part will remove all the bits that can
-change. Really. So the result *is* constant (within one thread).
-Marking it constant and telling gcc that it can combine these things
-is correct.
+I am currently running lttng-tools 2.0.4 on CentOS 6.3 (unfortunately I
+cannot upgrade either at this time).
 
-Guys, read my email again.
+I have created a plugin in Eclipse (called LTTng Control) that allows users
+to trace without the command line. It is just a simple GUI with buttons
+that essentially relate to the system calls in the terminal. One of the
+options I have allows users to manually connect, via the IP address, to
+another VM to trace remotely on that VM. So far I support RHEL 6.1, 6.3,
+6.4, and CentOS 6.3 remote VMs. I have made all the system calls as seen
+below, creating each trace in /tmp and calling all lttng calls on that
+specific trace:
 
-The bug is not that gcc can re-order or combine the accesses to "sp".
-WE WANT THAT TO HAPPEN.
+lttng create TRACE_<date>_<time> -o /tmp/TRACE_<date>_<time>
+lttng enable-event -a -k TRACE_<date>_<time>
+lttng start TRACE_<date>_<time>
+lttng stop TRACE_<date>_<time>
+lttng destroy TRACE_<date>_<time>
 
-The bug is *outside* that "current_thread_info()" macro/inline
-function. It's the *dereference* of the pointer that gcc re-orders.
-AND THAT IS WRONG.
+I then change ownership of each trace folder (and all subfolders) after the
+destroy command so that the user who signed in when connecting to the
+remote VM now has ownership of the trace and can view and open the trace
+files in the LTTng Eclipse Viewer plugin.
 
-Gcc seems to mess up the alias analysis, and decide that the
-deferences cannot alias. Which is wrong. They clearly *can* alias,
-exactly because the value of "sp & ~(THREAD_SIZE - 1)" ends up having
-the same value all the time.
+This ALL works PERFECTLY on a remote VM where I had the root account
+"adduser user". Unfortunately, I need to set up users a little differently
+for work...
 
-                 Linus
+I have set up another VM that only has a root account. Using Active
+Directory, I set up user accounts from my work's development network
+(giving everyone here at work the ability to sign in with their usernames
+and passwords), meaning root does not have permissions to edit files owned
+by these users. Here lies my problem:
+
+Let's say I sign in to the remote VM as user = "Scott". When I try and
+attempt to perform the "create" command through my plugin, I get:
+
+An error was encountered on 10.176.15.180 (10.176.15.180)
+Host: 10.176.15.180
+Command: /usr/bin/lttng create TRACE_111913_082211 -o
+/tmp/TRACE_111913_082211
+Exit Code: 1
+No output stream captured
+Error Output:
+    Error: Unable to create config file
+    Error: Command error
+
+I am assuming it is unable to create the config file because the all the
+tracing folders and files are created and owned by root and root does not
+have access to write to Scott's home directory, where the config file
+should go. The trace is actually created, but not .lttngrc file is created.
+If I perform an 'lttng list" in the remote VM (signed in as Scott), I can
+see the TRACE_<date>_<time> and that its status is [inactive] (because we
+haven't started the trace yet).
+
+My question is this. Is there a way, in this version of LTT, to have the
+.lttng and .lttngrc folder/file to be located somewhere else? That way, all
+the tracing is done by root and the trace files are stored in /tmp and when
+the tracing is finished, root can give Scott ownership of the trace files?
+
+I know that was long and possibly confusing so let me know if you have any
+questions. Love your tracing tool by the way!
+
+Thanks!
+Michael Steppe
+
+--001a113308a414090604eb87c921
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div><div><div><div><div><div><div><div>Hello!<br><br></di=
+v>I am currently running lttng-tools 2.0.4 on CentOS 6.3 (unfortunately I c=
+annot upgrade either at this time).<br><br>I have created a plugin in Eclip=
+se (called LTTng Control) that allows=20
+users to trace without the command line. It is just a simple GUI with=20
+buttons that essentially relate to the system calls in the terminal. One of=
+ the options I have allows users to manually connect, via the IP address, t=
+o another VM to trace remotely on that VM. So far I support RHEL 6.1, 6.3, =
+6.4, and CentOS 6.3 remote VMs. I=20
+have made all the system calls as seen below, creating each trace in /tmp a=
+nd=20
+calling all lttng calls on that specific trace:<br>
+<br>
+lttng create TRACE_&lt;date&gt;_&lt;time&gt; -o /tmp/TRACE_&lt;date&gt;_&lt=
+;time&gt;<br>
+lttng enable-event -a -k TRACE_&lt;date&gt;_&lt;time&gt;<br>
+lttng start TRACE_&lt;date&gt;_&lt;time&gt;<br>
+lttng stop TRACE_&lt;date&gt;_&lt;time&gt;<br>
+lttng destroy TRACE_&lt;date&gt;_&lt;time&gt;<br><br></div><div>I then chan=
+ge ownership of each trace folder (and all subfolders) after the destroy co=
+mmand so that the user who signed in when connecting to the remote VM now h=
+as ownership of the trace and can view and open the trace files in the LTTn=
+g Eclipse Viewer plugin.<br>
+</div><div><br></div><div>This ALL works PERFECTLY on a remote VM where I h=
+ad the root account &quot;adduser user&quot;. Unfortunately, I need to set =
+up users a little differently for work...<br></div><div><br>I have set up a=
+nother VM that only has a root account. Using Active Directory, I set up us=
+er accounts from my work&#39;s development network (giving everyone here at=
+ work the ability to sign in with their usernames and passwords), meaning r=
+oot does not have permissions to edit files owned by these users. Here lies=
+ my problem:<br>
+<br></div><div>Let&#39;s say I sign in to the remote VM as user =3D &quot;S=
+cott&quot;. When I try and attempt to perform the &quot;create&quot; comman=
+d through my plugin, I get:<br><br>An error was encountered on 10.176.15.18=
+0 (10.176.15.180)<br>
+Host: 10.176.15.180<br>Command: /usr/bin/lttng create TRACE_111913_082211 -=
+o /tmp/TRACE_111913_082211<br>Exit Code: 1<br>No output stream captured<br>=
+Error Output:<br>=A0=A0=A0 Error: Unable to create config file<br>=A0=A0=A0=
+ Error: Command error<br>
+<br></div><div>I am assuming it is unable to create the config file because=
+ the all the tracing folders and files are created and owned by root and ro=
+ot does not have access to write to Scott&#39;s home directory, where the c=
+onfig file should go. The trace is actually created, but not .lttngrc file =
+is created. If I perform an &#39;lttng list&quot; in the remote VM (signed =
+in as Scott), I can see the TRACE_&lt;date&gt;_&lt;time&gt; and that its st=
+atus is [inactive] (because we haven&#39;t started the trace yet).<br>
+<br></div><div>My question is this. Is there a way, in this version of LTT,=
+ to have the .lttng and .lttngrc folder/file to be located somewhere else? =
+That way, all the tracing is done by root and the trace files are stored in=
+ /tmp and when the tracing is finished, root can give Scott ownership of th=
+e trace files?<br>
+<br></div><div>I know that was long and possibly confusing so let me know i=
+f you have any questions. Love your tracing tool by the way!<br></div><div>=
+<br>Thanks!<br></div><div>Michael Steppe<br></div><div><br></div><br></div>
+<br></div></div></div></div></div></div>
+
+--001a113308a414090604eb87c921--
+
+
+--===============0672987481==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0672987481==--
