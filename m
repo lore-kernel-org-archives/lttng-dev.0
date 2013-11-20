@@ -1,19 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Overwrite mode, lost events, and reader behaviour
-Date: Wed, 20 Nov 2013 15:42:02 +0000 (UTC)
-Message-ID: <1714397637.71404.1384962122849.JavaMail.zimbra__34826.5261309736$1384962175$gmane$org@efficios.com>
-References: <48CF5AC71E61DB46B70D0F388054EFFD267A2924@VAL-E-01.valcartier.drdc-rddc.gc.ca>
-	<1552475027.71330.1384958632444.JavaMail.zimbra@efficios.com>
-	<48CF5AC71E61DB46B70D0F388054EFFD267A2D69@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Subject: loglevel: <<UNKNOWN>>
+Date: Wed, 20 Nov 2013 21:04:43 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD267A2E4E__3814.29246995157$1384981547$gmane$org@VAL-E-01.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1Vj9ul-0001R0-Ii
-	for lttng-dev@lists.lttng.org; Wed, 20 Nov 2013 10:42:09 -0500
-In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD267A2D69@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1VjEx2-0003bp-CQ
+	for lttng-dev@lists.lttng.org; Wed, 20 Nov 2013 16:04:50 -0500
+Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,53 +19,45 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Daniel Thibault <Daniel.Thibault@drdc-rddc.gc.ca>
-Cc: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJEYW5pZWwgVGhpYmF1bHQiIDxE
-YW5pZWwuVGhpYmF1bHRAZHJkYy1yZGRjLmdjLmNhPgo+IFRvOiAiTWF0aGlldSBEZXNub3llcnMi
-IDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+Cj4gQ2M6IGx0dG5nLWRldkBsaXN0cy5s
-dHRuZy5vcmcKPiBTZW50OiBXZWRuZXNkYXksIE5vdmVtYmVyIDIwLCAyMDEzIDEwOjM4OjI4IEFN
-Cj4gU3ViamVjdDogUkU6IFtsdHRuZy1kZXZdIE92ZXJ3cml0ZSBtb2RlLCBsb3N0IGV2ZW50cywg
-YW5kIHJlYWRlciBiZWhhdmlvdXIKPiAKPiAtLS0tLU1lc3NhZ2UgZCdvcmlnaW5lLS0tLS0KPiBF
-bnZvecOpwqA6IDIwIG5vdmVtYnJlIDIwMTMgMDk6NDQKPiAKPiA+IFdlIGRvbid0IHVzZSB0aGUg
-dGltZXN0YW1wcyBmb3IgdGhpcy4gRWFjaCBwYWNrZXQgaGFzIGEgc2VxdWVuY2UgbnVtYmVyCj4g
-PiBnaXZlbiBieSB0aGUgcHJvZHVjZXIsIGFuZCB0aGUgcmVhZGVyIGlzIHF1ZXJ5aW5nIGZvciBw
-YWNrZXRzIGJ5Cj4gPiByZXF1ZXN0aW5nIHNlcXVlbmNlIG51bWJlcnMKPiA+IChpbmNyZWFzaW5n
-IGJ5IG9uZSBlYWNoIHRpbWUpLiBJbiB0aGUgY2FzZSB5b3UgcHJlc2VudCBoZXJlLCB0aGUgcmVh
-ZGVyCj4gPiB3aWxsIHRyeSB0byBxdWVyeSB0aGUgc2VxdWVuY2UgbnVtYmVyIG9mIGFuIG92ZXJ3
-cml0dGVuIHBhY2tldCwgYW5kIHdpbGwKPiA+IHRoZXJlZm9yZSBub3QgYmUgYWJsZSB0byBnZXQg
-aXQuCj4gPiBJdCB3aWxsIG1vdmUgb24gdG8gdGhlIG5leHQgcGFja2V0IHVudGlsIGl0IGZpbmFs
-bHkgZmluZHMgdGhlIGZpcnN0IHBhY2tldAo+ID4gd2hpY2ggc2VxdWVuY2UgbnVtYmVyIG1hdGNo
-ZXMgaXRzIGN1cnJlbnQgc2VxdWVuY2UgbnVtYmVyIChvciB0aGUgd3JpdGVyCj4gPiBwb3NpdGlv
-bikuCj4gCj4gICAgU28gbXkgb3JpZ2luYWwgc3VnZ2VzdGlvbiBob2xkczogcGVyZm9ybWFuY2Ug
-Y291bGQgaW5jcmVhc2UganVzdCBhIGxpdHRsZQo+ICAgIGJpdCAob24gdGhlIHJlYWRlciBzaWRl
-KSBpZiB0aGUgcmVhZGVyJ3MgcmVxdWVzdAo+ICAgIChsaWJfcmluZ19idWZmZXJfZ2V0X3N1YmJ1
-ZiwgaXMgaXQ/KSBkaWQgbm90IHJldHVybiAtRUFHQUlOIGJ1dCByYXRoZXIKPiAgICB0aGUgY3Vy
-cmVudCAiZWFybGllc3QgYXZhaWxhYmxlIHNlcXVlbmNlIG51bWJlciIgaXQgc2hvdWxkIG5leHQg
-YXNrIGZvci4KPiAgICBJbiB0aGUgKHByZXN1bWFibHkgcmFyZSkgY2FzZSB3aGVyZSB0aGUgcmVh
-ZGVyIGhhcyBiZWVuIHBhc3NlZCBieSB0aGUKPiAgICB3cml0ZXJzIGJ5IHNldmVyYWwgc3ViLWJ1
-ZmZlciBzZXF1ZW5jZSBudW1iZXJzJyB3b3J0aCwgdGhpcyB3b3VsZCBhbGxvdwo+ICAgIHRoZSBy
-ZWFkZXIgdG8gc2tpcCBhaGVhZCB0byB0aGUgbmV4dCBsaWtlbHktdG8tc3VjY2VlZCBzZXF1ZW5j
-ZSBudW1iZXIKPiAgICByZXF1ZXN0LiAgRG9lcyB0aGlzIG1ha2Ugc2Vuc2U/CgpTa2lwcGluZyBh
-aGVhZCBsaWtlIHRoaXMgY291bGQgaW5kZWVkIGJlIGEgZ29vZCBhcHByb2FjaC4gV2UgZG9uJ3Qg
-bmVlZCB0bwpjaGFuZ2UgZ2V0X3N1YmJ1ZigpIHRvIGRvIHRoaXMgdGhvdWdoLiBXaGVuIHRoZSBj
-b25zdW1lciBnZXRzIGEgLUVBR0FJTiwKaXQgY291bGQgdXNlIHRoZSBzbmFwc2hvdCBmZWF0dXJl
-IHRvIGZpbmQgdGhlIG5ldyBjb25zdW1lciBwb3NpdGlvbi4gU2FtZQplZmZlY3QsIG5vIGNoYW5n
-ZSBuZWVkZWQgaW4gbW9kdWxlcyBub3IgVVNULgoKVGhhbmtzLAoKTWF0aGlldQoKPiAKPiBEYW5p
-ZWwgVS4gVGhpYmF1bHQKPiBQcm90ZWN0aW9uIGRlcyBzeXN0w6htZXMgZXQgY29udHJlbWVzdXJl
-cyAoUFNDKSB8IFN5c3RlbXMgUHJvdGVjdGlvbiAmCj4gQ291bnRlcm1lYXN1cmVzIChTUEMpCj4g
-Q3liZXIgc8OpY3VyaXTDqSBwb3VyIGxlcyBtaXNzaW9ucyBlc3NlbnRpZWxsZXMgKENNRSkgfCBN
-aXNzaW9uIENyaXRpY2FsIEN5YmVyCj4gU2VjdXJpdHkgKE1DQ1MpCj4gUiAmIEQgcG91ciBsYSBk
-w6lmZW5zZSBDYW5hZGEgLSBWYWxjYXJ0aWVyIChSRERDIFZhbGNhcnRpZXIpIHwgRGVmZW5jZSBS
-JkQKPiBDYW5hZGEgLSBWYWxjYXJ0aWVyIChEUkRDIFZhbGNhcnRpZXIpCj4gMjQ1OSByb3V0ZSBk
-ZSBsYSBCcmF2b3VyZQo+IFF1w6liZWMgUUMgIEczSiAxWDUKPiBDQU5BREEKPiBWb3ggOiAoNDE4
-KSA4NDQtNDAwMCB4NDI0NQo+IEZheCA6ICg0MTgpIDg0NC00NTM4Cj4gTkFDIDogOTE4ViBRU0RK
-IDxodHRwOi8vd3d3LnRyYXZlbGdpcy5jb20vbWFwLmFzcD9hZGRyPTkxOFYlMjBRU0RKPgo+IEdv
-dXZlcm5lbWVudCBkdSBDYW5hZGEgfCBHb3Zlcm5tZW50IG9mIENhbmFkYQo+IDxodHRwOi8vd3d3
-LnZhbGNhcnRpZXIuZHJkYy1yZGRjLmdjLmNhLz4KPiAKCi0tIApNYXRoaWV1IERlc25veWVycwpF
-ZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCgpfX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5n
-LWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxt
-YW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+   Something strange is going on in one of my virtual machines.  I was fool=
+ing around with defining events, creating and deleting sessions, etc., and =
+now the list of kernel tracepoints (lttng list -k) contains several entries=
+ where the loglevel reads a corrupt value.  Specifically:
+
+      skb_consume (loglevel: <<UNKNOWN>> (577)) (type:tracepoint)
+      skb_copy_datagram_iovec (loglevel: <<UNKNOWN>> (1140980544)) (type:tr=
+acepoint)
+      sched_switch (loglevel: <<UNKNOWN>> (6647407)) (type:tracepoint)
+      sched_migrate_task (loglevel: <<UNKNOWN>> (1140883008)) (type:tracepo=
+int)
+      sched_process_free (loglevel: <<UNKNOWN>> (51088)) (type:tracepoint)
+      regulator_enable (loglevel: <<UNKNOWN>> (1140998064)) (type:tracepoin=
+t)
+      regulator_enable_delay (loglevel: <<UNKNOWN>> (1140998080)) (type:tra=
+cepoint)
+      power_machine_suspend (loglevel: <<UNKNOWN>> (52)) (type:tracepoint)
+
+   None of these events were the subject of kprobe or kretprobe events, exc=
+ept maybe sched_switch.
+
+   This weirdness went away after a restart of lttng-sessiond.  I've saved =
+the VM with this corrupt system in case anyone wants to investigate.
+
+Daniel U. Thibault
+Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
+ntermeasures (SPC)
+Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
+Cyber Security (MCCS)
+R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
+ Canada - Valcartier (DRDC Valcartier)
+2459 route de la Bravoure
+Qu=E9bec QC=A0 G3J 1X5
+CANADA
+Vox=A0: (418) 844-4000 x4245
+Fax=A0: (418) 844-4538
+NAC=A0: 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+Gouvernement du Canada=A0| Government of Canada
+<http://www.valcartier.drdc-rddc.gc.ca/>
