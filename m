@@ -1,62 +1,451 @@
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: current_thread_info() not respecting program order with gcc 4.8.x
-Date: Tue, 19 Nov 2013 16:41:17 -0800
-Message-ID: <CA+55aFw923sA0E1RQNxFF0OWFtAfcaG-dBUc-0YYZGDSAsaQyg@mail.gmail.com>
-References: <52803E5D.3050109@mentor.com>
-	<52851395.3010306@mentor.com>
-	<67652521.68027.1384482849638.JavaMail.zimbra@efficios.com>
-	<1691607547.70809.1384874952002.JavaMail.zimbra@efficios.com>
+From: Salman Rafiq <salman.rafiq@esk.fraunhofer.de>
+Subject: Re: Reading CTF trace using Babeltrace API
+Date: Wed, 20 Nov 2013 13:45:55 +0100
+Message-ID: <E537659DE2B2C54EBD9FC9180F05988039CC85EA02__19849.8182734058$1384951623$gmane$org@zulu.esk.fraunhofer.de>
+References: <E537659DE2B2C54EBD9FC9180F059880395D85FEA2@zulu.esk.fraunhofer.de>
+	<CA+jJMxtmqSLA9wpyCMxCo5i7k2=ndL_GZNi8Dbw8YsSbQ15qeQ@mail.gmail.com>
+	<E537659DE2B2C54EBD9FC9180F059880395D860010@zulu.esk.fraunhofer.de>
+	<CA+jJMxsMU5u_4m3pUPJ6EBQVKTL_4+PNSj8iHvRcn6CJ=bt6Ag@mail.gmail.com>
+	<439534666.36114.1381274066505.JavaMail.zimbra@efficios.com>
+	<CA+jJMxtK8ZHvXKw3Ea6wxF_6f8_LwmkDahbxCg=rBu3SXjBMWg@mail.gmail.com>
+	<E537659DE2B2C54EBD9FC9180F059880395D955070@zulu.esk.fraunhofer.de>
+	<CA+jJMxuC+NUrGdo4kespb+7u7E3etPoE--0UmekFqyYr3Jzkwg@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Return-path: <linux-kernel-owner@vger.kernel.org>
-In-Reply-To: <1691607547.70809.1384874952002.JavaMail.zimbra@efficios.com>
-Sender: linux-kernel-owner@vger.kernel.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Jakub Jelinek <jakub@redhat.com>, Richard Henderson <rth@twiddle.net>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Will Deacon <will.deacon@arm.com>, Catalin Marinas <catalin.marinas@arm.com>, Peter Zijlstra <peterz@infradead.org>, lttng-dev@lists.lttng.org, Nathan Lynch <Nathan_Lynch@mentor.com>, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Andrew Morton <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mx-relay14-dus.antispameurope.com ([94.100.134.214])
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <salman.rafiq@esk.fraunhofer.de>) id 1Vj7Aa-0003eq-4Y
+	for lttng-dev@lists.lttng.org; Wed, 20 Nov 2013 07:46:14 -0500
+In-Reply-To: <CA+jJMxuC+NUrGdo4kespb+7u7E3etPoE--0UmekFqyYr3Jzkwg@mail.gmail.com>
+Content-Language: en-US
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+To: =?iso-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-On Tue, Nov 19, 2013 at 7:29 AM, Mathieu Desnoyers
-<mathieu.desnoyers@efficios.com> wrote:
+Thanks J=E9r=E9mie. It worked out fine by using the bt_ctf_get_index() func=
+tion.
+As for now, I ignored the warning " [warning] Extracting String".
+
+
+Regards,
+Salman
+--
+Salman Rafiq
+Gesch=E4ftsfeld Industrial Communication
+Fraunhofer-Institut  f=FCr Eingebettete Systeme und Kommunikationstechnik E=
+SK
+
+Hansastra=DFe 32 | 80686 M=FCnchen
+Telefon, Fax:=A0 +49 89 547088-356 | +49 89 547088-221
+E-Mail:=A0=A0 salman.rafiq@esk.fraunhofer.de
+=A0 =
+
+Internet: =
+
+http://www.esk.fraunhofer.de
+http://www.twitter.com/FraunhoferESK
+
+-----Original Message-----
+From: jeremie.galarneau@gmail.com [mailto:jeremie.galarneau@gmail.com] On B=
+ehalf Of J=E9r=E9mie Galarneau
+Sent: Donnerstag, 7. November 2013 22:41
+To: Salman Rafiq
+Cc: Mathieu Desnoyers; Julien Desfossez; lttng-dev@lists.lttng.org
+Subject: Re: Reading CTF trace using Babeltrace API
+
+On Wed, Oct 23, 2013 at 10:50 AM, Salman Rafiq <salman.rafiq@esk.fraunhofer=
+.de> wrote:
+> Hello again :)
 >
-> Since each current_thread_info() is a different asm ("sp") without clobber nor volatile, AFAIU, the compiler is within its right to reorder them.
+> While reading Kernel trace events (system calls), I came across an issue =
+related to reading the field 'args' inside 'sys_unknown' system call event.
+>
+> Below is the information I get using public babeltrace API's for the even=
+t field type.
+> Ctf_type_id =3D 8  (CTF_TYPE_ARRAY)
+>
+>
+> But when I try to read the value for the field using the following API =
 
-I don't understand why you say that.
+> char * bt_ctf_get_char_array(const struct bt_definition *field);
+>
+> I receive null value. Also it gives me warning that I am instead extracti=
+ng a String.
+> [warning] Extracting String
+>
+> Also, I am unable to read the value using the following API.
+> char *bt_ctf_get_string(const struct bt_definition *field);
+>
 
-The ordering of the access to the asm("sp") register is totally
-irrelevant. You are "correct" in saying that the compiler is within
-its right to re-order them, but that is the worst kind of correct:
-it's totally immaterial. In fact, we *want* the compiler to not just
-re-order the accesses to %sp, but to notice that it can combine them,
-and do CSE on that whole expression when it is used multiple times
-within the same function (like it often is used).
+You should be using the bt_ctf_get_index() function to access the individua=
+l elements of _args. Let me know how that works out.
 
-So the compiler can very much decide to re-read %sp all it wants, and
-re-order those reads all it wants, and that's not the bug at all.
-Putting a clobber or a volatile on it would disable the optimization
-we *want* to happen.
+As for the "Extracting string" message, it can indeed be misleading...
 
-So don't bark up the wrong tree.
+J=E9r=E9mie
 
-The bug seems to be that gcc re-orders the *memory* *accesses* through
-that point, which is not correct in any way, shape, or form. If we
-have a write to a memory location followed by a read of the same
-memory location, the compiler ABSOLUTELY MUST NOT RE-ORDER THEM. The
-write obviously changes the value of the read.
+>
+> below is the sample event recorded:
+> [00002934900435406801] (+0.000009630) sys_unknown: { cpu_id =3D 3 }, { =
 
-It seems that some gcc alias analysis completely incorrectly thinks
-that they are not the same memory location, and do not alias. My guess
-would be that gcc sees that that they are based on the stack pointer
-with "different" offsets, and decides that the memory locations must
-be different - without noticing that the "& ~(THREAD_SIZE - 1)" will
-end up generating the same address for both of them.
+> id =3D 277, args =3D [ [0] =3D 22, [1] =3D 0, [2] =3D 4096, [3] =3D 2, [4=
+] =3D 4096, =
 
-There may be some insane "two different objects on the stack cannot
-alias" logic, which is true for *objects* on the stack, but it sure as
-hell isn't true for random accesses through asm("sp").
+> [5] =3D 5 ] }
+>
+> AND the event definition:
+> event {
+>         name =3D sys_unknown;
+>         id =3D 2;
+>         stream_id =3D 0;
+>         fields :=3D struct {
+>                 integer { size =3D 32; align =3D 8; signed =3D 0; encodin=
+g =3D none; base =3D 10; } _id
+>                 integer { size =3D 64; align =3D 8; signed =3D 0; encodin=
+g =3D none; base =3D 10; } _args[6];
+>         };
+> };
+>
+>
+> Any suggestion related to that will be very helpful.
+> Thanks!
+>
+> Best Regards,
+> Salman
+> --
+> Salman Rafiq
+> Gesch=E4ftsfeld Industrial Communication Fraunhofer-Institut  f=FCr =
 
-If I read this thread correctly, you're all talking about something
-else than the actual bug, and are trying to say that there is
-something wrong with re-ordering the access to %sp itself. Missing the
-_real_ bug entirely. See above.
+> Eingebettete Systeme und Kommunikationstechnik ESK
+>
+> Hansastra=DFe 32 | 80686 M=FCnchen
+> Telefon, Fax:  +49 89 547088-356 | +49 89 547088-221
+> E-Mail:   salman.rafiq@esk.fraunhofer.de
+>
+> Internet:
+> http://www.esk.fraunhofer.de
+> http://www.twitter.com/FraunhoferESK
+>
+>
+> -----Original Message-----
+> From: jeremie.galarneau@gmail.com [mailto:jeremie.galarneau@gmail.com] =
 
-                  Linus
+> On Behalf Of J=E9r=E9mie Galarneau
+> Sent: Mittwoch, 9. Oktober 2013 01:50
+> To: Mathieu Desnoyers
+> Cc: Salman Rafiq; Julien Desfossez; lttng-dev@lists.lttng.org
+> Subject: Re: Reading CTF trace using Babeltrace API
+>
+> On Tue, Oct 8, 2013 at 7:14 PM, Mathieu Desnoyers <mathieu.desnoyers@effi=
+cios.com> wrote:
+>> ----- Original Message -----
+>>> From: "J=E9r=E9mie Galarneau" <jeremie.galarneau@efficios.com>
+>>> To: "Salman Rafiq" <salman.rafiq@esk.fraunhofer.de>
+>>> Cc: jdesfossez@efficios.com, lttng-dev@lists.lttng.org, "Mathieu =
+
+>>> Desnoyers" <mathieu.desnoyers@efficios.com>
+>>> Sent: Tuesday, October 8, 2013 2:52:38 PM
+>>> Subject: Re: Reading CTF trace using Babeltrace API
+>> [...]
+>>>
+>>> The problem is that the "id" fields in both struct =
+
+>>> event_header_compact and event_header_large acts as a variant's tag =
+
+>>> enumeration.
+>>>
+>>> For instance, if we take a look at the event_header_compact =
+
+>>> structure,
+>>>
+>>> struct event_header_compact {
+>>>         enum : uint5_t { compact =3D 0 ... 30, extended =3D 31 } id;
+>>>         variant <id> {
+>>>                 struct {
+>>>                         uint27_clock_monotonic_t timestamp;
+>>>                 } compact;
+>>>                 struct {
+>>>                         uint32_t id;
+>>>                         uint64_clock_monotonic_t timestamp;
+>>>                 } extended;
+>>>         } v;
+>>> } align(8);
+>>>
+>>> The "enum id" field will indicate the event's id if it has a value =
+
+>>> of [0, 30]. It also indicates that the "compact" structure is =
+
+>>> selected in the variant that follows. If id =3D=3D 31, the "extended" =
+
+>>> structure is selected, which means that you should retrieve the "id" =
+
+>>> field's value from that structure.
+>>>
+>>> Since code is worth a thousand words, here's a more complete code =
+
+>>> sample to read the id fields.
+>>>
+>>> while ((ctf_event =3D bt_ctf_iter_read_event(iter))) {
+>>>         uint64_t event_id =3D 0;
+>>>         const struct bt_definition *stream_event_header_scope =3D
+>>>                 bt_ctf_get_top_level_scope(
+>>>                         ctf_event, BT_STREAM_EVENT_HEADER);
+>>>         const struct bt_definition *id_definition =3D
+>>>                 bt_ctf_get_field(ctf_event, stream_event_header_scope,
+>>>                                  "id");
+>>>         const struct bt_definition *v_definition =3D
+>>>                 bt_ctf_get_field(ctf_event, stream_event_header_scope,
+>>>                                  "v");
+>>>
+>>>         /* "id may be an enum, get the underlying integer if it's the c=
+ase */
+>>>         if (id_definition &&
+>>> bt_ctf_field_type(bt_ctf_get_decl_from_def(id_definition)) =3D=3D
+>>> CTF_TYPE_ENUM) {
+>>>                 id_definition =3D bt_ctf_get_enum_int(id_definition);
+>>>         }
+>>>
+>>>         /* Check if there is a "v" field and if it contains an "id" fie=
+ld */
+>>>         if (v_definition &&
+>>> bt_ctf_field_type(bt_ctf_get_decl_from_def(v_definition)) =3D=3D
+>>> CTF_TYPE_STRUCT) {
+>>>                 struct bt_definition const * const *list =3D NULL;
+>>>                 unsigned int count =3D 0;
+>>>                 unsigned int i;
+>>>
+>>>                 ret =3D bt_ctf_get_field_list(ctf_event, v_definition, =
+
+>>> &list, &count);
+>>>                 if (ret) {
+>>>                         goto end;
+>>>                 }
+>>>
+>>>                 for (i =3D 0; i < count; i++) {
+>>>                         const char *name =3D =
+
+>>> bt_ctf_field_name(list[i]);
+>>>
+>>>                         if (strcmp("id", name) =3D=3D 0) {
+>>>                                 id_definition =3D list[i];
+>>>                                 break;
+>>>                         }
+>>>                 }
+>>
+>> Instead of doing this bt_ctf_get_field_list() and iteration, can't we si=
+mply use bt_ctf_get_field() to try getting the struct bt_definition ?
+>
+> Right. I was under the impression the bt_ctf_get_field() would only work =
+on scopes, but it's not the case.
+>
+> Thanks!
+> J=E9r=E9mie
+>
+>>
+>> Thanks,
+>>
+>> Mathieu
+>>
+>>>         }
+>>>
+>>>         if (id_definition &&
+>>> bt_ctf_field_type(bt_ctf_get_decl_from_def(id_definition)) =3D=3D
+>>> CTF_TYPE_INTEGER) {
+>>>                 event_id =3D bt_ctf_get_uint64(id_definition);
+>>>         }
+>>>
+>>>         printf("id =3D %" PRIu64 "\n", event_id); }
+>>>
+>>> Regards,
+>>> J=E9r=E9mie
+>>>
+>>> > Thanks a lot!
+>>> >
+>>> > Regards,
+>>> > Salman
+>>> >
+>>> > --
+>>> > Salman Rafiq
+>>> > Gesch=E4ftsfeld Industrial Communication Fraunhofer-Institut  f=FCr =
+
+>>> > Eingebettete Systeme und Kommunikationstechnik ESK
+>>> >
+>>> > Hansastra=DFe 32 | 80686 M=FCnchen
+>>> > Telefon, Fax:  +49 89 547088-356 | +49 89 547088-221
+>>> > E-Mail:   salman.rafiq@esk.fraunhofer.de
+>>> >
+>>> > Internet:
+>>> > http://www.esk.fraunhofer.de
+>>> > http://www.twitter.com/FraunhoferESK
+>>> >
+>>> >
+>>> > -----Original Message-----
+>>> > From: jeremie.galarneau@gmail.com
+>>> > [mailto:jeremie.galarneau@gmail.com] On Behalf Of J=E9r=E9mie =
+
+>>> > Galarneau
+>>> > Sent: Mittwoch, 2. Oktober 2013 20:25
+>>> > To: Salman Rafiq
+>>> > Cc: jdesfossez@efficios.com; lttng-dev@lists.lttng.org; Mathieu =
+
+>>> > Desnoyers
+>>> > Subject: Re: Reading CTF trace using Babeltrace API
+>>> >
+>>> > On Wed, Oct 2, 2013 at 12:55 PM, Salman Rafiq =
+
+>>> > <salman.rafiq@esk.fraunhofer.de> wrote:
+>>> >> Dear LTTngers,
+>>> >>
+>>> >> I would like to ask few questions related to the API's for =
+
+>>> >> reading CTF traces.
+>>> >>
+>>> >> 1.  Is there any way to read CTF metadata independently, like we =
+
+>>> >> have certain API's to read the events.
+>>> >>
+>>> >
+>>> > Not from the public API, unfortunately.
+>>> >
+>>> >> 2. There are certain scopes defined in ctf/events.h like:
+>>> >>         BT_TRACE_PACKET_HEADER          =3D 0,
+>>> >>         BT_STREAM_PACKET_CONTEXT        =3D 1,
+>>> >>         BT_STREAM_EVENT_HEADER          =3D 2,
+>>> >>         BT_STREAM_EVENT_CONTEXT         =3D 3,
+>>> >>         BT_EVENT_CONTEXT                =3D 4,
+>>> >>         BT_EVENT_FIELDS                 =3D 5,
+>>> >>
+>>> >> I could not figure out the way to ready the fields 'id' and =
+
+>>> >> 'stream_id', for a particular event while iterating through the trac=
+e.
+>>> >> Though I can ready the event name using an API and fields using =
+
+>>> >> BT_EVENT_FIELDS as a scope.
+>>> >> For e.g. consider the
+>>> >>
+>>> >> event {
+>>> >>         name =3D sched_migrate_task;
+>>> >>         id =3D 1;
+>>> >>         stream_id =3D 0;
+>>> >>         fields :=3D struct {
+>>> >>                 integer { size =3D 8; align =3D 8; signed =3D 1; enc=
+oding =3D
+>>> >>                 UTF8; base =3D 10; } _comm[16];
+>>> >>                 integer { size =3D 32; align =3D 8; signed =3D 1; en=
+coding =3D
+>>> >>                 none; base =3D 10; } _tid;
+>>> >>                 integer { size =3D 32; align =3D 8; signed =3D 1; en=
+coding =3D
+>>> >>                 none; base =3D 10; } _prio;
+>>> >>                 integer { size =3D 32; align =3D 8; signed =3D 1; en=
+coding =3D
+>>> >>                 none; base =3D 10; } _orig_cpu;
+>>> >>                 integer { size =3D 32; align =3D 8; signed =3D 1; en=
+coding =3D
+>>> >>                 none; base =3D 10; } _dest_cpu;
+>>> >>         };
+>>> >> };
+>>> >>
+>>> >
+>>> > The "id" field is part of the BT_STREAM_EVENT_HEADER scope, while =
+
+>>> > the "stream_id" field is part of the BT_TRACE_PACKET_HEADER scope.
+>>> >
+>>> > The code below is adapted from converter/babeltrace.c's
+>>> > convert_trace() loop to print both values.
+>>> >
+>>> > while ((ctf_event =3D bt_ctf_iter_read_event(iter))) {
+>>> >
+>>> >         const struct bt_definition *stream_event_header_scope =3D
+>>> >                 bt_ctf_get_top_level_scope(
+>>> >                         ctf_event, BT_STREAM_EVENT_HEADER);
+>>> >         const struct bt_definition *id_field =3D
+>>> >                 bt_ctf_get_field(
+>>> >                         ctf_event, stream_event_header_scope, =
+
+>>> > "id");
+>>> >
+>>> >         printf("id =3D %" PRIu64 "\n", bt_ctf_get_uint64(id_field));
+>>> >
+>>> >         const struct bt_definition *packet_header_scope =3D
+>>> >                 bt_ctf_get_top_level_scope(
+>>> >                         ctf_event, BT_TRACE_PACKET_HEADER);
+>>> >         const struct bt_definition *stream_id_field =3D
+>>> >                 bt_ctf_get_field(
+>>> >                         ctf_event, packet_header_scope, =
+
+>>> > "stream_id");
+>>> >
+>>> >         printf("stream_id =3D %" PRIu64 "\n", bt_ctf_get_uint64(
+>>> >                        stream_id_field)); [...] }
+>>> >
+>>> > Regards,
+>>> > J=E9r=E9mie
+>>> >
+>>> >>
+>>> >> Any help or suggestion related to this issue will be really apprecia=
+ted.
+>>> >> Thanks!
+>>> >>
+>>> >> Regards,
+>>> >> Salman
+>>> >>
+>>> >> --
+>>> >> Salman Rafiq
+>>> >> Gesch=E4ftsfeld Industrial Communication Fraunhofer-Institut  f=FCr =
+
+>>> >> Eingebettete Systeme und Kommunikationstechnik ESK
+>>> >>
+>>> >> Hansastra=DFe 32 | 80686 M=FCnchen
+>>> >> Telefon, Fax:  +49 89 547088-356 | +49 89 547088-221
+>>> >> E-Mail:   salman.rafiq@esk.fraunhofer.de
+>>> >>
+>>> >> Internet:
+>>> >> http://www.esk.fraunhofer.de
+>>> >> http://www.twitter.com/FraunhoferESK
+>>> >>
+>>> >
+>>> >
+>>> >
+>>> > --
+>>> > J=E9r=E9mie Galarneau
+>>> > EfficiOS Inc.
+>>> > http://www.efficios.com
+>>>
+>>>
+>>>
+>>> --
+>>> J=E9r=E9mie Galarneau
+>>> EfficiOS Inc.
+>>> http://www.efficios.com
+>>>
+>>
+>> --
+>> Mathieu Desnoyers
+>> EfficiOS Inc.
+>> http://www.efficios.com
+>
+>
+>
+> --
+> J=E9r=E9mie Galarneau
+> EfficiOS Inc.
+> http://www.efficios.com
+
+
+
+--
+J=E9r=E9mie Galarneau
+EfficiOS Inc.
+http://www.efficios.com
