@@ -1,88 +1,61 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: current_thread_info() not respecting program order with gcc
- 4.8.x
-Date: Wed, 20 Nov 2013 15:10:48 +0000 (UTC)
-Message-ID: <1067303101.71379.1384960248303.JavaMail.zimbra@efficios.com>
-References: <52803E5D.3050109@mentor.com> <52851395.3010306@mentor.com> <67652521.68027.1384482849638.JavaMail.zimbra@efficios.com> <1691607547.70809.1384874952002.JavaMail.zimbra@efficios.com> <CA+55aFw923sA0E1RQNxFF0OWFtAfcaG-dBUc-0YYZGDSAsaQyg@mail.gmail.com>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Subject: Re: Overwrite mode, lost events, and reader behaviour
+Date: Wed, 20 Nov 2013 15:38:28 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD267A2D69__41185.9243330129$1384961966$gmane$org@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+References: <48CF5AC71E61DB46B70D0F388054EFFD267A2924@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+	<1552475027.71330.1384958632444.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Return-path: <linux-kernel-owner@vger.kernel.org>
-In-Reply-To: <CA+55aFw923sA0E1RQNxFF0OWFtAfcaG-dBUc-0YYZGDSAsaQyg@mail.gmail.com>
-Sender: linux-kernel-owner@vger.kernel.org
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Jakub Jelinek <jakub@redhat.com>, Richard Henderson <rth@twiddle.net>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Will Deacon <will.deacon@arm.com>, Catalin Marinas <catalin.marinas@arm.com>, Peter Zijlstra <peterz@infradead.org>, lttng-dev@lists.lttng.org, Nathan Lynch <Nathan_Lynch@mentor.com>, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Andrew Morton <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1Vj9rJ-00006j-IV
+	for lttng-dev@lists.lttng.org; Wed, 20 Nov 2013 10:38:36 -0500
+In-Reply-To: <1552475027.71330.1384958632444.JavaMail.zimbra@efficios.com>
+Content-Language: fr-FR
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
------ Original Message -----
-> From: "Linus Torvalds" <torvalds@linux-foundation.org>
-> To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>, "Jakub Jelinek" <jakub@redhat.com>, "Richard Henderson"
-> <rth@twiddle.net>
-> Cc: "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>, "Will Deacon" <will.deacon@arm.com>, "Catalin
-> Marinas" <catalin.marinas@arm.com>, "Peter Zijlstra" <peterz@infradead.org>, lttng-dev@lists.lttng.org, "Nathan
-> Lynch" <Nathan_Lynch@mentor.com>, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, "Andrew Morton"
-> <akpm@linux-foundation.org>
-> Sent: Tuesday, November 19, 2013 7:41:17 PM
-> Subject: Re: current_thread_info() not respecting program order with gcc 4.8.x
-> 
-> On Tue, Nov 19, 2013 at 7:29 AM, Mathieu Desnoyers
-> <mathieu.desnoyers@efficios.com> wrote:
-> >
-> > Since each current_thread_info() is a different asm ("sp") without clobber
-> > nor volatile, AFAIU, the compiler is within its right to reorder them.
-> 
-> I don't understand why you say that.
-> 
-> The ordering of the access to the asm("sp") register is totally
-> irrelevant. You are "correct" in saying that the compiler is within
-> its right to re-order them, but that is the worst kind of correct:
-> it's totally immaterial. In fact, we *want* the compiler to not just
-> re-order the accesses to %sp, but to notice that it can combine them,
-> and do CSE on that whole expression when it is used multiple times
-> within the same function (like it often is used).
-> 
-> So the compiler can very much decide to re-read %sp all it wants, and
-> re-order those reads all it wants, and that's not the bug at all.
-> Putting a clobber or a volatile on it would disable the optimization
-> we *want* to happen.
-> 
-> So don't bark up the wrong tree.
-> 
-> The bug seems to be that gcc re-orders the *memory* *accesses* through
-> that point, which is not correct in any way, shape, or form. If we
-> have a write to a memory location followed by a read of the same
-> memory location, the compiler ABSOLUTELY MUST NOT RE-ORDER THEM. The
-> write obviously changes the value of the read.
-> 
-> It seems that some gcc alias analysis completely incorrectly thinks
-> that they are not the same memory location, and do not alias. My guess
-> would be that gcc sees that that they are based on the stack pointer
-> with "different" offsets, and decides that the memory locations must
-> be different - without noticing that the "& ~(THREAD_SIZE - 1)" will
-> end up generating the same address for both of them.
-> 
-> There may be some insane "two different objects on the stack cannot
-> alias" logic, which is true for *objects* on the stack, but it sure as
-> hell isn't true for random accesses through asm("sp").
-> 
-> If I read this thread correctly, you're all talking about something
-> else than the actual bug, and are trying to say that there is
-> something wrong with re-ordering the access to %sp itself. Missing the
-> _real_ bug entirely. See above.
-
-Yes, exactly, your explanation clarifies the underlying issue I'm trying to
-point at.
-
-Thank you !
-
-Mathieu
-
-
-> 
->                   Linus
-> 
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+LS0tLS1NZXNzYWdlIGQnb3JpZ2luZS0tLS0tDQpFbnZvecOpwqA6IDIwIG5vdmVtYnJlIDIwMTMg
+MDk6NDQNCg0KPiBXZSBkb24ndCB1c2UgdGhlIHRpbWVzdGFtcHMgZm9yIHRoaXMuIEVhY2ggcGFj
+a2V0IGhhcyBhIHNlcXVlbmNlIG51bWJlciBnaXZlbiBieSB0aGUgcHJvZHVjZXIsIGFuZCB0aGUg
+cmVhZGVyIGlzIHF1ZXJ5aW5nIGZvciBwYWNrZXRzIGJ5IHJlcXVlc3Rpbmcgc2VxdWVuY2UgbnVt
+YmVycw0KPiAoaW5jcmVhc2luZyBieSBvbmUgZWFjaCB0aW1lKS4gSW4gdGhlIGNhc2UgeW91IHBy
+ZXNlbnQgaGVyZSwgdGhlIHJlYWRlciB3aWxsIHRyeSB0byBxdWVyeSB0aGUgc2VxdWVuY2UgbnVt
+YmVyIG9mIGFuIG92ZXJ3cml0dGVuIHBhY2tldCwgYW5kIHdpbGwgdGhlcmVmb3JlIG5vdCBiZSBh
+YmxlIHRvIGdldCBpdC4NCj4gSXQgd2lsbCBtb3ZlIG9uIHRvIHRoZSBuZXh0IHBhY2tldCB1bnRp
+bCBpdCBmaW5hbGx5IGZpbmRzIHRoZSBmaXJzdCBwYWNrZXQgd2hpY2ggc2VxdWVuY2UgbnVtYmVy
+IG1hdGNoZXMgaXRzIGN1cnJlbnQgc2VxdWVuY2UgbnVtYmVyIChvciB0aGUgd3JpdGVyIHBvc2l0
+aW9uKS4NCg0KICAgU28gbXkgb3JpZ2luYWwgc3VnZ2VzdGlvbiBob2xkczogcGVyZm9ybWFuY2Ug
+Y291bGQgaW5jcmVhc2UganVzdCBhIGxpdHRsZSBiaXQgKG9uIHRoZSByZWFkZXIgc2lkZSkgaWYg
+dGhlIHJlYWRlcidzIHJlcXVlc3QgKGxpYl9yaW5nX2J1ZmZlcl9nZXRfc3ViYnVmLCBpcyBpdD8p
+IGRpZCBub3QgcmV0dXJuIC1FQUdBSU4gYnV0IHJhdGhlciB0aGUgY3VycmVudCAiZWFybGllc3Qg
+YXZhaWxhYmxlIHNlcXVlbmNlIG51bWJlciIgaXQgc2hvdWxkIG5leHQgYXNrIGZvci4gIEluIHRo
+ZSAocHJlc3VtYWJseSByYXJlKSBjYXNlIHdoZXJlIHRoZSByZWFkZXIgaGFzIGJlZW4gcGFzc2Vk
+IGJ5IHRoZSB3cml0ZXJzIGJ5IHNldmVyYWwgc3ViLWJ1ZmZlciBzZXF1ZW5jZSBudW1iZXJzJyB3
+b3J0aCwgdGhpcyB3b3VsZCBhbGxvdyB0aGUgcmVhZGVyIHRvIHNraXAgYWhlYWQgdG8gdGhlIG5l
+eHQgbGlrZWx5LXRvLXN1Y2NlZWQgc2VxdWVuY2UgbnVtYmVyIHJlcXVlc3QuICBEb2VzIHRoaXMg
+bWFrZSBzZW5zZT8NCg0KRGFuaWVsIFUuIFRoaWJhdWx0DQpQcm90ZWN0aW9uIGRlcyBzeXN0w6ht
+ZXMgZXQgY29udHJlbWVzdXJlcyAoUFNDKSB8IFN5c3RlbXMgUHJvdGVjdGlvbiAmIENvdW50ZXJt
+ZWFzdXJlcyAoU1BDKQ0KQ3liZXIgc8OpY3VyaXTDqSBwb3VyIGxlcyBtaXNzaW9ucyBlc3NlbnRp
+ZWxsZXMgKENNRSkgfCBNaXNzaW9uIENyaXRpY2FsIEN5YmVyIFNlY3VyaXR5IChNQ0NTKQ0KUiAm
+IEQgcG91ciBsYSBkw6lmZW5zZSBDYW5hZGEgLSBWYWxjYXJ0aWVyIChSRERDIFZhbGNhcnRpZXIp
+IHwgRGVmZW5jZSBSJkQgQ2FuYWRhIC0gVmFsY2FydGllciAoRFJEQyBWYWxjYXJ0aWVyKQ0KMjQ1
+OSByb3V0ZSBkZSBsYSBCcmF2b3VyZQ0KUXXDqWJlYyBRQyAgRzNKIDFYNQ0KQ0FOQURBDQpWb3gg
+OiAoNDE4KSA4NDQtNDAwMCB4NDI0NQ0KRmF4IDogKDQxOCkgODQ0LTQ1MzgNCk5BQyA6IDkxOFYg
+UVNESiA8aHR0cDovL3d3dy50cmF2ZWxnaXMuY29tL21hcC5hc3A/YWRkcj05MThWJTIwUVNESj4N
+CkdvdXZlcm5lbWVudCBkdSBDYW5hZGEgfCBHb3Zlcm5tZW50IG9mIENhbmFkYQ0KPGh0dHA6Ly93
+d3cudmFsY2FydGllci5kcmRjLXJkZGMuZ2MuY2EvPg0KX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZA
+bGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xp
+c3RpbmZvL2x0dG5nLWRldgo=
