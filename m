@@ -1,77 +1,86 @@
-From: Willy Lambert <lambert.willy@gmail.com>
-Subject: Building LTTNG as a debian package
-Date: Fri, 22 Nov 2013 00:24:09 +0100
-Message-ID: <CAKvQZ_3Kus-9FnXmn_qJtVux_U+U5nPUis2es_Ws0NeMXxWqpQ__31351.4832211242$1385076306$gmane$org@mail.gmail.com>
+From: Luis Lozano <llozano@google.com>
+Subject: Re: current_thread_info() not respecting program order with gcc 4.8.x
+Date: Thu, 21 Nov 2013 15:45:35 -0800
+Message-ID: <CANxoKds1iLpXK0yb1qW_Z4tLSRccrf69nYUV7mLSJBMwSrjwmQ@mail.gmail.com>
+References: <52803E5D.3050109@mentor.com>
+	<52851395.3010306@mentor.com>
+	<67652521.68027.1384482849638.JavaMail.zimbra@efficios.com>
+	<1691607547.70809.1384874952002.JavaMail.zimbra@efficios.com>
+	<CA+55aFw923sA0E1RQNxFF0OWFtAfcaG-dBUc-0YYZGDSAsaQyg@mail.gmail.com>
+	<528E2E8E.8080004@ahsoftware.de>
+	<CA+55aFyNZun07BLoD2KQFT7cN1xsiQ2gE6hYwRvOGa3tCap4CQ@mail.gmail.com>
+	<528E94E2.3080102@ahsoftware.de>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1619809872=="
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f179.google.com ([209.85.223.179])
-	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <lambert.willy@gmail.com>) id 1Vjdbb-0007hZ-33
-	for lttng-dev@lists.lttng.org; Thu, 21 Nov 2013 18:24:17 -0500
-Received: by mail-ie0-f179.google.com with SMTP id x13so855896ief.38
-	for <lttng-dev@lists.lttng.org>; Thu, 21 Nov 2013 15:24:09 -0800 (PST)
-List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
-	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
-	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+Content-Type: text/plain; charset=ISO-8859-1
+Return-path: <linux-kernel-owner@vger.kernel.org>
+In-Reply-To: <528E94E2.3080102@ahsoftware.de>
+Sender: linux-kernel-owner@vger.kernel.org
+To: Alexander Holler <holler@ahsoftware.de>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Jakub Jelinek <jakub@redhat.com>, Richard Henderson <rth@twiddle.net>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Will Deacon <will.deacon@arm.com>, Catalin Marinas <catalin.marinas@arm.com>, Peter Zijlstra <peterz@infradead.org>, lttng-dev@lists.lttng.org, Nathan Lynch <Nathan_Lynch@mentor.com>, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Andrew Morton <akpm@linux-foundation.org>, Bhaskar Janakiraman <bjanakiraman@chromium.org>, Han Shen <shenhan@chromium.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============1619809872==
-Content-Type: multipart/alternative; boundary=047d7bd7679ad721fd04ebb831e4
+I think we need a reproducer. Without this we may all be going on the
+wrong path. This whole conversation started on an *assumption* that
+some accesses were being reordered.
 
---047d7bd7679ad721fd04ebb831e4
-Content-Type: text/plain; charset=ISO-8859-1
+evidence of the reorder or reproducer please?
 
-Hi all,
+Luis
 
-I have successfully build an embedded target with the LTTNG toolset and I'm
-now trying to package this to be able to repopulate a target from scratch.
 
-I'm starting with the kernel modules and I did not succeed in building them
-with make-kpkg modules_images.
-
-As I have seen you produce Debian packages for recent distributions, I
-wonder if your packaging architecture is available somewhere (I had q quick
-look on git but debian packaging infrastructure isn't present).
-
-Or maybe is there any documentation on this ?
-
-Regards.
-
---047d7bd7679ad721fd04ebb831e4
-Content-Type: text/html; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div><div><div><div>Hi all,<br><br></div>I have successful=
-ly build an embedded target with the LTTNG toolset and I&#39;m now trying t=
-o package this to be able to repopulate a target from scratch.<br><br></div=
+On Thu, Nov 21, 2013 at 3:18 PM, Alexander Holler <holler@ahsoftware.de> wrote:
 >
-I&#39;m starting with the kernel modules and I did not succeed in building =
-them with make-kpkg modules_images. <br><br></div>As I have seen you produc=
-e Debian packages for recent distributions, I wonder if your packaging arch=
-itecture is available somewhere (I had q quick look on git but debian packa=
-ging infrastructure isn&#39;t present).<br>
-<br></div>Or maybe is there any documentation on this ?<br><br>Regards.<br>=
-<div><div>=A0</div></div></div>
+> Am 21.11.2013 23:32, schrieb Linus Torvalds:
+>
+>> On Thu, Nov 21, 2013 at 8:02 AM, Alexander Holler <holler@ahsoftware.de>
+>> wrote:
+>
+>
+>> The bug is not that gcc can re-order or combine the accesses to "sp".
+>> WE WANT THAT TO HAPPEN.
+>
+>
+> Sure, and I don't disagree on that.
+>
+>
+>>
+>> The bug is *outside* that "current_thread_info()" macro/inline
+>> function. It's the *dereference* of the pointer that gcc re-orders.
+>> AND THAT IS WRONG.
+>>
+>> Gcc seems to mess up the alias analysis, and decide that the
+>> deferences cannot alias. Which is wrong. They clearly *can* alias,
+>> exactly because the value of "sp & ~(THREAD_SIZE - 1)" ends up having
+>> the same value all the time.
+>
+>
+> Sorry, that I still disagree.
+>
+> I try to describe it more clearly why I still think that the problem might
+> be because of that const declaration.
+>
+> (...)
+>
+> foobar1 = current_thread_info() __attribute_const__ {
+>         return sp->somewhere_local;
+> }
+>
+> (...)
+>
+> foobar2 = current_thread_info() __attribute_const__ {
+>         return sp->somewhere_local;
+> }
+>
+> So, even if sp is the same in both cases, that const states that wherever sp
+> points to is local to current_thread_info(), so it can't be the same for
+> both cases.
+>
+> Regards,
+>
+> Alexander Holler
 
---047d7bd7679ad721fd04ebb831e4--
 
 
---===============1619809872==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+-- 
 
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1619809872==--
+Luis A. Lozano | Software Engineer | llozano@google.com | +1 (408)431-5164
