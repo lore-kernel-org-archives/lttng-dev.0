@@ -1,333 +1,603 @@
-From: Luis Lozano <llozano@google.com>
-Subject: Re: current_thread_info() not respecting program order with gcc 4.8.x
-Date: Fri, 22 Nov 2013 00:33:10 -0800
-Message-ID: <CANxoKduLWx=DnGhAfAtO4oje4AanQSnOU5s7pL5rVvOhwJqXCg@mail.gmail.com>
-References: <52803E5D.3050109@mentor.com>
-	<528E2E8E.8080004@ahsoftware.de>
-	<CA+55aFyNZun07BLoD2KQFT7cN1xsiQ2gE6hYwRvOGa3tCap4CQ@mail.gmail.com>
-	<528E94E2.3080102@ahsoftware.de>
-	<CANxoKds1iLpXK0yb1qW_Z4tLSRccrf69nYUV7mLSJBMwSrjwmQ@mail.gmail.com>
-	<20131122003904.GT892@tucnak.redhat.com>
-	<894043206.72860.1385085446389.JavaMail.zimbra@efficios.com>
-	<CANxoKdsUjG4McOVR8A3dZekNmCwyEztJ7rabCJ8p-G7mNmjiLA@mail.gmail.com>
-	<2038513765.72947.1385091506781.JavaMail.zimbra@efficios.com>
-	<CANxoKds7uwdwQ06AaqE-kcRbWGnqDU2gnFD-3GuKoF7tXigTHw@mail.gmail.com>
+From: Klaus Dannecker <klaus.dannecker@gmx.de>
+Subject: Re: make a trace_event in a modul (driver)
+Date: Fri, 22 Nov 2013 11:54:22 +0100
+Message-ID: <528F37DE.7050204__724.265274084423$1385117687$gmane$org@gmx.de>
+References: <527DF369.4020704@gmx.de>	<5283B8BD.9020703@gmx.de>	<528DD70B.8040504@gmx.de>	<CA+jJMxsybZ4mo1Mp369hhgNSCi-pfNh8VG1F5S2H5DpKL5nSsw@mail.gmail.com>	<528E37D8.3060606@gmx.de>
+	<CA+jJMxt89qdM98hu536heBwk90AQEPwONvpa7s-vqKGQ036euQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-1
-Return-path: <linux-kernel-owner@vger.kernel.org>
-In-Reply-To: <CANxoKds7uwdwQ06AaqE-kcRbWGnqDU2gnFD-3GuKoF7tXigTHw@mail.gmail.com>
-Sender: linux-kernel-owner@vger.kernel.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Jakub Jelinek <jakub@redhat.com>, Alexander Holler <holler@ahsoftware.de>, Linus Torvalds <torvalds@linux-foundation.org>, Richard Henderson <rth@twiddle.net>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Will Deacon <will.deacon@arm.com>, Catalin Marinas <catalin.marinas@arm.com>, Peter Zijlstra <peterz@infradead.org>, lttng-dev@lists.lttng.org, Nathan Lynch <Nathan_Lynch@mentor.com>, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Andrew Morton <akpm@linux-foundation.org>, Bhaskar Janakiraman <bjanakiraman@chromium.org>, Han Shen <shenhan@chromium.org>
+Content-Type: text/plain; charset="iso-8859-1"; Format="flowed"
+Content-Transfer-Encoding: quoted-printable
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mout.gmx.net ([212.227.17.21])
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <klaus.dannecker@gmx.de>) id 1VjoN5-0007vr-Cq
+	for lttng-dev@lists.lttng.org; Fri, 22 Nov 2013 05:54:02 -0500
+Received: from [192.168.178.21] ([188.105.68.18]) by mail.gmx.com (mrgmx101)
+	with ESMTPSA (Nemesis) id 0MFgxF-1VvZvf0w9V-00EbAO for
+	<lttng-dev@lists.lttng.org>; Fri, 22 Nov 2013 11:53:50 +0100
+In-Reply-To: <CA+jJMxt89qdM98hu536heBwk90AQEPwONvpa7s-vqKGQ036euQ@mail.gmail.com>
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+To: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-On Fri, Nov 22, 2013 at 12:18 AM, Luis Lozano <llozano@chromium.org> wrote:
-> On Thu, Nov 21, 2013 at 7:38 PM, Mathieu Desnoyers
-> <mathieu.desnoyers@efficios.com> wrote:
->>
->> ----- Original Message -----
->> > From: "Luis Lozano" <llozano@google.com>
->> > To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
->> > Cc: "Jakub Jelinek" <jakub@redhat.com>, "Alexander Holler" <holler@ahsoftware.de>, "Linus Torvalds"
->> > <torvalds@linux-foundation.org>, "Richard Henderson" <rth@twiddle.net>, "Linux Kernel Mailing List"
->> > <linux-kernel@vger.kernel.org>, "Will Deacon" <will.deacon@arm.com>, "Catalin Marinas" <catalin.marinas@arm.com>,
->> > "Peter Zijlstra" <peterz@infradead.org>, lttng-dev@lists.lttng.org, "Nathan Lynch" <Nathan_Lynch@mentor.com>, "Paul
->> > E. McKenney" <paulmck@linux.vnet.ibm.com>, "Andrew Morton" <akpm@linux-foundation.org>, "Bhaskar Janakiraman"
->> > <bjanakiraman@chromium.org>, "Han Shen" <shenhan@chromium.org>
->> > Sent: Thursday, November 21, 2013 9:36:27 PM
->> > Subject: Re: current_thread_info() not respecting program order with gcc 4.8.x
->> >
->> > Hi Mathieu,
->> >
->> > Yes the problem we were seeing with GCC bug 58854 is that an interrupt
->> > handler was corrupting the stack of a routine which had an invalid
->> > value of SP (not really on "top" of the stack) for part of the
->> > routine.
->> > But in the assembly code you sent, I don't see where sp is being
->> > modified... or where the access to "below" sp is happening.
->>
->> The following instruction
->>
->>   f1c:      e50b1048        str     r1, [fp, #-72]  ; 0xffffffb8
->>
->> appears in the assembly generated by gcc 4.8.2, but not in the one
->> generated by 4.7.3,
->
->
->
-> It is there in 4.7.3 just a few lines difference.
-> I don't see any meaningful difference between the 2 assembly snippets...
-> Just the instructions ordered a little different?
->
 
-unless there is a dependency between the following 2 instructions?
--     f1c:      e50b1048        str     r1, [fp, #-72]  ; 0xffffffb8
+Am 21.11.2013 18:41, schrieb J=E9r=E9mie Galarneau:
+> On Thu, Nov 21, 2013 at 11:42 AM, Klaus Dannecker
+> <klaus.dannecker@gmx.de> wrote:
+>> Am 21.11.2013 16:49, schrieb J=E9r=E9mie Galarneau:
+>>
+>>> On Thu, Nov 21, 2013 at 4:48 AM, Klaus Dannecker <klaus.dannecker@gmx.d=
+e>
+>>> wrote:
+>>>> Hi,
+>>>>
+>>>> Nobody can help me?
+>>>>
+>>>> now i have ubuntu 13.10 installed  in a vmware.
+>>>> but i have the same error!
+>>>>
+>>>> s$ sudo make modules_install
+>>>> make -C /lib/modules/3.11.0-12-generic/build
+>>>> M=3D/home/klaus/lttng_src/lttng-modules modules_install
+>>>> make[1]: Entering directory `/usr/src/linux-headers-3.11.0-12-generic'
+>>>>     INSTALL
+>>>> /home/klaus/lttng_src/lttng-modules/lib/lttng-lib-ring-buffer.ko
+>>>>
+>>>> Can't read private key
+>>> Ubuntu now ships with module signing enabled by default.
+>>> Does the installation fail, or is it just a warning?
+>> i don't know
+>>
+>>>> ....
+>>>> lsmod | grep lttng
+>>>> -> no module found
+>>>>
+>>> The modules will not be automatically loaded after being built and
+>>> installed. You have to launch lttng-sessiond (as root) for that. What
+>>> is the output of the following commands?
+>>>
+>>> make
+>>> sudo make modules_install
+>>> sudo depmod -a
+>>> sudo lttng-sessiond &
+>>> lsmod | grep lttng
+>> klaus@ubuntu:~/lttng_src/lttng-modules$ make
+>> make -C /lib/modules/3.11.0-12-generic/build
+>> M=3D/home/klaus/lttng_src/lttng-modules modules
+>>
+>> make[1]: Entering directory `/usr/src/linux-headers-3.11.0-12-generic'
+>> /home/klaus/lttng_src/lttng-modules/probes/Makefile:30: File
+>> /usr/src/linux-headers-3.11.0-12-generic/virt/kvm/iodev.h not found. Pro=
+be
+>> "kvm" x86-specific is disabled. Use full kernel source tree to enable it.
+>> /home/klaus/lttng_src/lttng-modules/probes/Makefile:81: Files
+>> /usr/src/linux-headers-3.11.0-12-generic/fs/ext3/*.h not found. Probe "e=
+xt3"
+>> is disabled. Use full kernel source tree to enable it.
+>> /home/klaus/lttng_src/lttng-modules/probes/Makefile:142: Files
+>> /usr/src/linux-headers-3.11.0-12-generic/fs/btrfs/*.h not found. Probe
+>> "btrfs" is disabled. Use full kernel source tree to enable it.
+>> /home/klaus/lttng_src/lttng-modules/probes/Makefile:158: Files
+>> /usr/src/linux-headers-3.11.0-12-generic/fs/ext4/*.h not found. Probe "e=
+xt4"
+>> is disabled. Use full kernel source tree to enable it.
+>>    Building modules, stage 2.
+>>    MODPOST 44 modules
+>> make[1]: Leaving directory `/usr/src/linux-headers-3.11.0-12-generic'
+>>
+>> klaus@ubuntu:~/lttng_src/lttng-modules$ sudo make modules_install
+>>
+>> make -C /lib/modules/3.11.0-12-generic/build
+>> M=3D/home/klaus/lttng_src/lttng-modules modules_install
+>> make[1]: Entering directory `/usr/src/linux-headers-3.11.0-12-generic'
+>>    INSTALL /home/klaus/lttng_src/lttng-modules/lib/lttng-lib-ring-buffer=
+.ko
+>> Can't read private key
+>>    INSTALL
+>> /home/klaus/lttng_src/lttng-modules/lttng-ring-buffer-client-discard.ko
+>>
+>> Can't read private key
+>> ...
+>>    DEPMOD  3.11.0-12-generic
+>> make[1]: Leaving directory `/usr/src/linux-headers-3.11.0-12-generic'
+>> klaus@ubuntu:~/lttng_src/lttng-modules$
+>>
+>> klaus@ubuntu:~/lttng_src/lttng-modules$ sudo depmod -a
+>> klaus@ubuntu:~/lttng_src/lttng-modules$
+>> klaus@ubuntu:~/lttng_src/lttng-modules$ sudo lttng-sessiond &
+>> [1] 23486
+>> klaus@ubuntu:~/lttng_src/lttng-modules$ lsmod | grep lttng
+>>
+>> [1]+  Stopped                 sudo lttng-sessiond
+>> klaus@ubuntu:~/lttng_src/lttng-modules$
+>>
+> Hard to say why lttng-sessiond received SIGSTOP...
+>
+> Could you try running the session daemon in verbose mode in another termi=
+nal?
+> sudo lttng-sessiond -vvv
+klaus@ubuntu:~$ sudo lttng-sessiond -vvv
+[sudo] password for klaus:
+DEBUG3 [23710/23710]: Creating LTTng run directory: /var/run/lttng (in =
+
+create_lttng_rundir() at main.c:4267)
+DEBUG2 [23710/23710]: Kernel consumer err path: =
+
+/var/run/lttng/kconsumerd/error (in main() at main.c:4696)
+DEBUG2 [23710/23710]: Kernel consumer cmd path: =
+
+/var/run/lttng/kconsumerd/command (in main() at main.c:4698)
+DEBUG1 [23710/23710]: Client socket path =
+
+/var/run/lttng/client-lttng-sessiond (in main() at main.c:4751)
+DEBUG1 [23710/23710]: Application socket path =
+
+/var/run/lttng/lttng-ust-sock-5 (in main() at main.c:4752)
+DEBUG1 [23710/23710]: Application wait path /lttng-ust-wait-5 (in main() =
+
+at main.c:4753)
+DEBUG1 [23710/23710]: LTTng run directory path: /var/run/lttng (in =
+
+main() at main.c:4754)
+DEBUG2 [23710/23710]: UST consumer 32 bits err path: =
+
+/var/run/lttng/ustconsumerd32/error (in main() at main.c:4763)
+DEBUG2 [23710/23710]: UST consumer 32 bits cmd path: =
+
+/var/run/lttng/ustconsumerd32/command (in main() at main.c:4765)
+DEBUG2 [23710/23710]: UST consumer 64 bits err path: =
+
+/var/run/lttng/ustconsumerd64/error (in main() at main.c:4774)
+DEBUG2 [23710/23710]: UST consumer 64 bits cmd path: =
+
+/var/run/lttng/ustconsumerd64/command (in main() at main.c:4776)
+DEBUG3 [23710/23710]: Created hashtable size 4 at 0x982c080 of type 1 =
+
+(in lttng_ht_new() at hashtable.c:127)
+DEBUG3 [23710/23710]: Created hashtable size 4 at 0x982c270 of type 1 =
+
+(in lttng_ht_new() at hashtable.c:127)
+DEBUG3 [23710/23710]: Created hashtable size 4 at 0x982c498 of type 1 =
+
+(in lttng_ht_new() at hashtable.c:127)
+DEBUG3 [23710/23710]: Created hashtable size 4 at 0x982c6c0 of type 1 =
+
+(in lttng_ht_new() at hashtable.c:127)
+DEBUG2 [23710/23710]: Creating consumer directory: =
+
+/var/run/lttng/kconsumerd (in set_consumer_sockets() at main.c:4309)
+DEBUG1 [23710/23710]: Modprobe successfully lttng-tracer (in =
+
+modprobe_lttng_control() at modprobe.c:192)
+DEBUG2 [23710/23710]: Kernel tracer version validated (major version 2) =
+
+(in kernel_validate_version() at kernel.c:700)
+DEBUG1 [23710/23710]: Modprobe successfully lttng-ftrace (in =
+
+modprobe_lttng_data() at modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully lttng-kprobes (in =
+
+modprobe_lttng_data() at modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully lttng-kretprobes (in =
+
+modprobe_lttng_data() at modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully lttng-lib-ring-buffer (in =
+
+modprobe_lttng_data() at modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully =
+
+lttng-ring-buffer-client-discard (in modprobe_lttng_data() at =
+
+modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully =
+
+lttng-ring-buffer-client-overwrite (in modprobe_lttng_data() at =
+
+modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully =
+
+lttng-ring-buffer-metadata-client (in modprobe_lttng_data() at =
+
+modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully =
+
+lttng-ring-buffer-client-mmap-discard (in modprobe_lttng_data() at =
+
+modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully =
+
+lttng-ring-buffer-client-mmap-overwrite (in modprobe_lttng_data() at =
+
+modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully =
+
+lttng-ring-buffer-metadata-mmap-client (in modprobe_lttng_data() at =
+
+modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully lttng-types (in =
+
+modprobe_lttng_data() at modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully lttng-probe-asoc (in =
+
+modprobe_lttng_data() at modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully lttng-probe-block (in =
+
+modprobe_lttng_data() at modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully lttng-probe-btrfs (in =
+
+modprobe_lttng_data() at modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully lttng-probe-compaction (in =
+
+modprobe_lttng_data() at modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully lttng-probe-ext3 (in =
+
+modprobe_lttng_data() at modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully lttng-probe-ext4 (in =
+
+modprobe_lttng_data() at modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully lttng-probe-gpio (in =
+
+modprobe_lttng_data() at modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully lttng-probe-irq (in =
+
+modprobe_lttng_data() at modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully lttng-probe-jbd (in =
+
+modprobe_lttng_data() at modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully lttng-probe-jbd2 (in =
+
+modprobe_lttng_data() at modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully lttng-probe-kmem (in =
+
+modprobe_lttng_data() at modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully lttng-probe-kvm (in =
+
+modprobe_lttng_data() at modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully lttng-probe-kvm-x86 (in =
+
+modprobe_lttng_data() at modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully lttng-probe-kvm-x86-mmu (in =
+
+modprobe_lttng_data() at modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully lttng-probe-lock (in =
+
+modprobe_lttng_data() at modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully lttng-probe-module (in =
+
+modprobe_lttng_data() at modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully lttng-probe-napi (in =
+
+modprobe_lttng_data() at modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully lttng-probe-net (in =
+
+modprobe_lttng_data() at modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully lttng-probe-power (in =
+
+modprobe_lttng_data() at modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully lttng-probe-printk (in =
+
+modprobe_lttng_data() at modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully lttng-probe-random (in =
+
+modprobe_lttng_data() at modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully lttng-probe-rcu (in =
+
+modprobe_lttng_data() at modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully lttng-probe-regmap (in =
+
+modprobe_lttng_data() at modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully lttng-probe-regulator (in =
+
+modprobe_lttng_data() at modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully lttng-probe-rpm (in =
+
+modprobe_lttng_data() at modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully lttng-probe-sched (in =
+
+modprobe_lttng_data() at modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully lttng-probe-scsi (in =
+
+modprobe_lttng_data() at modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully lttng-probe-signal (in =
+
+modprobe_lttng_data() at modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully lttng-probe-skb (in =
+
+modprobe_lttng_data() at modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully lttng-probe-sock (in =
+
+modprobe_lttng_data() at modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully lttng-probe-statedump (in =
+
+modprobe_lttng_data() at modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully lttng-probe-sunrpc (in =
+
+modprobe_lttng_data() at modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully lttng-probe-timer (in =
+
+modprobe_lttng_data() at modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully lttng-probe-udp (in =
+
+modprobe_lttng_data() at modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully lttng-probe-vmscan (in =
+
+modprobe_lttng_data() at modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully lttng-probe-workqueue (in =
+
+modprobe_lttng_data() at modprobe.c:228)
+DEBUG1 [23710/23710]: Modprobe successfully lttng-probe-writeback (in =
+
+modprobe_lttng_data() at modprobe.c:228)
+DEBUG1 [23710/23710]: Kernel tracer fd 6 (in init_kernel_tracer() at =
+
+main.c:2364)
+DEBUG2 [23710/23710]: Creating consumer directory: =
+
+/var/run/lttng/ustconsumerd64 (in set_consumer_sockets() at main.c:4309)
+DEBUG2 [23710/23710]: Creating consumer directory: =
+
+/var/run/lttng/ustconsumerd32 (in set_consumer_sockets() at main.c:4309)
+DEBUG3 [23710/23710]: Session daemon client socket 9 and application =
+
+socket 10 created (in init_daemon_socket() at main.c:4175)
+DEBUG1 [23710/23710]: All permissions are set (in set_permissions() at =
+
+main.c:4255)
+DEBUG3 [23710/23710]: Created hashtable size 4 at 0x982e160 of type 2 =
+
+(in lttng_ht_new() at hashtable.c:127)
+DEBUG3 [23710/23710]: Global buffer per UID registry initialized (in =
+
+buffer_reg_init_uid_registry() at buffer-registry.c:99)
+DEBUG3 [23710/23710]: Created hashtable size 4 at 0x982e388 of type 2 =
+
+(in lttng_ht_new() at hashtable.c:127)
+DEBUG3 [23710/23710]: Global buffer per PID registry initialized (in =
+
+buffer_reg_init_pid_registry() at buffer-registry.c:220)
+DEBUG1 [23710/23710]: epoll set max size is 327338 (in =
+
+compat_epoll_set_max_size() at compat-epoll.c:280)
+DEBUG1 [23710/23710]: Command subsystem initialized (in cmd_init() at =
+
+cmd.c:3056)
+DEBUG1 [23710/23710]: Pid 23710 written in file =
+
+/var/run/lttng/lttng-sessiond.pid (in utils_create_pid_file() at =
+
+utils.c:437)
+DEBUG1 [23710/23710]: Pid 5345 written in file /var/run/lttng/jul.port =
+
+(in utils_create_pid_file() at utils.c:437)
+DEBUG1 [23710/23710]: TCP inet operation timeout set to 216 sec (in =
+
+lttcomm_inet_init() at inet.c:529)
+DEBUG1 [23710/23710]: Health check time delta in seconds set to 236 (in =
+
+health_init() at health.c:73)
+DEBUG1 [23710/23820]: [thread] Manage health check started (in =
+
+thread_manage_health() at main.c:3511)
+DEBUG1 [23710/23824]: [thread] Manage application started (in =
+
+thread_manage_apps() at main.c:1256)
+DEBUG1 [23710/23823]: [thread] Manage application registration started =
+
+(in thread_registration_apps() at main.c:1766)
+DEBUG1 [23710/23822]: [thread] Dispatch UST command started (in =
+
+thread_dispatch_ust_registration() at main.c:1543)
+DEBUG1 [23710/23821]: [thread] Manage client started (in =
+
+thread_manage_clients() at main.c:3695)
+DEBUG1 [23710/23821]: Accepting client command ... (in =
+
+thread_manage_clients() at main.c:3747)
+DEBUG1 [23710/23819]: [ht-thread] startup. (in thread_ht_cleanup() at =
+
+ht-cleanup.c:35)
+DEBUG3 [23710/23819]: [ht-thread] Polling on 2 fds. (in =
+
+thread_ht_cleanup() at ht-cleanup.c:59)
+DEBUG1 [23710/23825]: [ust-thread] Manage application notify command (in =
+
+ust_thread_manage_notify() at ust-thread.c:38)
+DEBUG1 [23710/23826]: [jul-thread] Manage JUL application registration. =
+
+(in jul_thread_manage_registration() at jul-thread.c:250)
+DEBUG3 [23710/23826]: URI string: tcp://localhost (in uri_parse() at =
+
+uri.c:291)
+DEBUG1 [23710/23824]: Apps thread polling on 2 fds (in =
+
+thread_manage_apps() at main.c:1286)
+DEBUG1 [23710/23822]: Futex n to 1 prepare done (in futex_nto1_prepare() =
+
+at futex.c:75)
+DEBUG1 [23710/23823]: Notifying applications of session daemon state: 1 =
+
+(in notify_ust_apps() at main.c:593)
+DEBUG3 [23710/23825]: [ust-thread] Manage notify polling on 2 fds (in =
+
+ust_thread_manage_notify() at ust-thread.c:63)
+DEBUG1 [23710/23820]: Health check ready (in thread_manage_health() at =
+
+main.c:3574)
+DEBUG1 [23710/23827]: [thread] Thread manage kernel started (in =
+
+thread_manage_kernel() at main.c:794)
+DEBUG1 [23710/23827]: Updating kernel poll set (in update_kernel_poll() =
+
+at main.c:654)
+DEBUG1 [23710/23827]: Thread kernel polling on 2 fds (in =
+
+thread_manage_kernel() at main.c:839)
+DEBUG1 [23710/23822]: Woken up but nothing in the UST command queue (in =
+
+thread_dispatch_ust_registration() at main.c:1566)
+DEBUG2 [23710/23826]: IP address resolved to 127.0.0.1 (in =
+
+set_ip_address() at uri.c:132)
+DEBUG3 [23710/23826]: URI dtype: 1, proto: 1, host: localhost, subdir: , =
+
+ctrl: 0, data: 0 (in uri_parse() at uri.c:505)
+PERROR [23710/23826]: bind inet: Address already in use (in =
+
+lttcomm_bind_inet_sock() at inet.c:109)
+DEBUG1 [23710/23826]: [jul-thread] is cleaning up and stopping. (in =
+
+jul_thread_manage_registration() at jul-thread.c:356)
+DEBUG3 [23710/23826]: [jul-thread] Cleaning JUL apps ht (in =
+
+clean_jul_apps_ht() at jul-thread.c:100)
+DEBUG1 [23710/23823]: Got the wait shm fd 26 (in get_wait_shm() at =
+
+shm.c:115)
+DEBUG1 [23710/23823]: Futex wait update active 1 (in futex_wait_update() =
+
+at futex.c:63)
+DEBUG1 [23710/23823]: Accepting application registration (in =
+
+thread_registration_apps() at main.c:1803)
+
+another terminal:
+klaus@ubuntu:~/lttng_src/lttng-modules$ lsmod | grep lttng
+lttng_probe_writeback    22927  0
+lttng_probe_workqueue    13726  0
+lttng_probe_vmscan     17138  0
+....
+
+but:
+klaus@ubuntu:~/lttng_src/lttng-modules$ lttng list -k
+Error: Unable to list kernel events: Tracing the kernel requires a root =
+
+lttng-sessiond daemon, as well as "tracing" group membership or root =
+
+user ID for the lttng client.
+Error: Command error
+klaus@ubuntu:~/lttng_src/lttng-modules$
+
+then stop the command sudo lttng-sessiond -vvv with "STRG+C"
+^CDEBUG1 [23710/23710]: SIGINT caught (in sighandler() at main.c:4374)
+DEBUG1 [23710/23710]: Terminating all threads (in stop_threads() at =
+
+main.c:370)
+DEBUG1 [23710/23710]: Futex n to 1 wake done (in futex_nto1_wake() at =
+
+futex.c:104)
+DEBUG1 [23710/23821]: Clean command context structure (in =
+
+clean_command_ctx() at main.c:573)
 ...
-      f20:      e5936030        ldr     r6, [r3, #48]   ; 0x30
+klaus@ubuntu:~/lttng_src/lttng-modules$ lsmod | grep lttng
+klaus@ubuntu:~/lttng_src/lttng-modules$
 
-and moving the str across the ldr makes a difference...
+Regards,
+Klaus
 
 
-> Luis
+
+> This should load the modules or at least log an error if it fails to do s=
+o.
 >
+>> Thanks for your help!
 >>
->> which makes me wonder if it's good or not. With
->> slightly different build output from the diff (probably a different config
->> from Nathan), the first function instructions look like:
+>> Regards,
+>> Klaus
 >>
->> 00000efc <lttng_event_reserve>:
->>      efc:       e1a0c00d        mov     ip, sp
->>      f00:       e92ddff0        push    {r4, r5, r6, r7, r8, r9, sl, fp, ip, lr, pc}
->>      f04:       e24cb004        sub     fp, ip, #4
->>      f08:       e24dd03c        sub     sp, sp, #60     ; 0x3c
->>      f0c:       e52de004        push    {lr}            ; (str lr, [sp, #-4]!)
->>      f10:       ebfffffe        bl      0 <__gnu_mcount_nc>
->>      f14:       e5903000        ldr     r3, [r0]
->>      f18:       e1a04000        mov     r4, r0
->>      f1c:       e1a0000d        mov     r0, sp
->>      f20:       e5936030        ldr     r6, [r3, #48]   ; 0x30
->>      f24:       e3c03d7f        bic     r3, r0, #8128   ; 0x1fc0
->>      f28:       e3c3303f        bic     r3, r3, #63     ; 0x3f
->>      f2c:       e50b104c        str     r1, [fp, #-76]  ; 0xffffffb4
->>      f30:       e5932004        ldr     r2, [r3, #4]
->>      f34:       e2822001        add     r2, r2, #1
->>      f38:       e5832004        str     r2, [r3, #4]
->>      f3c:       ebfffffe        bl      0 <debug_smp_processor_id>
->>      f40:       e59f2e44        ldr     r2, [pc, #3652] ; 1d8c <lttng_event_reserve+0xe90>
->>      f44:       e59f3e44        ldr     r3, [pc, #3652] ; 1d90 <lttng_event_reserve+0xe94>
->>      f48:       e7921100        ldr     r1, [r2, r0, lsl #2]
->>      f4c:       e1a05000        mov     r5, r0
->>      f50:       e7932001        ldr     r2, [r3, r1]
->>
->> My rusty ARM assembler knowledge analyzes this like:
->>
->> ip = sp            (ip being the scratch register)
->> push 11 registers * 4 bytes = 44 bytes onto the stack
->> fp = ip - 4
->> sp = sp - 60   (sp = ip - 104)
->> push {lr} bl
->> 0 <__gnu_mcount_nc>  (dynamically patched to a pop {lr})
->> [...]
->> store r1 into mem location fp - 76
->>
->> So yes, it does look like the -76 from fp is within the stack.
->>
->>
->> > In GCC bug 58854 it was pretty clear that the restore of the sp
->> > register in the epilogue is moved to somewhere close to the prologue
->> > of the routine.
->> > Are we missing some diffs from the assembly comparison?
->>
->> My next step is to setup my own 4.8.2 ARM cross-compiler. I've tried this morning,
->> did not manage to get one working even after following 2 howtos, trying with Debian
->> packages, etc. Nathan told me this diff was the full comparison between the two
->> functions, but you'll understand that at this point I want to reproduce
->> everything myself, because this is a _weird_ issue.
->>
->> But after a long day of debugging, it's time for some sleep. I will get back to this
->> tomorrow,
->>
->> Thanks,
->>
->> Mathieu
->>
->> >
->> > Thanks
->> >
->> > Luis
->> >
->> >
->> >
->> >
->> > On Thu, Nov 21, 2013 at 5:57 PM, Mathieu Desnoyers
->> > <mathieu.desnoyers@efficios.com> wrote:
->> > > ----- Original Message -----
->> > >> From: "Jakub Jelinek" <jakub@redhat.com>
->> > >> To: "Luis Lozano" <llozano@google.com>
->> > >> Cc: "Alexander Holler" <holler@ahsoftware.de>, "Linus Torvalds"
->> > >> <torvalds@linux-foundation.org>, "Mathieu Desnoyers"
->> > >> <mathieu.desnoyers@efficios.com>, "Richard Henderson" <rth@twiddle.net>,
->> > >> "Linux Kernel Mailing List"
->> > >> <linux-kernel@vger.kernel.org>, "Will Deacon" <will.deacon@arm.com>,
->> > >> "Catalin Marinas" <catalin.marinas@arm.com>,
->> > >> "Peter Zijlstra" <peterz@infradead.org>, lttng-dev@lists.lttng.org,
->> > >> "Nathan Lynch" <Nathan_Lynch@mentor.com>, "Paul
->> > >> E. McKenney" <paulmck@linux.vnet.ibm.com>, "Andrew Morton"
->> > >> <akpm@linux-foundation.org>, "Bhaskar Janakiraman"
->> > >> <bjanakiraman@chromium.org>, "Han Shen" <shenhan@chromium.org>
->> > >> Sent: Thursday, November 21, 2013 7:39:04 PM
->> > >> Subject: Re: current_thread_info() not respecting program order with gcc
->> > >> 4.8.x
->> > >>
->> > >> On Thu, Nov 21, 2013 at 03:45:35PM -0800, Luis Lozano wrote:
->> > >> > I think we need a reproducer. Without this we may all be going on the
->> > >> > wrong path. This whole conversation started on an *assumption* that
->> > >> > some accesses were being reordered.
->> > >> >
->> > >> > evidence of the reorder or reproducer please?
->> > >>
->> > >> Yeah, if a compiler bug is suspected, can anybody please open
->> > >> a bugreport in http://gcc.gnu.org/bugzilla/ with the preprocessed source,
->> > >> compiler version, flags and how it was configured and some hint in which
->> > >> function to look for what exactly?  We don't necessarily need a runtime
->> > >> small reproducer, but if it can be shown in the assembly what has been
->> > >> reordered and why you think it shouldn't, with the above mentioned input
->> > >> that ought to be sufficient.  Thanks.
->> > >
->> > > OK OK, let me reply on list first so I can share the result of a full day
->> > > of bug hunting. We're not there yet, but many options have been eliminated.
->> > >
->> > > The issue shows up in stress test, when tracing with lttng-modules 2.4-rc1,
->> > > on ARM. It's been reproduced with a Linux kernel 3.12 so far, with
->> > > lttng-modules
->> > > compiled against that kernel.
->> > >
->> > > First, I asked Nathan to compile his kernel with gcc 4.7, and lttng-modules
->> > > with gcc 4.8.x (and vice-versa). The problem only appears when
->> > > lttng-modules
->> > > are compiled with gcc 4.8.x. The compiler version used to compile the rest
->> > > of the kernel does not matter.
->> > >
->> > > Then I looked at gcc 4.8 changelog for ARM, new feature:
->> > > -fno-sched-pressure
->> > > (sched pressure is there by default). Nathan tried compiling lttng-modules
->> > > with
->> > > -fno-sched-pressure. The problem still reproduces.
->> > >
->> > > Knowing that adding barrier() outside of preempt_disable()/enable() was
->> > > fixing the issue, we tried identifying which code location was responsible
->> > > for working around the issue. Skipping a long investigation, here is the
->> > > executive summary:
->> > >
->> > > http://git.lttng.org/?p=lttng-modules.git;a=blob;f=lttng-ring-buffer-client.h;h=50c47b3bf49f6c2dd24e250cf1a9b97808cd8e27;hb=HEAD
->> > >
->> > > Has the following function. We identified that adding a barrier() as shown
->> > > below
->> > > works around the issue:
->> > >
->> > > static
->> > > int lttng_event_reserve(struct lib_ring_buffer_ctx *ctx,
->> > >                       uint32_t event_id)
->> > > {
->> > >         struct lttng_channel *lttng_chan = channel_get_private(ctx->chan);
->> > >         int ret, cpu;
->> > >
->> > >         cpu = lib_ring_buffer_get_cpu(&client_config);
->> > >         if (cpu < 0)
->> > >                 return -EPERM;
->> > >         ctx->cpu = cpu;
->> > >
->> > >         switch (lttng_chan->header_type) {
->> > >         case 1: /* compact */
->> > >                 if (event_id > 30)
->> > >                         ctx->rflags |= LTTNG_RFLAG_EXTENDED;
->> > >                 break;
->> > >         case 2: /* large */
->> > >                 if (event_id > 65534)
->> > >                         ctx->rflags |= LTTNG_RFLAG_EXTENDED;
->> > >                 break;
->> > >         default:
->> > >                 WARN_ON_ONCE(1);
->> > >         }
->> > >
->> > >         ret = lib_ring_buffer_reserve(&client_config, ctx);
->> > >         if (ret)
->> > >                 goto put;
->> > >         lttng_write_event_header(&client_config, ctx, event_id);
->> > >         return 0;
->> > > put:
->> > >         lib_ring_buffer_put_cpu(&client_config);
->> > >         ---------------> barrier() added here;
->> > >         <----------------------------
->> > >         return ret;
->> > > }
->> > >
->> > > Where barrier() is the usual asm volatile with "memory" clobber, nothing
->> > > else.
->> > >
->> > > Nathan gave me the binary diff for the assembly generated for this function
->> > > without
->> > > the barrier and with the barrier:
->> > >
->> > > --- /tmp/lttng_event_reserve-4.8.2.dump 2013-11-21 11:14:14.536495079 -0600
->> > > +++ /tmp/lttng_event_reserve-with-barrier-4.8.2.dump    2013-11-21
->> > > 14:12:52.997355907 -0600
->> > > @@ -7,11 +7,11 @@
->> > >       f10:      ebfffffe        bl      0 <__gnu_mcount_nc>
->> > >       f14:      e5903000        ldr     r3, [r0]
->> > >       f18:      e1a04000        mov     r4, r0
->> > > -     f1c:      e50b1048        str     r1, [fp, #-72]  ; 0xffffffb8
->> > > +     f1c:      e1a0000d        mov     r0, sp
->> > >       f20:      e5936030        ldr     r6, [r3, #48]   ; 0x30
->> > > -     f24:      e1a0000d        mov     r0, sp
->> > > -     f28:      e3c03d7f        bic     r3, r0, #8128   ; 0x1fc0
->> > > -     f2c:      e3c3303f        bic     r3, r3, #63     ; 0x3f
->> > > +     f24:      e3c03d7f        bic     r3, r0, #8128   ; 0x1fc0
->> > > +     f28:      e3c3303f        bic     r3, r3, #63     ; 0x3f
->> > > +     f2c:      e50b1048        str     r1, [fp, #-72]  ; 0xffffffb8
->> > >       f30:      e5932004        ldr     r2, [r3, #4]
->> > >       f34:      e2822001        add     r2, r2, #1
->> > >       f38:      e5832004        str     r2, [r3, #4]
->> > > @@ -53,7 +53,7 @@
->> > >       fc8:      e3c3303f        bic     r3, r3, #63     ; 0x3f
->> > >       fcc:      e5933000        ldr     r3, [r3]
->> > >       fd0:      e3130002        tst     r3, #2
->> > > -     fd4:      0a000000        beq     fdc <lttng_event_reserve+0xe0>
->> > > +     fd4:      0a0002be        beq     1ad4 <lttng_event_reserve+0xbd8>
->> > >       fd8:      ebfffffe        bl      0 <preempt_schedule>
->> > >       fdc:      ea0002bc        b       1ad4 <lttng_event_reserve+0xbd8>
->> > >       fe0:      e3500000        cmp     r0, #0
->> > >
->> > > We tried disabling the ftrace function tracing to get mcount out of the
->> > > way,
->> > > and the problem still reproduces.
->> > >
->> > > I'm stopping here in terms of details about the disassembly, because I
->> > > need to double check with Nathan that I get the right disassembly for the
->> > > right
->> > > cases. I also terribly need to setup a 4.8.2 ARM cross-compiler on my
->> > > machine.
->> > >
->> > > I'm attaching Nathan's ARM configuration.
->> > >
->> > > It does look behave a bit like this bug pointed out by Luis:
->> > >
->> > > http://gcc.gnu.org/bugzilla/show_bug.cgi?id=58854
->> > >
->> > > AFAIU (please correct me if I am wrong), ARM's interrupt handler run
->> > > on top of the thread stack (?). If it's the case, then anything stored
->> > > on the stack below "sp" could be overwritten by an interrupt handler.
->> > > This would fit well the reproduction scenario for this bug: Nathan runs
->> > > LTTng tracing of kmem_cache_free tracepoint with hackbench running.
->> > > A race between a short window of stack use below sp and interrupt handlers
->> > > would trigger with this kind of stress-test.
->> > >
->> > > Thoughts ?
->> > >
->> > > Thanks,
->> > >
->> > > Mathieu
->> > >
->> > >
->> > > --
->> > > Mathieu Desnoyers
->> > > EfficiOS Inc.
->> > > http://www.efficios.com
->> >
->> >
->> >
->> > --
->> >
->> > Luis A. Lozano | Software Engineer | llozano@google.com | +1 (408)431-5164
->> >
->>
->> --
->> Mathieu Desnoyers
->> EfficiOS Inc.
->> http://www.efficios.com
-
-
-
--- 
-
-Luis A. Lozano | Software Engineer | llozano@google.com | +1 (408)431-5164
+>>> Regards,
+>>> J=E9r=E9mie
+>>>
+>>>> Thanks!
+>>>>
+>>>> Am 13.11.2013 18:37, schrieb Klaus Dannecker:
+>>>>
+>>>>
+>>>> Am 09.11.2013 09:33, schrieb Klaus Dannecker:
+>>>>
+>>>> Hi,
+>>>> I want to write a driver with trace events.
+>>>> In the first step i compile the example  trace-events-sample.c with the
+>>>> makefile:
+>>>>
+>>>> ifneq ($(KERNELRELEASE),)
+>>>>       obj-m  :=3D modul_trace-events-sample.o
+>>>>       modul_trace-events-sample-y :=3D trace-events-sample.o
+>>>>       ccflags-y :=3D -I$(src)
+>>>> else
+>>>>       KDIR ?=3D /lib/modules/`uname -r`/build
+>>>> default:
+>>>>       $(MAKE) -C $(KDIR) M=3D$$PWD
+>>>> endif
+>>>>
+>>>> now i get the modul_trace-events-sample.ko File.
+>>>> now:
+>>>> insmod modul_trace-events-sample.ko
+>>>> lttng create
+>>>> lttng enable-event -k -a
+>>>> lttng start
+>>>> ...wait...
+>>>> lttng stop
+>>>> lttng destroy
+>>>>
+>>>> now i look the result in the eclise viewer, but i found event
+>>>> "trace_foo_bar" not in the session!
+>>>> what am I doing wrong?
+>>>>
+>>>> I use ubuntu 13.04 in a vmware
+>>>>
+>>>> Thanks
+>>>>
+>>>> _______________________________________________
+>>>>
+>>>> Hi,
+>>>>
+>>>> now i found a answer:
+>>>> http://lists.lttng.org/pipermail/lttng-dev/2013-October/021540.html
+>>>> now i download the lttng-module and compiled it.
+>>>>
+>>>> $ git clone git://git.lttng.org/lttng-modules.git
+>>>> $ cd lttng-tools
+>>>> $ make
+>>>> $ sudo make modules_install
+>>>> here I get error
+>>>> INSTALL
+>>>> /mnt/hgfs/shared_Folder/lttng-modules/lib/lttng-lib-ring-buffer.ko
+>>>> Can't read private key
+>>>> ...
+>>>> what does that mean?
+>>>> what should I do?
+>>>>
+>>>> please help me!
+>>>>
+>>>> another question:
+>>>> when i create a trace events in module_a,
+>>>> can i use it in module_b?
+>>>> if yes, what should I do?
+>>>>
+>>>> thanks Klaus
+>>>>
+>>>>
+>>>> _______________________________________________
+>>>> lttng-dev mailing list
+>>>> lttng-dev@lists.lttng.org
+>>>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>>>>
+>>>>
+>>>>
+>>>> _______________________________________________
+>>>> lttng-dev mailing list
+>>>> lttng-dev@lists.lttng.org
+>>>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>>>>
+>>>
+>
+>
