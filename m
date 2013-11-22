@@ -1,19 +1,24 @@
-From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: make a trace_event in a modul (driver)
-Date: Fri, 22 Nov 2013 14:01:15 -0500
-Message-ID: <CA+jJMxt0zOzd897XEv7=-oEM-z7ZENHy385d5YK6hOp2gcEfeA__12464.8130652078$1385146938$gmane$org@mail.gmail.com>
-References: <48CF5AC71E61DB46B70D0F388054EFFD267A5932@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: LTTng packages in Debian sid out of sync
+Date: Fri, 22 Nov 2013 19:02:08 +0000 (UTC)
+Message-ID: <1846575582.73471.1385146928205.JavaMail.zimbra__32922.5463247441$1385147044$gmane$org@efficios.com>
+References: <630558869.45441.1382211345502.JavaMail.zimbra@efficios.com>
+	<856849325.45462.1382211994767.JavaMail.zimbra@efficios.com>
+	<20131019211009.GA83292@helmut.local>
+	<300817690.45707.1382242504740.JavaMail.zimbra@efficios.com>
+	<20131020134521.GA97360@helmut.local>
+	<1084047903.45979.1382281219903.JavaMail.zimbra@efficios.com>
+	<20131020160434.GA2011@helmut.local>
+	<20131122185715.GA27557@shaniqua>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qc0-f175.google.com ([209.85.216.175])
+Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1Vjvyj-00083i-9t
-	for lttng-dev@lists.lttng.org; Fri, 22 Nov 2013 14:01:26 -0500
-Received: by mail-qc0-f175.google.com with SMTP id e9so1002287qcy.6
-	for <lttng-dev@lists.lttng.org>; Fri, 22 Nov 2013 11:01:15 -0800 (PST)
-In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD267A5932@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+	(envelope-from <compudj@efficios.com>) id 1VjvzV-0008M0-78
+	for lttng-dev@lists.lttng.org; Fri, 22 Nov 2013 14:02:15 -0500
+In-Reply-To: <20131122185715.GA27557@shaniqua>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,64 +27,50 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Jon Bernard <jbernard@debian.org>
+Cc: lttng-dev@lists.lttng.org, =?utf-8?Q?St=C3=A9phane?= Graber <stgraber@ubuntu.com>
 List-Id: lttng-dev@lists.lttng.org
 
-On Fri, Nov 22, 2013 at 1:54 PM, Thibault, Daniel
-<Daniel.Thibault@drdc-rddc.gc.ca> wrote:
->> how can I define a "tracing"group , so I no longer need the sudo command?
->
-> $ sudo addgroup --system tracing
-> $ sudo adduser username tracing
->
-
-Thanks for providing the info Daniel, I read the original question
-completely wrong!
-
-> You must log off and back on for group membership to be activated.
->
-> You may also want to add lttng-sessiond as a service:
->
-> $ sudo ln --symbolic /lib/init/upstart-job /etc/init.d/lttng-sessiond
->
-> And create /etc/init/lttng-sessiond.conf containing:
->
-> description "LTTng central tracing registry session daemon"
-> author "St=E9phane Graber <stgraber@ubuntu.com>"
-> start on local-filesystems
-> stop on runlevel [06]
-> respawn
-> exec lttng-sessiond
->
-> You can then start the session daemon with 'sudo service lttng-sessiond s=
-tart' (stop it with 'stop', restart with 'restart').
->
-> Daniel U. Thibault
-> Protection des syst=E8mes et contremesures (PSC) | Systems Protection & C=
-ountermeasures (SPC)
-> Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critica=
-l Cyber Security (MCCS)
-> R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R=
-&D Canada - Valcartier (DRDC Valcartier)
-> 2459 route de la Bravoure
-> Qu=E9bec QC  G3J 1X5
-> CANADA
-> Vox : (418) 844-4000 x4245
-> Fax : (418) 844-4538
-> NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-> Gouvernement du Canada | Government of Canada
-> <http://www.valcartier.drdc-rddc.gc.ca/>
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
-
-
--- =
-
-J=E9r=E9mie Galarneau
-EfficiOS Inc.
-http://www.efficios.com
+LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJKb24gQmVybmFyZCIgPGpiZXJu
+YXJkQGRlYmlhbi5vcmc+Cj4gVG86ICJNYXRoaWV1IERlc25veWVycyIgPG1hdGhpZXUuZGVzbm95
+ZXJzQGVmZmljaW9zLmNvbT4sICJTdMOpcGhhbmUgR3JhYmVyIiA8c3RncmFiZXJAdWJ1bnR1LmNv
+bT4sICJBbGV4YW5kcmUKPiBNb250cGxhaXNpciIgPGFsZXhtb250aHlAdm94cG9wdWxpLmltPiwg
+bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IFNlbnQ6IEZyaWRheSwgTm92ZW1iZXIgMjIsIDIw
+MTMgMTo1NzoxNSBQTQo+IFN1YmplY3Q6IFJlOiBbbHR0bmctZGV2XSBMVFRuZyBwYWNrYWdlcyBp
+biBEZWJpYW4gc2lkIG91dCBvZiBzeW5jCj4gCj4gKiBKb24gQmVybmFyZCA8amJlcm5hcmRAZGVi
+aWFuLm9yZz4gd3JvdGU6Cj4gPiAqIE1hdGhpZXUgRGVzbm95ZXJzIDxtYXRoaWV1LmRlc25veWVy
+c0BlZmZpY2lvcy5jb20+IHdyb3RlOgo+ID4gPiAtLS0tLSBPcmlnaW5hbCBNZXNzYWdlIC0tLS0t
+Cj4gPiA+ID4gRnJvbTogIkpvbiBCZXJuYXJkIiA8amJlcm5hcmRAZGViaWFuLm9yZz4KPiA+ID4g
+PiBUbzogIk1hdGhpZXUgRGVzbm95ZXJzIiA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29t
+Pgo+ID4gPiA+IENjOiAiU3TDqXBoYW5lIEdyYWJlciIgPHN0Z3JhYmVyQHVidW50dS5jb20+LCAi
+QWxleGFuZHJlIE1vbnRwbGFpc2lyIgo+ID4gPiA+IDxhbGV4bW9udGh5QHZveHBvcHVsaS5pbT4s
+Cj4gPiA+ID4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+ID4gPiA+IFNlbnQ6IFN1bmRheSwg
+T2N0b2JlciAyMCwgMjAxMyA5OjQ1OjIxIEFNCj4gPiA+ID4gU3ViamVjdDogUmU6IExUVG5nIHBh
+Y2thZ2VzIGluIERlYmlhbiBzaWQgb3V0IG9mIHN5bmMKPiA+ID4gPiAKPiA+ID4gWy4uLl0KPiA+
+ID4gPiAKPiA+ID4gPiBUaGF0IGlzIG5vdCBleGFjdGx5IHdoYXQgSSBpbnRlbmRlZCB0byBjb252
+ZXksIGxldCBtZSBiZSBtb3JlIGRpcmVjdAo+ID4gPiA+IGFib3V0IG15Cj4gPiA+ID4gdmlldy4g
+IEkgY29tcGxldGVseSBhZ3JlZSB0aGF0IHNpZCBzaG91bGQgaGF2ZSAyLjMueCBpbW1lZGlhdGVs
+eS4gIEkKPiA+ID4gPiBhbHNvCj4gPiA+ID4gYWdyZWUKPiA+ID4gPiB0aGF0IDIuMyBzaG91bGQg
+YmUgdGFyZ2V0ZWQgZm9yIHRlc3RpbmcsIGFuZCB0aGVyZWZvcmUgdGhlIG5leHQgc3RhYmxlCj4g
+PiA+ID4gcmVsZWFzZS4KPiA+ID4gCj4gPiA+IEFsbHJpZ2h0IDopIEknbSBnbGFkIHdlJ3JlIG9u
+IHRoZSBzYW1lIHBhZ2UsIHNvcnJ5IGZvciB0aGUKPiA+ID4gbWlzdW5kZXJzdGFuZGluZy4KPiA+
+IAo+ID4gTm8gd29ycmllcy4gIEknbGwgYWRkIHRoYXQgZnV0dXJlIHJlbGVhc2VzIChsaWtlIHRo
+ZSB1cGNvbWluZyAyLjQpIHdpbGwKPiA+IGJlIHByZXBhcmVkIGFuZCB0ZXN0ZWQgYWxsIHRvZ2V0
+aGVyIHByaW9yIHRvIHVwbG9hZCAtIHRvIGhvcGVmdWxseSBhdm9pZAo+ID4gdGhlIHByZXZpb3Vz
+IHNpdHVhdGlvbi9uaWdodG1hcmUgdGhhdCBJIG1hbmFnZWQgdG8gZ2V0IG15c2VsZiBpbnRvLgo+
+ID4gCj4gPiBUaGVyZSBjYW4gc3RpbGwgYmUgYSBzaXphYmxlIGFtb3VudCBvZiB3b3JrIGZvciAy
+LjMgdG8gZnVsbHkgbGFuZCBpbnRvCj4gPiB0ZXN0aW5nLCBzbyB0aGF0IGlzIG15IHByaW1hcnkg
+Zm9jdXMuICBUaGUgZnJlZXplIGRlYWRsaW5lIGlzIGZhc3QKPiA+IGFwcHJvYWNoaW5nLCBzbyBJ
+IHdpbGwgYmUga2VlcGluZyBhIGNsb3NlIGV5ZSBvbiB0aGluZ3MgYXMgdGhleQo+ID4gcHJvZ3Jl
+c3MuICBBcyB0aGluZ3Mgc2V0dGxlIEknbGwgcG9zdCBzdGF0dXMgaGVyZS4KPiAKPiBJIHRoaW5r
+IEkndmUgZ290IHRoZSBVU1QgdXBncmFkZSBwYWNrYWdlcyBpbiBnb29kIHNoYXBlIGFuZCBJIHVw
+bG9hZGVkCj4gYSBuZXcgbHR0bmctdG9vbHMgdG8gZml4IHRoZSBhcm1lbCBidWlsZCBlYXJsaWVy
+IHRvZGF5LiAgU28sIGhvcGVmdWxseQo+IGJ5IGp1c3Qgd2FpdGluZyBhIGJpdCB0aGluZ3Mgc2hv
+dWxkIGJlIGluIGdvb2Qgc2hhcGUgYW5kIG1pZ3JhdGUgaW50bwo+IHRlc3RpbmcgaW4gZWFybHkg
+RGVjZW1iZXIgKH4xMCBkYXlzIGZyb20gbm93KS4gIEF0IHRoZSBtb21lbnQsIDIuMy4wIGlzCj4g
+Y29tcGxldGUgaW4gdW5zdGFibGUgKHNpZCkuCgpHcmVhdCEgVGhhbmtzIGZvciB0aGUgdXBkYXRl
+cyEgOikKCk1hdGhpZXUKCj4gCj4gLS0KPiBKb24KPiAKCi0tIApNYXRoaWV1IERlc25veWVycwpF
+ZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCgpfX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5n
+LWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxt
+YW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
