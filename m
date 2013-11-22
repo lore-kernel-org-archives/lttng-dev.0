@@ -1,16 +1,24 @@
-From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Subject: Re: make a trace_event in a modul (driver)
-Date: Fri, 22 Nov 2013 18:54:57 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD267A5932__9425.99188206277$1385146556$gmane$org@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+From: Jon Bernard <jbernard@debian.org>
+Subject: Re: LTTng packages in Debian sid out of sync
+Date: Fri, 22 Nov 2013 13:57:15 -0500
+Message-ID: <20131122185715.GA27557__44208.0704648562$1385146701$gmane$org@shaniqua>
+References: <630558869.45441.1382211345502.JavaMail.zimbra@efficios.com>
+	<856849325.45462.1382211994767.JavaMail.zimbra@efficios.com>
+	<20131019211009.GA83292@helmut.local>
+	<300817690.45707.1382242504740.JavaMail.zimbra@efficios.com>
+	<20131020134521.GA97360@helmut.local>
+	<1084047903.45979.1382281219903.JavaMail.zimbra@efficios.com>
+	<20131020160434.GA2011@helmut.local>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
+Received: from out1-smtp.messagingengine.com ([66.111.4.25])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1VjvsY-0005S7-WC
-	for lttng-dev@lists.lttng.org; Fri, 22 Nov 2013 13:55:04 -0500
-Content-Language: fr-FR
+	(envelope-from <jbernard@debian.org>) id 1Vjvut-0006QF-3l
+	for lttng-dev@lists.lttng.org; Fri, 22 Nov 2013 13:57:29 -0500
+Content-Disposition: inline
+In-Reply-To: <20131020160434.GA2011@helmut.local>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,44 +27,53 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, =?iso-8859-1?Q?St=E9phane?= Graber <stgraber@ubuntu.com>, Alexandre Montplaisir <alexmonthy@voxpopuli.im>, lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-> how can I define a "tracing"group , so I no longer need the sudo command?
+* Jon Bernard <jbernard@debian.org> wrote:
+> * Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
+> > ----- Original Message -----
+> > > From: "Jon Bernard" <jbernard@debian.org>
+> > > To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+> > > Cc: "St=E9phane Graber" <stgraber@ubuntu.com>, "Alexandre Montplaisir=
+" <alexmonthy@voxpopuli.im>,
+> > > lttng-dev@lists.lttng.org
+> > > Sent: Sunday, October 20, 2013 9:45:21 AM
+> > > Subject: Re: LTTng packages in Debian sid out of sync
+> > > =
 
-$ sudo addgroup --system tracing
-$ sudo adduser username tracing
+> > [...]
+> > > =
 
-You must log off and back on for group membership to be activated.
+> > > That is not exactly what I intended to convey, let me be more direct =
+about my
+> > > view.  I completely agree that sid should have 2.3.x immediately.  I =
+also
+> > > agree
+> > > that 2.3 should be targeted for testing, and therefore the next stable
+> > > release.
+> > =
 
-You may also want to add lttng-sessiond as a service:
+> > Allright :) I'm glad we're on the same page, sorry for the misunderstan=
+ding.
+> =
 
-$ sudo ln --symbolic /lib/init/upstart-job /etc/init.d/lttng-sessiond
+> No worries.  I'll add that future releases (like the upcoming 2.4) will
+> be prepared and tested all together prior to upload - to hopefully avoid
+> the previous situation/nightmare that I managed to get myself into.
+> =
 
-And create /etc/init/lttng-sessiond.conf containing:
+> There can still be a sizable amount of work for 2.3 to fully land into
+> testing, so that is my primary focus.  The freeze deadline is fast
+> approaching, so I will be keeping a close eye on things as they
+> progress.  As things settle I'll post status here.
 
-description "LTTng central tracing registry session daemon"
-author "St=E9phane Graber <stgraber@ubuntu.com>"
-start on local-filesystems
-stop on runlevel [06]
-respawn
-exec lttng-sessiond
+I think I've got the UST upgrade packages in good shape and I uploaded
+a new lttng-tools to fix the armel build earlier today.  So, hopefully
+by just waiting a bit things should be in good shape and migrate into
+testing in early December (~10 days from now).  At the moment, 2.3.0 is
+complete in unstable (sid).
 
-You can then start the session daemon with 'sudo service lttng-sessiond sta=
-rt' (stop it with 'stop', restart with 'restart').
+-- =
 
-Daniel U. Thibault
-Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
-ntermeasures (SPC)
-Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
-Cyber Security (MCCS)
-R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
- Canada - Valcartier (DRDC Valcartier)
-2459 route de la Bravoure
-Qu=E9bec QC  G3J 1X5
-CANADA
-Vox : (418) 844-4000 x4245
-Fax : (418) 844-4538
-NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-Gouvernement du Canada | Government of Canada
-<http://www.valcartier.drdc-rddc.gc.ca/>
+Jon
