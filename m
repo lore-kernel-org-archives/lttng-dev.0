@@ -1,66 +1,64 @@
-From: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
-Subject: Re: Building LTTNG as a debian package
-Date: Thu, 21 Nov 2013 19:11:31 -0500
-Message-ID: <528EA133.1090500__4590.08326656676$1385079177$gmane$org@voxpopuli.im>
-References: <CAKvQZ_3Kus-9FnXmn_qJtVux_U+U5nPUis2es_Ws0NeMXxWqpQ@mail.gmail.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: current_thread_info() not respecting program order with gcc 4.8.x
+Date: Thu, 21 Nov 2013 16:17:12 -0800
+Message-ID: <CA+55aFx2BTQLFLU0BdXrzYR55SZT_UZ4BjbYoMUZ8bt-p1XENg@mail.gmail.com>
+References: <52803E5D.3050109@mentor.com>
+	<52851395.3010306@mentor.com>
+	<67652521.68027.1384482849638.JavaMail.zimbra@efficios.com>
+	<1691607547.70809.1384874952002.JavaMail.zimbra@efficios.com>
+	<CA+55aFw923sA0E1RQNxFF0OWFtAfcaG-dBUc-0YYZGDSAsaQyg@mail.gmail.com>
+	<528E2E8E.8080004@ahsoftware.de>
+	<CA+55aFyNZun07BLoD2KQFT7cN1xsiQ2gE6hYwRvOGa3tCap4CQ@mail.gmail.com>
+	<528E94E2.3080102@ahsoftware.de>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from ironport2-out.teksavvy.com ([206.248.154.181])
-	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <alexmonthy@voxpopuli.im>) id 1VjeLT-0000l5-GU
-	for lttng-dev@lists.lttng.org; Thu, 21 Nov 2013 19:11:54 -0500
-In-Reply-To: <CAKvQZ_3Kus-9FnXmn_qJtVux_U+U5nPUis2es_Ws0NeMXxWqpQ@mail.gmail.com>
-List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
-	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
-	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Willy Lambert <lambert.willy@gmail.com>
-Cc: lttng-dev@lists.lttng.org
+Content-Type: text/plain; charset=UTF-8
+Return-path: <linux-kernel-owner@vger.kernel.org>
+In-Reply-To: <528E94E2.3080102@ahsoftware.de>
+Sender: linux-kernel-owner@vger.kernel.org
+To: Alexander Holler <holler@ahsoftware.de>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Jakub Jelinek <jakub@redhat.com>, Richard Henderson <rth@twiddle.net>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Will Deacon <will.deacon@arm.com>, Catalin Marinas <catalin.marinas@arm.com>, Peter Zijlstra <peterz@infradead.org>, lttng-dev@lists.lttng.org, Nathan Lynch <Nathan_Lynch@mentor.com>, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Andrew Morton <akpm@linux-foundation.org>, Luis Lozano <llozano@chromium.org>, Bhaskar Janakiraman <bjanakiraman@chromium.org>, Han Shen <shenhan@chromium.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
-
-The packaging for distributions is usually managed by the distribution
-itself, not the upstream project.
-
-For the official Debian packages, you can search on packages.debian.org
-for the package names, and from there you can download the
-*.debian.tar.gz for the packaging "recipe". Or follow the links to get
-to the git tree where it is stored. For example, for the lttng-modules
-package:
-http://anonscm.debian.org/gitweb/?p=collab-maint/lttng-modules.git;a=summary
-
-We also maintain a Ubuntu PPA which does automatic builds from git
-roughly every day. If you want to package a git snapshot, you may find
-those useful:
-https://code.launchpad.net/~lttng
-(under the *-packaging-daily branches)
-
-
-Cheers,
-Alexandre
-
-
-On 13-11-21 06:24 PM, Willy Lambert wrote:
-> Hi all,
+On Thu, Nov 21, 2013 at 3:18 PM, Alexander Holler <holler@ahsoftware.de> wrote:
 >
-> I have successfully build an embedded target with the LTTNG toolset and I'm
-> now trying to package this to be able to repopulate a target from scratch.
->
-> I'm starting with the kernel modules and I did not succeed in building them
-> with make-kpkg modules_images.
->
-> As I have seen you produce Debian packages for recent distributions, I
-> wonder if your packaging architecture is available somewhere (I had q quick
-> look on git but debian packaging infrastructure isn't present).
->
-> Or maybe is there any documentation on this ?
->
-> Regards.
->
+> Sorry, that I still disagree.
+
+Why? You're wrong.
+
+I mean, anybody who disagrees with me is pretty much wrong just on
+pure principles, but I actually mean a deeper kind of wrong than that.
+I mean a very objective "you're clearly wrong".
+
+> I try to describe it more clearly why I still think that the problem might
+> be because of that const declaration.
+
+.. and then you use a totally bogus example to try to "prove" your point.
+
+The example you use has nothing to do with what the function in case
+actually does.
+
+The function we actually talk about RETURNS THE SAME VALUE EVERY TIME
+IT IS CALLED, regardless of arguments (which it doesn't happen to
+have). Ergo, it is "const".
+
+Your example is pure and utter shit, since you still get confused
+about what is actually const and what isn't.
+
+The fact is, "current_thread_info()" returns a constant value (within
+that execution context). Always has, always will. It fundamentally HAS
+to, since that is - by definition - what that "thread info" is all
+about.
+
+The dereference (your "->somewhere_local") happens *outside* that
+const function scope. And no, that dereference is not const. But
+that's not what we tell gcc, and never has been.
+
+So don't try to confuse things by trying to make
+"current_thread_info()" something it isn't.
+
+Basically, your whole argument boils down to "if the function did
+something else than what it does, then it wouldn't be const, so we
+shouldn't mark it const". But that argument is BULLSHIT, because the
+fact is, the function *doesn't* do what you try to claim it does.
+
+               Linus
