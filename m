@@ -1,9 +1,9 @@
 From: Luis Lozano <llozano@chromium.org>
-Subject: Re: current_thread_info() not respecting program order
-	with gcc 4.8.x
-Date: Fri, 22 Nov 2013 00:16:27 -0800
-Message-ID: <CANxoKduwK=9__0WFXFcTWjQn3Rbn+HgSWZyL0FN_VuJ2Q_2TPQ__43425.8465459154$1385108250$gmane$org@mail.gmail.com>
-References: <52803E5D.3050109@mentor.com> <528E2E8E.8080004@ahsoftware.de>
+Subject: Re: current_thread_info() not respecting program order with gcc 4.8.x
+Date: Fri, 22 Nov 2013 00:18:14 -0800
+Message-ID: <CANxoKds7uwdwQ06AaqE-kcRbWGnqDU2gnFD-3GuKoF7tXigTHw@mail.gmail.com>
+References: <52803E5D.3050109@mentor.com>
+	<528E2E8E.8080004@ahsoftware.de>
 	<CA+55aFyNZun07BLoD2KQFT7cN1xsiQ2gE6hYwRvOGa3tCap4CQ@mail.gmail.com>
 	<528E94E2.3080102@ahsoftware.de>
 	<CANxoKds1iLpXK0yb1qW_Z4tLSRccrf69nYUV7mLSJBMwSrjwmQ@mail.gmail.com>
@@ -12,53 +12,28 @@ References: <52803E5D.3050109@mentor.com> <528E2E8E.8080004@ahsoftware.de>
 	<CANxoKdsUjG4McOVR8A3dZekNmCwyEztJ7rabCJ8p-G7mNmjiLA@mail.gmail.com>
 	<2038513765.72947.1385091506781.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0581600401=="
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qe0-f49.google.com ([209.85.128.49])
-	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <llozano@google.com>) id 1Vjluj-00050v-2h
-	for lttng-dev@lists.lttng.org; Fri, 22 Nov 2013 03:16:37 -0500
-Received: by mail-qe0-f49.google.com with SMTP id w7so676722qeb.36
-	for <lttng-dev@lists.lttng.org>; Fri, 22 Nov 2013 00:16:27 -0800 (PST)
+Content-Type: text/plain; charset=ISO-8859-1
+Return-path: <linux-kernel-owner@vger.kernel.org>
 In-Reply-To: <2038513765.72947.1385091506781.JavaMail.zimbra@efficios.com>
-List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
-	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
-	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
+Sender: linux-kernel-owner@vger.kernel.org
 To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Jakub Jelinek <jakub@redhat.com>, Han Shen <shenhan@chromium.org>, Peter Zijlstra <peterz@infradead.org>, Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will.deacon@arm.com>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Nathan Lynch <Nathan_Lynch@mentor.com>, lttng-dev@lists.lttng.org, Bhaskar Janakiraman <bjanakiraman@chromium.org>, Alexander Holler <holler@ahsoftware.de>, Andrew Morton <akpm@linux-foundation.org>, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Linus Torvalds <torvalds@linux-foundation.org>, Richard Henderson <rth@twiddle.net>
+Cc: Jakub Jelinek <jakub@redhat.com>, Alexander Holler <holler@ahsoftware.de>, Linus Torvalds <torvalds@linux-foundation.org>, Richard Henderson <rth@twiddle.net>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Will Deacon <will.deacon@arm.com>, Catalin Marinas <catalin.marinas@arm.com>, Peter Zijlstra <peterz@infradead.org>, lttng-dev@lists.lttng.org, Nathan Lynch <Nathan_Lynch@mentor.com>, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Andrew Morton <akpm@linux-foundation.org>, Bhaskar Janakiraman <bjanakiraman@chromium.org>, Han Shen <shenhan@chromium.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0581600401==
-Content-Type: multipart/alternative; boundary=047d7b5d5af47a370204ebbfa121
-
---047d7b5d5af47a370204ebbfa121
-Content-Type: text/plain; charset=ISO-8859-1
-
-On Thu, Nov 21, 2013 at 7:38 PM, Mathieu Desnoyers <
-mathieu.desnoyers@efficios.com> wrote:
-
+On Thu, Nov 21, 2013 at 7:38 PM, Mathieu Desnoyers
+<mathieu.desnoyers@efficios.com> wrote:
+>
 > ----- Original Message -----
 > > From: "Luis Lozano" <llozano@google.com>
 > > To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-> > Cc: "Jakub Jelinek" <jakub@redhat.com>, "Alexander Holler" <
-> holler@ahsoftware.de>, "Linus Torvalds"
-> > <torvalds@linux-foundation.org>, "Richard Henderson" <rth@twiddle.net>,
-> "Linux Kernel Mailing List"
-> > <linux-kernel@vger.kernel.org>, "Will Deacon" <will.deacon@arm.com>,
-> "Catalin Marinas" <catalin.marinas@arm.com>,
-> > "Peter Zijlstra" <peterz@infradead.org>, lttng-dev@lists.lttng.org,
-> "Nathan Lynch" <Nathan_Lynch@mentor.com>, "Paul
-> > E. McKenney" <paulmck@linux.vnet.ibm.com>, "Andrew Morton" <
-> akpm@linux-foundation.org>, "Bhaskar Janakiraman"
+> > Cc: "Jakub Jelinek" <jakub@redhat.com>, "Alexander Holler" <holler@ahsoftware.de>, "Linus Torvalds"
+> > <torvalds@linux-foundation.org>, "Richard Henderson" <rth@twiddle.net>, "Linux Kernel Mailing List"
+> > <linux-kernel@vger.kernel.org>, "Will Deacon" <will.deacon@arm.com>, "Catalin Marinas" <catalin.marinas@arm.com>,
+> > "Peter Zijlstra" <peterz@infradead.org>, lttng-dev@lists.lttng.org, "Nathan Lynch" <Nathan_Lynch@mentor.com>, "Paul
+> > E. McKenney" <paulmck@linux.vnet.ibm.com>, "Andrew Morton" <akpm@linux-foundation.org>, "Bhaskar Janakiraman"
 > > <bjanakiraman@chromium.org>, "Han Shen" <shenhan@chromium.org>
 > > Sent: Thursday, November 21, 2013 9:36:27 PM
-> > Subject: Re: current_thread_info() not respecting program order with gcc
-> 4.8.x
+> > Subject: Re: current_thread_info() not respecting program order with gcc 4.8.x
 > >
 > > Hi Mathieu,
 > >
@@ -74,29 +49,27 @@ mathieu.desnoyers@efficios.com> wrote:
 >   f1c:      e50b1048        str     r1, [fp, #-72]  ; 0xffffffb8
 >
 > appears in the assembly generated by gcc 4.8.2, but not in the one
-> generated by 4.7.3, which makes me wonder if it's good or not.
+> generated by 4.7.3,
 
 
 
 It is there in 4.7.3 just a few lines difference.
 I don't see any meaningful difference between the 2 assembly snippets...
-Just instructions ordered a little different?
+Just the instructions ordered a little different?
 
 Luis
 
-
-> With
+>
+> which makes me wonder if it's good or not. With
 > slightly different build output from the diff (probably a different config
 > from Nathan), the first function instructions look like:
 >
 > 00000efc <lttng_event_reserve>:
 >      efc:       e1a0c00d        mov     ip, sp
->      f00:       e92ddff0        push    {r4, r5, r6, r7, r8, r9, sl, fp,
-> ip, lr, pc}
+>      f00:       e92ddff0        push    {r4, r5, r6, r7, r8, r9, sl, fp, ip, lr, pc}
 >      f04:       e24cb004        sub     fp, ip, #4
 >      f08:       e24dd03c        sub     sp, sp, #60     ; 0x3c
->      f0c:       e52de004        push    {lr}            ; (str lr, [sp,
-> #-4]!)
+>      f0c:       e52de004        push    {lr}            ; (str lr, [sp, #-4]!)
 >      f10:       ebfffffe        bl      0 <__gnu_mcount_nc>
 >      f14:       e5903000        ldr     r3, [r0]
 >      f18:       e1a04000        mov     r4, r0
@@ -109,10 +82,8 @@ Luis
 >      f34:       e2822001        add     r2, r2, #1
 >      f38:       e5832004        str     r2, [r3, #4]
 >      f3c:       ebfffffe        bl      0 <debug_smp_processor_id>
->      f40:       e59f2e44        ldr     r2, [pc, #3652] ; 1d8c
-> <lttng_event_reserve+0xe90>
->      f44:       e59f3e44        ldr     r3, [pc, #3652] ; 1d90
-> <lttng_event_reserve+0xe94>
+>      f40:       e59f2e44        ldr     r2, [pc, #3652] ; 1d8c <lttng_event_reserve+0xe90>
+>      f44:       e59f3e44        ldr     r3, [pc, #3652] ; 1d90 <lttng_event_reserve+0xe94>
 >      f48:       e7921100        ldr     r1, [r2, r0, lsl #2]
 >      f4c:       e1a05000        mov     r5, r0
 >      f50:       e7932001        ldr     r2, [r3, r1]
@@ -136,17 +107,13 @@ Luis
 > > of the routine.
 > > Are we missing some diffs from the assembly comparison?
 >
-> My next step is to setup my own 4.8.2 ARM cross-compiler. I've tried this
-> morning,
-> did not manage to get one working even after following 2 howtos, trying
-> with Debian
-> packages, etc. Nathan told me this diff was the full comparison between
-> the two
+> My next step is to setup my own 4.8.2 ARM cross-compiler. I've tried this morning,
+> did not manage to get one working even after following 2 howtos, trying with Debian
+> packages, etc. Nathan told me this diff was the full comparison between the two
 > functions, but you'll understand that at this point I want to reproduce
 > everything myself, because this is a _weird_ issue.
 >
-> But after a long day of debugging, it's time for some sleep. I will get
-> back to this
+> But after a long day of debugging, it's time for some sleep. I will get back to this
 > tomorrow,
 >
 > Thanks,
@@ -168,8 +135,7 @@ Luis
 > > >> To: "Luis Lozano" <llozano@google.com>
 > > >> Cc: "Alexander Holler" <holler@ahsoftware.de>, "Linus Torvalds"
 > > >> <torvalds@linux-foundation.org>, "Mathieu Desnoyers"
-> > >> <mathieu.desnoyers@efficios.com>, "Richard Henderson" <
-> rth@twiddle.net>,
+> > >> <mathieu.desnoyers@efficios.com>, "Richard Henderson" <rth@twiddle.net>,
 > > >> "Linux Kernel Mailing List"
 > > >> <linux-kernel@vger.kernel.org>, "Will Deacon" <will.deacon@arm.com>,
 > > >> "Catalin Marinas" <catalin.marinas@arm.com>,
@@ -179,68 +145,52 @@ Luis
 > > >> <akpm@linux-foundation.org>, "Bhaskar Janakiraman"
 > > >> <bjanakiraman@chromium.org>, "Han Shen" <shenhan@chromium.org>
 > > >> Sent: Thursday, November 21, 2013 7:39:04 PM
-> > >> Subject: Re: current_thread_info() not respecting program order with
-> gcc
+> > >> Subject: Re: current_thread_info() not respecting program order with gcc
 > > >> 4.8.x
 > > >>
 > > >> On Thu, Nov 21, 2013 at 03:45:35PM -0800, Luis Lozano wrote:
-> > >> > I think we need a reproducer. Without this we may all be going on
-> the
+> > >> > I think we need a reproducer. Without this we may all be going on the
 > > >> > wrong path. This whole conversation started on an *assumption* that
 > > >> > some accesses were being reordered.
 > > >> >
 > > >> > evidence of the reorder or reproducer please?
 > > >>
 > > >> Yeah, if a compiler bug is suspected, can anybody please open
-> > >> a bugreport in http://gcc.gnu.org/bugzilla/ with the preprocessed
-> source,
-> > >> compiler version, flags and how it was configured and some hint in
-> which
-> > >> function to look for what exactly?  We don't necessarily need a
-> runtime
+> > >> a bugreport in http://gcc.gnu.org/bugzilla/ with the preprocessed source,
+> > >> compiler version, flags and how it was configured and some hint in which
+> > >> function to look for what exactly?  We don't necessarily need a runtime
 > > >> small reproducer, but if it can be shown in the assembly what has been
-> > >> reordered and why you think it shouldn't, with the above mentioned
-> input
+> > >> reordered and why you think it shouldn't, with the above mentioned input
 > > >> that ought to be sufficient.  Thanks.
 > > >
-> > > OK OK, let me reply on list first so I can share the result of a full
-> day
-> > > of bug hunting. We're not there yet, but many options have been
-> eliminated.
+> > > OK OK, let me reply on list first so I can share the result of a full day
+> > > of bug hunting. We're not there yet, but many options have been eliminated.
 > > >
-> > > The issue shows up in stress test, when tracing with lttng-modules
-> 2.4-rc1,
+> > > The issue shows up in stress test, when tracing with lttng-modules 2.4-rc1,
 > > > on ARM. It's been reproduced with a Linux kernel 3.12 so far, with
 > > > lttng-modules
 > > > compiled against that kernel.
 > > >
-> > > First, I asked Nathan to compile his kernel with gcc 4.7, and
-> lttng-modules
+> > > First, I asked Nathan to compile his kernel with gcc 4.7, and lttng-modules
 > > > with gcc 4.8.x (and vice-versa). The problem only appears when
 > > > lttng-modules
-> > > are compiled with gcc 4.8.x. The compiler version used to compile the
-> rest
+> > > are compiled with gcc 4.8.x. The compiler version used to compile the rest
 > > > of the kernel does not matter.
 > > >
 > > > Then I looked at gcc 4.8 changelog for ARM, new feature:
 > > > -fno-sched-pressure
-> > > (sched pressure is there by default). Nathan tried compiling
-> lttng-modules
+> > > (sched pressure is there by default). Nathan tried compiling lttng-modules
 > > > with
 > > > -fno-sched-pressure. The problem still reproduces.
 > > >
 > > > Knowing that adding barrier() outside of preempt_disable()/enable() was
-> > > fixing the issue, we tried identifying which code location was
-> responsible
-> > > for working around the issue. Skipping a long investigation, here is
-> the
+> > > fixing the issue, we tried identifying which code location was responsible
+> > > for working around the issue. Skipping a long investigation, here is the
 > > > executive summary:
 > > >
+> > > http://git.lttng.org/?p=lttng-modules.git;a=blob;f=lttng-ring-buffer-client.h;h=50c47b3bf49f6c2dd24e250cf1a9b97808cd8e27;hb=HEAD
 > > >
-> http://git.lttng.org/?p=lttng-modules.git;a=blob;f=lttng-ring-buffer-client.h;h=50c47b3bf49f6c2dd24e250cf1a9b97808cd8e27;hb=HEAD
-> > >
-> > > Has the following function. We identified that adding a barrier() as
-> shown
+> > > Has the following function. We identified that adding a barrier() as shown
 > > > below
 > > > works around the issue:
 > > >
@@ -248,8 +198,7 @@ Luis
 > > > int lttng_event_reserve(struct lib_ring_buffer_ctx *ctx,
 > > >                       uint32_t event_id)
 > > > {
-> > >         struct lttng_channel *lttng_chan =
-> channel_get_private(ctx->chan);
+> > >         struct lttng_channel *lttng_chan = channel_get_private(ctx->chan);
 > > >         int ret, cpu;
 > > >
 > > >         cpu = lib_ring_buffer_get_cpu(&client_config);
@@ -282,17 +231,14 @@ Luis
 > > >         return ret;
 > > > }
 > > >
-> > > Where barrier() is the usual asm volatile with "memory" clobber,
-> nothing
+> > > Where barrier() is the usual asm volatile with "memory" clobber, nothing
 > > > else.
 > > >
-> > > Nathan gave me the binary diff for the assembly generated for this
-> function
+> > > Nathan gave me the binary diff for the assembly generated for this function
 > > > without
 > > > the barrier and with the barrier:
 > > >
-> > > --- /tmp/lttng_event_reserve-4.8.2.dump 2013-11-21 11:14:14.536495079
-> -0600
+> > > --- /tmp/lttng_event_reserve-4.8.2.dump 2013-11-21 11:14:14.536495079 -0600
 > > > +++ /tmp/lttng_event_reserve-with-barrier-4.8.2.dump    2013-11-21
 > > > 14:12:52.997355907 -0600
 > > > @@ -7,11 +7,11 @@
@@ -316,11 +262,9 @@ Luis
 > > >       fcc:      e5933000        ldr     r3, [r3]
 > > >       fd0:      e3130002        tst     r3, #2
 > > > -     fd4:      0a000000        beq     fdc <lttng_event_reserve+0xe0>
-> > > +     fd4:      0a0002be        beq     1ad4
-> <lttng_event_reserve+0xbd8>
+> > > +     fd4:      0a0002be        beq     1ad4 <lttng_event_reserve+0xbd8>
 > > >       fd8:      ebfffffe        bl      0 <preempt_schedule>
-> > >       fdc:      ea0002bc        b       1ad4
-> <lttng_event_reserve+0xbd8>
+> > >       fdc:      ea0002bc        b       1ad4 <lttng_event_reserve+0xbd8>
 > > >       fe0:      e3500000        cmp     r0, #0
 > > >
 > > > We tried disabling the ftrace function tracing to get mcount out of the
@@ -328,8 +272,7 @@ Luis
 > > > and the problem still reproduces.
 > > >
 > > > I'm stopping here in terms of details about the disassembly, because I
-> > > need to double check with Nathan that I get the right disassembly for
-> the
+> > > need to double check with Nathan that I get the right disassembly for the
 > > > right
 > > > cases. I also terribly need to setup a 4.8.2 ARM cross-compiler on my
 > > > machine.
@@ -345,8 +288,7 @@ Luis
 > > > on the stack below "sp" could be overwritten by an interrupt handler.
 > > > This would fit well the reproduction scenario for this bug: Nathan runs
 > > > LTTng tracing of kmem_cache_free tracepoint with hackbench running.
-> > > A race between a short window of stack use below sp and interrupt
-> handlers
+> > > A race between a short window of stack use below sp and interrupt handlers
 > > > would trigger with this kind of stress-test.
 > > >
 > > > Thoughts ?
@@ -365,482 +307,10 @@ Luis
 > >
 > > --
 > >
-> > Luis A. Lozano | Software Engineer | llozano@google.com | +1
-> (408)431-5164
+> > Luis A. Lozano | Software Engineer | llozano@google.com | +1 (408)431-5164
 > >
 >
 > --
 > Mathieu Desnoyers
 > EfficiOS Inc.
 > http://www.efficios.com
->
-
---047d7b5d5af47a370204ebbfa121
-Content-Type: text/html; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><br><div class=3D"gmail_extra"><br><br><div class=3D"gmail=
-_quote">On Thu, Nov 21, 2013 at 7:38 PM, Mathieu Desnoyers <span dir=3D"ltr=
-">&lt;<a href=3D"mailto:mathieu.desnoyers@efficios.com" target=3D"_blank">m=
-athieu.desnoyers@efficios.com</a>&gt;</span> wrote:<br>
-<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
-x #ccc solid;padding-left:1ex"><div class=3D"im">----- Original Message ---=
---<br>
-&gt; From: &quot;Luis Lozano&quot; &lt;<a href=3D"mailto:llozano@google.com=
-">llozano@google.com</a>&gt;<br>
-&gt; To: &quot;Mathieu Desnoyers&quot; &lt;<a href=3D"mailto:mathieu.desnoy=
-ers@efficios.com">mathieu.desnoyers@efficios.com</a>&gt;<br>
-&gt; Cc: &quot;Jakub Jelinek&quot; &lt;<a href=3D"mailto:jakub@redhat.com">=
-jakub@redhat.com</a>&gt;, &quot;Alexander Holler&quot; &lt;<a href=3D"mailt=
-o:holler@ahsoftware.de">holler@ahsoftware.de</a>&gt;, &quot;Linus Torvalds&=
-quot;<br>
-
-&gt; &lt;<a href=3D"mailto:torvalds@linux-foundation.org">torvalds@linux-fo=
-undation.org</a>&gt;, &quot;Richard Henderson&quot; &lt;<a href=3D"mailto:r=
-th@twiddle.net">rth@twiddle.net</a>&gt;, &quot;Linux Kernel Mailing List&qu=
-ot;<br>
-
-&gt; &lt;<a href=3D"mailto:linux-kernel@vger.kernel.org">linux-kernel@vger.=
-kernel.org</a>&gt;, &quot;Will Deacon&quot; &lt;<a href=3D"mailto:will.deac=
-on@arm.com">will.deacon@arm.com</a>&gt;, &quot;Catalin Marinas&quot; &lt;<a=
- href=3D"mailto:catalin.marinas@arm.com">catalin.marinas@arm.com</a>&gt;,<b=
-r>
-
-&gt; &quot;Peter Zijlstra&quot; &lt;<a href=3D"mailto:peterz@infradead.org"=
->peterz@infradead.org</a>&gt;, <a href=3D"mailto:lttng-dev@lists.lttng.org"=
->lttng-dev@lists.lttng.org</a>, &quot;Nathan Lynch&quot; &lt;<a href=3D"mai=
-lto:Nathan_Lynch@mentor.com">Nathan_Lynch@mentor.com</a>&gt;, &quot;Paul<br=
->
-
-&gt; E. McKenney&quot; &lt;<a href=3D"mailto:paulmck@linux.vnet.ibm.com">pa=
-ulmck@linux.vnet.ibm.com</a>&gt;, &quot;Andrew Morton&quot; &lt;<a href=3D"=
-mailto:akpm@linux-foundation.org">akpm@linux-foundation.org</a>&gt;, &quot;=
-Bhaskar Janakiraman&quot;<br>
-
-&gt; &lt;<a href=3D"mailto:bjanakiraman@chromium.org">bjanakiraman@chromium=
-.org</a>&gt;, &quot;Han Shen&quot; &lt;<a href=3D"mailto:shenhan@chromium.o=
-rg">shenhan@chromium.org</a>&gt;<br>
-</div><div class=3D"im">&gt; Sent: Thursday, November 21, 2013 9:36:27 PM<b=
-r>
-&gt; Subject: Re: current_thread_info() not respecting program order with g=
-cc 4.8.x<br>
-&gt;<br>
-</div><div class=3D"im">&gt; Hi Mathieu,<br>
-&gt;<br>
-&gt; Yes the problem we were seeing with GCC bug 58854 is that an interrupt=
-<br>
-&gt; handler was corrupting the stack of a routine which had an invalid<br>
-&gt; value of SP (not really on &quot;top&quot; of the stack) for part of t=
-he<br>
-&gt; routine.<br>
-&gt; But in the assembly code you sent, I don&#39;t see where sp is being<b=
-r>
-&gt; modified... or where the access to &quot;below&quot; sp is happening.<=
-br>
-<br>
-</div>The following instruction<br>
-<div class=3D"im"><br>
-=A0 f1c: =A0 =A0 =A0e50b1048 =A0 =A0 =A0 =A0str =A0 =A0 r1, [fp, #-72] =A0;=
- 0xffffffb8<br>
-<br>
-</div>appears in the assembly generated by gcc 4.8.2, but not in the one<br=
->
-generated by 4.7.3, which makes me wonder if it&#39;s good or not.</blockqu=
-ote><div><br></div><div><br></div><div>It is there in 4.7.3 just a few line=
-s difference.=A0</div><div>I don&#39;t see any meaningful difference betwee=
-n the 2 assembly snippets...=A0</div>
-<div>Just instructions ordered a little different?=A0</div><div><br></div><=
-div>Luis</div><div>=A0</div><blockquote class=3D"gmail_quote" style=3D"marg=
-in:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex"> With<br>
-slightly different build output from the diff (probably a different config<=
-br>
-from Nathan), the first function instructions look like:<br>
-<br>
-00000efc &lt;lttng_event_reserve&gt;:<br>
-=A0 =A0 =A0efc: =A0 =A0 =A0 e1a0c00d =A0 =A0 =A0 =A0mov =A0 =A0 ip, sp<br>
-=A0 =A0 =A0f00: =A0 =A0 =A0 e92ddff0 =A0 =A0 =A0 =A0push =A0 =A0{r4, r5, r6=
-, r7, r8, r9, sl, fp, ip, lr, pc}<br>
-=A0 =A0 =A0f04: =A0 =A0 =A0 e24cb004 =A0 =A0 =A0 =A0sub =A0 =A0 fp, ip, #4<=
-br>
-=A0 =A0 =A0f08: =A0 =A0 =A0 e24dd03c =A0 =A0 =A0 =A0sub =A0 =A0 sp, sp, #60=
- =A0 =A0 ; 0x3c<br>
-=A0 =A0 =A0f0c: =A0 =A0 =A0 e52de004 =A0 =A0 =A0 =A0push =A0 =A0{lr} =A0 =
-=A0 =A0 =A0 =A0 =A0; (str lr, [sp, #-4]!)<br>
-<div class=3D"im">=A0 =A0 =A0f10: =A0 =A0 =A0 ebfffffe =A0 =A0 =A0 =A0bl =
-=A0 =A0 =A00 &lt;__gnu_mcount_nc&gt;<br>
-=A0 =A0 =A0f14: =A0 =A0 =A0 e5903000 =A0 =A0 =A0 =A0ldr =A0 =A0 r3, [r0]<br=
->
-=A0 =A0 =A0f18: =A0 =A0 =A0 e1a04000 =A0 =A0 =A0 =A0mov =A0 =A0 r4, r0<br>
-</div><div class=3D"im">=A0 =A0 =A0f1c: =A0 =A0 =A0 e1a0000d =A0 =A0 =A0 =
-=A0mov =A0 =A0 r0, sp<br>
-=A0 =A0 =A0f20: =A0 =A0 =A0 e5936030 =A0 =A0 =A0 =A0ldr =A0 =A0 r6, [r3, #4=
-8] =A0 ; 0x30<br>
-</div><div class=3D"im">=A0 =A0 =A0f24: =A0 =A0 =A0 e3c03d7f =A0 =A0 =A0 =
-=A0bic =A0 =A0 r3, r0, #8128 =A0 ; 0x1fc0<br>
-</div><div class=3D"im">=A0 =A0 =A0f28: =A0 =A0 =A0 e3c3303f =A0 =A0 =A0 =
-=A0bic =A0 =A0 r3, r3, #63 =A0 =A0 ; 0x3f<br>
-</div>=A0 =A0 =A0f2c: =A0 =A0 =A0 e50b104c =A0 =A0 =A0 =A0str =A0 =A0 r1, [=
-fp, #-76] =A0; 0xffffffb4<br>
-<div class=3D"im">=A0 =A0 =A0f30: =A0 =A0 =A0 e5932004 =A0 =A0 =A0 =A0ldr =
-=A0 =A0 r2, [r3, #4]<br>
-=A0 =A0 =A0f34: =A0 =A0 =A0 e2822001 =A0 =A0 =A0 =A0add =A0 =A0 r2, r2, #1<=
-br>
-=A0 =A0 =A0f38: =A0 =A0 =A0 e5832004 =A0 =A0 =A0 =A0str =A0 =A0 r2, [r3, #4=
-]<br>
-</div>=A0 =A0 =A0f3c: =A0 =A0 =A0 ebfffffe =A0 =A0 =A0 =A0bl =A0 =A0 =A00 &=
-lt;debug_smp_processor_id&gt;<br>
-=A0 =A0 =A0f40: =A0 =A0 =A0 e59f2e44 =A0 =A0 =A0 =A0ldr =A0 =A0 r2, [pc, #3=
-652] ; 1d8c &lt;lttng_event_reserve+0xe90&gt;<br>
-=A0 =A0 =A0f44: =A0 =A0 =A0 e59f3e44 =A0 =A0 =A0 =A0ldr =A0 =A0 r3, [pc, #3=
-652] ; 1d90 &lt;lttng_event_reserve+0xe94&gt;<br>
-=A0 =A0 =A0f48: =A0 =A0 =A0 e7921100 =A0 =A0 =A0 =A0ldr =A0 =A0 r1, [r2, r0=
-, lsl #2]<br>
-=A0 =A0 =A0f4c: =A0 =A0 =A0 e1a05000 =A0 =A0 =A0 =A0mov =A0 =A0 r5, r0<br>
-=A0 =A0 =A0f50: =A0 =A0 =A0 e7932001 =A0 =A0 =A0 =A0ldr =A0 =A0 r2, [r3, r1=
-]<br>
-<br>
-My rusty ARM assembler knowledge analyzes this like:<br>
-<br>
-ip =3D sp =A0 =A0 =A0 =A0 =A0 =A0(ip being the scratch register)<br>
-push 11 registers * 4 bytes =3D 44 bytes onto the stack<br>
-fp =3D ip - 4<br>
-sp =3D sp - 60 =A0 (sp =3D ip - 104)<br>
-push {lr} bl<br>
-0 &lt;__gnu_mcount_nc&gt; =A0(dynamically patched to a pop {lr})<br>
-[...]<br>
-store r1 into mem location fp - 76<br>
-<br>
-So yes, it does look like the -76 from fp is within the stack.<br>
-<div class=3D"im"><br>
-<br>
-&gt; In GCC bug 58854 it was pretty clear that the restore of the sp<br>
-&gt; register in the epilogue is moved to somewhere close to the prologue<b=
-r>
-&gt; of the routine.<br>
-&gt; Are we missing some diffs from the assembly comparison?<br>
-<br>
-</div>My next step is to setup my own 4.8.2 ARM cross-compiler. I&#39;ve tr=
-ied this morning,<br>
-did not manage to get one working even after following 2 howtos, trying wit=
-h Debian<br>
-packages, etc. Nathan told me this diff was the full comparison between the=
- two<br>
-functions, but you&#39;ll understand that at this point I want to reproduce=
-<br>
-everything myself, because this is a _weird_ issue.<br>
-<br>
-But after a long day of debugging, it&#39;s time for some sleep. I will get=
- back to this<br>
-tomorrow,<br>
-<br>
-Thanks,<br>
-<br>
-Mathieu<br>
-<div class=3D"HOEnZb"><div class=3D"h5"><br>
-&gt;<br>
-&gt; Thanks<br>
-&gt;<br>
-&gt; Luis<br>
-&gt;<br>
-&gt;<br>
-&gt;<br>
-&gt;<br>
-&gt; On Thu, Nov 21, 2013 at 5:57 PM, Mathieu Desnoyers<br>
-&gt; &lt;<a href=3D"mailto:mathieu.desnoyers@efficios.com">mathieu.desnoyer=
-s@efficios.com</a>&gt; wrote:<br>
-&gt; &gt; ----- Original Message -----<br>
-&gt; &gt;&gt; From: &quot;Jakub Jelinek&quot; &lt;<a href=3D"mailto:jakub@r=
-edhat.com">jakub@redhat.com</a>&gt;<br>
-&gt; &gt;&gt; To: &quot;Luis Lozano&quot; &lt;<a href=3D"mailto:llozano@goo=
-gle.com">llozano@google.com</a>&gt;<br>
-&gt; &gt;&gt; Cc: &quot;Alexander Holler&quot; &lt;<a href=3D"mailto:holler=
-@ahsoftware.de">holler@ahsoftware.de</a>&gt;, &quot;Linus Torvalds&quot;<br=
->
-&gt; &gt;&gt; &lt;<a href=3D"mailto:torvalds@linux-foundation.org">torvalds=
-@linux-foundation.org</a>&gt;, &quot;Mathieu Desnoyers&quot;<br>
-&gt; &gt;&gt; &lt;<a href=3D"mailto:mathieu.desnoyers@efficios.com">mathieu=
-.desnoyers@efficios.com</a>&gt;, &quot;Richard Henderson&quot; &lt;<a href=
-=3D"mailto:rth@twiddle.net">rth@twiddle.net</a>&gt;,<br>
-&gt; &gt;&gt; &quot;Linux Kernel Mailing List&quot;<br>
-&gt; &gt;&gt; &lt;<a href=3D"mailto:linux-kernel@vger.kernel.org">linux-ker=
-nel@vger.kernel.org</a>&gt;, &quot;Will Deacon&quot; &lt;<a href=3D"mailto:=
-will.deacon@arm.com">will.deacon@arm.com</a>&gt;,<br>
-&gt; &gt;&gt; &quot;Catalin Marinas&quot; &lt;<a href=3D"mailto:catalin.mar=
-inas@arm.com">catalin.marinas@arm.com</a>&gt;,<br>
-&gt; &gt;&gt; &quot;Peter Zijlstra&quot; &lt;<a href=3D"mailto:peterz@infra=
-dead.org">peterz@infradead.org</a>&gt;, <a href=3D"mailto:lttng-dev@lists.l=
-ttng.org">lttng-dev@lists.lttng.org</a>,<br>
-&gt; &gt;&gt; &quot;Nathan Lynch&quot; &lt;<a href=3D"mailto:Nathan_Lynch@m=
-entor.com">Nathan_Lynch@mentor.com</a>&gt;, &quot;Paul<br>
-&gt; &gt;&gt; E. McKenney&quot; &lt;<a href=3D"mailto:paulmck@linux.vnet.ib=
-m.com">paulmck@linux.vnet.ibm.com</a>&gt;, &quot;Andrew Morton&quot;<br>
-&gt; &gt;&gt; &lt;<a href=3D"mailto:akpm@linux-foundation.org">akpm@linux-f=
-oundation.org</a>&gt;, &quot;Bhaskar Janakiraman&quot;<br>
-&gt; &gt;&gt; &lt;<a href=3D"mailto:bjanakiraman@chromium.org">bjanakiraman=
-@chromium.org</a>&gt;, &quot;Han Shen&quot; &lt;<a href=3D"mailto:shenhan@c=
-hromium.org">shenhan@chromium.org</a>&gt;<br>
-&gt; &gt;&gt; Sent: Thursday, November 21, 2013 7:39:04 PM<br>
-&gt; &gt;&gt; Subject: Re: current_thread_info() not respecting program ord=
-er with gcc<br>
-&gt; &gt;&gt; 4.8.x<br>
-&gt; &gt;&gt;<br>
-&gt; &gt;&gt; On Thu, Nov 21, 2013 at 03:45:35PM -0800, Luis Lozano wrote:<=
-br>
-&gt; &gt;&gt; &gt; I think we need a reproducer. Without this we may all be=
- going on the<br>
-&gt; &gt;&gt; &gt; wrong path. This whole conversation started on an *assum=
-ption* that<br>
-&gt; &gt;&gt; &gt; some accesses were being reordered.<br>
-&gt; &gt;&gt; &gt;<br>
-&gt; &gt;&gt; &gt; evidence of the reorder or reproducer please?<br>
-&gt; &gt;&gt;<br>
-&gt; &gt;&gt; Yeah, if a compiler bug is suspected, can anybody please open=
-<br>
-&gt; &gt;&gt; a bugreport in <a href=3D"http://gcc.gnu.org/bugzilla/" targe=
-t=3D"_blank">http://gcc.gnu.org/bugzilla/</a> with the preprocessed source,=
-<br>
-&gt; &gt;&gt; compiler version, flags and how it was configured and some hi=
-nt in which<br>
-&gt; &gt;&gt; function to look for what exactly? =A0We don&#39;t necessaril=
-y need a runtime<br>
-&gt; &gt;&gt; small reproducer, but if it can be shown in the assembly what=
- has been<br>
-&gt; &gt;&gt; reordered and why you think it shouldn&#39;t, with the above =
-mentioned input<br>
-&gt; &gt;&gt; that ought to be sufficient. =A0Thanks.<br>
-&gt; &gt;<br>
-&gt; &gt; OK OK, let me reply on list first so I can share the result of a =
-full day<br>
-&gt; &gt; of bug hunting. We&#39;re not there yet, but many options have be=
-en eliminated.<br>
-&gt; &gt;<br>
-&gt; &gt; The issue shows up in stress test, when tracing with lttng-module=
-s 2.4-rc1,<br>
-&gt; &gt; on ARM. It&#39;s been reproduced with a Linux kernel 3.12 so far,=
- with<br>
-&gt; &gt; lttng-modules<br>
-&gt; &gt; compiled against that kernel.<br>
-&gt; &gt;<br>
-&gt; &gt; First, I asked Nathan to compile his kernel with gcc 4.7, and ltt=
-ng-modules<br>
-&gt; &gt; with gcc 4.8.x (and vice-versa). The problem only appears when<br=
->
-&gt; &gt; lttng-modules<br>
-&gt; &gt; are compiled with gcc 4.8.x. The compiler version used to compile=
- the rest<br>
-&gt; &gt; of the kernel does not matter.<br>
-&gt; &gt;<br>
-&gt; &gt; Then I looked at gcc 4.8 changelog for ARM, new feature:<br>
-&gt; &gt; -fno-sched-pressure<br>
-&gt; &gt; (sched pressure is there by default). Nathan tried compiling lttn=
-g-modules<br>
-&gt; &gt; with<br>
-&gt; &gt; -fno-sched-pressure. The problem still reproduces.<br>
-&gt; &gt;<br>
-&gt; &gt; Knowing that adding barrier() outside of preempt_disable()/enable=
-() was<br>
-&gt; &gt; fixing the issue, we tried identifying which code location was re=
-sponsible<br>
-&gt; &gt; for working around the issue. Skipping a long investigation, here=
- is the<br>
-&gt; &gt; executive summary:<br>
-&gt; &gt;<br>
-&gt; &gt; <a href=3D"http://git.lttng.org/?p=3Dlttng-modules.git;a=3Dblob;f=
-=3Dlttng-ring-buffer-client.h;h=3D50c47b3bf49f6c2dd24e250cf1a9b97808cd8e27;=
-hb=3DHEAD" target=3D"_blank">http://git.lttng.org/?p=3Dlttng-modules.git;a=
-=3Dblob;f=3Dlttng-ring-buffer-client.h;h=3D50c47b3bf49f6c2dd24e250cf1a9b978=
-08cd8e27;hb=3DHEAD</a><br>
-
-&gt; &gt;<br>
-&gt; &gt; Has the following function. We identified that adding a barrier()=
- as shown<br>
-&gt; &gt; below<br>
-&gt; &gt; works around the issue:<br>
-&gt; &gt;<br>
-&gt; &gt; static<br>
-&gt; &gt; int lttng_event_reserve(struct lib_ring_buffer_ctx *ctx,<br>
-&gt; &gt; =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 uint32_t event_id)<br=
->
-&gt; &gt; {<br>
-&gt; &gt; =A0 =A0 =A0 =A0 struct lttng_channel *lttng_chan =3D channel_get_=
-private(ctx-&gt;chan);<br>
-&gt; &gt; =A0 =A0 =A0 =A0 int ret, cpu;<br>
-&gt; &gt;<br>
-&gt; &gt; =A0 =A0 =A0 =A0 cpu =3D lib_ring_buffer_get_cpu(&amp;client_confi=
-g);<br>
-&gt; &gt; =A0 =A0 =A0 =A0 if (cpu &lt; 0)<br>
-&gt; &gt; =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 return -EPERM;<br>
-&gt; &gt; =A0 =A0 =A0 =A0 ctx-&gt;cpu =3D cpu;<br>
-&gt; &gt;<br>
-&gt; &gt; =A0 =A0 =A0 =A0 switch (lttng_chan-&gt;header_type) {<br>
-&gt; &gt; =A0 =A0 =A0 =A0 case 1: /* compact */<br>
-&gt; &gt; =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 if (event_id &gt; 30)<br>
-&gt; &gt; =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 ctx-&gt;rflags |=
-=3D LTTNG_RFLAG_EXTENDED;<br>
-&gt; &gt; =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 break;<br>
-&gt; &gt; =A0 =A0 =A0 =A0 case 2: /* large */<br>
-&gt; &gt; =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 if (event_id &gt; 65534)<br>
-&gt; &gt; =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 ctx-&gt;rflags |=
-=3D LTTNG_RFLAG_EXTENDED;<br>
-&gt; &gt; =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 break;<br>
-&gt; &gt; =A0 =A0 =A0 =A0 default:<br>
-&gt; &gt; =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 WARN_ON_ONCE(1);<br>
-&gt; &gt; =A0 =A0 =A0 =A0 }<br>
-&gt; &gt;<br>
-&gt; &gt; =A0 =A0 =A0 =A0 ret =3D lib_ring_buffer_reserve(&amp;client_confi=
-g, ctx);<br>
-&gt; &gt; =A0 =A0 =A0 =A0 if (ret)<br>
-&gt; &gt; =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 goto put;<br>
-&gt; &gt; =A0 =A0 =A0 =A0 lttng_write_event_header(&amp;client_config, ctx,=
- event_id);<br>
-&gt; &gt; =A0 =A0 =A0 =A0 return 0;<br>
-&gt; &gt; put:<br>
-&gt; &gt; =A0 =A0 =A0 =A0 lib_ring_buffer_put_cpu(&amp;client_config);<br>
-&gt; &gt; =A0 =A0 =A0 =A0 ---------------&gt; barrier() added here;<br>
-&gt; &gt; =A0 =A0 =A0 =A0 &lt;----------------------------<br>
-&gt; &gt; =A0 =A0 =A0 =A0 return ret;<br>
-&gt; &gt; }<br>
-&gt; &gt;<br>
-&gt; &gt; Where barrier() is the usual asm volatile with &quot;memory&quot;=
- clobber, nothing<br>
-&gt; &gt; else.<br>
-&gt; &gt;<br>
-&gt; &gt; Nathan gave me the binary diff for the assembly generated for thi=
-s function<br>
-&gt; &gt; without<br>
-&gt; &gt; the barrier and with the barrier:<br>
-&gt; &gt;<br>
-&gt; &gt; --- /tmp/lttng_event_reserve-4.8.2.dump 2013-11-21 11:14:14.53649=
-5079 -0600<br>
-&gt; &gt; +++ /tmp/lttng_event_reserve-with-barrier-4.8.2.dump =A0 =A02013-=
-11-21<br>
-&gt; &gt; 14:12:52.997355907 -0600<br>
-&gt; &gt; @@ -7,11 +7,11 @@<br>
-&gt; &gt; =A0 =A0 =A0 f10: =A0 =A0 =A0ebfffffe =A0 =A0 =A0 =A0bl =A0 =A0 =
-=A00 &lt;__gnu_mcount_nc&gt;<br>
-&gt; &gt; =A0 =A0 =A0 f14: =A0 =A0 =A0e5903000 =A0 =A0 =A0 =A0ldr =A0 =A0 r=
-3, [r0]<br>
-&gt; &gt; =A0 =A0 =A0 f18: =A0 =A0 =A0e1a04000 =A0 =A0 =A0 =A0mov =A0 =A0 r=
-4, r0<br>
-&gt; &gt; - =A0 =A0 f1c: =A0 =A0 =A0e50b1048 =A0 =A0 =A0 =A0str =A0 =A0 r1,=
- [fp, #-72] =A0; 0xffffffb8<br>
-&gt; &gt; + =A0 =A0 f1c: =A0 =A0 =A0e1a0000d =A0 =A0 =A0 =A0mov =A0 =A0 r0,=
- sp<br>
-&gt; &gt; =A0 =A0 =A0 f20: =A0 =A0 =A0e5936030 =A0 =A0 =A0 =A0ldr =A0 =A0 r=
-6, [r3, #48] =A0 ; 0x30<br>
-&gt; &gt; - =A0 =A0 f24: =A0 =A0 =A0e1a0000d =A0 =A0 =A0 =A0mov =A0 =A0 r0,=
- sp<br>
-&gt; &gt; - =A0 =A0 f28: =A0 =A0 =A0e3c03d7f =A0 =A0 =A0 =A0bic =A0 =A0 r3,=
- r0, #8128 =A0 ; 0x1fc0<br>
-&gt; &gt; - =A0 =A0 f2c: =A0 =A0 =A0e3c3303f =A0 =A0 =A0 =A0bic =A0 =A0 r3,=
- r3, #63 =A0 =A0 ; 0x3f<br>
-&gt; &gt; + =A0 =A0 f24: =A0 =A0 =A0e3c03d7f =A0 =A0 =A0 =A0bic =A0 =A0 r3,=
- r0, #8128 =A0 ; 0x1fc0<br>
-&gt; &gt; + =A0 =A0 f28: =A0 =A0 =A0e3c3303f =A0 =A0 =A0 =A0bic =A0 =A0 r3,=
- r3, #63 =A0 =A0 ; 0x3f<br>
-&gt; &gt; + =A0 =A0 f2c: =A0 =A0 =A0e50b1048 =A0 =A0 =A0 =A0str =A0 =A0 r1,=
- [fp, #-72] =A0; 0xffffffb8<br>
-&gt; &gt; =A0 =A0 =A0 f30: =A0 =A0 =A0e5932004 =A0 =A0 =A0 =A0ldr =A0 =A0 r=
-2, [r3, #4]<br>
-&gt; &gt; =A0 =A0 =A0 f34: =A0 =A0 =A0e2822001 =A0 =A0 =A0 =A0add =A0 =A0 r=
-2, r2, #1<br>
-&gt; &gt; =A0 =A0 =A0 f38: =A0 =A0 =A0e5832004 =A0 =A0 =A0 =A0str =A0 =A0 r=
-2, [r3, #4]<br>
-&gt; &gt; @@ -53,7 +53,7 @@<br>
-&gt; &gt; =A0 =A0 =A0 fc8: =A0 =A0 =A0e3c3303f =A0 =A0 =A0 =A0bic =A0 =A0 r=
-3, r3, #63 =A0 =A0 ; 0x3f<br>
-&gt; &gt; =A0 =A0 =A0 fcc: =A0 =A0 =A0e5933000 =A0 =A0 =A0 =A0ldr =A0 =A0 r=
-3, [r3]<br>
-&gt; &gt; =A0 =A0 =A0 fd0: =A0 =A0 =A0e3130002 =A0 =A0 =A0 =A0tst =A0 =A0 r=
-3, #2<br>
-&gt; &gt; - =A0 =A0 fd4: =A0 =A0 =A00a000000 =A0 =A0 =A0 =A0beq =A0 =A0 fdc=
- &lt;lttng_event_reserve+0xe0&gt;<br>
-&gt; &gt; + =A0 =A0 fd4: =A0 =A0 =A00a0002be =A0 =A0 =A0 =A0beq =A0 =A0 1ad=
-4 &lt;lttng_event_reserve+0xbd8&gt;<br>
-&gt; &gt; =A0 =A0 =A0 fd8: =A0 =A0 =A0ebfffffe =A0 =A0 =A0 =A0bl =A0 =A0 =
-=A00 &lt;preempt_schedule&gt;<br>
-&gt; &gt; =A0 =A0 =A0 fdc: =A0 =A0 =A0ea0002bc =A0 =A0 =A0 =A0b =A0 =A0 =A0=
- 1ad4 &lt;lttng_event_reserve+0xbd8&gt;<br>
-&gt; &gt; =A0 =A0 =A0 fe0: =A0 =A0 =A0e3500000 =A0 =A0 =A0 =A0cmp =A0 =A0 r=
-0, #0<br>
-&gt; &gt;<br>
-&gt; &gt; We tried disabling the ftrace function tracing to get mcount out =
-of the<br>
-&gt; &gt; way,<br>
-&gt; &gt; and the problem still reproduces.<br>
-&gt; &gt;<br>
-&gt; &gt; I&#39;m stopping here in terms of details about the disassembly, =
-because I<br>
-&gt; &gt; need to double check with Nathan that I get the right disassembly=
- for the<br>
-&gt; &gt; right<br>
-&gt; &gt; cases. I also terribly need to setup a 4.8.2 ARM cross-compiler o=
-n my<br>
-&gt; &gt; machine.<br>
-&gt; &gt;<br>
-&gt; &gt; I&#39;m attaching Nathan&#39;s ARM configuration.<br>
-&gt; &gt;<br>
-&gt; &gt; It does look behave a bit like this bug pointed out by Luis:<br>
-&gt; &gt;<br>
-&gt; &gt; <a href=3D"http://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D58854" t=
-arget=3D"_blank">http://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D58854</a><br=
->
-&gt; &gt;<br>
-&gt; &gt; AFAIU (please correct me if I am wrong), ARM&#39;s interrupt hand=
-ler run<br>
-&gt; &gt; on top of the thread stack (?). If it&#39;s the case, then anythi=
-ng stored<br>
-&gt; &gt; on the stack below &quot;sp&quot; could be overwritten by an inte=
-rrupt handler.<br>
-&gt; &gt; This would fit well the reproduction scenario for this bug: Natha=
-n runs<br>
-&gt; &gt; LTTng tracing of kmem_cache_free tracepoint with hackbench runnin=
-g.<br>
-&gt; &gt; A race between a short window of stack use below sp and interrupt=
- handlers<br>
-&gt; &gt; would trigger with this kind of stress-test.<br>
-&gt; &gt;<br>
-&gt; &gt; Thoughts ?<br>
-&gt; &gt;<br>
-&gt; &gt; Thanks,<br>
-&gt; &gt;<br>
-&gt; &gt; Mathieu<br>
-&gt; &gt;<br>
-&gt; &gt;<br>
-&gt; &gt; --<br>
-&gt; &gt; Mathieu Desnoyers<br>
-&gt; &gt; EfficiOS Inc.<br>
-&gt; &gt; <a href=3D"http://www.efficios.com" target=3D"_blank">http://www.=
-efficios.com</a><br>
-&gt;<br>
-&gt;<br>
-&gt;<br>
-&gt; --<br>
-&gt;<br>
-&gt; Luis A. Lozano | Software Engineer | <a href=3D"mailto:llozano@google.=
-com">llozano@google.com</a> | <a href=3D"tel:%2B1%20%28408%29431-5164" valu=
-e=3D"+14084315164">+1 (408)431-5164</a><br>
-&gt;<br>
-<br>
---<br>
-Mathieu Desnoyers<br>
-EfficiOS Inc.<br>
-<a href=3D"http://www.efficios.com" target=3D"_blank">http://www.efficios.c=
-om</a><br>
-</div></div></blockquote></div><br></div></div>
-
---047d7b5d5af47a370204ebbfa121--
-
-
---===============0581600401==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0581600401==--
