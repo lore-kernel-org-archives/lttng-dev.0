@@ -1,19 +1,20 @@
 From: =?UTF-8?q?Rapha=C3=ABl=20Beamonte?= <raphael.beamonte@gmail.com>
-Subject: [lttng-tools PATCH 0/5] utils_expand_path fix
-Date: Sat, 23 Nov 2013 17:32:23 -0500
-Message-ID: <1385245948-23011-1-git-send-email-raphael.beamonte__14290.1759049439$1385246128$gmane$org@gmail.com>
+Subject: [lttng-tools PATCH 2/5] Fix: comment indentation
+Date: Sat, 23 Nov 2013 17:32:25 -0500
+Message-ID: <1385245948-23011-3-git-send-email-raphael.beamonte__1102.35546385429$1385246235$gmane$org@gmail.com>
 References: <20131115154539.GA6986@thessa>
+	<1385245948-23011-1-git-send-email-raphael.beamonte@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f173.google.com ([209.85.223.173])
+Received: from mail-ie0-f178.google.com ([209.85.223.178])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <raphael.beamonte@gmail.com>) id 1VkLkq-0004uD-Ag
-	for lttng-dev@lists.lttng.org; Sat, 23 Nov 2013 17:32:50 -0500
-Received: by mail-ie0-f173.google.com with SMTP id to1so4425395ieb.4
-	for <lttng-dev@lists.lttng.org>; Sat, 23 Nov 2013 14:32:38 -0800 (PST)
-In-Reply-To: <20131115154539.GA6986@thessa>
+	(envelope-from <raphael.beamonte@gmail.com>) id 1VkLkr-0004uk-LI
+	for lttng-dev@lists.lttng.org; Sat, 23 Nov 2013 17:32:55 -0500
+Received: by mail-ie0-f178.google.com with SMTP id lx4so4514321iec.37
+	for <lttng-dev@lists.lttng.org>; Sat, 23 Nov 2013 14:32:40 -0800 (PST)
+In-Reply-To: <1385245948-23011-1-git-send-email-raphael.beamonte@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -26,21 +27,17 @@ To: dgoulet@efficios.com
 Cc: =?UTF-8?q?Rapha=C3=ABl=20Beamonte?= <raphael.beamonte@gmail.com>, lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-SGVsbG8gRGF2aWQhCgpIZXJlIGlzIHRoZSBmaXggbmVlZGVkIHRvIGhhdmUgdGhlIGV4cGVjdGVk
-IGJlaGF2aW9yIGZvciBwYXRoIHRoYXQKZW5kcyB3aXRoICcvLicgb3IgJy8uLicuIEkgYWxzbyBw
-cm9maXQgdG8gc2VuZCBwYXRjaGVzIGZvciB0aGUgdW5pdAp0ZXN0IHRvIGFsbG93IHRvIGFkZCB0
-ZXN0cyB1c2luZyBhbiBleGlzdGluZyB0cmVlIGFuZCBzeW1saW5rcywKYWRkaW5nIHRoZSBtaXNz
-aW5nIGNvcHlyaWdodCBpbiB1dGlscy5jIGFuZCBjb3JyZWN0aW5nIHRoZSBpbmRlbnRhdGlvbgpv
-ZiBvbmUgY29tbWVudC4KCldhaXRpbmcgZm9yIHlvdXIgY29tbWVudHMhCgpUaGFua3MsClJhcGhh
-w6tsCgoKUmFwaGHDq2wgQmVhbW9udGUgKDUpOgogIEFkZCBtaXNzaW5nIGNvcHlyaWdodCB0byB1
-dGlscy5jCiAgRml4OiBjb21tZW50IGluZGVudGF0aW9uCiAgRml4OiB1dGlsc19leHBhbmRfcGF0
-aCBub3cgd29ya3MgZm9yIHBhdGhzIHRoYXQgZW5kcyB3aXRoICcvLicgb3IKICAgICcvLi4nCiAg
-VGVzdHM6IGFkZCBzeW1saW5rIHRlc3RzIGZvciB0ZXN0X3V0aWxzX2V4cGFuZF9wYXRoCiAgVGVz
-dHM6IGFkZCB2YWxpZCB0ZXN0IGNhc2VzIHRvIHRlc3RfdXRpbHNfZXhwYW5kX3BhdGgKCiBzcmMv
-Y29tbW9uL3V0aWxzLmMgICAgICAgICAgICAgICAgICB8ICAgMzAgKysrKystCiB0ZXN0cy91bml0
-L3Rlc3RfdXRpbHNfZXhwYW5kX3BhdGguYyB8ICAxNzUgKysrKysrKysrKysrKysrKysrKysrKysr
-KysrKysrKysrKy0KIDIgZmlsZXMgY2hhbmdlZCwgMTk5IGluc2VydGlvbnMoKyksIDYgZGVsZXRp
-b25zKC0pCgotLSAKMS43LjEwLjQKCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRu
-Zy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0
-bmctZGV2Cg==
+U2lnbmVkLW9mZi1ieTogUmFwaGHDq2wgQmVhbW9udGUgPHJhcGhhZWwuYmVhbW9udGVAZ21haWwu
+Y29tPgotLS0KIHNyYy9jb21tb24vdXRpbHMuYyB8ICAgIDIgKy0KIDEgZmlsZSBjaGFuZ2VkLCAx
+IGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQoKZGlmZiAtLWdpdCBhL3NyYy9jb21tb24vdXRp
+bHMuYyBiL3NyYy9jb21tb24vdXRpbHMuYwppbmRleCAzYTRmODUwLi4zMzBjMDRlIDEwMDY0NAot
+LS0gYS9zcmMvY29tbW9uL3V0aWxzLmMKKysrIGIvc3JjL2NvbW1vbi91dGlscy5jCkBAIC0xOTgs
+NyArMTk4LDcgQEAgY2hhciAqdXRpbHNfZXhwYW5kX3BhdGgoY29uc3QgY2hhciAqcGF0aCkKIAlp
+ZiAoKnBhdGggIT0gJy8nICYmIHN0cm5jbXAocGF0aCwgIi4vIiwgMikgIT0gMCAmJgogCQkJc3Ry
+bmNtcChwYXRoLCAiLi4vIiwgMykgIT0gMCkgewogCQlzbnByaW50ZihhYnNvbHV0ZV9wYXRoLCBQ
+QVRIX01BWCwgIi4vJXMiLCBwYXRoKTsKLQkJLyogRWxzZSwgd2UganVzdCBjb3B5IHRoZSBwYXRo
+ICovCisJLyogRWxzZSwgd2UganVzdCBjb3B5IHRoZSBwYXRoICovCiAJfSBlbHNlIHsKIAkJc3Ry
+bmNweShhYnNvbHV0ZV9wYXRoLCBwYXRoLCBQQVRIX01BWCk7CiAJfQotLSAKMS43LjEwLjQKCgpf
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYg
+bWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5n
+Lm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
