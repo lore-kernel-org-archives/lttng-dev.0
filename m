@@ -1,22 +1,21 @@
-From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PULL REQUEST babeltrace] Python bindings API
-	refactoring
-Date: Sat, 23 Nov 2013 01:15:05 -0500
-Message-ID: <CA+jJMxvUk3JLnO2hFvV_Z-OPoN5vnYRukhPJTgbU4UhdT1ds0A__29611.625095322$1385187352$gmane$org@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PULL REQUEST babeltrace] Python bindings
+	API	refactoring
+Date: Sat, 23 Nov 2013 15:26:00 +0000 (UTC)
+Message-ID: <696349360.74184.1385220360428.JavaMail.zimbra__16207.8434405432$1385220425$gmane$org@efficios.com>
 References: <CA+jJMxuaWjcJ7M55TpX=xG00R-VQdm0e0WtMg9M-AxnBQtwGfg@mail.gmail.com>
 	<CAFXXi0kr4MnZCzOGWMrUUSstCRT18XJzva=qfBLjoNEv8m8U8g@mail.gmail.com>
 	<CAFXXi0ktx+jXs5tciOMhDkPgGCSW5E_5PhBf+Ts-ooj12_1TDg@mail.gmail.com>
+	<CA+jJMxvUk3JLnO2hFvV_Z-OPoN5vnYRukhPJTgbU4UhdT1ds0A@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qa0-f48.google.com ([209.85.216.48])
+Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1Vk6Up-0000qn-S0
-	for lttng-dev@lists.lttng.org; Sat, 23 Nov 2013 01:15:13 -0500
-Received: by mail-qa0-f48.google.com with SMTP id w5so5222374qac.7
-	for <lttng-dev@lists.lttng.org>; Fri, 22 Nov 2013 22:15:06 -0800 (PST)
-In-Reply-To: <CAFXXi0ktx+jXs5tciOMhDkPgGCSW5E_5PhBf+Ts-ooj12_1TDg@mail.gmail.com>
+	(envelope-from <compudj@efficios.com>) id 1VkF5v-0006Bj-Ct
+	for lttng-dev@lists.lttng.org; Sat, 23 Nov 2013 10:26:09 -0500
+In-Reply-To: <CA+jJMxvUk3JLnO2hFvV_Z-OPoN5vnYRukhPJTgbU4UhdT1ds0A@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -25,101 +24,91 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Simon Marchi <simon.marchi@polymtl.ca>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: =?utf-8?B?SsOpcsOpbWll?= Galarneau <jeremie.galarneau@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On Fri, Nov 22, 2013 at 11:09 PM, Simon Marchi <simon.marchi@polymtl.ca> wr=
-ote:
-> Also, around line 230, the indentation is inconsistent, so Python
-> complains when you import babeltrace.
->
-> https://github.com/jgalar/babeltrace/blob/bindings/python/bindings/python=
-/babeltrace.i.in#L230
->
-> Btw, thanks for doing this!
->
-
-And thanks for testing! I have addressed both issues and rebased the patche=
-s.
-Here are the new revisions.
-
-74ea15a Python-bindings: Refactor the Context class
-464425e Python-bindings: Refactor the TraceHandle class to use properties
-78d714e Python-bindings: Refactor the Event class
-e404272 Python-bindings: Move the _scopes array out of the Event class
-cb1fcc6 Python-bindings: Refactor the FieldDecl and EventDecl classes
-8bb2718 Python-bindings: Move declaration bindings out of the _Definition c=
-lass
-d899d6d Fix: Use the bt_iter_set_pos function to set the begin_pos
-5644e6f Fix: Take the iterator's end position into account
-da2f697 Fix: bt_ctf_field_generic_validate should return < 0 on error
-1400127 Python-bindings: Refactor the CTFWriter API
-
-Regards,
-J=E9r=E9mie
-
-> On 22 November 2013 22:29, Simon Marchi <simon.marchi@polymtl.ca> wrote:
->> I'm getting this error when making in bindings/python:
->>
->> sed "s/BABELTRACE_VERSION_STR/Babeltrace 1.1.1/g" <babeltrace.i.in >babe=
-ltrace.i
->> /usr/bin/swig -python -Wall -I. -I../../include babeltrace.i
->> babeltrace.i:367: Error: Syntax error in input(1).
->> make: *** [babeltrace_wrap.c] Error 1
->>
->> Are you missing a little %pythoncode %{ around class ClockType ?
->> https://github.com/jgalar/babeltrace/blob/bindings/python/bindings/pytho=
-n/babeltrace.i.in#L361
->>
->> On 22 November 2013 18:00, J=E9r=E9mie Galarneau
->> <jeremie.galarneau@efficios.com> wrote:
->>> Hi all,
->>>
->>> I received a number of great comments about the Babeltrace Python API
->>> since my last pull request. These patches, available on my personal
->>> repository, aim at making the API feel more natural to Python
->>> developers by using the appropriate language constructs where
->>> appropriate.
->>>
->>> The three "Fix" patches address bugs that were uncovered in the C
->>> codebase while developing and testing this patch set.
->>>
->>> https://github.com/jgalar/babeltrace.git
->>>
->>> 2be62ad Python-bindings: Refactor the Context class
->>> 32de3db Python-bindings: Refactor the TraceHandle class to use properti=
-es
->>> 7740532 Python-bindings: Refactor the Event class
->>> 10d1b96 Python-bindings: Move the _scopes array out of the Event class
->>> 99e8489 Python-bindings: Refactor the FieldDecl and EventDecl classes
->>> 425caab Python-bindings: Move declaration bindings out of the _Definiti=
-on class
->>> b5e4875 Fix: Use the bt_iter_set_pos function to set the begin_pos
->>> 3f8750e Fix: Take the iterator's end position into account
->>> 35e0cb7 Fix: bt_ctf_field_generic_validate should return < 0 on error
->>> 810922e Python-bindings: Refactor the CTFWriter API
->>>
->>> I think these patches bring us to a point where the bindings/python
->>> branch could be safely merged into master.
->>>
->>> Thanks,
->>> J=E9r=E9mie
->>>
->>> --
->>> J=E9r=E9mie Galarneau
->>> EfficiOS Inc.
->>> http://www.efficios.com
->>>
->>> _______________________________________________
->>> lttng-dev mailing list
->>> lttng-dev@lists.lttng.org
->>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
-
-
--- =
-
-J=E9r=E9mie Galarneau
-EfficiOS Inc.
-http://www.efficios.com
+CgotLS0tLSBPcmlnaW5hbCBNZXNzYWdlIC0tLS0tCj4gRnJvbTogIkrDqXLDqW1pZSBHYWxhcm5l
+YXUiIDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20+Cj4gVG86ICJTaW1vbiBNYXJjaGki
+IDxzaW1vbi5tYXJjaGlAcG9seW10bC5jYT4KPiBDYzogbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9y
+Zwo+IFNlbnQ6IFNhdHVyZGF5LCBOb3ZlbWJlciAyMywgMjAxMyAxOjE1OjA1IEFNCj4gU3ViamVj
+dDogUmU6IFtsdHRuZy1kZXZdIFtQVUxMIFJFUVVFU1QgYmFiZWx0cmFjZV0gUHl0aG9uIGJpbmRp
+bmdzIEFQSQlyZWZhY3RvcmluZwo+IAo+IE9uIEZyaSwgTm92IDIyLCAyMDEzIGF0IDExOjA5IFBN
+LCBTaW1vbiBNYXJjaGkgPHNpbW9uLm1hcmNoaUBwb2x5bXRsLmNhPgo+IHdyb3RlOgo+ID4gQWxz
+bywgYXJvdW5kIGxpbmUgMjMwLCB0aGUgaW5kZW50YXRpb24gaXMgaW5jb25zaXN0ZW50LCBzbyBQ
+eXRob24KPiA+IGNvbXBsYWlucyB3aGVuIHlvdSBpbXBvcnQgYmFiZWx0cmFjZS4KPiA+Cj4gPiBo
+dHRwczovL2dpdGh1Yi5jb20vamdhbGFyL2JhYmVsdHJhY2UvYmxvYi9iaW5kaW5ncy9weXRob24v
+YmluZGluZ3MvcHl0aG9uL2JhYmVsdHJhY2UuaS5pbiNMMjMwCj4gPgo+ID4gQnR3LCB0aGFua3Mg
+Zm9yIGRvaW5nIHRoaXMhCj4gPgo+IAo+IEFuZCB0aGFua3MgZm9yIHRlc3RpbmchIEkgaGF2ZSBh
+ZGRyZXNzZWQgYm90aCBpc3N1ZXMgYW5kIHJlYmFzZWQgdGhlIHBhdGNoZXMuCj4gSGVyZSBhcmUg
+dGhlIG5ldyByZXZpc2lvbnMuCj4gCj4gNzRlYTE1YSBQeXRob24tYmluZGluZ3M6IFJlZmFjdG9y
+IHRoZSBDb250ZXh0IGNsYXNzCj4gNDY0NDI1ZSBQeXRob24tYmluZGluZ3M6IFJlZmFjdG9yIHRo
+ZSBUcmFjZUhhbmRsZSBjbGFzcyB0byB1c2UgcHJvcGVydGllcwo+IDc4ZDcxNGUgUHl0aG9uLWJp
+bmRpbmdzOiBSZWZhY3RvciB0aGUgRXZlbnQgY2xhc3MKPiBlNDA0MjcyIFB5dGhvbi1iaW5kaW5n
+czogTW92ZSB0aGUgX3Njb3BlcyBhcnJheSBvdXQgb2YgdGhlIEV2ZW50IGNsYXNzCj4gY2IxZmNj
+NiBQeXRob24tYmluZGluZ3M6IFJlZmFjdG9yIHRoZSBGaWVsZERlY2wgYW5kIEV2ZW50RGVjbCBj
+bGFzc2VzCj4gOGJiMjcxOCBQeXRob24tYmluZGluZ3M6IE1vdmUgZGVjbGFyYXRpb24gYmluZGlu
+Z3Mgb3V0IG9mIHRoZSBfRGVmaW5pdGlvbgo+IGNsYXNzCj4gZDg5OWQ2ZCBGaXg6IFVzZSB0aGUg
+YnRfaXRlcl9zZXRfcG9zIGZ1bmN0aW9uIHRvIHNldCB0aGUgYmVnaW5fcG9zCj4gNTY0NGU2ZiBG
+aXg6IFRha2UgdGhlIGl0ZXJhdG9yJ3MgZW5kIHBvc2l0aW9uIGludG8gYWNjb3VudAo+IGRhMmY2
+OTcgRml4OiBidF9jdGZfZmllbGRfZ2VuZXJpY192YWxpZGF0ZSBzaG91bGQgcmV0dXJuIDwgMCBv
+biBlcnJvcgo+IDE0MDAxMjcgUHl0aG9uLWJpbmRpbmdzOiBSZWZhY3RvciB0aGUgQ1RGV3JpdGVy
+IEFQSQoKQWxsIG1lcmdlZCBpbnRvIGJpbmRpbmdzL3B5dGhvbiBicmFuY2gsIGJ1dCBub3QgeWV0
+IGludG8gbWFzdGVyLCBoZXJlIGlzIHdoeToKCm1ha2UgZGlzdAp1bnBhY2sgZGlzdCB0YXJiYWxs
+IGludG8gdG1wIGRpcmVjdG9yeQpjcmVhdGUgYW5vdGhlciB0bXAgZGlyZWN0b3J5IChmb3Igb3V0
+IG9mIHRyZWUgYnVpbGQpCmludm9rZToKcGF0aF90b190bXBfZGlyL2JhYmVsdHJhY2UtMS4xLjEv
+Y29uZmlndXJlIC0tZW5hYmxlLXB5dGhvbi1iaW5kaW5ncwoKbWFrZSAtajQKCm1ha2VbM106IEVu
+dGVyaW5nIGRpcmVjdG9yeSBgL3RtcC90NC9iaW5kaW5ncy9weXRob24nCm1ha2VbM106ICoqKiBO
+byBydWxlIHRvIG1ha2UgdGFyZ2V0IGBiYWJlbHRyYWNlLmkuaW4nLCBuZWVkZWQgYnkgYGJhYmVs
+dHJhY2UuaScuICBTdG9wLgoKY2FuIHlvdSBwcm92aWRlIGEgZml4IGZvciBtYWtlIGRpc3QgYW5k
+L29yIG91dCBvZiB0cmVlIGJ1aWxkID8KClRoYW5rcywKCk1hdGhpZXUKCgo+IAo+IFJlZ2FyZHMs
+Cj4gSsOpcsOpbWllCj4gCj4gPiBPbiAyMiBOb3ZlbWJlciAyMDEzIDIyOjI5LCBTaW1vbiBNYXJj
+aGkgPHNpbW9uLm1hcmNoaUBwb2x5bXRsLmNhPiB3cm90ZToKPiA+PiBJJ20gZ2V0dGluZyB0aGlz
+IGVycm9yIHdoZW4gbWFraW5nIGluIGJpbmRpbmdzL3B5dGhvbjoKPiA+Pgo+ID4+IHNlZCAicy9C
+QUJFTFRSQUNFX1ZFUlNJT05fU1RSL0JhYmVsdHJhY2UgMS4xLjEvZyIgPGJhYmVsdHJhY2UuaS5p
+bgo+ID4+ID5iYWJlbHRyYWNlLmkKPiA+PiAvdXNyL2Jpbi9zd2lnIC1weXRob24gLVdhbGwgLUku
+IC1JLi4vLi4vaW5jbHVkZSBiYWJlbHRyYWNlLmkKPiA+PiBiYWJlbHRyYWNlLmk6MzY3OiBFcnJv
+cjogU3ludGF4IGVycm9yIGluIGlucHV0KDEpLgo+ID4+IG1ha2U6ICoqKiBbYmFiZWx0cmFjZV93
+cmFwLmNdIEVycm9yIDEKPiA+Pgo+ID4+IEFyZSB5b3UgbWlzc2luZyBhIGxpdHRsZSAlcHl0aG9u
+Y29kZSAleyBhcm91bmQgY2xhc3MgQ2xvY2tUeXBlID8KPiA+PiBodHRwczovL2dpdGh1Yi5jb20v
+amdhbGFyL2JhYmVsdHJhY2UvYmxvYi9iaW5kaW5ncy9weXRob24vYmluZGluZ3MvcHl0aG9uL2Jh
+YmVsdHJhY2UuaS5pbiNMMzYxCj4gPj4KPiA+PiBPbiAyMiBOb3ZlbWJlciAyMDEzIDE4OjAwLCBK
+w6lyw6ltaWUgR2FsYXJuZWF1Cj4gPj4gPGplcmVtaWUuZ2FsYXJuZWF1QGVmZmljaW9zLmNvbT4g
+d3JvdGU6Cj4gPj4+IEhpIGFsbCwKPiA+Pj4KPiA+Pj4gSSByZWNlaXZlZCBhIG51bWJlciBvZiBn
+cmVhdCBjb21tZW50cyBhYm91dCB0aGUgQmFiZWx0cmFjZSBQeXRob24gQVBJCj4gPj4+IHNpbmNl
+IG15IGxhc3QgcHVsbCByZXF1ZXN0LiBUaGVzZSBwYXRjaGVzLCBhdmFpbGFibGUgb24gbXkgcGVy
+c29uYWwKPiA+Pj4gcmVwb3NpdG9yeSwgYWltIGF0IG1ha2luZyB0aGUgQVBJIGZlZWwgbW9yZSBu
+YXR1cmFsIHRvIFB5dGhvbgo+ID4+PiBkZXZlbG9wZXJzIGJ5IHVzaW5nIHRoZSBhcHByb3ByaWF0
+ZSBsYW5ndWFnZSBjb25zdHJ1Y3RzIHdoZXJlCj4gPj4+IGFwcHJvcHJpYXRlLgo+ID4+Pgo+ID4+
+PiBUaGUgdGhyZWUgIkZpeCIgcGF0Y2hlcyBhZGRyZXNzIGJ1Z3MgdGhhdCB3ZXJlIHVuY292ZXJl
+ZCBpbiB0aGUgQwo+ID4+PiBjb2RlYmFzZSB3aGlsZSBkZXZlbG9waW5nIGFuZCB0ZXN0aW5nIHRo
+aXMgcGF0Y2ggc2V0Lgo+ID4+Pgo+ID4+PiBodHRwczovL2dpdGh1Yi5jb20vamdhbGFyL2JhYmVs
+dHJhY2UuZ2l0Cj4gPj4+Cj4gPj4+IDJiZTYyYWQgUHl0aG9uLWJpbmRpbmdzOiBSZWZhY3RvciB0
+aGUgQ29udGV4dCBjbGFzcwo+ID4+PiAzMmRlM2RiIFB5dGhvbi1iaW5kaW5nczogUmVmYWN0b3Ig
+dGhlIFRyYWNlSGFuZGxlIGNsYXNzIHRvIHVzZSBwcm9wZXJ0aWVzCj4gPj4+IDc3NDA1MzIgUHl0
+aG9uLWJpbmRpbmdzOiBSZWZhY3RvciB0aGUgRXZlbnQgY2xhc3MKPiA+Pj4gMTBkMWI5NiBQeXRo
+b24tYmluZGluZ3M6IE1vdmUgdGhlIF9zY29wZXMgYXJyYXkgb3V0IG9mIHRoZSBFdmVudCBjbGFz
+cwo+ID4+PiA5OWU4NDg5IFB5dGhvbi1iaW5kaW5nczogUmVmYWN0b3IgdGhlIEZpZWxkRGVjbCBh
+bmQgRXZlbnREZWNsIGNsYXNzZXMKPiA+Pj4gNDI1Y2FhYiBQeXRob24tYmluZGluZ3M6IE1vdmUg
+ZGVjbGFyYXRpb24gYmluZGluZ3Mgb3V0IG9mIHRoZSBfRGVmaW5pdGlvbgo+ID4+PiBjbGFzcwo+
+ID4+PiBiNWU0ODc1IEZpeDogVXNlIHRoZSBidF9pdGVyX3NldF9wb3MgZnVuY3Rpb24gdG8gc2V0
+IHRoZSBiZWdpbl9wb3MKPiA+Pj4gM2Y4NzUwZSBGaXg6IFRha2UgdGhlIGl0ZXJhdG9yJ3MgZW5k
+IHBvc2l0aW9uIGludG8gYWNjb3VudAo+ID4+PiAzNWUwY2I3IEZpeDogYnRfY3RmX2ZpZWxkX2dl
+bmVyaWNfdmFsaWRhdGUgc2hvdWxkIHJldHVybiA8IDAgb24gZXJyb3IKPiA+Pj4gODEwOTIyZSBQ
+eXRob24tYmluZGluZ3M6IFJlZmFjdG9yIHRoZSBDVEZXcml0ZXIgQVBJCj4gPj4+Cj4gPj4+IEkg
+dGhpbmsgdGhlc2UgcGF0Y2hlcyBicmluZyB1cyB0byBhIHBvaW50IHdoZXJlIHRoZSBiaW5kaW5n
+cy9weXRob24KPiA+Pj4gYnJhbmNoIGNvdWxkIGJlIHNhZmVseSBtZXJnZWQgaW50byBtYXN0ZXIu
+Cj4gPj4+Cj4gPj4+IFRoYW5rcywKPiA+Pj4gSsOpcsOpbWllCj4gPj4+Cj4gPj4+IC0tCj4gPj4+
+IErDqXLDqW1pZSBHYWxhcm5lYXUKPiA+Pj4gRWZmaWNpT1MgSW5jLgo+ID4+PiBodHRwOi8vd3d3
+LmVmZmljaW9zLmNvbQo+ID4+Pgo+ID4+PiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fXwo+ID4+PiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4gPj4+IGx0dG5n
+LWRldkBsaXN0cy5sdHRuZy5vcmcKPiA+Pj4gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmlu
+L21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cj4gCj4gCj4gCj4gLS0KPiBKw6lyw6ltaWUgR2Fs
+YXJuZWF1Cj4gRWZmaWNpT1MgSW5jLgo+IGh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCj4gCj4gX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBsdHRuZy1kZXYg
+bWFpbGluZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IGh0dHA6Ly9saXN0cy5s
+dHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo+IAoKLS0gCk1hdGhp
+ZXUgRGVzbm95ZXJzCkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KCl9fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWls
+aW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3Jn
+L2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
