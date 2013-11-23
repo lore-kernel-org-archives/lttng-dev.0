@@ -1,21 +1,22 @@
-From: =?UTF-8?q?Rapha=C3=ABl=20Beamonte?= <raphael.beamonte@gmail.com>
-Subject: [lttng-tools PATCH 3/5] Fix: utils_expand_path now
-	works for paths that ends with '/.' or '/..'
-Date: Sat, 23 Nov 2013 17:32:26 -0500
-Message-ID: <1385245948-23011-4-git-send-email-raphael.beamonte__33791.4572483443$1385246531$gmane$org@gmail.com>
-References: <20131115154539.GA6986@thessa>
-	<1385245948-23011-1-git-send-email-raphael.beamonte@gmail.com>
+From: =?ISO-8859-1?Q?Rapha=EBl_Beamonte?= <raphael.beamonte@gmail.com>
+Subject: Re: [PATCH] checkpatch: change status of warning from
+ "BRACES" to "BRACES_SINGLE_STMT"
+Date: Sat, 23 Nov 2013 17:38:03 -0500
+Message-ID: <CAE_Gge0CXpSTHRGtrw0MVRsZDdzh11fmEZUQuOmTNurPi5ivOQ__40050.5350241021$1385246678$gmane$org@mail.gmail.com>
+References: <1384321468-29220-1-git-send-email-raphael.beamonte@gmail.com>
+	<CAGDH53=vS-+mfjsJo8HFNGYsi+UbYgJDNZqd7bxQAYMpJhPf-w@mail.gmail.com>
+	<CAE_Gge0wR7L6_SqP6YkWGiHK-Q3o-w=CR9oN9u86+wrgUxmxwQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f173.google.com ([209.85.223.173])
+Received: from mail-ob0-f172.google.com ([209.85.214.172])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <raphael.beamonte@gmail.com>) id 1VkLks-0004vB-BL
-	for lttng-dev@lists.lttng.org; Sat, 23 Nov 2013 17:32:56 -0500
-Received: by mail-ie0-f173.google.com with SMTP id to1so4425427ieb.4
-	for <lttng-dev@lists.lttng.org>; Sat, 23 Nov 2013 14:32:41 -0800 (PST)
-In-Reply-To: <1385245948-23011-1-git-send-email-raphael.beamonte@gmail.com>
+	(envelope-from <nashii@gmail.com>) id 1VkLqP-0007KI-4p
+	for lttng-dev@lists.lttng.org; Sat, 23 Nov 2013 17:38:35 -0500
+Received: by mail-ob0-f172.google.com with SMTP id gq1so2805778obb.3
+	for <lttng-dev@lists.lttng.org>; Sat, 23 Nov 2013 14:38:23 -0800 (PST)
+In-Reply-To: <CAE_Gge0wR7L6_SqP6YkWGiHK-Q3o-w=CR9oN9u86+wrgUxmxwQ@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,38 +25,96 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: dgoulet@efficios.com
-Cc: =?UTF-8?q?Rapha=C3=ABl=20Beamonte?= <raphael.beamonte@gmail.com>, lttng-dev@lists.lttng.org
+To: Christian Babeux <christian.babeux@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Q2FzZXMgd2hlcmUgdGhlIHBhdGggZ2l2ZW4gZW5kZWQgd2l0aCAnLy4nIG9yICcvLi4nIHdlcmUg
-bm90IGhhbmRsZWQKcHJvcGVybHkgdXNpbmcgdGhlIHV0aWxzX2V4cGFuZF9wYXRoIGZ1bmN0aW9u
-IGFuZCB0aGUgcmVzdWx0aW5nIHBhdGgKd2FzIHN0aWxsIHNob3dpbmcgdGhpcyBlbmQgcGFydC4g
-VGhpcyBmaXggYWltcyB0byB0cmVhdCB0aGF0IGxhc3QKcGFydCBhbmQgJ2V4cGFuZCcgaXQgYXMg
-ZXhwZWN0ZWQuCgpTaWduZWQtb2ZmLWJ5OiBSYXBoYcOrbCBCZWFtb250ZSA8cmFwaGFlbC5iZWFt
-b250ZUBnbWFpbC5jb20+Ci0tLQogc3JjL2NvbW1vbi91dGlscy5jIHwgICAyNyArKysrKysrKysr
-KysrKysrKysrKysrKysrKysKIDEgZmlsZSBjaGFuZ2VkLCAyNyBpbnNlcnRpb25zKCspCgpkaWZm
-IC0tZ2l0IGEvc3JjL2NvbW1vbi91dGlscy5jIGIvc3JjL2NvbW1vbi91dGlscy5jCmluZGV4IDMz
-MGMwNGUuLmNlMjVmMjMgMTAwNjQ0Ci0tLSBhL3NyYy9jb21tb24vdXRpbHMuYworKysgYi9zcmMv
-Y29tbW9uL3V0aWxzLmMKQEAgLTE3OCw2ICsxNzgsOCBAQCBMVFROR19ISURERU4KIGNoYXIgKnV0
-aWxzX2V4cGFuZF9wYXRoKGNvbnN0IGNoYXIgKnBhdGgpCiB7CiAJY2hhciAqbmV4dCwgKnByZXZp
-b3VzLCAqc2xhc2gsICpzdGFydF9wYXRoLCAqYWJzb2x1dGVfcGF0aCA9IE5VTEw7CisJY2hhciAq
-bGFzdF90b2tlbjsKKwlpbnQgaXNfZG90LCBpc19kb3Rkb3Q7CiAKIAkvKiBTYWZldHkgbmV0ICov
-CiAJaWYgKHBhdGggPT0gTlVMTCkgewpAQCAtMjQxLDYgKzI0MywzMSBAQCBjaGFyICp1dGlsc19l
-eHBhbmRfcGF0aChjb25zdCBjaGFyICpwYXRoKQogCQkJCWFic29sdXRlX3BhdGgsIFBBVEhfTUFY
-KTsKIAl9CiAKKwkvKiBJZGVudGlmeSB0aGUgbGFzdCB0b2tlbiAqLworCWxhc3RfdG9rZW4gPSBz
-dHJyY2hyKGFic29sdXRlX3BhdGgsICcvJyk7CisKKwkvKiBWZXJpZnkgdGhhdCB0aGlzIHRva2Vu
-IGlzIG5vdCBhIHJlbGF0aXZlIHBhdGggKi8KKwlpc19kb3Rkb3QgPSAoc3RyY21wKGxhc3RfdG9r
-ZW4sICIvLi4iKSA9PSAwKTsKKwlpc19kb3QgPSAoc3RyY21wKGxhc3RfdG9rZW4sICIvLiIpID09
-IDApOworCisJLyogSWYgaXQgaXMsIHRha2UgYWN0aW9uICovCisJaWYgKGlzX2RvdCB8fCBpc19k
-b3Rkb3QpIHsKKwkJLyogRm9yIGJvdGgsIHJlbW92ZSB0aGlzIHRva2VuICovCisJCSpsYXN0X3Rv
-a2VuID0gJ1wwJzsKKworCQkvKiBJZiBpdCB3YXMgYSByZWZlcmVuY2UgdG8gcGFyZW50IGRpcmVj
-dG9yeSwgZ28gYmFjayBvbmUgbW9yZSB0aW1lICovCisJCWlmIChpc19kb3Rkb3QpIHsKKwkJCWxh
-c3RfdG9rZW4gPSBzdHJyY2hyKGFic29sdXRlX3BhdGgsICcvJyk7CisKKwkJCS8qIElmIHRoZXJl
-IHdhcyBvbmx5IG9uZSBsZXZlbCBsZWZ0LCB3ZSBrZWVwIHRoZSBmaXJzdCAnLycgKi8KKwkJCWlm
-IChsYXN0X3Rva2VuID09IGFic29sdXRlX3BhdGgpIHsKKwkJCQlsYXN0X3Rva2VuKys7CisJCQl9
-CisKKwkJCSpsYXN0X3Rva2VuID0gJ1wwJzsKKwkJfQorCX0KKwogCXJldHVybiBhYnNvbHV0ZV9w
-YXRoOwogCiBlcnJvcjoKLS0gCjEuNy4xMC40CgoKX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlz
-dHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3Rp
-bmZvL2x0dG5nLWRldgo=
+Hello,
+
+Do you have some follow-up on this patch ?
+
+Thanks,
+Rapha=EBl
+
+2013/11/13 Rapha=EBl Beamonte <raphael.beamonte@gmail.com>:
+> Hello Christian,
+>
+> You can try to use checkpatch on the patch I sent yesterday about the
+> expand_path unit test. You'll see that it shows a warning for the
+> following lines :
+>
+> +               if (strcmp(valid_tests_inputs[i].
+> relative_part, ".") =3D=3D 0) {
+> +                       relative =3D cur_path;
+> +               } else if (strcmp(valid_tests_inputs[i].relative_part,
+> "..") =3D=3D 0) {
+> +                       relative =3D prev_path;
+> +               } else if (strcmp(valid_tests_inputs[i].relative_part,
+> "../..") =3D=3D 0) {
+> +                       relative =3D pprev_path;
+> +               } else {
+> +                       relative =3D empty;
+> +               }
+>
+> As I understood from a discussion with Julien, singles braces are
+> recommended for LTTng source code to limit the number of modified
+> lines in case of change. In this very case, the warning that is shown
+> is not the one about "single statement", but the one about "braces
+> [that] are not necessary for any arm of this statement".
+> It seems that the single statement check you patched is only about
+> single ifs. If we use else or else-if, that's not the same check that
+> is used.
+>
+> Thanks,
+> Rapha=EBl
+>
+>
+>
+> 2013/11/13 Christian Babeux <christian.babeux@efficios.com>:
+>> Hi Rapha=EBl,
+>>
+>> Do you have a specific example that is failing for this case of braces
+>> detection? I patched checkpatch a while ago in a similar way for
+>> braces around single statement blocks, I don't remember the intention
+>> behind the particular check you are patching.
+>>
+>> Thanks,
+>>
+>> Christian
+>>
+>> On Wed, Nov 13, 2013 at 12:44 AM, Rapha=EBl Beamonte
+>> <raphael.beamonte@gmail.com> wrote:
+>>> The warning about braces that are not necessary for any arm of a statem=
+ent
+>>> should be interpreted as a warning about braces around single statement=
+s.
+>>>
+>>> Signed-off-by: Rapha=EBl Beamonte <raphael.beamonte@gmail.com>
+>>> ---
+>>>  extras/checkpatch.pl |    2 +-
+>>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/extras/checkpatch.pl b/extras/checkpatch.pl
+>>> index fdd8484..5a67704 100755
+>>> --- a/extras/checkpatch.pl
+>>> +++ b/extras/checkpatch.pl
+>>> @@ -3138,7 +3138,7 @@ sub process {
+>>>                                                 $sum_allowed +=3D $_;
+>>>                                         }
+>>>                                         if ($sum_allowed =3D=3D 0) {
+>>> -                                               WARN("BRACES",
+>>> +                                               WARN("BRACES_SINGLE_STM=
+T",
+>>>                                                      "braces {} are not=
+ necessary for any arm of this statement\n" . $herectx);
+>>>                                         } elsif ($sum_allowed !=3D $all=
+ow &&
+>>>                                                  $seen !=3D $allow) {
+>>> --
+>>> 1.7.10.4
+>>>
+>>>
+>>> _______________________________________________
+>>> lttng-dev mailing list
+>>> lttng-dev@lists.lttng.org
+>>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
