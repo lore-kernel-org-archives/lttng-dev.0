@@ -1,21 +1,17 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PULL REQUEST babeltrace] Python bindings
-	API	refactoring
-Date: Sat, 23 Nov 2013 15:26:00 +0000 (UTC)
-Message-ID: <696349360.74184.1385220360428.JavaMail.zimbra__16207.8434405432$1385220425$gmane$org@efficios.com>
-References: <CA+jJMxuaWjcJ7M55TpX=xG00R-VQdm0e0WtMg9M-AxnBQtwGfg@mail.gmail.com>
-	<CAFXXi0kr4MnZCzOGWMrUUSstCRT18XJzva=qfBLjoNEv8m8U8g@mail.gmail.com>
-	<CAFXXi0ktx+jXs5tciOMhDkPgGCSW5E_5PhBf+Ts-ooj12_1TDg@mail.gmail.com>
-	<CA+jJMxvUk3JLnO2hFvV_Z-OPoN5vnYRukhPJTgbU4UhdT1ds0A@mail.gmail.com>
+From: Eduardo Silva <edsiper@gmail.com>
+Subject: Undefined reference to
+	__tracepoint_provider_mk_linuxtrace
+Date: Sat, 23 Nov 2013 11:24:07 -0600
+Message-ID: <CAMAQheOmZZfXiQiKQXONfupwUR=YBFZuogsDxj-0aSmQQ_uJKw__22024.7276629836$1385227523$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============1752902449=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-vb0-f50.google.com ([209.85.212.50])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1VkF5v-0006Bj-Ct
-	for lttng-dev@lists.lttng.org; Sat, 23 Nov 2013 10:26:09 -0500
-In-Reply-To: <CA+jJMxvUk3JLnO2hFvV_Z-OPoN5vnYRukhPJTgbU4UhdT1ds0A@mail.gmail.com>
+	(envelope-from <edsiper@gmail.com>) id 1VkGwH-0004B0-MS
+	for lttng-dev@lists.lttng.org; Sat, 23 Nov 2013 12:24:19 -0500
+Received: by mail-vb0-f50.google.com with SMTP id 10so1719636vbe.37
+	for <lttng-dev@lists.lttng.org>; Sat, 23 Nov 2013 09:24:08 -0800 (PST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,91 +20,128 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?utf-8?B?SsOpcsOpbWll?= Galarneau <jeremie.galarneau@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-CgotLS0tLSBPcmlnaW5hbCBNZXNzYWdlIC0tLS0tCj4gRnJvbTogIkrDqXLDqW1pZSBHYWxhcm5l
-YXUiIDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20+Cj4gVG86ICJTaW1vbiBNYXJjaGki
-IDxzaW1vbi5tYXJjaGlAcG9seW10bC5jYT4KPiBDYzogbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9y
-Zwo+IFNlbnQ6IFNhdHVyZGF5LCBOb3ZlbWJlciAyMywgMjAxMyAxOjE1OjA1IEFNCj4gU3ViamVj
-dDogUmU6IFtsdHRuZy1kZXZdIFtQVUxMIFJFUVVFU1QgYmFiZWx0cmFjZV0gUHl0aG9uIGJpbmRp
-bmdzIEFQSQlyZWZhY3RvcmluZwo+IAo+IE9uIEZyaSwgTm92IDIyLCAyMDEzIGF0IDExOjA5IFBN
-LCBTaW1vbiBNYXJjaGkgPHNpbW9uLm1hcmNoaUBwb2x5bXRsLmNhPgo+IHdyb3RlOgo+ID4gQWxz
-bywgYXJvdW5kIGxpbmUgMjMwLCB0aGUgaW5kZW50YXRpb24gaXMgaW5jb25zaXN0ZW50LCBzbyBQ
-eXRob24KPiA+IGNvbXBsYWlucyB3aGVuIHlvdSBpbXBvcnQgYmFiZWx0cmFjZS4KPiA+Cj4gPiBo
-dHRwczovL2dpdGh1Yi5jb20vamdhbGFyL2JhYmVsdHJhY2UvYmxvYi9iaW5kaW5ncy9weXRob24v
-YmluZGluZ3MvcHl0aG9uL2JhYmVsdHJhY2UuaS5pbiNMMjMwCj4gPgo+ID4gQnR3LCB0aGFua3Mg
-Zm9yIGRvaW5nIHRoaXMhCj4gPgo+IAo+IEFuZCB0aGFua3MgZm9yIHRlc3RpbmchIEkgaGF2ZSBh
-ZGRyZXNzZWQgYm90aCBpc3N1ZXMgYW5kIHJlYmFzZWQgdGhlIHBhdGNoZXMuCj4gSGVyZSBhcmUg
-dGhlIG5ldyByZXZpc2lvbnMuCj4gCj4gNzRlYTE1YSBQeXRob24tYmluZGluZ3M6IFJlZmFjdG9y
-IHRoZSBDb250ZXh0IGNsYXNzCj4gNDY0NDI1ZSBQeXRob24tYmluZGluZ3M6IFJlZmFjdG9yIHRo
-ZSBUcmFjZUhhbmRsZSBjbGFzcyB0byB1c2UgcHJvcGVydGllcwo+IDc4ZDcxNGUgUHl0aG9uLWJp
-bmRpbmdzOiBSZWZhY3RvciB0aGUgRXZlbnQgY2xhc3MKPiBlNDA0MjcyIFB5dGhvbi1iaW5kaW5n
-czogTW92ZSB0aGUgX3Njb3BlcyBhcnJheSBvdXQgb2YgdGhlIEV2ZW50IGNsYXNzCj4gY2IxZmNj
-NiBQeXRob24tYmluZGluZ3M6IFJlZmFjdG9yIHRoZSBGaWVsZERlY2wgYW5kIEV2ZW50RGVjbCBj
-bGFzc2VzCj4gOGJiMjcxOCBQeXRob24tYmluZGluZ3M6IE1vdmUgZGVjbGFyYXRpb24gYmluZGlu
-Z3Mgb3V0IG9mIHRoZSBfRGVmaW5pdGlvbgo+IGNsYXNzCj4gZDg5OWQ2ZCBGaXg6IFVzZSB0aGUg
-YnRfaXRlcl9zZXRfcG9zIGZ1bmN0aW9uIHRvIHNldCB0aGUgYmVnaW5fcG9zCj4gNTY0NGU2ZiBG
-aXg6IFRha2UgdGhlIGl0ZXJhdG9yJ3MgZW5kIHBvc2l0aW9uIGludG8gYWNjb3VudAo+IGRhMmY2
-OTcgRml4OiBidF9jdGZfZmllbGRfZ2VuZXJpY192YWxpZGF0ZSBzaG91bGQgcmV0dXJuIDwgMCBv
-biBlcnJvcgo+IDE0MDAxMjcgUHl0aG9uLWJpbmRpbmdzOiBSZWZhY3RvciB0aGUgQ1RGV3JpdGVy
-IEFQSQoKQWxsIG1lcmdlZCBpbnRvIGJpbmRpbmdzL3B5dGhvbiBicmFuY2gsIGJ1dCBub3QgeWV0
-IGludG8gbWFzdGVyLCBoZXJlIGlzIHdoeToKCm1ha2UgZGlzdAp1bnBhY2sgZGlzdCB0YXJiYWxs
-IGludG8gdG1wIGRpcmVjdG9yeQpjcmVhdGUgYW5vdGhlciB0bXAgZGlyZWN0b3J5IChmb3Igb3V0
-IG9mIHRyZWUgYnVpbGQpCmludm9rZToKcGF0aF90b190bXBfZGlyL2JhYmVsdHJhY2UtMS4xLjEv
-Y29uZmlndXJlIC0tZW5hYmxlLXB5dGhvbi1iaW5kaW5ncwoKbWFrZSAtajQKCm1ha2VbM106IEVu
-dGVyaW5nIGRpcmVjdG9yeSBgL3RtcC90NC9iaW5kaW5ncy9weXRob24nCm1ha2VbM106ICoqKiBO
-byBydWxlIHRvIG1ha2UgdGFyZ2V0IGBiYWJlbHRyYWNlLmkuaW4nLCBuZWVkZWQgYnkgYGJhYmVs
-dHJhY2UuaScuICBTdG9wLgoKY2FuIHlvdSBwcm92aWRlIGEgZml4IGZvciBtYWtlIGRpc3QgYW5k
-L29yIG91dCBvZiB0cmVlIGJ1aWxkID8KClRoYW5rcywKCk1hdGhpZXUKCgo+IAo+IFJlZ2FyZHMs
-Cj4gSsOpcsOpbWllCj4gCj4gPiBPbiAyMiBOb3ZlbWJlciAyMDEzIDIyOjI5LCBTaW1vbiBNYXJj
-aGkgPHNpbW9uLm1hcmNoaUBwb2x5bXRsLmNhPiB3cm90ZToKPiA+PiBJJ20gZ2V0dGluZyB0aGlz
-IGVycm9yIHdoZW4gbWFraW5nIGluIGJpbmRpbmdzL3B5dGhvbjoKPiA+Pgo+ID4+IHNlZCAicy9C
-QUJFTFRSQUNFX1ZFUlNJT05fU1RSL0JhYmVsdHJhY2UgMS4xLjEvZyIgPGJhYmVsdHJhY2UuaS5p
-bgo+ID4+ID5iYWJlbHRyYWNlLmkKPiA+PiAvdXNyL2Jpbi9zd2lnIC1weXRob24gLVdhbGwgLUku
-IC1JLi4vLi4vaW5jbHVkZSBiYWJlbHRyYWNlLmkKPiA+PiBiYWJlbHRyYWNlLmk6MzY3OiBFcnJv
-cjogU3ludGF4IGVycm9yIGluIGlucHV0KDEpLgo+ID4+IG1ha2U6ICoqKiBbYmFiZWx0cmFjZV93
-cmFwLmNdIEVycm9yIDEKPiA+Pgo+ID4+IEFyZSB5b3UgbWlzc2luZyBhIGxpdHRsZSAlcHl0aG9u
-Y29kZSAleyBhcm91bmQgY2xhc3MgQ2xvY2tUeXBlID8KPiA+PiBodHRwczovL2dpdGh1Yi5jb20v
-amdhbGFyL2JhYmVsdHJhY2UvYmxvYi9iaW5kaW5ncy9weXRob24vYmluZGluZ3MvcHl0aG9uL2Jh
-YmVsdHJhY2UuaS5pbiNMMzYxCj4gPj4KPiA+PiBPbiAyMiBOb3ZlbWJlciAyMDEzIDE4OjAwLCBK
-w6lyw6ltaWUgR2FsYXJuZWF1Cj4gPj4gPGplcmVtaWUuZ2FsYXJuZWF1QGVmZmljaW9zLmNvbT4g
-d3JvdGU6Cj4gPj4+IEhpIGFsbCwKPiA+Pj4KPiA+Pj4gSSByZWNlaXZlZCBhIG51bWJlciBvZiBn
-cmVhdCBjb21tZW50cyBhYm91dCB0aGUgQmFiZWx0cmFjZSBQeXRob24gQVBJCj4gPj4+IHNpbmNl
-IG15IGxhc3QgcHVsbCByZXF1ZXN0LiBUaGVzZSBwYXRjaGVzLCBhdmFpbGFibGUgb24gbXkgcGVy
-c29uYWwKPiA+Pj4gcmVwb3NpdG9yeSwgYWltIGF0IG1ha2luZyB0aGUgQVBJIGZlZWwgbW9yZSBu
-YXR1cmFsIHRvIFB5dGhvbgo+ID4+PiBkZXZlbG9wZXJzIGJ5IHVzaW5nIHRoZSBhcHByb3ByaWF0
-ZSBsYW5ndWFnZSBjb25zdHJ1Y3RzIHdoZXJlCj4gPj4+IGFwcHJvcHJpYXRlLgo+ID4+Pgo+ID4+
-PiBUaGUgdGhyZWUgIkZpeCIgcGF0Y2hlcyBhZGRyZXNzIGJ1Z3MgdGhhdCB3ZXJlIHVuY292ZXJl
-ZCBpbiB0aGUgQwo+ID4+PiBjb2RlYmFzZSB3aGlsZSBkZXZlbG9waW5nIGFuZCB0ZXN0aW5nIHRo
-aXMgcGF0Y2ggc2V0Lgo+ID4+Pgo+ID4+PiBodHRwczovL2dpdGh1Yi5jb20vamdhbGFyL2JhYmVs
-dHJhY2UuZ2l0Cj4gPj4+Cj4gPj4+IDJiZTYyYWQgUHl0aG9uLWJpbmRpbmdzOiBSZWZhY3RvciB0
-aGUgQ29udGV4dCBjbGFzcwo+ID4+PiAzMmRlM2RiIFB5dGhvbi1iaW5kaW5nczogUmVmYWN0b3Ig
-dGhlIFRyYWNlSGFuZGxlIGNsYXNzIHRvIHVzZSBwcm9wZXJ0aWVzCj4gPj4+IDc3NDA1MzIgUHl0
-aG9uLWJpbmRpbmdzOiBSZWZhY3RvciB0aGUgRXZlbnQgY2xhc3MKPiA+Pj4gMTBkMWI5NiBQeXRo
-b24tYmluZGluZ3M6IE1vdmUgdGhlIF9zY29wZXMgYXJyYXkgb3V0IG9mIHRoZSBFdmVudCBjbGFz
-cwo+ID4+PiA5OWU4NDg5IFB5dGhvbi1iaW5kaW5nczogUmVmYWN0b3IgdGhlIEZpZWxkRGVjbCBh
-bmQgRXZlbnREZWNsIGNsYXNzZXMKPiA+Pj4gNDI1Y2FhYiBQeXRob24tYmluZGluZ3M6IE1vdmUg
-ZGVjbGFyYXRpb24gYmluZGluZ3Mgb3V0IG9mIHRoZSBfRGVmaW5pdGlvbgo+ID4+PiBjbGFzcwo+
-ID4+PiBiNWU0ODc1IEZpeDogVXNlIHRoZSBidF9pdGVyX3NldF9wb3MgZnVuY3Rpb24gdG8gc2V0
-IHRoZSBiZWdpbl9wb3MKPiA+Pj4gM2Y4NzUwZSBGaXg6IFRha2UgdGhlIGl0ZXJhdG9yJ3MgZW5k
-IHBvc2l0aW9uIGludG8gYWNjb3VudAo+ID4+PiAzNWUwY2I3IEZpeDogYnRfY3RmX2ZpZWxkX2dl
-bmVyaWNfdmFsaWRhdGUgc2hvdWxkIHJldHVybiA8IDAgb24gZXJyb3IKPiA+Pj4gODEwOTIyZSBQ
-eXRob24tYmluZGluZ3M6IFJlZmFjdG9yIHRoZSBDVEZXcml0ZXIgQVBJCj4gPj4+Cj4gPj4+IEkg
-dGhpbmsgdGhlc2UgcGF0Y2hlcyBicmluZyB1cyB0byBhIHBvaW50IHdoZXJlIHRoZSBiaW5kaW5n
-cy9weXRob24KPiA+Pj4gYnJhbmNoIGNvdWxkIGJlIHNhZmVseSBtZXJnZWQgaW50byBtYXN0ZXIu
-Cj4gPj4+Cj4gPj4+IFRoYW5rcywKPiA+Pj4gSsOpcsOpbWllCj4gPj4+Cj4gPj4+IC0tCj4gPj4+
-IErDqXLDqW1pZSBHYWxhcm5lYXUKPiA+Pj4gRWZmaWNpT1MgSW5jLgo+ID4+PiBodHRwOi8vd3d3
-LmVmZmljaW9zLmNvbQo+ID4+Pgo+ID4+PiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fXwo+ID4+PiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4gPj4+IGx0dG5n
-LWRldkBsaXN0cy5sdHRuZy5vcmcKPiA+Pj4gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmlu
-L21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cj4gCj4gCj4gCj4gLS0KPiBKw6lyw6ltaWUgR2Fs
-YXJuZWF1Cj4gRWZmaWNpT1MgSW5jLgo+IGh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCj4gCj4gX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBsdHRuZy1kZXYg
-bWFpbGluZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IGh0dHA6Ly9saXN0cy5s
-dHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo+IAoKLS0gCk1hdGhp
-ZXUgRGVzbm95ZXJzCkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KCl9fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWls
-aW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3Jn
-L2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+--===============1752902449==
+Content-Type: multipart/alternative; boundary=047d7bdc192cf7ca6304ebdb65b4
+
+--047d7bdc192cf7ca6304ebdb65b4
+Content-Type: text/plain; charset=ISO-8859-1
+
+Hi,
+
+i am adding support of Lttng to monkey-project.com but the compiler is
+claiming an undefined reference, of course there is something wrong in my
+provider header but i am not able to catch the error.
+
+My code structure is as follows:
+
+monkey.c (src/monkey.c)
+====================
+#define TRACEPOINT_DEFINE
+#include "mk_linuxtrace_provider.h"
+
+int main()
+{
+  ...
+}
+
+
+mk_linuxtrace_provider.h (src/include/mk_linuxtrace_provider.h)
+====================================================
+#undef  TRACEPOINT_PROVIDER
+#define TRACEPOINT_PROVIDER mk_linuxtrace
+
+#undef  TRACEPOINT_INCLUDE
+#define TRACEPOINT_INCLUDE "mk_linuxtrace_provider.h"
+
+#if !defined(_MK_LINUXTRACE_PROVIDER_H) ||
+defined(TRACEPOINT_HEADER_MULTI_READ)
+#define _MK_LINUXTRACE_PROVIDER_H
+#include <lttng/tracepoint.h>
+
+TRACEPOINT_EVENT(
+                 mk_linuxtrace,
+                 message,
+                 TP_ARGS(char *, text),
+                 TP_FIELDS(ctf_string(message, text))
+                 )
+
+TRACEPOINT_LOGLEVEL(
+                    mk_linuxtrace,
+                    message,
+                    TRACE_WARNING)
+#endif
+
+#include <lttng/tracepoint-event.h>
+
+---EOF---
+
+any help is appreciated,
+
+thanks
+
+-- 
+Eduardo Silva
+http://edsiper.linuxchile.cl
+http://monkey-project.com
+
+--047d7bdc192cf7ca6304ebdb65b4
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hi,=A0<div><br></div><div>i am adding support of Lttng to =
+<a href=3D"http://monkey-project.com">monkey-project.com</a> but the compil=
+er is claiming an undefined reference, of course there is something wrong i=
+n my provider header but i am not able to catch the error.=A0</div>
+<div><br></div><div>My code structure is as follows:</div><div><br></div><d=
+iv><div>monkey.c (src/monkey.c)=A0</div><div>=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D</div><div>#define TRACEPOINT_DEFINE</div><di=
+v>#include &quot;mk_linuxtrace_provider.h&quot;</div>
+<div><br></div><div>int main()</div><div>{</div><div>=A0 ...</div><div>}</d=
+iv><div><br></div><div><br></div><div>mk_linuxtrace_provider.h (src/include=
+/mk_linuxtrace_provider.h)</div><div>=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D</div>
+<div>#undef =A0TRACEPOINT_PROVIDER</div><div>#define TRACEPOINT_PROVIDER mk=
+_linuxtrace</div><div><br></div><div>#undef =A0TRACEPOINT_INCLUDE</div><div=
+>#define TRACEPOINT_INCLUDE &quot;mk_linuxtrace_provider.h&quot;</div><div>
+<br></div><div>#if !defined(_MK_LINUXTRACE_PROVIDER_H) || defined(TRACEPOIN=
+T_HEADER_MULTI_READ)</div><div>#define _MK_LINUXTRACE_PROVIDER_H</div><div>=
+#include &lt;lttng/tracepoint.h&gt;</div><div><br></div><div>TRACEPOINT_EVE=
+NT(</div>
+<div>=A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0mk_linuxtrace,</div><div>=A0 =A0 =
+=A0 =A0 =A0 =A0 =A0 =A0 =A0message,</div><div>=A0 =A0 =A0 =A0 =A0 =A0 =A0 =
+=A0 =A0TP_ARGS(char *, text),</div><div>=A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0=
+TP_FIELDS(ctf_string(message, text))</div><div>=A0 =A0 =A0 =A0 =A0 =A0 =A0 =
+=A0 =A0)</div>
+<div><br></div><div>TRACEPOINT_LOGLEVEL(</div><div>=A0 =A0 =A0 =A0 =A0 =A0 =
+=A0 =A0 =A0 =A0 mk_linuxtrace,</div><div>=A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =
+=A0 =A0 message,</div><div>=A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 TRACE_WA=
+RNING)</div><div>#endif</div><div><br></div><div>#include &lt;lttng/tracepo=
+int-event.h&gt;</div>
+<div><br></div><div style>---EOF---</div><div style><br></div><div style>an=
+y help is appreciated,=A0</div><div style><br></div><div style>thanks</div>=
+<div><br></div><div>--=A0<br></div></div><div><div dir=3D"ltr">Eduardo Silv=
+a<br>
+<a href=3D"http://edsiper.linuxchile.cl" target=3D"_blank">http://edsiper.l=
+inuxchile.cl</a><br><a href=3D"http://monkey-project.com" target=3D"_blank"=
+>http://monkey-project.com</a></div>
+</div></div>
+
+--047d7bdc192cf7ca6304ebdb65b4--
+
+
+--===============1752902449==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1752902449==--
