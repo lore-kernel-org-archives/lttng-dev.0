@@ -1,19 +1,17 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH babeltrace python/bindings] Python-bindings
- fix:	outdated dist target babeltrace.i
-Date: Sun, 24 Nov 2013 01:31:41 +0000 (UTC)
-Message-ID: <414873996.74599.1385256701005.JavaMail.zimbra__19481.9162054502$1385256762$gmane$org@efficios.com>
-References: <696349360.74184.1385220360428.JavaMail.zimbra@efficios.com>
-	<1385242259-11854-1-git-send-email-jeremie.galarneau@efficios.com>
+Subject: deadlock in ust baddr 2.4.0-rc1
+Date: Sun, 24 Nov 2013 08:13:17 +0000 (UTC)
+Message-ID: <1234203790.74752.1385280797186.JavaMail.zimbra__31119.9528551244$1385280867$gmane$org@efficios.com>
+References: <553056004.74731.1385279999530.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1VkOY4-0003Lz-FH
-	for lttng-dev@lists.lttng.org; Sat, 23 Nov 2013 20:31:50 -0500
-In-Reply-To: <1385242259-11854-1-git-send-email-jeremie.galarneau@efficios.com>
+	(envelope-from <compudj@efficios.com>) id 1VkUos-0002O6-1z
+	for lttng-dev@lists.lttng.org; Sun, 24 Nov 2013 03:13:32 -0500
+In-Reply-To: <553056004.74731.1385279999530.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,47 +20,178 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?utf-8?B?SsOpcsOpbWll?= Galarneau <jeremie.galarneau@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: Paul Woegerer <paul_woegerer@mentor.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJKw6lyw6ltaWUgR2FsYXJuZWF1
-IiA8amVyZW1pZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29tPgo+IFRvOiBsdHRuZy1kZXZAbGlzdHMu
-bHR0bmcub3JnCj4gU2VudDogU2F0dXJkYXksIE5vdmVtYmVyIDIzLCAyMDEzIDQ6MzA6NTkgUE0K
-PiBTdWJqZWN0OiBbbHR0bmctZGV2XSBbUEFUQ0ggYmFiZWx0cmFjZSBweXRob24vYmluZGluZ3Nd
-IFB5dGhvbi1iaW5kaW5ncyBmaXg6CW91dGRhdGVkIGRpc3QgdGFyZ2V0IGJhYmVsdHJhY2UuaQo+
-IAo+IFRoaXMgZml4ZXMgdGhlIGRpc3QgdGFyZ2V0IGZvciB0aGUgcHl0aG9uIGJpbmRpbmdzLiBU
-aGUKPiBweXRob24tY29tcGxlbWVudHMuaC8uYyBmaWxlcyBtdXN0IGJlIGRpc3RyaWJ1dGVkLCBi
-dXQgbm90IGluc3RhbGxlZCwKPiBpbiBvcmRlciB0byBidWlsZCB0aGUgcHl0aG9uIGJpbmRpbmdz
-LgoKbWFrZSBkaXN0Y2xlYW4KbWFrZSBkaXN0CmNwIHRoZSB0YXJiYWxsIGVsc2V3aGVyZSwgZXh0
-cmFjdAp0aGVuLCBmcm9tIG90aGVyIHBhdGg6CnBhdGgvdG8vYmFiZWx0cmFjZS0xLjEuMS9jb25m
-aWd1cmUgLS1lbmFibGUtcHl0aG9uLWJpbmRpbmdzCm1ha2UgLWo0CgptYWtlWzNdOiBFbnRlcmlu
-ZyBkaXJlY3RvcnkgYC90bXAvei9iaW5kaW5ncy9weXRob24nCnNlZCAicy9CQUJFTFRSQUNFX1ZF
-UlNJT05fU1RSL0JhYmVsdHJhY2UgMS4xLjEvZyIgPGJhYmVsdHJhY2UuaS5pbiA+YmFiZWx0cmFj
-ZS5pCi9iaW4vYmFzaDogYmFiZWx0cmFjZS5pLmluOiBObyBzdWNoIGZpbGUgb3IgZGlyZWN0b3J5
-Cgood2l0aCB5b3VyIHBhdGNoIGFwcGxpZWQpCgpBbnl0aGluZyBlbHNlIG1pc3NpbmcgPwoKVGhh
-bmtzLAoKTWF0aGlldQoKPiAKPiBTaWduZWQtb2ZmLWJ5OiBKw6lyw6ltaWUgR2FsYXJuZWF1IDxq
-ZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20+Cj4gLS0tCj4gIGJpbmRpbmdzL3B5dGhvbi9N
-YWtlZmlsZS5hbSB8IDggKysrKy0tLS0KPiAgMSBmaWxlIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygr
-KSwgNCBkZWxldGlvbnMoLSkKPiAKPiBkaWZmIC0tZ2l0IGEvYmluZGluZ3MvcHl0aG9uL01ha2Vm
-aWxlLmFtIGIvYmluZGluZ3MvcHl0aG9uL01ha2VmaWxlLmFtCj4gaW5kZXggYjI1Y2U5Mi4uMjk1
-MjQ1NCAxMDA2NDQKPiAtLS0gYS9iaW5kaW5ncy9weXRob24vTWFrZWZpbGUuYW0KPiArKysgYi9i
-aW5kaW5ncy9weXRob24vTWFrZWZpbGUuYW0KPiBAQCAtMywxNCArMywxNCBAQCBiYWJlbHRyYWNl
-Lmk6IGJhYmVsdHJhY2UuaS5pbgo+ICAKPiAgQU1fQ0ZMQUdTID0gJChQWVRIT05fSU5DTFVERSkg
-LUkkKHRvcF9zcmNkaXIpL2luY2x1ZGUvCj4gIAo+IC1FWFRSQV9ESVNUID0gYmFiZWx0cmFjZS5p
-Cj4gLXB5dGhvbl9QWVRIT04gPSBiYWJlbHRyYWNlLnB5Cj4gK0VYVFJBX0RJU1QgPSBiYWJlbHRy
-YWNlLmkuaW4KPiArbm9kaXN0X3B5dGhvbl9QWVRIT04gPSBiYWJlbHRyYWNlLnB5Cj4gIHB5ZXhl
-Y19MVExJQlJBUklFUyA9IF9iYWJlbHRyYWNlLmxhCj4gIAo+ICBNQUlOVEFJTkVSQ0xFQU5GSUxF
-UyA9IGJhYmVsdHJhY2Vfd3JhcC5jIGJhYmVsdHJhY2UucHkKPiAgCj4gLV9iYWJlbHRyYWNlX2xh
-X1NPVVJDRVMgPSBiYWJlbHRyYWNlX3dyYXAuYyBweXRob24tY29tcGxlbWVudHMuYwo+IC0KPiAr
-bm9kaXN0X19iYWJlbHRyYWNlX2xhX1NPVVJDRVMgPSBiYWJlbHRyYWNlX3dyYXAuYwo+ICtfYmFi
-ZWx0cmFjZV9sYV9TT1VSQ0VTID0gcHl0aG9uLWNvbXBsZW1lbnRzLmggcHl0aG9uLWNvbXBsZW1l
-bnRzLmMKPiAgX2JhYmVsdHJhY2VfbGFfTERGTEFHUyA9IC1tb2R1bGUKPiAgCj4gIF9iYWJlbHRy
-YWNlX2xhX0NGTEFHUyA9ICQoR0xJQl9DRkxBR1MpICQoQU1fQ0ZMQUdTKQo+IC0tCj4gMS44LjQu
-Mgo+IAo+IAo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-Cj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBo
-dHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-PiAKCi0tIApNYXRoaWV1IERlc25veWVycwpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNp
-b3MuY29tCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwps
-dHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xp
-c3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+Hi Paul,
+
+We are facing a deadlock with the UST baddr feature in 2.4.0-rc1. Here is how to
+reproduce:
+
+Build UST ae5f44dbf46c87c1318fde8ab5b5a68048e5af08 by following doc/java-util-logging.txt
+Build tools 077df0b372f77833c1de2dd9f534dec9e75696de
+
+Install into system + run lttng-sessiond as user (there is an issue David is working
+on that prevents non-root applications to register to the root session daemon, so
+make sure sessiond is not run as root for now).
+
+run doc/examples/java-jul  ./run file (in UST)
+
+example output (all is OK, since no tracing is active):
+
+24-Nov-2013 3:05:37 AM Hello main
+INFO: Hello World, the answer is 42
+Firing hello delay in 10 seconds...
+24-Nov-2013 3:05:47 AM Hello main
+INFO: Hello World delayed...
+Cleaning Hello
+
+Then start JUL tracing with:
+
+lttng create
+lttng enable-event -j -a
+lttng start
+
+./run
+
+
+libust[3438/3439]: Error: Timed out waiting for lttng-sessiond (in lttng_ust_init() at lttng-ust-comm.c:1397)
+
+even worse if:
+
+LTTNG_UST_REGISTER_TIMEOUT=-1 ./run
+
+The application deadlocks like this (on thread 2 in gdb):
+
+
+(gdb) bt full
+#0  __lll_lock_wait () at ../nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S:136
+No locals.
+#1  0x00007f78ce4c2354 in _L_lock_997 () from /lib/x86_64-linux-gnu/libpthread.so.0
+No symbol table info available.
+#2  0x00007f78ce4c21b7 in __pthread_mutex_lock (mutex=0x7f78ceb0c948) at pthread_mutex_lock.c:82
+        ignore1 = <optimized out>
+        ignore2 = <optimized out>
+        ignore3 = <optimized out>
+        __PRETTY_FUNCTION__ = "__pthread_mutex_lock"
+        type = 3467692360
+#3  0x00007f78ce8fdadb in ?? () from /lib64/ld-linux-x86-64.so.2
+No symbol table info available.
+#4  0x00007f78ce0b1f66 in dlopen_doit (a=<optimized out>) at dlopen.c:67
+        args = 0x7f78c5903520
+#5  0x00007f78ce8f9bd6 in ?? () from /lib64/ld-linux-x86-64.so.2
+No symbol table info available.
+#6  0x00007f78ce0b22ec in _dlerror_run (operate=0x7f78ce0b1f00 <dlopen_doit>, args=0x7f78c5903520) at dlerror.c:164
+        result = 0x1568b30
+#7  0x00007f78ce0b1ee1 in __dlopen (file=<optimized out>, mode=<optimized out>) at dlopen.c:88
+        args = {file = 0x7f78c69a7eb9 "liblttng-ust-baddr.so.0", mode = 258, new = 0x101010101010101, caller = 0x7f78c696d8a9}
+#8  0x00007f78c696d8a9 in lttng_ust_baddr_handle () at lttng-ust-comm.c:249
+        __func__ = "lttng_ust_baddr_handle"
+#9  0x00007f78c696d999 in lttng_ust_baddr_statedump (session=0x159ded0) at lttng-ust-comm.c:264
+        baddr_handle = 0xc69a7dd7
+        lttng_ust_baddr_init_fn = 0
+        __func__ = "lttng_ust_baddr_statedump"
+#10 0x00007f78c6971317 in ust_listener_thread (arg=0x7f78c6bbd000) at lttng-ust-comm.c:1254
+        session = 0x159ded0
+        len = 612
+        lum = {handle = 1, cmd = 128, padding = '\000' <repeats 31 times>, u = {channel = {len = 0, type = LTTNG_UST_CHAN_PER_CPU, 
+              padding = '\000' <repeats 287 times>, data = 0x7f78c5903d54 ""}, stream = {len = 0, stream_nr = 0, 
+              padding = '\000' <repeats 287 times>}, event = {instrumentation = LTTNG_UST_TRACEPOINT, 
+              name = '\000' <repeats 255 times>, loglevel_type = LTTNG_UST_LOGLEVEL_ALL, loglevel = 0, 
+              padding = '\000' <repeats 15 times>, u = {padding = '\000' <repeats 287 times>}}, context = {
+              ctx = LTTNG_UST_CONTEXT_VTID, padding = '\000' <repeats 15 times>, u = {padding = '\000' <repeats 287 times>}}, 
+            version = {major = 0, minor = 0, patchlevel = 0}, tracepoint = {name = '\000' <repeats 255 times>, loglevel = 0, 
+              padding = '\000' <repeats 15 times>}, filter = {data_size = 0, reloc_offset = 0, seqnum = 0}, exclusion = {
+              count = 0}, padding = '\000' <repeats 31 times>}}
+        sock_info = 0x7f78c6bbd000
+        sock = 15
+        ret = 0
+        prev_connect_failed = 0
+        has_waited = 0
+        timeout = -1
+        __func__ = "ust_listener_thread"
+        __PRETTY_FUNCTION__ = "ust_listener_thread"
+#11 0x00007f78ce4bfb50 in start_thread (arg=<optimized out>) at pthread_create.c:304
+        __res = <optimized out>
+        pd = 0x7f78c5904700
+        unwind_buf = {cancel_jmp_buf = {{jmp_buf = {140156687369984, -4360901099104425548, 140156840281200, 140156687370688, 
+                140156840493120, 3, 4434775346229094836, 4434756016842287540}, mask_was_saved = 0}}, priv = {pad = {0x0, 0x0, 0x0, 
+              0x0}, data = {prev = 0x0, cleanup = 0x0, canceltype = 0}}}
+        not_first_call = <optimized out>
+        freesize = <optimized out>
+        __PRETTY_FUNCTION__ = "start_thread"
+#12 0x00007f78cde01a7d in clone () at ../sysdeps/unix/sysv/linux/x86_64/clone.S:112
+
+
+It is deadlocked on the constructor awaiting for semaphore completion. The
+mutex is probably the internal libc dynamic linker mutex held across
+constructor execution:
+
+
+#0  sem_wait () at ../nptl/sysdeps/unix/sysv/linux/x86_64/sem_wait.S:86
+No locals.
+#1  0x00007f78c6971eb6 in lttng_ust_init () at lttng-ust-comm.c:1404
+        constructor_timeout = {tv_sec = 140736647255400, tv_nsec = 5}
+        sig_all_blocked = {__val = {18446744067267100671, 18446744073709551615 <repeats 15 times>}}
+        orig_parent_mask = {__val = {4, 140156702215847, 1, 140156702215909, 140153372803072, 140156840282096, 0, 140156594940184, 
+            140156840281472, 140156840281496, 3467478208, 140156840282096, 140156709124528, 140156707014326, 140156833869240, 
+            140156840308736}}
+        thread_attr = {
+          __size = "\000\000\000\000\000\000\000\000\001\000\000\000\000\000\000\000\000\020", '\000' <repeats 37 times>, 
+          __align = 0}
+        timeout_mode = -1
+        ret = 0
+        __PRETTY_FUNCTION__ = "lttng_ust_init"
+        __func__ = "lttng_ust_init"
+#2  0x00007f78ce8f9f80 in ?? () from /lib64/ld-linux-x86-64.so.2
+No symbol table info available.
+#3  0x00007f78ce8fa077 in ?? () from /lib64/ld-linux-x86-64.so.2
+No symbol table info available.
+#4  0x00007f78ce8fe363 in ?? () from /lib64/ld-linux-x86-64.so.2
+No symbol table info available.
+#5  0x00007f78ce8f9bd6 in ?? () from /lib64/ld-linux-x86-64.so.2
+No symbol table info available.
+#6  0x00007f78ce8fdb4a in ?? () from /lib64/ld-linux-x86-64.so.2
+No symbol table info available.
+#7  0x00007f78ce0b1f66 in dlopen_doit (a=<optimized out>) at dlopen.c:67
+        args = 0x7f78cead8b20
+#8  0x00007f78ce8f9bd6 in ?? () from /lib64/ld-linux-x86-64.so.2
+No symbol table info available.
+#9  0x00007f78ce0b22ec in _dlerror_run (operate=0x7f78ce0b1f00 <dlopen_doit>, args=0x7f78cead8b20) at dlerror.c:164
+        result = 0x14e2630
+#10 0x00007f78ce0b1ee1 in __dlopen (file=<optimized out>, mode=<optimized out>) at dlopen.c:88
+        args = {file = 0x7f78c00eb5f0 "/home/compudj/git/lttng-ust/liblttng-ust-jul/.libs/liblttng-ust-jul-jni.so.0.0.0", mode = 1, 
+          new = 0x14ea800, caller = 0x7f78cd7abf9f}
+#11 0x00007f78cd7abf9f in os::dll_load(char const*, char*, int) ()
+   from /usr/lib/jvm/java-6-openjdk-amd64/jre/lib/amd64/server/libjvm.so
+No symbol table info available.
+#12 0x00007f78cd648f3f in JVM_LoadLibrary () from /usr/lib/jvm/java-6-openjdk-amd64/jre/lib/amd64/server/libjvm.so
+No symbol table info available.
+#13 0x00007f78cc3799f7 in Java_java_lang_ClassLoader_00024NativeLibrary_load ()
+   from /usr/lib/jvm/java-6-openjdk-amd64/jre/lib/amd64/libjava.so
+No symbol table info available.
+#14 0x00007f78c8939d68 in ?? ()
+No symbol table info available.
+#15 0x00007f78cead95d0 in ?? ()
+No symbol table info available.
+#16 0x00007f78c892e85a in ?? ()
+No symbol table info available.
+#17 0x00007f78cead9580 in ?? ()
+No symbol table info available.
+#18 0x0000000000000000 in ?? ()
+No symbol table info available.
+
+So it looks like calling dlopen() from within lttng-ust is tricky, because it
+introduces deadlocks with the dynamic linker.
+
+Thoughts ?
+
+Thanks,
+
+Mathieu
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
