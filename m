@@ -1,15 +1,15 @@
 From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Subject: Re: make a trace_event in a module (driver)
-Date: Mon, 25 Nov 2013 15:53:04 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD267A5DA9__16428.0285513543$1385394942$gmane$org@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+Subject: Re: Fwd: liburcu error: Cannot find -lurcu
+Date: Mon, 25 Nov 2013 16:40:48 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD267A5DE7__21349.9214071364$1385397709$gmane$org@VAL-E-01.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1VkyTC-0006Io-9O
-	for lttng-dev@lists.lttng.org; Mon, 25 Nov 2013 10:53:11 -0500
+	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1VkzDO-0001pb-3X
+	for lttng-dev@lists.lttng.org; Mon, 25 Nov 2013 11:40:56 -0500
 Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -22,90 +22,151 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-> Date: Sun, 24 Nov 2013 19:26:05 +0100
-> From: Klaus Dannecker <klaus.dannecker@gmx.de>
+> Date: Mon, 25 Nov 2013 12:11:09 +0530
+> From: kumar s <skumar.m226@gmail.com>
 >
-> > Interesting. Would you mind running "lttng start" in verbose mode and =
-
-> > provide the output?
-> > lttng -vvv start
-> klaus@ubuntu:~$ sudo lttng -vvv start
-> DEBUG2 [2854/2854]: Config file path found: /home/klaus (in get_session_n=
-ame() at utils.c:57)
-> DEBUG1 [2854/2854]: Session name found: auto-20131124-091639 (in get_sess=
-ion_name() at utils.c:58)
-> DEBUG1 [2854/2854]: Starting tracing for session auto-20131124-091639 (in=
- start_tracing() at commands/start.c:81)
-> DEBUG1 [2854/2854]: LSM cmd type : 16 (in send_session_msg() at lttng-ctl=
-.c:131)
-> 'ctrl c'
-> klaus@ubuntu:~$
-
-Definitely looks like a module loading problem.
-
-> > lttng-modules does not define an "uninstall" make target. I guess =
-
-> > you'll have to delete the modules manually under /lib/modules/$(uname =
-
-> > -r)/extra /lib/modules/$(uname -r)/extra/lib /lib/modules/$(uname =
-
-> > -r)/extra/probes
-> >
-> > I'm wondering if it could be a conflict with your distribution's =
-
-> > lttng-modules-dkms package... Could you verify that it is not =
-
-> > installed?
+> I tried test .so and app ,compiled with mips gcc . it worked fine without=
+ throwing any errors.
 >
-> now i make two experiments:
-> first:
-> install ubuntu 12.04 in vmware
-> $ git clone git://git.lttng.org/lttng-tools.git
-> $ git clone git://git.lttng.org/lttng-modules.git
-> $ git clone git://git.lttng.org/lttng-ust.git
-> $ git clone git://git.lttng.org/userspace-rcu.git
-> compile and install all like:
-> https://www.ibm.com/developerworks/community/blogs/fe313521-2e95-46f2-817=
-d-44a4f27eba32/entry/howto_tracing_with_lttng?lang=3Den
-> now i have the same problem.
-
-   Aha!  There is one crucial mistake in the ibm.com document: he installs =
-the packages in the wrong order.  lttng-tools must be installed AFTER lttng=
--modules and lttng-ust.  lttng-modules can be installed before, during or a=
-fter lttng-ust, but userspace-rcu must be installed before lttng-ust.
-   The problem is that the configure of lttng-tools detects the presence or=
- absence of lttng-modules and also detects the presence or absence of lttng=
--ust, and adjusts to both.  By installing lttng-tools before lttng-modules,=
- you've built an lttng-tools set that CANNOT be used to trace the kernel.
-
-   So, try again from scratch, making sure to install lttng-tools last.
-
-> second:
-> install ubuntu 12.04 in vmware
-> sudo apt-get install lttng-tools
->...
-> Building only for 3.8.0-29-generic
-> Building initial module for 3.8.0-29-generic
-> Error! Bad return status for module build on kernel: 3.8.0-29-generic (i6=
-86)
-> Consult /var/lib/dkms/lttng-modules/2.0.2/build/make.log for more informa=
-tion.
-> Setting up lttng-tools (2.0.1-0ubuntu1) ...
-> /usr/sbin/addgroup
-> lttng-sessiond start/running, process 5515
-> Processing triggers for libc-bin ...
-> ldconfig deferred processing now taking place
-> klaus@ubuntu:~$
-
-   The Ubuntu lttng 2.0.1 install will very likely run into trouble against=
- kernel 3.8 because of the new module signing requirements.
-
-> $ git clone git://git.lttng.org/lttng-modules.git
-> compile and install lttng_modules
+> configuring with static library works fine but shared lib throws this err=
+or. I have attached the log below.
 >
-> now works lttng start, stop and destroy!
+> *Static Library build*
 >
-> Klaus
+> CC=3Dmips64-octeon-linux-gnu-gcc ./configure prefix=3D$(pwd)/urcu_install=
+ --host=3Dmips64-octeon-linux-gnu --disable-shared
+> configure: WARNING: if you wanted to set the --build type, don't use --ho=
+st.
+> [...]
+> checking if libtool supports shared libraries... yes
+> *checking whether to build shared libraries... no*
+> checking whether to build static libraries... yes
+> [...]
+> configure: creating ./config.status
+> config.status: creating Makefile
+> config.status: creating doc/Makefile
+> config.status: creating doc/examples/Makefile
+> config.status: creating tests/Makefile
+> config.status: creating tests/common/Makefile
+> config.status: creating tests/unit/Makefile
+> config.status: creating tests/benchmark/Makefile
+> config.status: creating tests/regression/Makefile
+> config.status: creating liburcu.pc
+> config.status: creating liburcu-bp.pc
+> config.status: creating liburcu-cds.pc
+> config.status: creating liburcu-qsbr.pc
+> config.status: creating liburcu-mb.pc
+> config.status: creating liburcu-signal.pc
+> config.status: creating config.h
+> config.status: config.h is unchanged
+> config.status: creating urcu/config.h
+> config.status: urcu/config.h is unchanged
+
+   The two "config.h is unchanged" messages are the only ones different fro=
+m my configure.log.  Did you install from a clean system?
+
+> config.status: linking urcu/arch/mips.h to urcu/arch.h
+> config.status: linking urcu/uatomic/mips.h to urcu/uatomic.h
+> config.status: executing depfiles commands
+> config.status: executing libtool commands
+> SMP support enabled.
+> Thread Local Storage (TLS): __thread.
+
+> [shkumar@shrayanth userspace-rcu]$ make
+> make  all-recursive
+> make[1]: Entering directory `/home/shkumar/Development_Merge/NewOCT/users=
+pace/userspace-rcu'
+> Making all in .
+> make[2]: Entering directory `/home/shkumar/Development_Merge/NewOCT/users=
+pace/userspace-rcu'
+>   CC     wfqueue.lo
+>   CC     wfcqueue.lo
+> [...]
+>   CC     urcu.lo
+
+   At least the warnings have disappeared.
+
+> [...]
+>   CCLD   test_urcu_lfs_rcu_dynlink
+> make[3]: Leaving directory `/home/shkumar/Development_Merge/NewOCT/usersp=
+ace/userspace-rcu/tests/benchmark'
+> Making all in regression
+> make[3]: Entering directory `/home/shkumar/Development_Merge/NewOCT/users=
+pace/userspace-rcu/tests/regression'
+>   CC     test_urcu_fork.o
+>   CC     urcu.o
+> [...]
+> make[1]: Leaving directory `/home/shkumar/Development_Merge/NewOCT/usersp=
+ace/userspace-rcu'
+
+   Your log is identical to mine, except for the paths, of course.
+
+> *Shared-library build.*
+>
+> CC=3Dmips64-octeon-linux-gnu-gcc ./configure prefix=3D$(pwd)/urcu_install=
+ --host=3Dmips64-octeon-linux-gnu --enable-shared
+> configure: WARNING: if you wanted to set the --build type, don't use --ho=
+st.
+> [...]
+> checking if libtool supports shared libraries... yes
+> *checking whether to build shared libraries... yes*
+> checking whether to build static libraries... yes
+> [...]
+> configure: creating ./config.status
+> [...]
+> config.status: creating config.h
+> config.status: config.h is unchanged
+> config.status: creating urcu/config.h
+> config.status: urcu/config.h is unchanged
+> config.status: linking urcu/arch/mips.h to urcu/arch.h
+> config.status: linking urcu/uatomic/mips.h to urcu/uatomic.h
+> config.status: executing depfiles commands
+> config.status: executing libtool commands
+> SMP support enabled.
+> Thread Local Storage (TLS): __thread.
+
+> [shkumar@shrayanth userspace-rcu]$ make
+> make  all-recursive
+> make[1]: Entering directory `/home/shkumar/Development_Merge/NewOCT/users=
+pace/userspace-rcu'
+> Making all in .
+> [...]
+> cc  -g -O2 -Wall -I../../../urcu/ -I../../../ -g -O2 \
+>         -c -o cds_hlist_add_head_rcu.o cds_hlist_add_head_rcu.c
+> cc -g -O2 -Wall  -g -O2 -L../../../.libs/ \
+>         -Wl,-rpath=3D"/home/shkumar/Development_Merge/NewOCT/userspace/us=
+erspace-rcu/doc/examples/../../.libs/" \
+>         -o cds_hlist_add_head_rcu cds_hlist_add_head_rcu.o -lurcu
+> /usr/bin/ld: skipping incompatible ../../../.libs//liburcu.so when search=
+ing for -lurcu
+> /usr/bin/ld: skipping incompatible ../../../.libs//liburcu.a when searchi=
+ng for -lurcu
+> /usr/bin/ld: cannot find -lurcu
+> collect2: ld returned 1 exit status
+> make[6]: *** [cds_hlist_add_head_rcu] Error 1
+> [...]
+
+   The incompatibility message occurs because you're trying to mix bitnesse=
+s (a 32-bit liburcu.so won't link with a 64-bit application and vice-versa).
+
+   Could the replacement of gcc by cc somehow be responsible?  How come the=
+ Makefile isn't using CC =3D mips64-octeon-linux-gnu-gcc (or so it seems)?
+
+> is userspace lib required to build lttng-tools (latest version from git)?
+> It throws this error while trying to configure..
+>
+> [...]
+> checking for grp.h... yes
+> checking for pthread_create in -lpthread... yes
+> checking for poptGetContext in -lpopt... yes
+> checking for uuid_generate in -luuid... yes
+> checking whether cds_list_add is declared... no
+> configure: error: liburcu >=3D 0.7.2 or newer is needed
+
+> skumar
+
+   Yes, lttng-tools requires userspace-rcu, although it can be built withou=
+t lttng-modules and/or lttng-ust.
 
 Daniel U. Thibault
 Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
