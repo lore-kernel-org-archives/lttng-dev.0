@@ -1,18 +1,19 @@
-From: Julien Desfossez <jdesfossez@efficios.com>
-Subject: [BABELTRACE PATCH 3/3] Handle empty streams on iterator
-	init
-Date: Wed, 27 Nov 2013 10:06:03 -0500
-Message-ID: <1385564763-1374-3-git-send-email-jdesfossez__30639.694320462$1385565044$gmane$org@efficios.com>
-References: <1385564763-1374-1-git-send-email-jdesfossez@efficios.com>
+From: Charles Briere <charlesbriere.flatzo@gmail.com>
+Subject: [PATCH liburcu 2/5] Dont link pthread on Android
+Date: Wed, 27 Nov 2013 07:48:30 -0800
+Message-ID: <1385567313-8138-2-git-send-email-charlesbriere.flatzo__1686.06443699009$1385567457$gmane$org@gmail.com>
+References: <1385567313-8138-1-git-send-email-charlesbriere.flatzo@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([144.76.53.219])
+Received: from mail-pd0-f177.google.com ([209.85.192.177])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jdesfossez@efficios.com>) id 1Vlgh1-0007WZ-8K
-	for lttng-dev@lists.lttng.org; Wed, 27 Nov 2013 10:06:27 -0500
-In-Reply-To: <1385564763-1374-1-git-send-email-jdesfossez@efficios.com>
+	(envelope-from <charlesbriere.flatzo@gmail.com>) id 1VlhNF-0002UC-4W
+	for lttng-dev@lists.lttng.org; Wed, 27 Nov 2013 10:50:03 -0500
+Received: by mail-pd0-f177.google.com with SMTP id q10so10121425pdj.22
+	for <lttng-dev@lists.lttng.org>; Wed, 27 Nov 2013 07:49:51 -0800 (PST)
+In-Reply-To: <1385567313-8138-1-git-send-email-charlesbriere.flatzo@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,43 +23,72 @@ List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 To: mathieu.desnoyers@efficios.com
-Cc: lttng-dev@lists.lttng.org, Julien Desfossez <jdesfossez@efficios.com>
+Cc: Charles Briere <charlesbriere.flatzo@gmail.com>, lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-In live trace streaming, we can create an iterator with inactive
-streams. This patch allows inactive streams to be considered as valid.
+On Android, pthread is already part of libc
+called Bionic and doesn't have an external
+library to link with.
 
-Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
+Signed-off-by: Charles Briere <charlesbriere.flatzo@gmail.com>
 ---
- lib/iterator.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ Makefile.am                  | 5 ++++-
+ tests/benchmark/Makefile.am  | 4 +++-
+ tests/regression/Makefile.am | 4 +++-
+ tests/unit/Makefile.am       | 4 +++-
+ 4 files changed, 13 insertions(+), 4 deletions(-)
 
-diff --git a/lib/iterator.c b/lib/iterator.c
-index 155fcbe..3280f4a 100644
---- a/lib/iterator.c
-+++ b/lib/iterator.c
-@@ -725,7 +725,7 @@ int bt_iter_init(struct bt_iter *iter,
- 				if (ret == EOF) {
- 					ret = 0;
- 					continue;
--				} else if (ret) {
-+				} else if (ret != 0 && ret != EAGAIN) {
- 					goto error;
- 				}
- 				/* Add to heap */
-@@ -821,6 +821,13 @@ reinsert:
- 	removed = bt_heap_replace_max(iter->stream_heap, file_stream);
- 	assert(removed == file_stream);
+diff --git a/Makefile.am b/Makefile.am
+index e09778f..baac8b9 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -4,7 +4,10 @@ INCLUDES = -I$(top_builddir)/urcu
  
-+	file_stream = bt_heap_maximum(iter->stream_heap);
-+	if (file_stream->pos.content_size == 0) {
-+		ret = EAGAIN;
-+	} else {
-+		ret = 0;
-+	}
-+
- end:
- 	return ret;
- }
+ #Add the -version-info directly here since we are only building
+ # library that use the version-info
+-AM_LDFLAGS=-lpthread -version-info $(URCU_LIBRARY_VERSION)
++AM_LDFLAGS=-version-info $(URCU_LIBRARY_VERSION)
++if !TARGET_IS_ANDROID
++AM_LDFLAGS += -lpthread
++endif
+ AM_CFLAGS=-Wall
+ 
+ SUBDIRS = . doc tests
+diff --git a/tests/benchmark/Makefile.am b/tests/benchmark/Makefile.am
+index e071034..91ba1da 100644
+--- a/tests/benchmark/Makefile.am
++++ b/tests/benchmark/Makefile.am
+@@ -1,4 +1,6 @@
+-AM_LDFLAGS=-lpthread
++if !TARGET_IS_ANDROID
++AM_LDFLAGS += -lpthread
++endif
+ AM_CFLAGS=-I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/tests/common -g
+ 
+ noinst_PROGRAMS = test_urcu test_urcu_dynamic_link test_urcu_timing \
+diff --git a/tests/regression/Makefile.am b/tests/regression/Makefile.am
+index 2c0542f..2cefa33 100644
+--- a/tests/regression/Makefile.am
++++ b/tests/regression/Makefile.am
+@@ -1,4 +1,6 @@
+-AM_LDFLAGS=-lpthread
++if !TARGET_IS_ANDROID
++AM_LDFLAGS += -lpthread
++endif
+ AM_CFLAGS=-I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/tests/common -g
+ 
+ noinst_PROGRAMS = test_urcu_fork \
+diff --git a/tests/unit/Makefile.am b/tests/unit/Makefile.am
+index 1fa8b71..85860e2 100644
+--- a/tests/unit/Makefile.am
++++ b/tests/unit/Makefile.am
+@@ -1,4 +1,6 @@
+-AM_LDFLAGS=-lpthread
++if !TARGET_IS_ANDROID
++AM_LDFLAGS += -lpthread
++endif
+ AM_CFLAGS=-I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/tests/common -g
+ 
+ noinst_PROGRAMS = test_uatomic \
 -- 
-1.8.3.2
+1.8.4.2
