@@ -1,18 +1,19 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH liburcu 2/5] Dont link pthread on Android
-Date: Wed, 27 Nov 2013 16:10:37 +0000 (UTC)
-Message-ID: <164876968.76709.1385568637093.JavaMail.zimbra__36440.9051057466$1385568737$gmane$org@efficios.com>
+Subject: Re: [PATCH liburcu 3/5] Added a compat layer for
+	'syscall.h'
+Date: Wed, 27 Nov 2013 16:29:40 +0000 (UTC)
+Message-ID: <1311213495.76736.1385569780668.JavaMail.zimbra__19266.2100460895$1385569843$gmane$org@efficios.com>
 References: <1385567313-8138-1-git-send-email-charlesbriere.flatzo@gmail.com>
-	<1385567313-8138-2-git-send-email-charlesbriere.flatzo@gmail.com>
+	<1385567313-8138-3-git-send-email-charlesbriere.flatzo@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1VlhhF-0003pX-5e
-	for lttng-dev@lists.lttng.org; Wed, 27 Nov 2013 11:10:42 -0500
-In-Reply-To: <1385567313-8138-2-git-send-email-charlesbriere.flatzo@gmail.com>
+	(envelope-from <compudj@efficios.com>) id 1Vlhzi-0004DA-0f
+	for lttng-dev@lists.lttng.org; Wed, 27 Nov 2013 11:29:48 -0500
+In-Reply-To: <1385567313-8138-3-git-send-email-charlesbriere.flatzo@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -28,91 +29,135 @@ List-Id: lttng-dev@lists.lttng.org
 ----- Original Message -----
 > From: "Charles Briere" <charlesbriere.flatzo@gmail.com>
 > To: "mathieu desnoyers" <mathieu.desnoyers@efficios.com>
-> Cc: lttng-dev@lists.lttng.org, "Charles Briere" <charlesbriere.flatzo@gmail.com>
-> Sent: Wednesday, November 27, 2013 10:48:30 AM
-> Subject: [PATCH liburcu 2/5] Dont link pthread on Android
+> Cc: lttng-dev@lists.lttng.org, "Pierre-Luc St-Charles" <pierre-luc.st-charles@polymtl.ca>, "Charles Briere"
+> <charlesbriere.flatzo@gmail.com>
+> Sent: Wednesday, November 27, 2013 10:48:31 AM
+> Subject: [PATCH liburcu 3/5] Added a compat layer for 'syscall.h'
 > 
-> On Android, pthread is already part of libc
-> called Bionic and doesn't have an external
-> library to link with.
+> From: Pierre-Luc St-Charles <pierre-luc.st-charles@polymtl.ca>
+> 
+> Path to include syscall.h is different on Android
 > 
 > Signed-off-by: Charles Briere <charlesbriere.flatzo@gmail.com>
 > ---
->  Makefile.am                  | 5 ++++-
->  tests/benchmark/Makefile.am  | 4 +++-
->  tests/regression/Makefile.am | 4 +++-
->  tests/unit/Makefile.am       | 4 +++-
->  4 files changed, 13 insertions(+), 4 deletions(-)
+>  Makefile.am              |  2 +-
+>  tests/common/thread-id.h |  5 ++---
+>  urcu.c                   |  2 +-
+>  urcu/futex.h             |  2 +-
+>  urcu/syscall-compat.h    | 36 ++++++++++++++++++++++++++++++++++++
+>  5 files changed, 41 insertions(+), 6 deletions(-)
+>  create mode 100644 urcu/syscall-compat.h
 > 
 > diff --git a/Makefile.am b/Makefile.am
-> index e09778f..baac8b9 100644
+> index baac8b9..64073a1 100644
 > --- a/Makefile.am
 > +++ b/Makefile.am
-> @@ -4,7 +4,10 @@ INCLUDES = -I$(top_builddir)/urcu
->  
->  #Add the -version-info directly here since we are only building
->  # library that use the version-info
-> -AM_LDFLAGS=-lpthread -version-info $(URCU_LIBRARY_VERSION)
-> +AM_LDFLAGS=-version-info $(URCU_LIBRARY_VERSION)
-> +if !TARGET_IS_ANDROID
-> +AM_LDFLAGS += -lpthread
-> +endif
->  AM_CFLAGS=-Wall
->  
->  SUBDIRS = . doc tests
-> diff --git a/tests/benchmark/Makefile.am b/tests/benchmark/Makefile.am
-> index e071034..91ba1da 100644
-> --- a/tests/benchmark/Makefile.am
-> +++ b/tests/benchmark/Makefile.am
-> @@ -1,4 +1,6 @@
-> -AM_LDFLAGS=-lpthread
-> +if !TARGET_IS_ANDROID
-> +AM_LDFLAGS += -lpthread
+> @@ -20,7 +20,7 @@ nobase_dist_include_HEADERS = urcu/compiler.h urcu/hlist.h
+> urcu/list.h \
+>  		urcu/wfqueue.h urcu/rculfstack.h urcu/rculfqueue.h \
+>  		urcu/ref.h urcu/cds.h urcu/urcu_ref.h urcu/urcu-futex.h \
+>  		urcu/uatomic_arch.h urcu/rculfhash.h urcu/wfcqueue.h \
+> -		urcu/lfstack.h \
+> +		urcu/lfstack.h urcu/syscall-compat.h \
+>  		$(top_srcdir)/urcu/map/*.h \
+>  		$(top_srcdir)/urcu/static/*.h \
+>  		urcu/tls-compat.h
+> diff --git a/tests/common/thread-id.h b/tests/common/thread-id.h
+> index 9378edc..bad3006 100644
+> --- a/tests/common/thread-id.h
+> +++ b/tests/common/thread-id.h
+> @@ -17,9 +17,8 @@
+>   * provided the above notices are retained, and a notice that the code was
+>   * modified is included with the above copyright notice.
+>   */
+> -
+> -#ifdef __linux__
+> -# include <syscall.h>
+> +#ifdef __Linux__
 
-change = for += is triggering those warnings
+Changing from __linux__ to __Linux__ breaks things here on non-Android.
+Why are you changing this ?
 
-./bootstrap 
-+ [ ! -e config ]
-+ autoreconf -i
-tests/benchmark/Makefile.am:2: AM_LDFLAGS must be set with `=' before using `+='
-tests/regression/Makefile.am:2: AM_LDFLAGS must be set with `=' before using `+='
-tests/unit/Makefile.am:2: AM_LDFLAGS must be set with `=' before using `+='
-autoreconf: automake failed with exit status: 1
-
-Will fix in the patch myself.
+In file included from test_rwlock.c:39:0:
+../../tests/common/thread-id.h:46:3: warning: #warning "use pid as thread ID" [-Wcpp]
 
 Thanks,
 
 Mathieu
 
-> +endif
->  AM_CFLAGS=-I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/tests/common -g
+> +# include <urcu/syscall-compat.h>
 >  
->  noinst_PROGRAMS = test_urcu test_urcu_dynamic_link test_urcu_timing \
-> diff --git a/tests/regression/Makefile.am b/tests/regression/Makefile.am
-> index 2c0542f..2cefa33 100644
-> --- a/tests/regression/Makefile.am
-> +++ b/tests/regression/Makefile.am
-> @@ -1,4 +1,6 @@
-> -AM_LDFLAGS=-lpthread
-> +if !TARGET_IS_ANDROID
-> +AM_LDFLAGS += -lpthread
-> +endif
->  AM_CFLAGS=-I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/tests/common -g
+>  # if defined(_syscall0)
+>  _syscall0(pid_t, gettid)
+> diff --git a/urcu.c b/urcu.c
+> index 759b94b..69ebcaa 100644
+> --- a/urcu.c
+> +++ b/urcu.c
+> @@ -66,7 +66,7 @@
+>   * RCU_MEMBARRIER is only possibly available on Linux.
+>   */
+>  #if defined(RCU_MEMBARRIER) && defined(__linux__)
+> -#include <syscall.h>
+> +#include <urcu/syscall-compat.h>
+>  #endif
 >  
->  noinst_PROGRAMS = test_urcu_fork \
-> diff --git a/tests/unit/Makefile.am b/tests/unit/Makefile.am
-> index 1fa8b71..85860e2 100644
-> --- a/tests/unit/Makefile.am
-> +++ b/tests/unit/Makefile.am
-> @@ -1,4 +1,6 @@
-> -AM_LDFLAGS=-lpthread
-> +if !TARGET_IS_ANDROID
-> +AM_LDFLAGS += -lpthread
-> +endif
->  AM_CFLAGS=-I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/tests/common -g
+>  /* If the headers do not support SYS_membarrier, fall back on RCU_MB */
+> diff --git a/urcu/futex.h b/urcu/futex.h
+> index cdaa430..bb270c2 100644
+> --- a/urcu/futex.h
+> +++ b/urcu/futex.h
+> @@ -45,7 +45,7 @@ extern "C" {
+>   */
 >  
->  noinst_PROGRAMS = test_uatomic \
+>  #ifdef CONFIG_RCU_HAVE_FUTEX
+> -#include <syscall.h>
+> +#include <urcu/syscall-compat.h>
+>  #define futex(...)	syscall(__NR_futex, __VA_ARGS__)
+>  #define futex_noasync(uaddr, op, val, timeout, uaddr2, val3)	\
+>  		futex(uaddr, op, val, timeout, uaddr2, val3)
+> diff --git a/urcu/syscall-compat.h b/urcu/syscall-compat.h
+> new file mode 100644
+> index 0000000..55576f0
+> --- /dev/null
+> +++ b/urcu/syscall-compat.h
+> @@ -0,0 +1,36 @@
+> +#ifndef _URCU_SYSCALL_COMPAT_H
+> +#define _URCU_SYSCALL_COMPAT_H
+> +
+> +/*
+> + * urcu/syscall-compat.h
+> + *
+> + * Userspace RCU library - Syscall Compatibility Header
+> + *
+> + * Copyright 2013 - Pierre-Luc St-Charles <pierre-luc.st-charles@polymtl.ca>
+> + *
+> + * Note: this file is only used to simplify the code required to
+> + * include the 'syscall.h' system header across multiple platforms,
+> + * which might not always be located at the same place (or needed at all).
+> + *
+> + * This library is free software; you can redistribute it and/or
+> + * modify it under the terms of the GNU Lesser General Public
+> + * License as published by the Free Software Foundation; either
+> + * version 2.1 of the License, or (at your option) any later version.
+> + *
+> + * This library is distributed in the hope that it will be useful,
+> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
+> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> + * Lesser General Public License for more details.
+> + *
+> + * You should have received a copy of the GNU Lesser General Public
+> + * License along with this library; if not, write to the Free Software
+> + * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301
+> USA
+> + */
+> +
+> +#if defined(__ANDROID__)
+> +#include <sys/syscall.h>
+> +#elif defined(__linux__)
+> +#include <syscall.h>
+> +#endif
+> +
+> +#endif /* _URCU_SYSCALL_COMPAT_H */
 > --
 > 1.8.4.2
 > 
