@@ -1,8 +1,8 @@
 From: Julien Desfossez <jdesfossez@efficios.com>
-Subject: [BABELTRACE PATCH 2/3] Handle packets containing only a
-	header
-Date: Wed, 27 Nov 2013 10:06:02 -0500
-Message-ID: <1385564763-1374-2-git-send-email-jdesfossez__45472.7323180579$1385564942$gmane$org@efficios.com>
+Subject: [BABELTRACE PATCH 3/3] Handle empty streams on iterator
+	init
+Date: Wed, 27 Nov 2013 10:06:03 -0500
+Message-ID: <1385564763-1374-3-git-send-email-jdesfossez__30639.694320462$1385565044$gmane$org@efficios.com>
 References: <1385564763-1374-1-git-send-email-jdesfossez@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,8 +10,8 @@ Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from smtp.ini-tech.com ([144.76.53.219])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jdesfossez@efficios.com>) id 1Vlggz-0007WJ-RD
-	for lttng-dev@lists.lttng.org; Wed, 27 Nov 2013 10:06:23 -0500
+	(envelope-from <jdesfossez@efficios.com>) id 1Vlgh1-0007WZ-8K
+	for lttng-dev@lists.lttng.org; Wed, 27 Nov 2013 10:06:27 -0500
 In-Reply-To: <1385564763-1374-1-git-send-email-jdesfossez@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -25,25 +25,40 @@ To: mathieu.desnoyers@efficios.com
 Cc: lttng-dev@lists.lttng.org, Julien Desfossez <jdesfossez@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
+In live trace streaming, we can create an iterator with inactive
+streams. This patch allows inactive streams to be considered as valid.
+
 Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
 ---
- formats/ctf/ctf.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ lib/iterator.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/formats/ctf/ctf.c b/formats/ctf/ctf.c
-index 5f263cd..477392b 100644
---- a/formats/ctf/ctf.c
-+++ b/formats/ctf/ctf.c
-@@ -476,6 +476,10 @@ int ctf_read_event(struct bt_stream_pos *ppos, struct ctf_stream_definition *str
- 		/* Stream is inactive for now (live reading). */
- 		return EAGAIN;
- 	}
-+	/* Packet only contains headers */
-+	if (pos->offset == pos->content_size)
-+		return EOF;
-+
- 	assert(pos->offset < pos->content_size);
+diff --git a/lib/iterator.c b/lib/iterator.c
+index 155fcbe..3280f4a 100644
+--- a/lib/iterator.c
++++ b/lib/iterator.c
+@@ -725,7 +725,7 @@ int bt_iter_init(struct bt_iter *iter,
+ 				if (ret == EOF) {
+ 					ret = 0;
+ 					continue;
+-				} else if (ret) {
++				} else if (ret != 0 && ret != EAGAIN) {
+ 					goto error;
+ 				}
+ 				/* Add to heap */
+@@ -821,6 +821,13 @@ reinsert:
+ 	removed = bt_heap_replace_max(iter->stream_heap, file_stream);
+ 	assert(removed == file_stream);
  
- 	/* Read event header */
++	file_stream = bt_heap_maximum(iter->stream_heap);
++	if (file_stream->pos.content_size == 0) {
++		ret = EAGAIN;
++	} else {
++		ret = 0;
++	}
++
+ end:
+ 	return ret;
+ }
 -- 
 1.8.3.2
