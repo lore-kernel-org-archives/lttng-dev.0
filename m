@@ -1,17 +1,19 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Tmf Ctf Parser Scalability issues (3/3)
-Date: Tue, 26 Nov 2013 23:07:20 +0000 (UTC)
-Message-ID: <206978342.76316.1385507240205.JavaMail.zimbra__39886.5683041096$1385507301$gmane$org@efficios.com>
-References: <5294D003.5040104@ericsson.com>
+From: Charles Briere <charlesbriere.flatzo@gmail.com>
+Subject: [PATCH liburcu 2/5] Dont link pthread on Android
+Date: Tue, 26 Nov 2013 21:08:19 -0800
+Message-ID: <1385528902-4797-2-git-send-email-charlesbriere.flatzo__33266.1940869459$1385529030$gmane$org@gmail.com>
+References: <1385528902-4797-1-git-send-email-charlesbriere.flatzo@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-pb0-f51.google.com ([209.85.160.51])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1VlRix-0006Dt-WA
-	for lttng-dev@lists.lttng.org; Tue, 26 Nov 2013 18:07:25 -0500
-In-Reply-To: <5294D003.5040104@ericsson.com>
+	(envelope-from <charlesbriere.flatzo@gmail.com>) id 1VlXNb-0002Me-Aj
+	for lttng-dev@lists.lttng.org; Wed, 27 Nov 2013 00:09:41 -0500
+Received: by mail-pb0-f51.google.com with SMTP id up15so9567160pbc.38
+	for <lttng-dev@lists.lttng.org>; Tue, 26 Nov 2013 21:09:33 -0800 (PST)
+In-Reply-To: <1385528902-4797-1-git-send-email-charlesbriere.flatzo@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,54 +22,73 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Matthew Khouzam <matthew.khouzam@ericsson.com>
-Cc: lttng-dev@lists.lttng.org, Linux Tools developer discussions <linuxtools-dev@eclipse.org>
+To: mathieu.desnoyers@efficios.com
+Cc: Charles Briere <charlesbriere.flatzo@gmail.com>, lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
------ Original Message -----
-> From: "Matthew Khouzam" <matthew.khouzam@ericsson.com>
-> To: lttng-dev@lists.lttng.org, "Linux Tools developer discussions" <linuxtools-dev@eclipse.org>
-> Sent: Tuesday, November 26, 2013 11:44:51 AM
-> Subject: [lttng-dev] Tmf Ctf Parser Scalability issues (3/3)
-> 
-> Hello all,
-> I was looking at the CTF parser in the TMF project of Linux Tools. I
-> have come up with three points where scalability will be an issue. I am
-> sending 3 emails, each one describing one of the issues so we can
-> aggregate them more cohesively. First a primer, CTF is a file format
-> that has traces written in packets, the packets are parts of files in
-> streams, the streams are files in a directory.
-> 
-> Issue 3: Event size
-> As hinted in the previous email, it can definitely be a possibility that
-> traces can have events that are too large to fit into memory. These
-> events could also make reading a packet difficult, since the packet
-> could have a said event in the middle, and therefore, we could end up
-> with a packet that cannot be read properly with the sliding window
-> memory map, unless corrective actions are taken.
-> 
-> Proposed solution:
-> Would anyone do this? I see it as a longer term problem and as a known
-> limitation, unless someone says "Hey, I want 8gb events!".
+On Android, pthread is already part of libc
+called Bionic and doesn't have an external
+library to link with.
 
-I'm tempted to say that we should put that limitation on individual
-non-compound field, rather than events. Therefore, you could not have
-such a large string, nor such a large integer, but you could very well
-have a very large array of integers within an event which would be 8gb
-in size.
+Signed-off-by: Charles Briere <charlesbriere.flatzo@gmail.com>
+---
+ Makefile.am                  | 5 ++++-
+ tests/benchmark/Makefile.am  | 4 +++-
+ tests/regression/Makefile.am | 4 +++-
+ tests/unit/Makefile.am       | 4 +++-
+ 4 files changed, 13 insertions(+), 4 deletions(-)
 
-Thanks,
-
-Mathieu
-
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> 
-
+diff --git a/Makefile.am b/Makefile.am
+index e09778f..baac8b9 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -4,7 +4,10 @@ INCLUDES = -I$(top_builddir)/urcu
+ 
+ #Add the -version-info directly here since we are only building
+ # library that use the version-info
+-AM_LDFLAGS=-lpthread -version-info $(URCU_LIBRARY_VERSION)
++AM_LDFLAGS=-version-info $(URCU_LIBRARY_VERSION)
++if !TARGET_IS_ANDROID
++AM_LDFLAGS += -lpthread
++endif
+ AM_CFLAGS=-Wall
+ 
+ SUBDIRS = . doc tests
+diff --git a/tests/benchmark/Makefile.am b/tests/benchmark/Makefile.am
+index e071034..91ba1da 100644
+--- a/tests/benchmark/Makefile.am
++++ b/tests/benchmark/Makefile.am
+@@ -1,4 +1,6 @@
+-AM_LDFLAGS=-lpthread
++if !TARGET_IS_ANDROID
++AM_LDFLAGS += -lpthread
++endif
+ AM_CFLAGS=-I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/tests/common -g
+ 
+ noinst_PROGRAMS = test_urcu test_urcu_dynamic_link test_urcu_timing \
+diff --git a/tests/regression/Makefile.am b/tests/regression/Makefile.am
+index 2c0542f..2cefa33 100644
+--- a/tests/regression/Makefile.am
++++ b/tests/regression/Makefile.am
+@@ -1,4 +1,6 @@
+-AM_LDFLAGS=-lpthread
++if !TARGET_IS_ANDROID
++AM_LDFLAGS += -lpthread
++endif
+ AM_CFLAGS=-I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/tests/common -g
+ 
+ noinst_PROGRAMS = test_urcu_fork \
+diff --git a/tests/unit/Makefile.am b/tests/unit/Makefile.am
+index 1fa8b71..85860e2 100644
+--- a/tests/unit/Makefile.am
++++ b/tests/unit/Makefile.am
+@@ -1,4 +1,6 @@
+-AM_LDFLAGS=-lpthread
++if !TARGET_IS_ANDROID
++AM_LDFLAGS += -lpthread
++endif
+ AM_CFLAGS=-I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/tests/common -g
+ 
+ noinst_PROGRAMS = test_uatomic \
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+1.8.4.2
