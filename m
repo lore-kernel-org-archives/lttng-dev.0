@@ -1,18 +1,19 @@
 From: Charles Briere <charlesbriere.flatzo@gmail.com>
-Subject: [PATCH liburcu 3/5] Added a compat layer for 'syscall.h'
-Date: Wed, 27 Nov 2013 07:48:31 -0800
-Message-ID: <1385567313-8138-3-git-send-email-charlesbriere.flatzo__18964.5248734907$1385567671$gmane$org@gmail.com>
+Subject: [PATCH liburcu 4/5] Fix: Do not redefine gettid on
+	Android
+Date: Wed, 27 Nov 2013 07:48:32 -0800
+Message-ID: <1385567313-8138-4-git-send-email-charlesbriere.flatzo__12277.2628478289$1385567776$gmane$org@gmail.com>
 References: <1385567313-8138-1-git-send-email-charlesbriere.flatzo@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-pb0-f41.google.com ([209.85.160.41])
+Received: from mail-pb0-f50.google.com ([209.85.160.50])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <charlesbriere.flatzo@gmail.com>) id 1VlhNF-0002UI-8c
-	for lttng-dev@lists.lttng.org; Wed, 27 Nov 2013 10:50:08 -0500
-Received: by mail-pb0-f41.google.com with SMTP id jt11so10702527pbb.28
-	for <lttng-dev@lists.lttng.org>; Wed, 27 Nov 2013 07:49:51 -0800 (PST)
+	(envelope-from <charlesbriere.flatzo@gmail.com>) id 1VlhNI-0002Va-Cu
+	for lttng-dev@lists.lttng.org; Wed, 27 Nov 2013 10:50:09 -0500
+Received: by mail-pb0-f50.google.com with SMTP id rr13so10695628pbb.9
+	for <lttng-dev@lists.lttng.org>; Wed, 27 Nov 2013 07:49:54 -0800 (PST)
 In-Reply-To: <1385567313-8138-1-git-send-email-charlesbriere.flatzo@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -26,116 +27,28 @@ To: mathieu.desnoyers@efficios.com
 Cc: Charles Briere <charlesbriere.flatzo@gmail.com>, lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-From: Pierre-Luc St-Charles <pierre-luc.st-charles@polymtl.ca>
-
-Path to include syscall.h is different on Android
+Bionic already defines gettid through <unistd.h>
 
 Signed-off-by: Charles Briere <charlesbriere.flatzo@gmail.com>
 ---
- Makefile.am              |  2 +-
- tests/common/thread-id.h |  5 ++---
- urcu.c                   |  2 +-
- urcu/futex.h             |  2 +-
- urcu/syscall-compat.h    | 36 ++++++++++++++++++++++++++++++++++++
- 5 files changed, 41 insertions(+), 6 deletions(-)
- create mode 100644 urcu/syscall-compat.h
+ tests/common/thread-id.h | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/Makefile.am b/Makefile.am
-index baac8b9..64073a1 100644
---- a/Makefile.am
-+++ b/Makefile.am
-@@ -20,7 +20,7 @@ nobase_dist_include_HEADERS = urcu/compiler.h urcu/hlist.h urcu/list.h \
- 		urcu/wfqueue.h urcu/rculfstack.h urcu/rculfqueue.h \
- 		urcu/ref.h urcu/cds.h urcu/urcu_ref.h urcu/urcu-futex.h \
- 		urcu/uatomic_arch.h urcu/rculfhash.h urcu/wfcqueue.h \
--		urcu/lfstack.h \
-+		urcu/lfstack.h urcu/syscall-compat.h \
- 		$(top_srcdir)/urcu/map/*.h \
- 		$(top_srcdir)/urcu/static/*.h \
- 		urcu/tls-compat.h
 diff --git a/tests/common/thread-id.h b/tests/common/thread-id.h
-index 9378edc..bad3006 100644
+index bad3006..b89a100 100644
 --- a/tests/common/thread-id.h
 +++ b/tests/common/thread-id.h
-@@ -17,9 +17,8 @@
-  * provided the above notices are retained, and a notice that the code was
-  * modified is included with the above copyright notice.
-  */
--
--#ifdef __linux__
--# include <syscall.h>
-+#ifdef __Linux__
-+# include <urcu/syscall-compat.h>
- 
- # if defined(_syscall0)
- _syscall0(pid_t, gettid)
-diff --git a/urcu.c b/urcu.c
-index 759b94b..69ebcaa 100644
---- a/urcu.c
-+++ b/urcu.c
-@@ -66,7 +66,7 @@
-  * RCU_MEMBARRIER is only possibly available on Linux.
-  */
- #if defined(RCU_MEMBARRIER) && defined(__linux__)
--#include <syscall.h>
-+#include <urcu/syscall-compat.h>
- #endif
- 
- /* If the headers do not support SYS_membarrier, fall back on RCU_MB */
-diff --git a/urcu/futex.h b/urcu/futex.h
-index cdaa430..bb270c2 100644
---- a/urcu/futex.h
-+++ b/urcu/futex.h
-@@ -45,7 +45,7 @@ extern "C" {
-  */
- 
- #ifdef CONFIG_RCU_HAVE_FUTEX
--#include <syscall.h>
-+#include <urcu/syscall-compat.h>
- #define futex(...)	syscall(__NR_futex, __VA_ARGS__)
- #define futex_noasync(uaddr, op, val, timeout, uaddr2, val3)	\
- 		futex(uaddr, op, val, timeout, uaddr2, val3)
-diff --git a/urcu/syscall-compat.h b/urcu/syscall-compat.h
-new file mode 100644
-index 0000000..55576f0
---- /dev/null
-+++ b/urcu/syscall-compat.h
-@@ -0,0 +1,36 @@
-+#ifndef _URCU_SYSCALL_COMPAT_H
-+#define _URCU_SYSCALL_COMPAT_H
-+
-+/*
-+ * urcu/syscall-compat.h
-+ *
-+ * Userspace RCU library - Syscall Compatibility Header
-+ *
-+ * Copyright 2013 - Pierre-Luc St-Charles <pierre-luc.st-charles@polymtl.ca>
-+ *
-+ * Note: this file is only used to simplify the code required to
-+ * include the 'syscall.h' system header across multiple platforms,
-+ * which might not always be located at the same place (or needed at all).
-+ *
-+ * This library is free software; you can redistribute it and/or
-+ * modify it under the terms of the GNU Lesser General Public
-+ * License as published by the Free Software Foundation; either
-+ * version 2.1 of the License, or (at your option) any later version.
-+ *
-+ * This library is distributed in the hope that it will be useful,
-+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
-+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-+ * Lesser General Public License for more details.
-+ *
-+ * You should have received a copy of the GNU Lesser General Public
-+ * License along with this library; if not, write to the Free Software
-+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+@@ -42,6 +42,11 @@ unsigned long urcu_get_thread_id(void)
+ {
+ 	return (unsigned long) pthread_getthreadid_np();
+ }
++#elif defined(__Android__)
++/* 
++ * Do not redefine gettid() as it is already included
++ * in bionic through <unistd.h>
 + */
-+
-+#if defined(__ANDROID__)
-+#include <sys/syscall.h>
-+#elif defined(__linux__)
-+#include <syscall.h>
-+#endif
-+
-+#endif /* _URCU_SYSCALL_COMPAT_H */
+ #else
+ # warning "use pid as thread ID"
+ static inline
 -- 
 1.8.4.2
