@@ -1,19 +1,17 @@
 From: Charles Briere <charlesbriere.flatzo@gmail.com>
-Subject: [PATCH liburcu 2/5] Dont link pthread on Android
-Date: Wed, 27 Nov 2013 07:48:30 -0800
-Message-ID: <1385567313-8138-2-git-send-email-charlesbriere.flatzo__1686.06443699009$1385567457$gmane$org@gmail.com>
-References: <1385567313-8138-1-git-send-email-charlesbriere.flatzo@gmail.com>
+Subject: [PATCH liburcu 1/5] configure.ac Android check
+Date: Wed, 27 Nov 2013 07:48:29 -0800
+Message-ID: <1385567313-8138-1-git-send-email-charlesbriere.flatzo__601.242253515188$1385567561$gmane$org@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-pd0-f177.google.com ([209.85.192.177])
+Received: from mail-pb0-f44.google.com ([209.85.160.44])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <charlesbriere.flatzo@gmail.com>) id 1VlhNF-0002UC-4W
-	for lttng-dev@lists.lttng.org; Wed, 27 Nov 2013 10:50:03 -0500
-Received: by mail-pd0-f177.google.com with SMTP id q10so10121425pdj.22
-	for <lttng-dev@lists.lttng.org>; Wed, 27 Nov 2013 07:49:51 -0800 (PST)
-In-Reply-To: <1385567313-8138-1-git-send-email-charlesbriere.flatzo@gmail.com>
+	(envelope-from <charlesbriere.flatzo@gmail.com>) id 1VlhNC-0002Sm-KU
+	for lttng-dev@lists.lttng.org; Wed, 27 Nov 2013 10:50:04 -0500
+Received: by mail-pb0-f44.google.com with SMTP id rq2so10625720pbb.17
+	for <lttng-dev@lists.lttng.org>; Wed, 27 Nov 2013 07:49:48 -0800 (PST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -26,69 +24,29 @@ To: mathieu.desnoyers@efficios.com
 Cc: Charles Briere <charlesbriere.flatzo@gmail.com>, lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On Android, pthread is already part of libc
-called Bionic and doesn't have an external
-library to link with.
+Set TARGET_IS_ANDROID to true if target
+is Android
 
 Signed-off-by: Charles Briere <charlesbriere.flatzo@gmail.com>
 ---
- Makefile.am                  | 5 ++++-
- tests/benchmark/Makefile.am  | 4 +++-
- tests/regression/Makefile.am | 4 +++-
- tests/unit/Makefile.am       | 4 +++-
- 4 files changed, 13 insertions(+), 4 deletions(-)
+ configure.ac | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/Makefile.am b/Makefile.am
-index e09778f..baac8b9 100644
---- a/Makefile.am
-+++ b/Makefile.am
-@@ -4,7 +4,10 @@ INCLUDES = -I$(top_builddir)/urcu
+diff --git a/configure.ac b/configure.ac
+index 0aae5fd..a2a0bcd 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -82,6 +82,11 @@ AS_CASE([$host_cpu],
+ 	[ARCHTYPE="unknown"]
+ )
  
- #Add the -version-info directly here since we are only building
- # library that use the version-info
--AM_LDFLAGS=-lpthread -version-info $(URCU_LIBRARY_VERSION)
-+AM_LDFLAGS=-version-info $(URCU_LIBRARY_VERSION)
-+if !TARGET_IS_ANDROID
-+AM_LDFLAGS += -lpthread
-+endif
- AM_CFLAGS=-Wall
++AS_CASE([$host],[*-*-linux-androideabi],
++	[AM_CONDITIONAL(TARGET_IS_ANDROID, true)],
++	[AM_CONDITIONAL(TARGET_IS_ANDROID, false)]
++)
++
+ AC_SUBST(ARCHTYPE)
+ AC_SUBST(SUBARCHTYPE)
  
- SUBDIRS = . doc tests
-diff --git a/tests/benchmark/Makefile.am b/tests/benchmark/Makefile.am
-index e071034..91ba1da 100644
---- a/tests/benchmark/Makefile.am
-+++ b/tests/benchmark/Makefile.am
-@@ -1,4 +1,6 @@
--AM_LDFLAGS=-lpthread
-+if !TARGET_IS_ANDROID
-+AM_LDFLAGS += -lpthread
-+endif
- AM_CFLAGS=-I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/tests/common -g
- 
- noinst_PROGRAMS = test_urcu test_urcu_dynamic_link test_urcu_timing \
-diff --git a/tests/regression/Makefile.am b/tests/regression/Makefile.am
-index 2c0542f..2cefa33 100644
---- a/tests/regression/Makefile.am
-+++ b/tests/regression/Makefile.am
-@@ -1,4 +1,6 @@
--AM_LDFLAGS=-lpthread
-+if !TARGET_IS_ANDROID
-+AM_LDFLAGS += -lpthread
-+endif
- AM_CFLAGS=-I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/tests/common -g
- 
- noinst_PROGRAMS = test_urcu_fork \
-diff --git a/tests/unit/Makefile.am b/tests/unit/Makefile.am
-index 1fa8b71..85860e2 100644
---- a/tests/unit/Makefile.am
-+++ b/tests/unit/Makefile.am
-@@ -1,4 +1,6 @@
--AM_LDFLAGS=-lpthread
-+if !TARGET_IS_ANDROID
-+AM_LDFLAGS += -lpthread
-+endif
- AM_CFLAGS=-I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/tests/common -g
- 
- noinst_PROGRAMS = test_uatomic \
 -- 
 1.8.4.2
