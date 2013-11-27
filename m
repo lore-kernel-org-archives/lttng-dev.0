@@ -1,19 +1,18 @@
 From: Charles Briere <charlesbriere.flatzo@gmail.com>
-Subject: [PATCH liburcu 4/5] Fix: Do not redefine gettid on
-	Android
-Date: Wed, 27 Nov 2013 07:48:32 -0800
-Message-ID: <1385567313-8138-4-git-send-email-charlesbriere.flatzo__12277.2628478289$1385567776$gmane$org@gmail.com>
+Subject: [PATCH liburcu 5/5] Added implementation for rand_r()
+Date: Wed, 27 Nov 2013 07:48:33 -0800
+Message-ID: <1385567313-8138-5-git-send-email-charlesbriere.flatzo__10075.7700311535$1385567898$gmane$org@gmail.com>
 References: <1385567313-8138-1-git-send-email-charlesbriere.flatzo@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-pb0-f50.google.com ([209.85.160.50])
+Received: from mail-pd0-f176.google.com ([209.85.192.176])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <charlesbriere.flatzo@gmail.com>) id 1VlhNI-0002Va-Cu
+	(envelope-from <charlesbriere.flatzo@gmail.com>) id 1VlhNJ-0002Wz-VJ
 	for lttng-dev@lists.lttng.org; Wed, 27 Nov 2013 10:50:09 -0500
-Received: by mail-pb0-f50.google.com with SMTP id rr13so10695628pbb.9
-	for <lttng-dev@lists.lttng.org>; Wed, 27 Nov 2013 07:49:54 -0800 (PST)
+Received: by mail-pd0-f176.google.com with SMTP id w10so10116740pde.21
+	for <lttng-dev@lists.lttng.org>; Wed, 27 Nov 2013 07:49:56 -0800 (PST)
 In-Reply-To: <1385567313-8138-1-git-send-email-charlesbriere.flatzo@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -27,28 +26,123 @@ To: mathieu.desnoyers@efficios.com
 Cc: Charles Briere <charlesbriere.flatzo@gmail.com>, lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Bionic already defines gettid through <unistd.h>
+From: Pierre-Luc St-Charles <pierre-luc.st-charles@polymtl.ca>
+
+stdlib.h doesn't implement rand_r() on Android.
 
 Signed-off-by: Charles Briere <charlesbriere.flatzo@gmail.com>
 ---
- tests/common/thread-id.h | 5 +++++
- 1 file changed, 5 insertions(+)
+ Makefile.am                      |  1 +
+ tests/benchmark/test_urcu_hash.h |  1 +
+ urcu/rand-compat.h               | 63 ++++++++++++++++++++++++++++++++++++++++
+ urcu/static/urcu.h               |  1 +
+ 4 files changed, 66 insertions(+)
+ create mode 100644 urcu/rand-compat.h
 
-diff --git a/tests/common/thread-id.h b/tests/common/thread-id.h
-index bad3006..b89a100 100644
---- a/tests/common/thread-id.h
-+++ b/tests/common/thread-id.h
-@@ -42,6 +42,11 @@ unsigned long urcu_get_thread_id(void)
- {
- 	return (unsigned long) pthread_getthreadid_np();
- }
-+#elif defined(__Android__)
-+/* 
-+ * Do not redefine gettid() as it is already included
-+ * in bionic through <unistd.h>
+diff --git a/Makefile.am b/Makefile.am
+index 64073a1..38ff543 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -23,6 +23,7 @@ nobase_dist_include_HEADERS = urcu/compiler.h urcu/hlist.h urcu/list.h \
+ 		urcu/lfstack.h urcu/syscall-compat.h \
+ 		$(top_srcdir)/urcu/map/*.h \
+ 		$(top_srcdir)/urcu/static/*.h \
++		urcu/rand-compat.h \
+ 		urcu/tls-compat.h
+ nobase_nodist_include_HEADERS = urcu/arch.h urcu/uatomic.h urcu/config.h
+ 
+diff --git a/tests/benchmark/test_urcu_hash.h b/tests/benchmark/test_urcu_hash.h
+index c0727b7..b35acdb 100644
+--- a/tests/benchmark/test_urcu_hash.h
++++ b/tests/benchmark/test_urcu_hash.h
+@@ -37,6 +37,7 @@
+ #include <signal.h>
+ 
+ #include <urcu/tls-compat.h>
++#include <urcu/rand-compat.h>
+ #include "cpuset.h"
+ #include "thread-id.h"
+ 
+diff --git a/urcu/rand-compat.h b/urcu/rand-compat.h
+new file mode 100644
+index 0000000..2c57751
+--- /dev/null
++++ b/urcu/rand-compat.h
+@@ -0,0 +1,63 @@
++#ifndef _URCU_RAND_COMPAT_H
++#define _URCU_RAND_COMPAT_H
++
++/*
++ * urcu/rand-compat.h
++ *
++ * Userspace RCU library - rand/rand_r Compatibility Header
++ *
++ * Copyright 1996 - Ulrich Drepper <drepper@cygnus.com >
++ * Copyright 2013 - Pierre-Luc St-Charles <pierre-luc.st-charles@polymtl.ca>
++ *
++ * Note: this file is only used to simplify the code required to
++ * use the 'rand_r(...)' system function across multiple platforms,
++ * which might not always be referenced the same way.
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 + */
- #else
- # warning "use pid as thread ID"
- static inline
++
++#ifdef __ANDROID__
++/*
++ * Reentrant random function from POSIX.1c.
++ * Copyright (C) 1996, 1999 Free Software Foundation, Inc.
++ * This file is part of the GNU C Library.
++ * Contributed by Ulrich Drepper <drepper@cygnus.com <mailto:drepper@cygnus.com>>, 1996.
++ */
++static inline int rand_r(unsigned int *seed)
++{
++       unsigned int next = *seed;
++       int result;
++
++       next *= 1103515245;
++       next += 12345;
++       result = (unsigned int) (next / 65536) % 2048;
++
++       next *= 1103515245;
++       next += 12345;
++       result <<= 10;
++       result ^= (unsigned int) (next / 65536) % 1024;
++
++       next *= 1103515245;
++       next += 12345;
++       result <<= 10;
++       result ^= (unsigned int) (next / 65536) % 1024;
++
++       *seed = next;
++
++       return result;
++}
++#endif /* __ANDROID__ */
++
++#endif /* _URCU_RAND_COMPAT_H */
+diff --git a/urcu/static/urcu.h b/urcu/static/urcu.h
+index 53d2610..33545b7 100644
+--- a/urcu/static/urcu.h
++++ b/urcu/static/urcu.h
+@@ -41,6 +41,7 @@
+ #include <urcu/list.h>
+ #include <urcu/futex.h>
+ #include <urcu/tls-compat.h>
++#include <urcu/rand-compat.h>
+ 
+ #ifdef __cplusplus
+ extern "C" {
 -- 
 1.8.4.2
