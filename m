@@ -1,19 +1,20 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [BABELTRACE PATCH 3/3] Handle empty streams on
-	iterator init
-Date: Wed, 27 Nov 2013 17:41:25 +0000 (UTC)
-Message-ID: <24722733.76810.1385574085881.JavaMail.zimbra__17096.3717661381$1385574148$gmane$org@efficios.com>
-References: <1385570412-31370-1-git-send-email-jdesfossez@efficios.com>
-	<1385570412-31370-3-git-send-email-jdesfossez@efficios.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Subject: Re: [PATCH liburcu 2/5] Dont link pthread on Android
+Date: Thu, 28 Nov 2013 10:30:24 +0100
+Message-ID: <20131128103024.3341ccc8__28333.6416156546$1385631111$gmane$org@skate>
+References: <1385567313-8138-1-git-send-email-charlesbriere.flatzo@gmail.com>
+	<1385567313-8138-2-git-send-email-charlesbriere.flatzo@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from top.free-electrons.com ([176.31.233.9]
+	helo=mail.free-electrons.com)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1Vlj79-0003rm-9W
-	for lttng-dev@lists.lttng.org; Wed, 27 Nov 2013 12:41:33 -0500
-In-Reply-To: <1385570412-31370-3-git-send-email-jdesfossez@efficios.com>
+	(envelope-from <thomas.petazzoni@free-electrons.com>)
+	id 1Vlxvc-0001Tl-Cb
+	for lttng-dev@lists.lttng.org; Thu, 28 Nov 2013 04:30:38 -0500
+In-Reply-To: <1385567313-8138-2-git-send-email-charlesbriere.flatzo@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,62 +23,34 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Julien Desfossez <jdesfossez@efficios.com>
+To: Charles Briere <charlesbriere.flatzo@gmail.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-All 3 patches merged, thanks!
+Dear Charles Briere,
 
-Mathieu
+On Wed, 27 Nov 2013 07:48:30 -0800, Charles Briere wrote:
 
------ Original Message -----
-> From: "Julien Desfossez" <jdesfossez@efficios.com>
-> To: "mathieu desnoyers" <mathieu.desnoyers@efficios.com>
-> Cc: lttng-dev@lists.lttng.org, "Julien Desfossez" <jdesfossez@efficios.com>
-> Sent: Wednesday, November 27, 2013 11:40:12 AM
-> Subject: [BABELTRACE PATCH 3/3] Handle empty streams on iterator init
-> 
-> In live trace streaming, we can create an iterator with inactive
-> streams. This patch allows inactive streams to be considered as valid.
-> 
-> Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
-> ---
->  lib/iterator.c | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/lib/iterator.c b/lib/iterator.c
-> index 155fcbe..3280f4a 100644
-> --- a/lib/iterator.c
-> +++ b/lib/iterator.c
-> @@ -725,7 +725,7 @@ int bt_iter_init(struct bt_iter *iter,
->  				if (ret == EOF) {
->  					ret = 0;
->  					continue;
-> -				} else if (ret) {
-> +				} else if (ret != 0 && ret != EAGAIN) {
->  					goto error;
->  				}
->  				/* Add to heap */
-> @@ -821,6 +821,13 @@ reinsert:
->  	removed = bt_heap_replace_max(iter->stream_heap, file_stream);
->  	assert(removed == file_stream);
->  
-> +	file_stream = bt_heap_maximum(iter->stream_heap);
-> +	if (file_stream->pos.content_size == 0) {
-> +		ret = EAGAIN;
-> +	} else {
-> +		ret = 0;
-> +	}
-> +
->  end:
->  	return ret;
->  }
-> --
-> 1.8.3.2
-> 
-> 
+>  #Add the -version-info directly here since we are only building
+>  # library that use the version-info
+> -AM_LDFLAGS=-lpthread -version-info $(URCU_LIBRARY_VERSION)
+> +AM_LDFLAGS=-version-info $(URCU_LIBRARY_VERSION)
+> +if !TARGET_IS_ANDROID
+> +AM_LDFLAGS += -lpthread
+> +endif
 
+Instead of making that conditional on Android, wouldn't it make more
+sense to make it conditional on whether linking with pthread is
+necessary or not?
+
+I can at least think of one other C library than Bionic that has
+everything in libc instead of things split in several libraries: the
+Musl C library (http://www.musl-libc.org).
+
+Best regards,
+
+Thomas
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
