@@ -1,17 +1,19 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: Re: lttng-tools build error: non-dynamic relocations
- refer to dynamic symbol lttcomm_inet_tcp_timeout
-Date: Thu, 28 Nov 2013 15:32:43 -0500
-Message-ID: <20131128203243.GC8372__16974.4598017589$1385670838$gmane$org@thessa>
-References: <CAO_ArvpzYu+bVKKi956eiObSd+sg-6Aarhy+h5MZqcDk5S-eqg@mail.gmail.com>
+From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
+	<jeremie.galarneau@efficios.com>
+Subject: [PATCH babeltrace 1/2] Fix ctf-writer: Quote strings
+	provided as enumeration mappings
+Date: Thu, 28 Nov 2013 15:46:40 -0500
+Message-ID: <1385671601-5884-1-git-send-email-jeremie.galarneau__35196.2534864016$1385671670$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1554445460=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([144.76.53.219])
+Received: from mail-qe0-f43.google.com ([209.85.128.43])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1Vm8GZ-0005DO-NG
-	for lttng-dev@lists.lttng.org; Thu, 28 Nov 2013 15:32:58 -0500
-In-Reply-To: <CAO_ArvpzYu+bVKKi956eiObSd+sg-6Aarhy+h5MZqcDk5S-eqg@mail.gmail.com>
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1Vm8U4-0003XM-9E
+	for lttng-dev@lists.lttng.org; Thu, 28 Nov 2013 15:46:54 -0500
+Received: by mail-qe0-f43.google.com with SMTP id 2so9490286qeb.16
+	for <lttng-dev@lists.lttng.org>; Thu, 28 Nov 2013 12:46:42 -0800 (PST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,130 +22,55 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: kumar s <skumar.m226@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-
---===============1554445460==
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="S1BNGpv0yoYahz37"
-Content-Disposition: inline
-
-
---S1BNGpv0yoYahz37
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 27 Nov (15:37:10), kumar s wrote:
-> Hi,
->=20
-> I am getting non dynamic relocation error while trying to build
-> lttng-tools. I have configured the lttng-tools for mips-gcc.
->=20
-> Making all in lttng-sessiond
-> make[3]: Entering directory
-> `/home/shkumar/lttng-tools/lttng-tools/src/bin/lttng-sessiond'
->   CC     utils.o
->   CC     trace-kernel.o
->   CC     kernel.o
->   CC     context.o
->   CC     channel.o
->   CC     event.o
->   CC     shm.o
->   CC     consumer.o
->   CC     session.o
->   CC     modprobe.o
->   CC     fd-limit.o
->   CC     kernel-consumer.o
->   CC     cmd.o
->   CC     buffer-registry.o
->   CC     ht-cleanup.o
->   CC     snapshot.o
->   CC     jul.o
->   CC     main.o
-> main.c: In function 'thread_dispatch_ust_registration':
-> main.c:1564: warning: 'cds_wfq_dequeue_blocking' is deprecated (declared =
-at
-> /home/shkumar/Development_Merge/NewOCT/popt-1.16/popt_installed/include/u=
-rcu/wfqueue.h:88)
-> main.c: In function 'thread_registration_apps':
-> main.c:1917: warning: 'cds_wfq_enqueue' is deprecated (declared at
-> /home/shkumar/Development_Merge/NewOCT/popt-1.16/popt_installed/include/u=
-rcu/wfqueue.h:76)
-> main.c: In function 'main':
-> main.c:4891: warning: 'cds_wfq_init' is deprecated (declared at
-> /home/shkumar/Development_Merge/NewOCT/popt-1.16/popt_installed/include/u=
-rcu/wfqueue.h:70)
->   CCLD   lttng-sessiond
-> /home/shkumar/Development_Merge/NewOCT/OCTEON_SDK/octeon_sdk/OCTEON-SDK/t=
-ools-gcc-4.3/bin/../lib/gcc/mips64-octeon-linux-gnu/4.3.3/../../../../mips6=
-4-octeon-linux-gnu/bin/ld:
-> non-dynamic relocations refer to dynamic symbol lttcomm_inet_tcp_timeout
-> /home/shkumar/Development_Merge/NewOCT/OCTEON_SDK/octeon_sdk/OCTEON-SDK/t=
-ools-gcc-4.3/bin/../lib/gcc/mips64-octeon-linux-gnu/4.3.3/../../../../mips6=
-4-octeon-linux-gnu/bin/ld:
-> failed to set dynamic section sizes: Bad value
-
-Looks quite the same here:
-https://sourceware.org/bugzilla/show_bug.cgi?id=3D10144#c8
-
-It seems that this is a gcc bug with -g. I'm not too familiar with MIPS
-but you could try removing the -g or using "-mplt" as stated in the bug.
-
-Cheers!
-David
-
-> collect2: ld returned 1 exit status
-> make[3]: *** [lttng-sessiond] Error 1
-> make[3]: Leaving directory
-> `/home/shkumar/lttng-tools/lttng-tools/src/bin/lttng-sessiond'
-> make[2]: *** [all-recursive] Error 1
-> make[2]: Leaving directory `/home/shkumar/lttng-tools/lttng-tools/src/bin'
-> make[1]: *** [all-recursive] Error 1
-> make[1]: Leaving directory `/home/shkumar/lttng-tools/lttng-tools/src'
-> make: *** [all-recursive] Error 1
->=20
-> Thank you
-> Skumar
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
-
---S1BNGpv0yoYahz37
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.15 (GNU/Linux)
-
-iQF8BAEBAgBmBQJSl6hqXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
-ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
-MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02LUcIAJVopi0arP9KF8H03sWWk+kV
-AbH6Oihc+SMBatx0H36zCRcTOjFb5GL9riYzIVVyClvEqW9DaQw27fig1e17xBFu
-5eB4T+BuaFywMxcGwxcd6aZ+ESgLQR/5M6PO8wJCktNB4gAJz66doLFxjcdJywfG
-N6VJWJ1cRm+5g0EP03VAjUXmtuTtQO+3dwMAmUEfzn5OnqtOPG8rn28ACuAkzQ/F
-MdcAbHV266AUQeNR+c6peG/jlWQbt0MeFYKUrEhkDURrJJgiBAD2+t7AJqvldgUd
-4vGdMpbUYOzmiiPkWduyRUEr5PrvQJuvJ0R29QjTir4F5E1NtUvl6NMC3cTUo7I=
-=8c31
------END PGP SIGNATURE-----
-
---S1BNGpv0yoYahz37--
-
-
---===============1554445460==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1554445460==--
+U2lnbmVkLW9mZi1ieTogSsOpcsOpbWllIEdhbGFybmVhdSA8amVyZW1pZS5nYWxhcm5lYXVAZWZm
+aWNpb3MuY29tPgotLS0KIGZvcm1hdHMvY3RmL3dyaXRlci9ldmVudC10eXBlcy5jIHwgMjMgKysr
+KysrKysrKysrKysrKystLS0tLS0KIDEgZmlsZSBjaGFuZ2VkLCAxNyBpbnNlcnRpb25zKCspLCA2
+IGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL2Zvcm1hdHMvY3RmL3dyaXRlci9ldmVudC10eXBl
+cy5jIGIvZm9ybWF0cy9jdGYvd3JpdGVyL2V2ZW50LXR5cGVzLmMKaW5kZXggNGVkOWZlZC4uN2Y3
+ZmE3NiAxMDA2NDQKLS0tIGEvZm9ybWF0cy9jdGYvd3JpdGVyL2V2ZW50LXR5cGVzLmMKKysrIGIv
+Zm9ybWF0cy9jdGYvd3JpdGVyL2V2ZW50LXR5cGVzLmMKQEAgLTMzLDYgKzMzLDcgQEAKICNpbmNs
+dWRlIDxiYWJlbHRyYWNlL2VuZGlhbi5oPgogI2luY2x1ZGUgPGZsb2F0Lmg+CiAjaW5jbHVkZSA8
+aW50dHlwZXMuaD4KKyNpbmNsdWRlIDxzdGRsaWIuaD4KIAogc3RydWN0IHJhbmdlX292ZXJsYXBf
+cXVlcnkgewogCWludDY0X3QgcmFuZ2Vfc3RhcnQsIHJhbmdlX2VuZDsKQEAgLTM4NSw2ICszODYs
+NyBAQCBpbnQgYnRfY3RmX2ZpZWxkX3R5cGVfZW51bWVyYXRpb25fYWRkX21hcHBpbmcoCiAJc3Ry
+dWN0IGVudW1lcmF0aW9uX21hcHBpbmcgKm1hcHBpbmc7CiAJc3RydWN0IGJ0X2N0Zl9maWVsZF90
+eXBlX2VudW1lcmF0aW9uICplbnVtZXJhdGlvbjsKIAlzdHJ1Y3QgcmFuZ2Vfb3ZlcmxhcF9xdWVy
+eSBxdWVyeTsKKwljaGFyICplc2NhcGVkX3N0cmluZzsKIAogCWlmICghdHlwZSB8fCAodHlwZS0+
+ZGVjbGFyYXRpb24tPmlkICE9IENURl9UWVBFX0VOVU0pIHx8CiAJCXR5cGUtPmZyb3plbiB8fApA
+QCAtMzkzLDEyICszOTUsMTggQEAgaW50IGJ0X2N0Zl9maWVsZF90eXBlX2VudW1lcmF0aW9uX2Fk
+ZF9tYXBwaW5nKAogCQlnb3RvIGVuZDsKIAl9CiAKLQlpZiAodmFsaWRhdGVfaWRlbnRpZmllcihz
+dHJpbmcpKSB7CisJaWYgKCFzdHJpbmcgfHwgc3RybGVuKHN0cmluZykgPT0gMCkgewogCQlyZXQg
+PSAtMTsKIAkJZ290byBlbmQ7CiAJfQogCi0JbWFwcGluZ19uYW1lID0gZ19xdWFya19mcm9tX3N0
+cmluZyhzdHJpbmcpOworCWVzY2FwZWRfc3RyaW5nID0gZ19zdHJlc2NhcGUoc3RyaW5nLCBOVUxM
+KTsKKwlpZiAoIWVzY2FwZWRfc3RyaW5nKSB7CisJCXJldCA9IC0xOworCQlnb3RvIGVuZDsKKwl9
+CisKKwltYXBwaW5nX25hbWUgPSBnX3F1YXJrX2Zyb21fc3RyaW5nKGVzY2FwZWRfc3RyaW5nKTsK
+IAlxdWVyeSA9IChzdHJ1Y3QgcmFuZ2Vfb3ZlcmxhcF9xdWVyeSkgeyAucmFuZ2Vfc3RhcnQgPSBy
+YW5nZV9zdGFydCwKIAkJLnJhbmdlX2VuZCA9IHJhbmdlX2VuZCwKIAkJLm1hcHBpbmdfbmFtZSA9
+IG1hcHBpbmdfbmFtZSwKQEAgLTQxMCwxOCArNDE4LDIwIEBAIGludCBidF9jdGZfZmllbGRfdHlw
+ZV9lbnVtZXJhdGlvbl9hZGRfbWFwcGluZygKIAlnX3B0cl9hcnJheV9mb3JlYWNoKGVudW1lcmF0
+aW9uLT5lbnRyaWVzLCBjaGVja19yYW5nZXNfb3ZlcmxhcCwgJnF1ZXJ5KTsKIAlpZiAocXVlcnku
+b3ZlcmxhcHMpIHsKIAkJcmV0ID0gLTE7Ci0JCWdvdG8gZW5kOworCQlnb3RvIGVycm9yX2ZyZWU7
+CiAJfQogCiAJbWFwcGluZyA9IGdfbmV3KHN0cnVjdCBlbnVtZXJhdGlvbl9tYXBwaW5nLCAxKTsK
+IAlpZiAoIW1hcHBpbmcpIHsKIAkJcmV0ID0gLTE7Ci0JCWdvdG8gZW5kOworCQlnb3RvIGVycm9y
+X2ZyZWU7CiAJfQogCiAJKm1hcHBpbmcgPSAoc3RydWN0IGVudW1lcmF0aW9uX21hcHBpbmcpIHsu
+cmFuZ2Vfc3RhcnQgPSByYW5nZV9zdGFydCwKIAkJLnJhbmdlX2VuZCA9IHJhbmdlX2VuZCwgLnN0
+cmluZyA9IG1hcHBpbmdfbmFtZX07CiAJZ19wdHJfYXJyYXlfYWRkKGVudW1lcmF0aW9uLT5lbnRy
+aWVzLCBtYXBwaW5nKTsKK2Vycm9yX2ZyZWU6CisJZnJlZShlc2NhcGVkX3N0cmluZyk7CiBlbmQ6
+CiAJcmV0dXJuIHJldDsKIH0KQEAgLTEyMDAsMTIgKzEyMTAsMTMgQEAgaW50IGJ0X2N0Zl9maWVs
+ZF90eXBlX2VudW1lcmF0aW9uX3NlcmlhbGl6ZShzdHJ1Y3QgYnRfY3RmX2ZpZWxkX3R5cGUgKnR5
+cGUsCiAJCQllbnVtZXJhdGlvbi0+ZW50cmllcy0+cGRhdGFbZW50cnldOwogCiAJCWlmIChtYXBw
+aW5nLT5yYW5nZV9zdGFydCA9PSBtYXBwaW5nLT5yYW5nZV9lbmQpIHsKLQkJCWdfc3RyaW5nX2Fw
+cGVuZF9wcmludGYoY29udGV4dC0+c3RyaW5nLCAiJXMgPSAlIiBQUklkNjQsCisJCQlnX3N0cmlu
+Z19hcHBlbmRfcHJpbnRmKGNvbnRleHQtPnN0cmluZywKKwkJCQkiXCIlc1wiID0gJSIgUFJJZDY0
+LAogCQkJCWdfcXVhcmtfdG9fc3RyaW5nKG1hcHBpbmctPnN0cmluZyksCiAJCQkJbWFwcGluZy0+
+cmFuZ2Vfc3RhcnQpOwogCQl9IGVsc2UgewogCQkJZ19zdHJpbmdfYXBwZW5kX3ByaW50Zihjb250
+ZXh0LT5zdHJpbmcsCi0JCQkJIiVzID0gJSIgUFJJZDY0ICIgLi4uICUiIFBSSWQ2NCwKKwkJCQki
+XCIlc1wiID0gJSIgUFJJZDY0ICIgLi4uICUiIFBSSWQ2NCwKIAkJCQlnX3F1YXJrX3RvX3N0cmlu
+ZyhtYXBwaW5nLT5zdHJpbmcpLAogCQkJCW1hcHBpbmctPnJhbmdlX3N0YXJ0LCBtYXBwaW5nLT5y
+YW5nZV9lbmQpOwogCQl9Ci0tIAoxLjguNC4yCgoKX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlz
+dHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3Rp
+bmZvL2x0dG5nLWRldgo=
