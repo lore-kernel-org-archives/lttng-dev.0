@@ -1,18 +1,21 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-ust 0/3] Solve remaining issues with
- base-address-state tracing
-Date: Thu, 28 Nov 2013 15:59:18 +0000 (UTC)
-Message-ID: <1334310693.77201.1385654358360.JavaMail.zimbra__5199.20294541425$1385654426$gmane$org@efficios.com>
-References: <1385641614-18806-1-git-send-email-paul_woegerer@mentor.com>
+From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
+	<jeremie.galarneau@efficios.com>
+Subject: [PATCH babeltrace python/bindings] Python-bindings fix:
+	Out of tree build fails to find babeltrace.i
+Date: Thu, 28 Nov 2013 13:19:10 -0500
+Message-ID: <1385662750-32501-1-git-send-email-jeremie.galarneau__13265.8611088575$1385662823$gmane$org@efficios.com>
+References: <414873996.74599.1385256701005.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-qa0-f51.google.com ([209.85.216.51])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1Vm3zv-00011J-0r
-	for lttng-dev@lists.lttng.org; Thu, 28 Nov 2013 10:59:30 -0500
-In-Reply-To: <1385641614-18806-1-git-send-email-paul_woegerer@mentor.com>
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1Vm6BK-0000Lk-VU
+	for lttng-dev@lists.lttng.org; Thu, 28 Nov 2013 13:19:24 -0500
+Received: by mail-qa0-f51.google.com with SMTP id o15so1027326qap.10
+	for <lttng-dev@lists.lttng.org>; Thu, 28 Nov 2013 10:19:13 -0800 (PST)
+In-Reply-To: <414873996.74599.1385256701005.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,94 +24,37 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Paul Woegerer <paul_woegerer@mentor.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Merged patches 1 and 3, not 2. I also did another commit to move files around and
-simplify things.
-
-We need to discuss the deadlock fix more thoroughly.
-
-Thanks,
-
-Mathieu
-
------ Original Message -----
-> From: "Paul Woegerer" <paul_woegerer@mentor.com>
-> To: lttng-dev@lists.lttng.org, "mathieu desnoyers" <mathieu.desnoyers@efficios.com>, dgoulet@efficios.com
-> Sent: Thursday, November 28, 2013 1:26:51 PM
-> Subject: [PATCH lttng-ust 0/3] Solve remaining issues with base-address-state tracing
-> 
-> This patch series addresses the remaining issues that were reported against
-> base-address-state tracing. Base-address-state tracing is now fully
-> integrated
-> into lttng-ust (no separate shared object anymore).
-> 
-> Users that would like to suppress the generation of ust_baddr_statedump
-> events
-> entirely can now use environment variable
-> LTTNG_UST_WITHOUT_BADDR_STATEDUMP=1.
-> 
-> The deadlock in combination with JUL tracing is also fixed now. It was caused
-> by the fact that JUL tracing causes the static constructor of lttng-ust to be
-> called in the context of dlopen:
-> 
-> To setup JUL tracing the JVM executes:
-> 
->    System.loadLibrary("lttng-ust-jul-jni");
-> 
-> This effectively dlopen's lttng-ust-jul-jni.so.0 and that will cause the
-> static
-> ctor of lttng-ust to get executed. Now if the completion of the execution of
-> the lttng-ust ctor depends on someone that tries to acquire a lock on glibc's
-> dl_load_lock we run into a deadlock because the lock is already hold as a
-> side
-> effect of the dlopen that was initiated by the JVM to load
-> "lttng-ust-jul-jni".
-> But exactly that happened when base-address-state tracing tries to generate
-> ust_baddr_statedump events on session-enable (e.g. calling dladdr or emitting
-> a
-> tracepoint all try to acquire the dl_load_lock).
-> 
-> By making the ust_baddr_statedump happen a "little later" so that it cannot
-> block the completion of the static ctor anymore, the deadlock is prevented.
-> Once we know the static ctor will complete for sure we also know that the JVM
-> initiated dlopen that called the static ctor will complete.  At that point is
-> is again safe to use calls that involve acquiring dl_load_lock. Making the
-> statedump happen a "little later" is implemented by patch:
-> 
->    Fix: baddr_statedump deadlock with JUL tracing
-> 
-> 
-> Paul Woegerer (3):
->   Integrate base-address statedump into lttng-ust
->   Fix: baddr_statedump deadlock with JUL tracing
->   Allow suppressing of base-address-state tracing
-> 
->  Makefile.am                                        |  3 +-
->  liblttng-ust-baddr/Makefile.am                     | 18 +----
->  liblttng-ust-baddr/lttng-ust-baddr.c               | 34 ++--------
->  liblttng-ust-baddr/lttng-ust-baddr.h               | 22 +++++++
->  liblttng-ust-baddr/ust_baddr_statedump.h           |  2 +-
->  liblttng-ust-dl/Makefile.am                        |  5 +-
->  .../ust_baddr.c                                    |  0
->  .../ust_baddr.h                                    |  0
->  liblttng-ust-dl/ustdl.c                            | 76
->  ++++++----------------
->  liblttng-ust/Makefile.am                           |  1 +
->  liblttng-ust/lttng-ust-comm.c                      | 50 ++------------
->  11 files changed, 63 insertions(+), 148 deletions(-)
->  create mode 100644 liblttng-ust-baddr/lttng-ust-baddr.h
->  rename {liblttng-ust-baddr => liblttng-ust-dl}/ust_baddr.c (100%)
->  rename {liblttng-ust-baddr => liblttng-ust-dl}/ust_baddr.h (100%)
-> 
-> --
-> 1.8.4
-> 
-> 
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+VGhpcyBmaXhlcyB0aGUgb3V0IG9mIHRyZWUgYnVpbGRzIGJ5IHVzaW5nIHRoZSBhcHByb3ByaWF0
+ZSB0b3Bfc3JjZGlyCmFuZCB0b3BfYnVpbGRkaXIgdmFyaWFibGVzIGluIHRoZSBiaW5kaW5ncycg
+TWFrZWZpbGUuCgpTaWduZWQtb2ZmLWJ5OiBKw6lyw6ltaWUgR2FsYXJuZWF1IDxqZXJlbWllLmdh
+bGFybmVhdUBlZmZpY2lvcy5jb20+Ci0tLQogYmluZGluZ3MvcHl0aG9uL01ha2VmaWxlLmFtIHwg
+MTEgKysrKysrKy0tLS0KIDEgZmlsZSBjaGFuZ2VkLCA3IGluc2VydGlvbnMoKyksIDQgZGVsZXRp
+b25zKC0pCgpkaWZmIC0tZ2l0IGEvYmluZGluZ3MvcHl0aG9uL01ha2VmaWxlLmFtIGIvYmluZGlu
+Z3MvcHl0aG9uL01ha2VmaWxlLmFtCmluZGV4IDI5NTI0NTQuLjBkOTY3MDAgMTAwNjQ0Ci0tLSBh
+L2JpbmRpbmdzL3B5dGhvbi9NYWtlZmlsZS5hbQorKysgYi9iaW5kaW5ncy9weXRob24vTWFrZWZp
+bGUuYW0KQEAgLTEsNSArMSw3IEBACiBiYWJlbHRyYWNlLmk6IGJhYmVsdHJhY2UuaS5pbgotCXNl
+ZCAicy9CQUJFTFRSQUNFX1ZFUlNJT05fU1RSL0JhYmVsdHJhY2UgJChQQUNLQUdFX1ZFUlNJT04p
+L2ciIDxiYWJlbHRyYWNlLmkuaW4gPmJhYmVsdHJhY2UuaQorCXNlZCAicy9CQUJFTFRSQUNFX1ZF
+UlNJT05fU1RSL0JhYmVsdHJhY2UgJChQQUNLQUdFX1ZFUlNJT04pL2ciIDwgXAorCQkkKHRvcF9z
+cmNkaXIpL2JpbmRpbmdzL3B5dGhvbi9iYWJlbHRyYWNlLmkuaW4gPiBcCisJCSQodG9wX2J1aWxk
+ZGlyKS9iaW5kaW5ncy9weXRob24vYmFiZWx0cmFjZS5pCiAKIEFNX0NGTEFHUyA9ICQoUFlUSE9O
+X0lOQ0xVREUpIC1JJCh0b3Bfc3JjZGlyKS9pbmNsdWRlLwogCkBAIC0xNywxMSArMTksMTIgQEAg
+X2JhYmVsdHJhY2VfbGFfQ0ZMQUdTID0gJChHTElCX0NGTEFHUykgJChBTV9DRkxBR1MpCiAKIF9i
+YWJlbHRyYWNlX2xhX0xJQlMgPSAkKEdMSUJfTElCUykKIAotX2JhYmVsdHJhY2VfbGFfTElCQURE
+ID0gJCh0b3Bfc3JjZGlyKS9mb3JtYXRzL2N0Zi9saWJiYWJlbHRyYWNlLWN0Zi5sYQlcCi0JCQkk
+KHRvcF9zcmNkaXIpL2Zvcm1hdHMvY3RmLXRleHQvbGliYmFiZWx0cmFjZS1jdGYtdGV4dC5sYQor
+X2JhYmVsdHJhY2VfbGFfTElCQUREID0gJCh0b3BfYnVpbGRkaXIpL2Zvcm1hdHMvY3RmL2xpYmJh
+YmVsdHJhY2UtY3RmLmxhIFwKKwkkKHRvcF9idWlsZGRpcikvZm9ybWF0cy9jdGYtdGV4dC9saWJi
+YWJlbHRyYWNlLWN0Zi10ZXh0LmxhCiAKICMgU1dJRyAnd2FybmluZyBtZCB2YXJpYWJsZSB1bnVz
+ZWQnIGZpeGVkIGFmdGVyIFNXSUcgYnVpbGQ6CiBiYWJlbHRyYWNlX3dyYXAuYzogYmFiZWx0cmFj
+ZS5pCi0JJChTV0lHKSAtcHl0aG9uIC1XYWxsIC1JLiAtSSQodG9wX3NyY2RpcikvaW5jbHVkZSBi
+YWJlbHRyYWNlLmkKKwkkKFNXSUcpIC1weXRob24gLVdhbGwgLUkuIC1JJCh0b3Bfc3JjZGlyKS9p
+bmNsdWRlIFwKKwkJJCh0b3BfYnVpbGRkaXIpL2JpbmRpbmdzL3B5dGhvbi9iYWJlbHRyYWNlLmkK
+IAogQ0xFQU5GSUxFUyA9IGJhYmVsdHJhY2UuaSBiYWJlbHRyYWNlLnB5IGJhYmVsdHJhY2Vfd3Jh
+cC5jCi0tIAoxLjguNC4yCgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3Jn
+Cmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRl
+dgo=
