@@ -1,21 +1,17 @@
-From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
-	<jeremie.galarneau@efficios.com>
-Subject: [PATCH babeltrace python/bindings] Python-bindings fix:
-	Out of tree build fails to find babeltrace.i
-Date: Thu, 28 Nov 2013 13:19:10 -0500
-Message-ID: <1385662750-32501-1-git-send-email-jeremie.galarneau__13265.8611088575$1385662823$gmane$org@efficios.com>
-References: <414873996.74599.1385256701005.JavaMail.zimbra@efficios.com>
+From: David Goulet <dgoulet@efficios.com>
+Subject: Re: lttng-tools build error: non-dynamic relocations
+ refer to dynamic symbol lttcomm_inet_tcp_timeout
+Date: Thu, 28 Nov 2013 15:32:43 -0500
+Message-ID: <20131128203243.GC8372__16974.4598017589$1385670838$gmane$org@thessa>
+References: <CAO_ArvpzYu+bVKKi956eiObSd+sg-6Aarhy+h5MZqcDk5S-eqg@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============1554445460=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qa0-f51.google.com ([209.85.216.51])
+Received: from smtp.ini-tech.com ([144.76.53.219])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1Vm6BK-0000Lk-VU
-	for lttng-dev@lists.lttng.org; Thu, 28 Nov 2013 13:19:24 -0500
-Received: by mail-qa0-f51.google.com with SMTP id o15so1027326qap.10
-	for <lttng-dev@lists.lttng.org>; Thu, 28 Nov 2013 10:19:13 -0800 (PST)
-In-Reply-To: <414873996.74599.1385256701005.JavaMail.zimbra@efficios.com>
+	(envelope-from <dgoulet@efficios.com>) id 1Vm8GZ-0005DO-NG
+	for lttng-dev@lists.lttng.org; Thu, 28 Nov 2013 15:32:58 -0500
+In-Reply-To: <CAO_ArvpzYu+bVKKi956eiObSd+sg-6Aarhy+h5MZqcDk5S-eqg@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,37 +20,130 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: kumar s <skumar.m226@gmail.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-VGhpcyBmaXhlcyB0aGUgb3V0IG9mIHRyZWUgYnVpbGRzIGJ5IHVzaW5nIHRoZSBhcHByb3ByaWF0
-ZSB0b3Bfc3JjZGlyCmFuZCB0b3BfYnVpbGRkaXIgdmFyaWFibGVzIGluIHRoZSBiaW5kaW5ncycg
-TWFrZWZpbGUuCgpTaWduZWQtb2ZmLWJ5OiBKw6lyw6ltaWUgR2FsYXJuZWF1IDxqZXJlbWllLmdh
-bGFybmVhdUBlZmZpY2lvcy5jb20+Ci0tLQogYmluZGluZ3MvcHl0aG9uL01ha2VmaWxlLmFtIHwg
-MTEgKysrKysrKy0tLS0KIDEgZmlsZSBjaGFuZ2VkLCA3IGluc2VydGlvbnMoKyksIDQgZGVsZXRp
-b25zKC0pCgpkaWZmIC0tZ2l0IGEvYmluZGluZ3MvcHl0aG9uL01ha2VmaWxlLmFtIGIvYmluZGlu
-Z3MvcHl0aG9uL01ha2VmaWxlLmFtCmluZGV4IDI5NTI0NTQuLjBkOTY3MDAgMTAwNjQ0Ci0tLSBh
-L2JpbmRpbmdzL3B5dGhvbi9NYWtlZmlsZS5hbQorKysgYi9iaW5kaW5ncy9weXRob24vTWFrZWZp
-bGUuYW0KQEAgLTEsNSArMSw3IEBACiBiYWJlbHRyYWNlLmk6IGJhYmVsdHJhY2UuaS5pbgotCXNl
-ZCAicy9CQUJFTFRSQUNFX1ZFUlNJT05fU1RSL0JhYmVsdHJhY2UgJChQQUNLQUdFX1ZFUlNJT04p
-L2ciIDxiYWJlbHRyYWNlLmkuaW4gPmJhYmVsdHJhY2UuaQorCXNlZCAicy9CQUJFTFRSQUNFX1ZF
-UlNJT05fU1RSL0JhYmVsdHJhY2UgJChQQUNLQUdFX1ZFUlNJT04pL2ciIDwgXAorCQkkKHRvcF9z
-cmNkaXIpL2JpbmRpbmdzL3B5dGhvbi9iYWJlbHRyYWNlLmkuaW4gPiBcCisJCSQodG9wX2J1aWxk
-ZGlyKS9iaW5kaW5ncy9weXRob24vYmFiZWx0cmFjZS5pCiAKIEFNX0NGTEFHUyA9ICQoUFlUSE9O
-X0lOQ0xVREUpIC1JJCh0b3Bfc3JjZGlyKS9pbmNsdWRlLwogCkBAIC0xNywxMSArMTksMTIgQEAg
-X2JhYmVsdHJhY2VfbGFfQ0ZMQUdTID0gJChHTElCX0NGTEFHUykgJChBTV9DRkxBR1MpCiAKIF9i
-YWJlbHRyYWNlX2xhX0xJQlMgPSAkKEdMSUJfTElCUykKIAotX2JhYmVsdHJhY2VfbGFfTElCQURE
-ID0gJCh0b3Bfc3JjZGlyKS9mb3JtYXRzL2N0Zi9saWJiYWJlbHRyYWNlLWN0Zi5sYQlcCi0JCQkk
-KHRvcF9zcmNkaXIpL2Zvcm1hdHMvY3RmLXRleHQvbGliYmFiZWx0cmFjZS1jdGYtdGV4dC5sYQor
-X2JhYmVsdHJhY2VfbGFfTElCQUREID0gJCh0b3BfYnVpbGRkaXIpL2Zvcm1hdHMvY3RmL2xpYmJh
-YmVsdHJhY2UtY3RmLmxhIFwKKwkkKHRvcF9idWlsZGRpcikvZm9ybWF0cy9jdGYtdGV4dC9saWJi
-YWJlbHRyYWNlLWN0Zi10ZXh0LmxhCiAKICMgU1dJRyAnd2FybmluZyBtZCB2YXJpYWJsZSB1bnVz
-ZWQnIGZpeGVkIGFmdGVyIFNXSUcgYnVpbGQ6CiBiYWJlbHRyYWNlX3dyYXAuYzogYmFiZWx0cmFj
-ZS5pCi0JJChTV0lHKSAtcHl0aG9uIC1XYWxsIC1JLiAtSSQodG9wX3NyY2RpcikvaW5jbHVkZSBi
-YWJlbHRyYWNlLmkKKwkkKFNXSUcpIC1weXRob24gLVdhbGwgLUkuIC1JJCh0b3Bfc3JjZGlyKS9p
-bmNsdWRlIFwKKwkJJCh0b3BfYnVpbGRkaXIpL2JpbmRpbmdzL3B5dGhvbi9iYWJlbHRyYWNlLmkK
-IAogQ0xFQU5GSUxFUyA9IGJhYmVsdHJhY2UuaSBiYWJlbHRyYWNlLnB5IGJhYmVsdHJhY2Vfd3Jh
-cC5jCi0tIAoxLjguNC4yCgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3Jn
-Cmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRl
-dgo=
+
+--===============1554445460==
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="S1BNGpv0yoYahz37"
+Content-Disposition: inline
+
+
+--S1BNGpv0yoYahz37
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On 27 Nov (15:37:10), kumar s wrote:
+> Hi,
+>=20
+> I am getting non dynamic relocation error while trying to build
+> lttng-tools. I have configured the lttng-tools for mips-gcc.
+>=20
+> Making all in lttng-sessiond
+> make[3]: Entering directory
+> `/home/shkumar/lttng-tools/lttng-tools/src/bin/lttng-sessiond'
+>   CC     utils.o
+>   CC     trace-kernel.o
+>   CC     kernel.o
+>   CC     context.o
+>   CC     channel.o
+>   CC     event.o
+>   CC     shm.o
+>   CC     consumer.o
+>   CC     session.o
+>   CC     modprobe.o
+>   CC     fd-limit.o
+>   CC     kernel-consumer.o
+>   CC     cmd.o
+>   CC     buffer-registry.o
+>   CC     ht-cleanup.o
+>   CC     snapshot.o
+>   CC     jul.o
+>   CC     main.o
+> main.c: In function 'thread_dispatch_ust_registration':
+> main.c:1564: warning: 'cds_wfq_dequeue_blocking' is deprecated (declared =
+at
+> /home/shkumar/Development_Merge/NewOCT/popt-1.16/popt_installed/include/u=
+rcu/wfqueue.h:88)
+> main.c: In function 'thread_registration_apps':
+> main.c:1917: warning: 'cds_wfq_enqueue' is deprecated (declared at
+> /home/shkumar/Development_Merge/NewOCT/popt-1.16/popt_installed/include/u=
+rcu/wfqueue.h:76)
+> main.c: In function 'main':
+> main.c:4891: warning: 'cds_wfq_init' is deprecated (declared at
+> /home/shkumar/Development_Merge/NewOCT/popt-1.16/popt_installed/include/u=
+rcu/wfqueue.h:70)
+>   CCLD   lttng-sessiond
+> /home/shkumar/Development_Merge/NewOCT/OCTEON_SDK/octeon_sdk/OCTEON-SDK/t=
+ools-gcc-4.3/bin/../lib/gcc/mips64-octeon-linux-gnu/4.3.3/../../../../mips6=
+4-octeon-linux-gnu/bin/ld:
+> non-dynamic relocations refer to dynamic symbol lttcomm_inet_tcp_timeout
+> /home/shkumar/Development_Merge/NewOCT/OCTEON_SDK/octeon_sdk/OCTEON-SDK/t=
+ools-gcc-4.3/bin/../lib/gcc/mips64-octeon-linux-gnu/4.3.3/../../../../mips6=
+4-octeon-linux-gnu/bin/ld:
+> failed to set dynamic section sizes: Bad value
+
+Looks quite the same here:
+https://sourceware.org/bugzilla/show_bug.cgi?id=3D10144#c8
+
+It seems that this is a gcc bug with -g. I'm not too familiar with MIPS
+but you could try removing the -g or using "-mplt" as stated in the bug.
+
+Cheers!
+David
+
+> collect2: ld returned 1 exit status
+> make[3]: *** [lttng-sessiond] Error 1
+> make[3]: Leaving directory
+> `/home/shkumar/lttng-tools/lttng-tools/src/bin/lttng-sessiond'
+> make[2]: *** [all-recursive] Error 1
+> make[2]: Leaving directory `/home/shkumar/lttng-tools/lttng-tools/src/bin'
+> make[1]: *** [all-recursive] Error 1
+> make[1]: Leaving directory `/home/shkumar/lttng-tools/lttng-tools/src'
+> make: *** [all-recursive] Error 1
+>=20
+> Thank you
+> Skumar
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+
+--S1BNGpv0yoYahz37
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.15 (GNU/Linux)
+
+iQF8BAEBAgBmBQJSl6hqXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
+ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
+MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02LUcIAJVopi0arP9KF8H03sWWk+kV
+AbH6Oihc+SMBatx0H36zCRcTOjFb5GL9riYzIVVyClvEqW9DaQw27fig1e17xBFu
+5eB4T+BuaFywMxcGwxcd6aZ+ESgLQR/5M6PO8wJCktNB4gAJz66doLFxjcdJywfG
+N6VJWJ1cRm+5g0EP03VAjUXmtuTtQO+3dwMAmUEfzn5OnqtOPG8rn28ACuAkzQ/F
+MdcAbHV266AUQeNR+c6peG/jlWQbt0MeFYKUrEhkDURrJJgiBAD2+t7AJqvldgUd
+4vGdMpbUYOzmiiPkWduyRUEr5PrvQJuvJ0R29QjTir4F5E1NtUvl6NMC3cTUo7I=
+=8c31
+-----END PGP SIGNATURE-----
+
+--S1BNGpv0yoYahz37--
+
+
+--===============1554445460==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1554445460==--
