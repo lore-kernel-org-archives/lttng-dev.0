@@ -1,19 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH babeltrace python/bindings] Python-bindings
- fix:	Out of tree build fails to find babeltrace.i
-Date: Fri, 29 Nov 2013 06:21:10 +0000 (UTC)
-Message-ID: <1904220104.77573.1385706070807.JavaMail.zimbra__44635.3753367022$1385706118$gmane$org@efficios.com>
-References: <414873996.74599.1385256701005.JavaMail.zimbra@efficios.com>
-	<1385662750-32501-1-git-send-email-jeremie.galarneau@efficios.com>
+From: Paul Woegerer <paul_woegerer@mentor.com>
+Subject: [PATCH lttng-ust v2] Multisession compatible fix for
+	statedump with JUL tracing
+Date: Fri, 29 Nov 2013 14:32:53 +0100
+Message-ID: <1385731974-12135-1-git-send-email-paul_woegerer__28753.7768054337$1385732062$gmane$org@mentor.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1VmHRy-0002Bc-Pl
-	for lttng-dev@lists.lttng.org; Fri, 29 Nov 2013 01:21:16 -0500
-In-Reply-To: <1385662750-32501-1-git-send-email-jeremie.galarneau@efficios.com>
+	(envelope-from <Paul_Woegerer@mentor.com>) id 1VmOC8-00021r-PN
+	for lttng-dev@lists.lttng.org; Fri, 29 Nov 2013 08:33:23 -0500
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,50 +19,67 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?utf-8?B?SsOpcsOpbWll?= Galarneau <jeremie.galarneau@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org, mathieu.desnoyers@efficios.com, dgoulet@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJKw6lyw6ltaWUgR2FsYXJuZWF1
-IiA8amVyZW1pZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29tPgo+IFRvOiBsdHRuZy1kZXZAbGlzdHMu
-bHR0bmcub3JnCj4gU2VudDogVGh1cnNkYXksIE5vdmVtYmVyIDI4LCAyMDEzIDc6MTk6MTAgUE0K
-PiBTdWJqZWN0OiBbbHR0bmctZGV2XSBbUEFUQ0ggYmFiZWx0cmFjZSBweXRob24vYmluZGluZ3Nd
-IFB5dGhvbi1iaW5kaW5ncyBmaXg6CU91dCBvZiB0cmVlIGJ1aWxkIGZhaWxzIHRvIGZpbmQKPiBi
-YWJlbHRyYWNlLmkKPiAKPiBUaGlzIGZpeGVzIHRoZSBvdXQgb2YgdHJlZSBidWlsZHMgYnkgdXNp
-bmcgdGhlIGFwcHJvcHJpYXRlIHRvcF9zcmNkaXIKPiBhbmQgdG9wX2J1aWxkZGlyIHZhcmlhYmxl
-cyBpbiB0aGUgYmluZGluZ3MnIE1ha2VmaWxlLgoKbWVyZ2VkIGludG8gYmluZGluZ3MvcHl0aG9u
-LiBJIGZpbmFsbHkgbWVyZ2VkIGJpbmRpbmdzL3B5dGhvbiBpbnRvIG1hc3RlciwgZ29vZCBqb2Ig
-ISEhCgpUaGFua3MsCgpNYXRoaWV1Cgo+IAo+IFNpZ25lZC1vZmYtYnk6IErDqXLDqW1pZSBHYWxh
-cm5lYXUgPGplcmVtaWUuZ2FsYXJuZWF1QGVmZmljaW9zLmNvbT4KPiAtLS0KPiAgYmluZGluZ3Mv
-cHl0aG9uL01ha2VmaWxlLmFtIHwgMTEgKysrKysrKy0tLS0KPiAgMSBmaWxlIGNoYW5nZWQsIDcg
-aW5zZXJ0aW9ucygrKSwgNCBkZWxldGlvbnMoLSkKPiAKPiBkaWZmIC0tZ2l0IGEvYmluZGluZ3Mv
-cHl0aG9uL01ha2VmaWxlLmFtIGIvYmluZGluZ3MvcHl0aG9uL01ha2VmaWxlLmFtCj4gaW5kZXgg
-Mjk1MjQ1NC4uMGQ5NjcwMCAxMDA2NDQKPiAtLS0gYS9iaW5kaW5ncy9weXRob24vTWFrZWZpbGUu
-YW0KPiArKysgYi9iaW5kaW5ncy9weXRob24vTWFrZWZpbGUuYW0KPiBAQCAtMSw1ICsxLDcgQEAK
-PiAgYmFiZWx0cmFjZS5pOiBiYWJlbHRyYWNlLmkuaW4KPiAtCXNlZCAicy9CQUJFTFRSQUNFX1ZF
-UlNJT05fU1RSL0JhYmVsdHJhY2UgJChQQUNLQUdFX1ZFUlNJT04pL2ciCj4gPGJhYmVsdHJhY2Uu
-aS5pbiA+YmFiZWx0cmFjZS5pCj4gKwlzZWQgInMvQkFCRUxUUkFDRV9WRVJTSU9OX1NUUi9CYWJl
-bHRyYWNlICQoUEFDS0FHRV9WRVJTSU9OKS9nIiA8IFwKPiArCQkkKHRvcF9zcmNkaXIpL2JpbmRp
-bmdzL3B5dGhvbi9iYWJlbHRyYWNlLmkuaW4gPiBcCj4gKwkJJCh0b3BfYnVpbGRkaXIpL2JpbmRp
-bmdzL3B5dGhvbi9iYWJlbHRyYWNlLmkKPiAgCj4gIEFNX0NGTEFHUyA9ICQoUFlUSE9OX0lOQ0xV
-REUpIC1JJCh0b3Bfc3JjZGlyKS9pbmNsdWRlLwo+ICAKPiBAQCAtMTcsMTEgKzE5LDEyIEBAIF9i
-YWJlbHRyYWNlX2xhX0NGTEFHUyA9ICQoR0xJQl9DRkxBR1MpICQoQU1fQ0ZMQUdTKQo+ICAKPiAg
-X2JhYmVsdHJhY2VfbGFfTElCUyA9ICQoR0xJQl9MSUJTKQo+ICAKPiAtX2JhYmVsdHJhY2VfbGFf
-TElCQUREID0gJCh0b3Bfc3JjZGlyKS9mb3JtYXRzL2N0Zi9saWJiYWJlbHRyYWNlLWN0Zi5sYQlc
-Cj4gLQkJCSQodG9wX3NyY2RpcikvZm9ybWF0cy9jdGYtdGV4dC9saWJiYWJlbHRyYWNlLWN0Zi10
-ZXh0LmxhCj4gK19iYWJlbHRyYWNlX2xhX0xJQkFERCA9ICQodG9wX2J1aWxkZGlyKS9mb3JtYXRz
-L2N0Zi9saWJiYWJlbHRyYWNlLWN0Zi5sYSBcCj4gKwkkKHRvcF9idWlsZGRpcikvZm9ybWF0cy9j
-dGYtdGV4dC9saWJiYWJlbHRyYWNlLWN0Zi10ZXh0LmxhCj4gIAo+ICAjIFNXSUcgJ3dhcm5pbmcg
-bWQgdmFyaWFibGUgdW51c2VkJyBmaXhlZCBhZnRlciBTV0lHIGJ1aWxkOgo+ICBiYWJlbHRyYWNl
-X3dyYXAuYzogYmFiZWx0cmFjZS5pCj4gLQkkKFNXSUcpIC1weXRob24gLVdhbGwgLUkuIC1JJCh0
-b3Bfc3JjZGlyKS9pbmNsdWRlIGJhYmVsdHJhY2UuaQo+ICsJJChTV0lHKSAtcHl0aG9uIC1XYWxs
-IC1JLiAtSSQodG9wX3NyY2RpcikvaW5jbHVkZSBcCj4gKwkJJCh0b3BfYnVpbGRkaXIpL2JpbmRp
-bmdzL3B5dGhvbi9iYWJlbHRyYWNlLmkKPiAgCj4gIENMRUFORklMRVMgPSBiYWJlbHRyYWNlLmkg
-YmFiZWx0cmFjZS5weSBiYWJlbHRyYWNlX3dyYXAuYwo+IC0tCj4gMS44LjQuMgo+IAo+IAo+IF9f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gbHR0bmctZGV2
-IG1haWxpbmcgbGlzdAo+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBodHRwOi8vbGlzdHMu
-bHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKPiAKCi0tIApNYXRo
-aWV1IERlc25veWVycwpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCgpfX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFp
-bGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9y
-Zy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+Unfortunately, the first version of the deadlock fix broke the multi-session
+usecase as a side effect.  This revised version works fine even for
+multi-session scenarios.
+
+I used the following bash-script for verification:
+
+#!/bin/bash
+function session_start {
+	lttng create $1
+	local SARG="-s $1"
+	lttng enable-event -j -a $SARG
+	lttng enable-channel -u test $SARG
+	lttng enable-event -u -a -c test $SARG
+	lttng start $1
+}
+function session_stop {
+	lttng stop $1
+}
+function session_destroy {
+	lttng destroy $1
+}
+
+session_start s1
+session_start s2
+session_start s3
+(sleep 6 && session_start a1)&
+(sleep 12 && session_start a2)&
+(sleep 18 && session_start a3)&
+
+./run
+
+session_stop s1
+session_stop s2
+session_stop s3
+session_stop a1
+session_stop a2
+session_stop a3
+
+# start a new bash session to allow browsing the results (e.g. lttng view a1, ...)
+# exit that session to do the cleanup.
+PS1="(browse results) " bash -i
+
+session_destroy s1
+session_destroy s2
+session_destroy s3
+session_destroy a1
+session_destroy a2
+session_destroy a3
+# script-end
+
+Paul Woegerer (1):
+  Fix: baddr_statedump deadlock with JUL tracing
+
+ include/lttng/ust-events.h       |  6 ++++++
+ liblttng-ust/lttng-events.c      | 19 ++++++++++++++++++-
+ liblttng-ust/lttng-tracer-core.h |  3 +--
+ liblttng-ust/lttng-ust-comm.c    | 30 +++++++++++++++++-------------
+ 4 files changed, 42 insertions(+), 16 deletions(-)
+
+-- 
+1.8.4
