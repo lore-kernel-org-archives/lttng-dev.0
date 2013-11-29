@@ -1,19 +1,19 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH liburcu 2/5] Dont link pthread on Android
-Date: Fri, 29 Nov 2013 06:01:28 +0000 (UTC)
-Message-ID: <479853854.77497.1385704888472.JavaMail.zimbra__35005.6151314222$1385704941$gmane$org@efficios.com>
-References: <1385567313-8138-1-git-send-email-charlesbriere.flatzo@gmail.com>
-	<1385567313-8138-2-git-send-email-charlesbriere.flatzo@gmail.com>
-	<20131128103024.3341ccc8@skate>
-	<CACnpWGTmYwjtmUCsiGHyS=nqSoQrO+_TMifPMvkwhYjxTOU06w@mail.gmail.com>
+Subject: Re: [PATCH babeltrace 2/2] Test: Validate that
+ enumeration	mapping strings are properly escaped
+Date: Fri, 29 Nov 2013 06:06:07 +0000 (UTC)
+Message-ID: <1394158645.77529.1385705167406.JavaMail.zimbra__39176.9883026884$1385705205$gmane$org@efficios.com>
+References: <1385671601-5884-1-git-send-email-jeremie.galarneau@efficios.com>
+	<1385671601-5884-2-git-send-email-jeremie.galarneau@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0684654155=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1VmH8u-00011T-UA
-	for lttng-dev@lists.lttng.org; Fri, 29 Nov 2013 01:01:36 -0500
-In-Reply-To: <CACnpWGTmYwjtmUCsiGHyS=nqSoQrO+_TMifPMvkwhYjxTOU06w@mail.gmail.com>
+	(envelope-from <compudj@efficios.com>) id 1VmHDL-0003HO-IV
+	for lttng-dev@lists.lttng.org; Fri, 29 Nov 2013 01:06:08 -0500
+In-Reply-To: <1385671601-5884-2-git-send-email-jeremie.galarneau@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,215 +22,73 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Charles =?utf-8?Q?Bri=C3=A8re?= <charlesbriere.flatzo@gmail.com>
+To: =?utf-8?B?SsOpcsOpbWll?= Galarneau <jeremie.galarneau@efficios.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============0684654155==
-Content-Type: multipart/alternative;
-	boundary="----=_Part_77496_1356340737.1385704888471"
-
-------=_Part_77496_1356340737.1385704888471
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
------ Original Message -----
-
-> From: "Charles Bri=C3=A8re" <charlesbriere.flatzo@gmail.com>
-> To: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>, "Mathieu
-> Desnoyers" <mathieu.desnoyers@efficios.com>
-> Cc: lttng-dev@lists.lttng.org
-> Sent: Friday, November 29, 2013 1:10:53 AM
-> Subject: Re: [lttng-dev] [PATCH liburcu 2/5] Dont link pthread on Android
-
-> Dear Thomas,
-
-> To be honest, I haven't even though about other libc. But you are right, =
-that
-> is probably a better idea.
-
-> What about adding those lines to configure.ac ( modified from configure.a=
-c
-> found in lttng-tools )
-
-> # Check for pthread
-> AC_CHECK_LIB([pthread], [pthread_create],
-> [AM_CONDITIONAL(LIBC_INCLUDES_PTHREAD, false)],
-> [AC_CHECK_LIB([c], [pthread_create],
-> [AM_CONDITIONAL(LIBC_INCLUDES_PTHREAD, true)],
-> [AC_MSG_ERROR([Cannot find libpthread. Use [LDFLAGS]=3D-Ldir to specify i=
-ts
-> location.])]
-> )]
-> )
-
-> and changing the if in the patch to "if !LIBC_INCLUDES_PTHREAD"
-
-> Thanks for the comment,
-> Charles
-
-> Mathieu,
-
-> if I am to submit a patch for that, should it be intended to replace this
-> one, or on top of HEAD as a Fix ?
-
-Please submit against HEAD, as a fix, since the patch discussed here was al=
-ready merged.=20
-
-Thanks,=20
-
-Mathieu=20
-
-> Thanks,
-> Charles
-
-> On Thu, Nov 28, 2013 at 1:30 AM, Thomas Petazzoni <
-> thomas.petazzoni@free-electrons.com > wrote:
-
-> > Dear Charles Briere,
->=20
-
-> > On Wed, 27 Nov 2013 07:48:30 -0800, Charles Briere wrote:
->=20
-
-> > > #Add the -version-info directly here since we are only building
->=20
-> > > # library that use the version-info
->=20
-> > > -AM_LDFLAGS=3D-lpthread -version-info $(URCU_LIBRARY_VERSION)
->=20
-> > > +AM_LDFLAGS=3D-version-info $(URCU_LIBRARY_VERSION)
->=20
-> > > +if !TARGET_IS_ANDROID
->=20
-> > > +AM_LDFLAGS +=3D -lpthread
->=20
-> > > +endif
->=20
-
-> > Instead of making that conditional on Android, wouldn't it make more
->=20
-> > sense to make it conditional on whether linking with pthread is
->=20
-> > necessary or not?
->=20
-
-> > I can at least think of one other C library than Bionic that has
->=20
-> > everything in libc instead of things split in several libraries: the
->=20
-> > Musl C library ( http://www.musl-libc.org ).
->=20
-
-> > Best regards,
->=20
-
-> > Thomas
->=20
-> > --
->=20
-> > Thomas Petazzoni, CTO, Free Electrons
->=20
-> > Embedded Linux, Kernel and Android engineering
->=20
-> > http://free-electrons.com
->=20
-
---=20
-Mathieu Desnoyers=20
-EfficiOS Inc.=20
-http://www.efficios.com=20
-
-------=_Part_77496_1356340737.1385704888471
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-<html><body><div style=3D"font-family: times new roman, new york, times, se=
-rif; font-size: 12pt; color: #000000"><hr id=3D"zwchr"><blockquote style=3D=
-"border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;=
-font-weight:normal;font-style:normal;text-decoration:none;font-family:Helve=
-tica,Arial,sans-serif;font-size:12pt;" data-mce-style=3D"border-left: 2px s=
-olid #1010FF; margin-left: 5px; padding-left: 5px; color: #000; font-weight=
-: normal; font-style: normal; text-decoration: none; font-family: Helvetica=
-,Arial,sans-serif; font-size: 12pt;"><b>From: </b>"Charles Bri=C3=A8re" &lt=
-;charlesbriere.flatzo@gmail.com&gt;<br><b>To: </b>"Thomas Petazzoni" &lt;th=
-omas.petazzoni@free-electrons.com&gt;, "Mathieu Desnoyers" &lt;mathieu.desn=
-oyers@efficios.com&gt;<br><b>Cc: </b>lttng-dev@lists.lttng.org<br><b>Sent: =
-</b>Friday, November 29, 2013 1:10:53 AM<br><b>Subject: </b>Re: [lttng-dev]=
- [PATCH liburcu 2/5] Dont link pthread on Android<br><div><br></div><div di=
-r=3D"ltr">Dear Thomas,&nbsp;<div><br></div><div>To be honest, I haven't eve=
-n though about other libc. But you are right, that is probably a better ide=
-a.&nbsp;</div><div><br></div><div>What about adding those lines to <a href=
-=3D"http://configure.ac" target=3D"_blank" data-mce-href=3D"http://configur=
-e.ac">configure.ac</a> ( modified from <a href=3D"http://configure.ac" targ=
-et=3D"_blank" data-mce-href=3D"http://configure.ac">configure.ac</a> found =
-in lttng-tools )&nbsp;</div><div><br></div><div># Check for pthread</div><d=
-iv>AC_CHECK_LIB([pthread], [pthread_create],</div><div><span style=3D"white=
--space:pre-wrap" data-mce-style=3D"white-space: pre-wrap;"> </span>[AM_COND=
-ITIONAL(LIBC_INCLUDES_PTHREAD, false)],</div><div><span style=3D"white-spac=
-e:pre-wrap" data-mce-style=3D"white-space: pre-wrap;"> </span>[AC_CHECK_LIB=
-([c], [pthread_create],</div><div><span style=3D"white-space:pre-wrap" data=
--mce-style=3D"white-space: pre-wrap;"> </span>[AM_CONDITIONAL(LIBC_INCLUDES=
-_PTHREAD, true)],</div><div><span style=3D"white-space:pre-wrap" data-mce-s=
-tyle=3D"white-space: pre-wrap;"> </span>[AC_MSG_ERROR([Cannot find libpthre=
-ad. Use [LDFLAGS]=3D-Ldir to specify its location.])]</div><div><span style=
-=3D"white-space:pre-wrap" data-mce-style=3D"white-space: pre-wrap;"> </span=
->)]</div><div>)</div><div><br></div><div>and changing the if in the patch t=
-o "if !LIBC_INCLUDES_PTHREAD"</div><div><br></div><div><br></div><div>Thank=
-s for the comment,</div><div>Charles</div><div><br></div><div><br></div><di=
-v><br></div><div>Mathieu,&nbsp;</div><div><br></div><div>&nbsp; &nbsp;if I =
-am to submit a patch for that, should it be intended to replace this one, o=
-r on top of HEAD as a Fix ?</div></div></blockquote><div><br></div><div>Ple=
-ase submit against HEAD, as a fix, since the patch discussed here was alrea=
-dy merged.<br></div><div><br></div><div>Thanks,<br></div><div><br></div><di=
-v>Mathieu<br></div><div><br></div><blockquote style=3D"border-left:2px soli=
-d #1010FF;margin-left:5px;padding-left:5px;color:#000;font-weight:normal;fo=
-nt-style:normal;text-decoration:none;font-family:Helvetica,Arial,sans-serif=
-;font-size:12pt;" data-mce-style=3D"border-left: 2px solid #1010FF; margin-=
-left: 5px; padding-left: 5px; color: #000; font-weight: normal; font-style:=
- normal; text-decoration: none; font-family: Helvetica,Arial,sans-serif; fo=
-nt-size: 12pt;"><div dir=3D"ltr"><div><br></div><div><br></div><div>Thanks,=
-</div><div>Charles</div></div><div class=3D"gmail_extra"><br><div><br></div=
-><div class=3D"gmail_quote">On Thu, Nov 28, 2013 at 1:30 AM, Thomas Petazzo=
-ni <span dir=3D"ltr">&lt;<a href=3D"mailto:thomas.petazzoni@free-electrons.=
-com" target=3D"_blank" data-mce-href=3D"mailto:thomas.petazzoni@free-electr=
-ons.com">thomas.petazzoni@free-electrons.com</a>&gt;</span> wrote:<br><bloc=
-kquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #cc=
-c solid;padding-left:1ex" data-mce-style=3D"margin: 0 0 0 .8ex; border-left=
-: 1px #ccc solid; padding-left: 1ex;">Dear Charles Briere,<br><div class=3D=
-"im"><br> On Wed, 27 Nov 2013 07:48:30 -0800, Charles Briere wrote:<br><br>=
- &gt; &nbsp;#Add the -version-info directly here since we are only building=
-<br> &gt; &nbsp;# library that use the version-info<br> &gt; -AM_LDFLAGS=3D=
--lpthread -version-info $(URCU_LIBRARY_VERSION)<br> &gt; +AM_LDFLAGS=3D-ver=
-sion-info $(URCU_LIBRARY_VERSION)<br> &gt; +if !TARGET_IS_ANDROID<br> &gt; =
-+AM_LDFLAGS +=3D -lpthread<br> &gt; +endif<br><br></div>Instead of making t=
-hat conditional on Android, wouldn't it make more<br> sense to make it cond=
-itional on whether linking with pthread is<br> necessary or not?<br><br> I =
-can at least think of one other C library than Bionic that has<br> everythi=
-ng in libc instead of things split in several libraries: the<br> Musl C lib=
-rary (<a href=3D"http://www.musl-libc.org" target=3D"_blank" data-mce-href=
-=3D"http://www.musl-libc.org">http://www.musl-libc.org</a>).<br><br> Best r=
-egards,<br><br> Thomas<br><span class=3D"HOEnZb"><span style=3D"color: #888=
-888;" data-mce-style=3D"color: #888888;" color=3D"#888888">--<br> Thomas Pe=
-tazzoni, CTO, Free Electrons<br> Embedded Linux, Kernel and Android enginee=
-ring<br> <a href=3D"http://free-electrons.com" target=3D"_blank" data-mce-h=
-ref=3D"http://free-electrons.com">http://free-electrons.com</a><br> </span>=
-</span></blockquote></div><br></div></blockquote><div><br><br></div><div><b=
-r></div><div>-- <br></div><div><span name=3D"x"></span>Mathieu Desnoyers<br=
->EfficiOS Inc.<br>http://www.efficios.com<span name=3D"x"></span><br></div>=
-</div></body></html>
-------=_Part_77496_1356340737.1385704888471--
-
-
---===============0684654155==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Disposition: inline
-Content-Transfer-Encoding: 7bit
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0684654155==--
+Qm90aCBwYXRjaGVzIG1lcmdlZCwgdGhhbmtzIQoKTWF0aGlldQoKLS0tLS0gT3JpZ2luYWwgTWVz
+c2FnZSAtLS0tLQo+IEZyb206ICJKw6lyw6ltaWUgR2FsYXJuZWF1IiA8amVyZW1pZS5nYWxhcm5l
+YXVAZWZmaWNpb3MuY29tPgo+IFRvOiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gU2VudDog
+VGh1cnNkYXksIE5vdmVtYmVyIDI4LCAyMDEzIDk6NDY6NDEgUE0KPiBTdWJqZWN0OiBbbHR0bmct
+ZGV2XSBbUEFUQ0ggYmFiZWx0cmFjZSAyLzJdIFRlc3Q6IFZhbGlkYXRlIHRoYXQgZW51bWVyYXRp
+b24JbWFwcGluZyBzdHJpbmdzIGFyZSBwcm9wZXJseSBlc2NhcGVkCj4gCj4gU2lnbmVkLW9mZi1i
+eTogSsOpcsOpbWllIEdhbGFybmVhdSA8amVyZW1pZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29tPgo+
+IC0tLQo+ICB0ZXN0cy9saWIvdGVzdF9jdGZfd3JpdGVyLmMgfCAyNyArKysrKysrKysrKysrKysr
+KysrKysrKysrKysKPiAgMSBmaWxlIGNoYW5nZWQsIDI3IGluc2VydGlvbnMoKykKPiAKPiBkaWZm
+IC0tZ2l0IGEvdGVzdHMvbGliL3Rlc3RfY3RmX3dyaXRlci5jIGIvdGVzdHMvbGliL3Rlc3RfY3Rm
+X3dyaXRlci5jCj4gaW5kZXggZDdmN2RiNy4uMDkyN2EzMiAxMDA2NDQKPiAtLS0gYS90ZXN0cy9s
+aWIvdGVzdF9jdGZfd3JpdGVyLmMKPiArKysgYi90ZXN0cy9saWIvdGVzdF9jdGZfd3JpdGVyLmMK
+PiBAQCAtMjU0LDEzICsyNTQsMzAgQEAgdm9pZCBhcHBlbmRfc2ltcGxlX2V2ZW50KHN0cnVjdCBi
+dF9jdGZfc3RyZWFtX2NsYXNzCj4gKnN0cmVhbV9jbGFzcywKPiAgCQlidF9jdGZfZmllbGRfdHlw
+ZV9pbnRlZ2VyX2NyZWF0ZSgxMik7Cj4gIAlzdHJ1Y3QgYnRfY3RmX2ZpZWxkX3R5cGUgKmZsb2F0
+X3R5cGUgPQo+ICAJCWJ0X2N0Zl9maWVsZF90eXBlX2Zsb2F0aW5nX3BvaW50X2NyZWF0ZSgpOwo+
+ICsJc3RydWN0IGJ0X2N0Zl9maWVsZF90eXBlICplbnVtX3R5cGUgPQo+ICsJCWJ0X2N0Zl9maWVs
+ZF90eXBlX2VudW1lcmF0aW9uX2NyZWF0ZSh1aW50XzEyX3R5cGUpOwo+ICAJc3RydWN0IGJ0X2N0
+Zl9ldmVudCAqc2ltcGxlX2V2ZW50Owo+ICAJc3RydWN0IGJ0X2N0Zl9maWVsZCAqaW50ZWdlcl9m
+aWVsZDsKPiAgCXN0cnVjdCBidF9jdGZfZmllbGQgKmZsb2F0X2ZpZWxkOwo+ICsJc3RydWN0IGJ0
+X2N0Zl9maWVsZCAqZW51bV9maWVsZDsKPiArCXN0cnVjdCBidF9jdGZfZmllbGQgKmVudW1fY29u
+dGFpbmVyX2ZpZWxkOwo+ICAKPiAgCWJ0X2N0Zl9maWVsZF90eXBlX3NldF9hbGlnbm1lbnQoZmxv
+YXRfdHlwZSwgMzIpOwo+ICAJYnRfY3RmX2ZpZWxkX3R5cGVfZmxvYXRpbmdfcG9pbnRfc2V0X2V4
+cG9uZW50X2RpZ2l0cyhmbG9hdF90eXBlLCAxMSk7Cj4gIAlidF9jdGZfZmllbGRfdHlwZV9mbG9h
+dGluZ19wb2ludF9zZXRfbWFudGlzc2FfZGlnaXRzKGZsb2F0X3R5cGUsIDUzKTsKPiArCj4gKwlv
+ayhidF9jdGZfZmllbGRfdHlwZV9lbnVtZXJhdGlvbl9hZGRfbWFwcGluZyhlbnVtX3R5cGUsCj4g
+KwkJImVzY2FwaW5nOyBcInRlc3RcIiIsIDAsIDApID09IDAsCj4gKwkJIkFjY2VwdCBlbnVtZXJh
+dGlvbiBtYXBwaW5nIHN0cmluZ3MgY29udGFpbmluZyBxdW90ZXMiKTsKPiArCW9rKGJ0X2N0Zl9m
+aWVsZF90eXBlX2VudW1lcmF0aW9uX2FkZF9tYXBwaW5nKGVudW1fdHlwZSwKPiArCQkiXHRhbm90
+aGVyIFwnZXNjYXBpbmdcJ1xuIHRlc3RcIiIsIDEsIDQpID09IDAsCj4gKwkJIkFjY2VwdCBlbnVt
+ZXJhdGlvbiBtYXBwaW5nIHN0cmluZ3MgY29udGFpbmluZyBzcGVjaWFsIGNoYXJhY3RlcnMiKTsK
+PiArCW9rKGJ0X2N0Zl9maWVsZF90eXBlX2VudW1lcmF0aW9uX2FkZF9tYXBwaW5nKGVudW1fdHlw
+ZSwKPiArCQkiZXZlbnQgY2xvY2sgaW50IGZsb2F0IiwgNSwgMjIpID09IDAsCj4gKwkJIkFjY2Vw
+dCBlbnVtZXJhdGlvbiBtYXBwaW5nIHN0cmluZ3MgY29udGFpbmluZyByZXNlcnZlZCBrZXl3b3Jk
+cyIpOwo+ICsJb2soYnRfY3RmX2V2ZW50X2NsYXNzX2FkZF9maWVsZChzaW1wbGVfZXZlbnRfY2xh
+c3MsIGVudW1fdHlwZSwKPiArCQkiZW51bV9maWVsZCIpID09IDAsICJBZGQgZW51bWVyYXRpb24g
+ZmllbGQgdG8gZXZlbnQiKTsKPiArCj4gIAlvayh1aW50XzEyX3R5cGUsICJDcmVhdGUgYW4gdW5z
+aWduZWQgaW50ZWdlciB0eXBlIik7Cj4gIAlidF9jdGZfZXZlbnRfY2xhc3NfYWRkX2ZpZWxkKHNp
+bXBsZV9ldmVudF9jbGFzcywgdWludF8xMl90eXBlLAo+ICAJCSJpbnRlZ2VyX2ZpZWxkIik7Cj4g
+QEAgLTI4MSw2ICsyOTgsMTMgQEAgdm9pZCBhcHBlbmRfc2ltcGxlX2V2ZW50KHN0cnVjdCBidF9j
+dGZfc3RyZWFtX2NsYXNzCj4gKnN0cmVhbV9jbGFzcywKPiAgCj4gIAlmbG9hdF9maWVsZCA9IGJ0
+X2N0Zl9ldmVudF9nZXRfcGF5bG9hZChzaW1wbGVfZXZlbnQsICJmbG9hdF9maWVsZCIpOwo+ICAJ
+YnRfY3RmX2ZpZWxkX2Zsb2F0aW5nX3BvaW50X3NldF92YWx1ZShmbG9hdF9maWVsZCwgMy4xNDE1
+KTsKPiArCWVudW1fZmllbGQgPSBidF9jdGZfZmllbGRfY3JlYXRlKGVudW1fdHlwZSk7Cj4gKwll
+bnVtX2NvbnRhaW5lcl9maWVsZCA9IGJ0X2N0Zl9maWVsZF9lbnVtZXJhdGlvbl9nZXRfY29udGFp
+bmVyKAo+ICsJCWVudW1fZmllbGQpOwo+ICsJb2soYnRfY3RmX2ZpZWxkX3Vuc2lnbmVkX2ludGVn
+ZXJfc2V0X3ZhbHVlKAo+ICsJCWVudW1fY29udGFpbmVyX2ZpZWxkLCAxKSA9PSAwLAo+ICsJCSJT
+ZXQgZW51bWVyYXRpb24gY29udGFpbmVyIHZhbHVlIik7Cj4gKwlidF9jdGZfZXZlbnRfc2V0X3Bh
+eWxvYWQoc2ltcGxlX2V2ZW50LCAiZW51bV9maWVsZCIsIGVudW1fZmllbGQpOwo+ICAKPiAgCW9r
+KGJ0X2N0Zl9jbG9ja19zZXRfdGltZShjbG9jaywgY3VycmVudF90aW1lKSA9PSAwLCAiU2V0IGNs
+b2NrIHRpbWUiKTsKPiAgCj4gQEAgLTI5NCw4ICszMTgsMTEgQEAgdm9pZCBhcHBlbmRfc2ltcGxl
+X2V2ZW50KHN0cnVjdCBidF9jdGZfc3RyZWFtX2NsYXNzCj4gKnN0cmVhbV9jbGFzcywKPiAgCWJ0
+X2N0Zl9ldmVudF9wdXQoc2ltcGxlX2V2ZW50KTsKPiAgCWJ0X2N0Zl9maWVsZF90eXBlX3B1dCh1
+aW50XzEyX3R5cGUpOwo+ICAJYnRfY3RmX2ZpZWxkX3R5cGVfcHV0KGZsb2F0X3R5cGUpOwo+ICsJ
+YnRfY3RmX2ZpZWxkX3R5cGVfcHV0KGVudW1fdHlwZSk7Cj4gIAlidF9jdGZfZmllbGRfcHV0KGlu
+dGVnZXJfZmllbGQpOwo+ICAJYnRfY3RmX2ZpZWxkX3B1dChmbG9hdF9maWVsZCk7Cj4gKwlidF9j
+dGZfZmllbGRfcHV0KGVudW1fZmllbGQpOwo+ICsJYnRfY3RmX2ZpZWxkX3B1dChlbnVtX2NvbnRh
+aW5lcl9maWVsZCk7Cj4gIH0KPiAgCj4gIHZvaWQgYXBwZW5kX2NvbXBsZXhfZXZlbnQoc3RydWN0
+IGJ0X2N0Zl9zdHJlYW1fY2xhc3MgKnN0cmVhbV9jbGFzcywKPiAtLQo+IDEuOC40LjIKPiAKPiAK
+PiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGx0dG5n
+LWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0cDovL2xp
+c3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cj4gCgotLSAK
+TWF0aGlldSBEZXNub3llcnMKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoK
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRu
+Zy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
