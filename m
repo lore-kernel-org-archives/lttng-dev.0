@@ -1,19 +1,18 @@
-From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
-	<jeremie.galarneau@efficios.com>
-Subject: [PATCH babeltrace] Fix ctf-writer: possible use after
-	free
-Date: Fri, 29 Nov 2013 13:26:42 -0500
-Message-ID: <1385749602-13426-1-git-send-email-jeremie.galarneau__28088.8244430118$1385749668$gmane$org@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [BABELTRACE PATCH] Fix data_offset when importing
+	the indexes
+Date: Fri, 29 Nov 2013 21:29:34 +0000 (UTC)
+Message-ID: <2043375582.77791.1385760574908.JavaMail.zimbra__36459.7397893251$1385760639$gmane$org@efficios.com>
+References: <1385741522-25767-1-git-send-email-jdesfossez@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qe0-f53.google.com ([209.85.128.53])
+Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1VmSm9-0002aP-WA
-	for lttng-dev@lists.lttng.org; Fri, 29 Nov 2013 13:26:56 -0500
-Received: by mail-qe0-f53.google.com with SMTP id nc12so9061048qeb.40
-	for <lttng-dev@lists.lttng.org>; Fri, 29 Nov 2013 10:26:44 -0800 (PST)
+	(envelope-from <compudj@efficios.com>) id 1VmVd3-00086Y-80
+	for lttng-dev@lists.lttng.org; Fri, 29 Nov 2013 16:29:43 -0500
+In-Reply-To: <1385741522-25767-1-git-send-email-jdesfossez@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,26 +21,197 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Julien Desfossez <jdesfossez@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Y3RmX3N0cmVhbV9wb3MnIGJhc2VfbW1hIG1lbWJlciBtdXN0IGJlIGNvcGllZCBmcm9tIHN0cmVh
-bS0+cG9zIGJlZm9yZQp1cGRhdGluZyB0aGUgZmluYWwgcGFja2V0IGFuZCBjb250ZW50IHNpemVz
-LiBUaGUgb3JpZ2luYWwgYmFzZV9tbWEKc3RydWN0dXJlIHdpbGwgYmUgcmVhbGxvY2F0ZWQgaWYg
-dGhlIHBhY2tldCBpcyByZXNpemVkLgoKU2lnbmVkLW9mZi1ieTogSsOpcsOpbWllIEdhbGFybmVh
-dSA8amVyZW1pZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29tPgotLS0KIGZvcm1hdHMvY3RmL3dyaXRl
-ci9zdHJlYW0uYyB8IDMgKysrCiAxIGZpbGUgY2hhbmdlZCwgMyBpbnNlcnRpb25zKCspCgpkaWZm
-IC0tZ2l0IGEvZm9ybWF0cy9jdGYvd3JpdGVyL3N0cmVhbS5jIGIvZm9ybWF0cy9jdGYvd3JpdGVy
-L3N0cmVhbS5jCmluZGV4IGFjODk0MjkuLjRlZmIzNjkgMTAwNjQ0Ci0tLSBhL2Zvcm1hdHMvY3Rm
-L3dyaXRlci9zdHJlYW0uYworKysgYi9mb3JtYXRzL2N0Zi93cml0ZXIvc3RyZWFtLmMKQEAgLTQ2
-NCw3ICs0NjQsMTAgQEAgaW50IGJ0X2N0Zl9zdHJlYW1fZmx1c2goc3RydWN0IGJ0X2N0Zl9zdHJl
-YW0gKnN0cmVhbSkKIAkvKgogCSAqIFVwZGF0ZSB0aGUgcGFja2V0IHRvdGFsIHNpemUgYW5kIGNv
-bnRlbnQgc2l6ZSBhbmQgb3ZlcndyaXRlIHRoZQogCSAqIHBhY2tldCBjb250ZXh0LgorCSAqIENv
-cHkgYmFzZV9tbWEgYXMgdGhlIHBhY2tldCBtYXkgaGF2ZSBiZWVuIHJlbWFwcGVkIChlLmcuIHdo
-ZW4gYQorCSAqIHBhY2tldCBpcyByZXNpemVkKS4KIAkgKi8KKwlwYWNrZXRfY29udGV4dF9wb3Mu
-YmFzZV9tbWEgPSBzdHJlYW0tPnBvcy5iYXNlX21tYTsKIAlyZXQgPSBzZXRfc3RydWN0dXJlX2Zp
-ZWxkX2ludGVnZXIoc3RyZWFtX2NsYXNzLT5wYWNrZXRfY29udGV4dCwKIAkJImNvbnRlbnRfc2l6
-ZSIsIHN0cmVhbS0+cG9zLm9mZnNldCk7CiAJaWYgKHJldCkgewotLSAKMS44LjQuMgoKCl9fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWls
-aW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3Jn
-L2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+----- Original Message -----
+> From: "Julien Desfossez" <jdesfossez@efficios.com>
+> To: "mathieu desnoyers" <mathieu.desnoyers@efficios.com>
+> Cc: lttng-dev@lists.lttng.org, "Julien Desfossez" <jdesfossez@efficios.com>
+> Sent: Friday, November 29, 2013 5:12:02 PM
+> Subject: [BABELTRACE PATCH] Fix data_offset when importing the indexes
+> 
+> The data_offset is the same for all the packets of a stream and is
+> computed from reading the headers and context of the first packet in a
+> stream.
+
+This assumption is wrong. You can have variants, sequences or string
+in a packet header/context, which makes it impossible to know the size
+of those structures for all packets by just reading the first packet.
+
+Thanks,
+
+Mathieu
+
+> When importing an index, we don't have this information and we want to
+> mmap the tracefile only when needed, so we introduce a new function to
+> only compute this information when we are going to use the first packet
+> of a stream. Once we find the data_offset, we copy it to the
+> ctf_stream_pos to avoid recomputing it for each packet (since it won't
+> be written in the index at open time).
+> 
+> Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
+> ---
+>  formats/ctf/ctf.c              | 102
+>  +++++++++++++++++++++++++++++++++++++++++
+>  include/babeltrace/ctf/types.h |   1 +
+>  2 files changed, 103 insertions(+)
+> 
+> diff --git a/formats/ctf/ctf.c b/formats/ctf/ctf.c
+> index 5cf8097..5e7ae17 100644
+> --- a/formats/ctf/ctf.c
+> +++ b/formats/ctf/ctf.c
+> @@ -627,10 +627,103 @@ error:
+>  	return ret;
+>  }
+>  
+> +static
+> +int find_data_offset(struct ctf_stream_pos *pos,
+> +		struct ctf_file_stream *file_stream)
+> +{
+> +	uint64_t packet_map_len = DEFAULT_HEADER_LEN, tmp_map_len;
+> +	struct stat filestats;
+> +	int ret;
+> +	size_t filesize;
+> +
+> +	pos = &file_stream->pos;
+> +
+> +	ret = fstat(pos->fd, &filestats);
+> +	if (ret < 0)
+> +		return ret;
+> +	filesize = filestats.st_size;
+> +
+> +	/* Deal with empty files */
+> +	if (!filesize) {
+> +		return 0;
+> +	}
+> +
+> +begin:
+> +	if (filesize - pos->mmap_offset < (packet_map_len >> LOG2_CHAR_BIT)) {
+> +		packet_map_len = (filesize - pos->mmap_offset) << LOG2_CHAR_BIT;
+> +	}
+> +
+> +	if (pos->base_mma) {
+> +		/* unmap old base */
+> +		ret = munmap_align(pos->base_mma);
+> +		if (ret) {
+> +			fprintf(stderr, "[error] Unable to unmap old base: %s.\n",
+> +					strerror(errno));
+> +			return ret;
+> +		}
+> +		pos->base_mma = NULL;
+> +	}
+> +	/* map new base. Need mapping length from header. */
+> +	pos->base_mma = mmap_align(packet_map_len >> LOG2_CHAR_BIT, PROT_READ,
+> +			MAP_PRIVATE, pos->fd, pos->mmap_offset);
+> +	assert(pos->base_mma != MAP_FAILED);
+> +
+> +	/* update trace_packet_header and stream_packet_context */
+> +	if (pos->prot != PROT_WRITE && file_stream->parent.trace_packet_header) {
+> +		/* Read packet header */
+> +		ret = generic_rw(&pos->parent,
+> &file_stream->parent.trace_packet_header->p);
+> +		if (ret) {
+> +			if (ret == -EFAULT)
+> +				goto retry;
+> +		}
+> +	}
+> +	if (pos->prot != PROT_WRITE && file_stream->parent.stream_packet_context) {
+> +		/* Read packet context */
+> +		ret = generic_rw(&pos->parent,
+> &file_stream->parent.stream_packet_context->p);
+> +		if (ret) {
+> +			if (ret == -EFAULT)
+> +				goto retry;
+> +		}
+> +	}
+> +	pos->data_offset = pos->offset;
+> +
+> +	/* unmap old base */
+> +	ret = munmap_align(pos->base_mma);
+> +	if (ret) {
+> +		fprintf(stderr, "[error] Unable to unmap old base: %s.\n",
+> +				strerror(errno));
+> +		return ret;
+> +	}
+> +	pos->base_mma = NULL;
+> +
+> +	return 0;
+> +
+> +	/* Retry with larger mapping */
+> +retry:
+> +	if (packet_map_len == ((filesize - pos->mmap_offset) << LOG2_CHAR_BIT)) {
+> +		/*
+> +		 * Reached EOF, but still expecting header/context data.
+> +		 */
+> +		fprintf(stderr, "[error] Reached end of file, but still expecting header
+> or context fields.\n");
+> +		return -EFAULT;
+> +	}
+> +	/* Double the mapping len, and retry */
+> +	tmp_map_len = packet_map_len << 1;
+> +	if (tmp_map_len >> 1 != packet_map_len) {
+> +		/* Overflow */
+> +		fprintf(stderr, "[error] Packet mapping length overflow\n");
+> +		return -EFAULT;
+> +	}
+> +	packet_map_len = tmp_map_len;
+> +	goto begin;
+> +}
+> +
+> +
+>  int ctf_init_pos(struct ctf_stream_pos *pos, struct bt_trace_descriptor
+>  *trace,
+>  		int fd, int open_flags)
+>  {
+>  	pos->fd = fd;
+> +	pos->data_offset = -1;
+>  	if (fd >= 0) {
+>  		pos->packet_cycles_index = g_array_new(FALSE, TRUE,
+>  						sizeof(struct packet_index));
+> @@ -850,6 +943,14 @@ void ctf_packet_seek(struct bt_stream_pos *stream_pos,
+> size_t index, int whence)
+>  		/* Lookup context/packet size in index */
+>  		pos->content_size = packet_index->content_size;
+>  		pos->packet_size = packet_index->packet_size;
+> +		if (pos->data_offset != -1) {
+> +			packet_index->data_offset = pos->data_offset;
+> +		} else {
+> +			ret = find_data_offset(pos, file_stream);
+> +			if (ret < 0) {
+> +				return;
+> +			}
+> +		}
+>  		if (packet_index->data_offset < packet_index->content_size) {
+>  			pos->offset = 0;	/* will read headers */
+>  		} else if (packet_index->data_offset == packet_index->content_size) {
+> @@ -1593,6 +1694,7 @@ begin:
+>  
+>  	/* Save position after header and context */
+>  	packet_index.data_offset = pos->offset;
+> +	pos->data_offset = pos->offset;
+>  
+>  	/* add index to packet array */
+>  	g_array_append_val(file_stream->pos.packet_cycles_index, packet_index);
+> diff --git a/include/babeltrace/ctf/types.h b/include/babeltrace/ctf/types.h
+> index e90464d..5f32b9b 100644
+> --- a/include/babeltrace/ctf/types.h
+> +++ b/include/babeltrace/ctf/types.h
+> @@ -78,6 +78,7 @@ struct ctf_stream_pos {
+>  	int64_t last_offset;	/* offset before the last read_event */
+>  	uint64_t cur_index;	/* current index in packet index */
+>  	uint64_t last_events_discarded;	/* last known amount of event discarded */
+> +	int64_t data_offset;	/* offset of data within the packet, in bits */
+>  	void (*packet_seek)(struct bt_stream_pos *pos, size_t index,
+>  			int whence); /* function called to switch packet */
+>  
+> --
+> 1.8.3.2
+> 
+> 
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
