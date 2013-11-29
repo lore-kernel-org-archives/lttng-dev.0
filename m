@@ -1,21 +1,20 @@
-From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
-	<jeremie.galarneau@efficios.com>
-Subject: [PATCH babeltrace 2/2] Test: Validate that enumeration
-	mapping strings are properly escaped
-Date: Thu, 28 Nov 2013 15:46:41 -0500
-Message-ID: <1385671601-5884-2-git-send-email-jeremie.galarneau__21134.946429129$1385671811$gmane$org@efficios.com>
-References: <1385671601-5884-1-git-send-email-jeremie.galarneau@efficios.com>
+From: =?ISO-8859-1?Q?Charles_Bri=E8re?= <charlesbriere.flatzo@gmail.com>
+Subject: Re: [PATCH liburcu 2/5] Dont link pthread on Android
+Date: Thu, 28 Nov 2013 16:10:53 -0800
+Message-ID: <CACnpWGTmYwjtmUCsiGHyS=nqSoQrO+_TMifPMvkwhYjxTOU06w__23437.0939353996$1385683921$gmane$org@mail.gmail.com>
+References: <1385567313-8138-1-git-send-email-charlesbriere.flatzo@gmail.com>
+	<1385567313-8138-2-git-send-email-charlesbriere.flatzo@gmail.com>
+	<20131128103024.3341ccc8@skate>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============0905641611=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qe0-f42.google.com ([209.85.128.42])
+Received: from mail-qe0-f54.google.com ([209.85.128.54])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1Vm8U5-0003Xw-Qg
-	for lttng-dev@lists.lttng.org; Thu, 28 Nov 2013 15:46:55 -0500
-Received: by mail-qe0-f42.google.com with SMTP id b4so8793685qen.1
-	for <lttng-dev@lists.lttng.org>; Thu, 28 Nov 2013 12:46:44 -0800 (PST)
-In-Reply-To: <1385671601-5884-1-git-send-email-jeremie.galarneau@efficios.com>
+	(envelope-from <charlesbriere.flatzo@gmail.com>) id 1VmBff-0000LX-1I
+	for lttng-dev@lists.lttng.org; Thu, 28 Nov 2013 19:11:05 -0500
+Received: by mail-qe0-f54.google.com with SMTP id cy11so8033374qeb.13
+	for <lttng-dev@lists.lttng.org>; Thu, 28 Nov 2013 16:10:53 -0800 (PST)
+In-Reply-To: <20131128103024.3341ccc8@skate>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,60 +23,164 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-U2lnbmVkLW9mZi1ieTogSsOpcsOpbWllIEdhbGFybmVhdSA8amVyZW1pZS5nYWxhcm5lYXVAZWZm
-aWNpb3MuY29tPgotLS0KIHRlc3RzL2xpYi90ZXN0X2N0Zl93cml0ZXIuYyB8IDI3ICsrKysrKysr
-KysrKysrKysrKysrKysrKysrKwogMSBmaWxlIGNoYW5nZWQsIDI3IGluc2VydGlvbnMoKykKCmRp
-ZmYgLS1naXQgYS90ZXN0cy9saWIvdGVzdF9jdGZfd3JpdGVyLmMgYi90ZXN0cy9saWIvdGVzdF9j
-dGZfd3JpdGVyLmMKaW5kZXggZDdmN2RiNy4uMDkyN2EzMiAxMDA2NDQKLS0tIGEvdGVzdHMvbGli
-L3Rlc3RfY3RmX3dyaXRlci5jCisrKyBiL3Rlc3RzL2xpYi90ZXN0X2N0Zl93cml0ZXIuYwpAQCAt
-MjU0LDEzICsyNTQsMzAgQEAgdm9pZCBhcHBlbmRfc2ltcGxlX2V2ZW50KHN0cnVjdCBidF9jdGZf
-c3RyZWFtX2NsYXNzICpzdHJlYW1fY2xhc3MsCiAJCWJ0X2N0Zl9maWVsZF90eXBlX2ludGVnZXJf
-Y3JlYXRlKDEyKTsKIAlzdHJ1Y3QgYnRfY3RmX2ZpZWxkX3R5cGUgKmZsb2F0X3R5cGUgPQogCQli
-dF9jdGZfZmllbGRfdHlwZV9mbG9hdGluZ19wb2ludF9jcmVhdGUoKTsKKwlzdHJ1Y3QgYnRfY3Rm
-X2ZpZWxkX3R5cGUgKmVudW1fdHlwZSA9CisJCWJ0X2N0Zl9maWVsZF90eXBlX2VudW1lcmF0aW9u
-X2NyZWF0ZSh1aW50XzEyX3R5cGUpOwogCXN0cnVjdCBidF9jdGZfZXZlbnQgKnNpbXBsZV9ldmVu
-dDsKIAlzdHJ1Y3QgYnRfY3RmX2ZpZWxkICppbnRlZ2VyX2ZpZWxkOwogCXN0cnVjdCBidF9jdGZf
-ZmllbGQgKmZsb2F0X2ZpZWxkOworCXN0cnVjdCBidF9jdGZfZmllbGQgKmVudW1fZmllbGQ7CisJ
-c3RydWN0IGJ0X2N0Zl9maWVsZCAqZW51bV9jb250YWluZXJfZmllbGQ7CiAKIAlidF9jdGZfZmll
-bGRfdHlwZV9zZXRfYWxpZ25tZW50KGZsb2F0X3R5cGUsIDMyKTsKIAlidF9jdGZfZmllbGRfdHlw
-ZV9mbG9hdGluZ19wb2ludF9zZXRfZXhwb25lbnRfZGlnaXRzKGZsb2F0X3R5cGUsIDExKTsKIAli
-dF9jdGZfZmllbGRfdHlwZV9mbG9hdGluZ19wb2ludF9zZXRfbWFudGlzc2FfZGlnaXRzKGZsb2F0
-X3R5cGUsIDUzKTsKKworCW9rKGJ0X2N0Zl9maWVsZF90eXBlX2VudW1lcmF0aW9uX2FkZF9tYXBw
-aW5nKGVudW1fdHlwZSwKKwkJImVzY2FwaW5nOyBcInRlc3RcIiIsIDAsIDApID09IDAsCisJCSJB
-Y2NlcHQgZW51bWVyYXRpb24gbWFwcGluZyBzdHJpbmdzIGNvbnRhaW5pbmcgcXVvdGVzIik7CisJ
-b2soYnRfY3RmX2ZpZWxkX3R5cGVfZW51bWVyYXRpb25fYWRkX21hcHBpbmcoZW51bV90eXBlLAor
-CQkiXHRhbm90aGVyIFwnZXNjYXBpbmdcJ1xuIHRlc3RcIiIsIDEsIDQpID09IDAsCisJCSJBY2Nl
-cHQgZW51bWVyYXRpb24gbWFwcGluZyBzdHJpbmdzIGNvbnRhaW5pbmcgc3BlY2lhbCBjaGFyYWN0
-ZXJzIik7CisJb2soYnRfY3RmX2ZpZWxkX3R5cGVfZW51bWVyYXRpb25fYWRkX21hcHBpbmcoZW51
-bV90eXBlLAorCQkiZXZlbnQgY2xvY2sgaW50IGZsb2F0IiwgNSwgMjIpID09IDAsCisJCSJBY2Nl
-cHQgZW51bWVyYXRpb24gbWFwcGluZyBzdHJpbmdzIGNvbnRhaW5pbmcgcmVzZXJ2ZWQga2V5d29y
-ZHMiKTsKKwlvayhidF9jdGZfZXZlbnRfY2xhc3NfYWRkX2ZpZWxkKHNpbXBsZV9ldmVudF9jbGFz
-cywgZW51bV90eXBlLAorCQkiZW51bV9maWVsZCIpID09IDAsICJBZGQgZW51bWVyYXRpb24gZmll
-bGQgdG8gZXZlbnQiKTsKKwogCW9rKHVpbnRfMTJfdHlwZSwgIkNyZWF0ZSBhbiB1bnNpZ25lZCBp
-bnRlZ2VyIHR5cGUiKTsKIAlidF9jdGZfZXZlbnRfY2xhc3NfYWRkX2ZpZWxkKHNpbXBsZV9ldmVu
-dF9jbGFzcywgdWludF8xMl90eXBlLAogCQkiaW50ZWdlcl9maWVsZCIpOwpAQCAtMjgxLDYgKzI5
-OCwxMyBAQCB2b2lkIGFwcGVuZF9zaW1wbGVfZXZlbnQoc3RydWN0IGJ0X2N0Zl9zdHJlYW1fY2xh
-c3MgKnN0cmVhbV9jbGFzcywKIAogCWZsb2F0X2ZpZWxkID0gYnRfY3RmX2V2ZW50X2dldF9wYXls
-b2FkKHNpbXBsZV9ldmVudCwgImZsb2F0X2ZpZWxkIik7CiAJYnRfY3RmX2ZpZWxkX2Zsb2F0aW5n
-X3BvaW50X3NldF92YWx1ZShmbG9hdF9maWVsZCwgMy4xNDE1KTsKKwllbnVtX2ZpZWxkID0gYnRf
-Y3RmX2ZpZWxkX2NyZWF0ZShlbnVtX3R5cGUpOworCWVudW1fY29udGFpbmVyX2ZpZWxkID0gYnRf
-Y3RmX2ZpZWxkX2VudW1lcmF0aW9uX2dldF9jb250YWluZXIoCisJCWVudW1fZmllbGQpOworCW9r
-KGJ0X2N0Zl9maWVsZF91bnNpZ25lZF9pbnRlZ2VyX3NldF92YWx1ZSgKKwkJZW51bV9jb250YWlu
-ZXJfZmllbGQsIDEpID09IDAsCisJCSJTZXQgZW51bWVyYXRpb24gY29udGFpbmVyIHZhbHVlIik7
-CisJYnRfY3RmX2V2ZW50X3NldF9wYXlsb2FkKHNpbXBsZV9ldmVudCwgImVudW1fZmllbGQiLCBl
-bnVtX2ZpZWxkKTsKIAogCW9rKGJ0X2N0Zl9jbG9ja19zZXRfdGltZShjbG9jaywgY3VycmVudF90
-aW1lKSA9PSAwLCAiU2V0IGNsb2NrIHRpbWUiKTsKIApAQCAtMjk0LDggKzMxOCwxMSBAQCB2b2lk
-IGFwcGVuZF9zaW1wbGVfZXZlbnQoc3RydWN0IGJ0X2N0Zl9zdHJlYW1fY2xhc3MgKnN0cmVhbV9j
-bGFzcywKIAlidF9jdGZfZXZlbnRfcHV0KHNpbXBsZV9ldmVudCk7CiAJYnRfY3RmX2ZpZWxkX3R5
-cGVfcHV0KHVpbnRfMTJfdHlwZSk7CiAJYnRfY3RmX2ZpZWxkX3R5cGVfcHV0KGZsb2F0X3R5cGUp
-OworCWJ0X2N0Zl9maWVsZF90eXBlX3B1dChlbnVtX3R5cGUpOwogCWJ0X2N0Zl9maWVsZF9wdXQo
-aW50ZWdlcl9maWVsZCk7CiAJYnRfY3RmX2ZpZWxkX3B1dChmbG9hdF9maWVsZCk7CisJYnRfY3Rm
-X2ZpZWxkX3B1dChlbnVtX2ZpZWxkKTsKKwlidF9jdGZfZmllbGRfcHV0KGVudW1fY29udGFpbmVy
-X2ZpZWxkKTsKIH0KIAogdm9pZCBhcHBlbmRfY29tcGxleF9ldmVudChzdHJ1Y3QgYnRfY3RmX3N0
-cmVhbV9jbGFzcyAqc3RyZWFtX2NsYXNzLAotLSAKMS44LjQuMgoKCl9fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0
-bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFp
-bG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+--===============0905641611==
+Content-Type: multipart/alternative; boundary=001a11c2f27adc8d5804ec45a966
+
+--001a11c2f27adc8d5804ec45a966
+Content-Type: text/plain; charset=ISO-8859-1
+
+Dear Thomas,
+
+To be honest, I haven't even though about other libc. But you are right,
+that is probably a better idea.
+
+What about adding those lines to configure.ac ( modified from
+configure.acfound in lttng-tools )
+
+# Check for pthread
+AC_CHECK_LIB([pthread], [pthread_create],
+[AM_CONDITIONAL(LIBC_INCLUDES_PTHREAD, false)],
+[AC_CHECK_LIB([c], [pthread_create],
+ [AM_CONDITIONAL(LIBC_INCLUDES_PTHREAD, true)],
+[AC_MSG_ERROR([Cannot find libpthread. Use [LDFLAGS]=-Ldir to specify its
+location.])]
+ )]
+)
+
+and changing the if in the patch to "if !LIBC_INCLUDES_PTHREAD"
+
+
+Thanks for the comment,
+Charles
+
+
+
+Mathieu,
+
+   if I am to submit a patch for that, should it be intended to replace
+this one, or on top of HEAD as a Fix ?
+
+
+Thanks,
+Charles
+
+
+
+On Thu, Nov 28, 2013 at 1:30 AM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
+
+> Dear Charles Briere,
+>
+> On Wed, 27 Nov 2013 07:48:30 -0800, Charles Briere wrote:
+>
+> >  #Add the -version-info directly here since we are only building
+> >  # library that use the version-info
+> > -AM_LDFLAGS=-lpthread -version-info $(URCU_LIBRARY_VERSION)
+> > +AM_LDFLAGS=-version-info $(URCU_LIBRARY_VERSION)
+> > +if !TARGET_IS_ANDROID
+> > +AM_LDFLAGS += -lpthread
+> > +endif
+>
+> Instead of making that conditional on Android, wouldn't it make more
+> sense to make it conditional on whether linking with pthread is
+> necessary or not?
+>
+> I can at least think of one other C library than Bionic that has
+> everything in libc instead of things split in several libraries: the
+> Musl C library (http://www.musl-libc.org).
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
+
+--001a11c2f27adc8d5804ec45a966
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Dear Thomas,=A0<div><br></div><div>To be honest, I haven&#=
+39;t even though about other libc. But you are right, that is probably a be=
+tter idea.=A0</div><div><br></div><div>What about adding those lines to <a =
+href=3D"http://configure.ac" target=3D"_blank">configure.ac</a> ( modified =
+from <a href=3D"http://configure.ac" target=3D"_blank">configure.ac</a> fou=
+nd in lttng-tools )=A0</div>
+
+<div><br></div><div># Check for pthread</div><div>AC_CHECK_LIB([pthread], [=
+pthread_create],</div><div><span style=3D"white-space:pre-wrap">	</span>[AM=
+_CONDITIONAL(LIBC_INCLUDES_PTHREAD, false)],</div><div><span style=3D"white=
+-space:pre-wrap">	</span>[AC_CHECK_LIB([c], [pthread_create],</div>
+
+<div><span style=3D"white-space:pre-wrap">		</span>[AM_CONDITIONAL(LIBC_INC=
+LUDES_PTHREAD, true)],</div><div><span style=3D"white-space:pre-wrap">		</s=
+pan>[AC_MSG_ERROR([Cannot find libpthread. Use [LDFLAGS]=3D-Ldir to specify=
+ its location.])]</div>
+
+<div><span style=3D"white-space:pre-wrap">	</span>)]</div><div>)</div><div>=
+<br></div><div>and changing the if in the patch to &quot;if !LIBC_INCLUDES_=
+PTHREAD&quot;</div><div><br></div><div><br></div><div>Thanks for the commen=
+t,</div>
+<div>Charles</div><div><br></div><div><br></div><div><br></div><div>Mathieu=
+,=A0</div><div><br></div><div>=A0 =A0if I am to submit a patch for that, sh=
+ould it be intended to replace this one, or on top of HEAD as a Fix ?</div>=
+<div>
+<br></div><div><br></div><div>Thanks,</div><div>Charles</div><div>=A0</div>=
+</div><div class=3D"gmail_extra"><br><br><div class=3D"gmail_quote">On Thu,=
+ Nov 28, 2013 at 1:30 AM, Thomas Petazzoni <span dir=3D"ltr">&lt;<a href=3D=
+"mailto:thomas.petazzoni@free-electrons.com" target=3D"_blank">thomas.petaz=
+zoni@free-electrons.com</a>&gt;</span> wrote:<br>
+<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
+x #ccc solid;padding-left:1ex">Dear Charles Briere,<br>
+<div class=3D"im"><br>
+On Wed, 27 Nov 2013 07:48:30 -0800, Charles Briere wrote:<br>
+<br>
+&gt; =A0#Add the -version-info directly here since we are only building<br>
+&gt; =A0# library that use the version-info<br>
+&gt; -AM_LDFLAGS=3D-lpthread -version-info $(URCU_LIBRARY_VERSION)<br>
+&gt; +AM_LDFLAGS=3D-version-info $(URCU_LIBRARY_VERSION)<br>
+&gt; +if !TARGET_IS_ANDROID<br>
+&gt; +AM_LDFLAGS +=3D -lpthread<br>
+&gt; +endif<br>
+<br>
+</div>Instead of making that conditional on Android, wouldn&#39;t it make m=
+ore<br>
+sense to make it conditional on whether linking with pthread is<br>
+necessary or not?<br>
+<br>
+I can at least think of one other C library than Bionic that has<br>
+everything in libc instead of things split in several libraries: the<br>
+Musl C library (<a href=3D"http://www.musl-libc.org" target=3D"_blank">http=
+://www.musl-libc.org</a>).<br>
+<br>
+Best regards,<br>
+<br>
+Thomas<br>
+<span class=3D"HOEnZb"><font color=3D"#888888">--<br>
+Thomas Petazzoni, CTO, Free Electrons<br>
+Embedded Linux, Kernel and Android engineering<br>
+<a href=3D"http://free-electrons.com" target=3D"_blank">http://free-electro=
+ns.com</a><br>
+</font></span></blockquote></div><br></div>
+
+--001a11c2f27adc8d5804ec45a966--
+
+
+--===============0905641611==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0905641611==--
