@@ -1,18 +1,19 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [BABELTRACE PATCH] Fix data_offset when importing
-	the indexes
-Date: Sat, 30 Nov 2013 11:19:11 +0000 (UTC)
-Message-ID: <601953286.77905.1385810351942.JavaMail.zimbra__18333.4465291866$1385810413$gmane$org@efficios.com>
-References: <1385765019-2963-1-git-send-email-jdesfossez@efficios.com>
+Subject: Re: [PATCH lttng-ust v2] Fix: baddr_statedump deadlock
+ with JUL tracing
+Date: Sat, 30 Nov 2013 14:44:58 +0000 (UTC)
+Message-ID: <1648091408.78023.1385822698871.JavaMail.zimbra__20374.1432553672$1385822800$gmane$org@efficios.com>
+References: <1385731974-12135-1-git-send-email-paul_woegerer@mentor.com>
+	<1385731974-12135-2-git-send-email-paul_woegerer@mentor.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1VmiZt-00071r-C4
-	for lttng-dev@lists.lttng.org; Sat, 30 Nov 2013 06:19:19 -0500
-In-Reply-To: <1385765019-2963-1-git-send-email-jdesfossez@efficios.com>
+	(envelope-from <compudj@efficios.com>) id 1Vmln1-0000sx-9y
+	for lttng-dev@lists.lttng.org; Sat, 30 Nov 2013 09:45:01 -0500
+In-Reply-To: <1385731974-12135-2-git-send-email-paul_woegerer@mentor.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,176 +22,202 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Julien Desfossez <jdesfossez@efficios.com>
+To: Paul Woegerer <paul_woegerer@mentor.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
 ----- Original Message -----
-> From: "Julien Desfossez" <jdesfossez@efficios.com>
-> To: "mathieu desnoyers" <mathieu.desnoyers@efficios.com>
-> Cc: lttng-dev@lists.lttng.org, "Julien Desfossez" <jdesfossez@efficios.com>
-> Sent: Friday, November 29, 2013 11:43:39 PM
-> Subject: [BABELTRACE PATCH] Fix data_offset when importing the indexes
-> 
-> When importing an index, we don't have the data_offset and we want to
-> mmap the tracefile only when needed, so we introduce a new function to
-> only compute this information when we are going to use a new packet.
+> From: "Paul Woegerer" <paul_woegerer@mentor.com>
+> To: lttng-dev@lists.lttng.org, "mathieu desnoyers" <mathieu.desnoyers@efficios.com>, dgoulet@efficios.com
+> Sent: Friday, November 29, 2013 2:32:54 PM
+> Subject: [PATCH lttng-ust v2] Fix: baddr_statedump deadlock with JUL tracing
 
-Merged with tiny cleanup.
+Almost there! I merged your patch, and then committed a fix that should handle
+everything (missing ust lock around session iteration).
+
+see commit
+
+commit 37dddb65504eff070a64fb4a8f1c56ee81c3173c
+Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Date:   Sat Nov 30 15:42:50 2013 +0100
+
+    Fix: take the ust lock around session iteration in statedump
+    
+    This is crafted _very_ carefully: we need to always take the ust lock
+    _within_ the dynamic loader lock.
+    
+    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+
+for details. Please let me know how this works for you.
 
 Thanks!
 
 Mathieu
 
+
 > 
-> Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
+> Signed-off-by: Paul Woegerer <paul_woegerer@mentor.com>
 > ---
->  formats/ctf/ctf.c | 106
->  +++++++++++++++++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 105 insertions(+), 1 deletion(-)
+>  include/lttng/ust-events.h       |  6 ++++++
+>  liblttng-ust/lttng-events.c      | 19 ++++++++++++++++++-
+>  liblttng-ust/lttng-tracer-core.h |  3 +--
+>  liblttng-ust/lttng-ust-comm.c    | 30 +++++++++++++++++-------------
+>  4 files changed, 42 insertions(+), 16 deletions(-)
 > 
-> diff --git a/formats/ctf/ctf.c b/formats/ctf/ctf.c
-> index 5cf8097..b8103c5 100644
-> --- a/formats/ctf/ctf.c
-> +++ b/formats/ctf/ctf.c
-> @@ -627,6 +627,103 @@ error:
+> diff --git a/include/lttng/ust-events.h b/include/lttng/ust-events.h
+> index 5d43570..28f7391 100644
+> --- a/include/lttng/ust-events.h
+> +++ b/include/lttng/ust-events.h
+> @@ -513,6 +513,9 @@ struct lttng_session {
+>  	struct lttng_ust_event_ht events_ht;	/* ht of events */
+>  	void *owner;				/* object owner */
+>  	int tstate:1;				/* Transient enable state */
+> +
+> +	/* New UST 2.4 */
+> +	int statedump_pending:1;
+>  };
+>  
+>  struct lttng_transport {
+> @@ -606,4 +609,7 @@ void lttng_filter_sync_state(struct
+> lttng_bytecode_runtime *runtime);
+>  struct cds_list_head *lttng_get_probe_list_head(void);
+>  int lttng_session_active(void);
+>  
+> +typedef int (*t_statedump_func_ptr)(struct lttng_session *session);
+> +int lttng_handle_pending_statedumps(t_statedump_func_ptr
+> statedump_func_ptr);
+> +
+>  #endif /* _LTTNG_UST_EVENTS_H */
+> diff --git a/liblttng-ust/lttng-events.c b/liblttng-ust/lttng-events.c
+> index 7751584..9380e9c 100644
+> --- a/liblttng-ust/lttng-events.c
+> +++ b/liblttng-ust/lttng-events.c
+> @@ -294,7 +294,8 @@ int lttng_session_enable(struct lttng_session *session)
+>  	CMM_ACCESS_ONCE(session->active) = 1;
+>  	CMM_ACCESS_ONCE(session->been_active) = 1;
+>  
+> -	lttng_ust_sockinfo_session_enabled(session->owner, session);
+> +	session->statedump_pending = 1;
+> +	lttng_ust_sockinfo_session_enabled(session->owner);
+>  end:
 >  	return ret;
 >  }
+> @@ -675,6 +676,22 @@ int lttng_fix_pending_events(void)
+>  }
 >  
-> +static
-> +int find_data_offset(struct ctf_stream_pos *pos,
-> +		struct ctf_file_stream *file_stream,
-> +		struct packet_index *packet_index)
+>  /*
+> + * Called after session enable: For each session, execute pending
+> statedumps.
+> + */
+> +int lttng_handle_pending_statedumps(t_statedump_func_ptr statedump_func_ptr)
 > +{
-> +	uint64_t packet_map_len = DEFAULT_HEADER_LEN, tmp_map_len;
-> +	struct stat filestats;
-> +	int ret;
-> +	size_t filesize;
+> +	struct lttng_session *session;
 > +
-> +	pos = &file_stream->pos;
-> +
-> +	ret = fstat(pos->fd, &filestats);
-> +	if (ret < 0)
-> +		return ret;
-> +	filesize = filestats.st_size;
-> +
-> +	/* Deal with empty files */
-> +	if (!filesize) {
-> +		return 0;
-> +	}
-> +
-> +begin:
-> +	if (filesize - pos->mmap_offset < (packet_map_len >> LOG2_CHAR_BIT)) {
-> +		packet_map_len = (filesize - pos->mmap_offset) << LOG2_CHAR_BIT;
-> +	}
-> +
-> +	if (pos->base_mma) {
-> +		/* unmap old base */
-> +		ret = munmap_align(pos->base_mma);
-> +		if (ret) {
-> +			fprintf(stderr, "[error] Unable to unmap old base: %s.\n",
-> +					strerror(errno));
-> +			return ret;
-> +		}
-> +		pos->base_mma = NULL;
-> +	}
-> +	/* map new base. Need mapping length from header. */
-> +	pos->base_mma = mmap_align(packet_map_len >> LOG2_CHAR_BIT, PROT_READ,
-> +			MAP_PRIVATE, pos->fd, pos->mmap_offset);
-> +	assert(pos->base_mma != MAP_FAILED);
-> +
-> +	pos->content_size = packet_map_len;
-> +	pos->packet_size = packet_map_len;
-> +	pos->offset = 0;	/* Position of the packet header */
-> +
-> +	/* update trace_packet_header and stream_packet_context */
-> +	if (pos->prot != PROT_WRITE && file_stream->parent.trace_packet_header) {
-> +		/* Read packet header */
-> +		ret = generic_rw(&pos->parent,
-> &file_stream->parent.trace_packet_header->p);
-> +		if (ret) {
-> +			if (ret == -EFAULT)
-> +				goto retry;
+> +	cds_list_for_each_entry(session, &sessions, node) {
+> +		if (session->statedump_pending) {
+> +			session->statedump_pending = 0;
+> +			statedump_func_ptr(session);
 > +		}
 > +	}
-> +	if (pos->prot != PROT_WRITE && file_stream->parent.stream_packet_context) {
-> +		/* Read packet context */
-> +		ret = generic_rw(&pos->parent,
-> &file_stream->parent.stream_packet_context->p);
-> +		if (ret) {
-> +			if (ret == -EFAULT)
-> +				goto retry;
-> +		}
-> +	}
-> +	packet_index->data_offset = pos->offset;
-> +
-> +	/* unmap old base */
-> +	ret = munmap_align(pos->base_mma);
-> +	if (ret) {
-> +		fprintf(stderr, "[error] Unable to unmap old base: %s.\n",
-> +				strerror(errno));
-> +		return ret;
-> +	}
-> +	pos->base_mma = NULL;
-> +
 > +	return 0;
-> +
-> +	/* Retry with larger mapping */
-> +retry:
-> +	if (packet_map_len == ((filesize - pos->mmap_offset) << LOG2_CHAR_BIT)) {
-> +		/*
-> +		 * Reached EOF, but still expecting header/context data.
-> +		 */
-> +		fprintf(stderr, "[error] Reached end of file, but still expecting header
-> or context fields.\n");
-> +		return -EFAULT;
-> +	}
-> +	/* Double the mapping len, and retry */
-> +	tmp_map_len = packet_map_len << 1;
-> +	if (tmp_map_len >> 1 != packet_map_len) {
-> +		/* Overflow */
-> +		fprintf(stderr, "[error] Packet mapping length overflow\n");
-> +		return -EFAULT;
-> +	}
-> +	packet_map_len = tmp_map_len;
-> +	goto begin;
 > +}
 > +
+> +/*
+>   * Only used internally at session destruction.
+>   */
+>  static
+> diff --git a/liblttng-ust/lttng-tracer-core.h
+> b/liblttng-ust/lttng-tracer-core.h
+> index e7f549e..57df175 100644
+> --- a/liblttng-ust/lttng-tracer-core.h
+> +++ b/liblttng-ust/lttng-tracer-core.h
+> @@ -45,7 +45,6 @@ const char *lttng_ust_obj_get_name(int id);
+>  
+>  int lttng_get_notify_socket(void *owner);
+>  
+> -void lttng_ust_sockinfo_session_enabled(void *owner,
+> -		struct lttng_session *session_enabled);
+> +void lttng_ust_sockinfo_session_enabled(void *owner);
+>  
+>  #endif /* _LTTNG_TRACER_CORE_H */
+> diff --git a/liblttng-ust/lttng-ust-comm.c b/liblttng-ust/lttng-ust-comm.c
+> index b99bf00..4724fab 100644
+> --- a/liblttng-ust/lttng-ust-comm.c
+> +++ b/liblttng-ust/lttng-ust-comm.c
+> @@ -108,7 +108,7 @@ struct sock_info {
+>  
+>  	char wait_shm_path[PATH_MAX];
+>  	char *wait_shm_mmap;
+> -	struct lttng_session *session_enabled;
+> +	int session_enabled;
+>  };
+>  
+>  /* Socket from app (connect) to session daemon (listen) for communication */
+> @@ -126,7 +126,7 @@ struct sock_info global_apps = {
+>  
+>  	.wait_shm_path = "/" LTTNG_UST_WAIT_FILENAME,
+>  
+> -	.session_enabled = NULL,
+> +	.session_enabled = 0,
+>  };
+>  
+>  /* TODO: allow global_apps_sock_path override */
+> @@ -141,7 +141,7 @@ struct sock_info local_apps = {
+>  	.socket = -1,
+>  	.notify_socket = -1,
+>  
+> -	.session_enabled = NULL,
+> +	.session_enabled = 0,
+>  };
+>  
+>  static int wait_poll_fallback;
+> @@ -709,6 +709,17 @@ error:
+>  }
+>  
+>  static
+> +void handle_pending_statedumps(struct sock_info *sock_info)
+> +{
+> +	int ctor_passed = sock_info->constructor_sem_posted;
 > +
->  int ctf_init_pos(struct ctf_stream_pos *pos, struct bt_trace_descriptor
->  *trace,
->  		int fd, int open_flags)
+> +	if (ctor_passed && sock_info->session_enabled) {
+> +		sock_info->session_enabled = 0;
+> +		lttng_handle_pending_statedumps(&lttng_ust_baddr_statedump);
+> +	}
+> +}
+> +
+> +static
+>  void cleanup_sock_info(struct sock_info *sock_info, int exiting)
 >  {
-> @@ -845,11 +942,17 @@ void ctf_packet_seek(struct bt_stream_pos *stream_pos,
-> size_t index, int whence)
->  				struct packet_index,
->  				pos->cur_index);
->  		file_stream->parent.real_timestamp = packet_index->timestamp_begin;
-> -		pos->mmap_offset = packet_index->offset;
+>  	int ret;
+> @@ -1214,13 +1225,7 @@ restart:
+>  			if (ret) {
+>  				ERR("Error handling message for %s socket", sock_info->name);
+>  			} else {
+> -				struct lttng_session *session;
+> -
+> -				session = sock_info->session_enabled;
+> -				if (session) {
+> -					sock_info->session_enabled = NULL;
+> -					lttng_ust_baddr_statedump(session);
+> -				}
+> +				handle_pending_statedumps(sock_info);
+>  			}
+>  			continue;
+>  		default:
+> @@ -1535,9 +1540,8 @@ void ust_after_fork_child(sigset_t *restore_sigset)
+>  	lttng_ust_init();
+>  }
 >  
->  		/* Lookup context/packet size in index */
-> +		if (packet_index->data_offset == -1) {
-> +			ret = find_data_offset(pos, file_stream, packet_index);
-> +			if (ret < 0) {
-> +				return;
-> +			}
-> +		}
->  		pos->content_size = packet_index->content_size;
->  		pos->packet_size = packet_index->packet_size;
-> +		pos->mmap_offset = packet_index->offset;
->  		if (packet_index->data_offset < packet_index->content_size) {
->  			pos->offset = 0;	/* will read headers */
->  		} else if (packet_index->data_offset == packet_index->content_size) {
-> @@ -1748,6 +1851,7 @@ int import_stream_packet_index(struct ctf_trace *td,
->  		index.timestamp_end = be64toh(ctf_index.timestamp_end);
->  		index.events_discarded = be64toh(ctf_index.events_discarded);
->  		index.events_discarded_len = 64;
-> +		index.data_offset = -1;
->  		stream_id = be64toh(ctf_index.stream_id);
->  
->  		if (!first_packet) {
+> -void lttng_ust_sockinfo_session_enabled(void *owner,
+> -		struct lttng_session *session_enabled)
+> +void lttng_ust_sockinfo_session_enabled(void *owner)
+>  {
+>  	struct sock_info *sock_info = owner;
+> -	sock_info->session_enabled = session_enabled;
+> +	sock_info->session_enabled = 1;
+>  }
 > --
-> 1.8.3.2
+> 1.8.4
 > 
 > 
 
