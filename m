@@ -1,16 +1,18 @@
-From: Shariyar <syed.shariyar@gmail.com>
-Subject: Re: Extracting System Call IDs By Using TMF
-Date: Sat, 30 Nov 2013 20:23:58 -0500
-Message-ID: <CAKQh6phjqskTkP5OfG3-NN9UBhWxK6UtiyZA+YcoG=x7aYS=yg__17173.7695149661$1385861105$gmane$org@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH babeltrace] Fix ctf-writer: possible use
+ after	free
+Date: Sun, 1 Dec 2013 02:00:10 +0000 (UTC)
+Message-ID: <906518736.78116.1385863210708.JavaMail.zimbra__39768.3505122133$1385863274$gmane$org@efficios.com>
+References: <1385749602-13426-1-git-send-email-jeremie.galarneau@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0790874532=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-pb0-f44.google.com ([209.85.160.44])
+Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <syed.shariyar@gmail.com>) id 1VmvlU-0003aO-JJ
-	for lttng-dev@lists.lttng.org; Sat, 30 Nov 2013 20:24:10 -0500
-Received: by mail-pb0-f44.google.com with SMTP id rq2so16545457pbb.17
-	for <lttng-dev@lists.lttng.org>; Sat, 30 Nov 2013 17:23:58 -0800 (PST)
+	(envelope-from <compudj@efficios.com>) id 1VmwKS-00056t-St
+	for lttng-dev@lists.lttng.org; Sat, 30 Nov 2013 21:00:19 -0500
+In-Reply-To: <1385749602-13426-1-git-send-email-jeremie.galarneau@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,90 +21,37 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: =?utf-8?B?SsOpcsOpbWll?= Galarneau <jeremie.galarneau@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============0790874532==
-Content-Type: multipart/alternative; boundary=001a11369d70eae4c104ec6eeaff
-
---001a11369d70eae4c104ec6eeaff
-Content-Type: text/plain; charset=ISO-8859-1
-
-Hi Matthew:
-
-In that case I need to create a map myself.
-
-I  was looking for the system call ids for the following reasons:
-
-1. In LTTng 1.0, there were several occasions when only the system call id
-was found in a trace but not the names. If such is the case with LTTng 2.0,
-then my concern is  that it would be better to extract ids.
-
-2. Trained models need to be stored in database and ids will take lesser
-sapce as the model grows with time.
-
-Regards,
-Shariyar
-
-
-
-Message: 1
-Date: Fri, 29 Nov 2013 10:39:54 -0500
-From: Matthew Khouzam <matthew.khouzam@ericsson.com>
-To: <lttng-dev@lists.lttng.org>
-Subject: Re: [lttng-dev] Extracting System Call IDs By Using TMF
-Message-ID: <5298B54A.5080907@ericsson.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-
-Hi Shariyar,
-
-I would like to know what is the need for the syscall id? I looked at
-kernel events, and they store the system call name, not the id? Is it
-for performance reasons, or is there some functionality that can be
-achieved from a call ID that cannot from a name?
-
---001a11369d70eae4c104ec6eeaff
-Content-Type: text/html; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div>Hi Matthew:</div><div>=A0</div><div>In that case I ne=
-ed to create a map myself. </div><div>=A0</div><div>I=A0 was looking for=A0=
-the system call ids for the following reasons:</div><div>=A0</div><div>1. I=
-n LTTng 1.0, there were=A0several occasions when only the system call id wa=
-s found in a trace but not the names. If such is the=A0case with LTTng 2.0,=
- then my concern is=A0 that it would=A0be=A0better to extract ids.</div>
-<div>=A0</div><div>2.=A0Trained models need to be stored=A0in database and =
-ids will take lesser sapce as the model grows with time. </div><div>=A0</di=
-v><div>Regards,</div><div>Shariyar</div><div>=A0</div><div>=A0</div><div>=
-=A0</div><div>
-Message: 1<br>Date: Fri, 29 Nov 2013 10:39:54 -0500<br>From: Matthew Khouza=
-m &lt;<a href=3D"mailto:matthew.khouzam@ericsson.com"><font color=3D"#0066c=
-c">matthew.khouzam@ericsson.com</font></a>&gt;<br>To: &lt;<a href=3D"mailto=
-:lttng-dev@lists.lttng.org"><font color=3D"#0066cc">lttng-dev@lists.lttng.o=
-rg</font></a>&gt;<br>
-Subject: Re: [lttng-dev] Extracting System Call IDs By Using TMF<br>Message=
--ID: &lt;<a href=3D"mailto:5298B54A.5080907@ericsson.com"><font color=3D"#0=
-066cc">5298B54A.5080907@ericsson.com</font></a><font color=3D"#0066cc"></fo=
-nt>&gt;<br>
-Content-Type: text/plain; charset=3D&quot;ISO-8859-1&quot;<br><br>Hi Shariy=
-ar,<br><br>I would like to know what is the need for the syscall id? I look=
-ed at<br>kernel events, and they store the system call name, not the id? Is=
- it<br>
-for performance reasons, or is there some functionality that can be<br>achi=
-eved from a call ID that cannot from a name?<br></div></div>
-
---001a11369d70eae4c104ec6eeaff--
-
-
---===============0790874532==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0790874532==--
+TWVyZ2VkLCB0aGFua3MhCgpNYXRoaWV1CgotLS0tLSBPcmlnaW5hbCBNZXNzYWdlIC0tLS0tCj4g
+RnJvbTogIkrDqXLDqW1pZSBHYWxhcm5lYXUiIDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5j
+b20+Cj4gVG86IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBTZW50OiBGcmlkYXksIE5vdmVt
+YmVyIDI5LCAyMDEzIDc6MjY6NDIgUE0KPiBTdWJqZWN0OiBbbHR0bmctZGV2XSBbUEFUQ0ggYmFi
+ZWx0cmFjZV0gRml4IGN0Zi13cml0ZXI6IHBvc3NpYmxlIHVzZSBhZnRlcglmcmVlCj4gCj4gY3Rm
+X3N0cmVhbV9wb3MnIGJhc2VfbW1hIG1lbWJlciBtdXN0IGJlIGNvcGllZCBmcm9tIHN0cmVhbS0+
+cG9zIGJlZm9yZQo+IHVwZGF0aW5nIHRoZSBmaW5hbCBwYWNrZXQgYW5kIGNvbnRlbnQgc2l6ZXMu
+IFRoZSBvcmlnaW5hbCBiYXNlX21tYQo+IHN0cnVjdHVyZSB3aWxsIGJlIHJlYWxsb2NhdGVkIGlm
+IHRoZSBwYWNrZXQgaXMgcmVzaXplZC4KPiAKPiBTaWduZWQtb2ZmLWJ5OiBKw6lyw6ltaWUgR2Fs
+YXJuZWF1IDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20+Cj4gLS0tCj4gIGZvcm1hdHMv
+Y3RmL3dyaXRlci9zdHJlYW0uYyB8IDMgKysrCj4gIDEgZmlsZSBjaGFuZ2VkLCAzIGluc2VydGlv
+bnMoKykKPiAKPiBkaWZmIC0tZ2l0IGEvZm9ybWF0cy9jdGYvd3JpdGVyL3N0cmVhbS5jIGIvZm9y
+bWF0cy9jdGYvd3JpdGVyL3N0cmVhbS5jCj4gaW5kZXggYWM4OTQyOS4uNGVmYjM2OSAxMDA2NDQK
+PiAtLS0gYS9mb3JtYXRzL2N0Zi93cml0ZXIvc3RyZWFtLmMKPiArKysgYi9mb3JtYXRzL2N0Zi93
+cml0ZXIvc3RyZWFtLmMKPiBAQCAtNDY0LDcgKzQ2NCwxMCBAQCBpbnQgYnRfY3RmX3N0cmVhbV9m
+bHVzaChzdHJ1Y3QgYnRfY3RmX3N0cmVhbSAqc3RyZWFtKQo+ICAJLyoKPiAgCSAqIFVwZGF0ZSB0
+aGUgcGFja2V0IHRvdGFsIHNpemUgYW5kIGNvbnRlbnQgc2l6ZSBhbmQgb3ZlcndyaXRlIHRoZQo+
+ICAJICogcGFja2V0IGNvbnRleHQuCj4gKwkgKiBDb3B5IGJhc2VfbW1hIGFzIHRoZSBwYWNrZXQg
+bWF5IGhhdmUgYmVlbiByZW1hcHBlZCAoZS5nLiB3aGVuIGEKPiArCSAqIHBhY2tldCBpcyByZXNp
+emVkKS4KPiAgCSAqLwo+ICsJcGFja2V0X2NvbnRleHRfcG9zLmJhc2VfbW1hID0gc3RyZWFtLT5w
+b3MuYmFzZV9tbWE7Cj4gIAlyZXQgPSBzZXRfc3RydWN0dXJlX2ZpZWxkX2ludGVnZXIoc3RyZWFt
+X2NsYXNzLT5wYWNrZXRfY29udGV4dCwKPiAgCQkiY29udGVudF9zaXplIiwgc3RyZWFtLT5wb3Mu
+b2Zmc2V0KTsKPiAgCWlmIChyZXQpIHsKPiAtLQo+IDEuOC40LjIKPiAKPiAKPiBfX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5n
+IGxpc3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0cDovL2xpc3RzLmx0dG5nLm9y
+Zy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cj4gCgotLSAKTWF0aGlldSBEZXNu
+b3llcnMKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlz
+dApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJp
+bi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
