@@ -2,7 +2,7 @@ From: Charles Briere <charlesbriere.flatzo@gmail.com>
 Subject: [PATCH liburcu 1/2] FIX: Android : Do not redefine
 	gettid
 Date: Sun,  1 Dec 2013 18:00:49 -0800
-Message-ID: <1385949650-16725-1-git-send-email-charlesbriere.flatzo__20332.1228888401$1386015446$gmane$org@gmail.com>
+Message-ID: <1385949650-16725-1-git-send-email-charlesbriere.flatzo__48873.225428588$1386016315$gmane$org@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
