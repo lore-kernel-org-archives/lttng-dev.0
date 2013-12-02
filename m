@@ -1,20 +1,18 @@
-From: "Woegerer, Paul" <Paul_Woegerer@mentor.com>
-Subject: Re: [PATCH lttng-ust v2] Fix: baddr_statedump deadlock
-	with JUL tracing
-Date: Mon, 2 Dec 2013 14:03:06 +0100
-Message-ID: <529C850A.5060702__21892.2958746136$1386016621$gmane$org@mentor.com>
-References: <1385731974-12135-1-git-send-email-paul_woegerer@mentor.com>
-	<1385731974-12135-2-git-send-email-paul_woegerer@mentor.com>
-	<1648091408.78023.1385822698871.JavaMail.zimbra@efficios.com>
+From: =?ISO-8859-1?Q?Genevi=E8ve_Bastien?= <gbastien+lttng@versatic.net>
+Subject: LTTng-TMF hack-a-thon, December 12
+Date: Mon, 02 Dec 2013 13:57:56 -0500
+Message-ID: <529CD834.2090307__47263.2372788668$1386016726$gmane$org@versatic.net>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0236819266=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from relay1.mentorg.com ([192.94.38.131])
+Received: from smtp.polymtl.ca ([132.207.4.11])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Paul_Woegerer@mentor.com>) id 1VnT9r-0000tt-58
-	for lttng-dev@lists.lttng.org; Mon, 02 Dec 2013 08:03:30 -0500
-In-Reply-To: <1648091408.78023.1385822698871.JavaMail.zimbra@efficios.com>
+	(envelope-from <gbastien+lttng@versatic.net>) id 1VnYgw-0003a3-73
+	for lttng-dev@lists.lttng.org; Mon, 02 Dec 2013 13:58:04 -0500
+Received: from [132.207.72.43] (dyn43.dorsal.polymtl.ca [132.207.72.43])
+	by smtp.polymtl.ca (8.14.3/8.14.3) with ESMTP id rB2Ivuwp002300
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-SHA bits=256 verify=NOT)
+	for <lttng-dev@lists.lttng.org>; Mon, 2 Dec 2013 13:57:57 -0500
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,209 +21,112 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-On 11/30/2013 03:44 PM, Mathieu Desnoyers wrote:
-> ----- Original Message -----
->> From: "Paul Woegerer" <paul_woegerer@mentor.com>
->> To: lttng-dev@lists.lttng.org, "mathieu desnoyers" <mathieu.desnoyers@efficios.com>, dgoulet@efficios.com
->> Sent: Friday, November 29, 2013 2:32:54 PM
->> Subject: [PATCH lttng-ust v2] Fix: baddr_statedump deadlock with JUL tracing
-> Almost there! I merged your patch, and then committed a fix that should handle
-> everything (missing ust lock around session iteration).
->
-> see commit
->
-> commit 37dddb65504eff070a64fb4a8f1c56ee81c3173c
-> Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> Date:   Sat Nov 30 15:42:50 2013 +0100
->
->     Fix: take the ust lock around session iteration in statedump
->     
->     This is crafted _very_ carefully: we need to always take the ust lock
->     _within_ the dynamic loader lock.
->     
->     Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
->
-> for details. Please let me know how this works for you.
+This is a multi-part message in MIME format.
+--===============0236819266==
+Content-Type: multipart/alternative;
+ boundary="------------070904040204040609030502"
 
-Works just fine. Thanks !
+This is a multi-part message in MIME format.
+--------------070904040204040609030502
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+X-MIME-Autoconverted: from 8bit to quoted-printable by smtp.polymtl.ca id rB2Ivuwp002300
+Content-Transfer-Encoding: quoted-printable
 
->
-> Thanks!
->
-> Mathieu
->
->
->> Signed-off-by: Paul Woegerer <paul_woegerer@mentor.com>
->> ---
->>  include/lttng/ust-events.h       |  6 ++++++
->>  liblttng-ust/lttng-events.c      | 19 ++++++++++++++++++-
->>  liblttng-ust/lttng-tracer-core.h |  3 +--
->>  liblttng-ust/lttng-ust-comm.c    | 30 +++++++++++++++++-------------
->>  4 files changed, 42 insertions(+), 16 deletions(-)
->>
->> diff --git a/include/lttng/ust-events.h b/include/lttng/ust-events.h
->> index 5d43570..28f7391 100644
->> --- a/include/lttng/ust-events.h
->> +++ b/include/lttng/ust-events.h
->> @@ -513,6 +513,9 @@ struct lttng_session {
->>  	struct lttng_ust_event_ht events_ht;	/* ht of events */
->>  	void *owner;				/* object owner */
->>  	int tstate:1;				/* Transient enable state */
->> +
->> +	/* New UST 2.4 */
->> +	int statedump_pending:1;
->>  };
->>  
->>  struct lttng_transport {
->> @@ -606,4 +609,7 @@ void lttng_filter_sync_state(struct
->> lttng_bytecode_runtime *runtime);
->>  struct cds_list_head *lttng_get_probe_list_head(void);
->>  int lttng_session_active(void);
->>  
->> +typedef int (*t_statedump_func_ptr)(struct lttng_session *session);
->> +int lttng_handle_pending_statedumps(t_statedump_func_ptr
->> statedump_func_ptr);
->> +
->>  #endif /* _LTTNG_UST_EVENTS_H */
->> diff --git a/liblttng-ust/lttng-events.c b/liblttng-ust/lttng-events.c
->> index 7751584..9380e9c 100644
->> --- a/liblttng-ust/lttng-events.c
->> +++ b/liblttng-ust/lttng-events.c
->> @@ -294,7 +294,8 @@ int lttng_session_enable(struct lttng_session *session)
->>  	CMM_ACCESS_ONCE(session->active) = 1;
->>  	CMM_ACCESS_ONCE(session->been_active) = 1;
->>  
->> -	lttng_ust_sockinfo_session_enabled(session->owner, session);
->> +	session->statedump_pending = 1;
->> +	lttng_ust_sockinfo_session_enabled(session->owner);
->>  end:
->>  	return ret;
->>  }
->> @@ -675,6 +676,22 @@ int lttng_fix_pending_events(void)
->>  }
->>  
->>  /*
->> + * Called after session enable: For each session, execute pending
->> statedumps.
->> + */
->> +int lttng_handle_pending_statedumps(t_statedump_func_ptr statedump_func_ptr)
->> +{
->> +	struct lttng_session *session;
->> +
->> +	cds_list_for_each_entry(session, &sessions, node) {
->> +		if (session->statedump_pending) {
->> +			session->statedump_pending = 0;
->> +			statedump_func_ptr(session);
->> +		}
->> +	}
->> +	return 0;
->> +}
->> +
->> +/*
->>   * Only used internally at session destruction.
->>   */
->>  static
->> diff --git a/liblttng-ust/lttng-tracer-core.h
->> b/liblttng-ust/lttng-tracer-core.h
->> index e7f549e..57df175 100644
->> --- a/liblttng-ust/lttng-tracer-core.h
->> +++ b/liblttng-ust/lttng-tracer-core.h
->> @@ -45,7 +45,6 @@ const char *lttng_ust_obj_get_name(int id);
->>  
->>  int lttng_get_notify_socket(void *owner);
->>  
->> -void lttng_ust_sockinfo_session_enabled(void *owner,
->> -		struct lttng_session *session_enabled);
->> +void lttng_ust_sockinfo_session_enabled(void *owner);
->>  
->>  #endif /* _LTTNG_TRACER_CORE_H */
->> diff --git a/liblttng-ust/lttng-ust-comm.c b/liblttng-ust/lttng-ust-comm.c
->> index b99bf00..4724fab 100644
->> --- a/liblttng-ust/lttng-ust-comm.c
->> +++ b/liblttng-ust/lttng-ust-comm.c
->> @@ -108,7 +108,7 @@ struct sock_info {
->>  
->>  	char wait_shm_path[PATH_MAX];
->>  	char *wait_shm_mmap;
->> -	struct lttng_session *session_enabled;
->> +	int session_enabled;
->>  };
->>  
->>  /* Socket from app (connect) to session daemon (listen) for communication */
->> @@ -126,7 +126,7 @@ struct sock_info global_apps = {
->>  
->>  	.wait_shm_path = "/" LTTNG_UST_WAIT_FILENAME,
->>  
->> -	.session_enabled = NULL,
->> +	.session_enabled = 0,
->>  };
->>  
->>  /* TODO: allow global_apps_sock_path override */
->> @@ -141,7 +141,7 @@ struct sock_info local_apps = {
->>  	.socket = -1,
->>  	.notify_socket = -1,
->>  
->> -	.session_enabled = NULL,
->> +	.session_enabled = 0,
->>  };
->>  
->>  static int wait_poll_fallback;
->> @@ -709,6 +709,17 @@ error:
->>  }
->>  
->>  static
->> +void handle_pending_statedumps(struct sock_info *sock_info)
->> +{
->> +	int ctor_passed = sock_info->constructor_sem_posted;
->> +
->> +	if (ctor_passed && sock_info->session_enabled) {
->> +		sock_info->session_enabled = 0;
->> +		lttng_handle_pending_statedumps(&lttng_ust_baddr_statedump);
->> +	}
->> +}
->> +
->> +static
->>  void cleanup_sock_info(struct sock_info *sock_info, int exiting)
->>  {
->>  	int ret;
->> @@ -1214,13 +1225,7 @@ restart:
->>  			if (ret) {
->>  				ERR("Error handling message for %s socket", sock_info->name);
->>  			} else {
->> -				struct lttng_session *session;
->> -
->> -				session = sock_info->session_enabled;
->> -				if (session) {
->> -					sock_info->session_enabled = NULL;
->> -					lttng_ust_baddr_statedump(session);
->> -				}
->> +				handle_pending_statedumps(sock_info);
->>  			}
->>  			continue;
->>  		default:
->> @@ -1535,9 +1540,8 @@ void ust_after_fork_child(sigset_t *restore_sigset)
->>  	lttng_ust_init();
->>  }
->>  
->> -void lttng_ust_sockinfo_session_enabled(void *owner,
->> -		struct lttng_session *session_enabled)
->> +void lttng_ust_sockinfo_session_enabled(void *owner)
->>  {
->>  	struct sock_info *sock_info = owner;
->> -	sock_info->session_enabled = session_enabled;
->> +	sock_info->session_enabled = 1;
->>  }
->> --
->> 1.8.4
->>
->>
+Hello all,
+
+We'll have a unofficial Hack-day on thursday December 12 at=20
+Polytechnique in Montr=E9al, for those interested.  We'll work on LTTng=20
+and TMF features, get feedback on new features, most of which are=20
+available in the experimental Tmf RCP, announced previously in october=20
+(available at http://secretaire.dorsal.polymtl.ca/~gbastien/TracingRCP/=20
+<http://secretaire.dorsal.polymtl.ca/%7Egbastien/TracingRCP/>). The idea=20
+is, though there might be some preliminary work and suggestions, that=20
+the actual course of the day will be decided on the spot, by the people=20
+present.  We'll most probably divide the group in smaller workgroups to=20
+work on specific topics.
+
+If you want to join physically, it will take place at =C9cole=20
+Polytechnique, pavillon Lassonde (http://goo.gl/maps/zrIh1) on December=20
+12, from 9h30 in room L-4812.  Bring your laptop and let us know in=20
+advance if you plan to come. If you wish to participate but cannot come=20
+to Polytechnique, then let us know and we'll find a way to have you join=20
+the conversation.
+
+Whether or not you'll be present, you may propose ideas and topics of=20
+discussion and we'll take those into consideration.
+
+Thanks,
+
+--=20
+Genevi=E8ve Bastien
+Research Associate
+=C9cole Polytechnique de Montr=E9al
+514-340-4711 #7184
+
+--------------070904040204040609030502
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
+
+<html>
+  <head>
+
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+  </head>
+  <body text="#000000" bgcolor="#FFFFFF">
+    Hello all,
+    <br>
+    <br>
+    We'll have a unofficial Hack-day on thursday December 12 at
+    Polytechnique in Montr&eacute;al, for those interested.&nbsp; We'll work on
+    LTTng and TMF features, get feedback on new features, most of which
+    are available in the experimental Tmf RCP, announced previously in
+    october (available at <a
+      href="http://secretaire.dorsal.polymtl.ca/%7Egbastien/TracingRCP/">http://secretaire.dorsal.polymtl.ca/~gbastien/TracingRCP/</a>).&nbsp;
+
+    The idea is, though there might be some preliminary work and
+    suggestions, that the actual course of the day will be decided on
+    the spot, by the people present.&nbsp; We'll most probably divide the
+    group in smaller workgroups to work on specific topics.<br>
+    <br>
+    If you want to join physically, it will take place at &Eacute;cole
+    Polytechnique, pavillon Lassonde (<a class="moz-txt-link-freetext" href="http://goo.gl/maps/zrIh1">http://goo.gl/maps/zrIh1</a>) on
+    December 12, from 9h30 in room L-4812.&nbsp; Bring your laptop and let us
+    know in advance if you plan to come. If you wish to participate but
+    cannot come to Polytechnique, then let us know and we'll find a way
+    to have you join the conversation.<br>
+    <br>
+    Whether or not you'll be present, you may propose ideas and topics
+    of discussion and we'll take those into consideration.<br>
+    <br>
+    Thanks,<br>
+    <br>
+    --
+    <br>
+    Genevi&egrave;ve Bastien
+    <br>
+    Research Associate
+    <br>
+    &Eacute;cole Polytechnique de Montr&eacute;al
+    <br>
+    514-340-4711 #7184
+  </body>
+</html>
+
+--------------070904040204040609030502--
 
 
--- 
-Paul Woegerer, SW Development Engineer
-Sourcery Analyzer <http://go.mentor.com/sourceryanalyzer>
-Mentor Graphics, Embedded Software Division
+--===============0236819266==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0236819266==--
