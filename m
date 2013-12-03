@@ -1,19 +1,16 @@
-From: Yannick Brosseau <yannick.brosseau@gmail.com>
-Subject: Re: LTTV build failure in ubuntu 12.04
-Date: Mon, 02 Dec 2013 23:30:32 -0800
-Message-ID: <529D8898.50507__9582.75722009621$1386055892$gmane$org@gmail.com>
-References: <CAFuHdY2g+6ezgRWyFPY_iPm87DTgVT-6OD4KZiQnBVThxBSBhg@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: Babeltrace compatibility
+Date: Tue, 3 Dec 2013 07:31:28 +0000 (UTC)
+Message-ID: <2137552692.78949.1386055888804.JavaMail.zimbra__24606.663423083$1386055923$gmane$org@efficios.com>
+References: <0C794A2958AD524DAB4175408F839BD3107C6B@ESESSMB109.ericsson.se>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="windows-1252"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/mixed; boundary="===============0151158776=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-pd0-f177.google.com ([209.85.192.177])
+Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <yannick.brosseau@gmail.com>) id 1VnkRb-000685-6E
-	for lttng-dev@lists.lttng.org; Tue, 03 Dec 2013 02:30:55 -0500
-Received: by mail-pd0-f177.google.com with SMTP id q10so19384452pdj.8
-	for <lttng-dev@lists.lttng.org>; Mon, 02 Dec 2013 23:30:49 -0800 (PST)
-In-Reply-To: <CAFuHdY2g+6ezgRWyFPY_iPm87DTgVT-6OD4KZiQnBVThxBSBhg@mail.gmail.com>
+	(envelope-from <compudj@efficios.com>) id 1VnkS8-00069Z-CK
+	for lttng-dev@lists.lttng.org; Tue, 03 Dec 2013 02:31:29 -0500
+In-Reply-To: <0C794A2958AD524DAB4175408F839BD3107C6B@ESESSMB109.ericsson.se>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,45 +19,137 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Aananth CN <c.n.aananth@gmail.com>
+To: Anette =?utf-8?Q?Sch=C3=B6tt?= <anette.schott@ericsson.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-hi,
+--===============0151158776==
+Content-Type: multipart/alternative;
+	boundary="----=_Part_78948_434555956.1386055888803"
 
-Which version of babeltrace is installed on the system?
+------=_Part_78948_434555956.1386055888803
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On 11/25/13 08:52, Aananth CN wrote:
+----- Original Message -----
+
+> From: "Anette Sch=C3=B6tt" <anette.schott@ericsson.com>
+> To: lttng-dev@lists.lttng.org
+> Sent: Tuesday, December 3, 2013 7:54:51 AM
+> Subject: [lttng-dev] Babeltrace compatibility
+
 > Hi,
->
-> I could not find lttv (viewer) on ubuntu, hence I built from source. I
-> get following error. Could you please help me resolving this issue?
-> (Am I missing something, should I install any other packages?)
->
-> make all-recursive
-> make[1]: Entering directory `/home/caananth/Downloads/lttv-1.5'
-> Making all in lttv
-> make[2]: Entering directory `/home/caananth/Downloads/lttv-1.5/lttv'
-> Making all in lttv
-> make[3]: Entering directory `/home/caananth/Downloads/lttv-1.5/lttv/lttv'
-> CC state.o
-> state.c: In function =91restore_init_state=92:
-> state.c:413:25: error: =91BT_CLOCK_REAL=92 undeclared (first use in this
-> function)
-> state.c:413:25: note: each undeclared identifier is reported only once
-> for each function it appears in
-> state.c:413:9: error: too many arguments to function
-> =91bt_trace_handle_get_timestamp_begin=92
-> /usr/include/babeltrace/trace-handle.h:45:10: note: declared here
-> state.c: In function =91state_save_after_trace_hook=92:
-> state.c:3531:2: warning: #warning "Would we move max_time to traceset"
-> [-Wcpp]
-> make[3]: *** [state.o] Error 1
-> make[3]: Leaving directory `/home/caananth/Downloads/lttv-1.5/lttv/lttv'
-> make[2]: *** [all-recursive] Error 1
-> make[2]: Leaving directory `/home/caananth/Downloads/lttv-1.5/lttv'
-> make[1]: *** [all-recursive] Error 1
-> make[1]: Leaving directory `/home/caananth/Downloads/lttv-1.5'
-> make: *** [all] Error 2
->
->
+
+> Is there a need for a specific version of babeltrace to use for different
+> LTTng releases?
+
+> I am currently using LTTng 2.2.3 rc2.
+
+> If thera are such dependencies, where can I find this information on
+> lttng.org ?
+
+Hi Anette,=20
+
+You can use pretty much any version of Babeltrace with any version of LTTng=
+. We kept compatiiblity=20
+between every version so far. I recommend using the latest stable release w=
+henever possible to ensure=20
+you have all the updates, bugfix, and benefit from all the newer features.=
+=20
+
+Thanks,=20
+
+Mathieu=20
+
+> Regards
+
+> Anette Sch=C3=B6tt
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--=20
+Mathieu Desnoyers=20
+EfficiOS Inc.=20
+http://www.efficios.com=20
+
+------=_Part_78948_434555956.1386055888803
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><body><div style=3D"font-family: times new roman, new york, times, se=
+rif; font-size: 12pt; color: #000000"><hr id=3D"zwchr"><blockquote style=3D=
+"border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;=
+font-weight:normal;font-style:normal;text-decoration:none;font-family:Helve=
+tica,Arial,sans-serif;font-size:12pt;"><b>From: </b>"Anette Sch=C3=B6tt" &l=
+t;anette.schott@ericsson.com&gt;<br><b>To: </b>lttng-dev@lists.lttng.org<br=
+><b>Sent: </b>Tuesday, December 3, 2013 7:54:51 AM<br><b>Subject: </b>[lttn=
+g-dev] Babeltrace compatibility<br><div><br></div><style><!--
+
+@font-face
+=09{font-family:Calibri;
+=09panose-1:2 15 5 2 2 2 4 3 2 4;}
+
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+=09{margin:0cm;
+=09margin-bottom:.0001pt;
+=09font-size:11.0pt;
+=09font-family:"Calibri","sans-serif";}
+a:link, span.MsoHyperlink
+=09{mso-style-priority:99;
+=09color:blue;
+=09text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+=09{mso-style-priority:99;
+=09color:purple;
+=09text-decoration:underline;}
+span.EmailStyle17
+=09{mso-style-type:personal-compose;
+=09font-family:"Calibri","sans-serif";
+=09color:windowtext;}
+.MsoChpDefault
+=09{mso-style-type:export-only;
+=09font-family:"Calibri","sans-serif";}
+@page WordSection1
+=09{size:612.0pt 792.0pt;
+=09margin:72.0pt 72.0pt 72.0pt 72.0pt;}
+div.WordSection1
+=09{page:WordSection1;}
+--></style><div class=3D"WordSection1"><p class=3D"MsoNormal">Hi,</p><p cla=
+ss=3D"MsoNormal">Is there a need for a specific version of babeltrace to us=
+e for different LTTng releases?</p><p class=3D"MsoNormal">I am currently us=
+ing LTTng 2.2.3 rc2.</p><p class=3D"MsoNormal">If thera are such dependenci=
+es, where can I find this information on lttng.org ?</p></div></blockquote>=
+<div>Hi Anette,<br></div><div><br></div><div>You can use pretty much any ve=
+rsion of Babeltrace with any version of LTTng. We kept compatiiblity</div><=
+div>between every version so far. I recommend using the latest stable relea=
+se whenever possible to ensure</div><div>you have all the updates, bugfix, =
+and benefit from all the newer features.<br></div><div><br></div><div>Thank=
+s,<br></div><div><br></div><div>Mathieu<br></div><div><br></div><div><br></=
+div><blockquote style=3D"border-left:2px solid #1010FF;margin-left:5px;padd=
+ing-left:5px;color:#000;font-weight:normal;font-style:normal;text-decoratio=
+n:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><div class=
+=3D"WordSection1"><p class=3D"MsoNormal">Regards</p><p class=3D"MsoNormal">=
+Anette Sch=C3=B6tt</p></div><br>___________________________________________=
+____<br>lttng-dev mailing list<br>lttng-dev@lists.lttng.org<br>http://lists=
+.lttng.org/cgi-bin/mailman/listinfo/lttng-dev<br></blockquote><div><br><br>=
+</div><div><br></div><div>-- <br></div><div><span name=3D"x"></span>Mathieu=
+ Desnoyers<br>EfficiOS Inc.<br>http://www.efficios.com<span name=3D"x"></sp=
+an><br></div></div></body></html>
+------=_Part_78948_434555956.1386055888803--
+
+
+--===============0151158776==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0151158776==--
