@@ -1,18 +1,17 @@
-From: =?utf-8?B?QW5ldHRlIFNjaMO2dHQ=?= <anette.schott@ericsson.com>
-Subject: Re: Babeltrace compatibility
-Date: Tue, 3 Dec 2013 07:50:56 +0000
-Message-ID: <0C794A2958AD524DAB4175408F839BD3107D34__19475.5121054643$1386057100$gmane$org@ESESSMB109.ericsson.se>
-References: <0C794A2958AD524DAB4175408F839BD3107C6B@ESESSMB109.ericsson.se>
-	<2137552692.78949.1386055888804.JavaMail.zimbra@efficios.com>
+From: kumar s <skumar.m226@gmail.com>
+Subject: lib_ring_buffer_align error bit-field '<anonymous>'
+ width not an integer constant
+Date: Tue, 3 Dec 2013 13:50:02 +0530
+Message-ID: <CAO_Arvrp4GwhVr_c170hD3eQ8F77WSmsY4wsCOpg3Xdg23jjKw__8611.16017117656$1386058846$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1376466171=="
+Content-Type: multipart/mixed; boundary="===============1929097239=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from sesbmg20.ericsson.net ([193.180.251.56])
+Received: from mail-vc0-f178.google.com ([209.85.220.178])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <anette.schott@ericsson.com>) id 1Vnkl0-0006JJ-OH
-	for lttng-dev@lists.lttng.org; Tue, 03 Dec 2013 02:51:01 -0500
-In-Reply-To: <2137552692.78949.1386055888804.JavaMail.zimbra@efficios.com>
-Content-Language: en-US
+	(envelope-from <skumar.m226@gmail.com>) id 1VnlDE-0006aW-Bo
+	for lttng-dev@lists.lttng.org; Tue, 03 Dec 2013 03:20:09 -0500
+Received: by mail-vc0-f178.google.com with SMTP id lh4so9647343vcb.9
+	for <lttng-dev@lists.lttng.org>; Tue, 03 Dec 2013 00:20:02 -0800 (PST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,209 +20,98 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============1376466171==
-Content-Language: en-US
-Content-Type: multipart/alternative;
-	boundary="_000_0C794A2958AD524DAB4175408F839BD3107D34ESESSMB109ericsso_"
+--===============1929097239==
+Content-Type: multipart/alternative; boundary=001a11c1eb4495063004ec9cf60f
 
---_000_0C794A2958AD524DAB4175408F839BD3107D34ESESSMB109ericsso_
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+--001a11c1eb4495063004ec9cf60f
+Content-Type: text/plain; charset=ISO-8859-1
 
-SGkgTWF0aGlldSwNCg0KSSB3aWxsIGRvIHNvLiBUaGFua3MgZm9yIHF1aWNrIHJlc3BvbnNlLg0K
-DQpSZWdhcmRzDQpBbmV0dGUNCg0KRnJvbTogTWF0aGlldSBEZXNub3llcnMgW21haWx0bzptYXRo
-aWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb21dDQpTZW50OiBkZW4gMyBkZWNlbWJlciAyMDEzIDA4
-OjMxDQpUbzogQW5ldHRlIFNjaMO2dHQNCkNjOiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnDQpT
-dWJqZWN0OiBSZTogW2x0dG5nLWRldl0gQmFiZWx0cmFjZSBjb21wYXRpYmlsaXR5DQoNCl9fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fDQpGcm9tOiAiQW5ldHRlIFNjaMO2dHQiIDxhbmV0
-dGUuc2Nob3R0QGVyaWNzc29uLmNvbTxtYWlsdG86YW5ldHRlLnNjaG90dEBlcmljc3Nvbi5jb20+
-Pg0KVG86IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmc8bWFpbHRvOmx0dG5nLWRldkBsaXN0cy5s
-dHRuZy5vcmc+DQpTZW50OiBUdWVzZGF5LCBEZWNlbWJlciAzLCAyMDEzIDc6NTQ6NTEgQU0NClN1
-YmplY3Q6IFtsdHRuZy1kZXZdIEJhYmVsdHJhY2UgY29tcGF0aWJpbGl0eQ0KDQpIaSwNCklzIHRo
-ZXJlIGEgbmVlZCBmb3IgYSBzcGVjaWZpYyB2ZXJzaW9uIG9mIGJhYmVsdHJhY2UgdG8gdXNlIGZv
-ciBkaWZmZXJlbnQgTFRUbmcgcmVsZWFzZXM/DQpJIGFtIGN1cnJlbnRseSB1c2luZyBMVFRuZyAy
-LjIuMyByYzIuDQpJZiB0aGVyYSBhcmUgc3VjaCBkZXBlbmRlbmNpZXMsIHdoZXJlIGNhbiBJIGZp
-bmQgdGhpcyBpbmZvcm1hdGlvbiBvbiBsdHRuZy5vcmcgPw0KSGkgQW5ldHRlLA0KDQpZb3UgY2Fu
-IHVzZSBwcmV0dHkgbXVjaCBhbnkgdmVyc2lvbiBvZiBCYWJlbHRyYWNlIHdpdGggYW55IHZlcnNp
-b24gb2YgTFRUbmcuIFdlIGtlcHQgY29tcGF0aWlibGl0eQ0KYmV0d2VlbiBldmVyeSB2ZXJzaW9u
-IHNvIGZhci4gSSByZWNvbW1lbmQgdXNpbmcgdGhlIGxhdGVzdCBzdGFibGUgcmVsZWFzZSB3aGVu
-ZXZlciBwb3NzaWJsZSB0byBlbnN1cmUNCnlvdSBoYXZlIGFsbCB0aGUgdXBkYXRlcywgYnVnZml4
-LCBhbmQgYmVuZWZpdCBmcm9tIGFsbCB0aGUgbmV3ZXIgZmVhdHVyZXMuDQoNClRoYW5rcywNCg0K
-TWF0aGlldQ0KDQoNClJlZ2FyZHMNCkFuZXR0ZSBTY2jDtnR0DQoNCl9fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fDQpsdHRuZy1kZXYgbWFpbGluZyBsaXN0DQps
-dHRuZy1kZXZAbGlzdHMubHR0bmcub3JnPG1haWx0bzpsdHRuZy1kZXZAbGlzdHMubHR0bmcub3Jn
-Pg0KaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmct
-ZGV2DQoNCg0KLS0NCk1hdGhpZXUgRGVzbm95ZXJzDQpFZmZpY2lPUyBJbmMuDQpodHRwOi8vd3d3
-LmVmZmljaW9zLmNvbQ0K
+Hello,
 
---_000_0C794A2958AD524DAB4175408F839BD3107D34ESESSMB109ericsso_
-Content-Type: text/html; charset="utf-8"
-Content-Transfer-Encoding: base64
+When trying to build lttng modules i am getting this error. Cross compiler
+for mips and Arch = mips is used in makefile.
 
-PGh0bWwgeG1sbnM6dj0idXJuOnNjaGVtYXMtbWljcm9zb2Z0LWNvbTp2bWwiIHhtbG5zOm89InVy
-bjpzY2hlbWFzLW1pY3Jvc29mdC1jb206b2ZmaWNlOm9mZmljZSIgeG1sbnM6dz0idXJuOnNjaGVt
-YXMtbWljcm9zb2Z0LWNvbTpvZmZpY2U6d29yZCIgeG1sbnM6bT0iaHR0cDovL3NjaGVtYXMubWlj
-cm9zb2Z0LmNvbS9vZmZpY2UvMjAwNC8xMi9vbW1sIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcv
-VFIvUkVDLWh0bWw0MCI+DQo8aGVhZD4NCjxtZXRhIGh0dHAtZXF1aXY9IkNvbnRlbnQtVHlwZSIg
-Y29udGVudD0idGV4dC9odG1sOyBjaGFyc2V0PXV0Zi04Ij4NCjxtZXRhIG5hbWU9IkdlbmVyYXRv
-ciIgY29udGVudD0iTWljcm9zb2Z0IFdvcmQgMTQgKGZpbHRlcmVkIG1lZGl1bSkiPg0KPCEtLVtp
-ZiAhbXNvXT48c3R5bGU+dlw6KiB7YmVoYXZpb3I6dXJsKCNkZWZhdWx0I1ZNTCk7fQ0Kb1w6KiB7
-YmVoYXZpb3I6dXJsKCNkZWZhdWx0I1ZNTCk7fQ0Kd1w6KiB7YmVoYXZpb3I6dXJsKCNkZWZhdWx0
-I1ZNTCk7fQ0KLnNoYXBlIHtiZWhhdmlvcjp1cmwoI2RlZmF1bHQjVk1MKTt9DQo8L3N0eWxlPjwh
-W2VuZGlmXS0tPjxzdHlsZT48IS0tDQovKiBGb250IERlZmluaXRpb25zICovDQpAZm9udC1mYWNl
-DQoJe2ZvbnQtZmFtaWx5OkhlbHZldGljYTsNCglwYW5vc2UtMToyIDExIDYgNCAyIDIgMiAyIDIg
-NDt9DQpAZm9udC1mYWNlDQoJe2ZvbnQtZmFtaWx5OkhlbHZldGljYTsNCglwYW5vc2UtMToyIDEx
-IDYgNCAyIDIgMiAyIDIgNDt9DQpAZm9udC1mYWNlDQoJe2ZvbnQtZmFtaWx5OkNhbGlicmk7DQoJ
-cGFub3NlLTE6MiAxNSA1IDIgMiAyIDQgMyAyIDQ7fQ0KQGZvbnQtZmFjZQ0KCXtmb250LWZhbWls
-eTpUYWhvbWE7DQoJcGFub3NlLTE6MiAxMSA2IDQgMyA1IDQgNCAyIDQ7fQ0KLyogU3R5bGUgRGVm
-aW5pdGlvbnMgKi8NCnAuTXNvTm9ybWFsLCBsaS5Nc29Ob3JtYWwsIGRpdi5Nc29Ob3JtYWwNCgl7
-bWFyZ2luOjBjbTsNCgltYXJnaW4tYm90dG9tOi4wMDAxcHQ7DQoJZm9udC1zaXplOjExLjBwdDsN
-Cglmb250LWZhbWlseToiQ2FsaWJyaSIsInNhbnMtc2VyaWYiO30NCmE6bGluaywgc3Bhbi5Nc29I
-eXBlcmxpbmsNCgl7bXNvLXN0eWxlLXByaW9yaXR5Ojk5Ow0KCWNvbG9yOmJsdWU7DQoJdGV4dC1k
-ZWNvcmF0aW9uOnVuZGVybGluZTt9DQphOnZpc2l0ZWQsIHNwYW4uTXNvSHlwZXJsaW5rRm9sbG93
-ZWQNCgl7bXNvLXN0eWxlLXByaW9yaXR5Ojk5Ow0KCWNvbG9yOnB1cnBsZTsNCgl0ZXh0LWRlY29y
-YXRpb246dW5kZXJsaW5lO30NCnAuTXNvQWNldGF0ZSwgbGkuTXNvQWNldGF0ZSwgZGl2Lk1zb0Fj
-ZXRhdGUNCgl7bXNvLXN0eWxlLXByaW9yaXR5Ojk5Ow0KCW1zby1zdHlsZS1saW5rOiJCYWxsb29u
-IFRleHQgQ2hhciI7DQoJbWFyZ2luOjBjbTsNCgltYXJnaW4tYm90dG9tOi4wMDAxcHQ7DQoJZm9u
-dC1zaXplOjguMHB0Ow0KCWZvbnQtZmFtaWx5OiJUYWhvbWEiLCJzYW5zLXNlcmlmIjt9DQpzcGFu
-LkVtYWlsU3R5bGUxNw0KCXttc28tc3R5bGUtdHlwZTpwZXJzb25hbDsNCglmb250LWZhbWlseToi
-Q2FsaWJyaSIsInNhbnMtc2VyaWYiOw0KCWNvbG9yOndpbmRvd3RleHQ7fQ0Kc3Bhbi5FbWFpbFN0
-eWxlMTgNCgl7bXNvLXN0eWxlLXR5cGU6cGVyc29uYWwtcmVwbHk7DQoJZm9udC1mYW1pbHk6IkNh
-bGlicmkiLCJzYW5zLXNlcmlmIjsNCgljb2xvcjojMUY0OTdEO30NCnNwYW4uQmFsbG9vblRleHRD
-aGFyDQoJe21zby1zdHlsZS1uYW1lOiJCYWxsb29uIFRleHQgQ2hhciI7DQoJbXNvLXN0eWxlLXBy
-aW9yaXR5Ojk5Ow0KCW1zby1zdHlsZS1saW5rOiJCYWxsb29uIFRleHQiOw0KCWZvbnQtZmFtaWx5
-OiJUYWhvbWEiLCJzYW5zLXNlcmlmIjt9DQouTXNvQ2hwRGVmYXVsdA0KCXttc28tc3R5bGUtdHlw
-ZTpleHBvcnQtb25seTsNCglmb250LXNpemU6MTAuMHB0O30NCkBwYWdlIFdvcmRTZWN0aW9uMQ0K
-CXtzaXplOjYxMi4wcHQgNzkyLjBwdDsNCgltYXJnaW46NzIuMHB0IDcyLjBwdCA3Mi4wcHQgNzIu
-MHB0O30NCmRpdi5Xb3JkU2VjdGlvbjENCgl7cGFnZTpXb3JkU2VjdGlvbjE7fQ0KLS0+PC9zdHls
-ZT48IS0tW2lmIGd0ZSBtc28gOV0+PHhtbD4NCjxvOnNoYXBlZGVmYXVsdHMgdjpleHQ9ImVkaXQi
-IHNwaWRtYXg9IjEwMjYiIC8+DQo8L3htbD48IVtlbmRpZl0tLT48IS0tW2lmIGd0ZSBtc28gOV0+
-PHhtbD4NCjxvOnNoYXBlbGF5b3V0IHY6ZXh0PSJlZGl0Ij4NCjxvOmlkbWFwIHY6ZXh0PSJlZGl0
-IiBkYXRhPSIxIiAvPg0KPC9vOnNoYXBlbGF5b3V0PjwveG1sPjwhW2VuZGlmXS0tPg0KPC9oZWFk
-Pg0KPGJvZHkgbGFuZz0iRU4tVVMiIGxpbms9ImJsdWUiIHZsaW5rPSJwdXJwbGUiPg0KPGRpdiBj
-bGFzcz0iV29yZFNlY3Rpb24xIj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJj
-b2xvcjojMUY0OTdEIj5IaSBNYXRoaWV1LDxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjxwIGNsYXNz
-PSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJjb2xvcjojMUY0OTdEIj48bzpwPiZuYnNwOzwvbzpw
-Pjwvc3Bhbj48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHlsZT0iY29sb3I6IzFG
-NDk3RCI+SSB3aWxsIGRvIHNvLiBUaGFua3MgZm9yIHF1aWNrIHJlc3BvbnNlLjxvOnA+PC9vOnA+
-PC9zcGFuPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJjb2xvcjojMUY0
-OTdEIj48bzpwPiZuYnNwOzwvbzpwPjwvc3Bhbj48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48
-c3BhbiBzdHlsZT0iY29sb3I6IzFGNDk3RCI+UmVnYXJkczxvOnA+PC9vOnA+PC9zcGFuPjwvcD4N
-CjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJjb2xvcjojMUY0OTdEIj5BbmV0dGU8
-bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHlsZT0i
-Y29sb3I6IzFGNDk3RCI+PG86cD4mbmJzcDs8L286cD48L3NwYW4+PC9wPg0KPGRpdj4NCjxkaXYg
-c3R5bGU9ImJvcmRlcjpub25lO2JvcmRlci10b3A6c29saWQgI0I1QzRERiAxLjBwdDtwYWRkaW5n
-OjMuMHB0IDBjbSAwY20gMGNtIj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxiPjxzcGFuIHN0eWxl
-PSJmb250LXNpemU6MTAuMHB0O2ZvbnQtZmFtaWx5OiZxdW90O1RhaG9tYSZxdW90OywmcXVvdDtz
-YW5zLXNlcmlmJnF1b3Q7Ij5Gcm9tOjwvc3Bhbj48L2I+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZTox
-MC4wcHQ7Zm9udC1mYW1pbHk6JnF1b3Q7VGFob21hJnF1b3Q7LCZxdW90O3NhbnMtc2VyaWYmcXVv
-dDsiPiBNYXRoaWV1IERlc25veWVycyBbbWFpbHRvOm1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9z
-LmNvbV0NCjxicj4NCjxiPlNlbnQ6PC9iPiBkZW4gMyBkZWNlbWJlciAyMDEzIDA4OjMxPGJyPg0K
-PGI+VG86PC9iPiBBbmV0dGUgU2Now7Z0dDxicj4NCjxiPkNjOjwvYj4gbHR0bmctZGV2QGxpc3Rz
-Lmx0dG5nLm9yZzxicj4NCjxiPlN1YmplY3Q6PC9iPiBSZTogW2x0dG5nLWRldl0gQmFiZWx0cmFj
-ZSBjb21wYXRpYmlsaXR5PG86cD48L286cD48L3NwYW4+PC9wPg0KPC9kaXY+DQo8L2Rpdj4NCjxw
-IGNsYXNzPSJNc29Ob3JtYWwiPjxvOnA+Jm5ic3A7PC9vOnA+PC9wPg0KPGRpdj4NCjxkaXYgY2xh
-c3M9Ik1zb05vcm1hbCIgYWxpZ249ImNlbnRlciIgc3R5bGU9InRleHQtYWxpZ246Y2VudGVyIj48
-c3BhbiBzdHlsZT0iY29sb3I6YmxhY2siPg0KPGhyIHNpemU9IjIiIHdpZHRoPSIxMDAlIiBhbGln
-bj0iY2VudGVyIiBpZD0iendjaHIiPg0KPC9zcGFuPjwvZGl2Pg0KPGJsb2NrcXVvdGUgc3R5bGU9
-ImJvcmRlcjpub25lO2JvcmRlci1sZWZ0OnNvbGlkICMxMDEwRkYgMS41cHQ7cGFkZGluZzowY20g
-MGNtIDBjbSA0LjBwdDttYXJnaW4tbGVmdDozLjc1cHQ7bWFyZ2luLXRvcDo1LjBwdDttYXJnaW4t
-Ym90dG9tOjUuMHB0Ij4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxiPjxzcGFuIHN0eWxlPSJmb250
-LWZhbWlseTomcXVvdDtIZWx2ZXRpY2EmcXVvdDssJnF1b3Q7c2Fucy1zZXJpZiZxdW90Oztjb2xv
-cjpibGFjayI+RnJvbToNCjwvc3Bhbj48L2I+PHNwYW4gc3R5bGU9ImZvbnQtZmFtaWx5OiZxdW90
-O0hlbHZldGljYSZxdW90OywmcXVvdDtzYW5zLXNlcmlmJnF1b3Q7O2NvbG9yOmJsYWNrIj4mcXVv
-dDtBbmV0dGUgU2Now7Z0dCZxdW90OyAmbHQ7PGEgaHJlZj0ibWFpbHRvOmFuZXR0ZS5zY2hvdHRA
-ZXJpY3Nzb24uY29tIj5hbmV0dGUuc2Nob3R0QGVyaWNzc29uLmNvbTwvYT4mZ3Q7PGJyPg0KPGI+
-VG86IDwvYj48YSBocmVmPSJtYWlsdG86bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZyI+bHR0bmct
-ZGV2QGxpc3RzLmx0dG5nLm9yZzwvYT48YnI+DQo8Yj5TZW50OiA8L2I+VHVlc2RheSwgRGVjZW1i
-ZXIgMywgMjAxMyA3OjU0OjUxIEFNPGJyPg0KPGI+U3ViamVjdDogPC9iPltsdHRuZy1kZXZdIEJh
-YmVsdHJhY2UgY29tcGF0aWJpbGl0eTxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjxkaXY+DQo8cCBj
-bGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHlsZT0iZm9udC1mYW1pbHk6JnF1b3Q7SGVsdmV0aWNh
-JnF1b3Q7LCZxdW90O3NhbnMtc2VyaWYmcXVvdDs7Y29sb3I6YmxhY2siPjxvOnA+Jm5ic3A7PC9v
-OnA+PC9zcGFuPjwvcD4NCjwvZGl2Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9
-ImNvbG9yOmJsYWNrIj5IaSw8bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8cCBjbGFzcz0iTXNvTm9y
-bWFsIj48c3BhbiBzdHlsZT0iY29sb3I6YmxhY2siPklzIHRoZXJlIGEgbmVlZCBmb3IgYSBzcGVj
-aWZpYyB2ZXJzaW9uIG9mIGJhYmVsdHJhY2UgdG8gdXNlIGZvciBkaWZmZXJlbnQgTFRUbmcgcmVs
-ZWFzZXM/PG86cD48L286cD48L3NwYW4+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4g
-c3R5bGU9ImNvbG9yOmJsYWNrIj5JIGFtIGN1cnJlbnRseSB1c2luZyBMVFRuZyAyLjIuMyByYzIu
-PG86cD48L286cD48L3NwYW4+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9
-ImNvbG9yOmJsYWNrIj5JZiB0aGVyYSBhcmUgc3VjaCBkZXBlbmRlbmNpZXMsIHdoZXJlIGNhbiBJ
-IGZpbmQgdGhpcyBpbmZvcm1hdGlvbiBvbiBsdHRuZy5vcmcgPzxvOnA+PC9vOnA+PC9zcGFuPjwv
-cD4NCjwvYmxvY2txdW90ZT4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHls
-ZT0iZm9udC1zaXplOjEyLjBwdDtmb250LWZhbWlseTomcXVvdDtUaW1lcyBOZXcgUm9tYW4mcXVv
-dDssJnF1b3Q7c2VyaWYmcXVvdDs7Y29sb3I6YmxhY2siPkhpIEFuZXR0ZSw8bzpwPjwvbzpwPjwv
-c3Bhbj48L3A+DQo8L2Rpdj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHls
-ZT0iZm9udC1zaXplOjEyLjBwdDtmb250LWZhbWlseTomcXVvdDtUaW1lcyBOZXcgUm9tYW4mcXVv
-dDssJnF1b3Q7c2VyaWYmcXVvdDs7Y29sb3I6YmxhY2siPjxvOnA+Jm5ic3A7PC9vOnA+PC9zcGFu
-PjwvcD4NCjwvZGl2Pg0KPGRpdj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJm
-b250LXNpemU6MTIuMHB0O2ZvbnQtZmFtaWx5OiZxdW90O1RpbWVzIE5ldyBSb21hbiZxdW90Oywm
-cXVvdDtzZXJpZiZxdW90Oztjb2xvcjpibGFjayI+WW91IGNhbiB1c2UgcHJldHR5IG11Y2ggYW55
-IHZlcnNpb24gb2YgQmFiZWx0cmFjZSB3aXRoIGFueSB2ZXJzaW9uIG9mIExUVG5nLiBXZSBrZXB0
-IGNvbXBhdGlpYmxpdHk8bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8L2Rpdj4NCjxkaXY+DQo8cCBj
-bGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHlsZT0iZm9udC1zaXplOjEyLjBwdDtmb250LWZhbWls
-eTomcXVvdDtUaW1lcyBOZXcgUm9tYW4mcXVvdDssJnF1b3Q7c2VyaWYmcXVvdDs7Y29sb3I6Ymxh
-Y2siPmJldHdlZW4gZXZlcnkgdmVyc2lvbiBzbyBmYXIuIEkgcmVjb21tZW5kIHVzaW5nIHRoZSBs
-YXRlc3Qgc3RhYmxlIHJlbGVhc2Ugd2hlbmV2ZXIgcG9zc2libGUgdG8gZW5zdXJlPG86cD48L286
-cD48L3NwYW4+PC9wPg0KPC9kaXY+DQo8ZGl2Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4g
-c3R5bGU9ImZvbnQtc2l6ZToxMi4wcHQ7Zm9udC1mYW1pbHk6JnF1b3Q7VGltZXMgTmV3IFJvbWFu
-JnF1b3Q7LCZxdW90O3NlcmlmJnF1b3Q7O2NvbG9yOmJsYWNrIj55b3UgaGF2ZSBhbGwgdGhlIHVw
-ZGF0ZXMsIGJ1Z2ZpeCwgYW5kIGJlbmVmaXQgZnJvbSBhbGwgdGhlIG5ld2VyIGZlYXR1cmVzLjxv
-OnA+PC9vOnA+PC9zcGFuPjwvcD4NCjwvZGl2Pg0KPGRpdj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwi
-PjxzcGFuIHN0eWxlPSJmb250LXNpemU6MTIuMHB0O2ZvbnQtZmFtaWx5OiZxdW90O1RpbWVzIE5l
-dyBSb21hbiZxdW90OywmcXVvdDtzZXJpZiZxdW90Oztjb2xvcjpibGFjayI+PG86cD4mbmJzcDs8
-L286cD48L3NwYW4+PC9wPg0KPC9kaXY+DQo8ZGl2Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNw
-YW4gc3R5bGU9ImZvbnQtc2l6ZToxMi4wcHQ7Zm9udC1mYW1pbHk6JnF1b3Q7VGltZXMgTmV3IFJv
-bWFuJnF1b3Q7LCZxdW90O3NlcmlmJnF1b3Q7O2NvbG9yOmJsYWNrIj5UaGFua3MsPG86cD48L286
-cD48L3NwYW4+PC9wPg0KPC9kaXY+DQo8ZGl2Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4g
-c3R5bGU9ImZvbnQtc2l6ZToxMi4wcHQ7Zm9udC1mYW1pbHk6JnF1b3Q7VGltZXMgTmV3IFJvbWFu
-JnF1b3Q7LCZxdW90O3NlcmlmJnF1b3Q7O2NvbG9yOmJsYWNrIj48bzpwPiZuYnNwOzwvbzpwPjwv
-c3Bhbj48L3A+DQo8L2Rpdj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHls
-ZT0iZm9udC1zaXplOjEyLjBwdDtmb250LWZhbWlseTomcXVvdDtUaW1lcyBOZXcgUm9tYW4mcXVv
-dDssJnF1b3Q7c2VyaWYmcXVvdDs7Y29sb3I6YmxhY2siPk1hdGhpZXU8bzpwPjwvbzpwPjwvc3Bh
-bj48L3A+DQo8L2Rpdj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHlsZT0i
-Zm9udC1zaXplOjEyLjBwdDtmb250LWZhbWlseTomcXVvdDtUaW1lcyBOZXcgUm9tYW4mcXVvdDss
-JnF1b3Q7c2VyaWYmcXVvdDs7Y29sb3I6YmxhY2siPjxvOnA+Jm5ic3A7PC9vOnA+PC9zcGFuPjwv
-cD4NCjwvZGl2Pg0KPGRpdj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJmb250
-LXNpemU6MTIuMHB0O2ZvbnQtZmFtaWx5OiZxdW90O1RpbWVzIE5ldyBSb21hbiZxdW90OywmcXVv
-dDtzZXJpZiZxdW90Oztjb2xvcjpibGFjayI+PG86cD4mbmJzcDs8L286cD48L3NwYW4+PC9wPg0K
-PC9kaXY+DQo8YmxvY2txdW90ZSBzdHlsZT0iYm9yZGVyOm5vbmU7Ym9yZGVyLWxlZnQ6c29saWQg
-IzEwMTBGRiAxLjVwdDtwYWRkaW5nOjBjbSAwY20gMGNtIDQuMHB0O21hcmdpbi1sZWZ0OjMuNzVw
-dDttYXJnaW4tdG9wOjUuMHB0O21hcmdpbi1ib3R0b206NS4wcHQiPg0KPHAgY2xhc3M9Ik1zb05v
-cm1hbCI+PHNwYW4gc3R5bGU9ImNvbG9yOmJsYWNrIj5SZWdhcmRzPG86cD48L286cD48L3NwYW4+
-PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImNvbG9yOmJsYWNrIj5BbmV0
-dGUgU2Now7Z0dDxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxz
-cGFuIHN0eWxlPSJmb250LXNpemU6MTIuMHB0O2ZvbnQtZmFtaWx5OiZxdW90O0hlbHZldGljYSZx
-dW90OywmcXVvdDtzYW5zLXNlcmlmJnF1b3Q7O2NvbG9yOmJsYWNrIj48YnI+DQpfX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXzxicj4NCmx0dG5nLWRldiBtYWls
-aW5nIGxpc3Q8YnI+DQo8YSBocmVmPSJtYWlsdG86bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZyI+
-bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZzwvYT48YnI+DQo8YSBocmVmPSJodHRwOi8vbGlzdHMu
-bHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYiPmh0dHA6Ly9saXN0
-cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldjwvYT48bzpwPjwv
-bzpwPjwvc3Bhbj48L3A+DQo8L2Jsb2NrcXVvdGU+DQo8ZGl2Pg0KPHAgY2xhc3M9Ik1zb05vcm1h
-bCIgc3R5bGU9Im1hcmdpbi1ib3R0b206MTIuMHB0Ij48c3BhbiBzdHlsZT0iZm9udC1zaXplOjEy
-LjBwdDtmb250LWZhbWlseTomcXVvdDtUaW1lcyBOZXcgUm9tYW4mcXVvdDssJnF1b3Q7c2VyaWYm
-cXVvdDs7Y29sb3I6YmxhY2siPjxvOnA+Jm5ic3A7PC9vOnA+PC9zcGFuPjwvcD4NCjwvZGl2Pg0K
-PGRpdj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJmb250LXNpemU6MTIuMHB0
-O2ZvbnQtZmFtaWx5OiZxdW90O1RpbWVzIE5ldyBSb21hbiZxdW90OywmcXVvdDtzZXJpZiZxdW90
-Oztjb2xvcjpibGFjayI+PG86cD4mbmJzcDs8L286cD48L3NwYW4+PC9wPg0KPC9kaXY+DQo8ZGl2
-Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxMi4wcHQ7Zm9u
-dC1mYW1pbHk6JnF1b3Q7VGltZXMgTmV3IFJvbWFuJnF1b3Q7LCZxdW90O3NlcmlmJnF1b3Q7O2Nv
-bG9yOmJsYWNrIj4tLQ0KPG86cD48L286cD48L3NwYW4+PC9wPg0KPC9kaXY+DQo8ZGl2Pg0KPHAg
-Y2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxMi4wcHQ7Zm9udC1mYW1p
-bHk6JnF1b3Q7VGltZXMgTmV3IFJvbWFuJnF1b3Q7LCZxdW90O3NlcmlmJnF1b3Q7O2NvbG9yOmJs
-YWNrIj5NYXRoaWV1IERlc25veWVyczxicj4NCkVmZmljaU9TIEluYy48YnI+DQo8YSBocmVmPSJo
-dHRwOi8vd3d3LmVmZmljaW9zLmNvbSI+aHR0cDovL3d3dy5lZmZpY2lvcy5jb208L2E+PG86cD48
-L286cD48L3NwYW4+PC9wPg0KPC9kaXY+DQo8L2Rpdj4NCjwvZGl2Pg0KPC9ib2R5Pg0KPC9odG1s
-Pg0K
-
---_000_0C794A2958AD524DAB4175408F839BD3107D34ESESSMB109ericsso_--
+Linux kernel version 2.6.32.27
 
 
---===============1376466171==
+make -C
+/home/shkumar/Development_Merge/NewOCT/OCTEON_SDK/octeon_sdk/OCTEON-SDK/linux/kernel_2.6/linux
+M=/home/shkumar/lttng-tools/lttngmod/lttng-modules modules ARCH=mips
+CROSS_COMPILE=mips64-octeon-linux-gnu-
+make[1]: Entering directory
+`/home/shkumar/Development_Merge/NewOCT/OCTEON_SDK/octeon_sdk/OCTEON-SDK/linux/kernel_2.6/linux'
+  CC [M]
+ /home/shkumar/lttng-tools/lttngmod/lttng-modules/lttng-ring-buffer-client-discard.o
+In file included from
+/home/shkumar/lttng-tools/lttngmod/lttng-modules/wrapper/ringbuffer/config.h:1,
+                 from
+/home/shkumar/lttng-tools/lttngmod/lttng-modules/lttng-tracer-core.h:35,
+                 from
+/home/shkumar/lttng-tools/lttngmod/lttng-modules/lttng-tracer.h:39,
+                 from
+/home/shkumar/lttng-tools/lttngmod/lttng-modules/lttng-ring-buffer-client-discard.c:24:
+/home/shkumar/lttng-tools/lttngmod/lttng-modules/wrapper/ringbuffer/../../lib/ringbuffer/config.h:
+In function 'lib_ring_buffer_align':
+/home/shkumar/lttng-tools/lttngmod/lttng-modules/wrapper/ringbuffer/../../lib/ringbuffer/config.h:266:
+error: bit-field '<anonymous>' width not an integer constant
+make[2]: ***
+[/home/shkumar/lttng-tools/lttngmod/lttng-modules/lttng-ring-buffer-client-discard.o]
+Error 1
+make[1]: *** [_module_/home/shkumar/lttng-tools/lttngmod/lttng-modules]
+Error 2
+make[1]: Leaving directory
+`/home/shkumar/Development_Merge/NewOCT/OCTEON_SDK/octeon_sdk/OCTEON-SDK/linux/kernel_2.6/linux'
+make: *** [default] Error 2
+
+How do i fix this?
+
+Skumar.
+
+--001a11c1eb4495063004ec9cf60f
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hello,<div><br></div><div>When trying to build lttng modul=
+es i am getting this error. Cross compiler for mips and Arch =3D mips is us=
+ed in makefile.</div><div><br></div><div>Linux kernel version 2.6.32.27</di=
+v>
+<div><br></div><div><br></div><div><div>make -C /home/shkumar/Development_M=
+erge/NewOCT/OCTEON_SDK/octeon_sdk/OCTEON-SDK/linux/kernel_2.6/linux M=3D/ho=
+me/shkumar/lttng-tools/lttngmod/lttng-modules modules ARCH=3Dmips CROSS_COM=
+PILE=3Dmips64-octeon-linux-gnu-</div>
+<div>make[1]: Entering directory `/home/shkumar/Development_Merge/NewOCT/OC=
+TEON_SDK/octeon_sdk/OCTEON-SDK/linux/kernel_2.6/linux&#39;</div><div>=A0 CC=
+ [M] =A0/home/shkumar/lttng-tools/lttngmod/lttng-modules/lttng-ring-buffer-=
+client-discard.o</div>
+<div>In file included from /home/shkumar/lttng-tools/lttngmod/lttng-modules=
+/wrapper/ringbuffer/config.h:1,</div><div>=A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =
+=A0from /home/shkumar/lttng-tools/lttngmod/lttng-modules/lttng-tracer-core.=
+h:35,</div><div>
+=A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0from /home/shkumar/lttng-tools/lttngmod/=
+lttng-modules/lttng-tracer.h:39,</div><div>=A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =
+=A0from /home/shkumar/lttng-tools/lttngmod/lttng-modules/lttng-ring-buffer-=
+client-discard.c:24:</div><div>/home/shkumar/lttng-tools/lttngmod/lttng-mod=
+ules/wrapper/ringbuffer/../../lib/ringbuffer/config.h: In function &#39;lib=
+_ring_buffer_align&#39;:</div>
+<div>/home/shkumar/lttng-tools/lttngmod/lttng-modules/wrapper/ringbuffer/..=
+/../lib/ringbuffer/config.h:266: error: bit-field &#39;&lt;anonymous&gt;&#3=
+9; width not an integer constant</div><div>make[2]: *** [/home/shkumar/lttn=
+g-tools/lttngmod/lttng-modules/lttng-ring-buffer-client-discard.o] Error 1<=
+/div>
+<div>make[1]: *** [_module_/home/shkumar/lttng-tools/lttngmod/lttng-modules=
+] Error 2</div><div>make[1]: Leaving directory `/home/shkumar/Development_M=
+erge/NewOCT/OCTEON_SDK/octeon_sdk/OCTEON-SDK/linux/kernel_2.6/linux&#39;</d=
+iv>
+<div>make: *** [default] Error 2</div></div><div><br></div><div>How do i fi=
+x this?</div><div><br></div><div>Skumar.</div></div>
+
+--001a11c1eb4495063004ec9cf60f--
+
+
+--===============1929097239==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -234,4 +122,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============1376466171==--
+--===============1929097239==--
