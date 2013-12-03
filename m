@@ -1,16 +1,16 @@
-From: Anand Neeli <anand.neeli@gmail.com>
-Subject: Separate trace file per app
-Date: Thu, 28 Nov 2013 15:46:31 +0530
-Message-ID: <CAM5kDqxQgXi+o4tfb6pZ+Po0qsMTm3aM2_tfLi3TAJNucUtHbQ__6547.22302356294$1386054911$gmane$org@mail.gmail.com>
+From: =?iso-8859-1?Q?Anette_Sch=F6tt?= <anette.schott@ericsson.com>
+Subject: Babeltrace compatibility
+Date: Tue, 3 Dec 2013 06:54:51 +0000
+Message-ID: <0C794A2958AD524DAB4175408F839BD3107C6B__2793.72323207117$1386054933$gmane$org@ESESSMB109.ericsson.se>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1298878458=="
+Content-Type: multipart/mixed; boundary="===============0448711002=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-pb0-f52.google.com ([209.85.160.52])
+Received: from sessmg20.ericsson.net ([193.180.251.50]
+	helo=sessmg20.mgmt.ericsson.se)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <anand.neeli@gmail.com>) id 1VlyeD-0006QK-4W
-	for lttng-dev@lists.lttng.org; Thu, 28 Nov 2013 05:16:37 -0500
-Received: by mail-pb0-f52.google.com with SMTP id uo5so12246643pbc.25
-	for <lttng-dev@lists.lttng.org>; Thu, 28 Nov 2013 02:16:31 -0800 (PST)
+	(envelope-from <anette.schott@ericsson.com>) id 1Vnjsk-0005kf-4f
+	for lttng-dev@lists.lttng.org; Tue, 03 Dec 2013 01:54:55 -0500
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,64 +19,105 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============1298878458==
-Content-Type: multipart/alternative; boundary=e89a8ff1cb42e8e95d04ec3a019f
+--===============0448711002==
+Content-Language: en-US
+Content-Type: multipart/alternative;
+	boundary="_000_0C794A2958AD524DAB4175408F839BD3107C6BESESSMB109ericsso_"
 
---e89a8ff1cb42e8e95d04ec3a019f
-Content-Type: text/plain; charset=ISO-8859-1
-
-Hi All,
-How can i create separate trace-file per app?
-
-As shown below, i have created two trace sessions and filtered based on
-procname.
-Is this the correct way? or is there any other efficient way to do it?
-
-
-./lttng create app_1_trace
-./lttng enable-event -s app_1_trace -u -a --filter '$ctx.procname ==
-"app_1"'
-./lttng start app_1_trace
-now run app_1    ./app_1
-
-
-./lttng create app_2_trace
-./lttng enable-event -s app_2_trace -u -a --filter '$ctx.procname ==
-"app_2"'
-./lttng start app_2_trace
-now run app_2     ./app_2
-
-
-
-Thanks,
-Anand Neeli
-
---e89a8ff1cb42e8e95d04ec3a019f
-Content-Type: text/html; charset=ISO-8859-1
+--_000_0C794A2958AD524DAB4175408F839BD3107C6BESESSMB109ericsso_
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr">Hi All,<div>How can i create separate trace-file per app?<=
-/div><div><br></div><div>As shown below, i have created two trace sessions =
-and filtered based on procname.</div><div>Is this the correct way? or is th=
-ere any other efficient way to do it?</div>
-<div><br></div><div><br></div><div><div>./lttng create app_1_trace</div><di=
-v>./lttng enable-event -s=A0app_1_trace=A0-u -a --filter &#39;$ctx.procname=
- =3D=3D &quot;app_1&quot;&#39;</div><div>./lttng start app_1_trace</div><di=
-v>now run app_1 =A0 =A0./app_1</div>
-<div><br></div><div><br></div><div>./lttng create app_2_trace</div><div>./l=
-ttng enable-event -s=A0app_2_trace=A0-u -a --filter &#39;$ctx.procname =3D=
-=3D &quot;app_2&quot;&#39;</div><div>./lttng start app_2_trace</div><div>no=
-w run app_2 =A0 =A0 ./app_2</div>
-<div><br></div></div><div><br></div><div><br></div><div>Thanks,</div><div>A=
-nand Neeli</div></div>
+Hi,
 
---e89a8ff1cb42e8e95d04ec3a019f--
+Is there a need for a specific version of babeltrace to use for different L=
+TTng releases?
+I am currently using LTTng 2.2.3 rc2.
+
+If thera are such dependencies, where can I find this information on lttng.=
+org ?
+
+Regards
+Anette Sch=F6tt
 
 
---===============1298878458==
+
+--_000_0C794A2958AD524DAB4175408F839BD3107C6BESESSMB109ericsso_
+Content-Type: text/html; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+<html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-micr=
+osoft-com:office:office" xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
+xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http:=
+//www.w3.org/TR/REC-html40">
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Diso-8859-=
+1">
+<meta name=3D"Generator" content=3D"Microsoft Word 14 (filtered medium)">
+<style><!--
+/* Font Definitions */
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+/* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0cm;
+	margin-bottom:.0001pt;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+a:link, span.MsoHyperlink
+	{mso-style-priority:99;
+	color:blue;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{mso-style-priority:99;
+	color:purple;
+	text-decoration:underline;}
+span.EmailStyle17
+	{mso-style-type:personal-compose;
+	font-family:"Calibri","sans-serif";
+	color:windowtext;}
+.MsoChpDefault
+	{mso-style-type:export-only;
+	font-family:"Calibri","sans-serif";}
+@page WordSection1
+	{size:612.0pt 792.0pt;
+	margin:72.0pt 72.0pt 72.0pt 72.0pt;}
+div.WordSection1
+	{page:WordSection1;}
+--></style><!--[if gte mso 9]><xml>
+<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
+</xml><![endif]--><!--[if gte mso 9]><xml>
+<o:shapelayout v:ext=3D"edit">
+<o:idmap v:ext=3D"edit" data=3D"1" />
+</o:shapelayout></xml><![endif]-->
+</head>
+<body lang=3D"EN-US" link=3D"blue" vlink=3D"purple">
+<div class=3D"WordSection1">
+<p class=3D"MsoNormal">Hi,<o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">Is there a need for a specific version of babeltrace=
+ to use for different LTTng releases?<o:p></o:p></p>
+<p class=3D"MsoNormal">I am currently using LTTng 2.2.3 rc2.<o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">If thera are such dependencies, where can I find thi=
+s information on lttng.org ?<o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">Regards<o:p></o:p></p>
+<p class=3D"MsoNormal">Anette Sch=F6tt<o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+</div>
+</body>
+</html>
+
+--_000_0C794A2958AD524DAB4175408F839BD3107C6BESESSMB109ericsso_--
+
+
+--===============0448711002==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -87,4 +128,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============1298878458==--
+--===============0448711002==--
