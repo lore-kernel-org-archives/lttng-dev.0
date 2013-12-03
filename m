@@ -1,16 +1,19 @@
-From: =?iso-8859-1?Q?Anette_Sch=F6tt?= <anette.schott@ericsson.com>
-Subject: Babeltrace compatibility
-Date: Tue, 3 Dec 2013 06:54:51 +0000
-Message-ID: <0C794A2958AD524DAB4175408F839BD3107C6B__2793.72323207117$1386054933$gmane$org@ESESSMB109.ericsson.se>
+From: Yannick Brosseau <yannick.brosseau@gmail.com>
+Subject: Re: LTTV build failure in ubuntu 12.04
+Date: Mon, 02 Dec 2013 23:30:32 -0800
+Message-ID: <529D8898.50507__9582.75722009621$1386055892$gmane$org@gmail.com>
+References: <CAFuHdY2g+6ezgRWyFPY_iPm87DTgVT-6OD4KZiQnBVThxBSBhg@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0448711002=="
+Content-Type: text/plain; charset="windows-1252"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from sessmg20.ericsson.net ([193.180.251.50]
-	helo=sessmg20.mgmt.ericsson.se)
+Received: from mail-pd0-f177.google.com ([209.85.192.177])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <anette.schott@ericsson.com>) id 1Vnjsk-0005kf-4f
-	for lttng-dev@lists.lttng.org; Tue, 03 Dec 2013 01:54:55 -0500
-Content-Language: en-US
+	(envelope-from <yannick.brosseau@gmail.com>) id 1VnkRb-000685-6E
+	for lttng-dev@lists.lttng.org; Tue, 03 Dec 2013 02:30:55 -0500
+Received: by mail-pd0-f177.google.com with SMTP id q10so19384452pdj.8
+	for <lttng-dev@lists.lttng.org>; Mon, 02 Dec 2013 23:30:49 -0800 (PST)
+In-Reply-To: <CAFuHdY2g+6ezgRWyFPY_iPm87DTgVT-6OD4KZiQnBVThxBSBhg@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,113 +22,45 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Aananth CN <c.n.aananth@gmail.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============0448711002==
-Content-Language: en-US
-Content-Type: multipart/alternative;
-	boundary="_000_0C794A2958AD524DAB4175408F839BD3107C6BESESSMB109ericsso_"
+hi,
 
---_000_0C794A2958AD524DAB4175408F839BD3107C6BESESSMB109ericsso_
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Which version of babeltrace is installed on the system?
 
-Hi,
-
-Is there a need for a specific version of babeltrace to use for different L=
-TTng releases?
-I am currently using LTTng 2.2.3 rc2.
-
-If thera are such dependencies, where can I find this information on lttng.=
-org ?
-
-Regards
-Anette Sch=F6tt
-
-
-
---_000_0C794A2958AD524DAB4175408F839BD3107C6BESESSMB109ericsso_
-Content-Type: text/html; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-
-<html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-micr=
-osoft-com:office:office" xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
-xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http:=
-//www.w3.org/TR/REC-html40">
-<head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Diso-8859-=
-1">
-<meta name=3D"Generator" content=3D"Microsoft Word 14 (filtered medium)">
-<style><!--
-/* Font Definitions */
-@font-face
-	{font-family:Calibri;
-	panose-1:2 15 5 2 2 2 4 3 2 4;}
-/* Style Definitions */
-p.MsoNormal, li.MsoNormal, div.MsoNormal
-	{margin:0cm;
-	margin-bottom:.0001pt;
-	font-size:11.0pt;
-	font-family:"Calibri","sans-serif";}
-a:link, span.MsoHyperlink
-	{mso-style-priority:99;
-	color:blue;
-	text-decoration:underline;}
-a:visited, span.MsoHyperlinkFollowed
-	{mso-style-priority:99;
-	color:purple;
-	text-decoration:underline;}
-span.EmailStyle17
-	{mso-style-type:personal-compose;
-	font-family:"Calibri","sans-serif";
-	color:windowtext;}
-.MsoChpDefault
-	{mso-style-type:export-only;
-	font-family:"Calibri","sans-serif";}
-@page WordSection1
-	{size:612.0pt 792.0pt;
-	margin:72.0pt 72.0pt 72.0pt 72.0pt;}
-div.WordSection1
-	{page:WordSection1;}
---></style><!--[if gte mso 9]><xml>
-<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
-</xml><![endif]--><!--[if gte mso 9]><xml>
-<o:shapelayout v:ext=3D"edit">
-<o:idmap v:ext=3D"edit" data=3D"1" />
-</o:shapelayout></xml><![endif]-->
-</head>
-<body lang=3D"EN-US" link=3D"blue" vlink=3D"purple">
-<div class=3D"WordSection1">
-<p class=3D"MsoNormal">Hi,<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">Is there a need for a specific version of babeltrace=
- to use for different LTTng releases?<o:p></o:p></p>
-<p class=3D"MsoNormal">I am currently using LTTng 2.2.3 rc2.<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">If thera are such dependencies, where can I find thi=
-s information on lttng.org ?<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">Regards<o:p></o:p></p>
-<p class=3D"MsoNormal">Anette Sch=F6tt<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-</div>
-</body>
-</html>
-
---_000_0C794A2958AD524DAB4175408F839BD3107C6BESESSMB109ericsso_--
-
-
---===============0448711002==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0448711002==--
+On 11/25/13 08:52, Aananth CN wrote:
+> Hi,
+>
+> I could not find lttv (viewer) on ubuntu, hence I built from source. I
+> get following error. Could you please help me resolving this issue?
+> (Am I missing something, should I install any other packages?)
+>
+> make all-recursive
+> make[1]: Entering directory `/home/caananth/Downloads/lttv-1.5'
+> Making all in lttv
+> make[2]: Entering directory `/home/caananth/Downloads/lttv-1.5/lttv'
+> Making all in lttv
+> make[3]: Entering directory `/home/caananth/Downloads/lttv-1.5/lttv/lttv'
+> CC state.o
+> state.c: In function =91restore_init_state=92:
+> state.c:413:25: error: =91BT_CLOCK_REAL=92 undeclared (first use in this
+> function)
+> state.c:413:25: note: each undeclared identifier is reported only once
+> for each function it appears in
+> state.c:413:9: error: too many arguments to function
+> =91bt_trace_handle_get_timestamp_begin=92
+> /usr/include/babeltrace/trace-handle.h:45:10: note: declared here
+> state.c: In function =91state_save_after_trace_hook=92:
+> state.c:3531:2: warning: #warning "Would we move max_time to traceset"
+> [-Wcpp]
+> make[3]: *** [state.o] Error 1
+> make[3]: Leaving directory `/home/caananth/Downloads/lttv-1.5/lttv/lttv'
+> make[2]: *** [all-recursive] Error 1
+> make[2]: Leaving directory `/home/caananth/Downloads/lttv-1.5/lttv'
+> make[1]: *** [all-recursive] Error 1
+> make[1]: Leaving directory `/home/caananth/Downloads/lttv-1.5'
+> make: *** [all] Error 2
+>
+>
