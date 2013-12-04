@@ -1,18 +1,18 @@
-From: Aananth CN <c.n.aananth@gmail.com>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
 Subject: Re: LTTV build failure in ubuntu 12.04
-Date: Wed, 4 Dec 2013 06:54:23 +0530
-Message-ID: <CAFuHdY0yB6aS=p_7ieFoZ3biwYT3RQZ=w9N29tA0oQHXe1b+cA__11083.8422588587$1386120324$gmane$org@mail.gmail.com>
+Date: Wed, 4 Dec 2013 13:43:21 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD267B28B0__12801.9596254036$1386164687$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 References: <48CF5AC71E61DB46B70D0F388054EFFD267B25FA@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+	<CAFuHdY0yB6aS=p_7ieFoZ3biwYT3RQZ=w9N29tA0oQHXe1b+cA@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0184570728=="
+Content-Type: multipart/mixed; boundary="===============1615707155=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wg0-f48.google.com ([74.125.82.48])
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <c.n.aananth@gmail.com>) id 1Vo1CY-0006bo-6q
-	for lttng-dev@lists.lttng.org; Tue, 03 Dec 2013 20:24:34 -0500
-Received: by mail-wg0-f48.google.com with SMTP id z12so14453712wgg.27
-	for <lttng-dev@lists.lttng.org>; Tue, 03 Dec 2013 17:24:24 -0800 (PST)
-In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD267B25FA@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1VoCja-0004Hf-Rz
+	for lttng-dev@lists.lttng.org; Wed, 04 Dec 2013 08:43:30 -0500
+In-Reply-To: <CAFuHdY0yB6aS=p_7ieFoZ3biwYT3RQZ=w9N29tA0oQHXe1b+cA@mail.gmail.com>
+Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,227 +21,236 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+To: Aananth CN <c.n.aananth@gmail.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0184570728==
-Content-Type: multipart/alternative; boundary=047d7ba97f3af4db6504ecab45f5
+--===============1615707155==
+Content-Language: fr-FR
+Content-Type: multipart/alternative;
+	boundary="_000_48CF5AC71E61DB46B70D0F388054EFFD267B28B0VALE02valcartie_"
 
---047d7ba97f3af4db6504ecab45f5
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+--_000_48CF5AC71E61DB46B70D0F388054EFFD267B28B0VALE02valcartie_
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 
-Hi Daniel, Brosseau,
+RW52b3nDqSA6IDMgZMOpY2VtYnJlIDIwMTMgMjA6MjQNCg0KPiBIZXJlIGlzIHRoZSBwYWNrYWdl
+L2xpYnMgYW5kIHRoZWlyIGxpYnJhcnkgdmVyc2lvbnMuDQo+DQo+IGJhYmVsdHJhY2UgICAtIDEu
+MC4wLXJjMQ0KDQogICBZb3Ugc2hvdWxkIHVwZ3JhZGUgdG8gMS4wLjAgb3IgYmV0dGVyIHlldCAx
+LjEuMSAoaHR0cDovL2dpdC5lZmZpY2lvcy5jb20vP3A9YmFiZWx0cmFjZS5naXQ7YT1zdW1tYXJ5
+KSwgYXMgMS4wLjAtcmMxIHByZWNlZGVzIDEuMC4wLiAgWW91IG1heSBoYXZlIHRvIOKAnEZvcmNl
+IHZlcnNpb27igJ0gZnJvbSBTeW5hcHRpYywgYXMgaXQgc29tZXRpbWVzIHRyZWF0cyByZWxlYXNl
+IGNhbmRpZGF0ZXMgYXMgbGF0ZXIgdGhhbiB0aGUgZnVsbCB2ZXJzaW9ucy4gIChUbyBmb3JjZSB0
+aGUgdmVyc2lvbiBmcm9tIHRoZSBjb21tYW5kIGxpbmUsIHVzZSBlLmcuIOKAmGFwdC1nZXQgaW5z
+dGFsbCBiYWJlbHRyYWNlPTEuMC4w4oCZKQ0KDQo+IGF1dG9tYWtlICAgICAtIE5PVCBJTlNUQUxM
+RUQNCj4gZ2NjIHZlcnNpb24gLSA0LjYuMw0KPiBsaWJ0b29sICAgICAgLSBOT1QgSU5TVEFMTEVE
+DQo+IGxpYmd0azIuMC1kZXYgICAgIC0gMi4yNC4xMC0wdWJ1bnR1NiAoRE9FUyBOT1QgTUVFVCA+
+PSAyLjQpDQoNCiAgIDIuMjQgaXMgZ3JlYXRlciB0aGFuIDIuNC4gIElzIFN5bmFwdGljIHRlbGxp
+bmcgeW91IGl0IGlzbuKAmXQ/DQoNCj4gbGliZ2xpYjIuMC1kZXYgICAgLSAyLjMyLjQtMHVidW50
+dTENCj4gbGlicG9wdC1kZXYgIC0gMS4xNi0zdWJ1bnR1MQ0KPiBsaWJwYW5nbzEuMC1kZXYgLSAx
+LjMwLjAtMHVidW50dTMuMQ0KPiBsaWJjNi1kZXYgICAgLSAyLjE1LTB1YnVudHUxMC41DQo+DQo+
+IExhdGVyIEkgaW5zdGFsbGVkIHRoZSBmb2xsb3dpbmcgYW5kIHJlLWJ1aWx0IHRoZSBsdHR2Og0K
+Pg0KPiBhdXRvbWFrZSAgICAgLSAxLjExLjMNCj4gbGlidG9vbCAgICAgICAgICAgICAgICAgICAg
+ICAtIDIuNC4yDQo+DQo+IFN0aWxsIHRoZSBlcnJvciBwZXJzaXN0cy4gTWF5YmUgdGhlIGxpYmd0
+azIuMC1kZXYgbm90IG1lZXRpbmcgdGhlIGRlcGVuZGVuY3kgaXMgY2F1c2luZyB0aGlzLg0KDQpE
+YW5pZWwgVS4gVGhpYmF1bHQNClByb3RlY3Rpb24gZGVzIHN5c3TDqG1lcyBldCBjb250cmVtZXN1
+cmVzIChQU0MpIHwgU3lzdGVtcyBQcm90ZWN0aW9uICYgQ291bnRlcm1lYXN1cmVzIChTUEMpDQpD
+eWJlciBzw6ljdXJpdMOpIHBvdXIgbGVzIG1pc3Npb25zIGVzc2VudGllbGxlcyAoQ01FKSB8IE1p
+c3Npb24gQ3JpdGljYWwgQ3liZXIgU2VjdXJpdHkgKE1DQ1MpDQpSICYgRCBwb3VyIGxhIGTDqWZl
+bnNlIENhbmFkYSAtIFZhbGNhcnRpZXIgKFJEREMgVmFsY2FydGllcikgfCBEZWZlbmNlIFImRCBD
+YW5hZGEgLSBWYWxjYXJ0aWVyIChEUkRDIFZhbGNhcnRpZXIpDQoyNDU5IHJvdXRlIGRlIGxhIEJy
+YXZvdXJlDQpRdcOpYmVjIFFDICBHM0ogMVg1DQpDQU5BREENClZveCA6ICg0MTgpIDg0NC00MDAw
+IHg0MjQ1DQpGYXggOiAoNDE4KSA4NDQtNDUzOA0KTkFDIDogOTE4ViBRU0RKIDxodHRwOi8vd3d3
+LnRyYXZlbGdpcy5jb20vbWFwLmFzcD9hZGRyPTkxOFYlMjBRU0RKPC0tRVNGU0VDRVYtVFkzMDEx
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0+Pg0KR291dmVybmVtZW50IGR1IENhbmFk
+YSB8IEdvdmVybm1lbnQgb2YgQ2FuYWRhDQo8aHR0cDovL3d3dy52YWxjYXJ0aWVyLmRyZGMtcmRk
+Yy5nYy5jYS88LS1FU0ZTRUNFVi1UWTMwMTEtLS0tLS0tLS0tLS0tLS0tLS0tLS0+Pg0K
 
-Here is the package/libs and their library versions.
+--_000_48CF5AC71E61DB46B70D0F388054EFFD267B28B0VALE02valcartie_
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: base64
 
-babeltrace - 1.0.0-rc1
-automake - NOT INSTALLED
-gcc version - 4.6.3
-libtool - NOT INSTALLED
-libgtk2.0-dev - 2.24.10-0ubuntu6 (DOES NOT MEET >=3D 2.4)
-libglib2.0-dev - 2.32.4-0ubuntu1
-libpopt-dev - 1.16-3ubuntu1
-libpango1.0-dev - 1.30.0-0ubuntu3.1
-libc6-dev - 2.15-0ubuntu10.5
+PGh0bWwgeG1sbnM6dj0idXJuOnNjaGVtYXMtbWljcm9zb2Z0LWNvbTp2bWwiIHhtbG5zOm89InVy
+bjpzY2hlbWFzLW1pY3Jvc29mdC1jb206b2ZmaWNlOm9mZmljZSIgeG1sbnM6dz0idXJuOnNjaGVt
+YXMtbWljcm9zb2Z0LWNvbTpvZmZpY2U6d29yZCIgeG1sbnM6bT0iaHR0cDovL3NjaGVtYXMubWlj
+cm9zb2Z0LmNvbS9vZmZpY2UvMjAwNC8xMi9vbW1sIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcv
+VFIvUkVDLWh0bWw0MCI+DQo8aGVhZD4NCjxtZXRhIGh0dHAtZXF1aXY9IkNvbnRlbnQtVHlwZSIg
+Y29udGVudD0idGV4dC9odG1sOyBjaGFyc2V0PXV0Zi04Ij4NCjxtZXRhIG5hbWU9IkdlbmVyYXRv
+ciIgY29udGVudD0iTWljcm9zb2Z0IFdvcmQgMTQgKGZpbHRlcmVkIG1lZGl1bSkiPg0KPHN0eWxl
+PjwhLS0NCi8qIEZvbnQgRGVmaW5pdGlvbnMgKi8NCkBmb250LWZhY2UNCgl7Zm9udC1mYW1pbHk6
+IkNhbWJyaWEgTWF0aCI7DQoJcGFub3NlLTE6MiA0IDUgMyA1IDQgNiAzIDIgNDt9DQpAZm9udC1m
+YWNlDQoJe2ZvbnQtZmFtaWx5OkNhbGlicmk7DQoJcGFub3NlLTE6MiAxNSA1IDIgMiAyIDQgMyAy
+IDQ7fQ0KQGZvbnQtZmFjZQ0KCXtmb250LWZhbWlseTpUYWhvbWE7DQoJcGFub3NlLTE6MiAxMSA2
+IDQgMyA1IDQgNCAyIDQ7fQ0KQGZvbnQtZmFjZQ0KCXtmb250LWZhbWlseTpDb25zb2xhczsNCglw
+YW5vc2UtMToyIDExIDYgOSAyIDIgNCAzIDIgNDt9DQovKiBTdHlsZSBEZWZpbml0aW9ucyAqLw0K
+cC5Nc29Ob3JtYWwsIGxpLk1zb05vcm1hbCwgZGl2Lk1zb05vcm1hbA0KCXttYXJnaW46MGNtOw0K
+CW1hcmdpbi1ib3R0b206LjAwMDFwdDsNCglmb250LXNpemU6MTIuMHB0Ow0KCWZvbnQtZmFtaWx5
+OiJUaW1lcyBOZXcgUm9tYW4iLCJzZXJpZiI7fQ0KYTpsaW5rLCBzcGFuLk1zb0h5cGVybGluaw0K
+CXttc28tc3R5bGUtcHJpb3JpdHk6OTk7DQoJY29sb3I6Ymx1ZTsNCgl0ZXh0LWRlY29yYXRpb246
+dW5kZXJsaW5lO30NCmE6dmlzaXRlZCwgc3Bhbi5Nc29IeXBlcmxpbmtGb2xsb3dlZA0KCXttc28t
+c3R5bGUtcHJpb3JpdHk6OTk7DQoJY29sb3I6cHVycGxlOw0KCXRleHQtZGVjb3JhdGlvbjp1bmRl
+cmxpbmU7fQ0KcA0KCXttc28tc3R5bGUtcHJpb3JpdHk6OTk7DQoJbXNvLW1hcmdpbi10b3AtYWx0
+OmF1dG87DQoJbWFyZ2luLXJpZ2h0OjBjbTsNCgltc28tbWFyZ2luLWJvdHRvbS1hbHQ6YXV0bzsN
+CgltYXJnaW4tbGVmdDowY207DQoJZm9udC1zaXplOjEyLjBwdDsNCglmb250LWZhbWlseToiVGlt
+ZXMgTmV3IFJvbWFuIiwic2VyaWYiO30NCnByZQ0KCXttc28tc3R5bGUtcHJpb3JpdHk6OTk7DQoJ
+bXNvLXN0eWxlLWxpbms6IlByw6lmb3JtYXTDqSBIVE1MIENhciI7DQoJbWFyZ2luOjBjbTsNCglt
+YXJnaW4tYm90dG9tOi4wMDAxcHQ7DQoJZm9udC1zaXplOjEwLjBwdDsNCglmb250LWZhbWlseToi
+Q291cmllciBOZXciO30NCnAuTXNvQWNldGF0ZSwgbGkuTXNvQWNldGF0ZSwgZGl2Lk1zb0FjZXRh
+dGUNCgl7bXNvLXN0eWxlLXByaW9yaXR5Ojk5Ow0KCW1zby1zdHlsZS1saW5rOiJUZXh0ZSBkZSBi
+dWxsZXMgQ2FyIjsNCgltYXJnaW46MGNtOw0KCW1hcmdpbi1ib3R0b206LjAwMDFwdDsNCglmb250
+LXNpemU6OC4wcHQ7DQoJZm9udC1mYW1pbHk6IlRhaG9tYSIsInNhbnMtc2VyaWYiO30NCnAuTXNv
+TGlzdFBhcmFncmFwaCwgbGkuTXNvTGlzdFBhcmFncmFwaCwgZGl2Lk1zb0xpc3RQYXJhZ3JhcGgN
+Cgl7bXNvLXN0eWxlLXByaW9yaXR5OjM0Ow0KCW1hcmdpbi10b3A6MGNtOw0KCW1hcmdpbi1yaWdo
+dDowY207DQoJbWFyZ2luLWJvdHRvbTowY207DQoJbWFyZ2luLWxlZnQ6MzYuMHB0Ow0KCW1hcmdp
+bi1ib3R0b206LjAwMDFwdDsNCglmb250LXNpemU6MTIuMHB0Ow0KCWZvbnQtZmFtaWx5OiJUaW1l
+cyBOZXcgUm9tYW4iLCJzZXJpZiI7fQ0Kc3Bhbi5QcmZvcm1hdEhUTUxDYXINCgl7bXNvLXN0eWxl
+LW5hbWU6IlByw6lmb3JtYXTDqSBIVE1MIENhciI7DQoJbXNvLXN0eWxlLXByaW9yaXR5Ojk5Ow0K
+CW1zby1zdHlsZS1saW5rOiJQcsOpZm9ybWF0w6kgSFRNTCI7DQoJZm9udC1mYW1pbHk6Q29uc29s
+YXM7DQoJbXNvLWZhcmVhc3QtbGFuZ3VhZ2U6RlItQ0E7fQ0Kc3Bhbi5FbWFpbFN0eWxlMjANCgl7
+bXNvLXN0eWxlLXR5cGU6cGVyc29uYWwtcmVwbHk7DQoJZm9udC1mYW1pbHk6IkNhbGlicmkiLCJz
+YW5zLXNlcmlmIjsNCgljb2xvcjojMUY0OTdEO30NCnNwYW4uVGV4dGVkZWJ1bGxlc0Nhcg0KCXtt
+c28tc3R5bGUtbmFtZToiVGV4dGUgZGUgYnVsbGVzIENhciI7DQoJbXNvLXN0eWxlLXByaW9yaXR5
+Ojk5Ow0KCW1zby1zdHlsZS1saW5rOiJUZXh0ZSBkZSBidWxsZXMiOw0KCWZvbnQtZmFtaWx5OiJU
+YWhvbWEiLCJzYW5zLXNlcmlmIjsNCgltc28tZmFyZWFzdC1sYW5ndWFnZTpGUi1DQTt9DQouTXNv
+Q2hwRGVmYXVsdA0KCXttc28tc3R5bGUtdHlwZTpleHBvcnQtb25seTsNCglmb250LWZhbWlseToi
+Q2FsaWJyaSIsInNhbnMtc2VyaWYiOw0KCW1zby1mYXJlYXN0LWxhbmd1YWdlOkVOLVVTO30NCkBw
+YWdlIFdvcmRTZWN0aW9uMQ0KCXtzaXplOjYxMi4wcHQgNzkyLjBwdDsNCgltYXJnaW46NzIuMHB0
+IDkwLjBwdCA3Mi4wcHQgOTAuMHB0O30NCmRpdi5Xb3JkU2VjdGlvbjENCgl7cGFnZTpXb3JkU2Vj
+dGlvbjE7fQ0KLS0+PC9zdHlsZT48IS0tW2lmIGd0ZSBtc28gOV0+PHhtbD4NCjxvOnNoYXBlZGVm
+YXVsdHMgdjpleHQ9ImVkaXQiIHNwaWRtYXg9IjEwMjYiIC8+DQo8L3htbD48IVtlbmRpZl0tLT48
+IS0tW2lmIGd0ZSBtc28gOV0+PHhtbD4NCjxvOnNoYXBlbGF5b3V0IHY6ZXh0PSJlZGl0Ij4NCjxv
+OmlkbWFwIHY6ZXh0PSJlZGl0IiBkYXRhPSIxIiAvPg0KPC9vOnNoYXBlbGF5b3V0PjwveG1sPjwh
+W2VuZGlmXS0tPg0KPC9oZWFkPg0KPGJvZHkgbGFuZz0iRlItQ0EiIGxpbms9ImJsdWUiIHZsaW5r
+PSJwdXJwbGUiPg0KPGRpdiBjbGFzcz0iV29yZFNlY3Rpb24xIj4NCjxwIGNsYXNzPSJNc29Ob3Jt
+YWwiPjxiPjxzcGFuIGxhbmc9IkZSIiBzdHlsZT0iZm9udC1zaXplOjEwLjBwdDtmb250LWZhbWls
+eTomcXVvdDtUYWhvbWEmcXVvdDssJnF1b3Q7c2Fucy1zZXJpZiZxdW90OyI+RW52b3nDqSZuYnNw
+Ozo8L3NwYW4+PC9iPjxzcGFuIGxhbmc9IkZSIiBzdHlsZT0iZm9udC1zaXplOjEwLjBwdDtmb250
+LWZhbWlseTomcXVvdDtUYWhvbWEmcXVvdDssJnF1b3Q7c2Fucy1zZXJpZiZxdW90OyI+IDMgZMOp
+Y2VtYnJlIDIwMTMgMjA6MjQ8YnI+DQo8YnI+DQo8bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8ZGl2
+Pg0KPGRpdj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIGxhbmc9IkVOLUNBIiBzdHlsZT0i
+Y29sb3I6IzFGNDk3RCI+Jmd0OyA8L3NwYW4+PHNwYW4gbGFuZz0iRU4tQ0EiPkhlcmUgaXMgdGhl
+IHBhY2thZ2UvbGlicyBhbmQgdGhlaXIgbGlicmFyeSB2ZXJzaW9ucy48bzpwPjwvbzpwPjwvc3Bh
+bj48L3A+DQo8L2Rpdj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBsYW5nPSJF
+Ti1DQSIgc3R5bGU9ImNvbG9yOiMxRjQ5N0QiPiZndDs8L3NwYW4+PHNwYW4gbGFuZz0iRU4tQ0Ei
+PjxvOnA+Jm5ic3A7PC9vOnA+PC9zcGFuPjwvcD4NCjwvZGl2Pg0KPGRpdj4NCjxwIGNsYXNzPSJN
+c29Ob3JtYWwiPjxzcGFuIGxhbmc9IkVOLUNBIiBzdHlsZT0iY29sb3I6IzFGNDk3RCI+Jmd0OyA8
+L3NwYW4+PHNwYW4gbGFuZz0iRU4tQ0EiIHN0eWxlPSJmb250LWZhbWlseTomcXVvdDtDb3VyaWVy
+IE5ldyZxdW90OyI+YmFiZWx0cmFjZSAmbmJzcDsgLSAxLjAuMC1yYzE8c3BhbiBzdHlsZT0iY29s
+b3I6IzFGNDk3RCI+PG86cD48L286cD48L3NwYW4+PC9zcGFuPjwvcD4NCjxwIGNsYXNzPSJNc29O
+b3JtYWwiPjxzcGFuIGxhbmc9IkVOLUNBIiBzdHlsZT0iZm9udC1zaXplOjExLjBwdDtmb250LWZh
+bWlseTomcXVvdDtDYWxpYnJpJnF1b3Q7LCZxdW90O3NhbnMtc2VyaWYmcXVvdDs7Y29sb3I6IzFG
+NDk3RCI+PG86cD4mbmJzcDs8L286cD48L3NwYW4+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+
+PHNwYW4gbGFuZz0iRU4tQ0EiIHN0eWxlPSJmb250LXNpemU6MTEuMHB0O2ZvbnQtZmFtaWx5OiZx
+dW90O0NhbGlicmkmcXVvdDssJnF1b3Q7c2Fucy1zZXJpZiZxdW90Oztjb2xvcjojMUY0OTdEIj4m
+bmJzcDsmbmJzcDsgWW91IHNob3VsZCB1cGdyYWRlIHRvIDEuMC4wIG9yIGJldHRlciB5ZXQgMS4x
+LjEgKGh0dHA6Ly9naXQuZWZmaWNpb3MuY29tLz9wPWJhYmVsdHJhY2UuZ2l0O2E9c3VtbWFyeSks
+IGFzIDEuMC4wLXJjMSBwcmVjZWRlcyAxLjAuMC4mbmJzcDsgWW91IG1heQ0KIGhhdmUgdG8g4oCc
+Rm9yY2UgdmVyc2lvbuKAnSBmcm9tIFN5bmFwdGljLCBhcyBpdCBzb21ldGltZXMgdHJlYXRzIHJl
+bGVhc2UgY2FuZGlkYXRlcyBhcyBsYXRlciB0aGFuIHRoZSBmdWxsIHZlcnNpb25zLiZuYnNwOyAo
+VG8gZm9yY2UgdGhlIHZlcnNpb24gZnJvbSB0aGUgY29tbWFuZCBsaW5lLCB1c2UgZS5nLiDigJhh
+cHQtZ2V0IGluc3RhbGwgYmFiZWx0cmFjZT0xLjAuMOKAmSk8bzpwPjwvbzpwPjwvc3Bhbj48L3A+
+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBsYW5nPSJFTi1DQSIgc3R5bGU9ImZvbnQtc2l6
+ZToxMS4wcHQ7Zm9udC1mYW1pbHk6JnF1b3Q7Q2FsaWJyaSZxdW90OywmcXVvdDtzYW5zLXNlcmlm
+JnF1b3Q7O2NvbG9yOiMxRjQ5N0QiPjxvOnA+Jm5ic3A7PC9vOnA+PC9zcGFuPjwvcD4NCjwvZGl2
+Pg0KPGRpdj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIGxhbmc9IkVOLUNBIiBzdHlsZT0i
+Y29sb3I6IzFGNDk3RCI+Jmd0OyA8L3NwYW4+PHNwYW4gbGFuZz0iRU4tQ0EiIHN0eWxlPSJmb250
+LWZhbWlseTomcXVvdDtDb3VyaWVyIE5ldyZxdW90OyI+YXV0b21ha2UgJm5ic3A7Jm5ic3A7Jm5i
+c3A7IC0gTk9UIElOU1RBTExFRDwvc3Bhbj48c3BhbiBsYW5nPSJFTi1DQSI+PG86cD48L286cD48
+L3NwYW4+PC9wPg0KPC9kaXY+DQo8ZGl2Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gbGFu
+Zz0iRU4tQ0EiIHN0eWxlPSJjb2xvcjojMUY0OTdEIj4mZ3Q7IDwvc3Bhbj48c3BhbiBsYW5nPSJF
+Ti1DQSIgc3R5bGU9ImZvbnQtZmFtaWx5OiZxdW90O0NvdXJpZXIgTmV3JnF1b3Q7Ij5nY2MgdmVy
+c2lvbiAtIDQuNi4zPC9zcGFuPjxzcGFuIGxhbmc9IkVOLUNBIj48bzpwPjwvbzpwPjwvc3Bhbj48
+L3A+DQo8L2Rpdj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBsYW5nPSJFTi1D
+QSIgc3R5bGU9ImNvbG9yOiMxRjQ5N0QiPiZndDsgPC9zcGFuPjxzcGFuIGxhbmc9IkVOLUNBIiBz
+dHlsZT0iZm9udC1mYW1pbHk6JnF1b3Q7Q291cmllciBOZXcmcXVvdDsiPmxpYnRvb2wgJm5ic3A7
+Jm5ic3A7Jm5ic3A7Jm5ic3A7IC0gTk9UIElOU1RBTExFRDwvc3Bhbj48c3BhbiBsYW5nPSJFTi1D
+QSI+PG86cD48L286cD48L3NwYW4+PC9wPg0KPC9kaXY+DQo8ZGl2Pg0KPHAgY2xhc3M9Ik1zb05v
+cm1hbCI+PHNwYW4gbGFuZz0iRU4tQ0EiIHN0eWxlPSJjb2xvcjojMUY0OTdEIj4mZ3Q7IDwvc3Bh
+bj48c3BhbiBsYW5nPSJFTi1DQSIgc3R5bGU9ImZvbnQtZmFtaWx5OiZxdW90O0NvdXJpZXIgTmV3
+JnF1b3Q7Ij5saWJndGsyLjAtZGV2Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7IC0gMi4yNC4xMC0w
+dWJ1bnR1NiAoRE9FUyBOT1QgTUVFVCAmZ3Q7PSAyLjQpPHNwYW4gc3R5bGU9ImNvbG9yOiMxRjQ5
+N0QiPjxvOnA+PC9vOnA+PC9zcGFuPjwvc3Bhbj48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48
+c3BhbiBsYW5nPSJFTi1DQSIgc3R5bGU9ImZvbnQtc2l6ZToxMS4wcHQ7Zm9udC1mYW1pbHk6JnF1
+b3Q7Q2FsaWJyaSZxdW90OywmcXVvdDtzYW5zLXNlcmlmJnF1b3Q7O2NvbG9yOiMxRjQ5N0QiPjxv
+OnA+Jm5ic3A7PC9vOnA+PC9zcGFuPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIGxh
+bmc9IkVOLUNBIiBzdHlsZT0iZm9udC1zaXplOjExLjBwdDtmb250LWZhbWlseTomcXVvdDtDYWxp
+YnJpJnF1b3Q7LCZxdW90O3NhbnMtc2VyaWYmcXVvdDs7Y29sb3I6IzFGNDk3RCI+Jm5ic3A7Jm5i
+c3A7IDIuMjQgaXMgZ3JlYXRlciB0aGFuIDIuNC4mbmJzcDsgSXMgU3luYXB0aWMgdGVsbGluZyB5
+b3UgaXQgaXNu4oCZdD88bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFs
+Ij48c3BhbiBsYW5nPSJFTi1DQSIgc3R5bGU9ImZvbnQtc2l6ZToxMS4wcHQ7Zm9udC1mYW1pbHk6
+JnF1b3Q7Q2FsaWJyaSZxdW90OywmcXVvdDtzYW5zLXNlcmlmJnF1b3Q7O2NvbG9yOiMxRjQ5N0Qi
+PjxvOnA+Jm5ic3A7PC9vOnA+PC9zcGFuPjwvcD4NCjwvZGl2Pg0KPGRpdj4NCjxwIGNsYXNzPSJN
+c29Ob3JtYWwiPjxzcGFuIGxhbmc9IkVOLUNBIiBzdHlsZT0iY29sb3I6IzFGNDk3RCI+Jmd0OyA8
+L3NwYW4+PHNwYW4gbGFuZz0iRU4tQ0EiIHN0eWxlPSJmb250LWZhbWlseTomcXVvdDtDb3VyaWVy
+IE5ldyZxdW90OyI+bGliZ2xpYjIuMC1kZXYmbmJzcDsmbmJzcDsmbmJzcDsgLSAyLjMyLjQtMHVi
+dW50dTEmbmJzcDs8L3NwYW4+PHNwYW4gbGFuZz0iRU4tQ0EiPjxvOnA+PC9vOnA+PC9zcGFuPjwv
+cD4NCjwvZGl2Pg0KPGRpdj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIGxhbmc9IkVOLUNB
+IiBzdHlsZT0iY29sb3I6IzFGNDk3RCI+Jmd0OyA8L3NwYW4+PHNwYW4gbGFuZz0iRU4tQ0EiIHN0
+eWxlPSJmb250LWZhbWlseTomcXVvdDtDb3VyaWVyIE5ldyZxdW90OyI+bGlicG9wdC1kZXYmbmJz
+cDsgLSAxLjE2LTN1YnVudHUxPC9zcGFuPjxzcGFuIGxhbmc9IkVOLUNBIj48bzpwPjwvbzpwPjwv
+c3Bhbj48L3A+DQo8L2Rpdj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBsYW5n
+PSJFTi1DQSIgc3R5bGU9ImNvbG9yOiMxRjQ5N0QiPiZndDsgPC9zcGFuPjxzcGFuIGxhbmc9IkVO
+LUNBIiBzdHlsZT0iZm9udC1mYW1pbHk6JnF1b3Q7Q291cmllciBOZXcmcXVvdDsiPmxpYnBhbmdv
+MS4wLWRldiAtIDEuMzAuMC0wdWJ1bnR1My4xPC9zcGFuPjxzcGFuIGxhbmc9IkVOLUNBIj48bzpw
+PjwvbzpwPjwvc3Bhbj48L3A+DQo8L2Rpdj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48
+c3BhbiBsYW5nPSJFTi1DQSIgc3R5bGU9ImNvbG9yOiMxRjQ5N0QiPiZndDsgPC9zcGFuPjxzcGFu
+IGxhbmc9IkVOLUNBIiBzdHlsZT0iZm9udC1mYW1pbHk6JnF1b3Q7Q291cmllciBOZXcmcXVvdDsi
+PmxpYmM2LWRldiZuYnNwOyZuYnNwOyZuYnNwOyAtIDIuMTU8L3NwYW4+PHNwYW4gc3R5bGU9ImZv
+bnQtZmFtaWx5OiZxdW90O0NvdXJpZXIgTmV3JnF1b3Q7Ij4tMHVidW50dTEwLjU8L3NwYW4+PG86
+cD48L286cD48L3A+DQo8L2Rpdj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBs
+YW5nPSJFTi1DQSIgc3R5bGU9ImNvbG9yOiMxRjQ5N0QiPiZndDs8L3NwYW4+PHNwYW4gbGFuZz0i
+RU4tQ0EiPjxvOnA+Jm5ic3A7PC9vOnA+PC9zcGFuPjwvcD4NCjwvZGl2Pg0KPGRpdj4NCjxwIGNs
+YXNzPSJNc29Ob3JtYWwiPjxzcGFuIGxhbmc9IkVOLUNBIiBzdHlsZT0iY29sb3I6IzFGNDk3RCI+
+Jmd0OyA8L3NwYW4+PHNwYW4gbGFuZz0iRU4tQ0EiPkxhdGVyIEkgaW5zdGFsbGVkIHRoZSBmb2xs
+b3dpbmcgYW5kIHJlLWJ1aWx0IHRoZSBsdHR2OjxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjwvZGl2
+Pg0KPGRpdj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIGxhbmc9IkVOLUNBIiBzdHlsZT0i
+Y29sb3I6IzFGNDk3RCI+Jmd0Ozwvc3Bhbj48c3BhbiBsYW5nPSJFTi1DQSI+PG86cD4mbmJzcDs8
+L286cD48L3NwYW4+PC9wPg0KPC9kaXY+DQo8ZGl2Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNw
+YW4gbGFuZz0iRU4tQ0EiIHN0eWxlPSJjb2xvcjojMUY0OTdEIj4mZ3Q7IDwvc3Bhbj48c3BhbiBs
+YW5nPSJFTi1DQSI+YXV0b21ha2UmbmJzcDsmbmJzcDsmbmJzcDsmbmJzcDsgLSAxLjExLjM8bzpw
+PjwvbzpwPjwvc3Bhbj48L3A+DQo8L2Rpdj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48
+c3BhbiBsYW5nPSJFTi1DQSIgc3R5bGU9ImNvbG9yOiMxRjQ5N0QiPiZndDsgPC9zcGFuPjxzcGFu
+IGxhbmc9IkVOLUNBIj5saWJ0b29sJm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7
+Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5i
+c3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7IC0gMi40LjI8bzpwPjwvbzpwPjwvc3Bh
+bj48L3A+DQo8L2Rpdj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBsYW5nPSJF
+Ti1DQSIgc3R5bGU9ImNvbG9yOiMxRjQ5N0QiPiZndDs8L3NwYW4+PHNwYW4gbGFuZz0iRU4tQ0Ei
+PjxvOnA+Jm5ic3A7PC9vOnA+PC9zcGFuPjwvcD4NCjwvZGl2Pg0KPGRpdj4NCjxwIGNsYXNzPSJN
+c29Ob3JtYWwiPjxzcGFuIGxhbmc9IkVOLUNBIiBzdHlsZT0iY29sb3I6IzFGNDk3RCI+Jmd0OyA8
+L3NwYW4+PHNwYW4gbGFuZz0iRU4tQ0EiPlN0aWxsIHRoZSBlcnJvciBwZXJzaXN0cy4gTWF5YmUg
+dGhlIGxpYmd0azIuMC1kZXYgbm90IG1lZXRpbmcgdGhlIGRlcGVuZGVuY3kgaXMgY2F1c2luZyB0
+aGlzLjxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjwvZGl2Pg0KPC9kaXY+DQo8ZGl2Pg0KPGRpdj4N
+CjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIGxhbmc9IkVOLUNBIiBzdHlsZT0iY29sb3I6IzFG
+NDk3RCI+PG86cD4mbmJzcDs8L286cD48L3NwYW4+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+
+RGFuaWVsIFUuIFRoaWJhdWx0PGJyPg0KUHJvdGVjdGlvbiBkZXMgc3lzdMOobWVzIGV0IGNvbnRy
+ZW1lc3VyZXMgKFBTQykgfCBTeXN0ZW1zIFByb3RlY3Rpb24gJmFtcDsgQ291bnRlcm1lYXN1cmVz
+IChTUEMpPGJyPg0KQ3liZXIgc8OpY3VyaXTDqSBwb3VyIGxlcyBtaXNzaW9ucyBlc3NlbnRpZWxs
+ZXMgKENNRSkgfCBNaXNzaW9uIENyaXRpY2FsIEN5YmVyIFNlY3VyaXR5IChNQ0NTKTxicj4NClIg
+JmFtcDsgRCBwb3VyIGxhIGTDqWZlbnNlIENhbmFkYSAtIFZhbGNhcnRpZXIgKFJEREMgVmFsY2Fy
+dGllcikgfCBEZWZlbmNlIFImYW1wO0QgQ2FuYWRhIC0gVmFsY2FydGllciAoRFJEQyBWYWxjYXJ0
+aWVyKTxicj4NCjI0NTkgcm91dGUgZGUgbGEgQnJhdm91cmU8YnI+DQpRdcOpYmVjIFFDICZuYnNw
+O0czSiAxWDU8YnI+DQpDQU5BREE8YnI+DQpWb3ggOiAoNDE4KSA4NDQtNDAwMCB4NDI0NTxicj4N
+CkZheCA6ICg0MTgpIDg0NC00NTM4PGJyPg0KTkFDIDogOTE4ViBRU0RKICZsdDs8YSBocmVmPSIt
+LUVTRlNFQ0VWLVRZMzAxMS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tIiB0YXJnZXQ9
+Il9ibGFuayI+aHR0cDovL3d3dy50cmF2ZWxnaXMuY29tL21hcC5hc3A/YWRkcj05MThWJTIwUVNE
+SjwvYT4mZ3Q7PGJyPg0KR291dmVybmVtZW50IGR1IENhbmFkYSB8IEdvdmVybm1lbnQgb2YgQ2Fu
+YWRhPGJyPg0KJmx0OzxhIGhyZWY9Ii0tRVNGU0VDRVYtVFkzMDExLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tIiB0YXJnZXQ9Il9ibGFuayI+aHR0cDovL3d3dy52YWxjYXJ0aWVyLmRyZGMtcmRkYy5nYy5j
+YS88L2E+Jmd0OzxvOnA+PC9vOnA+PC9wPg0KPC9kaXY+DQo8L2Rpdj4NCjwvZGl2Pg0KPC9ib2R5
+Pg0KPC9odG1sPg0K
 
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-Later I installed the following and re-built the lttv:
-
-automake - 1.11.3
-libtool - 2.4.2
-
-Still the error persists. May be the libgtk2.0-dev not meeting the
-dependency is causing this.
-
-Thanks for your time.
-
-Regards,
-Aananth C N
-
-
-On Tue, Dec 3, 2013 at 6:53 PM, Thibault, Daniel <
-Daniel.Thibault@drdc-rddc.gc.ca> wrote:
-
-> Date: Mon, 25 Nov 2013 22:22:01 +0530
-> From: Aananth CN <c.n.aananth@gmail.com>
->
-> > I could not find lttv (viewer) on ubuntu, hence I built from source. I
-> get
-> > following error. Could you please help me resolving this issue? (Am I
-> > missing something, should I install any other packages?)
->
-> lttv
->
-> Depends: automake (>=3D 1.10), gcc (>=3D 3.2), libtool (>=3D 2.2), libgtk=
-2.0-dev
-> (>=3D 2.4), libglib2.0-dev (>=3D 2.16), libpopt-dev (>=3D 1.14), libpango=
-1.0-dev
-> (>=3D 1.20), libc6-dev (>=3D 2.4), babeltrace (>=3D 1.0.0)
->
-> Suggests: libglpk-dev, default-jdk
->
-> ./bootstrap 2>&1 | tee bootstrap.log
-> LDFLAGS=3D-L/usr/local/lib ./configure 2>&1 | tee configure.log
-> make 2>&1 | tee make.log
-> make install 2>&1 | tee install.log
-> ldconfig
->
-> Daniel U. Thibault
-> Protection des syst=C3=A8mes et contremesures (PSC) | Systems Protection =
-&
-> Countermeasures (SPC)
-> Cyber s=C3=A9curit=C3=A9 pour les missions essentielles (CME) | Mission C=
-ritical
-> Cyber Security (MCCS)
-> R & D pour la d=C3=A9fense Canada - Valcartier (RDDC Valcartier) | Defenc=
-e R&D
-> Canada - Valcartier (DRDC Valcartier)
-> 2459 route de la Bravoure
-> Qu=C3=A9bec QC  G3J 1X5
-> CANADA
-> Vox : (418) 844-4000 x4245
-> Fax : (418) 844-4538
-> NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-> Gouvernement du Canada | Government of Canada
-> <http://www.valcartier.drdc-rddc.gc.ca/>
->
-
-
-
---=20
-*Aananth C N*
-Ph: 9444776690
-
-=E0=AE=8E=E0=AE=AA=E0=AF=8D=E0=AE=AA=E0=AF=8A=E0=AE=B0=E0=AF=81=E0=AE=B3=E0=
-=AF=8D =E0=AE=AF=E0=AE=BE=E0=AE=B0=E0=AF=8D =E0=AE=AF=E0=AE=BE=E0=AE=B0=E0=
-=AF=8D =E0=AE=B5=E0=AE=BE=E0=AE=AF=E0=AF=8D =E0=AE=95=E0=AF=87=E0=AE=9F=E0=
-=AF=8D=E0=AE=AA=E0=AE=BF=E0=AE=A9=E0=AF=81=E0=AE=AE=E0=AF=8D =E0=AE=85=E0=
-=AE=AA=E0=AF=8D=E0=AE=AA=E0=AF=8A=E0=AE=B0=E0=AF=81=E0=AE=B3=E0=AF=8D
-
-=E0=AE=AE=E0=AF=86=E0=AE=AF=E0=AF=8D=E0=AE=AA=E0=AF=8A=E0=AE=B0=E0=AF=81=E0=
-=AE=B3=E0=AF=8D =E0=AE=95=E0=AE=BE=E0=AE=A3=E0=AF=8D=E0=AE=AA=E0=AE=A4=E0=
-=AE=B1=E0=AE=BF=E0=AE=B5=E0=AF=81
-
---047d7ba97f3af4db6504ecab45f5
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div>Hi Daniel, Brosseau,</div><div><br></div><div>Here is=
- the package/libs and their library versions.</div><div><br></div><div><fon=
-t face=3D"courier new, monospace">babeltrace <span class=3D"" style=3D"whit=
-e-space:pre">	</span>- 1.0.0-rc1</font></div>
-<div><font face=3D"courier new, monospace">automake <span class=3D"" style=
-=3D"white-space:pre">	</span>- NOT INSTALLED</font></div><div><font face=3D=
-"courier new, monospace">gcc version <span class=3D"" style=3D"white-space:=
-pre">	</span>- 4.6.3</font></div>
-<div><font face=3D"courier new, monospace">libtool <span class=3D"" style=
-=3D"white-space:pre">	</span>- NOT INSTALLED</font></div><div><font face=3D=
-"courier new, monospace">libgtk2.0-dev<span class=3D"" style=3D"white-space=
-:pre">	</span>- 2.24.10-0ubuntu6 (DOES NOT MEET &gt;=3D 2.4)</font></div>
-<div><font face=3D"courier new, monospace">libglib2.0-dev<span class=3D"" s=
-tyle=3D"white-space:pre">	</span>- 2.32.4-0ubuntu1=C2=A0</font></div><div><=
-font face=3D"courier new, monospace">libpopt-dev<span class=3D"" style=3D"w=
-hite-space:pre">	</span>- 1.16-3ubuntu1</font></div>
-<div><font face=3D"courier new, monospace">libpango1.0-dev - 1.30.0-0ubuntu=
-3.1</font></div><div><font face=3D"courier new, monospace">libc6-dev<span c=
-lass=3D"" style=3D"white-space:pre">	</span>- 2.15-0ubuntu10.5</font></div>=
-<div>
-<br></div><div><br></div><div>=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D</div><div>Later I installed the following and re-built the ltt=
-v:</div><div><br></div><div>automake<span class=3D"" style=3D"white-space:p=
-re">	</span>- 1.11.3</div><div>libtool<span class=3D"" style=3D"white-space=
-:pre">		</span>- 2.4.2</div>
-<div><br></div><div>Still the error persists. May be the libgtk2.0-dev not =
-meeting the dependency is causing this.</div><div><br></div><div>Thanks for=
- your time.</div><div><br></div><div>Regards,</div><div>Aananth C N</div>
-</div><div class=3D"gmail_extra"><br><br><div class=3D"gmail_quote">On Tue,=
- Dec 3, 2013 at 6:53 PM, Thibault, Daniel <span dir=3D"ltr">&lt;<a href=3D"=
-mailto:Daniel.Thibault@drdc-rddc.gc.ca" target=3D"_blank">Daniel.Thibault@d=
-rdc-rddc.gc.ca</a>&gt;</span> wrote:<br>
-<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
-x #ccc solid;padding-left:1ex">Date: Mon, 25 Nov 2013 22:22:01 +0530<br>
-From: Aananth CN &lt;<a href=3D"mailto:c.n.aananth@gmail.com">c.n.aananth@g=
-mail.com</a>&gt;<br>
-<div class=3D"im"><br>
-&gt; I could not find lttv (viewer) on ubuntu, hence I built from source. I=
- get<br>
-&gt; following error. Could you please help me resolving this issue? (Am I<=
-br>
-&gt; missing something, should I install any other packages?)<br>
-<br>
-</div>lttv<br>
-<br>
-Depends: automake (&gt;=3D 1.10), gcc (&gt;=3D 3.2), libtool (&gt;=3D 2.2),=
- libgtk2.0-dev (&gt;=3D 2.4), libglib2.0-dev (&gt;=3D 2.16), libpopt-dev (&=
-gt;=3D 1.14), libpango1.0-dev (&gt;=3D 1.20), libc6-dev (&gt;=3D 2.4), babe=
-ltrace (&gt;=3D 1.0.0)<br>
-
-<br>
-Suggests: libglpk-dev, default-jdk<br>
-<br>
-./bootstrap 2&gt;&amp;1 | tee bootstrap.log<br>
-LDFLAGS=3D-L/usr/local/lib ./configure 2&gt;&amp;1 | tee configure.log<br>
-make 2&gt;&amp;1 | tee make.log<br>
-make install 2&gt;&amp;1 | tee install.log<br>
-ldconfig<br>
-<br>
-Daniel U. Thibault<br>
-Protection des syst=C3=A8mes et contremesures (PSC) | Systems Protection &a=
-mp; Countermeasures (SPC)<br>
-Cyber s=C3=A9curit=C3=A9 pour les missions essentielles (CME) | Mission Cri=
-tical Cyber Security (MCCS)<br>
-R &amp; D pour la d=C3=A9fense Canada - Valcartier (RDDC Valcartier) | Defe=
-nce R&amp;D Canada - Valcartier (DRDC Valcartier)<br>
-2459 route de la Bravoure<br>
-Qu=C3=A9bec QC =C2=A0G3J 1X5<br>
-CANADA<br>
-Vox : (418) 844-4000 x4245<br>
-Fax : (418) 844-4538<br>
-NAC : 918V QSDJ &lt;<a href=3D"http://www.travelgis.com/map.asp?addr=3D918V=
-%20QSDJ" target=3D"_blank">http://www.travelgis.com/map.asp?addr=3D918V%20Q=
-SDJ</a>&gt;<br>
-Gouvernement du Canada | Government of Canada<br>
-&lt;<a href=3D"http://www.valcartier.drdc-rddc.gc.ca/" target=3D"_blank">ht=
-tp://www.valcartier.drdc-rddc.gc.ca/</a>&gt;<br>
-</blockquote></div><br><br clear=3D"all"><div><br></div>-- <br><u style=3D"=
-color:rgb(0,0,153)"><b>Aananth C N</b></u><br><span style=3D"font-family:ta=
-homa,sans-serif;color:rgb(102,102,102)">Ph: 9444776690</span><br><font styl=
-e=3D"color:rgb(204,204,255)" size=3D"1"><b></b></font><p style=3D"margin:0p=
-x">
-</p><p><font color=3D"#000099"><span style=3D"font-size:9pt;font-family:&#3=
-9;Arial Unicode MS&#39;,sans-serif">=E0=AE=8E=E0=AE=AA=E0=AF=8D=E0=AE=AA=E0=
-=AF=8A=E0=AE=B0=E0=AF=81=E0=AE=B3=E0=AF=8D =E0=AE=AF=E0=AE=BE=E0=AE=B0=E0=
-=AF=8D =E0=AE=AF=E0=AE=BE=E0=AE=B0=E0=AF=8D =E0=AE=B5=E0=AE=BE=E0=AE=AF=E0=
-=AF=8D =E0=AE=95=E0=AF=87=E0=AE=9F=E0=AF=8D=E0=AE=AA=E0=AE=BF=E0=AE=A9=E0=
-=AF=81=E0=AE=AE=E0=AF=8D =E0=AE=85=E0=AE=AA=E0=AF=8D=E0=AE=AA=E0=AF=8A=E0=
-=AE=B0=E0=AF=81=E0=AE=B3=E0=AF=8D=C2=A0</span><span style=3D"font-size:9pt;=
-font-family:Arial,sans-serif"></span></font></p>
+--_000_48CF5AC71E61DB46B70D0F388054EFFD267B28B0VALE02valcartie_--
 
 
-<p><span style=3D"font-size:9pt;font-family:&#39;Arial Unicode MS&#39;,sans=
--serif"><font color=3D"#000099">=E0=AE=AE=E0=AF=86=E0=AE=AF=E0=AF=8D=E0=AE=
-=AA=E0=AF=8A=E0=AE=B0=E0=AF=81=E0=AE=B3=E0=AF=8D
-=E0=AE=95=E0=AE=BE=E0=AE=A3=E0=AF=8D=E0=AE=AA=E0=AE=A4=E0=AE=B1=E0=AE=BF=E0=
-=AE=B5=E0=AF=81</font></span><span style=3D"font-size:9pt;font-family:&#39;=
-Courier New&#39;"></span></p><p></p><pre><br></pre><span style=3D"font-fami=
-ly:tahoma,sans-serif;color:rgb(102,102,102)"></span><br>
-</div>
-
---047d7ba97f3af4db6504ecab45f5--
-
-
---===============0184570728==
+--===============1615707155==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
 
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============0184570728==--
+--===============1615707155==--
