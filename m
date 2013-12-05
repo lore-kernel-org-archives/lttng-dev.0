@@ -1,16 +1,18 @@
-From: kumar s <skumar.m226@gmail.com>
-Subject: is ltt patch required to build lttng module?
-Date: Thu, 5 Dec 2013 13:10:08 +0530
-Message-ID: <CAO_Arvp5Q6EfDS_LRBKKCaPybXG-3+vp6ezzjfAcRKfNk+YTrQ__29691.0108453178$1386229282$gmane$org@mail.gmail.com>
+From: "Woegerer, Paul" <Paul_Woegerer@mentor.com>
+Subject: Re: RFC LTTng session and daemon configuration save and
+ restore
+Date: Thu, 5 Dec 2013 08:49:39 +0100
+Message-ID: <52A03013.9030604__47353.9896229797$1386229884$gmane$org@mentor.com>
+References: <CA+jJMxv-mg_Lx1DdZHq7LyETNmULZ=MMKUoHqMhc5t3o9BJRkg@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0527734097=="
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-vc0-f170.google.com ([209.85.220.170])
+Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <skumar.m226@gmail.com>) id 1VoTXi-0004ED-3q
-	for lttng-dev@lists.lttng.org; Thu, 05 Dec 2013 02:40:19 -0500
-Received: by mail-vc0-f170.google.com with SMTP id ht10so12834836vcb.29
-	for <lttng-dev@lists.lttng.org>; Wed, 04 Dec 2013 23:40:08 -0800 (PST)
+	(envelope-from <Paul_Woegerer@mentor.com>) id 1VoThN-0004Jt-Fk
+	for lttng-dev@lists.lttng.org; Thu, 05 Dec 2013 02:50:35 -0500
+In-Reply-To: <CA+jJMxv-mg_Lx1DdZHq7LyETNmULZ=MMKUoHqMhc5t3o9BJRkg@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,50 +21,34 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0527734097==
-Content-Type: multipart/alternative; boundary=20cf307ca4f88dc66a04ecc4a308
+Hi J=E9r=E9mie,
 
---20cf307ca4f88dc66a04ecc4a308
-Content-Type: text/plain; charset=ISO-8859-1
+On 12/04/2013 10:33 PM, J=E9r=E9mie Galarneau wrote:
 
-Hi,
+> Session Configuration File Format
 
-I am using kernel version 2.6.32.27. When building lttng module, do i need
-to build against kernel which is patched using lttng (v0.190) or should i
-build lttng modules for kernel that is not patched.
+This is great news. Providing the ability to specify the specifics of a
+session as data will benefit command line users as well as IDEs (talking
+to lttng).
 
-I am trying to build lttng module latest version taken from lttng-module.git
+> ...
+> ...
+> XML seems like a better option than JSON since it makes it possible to ha=
+ve
+> robust file validation using a pre-defined schema. The use of version-spe=
+cific
+> schemas could also be beneficial for backward compatibility as the format
+> moves forward. Finally, character encoding handling is already a solved
+> problem for most XML libraries.
 
-Thank you
-Skumar
+Just in case you don't know, there is also schema validation for JSON:
+http://json-schema.org/
+Available in multiple implementations (Java, C, Javascript, ...):
+http://json-schema.org/implementations.html
 
---20cf307ca4f88dc66a04ecc4a308
-Content-Type: text/html; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hi,<div><br></div><div>I am using kernel version 2.6.32.27=
-. When building lttng module, do i need to build against kernel which is pa=
-tched using lttng (v0.190) or should i build lttng modules for kernel that =
-is not patched.=A0</div>
-<div><br></div><div>I am trying to build lttng module latest version taken =
-from lttng-module.git</div><div><br></div><div>Thank you</div><div>Skumar</=
-div></div>
-
---20cf307ca4f88dc66a04ecc4a308--
-
-
---===============0527734097==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0527734097==--
+--
+Thanks,
+Paul
