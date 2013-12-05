@@ -1,19 +1,15 @@
-From: Christian Babeux <christian.babeux@efficios.com>
-Subject: Re: System level profiling of APT
-Date: Thu, 5 Dec 2013 22:06:45 +0100
-Message-ID: <CAGDH53kCzAHY223Bi63Xz7anTJSUtstWGYtzBqnm0HgsEEVTow__37333.9341640987$1386278021$gmane$org@mail.gmail.com>
-References: <52A0D60D.1030201@gmail.com>
+From: Matthew Khouzam <matthew.khouzam@ericsson.com>
+Subject: Ctf specification on Variants and Enums
+Date: Thu, 5 Dec 2013 17:19:44 -0500
+Message-ID: <52A0FC00.8070706__49836.1696525992$1386282121$gmane$org@ericsson.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-vc0-f174.google.com ([209.85.220.174])
+Received: from usevmg20.ericsson.net ([198.24.6.45])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <christian.babeux@0x80.ca>) id 1Vog8J-0002iH-VR
-	for lttng-dev@lists.lttng.org; Thu, 05 Dec 2013 16:07:49 -0500
-Received: by mail-vc0-f174.google.com with SMTP id id10so13729086vcb.33
-	for <lttng-dev@lists.lttng.org>; Thu, 05 Dec 2013 13:06:46 -0800 (PST)
-In-Reply-To: <52A0D60D.1030201@gmail.com>
+	(envelope-from <matthew.khouzam@ericsson.com>) id 1VohI4-0003JV-Fd
+	for lttng-dev@lists.lttng.org; Thu, 05 Dec 2013 17:21:10 -0500
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,29 +18,23 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Francis Giraldeau <francis.giraldeau@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, "linuxtools-dev@eclipse.org" <linuxtools-dev@eclipse.org>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Francis,
+Hi,
+In the ctf specifications variants need a tag that is an enum. An enum
+can have identifiers as Strings. The enum can contain strings.
 
-Thank you for this blog post, the critical path analysis looks pretty awesome!
+so if you have an enum:int32{"a","b","c", d} tag;
+and a variant <tag> { int "a"; int "b"... } according to the spec it
+should be fine.
+according to the test cases it fails.
 
-Christian
+Please clarify where my logic went astray.
 
-On Thu, Dec 5, 2013 at 8:37 PM, Francis Giraldeau
-<francis.giraldeau@gmail.com> wrote:
-> I did some system-level profiling of APT using kernel tracing and the
-> waiting dependency analysis currently in review for inclusion in Eclipse
-> Linux Tools. You can find the details on my blog:
->
-> http://multivax.blogspot.ca/2013/12/system-level-profiling-of-apt.html
->
-> Cheers,
->
-> Francis
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+Also, in reading the spec, there are no guaranties that enums contain
+ANY values of the fields of the variants. I think this is problematic
+
+enum { a,b,c}
+variant{
+x,y,z} passes.
