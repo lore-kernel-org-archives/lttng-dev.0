@@ -1,23 +1,17 @@
-From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: No trace files are generated for UST
-Date: Fri, 6 Dec 2013 12:52:34 -0500
-Message-ID: <CA+jJMxt-D9CEFVhH93Q7iy=0W1KRsynBA9is-AP3L0+Dpq11Cg__5044.04671160064$1386352422$gmane$org@mail.gmail.com>
-References: <6CFA219DE9CAD940989B83CA579159F91B43ACBFBE@SGSINEXC014.vestas.net>
-	<48CF5AC71E61DB46B70D0F388054EFFD267B2DCF@VAL-E-02.valcartier.drdc-rddc.gc.ca>
-	<6CFA219DE9CAD940989B83CA579159F91B43ACC0B6@SGSINEXC014.vestas.net>
-	<48CF5AC71E61DB46B70D0F388054EFFD267B2DF5@VAL-E-02.valcartier.drdc-rddc.gc.ca>
-	<6CFA219DE9CAD940989B83CA579159F91B43ACC0C1@SGSINEXC014.vestas.net>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: Xeon Phi memory barriers
+Date: Fri, 6 Dec 2013 20:15:38 +0000 (UTC)
+Message-ID: <1816982181.80892.1386360938886.JavaMail.zimbra__14363.0348648459$1386361011$gmane$org@efficios.com>
+References: <CAFXXi0n784=HA5RKX91OM8=CTpgofd1dkqnC_b4avo0aAYBnOQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qc0-f170.google.com ([209.85.216.170])
+Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1VozZw-0004Ml-DO
-	for lttng-dev@lists.lttng.org; Fri, 06 Dec 2013 12:52:46 -0500
-Received: by mail-qc0-f170.google.com with SMTP id x13so729868qcv.15
-	for <lttng-dev@lists.lttng.org>; Fri, 06 Dec 2013 09:52:35 -0800 (PST)
-In-Reply-To: <6CFA219DE9CAD940989B83CA579159F91B43ACC0C1@SGSINEXC014.vestas.net>
+	(envelope-from <compudj@efficios.com>) id 1Vp1oT-0005UZ-7u
+	for lttng-dev@lists.lttng.org; Fri, 06 Dec 2013 15:15:58 -0500
+In-Reply-To: <CAFXXi0n784=HA5RKX91OM8=CTpgofd1dkqnC_b4avo0aAYBnOQ@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -26,113 +20,93 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Manikandan Govindaswamy <magov@vestas.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, "Thibault,
-	Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+To: Simon Marchi <simon.marchi@polymtl.ca>
+Cc: lttng-dev@lists.lttng.org, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
 List-Id: lttng-dev@lists.lttng.org
 
-Could you launch the session daemon in verbose mode and post the logs?
-
-lttng-sessiond -vvv --verbose-consumer
-
-On Fri, Dec 6, 2013 at 10:51 AM, Manikandan Govindaswamy
-<magov@vestas.com> wrote:
-> Yes, with that LD_PRELOAD sample able to run.
->
-> root@/tmp/lttng-build-root/bin # ./lttng create app
-> Session app created.
-> Traces will be written in /root/lttng-traces/app-20131206-174935
-> root@/tmp/lttng-build-root/bin # dmesg
-> root@/tmp/lttng-build-root/bin # ./lttng enable-event -u -a
-> All UST events are enabled in channel channel0
-> root@/tmp/lttng-build-root/bin # ./lttng start
-> Tracing started for session app
-> root@/tmp/lttng-build-root/bin # cd ..
-> root@/tmp/lttng-build-root # cd ..
-> root@/tmp # LD_PRELOAD=3D/tmp/lttng-build-root/lib/liblttng-ust.so.0 ./sa=
-mple
-> root@/tmp #
-> root@/tmp #
-> root@/tmp # cd lttng-build-root/
-> root@/tmp/lttng-build-root # cd bin/
-> root@/tmp/lttng-build-root/bin # ./lttng stop
-> Waiting for data availability
-> Tracing stopped for session app
-> root@/tmp/lttng-build-root/bin # dmesg
-> root@/tmp/lttng-build-root/bin # ./lttng destroy
-> Session app destroyed
-> root@/tmp/lttng-build-root/bin # cd /
-> root@/ # cd root/
-> root@~ # ls
-> lttng-traces
-> root@~ # cd lttng-traces/
-> root@~/lttng-traces # ls
-> root@~/lttng-traces #< no traces are generated>
->
-> in ps -ef
->
-> 28664 root       0:00 ./lttng-sessiond -vvv --consumerd64-path=3D/tmp/ltt=
-ng-build-root/lib/lttng/libexec/lttng-consumerd
-> 29027 root       0:00 lttng-consumerd --quiet -u --consumerd-cmd-sock /va=
-r/run/lttng/ustconsumerd64/command --consumerd-err-sock /var/run/lttng/ustc=
-onsumerd64/error
->
-> Regards,
-> GMK.
->
->
->
-> -----Original Message-----
-> From: Thibault, Daniel [mailto:Daniel.Thibault@drdc-rddc.gc.ca]
-> Sent: Friday, December 06, 2013 9:14 PM
-> To: Manikandan Govindaswamy; J=E9r=E9mie Galarneau
-> Cc: lttng-dev@lists.lttng.org
-> Subject: RE: [lttng-dev] No trace files are generated for UST
->
->> As I'm using the custom image on x86 machine, i've kept the lib in /tmp/=
-lttng-build-root/lib folder and this sample able to see the library as well.
->>
->> And the same way I able to create the trace files for kernel but not for=
- ust. There were no dmesg as well.
->>
->> [...]
->> root@/tmp # ldd sample
->>         linux-vdso.so.1 (0x00007fff2a135000)
->>         libdl.so.2 =3D> /lib64/libdl.so.2 (0x00007fe2cccb5000)
->>         liblttng-ust.so.0 =3D> /tmp/lttng-build-root/lib/liblttng-ust.so=
-.0 (0x00007fe2cca51000)
->>         [...]
->
->    Try running sample using:
->
-> LD_PRELOAD=3D/tmp/lttng-build-root/lib/liblttng-ust.so.0 ./sample
->
->    If the LD_PRELOAD succeeds, we will know at least that liblttng-ust is=
- reachable by sample.
->
->    The modules have nothing to do with UST: kernel and user-space tracing=
- are essentially independent features.
->
-> Daniel U. Thibault
-> Protection des syst=E8mes et contremesures (PSC) | Systems Protection & C=
-ountermeasures (SPC)
-> Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critica=
-l Cyber Security (MCCS)
-> R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R=
-&D Canada - Valcartier (DRDC Valcartier)
-> 2459 route de la Bravoure
-> Qu=E9bec QC  G3J 1X5
-> CANADA
-> Vox : (418) 844-4000 x4245
-> Fax : (418) 844-4538
-> NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-> Gouvernement du Canada | Government of Canada <http://www.valcartier.drdc=
--rddc.gc.ca/>
-
-
-
--- =
-
-J=E9r=E9mie Galarneau
-EfficiOS Inc.
-http://www.efficios.com
+LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJTaW1vbiBNYXJjaGkiIDxzaW1v
+bi5tYXJjaGlAcG9seW10bC5jYT4KPiBUbzogbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IFNl
+bnQ6IFR1ZXNkYXksIE5vdmVtYmVyIDE5LCAyMDEzIDQ6MjY6MDYgUE0KPiBTdWJqZWN0OiBbbHR0
+bmctZGV2XSBYZW9uIFBoaSBtZW1vcnkgYmFycmllcnMKPiAKPiBIZWxsbyB0aGVyZSwKCkhpIFNp
+bW9uLAoKV2hpbGUgcmVhZGluZyB0aGlzIHJlcGx5LCBwbGVhc2Uga2VlcCBpbiBtaW5kIHRoYXQg
+SSdtIGluIGEKbWluZHNldCB3aGVyZSBJJ3ZlIGJlZW4gaW4gYSBmdWxsIHdlZWsgb2YgbWVldGlu
+ZywgYW5kIGl0J3MgbGF0ZSBvbgpGcmlkYXkgZXZlbmluZyBoZXJlLiBTbyBZTU1WIDstKSBJJ20g
+Q0NpbmcgUGF1bCBFLiBNY0tlbm5leSwgc28gaGUgY2FuCmRlYnVuayBteSBhbnN3ZXIgOikKCj4g
+Cj4gbGlidXJjdSBkb2VzIG5vdCBidWlsZCBvbiB0aGUgSW50ZWwgWGVvbiBQaGksIGJlY2F1c2Ug
+dGhlIGNoaXAgaXMKPiByZWNvZ25pemVkIGFzIHg4Nl82NCwgYnV0IGxhY2tzIHRoZSB7cyxsLG19
+ZmVuY2UgaW5zdHJ1Y3Rpb25zIGZvdW5kIG9uCj4gdXN1YWwgeDg2XzY0IHByb2Nlc3NvcnMuIFRo
+ZSBmb2xsb3dpbmcgaXMgdGFrZW4gZnJvbSB0aGUgWGVvbiBQaGkgZGV2Cj4gZ3VpZGU6CgpMZXQn
+cyBoYXZlIGEgbG9vazoKCj4gCj4gVGhlIEludGVswq4gWGVvbiBQaGlUTSBjb3Byb2Nlc3NvciBt
+ZW1vcnkgbW9kZWwgaXMgdGhlIHNhbWUgYXMgdGhhdCBvZgo+IHRoZSBJbnRlbMKuIFBlbnRpdW0g
+cHJvY2Vzc29yLiBUaGUgcmVhZHMgYW5kIHdyaXRlcyBhbHdheXMgYXBwZWFyIGluCj4gcHJvZ3Jh
+bW1lZCBvcmRlciBhdCB0aGUgc3lzdGVtIGJ1cyAob3IgdGhlIHJpbmcgaW50ZXJjb25uZWN0IGlu
+IHRoZQo+IGNhc2Ugb2YgdGhlIEludGVswq4gWGVvbiBQaGlUTSBjb3Byb2Nlc3Nvcik7IHRoZSBl
+eGNlcHRpb24gYmVpbmcgdGhhdAo+IHJlYWQgbWlzc2VzIGFyZSBwZXJtaXR0ZWQgdG8gZ28gYWhl
+YWQgb2YgYnVmZmVyZWQgd3JpdGVzIG9uIHRoZSBzeXN0ZW0KPiBidXMgd2hlbiBhbGwgdGhlIGJ1
+ZmZlcmVkIHdyaXRlcyBhcmUgY2FjaGVkIGhpdHMgYW5kIGFyZSwgdGhlcmVmb3JlLAo+IG5vdCBk
+aXJlY3RlZCB0byB0aGUgc2FtZSBhZGRyZXNzIGJlaW5nIGFjY2Vzc2VkIGJ5IHRoZSByZWFkIG1p
+c3MuCgpPSywgc28gcmVhZHMgY2FuIGJlIHJlb3JkZXJlZCB3aXRoIHJlc3BlY3QgdG8gZm9sbG93
+aW5nIHdyaXRlcy4KCj4gCj4gQXMgYSBjb25zZXF1ZW5jZSBvZiBpdHMgc3RyaWN0ZXIgbWVtb3J5
+IG9yZGVyaW5nIG1vZGVsLCB0aGUgSW50ZWzCrgo+IFhlb24gUGhpVE0gY29wcm9jZXNzb3IgZG9l
+cyBub3Qgc3VwcG9ydCB0aGUgU0ZFTkNFLCBMRkVOQ0UsIGFuZCBNRkVOQ0UKPiBpbnN0cnVjdGlv
+bnMgdGhhdCBwcm92aWRlIGEgbW9yZSBlZmZpY2llbnQgd2F5IG9mIGNvbnRyb2xsaW5nIG1lbW9y
+eQo+IG9yZGVyaW5nIG9uIG90aGVyIEludGVsIHByb2Nlc3NvcnMuCgpJIGd1ZXNzIHNmZW5jZSBh
+bmQgbGZlbmNlIGFyZSBpbmRlZWQgY29tcGxldGVseSB1c2VsZXNzLCBiZWNhdXNlIHdlIG9ubHkK
+Y2FuIGV2ZXIgY2FyZSBhYm91dCBvcmRlcmluZyByZWFkcyB2cyB3cml0ZXMgKG1mZW5jZSkuIEJ1
+dCBldmVuIHRoZSBtZmVuY2UKaXMgbm90IHRoZXJlLgoKPiAKPiBXaGlsZSByZWFkcyBhbmQgd3Jp
+dGVzIGZyb20gYW4gSW50ZWzCriBYZW9uIFBoaVRNIGNvcHJvY2Vzc29yIGFwcGVhciBpbgo+IHBy
+b2dyYW0gb3JkZXIgb24gdGhlIHN5c3RlbSBidXMsCgpUaGlzIHBhcnQgb2YgdGhlIHNlbnRlbmNl
+IHNlZW1zIG1pc2xlYWRpbmcgdG8gbWUuIERpZG4ndCB0aGUgZmlyc3QKc2VudGVuY2Ugc3RhdGUg
+dGhlIG9wcG9zaXRlID8gInRoZSBleGNlcHRpb24gYmVpbmcgdGhhdApyZWFkIG1pc3NlcyBhcmUg
+cGVybWl0dGVkIHRvIGdvIGFoZWFkIG9mIGJ1ZmZlcmVkIHdyaXRlcyBvbiB0aGUgc3lzdGVtCmJ1
+cyB3aGVuIGFsbCB0aGUgYnVmZmVyZWQgd3JpdGVzIGFyZSBjYWNoZWQgaGl0cyBhbmQgYXJlLCB0
+aGVyZWZvcmUsCm5vdCBkaXJlY3RlZCB0byB0aGUgc2FtZSBhZGRyZXNzIGJlaW5nIGFjY2Vzc2Vk
+IGJ5IHRoZSByZWFkIG1pc3MuIgoKSSdtIHByb2JhYmx5IG1pc3Npbmcgc29tZXRoaW5nLgoKPiB0
+aGUgY29tcGlsZXIgY2FuIHN0aWxsIHJlb3JkZXIKPiB1bnJlbGF0ZWQgbWVtb3J5IG9wZXJhdGlv
+bnMgd2hpbGUgbWFpbnRhaW5pbmcgcHJvZ3JhbSBvcmRlciBvbiBhCj4gc2luZ2xlIEludGVswq4g
+WGVvbiBQaGlUTSBjb3Byb2Nlc3NvciAoaGFyZHdhcmUgdGhyZWFkKS4gSWYgc29mdHdhcmUKPiBy
+dW5uaW5nIG9uIGFuIEludGVswq4gWGVvbiBQaGlUTSBjb3Byb2Nlc3NvciBpcyBkZXBlbmRlbnQg
+b24gdGhlIG9yZGVyCj4gb2YgbWVtb3J5IG9wZXJhdGlvbnMgb24gYW5vdGhlciBJbnRlbMKuIFhl
+b24gUGhpVE0gY29wcm9jZXNzb3IgdGhlbiBhCj4gc2VyaWFsaXppbmcgaW5zdHJ1Y3Rpb24gKGUu
+Zy4sIENQVUlELCBpbnN0cnVjdGlvbiB3aXRoIGEgTE9DSyBwcmVmaXgpCj4gYmV0d2VlbiB0aGUg
+bWVtb3J5IG9wZXJhdGlvbnMgaXMgcmVxdWlyZWQgdG8gZ3VhcmFudGVlIGNvbXBsZXRpb24gb2YK
+PiBhbGwgbWVtb3J5IGFjY2Vzc2VzIGlzc3VlZCBwcmlvciB0byB0aGUgc2VyaWFsaXppbmcgaW5z
+dHJ1Y3Rpb24gYmVmb3JlCj4gYW55IHN1YnNlcXVlbnQgbWVtb3J5IG9wZXJhdGlvbnMgYXJlIHN0
+YXJ0ZWQuCj4gCj4gKGVuZCBvZiBxdW90ZSkKPiAKPiBGcm9tIHdoYXQgSSB1bmRlcnN0YW5kLCBp
+dCBpcyBzYWZlIHRvIGxlYXZlIG91dCBhbnkgcnVuLXRpbWUgbWVtb3J5Cj4gYmFycmllcnMsIGJ1
+dCB3ZSBzdGlsbCBuZWVkIGJhcnJpZXJzIHRoYXQgcHJldmVudCB0aGUgY29tcGlsZXIgZnJvbQo+
+IHJlb3JkZXJpbmcgKHVzaW5nIF9fYXNtX18gX192b2xhdGlsZV9fICgiIjo6OiJtZW1vcnkiKSku
+IEluCj4gdXJjdS9hcmNoL3g4Ni5oLCBJIHNlZSB0aGF0IHdoZW4gQ09ORklHX1JDVV9IQVZFX0ZF
+TkNFIGlzIGZhbHNlLAo+IG1lbW9yeSBiYXJyaWVycyByZXN1bHQgaW4gYm90aCBjb21waWxlLXRp
+bWUgYW5kIHJ1bi10aW1lIG1lbW9yeQo+IGJhcnJpZXJzOiAgX19hc21fXyBfX3ZvbGF0aWxlX18g
+KCJsb2NrOyBhZGRsICQwLDAoJSVlc3ApIjo6OiJtZW1vcnkiKS4KPiBJIGd1ZXNzIHRoaXMgd291
+bGQgd29yayBmb3IgdGhlIFBoaSwgYnV0IHRoZSBsb2NrIGluc3RydWN0aW9uIGRvZXMgbm90Cj4g
+c2VlbSBuZWNlc3NhcnkuCgpBY3R1YWxseSwgZWl0aGVyIGEgY3B1aWQgKGNvcmUgc2VyaWFsaXpp
+bmcpIGluc3RydWN0aW9uIG9yIGxvY2stcHJlZml4ZWQKaW5zdHJ1Y3Rpb24gKHNlcmlhbGl6aW5n
+IGFzIGEgc2lkZS1lZmZlY3QgbWVtb3J5IGFjY2Vzc2VzKSBzZWVtcyByZXF1aXJlZC4KCj4gCj4g
+U28sIHNob3VsZCB3ZSBqdXN0IHNldCBDT05GSUdfUkNVX0hBVkVfRkVOQ0UgdG8gZmFsc2Ugd2hl
+biBjb21waWxpbmcKPiBmb3IgdGhlIFBoaSBhbmQgZ28gb24gd2l0aCBvdXIgbGl2ZXMsIG9yIHNo
+b3VsZCB3ZSBhZGQgYSBzcGVjaWZpYwo+IGNvbmZpZyBmb3IgdGhpcyBjYXNlPwoKSSBfdGhpbmtf
+IHdlIGNvdWxkIGdldCBhd2F5IHdpdGggdGhpcyBtYXBwaW5nOgoKc21wX3dtYigpIC0+IGJhcnJp
+ZXIoKQogIHJlYXNvbmluZzogd3JpdGUgdnMgd3JpdGUgYXJlIG5vdCByZW9yZGVyZWQgYnkgdGhl
+IHByb2Nlc3Nvci4KCnNtcF9ybWIoKSAtPiBiYXJyaWVyKCkKICByZWFzb25pbmc6IHJlYWQgdnMg
+cmVhZCBub3QgcmVvcmRlcmVkIGJ5IHByb2Nlc3Nvci4KCnNtcF9tYigpIC0+IF9fYXNtX18gX192
+b2xhdGlsZV9fICgibG9jazsgYWRkbCAkMCwwKCUlZXNwKSI6OjoibWVtb3J5IikKICAgb3IgYSBj
+cHVpZCBpbnN0cnVjdGlvbgogIHJlYXNvbmluZzogY3B1IGNhbiByZW9yZGVyIHJlYWRzIHZzIGxh
+dGVyIHdyaXRlcy4KCnNtcF9yZWFkX2JhcnJpZXJfZGVwZW5kcygpIC0+IG5vdGhpbmcgYXQgYWxs
+IChub3QgbmVlZGVkIGF0IGFueSBsZXZlbCkuCgpJbnRlcmVzdGluZ2x5IGVub3VnaCwgQUZBSVUs
+IHRoaXMgc2VlbXMgdG8gbWFwIHRvIHg4Ni1UU08uIE1heWJlIHRoYXQgaW5zdGVhZApvZiBkZWZp
+bmluZyBhIGNvbXBpbGluZyBvcHRpb24gc3BlY2lmaWNhbGx5IGZvciBYZW9uIFBoaSwgd2UgY291
+bGQgaW5zdGVhZApkZWZpbmUgYSB4ODYtdHNvLmggaGVhZGVyIHZhcmlhbnQgaW4gdXNlcnNwYWNl
+IFJDVSBhbmQgdXNlIGl0IGluIGFsbCBJbnRlbApwcm9jZXNzb3JzIHRoYXQgbWFwIHRvIFRTTyAo
+aGludDogdmVyeSB2YXN0IG1ham9yaXR5KS4gVGhlIG9ubHkgZXhjZXB0aW9ucwpzZWVtcyB0byBi
+ZSBQZW50aXVtIFBybyAobmVlZGluZyBzbXBfcm1iKCkgLT4gbGZlbmNlKSBhbmQgc29tZSBXaW5k
+Y2hpcApwcm9jZXNzb3JzIHdoaWNoIGNvdWxkIHJlb3JkZXIgc3RvcmVzICh0aHVzIG5lZWRpbmcg
+c21wX3dtYigpIC0+IHNmZW5jZSkuCgpUaG91Z2h0cyA/CgpUaGFua3MsCgpNYXRoaWV1Cgo+IAo+
+IFNpbW9uCj4gCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X18KPiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+
+IGh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRl
+dgo+IAoKLS0gCk1hdGhpZXUgRGVzbm95ZXJzCkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZp
+Y2lvcy5jb20KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+Cmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8v
+bGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
