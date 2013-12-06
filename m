@@ -1,17 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Xeon Phi memory barriers
-Date: Fri, 6 Dec 2013 20:15:38 +0000 (UTC)
-Message-ID: <1816982181.80892.1386360938886.JavaMail.zimbra__14363.0348648459$1386361011$gmane$org@efficios.com>
-References: <CAFXXi0n784=HA5RKX91OM8=CTpgofd1dkqnC_b4avo0aAYBnOQ@mail.gmail.com>
+From: Simon Marchi <simon.marchi@polymtl.ca>
+Subject: [PATCH userspace-rcu] Set RCU_HAVE_FENCE to false on
+	Intel Xeon Phi
+Date: Fri,  6 Dec 2013 16:17:55 -0500
+Message-ID: <1386364675-9225-1-git-send-email-simon.marchi__38122.7441983812$1386364706$gmane$org@polymtl.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from smtp.polymtl.ca ([132.207.4.11])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1Vp1oT-0005UZ-7u
-	for lttng-dev@lists.lttng.org; Fri, 06 Dec 2013 15:15:58 -0500
-In-Reply-To: <CAFXXi0n784=HA5RKX91OM8=CTpgofd1dkqnC_b4avo0aAYBnOQ@mail.gmail.com>
+	(envelope-from <simon.marchi@polymtl.ca>) id 1Vp2lu-0005yl-4R
+	for lttng-dev@lists.lttng.org; Fri, 06 Dec 2013 16:17:19 -0500
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,93 +19,35 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Simon Marchi <simon.marchi@polymtl.ca>
-Cc: lttng-dev@lists.lttng.org, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJTaW1vbiBNYXJjaGkiIDxzaW1v
-bi5tYXJjaGlAcG9seW10bC5jYT4KPiBUbzogbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IFNl
-bnQ6IFR1ZXNkYXksIE5vdmVtYmVyIDE5LCAyMDEzIDQ6MjY6MDYgUE0KPiBTdWJqZWN0OiBbbHR0
-bmctZGV2XSBYZW9uIFBoaSBtZW1vcnkgYmFycmllcnMKPiAKPiBIZWxsbyB0aGVyZSwKCkhpIFNp
-bW9uLAoKV2hpbGUgcmVhZGluZyB0aGlzIHJlcGx5LCBwbGVhc2Uga2VlcCBpbiBtaW5kIHRoYXQg
-SSdtIGluIGEKbWluZHNldCB3aGVyZSBJJ3ZlIGJlZW4gaW4gYSBmdWxsIHdlZWsgb2YgbWVldGlu
-ZywgYW5kIGl0J3MgbGF0ZSBvbgpGcmlkYXkgZXZlbmluZyBoZXJlLiBTbyBZTU1WIDstKSBJJ20g
-Q0NpbmcgUGF1bCBFLiBNY0tlbm5leSwgc28gaGUgY2FuCmRlYnVuayBteSBhbnN3ZXIgOikKCj4g
-Cj4gbGlidXJjdSBkb2VzIG5vdCBidWlsZCBvbiB0aGUgSW50ZWwgWGVvbiBQaGksIGJlY2F1c2Ug
-dGhlIGNoaXAgaXMKPiByZWNvZ25pemVkIGFzIHg4Nl82NCwgYnV0IGxhY2tzIHRoZSB7cyxsLG19
-ZmVuY2UgaW5zdHJ1Y3Rpb25zIGZvdW5kIG9uCj4gdXN1YWwgeDg2XzY0IHByb2Nlc3NvcnMuIFRo
-ZSBmb2xsb3dpbmcgaXMgdGFrZW4gZnJvbSB0aGUgWGVvbiBQaGkgZGV2Cj4gZ3VpZGU6CgpMZXQn
-cyBoYXZlIGEgbG9vazoKCj4gCj4gVGhlIEludGVswq4gWGVvbiBQaGlUTSBjb3Byb2Nlc3NvciBt
-ZW1vcnkgbW9kZWwgaXMgdGhlIHNhbWUgYXMgdGhhdCBvZgo+IHRoZSBJbnRlbMKuIFBlbnRpdW0g
-cHJvY2Vzc29yLiBUaGUgcmVhZHMgYW5kIHdyaXRlcyBhbHdheXMgYXBwZWFyIGluCj4gcHJvZ3Jh
-bW1lZCBvcmRlciBhdCB0aGUgc3lzdGVtIGJ1cyAob3IgdGhlIHJpbmcgaW50ZXJjb25uZWN0IGlu
-IHRoZQo+IGNhc2Ugb2YgdGhlIEludGVswq4gWGVvbiBQaGlUTSBjb3Byb2Nlc3Nvcik7IHRoZSBl
-eGNlcHRpb24gYmVpbmcgdGhhdAo+IHJlYWQgbWlzc2VzIGFyZSBwZXJtaXR0ZWQgdG8gZ28gYWhl
-YWQgb2YgYnVmZmVyZWQgd3JpdGVzIG9uIHRoZSBzeXN0ZW0KPiBidXMgd2hlbiBhbGwgdGhlIGJ1
-ZmZlcmVkIHdyaXRlcyBhcmUgY2FjaGVkIGhpdHMgYW5kIGFyZSwgdGhlcmVmb3JlLAo+IG5vdCBk
-aXJlY3RlZCB0byB0aGUgc2FtZSBhZGRyZXNzIGJlaW5nIGFjY2Vzc2VkIGJ5IHRoZSByZWFkIG1p
-c3MuCgpPSywgc28gcmVhZHMgY2FuIGJlIHJlb3JkZXJlZCB3aXRoIHJlc3BlY3QgdG8gZm9sbG93
-aW5nIHdyaXRlcy4KCj4gCj4gQXMgYSBjb25zZXF1ZW5jZSBvZiBpdHMgc3RyaWN0ZXIgbWVtb3J5
-IG9yZGVyaW5nIG1vZGVsLCB0aGUgSW50ZWzCrgo+IFhlb24gUGhpVE0gY29wcm9jZXNzb3IgZG9l
-cyBub3Qgc3VwcG9ydCB0aGUgU0ZFTkNFLCBMRkVOQ0UsIGFuZCBNRkVOQ0UKPiBpbnN0cnVjdGlv
-bnMgdGhhdCBwcm92aWRlIGEgbW9yZSBlZmZpY2llbnQgd2F5IG9mIGNvbnRyb2xsaW5nIG1lbW9y
-eQo+IG9yZGVyaW5nIG9uIG90aGVyIEludGVsIHByb2Nlc3NvcnMuCgpJIGd1ZXNzIHNmZW5jZSBh
-bmQgbGZlbmNlIGFyZSBpbmRlZWQgY29tcGxldGVseSB1c2VsZXNzLCBiZWNhdXNlIHdlIG9ubHkK
-Y2FuIGV2ZXIgY2FyZSBhYm91dCBvcmRlcmluZyByZWFkcyB2cyB3cml0ZXMgKG1mZW5jZSkuIEJ1
-dCBldmVuIHRoZSBtZmVuY2UKaXMgbm90IHRoZXJlLgoKPiAKPiBXaGlsZSByZWFkcyBhbmQgd3Jp
-dGVzIGZyb20gYW4gSW50ZWzCriBYZW9uIFBoaVRNIGNvcHJvY2Vzc29yIGFwcGVhciBpbgo+IHBy
-b2dyYW0gb3JkZXIgb24gdGhlIHN5c3RlbSBidXMsCgpUaGlzIHBhcnQgb2YgdGhlIHNlbnRlbmNl
-IHNlZW1zIG1pc2xlYWRpbmcgdG8gbWUuIERpZG4ndCB0aGUgZmlyc3QKc2VudGVuY2Ugc3RhdGUg
-dGhlIG9wcG9zaXRlID8gInRoZSBleGNlcHRpb24gYmVpbmcgdGhhdApyZWFkIG1pc3NlcyBhcmUg
-cGVybWl0dGVkIHRvIGdvIGFoZWFkIG9mIGJ1ZmZlcmVkIHdyaXRlcyBvbiB0aGUgc3lzdGVtCmJ1
-cyB3aGVuIGFsbCB0aGUgYnVmZmVyZWQgd3JpdGVzIGFyZSBjYWNoZWQgaGl0cyBhbmQgYXJlLCB0
-aGVyZWZvcmUsCm5vdCBkaXJlY3RlZCB0byB0aGUgc2FtZSBhZGRyZXNzIGJlaW5nIGFjY2Vzc2Vk
-IGJ5IHRoZSByZWFkIG1pc3MuIgoKSSdtIHByb2JhYmx5IG1pc3Npbmcgc29tZXRoaW5nLgoKPiB0
-aGUgY29tcGlsZXIgY2FuIHN0aWxsIHJlb3JkZXIKPiB1bnJlbGF0ZWQgbWVtb3J5IG9wZXJhdGlv
-bnMgd2hpbGUgbWFpbnRhaW5pbmcgcHJvZ3JhbSBvcmRlciBvbiBhCj4gc2luZ2xlIEludGVswq4g
-WGVvbiBQaGlUTSBjb3Byb2Nlc3NvciAoaGFyZHdhcmUgdGhyZWFkKS4gSWYgc29mdHdhcmUKPiBy
-dW5uaW5nIG9uIGFuIEludGVswq4gWGVvbiBQaGlUTSBjb3Byb2Nlc3NvciBpcyBkZXBlbmRlbnQg
-b24gdGhlIG9yZGVyCj4gb2YgbWVtb3J5IG9wZXJhdGlvbnMgb24gYW5vdGhlciBJbnRlbMKuIFhl
-b24gUGhpVE0gY29wcm9jZXNzb3IgdGhlbiBhCj4gc2VyaWFsaXppbmcgaW5zdHJ1Y3Rpb24gKGUu
-Zy4sIENQVUlELCBpbnN0cnVjdGlvbiB3aXRoIGEgTE9DSyBwcmVmaXgpCj4gYmV0d2VlbiB0aGUg
-bWVtb3J5IG9wZXJhdGlvbnMgaXMgcmVxdWlyZWQgdG8gZ3VhcmFudGVlIGNvbXBsZXRpb24gb2YK
-PiBhbGwgbWVtb3J5IGFjY2Vzc2VzIGlzc3VlZCBwcmlvciB0byB0aGUgc2VyaWFsaXppbmcgaW5z
-dHJ1Y3Rpb24gYmVmb3JlCj4gYW55IHN1YnNlcXVlbnQgbWVtb3J5IG9wZXJhdGlvbnMgYXJlIHN0
-YXJ0ZWQuCj4gCj4gKGVuZCBvZiBxdW90ZSkKPiAKPiBGcm9tIHdoYXQgSSB1bmRlcnN0YW5kLCBp
-dCBpcyBzYWZlIHRvIGxlYXZlIG91dCBhbnkgcnVuLXRpbWUgbWVtb3J5Cj4gYmFycmllcnMsIGJ1
-dCB3ZSBzdGlsbCBuZWVkIGJhcnJpZXJzIHRoYXQgcHJldmVudCB0aGUgY29tcGlsZXIgZnJvbQo+
-IHJlb3JkZXJpbmcgKHVzaW5nIF9fYXNtX18gX192b2xhdGlsZV9fICgiIjo6OiJtZW1vcnkiKSku
-IEluCj4gdXJjdS9hcmNoL3g4Ni5oLCBJIHNlZSB0aGF0IHdoZW4gQ09ORklHX1JDVV9IQVZFX0ZF
-TkNFIGlzIGZhbHNlLAo+IG1lbW9yeSBiYXJyaWVycyByZXN1bHQgaW4gYm90aCBjb21waWxlLXRp
-bWUgYW5kIHJ1bi10aW1lIG1lbW9yeQo+IGJhcnJpZXJzOiAgX19hc21fXyBfX3ZvbGF0aWxlX18g
-KCJsb2NrOyBhZGRsICQwLDAoJSVlc3ApIjo6OiJtZW1vcnkiKS4KPiBJIGd1ZXNzIHRoaXMgd291
-bGQgd29yayBmb3IgdGhlIFBoaSwgYnV0IHRoZSBsb2NrIGluc3RydWN0aW9uIGRvZXMgbm90Cj4g
-c2VlbSBuZWNlc3NhcnkuCgpBY3R1YWxseSwgZWl0aGVyIGEgY3B1aWQgKGNvcmUgc2VyaWFsaXpp
-bmcpIGluc3RydWN0aW9uIG9yIGxvY2stcHJlZml4ZWQKaW5zdHJ1Y3Rpb24gKHNlcmlhbGl6aW5n
-IGFzIGEgc2lkZS1lZmZlY3QgbWVtb3J5IGFjY2Vzc2VzKSBzZWVtcyByZXF1aXJlZC4KCj4gCj4g
-U28sIHNob3VsZCB3ZSBqdXN0IHNldCBDT05GSUdfUkNVX0hBVkVfRkVOQ0UgdG8gZmFsc2Ugd2hl
-biBjb21waWxpbmcKPiBmb3IgdGhlIFBoaSBhbmQgZ28gb24gd2l0aCBvdXIgbGl2ZXMsIG9yIHNo
-b3VsZCB3ZSBhZGQgYSBzcGVjaWZpYwo+IGNvbmZpZyBmb3IgdGhpcyBjYXNlPwoKSSBfdGhpbmtf
-IHdlIGNvdWxkIGdldCBhd2F5IHdpdGggdGhpcyBtYXBwaW5nOgoKc21wX3dtYigpIC0+IGJhcnJp
-ZXIoKQogIHJlYXNvbmluZzogd3JpdGUgdnMgd3JpdGUgYXJlIG5vdCByZW9yZGVyZWQgYnkgdGhl
-IHByb2Nlc3Nvci4KCnNtcF9ybWIoKSAtPiBiYXJyaWVyKCkKICByZWFzb25pbmc6IHJlYWQgdnMg
-cmVhZCBub3QgcmVvcmRlcmVkIGJ5IHByb2Nlc3Nvci4KCnNtcF9tYigpIC0+IF9fYXNtX18gX192
-b2xhdGlsZV9fICgibG9jazsgYWRkbCAkMCwwKCUlZXNwKSI6OjoibWVtb3J5IikKICAgb3IgYSBj
-cHVpZCBpbnN0cnVjdGlvbgogIHJlYXNvbmluZzogY3B1IGNhbiByZW9yZGVyIHJlYWRzIHZzIGxh
-dGVyIHdyaXRlcy4KCnNtcF9yZWFkX2JhcnJpZXJfZGVwZW5kcygpIC0+IG5vdGhpbmcgYXQgYWxs
-IChub3QgbmVlZGVkIGF0IGFueSBsZXZlbCkuCgpJbnRlcmVzdGluZ2x5IGVub3VnaCwgQUZBSVUs
-IHRoaXMgc2VlbXMgdG8gbWFwIHRvIHg4Ni1UU08uIE1heWJlIHRoYXQgaW5zdGVhZApvZiBkZWZp
-bmluZyBhIGNvbXBpbGluZyBvcHRpb24gc3BlY2lmaWNhbGx5IGZvciBYZW9uIFBoaSwgd2UgY291
-bGQgaW5zdGVhZApkZWZpbmUgYSB4ODYtdHNvLmggaGVhZGVyIHZhcmlhbnQgaW4gdXNlcnNwYWNl
-IFJDVSBhbmQgdXNlIGl0IGluIGFsbCBJbnRlbApwcm9jZXNzb3JzIHRoYXQgbWFwIHRvIFRTTyAo
-aGludDogdmVyeSB2YXN0IG1ham9yaXR5KS4gVGhlIG9ubHkgZXhjZXB0aW9ucwpzZWVtcyB0byBi
-ZSBQZW50aXVtIFBybyAobmVlZGluZyBzbXBfcm1iKCkgLT4gbGZlbmNlKSBhbmQgc29tZSBXaW5k
-Y2hpcApwcm9jZXNzb3JzIHdoaWNoIGNvdWxkIHJlb3JkZXIgc3RvcmVzICh0aHVzIG5lZWRpbmcg
-c21wX3dtYigpIC0+IHNmZW5jZSkuCgpUaG91Z2h0cyA/CgpUaGFua3MsCgpNYXRoaWV1Cgo+IAo+
-IFNpbW9uCj4gCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X18KPiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+
-IGh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRl
-dgo+IAoKLS0gCk1hdGhpZXUgRGVzbm95ZXJzCkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZp
-Y2lvcy5jb20KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-Cmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8v
-bGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+It currently fails to compile, because the Phi does not have fence
+instructions.
+
+It will use lock prefixed instructions for all memory barriers, which
+is overkill for this platform, but at least it will work.
+
+Signed-off-by: Simon Marchi <simon.marchi@polymtl.ca>
+---
+ configure.ac |    5 ++++-
+ 1 files changed, 4 insertions(+), 1 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 774094e..079c145 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -140,7 +140,10 @@ AS_IF([test "x$ARCHTYPE" = "xx86"],[
+ 	#For now, using lock; addl compatibility mode even for i686, because the
+ 	#Pentium III is seen as a i686, but lacks mfence instruction.
+ 	#Only using fence for x86_64.
+-	AS_IF([test "x$host_cpu" != "xi386" -a "x$host_cpu" != "xi486" -a "x$host_cpu" != "xi586" -a "x$host_cpu" != "xi686"],[
++	#
++	#k1om is the name for the Intel MIC family (Xeon Phi). It is an x86_64
++	#variant but lacks fence instructions.
++	AS_IF([test "x$host_cpu" != "xi386" -a "x$host_cpu" != "xi486" -a "x$host_cpu" != "xi586" -a "x$host_cpu" != "xi686" -a "x$host_vendor" != "xk1om"],[
+ 		AC_MSG_RESULT([yes])
+ 		AC_DEFINE([CONFIG_RCU_HAVE_FENCE], [1])
+ 	],[
+-- 
+1.7.1
