@@ -1,21 +1,16 @@
-From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: is ltt patch required to build lttng module?
-Date: Mon, 9 Dec 2013 14:31:55 -0500
-Message-ID: <CA+jJMxvaTkbH4tws5r9F_jgXv7Ter8E1C8hrJmKXOoNWaPtG+Q__11184.7042142928$1386617582$gmane$org@mail.gmail.com>
-References: <CAO_Arvp5Q6EfDS_LRBKKCaPybXG-3+vp6ezzjfAcRKfNk+YTrQ@mail.gmail.com>
-	<CA+jJMxsuXT=_1Yw4N_ixx7RQyN0X5X3EaFPgPB2QzxuhKSDnLA@mail.gmail.com>
-	<CAO_ArvoCr97=8rQiLx13OK1ndJQ4vZ2Ji9H1moXZ3OS8noYKaQ@mail.gmail.com>
+From: David Goulet <dgoulet@efficios.com>
+Subject: Re: no trace data are collected for UST
+Date: Mon, 9 Dec 2013 15:17:06 -0500
+Message-ID: <20131209201706.GC7628__3018.54680660671$1386620296$gmane$org@thessa>
+References: <c3d1fc94-92e2-43b3-af78-6315aaa7419d@aliyun.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/mixed; boundary="===============1684839714=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qe0-f47.google.com ([209.85.128.47])
+Received: from smtp.ini-tech.com ([144.76.53.219])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1Vq6Yj-0004x5-GL
-	for lttng-dev@lists.lttng.org; Mon, 09 Dec 2013 14:32:07 -0500
-Received: by mail-qe0-f47.google.com with SMTP id t7so3313317qeb.34
-	for <lttng-dev@lists.lttng.org>; Mon, 09 Dec 2013 11:31:56 -0800 (PST)
-In-Reply-To: <CAO_ArvoCr97=8rQiLx13OK1ndJQ4vZ2Ji9H1moXZ3OS8noYKaQ@mail.gmail.com>
+	(envelope-from <dgoulet@efficios.com>) id 1Vq7GU-0005Kd-OC
+	for lttng-dev@lists.lttng.org; Mon, 09 Dec 2013 15:17:20 -0500
+In-Reply-To: <c3d1fc94-92e2-43b3-af78-6315aaa7419d@aliyun.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,178 +19,99 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: kumar s <skumar.m226@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: "zhenyu.ren" <zhenyu.ren@aliyun.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-On Mon, Dec 9, 2013 at 3:13 AM, kumar s <skumar.m226@gmail.com> wrote:
-> Hi,
->
-> I have not patched the linux kernel provided with octeon sdk (kernel vers=
-ion
-> 2.6.32.27). The Make has been modified with kernel directory path.
->
-> #
-> # Makefile for the LTT objects.
-> #
->
-> ifneq ($(KERNELRELEASE),)
-> ifneq ($(CONFIG_TRACEPOINTS),)
->
-> obj-m +=3D lttng-ring-buffer-client-discard.o
-> obj-m +=3D lttng-ring-buffer-client-overwrite.o
-> obj-m +=3D lttng-ring-buffer-metadata-client.o
-> obj-m +=3D lttng-ring-buffer-client-mmap-discard.o
-> obj-m +=3D lttng-ring-buffer-client-mmap-overwrite.o
-> obj-m +=3D lttng-ring-buffer-metadata-mmap-client.o
->
-> obj-m +=3D lttng-tracer.o
-> lttng-tracer-objs :=3D  lttng-events.o lttng-abi.o \
-> lttng-probes.o lttng-context.o \
-> lttng-context-pid.o lttng-context-procname.o \
-> lttng-context-prio.o lttng-context-nice.o \
-> lttng-context-vpid.o lttng-context-tid.o \
-> lttng-context-vtid.o lttng-context-ppid.o \
-> lttng-context-vppid.o lttng-calibrate.o \
-> lttng-context-hostname.o wrapper/random.o
->
-> obj-m +=3D lttng-statedump.o
-> lttng-statedump-objs :=3D lttng-statedump-impl.o wrapper/irqdesc.o \
-> wrapper/fdtable.o
->
-> ifneq ($(CONFIG_HAVE_SYSCALL_TRACEPOINTS),)
-> lttng-tracer-objs +=3D lttng-syscalls.o probes/lttng-probe-user.o
-> endif # CONFIG_HAVE_SYSCALL_TRACEPOINTS
->
-> ifneq ($(CONFIG_PERF_EVENTS),)
-> lttng-tracer-objs +=3D $(shell \
-> if [ $(VERSION) -ge 3 \
-> -o \( $(VERSION) -eq 2 -a $(PATCHLEVEL) -ge 6 -a $(SUBLEVEL) -ge 33 \) ] ;
-> then \
-> echo "lttng-context-perf-counters.o" ; fi;)
-> endif # CONFIG_PERF_EVENTS
->
-> obj-m +=3D probes/
-> obj-m +=3D lib/
->
-> endif # CONFIG_TRACEPOINTS
->
-> else # KERNELRELEASE
-> KERNELDIR ?=3D
-> /home/shkumar/Development_Merge/OCT_no_patch/OCTEON_SDK/octeon_sdk/OCTEON=
--SDK/linux/kernel_2.6/linux/
-> PWD :=3D $(shell pwd)
-> CFLAGS =3D $(EXTCFLAGS)
->
-> default:
-> $(MAKE) -C $(KERNELDIR) M=3D$(PWD) modules ARCH=3Dmips
-> CROSS_COMPILE=3Dmips64-octeon-linux-gnu-
->
-> modules_install:
-> $(MAKE) -C $(KERNELDIR) M=3D$(PWD) modules_install
->
-> clean:
-> $(MAKE) -C $(KERNELDIR) M=3D$(PWD) clean
->
-> %.i: %.c
-> $(MAKE) -C $(KERNELDIR) M=3D$(PWD) $@
-> endif # KERNELRELEASE
->
->
->
-> when trying to build
->
-> make -C
-> /home/shkumar/Development_Merge/OCT_no_patch/OCTEON_SDK/octeon_sdk/OCTEON=
--SDK/linux/kernel_2.6/linux/
-> M=3D/home/shkumar/lttng-tools/lttngnew/lttng-modules-f49eb38 modules ARCH=
-=3Dmips
-> CROSS_COMPILE=3Dmips64-octeon-linux-gnu-
-> make[1]: Entering directory
-> `/home/shkumar/Development_Merge/OCT_no_patch/OCTEON_SDK/octeon_sdk/OCTEO=
-N-SDK/linux/kernel_2.6/linux'
->   Building modules, stage 2.
->   MODPOST 0 modules
-> make[1]: Leaving directory
-> `/home/shkumar/Development_Merge/OCT_no_patch/OCTEON_SDK/octeon_sdk/OCTEO=
-N-SDK/linux/kernel_2.6/linux'
->
-> But lttng modules are not compiled. I cannot any modules(.ko or .o) being
-> generated in lttng directory or in kernel path.
->
->
-> If Octeon sdk is required , it can be obtained from cnusers.org.
->
-> Only patches in linux_patch directory has been applied to the kernel.
->
-> any suggestions to fix this ?
 
-Using the -C option should not be necessary.
-
-The README in lttng-modules' tree explains how to set a custom kernel
-directory. The README also details the required kernel configuration
-options. Make sure that your platform's kernel configuration follows
-these requirements.
-
-% KERNELDIR=3Dpath_to_kernel_dir make
-# KERNELDIR=3Dpath_to_kernel_dir make modules_install
-# depmod -a kernel_version
-
-Regards,
-J=E9r=E9mie
-
->
-> Thank you
-> Skumar
->
->
-> On Thu, Dec 5, 2013 at 8:55 PM, J=E9r=E9mie Galarneau
-> <jeremie.galarneau@efficios.com> wrote:
->>
->> On Thu, Dec 5, 2013 at 2:40 AM, kumar s <skumar.m226@gmail.com> wrote:
->> > Hi,
->> >
->> > I am using kernel version 2.6.32.27. When building lttng module, do i
->> > need
->> > to build against kernel which is patched using lttng (v0.190) or should
->> > i
->> > build lttng modules for kernel that is not patched.
->> >
->>
->> You do not need to patch your kernel using the 0.x kernel patch set to
->> use the 2.x tracer.
->>
->> To build lttng-modules on this kernel, you will need to apply the
->> patches found under linux-patches in the lttng-modules tree.
->>
->> Regards,
->> J=E9r=E9mie
->>
->> > I am trying to build lttng module latest version taken from
->> > lttng-module.git
->> >
->> > Thank you
->> > Skumar
->> >
->> > _______________________________________________
->> > lttng-dev mailing list
->> > lttng-dev@lists.lttng.org
->> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->> >
->>
->>
->>
->> --
->> J=E9r=E9mie Galarneau
->> EfficiOS Inc.
->> http://www.efficios.com
->
->
+--===============1684839714==
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="Md/poaVZ8hnGTzuv"
+Content-Disposition: inline
 
 
+--Md/poaVZ8hnGTzuv
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--- =
+On 08 Dec (10:33:09), zhenyu.ren wrote:
+> Hi, lttng-dev=A0=A0 =A0 All seems well but no trace data are produced for=
+ UST.=A0(1) link static lib(.a) into target program=A0 =A0g++ -o target ...=
+ provider.o xx.o ... -ldl -llttng-ust -lurcu-cds -lurcu-bp -llttng-ust-trac=
+epoint(2) run target and lttng-sessiond(root&uid)/consumerd etc....$lttng-s=
+tartAvailable tracing sessions:=A0 1) auto-20131208-100815 (/home/admin/ltt=
+ng-traces/auto-20131208-100815) [active]Use lttng list <session_name> for m=
+ore details$lttng list -uUST events:-------------
+> PID: 42025 - Name: /home/admin/target=A0 =A0 =A0 target_ioitem:AddIOWorkI=
+tem (loglevel: TRACE_DEBUG_LINE (13)) (type: tracepoint)$lttng list auto-20=
+131208-100815Tracing session auto-20131208-100815: [active]=A0 =A0 Trace pa=
+th: /home/admin/lttng-traces/auto-20131208-100815
+> =3D=3D=3D Domain: UST global =3D=3D=3D
+> Buffer type: per UID
+> Channels:-------------- channel0: [enabled]
+> =A0 =A0 Attributes:=A0 =A0 =A0 overwrite mode: 0=A0 =A0 =A0 subbufers siz=
+e: 131072=A0 =A0 =A0 number of subbufers: 4=A0 =A0 =A0 switch timer interva=
+l: 0=A0 =A0 =A0 read timer interval: 0=A0 =A0 =A0 output: mmap()
+> =A0 =A0 Events:=A0 =A0 =A0 * (type: tracepoint) [enabled]
+> $lttng stopWaiting for data availability......Tracing stopped for session=
+ auto-20131208-100815$ls -l ~/lttng-traces/auto-20131208-100815/ust/uid/505=
+/64-bit/total 100-rw-rw---- 1 admin admin 4096 Dec =A08 10:11 channel0_0-rw=
+-rw---- 1 admin admin 4096 Dec =A08 10:11 channel0_1-rw-rw---- 1 admin admi=
+n 4096 Dec =A08 10:11 channel0_10-rw-rw---- 1 admin admin 4096 Dec =A08 10:=
+11 channel0_11...-rw-rw---- 1 admin admin 4096 Dec =A08 10:11 metadata$babe=
+ltrace ~/lttng-traces/auto-20131208-100815/"empty result"=A0 =A0I am very s=
+ure tracepoint=A0target_ioitem:AddIOWorkItem has been running since printf =
+log at the next line does work. Why lttng list -u shows me=A0=A0tracepoint=
+=A0target_ioitem:AddIOWorkItem there,but no trace data are produced for ust=
+?Thankszhenyu.ren
 
-J=E9r=E9mie Galarneau
-EfficiOS Inc.
-http://www.efficios.com
+Hey!
+
+Can you provide a code snippet that reproduce this issue along with the
+exact list of commands you used.
+
+(Also, please try to avoid the weird text wrapping ;)
+
+Thanks!
+David
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+
+--Md/poaVZ8hnGTzuv
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.15 (GNU/Linux)
+
+iQF8BAEBAgBmBQJSpiVCXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
+ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
+MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I0264kH/2m5pPvUr+wo8NrAdOoFri8Z
+ue2+0h5Gk7TbeKSPLrVljoVZviX8ADzAhfmZdRJojmPIK8g4N7uOgPjdTaL5QT9V
+t+2QvWWD2K3AzTkId4I648aIEUPCLEuhJq19RYUROPpyF89iuD5KIWkxTnVYMUfm
+s3r1nqxmckBdSp86/d+FUk8Bjkcau3A1myVFlp1MUi/HRH6sFyrH6IAdoNyN3jjV
+nF7ctPtLuVYNb85AH4C0VT6QmEMgUEoQoQ27s4zi7by0r4zuUxw2ubrPeJLKB6OF
+fT0B8cCXeWK0gvoKcMIjQygEO3IQ2F3qA1fOMeM2buUHANAJe0tKDjqwBhqXfvA=
+=vqB2
+-----END PGP SIGNATURE-----
+
+--Md/poaVZ8hnGTzuv--
+
+
+--===============1684839714==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1684839714==--
