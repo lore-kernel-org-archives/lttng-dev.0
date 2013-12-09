@@ -1,24 +1,21 @@
-From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Subject: Re: No trace files are generated for UST
-Date: Mon, 9 Dec 2013 13:53:52 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD267B3249__22424.2928241894$1386599547$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
-References: <6CFA219DE9CAD940989B83CA579159F91B43ACBFBE@SGSINEXC014.vestas.net>
-	<48CF5AC71E61DB46B70D0F388054EFFD267B2DCF@VAL-E-02.valcartier.drdc-rddc.gc.ca>
-	<6CFA219DE9CAD940989B83CA579159F91B43ACC0B6@SGSINEXC014.vestas.net>
-	<48CF5AC71E61DB46B70D0F388054EFFD267B2DF5@VAL-E-02.valcartier.drdc-rddc.gc.ca>
-	<6CFA219DE9CAD940989B83CA579159F91B43ACC0C1@SGSINEXC014.vestas.net>
-	<CA+jJMxt-D9CEFVhH93Q7iy=0W1KRsynBA9is-AP3L0+Dpq11Cg@mail.gmail.com>
-	<6CFA219DE9CAD940989B83CA579159F91B43ACC0FD@SGSINEXC014.vestas.net>
+From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: is ltt patch required to build lttng module?
+Date: Mon, 9 Dec 2013 14:31:55 -0500
+Message-ID: <CA+jJMxvaTkbH4tws5r9F_jgXv7Ter8E1C8hrJmKXOoNWaPtG+Q__11184.7042142928$1386617582$gmane$org@mail.gmail.com>
+References: <CAO_Arvp5Q6EfDS_LRBKKCaPybXG-3+vp6ezzjfAcRKfNk+YTrQ@mail.gmail.com>
+	<CA+jJMxsuXT=_1Yw4N_ixx7RQyN0X5X3EaFPgPB2QzxuhKSDnLA@mail.gmail.com>
+	<CAO_ArvoCr97=8rQiLx13OK1ndJQ4vZ2Ji9H1moXZ3OS8noYKaQ@mail.gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
+Received: from mail-qe0-f47.google.com ([209.85.128.47])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1Vq1HX-0002Jm-17
-	for lttng-dev@lists.lttng.org; Mon, 09 Dec 2013 08:54:00 -0500
-In-Reply-To: <6CFA219DE9CAD940989B83CA579159F91B43ACC0FD@SGSINEXC014.vestas.net>
-Content-Language: fr-FR
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1Vq6Yj-0004x5-GL
+	for lttng-dev@lists.lttng.org; Mon, 09 Dec 2013 14:32:07 -0500
+Received: by mail-qe0-f47.google.com with SMTP id t7so3313317qeb.34
+	for <lttng-dev@lists.lttng.org>; Mon, 09 Dec 2013 11:31:56 -0800 (PST)
+In-Reply-To: <CAO_ArvoCr97=8rQiLx13OK1ndJQ4vZ2Ji9H1moXZ3OS8noYKaQ@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -27,37 +24,178 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Manikandan Govindaswamy <magov@vestas.com>, =?iso-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+To: kumar s <skumar.m226@gmail.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-   A first glance through the log reveals these possibly significant entrie=
-s:
+On Mon, Dec 9, 2013 at 3:13 AM, kumar s <skumar.m226@gmail.com> wrote:
+> Hi,
+>
+> I have not patched the linux kernel provided with octeon sdk (kernel vers=
+ion
+> 2.6.32.27). The Make has been modified with kernel directory path.
+>
+> #
+> # Makefile for the LTT objects.
+> #
+>
+> ifneq ($(KERNELRELEASE),)
+> ifneq ($(CONFIG_TRACEPOINTS),)
+>
+> obj-m +=3D lttng-ring-buffer-client-discard.o
+> obj-m +=3D lttng-ring-buffer-client-overwrite.o
+> obj-m +=3D lttng-ring-buffer-metadata-client.o
+> obj-m +=3D lttng-ring-buffer-client-mmap-discard.o
+> obj-m +=3D lttng-ring-buffer-client-mmap-overwrite.o
+> obj-m +=3D lttng-ring-buffer-metadata-mmap-client.o
+>
+> obj-m +=3D lttng-tracer.o
+> lttng-tracer-objs :=3D  lttng-events.o lttng-abi.o \
+> lttng-probes.o lttng-context.o \
+> lttng-context-pid.o lttng-context-procname.o \
+> lttng-context-prio.o lttng-context-nice.o \
+> lttng-context-vpid.o lttng-context-tid.o \
+> lttng-context-vtid.o lttng-context-ppid.o \
+> lttng-context-vppid.o lttng-calibrate.o \
+> lttng-context-hostname.o wrapper/random.o
+>
+> obj-m +=3D lttng-statedump.o
+> lttng-statedump-objs :=3D lttng-statedump-impl.o wrapper/irqdesc.o \
+> wrapper/fdtable.o
+>
+> ifneq ($(CONFIG_HAVE_SYSCALL_TRACEPOINTS),)
+> lttng-tracer-objs +=3D lttng-syscalls.o probes/lttng-probe-user.o
+> endif # CONFIG_HAVE_SYSCALL_TRACEPOINTS
+>
+> ifneq ($(CONFIG_PERF_EVENTS),)
+> lttng-tracer-objs +=3D $(shell \
+> if [ $(VERSION) -ge 3 \
+> -o \( $(VERSION) -eq 2 -a $(PATCHLEVEL) -ge 6 -a $(SUBLEVEL) -ge 33 \) ] ;
+> then \
+> echo "lttng-context-perf-counters.o" ; fi;)
+> endif # CONFIG_PERF_EVENTS
+>
+> obj-m +=3D probes/
+> obj-m +=3D lib/
+>
+> endif # CONFIG_TRACEPOINTS
+>
+> else # KERNELRELEASE
+> KERNELDIR ?=3D
+> /home/shkumar/Development_Merge/OCT_no_patch/OCTEON_SDK/octeon_sdk/OCTEON=
+-SDK/linux/kernel_2.6/linux/
+> PWD :=3D $(shell pwd)
+> CFLAGS =3D $(EXTCFLAGS)
+>
+> default:
+> $(MAKE) -C $(KERNELDIR) M=3D$(PWD) modules ARCH=3Dmips
+> CROSS_COMPILE=3Dmips64-octeon-linux-gnu-
+>
+> modules_install:
+> $(MAKE) -C $(KERNELDIR) M=3D$(PWD) modules_install
+>
+> clean:
+> $(MAKE) -C $(KERNELDIR) M=3D$(PWD) clean
+>
+> %.i: %.c
+> $(MAKE) -C $(KERNELDIR) M=3D$(PWD) $@
+> endif # KERNELRELEASE
+>
+>
+>
+> when trying to build
+>
+> make -C
+> /home/shkumar/Development_Merge/OCT_no_patch/OCTEON_SDK/octeon_sdk/OCTEON=
+-SDK/linux/kernel_2.6/linux/
+> M=3D/home/shkumar/lttng-tools/lttngnew/lttng-modules-f49eb38 modules ARCH=
+=3Dmips
+> CROSS_COMPILE=3Dmips64-octeon-linux-gnu-
+> make[1]: Entering directory
+> `/home/shkumar/Development_Merge/OCT_no_patch/OCTEON_SDK/octeon_sdk/OCTEO=
+N-SDK/linux/kernel_2.6/linux'
+>   Building modules, stage 2.
+>   MODPOST 0 modules
+> make[1]: Leaving directory
+> `/home/shkumar/Development_Merge/OCT_no_patch/OCTEON_SDK/octeon_sdk/OCTEO=
+N-SDK/linux/kernel_2.6/linux'
+>
+> But lttng modules are not compiled. I cannot any modules(.ko or .o) being
+> generated in lttng directory or in kernel path.
+>
+>
+> If Octeon sdk is required , it can be obtained from cnusers.org.
+>
+> Only patches in linux_patch directory has been applied to the kernel.
+>
+> any suggestions to fix this ?
 
-DEBUG1 [15860/15996]: Sending response (size: 16, retcode: Unknown error co=
-de) (in thread_manage_clients() at main.c:3803)
+Using the -C option should not be necessary.
 
-And later
+The README in lttng-modules' tree explains how to set a custom kernel
+directory. The README also details the required kernel configuration
+options. Make sure that your platform's kernel configuration follows
+these requirements.
 
-PERROR [16322/16322]: sendmsg: Broken pipe (in lttcomm_send_unix_sock() at =
-unix.c:218)
+% KERNELDIR=3Dpath_to_kernel_dir make
+# KERNELDIR=3Dpath_to_kernel_dir make modules_install
+# depmod -a kernel_version
 
-   What were the client commands used to generate the log?  And what was th=
-e running environment (which versions of the LTTng suite were installed, an=
-d which session daemon(s) is(are) running? ).
+Regards,
+J=E9r=E9mie
 
-Daniel U. Thibault
-Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
-ntermeasures (SPC)
-Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
-Cyber Security (MCCS)
-R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
- Canada - Valcartier (DRDC Valcartier)
-2459 route de la Bravoure
-Qu=E9bec QC=A0 G3J 1X5
-CANADA
-Vox=A0: (418) 844-4000 x4245
-Fax=A0: (418) 844-4538
-NAC=A0: 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-Gouvernement du Canada=A0| Government of Canada
-<http://www.valcartier.drdc-rddc.gc.ca/>
+>
+> Thank you
+> Skumar
+>
+>
+> On Thu, Dec 5, 2013 at 8:55 PM, J=E9r=E9mie Galarneau
+> <jeremie.galarneau@efficios.com> wrote:
+>>
+>> On Thu, Dec 5, 2013 at 2:40 AM, kumar s <skumar.m226@gmail.com> wrote:
+>> > Hi,
+>> >
+>> > I am using kernel version 2.6.32.27. When building lttng module, do i
+>> > need
+>> > to build against kernel which is patched using lttng (v0.190) or should
+>> > i
+>> > build lttng modules for kernel that is not patched.
+>> >
+>>
+>> You do not need to patch your kernel using the 0.x kernel patch set to
+>> use the 2.x tracer.
+>>
+>> To build lttng-modules on this kernel, you will need to apply the
+>> patches found under linux-patches in the lttng-modules tree.
+>>
+>> Regards,
+>> J=E9r=E9mie
+>>
+>> > I am trying to build lttng module latest version taken from
+>> > lttng-module.git
+>> >
+>> > Thank you
+>> > Skumar
+>> >
+>> > _______________________________________________
+>> > lttng-dev mailing list
+>> > lttng-dev@lists.lttng.org
+>> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>> >
+>>
+>>
+>>
+>> --
+>> J=E9r=E9mie Galarneau
+>> EfficiOS Inc.
+>> http://www.efficios.com
+>
+>
+
+
+
+-- =
+
+J=E9r=E9mie Galarneau
+EfficiOS Inc.
+http://www.efficios.com
