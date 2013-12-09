@@ -1,22 +1,39 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: Re: No trace files are generated for UST
-Date: Mon, 9 Dec 2013 15:48:05 -0500
-Message-ID: <20131209204805.GA5152__8382.12666935778$1386622147$gmane$org@thessa>
-References: <6CFA219DE9CAD940989B83CA579159F91B43ACBFBE@SGSINEXC014.vestas.net>
-	<48CF5AC71E61DB46B70D0F388054EFFD267B2DCF@VAL-E-02.valcartier.drdc-rddc.gc.ca>
-	<6CFA219DE9CAD940989B83CA579159F91B43ACC0B6@SGSINEXC014.vestas.net>
-	<48CF5AC71E61DB46B70D0F388054EFFD267B2DF5@VAL-E-02.valcartier.drdc-rddc.gc.ca>
-	<6CFA219DE9CAD940989B83CA579159F91B43ACC0C1@SGSINEXC014.vestas.net>
-	<CA+jJMxt-D9CEFVhH93Q7iy=0W1KRsynBA9is-AP3L0+Dpq11Cg@mail.gmail.com>
-	<6CFA219DE9CAD940989B83CA579159F91B43ACC0FD@SGSINEXC014.vestas.net>
+From: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
+Subject: Re: Xeon Phi memory barriers
+Date: Mon, 9 Dec 2013 13:46:52 -0800
+Message-ID: <20131209214652.GE4208__6851.47431581772$1386625693$gmane$org@linux.vnet.ibm.com>
+References: <CAFXXi0n784=HA5RKX91OM8=CTpgofd1dkqnC_b4avo0aAYBnOQ@mail.gmail.com>
+	<1816982181.80892.1386360938886.JavaMail.zimbra@efficios.com>
+	<20131206214045.GC24148@linux.vnet.ibm.com>
+	<1920088693.81078.1386395934621.JavaMail.zimbra@efficios.com>
+Reply-To: paulmck@linux.vnet.ibm.com
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1514022027=="
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([144.76.53.219])
+Received: from e35.co.us.ibm.com ([32.97.110.153])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1Vq7kT-0005ga-Ut
-	for lttng-dev@lists.lttng.org; Mon, 09 Dec 2013 15:48:20 -0500
-In-Reply-To: <6CFA219DE9CAD940989B83CA579159F91B43ACC0FD@SGSINEXC014.vestas.net>
+	(envelope-from <paulmck@linux.vnet.ibm.com>) id 1Vq8fN-00068G-G8
+	for lttng-dev@lists.lttng.org; Mon, 09 Dec 2013 16:47:07 -0500
+Received: from /spool/local
+	by e35.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only!
+	Violators will be prosecuted
+	for <lttng-dev@lists.lttng.org> from <paulmck@linux.vnet.ibm.com>;
+	Mon, 9 Dec 2013 14:46:56 -0700
+Received: from b03cxnp07027.gho.boulder.ibm.com
+	(b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
+	by d03dlp02.boulder.ibm.com (Postfix) with ESMTP id 75DBE3E4003E
+	for <lttng-dev@lists.lttng.org>; Mon,  9 Dec 2013 14:46:54 -0700 (MST)
+Received: from d03av06.boulder.ibm.com (d03av06.boulder.ibm.com [9.17.195.245])
+	by b03cxnp07027.gho.boulder.ibm.com (8.13.8/8.13.8/NCO v10.0) with
+	ESMTP id rB9JilKp62849136
+	for <lttng-dev@lists.lttng.org>; Mon, 9 Dec 2013 20:44:47 +0100
+Received: from d03av06.boulder.ibm.com (loopback [127.0.0.1])
+	by d03av06.boulder.ibm.com (8.14.4/8.13.1/NCO v10.0 AVout) with ESMTP
+	id rB9LntVU024560
+	for <lttng-dev@lists.lttng.org>; Mon, 9 Dec 2013 14:49:55 -0700
+Content-Disposition: inline
+In-Reply-To: <1920088693.81078.1386395934621.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -25,193 +42,319 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Manikandan Govindaswamy <magov@vestas.com>
-Cc: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
+On Sat, Dec 07, 2013 at 05:58:54AM +0000, Mathieu Desnoyers wrote:
+> ----- Original Message -----
+> > From: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
+> > To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+> > Cc: "Simon Marchi" <simon.marchi@polymtl.ca>, lttng-dev@lists.lttng.org
+> > Sent: Friday, December 6, 2013 10:40:45 PM
+> > Subject: Re: [lttng-dev] Xeon Phi memory barriers
+> > =
 
---===============1514022027==
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="7AUc2qLy4jB3hD7Z"
-Content-Disposition: inline
+> > On Fri, Dec 06, 2013 at 08:15:38PM +0000, Mathieu Desnoyers wrote:
+> > > ----- Original Message -----
+> > > > From: "Simon Marchi" <simon.marchi@polymtl.ca>
+> > > > To: lttng-dev@lists.lttng.org
+> > > > Sent: Tuesday, November 19, 2013 4:26:06 PM
+> > > > Subject: [lttng-dev] Xeon Phi memory barriers
+> > > > =
 
+> > > > Hello there,
+> > > =
 
---7AUc2qLy4jB3hD7Z
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> > > Hi Simon,
+> > > =
 
-On 07 Dec (06:16:14), Manikandan Govindaswamy wrote:
-> Please find the log for the --verbose-consumer attached.
+> > > While reading this reply, please keep in mind that I'm in a
+> > > mindset where I've been in a full week of meeting, and it's late on
+> > > Friday evening here. So YMMV ;-) I'm CCing Paul E. McKenney, so he can
+> > > debunk my answer :)
+> > > =
 
-With the log file you provided, *no* application registered to the
-session daemon meaning probably that lttng-ust is either not called or
-not linked at all.
+> > > > =
 
-By adding this in front, you should have quite an amount of debug being
-printed out on stderr. If not, you have a problem with maybe the
-LD_PRELOAD path or lttng-ust linking else provide those logs :).
+> > > > liburcu does not build on the Intel Xeon Phi, because the chip is
+> > > > recognized as x86_64, but lacks the {s,l,m}fence instructions found=
+ on
+> > > > usual x86_64 processors. The following is taken from the Xeon Phi d=
+ev
+> > > > guide:
+> > > =
 
-LTTNG_UST_DEBUG=3D1 ./sample
+> > > Let's have a look:
+> > > =
 
-Cheers!
-David
+> > > > =
 
->=20
-> Regards,
-> GMK.
->=20
-> -----Original Message-----
-> From: jeremie.galarneau@gmail.com [mailto:jeremie.galarneau@gmail.com] On=
- Behalf Of J=E9r=E9mie Galarneau
-> Sent: Friday, December 06, 2013 11:23 PM
-> To: Manikandan Govindaswamy
-> Cc: Thibault, Daniel; lttng-dev@lists.lttng.org
-> Subject: Re: [lttng-dev] No trace files are generated for UST
->=20
-> Could you launch the session daemon in verbose mode and post the logs?
->=20
-> lttng-sessiond -vvv --verbose-consumer
->=20
-> On Fri, Dec 6, 2013 at 10:51 AM, Manikandan Govindaswamy
-> <magov@vestas.com> wrote:
-> > Yes, with that LD_PRELOAD sample able to run.
-> >
-> > root@/tmp/lttng-build-root/bin # ./lttng create app
-> > Session app created.
-> > Traces will be written in /root/lttng-traces/app-20131206-174935
-> > root@/tmp/lttng-build-root/bin # dmesg
-> > root@/tmp/lttng-build-root/bin # ./lttng enable-event -u -a
-> > All UST events are enabled in channel channel0
-> > root@/tmp/lttng-build-root/bin # ./lttng start
-> > Tracing started for session app
-> > root@/tmp/lttng-build-root/bin # cd ..
-> > root@/tmp/lttng-build-root # cd ..
-> > root@/tmp # LD_PRELOAD=3D/tmp/lttng-build-root/lib/liblttng-ust.so.0 ./=
-sample
-> > root@/tmp #
-> > root@/tmp #
-> > root@/tmp # cd lttng-build-root/
-> > root@/tmp/lttng-build-root # cd bin/
-> > root@/tmp/lttng-build-root/bin # ./lttng stop
-> > Waiting for data availability
-> > Tracing stopped for session app
-> > root@/tmp/lttng-build-root/bin # dmesg
-> > root@/tmp/lttng-build-root/bin # ./lttng destroy
-> > Session app destroyed
-> > root@/tmp/lttng-build-root/bin # cd /
-> > root@/ # cd root/
-> > root@~ # ls
-> > lttng-traces
-> > root@~ # cd lttng-traces/
-> > root@~/lttng-traces # ls
-> > root@~/lttng-traces #< no traces are generated>
-> >
-> > in ps -ef
-> >
-> > 28664 root       0:00 ./lttng-sessiond -vvv --consumerd64-path=3D/tmp/l=
-ttng-build-root/lib/lttng/libexec/lttng-consumerd
-> > 29027 root       0:00 lttng-consumerd --quiet -u --consumerd-cmd-sock /=
-var/run/lttng/ustconsumerd64/command --consumerd-err-sock /var/run/lttng/us=
-tconsumerd64/error
-> >
-> > Regards,
-> > GMK.
-> >
-> >
-> >
-> > -----Original Message-----
-> > From: Thibault, Daniel [mailto:Daniel.Thibault@drdc-rddc.gc.ca]
-> > Sent: Friday, December 06, 2013 9:14 PM
-> > To: Manikandan Govindaswamy; J=E9r=E9mie Galarneau
-> > Cc: lttng-dev@lists.lttng.org
-> > Subject: RE: [lttng-dev] No trace files are generated for UST
-> >
-> >> As I'm using the custom image on x86 machine, i've kept the lib in /tm=
-p/lttng-build-root/lib folder and this sample able to see the library as we=
-ll.
-> >>
-> >> And the same way I able to create the trace files for kernel but not f=
-or ust. There were no dmesg as well.
-> >>
-> >> [...]
-> >> root@/tmp # ldd sample
-> >>         linux-vdso.so.1 (0x00007fff2a135000)
-> >>         libdl.so.2 =3D> /lib64/libdl.so.2 (0x00007fe2cccb5000)
-> >>         liblttng-ust.so.0 =3D> /tmp/lttng-build-root/lib/liblttng-ust.=
-so.0 (0x00007fe2cca51000)
-> >>         [...]
-> >
-> >    Try running sample using:
-> >
-> > LD_PRELOAD=3D/tmp/lttng-build-root/lib/liblttng-ust.so.0 ./sample
-> >
-> >    If the LD_PRELOAD succeeds, we will know at least that liblttng-ust =
-is reachable by sample.
-> >
-> >    The modules have nothing to do with UST: kernel and user-space traci=
-ng are essentially independent features.
-> >
-> > Daniel U. Thibault
-> > Protection des syst=E8mes et contremesures (PSC) | Systems Protection &=
- Countermeasures (SPC)
-> > Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Criti=
-cal Cyber Security (MCCS)
-> > R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence=
- R&D Canada - Valcartier (DRDC Valcartier)
-> > 2459 route de la Bravoure
-> > Qu=E9bec QC  G3J 1X5
-> > CANADA
-> > Vox : (418) 844-4000 x4245
-> > Fax : (418) 844-4538
-> > NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-> > Gouvernement du Canada | Government of Canada <http://www.valcartier.dr=
-dc-rddc.gc.ca/>
->=20
->=20
->=20
-> --=20
-> J=E9r=E9mie Galarneau
+> > > > The Intel=AE Xeon PhiTM coprocessor memory model is the same as tha=
+t of
+> > > > the Intel=AE Pentium processor. The reads and writes always appear =
+in
+> > > > programmed order at the system bus (or the ring interconnect in the
+> > > > case of the Intel=AE Xeon PhiTM coprocessor); the exception being t=
+hat
+> > > > read misses are permitted to go ahead of buffered writes on the sys=
+tem
+> > > > bus when all the buffered writes are cached hits and are, therefore,
+> > > > not directed to the same address being accessed by the read miss.
+> > > =
+
+> > > OK, so reads can be reordered with respect to following writes.
+> > =
+
+> > That would be -preceding- writes, correct?
+> =
+
+> Oh, yes, I got it reversed.
+> =
+
+> > =
+
+> > > > As a consequence of its stricter memory ordering model, the Intel=
+=AE
+> > > > Xeon PhiTM coprocessor does not support the SFENCE, LFENCE, and MFE=
+NCE
+> > > > instructions that provide a more efficient way of controlling memory
+> > > > ordering on other Intel processors.
+> > > =
+
+> > > I guess sfence and lfence are indeed completely useless, because we o=
+nly
+> > > can ever care about ordering reads vs writes (mfence). But even the m=
+fence
+> > > is not there.
+> > =
+
+> > The usual approach is an atomic operation to a dummy location on the
+> > stack.  Is that the recommendation for Xeon Phi?
+> =
+
+> Yes, see below,
+> =
+
+> > =
+
+> > Either way, what should userspace RCU do to detect that it is being bui=
+lt
+> > on a Xeon Phi?  I am sure that Mathieu would welcome the relevant patch=
+es
+> > for this.  ;-)
+> > =
+
+> > > > While reads and writes from an Intel=AE Xeon PhiTM coprocessor appe=
+ar in
+> > > > program order on the system bus,
+> > > =
+
+> > > This part of the sentence seems misleading to me. Didn't the first
+> > > sentence state the opposite ? "the exception being that
+> > > read misses are permitted to go ahead of buffered writes on the system
+> > > bus when all the buffered writes are cached hits and are, therefore,
+> > > not directed to the same address being accessed by the read miss."
+> > > =
+
+> > > I'm probably missing something.
+> > =
+
+> > The trick might be that read misses are only allowed to pass write
+> > -hits-, which would mean that the system bus would have already seen
+> > the invalidate corresponding to the delayed write, and thus would
+> > have no evidence of any misorderingr
+> > =
+
+> > > > the compiler can still reorder
+> > > > unrelated memory operations while maintaining program order on a
+> > > > single Intel=AE Xeon PhiTM coprocessor (hardware thread). If softwa=
+re
+> > > > running on an Intel=AE Xeon PhiTM coprocessor is dependent on the o=
+rder
+> > > > of memory operations on another Intel=AE Xeon PhiTM coprocessor the=
+n a
+> > > > serializing instruction (e.g., CPUID, instruction with a LOCK prefi=
+x)
+> > > > between the memory operations is required to guarantee completion of
+> > > > all memory accesses issued prior to the serializing instruction bef=
+ore
+> > > > any subsequent memory operations are started.
+> > =
+
+> > OK, sounds like my guess of atomic instruction to dummy stack location
+> > is correct, or perhaps carrying out a nearby assignment using an
+> > xchg instruction.
+> =
+
+> Yes, or CPUID instruction seems OK too. We already use lock; addl on stack
+> in URCU for cases where fence instructions may not be available (x86-32).
+> =
+
+> > =
+
+> > > > (end of quote)
+> > > > =
+
+> > > > From what I understand, it is safe to leave out any run-time memory
+> > > > barriers, but we still need barriers that prevent the compiler from
+> > > > reordering (using __asm__ __volatile__ ("":::"memory")). In
+> > > > urcu/arch/x86.h, I see that when CONFIG_RCU_HAVE_FENCE is false,
+> > > > memory barriers result in both compile-time and run-time memory
+> > > > barriers:  __asm__ __volatile__ ("lock; addl $0,0(%%esp)":::"memory=
+").
+> > > > I guess this would work for the Phi, but the lock instruction does =
+not
+> > > > seem necessary.
+> > > =
+
+> > > Actually, either a cpuid (core serializing) instruction or lock-prefi=
+xed
+> > > instruction (serializing as a side-effect memory accesses) seems requ=
+ired.
+> > =
+
+> > It would certainly be safe.  One approach would be to keep it that way
+> > unless/until someone showed it to be unnecessary.
+> > =
+
+> > > > So, should we just set CONFIG_RCU_HAVE_FENCE to false when compiling
+> > > > for the Phi and go on with our lives, or should we add a specific
+> > > > config for this case?
+> > > =
+
+> > > I _think_ we could get away with this mapping:
+> > > =
+
+> > > smp_wmb() -> barrier()
+> > >   reasoning: write vs write are not reordered by the processor.
+> > > =
+
+> > > smp_rmb() -> barrier()
+> > >   reasoning: read vs read not reordered by processor.
+> > > =
+
+> > > smp_mb() -> __asm__ __volatile__ ("lock; addl $0,0(%%esp)":::"memory")
+> > >    or a cpuid instruction
+> > >   reasoning: cpu can reorder reads vs later writes.
+> > > =
+
+> > > smp_read_barrier_depends() -> nothing at all (not needed at any level=
+).
+> > =
+
+> > This should be safe, though I would argue for do { } while (0) for
+> > smp_read_barrier_depends().
+> =
+
+> Indeed.
+> =
+
+> > =
+
+> > > Interestingly enough, AFAIU, this seems to map to x86-TSO. Maybe that
+> > > instead
+> > > of defining a compiling option specifically for Xeon Phi, we could in=
+stead
+> > > define a x86-tso.h header variant in userspace RCU and use it in all =
+Intel
+> > > processors that map to TSO (hint: very vast majority). The only excep=
+tions
+> > > seems to be Pentium Pro (needing smp_rmb() -> lfence) and some Windch=
+ip
+> > > processors which could reorder stores (thus needing smp_wmb() -> sfen=
+ce).
+> > > =
+
+> > > Thoughts ?
+> > =
+
+> > As long as there is some reasonable way of detecting them.
+> =
+
+> The issue here is that I don't see any easy way to detect PPro and Windch=
+ip. AFAIU
+> it needs to be done dynamically (e.g. by reading /proc/cpuinfo), and this=
+ would
+> require code patching. We unfortunately don't have the infrastructure for=
+ this yet.
+> =
+
+> > =
+
+> > Actually, why not use the locked add of zero for all x86 systems for
+> > smp_mb()?
+> =
+
+> I suspect that perhaps on NUMA x86-64 systems, using locked add might have
+> more severe performance impact than mfence. Also, AFAIU, when compiling f=
+or
+> Xeon Phi, the compiler is targeting a specific sub-architecture
+> =
+
+>   "x$host_vendor" =3D=3D "xk1om"
+> =
+
+> So we might not need to find the minimum common denominator between x86-64
+> (generic) and Xeon Phi at all, since it has its own instruction set.
+
+The Linux kernel does a locked add for 32 bit and mfence for 64 bit.
+Xeon Phi appears to be a bit strange in that it does 64 bit, but not
+mfence.
+
+I guess I don't have an objection to a separate Xeon Phi build target,
+though.
+
+							Thanx, Paul
+
+> Thoughts ?
+> =
+
+> Thanks,
+> =
+
+> Mathieu
+> =
+
+> > =
+
+> > 							Thanx, Paul
+> > =
+
+> > > Thanks,
+> > > =
+
+> > > Mathieu
+> > > =
+
+> > > > =
+
+> > > > Simon
+> > > > =
+
+> > > > _______________________________________________
+> > > > lttng-dev mailing list
+> > > > lttng-dev@lists.lttng.org
+> > > > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> > > > =
+
+> > > =
+
+> > > --
+> > > Mathieu Desnoyers
+> > > EfficiOS Inc.
+> > > http://www.efficios.com
+> > > =
+
+> > =
+
+> > =
+
+> =
+
+> -- =
+
+> Mathieu Desnoyers
 > EfficiOS Inc.
 > http://www.efficios.com
-
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
-
---7AUc2qLy4jB3hD7Z
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.15 (GNU/Linux)
-
-iQF8BAEBAgBmBQJSpiyFXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
-ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
-MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02Gh8H/AzwZtZl/d0Vb6twtW9BZHMh
-mbtH9QvJL6Zj0nETAbXmJRe768qACKSVKR9N6uL0G1C84vh3gY9pE5Hyl3SUlUeu
-31Kr7kl6N7Qot4tH8Z5SSxIHZjMqt3lQtneTNIBTY5XJVyPKqWmjF7Qn2RwppVch
-zn6i+/DZ+PjT21Bqoe9uRWu5joQ6XrvAYnEpd0a14uONxk4hnA+WH+2MjJhqkRLk
-Jq0aGL/ioyGWcqjThroFyr8UG3REvdDjlHpodA7tROiqhBctF1HKC97VvkSA+pnx
-AUZ1jNHgeTpCNOTWb3Wl6guLJTDjstEsdlh8QyK8JYvQ8OdMlekNb8gSQWPACc0=
-=1GyT
------END PGP SIGNATURE-----
-
---7AUc2qLy4jB3hD7Z--
-
-
---===============1514022027==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1514022027==--
+> =
