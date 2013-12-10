@@ -1,16 +1,15 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: What are sys calls starting with compat?
-Date: Tue, 10 Dec 2013 01:55:48 +0000 (UTC)
-Message-ID: <2046508974.82289.1386640548755.JavaMail.zimbra__40678.0398371213$1386640606$gmane$org@efficios.com>
-References: <CAKQh6pjTETiXbDVxwkZeQ3Et8313StbiLTWZx7uV9P5YQ2zVuA@mail.gmail.com>
+From: Manikandan Govindaswamy <magov@vestas.com>
+Subject: lttng-ust works
+Date: Tue, 10 Dec 2013 13:42:51 +0800
+Message-ID: <6CFA219DE9CAD940989B83CA579159F91B43C4D05A__47504.2633632713$1386654226$gmane$org@SGSINEXC014.vestas.net>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1729788109=="
+Content-Type: multipart/mixed; boundary="===============1354741623=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail1.bemta14.messagelabs.com ([193.109.254.117])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1VqCY9-00080y-1j
-	for lttng-dev@lists.lttng.org; Mon, 09 Dec 2013 20:55:55 -0500
-In-Reply-To: <CAKQh6pjTETiXbDVxwkZeQ3Et8313StbiLTWZx7uV9P5YQ2zVuA@mail.gmail.com>
+	(envelope-from <magov@vestas.com>) id 1VqG5z-0001Ir-Oe
+	for lttng-dev@lists.lttng.org; Tue, 10 Dec 2013 00:43:01 -0500
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,86 +18,140 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Shariyar <syed.shariyar@gmail.com>
-Cc: lttng-dev@lists.lttng.org
+To: "jeremie.galarneau@efficios.com" <jeremie.galarneau@efficios.com>, "Thibault, Daniel (Daniel.Thibault@drdc-rddc.gc.ca)" <Daniel.Thibault@drdc-rddc.gc.ca>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============1729788109==
+--===============1354741623==
+Content-Language: en-US
 Content-Type: multipart/alternative;
-	boundary="----=_Part_82288_1627185296.1386640548754"
+	boundary="_000_6CFA219DE9CAD940989B83CA579159F91B43C4D05ASGSINEXC014ve_"
 
-------=_Part_82288_1627185296.1386640548754
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-
------ Original Message -----
-
-> From: "Shariyar" <syed.shariyar@gmail.com>
-> To: lttng-dev@lists.lttng.org
-> Sent: Friday, December 6, 2013 10:47:37 PM
-> Subject: [lttng-dev] What are sys calls starting with compat?
-
-> Can someone kindly explain the difference between system calls starting with
-> "compat" prefix and regular system calls?
-
-System calls with "compat" prefix are for e.g. 32-bit processes running on a 64-bit kernel: those processes are using a different system call table (ia32 for Intel) than 64-bit processes, and therefore those system calls are named "compat_*" by LTTng. 
-
-Thanks, 
-
-Mathieu 
-
-> Compat system calls do not appear in the system call table:
-> http://syscalls.kernelgrok.com/ . However, I did found them in the source
-> code of Linux.
-
-> Thanks,
-> Shariyar
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- 
-Mathieu Desnoyers 
-EfficiOS Inc. 
-http://www.efficios.com 
-
-------=_Part_82288_1627185296.1386640548754
-Content-Type: text/html; charset=utf-8
+--_000_6CFA219DE9CAD940989B83CA579159F91B43C4D05ASGSINEXC014ve_
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 
-<html><body><div style=3D"font-family: times new roman, new york, times, se=
-rif; font-size: 12pt; color: #000000"><hr id=3D"zwchr"><blockquote style=3D=
-"border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;=
-font-weight:normal;font-style:normal;text-decoration:none;font-family:Helve=
-tica,Arial,sans-serif;font-size:12pt;"><b>From: </b>"Shariyar" &lt;syed.sha=
-riyar@gmail.com&gt;<br><b>To: </b>lttng-dev@lists.lttng.org<br><b>Sent: </b=
->Friday, December 6, 2013 10:47:37 PM<br><b>Subject: </b>[lttng-dev] What a=
-re sys calls starting with compat?<br><div><br></div><div dir=3D"ltr"><div>=
-<div>Can someone kindly explain the difference between system calls startin=
-g with "compat" prefix and regular system calls?</div></div></div></blockqu=
-ote><div><br></div><div>System calls with "compat" prefix are for e.g. 32-b=
-it processes running on a 64-bit kernel: those processes are using a differ=
-ent system call table (ia32 for Intel) than 64-bit processes, and therefore=
- those system calls are named "compat_*" by LTTng.<br></div><div><br></div>=
-<div>Thanks,<br></div><div><br></div><div>Mathieu<br></div><div><br></div><=
-blockquote style=3D"border-left:2px solid #1010FF;margin-left:5px;padding-l=
-eft:5px;color:#000;font-weight:normal;font-style:normal;text-decoration:non=
-e;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><div dir=3D"ltr">=
-<div><div><div><br></div>&nbsp;Compat system calls do not appear in the sys=
-tem call table: <a href=3D"http://syscalls.kernelgrok.com/" target=3D"_blan=
-k">http://syscalls.kernelgrok.com/</a>. However, I did found them in the so=
-urce code of Linux.<br><br></div>Thanks,<br></div>Shariyar<br></div><br>___=
-____________________________________________<br>lttng-dev mailing list<br>l=
-ttng-dev@lists.lttng.org<br>http://lists.lttng.org/cgi-bin/mailman/listinfo=
-/lttng-dev<br></blockquote><div><br><br></div><div><br></div><div>-- <br></=
-div><div><span name=3D"x"></span>Mathieu Desnoyers<br>EfficiOS Inc.<br>http=
-://www.efficios.com<span name=3D"x"></span><br></div></div></body></html>
-------=_Part_82288_1627185296.1386640548754--
+Hi !,
 
 
---===============1729788109==
+
+I'm also able to run the easy-ust and generate the traces successfully if I=
+ create and run from an user not as root user.
+
+
+
+But  the kernel traces are generated fine for even root user but for ust it=
+ runs fine only with non-root user in my case.
+
+
+
+And the behavior is vice versa if I try the kernel tracer from user
+
+
+
+# lttng list -k
+
+Error: Unable to list kernel events: Tracing the kernel requires a root ltt=
+ng-sessiond daemon, as well as "tracing" group membership or root user ID f=
+or the lttng client.
+
+Error: Command error
+
+
+
+Will it be possible to run both kernel and ust to run and create the traces=
+ from root user itself? And if you could explain why ust expects the user?
+
+
+
+Regards,
+
+GMK
+
+
+--_000_6CFA219DE9CAD940989B83CA579159F91B43C4D05ASGSINEXC014ve_
+Content-Type: text/html; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+<html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-micr=
+osoft-com:office:office" xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
+xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http:=
+//www.w3.org/TR/REC-html40"><head><meta http-equiv=3DContent-Type content=
+=3D"text/html; charset=3Dus-ascii"><meta name=3DGenerator content=3D"Micros=
+oft Word 14 (filtered medium)"><style><!--
+/* Font Definitions */
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+/* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0in;
+	margin-bottom:.0001pt;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+a:link, span.MsoHyperlink
+	{mso-style-priority:99;
+	color:blue;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{mso-style-priority:99;
+	color:purple;
+	text-decoration:underline;}
+p.MsoPlainText, li.MsoPlainText, div.MsoPlainText
+	{mso-style-priority:99;
+	mso-style-link:"Plain Text Char";
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:11.0pt;
+	font-family:"Calibri","sans-serif";}
+span.EmailStyle17
+	{mso-style-type:personal-compose;
+	font-family:"Calibri","sans-serif";
+	color:windowtext;}
+span.PlainTextChar
+	{mso-style-name:"Plain Text Char";
+	mso-style-priority:99;
+	mso-style-link:"Plain Text";
+	font-family:"Calibri","sans-serif";}
+.MsoChpDefault
+	{mso-style-type:export-only;
+	font-family:"Calibri","sans-serif";}
+@page WordSection1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.0in 1.0in 1.0in;}
+div.WordSection1
+	{page:WordSection1;}
+--></style><!--[if gte mso 9]><xml>
+<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
+</xml><![endif]--><!--[if gte mso 9]><xml>
+<o:shapelayout v:ext=3D"edit">
+<o:idmap v:ext=3D"edit" data=3D"1" />
+</o:shapelayout></xml><![endif]--></head><body lang=3DEN-US link=3Dblue vli=
+nk=3Dpurple><div class=3DWordSection1><p class=3DMsoPlainText>Hi !,<o:p></o=
+:p></p><p class=3DMsoPlainText><o:p>&nbsp;</o:p></p><p class=3DMsoPlainText=
+>I&#8217;m also able to run the easy-ust and generate the traces successful=
+ly if I create and run from an user not as root user.<o:p></o:p></p><p clas=
+s=3DMsoPlainText><o:p>&nbsp;</o:p></p><p class=3DMsoPlainText>But&nbsp; the=
+ kernel traces are generated fine for even root user but for ust it runs fi=
+ne only with non-root user in my case.<o:p></o:p></p><p class=3DMsoPlainTex=
+t><o:p>&nbsp;</o:p></p><p class=3DMsoPlainText>And the behavior is vice ver=
+sa if I try the kernel tracer from user<o:p></o:p></p><p class=3DMsoPlainTe=
+xt><o:p>&nbsp;</o:p></p><p class=3DMsoPlainText># lttng list -k<o:p></o:p><=
+/p><p class=3DMsoPlainText>Error: Unable to list kernel events: Tracing the=
+ kernel requires a root lttng-sessiond daemon, as well as &quot;tracing&quo=
+t; group membership or root user ID for the lttng client.<o:p></o:p></p><p =
+class=3DMsoPlainText>Error: Command error<o:p></o:p></p><p class=3DMsoPlain=
+Text><o:p>&nbsp;</o:p></p><p class=3DMsoPlainText>Will it be possible to ru=
+n both kernel and ust to run and create the traces from root user itself? A=
+nd if you could explain why ust expects the user?<o:p></o:p></p><p class=3D=
+MsoPlainText><o:p>&nbsp;</o:p></p><p class=3DMsoPlainText>Regards,<o:p></o:=
+p></p><p class=3DMsoPlainText>GMK<o:p></o:p></p><p class=3DMsoNormal><o:p>&=
+nbsp;</o:p></p></div></body></html>=
+
+--_000_6CFA219DE9CAD940989B83CA579159F91B43C4D05ASGSINEXC014ve_--
+
+
+--===============1354741623==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -109,4 +162,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============1729788109==--
+--===============1354741623==--
