@@ -1,31 +1,16 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: [RELEASE] LTTng-Tools 2.4.0-rc2
-Date: Tue, 10 Dec 2013 14:33:12 -0500
-Message-ID: <20131210193312.GC7440__4308.3653240048$1386704056$gmane$org@thessa>
+From: Shariyar <syed.shariyar@gmail.com>
+Subject: Re: What are sys calls starting with compat?
+Date: Tue, 10 Dec 2013 11:39:40 -0800
+Message-ID: <CAKQh6pg_TxhCSB4=Q2ku6uEs=c_Tx=t3vDGKb0sV-ER4dMonhA__38907.6463565745$1386704740$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1321651904=="
+Content-Type: multipart/mixed; boundary="===============1923645945=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([144.76.53.219])
+Received: from mail-pb0-f46.google.com ([209.85.160.46])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1VqT3Y-0008CQ-Ve
-	for lttng-dev@lists.lttng.org; Tue, 10 Dec 2013 14:33:26 -0500
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by smtp.ini-tech.com (Postfix) with ESMTP id 026FBA1D7A
-	for <lttng-dev@lists.lttng.org>; Tue, 10 Dec 2013 19:33:10 +0000 (UTC)
-Received: from smtp.ini-tech.com ([127.0.0.1])
-	by localhost (smtp.ini-tech.com [127.0.0.1]) (amavisd-new, port 10032)
-	with ESMTP id Qqk6q4W75T1M for <lttng-dev@lists.lttng.org>;
-	Tue, 10 Dec 2013 19:33:09 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by smtp.ini-tech.com (Postfix) with ESMTP id 72596A1DA0
-	for <lttng-dev@lists.lttng.org>; Tue, 10 Dec 2013 19:33:09 +0000 (UTC)
-Received: from smtp.ini-tech.com ([127.0.0.1])
-	by localhost (smtp.ini-tech.com [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id Nw-TIzbgWsqw for <lttng-dev@lists.lttng.org>;
-	Tue, 10 Dec 2013 19:33:09 +0000 (UTC)
-Received: from thessa (cable-10.246.173-146.electronicbox.net [173.246.10.146])
-	by smtp.ini-tech.com (Postfix) with ESMTPSA id BC399A1D7A
-	for <lttng-dev@lists.lttng.org>; Tue, 10 Dec 2013 19:33:08 +0000 (UTC)
+	(envelope-from <syed.shariyar@gmail.com>) id 1VqT9m-0008Gy-SE
+	for lttng-dev@lists.lttng.org; Tue, 10 Dec 2013 14:39:52 -0500
+Received: by mail-pb0-f46.google.com with SMTP id md12so8363183pbc.33
+	for <lttng-dev@lists.lttng.org>; Tue, 10 Dec 2013 11:39:40 -0800 (PST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -34,100 +19,152 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
+--===============1923645945==
+Content-Type: multipart/alternative; boundary=047d7b5dbaac0240e504ed33464d
 
---===============1321651904==
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="DSayHWYpDlRfCAAQ"
-Content-Disposition: inline
+--047d7b5dbaac0240e504ed33464d
+Content-Type: text/plain; charset=ISO-8859-1
+
+What does sys_unknown mean and why doe it occur? Does it mean that LTTng
+can not find the name of system call?
+
+Regards,
+Shariyar
+------------------------------
+
+Message: 2
+Date: Tue, 10 Dec 2013 15:31:19 +0000 (UTC)
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: Daniel Thibault <Daniel.Thibault@drdc-rddc.gc.ca>
+Cc: lttng-dev@lists.lttng.org
+Subject: Re: [lttng-dev] What are sys calls starting with compat?
+Message-ID:
+        <1571110803.82672.1386689479225.JavaMail.zimbra@efficios.com>
+Content-Type: text/plain; charset=utf-8
+
+----- Original Message -----
+> From: "Daniel Thibault" <Daniel.Thibault@drdc-rddc.gc.ca>
+> To: lttng-dev@lists.lttng.org
+> Cc: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+> Sent: Tuesday, December 10, 2013 9:57:21 AM
+> Subject: Re: [lttng-dev] What are sys calls starting with compat?
+>
+> > Date: Tue, 10 Dec 2013 01:55:48 +0000 (UTC)
+> >
+> > System calls with "compat" prefix are for e.g. 32-bit processes running
+on
+> > a 64-bit kernel:
+> > those processes are using a different system call table (ia32 for Intel)
+> > than 64-bit processes,
+> > and therefore those system calls are named "compat_*" by LTTng.
+> >
+> > Mathieu
+>
+>    I presume the LTTng event names will also be prefixed with "compat_".
+
+Yes.
+
+>  For
+>    instance, "compat_sys_rmdir".
+
+Yes.
+
+>  Or would it be "sys_compat_rmdir"?
+
+No.
+
+>  And
+>    what of the exit_syscall and sys_unknown events?
+
+exit_syscall has no compat prefix as I recall.
+
+compat_sys_unknown.
+
+Thanks,
+
+Mathieu
+
+--047d7b5dbaac0240e504ed33464d
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div>What does sys_unknown mean and why doe it occur? Does=
+ it mean that LTTng can not find the name of system call?<br><br></div>Rega=
+rds,<br><div><div>Shariyar<br></div><div>------------------------------<br>
+
+<br>
+Message: 2<br>
+Date: <span tabindex=3D"0" class=3D""><span class=3D"">Tue, 10 Dec 2013 15:=
+31:19 +0000</span></span> (UTC)<br>
+From: Mathieu Desnoyers &lt;<a href=3D"mailto:mathieu.desnoyers@efficios.co=
+m">mathieu.desnoyers@efficios.com</a>&gt;<br>
+To: Daniel Thibault &lt;<a href=3D"mailto:Daniel.Thibault@drdc-rddc.gc.ca">=
+Daniel.Thibault@drdc-rddc.gc.ca</a>&gt;<br>
+Cc: <a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org<=
+/a><br>
+Subject: Re: [lttng-dev] What are sys calls starting with compat?<br>
+Message-ID:<br>
+=A0 =A0 =A0 =A0 &lt;<a href=3D"mailto:1571110803.82672.1386689479225.JavaMa=
+il.zimbra@efficios.com">1571110803.82672.1386689479225.JavaMail.zimbra@effi=
+cios.com</a>&gt;<br>
+Content-Type: text/plain; charset=3Dutf-8<br>
+<br>
+----- Original Message -----<br>
+&gt; From: &quot;Daniel Thibault&quot; &lt;<a href=3D"mailto:Daniel.Thibaul=
+t@drdc-rddc.gc.ca">Daniel.Thibault@drdc-rddc.gc.ca</a>&gt;<br>
+&gt; To: <a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng=
+.org</a><br>
+&gt; Cc: &quot;Mathieu Desnoyers&quot; &lt;<a href=3D"mailto:mathieu.desnoy=
+ers@efficios.com">mathieu.desnoyers@efficios.com</a>&gt;<br>
+&gt; Sent: Tuesday, December 10, 2013 9:57:21 AM<br>
+&gt; Subject: Re: [lttng-dev] What are sys calls starting with compat?<br>
+&gt;<br>
+&gt; &gt; Date: <span tabindex=3D"0" class=3D""><span class=3D"">Tue, 10 De=
+c 2013 01:55:48 +0000</span></span> (UTC)<br>
+&gt; &gt;<br>
+&gt; &gt; System calls with &quot;compat&quot; prefix are for e.g. 32-bit p=
+rocesses running on<br>
+&gt; &gt; a 64-bit kernel:<br>
+&gt; &gt; those processes are using a different system call table (ia32 for=
+ Intel)<br>
+&gt; &gt; than 64-bit processes,<br>
+&gt; &gt; and therefore those system calls are named &quot;compat_*&quot; b=
+y LTTng.<br>
+&gt; &gt;<br>
+&gt; &gt; Mathieu<br>
+&gt;<br>
+&gt; =A0 =A0I presume the LTTng event names will also be prefixed with &quo=
+t;compat_&quot;.<br>
+<br>
+Yes.<br>
+<br>
+&gt; =A0For<br>
+&gt; =A0 =A0instance, &quot;compat_sys_rmdir&quot;.<br>
+<br>
+Yes.<br>
+<br>
+&gt; =A0Or would it be &quot;sys_compat_rmdir&quot;?<br>
+<br>
+No.<br>
+<br>
+&gt; =A0And<br>
+&gt; =A0 =A0what of the exit_syscall and sys_unknown events?<br>
+<br>
+exit_syscall has no compat prefix as I recall.<br>
+<br>
+compat_sys_unknown.<br>
+<br>
+Thanks,<br>
+<br>
+Mathieu</div></div></div>
+
+--047d7b5dbaac0240e504ed33464d--
 
 
---DSayHWYpDlRfCAAQ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-Greetings everyone (including LTTng elves),
-
-The lttng-tools project provides a session daemon (lttng-sessiond) that acts as
-a tracing registry, the "lttng" command line for tracing control, a lttng-ctl
-library for tracing control and a lttng-relayd for network streaming.
-
-Here is the change log for the release candidate 2.
-
-2013-12-10 lttng-tools 2.4.0-rc2
-    * Fix: close connection on incompatible version check
-    * Fix: fields alignements in live protocol
-    * Tests: add regression test for Java JUL support
-    * Fix: possible use after free
-    * Fix: remove unused code in session daemon
-    * Fix: string format with unsigned value
-    * Fix: remove useless assert
-    * Fix: bad logical check of error codes
-    * Fix: resource leak in enable-event command
-    * Fix: unchecked return value in ust app delete
-    * Fix: dereference after null check in UST registry
-    * Fix: Resource leak in ust registry
-    * Fix: backported from urcu commit 92af1a30
-    * Tests: fix racy tests and misleading output messages
-    * Tests: fix bad argument parsing in test app
-    * Fix: remove assert on fd in the read/write layer
-    * Fix: missing lock/unlock when sending index
-    * Fix: update back the metadata len sent on failure
-    * Fix: don't fail on push metadata if no channel
-    * Rename LTTng index in CTF index
-    * Fix: set the enable all event command type
-    * Fix: implicit conversion of enum types in sessiond
-    * Fix: implicit conversion of enum types in consumer
-    * Fix: comparison of unsigned enum expression >= 0
-    * Fix: comparison of unsigned value agains < 0
-    * Fix: create a fast and a long UST snapshot test
-    * Tests: fix racy UST snapshot post mortem test
-    * Tests: remove useless sleep when spawning sessiond
-    * Add travis-ci configuration file
-    * Add libuuid as dependency in README
-    * Tests: add valid test cases to test_utils_expand_path
-    * Tests: add symlink tests for test_utils_expand_path
-    * Fix: utils_expand_path now works for paths that ends with '/.' or '/..'
-    * Fix: comment indentation
-    * Add missing copyright to utils.c
-    * Fix: use non block waitpid to lookup child state
-
-Please report ANY issues to bugs.lttng.org or through that mailing list.
-
-Using it is testing it!
-
-Project website: http://lttng.org/lttng2.0
-Download link:
-http://lttng.org/files/lttng-tools/lttng-tools-2.4.0-rc2.tar.bz2 (for
-the PGP signature, same file with .asc appended)
-
-Cheers!
-David
-
---DSayHWYpDlRfCAAQ
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.15 (GNU/Linux)
-
-iQF8BAEBAgBmBQJSp2x3XxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
-ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
-MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I027agH/1QYe4fRRoXkopQSJVk0SQjt
-lr/sacU0r39DxTgkklr2kWL0WvMLwMlHRb0f6wQXlyPvKerhEwNtvPBG3CmQ0zhd
-LWyM4Cdy5BBv/ay3IhvA7bsYwFeUv6f4gHKmDsjvd4Ja3jkxX7hf5W0gbUcbf04U
-PgdTe3ANh1V1kQ5HIaqB8XwKqsapqOzGvXjqbIXm4ab6LDPv5L/eXBRBPFT1rtEn
-M1TunIeaYTobvP7z84zi21SrAVXGj9eYNNLfJwwKwiTGD16DqkOyU+7QpXDG/NjL
-RMQ4QF16UvAlwemgwbCNfwC/Z3zEEz2uIyCKYhfD3AoW7t/EcFyfveCSE97XZZQ=
-=ytfd
------END PGP SIGNATURE-----
-
---DSayHWYpDlRfCAAQ--
-
-
---===============1321651904==
+--===============1923645945==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -138,4 +175,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============1321651904==--
+--===============1923645945==--
