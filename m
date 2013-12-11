@@ -1,15 +1,16 @@
 From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Subject: Re: What are sys calls starting with compat?
-Date: Wed, 11 Dec 2013 14:23:15 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD267B364D__42936.1873692416$1386771854$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+Subject: Re: auto generation of .c and .h files for a userspace
+ app
+Date: Wed, 11 Dec 2013 14:23:18 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD267B3658__17980.4567284465$1386771865$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1Vqkh2-0000ST-Qe
-	for lttng-dev@lists.lttng.org; Wed, 11 Dec 2013 09:23:19 -0500
+	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1Vqkh6-0000SZ-43
+	for lttng-dev@lists.lttng.org; Wed, 11 Dec 2013 09:23:22 -0500
 Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -20,20 +21,24 @@ List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
-Cc: Shariyar <syed.shariyar@gmail.com>
+Cc: Anand Neeli <anand.neeli@gmail.com>
 List-Id: lttng-dev@lists.lttng.org
 
-> > Date: Tue, 10 Dec 2013 11:39:40 -0800
-> > What does sys_unknown mean and why does it occur? Does it mean that LTT=
-ng cannot find the name of a system call?
-> >
-> Yes. It means the ID of the system call is unknown to LTTng (e.g. kernel =
-newer than LTTng system call instrumentation). =
+> Date: Wed, 11 Dec 2013 11:02:57 +0530
+>
+> Is there a script/program which can be used to auto-generate the required=
+ .c and .h files required for lttng-ust.
+> The script/program should parse all the .c files in a directory and gener=
+ate corresponding .c and .h files. And this should be run before the build =
+of app.
+>
+> This would make app developers life easy and will be very useful for on t=
+he fly changes.
+>
+> Will be great if someone can all add more details related to this topic o=
+r give me pointers if this is already discussed.
 
-
-   You can also get sys_ni_syscall (and compat_sys_ni_syscall) when the sys=
-tem call is even more unknown -that is to say, when the system call number =
-cannot be found in the system call dispatch table.
+   Do you mean lttng_gen_tp?
 
 Daniel U. Thibault
 Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
