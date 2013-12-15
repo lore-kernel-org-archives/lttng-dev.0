@@ -1,19 +1,19 @@
 From: Francis Giraldeau <francis.giraldeau@gmail.com>
-Subject: Re: Userspace Tracing
-Date: Sun, 15 Dec 2013 17:36:58 -0500
-Message-ID: <52AE2F0A.7000400__11377.8428444222$1387148108$gmane$org@gmail.com>
-References: <CAN7pGtv367co+mh3-m8+=W437+_rQk8oUoqpK_sE_MrGFxMLxA@mail.gmail.com>
+Subject: Re: Viewing existing kernel tracepoints with LTTng
+Date: Sun, 15 Dec 2013 17:49:40 -0500
+Message-ID: <52AE3204.2030602__5244.5110668943$1387148171$gmane$org@gmail.com>
+References: <DUB116-W92AC0AF296A377773DFA7CD5D90@phx.gbl>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qc0-f177.google.com ([209.85.216.177])
+Received: from mail-qe0-f43.google.com ([209.85.128.43])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <francis.giraldeau@gmail.com>) id 1VsKZn-0006lx-IP
-	for lttng-dev@lists.lttng.org; Sun, 15 Dec 2013 17:54:21 -0500
-Received: by mail-qc0-f177.google.com with SMTP id m20so3117974qcx.22
-	for <lttng-dev@lists.lttng.org>; Sun, 15 Dec 2013 14:54:14 -0800 (PST)
-In-Reply-To: <CAN7pGtv367co+mh3-m8+=W437+_rQk8oUoqpK_sE_MrGFxMLxA@mail.gmail.com>
+	(envelope-from <francis.giraldeau@gmail.com>) id 1VsKZr-0006ly-Ak
+	for lttng-dev@lists.lttng.org; Sun, 15 Dec 2013 17:54:28 -0500
+Received: by mail-qe0-f43.google.com with SMTP id 2so3320153qeb.16
+	for <lttng-dev@lists.lttng.org>; Sun, 15 Dec 2013 14:54:17 -0800 (PST)
+In-Reply-To: <DUB116-W92AC0AF296A377773DFA7CD5D90@phx.gbl>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,34 +22,33 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Michael Steppe <msteppe91@gmail.com>, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Amit Schreiber <gnobal@outlook.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Le 2013-12-13 14:53, Michael Steppe a =E9crit :
-> Hello!
+Le 2013-12-15 09:39, Amit Schreiber a =E9crit :
+> Hi,
 > =
 
-> I have a question regarding userspace tracing. I am working on a project
-> on which we have used LTTng in the past (prior to LTTng 2.0). In order
-> to see how our application was running in coordination with the kernel,
-> we created a .h file in which we would append strings to
-> "/mnt/debugfs/ltt/write_event" in order to see our application timing in
-> the LTTng viewer in Eclipse.
+> I started integrating LTTng into my code, and thought that existing trace=
+points (which are visible with perf) will be immediately visible to LTTng. =
+I obviously misunderstood or am doing something wrong.
 > =
 
-> Since then we have updated to LTTng 2.0.4. It would be very hard for us
-> to change to a different version at the current time. I have noticed
-> that /mnt/debugfs/ltt/write_event no longer exists in 2.0.4 and was
-> wondering (crossing my fingers) that this location has simply changed or
-> is there a new filesystem that you use?
+> What's the correct way to have existing perf tracepoints seen by LTTng?
 
-This feature has not been included in lttng 2. I think that this feature
-is useful, and I tried last year to bring it back. It was close to be
-merged as a separate proc file, but someone pointed that it would be
-better to profile the file with debugfs. I haven't work on it since
-then. I may give it another spin later, but I can't right now.
+LTTng adds probes to existing tracepoints in the kernel. Under the hood,
+LTTng probe modules call tracepoint_probe_register() to add a callback
+when the tracepoint is enabled. You can thus hook to any tracepoint
+defined in the kernel, provided that the probe function have the right
+signature. In the case of LTTng, the probe writes an event in the ring
+buffer.
 
-http://lists.lttng.org/pipermail/lttng-dev/2012-July/018210.html
+To make things safer and add type checking at compile-time, LTTng
+defines the probe code with macros. In fact, all the module's probe code
+is generated. Each tracepoint in the kernel must also have an LTTng
+probe to be listed, and this is the proper way to do it. For the detail,
+refer to the "probe" directory of lttng-modules.
 
 Cheers,
 
