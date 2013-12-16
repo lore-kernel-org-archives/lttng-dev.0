@@ -1,18 +1,18 @@
-From: "Woegerer, Paul" <Paul_Woegerer@mentor.com>
-Subject: Re: [PATCH] Fix: baddr_statedump tracepoint registration
-Date: Mon, 16 Dec 2013 16:05:17 +0100
-Message-ID: <52AF16AD.2010807__9229.50089811838$1387206407$gmane$org@mentor.com>
-References: <1386940322-9894-1-git-send-email-paul_woegerer@mentor.com>
-	<1960820379.86137.1387201178199.JavaMail.zimbra@efficios.com>
+From: Amit Schreiber <gnobal@outlook.com>
+Subject: Re: Viewing existing kernel tracepoints with LTTng
+Date: Mon, 16 Dec 2013 08:14:44 +0200
+Message-ID: <DUB116-W138810902A63C341036F5B2D5D80__13314.7354041741$1387212842$gmane$org@phx.gbl>
+References: <DUB116-W92AC0AF296A377773DFA7CD5D90@phx.gbl>,
+	<52AE3204.2030602@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from relay1.mentorg.com ([192.94.38.131])
+Received: from dub0-omc3-s17.dub0.hotmail.com ([157.55.2.26])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Paul_Woegerer@mentor.com>) id 1VsZk1-00068x-UV
-	for lttng-dev@lists.lttng.org; Mon, 16 Dec 2013 10:06:00 -0500
-In-Reply-To: <1960820379.86137.1387201178199.JavaMail.zimbra@efficios.com>
+	(envelope-from <gnobal@outlook.com>) id 1VsRS6-0001rm-3Y
+	for lttng-dev@lists.lttng.org; Mon, 16 Dec 2013 01:14:52 -0500
+In-Reply-To: <52AE3204.2030602@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,191 +21,44 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: Francis Giraldeau <francis.giraldeau@gmail.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Works as expected.
+----------------------------------------
+> Date: Sun, 15 Dec 2013 17:49:40 -0500
+> From: francis.giraldeau@gmail.com
+> To: gnobal@outlook.com
+> CC: lttng-dev@lists.lttng.org
+> Subject: Re: [lttng-dev] Viewing existing kernel tracepoints with LTTng
+>
+> Le 2013-12-15 09:39, Amit Schreiber a =E9crit :
+>> Hi,
+>>
+>> I started integrating LTTng into my code, and thought that existing trac=
+epoints (which are visible with perf) will be immediately visible to LTTng.=
+ I obviously misunderstood or am doing something wrong.
+>>
+>> What's the correct way to have existing perf tracepoints seen by LTTng?
+>
+> LTTng adds probes to existing tracepoints in the kernel. Under the hood,
+> LTTng probe modules call tracepoint_probe_register() to add a callback
+> when the tracepoint is enabled. You can thus hook to any tracepoint
+> defined in the kernel, provided that the probe function have the right
+> signature. In the case of LTTng, the probe writes an event in the ring
+> buffer.
+>
+> To make things safer and add type checking at compile-time, LTTng
+> defines the probe code with macros. In fact, all the module's probe code
+> is generated. Each tracepoint in the kernel must also have an LTTng
+> probe to be listed, and this is the proper way to do it. For the detail,
+> refer to the "probe" directory of lttng-modules.
+>
+> Cheers,
+>
+> Francis
+>
 
-Thanks,
-Paul
+Thanks a lot, Francis. I appreciate the help and quick response.
 
-On 12/16/2013 02:39 PM, Mathieu Desnoyers wrote:
-> Hi Paul,
->
-> I rewrote the patch to use a reference counting approach instead.
-> The effect should be the same. Here is the commit:
->
-> commit f0cc794d37abf59b4b8079612c7aa03dc305d92f
-> Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> Date:   Mon Dec 16 08:36:06 2013 -0500
->
->     Fix: baddr_statedump tracepoint registration
->     
->     Make sure that the ust_baddr_statedump probe is registered prior to
->     using the tracepoint in lttng_ust_baddr_statedump(). This fix solves the
->     issue that in rare cases the very first ust_baddr_statedump events were
->     missing.
->     
->     Use a reference counting approach that allows constructors/destructors
->     of the probe to be called many times, as long as the number of calls to
->     constructor matches the number of calls to destructor.
->     
->     Reported-by: Paul Woegerer <paul_woegerer@mentor.com>
->     Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
->
-> Thanks,
->
-> Mathieu
->
->
-> ----- Original Message -----
->> From: "Paul Woegerer" <paul_woegerer@mentor.com>
->> To: "mathieu desnoyers" <mathieu.desnoyers@efficios.com>, lttng-dev@lists.lttng.org
->> Sent: Friday, December 13, 2013 8:12:02 AM
->> Subject: [PATCH] Fix: baddr_statedump tracepoint registration
->>
->> Also make sure that the ust_baddr_statedump probe get registered prior
->> to using the tracepoint in lttng_ust_baddr_statedump(). This fix solves
->> the issue that in rare cases the very first ust_baddr_statedump events
->> were missing.
->>
->> Signed-off-by: Paul Woegerer <paul_woegerer@mentor.com>
->> ---
->>  include/lttng/ust-tracepoint-event.h | 10 ++++++++++
->>  liblttng-ust/Makefile.am             |  1 -
->>  liblttng-ust/lttng-ust-baddr.c       | 15 +++++++++++++++
->>  liblttng-ust/ust_baddr_statedump.c   | 22 ----------------------
->>  4 files changed, 25 insertions(+), 23 deletions(-)
->>  delete mode 100644 liblttng-ust/ust_baddr_statedump.c
->>
->> diff --git a/include/lttng/ust-tracepoint-event.h
->> b/include/lttng/ust-tracepoint-event.h
->> index be58030..b48cd74 100644
->> --- a/include/lttng/ust-tracepoint-event.h
->> +++ b/include/lttng/ust-tracepoint-event.h
->> @@ -694,6 +694,10 @@ static struct lttng_probe_desc
->> _TP_COMBINE_TOKENS(__probe_desc___, TRACEPOINT_PR
->>   * linking the probe statically.
->>   */
->>  
->> +#ifndef BADDR_EXPLICIT_PROBE_REGISTER
->> +#define BADDR_EXPLICIT_PROBE_REGISTER do {} while (0)
->> +#endif
->> +
->>  /* Reset all macros within TRACEPOINT_EVENT */
->>  #include <lttng/ust-tracepoint-event-reset.h>
->>  static void lttng_ust_notrace __attribute__((constructor))
->> @@ -703,6 +707,8 @@ _TP_COMBINE_TOKENS(__lttng_events_init__,
->> TRACEPOINT_PROVIDER)(void)
->>  {
->>  	int ret;
->>  
->> +	BADDR_EXPLICIT_PROBE_REGISTER;
->> +
->>  	/*
->>  	 * __tracepoint_provider_check_ ## TRACEPOINT_PROVIDER() is a
->>  	 * static inline function that ensures every probe PROVIDER
->> @@ -724,7 +730,11 @@ _TP_COMBINE_TOKENS(__lttng_events_exit__,
->> TRACEPOINT_PROVIDER)(void);
->>  static void
->>  _TP_COMBINE_TOKENS(__lttng_events_exit__, TRACEPOINT_PROVIDER)(void)
->>  {
->> +	BADDR_EXPLICIT_PROBE_REGISTER;
->> +
->>  	lttng_probe_unregister(&_TP_COMBINE_TOKENS(__probe_desc___,
->>  	TRACEPOINT_PROVIDER));
->>  }
->>  
->> +#undef BADDR_EXPLICIT_PROBE_REGISTER
->> +
->>  int _TP_COMBINE_TOKENS(__tracepoint_provider_, TRACEPOINT_PROVIDER);
->> diff --git a/liblttng-ust/Makefile.am b/liblttng-ust/Makefile.am
->> index b165c32..e9022d8 100644
->> --- a/liblttng-ust/Makefile.am
->> +++ b/liblttng-ust/Makefile.am
->> @@ -37,7 +37,6 @@ liblttng_ust_runtime_la_SOURCES = \
->>  	lttng-hash-helper.h \
->>  	lttng-ust-baddr.c \
->>  	lttng-ust-baddr.h \
->> -	ust_baddr_statedump.c \
->>  	ust_baddr_statedump.h \
->>  	tracepoint-internal.h \
->>  	clock.h \
->> diff --git a/liblttng-ust/lttng-ust-baddr.c b/liblttng-ust/lttng-ust-baddr.c
->> index b7843e2..d39e9e8 100644
->> --- a/liblttng-ust/lttng-ust-baddr.c
->> +++ b/liblttng-ust/lttng-ust-baddr.c
->> @@ -35,6 +35,15 @@
->>  #include "lttng-tracer-core.h"
->>  #include "lttng-ust-baddr.h"
->>  
->> +#define TRACEPOINT_CREATE_PROBES
->> +#define TP_SESSION_CHECK
->> +static int explicit_probe_register;
->> +#define BADDR_EXPLICIT_PROBE_REGISTER \
->> +do { \
->> +	if (!explicit_probe_register) \
->> +		return; \
->> +} while (0)
->> +
->>  #define TRACEPOINT_DEFINE
->>  #include "ust_baddr_statedump.h"
->>  
->> @@ -199,10 +208,16 @@ void lttng_ust_baddr_statedump_init(void)
->>  {
->>  	__tracepoints__init();
->>  	__tracepoints__ptrs_init();
->> +	explicit_probe_register = 1;
->> +	__lttng_events_init__ust_baddr_statedump();
->> +	explicit_probe_register = 0;
->>  }
->>  
->>  void lttng_ust_baddr_statedump_destroy(void)
->>  {
->> +	explicit_probe_register = 1;
->> +	__lttng_events_exit__ust_baddr_statedump();
->> +	explicit_probe_register = 0;
->>  	__tracepoints__ptrs_destroy();
->>  	__tracepoints__destroy();
->>  }
->> diff --git a/liblttng-ust/ust_baddr_statedump.c
->> b/liblttng-ust/ust_baddr_statedump.c
->> deleted file mode 100644
->> index 9097008..0000000
->> --- a/liblttng-ust/ust_baddr_statedump.c
->> +++ /dev/null
->> @@ -1,22 +0,0 @@
->> -/*
->> - * Copyright (C) 2013  Paul Woegerer <paul_woegerer@mentor.com>
->> - *
->> - * This library is free software; you can redistribute it and/or
->> - * modify it under the terms of the GNU Lesser General Public
->> - * License as published by the Free Software Foundation; either
->> - * version 2.1 of the License, or (at your option) any later version.
->> - *
->> - * This library is distributed in the hope that it will be useful,
->> - * but WITHOUT ANY WARRANTY; without even the implied warranty of
->> - * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
->> - * Lesser General Public License for more details.
->> - *
->> - * You should have received a copy of the GNU Lesser General Public
->> - * License along with this library; if not, write to the Free Software
->> - * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
->> USA
->> - */
->> -
->> -#define _LGPL_SOURCE
->> -#define TRACEPOINT_CREATE_PROBES
->> -#define TP_SESSION_CHECK
->> -#include "ust_baddr_statedump.h"
->> --
->> 1.8.5
->>
->>
-
-
--- 
-Paul Woegerer, SW Development Engineer
-Sourcery Analyzer <http://go.mentor.com/sourceryanalyzer>
-Mentor Graphics, Embedded Software Division
+Amit 		 	   		  =
