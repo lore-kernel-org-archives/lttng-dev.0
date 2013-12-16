@@ -1,21 +1,17 @@
-From: Ming Liu <ming.liu@windriver.com>
-Subject: [PATCH] x86-trace-clock/preempt_rt: move async_tsc_lock
-	out of atomic condition
-Date: Mon, 16 Dec 2013 14:23:46 +0800
-Message-ID: <1387175026-22197-1-git-send-email-ming.liu__44360.1412502632$1387175077$gmane$org@windriver.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH] Fix: baddr_statedump tracepoint registration
+Date: Mon, 16 Dec 2013 13:39:38 +0000 (UTC)
+Message-ID: <1960820379.86137.1387201178199.JavaMail.zimbra__5150.97985412485$1387201234$gmane$org@efficios.com>
+References: <1386940322-9894-1-git-send-email-paul_woegerer@mentor.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail1.windriver.com ([147.11.146.13])
+Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Ming.Liu@windriver.com>) id 1VsRat-0001w7-3d
-	for lttng-dev@lists.lttng.org; Mon, 16 Dec 2013 01:23:56 -0500
-Received: from ALA-HCA.corp.ad.wrs.com (ala-hca.corp.ad.wrs.com
-	[147.11.189.40])
-	by mail1.windriver.com (8.14.5/8.14.5) with ESMTP id rBG6Nnsu011244
-	(version=TLSv1/SSLv3 cipher=AES128-SHA bits=128 verify=FAIL)
-	for <lttng-dev@lists.lttng.org>; Sun, 15 Dec 2013 22:23:49 -0800 (PST)
+	(envelope-from <compudj@efficios.com>) id 1VsYOZ-0005T4-LE
+	for lttng-dev@lists.lttng.org; Mon, 16 Dec 2013 08:39:43 -0500
+In-Reply-To: <1386940322-9894-1-git-send-email-paul_woegerer@mentor.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,114 +20,184 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Paul Woegerer <paul_woegerer@mentor.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-The following call trace is observed in preempt_rt:
-------
-BUG: sleeping function called from invalid context at
-/opt/platforms/atom_prj/build/linux/kernel/rtmutex.c:707
-pcnt: 0 0 in_atomic(): 0, irqs_disabled(): 1, pid: 5928, name: kstop/1
-Pid: 5928, comm: kstop/1 Tainted: P           2.6.38.6-rt_preempt_rt #1
-Call Trace:
-[<c102d101>] __might_sleep+0xe1/0x100
-[<c15a6cb7>] rt_spin_lock+0x27/0x70
-[<c159e4e7>] hotcpu_callback+0x13/0x102
-[<c1060155>] notifier_call_chain+0x35/0x70
-[<c106023a>] raw_notifier_call_chain+0x1a/0x20
-[<c15969ff>] take_cpu_down+0x2f/0x60
-[<c107ef25>] stop_cpu+0x95/0xd0
-[<c1056550>] worker_thread+0x110/0x230
-[<c15a4f9b>] ? __schedule+0x22b/0x6c0
-[<c106ccd2>] ? rt_mutex_adjust_prio+0x32/0x50
-[<c107ee90>] ? stop_cpu+0x0/0xd0
-[<c105aa30>] ? autoremove_wake_function+0x0/0x40
-[<c1056440>] ? worker_thread+0x0/0x230
-[<c105a71c>] kthread+0x6c/0x80
-[<c105a6b0>] ? kthread+0x0/0x80
-[<c1003336>] kernel_thread_helper+0x6/0x30
-CPU 1 is now offline
-------
+Hi Paul,
 
-To track it as follows:
-------
-stop_cpu()
-  local_irq_disable()
-  take_cpu_down()
-    raw_notifier_call_chain() <-- CPU_DYING
-          |
-          + hotcpu_callback()
-            {
-                spin_lock(&async_tsc_lock);
-                ......
-                spin_unlock(&async_tsc_lock);
-            }
-------
+I rewrote the patch to use a reference counting approach instead.
+The effect should be the same. Here is the commit:
 
-Since spin_lock is actually rt_spin_lock under preempt_rt, a call trace
-will be issued when it's trying to hold async_tsc_lock when interrupts
-are disabled.
+commit f0cc794d37abf59b4b8079612c7aa03dc305d92f
+Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Date:   Mon Dec 16 08:36:06 2013 -0500
 
-The fix is to move async_tsc_lock into switch cases, allow the CPU_DYING
-handling fall through without holding the spin lock.
+    Fix: baddr_statedump tracepoint registration
+    
+    Make sure that the ust_baddr_statedump probe is registered prior to
+    using the tracepoint in lttng_ust_baddr_statedump(). This fix solves the
+    issue that in rare cases the very first ust_baddr_statedump events were
+    missing.
+    
+    Use a reference counting approach that allows constructors/destructors
+    of the probe to be called many times, as long as the number of calls to
+    constructor matches the number of calls to destructor.
+    
+    Reported-by: Paul Woegerer <paul_woegerer@mentor.com>
+    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 
-Signed-off-by: Ming Liu <ming.liu@windriver.com>
----
- arch/x86/kernel/trace-clock.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+Thanks,
 
-diff --git a/arch/x86/kernel/trace-clock.c b/arch/x86/kernel/trace-clock.c
-index 47539e2..a7a51ce 100644
---- a/arch/x86/kernel/trace-clock.c
-+++ b/arch/x86/kernel/trace-clock.c
-@@ -145,7 +145,6 @@ static int __cpuinit hotcpu_callback(struct notifier_block *nb,
- 	unsigned int hotcpu = (unsigned long)hcpu;
- 	int cpu;
- 
--	spin_lock(&async_tsc_lock);
- 	switch (action) {
- 	case CPU_UP_PREPARE:
- 	case CPU_UP_PREPARE_FROZEN:
-@@ -159,6 +158,7 @@ static int __cpuinit hotcpu_callback(struct notifier_block *nb,
- 		 * the CPU_ONLINE notification. It's just there to give a
- 		 * maximum bound to the TSC error.
- 		 */
-+		spin_lock(&async_tsc_lock);
- 		if (async_tsc_refcount && !trace_clock_is_sync()) {
- 			if (!async_tsc_enabled) {
- 				async_tsc_enabled = 1;
-@@ -168,12 +168,15 @@ static int __cpuinit hotcpu_callback(struct notifier_block *nb,
- 				enable_trace_clock(hotcpu);
- 			}
- 		}
-+		spin_unlock(&async_tsc_lock);
- 		break;
- #ifdef CONFIG_HOTPLUG_CPU
- 	case CPU_UP_CANCELED:
- 	case CPU_UP_CANCELED_FROZEN:
-+		spin_lock(&async_tsc_lock);
- 		if (!async_tsc_refcount && num_online_cpus() == 1)
- 			set_trace_clock_is_sync(1);
-+		spin_unlock(&async_tsc_lock);
- 		break;
- 	case CPU_DEAD:
- 	case CPU_DEAD_FROZEN:
-@@ -182,14 +185,15 @@ static int __cpuinit hotcpu_callback(struct notifier_block *nb,
- 		 * active even if we go back to a synchronized state (1 CPU)
- 		 * because the CPU left could be the one lagging behind.
- 		 */
-+		spin_lock(&async_tsc_lock);
- 		if (async_tsc_refcount && async_tsc_enabled)
- 			disable_trace_clock(hotcpu);
- 		if (!async_tsc_refcount && num_online_cpus() == 1)
- 			set_trace_clock_is_sync(1);
-+		spin_unlock(&async_tsc_lock);
- 		break;
- #endif /* CONFIG_HOTPLUG_CPU */
- 	}
--	spin_unlock(&async_tsc_lock);
- 
- 	return NOTIFY_OK;
- }
+Mathieu
+
+
+----- Original Message -----
+> From: "Paul Woegerer" <paul_woegerer@mentor.com>
+> To: "mathieu desnoyers" <mathieu.desnoyers@efficios.com>, lttng-dev@lists.lttng.org
+> Sent: Friday, December 13, 2013 8:12:02 AM
+> Subject: [PATCH] Fix: baddr_statedump tracepoint registration
+> 
+> Also make sure that the ust_baddr_statedump probe get registered prior
+> to using the tracepoint in lttng_ust_baddr_statedump(). This fix solves
+> the issue that in rare cases the very first ust_baddr_statedump events
+> were missing.
+> 
+> Signed-off-by: Paul Woegerer <paul_woegerer@mentor.com>
+> ---
+>  include/lttng/ust-tracepoint-event.h | 10 ++++++++++
+>  liblttng-ust/Makefile.am             |  1 -
+>  liblttng-ust/lttng-ust-baddr.c       | 15 +++++++++++++++
+>  liblttng-ust/ust_baddr_statedump.c   | 22 ----------------------
+>  4 files changed, 25 insertions(+), 23 deletions(-)
+>  delete mode 100644 liblttng-ust/ust_baddr_statedump.c
+> 
+> diff --git a/include/lttng/ust-tracepoint-event.h
+> b/include/lttng/ust-tracepoint-event.h
+> index be58030..b48cd74 100644
+> --- a/include/lttng/ust-tracepoint-event.h
+> +++ b/include/lttng/ust-tracepoint-event.h
+> @@ -694,6 +694,10 @@ static struct lttng_probe_desc
+> _TP_COMBINE_TOKENS(__probe_desc___, TRACEPOINT_PR
+>   * linking the probe statically.
+>   */
+>  
+> +#ifndef BADDR_EXPLICIT_PROBE_REGISTER
+> +#define BADDR_EXPLICIT_PROBE_REGISTER do {} while (0)
+> +#endif
+> +
+>  /* Reset all macros within TRACEPOINT_EVENT */
+>  #include <lttng/ust-tracepoint-event-reset.h>
+>  static void lttng_ust_notrace __attribute__((constructor))
+> @@ -703,6 +707,8 @@ _TP_COMBINE_TOKENS(__lttng_events_init__,
+> TRACEPOINT_PROVIDER)(void)
+>  {
+>  	int ret;
+>  
+> +	BADDR_EXPLICIT_PROBE_REGISTER;
+> +
+>  	/*
+>  	 * __tracepoint_provider_check_ ## TRACEPOINT_PROVIDER() is a
+>  	 * static inline function that ensures every probe PROVIDER
+> @@ -724,7 +730,11 @@ _TP_COMBINE_TOKENS(__lttng_events_exit__,
+> TRACEPOINT_PROVIDER)(void);
+>  static void
+>  _TP_COMBINE_TOKENS(__lttng_events_exit__, TRACEPOINT_PROVIDER)(void)
+>  {
+> +	BADDR_EXPLICIT_PROBE_REGISTER;
+> +
+>  	lttng_probe_unregister(&_TP_COMBINE_TOKENS(__probe_desc___,
+>  	TRACEPOINT_PROVIDER));
+>  }
+>  
+> +#undef BADDR_EXPLICIT_PROBE_REGISTER
+> +
+>  int _TP_COMBINE_TOKENS(__tracepoint_provider_, TRACEPOINT_PROVIDER);
+> diff --git a/liblttng-ust/Makefile.am b/liblttng-ust/Makefile.am
+> index b165c32..e9022d8 100644
+> --- a/liblttng-ust/Makefile.am
+> +++ b/liblttng-ust/Makefile.am
+> @@ -37,7 +37,6 @@ liblttng_ust_runtime_la_SOURCES = \
+>  	lttng-hash-helper.h \
+>  	lttng-ust-baddr.c \
+>  	lttng-ust-baddr.h \
+> -	ust_baddr_statedump.c \
+>  	ust_baddr_statedump.h \
+>  	tracepoint-internal.h \
+>  	clock.h \
+> diff --git a/liblttng-ust/lttng-ust-baddr.c b/liblttng-ust/lttng-ust-baddr.c
+> index b7843e2..d39e9e8 100644
+> --- a/liblttng-ust/lttng-ust-baddr.c
+> +++ b/liblttng-ust/lttng-ust-baddr.c
+> @@ -35,6 +35,15 @@
+>  #include "lttng-tracer-core.h"
+>  #include "lttng-ust-baddr.h"
+>  
+> +#define TRACEPOINT_CREATE_PROBES
+> +#define TP_SESSION_CHECK
+> +static int explicit_probe_register;
+> +#define BADDR_EXPLICIT_PROBE_REGISTER \
+> +do { \
+> +	if (!explicit_probe_register) \
+> +		return; \
+> +} while (0)
+> +
+>  #define TRACEPOINT_DEFINE
+>  #include "ust_baddr_statedump.h"
+>  
+> @@ -199,10 +208,16 @@ void lttng_ust_baddr_statedump_init(void)
+>  {
+>  	__tracepoints__init();
+>  	__tracepoints__ptrs_init();
+> +	explicit_probe_register = 1;
+> +	__lttng_events_init__ust_baddr_statedump();
+> +	explicit_probe_register = 0;
+>  }
+>  
+>  void lttng_ust_baddr_statedump_destroy(void)
+>  {
+> +	explicit_probe_register = 1;
+> +	__lttng_events_exit__ust_baddr_statedump();
+> +	explicit_probe_register = 0;
+>  	__tracepoints__ptrs_destroy();
+>  	__tracepoints__destroy();
+>  }
+> diff --git a/liblttng-ust/ust_baddr_statedump.c
+> b/liblttng-ust/ust_baddr_statedump.c
+> deleted file mode 100644
+> index 9097008..0000000
+> --- a/liblttng-ust/ust_baddr_statedump.c
+> +++ /dev/null
+> @@ -1,22 +0,0 @@
+> -/*
+> - * Copyright (C) 2013  Paul Woegerer <paul_woegerer@mentor.com>
+> - *
+> - * This library is free software; you can redistribute it and/or
+> - * modify it under the terms of the GNU Lesser General Public
+> - * License as published by the Free Software Foundation; either
+> - * version 2.1 of the License, or (at your option) any later version.
+> - *
+> - * This library is distributed in the hope that it will be useful,
+> - * but WITHOUT ANY WARRANTY; without even the implied warranty of
+> - * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> - * Lesser General Public License for more details.
+> - *
+> - * You should have received a copy of the GNU Lesser General Public
+> - * License along with this library; if not, write to the Free Software
+> - * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
+> USA
+> - */
+> -
+> -#define _LGPL_SOURCE
+> -#define TRACEPOINT_CREATE_PROBES
+> -#define TP_SESSION_CHECK
+> -#include "ust_baddr_statedump.h"
+> --
+> 1.8.5
+> 
+> 
+
 -- 
-1.8.4.1
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
