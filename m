@@ -1,18 +1,21 @@
-From: Amit Schreiber <gnobal@outlook.com>
-Subject: Re: Viewing existing kernel tracepoints with LTTng
-Date: Mon, 16 Dec 2013 08:14:44 +0200
-Message-ID: <DUB116-W138810902A63C341036F5B2D5D80__13314.7354041741$1387212842$gmane$org@phx.gbl>
-References: <DUB116-W92AC0AF296A377773DFA7CD5D90@phx.gbl>,
-	<52AE3204.2030602@gmail.com>
+From: Klaus Dannecker <klaus.dannecker@gmx.de>
+Subject: Re: make a trace_event in a module (driver)
+Date: Mon, 16 Dec 2013 18:05:50 +0100
+Message-ID: <52AF32EE.6090203__48783.399075228$1387213617$gmane$org@gmx.de>
+References: <48CF5AC71E61DB46B70D0F388054EFFD267A5E6B@VAL-E-01.valcartier.drdc-rddc.gc.ca>	<5294DB13.3010307@gmx.de>	<CA+jJMxsvAc2Tq2M+qYBhM=L-zL7mhAD=J76T2C_KH7T5PJPgnA@mail.gmail.com>
+	<52ADF368.7040007@gmx.de> <52AE330E.2070604@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Type: text/plain; charset="iso-8859-1"; Format="flowed"
 Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from dub0-omc3-s17.dub0.hotmail.com ([157.55.2.26])
+Received: from mout.gmx.net ([212.227.15.19])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <gnobal@outlook.com>) id 1VsRS6-0001rm-3Y
-	for lttng-dev@lists.lttng.org; Mon, 16 Dec 2013 01:14:52 -0500
-In-Reply-To: <52AE3204.2030602@gmail.com>
+	(envelope-from <klaus.dannecker@gmx.de>) id 1VsbcA-00075y-2O
+	for lttng-dev@lists.lttng.org; Mon, 16 Dec 2013 12:05:59 -0500
+Received: from [192.168.178.23] ([94.217.80.40]) by mail.gmx.com (mrgmx003)
+	with ESMTPSA (Nemesis) id 0MYP57-1W5Y1V1EY5-00V7BB for
+	<lttng-dev@lists.lttng.org>; Mon, 16 Dec 2013 18:05:48 +0100
+In-Reply-To: <52AE330E.2070604@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -25,40 +28,43 @@ To: Francis Giraldeau <francis.giraldeau@gmail.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-----------------------------------------
-> Date: Sun, 15 Dec 2013 17:49:40 -0500
-> From: francis.giraldeau@gmail.com
-> To: gnobal@outlook.com
-> CC: lttng-dev@lists.lttng.org
-> Subject: Re: [lttng-dev] Viewing existing kernel tracepoints with LTTng
->
-> Le 2013-12-15 09:39, Amit Schreiber a =E9crit :
->> Hi,
->>
->> I started integrating LTTng into my code, and thought that existing trac=
-epoints (which are visible with perf) will be immediately visible to LTTng.=
- I obviously misunderstood or am doing something wrong.
->>
->> What's the correct way to have existing perf tracepoints seen by LTTng?
->
-> LTTng adds probes to existing tracepoints in the kernel. Under the hood,
-> LTTng probe modules call tracepoint_probe_register() to add a callback
-> when the tracepoint is enabled. You can thus hook to any tracepoint
-> defined in the kernel, provided that the probe function have the right
-> signature. In the case of LTTng, the probe writes an event in the ring
-> buffer.
->
-> To make things safer and add type checking at compile-time, LTTng
-> defines the probe code with macros. In fact, all the module's probe code
-> is generated. Each tracepoint in the kernel must also have an LTTng
-> probe to be listed, and this is the proper way to do it. For the detail,
-> refer to the "probe" directory of lttng-modules.
->
-> Cheers,
->
-> Francis
->
 
-Thanks a lot, Francis. I appreciate the help and quick response.
+Am 15.12.2013 23:54, schrieb Francis Giraldeau:
+> Le 2013-12-15 13:22, Klaus Dannecker a =E9crit :
+>> Hello,
+>>
+>> now its work!
+>> i have download the new lttng-tools. (git pull)
+>>
+>> the next problem:
+>> with
+>> sudo insmod
+>> /lib/modules/3.8.0-29-generic/extra/addons/lttng-trace-events-sample.ko
+>> and
+>> lttng list -k
+>> hurray! i see the new event!
+> Great!
+>
+>> now i start a lttng session and load the trace-events-sample.ko
+>> (compiling the sample in the linux source code)
+>> but i see not the event in the session. (looking in the eclipse viewer)
+>> what i am doing wrong?
+> Could it be possible that the tracepoint is not called? To verify this,
+> I would recommend you to display the information in dmesg just before
+> the tracepoint:
+>
+> if (printk_ratelimit())
+> 	printk("hello event!");
+>
+> Then: dmesg -c
+>
+> What does exactly the module is supposed to record?
+I see the message "hello event!"
+it does not matter if i start a lttng session or not. I see always the =
 
-Amit 		 	   		  =
+message!
+
+Regards,
+Klaus
+
+Cheers, Francis
