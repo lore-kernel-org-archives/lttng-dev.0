@@ -1,16 +1,19 @@
-From: Anand Neeli <anand.neeli@gmail.com>
-Subject: lttng with syslog and stdout
-Date: Wed, 18 Dec 2013 16:21:21 +0530
-Message-ID: <CAM5kDqzmGS7w7B6-KdvP_wEafJ626omhJQ5RC7Q8sV4-RU5riQ__13093.8510912985$1387363931$gmane$org@mail.gmail.com>
+From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: lttng with syslog and stdout
+Date: Wed, 18 Dec 2013 10:04:38 -0500
+Message-ID: <CA+jJMxu+bmJk+mAHzWXx6bySxKTG5XWbNJLh3sRo30MiYCxbzw__44368.2740828537$1387380771$gmane$org@mail.gmail.com>
+References: <CAM5kDqzmGS7w7B6-KdvP_wEafJ626omhJQ5RC7Q8sV4-RU5riQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2136963728=="
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-pd0-f178.google.com ([209.85.192.178])
+Received: from mail-qc0-f173.google.com ([209.85.216.173])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <anand.neeli@gmail.com>) id 1VtEit-0001Vv-IQ
-	for lttng-dev@lists.lttng.org; Wed, 18 Dec 2013 05:51:30 -0500
-Received: by mail-pd0-f178.google.com with SMTP id y10so8048206pdj.37
-	for <lttng-dev@lists.lttng.org>; Wed, 18 Dec 2013 02:51:21 -0800 (PST)
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1VtIfz-0003kR-P3
+	for lttng-dev@lists.lttng.org; Wed, 18 Dec 2013 10:04:49 -0500
+Received: by mail-qc0-f173.google.com with SMTP id m20so6325131qcx.32
+	for <lttng-dev@lists.lttng.org>; Wed, 18 Dec 2013 07:04:38 -0800 (PST)
+In-Reply-To: <CAM5kDqzmGS7w7B6-KdvP_wEafJ626omhJQ5RC7Q8sV4-RU5riQ@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,62 +22,58 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Anand Neeli <anand.neeli@gmail.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============2136963728==
-Content-Type: multipart/alternative; boundary=e89a8ff1cce455d19004edccd317
+On Wed, Dec 18, 2013 at 5:51 AM, Anand Neeli <anand.neeli@gmail.com> wrote:
+> Hi All,
+> Here are some queries i have. Can someone please help me with them.
+>
+> 1) is there a way send selective traces from lttng to syslog; and should =
+be
+> configurable based on the priority. (say like i want to send all CRIT or
+> EMRG traces to syslog)
+>
 
---e89a8ff1cce455d19004edccd317
-Content-Type: text/plain; charset=ISO-8859-1
+Not directly. You could probably work something out by parsing the
+output of babeltrace in "live" mode. Look at the --log-level option of
+the lttng enable-event command in the lttng(1) man page to only record
+events of certain log levels.
 
-Hi All,
-Here are some queries i have. Can someone please help me with them.
+Be aware that LTTng can drop events under heavy loads; make sure that
+is not a problem in your particular scenario.
 
-1) is there a way send selective traces from lttng to syslog; and should be
-configurable based on the priority. (say like i want to send all CRIT or
-EMRG traces to syslog)
+> 2) is there a way to stdout the logs of lttng. (similar to above this sho=
+uld
+> also be configurable based on the priority)
+>
 
-2) is there a way to stdout the logs of lttng. (similar to above this
-should also be configurable based on the priority)
+The live tracing mode, introduced in LTTng 2.4, seems to fit your
+use-case with the aforementioned event-drop caveat.
 
-What i'm trying here is to use syslog for critical messages and use stdout
-when debugging live.
+Regards,
+J=E9r=E9mie
 
-Please give me pointers if this is already there.
-
-Thanks in advance.
-Anand Neeli
-
---e89a8ff1cce455d19004edccd317
-Content-Type: text/html; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hi All,<div>Here are some queries i have. Can someone plea=
-se help me with them.</div><div>=A0<br></div><div>1) is there a way send se=
-lective traces from lttng to syslog; and should be configurable based on th=
-e priority. (say like i want to send all CRIT or EMRG traces to syslog)</di=
-v>
-<div><br></div><div>2) is there a way to stdout the logs of lttng. (similar=
- to above this should also be configurable based on the priority)</div><div=
-><br></div><div>What i&#39;m trying here is to use syslog for critical mess=
-ages and use stdout when debugging live.</div>
-<div><br></div><div>Please give me pointers if this is already there.</div>=
-<div><br></div><div>Thanks in advance.</div><div>Anand Neeli</div><div><br>=
-</div></div>
-
---e89a8ff1cce455d19004edccd317--
+> What i'm trying here is to use syslog for critical messages and use stdout
+> when debugging live.
+>
+> Please give me pointers if this is already there.
+>
+> Thanks in advance.
+> Anand Neeli
+>
+>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>
 
 
---===============2136963728==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
 
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+-- =
 
---===============2136963728==--
+J=E9r=E9mie Galarneau
+EfficiOS Inc.
+http://www.efficios.com
