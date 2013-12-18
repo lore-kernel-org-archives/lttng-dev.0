@@ -1,19 +1,22 @@
-From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: lttng with syslog and stdout
-Date: Wed, 18 Dec 2013 10:04:38 -0500
-Message-ID: <CA+jJMxu+bmJk+mAHzWXx6bySxKTG5XWbNJLh3sRo30MiYCxbzw__44368.2740828537$1387380771$gmane$org@mail.gmail.com>
-References: <CAM5kDqzmGS7w7B6-KdvP_wEafJ626omhJQ5RC7Q8sV4-RU5riQ@mail.gmail.com>
+From: Francis Giraldeau <francis.giraldeau@gmail.com>
+Subject: Re: make a trace_event in a module (driver)
+Date: Wed, 18 Dec 2013 11:27:01 -0500
+Message-ID: <52B1CCD5.8010906__18948.366205632$1387384096$gmane$org@gmail.com>
+References: <48CF5AC71E61DB46B70D0F388054EFFD267A5E6B@VAL-E-01.valcartier.drdc-rddc.gc.ca>	<5294DB13.3010307@gmx.de>	<CA+jJMxsvAc2Tq2M+qYBhM=L-zL7mhAD=J76T2C_KH7T5PJPgnA@mail.gmail.com>
+	<52ADF368.7040007@gmx.de> <52AE330E.2070604@gmail.com>
+	<52AF32EE.6090203@gmx.de> <52AF3CED.2060106@gmail.com>
+	<52AF4804.807@gmx.de>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Type: text/plain; charset="windows-1252"
 Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qc0-f173.google.com ([209.85.216.173])
+Received: from mail-gg0-f181.google.com ([209.85.161.181])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1VtIfz-0003kR-P3
-	for lttng-dev@lists.lttng.org; Wed, 18 Dec 2013 10:04:49 -0500
-Received: by mail-qc0-f173.google.com with SMTP id m20so6325131qcx.32
-	for <lttng-dev@lists.lttng.org>; Wed, 18 Dec 2013 07:04:38 -0800 (PST)
-In-Reply-To: <CAM5kDqzmGS7w7B6-KdvP_wEafJ626omhJQ5RC7Q8sV4-RU5riQ@mail.gmail.com>
+	(envelope-from <francis.giraldeau@gmail.com>) id 1VtJxo-0004Oo-H5
+	for lttng-dev@lists.lttng.org; Wed, 18 Dec 2013 11:27:18 -0500
+Received: by mail-gg0-f181.google.com with SMTP id y1so736350ggc.40
+	for <lttng-dev@lists.lttng.org>; Wed, 18 Dec 2013 08:27:06 -0800 (PST)
+In-Reply-To: <52AF4804.807@gmx.de>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,58 +25,69 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Anand Neeli <anand.neeli@gmail.com>
+To: Klaus Dannecker <klaus.dannecker@gmx.de>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-On Wed, Dec 18, 2013 at 5:51 AM, Anand Neeli <anand.neeli@gmail.com> wrote:
-> Hi All,
-> Here are some queries i have. Can someone please help me with them.
->
-> 1) is there a way send selective traces from lttng to syslog; and should =
-be
-> configurable based on the priority. (say like i want to send all CRIT or
-> EMRG traces to syslog)
->
+Le 2013-12-16 13:35, Klaus Dannecker a =E9crit :
+> Hi Francis,
+> =
 
-Not directly. You could probably work something out by parsing the
-output of babeltrace in "live" mode. Look at the --log-level option of
-the lttng enable-event command in the lttng(1) man page to only record
-events of certain log levels.
+> sample.h  ->  ../instumentation/events/lttng-modul
+> lttng-trace-events-sample.c  ->  ../addons/
+> and two various example
+> trace-events-sample.c ; trace-events-sample.h
+> trace-events-sample1.c with the
+> the examples are stored in the folder ../addons/
+> =
 
-Be aware that LTTng can drop events under heavy loads; make sure that
-is not a problem in your particular scenario.
+> in the make-File i add
+> obj-m +=3D lttng-trace-events-sample.o
+> obj-m +=3D trace-events-sample.o
+> obj-m +=3D trace-events-sample1.o
+> =
 
-> 2) is there a way to stdout the logs of lttng. (similar to above this sho=
-uld
-> also be configurable based on the priority)
->
+> where is the error?
+> what sample is the best?
+> can i use the same trace-event in all sample?
 
-The live tracing mode, introduced in LTTng 2.4, seems to fit your
-use-case with the aforementioned event-drop caveat.
+First, there were two definition with the same name, that is you may
+end-up enabling one, but calling the other. It's better to use unique
+names.
 
-Regards,
-J=E9r=E9mie
+Also, the module lttng-modsign must be loaded first, otherwise the
+tracepoint won't generate data.
 
-> What i'm trying here is to use syslog for critical messages and use stdout
-> when debugging live.
->
-> Please give me pointers if this is already there.
->
-> Thanks in advance.
-> Anand Neeli
->
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
+It's better to put the probe code in it's own module.
 
+You should put '\n' at the end of printk() (and printf() in general) to
+force a flush, otherwise the string accumulates, and is flushed later.
 
+I did put your code into addons-klaus branch on github. Grab the source,
+then:
 
--- =
+make
+sudo make modules_install
+sudo depmod -a
+sudo lttng-sessiond -v
+// make sure normal modules are loaded
 
-J=E9r=E9mie Galarneau
-EfficiOS Inc.
-http://www.efficios.com
+cd addons
+./control-addons.sh load
+// make sure sample modules are loaded
+// verify that event-sample thread is running (pgrep -l event-sample)
+
+lttng create
+lttng enable-event -k foo1_bar
+lttng start
+// check dmesg for event-sample output
+lttng stop
+lttng view
+
+I tested it and it worked for me.
+
+https://github.com/giraldeau/lttng-modules/tree/addons-klaus
+
+Cheers,
+
+Francis
