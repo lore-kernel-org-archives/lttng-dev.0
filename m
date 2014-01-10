@@ -1,18 +1,19 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH] baddr: Added ust_baddr &
-	ust_baddr_statedump docu
-Date: Wed, 8 Jan 2014 15:14:11 +0000 (UTC)
-Message-ID: <926911886.5026.1389194051589.JavaMail.zimbra__39721.8789127239$1389194137$gmane$org@efficios.com>
-References: <1387466479-17334-1-git-send-email-paul_woegerer@mentor.com>
+From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
+	<jeremie.galarneau@efficios.com>
+Subject: [PATCH lttng-ust] Pass the CC variable to the example
+	Makefiles
+Date: Fri, 10 Jan 2014 16:38:05 -0500
+Message-ID: <1389389885-25914-1-git-send-email-jeremie.galarneau__26095.1929180466$1389389961$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-qc0-f170.google.com ([209.85.216.170])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1W0upq-0006YN-My
-	for lttng-dev@lists.lttng.org; Wed, 08 Jan 2014 10:14:28 -0500
-In-Reply-To: <1387466479-17334-1-git-send-email-paul_woegerer@mentor.com>
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1W1jmQ-0006b9-0c
+	for lttng-dev@lists.lttng.org; Fri, 10 Jan 2014 16:38:20 -0500
+Received: by mail-qc0-f170.google.com with SMTP id e9so4324261qcy.29
+	for <lttng-dev@lists.lttng.org>; Fri, 10 Jan 2014 13:38:08 -0800 (PST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,180 +22,70 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Paul Woegerer <paul_woegerer@mentor.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Merged and pushed, along with a follow up cleanup commit.
-
-Thanks!
-
-Mathieu
-
------ Original Message -----
-> From: "Paul Woegerer" <paul_woegerer@mentor.com>
-> To: "mathieu desnoyers" <mathieu.desnoyers@efficios.com>, lttng-dev@lists.lttng.org
-> Sent: Thursday, December 19, 2013 10:21:19 AM
-> Subject: [PATCH] baddr: Added ust_baddr & ust_baddr_statedump docu
-> 
-> Signed-off-by: Paul Woegerer <paul_woegerer@mentor.com>
-> ---
->  doc/Makefile.am        |  1 +
->  doc/man/lttng-ust-dl.3 | 47 +++++++++++++++++++++++++++++++++++++++++++++++
->  doc/man/lttng-ust.3    | 34 +++++++++++++++++++++++++++++++++-
->  3 files changed, 81 insertions(+), 1 deletion(-)
->  create mode 100644 doc/man/lttng-ust-dl.3
-> 
-> diff --git a/doc/Makefile.am b/doc/Makefile.am
-> index 4349713..72dcde2 100644
-> --- a/doc/Makefile.am
-> +++ b/doc/Makefile.am
-> @@ -2,6 +2,7 @@ SUBDIRS = . examples
->  
->  dist_man_MANS = man/lttng-gen-tp.1 \
->  	man/lttng-ust.3 \
-> +	man/lttng-ust-dl.3 \
->  	man/lttng-ust-cyg-profile.3
->  
->  dist_doc_DATA = java-util-logging.txt
-> diff --git a/doc/man/lttng-ust-dl.3 b/doc/man/lttng-ust-dl.3
-> new file mode 100644
-> index 0000000..ff46f6b
-> --- /dev/null
-> +++ b/doc/man/lttng-ust-dl.3
-> @@ -0,0 +1,47 @@
-> +.TH "LTTNG-UST-DL" "3" "December 19, 2013" "" ""
-> +
-> +.SH "NAME"
-> +lttng-ust-dl \(em LTTng UST 2.x Dynamic Linker Tracing
-> +
-> +.SH "SYNOPSIS"
-> +Launch your application with:
-> +.TP
-> +\fBLD_PRELOAD=liblttng-ust-dl.so\fP appname
-> +.PP
-> +This LD_PRELOAD library causes all calls to dlopen and dlclose in the
-> +application to be traced with LTTng. The following two events need to be
-> +enabled: ust_baddr:push and ust_baddr:pop.
-> +
-> +.SH "DESCRIPTION"
-> +The events have the following detailed definitions:
-> +.PP
-> +.IP "ust_baddr:push"
-> +This event is used to trace dlopen calls. The base address (where the
-> dynamic
-> +linker has placed the shared object) is recorded in the baddr-field. The
-> path
-> +to the shared object gets recorded in the sopath-field (as string). The file
-> +size of the loaded object (in bytes) is recorded to the size-field and its
-> time
-> +of last modification (in seconds since Epoch) is recorded in the
-> mtime-field.
-> +.IP "ust_baddr:pop"
-> +This event is used to trace dlclose calls. The base address of the shared
-> +object that got closed is recorded in the baddr-field.
-> +.PP
-> +
-> +.SH "SEE ALSO"
-> +lttng-ust(3), dlopen(3), lttng(1)
-> +.SH "BUGS"
-> +If you encounter any issues or usability problem, please report it on
-> +our mailing list <lttng-dev@lists.lttng.org> to help improve this
-> +project.
-> +.SH "CREDITS"
-> +liblttng-ust is distributed under the GNU Lesser General Public License
-> +version 2.1. The headers are distributed under the MIT license.
-> +
-> +See http://lttng.org for more information on the LTTng project.
-> +
-> +Mailing list for support and development: <lttng-dev@lists.lttng.org>.
-> +
-> +You can find us on IRC server irc.oftc.net (OFTC) in #lttng.
-> +.SH "AUTHORS"
-> +liblttng-ust was originally written by Mathieu Desnoyers, with additional
-> +contributions from various other people. It is currently maintained by
-> +Mathieu Desnoyers <mathieu.desnoyers@efficios.com>.
-> diff --git a/doc/man/lttng-ust.3 b/doc/man/lttng-ust.3
-> index 7624e88..55de9fd 100644
-> --- a/doc/man/lttng-ust.3
-> +++ b/doc/man/lttng-ust.3
-> @@ -347,6 +347,13 @@ process namespace.
->  .PP
->  
->  .PP
-> +.IP "ip"
-> +Instruction pointer: Enables recording of the exact location where a
-> tracepoint
-> +was emitted. Can be used to reverse-lookup the source location that caused
-> the
-> +event to be emitted.
-> +.PP
-> +
-> +.PP
->  .IP "procname"
->  Thread name, as set by exec() or prctl(). It is recommended that
->  programs set their thread name with prctl() before hitting the first
-> @@ -359,6 +366,28 @@ Pthread identifier. Can be used on architectures where
-> pthread_t maps
->  nicely to an unsigned long type.
->  .PP
->  
-> +.SH "BASE ADDRESS STATEDUMP"
-> +
-> +.PP
-> +If an application that uses liblttng-ust.so becomes part of a session,
-> +information about its currently loaded shared objects will be traced to the
-> +session at session-enable time. To record this information, the following
-> event
-> +needs to be enabled:
-> +.PP
-> +.IP "ust_baddr_statedump:soinfo"
-> +This event is used to trace a currently loaded shared object. The base
-> address
-> +(where the dynamic linker has placed the shared object) is recorded in the
-> +baddr-field. The path to the shared object gets recorded in the sopath-field
-> +(as string). The file size of the loaded object (in bytes) is recorded to
-> the
-> +size-field and its time of last modification (in seconds since Epoch) is
-> +recorded in the mtime-field.
-> +.PP
-> +If the event above is enabled, a series of ust_baddr_statedump:soinfo events
-> is
-> +recorded at session-enable time, that represents the state of currently
-> loaded
-> +shared objects (of the traced application). If this information gets
-> combined
-> +with the lttng-ust-dl(3) instrumentation, all aspects of dynamic loading
-> that
-> +are relevant for symbol and linenumber-lookup are traced by LTTng.
-> +.PP
->  .SH "ENVIRONMENT VARIABLES"
->  
->  .PP
-> @@ -375,12 +404,15 @@ specified in milliseconds. The value 0 means "don't
-> wait". The value
->  recommended for applications with time constraints on the process
->  startup time.
->  .PP
-> +.IP "LTTNG_UST_WITHOUT_BADDR_STATEDUMP"
-> +Prevent liblttng-ust to perform a base-address statedump on session-enable.
-> +.PP
->  
->  .SH "SEE ALSO"
->  
->  .PP
->  lttng-gen-tp(1), lttng(1), babeltrace(1), lttng-ust-cyg-profile(3),
-> -lttng-sessiond(8)
-> +lttng-ust-dl(3), lttng-sessiond(8)
->  .PP
->  
->  .SH "COMPATIBILITY"
-> --
-> 1.8.5
-> 
-> 
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Q3Jvc3MtY29tcGlsYXRpb24gZmFpbHMgd2hlbiB1c2luZyB0aGUgLS1ob3N0IGNvbmZpZ3VyZSBv
+cHRpb24Kc2luY2UgdGhlIGNyb3NzLWNvbXBpbGVyIGlzIG5vdCBpbnZva2VkIGJ5IHRoZSBoYW5k
+LW1hZGUgTWFrZWZpbGVzCmluIGRvYy9leGFtcGxlcy4KClRoZSBDQyB2YXJpYWJsZSBtdXN0IGJl
+IHBhc3NlZCBleHBsaWNpdGx5IHRvIGVuc3VyZSB0aGUgaG9zdCdzCmRlZmF1bHQgY29tcGlsZXIg
+aXMgbm90IGludm9rZWQuCgpTaWduZWQtb2ZmLWJ5OiBKw6lyw6ltaWUgR2FsYXJuZWF1IDxqZXJl
+bWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20+Ci0tLQogZG9jL2V4YW1wbGVzL01ha2VmaWxlLmFt
+ICAgICAgICAgICAgICAgfCAyICstCiBkb2MvZXhhbXBsZXMvZGVtby9NYWtlZmlsZSAgICAgICAg
+ICAgICB8IDUgKysrKy0KIGRvYy9leGFtcGxlcy9lYXN5LXVzdC9NYWtlZmlsZSAgICAgICAgIHwg
+NSArKysrLQogZG9jL2V4YW1wbGVzL2dlbi10cC9NYWtlZmlsZSAgICAgICAgICAgfCA1ICsrKyst
+CiBkb2MvZXhhbXBsZXMvaGVsbG8tc3RhdGljLWxpYi9NYWtlZmlsZSB8IDUgKysrKy0KIDUgZmls
+ZXMgY2hhbmdlZCwgMTcgaW5zZXJ0aW9ucygrKSwgNSBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQg
+YS9kb2MvZXhhbXBsZXMvTWFrZWZpbGUuYW0gYi9kb2MvZXhhbXBsZXMvTWFrZWZpbGUuYW0KaW5k
+ZXggNzI1ODA2ZC4uZDVkMTY4MiAxMDA2NDQKLS0tIGEvZG9jL2V4YW1wbGVzL01ha2VmaWxlLmFt
+CisrKyBiL2RvYy9leGFtcGxlcy9NYWtlZmlsZS5hbQpAQCAtNTQsNyArNTQsNyBAQCBhbGwtbG9j
+YWw6CiAJCWRvbmU7IFwKIAlmaQogCWZvciBzdWJkaXIgaW4gJChTVUJESVJTX1BST1hZKTsgZG8g
+XAotCQkoY2QgJCRzdWJkaXIgJiYgJChNQUtFKSBBTV9DUFBGTEFHUz0iJChDUFBGTEFHUykgLUku
+Li8uLi8uLi9pbmNsdWRlLyIgQU1fQ0ZMQUdTPSckKENGTEFHUyknIEFNX0xERkxBR1M9JyQoTERG
+TEFHUykgLUwuLi8uLi8uLi9saWJsdHRuZy11c3QvLmxpYnMvIC1XbCwtcnBhdGg9IiQoUFdEKS8u
+Li8uLi9saWJsdHRuZy11c3QvLmxpYnMvIicgTFRUTkdfR0VOX1RQX1BBVEg9Ii4uLy4uLy4uL3Rv
+b2xzLyIgJChBTV9NQUtFRkxBR1MpIGFsbCAmJiBjZCAuLikgfHwgZXhpdCAxOyBcCisJCShjZCAk
+JHN1YmRpciAmJiBBTV9DQz0iJChDQykiICQoTUFLRSkgQU1fQ1BQRkxBR1M9IiQoQ1BQRkxBR1Mp
+IC1JLi4vLi4vLi4vaW5jbHVkZS8iIEFNX0NGTEFHUz0nJChDRkxBR1MpJyBBTV9MREZMQUdTPSck
+KExERkxBR1MpIC1MLi4vLi4vLi4vbGlibHR0bmctdXN0Ly5saWJzLyAtV2wsLXJwYXRoPSIkKFBX
+RCkvLi4vLi4vbGlibHR0bmctdXN0Ly5saWJzLyInIExUVE5HX0dFTl9UUF9QQVRIPSIuLi8uLi8u
+Li90b29scy8iICQoQU1fTUFLRUZMQUdTKSBhbGwgJiYgY2QgLi4pIHx8IGV4aXQgMTsgXAogCWRv
+bmUKIAlAaWYgWyB4IiQoU1VCRElSU19KVUwpIiAhPSB4IiIgXTsgdGhlbiBcCiAJCWZvciBzdWJk
+aXIgaW4gJChTVUJESVJTX0pVTCk7IGRvIFwKZGlmZiAtLWdpdCBhL2RvYy9leGFtcGxlcy9kZW1v
+L01ha2VmaWxlIGIvZG9jL2V4YW1wbGVzL2RlbW8vTWFrZWZpbGUKaW5kZXggMjdlNDE0Ni4uOWM4
+NDdiMSAxMDA2NDQKLS0tIGEvZG9jL2V4YW1wbGVzL2RlbW8vTWFrZWZpbGUKKysrIGIvZG9jL2V4
+YW1wbGVzL2RlbW8vTWFrZWZpbGUKQEAgLTE0LDcgKzE0LDEwIEBACiAjCiAjIFRoaXMgbWFrZWZp
+bGUgaXMgcHVycG9zZWZ1bGx5IGtlcHQgc2ltcGxlIHRvIHN1cHBvcnQgR05VIGFuZCBCU0QgbWFr
+ZS4KIAotQ0MgPSBnY2MKK2lmZGVmIEFNX0NDCisJQ0MgPSAkKEFNX0NDKQorZW5kaWYKKwogTElC
+UyA9IC1sZGwJIyBPbiBMaW51eAogI0xJQlMgPSAtbGMJIyBPbiBCU0QKIExPQ0FMX0NQUEZMQUdT
+ICs9IC1JLgpkaWZmIC0tZ2l0IGEvZG9jL2V4YW1wbGVzL2Vhc3ktdXN0L01ha2VmaWxlIGIvZG9j
+L2V4YW1wbGVzL2Vhc3ktdXN0L01ha2VmaWxlCmluZGV4IDk2NmM0NzQuLjcyMzc4MGYgMTAwNjQ0
+Ci0tLSBhL2RvYy9leGFtcGxlcy9lYXN5LXVzdC9NYWtlZmlsZQorKysgYi9kb2MvZXhhbXBsZXMv
+ZWFzeS11c3QvTWFrZWZpbGUKQEAgLTE2LDcgKzE2LDEwIEBACiAjCiAjIFRoaXMgbWFrZWZpbGUg
+aXMgcHVycG9zZWZ1bGx5IGtlcHQgc2ltcGxlIHRvIHN1cHBvcnQgR05VIGFuZCBCU0QgbWFrZS4K
+IAotQ0MgPSBnY2MKK2lmZGVmIEFNX0NDCisJQ0MgPSAkKEFNX0NDKQorZW5kaWYKKwogTElCUyA9
+IC1sZGwgLWxsdHRuZy11c3QJCSMgT24gTGludXgKICNMSUJTID0gLWxjIC1sbHR0bmctdXN0CQkj
+IE9uIEJTRAogTE9DQUxfQ1BQRkxBR1MgKz0gLUkuCmRpZmYgLS1naXQgYS9kb2MvZXhhbXBsZXMv
+Z2VuLXRwL01ha2VmaWxlIGIvZG9jL2V4YW1wbGVzL2dlbi10cC9NYWtlZmlsZQppbmRleCBiYzk3
+OWQ5Li4wZmE3NTdjIDEwMDY0NAotLS0gYS9kb2MvZXhhbXBsZXMvZ2VuLXRwL01ha2VmaWxlCisr
+KyBiL2RvYy9leGFtcGxlcy9nZW4tdHAvTWFrZWZpbGUKQEAgLTE3LDcgKzE3LDkgQEAKICMKICMg
+VGhpcyBtYWtlZmlsZSBpcyBwdXJwb3NlZnVsbHkga2VwdCBzaW1wbGUgdG8gc3VwcG9ydCBHTlUg
+YW5kIEJTRCBtYWtlLgogCi1DQyA9IGdjYworaWZkZWYgQU1fQ0MKKwlDQyA9ICQoQU1fQ0MpCitl
+bmRpZgogCiBMSUJTID0gLWxkbCAtbGx0dG5nLXVzdAkJI09uIExpbnV4CiAjTElCUyA9IC1sYyAt
+bGx0dG5nLXVzdAkJI09uIEJTRApAQCAtNDMsNiArNDUsNyBAQCBzYW1wbGUubzogc2FtcGxlLmMg
+c2FtcGxlX3RyYWNlcG9pbnQuaAogCUNQUEZMQUdTPSIkKENQUEZMQUdTKSAkKEFNX0NQUEZMQUdT
+KSIgXAogCUNGTEFHUz0iJChDRkxBR1MpICQoQU1fQ0ZMQUdTKSIgXAogCUxERkxBR1M9IiQoTERG
+TEFHUykgJChBTV9MREZMQUdTKSIgXAorCUNDPSQoQ0MpIFwKIAkkKExUVE5HX0dFTl9UUF9QQVRI
+KWx0dG5nLWdlbi10cCAtbyAkQCAkPAogCiAjIFRoZSBmb2xsb3dpbmcgcnVsZSBjYW4gYmUgdXNl
+ZCB0byBnZW5lcmF0ZSBhbGwgZmlsZXMgaW5zdGVhZCBvZiBoYXZpbmcgb25lCmRpZmYgLS1naXQg
+YS9kb2MvZXhhbXBsZXMvaGVsbG8tc3RhdGljLWxpYi9NYWtlZmlsZSBiL2RvYy9leGFtcGxlcy9o
+ZWxsby1zdGF0aWMtbGliL01ha2VmaWxlCmluZGV4IDlhMDc5ZWMuLmVjMTg1YzEgMTAwNjQ0Ci0t
+LSBhL2RvYy9leGFtcGxlcy9oZWxsby1zdGF0aWMtbGliL01ha2VmaWxlCisrKyBiL2RvYy9leGFt
+cGxlcy9oZWxsby1zdGF0aWMtbGliL01ha2VmaWxlCkBAIC0xNCw3ICsxNCwxMCBAQAogIwogIyBU
+aGlzIG1ha2VmaWxlIGlzIHB1cnBvc2VmdWxseSBrZXB0IHNpbXBsZSB0byBzdXBwb3J0IEdOVSBh
+bmQgQlNEIG1ha2UuCiAKLUNDID0gZ2NjCitpZmRlZiBBTV9DQworCUNDID0gJChBTV9DQykKK2Vu
+ZGlmCisKIExPQ0FMX0NQUEZMQUdTICs9IC1JLgogTElCUyA9IC1sZGwgLWxsdHRuZy11c3QJIyBP
+biBMaW51eAogI0xJQlMgPSAtbGMgLWxsdHRuZy11c3QJIyBPbiBCU0QKLS0gCjEuOC41LjIKCgpf
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYg
+bWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5n
+Lm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
