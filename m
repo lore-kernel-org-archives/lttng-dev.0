@@ -1,36 +1,18 @@
-From: Amit Margalit <AMITM@il.ibm.com>
-Subject: Re: [UST] SIGSEGV in lttng_ust_exit()
-Date: Sun, 12 Jan 2014 13:52:58 +0200
-Message-ID: <OFFEF0E305.3F03A005-ONC2257C5E.0041360D-C2257C5E.00414EBA__35724.3328159258$1389527663$gmane$org@il.ibm.com>
-References: <OF99872887.58F6C4DA-ONC2257C4C.00466CBF-C2257C4C.00474033@il.ibm.com>
-	<653943812.4048.1389041053865.JavaMail.zimbra@efficios.com>
-	<1275424701.4355.1389109493760.JavaMail.zimbra@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH lttng-ust] Pass the CC variable to the
+ example	Makefiles
+Date: Tue, 14 Jan 2014 14:30:28 +0000 (UTC)
+Message-ID: <15438463.7235.1389709828846.JavaMail.zimbra__44084.4634584666$1389709904$gmane$org@efficios.com>
+References: <1389389885-25914-1-git-send-email-jeremie.galarneau@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1813785311=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from e06smtp14.uk.ibm.com ([195.75.94.110])
+Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <amitm@il.ibm.com>) id 1W2JbU-0007EG-PL
-	for lttng-dev@lists.lttng.org; Sun, 12 Jan 2014 06:53:22 -0500
-Received: from /spool/local
-	by e06smtp14.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use
-	Only! Violators will be prosecuted
-	for <lttng-dev@lists.lttng.org> from <amitm@il.ibm.com>;
-	Sun, 12 Jan 2014 11:53:14 -0000
-Received: from b06cxnps4076.portsmouth.uk.ibm.com
-	(d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-	by d06dlp03.portsmouth.uk.ibm.com (Postfix) with ESMTP id 447E71B0805F
-	for <lttng-dev@lists.lttng.org>; Sun, 12 Jan 2014 11:52:32 +0000 (GMT)
-Received: from d06av01.portsmouth.uk.ibm.com (d06av01.portsmouth.uk.ibm.com
-	[9.149.37.212])
-	by b06cxnps4076.portsmouth.uk.ibm.com (8.13.8/8.13.8/NCO v10.0) with
-	ESMTP id s0CBqx2L61735080
-	for <lttng-dev@lists.lttng.org>; Sun, 12 Jan 2014 11:52:59 GMT
-Received: from d06av01.portsmouth.uk.ibm.com (localhost [127.0.0.1])
-	by d06av01.portsmouth.uk.ibm.com (8.14.4/8.14.4/NCO v10.0 AVout) with
-	ESMTP id s0CBrASg010682
-	for <lttng-dev@lists.lttng.org>; Sun, 12 Jan 2014 04:53:11 -0700
-In-Reply-To: <1275424701.4355.1389109493760.JavaMail.zimbra@efficios.com>
+	(envelope-from <compudj@efficios.com>) id 1W350l-0005TZ-VD
+	for lttng-dev@lists.lttng.org; Tue, 14 Jan 2014 09:30:41 -0500
+In-Reply-To: <1389389885-25914-1-git-send-email-jeremie.galarneau@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -39,263 +21,86 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: =?utf-8?B?SsOpcsOpbWll?= Galarneau <jeremie.galarneau@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-This is a multipart message in MIME format.
---===============1813785311==
-Content-Type: multipart/alternative; boundary="=_alternative 00414E73C2257C5E_="
-
-This is a multipart message in MIME format.
---=_alternative 00414E73C2257C5E_=
-Content-Type: text/plain; charset="US-ASCII"
-
-Indeed, it seems that lttng-ust-fork is needed.
-
-Thanks!
-
-Amit Margalit
-IBM XIV - Storage Reinvented
-XIV-NAS Development Team
-Tel. 03-689-7774
-Fax. 03-689-7230
-
-
-
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Amit Margalit/Israel/IBM@IBMIL
-Cc:     lttng-dev <lttng-dev@lists.lttng.org>
-Date:   01/07/2014 05:44 PM
-Subject:        Re: [lttng-dev] [UST] SIGSEGV in lttng_ust_exit()
-
-
-
-Another thing: is your daemon using fork(), clone() or daemon() at any 
-point ? If yes, did you LD_PRELOAD liblttng-ust-fork.so as stated in the 
-lttng-ust(3) manpage in the environment starting your daemon ?
-
-Thanks,
-
-Mathieu
-
-
-
-From: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-To: "Amit Margalit" <AMITM@il.ibm.com>
-Cc: "lttng-dev" <lttng-dev@lists.lttng.org>
-Sent: Monday, January 6, 2014 3:44:13 PM
-Subject: Re: [lttng-dev] [UST] SIGSEGV in lttng_ust_exit()
-
-Hi,
-
-Can you try with updated lttng-ust (2.3.1 and stable-2.3 branch head) and 
-update userspace RCU (0.8.1 and stable-0.8 head).
-
-Thanks,
-
-Mathieu
-
-
-
-From: "Amit Margalit" <AMITM@il.ibm.com>
-To: "lttng-dev" <lttng-dev@lists.lttng.org>
-Sent: Wednesday, December 25, 2013 7:58:05 AM
-Subject: [lttng-dev] [UST] SIGSEGV in lttng_ust_exit()
-
-Hi, 
-
-Using 2.3.0, we have a daemon process that's being restarted. The process 
-is being asked to terminate using a simple 'kill', i.e. SIGTERM. 
-
-Here is most of the traceback - any help is appreciated. 
-
-.424636] ===26292=== #2 crash_sig_handler (sig=11, info=0xb519f0, 
-uc=<optimized out>) at common/crashandler/crashandler_client.c:139
-.424671] ===26292=== #3 <signal handler called>
-.424730] ===26292=== #4 0x00007f4c2cb57831 in pthread_cancel () from 
-/lib64/libpthread.so.0
-.424788] ===26292=== #5 0x00007f4c2dec428e in lttng_ust_exit () at 
-lttng-ust-comm.c:1296
-.424846] ===26292=== #6 0x00007f4c2e310469 in _dl_fini () from 
-/lib64/ld-linux-x86-64.so.2
-.424904] ===26292=== #7 0x00007f4c2c4135e5 in __run_exit_handlers () from 
-/lib64/libc.so.6
-.424954] ===26292=== #8 0x00007f4c2c413635 in exit () from 
-/lib64/libc.so.6
-.425011] ===26292=== #9 0x00007f4c2c3fcbcd in __libc_start_main () from 
-/lib64/libc.so.6
-.425072] ===26292=== #10 0x000000000041cd49 in _start () at 
-../sysdeps/x86_64/elf/start.S:113 
-
-
-Amit Margalit 
-IBM XIV - Storage Reinvented 
-XIV-NAS Development Team 
-Tel. 03-689-7774 
-Fax. 03-689-7230
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
-
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
-
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
-
---=_alternative 00414E73C2257C5E_=
-Content-Type: text/html; charset="US-ASCII"
-
-<font size=2 face="sans-serif">Indeed, it seems that lttng-ust-fork is
-needed.</font>
-<br>
-<br><font size=2 face="sans-serif">Thanks!</font>
-<br>
-<br><font size=2 color=#000080 face="sans-serif">Amit Margalit</font>
-<br><font size=2 color=#808000 face="sans-serif">IBM XIV </font><font size=2 face="sans-serif">-
-<i>Storage Reinvented</i></font>
-<br><font size=2 face="sans-serif">XIV-NAS Development Team</font>
-<br><font size=2 face="sans-serif">Tel. 03</font><font size=2 face="Arial">-689-7774</font>
-<br><font size=2 face="Arial">Fax. 03-689-7230</font>
-<br>
-<br>
-<br>
-<br><font size=1 color=#5f5f5f face="sans-serif">From: &nbsp; &nbsp; &nbsp;
-&nbsp;</font><font size=1 face="sans-serif">Mathieu Desnoyers &lt;mathieu.desnoyers@efficios.com&gt;</font>
-<br><font size=1 color=#5f5f5f face="sans-serif">To: &nbsp; &nbsp; &nbsp;
-&nbsp;</font><font size=1 face="sans-serif">Amit Margalit/Israel/IBM@IBMIL</font>
-<br><font size=1 color=#5f5f5f face="sans-serif">Cc: &nbsp; &nbsp; &nbsp;
-&nbsp;</font><font size=1 face="sans-serif">lttng-dev &lt;lttng-dev@lists.lttng.org&gt;</font>
-<br><font size=1 color=#5f5f5f face="sans-serif">Date: &nbsp; &nbsp; &nbsp;
-&nbsp;</font><font size=1 face="sans-serif">01/07/2014 05:44 PM</font>
-<br><font size=1 color=#5f5f5f face="sans-serif">Subject: &nbsp; &nbsp;
-&nbsp; &nbsp;</font><font size=1 face="sans-serif">Re: [lttng-dev]
-[UST] SIGSEGV in lttng_ust_exit()</font>
-<br>
-<hr noshade>
-<br>
-<br>
-<br><font size=3>Another thing: is your daemon using fork(), clone() or
-daemon() at any point ? If yes, did you LD_PRELOAD liblttng-ust-fork.so
-as stated in the lttng-ust(3) manpage in the environment starting your
-daemon ?</font>
-<br>
-<br><font size=3>Thanks,</font>
-<br>
-<br><font size=3>Mathieu</font>
-<br>
-<br>
-<br>
-<hr>
-<br><font size=3 face="Helvetica"><b>From: </b>&quot;Mathieu Desnoyers&quot;
-&lt;mathieu.desnoyers@efficios.com&gt;<b><br>
-To: </b>&quot;Amit Margalit&quot; &lt;AMITM@il.ibm.com&gt;<b><br>
-Cc: </b>&quot;lttng-dev&quot; &lt;lttng-dev@lists.lttng.org&gt;<b><br>
-Sent: </b>Monday, January 6, 2014 3:44:13 PM<b><br>
-Subject: </b>Re: [lttng-dev] [UST] SIGSEGV in lttng_ust_exit()</font>
-<br>
-<br><font size=3>Hi,</font>
-<br>
-<br><font size=3>Can you try with updated lttng-ust (2.3.1 and stable-2.3
-branch head) and update userspace RCU (0.8.1 and stable-0.8 head).</font>
-<br>
-<br><font size=3>Thanks,</font>
-<br>
-<br><font size=3>Mathieu</font>
-<br>
-<br>
-<br>
-<hr>
-<br><font size=3 face="Helvetica"><b>From: </b>&quot;Amit Margalit&quot;
-&lt;AMITM@il.ibm.com&gt;<b><br>
-To: </b>&quot;lttng-dev&quot; &lt;lttng-dev@lists.lttng.org&gt;<b><br>
-Sent: </b>Wednesday, December 25, 2013 7:58:05 AM<b><br>
-Subject: </b>[lttng-dev] [UST] SIGSEGV in lttng_ust_exit()</font>
-<br>
-<br><font size=2 face="Helvetica">Hi,</font><font size=3 face="Helvetica">
-<br>
-</font><font size=2 face="Helvetica"><br>
-Using 2.3.0, we have a daemon process that's being restarted. The process
-is being asked to terminate using a simple 'kill', i.e. SIGTERM.</font><font size=3 face="Helvetica">
-<br>
-</font><font size=2 face="Helvetica"><br>
-Here is most of the traceback - any help is appreciated.</font><font size=3 face="Helvetica">
-<br>
-</font><font size=2 face="Helvetica"><br>
-.424636] ===26292=== #2 crash_sig_handler (sig=11, info=0xb519f0, uc=&lt;optimized
-out&gt;) at common/crashandler/crashandler_client.c:139<br>
-.424671] ===26292=== #3 &lt;signal handler called&gt;<br>
-.424730] ===26292=== #4 0x00007f4c2cb57831 in pthread_cancel () from /lib64/libpthread.so.0<br>
-.424788] ===26292=== #5 0x00007f4c2dec428e in lttng_ust_exit () at lttng-ust-comm.c:1296<br>
-.424846] ===26292=== #6 0x00007f4c2e310469 in _dl_fini () from /lib64/ld-linux-x86-64.so.2<br>
-.424904] ===26292=== #7 0x00007f4c2c4135e5 in __run_exit_handlers () from
-/lib64/libc.so.6<br>
-.424954] ===26292=== #8 0x00007f4c2c413635 in exit () from /lib64/libc.so.6<br>
-.425011] ===26292=== #9 0x00007f4c2c3fcbcd in __libc_start_main () from
-/lib64/libc.so.6<br>
-.425072] ===26292=== #10 0x000000000041cd49 in _start () at ../sysdeps/x86_64/elf/start.S:113</font><font size=3 face="Helvetica">
-<br>
-<br>
-</font><font size=2 color=#000080 face="Helvetica"><br>
-Amit Margalit</font><font size=3 face="Helvetica"> </font><font size=2 color=#808000 face="Helvetica"><br>
-IBM XIV </font><font size=2 face="Helvetica">- <i>Storage Reinvented</i></font><font size=3 face="Helvetica">
-</font><font size=2 face="Helvetica"><br>
-XIV-NAS Development Team</font><font size=3 face="Helvetica"> </font><font size=2 face="Helvetica"><br>
-Tel. 03</font><font size=2 face="Arial">-689-7774</font><font size=3 face="Helvetica">
-</font><font size=2 face="Arial"><br>
-Fax. 03-689-7230</font><font size=3 face="Helvetica"><br>
-_______________________________________________<br>
-lttng-dev mailing list<br>
-lttng-dev@lists.lttng.org<br>
-</font><a href="http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev"><font size=3 face="Helvetica">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</font></a>
-<br>
-<br>
-<br>
-<br><font size=3>-- </font>
-<br><font size=3>Mathieu Desnoyers<br>
-EfficiOS Inc.<br>
-</font><a href=http://www.efficios.com/><font size=3>http://www.efficios.com</font></a>
-<br><font size=3 face="Helvetica"><br>
-_______________________________________________<br>
-lttng-dev mailing list<br>
-lttng-dev@lists.lttng.org<br>
-</font><a href="http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev"><font size=3 face="Helvetica">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</font></a>
-<br><font size=3><br>
-</font>
-<br>
-<br><font size=3>-- </font>
-<br><font size=3>Mathieu Desnoyers<br>
-EfficiOS Inc.<br>
-</font><a href=http://www.efficios.com/><font size=3>http://www.efficios.com</font></a>
-<br>
---=_alternative 00414E73C2257C5E_=--
-
-
-
---===============1813785311==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1813785311==--
+TWVyZ2luZyB3aXRoIGEgc21hbGwgY2hhbmdlOgoKUGFzc2luZyBBTV9DQyBhcyBwYXJhbWV0ZXIg
+dG8gbWFrZSByYXRoZXIgdGhhbiBlbnZpcm9ubWVudCwgdG8gZG8gdGhlIHNhbWUgYXMgQU1fQ0ZM
+QUdTIGFuZCBvdGhlcnMuCgpUaGFua3MsCgpNQXRoaWV1CgotLS0tLSBPcmlnaW5hbCBNZXNzYWdl
+IC0tLS0tCj4gRnJvbTogIkrDqXLDqW1pZSBHYWxhcm5lYXUiIDxqZXJlbWllLmdhbGFybmVhdUBl
+ZmZpY2lvcy5jb20+Cj4gVG86IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBTZW50OiBGcmlk
+YXksIEphbnVhcnkgMTAsIDIwMTQgNDozODowNSBQTQo+IFN1YmplY3Q6IFtsdHRuZy1kZXZdIFtQ
+QVRDSCBsdHRuZy11c3RdIFBhc3MgdGhlIENDIHZhcmlhYmxlIHRvIHRoZSBleGFtcGxlCU1ha2Vm
+aWxlcwo+IAo+IENyb3NzLWNvbXBpbGF0aW9uIGZhaWxzIHdoZW4gdXNpbmcgdGhlIC0taG9zdCBj
+b25maWd1cmUgb3B0aW9uCj4gc2luY2UgdGhlIGNyb3NzLWNvbXBpbGVyIGlzIG5vdCBpbnZva2Vk
+IGJ5IHRoZSBoYW5kLW1hZGUgTWFrZWZpbGVzCj4gaW4gZG9jL2V4YW1wbGVzLgo+IAo+IFRoZSBD
+QyB2YXJpYWJsZSBtdXN0IGJlIHBhc3NlZCBleHBsaWNpdGx5IHRvIGVuc3VyZSB0aGUgaG9zdCdz
+Cj4gZGVmYXVsdCBjb21waWxlciBpcyBub3QgaW52b2tlZC4KPiAKPiBTaWduZWQtb2ZmLWJ5OiBK
+w6lyw6ltaWUgR2FsYXJuZWF1IDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20+Cj4gLS0t
+Cj4gIGRvYy9leGFtcGxlcy9NYWtlZmlsZS5hbSAgICAgICAgICAgICAgIHwgMiArLQo+ICBkb2Mv
+ZXhhbXBsZXMvZGVtby9NYWtlZmlsZSAgICAgICAgICAgICB8IDUgKysrKy0KPiAgZG9jL2V4YW1w
+bGVzL2Vhc3ktdXN0L01ha2VmaWxlICAgICAgICAgfCA1ICsrKystCj4gIGRvYy9leGFtcGxlcy9n
+ZW4tdHAvTWFrZWZpbGUgICAgICAgICAgIHwgNSArKysrLQo+ICBkb2MvZXhhbXBsZXMvaGVsbG8t
+c3RhdGljLWxpYi9NYWtlZmlsZSB8IDUgKysrKy0KPiAgNSBmaWxlcyBjaGFuZ2VkLCAxNyBpbnNl
+cnRpb25zKCspLCA1IGRlbGV0aW9ucygtKQo+IAo+IGRpZmYgLS1naXQgYS9kb2MvZXhhbXBsZXMv
+TWFrZWZpbGUuYW0gYi9kb2MvZXhhbXBsZXMvTWFrZWZpbGUuYW0KPiBpbmRleCA3MjU4MDZkLi5k
+NWQxNjgyIDEwMDY0NAo+IC0tLSBhL2RvYy9leGFtcGxlcy9NYWtlZmlsZS5hbQo+ICsrKyBiL2Rv
+Yy9leGFtcGxlcy9NYWtlZmlsZS5hbQo+IEBAIC01NCw3ICs1NCw3IEBAIGFsbC1sb2NhbDoKPiAg
+CQlkb25lOyBcCj4gIAlmaQo+ICAJZm9yIHN1YmRpciBpbiAkKFNVQkRJUlNfUFJPWFkpOyBkbyBc
+Cj4gLQkJKGNkICQkc3ViZGlyICYmICQoTUFLRSkgQU1fQ1BQRkxBR1M9IiQoQ1BQRkxBR1MpIC1J
+Li4vLi4vLi4vaW5jbHVkZS8iCj4gQU1fQ0ZMQUdTPSckKENGTEFHUyknIEFNX0xERkxBR1M9JyQo
+TERGTEFHUykgLUwuLi8uLi8uLi9saWJsdHRuZy11c3QvLmxpYnMvCj4gLVdsLC1ycGF0aD0iJChQ
+V0QpLy4uLy4uL2xpYmx0dG5nLXVzdC8ubGlicy8iJwo+IExUVE5HX0dFTl9UUF9QQVRIPSIuLi8u
+Li8uLi90b29scy8iICQoQU1fTUFLRUZMQUdTKSBhbGwgJiYgY2QgLi4pIHx8IGV4aXQgMTsKPiBc
+Cj4gKwkJKGNkICQkc3ViZGlyICYmIEFNX0NDPSIkKENDKSIgJChNQUtFKSBBTV9DUFBGTEFHUz0i
+JChDUFBGTEFHUykKPiAtSS4uLy4uLy4uL2luY2x1ZGUvIiBBTV9DRkxBR1M9JyQoQ0ZMQUdTKScg
+QU1fTERGTEFHUz0nJChMREZMQUdTKQo+IC1MLi4vLi4vLi4vbGlibHR0bmctdXN0Ly5saWJzLwo+
+IC1XbCwtcnBhdGg9IiQoUFdEKS8uLi8uLi9saWJsdHRuZy11c3QvLmxpYnMvIicKPiBMVFROR19H
+RU5fVFBfUEFUSD0iLi4vLi4vLi4vdG9vbHMvIiAkKEFNX01BS0VGTEFHUykgYWxsICYmIGNkIC4u
+KSB8fCBleGl0IDE7Cj4gXAo+ICAJZG9uZQo+ICAJQGlmIFsgeCIkKFNVQkRJUlNfSlVMKSIgIT0g
+eCIiIF07IHRoZW4gXAo+ICAJCWZvciBzdWJkaXIgaW4gJChTVUJESVJTX0pVTCk7IGRvIFwKPiBk
+aWZmIC0tZ2l0IGEvZG9jL2V4YW1wbGVzL2RlbW8vTWFrZWZpbGUgYi9kb2MvZXhhbXBsZXMvZGVt
+by9NYWtlZmlsZQo+IGluZGV4IDI3ZTQxNDYuLjljODQ3YjEgMTAwNjQ0Cj4gLS0tIGEvZG9jL2V4
+YW1wbGVzL2RlbW8vTWFrZWZpbGUKPiArKysgYi9kb2MvZXhhbXBsZXMvZGVtby9NYWtlZmlsZQo+
+IEBAIC0xNCw3ICsxNCwxMCBAQAo+ICAjCj4gICMgVGhpcyBtYWtlZmlsZSBpcyBwdXJwb3NlZnVs
+bHkga2VwdCBzaW1wbGUgdG8gc3VwcG9ydCBHTlUgYW5kIEJTRCBtYWtlLgo+ICAKPiAtQ0MgPSBn
+Y2MKPiAraWZkZWYgQU1fQ0MKPiArCUNDID0gJChBTV9DQykKPiArZW5kaWYKPiArCj4gIExJQlMg
+PSAtbGRsCSMgT24gTGludXgKPiAgI0xJQlMgPSAtbGMJIyBPbiBCU0QKPiAgTE9DQUxfQ1BQRkxB
+R1MgKz0gLUkuCj4gZGlmZiAtLWdpdCBhL2RvYy9leGFtcGxlcy9lYXN5LXVzdC9NYWtlZmlsZSBi
+L2RvYy9leGFtcGxlcy9lYXN5LXVzdC9NYWtlZmlsZQo+IGluZGV4IDk2NmM0NzQuLjcyMzc4MGYg
+MTAwNjQ0Cj4gLS0tIGEvZG9jL2V4YW1wbGVzL2Vhc3ktdXN0L01ha2VmaWxlCj4gKysrIGIvZG9j
+L2V4YW1wbGVzL2Vhc3ktdXN0L01ha2VmaWxlCj4gQEAgLTE2LDcgKzE2LDEwIEBACj4gICMKPiAg
+IyBUaGlzIG1ha2VmaWxlIGlzIHB1cnBvc2VmdWxseSBrZXB0IHNpbXBsZSB0byBzdXBwb3J0IEdO
+VSBhbmQgQlNEIG1ha2UuCj4gIAo+IC1DQyA9IGdjYwo+ICtpZmRlZiBBTV9DQwo+ICsJQ0MgPSAk
+KEFNX0NDKQo+ICtlbmRpZgo+ICsKPiAgTElCUyA9IC1sZGwgLWxsdHRuZy11c3QJCSMgT24gTGlu
+dXgKPiAgI0xJQlMgPSAtbGMgLWxsdHRuZy11c3QJCSMgT24gQlNECj4gIExPQ0FMX0NQUEZMQUdT
+ICs9IC1JLgo+IGRpZmYgLS1naXQgYS9kb2MvZXhhbXBsZXMvZ2VuLXRwL01ha2VmaWxlIGIvZG9j
+L2V4YW1wbGVzL2dlbi10cC9NYWtlZmlsZQo+IGluZGV4IGJjOTc5ZDkuLjBmYTc1N2MgMTAwNjQ0
+Cj4gLS0tIGEvZG9jL2V4YW1wbGVzL2dlbi10cC9NYWtlZmlsZQo+ICsrKyBiL2RvYy9leGFtcGxl
+cy9nZW4tdHAvTWFrZWZpbGUKPiBAQCAtMTcsNyArMTcsOSBAQAo+ICAjCj4gICMgVGhpcyBtYWtl
+ZmlsZSBpcyBwdXJwb3NlZnVsbHkga2VwdCBzaW1wbGUgdG8gc3VwcG9ydCBHTlUgYW5kIEJTRCBt
+YWtlLgo+ICAKPiAtQ0MgPSBnY2MKPiAraWZkZWYgQU1fQ0MKPiArCUNDID0gJChBTV9DQykKPiAr
+ZW5kaWYKPiAgCj4gIExJQlMgPSAtbGRsIC1sbHR0bmctdXN0CQkjT24gTGludXgKPiAgI0xJQlMg
+PSAtbGMgLWxsdHRuZy11c3QJCSNPbiBCU0QKPiBAQCAtNDMsNiArNDUsNyBAQCBzYW1wbGUubzog
+c2FtcGxlLmMgc2FtcGxlX3RyYWNlcG9pbnQuaAo+ICAJQ1BQRkxBR1M9IiQoQ1BQRkxBR1MpICQo
+QU1fQ1BQRkxBR1MpIiBcCj4gIAlDRkxBR1M9IiQoQ0ZMQUdTKSAkKEFNX0NGTEFHUykiIFwKPiAg
+CUxERkxBR1M9IiQoTERGTEFHUykgJChBTV9MREZMQUdTKSIgXAo+ICsJQ0M9JChDQykgXAo+ICAJ
+JChMVFROR19HRU5fVFBfUEFUSClsdHRuZy1nZW4tdHAgLW8gJEAgJDwKPiAgCj4gICMgVGhlIGZv
+bGxvd2luZyBydWxlIGNhbiBiZSB1c2VkIHRvIGdlbmVyYXRlIGFsbCBmaWxlcyBpbnN0ZWFkIG9m
+IGhhdmluZyBvbmUKPiBkaWZmIC0tZ2l0IGEvZG9jL2V4YW1wbGVzL2hlbGxvLXN0YXRpYy1saWIv
+TWFrZWZpbGUKPiBiL2RvYy9leGFtcGxlcy9oZWxsby1zdGF0aWMtbGliL01ha2VmaWxlCj4gaW5k
+ZXggOWEwNzllYy4uZWMxODVjMSAxMDA2NDQKPiAtLS0gYS9kb2MvZXhhbXBsZXMvaGVsbG8tc3Rh
+dGljLWxpYi9NYWtlZmlsZQo+ICsrKyBiL2RvYy9leGFtcGxlcy9oZWxsby1zdGF0aWMtbGliL01h
+a2VmaWxlCj4gQEAgLTE0LDcgKzE0LDEwIEBACj4gICMKPiAgIyBUaGlzIG1ha2VmaWxlIGlzIHB1
+cnBvc2VmdWxseSBrZXB0IHNpbXBsZSB0byBzdXBwb3J0IEdOVSBhbmQgQlNEIG1ha2UuCj4gIAo+
+IC1DQyA9IGdjYwo+ICtpZmRlZiBBTV9DQwo+ICsJQ0MgPSAkKEFNX0NDKQo+ICtlbmRpZgo+ICsK
+PiAgTE9DQUxfQ1BQRkxBR1MgKz0gLUkuCj4gIExJQlMgPSAtbGRsIC1sbHR0bmctdXN0CSMgT24g
+TGludXgKPiAgI0xJQlMgPSAtbGMgLWxsdHRuZy11c3QJIyBPbiBCU0QKPiAtLQo+IDEuOC41LjIK
+PiAKPiAKPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+
+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0
+cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cj4g
+CgotLSAKTWF0aGlldSBEZXNub3llcnMKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9z
+LmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0
+bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0
+cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
