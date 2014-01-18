@@ -1,19 +1,18 @@
-From: Simon Marchi <simon.marchi@polymtl.ca>
-Subject: Re: [PATCH] Use uint32_t for
-	lttng_viewer_stream.metadata_flag
-Date: Fri, 17 Jan 2014 21:31:51 -0500
-Message-ID: <CAFXXi0nYX8xQAvDW+uox6bfx0ODa2Rdr4ex35pP8PmXotnMjyg__1766.64494579217$1390012400$gmane$org@mail.gmail.com>
-References: <1390002463-21184-1-git-send-email-marc-andre.laperle@ericsson.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: Extract lttng trace from kernel coredump
+Date: Sat, 18 Jan 2014 16:47:33 +0000 (UTC)
+Message-ID: <1303248645.9400.1390063653581.JavaMail.zimbra__5370.02802961997$1390063716$gmane$org@efficios.com>
+References: <52D46B33.4010401@acm.org> <20140114184243.GC8177@thessa>
+	<52D5A08F.4020204@acm.org>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1799498602=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f178.google.com ([209.85.223.178])
+Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <thundersim@gmail.com>) id 1W4Lhy-00030d-TD
-	for lttng-dev@lists.lttng.org; Fri, 17 Jan 2014 21:32:29 -0500
-Received: by mail-ie0-f178.google.com with SMTP id x13so6192126ief.23
-	for <lttng-dev@lists.lttng.org>; Fri, 17 Jan 2014 18:32:21 -0800 (PST)
-In-Reply-To: <1390002463-21184-1-git-send-email-marc-andre.laperle@ericsson.com>
+	(envelope-from <compudj@efficios.com>) id 1W4Z3a-00019I-R4
+	for lttng-dev@lists.lttng.org; Sat, 18 Jan 2014 11:47:40 -0500
+In-Reply-To: <52D5A08F.4020204@acm.org>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,116 +21,79 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Marc-Andre Laperle <marc-andre.laperle@ericsson.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: minyard@acm.org
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============1799498602==
-Content-Type: multipart/alternative; boundary=001a11348574d7784304f035779d
+----- Original Message -----
+> From: "Corey Minyard" <minyard@acm.org>
+> To: "David Goulet" <dgoulet@efficios.com>
+> Cc: lttng-dev@lists.lttng.org
+> Sent: Tuesday, January 14, 2014 3:39:43 PM
+> Subject: Re: [lttng-dev] Extract lttng trace from kernel coredump
+> 
+> On 01/14/2014 12:42 PM, David Goulet wrote:
+> > On 13 Jan (16:39:47), Corey Minyard wrote:
+> >> I'm working on a feature to allow an lttng trace to be extracted from a
+> >> kernel coredump, and I'm wondering the best way to proceed.  I've looked
+> >> at extracting from the existing data structures, but that would require
+> >> something to always have a trace file open and it looks more than a
+> >> little complicated.  I was thinking instead of having a different trace
+> >> channel for configuring this coredump and some globals to point to the
+> >> various data structures.  Would that be the best way to pursue this?  Is
+> >> there a better way, perhaps?
+> > Oh yes we do actually already have a way to do that :)
+> >
+> > Please see:
+> > https://git.lttng.org/?p=lttng-tools.git;a=tree;f=extras/core-handler;h=29ded89a71fd36e159d671ca1f405cea394f8683;hb=HEAD
+> >
+> > With the snapshot feature, it's quite easy to do that. Hope that helps
+> > you with what you are trying to achieve.
+> 
+> I did see that, but it seems to be for an application coredump.  I was
+> looking for something that would work for a kernel coredump.  So that if
+> the kernel crashes, you can use kdump to extract the kernel core and
+> then extract the LTT buffers from that.  The idea is that if the kernel
+> crashes, you can get some idea of what was happening before the crash.
 
---001a11348574d7784304f035779d
-Content-Type: text/plain; charset=ISO-8859-1
+Something along these lines have been proposed a while back on the ML,
+but it was against an old LTTng version (0.x):
 
-While you are at it, you could change the char fields as well, since char
-is not exact-width either.
+http://lists.lttng.org/pipermail/lttng-dev/2010-August/014239.html
 
+It might be interesting to adapt it to the newer LTTng 2.x. Anyone interested
+to look into this ?
 
-On 17 January 2014 18:47, Marc-Andre Laperle <
-marc-andre.laperle@ericsson.com> wrote:
+Thanks,
 
-> This struct is meant to be sent over the network so members should be
-> of exact-width.
->
-> Signed-off-by: Marc-Andre Laperle <marc-andre.laperle@ericsson.com>
-> ---
->  src/bin/lttng-relayd/lttng-viewer.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/src/bin/lttng-relayd/lttng-viewer.h
-> b/src/bin/lttng-relayd/lttng-viewer.h
-> index 1977a43..6330270 100644
-> --- a/src/bin/lttng-relayd/lttng-viewer.h
-> +++ b/src/bin/lttng-relayd/lttng-viewer.h
-> @@ -100,7 +100,7 @@ struct lttng_viewer_session {
->  struct lttng_viewer_stream {
->         uint64_t id;
->         uint64_t ctf_trace_id;
-> -       int metadata_flag;
-> +       uint32_t metadata_flag;
->         char path_name[LTTNG_VIEWER_PATH_MAX];
->         char channel_name[LTTNG_VIEWER_NAME_MAX];
->  } __attribute__((__packed__));
-> --
-> 1.8.3.2
->
->
+Mathieu
+
+> 
+> 
+> Thanks,
+> 
+> -corey
+> 
+> > Cheers!
+> > David
+> >
+> >> Thanks,
+> >>
+> >> -corey
+> >>
+> >> _______________________________________________
+> >> lttng-dev mailing list
+> >> lttng-dev@lists.lttng.org
+> >> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> 
+> 
 > _______________________________________________
 > lttng-dev mailing list
 > lttng-dev@lists.lttng.org
 > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
+> 
 
---001a11348574d7784304f035779d
-Content-Type: text/html; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">While you are at it, you could change the char fields as w=
-ell, since char is not exact-width either.</div><div class=3D"gmail_extra">=
-<br><br><div class=3D"gmail_quote">On 17 January 2014 18:47, Marc-Andre Lap=
-erle <span dir=3D"ltr">&lt;<a href=3D"mailto:marc-andre.laperle@ericsson.co=
-m" target=3D"_blank">marc-andre.laperle@ericsson.com</a>&gt;</span> wrote:<=
-br>
-
-<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
-x #ccc solid;padding-left:1ex">This struct is meant to be sent over the net=
-work so members should be<br>
-of exact-width.<br>
-<br>
-Signed-off-by: Marc-Andre Laperle &lt;<a href=3D"mailto:marc-andre.laperle@=
-ericsson.com">marc-andre.laperle@ericsson.com</a>&gt;<br>
----<br>
-=A0src/bin/lttng-relayd/lttng-viewer.h | 2 +-<br>
-=A01 file changed, 1 insertion(+), 1 deletion(-)<br>
-<br>
-diff --git a/src/bin/lttng-relayd/lttng-viewer.h b/src/bin/lttng-relayd/ltt=
-ng-viewer.h<br>
-index 1977a43..6330270 100644<br>
---- a/src/bin/lttng-relayd/lttng-viewer.h<br>
-+++ b/src/bin/lttng-relayd/lttng-viewer.h<br>
-@@ -100,7 +100,7 @@ struct lttng_viewer_session {<br>
-=A0struct lttng_viewer_stream {<br>
-=A0 =A0 =A0 =A0 uint64_t id;<br>
-=A0 =A0 =A0 =A0 uint64_t ctf_trace_id;<br>
-- =A0 =A0 =A0 int metadata_flag;<br>
-+ =A0 =A0 =A0 uint32_t metadata_flag;<br>
-=A0 =A0 =A0 =A0 char path_name[LTTNG_VIEWER_PATH_MAX];<br>
-=A0 =A0 =A0 =A0 char channel_name[LTTNG_VIEWER_NAME_MAX];<br>
-=A0} __attribute__((__packed__));<br>
-<span class=3D"HOEnZb"><font color=3D"#888888">--<br>
-1.8.3.2<br>
-<br>
-<br>
-_______________________________________________<br>
-lttng-dev mailing list<br>
-<a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a><=
-br>
-<a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" targe=
-t=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><=
-br>
-</font></span></blockquote></div><br></div>
-
---001a11348574d7784304f035779d--
-
-
---===============1799498602==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1799498602==--
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
