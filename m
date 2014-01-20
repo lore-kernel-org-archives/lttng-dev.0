@@ -1,22 +1,19 @@
-From: Corey Minyard <minyard@acm.org>
-Subject: Re: Extract lttng trace from kernel coredump
-Date: Sat, 18 Jan 2014 12:29:52 -0600
-Message-ID: <52DAC820.7000005__29729.3166550391$1390088479$gmane$org@acm.org>
-References: <52D46B33.4010401@acm.org> <20140114184243.GC8177@thessa>
-	<52D5A08F.4020204@acm.org>
-	<1303248645.9400.1390063653581.JavaMail.zimbra@efficios.com>
-Reply-To: minyard@acm.org
+From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
+	<jeremie.galarneau@efficios.com>
+Subject: [PATCH lttng-tools] Fix: memory leak when UST events
+	are enabled with exclusions
+Date: Mon, 20 Jan 2014 12:51:12 -0500
+Message-ID: <1390240272-16029-1-git-send-email-jeremie.galarneau__10921.9681624838$1390240347$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ob0-f176.google.com ([209.85.214.176])
+Received: from mail-qc0-f176.google.com ([209.85.216.176])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <tcminyard@gmail.com>) id 1W4aee-0001uZ-8r
-	for lttng-dev@lists.lttng.org; Sat, 18 Jan 2014 13:30:02 -0500
-Received: by mail-ob0-f176.google.com with SMTP id gq1so3631204obb.7
-	for <lttng-dev@lists.lttng.org>; Sat, 18 Jan 2014 10:29:54 -0800 (PST)
-In-Reply-To: <1303248645.9400.1390063653581.JavaMail.zimbra@efficios.com>
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1W5J0K-00070J-3T
+	for lttng-dev@lists.lttng.org; Mon, 20 Jan 2014 12:51:27 -0500
+Received: by mail-qc0-f176.google.com with SMTP id e16so6115559qcx.21
+	for <lttng-dev@lists.lttng.org>; Mon, 20 Jan 2014 09:51:14 -0800 (PST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -25,60 +22,28 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On 01/18/2014 10:47 AM, Mathieu Desnoyers wrote:
-> ----- Original Message -----
->> From: "Corey Minyard" <minyard@acm.org>
->> To: "David Goulet" <dgoulet@efficios.com>
->> Cc: lttng-dev@lists.lttng.org
->> Sent: Tuesday, January 14, 2014 3:39:43 PM
->> Subject: Re: [lttng-dev] Extract lttng trace from kernel coredump
->>
->> On 01/14/2014 12:42 PM, David Goulet wrote:
->>> On 13 Jan (16:39:47), Corey Minyard wrote:
->>>> I'm working on a feature to allow an lttng trace to be extracted from a
->>>> kernel coredump, and I'm wondering the best way to proceed.  I've looked
->>>> at extracting from the existing data structures, but that would require
->>>> something to always have a trace file open and it looks more than a
->>>> little complicated.  I was thinking instead of having a different trace
->>>> channel for configuring this coredump and some globals to point to the
->>>> various data structures.  Would that be the best way to pursue this?  Is
->>>> there a better way, perhaps?
->>> Oh yes we do actually already have a way to do that :)
->>>
->>> Please see:
->>> https://git.lttng.org/?p=lttng-tools.git;a=tree;f=extras/core-handler;h=29ded89a71fd36e159d671ca1f405cea394f8683;hb=HEAD
->>>
->>> With the snapshot feature, it's quite easy to do that. Hope that helps
->>> you with what you are trying to achieve.
->> I did see that, but it seems to be for an application coredump.  I was
->> looking for something that would work for a kernel coredump.  So that if
->> the kernel crashes, you can use kdump to extract the kernel core and
->> then extract the LTT buffers from that.  The idea is that if the kernel
->> crashes, you can get some idea of what was happening before the crash.
-> Something along these lines have been proposed a while back on the ML,
-> but it was against an old LTTng version (0.x):
->
-> http://lists.lttng.org/pipermail/lttng-dev/2010-August/014239.html
->
-> It might be interesting to adapt it to the newer LTTng 2.x. Anyone interested
-> to look into this ?
-
-That was done by a colleague of mine.  However, things appear to have
-changed so much since then that it doesn't seem simple to extract a
-trace from memory.  It could be done, but I'm currently looking at
-adding a separate transport that writes to a simpler per-core circular
-data structure and doesn't actually ever generate any output.  Since it
-doesn't generate any output, it can be much simpler.
-
-But I am certainly open to suggestions on how to do this, and happy to
-have anything included back into the mainline.
-
-And I'm still learning about the internals of LTT.
-
-Thanks,
-
--corey
+U2lnbmVkLW9mZi1ieTogSsOpcsOpbWllIEdhbGFybmVhdSA8amVyZW1pZS5nYWxhcm5lYXVAZWZm
+aWNpb3MuY29tPgotLS0KIHNyYy9iaW4vbHR0bmctc2Vzc2lvbmQvdHJhY2UtdXN0LmMgfCAxICsK
+IHNyYy9iaW4vbHR0bmctc2Vzc2lvbmQvdHJhY2UtdXN0LmggfCAyICstCiAyIGZpbGVzIGNoYW5n
+ZWQsIDIgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQoKZGlmZiAtLWdpdCBhL3NyYy9iaW4v
+bHR0bmctc2Vzc2lvbmQvdHJhY2UtdXN0LmMgYi9zcmMvYmluL2x0dG5nLXNlc3Npb25kL3RyYWNl
+LXVzdC5jCmluZGV4IDcwYjNhOTEuLmMwODI0NmEgMTAwNjQ0Ci0tLSBhL3NyYy9iaW4vbHR0bmct
+c2Vzc2lvbmQvdHJhY2UtdXN0LmMKKysrIGIvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC90cmFjZS11
+c3QuYwpAQCAtNTA0LDYgKzUwNCw3IEBAIHZvaWQgdHJhY2VfdXN0X2Rlc3Ryb3lfZXZlbnQoc3Ry
+dWN0IGx0dF91c3RfZXZlbnQgKmV2ZW50KQogCiAJREJHMigiVHJhY2UgZGVzdHJveSBVU1QgZXZl
+bnQgJXMiLCBldmVudC0+YXR0ci5uYW1lKTsKIAlmcmVlKGV2ZW50LT5maWx0ZXIpOworCWZyZWUo
+ZXZlbnQtPmV4Y2x1c2lvbik7CiAJZnJlZShldmVudCk7CiB9CiAKZGlmZiAtLWdpdCBhL3NyYy9i
+aW4vbHR0bmctc2Vzc2lvbmQvdHJhY2UtdXN0LmggYi9zcmMvYmluL2x0dG5nLXNlc3Npb25kL3Ry
+YWNlLXVzdC5oCmluZGV4IGYyZjhjN2UuLjA3YWYwZjEgMTAwNjQ0Ci0tLSBhL3NyYy9iaW4vbHR0
+bmctc2Vzc2lvbmQvdHJhY2UtdXN0LmgKKysrIGIvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC90cmFj
+ZS11c3QuaApAQCAtNTAsNyArNTAsNyBAQCBzdHJ1Y3QgbHR0X3VzdF9ldmVudCB7CiAJc3RydWN0
+IGx0dG5nX3VzdF9ldmVudCBhdHRyOwogCXN0cnVjdCBsdHRuZ19odF9ub2RlX3N0ciBub2RlOwog
+CXN0cnVjdCBsdHRuZ191c3RfZmlsdGVyX2J5dGVjb2RlICpmaWx0ZXI7Ci0JY29uc3Qgc3RydWN0
+IGx0dG5nX2V2ZW50X2V4Y2x1c2lvbiAqZXhjbHVzaW9uOworCXN0cnVjdCBsdHRuZ19ldmVudF9l
+eGNsdXNpb24gKmV4Y2x1c2lvbjsKIH07CiAKIC8qIFVTVCBjaGFubmVsICovCi0tIAoxLjguNS4y
+CgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmct
+ZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5s
+dHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
