@@ -1,16 +1,17 @@
-From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Subject: Re: Trace-file size and flight record mode
-Date: Thu, 23 Jan 2014 14:33:02 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD267DC026__41731.9645792761$1390487650$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+From: Krishanth TJ <krishanthtj@gmail.com>
+Subject: Lttng state dump traces not present in 13.04 Ubuntu
+	server distribution
+Date: Thu, 23 Jan 2014 16:00:58 +0530
+Message-ID: <CAAoqFdREb-auZ90-w20adi8vrBSisFrZcVCREBDZwgjS0OK7dA__19566.3442755633$1390500973$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/mixed; boundary="===============0407848259=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
+Received: from mail-ig0-f193.google.com ([209.85.213.193])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1W6LLA-0005to-8p
-	for lttng-dev@lists.lttng.org; Thu, 23 Jan 2014 09:33:14 -0500
-Content-Language: fr-FR
+	(envelope-from <krishanthtj@gmail.com>) id 1W6Heb-0003pC-I5
+	for lttng-dev@lists.lttng.org; Thu, 23 Jan 2014 05:36:58 -0500
+Received: by mail-ig0-f193.google.com with SMTP id c10so704851igq.0
+	for <lttng-dev@lists.lttng.org>; Thu, 23 Jan 2014 02:36:52 -0800 (PST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,71 +20,94 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
-Cc: Anand Neeli <anand.neeli@gmail.com>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
------Message d'origine-----
-Date: Thu, 23 Jan 2014 14:06:03 +0530
-From: Anand Neeli <anand.neeli@gmail.com>
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+--===============0407848259==
+Content-Type: multipart/alternative; boundary=001a1134b50eb71d6d04f0a0bcb0
 
-> can anyone help me with these queries. These are related to trace modes a=
-nd file sizes.
-> I use the following commands to trace
->    ./lttng enable-channel mychannel --userspace --buffers-pid -s mysession
->    ./lttng enable-event --channel mychannel --userspace --all -s mysession
->
-> here are my queries
-> 1) Trace file should be limited to some defined size and should be overwr=
-itten after it reaches max size.
-> I want to retain latest N bytes of traces.
-> can anyone pls provide more details and the command to enable this?
+--001a1134b50eb71d6d04f0a0bcb0
+Content-Type: text/plain; charset=ISO-8859-1
 
-lttng enable-channel mychannel -u --buffers-pid -s mysession --tracefile-si=
-ze N --tracefile-count 1
+Dear All,
 
-This will limit each mychannel_n file to N bytes.  If running on multiple C=
-PUs, you get multiple mychannel_n files, each limited to N bytes.  And each=
- process ID will have its trace file limited separately.  Further, you won'=
-t capture "the last N bytes of events"; rather, every time the file is fill=
-ed, it gets wiped and a new set of event records begins being captured.  If=
- you were to use say --tracefile-size M --tracefile-count 8 (where M is N/8=
-), you would guarantee keeping at least 7M bytes' worth of events in the tr=
-ace.
+Recently when I tried to use lttng on Ubuntu 13.04 server distribution, I
+noticed that statedump traces were not present.
 
-> I see -C and -W options. But will the files be overwritten to maintain la=
-test traces?
-> and if i use "-W 4" will it create 4xN bytes of latest traces?
+Installed lttng-tools, lttng-modules-dkms, babeltrace from
 
-   Yes, -W 4 creates 4 files of size -C N each.  LTTng would write file 1, =
-file 2, file 3, file 4, then overwrite file 1, then file 2, etc.
+deb http://ppa.launchpad.net/lttng/ppa/ubuntu raring main
+deb-src http://ppa.launchpad.net/lttng/ppa/ubuntu raring main
 
-   Note that when you babeltrace this, you will get what seems to be spurio=
-us "discarded events" warnings.  This may be a bug (using LTTng 2.3.0).
+Version:
 
-> 2) Flight recorder mode
-> If i'm not wrong "Flight recorder mode" continuously overwrite the data i=
-n the memory buffers, instead of flushing it to a file on disk.
-> How to flush this memory buffer to file to see the traces or is there a w=
-ay to read this memory?
+lttng version 2.3.0
+babeltrace 1.0.3
 
-   If by "flight recorder mode" you mean 'lttng create --snapshot', you use=
- the 'lttng snapshot record' command to take the snapshots (copy the buffer=
-s to trace files).  See the man pages.
+The procedure followed was
 
-Daniel U. Thibault
-Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
-ntermeasures (SPC)
-Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
-Cyber Security (MCCS)
-R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
- Canada - Valcartier (DRDC Valcartier)
-2459 route de la Bravoure
-Qu=E9bec QC  G3J 1X5
-CANADA
-Vox : (418) 844-4000 x4245
-Fax : (418) 844-4538
-NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-Gouvernement du Canada | Government of Canada
-<http://www.valcartier.drdc-rddc.gc.ca/>
+# lttng create newsession
+
+# lttng enable-event -a -k
+
+# lttng start
+
+# Do something
+
+# lttng stop
+
+# lttng destroy
+
+# babeltrace <session>
+
+Any help would be appreciated.
+
+Noticed that 3.2.0-39-generic has statedump traces.
+
+Regards,
+Krish.
+
+--001a1134b50eb71d6d04f0a0bcb0
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div><div><div><div>Dear All,<br><br></div>Recently when I=
+ tried to use lttng on Ubuntu 13.04 server distribution, I noticed that sta=
+tedump traces were not present. <br><br></div>Installed lttng-tools, lttng-=
+modules-dkms, babeltrace from <br>
+<br><pre id=3D"sources-list-entries" class=3D"">deb <a href=3D"http://ppa.l=
+aunchpad.net/lttng/ppa/ubuntu">http://ppa.launchpad.net/lttng/ppa/ubuntu</a=
+> <span id=3D"series-deb">raring</span> main=20
+deb-src <a href=3D"http://ppa.launchpad.net/lttng/ppa/ubuntu">http://ppa.la=
+unchpad.net/lttng/ppa/ubuntu</a> <span id=3D"series-deb-src">raring</span> =
+main <br><br></pre><pre id=3D"sources-list-entries" class=3D"">Version:<br>=
+<br>
+lttng version 2.3.0<br>babeltrace 1.0.3<br></pre><pre id=3D"sources-list-en=
+tries" class=3D"">The procedure followed was<br><br></pre><pre id=3D"source=
+s-list-entries" class=3D""># lttng create newsession<br></pre><pre id=3D"so=
+urces-list-entries" class=3D"">
+# lttng enable-event -a -k<br></pre><pre id=3D"sources-list-entries" class=
+=3D""># lttng start<br></pre><pre id=3D"sources-list-entries" class=3D""># =
+Do something<br></pre><pre id=3D"sources-list-entries" class=3D""></pre><pr=
+e id=3D"sources-list-entries" class=3D"">
+# lttng stop<br></pre><pre id=3D"sources-list-entries" class=3D""># lttng d=
+estroy<br></pre><pre id=3D"sources-list-entries" class=3D""># babeltrace &l=
+t;session&gt;<br></pre>Any help would be appreciated.<br><br></div><div>Not=
+iced that 3.2.0-39-generic has statedump traces.<br>
+</div><div><br></div>Regards,<br></div>Krish.<br></div>
+
+--001a1134b50eb71d6d04f0a0bcb0--
+
+
+--===============0407848259==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0407848259==--
