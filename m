@@ -1,17 +1,16 @@
-From: Krishanth TJ <krishanthtj@gmail.com>
-Subject: Lttng state dump traces not present in 13.04 Ubuntu
-	server distribution
-Date: Thu, 23 Jan 2014 16:00:58 +0530
-Message-ID: <CAAoqFdREb-auZ90-w20adi8vrBSisFrZcVCREBDZwgjS0OK7dA__19566.3442755633$1390500973$gmane$org@mail.gmail.com>
+From: Jon <jonconn@gmail.com>
+Subject: RH EL-5
+Date: Thu, 23 Jan 2014 12:42:32 -0500
+Message-ID: <CAA6WC3HnbmT9MPuYm-0Oh4GZW2gixGkBzF=AO-jay0OyOkDj8A__4807.42272125116$1390501056$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0407848259=="
+Content-Type: multipart/mixed; boundary="===============1753151940=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ig0-f193.google.com ([209.85.213.193])
+Received: from mail-vc0-f171.google.com ([209.85.220.171])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <krishanthtj@gmail.com>) id 1W6Heb-0003pC-I5
-	for lttng-dev@lists.lttng.org; Thu, 23 Jan 2014 05:36:58 -0500
-Received: by mail-ig0-f193.google.com with SMTP id c10so704851igq.0
-	for <lttng-dev@lists.lttng.org>; Thu, 23 Jan 2014 02:36:52 -0800 (PST)
+	(envelope-from <jonconn@gmail.com>) id 1W6OIX-0007KY-UI
+	for lttng-dev@lists.lttng.org; Thu, 23 Jan 2014 12:42:43 -0500
+Received: by mail-vc0-f171.google.com with SMTP id le5so1253405vcb.30
+	for <lttng-dev@lists.lttng.org>; Thu, 23 Jan 2014 09:42:32 -0800 (PST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,83 +22,27 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============0407848259==
-Content-Type: multipart/alternative; boundary=001a1134b50eb71d6d04f0a0bcb0
+--===============1753151940==
+Content-Type: multipart/alternative; boundary=001a11335afc1d60b504f0a6c416
 
---001a1134b50eb71d6d04f0a0bcb0
+--001a11335afc1d60b504f0a6c416
 Content-Type: text/plain; charset=ISO-8859-1
 
-Dear All,
+Is there a way of building LTTng for an older -- kind of ancient, Red Hat
+release EL5?
 
-Recently when I tried to use lttng on Ubuntu 13.04 server distribution, I
-noticed that statedump traces were not present.
+I found some RPMs but not the complete set necessary to make any use of
+LTTng.
 
-Installed lttng-tools, lttng-modules-dkms, babeltrace from
-
-deb http://ppa.launchpad.net/lttng/ppa/ubuntu raring main
-deb-src http://ppa.launchpad.net/lttng/ppa/ubuntu raring main
-
-Version:
-
-lttng version 2.3.0
-babeltrace 1.0.3
-
-The procedure followed was
-
-# lttng create newsession
-
-# lttng enable-event -a -k
-
-# lttng start
-
-# Do something
-
-# lttng stop
-
-# lttng destroy
-
-# babeltrace <session>
-
-Any help would be appreciated.
-
-Noticed that 3.2.0-39-generic has statedump traces.
-
-Regards,
-Krish.
-
---001a1134b50eb71d6d04f0a0bcb0
+--001a11335afc1d60b504f0a6c416
 Content-Type: text/html; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr"><div><div><div><div>Dear All,<br><br></div>Recently when I=
- tried to use lttng on Ubuntu 13.04 server distribution, I noticed that sta=
-tedump traces were not present. <br><br></div>Installed lttng-tools, lttng-=
-modules-dkms, babeltrace from <br>
-<br><pre id=3D"sources-list-entries" class=3D"">deb <a href=3D"http://ppa.l=
-aunchpad.net/lttng/ppa/ubuntu">http://ppa.launchpad.net/lttng/ppa/ubuntu</a=
-> <span id=3D"series-deb">raring</span> main=20
-deb-src <a href=3D"http://ppa.launchpad.net/lttng/ppa/ubuntu">http://ppa.la=
-unchpad.net/lttng/ppa/ubuntu</a> <span id=3D"series-deb-src">raring</span> =
-main <br><br></pre><pre id=3D"sources-list-entries" class=3D"">Version:<br>=
-<br>
-lttng version 2.3.0<br>babeltrace 1.0.3<br></pre><pre id=3D"sources-list-en=
-tries" class=3D"">The procedure followed was<br><br></pre><pre id=3D"source=
-s-list-entries" class=3D""># lttng create newsession<br></pre><pre id=3D"so=
-urces-list-entries" class=3D"">
-# lttng enable-event -a -k<br></pre><pre id=3D"sources-list-entries" class=
-=3D""># lttng start<br></pre><pre id=3D"sources-list-entries" class=3D""># =
-Do something<br></pre><pre id=3D"sources-list-entries" class=3D""></pre><pr=
-e id=3D"sources-list-entries" class=3D"">
-# lttng stop<br></pre><pre id=3D"sources-list-entries" class=3D""># lttng d=
-estroy<br></pre><pre id=3D"sources-list-entries" class=3D""># babeltrace &l=
-t;session&gt;<br></pre>Any help would be appreciated.<br><br></div><div>Not=
-iced that 3.2.0-39-generic has statedump traces.<br>
-</div><div><br></div>Regards,<br></div>Krish.<br></div>
+<div dir="ltr"><div><div>Is there a way of building LTTng for an older -- kind of ancient, Red Hat release EL5?<br><br></div>I found some RPMs but not the complete set necessary to make any use of LTTng.<br><br></div></div>
 
---001a1134b50eb71d6d04f0a0bcb0--
+--001a11335afc1d60b504f0a6c416--
 
 
---===============0407848259==
+--===============1753151940==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -110,4 +53,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============0407848259==--
+--===============1753151940==--
