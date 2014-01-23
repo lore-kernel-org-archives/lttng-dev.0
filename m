@@ -1,16 +1,18 @@
-From: Jon <jonconn@gmail.com>
-Subject: RH EL-5
-Date: Thu, 23 Jan 2014 12:42:32 -0500
-Message-ID: <CAA6WC3HnbmT9MPuYm-0Oh4GZW2gixGkBzF=AO-jay0OyOkDj8A__4807.42272125116$1390501056$gmane$org@mail.gmail.com>
+From: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
+Subject: Re: Lttng state dump traces not present in 13.04 Ubuntu
+ server distribution
+Date: Thu, 23 Jan 2014 13:38:32 -0500
+Message-ID: <52E161A8.4070908__19410.1075911478$1390502381$gmane$org@voxpopuli.im>
+References: <CAAoqFdREb-auZ90-w20adi8vrBSisFrZcVCREBDZwgjS0OK7dA@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1753151940=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-vc0-f171.google.com ([209.85.220.171])
+Received: from ironport2-out.teksavvy.com ([206.248.154.181])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jonconn@gmail.com>) id 1W6OIX-0007KY-UI
-	for lttng-dev@lists.lttng.org; Thu, 23 Jan 2014 12:42:43 -0500
-Received: by mail-vc0-f171.google.com with SMTP id le5so1253405vcb.30
-	for <lttng-dev@lists.lttng.org>; Thu, 23 Jan 2014 09:42:32 -0800 (PST)
+	(envelope-from <alexmonthy@voxpopuli.im>) id 1W6PAr-0007mi-VL
+	for lttng-dev@lists.lttng.org; Thu, 23 Jan 2014 13:38:51 -0500
+In-Reply-To: <CAAoqFdREb-auZ90-w20adi8vrBSisFrZcVCREBDZwgjS0OK7dA@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,38 +21,72 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Krishanth TJ <krishanthtj@gmail.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============1753151940==
-Content-Type: multipart/alternative; boundary=001a11335afc1d60b504f0a6c416
+Hi,
 
---001a11335afc1d60b504f0a6c416
-Content-Type: text/plain; charset=ISO-8859-1
+Can you confirm if the updated "lttng-modules-dkms" package really
+installed successfully? (You can uninstall/reinstall it and check in the
+output.) The problem with DKMS packages is that the .deb can build fine
+on the builder, but it fails to install on the user's machine depending
+on the kernel version, etc.
 
-Is there a way of building LTTng for an older -- kind of ancient, Red Hat
-release EL5?
+What may happen is that the package failed to install, and you are still
+using the old version of the lttng-modules that come with the default
+Ubuntu kernel, which may not have statedump events. In that case I would
+suggest installing the modules manually from source.
 
-I found some RPMs but not the complete set necessary to make any use of
-LTTng.
+Unfortunately, there is no easy way to query which version of the
+modules are running with the "lttng" command.
 
---001a11335afc1d60b504f0a6c416
-Content-Type: text/html; charset=ISO-8859-1
-
-<div dir="ltr"><div><div>Is there a way of building LTTng for an older -- kind of ancient, Red Hat release EL5?<br><br></div>I found some RPMs but not the complete set necessary to make any use of LTTng.<br><br></div></div>
-
---001a11335afc1d60b504f0a6c416--
+Cheers,
+Alexandre
 
 
---===============1753151940==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1753151940==--
+On 14-01-23 05:30 AM, Krishanth TJ wrote:
+> Dear All,
+>
+> Recently when I tried to use lttng on Ubuntu 13.04 server distribution, I
+> noticed that statedump traces were not present.
+>
+> Installed lttng-tools, lttng-modules-dkms, babeltrace from
+>
+> deb http://ppa.launchpad.net/lttng/ppa/ubuntu raring main
+> deb-src http://ppa.launchpad.net/lttng/ppa/ubuntu raring main
+>
+> Version:
+>
+> lttng version 2.3.0
+> babeltrace 1.0.3
+>
+> The procedure followed was
+>
+> # lttng create newsession
+>
+> # lttng enable-event -a -k
+>
+> # lttng start
+>
+> # Do something
+>
+> # lttng stop
+>
+> # lttng destroy
+>
+> # babeltrace <session>
+>
+> Any help would be appreciated.
+>
+> Noticed that 3.2.0-39-generic has statedump traces.
+>
+> Regards,
+> Krish.
+>
+>
+>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
