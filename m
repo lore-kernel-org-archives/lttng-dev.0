@@ -1,19 +1,20 @@
-From: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
-Subject: Re: Lttng state dump traces not present in 13.04 Ubuntu
- server distribution
-Date: Fri, 24 Jan 2014 13:17:18 -0500
-Message-ID: <52E2AE2E.2020907__46920.0948872187$1390587510$gmane$org@voxpopuli.im>
-References: <CAAoqFdREb-auZ90-w20adi8vrBSisFrZcVCREBDZwgjS0OK7dA@mail.gmail.com>	<52E161A8.4070908@voxpopuli.im>
-	<CAAoqFdRZaoLW_r2bdaZvU+wwMtMS1nHuBNkumznqRY-_yOPh6g@mail.gmail.com>
+From: =?UTF-8?q?Genevi=C3=A8ve=20Bastien?= <gbastien+lttng@versatic.net>
+Subject: LTTng-ust: Add support of named metadata and CTF
+	enumerations
+Date: Fri, 24 Jan 2014 15:04:38 -0500
+Message-ID: <1390593885-7463-1-git-send-email-gbastien+lttng__44403.2490057454$1390593975$gmane$org@versatic.net>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from ironport2-out.teksavvy.com ([206.248.154.181])
+Received: from smtp.polymtl.ca ([132.207.4.11])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <alexmonthy@voxpopuli.im>) id 1W6lJs-00027b-Ux
-	for lttng-dev@lists.lttng.org; Fri, 24 Jan 2014 13:17:38 -0500
-In-Reply-To: <CAAoqFdRZaoLW_r2bdaZvU+wwMtMS1nHuBNkumznqRY-_yOPh6g@mail.gmail.com>
+	(envelope-from <gbastien+lttng@versatic.net>) id 1W6n00-0002wl-Dg
+	for lttng-dev@lists.lttng.org; Fri, 24 Jan 2014 15:05:13 -0500
+Received: from wilbrod.dorsal.polymtl.ca ([132.207.72.9])
+	by smtp.polymtl.ca (8.14.3/8.14.3) with ESMTP id s0OK57rv018860
+	(version=TLSv1/SSLv3 cipher=AES128-SHA bits=128 verify=NOT)
+	for <lttng-dev@lists.lttng.org>; Fri, 24 Jan 2014 15:05:08 -0500
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,38 +23,13 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Krishanth TJ <krishanthtj@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hmm, ok, if you use "lttng list -k" do they appear in the list of
-available events?
+The following patch series in LTTng-ust add support of named CTF metadata in
+tracepoints, and add support of enumerations fields.
 
-One other thing I can think about is that the statedump itself takes a
-little bit of time to execute, so the statedump events are never at the
-very start of the trace. So if your traces are very short it's possible
-to miss them entirely.
+This series goes with another patch series in LTTng-tools. This series'
+patch 5 needs the LTTng-tools patch series.
 
-Cheers,
-Alexandre
-
-
-On 14-01-24 08:54 AM, Krishanth TJ wrote:
-> Hi,
->
-> I have confirmed that the "lttng-modules-dkms" package was successfully
-> installed.
->
-> $ cat /usr/src/lttng-modules-2.3.x+stable/ChangeLog | head -4
-> 2013-09-28 LTTng modules 2.3.2
->     * Blacklist kernels 3.10.13 and 3.11.2
->
-> I have even confirmed with few debug printk's in lttng_statedump.ko that
-> the module is indeed loaded and the tracepoints are getting called. But
-> still babeltrace output fails to show lttng_statedump_events.
->
-> Am I missing something here?
->
-> Regards,
-> Krish.
->
+Filters do not work yet for enumeration fields.
