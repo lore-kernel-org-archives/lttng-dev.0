@@ -1,18 +1,20 @@
 From: =?UTF-8?q?Genevi=C3=A8ve=20Bastien?= <gbastien+lttng@versatic.net>
-Subject: [Patch LTTng-ust 7/7] Update the LTTng documentation
-	with CTF named enumerations
-Date: Fri, 24 Jan 2014 15:04:45 -0500
-Message-ID: <1390593885-7463-8-git-send-email-gbastien+lttng__5145.34748294881$1390594746$gmane$org@versatic.net>
-References: <1390593885-7463-1-git-send-email-gbastien+lttng@versatic.net>
+Subject: LTTng-tools: Add support of named metadata and CTF
+	enumerations
+Date: Fri, 24 Jan 2014 15:07:21 -0500
+Message-ID: <1390594045-7556-1-git-send-email-gbastien+lttng__4403.01811690933$1390594907$gmane$org@versatic.net>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from smtp.polymtl.ca ([132.207.4.11])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <gbastien+lttng@versatic.net>) id 1W6n0A-0002xD-Uy
-	for lttng-dev@lists.lttng.org; Fri, 24 Jan 2014 15:05:25 -0500
-In-Reply-To: <1390593885-7463-1-git-send-email-gbastien+lttng@versatic.net>
+	(envelope-from <gbastien+lttng@versatic.net>) id 1W6n2S-0002zr-4t
+	for lttng-dev@lists.lttng.org; Fri, 24 Jan 2014 15:07:45 -0500
+Received: from wilbrod.dorsal.polymtl.ca ([132.207.72.9])
+	by smtp.polymtl.ca (8.14.3/8.14.3) with ESMTP id s0OK7dTj020293
+	(version=TLSv1/SSLv3 cipher=AES128-SHA bits=128 verify=NOT)
+	for <lttng-dev@lists.lttng.org>; Fri, 24 Jan 2014 15:07:39 -0500
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,48 +26,10 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-U2lnbmVkLW9mZi1ieTogR2VuZXZpw6h2ZSBCYXN0aWVuIDxnYmFzdGllbitsdHRuZ0B2ZXJzYXRp
-Yy5uZXQ+Ci0tLQogZG9jL21hbi9sdHRuZy11c3QuMyB8IDU0ICsrKysrKysrKysrKysrKysrKysr
-KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrCiAxIGZpbGUgY2hhbmdlZCwgNTQgaW5z
-ZXJ0aW9ucygrKQoKZGlmZiAtLWdpdCBhL2RvYy9tYW4vbHR0bmctdXN0LjMgYi9kb2MvbWFuL2x0
-dG5nLXVzdC4zCmluZGV4IDc2MjRlODguLmQ0NzQyMjUgMTAwNjQ0Ci0tLSBhL2RvYy9tYW4vbHR0
-bmctdXN0LjMKKysrIGIvZG9jL21hbi9sdHRuZy11c3QuMwpAQCAtMTU4LDYgKzE1OCwxNCBAQCBU
-UkFDRVBPSU5UX0VWRU5UKAogCQkgKi8KIAkJY3RmX2Zsb2F0KGZsb2F0LCBmbG9hdGZpZWxkLCBm
-bG9hdGFyZykKIAkJY3RmX2Zsb2F0KGRvdWJsZSwgZG91YmxlZmllbGQsIGRvdWJsZWFyZykKKwor
-CQkvKgorCQkgKiBjdGZfZW51bTogYSBmaWVsZCB1c2luZyBhIHByZXZpb3VzbHkgZGVmaW5lZCBu
-YW1lZCBlbnVtZXJhdGlvbgorCQkgKiBhcmdzOiAocHJvdmlkZXIsIGVudW0gbmFtZSwgZmllbGQg
-bmFtZSwgYXJndW1lbnQgZXhwcmVzc2lvbikKKwkJICogVGhlIGVudW1lcmF0aW9uIGl0c2VsZiBh
-bmQgaXRzIHZhbHVlcyBtdXN0IGhhdmUgYmVlbiBkZWZpbmVkCisJCSAqIHByZXZpb3VzbHkgd2l0
-aCB0aGUgVFJBQ0VQT0lOVF9FTlVNIG1hY3JvLCBkZXNjcmliZWQgYmVsb3cuCisJCSAqLworCQlj
-dGZfZW51bShzYW1wbGVfY29tcG9uZW50LCBlbnVtZXJhdGlvbl9uYW1lLCBlbnVtZmllbGQsIGVu
-dW1hcmcpCiAJKQogKQogCkBAIC0xNjUsNiArMTczLDUyIEBAIFRoZXJlIGNhbiBiZSBhbiBhcmJp
-dHJhcnkgbnVtYmVyIG9mIHRyYWNlcG9pbnQgcHJvdmlkZXJzIHdpdGhpbiBhbgogYXBwbGljYXRp
-b24sIGJ1dCB0aGV5IG11c3QgZWFjaCBoYXZlIHRoZWlyIG93biBwcm92aWRlciBuYW1lLiBEdXBs
-aWNhdGUKIHByb3ZpZGVyIG5hbWVzIGFyZSBub3QgYWxsb3dlZC4KIAorVGhlIENURiBzcGVjaWZp
-Y2F0aW9uIGFsc28gc3VwcG9ydHMgc29tZSBuYW1lZCBiYXNpYyBhbmQgY29tcG91bmQgdHlwZXMg
-dGhhdAorY2FuIGJlIGRlZmluZWQgaW5zaWRlIGEgdHJhY2Vwb2ludCBwcm92aWRlciBhbmQgdXNl
-ZCBhcyBmaWVsZHMgaW4gdGhlCit0cmFjZXBvaW50LiBUaGlzIHNob3dzIGhvdyB0byBzcGVjaWZ5
-IHRoZW0gYW5kIHdoYXQgdGhleSBjYW4gYmUgdXNlZCBmb3I6CisKK1RoZSBlbnVtZXJhdGlvbiBp
-cyBhIG1hcHBpbmcgYmV0d2VlbiBhbiBpbnRlZ2VyIGFuZCBhIHN0cmluZy4gSXQgY2FuIGJlIHVz
-ZWQKK3RvIGhhdmUgYSBtb3JlIGNvbXBhY3QgdHJhY2UgaW4gY2FzZXMgd2hlcmUgdGhlIHBvc3Np
-YmxlIHZhbHVlcyBmb3IgYSBmaWVsZCBhcmUKK2xpbWl0ZWQ6CisKK1RSQUNFUE9JTlRfRU5VTSgK
-KwkvKgorCSAqIFRoZSBwcm92aWRlciBuYW1lLCBhcyBkZXNjcmliZWQgaW4gdGhlIFRSQUNFUE9J
-TlRfRVZFTlQgbWFjcm8KKwkgKi8KKwlzYW1wbGVfY29tcG9uZW50LAorCisJLyoKKwkgKiBUaGUg
-bmFtZSBvZiB0aGlzIGVudW1lcmF0aW9uLCB0aGF0IHdpbGwgYmUgdXNlZCB3aGVuIHVzaW5nIHRo
-aXMKKwkgKiBtZXRhZGF0YSB0eXBlIGluIHRyYWNlcG9pbnQgZmllbGRzCisJICovCisJZW51bWVy
-YXRpb25fbmFtZSwKKworCS8qCisJICogSW50ZWdlciB0eXBlIGJ5IHdoaWNoIHRoaXMgZW51bWVy
-YXRpb24gd2lsbCBiZSByZXByZXNlbnRlZC4KKwkgKiBJdCBjYW4gYmU6IGNoYXIsIGludCwgbG9u
-ZyBvciBhbnkgdmFyaWFudCBvbiB0aG9zZQorCSAqLworCXR5cGUsCisKKwkvKgorCSAqIFRQX0VO
-VU1fVkFMVUVTIGRlc2NyaWJlIHRoZSB2YWx1ZXMgb2YgdGhpcyBlbnVtZXJhdGlvbiBhbmQgd2hh
-dCB0aGV5CisJICogbWFwIHRvLgorCSAqLworCVRQX0VOVU1fVkFMVUVTKAorCQkvKgorCQkgKiBN
-YXBzIGFuIGludGVnZXIgd2l0aCB0aGlzIHN0cmluZyB2YWx1ZS4gQnkgZGVmYXVsdCwgZW51bWVy
-YXRpb25zCisJCSAqIHN0YXJ0IGF0IDAgYW5kIGluY3JlbWVudCAxIGZvciBlYWNoIGVudHJ5Lgor
-CQkgKi8KKwkJY3RmX2VudW1fdmFsdWUoc3RyaW5nX3ZhbHVlKQorCisJCS8qCisJCSAqIE1hcHMg
-dGhlIHN0cmluZyB2YWx1ZSB0byBpbnRlZ2VycyBpbiB0aGUgcmFuZ2UgJ3N0YXJ0JyB0byAnZW5k
-JworCQkgKiBpbmNsdXNpdmVseS4gSWYgJ3N0YXJ0JyA9PSAnZW5kJywgdGhlbiB0aGUgc3RyaW5n
-IGlzIG1hcHBlZCB0bworCQkgKiBhIHNwZWNpZmljIHZhbHVlLgorCQkgKi8KKwkJY3RmX2VudW1f
-cmFuZ2Uoc3RhcnQsIGVuZCwgc3RyaW5nX3ZhbHVlKQorCSkKKykKKwogLmZpCiAKIC5TSCAiQVNT
-SUdOSU5HIExPR0xFVkVMIFRPIEVWRU5UUyIKLS0gCjEuOC41LjMKCgpfX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0
-dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21h
-aWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+The following patch series in LTTng-tools add support of named metadata 
+in tracepoints, and add the statedump in metadata of named CTF
+enumerations.
+
+This series goes with another patch series in LTTng-ust. Patch 1 works
+with LTTng-ust master, but the other patches require LTTng-ust's series
+patch 5.
