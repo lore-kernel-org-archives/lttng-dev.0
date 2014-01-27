@@ -1,18 +1,22 @@
-From: =?UTF-8?q?Genevi=C3=A8ve=20Bastien?= <gbastien+lttng@versatic.net>
-Subject: [Patch LTTng-tools 4/4] Dump a named metadata only once
-	per session
-Date: Fri, 24 Jan 2014 15:07:25 -0500
-Message-ID: <1390594045-7556-5-git-send-email-gbastien+lttng__37700.025845743$1390595306$gmane$org@versatic.net>
-References: <1390594045-7556-1-git-send-email-gbastien+lttng@versatic.net>
+From: Krishanth TJ <krishanthtj@gmail.com>
+Subject: Re: Lttng state dump traces not present in 13.04 Ubuntu
+ server distribution
+Date: Mon, 27 Jan 2014 11:30:44 +0530
+Message-ID: <CAAoqFdTREawK0vSn1aVLCGs9PhFj8JJNjsHopiE8G8dYHv_6zQ__5166.83295504681$1390802504$gmane$org@mail.gmail.com>
+References: <CAAoqFdREb-auZ90-w20adi8vrBSisFrZcVCREBDZwgjS0OK7dA@mail.gmail.com>
+	<52E161A8.4070908@voxpopuli.im>
+	<CAAoqFdRZaoLW_r2bdaZvU+wwMtMS1nHuBNkumznqRY-_yOPh6g@mail.gmail.com>
+	<52E2AE2E.2020907@voxpopuli.im>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============1601818481=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.polymtl.ca ([132.207.4.11])
+Received: from mail-ie0-f196.google.com ([209.85.223.196])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <gbastien+lttng@versatic.net>) id 1W6n2k-00030J-A7
-	for lttng-dev@lists.lttng.org; Fri, 24 Jan 2014 15:08:05 -0500
-In-Reply-To: <1390594045-7556-1-git-send-email-gbastien+lttng@versatic.net>
+	(envelope-from <krishanthtj@gmail.com>) id 1W7fFa-0004Mr-2s
+	for lttng-dev@lists.lttng.org; Mon, 27 Jan 2014 01:00:52 -0500
+Received: by mail-ie0-f196.google.com with SMTP id e14so2434338iej.11
+	for <lttng-dev@lists.lttng.org>; Sun, 26 Jan 2014 22:00:44 -0800 (PST)
+In-Reply-To: <52E2AE2E.2020907@voxpopuli.im>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,74 +25,122 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-TmFtZWQgbWV0YWRhdGEgY2FuIGJlIHVzZWQgbW9yZSB0aGFuIG9uY2UgaW4gYSBzaW5nbGUgdHJh
-Y2Vwb2ludCwgb3IgbWFueQp0cmFjZXBvaW50cyBjYW4gdXNlIGl0LiBJdCBtdXN0IGJlIHN0YXRl
-ZHVtcGVkIG9ubHkgb25jZSBpbiBhIGdpdmVuIHNlc3Npb24uCgpTaWduZWQtb2ZmLWJ5OiBHZW5l
-dmnDqHZlIEJhc3RpZW4gPGdiYXN0aWVuK2x0dG5nQHZlcnNhdGljLm5ldD4KLS0tCiBzcmMvYmlu
-L2x0dG5nLXNlc3Npb25kL3VzdC1tZXRhZGF0YS5jIHwgMzkgKysrKysrKysrKysrKysrKysrKysr
-KysrKysrKysrKysrKysKIHNyYy9iaW4vbHR0bmctc2Vzc2lvbmQvdXN0LXJlZ2lzdHJ5LmMgfCAx
-MSArKysrKysrKysrCiBzcmMvYmluL2x0dG5nLXNlc3Npb25kL3VzdC1yZWdpc3RyeS5oIHwgIDgg
-KysrKysrKwogMyBmaWxlcyBjaGFuZ2VkLCA1OCBpbnNlcnRpb25zKCspCgpkaWZmIC0tZ2l0IGEv
-c3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC91c3QtbWV0YWRhdGEuYyBiL3NyYy9iaW4vbHR0bmctc2Vz
-c2lvbmQvdXN0LW1ldGFkYXRhLmMKaW5kZXggODdkMjFmYy4uOGI5MDRhOCAxMDA2NDQKLS0tIGEv
-c3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC91c3QtbWV0YWRhdGEuYworKysgYi9zcmMvYmluL2x0dG5n
-LXNlc3Npb25kL3VzdC1tZXRhZGF0YS5jCkBAIC0zMTYsNiArMzE2LDI3IEBAIGludCBfbHR0bmdf
-b25lX21ldGFkYXRhX3N0YXRlZHVtcChzdHJ1Y3QgdXN0X3JlZ2lzdHJ5X3Nlc3Npb24gKnNlc3Np
-b24sCiB7CiAJaW50IHJldCA9IDAsIGk7CiAKKwkvKiBDaGVjayBpZiB0aGUgbWV0YWRhdGEgd2Fz
-IGFscmVhZHkgZHVtcGVkICovCisJaWYgKHNlc3Npb24tPmR1bXBlZF9uYW1lZF9tZXRhZGF0YSAh
-PSAwKSB7CisJCXN0cnVjdCB1c3RfZHVtcGVkX21ldGFkYXRhICpkdW1wZWQgPSBzZXNzaW9uLT5k
-dW1wZWRfbmFtZWRfbWV0YWRhdGE7CisJCWNoYXIgKm1ldGFkYXRhX25hbWU7CisJCXN3aXRjaCAo
-bWV0YWRhdGEtPm10eXBlKSB7CisJCWNhc2UgdXN0Y3RsX210eXBlX2VudW06CisJCQltZXRhZGF0
-YV9uYW1lID0gbWV0YWRhdGEtPnUuY3RmX2VudW0ubmFtZTsKKwkJCWJyZWFrOworCQlkZWZhdWx0
-OgorCQkJcmV0dXJuIC1FSU5WQUw7CisJCX0KKwkJZG8geworCQkJaWYgKGR1bXBlZC0+bXR5cGUg
-PT0gbWV0YWRhdGEtPm10eXBlKSB7CisJCQkJaWYgKHN0cmNtcChkdW1wZWQtPm5hbWUsIG1ldGFk
-YXRhX25hbWUpID09IDApIHsKKwkJCQkJcmV0dXJuIDA7CisJCQkJfQorCQkJfQorCQkJZHVtcGVk
-ID0gZHVtcGVkLT5uZXh0OworCQl9IHdoaWxlIChkdW1wZWQpOworCX0KKwogCXN3aXRjaCAobWV0
-YWRhdGEtPm10eXBlKSB7CiAJY2FzZSB1c3RjdGxfbXR5cGVfZW51bToKIAl7CkBAIC0zNjIsNiAr
-MzgzLDI0IEBAIGludCBfbHR0bmdfb25lX21ldGFkYXRhX3N0YXRlZHVtcChzdHJ1Y3QgdXN0X3Jl
-Z2lzdHJ5X3Nlc3Npb24gKnNlc3Npb24sCiAJCXJldHVybiAtRUlOVkFMOwogCX0KIAorCS8qIEZs
-YWcgdGhpcyBtZXRhZGF0YSBhcyBkdW1wZWQgKi8KKwlzdHJ1Y3QgdXN0X2R1bXBlZF9tZXRhZGF0
-YSAqZHVtcGVkOworCWR1bXBlZCA9IHptYWxsb2Moc2l6ZW9mKCpkdW1wZWQpKTsKKwlpZiAoIWR1
-bXBlZCkgeworCQlyZXQgPSAtRU5PTUVNOworCQlyZXR1cm4gcmV0OworCX0KKwlkdW1wZWQtPm10
-eXBlID0gbWV0YWRhdGEtPm10eXBlOworCXN3aXRjaCAobWV0YWRhdGEtPm10eXBlKSB7CisJY2Fz
-ZSB1c3RjdGxfbXR5cGVfZW51bToKKwkJc3RybmNweShkdW1wZWQtPm5hbWUsIG1ldGFkYXRhLT51
-LmN0Zl9lbnVtLm5hbWUsIExUVE5HX1VTVF9TWU1fTkFNRV9MRU4pOworCQlicmVhazsKKwlkZWZh
-dWx0OgorCQlyZXR1cm4gLUVJTlZBTDsKKwl9CisJZHVtcGVkLT5uZXh0ID0gc2Vzc2lvbi0+ZHVt
-cGVkX25hbWVkX21ldGFkYXRhOworCXNlc3Npb24tPmR1bXBlZF9uYW1lZF9tZXRhZGF0YSA9IGR1
-bXBlZDsKKwogCXJldHVybiByZXQ7CiB9CiAKZGlmZiAtLWdpdCBhL3NyYy9iaW4vbHR0bmctc2Vz
-c2lvbmQvdXN0LXJlZ2lzdHJ5LmMgYi9zcmMvYmluL2x0dG5nLXNlc3Npb25kL3VzdC1yZWdpc3Ry
-eS5jCmluZGV4IDAwZTFjMjYuLjI1Y2QzMWQgMTAwNjQ0Ci0tLSBhL3NyYy9iaW4vbHR0bmctc2Vz
-c2lvbmQvdXN0LXJlZ2lzdHJ5LmMKKysrIGIvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC91c3QtcmVn
-aXN0cnkuYwpAQCAtNTY4LDYgKzU2OCw3IEBAIGludCB1c3RfcmVnaXN0cnlfc2Vzc2lvbl9pbml0
-KHN0cnVjdCB1c3RfcmVnaXN0cnlfc2Vzc2lvbiAqKnNlc3Npb25wLAogCXNlc3Npb24tPnVpbnQ2
-NF90X2FsaWdubWVudCA9IHVpbnQ2NF90X2FsaWdubWVudDsKIAlzZXNzaW9uLT5sb25nX2FsaWdu
-bWVudCA9IGxvbmdfYWxpZ25tZW50OwogCXNlc3Npb24tPmJ5dGVfb3JkZXIgPSBieXRlX29yZGVy
-OworCXNlc3Npb24tPmR1bXBlZF9uYW1lZF9tZXRhZGF0YSA9IDA7CiAKIAlzZXNzaW9uLT5jaGFu
-bmVscyA9IGx0dG5nX2h0X25ldygwLCBMVFROR19IVF9UWVBFX1U2NCk7CiAJaWYgKCFzZXNzaW9u
-LT5jaGFubmVscykgewpAQCAtNjMwLDQgKzYzMSwxNCBAQCB2b2lkIHVzdF9yZWdpc3RyeV9zZXNz
-aW9uX2Rlc3Ryb3koc3RydWN0IHVzdF9yZWdpc3RyeV9zZXNzaW9uICpyZWcpCiAJfQogCiAJZnJl
-ZShyZWctPm1ldGFkYXRhKTsKKworCS8qIEZyZWUgYWxsIGR1bXBlZCBtZXRhZGF0YSAqLworCWlm
-IChyZWctPmR1bXBlZF9uYW1lZF9tZXRhZGF0YSkgeworCQlzdHJ1Y3QgdXN0X2R1bXBlZF9tZXRh
-ZGF0YSAqZHVtcGVkOworCQlkbyB7CisJCQlkdW1wZWQgPSByZWctPmR1bXBlZF9uYW1lZF9tZXRh
-ZGF0YTsKKwkJCXJlZy0+ZHVtcGVkX25hbWVkX21ldGFkYXRhID0gZHVtcGVkLT5uZXh0OworCQkJ
-ZnJlZShkdW1wZWQpOworCQl9IHdoaWxlIChyZWctPmR1bXBlZF9uYW1lZF9tZXRhZGF0YSk7CisJ
-fQogfQpkaWZmIC0tZ2l0IGEvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC91c3QtcmVnaXN0cnkuaCBi
-L3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvdXN0LXJlZ2lzdHJ5LmgKaW5kZXggMTgzZGIwZi4uYTZj
-N2U2ZSAxMDA2NDQKLS0tIGEvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC91c3QtcmVnaXN0cnkuaAor
-KysgYi9zcmMvYmluL2x0dG5nLXNlc3Npb25kL3VzdC1yZWdpc3RyeS5oCkBAIC0zMSw2ICszMSwx
-MiBAQAogCiBzdHJ1Y3QgdXN0X2FwcDsKIAorc3RydWN0IHVzdF9kdW1wZWRfbWV0YWRhdGEgewor
-CWVudW0gdXN0Y3RsX21ldGFkYXRhX3R5cGVzIG10eXBlOworCWNoYXIgbmFtZVtMVFROR19VU1Rf
-U1lNX05BTUVfTEVOXTsKKwlzdHJ1Y3QgdXN0X2R1bXBlZF9tZXRhZGF0YSAqbmV4dDsKK307CisK
-IHN0cnVjdCB1c3RfcmVnaXN0cnlfc2Vzc2lvbiB7CiAJLyoKIAkgKiBXaXRoIG11bHRpcGxlIHdy
-aXRlcnMgYW5kIHJlYWRlcnMsIHVzZSB0aGlzIGxvY2sgdG8gYWNjZXNzIHRoZSByZWdpc3RyeS4K
-QEAgLTc1LDYgKzgxLDggQEAgc3RydWN0IHVzdF9yZWdpc3RyeV9zZXNzaW9uIHsKIAkgKiBkZWxl
-dGVzIGl0cyBzZXNzaW9ucy4KIAkgKi8KIAl1bnNpZ25lZCBpbnQgbWV0YWRhdGFfY2xvc2VkOwor
-CS8qIFRoZSBsaXN0IG9mIG5hbWVkIG1ldGFkYXRhIGFscmVhZHkgZHVtcGVkICovCisJc3RydWN0
-IHVzdF9kdW1wZWRfbWV0YWRhdGEgKmR1bXBlZF9uYW1lZF9tZXRhZGF0YTsKIH07CiAKIHN0cnVj
-dCB1c3RfcmVnaXN0cnlfY2hhbm5lbCB7Ci0tIAoxLjguNS4zCgoKX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRu
-Zy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWls
-bWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+--===============1601818481==
+Content-Type: multipart/alternative; boundary=20cf301af619a2624004f0ed6d27
+
+--20cf301af619a2624004f0ed6d27
+Content-Type: text/plain; charset=ISO-8859-1
+
+Yes, they do appear in "lttng list -k" event list.
+
+Regards,
+Krish.
+
+On Fri, Jan 24, 2014 at 11:47 PM, Alexandre Montplaisir <
+alexmonthy@voxpopuli.im> wrote:
+
+> Hmm, ok, if you use "lttng list -k" do they appear in the list of
+> available events?
+>
+> One other thing I can think about is that the statedump itself takes a
+> little bit of time to execute, so the statedump events are never at the
+> very start of the trace. So if your traces are very short it's possible
+> to miss them entirely.
+>
+> Cheers,
+> Alexandre
+>
+>
+> On 14-01-24 08:54 AM, Krishanth TJ wrote:
+> > Hi,
+> >
+> > I have confirmed that the "lttng-modules-dkms" package was successfully
+> > installed.
+> >
+> > $ cat /usr/src/lttng-modules-2.3.x+stable/ChangeLog | head -4
+> > 2013-09-28 LTTng modules 2.3.2
+> >     * Blacklist kernels 3.10.13 and 3.11.2
+> >
+> > I have even confirmed with few debug printk's in lttng_statedump.ko that
+> > the module is indeed loaded and the tracepoints are getting called. But
+> > still babeltrace output fails to show lttng_statedump_events.
+> >
+> > Am I missing something here?
+> >
+> > Regards,
+> > Krish.
+> >
+>
+>
+
+--20cf301af619a2624004f0ed6d27
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><br><div class=3D"gmail_extra">Yes, they do appear in &quo=
+t;lttng list -k&quot; event list.<br><br></div><div class=3D"gmail_extra">R=
+egards,<br></div><div class=3D"gmail_extra">Krish.<br></div><div class=3D"g=
+mail_extra">
+<br><div class=3D"gmail_quote">On Fri, Jan 24, 2014 at 11:47 PM, Alexandre =
+Montplaisir <span dir=3D"ltr">&lt;<a href=3D"mailto:alexmonthy@voxpopuli.im=
+" target=3D"_blank">alexmonthy@voxpopuli.im</a>&gt;</span> wrote:<br><block=
+quote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1=
+px solid rgb(204,204,204);padding-left:1ex">
+Hmm, ok, if you use &quot;lttng list -k&quot; do they appear in the list of=
+<br>
+available events?<br>
+<br>
+One other thing I can think about is that the statedump itself takes a<br>
+little bit of time to execute, so the statedump events are never at the<br>
+very start of the trace. So if your traces are very short it&#39;s possible=
+<br>
+to miss them entirely.<br>
+<br>
+Cheers,<br>
+Alexandre<br>
+<div class=3D""><div class=3D"h5"><br>
+<br>
+On 14-01-24 08:54 AM, Krishanth TJ wrote:<br>
+&gt; Hi,<br>
+&gt;<br>
+&gt; I have confirmed that the &quot;lttng-modules-dkms&quot; package was s=
+uccessfully<br>
+&gt; installed.<br>
+&gt;<br>
+&gt; $ cat /usr/src/lttng-modules-2.3.x+stable/ChangeLog | head -4<br>
+&gt; 2013-09-28 LTTng modules 2.3.2<br>
+&gt; =A0 =A0 * Blacklist kernels 3.10.13 and 3.11.2<br>
+&gt;<br>
+&gt; I have even confirmed with few debug printk&#39;s in lttng_statedump.k=
+o that<br>
+&gt; the module is indeed loaded and the tracepoints are getting called. Bu=
+t<br>
+&gt; still babeltrace output fails to show lttng_statedump_events.<br>
+&gt;<br>
+&gt; Am I missing something here?<br>
+&gt;<br>
+&gt; Regards,<br>
+&gt; Krish.<br>
+&gt;<br>
+<br>
+</div></div></blockquote></div><br></div></div>
+
+--20cf301af619a2624004f0ed6d27--
+
+
+--===============1601818481==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1601818481==--
