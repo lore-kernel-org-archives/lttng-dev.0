@@ -1,22 +1,19 @@
-From: Krishanth TJ <krishanthtj@gmail.com>
-Subject: Re: Lttng state dump traces not present in 13.04 Ubuntu
- server distribution
-Date: Mon, 27 Jan 2014 11:30:44 +0530
-Message-ID: <CAAoqFdTREawK0vSn1aVLCGs9PhFj8JJNjsHopiE8G8dYHv_6zQ__5166.83295504681$1390802504$gmane$org@mail.gmail.com>
-References: <CAAoqFdREb-auZ90-w20adi8vrBSisFrZcVCREBDZwgjS0OK7dA@mail.gmail.com>
-	<52E161A8.4070908@voxpopuli.im>
-	<CAAoqFdRZaoLW_r2bdaZvU+wwMtMS1nHuBNkumznqRY-_yOPh6g@mail.gmail.com>
-	<52E2AE2E.2020907@voxpopuli.im>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [PATCH] Fix: measure UST clock offset with a median of
+	samples
+Date: Mon, 27 Jan 2014 12:47:52 -0500
+Message-ID: <1390844872-25095-1-git-send-email-mathieu.desnoyers__4122.85731076754$1390844969$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1601818481=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f196.google.com ([209.85.223.196])
+Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <krishanthtj@gmail.com>) id 1W7fFa-0004Mr-2s
-	for lttng-dev@lists.lttng.org; Mon, 27 Jan 2014 01:00:52 -0500
-Received: by mail-ie0-f196.google.com with SMTP id e14so2434338iej.11
-	for <lttng-dev@lists.lttng.org>; Sun, 26 Jan 2014 22:00:44 -0800 (PST)
-In-Reply-To: <52E2AE2E.2020907@voxpopuli.im>
+	(envelope-from <mathieu.desnoyers@efficios.com>) id 1W7qI9-0001ce-0M
+	for lttng-dev@lists.lttng.org; Mon, 27 Jan 2014 12:48:18 -0500
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.efficios.com (Postfix) with ESMTP id 96157340198
+	for <lttng-dev@lists.lttng.org>; Mon, 27 Jan 2014 17:48:10 +0000 (UTC)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -25,122 +22,108 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: dgoulet@efficios.com
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============1601818481==
-Content-Type: multipart/alternative; boundary=20cf301af619a2624004f0ed6d27
+Fixes #729
 
---20cf301af619a2624004f0ed6d27
-Content-Type: text/plain; charset=ISO-8859-1
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+---
+ src/bin/lttng-sessiond/ust-metadata.c |   52 +++++++++++++++++++++++++++------
+ 1 file changed, 43 insertions(+), 9 deletions(-)
 
-Yes, they do appear in "lttng list -k" event list.
-
-Regards,
-Krish.
-
-On Fri, Jan 24, 2014 at 11:47 PM, Alexandre Montplaisir <
-alexmonthy@voxpopuli.im> wrote:
-
-> Hmm, ok, if you use "lttng list -k" do they appear in the list of
-> available events?
->
-> One other thing I can think about is that the statedump itself takes a
-> little bit of time to execute, so the statedump events are never at the
-> very start of the trace. So if your traces are very short it's possible
-> to miss them entirely.
->
-> Cheers,
-> Alexandre
->
->
-> On 14-01-24 08:54 AM, Krishanth TJ wrote:
-> > Hi,
-> >
-> > I have confirmed that the "lttng-modules-dkms" package was successfully
-> > installed.
-> >
-> > $ cat /usr/src/lttng-modules-2.3.x+stable/ChangeLog | head -4
-> > 2013-09-28 LTTng modules 2.3.2
-> >     * Blacklist kernels 3.10.13 and 3.11.2
-> >
-> > I have even confirmed with few debug printk's in lttng_statedump.ko that
-> > the module is indeed loaded and the tracepoints are getting called. But
-> > still babeltrace output fails to show lttng_statedump_events.
-> >
-> > Am I missing something here?
-> >
-> > Regards,
-> > Krish.
-> >
->
->
-
---20cf301af619a2624004f0ed6d27
-Content-Type: text/html; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><br><div class=3D"gmail_extra">Yes, they do appear in &quo=
-t;lttng list -k&quot; event list.<br><br></div><div class=3D"gmail_extra">R=
-egards,<br></div><div class=3D"gmail_extra">Krish.<br></div><div class=3D"g=
-mail_extra">
-<br><div class=3D"gmail_quote">On Fri, Jan 24, 2014 at 11:47 PM, Alexandre =
-Montplaisir <span dir=3D"ltr">&lt;<a href=3D"mailto:alexmonthy@voxpopuli.im=
-" target=3D"_blank">alexmonthy@voxpopuli.im</a>&gt;</span> wrote:<br><block=
-quote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1=
-px solid rgb(204,204,204);padding-left:1ex">
-Hmm, ok, if you use &quot;lttng list -k&quot; do they appear in the list of=
-<br>
-available events?<br>
-<br>
-One other thing I can think about is that the statedump itself takes a<br>
-little bit of time to execute, so the statedump events are never at the<br>
-very start of the trace. So if your traces are very short it&#39;s possible=
-<br>
-to miss them entirely.<br>
-<br>
-Cheers,<br>
-Alexandre<br>
-<div class=3D""><div class=3D"h5"><br>
-<br>
-On 14-01-24 08:54 AM, Krishanth TJ wrote:<br>
-&gt; Hi,<br>
-&gt;<br>
-&gt; I have confirmed that the &quot;lttng-modules-dkms&quot; package was s=
-uccessfully<br>
-&gt; installed.<br>
-&gt;<br>
-&gt; $ cat /usr/src/lttng-modules-2.3.x+stable/ChangeLog | head -4<br>
-&gt; 2013-09-28 LTTng modules 2.3.2<br>
-&gt; =A0 =A0 * Blacklist kernels 3.10.13 and 3.11.2<br>
-&gt;<br>
-&gt; I have even confirmed with few debug printk&#39;s in lttng_statedump.k=
-o that<br>
-&gt; the module is indeed loaded and the tracepoints are getting called. Bu=
-t<br>
-&gt; still babeltrace output fails to show lttng_statedump_events.<br>
-&gt;<br>
-&gt; Am I missing something here?<br>
-&gt;<br>
-&gt; Regards,<br>
-&gt; Krish.<br>
-&gt;<br>
-<br>
-</div></div></blockquote></div><br></div></div>
-
---20cf301af619a2624004f0ed6d27--
-
-
---===============1601818481==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1601818481==--
+diff --git a/src/bin/lttng-sessiond/ust-metadata.c b/src/bin/lttng-sessiond/ust-metadata.c
+index b0f83d2..f511253 100644
+--- a/src/bin/lttng-sessiond/ust-metadata.c
++++ b/src/bin/lttng-sessiond/ust-metadata.c
+@@ -24,6 +24,7 @@
+ #include <string.h>
+ #include <stdarg.h>
+ #include <stdio.h>
++#include <stdlib.h>
+ #include <limits.h>
+ #include <unistd.h>
+ #include <inttypes.h>
+@@ -37,6 +38,8 @@
+ #define max_t(type, a, b)	((type) ((a) > (b) ? (a) : (b)))
+ #endif
+ 
++#define NR_CLOCK_OFFSET_SAMPLES		20
++
+ static inline
+ int fls(unsigned int x)
+ {
+@@ -490,14 +493,21 @@ int _lttng_event_header_declare(struct ust_registry_session *session)
+ 	);
+ }
+ 
+-/*
+- * Approximation of NTP time of day to clock monotonic correlation,
+- * taken at start of trace.
+- * Yes, this is only an approximation. Yes, we can (and will) do better
+- * in future versions.
+- */
+ static
+-uint64_t measure_clock_offset(void)
++int sort_uint64(const void *_a, const void *_b)
++{
++	const uint64_t *a = _a, *b = _b;
++
++	if (a < b)
++		return -1;
++	else if (a > b)
++		return 1;
++	else
++		return 0;
++}
++
++static
++int measure_single_clock_offset(uint64_t *offset_sample)
+ {
+ 	uint64_t offset, monotonic[2], realtime;
+ 	struct timespec rts = { 0, 0 };
+@@ -506,15 +516,39 @@ uint64_t measure_clock_offset(void)
+ 	monotonic[0] = trace_clock_read64();
+ 	ret = clock_gettime(CLOCK_REALTIME, &rts);
+ 	if (ret < 0)
+-		return 0;
++		return ret;
+ 	monotonic[1] = trace_clock_read64();
+ 	offset = (monotonic[0] + monotonic[1]) >> 1;
+ 	realtime = (uint64_t) rts.tv_sec * 1000000000ULL;
+ 	realtime += rts.tv_nsec;
+ 	offset = realtime - offset;
+-	return offset;
++	*offset_sample = offset;
++	return 0;
+ }
+ 
++/*
++ * Approximation of NTP time of day to clock monotonic correlation,
++ * taken at start of trace.
++ * Take the median of many measurements to remove uncertainty caused by
++ * preemption.
++ */
++static
++uint64_t measure_clock_offset(void)
++{
++	uint64_t offset_samples[NR_CLOCK_OFFSET_SAMPLES];
++	int i;
++
++	for (i = 0; i < NR_CLOCK_OFFSET_SAMPLES; i++) {
++		if (measure_single_clock_offset(&offset_samples[i])) {
++			return 0;
++		}
++	}
++
++	/* Find median (using qsort() which is already implemented) */
++	qsort(offset_samples, NR_CLOCK_OFFSET_SAMPLES,
++		sizeof(*offset_samples), sort_uint64);
++	return offset_samples[NR_CLOCK_OFFSET_SAMPLES >> 1];
++}
+ 
+ /*
+  * Should be called with session registry mutex held.
+-- 
+1.7.10.4
