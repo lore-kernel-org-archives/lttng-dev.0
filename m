@@ -1,14 +1,16 @@
 From: Florian Lohoff <f@zz.de>
-Subject: urcu hang in cds_lfht_add
-Date: Tue, 28 Jan 2014 21:24:13 +0100
-Message-ID: <20140128202413.GC19393__4349.53642911768$1390940714$gmane$org@pax.zz.de>
+Subject: Re: urcu hang in cds_lfht_add
+Date: Tue, 28 Jan 2014 22:01:50 +0100
+Message-ID: <20140128210150.GE19393__10095.4106230803$1390942980$gmane$org@pax.zz.de>
+References: <20140128202413.GC19393@pax.zz.de>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1536387249=="
+Content-Type: multipart/mixed; boundary="===============1780996402=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from pax.zz.de ([88.198.69.77])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <flo@pax.zz.de>) id 1W8FCh-0005nt-07
-	for lttng-dev@lists.lttng.org; Tue, 28 Jan 2014 15:24:20 -0500
+	(envelope-from <flo@pax.zz.de>) id 1W8Fn5-000677-TB
+	for lttng-dev@lists.lttng.org; Tue, 28 Jan 2014 16:01:57 -0500
+In-Reply-To: <20140128202413.GC19393@pax.zz.de>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,73 +23,52 @@ To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
 
---===============1536387249==
+--===============1780996402==
 Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="uh9ZiVrAOUUm9fzH"
+	protocol="application/pgp-signature"; boundary="8vCeF2GUdMpe9ZbK"
 Content-Disposition: inline
 
 
---uh9ZiVrAOUUm9fzH
+--8vCeF2GUdMpe9ZbK
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
+On Tue, Jan 28, 2014 at 09:24:13PM +0100, Florian Lohoff wrote:
+>=20
+> Hi,
+>=20
+> i am using urcu hashes for indexing network packets. I am currently
+> reading a pcap file for replaying so i am single threaded right now.
+> I am indexing the same packet in multiple different hashes.
+>=20
+> I have now added call_rcu for freeing structures and now i experience
+> hangs.
+>=20
+> As soon as i remove the call_rcu the code runs through. with the call_rcu
+> it hangs after a couple thousand packets in an cds_lfht_add.
+>=20
+> As i find RCU still a little mind twisting i fail to find a path
+> for debugging.
+>=20
+> Ah - this is urcu 0.7.7 on Debian/Wheezy amd64
 
-Hi,
+Using 0.8.1 with DEBUG_RCU, adding a second thread calling synchronize_rcu =
+regularly
+gave an assert sometimes which showed some broken state.
 
-i am using urcu hashes for indexing network packets. I am currently
-reading a pcap file for replaying so i am single threaded right now.
-I am indexing the same packet in multiple different hashes.
+Disabling the last free() caused the process to finish so=20
+i found a small bug causing a removal on a hash to fail.
 
-I have now added call_rcu for freeing structures and now i experience
-hangs.
+I freed the memory and there was your hash corruption.
 
-As soon as i remove the call_rcu the code runs through. with the call_rcu
-it hangs after a couple thousand packets in an cds_lfht_add.
-
-As i find RCU still a little mind twisting i fail to find a path
-for debugging.
-
-Ah - this is urcu 0.7.7 on Debian/Wheezy amd64
-
-currently i do
-
-rcu_init
-rcu_register_thread
-
-h1=3Dcds_lfht_new
-h2=3Dcds_lfht_new
-h3=3Dcds_lfht_new
-
-for each packet {
- rcu_lock
-
- res=3Dcds_lfht_add_replace(h1, Pn, ..)
-
- if (res) {
-
-  cds_lfht_lookup(h2 ...
-   cds_lfht_next_duplicate
-    cds_lfht_del
-
-  cds_lfht_lookup(h3 ...
-   cds_lfht_next_duplicate
-    cds_lfht_del
-
-  call_rcu(... res)
- }
-
- cds_lfht_add(h2, Pn
- cds_lfht_add(h3, Pn
-
- rcu_unlock
-}
+Sorry for the noise ...
 
 Flo
 --=20
 Florian Lohoff                                                 f@zz.de
 
---uh9ZiVrAOUUm9fzH
+--8vCeF2GUdMpe9ZbK
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: Digital signature
 Content-Disposition: inline
@@ -95,25 +76,25 @@ Content-Disposition: inline
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.10 (GNU/Linux)
 
-iQIUAwUBUugR7ZDdQSDLCfIvAQi0mw/3VCDCsD0BxkF5tvEnOH60wMjAbvzS7XPq
-GNVCodxD2sczFrrQFXcuFbq9RUl1L09F58pLwXRM0fP6kihYjVC86zMiBCAqyqvr
-SrsQwGruZ93cd5JXMRDgccnGckh+JkXCdYiJvLMjF5YB9dRLKxMHu47fRH3PO6Z1
-F+f3ii0UW47O5Wus6WcWdvXfHhbBGXbJZMN4k586t437ZQKTShsKcTyQTUZ5nTJf
-bDc9Y/2QS7zR7pjcUf0jaONemO+YPPekjpGAg0cYnRNngzyfR/CrZ2SVMbeu5zNQ
-tExaALCVGPG6ox0xLIdJrDS1slHo76foxUXTtpdk6XJzUZR+nY/vXkXzg3UbTtUD
-ohHDr95Zw86xwa4nyLux0nQamAjQ3SfNZ/Cr4jbdg2u08NHPZtiG03GmXcs/iaE2
-Y5QhhrcMN6INfZC1IZmTkbxHmYmCJ/Odz/Xsufcu0P0pV37SqQ2Lzkr5md9rPv3Q
-IGGbP8QVdycUxf6WK4twnR1RdejBgYPUnjUVRkml7/g1XLqJfBsfJnt++QRoWR2c
-u/X+HNQwtkG403m5ksd0c4cTx1OKeF4GEhUoN6xH3ZchqBA368O9c4RKNOARGVDn
-1mEN5fzftgwvQspyADCTtqToymmdToHEbBYlTapVaIa+2oA53/FEUUToDn1zy/Gk
-KMCODuDpig==
-=Y8lZ
+iQIVAwUBUugavpDdQSDLCfIvAQhs+g//bsodcxpH5HyHbtgmDcg9nxgbGniKoMON
+q/hD9KoMtVEii7dcolcXu5mSRuwr5Jxi6m8CpT1CUAvhPNdlxs+bolEd67E/EkoI
+e/oeKjDMe5A9jZ8+C2SZNiAp+hx7YM4Ad50U1dTmHTwztPMBwfQCQ/BeCdBeskUT
+sxQlJ9v+aNOWcFWEfMqAwbr+Vg535uGoEqTY903t4ntJG2JOqMegq7IQe/1WQRUD
+4eRjHKYuwCXCa3oRu+DXB6oX+AmUzq7WEP5iL4DAM8JYYIFuRAUzGPlnP53Lo2KN
+kg8VfXuYOs23YCsfwZkfAVkZhI6uSWmEPmaxe7jY5Snw9pznHK7onz+GkEEglu/p
+xk3aFJxiFcCw0Zvhy+A5vFwl7HkvX1/KewtOtKN9HlhfsX3eTFcon/rC6e17D3NL
+2zwuIT7qdd1E1wjS1EaXKeim/yrxW2CRuoRkx+dsT0e9DIjn0QN+41SEQQPc5liO
+Ex3u3+9xarKtMrmZxWk3IQpBN2MzPvS5qelC1vPkyuCvBm9R25NzvnPgdexyIFsK
++EF8MtXtjD14zHBiTfhFYrR52do3mwgn1bQfdsKhTfSHbXSShTi8lKe0HiA9Tq1v
+AU5bLS8g5gGGAykUG+R8ArkkyDbLqO5j0ddKoc0WQf5s+wIr4BGDxqOxain1c1BM
+JENO9m+WeVI=
+=s0pe
 -----END PGP SIGNATURE-----
 
---uh9ZiVrAOUUm9fzH--
+--8vCeF2GUdMpe9ZbK--
 
 
---===============1536387249==
+--===============1780996402==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -124,4 +105,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============1536387249==--
+--===============1780996402==--
