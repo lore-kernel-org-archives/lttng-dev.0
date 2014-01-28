@@ -1,21 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-tools] Fix: measure UST clock offset
- with best sample
-Date: Mon, 27 Jan 2014 19:30:19 +0000 (UTC)
-Message-ID: <1521412374.13620.1390851019687.JavaMail.zimbra__6789.53522951833$1390851084$gmane$org@efficios.com>
-References: <1390850916-11467-1-git-send-email-mathieu.desnoyers@efficios.com>
+From: Shariyar <syed.shariyar@gmail.com>
+Subject: liblttng-ust-cyg-profile.so not found
+Date: Tue, 28 Jan 2014 11:37:20 -0500
+Message-ID: <CAKQh6pgjuidy=KzKNQx1hropC_A8Nvdsk4AX2S0j2CHXCP8ihw__19174.3640149527$1390927114$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0025889240=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-pa0-f41.google.com ([209.85.220.41])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1W7rt1-0002Ro-QR
-	for lttng-dev@lists.lttng.org; Mon, 27 Jan 2014 14:30:29 -0500
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.efficios.com (Postfix) with ESMTP id E4E2C3401C8
-	for <lttng-dev@lists.lttng.org>; Mon, 27 Jan 2014 19:30:21 +0000 (UTC)
-In-Reply-To: <1390850916-11467-1-git-send-email-mathieu.desnoyers@efficios.com>
+	(envelope-from <syed.shariyar@gmail.com>) id 1W8BfD-0003xj-GG
+	for lttng-dev@lists.lttng.org; Tue, 28 Jan 2014 11:37:35 -0500
+Received: by mail-pa0-f41.google.com with SMTP id fa1so575639pad.28
+	for <lttng-dev@lists.lttng.org>; Tue, 28 Jan 2014 08:37:20 -0800 (PST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,138 +19,63 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: dgoulet@efficios.com
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
------ Original Message -----
-> From: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-> To: dgoulet@efficios.com
-> Cc: lttng-dev@lists.lttng.org, "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-> Sent: Monday, January 27, 2014 2:28:36 PM
-> Subject: [PATCH lttng-tools] Fix: measure UST clock offset with best sample
-> 
-> Fixes #729
-> 
-> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> ---
->  src/bin/lttng-sessiond/ust-metadata.c |   57
->  ++++++++++++++++++++++++++-------
->  1 file changed, 46 insertions(+), 11 deletions(-)
-> 
-> diff --git a/src/bin/lttng-sessiond/ust-metadata.c
-> b/src/bin/lttng-sessiond/ust-metadata.c
-> index b0f83d2..55d00da 100644
-> --- a/src/bin/lttng-sessiond/ust-metadata.c
-> +++ b/src/bin/lttng-sessiond/ust-metadata.c
-> @@ -24,6 +24,7 @@
->  #include <string.h>
->  #include <stdarg.h>
->  #include <stdio.h>
-> +#include <stdlib.h>
+--===============0025889240==
+Content-Type: multipart/alternative; boundary=047d7b67823a2b0ea204f10a7070
 
-Hrm, I forgot to remove this include from the previous patch.
+--047d7b67823a2b0ea204f10a7070
+Content-Type: text/plain; charset=ISO-8859-1
 
-Will wait for comments before re-send.
+Hi,
+
+I am trying to collect function entry and exit points in a trace. I  have
+followed the instructions written on the following man page:
+http://manpages.ubuntu.com/manpages/trusty/man3/lttng-ust-cyg-profile.3.html.
+
+
+In my system, UST tracepoint tracing  is working fine and I am able to
+collect traces with the statically typed tracepoints in the code. However,
+there is no liblttng-ust-cyg-profile.so in my system and I get an error
+when I execute the following:
+
+       *LD_PRELOAD=liblttng-ust-cyg-profile.so* appname
+
+Please let me know how to get it to work?
 
 Thanks,
+Shariyar
 
-Mathieu
+--047d7b67823a2b0ea204f10a7070
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
 
->  #include <limits.h>
->  #include <unistd.h>
->  #include <inttypes.h>
-> @@ -37,6 +38,13 @@
->  #define max_t(type, a, b)	((type) ((a) > (b) ? (a) : (b)))
->  #endif
->  
-> +#define NR_CLOCK_OFFSET_SAMPLES		10
-> +
-> +struct offset_sample {
-> +	uint64_t offset;		/* correlation offset */
-> +	uint64_t measure_delta;		/* lower is better */
-> +};
-> +
->  static inline
->  int fls(unsigned int x)
->  {
-> @@ -490,31 +498,58 @@ int _lttng_event_header_declare(struct
-> ust_registry_session *session)
->  	);
->  }
->  
-> -/*
-> - * Approximation of NTP time of day to clock monotonic correlation,
-> - * taken at start of trace.
-> - * Yes, this is only an approximation. Yes, we can (and will) do better
-> - * in future versions.
-> - */
->  static
-> -uint64_t measure_clock_offset(void)
-> +int measure_single_clock_offset(struct offset_sample *sample)
->  {
-> -	uint64_t offset, monotonic[2], realtime;
-> +	uint64_t offset, monotonic[2], measure_delta, realtime;
->  	struct timespec rts = { 0, 0 };
->  	int ret;
->  
->  	monotonic[0] = trace_clock_read64();
->  	ret = clock_gettime(CLOCK_REALTIME, &rts);
-> -	if (ret < 0)
-> -		return 0;
-> +	if (ret < 0) {
-> +		return ret;
-> +	}
->  	monotonic[1] = trace_clock_read64();
-> +	measure_delta = monotonic[1] - monotonic[0];
-> +	if (measure_delta > sample->measure_delta) {
-> +		/*
-> +		 * Discard value if it took longer to read than the best
-> +		 * sample so far.
-> +		 */
-> +		return 0;
-> +	}
->  	offset = (monotonic[0] + monotonic[1]) >> 1;
->  	realtime = (uint64_t) rts.tv_sec * 1000000000ULL;
->  	realtime += rts.tv_nsec;
->  	offset = realtime - offset;
-> -	return offset;
-> +	sample->offset = offset;
-> +	sample->measure_delta = measure_delta;
-> +	return 0;
->  }
->  
-> +/*
-> + * Approximation of NTP time of day to clock monotonic correlation,
-> + * taken at start of trace.
-> + * Take the median of many measurements to remove uncertainty caused by
-> + * preemption.
-> + */
-> +static
-> +uint64_t measure_clock_offset(void)
-> +{
-> +	int i;
-> +	struct offset_sample offset_best_sample = {
-> +		.offset = 0,
-> +		.measure_delta = UINT64_MAX,
-> +	};
-> +
-> +	for (i = 0; i < NR_CLOCK_OFFSET_SAMPLES; i++) {
-> +		if (measure_single_clock_offset(&offset_best_sample)) {
-> +			return 0;
-> +		}
-> +	}
-> +	return offset_best_sample.offset;
-> +}
->  
->  /*
->   * Should be called with session registry mutex held.
-> --
-> 1.7.10.4
-> 
-> 
+<div dir=3D"ltr"><div>Hi,<br><br>I am trying to collect function entry and =
+exit points in a trace. I=A0 have followed the instructions written on the =
+following man page: <br>
+<a href=3D"http://manpages.ubuntu.com/manpages/trusty/man3/lttng-ust-cyg-pr=
+ofile.3.html">http://manpages.ubuntu.com/manpages/trusty/man3/lttng-ust-cyg=
+-profile.3.html</a>. <br><br>In my system, UST tracepoint tracing=A0 is wor=
+king fine and I am able to collect traces with the statically typed tracepo=
+ints in the code. However, there is no<b> </b>liblttng-ust-cyg-profile.so i=
+n my system and I get an error when I execute the following:<br>
+<pre>       <b>LD_PRELOAD=3Dliblttng-ust-cyg-profile.so</b> appname</pre>Pl=
+ease let me know how to get it to work?<br><br></div><div>Thanks,<br></div>=
+<div>Shariyar<br></div></div>
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+--047d7b67823a2b0ea204f10a7070--
+
+
+--===============0025889240==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0025889240==--
