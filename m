@@ -1,16 +1,36 @@
-From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Subject: Re: liblttng-ust-cyg-profile.so not found
-Date: Wed, 29 Jan 2014 14:26:07 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD267DD6EB__42977.254294283$1391005638$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [RELEASE] LTTng-UST 2.4.0-rc3
+Date: Wed, 29 Jan 2014 17:04:46 +0000 (UTC)
+Message-ID: <225199525.14901.1391015086986.JavaMail.zimbra__14387.7955888913$1391015156$gmane$org@efficios.com>
+References: <1387734468.14900.1391015075560.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
+Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1W8W5l-0005pI-W4
-	for lttng-dev@lists.lttng.org; Wed, 29 Jan 2014 09:26:19 -0500
-Content-Language: fr-FR
+	(envelope-from <compudj@efficios.com>) id 1W8YZI-00074L-2D
+	for lttng-dev@lists.lttng.org; Wed, 29 Jan 2014 12:04:57 -0500
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.efficios.com (Postfix) with ESMTP id D16EF3400CB
+	for <lttng-dev@lists.lttng.org>; Wed, 29 Jan 2014 17:04:49 +0000 (UTC)
+Received: from mail.efficios.com ([127.0.0.1])
+	by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new,
+	port 10032)
+	with ESMTP id cEX3L_Zt8wx1 for <lttng-dev@lists.lttng.org>;
+	Wed, 29 Jan 2014 17:04:47 +0000 (UTC)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.efficios.com (Postfix) with ESMTP id 8433D3401F1
+	for <lttng-dev@lists.lttng.org>; Wed, 29 Jan 2014 17:04:47 +0000 (UTC)
+Received: from mail.efficios.com ([127.0.0.1])
+	by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new,
+	port 10026)
+	with ESMTP id S-kfckfpnuWP for <lttng-dev@lists.lttng.org>;
+	Wed, 29 Jan 2014 17:04:47 +0000 (UTC)
+Received: from evm-mail-1.efficios.com (evm-mail-1.efficios.com [78.47.125.74])
+	by mail.efficios.com (Postfix) with ESMTP id 48D253400CB
+	for <lttng-dev@lists.lttng.org>; Wed, 29 Jan 2014 17:04:47 +0000 (UTC)
+In-Reply-To: <1387734468.14900.1391015075560.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,79 +39,29 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
-Cc: Shariyar <syed.shariyar@gmail.com>
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-----------------------------------------------------------------------
-Date: Tue, 28 Jan 2014 11:37:20 -0500
-From: Shariyar <syed.shariyar@gmail.com>
+LTTng-UST, the Linux Trace Toolkit Next Generation Userspace Tracer, is
+port of the low-overhead tracing capabilities of the LTTng kernel tracer
+to user-space. The library "liblttng-ust" enables tracing of
+applications and libraries.
 
-> I am trying to collect function entry and exit points in a trace. I  have=
- followed the instructions written on the following man page:
-> http://manpages.ubuntu.com/manpages/trusty/man3/lttng-ust-cyg-profile.3.h=
-tml.
->
-> In my system, UST tracepoint tracing  is working fine and I am able to co=
-llect traces with the statically typed tracepoints in the code.
-> However, there is no liblttng-ust-cyg-profile.so in my system and I get a=
-n error when I execute the following:
->
->      *LD_PRELOAD=3Dliblttng-ust-cyg-profile.so* appname
-------------------------------
-Date: Tue, 28 Jan 2014 12:29:43 -0500
-From: Suchakrapani Datt Sharma <suchakrapani.sharma@polymtl.ca>
+Changelog:
+2014-01-29 lttng-ust 2.4.0-rc3
+        * Fix: add missing JUL loglevel handling
+        * Cleanup gen-tp: add quotes around AM_CC
+        * Pass the CC variable to the example Makefiles
+        * cleanup ust_baddr and ust_baddr_statedump doc
+        * baddr: add ust_baddr and ust_baddr_statedump doc
+        * Fix: baddr_statedump tracepoint registration
+        * Fix: baddr out of tree build
 
-> Check if the liblttng-ust-cyg-profile.so is present in system using 'loca=
-te'. On my system its in /usr/lib64
-> Then give the absolute path -
->*LD_PRELOAD=3D/usr/lib64/liblttng-ust-cyg-profile.so* appname
-------------------------------
-Date: Tue, 28 Jan 2014 12:32:14 -0500
-From: Shariyar <syed.shariyar@gmail.com>
+Project website: http://lttng.org
+Download link: http://lttng.org/download
+(please refer to the README file for installation instructions)
 
-> It is not present in the system even after reinstalling ust libs from PPA.
-> I am working on Ubuntu 12.04.1 LTS, 64 bit.
-------------------------------
-Date: Tue, 28 Jan 2014 12:45:34 -0500
-From: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
-
-> On Ubuntu/Debian, there is no "lib64", it's /usr/lib/x86_64-linux-gnu/
->
-> If you installed UST from the distro package, it should be at:
-> /usr/lib/x86_64-linux-gnu/liblttng-ust-cyg-profile.so.0
->
-> (the .so symlink is only installed by the -dev package)
->
-> If you installed from source, it would be at:
-> /usr/local/lib/liblttng-ust-cyg-profile.so
->
-> Quick tip: you can use:
-> dpkg -L liblttng-ust0
-> to list the files installed by a package.
-------------------------------
-Date: Tue, 28 Jan 2014 16:19:09 -0500
-From: Shariyar <syed.shariyar@gmail.com>
-
-> dpkg -L liblttng-ust0 gives the following; i.e., no liblttng-ust-cyg-prof=
-ile.so
->
-> /usr/share/man/man3/lttng-ust-cyg-profile.3.gz
-
-   Which package did you install, and whence came it?
-
-Daniel U. Thibault
-Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
-ntermeasures (SPC)
-Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
-Cyber Security (MCCS)
-R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
- Canada - Valcartier (DRDC Valcartier)
-2459 route de la Bravoure
-Qu=E9bec QC  G3J 1X5
-CANADA
-Vox : (418) 844-4000 x4245
-Fax : (418) 844-4538
-NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-Gouvernement du Canada | Government of Canada
-<http://www.valcartier.drdc-rddc.gc.ca/>
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
