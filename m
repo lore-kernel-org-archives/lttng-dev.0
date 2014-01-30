@@ -1,19 +1,21 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH lttng-tools] Fix: measure UST clock offset with
-	best sample (v2)
-Date: Thu, 30 Jan 2014 17:06:30 -0500
-Message-ID: <1391119590-16367-1-git-send-email-mathieu.desnoyers__49797.405410982$1391119677$gmane$org@efficios.com>
+Subject: Re: Lttng state dump traces not present in 13.04 Ubuntu
+ server distribution
+Date: Thu, 30 Jan 2014 22:54:19 +0000 (UTC)
+Message-ID: <275408743.15986.1391122459985.JavaMail.zimbra__44438.9630378739$1391122529$gmane$org@efficios.com>
+References: <CAAoqFdREb-auZ90-w20adi8vrBSisFrZcVCREBDZwgjS0OK7dA@mail.gmail.com>
+	<52E161A8.4070908@voxpopuli.im>
+	<CAAoqFdRZaoLW_r2bdaZvU+wwMtMS1nHuBNkumznqRY-_yOPh6g@mail.gmail.com>
+	<52E2AE2E.2020907@voxpopuli.im>
+	<CAAoqFdTREawK0vSn1aVLCGs9PhFj8JJNjsHopiE8G8dYHv_6zQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0639168724=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <mathieu.desnoyers@efficios.com>) id 1W8zl1-0003pb-4k
-	for lttng-dev@lists.lttng.org; Thu, 30 Jan 2014 17:06:52 -0500
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.efficios.com (Postfix) with ESMTP id 1F20D340189
-	for <lttng-dev@lists.lttng.org>; Thu, 30 Jan 2014 22:06:45 +0000 (UTC)
+	(envelope-from <compudj@efficios.com>) id 1W90V7-0004Ct-73
+	for lttng-dev@lists.lttng.org; Thu, 30 Jan 2014 17:54:31 -0500
+In-Reply-To: <CAAoqFdTREawK0vSn1aVLCGs9PhFj8JJNjsHopiE8G8dYHv_6zQ@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,103 +24,201 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: dgoulet@efficios.com
+To: Krishanth TJ <krishanthtj@gmail.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Fixes #729
+--===============0639168724==
+Content-Type: multipart/alternative;
+	boundary="----=_Part_15985_1034723507.1391122459984"
 
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
----
- src/bin/lttng-sessiond/ust-metadata.c |   55 ++++++++++++++++++++++++++-------
- 1 file changed, 44 insertions(+), 11 deletions(-)
+------=_Part_15985_1034723507.1391122459984
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-diff --git a/src/bin/lttng-sessiond/ust-metadata.c b/src/bin/lttng-sessiond/ust-metadata.c
-index b0f83d2..f430ae1 100644
---- a/src/bin/lttng-sessiond/ust-metadata.c
-+++ b/src/bin/lttng-sessiond/ust-metadata.c
-@@ -37,6 +37,13 @@
- #define max_t(type, a, b)	((type) ((a) > (b) ? (a) : (b)))
- #endif
- 
-+#define NR_CLOCK_OFFSET_SAMPLES		10
-+
-+struct offset_sample {
-+	uint64_t offset;		/* correlation offset */
-+	uint64_t measure_delta;		/* lower is better */
-+};
-+
- static inline
- int fls(unsigned int x)
- {
-@@ -490,31 +497,57 @@ int _lttng_event_header_declare(struct ust_registry_session *session)
- 	);
- }
- 
--/*
-- * Approximation of NTP time of day to clock monotonic correlation,
-- * taken at start of trace.
-- * Yes, this is only an approximation. Yes, we can (and will) do better
-- * in future versions.
-- */
- static
--uint64_t measure_clock_offset(void)
-+int measure_single_clock_offset(struct offset_sample *sample)
- {
--	uint64_t offset, monotonic[2], realtime;
-+	uint64_t offset, monotonic[2], measure_delta, realtime;
- 	struct timespec rts = { 0, 0 };
- 	int ret;
- 
- 	monotonic[0] = trace_clock_read64();
- 	ret = clock_gettime(CLOCK_REALTIME, &rts);
--	if (ret < 0)
--		return 0;
-+	if (ret < 0) {
-+		return ret;
-+	}
- 	monotonic[1] = trace_clock_read64();
-+	measure_delta = monotonic[1] - monotonic[0];
-+	if (measure_delta > sample->measure_delta) {
-+		/*
-+		 * Discard value if it took longer to read than the best
-+		 * sample so far.
-+		 */
-+		return 0;
-+	}
- 	offset = (monotonic[0] + monotonic[1]) >> 1;
- 	realtime = (uint64_t) rts.tv_sec * 1000000000ULL;
- 	realtime += rts.tv_nsec;
- 	offset = realtime - offset;
--	return offset;
-+	sample->offset = offset;
-+	sample->measure_delta = measure_delta;
-+	return 0;
- }
- 
-+/*
-+ * Approximation of NTP time of day to clock monotonic correlation,
-+ * taken at start of trace. Keep the measurement that took the less time
-+ * to complete, thus removing imprecision caused by preemption.
-+ */
-+static
-+uint64_t measure_clock_offset(void)
-+{
-+	int i;
-+	struct offset_sample offset_best_sample = {
-+		.offset = 0,
-+		.measure_delta = UINT64_MAX,
-+	};
-+
-+	for (i = 0; i < NR_CLOCK_OFFSET_SAMPLES; i++) {
-+		if (measure_single_clock_offset(&offset_best_sample)) {
-+			return 0;
-+		}
-+	}
-+	return offset_best_sample.offset;
-+}
- 
- /*
-  * Should be called with session registry mutex held.
+There are a few things to double-check: 
+
+- that the module holding the statedump event does not taint the kernel (is it signed ?) 
+- that there is no conflict between the lttng-modules from Ubuntu and the one you are using, 
+
+Also, I fixed TRACE_EVENT_MAP type of event declaration recently, but I don't think 
+it is related to your issue. This is only for the cases where the event name differs between the 
+Linux kernel tracepoint and the LTTng name. 
+
+Thanks, 
+
+Mathieu 
+
+----- Original Message -----
+
+> From: "Krishanth TJ" <krishanthtj@gmail.com>
+> To: "Alexandre Montplaisir" <alexmonthy@voxpopuli.im>
+> Cc: lttng-dev@lists.lttng.org
+> Sent: Monday, January 27, 2014 1:00:44 AM
+> Subject: Re: [lttng-dev] Lttng state dump traces not present in 13.04 Ubuntu
+> server distribution
+
+> Yes, they do appear in "lttng list -k" event list.
+
+> Regards,
+> Krish.
+
+> On Fri, Jan 24, 2014 at 11:47 PM, Alexandre Montplaisir <
+> alexmonthy@voxpopuli.im > wrote:
+
+> > Hmm, ok, if you use "lttng list -k" do they appear in the list of
+> 
+> > available events?
+> 
+
+> > One other thing I can think about is that the statedump itself takes a
+> 
+> > little bit of time to execute, so the statedump events are never at the
+> 
+> > very start of the trace. So if your traces are very short it's possible
+> 
+> > to miss them entirely.
+> 
+
+> > Cheers,
+> 
+> > Alexandre
+> 
+
+> > On 14-01-24 08:54 AM, Krishanth TJ wrote:
+> 
+> > > Hi,
+> 
+> > >
+> 
+> > > I have confirmed that the "lttng-modules-dkms" package was successfully
+> 
+> > > installed.
+> 
+> > >
+> 
+> > > $ cat /usr/src/lttng-modules-2.3.x+stable/ChangeLog | head -4
+> 
+> > > 2013-09-28 LTTng modules 2.3.2
+> 
+> > > * Blacklist kernels 3.10.13 and 3.11.2
+> 
+> > >
+> 
+> > > I have even confirmed with few debug printk's in lttng_statedump.ko that
+> 
+> > > the module is indeed loaded and the tracepoints are getting called. But
+> 
+> > > still babeltrace output fails to show lttng_statedump_events.
+> 
+> > >
+> 
+> > > Am I missing something here?
+> 
+> > >
+> 
+> > > Regards,
+> 
+> > > Krish.
+> 
+> > >
+> 
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
 -- 
-1.7.10.4
+Mathieu Desnoyers 
+EfficiOS Inc. 
+http://www.efficios.com 
+
+------=_Part_15985_1034723507.1391122459984
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><body><div style=3D"font-family: times new roman, new york, times, se=
+rif; font-size: 12pt; color: #000000"><div>There are a few things to double=
+-check:<br></div><div><br></div><div>- that the module holding the statedum=
+p event does not taint the kernel (is it signed ?)<br></div><div>- that the=
+re is no conflict between the lttng-modules from Ubuntu and the one you are=
+ using,<br></div><div><br></div><div>Also, I fixed TRACE_EVENT_MAP type of =
+event declaration recently, but I don't think<br></div><div>it is related t=
+o your issue. This is only for the cases where the event name differs betwe=
+en the<br></div><div>Linux kernel tracepoint and the LTTng name.<br></div><=
+div><br></div><div>Thanks,<br></div><div><br></div><div>Mathieu<br></div><d=
+iv><br></div><div><br></div><hr id=3D"zwchr"><blockquote style=3D"border-le=
+ft:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;font-weigh=
+t:normal;font-style:normal;text-decoration:none;font-family:Helvetica,Arial=
+,sans-serif;font-size:12pt;"><b>From: </b>"Krishanth TJ" &lt;krishanthtj@gm=
+ail.com&gt;<br><b>To: </b>"Alexandre Montplaisir" &lt;alexmonthy@voxpopuli.=
+im&gt;<br><b>Cc: </b>lttng-dev@lists.lttng.org<br><b>Sent: </b>Monday, Janu=
+ary 27, 2014 1:00:44 AM<br><b>Subject: </b>Re: [lttng-dev] Lttng state dump=
+ traces not present in 13.04 Ubuntu server distribution<br><div><br></div><=
+div dir=3D"ltr"><br><div class=3D"gmail_extra">Yes, they do appear in "lttn=
+g list -k" event list.<br><div><br></div></div><div class=3D"gmail_extra">R=
+egards,<br></div><div class=3D"gmail_extra">Krish.<br></div><div class=3D"g=
+mail_extra">
+<br><div class=3D"gmail_quote">On Fri, Jan 24, 2014 at 11:47 PM, Alexandre =
+Montplaisir <span dir=3D"ltr">&lt;<a href=3D"mailto:alexmonthy@voxpopuli.im=
+" target=3D"_blank">alexmonthy@voxpopuli.im</a>&gt;</span> wrote:<br><block=
+quote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1=
+px solid rgb(204,204,204);padding-left:1ex">
+Hmm, ok, if you use "lttng list -k" do they appear in the list of<br>
+available events?<br>
+<br>
+One other thing I can think about is that the statedump itself takes a<br>
+little bit of time to execute, so the statedump events are never at the<br>
+very start of the trace. So if your traces are very short it's possible<br>
+to miss them entirely.<br>
+<br>
+Cheers,<br>
+Alexandre<br>
+<div class=3D""><div class=3D"h5"><br>
+<br>
+On 14-01-24 08:54 AM, Krishanth TJ wrote:<br>
+&gt; Hi,<br>
+&gt;<br>
+&gt; I have confirmed that the "lttng-modules-dkms" package was successfull=
+y<br>
+&gt; installed.<br>
+&gt;<br>
+&gt; $ cat /usr/src/lttng-modules-2.3.x+stable/ChangeLog | head -4<br>
+&gt; 2013-09-28 LTTng modules 2.3.2<br>
+&gt; &nbsp; &nbsp; * Blacklist kernels 3.10.13 and 3.11.2<br>
+&gt;<br>
+&gt; I have even confirmed with few debug printk's in lttng_statedump.ko th=
+at<br>
+&gt; the module is indeed loaded and the tracepoints are getting called. Bu=
+t<br>
+&gt; still babeltrace output fails to show lttng_statedump_events.<br>
+&gt;<br>
+&gt; Am I missing something here?<br>
+&gt;<br>
+&gt; Regards,<br>
+&gt; Krish.<br>
+&gt;<br>
+<br>
+</div></div></blockquote></div><br></div></div>
+<br>_______________________________________________<br>lttng-dev mailing li=
+st<br>lttng-dev@lists.lttng.org<br>http://lists.lttng.org/cgi-bin/mailman/l=
+istinfo/lttng-dev<br></blockquote><div><br><br></div><div><br></div><div>--=
+ <br></div><div><span name=3D"x"></span>Mathieu Desnoyers<br>EfficiOS Inc.<=
+br>http://www.efficios.com<span name=3D"x"></span><br></div></div></body></=
+html>
+------=_Part_15985_1034723507.1391122459984--
+
+
+--===============0639168724==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0639168724==--
