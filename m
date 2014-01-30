@@ -1,21 +1,19 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Lttng state dump traces not present in 13.04 Ubuntu
- server distribution
-Date: Thu, 30 Jan 2014 22:54:19 +0000 (UTC)
-Message-ID: <275408743.15986.1391122459985.JavaMail.zimbra__44438.9630378739$1391122529$gmane$org@efficios.com>
-References: <CAAoqFdREb-auZ90-w20adi8vrBSisFrZcVCREBDZwgjS0OK7dA@mail.gmail.com>
-	<52E161A8.4070908@voxpopuli.im>
-	<CAAoqFdRZaoLW_r2bdaZvU+wwMtMS1nHuBNkumznqRY-_yOPh6g@mail.gmail.com>
-	<52E2AE2E.2020907@voxpopuli.im>
-	<CAAoqFdTREawK0vSn1aVLCGs9PhFj8JJNjsHopiE8G8dYHv_6zQ@mail.gmail.com>
+Subject: Re: [PATCH] Use uint32_t for
+ lttng_viewer_stream.metadata_flag
+Date: Thu, 30 Jan 2014 22:54:46 +0000 (UTC)
+Message-ID: <17774810.15998.1391122486437.JavaMail.zimbra__38571.0471346558$1391122650$gmane$org@efficios.com>
+References: <1390002463-21184-1-git-send-email-marc-andre.laperle@ericsson.com>
+	<CAFXXi0nYX8xQAvDW+uox6bfx0ODa2Rdr4ex35pP8PmXotnMjyg@mail.gmail.com>
+	<D381217948BF4C45AF756AFC995BEB9F1C1A2A4D@eusaamb103.ericsson.se>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0639168724=="
+Content-Type: multipart/mixed; boundary="===============1589479481=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1W90V7-0004Ct-73
-	for lttng-dev@lists.lttng.org; Thu, 30 Jan 2014 17:54:31 -0500
-In-Reply-To: <CAAoqFdTREawK0vSn1aVLCGs9PhFj8JJNjsHopiE8G8dYHv_6zQ@mail.gmail.com>
+	(envelope-from <compudj@efficios.com>) id 1W90VW-0004DD-JS
+	for lttng-dev@lists.lttng.org; Thu, 30 Jan 2014 17:54:56 -0500
+In-Reply-To: <D381217948BF4C45AF756AFC995BEB9F1C1A2A4D@eusaamb103.ericsson.se>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,201 +22,234 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Krishanth TJ <krishanthtj@gmail.com>
+To: =?utf-8?Q?Marc-Andr=C3=A9?= Laperle <marc-andre.laperle@ericsson.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============0639168724==
+--===============1589479481==
 Content-Type: multipart/alternative;
-	boundary="----=_Part_15985_1034723507.1391122459984"
+	boundary="----=_Part_15997_251714200.1391122486435"
 
-------=_Part_15985_1034723507.1391122459984
+------=_Part_15997_251714200.1391122486435
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 
-There are a few things to double-check: 
-
-- that the module holding the statedump event does not taint the kernel (is it signed ?) 
-- that there is no conflict between the lttng-modules from Ubuntu and the one you are using, 
-
-Also, I fixed TRACE_EVENT_MAP type of event declaration recently, but I don't think 
-it is related to your issue. This is only for the cases where the event name differs between the 
-Linux kernel tracepoint and the LTTng name. 
-
-Thanks, 
-
-Mathieu 
+Using a char should be OK here.=20
 
 ----- Original Message -----
 
-> From: "Krishanth TJ" <krishanthtj@gmail.com>
-> To: "Alexandre Montplaisir" <alexmonthy@voxpopuli.im>
+> From: "Marc-Andr=C3=A9 Laperle" <marc-andre.laperle@ericsson.com>
+> To: "Simon Marchi" <simon.marchi@polymtl.ca>
 > Cc: lttng-dev@lists.lttng.org
-> Sent: Monday, January 27, 2014 1:00:44 AM
-> Subject: Re: [lttng-dev] Lttng state dump traces not present in 13.04 Ubuntu
-> server distribution
+> Sent: Monday, January 20, 2014 3:25:07 PM
+> Subject: Re: [lttng-dev] [PATCH] Use uint32_t for
+> lttng_viewer_stream.metadata_flag
 
-> Yes, they do appear in "lttng list -k" event list.
+> I'm not sure that's possible. Whether I change them to uint8_t or int8_t,=
+ I
+> get warnings because they get used with strncpy which wants char. Any ide=
+a
+> how to solve this?
 
-> Regards,
-> Krish.
+> Marc-Andr=C3=A9
 
-> On Fri, Jan 24, 2014 at 11:47 PM, Alexandre Montplaisir <
-> alexmonthy@voxpopuli.im > wrote:
+> From: thundersim@gmail.com [thundersim@gmail.com] on behalf of Simon Marc=
+hi
+> [simon.marchi@polymtl.ca]
+> Sent: Friday, 17 January 2014 9:31 PM
+> To: Marc-Andr=C3=A9 Laperle
+> Cc: lttng-dev@lists.lttng.org
+> Subject: Re: [lttng-dev] [PATCH] Use uint32_t for
+> lttng_viewer_stream.metadata_flag
 
-> > Hmm, ok, if you use "lttng list -k" do they appear in the list of
-> 
-> > available events?
-> 
+> While you are at it, you could change the char fields as well, since char=
+ is
+> not exact-width either.
 
-> > One other thing I can think about is that the statedump itself takes a
-> 
-> > little bit of time to execute, so the statedump events are never at the
-> 
-> > very start of the trace. So if your traces are very short it's possible
-> 
-> > to miss them entirely.
-> 
+> On 17 January 2014 18:47, Marc-Andre Laperle <
+> marc-andre.laperle@ericsson.com > wrote:
 
-> > Cheers,
-> 
-> > Alexandre
-> 
+> > This struct is meant to be sent over the network so members should be
+>=20
+> > of exact-width.
+>=20
 
-> > On 14-01-24 08:54 AM, Krishanth TJ wrote:
-> 
-> > > Hi,
-> 
-> > >
-> 
-> > > I have confirmed that the "lttng-modules-dkms" package was successfully
-> 
-> > > installed.
-> 
-> > >
-> 
-> > > $ cat /usr/src/lttng-modules-2.3.x+stable/ChangeLog | head -4
-> 
-> > > 2013-09-28 LTTng modules 2.3.2
-> 
-> > > * Blacklist kernels 3.10.13 and 3.11.2
-> 
-> > >
-> 
-> > > I have even confirmed with few debug printk's in lttng_statedump.ko that
-> 
-> > > the module is indeed loaded and the tracepoints are getting called. But
-> 
-> > > still babeltrace output fails to show lttng_statedump_events.
-> 
-> > >
-> 
-> > > Am I missing something here?
-> 
-> > >
-> 
-> > > Regards,
-> 
-> > > Krish.
-> 
-> > >
-> 
+> > Signed-off-by: Marc-Andre Laperle < marc-andre.laperle@ericsson.com >
+>=20
+> > ---
+>=20
+> > src/bin/lttng-relayd/lttng-viewer.h | 2 +-
+>=20
+> > 1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+
+> > diff --git a/src/bin/lttng-relayd/lttng-viewer.h
+> > b/src/bin/lttng-relayd/lttng-viewer.h
+>=20
+> > index 1977a43..6330270 100644
+>=20
+> > --- a/src/bin/lttng-relayd/lttng-viewer.h
+>=20
+> > +++ b/src/bin/lttng-relayd/lttng-viewer.h
+>=20
+> > @@ -100,7 +100,7 @@ struct lttng_viewer_session {
+>=20
+> > struct lttng_viewer_stream {
+>=20
+> > uint64_t id;
+>=20
+> > uint64_t ctf_trace_id;
+>=20
+> > - int metadata_flag;
+>=20
+> > + uint32_t metadata_flag;
+>=20
+> > char path_name[LTTNG_VIEWER_PATH_MAX];
+>=20
+> > char channel_name[LTTNG_VIEWER_NAME_MAX];
+>=20
+> > } __attribute__((__packed__));
+>=20
+> > --
+>=20
+> > 1.8.3.2
+>=20
+
+> > _______________________________________________
+>=20
+> > lttng-dev mailing list
+>=20
+> > lttng-dev@lists.lttng.org
+>=20
+> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>=20
 
 > _______________________________________________
 > lttng-dev mailing list
 > lttng-dev@lists.lttng.org
 > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
--- 
-Mathieu Desnoyers 
-EfficiOS Inc. 
-http://www.efficios.com 
+--=20
+Mathieu Desnoyers=20
+EfficiOS Inc.=20
+http://www.efficios.com=20
 
-------=_Part_15985_1034723507.1391122459984
+------=_Part_15997_251714200.1391122486435
 Content-Type: text/html; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
 <html><body><div style=3D"font-family: times new roman, new york, times, se=
-rif; font-size: 12pt; color: #000000"><div>There are a few things to double=
--check:<br></div><div><br></div><div>- that the module holding the statedum=
-p event does not taint the kernel (is it signed ?)<br></div><div>- that the=
-re is no conflict between the lttng-modules from Ubuntu and the one you are=
- using,<br></div><div><br></div><div>Also, I fixed TRACE_EVENT_MAP type of =
-event declaration recently, but I don't think<br></div><div>it is related t=
-o your issue. This is only for the cases where the event name differs betwe=
-en the<br></div><div>Linux kernel tracepoint and the LTTng name.<br></div><=
-div><br></div><div>Thanks,<br></div><div><br></div><div>Mathieu<br></div><d=
-iv><br></div><div><br></div><hr id=3D"zwchr"><blockquote style=3D"border-le=
-ft:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;font-weigh=
-t:normal;font-style:normal;text-decoration:none;font-family:Helvetica,Arial=
-,sans-serif;font-size:12pt;"><b>From: </b>"Krishanth TJ" &lt;krishanthtj@gm=
-ail.com&gt;<br><b>To: </b>"Alexandre Montplaisir" &lt;alexmonthy@voxpopuli.=
-im&gt;<br><b>Cc: </b>lttng-dev@lists.lttng.org<br><b>Sent: </b>Monday, Janu=
-ary 27, 2014 1:00:44 AM<br><b>Subject: </b>Re: [lttng-dev] Lttng state dump=
- traces not present in 13.04 Ubuntu server distribution<br><div><br></div><=
-div dir=3D"ltr"><br><div class=3D"gmail_extra">Yes, they do appear in "lttn=
-g list -k" event list.<br><div><br></div></div><div class=3D"gmail_extra">R=
-egards,<br></div><div class=3D"gmail_extra">Krish.<br></div><div class=3D"g=
-mail_extra">
-<br><div class=3D"gmail_quote">On Fri, Jan 24, 2014 at 11:47 PM, Alexandre =
-Montplaisir <span dir=3D"ltr">&lt;<a href=3D"mailto:alexmonthy@voxpopuli.im=
-" target=3D"_blank">alexmonthy@voxpopuli.im</a>&gt;</span> wrote:<br><block=
-quote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1=
-px solid rgb(204,204,204);padding-left:1ex">
-Hmm, ok, if you use "lttng list -k" do they appear in the list of<br>
-available events?<br>
+rif; font-size: 12pt; color: #000000"><div>Using a char should be OK here.<=
+br></div><div><br></div><div><br></div><hr id=3D"zwchr"><blockquote style=
+=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#0=
+00;font-weight:normal;font-style:normal;text-decoration:none;font-family:He=
+lvetica,Arial,sans-serif;font-size:12pt;"><b>From: </b>"Marc-Andr=C3=A9 Lap=
+erle" &lt;marc-andre.laperle@ericsson.com&gt;<br><b>To: </b>"Simon Marchi" =
+&lt;simon.marchi@polymtl.ca&gt;<br><b>Cc: </b>lttng-dev@lists.lttng.org<br>=
+<b>Sent: </b>Monday, January 20, 2014 3:25:07 PM<br><b>Subject: </b>Re: [lt=
+tng-dev] [PATCH] Use uint32_t for lttng_viewer_stream.metadata_flag<br><div=
+><br></div>
+
+
+<style id=3D"owaParaStyle">P {margin-top:0;margin-bottom:0;}</style>
+
+
+<div style=3D"direction: ltr;font-family: Tahoma;color: #000000;font-size: =
+10pt;">I'm not sure that's possible. Whether I change them to uint8_t or in=
+t8_t, I get warnings because they get used with strncpy which wants char. A=
+ny idea how to solve this?<br>
 <br>
-One other thing I can think about is that the statedump itself takes a<br>
-little bit of time to execute, so the statedump events are never at the<br>
-very start of the trace. So if your traces are very short it's possible<br>
-to miss them entirely.<br>
+Marc-Andr=C3=A9<br>
 <br>
-Cheers,<br>
-Alexandre<br>
-<div class=3D""><div class=3D"h5"><br>
+<div style=3D"font-family: Times New Roman; color: #000000; font-size: 16px=
+">
+<hr>
+<div style=3D"direction: ltr;" id=3D"divRpF924636"><span style=3D"color: #0=
+00000; font-family: Tahoma; font-size: small;" data-mce-style=3D"color: #00=
+0000; font-family: Tahoma; font-size: small;" color=3D"#000000" face=3D"Tah=
+oma" size=3D"2"><b>From:</b> thundersim@gmail.com [thundersim@gmail.com] on=
+ behalf of Simon Marchi [simon.marchi@polymtl.ca]<br>
+<b>Sent:</b> Friday, 17 January 2014 9:31 PM<br>
+<b>To:</b> Marc-Andr=C3=A9 Laperle<br>
+<b>Cc:</b> lttng-dev@lists.lttng.org<br>
+<b>Subject:</b> Re: [lttng-dev] [PATCH] Use uint32_t for lttng_viewer_strea=
+m.metadata_flag<br>
+</span><br>
+</div>
+<div></div>
+<div>
+<div dir=3D"ltr">While you are at it, you could change the char fields as w=
+ell, since char is not exact-width either.</div>
+<div class=3D"gmail_extra"><br>
 <br>
-On 14-01-24 08:54 AM, Krishanth TJ wrote:<br>
-&gt; Hi,<br>
-&gt;<br>
-&gt; I have confirmed that the "lttng-modules-dkms" package was successfull=
-y<br>
-&gt; installed.<br>
-&gt;<br>
-&gt; $ cat /usr/src/lttng-modules-2.3.x+stable/ChangeLog | head -4<br>
-&gt; 2013-09-28 LTTng modules 2.3.2<br>
-&gt; &nbsp; &nbsp; * Blacklist kernels 3.10.13 and 3.11.2<br>
-&gt;<br>
-&gt; I have even confirmed with few debug printk's in lttng_statedump.ko th=
-at<br>
-&gt; the module is indeed loaded and the tracepoints are getting called. Bu=
-t<br>
-&gt; still babeltrace output fails to show lttng_statedump_events.<br>
-&gt;<br>
-&gt; Am I missing something here?<br>
-&gt;<br>
-&gt; Regards,<br>
-&gt; Krish.<br>
-&gt;<br>
+<div class=3D"gmail_quote">On 17 January 2014 18:47, Marc-Andre Laperle <sp=
+an dir=3D"ltr">
+&lt;<a href=3D"mailto:marc-andre.laperle@ericsson.com" target=3D"_blank">ma=
+rc-andre.laperle@ericsson.com</a>&gt;</span> wrote:<br>
+<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex; border-left:1=
+px #ccc solid; padding-left:1ex">
+This struct is meant to be sent over the network so members should be<br>
+of exact-width.<br>
 <br>
-</div></div></blockquote></div><br></div></div>
+Signed-off-by: Marc-Andre Laperle &lt;<a href=3D"mailto:marc-andre.laperle@=
+ericsson.com" target=3D"_blank">marc-andre.laperle@ericsson.com</a>&gt;<br>
+---<br>
+&nbsp;src/bin/lttng-relayd/lttng-viewer.h | 2 +-<br>
+&nbsp;1 file changed, 1 insertion(+), 1 deletion(-)<br>
+<br>
+diff --git a/src/bin/lttng-relayd/lttng-viewer.h b/src/bin/lttng-relayd/ltt=
+ng-viewer.h<br>
+index 1977a43..6330270 100644<br>
+--- a/src/bin/lttng-relayd/lttng-viewer.h<br>
++++ b/src/bin/lttng-relayd/lttng-viewer.h<br>
+@@ -100,7 +100,7 @@ struct lttng_viewer_session {<br>
+&nbsp;struct lttng_viewer_stream {<br>
+&nbsp; &nbsp; &nbsp; &nbsp; uint64_t id;<br>
+&nbsp; &nbsp; &nbsp; &nbsp; uint64_t ctf_trace_id;<br>
+- &nbsp; &nbsp; &nbsp; int metadata_flag;<br>
++ &nbsp; &nbsp; &nbsp; uint32_t metadata_flag;<br>
+&nbsp; &nbsp; &nbsp; &nbsp; char path_name[LTTNG_VIEWER_PATH_MAX];<br>
+&nbsp; &nbsp; &nbsp; &nbsp; char channel_name[LTTNG_VIEWER_NAME_MAX];<br>
+&nbsp;} __attribute__((__packed__));<br>
+<span class=3D"HOEnZb"><span style=3D"color: #888888;" data-mce-style=3D"co=
+lor: #888888;" color=3D"#888888">--<br>
+1.8.3.2<br>
+<br>
+<br>
+_______________________________________________<br>
+lttng-dev mailing list<br>
+<a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-dev@li=
+sts.lttng.org</a><br>
+<a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" targe=
+t=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><=
+br>
+</span></span></blockquote>
+</div>
+<br>
+</div>
+</div>
+</div>
+</div>
+
+
 <br>_______________________________________________<br>lttng-dev mailing li=
 st<br>lttng-dev@lists.lttng.org<br>http://lists.lttng.org/cgi-bin/mailman/l=
 istinfo/lttng-dev<br></blockquote><div><br><br></div><div><br></div><div>--=
  <br></div><div><span name=3D"x"></span>Mathieu Desnoyers<br>EfficiOS Inc.<=
 br>http://www.efficios.com<span name=3D"x"></span><br></div></div></body></=
 html>
-------=_Part_15985_1034723507.1391122459984--
+------=_Part_15997_251714200.1391122486435--
 
 
---===============0639168724==
+--===============1589479481==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
 
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============0639168724==--
+--===============1589479481==--
