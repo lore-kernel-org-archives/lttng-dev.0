@@ -1,23 +1,21 @@
-From: Stefan Seefeld <stefan_seefeld@mentor.com>
-Subject: Re: [Patch LTTng-ust 6/7] Add the macros to generate
- the data structures for CTF named enumerations
-Date: Thu, 30 Jan 2014 20:55:19 -0500
-Message-ID: <52EB0287.4000105__25095.2946990312$1391133377$gmane$org@mentor.com>
-References: <1390593885-7463-1-git-send-email-gbastien+lttng@versatic.net>	<1390593885-7463-7-git-send-email-gbastien+lttng@versatic.net>
-	<1490865069.16181.1391132259063.JavaMail.zimbra@efficios.com>
+From: Zifei Tong <soariez@gmail.com>
+Subject: Re: [PATCH lttng-tools] Fix: memory leak when UST
+ events are enabled with exclusions
+Date: Fri, 31 Jan 2014 22:38:51 +0800
+Message-ID: <CAJ7wx-Fz9cBNpMoUz61uA=pi0FL09qj3a60prSRMqOLjyPpezw__37257.3590175763$1391179239$gmane$org@mail.gmail.com>
+References: <1390240272-16029-1-git-send-email-jeremie.galarneau@efficios.com>
+	<1633494270.16038.1391122775911.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from relay1.mentorg.com ([192.94.38.131])
+Received: from mail-ve0-f178.google.com ([209.85.128.178])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Stefan_Seefeld@mentor.com>) id 1W93KJ-0005tE-Eu
-	for lttng-dev@lists.lttng.org; Thu, 30 Jan 2014 20:55:31 -0500
-Received: from svr-orw-fem-01.mgc.mentorg.com ([147.34.98.93])
-	by relay1.mentorg.com with esmtp
-	id 1W93KD-0001PP-2Y from Stefan_Seefeld@mentor.com
-	for lttng-dev@lists.lttng.org; Thu, 30 Jan 2014 17:55:21 -0800
-In-Reply-To: <1490865069.16181.1391132259063.JavaMail.zimbra@efficios.com>
+	(envelope-from <soariez@gmail.com>) id 1W9FFp-0003go-3J
+	for lttng-dev@lists.lttng.org; Fri, 31 Jan 2014 09:39:43 -0500
+Received: by mail-ve0-f178.google.com with SMTP id oy12so3251898veb.9
+	for <lttng-dev@lists.lttng.org>; Fri, 31 Jan 2014 06:39:31 -0800 (PST)
+In-Reply-To: <1633494270.16038.1391122775911.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -26,37 +24,97 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-T24gMDEvMzAvMjAxNCAwODozNyBQTSwgTWF0aGlldSBEZXNub3llcnMgd3JvdGU6Cj4gLS0tLS0g
-T3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+PiBGcm9tOiAiR2VuZXZpw6h2ZSBCYXN0aWVuIiA8Z2Jh
-c3RpZW4rbHR0bmdAdmVyc2F0aWMubmV0Pgo+PiBUbzogbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9y
-Zwo+PiBTZW50OiBGcmlkYXksIEphbnVhcnkgMjQsIDIwMTQgMzowNDo0NCBQTQo+PiBTdWJqZWN0
-OiBbbHR0bmctZGV2XSBbUGF0Y2ggTFRUbmctdXN0IDYvN10gQWRkIHRoZSBtYWNyb3MgdG8gZ2Vu
-ZXJhdGUgdGhlCWRhdGEgc3RydWN0dXJlcyBmb3IgQ1RGIG5hbWVkIGVudW1lcmF0aW9ucwo+Pgo+
-PiBGaWxscyB0aGUgbWFjcm9zIHRvIGluaXRpYWxpemUgdGhlIG1ldGFkYXRhIGZvciBhIHRyYWNl
-cG9pbnQuCj4+Cj4+IEZyb20gdGhpcyBwYXRjaCBvbiwgdGhlIG5hbWVkIG1ldGFkYXRhIGFyZSBl
-bmFibGVkLgo+IE5vdyB0aGF0IEkgdGhpbmsgYWJvdXQgaXQsICJuYW1lZCBtZXRhZGF0YSIgZG9l
-cyBub3Qgc2VlbSB0byBiZSBzZW1hbnRpY2FsbHkgY2xlYXIuCj4gUGVyaGFwcyB3ZSBjb3VsZCBj
-aGFuZ2UgdGhpcyB0byAiZ2xvYmFsIHR5cGUgZGVjbGFyYXRpb25zIiA/IEJlY2F1c2UgdGhpcyBp
-cyByZWFsbHkKPiB3aGF0IGl0IGlzOiB0eXBlIGRlY2xhcmF0aW9ucyB0aGF0IGFyZSBpbiB0aGUg
-Z2xvYmFsIHNjb3BlIG9mIHRoZSBtZXRhZGF0YS4gVGhpcyBhcHBsaWVzCj4gdG8gYWxsIG90aGVy
-IHBhdGNoZXMgaW4gdGhpcyBzZXJpZXMuCgpNYXRoaWV1LAoKSSBtYXkgYmUgbWlzdW5kZXJzdGFu
-ZGluZyB3aGF0IHlvdSBpbnRlbmQgdG8gcmVsYWJlbCBhcyAiZ2xvYmFsIHR5cGUKZGVjbGFyYXRp
-b25zIiwgYnV0IEkgYmVsaWV2ZSB0aGUgdGVybSBpcyB0b28gcmVzdHJpY3RpdmUuCkknbSBmb2xs
-b3dpbmcgdGhpcyBkaXNjdXNzaW9uIHdpdGggaW50ZXJlc3QsIGFzIEkgaGF2ZSBhbm90aGVyIHVz
-ZS1jYXNlCmZvciBtZXRhLWRhdGEgd2hpY2ggbWlnaHQgYmUgaW1wbGVtZW50YWJsZSB2ZXJ5IG11
-Y2ggbGlrZSB0aGUgbmFtZWQKZW51bXM6IGNvbnN0YW50IG9yICJldmVudC1zdGF0aWMiIGZpZWxk
-cy4gRm9yIGV4YW1wbGUsIHdlIG1heSB3YW50IHRvCnN0b3JlIG51bWVyaWMgdmFsdWVzIGluIGV2
-ZW50cyB0aGF0IG5lZWQgYSAoY29uc3RhbnQpIHNjYWxlIGZhY3RvciAoYQp1bml0IG9mIG1lYXN1
-cmVtZW50KSwgd2hpY2ggd291bGQgYmUgd2VsbCByZXByZXNlbnRlZCBpbiBtZXRhLWRhdGEsIGFz
-Cm9wcG9zZWQgdG8gcmVkdW5kYW50bHkgaW5zaWRlIGV2ZW50cy4KQW5kIHNvLCB3aGlsZSBJIGFn
-cmVlIHRvIHlvdXIgY2hhcmFjdGVyaXphdGlvbiBvZiBuYW1lZCBlbnVtZXJhdGlvbnMgYXMKdHlw
-ZSBkZWNsYXJhdGlvbnMsIEknbSBzdGlsbCBsb29raW5nIGF0IHRoZSBtZWNoYW5pc20gYXMgZW5h
-YmxpbmcgdGhlCnN0b3JhZ2Ugb2YgbmFtZWQgbWV0YS1kYXRhLgoKClRoYW5rcywKICAgICAgICBT
-dGVmYW4KCi0tIApTdGVmYW4gU2VlZmVsZApDb2RlU291cmNlcnkgLyBNZW50b3IgR3JhcGhpY3MK
-aHR0cDovL3d3dy5tZW50b3IuY29tL2VtYmVkZGVkLXNvZnR3YXJlLwoKCl9fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QK
-bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4v
-bWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+I have to apply this patch onto J=E9r=E9mie's one to bypass a double free
+error in unit test.
+
+diff --git a/tests/unit/test_ust_data.c b/tests/unit/test_ust_data.c
+index 52b93e9..92f8771 100644
+--- a/tests/unit/test_ust_data.c
++++ b/tests/unit/test_ust_data.c
+@@ -172,7 +172,6 @@ static void test_create_ust_event_exclusion(void)
+           event->attr.name[LTTNG_UST_SYM_NAME_LEN - 1] =3D=3D '\0',
+           "Validate UST event and exclusion");
+
+-       free(exclusion);
+        trace_ust_destroy_event(event);
+ }
+
+--
+Best Regards,
+Zifei Tong
+
+
+On Fri, Jan 31, 2014 at 6:59 AM, Mathieu Desnoyers
+<mathieu.desnoyers@efficios.com> wrote:
+> David: this needs to be merged.
+>
+> Acked-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+>
+> Thanks,
+>
+> Mathieu
+>
+> ----- Original Message -----
+>> From: "J=E9r=E9mie Galarneau" <jeremie.galarneau@efficios.com>
+>> To: lttng-dev@lists.lttng.org
+>> Sent: Monday, January 20, 2014 12:51:12 PM
+>> Subject: [lttng-dev] [PATCH lttng-tools] Fix: memory leak when UST event=
+s     are enabled with exclusions
+>>
+>> Signed-off-by: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
+>> ---
+>>  src/bin/lttng-sessiond/trace-ust.c | 1 +
+>>  src/bin/lttng-sessiond/trace-ust.h | 2 +-
+>>  2 files changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/src/bin/lttng-sessiond/trace-ust.c
+>> b/src/bin/lttng-sessiond/trace-ust.c
+>> index 70b3a91..c08246a 100644
+>> --- a/src/bin/lttng-sessiond/trace-ust.c
+>> +++ b/src/bin/lttng-sessiond/trace-ust.c
+>> @@ -504,6 +504,7 @@ void trace_ust_destroy_event(struct ltt_ust_event *e=
+vent)
+>>
+>>       DBG2("Trace destroy UST event %s", event->attr.name);
+>>       free(event->filter);
+>> +     free(event->exclusion);
+>>       free(event);
+>>  }
+>>
+>> diff --git a/src/bin/lttng-sessiond/trace-ust.h
+>> b/src/bin/lttng-sessiond/trace-ust.h
+>> index f2f8c7e..07af0f1 100644
+>> --- a/src/bin/lttng-sessiond/trace-ust.h
+>> +++ b/src/bin/lttng-sessiond/trace-ust.h
+>> @@ -50,7 +50,7 @@ struct ltt_ust_event {
+>>       struct lttng_ust_event attr;
+>>       struct lttng_ht_node_str node;
+>>       struct lttng_ust_filter_bytecode *filter;
+>> -     const struct lttng_event_exclusion *exclusion;
+>> +     struct lttng_event_exclusion *exclusion;
+>>  };
+>>
+>>  /* UST channel */
+>> --
+>> 1.8.5.2
+>>
+>>
+>> _______________________________________________
+>> lttng-dev mailing list
+>> lttng-dev@lists.lttng.org
+>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>>
+>
+> --
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> http://www.efficios.com
+>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
