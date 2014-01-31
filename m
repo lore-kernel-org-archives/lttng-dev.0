@@ -1,20 +1,14 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-tools] Fix: memory leak when UST
- events are enabled with exclusions
-Date: Fri, 31 Jan 2014 15:47:05 +0000 (UTC)
-Message-ID: <229068319.16408.1391183225517.JavaMail.zimbra__6577.44474378905$1391183291$gmane$org@efficios.com>
-References: <1390240272-16029-1-git-send-email-jeremie.galarneau@efficios.com>
-	<1633494270.16038.1391122775911.JavaMail.zimbra@efficios.com>
-	<CAJ7wx-Fz9cBNpMoUz61uA=pi0FL09qj3a60prSRMqOLjyPpezw@mail.gmail.com>
+From: Florian Lohoff <f@zz.de>
+Subject: URCU accessing rcu_head->func
+Date: Fri, 31 Jan 2014 21:16:32 +0100
+Message-ID: <20140131201632.GA32482__19590.8585483723$1391199455$gmane$org@pax.zz.de>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============0939119038=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from pax.zz.de ([88.198.69.77])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1W9GJC-0004GJ-Ac
-	for lttng-dev@lists.lttng.org; Fri, 31 Jan 2014 10:47:19 -0500
-In-Reply-To: <CAJ7wx-Fz9cBNpMoUz61uA=pi0FL09qj3a60prSRMqOLjyPpezw@mail.gmail.com>
+	(envelope-from <flo@pax.zz.de>) id 1W9KVu-0006Gs-7x
+	for lttng-dev@lists.lttng.org; Fri, 31 Jan 2014 15:16:40 -0500
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,70 +17,88 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Zifei Tong <soariez@gmail.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-R29vZCBwb2ludCEKCkRhdmlkLCB5b3UgbWlnaHQgd2FudCB0byBjb25zaWRlciBtZXJnaW5nIHRo
-aXMgcGF0Y2ggdG9vLgoKVGhhbmtzLAoKTWF0aGlldQoKLS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAt
-LS0tLQo+IEZyb206ICJaaWZlaSBUb25nIiA8c29hcmllekBnbWFpbC5jb20+Cj4gVG86ICJNYXRo
-aWV1IERlc25veWVycyIgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4KPiBDYzogIkrD
-qXLDqW1pZSBHYWxhcm5lYXUiIDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20+LCAiRGF2
-aWQgR291bGV0IiA8ZGdvdWxldEBlZmZpY2lvcy5jb20+LAo+IGx0dG5nLWRldkBsaXN0cy5sdHRu
-Zy5vcmcKPiBTZW50OiBGcmlkYXksIEphbnVhcnkgMzEsIDIwMTQgOTozODo1MSBBTQo+IFN1Ympl
-Y3Q6IFJlOiBbbHR0bmctZGV2XSBbUEFUQ0ggbHR0bmctdG9vbHNdIEZpeDogbWVtb3J5IGxlYWsg
-d2hlbiBVU1QgZXZlbnRzIGFyZSBlbmFibGVkIHdpdGggZXhjbHVzaW9ucwo+IAo+IEkgaGF2ZSB0
-byBhcHBseSB0aGlzIHBhdGNoIG9udG8gSsOpcsOpbWllJ3Mgb25lIHRvIGJ5cGFzcyBhIGRvdWJs
-ZSBmcmVlCj4gZXJyb3IgaW4gdW5pdCB0ZXN0Lgo+IAo+IGRpZmYgLS1naXQgYS90ZXN0cy91bml0
-L3Rlc3RfdXN0X2RhdGEuYyBiL3Rlc3RzL3VuaXQvdGVzdF91c3RfZGF0YS5jCj4gaW5kZXggNTJi
-OTNlOS4uOTJmODc3MSAxMDA2NDQKPiAtLS0gYS90ZXN0cy91bml0L3Rlc3RfdXN0X2RhdGEuYwo+
-ICsrKyBiL3Rlc3RzL3VuaXQvdGVzdF91c3RfZGF0YS5jCj4gQEAgLTE3Miw3ICsxNzIsNiBAQCBz
-dGF0aWMgdm9pZCB0ZXN0X2NyZWF0ZV91c3RfZXZlbnRfZXhjbHVzaW9uKHZvaWQpCj4gICAgICAg
-ICAgICBldmVudC0+YXR0ci5uYW1lW0xUVE5HX1VTVF9TWU1fTkFNRV9MRU4gLSAxXSA9PSAnXDAn
-LAo+ICAgICAgICAgICAgIlZhbGlkYXRlIFVTVCBldmVudCBhbmQgZXhjbHVzaW9uIik7Cj4gCj4g
-LSAgICAgICBmcmVlKGV4Y2x1c2lvbik7Cj4gICAgICAgICB0cmFjZV91c3RfZGVzdHJveV9ldmVu
-dChldmVudCk7Cj4gIH0KPiAKPiAtLQo+IEJlc3QgUmVnYXJkcywKPiBaaWZlaSBUb25nCj4gCj4g
-Cj4gT24gRnJpLCBKYW4gMzEsIDIwMTQgYXQgNjo1OSBBTSwgTWF0aGlldSBEZXNub3llcnMKPiA8
-bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPiB3cm90ZToKPiA+IERhdmlkOiB0aGlzIG5l
-ZWRzIHRvIGJlIG1lcmdlZC4KPiA+Cj4gPiBBY2tlZC1ieTogTWF0aGlldSBEZXNub3llcnMgPG1h
-dGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4KPiA+Cj4gPiBUaGFua3MsCj4gPgo+ID4gTWF0
-aGlldQo+ID4KPiA+IC0tLS0tIE9yaWdpbmFsIE1lc3NhZ2UgLS0tLS0KPiA+PiBGcm9tOiAiSsOp
-csOpbWllIEdhbGFybmVhdSIgPGplcmVtaWUuZ2FsYXJuZWF1QGVmZmljaW9zLmNvbT4KPiA+PiBU
-bzogbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+ID4+IFNlbnQ6IE1vbmRheSwgSmFudWFyeSAy
-MCwgMjAxNCAxMjo1MToxMiBQTQo+ID4+IFN1YmplY3Q6IFtsdHRuZy1kZXZdIFtQQVRDSCBsdHRu
-Zy10b29sc10gRml4OiBtZW1vcnkgbGVhayB3aGVuIFVTVCBldmVudHMKPiA+PiBhcmUgZW5hYmxl
-ZCB3aXRoIGV4Y2x1c2lvbnMKPiA+Pgo+ID4+IFNpZ25lZC1vZmYtYnk6IErDqXLDqW1pZSBHYWxh
-cm5lYXUgPGplcmVtaWUuZ2FsYXJuZWF1QGVmZmljaW9zLmNvbT4KPiA+PiAtLS0KPiA+PiAgc3Jj
-L2Jpbi9sdHRuZy1zZXNzaW9uZC90cmFjZS11c3QuYyB8IDEgKwo+ID4+ICBzcmMvYmluL2x0dG5n
-LXNlc3Npb25kL3RyYWNlLXVzdC5oIHwgMiArLQo+ID4+ICAyIGZpbGVzIGNoYW5nZWQsIDIgaW5z
-ZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQo+ID4+Cj4gPj4gZGlmZiAtLWdpdCBhL3NyYy9iaW4v
-bHR0bmctc2Vzc2lvbmQvdHJhY2UtdXN0LmMKPiA+PiBiL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQv
-dHJhY2UtdXN0LmMKPiA+PiBpbmRleCA3MGIzYTkxLi5jMDgyNDZhIDEwMDY0NAo+ID4+IC0tLSBh
-L3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvdHJhY2UtdXN0LmMKPiA+PiArKysgYi9zcmMvYmluL2x0
-dG5nLXNlc3Npb25kL3RyYWNlLXVzdC5jCj4gPj4gQEAgLTUwNCw2ICs1MDQsNyBAQCB2b2lkIHRy
-YWNlX3VzdF9kZXN0cm95X2V2ZW50KHN0cnVjdCBsdHRfdXN0X2V2ZW50Cj4gPj4gKmV2ZW50KQo+
-ID4+Cj4gPj4gICAgICAgREJHMigiVHJhY2UgZGVzdHJveSBVU1QgZXZlbnQgJXMiLCBldmVudC0+
-YXR0ci5uYW1lKTsKPiA+PiAgICAgICBmcmVlKGV2ZW50LT5maWx0ZXIpOwo+ID4+ICsgICAgIGZy
-ZWUoZXZlbnQtPmV4Y2x1c2lvbik7Cj4gPj4gICAgICAgZnJlZShldmVudCk7Cj4gPj4gIH0KPiA+
-Pgo+ID4+IGRpZmYgLS1naXQgYS9zcmMvYmluL2x0dG5nLXNlc3Npb25kL3RyYWNlLXVzdC5oCj4g
-Pj4gYi9zcmMvYmluL2x0dG5nLXNlc3Npb25kL3RyYWNlLXVzdC5oCj4gPj4gaW5kZXggZjJmOGM3
-ZS4uMDdhZjBmMSAxMDA2NDQKPiA+PiAtLS0gYS9zcmMvYmluL2x0dG5nLXNlc3Npb25kL3RyYWNl
-LXVzdC5oCj4gPj4gKysrIGIvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC90cmFjZS11c3QuaAo+ID4+
-IEBAIC01MCw3ICs1MCw3IEBAIHN0cnVjdCBsdHRfdXN0X2V2ZW50IHsKPiA+PiAgICAgICBzdHJ1
-Y3QgbHR0bmdfdXN0X2V2ZW50IGF0dHI7Cj4gPj4gICAgICAgc3RydWN0IGx0dG5nX2h0X25vZGVf
-c3RyIG5vZGU7Cj4gPj4gICAgICAgc3RydWN0IGx0dG5nX3VzdF9maWx0ZXJfYnl0ZWNvZGUgKmZp
-bHRlcjsKPiA+PiAtICAgICBjb25zdCBzdHJ1Y3QgbHR0bmdfZXZlbnRfZXhjbHVzaW9uICpleGNs
-dXNpb247Cj4gPj4gKyAgICAgc3RydWN0IGx0dG5nX2V2ZW50X2V4Y2x1c2lvbiAqZXhjbHVzaW9u
-Owo+ID4+ICB9Owo+ID4+Cj4gPj4gIC8qIFVTVCBjaGFubmVsICovCj4gPj4gLS0KPiA+PiAxLjgu
-NS4yCj4gPj4KPiA+Pgo+ID4+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fCj4gPj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+ID4+IGx0dG5nLWRldkBsaXN0
-cy5sdHRuZy5vcmcKPiA+PiBodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9s
-aXN0aW5mby9sdHRuZy1kZXYKPiA+Pgo+ID4KPiA+IC0tCj4gPiBNYXRoaWV1IERlc25veWVycwo+
-ID4gRWZmaWNpT1MgSW5jLgo+ID4gaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KPiA+Cj4gPiBfX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+ID4gbHR0bmctZGV2
-IG1haWxpbmcgbGlzdAo+ID4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+ID4gaHR0cDovL2xp
-c3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cj4gCgotLSAK
-TWF0aGlldSBEZXNub3llcnMKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoK
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRu
-Zy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+
+--===============0939119038==
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="mP3DRpeJDSE+ciuQ"
+Content-Disposition: inline
+
+
+--mP3DRpeJDSE+ciuQ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+
+Hi,
+
+i am having multiple timer which can issue a call_rcu on an object using
+an rcu_head.
+
+It can happen than an object is already on the call_rcu list
+for destruction and another timer fires.
+
+So i am doing something like this.
+
+	if (!rs->rcuhead.func) {
+		call_rcu(&rs->rcuhead, free_obj);
+	}
+
+I have a feeling in my gut that this didnt blow up
+just by accident and i am doing something utterly stupid.
+
+I am in the read side critical section so my structure
+cant appear under my feet but the above can be racy at
+best.
+
+What would be the best way to achieve something like:
+
+	"queue for call_rcu if not already queued"
+
+Another flag with an atomic inc or something?
+
+Flo
+--=20
+Florian Lohoff                                                 f@zz.de
+
+--mP3DRpeJDSE+ciuQ
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+Content-Disposition: inline
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.10 (GNU/Linux)
+
+iQIVAwUBUuwEoJDdQSDLCfIvAQiy8Q//bWEV3EGt/515OK7ucK1Sjaaalz1s19xd
+68sqcz9KsC66VaX+79V3RnDBNABDL95l3SYHjyOXGZ7Yie7dA3EqOhCzqlPO/NVR
+mjDh6qTPtZucebjAms5nQAan3vGHKcanPzPF3tspne5EEZ58FM6vI8gpqQMvH6zE
+VhrFDFebwumi/1CgJMaIrLXMTMv4SvS9ppqMA42F0dn+wso1lNb9OCcM69uhdu8i
+7r021opn6CRVGqN8Mh0nhHBRAwQXiMgLnt8cf9DVBliw3V6wO5yJbPpAdOIOI66Y
+1NV8b+/xhTPBPTX1PTXqesgn7PxOk36pP3yWAJ8oAbVuos3r1065B4BuKibHFa6z
+z9tmI1q5/Nc9H3wt4zlD7PMWMaJquNz4JUtbhMToc1LtTazoMeIOgMCrWUBHtwFw
+OQGynX1CIGi2yODjPRSfeckNarjPLNxdzmjURyzaQnbITI+AA4Z4SArjMi4VoDSt
+4PaOnLKdM54pEtOXmi7VxBtG0x/ZcIunEVrpWu1PTa2aQbSxqQORbAK5Y5nfdQ5/
+VAo6SlTGEdQGiTJ+ykb7X90zwRUyp+tHrY93pYRwmA+wnjJL+gY2EfaXwbaVHU1R
+Ft3NdPECUMbdU0X6Wbl/bRH6cMtw+U6USzP1zs2ncH5cjJeDHOpcfuQKDhQ0o/9b
+OECjDLdfr94=
+=K9Ux
+-----END PGP SIGNATURE-----
+
+--mP3DRpeJDSE+ciuQ--
+
+
+--===============0939119038==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0939119038==--
