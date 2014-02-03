@@ -1,23 +1,17 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [Patch LTTng-ust 6/7] Add the macros to generate
- the data structures for CTF named enumerations
-Date: Mon, 3 Feb 2014 16:17:31 +0000 (UTC)
-Message-ID: <627045971.18225.1391444251887.JavaMail.zimbra__17893.104060977$1391444317$gmane$org@efficios.com>
-References: <1390593885-7463-1-git-send-email-gbastien+lttng@versatic.net>
-	<1390593885-7463-7-git-send-email-gbastien+lttng@versatic.net>
-	<1490865069.16181.1391132259063.JavaMail.zimbra@efficios.com>
-	<52EB0287.4000105@mentor.com>
-	<1044692147.17858.1391441334987.JavaMail.zimbra@efficios.com>
-	<52EFB89A.6040905@mentor.com>
+Subject: Re: Human read-writeable format for CTF traces
+Date: Mon, 3 Feb 2014 16:19:50 +0000 (UTC)
+Message-ID: <1219414962.18229.1391444390292.JavaMail.zimbra__32122.392676729$1391444450$gmane$org@efficios.com>
+References: <2093535948.9680292.1391443217617.JavaMail.root@polymtl.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1WAMDH-0004uf-6u
-	for lttng-dev@lists.lttng.org; Mon, 03 Feb 2014 11:17:40 -0500
-In-Reply-To: <52EFB89A.6040905@mentor.com>
+	(envelope-from <compudj@efficios.com>) id 1WAMFV-0004wk-Rz
+	for lttng-dev@lists.lttng.org; Mon, 03 Feb 2014 11:19:59 -0500
+In-Reply-To: <2093535948.9680292.1391443217617.JavaMail.root@polymtl.ca>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -26,88 +20,49 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Stefan Seefeld <stefan_seefeld@mentor.com>
+To: Michel Dagenais <michel.dagenais@polymtl.ca>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
------ Original Message -----
-> From: "Stefan Seefeld" <stefan_seefeld@mentor.com>
-> To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-> Cc: lttng-dev@lists.lttng.org
-> Sent: Monday, February 3, 2014 10:41:14 AM
-> Subject: Re: [lttng-dev] [Patch LTTng-ust 6/7] Add the macros to generate the data structures for CTF named
-> enumerations
-> 
-> On 02/03/2014 10:28 AM, Mathieu Desnoyers wrote:
-> 
-> > Hi Stefan,
-> > 
-> > Let's try to make sure I understand your intent here. Let's say we have
-> > an event with a "weight" field (uint32_t). You would like to have
-> > a multiplicative factor (e.g. *1000 for "kg") as a second field, that would
-> > be entirely known from the metadata (pretty much a C literal in the
-> > metadata,
-> > so it does not have to be repeated for each event).
-> 
-> Right. The analogy with a C literal isn't entirely sufficient, as there
-> is a range of situations where in fact "constant" doesn't map to
-> compile-time constant in C/C++. Thus...
-
-Can you provide a concrete example of what you envision ? What would
-this look like an an "extended" CTF metadata ?
-
-Thanks,
-
-Mathieu
-
-> 
-> > There are various ways to do this I imagine: e.g.:
-> > 
-> > * Using the typing system
-> 
-> 
-> [...]
-> 
-> ...the typing system can't quite capture values that are immutable
-> within a running session, but not quite constant in the sense that they
-> can be captured in a type system.
-> 
-> So perhaps another way to look at it is like a static class member, for
-> which storage isn't part of each instance of the class, but rather
-> somewhere that's associated with all instances of the class...
-> 
-> > But I don't see anything there that requires adding any top-level construct
-> > to the CTF metadata.
-> 
-> ...and that "somewhere" would naturally be the metadata section of the
-> traces.
-> 
-> > Hence, I am tempted to keep the name "global type declaration"
-> > for the part of metadata located in the "global" section (opposed to within
-> > a
-> > trace, env, stream, and event scope). Anyway, all we can declare there are
-> > types,
-> > so it makes sense to use this name. If we ever add something to the CTF
-> > spec in the
-> > future that is global but is not a type, then we'll have to extend the
-> > interfaces
-> > and implementations (which should be expected if we extend the CTF spec).
-> 
-> Right. I wasn't arguing so much against the use of "global type
-> declaration" for the case of named enums, but merely wanted to point out
-> that the mechanism could be extended to cover non-type-related metadata.
-> 
-> Thanks,
-> 		Stefan
-> 
-> 
-> --
-> Stefan Seefeld
-> CodeSourcery / Mentor Graphics
-> http://www.mentor.com/embedded-software/
-> 
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJNaWNoZWwgRGFnZW5haXMiIDxt
+aWNoZWwuZGFnZW5haXNAcG9seW10bC5jYT4KPiBUbzogIk1hdGhpZXUgRGVzbm95ZXJzIiA8bWF0
+aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPgo+IENjOiBsdHRuZy1kZXZAbGlzdHMubHR0bmcu
+b3JnLCAiR2VuZXZpw6h2ZSBCYXN0aWVuIiA8Z2Jhc3RpZW4rbHR0bmdAdmVyc2F0aWMubmV0Pgo+
+IFNlbnQ6IE1vbmRheSwgRmVicnVhcnkgMywgMjAxNCAxMTowMDoxNyBBTQo+IFN1YmplY3Q6IFJl
+OiBbbHR0bmctZGV2XSBIdW1hbiByZWFkLXdyaXRlYWJsZSBmb3JtYXQgZm9yIENURiB0cmFjZXMK
+PiAKPiAKPiA+IEkgd291bGQgZXhwZWN0IHRoYXQgdGhlIGN0ZiB3cml0ZXIgQVBJIHJlY2VudGx5
+IGFkZGVkIHRvIGJhYmVsdHJhY2UKPiA+IChjdXJyZW50bHkgaW4gbWFzdGVyIGJyYW5jaCksIGFs
+b25nIHdpdGggdGhlIFB5dGhvbiBiaW5kaW5ncyB0aGF0IGNvdmVyCj4gPiB0cmFjZSByZWFkIGFu
+ZCB3cml0ZSBBUElzLCBzaG91bGQgYWxsb3cgeW91IHRvIGltcGxlbWVudCB0aGluZ3MgbGlrZToK
+PiA+IAo+ID4gLSBBIHBsdWdpbiB0byByZWFkIGEgQ1RGIHRyYWNlLCBhbmQgb3V0cHV0IGl0IGlu
+IGFuIGludGVybWVkaWF0ZSBmb3JtYXQKPiA+ICAgdG8gZmFjaWxpdGF0ZSBlZGl0cyAoZS5nLiBY
+TUwgYXMgeW91IHByb3Bvc2UpLAo+ID4gLSBBIHBsdWdpbiB0byByZWFkIHRoaXMgWE1MIGZvcm1h
+dCBhbmQgb3V0cHV0IGEgQ1RGIHRyYWNlLgo+IAo+IFllcywgdGhpcyB3b3VsZCBpbmRlZWQgYmUg
+ZXh0cmVtZWx5IGhlbHBmdWwsIGluIFhNTCBhbmQvb3IgSlNPTi4KPiAKPiA+IFlvdSBjb3VsZCBh
+bHNvIGdlbmVyYXRlIHRoZSBYTUwgdHJhY2UgY29tcGxldGVseSBieSBoYW5kIGlmIHlvdSBsaWtl
+LCBhbmQKPiA+IHRoZW4gY29udmVydCBpdCB0byBDVEYgd2l0aCB0aGUgc2Vjb25kIHBsdWdpbiBJ
+J20gcmVsYXRpbmcgdG8gYWJvdmUuCj4gCj4gVGhlIGxpa2VseSBzY2VuYXJpbyBpcyB0byBhZGQg
+YSBmZXcgZXZlbnRzIGJ5IGhhbmQuCj4gCj4gPiBBbm90aGVyIHBvc3NpYmlsaXR5IGlzIHRoYXQg
+dGhlIFhNTCBkZXNjcmlwdGlvbiBhbHNvIGFsbG93cwo+ID4gZGVzY3JpYmluZyB3aGF0IHRoZSB0
+cmFjZSBjb250YWlucyBhdCBhIHNsaWdodGx5IGhpZ2hlciBsZXZlbC4gRm9yCj4gPiBpbnN0YW5j
+ZSwgaWYgeW91Cj4gPiBoYXZlIGEgcGVyaW9kaWMgZXZlbnQgaGFwcGVuaW5nIGZvciBhIGNlcnRh
+aW4gYW1vdW50IG9mIHRpbWUsIGl0IHdvdWxkCj4gPiBiZSBkZXNjcmliZWQgaW4gWE1MLCBhbmQg
+dGhlbiAiZ2VuZXJhdGVkIiBieSB0aGUgWE1MLXRvLUNURgo+ID4gY29udmVydGVyLgo+IAo+IERv
+IHdlIHdhbnQgdG8gZGVzY3JpYmUgdGhpcyBpbiBYTUwgb3IgaW4gUHl0aG9uPyBXZSBjb3VsZCBo
+YXZlICJDVEYiIHRvCj4gIlB5dGhvbiBzdGF0ZW1lbnRzIiBnZW5lcmF0aW5nIFhNTC4gVGhlbiB3
+ZSBjb3VsZCBhZGQgbG9vcHMgYnkgaGFuZC4gV2UKPiBjb3VsZCBhbHNvIGhhdmUgQ1RGIHRvIFhN
+TCwgd2l0aCBob29rcyB0byBtZXJnZSBQeXRob24gZ2VuZXJhdGVkIGV2ZW50cy4KCkkgdmVyeSBt
+dWNoIGxpa2UgdGhpcyBpZGVhLiBJbmRlZWQsIHdpdGggYSBDVEYtdG8tUHl0aG9uLXN0YXRlbWVu
+dHMgY29udmVydGVyLAp3ZSBjYW4gZWFzaWx5IHR3ZWFrIHRoZSByZXN1bHRpbmcgcHl0aG9uIHNj
+cmlwdCB0byBhZGQgZXZlbnRzLCBtb2RpZnkgZXZlbnRzLAphbmQgZXZlbiB1c2UgbG9vcHMgYW5k
+IHJlLXVzZSBmdW5jdGlvbnMuIFRoaXMgd291bGQgYmUgZXh0cmVtZWx5IHVzZWZ1bCBmb3IKdW5p
+dC10ZXN0aW5nIHRoZSBzdGF0ZSBzeXN0ZW0sIGFuZCB3b3VsZCBhbGxvdyByZS11c2UgKGltcG9y
+dCkgb2YgcGF0dGVybnMKbW9yZSBlYXNpbHkgdGhhbiB3aXRoIFhNTCBkZXNjcmlwdGlvbnMuCgpU
+aGFua3MsCgpNYXRoaWV1Cgo+IAo+IEluIGFkZGl0aW9uLCBUTUYgbWF5IGFsc28gd2FudCB0byBv
+ZmZlciBzaW1pbGFyIGZ1bmN0aW9uYWxpdHksIGFuIFhNTCBkdW1wIG9mCj4gZXZlbnRzIGFuZCBh
+biBYTUwgZXZlbnRzIHJlYWRlci4gSW5kZWVkLCBUTUYgc3VwcG9ydHMgYSBmZXcgZm9ybWF0cyBv
+dGhlcgo+IHRoYW4gQ1RGLgo+IAoKLS0gCk1hdGhpZXUgRGVzbm95ZXJzCkVmZmljaU9TIEluYy4K
+aHR0cDovL3d3dy5lZmZpY2lvcy5jb20KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0
+dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9s
+dHRuZy1kZXYK
