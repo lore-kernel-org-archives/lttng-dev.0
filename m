@@ -1,21 +1,19 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [Patch LTTng-ust 1/7] Add or update data structures
- to	support CTF named metadata
-Date: Mon, 3 Feb 2014 15:31:12 +0000 (UTC)
-Message-ID: <1706055662.17872.1391441472262.JavaMail.zimbra__37493.3674735532$1391441596$gmane$org@efficios.com>
-References: <1390593885-7463-1-git-send-email-gbastien+lttng@versatic.net>
-	<1390593885-7463-2-git-send-email-gbastien+lttng@versatic.net>
-	<2139172576.16061.1391123211482.JavaMail.zimbra@efficios.com>
-	<52EC0746.2020200@versatic.net>
+Subject: Re: Questions about JUL (was:  lttng-dev Digest, Vol 67,
+ Issue 48)
+Date: Mon, 3 Feb 2014 15:36:14 +0000 (UTC)
+Message-ID: <1953408834.17890.1391441774252.JavaMail.zimbra__18991.6766169064$1391441838$gmane$org@efficios.com>
+References: <mailman.1320.1384681007.2186.lttng-dev@lists.lttng.org>
+	<63008C666A72BB4F892767155D012B30390BFB4D@eusaamb105.ericsson.se>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1WALUS-0004I2-0L
-	for lttng-dev@lists.lttng.org; Mon, 03 Feb 2014 10:31:21 -0500
-In-Reply-To: <52EC0746.2020200@versatic.net>
+	(envelope-from <compudj@efficios.com>) id 1WALZN-0004N9-Eo
+	for lttng-dev@lists.lttng.org; Mon, 03 Feb 2014 10:36:29 -0500
+In-Reply-To: <63008C666A72BB4F892767155D012B30390BFB4D@eusaamb105.ericsson.se>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,123 +22,125 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?utf-8?Q?Genevi=C3=A8ve?= Bastien <gbastien@versatic.net>
+To: Jim Dumont <jim.dumont@ericsson.com>, David Goulet <dgoulet@efficios.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJHZW5ldmnDqHZlIEJhc3RpZW4i
-IDxnYmFzdGllbkB2ZXJzYXRpYy5uZXQ+Cj4gVG86ICJNYXRoaWV1IERlc25veWVycyIgPG1hdGhp
-ZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4sICJHZW5ldmnDqHZlIEJhc3RpZW4iIDxnYmFzdGll
-bitsdHRuZ0B2ZXJzYXRpYy5uZXQ+Cj4gQ2M6IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBT
-ZW50OiBGcmlkYXksIEphbnVhcnkgMzEsIDIwMTQgMzoyNzo1MCBQTQo+IFN1YmplY3Q6IFJlOiBb
-bHR0bmctZGV2XSBbUGF0Y2ggTFRUbmctdXN0IDEvN10gQWRkIG9yIHVwZGF0ZSBkYXRhIHN0cnVj
-dHVyZXMgdG8Jc3VwcG9ydCBDVEYgbmFtZWQgbWV0YWRhdGEKPiAKPiBUaGFua3MgZm9yIHJldmll
-d2luZyBhbGwgdGhvc2UgcGF0Y2hlcyEgSSdsbCBtYWtlIHRoZSBjaGFuZ2VzIHNvb24gd2hlbgo+
-IHRoZSBuYW1pbmcgb2YgdGhpcyBjb25jZXB0IGlzIHNldHRsZWQgKHNlZSBTdGVmYW4ncyBlbWFp
-bCkuICJHbG9iYWwKPiB0eXBlcyIgc291bmRzIGdvb2QuCgpPSy4gUmVwbGllZCBpbiBhIHNlcGFy
-YXRlIGVtYWlsIGZvciB0aGlzIG9uZS4KCj4gCj4gT25seSB0aGluZyB3aGVyZSBhbnN3ZXIgaXMg
-bmVlZGVkIGlubGluZSBiZWxvdy4KPiAKPiBPbiAxNC0wMS0zMCAwNjowNiBQTSwgTWF0aGlldSBE
-ZXNub3llcnMgd3JvdGU6Cj4gPiAtLS0tLSBPcmlnaW5hbCBNZXNzYWdlIC0tLS0tCj4gPj4gRnJv
-bTogIkdlbmV2acOodmUgQmFzdGllbiIgPGdiYXN0aWVuK2x0dG5nQHZlcnNhdGljLm5ldD4KPiA+
-PiBUbzogbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+ID4+IFNlbnQ6IEZyaWRheSwgSmFudWFy
-eSAyNCwgMjAxNCAzOjA0OjM5IFBNCj4gPj4gU3ViamVjdDogW2x0dG5nLWRldl0gW1BhdGNoIExU
-VG5nLXVzdCAxLzddIEFkZCBvciB1cGRhdGUgZGF0YSBzdHJ1Y3R1cmVzCj4gPj4gdG8Jc3VwcG9y
-dCBDVEYgbmFtZWQgbWV0YWRhdGEKPiA+Pgo+ID4+IFRoZSBzdHJ1Y3R1cmVzIG1hdGNoIHRob3Nl
-IGluIExUVG5nLXRvb2xzIHRvIHN1cHBvcnQgbmFtZWQgbWV0YWRhdGEgaW4KPiA+PiBnZW5lcmFs
-Cj4gPj4gYW5kIENURiBlbnVtZXJhdGlvbnMgaW4gcGFydGljdWxhci4KPiA+Pgo+ID4+IFNpZ25l
-ZC1vZmYtYnk6IEdlbmV2acOodmUgQmFzdGllbiA8Z2Jhc3RpZW4rbHR0bmdAdmVyc2F0aWMubmV0
-Pgo+ID4+IC0tLQo+ID4+ICAgaW5jbHVkZS9sdHRuZy91c3QtY3RsLmggICAgfCAzNiArKysrKysr
-KysrKysrKysrKysrKysrKysrKysrKysrKysrKy0KPiA+PiAgIGluY2x1ZGUvbHR0bmcvdXN0LWV2
-ZW50cy5oIHwgMjAgKysrKysrKysrKysrKysrKysrKy0KPiA+PiAgIDIgZmlsZXMgY2hhbmdlZCwg
-NTQgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkKPiA+Pgo+ID4+IGRpZmYgLS1naXQgYS9p
-bmNsdWRlL2x0dG5nL3VzdC1jdGwuaCBiL2luY2x1ZGUvbHR0bmcvdXN0LWN0bC5oCj4gPj4gaW5k
-ZXggNDBlODMxZS4uMjljODlmZSAxMDA2NDQKPiA+PiAtLS0gYS9pbmNsdWRlL2x0dG5nL3VzdC1j
-dGwuaAo+ID4+ICsrKyBiL2luY2x1ZGUvbHR0bmcvdXN0LWN0bC5oCj4gPj4gQEAgLTI5NSwxMyAr
-Mjk1LDIzIEBAIHN0cnVjdCB1c3RjdGxfZmxvYXRfdHlwZSB7Cj4gPj4gICAJY2hhciBwYWRkaW5n
-W1VTVENUTF9VU1RfRkxPQVRfVFlQRV9QQURESU5HXTsKPiA+PiAgIH0gTFRUTkdfUEFDS0VEOwo+
-ID4+ICAgCj4gPj4gLSNkZWZpbmUgVVNUQ1RMX1VTVF9CQVNJQ19UWVBFX1BBRERJTkcJMjk2Cj4g
-Pj4gKyNkZWZpbmUgVVNUQ1RMX1VTVF9FTlVNX0VOVFJZX1BBRERJTkcJMjk2Cj4gPj4gK3N0cnVj
-dCB1c3RjdGxfZW51bV9lbnRyeSB7Cj4gPj4gKwl1bnNpZ25lZCBsb25nIGxvbmcgc3RhcnQsIGVu
-ZDsJLyogc3RhcnQgYW5kIGVuZCBhcmUgaW5jbHVzaXZlICovCj4gPj4gKwljaGFyIHN0cmluZ1tM
-VFROR19VU1RfU1lNX05BTUVfTEVOXTsKPiA+PiArCWNoYXIgcGFkZGluZ1tVU1RDVExfVVNUX0VO
-VU1fRU5UUllfUEFERElOR107Cj4gPj4gK307Cj4gPj4gKwo+ID4+ICsjZGVmaW5lIFVTVENUTF9V
-U1RfQkFTSUNfVFlQRV9QQURESU5HCTQwCj4gPj4gICB1bmlvbiBfdXN0Y3RsX2Jhc2ljX3R5cGUg
-ewo+ID4+ICAgCXN0cnVjdCB1c3RjdGxfaW50ZWdlcl90eXBlIGludGVnZXI7Cj4gPj4gICAJc3Ry
-dWN0IHsKPiA+PiAgIAkJZW51bSB1c3RjdGxfc3RyaW5nX2VuY29kaW5ncyBlbmNvZGluZzsKPiA+
-PiAgIAl9IHN0cmluZzsKPiA+PiAgIAlzdHJ1Y3QgdXN0Y3RsX2Zsb2F0X3R5cGUgX2Zsb2F0Owo+
-ID4+ICsJc3RydWN0IHsKPiA+PiArCQljaGFyIG5hbWVbTFRUTkdfVVNUX1NZTV9OQU1FX0xFTl07
-Cj4gPj4gKwl9IGVudW1lcmF0aW9uOwo+ID4+ICAgCWNoYXIgcGFkZGluZ1tVU1RDVExfVVNUX0JB
-U0lDX1RZUEVfUEFERElOR107Cj4gPj4gICB9IExUVE5HX1BBQ0tFRDsKPiA+PiAgIAo+ID4+IEBA
-IC0zMjksNiArMzM5LDMwIEBAIHN0cnVjdCB1c3RjdGxfdHlwZSB7Cj4gPj4gICAJfSB1Owo+ID4+
-ICAgfSBMVFROR19QQUNLRUQ7Cj4gPj4gICAKPiA+PiArI2RlZmluZSBVU1RDVExfVVNUX0VOVU1f
-VFlQRV9QQURESU5HCTI5Ngo+ID4+ICtzdHJ1Y3QgdXN0Y3RsX2VudW0gewo+ID4+ICsJY2hhciBu
-YW1lW0xUVE5HX1VTVF9TWU1fTkFNRV9MRU5dOwo+ID4+ICsJc3RydWN0IHVzdGN0bF9pbnRlZ2Vy
-X3R5cGUgY29udGFpbmVyX3R5cGU7Cj4gPj4gKwlzdHJ1Y3QgdXN0Y3RsX2VudW1fZW50cnkgKmVu
-dHJpZXM7Cj4gPj4gKwl1bnNpZ25lZCBpbnQgbGVuOwo+ID4+ICsJY2hhciBwYWRkaW5nW1VTVENU
-TF9VU1RfRU5VTV9UWVBFX1BBRERJTkddOwo+ID4+ICt9IExUVE5HX1BBQ0tFRDsKPiA+PiArCj4g
-Pj4gKy8qIENURiBNZXRhZGF0YSB0eXBlcyBmb3IgbmFtZWQgbWV0YWRhdGEgZGVzY3JpYmVkIG91
-dHNpZGUgZXZlbnQKPiA+PiBkZXNjcmlwdGlvbnMgKi8KPiA+PiArZW51bSB1c3RjdGxfbWV0YWRh
-dGFfdHlwZXMgewo+ID4+ICsJdXN0Y3RsX210eXBlX2VudW0sCj4gPj4gKwlOUl9VU1RDVExfTUVU
-QURBVEFfVFlQRVMsCj4gPj4gK307Cj4gPj4gKwo+ID4+ICsjZGVmaW5lIFVTVENUTF9VU1RfTkFN
-RURfTUVUQURBVEFfUEFERElORyA2NDAKPiA+PiArc3RydWN0IHVzdGN0bF9uYW1lZF9tZXRhZGF0
-YSB7Cj4gPj4gKwllbnVtIHVzdGN0bF9tZXRhZGF0YV90eXBlcyBtdHlwZTsKPiA+IE9LIHRvIHVz
-ZSB0aGUgZW51bWVyYXRpb24sIGJ1dCBkZWZpbmUgdGhpcyBtdHlwZSBmaWVsZCBhcyBhIGZpeGVk
-LXNpemUKPiA+IGZpZWxkIChlLmcuIGludDMyX3QpLiAoeWVzLCBJIGRpZCB0aGUgbWlzdGFrZSB0
-byB1c2UgZW51bXMgaW4gdGhlIEFCSQo+ID4gaW4gdGhlIHBhc3QpLiBDdXJyZW50bHksIGNvbXBp
-bGVycyB1c2UgMzItYml0IGludCB0eXBpY2FsbHksIGJ1dCB0aGV5Cj4gPiBoYXZlIHNvbWUgZnJl
-ZWRvbSBpbiB0aGUgY2hvaWNlIG9mIHRoZSBiYWNraW5nIHR5cGUuCj4gPgo+ID4+ICsJdW5pb24g
-ewo+ID4+ICsJCXN0cnVjdCB1c3RjdGxfZW51bSBjdGZfZW51bTsKPiA+PiArCQljaGFyIHBhZGRp
-bmdbVVNUQ1RMX1VTVF9OQU1FRF9NRVRBREFUQV9QQURESU5HXTsKPiA+PiArCX0gdTsKPiA+PiAr
-fTsKPiA+PiArCj4gPj4gICAjZGVmaW5lIFVTVENUTF9VU1RfRklFTERfUEFERElORwkyOAo+ID4+
-ICAgc3RydWN0IHVzdGN0bF9maWVsZCB7Cj4gPj4gICAJY2hhciBuYW1lW0xUVE5HX1VTVF9TWU1f
-TkFNRV9MRU5dOwo+ID4+IGRpZmYgLS1naXQgYS9pbmNsdWRlL2x0dG5nL3VzdC1ldmVudHMuaCBi
-L2luY2x1ZGUvbHR0bmcvdXN0LWV2ZW50cy5oCj4gPj4gaW5kZXggZDkzYzkxMi4uMjYwYjIyMSAx
-MDA2NDQKPiA+PiAtLS0gYS9pbmNsdWRlL2x0dG5nL3VzdC1ldmVudHMuaAo+ID4+ICsrKyBiL2lu
-Y2x1ZGUvbHR0bmcvdXN0LWV2ZW50cy5oCj4gPj4gQEAgLTg5LDYgKzg5LDEyIEBAIGVudW0gbHR0
-bmdfc3RyaW5nX2VuY29kaW5ncyB7Cj4gPj4gICAJTlJfU1RSSU5HX0VOQ09ESU5HUywKPiA+PiAg
-IH07Cj4gPj4gICAKPiA+PiArLyogQ1RGIE1ldGFkYXRhIHR5cGVzIGZvciBuYW1lZCBtZXRhZGF0
-YSBkZXNjcmliZWQgb3V0c2lkZSBldmVudAo+ID4+IGRlc2NyaXB0aW9ucyAqLwo+ID4+ICtlbnVt
-IGx0dG5nX21ldGFkYXRhX3R5cGVzIHsKPiA+PiArCW10eXBlX2VudW0sCj4gPj4gKwlOUl9NRVRB
-REFUQV9UWVBFUywKPiA+PiArfTsKPiA+PiArCj4gPj4gICAjZGVmaW5lIExUVE5HX1VTVF9FTlVN
-X0VOVFJZX1BBRERJTkcJMTYKPiA+PiAgIHN0cnVjdCBsdHRuZ19lbnVtX2VudHJ5IHsKPiA+PiAg
-IAl1bnNpZ25lZCBsb25nIGxvbmcgc3RhcnQsIGVuZDsJLyogc3RhcnQgYW5kIGVuZCBhcmUgaW5j
-bHVzaXZlICovCj4gPj4gQEAgLTIwNCwxMiArMjEwLDIyIEBAIHN0cnVjdCBsdHRuZ190eXBlIHsK
-PiA+PiAgICNkZWZpbmUgTFRUTkdfVVNUX0VOVU1fVFlQRV9QQURESU5HCTI0Cj4gPj4gICBzdHJ1
-Y3QgbHR0bmdfZW51bSB7Cj4gPj4gICAJY29uc3QgY2hhciAqbmFtZTsKPiA+PiAtCXN0cnVjdCBs
-dHRuZ190eXBlIGNvbnRhaW5lcl90eXBlOwo+ID4+ICsJc3RydWN0IGx0dG5nX2ludGVnZXJfdHlw
-ZSBjb250YWluZXJfdHlwZTsKPiA+IGRvaW5nIHRoaXMgY2hhbmdlIGFzc3VtZXMgdGhhdCBsdHRu
-Z19lbnVtIHdhcyBuZXZlciB1c2VkIGluIGx0dG5nLXVzdCwgaXMKPiA+IHRoYXQgdHJ1ZSA/Cj4g
-QXJlIHlvdSBhc2tpbmcgbWUgb3IgdGhlIGxpc3Q/IEkgaGF2ZW4ndCBzZWVuIGFueSByZWZlcmVu
-Y2UgdG8gaXQgYW5kCj4geW91IHRvbGQgbWUgb24gSVJDIHRoYXQgW3lvdSB0aG91Z2h0XSBpdCBo
-YWRuJ3QgYmVlbiB1c2VkIGFueXdoZXJlIGV2ZXIuCj4gQnV0IEkgZG9uJ3Qga25vdyBhYm91dCB0
-aGUgcGFzdCBvZiBVU1QuLi4gRm9yIG1vcmUgc2VjdXJpdHksIG1heWJlIEkKPiBzaG91bGQganVz
-dCBhZGQgYSBuZXcgZmllbGQgYXQgdGhlIGVuZCBvZiB0aGlzIHN0cnVjdD8KCkkgdGhpbmsgaXQg
-c2hvdWxkIGJlIHNhZmUgdG8gYXNzdW1lIHRoYXQgbm9ib2R5IHVzZWQgaXQsIHNpbmNlIGl0J3Mg
-bm90CnN1cHBvcnRlZCBuZWl0aGVyIGF0IHRoZSBpbnN0cnVtZW50YXRpb24gQVBJIGxldmVsLCBu
-b3IgdXNlZCBieSBsdHRuZy11c3QsCm5vciB3cml0dGVuIGludG8gdGhlIENURiBtZXRhZGF0YSBi
-eSBsdHRuZy1zZXNzaW9uZC4gWW91IG1pZ2h0IHdhbnQgdG8KZG9jdW1lbnQgdGhpcyBhc3N1bXB0
-aW9uIGluIHRoZSBwYXRjaCBjaGFuZ2Vsb2cgdGhvdWdoLgoKVGhhbmtzLAoKTWF0aGlldQoKPiAK
-PiBUaGFua3MsCj4gCj4gR2VuZXZpw6h2ZQo+ID4KPiA+IFRoYW5rcywKPiA+Cj4gPiBNYXRoaWV1
-Cj4gPgo+ID4+ICAgCWNvbnN0IHN0cnVjdCBsdHRuZ19lbnVtX2VudHJ5ICplbnRyaWVzOwo+ID4+
-ICAgCXVuc2lnbmVkIGludCBsZW47Cj4gPj4gICAJY2hhciBwYWRkaW5nW0xUVE5HX1VTVF9FTlVN
-X1RZUEVfUEFERElOR107Cj4gPj4gICB9Owo+ID4+ICAgCj4gPj4gKyNkZWZpbmUgTFRUTkdfVVNU
-X05BTUVEX01FVEFEQVRBX1BBRERJTkcJNjAKPiA+PiArc3RydWN0IGx0dG5nX25hbWVkX21ldGFk
-YXRhIHsKPiA+PiArCWVudW0gbHR0bmdfbWV0YWRhdGFfdHlwZXMgbXR5cGU7Cj4gPj4gKwl1bnNp
-Z25lZCBpbnQgbm93cml0ZTsgLyogaW5oZXJpdGVkIGZyb20gdGhlIGZpZWxkIHVzaW5nIGl0ICov
-Cj4gPj4gKwl1bmlvbiB7Cj4gPj4gKwkJY29uc3Qgc3RydWN0IGx0dG5nX2VudW0gKmN0Zl9lbnVt
-Owo+ID4+ICsJCWNoYXIgcGFkZGluZ1tMVFROR19VU1RfTkFNRURfTUVUQURBVEFfUEFERElOR107
-Cj4gPj4gKwl9IHU7Cj4gPj4gK307Cj4gPj4gKwo+ID4+ICAgLyoKPiA+PiAgICAqIEV2ZW50IGZp
-ZWxkIGRlc2NyaXB0aW9uCj4gPj4gICAgKgo+ID4+IEBAIC0yNjcsNiArMjgzLDggQEAgc3RydWN0
-IGx0dG5nX2V2ZW50X2Rlc2Mgewo+ID4+ICAgCXVuaW9uIHsKPiA+PiAgIAkJc3RydWN0IHsKPiA+
-PiAgIAkJCWNvbnN0IGNoYXIgKiptb2RlbF9lbWZfdXJpOwo+ID4+ICsJCQl1bnNpZ25lZCBpbnQg
-bnJfbWV0YWRhdGE7Cj4gPj4gKwkJCWNvbnN0IHN0cnVjdCBsdHRuZ19uYW1lZF9tZXRhZGF0YSAq
-bmFtZWRfbWV0YWRhdGE7Cj4gPj4gICAJCX0gZXh0Owo+ID4+ICAgCQljaGFyIHBhZGRpbmdbTFRU
-TkdfVVNUX0VWRU5UX0RFU0NfUEFERElOR107Cj4gPj4gICAJfSB1Owo+ID4+IC0tCj4gPj4gMS44
-LjUuMwo+ID4+Cj4gPj4KPiA+PiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fXwo+ID4+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiA+PiBsdHRuZy1kZXZAbGlz
-dHMubHR0bmcub3JnCj4gPj4gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4v
-bGlzdGluZm8vbHR0bmctZGV2Cj4gPj4KPiAKPiAKCi0tIApNYXRoaWV1IERlc25veWVycwpFZmZp
-Y2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCgpfX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRl
-dkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4v
-bGlzdGluZm8vbHR0bmctZGV2Cg==
+Hi Jim,
+
+I'm CCing David on this one. He will answer as soon
+we he gets back from FOSDEM (and recovers from jet lag). ;-)
+
+Note to Daniel: please don't reply to a mailing list digest. It's a
+very good way to have an email ignored as "TL;DR".
+
+Thanks!
+
+Mathieu
+
+----- Original Message -----
+> From: "Jim Dumont" <jim.dumont@ericsson.com>
+> To: lttng-dev@lists.lttng.org
+> Sent: Friday, January 17, 2014 12:26:13 PM
+> Subject: Re: [lttng-dev] lttng-dev Digest, Vol 67, Issue 48
+> 
+> Hi there,
+> 
+> Was there a follow-up to the series of questions raised by Daniel below and
+> referenced here:
+> 
+> http://lists.lttng.org/pipermail/lttng-dev/2013-November/021844.html
+> 
+> I didn't see one in the mailing list.
+> 
+> BR,
+> 
+> /Jim
+> 
+[...]
+> 
+> 
+> ----------------------------------------------------------------------
+> 
+> Message: 1
+> Date: Fri, 15 Nov 2013 20:22:34 +0000
+> From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+> To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+> Subject: Re: [lttng-dev] [RELEASE] LTTng-Tools 2.4.0-rc1 - ?poque
+> 	Opaque
+> Message-ID:
+> 	<48CF5AC71E61DB46B70D0F388054EFFD267A2503@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+> 	
+> Content-Type: text/plain; charset="iso-8859-1"
+> 
+> -----Message d'origine-----
+> Date: Fri, 15 Nov 2013 12:27:01 -0500
+> From: David Goulet <dgoulet@efficios.com>
+> 
+> > 1) Live support. It's now possible to stream traces (kernel and UST)
+> > while they being extracted meaning a relayd can now receive traces
+> > live and a viewer can attach to it to process the trace while running.
+> > The "--live" has been added to lttng create command that sets up a
+> > live tracing session.
+> >
+> > See doc/live-reading-howto.txt and doc/live-reading-protocol.txt for
+> > more detail on that feature.
+> 
+>    Does this mean you can't do a "live" trace to local storage?
+> 
+> > 2) Java Util Logging support. With a special LTTngAgent located in
+> > lttng-ust project (liblttng-ust-jul) to trace JUL events and gather
+> > UST traces with them.
+> >
+> > The -j/--jul domain has been added to lttng command line so you can
+> > list the possible JUL Logger object and enable/disable them. It is the
+> > same as using the UST or Kernel domain.
+> >
+> > As of now, filters and loglevel are ignored with the JUL domain.
+> 
+>    Saying "It is the same as using the UST or Kernel domain" leaves a lot of
+>    questions unanswered, since the kernel and user-space behave *very*
+>    differently on a lot of points.
+> 
+> 1) Does --jul require root privileges?
+> 2) I suppose the various commands have --kernel pre-empting --userspace
+> pre-empting --ul?
+> 3) add-context: does --jul have the same possible context types as
+> --userspace (i.e. ip, pthread_id, procname, vpid, vtid)?
+> 4) enable-channel:
+> 4.1) Are the --jul --subbuf-size, --num-subbuf and --read-timer defaults the
+> same as with --userspace?
+> 4.2) Presumably --output can only be mmap?
+> 4.3) Are the --jul buffering schemes the same as with --userspace (i.e.
+> --buffers-pid and --buffers-uid)?
+> 4.4) If yes, won't they all degenerate to the virtual machine's user and
+> process IDs?
+> 5) enable-event:
+> 5.1) Can you assign --jul events to multiple channels like you can in
+> --userspace?
+> 5.2) Is the --jul event type --tracepoint or something else entirely?
+> 5.3) Can the trailing wild card (and exclusion option) be used in the event
+> name when enabling/disabling --jul events?
+> 6) list: Does bug #654 also apply to --jul?
+> 
+> Daniel U. Thibault
+> Protection des syst?mes et contremesures (PSC) | Systems Protection &
+> Countermeasures (SPC) Cyber s?curit? pour les missions essentielles (CME) |
+> Mission Critical Cyber Security (MCCS) R & D pour la d?fense Canada -
+> Valcartier (RDDC Valcartier) | Defence R&D Canada - Valcartier (DRDC
+> Valcartier)
+> 2459 route de la Bravoure
+> Qu?bec QC  G3J 1X5
+> CANADA
+> Vox : (418) 844-4000 x4245
+> Fax : (418) 844-4538
+> NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=918V%20QSDJ>
+> Gouvernement du Canada | Government of Canada
+> <http://www.valcartier.drdc-rddc.gc.ca/>
+> 
+> 
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
