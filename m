@@ -1,20 +1,19 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-tools] Fix: Some corrections to the
- lttng man page
-Date: Mon, 3 Feb 2014 16:05:39 +0000 (UTC)
-Message-ID: <36531237.18093.1391443539534.JavaMail.zimbra__9320.02794365889$1391443609$gmane$org@efficios.com>
-References: <48CF5AC71E61DB46B70D0F388054EFFD2679FA2C@VAL-E-01.valcartier.drdc-rddc.gc.ca>
-	<CA+jJMxu4WNTRny2x6C3H96_wLQaYeBEPk+HX1pXVvhHjT3X8Uw@mail.gmail.com>
-	<48CF5AC71E61DB46B70D0F388054EFFD267A10D1@VAL-E-01.valcartier.drdc-rddc.gc.ca>
-	<CA+jJMxsfyhffdEVEybjWA-5arfetSNbM9XuZXZN5r7mKX2xEEg@mail.gmail.com>
+Subject: Re: Tagging traces with arbitrary data (as in
+ custommetadata)
+Date: Mon, 3 Feb 2014 16:09:04 +0000 (UTC)
+Message-ID: <1927955167.18151.1391443744893.JavaMail.zimbra__5320.44328651882$1391443807$gmane$org@efficios.com>
+References: <C62A2692A7474EDFAB0AD54DA97D77E8@DVDMANDT5>
+	<1726942705.57214.1383661201794.JavaMail.zimbra@efficios.com>
+	<C28F32BAA3794A9895BA53E358410D54@DVDMANDT5>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1321265057=="
+Content-Type: multipart/mixed; boundary="===============1998302797=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1WAM1q-0004ka-Ix
-	for lttng-dev@lists.lttng.org; Mon, 03 Feb 2014 11:05:52 -0500
-In-Reply-To: <CA+jJMxsfyhffdEVEybjWA-5arfetSNbM9XuZXZN5r7mKX2xEEg@mail.gmail.com>
+	(envelope-from <compudj@efficios.com>) id 1WAM57-0004oC-GO
+	for lttng-dev@lists.lttng.org; Mon, 03 Feb 2014 11:09:15 -0500
+In-Reply-To: <C28F32BAA3794A9895BA53E358410D54@DVDMANDT5>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,446 +22,293 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?utf-8?B?SsOpcsOpbWll?= Galarneau <jeremie.galarneau@efficios.com>
-Cc: lttng-dev@lists.lttng.org, Daniel Thibault <Daniel.Thibault@drdc-rddc.gc.ca>
+To: David =?utf-8?Q?Lindstr=C3=B6m?= <david.lindstrom@percepio.se>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============1321265057==
+--===============1998302797==
 Content-Type: multipart/alternative;
-	boundary="----=_Part_18092_1824475250.1391443539533"
+	boundary="----=_Part_18150_322358643.1391443744891"
 
-------=_Part_18092_1824475250.1391443539533
+------=_Part_18150_322358643.1391443744891
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-Perhaps someone should open a bug report to track this, or submit a patch ?=
-=20
+----- Original Message -----
+
+> From: "David Lindstr=C3=B6m" <david.lindstrom@percepio.se>
+> To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>, "DavidLindstr=
+=C3=B6m"
+> <david.lindstrom@percepio.se>
+> Cc: lttng-dev@lists.lttng.org
+> Sent: Tuesday, November 5, 2013 9:49:08 AM
+> Subject: Re: [lttng-dev] Tagging traces with arbitrary data (as in
+> custommetadata)
+
+> > From: Mathieu Desnoyers
+>=20
+> > Sent: Tuesday, November 05, 2013 3:20 PM
+>=20
+> > To: DavidLindstr=C3=B6m
+>=20
+> > Cc: lttng-dev@lists.lttng.org
+>=20
+> > Subject: Re: [lttng-dev] Tagging traces with arbitrary data (as in
+> > custommetadata)
+>=20
+> > ----- Original Message -----
+>=20
+
+> > > From: "David Lindstr=C3=B6m" <david.lindstrom@percepio.se>
+> >=20
+>=20
+> > > To: lttng-dev@lists.lttng.org
+> >=20
+>=20
+> > > Sent: Tuesday, November 5, 2013 9:15:14 AM
+> >=20
+>=20
+> > > Subject: [lttng-dev] Tagging traces with arbitrary data (as in custom
+> > > metadata)
+> >=20
+>=20
+> > > Hi, I was wondering if there=E2=80=99s a way to tag a trace with some=
+ additional
+> > > information. A general example would be to include a description of t=
+he
+> > > current experiment. One way to do this currently would be to create a
+> > > custom
+> > > lttng-message application with some UST tracepoint and then just log =
+that
+> > > to
+> > > a separate channel, but that would be pretty ugly. It would be much
+> > > cleaner
+> > > to insert extra fields into the metadata stream. Is something like th=
+at
+> > > possible in current versions of LTTng and/or would it be possible to =
+add
+> > > it
+> > > for a future version?
+> >=20
+>=20
+
+> > The CTF metadata has an environment (env {}) section that contains this
+> > kind
+> > of information. LTTng already uses it to store the tracer version and s=
+ome
+> > info about the system. We could eventually add a feature like this, a
+> > "tag",
+> > that would be added to the CTF environment information. I would guess t=
+hat
+> > users would provide this tag on the lttng command line for their sessio=
+n,
+> > and it would be passed to the tracers by sessiond.
+>=20
+> > Thoughts ?
+>=20
+
+> I have no idea how this would be implemented, I=E2=80=99m only looking at=
+ potential
+> uses. A simple tag field in the env{} section should cover my initial use
+> cases. I have to wonder though, how much more complicated it would be to
+> allow multiple named tags? For example, tags.description =3D =E2=80=9DSom=
+e
+> description=E2=80=9D instead of tag =3D =E2=80=9CSome description=E2=80=
+=9D?
+
+This could be called "user-provided environment", and could look like this =
+in the metadata:=20
+
+env {=20
+....=20
+user.myenvname =3D "text";=20
+}=20
+
+> Also, how would one specify this? As an option to the lttng create comman=
+d or
+> as a separate command (lttng set-tag ...)?
+
+lttng set-env "text"=20
+
+Thoughts ?=20
 
 Thanks,=20
 
 Mathieu=20
 
------ Original Message -----
+> Mvh
+> David Lindstr=C3=B6m
 
-> From: "J=C3=A9r=C3=A9mie Galarneau" <jeremie.galarneau@efficios.com>
-> To: "Daniel Thibault" <Daniel.Thibault@drdc-rddc.gc.ca>
-> Cc: lttng-dev@lists.lttng.org
-> Sent: Tuesday, November 5, 2013 8:25:12 PM
-> Subject: Re: [lttng-dev] [PATCH lttng-tools] Fix: Some corrections to the
-> lttng man page
-
-> On Tue, Nov 5, 2013 at 4:34 PM, Thibault, Daniel <
-> Daniel.Thibault@drdc-rddc.gc.ca > wrote:
-
-> > De : jeremie.galarneau@gmail.com
+> > Thanks,
 >=20
-> > Envoy=C3=A9 : 5 novembre 2013 15:51
+> > Mathieu
 >=20
 
-> > On Thu, Oct 24, 2013 at 12:09 PM, Thibault, Daniel <
-> > Daniel.Thibault@drdc-rddc.gc.ca > wrote:
->=20
-
-> > > -----Message d'origine-----
+> > > Mvh
 > >=20
 >=20
-> > > Date: Wed, 23 Oct 2013 12:08:47 -0400
-> >=20
->=20
-> > > From: J?r?mie Galarneau < jeremie.galarneau@efficios.com >
+> > > David Lindstr=C3=B6m
 > >=20
 >=20
 
-> > > > diff --git a/doc/man/lttng.1 b/doc/man/lttng.1
+> > > _______________________________________________
 > >=20
 >=20
-> > > > [...]
+> > > lttng-dev mailing list
 > >=20
 >=20
-
-> > > > +All user-space applications instrumented with lttng-ust(3) will
+> > > lttng-dev@lists.lttng.org
 > >=20
 >=20
-> > > > automatically register to the session daemon. This feature gives yo=
-u
-> > > > the
-> >=20
->=20
-> > > > ability to list available traceable applications and tracepoints on=
- a
-> > > > per
-> > > > user
-> >=20
->=20
-> > > > basis. (See \fBlist\fP command).
+> > > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 > >=20
 >=20
 
-> > > Is this a statement of intent? LTTng 2.3.0's list command identifies
-> > > user-space events by trace provider name, event name, and process ID,=
- but
-> > > not by user ID (in fact it doesn't even yet filter the kernel events =
-out
-> > > when one asks for 'list -u session'; see bug #654). And there is as y=
-et
-> > > no
-> > > way to filter the 'lttng list' output by user ID (an optional argumen=
-t
-> > > for
-> > > the -u option could do the trick).
-> >=20
+> > --
 >=20
-> > > Of course, listing available tracepoints is automatically per-user wh=
-en
-> > > using
-> > > a local session daemon. But if you're a member of the 'tracing' group=
-,
-> > > you'll deal exclusively with the root daemon and won't have that choi=
-ce.
-> >=20
+> > Mathieu Desnoyers
 >=20
-> > > I didn't change the meaning of the original sentence. It just means t=
-hat
-> > > "lttng list" will output the events registered to the user's
-> > > corresponding
-> > > session daemon.
+> > EfficiOS Inc.
 >=20
-
-> > > Perhaps you can suggest a better phrasing?
+> > http://www.efficios.com
 >=20
-
-> > >
->=20
-
-> > > J=C3=A9r=C3=A9mie
->=20
-
-> > How about this?
->=20
-
-> > Each user-space application instrumented with lttng-ust(3) will
-> > automatically
->=20
-
-> > register with the root session daemon and its user session daemon. This
-> > allows
->=20
-
-> > each daemon to list the available traceable applications and tracepoint=
-s at
->=20
-
-> > any given moment (See the \fBlist\fP command).
->=20
-
-> Looks good to me.
-
-> Cheers,
-> J=C3=A9r=C3=A9mie
-
-> > (There is no need to explain further the diff between the two daemons s=
-ince
-> > the preceding paragraph in the man page already talks about co-existing
-> > session daemons)
->=20
-
-> > Daniel U. Thibault
->=20
-> > Protection des syst=C3=A8mes et contremesures (PSC) | Systems Protectio=
-n &
-> > Countermeasures (SPC)
->=20
-> > Cyber s=C3=A9curit=C3=A9 pour les missions essentielles (CME) | Mission=
- Critical
-> > Cyber
-> > Security (MCCS)
->=20
-> > R & D pour la d=C3=A9fense Canada - Valcartier (RDDC Valcartier) | Defe=
-nce R&D
-> > Canada - Valcartier (DRDC Valcartier)
->=20
-> > 2459 route de la Bravoure
->=20
-> > Qu=C3=A9bec QC G3J 1X5
->=20
-> > CANADA
->=20
-> > Vox : (418) 844-4000 x4245
->=20
-> > Fax : (418) 844-4538
->=20
-> > NAC : 918V QSDJ < http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ >
->=20
-> > Gouvernement du Canada | Government of Canada
->=20
-> > < http://www.valcartier.drdc-rddc.gc.ca/ >
->=20
-
-> --
-> J=C3=A9r=C3=A9mie Galarneau
-> EfficiOS Inc.
-> http://www.efficios.com
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
 --=20
 Mathieu Desnoyers=20
 EfficiOS Inc.=20
 http://www.efficios.com=20
 
-------=_Part_18092_1824475250.1391443539533
+------=_Part_18150_322358643.1391443744891
 Content-Type: text/html; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
 <html><body><div style=3D"font-family: times new roman, new york, times, se=
-rif; font-size: 12pt; color: #000000"><div>Perhaps someone should open a bu=
-g report to track this, or submit a patch ?<br></div><div><br></div><div>Th=
-anks,<br></div><div><br></div><div>Mathieu<br></div><div><br></div><div><br=
-></div><hr id=3D"zwchr"><blockquote style=3D"border-left:2px solid #1010FF;=
-margin-left:5px;padding-left:5px;color:#000;font-weight:normal;font-style:n=
-ormal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size=
-:12pt;"><b>From: </b>"J=C3=A9r=C3=A9mie Galarneau" &lt;jeremie.galarneau@ef=
-ficios.com&gt;<br><b>To: </b>"Daniel Thibault" &lt;Daniel.Thibault@drdc-rdd=
-c.gc.ca&gt;<br><b>Cc: </b>lttng-dev@lists.lttng.org<br><b>Sent: </b>Tuesday=
-, November 5, 2013 8:25:12 PM<br><b>Subject: </b>Re: [lttng-dev] [PATCH ltt=
-ng-tools] Fix: Some corrections to the lttng man page<br><div><br></div><di=
-v dir=3D"ltr"><br><div class=3D"gmail_extra"><br><div><br></div><div class=
-=3D"gmail_quote">On Tue, Nov 5, 2013 at 4:34 PM, Thibault, Daniel <span dir=
-=3D"ltr">&lt;<a href=3D"mailto:Daniel.Thibault@drdc-rddc.gc.ca" target=3D"_=
-blank">Daniel.Thibault@drdc-rddc.gc.ca</a>&gt;</span> wrote:<br>
-<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
-x #ccc solid;padding-left:1ex">
+rif; font-size: 12pt; color: #000000"><hr id=3D"zwchr"><blockquote style=3D=
+"border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;=
+font-weight:normal;font-style:normal;text-decoration:none;font-family:Helve=
+tica,Arial,sans-serif;font-size:12pt;"><b>From: </b>"David Lindstr=C3=B6m" =
+&lt;david.lindstrom@percepio.se&gt;<br><b>To: </b>"Mathieu Desnoyers" &lt;m=
+athieu.desnoyers@efficios.com&gt;, "DavidLindstr=C3=B6m" &lt;david.lindstro=
+m@percepio.se&gt;<br><b>Cc: </b>lttng-dev@lists.lttng.org<br><b>Sent: </b>T=
+uesday, November 5, 2013 9:49:08 AM<br><b>Subject: </b>Re: [lttng-dev] Tagg=
+ing traces with arbitrary data (as in custommetadata)<br><div><br></div><di=
+v dir=3D"ltr"><div style=3D"FONT-SIZE: 12pt; FONT-FAMILY: 'Calibri'; COLOR:=
+ #000000"><blockquote style=3D"MARGIN-RIGHT: 0px" dir=3D"ltr"><div><div sty=
+le=3D"FONT-SIZE: small; FONT-FAMILY: 'Calibri'; FONT-WEIGHT: normal; COLOR:=
+ #000000; FONT-STYLE: normal; TEXT-DECORATION: none; DISPLAY: inline"><b>Fr=
+om:</b><a title=3D"mathieu.desnoyers@efficios.com" href=3D"mailto:mathieu.d=
+esnoyers@efficios.com" target=3D"_blank">Mathieu Desnoyers</a><br data-mce-=
+bogus=3D"1"></div><div style=3D"FONT: 10pt tahoma"><div style=3D"BACKGROUND=
+: #f5f5f5"><div><b>Sent:</b> Tuesday, November 05, 2013 3:20 PM</div><div><=
+b>To:</b><a title=3D"david.lindstrom@percepio.se" href=3D"mailto:david.lind=
+strom@percepio.se" target=3D"_blank">DavidLindstr=C3=B6m</a><br data-mce-bo=
+gus=3D"1"></div><div><b>Cc:</b><a title=3D"lttng-dev@lists.lttng.org" href=
+=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-dev@lists.ltt=
+ng.org</a><br data-mce-bogus=3D"1"></div><div><b>Subject:</b> Re: [lttng-de=
+v] Tagging traces with arbitrary data (as in=20
+  custommetadata)</div></div></div></div><div style=3D"FONT-SIZE: small; FO=
+NT-FAMILY: 'Calibri'; FONT-WEIGHT: normal; COLOR: #000000; FONT-STYLE: norm=
+al; TEXT-DECORATION: none; DISPLAY: inline"><div style=3D"FONT-SIZE: 12pt; =
+FONT-FAMILY: times new roman, new york, times, serif; COLOR: #000000"><hr i=
+d=3D"zwchr"><blockquote style=3D"FONT-SIZE: 12pt; FONT-FAMILY: helvetica,ar=
+ial,sans-serif; FONT-WEIGHT: normal; COLOR: #000; FONT-STYLE: normal; PADDI=
+NG-LEFT: 5px; MARGIN-LEFT: 5px; TEXT-DECORATION: none; BORDER-LEFT: #1010ff=
+ 2px solid"><b>From:=20
+    </b>"David Lindstr=C3=B6m" &lt;david.lindstrom@percepio.se&gt;<br><b>To=
+:=20
+    </b>lttng-dev@lists.lttng.org<br><b>Sent: </b>Tuesday, November 5, 2013=
+=20
+    9:15:14 AM<br><b>Subject: </b>[lttng-dev] Tagging traces with arbitrary=
+ data=20
+    (as in custom&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; metadata)<br><d=
+iv dir=3D"ltr"><div style=3D"FONT-SIZE: 12pt; FONT-FAMILY: 'Calibri'; COLOR=
+: #000000"><div>Hi, I was wondering if there=E2=80=99s a way to tag a trace=
+ with some=20
+    additional information. A general example would be to include a descrip=
+tion=20
+    of the current experiment. One way to do this currently would be to cre=
+ate a=20
+    custom lttng-message application with some UST tracepoint and then just=
+ log=20
+    that to a separate channel, but that would be pretty ugly. It would be =
+much=20
+    cleaner to insert extra fields into the metadata stream. Is something l=
+ike=20
+    that possible in current versions of LTTng and/or would it be possible =
+to=20
+    add it for a future version?</div></div></div></blockquote><div>The CTF=
+ metadata has an environment (env {}) section that contains this=20
+  kind of information. LTTng already uses it to store the tracer version an=
+d=20
+  some info about the system. We could eventually add a feature like this, =
+a=20
+  "tag", that would be added to the CTF environment information. I would gu=
+ess=20
+  that users would provide this tag on the lttng command line for their ses=
+sion,=20
+  and it would be passed to the tracers by sessiond.<br></div><div>Thoughts=
+ ?<br></div></div></div></blockquote><div dir=3D"ltr">I have no idea how th=
+is would be implemented, I=E2=80=99m only looking at=20
+potential uses. A simple tag field in the env{} section should cover my ini=
+tial=20
+use cases. I have to wonder though, how much more complicated it would be t=
+o=20
+allow multiple named tags? For example, tags.description =3D =E2=80=9DSome =
+description=E2=80=9D=20
+instead of tag =3D =E2=80=9CSome description=E2=80=9D?</div></div></div></b=
+lockquote><div><br></div><div>This could be called "user-provided environme=
+nt", and could look like this in the metadata:<br></div><div><br></div><div=
+>env {<br></div><div>&nbsp; ....<br></div><div>&nbsp; user.myenvname =3D "t=
+ext";<br></div><div>}<br></div><div><br></div><div><br></div><blockquote st=
+yle=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color=
+:#000;font-weight:normal;font-style:normal;text-decoration:none;font-family=
+:Helvetica,Arial,sans-serif;font-size:12pt;"><div dir=3D"ltr"><div style=3D=
+"FONT-SIZE: 12pt; FONT-FAMILY: 'Calibri'; COLOR: #000000"><div dir=3D"ltr">=
+Also, how would one specify this? As an option to the lttng create=20
+command or as a separate command (lttng set-tag ...)?</div></div></div></bl=
+ockquote><div>lttng set-env "text"<br></div><div><br></div><div>Thoughts ?<=
+br></div><div><br></div><div>Thanks,<br></div><div><br></div><div>Mathieu<b=
+r></div><div><br></div><div><br></div><blockquote style=3D"border-left:2px =
+solid #1010FF;margin-left:5px;padding-left:5px;color:#000;font-weight:norma=
+l;font-style:normal;text-decoration:none;font-family:Helvetica,Arial,sans-s=
+erif;font-size:12pt;"><div dir=3D"ltr"><div style=3D"FONT-SIZE: 12pt; FONT-=
+FAMILY: 'Calibri'; COLOR: #000000"><div dir=3D"ltr">Mvh</div><div dir=3D"lt=
+r">David Lindstr=C3=B6m</div><blockquote style=3D"MARGIN-RIGHT: 0px" dir=3D=
+"ltr"><div style=3D"FONT-SIZE: 12pt; FONT-FAMILY: times new roman, new york=
+, times, serif; COLOR: #000000">Thanks,<br></div><div style=3D"FONT-SIZE: 1=
+2pt; FONT-FAMILY: times new roman, new york, times, serif; COLOR: #000000">=
+Mathieu<br></div><blockquote style=3D"FONT-SIZE: 12pt; FONT-FAMILY: helveti=
+ca,arial,sans-serif; FONT-WEIGHT: normal; COLOR: #000; FONT-STYLE: normal; =
+PADDING-LEFT: 5px; MARGIN-LEFT: 5px; TEXT-DECORATION: none; BORDER-LEFT: #1=
+010ff 2px solid"><div dir=3D"ltr"><div style=3D"FONT-SIZE: 12pt; FONT-FAMIL=
+Y: 'Calibri'; COLOR: #000000"><div style=3D"FONT-SIZE: 12pt; FONT-FAMILY: '=
+Calibri'; COLOR: #000000">Mvh<br>David=20
+    Lindstr=C3=B6m</div></div></div><br>___________________________________=
+____________<br>lttng-dev=20
+    mailing=20
+    list<br>lttng-dev@lists.lttng.org<br>http://lists.lttng.org/cgi-bin/mai=
+lman/listinfo/lttng-dev<br></blockquote><div style=3D"FONT-SIZE: 12pt; FONT=
+-FAMILY: times new roman, new york, times, serif; COLOR: #000000"><br><div>=
+<br></div></div><div style=3D"FONT-SIZE: 12pt; FONT-FAMILY: times new roman=
+, new york, times, serif; COLOR: #000000">--=20
+  <br></div><div style=3D"FONT-SIZE: 12pt; FONT-FAMILY: times new roman, ne=
+w york, times, serif; COLOR: #000000">Mathieu Desnoyers<br>EfficiOS=20
+  Inc.<br>http://www.efficios.com<br></div></blockquote></div></div></block=
+quote><div><br><br></div><div><br></div><div>-- <br></div><div><span name=
+=3D"x"></span>Mathieu Desnoyers<br>EfficiOS Inc.<br>http://www.efficios.com=
+<span name=3D"x"></span><br></div></div></body></html>
+------=_Part_18150_322358643.1391443744891--
 
 
-
-
-
-<div lang=3D"FR-CA">
-<div>
-<p class=3D"MsoNormal"><b><span style=3D"font-size:10.0pt;font-family:&quot=
-;Tahoma&quot;,&quot;sans-serif&quot;" lang=3D"EN-CA">De&nbsp;:</span></b><s=
-pan style=3D"font-size:10.0pt;font-family:&quot;Tahoma&quot;,&quot;sans-ser=
-if&quot;" lang=3D"EN-CA"> <a href=3D"mailto:jeremie.galarneau@gmail.com" ta=
-rget=3D"_blank">jeremie.galarneau@gmail.com</a><br>
-
-<b>Envoy=C3=A9&nbsp;:</b> 5 novembre 2013 15:51<br>
-<br>
-<span style=3D"text-decoration: underline;" data-mce-style=3D"text-decorati=
-on: underline;"></span><span style=3D"text-decoration: underline;" data-mce=
--style=3D"text-decoration: underline;"></span></span></p>
-<div><div class=3D"im">
-<p class=3D"MsoNormal"><span lang=3D"EN-CA">On Thu, Oct 24, 2013 at 12:09 P=
-M, Thibault, Daniel &lt;</span><a href=3D"mailto:Daniel.Thibault@drdc-rddc.=
-gc.ca" target=3D"_blank"><span lang=3D"EN-CA">Daniel.Thibault@drdc-rddc.gc.=
-ca</span></a><span lang=3D"EN-CA">&gt; wrote:<span style=3D"text-decoration=
-: underline;" data-mce-style=3D"text-decoration: underline;"></span><span s=
-tyle=3D"text-decoration: underline;" data-mce-style=3D"text-decoration: und=
-erline;"></span></span></p>
-
-</div><div>
-<div><div class=3D"im">
-<blockquote style=3D"border:none;border-left:solid #cccccc 1.0pt;padding:0c=
-m 0cm 0cm 6.0pt;margin-left:4.8pt;margin-right:0cm">
-<p class=3D"MsoNormal">-----Message d'origine-----<br>
-Date: Wed, 23 Oct 2013 12:08:47 -0400<br>
-From: J?r?mie Galarneau &lt;<a href=3D"mailto:jeremie.galarneau@efficios.co=
-m" target=3D"_blank">jeremie.galarneau@efficios.com</a>&gt;<br>
-<br>
-&gt; diff --git a/doc/man/lttng.1 b/doc/man/lttng.1<br>
-&gt; [...]<span style=3D"text-decoration: underline;" data-mce-style=3D"tex=
-t-decoration: underline;"></span><span style=3D"text-decoration: underline;=
-" data-mce-style=3D"text-decoration: underline;"></span></p>
-<div>
-<p class=3D"MsoNormal" style=3D"margin-bottom:12.0pt">&gt; +All user-space =
-applications instrumented with lttng-ust(3) will<br>
-&gt; automatically register to the session daemon. This feature gives you t=
-he<br>
-&gt; ability to list available traceable applications and tracepoints on a =
-per user<br>
-&gt; basis. (See \fBlist\fP command).<span style=3D"text-decoration: underl=
-ine;" data-mce-style=3D"text-decoration: underline;"></span><span style=3D"=
-text-decoration: underline;" data-mce-style=3D"text-decoration: underline;"=
-></span></p>
-</div>
-<p class=3D"MsoNormal" style=3D"margin-right:0cm;margin-bottom:12.0pt;margi=
-n-left:11.55pt">
-&nbsp; &nbsp;Is this a statement of intent? &nbsp;LTTng 2.3.0's list comman=
-d identifies user-space events by trace provider name, event name, and proc=
-ess ID, but not by user ID (in fact it doesn't even yet filter the kernel e=
-vents out when one asks for 'list -u session';
- see bug #654). &nbsp;And there is as yet no way to filter the 'lttng list'=
- output by user ID (an optional argument for the -u option could do the tri=
-ck).<span style=3D"color:#1f497d"><span style=3D"text-decoration: underline=
-;" data-mce-style=3D"text-decoration: underline;"></span><span style=3D"tex=
-t-decoration: underline;" data-mce-style=3D"text-decoration: underline;"></=
-span></span></p>
-</blockquote>
-</div><blockquote style=3D"border:none;border-left:solid #cccccc 1.0pt;padd=
-ing:0cm 0cm 0cm 6.0pt;margin-left:4.8pt;margin-right:0cm">
-<p class=3D"MsoNormal" style=3D"margin-bottom:12.0pt"><span lang=3D"EN-CA">=
-&nbsp; &nbsp;Of course, listing available tracepoints is automatically per-=
-user when using a local session daemon. &nbsp;</span>But if you're a member=
- of the 'tracing' group, you'll deal exclusively with
- the root daemon and won't have that choice.<span style=3D"text-decoration:=
- underline;" data-mce-style=3D"text-decoration: underline;"></span><span st=
-yle=3D"text-decoration: underline;" data-mce-style=3D"text-decoration: unde=
-rline;"></span></p>
-</blockquote>
-</div><div class=3D"im">
-<p class=3D"MsoNormal"><span style=3D"color:#1f497d" lang=3D"EN-CA">&gt; </=
-span><span lang=3D"EN-CA">I didn't change the meaning of the original sente=
-nce. It just means that "lttng list" will output the events registered to t=
-he user's corresponding session daemon.<span style=3D"color:#1f497d"><span =
-style=3D"text-decoration: underline;" data-mce-style=3D"text-decoration: un=
-derline;"></span><span style=3D"text-decoration: underline;" data-mce-style=
-=3D"text-decoration: underline;"></span></span></span></p>
-
-<p class=3D"MsoNormal"><span style=3D"color:#1f497d" lang=3D"EN-CA">&gt;</s=
-pan><span lang=3D"EN-CA"> Perhaps you can suggest a better phrasing?<span s=
-tyle=3D"text-decoration: underline;" data-mce-style=3D"text-decoration: und=
-erline;"></span><span style=3D"text-decoration: underline;" data-mce-style=
-=3D"text-decoration: underline;"></span></span></p>
-<p class=3D"MsoNormal"><span style=3D"color:#1f497d">&gt;</span><span style=
-=3D"text-decoration: underline;" data-mce-style=3D"text-decoration: underli=
-ne;"></span>&nbsp;<span style=3D"text-decoration: underline;" data-mce-styl=
-e=3D"text-decoration: underline;"></span></p>
-<p class=3D"MsoNormal"><span style=3D"color:#1f497d">&gt; </span>J=C3=A9r=
-=C3=A9mie<span style=3D"text-decoration: underline;" data-mce-style=3D"text=
--decoration: underline;"></span><span style=3D"text-decoration: underline;"=
- data-mce-style=3D"text-decoration: underline;"></span></p>
-<p class=3D"MsoNormal"><span style=3D"text-decoration: underline;" data-mce=
--style=3D"text-decoration: underline;"></span>&nbsp;<span style=3D"text-dec=
-oration: underline;" data-mce-style=3D"text-decoration: underline;"></span>=
-</p>
-</div><p class=3D"MsoNormal"><span lang=3D"EN-CA">&nbsp;&nbsp; How about th=
-is?<span style=3D"text-decoration: underline;" data-mce-style=3D"text-decor=
-ation: underline;"></span><span style=3D"text-decoration: underline;" data-=
-mce-style=3D"text-decoration: underline;"></span></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-CA"><span style=3D"text-decoration:=
- underline;" data-mce-style=3D"text-decoration: underline;"></span>&nbsp;<s=
-pan style=3D"text-decoration: underline;" data-mce-style=3D"text-decoration=
-: underline;"></span></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-CA">Each user-space application ins=
-trumented with lttng-ust(3) will automatically
-<span style=3D"text-decoration: underline;" data-mce-style=3D"text-decorati=
-on: underline;"></span><span style=3D"text-decoration: underline;" data-mce=
--style=3D"text-decoration: underline;"></span></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-CA">register with the root session =
-daemon and its user session daemon. This allows
-<span style=3D"text-decoration: underline;" data-mce-style=3D"text-decorati=
-on: underline;"></span><span style=3D"text-decoration: underline;" data-mce=
--style=3D"text-decoration: underline;"></span></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-CA">each daemon to list the availab=
-le traceable applications and tracepoints at
-<span style=3D"text-decoration: underline;" data-mce-style=3D"text-decorati=
-on: underline;"></span><span style=3D"text-decoration: underline;" data-mce=
--style=3D"text-decoration: underline;"></span></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-CA">any given moment (See the \fBli=
-st\fP command).<span style=3D"text-decoration: underline;" data-mce-style=
-=3D"text-decoration: underline;"></span><span style=3D"text-decoration: und=
-erline;" data-mce-style=3D"text-decoration: underline;"></span></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-CA"><span style=3D"text-decoration:=
- underline;" data-mce-style=3D"text-decoration: underline;"></span>&nbsp;</=
-span></p></div></div></div></div></blockquote><div><br></div><div>Looks goo=
-d to me.</div><div><br></div><div>Cheers,</div><div>J=C3=A9r=C3=A9mie</div>=
-<div>&nbsp;</div><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8=
-ex;border-left:1px #ccc solid;padding-left:1ex">
-<div lang=3D"FR-CA"><div><div><div><p class=3D"MsoNormal"><span lang=3D"EN-=
-CA"><span style=3D"text-decoration: underline;" data-mce-style=3D"text-deco=
-ration: underline;"></span></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-CA">(There is no need to explain fu=
-rther the diff between the two daemons since the preceding paragraph in the=
- man page already talks about co-existing session daemons)<span style=3D"te=
-xt-decoration: underline;" data-mce-style=3D"text-decoration: underline;"><=
-/span><span style=3D"text-decoration: underline;" data-mce-style=3D"text-de=
-coration: underline;"></span></span></p>
-<div class=3D"im">
-<p class=3D"MsoNormal"><span lang=3D"EN-CA"><span style=3D"text-decoration:=
- underline;" data-mce-style=3D"text-decoration: underline;"></span>&nbsp;<s=
-pan style=3D"text-decoration: underline;" data-mce-style=3D"text-decoration=
-: underline;"></span></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-size:11.0pt;font-family:Consolas=
-;color:#1f497d">Daniel U. Thibault<br>
-Protection des syst=C3=A8mes et contremesures (PSC) | Systems Protection &a=
-mp; Countermeasures (SPC)<br>
-Cyber s=C3=A9curit=C3=A9 pour les missions essentielles (CME) | Mission Cri=
-tical Cyber Security (MCCS)<br>
-R &amp; D pour la d=C3=A9fense Canada - Valcartier (RDDC Valcartier) | Defe=
-nce R&amp;D Canada - Valcartier (DRDC Valcartier)<br>
-2459 route de la Bravoure<br>
-Qu=C3=A9bec QC&nbsp; G3J 1X5<br>
-CANADA<br>
-Vox</span><span style=3D"font-size:10.5pt;font-family:Consolas;color:#1f497=
-d">&nbsp;</span><span style=3D"font-size:11.0pt;font-family:Consolas;color:=
-#1f497d">: <a href=3D"tel:%28418%29%20844-4000%20x4245" target=3D"_blank">(=
-418) 844-4000 x4245</a><br>
-
-Fax</span><span style=3D"font-size:10.5pt;font-family:Consolas;color:#1f497=
-d">&nbsp;</span><span style=3D"font-size:11.0pt;font-family:Consolas;color:=
-#1f497d">: <a href=3D"tel:%28418%29%20844-4538" target=3D"_blank">(418) 844=
--4538</a><br>
-
-</span><span style=3D"font-size:11.0pt;font-family:Consolas;color:#1f497d">=
-NAC&nbsp;: </span>
-<span style=3D"font-size:11.0pt;font-family:&quot;Calibri&quot;,&quot;sans-=
-serif&quot;;color:#1f497d" lang=3D"EN-CA"><a href=3D"http://www.travelgis.c=
-om/map.asp?addr=3D918V%20QSDJ" target=3D"_blank"><span style=3D"font-size:1=
-0.0pt;font-family:&quot;Courier New&quot;" lang=3D"FR-CA">918V QSDJ</span><=
-/a></span><span style=3D"font-size:11.0pt;font-family:&quot;Calibri&quot;,&=
-quot;sans-serif&quot;;color:#1f497d" lang=3D"EN-CA">
-</span><span style=3D"font-size:11.0pt;font-family:&quot;Calibri&quot;,&quo=
-t;sans-serif&quot;;color:#1f497d">&lt;</span><span style=3D"text-decoration=
-: underline;" data-mce-style=3D"text-decoration: underline;"><span style=3D=
-"font-size:10.0pt;font-family:&quot;Courier New&quot;;color:blue"><a href=
-=3D"http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ" target=3D"_blank">=
-http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ</a></span></span><span =
-style=3D"font-size:11.0pt;font-family:&quot;Calibri&quot;,&quot;sans-serif&=
-quot;;color:#1f497d">&gt;</span><span style=3D"font-size:11.0pt;font-family=
-:&quot;Calibri&quot;,&quot;sans-serif&quot;;color:#1f497d"><br>
-
-</span><span style=3D"font-size:11.0pt;font-family:Consolas;color:#1f497d">=
-Gouvernement du Canada&nbsp;| Government of Canada<br>
-</span><span style=3D"font-size:11.0pt;font-family:&quot;Calibri&quot;,&quo=
-t;sans-serif&quot;;color:#1f497d">&lt;</span><span style=3D"font-size:10.0p=
-t;font-family:&quot;Courier New&quot;;color:blue" lang=3D"EN-CA"><a href=3D=
-"http://www.valcartier.drdc-rddc.gc.ca/" target=3D"_blank"><span lang=3D"FR=
--CA">http://www.valcartier.drdc-rddc.gc.ca/</span></a></span><span style=3D=
-"font-size:11.0pt;font-family:&quot;Calibri&quot;,&quot;sans-serif&quot;;co=
-lor:#1f497d">&gt;</span><span style=3D"font-size:10.5pt;font-family:Consola=
-s;color:#1f497d"><span style=3D"text-decoration: underline;" data-mce-style=
-=3D"text-decoration: underline;"></span><span style=3D"text-decoration: und=
-erline;" data-mce-style=3D"text-decoration: underline;"></span></span></p>
-
-</div></div>
-</div>
-</div>
-</div>
-
-</blockquote></div><br><br clear=3D"all"><div><br></div>-- <br>J=C3=A9r=C3=
-=A9mie Galarneau<br>EfficiOS Inc.<br><a href=3D"http://www.efficios.com" ta=
-rget=3D"_blank">http://www.efficios.com</a>
-</div></div>
-<br>_______________________________________________<br>lttng-dev mailing li=
-st<br>lttng-dev@lists.lttng.org<br>http://lists.lttng.org/cgi-bin/mailman/l=
-istinfo/lttng-dev<br></blockquote><div><br><br></div><div><br></div><div>--=
- <br></div><div><span name=3D"x"></span>Mathieu Desnoyers<br>EfficiOS Inc.<=
-br>http://www.efficios.com<span name=3D"x"></span><br></div></div></body></=
-html>
-------=_Part_18092_1824475250.1391443539533--
-
-
---===============1321265057==
+--===============1998302797==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
 
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============1321265057==--
+--===============1998302797==--
