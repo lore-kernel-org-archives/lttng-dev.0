@@ -1,17 +1,17 @@
-From: Michel Dagenais <michel.dagenais@polymtl.ca>
-Subject: Re: Human read-writeable format for CTF traces
-Date: Mon, 3 Feb 2014 11:00:17 -0500 (EST)
-Message-ID: <2093535948.9680292.1391443217617.JavaMail.root__27066.4029558704$1391443276$gmane$org@polymtl.ca>
-References: <1617414287.17829.1391440364768.JavaMail.zimbra@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: About Lttng trace mode
+Date: Mon, 3 Feb 2014 16:03:14 +0000 (UTC)
+Message-ID: <949810863.18087.1391443394621.JavaMail.zimbra__32575.7863968194$1391443458$gmane$org@efficios.com>
+References: <48CF5AC71E61DB46B70D0F388054EFFD267A22BC@VAL-E-01.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.polymtl.ca ([132.207.4.11])
+Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <michel.dagenais@polymtl.ca>) id 1WALwb-0004fl-A6
-	for lttng-dev@lists.lttng.org; Mon, 03 Feb 2014 11:00:26 -0500
-In-Reply-To: <1617414287.17829.1391440364768.JavaMail.zimbra@efficios.com>
+	(envelope-from <compudj@efficios.com>) id 1WALzV-0004i8-8H
+	for lttng-dev@lists.lttng.org; Mon, 03 Feb 2014 11:03:27 -0500
+In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD267A22BC@VAL-E-01.valcartier.drdc-rddc.gc.ca>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,32 +20,92 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: Daniel Thibault <Daniel.Thibault@drdc-rddc.gc.ca>
+Cc: XIANG Hao <Hao.Xiang@alcatel-sbell.com.cn>, lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-
-> I would expect that the ctf writer API recently added to babeltrace
-> (currently in master branch), along with the Python bindings that cover
-> trace read and write APIs, should allow you to implement things like:
-> 
-> - A plugin to read a CTF trace, and output it in an intermediate format
->   to facilitate edits (e.g. XML as you propose),
-> - A plugin to read this XML format and output a CTF trace.
-
-Yes, this would indeed be extremely helpful, in XML and/or JSON.
-
-> You could also generate the XML trace completely by hand if you like, and
-> then convert it to CTF with the second plugin I'm relating to above.
-
-The likely scenario is to add a few events by hand.
-
-> Another possibility is that the XML description also allows
-> describing what the trace contains at a slightly higher level. For instance, if you
-> have a periodic event happening for a certain amount of time, it would
-> be described in XML, and then "generated" by the XML-to-CTF
-> converter.
-
-Do we want to describe this in XML or in Python? We could have "CTF" to "Python statements" generating XML. Then we could add loops by hand. We could also have CTF to XML, with hooks to merge Python generated events.
-
-In addition, TMF may also want to offer similar functionality, an XML dump of events and an XML events reader. Indeed, TMF supports a few formats other than CTF.
+LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJEYW5pZWwgVGhpYmF1bHQiIDxE
+YW5pZWwuVGhpYmF1bHRAZHJkYy1yZGRjLmdjLmNhPgo+IFRvOiBsdHRuZy1kZXZAbGlzdHMubHR0
+bmcub3JnCj4gQ2M6ICJYSUFORyBIYW8iIDxIYW8uWGlhbmdAYWxjYXRlbC1zYmVsbC5jb20uY24+
+Cj4gU2VudDogVGh1cnNkYXksIE5vdmVtYmVyIDE0LCAyMDEzIDEyOjAxOjI1IFBNCj4gU3ViamVj
+dDogUmU6IFtsdHRuZy1kZXZdIEFib3V0IEx0dG5nIHRyYWNlIG1vZGUKPiAKPiAtLS0tLU1lc3Nh
+Z2UgZCdvcmlnaW5lLS0tLS0KPiBEYXRlOiBUaHUsIDE0IE5vdiAyMDEzIDEzOjI0OjE2ICswMDAw
+Cj4gRnJvbTogWElBTkcgSGFvIDxIYW8uWGlhbmdAYWxjYXRlbC1zYmVsbC5jb20uY24+Cj4gCj4g
+PiAgIENvdWxkIEx0dG5nIHN1cHBvcnQgdHJhbnNtaXQgdHJhY2UgdG8gaG9zdCBQQyBpbiBhICJs
+aXZlIG1vZGUiIG9yICJmbHkKPiA+ICAgbW9kZSIgbm93PyBTbyBhcyB0byByZWR1Y2UgdGhlIGJ1
+ZmZlciBzaXplIHJlcXVpcmVtZW50IG9uIHRoZSB0YXJnZXQKPiA+ICAgYm9hcmQuCj4gPgo+ID4g
+ICBCVFcsIEkgcmVhZCBzb21lIG1hdGVyaWFsIG1lbnRpb25lZDoKPiA+ICAgVGhlIGRpc2NhcmQg
+bW9kZSBpcyB1c2VkIGJ5IGRlZmF1bHQuIEluIHRoaXMgbW9kZSwgbmV3IHRyYWNlIGRhdGEKPiA+
+ICAgYXJyaXZpbmcgdG8gYSBmdWxsIGJ1ZmZlciBhcmUgZGlzY2FyZGVkLiBJbiBvdmVyd3JpdGUg
+bW9kZSwgdGhlIG9sZGVzdAo+ID4gICB0cmFjZSBkYXRhIGluIHRoZSBidWZmZXIgYXJlIGRpc2Nh
+cmRlZC4KPiA+ICAgVGhpcyBtb2RlIGlzIGFsc28ga25vd24gYXMgZmxpZ2h0LXJlY29yZGVyIG1v
+ZGUuIE5vdGUgaG93ZXZlciwgdGhhdCB0aGlzCj4gPiAgIHJlZmVycyB0byB0aGUgaW50ZXJuYWwg
+YnVmZmVycywgbm90IHRvIHRoZSB0cmFjZSBsb2cgc3RvcmFnZS4gVGhlCj4gPiAgIGRpc2NhcmRp
+bmcgb2YgZXZlbnRzIGlzIG1hcmtlZCBpbgo+ID4gICB0aGUgdHJhY2UgbG9nIGFuZCBjYW4gYmUg
+bm90aWNlZCB3aGVuIHRoZSB0cmFjZSBpcyBhbmFseXplZC4gSW4gdGhpcyB3YXkKPiA+ICAgdGhl
+IHVzZXIgY2FuIGludGVyYWN0aXZlbHkgYWRqdXN0IGhpcyB0cmFjZSBzZXR0aW5ncy4KPiA+Cj4g
+PiAgIFdoYXQgaXMgdGhlIGRpZmZlcmVuY2UgYmV0d2VlbiAiaW50ZXJuYWwgYnVmZmVycyIgYW5k
+ICJ0cmFjZSBsb2cKPiA+ICAgc3RvcmFnZSI/IENvdWxkIHRoZSB0cmFjZSBsb2cgc3RvcmFnZSBi
+ZSBsb2NhdGVkIGluIHRoZSBob3N0IFBDPwo+ID4gICBGb3IgZXhhbXBsZTogdGhlIHRhcmdldCBi
+b2FyZCB0cmFuc21pdCB0aGUgdHJhY2UgdG8gSG9zdCBQQyB2aWEgVENQL1VEUCwKPiA+ICAgYW5k
+IG9ubHkgYSB2ZXJ5IGxpdHRsZSBpbnRlcm5hbCBmbGlnaHQtcmVjb3JkZXIgYnVmZmVyIGlzIHJl
+cXVpcmVkIGluCj4gPiAgIHRoZSB0YXJnZXQgZGV2aWNlLiBJcyBpdCBmZWFzaWJsZT8KPiAKPiAg
+ICBMaXZlIG1vZGUgaXMgbmVhcmx5IHJlYWR5OyBleHBlY3QgaXQgd2l0aCB2ZXJzaW9uIDIuNC4K
+PiAKPiAgICBUaGUgZGlmZmVyZW5jZSBiZXR3ZWVuIGludGVybmFsIGJ1ZmZlcnMgYW5kIHRyYWNl
+IGxvZyBzdG9yYWdlIGdvZXMgbGlrZQo+ICAgIHRoaXM6IHRoZSBldmVudCBwcm92aWRlcnMgd3Jp
+dGUgaW50byBhIG1lbW9yeSBidWZmZXIgKHRoZSBpbnRlcm5hbAo+ICAgIGJ1ZmZlcnMpLCBhbmQg
+YXQgdGhlIHNhbWUgdGltZSB0aGUgY29uc3VtZXIgZGFlbW9uKHMpIHdpdGhkcmF3IGV2ZW50Cj4g
+ICAgcmVjb3JkcyBmcm9tIHRoZSBidWZmZXIgYW5kIGNvbW1pdCB0aGVtIHRvIHBlcm1hbmVudCBz
+dG9yYWdlICh0cmFjZSBsb2cKPiAgICBzdG9yYWdlKS4gIFRoZSBidWZmZXIgaXMgYnJva2VuIGRv
+d24gaW50byBhIG51bWJlciBvZiBzdWItYnVmZmVycywgYW5kCj4gICAgZWFjaCBzdWItYnVmZmVy
+IGNhbiBvbmx5IGJlIGFjY2Vzc2VkIGVpdGhlciBieSB0aGUgd3JpdGVycyAoY29sbGVjdGl2ZWx5
+KQo+ICAgIG9yIGJ5IHRoZSBjb25zdW1lci4gIEluIGRpc2NhcmQgbW9kZSwgd2hpbGUgYSBzdWIt
+YnVmZmVyIGlzIGxvY2tlZCBmb3IKPiAgICBjb25zdW1lciBhY2Nlc3MsIHNob3VsZCB0aGUgd3Jp
+dGVycyBnbyBhcm91bmQgdGhlIHNldCBvZiBzdWItYnVmZmVycyBhbmQKPiAgICBjb21lIHVwIGJl
+aGluZCB0aGUgY29uc3VtZXIsIHRoZWlyIHJlcXVlc3QgdG8gd3JpdGUgaW50byB0aGUgY29uc3Vt
+ZXIncwo+ICAgIHN1Yi1idWZmZXIgd2lsbCBiZSBkZW5pZWQsIGFuZCB0aGV5IHdpbGwgdGhlbiBk
+aXNjYXJkIHRoZSBldmVudCB0aGV5Cj4gICAgd2FudGVkIHRvIHJlY29yZC4gIFRoZSAibm90IHRv
+IHRoZSB0cmFjZSBsb2cgc3RvcmFnZSIgYml0IGlzIHRoZXJlIHRvCj4gICAgY2xhcmlmeSB0aGF0
+IG5vIGV2ZW50IHJlY29yZCBtYXkgZXZlciBiZSBsb3N0IGZyb20gdGhlIHRyYWNlIGZpbGVzIG9u
+Y2UKPiAgICBpdCBoYXMgYmVlbiB3cml0dGVuIGludG8gdGhlbTogdGhleSBjYW4gbmVpdGhlciBi
+ZSBkaXNjYXJkZWQgbm9yCj4gICAgb3ZlcndyaXR0ZW4uICAoQWN0dWFsbHksIHVzaW5nIHRoZSBl
+bmFibGUtY2hhbm5lbCB0cmFjZWZpbGUtc2l6ZSBhbmQKPiAgICB0cmFjZWZpbGUtY291bnQgb3B0
+aW9ucywgeW91ICpjYW4qIHNldCB1cCBhbiBvbi1kaXNrIGZsaWdodCByZWNvcmRlciwgYnV0Cj4g
+ICAgdGhhdCBpcyBhIGRpZmZlcmVudCBzY2VuYXJpbykKClRoZSBwYXJhZ3JhcGggYWJvdmUgaXMg
+dHJ1ZSwgZXhjZXB0IGZvciB0aGUgcGFydCAid2hpbGUgYSBzdWItYnVmZmVyIGlzIGxvY2tlZApm
+b3IgY29uc3VtZXIgYWNjZXNzIi4gSW4gZGlzY2FyZCBtb2RlLCBhcyBzb29uIGFzIHRoZSB3cml0
+ZXIgaXMgZmlsbGluZyB1cCBhbGwKc3ViLWJ1ZmZlcnMsIGFuZCB0aHVzIHRoZSBwcm9kdWNlZCBz
+dWItYnVmZmVycyBjb3VudCByZWFjaGVzIHRoZSBjb25zdW1lZApzdWItYnVmZmVyIGNvdW50IG1p
+bnVzIHRoZSBudW1iZXIgb2Ygc3ViLWJ1ZmZlcnMgaW4gdGhlIGJ1ZmZlciAodGhpcyBpcyBhIGJ1
+ZmZlcgpmdWxsIHNpdHVhdGlvbiksIGV2ZW50cyBhcmUgZGlzY2FyZGVkLiBUaGlzIGlzIGRvbmUg
+aW5kZXBlbmRlbnRseSBvZiB3aGV0aGVyIG9yCm5vdCB0aGUgY29uc3VtZXIgaXMgY3VycmVudGx5
+IGxvY2tpbmcgYSBzdWItYnVmZmVyIGZvciByZWFkaW5nLgoKVGhhbmtzLAoKTWF0aGlldQoKPiAK
+PiAgICBMVFRuZyBjYW4gYWxyZWFkeSB0cmFuc21pdCB0aGUgdHJhY2UgZXZlbnRzIHRvIGEgaG9z
+dCBtYWNoaW5lLiAgR29pbmcgYmFjawo+ICAgIHRvIHRoZSBleGFtcGxlIG9mIHRoZSB3cml0ZXJz
+IHdyaXRpbmcgaW50byBhIG1lbW9yeSBidWZmZXIgd2hpbGUgdGhlCj4gICAgY29uc3VtZXIgd2l0
+aGRyYXdzIGV2ZW50cyBmcm9tIGl0LCB0aGUgY29uc3VtZXIgY2FuIGJlIGluc3RydWN0ZWQgdG8K
+PiAgICB0cmFuc21pdCB0aGUgcmVjb3JkcyB0byBhIFRDUCBhZGRyZXNzIGluc3RlYWQgb2Ygd3Jp
+dGluZyB0aGVtIHRvIGxvY2FsCj4gICAgZmlsZSBzdG9yYWdlLiAgQXQgdGhhdCBhZGRyZXNzLCBh
+IHJlbGF5IGRhZW1vbiByZWNlaXZlcyB0aGUgcmVjb3JkcyBhbmQKPiAgICB3cml0ZXMgdGhlbSB0
+byBmaWxlIHN0b3JhZ2UuICBFeGFtcGxlOgo+IAo+IChvbiB0aGUgaG9zdCBtYWNoaW5lOikKPiAk
+IGx0dG5nLXJlbGF5ZCAmCj4gKG9uIHRoZSB0cmFjZWQgbWFjaGluZTopCj4gJCBsdHRuZyBjcmVh
+dGUgbXlzZXNzaW9uIC0tc2V0LXVybCBuZXQ6Ly9ob3N0Cj4gKGVuYWJsZSBldmVudHMgYW5kIGNo
+YW5uZWxzLCBldGMuKQo+ICQgbHR0bmcgc3RhcnQKPiAoLikKPiAkIGx0dG5nIGRlc3Ryb3kKPiAK
+PiBEYW5pZWwgVS4gVGhpYmF1bHQKPiBQcm90ZWN0aW9uIGRlcyBzeXN0w6htZXMgZXQgY29udHJl
+bWVzdXJlcyAoUFNDKSB8IFN5c3RlbXMgUHJvdGVjdGlvbiAmCj4gQ291bnRlcm1lYXN1cmVzIChT
+UEMpCj4gQ3liZXIgc8OpY3VyaXTDqSBwb3VyIGxlcyBtaXNzaW9ucyBlc3NlbnRpZWxsZXMgKENN
+RSkgfCBNaXNzaW9uIENyaXRpY2FsIEN5YmVyCj4gU2VjdXJpdHkgKE1DQ1MpCj4gUiAmIEQgcG91
+ciBsYSBkw6lmZW5zZSBDYW5hZGEgLSBWYWxjYXJ0aWVyIChSRERDIFZhbGNhcnRpZXIpIHwgRGVm
+ZW5jZSBSJkQKPiBDYW5hZGEgLSBWYWxjYXJ0aWVyIChEUkRDIFZhbGNhcnRpZXIpCj4gMjQ1OSBy
+b3V0ZSBkZSBsYSBCcmF2b3VyZQo+IFF1w6liZWMgUUMgIEczSiAxWDUKPiBDQU5BREEKPiBWb3gg
+OiAoNDE4KSA4NDQtNDAwMCB4NDI0NQo+IEZheCA6ICg0MTgpIDg0NC00NTM4Cj4gTkFDIDogOTE4
+ViBRU0RKIDxodHRwOi8vd3d3LnRyYXZlbGdpcy5jb20vbWFwLmFzcD9hZGRyPTkxOFYlMjBRU0RK
+Pgo+IEdvdXZlcm5lbWVudCBkdSBDYW5hZGEgfCBHb3Zlcm5tZW50IG9mIENhbmFkYQo+IDxodHRw
+Oi8vd3d3LnZhbGNhcnRpZXIuZHJkYy1yZGRjLmdjLmNhLz4KPiAKPiBfX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QK
+PiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2kt
+YmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cj4gCgotLSAKTWF0aGlldSBEZXNub3llcnMK
+RWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRu
+Zy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWls
+bWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
