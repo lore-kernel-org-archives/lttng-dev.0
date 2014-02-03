@@ -1,19 +1,16 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: URCU accessing rcu_head->func
-Date: Mon, 3 Feb 2014 14:47:11 +0000 (UTC)
-Message-ID: <199896313.17720.1391438831680.JavaMail.zimbra__30255.2050482065$1391438901$gmane$org@efficios.com>
-References: <20140131201632.GA32482@pax.zz.de>
-	<582363683.17541.1391398658096.JavaMail.zimbra@efficios.com>
-	<20140203075259.GA25614@pax.zz.de>
+Subject: Re: enable event with java log level
+Date: Mon, 3 Feb 2014 14:56:54 +0000 (UTC)
+Message-ID: <1603481571.17795.1391439414663.JavaMail.zimbra__33052.4382334717$1391439474$gmane$org@efficios.com>
+References: <9B7E8841A008244FBC13A565047771A439389A91@eusaamb105.ericsson.se>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1965833266=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1WAKns-0003qz-AF
-	for lttng-dev@lists.lttng.org; Mon, 03 Feb 2014 09:47:22 -0500
-In-Reply-To: <20140203075259.GA25614@pax.zz.de>
+	(envelope-from <compudj@efficios.com>) id 1WAKxG-0003vp-5u
+	for lttng-dev@lists.lttng.org; Mon, 03 Feb 2014 09:57:04 -0500
+In-Reply-To: <9B7E8841A008244FBC13A565047771A439389A91@eusaamb105.ericsson.se>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,93 +19,178 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Florian Lohoff <f@zz.de>
-Cc: lttng-dev@lists.lttng.org, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
+To: Huiping Zhang <huiping.zhang@ericsson.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
+--===============1965833266==
+Content-Type: multipart/alternative;
+	boundary="----=_Part_17794_2050215898.1391439414662"
+
+------=_Part_17794_2050215898.1391439414662
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+Hi, 
+
+The documentation is found by running this: 
+
+lttng enable-event --help 
+
+You can look at the following lttng-tools files: 
+
+regression/ust/java-jul/test_java_jul: test_jul_loglevel() 
+as well as tests/utils/utils.sh 
+
+An example usage taken from there: 
+
+lttng enable-event -j --loglevel JUL_INFO hello 
+
+Thanks, 
+
+Mathieu 
+
 ----- Original Message -----
-> From: "Florian Lohoff" <f@zz.de>
-> To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-> Cc: lttng-dev@lists.lttng.org, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
-> Sent: Monday, February 3, 2014 2:52:59 AM
-> Subject: Re: [lttng-dev] URCU accessing rcu_head->func
-> 
-> 
-> Hi, Mathieu,
-> 
-> On Mon, Feb 03, 2014 at 03:37:38AM +0000, Mathieu Desnoyers wrote:
-> > > 
-> > > I am in the read side critical section so my structure
-> > > cant appear under my feet but the above can be racy at
-> > > best.
-> > 
-> > I guess you meant "disappear" here ?
-> 
-> Yep
-> 
-> > > What would be the best way to achieve something like:
-> > > 
-> > > 	"queue for call_rcu if not already queued"
-> > > 
-> > > Another flag with an atomic inc or something?
-> > 
-> > Indeed, the scheme you describe above seems to be racy, since there could
-> > be
-> > two or more read-side critical sections accessing the same object
-> > concurrently,
-> > and doing two call_rcu() enqueuing the same object (same linked list node)
-> > twice
-> > into the call_rcu lists will simply corrupt those lists.
-> > 
-> > Let me first rephrase your intent here just to make sure I understand: you
-> > use
-> > RCU read-side to provide existence guarantee on the "rs" object, and you
-> > want
-> > to enqueue the object rcuhead with call_rcu() for deletion (free_obj) after
-> > a
-> > grace period has elapsed.
-> > 
-> > Assuming you care about keeping this code path wait-free or lock-free (at
-> > least),
-> > using uatomic_xchg() would allow you to set an atomic flag and know, from
-> > the
-> > returned value, whether you "own" the object reclaim or not. You can then
-> > decide
-> > whether or not call_rcu() needs to be called based on the value read by
-> > uatomic_xchg().
-> > 
-> > You could do something similar with mutexes, but then you would lose the
-> > wait-freedom characteristic of this code path, which I am guessing is one
-> > key reason why you use RCU read-side lock and call_rcu() in the first
-> > place.
-> > 
-> > Does it make sense ?
-> 
-> I solved it a little different. I am using a RCU hash for keeping the
-> data structures and i simply took the reasult of cds_lfht_del
-> or cds_lfht_add_replace.
-> 
-> If i successfully remove my structure from the hash i queue for later
-> destruction. As the removal should only happen successfully once i should
-> be done.
-> 
-> Its just a little bit more tricky to get correct.
 
-Indeed! We have the return value to del/add replace in place for this
-kind of use-case, and it does get you the same result as using the flag
-technique.
+> From: "Huiping Zhang" <huiping.zhang@ericsson.com>
+> To: lttng-dev@lists.lttng.org
+> Sent: Thursday, January 30, 2014 10:02:11 AM
+> Subject: [lttng-dev] enable event with java log level
 
-Thanks,
+> Hi,
 
-Mathieu
+> Could you give an example how to provide java logger level in enable-event?
+> In Hello.java there is only sample providing logger name:
 
-> 
-> Flo
-> --
-> Florian Lohoff                                                 f@zz.de
-> 
+> lttng enable-event -j hello
+
+> Big thanks, Huiping
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Mathieu Desnoyers 
+EfficiOS Inc. 
+http://www.efficios.com 
+
+------=_Part_17794_2050215898.1391439414662
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><body><div style=3D"font-family: times new roman, new york, times, se=
+rif; font-size: 12pt; color: #000000"><div>Hi,<br></div><div><br></div><div=
+><div>The documentation is found by running this:<br></div><div><br></div><=
+div>lttng enable-event --help</div><div><br></div></div><div><br></div><div=
+>You can look at the following lttng-tools files:<br></div><div><br></div><=
+div>regression/ust/java-jul/test_java_jul: test_jul_loglevel()<br></div><di=
+v>as well as tests/utils/utils.sh<br></div><div><br></div><div>An example u=
+sage taken from there:<br></div><div><br></div><div>lttng enable-event -j -=
+-loglevel JUL_INFO hello <br></div><div><br></div><div>Thanks,<br></div><di=
+v><br></div><div>Mathieu<br></div><div><br></div><div><br></div><hr id=3D"z=
+wchr"><blockquote style=3D"border-left:2px solid #1010FF;margin-left:5px;pa=
+dding-left:5px;color:#000;font-weight:normal;font-style:normal;text-decorat=
+ion:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><b>From: <=
+/b>"Huiping Zhang" &lt;huiping.zhang@ericsson.com&gt;<br><b>To: </b>lttng-d=
+ev@lists.lttng.org<br><b>Sent: </b>Thursday, January 30, 2014 10:02:11 AM<b=
+r><b>Subject: </b>[lttng-dev] enable event with java log level<br><div><br>=
+</div>
+
+
+
+<style><!--
+
+@font-face
+=09{font-family:SimSun;
+=09panose-1:2 1 6 0 3 1 1 1 1 1;}
+@font-face
+=09{font-family:SimSun;
+=09panose-1:2 1 6 0 3 1 1 1 1 1;}
+@font-face
+=09{font-family:Calibri;
+=09panose-1:2 15 5 2 2 2 4 3 2 4;}
+@font-face
+=09{font-family:"\@SimSun";
+=09panose-1:2 1 6 0 3 1 1 1 1 1;}
+
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+=09{margin:0cm;
+=09margin-bottom:.0001pt;
+=09font-size:12.0pt;
+=09font-family:"Times New Roman","serif";}
+a:link, span.MsoHyperlink
+=09{mso-style-priority:99;
+=09color:blue;
+=09text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+=09{mso-style-priority:99;
+=09color:purple;
+=09text-decoration:underline;}
+span.EmailStyle17
+=09{mso-style-type:personal-reply;
+=09font-family:"Calibri","sans-serif";
+=09color:#1F497D;}
+.MsoChpDefault
+=09{mso-style-type:export-only;}
+@page WordSection1
+=09{size:612.0pt 792.0pt;
+=09margin:72.0pt 72.0pt 72.0pt 72.0pt;}
+div.WordSection1
+=09{page:WordSection1;}
+--></style>
+
+
+<div class=3D"WordSection1">
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11.0pt;font-family:&quot;Ca=
+libri&quot;,&quot;sans-serif&quot;;color:#1F497D" lang=3D"EN-CA">Hi,</span>=
+</p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11.0pt;font-family:&quot;Ca=
+libri&quot;,&quot;sans-serif&quot;;color:#1F497D" lang=3D"EN-CA">&nbsp;</sp=
+an></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11.0pt;font-family:&quot;Ca=
+libri&quot;,&quot;sans-serif&quot;;color:#1F497D" lang=3D"EN-CA">Could you =
+give an example how to provide java logger level in enable-event? In Hello.=
+java there is only sample providing logger name:</span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11.0pt;font-family:&quot;Ca=
+libri&quot;,&quot;sans-serif&quot;;color:#1F497D" lang=3D"EN-CA">&nbsp;</sp=
+an></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11.0pt;font-family:&quot;Ca=
+libri&quot;,&quot;sans-serif&quot;;color:#1F497D" lang=3D"EN-CA">&nbsp;&nbs=
+p; lttng enable-event -j hello</span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11.0pt;font-family:&quot;Ca=
+libri&quot;,&quot;sans-serif&quot;;color:#1F497D" lang=3D"EN-CA">&nbsp;</sp=
+an></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11.0pt;font-family:&quot;Ca=
+libri&quot;,&quot;sans-serif&quot;;color:#1F497D" lang=3D"EN-CA">&nbsp;</sp=
+an></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11.0pt;font-family:&quot;Ca=
+libri&quot;,&quot;sans-serif&quot;;color:#1F497D" lang=3D"EN-CA">Big thanks=
+, Huiping</span></p>
+</div>
+</div>
+
+
+<br>_______________________________________________<br>lttng-dev mailing li=
+st<br>lttng-dev@lists.lttng.org<br>http://lists.lttng.org/cgi-bin/mailman/l=
+istinfo/lttng-dev<br></blockquote><div><br><br></div><div><br></div><div>--=
+ <br></div><div><span name=3D"x"></span>Mathieu Desnoyers<br>EfficiOS Inc.<=
+br>http://www.efficios.com<span name=3D"x"></span><br></div></div></body></=
+html>
+------=_Part_17794_2050215898.1391439414662--
+
+
+--===============1965833266==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1965833266==--
