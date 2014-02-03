@@ -1,17 +1,21 @@
-From: Matthew Khouzam <matthew.khouzam@ericsson.com>
-Subject: Re: Human read-writeable format for CTF traces
-Date: Mon, 3 Feb 2014 10:28:10 -0500
-Message-ID: <52EFB58A.4090003__23808.0392046415$1391441386$gmane$org@ericsson.com>
-References: <52EFAED6.60304@versatic.net>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [Patch LTTng-ust 6/7] Add the macros to generate
+ the data structures for CTF named enumerations
+Date: Mon, 3 Feb 2014 15:28:54 +0000 (UTC)
+Message-ID: <1044692147.17858.1391441334987.JavaMail.zimbra__8074.69175565547$1391441487$gmane$org@efficios.com>
+References: <1390593885-7463-1-git-send-email-gbastien+lttng@versatic.net>
+	<1390593885-7463-7-git-send-email-gbastien+lttng@versatic.net>
+	<1490865069.16181.1391132259063.JavaMail.zimbra@efficios.com>
+	<52EB0287.4000105@mentor.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from usevmg20.ericsson.net ([198.24.6.45])
+Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <matthew.khouzam@ericsson.com>) id 1WALS5-0004FI-7I
-	for lttng-dev@lists.lttng.org; Mon, 03 Feb 2014 10:28:55 -0500
-In-Reply-To: <52EFAED6.60304@versatic.net>
+	(envelope-from <compudj@efficios.com>) id 1WALSG-0004FO-Jg
+	for lttng-dev@lists.lttng.org; Mon, 03 Feb 2014 10:29:10 -0500
+In-Reply-To: <52EB0287.4000105@mentor.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,84 +24,77 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Stefan Seefeld <stefan_seefeld@mentor.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Genevieve,
-Would it be an interesting option to make a "metadata" that would parse
-the xml? Just throwing another option into the mix.
-Matthew
-On 14-02-03 09:59 AM, Genevi=E8ve Bastien wrote:
-> Hello all,
->
-> Short question:
->
-> As we develop analyses in TMF for LTTng traces, we'd like to unit test
-> them with very specific sequences of events, something no real-life
-> trace can provide. We'd like to build our own traces manually.
->
-> Does a human read-writeable format already exist to work with CTF
-> traces or convert from/to CTF traces? I heard of a few CTF trace
-> generators, some which haven't been rebased in a while. What's their
-> status? Anything that answers our need there?
->
-> Thanks,
->
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> Detailed specification of what I'm looking for and why:
->
-> * In TMF, analyses use event requests and they handle events. It does
-> not matter at all whether the event came from a CTF binary stream or
-> from a text file, as long as they have the same name and fields, it
-> will be handled the same.
->
-> * Also, while we may want to hand make a full test trace, we may also
-> wish to take (part of) a real life CTF trace, convert it to a human
-> read-writeable format, tweak it to our needs and... as far as TMF is
-> concerned, we'll be perfectly happy with this format, but it may
-> eventually be desirable to convert it back to a CTF trace.
->
-> * XML-defined analyses are about to make it into TMF master. That
-> means users will be able to develop in XML their own state providers,
-> but eventually also their own views, filters, analyses, etc. Before
-> trying them on real traces, it must be possible to test them on
-> controlled hand-made traces. So that trace format is not just a
-> feature for unit tests, it should be made available in the main TMF
-> for users to use.
->
-> * We must keep in mind that users of this format may not have access
-> to the complete LTTng toolchain, or even to a linux command line as
-> they may be working... on Windows! That's even more true now that work
-> is being done to convert Windows traces to CTF format. So the solution
-> must be completely standalone in TMF.
->
-> * In a quick prototype last week, I came up with this format for the
-> human read-writeable test traces:
->
-> <trace>
-> <event>
-> <timestamp value=3D"1" />
-> <eventName value=3D"A" />
-> <source value=3D"0" /> /** the cpu */
-> <field name=3D"b" value=3D"1" type=3D"int" />
-> <field name=3D"c" value=3D"abcdef" type=3D"string" />
-> </event>
-> </trace>
->
-> Why XML? Because it's easy to validate with a XSD and we can use
-> existing tool to automatically generate from this XSD a user interface
-> to edit the events. But that's just a suggestion.
->
-> * Lastly and not least, whatever we end up implementing in TMF must
-> use or at least play nice with other tools around CTF that do more or
-> less the same thing. I wouldn't want to reinvent the wheel here.
->
-> Any thoughts?  Any thing I should look at?
->
-> Thanks,
-> Genevi=E8ve
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJTdGVmYW4gU2VlZmVsZCIgPHN0
+ZWZhbl9zZWVmZWxkQG1lbnRvci5jb20+Cj4gVG86IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcK
+PiBTZW50OiBUaHVyc2RheSwgSmFudWFyeSAzMCwgMjAxNCA4OjU1OjE5IFBNCj4gU3ViamVjdDog
+UmU6IFtsdHRuZy1kZXZdIFtQYXRjaCBMVFRuZy11c3QgNi83XSBBZGQgdGhlIG1hY3JvcyB0byBn
+ZW5lcmF0ZSB0aGUgZGF0YSBzdHJ1Y3R1cmVzIGZvciBDVEYgbmFtZWQKPiBlbnVtZXJhdGlvbnMK
+PiAKPiBPbiAwMS8zMC8yMDE0IDA4OjM3IFBNLCBNYXRoaWV1IERlc25veWVycyB3cm90ZToKPiA+
+IC0tLS0tIE9yaWdpbmFsIE1lc3NhZ2UgLS0tLS0KPiA+PiBGcm9tOiAiR2VuZXZpw6h2ZSBCYXN0
+aWVuIiA8Z2Jhc3RpZW4rbHR0bmdAdmVyc2F0aWMubmV0Pgo+ID4+IFRvOiBsdHRuZy1kZXZAbGlz
+dHMubHR0bmcub3JnCj4gPj4gU2VudDogRnJpZGF5LCBKYW51YXJ5IDI0LCAyMDE0IDM6MDQ6NDQg
+UE0KPiA+PiBTdWJqZWN0OiBbbHR0bmctZGV2XSBbUGF0Y2ggTFRUbmctdXN0IDYvN10gQWRkIHRo
+ZSBtYWNyb3MgdG8gZ2VuZXJhdGUgdGhlCj4gPj4gCWRhdGEgc3RydWN0dXJlcyBmb3IgQ1RGIG5h
+bWVkIGVudW1lcmF0aW9ucwo+ID4+Cj4gPj4gRmlsbHMgdGhlIG1hY3JvcyB0byBpbml0aWFsaXpl
+IHRoZSBtZXRhZGF0YSBmb3IgYSB0cmFjZXBvaW50Lgo+ID4+Cj4gPj4gRnJvbSB0aGlzIHBhdGNo
+IG9uLCB0aGUgbmFtZWQgbWV0YWRhdGEgYXJlIGVuYWJsZWQuCj4gPiBOb3cgdGhhdCBJIHRoaW5r
+IGFib3V0IGl0LCAibmFtZWQgbWV0YWRhdGEiIGRvZXMgbm90IHNlZW0gdG8gYmUKPiA+IHNlbWFu
+dGljYWxseSBjbGVhci4KPiA+IFBlcmhhcHMgd2UgY291bGQgY2hhbmdlIHRoaXMgdG8gImdsb2Jh
+bCB0eXBlIGRlY2xhcmF0aW9ucyIgPyBCZWNhdXNlIHRoaXMKPiA+IGlzIHJlYWxseQo+ID4gd2hh
+dCBpdCBpczogdHlwZSBkZWNsYXJhdGlvbnMgdGhhdCBhcmUgaW4gdGhlIGdsb2JhbCBzY29wZSBv
+ZiB0aGUgbWV0YWRhdGEuCj4gPiBUaGlzIGFwcGxpZXMKPiA+IHRvIGFsbCBvdGhlciBwYXRjaGVz
+IGluIHRoaXMgc2VyaWVzLgo+IAo+IE1hdGhpZXUsCj4gCj4gSSBtYXkgYmUgbWlzdW5kZXJzdGFu
+ZGluZyB3aGF0IHlvdSBpbnRlbmQgdG8gcmVsYWJlbCBhcyAiZ2xvYmFsIHR5cGUKPiBkZWNsYXJh
+dGlvbnMiLCBidXQgSSBiZWxpZXZlIHRoZSB0ZXJtIGlzIHRvbyByZXN0cmljdGl2ZS4KPiBJJ20g
+Zm9sbG93aW5nIHRoaXMgZGlzY3Vzc2lvbiB3aXRoIGludGVyZXN0LCBhcyBJIGhhdmUgYW5vdGhl
+ciB1c2UtY2FzZQo+IGZvciBtZXRhLWRhdGEgd2hpY2ggbWlnaHQgYmUgaW1wbGVtZW50YWJsZSB2
+ZXJ5IG11Y2ggbGlrZSB0aGUgbmFtZWQKPiBlbnVtczogY29uc3RhbnQgb3IgImV2ZW50LXN0YXRp
+YyIgZmllbGRzLiBGb3IgZXhhbXBsZSwgd2UgbWF5IHdhbnQgdG8KPiBzdG9yZSBudW1lcmljIHZh
+bHVlcyBpbiBldmVudHMgdGhhdCBuZWVkIGEgKGNvbnN0YW50KSBzY2FsZSBmYWN0b3IgKGEKPiB1
+bml0IG9mIG1lYXN1cmVtZW50KSwgd2hpY2ggd291bGQgYmUgd2VsbCByZXByZXNlbnRlZCBpbiBt
+ZXRhLWRhdGEsIGFzCj4gb3Bwb3NlZCB0byByZWR1bmRhbnRseSBpbnNpZGUgZXZlbnRzLgo+IEFu
+ZCBzbywgd2hpbGUgSSBhZ3JlZSB0byB5b3VyIGNoYXJhY3Rlcml6YXRpb24gb2YgbmFtZWQgZW51
+bWVyYXRpb25zIGFzCj4gdHlwZSBkZWNsYXJhdGlvbnMsIEknbSBzdGlsbCBsb29raW5nIGF0IHRo
+ZSBtZWNoYW5pc20gYXMgZW5hYmxpbmcgdGhlCj4gc3RvcmFnZSBvZiBuYW1lZCBtZXRhLWRhdGEu
+CgpIaSBTdGVmYW4sCgpMZXQncyB0cnkgdG8gbWFrZSBzdXJlIEkgdW5kZXJzdGFuZCB5b3VyIGlu
+dGVudCBoZXJlLiBMZXQncyBzYXkgd2UgaGF2ZQphbiBldmVudCB3aXRoIGEgIndlaWdodCIgZmll
+bGQgKHVpbnQzMl90KS4gWW91IHdvdWxkIGxpa2UgdG8gaGF2ZQphIG11bHRpcGxpY2F0aXZlIGZh
+Y3RvciAoZS5nLiAqMTAwMCBmb3IgImtnIikgYXMgYSBzZWNvbmQgZmllbGQsIHRoYXQgd291bGQK
+YmUgZW50aXJlbHkga25vd24gZnJvbSB0aGUgbWV0YWRhdGEgKHByZXR0eSBtdWNoIGEgQyBsaXRl
+cmFsIGluIHRoZSBtZXRhZGF0YSwKc28gaXQgZG9lcyBub3QgaGF2ZSB0byBiZSByZXBlYXRlZCBm
+b3IgZWFjaCBldmVudCkuCgpUaGVyZSBhcmUgdmFyaW91cyB3YXlzIHRvIGRvIHRoaXMgSSBpbWFn
+aW5lOiBlLmcuOgoKKiBVc2luZyB0aGUgdHlwaW5nIHN5c3RlbQoKZXZlbnQgewogIC4uLgogIGZp
+ZWxkcyA6PSBzdHJ1Y3QgewogICAgaW50ZWdlciB7IHNpemUgPSAzMjsgc2lnbmVkID0gZmFsc2U7
+IGFsaWduID0gMzI7IHNjYWxlID0gMTAwMDsgfSB3ZWlnaHQ7CiAgfTsKfTsKCiogQW5vdGhlciB3
+YXkgdG8gZG8gdGhpcyB3b3VsZCBiZSB0byBhc3NvY2lhdGUgYSBmb3JtYXQgc3RyaW5nIHdpdGgg
+dGhlIGV2ZW50OgoKZXZlbnQgewogIC4uLgogIGZpZWxkcyA6PSBzdHJ1Y3QgewogICAgaW50ZWdl
+ciB7IHNpemUgPSAzMjsgc2lnbmVkID0gZmFsc2U7IGFsaWduID0gMzI7IH0gd2VpZ2h0OwogIH07
+CiAgZm9ybWF0ID0gKCJUaGUgd2VpZ2h0IGlzICV1IGtnLiIsIHdlaWdodCk7Cn07CgoqIFlldCBh
+bm90aGVyIHdheSB3b3VsZCBiZSB0byBhc3NvY2lhdGUgdGhlIGZvcm1hdCBzdHJpbmcgd2l0aCB0
+aGUgc3RydWN0IHR5cGU6CgpldmVudCB7CiAgLi4uCiAgZmllbGRzIDo9IHN0cnVjdCB7CiAgICBp
+bnRlZ2VyIHsgc2l6ZSA9IDMyOyBzaWduZWQgPSBmYWxzZTsgYWxpZ24gPSAzMjsgfSB3ZWlnaHQ7
+CiAgfSBmb3JtYXQgKCJUaGUgd2VpZ2h0IGlzICV1IGtnLiIsIHdlaWdodCk7Cn07CgpCdXQgSSBk
+b24ndCBzZWUgYW55dGhpbmcgdGhlcmUgdGhhdCByZXF1aXJlcyBhZGRpbmcgYW55IHRvcC1sZXZl
+bCBjb25zdHJ1Y3QKdG8gdGhlIENURiBtZXRhZGF0YS4gSGVuY2UsIEkgYW0gdGVtcHRlZCB0byBr
+ZWVwIHRoZSBuYW1lICJnbG9iYWwgdHlwZSBkZWNsYXJhdGlvbiIKZm9yIHRoZSBwYXJ0IG9mIG1l
+dGFkYXRhIGxvY2F0ZWQgaW4gdGhlICJnbG9iYWwiIHNlY3Rpb24gKG9wcG9zZWQgdG8gd2l0aGlu
+IGEKdHJhY2UsIGVudiwgc3RyZWFtLCBhbmQgZXZlbnQgc2NvcGUpLiBBbnl3YXksIGFsbCB3ZSBj
+YW4gZGVjbGFyZSB0aGVyZSBhcmUgdHlwZXMsCnNvIGl0IG1ha2VzIHNlbnNlIHRvIHVzZSB0aGlz
+IG5hbWUuIElmIHdlIGV2ZXIgYWRkIHNvbWV0aGluZyB0byB0aGUgQ1RGIHNwZWMgaW4gdGhlCmZ1
+dHVyZSB0aGF0IGlzIGdsb2JhbCBidXQgaXMgbm90IGEgdHlwZSwgdGhlbiB3ZSdsbCBoYXZlIHRv
+IGV4dGVuZCB0aGUgaW50ZXJmYWNlcwphbmQgaW1wbGVtZW50YXRpb25zICh3aGljaCBzaG91bGQg
+YmUgZXhwZWN0ZWQgaWYgd2UgZXh0ZW5kIHRoZSBDVEYgc3BlYykuCgpUaGFua3MsCgpNYXRoaWV1
+Cgo+IAo+IAo+IFRoYW5rcywKPiAgICAgICAgIFN0ZWZhbgo+IAo+IC0tCj4gU3RlZmFuIFNlZWZl
+bGQKPiBDb2RlU291cmNlcnkgLyBNZW50b3IgR3JhcGhpY3MKPiBodHRwOi8vd3d3Lm1lbnRvci5j
+b20vZW1iZWRkZWQtc29mdHdhcmUvCj4gCj4gCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX18KPiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4gbHR0bmctZGV2
+QGxpc3RzLmx0dG5nLm9yZwo+IGh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFu
+L2xpc3RpbmZvL2x0dG5nLWRldgo+IAoKLS0gCk1hdGhpZXUgRGVzbm95ZXJzCkVmZmljaU9TIElu
+Yy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3Rz
+Lmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5m
+by9sdHRuZy1kZXYK
