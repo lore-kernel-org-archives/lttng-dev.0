@@ -1,20 +1,17 @@
-From: =?UTF-8?B?R2VuZXZpw6h2ZSBCYXN0aWVu?= <gbastien@versatic.net>
-Subject: Re: [Patch LTTng-ust 1/7] Add or update data structures
- to	support CTF named metadata
-Date: Fri, 31 Jan 2014 15:27:50 -0500
-Message-ID: <52EC0746.2020200__21229.4502919123$1391200141$gmane$org@versatic.net>
-References: <1390593885-7463-1-git-send-email-gbastien+lttng@versatic.net>
-	<1390593885-7463-2-git-send-email-gbastien+lttng@versatic.net>
-	<2139172576.16061.1391123211482.JavaMail.zimbra@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: URCU accessing rcu_head->func
+Date: Mon, 3 Feb 2014 03:37:38 +0000 (UTC)
+Message-ID: <582363683.17541.1391398658096.JavaMail.zimbra__3327.43900730765$1391398719$gmane$org@efficios.com>
+References: <20140131201632.GA32482@pax.zz.de>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.electronicbox.net ([96.127.255.82])
+Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <gbastien@versatic.net>) id 1W9Kgu-0006NN-B4
-	for lttng-dev@lists.lttng.org; Fri, 31 Jan 2014 15:28:02 -0500
-In-Reply-To: <2139172576.16061.1391123211482.JavaMail.zimbra@efficios.com>
+	(envelope-from <compudj@efficios.com>) id 1WAALv-0006jL-ST
+	for lttng-dev@lists.lttng.org; Sun, 02 Feb 2014 22:37:44 -0500
+In-Reply-To: <20140131201632.GA32482@pax.zz.de>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,103 +20,87 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, =?UTF-8?B?R2VuZXZp?= =?UTF-8?B?w6h2ZSBCYXN0aWVu?= <gbastien+lttng@versatic.net>
-Cc: lttng-dev@lists.lttng.org
+To: Florian Lohoff <f@zz.de>
+Cc: lttng-dev@lists.lttng.org, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
 List-Id: lttng-dev@lists.lttng.org
 
-VGhhbmtzIGZvciByZXZpZXdpbmcgYWxsIHRob3NlIHBhdGNoZXMhIEknbGwgbWFrZSB0aGUgY2hh
-bmdlcyBzb29uIHdoZW4gCnRoZSBuYW1pbmcgb2YgdGhpcyBjb25jZXB0IGlzIHNldHRsZWQgKHNl
-ZSBTdGVmYW4ncyBlbWFpbCkuICJHbG9iYWwgCnR5cGVzIiBzb3VuZHMgZ29vZC4KCk9ubHkgdGhp
-bmcgd2hlcmUgYW5zd2VyIGlzIG5lZWRlZCBpbmxpbmUgYmVsb3cuCgpPbiAxNC0wMS0zMCAwNjow
-NiBQTSwgTWF0aGlldSBEZXNub3llcnMgd3JvdGU6Cj4gLS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAt
-LS0tLQo+PiBGcm9tOiAiR2VuZXZpw6h2ZSBCYXN0aWVuIiA8Z2Jhc3RpZW4rbHR0bmdAdmVyc2F0
-aWMubmV0Pgo+PiBUbzogbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+PiBTZW50OiBGcmlkYXks
-IEphbnVhcnkgMjQsIDIwMTQgMzowNDozOSBQTQo+PiBTdWJqZWN0OiBbbHR0bmctZGV2XSBbUGF0
-Y2ggTFRUbmctdXN0IDEvN10gQWRkIG9yIHVwZGF0ZSBkYXRhIHN0cnVjdHVyZXMgdG8Jc3VwcG9y
-dCBDVEYgbmFtZWQgbWV0YWRhdGEKPj4KPj4gVGhlIHN0cnVjdHVyZXMgbWF0Y2ggdGhvc2UgaW4g
-TFRUbmctdG9vbHMgdG8gc3VwcG9ydCBuYW1lZCBtZXRhZGF0YSBpbgo+PiBnZW5lcmFsCj4+IGFu
-ZCBDVEYgZW51bWVyYXRpb25zIGluIHBhcnRpY3VsYXIuCj4+Cj4+IFNpZ25lZC1vZmYtYnk6IEdl
-bmV2acOodmUgQmFzdGllbiA8Z2Jhc3RpZW4rbHR0bmdAdmVyc2F0aWMubmV0Pgo+PiAtLS0KPj4g
-ICBpbmNsdWRlL2x0dG5nL3VzdC1jdGwuaCAgICB8IDM2ICsrKysrKysrKysrKysrKysrKysrKysr
-KysrKysrKysrKysrLQo+PiAgIGluY2x1ZGUvbHR0bmcvdXN0LWV2ZW50cy5oIHwgMjAgKysrKysr
-KysrKysrKysrKysrKy0KPj4gICAyIGZpbGVzIGNoYW5nZWQsIDU0IGluc2VydGlvbnMoKyksIDIg
-ZGVsZXRpb25zKC0pCj4+Cj4+IGRpZmYgLS1naXQgYS9pbmNsdWRlL2x0dG5nL3VzdC1jdGwuaCBi
-L2luY2x1ZGUvbHR0bmcvdXN0LWN0bC5oCj4+IGluZGV4IDQwZTgzMWUuLjI5Yzg5ZmUgMTAwNjQ0
-Cj4+IC0tLSBhL2luY2x1ZGUvbHR0bmcvdXN0LWN0bC5oCj4+ICsrKyBiL2luY2x1ZGUvbHR0bmcv
-dXN0LWN0bC5oCj4+IEBAIC0yOTUsMTMgKzI5NSwyMyBAQCBzdHJ1Y3QgdXN0Y3RsX2Zsb2F0X3R5
-cGUgewo+PiAgIAljaGFyIHBhZGRpbmdbVVNUQ1RMX1VTVF9GTE9BVF9UWVBFX1BBRERJTkddOwo+
-PiAgIH0gTFRUTkdfUEFDS0VEOwo+PiAgIAo+PiAtI2RlZmluZSBVU1RDVExfVVNUX0JBU0lDX1RZ
-UEVfUEFERElORwkyOTYKPj4gKyNkZWZpbmUgVVNUQ1RMX1VTVF9FTlVNX0VOVFJZX1BBRERJTkcJ
-Mjk2Cj4+ICtzdHJ1Y3QgdXN0Y3RsX2VudW1fZW50cnkgewo+PiArCXVuc2lnbmVkIGxvbmcgbG9u
-ZyBzdGFydCwgZW5kOwkvKiBzdGFydCBhbmQgZW5kIGFyZSBpbmNsdXNpdmUgKi8KPj4gKwljaGFy
-IHN0cmluZ1tMVFROR19VU1RfU1lNX05BTUVfTEVOXTsKPj4gKwljaGFyIHBhZGRpbmdbVVNUQ1RM
-X1VTVF9FTlVNX0VOVFJZX1BBRERJTkddOwo+PiArfTsKPj4gKwo+PiArI2RlZmluZSBVU1RDVExf
-VVNUX0JBU0lDX1RZUEVfUEFERElORwk0MAo+PiAgIHVuaW9uIF91c3RjdGxfYmFzaWNfdHlwZSB7
-Cj4+ICAgCXN0cnVjdCB1c3RjdGxfaW50ZWdlcl90eXBlIGludGVnZXI7Cj4+ICAgCXN0cnVjdCB7
-Cj4+ICAgCQllbnVtIHVzdGN0bF9zdHJpbmdfZW5jb2RpbmdzIGVuY29kaW5nOwo+PiAgIAl9IHN0
-cmluZzsKPj4gICAJc3RydWN0IHVzdGN0bF9mbG9hdF90eXBlIF9mbG9hdDsKPj4gKwlzdHJ1Y3Qg
-ewo+PiArCQljaGFyIG5hbWVbTFRUTkdfVVNUX1NZTV9OQU1FX0xFTl07Cj4+ICsJfSBlbnVtZXJh
-dGlvbjsKPj4gICAJY2hhciBwYWRkaW5nW1VTVENUTF9VU1RfQkFTSUNfVFlQRV9QQURESU5HXTsK
-Pj4gICB9IExUVE5HX1BBQ0tFRDsKPj4gICAKPj4gQEAgLTMyOSw2ICszMzksMzAgQEAgc3RydWN0
-IHVzdGN0bF90eXBlIHsKPj4gICAJfSB1Owo+PiAgIH0gTFRUTkdfUEFDS0VEOwo+PiAgIAo+PiAr
-I2RlZmluZSBVU1RDVExfVVNUX0VOVU1fVFlQRV9QQURESU5HCTI5Ngo+PiArc3RydWN0IHVzdGN0
-bF9lbnVtIHsKPj4gKwljaGFyIG5hbWVbTFRUTkdfVVNUX1NZTV9OQU1FX0xFTl07Cj4+ICsJc3Ry
-dWN0IHVzdGN0bF9pbnRlZ2VyX3R5cGUgY29udGFpbmVyX3R5cGU7Cj4+ICsJc3RydWN0IHVzdGN0
-bF9lbnVtX2VudHJ5ICplbnRyaWVzOwo+PiArCXVuc2lnbmVkIGludCBsZW47Cj4+ICsJY2hhciBw
-YWRkaW5nW1VTVENUTF9VU1RfRU5VTV9UWVBFX1BBRERJTkddOwo+PiArfSBMVFROR19QQUNLRUQ7
-Cj4+ICsKPj4gKy8qIENURiBNZXRhZGF0YSB0eXBlcyBmb3IgbmFtZWQgbWV0YWRhdGEgZGVzY3Jp
-YmVkIG91dHNpZGUgZXZlbnQKPj4gZGVzY3JpcHRpb25zICovCj4+ICtlbnVtIHVzdGN0bF9tZXRh
-ZGF0YV90eXBlcyB7Cj4+ICsJdXN0Y3RsX210eXBlX2VudW0sCj4+ICsJTlJfVVNUQ1RMX01FVEFE
-QVRBX1RZUEVTLAo+PiArfTsKPj4gKwo+PiArI2RlZmluZSBVU1RDVExfVVNUX05BTUVEX01FVEFE
-QVRBX1BBRERJTkcgNjQwCj4+ICtzdHJ1Y3QgdXN0Y3RsX25hbWVkX21ldGFkYXRhIHsKPj4gKwll
-bnVtIHVzdGN0bF9tZXRhZGF0YV90eXBlcyBtdHlwZTsKPiBPSyB0byB1c2UgdGhlIGVudW1lcmF0
-aW9uLCBidXQgZGVmaW5lIHRoaXMgbXR5cGUgZmllbGQgYXMgYSBmaXhlZC1zaXplCj4gZmllbGQg
-KGUuZy4gaW50MzJfdCkuICh5ZXMsIEkgZGlkIHRoZSBtaXN0YWtlIHRvIHVzZSBlbnVtcyBpbiB0
-aGUgQUJJCj4gaW4gdGhlIHBhc3QpLiBDdXJyZW50bHksIGNvbXBpbGVycyB1c2UgMzItYml0IGlu
-dCB0eXBpY2FsbHksIGJ1dCB0aGV5Cj4gaGF2ZSBzb21lIGZyZWVkb20gaW4gdGhlIGNob2ljZSBv
-ZiB0aGUgYmFja2luZyB0eXBlLgo+Cj4+ICsJdW5pb24gewo+PiArCQlzdHJ1Y3QgdXN0Y3RsX2Vu
-dW0gY3RmX2VudW07Cj4+ICsJCWNoYXIgcGFkZGluZ1tVU1RDVExfVVNUX05BTUVEX01FVEFEQVRB
-X1BBRERJTkddOwo+PiArCX0gdTsKPj4gK307Cj4+ICsKPj4gICAjZGVmaW5lIFVTVENUTF9VU1Rf
-RklFTERfUEFERElORwkyOAo+PiAgIHN0cnVjdCB1c3RjdGxfZmllbGQgewo+PiAgIAljaGFyIG5h
-bWVbTFRUTkdfVVNUX1NZTV9OQU1FX0xFTl07Cj4+IGRpZmYgLS1naXQgYS9pbmNsdWRlL2x0dG5n
-L3VzdC1ldmVudHMuaCBiL2luY2x1ZGUvbHR0bmcvdXN0LWV2ZW50cy5oCj4+IGluZGV4IGQ5M2M5
-MTIuLjI2MGIyMjEgMTAwNjQ0Cj4+IC0tLSBhL2luY2x1ZGUvbHR0bmcvdXN0LWV2ZW50cy5oCj4+
-ICsrKyBiL2luY2x1ZGUvbHR0bmcvdXN0LWV2ZW50cy5oCj4+IEBAIC04OSw2ICs4OSwxMiBAQCBl
-bnVtIGx0dG5nX3N0cmluZ19lbmNvZGluZ3Mgewo+PiAgIAlOUl9TVFJJTkdfRU5DT0RJTkdTLAo+
-PiAgIH07Cj4+ICAgCj4+ICsvKiBDVEYgTWV0YWRhdGEgdHlwZXMgZm9yIG5hbWVkIG1ldGFkYXRh
-IGRlc2NyaWJlZCBvdXRzaWRlIGV2ZW50Cj4+IGRlc2NyaXB0aW9ucyAqLwo+PiArZW51bSBsdHRu
-Z19tZXRhZGF0YV90eXBlcyB7Cj4+ICsJbXR5cGVfZW51bSwKPj4gKwlOUl9NRVRBREFUQV9UWVBF
-UywKPj4gK307Cj4+ICsKPj4gICAjZGVmaW5lIExUVE5HX1VTVF9FTlVNX0VOVFJZX1BBRERJTkcJ
-MTYKPj4gICBzdHJ1Y3QgbHR0bmdfZW51bV9lbnRyeSB7Cj4+ICAgCXVuc2lnbmVkIGxvbmcgbG9u
-ZyBzdGFydCwgZW5kOwkvKiBzdGFydCBhbmQgZW5kIGFyZSBpbmNsdXNpdmUgKi8KPj4gQEAgLTIw
-NCwxMiArMjEwLDIyIEBAIHN0cnVjdCBsdHRuZ190eXBlIHsKPj4gICAjZGVmaW5lIExUVE5HX1VT
-VF9FTlVNX1RZUEVfUEFERElORwkyNAo+PiAgIHN0cnVjdCBsdHRuZ19lbnVtIHsKPj4gICAJY29u
-c3QgY2hhciAqbmFtZTsKPj4gLQlzdHJ1Y3QgbHR0bmdfdHlwZSBjb250YWluZXJfdHlwZTsKPj4g
-KwlzdHJ1Y3QgbHR0bmdfaW50ZWdlcl90eXBlIGNvbnRhaW5lcl90eXBlOwo+IGRvaW5nIHRoaXMg
-Y2hhbmdlIGFzc3VtZXMgdGhhdCBsdHRuZ19lbnVtIHdhcyBuZXZlciB1c2VkIGluIGx0dG5nLXVz
-dCwgaXMKPiB0aGF0IHRydWUgPwpBcmUgeW91IGFza2luZyBtZSBvciB0aGUgbGlzdD8gSSBoYXZl
-bid0IHNlZW4gYW55IHJlZmVyZW5jZSB0byBpdCBhbmQgCnlvdSB0b2xkIG1lIG9uIElSQyB0aGF0
-IFt5b3UgdGhvdWdodF0gaXQgaGFkbid0IGJlZW4gdXNlZCBhbnl3aGVyZSBldmVyLiAKQnV0IEkg
-ZG9uJ3Qga25vdyBhYm91dCB0aGUgcGFzdCBvZiBVU1QuLi4gRm9yIG1vcmUgc2VjdXJpdHksIG1h
-eWJlIEkgCnNob3VsZCBqdXN0IGFkZCBhIG5ldyBmaWVsZCBhdCB0aGUgZW5kIG9mIHRoaXMgc3Ry
-dWN0PwoKVGhhbmtzLAoKR2VuZXZpw6h2ZQo+Cj4gVGhhbmtzLAo+Cj4gTWF0aGlldQo+Cj4+ICAg
-CWNvbnN0IHN0cnVjdCBsdHRuZ19lbnVtX2VudHJ5ICplbnRyaWVzOwo+PiAgIAl1bnNpZ25lZCBp
-bnQgbGVuOwo+PiAgIAljaGFyIHBhZGRpbmdbTFRUTkdfVVNUX0VOVU1fVFlQRV9QQURESU5HXTsK
-Pj4gICB9Owo+PiAgIAo+PiArI2RlZmluZSBMVFROR19VU1RfTkFNRURfTUVUQURBVEFfUEFERElO
-Rwk2MAo+PiArc3RydWN0IGx0dG5nX25hbWVkX21ldGFkYXRhIHsKPj4gKwllbnVtIGx0dG5nX21l
-dGFkYXRhX3R5cGVzIG10eXBlOwo+PiArCXVuc2lnbmVkIGludCBub3dyaXRlOyAvKiBpbmhlcml0
-ZWQgZnJvbSB0aGUgZmllbGQgdXNpbmcgaXQgKi8KPj4gKwl1bmlvbiB7Cj4+ICsJCWNvbnN0IHN0
-cnVjdCBsdHRuZ19lbnVtICpjdGZfZW51bTsKPj4gKwkJY2hhciBwYWRkaW5nW0xUVE5HX1VTVF9O
-QU1FRF9NRVRBREFUQV9QQURESU5HXTsKPj4gKwl9IHU7Cj4+ICt9Owo+PiArCj4+ICAgLyoKPj4g
-ICAgKiBFdmVudCBmaWVsZCBkZXNjcmlwdGlvbgo+PiAgICAqCj4+IEBAIC0yNjcsNiArMjgzLDgg
-QEAgc3RydWN0IGx0dG5nX2V2ZW50X2Rlc2Mgewo+PiAgIAl1bmlvbiB7Cj4+ICAgCQlzdHJ1Y3Qg
-ewo+PiAgIAkJCWNvbnN0IGNoYXIgKiptb2RlbF9lbWZfdXJpOwo+PiArCQkJdW5zaWduZWQgaW50
-IG5yX21ldGFkYXRhOwo+PiArCQkJY29uc3Qgc3RydWN0IGx0dG5nX25hbWVkX21ldGFkYXRhICpu
-YW1lZF9tZXRhZGF0YTsKPj4gICAJCX0gZXh0Owo+PiAgIAkJY2hhciBwYWRkaW5nW0xUVE5HX1VT
-VF9FVkVOVF9ERVNDX1BBRERJTkddOwo+PiAgIAl9IHU7Cj4+IC0tCj4+IDEuOC41LjMKPj4KPj4K
-Pj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPj4gbHR0
-bmctZGV2IG1haWxpbmcgbGlzdAo+PiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4+IGh0dHA6
-Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo+PgoK
-Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRl
-diBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+----- Original Message -----
+> From: "Florian Lohoff" <f@zz.de>
+> To: lttng-dev@lists.lttng.org
+> Sent: Friday, January 31, 2014 3:16:32 PM
+> Subject: [lttng-dev] URCU accessing rcu_head->func
+> 
+> 
+> Hi,
+> 
+> i am having multiple timer which can issue a call_rcu on an object using
+> an rcu_head.
+> 
+> It can happen than an object is already on the call_rcu list
+> for destruction and another timer fires.
+> 
+> So i am doing something like this.
+> 
+> 	if (!rs->rcuhead.func) {
+> 		call_rcu(&rs->rcuhead, free_obj);
+> 	}
+> 
+> I have a feeling in my gut that this didnt blow up
+> just by accident and i am doing something utterly stupid.
+> 
+> I am in the read side critical section so my structure
+> cant appear under my feet but the above can be racy at
+> best.
+
+I guess you meant "disappear" here ?
+
+> 
+> What would be the best way to achieve something like:
+> 
+> 	"queue for call_rcu if not already queued"
+> 
+> Another flag with an atomic inc or something?
+
+Indeed, the scheme you describe above seems to be racy, since there could be
+two or more read-side critical sections accessing the same object concurrently,
+and doing two call_rcu() enqueuing the same object (same linked list node) twice
+into the call_rcu lists will simply corrupt those lists.
+
+Let me first rephrase your intent here just to make sure I understand: you use
+RCU read-side to provide existence guarantee on the "rs" object, and you want
+to enqueue the object rcuhead with call_rcu() for deletion (free_obj) after a
+grace period has elapsed.
+
+Assuming you care about keeping this code path wait-free or lock-free (at least),
+using uatomic_xchg() would allow you to set an atomic flag and know, from the
+returned value, whether you "own" the object reclaim or not. You can then decide
+whether or not call_rcu() needs to be called based on the value read by
+uatomic_xchg().
+
+You could do something similar with mutexes, but then you would lose the
+wait-freedom characteristic of this code path, which I am guessing is one
+key reason why you use RCU read-side lock and call_rcu() in the first place.
+
+Does it make sense ?
+
+Thanks,
+
+Mathieu
+
+
+
+> 
+> Flo
+> --
+> Florian Lohoff                                                 f@zz.de
+> 
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> 
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
