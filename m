@@ -1,18 +1,19 @@
-From: =?ISO-8859-1?Q?Genevi=E8ve_Bastien?= <gbastien+lttng@versatic.net>
-Subject: Re: Human read-writeable format for CTF traces
-Date: Tue, 04 Feb 2014 12:35:15 -0500
-Message-ID: <52F124D3.70507__39533.9180635803$1391535392$gmane$org@versatic.net>
-References: <2093535948.9680292.1391443217617.JavaMail.root@polymtl.ca>	<52EFCC62.2070508@versatic.net>	<814395381.18374.1391447805215.JavaMail.zimbra@efficios.com>	<52EFCFD0.1010907@versatic.net>
-	<CA+jJMxtN1GKRe8yOJvw8NQfhjmJQeMpC-BWo-p8bt-ThB-SooA@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: lttng-dev Digest, Vol 67, Issue 48
+Date: Tue, 4 Feb 2014 17:44:25 +0000 (UTC)
+Message-ID: <1531748088.18942.1391535865844.JavaMail.zimbra__30242.3518420712$1391535929$gmane$org@efficios.com>
+References: <mailman.1320.1384681007.2186.lttng-dev@lists.lttng.org>
+	<63008C666A72BB4F892767155D012B30390BFB4D@eusaamb105.ericsson.se>
+	<20140204171736.GE7182@thessa>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"; Format="flowed"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.polymtl.ca ([132.207.4.11])
+Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <gbastien+lttng@versatic.net>) id 1WAju3-0008Sc-2L
-	for lttng-dev@lists.lttng.org; Tue, 04 Feb 2014 12:35:24 -0500
-In-Reply-To: <CA+jJMxtN1GKRe8yOJvw8NQfhjmJQeMpC-BWo-p8bt-ThB-SooA@mail.gmail.com>
+	(envelope-from <compudj@efficios.com>) id 1WAk2w-00006B-11
+	for lttng-dev@lists.lttng.org; Tue, 04 Feb 2014 12:44:36 -0500
+In-Reply-To: <20140204171736.GE7182@thessa>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,145 +22,145 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: David Goulet <dgoulet@efficios.com>
+Cc: lttng-dev@lists.lttng.org, Jim Dumont <jim.dumont@ericsson.com>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Jeremie,
+----- Original Message -----
+> From: "David Goulet" <dgoulet@efficios.com>
+> To: "Jim Dumont" <jim.dumont@ericsson.com>
+> Cc: lttng-dev@lists.lttng.org
+> Sent: Tuesday, February 4, 2014 12:17:36 PM
+> Subject: Re: [lttng-dev] lttng-dev Digest, Vol 67, Issue 48
+> 
+> On 17 Jan (17:26:13), Jim Dumont wrote:
+> > Hi there,
+> > 
+> > Was there a follow-up to the series of questions raised by Daniel below and
+> > referenced here:
+> > 
+> > http://lists.lttng.org/pipermail/lttng-dev/2013-November/021844.html
+> > 
+> > I didn't see one in the mailing list.
+> > 
+> > BR,
+> > 
+> > /Jim
+> > 
+> > 
+> > > 1) Live support. It's now possible to stream traces (kernel and UST)
+> > > while they being extracted meaning a relayd can now receive traces
+> > > live and a viewer can attach to it to process the trace while running.
+> > > The "--live" has been added to lttng create command that sets up a
+> > > live tracing session.
+> > >
+> > > See doc/live-reading-howto.txt and doc/live-reading-protocol.txt for
+> > > more detail on that feature.
+> > 
+> >    Does this mean you can't do a "live" trace to local storage?
+> 
+> You can use local storage for the live feature BUT you always need a
+> relayd thus there will be some streaming happening on the loopback
+> interface.
+> 
+> However, you *can't* start a live viewer by directly pointing to a trace
+> on disk. It may works but we do NOT recommend it since you'll probably
+> end up in a bad state or have synchronization issue.
+> 
+> > 
+> > > 2) Java Util Logging support. With a special LTTngAgent located in
+> > > lttng-ust project (liblttng-ust-jul) to trace JUL events and gather
+> > > UST traces with them.
+> > >
+> > > The -j/--jul domain has been added to lttng command line so you can
+> > > list the possible JUL Logger object and enable/disable them. It is the
+> > > same as using the UST or Kernel domain.
+> > >
+> > > As of now, filters and loglevel are ignored with the JUL domain.
+> > 
+> >    Saying "It is the same as using the UST or Kernel domain" leaves a lot
+> >    of questions unanswered, since the kernel and user-space behave *very*
+> >    differently on a lot of points.
+> > 
+> > 1) Does --jul require root privileges?
+> 
+> No. JUL actually acts exactly like UST since it uses it thus a Java
+> application connect to the session daemon that it can talk to.
+> 
+> > 2) I suppose the various commands have --kernel pre-empting --userspace
+> > pre-empting --ul?
+> 
+> Yup. This is actually not mention anywhere but looking at "lttng"
+> command line code, the domain's order is: kernel, ust, jul. Probably we
+> should actually output an error if the user uses multiple domain...
+> 
+> > 3) add-context: does --jul have the same possible context types as
+> > --userspace (i.e. ip, pthread_id, procname, vpid, vtid)?
+> 
+> Nope.
+> 
+> > 4) enable-channel:
+> > 4.1) Are the --jul --subbuf-size, --num-subbuf and --read-timer defaults
+> > the same as with --userspace?
+> 
+> Nope. JUL uses it's internal channel so basically enable channel does
+> NOT support the jul domain thus not having -j in the help/man.
+> 
+> > 4.2) Presumably --output can only be mmap?
+> 
+> Yes. Same as UST but again you can't use enable-channel with JUl domain.
+> 
+> > 4.3) Are the --jul buffering schemes the same as with --userspace (i.e.
+> > --buffers-pid and --buffers-uid)?
+> 
+> Always per UID. You can't change it.
+> 
+> > 4.4) If yes, won't they all degenerate to the virtual machine's user and
+> > process IDs?
+> 
+> Not sure I understand this one?
+> 
+> > 5) enable-event:
+> > 5.1) Can you assign --jul events to multiple channels like you can in
+> > --userspace?
+> 
+> No.
+> 
+> > 5.2) Is the --jul event type --tracepoint or something else entirely?
+> 
+> It is tracepoint yes. For the JUL domain, ALL UST tracepoints are
+> enabled (there is only one for now with the lttng-ust library we use
+> (liblttng-ust-jul)).
+> 
+> > 5.3) Can the trailing wild card (and exclusion option) be used in the event
+> > name when enabling/disabling --jul events?
+> 
+> Wild card are NOT supported for the JUL domain. Thus for instance "lttng
+> enable-event -j my_event_subsystem42_*" will not work. Only the "*" will
+> work enabling every Loggers.
+> 
+> > 6) list: Does bug #654 also apply to --jul?
+> 
+> Yes most probably. The session name is ignored.
+> 
+> 
+> Now after answering all this, I feel like either creating a lttng-jul
+> man page or adding a special section in "lttng.1" for the JUL domain
+> explaining all this. Thoughts?
 
-Thanks for your reply.
-
-On 02/04/2014 11:19 AM, J=E9r=E9mie Galarneau wrote:
-> Hi Genevi=E8ve,
->
-> I wonder if we are not overly complicating things here... The Python
-> bindings seem to address your immediate testing concerns and will let
-> you produce test traces with minimal effort.
-Do you have any information, links, examples how to use what exists in =
-
-python to generate traces with minimal effort? Our very immediate need =
-
-is actually to generate traces manually, because we don't need to know =
-
-how to script in python to do this ;-) and we can manually modify the =
-
-events. But since I have no idea (yet) what those python bindings do and =
-
-how they do it, then maybe I miss something here.
+I guess adding a JUL domain section to lttng.1 might be the way to go.
+Otherwise, it's unclear that people will find the lttng-jul man page,
+given it is related to the "lttng" command.
 
 Thanks,
-Genevi=E8ve
-> While I agree that it doesn't solve the problem of testing analysis on
-> Windows, I must ask if this really is a primary concern at this point.
->
-> I would personally start by writing tests in Python using the
-> CTF-Writer bindings and then, as the analysis feature gains traction,
-> work with users to determine the best testing strategy. I somehow
-> doubt that having an external dependancy on Babeltrace would really be
-> a problem to these power users...
->
-> Sorry for the late reply,
-> J=E9r=E9mie
->
-> On Mon, Feb 3, 2014 at 12:20 PM, Genevi=E8ve Bastien
-> <gbastien+lttng@versatic.net> wrote:
->> On 02/03/2014 12:16 PM, Mathieu Desnoyers wrote:
->>> ----- Original Message -----
->>>> From: "Genevi=E8ve Bastien" <gbastien+lttng@versatic.net>
->>>> To: "Michel Dagenais" <michel.dagenais@polymtl.ca>, "Mathieu Desnoyers"
->>>> <mathieu.desnoyers@efficios.com>
->>>> Cc: lttng-dev@lists.lttng.org
->>>> Sent: Monday, February 3, 2014 12:05:38 PM
->>>> Subject: Re: [lttng-dev] Human read-writeable format for CTF traces
->>>>
->>>> Ok, I'll wait for J=E9r=E9mie's answer for more details. As I said, my
->>>> concern is to have something fully standalone in TMF. But if one has
->>>> access to babeltrace and eventual plugins to read-write a CTF trace to
->>>> XML, then all the better. We could then import an XML generated by a
->>>> python script into TMF, edit it there and then use it to test analyses.
->>>>
->>>> All we have to settle on is the intermediate format that should be use=
-d.
->>>> I'd go for XML because of the possibility to validate it and have visu=
-al
->>>> editors.
->>> Michel's idea of going for Python seems even better to generate test
->>> suites.
->>> It would allow importing and combining test "patterns" very easily, thus
->>> allowing to create tests by construction without having to copy-paste h=
-uge
->>> XML files.
->>>
->>> I don't clearly see why having external dependencies on other tools
->>> for a TMF CI test suite would be an issue. What would be the main
->>> arguments
->>> for having all those tests stand-alone in TMF for the test-suite ?
->> It is not just for test suite. XML-defined analysis will need test trace=
-s as
->> well, and that is in main TMF, not in unit tests (one idea of the XML
->> analysis is to allow end-user to develop their own analysis without writ=
-ing
->> a single line of code or requiring the TMF development environment). And=
- the
->> user of these analysis and test traces may not have access to babeltrace=
- or
->> even to a Linux command line.
->>
->> Thanks,
->> Genevi=E8ve
->>
->>> Thanks,
->>>
->>> Mathieu
->>>
->>>> On 02/03/2014 11:00 AM, Michel Dagenais wrote:
->>>>>> I would expect that the ctf writer API recently added to babeltrace
->>>>>> (currently in master branch), along with the Python bindings that co=
-ver
->>>>>> trace read and write APIs, should allow you to implement things like:
->>>>>>
->>>>>> - A plugin to read a CTF trace, and output it in an intermediate for=
-mat
->>>>>>      to facilitate edits (e.g. XML as you propose),
->>>>>> - A plugin to read this XML format and output a CTF trace.
->>>>> Yes, this would indeed be extremely helpful, in XML and/or JSON.
->>>>>
->>>>>> You could also generate the XML trace completely by hand if you like,
->>>>>> and
->>>>>> then convert it to CTF with the second plugin I'm relating to above.
->>>>> The likely scenario is to add a few events by hand.
->>>>>
->>>>>> Another possibility is that the XML description also allows
->>>>>> describing what the trace contains at a slightly higher level. For
->>>>>> instance, if you
->>>>>> have a periodic event happening for a certain amount of time, it wou=
-ld
->>>>>> be described in XML, and then "generated" by the XML-to-CTF
->>>>>> converter.
->>>>> Do we want to describe this in XML or in Python? We could have "CTF" =
-to
->>>>> "Python statements" generating XML. Then we could add loops by hand. =
-We
->>>>> could also have CTF to XML, with hooks to merge Python generated even=
-ts.
->>>> Indeed being able to script a trace would be extremely helpful and
->>>> convert it either directly to CTF or to the intermediate format. Some
->>>> scenarios for unit test would be to script a custom trace then change a
->>>> few events for the test purpose, then either import it in TMF or conve=
-rt
->>>> it to CTF.
->>>>
->>>> Thanks,
->>>> Genevi=E8ve
->>>>> In addition, TMF may also want to offer similar functionality, an XML
->>>>> dump
->>>>> of events and an XML events reader. Indeed, TMF supports a few formats
->>>>> other than CTF.
->>>>
->>
->> _______________________________________________
->> lttng-dev mailing list
->> lttng-dev@lists.lttng.org
->> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
->
+
+Mathieu
+
+> 
+> Cheers!
+> David
+> 
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
