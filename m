@@ -1,19 +1,20 @@
-From: =?UTF-8?B?R2VuZXZpw6h2ZSBCYXN0aWVu?= <gbastien+lttng@versatic.net>
-Subject: Re: Human read-writeable format for CTF traces
-Date: Mon, 03 Feb 2014 12:20:16 -0500
-Message-ID: <52EFCFD0.1010907__39132.7691999779$1391448075$gmane$org@versatic.net>
-References: <2093535948.9680292.1391443217617.JavaMail.root@polymtl.ca>
-	<52EFCC62.2070508@versatic.net>
-	<814395381.18374.1391447805215.JavaMail.zimbra@efficios.com>
+From: kumar s <skumar.m226@gmail.com>
+Subject: Re: lib_ring_buffer_align error bit-field '<anonymous>'
+ width not an integer constant
+Date: Tue, 4 Feb 2014 15:43:44 +0530
+Message-ID: <CAO_ArvoEFQ_fCGnCK-imf69_1UhPdhmteGsT_jdrt2qw6QnY+A__29586.8279682056$1391508885$gmane$org@mail.gmail.com>
+References: <CAO_Arvrp4GwhVr_c170hD3eQ8F77WSmsY4wsCOpg3Xdg23jjKw@mail.gmail.com>
+	<2097060417.17951.1391442624499.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============0426839071=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.polymtl.ca ([132.207.4.11])
+Received: from mail-la0-f48.google.com ([209.85.215.48])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <gbastien+lttng@versatic.net>) id 1WANC0-0005TO-4y
-	for lttng-dev@lists.lttng.org; Mon, 03 Feb 2014 12:20:25 -0500
-In-Reply-To: <814395381.18374.1391447805215.JavaMail.zimbra@efficios.com>
+	(envelope-from <skumar.m226@gmail.com>) id 1WAd0o-0004ib-TQ
+	for lttng-dev@lists.lttng.org; Tue, 04 Feb 2014 05:13:52 -0500
+Received: by mail-la0-f48.google.com with SMTP id mc6so6171337lab.7
+	for <lttng-dev@lists.lttng.org>; Tue, 04 Feb 2014 02:13:44 -0800 (PST)
+In-Reply-To: <2097060417.17951.1391442624499.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,74 +24,244 @@ List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-T24gMDIvMDMvMjAxNCAxMjoxNiBQTSwgTWF0aGlldSBEZXNub3llcnMgd3JvdGU6Cj4gLS0tLS0g
-T3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+PiBGcm9tOiAiR2VuZXZpw6h2ZSBCYXN0aWVuIiA8Z2Jh
-c3RpZW4rbHR0bmdAdmVyc2F0aWMubmV0Pgo+PiBUbzogIk1pY2hlbCBEYWdlbmFpcyIgPG1pY2hl
-bC5kYWdlbmFpc0Bwb2x5bXRsLmNhPiwgIk1hdGhpZXUgRGVzbm95ZXJzIiA8bWF0aGlldS5kZXNu
-b3llcnNAZWZmaWNpb3MuY29tPgo+PiBDYzogbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+PiBT
-ZW50OiBNb25kYXksIEZlYnJ1YXJ5IDMsIDIwMTQgMTI6MDU6MzggUE0KPj4gU3ViamVjdDogUmU6
-IFtsdHRuZy1kZXZdIEh1bWFuIHJlYWQtd3JpdGVhYmxlIGZvcm1hdCBmb3IgQ1RGIHRyYWNlcwo+
-Pgo+PiBPaywgSSdsbCB3YWl0IGZvciBKw6lyw6ltaWUncyBhbnN3ZXIgZm9yIG1vcmUgZGV0YWls
-cy4gQXMgSSBzYWlkLCBteQo+PiBjb25jZXJuIGlzIHRvIGhhdmUgc29tZXRoaW5nIGZ1bGx5IHN0
-YW5kYWxvbmUgaW4gVE1GLiBCdXQgaWYgb25lIGhhcwo+PiBhY2Nlc3MgdG8gYmFiZWx0cmFjZSBh
-bmQgZXZlbnR1YWwgcGx1Z2lucyB0byByZWFkLXdyaXRlIGEgQ1RGIHRyYWNlIHRvCj4+IFhNTCwg
-dGhlbiBhbGwgdGhlIGJldHRlci4gV2UgY291bGQgdGhlbiBpbXBvcnQgYW4gWE1MIGdlbmVyYXRl
-ZCBieSBhCj4+IHB5dGhvbiBzY3JpcHQgaW50byBUTUYsIGVkaXQgaXQgdGhlcmUgYW5kIHRoZW4g
-dXNlIGl0IHRvIHRlc3QgYW5hbHlzZXMuCj4+Cj4+IEFsbCB3ZSBoYXZlIHRvIHNldHRsZSBvbiBp
-cyB0aGUgaW50ZXJtZWRpYXRlIGZvcm1hdCB0aGF0IHNob3VsZCBiZSB1c2VkLgo+PiBJJ2QgZ28g
-Zm9yIFhNTCBiZWNhdXNlIG9mIHRoZSBwb3NzaWJpbGl0eSB0byB2YWxpZGF0ZSBpdCBhbmQgaGF2
-ZSB2aXN1YWwKPj4gZWRpdG9ycy4KPiBNaWNoZWwncyBpZGVhIG9mIGdvaW5nIGZvciBQeXRob24g
-c2VlbXMgZXZlbiBiZXR0ZXIgdG8gZ2VuZXJhdGUgdGVzdCBzdWl0ZXMuCj4gSXQgd291bGQgYWxs
-b3cgaW1wb3J0aW5nIGFuZCBjb21iaW5pbmcgdGVzdCAicGF0dGVybnMiIHZlcnkgZWFzaWx5LCB0
-aHVzCj4gYWxsb3dpbmcgdG8gY3JlYXRlIHRlc3RzIGJ5IGNvbnN0cnVjdGlvbiB3aXRob3V0IGhh
-dmluZyB0byBjb3B5LXBhc3RlIGh1Z2UKPiBYTUwgZmlsZXMuCj4KPiBJIGRvbid0IGNsZWFybHkg
-c2VlIHdoeSBoYXZpbmcgZXh0ZXJuYWwgZGVwZW5kZW5jaWVzIG9uIG90aGVyIHRvb2xzCj4gZm9y
-IGEgVE1GIENJIHRlc3Qgc3VpdGUgd291bGQgYmUgYW4gaXNzdWUuIFdoYXQgd291bGQgYmUgdGhl
-IG1haW4gYXJndW1lbnRzCj4gZm9yIGhhdmluZyBhbGwgdGhvc2UgdGVzdHMgc3RhbmQtYWxvbmUg
-aW4gVE1GIGZvciB0aGUgdGVzdC1zdWl0ZSA/Ckl0IGlzIG5vdCBqdXN0IGZvciB0ZXN0IHN1aXRl
-LiBYTUwtZGVmaW5lZCBhbmFseXNpcyB3aWxsIG5lZWQgdGVzdCAKdHJhY2VzIGFzIHdlbGwsIGFu
-ZCB0aGF0IGlzIGluIG1haW4gVE1GLCBub3QgaW4gdW5pdCB0ZXN0cyAob25lIGlkZWEgb2YgCnRo
-ZSBYTUwgYW5hbHlzaXMgaXMgdG8gYWxsb3cgZW5kLXVzZXIgdG8gZGV2ZWxvcCB0aGVpciBvd24g
-YW5hbHlzaXMgCndpdGhvdXQgd3JpdGluZyBhIHNpbmdsZSBsaW5lIG9mIGNvZGUgb3IgcmVxdWly
-aW5nIHRoZSBUTUYgZGV2ZWxvcG1lbnQgCmVudmlyb25tZW50KS4gQW5kIHRoZSB1c2VyIG9mIHRo
-ZXNlIGFuYWx5c2lzIGFuZCB0ZXN0IHRyYWNlcyBtYXkgbm90IApoYXZlIGFjY2VzcyB0byBiYWJl
-bHRyYWNlIG9yIGV2ZW4gdG8gYSBMaW51eCBjb21tYW5kIGxpbmUuCgpUaGFua3MsCkdlbmV2acOo
-dmUKPgo+IFRoYW5rcywKPgo+IE1hdGhpZXUKPgo+Pgo+PiBPbiAwMi8wMy8yMDE0IDExOjAwIEFN
-LCBNaWNoZWwgRGFnZW5haXMgd3JvdGU6Cj4+Pj4gSSB3b3VsZCBleHBlY3QgdGhhdCB0aGUgY3Rm
-IHdyaXRlciBBUEkgcmVjZW50bHkgYWRkZWQgdG8gYmFiZWx0cmFjZQo+Pj4+IChjdXJyZW50bHkg
-aW4gbWFzdGVyIGJyYW5jaCksIGFsb25nIHdpdGggdGhlIFB5dGhvbiBiaW5kaW5ncyB0aGF0IGNv
-dmVyCj4+Pj4gdHJhY2UgcmVhZCBhbmQgd3JpdGUgQVBJcywgc2hvdWxkIGFsbG93IHlvdSB0byBp
-bXBsZW1lbnQgdGhpbmdzIGxpa2U6Cj4+Pj4KPj4+PiAtIEEgcGx1Z2luIHRvIHJlYWQgYSBDVEYg
-dHJhY2UsIGFuZCBvdXRwdXQgaXQgaW4gYW4gaW50ZXJtZWRpYXRlIGZvcm1hdAo+Pj4+ICAgICB0
-byBmYWNpbGl0YXRlIGVkaXRzIChlLmcuIFhNTCBhcyB5b3UgcHJvcG9zZSksCj4+Pj4gLSBBIHBs
-dWdpbiB0byByZWFkIHRoaXMgWE1MIGZvcm1hdCBhbmQgb3V0cHV0IGEgQ1RGIHRyYWNlLgo+Pj4g
-WWVzLCB0aGlzIHdvdWxkIGluZGVlZCBiZSBleHRyZW1lbHkgaGVscGZ1bCwgaW4gWE1MIGFuZC9v
-ciBKU09OLgo+Pj4KPj4+PiBZb3UgY291bGQgYWxzbyBnZW5lcmF0ZSB0aGUgWE1MIHRyYWNlIGNv
-bXBsZXRlbHkgYnkgaGFuZCBpZiB5b3UgbGlrZSwgYW5kCj4+Pj4gdGhlbiBjb252ZXJ0IGl0IHRv
-IENURiB3aXRoIHRoZSBzZWNvbmQgcGx1Z2luIEknbSByZWxhdGluZyB0byBhYm92ZS4KPj4+IFRo
-ZSBsaWtlbHkgc2NlbmFyaW8gaXMgdG8gYWRkIGEgZmV3IGV2ZW50cyBieSBoYW5kLgo+Pj4KPj4+
-PiBBbm90aGVyIHBvc3NpYmlsaXR5IGlzIHRoYXQgdGhlIFhNTCBkZXNjcmlwdGlvbiBhbHNvIGFs
-bG93cwo+Pj4+IGRlc2NyaWJpbmcgd2hhdCB0aGUgdHJhY2UgY29udGFpbnMgYXQgYSBzbGlnaHRs
-eSBoaWdoZXIgbGV2ZWwuIEZvcgo+Pj4+IGluc3RhbmNlLCBpZiB5b3UKPj4+PiBoYXZlIGEgcGVy
-aW9kaWMgZXZlbnQgaGFwcGVuaW5nIGZvciBhIGNlcnRhaW4gYW1vdW50IG9mIHRpbWUsIGl0IHdv
-dWxkCj4+Pj4gYmUgZGVzY3JpYmVkIGluIFhNTCwgYW5kIHRoZW4gImdlbmVyYXRlZCIgYnkgdGhl
-IFhNTC10by1DVEYKPj4+PiBjb252ZXJ0ZXIuCj4+PiBEbyB3ZSB3YW50IHRvIGRlc2NyaWJlIHRo
-aXMgaW4gWE1MIG9yIGluIFB5dGhvbj8gV2UgY291bGQgaGF2ZSAiQ1RGIiB0bwo+Pj4gIlB5dGhv
-biBzdGF0ZW1lbnRzIiBnZW5lcmF0aW5nIFhNTC4gVGhlbiB3ZSBjb3VsZCBhZGQgbG9vcHMgYnkg
-aGFuZC4gV2UKPj4+IGNvdWxkIGFsc28gaGF2ZSBDVEYgdG8gWE1MLCB3aXRoIGhvb2tzIHRvIG1l
-cmdlIFB5dGhvbiBnZW5lcmF0ZWQgZXZlbnRzLgo+PiBJbmRlZWQgYmVpbmcgYWJsZSB0byBzY3Jp
-cHQgYSB0cmFjZSB3b3VsZCBiZSBleHRyZW1lbHkgaGVscGZ1bCBhbmQKPj4gY29udmVydCBpdCBl
-aXRoZXIgZGlyZWN0bHkgdG8gQ1RGIG9yIHRvIHRoZSBpbnRlcm1lZGlhdGUgZm9ybWF0LiBTb21l
-Cj4+IHNjZW5hcmlvcyBmb3IgdW5pdCB0ZXN0IHdvdWxkIGJlIHRvIHNjcmlwdCBhIGN1c3RvbSB0
-cmFjZSB0aGVuIGNoYW5nZSBhCj4+IGZldyBldmVudHMgZm9yIHRoZSB0ZXN0IHB1cnBvc2UsIHRo
-ZW4gZWl0aGVyIGltcG9ydCBpdCBpbiBUTUYgb3IgY29udmVydAo+PiBpdCB0byBDVEYuCj4+Cj4+
-IFRoYW5rcywKPj4gR2VuZXZpw6h2ZQo+Pj4gSW4gYWRkaXRpb24sIFRNRiBtYXkgYWxzbyB3YW50
-IHRvIG9mZmVyIHNpbWlsYXIgZnVuY3Rpb25hbGl0eSwgYW4gWE1MIGR1bXAKPj4+IG9mIGV2ZW50
-cyBhbmQgYW4gWE1MIGV2ZW50cyByZWFkZXIuIEluZGVlZCwgVE1GIHN1cHBvcnRzIGEgZmV3IGZv
-cm1hdHMKPj4+IG90aGVyIHRoYW4gQ1RGLgo+PgoKCl9fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxp
-c3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0
-aW5mby9sdHRuZy1kZXYK
+--===============0426839071==
+Content-Type: multipart/alternative; boundary=047d7b3a89462c372404f191e579
+
+--047d7b3a89462c372404f191e579
+Content-Type: text/plain; charset=ISO-8859-1
+
+Hi,
+
+The lttng module i use is the latest version, compiler toolchain cannot be
+upgraded since it is provided by Cavium, kernel version is 2.6.32.27.
+
+Is there any change i need to do on lttng modules to build it?
+
+Thank you
+SKumar
+
+
+On Mon, Feb 3, 2014 at 9:20 PM, Mathieu Desnoyers <
+mathieu.desnoyers@efficios.com> wrote:
+
+> ------------------------------
+>
+> *From: *"kumar s" <skumar.m226@gmail.com>
+> *To: *lttng-dev@lists.lttng.org
+> *Sent: *Tuesday, December 3, 2013 3:20:02 AM
+> *Subject: *[lttng-dev] lib_ring_buffer_align error bit-field
+> '<anonymous>' width not an integer constant
+>
+>
+> Hello,
+>
+> When trying to build lttng modules i am getting this error. Cross compiler
+> for mips and Arch = mips is used in makefile.
+>
+> Linux kernel version 2.6.32.27
+>
+>
+> make -C
+> /home/shkumar/Development_Merge/NewOCT/OCTEON_SDK/octeon_sdk/OCTEON-SDK/linux/kernel_2.6/linux
+> M=/home/shkumar/lttng-tools/lttngmod/lttng-modules modules ARCH=mips
+> CROSS_COMPILE=mips64-octeon-linux-gnu-
+> make[1]: Entering directory
+> `/home/shkumar/Development_Merge/NewOCT/OCTEON_SDK/octeon_sdk/OCTEON-SDK/linux/kernel_2.6/linux'
+>   CC [M]
+>  /home/shkumar/lttng-tools/lttngmod/lttng-modules/lttng-ring-buffer-client-discard.o
+> In file included from
+> /home/shkumar/lttng-tools/lttngmod/lttng-modules/wrapper/ringbuffer/config.h:1,
+>                  from
+> /home/shkumar/lttng-tools/lttngmod/lttng-modules/lttng-tracer-core.h:35,
+>                  from
+> /home/shkumar/lttng-tools/lttngmod/lttng-modules/lttng-tracer.h:39,
+>                  from
+> /home/shkumar/lttng-tools/lttngmod/lttng-modules/lttng-ring-buffer-client-discard.c:24:
+> /home/shkumar/lttng-tools/lttngmod/lttng-modules/wrapper/ringbuffer/../../lib/ringbuffer/config.h:
+> In function 'lib_ring_buffer_align':
+> /home/shkumar/lttng-tools/lttngmod/lttng-modules/wrapper/ringbuffer/../../lib/ringbuffer/config.h:266:
+> error: bit-field '<anonymous>' width not an integer constant
+> make[2]: ***
+> [/home/shkumar/lttng-tools/lttngmod/lttng-modules/lttng-ring-buffer-client-discard.o]
+> Error 1
+> make[1]: *** [_module_/home/shkumar/lttng-tools/lttngmod/lttng-modules]
+> Error 2
+> make[1]: Leaving directory
+> `/home/shkumar/Development_Merge/NewOCT/OCTEON_SDK/octeon_sdk/OCTEON-SDK/linux/kernel_2.6/linux'
+> make: *** [default] Error 2
+>
+> How do i fix this?
+>
+>
+> This is caused by the use of offset_align(), passing incorrect parameters,
+> detected by the compiler:
+>
+> see lttng-modules
+>
+> lib/align.h:
+>
+> #define offset_align(align_drift,
+> alignment)                                   \
+>
+> ({                                                                     \
+>                 BUILD_RUNTIME_BUG_ON((alignment) ==
+> 0                          \
+>                                    || ((alignment) & ((alignment) -
+> 1)));      \
+>                 (((alignment) - (align_drift)) & ((alignment) -
+> 1));           \
+>         })
+>
+> See also lttng-modules
+> lib/bug.h
+>
+> So there are two things that are possible: either the compiler you use
+> does not perform the
+> optimisations that are expected, and therefore triggers the BUILD_BUG_ON()
+> without needing to,
+> or there really is an incorrect value passed to offset_align().
+>
+> Make sure lttng-modules, your compiler toolchain, and your kernel are up
+> to date.
+>
+> Thanks,
+>
+> Mathieu
+>
+>
+> Skumar.
+>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>
+>
+>
+>
+> --
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> http://www.efficios.com
+>
+
+--047d7b3a89462c372404f191e579
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div><div><div><div>Hi,<br><br></div>The lttng module i us=
+e is the latest version, compiler toolchain cannot be upgraded since it is =
+provided by Cavium, kernel version is 2.6.32.27. <br><br></div>Is there any=
+ change i need to do on lttng modules to build it?<br>
+<br></div>Thank you<br></div>SKumar<br></div><div class=3D"gmail_extra"><br=
+><br><div class=3D"gmail_quote">On Mon, Feb 3, 2014 at 9:20 PM, Mathieu Des=
+noyers <span dir=3D"ltr">&lt;<a href=3D"mailto:mathieu.desnoyers@efficios.c=
+om" target=3D"_blank">mathieu.desnoyers@efficios.com</a>&gt;</span> wrote:<=
+br>
+<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
+x #ccc solid;padding-left:1ex"><div><div style=3D"font-size:12pt;font-famil=
+y:times new roman,new york,times,serif"><hr><blockquote style=3D"padding-le=
+ft:5px;font-size:12pt;font-style:normal;margin-left:5px;font-family:Helveti=
+ca,Arial,sans-serif;text-decoration:none;font-weight:normal;border-left:2px=
+ solid #1010ff">
+<b>From: </b>&quot;kumar s&quot; &lt;<a href=3D"mailto:skumar.m226@gmail.co=
+m" target=3D"_blank">skumar.m226@gmail.com</a>&gt;<br><b>To: </b><a href=3D=
+"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-dev@lists.lttng.=
+org</a><br>
+<b>Sent: </b>Tuesday, December 3, 2013 3:20:02 AM<br><b>Subject: </b>[lttng=
+-dev] lib_ring_buffer_align error bit-field &#39;&lt;anonymous&gt;&#39; wid=
+th not an integer constant<div><div class=3D"h5"><br><div><br></div><div di=
+r=3D"ltr">
+Hello,<div><br></div><div>When trying to build lttng modules i am getting t=
+his error. Cross compiler for mips and Arch =3D mips is used in makefile.</=
+div><div><br></div><div>Linux kernel version 2.6.32.27</div><div><br></div>
+<div><br></div><div><div>make -C /home/shkumar/Development_Merge/NewOCT/OCT=
+EON_SDK/octeon_sdk/OCTEON-SDK/linux/kernel_2.6/linux M=3D/home/shkumar/lttn=
+g-tools/lttngmod/lttng-modules modules ARCH=3Dmips CROSS_COMPILE=3Dmips64-o=
+cteon-linux-gnu-</div>
+<div>make[1]: Entering directory `/home/shkumar/Development_Merge/NewOCT/OC=
+TEON_SDK/octeon_sdk/OCTEON-SDK/linux/kernel_2.6/linux&#39;</div><div>=A0 CC=
+ [M] =A0/home/shkumar/lttng-tools/lttngmod/lttng-modules/lttng-ring-buffer-=
+client-discard.o</div>
+<div>In file included from /home/shkumar/lttng-tools/lttngmod/lttng-modules=
+/wrapper/ringbuffer/config.h:1,</div><div>=A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =
+=A0from /home/shkumar/lttng-tools/lttngmod/lttng-modules/lttng-tracer-core.=
+h:35,</div><div>
+
+=A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0from /home/shkumar/lttng-tools/lttngmod/=
+lttng-modules/lttng-tracer.h:39,</div><div>=A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =
+=A0from /home/shkumar/lttng-tools/lttngmod/lttng-modules/lttng-ring-buffer-=
+client-discard.c:24:</div><div>
+/home/shkumar/lttng-tools/lttngmod/lttng-modules/wrapper/ringbuffer/../../l=
+ib/ringbuffer/config.h: In function &#39;lib_ring_buffer_align&#39;:</div><=
+div>/home/shkumar/lttng-tools/lttngmod/lttng-modules/wrapper/ringbuffer/../=
+../lib/ringbuffer/config.h:266: error: bit-field &#39;&lt;anonymous&gt;&#39=
+; width not an integer constant</div>
+<div>make[2]: *** [/home/shkumar/lttng-tools/lttngmod/lttng-modules/lttng-r=
+ing-buffer-client-discard.o] Error 1</div><div>make[1]: *** [_module_/home/=
+shkumar/lttng-tools/lttngmod/lttng-modules] Error 2</div><div>make[1]: Leav=
+ing directory `/home/shkumar/Development_Merge/NewOCT/OCTEON_SDK/octeon_sdk=
+/OCTEON-SDK/linux/kernel_2.6/linux&#39;</div>
+<div>make: *** [default] Error 2</div></div><div><br></div><div>How do i fi=
+x this?</div></div></div></div></blockquote><div><br></div><div>This is cau=
+sed by the use of offset_align(), passing incorrect parameters, detected by=
+ the compiler:<br>
+</div><div><br></div><div>see lttng-modules<br></div><div><br></div><div>li=
+b/align.h:<br></div><div><br></div><div>#define offset_align(align_drift, a=
+lignment)=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 \<br>=A0=A0=A0=A0=A0=A0=A0 ({=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 \<br>
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 BUILD_RUNTIME_BUG_ON((alignme=
+nt) =3D=3D 0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0 \<br>=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 || ((alignment) &amp; ((align=
+ment) - 1)));=A0=A0=A0=A0=A0 \<br>=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0 (((alignment) - (align_drift)) &amp; ((alignment) - 1));=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0 \<br>
+=A0=A0=A0=A0=A0=A0=A0 })<br><br></div><div>See also lttng-modules<br></div>=
+<div>lib/bug.h<br></div><div><br></div><div>So there are two things that ar=
+e possible: either the compiler you use does not perform the<br></div><div>=
+optimisations that are expected, and therefore triggers the BUILD_BUG_ON() =
+without needing to,</div>
+<div>or there really is an incorrect value passed to offset_align().<br></d=
+iv><div><br></div><div>Make sure lttng-modules, your compiler toolchain, an=
+d your kernel are up to date.<br></div><div><br></div><div>Thanks,<br></div=
+>
+<div><br></div><div>Mathieu<br></div><div><br></div><blockquote style=3D"pa=
+dding-left:5px;font-size:12pt;font-style:normal;margin-left:5px;font-family=
+:Helvetica,Arial,sans-serif;text-decoration:none;font-weight:normal;border-=
+left:2px solid #1010ff">
+<div dir=3D"ltr"><div><br></div><div>Skumar.</div></div><br>_______________=
+________________________________<br>lttng-dev mailing list<br><a href=3D"ma=
+ilto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-dev@lists.lttng.org=
+</a><br>
+<a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" targe=
+t=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><=
+span class=3D"HOEnZb"><font color=3D"#888888"><br></font></span></blockquot=
+e><span class=3D"HOEnZb"><font color=3D"#888888"><div>
+<br><br></div><div><br></div><div>-- <br></div><div><span name=3D"x"></span=
+>Mathieu Desnoyers<br>EfficiOS Inc.<br><a href=3D"http://www.efficios.com" =
+target=3D"_blank">http://www.efficios.com</a><span name=3D"x"></span><br></=
+div>
+</font></span></div></div></blockquote></div><br></div>
+
+--047d7b3a89462c372404f191e579--
+
+
+--===============0426839071==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0426839071==--
