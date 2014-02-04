@@ -1,19 +1,17 @@
 From: David Goulet <dgoulet@efficios.com>
-Subject: Re: [PATCH lttng-tools] Fix: memory leak when UST
- events are enabled with exclusions
-Date: Tue, 4 Feb 2014 14:15:16 -0500
-Message-ID: <20140204191516.GJ13440__40651.0529145182$1391541577$gmane$org@thessa>
-References: <1390240272-16029-1-git-send-email-jeremie.galarneau@efficios.com>
-	<1633494270.16038.1391122775911.JavaMail.zimbra@efficios.com>
-	<CAJ7wx-Fz9cBNpMoUz61uA=pi0FL09qj3a60prSRMqOLjyPpezw@mail.gmail.com>
+Subject: Re: [PATCH] Use uint32_t for
+ lttng_viewer_stream.metadata_flag
+Date: Tue, 4 Feb 2014 14:39:30 -0500
+Message-ID: <20140204193930.GK13440__21424.8018725359$1391542837$gmane$org@thessa>
+References: <1390002463-21184-1-git-send-email-marc-andre.laperle@ericsson.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0319688174=="
+Content-Type: multipart/mixed; boundary="===============1241577183=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from smtp.ini-tech.com ([144.76.53.219])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1WAlSv-0000vy-Er
-	for lttng-dev@lists.lttng.org; Tue, 04 Feb 2014 14:15:34 -0500
-In-Reply-To: <CAJ7wx-Fz9cBNpMoUz61uA=pi0FL09qj3a60prSRMqOLjyPpezw@mail.gmail.com>
+	(envelope-from <dgoulet@efficios.com>) id 1WAlqN-0001B7-GF
+	for lttng-dev@lists.lttng.org; Tue, 04 Feb 2014 14:39:45 -0500
+In-Reply-To: <1390002463-21184-1-git-send-email-marc-andre.laperle@ericsson.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,146 +20,93 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Zifei Tong <soariez@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Marc-Andre Laperle <marc-andre.laperle@ericsson.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
 
---===============0319688174==
+--===============1241577183==
 Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="ONvqYzh+7ST5RsLk"
+	protocol="application/pgp-signature"; boundary="+HmK7y6O+lKZIGkr"
 Content-Disposition: inline
 
 
---ONvqYzh+7ST5RsLk
-Content-Type: text/plain; charset=iso-8859-1
+--+HmK7y6O+lKZIGkr
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Merged!
+FYI, there is a lot of development on the relayd right now so I'll be
+merging this patch with everything else thus consider it merged but not
+yet upstream.
 
-On 31 Jan (22:38:51), Zifei Tong wrote:
-> I have to apply this patch onto J=E9r=E9mie's one to bypass a double free
-> error in unit test.
->=20
-> diff --git a/tests/unit/test_ust_data.c b/tests/unit/test_ust_data.c
-> index 52b93e9..92f8771 100644
-> --- a/tests/unit/test_ust_data.c
-> +++ b/tests/unit/test_ust_data.c
-> @@ -172,7 +172,6 @@ static void test_create_ust_event_exclusion(void)
->            event->attr.name[LTTNG_UST_SYM_NAME_LEN - 1] =3D=3D '\0',
->            "Validate UST event and exclusion");
->=20
-> -       free(exclusion);
->         trace_ust_destroy_event(event);
->  }
->=20
-> --
-> Best Regards,
-> Zifei Tong
->=20
->=20
-> On Fri, Jan 31, 2014 at 6:59 AM, Mathieu Desnoyers
-> <mathieu.desnoyers@efficios.com> wrote:
-> > David: this needs to be merged.
-> >
-> > Acked-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> >
-> > Thanks,
-> >
-> > Mathieu
-> >
-> > ----- Original Message -----
-> >> From: "J=E9r=E9mie Galarneau" <jeremie.galarneau@efficios.com>
-> >> To: lttng-dev@lists.lttng.org
-> >> Sent: Monday, January 20, 2014 12:51:12 PM
-> >> Subject: [lttng-dev] [PATCH lttng-tools] Fix: memory leak when UST eve=
-nts     are enabled with exclusions
-> >>
-> >> Signed-off-by: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
-> >> ---
-> >>  src/bin/lttng-sessiond/trace-ust.c | 1 +
-> >>  src/bin/lttng-sessiond/trace-ust.h | 2 +-
-> >>  2 files changed, 2 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/src/bin/lttng-sessiond/trace-ust.c
-> >> b/src/bin/lttng-sessiond/trace-ust.c
-> >> index 70b3a91..c08246a 100644
-> >> --- a/src/bin/lttng-sessiond/trace-ust.c
-> >> +++ b/src/bin/lttng-sessiond/trace-ust.c
-> >> @@ -504,6 +504,7 @@ void trace_ust_destroy_event(struct ltt_ust_event =
-*event)
-> >>
-> >>       DBG2("Trace destroy UST event %s", event->attr.name);
-> >>       free(event->filter);
-> >> +     free(event->exclusion);
-> >>       free(event);
-> >>  }
-> >>
-> >> diff --git a/src/bin/lttng-sessiond/trace-ust.h
-> >> b/src/bin/lttng-sessiond/trace-ust.h
-> >> index f2f8c7e..07af0f1 100644
-> >> --- a/src/bin/lttng-sessiond/trace-ust.h
-> >> +++ b/src/bin/lttng-sessiond/trace-ust.h
-> >> @@ -50,7 +50,7 @@ struct ltt_ust_event {
-> >>       struct lttng_ust_event attr;
-> >>       struct lttng_ht_node_str node;
-> >>       struct lttng_ust_filter_bytecode *filter;
-> >> -     const struct lttng_event_exclusion *exclusion;
-> >> +     struct lttng_event_exclusion *exclusion;
-> >>  };
-> >>
-> >>  /* UST channel */
-> >> --
-> >> 1.8.5.2
-> >>
-> >>
-> >> _______________________________________________
-> >> lttng-dev mailing list
-> >> lttng-dev@lists.lttng.org
-> >> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> >>
-> >
-> > --
-> > Mathieu Desnoyers
-> > EfficiOS Inc.
-> > http://www.efficios.com
-> >
-> > _______________________________________________
-> > lttng-dev mailing list
-> > lttng-dev@lists.lttng.org
-> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+Once upstream in the master branch, it will be ported to 2.4 stable.
 
---ONvqYzh+7ST5RsLk
+Big thanks!
+David
+
+On 17 Jan (18:47:43), Marc-Andre Laperle wrote:
+> This struct is meant to be sent over the network so members should be
+> of exact-width.
+>=20
+> Signed-off-by: Marc-Andre Laperle <marc-andre.laperle@ericsson.com>
+> ---
+>  src/bin/lttng-relayd/lttng-viewer.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/src/bin/lttng-relayd/lttng-viewer.h b/src/bin/lttng-relayd/l=
+ttng-viewer.h
+> index 1977a43..6330270 100644
+> --- a/src/bin/lttng-relayd/lttng-viewer.h
+> +++ b/src/bin/lttng-relayd/lttng-viewer.h
+> @@ -100,7 +100,7 @@ struct lttng_viewer_session {
+>  struct lttng_viewer_stream {
+>  	uint64_t id;
+>  	uint64_t ctf_trace_id;
+> -	int metadata_flag;
+> +	uint32_t metadata_flag;
+>  	char path_name[LTTNG_VIEWER_PATH_MAX];
+>  	char channel_name[LTTNG_VIEWER_NAME_MAX];
+>  } __attribute__((__packed__));
+> --=20
+> 1.8.3.2
+>=20
+>=20
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--+HmK7y6O+lKZIGkr
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: Digital signature
 
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1
 
-iQF8BAEBAgBmBQJS8TxEXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
+iQF8BAEBAgBmBQJS8UHyXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
 ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
-MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02J7AIAJAatxMfbG3TVZ/bpk4ei66o
-y/ntaZtDekqfw873CVv82oCGgXySaR4Ql5rH6fCEHfgDz2t6moP+3crIhB4p5pKT
-bFSlFjjdO3xvyaNasn86Zfa35sQHqxetFEjm9XGav22Alal+fJH4D5V6DzzfKKo2
-vZv1yfc6nKppT/bRCdi4aM+Y0dPQhDKk1vls3tSwoWp4pV8e2vB+aBeT22fV3TnU
-fpWPnS89nedB7uIYMxj9dalPaWOcxeiVGllEaSNTlQSAj/peNjYBcSqK0k4hhOOy
-NnTpeJpinqTR0CLYqiBfZiKUb4rFkqGkFQakAaVCtytvF7bWa2ZWNb2NrLPQU8s=
-=LZRx
+MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I028vgH/3bY09dGCIfvKoagalKea1Ec
+Hry0t70uNGy/3r5WVfMGTo7R3Xmmfn1igsPTLFI3Fk7fOHRqCHUvaVlcQ3eZs0/s
++EXG/32SbM/2SO/BcAGquvU+iHHn+GOw3H//yLW9qOsVD9ATfNTkEmA+oZc7MlY6
+F/ytqYqT9IsCX5qLisR/Z/XPneBRsMCMHz6KgkFU1CP3RzLwBhig04b7WB3x7l9E
++5MQWxL5aA+RXCtt3KVxTAKwOXQO4iCHUQWcYNJaT4tfOs8AY4M3c69u6jpy+7Ca
+UzAzYerbKa3EMkS6MuNky7B1azOtAfcFrw4E1z3F3bUqHw8fqdBNV04vhkL/c7Y=
+=b3tW
 -----END PGP SIGNATURE-----
 
---ONvqYzh+7ST5RsLk--
+--+HmK7y6O+lKZIGkr--
 
 
---===============0319688174==
+--===============1241577183==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
-Content-Disposition: inline
 Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============0319688174==--
+--===============1241577183==--
