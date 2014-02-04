@@ -1,18 +1,17 @@
-From: =?ISO-8859-1?Q?Genevi=E8ve_Bastien?= <gbastien+lttng@versatic.net>
-Subject: Re: Human read-writeable format for CTF traces
-Date: Tue, 04 Feb 2014 13:50:58 -0500
-Message-ID: <52F13692.9090703__26469.8403575041$1391539935$gmane$org@versatic.net>
-References: <2093535948.9680292.1391443217617.JavaMail.root@polymtl.ca>	<52EFCC62.2070508@versatic.net>	<814395381.18374.1391447805215.JavaMail.zimbra@efficios.com>	<52EFCFD0.1010907@versatic.net>	<CA+jJMxtN1GKRe8yOJvw8NQfhjmJQeMpC-BWo-p8bt-ThB-SooA@mail.gmail.com>	<52F124D3.70507@versatic.net>
-	<CA+jJMxugshxjTQ=iMUNtNuZK+zJ_GQUY8AV46SYSrZQG57zPVA@mail.gmail.com>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Subject: Re: Questions about JUL (was: Re:  lttng-dev Digest,
+ Vol 67, Issue 48)
+Date: Tue, 4 Feb 2014 18:59:02 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD267DE218__39521.2919720963$1391540424$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"; Format="flowed"
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.polymtl.ca ([132.207.4.11])
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <gbastien+lttng@versatic.net>) id 1WAl5J-0000eI-UW
-	for lttng-dev@lists.lttng.org; Tue, 04 Feb 2014 13:51:07 -0500
-In-Reply-To: <CA+jJMxugshxjTQ=iMUNtNuZK+zJ_GQUY8AV46SYSrZQG57zPVA@mail.gmail.com>
+	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1WAlDC-0000jO-F4
+	for lttng-dev@lists.lttng.org; Tue, 04 Feb 2014 13:59:15 -0500
+Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,183 +20,65 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-By the way, after discussing with Julien, one thing I need to add to =
+----------------------------------------------------------------------
+Date: Tue, 4 Feb 2014 12:17:36 -0500
+From: David Goulet <dgoulet@efficios.com>
+To: Jim Dumont <jim.dumont@ericsson.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 
-understand our point of view: In TMF, we use a custom XML format with =
-
-the existing custom XML parser to parse an XML trace, so it's really =
-
-straightforward to use those traces, we don't need to create a new =
-
-parser for it.
-
-Genevi=E8ve
-
-On 02/04/2014 12:46 PM, J=E9r=E9mie Galarneau wrote:
-> On Tue, Feb 4, 2014 at 12:35 PM, Genevi=E8ve Bastien
-> <gbastien+lttng@versatic.net> wrote:
->> Hi Jeremie,
->>
->> Thanks for your reply.
->>
->>
->> On 02/04/2014 11:19 AM, J=E9r=E9mie Galarneau wrote:
->>> Hi Genevi=E8ve,
->>>
->>> I wonder if we are not overly complicating things here... The Python
->>> bindings seem to address your immediate testing concerns and will let
->>> you produce test traces with minimal effort.
->> Do you have any information, links, examples how to use what exists in
->> python to generate traces with minimal effort? Our very immediate need is
->> actually to generate traces manually, because we don't need to know how =
-to
->> script in python to do this ;-) and we can manually modify the events. B=
-ut
->> since I have no idea (yet) what those python bindings do and how they do=
- it,
->> then maybe I miss something here.
->>
-> They are part of the current Babeltrace master branch and will be
-> included in the next release. An example script is available under
-> babeltrace/bindings/python/examples/ctf_writer.py.
-> Let me know if you have any questions.
+>> 3) add-context: does --jul have the same possible context types as --use=
+rspace (i.e. ip, pthread_id, procname, vpid, vtid)?
 >
-> Regards,
-> J=E9r=E9mie
+> Nope.
+
+   What are the possible context types then?  Or is it just that you can't =
+apply a filter to a jul event?
+
+>> 4) enable-channel:
+>> 4.1) Are the --jul --subbuf-size, --num-subbuf and --read-timer defaults=
+ the same as with --userspace?
 >
->> Thanks,
->> Genevi=E8ve
->>
->>> While I agree that it doesn't solve the problem of testing analysis on
->>> Windows, I must ask if this really is a primary concern at this point.
->>>
->>> I would personally start by writing tests in Python using the
->>> CTF-Writer bindings and then, as the analysis feature gains traction,
->>> work with users to determine the best testing strategy. I somehow
->>> doubt that having an external dependancy on Babeltrace would really be
->>> a problem to these power users...
->>>
->>> Sorry for the late reply,
->>> J=E9r=E9mie
->>>
->>> On Mon, Feb 3, 2014 at 12:20 PM, Genevi=E8ve Bastien
->>> <gbastien+lttng@versatic.net> wrote:
->>>> On 02/03/2014 12:16 PM, Mathieu Desnoyers wrote:
->>>>> ----- Original Message -----
->>>>>> From: "Genevi=E8ve Bastien" <gbastien+lttng@versatic.net>
->>>>>> To: "Michel Dagenais" <michel.dagenais@polymtl.ca>, "Mathieu Desnoye=
-rs"
->>>>>> <mathieu.desnoyers@efficios.com>
->>>>>> Cc: lttng-dev@lists.lttng.org
->>>>>> Sent: Monday, February 3, 2014 12:05:38 PM
->>>>>> Subject: Re: [lttng-dev] Human read-writeable format for CTF traces
->>>>>>
->>>>>> Ok, I'll wait for J=E9r=E9mie's answer for more details. As I said, =
-my
->>>>>> concern is to have something fully standalone in TMF. But if one has
->>>>>> access to babeltrace and eventual plugins to read-write a CTF trace =
-to
->>>>>> XML, then all the better. We could then import an XML generated by a
->>>>>> python script into TMF, edit it there and then use it to test analys=
-es.
->>>>>>
->>>>>> All we have to settle on is the intermediate format that should be
->>>>>> used.
->>>>>> I'd go for XML because of the possibility to validate it and have
->>>>>> visual
->>>>>> editors.
->>>>> Michel's idea of going for Python seems even better to generate test
->>>>> suites.
->>>>> It would allow importing and combining test "patterns" very easily, t=
-hus
->>>>> allowing to create tests by construction without having to copy-paste
->>>>> huge
->>>>> XML files.
->>>>>
->>>>> I don't clearly see why having external dependencies on other tools
->>>>> for a TMF CI test suite would be an issue. What would be the main
->>>>> arguments
->>>>> for having all those tests stand-alone in TMF for the test-suite ?
->>>> It is not just for test suite. XML-defined analysis will need test tra=
-ces
->>>> as
->>>> well, and that is in main TMF, not in unit tests (one idea of the XML
->>>> analysis is to allow end-user to develop their own analysis without
->>>> writing
->>>> a single line of code or requiring the TMF development environment). A=
-nd
->>>> the
->>>> user of these analysis and test traces may not have access to babeltra=
-ce
->>>> or
->>>> even to a Linux command line.
->>>>
->>>> Thanks,
->>>> Genevi=E8ve
->>>>
->>>>> Thanks,
->>>>>
->>>>> Mathieu
->>>>>
->>>>>> On 02/03/2014 11:00 AM, Michel Dagenais wrote:
->>>>>>>> I would expect that the ctf writer API recently added to babeltrace
->>>>>>>> (currently in master branch), along with the Python bindings that
->>>>>>>> cover
->>>>>>>> trace read and write APIs, should allow you to implement things li=
-ke:
->>>>>>>>
->>>>>>>> - A plugin to read a CTF trace, and output it in an intermediate
->>>>>>>> format
->>>>>>>>       to facilitate edits (e.g. XML as you propose),
->>>>>>>> - A plugin to read this XML format and output a CTF trace.
->>>>>>> Yes, this would indeed be extremely helpful, in XML and/or JSON.
->>>>>>>
->>>>>>>> You could also generate the XML trace completely by hand if you li=
-ke,
->>>>>>>> and
->>>>>>>> then convert it to CTF with the second plugin I'm relating to abov=
-e.
->>>>>>> The likely scenario is to add a few events by hand.
->>>>>>>
->>>>>>>> Another possibility is that the XML description also allows
->>>>>>>> describing what the trace contains at a slightly higher level. For
->>>>>>>> instance, if you
->>>>>>>> have a periodic event happening for a certain amount of time, it
->>>>>>>> would
->>>>>>>> be described in XML, and then "generated" by the XML-to-CTF
->>>>>>>> converter.
->>>>>>> Do we want to describe this in XML or in Python? We could have "CTF"
->>>>>>> to
->>>>>>> "Python statements" generating XML. Then we could add loops by hand.
->>>>>>> We
->>>>>>> could also have CTF to XML, with hooks to merge Python generated
->>>>>>> events.
->>>>>> Indeed being able to script a trace would be extremely helpful and
->>>>>> convert it either directly to CTF or to the intermediate format. Some
->>>>>> scenarios for unit test would be to script a custom trace then chang=
-e a
->>>>>> few events for the test purpose, then either import it in TMF or
->>>>>> convert
->>>>>> it to CTF.
->>>>>>
->>>>>> Thanks,
->>>>>> Genevi=E8ve
->>>>>>> In addition, TMF may also want to offer similar functionality, an X=
-ML
->>>>>>> dump
->>>>>>> of events and an XML events reader. Indeed, TMF supports a few form=
-ats
->>>>>>> other than CTF.
->>>>>>
->>>> _______________________________________________
->>>> lttng-dev mailing list
->>>> lttng-dev@lists.lttng.org
->>>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->>>
->>>
+> Nope. JUL uses it's internal channel so basically enable channel does NOT=
+ support the jul domain thus not having -j in the help/man.
+
+   So you turn jul events on and off using enable/disable-event --all inste=
+ad?  This is getting a tad confusing: jul events force you to use only enab=
+le/disable-event but kernel syscalls force you to use only enable/disable-c=
+hannel...
+
+>> 4.4) If yes, won't they all degenerate to the virtual machine's user and=
+ process IDs?
 >
->
+> Not sure I understand this one?
+
+   A Java application is interpreted and runs in a Java virtual machine (JV=
+M).  The userID and processID of any jul events are thus likely to be those=
+ of the JVM process.  I would expect Java apps launched by separate users t=
+o launch separate JVM instances, but I would also expect two separate Java =
+apps launched by the same user to share a single JVM (the user's) and, ther=
+efore, their process IDs.  This could get fun with multi-threaded Java apps.
+
+> Now after answering all this, I feel like either creating a lttng-jul man=
+ page or adding a special section in "lttng.1" for the JUL domain explainin=
+g all this. Thoughts?
+
+   We definitely need an additional section in "lttng.1".
+
+Daniel U. Thibault
+Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
+ntermeasures (SPC)
+Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
+Cyber Security (MCCS)
+R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
+ Canada - Valcartier (DRDC Valcartier)
+2459 route de la Bravoure
+Qu=E9bec QC  G3J 1X5
+CANADA
+Vox : (418) 844-4000 x4245
+Fax : (418) 844-4538
+NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+Gouvernement du Canada | Government of Canada
+<http://www.valcartier.drdc-rddc.gc.ca/>
