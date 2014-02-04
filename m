@@ -1,17 +1,19 @@
 From: David Goulet <dgoulet@efficios.com>
-Subject: Re: [PATCH lttng-tools] Fix: measure UST clock offset
- with best sample (v2)
-Date: Tue, 4 Feb 2014 14:14:37 -0500
-Message-ID: <20140204191437.GI13440__30524.5136646137$1391541515$gmane$org@thessa>
-References: <1391119590-16367-1-git-send-email-mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH lttng-tools] Fix: memory leak when UST
+ events are enabled with exclusions
+Date: Tue, 4 Feb 2014 14:15:16 -0500
+Message-ID: <20140204191516.GJ13440__40651.0529145182$1391541577$gmane$org@thessa>
+References: <1390240272-16029-1-git-send-email-jeremie.galarneau@efficios.com>
+	<1633494270.16038.1391122775911.JavaMail.zimbra@efficios.com>
+	<CAJ7wx-Fz9cBNpMoUz61uA=pi0FL09qj3a60prSRMqOLjyPpezw@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1702135217=="
+Content-Type: multipart/mixed; boundary="===============0319688174=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from smtp.ini-tech.com ([144.76.53.219])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1WAlSH-0000uf-Ue
-	for lttng-dev@lists.lttng.org; Tue, 04 Feb 2014 14:14:51 -0500
-In-Reply-To: <1391119590-16367-1-git-send-email-mathieu.desnoyers@efficios.com>
+	(envelope-from <dgoulet@efficios.com>) id 1WAlSv-0000vy-Er
+	for lttng-dev@lists.lttng.org; Tue, 04 Feb 2014 14:15:34 -0500
+In-Reply-To: <CAJ7wx-Fz9cBNpMoUz61uA=pi0FL09qj3a60prSRMqOLjyPpezw@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,158 +22,146 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: Zifei Tong <soariez@gmail.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
 
---===============1702135217==
+--===============0319688174==
 Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="0XMZdl/q8hSSmFeD"
+	protocol="application/pgp-signature"; boundary="ONvqYzh+7ST5RsLk"
 Content-Disposition: inline
 
 
---0XMZdl/q8hSSmFeD
-Content-Type: text/plain; charset=us-ascii
+--ONvqYzh+7ST5RsLk
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Merged.
+Merged!
 
-Backported to 2.4 and 2.3
-
-On 30 Jan (17:06:30), Mathieu Desnoyers wrote:
-> Fixes #729
+On 31 Jan (22:38:51), Zifei Tong wrote:
+> I have to apply this patch onto J=E9r=E9mie's one to bypass a double free
+> error in unit test.
 >=20
-> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> ---
->  src/bin/lttng-sessiond/ust-metadata.c |   55 ++++++++++++++++++++++++++-=
-------
->  1 file changed, 44 insertions(+), 11 deletions(-)
+> diff --git a/tests/unit/test_ust_data.c b/tests/unit/test_ust_data.c
+> index 52b93e9..92f8771 100644
+> --- a/tests/unit/test_ust_data.c
+> +++ b/tests/unit/test_ust_data.c
+> @@ -172,7 +172,6 @@ static void test_create_ust_event_exclusion(void)
+>            event->attr.name[LTTNG_UST_SYM_NAME_LEN - 1] =3D=3D '\0',
+>            "Validate UST event and exclusion");
 >=20
-> diff --git a/src/bin/lttng-sessiond/ust-metadata.c b/src/bin/lttng-sessio=
-nd/ust-metadata.c
-> index b0f83d2..f430ae1 100644
-> --- a/src/bin/lttng-sessiond/ust-metadata.c
-> +++ b/src/bin/lttng-sessiond/ust-metadata.c
-> @@ -37,6 +37,13 @@
->  #define max_t(type, a, b)	((type) ((a) > (b) ? (a) : (b)))
->  #endif
-> =20
-> +#define NR_CLOCK_OFFSET_SAMPLES		10
-> +
-> +struct offset_sample {
-> +	uint64_t offset;		/* correlation offset */
-> +	uint64_t measure_delta;		/* lower is better */
-> +};
-> +
->  static inline
->  int fls(unsigned int x)
->  {
-> @@ -490,31 +497,57 @@ int _lttng_event_header_declare(struct ust_registry=
-_session *session)
->  	);
+> -       free(exclusion);
+>         trace_ust_destroy_event(event);
 >  }
-> =20
-> -/*
-> - * Approximation of NTP time of day to clock monotonic correlation,
-> - * taken at start of trace.
-> - * Yes, this is only an approximation. Yes, we can (and will) do better
-> - * in future versions.
-> - */
->  static
-> -uint64_t measure_clock_offset(void)
-> +int measure_single_clock_offset(struct offset_sample *sample)
->  {
-> -	uint64_t offset, monotonic[2], realtime;
-> +	uint64_t offset, monotonic[2], measure_delta, realtime;
->  	struct timespec rts =3D { 0, 0 };
->  	int ret;
-> =20
->  	monotonic[0] =3D trace_clock_read64();
->  	ret =3D clock_gettime(CLOCK_REALTIME, &rts);
-> -	if (ret < 0)
-> -		return 0;
-> +	if (ret < 0) {
-> +		return ret;
-> +	}
->  	monotonic[1] =3D trace_clock_read64();
-> +	measure_delta =3D monotonic[1] - monotonic[0];
-> +	if (measure_delta > sample->measure_delta) {
-> +		/*
-> +		 * Discard value if it took longer to read than the best
-> +		 * sample so far.
-> +		 */
-> +		return 0;
-> +	}
->  	offset =3D (monotonic[0] + monotonic[1]) >> 1;
->  	realtime =3D (uint64_t) rts.tv_sec * 1000000000ULL;
->  	realtime +=3D rts.tv_nsec;
->  	offset =3D realtime - offset;
-> -	return offset;
-> +	sample->offset =3D offset;
-> +	sample->measure_delta =3D measure_delta;
-> +	return 0;
->  }
-> =20
-> +/*
-> + * Approximation of NTP time of day to clock monotonic correlation,
-> + * taken at start of trace. Keep the measurement that took the less time
-> + * to complete, thus removing imprecision caused by preemption.
-> + */
-> +static
-> +uint64_t measure_clock_offset(void)
-> +{
-> +	int i;
-> +	struct offset_sample offset_best_sample =3D {
-> +		.offset =3D 0,
-> +		.measure_delta =3D UINT64_MAX,
-> +	};
-> +
-> +	for (i =3D 0; i < NR_CLOCK_OFFSET_SAMPLES; i++) {
-> +		if (measure_single_clock_offset(&offset_best_sample)) {
-> +			return 0;
-> +		}
-> +	}
-> +	return offset_best_sample.offset;
-> +}
-> =20
->  /*
->   * Should be called with session registry mutex held.
-> --=20
-> 1.7.10.4
 >=20
+> --
+> Best Regards,
+> Zifei Tong
+>=20
+>=20
+> On Fri, Jan 31, 2014 at 6:59 AM, Mathieu Desnoyers
+> <mathieu.desnoyers@efficios.com> wrote:
+> > David: this needs to be merged.
+> >
+> > Acked-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> >
+> > Thanks,
+> >
+> > Mathieu
+> >
+> > ----- Original Message -----
+> >> From: "J=E9r=E9mie Galarneau" <jeremie.galarneau@efficios.com>
+> >> To: lttng-dev@lists.lttng.org
+> >> Sent: Monday, January 20, 2014 12:51:12 PM
+> >> Subject: [lttng-dev] [PATCH lttng-tools] Fix: memory leak when UST eve=
+nts     are enabled with exclusions
+> >>
+> >> Signed-off-by: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
+> >> ---
+> >>  src/bin/lttng-sessiond/trace-ust.c | 1 +
+> >>  src/bin/lttng-sessiond/trace-ust.h | 2 +-
+> >>  2 files changed, 2 insertions(+), 1 deletion(-)
+> >>
+> >> diff --git a/src/bin/lttng-sessiond/trace-ust.c
+> >> b/src/bin/lttng-sessiond/trace-ust.c
+> >> index 70b3a91..c08246a 100644
+> >> --- a/src/bin/lttng-sessiond/trace-ust.c
+> >> +++ b/src/bin/lttng-sessiond/trace-ust.c
+> >> @@ -504,6 +504,7 @@ void trace_ust_destroy_event(struct ltt_ust_event =
+*event)
+> >>
+> >>       DBG2("Trace destroy UST event %s", event->attr.name);
+> >>       free(event->filter);
+> >> +     free(event->exclusion);
+> >>       free(event);
+> >>  }
+> >>
+> >> diff --git a/src/bin/lttng-sessiond/trace-ust.h
+> >> b/src/bin/lttng-sessiond/trace-ust.h
+> >> index f2f8c7e..07af0f1 100644
+> >> --- a/src/bin/lttng-sessiond/trace-ust.h
+> >> +++ b/src/bin/lttng-sessiond/trace-ust.h
+> >> @@ -50,7 +50,7 @@ struct ltt_ust_event {
+> >>       struct lttng_ust_event attr;
+> >>       struct lttng_ht_node_str node;
+> >>       struct lttng_ust_filter_bytecode *filter;
+> >> -     const struct lttng_event_exclusion *exclusion;
+> >> +     struct lttng_event_exclusion *exclusion;
+> >>  };
+> >>
+> >>  /* UST channel */
+> >> --
+> >> 1.8.5.2
+> >>
+> >>
+> >> _______________________________________________
+> >> lttng-dev mailing list
+> >> lttng-dev@lists.lttng.org
+> >> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> >>
+> >
+> > --
+> > Mathieu Desnoyers
+> > EfficiOS Inc.
+> > http://www.efficios.com
+> >
+> > _______________________________________________
+> > lttng-dev mailing list
+> > lttng-dev@lists.lttng.org
+> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---0XMZdl/q8hSSmFeD
+--ONvqYzh+7ST5RsLk
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: Digital signature
 
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1
 
-iQF8BAEBAgBmBQJS8TwdXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
+iQF8BAEBAgBmBQJS8TxEXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
 ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
-MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02EEUIAJnPJ+Xj/oxM+etaMEc9Xy1o
-t1L2Lo08X08apnFIekGTmoj3iehrf9wnf7ftqElJ91ShCyh2Aqdv6ENj1PiAEXCC
-Q7083HsD+ZPTCUVhXg+XQLMhmwZ6xHslZLoili2N1oQOt/sxEWW5Q0Qw+j3fCQBO
-qVfWwWjzvhXH5uq0iyFJhaJZ9eU/5+zuoxKqAiAElVFL5v3v2i4lOA+qXg5awu/b
-AAOg3KVRgcUIxN6VniT9u5GrqMWD4hpJyZWJQFvYwNK2dDYHjbipJUdKDgHeCPxy
-WDXZxMjRbnh9mPfwNikOtiZsbzyyyujfQc/WmjTP2no/xeUnKK3FQ8eUWZARgVk=
-=trJE
+MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02J7AIAJAatxMfbG3TVZ/bpk4ei66o
+y/ntaZtDekqfw873CVv82oCGgXySaR4Ql5rH6fCEHfgDz2t6moP+3crIhB4p5pKT
+bFSlFjjdO3xvyaNasn86Zfa35sQHqxetFEjm9XGav22Alal+fJH4D5V6DzzfKKo2
+vZv1yfc6nKppT/bRCdi4aM+Y0dPQhDKk1vls3tSwoWp4pV8e2vB+aBeT22fV3TnU
+fpWPnS89nedB7uIYMxj9dalPaWOcxeiVGllEaSNTlQSAj/peNjYBcSqK0k4hhOOy
+NnTpeJpinqTR0CLYqiBfZiKUb4rFkqGkFQakAaVCtytvF7bWa2ZWNb2NrLPQU8s=
+=LZRx
 -----END PGP SIGNATURE-----
 
---0XMZdl/q8hSSmFeD--
+--ONvqYzh+7ST5RsLk--
 
 
---===============1702135217==
+--===============0319688174==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
 
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============1702135217==--
+--===============0319688174==--
