@@ -1,19 +1,21 @@
-From: Christian Babeux <christian.babeux@efficios.com>
+From: Jonathan Rajotte <jonathan.r.julien@gmail.com>
 Subject: Re: Machine Interface
-Date: Thu, 6 Feb 2014 11:11:39 -0500
-Message-ID: <CAGDH53mHYJg-uVd+4Cv=X6ST5Ly+nmE_BQSVmdN3Hb4k7ZKeSw__42793.816587846$1391703169$gmane$org@mail.gmail.com>
+Date: Thu, 6 Feb 2014 12:00:39 -0500
+Message-ID: <20140206170038.GA30540__2374.02996649525$1391706117$gmane$org@gmail.com>
 References: <20140206024218.GD23121@gmail.com>
+	<CAGDH53mHYJg-uVd+4Cv=X6ST5Ly+nmE_BQSVmdN3Hb4k7ZKeSw@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-vb0-f47.google.com ([209.85.212.47])
+Received: from mail-qc0-f182.google.com ([209.85.216.182])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <christian.babeux@0x80.ca>) id 1WBRYH-0005Y2-4b
-	for lttng-dev@lists.lttng.org; Thu, 06 Feb 2014 11:11:50 -0500
-Received: by mail-vb0-f47.google.com with SMTP id p6so1580342vbe.34
-	for <lttng-dev@lists.lttng.org>; Thu, 06 Feb 2014 08:11:39 -0800 (PST)
-In-Reply-To: <20140206024218.GD23121@gmail.com>
+	(envelope-from <jonathan.r.julien@gmail.com>) id 1WBSJq-0005yU-5f
+	for lttng-dev@lists.lttng.org; Thu, 06 Feb 2014 12:00:59 -0500
+Received: by mail-qc0-f182.google.com with SMTP id c9so3574859qcz.41
+	for <lttng-dev@lists.lttng.org>; Thu, 06 Feb 2014 09:00:46 -0800 (PST)
+Content-Disposition: inline
+In-Reply-To: <CAGDH53mHYJg-uVd+4Cv=X6ST5Ly+nmE_BQSVmdN3Hb4k7ZKeSw@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,57 +24,125 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Jonathan Rajotte <jonathan.r.julien@gmail.com>
+To: Christian Babeux <christian.babeux@efficios.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-SGkgSm9uYXRoYW4sCgo+IE11bHRpcGxlcyBzb2x1dGlvbnMgY29tZSB0byBtaW5kOgo+IC1YTUwK
-PiAtSlNPTgo+IC1ZQU1MCj4gLUN1c3RvbSBzeW50YXggKGxpa2UgR0RCIE1hY2hpbmUgaW50ZXJm
-YWNlKiBhcyBwcm9wb3NlZCBieSBBbGV4YW5kcmUKPiAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgIE1vbnRwbGFpc2lyKQoKSSB3b3VsZCBhZHZvY2F0ZSBmb3IgdGhlIHVzZSBvZiBYTUwg
-Zm9yIHRoZSBtYWNoaW5lIGludGVyZmFjZS4gVHdvCnJlYXNvbnMgY29tZSB0byBtaW5kOgoKMSAt
-IFRoZSBleHByZXNzaW9uIG9mIGhpZXJhcmNoeSAoc2Vzc2lvbiwgZXZlbnRzLCBldGMuKSBpcyBt
-dWNoIGVhc2llciB3aXRoIFhNTC4KCjIgLSBJbiBhIHJlY2VudCBwb3N0IFsxXSwgaXQgd2FzIGRl
-Y2lkZWQgdGhhdCB0aGUgY29uZmlndXJhdGlvbiBsb2FkCmFuZCByZXN0b3JlIChmb3Igc2Vzc2lv
-bnMpIHdvdWxkIGFsc28gdXNlIFhNTC4gVGhpcyB3aWxsIGludHJvZHVjZSBhCm5ldyBkZXBlbmRl
-bmN5IG9uIGxpYnhtbC4gSWYgd2Ugd2VyZSB0byBjaG9vc2UgeWV0IGFub3RoZXIgZm9ybWF0IGZv
-cgp0aGUgbWFjaGluZSBpbnRlcmZhY2UsIHdlIHdvdWxkIHByb2JhYmx5IG5lZWQgdG8gaW50cm9k
-dWNlIGFub3RoZXIKZGVwZW5kZW5jeSB0byBzb21lIGxpYnJhcnkuCgo+IE1hY2hpbmUgaW50ZXJm
-YWNlIG91dHB1dCB3b3VsZCBiZSBnZW5lcmF0ZWQgb25seSB3aXRoIC0tbWkgb3B0aW9uIGFuZAo+
-IGNvdWxkIGNvbnRhaW4gYWRkaXRpb25hbCBpbmZvcm1hdGlvbiB0aGFuIHJlZ3VsYXIgb3V0cHV0
-LgoKUGVyaGFwcyBhZGRpbmcgLS14bWwgb3B0aW9uIHRvIHRoZSByZWxldmFudCBjb21tYW5kPyBU
-aGlzIHdvdWxkIGJlCnNpbWlsYXIgdG8gc3ZuIG1hY2hpbmUgaW50ZXJmYWNlIFsyXS4KClRoYW5r
-cywKCkNocmlzdGlhbgoKWzFdIC0gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9waXBlcm1haWwvbHR0
-bmctZGV2LzIwMTMtRGVjZW1iZXIvMDIyMDY4Lmh0bWwKWzJdIC0gaHR0cDovL3N2bmJvb2sucmVk
-LWJlYW4uY29tL2VuLzEuNy9zdm4tYm9vay5odG1sI3N2bi5yZWYuc3ZuLnN3CgpPbiBXZWQsIEZl
-YiA1LCAyMDE0IGF0IDk6NDIgUE0sIEpvbmF0aGFuIFJham90dGUKPGpvbmF0aGFuLnIuanVsaWVu
-QGdtYWlsLmNvbT4gd3JvdGU6Cj4gSGVsbG8gYWxsLAo+Cj4gQWZ0ZXIgc3BlYWtpbmcgd2l0aCBN
-aWNoZWwgRGFnZW5haXMsIEdlbmV2acOodmUgQmFzdGllbiwgZm9sa3Mgb3ZlciBhdCBFZmZpY2lP
-cwo+IGFuZCBFcmljc3NvbiwgYSBtYWNoaW5lIGludGVyZmFjZSBmb3IgbHR0bmctdG9vbCB3b3Vs
-ZCBiZSBhIG5pY2UgZmVhdHVyZQo+IHRvIGhhdmUuIE9saXZpZXIgQ290dGUgYW5kIG1lIHdpbGwg
-YmUgd29ya2luZyBvbiBNSSBmb3IgdGhlCj4gbmV4dCBmZXcgd2Vla3MuCj4KPiBUaGUgbWFpbiBv
-YmplY3RpdmUgd291bGQgYmUgdG8gcmVkdWNlIHBhcnNpbmcgY29tcGxleGl0eQo+IGluIGNvbnRy
-b2wgdG9vbHMuCj4gZXg6UmVnZXggdXNlZCBpbiBUTUYgY29udHJvbCBzZXJ2aWNlLgo+IChvcmcu
-ZWNsaXBzZS5saW51eHRvb2xzLmludGVybmFsLmx0dG5nMi51aS52aWV3cy5jb250cm9sLnNlcnZp
-Y2UuTFRUbmdDb250cm9sU2VydmljZS5qYXZhKQo+Cj4gTXVsdGlwbGVzIHNvbHV0aW9ucyBjb21l
-IHRvIG1pbmQ6Cj4gLVhNTAo+IC1KU09OCj4gLVlBTUwKPiAtQ3VzdG9tIHN5bnRheCAobGlrZSBH
-REIgTWFjaGluZSBpbnRlcmZhY2UqIGFzIHByb3Bvc2VkIGJ5IEFsZXhhbmRyZQo+ICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgTW9udHBsYWlzaXIpCj4KPiBYTUwvSlNPTi9ZQU1MIHBy
-b21vdGUgZXh0ZW5zaWJpbGl0eSBhbmQgZWFzZSBvZiBkZXZlbG9wbWVudCBmb3IgbmV3IHRvb2xz
-Cj4gZGVwZW5kYW50IG9uIGx0dG5nLXRvb2xzIGJ5IGJlaW5nIGVzdGFibGlzaGVkIHN0YW5kYXJk
-cy4KPiBPbiB0aGUgb3RoZXIgaGFuZCwgdGhleSBhZGQgZGVwZW5kZW5jaWVzIHRvIGx0dG5nLXRv
-b2xzIHdoZXJlIGEgY3VzdG9tIHN5bnRheAo+IHdvdWxkIG5vdC4KPgo+IE1hY2hpbmUgaW50ZXJm
-YWNlIG91dHB1dCB3b3VsZCBiZSBnZW5lcmF0ZWQgb25seSB3aXRoIC0tbWkgb3B0aW9uIGFuZAo+
-IGNvdWxkIGNvbnRhaW4gYWRkaXRpb25hbCBpbmZvcm1hdGlvbiB0aGFuIHJlZ3VsYXIgb3V0cHV0
-Lgo+Cj4gV2UgYXJlIGZvY3VzaW5nIG9uIG91dHB1dCByaWdodCBub3cgYnV0IHdlIG1heSBldmVu
-dHVhbGx5IGFkZCBhICdtaScKPiBjb21tYW5kIGZvciBpbnB1dCBpZiBuZWNlc3NhcnkuCj4KPiBX
-aGF0IGRvIHlvdSB0aGluayA/Cj4KPiBUaGFua3MKPgo+Cj4gKmh0dHBzOi8vc291cmNld2FyZS5v
-cmcvZ2RiL29ubGluZWRvY3MvZ2RiL0dEQl8wMDJmTUkuaHRtbAo+Cj4gLS0KPiBKb25hdGhhbiBS
-YWpvdHRlIEp1bGllbgo+IENoYXJnw6kgZGUgbGFib3JhdG9pcmUgSU5GMTk5NQo+IE1lbWJyZSBN
-RDYKPiBQb2x5dGVjaG5pcXVlIE1vbnRyw6lhbAo+Cj4gX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX18KPiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4gbHR0bmct
-ZGV2QGxpc3RzLmx0dG5nLm9yZwo+IGh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWls
-bWFuL2xpc3RpbmZvL2x0dG5nLWRldgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0
-bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0
-dG5nLWRldgo=
+On Thu, Feb 06, 2014 at 11:11:39AM -0500, Christian Babeux wrote:
+> Hi Jonathan,
+> =
+
+> > Multiples solutions come to mind:
+> > -XML
+> > -JSON
+> > -YAML
+> > -Custom syntax (like GDB Machine interface* as proposed by Alexandre
+> >                                 Montplaisir)
+> =
+
+> I would advocate for the use of XML for the machine interface. Two
+> reasons come to mind:
+> =
+
+> 1 - The expression of hierarchy (session, events, etc.) is much easier wi=
+th XML.
+> =
+
+> 2 - In a recent post [1], it was decided that the configuration load
+> and restore (for sessions) would also use XML. This will introduce a
+> new dependency on libxml. If we were to choose yet another format for
+> the machine interface, we would probably need to introduce another
+> dependency to some library.
+
+Good point
++1 for XML
+
+> =
+
+> > Machine interface output would be generated only with --mi option and
+> > could contain additional information than regular output.
+> =
+
+> Perhaps adding --xml option to the relevant command? This would be
+> similar to svn machine interface [2].
+
+How about --machine-interface <output-type>?
+By default <output-type> would be the chosen format.
+
+This open opportunities for other MI type and have an unified syntax.
+
+--xml option is clear and efficient.We could
+add an option for each type (--json,--yaml) if needed.
+
+> =
+
+> Thanks,
+> =
+
+> Christian
+> =
+
+> [1] - http://lists.lttng.org/pipermail/lttng-dev/2013-December/022068.html
+> [2] - http://svnbook.red-bean.com/en/1.7/svn-book.html#svn.ref.svn.sw
+> =
+
+> On Wed, Feb 5, 2014 at 9:42 PM, Jonathan Rajotte
+> <jonathan.r.julien@gmail.com> wrote:
+> > Hello all,
+> >
+> > After speaking with Michel Dagenais, Genevi=E8ve Bastien, folks over at=
+ EfficiOs
+> > and Ericsson, a machine interface for lttng-tool would be a nice feature
+> > to have. Olivier Cotte and me will be working on MI for the
+> > next few weeks.
+> >
+> > The main objective would be to reduce parsing complexity
+> > in control tools.
+> > ex:Regex used in TMF control service.
+> > (org.eclipse.linuxtools.internal.lttng2.ui.views.control.service.LTTngC=
+ontrolService.java)
+> >
+> > Multiples solutions come to mind:
+> > -XML
+> > -JSON
+> > -YAML
+> > -Custom syntax (like GDB Machine interface* as proposed by Alexandre
+> >                                 Montplaisir)
+> >
+> > XML/JSON/YAML promote extensibility and ease of development for new too=
+ls
+> > dependant on lttng-tools by being established standards.
+> > On the other hand, they add dependencies to lttng-tools where a custom =
+syntax
+> > would not.
+> >
+> > Machine interface output would be generated only with --mi option and
+> > could contain additional information than regular output.
+> >
+> > We are focusing on output right now but we may eventually add a 'mi'
+> > command for input if necessary.
+> >
+> > What do you think ?
+> >
+> > Thanks
+> >
+> >
+> > *https://sourceware.org/gdb/onlinedocs/gdb/GDB_002fMI.html
+> >
+> > --
+> > Jonathan Rajotte Julien
+> > Charg=E9 de laboratoire INF1995
+> > Membre MD6
+> > Polytechnique Montr=E9al
+> >
+> > _______________________________________________
+> > lttng-dev mailing list
+> > lttng-dev@lists.lttng.org
+> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- =
+
+Jonathan Rajotte Juliana
+Charg=E9 de laboratoire INF1995
+Membre MD6
+Polytechnique Montr=E9al
