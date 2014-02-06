@@ -1,18 +1,21 @@
-From: "Woegerer, Paul" <Paul_Woegerer@mentor.com>
+From: Christian Babeux <christian.babeux@efficios.com>
 Subject: Re: Machine Interface
-Date: Thu, 6 Feb 2014 18:07:22 +0100
-Message-ID: <52F3C14A.6020803__44378.002981148$1391706898$gmane$org@mentor.com>
-References: <20140206024218.GD23121@gmail.com> <52F33CBA.5000802@mentor.com>
-	<CAFXXi0=enX3ERpH1Q3R-P4ii2wU7TE2wX_NEcXYF0iEXKCW6yA@mail.gmail.com>
+Date: Thu, 6 Feb 2014 13:21:07 -0500
+Message-ID: <CAGDH53=c+H26t6Nk71cGHnqfgj-At_nv4kWO1ODr69YGp3icTQ__46566.3836025216$1391710929$gmane$org@mail.gmail.com>
+References: <20140206024218.GD23121@gmail.com>
+	<CAGDH53mHYJg-uVd+4Cv=X6ST5Ly+nmE_BQSVmdN3Hb4k7ZKeSw@mail.gmail.com>
+	<20140206170038.GA30540@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from relay1.mentorg.com ([192.94.38.131])
+Received: from mail-vc0-f173.google.com ([209.85.220.173])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Paul_Woegerer@mentor.com>) id 1WBSRX-00063Q-P9
-	for lttng-dev@lists.lttng.org; Thu, 06 Feb 2014 12:08:57 -0500
-In-Reply-To: <CAFXXi0=enX3ERpH1Q3R-P4ii2wU7TE2wX_NEcXYF0iEXKCW6yA@mail.gmail.com>
+	(envelope-from <christian.babeux@0x80.ca>) id 1WBTZY-0006cU-U1
+	for lttng-dev@lists.lttng.org; Thu, 06 Feb 2014 13:21:18 -0500
+Received: by mail-vc0-f173.google.com with SMTP id ld13so1737956vcb.18
+	for <lttng-dev@lists.lttng.org>; Thu, 06 Feb 2014 10:21:07 -0800 (PST)
+In-Reply-To: <20140206170038.GA30540@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,97 +24,79 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Simon Marchi <simon.marchi@polymtl.ca>
+To: Jonathan Rajotte <jonathan.r.julien@gmail.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Simon,
-
-On 02/06/2014 02:32 PM, Simon Marchi wrote:
-> script) is easier than XML, but it's still not bulletproof. Consider
-> this eventual yaml structure I just made up for the output of the
-> session list.
-> 
-> sessions:
->   - name: my_session
->     domain: kernel
->     events:
->       - name: sched_switch
->         filter: prev_pid == 1234
->       - name: sched_migrate_task
->         otherproperty: "something"
->   - name: another_session
->     domain: ust
->     events:
->       - name: event_hello
->       - name: event_bonjour
->         loglevel: 3
-> 
-> If you want to get the list of sessions, you'll probably want to grep
-> the "name: " entries, but then event names would match as well. Of
-> course, names could be different, or you could grep for the
-> appropriate amount of spaces/tabs at the beginning of the line. But
-> then it also depends if the name dictionary entry is the first, then
-> it will have a "-" in front... It's possible, but it will also be very
-> easy to break scripts.
-
-The following simple script below would e.g. give you the list of
-sessions for you example above. To demonstrate the flexibility it
-also generates the event list for session my_session. This is just
-a quick prototype but it should make clear that YAML is considerably
-easier to parse from a shell script than any other option (and also
-reasonably robust). Also notice that no external helpers (like grep)
-are needed.
-
-list_of_sessions=''
-current_session=''
-my_session_events=''
-
-while IFS= read -r; do
-	line=$REPLY
-	case "${line}" in 
-		"      - "*)
-			;&
-		"        "*)
-			L2_key=${line:8}
-			L2_key=${L2_key%:*}
-			let vpos=2+8+${#L2_key}
-			L2_value=${line:${vpos}}
-			;;
-		"  - "*)
-			# New L1 list elem -> reset L2 state
-			L2_key=''
-			L2_value=''
-			;&
-		"    "*)
-			L1_key=${line:4}
-			L1_key=${L1_key%:*}
-			let vpos=2+4+${#L1_key}
-			L1_value=${line:${vpos}}
-			;;
-	esac
-	echo "($L1_key,$L1_value), ($L2_key,$L2_value)"
-
-	# Collect the session names
-	if [ "$L1_key" = "name" ]; then
-		current_session="$L1_value"
-		list_of_sessions="$list_of_sessions $current_session"
-	fi
-	# Which events are in session my_session ?
-	if [ "$current_session" = "my_session" ] && [ "$L1_key" = "events" ] && [ "$L2_key" = "name" ]; then
-		my_session_events="$my_session_events $L2_value"
-	fi
-done
-echo
-echo List of sessions: $list_of_sessions
-echo my_session events: $my_session_events
-echo
-
-
-Thanks,
-Paul
-
--- 
-Paul Woegerer, SW Development Engineer
-Sourcery Analyzer <http://go.mentor.com/sourceryanalyzer>
-Mentor Graphics, Embedded Software Division
+PiBIb3cgYWJvdXQgLS1tYWNoaW5lLWludGVyZmFjZSA8b3V0cHV0LXR5cGU+Pwo+IEJ5IGRlZmF1
+bHQgPG91dHB1dC10eXBlPiB3b3VsZCBiZSB0aGUgY2hvc2VuIGZvcm1hdC4KPgo+IFRoaXMgb3Bl
+biBvcHBvcnR1bml0aWVzIGZvciBvdGhlciBNSSB0eXBlIGFuZCBoYXZlIGFuIHVuaWZpZWQgc3lu
+dGF4Lgo+Cj4gLS14bWwgb3B0aW9uIGlzIGNsZWFyIGFuZCBlZmZpY2llbnQuV2UgY291bGQKPiBh
+ZGQgYW4gb3B0aW9uIGZvciBlYWNoIHR5cGUgKC0tanNvbiwtLXlhbWwpIGlmIG5lZWRlZC4KCklN
+Tywgc3VwcG9ydGluZyBtdWx0aXBsZSBvdXRwdXQgZm9ybWF0cyB3b3VsZCBiZSBhIHRhZCBiaXQg
+b3ZlcmtpbGwuCk1vcmVvdmVyLCB0aGUgaXNzdWUgb2YgYnJpbmdpbmcgaW4gYWRkaXRpb25hbCBs
+aWJyYXJ5IGRlcGVuZGVuY2llcyB0bwpzdXBwb3J0IG11bHRpcGxlIG91dHB1dCBmb3JtYXQgcmVt
+YWlucy4KClRoYW5rcywKCkNocmlzdGlhbgoKT24gVGh1LCBGZWIgNiwgMjAxNCBhdCAxMjowMCBQ
+TSwgSm9uYXRoYW4gUmFqb3R0ZQo8am9uYXRoYW4uci5qdWxpZW5AZ21haWwuY29tPiB3cm90ZToK
+PiBPbiBUaHUsIEZlYiAwNiwgMjAxNCBhdCAxMToxMTozOUFNIC0wNTAwLCBDaHJpc3RpYW4gQmFi
+ZXV4IHdyb3RlOgo+PiBIaSBKb25hdGhhbiwKPj4KPj4gPiBNdWx0aXBsZXMgc29sdXRpb25zIGNv
+bWUgdG8gbWluZDoKPj4gPiAtWE1MCj4+ID4gLUpTT04KPj4gPiAtWUFNTAo+PiA+IC1DdXN0b20g
+c3ludGF4IChsaWtlIEdEQiBNYWNoaW5lIGludGVyZmFjZSogYXMgcHJvcG9zZWQgYnkgQWxleGFu
+ZHJlCj4+ID4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBNb250cGxhaXNpcikKPj4K
+Pj4gSSB3b3VsZCBhZHZvY2F0ZSBmb3IgdGhlIHVzZSBvZiBYTUwgZm9yIHRoZSBtYWNoaW5lIGlu
+dGVyZmFjZS4gVHdvCj4+IHJlYXNvbnMgY29tZSB0byBtaW5kOgo+Pgo+PiAxIC0gVGhlIGV4cHJl
+c3Npb24gb2YgaGllcmFyY2h5IChzZXNzaW9uLCBldmVudHMsIGV0Yy4pIGlzIG11Y2ggZWFzaWVy
+IHdpdGggWE1MLgo+Pgo+PiAyIC0gSW4gYSByZWNlbnQgcG9zdCBbMV0sIGl0IHdhcyBkZWNpZGVk
+IHRoYXQgdGhlIGNvbmZpZ3VyYXRpb24gbG9hZAo+PiBhbmQgcmVzdG9yZSAoZm9yIHNlc3Npb25z
+KSB3b3VsZCBhbHNvIHVzZSBYTUwuIFRoaXMgd2lsbCBpbnRyb2R1Y2UgYQo+PiBuZXcgZGVwZW5k
+ZW5jeSBvbiBsaWJ4bWwuIElmIHdlIHdlcmUgdG8gY2hvb3NlIHlldCBhbm90aGVyIGZvcm1hdCBm
+b3IKPj4gdGhlIG1hY2hpbmUgaW50ZXJmYWNlLCB3ZSB3b3VsZCBwcm9iYWJseSBuZWVkIHRvIGlu
+dHJvZHVjZSBhbm90aGVyCj4+IGRlcGVuZGVuY3kgdG8gc29tZSBsaWJyYXJ5Lgo+Cj4gR29vZCBw
+b2ludAo+ICsxIGZvciBYTUwKPgo+Pgo+PiA+IE1hY2hpbmUgaW50ZXJmYWNlIG91dHB1dCB3b3Vs
+ZCBiZSBnZW5lcmF0ZWQgb25seSB3aXRoIC0tbWkgb3B0aW9uIGFuZAo+PiA+IGNvdWxkIGNvbnRh
+aW4gYWRkaXRpb25hbCBpbmZvcm1hdGlvbiB0aGFuIHJlZ3VsYXIgb3V0cHV0Lgo+Pgo+PiBQZXJo
+YXBzIGFkZGluZyAtLXhtbCBvcHRpb24gdG8gdGhlIHJlbGV2YW50IGNvbW1hbmQ/IFRoaXMgd291
+bGQgYmUKPj4gc2ltaWxhciB0byBzdm4gbWFjaGluZSBpbnRlcmZhY2UgWzJdLgo+Cj4gSG93IGFi
+b3V0IC0tbWFjaGluZS1pbnRlcmZhY2UgPG91dHB1dC10eXBlPj8KPiBCeSBkZWZhdWx0IDxvdXRw
+dXQtdHlwZT4gd291bGQgYmUgdGhlIGNob3NlbiBmb3JtYXQuCj4KPiBUaGlzIG9wZW4gb3Bwb3J0
+dW5pdGllcyBmb3Igb3RoZXIgTUkgdHlwZSBhbmQgaGF2ZSBhbiB1bmlmaWVkIHN5bnRheC4KPgo+
+IC0teG1sIG9wdGlvbiBpcyBjbGVhciBhbmQgZWZmaWNpZW50LldlIGNvdWxkCj4gYWRkIGFuIG9w
+dGlvbiBmb3IgZWFjaCB0eXBlICgtLWpzb24sLS15YW1sKSBpZiBuZWVkZWQuCj4KPj4KPj4gVGhh
+bmtzLAo+Pgo+PiBDaHJpc3RpYW4KPj4KPj4gWzFdIC0gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9w
+aXBlcm1haWwvbHR0bmctZGV2LzIwMTMtRGVjZW1iZXIvMDIyMDY4Lmh0bWwKPj4gWzJdIC0gaHR0
+cDovL3N2bmJvb2sucmVkLWJlYW4uY29tL2VuLzEuNy9zdm4tYm9vay5odG1sI3N2bi5yZWYuc3Zu
+LnN3Cj4+Cj4+IE9uIFdlZCwgRmViIDUsIDIwMTQgYXQgOTo0MiBQTSwgSm9uYXRoYW4gUmFqb3R0
+ZQo+PiA8am9uYXRoYW4uci5qdWxpZW5AZ21haWwuY29tPiB3cm90ZToKPj4gPiBIZWxsbyBhbGws
+Cj4+ID4KPj4gPiBBZnRlciBzcGVha2luZyB3aXRoIE1pY2hlbCBEYWdlbmFpcywgR2VuZXZpw6h2
+ZSBCYXN0aWVuLCBmb2xrcyBvdmVyIGF0IEVmZmljaU9zCj4+ID4gYW5kIEVyaWNzc29uLCBhIG1h
+Y2hpbmUgaW50ZXJmYWNlIGZvciBsdHRuZy10b29sIHdvdWxkIGJlIGEgbmljZSBmZWF0dXJlCj4+
+ID4gdG8gaGF2ZS4gT2xpdmllciBDb3R0ZSBhbmQgbWUgd2lsbCBiZSB3b3JraW5nIG9uIE1JIGZv
+ciB0aGUKPj4gPiBuZXh0IGZldyB3ZWVrcy4KPj4gPgo+PiA+IFRoZSBtYWluIG9iamVjdGl2ZSB3
+b3VsZCBiZSB0byByZWR1Y2UgcGFyc2luZyBjb21wbGV4aXR5Cj4+ID4gaW4gY29udHJvbCB0b29s
+cy4KPj4gPiBleDpSZWdleCB1c2VkIGluIFRNRiBjb250cm9sIHNlcnZpY2UuCj4+ID4gKG9yZy5l
+Y2xpcHNlLmxpbnV4dG9vbHMuaW50ZXJuYWwubHR0bmcyLnVpLnZpZXdzLmNvbnRyb2wuc2Vydmlj
+ZS5MVFRuZ0NvbnRyb2xTZXJ2aWNlLmphdmEpCj4+ID4KPj4gPiBNdWx0aXBsZXMgc29sdXRpb25z
+IGNvbWUgdG8gbWluZDoKPj4gPiAtWE1MCj4+ID4gLUpTT04KPj4gPiAtWUFNTAo+PiA+IC1DdXN0
+b20gc3ludGF4IChsaWtlIEdEQiBNYWNoaW5lIGludGVyZmFjZSogYXMgcHJvcG9zZWQgYnkgQWxl
+eGFuZHJlCj4+ID4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBNb250cGxhaXNpcikK
+Pj4gPgo+PiA+IFhNTC9KU09OL1lBTUwgcHJvbW90ZSBleHRlbnNpYmlsaXR5IGFuZCBlYXNlIG9m
+IGRldmVsb3BtZW50IGZvciBuZXcgdG9vbHMKPj4gPiBkZXBlbmRhbnQgb24gbHR0bmctdG9vbHMg
+YnkgYmVpbmcgZXN0YWJsaXNoZWQgc3RhbmRhcmRzLgo+PiA+IE9uIHRoZSBvdGhlciBoYW5kLCB0
+aGV5IGFkZCBkZXBlbmRlbmNpZXMgdG8gbHR0bmctdG9vbHMgd2hlcmUgYSBjdXN0b20gc3ludGF4
+Cj4+ID4gd291bGQgbm90Lgo+PiA+Cj4+ID4gTWFjaGluZSBpbnRlcmZhY2Ugb3V0cHV0IHdvdWxk
+IGJlIGdlbmVyYXRlZCBvbmx5IHdpdGggLS1taSBvcHRpb24gYW5kCj4+ID4gY291bGQgY29udGFp
+biBhZGRpdGlvbmFsIGluZm9ybWF0aW9uIHRoYW4gcmVndWxhciBvdXRwdXQuCj4+ID4KPj4gPiBX
+ZSBhcmUgZm9jdXNpbmcgb24gb3V0cHV0IHJpZ2h0IG5vdyBidXQgd2UgbWF5IGV2ZW50dWFsbHkg
+YWRkIGEgJ21pJwo+PiA+IGNvbW1hbmQgZm9yIGlucHV0IGlmIG5lY2Vzc2FyeS4KPj4gPgo+PiA+
+IFdoYXQgZG8geW91IHRoaW5rID8KPj4gPgo+PiA+IFRoYW5rcwo+PiA+Cj4+ID4KPj4gPiAqaHR0
+cHM6Ly9zb3VyY2V3YXJlLm9yZy9nZGIvb25saW5lZG9jcy9nZGIvR0RCXzAwMmZNSS5odG1sCj4+
+ID4KPj4gPiAtLQo+PiA+IEpvbmF0aGFuIFJham90dGUgSnVsaWVuCj4+ID4gQ2hhcmfDqSBkZSBs
+YWJvcmF0b2lyZSBJTkYxOTk1Cj4+ID4gTWVtYnJlIE1ENgo+PiA+IFBvbHl0ZWNobmlxdWUgTW9u
+dHLDqWFsCj4+ID4KPj4gPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fXwo+PiA+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPj4gPiBsdHRuZy1kZXZAbGlzdHMu
+bHR0bmcub3JnCj4+ID4gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlz
+dGluZm8vbHR0bmctZGV2Cj4KPiAtLQo+IEpvbmF0aGFuIFJham90dGUgSnVsaWFuYQo+IENoYXJn
+w6kgZGUgbGFib3JhdG9pcmUgSU5GMTk5NQo+IE1lbWJyZSBNRDYKPiBQb2x5dGVjaG5pcXVlIE1v
+bnRyw6lhbAoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
+bHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9s
+aXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
