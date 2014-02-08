@@ -1,21 +1,22 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH 1/2] Fix: read subbuffer mmap signedness
+Subject: Re: [PATCH 2/2] Fix: read subbuffer splice signedness
  issue
-Date: Sat, 8 Feb 2014 15:50:12 +0000 (UTC)
-Message-ID: <1842292155.21029.1391874612912.JavaMail.zimbra__27993.6712854125$1391874670$gmane$org@efficios.com>
+Date: Sat, 8 Feb 2014 15:51:56 +0000 (UTC)
+Message-ID: <1252014966.21031.1391874716079.JavaMail.zimbra__48601.3876078234$1391874753$gmane$org@efficios.com>
 References: <1391805760-30421-1-git-send-email-dgoulet@efficios.com>
+	<1391805760-30421-2-git-send-email-dgoulet@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1WCAAZ-0002uE-NK
-	for lttng-dev@lists.lttng.org; Sat, 08 Feb 2014 10:50:16 -0500
+	(envelope-from <compudj@efficios.com>) id 1WCACE-0002wV-Sk
+	for lttng-dev@lists.lttng.org; Sat, 08 Feb 2014 10:52:00 -0500
 Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.efficios.com (Postfix) with ESMTP id F023534013A
-	for <lttng-dev@lists.lttng.org>; Sat,  8 Feb 2014 15:50:14 +0000 (UTC)
-In-Reply-To: <1391805760-30421-1-git-send-email-dgoulet@efficios.com>
+	by mail.efficios.com (Postfix) with ESMTP id 1DB08340146
+	for <lttng-dev@lists.lttng.org>; Sat,  8 Feb 2014 15:51:58 +0000 (UTC)
+In-Reply-To: <1391805760-30421-2-git-send-email-dgoulet@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -28,142 +29,126 @@ To: David Goulet <dgoulet@efficios.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
+
+
 ----- Original Message -----
 > From: "David Goulet" <dgoulet@efficios.com>
 > To: lttng-dev@lists.lttng.org
-> Sent: Friday, February 7, 2014 3:42:39 PM
-> Subject: [lttng-dev] [PATCH 1/2] Fix: read subbuffer mmap signedness issue
+> Sent: Friday, February 7, 2014 3:42:40 PM
+> Subject: [lttng-dev] [PATCH 2/2] Fix: read subbuffer splice signedness issue
 > 
-> Signed and unsigned values were compared thus making the code path where
-> ret = -1 being interpreted as ret > len == true thus not cleaning up the
-> relayd.
-> 
-> This patch simplifies the read subbuffer mmap operation since
-> lttng_write() now provides a guarantee that the return data is either
-> equal to the count passed or less which the later means the endpoint has
-> stop working.
+> Same issue as the previous fix in the mmap read subbuffer. However, this
+> patch keeps looping on the len since splice() does NOT give any
+> guarantee that it will splice the full count.
 > 
 > Signed-off-by: David Goulet <dgoulet@efficios.com>
 > ---
->  src/common/consumer.c | 82
->  +++++++++++++++++++++++++++++----------------------
->  1 file changed, 47 insertions(+), 35 deletions(-)
+>  src/common/consumer.c | 41 ++++++++++++++++++++++++++---------------
+>  1 file changed, 26 insertions(+), 15 deletions(-)
 > 
 > diff --git a/src/common/consumer.c b/src/common/consumer.c
-> index 36ec024..59d4366 100644
+> index 59d4366..798e22e 100644
 > --- a/src/common/consumer.c
 > +++ b/src/common/consumer.c
-> @@ -1451,7 +1451,7 @@ ssize_t lttng_consumer_on_read_subbuffer_mmap(
->  {
->  	unsigned long mmap_offset;
->  	void *mmap_base;
-> -	ssize_t ret = 0, written = 0;
-> +	ssize_t ret = 0, written = 0, signed_len;
->  	off_t orig_offset = stream->out_fd_offset;
->  	/* Default is on the disk */
->  	int outfd = stream->out_fd;
-> @@ -1584,44 +1584,56 @@ ssize_t lttng_consumer_on_read_subbuffer_mmap(
->  		}
+> @@ -1796,17 +1796,24 @@ ssize_t lttng_consumer_on_read_subbuffer_splice(
 >  	}
 >  
-> -	while (len > 0) {
-> -		ret = lttng_write(outfd, mmap_base + mmap_offset, len);
-> -		DBG("Consumer mmap write() ret %zd (len %lu)", ret, len);
-> -		if (ret < len) {
-> -			/*
-> -			 * This is possible if the fd is closed on the other side (outfd)
-> -			 * or any write problem. It can be verbose a bit for a normal
-> -			 * execution if for instance the relayd is stopped abruptly. This
-> -			 * can happen so set this to a DBG statement.
-> -			 */
-> -			DBG("Error in file write mmap");
-> -			if (written == 0) {
-> -				written = -errno;
-> -			}
-> -			/* Socket operation failed. We consider the relayd dead */
-> -			if (errno == EPIPE || errno == EINVAL) {
-> -				relayd_hang_up = 1;
-> -				goto write_error;
-> -			}
-> -			goto end;
-> -		} else if (ret > len) {
-> -			PERROR("Error in file write (ret %zd > len %lu)", ret, len);
-> -			written += ret;
-> -			goto end;
-> +	/*
-> +	 * Set the len value to a signed value so the if/else statement can
-> +	 * evaluate it against the signed returned value from lttng_write since
-> +	 * -1 can be returned indicating a communication failure.
-> +	 */
-> +	signed_len = len;
-> +
-> +	/*
-> +	 * This call guarantee that len or less is returned. It's impossible to
-> +	 * receive a ret value that is bigger than len.
-> +	 */
-> +	ret = lttng_write(outfd, mmap_base + mmap_offset, len);
-> +	DBG("Consumer mmap write() ret %zd (len %lu)", ret, len);
-> +	if (ret != signed_len) {
+>  	while (len > 0) {
 > +		/*
-> +		 * Report error to caller if nothing was written else at least send the
-> +		 * amount written.
+> +		 * Set the len value to a signed value so the if/else statement can
+> +		 * evaluate it against the signed returned value from lttng_write since
+> +		 * -1 can be returned indicating a communication failure.
 > +		 */
-> +		if (ret < 0) {
+> +		ssize_t signed_len = len;
+> +
+>  		DBG("splice chan to pipe offset %lu of len %lu (fd : %d, pipe: %d)",
+>  				(unsigned long)offset, len, fd, splice_pipe[1]);
+>  		ret_splice = splice(fd, &offset, splice_pipe[1], NULL, len,
+>  				SPLICE_F_MOVE | SPLICE_F_MORE);
+>  		DBG("splice chan to pipe, ret %zd", ret_splice);
+> -		if (ret_splice < 0) {
+> -			PERROR("Error in relay splice");
+> +		if (ret_splice < signed_len) {
+> +			ret = errno;
+>  			if (written == 0) {
+>  				written = ret_splice;
+>  			}
+> -			ret = errno;
+> +			PERROR("Error in relay splice");
+>  			goto splice_error;
+>  		}
+>  
+> @@ -1824,6 +1831,8 @@ ssize_t lttng_consumer_on_read_subbuffer_splice(
+>  				 * argument to this function.
+>  				 */
+>  				written -= metadata_payload_size;
+> +				/* Take back a signed reference of the updated len. */
+> +				signed_len = len;
+>  			}
+>  		}
+>  
+> @@ -1831,28 +1840,33 @@ ssize_t lttng_consumer_on_read_subbuffer_splice(
+>  		ret_splice = splice(splice_pipe[0], NULL, outfd, NULL,
+>  				ret_splice, SPLICE_F_MOVE | SPLICE_F_MORE);
+>  		DBG("Consumer splice pipe to file, ret %zd", ret_splice);
+> -		if (ret_splice < 0) {
+> -			PERROR("Error in file splice");
+> +		if (ret_splice < signed_len) {
 
-We should do the comparison ret < 0 first, before doing the ret vs len comparison.
-
-If you do that, you don't semantically need the signed_len. You can then presume that
-the ret value is >= 0. So you can simply cast that value in the comparison that
-follows, e.g.:   if ((ssize_t) ret != len) ....
+similar comment than the other patch: we should first check if ret_splice < 0,
+and then in the else of that check, we can do a cast and assume that the value
+is not negative (because we already tested it).
 
 Thanks,
 
 Mathieu
 
-> +			written = -errno;
->  		} else {
-> -			len -= ret;
-> -			mmap_offset += ret;
-> +			written = ret;
->  		}
->  
-> -		/* This call is useless on a socket so better save a syscall. */
-> -		if (!relayd) {
-> -			/* This won't block, but will start writeout asynchronously */
-> -			lttng_sync_file_range(outfd, stream->out_fd_offset, ret,
-> -					SYNC_FILE_RANGE_WRITE);
-> -			stream->out_fd_offset += ret;
-> +		/* Socket operation failed. We consider the relayd dead */
-> +		if (errno == EPIPE || errno == EINVAL) {
+> +			ret = errno;
+>  			if (written == 0) {
+>  				written = ret_splice;
+>  			}
+>  			/* Socket operation failed. We consider the relayd dead */
+> -			if (errno == EBADF || errno == EPIPE) {
+> +			if (errno == EBADF || errno == EPIPE || errno == ESPIPE) {
+>  				WARN("Remote relayd disconnected. Stopping");
+>  				relayd_hang_up = 1;
+>  				goto write_error;
+>  			}
+> -			ret = errno;
+> +			PERROR("Error in file splice");
+>  			goto splice_error;
+> -		} else if (ret_splice > len) {
+> -			errno = EINVAL;
+> -			PERROR("Wrote more data than requested %zd (len: %lu)",
+> -					ret_splice, len);
+> +		} else if (ret_splice > signed_len) {
 > +			/*
-> +			 * This is possible if the fd is closed on the other side
-> +			 * (outfd) or any write problem. It can be verbose a bit for a
-> +			 * normal execution if for instance the relayd is stopped
-> +			 * abruptly. This can happen so set this to a DBG statement.
+> +			 * We don't expect this code path to be executed but you never know
+> +			 * so this is an extra protection agains a buggy splice().
 > +			 */
-> +			DBG("Consumer mmap write detected relayd hang up");
-> +			relayd_hang_up = 1;
-> +			goto write_error;
+>  			written += ret_splice;
+>  			ret = errno;
+> +			PERROR("Wrote more data than requested %zd (len: %lu)", ret_splice,
+> +					len);
+>  			goto splice_error;
+> +		} else {
+> +			/* All good, update current len and continue. */
+> +			len -= ret_splice;
 >  		}
-> -		stream->output_written += ret;
-> -		written += ret;
-> +
-> +		/* Unhandled error, print it and stop function right now. */
-> +		PERROR("Error in write mmap (ret %zd < len %lu)", ret, len);
-> +		goto end;
-> +	}
-> +	stream->output_written += ret;
-> +	written = ret;
-> +
-> +	/* This call is useless on a socket so better save a syscall. */
-> +	if (!relayd) {
-> +		/* This won't block, but will start writeout asynchronously */
-> +		lttng_sync_file_range(outfd, stream->out_fd_offset, len,
-> +				SYNC_FILE_RANGE_WRITE);
-> +		stream->out_fd_offset += len;
+> -		len -= ret_splice;
+>  
+>  		/* This call is useless on a socket so better save a syscall. */
+>  		if (!relayd) {
+> @@ -1865,9 +1879,6 @@ ssize_t lttng_consumer_on_read_subbuffer_splice(
+>  		written += ret_splice;
 >  	}
 >  	lttng_consumer_sync_trace_file(stream, orig_offset);
+> -
+> -	ret = ret_splice;
+> -
+>  	goto end;
 >  
+>  write_error:
 > --
 > 1.8.5.3
 > 
