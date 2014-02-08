@@ -1,17 +1,19 @@
-From: Stefan Seefeld <stefan_seefeld@mentor.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Subject: Re: RFC: Fix crash in dlerror()
-Date: Sat, 8 Feb 2014 11:53:44 -0500
-Message-ID: <52F66118.5010003__35515.0430732921$1391878780$gmane$org@mentor.com>
+Date: Sat, 8 Feb 2014 22:22:28 +0000 (UTC)
+Message-ID: <905376946.21151.1391898148330.JavaMail.zimbra__4430.42904739759$1391898227$gmane$org@efficios.com>
 References: <52F55511.2080309@mentor.com>
 	<1380151240.21051.1391875592403.JavaMail.zimbra@efficios.com>
+	<52F66118.5010003@mentor.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="------------090600020405020009000500"
+Content-Type: multipart/mixed;
+	boundary="----=_Part_21149_1830718725.1391898148324"
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from relay1.mentorg.com ([192.94.38.131])
+Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Stefan_Seefeld@mentor.com>) id 1WCBA8-0003SJ-J3
-	for lttng-dev@lists.lttng.org; Sat, 08 Feb 2014 11:53:55 -0500
-In-Reply-To: <1380151240.21051.1391875592403.JavaMail.zimbra@efficios.com>
+	(envelope-from <compudj@efficios.com>) id 1WCGIC-0005vk-Gi
+	for lttng-dev@lists.lttng.org; Sat, 08 Feb 2014 17:22:42 -0500
+In-Reply-To: <52F66118.5010003@mentor.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,105 +22,264 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: Stefan Seefeld <stefan_seefeld@mentor.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---------------090600020405020009000500
-Content-Type: text/plain; charset="UTF-8"
+------=_Part_21149_1830718725.1391898148324
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
 
-On 02/08/2014 11:06 AM, Mathieu Desnoyers wrote:
+----- Original Message -----
+> From: "Stefan Seefeld" <stefan_seefeld@mentor.com>
+> To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+> Cc: lttng-dev@lists.lttng.org
+> Sent: Saturday, February 8, 2014 11:53:44 AM
+> Subject: Re: [lttng-dev] RFC: Fix crash in dlerror()
 > 
+> On 02/08/2014 11:06 AM, Mathieu Desnoyers wrote:
+> > 
+> > 
+> > ----- Original Message -----
+> >> From: "Stefan Seefeld" <stefan_seefeld@mentor.com>
+> >> To: lttng-dev@lists.lttng.org
+> >> Sent: Friday, February 7, 2014 4:50:09 PM
+> >> Subject: [lttng-dev] RFC: Fix crash in dlerror()
+> >>
+> >> I have been looking into an issue with the malloc wrapper, where an
+> >> unsuccessful call to dlopen(), followed by a call to dlerror(), would
+> >> result in a segmentation fault when the malloc wrapper is being used.
+> >>
+> >> The problem is the following:
+> >>
+> >> The functions dlopen() and dlsym() make use of a global (though
+> >> thread-local) "result" structure to hold the error state, to allow a
+> >> subsequent call to dlerror() to report it.
+> >>
+> >> As it turns out, dlerror() itself may implicitly call realloc(), which,
+> >> if it hasn't been used before, triggers our wrapper to call dlsym(). So,
+> >> while dlerror() inspects said result structure, dlsym() re-initializes
+> >> it, causing the crash...
+> >>
+> >> This is arguably a bug in the dlfcn functions. The attached patch
+> >> attempts to fix this by moving the initialization of the realloc()
+> >> wrapper (i.e., the loading of the symbol) into the constructor. This
+> >> fixes the crash that I'm observing, but since none of these dependencies
+> >> are specified or documented, this change may cause other issues elsewhere.
+> >>
+> >> Are there any objections to this approach ? If not, I'll submit a formal
+> >> patch for this.
+> > 
+> > The issue I see with the approach you propose is if dlsym() is used
+> > within another constructor (from anoter lib for instance). Given that
+> > the order of constructor execution should be assumed to be random, we can
+> > run into the same error scenario you describe here.
 > 
-> ----- Original Message -----
->> From: "Stefan Seefeld" <stefan_seefeld@mentor.com>
->> To: lttng-dev@lists.lttng.org
->> Sent: Friday, February 7, 2014 4:50:09 PM
->> Subject: [lttng-dev] RFC: Fix crash in dlerror()
->>
->> I have been looking into an issue with the malloc wrapper, where an
->> unsuccessful call to dlopen(), followed by a call to dlerror(), would
->> result in a segmentation fault when the malloc wrapper is being used.
->>
->> The problem is the following:
->>
->> The functions dlopen() and dlsym() make use of a global (though
->> thread-local) "result" structure to hold the error state, to allow a
->> subsequent call to dlerror() to report it.
->>
->> As it turns out, dlerror() itself may implicitly call realloc(), which,
->> if it hasn't been used before, triggers our wrapper to call dlsym(). So,
->> while dlerror() inspects said result structure, dlsym() re-initializes
->> it, causing the crash...
->>
->> This is arguably a bug in the dlfcn functions. The attached patch
->> attempts to fix this by moving the initialization of the realloc()
->> wrapper (i.e., the loading of the symbol) into the constructor. This
->> fixes the crash that I'm observing, but since none of these dependencies
->> are specified or documented, this change may cause other issues elsewhere.
->>
->> Are there any objections to this approach ? If not, I'll submit a formal
->> patch for this.
+> Yes, I was worried about the same. In general there really isn't
+> anything we can do short of submitting a patch to glibc, as the only way
+> to address this correctly is to record whether we are inside a dlerror()
+> call. So, anything I can think of is merely heuristic.
 > 
-> The issue I see with the approach you propose is if dlsym() is used
-> within another constructor (from anoter lib for instance). Given that
-> the order of constructor execution should be assumed to be random, we can
-> run into the same error scenario you describe here.
+> Here is a slightly different approach: We know that the calloc symbol is
+> looked up very early (see the trick we use with the temporary static
+> calloc function to avoid the infinite recursion), and we may safely
+> assume that the calloc lookup won't fail (if it does, the user has more
+> important things to worry about). Thus, right after the calloc lookup
+> completed seems a good time to force the realloc lookup.
+> 
+> That's what this follow-up patch does (which still works for my test).
+> 
+> How does that look ?
 
-Yes, I was worried about the same. In general there really isn't
-anything we can do short of submitting a patch to glibc, as the only way
-to address this correctly is to record whether we are inside a dlerror()
-call. So, anything I can think of is merely heuristic.
+Interesting approach. Then I wonder if we couldn't simply lookup every symbol
+we're interested in whenever any of the overridden function is called and
+we notice a NULL pointer, and provide a simplistic "static" allocator for
+every function overridden.
 
-Here is a slightly different approach: We know that the calloc symbol is
-looked up very early (see the trick we use with the temporary static
-calloc function to avoid the infinite recursion), and we may safely
-assume that the calloc lookup won't fail (if it does, the user has more
-important things to worry about). Thus, right after the calloc lookup
-completed seems a good time to force the realloc lookup.
+Please let me know if something like the attached patch works for you.
+It seems more solid to cover all the cases, so that if the dlsym() implementation
+ever chooses to use other functions from the memory allocator, it will still work.
 
-That's what this follow-up patch does (which still works for my test).
+Thoughts ?
 
-How does that look ?
+Thanks,
 
-	Stefan
+Mathieu
+
+
+
+> 
+> 	Stefan
+> 
+> --
+> Stefan Seefeld
+> CodeSourcery / Mentor Graphics
+> http://www.mentor.com/embedded-software/
+> 
 
 -- 
-Stefan Seefeld
-CodeSourcery / Mentor Graphics
-http://www.mentor.com/embedded-software/
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
 
---------------090600020405020009000500
-Content-Type: text/plain; charset="UTF-8"; name="patch"
+------=_Part_21149_1830718725.1391898148324
+Content-Type: text/x-patch; name=fix-ust-malloc.patch
+Content-Disposition: attachment; filename=fix-ust-malloc.patch
 Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="patch"
 
-ZGlmZiAtLWdpdCBhL2xpYmx0dG5nLXVzdC1saWJjLXdyYXBwZXIvbHR0bmctdXN0LW1hbGxv
-Yy5jIGIvbGlibHR0bmctdXN0LWxpYmMtd3JhcHBlci9sdHRuZy11c3QtbWFsbG9jLmMKaW5k
-ZXggMzNlZDE4Yi4uODQxM2YzMSAxMDA2NDQKLS0tIGEvbGlibHR0bmctdXN0LWxpYmMtd3Jh
-cHBlci9sdHRuZy11c3QtbWFsbG9jLmMKKysrIGIvbGlibHR0bmctdXN0LWxpYmMtd3JhcHBl
-ci9sdHRuZy11c3QtbWFsbG9jLmMKQEAgLTU0LDYgKzU0LDggQEAgc3RhdGljIHZvaWQgKnN0
-YXRpY19jYWxsb2Moc2l6ZV90IG5tZW1iLCBzaXplX3Qgc2l6ZSkKIAlyZXR1cm4gJnN0YXRp
-Y19jYWxsb2NfYnVmW3ByZXZfb2Zmc2V0XTsKIH0KIAorc3RhdGljIHZvaWQgKigqcGxpYmNf
-cmVhbGxvYykodm9pZCAqcHRyLCBzaXplX3Qgc2l6ZSk7CisKIHZvaWQgKm1hbGxvYyhzaXpl
-X3Qgc2l6ZSkKIHsKIAlzdGF0aWMgdm9pZCAqKCpwbGliY19tYWxsb2MpKHNpemVfdCBzaXpl
-KTsKQEAgLTExMSw2ICsxMTMsMTYgQEAgdm9pZCAqY2FsbG9jKHNpemVfdCBubWVtYiwgc2l6
-ZV90IHNpemUpCiAJCQlmcHJpbnRmKHN0ZGVyciwgImNhbGxvY3dyYXA6IHVuYWJsZSB0byBm
-aW5kIGNhbGxvY1xuIik7CiAJCQlyZXR1cm4gTlVMTDsKIAkJfQorCQkvKgorCQkgKiBOb3cg
-c2VlbXMgYSBnb29kIHRpbWUgdG8gYWxzbyBpbml0aWFsaXplIHRoZSByZWFsbG9jIHN5bWJv
-bC4KKwkJICogKERvaW5nIHRoYXQganVzdC1pbi10aW1lIHdvbid0IHdvcmsgYXMgaXQgd291
-bGQgY29ycnVwdCBzb21lCisJCSAqIGRsZmNuLWludGVybmFsIHN0YXRlLikKKwkJICovCisJ
-CXBsaWJjX3JlYWxsb2MgPSBkbHN5bShSVExEX05FWFQsICJyZWFsbG9jIik7CisJCWlmIChw
-bGliY19jYWxsb2MgPT0gTlVMTCkgeworCQkJZnByaW50ZihzdGRlcnIsICJjYWxsb2N3cmFw
-OiB1bmFibGUgdG8gZmluZCByZWFsbG9jXG4iKTsKKwkJCXJldHVybiBOVUxMOworCQl9CiAJ
-fQogCXJldHZhbCA9IHBsaWJjX2NhbGxvYyhubWVtYiwgc2l6ZSk7CiAJdHJhY2Vwb2ludCh1
-c3RfbGliYywgY2FsbG9jLCBubWVtYiwgc2l6ZSwgcmV0dmFsKTsKQEAgLTExOSw3ICsxMzEs
-NiBAQCB2b2lkICpjYWxsb2Moc2l6ZV90IG5tZW1iLCBzaXplX3Qgc2l6ZSkKIAogdm9pZCAq
-cmVhbGxvYyh2b2lkICpwdHIsIHNpemVfdCBzaXplKQogewotCXN0YXRpYyB2b2lkICooKnBs
-aWJjX3JlYWxsb2MpKHZvaWQgKnB0ciwgc2l6ZV90IHNpemUpOwogCXZvaWQgKnJldHZhbDsK
-IAogCWlmIChwbGliY19yZWFsbG9jID09IE5VTEwpIHsK
---------------090600020405020009000500
+Y29tbWl0IGM5MzMzMTZlMGM1ZjQ1ZDdjOWE0OWNjNzU5MjZiZTNmNWM0MTlmMTAKQXV0aG9yOiBN
+YXRoaWV1IERlc25veWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPgpEYXRlOiAg
+IFNhdCBGZWIgOCAxNzoxMjoxNiAyMDE0IC0wNTAwCgogICAgRml4OiBtYWxsb2MgbGliYyBpbnN0
+cnVtZW50YXRpb24gd3JhcHBlcgogICAgCiAgICBjYWxsb2MgYW5kIHJlYWxsb2Mgd3J0IGRsc3lt
+IGFuZCBkbGVycm9yIGNhbiB0cmlnZ2VyIHNlZ21lbnRhdGlvbgogICAgZmF1bHRzLiBFbnN1cmUg
+dGhhdCB3ZSBmdWxseSBwb3B1bGF0ZSB0aGUgYWxsb2NhdG9yIHN5bWJvbHMgYWxsIGF0IG9uY2Us
+CiAgICBhbmQgYWxzbyBlbnN1cmUgdGhhdCB3ZSB1c2UgdGhlIHN0YXRpYyBhbGxvY2F0b3Igd2hp
+bGUgZG9pbmcgdGhlIGRsc3ltCiAgICBsb29rdXBzLgogICAgCiAgICBTaWduZWQtb2ZmLWJ5OiBN
+YXRoaWV1IERlc25veWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPgoKZGlmZiAt
+LWdpdCBhL2xpYmx0dG5nLXVzdC1saWJjLXdyYXBwZXIvbHR0bmctdXN0LW1hbGxvYy5jIGIvbGli
+bHR0bmctdXN0LWxpYmMtd3JhcHBlci9sdHRuZy11c3QtbWFsbG9jLmMKaW5kZXggMzNlZDE4Yi4u
+NGRiOWJmMCAxMDA2NDQKLS0tIGEvbGlibHR0bmctdXN0LWxpYmMtd3JhcHBlci9sdHRuZy11c3Qt
+bWFsbG9jLmMKKysrIGIvbGlibHR0bmctdXN0LWxpYmMtd3JhcHBlci9sdHRuZy11c3QtbWFsbG9j
+LmMKQEAgLTIxLDggKzIxLDExIEBACiAjaW5jbHVkZSA8ZGxmY24uaD4KICNpbmNsdWRlIDxzeXMv
+dHlwZXMuaD4KICNpbmNsdWRlIDxzdGRpby5oPgorI2luY2x1ZGUgPGFzc2VydC5oPgogI2luY2x1
+ZGUgPHVyY3Uvc3lzdGVtLmg+CiAjaW5jbHVkZSA8dXJjdS91YXRvbWljLmg+CisjaW5jbHVkZSA8
+dXJjdS9jb21waWxlci5oPgorI2luY2x1ZGUgPGx0dG5nL2FsaWduLmg+CiAKICNkZWZpbmUgVFJB
+Q0VQT0lOVF9ERUZJTkUKICNkZWZpbmUgVFJBQ0VQT0lOVF9DUkVBVEVfUFJPQkVTCkBAIC0zMiwx
+MCArMzUsMzAgQEAKIHN0YXRpYyBjaGFyIHN0YXRpY19jYWxsb2NfYnVmW1NUQVRJQ19DQUxMT0Nf
+TEVOXTsKIHN0YXRpYyB1bnNpZ25lZCBsb25nIHN0YXRpY19jYWxsb2NfYnVmX29mZnNldDsKIAot
+c3RhdGljIHZvaWQgKnN0YXRpY19jYWxsb2Moc2l6ZV90IG5tZW1iLCBzaXplX3Qgc2l6ZSkKK3N0
+cnVjdCBhbGxvY19mdW5jdGlvbnMgeworCXZvaWQgKigqY2FsbG9jKShzaXplX3Qgbm1lbWIsIHNp
+emVfdCBzaXplKTsKKwl2b2lkICooKm1hbGxvYykoc2l6ZV90IHNpemUpOworCXZvaWQgKCpmcmVl
+KSh2b2lkICpwdHIpOworCXZvaWQgKigqcmVhbGxvYykodm9pZCAqcHRyLCBzaXplX3Qgc2l6ZSk7
+CisJdm9pZCAqKCptZW1hbGlnbikoc2l6ZV90IGFsaWdubWVudCwgc2l6ZV90IHNpemUpOworCWlu
+dCAoKnBvc2l4X21lbWFsaWduKSh2b2lkICoqbWVtcHRyLCBzaXplX3QgYWxpZ25tZW50LCBzaXpl
+X3Qgc2l6ZSk7Cit9OworCitzdGF0aWMKK3N0cnVjdCBhbGxvY19mdW5jdGlvbnMgY3VyX2FsbG9j
+OworCisvKgorICogU3RhdGljIGFsbG9jYXRvciB0byB1c2Ugd2hlbiBpbml0aWFsbHkgZXhlY3V0
+aW5nIGRsc3ltKCkuCisgKi8KK3N0YXRpYwordm9pZCAqc3RhdGljX2NhbGxvY19hbGlnbmVkKHNp
+emVfdCBubWVtYiwgc2l6ZV90IHNpemUsIHNpemVfdCBhbGlnbm1lbnQpCiB7CiAJdW5zaWduZWQg
+bG9uZyBwcmV2X29mZnNldCwgbmV3X29mZnNldCwgcmVzX29mZnNldDsKIAorCWlmIChubWVtYiAq
+IHNpemUgPT0gMCkgeworCQlyZXR1cm4gTlVMTDsKKwl9CisKIAkvKgogCSAqIFByb3RlY3Qgc3Rh
+dGljX2NhbGxvY19idWZfb2Zmc2V0IGZyb20gY29uY3VycmVudCB1cGRhdGVzCiAJICogdXNpbmcg
+YSBjbXB4Y2hnIGxvb3AgcmF0aGVyIHRoYW4gYSBtdXRleCB0byByZW1vdmUgYQpAQCAtNDUsMTI1
+ICs2OCwyMDUgQEAgc3RhdGljIHZvaWQgKnN0YXRpY19jYWxsb2Moc2l6ZV90IG5tZW1iLCBzaXpl
+X3Qgc2l6ZSkKIAlyZXNfb2Zmc2V0ID0gQ01NX0xPQURfU0hBUkVEKHN0YXRpY19jYWxsb2NfYnVm
+X29mZnNldCk7CiAJZG8gewogCQlwcmV2X29mZnNldCA9IHJlc19vZmZzZXQ7Ci0JCWlmIChubWVt
+YiAqIHNpemUgPiBzaXplb2Yoc3RhdGljX2NhbGxvY19idWYpIC0gcHJldl9vZmZzZXQpIHsKKwkJ
+bmV3X29mZnNldCA9IEFMSUdOKHByZXZfb2Zmc2V0LCBhbGlnbm1lbnQpICsgbm1lbWIgKiBzaXpl
+OworCQlpZiAobmV3X29mZnNldCA+IHNpemVvZihzdGF0aWNfY2FsbG9jX2J1ZikpIHsKIAkJCXJl
+dHVybiBOVUxMOwogCQl9Ci0JCW5ld19vZmZzZXQgPSBwcmV2X29mZnNldCArIG5tZW1iICogc2l6
+ZTsKIAl9IHdoaWxlICgocmVzX29mZnNldCA9IHVhdG9taWNfY21weGNoZygmc3RhdGljX2NhbGxv
+Y19idWZfb2Zmc2V0LAogCQkJcHJldl9vZmZzZXQsIG5ld19vZmZzZXQpKSAhPSBwcmV2X29mZnNl
+dCk7CiAJcmV0dXJuICZzdGF0aWNfY2FsbG9jX2J1ZltwcmV2X29mZnNldF07CiB9CiAKK3N0YXRp
+Ywordm9pZCAqc3RhdGljX2NhbGxvYyhzaXplX3Qgbm1lbWIsIHNpemVfdCBzaXplKQoreworCXJl
+dHVybiBzdGF0aWNfY2FsbG9jX2FsaWduZWQobm1lbWIsIHNpemUsIDEpOworfQorCitzdGF0aWMK
+K3ZvaWQgKnN0YXRpY19tYWxsb2Moc2l6ZV90IHNpemUpCit7CisJcmV0dXJuIHN0YXRpY19jYWxs
+b2NfYWxpZ25lZCgxLCBzaXplLCAxKTsKK30KKworc3RhdGljCit2b2lkIHN0YXRpY19mcmVlKHZv
+aWQgKnB0cikKK3sKKwkvKiBuby1vcC4gKi8KK30KKworc3RhdGljCit2b2lkICpzdGF0aWNfcmVh
+bGxvYyh2b2lkICpwdHIsIHNpemVfdCBzaXplKQoreworCS8qIERvbid0IGZyZWUgcHJldmlvdXMg
+bWVtb3J5IGxvY2F0aW9uICovCisJcmV0dXJuIHN0YXRpY19jYWxsb2NfYWxpZ25lZCgxLCBzaXpl
+LCAxKTsKK30KKworc3RhdGljCit2b2lkICpzdGF0aWNfbWVtYWxpZ24oc2l6ZV90IGFsaWdubWVu
+dCwgc2l6ZV90IHNpemUpCit7CisJcmV0dXJuIHN0YXRpY19jYWxsb2NfYWxpZ25lZCgxLCBzaXpl
+LCBhbGlnbm1lbnQpOworfQorCitzdGF0aWMKK2ludCBzdGF0aWNfcG9zaXhfbWVtYWxpZ24odm9p
+ZCAqKm1lbXB0ciwgc2l6ZV90IGFsaWdubWVudCwgc2l6ZV90IHNpemUpCit7CisJdm9pZCAqcHRy
+OworCisJLyogQ2hlY2sgZm9yIHBvd2VyIG9mIDIgKi8KKwlpZiAoYWxpZ25tZW50ICYgKGFsaWdu
+bWVudCAtIDEpKSB7CisJCXJldHVybiBFSU5WQUw7CisJfQorCWlmIChhbGlnbm1lbnQgPCBzaXpl
+b2Yodm9pZCAqKSkgeworCQlyZXR1cm4gRUlOVkFMOworCX0KKwlwdHIgPSBzdGF0aWNfY2FsbG9j
+X2FsaWduZWQoMSwgc2l6ZSwgYWxpZ25tZW50KTsKKwlpZiAoc2l6ZSAmJiAhcHRyKSB7CisJCXJl
+dHVybiBFTk9NRU07CisJfQorCSptZW1wdHIgPSBwdHI7CisJcmV0dXJuIDA7Cit9CisKK3N0YXRp
+Ywordm9pZCBzZXR1cF9zdGF0aWNfYWxsb2NhdG9yKHZvaWQpCit7CisJYXNzZXJ0KGN1cl9hbGxv
+Yy5jYWxsb2MgPT0gTlVMTCk7CisJY3VyX2FsbG9jLmNhbGxvYyA9IHN0YXRpY19jYWxsb2M7CisJ
+YXNzZXJ0KGN1cl9hbGxvYy5tYWxsb2MgPT0gTlVMTCk7CisJY3VyX2FsbG9jLm1hbGxvYyA9IHN0
+YXRpY19tYWxsb2M7CisJYXNzZXJ0KGN1cl9hbGxvYy5mcmVlID09IE5VTEwpOworCWN1cl9hbGxv
+Yy5mcmVlID0gc3RhdGljX2ZyZWU7CisJYXNzZXJ0KGN1cl9hbGxvYy5yZWFsbG9jID09IE5VTEwp
+OworCWN1cl9hbGxvYy5yZWFsbG9jID0gc3RhdGljX3JlYWxsb2M7CisJYXNzZXJ0KGN1cl9hbGxv
+Yy5tZW1hbGlnbiA9PSBOVUxMKTsKKwljdXJfYWxsb2MubWVtYWxpZ24gPSBzdGF0aWNfbWVtYWxp
+Z247CisJYXNzZXJ0KGN1cl9hbGxvYy5wb3NpeF9tZW1hbGlnbiA9PSBOVUxMKTsKKwljdXJfYWxs
+b2MucG9zaXhfbWVtYWxpZ24gPSBzdGF0aWNfcG9zaXhfbWVtYWxpZ247Cit9CisKK3N0YXRpYwor
+dm9pZCBsb29rdXBfYWxsX3N5bWJvbHModm9pZCkKK3sKKwlzdHJ1Y3QgYWxsb2NfZnVuY3Rpb25z
+IGFmOworCisJLyoKKwkgKiBUZW1wb3JhcmlseSByZWRpcmVjdCBhbGxvY2F0aW9uIGZ1bmN0aW9u
+cyB0bworCSAqIHN0YXRpY19jYWxsb2NfYWxpZ25lZCwgYW5kIGZyZWUgZnVuY3Rpb24gdG8gc3Rh
+dGljX2ZyZWUKKwkgKiAobm8tb3ApLCB1bnRpbCB0aGUgZGxzeW0gbG9va3VwIGhhcyBjb21wbGV0
+ZWQuCisJICovCisJc2V0dXBfc3RhdGljX2FsbG9jYXRvcigpOworCisJLyogUGVyZm9ybSB0aGUg
+YWN0dWFsIGxvb2t1cHMgKi8KKwlhZi5jYWxsb2MgPSBkbHN5bShSVExEX05FWFQsICJjYWxsb2Mi
+KTsKKwlhZi5tYWxsb2MgPSBkbHN5bShSVExEX05FWFQsICJtYWxsb2MiKTsKKwlhZi5mcmVlID0g
+ZGxzeW0oUlRMRF9ORVhULCAiZnJlZSIpOworCWFmLnJlYWxsb2MgPSBkbHN5bShSVExEX05FWFQs
+ICJyZWFsbG9jIik7CisJYWYubWVtYWxpZ24gPSBkbHN5bShSVExEX05FWFQsICJtZW1hbGlnbiIp
+OworCWFmLnBvc2l4X21lbWFsaWduID0gZGxzeW0oUlRMRF9ORVhULCAicG9zaXhfbWVtYWxpZ24i
+KTsKKworCS8qIFBvcHVsYXRlIHRoZSBuZXcgYWxsb2NhdG9yIGZ1bmN0aW9ucyAqLworCW1lbWNw
+eSgmY3VyX2FsbG9jLCAmYWYsIHNpemVvZihjdXJfYWxsb2MpKTsKK30KKwogdm9pZCAqbWFsbG9j
+KHNpemVfdCBzaXplKQogewotCXN0YXRpYyB2b2lkICooKnBsaWJjX21hbGxvYykoc2l6ZV90IHNp
+emUpOwogCXZvaWQgKnJldHZhbDsKIAotCWlmIChwbGliY19tYWxsb2MgPT0gTlVMTCkgewotCQlw
+bGliY19tYWxsb2MgPSBkbHN5bShSVExEX05FWFQsICJtYWxsb2MiKTsKLQkJaWYgKHBsaWJjX21h
+bGxvYyA9PSBOVUxMKSB7CisJaWYgKGN1cl9hbGxvYy5tYWxsb2MgPT0gTlVMTCkgeworCQlsb29r
+dXBfYWxsX3N5bWJvbHMoKTsKKwkJaWYgKGN1cl9hbGxvYy5tYWxsb2MgPT0gTlVMTCkgewogCQkJ
+ZnByaW50ZihzdGRlcnIsICJtYWxsb2N3cmFwOiB1bmFibGUgdG8gZmluZCBtYWxsb2NcbiIpOwot
+CQkJcmV0dXJuIE5VTEw7CisJCQlhYm9ydCgpOwogCQl9CiAJfQotCXJldHZhbCA9IHBsaWJjX21h
+bGxvYyhzaXplKTsKKwlyZXR2YWwgPSBjdXJfYWxsb2MubWFsbG9jKHNpemUpOwogCXRyYWNlcG9p
+bnQodXN0X2xpYmMsIG1hbGxvYywgc2l6ZSwgcmV0dmFsKTsKIAlyZXR1cm4gcmV0dmFsOwogfQog
+CiB2b2lkIGZyZWUodm9pZCAqcHRyKQogewotCXN0YXRpYyB2b2lkICgqcGxpYmNfZnJlZSkodm9p
+ZCAqcHRyKTsKLQogCS8qIENoZWNrIHdoZXRoZXIgdGhlIG1lbW9yeSB3YXMgYWxsb2NhdGVkIHdp
+dGgKLQkgKiBzdGF0aWNfY2FsbG9jLCBpbiB3aGljaCBjYXNlIHRoZXJlIGlzIG5vdGhpbmcKKwkg
+KiBzdGF0aWNfY2FsbG9jX2FsaWduLCBpbiB3aGljaCBjYXNlIHRoZXJlIGlzIG5vdGhpbmcKIAkg
+KiB0byBmcmVlLgogCSAqLwotCWlmICgoY2hhciAqKXB0ciA+PSBzdGF0aWNfY2FsbG9jX2J1ZiAm
+JgotCSAgICAoY2hhciAqKXB0ciA8IHN0YXRpY19jYWxsb2NfYnVmICsgU1RBVElDX0NBTExPQ19M
+RU4pIHsKKwlpZiAoY2FhX3VubGlrZWx5KChjaGFyICopcHRyID49IHN0YXRpY19jYWxsb2NfYnVm
+ICYmCisJICAgIChjaGFyICopcHRyIDwgc3RhdGljX2NhbGxvY19idWYgKyBTVEFUSUNfQ0FMTE9D
+X0xFTikpIHsKIAkJcmV0dXJuOwogCX0KIAotCWlmIChwbGliY19mcmVlID09IE5VTEwpIHsKLQkJ
+cGxpYmNfZnJlZSA9IGRsc3ltKFJUTERfTkVYVCwgImZyZWUiKTsKLQkJaWYgKHBsaWJjX2ZyZWUg
+PT0gTlVMTCkgeworCWlmIChjdXJfYWxsb2MuZnJlZSA9PSBOVUxMKSB7CisJCWxvb2t1cF9hbGxf
+c3ltYm9scygpOworCQlpZiAoY3VyX2FsbG9jLmZyZWUgPT0gTlVMTCkgewogCQkJZnByaW50Zihz
+dGRlcnIsICJtYWxsb2N3cmFwOiB1bmFibGUgdG8gZmluZCBmcmVlXG4iKTsKLQkJCXJldHVybjsK
+KwkJCWFib3J0KCk7CiAJCX0KIAl9CiAJdHJhY2Vwb2ludCh1c3RfbGliYywgZnJlZSwgcHRyKTsK
+LQlwbGliY19mcmVlKHB0cik7CisJY3VyX2FsbG9jLmZyZWUocHRyKTsKIH0KIAogdm9pZCAqY2Fs
+bG9jKHNpemVfdCBubWVtYiwgc2l6ZV90IHNpemUpCiB7Ci0Jc3RhdGljIHZvaWQgKigqdm9sYXRp
+bGUgcGxpYmNfY2FsbG9jKShzaXplX3Qgbm1lbWIsIHNpemVfdCBzaXplKTsKIAl2b2lkICpyZXR2
+YWw7CiAKLQlpZiAocGxpYmNfY2FsbG9jID09IE5VTEwpIHsKLQkJLyoKLQkJICogVGVtcG9yYXJp
+bHkgcmVkaXJlY3QgdG8gc3RhdGljX2NhbGxvYywKLQkJICogdW50aWwgdGhlIGRsc3ltIGxvb2t1
+cCBoYXMgY29tcGxldGVkLgotCQkgKi8KLQkJcGxpYmNfY2FsbG9jID0gc3RhdGljX2NhbGxvYzsK
+LQkJcGxpYmNfY2FsbG9jID0gZGxzeW0oUlRMRF9ORVhULCAiY2FsbG9jIik7Ci0JCWlmIChwbGli
+Y19jYWxsb2MgPT0gTlVMTCkgeworCWlmIChjdXJfYWxsb2MuY2FsbG9jID09IE5VTEwpIHsKKwkJ
+bG9va3VwX2FsbF9zeW1ib2xzKCk7CisJCWlmIChjdXJfYWxsb2MuY2FsbG9jID09IE5VTEwpIHsK
+IAkJCWZwcmludGYoc3RkZXJyLCAiY2FsbG9jd3JhcDogdW5hYmxlIHRvIGZpbmQgY2FsbG9jXG4i
+KTsKLQkJCXJldHVybiBOVUxMOworCQkJYWJvcnQoKTsKIAkJfQogCX0KLQlyZXR2YWwgPSBwbGli
+Y19jYWxsb2Mobm1lbWIsIHNpemUpOworCXJldHZhbCA9IGN1cl9hbGxvYy5jYWxsb2Mobm1lbWIs
+IHNpemUpOwogCXRyYWNlcG9pbnQodXN0X2xpYmMsIGNhbGxvYywgbm1lbWIsIHNpemUsIHJldHZh
+bCk7CiAJcmV0dXJuIHJldHZhbDsKIH0KIAogdm9pZCAqcmVhbGxvYyh2b2lkICpwdHIsIHNpemVf
+dCBzaXplKQogewotCXN0YXRpYyB2b2lkICooKnBsaWJjX3JlYWxsb2MpKHZvaWQgKnB0ciwgc2l6
+ZV90IHNpemUpOwogCXZvaWQgKnJldHZhbDsKIAotCWlmIChwbGliY19yZWFsbG9jID09IE5VTEwp
+IHsKLQkJcGxpYmNfcmVhbGxvYyA9IGRsc3ltKFJUTERfTkVYVCwgInJlYWxsb2MiKTsKLQkJaWYg
+KHBsaWJjX3JlYWxsb2MgPT0gTlVMTCkgeworCWlmIChjdXJfYWxsb2MucmVhbGxvYyA9PSBOVUxM
+KSB7CisJCWxvb2t1cF9hbGxfc3ltYm9scygpOworCQlpZiAoY3VyX2FsbG9jLnJlYWxsb2MgPT0g
+TlVMTCkgewogCQkJZnByaW50ZihzdGRlcnIsICJyZWFsbG9jd3JhcDogdW5hYmxlIHRvIGZpbmQg
+cmVhbGxvY1xuIik7Ci0JCQlyZXR1cm4gTlVMTDsKKwkJCWFib3J0KCk7CiAJCX0KIAl9Ci0JcmV0
+dmFsID0gcGxpYmNfcmVhbGxvYyhwdHIsIHNpemUpOworCXJldHZhbCA9IGN1cl9hbGxvYy5yZWFs
+bG9jKHB0ciwgc2l6ZSk7CiAJdHJhY2Vwb2ludCh1c3RfbGliYywgcmVhbGxvYywgcHRyLCBzaXpl
+LCByZXR2YWwpOwogCXJldHVybiByZXR2YWw7CiB9CiAKIHZvaWQgKm1lbWFsaWduKHNpemVfdCBh
+bGlnbm1lbnQsIHNpemVfdCBzaXplKQogewotCXN0YXRpYyB2b2lkICooKnBsaWJjX21lbWFsaWdu
+KShzaXplX3QgYWxpZ25tZW50LCBzaXplX3Qgc2l6ZSk7CiAJdm9pZCAqcmV0dmFsOwogCi0JaWYg
+KHBsaWJjX21lbWFsaWduID09IE5VTEwpIHsKLQkJcGxpYmNfbWVtYWxpZ24gPSBkbHN5bShSVExE
+X05FWFQsICJtZW1hbGlnbiIpOwotCQlpZiAocGxpYmNfbWVtYWxpZ24gPT0gTlVMTCkgeworCWlm
+IChjdXJfYWxsb2MubWVtYWxpZ24gPT0gTlVMTCkgeworCQlsb29rdXBfYWxsX3N5bWJvbHMoKTsK
+KwkJaWYgKGN1cl9hbGxvYy5tZW1hbGlnbiA9PSBOVUxMKSB7CiAJCQlmcHJpbnRmKHN0ZGVyciwg
+Im1lbWFsaWdud3JhcDogdW5hYmxlIHRvIGZpbmQgbWVtYWxpZ25cbiIpOwotCQkJcmV0dXJuIE5V
+TEw7CisJCQlhYm9ydCgpOwogCQl9CiAJfQotCXJldHZhbCA9IHBsaWJjX21lbWFsaWduKGFsaWdu
+bWVudCwgc2l6ZSk7CisJcmV0dmFsID0gY3VyX2FsbG9jLm1lbWFsaWduKGFsaWdubWVudCwgc2l6
+ZSk7CiAJdHJhY2Vwb2ludCh1c3RfbGliYywgbWVtYWxpZ24sIGFsaWdubWVudCwgc2l6ZSwgcmV0
+dmFsKTsKIAlyZXR1cm4gcmV0dmFsOwogfQogCiBpbnQgcG9zaXhfbWVtYWxpZ24odm9pZCAqKm1l
+bXB0ciwgc2l6ZV90IGFsaWdubWVudCwgc2l6ZV90IHNpemUpCiB7Ci0Jc3RhdGljIGludCgqcGxp
+YmNfcG9zaXhfbWVtYWxpZ24pKHZvaWQgKiptZW1wdHIsIHNpemVfdCBhbGlnbm1lbnQsIHNpemVf
+dCBzaXplKTsKIAlpbnQgcmV0dmFsOwogCi0JaWYgKHBsaWJjX3Bvc2l4X21lbWFsaWduID09IE5V
+TEwpIHsKLQkJcGxpYmNfcG9zaXhfbWVtYWxpZ24gPSBkbHN5bShSVExEX05FWFQsICJwb3NpeF9t
+ZW1hbGlnbiIpOwotCQlpZiAocGxpYmNfcG9zaXhfbWVtYWxpZ24gPT0gTlVMTCkgeworCWlmIChj
+dXJfYWxsb2MucG9zaXhfbWVtYWxpZ24gPT0gTlVMTCkgeworCQlsb29rdXBfYWxsX3N5bWJvbHMo
+KTsKKwkJaWYgKGN1cl9hbGxvYy5wb3NpeF9tZW1hbGlnbiA9PSBOVUxMKSB7CiAJCQlmcHJpbnRm
+KHN0ZGVyciwgInBvc2l4X21lbWFsaWdud3JhcDogdW5hYmxlIHRvIGZpbmQgcG9zaXhfbWVtYWxp
+Z25cbiIpOwotCQkJcmV0dXJuIEVOT01FTTsKKwkJCWFib3J0KCk7CiAJCX0KIAl9Ci0JcmV0dmFs
+ID0gcGxpYmNfcG9zaXhfbWVtYWxpZ24obWVtcHRyLCBhbGlnbm1lbnQsIHNpemUpOworCXJldHZh
+bCA9IGN1cl9hbGxvYy5wb3NpeF9tZW1hbGlnbihtZW1wdHIsIGFsaWdubWVudCwgc2l6ZSk7CiAJ
+dHJhY2Vwb2ludCh1c3RfbGliYywgcG9zaXhfbWVtYWxpZ24sICptZW1wdHIsIGFsaWdubWVudCwg
+c2l6ZSwgcmV0dmFsKTsKIAlyZXR1cm4gcmV0dmFsOwogfQo=
+------=_Part_21149_1830718725.1391898148324
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -129,4 +290,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---------------090600020405020009000500--
+------=_Part_21149_1830718725.1391898148324--
