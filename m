@@ -1,16 +1,16 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: Re: Trace Streaming problem
-Date: Tue, 11 Feb 2014 09:57:13 -0500
-Message-ID: <20140211145713.GA7091__8717.34773177213$1392130706$gmane$org@thessa>
-References: <CAO_ArvpaU2cGQ+9F=A+vHv9zNupXitvkSCr6RZh0LzTjLj9uMA@mail.gmail.com>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Subject: Re: Instrumenting a module?
+Date: Tue, 11 Feb 2014 16:45:59 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD267E60F9__48796.3473461152$1392137241$gmane$org@VAL-E-01.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2024779797=="
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([144.76.53.219])
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1WDEm3-0002Z9-4x
-	for lttng-dev@lists.lttng.org; Tue, 11 Feb 2014 09:57:29 -0500
-In-Reply-To: <CAO_ArvpaU2cGQ+9F=A+vHv9zNupXitvkSCr6RZh0LzTjLj9uMA@mail.gmail.com>
+	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1WDGTF-0003QM-DU
+	for lttng-dev@lists.lttng.org; Tue, 11 Feb 2014 11:46:11 -0500
+Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,122 +19,92 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: kumar s <skumar.m226@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
+----------------------------------------------------------------------
+> Date: Mon, 10 Feb 2014 17:10:37 +0000
+> From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+>
+>    I'm trying to find out the recipe for instrumenting a kernel module wi=
+th some custom LTTng tracepoints.
+>  Oddly, writing the LTTng tracepoint provider kernel module turned out no=
+t too bad (the READMEs help),
+> but I have seen no documentation of the process of instrumenting a module.
 
---===============2024779797==
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="y0ulUmNC+osPPQO6"
-Content-Disposition: inline
+   Update.  Looking at the instrumented kernel compilation units and define=
+_trace.h, I've come to think I must #define CREATE_TRACE_POINTS just before=
+ #include <trace/events/hello.h> in the instrumented module.  What I find b=
+izarre, though, is that this works for an integer payload field (instrument=
+ed module and LTTng tracepoint provider kernel module compile, tracing the =
+new kernel events works as expected) but fails miserably with a string payl=
+oad field.  Looking at other kernel tracepoints that have string payload fi=
+elds, I just don't see what I'm doing wrong.
 
+   The integer tracepoint:
 
---y0ulUmNC+osPPQO6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+TRACE_EVENT(hello_init,
+   TP_PROTO(int anint),
+   TP_ARGS(anint),
+   TP_STRUCT__entry(
+      __field(int, aninteger)
+   ),
+   TP_fast_assign(
+      __entry->aninteger =3D anint;
+   ),
+   TP_printk(
+      "hello=3D%d", __entry->aninteger
+   )
+);
 
-On 11 Feb (13:24:15), kumar s wrote:
-> Hi,
->=20
-> I am trying to start the trace on MIPS board and dump it remotely on PC.
->=20
-> The steps i do
-> On MIPS board:
-> lttng create -U net://192.168.233.207 newsession
->=20
-> lttng enable-event lttng_statedump_start -k
->=20
-> Error: Event lttng_statedump_start: Unable to connect to lttng-relayd
-> (channel channel0, session news)
-> Warning: Some command(s) went wrong
->=20
-> In lttng-sessiond -vvv log
->=20
-> [...]
-> DEBUG3 [1918/2019]: Consumer socket created (fd: 30) and added to output
-> (in consumer_create_socket() at consumer.c:300)
-> DEBUG1 [1918/2019]: Setting relayd for session news (in cmd_setup_relayd()
-> at cmd.c:722)
-> DEBUG3 [1918/2019]: Relayd connect ... (in relayd_connect() at relayd.c:4=
-66)
-> PERROR [1918/2019]: connect: Connection refused (in
-> lttcomm_connect_inet_sock() at inet.c:253)
-> Error: Unable to reach lttng-relayd
-> DEBUG1 [1918/2019]: Sending response (size: 16, retcode: Unable to connect
-> to lttng-relayd) (in thread_manage_clients() at main.c:3973)
-> DEBUG1 [1918/2019]: Clean command context structure (in clean_command_ctx=
-()
-> at main.c:672)
-> DEBUG1 [1918/2019]: Accepting client command ... (in
-> thread_manage_clients() at main.c:3837)
->=20
-> On the linux pc
-> i have started lttng-relayd
->=20
-> lttng-relayd -vvv -C tcp://0.0.0.0:1234 -D tcp://0.0.0.0:5678 (as specifi=
-ed
-> in doc folder of lttng-tools)
+   The string tracepoint:
 
-The relayd is started with different ports here so the session creation
-should also specify those like so:
+TRACE_EVENT(hello_init,
+   TP_PROTO(const char * astring),
+   TP_ARGS(astring),
+   TP_STRUCT__entry(
+      __string(hello_string, astring)
+   ),
+   TP_fast_assign(
+      __assign_str(hello_string, astring);
+   ),
+   TP_printk(
+      "hello=3D%s", __entry->hello_string
+   )
+);
 
-$ lttng create -U net://192.168.233.207:1234:5678
+   This time the make says:
 
-(or use -C/-D).
+make -C /lib/modules/3.2.0-53-virtual/build M=3D/home/daniel/Documents/mymo=
+dule modules
+make[1]: entrant dans le r=E9pertoire =AB /usr/src/linux-headers-3.2.0-53-v=
+irtual =BB
+  CC [M]  /home/daniel/Documents/mymodule/hello.o
+In file included from include/trace/ftrace.h:296:0,
+                 from include/trace/define_trace.h:86,
+                 from include/trace/events/hello.h:110,
+                 from /home/daniel/Documents/mymodule/hello.c:5:
+include/trace/events/hello.h: In function 'ftrace_raw_output_hello_init':
+include/trace/events/hello.h:57:1: erreur: 'struct ftrace_raw_hello_init' h=
+as no member named 'hello_string'
+make[2]: *** [/home/daniel/Documents/mymodule/hello.o] Erreur 1
+make[1]: *** [_module_/home/daniel/Documents/mymodule] Erreur 2
+make[1]: quittant le r=E9pertoire =AB /usr/src/linux-headers-3.2.0-53-virtu=
+al =BB
+make: *** [all] Erreur 2
 
-David
-
->=20
->=20
-> Unfortunately i get error that lttng-relayd unable to connect. I also tri=
-ed
-> started lttng-relayd on mips board and running the same, still i get same
-> error.
->=20
-> Can someone explain steps for lttng trace streaming or how i can dump the
-> trace live onto PC.
->=20
-> Thank you
-> Skumar
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
-
---y0ulUmNC+osPPQO6
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iQF8BAEBAgBmBQJS+jpJXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
-ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
-MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02ceoH/26tcMinrLnwB0x3D03CBWVz
-vRZr8LScPm5Q5d4vhoRf5omjZC2e+NWtOScah8p2/aVRDUmsHwdDUdz8XPr4Jbai
-MatoUr31IKQFVvLAVy2qY4hwAMNhn4jLQHqi6jWgnRXzzxn5XwDHnAZ2tq6i2TTA
-l0ZyMWkSdVdWyfICyqf6jCB52wumUSHeZ6Lr6UPQQwHke92m9oT3fHAl0fjM5JvZ
-eIvw98R4pUpH7hdPTJtgqSxKcmNu0K+MQ0ypG+NPMTUVDjaQw/MA3qGzYfAHWPaS
-ItVmka8YP1hTcocTTcrBy5m6+L89MoOnnpuXzpKhnwSijeOITMUab6x/eY169aw=
-=93Jo
------END PGP SIGNATURE-----
-
---y0ulUmNC+osPPQO6--
-
-
---===============2024779797==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============2024779797==--
+Daniel U. Thibault
+Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
+ntermeasures (SPC)
+Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
+Cyber Security (MCCS)
+R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
+ Canada - Valcartier (DRDC Valcartier)
+2459 route de la Bravoure
+Qu=E9bec QC  G3J 1X5
+CANADA
+Vox : (418) 844-4000 x4245
+Fax : (418) 844-4538
+NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+Gouvernement du Canada | Government of Canada
+<http://www.valcartier.drdc-rddc.gc.ca/>
