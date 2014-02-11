@@ -1,18 +1,21 @@
-From: Julien Desfossez <jdesfossez@efficios.com>
-Subject: Update in the babeltrace live CLI
-Date: Mon, 10 Feb 2014 18:41:03 -0500
-Message-ID: <52F9638F.7070605__7857.20784119821$1392075742$gmane$org@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: RFC: Fix crash in dlerror()
+Date: Tue, 11 Feb 2014 00:31:16 +0000 (UTC)
+Message-ID: <1402132824.22511.1392078676053.JavaMail.zimbra__27265.5822489925$1392078742$gmane$org@efficios.com>
+References: <52F55511.2080309@mentor.com>
+	<1380151240.21051.1391875592403.JavaMail.zimbra@efficios.com>
+	<52F66118.5010003@mentor.com>
+	<905376946.21151.1391898148330.JavaMail.zimbra@efficios.com>
+	<52F7ACB6.4060907@mentor.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fukushima.klipix.org ([85.12.144.25])
+Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jdesfossez@efficios.com>) id 1WD0TP-0003dY-4q
-	for lttng-dev@lists.lttng.org; Mon, 10 Feb 2014 18:41:16 -0500
-Received: from [172.30.42.98] (unknown [192.222.130.16])
-	by fukushima.klipix.org (Postfix) with ESMTPSA id 60281460073
-	for <lttng-dev@lists.lttng.org>; Tue, 11 Feb 2014 00:41:04 +0100 (CET)
+	(envelope-from <compudj@efficios.com>) id 1WD1Fw-00041K-17
+	for lttng-dev@lists.lttng.org; Mon, 10 Feb 2014 19:31:25 -0500
+In-Reply-To: <52F7ACB6.4060907@mentor.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,52 +24,82 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Stefan Seefeld <stefan_seefeld@mentor.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
+----- Original Message -----
+> From: "Stefan Seefeld" <stefan_seefeld@mentor.com>
+> To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+> Cc: lttng-dev@lists.lttng.org
+> Sent: Sunday, February 9, 2014 11:28:38 AM
+> Subject: Re: [lttng-dev] RFC: Fix crash in dlerror()
+> 
+> On 02/08/2014 05:22 PM, Mathieu Desnoyers wrote:
+> 
+> > Interesting approach.
+> 
+> I assume here you are referring to the temporary static allocator we use
+> during calloc initialization, not my initializing realloc at the same time ?
 
-TL;DR:
-the new URL format for Babeltrace live is :
-$ babeltrace -i lttng-live net://host/<hostname>/<session-name>
+Actually, I'm referring to your idea of initializing more than just the
+function we need whenever the allocator is first used.
 
-Also the protocol has been slightly updated (main change : we require
-the viewer to create a viewer_session before attaching to one or
-multiple sessions), if you started to work on a live viewer, please make
-sure you read doc/live-reading-protocol.txt in lttng-tools and update
-your lttng-viewer-abi.h file.
+> 
+> > Then I wonder if we couldn't simply lookup every symbol
+> > we're interested in whenever any of the overridden function is called and
+> > we notice a NULL pointer, and provide a simplistic "static" allocator for
+> > every function overridden.
+> 
+> While I agree that a consistent technique to solve the initialization
+> problem has a lot of appeal, I'm actually hesitant in this particular
+> case: One important limitation of the static allocator is that it
+> requires an upper bound for the buffer. This works fine if we know the
+> circumstance where it is used (I believe dlsym() itself calls calloc()
+> to allocate a global structure that requires 32 bytes).
+> 
+> The case I discovered on Friday, however, uses realloc() from within
+> vasprintf(), which needs to grow a buffer to hold an error message, and
+> I don't think the size of that is bounded. Therefore, using a static
+> allocator in that situation seems dangerous.
 
+By inspecting the source, this error message is made of:
 
-More details :
-For the adventurous ones who had already tried LTTng live with
-Babeltrace, you were doing :
-$ babeltrace -i lttng-live net://localhost/42
+- objname (object/file name),
+- errstring (error detail)
 
-To connect to the session 42 on the relay running on localhost.
-You might have noticed that if you had kernel and UST tracing running
-inside the same session, you would see 2 sessions with the same name on
-the relay and no way to attach to both of these.
+I understand your concern about unbounded size for those strings. Since the
+statically allocated array is 4kB, one thing we could do is rely on a call
+to mmap() to handle allocations that require more space than available.
 
-As of now, this limitation is gone, the protocol allows to attach to
-multiple "sessions" as seen by the relay. In Babeltrace, we now
-automatically merge the sessions with the same hostname and
-session-name, so if the user creates a session with kernel and UST
-events, he will receive all the events when he attaches to the session
-(as would be expected).
-There might be clashes if two servers on the network have the same
-hostname and create the same session name, but for now the relay cannot
-distinguish these cases, so it is currently a known limitation. If you
-implement your own client, you can choose which session you want to
-attach to.
-Finally, notifications are sent when new streams are created (especially
-useful when using per-pid tracing), if you implement the protocol,
-please make sure you check the return flags when necessary.
+> An entirely different argument is that you are suggesting to rewrite an
+> entire library (albeit a small one), when we are trying to get a bugfix
+> into a release even after code freeze. But who am I to tell you that. ;-)
 
-So the new URL format for Babeltrace live is :
-$ babeltrace -i lttng-live net://host/<hostname>/<session-name>
+The last thing I want is to start playing hide-and-seek with bugs resulting
+from interactions between the lttng-ust malloc wrapper and libc. From my
+point of view, anything we can do to minimize the risk of interaction issues
+is a huge gain in maintainability, so I'd be OK with fixing things up all
+throughout this library, rather than going case-by-case for each bug
+encountered.
 
-If you have any questions, don't hesitate to ask here.
+Thoughts ?
 
-Have fun !
+Thanks,
 
-Julien
+Mathieu
+
+> 
+> Regards,
+> 		Stefan
+> 
+> --
+> Stefan Seefeld
+> CodeSourcery / Mentor Graphics
+> http://www.mentor.com/embedded-software/
+> 
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
