@@ -1,16 +1,22 @@
-From: kumar s <skumar.m226@gmail.com>
-Subject: Trace Streaming problem
-Date: Tue, 11 Feb 2014 13:24:15 +0530
-Message-ID: <CAO_ArvpaU2cGQ+9F=A+vHv9zNupXitvkSCr6RZh0LzTjLj9uMA__28550.8708250292$1392105305$gmane$org@mail.gmail.com>
+From: <David_Ke@compal.com>
+Subject: Re: great to read  your presention
+Date: Tue, 11 Feb 2014 16:54:23 +0800
+Message-ID: <E9A0D02B1D74EE4DBF9C09777345E107038FDA7C__29417.4114046202$1392110573$gmane$org@tpeexg06.compal.com>
+References: <E9A0D02B1D74EE4DBF9C09777345E1070382E970@tpeexg06.compal.com>
+	<52F5606C.3050709@voxpopuli.im>
+	<E9A0D02B1D74EE4DBF9C09777345E107038FD37E@tpeexg06.compal.com>
+	<52F8ED5C.5050106@versatic.net>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0704132346=="
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-la0-f41.google.com ([209.85.215.41])
+Received: from exmail2.compal.com ([203.67.170.10] helo=tpecef02.compal.com)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <skumar.m226@gmail.com>) id 1WD8Af-0007Rr-Nt
-	for lttng-dev@lists.lttng.org; Tue, 11 Feb 2014 02:54:23 -0500
-Received: by mail-la0-f41.google.com with SMTP id mc6so5711886lab.0
-	for <lttng-dev@lists.lttng.org>; Mon, 10 Feb 2014 23:54:15 -0800 (PST)
+	(envelope-from <prvs=111284965e=david_ke@compal.com>)
+	id 1WD970-0007va-5O
+	for lttng-dev@lists.lttng.org; Tue, 11 Feb 2014 03:54:41 -0500
+Content-class: urn:content-classes:message
+In-Reply-To: <52F8ED5C.5050106@versatic.net>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,111 +25,167 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: gbastien+lttng@versatic.net, alexmonthy@voxpopuli.im
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============0704132346==
-Content-Type: multipart/alternative; boundary=001a1137f67c38235c04f21cc3c5
+Hi Genevi=E8ve,
 
---001a1137f67c38235c04f21cc3c5
-Content-Type: text/plain; charset=ISO-8859-1
+Cool~
+Hope to see it soon.
 
-Hi,
+Thanks,
 
-I am trying to start the trace on MIPS board and dump it remotely on PC.
+David
 
-The steps i do
-On MIPS board:
-lttng create -U net://192.168.233.207 newsession
+-----Original Message-----
+From: Genevi=E8ve Bastien [mailto:gbastien+lttng@versatic.net] =
 
-lttng enable-event lttng_statedump_start -k
+Sent: Monday, February 10, 2014 11:17 PM
+To: Ke. David (TPE); alexmonthy@voxpopuli.im
+Cc: lttng-dev@lists.lttng.org
+Subject: Re: [lttng-dev] great to read your presention
 
-Error: Event lttng_statedump_start: Unable to connect to lttng-relayd
-(channel channel0, session news)
-Warning: Some command(s) went wrong
+Hi David,
 
-In lttng-sessiond -vvv log
+As Alex said, the CPU usage is still a work in progress. The data is
+available now, but we are working on a view to better show it. It should all
+be available in master in the coming weeks.
 
-[...]
-DEBUG3 [1918/2019]: Consumer socket created (fd: 30) and added to output
-(in consumer_create_socket() at consumer.c:300)
-DEBUG1 [1918/2019]: Setting relayd for session news (in cmd_setup_relayd()
-at cmd.c:722)
-DEBUG3 [1918/2019]: Relayd connect ... (in relayd_connect() at relayd.c:466)
-PERROR [1918/2019]: connect: Connection refused (in
-lttcomm_connect_inet_sock() at inet.c:253)
-Error: Unable to reach lttng-relayd
-DEBUG1 [1918/2019]: Sending response (size: 16, retcode: Unable to connect
-to lttng-relayd) (in thread_manage_clients() at main.c:3973)
-DEBUG1 [1918/2019]: Clean command context structure (in clean_command_ctx()
-at main.c:672)
-DEBUG1 [1918/2019]: Accepting client command ... (in
-thread_manage_clients() at main.c:3837)
+As for the wait chain, you may be interested in the critical path analysis =
+on
+LTTng kernel traces. This feature will make it slowly into master, but in t=
+he
+meantime, you can try it in our experimental version of the tracing RCP
+available here: =
 
-On the linux pc
-i have started lttng-relayd
+http://secretaire.dorsal.polymtl.ca/~gbastien/TracingRCP/
 
-lttng-relayd -vvv -C tcp://0.0.0.0:1234 -D tcp://0.0.0.0:5678 (as specified
-in doc folder of lttng-tools)
+You can get the critical path of a process by selecting it in the control
+flow view (with the critical path view open).
+
+Cheers,
+Genevi=E8ve
 
 
-Unfortunately i get error that lttng-relayd unable to connect. I also tried
-started lttng-relayd on mips board and running the same, still i get same
-error.
-
-Can someone explain steps for lttng trace streaming or how i can dump the
-trace live onto PC.
-
-Thank you
-Skumar
-
---001a1137f67c38235c04f21cc3c5
-Content-Type: text/html; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div><div><div><div><div><div><div><div><div><div>Hi,<br><=
-br></div>I am trying to start the trace on MIPS board and dump it remotely =
-on PC.<br><br></div>The steps i do <br></div>On MIPS board:<br>lttng create=
- -U net://<a href=3D"http://192.168.233.207">192.168.233.207</a> newsession=
-<br>
-<br>lttng enable-event lttng_statedump_start -k<br><br>Error: Event lttng_s=
-tatedump_start: Unable to connect to lttng-relayd (channel channel0, sessio=
-n news)<br>Warning: Some command(s) went wrong<br><br></div>In lttng-sessio=
-nd -vvv log <br>
-<br>[...]<br>DEBUG3 [1918/2019]: Consumer socket created (fd: 30) and added=
- to output (in consumer_create_socket() at consumer.c:300)<br>DEBUG1 [1918/=
-2019]: Setting relayd for session news (in cmd_setup_relayd() at cmd.c:722)=
-<br>
-DEBUG3 [1918/2019]: Relayd connect ... (in relayd_connect() at relayd.c:466=
-)<br>PERROR [1918/2019]: connect: Connection refused (in lttcomm_connect_in=
-et_sock() at inet.c:253)<br>Error: Unable to reach lttng-relayd<br>DEBUG1 [=
-1918/2019]: Sending response (size: 16, retcode: Unable to connect to lttng=
--relayd) (in thread_manage_clients() at main.c:3973)<br>
-DEBUG1 [1918/2019]: Clean command context structure (in clean_command_ctx()=
- at main.c:672)<br>DEBUG1 [1918/2019]: Accepting client command ... (in thr=
-ead_manage_clients() at main.c:3837)<br><br></div>On the linux pc<br></div>
-i have started lttng-relayd<br><br></div>lttng-relayd -vvv -C tcp://<a href=
-=3D"http://0.0.0.0:1234">0.0.0.0:1234</a> -D tcp://<a href=3D"http://0.0.0.=
-0:5678">0.0.0.0:5678</a> (as specified in doc folder of lttng-tools)<br><br=
+On 02/09/2014 10:49 PM, David_Ke@compal.com wrote:
+> Thanks, Alexandre,
 >
-<br></div>Unfortunately i get error that lttng-relayd unable to connect. I =
-also tried started lttng-relayd on mips board and running the same, still i=
- get same error.<br><br></div>Can someone explain steps for lttng trace str=
-eaming or how i can dump the trace live onto PC.<br>
-<br></div>Thank you<br>Skumar<br></div>
+> Good to hear that.
+> Hope to get that soon.
+> By the way, some feature to suggest for the utility~ The control flow =
 
---001a1137f67c38235c04f21cc3c5--
+> is aim to analyze the "long wait time" issue for that process, IMHO, =
 
+> If it can display the "wait chain" as well as the call stack for each =
 
---===============0704132346==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+> scheduled thread ,it will be awesome...
+>
+> Thanks,
+>
+> David
+>
+> ----Original Message-----
+> From: Alexandre Montplaisir [mailto:alexmonthy@voxpopuli.im]
+> Sent: Saturday, February 08, 2014 6:39 AM
+> To: Ke. David (TPE)
+> Cc: lttng-dev@lists.lttng.org; Genevieve Bastien
+> Subject: Re: [lttng-dev] great to read your presention
+>
+> Hi,
+>
+> The CPU usage view is still a work-in-progress, but it should be ready =
 
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> in a few weeks. We have a bit of infrastructure work to do first.
+>
+> CC'ing Genevieve, she can probably give us more details about its state.
+>
+> Cheers,
+> Alexandre
+>
+>
+>
+> On 14-02-04 08:55 PM, David_Ke@compal.com wrote:
+>> Hi Yannick,
+>>
+>>   =
 
---===============0704132346==--
+>>
+>> Great to read your deck and it is really a good presentation, from =
+
+>> that ,I know more about awesome features of Lttng.
+>>
+>>   =
+
+>>
+>> I was a SR. DEV of MSFT Windows team and was responsible for Xperf =
+
+>> and ADK portion in the past, Lttng did catch my eye much more than =
+
+>> other utilities (for example perf and oprefile...etc.)
+>>
+>>   =
+
+>>
+>> I download Lttng sample
+>> trace(http://lttng.org/files/samples/sample-ctf-trace-20120412.tar.bz
+>> 2
+>> )as
+>> well as the RCP version trace viewer( =
+
+>> http://secretaire.dorsal.polymtl.ca/~alexmont/tracing-rcp/)but can't =
+
+>> find the CPU usage tab in the viewer.
+>>
+>>   =
+
+>>
+>> Is the feature still under development? Where can I got it and have a tr=
+y?
+>>
+>>   =
+
+>>
+>> Thanks,
+>>
+>>   =
+
+>>
+>> David Ke
+>>
+>>
+>>
+>> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>> =3D =
+
+>> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>> =3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D This me=
+ssage may contain information which is =
+
+>> private, privileged or confidential of Compal Electronics, Inc.  If =
+
+>> you are
+> not the intended recipient of this message, please notify the sender =
+
+> and destroy/delete the message. Any review, retransmission, =
+
+> dissemination or other use of, or taking of any action in reliance =
+
+> upon this information, by persons or entities other than the intended
+recipient is prohibited.
+>> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>> =3D =
+
+>> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>> =3D
+>> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>>
+>>
