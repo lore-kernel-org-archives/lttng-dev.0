@@ -1,17 +1,17 @@
 From: David Goulet <dgoulet@efficios.com>
-Subject: Re: [PATCH lttng-tools] Cleanup inconsistent use of
- spaces and tabs in README
-Date: Tue, 11 Feb 2014 16:17:07 -0500
-Message-ID: <20140211211707.GA9564__20857.2527081289$1392153497$gmane$org@thessa>
-References: <1391795331-866-1-git-send-email-christian.babeux@efficios.com>
+Subject: Re: [PATCH lttng-tools] Add missing optional dependency
+ to babeltrace in README
+Date: Tue, 11 Feb 2014 16:17:18 -0500
+Message-ID: <20140211211718.GB9564__47552.30949163$1392153602$gmane$org@thessa>
+References: <1391795018-691-1-git-send-email-christian.babeux@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1800554531=="
+Content-Type: multipart/mixed; boundary="===============1123866082=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from smtp.ini-tech.com ([144.76.53.219])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1WDKhh-0005YU-4n
-	for lttng-dev@lists.lttng.org; Tue, 11 Feb 2014 16:17:23 -0500
-In-Reply-To: <1391795331-866-1-git-send-email-christian.babeux@efficios.com>
+	(envelope-from <dgoulet@efficios.com>) id 1WDKhr-0005YV-7x
+	for lttng-dev@lists.lttng.org; Tue, 11 Feb 2014 16:17:33 -0500
+In-Reply-To: <1391795018-691-1-git-send-email-christian.babeux@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -25,159 +25,67 @@ Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
 
---===============1800554531==
+--===============1123866082==
 Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="J/dobhs11T7y2rNN"
+	protocol="application/pgp-signature"; boundary="eAbsdosE1cNLO4uF"
 Content-Disposition: inline
 
 
---J/dobhs11T7y2rNN
+--eAbsdosE1cNLO4uF
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Merged
 
-On 07 Feb (12:48:51), Christian Babeux wrote:
+On 07 Feb (12:43:38), Christian Babeux wrote:
 > Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
 > ---
->  README | 58 +++++++++++++++++++++++++++++-----------------------------
->  1 file changed, 29 insertions(+), 29 deletions(-)
+>  README | 5 +++++
+>  1 file changed, 5 insertions(+)
 >=20
 > diff --git a/README b/README
-> index 4d70318..b217759 100644
+> index 3b5ae2e..4d70318 100644
 > --- a/README
 > +++ b/README
-> @@ -11,11 +11,11 @@ Latest development can be found at:
+> @@ -36,6 +36,11 @@ REQUIREMENTS:
 > =20
->  REQUIREMENTS:
+>        * Debian/Ubuntu package: uuid-dev
 > =20
-> -	- Linux kernel >=3D 2.6.27
-> -	  For epoll() support, at least this version is needed. However, poll()=
- is
-> -	  also supported by running "./configure --disable-epoll". Using that, =
-the
-> -	  kernel version can probably be older but we can't provide any guarant=
-ee.
-> -	  Please let us know if you are able to go lower without any problems.
-> +    - Linux kernel >=3D 2.6.27
-> +      For epoll() support, at least this version is needed. However, pol=
-l() is
-> +      also supported by running "./configure --disable-epoll". Using tha=
-t, the
-> +      kernel version can probably be older but we can't provide any guar=
-antee.
-> +      Please let us know if you are able to go lower without any problem=
-s.
-> =20
->      - liburcu
->        Userspace RCU library, by Mathieu Desnoyers and Paul E. McKenney
-> @@ -61,8 +61,8 @@ REQUIREMENTS:
-> =20
->      - For kernel tracing: modprobe
-> =20
-> -	- bash
-> -	  Needed for running "make check".
-> +    - bash
-> +      Needed for running "make check".
-> =20
->  For developers using the git tree:
-> =20
-> @@ -128,8 +128,8 @@ PACKAGE CONTENTS:
->        The LTTng tracing control library.
-> =20
->      - libsessiond-comm (internal)
-> -	  The lttng-sessiond communication library. In order to talk with
-> -	  lttng-sessiond, this library must be used.
-> +      The lttng-sessiond communication library. In order to talk with
-> +      lttng-sessiond, this library must be used.
-> =20
->      - libkernel-ctl (internal)
->        Kernel tracer control and ioctl definitions.
-> @@ -137,26 +137,26 @@ PACKAGE CONTENTS:
->      - libconsumer (internal)
->        Library for Kernel and (optionally) UST trace consumer.
-> =20
-> -	- libkernel-consumer (internal)
-> -	  Library for Kernel consumer control
-> +    - libkernel-consumer (internal)
-> +      Library for Kernel consumer control
-> =20
-> -	- libust-consumer (internal)
-> -	  Library for UST consumer control
-> +    - libust-consumer (internal)
-> +      Library for UST consumer control
-> =20
-> -	- libhashtable (internal)
-> -	  Library wrapper over URCU hashtables.
-> +    - libhashtable (internal)
-> +      Library wrapper over URCU hashtables.
-> =20
-> -	- libcommon (internal)
-> -	  Contains multiple useful function call used by the whole tree.
-> +    - libcommon (internal)
-> +      Contains multiple useful function call used by the whole tree.
-> =20
-> -	- libcompat (internal)
-> -	  Compatibility library mostly for FreeBSD and Linux.
-> -=09
-> -	- librelayd (internal)
-> -	  Library for all relayd interactions over the network.
-> +    - libcompat (internal)
-> +      Compatibility library mostly for FreeBSD and Linux.
-> =20
-> -	- lttng-relayd
-> -	  The relay daemon used for network streaming
-> +    - librelayd (internal)
-> +      Library for all relayd interactions over the network.
+> +    - Babeltrace (optional)
+> +      Trace viewer. Enable the use of "lttng view" command
 > +
-> +    - lttng-relayd
-> +      The relay daemon used for network streaming
+> +      * Debian/Ubuntu package: babeltrace
+> +
+>      - Perl (optional)
+>        Needed for make check and tests.
 > =20
->      - lttng-consumerd
->        The consumer daemon which uses libconsumer.
-> @@ -173,9 +173,9 @@ PACKAGE CONTENTS:
->      - tests
->        Various test programs.
-> =20
-> -	- doc
-> -	  Various documentations and quickstart guide.
-> +    - doc
-> +      Various documentations and quickstart guide.
-> =20
-> -	- extras
-> -	  Contains extra data such as bash completion file. Python bindings for
-> -	  liblttng-ctl are also available there.
-> +    - extras
-> +      Contains extra data such as bash completion file. Python bindings =
-for
-> +      liblttng-ctl are also available there.
 > --=20
 > 1.8.5.2
 >=20
 
---J/dobhs11T7y2rNN
+--eAbsdosE1cNLO4uF
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: Digital signature
 
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1
 
-iQF8BAEBAgBmBQJS+pNTXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
+iQF8BAEBAgBmBQJS+pNeXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
 ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
-MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02qWoH/0TstN5ov781LFO333gNny01
-3KuSqTRZYpGzX1O+nMlIR0XqloE5R4Rk05gPTojB5EHpIHaWhtbFtBkYAFQ51weC
-Nw2+Y6DhR3D8gBaNsthp7bpA8s2vHGi0t29IOtYHV0WKJ0TtEJbs3jircgtcLufS
-z449YMFQ9MnSyhGArW5u0QTuEiKje4/yFXZBs97u1PecJLKkqARCQF8KkfNZxUQE
-rpX1G+iYLuZKa3pxvxv+GweRxi4CZ1qpfbAFooRoQQiy9+v02PakICyzfOBq/+7D
-O1C1Lh6npQGkC4qpu3Ka3/XD4XFXOHgLwbVBNYi4VmcuLjhrtyqaomK3LwQ2dmU=
-=FVva
+MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02GkEH+gNtv6mK8ytW1YL27XwSyZAt
+B2WJMX5e/ro3RRfVirLKB0HgVc/HhmZgwITqsY1jxcLgowZf9k96mrBuId1X7h5l
+p/G42vWCLtYSXcv5KwoH6XlJBCOlNEK3JHYJPCX76h6+CG93u2JMZr7wjQ8UzFrC
+9n2pukVh/j7Ou9O5H8TPtaELrBsumAttGjhapHx119BhcRaeIwmFaf50bA9D59oT
+XieBWX4/VCjRc8RZNMa5wDRPqJJwEaLBOIOCJ/nlZZZK2D17WnhSLhgjAFkVHVNW
+O6CtOBRFbSi4rg+GbIe25PZt6j1S8LTbpK98Uev6rr6GJhprHrLkA2Nj3uqsfJk=
+=qmsl
 -----END PGP SIGNATURE-----
 
---J/dobhs11T7y2rNN--
+--eAbsdosE1cNLO4uF--
 
 
---===============1800554531==
+--===============1123866082==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -188,4 +96,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============1800554531==--
+--===============1123866082==--
