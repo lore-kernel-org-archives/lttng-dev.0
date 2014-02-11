@@ -1,22 +1,19 @@
 From: =?UTF-8?q?Genevi=C3=A8ve=20Bastien?= <gbastien+lttng@versatic.net>
-Subject: LTTng-tools: Add support of global types and CTF
-	enumerations
-Date: Tue, 11 Feb 2014 16:40:47 -0500
-Message-ID: <1392154852-31268-1-git-send-email-gbastien+lttng__14692.0613515706$1392155579$gmane$org@versatic.net>
+Subject: [Patch LTTng-tools v2 1/5] Update data structures to
+	support CTF global type declarations
+Date: Tue, 11 Feb 2014 16:40:48 -0500
+Message-ID: <1392154852-31268-2-git-send-email-gbastien+lttng__29002.2435052835$1392155674$gmane$org@versatic.net>
 References: <1390594045-7556-1-git-send-email-gbastien+lttng@versatic.net>
+	<1392154852-31268-1-git-send-email-gbastien+lttng@versatic.net>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from smtp.polymtl.ca ([132.207.4.11])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <gbastien+lttng@versatic.net>) id 1WDL4m-0005qJ-5g
-	for lttng-dev@lists.lttng.org; Tue, 11 Feb 2014 16:41:13 -0500
-Received: from wilbrod.dorsal.polymtl.ca ([132.207.72.9])
-	by smtp.polymtl.ca (8.14.3/8.14.3) with ESMTP id s1BLf6oJ023481
-	(version=TLSv1/SSLv3 cipher=AES128-SHA bits=128 verify=NOT)
-	for <lttng-dev@lists.lttng.org>; Tue, 11 Feb 2014 16:41:07 -0500
-In-Reply-To: <1390594045-7556-1-git-send-email-gbastien+lttng@versatic.net>
+	(envelope-from <gbastien+lttng@versatic.net>) id 1WDL4t-0005qS-Bg
+	for lttng-dev@lists.lttng.org; Tue, 11 Feb 2014 16:41:21 -0500
+In-Reply-To: <1392154852-31268-1-git-send-email-gbastien+lttng@versatic.net>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -28,5 +25,43 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-I made the corrections to the patches and added a regression test for events
-with tracepoints using global type declarations.
+VGhlIHN0cnVjdHVyZXMgbWF0Y2ggdGhlIExUVG5nLVVTVCBzdHJ1Y3R1cmUgZm9yIHN1cHBvcnRp
+bmcgZ2xvYmFsIHR5cGUKZGVsY2FyYXRpb25zIGluIGdlbmVyYWwgYW5kIENURiBlbnVtZXJhdGlv
+bnMgaW4gcGFydGljdWxhci4KClNpZ25lZC1vZmYtYnk6IEdlbmV2acOodmUgQmFzdGllbiA8Z2Jh
+c3RpZW4rbHR0bmdAdmVyc2F0aWMubmV0PgotLS0KIHNyYy9iaW4vbHR0bmctc2Vzc2lvbmQvbHR0
+bmctdXN0LWN0bC5oIHwgMzYgKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrLQogMSBm
+aWxlIGNoYW5nZWQsIDM1IGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkKCmRpZmYgLS1naXQg
+YS9zcmMvYmluL2x0dG5nLXNlc3Npb25kL2x0dG5nLXVzdC1jdGwuaCBiL3NyYy9iaW4vbHR0bmct
+c2Vzc2lvbmQvbHR0bmctdXN0LWN0bC5oCmluZGV4IDdmNTliODYuLjQxZWQ2YzUgMTAwNjQ0Ci0t
+LSBhL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvbHR0bmctdXN0LWN0bC5oCisrKyBiL3NyYy9iaW4v
+bHR0bmctc2Vzc2lvbmQvbHR0bmctdXN0LWN0bC5oCkBAIC0yNzQsMTMgKzI3NCwyMyBAQCBzdHJ1
+Y3QgdXN0Y3RsX2Zsb2F0X3R5cGUgewogCWNoYXIgcGFkZGluZ1tVU1RDVExfVVNUX0ZMT0FUX1RZ
+UEVfUEFERElOR107CiB9IExUVE5HX1BBQ0tFRDsKIAotI2RlZmluZSBVU1RDVExfVVNUX0JBU0lD
+X1RZUEVfUEFERElORwkyOTYKKyNkZWZpbmUgVVNUQ1RMX1VTVF9FTlVNX0VOVFJZX1BBRERJTkcJ
+Mjk2CitzdHJ1Y3QgdXN0Y3RsX2VudW1fZW50cnkgeworCXVuc2lnbmVkIGxvbmcgbG9uZyBzdGFy
+dCwgZW5kOwkvKiBzdGFydCBhbmQgZW5kIGFyZSBpbmNsdXNpdmUgKi8KKwljaGFyIHN0cmluZ1tM
+VFROR19VU1RfU1lNX05BTUVfTEVOXTsKKwljaGFyIHBhZGRpbmdbVVNUQ1RMX1VTVF9FTlVNX0VO
+VFJZX1BBRERJTkddOworfTsKKworI2RlZmluZSBVU1RDVExfVVNUX0JBU0lDX1RZUEVfUEFERElO
+Rwk0MAogdW5pb24gX3VzdGN0bF9iYXNpY190eXBlIHsKIAlzdHJ1Y3QgdXN0Y3RsX2ludGVnZXJf
+dHlwZSBpbnRlZ2VyOwogCXN0cnVjdCB7CiAJCWVudW0gdXN0Y3RsX3N0cmluZ19lbmNvZGluZ3Mg
+ZW5jb2Rpbmc7CiAJfSBzdHJpbmc7CiAJc3RydWN0IHVzdGN0bF9mbG9hdF90eXBlIF9mbG9hdDsK
+KwlzdHJ1Y3QgeworCQljaGFyIG5hbWVbTFRUTkdfVVNUX1NZTV9OQU1FX0xFTl07CisJfSBlbnVt
+ZXJhdGlvbjsKIAljaGFyIHBhZGRpbmdbVVNUQ1RMX1VTVF9CQVNJQ19UWVBFX1BBRERJTkddOwog
+fSBMVFROR19QQUNLRUQ7CiAKQEAgLTMwOCw2ICszMTgsMzAgQEAgc3RydWN0IHVzdGN0bF90eXBl
+IHsKIAl9IHU7CiB9IExUVE5HX1BBQ0tFRDsKIAorI2RlZmluZSBVU1RDVExfVVNUX0VOVU1fVFlQ
+RV9QQURESU5HCTI5Ngorc3RydWN0IHVzdGN0bF9lbnVtIHsKKwljaGFyIG5hbWVbTFRUTkdfVVNU
+X1NZTV9OQU1FX0xFTl07CisJc3RydWN0IHVzdGN0bF9pbnRlZ2VyX3R5cGUgY29udGFpbmVyX3R5
+cGU7CisJc3RydWN0IHVzdGN0bF9lbnVtX2VudHJ5ICplbnRyaWVzOworCXVuc2lnbmVkIGludCBs
+ZW47CisJY2hhciBwYWRkaW5nW1VTVENUTF9VU1RfRU5VTV9UWVBFX1BBRERJTkddOworfSBMVFRO
+R19QQUNLRUQ7CisKKy8qIENURiBjYXRlZ29yaWVzIGZvciBnbG9iYWwgdHlwZXMgZGVjbGFyZWQg
+b3V0c2lkZSBldmVudCBkZXNjcmlwdGlvbnMgKi8KK2VudW0gdXN0Y3RsX2dsb2JhbF90eXBlX2Nh
+dGVnb3JpZXMgeworCXVzdGN0bF9tdHlwZV9lbnVtLAorCU5SX1VTVENUTF9HTE9CQUxfVFlQRVMs
+Cit9OworCisjZGVmaW5lIFVTVENUTF9VU1RfR0xPQkFMX1RZUEVfREVDTF9QQURESU5HIDY0MAor
+c3RydWN0IHVzdGN0bF9nbG9iYWxfdHlwZV9kZWNsIHsKKwl1aW50MzJfdCBtdHlwZTsKKwl1bmlv
+biB7CisJCXN0cnVjdCB1c3RjdGxfZW51bSBjdGZfZW51bTsKKwkJY2hhciBwYWRkaW5nW1VTVENU
+TF9VU1RfR0xPQkFMX1RZUEVfREVDTF9QQURESU5HXTsKKwl9IHU7Cit9OworCiAjZGVmaW5lIFVT
+VENUTF9VU1RfRklFTERfUEFERElORwkyOAogc3RydWN0IHVzdGN0bF9maWVsZCB7CiAJY2hhciBu
+YW1lW0xUVE5HX1VTVF9TWU1fTkFNRV9MRU5dOwotLSAKMS44LjUuNAoKCl9fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QK
+bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4v
+bWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
