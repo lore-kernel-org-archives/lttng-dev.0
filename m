@@ -1,17 +1,23 @@
-From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Subject: How do you write an argument-less or payload-less
-	kernel tracepoint?
-Date: Wed, 12 Feb 2014 21:54:55 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD267E73BC__29433.8077809245$1392242170$gmane$org@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: RFC: Fix crash in dlerror()
+Date: Wed, 12 Feb 2014 21:59:09 +0000 (UTC)
+Message-ID: <1009657763.24078.1392242349218.JavaMail.zimbra__35589.4191227437$1392242410$gmane$org@efficios.com>
+References: <52F55511.2080309@mentor.com> <52F66118.5010003@mentor.com>
+	<905376946.21151.1391898148330.JavaMail.zimbra@efficios.com>
+	<52F9746F.5070302@mentor.com>
+	<1494953964.23233.1392151900002.JavaMail.zimbra@efficios.com>
+	<52FA8E5C.40203@mentor.com>
+	<975853026.23546.1392176395828.JavaMail.zimbra@efficios.com>
+	<2141704629.23782.1392215703555.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
+Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1WDhlm-0000gW-5P
-	for lttng-dev@lists.lttng.org; Wed, 12 Feb 2014 16:55:07 -0500
-Content-Language: fr-FR
+	(envelope-from <compudj@efficios.com>) id 1WDhpp-0000kh-0t
+	for lttng-dev@lists.lttng.org; Wed, 12 Feb 2014 16:59:18 -0500
+In-Reply-To: <2141704629.23782.1392215703555.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,61 +26,85 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Stefan Seefeld <stefan_seefeld@mentor.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-   How do you write an argument-less kernel tracepoint?  I tried:
+Patch merged into master as commit:
 
-TRACE_EVENT(hello_nil,
-   TP_PROTO(),
-   TP_ARGS(),
-...
-);
+commit 2594a5b4f2b60642973b4941ee506be41786c4d3
+Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Date:   Sat Feb 8 17:12:16 2014 -0500
 
-and
+    Fix: malloc libc instrumentation wrapper
+    
+    calloc and realloc wrt dlsym and dlerror can trigger segmentation
+    faults. Ensure that we fully populate the allocator symbols all at once,
+    and also ensure that we use the static allocator while doing the dlsym
+    lookups.
+    
+    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 
-TRACE_EVENT_NOARGS(hello_nil,
-// TP_PROTO(int x),
-// TP_ARGS(x),
-...
-);
+Thanks!
 
-   Without success.
+Mathieu
 
-   A payload-less tracepoint is possible, but causes a couple of warnings:
+----- Original Message -----
+> From: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+> To: "Stefan Seefeld" <stefan_seefeld@mentor.com>
+> Cc: lttng-dev@lists.lttng.org
+> Sent: Wednesday, February 12, 2014 9:35:03 AM
+> Subject: Re: [lttng-dev] RFC: Fix crash in dlerror()
+> 
+> Updated patch, now ensuring that the wrapper is initialized before
+> UST starts other threads. It now has a constructor function that will
+> take care of initializing the wrapper before other program threads are
+> started anyhow.
+> 
+> I also added a missing lookup check (calloc pointer) within realloc
+> (branch handling realloc of a statically allocated pointer).
+> 
+> Thanks,
+> 
+> Mathieu
+> 
+> ----- Original Message -----
+> > From: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+> > To: "Stefan Seefeld" <stefan_seefeld@mentor.com>
+> > Cc: lttng-dev@lists.lttng.org
+> > Sent: Tuesday, February 11, 2014 10:39:55 PM
+> > Subject: Re: [lttng-dev] RFC: Fix crash in dlerror()
+> > 
+> > Updated patch, now with tracepoints in the static allocator.
+> > 
+> > Review welcome,
+> > 
+> > Thanks,
+> > 
+> > Mathieu
+> > --
+> > Mathieu Desnoyers
+> > EfficiOS Inc.
+> > http://www.efficios.com
+> > 
+> > _______________________________________________
+> > lttng-dev mailing list
+> > lttng-dev@lists.lttng.org
+> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> > 
+> 
+> --
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> http://www.efficios.com
+> 
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> 
 
-make[1]: entrant dans le r=E9pertoire =AB /usr/src/linux-headers-3.2.0-53-v=
-irtual =BB
-  CC [M]  /home/daniel/Documents/mymodule/hello.o
-In file included from include/trace/ftrace.h:356:0,
-                 from include/trace/define_trace.h:86,
-                 from include/trace/events/hello.h:151,
-                 from /home/daniel/Documents/mymodule/hello.c:5:
-include/trace/events/hello.h: In function 'ftrace_define_fields_hello_nil':
-include/trace/events/hello.h:130:1: attention : unused variable 'field' [-W=
-unused-variable]
-include/trace/events/hello.h:130:1: attention : 'ret' is used uninitialized=
- in this function [-Wuninitialized]
-  Building modules, stage 2.
-  MODPOST 1 modules
-  LD [M]  /home/daniel/Documents/mymodule/hello.ko
-make[1]: quittant le r=E9pertoire =AB /usr/src/linux-headers-3.2.0-53-virtu=
-al =BB
-
-   Is it possible to get rid of the warnings?
-
-Daniel U. Thibault
-Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
-ntermeasures (SPC)
-Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
-Cyber Security (MCCS)
-R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
- Canada - Valcartier (DRDC Valcartier)
-2459 route de la Bravoure
-Qu=E9bec QC=A0 G3J 1X5
-CANADA
-Vox=A0: (418) 844-4000 x4245
-Fax=A0: (418) 844-4538
-NAC=A0: 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-Gouvernement du Canada=A0| Government of Canada
-<http://www.valcartier.drdc-rddc.gc.ca/>
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
