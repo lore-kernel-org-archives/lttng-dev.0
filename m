@@ -1,23 +1,19 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: RFC: Fix crash in dlerror()
-Date: Wed, 12 Feb 2014 03:39:55 +0000 (UTC)
-Message-ID: <975853026.23546.1392176395828.JavaMail.zimbra__35476.0217633613$1392176446$gmane$org@efficios.com>
-References: <52F55511.2080309@mentor.com>
-	<1380151240.21051.1391875592403.JavaMail.zimbra@efficios.com>
-	<52F66118.5010003@mentor.com>
-	<905376946.21151.1391898148330.JavaMail.zimbra@efficios.com>
-	<52F9746F.5070302@mentor.com>
-	<1494953964.23233.1392151900002.JavaMail.zimbra@efficios.com>
-	<52FA8E5C.40203@mentor.com>
+From: kumar s <skumar.m226@gmail.com>
+Subject: Re: Trace Streaming problem
+Date: Wed, 12 Feb 2014 17:25:36 +0530
+Message-ID: <CAO_Arvrc=0xpP+Uc4p2pqq251Akh_uHFb1Ww2eJHVbYZewrK3w__37993.6847639785$1392206205$gmane$org@mail.gmail.com>
+References: <CAO_ArvpaU2cGQ+9F=A+vHv9zNupXitvkSCr6RZh0LzTjLj9uMA@mail.gmail.com>
+	<20140211145713.GA7091@thessa>
 Mime-Version: 1.0
-Content-Type: multipart/mixed;
-	boundary="----=_Part_23544_1563704511.1392176395824"
+Content-Type: multipart/mixed; boundary="===============1651233829=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-la0-f50.google.com ([209.85.215.50])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1WDQg3-0000Jk-KM
-	for lttng-dev@lists.lttng.org; Tue, 11 Feb 2014 22:40:01 -0500
-In-Reply-To: <52FA8E5C.40203@mentor.com>
+	(envelope-from <skumar.m226@gmail.com>) id 1WDYPm-0004OW-Mq
+	for lttng-dev@lists.lttng.org; Wed, 12 Feb 2014 06:55:44 -0500
+Received: by mail-la0-f50.google.com with SMTP id ec20so6920817lab.37
+	for <lttng-dev@lists.lttng.org>; Wed, 12 Feb 2014 03:55:36 -0800 (PST)
+In-Reply-To: <20140211145713.GA7091@thessa>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -26,205 +22,237 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Stefan Seefeld <stefan_seefeld@mentor.com>
-Cc: lttng-dev@lists.lttng.org
+To: David Goulet <dgoulet@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-------=_Part_23544_1563704511.1392176395824
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
+--===============1651233829==
+Content-Type: multipart/alternative; boundary=089e011836be3465c504f23440b4
 
-Updated patch, now with tracepoints in the static allocator.
+--089e011836be3465c504f23440b4
+Content-Type: text/plain; charset=ISO-8859-1
 
-Review welcome,
+Hello,
 
-Thanks,
+Thanks a lot, It worked, i am able stream and save the trace on the remote
+PC.
 
-Mathieu
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+However out of curiosity i am also trying to do live tracing,
 
-------=_Part_23544_1563704511.1392176395824
-Content-Type: text/x-patch; name=fix-lttng-ust-malloc.patch
-Content-Disposition: attachment; filename=fix-lttng-ust-malloc.patch
-Content-Transfer-Encoding: base64
+On Mips Board
 
-ZGlmZiAtLWdpdCBhL2xpYmx0dG5nLXVzdC1saWJjLXdyYXBwZXIvbHR0bmctdXN0LW1hbGxvYy5j
-IGIvbGlibHR0bmctdXN0LWxpYmMtd3JhcHBlci9sdHRuZy11c3QtbWFsbG9jLmMKaW5kZXggMzNl
-ZDE4Yi4uYjg4OTJlNyAxMDA2NDQKLS0tIGEvbGlibHR0bmctdXN0LWxpYmMtd3JhcHBlci9sdHRu
-Zy11c3QtbWFsbG9jLmMKKysrIGIvbGlibHR0bmctdXN0LWxpYmMtd3JhcHBlci9sdHRuZy11c3Qt
-bWFsbG9jLmMKQEAgLTIxLDggKzIxLDExIEBACiAjaW5jbHVkZSA8ZGxmY24uaD4KICNpbmNsdWRl
-IDxzeXMvdHlwZXMuaD4KICNpbmNsdWRlIDxzdGRpby5oPgorI2luY2x1ZGUgPGFzc2VydC5oPgog
-I2luY2x1ZGUgPHVyY3Uvc3lzdGVtLmg+CiAjaW5jbHVkZSA8dXJjdS91YXRvbWljLmg+CisjaW5j
-bHVkZSA8dXJjdS9jb21waWxlci5oPgorI2luY2x1ZGUgPGx0dG5nL2FsaWduLmg+CiAKICNkZWZp
-bmUgVFJBQ0VQT0lOVF9ERUZJTkUKICNkZWZpbmUgVFJBQ0VQT0lOVF9DUkVBVEVfUFJPQkVTCkBA
-IC0zMiw5ICszNSwzMCBAQAogc3RhdGljIGNoYXIgc3RhdGljX2NhbGxvY19idWZbU1RBVElDX0NB
-TExPQ19MRU5dOwogc3RhdGljIHVuc2lnbmVkIGxvbmcgc3RhdGljX2NhbGxvY19idWZfb2Zmc2V0
-OwogCi1zdGF0aWMgdm9pZCAqc3RhdGljX2NhbGxvYyhzaXplX3Qgbm1lbWIsIHNpemVfdCBzaXpl
-KQorc3RydWN0IGFsbG9jX2Z1bmN0aW9ucyB7CisJdm9pZCAqKCpjYWxsb2MpKHNpemVfdCBubWVt
-Yiwgc2l6ZV90IHNpemUpOworCXZvaWQgKigqbWFsbG9jKShzaXplX3Qgc2l6ZSk7CisJdm9pZCAo
-KmZyZWUpKHZvaWQgKnB0cik7CisJdm9pZCAqKCpyZWFsbG9jKSh2b2lkICpwdHIsIHNpemVfdCBz
-aXplKTsKKwl2b2lkICooKm1lbWFsaWduKShzaXplX3QgYWxpZ25tZW50LCBzaXplX3Qgc2l6ZSk7
-CisJaW50ICgqcG9zaXhfbWVtYWxpZ24pKHZvaWQgKiptZW1wdHIsIHNpemVfdCBhbGlnbm1lbnQs
-IHNpemVfdCBzaXplKTsKK307CisKK3N0YXRpYworc3RydWN0IGFsbG9jX2Z1bmN0aW9ucyBjdXJf
-YWxsb2M7CisKKy8qCisgKiBTdGF0aWMgYWxsb2NhdG9yIHRvIHVzZSB3aGVuIGluaXRpYWxseSBl
-eGVjdXRpbmcgZGxzeW0oKS4gSXQga2VlcHMgYQorICogc2l6ZV90IHZhbHVlIG9mIGVhY2ggb2Jq
-ZWN0IHNpemUgcHJpb3IgdG8gdGhlIG9iamVjdC4KKyAqLworc3RhdGljCit2b2lkICpzdGF0aWNf
-Y2FsbG9jX2FsaWduZWQoc2l6ZV90IG5tZW1iLCBzaXplX3Qgc2l6ZSwgc2l6ZV90IGFsaWdubWVu
-dCkKIHsKLQl1bnNpZ25lZCBsb25nIHByZXZfb2Zmc2V0LCBuZXdfb2Zmc2V0LCByZXNfb2Zmc2V0
-OworCXNpemVfdCBwcmV2X29mZnNldCwgbmV3X29mZnNldCwgcmVzX29mZnNldCwgYWxpZ25lZF9v
-ZmZzZXQ7CisKKwlpZiAobm1lbWIgKiBzaXplID09IDApIHsKKwkJcmV0dXJuIE5VTEw7CisJfQog
-CiAJLyoKIAkgKiBQcm90ZWN0IHN0YXRpY19jYWxsb2NfYnVmX29mZnNldCBmcm9tIGNvbmN1cnJl
-bnQgdXBkYXRlcwpAQCAtNDUsMTI1ICs2OSwyNjMgQEAgc3RhdGljIHZvaWQgKnN0YXRpY19jYWxs
-b2Moc2l6ZV90IG5tZW1iLCBzaXplX3Qgc2l6ZSkKIAlyZXNfb2Zmc2V0ID0gQ01NX0xPQURfU0hB
-UkVEKHN0YXRpY19jYWxsb2NfYnVmX29mZnNldCk7CiAJZG8gewogCQlwcmV2X29mZnNldCA9IHJl
-c19vZmZzZXQ7Ci0JCWlmIChubWVtYiAqIHNpemUgPiBzaXplb2Yoc3RhdGljX2NhbGxvY19idWYp
-IC0gcHJldl9vZmZzZXQpIHsKLQkJCXJldHVybiBOVUxMOworCQlhbGlnbmVkX29mZnNldCA9IEFM
-SUdOKHByZXZfb2Zmc2V0ICsgc2l6ZW9mKHNpemVfdCksIGFsaWdubWVudCk7CisJCW5ld19vZmZz
-ZXQgPSBhbGlnbmVkX29mZnNldCArIG5tZW1iICogc2l6ZTsKKwkJaWYgKG5ld19vZmZzZXQgPiBz
-aXplb2Yoc3RhdGljX2NhbGxvY19idWYpKSB7CisJCQlhYm9ydCgpOwogCQl9Ci0JCW5ld19vZmZz
-ZXQgPSBwcmV2X29mZnNldCArIG5tZW1iICogc2l6ZTsKIAl9IHdoaWxlICgocmVzX29mZnNldCA9
-IHVhdG9taWNfY21weGNoZygmc3RhdGljX2NhbGxvY19idWZfb2Zmc2V0LAogCQkJcHJldl9vZmZz
-ZXQsIG5ld19vZmZzZXQpKSAhPSBwcmV2X29mZnNldCk7Ci0JcmV0dXJuICZzdGF0aWNfY2FsbG9j
-X2J1ZltwcmV2X29mZnNldF07CisJKihzaXplX3QgKikgJnN0YXRpY19jYWxsb2NfYnVmW2FsaWdu
-ZWRfb2Zmc2V0IC0gc2l6ZW9mKHNpemVfdCldID0gc2l6ZTsKKwlyZXR1cm4gJnN0YXRpY19jYWxs
-b2NfYnVmW2FsaWduZWRfb2Zmc2V0XTsKK30KKworc3RhdGljCit2b2lkICpzdGF0aWNfY2FsbG9j
-KHNpemVfdCBubWVtYiwgc2l6ZV90IHNpemUpCit7CisJdm9pZCAqcmV0dmFsOworCisJcmV0dmFs
-ID0gc3RhdGljX2NhbGxvY19hbGlnbmVkKG5tZW1iLCBzaXplLCAxKTsKKwl0cmFjZXBvaW50KHVz
-dF9saWJjLCBjYWxsb2MsIG5tZW1iLCBzaXplLCByZXR2YWwpOworCXJldHVybiByZXR2YWw7Cit9
-CisKK3N0YXRpYwordm9pZCAqc3RhdGljX21hbGxvYyhzaXplX3Qgc2l6ZSkKK3sKKwl2b2lkICpy
-ZXR2YWw7CisKKwlyZXR2YWwgPSBzdGF0aWNfY2FsbG9jX2FsaWduZWQoMSwgc2l6ZSwgMSk7CisJ
-dHJhY2Vwb2ludCh1c3RfbGliYywgbWFsbG9jLCBzaXplLCByZXR2YWwpOworCXJldHVybiByZXR2
-YWw7Cit9CisKK3N0YXRpYwordm9pZCBzdGF0aWNfZnJlZSh2b2lkICpwdHIpCit7CisJLyogbm8t
-b3AuICovCisJdHJhY2Vwb2ludCh1c3RfbGliYywgZnJlZSwgcHRyKTsKK30KKworc3RhdGljCit2
-b2lkICpzdGF0aWNfcmVhbGxvYyh2b2lkICpwdHIsIHNpemVfdCBzaXplKQoreworCXNpemVfdCAq
-b2xkX3NpemUgPSBOVUxMOworCXZvaWQgKnJldHZhbDsKKworCWlmIChzaXplID09IDApIHsKKwkJ
-cmV0dmFsID0gTlVMTDsKKwkJZ290byBlbmQ7CisJfQorCisJaWYgKHB0cikgeworCQlvbGRfc2l6
-ZSA9IChzaXplX3QgKikgcHRyIC0gMTsKKwkJaWYgKHNpemUgPD0gKm9sZF9zaXplKSB7CisJCQkv
-KiBXZSBjYW4gcmUtdXNlIHRoZSBvbGQgZW50cnkuICovCisJCQkqb2xkX3NpemUgPSBzaXplOwor
-CQkJcmV0dmFsID0gcHRyOworCQkJZ290byBlbmQ7CisJCX0KKwl9CisJLyogV2UgbmVlZCB0byBl
-eHBhbmQuIERvbid0IGZyZWUgcHJldmlvdXMgbWVtb3J5IGxvY2F0aW9uLiAqLworCXJldHZhbCA9
-IHN0YXRpY19jYWxsb2NfYWxpZ25lZCgxLCBzaXplLCAxKTsKKwlhc3NlcnQocmV0dmFsKTsKKwlp
-ZiAocHRyKQorCQltZW1jcHkocmV0dmFsLCBwdHIsICpvbGRfc2l6ZSk7CitlbmQ6CisJdHJhY2Vw
-b2ludCh1c3RfbGliYywgcmVhbGxvYywgcHRyLCBzaXplLCByZXR2YWwpOworCXJldHVybiByZXR2
-YWw7Cit9CisKK3N0YXRpYwordm9pZCAqc3RhdGljX21lbWFsaWduKHNpemVfdCBhbGlnbm1lbnQs
-IHNpemVfdCBzaXplKQoreworCXZvaWQgKnJldHZhbDsKKworCXJldHZhbCA9IHN0YXRpY19jYWxs
-b2NfYWxpZ25lZCgxLCBzaXplLCBhbGlnbm1lbnQpOworCXRyYWNlcG9pbnQodXN0X2xpYmMsIG1l
-bWFsaWduLCBhbGlnbm1lbnQsIHNpemUsIHJldHZhbCk7CisJcmV0dXJuIHJldHZhbDsKK30KKwor
-c3RhdGljCitpbnQgc3RhdGljX3Bvc2l4X21lbWFsaWduKHZvaWQgKiptZW1wdHIsIHNpemVfdCBh
-bGlnbm1lbnQsIHNpemVfdCBzaXplKQoreworCWludCByZXR2YWwgPSAwOworCXZvaWQgKnB0cjsK
-KworCS8qIENoZWNrIGZvciBwb3dlciBvZiAyLCBsYXJnZXIgdGhhbiB2b2lkICouICovCisJaWYg
-KGFsaWdubWVudCAmIChhbGlnbm1lbnQgLSAxKQorCQkJfHwgYWxpZ25tZW50IDwgc2l6ZW9mKHZv
-aWQgKikKKwkJCXx8IGFsaWdubWVudCA9PSAwKSB7CisJCXJldHZhbCA9IEVJTlZBTDsKKwkJZ290
-byBlbmQ7CisJfQorCXB0ciA9IHN0YXRpY19jYWxsb2NfYWxpZ25lZCgxLCBzaXplLCBhbGlnbm1l
-bnQpOworCSptZW1wdHIgPSBwdHI7CisJaWYgKHNpemUgJiYgIXB0cikKKwkJcmV0dmFsID0gRU5P
-TUVNOworZW5kOgorCXRyYWNlcG9pbnQodXN0X2xpYmMsIHBvc2l4X21lbWFsaWduLCAqbWVtcHRy
-LCBhbGlnbm1lbnQsIHNpemUsIHJldHZhbCk7CisJcmV0dXJuIDA7Cit9CisKK3N0YXRpYwordm9p
-ZCBzZXR1cF9zdGF0aWNfYWxsb2NhdG9yKHZvaWQpCit7CisJYXNzZXJ0KGN1cl9hbGxvYy5jYWxs
-b2MgPT0gTlVMTCk7CisJY3VyX2FsbG9jLmNhbGxvYyA9IHN0YXRpY19jYWxsb2M7CisJYXNzZXJ0
-KGN1cl9hbGxvYy5tYWxsb2MgPT0gTlVMTCk7CisJY3VyX2FsbG9jLm1hbGxvYyA9IHN0YXRpY19t
-YWxsb2M7CisJYXNzZXJ0KGN1cl9hbGxvYy5mcmVlID09IE5VTEwpOworCWN1cl9hbGxvYy5mcmVl
-ID0gc3RhdGljX2ZyZWU7CisJYXNzZXJ0KGN1cl9hbGxvYy5yZWFsbG9jID09IE5VTEwpOworCWN1
-cl9hbGxvYy5yZWFsbG9jID0gc3RhdGljX3JlYWxsb2M7CisJYXNzZXJ0KGN1cl9hbGxvYy5tZW1h
-bGlnbiA9PSBOVUxMKTsKKwljdXJfYWxsb2MubWVtYWxpZ24gPSBzdGF0aWNfbWVtYWxpZ247CisJ
-YXNzZXJ0KGN1cl9hbGxvYy5wb3NpeF9tZW1hbGlnbiA9PSBOVUxMKTsKKwljdXJfYWxsb2MucG9z
-aXhfbWVtYWxpZ24gPSBzdGF0aWNfcG9zaXhfbWVtYWxpZ247Cit9CisKK3N0YXRpYwordm9pZCBs
-b29rdXBfYWxsX3N5bWJvbHModm9pZCkKK3sKKwlzdHJ1Y3QgYWxsb2NfZnVuY3Rpb25zIGFmOwor
-CisJLyoKKwkgKiBUZW1wb3JhcmlseSByZWRpcmVjdCBhbGxvY2F0aW9uIGZ1bmN0aW9ucyB0bwor
-CSAqIHN0YXRpY19jYWxsb2NfYWxpZ25lZCwgYW5kIGZyZWUgZnVuY3Rpb24gdG8gc3RhdGljX2Zy
-ZWUKKwkgKiAobm8tb3ApLCB1bnRpbCB0aGUgZGxzeW0gbG9va3VwIGhhcyBjb21wbGV0ZWQuCisJ
-ICovCisJc2V0dXBfc3RhdGljX2FsbG9jYXRvcigpOworCisJLyogUGVyZm9ybSB0aGUgYWN0dWFs
-IGxvb2t1cHMgKi8KKwlhZi5jYWxsb2MgPSBkbHN5bShSVExEX05FWFQsICJjYWxsb2MiKTsKKwlh
-Zi5tYWxsb2MgPSBkbHN5bShSVExEX05FWFQsICJtYWxsb2MiKTsKKwlhZi5mcmVlID0gZGxzeW0o
-UlRMRF9ORVhULCAiZnJlZSIpOworCWFmLnJlYWxsb2MgPSBkbHN5bShSVExEX05FWFQsICJyZWFs
-bG9jIik7CisJYWYubWVtYWxpZ24gPSBkbHN5bShSVExEX05FWFQsICJtZW1hbGlnbiIpOworCWFm
-LnBvc2l4X21lbWFsaWduID0gZGxzeW0oUlRMRF9ORVhULCAicG9zaXhfbWVtYWxpZ24iKTsKKwor
-CS8qIFBvcHVsYXRlIHRoZSBuZXcgYWxsb2NhdG9yIGZ1bmN0aW9ucyAqLworCW1lbWNweSgmY3Vy
-X2FsbG9jLCAmYWYsIHNpemVvZihjdXJfYWxsb2MpKTsKIH0KIAogdm9pZCAqbWFsbG9jKHNpemVf
-dCBzaXplKQogewotCXN0YXRpYyB2b2lkICooKnBsaWJjX21hbGxvYykoc2l6ZV90IHNpemUpOwog
-CXZvaWQgKnJldHZhbDsKIAotCWlmIChwbGliY19tYWxsb2MgPT0gTlVMTCkgewotCQlwbGliY19t
-YWxsb2MgPSBkbHN5bShSVExEX05FWFQsICJtYWxsb2MiKTsKLQkJaWYgKHBsaWJjX21hbGxvYyA9
-PSBOVUxMKSB7CisJaWYgKGN1cl9hbGxvYy5tYWxsb2MgPT0gTlVMTCkgeworCQlsb29rdXBfYWxs
-X3N5bWJvbHMoKTsKKwkJaWYgKGN1cl9hbGxvYy5tYWxsb2MgPT0gTlVMTCkgewogCQkJZnByaW50
-ZihzdGRlcnIsICJtYWxsb2N3cmFwOiB1bmFibGUgdG8gZmluZCBtYWxsb2NcbiIpOwotCQkJcmV0
-dXJuIE5VTEw7CisJCQlhYm9ydCgpOwogCQl9CiAJfQotCXJldHZhbCA9IHBsaWJjX21hbGxvYyhz
-aXplKTsKKwlyZXR2YWwgPSBjdXJfYWxsb2MubWFsbG9jKHNpemUpOwogCXRyYWNlcG9pbnQodXN0
-X2xpYmMsIG1hbGxvYywgc2l6ZSwgcmV0dmFsKTsKIAlyZXR1cm4gcmV0dmFsOwogfQogCiB2b2lk
-IGZyZWUodm9pZCAqcHRyKQogewotCXN0YXRpYyB2b2lkICgqcGxpYmNfZnJlZSkodm9pZCAqcHRy
-KTsKKwl0cmFjZXBvaW50KHVzdF9saWJjLCBmcmVlLCBwdHIpOwogCi0JLyogQ2hlY2sgd2hldGhl
-ciB0aGUgbWVtb3J5IHdhcyBhbGxvY2F0ZWQgd2l0aAotCSAqIHN0YXRpY19jYWxsb2MsIGluIHdo
-aWNoIGNhc2UgdGhlcmUgaXMgbm90aGluZwotCSAqIHRvIGZyZWUuCisJLyoKKwkgKiBDaGVjayB3
-aGV0aGVyIHRoZSBtZW1vcnkgd2FzIGFsbG9jYXRlZCB3aXRoCisJICogc3RhdGljX2NhbGxvY19h
-bGlnbiwgaW4gd2hpY2ggY2FzZSB0aGVyZSBpcyBub3RoaW5nIHRvIGZyZWUuCiAJICovCi0JaWYg
-KChjaGFyICopcHRyID49IHN0YXRpY19jYWxsb2NfYnVmICYmCi0JICAgIChjaGFyICopcHRyIDwg
-c3RhdGljX2NhbGxvY19idWYgKyBTVEFUSUNfQ0FMTE9DX0xFTikgeworCWlmIChjYWFfdW5saWtl
-bHkoKGNoYXIgKilwdHIgPj0gc3RhdGljX2NhbGxvY19idWYgJiYKKwkJCShjaGFyICopcHRyIDwg
-c3RhdGljX2NhbGxvY19idWYgKyBTVEFUSUNfQ0FMTE9DX0xFTikpIHsKIAkJcmV0dXJuOwogCX0K
-IAotCWlmIChwbGliY19mcmVlID09IE5VTEwpIHsKLQkJcGxpYmNfZnJlZSA9IGRsc3ltKFJUTERf
-TkVYVCwgImZyZWUiKTsKLQkJaWYgKHBsaWJjX2ZyZWUgPT0gTlVMTCkgeworCWlmIChjdXJfYWxs
-b2MuZnJlZSA9PSBOVUxMKSB7CisJCWxvb2t1cF9hbGxfc3ltYm9scygpOworCQlpZiAoY3VyX2Fs
-bG9jLmZyZWUgPT0gTlVMTCkgewogCQkJZnByaW50ZihzdGRlcnIsICJtYWxsb2N3cmFwOiB1bmFi
-bGUgdG8gZmluZCBmcmVlXG4iKTsKLQkJCXJldHVybjsKKwkJCWFib3J0KCk7CiAJCX0KIAl9Ci0J
-dHJhY2Vwb2ludCh1c3RfbGliYywgZnJlZSwgcHRyKTsKLQlwbGliY19mcmVlKHB0cik7CisJY3Vy
-X2FsbG9jLmZyZWUocHRyKTsKIH0KIAogdm9pZCAqY2FsbG9jKHNpemVfdCBubWVtYiwgc2l6ZV90
-IHNpemUpCiB7Ci0Jc3RhdGljIHZvaWQgKigqdm9sYXRpbGUgcGxpYmNfY2FsbG9jKShzaXplX3Qg
-bm1lbWIsIHNpemVfdCBzaXplKTsKIAl2b2lkICpyZXR2YWw7CiAKLQlpZiAocGxpYmNfY2FsbG9j
-ID09IE5VTEwpIHsKLQkJLyoKLQkJICogVGVtcG9yYXJpbHkgcmVkaXJlY3QgdG8gc3RhdGljX2Nh
-bGxvYywKLQkJICogdW50aWwgdGhlIGRsc3ltIGxvb2t1cCBoYXMgY29tcGxldGVkLgotCQkgKi8K
-LQkJcGxpYmNfY2FsbG9jID0gc3RhdGljX2NhbGxvYzsKLQkJcGxpYmNfY2FsbG9jID0gZGxzeW0o
-UlRMRF9ORVhULCAiY2FsbG9jIik7Ci0JCWlmIChwbGliY19jYWxsb2MgPT0gTlVMTCkgeworCWlm
-IChjdXJfYWxsb2MuY2FsbG9jID09IE5VTEwpIHsKKwkJbG9va3VwX2FsbF9zeW1ib2xzKCk7CisJ
-CWlmIChjdXJfYWxsb2MuY2FsbG9jID09IE5VTEwpIHsKIAkJCWZwcmludGYoc3RkZXJyLCAiY2Fs
-bG9jd3JhcDogdW5hYmxlIHRvIGZpbmQgY2FsbG9jXG4iKTsKLQkJCXJldHVybiBOVUxMOworCQkJ
-YWJvcnQoKTsKIAkJfQogCX0KLQlyZXR2YWwgPSBwbGliY19jYWxsb2Mobm1lbWIsIHNpemUpOwor
-CXJldHZhbCA9IGN1cl9hbGxvYy5jYWxsb2Mobm1lbWIsIHNpemUpOwogCXRyYWNlcG9pbnQodXN0
-X2xpYmMsIGNhbGxvYywgbm1lbWIsIHNpemUsIHJldHZhbCk7CiAJcmV0dXJuIHJldHZhbDsKIH0K
-IAogdm9pZCAqcmVhbGxvYyh2b2lkICpwdHIsIHNpemVfdCBzaXplKQogewotCXN0YXRpYyB2b2lk
-ICooKnBsaWJjX3JlYWxsb2MpKHZvaWQgKnB0ciwgc2l6ZV90IHNpemUpOwogCXZvaWQgKnJldHZh
-bDsKIAotCWlmIChwbGliY19yZWFsbG9jID09IE5VTEwpIHsKLQkJcGxpYmNfcmVhbGxvYyA9IGRs
-c3ltKFJUTERfTkVYVCwgInJlYWxsb2MiKTsKLQkJaWYgKHBsaWJjX3JlYWxsb2MgPT0gTlVMTCkg
-eworCS8qIENoZWNrIHdoZXRoZXIgdGhlIG1lbW9yeSB3YXMgYWxsb2NhdGVkIHdpdGgKKwkgKiBz
-dGF0aWNfY2FsbG9jX2FsaWduLCBpbiB3aGljaCBjYXNlIHRoZXJlIGlzIG5vdGhpbmcKKwkgKiB0
-byBmcmVlLCBhbmQgd2UgbmVlZCB0byBjb3B5IHRoZSBvbGQgZGF0YS4KKwkgKi8KKwlpZiAoY2Fh
-X3VubGlrZWx5KChjaGFyICopcHRyID49IHN0YXRpY19jYWxsb2NfYnVmICYmCisJCQkoY2hhciAq
-KXB0ciA8IHN0YXRpY19jYWxsb2NfYnVmICsgU1RBVElDX0NBTExPQ19MRU4pKSB7CisJCXNpemVf
-dCAqb2xkX3NpemU7CisKKwkJb2xkX3NpemUgPSAoc2l6ZV90ICopIHB0ciAtIDE7CisJCXJldHZh
-bCA9IGN1cl9hbGxvYy5jYWxsb2MoMSwgc2l6ZSk7CisJCWlmIChyZXR2YWwpIHsKKwkJCW1lbWNw
-eShyZXR2YWwsIHB0ciwgKm9sZF9zaXplKTsKKwkJfQorCQlnb3RvIGVuZDsKKwl9CisKKwlpZiAo
-Y3VyX2FsbG9jLnJlYWxsb2MgPT0gTlVMTCkgeworCQlsb29rdXBfYWxsX3N5bWJvbHMoKTsKKwkJ
-aWYgKGN1cl9hbGxvYy5yZWFsbG9jID09IE5VTEwpIHsKIAkJCWZwcmludGYoc3RkZXJyLCAicmVh
-bGxvY3dyYXA6IHVuYWJsZSB0byBmaW5kIHJlYWxsb2NcbiIpOwotCQkJcmV0dXJuIE5VTEw7CisJ
-CQlhYm9ydCgpOwogCQl9CiAJfQotCXJldHZhbCA9IHBsaWJjX3JlYWxsb2MocHRyLCBzaXplKTsK
-KwlyZXR2YWwgPSBjdXJfYWxsb2MucmVhbGxvYyhwdHIsIHNpemUpOworZW5kOgogCXRyYWNlcG9p
-bnQodXN0X2xpYmMsIHJlYWxsb2MsIHB0ciwgc2l6ZSwgcmV0dmFsKTsKIAlyZXR1cm4gcmV0dmFs
-OwogfQogCiB2b2lkICptZW1hbGlnbihzaXplX3QgYWxpZ25tZW50LCBzaXplX3Qgc2l6ZSkKIHsK
-LQlzdGF0aWMgdm9pZCAqKCpwbGliY19tZW1hbGlnbikoc2l6ZV90IGFsaWdubWVudCwgc2l6ZV90
-IHNpemUpOwogCXZvaWQgKnJldHZhbDsKIAotCWlmIChwbGliY19tZW1hbGlnbiA9PSBOVUxMKSB7
-Ci0JCXBsaWJjX21lbWFsaWduID0gZGxzeW0oUlRMRF9ORVhULCAibWVtYWxpZ24iKTsKLQkJaWYg
-KHBsaWJjX21lbWFsaWduID09IE5VTEwpIHsKKwlpZiAoY3VyX2FsbG9jLm1lbWFsaWduID09IE5V
-TEwpIHsKKwkJbG9va3VwX2FsbF9zeW1ib2xzKCk7CisJCWlmIChjdXJfYWxsb2MubWVtYWxpZ24g
-PT0gTlVMTCkgewogCQkJZnByaW50ZihzdGRlcnIsICJtZW1hbGlnbndyYXA6IHVuYWJsZSB0byBm
-aW5kIG1lbWFsaWduXG4iKTsKLQkJCXJldHVybiBOVUxMOworCQkJYWJvcnQoKTsKIAkJfQogCX0K
-LQlyZXR2YWwgPSBwbGliY19tZW1hbGlnbihhbGlnbm1lbnQsIHNpemUpOworCXJldHZhbCA9IGN1
-cl9hbGxvYy5tZW1hbGlnbihhbGlnbm1lbnQsIHNpemUpOwogCXRyYWNlcG9pbnQodXN0X2xpYmMs
-IG1lbWFsaWduLCBhbGlnbm1lbnQsIHNpemUsIHJldHZhbCk7CiAJcmV0dXJuIHJldHZhbDsKIH0K
-IAogaW50IHBvc2l4X21lbWFsaWduKHZvaWQgKiptZW1wdHIsIHNpemVfdCBhbGlnbm1lbnQsIHNp
-emVfdCBzaXplKQogewotCXN0YXRpYyBpbnQoKnBsaWJjX3Bvc2l4X21lbWFsaWduKSh2b2lkICoq
-bWVtcHRyLCBzaXplX3QgYWxpZ25tZW50LCBzaXplX3Qgc2l6ZSk7CiAJaW50IHJldHZhbDsKIAot
-CWlmIChwbGliY19wb3NpeF9tZW1hbGlnbiA9PSBOVUxMKSB7Ci0JCXBsaWJjX3Bvc2l4X21lbWFs
-aWduID0gZGxzeW0oUlRMRF9ORVhULCAicG9zaXhfbWVtYWxpZ24iKTsKLQkJaWYgKHBsaWJjX3Bv
-c2l4X21lbWFsaWduID09IE5VTEwpIHsKKwlpZiAoY3VyX2FsbG9jLnBvc2l4X21lbWFsaWduID09
-IE5VTEwpIHsKKwkJbG9va3VwX2FsbF9zeW1ib2xzKCk7CisJCWlmIChjdXJfYWxsb2MucG9zaXhf
-bWVtYWxpZ24gPT0gTlVMTCkgewogCQkJZnByaW50ZihzdGRlcnIsICJwb3NpeF9tZW1hbGlnbndy
-YXA6IHVuYWJsZSB0byBmaW5kIHBvc2l4X21lbWFsaWduXG4iKTsKLQkJCXJldHVybiBFTk9NRU07
-CisJCQlhYm9ydCgpOwogCQl9CiAJfQotCXJldHZhbCA9IHBsaWJjX3Bvc2l4X21lbWFsaWduKG1l
-bXB0ciwgYWxpZ25tZW50LCBzaXplKTsKKwlyZXR2YWwgPSBjdXJfYWxsb2MucG9zaXhfbWVtYWxp
-Z24obWVtcHRyLCBhbGlnbm1lbnQsIHNpemUpOwogCXRyYWNlcG9pbnQodXN0X2xpYmMsIHBvc2l4
-X21lbWFsaWduLCAqbWVtcHRyLCBhbGlnbm1lbnQsIHNpemUsIHJldHZhbCk7CiAJcmV0dXJuIHJl
-dHZhbDsKIH0K
-------=_Part_23544_1563704511.1392176395824
+lttng-relayd -vvv
+
+lttng create --live 10000000 -U  net://localhost remotetes
+
+lttng enable-event -a -k
+
+lttng start
+
+On linux PC
+
+lttngtop -r net://192.168.233.39
+
+net://192.168.233.39/1 : remotetes on host Linux_Mips(timer = 10000000, 4
+stream(s), 0 client(s) connected)
+
+Segmentation fault (core dumped)
+
+What is the exact steps i need to follow for live tracing,
+
+Thank you
+Skumar
+
+
+
+
+
+On Tue, Feb 11, 2014 at 8:27 PM, David Goulet <dgoulet@efficios.com> wrote:
+
+> On 11 Feb (13:24:15), kumar s wrote:
+> > Hi,
+> >
+> > I am trying to start the trace on MIPS board and dump it remotely on PC.
+> >
+> > The steps i do
+> > On MIPS board:
+> > lttng create -U net://192.168.233.207 newsession
+> >
+> > lttng enable-event lttng_statedump_start -k
+> >
+> > Error: Event lttng_statedump_start: Unable to connect to lttng-relayd
+> > (channel channel0, session news)
+> > Warning: Some command(s) went wrong
+> >
+> > In lttng-sessiond -vvv log
+> >
+> > [...]
+> > DEBUG3 [1918/2019]: Consumer socket created (fd: 30) and added to output
+> > (in consumer_create_socket() at consumer.c:300)
+> > DEBUG1 [1918/2019]: Setting relayd for session news (in
+> cmd_setup_relayd()
+> > at cmd.c:722)
+> > DEBUG3 [1918/2019]: Relayd connect ... (in relayd_connect() at
+> relayd.c:466)
+> > PERROR [1918/2019]: connect: Connection refused (in
+> > lttcomm_connect_inet_sock() at inet.c:253)
+> > Error: Unable to reach lttng-relayd
+> > DEBUG1 [1918/2019]: Sending response (size: 16, retcode: Unable to
+> connect
+> > to lttng-relayd) (in thread_manage_clients() at main.c:3973)
+> > DEBUG1 [1918/2019]: Clean command context structure (in
+> clean_command_ctx()
+> > at main.c:672)
+> > DEBUG1 [1918/2019]: Accepting client command ... (in
+> > thread_manage_clients() at main.c:3837)
+> >
+> > On the linux pc
+> > i have started lttng-relayd
+> >
+> > lttng-relayd -vvv -C tcp://0.0.0.0:1234 -D tcp://0.0.0.0:5678 (as
+> specified
+> > in doc folder of lttng-tools)
+>
+> The relayd is started with different ports here so the session creation
+> should also specify those like so:
+>
+> $ lttng create -U net://192.168.233.207:1234:5678
+>
+> (or use -C/-D).
+>
+> David
+>
+> >
+> >
+> > Unfortunately i get error that lttng-relayd unable to connect. I also
+> tried
+> > started lttng-relayd on mips board and running the same, still i get same
+> > error.
+> >
+> > Can someone explain steps for lttng trace streaming or how i can dump the
+> > trace live onto PC.
+> >
+> > Thank you
+> > Skumar
+>
+> > _______________________________________________
+> > lttng-dev mailing list
+> > lttng-dev@lists.lttng.org
+> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>
+>
+
+--089e011836be3465c504f23440b4
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div><div><div>Hello,<br><br></div>Thanks a lot, It worked=
+, i am able stream and save the trace on the remote PC.<br><br></div>Howeve=
+r out of curiosity i am also trying to do live tracing,<br><br></div>On Mip=
+s Board<br>
+<div><br>lttng-relayd -vvv<br><br>lttng create --live 10000000 -U=A0 net://=
+localhost remotetes<br><br>lttng enable-event -a -k<br><br>lttng start <br>=
+<br></div><div>On linux PC<br><br>lttngtop -r net://<a href=3D"http://192.1=
+68.233.39">192.168.233.39</a><br>
+<br>net://<a href=3D"http://192.168.233.39/1">192.168.233.39/1</a> : remote=
+tes on host Linux_Mips(timer =3D 10000000, 4 stream(s), 0 client(s) connect=
+ed)<br><br>Segmentation fault (core dumped)<br><br></div><div>What is the e=
+xact steps i need to follow for live tracing, <br>
+<br></div><div>Thank you<br>Skumar<br></div><div><br><br><br></div></div><d=
+iv class=3D"gmail_extra"><br><br><div class=3D"gmail_quote">On Tue, Feb 11,=
+ 2014 at 8:27 PM, David Goulet <span dir=3D"ltr">&lt;<a href=3D"mailto:dgou=
+let@efficios.com" target=3D"_blank">dgoulet@efficios.com</a>&gt;</span> wro=
+te:<br>
+<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
+x #ccc solid;padding-left:1ex"><div class=3D"HOEnZb"><div class=3D"h5">On 1=
+1 Feb (13:24:15), kumar s wrote:<br>
+&gt; Hi,<br>
+&gt;<br>
+&gt; I am trying to start the trace on MIPS board and dump it remotely on P=
+C.<br>
+&gt;<br>
+&gt; The steps i do<br>
+&gt; On MIPS board:<br>
+&gt; lttng create -U net://<a href=3D"http://192.168.233.207" target=3D"_bl=
+ank">192.168.233.207</a> newsession<br>
+&gt;<br>
+&gt; lttng enable-event lttng_statedump_start -k<br>
+&gt;<br>
+&gt; Error: Event lttng_statedump_start: Unable to connect to lttng-relayd<=
+br>
+&gt; (channel channel0, session news)<br>
+&gt; Warning: Some command(s) went wrong<br>
+&gt;<br>
+&gt; In lttng-sessiond -vvv log<br>
+&gt;<br>
+&gt; [...]<br>
+&gt; DEBUG3 [1918/2019]: Consumer socket created (fd: 30) and added to outp=
+ut<br>
+&gt; (in consumer_create_socket() at consumer.c:300)<br>
+&gt; DEBUG1 [1918/2019]: Setting relayd for session news (in cmd_setup_rela=
+yd()<br>
+&gt; at cmd.c:722)<br>
+&gt; DEBUG3 [1918/2019]: Relayd connect ... (in relayd_connect() at relayd.=
+c:466)<br>
+&gt; PERROR [1918/2019]: connect: Connection refused (in<br>
+&gt; lttcomm_connect_inet_sock() at inet.c:253)<br>
+&gt; Error: Unable to reach lttng-relayd<br>
+&gt; DEBUG1 [1918/2019]: Sending response (size: 16, retcode: Unable to con=
+nect<br>
+&gt; to lttng-relayd) (in thread_manage_clients() at main.c:3973)<br>
+&gt; DEBUG1 [1918/2019]: Clean command context structure (in clean_command_=
+ctx()<br>
+&gt; at main.c:672)<br>
+&gt; DEBUG1 [1918/2019]: Accepting client command ... (in<br>
+&gt; thread_manage_clients() at main.c:3837)<br>
+&gt;<br>
+&gt; On the linux pc<br>
+&gt; i have started lttng-relayd<br>
+&gt;<br>
+&gt; lttng-relayd -vvv -C tcp://<a href=3D"http://0.0.0.0:1234" target=3D"_=
+blank">0.0.0.0:1234</a> -D tcp://<a href=3D"http://0.0.0.0:5678" target=3D"=
+_blank">0.0.0.0:5678</a> (as specified<br>
+&gt; in doc folder of lttng-tools)<br>
+<br>
+</div></div>The relayd is started with different ports here so the session =
+creation<br>
+should also specify those like so:<br>
+<br>
+$ lttng create -U net://192.168.233.207:1234:5678<br>
+<br>
+(or use -C/-D).<br>
+<br>
+David<br>
+<div class=3D""><br>
+&gt;<br>
+&gt;<br>
+&gt; Unfortunately i get error that lttng-relayd unable to connect. I also =
+tried<br>
+&gt; started lttng-relayd on mips board and running the same, still i get s=
+ame<br>
+&gt; error.<br>
+&gt;<br>
+&gt; Can someone explain steps for lttng trace streaming or how i can dump =
+the<br>
+&gt; trace live onto PC.<br>
+&gt;<br>
+&gt; Thank you<br>
+&gt; Skumar<br>
+<br>
+</div>&gt; _______________________________________________<br>
+&gt; lttng-dev mailing list<br>
+&gt; <a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org=
+</a><br>
+&gt; <a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" =
+target=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev=
+</a><br>
+<br>
+</blockquote></div><br></div>
+
+--089e011836be3465c504f23440b4--
+
+
+--===============1651233829==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -235,4 +263,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
-------=_Part_23544_1563704511.1392176395824--
+--===============1651233829==--
