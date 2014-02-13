@@ -1,23 +1,21 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: RFC: Fix crash in dlerror()
-Date: Thu, 13 Feb 2014 18:52:19 +0000 (UTC)
-Message-ID: <934762932.24558.1392317539645.JavaMail.zimbra__6666.49067211456$1392317608$gmane$org@efficios.com>
-References: <52F55511.2080309@mentor.com> <52FCCCD2.9050302@mentor.com>
-	<610029715.24333.1392300717731.JavaMail.zimbra@efficios.com>
-	<1692042945.24342.1392301795996.JavaMail.zimbra@efficios.com>
-	<1119459836.24348.1392302831554.JavaMail.zimbra@efficios.com>
-	<52FCE732.9090508@mentor.com>
-	<581364674.24417.1392309613306.JavaMail.zimbra@efficios.com>
-	<52FCF7F5.9070908@mentor.com>
+From: Jonathan Rajotte <jonathan.r.julien@gmail.com>
+Subject: Re: Machine Interface
+Date: Thu, 13 Feb 2014 14:16:59 -0500
+Message-ID: <20140213191658.GA16437__13672.0926072032$1392319092$gmane$org@gmail.com>
+References: <52FD0831.7030704@polymtl.ca>
+	<CAFXXi0mcn4MUA0iHE-+HGqcqrsyf=wgWXPFMnBJrc+xrF96gaQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-ig0-f172.google.com ([209.85.213.172])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1WE1Oa-0002FJ-ND
-	for lttng-dev@lists.lttng.org; Thu, 13 Feb 2014 13:52:30 -0500
-In-Reply-To: <52FCF7F5.9070908@mentor.com>
+	(envelope-from <jonathan.r.julien@gmail.com>) id 1WE1mW-0002S6-61
+	for lttng-dev@lists.lttng.org; Thu, 13 Feb 2014 14:17:14 -0500
+Received: by mail-ig0-f172.google.com with SMTP id k19so13590730igc.5
+	for <lttng-dev@lists.lttng.org>; Thu, 13 Feb 2014 11:17:02 -0800 (PST)
+Content-Disposition: inline
+In-Reply-To: <CAFXXi0mcn4MUA0iHE-+HGqcqrsyf=wgWXPFMnBJrc+xrF96gaQ@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -26,175 +24,159 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Paul Woegerer <Paul_Woegerer@mentor.com>
-Cc: Stefan Seefeld <Stefan_Seefeld@mentor.com>, lttng-dev <lttng-dev@lists.lttng.org>, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
+To: Simon Marchi <simon.marchi@polymtl.ca>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
------ Original Message -----
-> From: "Paul Woegerer" <Paul_Woegerer@mentor.com>
-> To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-> Cc: "Stefan Seefeld" <Stefan_Seefeld@mentor.com>, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, "lttng-dev"
-> <lttng-dev@lists.lttng.org>
-> Sent: Thursday, February 13, 2014 11:51:01 AM
-> Subject: Re: [lttng-dev] RFC: Fix crash in dlerror()
-> 
-> On 02/13/2014 05:40 PM, Mathieu Desnoyers wrote:
-> > (adding back lttng-dev, and CC Paul E. McKenney. He may have
-> > some interesting insight in this compiler reordering of store
-> > vs function call.)
-> >
-> > ----- Original Message -----
-> >> From: "Paul Woegerer" <Paul_Woegerer@mentor.com>
-> >> To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-> >> Cc: "Stefan Seefeld" <Stefan_Seefeld@mentor.com>
-> >> Sent: Thursday, February 13, 2014 10:39:30 AM
-> >> Subject: Re: [lttng-dev] RFC: Fix crash in dlerror()
-> >>
-> >> On 02/13/2014 03:47 PM, Mathieu Desnoyers wrote:
-> >>> ----- Original Message -----
-> >>>> From: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-> >>>> To: "Paul Woegerer" <Paul_Woegerer@mentor.com>
-> >>>> Cc: "Stefan Seefeld" <Stefan_Seefeld@mentor.com>
-> >>>> Sent: Thursday, February 13, 2014 9:29:56 AM
-> >>>> Subject: Re: [lttng-dev] RFC: Fix crash in dlerror()
-> >>>>
-> >>>> ----- Original Message -----
-> >>>>> From: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-> >>>>> To: "Paul Woegerer" <Paul_Woegerer@mentor.com>
-> >>>>> Cc: "Stefan Seefeld" <Stefan_Seefeld@mentor.com>
-> >>>>> Sent: Thursday, February 13, 2014 9:11:57 AM
-> >>>>> Subject: Re: [lttng-dev] RFC: Fix crash in dlerror()
-> >>>>>
-> >>>>> ----- Original Message -----
-> >>>>>> From: "Paul Woegerer" <Paul_Woegerer@mentor.com>
-> >>>>>> To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-> >>>>>> Cc: "Stefan Seefeld" <Stefan_Seefeld@mentor.com>
-> >>>>>> Sent: Thursday, February 13, 2014 8:46:58 AM
-> >>>>>> Subject: Re: [lttng-dev] RFC: Fix crash in dlerror()
-> >>>>>>
-> >>>>>> On 02/13/2014 02:17 PM, Mathieu Desnoyers wrote:
-> > [...]
-> >>>>> I've been able to reproduce with
-> >>>>>
-> >>>>> gcc version 4.8.2 (Debian 4.8.2-14)
-> >>>>>
-> >>>>> and indeed adding the volatile fixes the issue. But it seems wrong that
-> >>>>> the
-> >>>>> compiler thinks it is within its rights to assume it can move the store
-> >>>>> to that structure after the call to dlsym().
-> > [...]
-> >
-> >>> Adding a cmm_barrier() between the call to setup_static_allocator() and
-> >>> the first dlsym() call fixes the issue too.
-> >>>
-> >>> Thoughts ?
-> >> Intuitively I would have thought that the def-use analysis of the compiler
-> >> recognizes the first def to the fields as redundant.
-> >>
-> >> e.g.
-> >>
-> >> def cur_alloc.calloc (1)
-> >> def cur_alloc.calloc (2)
-> >> use cur_alloc.calloc
-> >>
-> >> so from compiler perspective (1) is redundant.
-> > Well actually, it's more:
-> >
-> > def cur_alloc.calloc (1)
-> >
-> >   calls to dlsym() (should act as a compiler memory barrier)
-> >
-> > def cur_alloc.calloc (2)
-> >
-> > (where the use of cur_alloc.calloc is within the dlsym() call)
-> >
-> > What seems to happen here is that gcc somehow assumes that dlsym() will
-> > never
-> > be interested in the value of the static variable cur_alloc.calloc. But I
-> > doubt
-> > this assumption is valid, because dlsym() could very well have access to a
-> > function pointer leading to a function within the object containing
-> > cur_alloc,
-> > and thus have to access cur_alloc. How can this store be optimized away
-> > without
-> 
-> To assume that dlsym() has "access" to the local static variable
-> cur_alloc is not something anyone should expect from the compiler. The
-> fact that dlsym() does have "access" is only due to preloading and the
-> circumstance that library functions that dlsym() itself uses are
-> redirected to the ones defined in the wrapper.
+On Thu, Feb 13, 2014 at 01:26:09PM -0500, Simon Marchi wrote:
+> It looks good!
+> =
 
-Can you provide quotes of the relevant parts of the C99 standard supporting
-this ?
+> Comments below.
+> =
 
-My understanding is that there is a sequence point before the function call:
-
-ISO/IEC 9899:TC2
-
-5.1.2.3 Program execution
-
-"2. Accessing a volatile object, modifying an object, modifying a file, or
-calling a function that does any of those operations are all side effects,11)
-which are changes in the state of the execution environment. Evaluation of an
-expression may produce side effects. At certain specified points in the execution
-sequence called sequence points, all side effects of previous evaluations shall
-be complete and no side effects of subsequent evaluations shall have taken place.
-(A summary of the sequence points is given in annex C.)"
-
-
-6.5.2.2 Function calls
-
-"10.  The order of evaluation of the function designator, the actual arguments, and
-subexpressions within the actual arguments is unspecified, but there is a sequence
-point before the actual call."
-
-And this sequence point should ensure that the side-effects of stores to cur_alloc
-should be complete before the call takes place.
-
-Thoughts ?
-
-Thanks,
-
-Mathieu
-
-> 
-> --
-> Best,
-> Paul
-> 
-> > breaking sequential consistency ?
+> On 13 February 2014 13:00, Olivier Cotte <olivier.cotte@polymtl.ca> wrote:
+> > At first, we wanted thank you for your quick and constructive feedback!
 > >
-> >> It cannot know about the indirect recursion via dlsym. To express this to
-> >> the
-> >> compiler you have to make the fields of your struct volatile.
-> > AFAIK, the compiler should assume that there may be a call to a function
-> > using
-> > cur_alloc within dlsym().
+> > After reflection on the nature of the problem and consideration of your
+> > feedback, we've arrived with the following solution.
 > >
-> >> BTW, for copying cur_alloc, let the compiler create the memcpy for you.
-> > Good point!
+> > The technology that will be use is XML. The integration of the machine
+> > interface to LTTng will be done in the most modular manner to facilitat=
+e the
+> > support multiples outputs format. This option will most likely be avail=
+able
+> > at configure time.
 > >
-> > I don't see how volatile would be required here. Maybe it fixes the issue
-> > (so does adding a compiler barrier), but I feel uneasy just fixing it up
-> > within lttng-ust if there is a deeper issue in gcc 4.8.
+> > For the moment, we will focus our effort into adding the XML feature on=
+ly.
+> > If many outputs languages is still a viable feature, it will be possibl=
+e to
+> > investigate.
 > >
-> > Thoughts ?
+> > Our main goal is of course to promote extensibility, ease of developmen=
+t for
+> > new tools and establish a standards for the communication control flow.=
+ Here
+> > are our primary requirement concerning the machine interface:
 > >
-> > Thanks,
+> >   * Fit the tree structure of LTTng commands structures.
+> >   * It can be parse from bash/shell script with no external helpers.
+> >   * The new format must not introduce any dependencies to LTTng.
+> >   * [Optional] Still human readable, but fit to be parse.This is not a
+> >      priority since we are talking about a machine interface.
 > >
-> > Mathieu
+> > Here are the reason why we think XML should be used for the machine
+> > interface:
 > >
-> >
-> 
-> 
-> --
-> Paul Woegerer, SW Development Engineer
-> Sourcery Analyzer <http://go.mentor.com/sourceryanalyzer>
-> Mentor Graphics, Embedded Software Division
-> 
-> 
+> >   * The expression of LTTng hierarchy really fit a XML tree structure.
+> >   * Since Jgalar add a load-save feature that depend on libxml2, we are
+> >     not introducing any dependencies. Choosing another format would
+> >     most likely introduce new dependency.
+> >   * XML is robust and easily extensible. It will also be easy to
+> >     maintains (add new commands, modify existing commands etc.)
+> >   * There are tools that allow you to evaluate XPath expressions from
+> >     the bash.
+> =
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+> In the requirements above, you said "It can be parse from bash/shell
+> script with no external helpers". For XML it's not really the case. I
+> don't really mind (I am fine withXML), but I just think those are
+> contradictory statements.
+True, but the requirement are 'ideal objectives'. The choice of XML do not =
+complies with
+this requirement but fits most of the requirements. I think we
+misspoke on this.
+> =
+
+> >   * XML is an established standard
+> >
+> > That's why we consider XML format as a suitable solution.
+> >
+> > Now for the machine interface syntax:
+> >
+> >   * Since we are aware that multiple output could be supported, we want=
+ an
+> >     unify flag for all machine interface command.
+> > The flag --xml would be used to output xml from LTTng (we could add
+> > similar
+> > options like --json, --yaml etc.). This would be similar to svn
+> > machine interface and speak for itself.
+> >   * Also, to avoid confusion we will use a different primary command for
+> > input and
+> >     output machine interface.
+> > Ex: lttng machine <input>
+> > Ex: lttng --xml <output>
+> =
+
+> Can you give an (preliminary) example usage of lttng machine ? The XML
+> document would be a big string / a single argument ?
+> =
+
+We are not sure yet... but probably a big string(one-lined XML).
+Could be a file but i don't see any advantage.
+
+Another option would be a prompt.. like GDB Machine Interface.
+> Also, could lttng machine also be able to read its input from stdin?
+> If it does, could it receive multiple commands in a single invocation?
+> For example, each root-level XML element could represent a command.
+> This way, a program would have to do a single exec and then push all
+> the commands one by one to the lttng client.
+> =
+
+That was the plan.
+
+To be frank, we will mostly put effort in the output side of MI.If
+everything is *functional* and *approved* we will work on input.
+
+> I have not really thought this through, I am just putting the idea in the=
+ wild.
+> =
+
+> > Any points we are missing?
+> =
+
+> I don't know how it would look, but as a user/developer, it would be
+> nice if there was a way for lttng to dump me the XML that corresponds
+> to a command (e.g. what I need to feed lttng machine to have the same
+> effect as a command).
+> =
+
+> Example with syntax I just made up:
+> =
+
+> lttng --dump-xml-input enable-event -k sched_switch,other_event
+> =
+
+> would output
+> =
+
+> <lttng>
+>     <command name=3D"enable-event" domain=3D"kernel">
+>         <event name=3D"sched_switch"/>
+>         <event name=3D"other_event"/>
+>     </command>
+> </lttng>
+> =
+
+nice idea
+
+> I feel that this feature would make the machine interface more
+> approachable (less doc to read before you start being efficient). What
+> do you think?
+> =
+
+> Simon
+> =
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- =
+
+Jonathan Rajotte Julien
+Charg=E9 de laboratoire INF1995
+Membre MD6
+Polytechnique Montr=E9al
