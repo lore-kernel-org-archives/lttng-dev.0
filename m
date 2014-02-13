@@ -1,21 +1,24 @@
-From: Jonathan Rajotte <jonathan.r.julien@gmail.com>
-Subject: Re: Machine Interface
-Date: Thu, 13 Feb 2014 14:16:59 -0500
-Message-ID: <20140213191658.GA16437__13672.0926072032$1392319092$gmane$org@gmail.com>
-References: <52FD0831.7030704@polymtl.ca>
-	<CAFXXi0mcn4MUA0iHE-+HGqcqrsyf=wgWXPFMnBJrc+xrF96gaQ@mail.gmail.com>
+From: Corey Minyard <minyard@acm.org>
+Subject: Re: Extract lttng trace from kernel coredump
+Date: Thu, 13 Feb 2014 13:31:13 -0600
+Message-ID: <52FD1D81.60306__3510.33194824613$1392320252$gmane$org@acm.org>
+References: <52D46B33.4010401@acm.org> <20140114184243.GC8177@thessa>
+	<52D5A08F.4020204@acm.org>
+	<1303248645.9400.1390063653581.JavaMail.zimbra@efficios.com>
+	<52DAC820.7000005@acm.org>
+	<353610105.9520.1390071650232.JavaMail.zimbra@efficios.com>
+Reply-To: minyard@acm.org
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ig0-f172.google.com ([209.85.213.172])
+Received: from mail-ob0-f170.google.com ([209.85.214.170])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jonathan.r.julien@gmail.com>) id 1WE1mW-0002S6-61
-	for lttng-dev@lists.lttng.org; Thu, 13 Feb 2014 14:17:14 -0500
-Received: by mail-ig0-f172.google.com with SMTP id k19so13590730igc.5
-	for <lttng-dev@lists.lttng.org>; Thu, 13 Feb 2014 11:17:02 -0800 (PST)
-Content-Disposition: inline
-In-Reply-To: <CAFXXi0mcn4MUA0iHE-+HGqcqrsyf=wgWXPFMnBJrc+xrF96gaQ@mail.gmail.com>
+	(envelope-from <tcminyard@gmail.com>) id 1WE20H-0002an-Lb
+	for lttng-dev@lists.lttng.org; Thu, 13 Feb 2014 14:31:28 -0500
+Received: by mail-ob0-f170.google.com with SMTP id va2so12838193obc.29
+	for <lttng-dev@lists.lttng.org>; Thu, 13 Feb 2014 11:31:16 -0800 (PST)
+In-Reply-To: <353610105.9520.1390071650232.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,159 +27,120 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Simon Marchi <simon.marchi@polymtl.ca>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On Thu, Feb 13, 2014 at 01:26:09PM -0500, Simon Marchi wrote:
-> It looks good!
-> =
+On 01/18/2014 01:00 PM, Mathieu Desnoyers wrote:
+> You can use the flight recorder mode in recent LTTng for this (2.3 and
+> newer). It simply writes to memory, without any output. I understand that
+> you want to create a contiguous ring buffer memory layout. However, you
+> have to be aware that this will probably be done using either
+>
+> a) statically allocated memory at boot time (not very flexible),
+> b) vmalloc() (very flexible, but can triggers minor page faults, which
+>    can interact badly with page fault instrumentation. vmalloc() space
+>    is often limited by a kernel boot time parameter, and is putting
+>    quite important limitations on systems with 32-bit address spaces).
+>
+>> But I am certainly open to suggestions on how to do this, and happy to
+>> have anything included back into the mainline.
+>>
+>> And I'm still learning about the internals of LTT.
+> One option would be to modify the tool to understand the LTTng 2.x buffer
+> layout by stitching pages together by software using the LTTng
+> libringbuffer "subbuffer table". You can think of it as a 2-level page
+> table, but one level indexes the sub-buffers, and the next level indexes
+> the pages within a sub-buffer.
 
-> Comments below.
-> =
+I'm finally back to this.  I discovered that /proc/vmcore did not map
+vmalloc-ed memory, so I had to come up with something to handle that
+before I could continue to work on this.
 
-> On 13 February 2014 13:00, Olivier Cotte <olivier.cotte@polymtl.ca> wrote:
-> > At first, we wanted thank you for your quick and constructive feedback!
-> >
-> > After reflection on the nature of the problem and consideration of your
-> > feedback, we've arrived with the following solution.
-> >
-> > The technology that will be use is XML. The integration of the machine
-> > interface to LTTng will be done in the most modular manner to facilitat=
-e the
-> > support multiples outputs format. This option will most likely be avail=
-able
-> > at configure time.
-> >
-> > For the moment, we will focus our effort into adding the XML feature on=
-ly.
-> > If many outputs languages is still a viable feature, it will be possibl=
-e to
-> > investigate.
-> >
-> > Our main goal is of course to promote extensibility, ease of developmen=
-t for
-> > new tools and establish a standards for the communication control flow.=
- Here
-> > are our primary requirement concerning the machine interface:
-> >
-> >   * Fit the tree structure of LTTng commands structures.
-> >   * It can be parse from bash/shell script with no external helpers.
-> >   * The new format must not introduce any dependencies to LTTng.
-> >   * [Optional] Still human readable, but fit to be parse.This is not a
-> >      priority since we are talking about a machine interface.
-> >
-> > Here are the reason why we think XML should be used for the machine
-> > interface:
-> >
-> >   * The expression of LTTng hierarchy really fit a XML tree structure.
-> >   * Since Jgalar add a load-save feature that depend on libxml2, we are
-> >     not introducing any dependencies. Choosing another format would
-> >     most likely introduce new dependency.
-> >   * XML is robust and easily extensible. It will also be easy to
-> >     maintains (add new commands, modify existing commands etc.)
-> >   * There are tools that allow you to evaluate XPath expressions from
-> >     the bash.
-> =
+This information was very useful, and snapshot mode is definitely the
+way to go.  I just want to make sure I understand this before I go on. I
+have some specific question:
 
-> In the requirements above, you said "It can be parse from bash/shell
-> script with no external helpers". For XML it's not really the case. I
-> don't really mind (I am fine withXML), but I just think those are
-> contradictory statements.
-True, but the requirement are 'ideal objectives'. The choice of XML do not =
-complies with
-this requirement but fits most of the requirements. I think we
-misspoke on this.
-> =
+consumed is where the data starts and offset is where the data ends.  So
+just go through the subbufs through a double index.  Calculate the
+start/end location by taking the consumed/offset value, dividing that by
+the size of a subbuffer, looking up that value in backend.buf_wsb,
+getting the index from the id there, then indexing into the
+backend.array with the index.  Once you have the subbuffer, you mod the
+location by the size of a subbuffer and that's the subbuffer offset. 
+Divide the subbuffer offset by a page size to get the page index in the
+subbuffer, and mod by a page size to get the offset into the page.
 
-> >   * XML is an established standard
-> >
-> > That's why we consider XML format as a suitable solution.
-> >
-> > Now for the machine interface syntax:
-> >
-> >   * Since we are aware that multiple output could be supported, we want=
- an
-> >     unify flag for all machine interface command.
-> > The flag --xml would be used to output xml from LTTng (we could add
-> > similar
-> > options like --json, --yaml etc.). This would be similar to svn
-> > machine interface and speak for itself.
-> >   * Also, to avoid confusion we will use a different primary command for
-> > input and
-> >     output machine interface.
-> > Ex: lttng machine <input>
-> > Ex: lttng --xml <output>
-> =
+Starting from the consumed position, dump data from pages until you hit
+subbufer->data_size, then move to the next subbuffer.  On the last
+subbuffer, you have to fill in the header and dump up to the offset.
 
-> Can you give an (preliminary) example usage of lttng machine ? The XML
-> document would be a big string / a single argument ?
-> =
+I think I'm missing something, though, because the data size of the last
+subbuffer doesn't match the offset location in that subbuffer.  It's a
+pretty good distance away.
 
-We are not sure yet... but probably a big string(one-lined XML).
-Could be a file but i don't see any advantage.
+Thanks,
 
-Another option would be a prompt.. like GDB Machine Interface.
-> Also, could lttng machine also be able to read its input from stdin?
-> If it does, could it receive multiple commands in a single invocation?
-> For example, each root-level XML element could represent a command.
-> This way, a program would have to do a single exec and then push all
-> the commands one by one to the lttng client.
-> =
+-corey
 
-That was the plan.
-
-To be frank, we will mostly put effort in the output side of MI.If
-everything is *functional* and *approved* we will work on input.
-
-> I have not really thought this through, I am just putting the idea in the=
- wild.
-> =
-
-> > Any points we are missing?
-> =
-
-> I don't know how it would look, but as a user/developer, it would be
-> nice if there was a way for lttng to dump me the XML that corresponds
-> to a command (e.g. what I need to feed lttng machine to have the same
-> effect as a command).
-> =
-
-> Example with syntax I just made up:
-> =
-
-> lttng --dump-xml-input enable-event -k sched_switch,other_event
-> =
-
-> would output
-> =
-
-> <lttng>
->     <command name=3D"enable-event" domain=3D"kernel">
->         <event name=3D"sched_switch"/>
->         <event name=3D"other_event"/>
->     </command>
-> </lttng>
-> =
-
-nice idea
-
-> I feel that this feature would make the machine interface more
-> approachable (less doc to read before you start being efficient). What
-> do you think?
-> =
-
-> Simon
-> =
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- =
-
-Jonathan Rajotte Julien
-Charg=E9 de laboratoire INF1995
-Membre MD6
-Polytechnique Montr=E9al
+> A good way to understand its layout is to look at:
+>
+> lttng-modules (master)
+> lib/ringbuffer/ring_buffer_backend.c
+>
+> lib_ring_buffer_backend_allocate()
+>
+> lib/ringbuffer/backend_types.h
+>
+> struct lib_ring_buffer_backend
+> struct lib_ring_buffer_backend_subbuffer
+> struct lib_ring_buffer_backend_pages
+> struct lib_ring_buffer_backend_page
+>
+> In your case, you never care about the bufb->buf_rsb (read-side owned subbuffer),
+> because you always ever just write into it. buf_rsb is only useful when taking
+> snapshots.
+>
+> bufb->buf_wsb[] has the mapping from sub-buffers write-side index within
+> the buffer to the associated index into bufb->array[], which allows getting the
+> actual sub-buffers and memory pages associated to each buffer.
+>
+> You'll notice that the "id" field within struct lib_ring_buffer_backend_subbuffer
+> is actually made of a mask of many fields. In order to understand how to use it,
+> see 
+>
+> lib/ringbuffer/backend_types.h
+>
+> where we provide helpers to get and set the various information elements
+> contained within the "id" field. See subbuffer_id*() functions and comments
+> surrounding them.
+>
+> So you'll need to use the structures presented above to make sense of the memory
+> layout of a buffer, and reorganize it into a CTF file that can be read by
+> Babeltrace or other CTF trace readers.
+>
+> The algorithm you want to end up doing (offline, on a vmcore) is pretty much
+> the same as grabbing an online snapshot (iterate from the consumer position up to
+> the producer position, see lib/ringbuffer/frontend.h:ib_ring_buffer_snapshot() ).
+> You will need an extra trick to handle the sub-buffer that was being written to
+> at the time of the crash, by using the
+>
+> lib/ringbuffer/frontend_types.h struct commit_counters_hot "seq" field
+>
+> which is designed to track the contiguously committed data within the currently
+> written buffer. This can be used at any point in time (whenever a crash occurs) to
+> populate the last sub-buffer's content size, packet size, see:
+>
+> lttng-ring-buffer-client.h: client_buffer_end()
+>
+> and find out how much of the last sub-buffer needs to be copied into the output
+> CTF trace.
+>
+> Thanks,
+>
+> Mathieu
+>
+>> Thanks,
+>>
+>> -corey
+>>
