@@ -1,7 +1,7 @@
 From: "Woegerer, Paul" <Paul_Woegerer@mentor.com>
 Subject: Re: RFC: Fix crash in dlerror()
-Date: Fri, 14 Feb 2014 12:35:59 +0100
-Message-ID: <52FDFF9F.4000206__33909.1024049141$1392377908$gmane$org@mentor.com>
+Date: Fri, 14 Feb 2014 12:54:17 +0100
+Message-ID: <52FE03E9.80204__40417.9491838024$1392379001$gmane$org@mentor.com>
 References: <52F55511.2080309@mentor.com> <52FCCCD2.9050302@mentor.com>
 	<610029715.24333.1392300717731.JavaMail.zimbra@efficios.com>
 	<1692042945.24342.1392301795996.JavaMail.zimbra@efficios.com>
@@ -20,8 +20,8 @@ Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Paul_Woegerer@mentor.com>) id 1WEH5P-0001ty-Sh
-	for lttng-dev@lists.lttng.org; Fri, 14 Feb 2014 06:37:45 -0500
+	(envelope-from <Paul_Woegerer@mentor.com>) id 1WEHN5-00023m-9M
+	for lttng-dev@lists.lttng.org; Fri, 14 Feb 2014 06:55:57 -0500
 In-Reply-To: <alpine.LNX.2.00.1402141420420.24828@monopod.intra.ispras.ru>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -34,19 +34,6 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: Alexander Monakov <amonakov@ispras.ru>, Stefan Seefeld <stefan_seefeld@mentor.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
 List-Id: lttng-dev@lists.lttng.org
-
-Thank you Alexander !
-
-So Stefans reasoning was entirely correct but the definition of dlsym()
-lies about its effect on others.
-...which makes GCC believe that there is no need to store the changes to
-the cur_alloc fields prior to calling dlsym().
-
-So I agree with you that this is a glibc bug then.
-
---
-Best,
-Paul
 
 On 02/14/2014 11:30 AM, Alexander Monakov wrote:
 > On Thu, 13 Feb 2014, Stefan Seefeld wrote:
@@ -63,6 +50,13 @@ On 02/14/2014 11:30 AM, Alexander Monakov wrote:
 > from __THROWNL).  Presence of the attribute allows the compiler to assume that
 > no functions from the current compilation unit will be called from dlsym, and
 > thus there's no need to write back potentially escaping data.
+
+So the CMM_ACCESS_ONCE's I suggested would only be required if dlsym()
+would call back into the wrapper from another thread, right ?
+
+Thanks,
+Paul
+
 >
 > glibc used to have __THROW annotations on dlopen() as well, and they changed
 > it to __THROWNL (removing the "leaf" attribute) after it was pointed out that
