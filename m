@@ -1,27 +1,17 @@
-From: "Woegerer, Paul" <Paul_Woegerer@mentor.com>
-Subject: Re: RFC: Fix crash in dlerror()
-Date: Fri, 14 Feb 2014 12:54:17 +0100
-Message-ID: <52FE03E9.80204__40417.9491838024$1392379001$gmane$org@mentor.com>
-References: <52F55511.2080309@mentor.com> <52FCCCD2.9050302@mentor.com>
-	<610029715.24333.1392300717731.JavaMail.zimbra@efficios.com>
-	<1692042945.24342.1392301795996.JavaMail.zimbra@efficios.com>
-	<1119459836.24348.1392302831554.JavaMail.zimbra@efficios.com>
-	<52FCE732.9090508@mentor.com>
-	<581364674.24417.1392309613306.JavaMail.zimbra@efficios.com>
-	<52FCF7F5.9070908@mentor.com>,
-	<934762932.24558.1392317539645.JavaMail.zimbra@efficios.com>,
-	<A30AF42E15BD64459E202697468DFFA77E387F33@EU-MBX-04.mgc.mentorg.com>
-	<A30AF42E15BD64459E202697468DFFA77E389F61@EU-MBX-04.mgc.mentorg.com>
-	<52FD4AB0.4060203@mentor.com>
-	<alpine.LNX.2.00.1402141420420.24828@monopod.intra.ispras.ru>
+From: Paul Woegerer <paul_woegerer@mentor.com>
+Subject: [PATCH] Force static_alloc setup to be written into
+	memory
+Date: Fri, 14 Feb 2014 14:45:05 +0100
+Message-ID: <1392385505-13405-1-git-send-email-paul_woegerer__18265.5415418141$1392385673$gmane$org@mentor.com>
+References: <alpine.LNX.2.00.1402141420420.24828@monopod.intra.ispras.ru>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Paul_Woegerer@mentor.com>) id 1WEHN5-00023m-9M
-	for lttng-dev@lists.lttng.org; Fri, 14 Feb 2014 06:55:57 -0500
+	(envelope-from <Paul_Woegerer@mentor.com>) id 1WEJ6U-0002zE-UT
+	for lttng-dev@lists.lttng.org; Fri, 14 Feb 2014 08:47:00 -0500
 In-Reply-To: <alpine.LNX.2.00.1402141420420.24828@monopod.intra.ispras.ru>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -31,51 +21,45 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Alexander Monakov <amonakov@ispras.ru>, Stefan Seefeld <stefan_seefeld@mentor.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
+To: lttng-dev@lists.lttng.org, mathieu.desnoyers@efficios.com, stefan_seefeld@mentor.com
+Cc: paulmck@linux.vnet.ibm.com
 List-Id: lttng-dev@lists.lttng.org
 
-On 02/14/2014 11:30 AM, Alexander Monakov wrote:
-> On Thu, 13 Feb 2014, Stefan Seefeld wrote:
->> Our compilation unit defines a bunch of functions with external linkage,
->> which access cur_alloc. And since gcc has no way to rule out that the
->> call to dlsym() will not cause any of these functions to be called, it
->> mustn't make any assumptions about whether or not the first
->> initialization of cur_alloc is redundant or not, and thus shouldn't
->> elide it.
-> Stefan, LTTng developers,
->
-> The problem here is that glibc declares dlsym() with __attribute__((leaf))
-> (see the definition of __THROW in /usr/include/sys/cdefs.h and the difference
-> from __THROWNL).  Presence of the attribute allows the compiler to assume that
-> no functions from the current compilation unit will be called from dlsym, and
-> thus there's no need to write back potentially escaping data.
+As explained by Alexander Monakov, dlsym() is defined to be pure, thus the
+compiler is allowed to assume that there is no need to write the changes
+performed by setup_static_allocator() into memory prior to calling dlsym().
+The added cmm_barrier() forces the compiler to write the changes into memory.
 
-So the CMM_ACCESS_ONCE's I suggested would only be required if dlsym()
-would call back into the wrapper from another thread, right ?
+For more details refer to:
+http://lists.lttng.org/pipermail/lttng-dev/2014-February/022389.html
 
-Thanks,
-Paul
+Signed-off-by: Paul Woegerer <paul_woegerer@mentor.com>
+---
+ liblttng-ust-libc-wrapper/lttng-ust-malloc.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
->
-> glibc used to have __THROW annotations on dlopen() as well, and they changed
-> it to __THROWNL (removing the "leaf" attribute) after it was pointed out that
-> dlopen will call constructors:
->
-> https://sourceware.org/ml/libc-alpha/2013-08/msg00465.html
->
-> Unfortunately when I pointed out that dlsym is not really "leaf" as well, my
-> argument was dismissed:
->
-> https://sourceware.org/ml/libc-alpha/2013-09/msg00012.html
->
-> Please consider filing a glibc bug or otherwise reopening that discussion.
->
-> Hope that helps,
-> Alexander
-
-
+diff --git a/liblttng-ust-libc-wrapper/lttng-ust-malloc.c b/liblttng-ust-libc-wrapper/lttng-ust-malloc.c
+index 8296ae2..7dd647f 100644
+--- a/liblttng-ust-libc-wrapper/lttng-ust-malloc.c
++++ b/liblttng-ust-libc-wrapper/lttng-ust-malloc.c
+@@ -198,6 +198,9 @@ void lookup_all_symbols(void)
+ 	 */
+ 	setup_static_allocator();
+ 
++	/* Dlsym is defined pure -> force static alloc into memory */
++	cmm_barrier();
++
+ 	/* Perform the actual lookups */
+ 	af.calloc = dlsym(RTLD_NEXT, "calloc");
+ 	af.malloc = dlsym(RTLD_NEXT, "malloc");
+@@ -207,7 +210,7 @@ void lookup_all_symbols(void)
+ 	af.posix_memalign = dlsym(RTLD_NEXT, "posix_memalign");
+ 
+ 	/* Populate the new allocator functions */
+-	memcpy(&cur_alloc, &af, sizeof(cur_alloc));
++	cur_alloc = af;
+ }
+ 
+ void *malloc(size_t size)
 -- 
-Paul Woegerer, SW Development Engineer
-Sourcery Analyzer <http://go.mentor.com/sourceryanalyzer>
-Mentor Graphics, Embedded Software Division
+1.8.5.2
