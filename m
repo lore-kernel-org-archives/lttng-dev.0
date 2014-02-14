@@ -1,36 +1,17 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] LTTng modules 2.4.0-rc4
-Date: Fri, 14 Feb 2014 16:49:26 +0000 (UTC)
-Message-ID: <1164404918.25142.1392396566252.JavaMail.zimbra__3543.58709087155$1392396687$gmane$org@efficios.com>
-References: <1749761650.25141.1392396546824.JavaMail.zimbra@efficios.com>
+Subject: [RELEASE] Babeltrace 1.2.0-rc1
+Date: Fri, 14 Feb 2014 22:05:13 +0000 (UTC)
+Message-ID: <1410622608.25378.1392415513045.JavaMail.zimbra__38451.3802513995$1392415589$gmane$org@efficios.com>
+References: <214509100.25341.1392414397703.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1WELx9-0004Wx-Sf
-	for lttng-dev@lists.lttng.org; Fri, 14 Feb 2014 11:49:33 -0500
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.efficios.com (Postfix) with ESMTP id BDA013400BC
-	for <lttng-dev@lists.lttng.org>; Fri, 14 Feb 2014 16:49:27 +0000 (UTC)
-Received: from mail.efficios.com ([127.0.0.1])
-	by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new,
-	port 10032)
-	with ESMTP id gBG0PlpkuKdi for <lttng-dev@lists.lttng.org>;
-	Fri, 14 Feb 2014 16:49:26 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.efficios.com (Postfix) with ESMTP id 8DF6A34027B
-	for <lttng-dev@lists.lttng.org>; Fri, 14 Feb 2014 16:49:26 +0000 (UTC)
-Received: from mail.efficios.com ([127.0.0.1])
-	by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new,
-	port 10026)
-	with ESMTP id UMfQPo8DSe5y for <lttng-dev@lists.lttng.org>;
-	Fri, 14 Feb 2014 16:49:26 +0000 (UTC)
-Received: from evm-mail-1.efficios.com (evm-mail-1.efficios.com [78.47.125.74])
-	by mail.efficios.com (Postfix) with ESMTP id 6BCCF3400BC
-	for <lttng-dev@lists.lttng.org>; Fri, 14 Feb 2014 16:49:26 +0000 (UTC)
-In-Reply-To: <1749761650.25141.1392396546824.JavaMail.zimbra@efficios.com>
+	(envelope-from <compudj@efficios.com>) id 1WEQsm-0006wr-IH
+	for lttng-dev@lists.lttng.org; Fri, 14 Feb 2014 17:05:22 -0500
+In-Reply-To: <214509100.25341.1392414397703.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -39,23 +20,62 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org, tiwg@multicore-association.org
 List-Id: lttng-dev@lists.lttng.org
 
-The LTTng modules provide Linux kernel tracing capability to the LTTng
-2.x tracer toolset.
+The Babeltrace project provides trace read and write libraries, as well
+as a trace converter. Plugins can be created for any trace format to
+allow its conversion to/from another trace format.
+
+The main format expected to be converted to/from is the Common Trace
+Format (CTF). The default input format of the "babeltrace" command is
+CTF, and its default output format is a human-readable text log. The
+"babeltrace-log" command converts from a text log to a CTF trace.
+
+The major new features in Babeltrace 1.2:
+
+1) lttng-live input plugin to read live streams with LTTng 2.4.
+
+Getting up and running with live for kernel tracing in a nutshell
+through localhost (adapt to use over the network):
+
+# assumes you installed lttng 2.4 packages already
+lttng-relayd -d  # as root
+lttng-sessiond -d  # as root
+lttng create mysession --live 1000000 -U net://localhost
+lttng enable-event -k -a
+lttng start
+babeltrace -i lttng-live net://localhost   # list the viewable sessions
+babeltrace -i lttng-live net://localhost/host/${HOSTNAME}/mysession
+# ... now getting live view of the kernel trace ...
+
+See LTTng Tools live-reading-howto.txt and Babeltrace lttng-live.txt
+for details.
+
+2) CTF writer library
+
+C/C++ library and Python bindings to write CTF traces.
+
+See include/babeltrace/ctf-writer/*.h for details.
+
+3) Babeltrace Python bindings
+
+Allow reading and writing CTF traces from Python. See doc/python-howto.txt
+for details.
+
+4) CTF indexes support
+
+Support index files extension of the Common Trace Format. Those are generated
+starting from LTTng 2.4.
 
 Changelog:
-2014-02-14 LTTng modules 2.4.0-rc4
-        * Fix: use after free in ring buffer clients
-        * Fix: Add statedump exit so module is not permanent
-        * Cleanup: move callback init to static initialization
-        * Fix: OOT lttng-statedump tracepoints not visible with signed kernels
+[see Changelog file in Babeltrace for a whooping 146 commits long changelog!]
 
-Project website: http://lttng.org
-Download link: http://lttng.org/download
-(please refer to the README files for installation instructions and
-lttng-tools doc/quickstart.txt for usage information)
+Thanks to everyone who contributed to this new release!
+
+Project website: http://www.efficios.com/babeltrace
+Download link: http://www.efficios.com/files/babeltrace/
+CTF specification: http://www.efficios.com/ctf
 
 -- 
 Mathieu Desnoyers
