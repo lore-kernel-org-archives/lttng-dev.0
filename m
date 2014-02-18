@@ -1,19 +1,23 @@
-From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
-	<jeremie.galarneau@efficios.com>
-Subject: [PATCH lttng-ust] Fix: java-jul/Makefile should not be
-	marked as a binary
-Date: Tue, 18 Feb 2014 13:59:35 -0500
-Message-ID: <1392749975-25136-1-git-send-email-jeremie.galarneau__36340.4875192375$1392750051$gmane$org@efficios.com>
+From: Corey Minyard <minyard@acm.org>
+Subject: Re: Extract lttng trace from kernel coredump
+Date: Tue, 18 Feb 2014 13:29:23 -0600
+Message-ID: <5303B493.7080200__41035.3291118101$1392752246$gmane$org@acm.org>
+References: <52D46B33.4010401@acm.org> <20140114184243.GC8177@thessa>
+	<52D5A08F.4020204@acm.org>
+	<1303248645.9400.1390063653581.JavaMail.zimbra@efficios.com>
+	<52DAC820.7000005@acm.org>
+	<353610105.9520.1390071650232.JavaMail.zimbra@efficios.com>
+Reply-To: minyard@acm.org
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="------------080906070505050609060500"
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qc0-f181.google.com ([209.85.216.181])
+Received: from mail-ob0-f180.google.com ([209.85.214.180])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1WFptP-0007Y5-CX
-	for lttng-dev@lists.lttng.org; Tue, 18 Feb 2014 13:59:48 -0500
-Received: by mail-qc0-f181.google.com with SMTP id e9so25762405qcy.26
-	for <lttng-dev@lists.lttng.org>; Tue, 18 Feb 2014 10:59:37 -0800 (PST)
+	(envelope-from <tcminyard@gmail.com>) id 1WFqMF-0007oB-T3
+	for lttng-dev@lists.lttng.org; Tue, 18 Feb 2014 14:29:40 -0500
+Received: by mail-ob0-f180.google.com with SMTP id wp4so19148566obc.11
+	for <lttng-dev@lists.lttng.org>; Tue, 18 Feb 2014 11:29:26 -0800 (PST)
+In-Reply-To: <353610105.9520.1390071650232.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,21 +26,414 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-amF2YS1qdWwvTWFrZWZpbGUgaXMgcGFydCBvZiBiaW5fU0NSSVBUUyB3aGljaCBjYXVzZXMgaXQg
-dG8gYmUKaW5zdGFsbGVkIHVuZGVyIC91c3IvbG9jYWwvYmluLgoKSXQgaXMgYWxyZWFkeSBpbnN0
-YWxsZWQgYXMgYW4gZXhhbXBsZS4KClNpZ25lZC1vZmYtYnk6IErDqXLDqW1pZSBHYWxhcm5lYXUg
-PGplcmVtaWUuZ2FsYXJuZWF1QGVmZmljaW9zLmNvbT4KLS0tCiBkb2MvZXhhbXBsZXMvTWFrZWZp
-bGUuYW0gfCAxIC0KIDEgZmlsZSBjaGFuZ2VkLCAxIGRlbGV0aW9uKC0pCgpkaWZmIC0tZ2l0IGEv
-ZG9jL2V4YW1wbGVzL01ha2VmaWxlLmFtIGIvZG9jL2V4YW1wbGVzL01ha2VmaWxlLmFtCmluZGV4
-IGUxOWFmMzguLjk3MWVlYzMgMTAwNjQ0Ci0tLSBhL2RvYy9leGFtcGxlcy9NYWtlZmlsZS5hbQor
-KysgYi9kb2MvZXhhbXBsZXMvTWFrZWZpbGUuYW0KQEAgLTEwLDcgKzEwLDYgQEAgZGlzdF9kb2Nf
-ZXhhbXBsZXNfamF2YV9qdWxfREFUQSA9IGphdmEtanVsL01ha2VmaWxlIFwKIAkJCQkJCQkJICBq
-YXZhLWp1bC9IZWxsby5qYXZhIFwKIAkJCQkJCQkJICBqYXZhLWp1bC9ydW4KIFNVQkRJUlNfSlVM
-ID0gamF2YS1qdWwKLWJpbl9TQ1JJUFRTID0gamF2YS1qdWwvTWFrZWZpbGUKIGVuZGlmCiAKIGRp
-c3RfZG9jX2V4YW1wbGVzX0RBVEEgPSBSRUFETUUKLS0gCjEuOS4wCgoKX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdAps
-dHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9t
-YWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+This is a multi-part message in MIME format.
+--------------080906070505050609060500
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+I have attached some gdb macros for dumping LTT buffers from a kernel
+coredump.  I haven't done a lot of testing, though.
+
+I do have one question.  I've been getting the metadata by taking a
+snapshot right when the trace starts and saving that to stick into the
+trace output from the coredump.  Is that the best way, or is there some
+other way I can extract it?  There doesn't seem to be a metadata channel
+running in snapshot mode.
+
+Thanks,
+
+-corey
+
+--------------080906070505050609060500
+Content-Type: text/x-python;
+ name="ltt.py"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="ltt.py"
+
+# gdb macros for extracting an LTT trace from a kernel coredump
+# Copyright (C) 2014  Montavista Software <source@mvista.com>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
+
+# They layout of the LTT buffers in memory is rather complex.  But here's
+# the data structures involved:
+#
+# sessions - a list of running sessions of type struct lttng_session.
+# A session consists of a some generic information and a list of
+# channels for the session.
+#
+# session->chan - a list of channels of type struct lttng_channel.  The
+# main information of interest is in chan.backend.
+#
+# This code parses the sessions and channels until it finds the first
+# active non-metadata session/channel running in snapshot
+# (relay-overwrite-mmap) mode.
+#
+# The chan.backend has some useful information about data sizes and a
+# percpu array of ring buffers.  Each CPU logs to its ring buffer and
+# the downstream tools pull all the data together.  The dump process
+# creates a separate file for each CPU, just like the normal tools do.
+#
+# chan.backend->buf - A percpu array of structures of type struct
+# lib_ring_buffer.  This is more or less the heart of the data
+# structure.  Like channels, lib_ring_buffer has a backend field that
+# holds most of the useful data.
+#
+# buf->backend.array - An array of pointers to subbuffers.  A
+# subbuffer itself is an array of pointers to pages, and each page in
+# order holds data.  LTT elements do not span subbuffers, so the
+# actual size of the data in the subbuffer may be smaller than the
+# full subbuffer size.  subbuf->data_size holds the actual data size in
+# the subbuffer.
+#
+# buf->backend.buf_wsb - The subbuffers may not be in order.  This array
+# holds the order of the subbuffers.
+#
+# chan->backend.num_subbuf - The number of subbuffers.
+#
+# chan->backend.subbuf_size - The size of each subbuffer, in bytes.
+#
+# So at this point, you can trace down any index by taking the index,
+# dividing it by num_subbuf to get the subbuffer, taking that and
+# doing a modulo on num_subbuf(*), indexing into buf->backend.buf_wsb
+# to get the actual subbuffer number, then indexing into
+# buf->backend.array to get a pointer to the subbuffer.  Then take the
+# original index, modulo it by the number of subbuffers to get a
+# subbuffer offset.  Dividing the subbuffer offset by the number of
+# pages in a subbuffer gives the page in the subbuffer, and modulo the
+# subbuffer offset by the page size to get the offset into the page.
+# The page data structure has a virtual pointer so the data can be
+# directly accessed.
+#
+# (*) the offset and consumed values do not wrap at the total output size,
+# so you must modulo the subbuffer index to get the proper value.
+#
+# buf->offset - The index of the end of the data.
+# buf->consumed - The index to the start of data.
+#
+# So the basic algorithm is to index down to buf->consumed and start dumping
+# pages until buf->offset is reached.
+#
+# The command is invoked as:
+#    dumpltt <lttdir> <outputdir>
+# where lttdir is the place where the ltt modules are compiled and outputdir
+# is the place where you want to put the trace output.
+#
+# The lttdir is required because this code loads the symbol tables
+# from the ltt modules so it can access the various data structures in
+# ltt.  It will not work without that.
+#
+# Note that the metadata for the dump is not available from the
+# kernel.  You must take a snapshot on the target after you start ltt
+# and use the metadata from the snapshot for your operation.
+
+import os
+
+def calc_offset(struct, member):
+    """Calculate the offset in the struct to the given member."""
+    return gdb.parse_and_eval("((int)&((%s *)0).%s)" % (struct, member))
+
+def fetch_container(ptr, struct, lmember):
+    """Fetch a pointer to the given structure given a pointer to one of
+    its members.  This is generally used to get the container of a list
+    element."""
+    offset = calc_offset(struct, lmember)
+    s = gdb.parse_and_eval("(void *) (((unsigned long) %s) - %s)" %
+                          (ptr, offset))
+    return "((%s *) %s)" % (struct, s)
+
+def get_ptr(ptr, struct):
+    """Return a string that can be used to reference the given type (struct)
+    at the given address (ptr)."""
+    s = gdb.parse_and_eval("(void *) %s" % ptr)
+    return "((%s *) %s)" % (struct, s)
+    
+def get_str(p):
+    """Get a string value from the given target address"""
+    s = gdb.parse_and_eval("(char *) %s" % p)
+    return str(s).split('"')[1]
+
+def align(v, alignment):
+    """Align the given integer to the given alignment"""
+    return (v + (alignment - 1)) & ~(alignment - 1)
+
+def get_file_size(fname):
+    """Return the size of the given file"""
+    f = open(fname, "a")
+    size = f.tell()
+    f.close()
+    return size
+
+def value_to_binary(tmpdir, typestr, v):
+    """Convert an expression to a binary value.  The size depends
+    on the typestr given.  Return a string with the raw binary value
+    in target-endian order"""
+    fn = "%s/dummy" % tmpdir
+    gdb.execute("append value %s ((%s) %ld)" % (fn, typestr, long(v)))
+    f = open(fn, "r")
+    str = f.read()
+    f.close()
+    os.unlink(fn)
+    return str
+
+def get_cpu_list():
+    """Return a list of online CPUs on the target."""
+    try:
+        ulongsize = gdb.parse_and_eval("sizeof(unsigned long)")
+        nr_cpumask = gdb.parse_and_eval("sizeof(*cpu_online_mask)")
+        nr_cpumask = int(nr_cpumask) / int(ulongsize)
+        cpu = 0;
+        cpus = []
+        for i in range(0, nr_cpumask):
+            mask = gdb.parse_and_eval("cpu_online_mask->bits[%d]" % i)
+            for j in range(0, ulongsize * 8):
+                if ((mask & 1) != 0):
+                    cpus.append(cpu)
+                mask = mask >> 1
+                cpu = cpu + 1
+    except e:
+        cpus = [ 0 ]
+    return cpus
+
+def get_percpu_ptr(p, cpu, typename):
+    """Convert a percpu pointer 'p' on the given cpu to a pointer to the
+    given type."""
+    try:
+        offset = gdb.parse_and_eval("__per_cpu_offset[%d]" % cpu)
+    except:
+        offset = "0";
+    v = gdb.parse_and_eval("(void *) %s + %s" % (p, offset))
+    return "((%s *) %s)" % (typename, v)
+    
+def find_module(modname):
+    """Return a pointer to the given module name's data structure"""
+    offset = gdb.parse_and_eval("((int)&((struct module *)0).list)")
+    head = gdb.parse_and_eval("modules").address
+    head = head.cast(gdb.lookup_type("unsigned long"))
+    current = gdb.parse_and_eval("((struct list_head *) %s)->next" % head)
+    while (current != head):
+        modp = gdb.parse_and_eval("((struct module *) (((char *) %s) - %s))"
+                                  % (current, offset))
+        modp = "((struct module *) %s)" % modp
+        cname = get_str("%s->name" % modp)
+        if (cname == modname):
+            return modp
+        current = gdb.parse_and_eval("((struct list_head *) %s)->next" %
+                                     current)
+    return None        
+
+class dumpltt(gdb.Command):
+    """Dump an LTT coredump from the kernel image."""
+    def __init__(self):
+        super(dumpltt, self).__init__("dumpltt", gdb.COMMAND_USER)
+
+    def find_channel(self, head):
+        """Find a channel in the list that is a per-cpu channel that
+        is in snapshot mode (relay-overwrite-mmap) and return the
+        first one found or None if not found."""
+        p = gdb.parse_and_eval("((struct list_head *) %s)->next" % head)
+        while (p != head):
+            chan = fetch_container(p, "struct lttng_channel", "list")
+            enabled = gdb.parse_and_eval("%s->enabled" % chan)
+            if (int(enabled)):
+                chantype = gdb.parse_and_eval("%s->channel_type" % chan)
+                if (chantype == self.PER_CPU_CHANNEL):
+                    backend = gdb.parse_and_eval("&(%s->chan->backend)" % chan)
+                    backend = "((struct channel_backend *) %s)" % str(backend)
+                    tpname = get_str("%s->name" % backend)
+                    if (tpname == "relay-overwrite-mmap"):
+                        return backend
+            p = gdb.parse_and_eval("((struct list_head *) %s)->next" % p)
+        return None
+
+    def find_session_channel(self):
+        """Search the channels in the given session for one in snapshot
+        mode."""
+        head = gdb.parse_and_eval("&sessions")
+        p = gdb.parse_and_eval("sessions.next")
+        while (p != head):
+            session = fetch_container(p, "struct lttng_session", "list")
+            print "session: " + session
+            active = gdb.parse_and_eval("%s->active" % session)
+            if (not int(active)):
+                continue
+            chanlist = gdb.parse_and_eval("&(%s->chan)" % session)
+            chan = self.find_channel(chanlist)
+            if (chan is not None):
+                return chan
+            p = gdb.parse_and_eval("((struct list_head *) %s)->next" % p)
+        return None
+
+    def add_alignment (self, cpu, size):
+        """Dump 'size' bytes to the per-CPU output file."""
+        f = open("%s/channel0_%d" % (self.dumpdir, cpu), "ab")
+        f.write("".ljust(size, chr(0)))
+        f.close()
+        return
+
+    def dump_page(self, cpu, page, start, size):
+        """Dump 'size' bytes from the page starting at offset 'start'
+        to the per-CPU output file."""
+        addr = long(gdb.parse_and_eval("%s->virt" % page)) + start
+        end = addr + size - start
+        gdb.execute("append memory %s/channel0_%d %ld %ld" %
+                    (self.dumpdir, cpu, addr, end))
+        return
+
+    def dump_subbuffer(self, cpu, rbbep, start, size):
+        """Dump 'size' bytes from offset 'start' in the given subbuffer
+        'rbbep' to the per-CPU output file."""
+        start_page = start / self.page_size
+        start_offset = start % self.page_size
+        written = 0
+        for i in range(start_page, self.num_pages_per_subbuf):
+            bepage = get_ptr("&(%s->p[%d])" % (rbbep, i),
+                             "struct lib_ring_buffer_backend_page")
+            if (size > self.page_size - start_offset):
+                self.dump_page(cpu, bepage, start_offset,
+                               self.page_size - start_offset)
+                size -= self.page_size - start_offset
+                written += self.page_size - start_offset
+                start_offset = 0
+            else:
+                self.dump_page(cpu, bepage, start_offset, size)
+                written += size
+                break
+        return written
+
+    def handle_subbuffer(self, cpu, buf, rbbe, cidx, coffset, length):
+        """Extract necessary information from the subbuffer and dump it to a
+        file.
+
+        buf is the ring buffer.
+        rbbe is a pointer to the buf->backend.buf_wsb array.
+        cidx is the subbuffer index (for indexing into cidx).
+        coffset is the offset within the subbuffer to start at.
+        length is the number of bytes to dump from the subbuffer.
+
+        Note that each subbuffer has a header, and it may not be
+        completely filled out.  So add the subbuffer size and
+        the size padded to a page to the header after writing it
+        out.
+        """
+        sid = long(gdb.parse_and_eval("%s[%d].id" % (rbbe, cidx)))
+        sbidx = sid & self.idmask
+        rbbep = get_ptr("%s->backend.array[%d]" % (buf, sbidx),
+                        "struct lib_ring_buffer_backend_pages")
+        size = int(gdb.parse_and_eval("%s->data_size" % rbbep))
+        last_subbuf_start = get_file_size("%s/channel0_%d"
+                                          % (self.dumpdir, cpu))
+        if (length > 0):
+            size = length
+        written_size = self.dump_subbuffer(cpu, rbbep, coffset, size);
+        padded_size = align(written_size, self.page_size)
+        self.add_alignment(cpu, padded_size - written_size)
+
+        print "    subbuf size = %d (%d padding) %d" % (padded_size, 
+                                                        padded_size - written_size,
+                                                        size)
+        
+        # Now fix the values in the header
+        f = open("%s/channel0_%d" % (self.dumpdir, cpu), "r+")
+        f.seek(last_subbuf_start + 40, os.SEEK_SET)
+        val = value_to_binary(self.dumpdir, "uint64_t", written_size * 8)
+        f.write(val)
+        f.seek(last_subbuf_start + 48, os.SEEK_SET)
+        val = value_to_binary(self.dumpdir, "uint64_t", padded_size * 8)
+        f.write(val)
+        f.close()
+
+    def handle_buffer(self, cpu, buf):
+        """Dump the given ring buffer to the given cpu's output file."""
+        print "Handling cpu %d buffer %s" % (cpu, buf)
+        offset = int(gdb.parse_and_eval("%s->offset.v" % buf))
+        oidx = (offset / self.subbuf_size) % self.num_subbuf
+        ooffset = offset % self.subbuf_size
+        consumed =  int(gdb.parse_and_eval("%s->consumed.counter" % buf))
+        cidx = (consumed / self.subbuf_size) % self.num_subbuf
+        coffset = consumed % self.subbuf_size
+        rbbe = get_ptr("%s->backend.buf_wsb" % buf,
+                       "struct lib_ring_buffer_backend_subbuffer")
+        subbuf_num = 1;
+        while (oidx != cidx):
+            print "  subbuffer %d" % subbuf_num
+            self.handle_subbuffer(cpu, buf, rbbe, cidx, coffset, 0)
+            cidx = (cidx + 1) % self.num_subbuf
+            coffset = 0
+            subbuf_num += 1
+        
+        print "  subbuffer %d" % subbuf_num
+        self.handle_subbuffer(cpu, buf, rbbe, cidx, coffset, ooffset - coffset)
+        return
+
+    def invoke(self, args, from_tty):
+        argv = gdb.string_to_argv(args)
+        if (len(argv) != 2):
+            raise gdb.GdbError("dumpltt <lttdir> <dumpdir>")
+
+        lttdir = argv[0]
+        self.dumpdir = argv[1]
+        os.system("rm -rf %s/channel*" % self.dumpdir)
+        os.system("rm -rf %s/dummy" % self.dumpdir)
+        modp = find_module("lttng_tracer")
+        if (modp is None):
+            raise gdb.GdbError("Unable to find lttng_tracer module, are you "
+                               "sure lttng is loaded in this kernel dump?")
+        gdb.execute("add-symbol-file %s/lttng-tracer.o %s -s .data %s" %
+              (lttdir,
+               gdb.parse_and_eval("(unsigned long) (%s->module_core_rx)"
+                                  % modp),
+               gdb.parse_and_eval("(unsigned long) (%s->module_core_rw)"
+                                  % modp)))
+
+        self.PER_CPU_CHANNEL = gdb.parse_and_eval("PER_CPU_CHANNEL")
+
+        backend = self.find_session_channel()
+        if (backend is None):
+            raise gdb.GdbError("Unable to find operating session, are you sure "
+                               "lttng was running with --snapshot?")
+        print "Backend: " + backend
+        self.num_subbuf = gdb.parse_and_eval("%s->num_subbuf" % backend);
+        self.subbuf_size = gdb.parse_and_eval("%s->subbuf_size" % backend);
+        p = get_percpu_ptr("%s->buf" % backend, 0, "struct lib_ring_buffer");
+        self.num_pages_per_subbuf = gdb.parse_and_eval(
+            "%s->backend.num_pages_per_subbuf" % p);
+        self.page_size = self.subbuf_size / self.num_pages_per_subbuf
+        self.idshift = int(gdb.parse_and_eval("sizeof(long)")) * 8 / 2
+        self.idmask = (1 << self.idshift) - 1
+        cpus = get_cpu_list()
+        for cpu in cpus:
+            p = get_percpu_ptr("%s->buf" % backend, cpu,
+                               "struct lib_ring_buffer");
+            self.handle_buffer(cpu, p)
+dumpltt()
+
+--------------080906070505050609060500
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--------------080906070505050609060500--
