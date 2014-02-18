@@ -1,18 +1,18 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH] LTTng logger ABI
-Date: Tue, 18 Feb 2014 00:22:39 +0000 (UTC)
-Message-ID: <200800140.26414.1392682959643.JavaMail.zimbra__12564.6044304178$1392683013$gmane$org@efficios.com>
-References: <1392671512-9136-1-git-send-email-mathieu.desnoyers@efficios.com>
-	<5302A3F1.6090508@opersys.com>
+Subject: Re: How do you write an argument-less or
+	payload-less	kernel tracepoint?
+Date: Tue, 18 Feb 2014 14:03:57 +0000 (UTC)
+Message-ID: <1957782186.26585.1392732237247.JavaMail.zimbra__30153.0167031617$1392732314$gmane$org@efficios.com>
+References: <48CF5AC71E61DB46B70D0F388054EFFD267E73BC@VAL-E-01.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1WFYSP-00077N-Fz
-	for lttng-dev@lists.lttng.org; Mon, 17 Feb 2014 19:22:49 -0500
-In-Reply-To: <5302A3F1.6090508@opersys.com>
+	(envelope-from <compudj@efficios.com>) id 1WFlHE-0005CH-4B
+	for lttng-dev@lists.lttng.org; Tue, 18 Feb 2014 09:04:08 -0500
+In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD267E73BC@VAL-E-01.valcartier.drdc-rddc.gc.ca>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,47 +21,40 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Karim Yaghmour <karim.yaghmour@opersys.com>
+To: Daniel Thibault <Daniel.Thibault@drdc-rddc.gc.ca>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
------ Original Message -----
-> From: "Karim Yaghmour" <karim.yaghmour@opersys.com>
-> To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-> Cc: lttng-dev@lists.lttng.org
-> Sent: Monday, February 17, 2014 7:06:09 PM
-> Subject: Re: [PATCH] LTTng logger ABI
-> 
-> 
-> On 14-02-17 04:11 PM, Mathieu Desnoyers wrote:
-> > Add a user-space ABI (new file /proc/lttng-logger) to lttng-modules
-> > which can be written into by any user on the system. The content is
-> > saved into the kernel trace stream into the "lttng_logger" kernel event.
-> > 
-> > The content of a single write is written into an lttng_logger event.
-> > The write count is truncated to 1024 bytes (if larger), which is much
-> > smaller than the smallest subbuffer size available (4096 bytes). This
-> > ensures all written data makes it into the active tracing buffers.
-> 
-> Very nice. Let me know when this is in so that I can schedule giving it
-> a try on Android.
-
-I plan to merge it into master right after LTTng 2.4 final is released, which
-should be in a matter of days. Stay tuned! :)
-
-Thanks,
-
-Mathieu
-
-> 
-> --
-> Karim Yaghmour
-> CEO - Opersys inc. / www.opersys.com
-> http://twitter.com/karimyaghmour
-> 
-> 
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJEYW5pZWwgVGhpYmF1bHQiIDxE
+YW5pZWwuVGhpYmF1bHRAZHJkYy1yZGRjLmdjLmNhPgo+IFRvOiBsdHRuZy1kZXZAbGlzdHMubHR0
+bmcub3JnCj4gU2VudDogV2VkbmVzZGF5LCBGZWJydWFyeSAxMiwgMjAxNCA0OjU0OjU1IFBNCj4g
+U3ViamVjdDogW2x0dG5nLWRldl0gSG93IGRvIHlvdSB3cml0ZSBhbiBhcmd1bWVudC1sZXNzIG9y
+IHBheWxvYWQtbGVzcwlrZXJuZWwgdHJhY2Vwb2ludD8KPiAKPiBIb3cgZG8geW91IHdyaXRlIGFu
+IGFyZ3VtZW50LWxlc3Mga2VybmVsIHRyYWNlcG9pbnQ/ICBJIHRyaWVkOgo+IAo+IFRSQUNFX0VW
+RU5UKGhlbGxvX25pbCwKPiAgICBUUF9QUk9UTygpLAo+ICAgIFRQX0FSR1MoKSwKPiAuLi4KPiAp
+Owo+IAo+IGFuZAo+IAo+IFRSQUNFX0VWRU5UX05PQVJHUyhoZWxsb19uaWwsCj4gLy8gVFBfUFJP
+VE8oaW50IHgpLAo+IC8vIFRQX0FSR1MoeCksCj4gLi4uCj4gKTsKPiAKPiAgICBXaXRob3V0IHN1
+Y2Nlc3MuCj4gCj4gICAgQSBwYXlsb2FkLWxlc3MgdHJhY2Vwb2ludCBpcyBwb3NzaWJsZSwgYnV0
+IGNhdXNlcyBhIGNvdXBsZSBvZiB3YXJuaW5nczoKPiAKPiBtYWtlWzFdOiBlbnRyYW50IGRhbnMg
+bGUgcsOpcGVydG9pcmUgwqsgL3Vzci9zcmMvbGludXgtaGVhZGVycy0zLjIuMC01My12aXJ0dWFs
+Cj4gwrsKPiAgIENDIFtNXSAgL2hvbWUvZGFuaWVsL0RvY3VtZW50cy9teW1vZHVsZS9oZWxsby5v
+Cj4gSW4gZmlsZSBpbmNsdWRlZCBmcm9tIGluY2x1ZGUvdHJhY2UvZnRyYWNlLmg6MzU2OjAsCj4g
+ICAgICAgICAgICAgICAgICBmcm9tIGluY2x1ZGUvdHJhY2UvZGVmaW5lX3RyYWNlLmg6ODYsCj4g
+ICAgICAgICAgICAgICAgICBmcm9tIGluY2x1ZGUvdHJhY2UvZXZlbnRzL2hlbGxvLmg6MTUxLAo+
+ICAgICAgICAgICAgICAgICAgZnJvbSAvaG9tZS9kYW5pZWwvRG9jdW1lbnRzL215bW9kdWxlL2hl
+bGxvLmM6NToKPiBpbmNsdWRlL3RyYWNlL2V2ZW50cy9oZWxsby5oOiBJbiBmdW5jdGlvbiAnZnRy
+YWNlX2RlZmluZV9maWVsZHNfaGVsbG9fbmlsJzoKPiBpbmNsdWRlL3RyYWNlL2V2ZW50cy9oZWxs
+by5oOjEzMDoxOiBhdHRlbnRpb24gOiB1bnVzZWQgdmFyaWFibGUgJ2ZpZWxkJwo+IFstV3VudXNl
+ZC12YXJpYWJsZV0KPiBpbmNsdWRlL3RyYWNlL2V2ZW50cy9oZWxsby5oOjEzMDoxOiBhdHRlbnRp
+b24gOiAncmV0JyBpcyB1c2VkIHVuaW5pdGlhbGl6ZWQKPiBpbiB0aGlzIGZ1bmN0aW9uIFstV3Vu
+aW5pdGlhbGl6ZWRdCj4gICBCdWlsZGluZyBtb2R1bGVzLCBzdGFnZSAyLgo+ICAgTU9EUE9TVCAx
+IG1vZHVsZXMKPiAgIExEIFtNXSAgL2hvbWUvZGFuaWVsL0RvY3VtZW50cy9teW1vZHVsZS9oZWxs
+by5rbwo+IG1ha2VbMV06IHF1aXR0YW50IGxlIHLDqXBlcnRvaXJlIMKrIC91c3Ivc3JjL2xpbnV4
+LWhlYWRlcnMtMy4yLjAtNTMtdmlydHVhbCDCuwo+IAo+ICAgIElzIGl0IHBvc3NpYmxlIHRvIGdl
+dCByaWQgb2YgdGhlIHdhcm5pbmdzPwoKSW4gbHR0bmctbW9kdWxlcywgdHJ5OgoKVFJBQ0VfRVZF
+TlRfTk9BUkdTKGhlbGxvX25pbCwKICAgIFRQX1NUUlVDVF9fZW50cnkoKSwKICAgIFRQX2Zhc3Rf
+YXNzaWduKCksCiAgICBUUF9wcmludGsoKQopCgpUaGFua3MsCgpNYXRoaWV1CgoKLS0gCk1hdGhp
+ZXUgRGVzbm95ZXJzCkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KCl9fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWls
+aW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3Jn
+L2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
