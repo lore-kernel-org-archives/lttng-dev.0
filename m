@@ -1,15 +1,19 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH] LTTng logger ABI
-Date: Mon, 17 Feb 2014 16:11:52 -0500
-Message-ID: <1392671512-9136-1-git-send-email-mathieu.desnoyers__46926.5795000412$1392671608$gmane$org@efficios.com>
+From: Karim Yaghmour <karim.yaghmour@opersys.com>
+Subject: Re: [PATCH] LTTng logger ABI
+Date: Mon, 17 Feb 2014 19:06:09 -0500
+Message-ID: <5302A3F1.6090508__21667.8449222401$1392682041$gmane$org@opersys.com>
+References: <1392671512-9136-1-git-send-email-mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-qg0-f47.google.com ([209.85.192.47])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <mathieu.desnoyers@efficios.com>) id 1WFVU4-0005gL-9a
-	for lttng-dev@lists.lttng.org; Mon, 17 Feb 2014 16:12:18 -0500
+	(envelope-from <karim.yaghmour@opersys.com>) id 1WFYCW-0006yv-6h
+	for lttng-dev@lists.lttng.org; Mon, 17 Feb 2014 19:06:22 -0500
+Received: by mail-qg0-f47.google.com with SMTP id 63so5897913qgz.6
+	for <lttng-dev@lists.lttng.org>; Mon, 17 Feb 2014 16:06:10 -0800 (PST)
+In-Reply-To: <1392671512-9136-1-git-send-email-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -18,270 +22,25 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Karim Yaghmour <karim.yaghmour@opersys.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Add a user-space ABI (new file /proc/lttng-logger) to lttng-modules
-which can be written into by any user on the system. The content is
-saved into the kernel trace stream into the "lttng_logger" kernel event.
 
-The content of a single write is written into an lttng_logger event.
-The write count is truncated to 1024 bytes (if larger), which is much
-smaller than the smallest subbuffer size available (4096 bytes). This
-ensures all written data makes it into the active tracing buffers.
+On 14-02-17 04:11 PM, Mathieu Desnoyers wrote:
+> Add a user-space ABI (new file /proc/lttng-logger) to lttng-modules
+> which can be written into by any user on the system. The content is
+> saved into the kernel trace stream into the "lttng_logger" kernel event.
+> 
+> The content of a single write is written into an lttng_logger event.
+> The write count is truncated to 1024 bytes (if larger), which is much
+> smaller than the smallest subbuffer size available (4096 bytes). This
+> ensures all written data makes it into the active tracing buffers.
 
-Example use:
+Very nice. Let me know when this is in so that I can schedule giving it
+a try on Android.
 
-lttng-sessiond -d # (as root)
-lttng create
-lttng enable-event -k lttng_logger
-lttng start
-
-echo -n "this is a test" > /proc/lttng-logger
-
-lttng stop
-lttng view
-
-Example result:
-
-[17:00:04.251970425] (+179.750663203) thinkos lttng_logger: { cpu_id = 3 }, { _msg_length = 14, msg = "this is a test" }
-
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-CC: Karim Yaghmour <karim.yaghmour@opersys.com>
----
- Makefile                                    |    3 +-
- instrumentation/events/lttng-module/lttng.h |   24 +++++
- lttng-events.c                              |    7 ++
- lttng-events.h                              |    3 +
- probes/lttng.c                              |  134 +++++++++++++++++++++++++++
- 5 files changed, 170 insertions(+), 1 deletion(-)
- create mode 100644 instrumentation/events/lttng-module/lttng.h
- create mode 100644 probes/lttng.c
-
-diff --git a/Makefile b/Makefile
-index a9d1cb1..a4c602f 100644
---- a/Makefile
-+++ b/Makefile
-@@ -20,7 +20,8 @@ lttng-tracer-objs :=  lttng-events.o lttng-abi.o \
- 			lttng-context-vpid.o lttng-context-tid.o \
- 			lttng-context-vtid.o lttng-context-ppid.o \
- 			lttng-context-vppid.o lttng-calibrate.o \
--			lttng-context-hostname.o wrapper/random.o
-+			lttng-context-hostname.o wrapper/random.o \
-+			probes/lttng.o
- 
- obj-m += lttng-statedump.o
- lttng-statedump-objs := lttng-statedump-impl.o wrapper/irqdesc.o \
-diff --git a/instrumentation/events/lttng-module/lttng.h b/instrumentation/events/lttng-module/lttng.h
-new file mode 100644
-index 0000000..c2ddf8d
---- /dev/null
-+++ b/instrumentation/events/lttng-module/lttng.h
-@@ -0,0 +1,24 @@
-+#undef TRACE_SYSTEM
-+#define TRACE_SYSTEM lttng
-+
-+#if !defined(_TRACE_LTTNG_H) || defined(TRACE_HEADER_MULTI_READ)
-+#define _TRACE_LTTNG_H
-+
-+#include <linux/tracepoint.h>
-+
-+TRACE_EVENT(lttng_logger,
-+	TP_PROTO(const char __user *text, size_t len),
-+	TP_ARGS(text, len),
-+	TP_STRUCT__entry(
-+		__dynamic_array_text(char, msg, len)
-+	),
-+	TP_fast_assign(
-+		tp_memcpy_dyn_from_user(msg, text)
-+	),
-+	TP_printk("")
-+)
-+
-+#endif /* _TRACE_LTTNG_H */
-+
-+/* This part must be outside protection */
-+#include "../../../probes/define_trace.h"
-diff --git a/lttng-events.c b/lttng-events.c
-index 0512a3f..ff28c9a 100644
---- a/lttng-events.c
-+++ b/lttng-events.c
-@@ -1261,7 +1261,13 @@ static int __init lttng_events_init(void)
- 	ret = lttng_abi_init();
- 	if (ret)
- 		goto error_abi;
-+	ret = lttng_logger_init();
-+	if (ret)
-+		goto error_logger;
- 	return 0;
-+
-+error_logger:
-+	lttng_abi_exit();
- error_abi:
- 	kmem_cache_destroy(event_cache);
- 	return ret;
-@@ -1273,6 +1279,7 @@ static void __exit lttng_events_exit(void)
- {
- 	struct lttng_session *session, *tmpsession;
- 
-+	lttng_logger_exit();
- 	lttng_abi_exit();
- 	list_for_each_entry_safe(session, tmpsession, &sessions, list)
- 		lttng_session_destroy(session);
-diff --git a/lttng-events.h b/lttng-events.h
-index 6b39304..aeb2a6b 100644
---- a/lttng-events.h
-+++ b/lttng-events.h
-@@ -429,6 +429,9 @@ int lttng_add_perf_counter_to_ctx(uint32_t type,
- }
- #endif
- 
-+int lttng_logger_init(void);
-+void lttng_logger_exit(void);
-+
- extern int lttng_statedump_start(struct lttng_session *session);
- 
- #ifdef CONFIG_KPROBES
-diff --git a/probes/lttng.c b/probes/lttng.c
-new file mode 100644
-index 0000000..8025687
---- /dev/null
-+++ b/probes/lttng.c
-@@ -0,0 +1,134 @@
-+/*
-+ * lttng.c
-+ *
-+ * LTTng logger ABI
-+ *
-+ * Copyright (C) 2008-2014 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-+ *
-+ * This library is free software; you can redistribute it and/or
-+ * modify it under the terms of the GNU Lesser General Public
-+ * License as published by the Free Software Foundation; only
-+ * version 2.1 of the License.
-+ *
-+ * This library is distributed in the hope that it will be useful,
-+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
-+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-+ * Lesser General Public License for more details.
-+ *
-+ * You should have received a copy of the GNU Lesser General Public
-+ * License along with this library; if not, write to the Free Software
-+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/tracepoint.h>
-+#include <linux/uaccess.h>
-+#include <linux/gfp.h>
-+#include <linux/fs.h>
-+#include <linux/proc_fs.h>
-+#include <linux/slab.h>
-+#include <linux/mm.h>
-+#include "../wrapper/vmalloc.h"
-+#include "../lttng-events.h"
-+
-+#define TP_MODULE_NOAUTOLOAD
-+#define LTTNG_PACKAGE_BUILD
-+#define CREATE_TRACE_POINTS
-+#define TRACE_INCLUDE_PATH ../instrumentation/events/lttng-module
-+#define TRACE_INCLUDE_FILE lttng
-+
-+#include "../instrumentation/events/lttng-module/lttng.h"
-+
-+/* Events written through logger are truncated at 1024 bytes */
-+#define LTTNG_LOGGER_COUNT_MAX	1024
-+#define LTTNG_LOGGER_FILE	"lttng-logger"
-+
-+static struct proc_dir_entry *lttng_logger_dentry;
-+
-+/**
-+ * lttng_logger_write - write a userspace string into the trace system
-+ * @file: file pointer
-+ * @user_buf: user string
-+ * @count: length to copy
-+ * @ppos: file position
-+ *
-+ * Copy a userspace string into a trace event named "lttng:logger".
-+ * Copies at most @count bytes into the event "msg" dynamic array.
-+ * Truncates the count at LTTNG_LOGGER_COUNT_MAX. Returns the number of
-+ * bytes copied from the source.
-+ * Return -1 on error, with EFAULT errno.
-+ */
-+static
-+ssize_t lttng_logger_write(struct file *file, const char __user *user_buf,
-+		    size_t count, loff_t *ppos)
-+{
-+	unsigned int nr_pages = 1, i;
-+	unsigned long uaddr = (unsigned long) user_buf;
-+	struct page *pages[2];
-+	ssize_t written;
-+	int ret;
-+
-+	/* Truncate count */
-+	if (unlikely(count > LTTNG_LOGGER_COUNT_MAX))
-+		count = LTTNG_LOGGER_COUNT_MAX;
-+
-+	/* How many pages are we dealing with ? */
-+	if (unlikely((uaddr & PAGE_MASK) != ((uaddr + count) & PAGE_MASK)))
-+		nr_pages = 2;
-+
-+	/* Pin userspace pages */
-+	ret = get_user_pages_fast(uaddr, nr_pages, 0, pages);
-+	if (unlikely(ret < nr_pages)) {
-+		if (ret > 0) {
-+			BUG_ON(ret != 1);
-+			put_page(pages[0]);
-+		}
-+		written = -EFAULT;
-+		goto end;
-+	}
-+
-+	/* Trace the event */
-+	trace_lttng_logger(user_buf, count);
-+	written = count;
-+	*ppos += written;
-+
-+	for (i = 0; i < nr_pages; i++)
-+		put_page(pages[i]);
-+end:
-+	return written;
-+}
-+
-+static const struct file_operations lttng_logger_operations = {
-+	.write = lttng_logger_write,
-+};
-+
-+int __init lttng_logger_init(void)
-+{
-+	int ret = 0;
-+
-+	wrapper_vmalloc_sync_all();
-+	lttng_logger_dentry = proc_create_data(LTTNG_LOGGER_FILE,
-+				S_IRUGO | S_IWUGO, NULL,
-+				&lttng_logger_operations, NULL);
-+	if (!lttng_logger_dentry) {
-+		printk(KERN_ERR "Error creating LTTng logger file\n");
-+		ret = -ENOMEM;
-+		goto error;
-+	}
-+	ret = __lttng_events_init__lttng();
-+	if (ret)
-+		goto error_events;
-+	return ret;
-+
-+error_events:
-+	remove_proc_entry("lttng-logger", NULL);
-+error:
-+	return ret;
-+}
-+
-+void __exit lttng_logger_exit(void)
-+{
-+	__lttng_events_exit__lttng();
-+	if (lttng_logger_dentry)
-+		remove_proc_entry("lttng-logger", NULL);
-+}
 -- 
-1.7.10.4
+Karim Yaghmour
+CEO - Opersys inc. / www.opersys.com
+http://twitter.com/karimyaghmour
