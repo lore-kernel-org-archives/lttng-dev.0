@@ -1,23 +1,23 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Subject: Re: Extract lttng trace from kernel coredump
-Date: Tue, 18 Feb 2014 21:42:06 +0000 (UTC)
-Message-ID: <801064989.27153.1392759726541.JavaMail.zimbra__40849.3007220843$1392759796$gmane$org@efficios.com>
-References: <52D46B33.4010401@acm.org> <20140114184243.GC8177@thessa>
-	<52D5A08F.4020204@acm.org>
+Date: Tue, 18 Feb 2014 21:59:32 +0000 (UTC)
+Message-ID: <2133531474.27181.1392760772248.JavaMail.zimbra__38267.9482725964$1392760841$gmane$org@efficios.com>
+References: <52D46B33.4010401@acm.org> <52D5A08F.4020204@acm.org>
 	<1303248645.9400.1390063653581.JavaMail.zimbra@efficios.com>
 	<52DAC820.7000005@acm.org>
 	<353610105.9520.1390071650232.JavaMail.zimbra@efficios.com>
 	<5303B493.7080200@acm.org>
 	<271092494.27125.1392757335976.JavaMail.zimbra@efficios.com>
+	<801064989.27153.1392759726541.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
 Content-Type: multipart/mixed;
-	boundary="----=_Part_27151_98955529.1392759726537"
+	boundary="----=_Part_27179_510204892.1392760772245"
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1WFsQd-0000SB-GH
-	for lttng-dev@lists.lttng.org; Tue, 18 Feb 2014 16:42:17 -0500
-In-Reply-To: <271092494.27125.1392757335976.JavaMail.zimbra@efficios.com>
+	(envelope-from <compudj@efficios.com>) id 1WFshS-0000aj-QS
+	for lttng-dev@lists.lttng.org; Tue, 18 Feb 2014 16:59:41 -0500
+In-Reply-To: <801064989.27153.1392759726541.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -30,7 +30,7 @@ To: minyard@acm.org
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-------=_Part_27151_98955529.1392759726537
+------=_Part_27179_510204892.1392760772245
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
 
@@ -38,77 +38,86 @@ Content-Transfer-Encoding: 7bit
 > From: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
 > To: minyard@acm.org
 > Cc: lttng-dev@lists.lttng.org
-> Sent: Tuesday, February 18, 2014 4:02:15 PM
+> Sent: Tuesday, February 18, 2014 4:42:06 PM
 > Subject: Re: [lttng-dev] Extract lttng trace from kernel coredump
 > 
 > ----- Original Message -----
-> > From: "Corey Minyard" <minyard@acm.org>
-> > To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-> > Cc: "David Goulet" <dgoulet@efficios.com>, lttng-dev@lists.lttng.org
-> > Sent: Tuesday, February 18, 2014 2:29:23 PM
+> > From: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+> > To: minyard@acm.org
+> > Cc: lttng-dev@lists.lttng.org
+> > Sent: Tuesday, February 18, 2014 4:02:15 PM
 > > Subject: Re: [lttng-dev] Extract lttng trace from kernel coredump
 > > 
-> > I have attached some gdb macros for dumping LTT buffers from a kernel
-> > coredump.  I haven't done a lot of testing, though.
-> 
-> Very cool! I'll have a look when things get less busy here. I hope my
-> earlier reply helps clearing things out.
-> 
+> > ----- Original Message -----
+> > > From: "Corey Minyard" <minyard@acm.org>
+> > > To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+> > > Cc: "David Goulet" <dgoulet@efficios.com>, lttng-dev@lists.lttng.org
+> > > Sent: Tuesday, February 18, 2014 2:29:23 PM
+> > > Subject: Re: [lttng-dev] Extract lttng trace from kernel coredump
+> > > 
+> > > I have attached some gdb macros for dumping LTT buffers from a kernel
+> > > coredump.  I haven't done a lot of testing, though.
 > > 
-> > I do have one question.  I've been getting the metadata by taking a
-> > snapshot right when the trace starts and saving that to stick into the
-> > trace output from the coredump.  Is that the best way, or is there some
-> > other way I can extract it?  There doesn't seem to be a metadata channel
-> > running in snapshot mode.
+> > Very cool! I'll have a look when things get less busy here. I hope my
+> > earlier reply helps clearing things out.
+> > 
+> > > 
+> > > I do have one question.  I've been getting the metadata by taking a
+> > > snapshot right when the trace starts and saving that to stick into the
+> > > trace output from the coredump.  Is that the best way, or is there some
+> > > other way I can extract it?  There doesn't seem to be a metadata channel
+> > > running in snapshot mode.
+> > 
+> > Actually, it's better if you grab the metadata near when you grab the
+> > coredump. Grabbing the metadata at the beginning of your tracing session
+> > will not have the info about other modules that might be coming and going
+> > while tracing is active (which might contain tracepoints).
+> > 
+> > You could grab the metadata from the coredump actually, this would be the
+> > best approach. Looking at lttng modules 2.4 rc, you will want to look at
+> > 
+> >  /lttng-events.h
+> > 
+> > struct lttng_session {
+> >   ...
+> >   struct lttng_metadata_cache *metadata_cache;
+> >   ...
+> > };
+> > 
+> > Which has the metadata string:
+> > 
+> > struct lttng_metadata_cache {
+> >         char *data;                     /* Metadata cache */
+> >         unsigned int cache_alloc;       /* Metadata allocated size (bytes)
+> >         */
+> >         unsigned int metadata_written;  /* Number of bytes written in
+> >         metadata cache */
+> >         struct kref refcount;           /* Metadata cache usage */
+> >         struct list_head metadata_stream;       /* Metadata stream list */
+> > };
+> > 
+> > You simply need to dump this metadata string into a "metadata" file, add a
+> > "/* CTF 1.8 */\n line at the beginning, and this will generate a "text only
+> > CTF metadata", which can be read by babeltrace.
+> > 
+> > If you happen to core dump while the metadata cache is being resized, you
+> > might
+> > encounter a corrupted metadata. It should not happen frequently, but it's
+> > possible.
+> > We could eventually change lttng_metadata_printf() so it makes sure to
+> > always
+> > keep a readable metadata around (by e.g. using kcalloc rather than krealloc
+> > and
+> > dealing carefully with cache_alloc vs data fields updates).
 > 
-> Actually, it's better if you grab the metadata near when you grab the
-> coredump. Grabbing the metadata at the beginning of your tracing session
-> will not have the info about other modules that might be coming and going
-> while tracing is active (which might contain tracepoints).
+> Oops, I meant "kzalloc".
 > 
-> You could grab the metadata from the coredump actually, this would be the
-> best approach. Looking at lttng modules 2.4 rc, you will want to look at
-> 
->  /lttng-events.h
-> 
-> struct lttng_session {
->   ...
->   struct lttng_metadata_cache *metadata_cache;
->   ...
-> };
-> 
-> Which has the metadata string:
-> 
-> struct lttng_metadata_cache {
->         char *data;                     /* Metadata cache */
->         unsigned int cache_alloc;       /* Metadata allocated size (bytes) */
->         unsigned int metadata_written;  /* Number of bytes written in
->         metadata cache */
->         struct kref refcount;           /* Metadata cache usage */
->         struct list_head metadata_stream;       /* Metadata stream list */
-> };
-> 
-> You simply need to dump this metadata string into a "metadata" file, add a
-> "/* CTF 1.8 */\n line at the beginning, and this will generate a "text only
-> CTF metadata", which can be read by babeltrace.
-> 
-> If you happen to core dump while the metadata cache is being resized, you
-> might
-> encounter a corrupted metadata. It should not happen frequently, but it's
-> possible.
-> We could eventually change lttng_metadata_printf() so it makes sure to always
-> keep a readable metadata around (by e.g. using kcalloc rather than krealloc
-> and
-> dealing carefully with cache_alloc vs data fields updates).
+> I'm attaching a patch that should take care of making sure it is always in
+> a valid state when a core dump occurs. You should be able to safely read
+> "metadata_flushed" bytes of data at any time. Whatever has been flushed
+> should be parseable by Babeltrace.
 
-Oops, I meant "kzalloc".
-
-I'm attaching a patch that should take care of making sure it is always in
-a valid state when a core dump occurs. You should be able to safely read
-"metadata_flushed" bytes of data at any time. Whatever has been flushed
-should be parseable by Babeltrace.
-
-Thoughts ?
+Updated patch (fixing poll).
 
 Thanks,
 
@@ -120,6 +129,24 @@ Mathieu
 > Thanks,
 > 
 > Mathieu
+> 
+> > 
+> > Thoughts ?
+> > 
+> > Thanks,
+> > 
+> > Mathieu
+> > 
+> > --
+> > Mathieu Desnoyers
+> > EfficiOS Inc.
+> > http://www.efficios.com
+> > 
+> > _______________________________________________
+> > lttng-dev mailing list
+> > lttng-dev@lists.lttng.org
+> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> > 
 > 
 > --
 > Mathieu Desnoyers
@@ -137,119 +164,125 @@ Mathieu Desnoyers
 EfficiOS Inc.
 http://www.efficios.com
 
-------=_Part_27151_98955529.1392759726537
+------=_Part_27179_510204892.1392760772245
 Content-Type: text/x-patch; name=metadata-core-dump.patch
 Content-Disposition: attachment; filename=metadata-core-dump.patch
 Content-Transfer-Encoding: base64
 
-Y29tbWl0IDg3NWZiYmJlNjE2N2IzODQ3Y2RmNGRlOTI1NzIyYmU5ZGNmNjg1Y2MKQXV0aG9yOiBN
+Y29tbWl0IDk0ZDE1MTcwOTZmMmJjZjAxY2RmZGNjYmZiNDAzMGRkNjJkOGJlZDQKQXV0aG9yOiBN
 YXRoaWV1IERlc25veWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPgpEYXRlOiAg
 IFR1ZSBGZWIgMTggMTY6MzU6MDUgMjAxNCAtMDUwMAoKICAgIEVuc3VyZSBtZXRhZGF0YSBjYW4g
 YmUgZXh0cmFjdGVkIGZyb20gY29yZSBkdW1wcyBhdCBhbnkgdGltZQogICAgCiAgICBTaWduZWQt
 b2ZmLWJ5OiBNYXRoaWV1IERlc25veWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29t
-PgoKZGlmZiAtLWdpdCBhL2x0dG5nLWV2ZW50cy5jIGIvbHR0bmctZXZlbnRzLmMKaW5kZXggMDUx
-MmEzZi4uMGU2NzUyMCAxMDA2NDQKLS0tIGEvbHR0bmctZXZlbnRzLmMKKysrIGIvbHR0bmctZXZl
-bnRzLmMKQEAgLTYwMyw3ICs2MDMsNyBAQCBpbnQgbHR0bmdfbWV0YWRhdGFfb3V0cHV0X2NoYW5u
-ZWwoc3RydWN0IGx0dG5nX21ldGFkYXRhX3N0cmVhbSAqc3RyZWFtLAogCWlmIChzdHJlYW0tPm1l
-dGFkYXRhX2luICE9IHN0cmVhbS0+bWV0YWRhdGFfb3V0KQogCQlyZXR1cm4gMDsKIAotCWxlbiA9
-IHN0cmVhbS0+bWV0YWRhdGFfY2FjaGUtPm1ldGFkYXRhX3dyaXR0ZW4gLQorCWxlbiA9IHN0cmVh
-bS0+bWV0YWRhdGFfY2FjaGUtPm1ldGFkYXRhX2ZsdXNoZWQgLQogCQlzdHJlYW0tPm1ldGFkYXRh
-X2luOwogCWlmICghbGVuKQogCQlyZXR1cm4gMDsKQEAgLTYzMSwxNyArNjMxLDQxIEBAIGVuZDoK
-IAlyZXR1cm4gcmV0OwogfQogCitzdGF0aWMKK3ZvaWQgbHR0bmdfbWV0YWRhdGFfZmx1c2goc3Ry
-dWN0IGx0dG5nX3Nlc3Npb24gKnNlc3Npb24pCit7CisJc3RydWN0IGx0dG5nX21ldGFkYXRhX2Nh
-Y2hlICpjYWNoZSA9IHNlc3Npb24tPm1ldGFkYXRhX2NhY2hlOworCXN0cnVjdCBsdHRuZ19tZXRh
-ZGF0YV9zdHJlYW0gKnN0cmVhbTsKKworCWlmIChjYWNoZS0+bWV0YWRhdGFfd3JpdHRlbiA9PSBj
-YWNoZS0+bWV0YWRhdGFfZmx1c2hlZCkKKwkJcmV0dXJuOworCisJLyoKKwkgKiBBcHBlbmQgdG8g
-bWV0YWRhdGEgYmVmb3JlIGluY3JlbWVudGluZyAibWV0YWRhdGEgZmx1c2hlZCIsCisJICogZW5z
-dXJpbmcgdGhhdCBjb3JlIGR1bXBzIGFsd2F5cyByZWFkIHVwIHRvICJtZXRhZGF0YSBmbHVzaGVk
-IgorCSAqIGJ5dGVzIG9mIHZhbGlkIG1ldGFkYXRhLgorCSAqLworCWJhcnJpZXIoKTsKKwljYWNo
-ZS0+bWV0YWRhdGFfZmx1c2hlZCA9IGNhY2hlLT5tZXRhZGF0YV93cml0dGVuOworCisJbGlzdF9m
-b3JfZWFjaF9lbnRyeShzdHJlYW0sICZjYWNoZS0+bWV0YWRhdGFfc3RyZWFtLCBsaXN0KQorCQl3
-YWtlX3VwX2ludGVycnVwdGlibGUoJnN0cmVhbS0+cmVhZF93YWl0KTsKK30KKwogLyoKICAqIFdy
-aXRlIHRoZSBtZXRhZGF0YSB0byB0aGUgbWV0YWRhdGEgY2FjaGUuCiAgKiBNdXN0IGJlIGNhbGxl
-ZCB3aXRoIHNlc3Npb25zX211dGV4IGhlbGQuCisgKiBHcm93IHRoZSBtZXRhZGF0YSBjYWNoZSB3
-aXRoIGFsbG9jYXRpb24sIGNvcHksIHBvcHVsYXRpbmcgdGhlIG5ldworICogc3RydWN0dXJlLCBh
-bmQgdGhlbiBmcmVlIHRoZSBvbGQgc3RydWN0dXJlLCB0byBlbnN1cmUgdGhhdCB0aGVyZSBpcwor
-ICogYWx3YXlzIGEgY29uc2lzdGVudCBzdGF0ZSB0byBncmFiIGZyb20ga2VybmVsIGNvcmUgZHVt
-cC4KICAqLworc3RhdGljCiBpbnQgbHR0bmdfbWV0YWRhdGFfcHJpbnRmKHN0cnVjdCBsdHRuZ19z
-ZXNzaW9uICpzZXNzaW9uLAogCQkJICBjb25zdCBjaGFyICpmbXQsIC4uLikKIHsKIAljaGFyICpz
-dHI7CiAJc2l6ZV90IGxlbjsKIAl2YV9saXN0IGFwOwotCXN0cnVjdCBsdHRuZ19tZXRhZGF0YV9z
-dHJlYW0gKnN0cmVhbTsKIAogCVdBUk5fT05fT05DRSghQUNDRVNTX09OQ0Uoc2Vzc2lvbi0+YWN0
-aXZlKSk7CiAKQEAgLTY1NCwxOCArNjc4LDMzIEBAIGludCBsdHRuZ19tZXRhZGF0YV9wcmludGYo
-c3RydWN0IGx0dG5nX3Nlc3Npb24gKnNlc3Npb24sCiAJbGVuID0gc3RybGVuKHN0cik7CiAJaWYg
-KHNlc3Npb24tPm1ldGFkYXRhX2NhY2hlLT5tZXRhZGF0YV93cml0dGVuICsgbGVuID4KIAkJCXNl
-c3Npb24tPm1ldGFkYXRhX2NhY2hlLT5jYWNoZV9hbGxvYykgewotCQljaGFyICp0bXBfY2FjaGVf
-cmVhbGxvYzsKLQkJdW5zaWduZWQgaW50IHRtcF9jYWNoZV9hbGxvY19zaXplOwotCi0JCXRtcF9j
-YWNoZV9hbGxvY19zaXplID0gbWF4X3QodW5zaWduZWQgaW50LAotCQkJCXNlc3Npb24tPm1ldGFk
-YXRhX2NhY2hlLT5jYWNoZV9hbGxvYyArIGxlbiwKLQkJCQlzZXNzaW9uLT5tZXRhZGF0YV9jYWNo
-ZS0+Y2FjaGVfYWxsb2MgPDwgMSk7Ci0JCXRtcF9jYWNoZV9yZWFsbG9jID0ga3JlYWxsb2Moc2Vz
-c2lvbi0+bWV0YWRhdGFfY2FjaGUtPmRhdGEsCi0JCQkJdG1wX2NhY2hlX2FsbG9jX3NpemUsIEdG
-UF9LRVJORUwpOwotCQlpZiAoIXRtcF9jYWNoZV9yZWFsbG9jKQorCQljaGFyICpuZXdfY2FjaGUs
-ICpvbGRfY2FjaGU7CisJCXVuc2lnbmVkIGludCBuZXdfY2FjaGVfYWxsb2Nfc2l6ZSwgb2xkX2Nh
-Y2hlX2FsbG9jX3NpemU7CisKKwkJb2xkX2NhY2hlX2FsbG9jX3NpemUgPSBzZXNzaW9uLT5tZXRh
-ZGF0YV9jYWNoZS0+Y2FjaGVfYWxsb2M7CisJCW5ld19jYWNoZV9hbGxvY19zaXplID0gbWF4X3Qo
-dW5zaWduZWQgaW50LAorCQkJCW9sZF9jYWNoZV9hbGxvY19zaXplICsgbGVuLAorCQkJCW9sZF9j
-YWNoZV9hbGxvY19zaXplIDw8IDEpOworCQluZXdfY2FjaGUgPSBremFsbG9jKG5ld19jYWNoZV9h
-bGxvY19zaXplLCBHRlBfS0VSTkVMKTsKKwkJaWYgKCFuZXdfY2FjaGUpCiAJCQlnb3RvIGVycjsK
-LQkJc2Vzc2lvbi0+bWV0YWRhdGFfY2FjaGUtPmNhY2hlX2FsbG9jID0gdG1wX2NhY2hlX2FsbG9j
-X3NpemU7Ci0JCXNlc3Npb24tPm1ldGFkYXRhX2NhY2hlLT5kYXRhID0gdG1wX2NhY2hlX3JlYWxs
-b2M7CisJCXNlc3Npb24tPm1ldGFkYXRhX2NhY2hlLT5jYWNoZV9hbGxvYyA9IG5ld19jYWNoZV9h
-bGxvY19zaXplOworCQlvbGRfY2FjaGUgPSBzZXNzaW9uLT5tZXRhZGF0YV9jYWNoZS0+ZGF0YTsK
-KwkJbWVtY3B5KG5ld19jYWNoZSwgb2xkX2NhY2hlLCBvbGRfY2FjaGVfYWxsb2Nfc2l6ZSk7CisJ
-CS8qCisJCSAqIENvcHkgdGhlIG9sZCBjYWNoZSBpbnRvIHRoZSBuZXcgb25lIGJlZm9yZSBzdG9y
-aW5nCisJCSAqIHRoZSBwb2ludGVyIHRvIG5ldyBjYWNoZSBpbnRvICJkYXRhIiwgc28gY29yZSBk
-dW1wcworCQkgKiByZWFkIHZhbGlkIG1ldGFkYXRhLgorCQkgKi8KKwkJYmFycmllcigpOworCQlz
-ZXNzaW9uLT5tZXRhZGF0YV9jYWNoZS0+ZGF0YSA9IG5ld19jYWNoZTsKKwkJLyoKKwkJICogU3Rv
-cmUgImRhdGEiIGJlZm9yZSBmcmVlaW5nIHRoZSBvbGQgY2FjaGUsIHRodXMKKwkJICogZW5zdXJp
-bmcga2VybmVsIGNvcmUgZHVtcHMgYWx3YXlzIHJlYWQgdXAgdG8KKwkJICogIm1ldGFkYXRhX2Zs
-dXNoZWQiIGJ5dGVzIG9mIHZhbGlkIG1ldGFkYXRhLgorCQkgKi8KKwkJYmFycmllcigpOworCQlr
-ZnJlZShvbGRfY2FjaGUpOwogCX0KIAltZW1jcHkoc2Vzc2lvbi0+bWV0YWRhdGFfY2FjaGUtPmRh
-dGEgKwogCQkJc2Vzc2lvbi0+bWV0YWRhdGFfY2FjaGUtPm1ldGFkYXRhX3dyaXR0ZW4sCkBAIC02
-NzMsOSArNzEyLDYgQEAgaW50IGx0dG5nX21ldGFkYXRhX3ByaW50ZihzdHJ1Y3QgbHR0bmdfc2Vz
-c2lvbiAqc2Vzc2lvbiwKIAlzZXNzaW9uLT5tZXRhZGF0YV9jYWNoZS0+bWV0YWRhdGFfd3JpdHRl
-biArPSBsZW47CiAJa2ZyZWUoc3RyKTsKIAotCWxpc3RfZm9yX2VhY2hfZW50cnkoc3RyZWFtLCAm
-c2Vzc2lvbi0+bWV0YWRhdGFfY2FjaGUtPm1ldGFkYXRhX3N0cmVhbSwgbGlzdCkKLQkJd2FrZV91
-cF9pbnRlcnJ1cHRpYmxlKCZzdHJlYW0tPnJlYWRfd2FpdCk7Ci0KIAlyZXR1cm4gMDsKIAogZXJy
-OgpAQCAtOTA2LDYgKzk0Miw3IEBAIGludCBfbHR0bmdfZXZlbnRfbWV0YWRhdGFfc3RhdGVkdW1w
-KHN0cnVjdCBsdHRuZ19zZXNzaW9uICpzZXNzaW9uLAogCiAJZXZlbnQtPm1ldGFkYXRhX2R1bXBl
-ZCA9IDE7CiBlbmQ6CisJbHR0bmdfbWV0YWRhdGFfZmx1c2goc2Vzc2lvbik7CiAJcmV0dXJuIHJl
-dDsKIAogfQpAQCAtOTU4LDYgKzk5NSw3IEBAIGludCBfbHR0bmdfY2hhbm5lbF9tZXRhZGF0YV9z
-dGF0ZWR1bXAoc3RydWN0IGx0dG5nX3Nlc3Npb24gKnNlc3Npb24sCiAKIAljaGFuLT5tZXRhZGF0
-YV9kdW1wZWQgPSAxOwogZW5kOgorCWx0dG5nX21ldGFkYXRhX2ZsdXNoKHNlc3Npb24pOwogCXJl
-dHVybiByZXQ7CiB9CiAKQEAgLTk2Nyw3ICsxMDA1LDkgQEAgZW5kOgogc3RhdGljCiBpbnQgX2x0
-dG5nX3N0cmVhbV9wYWNrZXRfY29udGV4dF9kZWNsYXJlKHN0cnVjdCBsdHRuZ19zZXNzaW9uICpz
-ZXNzaW9uKQogewotCXJldHVybiBsdHRuZ19tZXRhZGF0YV9wcmludGYoc2Vzc2lvbiwKKwlpbnQg
-cmV0OworCisJcmV0ID0gbHR0bmdfbWV0YWRhdGFfcHJpbnRmKHNlc3Npb24sCiAJCSJzdHJ1Y3Qg
-cGFja2V0X2NvbnRleHQge1xuIgogCQkiCXVpbnQ2NF9jbG9ja19tb25vdG9uaWNfdCB0aW1lc3Rh
-bXBfYmVnaW47XG4iCiAJCSIJdWludDY0X2Nsb2NrX21vbm90b25pY190IHRpbWVzdGFtcF9lbmQ7
-XG4iCkBAIC05NzcsNiArMTAxNyw4IEBAIGludCBfbHR0bmdfc3RyZWFtX3BhY2tldF9jb250ZXh0
-X2RlY2xhcmUoc3RydWN0IGx0dG5nX3Nlc3Npb24gKnNlc3Npb24pCiAJCSIJdWludDMyX3QgY3B1
-X2lkO1xuIgogCQkifTtcblxuIgogCQkpOworCWx0dG5nX21ldGFkYXRhX2ZsdXNoKHNlc3Npb24p
-OworCXJldHVybiByZXQ7CiB9CiAKIC8qCkBAIC05OTMsNyArMTAzNSw5IEBAIGludCBfbHR0bmdf
-c3RyZWFtX3BhY2tldF9jb250ZXh0X2RlY2xhcmUoc3RydWN0IGx0dG5nX3Nlc3Npb24gKnNlc3Np
-b24pCiBzdGF0aWMKIGludCBfbHR0bmdfZXZlbnRfaGVhZGVyX2RlY2xhcmUoc3RydWN0IGx0dG5n
-X3Nlc3Npb24gKnNlc3Npb24pCiB7Ci0JcmV0dXJuIGx0dG5nX21ldGFkYXRhX3ByaW50ZihzZXNz
-aW9uLAorCWludCByZXQ7CisKKwlyZXQgPSBsdHRuZ19tZXRhZGF0YV9wcmludGYoc2Vzc2lvbiwK
-IAkic3RydWN0IGV2ZW50X2hlYWRlcl9jb21wYWN0IHtcbiIKIAkiCWVudW0gOiB1aW50NV90IHsg
-Y29tcGFjdCA9IDAgLi4uIDMwLCBleHRlbmRlZCA9IDMxIH0gaWQ7XG4iCiAJIgl2YXJpYW50IDxp
-ZD4ge1xuIgpAQCAtMTAyMiw2ICsxMDY2LDggQEAgaW50IF9sdHRuZ19ldmVudF9oZWFkZXJfZGVj
-bGFyZShzdHJ1Y3QgbHR0bmdfc2Vzc2lvbiAqc2Vzc2lvbikKIAlsdHRuZ19hbGlnbm9mKHVpbnQz
-Ml90KSAqIENIQVJfQklULAogCWx0dG5nX2FsaWdub2YodWludDE2X3QpICogQ0hBUl9CSVQKIAkp
-OworCWx0dG5nX21ldGFkYXRhX2ZsdXNoKHNlc3Npb24pOworCXJldHVybiByZXQ7CiB9CiAKICAv
-KgpAQCAtMTIwOSw2ICsxMjU1LDcgQEAgc2tpcF9zZXNzaW9uOgogCX0KIAlzZXNzaW9uLT5tZXRh
-ZGF0YV9kdW1wZWQgPSAxOwogZW5kOgorCWx0dG5nX21ldGFkYXRhX2ZsdXNoKHNlc3Npb24pOwog
-CXJldHVybiByZXQ7CiB9CiAKZGlmZiAtLWdpdCBhL2x0dG5nLWV2ZW50cy5oIGIvbHR0bmctZXZl
-bnRzLmgKaW5kZXggNmIzOTMwNC4uOWQ0M2Q0NyAxMDA2NDQKLS0tIGEvbHR0bmctZXZlbnRzLmgK
-KysrIGIvbHR0bmctZXZlbnRzLmgKQEAgLTMyNiw2ICszMjYsNyBAQCBzdHJ1Y3QgbHR0bmdfbWV0
-YWRhdGFfY2FjaGUgewogCWNoYXIgKmRhdGE7CQkJLyogTWV0YWRhdGEgY2FjaGUgKi8KIAl1bnNp
-Z25lZCBpbnQgY2FjaGVfYWxsb2M7CS8qIE1ldGFkYXRhIGFsbG9jYXRlZCBzaXplIChieXRlcykg
-Ki8KIAl1bnNpZ25lZCBpbnQgbWV0YWRhdGFfd3JpdHRlbjsJLyogTnVtYmVyIG9mIGJ5dGVzIHdy
-aXR0ZW4gaW4gbWV0YWRhdGEgY2FjaGUgKi8KKwl1bnNpZ25lZCBpbnQgbWV0YWRhdGFfZmx1c2hl
-ZDsJLyogTnVtYmVyIG9mIGJ5dGVzIGZsdXNoZWQgaW4gbWV0YWRhdGEgY2FjaGUgKi8KIAlzdHJ1
-Y3Qga3JlZiByZWZjb3VudDsJCS8qIE1ldGFkYXRhIGNhY2hlIHVzYWdlICovCiAJc3RydWN0IGxp
-c3RfaGVhZCBtZXRhZGF0YV9zdHJlYW07CS8qIE1ldGFkYXRhIHN0cmVhbSBsaXN0ICovCiB9Owo=
-
-------=_Part_27151_98955529.1392759726537
+PgoKZGlmZiAtLWdpdCBhL2x0dG5nLWFiaS5jIGIvbHR0bmctYWJpLmMKaW5kZXggMjYxYTBhZC4u
+YmRiNGY1NyAxMDA2NDQKLS0tIGEvbHR0bmctYWJpLmMKKysrIGIvbHR0bmctYWJpLmMKQEAgLTU0
+MSw3ICs1NDEsNyBAQCB1bnNpZ25lZCBpbnQgbHR0bmdfbWV0YWRhdGFfcmluZ19idWZmZXJfcG9s
+bChzdHJ1Y3QgZmlsZSAqZmlscCwKIAkJaWYgKGZpbmFsaXplZCkKIAkJCW1hc2sgfD0gUE9MTEhV
+UDsKIAotCQlpZiAoc3RyZWFtLT5tZXRhZGF0YV9jYWNoZS0+bWV0YWRhdGFfd3JpdHRlbiA+CisJ
+CWlmIChzdHJlYW0tPm1ldGFkYXRhX2NhY2hlLT5tZXRhZGF0YV9mbHVzaGVkID4KIAkJCQlzdHJl
+YW0tPm1ldGFkYXRhX291dCkKIAkJCW1hc2sgfD0gUE9MTElOOwogCX0KZGlmZiAtLWdpdCBhL2x0
+dG5nLWV2ZW50cy5jIGIvbHR0bmctZXZlbnRzLmMKaW5kZXggMDUxMmEzZi4uMGU2NzUyMCAxMDA2
+NDQKLS0tIGEvbHR0bmctZXZlbnRzLmMKKysrIGIvbHR0bmctZXZlbnRzLmMKQEAgLTYwMyw3ICs2
+MDMsNyBAQCBpbnQgbHR0bmdfbWV0YWRhdGFfb3V0cHV0X2NoYW5uZWwoc3RydWN0IGx0dG5nX21l
+dGFkYXRhX3N0cmVhbSAqc3RyZWFtLAogCWlmIChzdHJlYW0tPm1ldGFkYXRhX2luICE9IHN0cmVh
+bS0+bWV0YWRhdGFfb3V0KQogCQlyZXR1cm4gMDsKIAotCWxlbiA9IHN0cmVhbS0+bWV0YWRhdGFf
+Y2FjaGUtPm1ldGFkYXRhX3dyaXR0ZW4gLQorCWxlbiA9IHN0cmVhbS0+bWV0YWRhdGFfY2FjaGUt
+Pm1ldGFkYXRhX2ZsdXNoZWQgLQogCQlzdHJlYW0tPm1ldGFkYXRhX2luOwogCWlmICghbGVuKQog
+CQlyZXR1cm4gMDsKQEAgLTYzMSwxNyArNjMxLDQxIEBAIGVuZDoKIAlyZXR1cm4gcmV0OwogfQog
+CitzdGF0aWMKK3ZvaWQgbHR0bmdfbWV0YWRhdGFfZmx1c2goc3RydWN0IGx0dG5nX3Nlc3Npb24g
+KnNlc3Npb24pCit7CisJc3RydWN0IGx0dG5nX21ldGFkYXRhX2NhY2hlICpjYWNoZSA9IHNlc3Np
+b24tPm1ldGFkYXRhX2NhY2hlOworCXN0cnVjdCBsdHRuZ19tZXRhZGF0YV9zdHJlYW0gKnN0cmVh
+bTsKKworCWlmIChjYWNoZS0+bWV0YWRhdGFfd3JpdHRlbiA9PSBjYWNoZS0+bWV0YWRhdGFfZmx1
+c2hlZCkKKwkJcmV0dXJuOworCisJLyoKKwkgKiBBcHBlbmQgdG8gbWV0YWRhdGEgYmVmb3JlIGlu
+Y3JlbWVudGluZyAibWV0YWRhdGEgZmx1c2hlZCIsCisJICogZW5zdXJpbmcgdGhhdCBjb3JlIGR1
+bXBzIGFsd2F5cyByZWFkIHVwIHRvICJtZXRhZGF0YSBmbHVzaGVkIgorCSAqIGJ5dGVzIG9mIHZh
+bGlkIG1ldGFkYXRhLgorCSAqLworCWJhcnJpZXIoKTsKKwljYWNoZS0+bWV0YWRhdGFfZmx1c2hl
+ZCA9IGNhY2hlLT5tZXRhZGF0YV93cml0dGVuOworCisJbGlzdF9mb3JfZWFjaF9lbnRyeShzdHJl
+YW0sICZjYWNoZS0+bWV0YWRhdGFfc3RyZWFtLCBsaXN0KQorCQl3YWtlX3VwX2ludGVycnVwdGli
+bGUoJnN0cmVhbS0+cmVhZF93YWl0KTsKK30KKwogLyoKICAqIFdyaXRlIHRoZSBtZXRhZGF0YSB0
+byB0aGUgbWV0YWRhdGEgY2FjaGUuCiAgKiBNdXN0IGJlIGNhbGxlZCB3aXRoIHNlc3Npb25zX211
+dGV4IGhlbGQuCisgKiBHcm93IHRoZSBtZXRhZGF0YSBjYWNoZSB3aXRoIGFsbG9jYXRpb24sIGNv
+cHksIHBvcHVsYXRpbmcgdGhlIG5ldworICogc3RydWN0dXJlLCBhbmQgdGhlbiBmcmVlIHRoZSBv
+bGQgc3RydWN0dXJlLCB0byBlbnN1cmUgdGhhdCB0aGVyZSBpcworICogYWx3YXlzIGEgY29uc2lz
+dGVudCBzdGF0ZSB0byBncmFiIGZyb20ga2VybmVsIGNvcmUgZHVtcC4KICAqLworc3RhdGljCiBp
+bnQgbHR0bmdfbWV0YWRhdGFfcHJpbnRmKHN0cnVjdCBsdHRuZ19zZXNzaW9uICpzZXNzaW9uLAog
+CQkJICBjb25zdCBjaGFyICpmbXQsIC4uLikKIHsKIAljaGFyICpzdHI7CiAJc2l6ZV90IGxlbjsK
+IAl2YV9saXN0IGFwOwotCXN0cnVjdCBsdHRuZ19tZXRhZGF0YV9zdHJlYW0gKnN0cmVhbTsKIAog
+CVdBUk5fT05fT05DRSghQUNDRVNTX09OQ0Uoc2Vzc2lvbi0+YWN0aXZlKSk7CiAKQEAgLTY1NCwx
+OCArNjc4LDMzIEBAIGludCBsdHRuZ19tZXRhZGF0YV9wcmludGYoc3RydWN0IGx0dG5nX3Nlc3Np
+b24gKnNlc3Npb24sCiAJbGVuID0gc3RybGVuKHN0cik7CiAJaWYgKHNlc3Npb24tPm1ldGFkYXRh
+X2NhY2hlLT5tZXRhZGF0YV93cml0dGVuICsgbGVuID4KIAkJCXNlc3Npb24tPm1ldGFkYXRhX2Nh
+Y2hlLT5jYWNoZV9hbGxvYykgewotCQljaGFyICp0bXBfY2FjaGVfcmVhbGxvYzsKLQkJdW5zaWdu
+ZWQgaW50IHRtcF9jYWNoZV9hbGxvY19zaXplOwotCi0JCXRtcF9jYWNoZV9hbGxvY19zaXplID0g
+bWF4X3QodW5zaWduZWQgaW50LAotCQkJCXNlc3Npb24tPm1ldGFkYXRhX2NhY2hlLT5jYWNoZV9h
+bGxvYyArIGxlbiwKLQkJCQlzZXNzaW9uLT5tZXRhZGF0YV9jYWNoZS0+Y2FjaGVfYWxsb2MgPDwg
+MSk7Ci0JCXRtcF9jYWNoZV9yZWFsbG9jID0ga3JlYWxsb2Moc2Vzc2lvbi0+bWV0YWRhdGFfY2Fj
+aGUtPmRhdGEsCi0JCQkJdG1wX2NhY2hlX2FsbG9jX3NpemUsIEdGUF9LRVJORUwpOwotCQlpZiAo
+IXRtcF9jYWNoZV9yZWFsbG9jKQorCQljaGFyICpuZXdfY2FjaGUsICpvbGRfY2FjaGU7CisJCXVu
+c2lnbmVkIGludCBuZXdfY2FjaGVfYWxsb2Nfc2l6ZSwgb2xkX2NhY2hlX2FsbG9jX3NpemU7CisK
+KwkJb2xkX2NhY2hlX2FsbG9jX3NpemUgPSBzZXNzaW9uLT5tZXRhZGF0YV9jYWNoZS0+Y2FjaGVf
+YWxsb2M7CisJCW5ld19jYWNoZV9hbGxvY19zaXplID0gbWF4X3QodW5zaWduZWQgaW50LAorCQkJ
+CW9sZF9jYWNoZV9hbGxvY19zaXplICsgbGVuLAorCQkJCW9sZF9jYWNoZV9hbGxvY19zaXplIDw8
+IDEpOworCQluZXdfY2FjaGUgPSBremFsbG9jKG5ld19jYWNoZV9hbGxvY19zaXplLCBHRlBfS0VS
+TkVMKTsKKwkJaWYgKCFuZXdfY2FjaGUpCiAJCQlnb3RvIGVycjsKLQkJc2Vzc2lvbi0+bWV0YWRh
+dGFfY2FjaGUtPmNhY2hlX2FsbG9jID0gdG1wX2NhY2hlX2FsbG9jX3NpemU7Ci0JCXNlc3Npb24t
+Pm1ldGFkYXRhX2NhY2hlLT5kYXRhID0gdG1wX2NhY2hlX3JlYWxsb2M7CisJCXNlc3Npb24tPm1l
+dGFkYXRhX2NhY2hlLT5jYWNoZV9hbGxvYyA9IG5ld19jYWNoZV9hbGxvY19zaXplOworCQlvbGRf
+Y2FjaGUgPSBzZXNzaW9uLT5tZXRhZGF0YV9jYWNoZS0+ZGF0YTsKKwkJbWVtY3B5KG5ld19jYWNo
+ZSwgb2xkX2NhY2hlLCBvbGRfY2FjaGVfYWxsb2Nfc2l6ZSk7CisJCS8qCisJCSAqIENvcHkgdGhl
+IG9sZCBjYWNoZSBpbnRvIHRoZSBuZXcgb25lIGJlZm9yZSBzdG9yaW5nCisJCSAqIHRoZSBwb2lu
+dGVyIHRvIG5ldyBjYWNoZSBpbnRvICJkYXRhIiwgc28gY29yZSBkdW1wcworCQkgKiByZWFkIHZh
+bGlkIG1ldGFkYXRhLgorCQkgKi8KKwkJYmFycmllcigpOworCQlzZXNzaW9uLT5tZXRhZGF0YV9j
+YWNoZS0+ZGF0YSA9IG5ld19jYWNoZTsKKwkJLyoKKwkJICogU3RvcmUgImRhdGEiIGJlZm9yZSBm
+cmVlaW5nIHRoZSBvbGQgY2FjaGUsIHRodXMKKwkJICogZW5zdXJpbmcga2VybmVsIGNvcmUgZHVt
+cHMgYWx3YXlzIHJlYWQgdXAgdG8KKwkJICogIm1ldGFkYXRhX2ZsdXNoZWQiIGJ5dGVzIG9mIHZh
+bGlkIG1ldGFkYXRhLgorCQkgKi8KKwkJYmFycmllcigpOworCQlrZnJlZShvbGRfY2FjaGUpOwog
+CX0KIAltZW1jcHkoc2Vzc2lvbi0+bWV0YWRhdGFfY2FjaGUtPmRhdGEgKwogCQkJc2Vzc2lvbi0+
+bWV0YWRhdGFfY2FjaGUtPm1ldGFkYXRhX3dyaXR0ZW4sCkBAIC02NzMsOSArNzEyLDYgQEAgaW50
+IGx0dG5nX21ldGFkYXRhX3ByaW50ZihzdHJ1Y3QgbHR0bmdfc2Vzc2lvbiAqc2Vzc2lvbiwKIAlz
+ZXNzaW9uLT5tZXRhZGF0YV9jYWNoZS0+bWV0YWRhdGFfd3JpdHRlbiArPSBsZW47CiAJa2ZyZWUo
+c3RyKTsKIAotCWxpc3RfZm9yX2VhY2hfZW50cnkoc3RyZWFtLCAmc2Vzc2lvbi0+bWV0YWRhdGFf
+Y2FjaGUtPm1ldGFkYXRhX3N0cmVhbSwgbGlzdCkKLQkJd2FrZV91cF9pbnRlcnJ1cHRpYmxlKCZz
+dHJlYW0tPnJlYWRfd2FpdCk7Ci0KIAlyZXR1cm4gMDsKIAogZXJyOgpAQCAtOTA2LDYgKzk0Miw3
+IEBAIGludCBfbHR0bmdfZXZlbnRfbWV0YWRhdGFfc3RhdGVkdW1wKHN0cnVjdCBsdHRuZ19zZXNz
+aW9uICpzZXNzaW9uLAogCiAJZXZlbnQtPm1ldGFkYXRhX2R1bXBlZCA9IDE7CiBlbmQ6CisJbHR0
+bmdfbWV0YWRhdGFfZmx1c2goc2Vzc2lvbik7CiAJcmV0dXJuIHJldDsKIAogfQpAQCAtOTU4LDYg
+Kzk5NSw3IEBAIGludCBfbHR0bmdfY2hhbm5lbF9tZXRhZGF0YV9zdGF0ZWR1bXAoc3RydWN0IGx0
+dG5nX3Nlc3Npb24gKnNlc3Npb24sCiAKIAljaGFuLT5tZXRhZGF0YV9kdW1wZWQgPSAxOwogZW5k
+OgorCWx0dG5nX21ldGFkYXRhX2ZsdXNoKHNlc3Npb24pOwogCXJldHVybiByZXQ7CiB9CiAKQEAg
+LTk2Nyw3ICsxMDA1LDkgQEAgZW5kOgogc3RhdGljCiBpbnQgX2x0dG5nX3N0cmVhbV9wYWNrZXRf
+Y29udGV4dF9kZWNsYXJlKHN0cnVjdCBsdHRuZ19zZXNzaW9uICpzZXNzaW9uKQogewotCXJldHVy
+biBsdHRuZ19tZXRhZGF0YV9wcmludGYoc2Vzc2lvbiwKKwlpbnQgcmV0OworCisJcmV0ID0gbHR0
+bmdfbWV0YWRhdGFfcHJpbnRmKHNlc3Npb24sCiAJCSJzdHJ1Y3QgcGFja2V0X2NvbnRleHQge1xu
+IgogCQkiCXVpbnQ2NF9jbG9ja19tb25vdG9uaWNfdCB0aW1lc3RhbXBfYmVnaW47XG4iCiAJCSIJ
+dWludDY0X2Nsb2NrX21vbm90b25pY190IHRpbWVzdGFtcF9lbmQ7XG4iCkBAIC05NzcsNiArMTAx
+Nyw4IEBAIGludCBfbHR0bmdfc3RyZWFtX3BhY2tldF9jb250ZXh0X2RlY2xhcmUoc3RydWN0IGx0
+dG5nX3Nlc3Npb24gKnNlc3Npb24pCiAJCSIJdWludDMyX3QgY3B1X2lkO1xuIgogCQkifTtcblxu
+IgogCQkpOworCWx0dG5nX21ldGFkYXRhX2ZsdXNoKHNlc3Npb24pOworCXJldHVybiByZXQ7CiB9
+CiAKIC8qCkBAIC05OTMsNyArMTAzNSw5IEBAIGludCBfbHR0bmdfc3RyZWFtX3BhY2tldF9jb250
+ZXh0X2RlY2xhcmUoc3RydWN0IGx0dG5nX3Nlc3Npb24gKnNlc3Npb24pCiBzdGF0aWMKIGludCBf
+bHR0bmdfZXZlbnRfaGVhZGVyX2RlY2xhcmUoc3RydWN0IGx0dG5nX3Nlc3Npb24gKnNlc3Npb24p
+CiB7Ci0JcmV0dXJuIGx0dG5nX21ldGFkYXRhX3ByaW50ZihzZXNzaW9uLAorCWludCByZXQ7CisK
+KwlyZXQgPSBsdHRuZ19tZXRhZGF0YV9wcmludGYoc2Vzc2lvbiwKIAkic3RydWN0IGV2ZW50X2hl
+YWRlcl9jb21wYWN0IHtcbiIKIAkiCWVudW0gOiB1aW50NV90IHsgY29tcGFjdCA9IDAgLi4uIDMw
+LCBleHRlbmRlZCA9IDMxIH0gaWQ7XG4iCiAJIgl2YXJpYW50IDxpZD4ge1xuIgpAQCAtMTAyMiw2
+ICsxMDY2LDggQEAgaW50IF9sdHRuZ19ldmVudF9oZWFkZXJfZGVjbGFyZShzdHJ1Y3QgbHR0bmdf
+c2Vzc2lvbiAqc2Vzc2lvbikKIAlsdHRuZ19hbGlnbm9mKHVpbnQzMl90KSAqIENIQVJfQklULAog
+CWx0dG5nX2FsaWdub2YodWludDE2X3QpICogQ0hBUl9CSVQKIAkpOworCWx0dG5nX21ldGFkYXRh
+X2ZsdXNoKHNlc3Npb24pOworCXJldHVybiByZXQ7CiB9CiAKICAvKgpAQCAtMTIwOSw2ICsxMjU1
+LDcgQEAgc2tpcF9zZXNzaW9uOgogCX0KIAlzZXNzaW9uLT5tZXRhZGF0YV9kdW1wZWQgPSAxOwog
+ZW5kOgorCWx0dG5nX21ldGFkYXRhX2ZsdXNoKHNlc3Npb24pOwogCXJldHVybiByZXQ7CiB9CiAK
+ZGlmZiAtLWdpdCBhL2x0dG5nLWV2ZW50cy5oIGIvbHR0bmctZXZlbnRzLmgKaW5kZXggNmIzOTMw
+NC4uOWQ0M2Q0NyAxMDA2NDQKLS0tIGEvbHR0bmctZXZlbnRzLmgKKysrIGIvbHR0bmctZXZlbnRz
+LmgKQEAgLTMyNiw2ICszMjYsNyBAQCBzdHJ1Y3QgbHR0bmdfbWV0YWRhdGFfY2FjaGUgewogCWNo
+YXIgKmRhdGE7CQkJLyogTWV0YWRhdGEgY2FjaGUgKi8KIAl1bnNpZ25lZCBpbnQgY2FjaGVfYWxs
+b2M7CS8qIE1ldGFkYXRhIGFsbG9jYXRlZCBzaXplIChieXRlcykgKi8KIAl1bnNpZ25lZCBpbnQg
+bWV0YWRhdGFfd3JpdHRlbjsJLyogTnVtYmVyIG9mIGJ5dGVzIHdyaXR0ZW4gaW4gbWV0YWRhdGEg
+Y2FjaGUgKi8KKwl1bnNpZ25lZCBpbnQgbWV0YWRhdGFfZmx1c2hlZDsJLyogTnVtYmVyIG9mIGJ5
+dGVzIGZsdXNoZWQgaW4gbWV0YWRhdGEgY2FjaGUgKi8KIAlzdHJ1Y3Qga3JlZiByZWZjb3VudDsJ
+CS8qIE1ldGFkYXRhIGNhY2hlIHVzYWdlICovCiAJc3RydWN0IGxpc3RfaGVhZCBtZXRhZGF0YV9z
+dHJlYW07CS8qIE1ldGFkYXRhIHN0cmVhbSBsaXN0ICovCiB9Owo=
+------=_Part_27179_510204892.1392760772245
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -260,4 +293,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
-------=_Part_27151_98955529.1392759726537--
+------=_Part_27179_510204892.1392760772245--
