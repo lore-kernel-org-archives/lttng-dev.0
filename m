@@ -1,17 +1,25 @@
-From: Tan Dung Le Tran <tan.dung.le.tran@ericsson.com>
-Subject: Re: Live streaming question (lttng 2.4.0.rc4)
-Date: Wed, 19 Feb 2014 15:55:02 +0000
-Message-ID: <510A3668CBDB6143966144326546DA921BFA3DC1__8188.35645118288$1392825388$gmane$org@eusaamb103.ericsson.se>
-References: <0C794A2958AD524DAB4175408F839BD3159514@ESESSMB109.ericsson.se>
+From: Corey Minyard <minyard@acm.org>
+Subject: Re: Extract lttng trace from kernel coredump
+Date: Wed, 19 Feb 2014 12:52:33 -0600
+Message-ID: <5304FD71.5040004__33680.277693975$1392836045$gmane$org@acm.org>
+References: <52D46B33.4010401@acm.org> <20140114184243.GC8177@thessa>
+	<52D5A08F.4020204@acm.org>
+	<1303248645.9400.1390063653581.JavaMail.zimbra@efficios.com>
+	<52DAC820.7000005@acm.org>
+	<353610105.9520.1390071650232.JavaMail.zimbra@efficios.com>
+	<52FD1D81.60306@acm.org>
+	<1494812851.27081.1392753777851.JavaMail.zimbra@efficios.com>
+Reply-To: minyard@acm.org
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0147092025=="
+Content-Type: multipart/mixed; boundary="------------040103070600090407010207"
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from usevmg20.ericsson.net ([198.24.6.45])
+Received: from mail-oa0-f45.google.com ([209.85.219.45])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <tan.dung.le.tran@ericsson.com>) id 1WG9UL-0000wZ-ON
-	for lttng-dev@lists.lttng.org; Wed, 19 Feb 2014 10:55:21 -0500
-In-Reply-To: <0C794A2958AD524DAB4175408F839BD3159514@ESESSMB109.ericsson.se>
-Content-Language: en-US
+	(envelope-from <tcminyard@gmail.com>) id 1WGCGB-0002Ll-3O
+	for lttng-dev@lists.lttng.org; Wed, 19 Feb 2014 13:52:49 -0500
+Received: by mail-oa0-f45.google.com with SMTP id i11so924841oag.4
+	for <lttng-dev@lists.lttng.org>; Wed, 19 Feb 2014 10:52:37 -0800 (PST)
+In-Reply-To: <1494812851.27081.1392753777851.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,403 +28,537 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?iso-8859-1?Q?Anette_Sch=F6tt?= <anette.schott@ericsson.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============0147092025==
-Content-Language: en-US
-Content-Type: multipart/alternative;
-	boundary="_000_510A3668CBDB6143966144326546DA921BFA3DC1eusaamb103erics_"
+This is a multi-part message in MIME format.
+--------------040103070600090407010207
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
---_000_510A3668CBDB6143966144326546DA921BFA3DC1eusaamb103erics_
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+On 02/18/2014 02:02 PM, Mathieu Desnoyers wrote:
+>> Starting from the consumed position, dump data from pages until you hit
+>> subbufer->data_size, then move to the next subbuffer.  On the last
+>> subbuffer, you have to fill in the header and dump up to the offset.
+> Not quite exactly. It's better to do:
+>
+> for each subbuffer between consumed and offset (inclusive)
+>   - if commit_seq is multiple of subbuffer size
+>     dump subbuffer->data_size
+>   - if commit_seq is not a multiple of subbuffer size,
+>     dump commit_seq % subbuf size bytes of data, filling up the
+>     header accordingly.
+>
+> Basically, all data that was "being written" (between commit_seq % subbuf size
+> and write offset % subbuf size) cannot be read, because it likely contains
+> holes and/or incomplete data.
+>
+>> I think I'm missing something, though, because the data size of the last
+>> subbuffer doesn't match the offset location in that subbuffer.  It's a
+>> pretty good distance away.
+> Does my explanation above help clear things out ?
 
-Hi Anette,
+Yes, I've modified the code a bit to use the hot commit data if
+necessary, and to dump the metadata from the metadata cache.  A new
+version is attached.
 
-We are using the following for a live streaming:
+I also modified to use the flushed value if present.  The probabilities
+of that situation causing a problem are pretty low, but this will avoid
+any issue.  It looks correct to me.
 
-   export TC=3DMySession
+-corey
 
-   #-- see if there is any instrumented application is running
-   lttng list -u
-   ps -ef |egrep 'lttng'
-
-   #-- Launch relayd with ControlPort 53000, DataPort 53001 and LiveViewPor=
-t 53002
-   #   whatever relayd collects, will be stored in /tmp/$TC
-   lttng-relayd  -C tcp://localhost:53000 -D tcp://localhost:53001 -L net:/=
-/localhost:53002 -o /tmp/$TC &
-
-   #-- Create session using Control and Data ports as specified in relayd
-   lttng create $TC --live 1000000 -U net://localhost:53000:53001/./
-
-   lttng list
-
-   #-- We want to use per-Uid buffer instead of the default per-PID buffer
-   lttng enable-channel chan1 -u --buffers-uid
-
-   lttng enable-event -s $TC -u -c chan1 tracepoints_that_you_want_to_trace=
-_on
-   lttng start $TC;
-   lttng list $TC
-
-   #-- make sure you see the tracepoints that your session is tracing on fr=
-om the
-   #   output of the next command, otherwise, your session / live view will=
- not
-   #   be able to capture anything
-   lttng list -u
-
-   #----- live viewing: -----
-
-     # to get a list of viewable traces (note the live view port is used he=
-re)
-     babeltrace -i lttng-live  net://localhost:53002
-          net://localhost:53002/host/SC-1/MySession (timer =3D 1000000, 17 =
-stream(s), 0 client(s) connected)
-
-     # Start the live view on node SC-1
-     babeltrace -i lttng-live  net://localhost:53002/host/SC-1/$TC
-         <you should see your trace hit now>
-
-   #-- stop the session
-   lttng stop $TC
-   lttng destroy $TC
-
-   #-- Convert what your session has captured:
-   babeltrace /tmp/$TC
-
-Hope it helps,
-Tan
-
-
-From: Anette Sch=F6tt [mailto:anette.schott@ericsson.com]
-Sent: February-19-14 8:55 AM
-To: lttng-dev@lists.lttng.org
-Subject: [lttng-dev] Live streaming question (lttng 2.4.0.rc4)
-
-Hi,
-
-I am trying to do live streaming via the lttng-relayd and babeltrace (lttng=
- 2.4.0.rc4). I am running an emulator where
-I want to both generate the user-space tracepoints and view them live on th=
-e same host (hope this is a valid use case).
-
-I do the following:
-
-# lttng-relayd -d -v -L net://localhost:5344
-DEBUG3 [1516/1516]: URI string: net://localhost:5344 (in uri_parse() at uri=
-.c:291)
-DEBUG3 [1516/1516]: URI dtype: 1, proto: 1, host: localhost, subdir: , ctrl=
-: 5344, data: 0 (in uri_parse() at uri.c:505)
-DEBUG3 [1516/1516]: URI string: tcp://0.0.0.0:5342 (in uri_parse() at uri.c=
-:291)
-DEBUG3 [1516/1516]: URI dtype: 1, proto: 1, host: 0.0.0.0, subdir: , ctrl: =
-5342, data: 0 (in uri_parse() at uri.c:505)
-DEBUG3 [1516/1516]: URI string: tcp://0.0.0.0:5343 (in uri_parse() at uri.c=
-:291)
-DEBUG3 [1516/1516]: URI dtype: 1, proto: 1, host: 0.0.0.0, subdir: , ctrl: =
-5343, data: 0 (in uri_parse() at uri.c:505)
-DEBUG1 [1516/1516]: Signal handler set for SIGTERM, SIGUSR1, SIGPIPE and SI=
-GINT (in set_signal_handler() at main.c:435)
-
-# lttng create s1 --live 200000 -U net://localhost:5344
-Session s1 created.
-Traces will be written in net://localhost:5344
-
-# lttng enable-channel ch1 -u
-ERROR [834/838]: recvmsg inet: Connection reset by peer (in lttcomm_recvmsg=
-_inet_sock() at inet.c:376)
-Error: Channel ch1: Relay daemon not compatible (session s1)
-Warning: Some command(s) went wrong
-
-As all command are executed on the same host, why compatibility issues?
-
-What commands shall I use to set up a live streaming?
-
-Regards
-Anette
-
-
---_000_510A3668CBDB6143966144326546DA921BFA3DC1eusaamb103erics_
-Content-Type: text/html; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-
-<html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-micr=
-osoft-com:office:office" xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
-xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http:=
-//www.w3.org/TR/REC-html40">
-<head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Diso-8859-=
-1">
-<meta name=3D"Generator" content=3D"Microsoft Word 14 (filtered medium)">
-<style><!--
-/* Font Definitions */
-@font-face
-	{font-family:Calibri;
-	panose-1:2 15 5 2 2 2 4 3 2 4;}
-@font-face
-	{font-family:Tahoma;
-	panose-1:2 11 6 4 3 5 4 4 2 4;}
-/* Style Definitions */
-p.MsoNormal, li.MsoNormal, div.MsoNormal
-	{margin:0cm;
-	margin-bottom:.0001pt;
-	font-size:11.0pt;
-	font-family:"Calibri","sans-serif";}
-a:link, span.MsoHyperlink
-	{mso-style-priority:99;
-	color:blue;
-	text-decoration:underline;}
-a:visited, span.MsoHyperlinkFollowed
-	{mso-style-priority:99;
-	color:purple;
-	text-decoration:underline;}
-span.EmailStyle17
-	{mso-style-type:personal;
-	font-family:"Calibri","sans-serif";
-	color:windowtext;}
-span.EmailStyle18
-	{mso-style-type:personal-reply;
-	font-family:"Calibri","sans-serif";
-	color:#1F497D;}
-.MsoChpDefault
-	{mso-style-type:export-only;
-	font-size:10.0pt;}
-@page WordSection1
-	{size:612.0pt 792.0pt;
-	margin:72.0pt 72.0pt 72.0pt 72.0pt;}
-div.WordSection1
-	{page:WordSection1;}
---></style><!--[if gte mso 9]><xml>
-<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
-</xml><![endif]--><!--[if gte mso 9]><xml>
-<o:shapelayout v:ext=3D"edit">
-<o:idmap v:ext=3D"edit" data=3D"1" />
-</o:shapelayout></xml><![endif]-->
-</head>
-<body lang=3D"EN-CA" link=3D"blue" vlink=3D"purple">
-<div class=3D"WordSection1">
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D">Hi Anette,<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D">We are using the following for a live streaming:<o:p></o:p></=
-span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D">&nbsp;&nbsp; export TC=3DMySession<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D">&nbsp;&nbsp; <o:p>
-</o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D">&nbsp;&nbsp;&nbsp;#-- see if there is any instrumented applic=
-ation is running
-<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D">&nbsp;&nbsp;&nbsp;lttng list &#8211;u &nbsp;&nbsp;&nbsp;&nbsp=
-;<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D">&nbsp;&nbsp;&nbsp;ps -ef |egrep 'lttng'<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D">&nbsp;&nbsp; #-- Launch relayd with ControlPort 53000, DataPo=
-rt 53001 and LiveViewPort 53002<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D">&nbsp;&nbsp; #&nbsp;&nbsp; whatever relayd collects, will be =
-stored in /tmp/$TC<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D">&nbsp;&nbsp; lttng-relayd&nbsp; -C tcp://localhost:53000 -D t=
-cp://localhost:53001 -L net://localhost:53002 -o /tmp/$TC &amp;<o:p></o:p><=
-/span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D">&nbsp;&nbsp;&nbsp;#-- Create session using Control and Data p=
-orts as specified in relayd<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D">&nbsp;&nbsp; lttng create $TC --live 1000000 -U net://localho=
-st:53000:53001/./<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D">&nbsp;&nbsp; <o:p>
-</o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D">&nbsp;&nbsp;&nbsp;lttng list<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D">&nbsp;&nbsp; #-- We want to use per-Uid buffer instead of the=
- default per-PID buffer<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D">&nbsp;&nbsp; lttng enable-channel chan1 -u --buffers-uid
-<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D">&nbsp;&nbsp; lttng enable-event -s $TC -u -c chan1 tracepoint=
-s_that_you_want_to_trace_on<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D">&nbsp;&nbsp; lttng start $TC;&nbsp;
-<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D">&nbsp;&nbsp;&nbsp;lttng list $TC<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D">&nbsp;&nbsp; #-- make sure you see the tracepoints that your =
-session is tracing on from the<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D">&nbsp;&nbsp; #&nbsp;&nbsp; output of the next command, otherw=
-ise, your session / live view will not<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D">&nbsp;&nbsp; #&nbsp;&nbsp; be able to capture anything<o:p></=
-o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D">&nbsp;&nbsp; lttng list &#8211;u<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D">&nbsp;&nbsp; #----- live viewing: -----<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D">&nbsp;&nbsp; &nbsp;&nbsp;# to get a list of viewable traces (=
-note the live view port is used here)<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D">&nbsp;&nbsp; &nbsp;&nbsp;babeltrace -i lttng-live&nbsp; net:/=
-/localhost:53002
-<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;n=
-et://localhost:53002/host/SC-1/MySession (timer =3D 1000000, 17 stream(s), =
-0 client(s) connected)<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D">&nbsp;&nbsp;&nbsp;&nbsp; # Start the live view on node SC-1&n=
-bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;babeltrace -i lttng-live&nbsp; =
-net://localhost:53002/host/SC-1/$TC&nbsp;&nbsp;
-<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;you=
- should see your trace hit now&gt;<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D">&nbsp;&nbsp; #-- stop the session<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D">&nbsp;&nbsp; lttng stop $TC<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D">&nbsp;&nbsp; lttng destroy $TC<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D">&nbsp;&nbsp; #-- Convert what your session has captured:<o:p>=
-</o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D">&nbsp;&nbsp; babeltrace /tmp/$TC<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D">Hope it helps,<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D">Tan<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&quot;Courier New&quot;;c=
-olor:#1F497D"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal"><span style=3D"color:#1F497D"><o:p>&nbsp;</o:p></spa=
-n></p>
-<div>
-<div style=3D"border:none;border-top:solid #B5C4DF 1.0pt;padding:3.0pt 0cm =
-0cm 0cm">
-<p class=3D"MsoNormal"><b><span lang=3D"EN-US" style=3D"font-size:10.0pt;fo=
-nt-family:&quot;Tahoma&quot;,&quot;sans-serif&quot;">From:</span></b><span =
-lang=3D"EN-US" style=3D"font-size:10.0pt;font-family:&quot;Tahoma&quot;,&qu=
-ot;sans-serif&quot;"> Anette Sch=F6tt [mailto:anette.schott@ericsson.com]
-<br>
-<b>Sent:</b> February-19-14 8:55 AM<br>
-<b>To:</b> lttng-dev@lists.lttng.org<br>
-<b>Subject:</b> [lttng-dev] Live streaming question (lttng 2.4.0.rc4)<o:p><=
-/o:p></span></p>
-</div>
-</div>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">Hi,<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">I am trying to do live streamin=
-g via the lttng-relayd and babeltrace (lttng 2.4.0.rc4). I am running an em=
-ulator where<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">I want to both generate the use=
-r-space tracepoints and view them live on the same host (hope this is a val=
-id use case).<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">I do the following:<o:p></o:p><=
-/span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US"># lttng-relayd -d -v -L net://l=
-ocalhost:5344<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG3 [1516/1516]: URI string:=
- net://localhost:5344 (in uri_parse() at uri.c:291)<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG3 [1516/1516]: URI dtype: =
-1, proto: 1, host: localhost, subdir: , ctrl: 5344, data: 0 (in uri_parse()=
- at uri.c:505)<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG3 [1516/1516]: URI string:=
- tcp://0.0.0.0:5342 (in uri_parse() at uri.c:291)<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG3 [1516/1516]: URI dtype: =
-1, proto: 1, host: 0.0.0.0, subdir: , ctrl: 5342, data: 0 (in uri_parse() a=
-t uri.c:505)<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG3 [1516/1516]: URI string:=
- tcp://0.0.0.0:5343 (in uri_parse() at uri.c:291)<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG3 [1516/1516]: URI dtype: =
-1, proto: 1, host: 0.0.0.0, subdir: , ctrl: 5343, data: 0 (in uri_parse() a=
-t uri.c:505)<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG1 [1516/1516]: Signal hand=
-ler set for SIGTERM, SIGUSR1, SIGPIPE and SIGINT (in set_signal_handler() a=
-t main.c:435)<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US"># lttng create s1 --live 200000=
- -U net://localhost:5344<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">Session s1 created.<o:p></o:p><=
-/span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">Traces will be written in net:/=
-/localhost:5344<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US"># lttng enable-channel ch1 &#82=
-11;u<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">ERROR [834/838]: recvmsg inet: =
-Connection reset by peer (in lttcomm_recvmsg_inet_sock() at inet.c:376)<o:p=
-></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">Error: Channel ch1: Relay daemo=
-n not compatible (session s1)<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">Warning: Some command(s) went w=
-rong<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">As all command are executed on =
-the same host, why compatibility issues?<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">What commands shall I use to se=
-t up a live streaming?<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">Regards<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">Anette<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US"><o:p>&nbsp;</o:p></span></p>
-</div>
-</body>
-</html>
-
---_000_510A3668CBDB6143966144326546DA921BFA3DC1eusaamb103erics_--
+> Thanks,
+>
+> Mathieu
+>
+>> Thanks,
+>>
+>> -corey
+>>
+>>> A good way to understand its layout is to look at:
+>>>
+>>> lttng-modules (master)
+>>> lib/ringbuffer/ring_buffer_backend.c
+>>>
+>>> lib_ring_buffer_backend_allocate()
+>>>
+>>> lib/ringbuffer/backend_types.h
+>>>
+>>> struct lib_ring_buffer_backend
+>>> struct lib_ring_buffer_backend_subbuffer
+>>> struct lib_ring_buffer_backend_pages
+>>> struct lib_ring_buffer_backend_page
+>>>
+>>> In your case, you never care about the bufb->buf_rsb (read-side owned
+>>> subbuffer),
+>>> because you always ever just write into it. buf_rsb is only useful when
+>>> taking
+>>> snapshots.
+>>>
+>>> bufb->buf_wsb[] has the mapping from sub-buffers write-side index within
+>>> the buffer to the associated index into bufb->array[], which allows getting
+>>> the
+>>> actual sub-buffers and memory pages associated to each buffer.
+>>>
+>>> You'll notice that the "id" field within struct
+>>> lib_ring_buffer_backend_subbuffer
+>>> is actually made of a mask of many fields. In order to understand how to
+>>> use it,
+>>> see
+>>>
+>>> lib/ringbuffer/backend_types.h
+>>>
+>>> where we provide helpers to get and set the various information elements
+>>> contained within the "id" field. See subbuffer_id*() functions and comments
+>>> surrounding them.
+>>>
+>>> So you'll need to use the structures presented above to make sense of the
+>>> memory
+>>> layout of a buffer, and reorganize it into a CTF file that can be read by
+>>> Babeltrace or other CTF trace readers.
+>>>
+>>> The algorithm you want to end up doing (offline, on a vmcore) is pretty
+>>> much
+>>> the same as grabbing an online snapshot (iterate from the consumer position
+>>> up to
+>>> the producer position, see
+>>> lib/ringbuffer/frontend.h:ib_ring_buffer_snapshot() ).
+>>> You will need an extra trick to handle the sub-buffer that was being
+>>> written to
+>>> at the time of the crash, by using the
+>>>
+>>> lib/ringbuffer/frontend_types.h struct commit_counters_hot "seq" field
+>>>
+>>> which is designed to track the contiguously committed data within the
+>>> currently
+>>> written buffer. This can be used at any point in time (whenever a crash
+>>> occurs) to
+>>> populate the last sub-buffer's content size, packet size, see:
+>>>
+>>> lttng-ring-buffer-client.h: client_buffer_end()
+>>>
+>>> and find out how much of the last sub-buffer needs to be copied into the
+>>> output
+>>> CTF trace.
+>>>
+>>> Thanks,
+>>>
+>>> Mathieu
+>>>
+>>>> Thanks,
+>>>>
+>>>> -corey
+>>>>
+>>
 
 
---===============0147092025==
+--------------040103070600090407010207
+Content-Type: text/x-python;
+ name="ltt.py"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="ltt.py"
+
+# gdb macros for extracting an LTT trace from a kernel coredump
+# Copyright (C) 2014  Montavista Software <source@mvista.com>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
+
+
+# The layout of the LTT buffers in memory is rather complex.  But here's
+# the data structures involved:
+#
+# sessions - a list of running sessions of type struct lttng_session.
+# A session consists of a some generic information and a list of
+# channels for the session.
+#
+# session->chan - a list of channels of type struct lttng_channel.  The
+# main information of interest is in chan.backend.
+#
+# This code parses the sessions and channels until it finds the first
+# active non-metadata session/channel running in snapshot
+# (relay-overwrite-mmap) mode.
+#
+# The chan.backend has some useful information about data sizes and a
+# percpu array of ring buffers.  Each CPU logs to its ring buffer and
+# the downstream tools pull all the data together.  The dump process
+# creates a separate file for each CPU, just like the normal tools do.
+#
+# chan.backend->buf - A percpu array of structures of type struct
+# lib_ring_buffer.  This is more or less the heart of the data
+# structure.  Like channels, lib_ring_buffer has a backend field that
+# holds most of the useful data.
+#
+# buf->backend.array - An array of pointers to subbuffers.  A
+# subbuffer itself is an array of pointers to pages, and each page in
+# order holds data.  LTT elements do not span subbuffers, so the
+# actual size of the data in the subbuffer may be smaller than the
+# full subbuffer size.  subbuf->data_size holds the actual data size in
+# the subbuffer.
+#
+# buf->backend.buf_wsb - The subbuffers may not be in order.  This array
+# holds the order of the subbuffers.
+#
+# chan->backend.num_subbuf - The number of subbuffers.
+#
+# chan->backend.subbuf_size - The size of each subbuffer, in bytes.
+#
+# So at this point, you can trace down any index by taking the index,
+# dividing it by num_subbuf to get the subbuffer, taking that and
+# doing a modulo on num_subbuf(*), indexing into buf->backend.buf_wsb
+# to get the actual subbuffer number, then indexing into
+# buf->backend.array to get a pointer to the subbuffer.  Then take the
+# original index, modulo it by the number of subbuffers to get a
+# subbuffer offset.  Dividing the subbuffer offset by the number of
+# pages in a subbuffer gives the page in the subbuffer, and modulo the
+# subbuffer offset by the page size to get the offset into the page.
+# The page data structure has a virtual pointer so the data can be
+# directly accessed.
+#
+# (*) the offset and consumed values do not wrap at the total output size,
+# so you must modulo the subbuffer index to get the proper value.
+#
+# buf->offset - The index of the end of the data.
+# buf->consumed - The index to the start of data.
+#
+# So the basic algorithm is to index down to buf->consumed and start dumping
+# pages until buf->offset is reached.
+#
+# The command is invoked as:
+#    dumpltt <lttdir> <outputdir>
+# where lttdir is the place where the ltt modules are compiled and outputdir
+# is the place where you want to put the trace output.
+#
+# The lttdir is required because this code loads the symbol tables
+# from the ltt modules so it can access the various data structures in
+# ltt.  It will not work without that.
+
+
+import os
+
+def calc_offset(struct, member):
+    """Calculate the offset in the struct to the given member."""
+    return gdb.parse_and_eval("((int)&((%s *)0).%s)" % (struct, member))
+
+def fetch_container(ptr, struct, lmember):
+    """Fetch a pointer to the given structure given a pointer to one of
+    its members.  This is generally used to get the container of a list
+    element."""
+    offset = calc_offset(struct, lmember)
+    s = gdb.parse_and_eval("(void *) (((unsigned long) %s) - %s)" %
+                          (ptr, offset))
+    return "((%s *) %s)" % (struct, s)
+
+def get_ptr(ptr, struct):
+    """Return a string that can be used to reference the given type (struct)
+    at the given address (ptr)."""
+    s = gdb.parse_and_eval("(void *) %s" % ptr)
+    return "((%s *) %s)" % (struct, s)
+    
+def get_str(p):
+    """Get a string value from the given target address"""
+    s = gdb.parse_and_eval("(char *) %s" % p)
+    return str(s).split('"')[1]
+
+def align(v, alignment):
+    """Align the given integer to the given alignment"""
+    return (v + (alignment - 1)) & ~(alignment - 1)
+
+def get_file_size(fname):
+    """Return the size of the given file"""
+    f = open(fname, "a")
+    size = f.tell()
+    f.close()
+    return size
+
+def value_to_binary(tmpdir, typestr, v):
+    """Convert an expression to a binary value.  The size depends
+    on the typestr given.  Return a string with the raw binary value
+    in target-endian order"""
+    fn = "%s/dummy" % tmpdir
+    gdb.execute("append value %s ((%s) %ld)" % (fn, typestr, long(v)))
+    f = open(fn, "r")
+    str = f.read()
+    f.close()
+    os.unlink(fn)
+    return str
+
+def get_cpu_list():
+    """Return a list of online CPUs on the target."""
+    try:
+        ulongsize = gdb.parse_and_eval("sizeof(unsigned long)")
+        nr_cpumask = gdb.parse_and_eval("sizeof(*cpu_online_mask)")
+        nr_cpumask = int(nr_cpumask) / int(ulongsize)
+        cpu = 0;
+        cpus = []
+        for i in range(0, nr_cpumask):
+            mask = gdb.parse_and_eval("cpu_online_mask->bits[%d]" % i)
+            for j in range(0, ulongsize * 8):
+                if ((mask & 1) != 0):
+                    cpus.append(cpu)
+                mask = mask >> 1
+                cpu = cpu + 1
+    except e:
+        cpus = [ 0 ]
+    return cpus
+
+def get_percpu_ptr(p, cpu, typename):
+    """Convert a percpu pointer 'p' on the given cpu to a pointer to the
+    given type."""
+    try:
+        offset = gdb.parse_and_eval("__per_cpu_offset[%d]" % cpu)
+    except:
+        offset = "0";
+    v = gdb.parse_and_eval("(void *) %s + %s" % (p, offset))
+    return "((%s *) %s)" % (typename, v)
+
+def get_member_ptr(p, membtype, member):
+    """Given a pointer to a structure, get the given member as a pointer
+    to another structure."""
+    v = gdb.parse_and_eval("%s->%s" % (p, member))
+    return "((%s *) %s)" % (membtype, str(v))
+
+def get_member_long(p, member):
+    """Given a pointer to a structure, get the given member that is an
+    integer."""
+    v = gdb.parse_and_eval("(long) (%s->%s)" % (p, member))
+    return long(v)
+
+def find_module(modname):
+    """Return a pointer to the given module name's data structure"""
+    offset = gdb.parse_and_eval("((int)&((struct module *)0).list)")
+    head = gdb.parse_and_eval("modules").address
+    head = head.cast(gdb.lookup_type("unsigned long"))
+    current = gdb.parse_and_eval("((struct list_head *) %s)->next" % head)
+    while (current != head):
+        modp = gdb.parse_and_eval("((struct module *) (((char *) %s) - %s))"
+                                  % (current, offset))
+        modp = "((struct module *) %s)" % modp
+        cname = get_str("%s->name" % modp)
+        if (cname == modname):
+            return modp
+        current = gdb.parse_and_eval("((struct list_head *) %s)->next" %
+                                     current)
+    return None        
+
+class dumpltt(gdb.Command):
+    """Dump an LTT coredump from the kernel image."""
+    def __init__(self):
+        super(dumpltt, self).__init__("dumpltt", gdb.COMMAND_USER)
+
+    def find_channel(self, head):
+        """Find a channel in the list that is a per-cpu channel that
+        is in snapshot mode (relay-overwrite-mmap) and return the
+        first one found or None if not found."""
+        p = gdb.parse_and_eval("((struct list_head *) %s)->next" % head)
+        while (p != head):
+            chan = fetch_container(p, "struct lttng_channel", "list")
+            enabled = gdb.parse_and_eval("%s->enabled" % chan)
+            if (int(enabled)):
+                chantype = gdb.parse_and_eval("%s->channel_type" % chan)
+                if (chantype == self.PER_CPU_CHANNEL):
+                    backend = gdb.parse_and_eval("&(%s->chan->backend)" % chan)
+                    backend = "((struct channel_backend *) %s)" % str(backend)
+                    tpname = get_str("%s->name" % backend)
+                    if (tpname == "relay-overwrite-mmap"):
+                        return backend
+            p = gdb.parse_and_eval("((struct list_head *) %s)->next" % p)
+        return None
+
+    def find_session_channel(self):
+        """Search the channels in the given session for one in snapshot
+        mode."""
+        head = gdb.parse_and_eval("&sessions")
+        p = gdb.parse_and_eval("sessions.next")
+        while (p != head):
+            session = fetch_container(p, "struct lttng_session", "list")
+            active = gdb.parse_and_eval("%s->active" % session)
+            if (not int(active)):
+                continue
+            chanlist = gdb.parse_and_eval("&(%s->chan)" % session)
+            chan = self.find_channel(chanlist)
+            if (chan is not None):
+                return (session, chan)
+            p = gdb.parse_and_eval("((struct list_head *) %s)->next" % p)
+        return (None, None)
+
+    def add_alignment (self, cpu, size):
+        """Dump 'size' bytes to the per-CPU output file."""
+        f = open("%s/channel0_%d" % (self.dumpdir, cpu), "ab")
+        f.write("".ljust(size, chr(0)))
+        f.close()
+        return
+
+    def dump_page(self, cpu, page, start, size):
+        """Dump 'size' bytes from the page starting at offset 'start'
+        to the per-CPU output file."""
+        addr = long(gdb.parse_and_eval("%s->virt" % page)) + start
+        end = addr + size - start
+        gdb.execute("append memory %s/channel0_%d %ld %ld" %
+                    (self.dumpdir, cpu, addr, end))
+        return
+
+    def dump_subbuffer(self, cpu, rbbep, start, size):
+        """Dump 'size' bytes from offset 'start' in the given subbuffer
+        'rbbep' to the per-CPU output file."""
+        start_page = start / self.page_size
+        start_offset = start % self.page_size
+        written = 0
+        for i in range(start_page, self.num_pages_per_subbuf):
+            bepage = get_ptr("&(%s->p[%d])" % (rbbep, i),
+                             "struct lib_ring_buffer_backend_page")
+            if (size > self.page_size - start_offset):
+                self.dump_page(cpu, bepage, start_offset,
+                               self.page_size - start_offset)
+                size -= self.page_size - start_offset
+                written += self.page_size - start_offset
+                start_offset = 0
+            else:
+                self.dump_page(cpu, bepage, start_offset, size)
+                written += size
+                break
+        return written
+
+    def handle_subbuffer(self, cpu, buf, rbbe, cidx, coffset, length):
+        """Extract necessary information from the subbuffer and dump it to a
+        file.
+
+        buf is the ring buffer.
+        rbbe is a pointer to the buf->backend.buf_wsb array.
+        cidx is the subbuffer index (for indexing into cidx).
+        coffset is the offset within the subbuffer to start at.
+        length is the number of bytes to dump from the subbuffer.
+
+        Note that each subbuffer has a header, and it may not be
+        completely filled out.  So add the subbuffer size and
+        the size padded to a page to the header after writing it
+        out.
+        """
+        sid = long(gdb.parse_and_eval("%s[%d].id" % (rbbe, cidx)))
+        sbidx = sid & self.idmask
+        rbbep = get_ptr("%s->backend.array[%d]" % (buf, sbidx),
+                        "struct lib_ring_buffer_backend_pages")
+        size = get_member_long(buf, "commit_hot[%d].seq.v" % (cidx))
+        if ((size & (self.subbuf_size - 1)) == 0):
+            # Hot value is a multiple of the subbuffer size, use the
+            # buffer data size.
+            size = int(gdb.parse_and_eval("%s->data_size" % rbbep))
+        else:
+            size = size % self.subbuf_size
+        last_subbuf_start = get_file_size("%s/channel0_%d"
+                                          % (self.dumpdir, cpu))
+        if (length > 0 and length < size):
+            size = length
+        written_size = self.dump_subbuffer(cpu, rbbep, coffset, size);
+        padded_size = align(written_size, self.page_size)
+        self.add_alignment(cpu, padded_size - written_size)
+
+        print "    subbuf size = %d (pad %d) %d" % (padded_size, 
+                                                    padded_size - written_size,
+                                                    size)
+        
+        # Now fix the values in the header
+        f = open("%s/channel0_%d" % (self.dumpdir, cpu), "r+")
+        f.seek(last_subbuf_start + 40, os.SEEK_SET)
+        val = value_to_binary(self.dumpdir, "uint64_t", written_size * 8)
+        f.write(val)
+        f.seek(last_subbuf_start + 48, os.SEEK_SET)
+        val = value_to_binary(self.dumpdir, "uint64_t", padded_size * 8)
+        f.write(val)
+        f.close()
+
+    def handle_buffer(self, cpu, buf):
+        """Dump the given ring buffer to the given cpu's output file."""
+        print "Handling cpu %d buffer %s" % (cpu, buf)
+        offset = int(gdb.parse_and_eval("%s->offset.v" % buf))
+        oidx = (offset / self.subbuf_size) % self.num_subbuf
+        ooffset = offset % self.subbuf_size
+        consumed =  int(gdb.parse_and_eval("%s->consumed.counter" % buf))
+        cidx = (consumed / self.subbuf_size) % self.num_subbuf
+        coffset = consumed % self.subbuf_size
+        rbbe = get_ptr("%s->backend.buf_wsb" % buf,
+                       "struct lib_ring_buffer_backend_subbuffer")
+        subbuf_num = 1;
+        while (oidx != cidx):
+            print "  subbuffer %d" % subbuf_num
+            self.handle_subbuffer(cpu, buf, rbbe, cidx, coffset, 0)
+            cidx = (cidx + 1) % self.num_subbuf
+            coffset = 0
+            subbuf_num += 1
+        
+        print "  subbuffer %d" % subbuf_num
+        self.handle_subbuffer(cpu, buf, rbbe, cidx, coffset, ooffset - coffset)
+        return
+
+    def dump_metadata(self, session):
+        f = open("%s/metadata" % (self.dumpdir), "w")
+        f.write("/* CTF 1.8 */\n")
+        f.close()
+        mdcache = get_member_ptr(session, "struct lttng_metadata_cache",
+                                 "metadata_cache")
+        data = get_member_long(mdcache, "data")
+        size = get_member_long(mdcache, "metadata_written")
+        gdb.execute("append memory %s/metadata %ld %ld" %
+                    (self.dumpdir, data, data + size))
+        
+    def invoke(self, args, from_tty):
+        argv = gdb.string_to_argv(args)
+        if (len(argv) != 2):
+            raise gdb.GdbError("dumpltt <lttdir> <dumpdir>")
+
+        lttdir = argv[0]
+        self.dumpdir = argv[1]
+        os.system("mkdir -p %s" % self.dumpdir)
+        os.system("rm -rf %s/channel*" % self.dumpdir)
+        os.system("rm -rf %s/dummy" % self.dumpdir)
+        modp = find_module("lttng_tracer")
+        if (modp is None):
+            raise gdb.GdbError("Unable to find lttng_tracer module, are you "
+                               "sure lttng is loaded in this kernel dump?")
+        gdb.execute("add-symbol-file %s/lttng-tracer.o %s -s .data %s" %
+              (lttdir,
+               gdb.parse_and_eval("(unsigned long) (%s->module_core_rx)"
+                                  % modp),
+               gdb.parse_and_eval("(unsigned long) (%s->module_core_rw)"
+                                  % modp)))
+
+        self.PER_CPU_CHANNEL = gdb.parse_and_eval("PER_CPU_CHANNEL")
+
+        (session, backend) = self.find_session_channel()
+        if (backend is None):
+            raise gdb.GdbError("Unable to find operating session, are you sure "
+                               "lttng was running with --snapshot?")
+        self.dump_metadata(session)
+        self.num_subbuf = gdb.parse_and_eval("%s->num_subbuf" % backend);
+        self.subbuf_size = gdb.parse_and_eval("%s->subbuf_size" % backend);
+        p = get_percpu_ptr("%s->buf" % backend, 0, "struct lib_ring_buffer");
+        self.num_pages_per_subbuf = gdb.parse_and_eval(
+            "%s->backend.num_pages_per_subbuf" % p);
+        self.page_size = self.subbuf_size / self.num_pages_per_subbuf
+        self.idshift = int(gdb.parse_and_eval("sizeof(long)")) * 8 / 2
+        self.idmask = (1 << self.idshift) - 1
+        cpus = get_cpu_list()
+        for cpu in cpus:
+            p = get_percpu_ptr("%s->buf" % backend, cpu,
+                               "struct lib_ring_buffer");
+            self.handle_buffer(cpu, p)
+dumpltt()
+
+--------------040103070600090407010207
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -427,4 +569,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============0147092025==--
+--------------040103070600090407010207--
