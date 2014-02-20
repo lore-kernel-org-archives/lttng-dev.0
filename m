@@ -1,20 +1,17 @@
-From: Christian Babeux <christian.babeux@efficios.com>
-Subject: Re: Updated man pages for http://lttng.org/documentation
-Date: Wed, 19 Feb 2014 16:09:38 -0500
-Message-ID: <CAGDH53=J0fwuJfo9u7FDjppfZbsP=HFFsXD+g30BNk1hmnrv6g__5789.21239725805$1392844253$gmane$org@mail.gmail.com>
-References: <530470D6.2050705@mentor.com>
-	<1401444408.27382.1392802708907.JavaMail.zimbra@efficios.com>
+From: Santiago Font <sfont@teldat.com>
+Subject: Re: LTTng-ust 2.4.0-rc4 build error with uClibc
+Date: Thu, 20 Feb 2014 12:35:12 +0100
+Message-ID: <5305E870.5060204__22923.9737768241$1392897144$gmane$org@teldat.com>
+References: <530382BA.2060301@teldat.com> <5304729F.5040706@mentor.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ve0-f178.google.com ([209.85.128.178])
+Received: from mail.teldat.com ([195.53.62.69])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <christian.babeux@0x80.ca>) id 1WGEOm-0003UK-Ml
-	for lttng-dev@lists.lttng.org; Wed, 19 Feb 2014 16:09:50 -0500
-Received: by mail-ve0-f178.google.com with SMTP id oy12so987644veb.23
-	for <lttng-dev@lists.lttng.org>; Wed, 19 Feb 2014 13:09:39 -0800 (PST)
-In-Reply-To: <1401444408.27382.1392802708907.JavaMail.zimbra@efficios.com>
+	(envelope-from <sfont@teldat.com>) id 1WGRuQ-0001wW-Nr
+	for lttng-dev@lists.lttng.org; Thu, 20 Feb 2014 06:35:23 -0500
+In-Reply-To: <5304729F.5040706@mentor.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,61 +20,54 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: "Woegerer, Paul" <Paul_Woegerer@mentor.com>, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
+Hi Paul,
+      Thank you very much for your help.
 
-Every manpage should now be available on the website.
+      Santi
 
-Thanks for reporting,
-
-Christian
-
-On Wed, Feb 19, 2014 at 4:38 AM, Mathieu Desnoyers
-<mathieu.desnoyers@efficios.com> wrote:
-> ----- Original Message -----
->> From: "Paul Woegerer" <Paul_Woegerer@mentor.com>
->> To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>, "lttng-dev" <lttng-dev@lists.lttng.org>
->> Sent: Wednesday, February 19, 2014 3:52:38 AM
->> Subject: Updated man pages for http://lttng.org/documentation
->>
+On 19/02/14 10:00, Woegerer, Paul wrote:
+> Hi Santiago,
+>
+> it looks like uClibc does not have proper support for dlinfo().
+>
+> You have two options:
+>
+> Switch to a different C library suitable for embedded systems that does
+> have proper support for dlinfo(): http://www.eglibc.org/home
+>
+> Build without liblttng-ust-dl (simply remove it from the list of SUBDIRS
+> in the top-level Makefile.am) and accept that the following LTTng 2.4
+> feature is missing in your custom build:
+> http://git.lttng.org/?p=lttng-ust.git;a=blob_plain;f=doc/man/lttng-ust-dl.3;hb=HEAD
+>
+>
+> HTH,
+> Paul
+>
+>
+> On 02/18/2014 04:56 PM, Santiago Font wrote:
 >> Hi,
 >>
->> I looks like recently created man-pages are not available on the web page.
+>> I'm trying to build LTTng-ust using uClibc and I get the following error:
 >>
->> The following links are currently dead:
->> http://lttng.org/files/doc/man-pages/man3/lttng-ust-cyg-profile.3.html
->> http://lttng.org/files/doc/man-pages/man3/lttng-ust-dl.3.html
+>>                          ustdl.c:95:22: error: 'RTLD_DI_LINKMAP'
+>> undeclared (first use in this function)
 >>
->> The documentation main page is also not listing the new man pages:
->> LTTng-UST man pages: lttng-ust(3), lttng-gen-tp(1)
+>> Checking the file dlfcn.h from uClibc, the code defining that enum is
+>> disabled by:
 >>
->> Please add html versions for the newer man pages and also add them to
->> the LTTng-UST man pages list.
->
-> Christian,
->
-> Can you take care of this please ?
->
-> Thanks,
->
-> Mathieu
->
+>>                          #if 0 /* not supported by uClibc */
 >>
->> --
+>> How can I fix this?
+>>
 >> Thanks,
->> Paul
+>>                Santi
 >>
->> --
->> Paul Woegerer, SW Development Engineer
->> Sourcery Analyzer <http://go.mentor.com/sourceryanalyzer>
->> Mentor Graphics, Embedded Software Division
->>
->>
+>> _______________________________________________
+>> lttng-dev mailing list
+>> lttng-dev@lists.lttng.org
+>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 >
-> --
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> http://www.efficios.com
