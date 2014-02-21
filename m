@@ -1,16 +1,18 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [babeltrace RFC PATCH 1/2] Introduce nscanf to fix
+Subject: [babeltrace RFC PATCH 2/2] Fix: use nscanf() to fix
 	unbounded scanf()
-Date: Thu, 20 Feb 2014 21:15:41 -0500
-Message-ID: <1392948942-10604-1-git-send-email-mathieu.desnoyers__21475.4809778698$1392949119$gmane$org@efficios.com>
+Date: Thu, 20 Feb 2014 21:15:42 -0500
+Message-ID: <1392948942-10604-2-git-send-email-mathieu.desnoyers__49005.2016721622$1392949223$gmane$org@efficios.com>
+References: <1392948942-10604-1-git-send-email-mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <mathieu.desnoyers@efficios.com>) id 1WGfec-0000GT-Ol
-	for lttng-dev@lists.lttng.org; Thu, 20 Feb 2014 21:16:01 -0500
+	(envelope-from <mathieu.desnoyers@efficios.com>) id 1WGfee-0000GU-D9
+	for lttng-dev@lists.lttng.org; Thu, 20 Feb 2014 21:16:06 -0500
+In-Reply-To: <1392948942-10604-1-git-send-email-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -25,576 +27,135 @@ List-Id: lttng-dev@lists.lttng.org
 
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- include/Makefile.am         |    3 +-
- include/babeltrace/nscanf.h |  103 +++++++++++
- lib/Makefile.am             |    4 +
- lib/nscanf.c                |  418 +++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 527 insertions(+), 1 deletion(-)
- create mode 100644 include/babeltrace/nscanf.h
- create mode 100644 lib/nscanf.c
+ formats/ctf/Makefile.am                |    1 +
+ formats/ctf/ctf.c                      |    5 ++++-
+ formats/lttng-live/Makefile.am         |    3 ++-
+ formats/lttng-live/lttng-live-plugin.c |   32 ++++++++++++++++++--------------
+ 4 files changed, 25 insertions(+), 16 deletions(-)
 
-diff --git a/include/Makefile.am b/include/Makefile.am
-index d9996a7..2152a74 100644
---- a/include/Makefile.am
-+++ b/include/Makefile.am
-@@ -53,4 +53,5 @@ noinst_HEADERS = \
- 	babeltrace/compat/string.h \
- 	babeltrace/compat/utc.h \
- 	babeltrace/endian.h \
--	babeltrace/mmap-align.h
-+	babeltrace/mmap-align.h \
-+	babeltrace/nscanf.h
-diff --git a/include/babeltrace/nscanf.h b/include/babeltrace/nscanf.h
-new file mode 100644
-index 0000000..ec74c24
---- /dev/null
-+++ b/include/babeltrace/nscanf.h
-@@ -0,0 +1,103 @@
-+#ifndef NSCANF_H
-+#define NSCANF_H
-+
-+/*
-+ * nscanf.h
-+ *
-+ * Secure scanf wrapper
-+ *
-+ * Copyright (c) 2014 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-+ *
-+ * This library is free software; you can redistribute it and/or
-+ * modify it under the terms of the GNU Lesser General Public
-+ * License as published by the Free Software Foundation; either
-+ * version 2.1 of the License, or (at your option) any later version.
-+ *
-+ * This library is distributed in the hope that it will be useful,
-+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
-+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-+ * Lesser General Public License for more details.
-+ *
-+ * You should have received a copy of the GNU Lesser General Public
-+ * License along with this library; if not, write to the Free Software
-+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
-+ */
-+
-+#include <stdarg.h>
-+#include <stdio.h>
-+
-+/*
-+ * Macro to generate "field_widths" argument.
-+ *
-+ * Example use:
-+ *
-+ * int ret;
-+ * char numerator[20], denominator[20];
-+ *
-+ * ret = nscanf("%s/%s",
-+ *    NSCANF_LEN(sizeof(numerator), sizeof(denominator)),
-+ *    numerator, denominator);
-+ *
-+ */
-+#define NSCANF_LEN(...)	\
-+	(const ssize_t []) { __VA_ARGS__ }
-+
-+/*
-+ * Common integer character max widths.
-+ */
-+#define NSCANF_LEN_u32	10
-+#define NSCANF_LEN_s32	11
-+#define NSCANF_LEN_o32	11
-+#define NSCANF_LEN_x32	9
-+#define NSCANF_LEN_u64	20
-+#define NSCANF_LEN_s64	21
-+#define NSCANF_LEN_o64	22
-+#define NSCANF_LEN_x64	17
-+
-+/*
-+ * field_widths is an array of ssize_t elements that specify the length
-+ * of each following parameter (field width).
-+ *
-+ * UNLIKE TO THE REGULAR SCANF(3) FAMILY OF FUNCTIONS, FOR SECURITY
-+ * REASONS, STRING CONVERSION ('s' AND '[' CONVERSION SPECIFIERS) WIDTH
-+ * INCLUDE THE FINAL \0 FOR EACH STRING. FOR THOSE, A WIDTH OF 0 RETURN
-+ * -1 WITH A EINVAL ERROR.
-+ *
-+ * The following scanf(3) features are not accepted. Those return -1
-+ * with a EINVAL error:
-+ * - 'n' conversion specification,
-+ * - 'a' conversion specification,
-+ * - Explicit maximum field width in the format string.
-+ *
-+ * A negative field width value skips field width validation for the
-+ * associated conversion specification (use with care, only with
-+ * pre-validated inputs!).
-+
-+ * Otherwise, the nscanf() family of functions behaves in the same way
-+ * as scanf(3).
-+ */
-+extern int nscanf(const char *format,
-+		const ssize_t *field_widths, ...)
-+	__attribute__ ((__format__ (__scanf__, 1, 3)));
-+
-+extern int fnscanf(FILE *stream, const char *format,
-+		const ssize_t *field_widths, ...)
-+	__attribute__ ((__format__ (__scanf__, 2, 4)));
-+
-+extern int snscanf(const char *str, const char *format,
-+		const ssize_t *field_widths, ...)
-+	__attribute__ ((__format__ (__scanf__, 2, 4)));
-+
-+extern int vnscanf(const char *format,
-+		const ssize_t *field_widths, va_list ap)
-+	__attribute__ ((__format__ (__scanf__, 1, 0)));
-+
-+extern int vfnscanf(FILE *stream, const char *format,
-+		const ssize_t *field_widths, va_list ap)
-+	__attribute__ ((__format__ (__scanf__, 2, 0)));
-+
-+extern int vsnscanf(const char *str, const char *format,
-+		const ssize_t *field_widths, va_list ap)
-+	__attribute__ ((__format__ (__scanf__, 2, 0)));
-+
-+#endif /* NSCANF_H */
-diff --git a/lib/Makefile.am b/lib/Makefile.am
-index 348b0a9..d707c93 100644
---- a/lib/Makefile.am
-+++ b/lib/Makefile.am
-@@ -4,6 +4,8 @@ AM_CFLAGS = $(PACKAGE_CFLAGS) -I$(top_srcdir)/include
+diff --git a/formats/ctf/Makefile.am b/formats/ctf/Makefile.am
+index 5d8a297..c5d5216 100644
+--- a/formats/ctf/Makefile.am
++++ b/formats/ctf/Makefile.am
+@@ -17,6 +17,7 @@ libbabeltrace_ctf_la_LDFLAGS = \
  
- lib_LTLIBRARIES = libbabeltrace.la
- 
-+noinst_LTLIBRARIES = libnscanf.la
-+
- libbabeltrace_la_SOURCES = babeltrace.c \
- 			   iterator.c \
- 			   context.c \
-@@ -17,3 +19,5 @@ libbabeltrace_la_LIBADD = \
- 	prio_heap/libprio_heap.la \
- 	$(top_builddir)/types/libbabeltrace_types.la \
- 	$(top_builddir)/compat/libcompat.la
-+
-+libnscanf_la_SOURCES = nscanf.c
-diff --git a/lib/nscanf.c b/lib/nscanf.c
-new file mode 100644
-index 0000000..9909eb6
---- /dev/null
-+++ b/lib/nscanf.c
-@@ -0,0 +1,418 @@
-+/*
-+ * nscanf.c
-+ *
-+ * Secure scanf wrapper
-+ *
-+ * Copyright (c) 2014 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-+ *
-+ * This library is free software; you can redistribute it and/or
-+ * modify it under the terms of the GNU Lesser General Public
-+ * License as published by the Free Software Foundation; either
-+ * version 2.1 of the License, or (at your option) any later version.
-+ *
-+ * This library is distributed in the hope that it will be useful,
-+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
-+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-+ * Lesser General Public License for more details.
-+ *
-+ * You should have received a copy of the GNU Lesser General Public
-+ * License along with this library; if not, write to the Free Software
-+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
-+ */
-+
-+#define _GNU_SOURCE
-+#include <stdio.h>
-+#include <string.h>
-+#include <stdarg.h>
-+#include <stdlib.h>
-+#include <errno.h>
-+#include <ctype.h>
-+#include <assert.h>
-+#include <babeltrace/babeltrace-internal.h>
+ libbabeltrace_ctf_la_LIBADD = \
+ 	$(top_builddir)/lib/libbabeltrace.la \
++	$(top_builddir)/lib/libnscanf.la \
+ 	types/libctf-types.la \
+ 	metadata/libctf-parser.la \
+ 	metadata/libctf-ast.la \
+diff --git a/formats/ctf/ctf.c b/formats/ctf/ctf.c
+index 2ff68bb..a4dc2c5 100644
+--- a/formats/ctf/ctf.c
++++ b/formats/ctf/ctf.c
+@@ -36,6 +36,7 @@
+ #include <babeltrace/compat/uuid.h>
+ #include <babeltrace/endian.h>
+ #include <babeltrace/ctf/ctf-index.h>
 +#include <babeltrace/nscanf.h>
-+
-+/* Max width of size_t printed as string (2^64) */
-+#define NSCANF_NUM_WIDTH	20
-+
-+/*
-+ * If returns 0, caller needs to free format_out.
-+ */
-+static
-+int nscanf_prepare_fmt(const char *format,
-+		char **format_out,
-+		const ssize_t *field_widths)
-+{
-+	char *format_a, *dest_p;
-+	size_t format_a_len;
-+	const char *p, *prev_p;
-+	int ret;
-+	const ssize_t *fw_iter = field_widths;
-+	size_t nr_fw = 0;
-+
-+	/*
-+	 * Calculate number of field width to learn the format
-+	 * allocation length we need.
-+	 */
-+	p = format;
-+
-+	while (*p != '\0') {
-+		p = strchrnul(p, '%');
-+		if (*p == '\0') {
-+			break;
-+		}
-+		p++;	/* Include % */
-+		switch (*p) {
-+		case '%':	/* match %% */
-+			p++;
-+			continue;	/* restart loop */
-+		case '*':	/* match %* */
-+			p++;
-+			break;		/* exit switch */
-+		default:
-+			break;		/* exit switch */
-+		}
-+
-+		/* Match n$ part of %n$ */
-+		prev_p = p;
-+		for (;;) {
-+			if (*p == '\0') {
-+				errno = EINVAL;
-+				return -1;
-+			}
-+			if (isdigit(*p)) {
-+				p++;
-+				continue;
-+			}
-+			if (*p == '$') {
-+				p++;
-+				/* This is the %n$ */
-+				break;
-+			}
-+			/* This is not a %n$ */
-+			p = prev_p;
-+			break;
-+		}
-+
-+		/*
-+		 * 'a' can be either GNU extension (dynamic allocation)
-+		 * or C99 conversion specifier. Refuse it due to
-+		 * semantic uncertainty.
-+		 */
-+		if (*p == 'a') {
-+			errno = EINVAL;
-+			return -1;
-+		}
-+
-+		/* Refuse explicit field width */
-+		if (isdigit(*p)) {
-+			/* unexpected numerical field len */
-+			errno = EINVAL;
-+			return -1;
-+		}
-+
-+		/* Length modifiers */
-+		switch (*p) {
-+		case 'h':
-+			/* 'h' or 'hh' */
-+			p++;
-+			if (*p == 'h') {
-+				p++;
-+			}
-+			break;		/* exit switch */
-+		case 'l':
-+			/* 'l' or 'll' */
-+			p++;
-+			if (*p == 'l') {
-+				p++;
-+			}
-+			break;		/* exit switch */
-+		case 'j':
-+		case 'z':
-+		case 't':
-+		case 'q':
-+		case 'L':
-+			p++;
-+			break;		/* exit switch */
-+		default:
-+			/* no length modifier */
-+			break;		/* exit switch */
-+		}
-+
-+		/* conversion specifiers */
-+		switch (*p) {
-+		case '[':
-+			/*
-+			 * We need to understand the '[' conversion
-+			 * specifier because it may contain an extra %
-+			 * character.
-+			 */
-+			p++;
-+			if (*p == '^') {
-+				p++;
-+			}
-+			if (*p == ']') {
-+				p++;
-+			}
-+			p = strchrnul(p, ']');
-+			if (*p == '\0') {
-+				/* Invalid: missing ']' */
-+				errno = EINVAL;
-+				return -1;
-+			}
-+			p++;		/* skip over ']' */
-+			break;		/* exit switch */
-+		case 'n':
-+		case 'a':
-+			/* Refuse the 'n' and 'a' specifiers */
-+			errno = EINVAL;
-+			return -1;
-+		default:
-+			/*
-+			 * Leave other conversion specifier validation
-+			 * to the scanf implementation.
-+			 */
-+			break;		/* exit switch */
-+		}
-+
-+		/* Found one location for field width */
-+		nr_fw++;
-+	}
-+	assert(strlen(format) == p - format);
-+
-+	/* Generate the format string with field width info */
-+	format_a_len = p - format + 1 + (nr_fw * NSCANF_NUM_WIDTH);
-+	format_a = malloc(format_a_len);
-+	if (!format_a) {
-+		errno = ENOMEM;
-+		return -1;
-+	}
-+	format_a[0] = '\0';
-+
-+	p = format;
-+	dest_p = format_a;
-+
-+	while (*p != '\0') {
-+		prev_p = p;
-+		p = strchrnul(p, '%');
-+		if (*p == '\0') {
-+			memcpy(dest_p, prev_p, p - prev_p);
-+			break;
-+		}
-+		p++;	/* Include % */
-+		memcpy(dest_p, prev_p, p - prev_p);
-+		dest_p += p - prev_p;
-+
-+		switch (*p) {
-+		case '%':	/* match %% */
-+			*(dest_p++) = *(p++);
-+			continue;	/* restart loop */
-+		case '*':	/* match %* */
-+			*(dest_p++) = *(p++);
-+			break;		/* exit switch */
-+		default:
-+			break;		/* exit switch */
-+		}
-+
-+		/* Match n$ part of %n$ */
-+		prev_p = p;
-+		for (;;) {
-+			assert(*p != '\0');
-+			if (isdigit(*p)) {
-+				p++;
-+				continue;
-+			}
-+			if (*p == '$') {
-+				p++;
-+				/* This is the %n$ */
-+				memcpy(dest_p, prev_p, p - prev_p);
-+				dest_p += p - prev_p;
-+				break;
-+			}
-+			/* This is not a %n$ */
-+			p = prev_p;
-+			break;
-+		}
-+
-+		assert(*p != 'a');
-+		assert(!isdigit(*p));
-+
-+		/*
-+		 * Print len into format string.
-+		 */
-+		if (*fw_iter >= 0) {
-+			size_t width = *fw_iter;
-+
-+			switch (*p) {
-+			case 's':
-+			case '[':
-+				if (!width) {
-+					errno = EINVAL;
-+					ret = -1;
-+					goto end_error;
-+				}
-+				/*
-+				 * Provide a dumb-proof API by including
-+				 * the final '\0' within the width
-+				 * received as argument, unlike scanf().
-+				 * Adapt the width value for scanf()
-+				 * here.
-+				 */
-+				width--;
-+				break;
-+			default:
-+				break;
-+			}
-+			ret = sprintf(dest_p, "%zu", width);
-+			if (ret < 0) {
-+				goto end_error;
-+			}
-+			assert(ret <= NSCANF_NUM_WIDTH);
-+			dest_p += ret;
-+		}
-+		fw_iter++;
-+
-+		/* Length modifiers */
-+		switch (*p) {
-+		case 'h':
-+			/* 'h' or 'hh' */
-+			*(dest_p++) = *(p++);
-+			if (*p == 'h') {
-+				*(dest_p++) = *(p++);
-+			}
-+			break;		/* exit switch */
-+		case 'l':
-+			/* 'l' or 'll' */
-+			*(dest_p++) = *(p++);
-+			if (*p == 'l') {
-+				*(dest_p++) = *(p++);
-+			}
-+			break;		/* exit switch */
-+		case 'j':
-+		case 'z':
-+		case 't':
-+		case 'q':
-+		case 'L':
-+			*(dest_p++) = *(p++);
-+			break;		/* exit switch */
-+		default:
-+			/* no length modifier */
-+			break;		/* exit switch */
-+		}
-+
-+		/* conversion specifiers */
-+		assert(*p != 'n' && *p != 'a');
-+		prev_p = p;
-+		switch (*p) {
-+		case '[':
-+			/*
-+			 * We need to understand the '[' conversion
-+			 * specifier because it may contain an extra %
-+			 * character.
-+			 */
-+			p++;
-+			if (*p == '^') {
-+				p++;
-+			}
-+			if (*p == ']') {
-+				p++;
-+			}
-+			p = strchrnul(p, ']');
-+			assert(*p != '\0');
-+			p++;		/* skip over ']' */
-+			memcpy(dest_p, prev_p, p - prev_p);
-+			dest_p += p - prev_p;
-+			break;		/* exit switch */
-+		default:
-+			/*
-+			 * Leave other conversion specifier validation
-+			 * to the scanf implementation.
-+			 */
-+			break;		/* exit switch */
-+		}
-+	}
-+	*format_out = format_a;
-+	return 0;
-+
-+end_error:
-+	free(format_a);
-+	return ret;
-+}
-+
-+BT_HIDDEN
-+int vsnscanf(const char *str, const char *format,
-+		const ssize_t *field_widths, va_list ap)
-+{
-+	char *format_a;
-+	int ret;
-+
-+	ret = nscanf_prepare_fmt(format, &format_a, field_widths);
-+	if (ret < 0) {
-+		goto end;
-+	}
-+	ret = vsscanf(str, format_a, ap);
-+	free(format_a);
-+end:
-+	return ret;
-+}
-+
-+BT_HIDDEN
-+int snscanf(const char *str, const char *format,
-+		const ssize_t *field_widths, ...)
-+{
-+	va_list ap;
-+	int ret;
-+
-+	va_start(ap, field_widths);
-+	ret = vsnscanf(str, format, field_widths, ap);
-+	va_end(ap);
-+	return ret;
-+}
-+
-+BT_HIDDEN
-+int vfnscanf(FILE *stream, const char *format,
-+		const ssize_t *field_widths, va_list ap)
-+{
-+	char *format_a;
-+	int ret;
-+
-+	ret = nscanf_prepare_fmt(format, &format_a, field_widths);
-+	if (ret < 0) {
-+		goto end;
-+	}
-+	ret = vfscanf(stream, format_a, ap);
-+	free(format_a);
-+end:
-+	return ret;
-+}
-+
-+BT_HIDDEN
-+int fnscanf(FILE *stream, const char *format,
-+		const ssize_t *field_widths, ...)
-+{
-+	va_list ap;
-+	int ret;
-+
-+	va_start(ap, field_widths);
-+	ret = vfnscanf(stream, format, field_widths, ap);
-+	va_end(ap);
-+	return ret;
-+}
-+
-+BT_HIDDEN
-+int vnscanf(const char *format,
-+		const ssize_t *field_widths, va_list ap)
-+{
-+	return vfnscanf(stdin, format, field_widths, ap);
-+}
-+
-+BT_HIDDEN
-+int nscanf(const char *format, const ssize_t *field_widths, ...)
-+{
-+	va_list ap;
-+	int ret;
-+
-+	va_start(ap, field_widths);
-+	ret = vfnscanf(stdin, format, field_widths, ap);
-+	va_end(ap);
-+	return ret;
-+}
+ #include <inttypes.h>
+ #include <stdio.h>
+ #include <sys/mman.h>
+@@ -1252,7 +1253,9 @@ int ctf_trace_metadata_read(struct ctf_trace *td, FILE *metadata_fp,
+ 			td->byte_order = BYTE_ORDER;
+ 
+ 			/* Check text-only metadata header and version */
+-			nr_items = fscanf(fp, "/* CTF %10u.%10u", &major, &minor);
++			nr_items = fnscanf(fp, "/* CTF %u.%u",
++				NSCANF_LEN(NSCANF_LEN_u32, NSCANF_LEN_u32),
++				&major, &minor);
+ 			if (nr_items < 2)
+ 				fprintf(stderr, "[warning] Ill-shapen or missing \"/* CTF x.y\" header for text-only metadata.\n");
+ 			if (check_version(major, minor) < 0) {
+diff --git a/formats/lttng-live/Makefile.am b/formats/lttng-live/Makefile.am
+index c834699..727ddac 100644
+--- a/formats/lttng-live/Makefile.am
++++ b/formats/lttng-live/Makefile.am
+@@ -14,4 +14,5 @@ libbabeltrace_lttng_live_la_LDFLAGS = \
+ 	-Wl,--no-as-needed -version-info $(BABELTRACE_LIBRARY_VERSION)
+ 
+ libbabeltrace_lttng_live_la_LIBADD = \
+-	$(top_builddir)/lib/libbabeltrace.la
++	$(top_builddir)/lib/libbabeltrace.la \
++	$(top_builddir)/lib/libnscanf.la
+diff --git a/formats/lttng-live/lttng-live-plugin.c b/formats/lttng-live/lttng-live-plugin.c
+index b3c660c..d09efcf 100644
+--- a/formats/lttng-live/lttng-live-plugin.c
++++ b/formats/lttng-live/lttng-live-plugin.c
+@@ -26,6 +26,7 @@
+ #include <babeltrace/ctf-text/types.h>
+ #include <babeltrace/format.h>
+ #include <babeltrace/babeltrace-internal.h>
++#include <babeltrace/nscanf.h>
+ #include <inttypes.h>
+ #include <sys/mman.h>
+ #include <errno.h>
+@@ -48,15 +49,9 @@ int parse_url(const char *path, struct lttng_live_ctx *ctx)
+ 	int ret = -1, proto, proto_offset = 0;
+ 	size_t path_len = strlen(path);
+ 
+-	/*
+-	 * Since sscanf API does not allow easily checking string length
+-	 * against a size defined by a macro. Test it beforehand on the
+-	 * input. We know the output is always <= than the input length.
+-	 */
+-	if (path_len > NAME_MAX) {
+-		goto end;
+-	}
+-	ret = sscanf(path, "net%d://", &proto);
++	ret = snscanf(path, "net%d://",
++		NSCANF_LEN(NSCANF_LEN_s32),
++		&proto);
+ 	if (ret < 1) {
+ 		proto = 4;
+ 		/* net:// */
+@@ -70,16 +65,21 @@ int parse_url(const char *path, struct lttng_live_ctx *ctx)
+ 	}
+ 	/* TODO : parse for IPv6 as well */
+ 	/* Parse the hostname or IP */
+-	ret = sscanf(&path[proto_offset], "%[a-zA-Z.0-9%-]%s",
++	ret = snscanf(&path[proto_offset], "%[a-zA-Z.0-9%-]%s",
++		NSCANF_LEN(sizeof(ctx->relay_hostname), sizeof(remain[0])),
+ 		ctx->relay_hostname, remain[0]);
+ 	if (ret == 2) {
+ 		/* Optional port number */
+ 		switch (remain[0][0]) {
+ 		case ':':
+-			ret = sscanf(remain[0], ":%d%s", &ctx->port, remain[1]);
++			ret = snscanf(remain[0], ":%d%s",
++				NSCANF_LEN(NSCANF_LEN_s32, sizeof(remain[1])),
++				&ctx->port, remain[1]);
+ 			/* Optional session ID with port number */
+ 			if (ret == 2) {
+-				ret = sscanf(remain[1], "/%s", remain[2]);
++				ret = snscanf(remain[1], "/%s",
++					NSCANF_LEN(sizeof(remain[2])),
++					remain[2]);
+ 				/* Accept 0 or 1 (optional) */
+ 				if (ret < 0) {
+ 					goto end;
+@@ -88,7 +88,9 @@ int parse_url(const char *path, struct lttng_live_ctx *ctx)
+ 			break;
+ 		case '/':
+ 			/* Optional session ID */
+-			ret = sscanf(remain[0], "/%s", remain[2]);
++			ret = snscanf(remain[0], "/%s",
++				NSCANF_LEN(sizeof(remain[2])),
++				remain[2]);
+ 			/* Accept 0 or 1 (optional) */
+ 			if (ret < 0) {
+ 				goto end;
+@@ -112,7 +114,9 @@ int parse_url(const char *path, struct lttng_live_ctx *ctx)
+ 		ret = 0;
+ 		goto end;
+ 	}
+-	ret = sscanf(remain[2], "host/%[a-zA-Z.0-9%-]/%s",
++	ret = snscanf(remain[2], "host/%[a-zA-Z.0-9%-]/%s",
++			NSCANF_LEN(sizeof(ctx->traced_hostname),
++				sizeof(ctx->session_name)),
+ 			ctx->traced_hostname, ctx->session_name);
+ 	if (ret != 2) {
+ 		fprintf(stderr, "[error] Format : "
 -- 
 1.7.10.4
