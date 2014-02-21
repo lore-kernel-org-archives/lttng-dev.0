@@ -1,19 +1,10 @@
-From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
-	<jeremie.galarneau@efficios.com>
-Subject: [PATCH lttng-ust] Fix: Unsynchronized access in
-	LTTngTCPSessiondClient
-Date: Thu, 20 Feb 2014 11:22:33 -0500
-Message-ID: <1392913353-13369-1-git-send-email-jeremie.galarneau__15696.6770337478$1392913431$gmane$org@efficios.com>
+From: Jessica Foest <jessica.foest@gmail.com>
+Subject: lttng trace format
+Date: Thu, 20 Feb 2014 21:15:42 -0500
+Message-ID: <CAPxN80Awz15=dY4vGGV0rHf_GM79uooPhYA8JOjV8Wp6jSBARQ__14161.2916756005$1392949015$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============1050432525=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qc0-f174.google.com ([209.85.216.174])
-	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1WGWOX-0004HB-PY
-	for lttng-dev@lists.lttng.org; Thu, 20 Feb 2014 11:22:47 -0500
-Received: by mail-qc0-f174.google.com with SMTP id x13so3529815qcv.33
-	for <lttng-dev@lists.lttng.org>; Thu, 20 Feb 2014 08:22:36 -0800 (PST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,50 +13,66 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org, lttng-dev-request@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-ZW5hYmxlZEV2ZW50TGlzdCBpcyBzaGFyZWQgYmV0d2VlbiB0aGUgTFRUbmdUaHJlYWQgYW5kIGV2
-ZW50VGltZXIKdGhyZWFkcyBidXQgaXMgbm90IHN5bmNocm9uaXplZC4KClRoaXMgcGF0Y2ggY2hh
-bmdlcyBlbmFibGVkRXZlbnRMaXN0J3MgdHlwZSBmcm9tIGFuIEFycmF5TGlzdCB0byBhCnN5bmNo
-cm9uaXplZExpc3Qgd2hpY2ggaW1wbGVtZW50cyB0aGUgc2FtZSBpbnRlcmZhY2UuCgpTaWduZWQt
-b2ZmLWJ5OiBKw6lyw6ltaWUgR2FsYXJuZWF1IDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5j
-b20+Ci0tLQogLi4uL29yZy9sdHRuZy91c3QvanVsL0xUVG5nVENQU2Vzc2lvbmRDbGllbnQuamF2
-YSAgICAgICAgIHwgMTUgKysrKysrKysrKystLS0tCiAxIGZpbGUgY2hhbmdlZCwgMTEgaW5zZXJ0
-aW9ucygrKSwgNCBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9saWJsdHRuZy11c3QtanVsL29y
-Zy9sdHRuZy91c3QvanVsL0xUVG5nVENQU2Vzc2lvbmRDbGllbnQuamF2YSBiL2xpYmx0dG5nLXVz
-dC1qdWwvb3JnL2x0dG5nL3VzdC9qdWwvTFRUbmdUQ1BTZXNzaW9uZENsaWVudC5qYXZhCmluZGV4
-IDI1ZDFjYjIuLjBkOWE0ODUgMTAwNjQ0Ci0tLSBhL2xpYmx0dG5nLXVzdC1qdWwvb3JnL2x0dG5n
-L3VzdC9qdWwvTFRUbmdUQ1BTZXNzaW9uZENsaWVudC5qYXZhCisrKyBiL2xpYmx0dG5nLXVzdC1q
-dWwvb3JnL2x0dG5nL3VzdC9qdWwvTFRUbmdUQ1BTZXNzaW9uZENsaWVudC5qYXZhCkBAIC0zNCw2
-ICszNCw3IEBAIGltcG9ydCBqYXZhLnV0aWwuTGlzdDsKIGltcG9ydCBqYXZhLnV0aWwuVGltZXI7
-CiBpbXBvcnQgamF2YS51dGlsLlRpbWVyVGFzazsKIGltcG9ydCBqYXZhLnV0aWwubG9nZ2luZy5M
-b2dnZXI7CitpbXBvcnQgamF2YS51dGlsLkNvbGxlY3Rpb25zOwogCiBjbGFzcyBVU1RSZWdpc3Rl
-ck1zZyB7CiAJcHVibGljIHN0YXRpYyBpbnQgcGlkOwpAQCAtNTcsNyArNTgsOCBAQCBwdWJsaWMg
-Y2xhc3MgTFRUbmdUQ1BTZXNzaW9uZENsaWVudCB7CiAJcHJpdmF0ZSBTZW1hcGhvcmUgcmVnaXN0
-ZXJTZW07CiAKIAlwcml2YXRlIFRpbWVyIGV2ZW50VGltZXI7Ci0JcHJpdmF0ZSBMaXN0PExUVG5n
-RXZlbnQ+IGVuYWJsZWRFdmVudExpc3QgPSBuZXcgQXJyYXlMaXN0PExUVG5nRXZlbnQ+KCk7CisJ
-cHJpdmF0ZSBMaXN0PExUVG5nRXZlbnQ+IGVuYWJsZWRFdmVudExpc3QgPSBDb2xsZWN0aW9ucy5z
-eW5jaHJvbml6ZWRMaXN0KAorCQluZXcgQXJyYXlMaXN0PExUVG5nRXZlbnQ+KCkpOwogCS8qCiAJ
-ICogTWFwIG9mIExvZ2dlciBvYmplY3RzIHRoYXQgaGF2ZSBiZWVuIGVuYWJsZWQuIFRoZXkgYXJl
-IGluZGV4ZWQgYnkgbmFtZS4KIAkgKi8KQEAgLTg2LDcgKzg4LDEwIEBAIHB1YmxpYyBjbGFzcyBM
-VFRuZ1RDUFNlc3Npb25kQ2xpZW50IHsKIAkJCQkgKiBXZSBoYXZlIHRvIG1ha2UgYSBjb3B5IGhl
-cmUgc2luY2UgaXQgaXMgcG9zc2libGUgdGhhdCB0aGUKIAkJCQkgKiBlbmFibGVkIGV2ZW50IGxp
-c3QgaXMgY2hhbmdlZCBkdXJpbmcgYW4gaXRlcmF0aW9uIG9uIGl0LgogCQkJCSAqLwotCQkJCUxp
-c3Q8TFRUbmdFdmVudD4gdG1wTGlzdCA9IG5ldyBBcnJheUxpc3Q8TFRUbmdFdmVudD4oZW5hYmxl
-ZEV2ZW50TGlzdCk7CisJCQkJTGlzdDxMVFRuZ0V2ZW50PiB0bXBMaXN0OworCQkJCXN5bmNocm9u
-aXplZChlbmFibGVkRXZlbnRMaXN0KSB7CisJCQkJCXRtcExpc3QgPSBuZXcgQXJyYXlMaXN0PExU
-VG5nRXZlbnQ+KGVuYWJsZWRFdmVudExpc3QpOworCQkJCX0KIAogCQkJCUxUVG5nU2Vzc2lvbmRD
-bWQyXzQuc2Vzc2lvbmRfZW5hYmxlX2hhbmRsZXIgZW5hYmxlQ21kID0gbmV3CiAJCQkJCUxUVG5n
-U2Vzc2lvbmRDbWQyXzQuc2Vzc2lvbmRfZW5hYmxlX2hhbmRsZXIoKTsKQEAgLTI3Nyw4ICsyODIs
-MTAgQEAgcHVibGljIGNsYXNzIExUVG5nVENQU2Vzc2lvbmRDbGllbnQgewogCQkJCQkJICogQWRk
-IHRoZSBldmVudCB0byB0aGUgbGlzdCBzbyBpdCBjYW4gYmUgZW5hYmxlZCBpZgogCQkJCQkJICog
-dGhlIGxvZ2dlciBhcHBlYXJzIGF0IHNvbWUgcG9pbnQgaW4gdGltZS4KIAkJCQkJCSAqLwotCQkJ
-CQkJaWYgKGVuYWJsZWRFdmVudExpc3QuY29udGFpbnMoZXZlbnQpID09IGZhbHNlKSB7Ci0JCQkJ
-CQkJZW5hYmxlZEV2ZW50TGlzdC5hZGQoZXZlbnQpOworCQkJCQkJc3luY2hyb25pemVkIChlbmFi
-bGVkRXZlbnRMaXN0KSB7CisJCQkJCQkJaWYgKGVuYWJsZWRFdmVudExpc3QuY29udGFpbnMoZXZl
-bnQpID09IGZhbHNlKSB7CisJCQkJCQkJCWVuYWJsZWRFdmVudExpc3QuYWRkKGV2ZW50KTsKKwkJ
-CQkJCQl9CiAJCQkJCQl9CiAJCQkJCX0KIAkJCQkJZGF0YSA9IGVuYWJsZUNtZC5nZXRCeXRlcygp
-OwotLSAKMS45LjAKCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0
-cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+--===============1050432525==
+Content-Type: multipart/alternative; boundary=089e01494a16f0cd4004f2e13288
+
+--089e01494a16f0cd4004f2e13288
+Content-Type: text/plain; charset=ISO-8859-1
+
+Hi all
+is there a document that explain the meaning of fields displayed in the
+traces generated by babeltrace ?
+
+
+an example :
+
+[19:52:06.617756425] *(+0.000001667)* workstation sys_splice: { cpu_id = 3
+}, { perf_branches = 418157709, perf_branch_instructions = 418156946,
+perf_cache_misses = 6682769, perf_cache_references = 50147680,
+perf_instructions = 3049323811, vppid = 587, ppid = 587, vtid = 3502, tid =
+3502, vpid = 3499, nice = 0, prio = 20, procname = "lttng-consumerd", pid =
+3499 }, { fd_in = 10, off_in = 0x0, fd_out = 26, off_out = 0x0, len =
+65536, flags = 5 }
+
+the field mentioned in blue , is it the execution time of sys_splice ?
+
+if yes , what's the necessity of sys_exit ?
+Regards
+
+--089e01494a16f0cd4004f2e13288
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div>Hi all</div>is there a document that explain the mean=
+ing of fields displayed in the traces generated by babeltrace ?<div><br></d=
+iv><div><br></div><div>an example :</div><div><br></div><div>[19:52:06.6177=
+56425] <font color=3D"#0000ff"><b>(+0.000001667)</b></font> workstation sys=
+_splice: { cpu_id =3D 3 }, { perf_branches =3D 418157709, perf_branch_instr=
+uctions =3D 418156946, perf_cache_misses =3D 6682769, perf_cache_references=
+ =3D 50147680, perf_instructions =3D 3049323811, vppid =3D 587, ppid =3D 58=
+7, vtid =3D 3502, tid =3D 3502, vpid =3D 3499, nice =3D 0, prio =3D 20, pro=
+cname =3D &quot;lttng-consumerd&quot;, pid =3D 3499 }, { fd_in =3D 10, off_=
+in =3D 0x0, fd_out =3D 26, off_out =3D 0x0, len =3D 65536, flags =3D 5 }=A0=
+</div>
+<div><br></div><div>the field mentioned in blue , is it the execution time =
+of sys_splice ?=A0</div><div><br></div><div>if yes , what&#39;s the necessi=
+ty of sys_exit ?=A0</div><div>Regards</div></div>
+
+--089e01494a16f0cd4004f2e13288--
+
+
+--===============1050432525==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1050432525==--
