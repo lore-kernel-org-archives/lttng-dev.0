@@ -1,18 +1,18 @@
-From: "zhenyu.ren" <zhenyu.ren@aliyun.com>
-Subject: =?utf-8?q?epoll=5Fwait_reboot_kernel=3F?=
-Date: Sat, 22 Feb 2014 13:17:54 +0800
-Message-ID: <a860adc0-d68a-4a1e-bbd1-775c1cf652e9__22587.2844145217$1393046371$gmane$org@aliyun.com>
-Reply-To: "zhenyu.ren" <zhenyu.ren@aliyun.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH lttng-ust] Fix: Unsynchronized access
+	in	LTTngTCPSessiondClient
+Date: Sat, 22 Feb 2014 16:12:59 +0000 (UTC)
+Message-ID: <1530478584.28856.1393085579318.JavaMail.zimbra__16429.5144415975$1393085634$gmane$org@efficios.com>
+References: <1392913353-13369-1-git-send-email-jeremie.galarneau@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtpcm9-304.freemail.mail.aliyun.com ([110.75.46.4])
+Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <zhenyu.ren@aliyun.com>) id 1WH4yU-0004Xn-KE
-	for lttng-dev@lists.lttng.org; Sat, 22 Feb 2014 00:18:10 -0500
-References: c3d1fc94-92e2-43b3-af78-6315aaa7419d@aliyun.com
-In-Reply-To: c3d1fc94-92e2-43b3-af78-6315aaa7419d@aliyun.com
+	(envelope-from <compudj@efficios.com>) id 1WHFCH-0001KX-Ns
+	for lttng-dev@lists.lttng.org; Sat, 22 Feb 2014 11:13:03 -0500
+In-Reply-To: <1392913353-13369-1-git-send-email-jeremie.galarneau@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,41 +21,73 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev <lttng-dev@lists.lttng.org>
+To: =?utf-8?B?SsOpcsOpbWll?= Galarneau <jeremie.galarneau@efficios.com>, David Goulet <dgoulet@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,lttng-dev
-
-   I am working on rhel6(2.6.32.220) and ust is working very well.But when I use lttng-modules (after "lttng start"),the kernel reboots immediately without any message output to console. 
-
-  It took me some days finding out what results in reboot. I shortcut __event_probe__##_name() before _tstruct but kernel still reboot(So what left is  metadata_printf).If I comment out "mask |= POLLIN" in lttng_metadata_ring_buffer_poll() ,kernel do not reboot. What I find out is before reboot the callchain of  lttng-consumerd thread is consumer_thread_metadata_poll()->lttng_poll_wait(wait for metadata stream)->compat_epoll_wait().
-
-  I want to use poll instead as epoll in lttng-tools ,I changed lttng-tools configure file to not use epoll(undef HAVE_EPOLL),but "lttng enable-event -a -k "failed :(Do I miss anything?)
-#lttng enable-event -a -k
-DEBUG1 [17837/18080]: Wait for client response (in thread_manage_clients() at main.c:3709)
-DEBUG1 [17837/18080]: Receiving data from client ... (in thread_manage_clients() at main.c:3754)
-DEBUG1 [17837/18080]: Nothing recv() from client... continuing (in thread_manage_clients() at main.c:3758)
-DEBUG1 [17837/18080]: Clean command context structure (in clean_command_ctx() at main.c:535)
-DEBUG1 [17837/18080]: Accepting client command ... (in thread_manage_clients() at main.c:3667)
-DEBUG1 [17837/18080]: Wait for client response (in thread_manage_clients() at main.c:3709)
-DEBUG1 [17837/18080]: Receiving data from client ... (in thread_manage_clients() at main.c:3754)
-DEBUG1 [17837/18080]: Processing client command 7 (in process_client_msg() at main.c:2579)
-DEBUG1 [17837/18080]: Getting session k-test by name (in process_client_msg() at main.c:2656)
-DEBUG1 [17837/18080]: Creating kernel session (in create_kernel_session() at main.c:2495)
-DEBUG3 [17837/18080]: Created hashtable size 4 at 0x669410 of type 1 (in lttng_ht_new() at hashtable.c:112)
-DEBUG1 [17837/18080]: Kernel session created (fd: 21) (in kernel_create_session() at kernel.c:109)
-DEBUG3 [17837/18080]: Copying tracing session consumer output in kernel session (in copy_session_consumer() at main.c:2393)
-DEBUG3 [17837/18080]: Created hashtable size 4 at 0x66a750 of type 1 (in lttng_ht_new() at hashtable.c:112)
-DEBUG3 [17837/18080]: Copy session consumer subdir /kernel (in copy_session_consumer() at main.c:2428)
-DEBUG3 [17837/18080]: mkdir() recursive /root/lttng-traces/k-test-20140222-131335 with mode 504 for uid 0 and gid 0 (in run_as_mkdir_recursive() at runas.c:310)
-DEBUG1 [17837/18080]: Using run_as_clone (in run_as() at runas.c:293)
-lttng-sessiond: ht-cleanup.c:92: thread_ht_cleanup: Assertion `pollfd == ht_cleanup_pipe[0]' failed.
-
-  It seems lttng-tools  in ubuntu 12.04 is using poll,isnt it?
-
-  Does anyone have any suggestions to me ?
-
-PS:.lttng(ust/module/tool) version is 2.3.0 and urcu version is 0.8
-
-Thanks in advance
-zhenyu.ren
+LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJKw6lyw6ltaWUgR2FsYXJuZWF1
+IiA8amVyZW1pZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29tPgo+IFRvOiBsdHRuZy1kZXZAbGlzdHMu
+bHR0bmcub3JnCj4gU2VudDogVGh1cnNkYXksIEZlYnJ1YXJ5IDIwLCAyMDE0IDExOjIyOjMzIEFN
+Cj4gU3ViamVjdDogW2x0dG5nLWRldl0gW1BBVENIIGx0dG5nLXVzdF0gRml4OiBVbnN5bmNocm9u
+aXplZCBhY2Nlc3MgaW4JTFRUbmdUQ1BTZXNzaW9uZENsaWVudAo+IAo+IGVuYWJsZWRFdmVudExp
+c3QgaXMgc2hhcmVkIGJldHdlZW4gdGhlIExUVG5nVGhyZWFkIGFuZCBldmVudFRpbWVyCj4gdGhy
+ZWFkcyBidXQgaXMgbm90IHN5bmNocm9uaXplZC4KPiAKPiBUaGlzIHBhdGNoIGNoYW5nZXMgZW5h
+YmxlZEV2ZW50TGlzdCdzIHR5cGUgZnJvbSBhbiBBcnJheUxpc3QgdG8gYQo+IHN5bmNocm9uaXpl
+ZExpc3Qgd2hpY2ggaW1wbGVtZW50cyB0aGUgc2FtZSBpbnRlcmZhY2UuCj4gCj4gU2lnbmVkLW9m
+Zi1ieTogSsOpcsOpbWllIEdhbGFybmVhdSA8amVyZW1pZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29t
+Pgo+IC0tLQo+ICAuLi4vb3JnL2x0dG5nL3VzdC9qdWwvTFRUbmdUQ1BTZXNzaW9uZENsaWVudC5q
+YXZhICAgICAgICAgfCAxNQo+ICArKysrKysrKysrKy0tLS0KPiAgMSBmaWxlIGNoYW5nZWQsIDEx
+IGluc2VydGlvbnMoKyksIDQgZGVsZXRpb25zKC0pCj4gCj4gZGlmZiAtLWdpdCBhL2xpYmx0dG5n
+LXVzdC1qdWwvb3JnL2x0dG5nL3VzdC9qdWwvTFRUbmdUQ1BTZXNzaW9uZENsaWVudC5qYXZhCj4g
+Yi9saWJsdHRuZy11c3QtanVsL29yZy9sdHRuZy91c3QvanVsL0xUVG5nVENQU2Vzc2lvbmRDbGll
+bnQuamF2YQo+IGluZGV4IDI1ZDFjYjIuLjBkOWE0ODUgMTAwNjQ0Cj4gLS0tIGEvbGlibHR0bmct
+dXN0LWp1bC9vcmcvbHR0bmcvdXN0L2p1bC9MVFRuZ1RDUFNlc3Npb25kQ2xpZW50LmphdmEKPiAr
+KysgYi9saWJsdHRuZy11c3QtanVsL29yZy9sdHRuZy91c3QvanVsL0xUVG5nVENQU2Vzc2lvbmRD
+bGllbnQuamF2YQo+IEBAIC0zNCw2ICszNCw3IEBAIGltcG9ydCBqYXZhLnV0aWwuTGlzdDsKPiAg
+aW1wb3J0IGphdmEudXRpbC5UaW1lcjsKPiAgaW1wb3J0IGphdmEudXRpbC5UaW1lclRhc2s7Cj4g
+IGltcG9ydCBqYXZhLnV0aWwubG9nZ2luZy5Mb2dnZXI7Cj4gK2ltcG9ydCBqYXZhLnV0aWwuQ29s
+bGVjdGlvbnM7Cj4gIAo+ICBjbGFzcyBVU1RSZWdpc3Rlck1zZyB7Cj4gIAlwdWJsaWMgc3RhdGlj
+IGludCBwaWQ7Cj4gQEAgLTU3LDcgKzU4LDggQEAgcHVibGljIGNsYXNzIExUVG5nVENQU2Vzc2lv
+bmRDbGllbnQgewo+ICAJcHJpdmF0ZSBTZW1hcGhvcmUgcmVnaXN0ZXJTZW07Cj4gIAo+ICAJcHJp
+dmF0ZSBUaW1lciBldmVudFRpbWVyOwo+IC0JcHJpdmF0ZSBMaXN0PExUVG5nRXZlbnQ+IGVuYWJs
+ZWRFdmVudExpc3QgPSBuZXcgQXJyYXlMaXN0PExUVG5nRXZlbnQ+KCk7Cj4gKwlwcml2YXRlIExp
+c3Q8TFRUbmdFdmVudD4gZW5hYmxlZEV2ZW50TGlzdCA9IENvbGxlY3Rpb25zLnN5bmNocm9uaXpl
+ZExpc3QoCj4gKwkJbmV3IEFycmF5TGlzdDxMVFRuZ0V2ZW50PigpKTsKPiAgCS8qCj4gIAkgKiBN
+YXAgb2YgTG9nZ2VyIG9iamVjdHMgdGhhdCBoYXZlIGJlZW4gZW5hYmxlZC4gVGhleSBhcmUgaW5k
+ZXhlZCBieSBuYW1lLgo+ICAJICovCj4gQEAgLTg2LDcgKzg4LDEwIEBAIHB1YmxpYyBjbGFzcyBM
+VFRuZ1RDUFNlc3Npb25kQ2xpZW50IHsKPiAgCQkJCSAqIFdlIGhhdmUgdG8gbWFrZSBhIGNvcHkg
+aGVyZSBzaW5jZSBpdCBpcyBwb3NzaWJsZSB0aGF0IHRoZQo+ICAJCQkJICogZW5hYmxlZCBldmVu
+dCBsaXN0IGlzIGNoYW5nZWQgZHVyaW5nIGFuIGl0ZXJhdGlvbiBvbiBpdC4KPiAgCQkJCSAqLwo+
+IC0JCQkJTGlzdDxMVFRuZ0V2ZW50PiB0bXBMaXN0ID0gbmV3IEFycmF5TGlzdDxMVFRuZ0V2ZW50
+PihlbmFibGVkRXZlbnRMaXN0KTsKPiArCQkJCUxpc3Q8TFRUbmdFdmVudD4gdG1wTGlzdDsKPiAr
+CQkJCXN5bmNocm9uaXplZChlbmFibGVkRXZlbnRMaXN0KSB7Cj4gKwkJCQkJdG1wTGlzdCA9IG5l
+dyBBcnJheUxpc3Q8TFRUbmdFdmVudD4oZW5hYmxlZEV2ZW50TGlzdCk7Cj4gKwkJCQl9CgoKRnVy
+dGhlciBkb3duIGluIHRoaXMgZnVuY3Rpb24sIHdlIGZpbmQ6CgogICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgcmV0ID0gZW5hYmxlQ21kLmVuYWJsZUxvZ2dlcihoYW5kbGVy
+LCBldmVudCwgZW5hYmxlZExvZ2dlcnMpOwogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgaWYgKHJldCA9PSAxKSB7CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgIC8qIEVuYWJsZWQgc28gcmVtb3ZlIHRoZSBldmVudCBmcm9tIHRoZSBs
+aXN0LiAqLwogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBl
+bmFibGVkRXZlbnRMaXN0LnJlbW92ZShldmVudCk7CiAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICB9CgpzaG91bGQgd2UgZW5jb21wYXNzIGEgbGFyZ2VyIHBhcnQgb2YgdGhp
+cyBmdW5jdGlvbiB3aXRoIHN5bmNocm9uaXplID8KCldoYXQgaGFwcGVucyBpZiBldmVudCBpcyBy
+ZW1vdmVkIGZyb20gZW5hYmxlZEV2ZW50TGlzdCB3aGlsZSB3ZSBpdGVyYXRlIG9uIHRoZSBsaXN0
+IGNvcHkgPwoKVGhhbmtzLAoKTUF0aGlldQoKCj4gIAo+ICAJCQkJTFRUbmdTZXNzaW9uZENtZDJf
+NC5zZXNzaW9uZF9lbmFibGVfaGFuZGxlciBlbmFibGVDbWQgPSBuZXcKPiAgCQkJCQlMVFRuZ1Nl
+c3Npb25kQ21kMl80LnNlc3Npb25kX2VuYWJsZV9oYW5kbGVyKCk7Cj4gQEAgLTI3Nyw4ICsyODIs
+MTAgQEAgcHVibGljIGNsYXNzIExUVG5nVENQU2Vzc2lvbmRDbGllbnQgewo+ICAJCQkJCQkgKiBB
+ZGQgdGhlIGV2ZW50IHRvIHRoZSBsaXN0IHNvIGl0IGNhbiBiZSBlbmFibGVkIGlmCj4gIAkJCQkJ
+CSAqIHRoZSBsb2dnZXIgYXBwZWFycyBhdCBzb21lIHBvaW50IGluIHRpbWUuCj4gIAkJCQkJCSAq
+Lwo+IC0JCQkJCQlpZiAoZW5hYmxlZEV2ZW50TGlzdC5jb250YWlucyhldmVudCkgPT0gZmFsc2Up
+IHsKPiAtCQkJCQkJCWVuYWJsZWRFdmVudExpc3QuYWRkKGV2ZW50KTsKPiArCQkJCQkJc3luY2hy
+b25pemVkIChlbmFibGVkRXZlbnRMaXN0KSB7Cj4gKwkJCQkJCQlpZiAoZW5hYmxlZEV2ZW50TGlz
+dC5jb250YWlucyhldmVudCkgPT0gZmFsc2UpIHsKPiArCQkJCQkJCQllbmFibGVkRXZlbnRMaXN0
+LmFkZChldmVudCk7Cj4gKwkJCQkJCQl9Cj4gIAkJCQkJCX0KPiAgCQkJCQl9Cj4gIAkJCQkJZGF0
+YSA9IGVuYWJsZUNtZC5nZXRCeXRlcygpOwo+IC0tCj4gMS45LjAKPiAKPiAKPiBfX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5n
+IGxpc3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0cDovL2xpc3RzLmx0dG5nLm9y
+Zy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cj4gCgotLSAKTWF0aGlldSBEZXNu
+b3llcnMKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlz
+dApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJp
+bi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
