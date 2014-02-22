@@ -1,18 +1,18 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-modules] correctly version kvm events
- to build against v3.0 kernel
-Date: Fri, 21 Feb 2014 20:40:59 +0000 (UTC)
-Message-ID: <1293227095.28674.1393015259118.JavaMail.zimbra__21434.0038867251$1393015327$gmane$org@efficios.com>
-References: <5307B458.6000007@suse.de>
+From: "zhenyu.ren" <zhenyu.ren@aliyun.com>
+Subject: =?utf-8?q?epoll=5Fwait_reboot_kernel=3F?=
+Date: Sat, 22 Feb 2014 13:17:54 +0800
+Message-ID: <a860adc0-d68a-4a1e-bbd1-775c1cf652e9__22587.2844145217$1393046371$gmane$org@aliyun.com>
+Reply-To: "zhenyu.ren" <zhenyu.ren@aliyun.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from smtpcm9-304.freemail.mail.aliyun.com ([110.75.46.4])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1WGwu5-0000k3-QD
-	for lttng-dev@lists.lttng.org; Fri, 21 Feb 2014 15:41:07 -0500
-In-Reply-To: <5307B458.6000007@suse.de>
+	(envelope-from <zhenyu.ren@aliyun.com>) id 1WH4yU-0004Xn-KE
+	for lttng-dev@lists.lttng.org; Sat, 22 Feb 2014 00:18:10 -0500
+References: c3d1fc94-92e2-43b3-af78-6315aaa7419d@aliyun.com
+In-Reply-To: c3d1fc94-92e2-43b3-af78-6315aaa7419d@aliyun.com
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,88 +21,41 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Tony Jones <tonyj@suse.de>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Merged with a tiny whitespace fix, into both stable-2.3 and master.
+Hi,lttng-dev
 
-Thanks!
+   I am working on rhel6(2.6.32.220) and ust is working very well.But when I use lttng-modules (after "lttng start"),the kernel reboots immediately without any message output to console. 
 
-Mathieu
+  It took me some days finding out what results in reboot. I shortcut __event_probe__##_name() before _tstruct but kernel still reboot(So what left is  metadata_printf).If I comment out "mask |= POLLIN" in lttng_metadata_ring_buffer_poll() ,kernel do not reboot. What I find out is before reboot the callchain of  lttng-consumerd thread is consumer_thread_metadata_poll()->lttng_poll_wait(wait for metadata stream)->compat_epoll_wait().
 
------ Original Message -----
-> From: "Tony Jones" <tonyj@suse.de>
-> To: lttng-dev@lists.lttng.org
-> Cc: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-> Sent: Friday, February 21, 2014 3:17:28 PM
-> Subject: [PATCH lttng-modules] correctly version kvm events to build against v3.0 kernel
-> 
-> Cleanly build against v3.0 kernel.  I didn't add versioning for mainline
-> commit 0d460ffc as it's build compatible.
-> 
-> Signed-off-by: Tony Jones <tonyj@suse.de>
-> ---
-> 
-> diff --git a/instrumentation/events/lttng-module/arch/x86/kvm/trace.h
-> b/instrumentation/events/lttng-module/arch/x86/kvm/trace.h
-> index 5eec169..7fc1f9c 100644
-> --- a/instrumentation/events/lttng-module/arch/x86/kvm/trace.h
-> +++ b/instrumentation/events/lttng-module/arch/x86/kvm/trace.h
-> @@ -4,7 +4,9 @@
->  #include <linux/tracepoint.h>
->  #include <asm/vmx.h>
->  #include <asm/svm.h>
-> +#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,8,0))
->  #include <asm/clocksource.h>
-> +#endif
->  #include <linux/version.h>
->  #include <../arch/x86/kvm/lapic.h>
->  #include <../arch/x86/kvm/kvm_cache_regs.h>
-> @@ -714,13 +716,23 @@ TRACE_EVENT(kvm_emulate_insn,
->  		),
->  
->  	TP_fast_assign(
-> +#if (LINUX_VERSION_CODE < KERNEL_VERSION(3,1,0))
-> +		tp_assign(rip, vcpu->arch.emulate_ctxt.decode.fetch.start)
-> +	  	tp_assign(csbase, kvm_x86_ops->get_segment_base(vcpu, VCPU_SREG_CS))
-> +		tp_assign(len, vcpu->arch.emulate_ctxt.decode.eip
-> +			       - vcpu->arch.emulate_ctxt.decode.fetch.start)
-> +		tp_memcpy(insn,
-> +		       vcpu->arch.emulate_ctxt.decode.fetch.data,
-> +		       15)
-> +#else
->  		tp_assign(rip, vcpu->arch.emulate_ctxt.fetch.start)
-> -	  tp_assign(csbase, kvm_x86_ops->get_segment_base(vcpu, VCPU_SREG_CS))
-> +	  	tp_assign(csbase, kvm_x86_ops->get_segment_base(vcpu, VCPU_SREG_CS))
->  		tp_assign(len, vcpu->arch.emulate_ctxt._eip
->  			       - vcpu->arch.emulate_ctxt.fetch.start)
->  		tp_memcpy(insn,
->  		       vcpu->arch.emulate_ctxt.fetch.data,
->  		       15)
-> +#endif
->  		tp_assign(flags, kei_decode_mode(vcpu->arch.emulate_ctxt.mode))
->  		tp_assign(failed, failed)
->  		),
-> @@ -784,6 +796,7 @@ TRACE_EVENT(kvm_write_tsc_offset,
->  )
->  #endif
->  
-> +#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,8,0))
->  #ifdef CONFIG_X86_64
->  
->  #define host_clocks					\
-> @@ -844,6 +857,7 @@ TRACE_EVENT(kvm_track_tsc,
->  )
->  
->  #endif /* CONFIG_X86_64 */
-> +#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,8,0) */
->  
->  #endif /* _TRACE_KVM_H */
->  
-> 
+  I want to use poll instead as epoll in lttng-tools ,I changed lttng-tools configure file to not use epoll(undef HAVE_EPOLL),but "lttng enable-event -a -k "failed :(Do I miss anything?)
+#lttng enable-event -a -k
+DEBUG1 [17837/18080]: Wait for client response (in thread_manage_clients() at main.c:3709)
+DEBUG1 [17837/18080]: Receiving data from client ... (in thread_manage_clients() at main.c:3754)
+DEBUG1 [17837/18080]: Nothing recv() from client... continuing (in thread_manage_clients() at main.c:3758)
+DEBUG1 [17837/18080]: Clean command context structure (in clean_command_ctx() at main.c:535)
+DEBUG1 [17837/18080]: Accepting client command ... (in thread_manage_clients() at main.c:3667)
+DEBUG1 [17837/18080]: Wait for client response (in thread_manage_clients() at main.c:3709)
+DEBUG1 [17837/18080]: Receiving data from client ... (in thread_manage_clients() at main.c:3754)
+DEBUG1 [17837/18080]: Processing client command 7 (in process_client_msg() at main.c:2579)
+DEBUG1 [17837/18080]: Getting session k-test by name (in process_client_msg() at main.c:2656)
+DEBUG1 [17837/18080]: Creating kernel session (in create_kernel_session() at main.c:2495)
+DEBUG3 [17837/18080]: Created hashtable size 4 at 0x669410 of type 1 (in lttng_ht_new() at hashtable.c:112)
+DEBUG1 [17837/18080]: Kernel session created (fd: 21) (in kernel_create_session() at kernel.c:109)
+DEBUG3 [17837/18080]: Copying tracing session consumer output in kernel session (in copy_session_consumer() at main.c:2393)
+DEBUG3 [17837/18080]: Created hashtable size 4 at 0x66a750 of type 1 (in lttng_ht_new() at hashtable.c:112)
+DEBUG3 [17837/18080]: Copy session consumer subdir /kernel (in copy_session_consumer() at main.c:2428)
+DEBUG3 [17837/18080]: mkdir() recursive /root/lttng-traces/k-test-20140222-131335 with mode 504 for uid 0 and gid 0 (in run_as_mkdir_recursive() at runas.c:310)
+DEBUG1 [17837/18080]: Using run_as_clone (in run_as() at runas.c:293)
+lttng-sessiond: ht-cleanup.c:92: thread_ht_cleanup: Assertion `pollfd == ht_cleanup_pipe[0]' failed.
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+  It seems lttng-tools  in ubuntu 12.04 is using poll,isnt it?
+
+  Does anyone have any suggestions to me ?
+
+PS:.lttng(ust/module/tool) version is 2.3.0 and urcu version is 0.8
+
+Thanks in advance
+zhenyu.ren
