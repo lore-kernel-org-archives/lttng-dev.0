@@ -1,18 +1,21 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-ust] Fix: Unsynchronized access
-	in	LTTngTCPSessiondClient
-Date: Sat, 22 Feb 2014 20:11:04 +0000 (UTC)
-Message-ID: <204474029.28925.1393099864388.JavaMail.zimbra__46044.4880569868$1393099929$gmane$org@efficios.com>
+From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: [PATCH lttng-ust] Fix: Unsynchronized access in
+	LTTngTCPSessiondClient
+Date: Sat, 22 Feb 2014 15:19:15 -0500
+Message-ID: <CA+jJMxukg5xB-DEVV3M23piN8sMB2uqvt+rLs375ocRk61ndAQ__35319.1678681926$1393100426$gmane$org@mail.gmail.com>
 References: <1392913353-13369-1-git-send-email-jeremie.galarneau@efficios.com>
+	<204474029.28925.1393099864388.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-qc0-f181.google.com ([209.85.216.181])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1WHIui-0003AS-FQ
-	for lttng-dev@lists.lttng.org; Sat, 22 Feb 2014 15:11:14 -0500
-In-Reply-To: <1392913353-13369-1-git-send-email-jeremie.galarneau@efficios.com>
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1WHJ2f-0003F7-IG
+	for lttng-dev@lists.lttng.org; Sat, 22 Feb 2014 15:19:27 -0500
+Received: by mail-qc0-f181.google.com with SMTP id c9so7192424qcz.40
+	for <lttng-dev@lists.lttng.org>; Sat, 22 Feb 2014 12:19:16 -0800 (PST)
+In-Reply-To: <204474029.28925.1393099864388.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,73 +24,149 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?utf-8?B?SsOpcsOpbWll?= Galarneau <jeremie.galarneau@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-T3RoZXIgY29tbWVudHMsCgotLS0tLSBPcmlnaW5hbCBNZXNzYWdlIC0tLS0tCj4gRnJvbTogIkrD
-qXLDqW1pZSBHYWxhcm5lYXUiIDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20+Cj4gVG86
-IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBTZW50OiBUaHVyc2RheSwgRmVicnVhcnkgMjAs
-IDIwMTQgMTE6MjI6MzMgQU0KPiBTdWJqZWN0OiBbbHR0bmctZGV2XSBbUEFUQ0ggbHR0bmctdXN0
-XSBGaXg6IFVuc3luY2hyb25pemVkIGFjY2VzcyBpbglMVFRuZ1RDUFNlc3Npb25kQ2xpZW50Cj4g
-Cj4gZW5hYmxlZEV2ZW50TGlzdCBpcyBzaGFyZWQgYmV0d2VlbiB0aGUgTFRUbmdUaHJlYWQgYW5k
-IGV2ZW50VGltZXIKPiB0aHJlYWRzIGJ1dCBpcyBub3Qgc3luY2hyb25pemVkLgo+IAo+IFRoaXMg
-cGF0Y2ggY2hhbmdlcyBlbmFibGVkRXZlbnRMaXN0J3MgdHlwZSBmcm9tIGFuIEFycmF5TGlzdCB0
-byBhCj4gc3luY2hyb25pemVkTGlzdCB3aGljaCBpbXBsZW1lbnRzIHRoZSBzYW1lIGludGVyZmFj
-ZS4KPiAKPiBTaWduZWQtb2ZmLWJ5OiBKw6lyw6ltaWUgR2FsYXJuZWF1IDxqZXJlbWllLmdhbGFy
-bmVhdUBlZmZpY2lvcy5jb20+Cj4gLS0tCj4gIC4uLi9vcmcvbHR0bmcvdXN0L2p1bC9MVFRuZ1RD
-UFNlc3Npb25kQ2xpZW50LmphdmEgICAgICAgICB8IDE1Cj4gICsrKysrKysrKysrLS0tLQo+ICAx
-IGZpbGUgY2hhbmdlZCwgMTEgaW5zZXJ0aW9ucygrKSwgNCBkZWxldGlvbnMoLSkKPiAKPiBkaWZm
-IC0tZ2l0IGEvbGlibHR0bmctdXN0LWp1bC9vcmcvbHR0bmcvdXN0L2p1bC9MVFRuZ1RDUFNlc3Np
-b25kQ2xpZW50LmphdmEKPiBiL2xpYmx0dG5nLXVzdC1qdWwvb3JnL2x0dG5nL3VzdC9qdWwvTFRU
-bmdUQ1BTZXNzaW9uZENsaWVudC5qYXZhCj4gaW5kZXggMjVkMWNiMi4uMGQ5YTQ4NSAxMDA2NDQK
-PiAtLS0gYS9saWJsdHRuZy11c3QtanVsL29yZy9sdHRuZy91c3QvanVsL0xUVG5nVENQU2Vzc2lv
-bmRDbGllbnQuamF2YQo+ICsrKyBiL2xpYmx0dG5nLXVzdC1qdWwvb3JnL2x0dG5nL3VzdC9qdWwv
-TFRUbmdUQ1BTZXNzaW9uZENsaWVudC5qYXZhCj4gQEAgLTM0LDYgKzM0LDcgQEAgaW1wb3J0IGph
-dmEudXRpbC5MaXN0Owo+ICBpbXBvcnQgamF2YS51dGlsLlRpbWVyOwo+ICBpbXBvcnQgamF2YS51
-dGlsLlRpbWVyVGFzazsKPiAgaW1wb3J0IGphdmEudXRpbC5sb2dnaW5nLkxvZ2dlcjsKPiAraW1w
-b3J0IGphdmEudXRpbC5Db2xsZWN0aW9uczsKPiAgCj4gIGNsYXNzIFVTVFJlZ2lzdGVyTXNnIHsK
-PiAgCXB1YmxpYyBzdGF0aWMgaW50IHBpZDsKPiBAQCAtNTcsNyArNTgsOCBAQCBwdWJsaWMgY2xh
-c3MgTFRUbmdUQ1BTZXNzaW9uZENsaWVudCB7Cj4gIAlwcml2YXRlIFNlbWFwaG9yZSByZWdpc3Rl
-clNlbTsKPiAgCj4gIAlwcml2YXRlIFRpbWVyIGV2ZW50VGltZXI7Cj4gLQlwcml2YXRlIExpc3Q8
-TFRUbmdFdmVudD4gZW5hYmxlZEV2ZW50TGlzdCA9IG5ldyBBcnJheUxpc3Q8TFRUbmdFdmVudD4o
-KTsKPiArCXByaXZhdGUgTGlzdDxMVFRuZ0V2ZW50PiBlbmFibGVkRXZlbnRMaXN0ID0gQ29sbGVj
-dGlvbnMuc3luY2hyb25pemVkTGlzdCgKPiArCQluZXcgQXJyYXlMaXN0PExUVG5nRXZlbnQ+KCkp
-OwoKSSdkIHByZWZlcjoKCiAgcHJpdmF0ZSBMaXN0PExUVG5nRXZlbnQ+IGVuYWJsZWRFdmVudExp
-c3QgPQogICAgICAgICBDb2xsZWN0aW9ucy5zeW5jaHJvbml6ZWRMaXN0KG5ldyBBcnJheUxpc3Q8
-TFRUbmdFdmVudD4oKSk7Cgp1bmxlc3MgeW91IHRlbGwgbWUgdGhhdCB5b3VyIGNvZGluZyBzdHls
-ZSBpcyBtb3JlICJqYXZhLWxpa2UiLgoKPiAgCS8qCj4gIAkgKiBNYXAgb2YgTG9nZ2VyIG9iamVj
-dHMgdGhhdCBoYXZlIGJlZW4gZW5hYmxlZC4gVGhleSBhcmUgaW5kZXhlZCBieSBuYW1lLgo+ICAJ
-ICovCj4gQEAgLTg2LDcgKzg4LDEwIEBAIHB1YmxpYyBjbGFzcyBMVFRuZ1RDUFNlc3Npb25kQ2xp
-ZW50IHsKPiAgCQkJCSAqIFdlIGhhdmUgdG8gbWFrZSBhIGNvcHkgaGVyZSBzaW5jZSBpdCBpcyBw
-b3NzaWJsZSB0aGF0IHRoZQo+ICAJCQkJICogZW5hYmxlZCBldmVudCBsaXN0IGlzIGNoYW5nZWQg
-ZHVyaW5nIGFuIGl0ZXJhdGlvbiBvbiBpdC4KPiAgCQkJCSAqLwo+IC0JCQkJTGlzdDxMVFRuZ0V2
-ZW50PiB0bXBMaXN0ID0gbmV3IEFycmF5TGlzdDxMVFRuZ0V2ZW50PihlbmFibGVkRXZlbnRMaXN0
-KTsKPiArCQkJCUxpc3Q8TFRUbmdFdmVudD4gdG1wTGlzdDsKPiArCQkJCXN5bmNocm9uaXplZChl
-bmFibGVkRXZlbnRMaXN0KSB7CgppbmNvbnNpc3RlbnQgc3R5bGUsIG1pc3Npbmcgc3BhY2UgYWZ0
-ZXIgInN5bmNocm9uaXplZCIuCgo+ICsJCQkJCXRtcExpc3QgPSBuZXcgQXJyYXlMaXN0PExUVG5n
-RXZlbnQ+KGVuYWJsZWRFdmVudExpc3QpOwo+ICsJCQkJfQo+ICAKPiAgCQkJCUxUVG5nU2Vzc2lv
-bmRDbWQyXzQuc2Vzc2lvbmRfZW5hYmxlX2hhbmRsZXIgZW5hYmxlQ21kID0gbmV3Cj4gIAkJCQkJ
-TFRUbmdTZXNzaW9uZENtZDJfNC5zZXNzaW9uZF9lbmFibGVfaGFuZGxlcigpOwo+IEBAIC0yNzcs
-OCArMjgyLDEwIEBAIHB1YmxpYyBjbGFzcyBMVFRuZ1RDUFNlc3Npb25kQ2xpZW50IHsKPiAgCQkJ
-CQkJICogQWRkIHRoZSBldmVudCB0byB0aGUgbGlzdCBzbyBpdCBjYW4gYmUgZW5hYmxlZCBpZgo+
-ICAJCQkJCQkgKiB0aGUgbG9nZ2VyIGFwcGVhcnMgYXQgc29tZSBwb2ludCBpbiB0aW1lLgo+ICAJ
-CQkJCQkgKi8KPiAtCQkJCQkJaWYgKGVuYWJsZWRFdmVudExpc3QuY29udGFpbnMoZXZlbnQpID09
-IGZhbHNlKSB7Cj4gLQkJCQkJCQllbmFibGVkRXZlbnRMaXN0LmFkZChldmVudCk7Cj4gKwkJCQkJ
-CXN5bmNocm9uaXplZCAoZW5hYmxlZEV2ZW50TGlzdCkgewo+ICsJCQkJCQkJaWYgKGVuYWJsZWRF
-dmVudExpc3QuY29udGFpbnMoZXZlbnQpID09IGZhbHNlKSB7Cj4gKwkJCQkJCQkJZW5hYmxlZEV2
-ZW50TGlzdC5hZGQoZXZlbnQpOwo+ICsJCQkJCQkJfQoKSHJtLCBzbyB3aGF0IHdlIHdhbnQgaGVy
-ZSBpcyBwcm9iYWJseSBtb3JlIGEgc2V0IHRoYW4gYSBsaXN0ID8gV2Ugd2FudCBhIGRhdGEgc3Ry
-dWN0dXJlCnRoYXQgZG9lcyBub3QgaGF2ZSBkdXBsaWNhdGVzLiBJZiB3ZSBjYW4gY29uZmlybSB0
-aGF0IHRoZSBvcmRlciBvZiB0aGUgZWxlbWVudHMgZG9lcyBub3QKbWF0dGVyLCBhIGhhc2ggbWFw
-IG1pZ2h0IGJlIGEgbXVjaCBtb3JlIHN1aXRlZCBkYXRhIHN0cnVjdHVyZSB0aGFuIGEgbGlzdC4g
-V2UgY291bGQKdGhlbiByZW1vdmUgdGhlIGV4cGxpY2l0IHN5bmNocm9uaXplIGFyb3VuZCAiYWRk
-Ii4KClRoYW5rcywKCk1hdGhpZXUKCj4gIAkJCQkJCX0KPiAgCQkJCQl9Cj4gIAkJCQkJZGF0YSA9
-IGVuYWJsZUNtZC5nZXRCeXRlcygpOwo+IC0tCj4gMS45LjAKPiAKPiAKPiBfX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxp
-c3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9j
-Z2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cj4gCgotLSAKTWF0aGlldSBEZXNub3ll
-cnMKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdAps
-dHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9t
-YWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+On Sat, Feb 22, 2014 at 3:11 PM, Mathieu Desnoyers
+<mathieu.desnoyers@efficios.com> wrote:
+> Other comments,
+>
+> ----- Original Message -----
+>> From: "J=E9r=E9mie Galarneau" <jeremie.galarneau@efficios.com>
+>> To: lttng-dev@lists.lttng.org
+>> Sent: Thursday, February 20, 2014 11:22:33 AM
+>> Subject: [lttng-dev] [PATCH lttng-ust] Fix: Unsynchronized access in  LT=
+TngTCPSessiondClient
+>>
+>> enabledEventList is shared between the LTTngThread and eventTimer
+>> threads but is not synchronized.
+>>
+>> This patch changes enabledEventList's type from an ArrayList to a
+>> synchronizedList which implements the same interface.
+>>
+>> Signed-off-by: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
+>> ---
+>>  .../org/lttng/ust/jul/LTTngTCPSessiondClient.java         | 15
+>>  +++++++++++----
+>>  1 file changed, 11 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/liblttng-ust-jul/org/lttng/ust/jul/LTTngTCPSessiondClient.j=
+ava
+>> b/liblttng-ust-jul/org/lttng/ust/jul/LTTngTCPSessiondClient.java
+>> index 25d1cb2..0d9a485 100644
+>> --- a/liblttng-ust-jul/org/lttng/ust/jul/LTTngTCPSessiondClient.java
+>> +++ b/liblttng-ust-jul/org/lttng/ust/jul/LTTngTCPSessiondClient.java
+>> @@ -34,6 +34,7 @@ import java.util.List;
+>>  import java.util.Timer;
+>>  import java.util.TimerTask;
+>>  import java.util.logging.Logger;
+>> +import java.util.Collections;
+>>
+>>  class USTRegisterMsg {
+>>       public static int pid;
+>> @@ -57,7 +58,8 @@ public class LTTngTCPSessiondClient {
+>>       private Semaphore registerSem;
+>>
+>>       private Timer eventTimer;
+>> -     private List<LTTngEvent> enabledEventList =3D new ArrayList<LTTngE=
+vent>();
+>> +     private List<LTTngEvent> enabledEventList =3D Collections.synchron=
+izedList(
+>> +             new ArrayList<LTTngEvent>());
+>
+> I'd prefer:
+>
+>   private List<LTTngEvent> enabledEventList =3D
+>          Collections.synchronizedList(new ArrayList<LTTngEvent>());
+>
+> unless you tell me that your coding style is more "java-like".
+>
+>>       /*
+>>        * Map of Logger objects that have been enabled. They are indexed =
+by name.
+>>        */
+>> @@ -86,7 +88,10 @@ public class LTTngTCPSessiondClient {
+>>                                * We have to make a copy here since it is=
+ possible that the
+>>                                * enabled event list is changed during an=
+ iteration on it.
+>>                                */
+>> -                             List<LTTngEvent> tmpList =3D new ArrayList=
+<LTTngEvent>(enabledEventList);
+>> +                             List<LTTngEvent> tmpList;
+>> +                             synchronized(enabledEventList) {
+>
+> inconsistent style, missing space after "synchronized".
+>
+>> +                                     tmpList =3D new ArrayList<LTTngEve=
+nt>(enabledEventList);
+>> +                             }
+>>
+>>                               LTTngSessiondCmd2_4.sessiond_enable_handle=
+r enableCmd =3D new
+>>                                       LTTngSessiondCmd2_4.sessiond_enabl=
+e_handler();
+>> @@ -277,8 +282,10 @@ public class LTTngTCPSessiondClient {
+>>                                                * Add the event to the li=
+st so it can be enabled if
+>>                                                * the logger appears at s=
+ome point in time.
+>>                                                */
+>> -                                             if (enabledEventList.conta=
+ins(event) =3D=3D false) {
+>> -                                                     enabledEventList.a=
+dd(event);
+>> +                                             synchronized (enabledEvent=
+List) {
+>> +                                                     if (enabledEventLi=
+st.contains(event) =3D=3D false) {
+>> +                                                             enabledEve=
+ntList.add(event);
+>> +                                                     }
+>
+> Hrm, so what we want here is probably more a set than a list ? We want a =
+data structure
+> that does not have duplicates. If we can confirm that the order of the el=
+ements does not
+> matter, a hash map might be a much more suited data structure than a list=
+. We could
+> then remove the explicit synchronize around "add".
+
+Makes sense, I guess David (original author) will probably have an
+opinion on that. My immediate concern was addressing the code's thread
+safety.
+
+Regards,
+J=E9r=E9mie
+
+>
+> Thanks,
+>
+> Mathieu
+>
+>>                                               }
+>>                                       }
+>>                                       data =3D enableCmd.getBytes();
+>> --
+>> 1.9.0
+>>
+>>
+>> _______________________________________________
+>> lttng-dev mailing list
+>> lttng-dev@lists.lttng.org
+>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>>
+>
+> --
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> http://www.efficios.com
+
+
+
+-- =
+
+J=E9r=E9mie Galarneau
+EfficiOS Inc.
+http://www.efficios.com
