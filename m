@@ -1,21 +1,20 @@
-From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Subject: Re: [PATCH lttng-ust] Fix: Unsynchronized access in
-	LTTngTCPSessiondClient
-Date: Sat, 22 Feb 2014 14:15:15 -0500
-Message-ID: <CA+jJMxs549OwuD6QBvF6nHW8M0tHyZxcMb0oHJ6okCt4TdoY_Q__20230.3223930814$1393096589$gmane$org@mail.gmail.com>
+ LTTngTCPSessiondClient
+Date: Sat, 22 Feb 2014 20:08:00 +0000 (UTC)
+Message-ID: <339347879.28922.1393099680949.JavaMail.zimbra__1408.71086991883$1393099748$gmane$org@efficios.com>
 References: <1392913353-13369-1-git-send-email-jeremie.galarneau@efficios.com>
 	<1530478584.28856.1393085579318.JavaMail.zimbra@efficios.com>
+	<CA+jJMxs549OwuD6QBvF6nHW8M0tHyZxcMb0oHJ6okCt4TdoY_Q@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qc0-f177.google.com ([209.85.216.177])
+Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1WHI2j-0002gp-GD
-	for lttng-dev@lists.lttng.org; Sat, 22 Feb 2014 14:15:27 -0500
-Received: by mail-qc0-f177.google.com with SMTP id i8so7434083qcq.8
-	for <lttng-dev@lists.lttng.org>; Sat, 22 Feb 2014 11:15:16 -0800 (PST)
-In-Reply-To: <1530478584.28856.1393085579318.JavaMail.zimbra@efficios.com>
+	(envelope-from <compudj@efficios.com>) id 1WHIrk-00036M-03
+	for lttng-dev@lists.lttng.org; Sat, 22 Feb 2014 15:08:10 -0500
+In-Reply-To: <CA+jJMxs549OwuD6QBvF6nHW8M0tHyZxcMb0oHJ6okCt4TdoY_Q@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,146 +23,118 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: =?utf-8?B?SsOpcsOpbWll?= Galarneau <jeremie.galarneau@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On Sat, Feb 22, 2014 at 11:12 AM, Mathieu Desnoyers
-<mathieu.desnoyers@efficios.com> wrote:
-> ----- Original Message -----
->> From: "J=E9r=E9mie Galarneau" <jeremie.galarneau@efficios.com>
->> To: lttng-dev@lists.lttng.org
->> Sent: Thursday, February 20, 2014 11:22:33 AM
->> Subject: [lttng-dev] [PATCH lttng-ust] Fix: Unsynchronized access in  LT=
-TngTCPSessiondClient
->>
->> enabledEventList is shared between the LTTngThread and eventTimer
->> threads but is not synchronized.
->>
->> This patch changes enabledEventList's type from an ArrayList to a
->> synchronizedList which implements the same interface.
->>
->> Signed-off-by: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
->> ---
->>  .../org/lttng/ust/jul/LTTngTCPSessiondClient.java         | 15
->>  +++++++++++----
->>  1 file changed, 11 insertions(+), 4 deletions(-)
->>
->> diff --git a/liblttng-ust-jul/org/lttng/ust/jul/LTTngTCPSessiondClient.j=
-ava
->> b/liblttng-ust-jul/org/lttng/ust/jul/LTTngTCPSessiondClient.java
->> index 25d1cb2..0d9a485 100644
->> --- a/liblttng-ust-jul/org/lttng/ust/jul/LTTngTCPSessiondClient.java
->> +++ b/liblttng-ust-jul/org/lttng/ust/jul/LTTngTCPSessiondClient.java
->> @@ -34,6 +34,7 @@ import java.util.List;
->>  import java.util.Timer;
->>  import java.util.TimerTask;
->>  import java.util.logging.Logger;
->> +import java.util.Collections;
->>
->>  class USTRegisterMsg {
->>       public static int pid;
->> @@ -57,7 +58,8 @@ public class LTTngTCPSessiondClient {
->>       private Semaphore registerSem;
->>
->>       private Timer eventTimer;
->> -     private List<LTTngEvent> enabledEventList =3D new ArrayList<LTTngE=
-vent>();
->> +     private List<LTTngEvent> enabledEventList =3D Collections.synchron=
-izedList(
->> +             new ArrayList<LTTngEvent>());
->>       /*
->>        * Map of Logger objects that have been enabled. They are indexed =
-by name.
->>        */
->> @@ -86,7 +88,10 @@ public class LTTngTCPSessiondClient {
->>                                * We have to make a copy here since it is=
- possible that the
->>                                * enabled event list is changed during an=
- iteration on it.
->>                                */
->> -                             List<LTTngEvent> tmpList =3D new ArrayList=
-<LTTngEvent>(enabledEventList);
->> +                             List<LTTngEvent> tmpList;
->> +                             synchronized(enabledEventList) {
->> +                                     tmpList =3D new ArrayList<LTTngEve=
-nt>(enabledEventList);
->> +                             }
->
->
-> Further down in this function, we find:
->
->                                         ret =3D enableCmd.enableLogger(ha=
-ndler, event, enabledLoggers);
->                                         if (ret =3D=3D 1) {
->                                                 /* Enabled so remove the =
-event from the list. */
->                                                 enabledEventList.remove(e=
-vent);
->                                         }
->
-> should we encompass a larger part of this function with synchronize ?
-
-AFAIU, this operation is already synchronized by the synchronizedList class.
-
-> What happens if event is removed from enabledEventList while we iterate o=
-n the list copy ?
-
-I'm not sure I understand your concern.
-
-Regards,
-J=E9r=E9mie
-
->
-> Thanks,
->
-> MAthieu
->
->
->>
->>                               LTTngSessiondCmd2_4.sessiond_enable_handle=
-r enableCmd =3D new
->>                                       LTTngSessiondCmd2_4.sessiond_enabl=
-e_handler();
->> @@ -277,8 +282,10 @@ public class LTTngTCPSessiondClient {
->>                                                * Add the event to the li=
-st so it can be enabled if
->>                                                * the logger appears at s=
-ome point in time.
->>                                                */
->> -                                             if (enabledEventList.conta=
-ins(event) =3D=3D false) {
->> -                                                     enabledEventList.a=
-dd(event);
->> +                                             synchronized (enabledEvent=
-List) {
->> +                                                     if (enabledEventLi=
-st.contains(event) =3D=3D false) {
->> +                                                             enabledEve=
-ntList.add(event);
->> +                                                     }
->>                                               }
->>                                       }
->>                                       data =3D enableCmd.getBytes();
->> --
->> 1.9.0
->>
->>
->> _______________________________________________
->> lttng-dev mailing list
->> lttng-dev@lists.lttng.org
->> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->>
->
-> --
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> http://www.efficios.com
-
-
-
--- =
-
-J=E9r=E9mie Galarneau
-EfficiOS Inc.
-http://www.efficios.com
+LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJKw6lyw6ltaWUgR2FsYXJuZWF1
+IiA8amVyZW1pZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29tPgo+IFRvOiAiTWF0aGlldSBEZXNub3ll
+cnMiIDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+Cj4gQ2M6ICJEYXZpZCBHb3VsZXQi
+IDxkZ291bGV0QGVmZmljaW9zLmNvbT4sIGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBTZW50
+OiBTYXR1cmRheSwgRmVicnVhcnkgMjIsIDIwMTQgMjoxNToxNSBQTQo+IFN1YmplY3Q6IFJlOiBb
+bHR0bmctZGV2XSBbUEFUQ0ggbHR0bmctdXN0XSBGaXg6IFVuc3luY2hyb25pemVkIGFjY2VzcyBp
+biBMVFRuZ1RDUFNlc3Npb25kQ2xpZW50Cj4gCj4gT24gU2F0LCBGZWIgMjIsIDIwMTQgYXQgMTE6
+MTIgQU0sIE1hdGhpZXUgRGVzbm95ZXJzCj4gPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNv
+bT4gd3JvdGU6Cj4gPiAtLS0tLSBPcmlnaW5hbCBNZXNzYWdlIC0tLS0tCj4gPj4gRnJvbTogIkrD
+qXLDqW1pZSBHYWxhcm5lYXUiIDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20+Cj4gPj4g
+VG86IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiA+PiBTZW50OiBUaHVyc2RheSwgRmVicnVh
+cnkgMjAsIDIwMTQgMTE6MjI6MzMgQU0KPiA+PiBTdWJqZWN0OiBbbHR0bmctZGV2XSBbUEFUQ0gg
+bHR0bmctdXN0XSBGaXg6IFVuc3luY2hyb25pemVkIGFjY2VzcyBpbgo+ID4+IExUVG5nVENQU2Vz
+c2lvbmRDbGllbnQKPiA+Pgo+ID4+IGVuYWJsZWRFdmVudExpc3QgaXMgc2hhcmVkIGJldHdlZW4g
+dGhlIExUVG5nVGhyZWFkIGFuZCBldmVudFRpbWVyCj4gPj4gdGhyZWFkcyBidXQgaXMgbm90IHN5
+bmNocm9uaXplZC4KPiA+Pgo+ID4+IFRoaXMgcGF0Y2ggY2hhbmdlcyBlbmFibGVkRXZlbnRMaXN0
+J3MgdHlwZSBmcm9tIGFuIEFycmF5TGlzdCB0byBhCj4gPj4gc3luY2hyb25pemVkTGlzdCB3aGlj
+aCBpbXBsZW1lbnRzIHRoZSBzYW1lIGludGVyZmFjZS4KPiA+Pgo+ID4+IFNpZ25lZC1vZmYtYnk6
+IErDqXLDqW1pZSBHYWxhcm5lYXUgPGplcmVtaWUuZ2FsYXJuZWF1QGVmZmljaW9zLmNvbT4KPiA+
+PiAtLS0KPiA+PiAgLi4uL29yZy9sdHRuZy91c3QvanVsL0xUVG5nVENQU2Vzc2lvbmRDbGllbnQu
+amF2YSAgICAgICAgIHwgMTUKPiA+PiAgKysrKysrKysrKystLS0tCj4gPj4gIDEgZmlsZSBjaGFu
+Z2VkLCAxMSBpbnNlcnRpb25zKCspLCA0IGRlbGV0aW9ucygtKQo+ID4+Cj4gPj4gZGlmZiAtLWdp
+dAo+ID4+IGEvbGlibHR0bmctdXN0LWp1bC9vcmcvbHR0bmcvdXN0L2p1bC9MVFRuZ1RDUFNlc3Np
+b25kQ2xpZW50LmphdmEKPiA+PiBiL2xpYmx0dG5nLXVzdC1qdWwvb3JnL2x0dG5nL3VzdC9qdWwv
+TFRUbmdUQ1BTZXNzaW9uZENsaWVudC5qYXZhCj4gPj4gaW5kZXggMjVkMWNiMi4uMGQ5YTQ4NSAx
+MDA2NDQKPiA+PiAtLS0gYS9saWJsdHRuZy11c3QtanVsL29yZy9sdHRuZy91c3QvanVsL0xUVG5n
+VENQU2Vzc2lvbmRDbGllbnQuamF2YQo+ID4+ICsrKyBiL2xpYmx0dG5nLXVzdC1qdWwvb3JnL2x0
+dG5nL3VzdC9qdWwvTFRUbmdUQ1BTZXNzaW9uZENsaWVudC5qYXZhCj4gPj4gQEAgLTM0LDYgKzM0
+LDcgQEAgaW1wb3J0IGphdmEudXRpbC5MaXN0Owo+ID4+ICBpbXBvcnQgamF2YS51dGlsLlRpbWVy
+Owo+ID4+ICBpbXBvcnQgamF2YS51dGlsLlRpbWVyVGFzazsKPiA+PiAgaW1wb3J0IGphdmEudXRp
+bC5sb2dnaW5nLkxvZ2dlcjsKPiA+PiAraW1wb3J0IGphdmEudXRpbC5Db2xsZWN0aW9uczsKPiA+
+Pgo+ID4+ICBjbGFzcyBVU1RSZWdpc3Rlck1zZyB7Cj4gPj4gICAgICAgcHVibGljIHN0YXRpYyBp
+bnQgcGlkOwo+ID4+IEBAIC01Nyw3ICs1OCw4IEBAIHB1YmxpYyBjbGFzcyBMVFRuZ1RDUFNlc3Np
+b25kQ2xpZW50IHsKPiA+PiAgICAgICBwcml2YXRlIFNlbWFwaG9yZSByZWdpc3RlclNlbTsKPiA+
+Pgo+ID4+ICAgICAgIHByaXZhdGUgVGltZXIgZXZlbnRUaW1lcjsKPiA+PiAtICAgICBwcml2YXRl
+IExpc3Q8TFRUbmdFdmVudD4gZW5hYmxlZEV2ZW50TGlzdCA9IG5ldwo+ID4+IEFycmF5TGlzdDxM
+VFRuZ0V2ZW50PigpOwo+ID4+ICsgICAgIHByaXZhdGUgTGlzdDxMVFRuZ0V2ZW50PiBlbmFibGVk
+RXZlbnRMaXN0ID0KPiA+PiBDb2xsZWN0aW9ucy5zeW5jaHJvbml6ZWRMaXN0KAo+ID4+ICsgICAg
+ICAgICAgICAgbmV3IEFycmF5TGlzdDxMVFRuZ0V2ZW50PigpKTsKPiA+PiAgICAgICAvKgo+ID4+
+ICAgICAgICAqIE1hcCBvZiBMb2dnZXIgb2JqZWN0cyB0aGF0IGhhdmUgYmVlbiBlbmFibGVkLiBU
+aGV5IGFyZSBpbmRleGVkIGJ5Cj4gPj4gICAgICAgIG5hbWUuCj4gPj4gICAgICAgICovCj4gPj4g
+QEAgLTg2LDcgKzg4LDEwIEBAIHB1YmxpYyBjbGFzcyBMVFRuZ1RDUFNlc3Npb25kQ2xpZW50IHsK
+PiA+PiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgKiBXZSBoYXZlIHRvIG1ha2UgYSBj
+b3B5IGhlcmUgc2luY2UgaXQgaXMKPiA+PiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+cG9zc2libGUgdGhhdCB0aGUKPiA+PiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgKiBl
+bmFibGVkIGV2ZW50IGxpc3QgaXMgY2hhbmdlZCBkdXJpbmcgYW4KPiA+PiAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgaXRlcmF0aW9uIG9uIGl0Lgo+ID4+ICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAqLwo+ID4+IC0gICAgICAgICAgICAgICAgICAgICAgICAgICAgIExpc3Q8
+TFRUbmdFdmVudD4gdG1wTGlzdCA9IG5ldwo+ID4+IEFycmF5TGlzdDxMVFRuZ0V2ZW50PihlbmFi
+bGVkRXZlbnRMaXN0KTsKPiA+PiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICBMaXN0PExU
+VG5nRXZlbnQ+IHRtcExpc3Q7Cj4gPj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgc3lu
+Y2hyb25pemVkKGVuYWJsZWRFdmVudExpc3QpIHsKPiA+PiArICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgIHRtcExpc3QgPSBuZXcKPiA+PiBBcnJheUxpc3Q8TFRUbmdFdmVudD4o
+ZW5hYmxlZEV2ZW50TGlzdCk7Cj4gPj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfQo+
+ID4KPiA+Cj4gPiBGdXJ0aGVyIGRvd24gaW4gdGhpcyBmdW5jdGlvbiwgd2UgZmluZDoKPiA+Cj4g
+PiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgcmV0ID0KPiA+ICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBlbmFibGVDbWQuZW5hYmxlTG9nZ2Vy
+KGhhbmRsZXIsCj4gPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZXZl
+bnQsIGVuYWJsZWRMb2dnZXJzKTsKPiA+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICBpZiAocmV0ID09IDEpIHsKPiA+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgIC8qIEVuYWJsZWQgc28gcmVtb3ZlIHRoZQo+ID4gICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZXZlbnQgZnJvbSB0aGUgbGlz
+dC4gKi8KPiA+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+IGVuYWJsZWRFdmVudExpc3QucmVtb3ZlKGV2ZW50KTsKPiA+ICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICB9Cj4gPgo+ID4gc2hvdWxkIHdlIGVuY29tcGFzcyBhIGxhcmdl
+ciBwYXJ0IG9mIHRoaXMgZnVuY3Rpb24gd2l0aCBzeW5jaHJvbml6ZSA/Cj4gCj4gQUZBSVUsIHRo
+aXMgb3BlcmF0aW9uIGlzIGFscmVhZHkgc3luY2hyb25pemVkIGJ5IHRoZSBzeW5jaHJvbml6ZWRM
+aXN0IGNsYXNzLgoKQWN0dWFsbHksIEkgZ290IHRoYXQgdGhlIHJlbW92ZSBvcGVyYXRpb24gaGFz
+IHRoZSBzeW5jaHJvbml6ZQppbXBsaWNpdC4gQWxzbywgaXQgc2hvdWxkIGJlIE9LIGlmIHRoZSBl
+dmVudCBpcyBpbiB0aGUgbGlzdCwKYW5kIGlmIGl0IGlzIG5vdC4gTW9yZW92ZXIsIHRoZSBjb25j
+dXJyZW50IHRocmVhZCBvbmx5IGRvICJhZGQiLApuZXZlciByZW1vdmUsIHNvIGlmIGl0IHdhcyBp
+biB0aGUgbGlzdCBjb3B5LCBpdCB3aWxsIGJlIHRoZXJlIGZvcgp0aGUgcmVtb3ZlLgoKPiAKPiA+
+IFdoYXQgaGFwcGVucyBpZiBldmVudCBpcyByZW1vdmVkIGZyb20gZW5hYmxlZEV2ZW50TGlzdCB3
+aGlsZSB3ZSBpdGVyYXRlIG9uCj4gPiB0aGUgbGlzdCBjb3B5ID8KPiAKPiBJJ20gbm90IHN1cmUg
+SSB1bmRlcnN0YW5kIHlvdXIgY29uY2Vybi4KCkl0J3MgT0ssIHNlZSBteSByZXBseSBhYm92ZS4K
+CkknbGwgZG8gYW5vdGhlciByZXBseSB0byB5b3VyIHBhdGNoIGZvciBvdGhlciBjb21tZW50cy4K
+ClRoYW5rcywKCk1hdGhpZXUKCj4gCj4gUmVnYXJkcywKPiBKw6lyw6ltaWUKPiAKPiA+Cj4gPiBU
+aGFua3MsCj4gPgo+ID4gTUF0aGlldQo+ID4KPiA+Cj4gPj4KPiA+PiAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICBMVFRuZ1Nlc3Npb25kQ21kMl80LnNlc3Npb25kX2VuYWJsZV9oYW5kbGVy
+Cj4gPj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZW5hYmxlQ21kID0gbmV3Cj4gPj4g
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBMVFRuZ1Nlc3Npb25kQ21kMl80
+LnNlc3Npb25kX2VuYWJsZV9oYW5kbGVyKCk7Cj4gPj4gQEAgLTI3Nyw4ICsyODIsMTAgQEAgcHVi
+bGljIGNsYXNzIExUVG5nVENQU2Vzc2lvbmRDbGllbnQgewo+ID4+ICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgKiBBZGQgdGhlIGV2ZW50IHRvIHRoZSBsaXN0
+Cj4gPj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzbyBp
+dCBjYW4gYmUgZW5hYmxlZCBpZgo+ID4+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgKiB0aGUgbG9nZ2VyIGFwcGVhcnMgYXQKPiA+PiAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHNvbWUgcG9pbnQgaW4gdGltZS4KPiA+
+PiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICovCj4gPj4g
+LSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGlmCj4gPj4gKGVu
+YWJsZWRFdmVudExpc3QuY29udGFpbnMoZXZlbnQpID09IGZhbHNlKSB7Cj4gPj4gLQo+ID4+IGVu
+YWJsZWRFdmVudExpc3QuYWRkKGV2ZW50KTsKPiA+PiArICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgc3luY2hyb25pemVkCj4gPj4gKGVuYWJsZWRFdmVudExpc3Qp
+IHsKPiA+PiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICBpZgo+ID4+IChlbmFibGVkRXZlbnRMaXN0LmNvbnRhaW5zKGV2ZW50KSA9PSBmYWxzZSkg
+ewo+ID4+ICsKPiA+PiBlbmFibGVkRXZlbnRMaXN0LmFkZChldmVudCk7Cj4gPj4gKyAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfQo+ID4+ICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB9Cj4gPj4gICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICB9Cj4gPj4gICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICBkYXRhID0gZW5hYmxlQ21kLmdldEJ5dGVzKCk7Cj4gPj4gLS0KPiA+
+PiAxLjkuMAo+ID4+Cj4gPj4KPiA+PiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fXwo+ID4+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiA+PiBsdHRuZy1kZXZA
+bGlzdHMubHR0bmcub3JnCj4gPj4gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxt
+YW4vbGlzdGluZm8vbHR0bmctZGV2Cj4gPj4KPiA+Cj4gPiAtLQo+ID4gTWF0aGlldSBEZXNub3ll
+cnMKPiA+IEVmZmljaU9TIEluYy4KPiA+IGh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCj4gCj4gCj4g
+Cj4gLS0KPiBKw6lyw6ltaWUgR2FsYXJuZWF1Cj4gRWZmaWNpT1MgSW5jLgo+IGh0dHA6Ly93d3cu
+ZWZmaWNpb3MuY29tCj4gCgotLSAKTWF0aGlldSBEZXNub3llcnMKRWZmaWNpT1MgSW5jLgpodHRw
+Oi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcu
+b3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5n
+LWRldgo=
