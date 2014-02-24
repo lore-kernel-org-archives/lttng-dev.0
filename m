@@ -1,19 +1,17 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: epoll_wait reboot kernel?
-Date: Mon, 24 Feb 2014 15:08:53 +0000 (UTC)
-Message-ID: <743353902.29447.1393254533122.JavaMail.zimbra__34400.6299543709$1393254612$gmane$org@efficios.com>
-References: <c3d1fc94-92e2-43b3-af78-6315aaa7419d@aliyun.com,
-	a860adc0-d68a-4a1e-bbd1-775c1cf652e9@aliyun.com>
-	<494972cb-79c7-4197-981c-d682306d585e@aliyun.com>
+From: David Goulet <dgoulet@efficios.com>
+Subject: Re: [PATCH lttng-tool] Comments fix: lttngerr.h ->
+ error.h (./Changelog:754)
+Date: Mon, 24 Feb 2014 13:05:55 -0500
+Message-ID: <20140224180555.GE8848__23186.9773510427$1393265235$gmane$org@thessa>
+References: <20140224005050.GA27035@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1132871689=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from smtp.ini-tech.com ([144.76.53.219])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1WHx9N-00068E-5q
-	for lttng-dev@lists.lttng.org; Mon, 24 Feb 2014 10:09:03 -0500
-In-Reply-To: <494972cb-79c7-4197-981c-d682306d585e@aliyun.com>
+	(envelope-from <dgoulet@efficios.com>) id 1WHzum-0007Tj-Hv
+	for lttng-dev@lists.lttng.org; Mon, 24 Feb 2014 13:06:13 -0500
+In-Reply-To: <20140224005050.GA27035@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,122 +20,163 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "zhenyu.ren" <zhenyu.ren@aliyun.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: Jonathan Rajotte <jonathan.r.julien@gmail.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Zhenyu,
 
-Which gcc version do you use ?
+--===============1132871689==
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="XuV1QlJbYrcVoo+x"
+Content-Disposition: inline
 
-(gcc --version)
 
-Thanks,
+--XuV1QlJbYrcVoo+x
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Mathieu
+Merged!
 
------ Original Message -----
-> From: "zhenyu.ren" <zhenyu.ren@aliyun.com>
-> To: "lttng-dev" <lttng-dev@lists.lttng.org>, "zhenyu.ren" <zhenyu.ren@aliyun.com>
-> Sent: Monday, February 24, 2014 4:36:36 AM
-> Subject: Re: [lttng-dev] epoll_wait reboot kernel?
-> 
-> Oh,It seems not epoll related . I am using DBG/ERR() as debug way ,but this
-> print-style method doesn't work as expected,so I mistake for epoll_wait.
-> It seems gcc problem because if  I changed lib_ring_buffer_do_copy as the
-> following,all  work well
-> 
-> #define lib_ring_buffer_do_copy(config, dest, src, len)         \
-> do {                                                            \
->         size_t __len1 = (len);                                  \
->         /*here , not __len=(len)*/
-> mdelay(0x135);\
->         if (__builtin_constant_p(len))                          \
->                 memcpy(dest, src, __len1);                      \
->         else                                                    \
->                 inline_memcpy(dest, src, __len1);               \
-> } while (0)
-> 
-> I disasembled lib_ring_buffer_write() and "vimdiff bad good" shows :
-> 49c:       48 89 da                mov    %rbx,%rdx
-> |       49c:
-> 4c 89 f2                mov    %r14,%rdx
-> 
-> here rdx is the 3rd parameter to inline_memcpy().
-> 
-> Thanks
-> zhenyu.ren
-> 
-> 
-> >Hi,lttng-dev
-> >
->  >  I am working on rhel6(2.6.32.220) and ust is working very well.But when I
->  >  use lttng-modules (after "lttng start"),the kernel reboots immediately
->  >  >without any message output to console.
-> >
-> >  It took me some days finding out what results in reboot. I shortcut
-> >  __event_probe__##_name() before _tstruct but kernel still reboot(So what
-> >  left is  >metadata_printf).If I comment out "mask |= POLLIN" in
-> >  lttng_metadata_ring_buffer_poll() ,kernel do not reboot. What I find out
-> >  is before reboot the >callchain of  lttng-consumerd thread is
-> >  consumer_thread_metadata_poll()->lttng_poll_wait(wait for metadata
-> >  stream)->compat_epoll_wait().
-> >
-> > I want to use poll instead as epoll in lttng-tools ,I changed lttng-tools
-> > configure file to not use epoll(undef HAVE_EPOLL),but "lttng enable-event
-> > -a -k >"failed :(Do I miss anything?)
-> >#lttng enable-event -a -k
-> >DEBUG1 [17837/18080]: Wait for client response (in thread_manage_clients()
-> >at main.c:3709)
-> >DEBUG1 [17837/18080]: Receiving data from client ... (in
-> >thread_manage_clients() at main.c:3754)
-> >DEBUG1 [17837/18080]: Nothing recv() from client... continuing (in
-> >thread_manage_clients() at main.c:3758)
-> >DEBUG1 [17837/18080]: Clean command context structure (in
-> >clean_command_ctx() at main.c:535)
-> >DEBUG1 [17837/18080]: Accepting client command ... (in
-> >thread_manage_clients() at main.c:3667)
-> >DEBUG1 [17837/18080]: Wait for client response (in thread_manage_clients()
-> >at main.c:3709)
-> >DEBUG1 [17837/18080]: Receiving data from client ... (in
-> >thread_manage_clients() at main.c:3754)
-> >DEBUG1 [17837/18080]: Processing client command 7 (in process_client_msg()
-> >at main.c:2579)
-> >DEBUG1 [17837/18080]: Getting session k-test by name (in
-> >process_client_msg() at main.c:2656)
-> >DEBUG1 [17837/18080]: Creating kernel session (in create_kernel_session() at
-> >main.c:2495)
-> >DEBUG3 [17837/18080]: Created hashtable size 4 at 0x669410 of type 1 (in
-> >lttng_ht_new() at hashtable.c:112)
-> >DEBUG1 [17837/18080]: Kernel session created (fd: 21) (in
-> >kernel_create_session() at kernel.c:109)
-> >DEBUG3 [17837/18080]: Copying tracing session consumer output in kernel
-> >session (in copy_session_consumer() at main.c:2393)
-> >DEBUG3 [17837/18080]: Created hashtable size 4 at 0x66a750 of type 1 (in
-> >lttng_ht_new() at hashtable.c:112)
-> >DEBUG3 [17837/18080]: Copy session consumer subdir /kernel (in
-> >copy_session_consumer() at main.c:2428)
-> >DEBUG3 [17837/18080]: mkdir() recursive
-> >/root/lttng-traces/k-test-20140222-131335 with mode 504 for uid 0 and gid 0
-> >(in run_as_mkdir_recursive() at >runas.c:310)
-> >DEBUG1 [17837/18080]: Using run_as_clone (in run_as() at runas.c:293)
-> >lttng-sessiond: ht-cleanup.c:92: thread_ht_cleanup: Assertion `pollfd ==
-> >ht_cleanup_pipe[0]' failed.
-> >
-> >  It seems lttng-tools  in ubuntu 12.04 is using poll,isnt it?
-> >
->  > Does anyone have any suggestions to me ?
-> 
-> >PS:.lttng(ust/module/tool) version is 2.3.0 and urcu version is 0.8
-> 
-> 
+Thanks
+
+On 23 Feb (19:50:52), Jonathan Rajotte wrote:
+>=20
+> Signed-off-by: Jonathan Rajotte <jonathan.r.julien@gmail.com>
+> ---
+>  tests/unit/test_kernel_data.c             |    2 +-
+>  tests/unit/test_session.c                 |    2 +-
+>  tests/unit/test_uri.c                     |    2 +-
+>  tests/unit/test_ust_data.c                |    2 +-
+>  tests/unit/test_utils_expand_path.c       |    2 +-
+>  tests/unit/test_utils_parse_size_suffix.c |    2 +-
+>  6 files changed, 6 insertions(+), 6 deletions(-)
+>=20
+> diff --git a/tests/unit/test_kernel_data.c b/tests/unit/test_kernel_data.c
+> index 16d4f7b..e2182e9 100644
+> --- a/tests/unit/test_kernel_data.c
+> +++ b/tests/unit/test_kernel_data.c
+> @@ -35,7 +35,7 @@
+>  /* Number of TAP tests in this file */
+>  #define NUM_TESTS 10
+> =20
+> -/* For lttngerr.h */
+> +/* For error.h */
+>  int lttng_opt_quiet =3D 1;
+>  int lttng_opt_verbose;
+> =20
+> diff --git a/tests/unit/test_session.c b/tests/unit/test_session.c
+> index 7242edd..a0e84e9 100644
+> --- a/tests/unit/test_session.c
+> +++ b/tests/unit/test_session.c
+> @@ -43,7 +43,7 @@
+> =20
+>  static struct ltt_session_list *session_list;
+> =20
+> -/* For lttngerr.h */
+> +/* For error.h */
+>  int lttng_opt_quiet =3D 1;
+>  int lttng_opt_verbose =3D 0;
+> =20
+> diff --git a/tests/unit/test_uri.c b/tests/unit/test_uri.c
+> index ef852c0..7cac95d 100644
+> --- a/tests/unit/test_uri.c
+> +++ b/tests/unit/test_uri.c
+> @@ -22,7 +22,7 @@
+> =20
+>  #include <common/uri.h>
+> =20
+> -/* For lttngerr.h */
+> +/* For error.h */
+>  int lttng_opt_quiet =3D 1;
+>  int lttng_opt_verbose =3D 3;
+> =20
+> diff --git a/tests/unit/test_ust_data.c b/tests/unit/test_ust_data.c
+> index c52a71b..bc3154c 100644
+> --- a/tests/unit/test_ust_data.c
+> +++ b/tests/unit/test_ust_data.c
+> @@ -41,7 +41,7 @@
+>  /* Number of TAP tests in this file */
+>  #define NUM_TESTS 10
+> =20
+> -/* For lttngerr.h */
+> +/* For error.h */
+>  int lttng_opt_quiet =3D 1;
+>  int lttng_opt_verbose;
+> =20
+> diff --git a/tests/unit/test_utils_expand_path.c b/tests/unit/test_utils_=
+expand_path.c
+> index 1e0863f..fe709ac 100644
+> --- a/tests/unit/test_utils_expand_path.c
+> +++ b/tests/unit/test_utils_expand_path.c
+> @@ -28,7 +28,7 @@
+> =20
+>  #include <src/common/utils.h>
+> =20
+> -/* For lttngerr.h */
+> +/* For error.h */
+>  int lttng_opt_quiet =3D 1;
+>  int lttng_opt_verbose =3D 3;
+> =20
+> diff --git a/tests/unit/test_utils_parse_size_suffix.c b/tests/unit/test_=
+utils_parse_size_suffix.c
+> index 3b9c68c..990aa1b 100644
+> --- a/tests/unit/test_utils_parse_size_suffix.c
+> +++ b/tests/unit/test_utils_parse_size_suffix.c
+> @@ -23,7 +23,7 @@
+> =20
+>  #include <src/common/utils.h>
+> =20
+> -/* For lttngerr.h */
+> +/* For error.h */
+>  int lttng_opt_quiet =3D 1;
+>  int lttng_opt_verbose =3D 3;
+> =20
+> --=20
+> 1.7.9.5
+>=20
+>=20
+> --=20
+> Jonathan Rajotte Julien
+> Charg=E9 de laboratoire INF1995
+> Membre MD6
+> Polytechnique Montr=E9al
+>=20
 > _______________________________________________
 > lttng-dev mailing list
 > lttng-dev@lists.lttng.org
 > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> 
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+--XuV1QlJbYrcVoo+x
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQF8BAEBAgBmBQJTC4oDXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
+ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
+MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02CpsIAKjvDv4QCWxG7yUj5YRmyHod
+RVWf/A1ub2cc0PiuQrl06E80FAlFJHZx43/xn1xjzEonk/ZBbNB0WfjmznODhQcL
+rR30FWCfBOBgAz69qghpUq3oETHECJNb4qJiQjbNZFaib01VlaXOOa+n+d2gYEHW
+YcjZe2KhsdslCZE4QM3gVLkaiqPk7VRg8pQlWQ/PRTMlNLKraXoMDGYHY8PE0A8j
+iYrGJLWkDobXZVr6HuDpGO1iA/FRmrgSy+yUBFFx9B52igeaAhB9LjP9Om0/Mrm9
+qNBdP21Gz3sWtYjsBcJRm7scTx/krFml49MtPRrLcxoR+C4I43/rOK49OXLFBSU=
+=VIN4
+-----END PGP SIGNATURE-----
+
+--XuV1QlJbYrcVoo+x--
+
+
+--===============1132871689==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1132871689==--
