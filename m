@@ -1,21 +1,25 @@
-From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-ust] Fix: Unsynchronized access in
-	LTTngTCPSessiondClient
-Date: Sat, 22 Feb 2014 15:19:15 -0500
-Message-ID: <CA+jJMxukg5xB-DEVV3M23piN8sMB2uqvt+rLs375ocRk61ndAQ__35319.1678681926$1393100426$gmane$org@mail.gmail.com>
-References: <1392913353-13369-1-git-send-email-jeremie.galarneau@efficios.com>
-	<204474029.28925.1393099864388.JavaMail.zimbra@efficios.com>
+From: Jonathan Rajotte <jonathan.r.julien@gmail.com>
+Subject: [PATCH lttng-tool] Comments fix: lttngerr.h -> error.h
+ (./Changelog:754)
+Date: Sun, 23 Feb 2014 19:50:52 -0500
+Message-ID: <20140224005050.GA27035__33073.8993980505$1393203127$gmane$org@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qc0-f181.google.com ([209.85.216.181])
+Received: from mail-ig0-f172.google.com ([209.85.213.172])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1WHJ2f-0003F7-IG
-	for lttng-dev@lists.lttng.org; Sat, 22 Feb 2014 15:19:27 -0500
-Received: by mail-qc0-f181.google.com with SMTP id c9so7192424qcz.40
-	for <lttng-dev@lists.lttng.org>; Sat, 22 Feb 2014 12:19:16 -0800 (PST)
-In-Reply-To: <204474029.28925.1393099864388.JavaMail.zimbra@efficios.com>
+	(envelope-from <jonathan.r.julien@gmail.com>) id 1WHjl6-0007ZB-EB
+	for lttng-dev@lists.lttng.org; Sun, 23 Feb 2014 19:51:05 -0500
+Received: by mail-ig0-f172.google.com with SMTP id h3so3575477igd.5
+	for <lttng-dev@lists.lttng.org>; Sun, 23 Feb 2014 16:50:54 -0800 (PST)
+Received: from gmail.com (Sansfil-Securise-Etudiants-Poly-253-230.polymtl.ca.
+	[132.207.253.230])
+	by mx.google.com with ESMTPSA id r6sm20882588igg.10.2014.02.23.16.50.54
+	for <lttng-dev@lists.lttng.org>
+	(version=TLSv1.2 cipher=RC4-SHA bits=128/128);
+	Sun, 23 Feb 2014 16:50:54 -0800 (PST)
+Content-Disposition: inline
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,149 +28,124 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On Sat, Feb 22, 2014 at 3:11 PM, Mathieu Desnoyers
-<mathieu.desnoyers@efficios.com> wrote:
-> Other comments,
->
-> ----- Original Message -----
->> From: "J=E9r=E9mie Galarneau" <jeremie.galarneau@efficios.com>
->> To: lttng-dev@lists.lttng.org
->> Sent: Thursday, February 20, 2014 11:22:33 AM
->> Subject: [lttng-dev] [PATCH lttng-ust] Fix: Unsynchronized access in  LT=
-TngTCPSessiondClient
->>
->> enabledEventList is shared between the LTTngThread and eventTimer
->> threads but is not synchronized.
->>
->> This patch changes enabledEventList's type from an ArrayList to a
->> synchronizedList which implements the same interface.
->>
->> Signed-off-by: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
->> ---
->>  .../org/lttng/ust/jul/LTTngTCPSessiondClient.java         | 15
->>  +++++++++++----
->>  1 file changed, 11 insertions(+), 4 deletions(-)
->>
->> diff --git a/liblttng-ust-jul/org/lttng/ust/jul/LTTngTCPSessiondClient.j=
-ava
->> b/liblttng-ust-jul/org/lttng/ust/jul/LTTngTCPSessiondClient.java
->> index 25d1cb2..0d9a485 100644
->> --- a/liblttng-ust-jul/org/lttng/ust/jul/LTTngTCPSessiondClient.java
->> +++ b/liblttng-ust-jul/org/lttng/ust/jul/LTTngTCPSessiondClient.java
->> @@ -34,6 +34,7 @@ import java.util.List;
->>  import java.util.Timer;
->>  import java.util.TimerTask;
->>  import java.util.logging.Logger;
->> +import java.util.Collections;
->>
->>  class USTRegisterMsg {
->>       public static int pid;
->> @@ -57,7 +58,8 @@ public class LTTngTCPSessiondClient {
->>       private Semaphore registerSem;
->>
->>       private Timer eventTimer;
->> -     private List<LTTngEvent> enabledEventList =3D new ArrayList<LTTngE=
-vent>();
->> +     private List<LTTngEvent> enabledEventList =3D Collections.synchron=
-izedList(
->> +             new ArrayList<LTTngEvent>());
->
-> I'd prefer:
->
->   private List<LTTngEvent> enabledEventList =3D
->          Collections.synchronizedList(new ArrayList<LTTngEvent>());
->
-> unless you tell me that your coding style is more "java-like".
->
->>       /*
->>        * Map of Logger objects that have been enabled. They are indexed =
-by name.
->>        */
->> @@ -86,7 +88,10 @@ public class LTTngTCPSessiondClient {
->>                                * We have to make a copy here since it is=
- possible that the
->>                                * enabled event list is changed during an=
- iteration on it.
->>                                */
->> -                             List<LTTngEvent> tmpList =3D new ArrayList=
-<LTTngEvent>(enabledEventList);
->> +                             List<LTTngEvent> tmpList;
->> +                             synchronized(enabledEventList) {
->
-> inconsistent style, missing space after "synchronized".
->
->> +                                     tmpList =3D new ArrayList<LTTngEve=
-nt>(enabledEventList);
->> +                             }
->>
->>                               LTTngSessiondCmd2_4.sessiond_enable_handle=
-r enableCmd =3D new
->>                                       LTTngSessiondCmd2_4.sessiond_enabl=
-e_handler();
->> @@ -277,8 +282,10 @@ public class LTTngTCPSessiondClient {
->>                                                * Add the event to the li=
-st so it can be enabled if
->>                                                * the logger appears at s=
-ome point in time.
->>                                                */
->> -                                             if (enabledEventList.conta=
-ins(event) =3D=3D false) {
->> -                                                     enabledEventList.a=
-dd(event);
->> +                                             synchronized (enabledEvent=
-List) {
->> +                                                     if (enabledEventLi=
-st.contains(event) =3D=3D false) {
->> +                                                             enabledEve=
-ntList.add(event);
->> +                                                     }
->
-> Hrm, so what we want here is probably more a set than a list ? We want a =
-data structure
-> that does not have duplicates. If we can confirm that the order of the el=
-ements does not
-> matter, a hash map might be a much more suited data structure than a list=
-. We could
-> then remove the explicit synchronize around "add".
 
-Makes sense, I guess David (original author) will probably have an
-opinion on that. My immediate concern was addressing the code's thread
-safety.
+Signed-off-by: Jonathan Rajotte <jonathan.r.julien@gmail.com>
+---
+ tests/unit/test_kernel_data.c             |    2 +-
+ tests/unit/test_session.c                 |    2 +-
+ tests/unit/test_uri.c                     |    2 +-
+ tests/unit/test_ust_data.c                |    2 +-
+ tests/unit/test_utils_expand_path.c       |    2 +-
+ tests/unit/test_utils_parse_size_suffix.c |    2 +-
+ 6 files changed, 6 insertions(+), 6 deletions(-)
 
-Regards,
-J=E9r=E9mie
+diff --git a/tests/unit/test_kernel_data.c b/tests/unit/test_kernel_data.c
+index 16d4f7b..e2182e9 100644
+--- a/tests/unit/test_kernel_data.c
++++ b/tests/unit/test_kernel_data.c
+@@ -35,7 +35,7 @@
+ /* Number of TAP tests in this file */
+ #define NUM_TESTS 10
+ =
 
->
-> Thanks,
->
-> Mathieu
->
->>                                               }
->>                                       }
->>                                       data =3D enableCmd.getBytes();
->> --
->> 1.9.0
->>
->>
->> _______________________________________________
->> lttng-dev mailing list
->> lttng-dev@lists.lttng.org
->> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->>
->
-> --
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> http://www.efficios.com
+-/* For lttngerr.h */
++/* For error.h */
+ int lttng_opt_quiet =3D 1;
+ int lttng_opt_verbose;
+ =
 
+diff --git a/tests/unit/test_session.c b/tests/unit/test_session.c
+index 7242edd..a0e84e9 100644
+--- a/tests/unit/test_session.c
++++ b/tests/unit/test_session.c
+@@ -43,7 +43,7 @@
+ =
+
+ static struct ltt_session_list *session_list;
+ =
+
+-/* For lttngerr.h */
++/* For error.h */
+ int lttng_opt_quiet =3D 1;
+ int lttng_opt_verbose =3D 0;
+ =
+
+diff --git a/tests/unit/test_uri.c b/tests/unit/test_uri.c
+index ef852c0..7cac95d 100644
+--- a/tests/unit/test_uri.c
++++ b/tests/unit/test_uri.c
+@@ -22,7 +22,7 @@
+ =
+
+ #include <common/uri.h>
+ =
+
+-/* For lttngerr.h */
++/* For error.h */
+ int lttng_opt_quiet =3D 1;
+ int lttng_opt_verbose =3D 3;
+ =
+
+diff --git a/tests/unit/test_ust_data.c b/tests/unit/test_ust_data.c
+index c52a71b..bc3154c 100644
+--- a/tests/unit/test_ust_data.c
++++ b/tests/unit/test_ust_data.c
+@@ -41,7 +41,7 @@
+ /* Number of TAP tests in this file */
+ #define NUM_TESTS 10
+ =
+
+-/* For lttngerr.h */
++/* For error.h */
+ int lttng_opt_quiet =3D 1;
+ int lttng_opt_verbose;
+ =
+
+diff --git a/tests/unit/test_utils_expand_path.c b/tests/unit/test_utils_ex=
+pand_path.c
+index 1e0863f..fe709ac 100644
+--- a/tests/unit/test_utils_expand_path.c
++++ b/tests/unit/test_utils_expand_path.c
+@@ -28,7 +28,7 @@
+ =
+
+ #include <src/common/utils.h>
+ =
+
+-/* For lttngerr.h */
++/* For error.h */
+ int lttng_opt_quiet =3D 1;
+ int lttng_opt_verbose =3D 3;
+ =
+
+diff --git a/tests/unit/test_utils_parse_size_suffix.c b/tests/unit/test_ut=
+ils_parse_size_suffix.c
+index 3b9c68c..990aa1b 100644
+--- a/tests/unit/test_utils_parse_size_suffix.c
++++ b/tests/unit/test_utils_parse_size_suffix.c
+@@ -23,7 +23,7 @@
+ =
+
+ #include <src/common/utils.h>
+ =
+
+-/* For lttngerr.h */
++/* For error.h */
+ int lttng_opt_quiet =3D 1;
+ int lttng_opt_verbose =3D 3;
+ =
+
+-- =
+
+1.7.9.5
 
 
 -- =
 
-J=E9r=E9mie Galarneau
-EfficiOS Inc.
-http://www.efficios.com
+Jonathan Rajotte Julien
+Charg=E9 de laboratoire INF1995
+Membre MD6
+Polytechnique Montr=E9al
