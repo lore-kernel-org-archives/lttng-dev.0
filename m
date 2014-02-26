@@ -1,14 +1,21 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: [UST Pull request] Fix: handle registration done command
-Date: Wed, 26 Feb 2014 16:13:24 -0500
-Message-ID: <20140226211324.GD7356__6498.4182165519$1393449304$gmane$org@thessa>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [UST Pull request] Fix: handle registration done
+	command
+Date: Wed, 26 Feb 2014 21:39:01 +0000 (UTC)
+Message-ID: <818692626.31206.1393450741276.JavaMail.zimbra__25893.7350511134$1393450805$gmane$org@efficios.com>
+References: <20140226211324.GD7356@thessa>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0779973577=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([144.76.53.219])
+Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1WIlni-0006ns-Fo
-	for lttng-dev@lists.lttng.org; Wed, 26 Feb 2014 16:14:10 -0500
+	(envelope-from <compudj@efficios.com>) id 1WImBy-00071W-6b
+	for lttng-dev@lists.lttng.org; Wed, 26 Feb 2014 16:39:07 -0500
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.efficios.com (Postfix) with ESMTP id 3F0043401F2
+	for <lttng-dev@lists.lttng.org>; Wed, 26 Feb 2014 21:39:03 +0000 (UTC)
+In-Reply-To: <20140226211324.GD7356@thessa>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -17,60 +24,33 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev <lttng-dev@lists.lttng.org>
+To: David Goulet <dgoulet@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
+merged, thanks!
 
---===============0779973577==
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="rqzD5py0kzyFAOWN"
-Content-Disposition: inline
+Mathieu
 
+----- Original Message -----
+> From: "David Goulet" <dgoulet@efficios.com>
+> To: "lttng-dev" <lttng-dev@lists.lttng.org>
+> Cc: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+> Sent: Wednesday, February 26, 2014 4:13:24 PM
+> Subject: [UST Pull request] Fix: handle registration done command
+> 
+> Repo:
+> 
+> https://github.com/dgoulet/lttng-ust-dev.git (branch: bug692)
+> 
+> This needs to go in lockstep with a commit in lttng-tools so please
+> inform me once pushed so I can update tools.
+> 
+> Cheers!
+> David
+> 
 
---rqzD5py0kzyFAOWN
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-Repo:
-
-https://github.com/dgoulet/lttng-ust-dev.git (branch: bug692)
-
-This needs to go in lockstep with a commit in lttng-tools so please
-inform me once pushed so I can update tools.
-
-Cheers!
-David
-
---rqzD5py0kzyFAOWN
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iQF8BAEBAgBmBQJTDlj0XxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
-ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
-MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I024kMIAJrXdf1gO+qqVhpPUGSJCZLg
-+yPrVNHgzGUlnqQ/1zMmKEYr0JyehbbxlxLH9EKC/y06RoOG6XU0z7IINvXZiIhm
-Ic+CZkHB3DiNgaGxkdFuUxD8c+F6zJonoWF/f8wuatgqeL0IpZpRrC7oeLDIJdRk
-BRNDGcXF0u5pC0dnRpiZQTZIFc1Y5qE0VszAYO9dik7Na1WUWxJpPB9QIHKzcvPj
-ZK8oYVNIUcJP0dqtbb/7GtZ8CnBmwgDp1/95iW9aIij749I0r03B4gk0hJ6fM86o
-G1OO9UfGqbar43slGqbzJ14/Y7kGJGJ2kaRghQ3lJX0xS7AfKBJTm6wz60rGfkU=
-=Kkky
------END PGP SIGNATURE-----
-
---rqzD5py0kzyFAOWN--
-
-
---===============0779973577==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0779973577==--
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
