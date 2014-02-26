@@ -1,20 +1,14 @@
-From: Christian Babeux <christian.babeux@efficios.com>
-Subject: Re: [GSOC] Interested in contributing to LTTng: Python
- tracing support
-Date: Wed, 26 Feb 2014 13:49:39 -0500
-Message-ID: <CAGDH53nyAWupcV2_KwZ5KvQsmxLLmg_F3Lr4xWD21_oH2bGuBQ__32983.2334806726$1393440646$gmane$org@mail.gmail.com>
-References: <CANK7Sy88U0q3YJ=Ys32_zgNf=QJYCh3QCca8iUgksWupBqNuAw@mail.gmail.com>
+From: David Goulet <dgoulet@efficios.com>
+Subject: [UST Pull request] Fix: handle registration done command
+Date: Wed, 26 Feb 2014 16:13:24 -0500
+Message-ID: <20140226211324.GD7356__6498.4182165519$1393449304$gmane$org@thessa>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============0779973577=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ve0-f182.google.com ([209.85.128.182])
+Received: from smtp.ini-tech.com ([144.76.53.219])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <christian.babeux@0x80.ca>) id 1WIjY9-0005eo-D8
-	for lttng-dev@lists.lttng.org; Wed, 26 Feb 2014 13:49:51 -0500
-Received: by mail-ve0-f182.google.com with SMTP id jy13so2666273veb.13
-	for <lttng-dev@lists.lttng.org>; Wed, 26 Feb 2014 10:49:39 -0800 (PST)
-In-Reply-To: <CANK7Sy88U0q3YJ=Ys32_zgNf=QJYCh3QCca8iUgksWupBqNuAw@mail.gmail.com>
+	(envelope-from <dgoulet@efficios.com>) id 1WIlni-0006ns-Fo
+	for lttng-dev@lists.lttng.org; Wed, 26 Feb 2014 16:14:10 -0500
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,32 +17,60 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?UTF-8?B?5YiY6LeD?= <liuyue0310@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-SGkgWXVlLAoKR3JlYXQgdG8gaGVhciB0aGF0IHlvdSBhcmUgaW50ZXJlc3RlZCBpbiB0aGUgUHl0
-aG9uIHRyYWNpbmcgc3VwcG9ydCEKClRoZSBmaXJzdCBzdGVwIHdvdWxkIGJlIHRvIHRha2UgYSBs
-b29rIGF0IHRoZSBidWcgdHJhY2tlciBbMV0gYW5kIHNlZQppZiB5b3UgY2FuIGZpeCBhbnkgdHlw
-byBvciBtaW5vciBidWcgYW5kIHN1Ym1pdCBhIHBhdGNoIHRvIHRoZSBtYWlsaW5nCmxpc3QuIFRo
-ZSBjb250cmlidXRpb24gcHJvY2VzcyBpcyBkZXRhaWxlZCBpbiB0aGUgZ3VpZGVsaW5lcyBbMl0g
-b24KdGhlIGlkZWEgcGFnZS4KClRoYW5rcywKCkNocmlzdGlhbgoKWzFdIC0gaHR0cDovL2J1Z3Mu
-bHR0bmcub3JnL3Byb2plY3RzL2x0dG5nL2lzc3Vlcz9zb3J0PXByaW9yaXR5JTJDaWQlM0FkZXNj
-ClsyXSAtIGh0dHA6Ly9idWdzLmx0dG5nLm9yZy9wcm9qZWN0cy9sdHRuZy93aWtpL0dvb2dsZV9T
-dW1tZXJfb2ZfQ29kZV8yMDE0CgpPbiBXZWQsIEZlYiAyNiwgMjAxNCBhdCA0OjI2IEFNLCDliJjo
-t4MgPGxpdXl1ZTAzMTBAZ21haWwuY29tPiB3cm90ZToKPiBIaSwKPgo+ICAgICBJIGFtIFl1ZSBM
-aXUsIHNlY29uZCB5ZWFyIGdyYWR1YXRlIGluIENvbXB1dGVyIFNjaWVuY2UgYW5kIEVuZ2luZWVy
-aW5nLgo+IEknbSBpbnRlcmVzdGVkIGluIGNvbnRyaWJ1dGluZyB0byBQeXRob24gdHJhY2luZyBz
-dXBwb3J0LiBJIGFtIEdvb2QgaW4KPiBDL0MrKy9QeXRob24gYW5kIFVuaXggT3BlcmF0aW5nIFN5
-c3RlbS4gSSBhbHNvIGhhdmUgZ29vZCBleHBlcmllbmNlIGluCj4gRGVidWdnaW5nL1JldmVyc2Ug
-RW5naW5lZXJpbmcvQmluYXJ5IEhhY2suCj4gICAgIFBsZWFzZSBsZXQgbWUga25vdyBob3cgc2hv
-dWxkIEkgcHJvY2VlZCBmdXJ0aGVyLgo+Cj4gICAgIFRoYW5rIHlvdSEKPgo+IFl1ZSBMaXUKPiAt
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-Cj4gVHNpbmdodWEgVW5pdmVyc2l0eSBOSVNMLUxhYihGSVQtMS0yMTMpCj4gVEVMOiArODYtMTU2
-LTUyNzktODE5MQo+IE1haWw6IGxpdXl1ZTAzMTBAZ21haWwuY29tCj4KPgo+IF9fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gbHR0bmctZGV2IG1haWxpbmcg
-bGlzdAo+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBodHRwOi8vbGlzdHMubHR0bmcub3Jn
-L2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKPgoKX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRu
-Zy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWls
-bWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+
+--===============0779973577==
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="rqzD5py0kzyFAOWN"
+Content-Disposition: inline
+
+
+--rqzD5py0kzyFAOWN
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+Repo:
+
+https://github.com/dgoulet/lttng-ust-dev.git (branch: bug692)
+
+This needs to go in lockstep with a commit in lttng-tools so please
+inform me once pushed so I can update tools.
+
+Cheers!
+David
+
+--rqzD5py0kzyFAOWN
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQF8BAEBAgBmBQJTDlj0XxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
+ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
+MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I024kMIAJrXdf1gO+qqVhpPUGSJCZLg
++yPrVNHgzGUlnqQ/1zMmKEYr0JyehbbxlxLH9EKC/y06RoOG6XU0z7IINvXZiIhm
+Ic+CZkHB3DiNgaGxkdFuUxD8c+F6zJonoWF/f8wuatgqeL0IpZpRrC7oeLDIJdRk
+BRNDGcXF0u5pC0dnRpiZQTZIFc1Y5qE0VszAYO9dik7Na1WUWxJpPB9QIHKzcvPj
+ZK8oYVNIUcJP0dqtbb/7GtZ8CnBmwgDp1/95iW9aIij749I0r03B4gk0hJ6fM86o
+G1OO9UfGqbar43slGqbzJ14/Y7kGJGJ2kaRghQ3lJX0xS7AfKBJTm6wz60rGfkU=
+=Kkky
+-----END PGP SIGNATURE-----
+
+--rqzD5py0kzyFAOWN--
+
+
+--===============0779973577==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0779973577==--
