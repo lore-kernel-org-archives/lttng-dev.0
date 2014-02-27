@@ -1,17 +1,18 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] Babeltrace 1.2.0-rc2
-Date: Thu, 27 Feb 2014 18:10:22 +0000 (UTC)
-Message-ID: <2074543268.31813.1393524622584.JavaMail.zimbra__49095.0174084448$1393524695$gmane$org@efficios.com>
-References: <250156299.31811.1393524575626.JavaMail.zimbra@efficios.com>
+Subject: Re: [PATCH lttng-ust] Fix: Skip lttng-gen-tp example
+ build	if Python is missing
+Date: Thu, 27 Feb 2014 18:35:57 +0000 (UTC)
+Message-ID: <1270677834.31837.1393526157195.JavaMail.zimbra__19824.9352550649$1393526216$gmane$org@efficios.com>
+References: <1393522241-24017-1-git-send-email-jeremie.galarneau@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1WJ5Pi-0000I9-PQ
-	for lttng-dev@lists.lttng.org; Thu, 27 Feb 2014 13:10:36 -0500
-In-Reply-To: <250156299.31811.1393524575626.JavaMail.zimbra@efficios.com>
+	(envelope-from <compudj@efficios.com>) id 1WJ5oM-0000Ut-Fd
+	for lttng-dev@lists.lttng.org; Thu, 27 Feb 2014 13:36:04 -0500
+In-Reply-To: <1393522241-24017-1-git-send-email-jeremie.galarneau@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,68 +21,41 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org, tiwg@multicore-association.or
+To: =?utf-8?B?SsOpcsOpbWll?= Galarneau <jeremie.galarneau@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-The Babeltrace project provides trace read and write libraries, as well
-as a trace converter. Plugins can be created for any trace format to
-allow its conversion to/from another trace format.
-
-The main format expected to be converted to/from is the Common Trace
-Format (CTF). The default input format of the "babeltrace" command is
-CTF, and its default output format is a human-readable text log. The
-"babeltrace-log" command converts from a text log to a CTF trace.
-
-Noteworthy: only bugfixes here. We plan a final release tomorrow,
-synchronized with LTTng 2.4 final.
-
-Changelog:
-2014-02-27 Babeltrace 1.2.0-rc2
-        * Fix: events discarded timing inaccuracy
-        * Fix: Move offset endianness conversion to get_data_packet
-        * Fix: Remove negative comparison to unsigned value
-        * Fix: Uninitialized scalar variable
-        * Fix: Don't assert on metadata generation failure
-        * Fix: add missing SIGTERM and SIGINT handler
-        * Fix: Reverse incorrect error message argument order
-        * Cleanup: add brackets to lttng-live-plugin.c
-        * Cleanup lttng-live: add brackets in lttng_live_read()
-        * Cleanup lttng-live: 80 columns wrapping
-        * Fix: handle new streams in get_data_packet()
-        * Fix: accept empty metadata on append
-        * Fix: lttng-live: 100ms active poll delay
-        * Fix: lttng-live await metadata
-        * Fix: lttng-live recv() and send() flags, partial recv()
-        * Fix: missing little endian conversion for one index field
-        * Cleanup: remove logically dead code
-        * Fix: untrusted value as argument
-        * Fix: off by one in lttng-live path length check
-        * Fix: fclose return value unchecked
-        * Fix: call to append metadata when new metadata is added
-        * Fix: use memstream instead of tmp file for live metadata
-        * Fix: assign a trace handle to every live trace
-        * Fix: get_new_metadata receive all the metadata
-        * Fix: Coverity warning CWE-457: Use of Uninitialized Variable
-        * Revert "Fix: get_new_metadata receive all the metadata"
-        * Revert "Fix: assign a trace handle to every live trace"
-        * Fix: assign a trace handle to every live trace
-        * Fix: get_new_metadata receive all the metadata
-        * CTF: Support incremental metadata append
-        * Fix: ctf.c fscanf missing integer length check
-        * Bump soname version to 1.0.0
-        * Move scanner allocation/free outside of ctf_open_trace_metadata_read
-        * CTF parser: prepare for incremental metadata parsing
-        * Python bindings: return char arrays as strings in value()
-        * Python bindings: sched_switch example clean-up
-        * Fix: add missing test scripts to Makefile.am
-
-
-Project website: http://www.efficios.com/babeltrace
-Download link: http://www.efficios.com/files/babeltrace/
-CTF specification: http://www.efficios.com/ctf
-
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+bWVyZ2VkLCB0aGFua3MhCgpNYXRoaWV1CgotLS0tLSBPcmlnaW5hbCBNZXNzYWdlIC0tLS0tCj4g
+RnJvbTogIkrDqXLDqW1pZSBHYWxhcm5lYXUiIDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5j
+b20+Cj4gVG86IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBTZW50OiBUaHVyc2RheSwgRmVi
+cnVhcnkgMjcsIDIwMTQgMTI6MzA6NDEgUE0KPiBTdWJqZWN0OiBbbHR0bmctZGV2XSBbUEFUQ0gg
+bHR0bmctdXN0XSBGaXg6IFNraXAgbHR0bmctZ2VuLXRwIGV4YW1wbGUgYnVpbGQJaWYgUHl0aG9u
+IGlzIG1pc3NpbmcKPiAKPiBGaXhlcyAjNjY1Cj4gCj4gU2lnbmVkLW9mZi1ieTogSsOpcsOpbWll
+IEdhbGFybmVhdSA8amVyZW1pZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29tPgo+IC0tLQo+ICBjb25m
+aWd1cmUuYWMgICAgICAgICAgICAgfCAzICsrKwo+ICBkb2MvZXhhbXBsZXMvTWFrZWZpbGUuYW0g
+fCA2ICsrKysrLQo+ICAyIGZpbGVzIGNoYW5nZWQsIDggaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlv
+bigtKQo+IAo+IGRpZmYgLS1naXQgYS9jb25maWd1cmUuYWMgYi9jb25maWd1cmUuYWMKPiBpbmRl
+eCBjODQyMWI3Li4zYzkyZGExIDEwMDY0NAo+IC0tLSBhL2NvbmZpZ3VyZS5hYwo+ICsrKyBiL2Nv
+bmZpZ3VyZS5hYwo+IEBAIC0yNzYsNiArMjc2LDkgQEAgQUNfREVGSU5FX1VOUVVPVEVEKFtMVFRO
+R19TWVNURU1fUlVORElSXSwKPiBbIiRsdHRuZ19zeXN0ZW1fcnVuZGlyIl0sCj4gIGx0dG5nbGli
+amF2YWRpcj0iJHtsaWJkaXJ9L2x0dG5nL2phdmEiCj4gIEFDX1NVQlNUKGx0dG5nbGliamF2YWRp
+cikKPiAgCj4gK0FNX1BBVEhfUFlUSE9OKFsyLjddLEJVSUxEX0dFTl9UUF9FWEFNUExFUz0xKQo+
+ICtBTV9DT05ESVRJT05BTChbQlVJTERfR0VOX1RQX0VYQU1QTEVTXSwgW3Rlc3QgJEJVSUxEX0dF
+Tl9UUF9FWEFNUExFU10sCj4gW0J1aWxkIGV4YW1wbGVzIHJlcXVpcmluZyBsdHRuZy1nZW4tdHBd
+KQo+ICsKPiAgQUNfQ09ORklHX0ZJTEVTKFsKPiAgCU1ha2VmaWxlCj4gIAlkb2MvTWFrZWZpbGUK
+PiBkaWZmIC0tZ2l0IGEvZG9jL2V4YW1wbGVzL01ha2VmaWxlLmFtIGIvZG9jL2V4YW1wbGVzL01h
+a2VmaWxlLmFtCj4gaW5kZXggOTcxZWVjMy4uMGQzNDFjOCAxMDA2NDQKPiAtLS0gYS9kb2MvZXhh
+bXBsZXMvTWFrZWZpbGUuYW0KPiArKysgYi9kb2MvZXhhbXBsZXMvTWFrZWZpbGUuYW0KPiBAQCAt
+NDMsNyArNDMsMTEgQEAgaWYgTk9fU0hBUkVECj4gICMgZGlzYWJsZWQuCj4gIGVsc2UKPiAgIyBD
+b3BpZXMgYXJlIGZvciBWUEFUSCBidWlsZCBzdXBwb3J0Cj4gLVNVQkRJUlNfUFJPWFkgPSBlYXN5
+LXVzdCBkZW1vIGdlbi10cCBoZWxsby1zdGF0aWMtbGliCj4gK1NVQkRJUlNfUFJPWFkgPSBlYXN5
+LXVzdCBkZW1vIGhlbGxvLXN0YXRpYy1saWIKPiArCj4gK2lmIEJVSUxEX0dFTl9UUF9FWEFNUExF
+Uwo+ICtTVUJESVJTX1BST1hZICs9IGdlbi10cAo+ICtlbmRpZgo+ICAKPiAgYWxsLWxvY2FsOgo+
+ICAJQGlmIFsgeCIkKHNyY2RpcikiICE9IHgiJChidWlsZGRpcikiIF07IHRoZW4gXAo+IC0tCj4g
+MS45LjAKPiAKPiAKPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3Jn
+Cj4gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmct
+ZGV2Cj4gCgotLSAKTWF0aGlldSBEZXNub3llcnMKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVm
+ZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6
+Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
