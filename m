@@ -1,16 +1,16 @@
-From: kumar s <skumar.m226@gmail.com>
-Subject: How to trace on a particular core in multicore-system?
-Date: Thu, 27 Feb 2014 16:53:07 +0530
-Message-ID: <CAO_ArvoCnDPPqLO3Wiw9jh4EGv+r9e8FxPKzh0Hpz2ijh_EEAA__22253.8980575793$1393500251$gmane$org@mail.gmail.com>
+From: David Goulet <dgoulet@efficios.com>
+Subject: Re: error in generation of trace files
+Date: Thu, 27 Feb 2014 08:42:47 -0500
+Message-ID: <20140227134247.GA7407__15406.2786292799$1393508643$gmane$org@thessa>
+References: <CAB7sTjgY9OpaQG-Cs2gnHA6s3+hHuutkP=6wPPVq5TkfdY-hng@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0212878233=="
+Content-Type: multipart/mixed; boundary="===============0118415203=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-la0-f43.google.com ([209.85.215.43])
+Received: from smtp.ini-tech.com ([144.76.53.219])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <skumar.m226@gmail.com>) id 1WIz3Z-0005CT-UM
-	for lttng-dev@lists.lttng.org; Thu, 27 Feb 2014 06:23:16 -0500
-Received: by mail-la0-f43.google.com with SMTP id e16so1326572lan.2
-	for <lttng-dev@lists.lttng.org>; Thu, 27 Feb 2014 03:23:07 -0800 (PST)
+	(envelope-from <dgoulet@efficios.com>) id 1WJ1El-0006XA-R4
+	for lttng-dev@lists.lttng.org; Thu, 27 Feb 2014 08:43:01 -0500
+In-Reply-To: <CAB7sTjgY9OpaQG-Cs2gnHA6s3+hHuutkP=6wPPVq5TkfdY-hng@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,35 +19,90 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Mariya Rampurawala <mariya.r26@gmail.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============0212878233==
-Content-Type: multipart/alternative; boundary=089e014940eaaa0fe704f3618b8b
 
---089e014940eaaa0fe704f3618b8b
-Content-Type: text/plain; charset=ISO-8859-1
-
-Hello,
-
-I have linux running on 8 cores (embedded platform-MIPS). How do i trace
-only a particular core / cpu.
-
-which lttng option do i need to use?
-
-Thank you
-skumar
-
---089e014940eaaa0fe704f3618b8b
-Content-Type: text/html; charset=ISO-8859-1
-
-<div dir="ltr"><div><div><div><div>Hello,<br><br></div>I have linux running on 8 cores (embedded platform-MIPS). How do i trace only a particular core / cpu.<br><br>which lttng option do i need to use?<br></div><br></div>Thank you<br>
-</div>skumar<br></div>
-
---089e014940eaaa0fe704f3618b8b--
+--===============0118415203==
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="zYM0uCDKw75PZbzx"
+Content-Disposition: inline
 
 
---===============0212878233==
+--zYM0uCDKw75PZbzx
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On 27 Feb (16:36:24), Mariya Rampurawala wrote:
+> Hello,
+>  I'm new to lttng. I use ubuntu 13.10. While performing basic operations,
+> on command lttng view, i get the following error.
+> [error] Cannot open any trace for reading.
+>=20
+> [error] opening trace "/home/mariya/lttng-traces/mysession-20140227-16335=
+3"
+> for reading.
+>=20
+> [error] none of the specified trace paths could be opened.
+>=20
+>=20
+> the o/p of the command "lttng-sessiond --verbose" is as follows
+>=20
+> DEBUG3: Creating LTTng run directory: /home/mariya/.lttng [in
+> create_lttng_rundir() at main.c:3692]
+> DEBUG1: Client socket path /home/mariya/.lttng/client-lttng-sessiond [in
+> main() at main.c:3995]
+> DEBUG1: Application socket path /home/mariya/.lttng/apps-lttng-sessiond [=
+in
+> main() at main.c:3996]
+> DEBUG1: LTTng run directory path: /home/mariya/.lttng [in main() at
+> main.c:3997]
+> Error: Already running daemon.
+>=20
+> Could you please help me solve the error and proceed with my project?
+
+Hi,
+
+So like the error says, you have an already dunnring daemon but that
+shouldn't stop you from tracing stuff.
+
+Can you provide step by step the command you did and from there we can
+help you out more easily. The -vvv to the session daemon are good
+information to have also!
+
+Thanks!
+David
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+
+--zYM0uCDKw75PZbzx
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQF8BAEBAgBmBQJTD0DXXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
+ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
+MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02d54H/3t9d7MKZd+0rYomb4FKHhbV
+uhHRgEkj9y5KAN6Gi+21uD9M1y4wN1I6v+PDJTYPTz3Fl9wmKDR9gWD7IcPZSc5U
+NBgpD7nAenyZL+Dp7F1K94KTdoTnT7XVq1hTCj84Thbiptfo2r7B8xa+pGchzR4Z
+7G98wwV6KEY92TsCLDvjFhxjoxfJ2QuDLiQFcxb7vQxNkBG197J4FXDaOOniw+K3
+8L9hZpMJlDABgcqt/KmXHsxzs2Oor0TS0Kud2dClqcTkwNhEFLqfFP+4DFXkQamY
+2L9qWMKBJtRXC1sZyuDXVKvLMpNV14vSyUSFmm/h/iHF85dAc/WLyjudZmV+WHg=
+=OSp+
+-----END PGP SIGNATURE-----
+
+--zYM0uCDKw75PZbzx--
+
+
+--===============0118415203==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -58,4 +113,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============0212878233==--
+--===============0118415203==--
