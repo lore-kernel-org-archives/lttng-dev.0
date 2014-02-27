@@ -1,18 +1,17 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-ust] Fix: Skip lttng-gen-tp example
- build	if Python is missing
-Date: Thu, 27 Feb 2014 18:35:57 +0000 (UTC)
-Message-ID: <1270677834.31837.1393526157195.JavaMail.zimbra__19824.9352550649$1393526216$gmane$org@efficios.com>
-References: <1393522241-24017-1-git-send-email-jeremie.galarneau@efficios.com>
+From: Suchakrapani Datt Sharma <suchakrapani.sharma@polymtl.ca>
+Subject: Re: error in generation of trace files
+Date: Thu, 27 Feb 2014 15:37:02 -0500
+Message-ID: <1393533422.530fa1ee38bd7__45014.868831686$1393533488$gmane$org@www.imp.polymtl.ca>
+References: <CAB7sTjgY9OpaQG-Cs2gnHA6s3+hHuutkP=6wPPVq5TkfdY-hng@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from smtp.polymtl.ca ([132.207.4.11])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1WJ5oM-0000Ut-Fd
-	for lttng-dev@lists.lttng.org; Thu, 27 Feb 2014 13:36:04 -0500
-In-Reply-To: <1393522241-24017-1-git-send-email-jeremie.galarneau@efficios.com>
+	(envelope-from <suchakrapani.sharma@polymtl.ca>) id 1WJ7hY-0001SG-Q7
+	for lttng-dev@lists.lttng.org; Thu, 27 Feb 2014 15:37:10 -0500
+In-Reply-To: <CAB7sTjgY9OpaQG-Cs2gnHA6s3+hHuutkP=6wPPVq5TkfdY-hng@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,41 +20,48 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?utf-8?B?SsOpcsOpbWll?= Galarneau <jeremie.galarneau@efficios.com>
+To: Mariya Rampurawala <mariya.r26@gmail.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-bWVyZ2VkLCB0aGFua3MhCgpNYXRoaWV1CgotLS0tLSBPcmlnaW5hbCBNZXNzYWdlIC0tLS0tCj4g
-RnJvbTogIkrDqXLDqW1pZSBHYWxhcm5lYXUiIDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5j
-b20+Cj4gVG86IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBTZW50OiBUaHVyc2RheSwgRmVi
-cnVhcnkgMjcsIDIwMTQgMTI6MzA6NDEgUE0KPiBTdWJqZWN0OiBbbHR0bmctZGV2XSBbUEFUQ0gg
-bHR0bmctdXN0XSBGaXg6IFNraXAgbHR0bmctZ2VuLXRwIGV4YW1wbGUgYnVpbGQJaWYgUHl0aG9u
-IGlzIG1pc3NpbmcKPiAKPiBGaXhlcyAjNjY1Cj4gCj4gU2lnbmVkLW9mZi1ieTogSsOpcsOpbWll
-IEdhbGFybmVhdSA8amVyZW1pZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29tPgo+IC0tLQo+ICBjb25m
-aWd1cmUuYWMgICAgICAgICAgICAgfCAzICsrKwo+ICBkb2MvZXhhbXBsZXMvTWFrZWZpbGUuYW0g
-fCA2ICsrKysrLQo+ICAyIGZpbGVzIGNoYW5nZWQsIDggaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlv
-bigtKQo+IAo+IGRpZmYgLS1naXQgYS9jb25maWd1cmUuYWMgYi9jb25maWd1cmUuYWMKPiBpbmRl
-eCBjODQyMWI3Li4zYzkyZGExIDEwMDY0NAo+IC0tLSBhL2NvbmZpZ3VyZS5hYwo+ICsrKyBiL2Nv
-bmZpZ3VyZS5hYwo+IEBAIC0yNzYsNiArMjc2LDkgQEAgQUNfREVGSU5FX1VOUVVPVEVEKFtMVFRO
-R19TWVNURU1fUlVORElSXSwKPiBbIiRsdHRuZ19zeXN0ZW1fcnVuZGlyIl0sCj4gIGx0dG5nbGli
-amF2YWRpcj0iJHtsaWJkaXJ9L2x0dG5nL2phdmEiCj4gIEFDX1NVQlNUKGx0dG5nbGliamF2YWRp
-cikKPiAgCj4gK0FNX1BBVEhfUFlUSE9OKFsyLjddLEJVSUxEX0dFTl9UUF9FWEFNUExFUz0xKQo+
-ICtBTV9DT05ESVRJT05BTChbQlVJTERfR0VOX1RQX0VYQU1QTEVTXSwgW3Rlc3QgJEJVSUxEX0dF
-Tl9UUF9FWEFNUExFU10sCj4gW0J1aWxkIGV4YW1wbGVzIHJlcXVpcmluZyBsdHRuZy1nZW4tdHBd
-KQo+ICsKPiAgQUNfQ09ORklHX0ZJTEVTKFsKPiAgCU1ha2VmaWxlCj4gIAlkb2MvTWFrZWZpbGUK
-PiBkaWZmIC0tZ2l0IGEvZG9jL2V4YW1wbGVzL01ha2VmaWxlLmFtIGIvZG9jL2V4YW1wbGVzL01h
-a2VmaWxlLmFtCj4gaW5kZXggOTcxZWVjMy4uMGQzNDFjOCAxMDA2NDQKPiAtLS0gYS9kb2MvZXhh
-bXBsZXMvTWFrZWZpbGUuYW0KPiArKysgYi9kb2MvZXhhbXBsZXMvTWFrZWZpbGUuYW0KPiBAQCAt
-NDMsNyArNDMsMTEgQEAgaWYgTk9fU0hBUkVECj4gICMgZGlzYWJsZWQuCj4gIGVsc2UKPiAgIyBD
-b3BpZXMgYXJlIGZvciBWUEFUSCBidWlsZCBzdXBwb3J0Cj4gLVNVQkRJUlNfUFJPWFkgPSBlYXN5
-LXVzdCBkZW1vIGdlbi10cCBoZWxsby1zdGF0aWMtbGliCj4gK1NVQkRJUlNfUFJPWFkgPSBlYXN5
-LXVzdCBkZW1vIGhlbGxvLXN0YXRpYy1saWIKPiArCj4gK2lmIEJVSUxEX0dFTl9UUF9FWEFNUExF
-Uwo+ICtTVUJESVJTX1BST1hZICs9IGdlbi10cAo+ICtlbmRpZgo+ICAKPiAgYWxsLWxvY2FsOgo+
-ICAJQGlmIFsgeCIkKHNyY2RpcikiICE9IHgiJChidWlsZGRpcikiIF07IHRoZW4gXAo+IC0tCj4g
-MS45LjAKPiAKPiAKPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3Jn
-Cj4gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmct
-ZGV2Cj4gCgotLSAKTWF0aGlldSBEZXNub3llcnMKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVm
-ZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6
-Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+Hi,
+
+>  I'm new to lttng. I use ubuntu 13.10. While performing basic operations,
+> on command lttng view, i get the following error.
+> [error] Cannot open any trace for reading.
+>
+> [error] opening trace "/home/mariya/lttng-traces/mysession-20140227-163353"
+> for reading.
+>
+> [error] none of the specified trace paths could be opened.
+
+Have a look at the directory and see if trace events have actually been written
+or not. You should see something like
+/home/mariya/lttng-traces/mysession-20140227-163353/kernel/metadata (if it was
+a kernel tracing session)
+
+> the o/p of the command "lttng-sessiond --verbose" is as follows
+>
+> DEBUG3: Creating LTTng run directory: /home/mariya/.lttng [in
+> create_lttng_rundir() at main.c:3692]
+> DEBUG1: Client socket path /home/mariya/.lttng/client-lttng-sessiond [in
+> main() at main.c:3995]
+> DEBUG1: Application socket path /home/mariya/.lttng/apps-lttng-sessiond [in
+> main() at main.c:3996]
+> DEBUG1: LTTng run directory path: /home/mariya/.lttng [in main() at
+> main.c:3997]
+> Error: Already running daemon.
+
+You probably did this again while the previous instance of lttng-sessiond was
+already running and hence the last error. Kill currently running sessiond and
+then start afresh using the verbose mode. Then proceed with usual lttng
+commands and observe the debug output (more lines of debug output would be
+definitely better). Please show it on the list if you need help in that.
+
+I would also recommend you to have a look at the lttng manual as well as at the
+Quickstart doc at [1] for detailed info of what the commands are doing.
+
+[1] https://bugs.lttng.org/projects/lttng-tools/wiki
+
+--
+Suchakra
