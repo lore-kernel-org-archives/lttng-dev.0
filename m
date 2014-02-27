@@ -1,21 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [UST Pull request] Fix: handle registration done
-	command
-Date: Wed, 26 Feb 2014 21:39:01 +0000 (UTC)
-Message-ID: <818692626.31206.1393450741276.JavaMail.zimbra__25893.7350511134$1393450805$gmane$org@efficios.com>
-References: <20140226211324.GD7356@thessa>
+From: Eduardo Silva <edsiper@gmail.com>
+Subject: Centos 6.x packages ?
+Date: Wed, 26 Feb 2014 22:29:24 -0600
+Message-ID: <CAMAQhePXxjfKHVrBz0yipy1JgOt1qV00UFFS6sojaHRsGuou5w__5272.42893954298$1393475417$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0414818604=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-vc0-f172.google.com ([209.85.220.172])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1WImBy-00071W-6b
-	for lttng-dev@lists.lttng.org; Wed, 26 Feb 2014 16:39:07 -0500
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.efficios.com (Postfix) with ESMTP id 3F0043401F2
-	for <lttng-dev@lists.lttng.org>; Wed, 26 Feb 2014 21:39:03 +0000 (UTC)
-In-Reply-To: <20140226211324.GD7356@thessa>
+	(envelope-from <edsiper@gmail.com>) id 1WIsbC-0001ep-8k
+	for lttng-dev@lists.lttng.org; Wed, 26 Feb 2014 23:29:31 -0500
+Received: by mail-vc0-f172.google.com with SMTP id lf12so1991811vcb.3
+	for <lttng-dev@lists.lttng.org>; Wed, 26 Feb 2014 20:29:24 -0800 (PST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,33 +19,50 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: David Goulet <dgoulet@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-merged, thanks!
+--===============0414818604==
+Content-Type: multipart/alternative; boundary=001a113401141e9c3404f35bc4b4
 
-Mathieu
+--001a113401141e9c3404f35bc4b4
+Content-Type: text/plain; charset=ISO-8859-1
 
------ Original Message -----
-> From: "David Goulet" <dgoulet@efficios.com>
-> To: "lttng-dev" <lttng-dev@lists.lttng.org>
-> Cc: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-> Sent: Wednesday, February 26, 2014 4:13:24 PM
-> Subject: [UST Pull request] Fix: handle registration done command
-> 
-> Repo:
-> 
-> https://github.com/dgoulet/lttng-ust-dev.git (branch: bug692)
-> 
-> This needs to go in lockstep with a commit in lttng-tools so please
-> inform me once pushed so I can update tools.
-> 
-> Cheers!
-> David
-> 
+Hi,
+
+is there any Centos 6.x packages around ?
+
+thanks,
 
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Eduardo Silva
+http://edsiper.linuxchile.cl
+http://monkey-project.com
+
+--001a113401141e9c3404f35bc4b4
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hi,=A0<div><br></div><div>is there any Centos 6.x packages=
+ around ?</div><div><br></div><div>thanks,=A0<br clear=3D"all"><div><br></d=
+iv>-- <br><div dir=3D"ltr">Eduardo Silva<br><a href=3D"http://edsiper.linux=
+chile.cl" target=3D"_blank">http://edsiper.linuxchile.cl</a><br>
+<a href=3D"http://monkey-project.com" target=3D"_blank">http://monkey-proje=
+ct.com</a></div>
+</div></div>
+
+--001a113401141e9c3404f35bc4b4--
+
+
+--===============0414818604==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0414818604==--
