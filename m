@@ -1,16 +1,16 @@
-From: Mariya Rampurawala <mariya.r26@gmail.com>
-Subject: error in generation of trace files
-Date: Thu, 27 Feb 2014 16:36:24 +0530
-Message-ID: <CAB7sTjgY9OpaQG-Cs2gnHA6s3+hHuutkP=6wPPVq5TkfdY-hng__39771.0080295385$1393499241$gmane$org@mail.gmail.com>
+From: kumar s <skumar.m226@gmail.com>
+Subject: How to trace on a particular core in multicore-system?
+Date: Thu, 27 Feb 2014 16:53:07 +0530
+Message-ID: <CAO_ArvoCnDPPqLO3Wiw9jh4EGv+r9e8FxPKzh0Hpz2ijh_EEAA__22253.8980575793$1393500251$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2053355382=="
+Content-Type: multipart/mixed; boundary="===============0212878233=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-we0-f195.google.com ([74.125.82.195])
+Received: from mail-la0-f43.google.com ([209.85.215.43])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <mariya.r26@gmail.com>) id 1WIynO-00052w-D3
-	for lttng-dev@lists.lttng.org; Thu, 27 Feb 2014 06:06:31 -0500
-Received: by mail-we0-f195.google.com with SMTP id q58so862533wes.10
-	for <lttng-dev@lists.lttng.org>; Thu, 27 Feb 2014 03:06:24 -0800 (PST)
+	(envelope-from <skumar.m226@gmail.com>) id 1WIz3Z-0005CT-UM
+	for lttng-dev@lists.lttng.org; Thu, 27 Feb 2014 06:23:16 -0500
+Received: by mail-la0-f43.google.com with SMTP id e16so1326572lan.2
+	for <lttng-dev@lists.lttng.org>; Thu, 27 Feb 2014 03:23:07 -0800 (PST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,65 +19,35 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============2053355382==
-Content-Type: multipart/alternative; boundary=f46d044287d8de2a7c04f3614fec
+--===============0212878233==
+Content-Type: multipart/alternative; boundary=089e014940eaaa0fe704f3618b8b
 
---f46d044287d8de2a7c04f3614fec
+--089e014940eaaa0fe704f3618b8b
 Content-Type: text/plain; charset=ISO-8859-1
 
 Hello,
- I'm new to lttng. I use ubuntu 13.10. While performing basic operations,
-on command lttng view, i get the following error.
-[error] Cannot open any trace for reading.
 
-[error] opening trace "/home/mariya/lttng-traces/mysession-20140227-163353"
-for reading.
+I have linux running on 8 cores (embedded platform-MIPS). How do i trace
+only a particular core / cpu.
 
-[error] none of the specified trace paths could be opened.
+which lttng option do i need to use?
 
+Thank you
+skumar
 
-the o/p of the command "lttng-sessiond --verbose" is as follows
-
-DEBUG3: Creating LTTng run directory: /home/mariya/.lttng [in
-create_lttng_rundir() at main.c:3692]
-DEBUG1: Client socket path /home/mariya/.lttng/client-lttng-sessiond [in
-main() at main.c:3995]
-DEBUG1: Application socket path /home/mariya/.lttng/apps-lttng-sessiond [in
-main() at main.c:3996]
-DEBUG1: LTTng run directory path: /home/mariya/.lttng [in main() at
-main.c:3997]
-Error: Already running daemon.
-
-Could you please help me solve the error and proceed with my project?
-
---f46d044287d8de2a7c04f3614fec
+--089e014940eaaa0fe704f3618b8b
 Content-Type: text/html; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr"><div><div><div>Hello,<br></div>=A0I&#39;m new to lttng. I =
-use ubuntu 13.10. While performing basic operations, on command lttng view,=
- i get the following error.<br>[error] Cannot open any trace for reading.<b=
-r>
-<br>[error] opening trace &quot;/home/mariya/lttng-traces/mysession-2014022=
-7-163353&quot; for reading.<br><br>[error] none of the specified trace path=
-s could be opened.<br><br><br></div>the o/p of the command &quot;lttng-sess=
-iond --verbose&quot; is as follows<br>
-<br>DEBUG3: Creating LTTng run directory: /home/mariya/.lttng [in create_lt=
-tng_rundir() at main.c:3692]<br>DEBUG1: Client socket path /home/mariya/.lt=
-tng/client-lttng-sessiond [in main() at main.c:3995]<br>DEBUG1: Application=
- socket path /home/mariya/.lttng/apps-lttng-sessiond [in main() at main.c:3=
-996]<br>
-DEBUG1: LTTng run directory path: /home/mariya/.lttng [in main() at main.c:=
-3997]<br>Error: Already running daemon.<br><br></div>Could you please help =
-me solve the error and proceed with my project?<br></div>
+<div dir="ltr"><div><div><div><div>Hello,<br><br></div>I have linux running on 8 cores (embedded platform-MIPS). How do i trace only a particular core / cpu.<br><br>which lttng option do i need to use?<br></div><br></div>Thank you<br>
+</div>skumar<br></div>
 
---f46d044287d8de2a7c04f3614fec--
+--089e014940eaaa0fe704f3618b8b--
 
 
---===============2053355382==
+--===============0212878233==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -88,4 +58,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============2053355382==--
+--===============0212878233==--
