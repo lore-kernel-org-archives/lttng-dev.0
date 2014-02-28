@@ -1,13 +1,13 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] Userspace RCU 0.7.10
-Date: Fri, 28 Feb 2014 22:34:15 +0000 (UTC)
-Message-ID: <1929970380.32531.1393626855704.JavaMail.zimbra@efficios.com>
-References: <1671875579.32530.1393626840963.JavaMail.zimbra@efficios.com>
+Subject: [RELEASE] Userspace RCU 0.8.2
+Date: Fri, 28 Feb 2014 22:39:52 +0000 (UTC)
+Message-ID: <1093938296.32533.1393627192076.JavaMail.zimbra@efficios.com>
+References: <1701445203.32532.1393627172801.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-kernel-owner@vger.kernel.org>
-In-Reply-To: <1671875579.32530.1393626840963.JavaMail.zimbra@efficios.com>
+In-Reply-To: <1701445203.32532.1393627172801.JavaMail.zimbra@efficios.com>
 Sender: linux-kernel-owner@vger.kernel.org
 To: linux-kernel@vger.kernel.org, lttng-dev@lists.lttng.org, rp@svcs.cs.pdx.edu
 Cc: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Lai Jiangshan <laijs@cn.fujitsu.com>, Stephen Hemminger <shemminger@vyatta.com>, Alan Stern <stern@rowland.harvard.edu>
@@ -24,8 +24,23 @@ liburcu-cds provides efficient data structures based on RCU and
 lock-free algorithms. Those structures include hash tables, queues,
 stacks, and doubly-linked lists.
 
+
 Changelog:
-2014-02-28 Userspace RCU 0.7.10
+2014-02-28 Userspace RCU 0.8.2
+        * Fix: out of tree build: doc/examples
+        * Fix: out of tree build tests/common
+        * tests/unit: use lib rather than source
+        * automake: Rename INCLUDES to AM_CPPFLAGS (new name)
+        * tests regressions: use lib rather than recompile from source
+        * tests: use common lib rather than recompile compat sources
+        * urcu tests: use lib rather than compile from source
+        * urcu mb tests: use lib rather than recompile from source
+        * urcu signal tests: use library rather than recompile source
+        * tests: move yield debug to common test library
+        * tests urcu bp: use lib rather than recompile source
+        * test_urcu_defer: link on urcu lib rather than recompile source
+        * tests/benchmark: use urcu qsbr lib rather than recompile from source
+        * Pass the CC variable to the example Makefiles
         * Fix: urcu-bp interaction with threads vs constructors/destructors
         * Fix undefined NULL pointer arithmetic
         * Blacklist ARM gcc 4.8.0, 4.8.1, 4.8.2
@@ -34,7 +49,6 @@ Changelog:
 Project website: http://urcu.so
 Download link: http://urcu.so/files/
 Git repository: git://git.urcu.so/urcu.git
-
 
 -- 
 Mathieu Desnoyers
