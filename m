@@ -1,16 +1,16 @@
 From: "Woegerer, Paul" <Paul_Woegerer@mentor.com>
 Subject: Re: baddr feature triggers deadlock in lttng-ust
-Date: Fri, 28 Feb 2014 10:33:07 +0100
-Message-ID: <531057D3.1070607__41787.1493068107$1393580155$gmane$org@mentor.com>
+Date: Fri, 28 Feb 2014 13:38:55 +0100
+Message-ID: <5310835F.10909__12695.6255677671$1393591313$gmane$org@mentor.com>
 References: <561294755.31915.1393536606539.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Paul_Woegerer@mentor.com>) id 1WJJqQ-0001tK-4x
-	for lttng-dev@lists.lttng.org; Fri, 28 Feb 2014 04:35:05 -0500
+	(envelope-from <Paul_Woegerer@mentor.com>) id 1WJMkF-0003d4-E0
+	for lttng-dev@lists.lttng.org; Fri, 28 Feb 2014 07:41:00 -0500
 In-Reply-To: <561294755.31915.1393536606539.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -23,29 +23,36 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, lttng-dev@lists.lttng.org, CS ESD-Analyzer <esd-analyzer@mentor.com>
 List-Id: lttng-dev@lists.lttng.org
 
-SGkgTWF0aGlldSwKCnRoaXMgaXMgdmVyeSB1bmZvcnR1bmF0ZS4gSSB0ZXN0ZWQgZm9ya3MgYXMg
-d2VsbCBidXQgY291bGRu4oCZdCBmaW5kIGFueQppc3N1ZXMgb24geDg2XzY0LiBJcm9uaWNhbGx5
-LCBsYXN0IHdlZWsgd2UgZm91bmQgYW4gaXNzdWUgdGhhdCBtYXRjaGVzCnlvdXIgZGVzY3JpcHRp
-b24gb24gUG93ZXJQQyBidXQgc2luY2Ugd2UgY291bGQgbm90IHJlcHJvZHVjZSBpdCBvbiB4ODYg
-SQpibGFtZWQgaXQgb24gdGhlIHBlY3VsaWFyaXRpZXMgb2YgdGhhdCBwbGF0Zm9ybSBhbmQgd29y
-a2VkIG9uIHNlZW1pbmdseQpoaWdoZXIgcHJpb3JpdHkgaXNzdWVzIGluc3RlYWQuCgpGb3IgdGhl
-IHNha2Ugb2YgZGFtYWdlIGNvbnRhaW5tZW50IEkganVzdCBwb3N0ZWQ6Cmh0dHA6Ly9saXN0cy5s
-dHRuZy5vcmcvcGlwZXJtYWlsL2x0dG5nLWRldi8yMDE0LUZlYnJ1YXJ5LzAyMjQ5NC5odG1sCnRv
-IHRoZSBsaXN0LgoKTm90IGhhdmluZyB0aGF0IGZlYXR1cmUgaW4gMi40IChhdCBsZWFzdCBpbiB0
-aGUgZXhwZXJpbWVudGFsIGZvcm0Kc3VnZ2VzdGVkIGFib3ZlKSB3b3VsZCBiZSBhIGRpc2FzdGVy
-IGZvciB1cy4KCk1lYW53aGlsZSBJJ20gdHJ5aW5nIHRvIHRoaW5rIGFib3V0IGEgbW9yZSBmdW5k
-YW1lbnRhbCBzb2x1dGlvbiB0byB0aGUKcHJvYmxlbS4gQnV0IEknbSBhZnJhaWQgeW91ciBjb21t
-ZW50IGFib3V0IHJldGhpbmtpbmcgb2YgdGhlIGxvY2tpbmcKc3RyYXRlZ3kgZm9yIHRoZSBlbnRp
-cmUgVVNUIG1pZ2h0IGNvbWUgdHJ1ZS4KCgpUaGFua3MsClBhdWwKCgpPbiAwMi8yNy8yMDE0IDEw
-OjMwIFBNLCBNYXRoaWV1IERlc25veWVycyB3cm90ZToKPiBIaSBQYXVsLAo+IAo+IFBsZWFzZSBz
-ZWUgaHR0cDovL2J1Z3MubHR0bmcub3JnL2lzc3Vlcy83NDUsIHdoaWNoIGV4cGxhaW5zIGEgZGVh
-ZGxvY2sKPiB3ZSBqdXN0IGZvdW5kIG91dC4KPiAKPiBXZSBtaWdodCBoYXZlIHRvIGRpc2FibGUg
-dGhlIGJhZGRyIGR1bXAgZmVhdHVyZSwgc2luY2Ugb3VyIHJlbGVhc2UgaXMKPiB0b21vcnJvdy4g
-V2UnbGwgaGF2ZSB0byByZS10aGluayBvdXIgbG9ja2luZyB0byBwcm90ZWN0IG9wZXJhdGlvbnMK
-PiB1c2luZyB0aGUgZHluYW1pYyBsb2FkZXIgbG9jayBhZ2FpbnN0IGZvcmssIGNsb25lLCBhbmQg
-ZGFlbW9uLgo+IAo+IFRoYW5rcywKPiAKPiBNYXRoaWV1Cj4gCgoKLS0gClBhdWwgV29lZ2VyZXIs
-IFNXIERldmVsb3BtZW50IEVuZ2luZWVyClNvdXJjZXJ5IEFuYWx5emVyIDxodHRwOi8vZ28ubWVu
-dG9yLmNvbS9zb3VyY2VyeWFuYWx5emVyPgpNZW50b3IgR3JhcGhpY3MsIEVtYmVkZGVkIFNvZnR3
-YXJlIERpdmlzaW9uCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0
-cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+I have looked a bit into the issue...
+
+The ust_locking inside the dl_iterate_phdr triggers the deadlock.
+
+If I just collect the base address info inside dl_iterate_phdr and dump
+the collected data with trace_baddr afterwards (outside the
+dl_iterate_phdr iteration) the deadlock will be prevented.
+
+I'm now going to create a patch that implements this approach.
+
+Thanks,
+Paul
+
+On 02/27/2014 10:30 PM, Mathieu Desnoyers wrote:
+> Hi Paul,
+>
+> Please see http://bugs.lttng.org/issues/745, which explains a deadlock
+> we just found out.
+>
+> We might have to disable the baddr dump feature, since our release is
+> tomorrow. We'll have to re-think our locking to protect operations
+> using the dynamic loader lock against fork, clone, and daemon.
+>
+> Thanks,
+>
+> Mathieu
+>
+
+
+-- 
+Paul Woegerer, SW Development Engineer
+Sourcery Analyzer <http://go.mentor.com/sourceryanalyzer>
+Mentor Graphics, Embedded Software Division
