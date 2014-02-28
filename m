@@ -1,16 +1,17 @@
-From: Paul Woegerer <paul_woegerer@mentor.com>
-Subject: [PATCH lttng-ust] Turn base address dump into
-	experimental feature
-Date: Fri, 28 Feb 2014 10:02:00 +0100
-Message-ID: <1393578120-18814-1-git-send-email-paul_woegerer__19689.9426090114$1393578293$gmane$org@mentor.com>
+From: "Woegerer, Paul" <Paul_Woegerer@mentor.com>
+Subject: Re: baddr feature triggers deadlock in lttng-ust
+Date: Fri, 28 Feb 2014 10:33:07 +0100
+Message-ID: <531057D3.1070607__41787.1493068107$1393580155$gmane$org@mentor.com>
+References: <561294755.31915.1393536606539.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Paul_Woegerer@mentor.com>) id 1WJJMU-0001dx-8O
-	for lttng-dev@lists.lttng.org; Fri, 28 Feb 2014 04:04:10 -0500
+	(envelope-from <Paul_Woegerer@mentor.com>) id 1WJJqQ-0001tK-4x
+	for lttng-dev@lists.lttng.org; Fri, 28 Feb 2014 04:35:05 -0500
+In-Reply-To: <561294755.31915.1393536606539.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,64 +20,32 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org, mathieu.desnoyers@efficios.com
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, lttng-dev@lists.lttng.org, CS ESD-Analyzer <esd-analyzer@mentor.com>
 List-Id: lttng-dev@lists.lttng.org
 
-Instead of having base address state dump enabled by default make it
-necessary to explicitly enable it with environment variable
-LTTNG_UST_WITH_EXPERIMENTAL_BADDR_STATEDUMP.
-
-Documentation is updated to reflect this change and explain about the
-experimental nature of this feature.
-
-Signed-off-by: Paul Woegerer <paul_woegerer@mentor.com>
----
- doc/man/lttng-ust.3            | 10 +++++++---
- liblttng-ust/lttng-ust-baddr.c |  2 +-
- 2 files changed, 8 insertions(+), 4 deletions(-)
-
-diff --git a/doc/man/lttng-ust.3 b/doc/man/lttng-ust.3
-index 2fb287a..2c58fba 100644
---- a/doc/man/lttng-ust.3
-+++ b/doc/man/lttng-ust.3
-@@ -366,9 +366,13 @@ Pthread identifier. Can be used on architectures where pthread_t maps
- nicely to an unsigned long type.
- .PP
- 
--.SH "BASE ADDRESS STATEDUMP"
-+.SH "BASE ADDRESS STATEDUMP (Experimental feature)"
- 
- .PP
-+Warning: This is an experimental feature known to cause deadlocks when the
-+traced application uses fork, clone or daemon. Only use it for debugging and
-+testing.  Do NOT use it in production.
-+
- If an application that uses liblttng-ust.so becomes part of a session,
- information about its currently loaded shared objects will be traced to the
- session at session-enable time. To record this information, the following event
-@@ -405,8 +409,8 @@ specified in milliseconds. The value 0 means "don't wait". The value
- recommended for applications with time constraints on the process
- startup time.
- .PP
--.IP "LTTNG_UST_WITHOUT_BADDR_STATEDUMP"
--Prevent liblttng-ust to perform a base-address statedump on session-enable.
-+.IP "LTTNG_UST_WITH_EXPERIMENTAL_BADDR_STATEDUMP"
-+Experimentally allow liblttng-ust to perform a base-address statedump on session-enable.
- .PP
- 
- .SH "SEE ALSO"
-diff --git a/liblttng-ust/lttng-ust-baddr.c b/liblttng-ust/lttng-ust-baddr.c
-index 922899b..dec7e82 100644
---- a/liblttng-ust/lttng-ust-baddr.c
-+++ b/liblttng-ust/lttng-ust-baddr.c
-@@ -176,7 +176,7 @@ int lttng_ust_baddr_statedump(void *owner)
- {
- 	struct extract_data data;
- 
--	if (getenv("LTTNG_UST_WITHOUT_BADDR_STATEDUMP"))
-+	if (!getenv("LTTNG_UST_WITH_EXPERIMENTAL_BADDR_STATEDUMP"))
- 		return 0;
- 
- 	data.owner = owner;
--- 
-1.9.0
+SGkgTWF0aGlldSwKCnRoaXMgaXMgdmVyeSB1bmZvcnR1bmF0ZS4gSSB0ZXN0ZWQgZm9ya3MgYXMg
+d2VsbCBidXQgY291bGRu4oCZdCBmaW5kIGFueQppc3N1ZXMgb24geDg2XzY0LiBJcm9uaWNhbGx5
+LCBsYXN0IHdlZWsgd2UgZm91bmQgYW4gaXNzdWUgdGhhdCBtYXRjaGVzCnlvdXIgZGVzY3JpcHRp
+b24gb24gUG93ZXJQQyBidXQgc2luY2Ugd2UgY291bGQgbm90IHJlcHJvZHVjZSBpdCBvbiB4ODYg
+SQpibGFtZWQgaXQgb24gdGhlIHBlY3VsaWFyaXRpZXMgb2YgdGhhdCBwbGF0Zm9ybSBhbmQgd29y
+a2VkIG9uIHNlZW1pbmdseQpoaWdoZXIgcHJpb3JpdHkgaXNzdWVzIGluc3RlYWQuCgpGb3IgdGhl
+IHNha2Ugb2YgZGFtYWdlIGNvbnRhaW5tZW50IEkganVzdCBwb3N0ZWQ6Cmh0dHA6Ly9saXN0cy5s
+dHRuZy5vcmcvcGlwZXJtYWlsL2x0dG5nLWRldi8yMDE0LUZlYnJ1YXJ5LzAyMjQ5NC5odG1sCnRv
+IHRoZSBsaXN0LgoKTm90IGhhdmluZyB0aGF0IGZlYXR1cmUgaW4gMi40IChhdCBsZWFzdCBpbiB0
+aGUgZXhwZXJpbWVudGFsIGZvcm0Kc3VnZ2VzdGVkIGFib3ZlKSB3b3VsZCBiZSBhIGRpc2FzdGVy
+IGZvciB1cy4KCk1lYW53aGlsZSBJJ20gdHJ5aW5nIHRvIHRoaW5rIGFib3V0IGEgbW9yZSBmdW5k
+YW1lbnRhbCBzb2x1dGlvbiB0byB0aGUKcHJvYmxlbS4gQnV0IEknbSBhZnJhaWQgeW91ciBjb21t
+ZW50IGFib3V0IHJldGhpbmtpbmcgb2YgdGhlIGxvY2tpbmcKc3RyYXRlZ3kgZm9yIHRoZSBlbnRp
+cmUgVVNUIG1pZ2h0IGNvbWUgdHJ1ZS4KCgpUaGFua3MsClBhdWwKCgpPbiAwMi8yNy8yMDE0IDEw
+OjMwIFBNLCBNYXRoaWV1IERlc25veWVycyB3cm90ZToKPiBIaSBQYXVsLAo+IAo+IFBsZWFzZSBz
+ZWUgaHR0cDovL2J1Z3MubHR0bmcub3JnL2lzc3Vlcy83NDUsIHdoaWNoIGV4cGxhaW5zIGEgZGVh
+ZGxvY2sKPiB3ZSBqdXN0IGZvdW5kIG91dC4KPiAKPiBXZSBtaWdodCBoYXZlIHRvIGRpc2FibGUg
+dGhlIGJhZGRyIGR1bXAgZmVhdHVyZSwgc2luY2Ugb3VyIHJlbGVhc2UgaXMKPiB0b21vcnJvdy4g
+V2UnbGwgaGF2ZSB0byByZS10aGluayBvdXIgbG9ja2luZyB0byBwcm90ZWN0IG9wZXJhdGlvbnMK
+PiB1c2luZyB0aGUgZHluYW1pYyBsb2FkZXIgbG9jayBhZ2FpbnN0IGZvcmssIGNsb25lLCBhbmQg
+ZGFlbW9uLgo+IAo+IFRoYW5rcywKPiAKPiBNYXRoaWV1Cj4gCgoKLS0gClBhdWwgV29lZ2VyZXIs
+IFNXIERldmVsb3BtZW50IEVuZ2luZWVyClNvdXJjZXJ5IEFuYWx5emVyIDxodHRwOi8vZ28ubWVu
+dG9yLmNvbS9zb3VyY2VyeWFuYWx5emVyPgpNZW50b3IgR3JhcGhpY3MsIEVtYmVkZGVkIFNvZnR3
+YXJlIERpdmlzaW9uCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0
+cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
