@@ -1,31 +1,31 @@
 From: David Goulet <dgoulet@efficios.com>
-Subject: [RELEASE] LTTng-Tools 2.2.6
-Date: Fri, 28 Feb 2014 12:59:26 -0500
-Message-ID: <20140228175926.GB14281__28238.1294332028$1393610439$gmane$org@thessa>
+Subject: [RELEASE] LTTng-Tools 2.3.2
+Date: Fri, 28 Feb 2014 13:08:22 -0500
+Message-ID: <20140228180822.GC14281__23022.457821253$1393610972$gmane$org@thessa>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1683481040=="
+Content-Type: multipart/mixed; boundary="===============1023214014=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from smtp.ini-tech.com ([144.76.53.219])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1WJRig-0006Ob-Ru
-	for lttng-dev@lists.lttng.org; Fri, 28 Feb 2014 12:59:40 -0500
+	(envelope-from <dgoulet@efficios.com>) id 1WJRrK-0006Vi-LB
+	for lttng-dev@lists.lttng.org; Fri, 28 Feb 2014 13:08:36 -0500
 Received: from localhost (localhost.localdomain [127.0.0.1])
-	by smtp.ini-tech.com (Postfix) with ESMTP id 92453A1D7A
-	for <lttng-dev@lists.lttng.org>; Fri, 28 Feb 2014 17:59:11 +0000 (UTC)
+	by smtp.ini-tech.com (Postfix) with ESMTP id A2282A1D7A
+	for <lttng-dev@lists.lttng.org>; Fri, 28 Feb 2014 18:08:07 +0000 (UTC)
 Received: from smtp.ini-tech.com ([127.0.0.1])
 	by localhost (smtp.ini-tech.com [127.0.0.1]) (amavisd-new, port 10032)
-	with ESMTP id Y0DAV3J7V-12 for <lttng-dev@lists.lttng.org>;
-	Fri, 28 Feb 2014 17:59:11 +0000 (UTC)
+	with ESMTP id 1fs7LfSz-qa3 for <lttng-dev@lists.lttng.org>;
+	Fri, 28 Feb 2014 18:08:07 +0000 (UTC)
 Received: from localhost (localhost.localdomain [127.0.0.1])
-	by smtp.ini-tech.com (Postfix) with ESMTP id 2E0F4A1D9C
-	for <lttng-dev@lists.lttng.org>; Fri, 28 Feb 2014 17:59:11 +0000 (UTC)
+	by smtp.ini-tech.com (Postfix) with ESMTP id 2D42DA1D9C
+	for <lttng-dev@lists.lttng.org>; Fri, 28 Feb 2014 18:08:07 +0000 (UTC)
 Received: from smtp.ini-tech.com ([127.0.0.1])
 	by localhost (smtp.ini-tech.com [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id vd8PEnthRNtd for <lttng-dev@lists.lttng.org>;
-	Fri, 28 Feb 2014 17:59:11 +0000 (UTC)
+	with ESMTP id Vs55_7R79kIe for <lttng-dev@lists.lttng.org>;
+	Fri, 28 Feb 2014 18:08:07 +0000 (UTC)
 Received: from thessa (unknown [96.127.212.51])
-	by smtp.ini-tech.com (Postfix) with ESMTPSA id 97E01A1D7A
-	for <lttng-dev@lists.lttng.org>; Fri, 28 Feb 2014 17:59:10 +0000 (UTC)
+	by smtp.ini-tech.com (Postfix) with ESMTPSA id 97BE4A1D7A
+	for <lttng-dev@lists.lttng.org>; Fri, 28 Feb 2014 18:08:06 +0000 (UTC)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -38,41 +38,59 @@ To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
 
---===============1683481040==
+--===============1023214014==
 Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="R3G7APHDIzY6R/pk"
+	protocol="application/pgp-signature"; boundary="JWEK1jqKZ6MHAcjA"
 Content-Disposition: inline
 
 
---R3G7APHDIzY6R/pk
+--JWEK1jqKZ6MHAcjA
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 Greetings everyone (including LTTng elves),
 
-The lttng-tools project provides a session daemon (lttng-sessiond) that acts as
-a tracing registry, the "lttng" command line for tracing control, a lttng-ctl
-library for tracing control and a lttng-relayd for network streaming.
+The lttng-tools project provides a session daemon (lttng-sessiond) that
+acts as a tracing registry, the "lttng" command line for tracing
+control, a lttng-ctl library for tracing control and a lttng-relayd for
+network streaming.
 
-This is the last stable 2.2 release and thus it will not be supported anymore
-after this.
+2014-02-28 lttng-tools 2.3.2
+     * Fix: minor rephrasing of the lttng.1 man page
+     * Fix: possible NULL deref. in sessiond error path
+     * Fix: flag that kernel streams FDs has been sent
+     * Fix: forbid session name creation if contains /
+     * Fix: don't start session if no channel
+     * Fix: report error if consumer can't be spawned
+     * Fix: lttng list -u <name> should only list UST
+     * Fix: kernel channel destroy on consumer if sent
+     * Fix: Define __STDC_LIMIT_MACROS to fix C++ builds
+     * Fix: remove unused goto label
+     * Fix: relayd: add LPOLLERR to events
+     * Fix: relayd: initialize lttcomm inet
+     * Fix: consumerd: HT init/teardown with program
+     * Fix: consumerd should initialize lttcomm
+     * Fix: measure UST clock offset with best sample (v2)
+     * Fix: report to client when snapshot will be empty
+     * Fix: missing reset when listing UST fields for multiple PIDs
+     * Fix: filter: check binary op nesting
+     * Fix: remove break in epoll loop of apps. thread
+     * Fix: wrong comment in snapshot public API
+     * Fix: remove bad code from previous backport patch
+     * Fix: bad logical check of error codes
+     * Fix: resource leak in enable-event command
+     * Fix: unchecked return value in ust app delete
+     * Fix: dereference after null check in UST registry
+     * Fix: Resource leak in ust registry
+     * Fix: backported from urcu commit 92af1a30
+     * Fix: update back the metadata len sent on failure
+     * Fix: don't fail on push metadata if no channel
+     * Fix: comparison of unsigned enum expression >= 0
+     * Add libuuid as dependency in README
+     * Fix: implicit conversion of enum types in consumer
+     * Fix: implicit conversion of enum types in sessiond
+     * Fix: comparison of unsigned value agains < 0
 
-2014-02-28 lttng-tools 2.2.6
-    * Fix: remove break in epoll loop of apps. thread
-    * Fix: remove bad code from previous backport patch
-    * Fix: bad logical check of error codes
-    * Fix: resource leak in enable-event command
-    * Fix: unchecked return value in ust app delete
-    * Fix: dereference after null check in UST registry
-    * Fix: Resource leak in ust registry
-    * Fix: backported from urcu commit 92af1a30
-    * Fix: add missing values for a backported fix
-    * Fix: update back the metadata len sent on failure
-    * Fix: don't fail on push metadata if no channel
-    * Fix: comparison of unsigned enum expression >= 0
-    * Fix: implicit conversion of enum types in sessiond
-    * Fix: comparison of unsigned value agains < 0
-    * Add libuuid as dependency in README
 
 Please report ANY issues to bugs.lttng.org or through that mailing list.
 
@@ -80,34 +98,34 @@ Using it is testing it!
 
 Project website: http://lttng.org/lttng2.0
 Download link:
-http://lttng.org/files/lttng-tools/lttng-tools-2.2.6.tar.bz2 (for
+http://lttng.org/files/lttng-tools/lttng-tools-2.3.2.tar.bz2 (for
 the PGP signature, same file with .asc appended)
 
 Cheers!
 David
 
---R3G7APHDIzY6R/pk
+--JWEK1jqKZ6MHAcjA
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: Digital signature
 
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1
 
-iQF8BAEBAgBmBQJTEM5+XxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
+iQF8BAEBAgBmBQJTENCWXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
 ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
-MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02JIkH/RMMoZ6u00ZTV4tZ7s687XF1
-jLOorULTVLqCRHpabOwsMMjV2HpIaxQKpFyZ/b+RRqurtBe3vlqkVnsjhT1gB+oy
-LBM8oTjgyvue3+JESq+j6VvDTmeGcFwBUv55r8OxYOZ8a+NL6QobaMJ0rgzOFjRk
-wM95nFIjiOCDXwktKjp6bVpxeGB2URFQpOFPnl4NQkPgxHf8Wa9N2OIVw7N2dC99
-AmlVzTK8r4B2WaTtPbf0FMl3Am7fbE1D38TE5W0riE/2Ieu9UzXflXhW+gkCfKc9
-wUM/zygnXxJv//a8NpXr+o0AO1RQsGvYg7EU56foRxKciIY0HsFNqxQB5G1S3sg=
-=7KBi
+MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02m4cH/3a0a7KQeukfZV6zDbSu5otT
+ppMMhXw9Dkp5+R2QfCcfy2F1bTEzU0l6/wAEN0XYXoLSNl7bug1CUMCPHr5NNQE1
+cd5Gkma+AOYjlZ3C9c/8cNFrl7Kt3k8LThMPPOTA0svd1W/Dlv+7NkDM62txRd9L
+YWzE8rJI9FLn7ZfmVodl9L3Sdupu3YT8Q9aobf4A3oyz8zZn0NWT6xpE6taZcs9d
+lTY40I01uJzI1nZ/NWrLe5tVGBbZIXZ8xnRECjPS5jbAPTKLleRuEgA4c0ia+V23
+eWImn4v1rAk5Pvf9fs0cpVd4xA0DM5JHg5p+58TO4CY0db1csKlRHSF300jTQLg=
+=ap3o
 -----END PGP SIGNATURE-----
 
---R3G7APHDIzY6R/pk--
+--JWEK1jqKZ6MHAcjA--
 
 
---===============1683481040==
+--===============1023214014==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -118,4 +136,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============1683481040==--
+--===============1023214014==--
