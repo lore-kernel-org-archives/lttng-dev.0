@@ -1,18 +1,21 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: baddr feature triggers deadlock in lttng-ust
-Date: Fri, 28 Feb 2014 00:07:51 +0000 (UTC)
-Message-ID: <864476638.31953.1393546071335.JavaMail.zimbra__17764.3066308976$1393546135$gmane$org@efficios.com>
-References: <561294755.31915.1393536606539.JavaMail.zimbra@efficios.com>
-	<530FCC33.4050200@voxpopuli.im>
+From: Sandeep K Chaudhary <babbusandy2006@gmail.com>
+Subject: Re: GSoC 2014 - Clang plugin providing automatic
+ application instrumentation
+Date: Thu, 27 Feb 2014 21:25:09 -0800
+Message-ID: <CAEEAEzXtb0vrDMz4_QXPsx_2ELaZcaH2TusybRNLfDC=78oJPw__20905.9042892934$1393565163$gmane$org@mail.gmail.com>
+References: <CAEEAEzVi0Z-025j0USVWL2u_ehnRX8aHrG9VbR8Qk0Q3EwBu-A@mail.gmail.com>
+	<1393482150.530ed9a6c790b@www.imp.polymtl.ca>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-qc0-f179.google.com ([209.85.216.179])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1WJAzY-00037F-Gp
-	for lttng-dev@lists.lttng.org; Thu, 27 Feb 2014 19:07:58 -0500
-In-Reply-To: <530FCC33.4050200@voxpopuli.im>
+	(envelope-from <babbusandy2006@gmail.com>) id 1WJFwh-0005Tj-Ar
+	for lttng-dev@lists.lttng.org; Fri, 28 Feb 2014 00:25:17 -0500
+Received: by mail-qc0-f179.google.com with SMTP id r5so243833qcx.10
+	for <lttng-dev@lists.lttng.org>; Thu, 27 Feb 2014 21:25:09 -0800 (PST)
+In-Reply-To: <1393482150.530ed9a6c790b@www.imp.polymtl.ca>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,54 +24,54 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
+To: Suchakrapani Datt Sharma <suchakrapani.sharma@polymtl.ca>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-As fixing it will very likely require a major rethinking of the locking strategy
-for the entire UST, I'm not very keen to make that kind of change within stable
-versions.
+Thanks Suchakrapani for the reply !
 
-Unless an elegant solution shows up by tomorrow, I plan to disable the feature
-(leaving the code there), and think up a solution for 2.5.
+I will have have a look the page and also hang out at the irc channel.
 
-Thoughts ?
+Regards,
+Sandeep.
 
-Thanks,
+On Wed, Feb 26, 2014 at 10:22 PM, Suchakrapani Datt Sharma
+<suchakrapani.sharma@polymtl.ca> wrote:
+> Hi,
+>
+> Welcome to the list. The 'force' has guided you to the right place :) In
+> addition to this, you may also want to have a look at [1] and hang out at
+> #lttng on irc.oftc.net. Specifically, Christian is cbab.
+>
+> [1] http://lists.lttng.org/pipermail/lttng-dev/2014-February/022471.html
+>
+> --
+> Suchakra
+>
+> Quoting Sandeep K Chaudhary <babbusandy2006@gmail.com>:
+>
+>> Hi guys,
+>>
+>> I am interested in working on the project 'Clang plugin providing
+>> automatic application instrumentation'. The mentor for this project is
+>> Christian Babeux but I don't
+>> know how to reach Christian directly so I am emailing to this list. Would
+>> reaching out to the IRC channel be better? Please let me know.
+>>
+>> Thanks,
+>> Sandeep.
+>>
+>> _______________________________________________
+>> lttng-dev mailing list
+>> lttng-dev@lists.lttng.org
+>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>>
+>
+>
+>
 
-Mathieu
 
------ Original Message -----
-> From: "Alexandre Montplaisir" <alexmonthy@voxpopuli.im>
-> To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-> Cc: "Paul Woegerer" <paul_woegerer@mentor.com>, lttng-dev@lists.lttng.org
-> Sent: Thursday, February 27, 2014 6:37:23 PM
-> Subject: Re: [lttng-dev] baddr feature triggers deadlock in lttng-ust
-> 
-> Could it be hidden behind a non-default configure option, instead of
-> completely removed?
-> 
-> Alex
-> 
-> 
-> On 14-02-27 04:30 PM, Mathieu Desnoyers wrote:
-> > Hi Paul,
-> >
-> > Please see http://bugs.lttng.org/issues/745, which explains a deadlock
-> > we just found out.
-> >
-> > We might have to disable the baddr dump feature, since our release is
-> > tomorrow. We'll have to re-think our locking to protect operations
-> > using the dynamic loader lock against fork, clone, and daemon.
-> >
-> > Thanks,
-> >
-> > Mathieu
-> >
-> 
-> 
 
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Thanks and regards,
+Sandeep K Chaudhary.
