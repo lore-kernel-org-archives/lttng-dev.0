@@ -1,31 +1,17 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: [RELEASE] LTTng-Tools 2.3.2
-Date: Fri, 28 Feb 2014 13:08:22 -0500
-Message-ID: <20140228180822.GC14281__23022.457821253$1393610972$gmane$org@thessa>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [RELEASE] Babeltrace 1.1.2
+Date: Fri, 28 Feb 2014 18:11:32 +0000 (UTC)
+Message-ID: <1534324216.32381.1393611092080.JavaMail.zimbra__11792.8789848976$1393611157$gmane$org@efficios.com>
+References: <357348868.32380.1393611075527.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1023214014=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([144.76.53.219])
+Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1WJRrK-0006Vi-LB
-	for lttng-dev@lists.lttng.org; Fri, 28 Feb 2014 13:08:36 -0500
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by smtp.ini-tech.com (Postfix) with ESMTP id A2282A1D7A
-	for <lttng-dev@lists.lttng.org>; Fri, 28 Feb 2014 18:08:07 +0000 (UTC)
-Received: from smtp.ini-tech.com ([127.0.0.1])
-	by localhost (smtp.ini-tech.com [127.0.0.1]) (amavisd-new, port 10032)
-	with ESMTP id 1fs7LfSz-qa3 for <lttng-dev@lists.lttng.org>;
-	Fri, 28 Feb 2014 18:08:07 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by smtp.ini-tech.com (Postfix) with ESMTP id 2D42DA1D9C
-	for <lttng-dev@lists.lttng.org>; Fri, 28 Feb 2014 18:08:07 +0000 (UTC)
-Received: from smtp.ini-tech.com ([127.0.0.1])
-	by localhost (smtp.ini-tech.com [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id Vs55_7R79kIe for <lttng-dev@lists.lttng.org>;
-	Fri, 28 Feb 2014 18:08:07 +0000 (UTC)
-Received: from thessa (unknown [96.127.212.51])
-	by smtp.ini-tech.com (Postfix) with ESMTPSA id 97BE4A1D7A
-	for <lttng-dev@lists.lttng.org>; Fri, 28 Feb 2014 18:08:06 +0000 (UTC)
+	(envelope-from <compudj@efficios.com>) id 1WJRuH-0006Z4-SX
+	for lttng-dev@lists.lttng.org; Fri, 28 Feb 2014 13:11:39 -0500
+In-Reply-To: <357348868.32380.1393611075527.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -34,106 +20,57 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org, tiwg@multicore-association.org
 List-Id: lttng-dev@lists.lttng.org
 
-
---===============1023214014==
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="JWEK1jqKZ6MHAcjA"
-Content-Disposition: inline
-
-
---JWEK1jqKZ6MHAcjA
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-Greetings everyone (including LTTng elves),
-
-The lttng-tools project provides a session daemon (lttng-sessiond) that
-acts as a tracing registry, the "lttng" command line for tracing
-control, a lttng-ctl library for tracing control and a lttng-relayd for
-network streaming.
-
-2014-02-28 lttng-tools 2.3.2
-     * Fix: minor rephrasing of the lttng.1 man page
-     * Fix: possible NULL deref. in sessiond error path
-     * Fix: flag that kernel streams FDs has been sent
-     * Fix: forbid session name creation if contains /
-     * Fix: don't start session if no channel
-     * Fix: report error if consumer can't be spawned
-     * Fix: lttng list -u <name> should only list UST
-     * Fix: kernel channel destroy on consumer if sent
-     * Fix: Define __STDC_LIMIT_MACROS to fix C++ builds
-     * Fix: remove unused goto label
-     * Fix: relayd: add LPOLLERR to events
-     * Fix: relayd: initialize lttcomm inet
-     * Fix: consumerd: HT init/teardown with program
-     * Fix: consumerd should initialize lttcomm
-     * Fix: measure UST clock offset with best sample (v2)
-     * Fix: report to client when snapshot will be empty
-     * Fix: missing reset when listing UST fields for multiple PIDs
-     * Fix: filter: check binary op nesting
-     * Fix: remove break in epoll loop of apps. thread
-     * Fix: wrong comment in snapshot public API
-     * Fix: remove bad code from previous backport patch
-     * Fix: bad logical check of error codes
-     * Fix: resource leak in enable-event command
-     * Fix: unchecked return value in ust app delete
-     * Fix: dereference after null check in UST registry
-     * Fix: Resource leak in ust registry
-     * Fix: backported from urcu commit 92af1a30
-     * Fix: update back the metadata len sent on failure
-     * Fix: don't fail on push metadata if no channel
-     * Fix: comparison of unsigned enum expression >= 0
-     * Add libuuid as dependency in README
-     * Fix: implicit conversion of enum types in consumer
-     * Fix: implicit conversion of enum types in sessiond
-     * Fix: comparison of unsigned value agains < 0
-
-
-Please report ANY issues to bugs.lttng.org or through that mailing list.
-
-Using it is testing it!
-
-Project website: http://lttng.org/lttng2.0
-Download link:
-http://lttng.org/files/lttng-tools/lttng-tools-2.3.2.tar.bz2 (for
-the PGP signature, same file with .asc appended)
-
-Cheers!
-David
-
---JWEK1jqKZ6MHAcjA
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iQF8BAEBAgBmBQJTENCWXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
-ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
-MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02m4cH/3a0a7KQeukfZV6zDbSu5otT
-ppMMhXw9Dkp5+R2QfCcfy2F1bTEzU0l6/wAEN0XYXoLSNl7bug1CUMCPHr5NNQE1
-cd5Gkma+AOYjlZ3C9c/8cNFrl7Kt3k8LThMPPOTA0svd1W/Dlv+7NkDM62txRd9L
-YWzE8rJI9FLn7ZfmVodl9L3Sdupu3YT8Q9aobf4A3oyz8zZn0NWT6xpE6taZcs9d
-lTY40I01uJzI1nZ/NWrLe5tVGBbZIXZ8xnRECjPS5jbAPTKLleRuEgA4c0ia+V23
-eWImn4v1rAk5Pvf9fs0cpVd4xA0DM5JHg5p+58TO4CY0db1csKlRHSF300jTQLg=
-=ap3o
------END PGP SIGNATURE-----
-
---JWEK1jqKZ6MHAcjA--
-
-
---===============1023214014==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1023214014==--
+VGhlIEJhYmVsdHJhY2UgcHJvamVjdCBwcm92aWRlcyB0cmFjZSByZWFkIGFuZCB3cml0ZSBsaWJy
+YXJpZXMsIGFzIHdlbGwKYXMgYSB0cmFjZSBjb252ZXJ0ZXIuIFBsdWdpbnMgY2FuIGJlIGNyZWF0
+ZWQgZm9yIGFueSB0cmFjZSBmb3JtYXQgdG8KYWxsb3cgaXRzIGNvbnZlcnNpb24gdG8vZnJvbSBh
+bm90aGVyIHRyYWNlIGZvcm1hdC4KClRoZSBtYWluIGZvcm1hdCBleHBlY3RlZCB0byBiZSBjb252
+ZXJ0ZWQgdG8vZnJvbSBpcyB0aGUgQ29tbW9uIFRyYWNlCkZvcm1hdCAoQ1RGKS4gVGhlIGRlZmF1
+bHQgaW5wdXQgZm9ybWF0IG9mIHRoZSAiYmFiZWx0cmFjZSIgY29tbWFuZCBpcwpDVEYsIGFuZCBp
+dHMgZGVmYXVsdCBvdXRwdXQgZm9ybWF0IGlzIGEgaHVtYW4tcmVhZGFibGUgdGV4dCBsb2cuIFRo
+ZQoiYmFiZWx0cmFjZS1sb2ciIGNvbW1hbmQgY29udmVydHMgZnJvbSBhIHRleHQgbG9nIHRvIGEg
+Q1RGIHRyYWNlLgoKCkNoYW5nZWxvZzoKMjAxNC0wMi0yOCBCYWJlbHRyYWNlIDEuMS4yCiAgICAg
+ICAgKiBDbGVhbnVwOiByZW1vdmUgbG9naWNhbGx5IGRlYWQgY29kZQogICAgICAgICogRml4OiBj
+dGYuYyBmc2NhbmYgbWlzc2luZyBpbnRlZ2VyIGxlbmd0aCBjaGVjawogICAgICAgICogQWRkIErD
+qXLDqW1pZSBHYWxhcm5lYXUgYXMgY28tbWFpbnRhaW5lcgogICAgICAgICogRml4OiBkaXNhbGxv
+dyByZS11c2luZyBzYW1lIGV2ZW50IElEIGluIHNhbWUgc3RyZWFtCiAgICAgICAgKiBGaXg6IGNo
+ZWNrIGZvciB1bmtub3duIGVudW0vdmFyaWFudCBmaWVsZHMKICAgICAgICAqIEZpeDogbGliYmFi
+ZWx0cmFjZSBsaWIgYnVpbGQgZGVwZW5kZW5jaWVzCiAgICAgICAgKiBCZSBtb3JlIHdpZGVseSBh
+Y2NlcHRpbmcgZm9yIG1pc3NpbmcgdmFyaWFudC9lbnVtIGZpZWxkcwogICAgICAgICogUmVmdXNl
+IDAgaW50ZWdlciBzaXplCiAgICAgICAgKiBGaXg6IHJlYWQvd3JpdGUgbW9kZSBjaGVjawogICAg
+ICAgICogQ2xlYW51cDogZG8gbm90IGR1cGxpY2F0ZSBjb2RlIGluIGZsb2F0IGZpeAogICAgICAg
+ICogRml4OiBmbG9hdHMgc2hvdWxkIHNldCBjb250ZW50IHNpemUgaW4gdG1wIGRlZmluaXRpb24K
+ICAgICAgICAqIEZpeDogdGVzdCBjb250ZW50IHNpemUgdnMgaGVhZGVycyBsZW4KICAgICAgICAq
+IEZpeDogdGVzdCBmb3IgbGVzcyB0aGFuIDEgYnl0ZSBwYWNrZXRzCiAgICAgICAgKiBGaXg6IHJl
+dmVyc2VkIGxvZ2ljIGluIHBhY2tldCB2cyBjb250ZW50IHNpemUKICAgICAgICAqIEZpeDogY2xh
+cmlmeSBlbmQgb2YgcGFja2V0IGVycm9yCiAgICAgICAgKiBGaXg6IHN0cmluZyBwYWNrZXQgYm91
+bmRhcnkgaGFuZGxpbmcsIGJpdHMgdnMgYnl0ZXMKICAgICAgICAqIEZpeDogYWRkIHN0cmljdGVy
+IGNoZWNrcyBvbiBwYWNrZXQgYm91bmRhcmllcwogICAgICAgICogQ2xlYW51cDogZml4IHR5cG8K
+ICAgICAgICAqIEZpeDogZmFpbCB3aGVuIHJlYWRpbmcgMCBieXRlIGV2ZW50CiAgICAgICAgKiBG
+aXg6IFRha2UgdGhlIGl0ZXJhdG9yJ3MgZW5kIHBvc2l0aW9uIGludG8gYWNjb3VudAogICAgICAg
+ICogRml4OiBVc2UgdGhlIGJ0X2l0ZXJfc2V0X3BvcyBmdW5jdGlvbiB0byBzZXQgdGhlIGJlZ2lu
+X3BvcwogICAgICAgICogRml4OiBEb24ndCBjcmVhdGUgYSBuZXcgcGFja2V0IGlmIGN0Zl9tb3Zl
+X3BvcygpIHNlZWtzIG91dCBvZiBhIHBhY2tldAogICAgICAgICogRml4OiBVbmluaXRpYWxpemVk
+IGN0Zl9zdHJlYW1fcG9zIHN0cnVjdHVyZSBpbiBjdGZfZmxvYXRfd3JpdGUoKQogICAgICAgICog
+Rml4OiBVc2UgdGhlIHBhY2tldCdzIGZpbmFsIHNpemUgd2hlbiBtbWFwLWluZyB0aGUgbmV4dCBw
+YWNrZXQKICAgICAgICAqIEZpeDogQ2xvc2UgdHJhY2VzIG9uIGNvbnRleHQgZGVzdHJ1Y3Rpb24K
+ICAgICAgICAqIGdjYyB3YXJuaW5nIGZpeDogLVdleHRyYQogICAgICAgICogRGVjbGFyZSBlbnVt
+IHR5cGUgdG8gdXNlIGZyb20gQysrCiAgICAgICAgKiBUZXN0czogZml4IHN0cmluZyBvY3RhbCBl
+bmNvZGluZwogICAgICAgICogRml4IGN0Zl9jbG9ja19kZWNsYXJhdGlvbl92aXNpdCByZXR1cm5p
+bmcgYW4gZXJyb3Igd2hlbiByZWFkaW5nIGEgYm9vbGVhbgogICAgICAgICogRml4IENURiBwYXJz
+ZXIgaGFuZyB3aXRoIGJpc29uIDMuMAogICAgICAgICogQWRkIG1pc3NpbmcgbGV4L2Jpc29uIGdl
+bmVyYXRlZCBmaWxlcyB0byBtYWtlIGNsZWFuCiAgICAgICAgKiBUZXN0IGZvciBwcmVzZW5jZSBv
+ZiBiaXNvbiBhbmQgZmxleCB3aGVuIGJ1aWxkaW5nIGZyb20gZ2l0CiAgICAgICAgKiBGaXg6IFVu
+Y2hlY2tlZCBhc3ByaW50Zi92YXNwcmludGYgcmV0dXJuIHZhbHVlcwogICAgICAgICogTWlzc2lu
+ZyBOVUxMIHBvaW50ZXIgaW5pdCBpbiB0YXAuYwogICAgICAgICogRG9jdW1lbnQ6IG1hbnBhZ2U6
+IGNocm9ub2xvZ2ljYWxseSBvcmRlcmVkIGV2ZW50cwogICAgICAgICogQ2xlYW51cDogY29tbWVu
+dCBtaXNtYXRjaCB3aXRoIGNvZGUKICAgICAgICAqIENsZWFudXA6IHJlbW92ZSB3aGl0ZXNwYWNl
+cyBhdCBlbmQgb2YgbGluZXMKClByb2plY3Qgd2Vic2l0ZTogaHR0cDovL3d3dy5lZmZpY2lvcy5j
+b20vYmFiZWx0cmFjZQpEb3dubG9hZCBsaW5rOiBodHRwOi8vd3d3LmVmZmljaW9zLmNvbS9maWxl
+cy9iYWJlbHRyYWNlLwpDVEYgc3BlY2lmaWNhdGlvbjogaHR0cDovL3d3dy5lZmZpY2lvcy5jb20v
+Y3RmCgotLSAKTWF0aGlldSBEZXNub3llcnMKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmlj
+aW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
+bHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9s
+aXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
