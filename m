@@ -1,17 +1,17 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] Babeltrace 1.1.2
-Date: Fri, 28 Feb 2014 18:11:32 +0000 (UTC)
-Message-ID: <1534324216.32381.1393611092080.JavaMail.zimbra__11792.8789848976$1393611157$gmane$org@efficios.com>
-References: <357348868.32380.1393611075527.JavaMail.zimbra@efficios.com>
+Subject: [RELEASE] Babeltrace 1.2.0
+Date: Fri, 28 Feb 2014 18:16:09 +0000 (UTC)
+Message-ID: <1483653033.32401.1393611369672.JavaMail.zimbra__21991.42215909$1393611434$gmane$org@efficios.com>
+References: <2141248164.32385.1393611290811.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1WJRuH-0006Z4-SX
-	for lttng-dev@lists.lttng.org; Fri, 28 Feb 2014 13:11:39 -0500
-In-Reply-To: <357348868.32380.1393611075527.JavaMail.zimbra@efficios.com>
+	(envelope-from <compudj@efficios.com>) id 1WJRyk-0006dF-JV
+	for lttng-dev@lists.lttng.org; Fri, 28 Feb 2014 13:16:16 -0500
+In-Reply-To: <2141248164.32385.1393611290811.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,54 +23,60 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org, tiwg@multicore-association.org
 List-Id: lttng-dev@lists.lttng.org
 
-VGhlIEJhYmVsdHJhY2UgcHJvamVjdCBwcm92aWRlcyB0cmFjZSByZWFkIGFuZCB3cml0ZSBsaWJy
-YXJpZXMsIGFzIHdlbGwKYXMgYSB0cmFjZSBjb252ZXJ0ZXIuIFBsdWdpbnMgY2FuIGJlIGNyZWF0
-ZWQgZm9yIGFueSB0cmFjZSBmb3JtYXQgdG8KYWxsb3cgaXRzIGNvbnZlcnNpb24gdG8vZnJvbSBh
-bm90aGVyIHRyYWNlIGZvcm1hdC4KClRoZSBtYWluIGZvcm1hdCBleHBlY3RlZCB0byBiZSBjb252
-ZXJ0ZWQgdG8vZnJvbSBpcyB0aGUgQ29tbW9uIFRyYWNlCkZvcm1hdCAoQ1RGKS4gVGhlIGRlZmF1
-bHQgaW5wdXQgZm9ybWF0IG9mIHRoZSAiYmFiZWx0cmFjZSIgY29tbWFuZCBpcwpDVEYsIGFuZCBp
-dHMgZGVmYXVsdCBvdXRwdXQgZm9ybWF0IGlzIGEgaHVtYW4tcmVhZGFibGUgdGV4dCBsb2cuIFRo
-ZQoiYmFiZWx0cmFjZS1sb2ciIGNvbW1hbmQgY29udmVydHMgZnJvbSBhIHRleHQgbG9nIHRvIGEg
-Q1RGIHRyYWNlLgoKCkNoYW5nZWxvZzoKMjAxNC0wMi0yOCBCYWJlbHRyYWNlIDEuMS4yCiAgICAg
-ICAgKiBDbGVhbnVwOiByZW1vdmUgbG9naWNhbGx5IGRlYWQgY29kZQogICAgICAgICogRml4OiBj
-dGYuYyBmc2NhbmYgbWlzc2luZyBpbnRlZ2VyIGxlbmd0aCBjaGVjawogICAgICAgICogQWRkIErD
-qXLDqW1pZSBHYWxhcm5lYXUgYXMgY28tbWFpbnRhaW5lcgogICAgICAgICogRml4OiBkaXNhbGxv
-dyByZS11c2luZyBzYW1lIGV2ZW50IElEIGluIHNhbWUgc3RyZWFtCiAgICAgICAgKiBGaXg6IGNo
-ZWNrIGZvciB1bmtub3duIGVudW0vdmFyaWFudCBmaWVsZHMKICAgICAgICAqIEZpeDogbGliYmFi
-ZWx0cmFjZSBsaWIgYnVpbGQgZGVwZW5kZW5jaWVzCiAgICAgICAgKiBCZSBtb3JlIHdpZGVseSBh
-Y2NlcHRpbmcgZm9yIG1pc3NpbmcgdmFyaWFudC9lbnVtIGZpZWxkcwogICAgICAgICogUmVmdXNl
-IDAgaW50ZWdlciBzaXplCiAgICAgICAgKiBGaXg6IHJlYWQvd3JpdGUgbW9kZSBjaGVjawogICAg
-ICAgICogQ2xlYW51cDogZG8gbm90IGR1cGxpY2F0ZSBjb2RlIGluIGZsb2F0IGZpeAogICAgICAg
-ICogRml4OiBmbG9hdHMgc2hvdWxkIHNldCBjb250ZW50IHNpemUgaW4gdG1wIGRlZmluaXRpb24K
-ICAgICAgICAqIEZpeDogdGVzdCBjb250ZW50IHNpemUgdnMgaGVhZGVycyBsZW4KICAgICAgICAq
-IEZpeDogdGVzdCBmb3IgbGVzcyB0aGFuIDEgYnl0ZSBwYWNrZXRzCiAgICAgICAgKiBGaXg6IHJl
-dmVyc2VkIGxvZ2ljIGluIHBhY2tldCB2cyBjb250ZW50IHNpemUKICAgICAgICAqIEZpeDogY2xh
-cmlmeSBlbmQgb2YgcGFja2V0IGVycm9yCiAgICAgICAgKiBGaXg6IHN0cmluZyBwYWNrZXQgYm91
-bmRhcnkgaGFuZGxpbmcsIGJpdHMgdnMgYnl0ZXMKICAgICAgICAqIEZpeDogYWRkIHN0cmljdGVy
-IGNoZWNrcyBvbiBwYWNrZXQgYm91bmRhcmllcwogICAgICAgICogQ2xlYW51cDogZml4IHR5cG8K
-ICAgICAgICAqIEZpeDogZmFpbCB3aGVuIHJlYWRpbmcgMCBieXRlIGV2ZW50CiAgICAgICAgKiBG
-aXg6IFRha2UgdGhlIGl0ZXJhdG9yJ3MgZW5kIHBvc2l0aW9uIGludG8gYWNjb3VudAogICAgICAg
-ICogRml4OiBVc2UgdGhlIGJ0X2l0ZXJfc2V0X3BvcyBmdW5jdGlvbiB0byBzZXQgdGhlIGJlZ2lu
-X3BvcwogICAgICAgICogRml4OiBEb24ndCBjcmVhdGUgYSBuZXcgcGFja2V0IGlmIGN0Zl9tb3Zl
-X3BvcygpIHNlZWtzIG91dCBvZiBhIHBhY2tldAogICAgICAgICogRml4OiBVbmluaXRpYWxpemVk
-IGN0Zl9zdHJlYW1fcG9zIHN0cnVjdHVyZSBpbiBjdGZfZmxvYXRfd3JpdGUoKQogICAgICAgICog
-Rml4OiBVc2UgdGhlIHBhY2tldCdzIGZpbmFsIHNpemUgd2hlbiBtbWFwLWluZyB0aGUgbmV4dCBw
-YWNrZXQKICAgICAgICAqIEZpeDogQ2xvc2UgdHJhY2VzIG9uIGNvbnRleHQgZGVzdHJ1Y3Rpb24K
-ICAgICAgICAqIGdjYyB3YXJuaW5nIGZpeDogLVdleHRyYQogICAgICAgICogRGVjbGFyZSBlbnVt
-IHR5cGUgdG8gdXNlIGZyb20gQysrCiAgICAgICAgKiBUZXN0czogZml4IHN0cmluZyBvY3RhbCBl
-bmNvZGluZwogICAgICAgICogRml4IGN0Zl9jbG9ja19kZWNsYXJhdGlvbl92aXNpdCByZXR1cm5p
-bmcgYW4gZXJyb3Igd2hlbiByZWFkaW5nIGEgYm9vbGVhbgogICAgICAgICogRml4IENURiBwYXJz
-ZXIgaGFuZyB3aXRoIGJpc29uIDMuMAogICAgICAgICogQWRkIG1pc3NpbmcgbGV4L2Jpc29uIGdl
-bmVyYXRlZCBmaWxlcyB0byBtYWtlIGNsZWFuCiAgICAgICAgKiBUZXN0IGZvciBwcmVzZW5jZSBv
-ZiBiaXNvbiBhbmQgZmxleCB3aGVuIGJ1aWxkaW5nIGZyb20gZ2l0CiAgICAgICAgKiBGaXg6IFVu
-Y2hlY2tlZCBhc3ByaW50Zi92YXNwcmludGYgcmV0dXJuIHZhbHVlcwogICAgICAgICogTWlzc2lu
-ZyBOVUxMIHBvaW50ZXIgaW5pdCBpbiB0YXAuYwogICAgICAgICogRG9jdW1lbnQ6IG1hbnBhZ2U6
-IGNocm9ub2xvZ2ljYWxseSBvcmRlcmVkIGV2ZW50cwogICAgICAgICogQ2xlYW51cDogY29tbWVu
-dCBtaXNtYXRjaCB3aXRoIGNvZGUKICAgICAgICAqIENsZWFudXA6IHJlbW92ZSB3aGl0ZXNwYWNl
-cyBhdCBlbmQgb2YgbGluZXMKClByb2plY3Qgd2Vic2l0ZTogaHR0cDovL3d3dy5lZmZpY2lvcy5j
-b20vYmFiZWx0cmFjZQpEb3dubG9hZCBsaW5rOiBodHRwOi8vd3d3LmVmZmljaW9zLmNvbS9maWxl
-cy9iYWJlbHRyYWNlLwpDVEYgc3BlY2lmaWNhdGlvbjogaHR0cDovL3d3dy5lZmZpY2lvcy5jb20v
-Y3RmCgotLSAKTWF0aGlldSBEZXNub3llcnMKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmlj
-aW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
-bHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9s
-aXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+The Babeltrace project provides trace read and write libraries, as well
+as a trace converter. Plugins can be created for any trace format to
+allow its conversion to/from another trace format.
+
+The main format expected to be converted to/from is the Common Trace
+Format (CTF). The default input format of the "babeltrace" command is
+CTF, and its default output format is a human-readable text log. The
+"babeltrace-log" command converts from a text log to a CTF trace.
+
+New and noteworthy features in the 1.2 release of Babeltrace:
+
+1) lttng-live input plugin to read live streams with LTTng 2.4.
+
+Getting up and running with live for kernel tracing in a nutshell
+through localhost (adapt to use over the network):
+
+# assumes you installed lttng 2.4 packages already
+lttng-relayd -d  # as root
+lttng-sessiond -d  # as root
+lttng create mysession --live 1000000 -U net://localhost
+lttng enable-event -k -a
+lttng start
+babeltrace -i lttng-live net://localhost   # list the viewable sessions
+babeltrace -i lttng-live net://localhost/host/${HOSTNAME}/mysession
+# ... now getting live view of the kernel trace ...
+
+See LTTng Tools live-reading-howto.txt and Babeltrace lttng-live.txt
+for details.
+
+2) CTF writer library
+
+C/C++ library and Python bindings to write CTF traces.
+
+See include/babeltrace/ctf-writer/*.h for details.
+
+3) Babeltrace Python bindings
+
+Allow reading and writing CTF traces from Python. See doc/python-howto.txt
+for details.
+
+4) CTF indexes support
+
+Support index files extension of the Common Trace Format. Those are generated
+starting from LTTng 2.4.
+
+Changelog:
+2014-02-28 Babeltrace 1.2.0
+        * Fix: lttng-live parse url port check
+
+Project website: http://www.efficios.com/babeltrace
+Download link: http://www.efficios.com/files/babeltrace/
+CTF specification: http://www.efficios.com/ctf
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
