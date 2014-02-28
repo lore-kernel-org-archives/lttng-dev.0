@@ -1,18 +1,36 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: baddr feature triggers deadlock in lttng-ust
-Date: Fri, 28 Feb 2014 14:05:10 +0000 (UTC)
-Message-ID: <373036003.32115.1393596310716.JavaMail.zimbra__34089.4032422968$1393596384$gmane$org@efficios.com>
-References: <561294755.31915.1393536606539.JavaMail.zimbra@efficios.com>
-	<5310835F.10909@mentor.com>
+Subject: [RELEASE] LTTng-UST 2.2.3 (end of life)
+Date: Fri, 28 Feb 2014 17:21:29 +0000 (UTC)
+Message-ID: <2002322606.32275.1393608089593.JavaMail.zimbra__620.62432193688$1393608157$gmane$org@efficios.com>
+References: <2066668738.32265.1393607912199.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1WJO3u-0004QN-4k
-	for lttng-dev@lists.lttng.org; Fri, 28 Feb 2014 09:05:20 -0500
-In-Reply-To: <5310835F.10909@mentor.com>
+	(envelope-from <compudj@efficios.com>) id 1WJR7q-0005yh-Gb
+	for lttng-dev@lists.lttng.org; Fri, 28 Feb 2014 12:21:36 -0500
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.efficios.com (Postfix) with ESMTP id 8B43834024C
+	for <lttng-dev@lists.lttng.org>; Fri, 28 Feb 2014 17:21:31 +0000 (UTC)
+Received: from mail.efficios.com ([127.0.0.1])
+	by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new,
+	port 10032)
+	with ESMTP id K5znlnMww9HA for <lttng-dev@lists.lttng.org>;
+	Fri, 28 Feb 2014 17:21:30 +0000 (UTC)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.efficios.com (Postfix) with ESMTP id E925E340253
+	for <lttng-dev@lists.lttng.org>; Fri, 28 Feb 2014 17:21:29 +0000 (UTC)
+Received: from mail.efficios.com ([127.0.0.1])
+	by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new,
+	port 10026)
+	with ESMTP id bfZHceuADW6i for <lttng-dev@lists.lttng.org>;
+	Fri, 28 Feb 2014 17:21:29 +0000 (UTC)
+Received: from evm-mail-1.efficios.com (evm-mail-1.efficios.com [78.47.125.74])
+	by mail.efficios.com (Postfix) with ESMTP id C1FE434024C
+	for <lttng-dev@lists.lttng.org>; Fri, 28 Feb 2014 17:21:29 +0000 (UTC)
+In-Reply-To: <2066668738.32265.1393607912199.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,63 +39,38 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Paul Woegerer <Paul_Woegerer@mentor.com>
-Cc: CS ESD-Analyzer <esd-analyzer@mentor.com>, lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
------ Original Message -----
-> From: "Paul Woegerer" <Paul_Woegerer@mentor.com>
-> To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>, lttng-dev@lists.lttng.org, "CS ESD-Analyzer"
-> <esd-analyzer@mentor.com>
-> Sent: Friday, February 28, 2014 7:38:55 AM
-> Subject: Re: baddr feature triggers deadlock in lttng-ust
-> 
-> I have looked a bit into the issue...
-> 
-> The ust_locking inside the dl_iterate_phdr triggers the deadlock.
-> 
-> If I just collect the base address info inside dl_iterate_phdr and dump
-> the collected data with trace_baddr afterwards (outside the
-> dl_iterate_phdr iteration) the deadlock will be prevented.
-> 
-> I'm now going to create a patch that implements this approach.
+LTTng-UST, the Linux Trace Toolkit Next Generation Userspace Tracer, is
+port of the low-overhead tracing capabilities of the LTTng kernel tracer
+to user-space. The library "liblttng-ust" enables tracing of
+applications and libraries.
 
-I suspect that having the UST lock nested inside the dynamic loader lock
-only makes the problem happen more consistently, but that the basic issue
-is that the dynamic loader lock should not be held while another thread
-concurrently calls fork/clone/daemon. It seems to leave the child process
-in a state where the lock state is stale (taken).
+Please note that this is the last version of the stable-2.2 lttng-ust
+branch. You are encouraged to move to either 2.4, or 2.3.
 
-Thanks,
+Changelog:
+2014-02-28 lttng-ust 2.2.3
+        * Fix: FD leak in liblttng-ust-ctl
+        * Fix: liblttng-ust-fork Makefile flags mismatch
+        * Fix: C++: incomplete extern C guard transition
+        * Cleanup gen-tp: add quotes around AM_CC
+        * Pass the CC variable to the example Makefiles
+        * doc/examples/gen-tp: pass automake CPPFLAGS/CFLAGS/LDFLAGS
+        * doc/examples: error out when a subdir make fails
+        * Fix: check deliver now takes tsc argument
+        * Fix: eliminate timestamp overlap between packets
+        * Fix lttng-ust(3) manpage
+        * Fix: move va_end to outermost label
+        * Fix: add missing NULL check after allocation
+        * Add missing copyrights to test scripts
+        * Escape minus signs in lttng-ust-cyg-profile manpage
+        * Fix spelling mistake in lttng-ust manpage
 
-Mathieu
-
-> 
-> Thanks,
-> Paul
-> 
-> On 02/27/2014 10:30 PM, Mathieu Desnoyers wrote:
-> > Hi Paul,
-> >
-> > Please see http://bugs.lttng.org/issues/745, which explains a deadlock
-> > we just found out.
-> >
-> > We might have to disable the baddr dump feature, since our release is
-> > tomorrow. We'll have to re-think our locking to protect operations
-> > using the dynamic loader lock against fork, clone, and daemon.
-> >
-> > Thanks,
-> >
-> > Mathieu
-> >
-> 
-> 
-> --
-> Paul Woegerer, SW Development Engineer
-> Sourcery Analyzer <http://go.mentor.com/sourceryanalyzer>
-> Mentor Graphics, Embedded Software Division
-> 
-> 
+Project website: http://lttng.org
+Download link: http://lttng.org/download
+(please refer to the README file for installation instructions)
 
 -- 
 Mathieu Desnoyers
