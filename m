@@ -1,41 +1,88 @@
-From: Riccardo Schirone <sirmy15@gmail.com>
-Subject: [GSoc 2014] Strace replacement based on LTTng
-Date: Sat, 01 Mar 2014 15:11:03 +0100
-Message-ID: <1393683063.22314.7.camel__17349.9280390844$1393683120$gmane$org@TAURUS>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [RELEASE] Userspace RCU 0.7.11 and 0.8.3
+Date: Sat, 1 Mar 2014 18:05:48 +0000 (UTC)
+Message-ID: <118155517.32860.1393697148593.JavaMail.zimbra@efficios.com>
+References: <529596190.32848.1393696790299.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ea0-f176.google.com ([209.85.215.176])
-	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <sirmy15@gmail.com>) id 1WJkdD-0007lK-UD
-	for lttng-dev@lists.lttng.org; Sat, 01 Mar 2014 09:11:15 -0500
-Received: by mail-ea0-f176.google.com with SMTP id o10so2755263eaj.21
-	for <lttng-dev@lists.lttng.org>; Sat, 01 Mar 2014 06:11:05 -0800 (PST)
-Received: from [192.168.1.15] ([151.64.0.33]) by mx.google.com with ESMTPSA id
-	k41sm23935886een.19.2014.03.01.06.11.04
-	for <lttng-dev@lists.lttng.org>
-	(version=SSLv3 cipher=RC4-SHA bits=128/128);
-	Sat, 01 Mar 2014 06:11:04 -0800 (PST)
-List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
-	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
-	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+Return-path: <linux-kernel-owner@vger.kernel.org>
+In-Reply-To: <529596190.32848.1393696790299.JavaMail.zimbra@efficios.com>
+Sender: linux-kernel-owner@vger.kernel.org
+To: linux-kernel@vger.kernel.org, lttng-dev@lists.lttng.org, rp@svcs.cs.pdx.edu
+Cc: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Lai Jiangshan <laijs@cn.fujitsu.com>, Stephen Hemminger <shemminger@vyatta.com>, Alan Stern <stern@rowland.harvard.edu>
 List-Id: lttng-dev@lists.lttng.org
 
-hi, i am Riccardo Schirone, an italian student interested in GSoC and in
-particular in the "Strace drop-in replacement based on LTTng" idea.
-Anyway, i would like to better understand the problem. For example, will
-i have to add features to lttng and so i need to have deep knowledge of
-process and linux system or all the features are just there and i have
-to fit them? 
+liburcu is a LGPLv2.1 userspace RCU (read-copy-update) library. This
+data synchronization library provides read-side access which scales
+linearly with the number of cores. It does so by allowing multiples
+copies of a given data structure to live at the same time, and by
+monitoring the data structure accesses to detect grace periods after
+which memory reclamation is possible.
 
-Thank you
+liburcu-cds provides efficient data structures based on RCU and
+lock-free algorithms. Those structures include hash tables, queues,
+stacks, and doubly-linked lists.
 
+Sorry about the quick releases, but I though I should save our
+packagers some time by releasing this fix, so they can skip over
+yesterday's version. It fixes a higher-than-normal CPU usage in
+presence of long RCU read-side critical sections. It does not affect
+correctness of RCU, just the amount of CPU usage in very specific
+scenarios. Since there is only one new commit, I'm putting the full
+commit changelog (from the stable-0.8 branch) below.
 
-Riccardo Schirone
+Changelog:
+commit e198fb6a2ebc22ceac8b10d953103b59452f24d4
+Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Date:   Sat Mar 1 11:33:25 2014 -0500
+
+    Fix: high cpu usage in synchronize_rcu with long RCU read-side C.S.
+    
+    We noticed that with this kind of scenario:
+    - application using urcu-mb, urcu-membarrier, urcu-signal, or urcu-bp,
+    - long RCU read-side critical sections, caused by e.g. long network I/O
+      system calls,
+    - other short lived RCU critical sections running in other threads,
+    - very frequent invocation of call_rcu to enqueue callbacks,
+    lead to abnormally high CPU usage within synchronize_rcu() in the
+    call_rcu worker threads.
+    
+    Inspection of the code gives us the answer: in urcu.c, we expect that if
+    we need to wait on a futex (wait_gp()), we expect to be able to end the
+    grace period within the next loop, having been notified by a
+    rcu_read_unlock(). However, this is not always the case: we can very
+    well be awakened by a rcu_read_unlock() executed on a thread running
+    short-lived RCU read-side critical sections, while the long-running RCU
+    read-side C.S. is still active. We end up in a situation where we
+    busy-wait for a very long time, because the counter is !=
+    RCU_QS_ACTIVE_ATTEMPTS until a 32-bit overflow happens (or more likely,
+    until we complete the grace period). We need to change the wait_loops ==
+    RCU_QS_ACTIVE_ATTEMPTS check into an inequality to use wait_gp() for
+    every attempts beyond RCU_QS_ACTIVE_ATTEMPTS loops.
+    
+    urcu-bp.c also has this issue. Moreover, it uses usleep() rather than
+    poll() when dealing with long-running RCU read-side critical sections.
+    Turn the usleep 1000us (1ms) into a poll of 10ms. One of the advantage
+    of using poll() rather than usleep() is that it does not interact with
+    SIGALRM.
+    
+    urcu-qsbr.c already checks for wait_loops >= RCU_QS_ACTIVE_ATTEMPTS, so
+    it is not affected by this issue.
+    
+    Looking into these loops, however, shows that overflow of the loop
+    counter, although unlikely, would bring us back to a situation of high
+    cpu usage (a negative value well below RCU_QS_ACTIVE_ATTEMPTS).
+    Therefore, change the counter behavior so it stops incrementing when it
+    reaches RCU_QS_ACTIVE_ATTEMPTS, to eliminate overflow.
+    
+    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+
+Project website: http://urcu.so
+Download link: http://urcu.so/files/
+Git repository: git://git.urcu.so/urcu.git
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
