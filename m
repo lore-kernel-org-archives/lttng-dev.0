@@ -1,56 +1,41 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] Userspace RCU 0.8.2
-Date: Fri, 28 Feb 2014 22:39:52 +0000 (UTC)
-Message-ID: <1093938296.32533.1393627192076.JavaMail.zimbra@efficios.com>
-References: <1701445203.32532.1393627172801.JavaMail.zimbra@efficios.com>
+From: Riccardo Schirone <sirmy15@gmail.com>
+Subject: [GSoc 2014] Strace replacement based on LTTng
+Date: Sat, 01 Mar 2014 15:11:03 +0100
+Message-ID: <1393683063.22314.7.camel__17349.9280390844$1393683120$gmane$org@TAURUS>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Return-path: <linux-kernel-owner@vger.kernel.org>
-In-Reply-To: <1701445203.32532.1393627172801.JavaMail.zimbra@efficios.com>
-Sender: linux-kernel-owner@vger.kernel.org
-To: linux-kernel@vger.kernel.org, lttng-dev@lists.lttng.org, rp@svcs.cs.pdx.edu
-Cc: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Lai Jiangshan <laijs@cn.fujitsu.com>, Stephen Hemminger <shemminger@vyatta.com>, Alan Stern <stern@rowland.harvard.edu>
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail-ea0-f176.google.com ([209.85.215.176])
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <sirmy15@gmail.com>) id 1WJkdD-0007lK-UD
+	for lttng-dev@lists.lttng.org; Sat, 01 Mar 2014 09:11:15 -0500
+Received: by mail-ea0-f176.google.com with SMTP id o10so2755263eaj.21
+	for <lttng-dev@lists.lttng.org>; Sat, 01 Mar 2014 06:11:05 -0800 (PST)
+Received: from [192.168.1.15] ([151.64.0.33]) by mx.google.com with ESMTPSA id
+	k41sm23935886een.19.2014.03.01.06.11.04
+	for <lttng-dev@lists.lttng.org>
+	(version=SSLv3 cipher=RC4-SHA bits=128/128);
+	Sat, 01 Mar 2014 06:11:04 -0800 (PST)
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-liburcu is a LGPLv2.1 userspace RCU (read-copy-update) library. This
-data synchronization library provides read-side access which scales
-linearly with the number of cores. It does so by allowing multiples
-copies of a given data structure to live at the same time, and by
-monitoring the data structure accesses to detect grace periods after
-which memory reclamation is possible.
+hi, i am Riccardo Schirone, an italian student interested in GSoC and in
+particular in the "Strace drop-in replacement based on LTTng" idea.
+Anyway, i would like to better understand the problem. For example, will
+i have to add features to lttng and so i need to have deep knowledge of
+process and linux system or all the features are just there and i have
+to fit them? 
 
-liburcu-cds provides efficient data structures based on RCU and
-lock-free algorithms. Those structures include hash tables, queues,
-stacks, and doubly-linked lists.
+Thank you
 
 
-Changelog:
-2014-02-28 Userspace RCU 0.8.2
-        * Fix: out of tree build: doc/examples
-        * Fix: out of tree build tests/common
-        * tests/unit: use lib rather than source
-        * automake: Rename INCLUDES to AM_CPPFLAGS (new name)
-        * tests regressions: use lib rather than recompile from source
-        * tests: use common lib rather than recompile compat sources
-        * urcu tests: use lib rather than compile from source
-        * urcu mb tests: use lib rather than recompile from source
-        * urcu signal tests: use library rather than recompile source
-        * tests: move yield debug to common test library
-        * tests urcu bp: use lib rather than recompile source
-        * test_urcu_defer: link on urcu lib rather than recompile source
-        * tests/benchmark: use urcu qsbr lib rather than recompile from source
-        * Pass the CC variable to the example Makefiles
-        * Fix: urcu-bp interaction with threads vs constructors/destructors
-        * Fix undefined NULL pointer arithmetic
-        * Blacklist ARM gcc 4.8.0, 4.8.1, 4.8.2
-        * rculfhash: document max_nr_buckets = 0
-
-Project website: http://urcu.so
-Download link: http://urcu.so/files/
-Git repository: git://git.urcu.so/urcu.git
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Riccardo Schirone
