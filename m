@@ -1,34 +1,24 @@
-From: ravi <ravi@linux.vnet.ibm.com>
-Subject: Support for new arch 'ppc64le'
-Date: Mon, 03 Mar 2014 06:32:12 +0530
-Message-ID: <5313D494.5040508__20546.7145111927$1393808625$gmane$org@linux.vnet.ibm.com>
+From: David OShea <David.OShea@quantum.com>
+Subject: Re: epoll_wait reboot kernel? [or --disable-epoll
+ causes lttng-sessiond assert]
+Date: Mon, 3 Mar 2014 10:17:11 +0000
+Message-ID: <20998D40D9A2B7499CA5A3A2666CB1EB2A67A4EE__22292.9726973691$1393841888$gmane$org@ZURMSG1.QUANTUM.com>
+References: <c3d1fc94-92e2-43b3-af78-6315aaa7419d@aliyun.com,
+	a860adc0-d68a-4a1e-bbd1-775c1cf652e9@aliyun.com>
+	<494972cb-79c7-4197-981c-d682306d585e@aliyun.com>,
+	743353902.29447.1393254533122.JavaMail.zimbra@efficios.com
+	<6cab5c14-9ef8-4a13-a134-a4b628ddc35d@aliyun.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="------------040501020901040403070901"
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from e28smtp03.in.ibm.com ([122.248.162.3])
+Received: from mx0a-000ceb01.pphosted.com ([67.231.144.126])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <ravi@linux.vnet.ibm.com>) id 1WKHGz-0006zH-Ih
-	for lttng-dev@lists.lttng.org; Sun, 02 Mar 2014 20:02:32 -0500
-Received: from /spool/local
-	by e28smtp03.in.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use
-	Only! Violators will be prosecuted
-	for <lttng-dev@lists.lttng.org> from <ravi@linux.vnet.ibm.com>;
-	Mon, 3 Mar 2014 06:32:17 +0530
-Received: from d28relay04.in.ibm.com (d28relay04.in.ibm.com [9.184.220.61])
-	by d28dlp02.in.ibm.com (Postfix) with ESMTP id 22DA73940023
-	for <lttng-dev@lists.lttng.org>; Mon,  3 Mar 2014 06:32:15 +0530 (IST)
-Received: from d28av01.in.ibm.com (d28av01.in.ibm.com [9.184.220.63])
-	by d28relay04.in.ibm.com (8.13.8/8.13.8/NCO v10.0) with ESMTP id
-	s2312GHl64684238
-	for <lttng-dev@lists.lttng.org>; Mon, 3 Mar 2014 06:32:16 +0530
-Received: from d28av01.in.ibm.com (localhost [127.0.0.1])
-	by d28av01.in.ibm.com (8.14.4/8.14.4/NCO v10.0 AVout) with ESMTP id
-	s2312Df6002288
-	for <lttng-dev@lists.lttng.org>; Mon, 3 Mar 2014 06:32:13 +0530
-Received: from [9.79.223.19] ([9.79.223.19])
-	by d28av01.in.ibm.com (8.14.4/8.14.4/NCO v10.0 AVin) with ESMTP id
-	s2312Dd1002274
-	for <lttng-dev@lists.lttng.org>; Mon, 3 Mar 2014 06:32:13 +0530
+	(envelope-from <prvs=3139b4a6c6=david.oshea@quantum.com>)
+	id 1WKPw2-0002wJ-0k
+	for lttng-dev@lists.lttng.org; Mon, 03 Mar 2014 05:17:22 -0500
+In-Reply-To: <6cab5c14-9ef8-4a13-a134-a4b628ddc35d@aliyun.com>
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -37,148 +27,69 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: "zhenyu.ren" <zhenyu.ren@aliyun.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-This is a multi-part message in MIME format.
---------------040501020901040403070901
-Content-Type: multipart/alternative;
- boundary="------------050006060508020704040701"
+Hi all,
 
+Apologies if I'm confusing things, but I think my issue may be related.  Please see below:
 
---------------050006060508020704040701
-Content-Type: text/plain; charset=ISO-8859-1; format=flowed
-Content-Transfer-Encoding: 7bit
+> -----Original Message-----
+> From: zhenyu.ren [mailto:zhenyu.ren@aliyun.com]
+> Sent: Tuesday, 25 February 2014 4:32 PM
+> To: Mathieu Desnoyers
+> Cc: lttng-dev
+> Subject: Re: [lttng-dev] epoll_wait reboot kernel?
+> 
+> >Which gcc version do you use ?
+> $gcc --version
+> gcc (GCC) 4.1.2 20080704 (Red Hat 4.1.2-46)
 
-Hi,
+I'm on CentOS 6, so my results ought to be relevant, but the above looks like the default GCC version for EL5, not EL6.  I'm using "gcc (GCC) 4.4.7 20120313 (Red Hat 4.4.7-4)".
 
-        We are in the process of adding support for new architecture 
-'ppc64le' (PowerPC 64 Little Endian) and as part of that, We have worked 
-with libtool maintainer to get alpha release (links below) which has all 
-the needed bits to support building on ppc64le arch.
-ftp://alpha.gnu.org/gnu/libtool/libtool-2.4.2.418.tar.gz(1.6MB)
-ftp://alpha.gnu.org/gnu/libtool/libtool-2.4.2.418.tar.xz(920KB)
-(A stable libtool release is expected soon this year)
+[...]
+> >  >  I am working on rhel6(2.6.32.220) and ust is working very
+> well.But when I
+> >  >  use lttng-modules (after "lttng start"),the kernel reboots
+> immediately
+> >  >  >without any message output to console.
 
-' userspace-rcu-0.8.1' didn't build on 'ppc64le' system because of 
-outdated libtoo.m4/config.guess files.
-Latest ' liburcu' source package we picked is from : 
-http://lttng.org/files/urcu/userspace-rcu-0.8.1.tar.bz2
+I'm not using the kernel modules here, just lttng-ust.
 
-Along with changes to libtool related files,  we have found a patch 
-available in ubuntu src repo, which is required to build 'liburcu' 
-successfully on 'ppc64le' system.
-Im attaching the same patch which is created on top of "liburcu-0.7.7-1"...
+[...]
+> > > I want to use poll instead as epoll in lttng-tools ,I changed
+> lttng-tools
+> > > configure file to not use epoll(undef HAVE_EPOLL),
 
-hence we request you to apply attached patch , and spin off a new 
-version of 'liburcu' using the latest libtool alpha release . So that we 
-can test ppc64le fixes.
-Your response is highly appreciated
+Note that 'configure' for lttng-tools has a --disable-epoll option.
 
--- 
-Ravindran
-IBM LinuxTechnologyCenter
+> > > but "lttng enable-event
+> > > -a -k >"failed :(Do I miss anything?)
+> > >#lttng enable-event -a -k
+> > >DEBUG1 [17837/18080]: Using run_as_clone (in run_as() at
+> runas.c:293)
+> > >lttng-sessiond: ht-cleanup.c:92: thread_ht_cleanup: Assertion
+> `pollfd ==
+> > >ht_cleanup_pipe[0]' failed.
 
+I get similar issues when I run 'lttng enable-event -a -u' (i.e. UST instead of kernel tracing):
 
---------------050006060508020704040701
-Content-Type: text/html; charset=ISO-8859-1
-Content-Transfer-Encoding: 7bit
+DEBUG1 [1292/1297]: Spawning consumerd (in spawn_consumerd() at main.c:2085)
+lttng-sessiond: ht-cleanup.c:92: thread_ht_cleanup: Assertion `pollfd == ht_cleanup_pipe[0]' failed.
+DEBUG1 [1329/1329]: Using 64-bit UST consumer at: /usr/lib64/lttng/libexec/lttng-consumerd (in spawn_consumerd() at main.c:2161)
+Aborted (core dumped)
 
-<html>
-  <head>
+but only when I configure lttng-tools with --disable-epoll.  If I remove that option at build time, that particular lttng-sessiond assertion failure goes away and UST works fine.
 
-    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
-  </head>
-  <body bgcolor="#FFFFFF" text="#000000">
-    Hi,
-    <br>
-    <br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; We are in the process of adding support for new architecture
-    'ppc64le' (PowerPC 64 Little Endian) and as part of that, We have
-    worked with libtool maintainer to get alpha release (links below)
-    which has all the needed bits to support building on ppc64le arch.
-    <br>
-    <a class="moz-txt-link-freetext"
-href="ftp://alpha.gnu.org/gnu/libtool/libtool-2.4.2.418.tar.gz%281.6MB%29">ftp://alpha.gnu.org/gnu/libtool/libtool-2.4.2.418.tar.gz(1.6MB)</a>
-    <br>
-    <a class="moz-txt-link-freetext"
-href="ftp://alpha.gnu.org/gnu/libtool/libtool-2.4.2.418.tar.xz%28920KB%29">ftp://alpha.gnu.org/gnu/libtool/libtool-2.4.2.418.tar.xz(920KB)</a>
-    <br>
-    (A stable libtool release is expected soon this year)
-    <br>
-    <br>
-    '&nbsp;
-    <meta http-equiv="content-type" content="text/html;
-      charset=ISO-8859-1">
-    userspace-rcu-0.8.1' didn't build on 'ppc64le' system because of
-    outdated libtoo.m4/config.guess files.
-    <br>
-    Latest '
-    <meta http-equiv="content-type" content="text/html;
-      charset=ISO-8859-1">
-    liburcu' source package we picked is from :
-    <a class="moz-txt-link-freetext" href="http://lttng.org/files/urcu/userspace-rcu-0.8.1.tar.bz2">http://lttng.org/files/urcu/userspace-rcu-0.8.1.tar.bz2</a><br>
-    <br>
-    Along with changes to libtool related files,&nbsp; we have found a patch
-    available in ubuntu src repo, which is required to build 'liburcu'
-    successfully on 'ppc64le' system.
-    <br>
-    Im attaching the same patch which is created on top of
-    "liburcu-0.7.7-1"...<br>
-    <br>
-    hence we request you to apply attached patch , and spin off a new
-    version of 'liburcu' using the latest libtool alpha release .&nbsp;
-    So that we can test ppc64le fixes.
-    <br>
-    Your response is highly appreciated
-    <pre class="moz-signature" cols="72">-- 
-Ravindran
-IBM LinuxTechnologyCenter</pre>
-  </body>
-</html>
+I built with --disable-epoll because I was told that, at least in some previous LTTng version, this was necessary for building on CentOS 5.  I guess I can stop doing that now I'm using CentOS 6, but should this happen or is there a bug here?
 
---------------050006060508020704040701--
+> > >PS:.lttng(ust/module/tool) version is 2.3.0 and urcu version is 0.8
 
---------------040501020901040403070901
-Content-Type: text/x-patch;
- name="arm64-archtype.patch"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
- filename="arm64-archtype.patch"
+I'm using lttng-ust, lttng-tools 2.3.2 and userspace-rcu 0.8.3.
 
-Description: Use gcc atomics on aarch64 for bootstrapping.
-Author: Dmitrijs Ledkovs <dmitrij.ledkov@ubuntu.com>
+Thanks in advance,
+David
 
-Index: b/configure.ac
-===================================================================
---- a/configure.ac	2013-06-19 01:08:41.000000000 +0000
-+++ b/configure.ac	2013-12-22 11:17:28.821288999 +0000
-@@ -69,6 +69,7 @@
- 	[powerpc], [ARCHTYPE="ppc"],
- 	[ppc64], [ARCHTYPE="ppc"],
- 	[powerpc64], [ARCHTYPE="ppc"],
-+	[powerpc64le], [ARCHTYPE="gcc"],
- 	[ppc], [ARCHTYPE="ppc"],
- 	[s390], [ARCHTYPE="s390"],
- 	[s390x], [ARCHTYPE="s390"],
-@@ -78,6 +79,7 @@
- 	[ia64], [ARCHTYPE="gcc"],
- 	[arm*], [ARCHTYPE="arm"],
- 	[mips*], [ARCHTYPE="mips"],
-+	[aarch64], [ARCHTYPE="gcc"],
- 	[ARCHTYPE="unknown"]
- )
- 
-
---------------040501020901040403070901
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---------------040501020901040403070901--
+----------------------------------------------------------------------
+The information contained in this transmission may be confidential. Any disclosure, copying, or further distribution of confidential information is not permitted unless such privilege is explicitly granted in writing by Quantum. Quantum reserves the right to have electronic communications, including email and attachments, sent across its networks filtered through anti virus and spam software programs and retain such messages in order to comply with applicable data security and retention requirements. Quantum is not responsible for the proper and complete transmission of the substance of this communication or for any delay in its receipt.
