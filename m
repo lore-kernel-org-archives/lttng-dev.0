@@ -1,23 +1,19 @@
 From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [GSOC] Interested in contributing to LTTng: Python
- tracing support
-Date: Mon, 3 Mar 2014 12:07:12 -0500
-Message-ID: <CA+jJMxsfeeH4dONv2PGDaRA0G2GSQHcnoveZVMZ2suazbuAcOg__15054.3583593846$1393866499$gmane$org@mail.gmail.com>
-References: <CANK7Sy88U0q3YJ=Ys32_zgNf=QJYCh3QCca8iUgksWupBqNuAw@mail.gmail.com>
-	<CAGDH53nyAWupcV2_KwZ5KvQsmxLLmg_F3Lr4xWD21_oH2bGuBQ@mail.gmail.com>
-	<CANK7Sy8iP73yj95Bg_+uMQZZn=ow9mw=FvXW0g-aLCOrPfwffQ@mail.gmail.com>
-	<OF86CD6BCA.2D7C440F-ONC2257C8F.0028696E-C2257C8F.00288A45@il.ibm.com>
+Subject: Re: [GSoC 2014]
+Date: Mon, 3 Mar 2014 13:12:58 -0500
+Message-ID: <CA+jJMxtEkhoZGBcwhQw4TcsEPY7Rdsb5gRavpJFMKKTu3o0B5A__22724.6478236795$1393870446$gmane$org@mail.gmail.com>
+References: <tencent_6CE862C660BA09B058533BE4@qq.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qa0-f48.google.com ([209.85.216.48])
+Received: from mail-qc0-f169.google.com ([209.85.216.169])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jeremie.galarneau@gmail.com>) id 1WKWKj-0006V5-Iv
-	for lttng-dev@lists.lttng.org; Mon, 03 Mar 2014 12:07:23 -0500
-Received: by mail-qa0-f48.google.com with SMTP id m5so3066176qaj.21
-	for <lttng-dev@lists.lttng.org>; Mon, 03 Mar 2014 09:07:12 -0800 (PST)
-In-Reply-To: <OF86CD6BCA.2D7C440F-ONC2257C8F.0028696E-C2257C8F.00288A45@il.ibm.com>
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1WKXMN-00072T-O6
+	for lttng-dev@lists.lttng.org; Mon, 03 Mar 2014 13:13:09 -0500
+Received: by mail-qc0-f169.google.com with SMTP id i17so1229065qcy.0
+	for <lttng-dev@lists.lttng.org>; Mon, 03 Mar 2014 10:12:58 -0800 (PST)
+In-Reply-To: <tencent_6CE862C660BA09B058533BE4@qq.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -26,68 +22,71 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Amit Margalit <AMITM@il.ibm.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: zlynus <302590304@qq.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-T24gU3VuLCBNYXIgMiwgMjAxNCBhdCAyOjIyIEFNLCBBbWl0IE1hcmdhbGl0IDxBTUlUTUBpbC5p
-Ym0uY29tPiB3cm90ZToKPiBIaSwKPgo+IEknZCBsb3ZlIHRvIGNvbnRyaWJ1dGUgdG8gUHl0aG9u
-IHRyYWNpbmcgc3VwcG9ydCBhcyB3ZWxsLCBidXQgZm9yIDIuNywgbm90Cj4gMy54IC4uLgo+Cj4g
-QW55IGNoYW5jZXMgd2Ugd2lsbCBzdXBwb3J0IGJvdGg/CgpUaGUgbWFpbiByZWFzb24gd2UgaGF2
-ZSBvbmx5IHN1cHBvcnRlZCBQeXRob24gMy54IHRodXMgZmFyIGlzIHRoYXQgd2UKY2FuJ3QgaGFu
-ZGxlIHRoZSBtYWludGFpbmFuY2UgbG9hZCBvZiBzdXBwb3J0aW5nIGFuZCB0ZXN0aW5nIGNvZGUg
-Zm9yCmRpZmZlcmVudCB2ZXJzaW9ucyBvZiB0aGUgc2FtZSBsYW5ndWFnZS4KCkkgdGhpbmsgYSBj
-b21wcm9taXNlIGNvdWxkIGJlIHJlYWNoZWQgaWYgX3Rob3JvdWdoXyBhdXRvbWF0ZWQgdGVzdHMK
-Y292ZXJpbmcgYm90aCBQeXRob24gMi43IGFuZCAzLnggYXJlIHByb3ZpZGVkIHdpdGggdGhlIGZl
-YXR1cmUuCgpSZWdhcmRzLApKqKZyqKZtaWUKCj4KPiBBbWl0IE1hcmdhbGl0Cj4gSUJNIFhJViAt
-IFN0b3JhZ2UgUmVpbnZlbnRlZAo+IFhJVi1OQVMgRGV2ZWxvcG1lbnQgVGVhbQo+IFRlbC4gMDMt
-Njg5LTc3NzQKPiBGYXguIDAzLTY4OS03MjMwCj4KPgo+Cj4gRnJvbTogICAgICAgIMH11L4gPGxp
-dXl1ZTAzMTBAZ21haWwuY29tPgo+IFRvOiAgICAgICAgQ2hyaXN0aWFuIEJhYmV1eCA8Y2hyaXN0
-aWFuLmJhYmV1eEBlZmZpY2lvcy5jb20+LAo+IHNvYXJpZXpAZ21haWwuY29tLCBqb25hdGhhbi5y
-Lmp1bGllbkBnbWFpbC5jb20KPiBDYzogICAgICAgICJsdHRuZy1kZXZAbGlzdHMubHR0bmcub3Jn
-IiA8bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZz4KPiBEYXRlOiAgICAgICAgMDIvMjcvMjAxNCAx
-MjowMyBQTQo+IFN1YmplY3Q6ICAgICAgICBSZTogW2x0dG5nLWRldl0gW0dTT0NdIEludGVyZXN0
-ZWQgaW4gY29udHJpYnV0aW5nIHRvIExUVG5nOgo+IFB5dGhvbiB0cmFjaW5nIHN1cHBvcnQKPiBf
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+Cj4KPgo+IEhpLCBKb25hdGhhbiwgWmlm
-ZWkgYW5kIGNiYWI6Cj4KPiBUaGFua3MgZm9yIHN1Y2ggYSBwYXNzaW9uYXRlIGFuZCBkZXRhaWxl
-ZCByZXBseS4KPiBUaGlzIGlzIHZlcnkgaGVscGZ1bCBmb3IgbWUsIEkgd2lsbCBzdXJlbHkgd29y
-ayBvdmVyIGl0IGZvciBuZXh0IGZldyBkYXlzLAo+IGFuZCB0cnkgdG8gZml4IG9uZSBvZiB0aGUg
-YnVncywgdGhpcyBtYXkgdGFrZSBzb21lIHRpbWUsIEkgd2lsbCBkbyBteSBiZXN0Lgo+Cj4gVGhh
-bmt1IQo+Cj4KPiBZdWUgTGl1Cj4gLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLQo+IFRzaW5naHVhIFVuaXZlcnNpdHkgTklTTC1MYWIoRklU
-LTEtMjEzKQo+IFRFTDogMTU2LTUyNzktODE5MQo+IE1haWw6IGxpdXl1ZTAzMTBAZ21haWwuY29t
-Cj4KPgo+Cj4gT24gVGh1LCBGZWIgMjcsIDIwMTQgYXQgMjo0OSBBTSwgQ2hyaXN0aWFuIEJhYmV1
-eAo+IDxjaHJpc3RpYW4uYmFiZXV4QGVmZmljaW9zLmNvbT4gd3JvdGU6Cj4gSGkgWXVlLAo+Cj4g
-R3JlYXQgdG8gaGVhciB0aGF0IHlvdSBhcmUgaW50ZXJlc3RlZCBpbiB0aGUgUHl0aG9uIHRyYWNp
-bmcgc3VwcG9ydCEKPgo+IFRoZSBmaXJzdCBzdGVwIHdvdWxkIGJlIHRvIHRha2UgYSBsb29rIGF0
-IHRoZSBidWcgdHJhY2tlciBbMV0gYW5kIHNlZQo+IGlmIHlvdSBjYW4gZml4IGFueSB0eXBvIG9y
-IG1pbm9yIGJ1ZyBhbmQgc3VibWl0IGEgcGF0Y2ggdG8gdGhlIG1haWxpbmcKPiBsaXN0LiBUaGUg
-Y29udHJpYnV0aW9uIHByb2Nlc3MgaXMgZGV0YWlsZWQgaW4gdGhlIGd1aWRlbGluZXMgWzJdIG9u
-Cj4gdGhlIGlkZWEgcGFnZS4KPgo+IFRoYW5rcywKPgo+IENocmlzdGlhbgo+Cj4gWzFdIC0gaHR0
-cDovL2J1Z3MubHR0bmcub3JnL3Byb2plY3RzL2x0dG5nL2lzc3Vlcz9zb3J0PXByaW9yaXR5JTJD
-aWQlM0FkZXNjCj4gWzJdIC0gaHR0cDovL2J1Z3MubHR0bmcub3JnL3Byb2plY3RzL2x0dG5nL3dp
-a2kvR29vZ2xlX1N1bW1lcl9vZl9Db2RlXzIwMTQKPgo+IE9uIFdlZCwgRmViIDI2LCAyMDE0IGF0
-IDQ6MjYgQU0sIMH11L4gPGxpdXl1ZTAzMTBAZ21haWwuY29tPiB3cm90ZToKPj4gSGksCj4+Cj4+
-ICAgICBJIGFtIFl1ZSBMaXUsIHNlY29uZCB5ZWFyIGdyYWR1YXRlIGluIENvbXB1dGVyIFNjaWVu
-Y2UgYW5kCj4+IEVuZ2luZWVyaW5nLgo+PiBJJ20gaW50ZXJlc3RlZCBpbiBjb250cmlidXRpbmcg
-dG8gUHl0aG9uIHRyYWNpbmcgc3VwcG9ydC4gSSBhbSBHb29kIGluCj4+IEMvQysrL1B5dGhvbiBh
-bmQgVW5peCBPcGVyYXRpbmcgU3lzdGVtLiBJIGFsc28gaGF2ZSBnb29kIGV4cGVyaWVuY2UgaW4K
-Pj4gRGVidWdnaW5nL1JldmVyc2UgRW5naW5lZXJpbmcvQmluYXJ5IEhhY2suCj4+ICAgICBQbGVh
-c2UgbGV0IG1lIGtub3cgaG93IHNob3VsZCBJIHByb2NlZWQgZnVydGhlci4KPj4KPj4gICAgIFRo
-YW5rIHlvdSEKPj4KPj4gWXVlIExpdQo+PiAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCj4+IFRzaW5naHVhIFVuaXZlcnNpdHkgTklTTC1M
-YWIoRklULTEtMjEzKQo+PiBURUw6ICs4Ni0xNTYtNTI3OS04MTkxCj4+IE1haWw6IGxpdXl1ZTAz
-MTBAZ21haWwuY29tCj4+Cj4+Cj4+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fCj4+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPj4gbHR0bmctZGV2QGxpc3Rz
-Lmx0dG5nLm9yZwo+PiBodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0
-aW5mby9sdHRuZy1kZXYKPj4KPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0
-bmcub3JnCj4gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8v
-bHR0bmctZGV2Cj4KPgo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fCj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5v
-cmcKPiBodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRu
-Zy1kZXYKPgoKCgotLSAKSqimcqimbWllIEdhbGFybmVhdQpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93
-d3cuZWZmaWNpb3MuY29tCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcK
-aHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2
-Cg==
+On Sun, Mar 2, 2014 at 11:07 AM, zlynus <302590304@qq.com> wrote:
+> Hi,
+> I'm a graduate student from China. Due to my last experience using System=
+Tap
+> to trace kernel's submit_bio() function activity in my recent research on
+> disk blocks' correlation, I get interested in system trace tool .So I thi=
+nk
+> contributing  to lttng in GSoC would be a great adventure.
+>
+
+Absolutely!
+
+> According to the idea page, the kernel side tracer has no comparable
+> filtering mechanism like the one in user-space side however, it is propos=
+ed
+> that the filtering be implemented in the babeltrace , rather than in kern=
+el
+> side. Can you please  tell me the reason?
+>
+
+We have been looking at kernel-level filtering for quite some time and
+are interested in the feature.
+
+The reason we are proposing the implementation of a filtering system
+in Babeltrace is to both address this shortcoming and provide a
+non-destructive way of filtering events. It would make it easier for
+users to search for events in a trace and lower Babeltrace's output
+volume to speed-up scripts based on it.
+
+Ideally, we'd have filtering both in Babeltrace and the kernel,
+although the latter is out of GSoC's scope.
+
+> Nevertheless, I think implementing a usable and relatively optimized filt=
+er
+> is a great work worth working on. I have read the man page and tested the
+> toolchain. Now I have got a whole picture of it. And in order to get
+> familiar with you guys and prove my skills I should try to submit patches=
+ to
+> this list, right? Beside that I hope hear your discussion on filter
+> mechanism.
+>
+
+That would be the way to go. Looking forward to your patches!
+
+Thanks,
+J=E9r=E9mie
+
+> Best regards,
+> Lingyu Zhu
+>
+>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>
+
+
+
+-- =
+
+J=E9r=E9mie Galarneau
+EfficiOS Inc.
+http://www.efficios.com
