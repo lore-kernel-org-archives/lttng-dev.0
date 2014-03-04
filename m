@@ -1,19 +1,17 @@
-From: Zifei Tong <soariez@gmail.com>
-Subject: Re: ask help for gsoc 2014
-Date: Tue, 4 Mar 2014 15:13:57 +0800
-Message-ID: <CAJ7wx-GJm1KyJ=mt3kaMzE6TNoJJ7jSqgUK4xLKaH5+1J0-8kQ__47201.984076719$1393917324$gmane$org@mail.gmail.com>
-References: <CAJeLfGQ9b1-DuUzSQ6MbMfa-zkde3wxw=nQx3P6KqwBY58RyOQ@mail.gmail.com>
+From: "Woegerer, Paul" <Paul_Woegerer@mentor.com>
+Subject: Re: LTTng-UST and "ip" context
+Date: Tue, 4 Mar 2014 09:25:48 +0100
+Message-ID: <53158E0C.10102__4924.5840091773$1393921719$gmane$org@mentor.com>
+References: <20998D40D9A2B7499CA5A3A2666CB1EB2A67A5D3@ZURMSG1.QUANTUM.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="windows-1252"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ve0-f181.google.com ([209.85.128.181])
+Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <soariez@gmail.com>) id 1WKjYp-0004vI-Af
-	for lttng-dev@lists.lttng.org; Tue, 04 Mar 2014 02:14:46 -0500
-Received: by mail-ve0-f181.google.com with SMTP id oy12so3087717veb.12
-	for <lttng-dev@lists.lttng.org>; Mon, 03 Mar 2014 23:14:37 -0800 (PST)
-In-Reply-To: <CAJeLfGQ9b1-DuUzSQ6MbMfa-zkde3wxw=nQx3P6KqwBY58RyOQ@mail.gmail.com>
+	(envelope-from <Paul_Woegerer@mentor.com>) id 1WKkhX-0005U4-RR
+	for lttng-dev@lists.lttng.org; Tue, 04 Mar 2014 03:27:53 -0500
+In-Reply-To: <20998D40D9A2B7499CA5A3A2666CB1EB2A67A5D3@ZURMSG1.QUANTUM.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,33 +20,117 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?UTF-8?B?5Li6546L?= <xiaoxiao046@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: David OShea <David.OShea@quantum.com>, lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-SGkgV2VpLAoKWW91IGNhbiBzaW1wbHkgdXNlIHRoZSBJUkMgd2ViY2hhdCAod3d3Lm9mdGMubmV0
-L1dlYkNoYXQvKSB0byBjb25uZWN0CnRvIHRoZSAjbHR0bmcgY2hhbm5lbC4KCklmIHlvdSB3YW50
-IHRvIHVzZSBhIGxvY2FsIGNsaWVudCwgZmlyc3QgbWFrZSBzdXJlIHlvdSBjYW4gYWNjZXNzCm9m
-dGMncyBpcmMgc2VydmVyIChpcmM6Ly9pcmMub2Z0Yy5uZXQ6NjY2NykuCllvdSBjYW4gZm9yY2Ug
-dXNlIElQdjQgaWYgeW91ciBJUHY2IG5ldHdvcmsgaXMgYnJva2VuLCB0cnkgY29ubmVjdCB0bwpp
-cmM6Ly9pcmM0Lm9mdGMubmV0OjY2NjcuCgpUaGVuIGNob29zZSBhIElSQyBjbGllbnQKKGh0dHA6
-Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvQ29tcGFyaXNvbl9vZl9JbnRlcm5ldF9SZWxheV9DaGF0
-X2NsaWVudHMpCmFuZCBqb2luIHRoZSAjbHR0bmcgY2hhbm5lbC4KClJlZ2FyZHMsClppZmVpIFRv
-bmcKCk9uIFR1ZSwgTWFyIDQsIDIwMTQgYXQgMTozOSBQTSwg5Li6546LIDx4aWFveGlhbzA0NkBn
-bWFpbC5jb20+IHdyb3RlOgo+IEhlbGxvIGV2ZXJ5b25lLCBJIGFtIGEgc3R1ZGVudCBmcm9tIGNo
-aW5hLkkgYW0gcG9vciBpbiBteSBlbmdsaXNoLkkgaG9wZSB5b3UKPiBjYW4gdW5kZXJzdGFuZCB3
-aGF0IGkgbWVhbi4gSSBhbSB2ZXJ5IGludGVyZXN0ZWQgaW4gdGhlIGtlcm5lbCBhbmQgZGVidWdn
-aW5nCj4gdGVjaG5pcXVlLHNvIHRoYXQgaSBob3BlIGkgY2FuIHRha2UgYWN0aXZlIHBhcnQgaW4g
-dGhlIGdzb2MgMjAxNCB0byBtYWtlIGEKPiBjb250cmlidXRpb24gZm9yIHRoZSBsdHRuZyBwcm9q
-ZWN0Lgo+IEkgaGF2ZSByZWFkIHRoZSB3aWtpIG9mIGx0dG5nIGZvciB0aGUgZ3NvYyAyMDE0IGlu
-IHRoaXMKPiBwYWdlLS0tLS0tLS0tLS0taHR0cDovL2J1Z3MubHR0bmcub3JnL3Byb2plY3RzL2x0
-dG5nL3dpa2kvR29vZ2xlX1N1bW1lcl9vZl9Db2RlXzIwMTQuCj4gYnV0LCBpIGNhbiBub3QgY29u
-bmVjdCB0byB0aGUgaXJjIHNlcnZlci5zbyBpIGRvbid0IGtub3cgaG93IHRvIGpvaW4geW91IGFu
-ZAo+IGRpc2N1c3Mgd2l0aCB5b3UuCj4gaSBob3BlIHNvbWVvbmUgY291bGQgdGVsbCBtZSBob3cg
-dG8gam9pbiB5b3UgYW5kIGRpc2N1c3Mgd2l0aCB5b3UuCj4gdGhhbmsgeW91IHZlcnkgbXVjaC4K
-Pgo+Cj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBs
-dHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IGh0dHA6
-Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgoKX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1h
-aWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5v
-cmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+Hi David,
+
+On 03/03/2014 11:24 PM, David OShea wrote:
+> Hi all,
+> =
+
+>  =
+
+> =
+
+> Apologies if this is a stupid question, but is the =93ip=94 context meant=
+ to
+> be used with LTTng-UST?  I tried it out, and the address in the field
+> pointed to the TRACEPOINT_EVENT definition in my header file, i.e. not
+> to the tracepoint() call site.  Could this be due to the fact that I use
+
+That's most likely a side effect of having debug info with macro
+expansion (e.g. caused by compiling with -g3).
+
+See: GCC info pages:
+
+     Level 3 includes extra information, such as all the macro
+     definitions present in the program.  Some debuggers support macro
+     expansion when you use `-g3'.
+
+Use 'addr2line -i' if you want to see where the TRACEPOINT_EVENT macro
+was expanded instead of the definition of the macro itself:
+
+       -i
+       --inlines
+           If the address belongs to a function that was inlined, the
+           source information for all enclosing scopes back to the
+           first non-inlined function will also be printed. ....
+
+
+For example:
+
+addr2line -e $PREFIX/bin/test 400ee6
+/home/pwoegere/test/test_tracepoint.h:18
+
+With -i you get:
+
+addr2line -i -e $PREFIX/bin/test 400ee6
+/home/pwoegere/test/test_tracepoint.h:18
+/home/pwoegere/test/test.c:15 <-- That's what you want !
+
+
+HTH,
+Paul
+
+
+> dynamic trace providers, could it be due to my compile options, or is
+> this only meant for kernel tracing?
+> =
+
+>  =
+
+> =
+
+> This is with the following (with some minor patches, so admittedly it
+> could be my fault) on CentOS 6:
+> =
+
+> babeltrace-1.1.2
+> =
+
+> lttng-tools-2.3.2
+> =
+
+> lttng-ust-2.3.2
+> =
+
+> userspace-rcu-0.8.3
+> =
+
+>  =
+
+> =
+
+> Thanks in advance,
+> David
+> =
+
+> ------------------------------------------------------------------------
+> The information contained in this transmission may be confidential. Any
+> disclosure, copying, or further distribution of confidential information
+> is not permitted unless such privilege is explicitly granted in writing
+> by Quantum. Quantum reserves the right to have electronic
+> communications, including email and attachments, sent across its
+> networks filtered through anti virus and spam software programs and
+> retain such messages in order to comply with applicable data security
+> and retention requirements. Quantum is not responsible for the proper
+> and complete transmission of the substance of this communication or for
+> any delay in its receipt.
+> =
+
+> =
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> =
+
+
+
+-- =
+
+Paul Woegerer, SW Development Engineer
+Sourcery Analyzer <http://go.mentor.com/sourceryanalyzer>
+Mentor Graphics, Embedded Software Division
