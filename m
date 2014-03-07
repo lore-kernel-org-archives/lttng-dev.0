@@ -1,19 +1,14 @@
-From: Ludovic Lefebvre <ludovic.lefebvre@polymtl.ca>
-Subject: Help us to improve the user Experience of TMF
-Date: Fri, 07 Mar 2014 10:14:18 -0500
-Message-ID: <5319E24A.7080407__47280.8247003288$1394205343$gmane$org@polymtl.ca>
+From: "=?ISO-8859-1?B?emx5bnVz?=" <302590304@qq.com>
+Subject: Can tracepoint be listed before app registered?
+Date: Sat, 8 Mar 2014 01:26:17 +0800
+Message-ID: <tencent_6D2083A7444C8D7C02D4AD53__39106.8141595044$1394213329$gmane$org@qq.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2141669755=="
+Content-Type: multipart/mixed; boundary="===============1252818262=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.polymtl.ca ([132.207.4.11])
-	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <ludovic.lefebvre@polymtl.ca>) id 1WLwTl-0001nL-GW
-	for lttng-dev@lists.lttng.org; Fri, 07 Mar 2014 10:14:35 -0500
-Received: from [192.168.2.50] (bas2-montreal07-2925317414.dsl.bell.ca
-	[174.92.205.38])
-	by smtp.polymtl.ca (8.14.3/8.14.3) with ESMTP id s27FEOXB011335
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES128-SHA bits=128 verify=NOT)
-	for <lttng-dev@lists.lttng.org>; Fri, 7 Mar 2014 10:14:28 -0500
+Received: from smtpbg64.qq.com ([103.7.28.238])
+	by ltt.polymtl.ca with smtp (Exim 4.72)
+	(envelope-from <302590304@qq.com>) id 1WLyYd-0002nS-H4
+	for lttng-dev@lists.lttng.org; Fri, 07 Mar 2014 12:27:45 -0500
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,114 +17,75 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: =?ISO-8859-1?B?bHR0bmctZGV2?= <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
 This is a multi-part message in MIME format.
---===============2141669755==
+
+--===============1252818262==
 Content-Type: multipart/alternative;
- boundary="------------020905040907020808010903"
+	boundary="----=_NextPart_531A0139_08B50C38_5F057345"
+Content-Transfer-Encoding: 8Bit
 
 This is a multi-part message in MIME format.
---------------020905040907020808010903
-Content-Type: text/plain; charset=ISO-8859-1; format=flowed
-X-MIME-Autoconverted: from 8bit to quoted-printable by smtp.polymtl.ca id s27FEOXB011335
-Content-Transfer-Encoding: quoted-printable
 
-Hello everyone,
+------=_NextPart_531A0139_08B50C38_5F057345
+Content-Type: text/plain;
+	charset="ISO-8859-1"
+Content-Transfer-Encoding: base64
 
-I'm Ludovic, I'm studying in software ergonomy and after 5 years of=20
-higher education I have started my end-of-course internship at the =C9col=
-e=20
-Polytechniques de Montr=E9al. I am in charge of improving the user=20
-experience of TMF.
+SGksDQpTb3JyeSB0byBib3RoZXIgeW91IGd1eXMuIFRoZSBsdHRuZy10b29sIG1hbiBwYWdl
+IGRvc2VuJ3QgbWFrZSBpdCBjbGVhciB0aGF0IHdoZW4gdGhlIHRyYWNlcG9pbnRzIG9mIHVz
+ZXItc3BhY2UgYXBwbGljYXRpb24gY2FuIGJlIGxpc3RlZC4gU28gSSBkaWQgYSBsaXR0bGUg
+dGVzdC4gQXMgZmFyIGFzIEkgY2FuIHRlbGwgLHRoZSB0cmFjZXBvaW50IGluZm9ybWF0aW9u
+IGlzIG9ubHkgYXZhaWxhYmxlIGR1cmluZyB0aGUgYXBwbGljYXRpb24gaXMgcnVubmluZy4g
+DQoNCg0KU28gaXMgaXQgcG9zc2libGUgdGhhdCB0aGUgdHJhY2Vwb2ludCBjYW4gYmUgYXZh
+aWxhYmxlICpiZWZvcmUqIGFwcCBnZXQgcnVubmluZywgc3BlY2lmaWNhbGx5LCBiZWZvcmUg
+ZW5hYmxlLWV2ZW50IHN1YmNvbW1hbmQ/IEkgdGhpbmsgaXQgY2FuIGJlIHF1aXRlIGNvbnZl
+bmllbnQgdG8gb3V0cHV0IHRoZSBsaXN0IHdoZW4gc3BlY2lmeSB3aGljaCBldmVudHMgdG8g
+dHJhY2UuIElmIGl0IGlzIG5vdCBmb3Igbm93LA0KbWF5YmUgaXQncyBhIGZlYXR1cmUgd29y
+dGggd29ya2luZyBvbi4gTXkgaWRlYSBpcyBsdHRuZy10b29sIGNvdWxkIHJlYWQgdHJhY2Vy
+IHByb3ZpZGVyIGxpYnJhcnkgYW5kIGdldCB0aGUgaW5mbyxhbmQgIGFkZCBhIG9wdGlvbiBh
+ZnRlciAnbGlzdCcgc3ViY29tbWFuZCB3aGljaCBsZXQgdXNlciBzcGVjaWZ5IHRoZSBwcm92
+aWRlciBsaWJyYXJ5IHRvIHJlYWQuIEp1c3QgYSBwZXJzb25hbCBvcGlvbiBmcm9tIGEgbmV3
+IGNvbWVyIDotKQ0KDQoNCkJlc3QgcmVnYXJkcywNCkxpbmd5dSBaaHU=
 
-In order to improve the interface ofTMF I need your help to answer a=20
-short questionnaire about your user experience with the tool.
+------=_NextPart_531A0139_08B50C38_5F057345
+Content-Type: text/html;
+	charset="ISO-8859-1"
+Content-Transfer-Encoding: base64
 
-This questionnaire will help to identify problems and make updates which=20
-will make TMF more user-friendly.
+PGRpdj5IaSw8L2Rpdj48ZGl2PlNvcnJ5IHRvIGJvdGhlciB5b3UgZ3V5cy4gVGhlIGx0dG5n
+LXRvb2wgbWFuIHBhZ2UgZG9zZW4ndCBtYWtlIGl0IGNsZWFyIHRoYXQgd2hlbiB0aGUgdHJh
+Y2Vwb2ludHMgb2YgdXNlci1zcGFjZSBhcHBsaWNhdGlvbiBjYW4gYmUgbGlzdGVkLiBTbyBJ
+IGRpZCBhIGxpdHRsZSB0ZXN0LiBBcyBmYXIgYXMgSSBjYW4gdGVsbCAsdGhlIHRyYWNlcG9p
+bnQgaW5mb3JtYXRpb24gaXMgb25seSBhdmFpbGFibGUgZHVyaW5nIHRoZSBhcHBsaWNhdGlv
+biBpcyBydW5uaW5nLiZuYnNwOzwvZGl2PjxkaXY+PGJyPjwvZGl2PjxkaXY+U28gaXMgaXQg
+cG9zc2libGUgdGhhdCB0aGUgdHJhY2Vwb2ludCBjYW4gYmUgYXZhaWxhYmxlICpiZWZvcmUq
+IGFwcCBnZXQgcnVubmluZywgc3BlY2lmaWNhbGx5LCBiZWZvcmUgZW5hYmxlLWV2ZW50IHN1
+YmNvbW1hbmQ/IEkgdGhpbmsgaXQgY2FuIGJlIHF1aXRlIGNvbnZlbmllbnQgdG8gb3V0cHV0
+IHRoZSBsaXN0IHdoZW4gc3BlY2lmeSB3aGljaCBldmVudHMgdG8gdHJhY2UuIElmIGl0IGlz
+IG5vdCBmb3Igbm93LDwvZGl2PjxkaXY+bWF5YmUgaXQncyBhIGZlYXR1cmUgd29ydGggd29y
+a2luZyBvbi4gTXkgaWRlYSBpcyBsdHRuZy10b29sIGNvdWxkIHJlYWQgdHJhY2VyIHByb3Zp
+ZGVyIGxpYnJhcnkgYW5kIGdldCB0aGUgaW5mbyxhbmQgJm5ic3A7YWRkIGEgb3B0aW9uIGFm
+dGVyICdsaXN0JyBzdWJjb21tYW5kIHdoaWNoIGxldCB1c2VyIHNwZWNpZnkgdGhlIHByb3Zp
+ZGVyIGxpYnJhcnkgdG8gcmVhZC4gSnVzdCBhIHBlcnNvbmFsIG9waW9uIGZyb20gYSBuZXcg
+Y29tZXIgOi0pPC9kaXY+PGRpdj48YnI+PC9kaXY+PGRpdj5CZXN0IHJlZ2FyZHMsPC9kaXY+
+PGRpdj5MaW5neXUgWmh1PC9kaXY+PGRpdj48YnI+PC9kaXY+
 
-Here is the link:
-https://docs.google.com/forms/d/1062AXpphKCWSQtzkgqWB65iJG5I4rzkNHuLYzzPB=
-gpU/viewform
-
-This questionnaire will take about 10 minutes to complete and is anonymou=
-s.
-Please, forward this questionnaire to all the end users you are in=20
-contact with.
-
-
-Thanks for your help,
-Have a good day.
-
-
---------------020905040907020808010903
-Content-Type: text/html; charset=ISO-8859-1
-Content-Transfer-Encoding: 7bit
-
-<html>
-  <head>
-    <meta http-equiv="content-type" content="text/html;
-      charset=ISO-8859-1">
-  </head>
-  <body text="#000000" bgcolor="#FFFFFF">
-    <p class="MsoNormal"><span style="mso-ansi-language:EN-CA"
-        lang="EN-CA">Hello everyone,<o:p><br>
-        </o:p></span></p>
-    <p> </p>
-    <p class="MsoNormal"><span style="mso-ansi-language:EN-CA"
-        lang="EN-CA">I'm Ludovic, I'm studying in software ergonomy and
-        after 5 years of higher education I have started my
-        end-of-course internship at the &Eacute;cole Polytechniques de
-        Montr&eacute;al. I am in charge of improving the user experience of
-        TMF.<o:p> <br>
-        </o:p></span></p>
-    <p> </p>
-    <p class="MsoNormal"><span style="mso-ansi-language:EN-CA"
-        lang="EN-CA">In order to improve the interface of<span
-          style="mso-spacerun:yes">&nbsp; </span>TMF I need your help to
-        answer a short questionnaire about your user experience with the
-        tool.<o:p> </o:p></span><br>
-    </p>
-    <p> </p>
-    <p class="MsoNormal"><span style="mso-ansi-language:EN-CA"
-        lang="EN-CA">This questionnaire will help to identify problems
-        and make updates which will make TMF more user-friendly.<o:p> <br>
-        </o:p></span></p>
-    <p> </p>
-    <p class="MsoNormal"><span style="mso-ansi-language:EN-CA"
-        lang="EN-CA">Here is the link:<br>
-        <a
-href="https://docs.google.com/forms/d/1062AXpphKCWSQtzkgqWB65iJG5I4rzkNHuLYzzPBgpU/viewform">https://docs.google.com/forms/d/1062AXpphKCWSQtzkgqWB65iJG5I4rzkNHuLYzzPBgpU/viewform</a><o:p></o:p></span></p>
-    <p> </p>
-    <p> </p>
-    <p class="MsoNormal"><span style="mso-ansi-language:EN-CA"
-        lang="EN-CA">This questionnaire will take about 10 minutes to
-        complete and <span style="mso-spacerun:yes">&nbsp;</span>is
-        anonymous.<o:p></o:p><br>
-        Please, forward this questionnaire to all the end users you are
-        in contact with.<o:p></o:p></span></p>
-    <p> </p>
-    <p class="MsoNormal"><span style="mso-ansi-language:EN-CA"
-        lang="EN-CA"><o:p>&nbsp;<br>
-          Thanks for your help, </o:p><br>
-        Have a good day.</span></p>
-  </body>
-</html>
-
---------------020905040907020808010903--
+------=_NextPart_531A0139_08B50C38_5F057345--
 
 
---===============2141669755==
+
+--===============1252818262==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
-Content-Disposition: inline
 Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============2141669755==--
+--===============1252818262==--
