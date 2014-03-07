@@ -1,17 +1,19 @@
-From: Andrei - Constantin Popescu <popescu.andrei1991@gmail.com>
-Subject: GSoC Introduction
-Date: Wed, 5 Mar 2014 12:13:24 +0200
-Message-ID: <CAFw0Hqw00LXtPLmvO_ixaMDodVJZf=GD1O=u8ddtahN7zLRK1g__11865.5766862959$1394014461$gmane$org@mail.gmail.com>
+From: Ludovic Lefebvre <ludovic.lefebvre@polymtl.ca>
+Subject: Help us to improve the user Experience of TMF
+Date: Fri, 07 Mar 2014 10:14:18 -0500
+Message-ID: <5319E24A.7080407__47280.8247003288$1394205343$gmane$org@polymtl.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/mixed; boundary="===============2141669755=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ve0-f169.google.com ([209.85.128.169])
+Received: from smtp.polymtl.ca ([132.207.4.11])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <popescu.andrei1991@gmail.com>) id 1WL8pO-0001BG-Gz
-	for lttng-dev@lists.lttng.org; Wed, 05 Mar 2014 05:13:31 -0500
-Received: by mail-ve0-f169.google.com with SMTP id pa12so809417veb.14
-	for <lttng-dev@lists.lttng.org>; Wed, 05 Mar 2014 02:13:25 -0800 (PST)
+	(envelope-from <ludovic.lefebvre@polymtl.ca>) id 1WLwTl-0001nL-GW
+	for lttng-dev@lists.lttng.org; Fri, 07 Mar 2014 10:14:35 -0500
+Received: from [192.168.2.50] (bas2-montreal07-2925317414.dsl.bell.ca
+	[174.92.205.38])
+	by smtp.polymtl.ca (8.14.3/8.14.3) with ESMTP id s27FEOXB011335
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES128-SHA bits=128 verify=NOT)
+	for <lttng-dev@lists.lttng.org>; Fri, 7 Mar 2014 10:14:28 -0500
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,42 +25,111 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hello!
+This is a multi-part message in MIME format.
+--===============2141669755==
+Content-Type: multipart/alternative;
+ boundary="------------020905040907020808010903"
 
-I'm Andrei(Popescu Andrei-Constantin, to be more precise), a 4th year
-undergraduate student at Univ. Polytechnic of Bucharest, Computer
-Science dept. I live in Bucharest, Romania. When I'm not coding, I'm
-playing basketball or video games, or simply hanging out with my
-friends. My IRC handle is andrei_ (with one or more _)
+This is a multi-part message in MIME format.
+--------------020905040907020808010903
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+X-MIME-Autoconverted: from 8bit to quoted-printable by smtp.polymtl.ca id s27FEOXB011335
+Content-Transfer-Encoding: quoted-printable
 
-I've successfully participated in GSoC 2012 with BRL-CAD on a project
-called libpkg extensions. On short, I had to performance test, improve
-then test again the brlcad networking library. I was completely new to
-open source and development back then. After that, I've been working
-as a linux kernel developer(not upstream tho). I'm mostly familiar
-with low level development(kernel, compilers, C is my strongest
-language) and with Java as an OOP/application development language.
-Regarding compilers, I've played a bit with llvm API(use-def chains,
-constant folding, that kind of stuff) as well as write a AST
-generator/interpreter in Antlr.
+Hello everyone,
 
-I have no idea if I'm up to it, but this year I was trying to find a
-project that would actually matter, that would actually help the
-organization aswell. I stopped over "Clang plugin providing automatic
-application instrumentation"  because I am interested in compilers,
-kernel and want to improve my C++. Aside of that, (I might be totally
-wrong since I don't have a firm understanding of the project yet), it
-seemed to me that it  would ease profiling functions.
+I'm Ludovic, I'm studying in software ergonomy and after 5 years of=20
+higher education I have started my end-of-course internship at the =C9col=
+e=20
+Polytechniques de Montr=E9al. I am in charge of improving the user=20
+experience of TMF.
 
-As discussed with Christian Babeux  and J=E9r=E9mie Galarneau I'll compile
-the toolchain, take a look at how clang plugins work and then probably
-come back with more questions :). (step 1)
+In order to improve the interface ofTMF I need your help to answer a=20
+short questionnaire about your user experience with the tool.
 
-My plan is to get a decent, high-level understanding of what LTTng
-does(basically, step 1), then work on bugfixes or small extensions on
-code related to my project simultaneously with writing iterations of
-my proposal.
+This questionnaire will help to identify problems and make updates which=20
+will make TMF more user-friendly.
 
-If anyone has any suggestions, feel free to point them out :)
+Here is the link:
+https://docs.google.com/forms/d/1062AXpphKCWSQtzkgqWB65iJG5I4rzkNHuLYzzPB=
+gpU/viewform
 
-Cheers!
+This questionnaire will take about 10 minutes to complete and is anonymou=
+s.
+Please, forward this questionnaire to all the end users you are in=20
+contact with.
+
+
+Thanks for your help,
+Have a good day.
+
+
+--------------020905040907020808010903
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
+
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html;
+      charset=ISO-8859-1">
+  </head>
+  <body text="#000000" bgcolor="#FFFFFF">
+    <p class="MsoNormal"><span style="mso-ansi-language:EN-CA"
+        lang="EN-CA">Hello everyone,<o:p><br>
+        </o:p></span></p>
+    <p> </p>
+    <p class="MsoNormal"><span style="mso-ansi-language:EN-CA"
+        lang="EN-CA">I'm Ludovic, I'm studying in software ergonomy and
+        after 5 years of higher education I have started my
+        end-of-course internship at the &Eacute;cole Polytechniques de
+        Montr&eacute;al. I am in charge of improving the user experience of
+        TMF.<o:p> <br>
+        </o:p></span></p>
+    <p> </p>
+    <p class="MsoNormal"><span style="mso-ansi-language:EN-CA"
+        lang="EN-CA">In order to improve the interface of<span
+          style="mso-spacerun:yes">&nbsp; </span>TMF I need your help to
+        answer a short questionnaire about your user experience with the
+        tool.<o:p> </o:p></span><br>
+    </p>
+    <p> </p>
+    <p class="MsoNormal"><span style="mso-ansi-language:EN-CA"
+        lang="EN-CA">This questionnaire will help to identify problems
+        and make updates which will make TMF more user-friendly.<o:p> <br>
+        </o:p></span></p>
+    <p> </p>
+    <p class="MsoNormal"><span style="mso-ansi-language:EN-CA"
+        lang="EN-CA">Here is the link:<br>
+        <a
+href="https://docs.google.com/forms/d/1062AXpphKCWSQtzkgqWB65iJG5I4rzkNHuLYzzPBgpU/viewform">https://docs.google.com/forms/d/1062AXpphKCWSQtzkgqWB65iJG5I4rzkNHuLYzzPBgpU/viewform</a><o:p></o:p></span></p>
+    <p> </p>
+    <p> </p>
+    <p class="MsoNormal"><span style="mso-ansi-language:EN-CA"
+        lang="EN-CA">This questionnaire will take about 10 minutes to
+        complete and <span style="mso-spacerun:yes">&nbsp;</span>is
+        anonymous.<o:p></o:p><br>
+        Please, forward this questionnaire to all the end users you are
+        in contact with.<o:p></o:p></span></p>
+    <p> </p>
+    <p class="MsoNormal"><span style="mso-ansi-language:EN-CA"
+        lang="EN-CA"><o:p>&nbsp;<br>
+          Thanks for your help, </o:p><br>
+        Have a good day.</span></p>
+  </body>
+</html>
+
+--------------020905040907020808010903--
+
+
+--===============2141669755==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============2141669755==--
