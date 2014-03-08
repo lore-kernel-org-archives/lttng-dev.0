@@ -1,46 +1,46 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] Userspace RCU 0.7.12 and 0.8.4
-Date: Sat, 8 Mar 2014 13:52:10 +0000 (UTC)
-Message-ID: <2003732716.34418.1394286730587.JavaMail.zimbra@efficios.com>
-References: <430198093.34414.1394286539155.JavaMail.zimbra@efficios.com>
+Subject: [RELEASE] Babeltrace 1.2.1
+Date: Sat, 8 Mar 2014 14:02:30 +0000 (UTC)
+Message-ID: <1018068216.34420.1394287350392.JavaMail.zimbra__627.446085172956$1394287387$gmane$org@efficios.com>
+References: <1255384434.34419.1394287329430.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Return-path: <linux-kernel-owner@vger.kernel.org>
-In-Reply-To: <430198093.34414.1394286539155.JavaMail.zimbra@efficios.com>
-Sender: linux-kernel-owner@vger.kernel.org
-To: linux-kernel@vger.kernel.org, lttng-dev@lists.lttng.org, rp@svcs.cs.pdx.edu
-Cc: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Lai Jiangshan <laijs@cn.fujitsu.com>, Stephen Hemminger <shemminger@vyatta.com>, Alan Stern <stern@rowland.harvard.edu>
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail.efficios.com ([78.47.125.74])
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <compudj@efficios.com>) id 1WMHpe-0003vG-82
+	for lttng-dev@lists.lttng.org; Sat, 08 Mar 2014 09:02:34 -0500
+In-Reply-To: <1255384434.34419.1394287329430.JavaMail.zimbra@efficios.com>
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+To: lttng-dev@lists.lttng.org, tiwg@multicore-association.org
 List-Id: lttng-dev@lists.lttng.org
 
-liburcu is a LGPLv2.1 userspace RCU (read-copy-update) library. This
-data synchronization library provides read-side access which scales
-linearly with the number of cores. It does so by allowing multiples
-copies of a given data structure to live at the same time, and by
-monitoring the data structure accesses to detect grace periods after
-which memory reclamation is possible.
+The Babeltrace project provides trace read and write libraries, as well
+as a trace converter. Plugins can be created for any trace format to
+allow its conversion to/from another trace format.
 
-liburcu-cds provides efficient data structures based on RCU and
-lock-free algorithms. Those structures include hash tables, queues,
-stacks, and doubly-linked lists.
+The main format expected to be converted to/from is the Common Trace
+Format (CTF). The default input format of the "babeltrace" command is
+CTF, and its default output format is a human-readable text log. The
+"babeltrace-log" command converts from a text log to a CTF trace.
 
-Noteworthy:
-
-There is a minor imperfection in the prior version (0.8.3/0.7.11)
-corrected by this release. However, it is not required for
-correctness. We are doing this release because clients will
-base their packages (and did their testing) on those commits.
 
 Changelog:
-2014-03-08 Userspace RCU 0.8.4
-        * Fix: move wait loop increment before first conditional block
+2014-03-08 Babeltrace 1.2.1
+        * Fix: Accept an input port in the live URL when no session is provided
 
-2014-03-08 Userspace RCU 0.7.12
-        * Fix: move wait loop increment before first conditional block
+Project website: http://www.efficios.com/babeltrace
+Download link: http://www.efficios.com/files/babeltrace/
+CTF specification: http://www.efficios.com/ctf
 
-Project website: http://urcu.so
-Download link: http://urcu.so/files/
-Git repository: git://git.urcu.so/urcu.git
 
 -- 
 Mathieu Desnoyers
