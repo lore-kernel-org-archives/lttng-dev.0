@@ -1,17 +1,18 @@
-From: Matthew Khouzam <matthew.khouzam@ericsson.com>
-Subject: Re: Help us to improve the user Experience of TMF
-Date: Mon, 10 Mar 2014 11:50:19 -0400
-Message-ID: <531DDF3B.6020000__45400.8758337752$1394466774$gmane$org@ericsson.com>
-References: <5319E24A.7080407@polymtl.ca>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH lttng-ust] Fix: mismatch between code and
+	comments
+Date: Mon, 10 Mar 2014 19:17:55 +0000 (UTC)
+Message-ID: <157376102.34960.1394479075953.JavaMail.zimbra__26813.6653387502$1394479162$gmane$org@efficios.com>
+References: <1393937414-32622-1-git-send-email-zifeitong@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from usevmg20.ericsson.net ([198.24.6.45])
+Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <matthew.khouzam@ericsson.com>) id 1WN2UP-0001jQ-TD
-	for lttng-dev@lists.lttng.org; Mon, 10 Mar 2014 11:51:47 -0400
-In-Reply-To: <5319E24A.7080407@polymtl.ca>
+	(envelope-from <compudj@efficios.com>) id 1WN5iE-0003LC-NF
+	for lttng-dev@lists.lttng.org; Mon, 10 Mar 2014 15:18:19 -0400
+In-Reply-To: <1393937414-32622-1-git-send-email-zifeitong@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,49 +21,46 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Zifei Tong <zifeitong@gmail.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hello tracing tracers,
+Merged, thanks!
 
-I would like to highlight that here in the tmf team, we are working with
-Ludovic and will take to heart any suggestions given. Make your voice
-heard, vote early and vote often! (well early!)
+Mathieu
 
-Thanks!
+----- Original Message -----
+> From: "Zifei Tong" <zifeitong@gmail.com>
+> To: "mathieu desnoyers" <mathieu.desnoyers@efficios.com>
+> Cc: lttng-dev@lists.lttng.org, "Zifei Tong" <zifeitong@gmail.com>
+> Sent: Tuesday, March 4, 2014 7:50:14 AM
+> Subject: [PATCH lttng-ust] Fix: mismatch between code and comments
+> 
+> Signed-off-by: Zifei Tong <zifeitong@gmail.com>
+> ---
+>  liblttng-ust-ctl/ustctl.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/liblttng-ust-ctl/ustctl.c b/liblttng-ust-ctl/ustctl.c
+> index 854d8ae..e07ec92 100644
+> --- a/liblttng-ust-ctl/ustctl.c
+> +++ b/liblttng-ust-ctl/ustctl.c
+> @@ -294,7 +294,7 @@ int ustctl_set_exclusion(int sock, struct
+> lttng_ust_event_exclusion *exclusion,
+>  		return ret;
+>  	}
+>  
+> -	/* send var len bytecode */
+> +	/* send var len exclusion names */
+>  	ret = ustcomm_send_unix_sock(sock,
+>  			exclusion->names,
+>  			exclusion->count * LTTNG_UST_SYM_NAME_LEN);
+> --
+> 1.9.0
+> 
+> 
 
-On 14-03-07 10:14 AM, Ludovic Lefebvre wrote:
->
-> Hello everyone,
->
-> I'm Ludovic, I'm studying in software ergonomy and after 5 years of
-> higher education I have started my end-of-course internship at the
-> =C9cole Polytechniques de Montr=E9al. I am in charge of improving the user
-> experience of TMF.
->
-> In order to improve the interface of  TMF I need your help to answer a
-> short questionnaire about your user experience with the tool.
->
-> This questionnaire will help to identify problems and make updates
-> which will make TMF more user-friendly.
->
-> Here is the link:
-> https://docs.google.com/forms/d/1062AXpphKCWSQtzkgqWB65iJG5I4rzkNHuLYzzPB=
-gpU/viewform
->
-> This questionnaire will take about 10 minutes to complete and  is
-> anonymous.
-> Please, forward this questionnaire to all the end users you are in
-> contact with.
->
->  =
-
-> Thanks for your help,
-> Have a good day.
->
->
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
