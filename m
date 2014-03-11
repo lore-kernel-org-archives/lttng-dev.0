@@ -1,18 +1,21 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
 Subject: Re: Can tracepoint be listed before app registered?
-Date: Tue, 11 Mar 2014 19:16:12 +0000 (UTC)
-Message-ID: <1167278944.300.1394565372926.JavaMail.zimbra__30297.0552271747$1394565431$gmane$org@efficios.com>
+Date: Tue, 11 Mar 2014 15:23:33 -0400
+Message-ID: <CA+jJMxu_BWt-LO-zfH4V3HA+ONo0-cO0f1TrV26bGOwcq3zHuA__39423.9638270394$1394565880$gmane$org@mail.gmail.com>
 References: <tencent_6D2083A7444C8D7C02D4AD53@qq.com>
 	<CA+jJMxtsE91pFis=SQbce0eHWS-vVfAiJg6deyvFSfp=B2WvYQ@mail.gmail.com>
+	<1167278944.300.1394565372926.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-qg0-f44.google.com ([209.85.192.44])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1WNS9u-0006dp-L3
-	for lttng-dev@lists.lttng.org; Tue, 11 Mar 2014 15:16:21 -0400
-In-Reply-To: <CA+jJMxtsE91pFis=SQbce0eHWS-vVfAiJg6deyvFSfp=B2WvYQ@mail.gmail.com>
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1WNSH5-0006ij-D4
+	for lttng-dev@lists.lttng.org; Tue, 11 Mar 2014 15:23:44 -0400
+Received: by mail-qg0-f44.google.com with SMTP id a108so26187262qge.3
+	for <lttng-dev@lists.lttng.org>; Tue, 11 Mar 2014 12:23:33 -0700 (PDT)
+In-Reply-To: <1167278944.300.1394565372926.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,55 +24,111 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?utf-8?B?SsOpcsOpbWll?= Galarneau <jeremie.galarneau@efficios.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-CgotLS0tLSBPcmlnaW5hbCBNZXNzYWdlIC0tLS0tCj4gRnJvbTogIkrDqXLDqW1pZSBHYWxhcm5l
-YXUiIDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20+Cj4gVG86ICJ6bHludXMiIDwzMDI1
-OTAzMDRAcXEuY29tPgo+IENjOiAibHR0bmctZGV2IiA8bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9y
-Zz4KPiBTZW50OiBGcmlkYXksIE1hcmNoIDcsIDIwMTQgMToyMzowMSBQTQo+IFN1YmplY3Q6IFJl
-OiBbbHR0bmctZGV2XSBDYW4gdHJhY2Vwb2ludCBiZSBsaXN0ZWQgYmVmb3JlIGFwcCByZWdpc3Rl
-cmVkPwo+IAo+IE9uIEZyaSwgTWFyIDcsIDIwMTQgYXQgMTI6MjYgUE0sIHpseW51cyA8MzAyNTkw
-MzA0QHFxLmNvbT4gd3JvdGU6Cj4gPiBIaSwKPiA+IFNvcnJ5IHRvIGJvdGhlciB5b3UgZ3V5cy4g
-VGhlIGx0dG5nLXRvb2wgbWFuIHBhZ2UgZG9zZW4ndCBtYWtlIGl0IGNsZWFyCj4gPiB0aGF0Cj4g
-PiB3aGVuIHRoZSB0cmFjZXBvaW50cyBvZiB1c2VyLXNwYWNlIGFwcGxpY2F0aW9uIGNhbiBiZSBs
-aXN0ZWQuIFNvIEkgZGlkIGEKPiA+IGxpdHRsZSB0ZXN0LiBBcyBmYXIgYXMgSSBjYW4gdGVsbCAs
-dGhlIHRyYWNlcG9pbnQgaW5mb3JtYXRpb24gaXMgb25seQo+ID4gYXZhaWxhYmxlIGR1cmluZyB0
-aGUgYXBwbGljYXRpb24gaXMgcnVubmluZy4KPiA+Cj4gCj4gQ29ycmVjdC4KPiAKPiA+IFNvIGlz
-IGl0IHBvc3NpYmxlIHRoYXQgdGhlIHRyYWNlcG9pbnQgY2FuIGJlIGF2YWlsYWJsZSAqYmVmb3Jl
-KiBhcHAgZ2V0Cj4gPiBydW5uaW5nLCBzcGVjaWZpY2FsbHksIGJlZm9yZSBlbmFibGUtZXZlbnQg
-c3ViY29tbWFuZD8gSSB0aGluayBpdCBjYW4gYmUKPiA+IHF1aXRlIGNvbnZlbmllbnQgdG8gb3V0
-cHV0IHRoZSBsaXN0IHdoZW4gc3BlY2lmeSB3aGljaCBldmVudHMgdG8gdHJhY2UuIElmCj4gPiBp
-dCBpcyBub3QgZm9yIG5vdywKPiA+IG1heWJlIGl0J3MgYSBmZWF0dXJlIHdvcnRoIHdvcmtpbmcg
-b24uIE15IGlkZWEgaXMgbHR0bmctdG9vbCBjb3VsZCByZWFkCj4gPiB0cmFjZXIgcHJvdmlkZXIg
-bGlicmFyeSBhbmQgZ2V0IHRoZSBpbmZvLGFuZCAgYWRkIGEgb3B0aW9uIGFmdGVyICdsaXN0Jwo+
-ID4gc3ViY29tbWFuZCB3aGljaCBsZXQgdXNlciBzcGVjaWZ5IHRoZSBwcm92aWRlciBsaWJyYXJ5
-IHRvIHJlYWQuIEp1c3QgYQo+ID4gcGVyc29uYWwgb3Bpb24gZnJvbSBhIG5ldyBjb21lciA6LSkK
-PiA+Cj4gCj4gWW91IGNhbiBlbmFibGUgYW4gZXZlbnQgYmVmb3JlIHRoZSBhcHAgaXMgc3RhcnRl
-ZC4gSG93ZXZlciwgYXMgeW91Cj4gcG9pbnRlZCBvdXQsIHRoZSBzZXNzaW9uIGRhZW1vbiBoYXMg
-bm8ga25vd2xlZGdlIG9mIGFwcGxpY2F0aW9uIGV2ZW50cwo+IGJlZm9yZSB0aGV5IGFyZSBsYXVu
-Y2hlZC4KPiAKPiBNeSB1bmRlcnN0YW5kaW5nIG9mIHlvdXIgc3VnZ2VzdGlvbiBpcyB0aGF0IHdl
-IHNob3VsZCBkZWZpbmUgYSBwdWJsaWMKPiBwcm92aWRlciBBUEkgb24gd2hpY2ggdGhlIGx0dG5n
-IGNsaWVudCBjb3VsZCBob29rIGl0c2VsZiB0byBsaXN0Cj4gZXZlbnRzLiBJdCB3b3VsZCBiZSBv
-ZiBsaW1pdGVkIHVzZSBpbiB0aGUgY2FzZSBvZiBzdGF0aWNhbGx5IGxpbmtlZAo+IHByb3ZpZGVy
-cywgYnV0IEl0J3MgYW4gaW50ZXJlc3RpbmcgcHJvYmxlbS4uLiBEbyB5b3UgaGF2ZSBhIHNwZWNp
-ZmljCj4gdXNlLWNhc2UgaW4gbWluZD8KCkFub3RoZXIgb3B0aW9uIHRoYXQgd291bGQgdGFrZSBj
-YXJlIG9mIHN0YXRpY2FsbHkgbGlua2VkIHByb3ZpZGVycwp3b3VsZCBiZSB0byBsZXQgYSBsdHRu
-ZyBsaWJyYXJ5IGxvb2sgYXQgYWxsIHRoZSBleGVjdXRhYmxlcyBvbiB0aGUgc3lzdGVtCihvciBm
-cm9tIGEgY2VydGFpbiBwYXRoIGluIHRoZSBzeXN0ZW0pLCBhcyB3ZWxsIGFzIC5zbywgYW5kIGxp
-c3QgYSBzcGVjaWZpYwoidHJhY2Vwb2ludCBwcm92aWRlciIgc2VjdGlvbiB0aGF0IHdlIGNvdWxk
-IHNwZWNpZnkuIFdlJ2QgbmVlZCB0byBwYXJzZQpFTEYgZm9yIHRoaXMuCgpUaG91Z2h0cyA/CgpU
-aGFua3MsCgpNYXRoaWV1Cgo+IAo+IFJlZ2FyZHMsCj4gSsOpcsOpbWllCj4gCj4gPiBCZXN0IHJl
-Z2FyZHMsCj4gPiBMaW5neXUgWmh1Cj4gPgo+ID4KPiA+IF9fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fCj4gPiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4gPiBs
-dHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gPiBodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1i
-aW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKPiA+Cj4gCj4gCj4gCj4gLS0KPiBKw6lyw6lt
-aWUgR2FsYXJuZWF1Cj4gRWZmaWNpT1MgSW5jLgo+IGh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCj4g
-Cj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBsdHRu
-Zy1kZXYgbWFpbGluZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IGh0dHA6Ly9s
-aXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo+IAoKLS0g
-Ck1hdGhpZXUgRGVzbm95ZXJzCkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20K
-Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRl
-diBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+On Tue, Mar 11, 2014 at 3:16 PM, Mathieu Desnoyers
+<mathieu.desnoyers@efficios.com> wrote:
+>
+>
+> ----- Original Message -----
+>> From: "J=E9r=E9mie Galarneau" <jeremie.galarneau@efficios.com>
+>> To: "zlynus" <302590304@qq.com>
+>> Cc: "lttng-dev" <lttng-dev@lists.lttng.org>
+>> Sent: Friday, March 7, 2014 1:23:01 PM
+>> Subject: Re: [lttng-dev] Can tracepoint be listed before app registered?
+>>
+>> On Fri, Mar 7, 2014 at 12:26 PM, zlynus <302590304@qq.com> wrote:
+>> > Hi,
+>> > Sorry to bother you guys. The lttng-tool man page dosen't make it clear
+>> > that
+>> > when the tracepoints of user-space application can be listed. So I did=
+ a
+>> > little test. As far as I can tell ,the tracepoint information is only
+>> > available during the application is running.
+>> >
+>>
+>> Correct.
+>>
+>> > So is it possible that the tracepoint can be available *before* app get
+>> > running, specifically, before enable-event subcommand? I think it can =
+be
+>> > quite convenient to output the list when specify which events to trace=
+. If
+>> > it is not for now,
+>> > maybe it's a feature worth working on. My idea is lttng-tool could read
+>> > tracer provider library and get the info,and  add a option after 'list'
+>> > subcommand which let user specify the provider library to read. Just a
+>> > personal opion from a new comer :-)
+>> >
+>>
+>> You can enable an event before the app is started. However, as you
+>> pointed out, the session daemon has no knowledge of application events
+>> before they are launched.
+>>
+>> My understanding of your suggestion is that we should define a public
+>> provider API on which the lttng client could hook itself to list
+>> events. It would be of limited use in the case of statically linked
+>> providers, but It's an interesting problem... Do you have a specific
+>> use-case in mind?
+>
+> Another option that would take care of statically linked providers
+> would be to let a lttng library look at all the executables on the system
+> (or from a certain path in the system), as well as .so, and list a specif=
+ic
+> "tracepoint provider" section that we could specify. We'd need to parse
+> ELF for this.
+>
+> Thoughts ?
+>
+
+I like the idea. Lingyu, would that be something you'd like to propose
+as a GSoC project?
+
+Regards,
+J=E9r=E9mie
+
+> Thanks,
+>
+> Mathieu
+>
+>>
+>> Regards,
+>> J=E9r=E9mie
+>>
+>> > Best regards,
+>> > Lingyu Zhu
+>> >
+>> >
+>> > _______________________________________________
+>> > lttng-dev mailing list
+>> > lttng-dev@lists.lttng.org
+>> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>> >
+>>
+>>
+>>
+>> --
+>> J=E9r=E9mie Galarneau
+>> EfficiOS Inc.
+>> http://www.efficios.com
+>>
+>> _______________________________________________
+>> lttng-dev mailing list
+>> lttng-dev@lists.lttng.org
+>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>>
+>
+> --
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> http://www.efficios.com
+
+
+
+-- =
+
+J=E9r=E9mie Galarneau
+EfficiOS Inc.
+http://www.efficios.com
