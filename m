@@ -1,16 +1,15 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: Re: Working on some bugs
-Date: Tue, 11 Mar 2014 12:22:01 -0400
-Message-ID: <20140311162201.GE7727__41421.5691773736$1394556655$gmane$org@thessa>
-References: <CAEEAEzWcPk788kF=BptjeGsG=hrWyeK1tcUAM4Fq9GAwZYPXhQ@mail.gmail.com>
+From: Santiago Font <sfont@teldat.com>
+Subject: LTTng-ust 2.4.0-rc2: no events when tracing busybox
+Date: Tue, 11 Mar 2014 19:28:11 +0100
+Message-ID: <531F55BB.6030203__30483.472106471$1394564609$gmane$org@teldat.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1497916856=="
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([144.76.53.219])
+Received: from mail.teldat.com ([195.53.62.69])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1WNPRS-00058x-1s
-	for lttng-dev@lists.lttng.org; Tue, 11 Mar 2014 12:22:16 -0400
-In-Reply-To: <CAEEAEzWcPk788kF=BptjeGsG=hrWyeK1tcUAM4Fq9GAwZYPXhQ@mail.gmail.com>
+	(envelope-from <sfont@teldat.com>) id 1WNRPX-0006Bv-8f
+	for lttng-dev@lists.lttng.org; Tue, 11 Mar 2014 14:28:25 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,123 +18,192 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Sandeep K Chaudhary <babbusandy2006@gmail.com>
-Cc: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
+Hi,
 
---===============1497916856==
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="vv4Sf/kQfcwinyKX"
-Content-Disposition: inline
+     I have an embedded scenario (openwrt over Freescale) working with 
+LTTng:
 
+         lttng create TEST
+         lttng enable-channel MYCHAN -u --buffers-uid --subbuf-size 64k
+         lttng add-context -u -t procname -c MYCHAN
+         lttng enable-event -u "*" -c MYCHAN
+         lttng start
+         /usr/sbin/sample &
+         lttng stop
+         lttng view
 
---vv4Sf/kQfcwinyKX
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+             - Several ust_baddr_statedump:soinfo events
+             - An example of the events I defined
+            (See below for details: dump_1)
 
-On 10 Mar (23:00:36), Sandeep K Chaudhary wrote:
-> Hi guys,
->=20
-> I want to submit patches for some bugs before making my GSoC application.=
- I
-> was looking at the bug tracker and I think I can work some of these
-> before/during the application. Can you please give some suggestion as to
-> whether I will be able to work on them (given that I am new to the code
-> base)?
->=20
-> http://bugs.lttng.org/issues/621
+     So far, so good.
 
-This one should be quite straight forward. There is already version
-check for the create_session command I think. Here is your starting
-point.
+     Now, I'm trying to add my events to busybox to trace telnetd (very 
+same provider .c file and event definition .h file, changing only the 
+provider name).
+     When I follow exactly the same steps but changing "/usr/sbin/sample 
+&" for "/usr/sbin/telnetd -F &", I get the ust_baddr_statedump:soinfo 
+events, but none of my events (see dump_2)
+     I have tried with/without TRACEPOINT_PROBE_DYNAMIC_LINKAGE, 
+with/without LD_PRELOAD=liblttng-ust-fork.so, but not success.
+     Taking a look to the symbols inside the binary (dump 3), all LTTng 
+stuff seems to be there.
 
-lttng-tools:
-* src/bin/lttng-relayd/cmd-*
-* src/bin/lttng-relayd/main.c
+     LTTng (modules, tools, ust): 2.4.0
 
-> http://bugs.lttng.org/issues/282
+     Any idea?
+     Thank you,
 
-That would be some work on removing tests that are not used at all in
-the lttng-ust code repository and I think there is still old test using
-UST 0.x but that are simply not compiled.
-
-lttng-ust:
-* tests/
-
-> http://bugs.lttng.org/issues/204
-
-That's a bigger one actually. You'll need to create a new command to
-lttng command line (lttng status) and print some information on the
-current session, maybe the state of the sessiond and relayd. The
-behavior is still undefined here so maybe not the easier one to choose
-:).
-
-> http://bugs.lttng.org/issues/682
-
-This one is babeltrace specific so I can't help you. J=E9r=E9mie or Mathieu
-or Julien might be able to help you out here.
-
->=20
-> I understand that the first three of these are marked as features, and
-> could probably more than bugs but I find them interesting. Please give so=
-me
-> suggestions as to how I can start with some bug.
-
-We are in the 2.5 development cycle right now so features like the one
-above are actually quite welcome!
-
-So you could do bug hunting as well meaning you use lttng, try to
-bend/break it quite a bit and see if there are unexpected results. Going
-through our bugtracker also with the ones flagged Bug will also work
-quite well :).
-
-Hope this help! Also, come on IRC in #lttng on OFTC network.
-
-Cheers!
-David
-
->=20
-> Thanks,
-> Sandeep.
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+               Santi
 
 
---vv4Sf/kQfcwinyKX
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
+------- dump_1 ------------------
 
-iQF8BAEBAgBmBQJTHzgpXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
-ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
-MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02+foH/iHEp3vf7x2D8QyZ3n3uyI4K
-AYYgA+RsQ7hwnVCEoaupKgiTgNjE5T5lzcxHScvAzSXAP9jiJzQr1miBwGID8WPz
-AMCvGhlA2ubw5KylwkAHg9lAGtjKi4sLmZ/8EwnZLL85M7EOBkbx3rJ34XIvCfr3
-vxwlZXLAw0Gc1sphh1u1q4tVPZxRsVUGq/jGlX/NoS+5yUXhyh/o6Oa9jAme6Yyw
-N66czz06FXvU5uMFJG0y1grDMKIjALs73XNjmUda3TW801CptJi0j0dq9iG8TEjb
-adrxngpDBZ18+faSMKh66q3IgTFyi/lKjDFU8GQuse8acKfXY+QMZiQ9pjarIJo=
-=/wNJ
------END PGP SIGNATURE-----
+[00:05:04.281094007] (+10.405305121) OpenWrt ust_baddr_statedump:soinfo: 
+{ cpu_id = 0 }, { procname = "sample" }, { baddr = 0x10000000, sopath = 
+"/usr/sbin/sample", size = 9176, mtime = 1394554355 }
+[00:05:04.281173138] (+0.000079131) OpenWrt ust_baddr_statedump:soinfo: 
+{ cpu_id = 0 }, { procname = "sample" }, { baddr = 0x48018000, sopath = 
+"/lib/libdl-0.9.33.2.so", size = 12436, mtime = 1394229945 }
+[00:05:04.281214310] (+0.000041172) OpenWrt ust_baddr_statedump:soinfo: 
+{ cpu_id = 0 }, { procname = "sample" }, { baddr = 0x4802C000, sopath = 
+"/usr/lib/liblttng-ust.so.0.0.0", size = 224696, mtime = 1394554355 }
+[00:05:04.281239239] (+0.000024929) OpenWrt ust_baddr_statedump:soinfo: 
+{ cpu_id = 0 }, { procname = "sample" }, { baddr = 0x48074000, sopath = 
+"/lib/libgcc_s.so.1", size = 88200, mtime = 1394229944 }
+[00:05:04.281271259] (+0.000032020) OpenWrt ust_baddr_statedump:soinfo: 
+{ cpu_id = 0 }, { procname = "sample" }, { baddr = 0x4809A000, sopath = 
+"/lib/libuClibc-0.9.33.2.so", size = 326616, mtime = 1394229945 }
+[00:05:04.281303562] (+0.000032303) OpenWrt ust_baddr_statedump:soinfo: 
+{ cpu_id = 0 }, { procname = "sample" }, { baddr = 0x48000000, sopath = 
+"/lib/ld-uClibc-0.9.33.2.so", size = 29052, mtime = 1394229945 }
+[00:05:04.281344714] (+0.000041152) OpenWrt ust_baddr_statedump:soinfo: 
+{ cpu_id = 0 }, { procname = "sample" }, { baddr = 0x480FF000, sopath = 
+"/usr/lib/liblttng-ust-tracepoint.so.0.0.0", size = 25276, mtime = 
+1394554355 }
+[00:05:04.281376996] (+0.000032282) OpenWrt ust_baddr_statedump:soinfo: 
+{ cpu_id = 0 }, { procname = "sample" }, { baddr = 0x4811E000, sopath = 
+"/lib/librt-0.9.33.2.so", size = 12404, mtime = 1394229945 }
+[00:05:04.281416532] (+0.000039536) OpenWrt ust_baddr_statedump:soinfo: 
+{ cpu_id = 0 }, { procname = "sample" }, { baddr = 0x48132000, sopath = 
+"/usr/lib/liburcu-bp.so.1.0.0", size = 15388, mtime = 1394548454 }
+[00:05:04.281456411] (+0.000039879) OpenWrt ust_baddr_statedump:soinfo: 
+{ cpu_id = 0 }, { procname = "sample" }, { baddr = 0x48146000, sopath = 
+"/usr/lib/liburcu-cds.so.1.0.0", size = 18216, mtime = 1394548454 }
+[00:05:04.281489138] (+0.000032727) OpenWrt ust_baddr_statedump:soinfo: 
+{ cpu_id = 0 }, { procname = "sample" }, { baddr = 0x4815B000, sopath = 
+"/lib/libpthread-0.9.33.2.so", size = 70104, mtime = 1394229945 }
+[00:05:04.281529501] (+0.000040363) OpenWrt ust_baddr_statedump:soinfo: 
+{ cpu_id = 0 }, { procname = "sample" }, { baddr = 0x4817F000, sopath = 
+"/usr/lib/liburcu-common.so.1.0.0", size = 3188, mtime = 1394548454 }
+[00:05:04.282903966] (+0.001374465) OpenWrt busybox_telnetd2:info: { 
+cpu_id = 0 }, { procname = "sample" }, { msg = "Hello World" }
+[00:05:04.282922512] (+0.000018546) OpenWrt busybox_telnetd2:session: { 
+cpu_id = 0 }, { procname = "sample" }, { msg = "Session", client = 
+"10.0.2.5", server = "10.0.2.4", session_pid = 0 }
+[00:05:04.282929643] (+0.000007131) OpenWrt busybox_telnetd2:err: { 
+cpu_id = 0 }, { procname = "sample" }, { call = "arg1", msg = "arg2", 
+errno_val = 0 }
 
---vv4Sf/kQfcwinyKX--
+------- dump_2 ------------------
+[00:14:16.375740554] (+11.778441605) OpenWrt ust_baddr_statedump:soinfo: 
+{ cpu_id = 0 }, { procname = "telnetd" }, { baddr = 0x10000000, sopath = 
+"/bin/busybox", size = 438834, mtime = 1394559555 }
+[00:14:16.375818817] (+0.000078263) OpenWrt ust_baddr_statedump:soinfo: 
+{ cpu_id = 0 }, { procname = "telnetd" }, { baddr = 0x48018000, sopath = 
+"/lib/libcrypt-0.9.33.2.so", size = 20724, mtime = 1394229945 }
+[00:14:16.375852150] (+0.000033333) OpenWrt ust_baddr_statedump:soinfo: 
+{ cpu_id = 0 }, { procname = "telnetd" }, { baddr = 0x4803F000, sopath = 
+"/lib/libdl-0.9.33.2.so", size = 12436, mtime = 1394229945 }
+[00:14:16.375892474] (+0.000040324) OpenWrt ust_baddr_statedump:soinfo: 
+{ cpu_id = 0 }, { procname = "telnetd" }, { baddr = 0x48053000, sopath = 
+"/usr/lib/liblttng-ust.so.0.0.0", size = 224696, mtime = 1394554355 }
+[00:14:16.375941827] (+0.000049353) OpenWrt ust_baddr_statedump:soinfo: 
+{ cpu_id = 0 }, { procname = "telnetd" }, { baddr = 0x4809B000, sopath = 
+"/lib/libm-0.9.33.2.so", size = 61540, mtime = 1394229945 }
+[00:14:16.375967524] (+0.000025697) OpenWrt ust_baddr_statedump:soinfo: 
+{ cpu_id = 0 }, { procname = "telnetd" }, { baddr = 0x480BB000, sopath = 
+"/lib/libgcc_s.so.1", size = 88200, mtime = 1394229944 }
+[00:14:16.375999484] (+0.000031960) OpenWrt ust_baddr_statedump:soinfo: 
+{ cpu_id = 0 }, { procname = "telnetd" }, { baddr = 0x480E1000, sopath = 
+"/lib/libuClibc-0.9.33.2.so", size = 326616, mtime = 1394229945 }
+[00:14:16.376031585] (+0.000032101) OpenWrt ust_baddr_statedump:soinfo: 
+{ cpu_id = 0 }, { procname = "telnetd" }, { baddr = 0x48000000, sopath = 
+"/lib/ld-uClibc-0.9.33.2.so", size = 29052, mtime = 1394229945 }
+[00:14:16.376072696] (+0.000041111) OpenWrt ust_baddr_statedump:soinfo: 
+{ cpu_id = 0 }, { procname = "telnetd" }, { baddr = 0x48146000, sopath = 
+"/usr/lib/liblttng-ust-tracepoint.so.0.0.0", size = 25276, mtime = 
+1394554355 }
+[00:14:16.376104938] (+0.000032242) OpenWrt ust_baddr_statedump:soinfo: 
+{ cpu_id = 0 }, { procname = "telnetd" }, { baddr = 0x48165000, sopath = 
+"/lib/librt-0.9.33.2.so", size = 12404, mtime = 1394229945 }
+[00:14:16.376144635] (+0.000039697) OpenWrt ust_baddr_statedump:soinfo: 
+{ cpu_id = 0 }, { procname = "telnetd" }, { baddr = 0x48179000, sopath = 
+"/usr/lib/liburcu-bp.so.1.0.0", size = 15388, mtime = 1394548454 }
+[00:14:16.376184373] (+0.000039738) OpenWrt ust_baddr_statedump:soinfo: 
+{ cpu_id = 0 }, { procname = "telnetd" }, { baddr = 0x4818D000, sopath = 
+"/usr/lib/liburcu-cds.so.1.0.0", size = 18216, mtime = 1394548454 }
+[00:14:16.376217363] (+0.000032990) OpenWrt ust_baddr_statedump:soinfo: 
+{ cpu_id = 0 }, { procname = "telnetd" }, { baddr = 0x481A2000, sopath = 
+"/lib/libpthread-0.9.33.2.so", size = 70104, mtime = 1394229945 }
+[00:14:16.376257908] (+0.000040545) OpenWrt ust_baddr_statedump:soinfo: 
+{ cpu_id = 0 }, { procname = "telnetd" }, { baddr = 0x481C6000, sopath = 
+"/usr/lib/liburcu-common.so.1.0.0", size = 3188, mtime = 1394548454 }
 
+----- dump 3 ------------
+nm ipkg-install/bin/busybox | grep 'tracepoint\|busybox_telnetd\|lttng'
 
---===============1497916856==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1497916856==--
+1007b124 d __event_desc___busybox_telnetd
+1005f7d0 R __event_desc___busybox_telnetd_err
+1005fee4 R __event_desc___busybox_telnetd_info
+1005fea4 R __event_desc___busybox_telnetd_session
+1005f998 r __event_fields___busybox_telnetd___err
+1005f868 r __event_fields___busybox_telnetd___info
+1005ff24 r __event_fields___busybox_telnetd___session
+10016624 t __event_probe__busybox_telnetd___err
+100164a4 t __event_probe__busybox_telnetd___info
+10016878 t __event_probe__busybox_telnetd___session
+1007b134 d _format___busybox_telnetd___err
+1007b130 d _format___busybox_telnetd___info
+1007b138 d _format___busybox_telnetd___session
+          w _loglevel___busybox_telnetd___err
+          w _loglevel___busybox_telnetd___info
+          w _loglevel___busybox_telnetd___session
+10016ca0 t __lttng_events_exit__busybox_telnetd
+10016c3c t __lttng_events_init__busybox_telnetd
+          U lttng_probe_register
+          U lttng_probe_unregister
+          w _model_emf_uri___busybox_telnetd___err
+          w _model_emf_uri___busybox_telnetd___info
+          w _model_emf_uri___busybox_telnetd___session
+1007b13c d __probe_desc___busybox_telnetd
+1007c228 b __probe_register_refcount___busybox_telnetd
+1007b1ec A __start___tracepoints_ptrs
+1007b1f8 A __stop___tracepoints_ptrs
+1005fe70 R __tp_event_signature___busybox_telnetd___err
+1005f858 R __tp_event_signature___busybox_telnetd___info
+1005f810 R __tp_event_signature___busybox_telnetd___session
+1006ac80 r __tp_strtab_busybox_telnetd___err
+1006ac94 r __tp_strtab_busybox_telnetd___info
+1006ac68 r __tp_strtab_busybox_telnetd___session
+1007b180 D __tracepoint_busybox_telnetd___err
+1007b1c8 D __tracepoint_busybox_telnetd___info
+1007b1a4 D __tracepoint_busybox_telnetd___session
+1007c210 V tracepoint_dlopen
+100155e8 t __tracepoint__init_urcu_sym
+1007b250 S __tracepoint_provider_busybox_telnetd
+1007b1f0 d __tracepoint_ptr_busybox_telnetd___err
+1007b1f4 d __tracepoint_ptr_busybox_telnetd___info
+1007b1ec d __tracepoint_ptr_busybox_telnetd___session
+1007b248 V __tracepoint_ptrs_registered
+1007b24c V __tracepoint_registered
+10015708 t __tracepoints__destroy
+10016ba4 t __tracepoints__destroy
+10015684 t __tracepoints__init
+10016ac4 t __tracepoints__init
+10015868 t __tracepoints__ptrs_destroy
+100157a0 t __tracepoints__ptrs_init
