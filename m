@@ -1,17 +1,18 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: LTTng-ust 2.4.0-rc2: no events when tracing busybox
-Date: Tue, 11 Mar 2014 19:10:02 +0000 (UTC)
-Message-ID: <118991123.277.1394565002713.JavaMail.zimbra__5571.08812868154$1394565066$gmane$org@efficios.com>
-References: <531F55BB.6030203@teldat.com>
+Subject: Re: Can tracepoint be listed before app registered?
+Date: Tue, 11 Mar 2014 19:16:12 +0000 (UTC)
+Message-ID: <1167278944.300.1394565372926.JavaMail.zimbra__30297.0552271747$1394565431$gmane$org@efficios.com>
+References: <tencent_6D2083A7444C8D7C02D4AD53@qq.com>
+	<CA+jJMxtsE91pFis=SQbce0eHWS-vVfAiJg6deyvFSfp=B2WvYQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1WNS3w-0006ZR-Fr
-	for lttng-dev@lists.lttng.org; Tue, 11 Mar 2014 15:10:09 -0400
-In-Reply-To: <531F55BB.6030203@teldat.com>
+	(envelope-from <compudj@efficios.com>) id 1WNS9u-0006dp-L3
+	for lttng-dev@lists.lttng.org; Tue, 11 Mar 2014 15:16:21 -0400
+In-Reply-To: <CA+jJMxtsE91pFis=SQbce0eHWS-vVfAiJg6deyvFSfp=B2WvYQ@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,220 +21,55 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Santiago Font <sfont@teldat.com>
-Cc: lttng-dev@lists.lttng.org
+To: =?utf-8?B?SsOpcsOpbWll?= Galarneau <jeremie.galarneau@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
------ Original Message -----
-> From: "Santiago Font" <sfont@teldat.com>
-> To: lttng-dev@lists.lttng.org
-> Sent: Tuesday, March 11, 2014 2:28:11 PM
-> Subject: [lttng-dev]   LTTng-ust 2.4.0-rc2: no events when tracing busybox
-> 
-> Hi,
-> 
->      I have an embedded scenario (openwrt over Freescale) working with
-> LTTng:
-> 
->          lttng create TEST
->          lttng enable-channel MYCHAN -u --buffers-uid --subbuf-size 64k
->          lttng add-context -u -t procname -c MYCHAN
->          lttng enable-event -u "*" -c MYCHAN
->          lttng start
->          /usr/sbin/sample &
->          lttng stop
->          lttng view
-> 
->              - Several ust_baddr_statedump:soinfo events
->              - An example of the events I defined
->             (See below for details: dump_1)
-> 
->      So far, so good.
-> 
->      Now, I'm trying to add my events to busybox to trace telnetd (very
-> same provider .c file and event definition .h file, changing only the
-> provider name).
->      When I follow exactly the same steps but changing "/usr/sbin/sample
-> &" for "/usr/sbin/telnetd -F &", I get the ust_baddr_statedump:soinfo
-> events, but none of my events (see dump_2)
->      I have tried with/without TRACEPOINT_PROBE_DYNAMIC_LINKAGE,
-> with/without LD_PRELOAD=liblttng-ust-fork.so, but not success.
->      Taking a look to the symbols inside the binary (dump 3), all LTTng
-> stuff seems to be there.
-> 
->      LTTng (modules, tools, ust): 2.4.0
-> 
->      Any idea?
-
-Could you share with us your patch that adds your specific tracepoints
-into the busybox codebase, along with the specific links/version info
-needed for us to see how it integrate into the busybox build system ?
-
-Thanks,
-
-Mathieu
-
->      Thank you,
-> 
->                Santi
-> 
-> 
-> 
-> ------- dump_1 ------------------
-> 
-> [00:05:04.281094007] (+10.405305121) OpenWrt ust_baddr_statedump:soinfo:
-> { cpu_id = 0 }, { procname = "sample" }, { baddr = 0x10000000, sopath =
-> "/usr/sbin/sample", size = 9176, mtime = 1394554355 }
-> [00:05:04.281173138] (+0.000079131) OpenWrt ust_baddr_statedump:soinfo:
-> { cpu_id = 0 }, { procname = "sample" }, { baddr = 0x48018000, sopath =
-> "/lib/libdl-0.9.33.2.so", size = 12436, mtime = 1394229945 }
-> [00:05:04.281214310] (+0.000041172) OpenWrt ust_baddr_statedump:soinfo:
-> { cpu_id = 0 }, { procname = "sample" }, { baddr = 0x4802C000, sopath =
-> "/usr/lib/liblttng-ust.so.0.0.0", size = 224696, mtime = 1394554355 }
-> [00:05:04.281239239] (+0.000024929) OpenWrt ust_baddr_statedump:soinfo:
-> { cpu_id = 0 }, { procname = "sample" }, { baddr = 0x48074000, sopath =
-> "/lib/libgcc_s.so.1", size = 88200, mtime = 1394229944 }
-> [00:05:04.281271259] (+0.000032020) OpenWrt ust_baddr_statedump:soinfo:
-> { cpu_id = 0 }, { procname = "sample" }, { baddr = 0x4809A000, sopath =
-> "/lib/libuClibc-0.9.33.2.so", size = 326616, mtime = 1394229945 }
-> [00:05:04.281303562] (+0.000032303) OpenWrt ust_baddr_statedump:soinfo:
-> { cpu_id = 0 }, { procname = "sample" }, { baddr = 0x48000000, sopath =
-> "/lib/ld-uClibc-0.9.33.2.so", size = 29052, mtime = 1394229945 }
-> [00:05:04.281344714] (+0.000041152) OpenWrt ust_baddr_statedump:soinfo:
-> { cpu_id = 0 }, { procname = "sample" }, { baddr = 0x480FF000, sopath =
-> "/usr/lib/liblttng-ust-tracepoint.so.0.0.0", size = 25276, mtime =
-> 1394554355 }
-> [00:05:04.281376996] (+0.000032282) OpenWrt ust_baddr_statedump:soinfo:
-> { cpu_id = 0 }, { procname = "sample" }, { baddr = 0x4811E000, sopath =
-> "/lib/librt-0.9.33.2.so", size = 12404, mtime = 1394229945 }
-> [00:05:04.281416532] (+0.000039536) OpenWrt ust_baddr_statedump:soinfo:
-> { cpu_id = 0 }, { procname = "sample" }, { baddr = 0x48132000, sopath =
-> "/usr/lib/liburcu-bp.so.1.0.0", size = 15388, mtime = 1394548454 }
-> [00:05:04.281456411] (+0.000039879) OpenWrt ust_baddr_statedump:soinfo:
-> { cpu_id = 0 }, { procname = "sample" }, { baddr = 0x48146000, sopath =
-> "/usr/lib/liburcu-cds.so.1.0.0", size = 18216, mtime = 1394548454 }
-> [00:05:04.281489138] (+0.000032727) OpenWrt ust_baddr_statedump:soinfo:
-> { cpu_id = 0 }, { procname = "sample" }, { baddr = 0x4815B000, sopath =
-> "/lib/libpthread-0.9.33.2.so", size = 70104, mtime = 1394229945 }
-> [00:05:04.281529501] (+0.000040363) OpenWrt ust_baddr_statedump:soinfo:
-> { cpu_id = 0 }, { procname = "sample" }, { baddr = 0x4817F000, sopath =
-> "/usr/lib/liburcu-common.so.1.0.0", size = 3188, mtime = 1394548454 }
-> [00:05:04.282903966] (+0.001374465) OpenWrt busybox_telnetd2:info: {
-> cpu_id = 0 }, { procname = "sample" }, { msg = "Hello World" }
-> [00:05:04.282922512] (+0.000018546) OpenWrt busybox_telnetd2:session: {
-> cpu_id = 0 }, { procname = "sample" }, { msg = "Session", client =
-> "10.0.2.5", server = "10.0.2.4", session_pid = 0 }
-> [00:05:04.282929643] (+0.000007131) OpenWrt busybox_telnetd2:err: {
-> cpu_id = 0 }, { procname = "sample" }, { call = "arg1", msg = "arg2",
-> errno_val = 0 }
-> 
-> ------- dump_2 ------------------
-> [00:14:16.375740554] (+11.778441605) OpenWrt ust_baddr_statedump:soinfo:
-> { cpu_id = 0 }, { procname = "telnetd" }, { baddr = 0x10000000, sopath =
-> "/bin/busybox", size = 438834, mtime = 1394559555 }
-> [00:14:16.375818817] (+0.000078263) OpenWrt ust_baddr_statedump:soinfo:
-> { cpu_id = 0 }, { procname = "telnetd" }, { baddr = 0x48018000, sopath =
-> "/lib/libcrypt-0.9.33.2.so", size = 20724, mtime = 1394229945 }
-> [00:14:16.375852150] (+0.000033333) OpenWrt ust_baddr_statedump:soinfo:
-> { cpu_id = 0 }, { procname = "telnetd" }, { baddr = 0x4803F000, sopath =
-> "/lib/libdl-0.9.33.2.so", size = 12436, mtime = 1394229945 }
-> [00:14:16.375892474] (+0.000040324) OpenWrt ust_baddr_statedump:soinfo:
-> { cpu_id = 0 }, { procname = "telnetd" }, { baddr = 0x48053000, sopath =
-> "/usr/lib/liblttng-ust.so.0.0.0", size = 224696, mtime = 1394554355 }
-> [00:14:16.375941827] (+0.000049353) OpenWrt ust_baddr_statedump:soinfo:
-> { cpu_id = 0 }, { procname = "telnetd" }, { baddr = 0x4809B000, sopath =
-> "/lib/libm-0.9.33.2.so", size = 61540, mtime = 1394229945 }
-> [00:14:16.375967524] (+0.000025697) OpenWrt ust_baddr_statedump:soinfo:
-> { cpu_id = 0 }, { procname = "telnetd" }, { baddr = 0x480BB000, sopath =
-> "/lib/libgcc_s.so.1", size = 88200, mtime = 1394229944 }
-> [00:14:16.375999484] (+0.000031960) OpenWrt ust_baddr_statedump:soinfo:
-> { cpu_id = 0 }, { procname = "telnetd" }, { baddr = 0x480E1000, sopath =
-> "/lib/libuClibc-0.9.33.2.so", size = 326616, mtime = 1394229945 }
-> [00:14:16.376031585] (+0.000032101) OpenWrt ust_baddr_statedump:soinfo:
-> { cpu_id = 0 }, { procname = "telnetd" }, { baddr = 0x48000000, sopath =
-> "/lib/ld-uClibc-0.9.33.2.so", size = 29052, mtime = 1394229945 }
-> [00:14:16.376072696] (+0.000041111) OpenWrt ust_baddr_statedump:soinfo:
-> { cpu_id = 0 }, { procname = "telnetd" }, { baddr = 0x48146000, sopath =
-> "/usr/lib/liblttng-ust-tracepoint.so.0.0.0", size = 25276, mtime =
-> 1394554355 }
-> [00:14:16.376104938] (+0.000032242) OpenWrt ust_baddr_statedump:soinfo:
-> { cpu_id = 0 }, { procname = "telnetd" }, { baddr = 0x48165000, sopath =
-> "/lib/librt-0.9.33.2.so", size = 12404, mtime = 1394229945 }
-> [00:14:16.376144635] (+0.000039697) OpenWrt ust_baddr_statedump:soinfo:
-> { cpu_id = 0 }, { procname = "telnetd" }, { baddr = 0x48179000, sopath =
-> "/usr/lib/liburcu-bp.so.1.0.0", size = 15388, mtime = 1394548454 }
-> [00:14:16.376184373] (+0.000039738) OpenWrt ust_baddr_statedump:soinfo:
-> { cpu_id = 0 }, { procname = "telnetd" }, { baddr = 0x4818D000, sopath =
-> "/usr/lib/liburcu-cds.so.1.0.0", size = 18216, mtime = 1394548454 }
-> [00:14:16.376217363] (+0.000032990) OpenWrt ust_baddr_statedump:soinfo:
-> { cpu_id = 0 }, { procname = "telnetd" }, { baddr = 0x481A2000, sopath =
-> "/lib/libpthread-0.9.33.2.so", size = 70104, mtime = 1394229945 }
-> [00:14:16.376257908] (+0.000040545) OpenWrt ust_baddr_statedump:soinfo:
-> { cpu_id = 0 }, { procname = "telnetd" }, { baddr = 0x481C6000, sopath =
-> "/usr/lib/liburcu-common.so.1.0.0", size = 3188, mtime = 1394548454 }
-> 
-> ----- dump 3 ------------
-> nm ipkg-install/bin/busybox | grep 'tracepoint\|busybox_telnetd\|lttng'
-> 
-> 1007b124 d __event_desc___busybox_telnetd
-> 1005f7d0 R __event_desc___busybox_telnetd_err
-> 1005fee4 R __event_desc___busybox_telnetd_info
-> 1005fea4 R __event_desc___busybox_telnetd_session
-> 1005f998 r __event_fields___busybox_telnetd___err
-> 1005f868 r __event_fields___busybox_telnetd___info
-> 1005ff24 r __event_fields___busybox_telnetd___session
-> 10016624 t __event_probe__busybox_telnetd___err
-> 100164a4 t __event_probe__busybox_telnetd___info
-> 10016878 t __event_probe__busybox_telnetd___session
-> 1007b134 d _format___busybox_telnetd___err
-> 1007b130 d _format___busybox_telnetd___info
-> 1007b138 d _format___busybox_telnetd___session
->           w _loglevel___busybox_telnetd___err
->           w _loglevel___busybox_telnetd___info
->           w _loglevel___busybox_telnetd___session
-> 10016ca0 t __lttng_events_exit__busybox_telnetd
-> 10016c3c t __lttng_events_init__busybox_telnetd
->           U lttng_probe_register
->           U lttng_probe_unregister
->           w _model_emf_uri___busybox_telnetd___err
->           w _model_emf_uri___busybox_telnetd___info
->           w _model_emf_uri___busybox_telnetd___session
-> 1007b13c d __probe_desc___busybox_telnetd
-> 1007c228 b __probe_register_refcount___busybox_telnetd
-> 1007b1ec A __start___tracepoints_ptrs
-> 1007b1f8 A __stop___tracepoints_ptrs
-> 1005fe70 R __tp_event_signature___busybox_telnetd___err
-> 1005f858 R __tp_event_signature___busybox_telnetd___info
-> 1005f810 R __tp_event_signature___busybox_telnetd___session
-> 1006ac80 r __tp_strtab_busybox_telnetd___err
-> 1006ac94 r __tp_strtab_busybox_telnetd___info
-> 1006ac68 r __tp_strtab_busybox_telnetd___session
-> 1007b180 D __tracepoint_busybox_telnetd___err
-> 1007b1c8 D __tracepoint_busybox_telnetd___info
-> 1007b1a4 D __tracepoint_busybox_telnetd___session
-> 1007c210 V tracepoint_dlopen
-> 100155e8 t __tracepoint__init_urcu_sym
-> 1007b250 S __tracepoint_provider_busybox_telnetd
-> 1007b1f0 d __tracepoint_ptr_busybox_telnetd___err
-> 1007b1f4 d __tracepoint_ptr_busybox_telnetd___info
-> 1007b1ec d __tracepoint_ptr_busybox_telnetd___session
-> 1007b248 V __tracepoint_ptrs_registered
-> 1007b24c V __tracepoint_registered
-> 10015708 t __tracepoints__destroy
-> 10016ba4 t __tracepoints__destroy
-> 10015684 t __tracepoints__init
-> 10016ac4 t __tracepoints__init
-> 10015868 t __tracepoints__ptrs_destroy
-> 100157a0 t __tracepoints__ptrs_init
-> 
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> 
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+CgotLS0tLSBPcmlnaW5hbCBNZXNzYWdlIC0tLS0tCj4gRnJvbTogIkrDqXLDqW1pZSBHYWxhcm5l
+YXUiIDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20+Cj4gVG86ICJ6bHludXMiIDwzMDI1
+OTAzMDRAcXEuY29tPgo+IENjOiAibHR0bmctZGV2IiA8bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9y
+Zz4KPiBTZW50OiBGcmlkYXksIE1hcmNoIDcsIDIwMTQgMToyMzowMSBQTQo+IFN1YmplY3Q6IFJl
+OiBbbHR0bmctZGV2XSBDYW4gdHJhY2Vwb2ludCBiZSBsaXN0ZWQgYmVmb3JlIGFwcCByZWdpc3Rl
+cmVkPwo+IAo+IE9uIEZyaSwgTWFyIDcsIDIwMTQgYXQgMTI6MjYgUE0sIHpseW51cyA8MzAyNTkw
+MzA0QHFxLmNvbT4gd3JvdGU6Cj4gPiBIaSwKPiA+IFNvcnJ5IHRvIGJvdGhlciB5b3UgZ3V5cy4g
+VGhlIGx0dG5nLXRvb2wgbWFuIHBhZ2UgZG9zZW4ndCBtYWtlIGl0IGNsZWFyCj4gPiB0aGF0Cj4g
+PiB3aGVuIHRoZSB0cmFjZXBvaW50cyBvZiB1c2VyLXNwYWNlIGFwcGxpY2F0aW9uIGNhbiBiZSBs
+aXN0ZWQuIFNvIEkgZGlkIGEKPiA+IGxpdHRsZSB0ZXN0LiBBcyBmYXIgYXMgSSBjYW4gdGVsbCAs
+dGhlIHRyYWNlcG9pbnQgaW5mb3JtYXRpb24gaXMgb25seQo+ID4gYXZhaWxhYmxlIGR1cmluZyB0
+aGUgYXBwbGljYXRpb24gaXMgcnVubmluZy4KPiA+Cj4gCj4gQ29ycmVjdC4KPiAKPiA+IFNvIGlz
+IGl0IHBvc3NpYmxlIHRoYXQgdGhlIHRyYWNlcG9pbnQgY2FuIGJlIGF2YWlsYWJsZSAqYmVmb3Jl
+KiBhcHAgZ2V0Cj4gPiBydW5uaW5nLCBzcGVjaWZpY2FsbHksIGJlZm9yZSBlbmFibGUtZXZlbnQg
+c3ViY29tbWFuZD8gSSB0aGluayBpdCBjYW4gYmUKPiA+IHF1aXRlIGNvbnZlbmllbnQgdG8gb3V0
+cHV0IHRoZSBsaXN0IHdoZW4gc3BlY2lmeSB3aGljaCBldmVudHMgdG8gdHJhY2UuIElmCj4gPiBp
+dCBpcyBub3QgZm9yIG5vdywKPiA+IG1heWJlIGl0J3MgYSBmZWF0dXJlIHdvcnRoIHdvcmtpbmcg
+b24uIE15IGlkZWEgaXMgbHR0bmctdG9vbCBjb3VsZCByZWFkCj4gPiB0cmFjZXIgcHJvdmlkZXIg
+bGlicmFyeSBhbmQgZ2V0IHRoZSBpbmZvLGFuZCAgYWRkIGEgb3B0aW9uIGFmdGVyICdsaXN0Jwo+
+ID4gc3ViY29tbWFuZCB3aGljaCBsZXQgdXNlciBzcGVjaWZ5IHRoZSBwcm92aWRlciBsaWJyYXJ5
+IHRvIHJlYWQuIEp1c3QgYQo+ID4gcGVyc29uYWwgb3Bpb24gZnJvbSBhIG5ldyBjb21lciA6LSkK
+PiA+Cj4gCj4gWW91IGNhbiBlbmFibGUgYW4gZXZlbnQgYmVmb3JlIHRoZSBhcHAgaXMgc3RhcnRl
+ZC4gSG93ZXZlciwgYXMgeW91Cj4gcG9pbnRlZCBvdXQsIHRoZSBzZXNzaW9uIGRhZW1vbiBoYXMg
+bm8ga25vd2xlZGdlIG9mIGFwcGxpY2F0aW9uIGV2ZW50cwo+IGJlZm9yZSB0aGV5IGFyZSBsYXVu
+Y2hlZC4KPiAKPiBNeSB1bmRlcnN0YW5kaW5nIG9mIHlvdXIgc3VnZ2VzdGlvbiBpcyB0aGF0IHdl
+IHNob3VsZCBkZWZpbmUgYSBwdWJsaWMKPiBwcm92aWRlciBBUEkgb24gd2hpY2ggdGhlIGx0dG5n
+IGNsaWVudCBjb3VsZCBob29rIGl0c2VsZiB0byBsaXN0Cj4gZXZlbnRzLiBJdCB3b3VsZCBiZSBv
+ZiBsaW1pdGVkIHVzZSBpbiB0aGUgY2FzZSBvZiBzdGF0aWNhbGx5IGxpbmtlZAo+IHByb3ZpZGVy
+cywgYnV0IEl0J3MgYW4gaW50ZXJlc3RpbmcgcHJvYmxlbS4uLiBEbyB5b3UgaGF2ZSBhIHNwZWNp
+ZmljCj4gdXNlLWNhc2UgaW4gbWluZD8KCkFub3RoZXIgb3B0aW9uIHRoYXQgd291bGQgdGFrZSBj
+YXJlIG9mIHN0YXRpY2FsbHkgbGlua2VkIHByb3ZpZGVycwp3b3VsZCBiZSB0byBsZXQgYSBsdHRu
+ZyBsaWJyYXJ5IGxvb2sgYXQgYWxsIHRoZSBleGVjdXRhYmxlcyBvbiB0aGUgc3lzdGVtCihvciBm
+cm9tIGEgY2VydGFpbiBwYXRoIGluIHRoZSBzeXN0ZW0pLCBhcyB3ZWxsIGFzIC5zbywgYW5kIGxp
+c3QgYSBzcGVjaWZpYwoidHJhY2Vwb2ludCBwcm92aWRlciIgc2VjdGlvbiB0aGF0IHdlIGNvdWxk
+IHNwZWNpZnkuIFdlJ2QgbmVlZCB0byBwYXJzZQpFTEYgZm9yIHRoaXMuCgpUaG91Z2h0cyA/CgpU
+aGFua3MsCgpNYXRoaWV1Cgo+IAo+IFJlZ2FyZHMsCj4gSsOpcsOpbWllCj4gCj4gPiBCZXN0IHJl
+Z2FyZHMsCj4gPiBMaW5neXUgWmh1Cj4gPgo+ID4KPiA+IF9fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fCj4gPiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4gPiBs
+dHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gPiBodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1i
+aW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKPiA+Cj4gCj4gCj4gCj4gLS0KPiBKw6lyw6lt
+aWUgR2FsYXJuZWF1Cj4gRWZmaWNpT1MgSW5jLgo+IGh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCj4g
+Cj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBsdHRu
+Zy1kZXYgbWFpbGluZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IGh0dHA6Ly9s
+aXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo+IAoKLS0g
+Ck1hdGhpZXUgRGVzbm95ZXJzCkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20K
+Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRl
+diBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
