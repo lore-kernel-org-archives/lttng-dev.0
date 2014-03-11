@@ -1,19 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH] LTTng logger ABI
-Date: Tue, 11 Mar 2014 01:28:35 +0000 (UTC)
-Message-ID: <495653591.35195.1394501315562.JavaMail.zimbra__10901.8426658169$1394501360$gmane$org@efficios.com>
-References: <1392671512-9136-1-git-send-email-mathieu.desnoyers@efficios.com>
-	<5302A3F1.6090508@opersys.com>
-	<200800140.26414.1392682959643.JavaMail.zimbra@efficios.com>
+From: Sandeep K Chaudhary <babbusandy2006@gmail.com>
+Subject: Working on some bugs
+Date: Mon, 10 Mar 2014 23:00:36 -0700
+Message-ID: <CAEEAEzWcPk788kF=BptjeGsG=hrWyeK1tcUAM4Fq9GAwZYPXhQ__6428.47982603616$1394517697$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0786703136=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-qa0-f44.google.com ([209.85.216.44])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1WNBUh-0006Ca-HD
-	for lttng-dev@lists.lttng.org; Mon, 10 Mar 2014 21:28:36 -0400
-In-Reply-To: <200800140.26414.1392682959643.JavaMail.zimbra@efficios.com>
+	(envelope-from <babbusandy2006@gmail.com>) id 1WNFk2-0008O7-EX
+	for lttng-dev@lists.lttng.org; Tue, 11 Mar 2014 02:00:44 -0400
+Received: by mail-qa0-f44.google.com with SMTP id f11so7953881qae.3
+	for <lttng-dev@lists.lttng.org>; Mon, 10 Mar 2014 23:00:37 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,80 +19,81 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Karim Yaghmour <karim.yaghmour@opersys.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
+--===============0786703136==
+Content-Type: multipart/alternative; boundary=089e015371dc61e1de04f44e70a8
 
+--089e015371dc61e1de04f44e70a8
+Content-Type: text/plain; charset=ISO-8859-1
 
------ Original Message -----
-> From: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-> To: "Karim Yaghmour" <karim.yaghmour@opersys.com>
-> Cc: lttng-dev@lists.lttng.org
-> Sent: Monday, February 17, 2014 7:22:39 PM
-> Subject: Re: [lttng-dev] [PATCH] LTTng logger ABI
-> 
-> ----- Original Message -----
-> > From: "Karim Yaghmour" <karim.yaghmour@opersys.com>
-> > To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-> > Cc: lttng-dev@lists.lttng.org
-> > Sent: Monday, February 17, 2014 7:06:09 PM
-> > Subject: Re: [PATCH] LTTng logger ABI
-> > 
-> > 
-> > On 14-02-17 04:11 PM, Mathieu Desnoyers wrote:
-> > > Add a user-space ABI (new file /proc/lttng-logger) to lttng-modules
-> > > which can be written into by any user on the system. The content is
-> > > saved into the kernel trace stream into the "lttng_logger" kernel event.
-> > > 
-> > > The content of a single write is written into an lttng_logger event.
-> > > The write count is truncated to 1024 bytes (if larger), which is much
-> > > smaller than the smallest subbuffer size available (4096 bytes). This
-> > > ensures all written data makes it into the active tracing buffers.
-> > 
-> > Very nice. Let me know when this is in so that I can schedule giving it
-> > a try on Android.
-> 
-> I plan to merge it into master right after LTTng 2.4 final is released, which
-> should be in a matter of days. Stay tuned! :)
+Hi guys,
 
-The feature is now pushed into the master branch:
+I want to submit patches for some bugs before making my GSoC application. I
+was looking at the bug tracker and I think I can work some of these
+before/during the application. Can you please give some suggestion as to
+whether I will be able to work on them (given that I am new to the code
+base)?
 
-commit 0c95667685cf8612eb0d231883874c173b7bb5a1
-Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Date:   Sat Feb 15 16:59:09 2014 -0500
+http://bugs.lttng.org/issues/621
+http://bugs.lttng.org/issues/282
+http://bugs.lttng.org/issues/204
+http://bugs.lttng.org/issues/682
 
-    LTTng logger ABI
+I understand that the first three of these are marked as features, and
+could probably more than bugs but I find them interesting. Please give some
+suggestions as to how I can start with some bug.
 
 Thanks,
+Sandeep.
 
-Mathieu
+--089e015371dc61e1de04f44e70a8
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
 
-> 
-> Thanks,
-> 
-> Mathieu
-> 
-> > 
-> > --
-> > Karim Yaghmour
-> > CEO - Opersys inc. / www.opersys.com
-> > http://twitter.com/karimyaghmour
-> > 
-> > 
-> 
-> --
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> http://www.efficios.com
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> 
+<div dir=3D"ltr"><span style=3D"font-family:arial,sans-serif;font-size:13px=
+">Hi guys,</span><br style=3D"font-family:arial,sans-serif;font-size:13px">=
+<br style=3D"font-family:arial,sans-serif;font-size:13px"><span style=3D"fo=
+nt-family:arial,sans-serif;font-size:13px">I want to submit patches for som=
+e bugs before making my GSoC application. I was looking at the bug tracker =
+and I think I can work some of these before/during the application. Can you=
+ please give some suggestion as to whether I will be able to work on them (=
+given that I am new to the code base)?</span><br style=3D"font-family:arial=
+,sans-serif;font-size:13px">
+<br style=3D"font-family:arial,sans-serif;font-size:13px"><div style=3D"fon=
+t-family:arial,sans-serif;font-size:13px"><a href=3D"http://bugs.lttng.org/=
+issues/621" target=3D"_blank">http://bugs.<span class=3D"" style=3D"backgro=
+und-color:rgb(255,255,204);color:rgb(34,34,34)">lttng</span>.org/issues/621=
+</a><br>
+<a href=3D"http://bugs.lttng.org/issues/282" target=3D"_blank">http://bugs.=
+<span class=3D"" style=3D"background-color:rgb(255,255,204);color:rgb(34,34=
+,34)">lttng</span>.org/issues/282</a><br><a href=3D"http://bugs.lttng.org/i=
+ssues/204" target=3D"_blank">http://bugs.<span class=3D"" style=3D"backgrou=
+nd-color:rgb(255,255,204);color:rgb(34,34,34)">lttng</span>.org/issues/204<=
+/a><br>
+<a href=3D"http://bugs.lttng.org/issues/682" target=3D"_blank">http://bugs.=
+<span class=3D"" style=3D"background-color:rgb(255,255,204);color:rgb(34,34=
+,34)">lttng</span>.org/issues/682</a><br></div><div style=3D"font-family:ar=
+ial,sans-serif;font-size:13px">
+<br></div><div style=3D"font-family:arial,sans-serif;font-size:13px">I unde=
+rstand that the first three of these are marked as features, and could prob=
+ably more than bugs but I find them interesting. Please give some suggestio=
+ns as to how I can start with some bug.<br>
+<br>Thanks,<br>Sandeep.</div></div>
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+--089e015371dc61e1de04f44e70a8--
+
+
+--===============0786703136==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0786703136==--
