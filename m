@@ -1,16 +1,17 @@
-From: Dimitri John Ledkov <xnox@ubuntu.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Subject: Re: Support for new arch 'ppc64le'
-Date: Wed, 12 Mar 2014 11:26:12 +0000
-Message-ID: <CANBHLUhP-FUrKP8nfiZe19JdihSyxuF9wEhzb53aCZYYg9hTvQ__45254.4024833061$1394623622$gmane$org@mail.gmail.com>
+Date: Wed, 12 Mar 2014 12:29:11 +0000 (UTC)
+Message-ID: <460007316.819.1394627351601.JavaMail.zimbra__14292.0282356956$1394627424$gmane$org@efficios.com>
+References: <CANBHLUhP-FUrKP8nfiZe19JdihSyxuF9wEhzb53aCZYYg9hTvQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary=089e01183daaaa9fba04f4671a55
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ve0-f179.google.com ([209.85.128.179])
+Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dimitri.ledkov@surgut.co.uk>) id 1WNhIg-0006kF-GX
-	for lttng-dev@lists.lttng.org; Wed, 12 Mar 2014 07:26:22 -0400
-Received: by mail-ve0-f179.google.com with SMTP id db12so9880750veb.38
-	for <lttng-dev@lists.lttng.org>; Wed, 12 Mar 2014 04:26:13 -0700 (PDT)
+	(envelope-from <compudj@efficios.com>) id 1WNiHZ-0007He-3w
+	for lttng-dev@lists.lttng.org; Wed, 12 Mar 2014 08:29:19 -0400
+In-Reply-To: <CANBHLUhP-FUrKP8nfiZe19JdihSyxuF9wEhzb53aCZYYg9hTvQ@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,70 +20,70 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Dimitri John Ledkov <xnox@ubuntu.com>
+Cc: lttng-dev@lists.lttng.org, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
 List-Id: lttng-dev@lists.lttng.org
 
---089e01183daaaa9fba04f4671a55
-Content-Type: text/plain; charset=UTF-8
+----- Original Message -----
+> From: "Dimitri John Ledkov" <xnox@ubuntu.com>
+> To: lttng-dev@lists.lttng.org
+> Cc: ravi@linux.vnet.ibm.com, "mathieu desnoyers" <mathieu.desnoyers@efficios.com>
+> Sent: Wednesday, March 12, 2014 7:26:12 AM
+> Subject: RE: [lttng-dev] Support for new arch 'ppc64le'
+> 
+> (sorry for breaking threading, I was not previously subscribed)
+> 
+> On 03/12/2014 12:58 AM, Mathieu Desnoyers wrote:
+> > I see that the patch you propose adds both "powerpc64le" and "aarch64"
+> > entries. Why are there two of them?
+> 
+> Currently there are two fairly recent architectures, which at the
+> moment can only be compiled with "gcc atomics" code path.
+> The two new architectures are (GNU Types):
+> * aarch64-linux-gnu (aka ARMv8, ARM64, AARCH64, etc)
+> * powerpc64le-linux-gnu
+> 
+> Upstream config.guess/config.sub/libtool/kernel/compilers have support
+> for these targets and many distributions are bootstrapping/building
+> archives for these architectures. Although for complete support,
+> ideally one would create tarballs on systems with patched libtool,
+> it's not required for distributions since we have support to update
+> config.guess/config.sub/libtool at package build time.
+> 
+> Thus I'd like to only request for aarch64/powerpc64el to be recognized
+> as archtypes that use gcc atomics in configure.ac. See attached patch.
 
-(sorry for breaking threading, I was not previously subscribed)
+OK. My request to you is that there has been some testing (make check,
+make regtest and ensuring there is no crash, assertions, or other issues
+reported) on each of those architectures with userspace RCU.
 
-On 03/12/2014 12:58 AM, Mathieu Desnoyers wrote:
-> I see that the patch you propose adds both "powerpc64le" and "aarch64" entries. Why are there two of them?
+> 
+> Alternatively, you might want to consider making "gcc" atomics the
+> fallback ARCHTYPE, instead of "unknown" such that compilation of this
+> package is at least attempted on unexpected architectures.
 
-Currently there are two fairly recent architectures, which at the
-moment can only be compiled with "gcc atomics" code path.
-The two new architectures are (GNU Types):
-* aarch64-linux-gnu (aka ARMv8, ARM64, AARCH64, etc)
-* powerpc64le-linux-gnu
+The reason why we don't have this fallback is because we want to make sure
+the implementation of gcc atomics are tested for each architecture before
+we allow building userspace RCU for them. You may call us paranoid over
+this, but we just don't trust the compiler to always do the right thing.
 
-Upstream config.guess/config.sub/libtool/kernel/compilers have support
-for these targets and many distributions are bootstrapping/building
-archives for these architectures. Although for complete support,
-ideally one would create tarballs on systems with patched libtool,
-it's not required for distributions since we have support to update
-config.guess/config.sub/libtool at package build time.
+I'll merge your patch into master. However, since this can be considered
+as new features (and not bugfixes), I cannot backport it to the stable
+branches of userspace RCU. So it will be in there for the future 0.9
+branch.
 
-Thus I'd like to only request for aarch64/powerpc64el to be recognized
-as archtypes that use gcc atomics in configure.ac. See attached patch.
+Thanks,
 
-Alternatively, you might want to consider making "gcc" atomics the
-fallback ARCHTYPE, instead of "unknown" such that compilation of this
-package is at least attempted on unexpected architectures.
+Mathieu
+
+> 
+> --
+> Regards,
+> 
+> Dimitri.
+> 
 
 -- 
-Regards,
-
-Dimitri.
-
---089e01183daaaa9fba04f4671a55
-Content-Type: text/x-patch; charset=US-ASCII; name="arm64-ppc64el-archtypes.patch"
-Content-Disposition: attachment; filename="arm64-ppc64el-archtypes.patch"
-Content-Transfer-Encoding: base64
-X-Attachment-Id: f_hsoikq5b0
-
-RGVzY3JpcHRpb246IFVzZSBnY2MgYXRvbWljcyBvbiBhYXJjaDY0L3Bvd2VycGM2NGxlIGZvciBi
-b290c3RyYXBwaW5nLgpBdXRob3I6IERpbWl0cmkgSm9obiBMZWRrb3YgPHhub3hAdWJ1bnR1LmNv
-bT4KCkluZGV4OiBiL2NvbmZpZ3VyZS5hYwo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09Ci0tLSBhL2NvbmZpZ3VyZS5hYwky
-MDEzLTA2LTE5IDAxOjA4OjQxLjAwMDAwMDAwMCArMDAwMAorKysgYi9jb25maWd1cmUuYWMJMjAx
-My0xMi0yMiAxMToxNzoyOC44MjEyODg5OTkgKzAwMDAKQEAgLTY5LDYgKzY5LDcgQEAKIAlbcG93
-ZXJwY10sIFtBUkNIVFlQRT0icHBjIl0sCiAJW3BwYzY0XSwgW0FSQ0hUWVBFPSJwcGMiXSwKIAlb
-cG93ZXJwYzY0XSwgW0FSQ0hUWVBFPSJwcGMiXSwKKwlbcG93ZXJwYzY0bGVdLCBbQVJDSFRZUEU9
-ImdjYyJdLAogCVtwcGNdLCBbQVJDSFRZUEU9InBwYyJdLAogCVtzMzkwXSwgW0FSQ0hUWVBFPSJz
-MzkwIl0sCiAJW3MzOTB4XSwgW0FSQ0hUWVBFPSJzMzkwIl0sCkBAIC03OCw2ICs3OSw3IEBACiAJ
-W2lhNjRdLCBbQVJDSFRZUEU9ImdjYyJdLAogCVthcm0qXSwgW0FSQ0hUWVBFPSJhcm0iXSwKIAlb
-bWlwcypdLCBbQVJDSFRZUEU9Im1pcHMiXSwKKwlbYWFyY2g2NF0sIFtBUkNIVFlQRT0iZ2NjIl0s
-CiAJW0FSQ0hUWVBFPSJ1bmtub3duIl0KICkKIAo=
---089e01183daaaa9fba04f4671a55
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---089e01183daaaa9fba04f4671a55--
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
