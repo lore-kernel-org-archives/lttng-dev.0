@@ -1,76 +1,81 @@
-From: Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [for-next][PATCH 08/20] tracing: Warn if a tracepoint is not
- set via debugfs
-Date: Wed, 12 Mar 2014 14:58:02 -0400
-Message-ID: <20140312145802.4819511e@gandalf.local.home>
-References: <20140307150920.881849073@goodmis.org>
-	<1501695915.977.1394634294978.JavaMail.zimbra@efficios.com>
-	<20140312111100.42ea41c2@gandalf.local.home>
-	<20140312114611.43547df7@gandalf.local.home>
-	<437054772.1403.1394640336308.JavaMail.zimbra@efficios.com>
-	<20140312121813.1e0102aa@gandalf.local.home>
-	<285520930.1511.1394642395537.JavaMail.zimbra@efficios.com>
-	<20140312135059.2d497b58@gandalf.local.home>
-	<1906756968.1732.1394650035535.JavaMail.zimbra@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH babeltrace] Use autoconf AM_MAINTAINER_MODE.
+Date: Wed, 12 Mar 2014 18:59:37 +0000 (UTC)
+Message-ID: <507471820.1743.1394650777447.JavaMail.zimbra__15601.4789631174$1394650889$gmane$org@efficios.com>
+References: <1394615117-2388-1-git-send-email-larper@axis.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Return-path: <linux-kernel-owner@vger.kernel.org>
-In-Reply-To: <1906756968.1732.1394650035535.JavaMail.zimbra@efficios.com>
-Sender: linux-kernel-owner@vger.kernel.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: "Frank Ch. Eigler" <fche@redhat.com>, linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>, Frederic Weisbecker <fweisbec@gmail.com>, Andrew Morton <akpm@linux-foundation.org>, Johannes Berg <johannes.berg@intel.com>, Linus Torvalds <torvalds@linux-foundation.org>, Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@linutronix.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, lttng-dev <lttng-dev@lists.lttng.org>, Rusty Russell <rusty@rustcorp.com.au>
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail.efficios.com ([78.47.125.74])
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <compudj@efficios.com>) id 1WNoNN-0002Po-Q3
+	for lttng-dev@lists.lttng.org; Wed, 12 Mar 2014 14:59:46 -0400
+In-Reply-To: <1394615117-2388-1-git-send-email-larper@axis.com>
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+To: Lars Persson <lars.persson@axis.com>
+Cc: lttng-dev@lists.lttng.org, Lars Persson <larper@axis.com>
 List-Id: lttng-dev@lists.lttng.org
 
-On Wed, 12 Mar 2014 18:47:15 +0000 (UTC)
-Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
- 
-> > On module unload, the events are destroyed.
+----- Original Message -----
+> From: "Lars Persson" <lars.persson@axis.com>
+> To: lttng-dev@lists.lttng.org
+> Cc: "Lars Persson" <larper@axis.com>
+> Sent: Wednesday, March 12, 2014 5:05:17 AM
+> Subject: [lttng-dev] [PATCH babeltrace] Use autoconf AM_MAINTAINER_MODE.
 > 
-> Isn't trace_event.c responsible for dealing with tracepoint probes rather
-> than call sites ? This is quite different. A tracepoint probe "foo" is only
-> located within a single module (the one you are unloading here). However,
-> if you try to unload a module that contains the callsite "foo", you have no
-> guarantee that no other modules also contain this callsite, and therefore
-> you cannot destroy the associated name, probe, nor data objects.
+> Give distribution maintainers the option to skip rebuilding
+> autoconf and automake generated files. The default behaviour
+> is still to have the rebuild rules enabled.
 
-No module should have the same tracepoint name as another module.
-That's just broken. Although we do not technically enforce this, in
-practice that has been the case.
+I just did some reading on this, and found:
 
+http://blogs.gnome.org/desrt/2011/09/08/am_maintainer_mode-is-not-cool/
+
+So, in what use-case is --disable-maintainer-mode useful nowadays ? All
+it seems to do is to stop ensuring that Makefile are consistent with changes
+to Makefile.am.
+
+Thanks,
+
+Mathieu
 
 > 
-> > 
-> > Thus, what your module should do, is exactly what event_remove() does.
-> > On module unload, you unregister any of the tracepoints that were
-> > registered. Just like any other module resource. If you request a
-> > resource on the behalf of a module, it is up to you to free it when the
-> > module is unloaded.
+> Signed-off-by: Lars Persson <larper@axis.com>
+> ---
+>  configure.ac |    1 +
+>  1 files changed, 1 insertions(+), 0 deletions(-)
 > 
-> You seem to try to apply a logic that works in the case of the probes
-> defined by trace event to tracepoint call sites, but the fact is that
-> they are very different. Or again perhaps I'm just on the wrong track.
+> diff --git a/configure.ac b/configure.ac
+> index 7a98612..faa3f98 100644
+> --- a/configure.ac
+> +++ b/configure.ac
+> @@ -11,6 +11,7 @@ AC_CONFIG_AUX_DIR([config])
+>  AC_CANONICAL_TARGET
+>  AC_CANONICAL_HOST
+>  AM_INIT_AUTOMAKE([foreign dist-bzip2 no-dist-gzip])
+> +AM_MAINTAINER_MODE([enable])
+>  m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
+>  
+>  AC_CONFIG_MACRO_DIR([m4])
+> --
+> 1.7.2.5
 > 
-> > 
-> > The tracepoint code will just destroy what it set up when the module
-> > was loaded. It's up to your module to clean up the allocations that you
-> > made when the module was loaded on unload. Just like we do for all
-> > other resources.
-> > 
-> > Mathieu, stop thinking that tracepoints are special. They are not.
 > 
-> I'm trying to understand how module going of tracepoint probes and
-> call sites can be considered the same. What am I missing ?
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> 
 
-What creates the tracepoint probe? For all purposes, it should be
-either created on boot up (on core tracepoints), or when a module is
-loaded.
-
-Two modules should not have the same name. Is there any duplicate
-tracepoints you are aware of. Namespace collisions in tracepoints
-should be avoided, as that would cause people to trace things they did
-not intend on tracing.
-
-That should be a new patch as well. Enforce unique tracepoint names.
-
--- Steve
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
