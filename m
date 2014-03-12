@@ -1,32 +1,18 @@
-From: Lars Persson <lars.persson@axis.com>
-Subject: [PATCH userspace-rcu] Use autoconf AM_MAINTAINER_MODE.
-Date: Wed, 12 Mar 2014 10:36:04 +0100
-Message-ID: <1394616964-23890-1-git-send-email-larper__32774.8118005276$1394617015$gmane$org@axis.com>
+From: Zifei Tong <zifeitong@gmail.com>
+Subject: [PATCH] Define tracepoint callback only if
+	TRACEPOINT_DEFINE defined
+Date: Wed, 12 Mar 2014 17:40:37 +0800
+Message-ID: <1394617237-30807-1-git-send-email-zifeitong__24109.1314856478$1394617302$gmane$org@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from bastet.se.axis.com ([195.60.68.11])
+Received: from mail-pd0-f179.google.com ([209.85.192.179])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <lars.persson@axis.com>) id 1WNfaF-0005OQ-IR
-	for lttng-dev@lists.lttng.org; Wed, 12 Mar 2014 05:36:20 -0400
-Received: from localhost (localhost [127.0.0.1])
-	by bastet.se.axis.com (Postfix) with ESMTP id 20FB91814A
-	for <lttng-dev@lists.lttng.org>; Wed, 12 Mar 2014 10:36:14 +0100 (CET)
-Received: from bastet.se.axis.com ([IPv6:::ffff:127.0.0.1])
-	by localhost (bastet.se.axis.com [::ffff:127.0.0.1]) (amavisd-new,
-	port 10024)
-	with LMTP id hX9pwhu6bJHc for <lttng-dev@lists.lttng.org>;
-	Wed, 12 Mar 2014 10:36:13 +0100 (CET)
-Received: from boulder.se.axis.com (boulder.se.axis.com [10.0.2.104])
-	by bastet.se.axis.com (Postfix) with ESMTP id 81B8F18123
-	for <lttng-dev@lists.lttng.org>; Wed, 12 Mar 2014 10:36:13 +0100 (CET)
-Received: from boulder.se.axis.com (localhost [127.0.0.1])
-	by postfix.imss71 (Postfix) with ESMTP id 6A176BCC
-	for <lttng-dev@lists.lttng.org>; Wed, 12 Mar 2014 10:36:13 +0100 (CET)
-Received: from thoth.se.axis.com (thoth.se.axis.com [10.0.2.173])
-	by boulder.se.axis.com (Postfix) with ESMTP id 5E0388F4
-	for <lttng-dev@lists.lttng.org>; Wed, 12 Mar 2014 10:36:13 +0100 (CET)
+	(envelope-from <zifeitong@gmail.com>) id 1WNfeo-0005Sp-Ml
+	for lttng-dev@lists.lttng.org; Wed, 12 Mar 2014 05:41:03 -0400
+Received: by mail-pd0-f179.google.com with SMTP id w10so837406pde.10
+	for <lttng-dev@lists.lttng.org>; Wed, 12 Mar 2014 02:40:56 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -35,30 +21,79 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
-Cc: Lars Persson <larper@axis.com>
+To: mathieu.desnoyers@efficios.com
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Give distribution maintainers the option to skip rebuilding
-autoconf and automake generated files. The default behaviour
-is still to have the rebuild rules enabled.
+Compiling tracepoint providers in clang will result in 'Wunused-function'
+warning, since tracepoint callbacks are defined but never called.
 
-Signed-off-by: Lars Persson <larper@axis.com>
+lttng-gen-tp is also updated to not put TRACEPOINT_DEFINE in generated
+headers.
+
+Fixes #760
+
+Signed-off-by: Zifei Tong <zifeitong@gmail.com>
 ---
- configure.ac |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ doc/examples/gen-tp/sample.c |  1 +
+ include/lttng/tracepoint.h   | 13 ++++++++++---
+ tools/lttng-gen-tp           |  1 -
+ 3 files changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/configure.ac b/configure.ac
-index 079c145..f950726 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -13,6 +13,7 @@ AC_CONFIG_MACRO_DIR([config])
- AC_CANONICAL_TARGET
- AC_CANONICAL_HOST
- AM_INIT_AUTOMAKE([foreign dist-bzip2 no-dist-gzip])
-+AM_MAINTAINER_MODE([enable])
- m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
+diff --git a/doc/examples/gen-tp/sample.c b/doc/examples/gen-tp/sample.c
+index dab6e7d..ae22f28 100644
+--- a/doc/examples/gen-tp/sample.c
++++ b/doc/examples/gen-tp/sample.c
+@@ -23,6 +23,7 @@
  
- m4_include([config/ax_tls.m4])
+ #include <unistd.h>
+ 
++#define TRACEPOINT_DEFINE
+ #include "sample_tracepoint.h"
+ int main(int argc, char **argv)
+ {
+diff --git a/include/lttng/tracepoint.h b/include/lttng/tracepoint.h
+index 66e2abd..462a0fc 100644
+--- a/include/lttng/tracepoint.h
++++ b/include/lttng/tracepoint.h
+@@ -150,8 +150,8 @@ extern "C" {
+  * between caller's ip addresses within the probe using the return
+  * address.
+  */
+-#define _DECLARE_TRACEPOINT(_provider, _name, ...)			 		\
+-extern struct tracepoint __tracepoint_##_provider##___##_name;				\
++#if defined(TRACEPOINT_DEFINE)
++#define _DECLARE_TRACEPOINT_CB(_provider, _name, ...)			 		\
+ static inline __attribute__((always_inline)) lttng_ust_notrace				\
+ void __tracepoint_cb_##_provider##___##_name(_TP_ARGS_PROTO(__VA_ARGS__));		\
+ static											\
+@@ -174,7 +174,14 @@ void __tracepoint_cb_##_provider##___##_name(_TP_ARGS_PROTO(__VA_ARGS__))		\
+ 	} while ((++__tp_probe)->func);							\
+ end:											\
+ 	tp_rcu_read_unlock_bp();							\
+-}											\
++}
++#else
++#define _DECLARE_TRACEPOINT_CB(_provider, _name, ...)
++#endif
++
++#define _DECLARE_TRACEPOINT(_provider, _name, ...)			 		\
++extern struct tracepoint __tracepoint_##_provider##___##_name;				\
++_DECLARE_TRACEPOINT_CB(_provider, _name, __VA_ARGS__)			 		\
+ static inline lttng_ust_notrace								\
+ void __tracepoint_register_##_provider##___##_name(char *name,				\
+ 		void (*func)(void), void *data);					\
+diff --git a/tools/lttng-gen-tp b/tools/lttng-gen-tp
+index c49e8a5..ff8c22d 100755
+--- a/tools/lttng-gen-tp
++++ b/tools/lttng-gen-tp
+@@ -69,7 +69,6 @@ class CFile:
+ /*
+  * The header containing our TRACEPOINT_EVENTs.
+  */
+-#define TRACEPOINT_DEFINE
+ #include "{headerFilename}"
+ """
+     def __init__(self, filename, template):
 -- 
-1.7.2.5
+1.9.0
