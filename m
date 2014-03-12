@@ -1,17 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Support for new arch 'ppc64le'
-Date: Wed, 12 Mar 2014 12:29:11 +0000 (UTC)
-Message-ID: <460007316.819.1394627351601.JavaMail.zimbra__14292.0282356956$1394627424$gmane$org@efficios.com>
-References: <CANBHLUhP-FUrKP8nfiZe19JdihSyxuF9wEhzb53aCZYYg9hTvQ@mail.gmail.com>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Subject: Re: Working on some bugs
+Date: Wed, 12 Mar 2014 13:17:48 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD2FFA0ED9__49091.8676638559$1394630333$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1WNiHZ-0007He-3w
-	for lttng-dev@lists.lttng.org; Wed, 12 Mar 2014 08:29:19 -0400
-In-Reply-To: <CANBHLUhP-FUrKP8nfiZe19JdihSyxuF9wEhzb53aCZYYg9hTvQ@mail.gmail.com>
+	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1WNj2h-0007gU-8W
+	for lttng-dev@lists.lttng.org; Wed, 12 Mar 2014 09:18:00 -0400
+Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -20,70 +19,34 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Dimitri John Ledkov <xnox@ubuntu.com>
-Cc: lttng-dev@lists.lttng.org, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
------ Original Message -----
-> From: "Dimitri John Ledkov" <xnox@ubuntu.com>
-> To: lttng-dev@lists.lttng.org
-> Cc: ravi@linux.vnet.ibm.com, "mathieu desnoyers" <mathieu.desnoyers@efficios.com>
-> Sent: Wednesday, March 12, 2014 7:26:12 AM
-> Subject: RE: [lttng-dev] Support for new arch 'ppc64le'
-> 
-> (sorry for breaking threading, I was not previously subscribed)
-> 
-> On 03/12/2014 12:58 AM, Mathieu Desnoyers wrote:
-> > I see that the patch you propose adds both "powerpc64le" and "aarch64"
-> > entries. Why are there two of them?
-> 
-> Currently there are two fairly recent architectures, which at the
-> moment can only be compiled with "gcc atomics" code path.
-> The two new architectures are (GNU Types):
-> * aarch64-linux-gnu (aka ARMv8, ARM64, AARCH64, etc)
-> * powerpc64le-linux-gnu
-> 
-> Upstream config.guess/config.sub/libtool/kernel/compilers have support
-> for these targets and many distributions are bootstrapping/building
-> archives for these architectures. Although for complete support,
-> ideally one would create tarballs on systems with patched libtool,
-> it's not required for distributions since we have support to update
-> config.guess/config.sub/libtool at package build time.
-> 
-> Thus I'd like to only request for aarch64/powerpc64el to be recognized
-> as archtypes that use gcc atomics in configure.ac. See attached patch.
+----------------------------------------------------------------------
+Date: Mon, 10 Mar 2014 23:00:36 -0700
+From: Sandeep K Chaudhary <babbusandy2006@gmail.com>
 
-OK. My request to you is that there has been some testing (make check,
-make regtest and ensuring there is no crash, assertions, or other issues
-reported) on each of those architectures with userspace RCU.
+> I want to submit patches for some bugs before making my GSoC application.
+>
+> http://bugs.lttng.org/issues/621
+> http://bugs.lttng.org/issues/282
+> http://bugs.lttng.org/issues/204
+> http://bugs.lttng.org/issues/682
 
-> 
-> Alternatively, you might want to consider making "gcc" atomics the
-> fallback ARCHTYPE, instead of "unknown" such that compilation of this
-> package is at least attempted on unexpected architectures.
+http://bugs.lttng.org/issues/633 would also be an easy one to do.
 
-The reason why we don't have this fallback is because we want to make sure
-the implementation of gcc atomics are tested for each architecture before
-we allow building userspace RCU for them. You may call us paranoid over
-this, but we just don't trust the compiler to always do the right thing.
-
-I'll merge your patch into master. However, since this can be considered
-as new features (and not bugfixes), I cannot backport it to the stable
-branches of userspace RCU. So it will be in there for the future 0.9
-branch.
-
-Thanks,
-
-Mathieu
-
-> 
-> --
-> Regards,
-> 
-> Dimitri.
-> 
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Daniel U. Thibault
+Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
+ntermeasures (SPC)
+Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
+Cyber Security (MCCS)
+R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
+ Canada - Valcartier (DRDC Valcartier)
+2459 route de la Bravoure
+Qu=E9bec QC  G3J 1X5
+CANADA
+Vox : (418) 844-4000 x4245
+Fax : (418) 844-4538
+NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+Gouvernement du Canada | Government of Canada
+<http://www.valcartier.drdc-rddc.gc.ca/>
