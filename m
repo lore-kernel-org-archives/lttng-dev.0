@@ -1,42 +1,87 @@
-From: Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [for-next][PATCH 08/20] tracing: Warn if a
- tracepoint is not set via debugfs
-Date: Wed, 12 Mar 2014 15:30:06 -0400
-Message-ID: <20140312153006.7acea4a8__34369.2631031901$1394652681$gmane$org@gandalf.local.home>
-References: <20140307150920.881849073@goodmis.org>
-	<1501695915.977.1394634294978.JavaMail.zimbra@efficios.com>
-	<20140312111100.42ea41c2@gandalf.local.home>
-	<20140312114611.43547df7@gandalf.local.home>
-	<437054772.1403.1394640336308.JavaMail.zimbra@efficios.com>
-	<20140312121813.1e0102aa@gandalf.local.home>
-	<285520930.1511.1394642395537.JavaMail.zimbra@efficios.com>
-	<20140312135059.2d497b58@gandalf.local.home>
-	<1906756968.1732.1394650035535.JavaMail.zimbra@efficios.com>
-	<20140312145802.4819511e@gandalf.local.home>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [for-next][PATCH 08/20] tracing: Warn if a tracepoint is not
+ set via debugfs
+Date: Wed, 12 Mar 2014 19:51:01 +0000 (UTC)
+Message-ID: <1177120325.1928.1394653861180.JavaMail.zimbra@efficios.com>
+References: <20140307150920.881849073@goodmis.org> <20140312114611.43547df7@gandalf.local.home> <437054772.1403.1394640336308.JavaMail.zimbra@efficios.com> <20140312121813.1e0102aa@gandalf.local.home> <285520930.1511.1394642395537.JavaMail.zimbra@efficios.com> <20140312135059.2d497b58@gandalf.local.home> <1906756968.1732.1394650035535.JavaMail.zimbra@efficios.com> <20140312145802.4819511e@gandalf.local.home>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from cdptpa-outbound-snat.email.rr.com ([107.14.166.230]
-	helo=cdptpa-oedge-vip.email.rr.com)
-	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <rostedt@goodmis.org>) id 1WNor0-0002jT-E6
-	for lttng-dev@lists.lttng.org; Wed, 12 Mar 2014 15:30:20 -0400
+Return-path: <linux-kernel-owner@vger.kernel.org>
 In-Reply-To: <20140312145802.4819511e@gandalf.local.home>
-List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
-	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
-	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Johannes Berg <johannes.berg@intel.com>, Peter Zijlstra <peterz@infradead.org>, Frederic Weisbecker <fweisbec@gmail.com>, Rusty Russell <rusty@rustcorp.com.au>, linux-kernel@vger.kernel.org, "Frank Ch. Eigler" <fche@redhat.com>, Thomas Gleixner <tglx@linutronix.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, lttng-dev <lttng-dev@lists.lttng.org>, Andrew Morton <akpm@linux-foundation.org>, Linus Torvalds <torvalds@linux-foundation.org>, Ingo Molnar <mingo@kernel.org>
+Sender: linux-kernel-owner@vger.kernel.org
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: "Frank Ch. Eigler" <fche@redhat.com>, linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>, Frederic Weisbecker <fweisbec@gmail.com>, Andrew Morton <akpm@linux-foundation.org>, Johannes Berg <johannes.berg@intel.com>, Linus Torvalds <torvalds@linux-foundation.org>, Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@linutronix.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, lttng-dev <lttng-dev@lists.lttng.org>, Rusty Russell <rusty@rustcorp.com.au>, Andi Kleen <andi@firstfloor.org>
 List-Id: lttng-dev@lists.lttng.org
 
-On Wed, 12 Mar 2014 14:58:02 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+----- Original Message -----
+> From: "Steven Rostedt" <rostedt@goodmis.org>
+> To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+> Cc: "Frank Ch. Eigler" <fche@redhat.com>, linux-kernel@vger.kernel.org, "Ingo Molnar" <mingo@kernel.org>, "Frederic
+> Weisbecker" <fweisbec@gmail.com>, "Andrew Morton" <akpm@linux-foundation.org>, "Johannes Berg"
+> <johannes.berg@intel.com>, "Linus Torvalds" <torvalds@linux-foundation.org>, "Peter Zijlstra"
+> <peterz@infradead.org>, "Thomas Gleixner" <tglx@linutronix.de>, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+> "lttng-dev" <lttng-dev@lists.lttng.org>, "Rusty Russell" <rusty@rustcorp.com.au>
+> Sent: Wednesday, March 12, 2014 2:58:02 PM
+> Subject: Re: [for-next][PATCH 08/20] tracing: Warn if a tracepoint is not set via debugfs
+> 
+> On Wed, 12 Mar 2014 18:47:15 +0000 (UTC)
+> Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
+>  
+> > > On module unload, the events are destroyed.
+> > 
+> > Isn't trace_event.c responsible for dealing with tracepoint probes rather
+> > than call sites ? This is quite different. A tracepoint probe "foo" is only
+> > located within a single module (the one you are unloading here). However,
+> > if you try to unload a module that contains the callsite "foo", you have no
+> > guarantee that no other modules also contain this callsite, and therefore
+> > you cannot destroy the associated name, probe, nor data objects.
+> 
+> No module should have the same tracepoint name as another module.
+> That's just broken. Although we do not technically enforce this, in
+> practice that has been the case.
+
+I agree with you on this.
+
+I now notice that all the tracepoints within kernel headers have been removed,
+this is why we're talking past each other. As soon as there is a tracepoint
+within a static inline function in a header shared between modules, you end up
+having instances of tracepoint call sites with the same names within different
+modules.
+
+So I understand that you wish to banish tracepoints from static inline
+functions within headers to ensure they only appear within a single module.
+This seems to be a step backward, but let's assume we stick to that rule.
+Then how do you envision dealing with Link-Time Optimisations (LTO) ?
+
+> > 
+> > > 
+> > > Thus, what your module should do, is exactly what event_remove() does.
+> > > On module unload, you unregister any of the tracepoints that were
+> > > registered. Just like any other module resource. If you request a
+> > > resource on the behalf of a module, it is up to you to free it when the
+> > > module is unloaded.
+> > 
+> > You seem to try to apply a logic that works in the case of the probes
+> > defined by trace event to tracepoint call sites, but the fact is that
+> > they are very different. Or again perhaps I'm just on the wrong track.
+> > 
+> > > 
+> > > The tracepoint code will just destroy what it set up when the module
+> > > was loaded. It's up to your module to clean up the allocations that you
+> > > made when the module was loaded on unload. Just like we do for all
+> > > other resources.
+> > > 
+> > > Mathieu, stop thinking that tracepoints are special. They are not.
+> > 
+> > I'm trying to understand how module going of tracepoint probes and
+> > call sites can be considered the same. What am I missing ?
+> 
+> What creates the tracepoint probe? For all purposes, it should be
+> either created on boot up (on core tracepoints), or when a module is
+> loaded.
+
+Yep, agreed.
 
 > 
 > Two modules should not have the same name. Is there any duplicate
@@ -46,45 +91,24 @@ Steven Rostedt <rostedt@goodmis.org> wrote:
 > 
 > That should be a new patch as well. Enforce unique tracepoint names.
 
-This may be why you are not understanding what I want. It's the way
-things are implemented today, which I believe are wrong. I see what you
-did. You have probes that are registered, and tracepoints that are
-where the code lies. You just add and remove probes from a hash list,
-and then you loop through all the tracepoints seeing if the iter->name
-matches a probe->name.
+There are no duplicate tracepoint that I'm aware of in the kernel (or
+very few, and they are in similar functions in the same module).
 
-I'm fine with keeping the probe separate, but there really should be
-no more than just a one to one mapping between probes and tracepoints.
-Have the probe point to the matching tracepoint. The probe is
-registered, it enables the tracepoint static key, when it's ref count
-goes to zero, it disables the tracepoint static key. We can get rid of
-that loop then, as well as the duplicate names between probes and
-tracepoints.
+This only leaves tracepoints in header files and the impact of LTO as
+requirements for having tracepoint callsites with the same name across
+modules.
 
-Here's the steps we should take:
+Thoughts ?
 
-1) Prevent duplicate tracepoints. They are just namespace collisions
-that we already try to avoid. How to do this? We may need to add a
-hlist_node to the tracepoint structure, and keep them in a hash by name.
-Check for collisions when the name is added to the hash.
+Thanks,
 
-2) Change the way tracepoints are enabled. Do not do a loop of all
-tracepoints, but instead have the first probe of a tracepoint enable
-it, and the last one to disable it. This would require a pointer from
-the probe to the tracepoint it represents. Again, it should not
-represent more than one.
+Mathieu
 
-3) On module unload, it would be the responsibility of the user to
-unload all the tracepoints that may have been enabled for a module. We
-can add a mod pointer in the probe to make this easier, as well as to
-the tp_module structure.
+> 
+> -- Steve
+> 
 
-The way tracepoints are today are to handle two completely different
-tracepoints with the same name. That should be avoided, and will make
-things much less complex.
-
-Then you can easily handle the accounting of modules loading and
-unloading in your module, and the tracepoint code will match what the
-rest of the kernel does for resource management.
-
--- Steve
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
