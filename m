@@ -1,14 +1,14 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Subject: Re: [for-next][PATCH 08/20] tracing: Warn if a tracepoint is not
  set via debugfs
-Date: Wed, 12 Mar 2014 19:51:01 +0000 (UTC)
-Message-ID: <1177120325.1928.1394653861180.JavaMail.zimbra@efficios.com>
-References: <20140307150920.881849073@goodmis.org> <20140312114611.43547df7@gandalf.local.home> <437054772.1403.1394640336308.JavaMail.zimbra@efficios.com> <20140312121813.1e0102aa@gandalf.local.home> <285520930.1511.1394642395537.JavaMail.zimbra@efficios.com> <20140312135059.2d497b58@gandalf.local.home> <1906756968.1732.1394650035535.JavaMail.zimbra@efficios.com> <20140312145802.4819511e@gandalf.local.home>
+Date: Wed, 12 Mar 2014 19:58:10 +0000 (UTC)
+Message-ID: <1666649564.1944.1394654290265.JavaMail.zimbra@efficios.com>
+References: <20140307150920.881849073@goodmis.org> <437054772.1403.1394640336308.JavaMail.zimbra@efficios.com> <20140312121813.1e0102aa@gandalf.local.home> <285520930.1511.1394642395537.JavaMail.zimbra@efficios.com> <20140312135059.2d497b58@gandalf.local.home> <1906756968.1732.1394650035535.JavaMail.zimbra@efficios.com> <20140312145802.4819511e@gandalf.local.home> <20140312153006.7acea4a8@gandalf.local.home>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-kernel-owner@vger.kernel.org>
-In-Reply-To: <20140312145802.4819511e@gandalf.local.home>
+In-Reply-To: <20140312153006.7acea4a8@gandalf.local.home>
 Sender: linux-kernel-owner@vger.kernel.org
 To: Steven Rostedt <rostedt@goodmis.org>
 Cc: "Frank Ch. Eigler" <fche@redhat.com>, linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>, Frederic Weisbecker <fweisbec@gmail.com>, Andrew Morton <akpm@linux-foundation.org>, Johannes Berg <johannes.berg@intel.com>, Linus Torvalds <torvalds@linux-foundation.org>, Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@linutronix.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, lttng-dev <lttng-dev@lists.lttng.org>, Rusty Russell <rusty@rustcorp.com.au>, Andi Kleen <andi@firstfloor.org>
@@ -22,88 +22,78 @@ List-Id: lttng-dev@lists.lttng.org
 > <johannes.berg@intel.com>, "Linus Torvalds" <torvalds@linux-foundation.org>, "Peter Zijlstra"
 > <peterz@infradead.org>, "Thomas Gleixner" <tglx@linutronix.de>, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
 > "lttng-dev" <lttng-dev@lists.lttng.org>, "Rusty Russell" <rusty@rustcorp.com.au>
-> Sent: Wednesday, March 12, 2014 2:58:02 PM
+> Sent: Wednesday, March 12, 2014 3:30:06 PM
 > Subject: Re: [for-next][PATCH 08/20] tracing: Warn if a tracepoint is not set via debugfs
 > 
-> On Wed, 12 Mar 2014 18:47:15 +0000 (UTC)
-> Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
->  
-> > > On module unload, the events are destroyed.
-> > 
-> > Isn't trace_event.c responsible for dealing with tracepoint probes rather
-> > than call sites ? This is quite different. A tracepoint probe "foo" is only
-> > located within a single module (the one you are unloading here). However,
-> > if you try to unload a module that contains the callsite "foo", you have no
-> > guarantee that no other modules also contain this callsite, and therefore
-> > you cannot destroy the associated name, probe, nor data objects.
+> On Wed, 12 Mar 2014 14:58:02 -0400
+> Steven Rostedt <rostedt@goodmis.org> wrote:
 > 
-> No module should have the same tracepoint name as another module.
-> That's just broken. Although we do not technically enforce this, in
-> practice that has been the case.
-
-I agree with you on this.
-
-I now notice that all the tracepoints within kernel headers have been removed,
-this is why we're talking past each other. As soon as there is a tracepoint
-within a static inline function in a header shared between modules, you end up
-having instances of tracepoint call sites with the same names within different
-modules.
-
-So I understand that you wish to banish tracepoints from static inline
-functions within headers to ensure they only appear within a single module.
-This seems to be a step backward, but let's assume we stick to that rule.
-Then how do you envision dealing with Link-Time Optimisations (LTO) ?
-
 > > 
-> > > 
-> > > Thus, what your module should do, is exactly what event_remove() does.
-> > > On module unload, you unregister any of the tracepoints that were
-> > > registered. Just like any other module resource. If you request a
-> > > resource on the behalf of a module, it is up to you to free it when the
-> > > module is unloaded.
+> > Two modules should not have the same name. Is there any duplicate
+> > tracepoints you are aware of. Namespace collisions in tracepoints
+> > should be avoided, as that would cause people to trace things they did
+> > not intend on tracing.
 > > 
-> > You seem to try to apply a logic that works in the case of the probes
-> > defined by trace event to tracepoint call sites, but the fact is that
-> > they are very different. Or again perhaps I'm just on the wrong track.
-> > 
-> > > 
-> > > The tracepoint code will just destroy what it set up when the module
-> > > was loaded. It's up to your module to clean up the allocations that you
-> > > made when the module was loaded on unload. Just like we do for all
-> > > other resources.
-> > > 
-> > > Mathieu, stop thinking that tracepoints are special. They are not.
-> > 
-> > I'm trying to understand how module going of tracepoint probes and
-> > call sites can be considered the same. What am I missing ?
+> > That should be a new patch as well. Enforce unique tracepoint names.
 > 
-> What creates the tracepoint probe? For all purposes, it should be
-> either created on boot up (on core tracepoints), or when a module is
-> loaded.
-
-Yep, agreed.
-
+> This may be why you are not understanding what I want. It's the way
+> things are implemented today, which I believe are wrong. I see what you
+> did. You have probes that are registered, and tracepoints that are
+> where the code lies. You just add and remove probes from a hash list,
+> and then you loop through all the tracepoints seeing if the iter->name
+> matches a probe->name.
 > 
-> Two modules should not have the same name. Is there any duplicate
-> tracepoints you are aware of. Namespace collisions in tracepoints
-> should be avoided, as that would cause people to trace things they did
-> not intend on tracing.
-> 
-> That should be a new patch as well. Enforce unique tracepoint names.
+> I'm fine with keeping the probe separate, but there really should be
+> no more than just a one to one mapping between probes and tracepoints.
+> Have the probe point to the matching tracepoint. The probe is
+> registered, it enables the tracepoint static key, when it's ref count
+> goes to zero, it disables the tracepoint static key. We can get rid of
+> that loop then, as well as the duplicate names between probes and
+> tracepoints.
 
-There are no duplicate tracepoint that I'm aware of in the kernel (or
-very few, and they are in similar functions in the same module).
+Right there, this is not possible for a few reasons, namely:
 
-This only leaves tracepoints in header files and the impact of LTO as
-requirements for having tracepoint callsites with the same name across
-modules.
+- loop unrolling performed by the compiler can duplicate a tracepoint,
+  even if it is only there once in the source code,
+- inlining performed by the compiler may do the same,
+- LTO, whenever it will start being used for the kernel, may do the same,
+  and also spread call sites across modules.
 
-Thoughts ?
+There can be no 1 to 1 mapping between a probe function and a callsite
+due to those compilers optimisations, even if we enforce the strictest
+coding style rules possible on their use.
 
 Thanks,
 
 Mathieu
 
+
+> 
+> Here's the steps we should take:
+> 
+> 1) Prevent duplicate tracepoints. They are just namespace collisions
+> that we already try to avoid. How to do this? We may need to add a
+> hlist_node to the tracepoint structure, and keep them in a hash by name.
+> Check for collisions when the name is added to the hash.
+> 
+> 2) Change the way tracepoints are enabled. Do not do a loop of all
+> tracepoints, but instead have the first probe of a tracepoint enable
+> it, and the last one to disable it. This would require a pointer from
+> the probe to the tracepoint it represents. Again, it should not
+> represent more than one.
+> 
+> 3) On module unload, it would be the responsibility of the user to
+> unload all the tracepoints that may have been enabled for a module. We
+> can add a mod pointer in the probe to make this easier, as well as to
+> the tp_module structure.
+> 
+> The way tracepoints are today are to handle two completely different
+> tracepoints with the same name. That should be avoided, and will make
+> things much less complex.
+> 
+> Then you can easily handle the accounting of modules loading and
+> unloading in your module, and the tracepoint code will match what the
+> rest of the kernel does for resource management.
 > 
 > -- Steve
 > 
