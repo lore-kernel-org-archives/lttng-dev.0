@@ -1,205 +1,158 @@
-From: Steven Rostedt <rostedt@goodmis.org>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Subject: Re: [for-next][PATCH 08/20] tracing: Warn if a tracepoint is not
  set via debugfs
-Date: Wed, 12 Mar 2014 14:02:02 -0400
-Message-ID: <20140312140202.455f4037@gandalf.local.home>
-References: <20140307150920.881849073@goodmis.org>
-	<20140311142650.GB13756@redhat.com>
-	<1448078225.73.1394550382164.JavaMail.zimbra@efficios.com>
-	<20140311114023.02fcf639@gandalf.local.home>
-	<1752080128.130.1394559263621.JavaMail.zimbra@efficios.com>
-	<20140311151357.077c5a68@gandalf.local.home>
-	<1501695915.977.1394634294978.JavaMail.zimbra@efficios.com>
-	<20140312111100.42ea41c2@gandalf.local.home>
-	<1078215147.1512.1394642450993.JavaMail.zimbra@efficios.com>
+Date: Wed, 12 Mar 2014 18:47:15 +0000 (UTC)
+Message-ID: <1906756968.1732.1394650035535.JavaMail.zimbra@efficios.com>
+References: <20140307150920.881849073@goodmis.org> <1501695915.977.1394634294978.JavaMail.zimbra@efficios.com> <20140312111100.42ea41c2@gandalf.local.home> <20140312114611.43547df7@gandalf.local.home> <437054772.1403.1394640336308.JavaMail.zimbra@efficios.com> <20140312121813.1e0102aa@gandalf.local.home> <285520930.1511.1394642395537.JavaMail.zimbra@efficios.com> <20140312135059.2d497b58@gandalf.local.home>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
 Return-path: <linux-kernel-owner@vger.kernel.org>
-In-Reply-To: <1078215147.1512.1394642450993.JavaMail.zimbra@efficios.com>
+In-Reply-To: <20140312135059.2d497b58@gandalf.local.home>
 Sender: linux-kernel-owner@vger.kernel.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: Steven Rostedt <rostedt@goodmis.org>
 Cc: "Frank Ch. Eigler" <fche@redhat.com>, linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>, Frederic Weisbecker <fweisbec@gmail.com>, Andrew Morton <akpm@linux-foundation.org>, Johannes Berg <johannes.berg@intel.com>, Linus Torvalds <torvalds@linux-foundation.org>, Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@linutronix.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, lttng-dev <lttng-dev@lists.lttng.org>, Rusty Russell <rusty@rustcorp.com.au>
 List-Id: lttng-dev@lists.lttng.org
 
-On Wed, 12 Mar 2014 16:40:51 +0000 (UTC)
-Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
- 
-> > Please tell me one in-tree user that will be impacted?
+----- Original Message -----
+> From: "Steven Rostedt" <rostedt@goodmis.org>
+> To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+> Cc: "Frank Ch. Eigler" <fche@redhat.com>, linux-kernel@vger.kernel.org, "Ingo Molnar" <mingo@kernel.org>, "Frederic
+> Weisbecker" <fweisbec@gmail.com>, "Andrew Morton" <akpm@linux-foundation.org>, "Johannes Berg"
+> <johannes.berg@intel.com>, "Linus Torvalds" <torvalds@linux-foundation.org>, "Peter Zijlstra"
+> <peterz@infradead.org>, "Thomas Gleixner" <tglx@linutronix.de>, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+> "lttng-dev" <lttng-dev@lists.lttng.org>, "Rusty Russell" <rusty@rustcorp.com.au>
+> Sent: Wednesday, March 12, 2014 1:50:59 PM
+> Subject: Re: [for-next][PATCH 08/20] tracing: Warn if a tracepoint is not set via debugfs
 > 
-> I'm talking about all users of tracepoints, all in tree and out of tree
-> users. We need the design and API for tracepoint to stay sound, and for that
-> we need to study carefully the impact of the changes you propose on module
-> load/unload scenarios.
-
-Right now the current change actually fixes a bug. It tells the tracing
-utility that the tracepoint that was to be enabled was or wasn't.
-
-
-> > And the distribution just magically installs itself onto a computer? No,
-> > a user does, and in doing so, they set up udev. A person installing a
-> > distribution is a sysadmin. Even if it's grandma installing it herself.
-> > She owns the box, no one else is doing anything for her (unless it's
-> > your grandma).
+> On Wed, 12 Mar 2014 16:39:55 +0000 (UTC)
+> Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
 > 
-> In a corporate environment, it's pretty much never the end user who ends
-> up being the system administrator of his machine.
-
-And they shouldn't be tracing their modules. That should be up to the
-corporate system administrators.
-
-
-> > Tracing is a root privilege.
 > 
-> Tracing the kernel should require root privilege for the process interacting
-> with the kernel ABI, I agree with that part. However, the end user of the
-> machine should not need to be in a root shell to interact with tracing. For
-> instance, if the tracer only provides summarized information pinpointing
-> issues, the system administrator could very well allow the end user to use
-> tracing without being root.
-> 
-> An example of this is the way laptops nowadays handle wifi connexions through
-> a root daemon setting up the network (interfacing with kernel ABI), but which
-> gets the user interaction though a user interface running in user context.
-
-This is all out of scope with the latest proposal, so I will ignore it.
-
- 
-> > This seems very specific to a single tracing tool that happens not to
-> > be in the kernel tree.
-> 
-> And the reason for that is because the said kernel community has been deaf to
-> the requirements of the user-base we target. Unlike Ftrace, we are not targeting
-> kernel developers, and unlike perf, we are not targeting sampling use-cases. Yes,
-> there is a partial infrastructure overlap, but LTTng has been rejected on the
-> ground of "fear of work duplication" which, frankly, makes no sense, since we are
-> targeting different use cases. Some of the infrastructure work needs to be done
-> in common, and some of the work needs to go in different directions.
-
-Honestly, LTTng has been rejected because the maintainer of it tends to
-sacrifice everything else to make tracing better.
-
-
+> > > Are you telling me it's not possible to delete the entire probe?
 > > 
-> > Why would grandma want to trace the kernel?
+> > The ownership flow is the following:
+> > 
+> > 1) Tracer creates name, probe, data objects. The probe can be typically
+> >    code within a probe provider module, which needs to have a reference
+> >    count incremented. The name and data objects can be dynamically
+> >    allocated,
+> >    or in some special cases part of a probe provider module (again with
+> >    refcount incremented).
+> > 
+> > 2) The tracer registers the tracepoint probe. If registration returns 0,
+> >    the tracer should not free those elements until it calls tracepoint
+> >    probe unregister for that (name, probe, data) tuple.
+> > 
+> > 3) Tracer calls tracepoint probe unregister for the (name, probe, data)
+> > tuple.
 > 
-> Perhaps because her kernel crashes and she hates to lose the emails she is
-> writing to her grandchildren when the crash happens, and because there is a
-> nice tool that allow her to click "yes, I want to report issues to my
-> favorite Linux distribution", which will then analyze the trace report and
-> come up with an automated kernel upgrade a few weeks later.
+> We can make the registered tracepoint up the mod count to prevent it
+> from unloading. But that probably defeats the purpose.
 
-A distro could set something like this up, with todays tools. If
-grandma needed to start tracing, it was already too late for her to get
-a report.
-
-
-
-> > I actually never said that. I said that you could have a proxy to
-> > enable or disable the tracepoint. I don't know where you're getting
-> > this crap from. Yes, I have suggested in the past that the ideal
-> > approach is to have modprobe handle it, just like it handles other
-> > module changes for one time deals. And yes, tracing a module is a one
-> > time deal. But you seem to be getting in a tizzy thinking that's what I
-> > recommended yesterday.
-> 
-> This was the logical consequence of your recommendation of having a root proxy
-> daemon to handle this.
-
-You read too much into what I say. Like the "No signed-off-by". I was
-actually telling you that tracepoints should not be enabled by non root
-unless there was a daemon to control it. We both got off an tangents.
-
-
-> > I wouldn't want people to have access to any box I own to be able to
-> > just stick any usb device into the computer. Look at all the USB drivers
-> > we have. You think they are all perfect. I'm sure it wouldn't be too
-> > hard to find a bad USB device driver and make your own dongle to stick
-> > in, that can root the box.
-> 
-> Yes, no code is perfect, and that includes USB drivers. But in that line of
-> reasoning, why bother about security at all ? Since the ssh server code is
-> imperfect, you might as well publish your private key. Sorry, this line of
-> reasoning makes no sense.
-
-ssh code is a small set of code compared to the thousands of random usb
-drivers, including several that are in staging, that still happen to be
-turned on by distros.
-
-
-> > Have your LTTNg module dictate that policy.
-> 
-> I'm OK with that, as long as the tracepoint infrastructure itself is consistent.
-
-We're working on that.
-
- 
-> > Hmm, currently the probe lies to the user when the tracepoint doesn't
-> > exist. We enable it and nothing happens. This BROKE IN TREE USERS!!!!
-> 
-> The root of the original problem here was that tracepoint.c was skipping
-> non-signed modules without printing any error. We added an printk error
-> message for this.
-
-Yes, but it still lies to the internal user in this case. Which is
-wrong.
+It seems more flexible to me to let this be handled by the tracer rather than
+tracepoint.c.
 
 > 
 > > 
-> > I suggest that we remove the probe when the module is unloaded. No
-> > lying. Either a tracepoint exists when you enable it, or it doesn't.
+> > 4) Tracer calls tracepoint_synchronize_unregister() to ensure quiescence
+> >    of tracepoint call sites wrt the probe that has just been unregistered.
 > 
-> See other leg of this thread for the "high signal/noise" ratio technical
-> discussion.
-> 
-> > 
-> > 
-> > > 
-> > > B) Making tracepoint_probe_register() just return an error (-ENOEDV), but
-> > >    leaving the probe registered.
-> > > 
-> > > I think we have already agreed that this compromise solution is a weird API
-> > > choice, since an error condition must be treated as a success by the
-> > > caller.
-> > > Moreover, it has the same issue as (A) above: if the module is unloaded
-> > > after probe registration, the tracer is lying to the user, making them
-> > > think there is a call site loaded when there are none.
-> > 
-> > But isn't that what we do today?
-> 
-> No, currently tracepoint offers no API to query the state of tracepoint callsites
-> other than the seqfile iterator (which I proposed to removed in a RFC patch
-> yesterday).
+> Tracepoints should all be disabled when the module is unloaded.
 
-To me that's a work around, not a real fix.
+This is only true for the tracepoint call sites located within this module.
+
+> If you
+> have a tracepoint callback still being called when the module is
+> unloaded then something is seriously wrong. That means the callback
+> will go back to the trace_foo() call which is in the module code and
+> will no longer exist. Kernel panic is the result.
+
+I agree that the specific call sites within an unloaded module need to be
+already quiescent by the time the module is unmapped from memory, no argument
+there.
+
+The scenario I'm painting here (ownership of name, probe and data through the
+5 steps) is the common "enable tracing, disable tracing" scenario, where the
+module is not necessarily unloaded.
+
+> 
+> 
+> > 
+> > 5) Tracer can free/unref the probe provider module.
+> 
+> I'm a bit confused at what you are doing. As this is totally unrelated
+> to anything that happens in the kernel.
+
+The objects "name" and "data" can be dynamically allocated, and need to be
+freed at some point. The probe provider module need to have its reference
+count released after its probe function is unregistered. However, there
+may still be tracepoint call sites in flights (again, this is a normal
+enable tracing/disable tracing scenario, no module unload).
+
+I detailed this scenario to answer your question "Are you telling me it's
+not possible to delete the entire probe?", thus showing what the ownership
+of objects passed to register/unregister is, to shed some light on why
+it's currently not possible to unregister a tracepoint probe from
+tracepoint.c, because it does not have ownership of those objects.
 
 > 
 > > 
 > > > 
-> > > C) Adding module load arguments to specify which tracepoint should be
-> > >    enabled.
-> > > 
-> > > Please refer to my response above in this email to understand why I object.
+> > > What I'm proposing is to do what the trace events do. Delete everything
+> > > associated to the tracepoints associated to the module.
 > > 
-> > I didn't suggest this in this thread. I only pointed out that is the
-> > most sane situation. But I've been trying to work with you, and you
-> > don't seem to see that.
+> > Is your intent to have a module "going" notifier in tracepoint.c managing
+> > ownership of objects it does not own ? If not, I guess I'm not
+> > understanding
+> > your proposal fully.
 > 
-> I appreciate the compromise efforts you have made, but my points here are about
-> sound design/API, and I have technical concerns still unanswered (see other leg
-> of the thread). This is not about what LTTng needs, but about keeping the
-> tracepoint API consistent.
+> Well, actually that's exactly what the trace_event code does. It
+> disables any event of the module that happens to be enabled.
+> 
+> Look at event_remove() in kernel/trace/trace_events.c
+> 
+> On module unload, the events are destroyed.
 
-Yep, see my responses.
+Isn't trace_event.c responsible for dealing with tracepoint probes rather
+than call sites ? This is quite different. A tracepoint probe "foo" is only
+located within a single module (the one you are unloading here). However,
+if you try to unload a module that contains the callsite "foo", you have no
+guarantee that no other modules also contain this callsite, and therefore
+you cannot destroy the associated name, probe, nor data objects.
 
+> 
+> Thus, what your module should do, is exactly what event_remove() does.
+> On module unload, you unregister any of the tracepoints that were
+> registered. Just like any other module resource. If you request a
+> resource on the behalf of a module, it is up to you to free it when the
+> module is unloaded.
 
-> I don't mind doing the heavy lifting in LTTng at all. My concern here
-> is (again) about keeping the tracepoint API semantically consistent when
-> module load/unload occur. A lot of thinking went into this when I initially
-> created tracepoint.c, and I don't want it to be degraded by a change that is
-> not thought thoroughly.
+You seem to try to apply a logic that works in the case of the probes
+defined by trace event to tracepoint call sites, but the fact is that
+they are very different. Or again perhaps I'm just on the wrong track.
 
-I have a good idea of what needs to be done. I just need you to look at
-things with a different perspective than what you are use to.
+> 
+> The tracepoint code will just destroy what it set up when the module
+> was loaded. It's up to your module to clean up the allocations that you
+> made when the module was loaded on unload. Just like we do for all
+> other resources.
+> 
+> Mathieu, stop thinking that tracepoints are special. They are not.
 
--- Steve
+I'm trying to understand how module going of tracepoint probes and
+call sites can be considered the same. What am I missing ?
+
+Thanks,
+
+Mathieu
+
+> 
+> 
+> -- Steve
+> 
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
