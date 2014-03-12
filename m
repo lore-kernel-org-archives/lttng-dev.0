@@ -1,20 +1,33 @@
-From: Sandeep K Chaudhary <babbusandy2006@gmail.com>
-Subject: Re: Working on some bugs
-Date: Tue, 11 Mar 2014 23:59:57 -0700
-Message-ID: <CAEEAEzX3KOz0JDGGee20f2CBtFuPhrRUX2m2hzhut5WObGVBuw__36315.7132560902$1394607700$gmane$org@mail.gmail.com>
-References: <CAEEAEzWcPk788kF=BptjeGsG=hrWyeK1tcUAM4Fq9GAwZYPXhQ@mail.gmail.com>
-	<20140311162201.GE7727@thessa>
+From: Lars Persson <lars.persson@axis.com>
+Subject: [PATCH babeltrace] Fix: Support out of tree builds in
+	babeltrace.
+Date: Wed, 12 Mar 2014 08:12:46 +0100
+Message-ID: <1394608366-28338-1-git-send-email-larper__21577.5526398376$1394608492$gmane$org@axis.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qg0-f48.google.com ([209.85.192.48])
+Received: from bastet.se.axis.com ([195.60.68.11])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <babbusandy2006@gmail.com>) id 1WNd91-000407-AC
-	for lttng-dev@lists.lttng.org; Wed, 12 Mar 2014 03:00:05 -0400
-Received: by mail-qg0-f48.google.com with SMTP id j107so27947082qga.7
-	for <lttng-dev@lists.lttng.org>; Tue, 11 Mar 2014 23:59:57 -0700 (PDT)
-In-Reply-To: <20140311162201.GE7727@thessa>
+	(envelope-from <lars.persson@axis.com>) id 1WNdMh-0004A2-7P
+	for lttng-dev@lists.lttng.org; Wed, 12 Mar 2014 03:14:15 -0400
+Received: from localhost (localhost [127.0.0.1])
+	by bastet.se.axis.com (Postfix) with ESMTP id D24F91818E
+	for <lttng-dev@lists.lttng.org>; Wed, 12 Mar 2014 08:13:59 +0100 (CET)
+Received: from bastet.se.axis.com ([IPv6:::ffff:127.0.0.1])
+	by localhost (bastet.se.axis.com [::ffff:127.0.0.1]) (amavisd-new,
+	port 10024)
+	with LMTP id Q5X365fvuAcj for <lttng-dev@lists.lttng.org>;
+	Wed, 12 Mar 2014 08:13:59 +0100 (CET)
+Received: from boulder.se.axis.com (boulder.se.axis.com [10.0.2.104])
+	by bastet.se.axis.com (Postfix) with ESMTP id 452DD18111
+	for <lttng-dev@lists.lttng.org>; Wed, 12 Mar 2014 08:13:59 +0100 (CET)
+Received: from boulder.se.axis.com (localhost [127.0.0.1])
+	by postfix.imss71 (Postfix) with ESMTP id 2E817B68
+	for <lttng-dev@lists.lttng.org>; Wed, 12 Mar 2014 08:13:59 +0100 (CET)
+Received: from seth.se.axis.com (seth.se.axis.com [10.0.2.172])
+	by boulder.se.axis.com (Postfix) with ESMTP id 2385DB67
+	for <lttng-dev@lists.lttng.org>; Wed, 12 Mar 2014 08:13:59 +0100 (CET)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,25 +36,24 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: David Goulet <dgoulet@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
+Cc: Lars Persson <larper@axis.com>
 List-Id: lttng-dev@lists.lttng.org
 
->> http://bugs.lttng.org/issues/621
->
-> This one should be quite straight forward. There is already version
-> check for the create_session command I think. Here is your starting
-> point.
->
-   I don't see the version check in create_session in create.c or
-session_create in session.c. Though I can see that in function
-relay_send_version in main.c, there is check for the major version (at
-line 1432).
+Signed-off-by: Lars Persson <larper@axis.com>
+---
+ formats/lttng-live/Makefile.am |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-         if (reply.major != be32toh(msg.major)) {
-
-Is this what you meant? Please let me know. Thanks !
-
-> lttng-tools:
-> * src/bin/lttng-relayd/cmd-*
-> * src/bin/lttng-relayd/main.c
+diff --git a/formats/lttng-live/Makefile.am b/formats/lttng-live/Makefile.am
+index c834699..2c6b0bd 100644
+--- a/formats/lttng-live/Makefile.am
++++ b/formats/lttng-live/Makefile.am
+@@ -1,4 +1,4 @@
+-AM_CFLAGS = $(PACKAGE_CFLAGS) -I$(top_srcdir)/include -I$(top_builddir)/include
++AM_CFLAGS = $(PACKAGE_CFLAGS) -I$(top_srcdir)/include -I$(top_builddir)/include -I$(top_srcdir)
+ 
+ lib_LTLIBRARIES = libbabeltrace-lttng-live.la
+ 
+-- 
+1.7.2.5
