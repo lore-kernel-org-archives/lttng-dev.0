@@ -1,18 +1,20 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH] Define tracepoint callback only if
- TRACEPOINT_DEFINE defined
-Date: Thu, 13 Mar 2014 13:49:12 +0000 (UTC)
-Message-ID: <1204619065.2725.1394718552327.JavaMail.zimbra__22388.8610759333$1394718621$gmane$org@efficios.com>
-References: <1394617237-30807-1-git-send-email-zifeitong@gmail.com>
+From: David Goulet <dgoulet@efficios.com>
+Subject: Re: Working on some bugs
+Date: Thu, 13 Mar 2014 10:44:31 -0400
+Message-ID: <20140313144431.GA8473__19459.6079680652$1394721952$gmane$org@thessa>
+References: <CAEEAEzWcPk788kF=BptjeGsG=hrWyeK1tcUAM4Fq9GAwZYPXhQ@mail.gmail.com>
+	<20140311162201.GE7727@thessa>
+	<CAEEAEzX3KOz0JDGGee20f2CBtFuPhrRUX2m2hzhut5WObGVBuw@mail.gmail.com>
+	<20140312142646.GA10776@thessa>
+	<CAEEAEzXcwbJbv_izsQjL9VTUja2kUj+d_r9iufeqSN4GJvV4Fg@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1787935230=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from smtp.ini-tech.com ([144.76.53.219])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1WO60V-0003jB-UF
-	for lttng-dev@lists.lttng.org; Thu, 13 Mar 2014 09:49:17 -0400
-In-Reply-To: <1394617237-30807-1-git-send-email-zifeitong@gmail.com>
+	(envelope-from <dgoulet@efficios.com>) id 1WO6sC-0004BN-Cb
+	for lttng-dev@lists.lttng.org; Thu, 13 Mar 2014 10:44:45 -0400
+In-Reply-To: <CAEEAEzXcwbJbv_izsQjL9VTUja2kUj+d_r9iufeqSN4GJvV4Fg@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -21,115 +23,94 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Zifei Tong <zifeitong@gmail.com>
+To: Sandeep K Chaudhary <babbusandy2006@gmail.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
------ Original Message -----
-> From: "Zifei Tong" <zifeitong@gmail.com>
-> To: "mathieu desnoyers" <mathieu.desnoyers@efficios.com>
-> Cc: lttng-dev@lists.lttng.org, "Zifei Tong" <zifeitong@gmail.com>
-> Sent: Wednesday, March 12, 2014 5:40:37 AM
-> Subject: [PATCH] Define tracepoint callback only if TRACEPOINT_DEFINE defined
-> 
-> Compiling tracepoint providers in clang will result in 'Wunused-function'
-> warning, since tracepoint callbacks are defined but never called.
-> 
-> lttng-gen-tp is also updated to not put TRACEPOINT_DEFINE in generated
-> headers.
-> 
-> Fixes #760
-> 
-> Signed-off-by: Zifei Tong <zifeitong@gmail.com>
-> ---
->  doc/examples/gen-tp/sample.c |  1 +
->  include/lttng/tracepoint.h   | 13 ++++++++++---
->  tools/lttng-gen-tp           |  1 -
->  3 files changed, 11 insertions(+), 4 deletions(-)
-> 
-> diff --git a/doc/examples/gen-tp/sample.c b/doc/examples/gen-tp/sample.c
-> index dab6e7d..ae22f28 100644
-> --- a/doc/examples/gen-tp/sample.c
-> +++ b/doc/examples/gen-tp/sample.c
-> @@ -23,6 +23,7 @@
->  
->  #include <unistd.h>
->  
-> +#define TRACEPOINT_DEFINE
 
-Hrm, so this requires end users to change the way to use lttng-gen-tp.
-I'm not sure I like that at all. This means changes in the way people do
-instrumentation, and I'm trying really hard not to break that.
+--===============1787935230==
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="M9NhX3UHpAaciwkO"
+Content-Disposition: inline
 
->  #include "sample_tracepoint.h"
->  int main(int argc, char **argv)
->  {
-> diff --git a/include/lttng/tracepoint.h b/include/lttng/tracepoint.h
-> index 66e2abd..462a0fc 100644
-> --- a/include/lttng/tracepoint.h
-> +++ b/include/lttng/tracepoint.h
-> @@ -150,8 +150,8 @@ extern "C" {
->   * between caller's ip addresses within the probe using the return
->   * address.
->   */
-> -#define _DECLARE_TRACEPOINT(_provider, _name, ...)			 		\
-> -extern struct tracepoint __tracepoint_##_provider##___##_name;				\
-> +#if defined(TRACEPOINT_DEFINE)
 
-So you are adding a ifdef conditional to skip creation of a macro that defines
-static inline functions. What is it achieving really other than silencing a compiler
-warning ? Anyway the compiler will optimize those static inline away if they are
-not used.
+--M9NhX3UHpAaciwkO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I think this is a case where we might want to use __attribute__((unused)) to just
-shut up the clang warning.
+On 12 Mar (22:59:20), Sandeep K Chaudhary wrote:
+> Thanks for pointing it to me, David !
+>=20
+> However I see the following in relay_add_stream in main.c
+>=20
+>         switch (conn->minor) {
+>         case 1: /* LTTng sessiond 2.1 */
+>                 ret =3D cmd_recv_stream_2_1(conn, stream);
+>                 break;
+>         case 2: /* LTTng sessiond 2.2 */
+>         default:
+>                 ret =3D cmd_recv_stream_2_2(conn, stream);
+>                 break;
+>         }
+>=20
+> This means that it's calling either 'cmd_recv_stream_2_1' or
+> 'cmd_recv_stream_2_2' depending on the minor version number. Is this not =
+we
+> want? Though I don't understand why it should be calling
+> 'cmd_recv_stream_2_2' for minor versions other than 1. Is this correct
+> behavior?
 
-Thoughts ?
+Yes so for now only the minor version matter since a major number other
+than 2 can't be negotiated during the send_version step (the first thing
+the relayd receives for a connection).
 
-Thanks,
+At some point in time, we would need to check the major number to here
+so calling cmd_recv_stream_2_2(...) would make more sense. Maybe it's
+something you want to do here before anything, adding a layer that
+checks major + minor and calls the right one? Something that could be
+generic enough so we don't have those ugly switch cases in each
+command... ?
 
-Mathieu
+Cheers!
+David
 
-> +#define _DECLARE_TRACEPOINT_CB(_provider, _name, ...)			 		\
->  static inline __attribute__((always_inline)) lttng_ust_notrace				\
->  void __tracepoint_cb_##_provider##___##_name(_TP_ARGS_PROTO(__VA_ARGS__));
->  		\
->  static											\
-> @@ -174,7 +174,14 @@ void
-> __tracepoint_cb_##_provider##___##_name(_TP_ARGS_PROTO(__VA_ARGS__))		\
->  	} while ((++__tp_probe)->func);							\
->  end:											\
->  	tp_rcu_read_unlock_bp();							\
-> -}											\
-> +}
-> +#else
-> +#define _DECLARE_TRACEPOINT_CB(_provider, _name, ...)
-> +#endif
-> +
-> +#define _DECLARE_TRACEPOINT(_provider, _name, ...)			 		\
-> +extern struct tracepoint __tracepoint_##_provider##___##_name;				\
-> +_DECLARE_TRACEPOINT_CB(_provider, _name, __VA_ARGS__)			 		\
->  static inline lttng_ust_notrace								\
->  void __tracepoint_register_##_provider##___##_name(char *name,				\
->  		void (*func)(void), void *data);					\
-> diff --git a/tools/lttng-gen-tp b/tools/lttng-gen-tp
-> index c49e8a5..ff8c22d 100755
-> --- a/tools/lttng-gen-tp
-> +++ b/tools/lttng-gen-tp
-> @@ -69,7 +69,6 @@ class CFile:
->  /*
->   * The header containing our TRACEPOINT_EVENTs.
->   */
-> -#define TRACEPOINT_DEFINE
->  #include "{headerFilename}"
->  """
->      def __init__(self, filename, template):
-> --
-> 1.9.0
-> 
-> 
+>=20
+> Please let me know.
+>=20
+> Thanks and regards,
+> Sandeep.
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+--M9NhX3UHpAaciwkO
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQF8BAEBAgBmBQJTIcRPXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
+ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
+MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02g1YIAJ52zhJ+r7267ixs7qMiIW9R
+OGToTRcQGYv1fXSapXNl1yolLbsV0i683xFtfG0UGy00k7W9Sq5JapSZCDzRlrHT
+ZHbOW5DLJGEoQKMO9Oz21a64fNavMe8qSjVzVy7NloUapPRCNShcQTrGHsjaw/xz
+yMDrIc6nIZdh8vSV1HS9KsT/UP/5g93pu7EdlYom1+Rx6z79+Hto38DrV0dfBXhS
+i1A2u3AOpxeiI7pVhwh3H4kJ5t0wvIMAbUHZgBRpafZvvm55zS29VYYDsAq0ibzS
+4mHJuBwpqBVvYODUwpmceHDY352IOxD8zGSDj6kbVDphQaK/gYN5UmgcQh3eOSI=
+=jAxx
+-----END PGP SIGNATURE-----
+
+--M9NhX3UHpAaciwkO--
+
+
+--===============1787935230==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1787935230==--
