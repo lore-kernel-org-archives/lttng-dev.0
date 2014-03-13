@@ -1,92 +1,98 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [for-next][PATCH 08/20] tracing: Warn if a tracepoint is not
- set via debugfs
-Date: Thu, 13 Mar 2014 03:21:27 +0000 (UTC)
-Message-ID: <2020214533.2317.1394680887617.JavaMail.zimbra@efficios.com>
-References: <20140307150920.881849073@goodmis.org> <20140312135059.2d497b58@gandalf.local.home> <1906756968.1732.1394650035535.JavaMail.zimbra@efficios.com> <20140312145802.4819511e@gandalf.local.home> <1177120325.1928.1394653861180.JavaMail.zimbra@efficios.com> <20140312203515.GV22728@two.firstfloor.org> <1083852821.1959.1394657227042.JavaMail.zimbra@efficios.com> <20140313031501.GW22728@two.firstfloor.org>
+From: Sandeep K Chaudhary <babbusandy2006@gmail.com>
+Subject: Re: Working on some bugs
+Date: Wed, 12 Mar 2014 22:59:20 -0700
+Message-ID: <CAEEAEzXcwbJbv_izsQjL9VTUja2kUj+d_r9iufeqSN4GJvV4Fg__4231.87940982661$1394690405$gmane$org@mail.gmail.com>
+References: <CAEEAEzWcPk788kF=BptjeGsG=hrWyeK1tcUAM4Fq9GAwZYPXhQ@mail.gmail.com>
+	<20140311162201.GE7727@thessa>
+	<CAEEAEzX3KOz0JDGGee20f2CBtFuPhrRUX2m2hzhut5WObGVBuw@mail.gmail.com>
+	<20140312142646.GA10776@thessa>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Return-path: <linux-kernel-owner@vger.kernel.org>
-In-Reply-To: <20140313031501.GW22728@two.firstfloor.org>
-Sender: linux-kernel-owner@vger.kernel.org
-To: Andi Kleen <andi@firstfloor.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>, "Frank Ch. Eigler" <fche@redhat.com>, linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>, Frederic Weisbecker <fweisbec@gmail.com>, Andrew Morton <akpm@linux-foundation.org>, Johannes Berg <johannes.berg@intel.com>, Linus Torvalds <torvalds@linux-foundation.org>, Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@linutronix.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, lttng-dev <lttng-dev@lists.lttng.org>, Rusty Russell <rusty@rustcorp.com.au>
+Content-Type: multipart/mixed; boundary="===============1380079137=="
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail-qa0-f49.google.com ([209.85.216.49])
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <babbusandy2006@gmail.com>) id 1WNyfu-0007vc-4r
+	for lttng-dev@lists.lttng.org; Thu, 13 Mar 2014 01:59:27 -0400
+Received: by mail-qa0-f49.google.com with SMTP id j7so542827qaq.36
+	for <lttng-dev@lists.lttng.org>; Wed, 12 Mar 2014 22:59:20 -0700 (PDT)
+In-Reply-To: <20140312142646.GA10776@thessa>
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+To: David Goulet <dgoulet@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
------ Original Message -----
-> From: "Andi Kleen" <andi@firstfloor.org>
-> To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-> Cc: "Andi Kleen" <andi@firstfloor.org>, "Steven Rostedt" <rostedt@goodmis.org>, "Frank Ch. Eigler" <fche@redhat.com>,
-> linux-kernel@vger.kernel.org, "Ingo Molnar" <mingo@kernel.org>, "Frederic Weisbecker" <fweisbec@gmail.com>, "Andrew
-> Morton" <akpm@linux-foundation.org>, "Johannes Berg" <johannes.berg@intel.com>, "Linus Torvalds"
-> <torvalds@linux-foundation.org>, "Peter Zijlstra" <peterz@infradead.org>, "Thomas Gleixner" <tglx@linutronix.de>,
-> "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, "lttng-dev" <lttng-dev@lists.lttng.org>, "Rusty Russell"
-> <rusty@rustcorp.com.au>
-> Sent: Wednesday, March 12, 2014 11:15:01 PM
-> Subject: Re: [for-next][PATCH 08/20] tracing: Warn if a tracepoint is not set via debugfs
-> 
-> On Wed, Mar 12, 2014 at 08:47:07PM +0000, Mathieu Desnoyers wrote:
-> > ----- Original Message -----
-> > > From: "Andi Kleen" <andi@firstfloor.org>
-> > > To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-> > > Cc: "Steven Rostedt" <rostedt@goodmis.org>, "Frank Ch. Eigler"
-> > > <fche@redhat.com>, linux-kernel@vger.kernel.org, "Ingo
-> > > Molnar" <mingo@kernel.org>, "Frederic Weisbecker" <fweisbec@gmail.com>,
-> > > "Andrew Morton" <akpm@linux-foundation.org>,
-> > > "Johannes Berg" <johannes.berg@intel.com>, "Linus Torvalds"
-> > > <torvalds@linux-foundation.org>, "Peter Zijlstra"
-> > > <peterz@infradead.org>, "Thomas Gleixner" <tglx@linutronix.de>, "Greg
-> > > Kroah-Hartman" <gregkh@linuxfoundation.org>,
-> > > "lttng-dev" <lttng-dev@lists.lttng.org>, "Rusty Russell"
-> > > <rusty@rustcorp.com.au>, "Andi Kleen" <andi@firstfloor.org>
-> > > Sent: Wednesday, March 12, 2014 4:35:15 PM
-> > > Subject: Re: [for-next][PATCH 08/20] tracing: Warn if a tracepoint is not
-> > > set via debugfs
-> > > 
-> > > > So I understand that you wish to banish tracepoints from static inline
-> > > > functions within headers to ensure they only appear within a single
-> > > > module.
-> > > > This seems to be a step backward, but let's assume we stick to that
-> > > > rule.
-> > > > Then how do you envision dealing with Link-Time Optimisations (LTO) ?
-> > > 
-> > > I assume it uses the file name defines set by Kbuild?
-> > 
-> > Just to make sure I understand your question: I understand that you are
-> > asking
-> > whether tracepoints use file name defines at all in the naming of a
-> > tracepoint.
-> > The answer to this question is: No, they do not.
-> 
-> Ok. It uses kallsyms? That can change of course.
+--===============1380079137==
+Content-Type: multipart/alternative; boundary=001a1137087c7f9eb504f476a789
 
-As I just replied to Steven, I now see that I mixed up concerns about
-static keys, and the prior kernel markers, with tracepoint concerns.
-The way they are implemented are very much different (Hey! I should know,
-I wrote that code some 6 years ago!) ;)
+--001a1137087c7f9eb504f476a789
+Content-Type: text/plain; charset=ISO-8859-1
 
-> > 
-> > > These don't change with
-> > > LTO. It's whatever was specified at compile time. Also LTO doesn't
-> > > inline over module boundaries (if the module is not built in)
-> > 
-> > Good to know. Can it inline core kernel functions into a module ?
-> 
-> Each module and the main kernel are currently LTO'ed separately.
-> 
-> In theory it would be possible to change this, but likely at some
-> compile time cost.
+Thanks for pointing it to me, David !
 
-OK, thanks for the explanations!
+However I see the following in relay_add_stream in main.c
 
-Mathieu
+        switch (conn->minor) {
+        case 1: /* LTTng sessiond 2.1 */
+                ret = cmd_recv_stream_2_1(conn, stream);
+                break;
+        case 2: /* LTTng sessiond 2.2 */
+        default:
+                ret = cmd_recv_stream_2_2(conn, stream);
+                break;
+        }
 
-> 
-> -Andi
-> 
+This means that it's calling either 'cmd_recv_stream_2_1' or
+'cmd_recv_stream_2_2' depending on the minor version number. Is this not we
+want? Though I don't understand why it should be calling
+'cmd_recv_stream_2_2' for minor versions other than 1. Is this correct
+behavior?
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Please let me know.
+
+Thanks and regards,
+Sandeep.
+
+--001a1137087c7f9eb504f476a789
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Thanks for pointing it to me, David !=A0<div><br></div><di=
+v>However I see the following in=A0relay_add_stream in main.c</div><div><br=
+></div><div><div>=A0 =A0 =A0 =A0 switch (conn-&gt;minor) {</div><div>=A0 =
+=A0 =A0 =A0 case 1: /* LTTng sessiond 2.1 */</div>
+<div>=A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 ret =3D cmd_recv_stream_2_1(conn, stre=
+am);</div><div>=A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 break;</div><div>=A0 =A0 =A0=
+ =A0 case 2: /* LTTng sessiond 2.2 */</div><div>=A0 =A0 =A0 =A0 default:</d=
+iv><div>=A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 ret =3D cmd_recv_stream_2_2(conn, s=
+tream);</div>
+<div>=A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 break;</div><div>=A0 =A0 =A0 =A0 }</di=
+v></div><div><br></div><div>This means that it&#39;s calling either &#39;cm=
+d_recv_stream_2_1&#39; or &#39;cmd_recv_stream_2_2&#39; depending on the mi=
+nor version number. Is this not we want? Though I don&#39;t understand why =
+it should be calling &#39;cmd_recv_stream_2_2&#39; for minor versions other=
+ than 1. Is this correct behavior?</div>
+<div><br></div><div>Please let me know.</div><div><br></div><div>Thanks and=
+ regards,</div><div>Sandeep.</div></div>
+
+--001a1137087c7f9eb504f476a789--
+
+
+--===============1380079137==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1380079137==--
