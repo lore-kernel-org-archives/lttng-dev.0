@@ -1,19 +1,18 @@
-From: Lars Persson <lars.persson@axis.com>
+From: "Woegerer, Paul" <Paul_Woegerer@mentor.com>
 Subject: Re: [PATCH babeltrace] Use autoconf AM_MAINTAINER_MODE.
-Date: Thu, 13 Mar 2014 09:12:23 +0100
-Message-ID: <771471B8871B5044A6CA7CCD9C26EEE10117E2935AF1__37250.3703496934$1394698411$gmane$org@xmail2.se.axis.com>
-References: <1394615117-2388-1-git-send-email-larper@axis.com>
-	<507471820.1743.1394650777447.JavaMail.zimbra@efficios.com>
+Date: Thu, 13 Mar 2014 10:55:33 +0100
+Message-ID: <53218095.4000105__29932.2306331762$1394704720$gmane$org@mentor.com>
+References: <1394615117-2388-1-git-send-email-larper@axis.com>	<507471820.1743.1394650777447.JavaMail.zimbra@efficios.com>
+	<771471B8871B5044A6CA7CCD9C26EEE10117E2935AF1@xmail2.se.axis.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from bes.se.axis.com ([195.60.68.10])
+Received: from relay1.mentorg.com ([192.94.38.131])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <lars.persson@axis.com>) id 1WO0ko-0000a3-17
-	for lttng-dev@lists.lttng.org; Thu, 13 Mar 2014 04:12:40 -0400
-In-Reply-To: <507471820.1743.1394650777447.JavaMail.zimbra@efficios.com>
-Content-Language: en-US
+	(envelope-from <Paul_Woegerer@mentor.com>) id 1WO2Oe-0001RK-4H
+	for lttng-dev@lists.lttng.org; Thu, 13 Mar 2014 05:57:55 -0400
+In-Reply-To: <771471B8871B5044A6CA7CCD9C26EEE10117E2935AF1@xmail2.se.axis.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,73 +21,103 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: Lars Persson <lars.persson@axis.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-It is useful when unpacking the distribution tarballs into another revision control system that doesn't preserve timestamps. If we retrigger autoconf, then some developer workstations will fail on the builds because they have outdated autoconf packages.
+On 03/13/2014 09:12 AM, Lars Persson wrote:
+> It is useful when unpacking the distribution tarballs into another revision control system that doesn't preserve timestamps. If we retrigger autoconf, then some developer workstations will fail on the builds because they have outdated autoconf packages.
 
-- Lars
+Without using AM_MAINTAINER_MODE we let users pay for something (having
+recent autotools installed on their machines) that they will not need in
+most cases. Using AM_MAINTAINER_MODE allows you to suppress the
+dependency to autotools if you are sure you do not really need it (e.g.
+you are not changing any Makefile.am or configure.ac).
 
-> -----Original Message-----
-> From: Mathieu Desnoyers [mailto:mathieu.desnoyers@efficios.com]
-> Sent: den 12 mars 2014 20:00
-> To: Lars Persson
-> Cc: lttng-dev@lists.lttng.org; Lars Persson
-> Subject: Re: [lttng-dev] [PATCH babeltrace] Use autoconf
-> AM_MAINTAINER_MODE.
+If you ever tried to install a new version of LTTng on an ancient Linux
+installation running on a VM in another timezone you will be very happy
+if you do not need to also install new autotools packages prior to
+building and installing the lttng packages.
+
+
+--
+Thanks,
+Paul
+
+
 > 
-> ----- Original Message -----
-> > From: "Lars Persson" <lars.persson@axis.com>
-> > To: lttng-dev@lists.lttng.org
-> > Cc: "Lars Persson" <larper@axis.com>
-> > Sent: Wednesday, March 12, 2014 5:05:17 AM
-> > Subject: [lttng-dev] [PATCH babeltrace] Use autoconf
-> AM_MAINTAINER_MODE.
-> >
-> > Give distribution maintainers the option to skip rebuilding autoconf
-> > and automake generated files. The default behaviour is still to have
-> > the rebuild rules enabled.
+> - Lars
 > 
-> I just did some reading on this, and found:
+>> -----Original Message-----
+>> From: Mathieu Desnoyers [mailto:mathieu.desnoyers@efficios.com]
+>> Sent: den 12 mars 2014 20:00
+>> To: Lars Persson
+>> Cc: lttng-dev@lists.lttng.org; Lars Persson
+>> Subject: Re: [lttng-dev] [PATCH babeltrace] Use autoconf
+>> AM_MAINTAINER_MODE.
+>>
+>> ----- Original Message -----
+>>> From: "Lars Persson" <lars.persson@axis.com>
+>>> To: lttng-dev@lists.lttng.org
+>>> Cc: "Lars Persson" <larper@axis.com>
+>>> Sent: Wednesday, March 12, 2014 5:05:17 AM
+>>> Subject: [lttng-dev] [PATCH babeltrace] Use autoconf
+>> AM_MAINTAINER_MODE.
+>>>
+>>> Give distribution maintainers the option to skip rebuilding autoconf
+>>> and automake generated files. The default behaviour is still to have
+>>> the rebuild rules enabled.
+>>
+>> I just did some reading on this, and found:
+>>
+>> http://blogs.gnome.org/desrt/2011/09/08/am_maintainer_mode-is-not-cool/
+>>
+>> So, in what use-case is --disable-maintainer-mode useful nowadays ? All
+>> it seems to do is to stop ensuring that Makefile are consistent with
+>> changes to Makefile.am.
+>>
+>> Thanks,
+>>
+>> Mathieu
+>>
+>>>
+>>> Signed-off-by: Lars Persson <larper@axis.com>
+>>> ---
+>>>  configure.ac |    1 +
+>>>  1 files changed, 1 insertions(+), 0 deletions(-)
+>>>
+>>> diff --git a/configure.ac b/configure.ac index 7a98612..faa3f98
+>> 100644
+>>> --- a/configure.ac
+>>> +++ b/configure.ac
+>>> @@ -11,6 +11,7 @@ AC_CONFIG_AUX_DIR([config])  AC_CANONICAL_TARGET
+>>> AC_CANONICAL_HOST  AM_INIT_AUTOMAKE([foreign dist-bzip2 no-dist-gzip])
+>>> +AM_MAINTAINER_MODE([enable])
+>>>  m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
+>>>
+>>>  AC_CONFIG_MACRO_DIR([m4])
+>>> --
+>>> 1.7.2.5
+>>>
+>>>
+>>> _______________________________________________
+>>> lttng-dev mailing list
+>>> lttng-dev@lists.lttng.org
+>>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>>>
+>>
+>> --
+>> Mathieu Desnoyers
+>> EfficiOS Inc.
+>> http://www.efficios.com
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 > 
-> http://blogs.gnome.org/desrt/2011/09/08/am_maintainer_mode-is-not-cool/
-> 
-> So, in what use-case is --disable-maintainer-mode useful nowadays ? All
-> it seems to do is to stop ensuring that Makefile are consistent with
-> changes to Makefile.am.
-> 
-> Thanks,
-> 
-> Mathieu
-> 
-> >
-> > Signed-off-by: Lars Persson <larper@axis.com>
-> > ---
-> >  configure.ac |    1 +
-> >  1 files changed, 1 insertions(+), 0 deletions(-)
-> >
-> > diff --git a/configure.ac b/configure.ac index 7a98612..faa3f98
-> 100644
-> > --- a/configure.ac
-> > +++ b/configure.ac
-> > @@ -11,6 +11,7 @@ AC_CONFIG_AUX_DIR([config])  AC_CANONICAL_TARGET
-> > AC_CANONICAL_HOST  AM_INIT_AUTOMAKE([foreign dist-bzip2 no-dist-gzip])
-> > +AM_MAINTAINER_MODE([enable])
-> >  m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
-> >
-> >  AC_CONFIG_MACRO_DIR([m4])
-> > --
-> > 1.7.2.5
-> >
-> >
-> > _______________________________________________
-> > lttng-dev mailing list
-> > lttng-dev@lists.lttng.org
-> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> >
-> 
-> --
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> http://www.efficios.com
+
+
+-- 
+Paul Woegerer, SW Development Engineer
+Sourcery Analyzer <http://go.mentor.com/sourceryanalyzer>
+Mentor Graphics, Embedded Software Division
