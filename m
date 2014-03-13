@@ -1,116 +1,108 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: Re: Working on some bugs
-Date: Thu, 13 Mar 2014 10:44:31 -0400
-Message-ID: <20140313144431.GA8473__19459.6079680652$1394721952$gmane$org@thessa>
-References: <CAEEAEzWcPk788kF=BptjeGsG=hrWyeK1tcUAM4Fq9GAwZYPXhQ@mail.gmail.com>
-	<20140311162201.GE7727@thessa>
-	<CAEEAEzX3KOz0JDGGee20f2CBtFuPhrRUX2m2hzhut5WObGVBuw@mail.gmail.com>
-	<20140312142646.GA10776@thessa>
-	<CAEEAEzXcwbJbv_izsQjL9VTUja2kUj+d_r9iufeqSN4GJvV4Fg@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [for-next][PATCH 08/20] tracing: Warn if a tracepoint is not
+ set via debugfs
+Date: Thu, 13 Mar 2014 15:24:46 +0000 (UTC)
+Message-ID: <970465661.2809.1394724286739.JavaMail.zimbra@efficios.com>
+References: <20140307150920.881849073@goodmis.org> <285520930.1511.1394642395537.JavaMail.zimbra@efficios.com> <20140312135059.2d497b58@gandalf.local.home> <1906756968.1732.1394650035535.JavaMail.zimbra@efficios.com> <20140312145802.4819511e@gandalf.local.home> <1177120325.1928.1394653861180.JavaMail.zimbra@efficios.com> <20140312204907.6b8d402c@gandalf.local.home> <209084517.2310.1394680253793.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1787935230=="
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([144.76.53.219])
-	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <dgoulet@efficios.com>) id 1WO6sC-0004BN-Cb
-	for lttng-dev@lists.lttng.org; Thu, 13 Mar 2014 10:44:45 -0400
-In-Reply-To: <CAEEAEzXcwbJbv_izsQjL9VTUja2kUj+d_r9iufeqSN4GJvV4Fg@mail.gmail.com>
-List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
-	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
-	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Sandeep K Chaudhary <babbusandy2006@gmail.com>
-Cc: lttng-dev@lists.lttng.org
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Return-path: <linux-kernel-owner@vger.kernel.org>
+In-Reply-To: <209084517.2310.1394680253793.JavaMail.zimbra@efficios.com>
+Sender: linux-kernel-owner@vger.kernel.org
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: "Frank Ch. Eigler" <fche@redhat.com>, linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>, Frederic Weisbecker <fweisbec@gmail.com>, Andrew Morton <akpm@linux-foundation.org>, Johannes Berg <johannes.berg@intel.com>, Linus Torvalds <torvalds@linux-foundation.org>, Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@linutronix.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, lttng-dev <lttng-dev@lists.lttng.org>, Rusty Russell <rusty@rustcorp.com.au>, Andi Kleen <andi@firstfloor.org>
 List-Id: lttng-dev@lists.lttng.org
 
+----- Original Message -----
+> From: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+> To: "Steven Rostedt" <rostedt@goodmis.org>
+> Cc: "Frank Ch. Eigler" <fche@redhat.com>, linux-kernel@vger.kernel.org, "Ingo Molnar" <mingo@kernel.org>, "Frederic
+> Weisbecker" <fweisbec@gmail.com>, "Andrew Morton" <akpm@linux-foundation.org>, "Johannes Berg"
+> <johannes.berg@intel.com>, "Linus Torvalds" <torvalds@linux-foundation.org>, "Peter Zijlstra"
+> <peterz@infradead.org>, "Thomas Gleixner" <tglx@linutronix.de>, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+> "lttng-dev" <lttng-dev@lists.lttng.org>, "Rusty Russell" <rusty@rustcorp.com.au>, "Andi Kleen" <andi@firstfloor.org>
+> Sent: Wednesday, March 12, 2014 11:10:53 PM
+> Subject: Re: [for-next][PATCH 08/20] tracing: Warn if a tracepoint is not set via debugfs
+> 
+> ----- Original Message -----
+> > From: "Steven Rostedt" <rostedt@goodmis.org>
+> > To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+> > Cc: "Frank Ch. Eigler" <fche@redhat.com>, linux-kernel@vger.kernel.org,
+> > "Ingo Molnar" <mingo@kernel.org>, "Frederic
+> > Weisbecker" <fweisbec@gmail.com>, "Andrew Morton"
+> > <akpm@linux-foundation.org>, "Johannes Berg"
+> > <johannes.berg@intel.com>, "Linus Torvalds"
+> > <torvalds@linux-foundation.org>, "Peter Zijlstra"
+> > <peterz@infradead.org>, "Thomas Gleixner" <tglx@linutronix.de>, "Greg
+> > Kroah-Hartman" <gregkh@linuxfoundation.org>,
+> > "lttng-dev" <lttng-dev@lists.lttng.org>, "Rusty Russell"
+> > <rusty@rustcorp.com.au>, "Andi Kleen" <andi@firstfloor.org>
+> > Sent: Wednesday, March 12, 2014 8:49:07 PM
+> > Subject: Re: [for-next][PATCH 08/20] tracing: Warn if a tracepoint is not
+> > set via debugfs
+> > 
+> > On Wed, 12 Mar 2014 19:51:01 +0000 (UTC)
+> > Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
+> > 
+> > > This only leaves tracepoints in header files and the impact of LTO as
+> > > requirements for having tracepoint callsites with the same name across
+> > > modules.
+> > 
+> > The only thing that needs to be unique is the struct tracepoint
+> > __tracepoint_##name. There should not be any duplicates of those. I
+> > can't see how the LTO would duplicate a data structure without screwing
+> > everything (not just tracepoints) up.
+> > 
+> > We can still have more than one trace_##name() called, as that is
+> > handled by the static key.
+> 
+> Hrm, I seem to have mixed up the concerns regarding compiler
+> optimisations between the static keys with those related to tracepoints
+> (including that their predecessors "kernel markers" worked more like
+> static keys than tracepoint). I did work in both area pretty much at the
+> same time back in 2007-2008.
+> 
+> Having gotten my head back up straight, I now see the point in your
+> proposal. Thanks for bearing with me.
+> 
+> Even if we ever want to have tracepoints within header files, as long
+> as we have the DECLARE_TRACE() within the header, and a DEFINE_TRACE()
+> in one location in the loaded kernel image (or a loaded module we depend
+> on), it should be possible too. All tracepoint.c cares about is the site
+> defined by DEFINE_TRACE().
 
---===============1787935230==
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="M9NhX3UHpAaciwkO"
-Content-Disposition: inline
+I just prepared a patch implementing your idea. I will post it as RFC very
+soon. The callers will still need to be adapted, so this is just to show
+the tracepoint.c/h modifications.
 
+Thanks!
 
---M9NhX3UHpAaciwkO
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Mathieu
 
-On 12 Mar (22:59:20), Sandeep K Chaudhary wrote:
-> Thanks for pointing it to me, David !
->=20
-> However I see the following in relay_add_stream in main.c
->=20
->         switch (conn->minor) {
->         case 1: /* LTTng sessiond 2.1 */
->                 ret =3D cmd_recv_stream_2_1(conn, stream);
->                 break;
->         case 2: /* LTTng sessiond 2.2 */
->         default:
->                 ret =3D cmd_recv_stream_2_2(conn, stream);
->                 break;
->         }
->=20
-> This means that it's calling either 'cmd_recv_stream_2_1' or
-> 'cmd_recv_stream_2_2' depending on the minor version number. Is this not =
-we
-> want? Though I don't understand why it should be calling
-> 'cmd_recv_stream_2_2' for minor versions other than 1. Is this correct
-> behavior?
+> 
+> > 
+> > Note, I'm scrambling to get ready for my trip tomorrow. Thus, I'm not
+> > as much at the computer. I may work on some patches in my 6 hour
+> > layover though.
+> 
+> Allright. Have a good trip!
+> 
+> Thanks,
+> 
+> Mathieu
+> 
+> > 
+> > -- Steve
+> > 
+> 
+> --
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> http://www.efficios.com
+> 
 
-Yes so for now only the minor version matter since a major number other
-than 2 can't be negotiated during the send_version step (the first thing
-the relayd receives for a connection).
-
-At some point in time, we would need to check the major number to here
-so calling cmd_recv_stream_2_2(...) would make more sense. Maybe it's
-something you want to do here before anything, adding a layer that
-checks major + minor and calls the right one? Something that could be
-generic enough so we don't have those ugly switch cases in each
-command... ?
-
-Cheers!
-David
-
->=20
-> Please let me know.
->=20
-> Thanks and regards,
-> Sandeep.
-
---M9NhX3UHpAaciwkO
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iQF8BAEBAgBmBQJTIcRPXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
-ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
-MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02g1YIAJ52zhJ+r7267ixs7qMiIW9R
-OGToTRcQGYv1fXSapXNl1yolLbsV0i683xFtfG0UGy00k7W9Sq5JapSZCDzRlrHT
-ZHbOW5DLJGEoQKMO9Oz21a64fNavMe8qSjVzVy7NloUapPRCNShcQTrGHsjaw/xz
-yMDrIc6nIZdh8vSV1HS9KsT/UP/5g93pu7EdlYom1+Rx6z79+Hto38DrV0dfBXhS
-i1A2u3AOpxeiI7pVhwh3H4kJ5t0wvIMAbUHZgBRpafZvvm55zS29VYYDsAq0ibzS
-4mHJuBwpqBVvYODUwpmceHDY352IOxD8zGSDj6kbVDphQaK/gYN5UmgcQh3eOSI=
-=jAxx
------END PGP SIGNATURE-----
-
---M9NhX3UHpAaciwkO--
-
-
---===============1787935230==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1787935230==--
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
