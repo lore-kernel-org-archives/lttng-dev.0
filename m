@@ -1,17 +1,17 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH babeltrace] Use autoconf AM_MAINTAINER_MODE.
-Date: Thu, 13 Mar 2014 13:00:15 +0000 (UTC)
-Message-ID: <1580199835.2641.1394715615821.JavaMail.zimbra__23927.9302572415$1394715755$gmane$org@efficios.com>
-References: <1394615117-2388-1-git-send-email-larper@axis.com>
+Subject: Re: [PATCH lttng-ust] Use autoconf AM_MAINTAINER_MODE.
+Date: Thu, 13 Mar 2014 13:01:32 +0000 (UTC)
+Message-ID: <696838103.2646.1394715692206.JavaMail.zimbra__31070.070868782$1394715828$gmane$org@efficios.com>
+References: <1394616529-18940-1-git-send-email-larper@axis.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1WO5FA-0003Co-Fk
-	for lttng-dev@lists.lttng.org; Thu, 13 Mar 2014 09:00:20 -0400
-In-Reply-To: <1394615117-2388-1-git-send-email-larper@axis.com>
+	(envelope-from <compudj@efficios.com>) id 1WO5GN-0003Ef-2D
+	for lttng-dev@lists.lttng.org; Thu, 13 Mar 2014 09:01:32 -0400
+In-Reply-To: <1394616529-18940-1-git-send-email-larper@axis.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,14 +24,16 @@ To: Lars Persson <lars.persson@axis.com>
 Cc: lttng-dev@lists.lttng.org, Lars Persson <larper@axis.com>
 List-Id: lttng-dev@lists.lttng.org
 
-Merged into babeltrace master. Thanks!
+Merged, thanks!
+
+Mathieu
 
 ----- Original Message -----
 > From: "Lars Persson" <lars.persson@axis.com>
 > To: lttng-dev@lists.lttng.org
 > Cc: "Lars Persson" <larper@axis.com>
-> Sent: Wednesday, March 12, 2014 5:05:17 AM
-> Subject: [lttng-dev] [PATCH babeltrace] Use autoconf AM_MAINTAINER_MODE.
+> Sent: Wednesday, March 12, 2014 5:28:49 AM
+> Subject: [lttng-dev] [PATCH lttng-ust] Use autoconf AM_MAINTAINER_MODE.
 > 
 > Give distribution maintainers the option to skip rebuilding
 > autoconf and automake generated files. The default behaviour
@@ -43,17 +45,17 @@ Merged into babeltrace master. Thanks!
 >  1 files changed, 1 insertions(+), 0 deletions(-)
 > 
 > diff --git a/configure.ac b/configure.ac
-> index 7a98612..faa3f98 100644
+> index f507883..6dafbc6 100644
 > --- a/configure.ac
 > +++ b/configure.ac
-> @@ -11,6 +11,7 @@ AC_CONFIG_AUX_DIR([config])
->  AC_CANONICAL_TARGET
+> @@ -19,6 +19,7 @@ AC_CANONICAL_TARGET
 >  AC_CANONICAL_HOST
+>  AC_CONFIG_MACRO_DIR([config])
 >  AM_INIT_AUTOMAKE([foreign dist-bzip2 no-dist-gzip])
 > +AM_MAINTAINER_MODE([enable])
 >  m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
+>  AC_CONFIG_SRCDIR([include/lttng/tracepoint.h])
 >  
->  AC_CONFIG_MACRO_DIR([m4])
 > --
 > 1.7.2.5
 > 
