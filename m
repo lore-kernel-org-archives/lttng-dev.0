@@ -1,18 +1,18 @@
 From: Zifei Tong <zifeitong@gmail.com>
 Subject: [PATCH lttng-ust] Add 'unused' attribute to tracepoint
 	callback
-Date: Fri, 14 Mar 2014 21:20:45 +0800
-Message-ID: <1394803245-32126-1-git-send-email-zifeitong__3588.79946074939$1394803508$gmane$org@gmail.com>
+Date: Fri, 14 Mar 2014 21:23:21 +0800
+Message-ID: <1394803401-32171-1-git-send-email-zifeitong__40858.3020595417$1394803611$gmane$org@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-pb0-f54.google.com ([209.85.160.54])
+Received: from mail-pd0-f176.google.com ([209.85.192.176])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <zifeitong@gmail.com>) id 1WOS5h-0006kf-Al
-	for lttng-dev@lists.lttng.org; Fri, 14 Mar 2014 09:24:06 -0400
-Received: by mail-pb0-f54.google.com with SMTP id ma3so2616758pbc.13
-	for <lttng-dev@lists.lttng.org>; Fri, 14 Mar 2014 06:23:55 -0700 (PDT)
+	(envelope-from <zifeitong@gmail.com>) id 1WOS6M-0006ln-7G
+	for lttng-dev@lists.lttng.org; Fri, 14 Mar 2014 09:24:47 -0400
+Received: by mail-pd0-f176.google.com with SMTP id r10so2531134pdi.21
+	for <lttng-dev@lists.lttng.org>; Fri, 14 Mar 2014 06:24:36 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
