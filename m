@@ -1,16 +1,19 @@
-From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Subject: Re: Event redefinition/re-enablement
-Date: Mon, 17 Mar 2014 12:26:53 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD31A61516__19969.0454210669$1395059265$gmane$org@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH lttng-ust] Fix: Make deadlocks with baddr
+ statedump unlikely
+Date: Mon, 17 Mar 2014 14:24:01 +0000 (UTC)
+Message-ID: <91652509.4480.1395066241978.JavaMail.zimbra__43662.179777357$1395066310$gmane$org@efficios.com>
+References: <1395048121-20770-1-git-send-email-paul_woegerer@mentor.com>
+	<1395048121-20770-2-git-send-email-paul_woegerer@mentor.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
+Received: from mail.efficios.com ([78.47.125.74])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1WPWdA-00066f-0T
-	for lttng-dev@lists.lttng.org; Mon, 17 Mar 2014 08:27:04 -0400
-Content-Language: fr-FR
+	(envelope-from <compudj@efficios.com>) id 1WPYSQ-00074Q-49
+	for lttng-dev@lists.lttng.org; Mon, 17 Mar 2014 10:24:08 -0400
+In-Reply-To: <1395048121-20770-2-git-send-email-paul_woegerer@mentor.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,54 +22,219 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Paul Woegerer <paul_woegerer@mentor.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-----------------------------------------------------------------------
-Date: Sun, 16 Mar 2014 00:41:28 -0700
-From: Ruslan Uvashev <ruslan.uvashev@gmail.com>
+----- Original Message -----
+> From: "Paul Woegerer" <paul_woegerer@mentor.com>
+> To: lttng-dev@lists.lttng.org, "mathieu desnoyers" <mathieu.desnoyers@efficios.com>
+> Sent: Monday, March 17, 2014 5:22:01 AM
+> Subject: [PATCH lttng-ust] Fix: Make deadlocks with baddr statedump unlikely
 
-> It seems that event once enabled for a channel cannot be reassigned to an=
-other channel.
-> If events are immutable will Feature #445 (https://bugs.lttng.org/issues/=
-445)
->  account such situation? Or do we need to update man saying that events
-> cannot be redefined?
->
-> Command output below.
->
-> $ sudo lttng create tst1
-> Session tst1 created.
-> Traces will be written in /home/rusty/lttng-traces/tst1-20140315-173020
-> $ sudo lttng enable-event writeback_nothread -k
-> Kernel event writeback_nothread created in channel channel0
-> $ sudo lttng enable-channel ch1 -k
-> Kernel channel ch1 enabled for session tst1
-[...]
-> $ sudo lttng disable-event writeback_nothread -k -c channel0
-> Kernel event writeback_nothread disabled in channel channel0 for session =
-tst1
-> $ sudo lttng enable-event writeback_nothread -k -c ch1
-> Error: Event writeback_nothread: Enable kernel event failed (channel ch1,=
- session tst1)
-> Warning: Some command(s) went wrong
+Hi Paul,
 
-   That is a known feature/limitation of LTTng: kernel events can only be a=
-ssigned once (within a session).  User-space events can be assigned to mult=
-iple channels.
+A partial fix changing the code and leaving the bug in place is not
+interesting for us, and will add a maintainance burden (extra delta
+between current master and stable-2.4) for an experimental feature.
 
-Daniel U. Thibault
-Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
-ntermeasures (SPC)
-Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
-Cyber Security (MCCS)
-R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
- Canada - Valcartier (DRDC Valcartier)
-2459 route de la Bravoure
-Qu=E9bec QC  G3J 1X5
-CANADA
-Vox : (418) 844-4000 x4245
-Fax : (418) 844-4538
-NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-Gouvernement du Canada | Government of Canada
-<http://www.valcartier.drdc-rddc.gc.ca/>
+You might want to focus on getting the right fix in for 2.5, while we
+are still in the development cycle.
+
+Thanks,
+
+Mathieu
+
+> 
+> Signed-off-by: Paul Woegerer <paul_woegerer@mentor.com>
+> ---
+>  liblttng-ust/lttng-ust-baddr.c | 95
+>  ++++++++++++++++++++++++++++++++----------
+>  1 file changed, 74 insertions(+), 21 deletions(-)
+> 
+> diff --git a/liblttng-ust/lttng-ust-baddr.c b/liblttng-ust/lttng-ust-baddr.c
+> index dec7e82..0e8ff24 100644
+> --- a/liblttng-ust/lttng-ust-baddr.c
+> +++ b/liblttng-ust/lttng-ust-baddr.c
+> @@ -39,17 +39,50 @@
+>  #define TP_SESSION_CHECK
+>  #include "ust_baddr_statedump.h"
+>  
+> +struct baddr_entry {
+> +	void *base_addr_ptr;
+> +	char resolved_path[PATH_MAX];
+> +	int vdso;
+> +};
+> +
+>  struct extract_data {
+> -	void *owner;
+>  	void *exec_baddr;	/* executable base address */
+> +	struct baddr_entry *baddrs;	/* other base addresses */
+> +	size_t num_baddrs;		/* number of other base addresses */
+> +	size_t idx_baddrs;		/* current base addresse index */
+>  };
+>  
+> +static
+> +int add_baddr(void *base_addr_ptr,
+> +	const char *resolved_path,
+> +	int vdso,
+> +	struct extract_data *data)
+> +{
+> +	struct baddr_entry *baddr;
+> +
+> +	if (data->num_baddrs < data->idx_baddrs + 1) {
+> +		data->num_baddrs *= 2;
+> +		data->baddrs = realloc(data->baddrs,
+> +			data->num_baddrs * sizeof(struct baddr_entry));
+> +		if (!data->baddrs)
+> +			return 1;
+> +	}
+> +
+> +	baddr = data->baddrs + data->idx_baddrs;
+> +	baddr->base_addr_ptr = base_addr_ptr;
+> +	strncpy(baddr->resolved_path, resolved_path, PATH_MAX - 1);
+> +	baddr->vdso = vdso;
+> +
+> +	data->idx_baddrs += 1;
+> +	return 0;
+> +}
+> +
+>  /*
+>   * Trace baddr into all sessions for which statedump is pending owned by
+>   * the caller thread.
+>   */
+>  static
+> -int trace_baddr(void *base_addr_ptr,
+> +void trace_baddr(void *base_addr_ptr,
+>  	const char *resolved_path,
+>  	int vdso,
+>  	void *owner)
+> @@ -62,16 +95,6 @@ int trace_baddr(void *base_addr_ptr,
+>  		sostat.st_size = 0;
+>  		sostat.st_mtime = -1;
+>  	}
+> -	/*
+> -	 * UST lock nests within dynamic loader lock.
+> -	 */
+> -	if (ust_lock()) {
+> -		/*
+> -		 * Stop iteration on headers if need to exit.
+> -		 */
+> -		ust_unlock();
+> -		return 1;
+> -	}
+>  
+>  	sessionsp = _lttng_get_sessions();
+>  	cds_list_for_each_entry(session, sessionsp, node) {
+> @@ -84,8 +107,6 @@ int trace_baddr(void *base_addr_ptr,
+>  				resolved_path, sostat.st_size,
+>  				sostat.st_mtime);
+>  	}
+> -	ust_unlock();
+> -	return 0;
+>  }
+>  
+>  static
+> @@ -93,7 +114,6 @@ int extract_soinfo_events(struct dl_phdr_info *info,
+> size_t size, void *_data)
+>  {
+>  	int j;
+>  	struct extract_data *data = _data;
+> -	void *owner = data->owner;
+>  
+>  	for (j = 0; j < info->dlpi_phnum; j++) {
+>  		char resolved_path[PATH_MAX];
+> @@ -138,9 +158,8 @@ int extract_soinfo_events(struct dl_phdr_info *info,
+> size_t size, void *_data)
+>  				vdso = 1;
+>  			}
+>  		}
+> -		if (trace_baddr(base_addr_ptr, resolved_path, vdso, owner)) {
+> +		if (add_baddr(base_addr_ptr, resolved_path, vdso, data))
+>  			return 1;
+> -		}
+>  		/*
+>  		 * We are only interested in the base address (lowest virtual
+>  		 * address associated with the memory image), skip the rest
+> @@ -151,9 +170,8 @@ int extract_soinfo_events(struct dl_phdr_info *info,
+> size_t size, void *_data)
+>  }
+>  
+>  static
+> -void dump_exec_baddr(struct extract_data *data)
+> +void dump_exec_baddr(struct extract_data *data, void *owner)
+>  {
+> -	void *owner = data->owner;
+>  	void *base_addr_ptr;
+>  	char exe_path[PATH_MAX];
+>  	ssize_t exe_len;
+> @@ -172,6 +190,38 @@ void dump_exec_baddr(struct extract_data *data)
+>  	trace_baddr(base_addr_ptr, exe_path, 0, owner);
+>  }
+>  
+> +static
+> +void dump_baddrs(struct extract_data *data, void *owner)
+> +{
+> +	/* Emit tracepoints for shared objects */
+> +	struct baddr_entry *baddrs = data->baddrs;
+> +	size_t idx_baddrs = data->idx_baddrs;
+> +	size_t i = 0;
+> +
+> +	/*
+> +	 * UST lock nests within dynamic loader lock.
+> +	 */
+> +	if (ust_lock()) {
+> +		/*
+> +		 * Stop if need to exit.
+> +		 */
+> +		ust_unlock();
+> +		return;
+> +	}
+> +
+> +	while (i < idx_baddrs) {
+> +		struct baddr_entry *baddr = baddrs + i;
+> +		trace_baddr(baddr->base_addr_ptr,
+> +			baddr->resolved_path,
+> +			baddr->vdso, owner);
+> +		i += 1;
+> +	}
+> +	/* Emit tracepoint for executable */
+> +	dump_exec_baddr(data, owner);
+> +
+> +	ust_unlock();
+> +}
+> +
+>  int lttng_ust_baddr_statedump(void *owner)
+>  {
+>  	struct extract_data data;
+> @@ -179,8 +229,10 @@ int lttng_ust_baddr_statedump(void *owner)
+>  	if (!getenv("LTTNG_UST_WITH_EXPERIMENTAL_BADDR_STATEDUMP"))
+>  		return 0;
+>  
+> -	data.owner = owner;
+>  	data.exec_baddr = NULL;
+> +	data.num_baddrs = 32;
+> +	data.baddrs = malloc(data.num_baddrs * sizeof(struct baddr_entry));
+> +	data.idx_baddrs = 0;
+>  	/*
+>  	 * Iterate through the list of currently loaded shared objects and
+>  	 * generate events for loadable segments using
+> @@ -193,7 +245,8 @@ int lttng_ust_baddr_statedump(void *owner)
+>  	 * deadlocks, so dump the executable outside of the phdr
+>  	 * iteration.
+>  	 */
+> -	dump_exec_baddr(&data);
+> +	dump_baddrs(&data, owner);
+> +	free(data.baddrs);
+>  	return 0;
+>  }
+>  
+> --
+> 1.9.0
+> 
+> 
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
