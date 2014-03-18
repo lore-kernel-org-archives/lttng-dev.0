@@ -1,16 +1,16 @@
-From: Yue Liu <liuyue0310@gmail.com>
-Subject: [GSoC]My proposal for "Python Tracing Support" project
-Date: Wed, 19 Mar 2014 00:01:53 +0800
-Message-ID: <CANK7Sy8i7qCGWiwCoKZQMa+SvR1Q9RjDZWr9cV88SuhLSNd72A__41245.073991786$1395158584$gmane$org@mail.gmail.com>
+From: Lingyu Zhu <lynuszhu@gmail.com>
+Subject: [bug]session create failed
+Date: Wed, 19 Mar 2014 00:25:36 +0800
+Message-ID: <CACFGcba=x_GVeVpOMbWyXq19FVKrMdeB7EZ87YxUVTUeH6yXbg__16476.3059503914$1395160002$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0714226055=="
+Content-Type: multipart/mixed; boundary="===============1279876643=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f179.google.com ([209.85.223.179])
+Received: from mail-ve0-f196.google.com ([209.85.128.196])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <liuyue0310@gmail.com>) id 1WPwSl-0002vC-8A
-	for lttng-dev@lists.lttng.org; Tue, 18 Mar 2014 12:02:04 -0400
-Received: by mail-ie0-f179.google.com with SMTP id lx4so7138570iec.24
-	for <lttng-dev@lists.lttng.org>; Tue, 18 Mar 2014 09:01:53 -0700 (PDT)
+	(envelope-from <lynuszhu@gmail.com>) id 1WPwpi-00037O-HF
+	for lttng-dev@lists.lttng.org; Tue, 18 Mar 2014 12:25:48 -0400
+Received: by mail-ve0-f196.google.com with SMTP id cz12so1729502veb.7
+	for <lttng-dev@lists.lttng.org>; Tue, 18 Mar 2014 09:25:37 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,74 +19,101 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: jeremie.galarneau@efficios.com, Christian Babeux <christian.babeux@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Zifei Tong <soariez@gmail.com>
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0714226055==
-Content-Type: multipart/alternative; boundary=047d7ba97a949d9a3004f4e3a708
+--===============1279876643==
+Content-Type: multipart/alternative; boundary=001a1133a9fe73142404f4e3fcba
 
---047d7ba97a949d9a3004f4e3a708
-Content-Type: text/plain; charset=ISO-8859-1
+--001a1133a9fe73142404f4e3fcba
+Content-Type: text/plain; charset=UTF-8
 
-Dear mentors:
+Hello,
+Sorry for being away a few days. My thesis opening proposal is hiting the
+deadline, which happens to be same date for GSoC. Now I can be fully
+devoted to lttng and compose my GSoC proposal.
 
-I have already completed the draft of my application[1]. I would like to
-discuss about my schedule and main tasks  for python tracing support
-project. Hope your valuable suggestions.
+Anyway, I may have found a bug.I'm not very sure. Here is my log:
 
-BTW. Because of the font  format, i'm so sorry for the malformed Call graph
-!
+===================================================
+[lynus@slave1 ~]$lttng create
+Spawning a session daemon
+Session auto-20140319-081547 created.
+Traces will be written in /home/lynus/lttng-traces/auto-20140319-081547
+[lynus@slave1 ~]$ lttng enable-event page_block -k
+Error: Event page_block: Tracing the kernel requires a root lttng-sessiond
+daemon, as well as "tracing" group membership or root user ID for the lttng
+client. (channel channel0, session auto-20140319-081547)
+Warning: Some command(s) went wrong
+[lynus@slave1 ~]$ lttng destroy
+Session auto-20140319-081547 destroyed
+[lynus@slave1 ~]$ sudo su -
+[sudo] password for lynus:
+root@slave1:~# lttng create
+Spawning a session daemon
+Warning: No tracing group detected
+Session auto-20140319-081615 created.
+Traces will be written in /root/lttng-traces/auto-20140319-081615
+PERROR [4774/4882]: bind inet: Address already in use (in
+lttcomm_bind_inet_sock() at inet.c:109)
+Warning: An other session daemon is using this JUL port. JUL support will
+be deactivated not interfering with the tracing.
+root@slave1:~# lttng create
+Session auto-20140319-081620 created.
+Traces will be written in /root/lttng-traces/auto-20140319-081620
+root@slave1:~#
+[END] 2014/3/19 0:04:31
+======================================================
 
-Thanku.
-Yue Liu
+These command is issued right after my machine is booted. And if I directly
+switch to root and create a seesion, everything is normal. So I guess I may
+have come across a bug.
+Any comment?
 
-[1]
-http://www.google-melange.com/gsoc/proposal/review/student/google/gsoc2014/liuyue/5629499534213120
-
-----------------------------------------------------------
-Tsinghua University NISL-Lab(FIT-1-213)
-TEL: 156-5279-8191
-Mail: liuyue0310@gmail.com
-
-<liuyue0310@gmail.com>
-
---047d7ba97a949d9a3004f4e3a708
-Content-Type: text/html; charset=ISO-8859-1
+--001a1133a9fe73142404f4e3fcba
+Content-Type: text/html; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr"><div>Dear mentors:</div><div><br></div><div><span style=3D=
-"background-color:rgb(243,243,243)"><font color=3D"#000000"><span style=3D"=
-font-family:Arial,sans-serif;line-height:24px">I have already completed the=
- draft of my application[1]. I would like to discuss about my schedule and =
-main tasks =A0for python tracing support project. H</span><span style=3D"fo=
-nt-family:Arial,sans-serif;line-height:24px">ope your valuable suggestions.=
-</span></font></span></div>
-<div><span style=3D"font-family:Arial,sans-serif;line-height:24px;backgroun=
-d-color:rgb(243,243,243)"><font color=3D"#000000"><br></font></span></div><=
-div><span style=3D"font-family:Arial,sans-serif;line-height:24px;background=
--color:rgb(243,243,243)"><font color=3D"#000000">BTW. Because of the font =
-=A0format, i&#39;m so sorry for the</font><font color=3D"#ff9900">=A0</font=
-></span><font color=3D"#000000">malformed</font><font color=3D"#000000">=A0=
-</font><span style=3D"color:rgb(0,0,0);background-color:rgb(243,243,243);fo=
-nt-family:Arial,sans-serif;line-height:24px">Call graph !</span></div>
-<div><br></div><div>Thanku.</div><div>Yue Liu<br></div><div><br></div>[1]<a=
- href=3D"http://www.google-melange.com/gsoc/proposal/review/student/google/=
-gsoc2014/liuyue/5629499534213120">http://www.google-melange.com/gsoc/propos=
-al/review/student/google/gsoc2014/liuyue/5629499534213120</a><br clear=3D"a=
-ll">
-<div><div dir=3D"ltr"><div><br></div><div>---------------------------------=
--------------------------</div><div>Tsinghua University NISL-Lab(FIT-1-213)=
-</div><div>TEL: 156-5279-8191</div><div>Mail:=A0<a href=3D"mailto:liuyue031=
-0@gmail.com" target=3D"_blank">liuyue0310@gmail.com</a></div>
-<div><a href=3D"mailto:liuyue0310@gmail.com" target=3D"_blank"><br></a></di=
-v></div></div>
-</div>
+<div dir=3D"ltr">Hello,<div>Sorry for being away a few days. My thesis open=
+ing proposal is hiting the deadline, which happens to be same date for GSoC=
+. Now I can be fully devoted to lttng and compose my GSoC proposal.</div><d=
+iv>
+<br></div><div>Anyway, I may have found a bug.I&#39;m not very sure. Here i=
+s my log:</div><div><br></div><div>=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D</div><div><div>[lynus@slave1 ~]$ltt=
+ng create</div><div>Spawning a session daemon</div>
+<div>Session auto-20140319-081547 created.</div><div>Traces will be written=
+ in /home/lynus/lttng-traces/auto-20140319-081547</div><div>[lynus@slave1 ~=
+]$ lttng enable-event page_block -k</div><div>Error: Event page_block: Trac=
+ing the kernel requires a root lttng-sessiond daemon, as well as &quot;trac=
+ing&quot; group membership or root user ID for the lttng client. (channel c=
+hannel0, session auto-20140319-081547)</div>
+<div>Warning: Some command(s) went wrong</div><div>[lynus@slave1 ~]$ lttng =
+destroy</div><div>Session auto-20140319-081547 destroyed</div><div>[lynus@s=
+lave1 ~]$ sudo su -</div><div>[sudo] password for lynus:=C2=A0</div><div>ro=
+ot@slave1:~# lttng create</div>
+<div>Spawning a session daemon</div><div>Warning: No tracing group detected=
+</div><div>Session auto-20140319-081615 created.</div><div>Traces will be w=
+ritten in /root/lttng-traces/auto-20140319-081615</div><div>PERROR [4774/48=
+82]: bind inet: Address already in use (in lttcomm_bind_inet_sock() at inet=
+.c:109)</div>
+<div>Warning: An other session daemon is using this JUL port. JUL support w=
+ill be deactivated not interfering with the tracing.</div><div>root@slave1:=
+~# lttng create</div><div>Session auto-20140319-081620 created.</div><div>
+Traces will be written in /root/lttng-traces/auto-20140319-081620</div><div=
+>root@slave1:~#=C2=A0</div><div>[END] 2014/3/19 0:04:31</div></div><div>=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D</div><div><br></div><div>
+These command is issued right after my machine is booted. And if I directly=
+ switch to root and create a seesion, everything is normal. So I guess I ma=
+y have come across a bug.</div><div>Any comment?</div></div>
 
---047d7ba97a949d9a3004f4e3a708--
+--001a1133a9fe73142404f4e3fcba--
 
 
---===============0714226055==
+--===============1279876643==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -97,4 +124,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============0714226055==--
+--===============1279876643==--
