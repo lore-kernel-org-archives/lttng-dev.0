@@ -1,23 +1,23 @@
-From: Zifei Tong <zifeitong@gmail.com>
+From: wen qun wang <xiaoxiao046@gmail.com>
 Subject: Re: Clang plugin providing automatic application
 	instrumentation
-Date: Tue, 18 Mar 2014 19:55:56 +0800
-Message-ID: <CAJ7wx-GDgK23JHAqpYFt=U2zGyDe2Eip950t=NQR1VtR+Kon3w__2839.31382368809$1395143857$gmane$org@mail.gmail.com>
+Date: Tue, 18 Mar 2014 20:37:49 +0800
+Message-ID: <CAJeLfGR34V_GXUZ=2wkrtm1Hps6OiQvE5PcWvjnm=mR4x23f+A__37285.935591399$1395146316$gmane$org@mail.gmail.com>
 References: <CAJeLfGT9xKZsrc_WfsY22u-CfqBjR+ry5D+US=g8VJY7XZutmg@mail.gmail.com>
 	<CA+jJMxubB8xJBxt6JYVBODC+=iRZbiNPwX4DJU46OajODJ_jfA@mail.gmail.com>
 	<CAJeLfGTPDQVBmVmRY_Tdsvm3957QCMgJ0hzva0hEs8g=6t9tCw@mail.gmail.com>
 	<CAJeLfGSAsLmEXr=Nn_mP=BRboP-eTaGG=ciGQnE-3ZOiFb3D0g@mail.gmail.com>
+	<CAJ7wx-GDgK23JHAqpYFt=U2zGyDe2Eip950t=NQR1VtR+Kon3w@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============0757455323=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ve0-f180.google.com ([209.85.128.180])
+Received: from mail-wg0-f52.google.com ([74.125.82.52])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <soariez@gmail.com>) id 1WPsdO-0000rC-4e
-	for lttng-dev@lists.lttng.org; Tue, 18 Mar 2014 07:56:45 -0400
-Received: by mail-ve0-f180.google.com with SMTP id jz11so6692370veb.25
-	for <lttng-dev@lists.lttng.org>; Tue, 18 Mar 2014 04:56:36 -0700 (PDT)
-In-Reply-To: <CAJeLfGSAsLmEXr=Nn_mP=BRboP-eTaGG=ciGQnE-3ZOiFb3D0g@mail.gmail.com>
+	(envelope-from <xiaoxiao046@gmail.com>) id 1WPtHI-0001BX-1W
+	for lttng-dev@lists.lttng.org; Tue, 18 Mar 2014 08:37:58 -0400
+Received: by mail-wg0-f52.google.com with SMTP id k14so5777211wgh.23
+	for <lttng-dev@lists.lttng.org>; Tue, 18 Mar 2014 05:37:50 -0700 (PDT)
+In-Reply-To: <CAJ7wx-GDgK23JHAqpYFt=U2zGyDe2Eip950t=NQR1VtR+Kon3w@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -26,113 +26,473 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: wen qun wang <xiaoxiao046@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Zifei Tong <zifeitong@gmail.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-SGksCgpQbGVhc2UgY2hlY2sgdGhlIHNldF90cmFjZXBvaW50KCkgZnVuY3Rpb24gaW4gbGlibHR0
-bmctdXN0L3RyYWNlcG9pbnQuYwoKICAgIC8qCiAgICAgKiBTZXRzIHRoZSBwcm9iZSBjYWxsYmFj
-ayBjb3JyZXNwb25kaW5nIHRvIG9uZSB0cmFjZXBvaW50LgogICAgICovCiAgICBzdGF0aWMgdm9p
-ZCBzZXRfdHJhY2Vwb2ludChzdHJ1Y3QgdHJhY2Vwb2ludF9lbnRyeSAqKmVudHJ5LCBzdHJ1Y3QK
-dHJhY2Vwb2ludCAqZWxlbSwgaW50IGFjdGl2ZSk7CgpJIHRoaW5rIHByb2JlcyBhcmUgY29ubmVj
-dGVkIHRvIHRyYWNlcG9pbnRzIHdoZW4gdXNlciBlbmFibGUKY29ycmVzcG9uZGluZyBldmVudHMu
-CgpIb3BlIHRoYXQgaGVscHMuCgpaaWZlaSBUb25nCgpPbiBUdWUsIE1hciAxOCwgMjAxNCBhdCA1
-OjA4IFBNLCB3ZW4gcXVuIHdhbmcgPHhpYW94aWFvMDQ2QGdtYWlsLmNvbT4gd3JvdGU6Cj4gSGks
-ZXZlcnlvbmUuQXQgZmlyc3QgLHRoYW5rcyBmb3IgamVyZW1pZSdzIGhlbHAuIEkgaGF2ZSBjb21w
-bGV0ZWQgdG9vbGNoYWluCj4gdG8gZ2FpbiAgYW4gdW5kZXJzdGFuZGluZyBvZiBob3cgdGhlIGRp
-ZmZlcmVudCBwaWVjZXMgZml0IHRvZ2V0aGVyLlRoZW4sIEknbQo+IGdvaW5nIHRvIHRocm91Z2gg
-dGhlIHN0dWR5aW5nIHRoZSBkZW1vKC9sdHRuZy11c3QtMi40LjAvZG9jL2V4YW1wbGVzL2RlbW8p
-Cj4gb2YgbHR0bmctdXN0IHRvIHVuZGVyc3RhbmQgdGhlIHdvcmtpbmcgcHJpbmNpcGxlIG9mIGx0
-dG5nLkJ1dCBub3csSSBhbSBpbgo+IHRyb3VibGUuCj4gSW4gL2x0dG5nLXVzdC0yLjQuMC9kb2Mv
-ZXhhbXBsZXMvZGVtby9kZW1vLmMKPgo+ICMjIyMjIyMjIyMjIyMjIyMjIwo+IHRyYWNlcG9pbnQo
-dXN0X3Rlc3RfZGVtbzIsZG9uZSw0MikKPiAjIyMjIyMjIyMjIyMjIyMjIyMjCj4KPiBJIGZvdW5k
-IHRoZSBkZWZpbml0aW9uIG9mIHRyYWNlcG9pbnQgaW4KPiAvbHR0bmctdXN0LTIuNC4wL2luY2x1
-ZGUvbHR0bmcvdHJhY2Vwb2ludC5oCj4KPiAjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKPiAjZGVmaW5lIHRyYWNlcG9pbnQocHJvdmlk
-ZXIsIG5hbWUsIC4uLikgICAgXAo+IGRvIHsgICAgXAo+IFNUQVBfUFJPQkVWKHByb3ZpZGVyLCBu
-YW1lLCAjIyBfX1ZBX0FSR1NfXyk7ICAgIFwKPiBpZiAoY2FhX3VubGlrZWx5KF9fdHJhY2Vwb2lu
-dF8jI3Byb3ZpZGVyIyNfX18jI25hbWUuc3RhdGUpKSBcCj4gX190cmFjZXBvaW50X2NiXyMjcHJv
-dmlkZXIjI19fXyMjbmFtZShfX1ZBX0FSR1NfXyk7IFwKPiB9IHdoaWxlICgwKQo+ICMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-Cj4KPiB0aGVuIGkgZm91bmQgdGhlIGRlZmluaXRpb24gb2YKPiAiX190cmFjZXBvaW50X2NiXyMj
-cHJvdmlkZXIjI19fXyMjbmFtZShfX1ZBX0FSR1NfXykiIGluCj4gL2x0dG5nLXVzdC0yLjQuMC9p
-bmNsdWRlL2x0dG5nL3RyYWNlcG9pbnQuaCBsaW5lIDE1OAo+Cj4gIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4g
-dm9pZCBfX3RyYWNlcG9pbnRfY2JfIyNfcHJvdmlkZXIjI19fXyMjX25hbWUoX1RQX0FSR1NfUFJP
-VE8oX19WQV9BUkdTX18pKSBcCj4geyBcCj4gc3RydWN0IHRyYWNlcG9pbnRfcHJvYmUgKl9fdHBf
-cHJvYmU7IFwKPiBcCj4gaWYgKGNhYV91bmxpa2VseSghVFBfUkNVX0xJTktfVEVTVCgpKSkgXAo+
-IHJldHVybjsgXAo+IHRwX3JjdV9yZWFkX2xvY2tfYnAoKTsgXAo+IF9fdHBfcHJvYmUgPQo+IHRw
-X3JjdV9kZXJlZmVyZW5jZV9icChfX3RyYWNlcG9pbnRfIyNfcHJvdmlkZXIjI19fXyMjX25hbWUu
-cHJvYmVzKTsgXAo+IGlmIChjYWFfdW5saWtlbHkoIV9fdHBfcHJvYmUpKSBcCj4gZ290byBlbmQ7
-IFwKPiBkbyB7IFwKPiB2b2lkICgqX190cF9jYikodm9pZCkgPSBfX3RwX3Byb2JlLT5mdW5jOyBc
-Cj4gdm9pZCAqX190cF9kYXRhID0gX190cF9wcm9iZS0+ZGF0YTsgXAo+IFwKPiBVUkNVX0ZPUkNF
-X0NBU1Qodm9pZCAoKikoX1RQX0FSR1NfREFUQV9QUk9UTyhfX1ZBX0FSR1NfXykpLCBfX3RwX2Ni
-KSBcCj4gKF9UUF9BUkdTX0RBVEFfVkFSKF9fVkFfQVJHU19fKSk7IFwKPiB9IHdoaWxlICgoKytf
-X3RwX3Byb2JlKS0+ZnVuYyk7IFwKPiBlbmQ6IFwKPiB0cF9yY3VfcmVhZF91bmxvY2tfYnAoKTsg
-XAo+IH0KPiAjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIwo+Cj4gSXQgc2VlbXMgdGhhdCAiX190cmFjZXBvaW50XyMjX3By
-b3ZpZGVyIyNfX18jI19uYW1lIiAgaW4KPiAiX190cmFjZXBvaW50XyMjX3Byb3ZpZGVyIyNfX18j
-I19uYW1lLnByb2JlcyIgaXMgYSBzdHJ1Y3Qgb2YgdHJhY2Vwb2ludC4KPiB3ZSBjYW4gZm91bmQg
-dGhlIG1hY3JvIFRSQUNFUE9JTlRfRVZFTlQgd2FzIHVzZWQgaW4KPiAibHR0bmctdXN0LTIuNC4w
-XGRvY1xleGFtcGxlc1xkZW1vXHVzdF90ZXN0c19kZW1vLmgiLkFuZCB0aGUgc3RydWN0IG9mCj4g
-dHJhY2Vwb2ludCB3YXMgZGVmaW5lZCBieSB0aGUgbWFjcm8gVFJBQ0VQT0lOVF9FVkVOVC5CdXQg
-dGhlCj4gX190cmFjZXBvaW50XyMjX3Byb3ZpZGVyIyNfX18jI19uYW1lLnByb2JlcyB3YXMgc2V0
-IHRvIG51bGwuCj4KPiAjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjCj4gXGx0dG5nLXVzdC0yLjQuMFxpbmNsdWRlXGx0dG5nXHRyYWNlcG9pbnQuaCBsaW5l
-IDM0Mgo+ICNkZWZpbmUgX0RFRklORV9UUkFDRVBPSU5UKF9wcm92aWRlciwgX25hbWUsIF9hcmdz
-KSBcCj4gZXh0ZXJuIGludCBfX3RyYWNlcG9pbnRfcHJvdmlkZXJfIyNfcHJvdmlkZXI7IFwKPiBz
-dGF0aWMgY29uc3QgY2hhciBfX3RwX3N0cnRhYl8jI19wcm92aWRlciMjX19fIyNfbmFtZVtdIFwK
-PiBfX2F0dHJpYnV0ZV9fKChzZWN0aW9uKCJfX3RyYWNlcG9pbnRzX3N0cmluZ3MiKSkpID0gXAo+
-ICNfcHJvdmlkZXIgIjoiICNfbmFtZTsgXAo+IHN0cnVjdCB0cmFjZXBvaW50IF9fdHJhY2Vwb2lu
-dF8jI19wcm92aWRlciMjX19fIyNfbmFtZSBcCj4gX19hdHRyaWJ1dGVfXygoc2VjdGlvbigiX190
-cmFjZXBvaW50cyIpKSkgPSBcCj4geyBcCj4gX190cF9zdHJ0YWJfIyNfcHJvdmlkZXIjI19fXyMj
-X25hbWUsIFwKPiAwLCBcCj4gTlVMTCwgXC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0+aGVyZSBpcyB0aGUgcHJvYmVzLgo+IF9UUkFDRVBPSU5UX1VOREVGSU5F
-RF9SRUYoX3Byb3ZpZGVyKSwgXAo+IF9UUF9FWFRSQUNUX1NUUklORyhfYXJncyksIFwKPiB7IH0s
-IFwKPiB9OyBcCj4gc3RhdGljIHN0cnVjdCB0cmFjZXBvaW50ICogX190cmFjZXBvaW50X3B0cl8j
-I19wcm92aWRlciMjX19fIyNfbmFtZSBcCj4gX19hdHRyaWJ1dGVfXygodXNlZCwgc2VjdGlvbigi
-X190cmFjZXBvaW50c19wdHJzIikpKSA9IFwKPiAmX190cmFjZXBvaW50XyMjX3Byb3ZpZGVyIyNf
-X18jI19uYW1lOwo+ICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKPgo+IHNvIGkgd2FudCB0byBrbm93IHRoYXQgaG93IHRo
-ZSBwcm9iZXMgb2YgdGhlIHRyYWNlcG9pbnQgc3RydWN0ICBzaG91bGQgYmUKPiBpbml0aWFsaXpl
-ZCxJIGNhbid0IGZpbmQgdGhlIHNvdXJjZSBjb2RlLgo+IE15IGVuZ2xpc2ggaXMgcG9vcixpIGhv
-cGUgeW91IGNhbiB1bmRlcnN0YW5kIHdoYXQgaSBtZWFuLiBUaGFuayB5b3UgdmVyeQo+IG11Y2gu
-Cj4KPgo+Cj4KPgo+Cj4gMjAxNC0wMy0xNSA5OjI0IEdNVCswODowMCDkuLrnjosgPHhpYW94aWFv
-MDQ2QGdtYWlsLmNvbT46Cj4+Cj4+IHRoYW5rIHlvdSB2ZXJ5IG11Y2gKPj4KPj4KPj4gMjAxNC0w
-My0xNSAxOjM1IEdNVCswODowMCBKw6lyw6ltaWUgR2FsYXJuZWF1Cj4+IDxqZXJlbWllLmdhbGFy
-bmVhdUBlZmZpY2lvcy5jb20+Ogo+Pgo+Pj4gT24gV2VkLCBNYXIgMTIsIDIwMTQgYXQgNjowNSBB
-TSwg5Li6546LIDx4aWFveGlhbzA0NkBnbWFpbC5jb20+IHdyb3RlOgo+Pj4gPiBIaSBBbGwsSSBh
-bSBhIGdyYWR1YXRlIHN0dWRlbnQgZnJvbSBCZWlqaW5nIFVuaXZlcnNpdHkgb2YgUG9zdHMgYW5k
-Cj4+PiA+IFRlbGVjb21tdW5pY2F0aW9ucy4gRHVlIHRvIG15Cj4+PiA+IGV4cGVyaWVuY2UgaW4g
-d2luZG93cyBrZXJuZWwgZGV2ZWxvcG1lbnQgYW5kIGRlYnVnZ2luZyB0ZWNobmlxdWUsSSBhbQo+
-Pj4gPiB2ZXJ5Cj4+PiA+IGludGVyZXN0ZWQgaW4gdGhlIGx0dG5nIHByb2plY3QuSSB3YW50IHRv
-IG1ha2UgYSBjb250cmlidXRpb24gZm9yIHRoZQo+Pj4gPiBDbGFuZwo+Pj4gPiBwbHVnaW4gcHJv
-dmlkaW5nIGF1dG9tYXRpYyBhcHBsaWNhdGlvbiBpbnN0cnVtZW50YXRpb24gYWZ0ZXIgcmVhZGlu
-Zwo+Pj4gPiB0aGUKPj4+ID4gcHJvamVjdCBpZGVhcyBmb3IgZ3NvYzIwMTQuSSBhbSBhbHNvIGlu
-dGVyZXN0ZWQgaW4gcmV2ZXJzZSBlbmdpbmVlcmluZwo+Pj4gPiBhbmQKPj4+ID4gYmluYXJ5IGhh
-Y2suCj4+PiA+IFRoZSBjb2RlcyBvZiBsdHRuZyBwcm9qZWN0IGhhdmUgYmVlbiBkb3dubG9hZGVk
-IGZvciByZWFkaW5nLkR1ZSB0byBpdHMKPj4+ID4gbGFyZ2UKPj4+ID4gYW1vdW50LGkgY291bGRu
-J3QgZmlndXJlIG91dCBhIGdvb2Qgd2F5IHRvIHVuZGVyc3RhbmQgaXQuU28saSB3YW50IHRvCj4+
-PiA+IGtvbncKPj4+ID4gaG93IHNob3VsZCBpIHByb2NlZWQgZnVydGhlci4KPj4+Cj4+PiBZb3Ug
-c2hvdWxkIHN0YXJ0IGJ5IHRyeWluZyB0aGUgY29tcGxldGUgdG9vbGNoYWluIHRvIGdhaW4gYW4K
-Pj4+IHVuZGVyc3RhbmRpbmcgb2YgaG93IHRoZSBkaWZmZXJlbnQgcGllY2VzIGZpdCB0b2dldGhl
-ci4gSSB3b3VsZG4ndAo+Pj4gc3VnZ2VzdCBzaW1wbHkganVtcGluZyBpbnRvIHRoZSBjb2RlLgo+
-Pj4KPj4+IEhhdmUgYSBsb29rIGF0IHRoZSBndWlkZWxpbmVzIHBvc3RlZCBvbiBvdXIgR1NvQyAy
-MDE0IHdpa2kgZm9yIG1vcmUKPj4+IGluZm9ybWF0aW9uIG9uIGhvdyB0byBzdWJtaXQgYSBwcm9w
-b3NhbCBbMV0uCj4+Pgo+Pj4gTGV0IHVzIGtub3cgaWYgeW91IGhhdmUgbW9yZSBzcGVjaWZpYyBx
-dWVzdGlvbnMuCj4+Pgo+Pj4gSsOpcsOpbWllCj4+Pgo+Pj4gWzFdCj4+PiBodHRwczovL2J1Z3Mu
-bHR0bmcub3JnL3Byb2plY3RzL2x0dG5nL3dpa2kvR29vZ2xlX1N1bW1lcl9vZl9Db2RlXzIwMTQj
-R3VpZGVsaW5lcy1mb3Itc3R1ZGVudHMtYXBwbHlpbmctdG8tR1NvQwo+Pj4KPj4+ID4gTXkgZW5n
-bGlzaCBpcyBwb29yLGkgaG9wZSB5b3UgY2FuIHVuZGVyc3RhbmQgd2hhdCBpIG1lYW4uIFRoYW5r
-IHlvdQo+Pj4gPiB2ZXJ5Cj4+PiA+IG11Y2guCj4+PiA+Cj4+PiA+IF9fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4+PiA+IGx0dG5nLWRldiBtYWlsaW5nIGxp
-c3QKPj4+ID4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+Pj4gPiBodHRwOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKPj4+ID4KPj4+Cj4+Pgo+
-Pj4KPj4+IC0tCj4+PiBKw6lyw6ltaWUgR2FsYXJuZWF1Cj4+PiBFZmZpY2lPUyBJbmMuCj4+PiBo
-dHRwOi8vd3d3LmVmZmljaW9zLmNvbQo+Pgo+Pgo+Cj4KPiBfX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRu
-Zy1kZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21h
-aWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cj4KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3Rz
-Lmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5m
-by9sdHRuZy1kZXYK
+--===============0757455323==
+Content-Type: multipart/alternative; boundary=f46d04428e70d2a00504f4e0cda7
+
+--f46d04428e70d2a00504f4e0cda7
+Content-Type: text/plain; charset=GB2312
+Content-Transfer-Encoding: quoted-printable
+
+Thanks for your help.
+It seems that set_tracepoint is called by the void
+__tracepoint_register_##_provider##___##_name(\lttng-ust-2.4.0\include\lttn=
+g\tracepoint.h
+line 182).
+But there is no function which invoke the function
+__tracepoint_register_##_provider##___##_name,so when is the function
+__tracepoint_register_##_provider##___##_name is called?
+
+
+2014-03-18 19:55 GMT+08:00 Zifei Tong <zifeitong@gmail.com>:
+
+> Hi,
+>
+> Please check the set_tracepoint() function in liblttng-ust/tracepoint.c
+>
+>     /*
+>      * Sets the probe callback corresponding to one tracepoint.
+>      */
+>     static void set_tracepoint(struct tracepoint_entry **entry, struct
+> tracepoint *elem, int active);
+>
+> I think probes are connected to tracepoints when user enable
+> corresponding events.
+>
+> Hope that helps.
+>
+> Zifei Tong
+>
+> On Tue, Mar 18, 2014 at 5:08 PM, wen qun wang <xiaoxiao046@gmail.com>
+> wrote:
+> > Hi,everyone.At first ,thanks for jeremie's help. I have completed
+> toolchain
+> > to gain  an understanding of how the different pieces fit together.Then=
+,
+> I'm
+> > going to through the studying the
+> demo(/lttng-ust-2.4.0/doc/examples/demo)
+> > of lttng-ust to understand the working principle of lttng.But now,I am =
+in
+> > trouble.
+> > In /lttng-ust-2.4.0/doc/examples/demo/demo.c
+> >
+> > ##################
+> > tracepoint(ust_test_demo2,done,42)
+> > ###################
+> >
+> > I found the definition of tracepoint in
+> > /lttng-ust-2.4.0/include/lttng/tracepoint.h
+> >
+> > ############################################################
+> > #define tracepoint(provider, name, ...)    \
+> > do {    \
+> > STAP_PROBEV(provider, name, ## __VA_ARGS__);    \
+> > if (caa_unlikely(__tracepoint_##provider##___##name.state)) \
+> > __tracepoint_cb_##provider##___##name(__VA_ARGS__); \
+> > } while (0)
+> > #################################################################
+> >
+> > then i found the definition of
+> > "__tracepoint_cb_##provider##___##name(__VA_ARGS__)" in
+> > /lttng-ust-2.4.0/include/lttng/tracepoint.h line 158
+> >
+> > #######################################################################=
+#
+> > void
+> __tracepoint_cb_##_provider##___##_name(_TP_ARGS_PROTO(__VA_ARGS__)) \
+> > { \
+> > struct tracepoint_probe *__tp_probe; \
+> > \
+> > if (caa_unlikely(!TP_RCU_LINK_TEST())) \
+> > return; \
+> > tp_rcu_read_lock_bp(); \
+> > __tp_probe =3D
+> > tp_rcu_dereference_bp(__tracepoint_##_provider##___##_name.probes); \
+> > if (caa_unlikely(!__tp_probe)) \
+> > goto end; \
+> > do { \
+> > void (*__tp_cb)(void) =3D __tp_probe->func; \
+> > void *__tp_data =3D __tp_probe->data; \
+> > \
+> > URCU_FORCE_CAST(void (*)(_TP_ARGS_DATA_PROTO(__VA_ARGS__)), __tp_cb) \
+> > (_TP_ARGS_DATA_VAR(__VA_ARGS__)); \
+> > } while ((++__tp_probe)->func); \
+> > end: \
+> > tp_rcu_read_unlock_bp(); \
+> > }
+> > ####################################################################
+> >
+> > It seems that "__tracepoint_##_provider##___##_name"  in
+> > "__tracepoint_##_provider##___##_name.probes" is a struct of tracepoint=
+.
+> > we can found the macro TRACEPOINT_EVENT was used in
+> > "lttng-ust-2.4.0\doc\examples\demo\ust_tests_demo.h".And the struct of
+> > tracepoint was defined by the macro TRACEPOINT_EVENT.But the
+> > __tracepoint_##_provider##___##_name.probes was set to null.
+> >
+> > #################################################
+> > \lttng-ust-2.4.0\include\lttng\tracepoint.h line 342
+> > #define _DEFINE_TRACEPOINT(_provider, _name, _args) \
+> > extern int __tracepoint_provider_##_provider; \
+> > static const char __tp_strtab_##_provider##___##_name[] \
+> > __attribute__((section("__tracepoints_strings"))) =3D \
+> > #_provider ":" #_name; \
+> > struct tracepoint __tracepoint_##_provider##___##_name \
+> > __attribute__((section("__tracepoints"))) =3D \
+> > { \
+> > __tp_strtab_##_provider##___##_name, \
+> > 0, \
+> > NULL, \---------------------------------------------->here is the probe=
+s.
+> > _TRACEPOINT_UNDEFINED_REF(_provider), \
+> > _TP_EXTRACT_STRING(_args), \
+> > { }, \
+> > }; \
+> > static struct tracepoint * __tracepoint_ptr_##_provider##___##_name \
+> > __attribute__((used, section("__tracepoints_ptrs"))) =3D \
+> > &__tracepoint_##_provider##___##_name;
+> > ###################################################################
+> >
+> > so i want to know that how the probes of the tracepoint struct  should =
+be
+> > initialized,I can't find the source code.
+> > My english is poor,i hope you can understand what i mean. Thank you ver=
+y
+> > much.
+> >
+> >
+> >
+> >
+> >
+> >
+> > 2014-03-15 9:24 GMT+08:00 =CE=AA=CD=F5 <xiaoxiao046@gmail.com>:
+> >>
+> >> thank you very much
+> >>
+> >>
+> >> 2014-03-15 1:35 GMT+08:00 J=A8=A6r=A8=A6mie Galarneau
+> >> <jeremie.galarneau@efficios.com>:
+> >>
+> >>> On Wed, Mar 12, 2014 at 6:05 AM, =CE=AA=CD=F5 <xiaoxiao046@gmail.com>=
+ wrote:
+> >>> > Hi All,I am a graduate student from Beijing University of Posts and
+> >>> > Telecommunications. Due to my
+> >>> > experience in windows kernel development and debugging technique,I =
+am
+> >>> > very
+> >>> > interested in the lttng project.I want to make a contribution for t=
+he
+> >>> > Clang
+> >>> > plugin providing automatic application instrumentation after readin=
+g
+> >>> > the
+> >>> > project ideas for gsoc2014.I am also interested in reverse
+> engineering
+> >>> > and
+> >>> > binary hack.
+> >>> > The codes of lttng project have been downloaded for reading.Due to
+> its
+> >>> > large
+> >>> > amount,i couldn't figure out a good way to understand it.So,i want =
+to
+> >>> > konw
+> >>> > how should i proceed further.
+> >>>
+> >>> You should start by trying the complete toolchain to gain an
+> >>> understanding of how the different pieces fit together. I wouldn't
+> >>> suggest simply jumping into the code.
+> >>>
+> >>> Have a look at the guidelines posted on our GSoC 2014 wiki for more
+> >>> information on how to submit a proposal [1].
+> >>>
+> >>> Let us know if you have more specific questions.
+> >>>
+> >>> J=A8=A6r=A8=A6mie
+> >>>
+> >>> [1]
+> >>>
+> https://bugs.lttng.org/projects/lttng/wiki/Google_Summer_of_Code_2014#Gui=
+delines-for-students-applying-to-GSoC
+> >>>
+> >>> > My english is poor,i hope you can understand what i mean. Thank you
+> >>> > very
+> >>> > much.
+> >>> >
+> >>> > _______________________________________________
+> >>> > lttng-dev mailing list
+> >>> > lttng-dev@lists.lttng.org
+> >>> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> >>> >
+> >>>
+> >>>
+> >>>
+> >>> --
+> >>> J=A8=A6r=A8=A6mie Galarneau
+> >>> EfficiOS Inc.
+> >>> http://www.efficios.com
+> >>
+> >>
+> >
+> >
+> > _______________________________________________
+> > lttng-dev mailing list
+> > lttng-dev@lists.lttng.org
+> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> >
+>
+
+--f46d04428e70d2a00504f4e0cda7
+Content-Type: text/html; charset=GB2312
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Thanks for your help.<div>It seems that set_tracepoint is =
+called by the&nbsp;void __tracepoint_register_##_provider##___##_name(\lttn=
+g-ust-2.4.0\include\lttng\tracepoint.h line 182).</div><div>But there is no=
+ function which invoke the function __tracepoint_register_##_provider##___#=
+#_name,so when is the function __tracepoint_register_##_provider##___##_nam=
+e is called?</div>
+</div><div class=3D"gmail_extra"><br><br><div class=3D"gmail_quote">2014-03=
+-18 19:55 GMT+08:00 Zifei Tong <span dir=3D"ltr">&lt;<a href=3D"mailto:zife=
+itong@gmail.com" target=3D"_blank">zifeitong@gmail.com</a>&gt;</span>:<br><=
+blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px=
+ #ccc solid;padding-left:1ex">
+Hi,<br>
+<br>
+Please check the set_tracepoint() function in liblttng-ust/tracepoint.c<br>
+<br>
+&nbsp; &nbsp; /*<br>
+&nbsp; &nbsp; &nbsp;* Sets the probe callback corresponding to one tracepoi=
+nt.<br>
+&nbsp; &nbsp; &nbsp;*/<br>
+&nbsp; &nbsp; static void set_tracepoint(struct tracepoint_entry **entry, s=
+truct<br>
+tracepoint *elem, int active);<br>
+<br>
+I think probes are connected to tracepoints when user enable<br>
+corresponding events.<br>
+<br>
+Hope that helps.<br>
+<span class=3D"HOEnZb"><font color=3D"#888888"><br>
+Zifei Tong<br>
+</font></span><div class=3D"HOEnZb"><div class=3D"h5"><br>
+On Tue, Mar 18, 2014 at 5:08 PM, wen qun wang &lt;<a href=3D"mailto:xiaoxia=
+o046@gmail.com">xiaoxiao046@gmail.com</a>&gt; wrote:<br>
+&gt; Hi,everyone.At first ,thanks for jeremie&#39;s help. I have completed =
+toolchain<br>
+&gt; to gain &nbsp;an understanding of how the different pieces fit togethe=
+r.Then, I&#39;m<br>
+&gt; going to through the studying the demo(/lttng-ust-2.4.0/doc/examples/d=
+emo)<br>
+&gt; of lttng-ust to understand the working principle of lttng.But now,I am=
+ in<br>
+&gt; trouble.<br>
+&gt; In /lttng-ust-2.4.0/doc/examples/demo/demo.c<br>
+&gt;<br>
+&gt; ##################<br>
+&gt; tracepoint(ust_test_demo2,done,42)<br>
+&gt; ###################<br>
+&gt;<br>
+&gt; I found the definition of tracepoint in<br>
+&gt; /lttng-ust-2.4.0/include/lttng/tracepoint.h<br>
+&gt;<br>
+&gt; ############################################################<br>
+&gt; #define tracepoint(provider, name, ...) &nbsp; &nbsp;\<br>
+&gt; do { &nbsp; &nbsp;\<br>
+&gt; STAP_PROBEV(provider, name, ## __VA_ARGS__); &nbsp; &nbsp;\<br>
+&gt; if (caa_unlikely(__tracepoint_##provider##___##name.state)) \<br>
+&gt; __tracepoint_cb_##provider##___##name(__VA_ARGS__); \<br>
+&gt; } while (0)<br>
+&gt; #################################################################<br>
+&gt;<br>
+&gt; then i found the definition of<br>
+&gt; &quot;__tracepoint_cb_##provider##___##name(__VA_ARGS__)&quot; in<br>
+&gt; /lttng-ust-2.4.0/include/lttng/tracepoint.h line 158<br>
+&gt;<br>
+&gt; ######################################################################=
+##<br>
+&gt; void __tracepoint_cb_##_provider##___##_name(_TP_ARGS_PROTO(__VA_ARGS_=
+_)) \<br>
+&gt; { \<br>
+&gt; struct tracepoint_probe *__tp_probe; \<br>
+&gt; \<br>
+&gt; if (caa_unlikely(!TP_RCU_LINK_TEST())) \<br>
+&gt; return; \<br>
+&gt; tp_rcu_read_lock_bp(); \<br>
+&gt; __tp_probe =3D<br>
+&gt; tp_rcu_dereference_bp(__tracepoint_##_provider##___##_name.probes); \<=
+br>
+&gt; if (caa_unlikely(!__tp_probe)) \<br>
+&gt; goto end; \<br>
+&gt; do { \<br>
+&gt; void (*__tp_cb)(void) =3D __tp_probe-&gt;func; \<br>
+&gt; void *__tp_data =3D __tp_probe-&gt;data; \<br>
+&gt; \<br>
+&gt; URCU_FORCE_CAST(void (*)(_TP_ARGS_DATA_PROTO(__VA_ARGS__)), __tp_cb) \=
+<br>
+&gt; (_TP_ARGS_DATA_VAR(__VA_ARGS__)); \<br>
+&gt; } while ((++__tp_probe)-&gt;func); \<br>
+&gt; end: \<br>
+&gt; tp_rcu_read_unlock_bp(); \<br>
+&gt; }<br>
+&gt; ####################################################################<b=
+r>
+&gt;<br>
+&gt; It seems that &quot;__tracepoint_##_provider##___##_name&quot; &nbsp;i=
+n<br>
+&gt; &quot;__tracepoint_##_provider##___##_name.probes&quot; is a struct of=
+ tracepoint.<br>
+&gt; we can found the macro TRACEPOINT_EVENT was used in<br>
+&gt; &quot;lttng-ust-2.4.0\doc\examples\demo\ust_tests_demo.h&quot;.And the=
+ struct of<br>
+&gt; tracepoint was defined by the macro TRACEPOINT_EVENT.But the<br>
+&gt; __tracepoint_##_provider##___##_name.probes was set to null.<br>
+&gt;<br>
+&gt; #################################################<br>
+&gt; \lttng-ust-2.4.0\include\lttng\tracepoint.h line 342<br>
+&gt; #define _DEFINE_TRACEPOINT(_provider, _name, _args) \<br>
+&gt; extern int __tracepoint_provider_##_provider; \<br>
+&gt; static const char __tp_strtab_##_provider##___##_name[] \<br>
+&gt; __attribute__((section(&quot;__tracepoints_strings&quot;))) =3D \<br>
+&gt; #_provider &quot;:&quot; #_name; \<br>
+&gt; struct tracepoint __tracepoint_##_provider##___##_name \<br>
+&gt; __attribute__((section(&quot;__tracepoints&quot;))) =3D \<br>
+&gt; { \<br>
+&gt; __tp_strtab_##_provider##___##_name, \<br>
+&gt; 0, \<br>
+&gt; NULL, \----------------------------------------------&gt;here is the p=
+robes.<br>
+&gt; _TRACEPOINT_UNDEFINED_REF(_provider), \<br>
+&gt; _TP_EXTRACT_STRING(_args), \<br>
+&gt; { }, \<br>
+&gt; }; \<br>
+&gt; static struct tracepoint * __tracepoint_ptr_##_provider##___##_name \<=
+br>
+&gt; __attribute__((used, section(&quot;__tracepoints_ptrs&quot;))) =3D \<b=
+r>
+&gt; &amp;__tracepoint_##_provider##___##_name;<br>
+&gt; ###################################################################<br=
+>
+&gt;<br>
+&gt; so i want to know that how the probes of the tracepoint struct &nbsp;s=
+hould be<br>
+&gt; initialized,I can&#39;t find the source code.<br>
+&gt; My english is poor,i hope you can understand what i mean. Thank you ve=
+ry<br>
+&gt; much.<br>
+&gt;<br>
+&gt;<br>
+&gt;<br>
+&gt;<br>
+&gt;<br>
+&gt;<br>
+&gt; 2014-03-15 9:24 GMT+08:00 =CE=AA=CD=F5 &lt;<a href=3D"mailto:xiaoxiao0=
+46@gmail.com">xiaoxiao046@gmail.com</a>&gt;:<br>
+&gt;&gt;<br>
+&gt;&gt; thank you very much<br>
+&gt;&gt;<br>
+&gt;&gt;<br>
+&gt;&gt; 2014-03-15 1:35 GMT+08:00 J=A8=A6r=A8=A6mie Galarneau<br>
+&gt;&gt; &lt;<a href=3D"mailto:jeremie.galarneau@efficios.com">jeremie.gala=
+rneau@efficios.com</a>&gt;:<br>
+&gt;&gt;<br>
+&gt;&gt;&gt; On Wed, Mar 12, 2014 at 6:05 AM, =CE=AA=CD=F5 &lt;<a href=3D"m=
+ailto:xiaoxiao046@gmail.com">xiaoxiao046@gmail.com</a>&gt; wrote:<br>
+&gt;&gt;&gt; &gt; Hi All,I am a graduate student from Beijing University of=
+ Posts and<br>
+&gt;&gt;&gt; &gt; Telecommunications. Due to my<br>
+&gt;&gt;&gt; &gt; experience in windows kernel development and debugging te=
+chnique,I am<br>
+&gt;&gt;&gt; &gt; very<br>
+&gt;&gt;&gt; &gt; interested in the lttng project.I want to make a contribu=
+tion for the<br>
+&gt;&gt;&gt; &gt; Clang<br>
+&gt;&gt;&gt; &gt; plugin providing automatic application instrumentation af=
+ter reading<br>
+&gt;&gt;&gt; &gt; the<br>
+&gt;&gt;&gt; &gt; project ideas for gsoc2014.I am also interested in revers=
+e engineering<br>
+&gt;&gt;&gt; &gt; and<br>
+&gt;&gt;&gt; &gt; binary hack.<br>
+&gt;&gt;&gt; &gt; The codes of lttng project have been downloaded for readi=
+ng.Due to its<br>
+&gt;&gt;&gt; &gt; large<br>
+&gt;&gt;&gt; &gt; amount,i couldn&#39;t figure out a good way to understand=
+ it.So,i want to<br>
+&gt;&gt;&gt; &gt; konw<br>
+&gt;&gt;&gt; &gt; how should i proceed further.<br>
+&gt;&gt;&gt;<br>
+&gt;&gt;&gt; You should start by trying the complete toolchain to gain an<b=
+r>
+&gt;&gt;&gt; understanding of how the different pieces fit together. I woul=
+dn&#39;t<br>
+&gt;&gt;&gt; suggest simply jumping into the code.<br>
+&gt;&gt;&gt;<br>
+&gt;&gt;&gt; Have a look at the guidelines posted on our GSoC 2014 wiki for=
+ more<br>
+&gt;&gt;&gt; information on how to submit a proposal [1].<br>
+&gt;&gt;&gt;<br>
+&gt;&gt;&gt; Let us know if you have more specific questions.<br>
+&gt;&gt;&gt;<br>
+&gt;&gt;&gt; J=A8=A6r=A8=A6mie<br>
+&gt;&gt;&gt;<br>
+&gt;&gt;&gt; [1]<br>
+&gt;&gt;&gt; <a href=3D"https://bugs.lttng.org/projects/lttng/wiki/Google_S=
+ummer_of_Code_2014#Guidelines-for-students-applying-to-GSoC" target=3D"_bla=
+nk">https://bugs.lttng.org/projects/lttng/wiki/Google_Summer_of_Code_2014#G=
+uidelines-for-students-applying-to-GSoC</a><br>
+
+&gt;&gt;&gt;<br>
+&gt;&gt;&gt; &gt; My english is poor,i hope you can understand what i mean.=
+ Thank you<br>
+&gt;&gt;&gt; &gt; very<br>
+&gt;&gt;&gt; &gt; much.<br>
+&gt;&gt;&gt; &gt;<br>
+&gt;&gt;&gt; &gt; _______________________________________________<br>
+&gt;&gt;&gt; &gt; lttng-dev mailing list<br>
+&gt;&gt;&gt; &gt; <a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@li=
+sts.lttng.org</a><br>
+&gt;&gt;&gt; &gt; <a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinf=
+o/lttng-dev" target=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listi=
+nfo/lttng-dev</a><br>
+&gt;&gt;&gt; &gt;<br>
+&gt;&gt;&gt;<br>
+&gt;&gt;&gt;<br>
+&gt;&gt;&gt;<br>
+&gt;&gt;&gt; --<br>
+&gt;&gt;&gt; J=A8=A6r=A8=A6mie Galarneau<br>
+&gt;&gt;&gt; EfficiOS Inc.<br>
+&gt;&gt;&gt; <a href=3D"http://www.efficios.com" target=3D"_blank">http://w=
+ww.efficios.com</a><br>
+&gt;&gt;<br>
+&gt;&gt;<br>
+&gt;<br>
+&gt;<br>
+&gt; _______________________________________________<br>
+&gt; lttng-dev mailing list<br>
+&gt; <a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org=
+</a><br>
+&gt; <a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" =
+target=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev=
+</a><br>
+&gt;<br>
+</div></div></blockquote></div><br></div>
+
+--f46d04428e70d2a00504f4e0cda7--
+
+
+--===============0757455323==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0757455323==--
