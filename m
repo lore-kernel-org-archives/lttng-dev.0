@@ -2,12 +2,18 @@ From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
 	<jeremie.galarneau@efficios.com>
 Subject: [PATCH lttng-tools] Fix: Remove overly restrictive
 	asserts in create_session()
-Date: Wed, 19 Mar 2014 11:24:54 -0400
-Message-ID: <1395242694-31842-1-git-send-email-jeremie.galarneau__32825.8527013988$1395242757$gmane$org@efficios.com>
+Date: Wed, 19 Mar 2014 11:25:26 -0400
+Message-ID: <1395242726-31883-1-git-send-email-jeremie.galarneau__32537.188116885$1395242794$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail-qc0-f169.google.com ([209.85.216.169])
+	by ltt.polymtl.ca with esmtp (Exim 4.72)
+	(envelope-from <jeremie.galarneau@gmail.com>) id 1WQIND-00062d-2p
+	for lttng-dev@lists.lttng.org; Wed, 19 Mar 2014 11:25:43 -0400
+Received: by mail-qc0-f169.google.com with SMTP id i17so9986553qcy.14
+	for <lttng-dev@lists.lttng.org>; Wed, 19 Mar 2014 08:25:37 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -16,7 +22,7 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: ltt-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
 VGhlIGN1cnJlbnQgYXNzZXJ0aW9ucyBvbmx5IGFsbG93IHNlc3Npb25zIGNvbnRhaW5pbmcgYWxs
