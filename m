@@ -1,19 +1,16 @@
-From: Ilya Mirsky <ilya.mirsky@gmail.com>
+From: Michel Dagenais <michel.dagenais@polymtl.ca>
 Subject: Re: Performance impact using the "filter" option
-Date: Wed, 19 Mar 2014 21:51:34 +0200
-Message-ID: <CANRvXTMAYGjiQsRO+-4wsGQkaTVpBGtuuoUu=E-SVuMU5BXFLw__12044.2662424923$1395258841$gmane$org@mail.gmail.com>
-References: <OF6F0C7C97.315DE372-ONC2257CA0.00489386-C2257CA0.0048D132@il.ibm.com>
-	<1112565932.1656317.1395241782380.JavaMail.root@polymtl.ca>
+Date: Wed, 19 Mar 2014 16:48:44 -0400 (EDT)
+Message-ID: <173115420.1939299.1395262124153.JavaMail.root__39070.5095175237$1395262175$gmane$org@polymtl.ca>
+References: <CANRvXTMAYGjiQsRO+-4wsGQkaTVpBGtuuoUu=E-SVuMU5BXFLw@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2073180250=="
+Content-Type: multipart/mixed; boundary="===============0977421987=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ve0-f170.google.com ([209.85.128.170])
+Received: from smtp.polymtl.ca ([132.207.4.11])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <ilya.mirsky@gmail.com>) id 1WQMXF-0008DR-MT
-	for lttng-dev@lists.lttng.org; Wed, 19 Mar 2014 15:52:22 -0400
-Received: by mail-ve0-f170.google.com with SMTP id pa12so9682039veb.1
-	for <lttng-dev@lists.lttng.org>; Wed, 19 Mar 2014 12:52:16 -0700 (PDT)
-In-Reply-To: <1112565932.1656317.1395241782380.JavaMail.root@polymtl.ca>
+	(envelope-from <michel.dagenais@polymtl.ca>) id 1WQNPs-0000Cv-K2
+	for lttng-dev@lists.lttng.org; Wed, 19 Mar 2014 16:48:51 -0400
+In-Reply-To: <CANRvXTMAYGjiQsRO+-4wsGQkaTVpBGtuuoUu=E-SVuMU5BXFLw@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -22,98 +19,64 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Michel Dagenais <michel.dagenais@polymtl.ca>
+To: Ilya Mirsky <ilya.mirsky@gmail.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============2073180250==
-Content-Type: multipart/alternative; boundary=e89a8f92190656429604f4fafd11
+--===============0977421987==
+Content-Type: multipart/alternative;
+	boundary="----=_Part_1939298_563234428.1395262124152"
 
---e89a8f92190656429604f4fafd11
-Content-Type: text/plain; charset=ISO-8859-1
+------=_Part_1939298_563234428.1395262124152
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-Amit and Michel, I appreciate your replies.
-Please see my comments below.
+> That's what I thought, but benchmarking showed that there's
+> practically no difference.
+> The filter is a simple ID comparison of the form 'id % 1,000 == 0',
+> so 999 out of 1K tracepoints are filtered out.
+> Could you please point me to some references on this topic?
+What is the running time and trace size with tracing disabled, with tracing enabled unconditionally, and with tracing under condition? If tracing takes negligible time, filtering will not change much. Note that I have not experimented with the current UST filter implementation but with a similar facility in GDB and an in-kernel prototype. 
 
-On Wed, Mar 19, 2014 at 5:09 PM, Michel Dagenais <michel.dagenais@polymtl.ca
-> wrote:
+This article is not directly related but discusses many of these issues 
+http://benthamscience.com/open/tocsj/articles/V006/11TOCSJ.htm 
 
->  If I understand correctly, filtering is done at the client application
-> side.
->
-> With UST yes.
->
-> This means that filtering could theoretically lower the performance of the
-> running application which has to check, for each event, whether it should
-> be sent to the daemon or not.
->
-> Each event is checked against the filter and then written to the buffer or
-> not. With a simple filter and most events filtered out, checking the filter
-> is faster than writing to the buffer (with atomic operations to increment
-> the buffer counters) and you definitely save (at each tracepoint and in the
-> daemon with trace buffers filling more slowly). If the filter is
-> complicated and most often keeps the event, then you certainly loose.
->
-
-That's what I thought, but benchmarking showed that there's practically no
-difference.
-The filter is a simple ID comparison of the form 'id % 1,000 == 0', so 999
-out of 1K tracepoints are filtered out.
-Could you please point me to some references on this topic?
-
-Thanks,
-Ilya
-
---e89a8f92190656429604f4fafd11
-Content-Type: text/html; charset=ISO-8859-1
+------=_Part_1939298_563234428.1395262124152
+Content-Type: text/html; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr"><div class=3D"gmail_extra"><div class=3D"gmail_quote">Amit=
- and Michel, I appreciate your replies.</div><div class=3D"gmail_quote">Ple=
-ase see my comments below.</div><div class=3D"gmail_quote"><br></div><div c=
-lass=3D"gmail_quote">
+<html><head><style type=3D'text/css'>p { margin: 0; }</style></head><body><=
+div style=3D'font-family: times new roman,new york,times,serif; font-size: =
+12pt; color: #000000'><br><blockquote style=3D"border-left:2px solid #1010F=
+F;margin-left:5px;padding-left:5px;color:#000;font-weight:normal;font-style=
+:normal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-si=
+ze:12pt;"><div dir=3D"ltr"><div class=3D"gmail_extra"><div class=3D"gmail_q=
+uote"><div>That's what I thought, but benchmarking showed that there's prac=
+tically no difference.</div><div>The filter is a simple ID comparison of th=
+e form 'id % 1,000 =3D=3D 0', so 999 out of 1K tracepoints are filtered out=
+.</div>
 
-On Wed, Mar 19, 2014 at 5:09 PM, Michel Dagenais <span dir=3D"ltr">&lt;<a h=
-ref=3D"mailto:michel.dagenais@polymtl.ca" target=3D"_blank">michel.dagenais=
-@polymtl.ca</a>&gt;</span> wrote:<br><blockquote class=3D"gmail_quote" styl=
-e=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex">
-
-<div><div style=3D"font-size:12pt;font-family:times new roman,new york,time=
-s,serif"><div class=3D""><blockquote style=3D"padding-left:5px;font-size:12=
-pt;font-style:normal;margin-left:5px;font-family:Helvetica,Arial,sans-serif=
-;text-decoration:none;font-weight:normal;border-left:2px solid #1010ff">
-
-<font face=3D"sans-serif">If I understand correctly, filtering is
-done at the client application side.</font>
-<br></blockquote></div>With UST yes.<div class=3D""><br><blockquote style=
-=3D"padding-left:5px;font-size:12pt;font-style:normal;margin-left:5px;font-=
-family:Helvetica,Arial,sans-serif;text-decoration:none;font-weight:normal;b=
-order-left:2px solid #1010ff">
-
-<font face=3D"sans-serif">This means that filtering could theoretically
-lower the performance of the running application which has to check, for
-each event, whether it should be sent to the daemon or not.</font>
-<br></blockquote></div>Each event is checked against the filter and then wr=
-itten to the buffer or not. With a simple filter and most events filtered o=
-ut, checking the filter is faster than writing to the buffer (with atomic o=
-perations to increment the buffer counters) and you definitely save (at eac=
-h tracepoint and in the daemon with trace buffers filling more slowly). If =
-the filter is complicated and most often keeps the event, then you certainl=
-y loose.<br>
-
-</div></div></blockquote><div><br></div><div>That&#39;s what I thought, but=
- benchmarking showed that there&#39;s practically no difference.</div><div>=
-The filter is a simple ID comparison of the form &#39;id % 1,000 =3D=3D 0&#=
-39;, so 999 out of 1K tracepoints are filtered out.</div>
-
-<div>Could you please point me to some references on this topic?</div><div>=
-<br></div><div>Thanks,</div><div>Ilya</div><div>=A0</div></div><br></div></=
-div>
-
---e89a8f92190656429604f4fafd11--
+<div id=3D"DWT157">Could you please point me to some references on this top=
+ic?</div></div></div></div></blockquote>What is the running time and trace =
+size with tracing disabled, with tracing enabled unconditionally, and with =
+tracing under condition? If tracing takes negligible time, filtering will n=
+ot change much. Note that I have not experimented with the current UST filt=
+er implementation but with a similar facility in GDB and an in-kernel proto=
+type.<br><blockquote style=3D"border-left:2px solid #1010FF;margin-left:5px=
+;padding-left:5px;color:#000;font-weight:normal;font-style:normal;text-deco=
+ration:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><div di=
+r=3D"ltr"><div class=3D"gmail_extra"><div class=3D"gmail_quote"><div></div>=
+</div></div></div></blockquote>This article is not directly related but dis=
+cusses many of these issues<br>http://benthamscience.com/open/tocsj/article=
+s/V006/11TOCSJ.htm<br><blockquote style=3D"border-left:2px solid #1010FF;ma=
+rgin-left:5px;padding-left:5px;color:#000;font-weight:normal;font-style:nor=
+mal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:1=
+2pt;"><div dir=3D"ltr"><div class=3D"gmail_extra"><div class=3D"gmail_quote=
+"><div></div></div></div></div></blockquote></div></body></html>
+------=_Part_1939298_563234428.1395262124152--
 
 
---===============2073180250==
+--===============0977421987==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -124,4 +87,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============2073180250==--
+--===============0977421987==--
