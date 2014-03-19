@@ -1,16 +1,16 @@
-From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Subject: Re: session create failed
-Date: Tue, 18 Mar 2014 21:08:24 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD31A68213__8952.05896017632$1395176971$gmane$org@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+From: Ilya Mirsky <ilya.mirsky@gmail.com>
+Subject: Performance impact using the "filter" option
+Date: Wed, 19 Mar 2014 14:46:29 +0200
+Message-ID: <CANRvXTPktqrjRDa8WvRV=UoJi97mQT6bXVZr8==Ta8DjkkuiCQ__30282.2841717445$1395233289$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/mixed; boundary="===============2026560718=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
+Received: from mail-vc0-f180.google.com ([209.85.220.180])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1WQ1FN-0005Tm-VS
-	for lttng-dev@lists.lttng.org; Tue, 18 Mar 2014 17:08:35 -0400
-Content-Language: fr-FR
+	(envelope-from <ilya.mirsky@gmail.com>) id 1WQFtq-0004eb-Pk
+	for lttng-dev@lists.lttng.org; Wed, 19 Mar 2014 08:47:16 -0400
+Received: by mail-vc0-f180.google.com with SMTP id lf12so8826486vcb.39
+	for <lttng-dev@lists.lttng.org>; Wed, 19 Mar 2014 05:47:09 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,44 +19,60 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-----------------------------------------------------------------------
-Date: Wed, 19 Mar 2014 01:19:52 +0800
-From: Lingyu Zhu <lynuszhu@gmail.com>
-To: Jonathan Rajotte <jonathan.r.julien@gmail.com>
+--===============2026560718==
+Content-Type: multipart/alternative; boundary=001a11c3d97c0224a004f4f50d88
 
-> Thanks for point that out. But My point is creating session would fail as
-> root, only after I  failed enable kernel event as normal user.
+--001a11c3d97c0224a004f4f50d88
+Content-Type: text/plain; charset=ISO-8859-1
 
-   Your session creation remains successful.  You just can't do kernel trac=
-ing from it.  You could have gone on to enable user-space events, etc.
+Hi all,
 
-   The later JUL problem is because you did not 'kill' the local session da=
-emon the first lttng command spawned.
+It's a simple question, but I couldn't find the answer in the documentation.
+Figured out I'll ask here before looking this in the code.
 
-   In a nutshell, use 'lttng <command>' for local user-space tracing, 'sudo=
- -H lttng <command>' for kernel and multiple user-space tracing.  Alternate=
-ly, join the 'tracing' group (log off and back on for the change to take), =
-then use 'lttng <command>' for all tracing -but make sure the root daemon i=
-s the only lttng session daemon running.
+Should I expect LTTng's overhead to be lower when filtering some of the
+trace points,
+or is the main overhead is due to the trace point call and not the
+recording itself?
+In practice I see no noticeable difference in performance,
+while I was hoping to get at least some improvement...
 
-   As late as lttng 2.3, the lttng -g option does not work.  Has it been fi=
-xed?
+Thanks,
+Ilya
 
-Daniel U. Thibault
-Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
-ntermeasures (SPC)
-Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
-Cyber Security (MCCS)
-R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
- Canada - Valcartier (DRDC Valcartier)
-2459 route de la Bravoure
-Qu=E9bec QC  G3J 1X5
-CANADA
-Vox : (418) 844-4000 x4245
-Fax : (418) 844-4538
-NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-Gouvernement du Canada | Government of Canada
-<http://www.valcartier.drdc-rddc.gc.ca/>
+--001a11c3d97c0224a004f4f50d88
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hi all,<div><br></div><div>It&#39;s a simple question, but=
+ I couldn&#39;t find the answer in the documentation.</div><div>Figured out=
+ I&#39;ll ask here before looking this in the code.</div><div><br></div><di=
+v>
+
+Should I expect LTTng&#39;s overhead to be lower when filtering some of the=
+ trace points,</div><div>or is the main overhead is due to the trace point =
+call and not the recording itself?</div><div>In practice I see no noticeabl=
+e difference in performance,=A0</div>
+
+<div>while I was hoping to get at least some improvement...</div><div><br><=
+/div><div>Thanks,</div><div>Ilya</div><div><br></div><div><br></div><div><d=
+iv><div><br></div><div><br></div></div></div></div>
+
+--001a11c3d97c0224a004f4f50d88--
+
+
+--===============2026560718==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============2026560718==--
