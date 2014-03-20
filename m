@@ -1,16 +1,16 @@
-From: wen qun wang <xiaoxiao046@gmail.com>
-Subject: Re: Need help in UST
-Date: Thu, 20 Mar 2014 22:39:42 +0800
-Message-ID: <CAJeLfGTmz4q44uM9EpTgP=dRc1V+bSgPoyzU87TAK1Xf8M8AdQ__3454.42094044319$1395326429$gmane$org@mail.gmail.com>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Subject: Yet another toxic comment
+Date: Thu, 20 Mar 2014 15:56:19 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD3598E9C9__28525.0069377527$1395331042$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0086756321=="
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wi0-f177.google.com ([209.85.212.177])
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <xiaoxiao046@gmail.com>) id 1WQe8K-0000g2-Hi
-	for lttng-dev@lists.lttng.org; Thu, 20 Mar 2014 10:39:49 -0400
-Received: by mail-wi0-f177.google.com with SMTP id cc10so833659wib.16
-	for <lttng-dev@lists.lttng.org>; Thu, 20 Mar 2014 07:39:42 -0700 (PDT)
+	(envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1WQfKZ-0001I5-QU
+	for lttng-dev@lists.lttng.org; Thu, 20 Mar 2014 11:56:36 -0400
+Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -19,47 +19,40 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: ningarajsr@gmail.com
-Cc: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0086756321==
-Content-Type: multipart/alternative; boundary=089e016347fc5ef85104f50abdd9
+   lttng-tools/src/bin/lttng-sessiond/main.c, lines 163-169:
 
---089e016347fc5ef85104f50abdd9
-Content-Type: text/plain; charset=ISO-8859-1
+/*
+ * UST registration command queue. This queue is tied with a futex and uses=
+ a N
+ * wakers / 1 waiter implemented and detailed in futex.c/.h
+ *
+ * The thread_manage_apps and thread_dispatch_ust_registration interact with
+ * this queue and the wait/wake scheme.
+ */
 
-Hi Ningaraj,Lingyu Zhu provide a good advice for you.I very much agree.And
-i also want to give you some suggestion for your reference.First,build a
-project with codeblocks,then import the source code to it so that you can
-find some key function easily.Second ,I thind you can read the easy-ust
-(/lttng-ust/doc/esamples/easy-ust) first,it may help you to unstand the
-demo(/lttng-ust/doc/esamples/easy-ust)
+   The fifth line should actually read:
 
---089e016347fc5ef85104f50abdd9
-Content-Type: text/html; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
+* The thread_registration_apps and thread_dispatch_ust_registration interac=
+t with
 
-<div dir=3D"ltr">Hi=A0<span style=3D"font-family:arial,sans-serif;font-size=
-:14px">Ningaraj,Lingyu Zhu provide a good advice for you.I very much agree.=
-And i also want to give you some suggestion for your reference.First,build =
-a project with codeblocks,then import the source code to it so that you can=
- find some key function easily.Second ,I thind you can read the easy-ust (/=
-lttng-ust/doc/esamples/easy-ust) first,it may help you to unstand the demo(=
-/lttng-ust/doc/esamples/easy-ust)</span></div>
+   thread_manage_apps occurs further down the line: it watches the register=
+ed apps' cmd sockets and triggers unregistration when they close.
 
---089e016347fc5ef85104f50abdd9--
-
-
---===============0086756321==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0086756321==--
+Daniel U. Thibault
+Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
+ntermeasures (SPC)
+Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
+Cyber Security (MCCS)
+R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
+ Canada - Valcartier (DRDC Valcartier)
+2459 route de la Bravoure
+Qu=E9bec QC=A0 G3J 1X5
+CANADA
+Vox=A0: (418) 844-4000 x4245
+Fax=A0: (418) 844-4538
+NAC=A0: 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+Gouvernement du Canada=A0| Government of Canada
+<http://www.valcartier.drdc-rddc.gc.ca/>
