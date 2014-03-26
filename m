@@ -1,19 +1,18 @@
 From: =?UTF-8?q?Genevi=C3=A8ve=20Bastien?= <gbastien+lttng@versatic.net>
-Subject: Add support of CTF structure global type
-Date: Wed, 26 Mar 2014 10:55:09 -0400
-Message-ID: <1395845712-18498-1-git-send-email-gbastien+lttng__34552.088919054$1395845755$gmane$org@versatic.net>
+Subject: [RFC Patch Tools 1/3] Update data structures to support
+	CTF global structures
+Date: Wed, 26 Mar 2014 10:55:10 -0400
+Message-ID: <1395845712-18498-2-git-send-email-gbastien+lttng__12959.2741760009$1395845782$gmane$org@versatic.net>
+References: <1395845712-18498-1-git-send-email-gbastien+lttng@versatic.net>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from smtp.polymtl.ca ([132.207.4.11])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <gbastien+lttng@versatic.net>) id 1WSpEh-0000le-EY
+	(envelope-from <gbastien+lttng@versatic.net>) id 1WSpEi-0000lg-6h
 	for lttng-dev@lists.lttng.org; Wed, 26 Mar 2014 10:55:24 -0400
-Received: from wilbrod.dorsal.polymtl.ca ([132.207.72.9])
-	by smtp.polymtl.ca (8.14.3/8.14.3) with ESMTP id s2QEtMqD003733
-	(version=TLSv1/SSLv3 cipher=AES128-SHA bits=128 verify=NOT)
-	for <lttng-dev@lists.lttng.org>; Wed, 26 Mar 2014 10:55:23 -0400
+In-Reply-To: <1395845712-18498-1-git-send-email-gbastien+lttng@versatic.net>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -25,9 +24,44 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-The following patch series in LTTng-Tools add support of the named CTF
-structure global type. It goes along with a patch series in LTTng-ust.
-
-It is built above the CTF enumerations patches proposed earlier adn being
-staged in Mathieu Desnoyers's development branch here:
-https://github.com/compudj/lttng-tools-dev/tree/ust-enum
+SXQgYWxzbyBhZGRzIGFwcHJvcHJpYXRlIGRhdGEgc3RydWN0dXJlcyB0byBkZXNjcmliZSBhIHN0
+cnVjdHVyZSBmaWVsZCBpbgp0cmFjZXBvaW50cy4KClNpZ25lZC1vZmYtYnk6IEdlbmV2acOodmUg
+QmFzdGllbiA8Z2Jhc3RpZW4rbHR0bmdAdmVyc2F0aWMubmV0PgotLS0KIHNyYy9iaW4vbHR0bmct
+c2Vzc2lvbmQvbHR0bmctdXN0LWN0bC5oIHwgMTQgKysrKysrKysrKysrKysKIHNyYy9iaW4vbHR0
+bmctc2Vzc2lvbmQvdXN0LXJlZ2lzdHJ5LmMgIHwgIDEgKwogMiBmaWxlcyBjaGFuZ2VkLCAxNSBp
+bnNlcnRpb25zKCspCgpkaWZmIC0tZ2l0IGEvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9sdHRuZy11
+c3QtY3RsLmggYi9zcmMvYmluL2x0dG5nLXNlc3Npb25kL2x0dG5nLXVzdC1jdGwuaAppbmRleCAz
+NzkyNjBkLi45YTEzZmQ5IDEwMDY0NAotLS0gYS9zcmMvYmluL2x0dG5nLXNlc3Npb25kL2x0dG5n
+LXVzdC1jdGwuaAorKysgYi9zcmMvYmluL2x0dG5nLXNlc3Npb25kL2x0dG5nLXVzdC1jdGwuaApA
+QCAtMjQ0LDYgKzI0NCw3IEBAIGVudW0gdXN0Y3RsX2Fic3RyYWN0X3R5cGVzIHsKIAl1c3RjdGxf
+YXR5cGVfc2VxdWVuY2UsCiAJdXN0Y3RsX2F0eXBlX3N0cmluZywKIAl1c3RjdGxfYXR5cGVfZmxv
+YXQsCisJdXN0Y3RsX2F0eXBlX3N0cnVjdHVyZSwKIAlOUl9VU1RDVExfQUJTVFJBQ1RfVFlQRVMs
+CiB9OwogCkBAIC0zMTQsNiArMzE1LDkgQEAgc3RydWN0IHVzdGN0bF90eXBlIHsKIAkJCXN0cnVj
+dCB1c3RjdGxfYmFzaWNfdHlwZSBsZW5ndGhfdHlwZTsKIAkJCXN0cnVjdCB1c3RjdGxfYmFzaWNf
+dHlwZSBlbGVtX3R5cGU7CiAJCX0gc2VxdWVuY2U7CisJCXN0cnVjdCB7CisJCQljaGFyIG5hbWVb
+TFRUTkdfVVNUX1NZTV9OQU1FX0xFTl07CisJCX0gc3RydWN0dXJlOwogCQljaGFyIHBhZGRpbmdb
+VVNUQ1RMX1VTVF9UWVBFX1BBRERJTkddOwogCX0gdTsKIH0gTFRUTkdfUEFDS0VEOwpAQCAtMzI3
+LDkgKzMzMSwxOCBAQCBzdHJ1Y3QgdXN0Y3RsX2VudW0gewogCWNoYXIgcGFkZGluZ1tVU1RDVExf
+VVNUX0VOVU1fVFlQRV9QQURESU5HXTsKIH0gTFRUTkdfUEFDS0VEOwogCisjZGVmaW5lIFVTVENU
+TF9VU1RfU1RSVUNUX1RZUEVfUEFERElORwkzNjgKK3N0cnVjdCB1c3RjdGxfc3RydWN0dXJlIHsK
+KwljaGFyIG5hbWVbTFRUTkdfVVNUX1NZTV9OQU1FX0xFTl07CisJc2l6ZV90IG5yX2ZpZWxkczsK
+KwlzdHJ1Y3QgdXN0Y3RsX2ZpZWxkICpmaWVsZHM7CisJY2hhciBwYWRkaW5nW1VTVENUTF9VU1Rf
+U1RSVUNUX1RZUEVfUEFERElOR107Cit9IExUVE5HX1BBQ0tFRDsKKwogLyogQ1RGIGNhdGVnb3Jp
+ZXMgZm9yIGdsb2JhbCB0eXBlcyBkZWNsYXJlZCBvdXRzaWRlIGV2ZW50IGRlc2NyaXB0aW9ucyAq
+LwogZW51bSB1c3RjdGxfZ2xvYmFsX3R5cGVfY2F0ZWdvcmllcyB7CiAJdXN0Y3RsX210eXBlX2Vu
+dW0sCisJdXN0Y3RsX210eXBlX3N0cnVjdHVyZSwKIAlOUl9VU1RDVExfR0xPQkFMX1RZUEVTLAog
+fTsKIApAQCAtMzM4LDYgKzM1MSw3IEBAIHN0cnVjdCB1c3RjdGxfZ2xvYmFsX3R5cGVfZGVjbCB7
+CiAJdWludDMyX3QgbXR5cGU7CiAJdW5pb24gewogCQlzdHJ1Y3QgdXN0Y3RsX2VudW0gY3RmX2Vu
+dW07CisJCXN0cnVjdCB1c3RjdGxfc3RydWN0dXJlIGN0Zl9zdHJ1Y3R1cmU7CiAJCWNoYXIgcGFk
+ZGluZ1tVU1RDVExfVVNUX0dMT0JBTF9UWVBFX0RFQ0xfUEFERElOR107CiAJfSB1OwogfSBMVFRO
+R19QQUNLRUQ7CmRpZmYgLS1naXQgYS9zcmMvYmluL2x0dG5nLXNlc3Npb25kL3VzdC1yZWdpc3Ry
+eS5jIGIvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC91c3QtcmVnaXN0cnkuYwppbmRleCA4YjU4YjI1
+Li42ZmQyZjNiIDEwMDY0NAotLS0gYS9zcmMvYmluL2x0dG5nLXNlc3Npb25kL3VzdC1yZWdpc3Ry
+eS5jCisrKyBiL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvdXN0LXJlZ2lzdHJ5LmMKQEAgLTEzNSw2
+ICsxMzUsNyBAQCBpbnQgdmFsaWRhdGVfZXZlbnRfZmllbGQoc3RydWN0IHVzdGN0bF9maWVsZCAq
+ZmllbGQsCiAJY2FzZSB1c3RjdGxfYXR5cGVfYXJyYXk6CiAJY2FzZSB1c3RjdGxfYXR5cGVfc2Vx
+dWVuY2U6CiAJY2FzZSB1c3RjdGxfYXR5cGVfc3RyaW5nOgorCWNhc2UgdXN0Y3RsX2F0eXBlX3N0
+cnVjdHVyZToKIAkJYnJlYWs7CiAKIAljYXNlIHVzdGN0bF9hdHlwZV9mbG9hdDoKLS0gCjEuOS4x
+CgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmct
+ZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5s
+dHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
