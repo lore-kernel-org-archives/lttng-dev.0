@@ -1,18 +1,19 @@
 From: =?UTF-8?q?Genevi=C3=A8ve=20Bastien?= <gbastien+lttng@versatic.net>
-Subject: [RFC Patch Ust 4/5] Update the ctf-global-type example
-	to show the usage of a global structure
-Date: Wed, 26 Mar 2014 10:47:11 -0400
-Message-ID: <1395845232-17669-5-git-send-email-gbastien+lttng__4820.04142036221$1395845461$gmane$org@versatic.net>
-References: <1395845232-17669-1-git-send-email-gbastien+lttng@versatic.net>
+Subject: Add support of CTF structure global type
+Date: Wed, 26 Mar 2014 10:55:09 -0400
+Message-ID: <1395845712-18498-1-git-send-email-gbastien+lttng__34552.088919054$1395845755$gmane$org@versatic.net>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from smtp.polymtl.ca ([132.207.4.11])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <gbastien+lttng@versatic.net>) id 1WSp71-0000ZL-Tf
-	for lttng-dev@lists.lttng.org; Wed, 26 Mar 2014 10:47:33 -0400
-In-Reply-To: <1395845232-17669-1-git-send-email-gbastien+lttng@versatic.net>
+	(envelope-from <gbastien+lttng@versatic.net>) id 1WSpEh-0000le-EY
+	for lttng-dev@lists.lttng.org; Wed, 26 Mar 2014 10:55:24 -0400
+Received: from wilbrod.dorsal.polymtl.ca ([132.207.72.9])
+	by smtp.polymtl.ca (8.14.3/8.14.3) with ESMTP id s2QEtMqD003733
+	(version=TLSv1/SSLv3 cipher=AES128-SHA bits=128 verify=NOT)
+	for <lttng-dev@lists.lttng.org>; Wed, 26 Mar 2014 10:55:23 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -24,51 +25,9 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-U2lnbmVkLW9mZi1ieTogR2VuZXZpw6h2ZSBCYXN0aWVuIDxnYmFzdGllbitsdHRuZ0B2ZXJzYXRp
-Yy5uZXQ+Ci0tLQogdGVzdHMvY3RmLWdsb2JhbC10eXBlcy9jdGYtZ2xvYmFsLXR5cGVzLmMgICAg
-ICAgICAgfCAgOCArKysrKystLQogLi4uL2N0Zi1nbG9iYWwtdHlwZXMvdXN0X3Rlc3RzX2N0Zl9n
-bG9iYWxfdHlwZXMuaCAgfCAyMiArKysrKysrKysrKysrKysrKysrKystCiAyIGZpbGVzIGNoYW5n
-ZWQsIDI3IGluc2VydGlvbnMoKyksIDMgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvdGVzdHMv
-Y3RmLWdsb2JhbC10eXBlcy9jdGYtZ2xvYmFsLXR5cGVzLmMgYi90ZXN0cy9jdGYtZ2xvYmFsLXR5
-cGVzL2N0Zi1nbG9iYWwtdHlwZXMuYwppbmRleCA4MWI2OWUxLi41NWMyYWQwIDEwMDY0NAotLS0g
-YS90ZXN0cy9jdGYtZ2xvYmFsLXR5cGVzL2N0Zi1nbG9iYWwtdHlwZXMuYworKysgYi90ZXN0cy9j
-dGYtZ2xvYmFsLXR5cGVzL2N0Zi1nbG9iYWwtdHlwZXMuYwpAQCAtMjUsNiArMjUsNyBAQCBpbnQg
-bWFpbihpbnQgYXJnYywgY2hhciAqKmFyZ3YpCiB7CiAJaW50IGk7CiAJaW50IGRlbGF5ID0gMDsK
-KwljaGFyIHRleHRbMTBdID0gInRlc3QiOwogCiAJaWYgKGFyZ2MgPT0gMikKIAkJZGVsYXkgPSBh
-dG9pKGFyZ3ZbMV0pOwpAQCAtMzQsOCArMzUsMTEgQEAgaW50IG1haW4oaW50IGFyZ2MsIGNoYXIg
-Kiphcmd2KQogCXNsZWVwKGRlbGF5KTsKIAogCWZwcmludGYoc3RkZXJyLCAiVHJhY2luZy4uLiAi
-KTsKLQlmb3IgKGkgPSAwOyBpIDwgMTAwOyBpKyspIHsKLQkJdHJhY2Vwb2ludCh1c3RfdGVzdHNf
-Y3RmX2dsb2JhbF90eXBlcywgdHB0ZXN0LCBpLCAoaSAlIDYpKTsKKwlmb3IgKGkgPSAwOyBpIDwg
-MjA7IGkrKykgeworCQl0cmFjZXBvaW50KHVzdF90ZXN0c19jdGZfZ2xvYmFsX3R5cGVzLCB0cHRl
-c3QsIGksIChpICUgNiksIHRleHQsIHN0cmxlbih0ZXh0KSk7CisJCWlmIChpID09IDEwKSB7CisJ
-CQlzdHJjcHkodGV4dCwgImFiY2RlZmdoIik7CisJCX0KIAl9CiAKIAlmb3IgKGkgPSAwOyBpIDwg
-MTA7IGkrKykgewpkaWZmIC0tZ2l0IGEvdGVzdHMvY3RmLWdsb2JhbC10eXBlcy91c3RfdGVzdHNf
-Y3RmX2dsb2JhbF90eXBlcy5oIGIvdGVzdHMvY3RmLWdsb2JhbC10eXBlcy91c3RfdGVzdHNfY3Rm
-X2dsb2JhbF90eXBlcy5oCmluZGV4IDZmZTIwNTguLjdiNzA0ZDIgMTAwNjQ0Ci0tLSBhL3Rlc3Rz
-L2N0Zi1nbG9iYWwtdHlwZXMvdXN0X3Rlc3RzX2N0Zl9nbG9iYWxfdHlwZXMuaAorKysgYi90ZXN0
-cy9jdGYtZ2xvYmFsLXR5cGVzL3VzdF90ZXN0c19jdGZfZ2xvYmFsX3R5cGVzLmgKQEAgLTM4LDE2
-ICszOCwzNiBAQCBUUkFDRVBPSU5UX0VOVU0odXN0X3Rlc3RzX2N0Zl9nbG9iYWxfdHlwZXMsIHRl
-c3RlbnVtLAogCSkKICkKIAorVFJBQ0VQT0lOVF9TVFJVQ1QodXN0X3Rlc3RzX2N0Zl9nbG9iYWxf
-dHlwZXMsIGlubmVyLAorCVRQX0FSR1MoY2hhciAqLCB0ZXh0LCBzaXplX3QsIHRleHRsZW4sCisJ
-CWludCwgZW51bXZhbHVlKSwKKwlUUF9GSUVMRFMoCisJCWN0Zl9hcnJheShjaGFyLCBhcnJmaWVs
-ZCwgdGV4dCwgMTApCisJCWN0Zl9zZXF1ZW5jZShjaGFyLCBzZXFmaWVsZCwgdGV4dCwgc2l6ZV90
-LCB0ZXh0bGVuKQorCQljdGZfZW51bSh1c3RfdGVzdHNfY3RmX2dsb2JhbF90eXBlcywgdGVzdGVu
-dW0sIGVudW1maWVsZCwgZW51bXZhbHVlKQorCSkKKykKKworVFJBQ0VQT0lOVF9TVFJVQ1QodXN0
-X3Rlc3RzX2N0Zl9nbG9iYWxfdHlwZXMsIG91dGVyLAorCVRQX0FSR1MoY2hhciAqLCB0ZXh0LCBz
-aXplX3QsIHRleHRsZW4sCisJCWludCwgZW51bXZhbHVlKSwKKwlUUF9GSUVMRFMoCisJCWN0Zl9z
-dHJpbmcoc3RyaW5nZmllbGQsIHRleHQpCisJCWN0Zl9zdHJ1Y3QodXN0X3Rlc3RzX2N0Zl9nbG9i
-YWxfdHlwZXMsIGlubmVyLCBzdHJ1Y3RmaWVsZCwgdGV4dCwgdGV4dGxlbiwgZW51bXZhbHVlKQor
-CSkKKykKKwogLyoKICAqIEVudW1lcmF0aW9uIGZpZWxkIGlzIHVzZWQgdHdpY2UgdG8gbWFrZSBz
-dXJlIHRoZSBnbG9iYWwgdHlwZSBkZWNsYXJhdGlvbgogICogaXMgZW50ZXJlZCBvbmx5IG9uY2Ug
-aW4gdGhlIG1ldGFkYXRhIGZpbGUuCiAgKi8KIFRSQUNFUE9JTlRfRVZFTlQodXN0X3Rlc3RzX2N0
-Zl9nbG9iYWxfdHlwZXMsIHRwdGVzdCwKLQlUUF9BUkdTKGludCwgYW5pbnQsIGludCwgZW51bXZh
-bCksCisJVFBfQVJHUyhpbnQsIGFuaW50LCBpbnQsIGVudW12YWwsIGNoYXIgKiwgdGV4dCwgc2l6
-ZV90LCB0ZXh0bGVuKSwKIAlUUF9GSUVMRFMoCiAJCWN0Zl9pbnRlZ2VyKGludCwgaW50ZmllbGQs
-IGFuaW50KQogCQljdGZfZW51bSh1c3RfdGVzdHNfY3RmX2dsb2JhbF90eXBlcywgdGVzdGVudW0s
-IGVudW1maWVsZCwgZW51bXZhbCkKIAkJY3RmX2VudW0odXN0X3Rlc3RzX2N0Zl9nbG9iYWxfdHlw
-ZXMsIHRlc3RlbnVtLCBlbnVtZmllbGRfYmlzLCBlbnVtdmFsKQorCQljdGZfc3RydWN0KHVzdF90
-ZXN0c19jdGZfZ2xvYmFsX3R5cGVzLCBvdXRlciwgc3RydWN0ZmllbGQsIHRleHQsIHRleHRsZW4s
-IGVudW12YWwpCiAJKQogKQogCi0tIAoxLjkuMQoKCl9fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxp
-c3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0
-aW5mby9sdHRuZy1kZXYK
+The following patch series in LTTng-Tools add support of the named CTF
+structure global type. It goes along with a patch series in LTTng-ust.
+
+It is built above the CTF enumerations patches proposed earlier adn being
+staged in Mathieu Desnoyers's development branch here:
+https://github.com/compudj/lttng-tools-dev/tree/ust-enum
