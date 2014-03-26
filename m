@@ -1,20 +1,18 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-ust] Fix: Corrected python version
- assumptions in lttng-gen-tp
-Date: Tue, 25 Mar 2014 19:20:24 +0000 (UTC)
-Message-ID: <1396845262.585.1395775224524.JavaMail.zimbra__172.632226213132$1395775313$gmane$org@efficios.com>
-References: <1395671384-24750-1-git-send-email-jderehag@hotmail.com>
-	<654526496.119.1395756962956.JavaMail.zimbra@efficios.com>
-	<DUB123-W18FF6C4DAEAEC5A2346C92DD650@phx.gbl>
+From: David Goulet <dgoulet@efficios.com>
+Subject: Re: [MI-prototype] MI: mi-lttng into libcommon,
+ global option lttng_mi_opt , command version
+Date: Wed, 26 Mar 2014 09:56:39 -0400
+Message-ID: <20140326135639.GA8104__45699.5007269599$1395842256$gmane$org@thessa>
+References: <20140321172505.GA9511@gmail.com> <20140325144745.GB7702@thessa>
+	<20140325184906.GA1538@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============1786451345=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from smtp.ini-tech.com ([144.76.53.219])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <compudj@efficios.com>) id 1WSWtl-0008L8-Kv
-	for lttng-dev@lists.lttng.org; Tue, 25 Mar 2014 15:20:39 -0400
-In-Reply-To: <DUB123-W18FF6C4DAEAEC5A2346C92DD650@phx.gbl>
+	(envelope-from <dgoulet@efficios.com>) id 1WSoK0-00007v-61
+	for lttng-dev@lists.lttng.org; Wed, 26 Mar 2014 09:56:49 -0400
+In-Reply-To: <20140325184906.GA1538@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,73 +21,94 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Jesper Derehag <jderehag@hotmail.com>
-Cc: lttng-dev@lists.lttng.org
+To: Jonathan Rajotte <jonathan.r.julien@gmail.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJKZXNwZXIgRGVyZWhhZyIgPGpk
-ZXJlaGFnQGhvdG1haWwuY29tPgo+IFRvOiAiTWF0aGlldSBEZXNub3llcnMiIDxtYXRoaWV1LmRl
-c25veWVyc0BlZmZpY2lvcy5jb20+Cj4gQ2M6IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBT
-ZW50OiBUdWVzZGF5LCBNYXJjaCAyNSwgMjAxNCAyOjAzOjUzIFBNCj4gU3ViamVjdDogUkU6IFts
-dHRuZy1kZXZdIFtQQVRDSCBsdHRuZy11c3RdIEZpeDogQ29ycmVjdGVkIHB5dGhvbiB2ZXJzaW9u
-IGFzc3VtcHRpb25zIGluIGx0dG5nLWdlbi10cAo+IAo+ID4gRGF0ZTogVHVlLCAyNSBNYXIgMjAx
-NCAxNDoxNjowMiArMDAwMAo+ID4gRnJvbTogbWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29t
-Cj4gPiBUbzogamRlcmVoYWdAaG90bWFpbC5jb20KPiA+IENDOiBsdHRuZy1kZXZAbGlzdHMubHR0
-bmcub3JnCj4gPiBTdWJqZWN0OiBSZTogW2x0dG5nLWRldl0gW1BBVENIIGx0dG5nLXVzdF0gRml4
-OiBDb3JyZWN0ZWQgcHl0aG9uIHZlcnNpb24KPiA+IAlhc3N1bXB0aW9ucyBpbiBsdHRuZy1nZW4t
-dHAKPiA+IAo+ID4gLS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+ID4+IEZyb206IGpkZXJl
-aGFnQGhvdG1haWwuY29tCj4gPj4gVG86IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiA+PiBD
-YzogIkplc3BlciBEZXJlaGFnIiA8amRlcmVoYWdAaG90bWFpbC5jb20+Cj4gPj4gU2VudDogTW9u
-ZGF5LCBNYXJjaCAyNCwgMjAxNCAxMDoyOTo0NCBBTQo+ID4+IFN1YmplY3Q6IFtsdHRuZy1kZXZd
-IFtQQVRDSCBsdHRuZy11c3RdIEZpeDogQ29ycmVjdGVkIHB5dGhvbiB2ZXJzaW9uCj4gPj4gCWFz
-c3VtcHRpb25zIGluIGx0dG5nLWdlbi10cAo+ID4+IAo+ID4+IEZyb206IEplc3BlciBEZXJlaGFn
-IDxqZGVyZWhhZ0Bob3RtYWlsLmNvbT4KPiA+PiAKPiA+PiBUaGlzIG1vZGlmaWNhdGlvbiBjYWxs
-cyB0aGUgaW50ZXJwcmV0ZXIgdGhyb3VnaCBlbnYgaW5zdGVhZCBvZgo+ID4+IGRpcmVjdGx5LCB3
-aGljaCBzaG91bGQgYmUgbW9yZSBwb3J0YWJsZSBmb3IgdGhvc2UgZGlzdHJvcyB3aGljaCBkbyBu
-b3QKPiA+PiBpbnN0YWxsCj4gPj4gcHl0aG9uIGludG8gL3Vzci9iaW4vLgo+ID4+IAo+ID4+IEFs
-c28sIHNpbmNlIGx0dG5nLWdlbi10cCBpcyBub3QgcHl0aG9uMiBjb21wYXRpYmxlLCBJIGNoYW5n
-ZWQgaXQgdG8KPiA+PiBzdHJpY3RseQo+ID4+IGNhbGwgcHl0aG9uMyB3aGljaCBpcyB0aGUgcmVj
-b21tZW5kZWQgd2F5Lgo+ID4+IFNlZSBQRVAgMzk0Lgo+ID4+IGh0dHA6Ly9sZWdhY3kucHl0aG9u
-Lm9yZy9kZXYvcGVwcy9wZXAtMDM5NC8KPiA+IAo+ID4gSGkgSmVzcGVyLAo+ID4gCj4gPiBJIHNv
-bWVob3cgdGhvdWdodCB0aGF0IGx0dG5nLWdlbi10cCB3YXMgbWVhbnQgdG8gd29yayB3aXRoCj4g
-PiBQeXRob24gMi43IGFuZCBQeXRob24gMy4gQnV0IG1heWJlIEknbSBtaXNzaW5nIHNvbWV0aGlu
-Zy4KPiA+IFdoZXJlIGhhdmUgeW91IHNlZW4gdGhlIGRlcGVuZGVuY3kgb2YgdGhpcyBzY3JpcHQg
-b24gcHl0aG9uCj4gPiAzIGluIG91ciBkb2NzID8KPiA+IAo+ID4gVGhhbmtzLAo+ID4gCj4gPiBN
-YXRoaWV1Cj4gCj4gSG1tLi4uIFRoZSByZWFzb24gZm9yIHdoeSBJIGNoYW5nZWQgaW50byBweXRo
-b24zIHdhcyBkdWUgdG8gdGhhdCBJIGdvdCBzeW50YXgKPiBlcnJvciB3aGVuIHRyeWluZyB0byBy
-dW4gaXQ6Cj4gLS0tLS0KPiAuL2x0dG5nLWdlbi10cAo+IMKgIEZpbGUgIi4vbHR0bmctZ2VuLXRw
-IiwgbGluZSAxMDAKPiDCoCDCoCBleGNlcHQgT1NFcnJvciBhcyBtc2c6Cj4gwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgXgo+IFN5bnRheEVycm9yOiBpbnZhbGlkIHN5bnRheAo+IC0tLS0t
-LQo+IEkgKnRob3VnaHQqIEkgd2FzIHJ1bm5pbmcgb24gcHl0aG9uMi43IGJ1dCBhcyBpdCB0dXJu
-cyBvdXQgSSB3YXMgbm90Lgo+IFdoZW4gcmVzb2x2aW5nICJweXRob24iIEkgZ2V0IHB5dGhvbjIu
-NyBidXQgd2hlbiBJIGNoZWNrIHRoZSBleHBsaWNpdCB2ZXJzaW9uCj4gbGF5aW5nIGF0IC91c3Iv
-YmluL3B5dGhvbiBpdHMgYWN0dWFsbHkgYSAyLjQgdmVyc2lvbiBzbyBubyB3b25kZXIgaXQgd2Fz
-Cj4gZmFpbGluZy4KPiAKPiBDaGVja2luZyB0aGUgUEVQIGZvciB3aGVuICJleGNlcHQgWFggYXMg
-eXkiIHdhcyBpbnRyb2R1Y2VkIHBvaW50cyB0byB0aGF0IGl0Cj4gd2FzIGludHJvZHVjZWQgaW4g
-cHl0aG9uIDIuNiBzbyBlbnRpcmVseSBteSBtaXN0YWtlLgo+IFJlcmFuIGl0IG5vdyB3aXRoIHRo
-ZSBhIDIuNyB2ZXJzaW9uIGFuZCBpdCB3b3JrcyBhcyBpbnRlbmRlZC4KPiAKPiBIb3dldmVyLCBJ
-IHN0aWxsIHRoaW5rIHlvdSBzaG91bGQgcnVuIGl0IHRocm91Z2ggZW52IGFzIHByb3Bvc2VkIGlu
-IHRoZSBwYXRjaAo+IGFuZCBub3QgdXNlIHRoZSBleHBsaWNpdCBwYXRoIHRvIHB5dGhvbi4KPiAK
-PiBJZiB5b3UgYWdyZWUsIGRvIHlvdSB3YW50IG1lIHRvIHNlbmQgeW91IGFub3RoZXIgcGF0Y2gg
-cmVtb3ZpbmcgdGhlICIzIj8KClllcywgaWYgeW91IGNhbiBkbyB0aGF0IGl0IHdvdWxkIGJlIHBl
-cmZlY3QhCgo+IAo+IE90aGVyd2lzZSwgSSBhcG9sb2dpemUgZm9yIG15IGJsdW5kZXIuCgpObyB3
-b3JyaWVzISBUaGlzIGlzIHdoeSB3ZSBoYXZlIGNvZGUgcmV2aWV3IDopIFBpbnBvaW50aW5nCmFu
-IGlzc3VlIGFuZCBzdWJtaXR0aW5nIGEgcGF0Y2ggYXMgd2VsbCwgZXZlbiBpZiBpbXBlcmZlY3Qs
-CmRvZXMgYSBsb3QgdG8gaW1wcm92ZSBMVFRuZyEKClRoYW5rcywKCk1hdGhpZXUKCj4gCj4gUmVn
-YXJkcywKPiBKZXNwZXIKPiAKPiA+IAo+ID4gCj4gPj4gLS0tCj4gPj4gdG9vbHMvbHR0bmctZ2Vu
-LXRwIHwgMiArLQo+ID4+IDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlv
-bigtKQo+ID4+IAo+ID4+IGRpZmYgLS1naXQgYS90b29scy9sdHRuZy1nZW4tdHAgYi90b29scy9s
-dHRuZy1nZW4tdHAKPiA+PiBpbmRleCBjNDllOGE1Li5jN2JmMjk1IDEwMDc1NQo+ID4+IC0tLSBh
-L3Rvb2xzL2x0dG5nLWdlbi10cAo+ID4+ICsrKyBiL3Rvb2xzL2x0dG5nLWdlbi10cAo+ID4+IEBA
-IC0xLDQgKzEsNCBAQAo+ID4+IC0jIS91c3IvYmluL3B5dGhvbgo+ID4+ICsjIS91c3IvYmluL2Vu
-diBweXRob24zCj4gPj4gIwo+ID4+ICMgQ29weXJpZ2h0IChjKSAyMDEyIFlhbm5pY2sgQnJvc3Nl
-YXUgPHlhbm5pY2suYnJvc3NlYXVAZ21haWwuY29tPgo+ID4+ICMKPiA+PiAtLQo+ID4+IDEuNy45
-LjUKPiA+PiAKPiA+PiAKPiA+PiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fXwo+ID4+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiA+PiBsdHRuZy1kZXZAbGlz
-dHMubHR0bmcub3JnCj4gPj4gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4v
-bGlzdGluZm8vbHR0bmctZGV2Cj4gPj4gCj4gPiAKPiA+IC0tCj4gPiBNYXRoaWV1IERlc25veWVy
-cwo+ID4gRWZmaWNpT1MgSW5jLgo+ID4gaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KCi0tIApNYXRo
-aWV1IERlc25veWVycwpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCgpfX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFp
-bGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9y
-Zy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+
+--===============1786451345==
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="AhhlLboLdkugWU4S"
+Content-Disposition: inline
+
+
+--AhhlLboLdkugWU4S
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+> > > +/*
+> > >   *  cmd_version
+> > >   */
+> > >  int cmd_version(int argc, const char **argv)
+> > >  {
+> > >  	int opt, ret =3D CMD_SUCCESS;
+> > >  	static poptContext pc;
+> > > +	struct mi_writer *writer =3D NULL;
+> > > +	struct lttng_version version;
+> > > =20
+> > >  	pc =3D poptGetContext(NULL, argc, argv, long_options, 0);
+> > >  	poptReadDefaultConfig(pc, 0);
+> > > @@ -78,12 +97,58 @@ int cmd_version(int argc, const char **argv)
+> > >  		}
+> > >  	}
+> > > =20
+> > > -	MSG("lttng version " VERSION " - " VERSION_NAME);
+> > > -	MSG("\n" VERSION_DESCRIPTION "\n");
+> > > -	MSG("Web site: http://lttng.org");
+> > > -	MSG("\nlttng is free software and under the GPL license and part LG=
+PL");
+> > > +	if (lttng_opt_mi) {
+> >=20
+> > I would go for a function to print the mi like maybe "print_mi()" since
+> > this *may* change depending on what output type we use. For now, only
+> > one but let's think ahead :) and this allow to handle the mi writer
+> > destruction in one specific call also, cleaner in the long run I think.
+> Okai, we got a patch comming for list ( need some cleanup, internal
+> code review and 2 features) but you might want to check the way we
+> incorporate the mi into the command and tell us what you think. Cause
+> with your comment I think we are heading the wrong way.
+> https://github.com/PSRCode/lttng-tools-dev/commit/23b3a771083dc9abbf80aa9=
+a46087b0ea9fd5959
+
+What I meant here is to simply have a static function in the same file
+that do this job below. This is just easier in terms of code separation
+in the long run so keep everything but move it to a function that
+handles "mi printouts".
+
+Cheers!
+David
+
+--AhhlLboLdkugWU4S
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQF8BAEBAgBmBQJTMtyXXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
+ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
+MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02NzsH/00IYRs4wORrOishlhRrBP3a
+Cq9PQqRxRtuDihflboLwLJufNZi2Ogxn9kljrq5/IoLpOe1B2vmg+4bGMlAUXewC
+vq2h7FSpLtRQDDWmmZh/MdPClArIrQU9o5WD7wrn9B/NZk9zYXEPVuUFdwDiIjl2
+DdSvGa7NltfCq+LAORXEeHJoq53jIQJzvTd16vJN3eLSf6YyVCX68XhD98OfvqFs
+u3MkO38Z227kOHj2dNadWMt29Sql8mlJVpEP3a0WMBkGM32jtkFxH08wJXvzu8fQ
+rp6AHce9e8jfKEc3IpILyuxgZ/2TGJfg/prrDXX/JFIHQkk+6EYXMEpEALd/jyg=
+=QeSC
+-----END PGP SIGNATURE-----
+
+--AhhlLboLdkugWU4S--
+
+
+--===============1786451345==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1786451345==--
