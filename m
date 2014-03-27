@@ -1,20 +1,17 @@
-From: Jan Glauber <jan.glauber@gmail.com>
-Subject: Re: lttng-tools liburcu path
-Date: Thu, 27 Mar 2014 13:25:25 +0100
-Message-ID: <20140327122524.GB29197__16106.7848247059$1395923236$gmane$org@hal>
-References: <20140327103453.GA29197@hal>
+From: loody <miloody@gmail.com>
+Subject: arm gcc compile lttng-tool fail
+Date: Thu, 27 Mar 2014 20:26:41 +0800
+Message-ID: <CANudz+vJ94402GcgVbFonObcWY7HuxcPR_R6eTat54W9JmeYTQ__49257.660265039$1395923252$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ee0-f42.google.com ([74.125.83.42])
+Received: from mail-ie0-f175.google.com ([209.85.223.175])
 	by ltt.polymtl.ca with esmtp (Exim 4.72)
-	(envelope-from <jan.glauber@gmail.com>) id 1WT9O7-0002cl-Hf
-	for lttng-dev@lists.lttng.org; Thu, 27 Mar 2014 08:26:32 -0400
-Received: by mail-ee0-f42.google.com with SMTP id d17so2806484eek.15
-	for <lttng-dev@lists.lttng.org>; Thu, 27 Mar 2014 05:26:21 -0700 (PDT)
-Content-Disposition: inline
-In-Reply-To: <20140327103453.GA29197@hal>
+	(envelope-from <miloody@gmail.com>) id 1WT9OR-0002dO-Ip
+	for lttng-dev@lists.lttng.org; Thu, 27 Mar 2014 08:26:48 -0400
+Received: by mail-ie0-f175.google.com with SMTP id to1so3340239ieb.20
+	for <lttng-dev@lists.lttng.org>; Thu, 27 Mar 2014 05:26:42 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev>
@@ -23,48 +20,23 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 	<mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: dgoulet@efficios.com
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-With this patch it works for me, but I'm no autoconf wizard and I just realized
-I also could use:
+hi all:
+I try to compile lttng-tool for arm platform but get below message
 
-./configure  --disable-lttng-ust --with-lttng-ust-prefix=/usr/local/
+  CC     kernel-consumer.lo
+kernel-consumer.c: In function 'lttng_kconsumer_snapshot_
+channel':
+kernel-consumer.c:324:1: internal compiler error: in gen_movsi, at
+config/arm/arm.md:5680
 
-to make it work since all I need is the additional -L path...
+after ask gcc for help, they said this will be fixed in gcc 4.9.0
+http://gcc.gnu.org/ml/gcc-help/2014-03/msg00107.html
 
---Jan
+the stable release version of gcc is 4.8.2.
+Could I get the conclusion that no one can compile it for arm platform before?
 
-diff --git a/configure.ac b/configure.ac
-index 54f82cf..59e8344 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -200,6 +200,15 @@ AC_CHECK_DECL([cmm_smp_mb__before_uatomic_or], [],
-         [AC_MSG_ERROR([liburcu $liburcu_version or newer is needed])], [[#include <urcu.h>]]
- )
- 
-+AC_ARG_WITH(liburcu-prefix,
-+  AS_HELP_STRING([--with-liburcu-prefix=PATH],
-+                 [Specify the installation prefix of the liburcu library.
-+	          Headers must be in PATH/include; libraries in PATH/lib.]),
-+		  [
-+		    CPPFLAGS="$CPPFLAGS -I${withval}/include"
-+		    LDFLAGS="$LDFLAGS -L${withval}/lib64 -L${withval}/lib"
-+		  ])
-+
- AC_ARG_WITH(lttng-ust-prefix,
-   AS_HELP_STRING([--with-lttng-ust-prefix=PATH],
-                  [Specify the installation prefix of the lttng-ust library.
 
-On Thu, Mar 27, 2014 at 11:34:54AM +0100, Jan Glauber wrote:
-> Hi David,
-> 
-> I'm getting linker errors for lttng-tools, due to an older version of
-> liburcu (<0.7) installed. Now I was looking for a configure switch to
-> specify where the liburcu that should be used is but I didn't find one.
-> 
-> Would it be possible to add something like --with-xml-prefix= but for
-> luburcu?
-> 
-> thanks, Jan
+thanks for your help,
