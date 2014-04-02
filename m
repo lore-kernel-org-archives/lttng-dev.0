@@ -1,17 +1,37 @@
-From: =?UTF-8?Q?Adrien_Verg=C3=A9?= <adrienverge@gmail.com>
-Subject: Hardware-assisted tracing in LTTng
-Date: Tue, 1 Apr 2014 14:23:55 -0400
-Message-ID: <CANsc=4XT1wqzdp2YkqGyZrvmip-XwECMThmSgZ_QN5zo1uRsSA__29322.8778675713$1396377277$gmane$org@mail.gmail.com>
+From: Amit Margalit <AMITM@il.ibm.com>
+Subject: Minor documentation issue with 2.4.0
+Date: Wed, 2 Apr 2014 12:23:42 +0300
+Message-ID: <OF651759A2.C8A68066-ONC2257CAE.00334115-C2257CAE.0033A0AF__1593.1605980315$1396516607$gmane$org@il.ibm.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============0748399471=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-lb0-f169.google.com ([209.85.217.169])
+Received: from e06smtp10.uk.ibm.com ([195.75.94.106])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <adrienverge@gmail.com>) id 1WV3Lu-0001a2-Gh
- for lttng-dev@lists.lttng.org; Tue, 01 Apr 2014 14:24:08 -0400
-Received: by mail-lb0-f169.google.com with SMTP id q8so7426051lbi.0
- for <lttng-dev@lists.lttng.org>; Tue, 01 Apr 2014 11:23:55 -0700 (PDT)
+ (envelope-from <amitm@il.ibm.com>) id 1WVHOt-0006kw-CN
+ for lttng-dev@lists.lttng.org; Wed, 02 Apr 2014 05:24:04 -0400
+Received: from /spool/local
+ by e06smtp10.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only!
+ Violators will be prosecuted
+ for <lttng-dev@lists.lttng.org> from <amitm@il.ibm.com>;
+ Wed, 2 Apr 2014 10:23:57 +0100
+Received: from b06cxnps3075.portsmouth.uk.ibm.com
+ (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+ by d06dlp02.portsmouth.uk.ibm.com (Postfix) with ESMTP id BE1652190056
+ for <lttng-dev@lists.lttng.org>; Wed,  2 Apr 2014 10:23:48 +0100 (BST)
+Received: from d06av01.portsmouth.uk.ibm.com (d06av01.portsmouth.uk.ibm.com
+ [9.149.37.212])
+ by b06cxnps3075.portsmouth.uk.ibm.com (8.13.8/8.13.8/NCO v10.0) with ESMTP id
+ s329NgTF1507646
+ for <lttng-dev@lists.lttng.org>; Wed, 2 Apr 2014 09:23:42 GMT
+Received: from d06av01.portsmouth.uk.ibm.com (localhost [127.0.0.1])
+ by d06av01.portsmouth.uk.ibm.com (8.14.4/8.14.4/NCO v10.0 AVout) with ESMTP id
+ s329NsOX011805
+ for <lttng-dev@lists.lttng.org>; Wed, 2 Apr 2014 03:23:54 -0600
+Received: from d06ml311.portsmouth.uk.ibm.com (d06ml311.portsmouth.uk.ibm.com
+ [9.149.104.181])
+ by d06av01.portsmouth.uk.ibm.com (8.14.4/8.14.4/NCO v10.0 AVin) with ESMTP id
+ s329NsvS011802
+ for <lttng-dev@lists.lttng.org>; Wed, 2 Apr 2014 03:23:54 -0600
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,75 +40,204 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-SGksCgpJJ20gZmluaXNoaW5nIG15IG1hc3RlciBhbmQgSSB3YW50IHRvIHNoYXJlIG15IHJlc3Vs
-dHMgb24gd2hhdCBjYW4gYmUgZG9uZQp1c2luZyBTVE0sIGEgaGFyZHdhcmUgdHJhY2VyIHByZXNl
-bnQgb24gbmV3ZXIgQVJNLWJhc2VkIHBsYXRmb3JtLiAgSXQgcmVhbGx5CnNwZWVkcyB1cCB0cmFj
-aW5nLCBidXQgcmVxdWlyZXMgYSBsb3Qgb2YgY2hhbmdlcyBpZiB3ZSB3YW50IExUVG5nIHRvIHN1
-cHBvcnQKaXQgd2l0aCBzb21ldGhpbmcgbGlrZToKCiQgbHR0bmcgdXNlLWhhcmR3YXJlIHN0bQoK
-TW9zdCBkZWJ1Z2dpbmcgaGFyZHdhcmUgdW5pdHMgcHJvdmlkZSBleGVjdXRpb24gdHJhY2luZyAo
-aS5lLiByZWNvcmRpbmcgZXZlcnkKYnJhbmNoIGR1cmluZyBleGVjdXRpb24pLCB3aGljaCBpcyBu
-b3QgYWRhcHRlZCB0byBldmVudCB0cmFjaW5nLiAgSG93ZXZlciwgc29tZQpvdGhlciBoYXJkd2Fy
-ZSBzb2x1dGlvbnMgZXhpc3QgdG8gYWNjZWxlcmF0ZSBldmVudCByZWNvcmRpbmcuICBUaGV5IHBy
-b3ZpZGUKZGVkaWNhdGVkIHJlc291cmNlcyBmb3Igd3JpdGluZyBhbmQgdGltZXN0YW1waW5nIGV2
-ZW50cy4gIEN1cnJlbnRseSwgdHdvCmhhcmR3YXJlIG1vZHVsZXMgcHJvdmlkZSBzdWNoIGZ1bmN0
-aW9uYWxpdHk6Ci0gIkRhdGEgQWNxdWlzaXRpb24gTWVzc2FnZXMiIG9uIEZyZWVzY2FsZSBRb3JJ
-USBwcm9jZXNzb3JzOwotICJTeXN0ZW0gVHJhY2UgTW9kdWxlIiBvbiBzb21lIEFSTS1iYXNlZCBj
-aGlwcyAoY2FsbGVkICJTeXN0ZW0gVHJhY2UKICBNYWNyb2NlbGwiIGluIG5ldyB2ZXJzaW9ucyku
-ClNpbmNlIERhdGEgQWNxdWlzaXRpb24gTWVzc2FnZXMgYXJlIG5vdCBwdWJsaWNseSBkb2N1bWVu
-dGVkLCB0aGUgZm9sbG93aW5nIG9ubHkKY29uY2VybnMgU1RNLgoKVGVzdCB3ZSBtYWRlIG9uIGEg
-UGFuZGFib2FyZCBzaG93ZWQgdGhhdCB1c2luZyBTVE0gdG8gcmVjb3JkIHNtYWxsIFVTVAp0cmFj
-ZXBvaW50cyBpcyAxMHggZmFzdGVyIHRoYW4gdXNpbmcgTFRUbmctVVNULiAgQWxzbywgU1RNIGhh
-cyBtYW55IGluZGVwZW5kZW50CiJjaGFubmVscyIgc28gdGhhdCBpbiBtb3N0IHNpdHVhdGlvbnMs
-IHRoZSB1c2Ugb2YgbG9ja3MgaXNuJ3QgbmVlZGVkLgoKSG93ZXZlciwgdGhlIGNoYXJhY3Rlcmlz
-dGljcyBvZiB0aGlzIGhhcmR3YXJlIG1ha2VzIHNwZWNpYWwgaGFuZGxpbmcgbmVjZXNzYXJ5LgpQ
-YXJ0aWN1bGFybHksIHRoZSBmb2xsb3dpbmcgYXJlIG5lZWRlZDoKLSBhIG5ldyB3YXkgb2Ygd3Jp
-dGluZyB0cmFjZSAqc2VxdWVudGlhbGx5KjsKLSBhIG5ldyB0eXBlIG9mIHRyYWNlIGNvbnN1bWVy
-IChmb3IgZGVhbGluZyB3aXRoIGhhcmR3YXJlIGJ1ZmZlcnMpOwotIGEgbmV3IHRyYWNlIGNvbnZl
-cnRlciAoU1RNIGZvcm1hdCAtPiBDVEYpLgoKQWJvdXQgc2VxdWVudGlhbCB0cmFjZQotLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tCldyaXRpbmcgdG8gU1RNIG11c3QgYmUgc2VxdWVudGlhbDogdG8gc3Rv
-cmUgYSA0LWludGVnZXIgYXJyYXksIHlvdSBuZWVkIHRvCndyaXRlIDQgdGltZXMgdG8gdGhlIHNh
-bWUgYWRkcmVzcy4gIFRodXMsIHRoZSBjbGFzc2ljICJjaGFubmVsMF8lZCIgZmlsZXMKY2Fubm90
-IGJlIHdyaXR0ZW4gdG8gU1RNLCBmaXJzdCBiZWNhdXNlIHRoZXkgYXJlIG5vdCB3cml0dGVuIHNl
-cXVlbnRpYWxseTogdGhlCmhlYWRlciBpcyB1cGRhdGVkIG9uY2UgYSBmdWxsIHBhZ2UgaGFzIGJl
-ZW4gd3JpdHRlbi4gIFRoZSBvdGhlciByZWFzb24gaXMgdGhhdAp0aGVzZXMgZmlsZXMgYXJlIGZ1
-bGwgb2YgcGFkZGluZyBhbmQgc3BhY2VzLCB3aGljaCB3b3VsZCBiZSByZWFsbHkgaW5lZmZpY2ll
-bnQKaW4gU1RNIGJlY2F1c2UgaXQgbWVhbnMgd3JpdGluZyBlYWNoIG9mIHRoZXNlIHplcm9zIChh
-bmQgbm90IGp1c3QgbW92aW5nIGEKcG9pbnRlciBhcyBpbiBsaWJyaW5nYnVmZmVyKS4KCkFub3Ro
-ZXIgU1RNIGNhcGFiaWxpdHkgaXMgdG8gYXV0b21hdGljYWxseSB0aW1lc3RhbXAgbWVzc2FnZXMg
-dXNpbmcgYSBoYXJkd2FyZQpjbG9jaywgc28gTFRUbmcgc29mdHdhcmUgdGltZXN0YW1waW5nIHdv
-dWxkIG5vdCBiZSBuZWVkZWQgd2hlbiB1c2luZyBoYXJkd2FyZS4KSSBkb24ndCBrbm93IGhvdyBt
-dWNoIHNwZWVkdXAgY2FuIGJlIGV4cGVjdGVkLiAgU2luY2UgU1RNIGNsb2NrIGFuZCBMVFRuZyBj
-bG9jawooUkRUU0MpIGFyZSBkaWZmZXJlbnQsIGFuIGFydGVmYWN0IGlzIG5lZWRlZCB0byBzeW5j
-aHJvbml6ZSAoZm9yIGluc3RhbmNlLApzZW5kaW5nIGEgc2lnbmFsIHBhY2tldCBjb250YWluaW5n
-IFJEVFNDIHZhbHVlIGludG8gU1RNIGV2ZXJ5IHNlY29uZCkuCgpBYm91dCB0cmFjZSBjb25zdW1p
-bmcKLS0tLS0tLS0tLS0tLS0tLS0tLS0tClNUTSBvdXRwdXQgaXMgc3RvcmVkIGluIGEgc3BlY2lh
-bCBidWZmZXIgY2FsbGVkIEVUQi4gIFRoaXMgYnVmZmVyIGNhbiBlaXRoZXIgYmUKcmVhZCBmcm9t
-IHRoZSBob3N0IHN5c3RlbSwgb3IgcmVtb3RlbHkgZHJhaW5lZCBmcm9tIGFub3RoZXIgY29tcHV0
-ZXIgYXR0YWNoZWQKd2l0aCBKVEFHLiAgQm90aCBjYXNlcyBoYXZlIHVzZXJzOiBzb21lIHdhbnQg
-dG8gZXhwb3J0IHRyYWNlIHZpYSBKVEFHIHRvIHJlZHVjZQpvdmVyaGVhZCwgc29tZSBkb24ndCBo
-YXZlIGEgSlRBRyBjb25uZWN0b3IuICBTbyBib3RoIGNhc2VzIHNob3VsZCBiZSBzdXBwb3J0ZWQu
-CgpNeSB3YXkgb2YgZG9pbmcgdGhpbmdzIHdvdWxkIGJlIGEgc3RhbmQtYWxvbmUgdHJhY2UgY29u
-c3VtZXIgc29mdHdhcmUsIG5vdCBwYXJ0Cm9mIHRoZSBMVFRuZyBjb25zdW1lcnMuICBUaGlzIHdh
-eSwgYm90aCBvbi1jaGlwIGFuZCBvZmYtY2hpcCB1c2UtY2FzZXMgd291bGQKcmVzdWx0IGluIGEg
-cmF3IHRyYWNlIGZpbGUsIGVpdGhlciBjcmVhdGVkIG9uIHRoZSB0cmFjZWQgaG9zdCBvciByZXRy
-aWV2ZWQgYnkKdGhlIG90aGVyIG1vbml0b3JpbmcgbWFjaGluZS4KCkFib3V0IFNUTSB0cmFjZSBm
-b3JtYXQKLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQpUaGVuLCBhIHRyYWNlIGNvbnZlcnRlZCB3b3Vs
-ZCBwcm9kdWNlIENURiBmcm9tIHRoaXMgcmF3IHRyYWNlIGZpbGUuICBUaGUgU1RNCmZvcm1hdCAo
-Y2FsbGVkIFNUUCkgaXMgdG9vIHN0cmFuZ2UgdG8gYmUgZGVzY3JpYmVkIGFzIENURi4gIEFsc28s
-IHByb2Nlc3NpbmcKU1RQIGlzIHF1aXRlIENQVS1pbnRlbnNpdmUsIHNvIHJlYWwtdGltZSBkZWNv
-ZGluZyBpcyBub3QgYSBnb29kIGlkZWEgYXMgaXQKd291bGQgYmUgYSBidXJkZW4gb24gcGVyZm9y
-bWFuY2UuICBEZWNvZGluZyBhdCBhbmFseXNpcyB0aW1lIHNob3VsZCBiZQpwcmVmZXJyZWQuICBU
-aGUgU1RQIGZvcm1hdCBpcyBub3QgcHVibGljbHkgZG9jdW1lbnRlZCwgYnV0IEkgd3JvdGUgY29k
-ZSB0bwpkZWNvZGUgaXQgWzFdLiAgSXQgY291bGQgYmUgcmV1c2VkIGFzIGEgYmFzZSBmb3IgYSBk
-ZWNvZGVyLCBmb3IgZXhhbXBsZSBhCiJzdHAyY3RmIiBiYWJlbHRyYWNlIHBsdWdpbi4KCkNvbW1l
-bnRzIGFyZSB3ZWxjb21lIHRvIGFuc3dlciB0aGVzZSB0d28gcXVlc3Rpb25zOgoxLiBJcyBpdCB3
-b3J0aCBzdXBwb3J0aW5nIFNUTSBpbiBMVFRuZz8KMi4gSG93IHRvIGRlZmluZSBhIG5ldyBzZXF1
-ZW50aWFsIHRyYWNlIGZvcm1hdCB0aGF0IGlzIGZ1cnRoZXItY29tcGF0aWJsZSB3aXRoCiAgIGZ1
-dHVyZSBldmVudC10cmFjaW5nIGhhcmR3YXJlPwoKVGhhbmtzLAoKQWRyaWVuIFZlcmfDqQoKWzFd
-OiBodHRwczovL2dpdGh1Yi5jb20vYWRyaWVudmVyZ2UvbGliY29yZXNpZ2h0b21hcDQ0MzAKCl9f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBt
-YWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcu
-b3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+This is a multipart message in MIME format.
+--===============0748399471==
+Content-Type: multipart/alternative; boundary="=_alternative 0033A03AC2257CAE_="
+
+This is a multipart message in MIME format.
+--=_alternative 0033A03AC2257CAE_=
+Content-Type: text/plain; charset="US-ASCII"
+
+Hello,
+
+I ran a command that included an error, and noticed that 'lttng' mentions 
+-j in --buffers-pid and --buffers-uid, but nowhere else:
+
+# /usr/bin/lttng enable-channel -u    
+Error: Missing channel name.
+
+usage: lttng enable-channel NAME[,NAME2,...] (-u | -k) [OPTIONS]
+
+Options:
+  -h, --help               Show this help
+      --list-options       Simple listing of options
+  -s, --session NAME       Apply to session name
+  -k, --kernel             Apply to the kernel tracer
+  -u, --userspace          Apply to the user-space tracer
+
+Channel options:
+      --discard            Discard event when buffers are full (default)
+      --overwrite          Flight recorder mode
+      --subbuf-size SIZE   Subbuffer size in bytes {+k,+M,+G}
+                               (default UST uid: 131072, UST pid: 4096, 
+kernel: 262144, metadata: 4096)
+                               Rounded up to the next power of 2.
+      --num-subbuf NUM     Number of subbufers
+                               (default UST uid: 4, UST pid: 4, kernel: 4, 
+metadata: 2)
+                               Rounded up to the next power of 2.
+      --switch-timer USEC  Switch timer interval in usec
+                               (default UST uid: 0, UST pid: 0, kernel: 0, 
+metadata: 0)
+      --read-timer USEC    Read timer interval in usec.
+                               (default UST uid: 0, UST pid: 0, kernel: 
+200000, metadata: 0)
+      --output TYPE        Channel output type (Values: mmap, splice)
+                               (default UST uid: mmap, UST pid: mmap, 
+kernel: splice, metadata: mmap)
+      --buffers-uid        Use per UID buffer (-u/-j only)
+      --buffers-pid        Use per PID buffer (-u/-j only)
+      --buffers-global     Use shared buffer for the whole system (-k 
+only)
+  -C, --tracefile-size SIZE
+                           Maximum size of each tracefile within a stream 
+(in bytes). 0 means unlimited.
+                               (default: 0)
+  -W, --tracefile-count COUNT
+                           Used in conjunction with -C option, this will 
+limit the number
+                           of files created to the specified count. 0 
+means unlimited.
+                               (default: 0)
+
+Error: Command error
+
+You can see these 2 lines:
+
+      --buffers-uid        Use per UID buffer (-u/-j only)
+      --buffers-pid        Use per PID buffer (-u/-j only)
+
+But -j is not explained above.
+
+Amit Margalit
+IBM XIV - Storage Reinvented
+XIV-NAS Development Team
+Tel. 03-689-7774
+Fax. 03-689-7230
+--=_alternative 0033A03AC2257CAE_=
+Content-Type: text/html; charset="US-ASCII"
+
+<font size=2 face="sans-serif">Hello,</font>
+<br>
+<br><font size=2 face="sans-serif">I ran a command that included an error,
+and noticed that 'lttng' mentions -j in --buffers-pid and --buffers-uid,
+but nowhere else:</font>
+<br>
+<br><tt><font size=2># /usr/bin/lttng enable-channel -u &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; </font></tt>
+<br><tt><font size=2>Error: Missing channel name.</font></tt>
+<br>
+<br><tt><font size=2>usage: lttng enable-channel NAME[,NAME2,...] (-u |
+-k) [OPTIONS]</font></tt>
+<br>
+<br><tt><font size=2>Options:</font></tt>
+<br><tt><font size=2>&nbsp; -h, --help &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; Show this help</font></tt>
+<br><tt><font size=2>&nbsp; &nbsp; &nbsp; --list-options &nbsp; &nbsp;
+&nbsp; Simple listing of options</font></tt>
+<br><tt><font size=2>&nbsp; -s, --session NAME &nbsp; &nbsp; &nbsp; Apply
+to session name</font></tt>
+<br><tt><font size=2>&nbsp; -k, --kernel &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; Apply to the kernel tracer</font></tt>
+<br><tt><font size=2>&nbsp; -u, --userspace &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp;Apply to the user-space tracer</font></tt>
+<br>
+<br><tt><font size=2>Channel options:</font></tt>
+<br><tt><font size=2>&nbsp; &nbsp; &nbsp; --discard &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp;Discard event when buffers are full (default)</font></tt>
+<br><tt><font size=2>&nbsp; &nbsp; &nbsp; --overwrite &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp;Flight recorder mode</font></tt>
+<br><tt><font size=2>&nbsp; &nbsp; &nbsp; --subbuf-size SIZE &nbsp; Subbuffer
+size in bytes {+k,+M,+G}</font></tt>
+<br><tt><font size=2>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;(default UST uid:
+131072, UST pid: 4096, kernel: 262144, metadata: 4096)</font></tt>
+<br><tt><font size=2>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Rounded up to the
+next power of 2.</font></tt>
+<br><tt><font size=2>&nbsp; &nbsp; &nbsp; --num-subbuf NUM &nbsp; &nbsp;
+Number of subbufers</font></tt>
+<br><tt><font size=2>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;(default UST uid:
+4, UST pid: 4, kernel: 4, metadata: 2)</font></tt>
+<br><tt><font size=2>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Rounded up to the
+next power of 2.</font></tt>
+<br><tt><font size=2>&nbsp; &nbsp; &nbsp; --switch-timer USEC &nbsp;Switch
+timer interval in usec</font></tt>
+<br><tt><font size=2>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;(default UST uid:
+0, UST pid: 0, kernel: 0, metadata: 0)</font></tt>
+<br><tt><font size=2>&nbsp; &nbsp; &nbsp; --read-timer USEC &nbsp; &nbsp;Read
+timer interval in usec.</font></tt>
+<br><tt><font size=2>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;(default UST uid:
+0, UST pid: 0, kernel: 200000, metadata: 0)</font></tt>
+<br><tt><font size=2>&nbsp; &nbsp; &nbsp; --output TYPE &nbsp; &nbsp; &nbsp;
+&nbsp;Channel output type (Values: mmap, splice)</font></tt>
+<br><tt><font size=2>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;(default UST uid:
+mmap, UST pid: mmap, kernel: splice, metadata: mmap)</font></tt>
+<br><tt><font size=2>&nbsp; &nbsp; &nbsp; --buffers-uid &nbsp; &nbsp; &nbsp;
+&nbsp;Use per UID buffer (-u/-j only)</font></tt>
+<br><tt><font size=2>&nbsp; &nbsp; &nbsp; --buffers-pid &nbsp; &nbsp; &nbsp;
+&nbsp;Use per PID buffer (-u/-j only)</font></tt>
+<br><tt><font size=2>&nbsp; &nbsp; &nbsp; --buffers-global &nbsp; &nbsp;
+Use shared buffer for the whole system (-k only)</font></tt>
+<br><tt><font size=2>&nbsp; -C, --tracefile-size SIZE</font></tt>
+<br><tt><font size=2>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Maximum size of each tracefile
+within a stream (in bytes). 0 means unlimited.</font></tt>
+<br><tt><font size=2>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;(default: 0)</font></tt>
+<br><tt><font size=2>&nbsp; -W, --tracefile-count COUNT</font></tt>
+<br><tt><font size=2>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Used in conjunction with -C option,
+this will limit the number</font></tt>
+<br><tt><font size=2>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;of files created to the specified
+count. 0 means unlimited.</font></tt>
+<br><tt><font size=2>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;(default: 0)</font></tt>
+<br>
+<br><tt><font size=2>Error: Command error</font></tt>
+<br>
+<br><font size=2 face="sans-serif">You can see these 2 lines:</font>
+<br>
+<br><tt><font size=2>&nbsp; &nbsp; &nbsp; --buffers-uid &nbsp; &nbsp; &nbsp;
+&nbsp;Use per UID buffer (-u/-j only)</font></tt>
+<br><tt><font size=2>&nbsp; &nbsp; &nbsp; --buffers-pid &nbsp; &nbsp; &nbsp;
+&nbsp;Use per PID buffer (-u/-j only)</font></tt>
+<br>
+<br><font size=2 face="sans-serif">But -j is not explained above.</font>
+<br>
+<br><font size=2 color=#000080 face="sans-serif">Amit Margalit</font>
+<br><font size=2 color=#808000 face="sans-serif">IBM XIV </font><font size=2 face="sans-serif">-
+<i>Storage Reinvented</i></font>
+<br><font size=2 face="sans-serif">XIV-NAS Development Team</font>
+<br><font size=2 face="sans-serif">Tel. 03</font><font size=2 face="Arial">-689-7774</font>
+<br><font size=2 face="Arial">Fax. 03-689-7230</font>
+--=_alternative 0033A03AC2257CAE_=--
+
+
+
+--===============0748399471==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0748399471==--
