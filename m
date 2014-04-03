@@ -1,22 +1,17 @@
 From: Jan Glauber <jan.glauber@gmail.com>
-Subject: [RFC Patch Tools 2/4] Seperate probe modules from
-	control modules
-Date: Thu,  3 Apr 2014 12:57:45 +0200
-Message-ID: <d292e2654493cbff0addbe9c4fab99dd05a4ea1c.1396521858.git.jan.glauber__41045.7941274673$1396527666$gmane$org@gmail.com>
-References: <cover.1396521858.git.jan.glauber@gmail.com>
+Subject: [RFC Patch Tools 0/4] Configurable lttng-probe modules
+Date: Thu,  3 Apr 2014 12:57:43 +0200
+Message-ID: <cover.1396521858.git.jan.glauber__43548.305243212$1396528543$gmane$org@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wg0-f41.google.com ([74.125.82.41])
+Received: from mail-we0-f178.google.com ([74.125.82.178])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jan.glauber@gmail.com>) id 1WVfMg-0007uQ-5J
- for lttng-dev@lists.lttng.org; Thu, 03 Apr 2014 06:59:22 -0400
-Received: by mail-wg0-f41.google.com with SMTP id n12so1668339wgh.12
- for <lttng-dev@lists.lttng.org>; Thu, 03 Apr 2014 03:59:16 -0700 (PDT)
-In-Reply-To: <cover.1396521858.git.jan.glauber@gmail.com>
-In-Reply-To: <cover.1396521858.git.jan.glauber@gmail.com>
-References: <cover.1396521858.git.jan.glauber@gmail.com>
+ (envelope-from <jan.glauber@gmail.com>) id 1WVfMS-0007tw-FD
+ for lttng-dev@lists.lttng.org; Thu, 03 Apr 2014 06:59:09 -0400
+Received: by mail-we0-f178.google.com with SMTP id u56so1594939wes.23
+ for <lttng-dev@lists.lttng.org>; Thu, 03 Apr 2014 03:59:02 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -28,68 +23,45 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Move all control modules to the control list and make a seperate
-probes list.
+Hi LTTng'ers,
 
-Signed-off-by: Jan Glauber <jan.glauber@gmail.com>
+I've asked briefly for the configurable probes feature at the Tracing summit,
+here is an RFC how we could implement it.
+
+Why I want to have this feature:
+Currently the LTTng probes that are loaded when a session is created are defined
+in a static list. If the user wants to change the loaded probes (for instance
+disable the very noisy rcu) then lttng-tools must be recompiled or the modules must
+be blacklisted or deleted. I also found that in our embedded environment the default
+busybox configuration is to disable the blacklist feature, so blacklisting is not an
+option.
+
+Therefore I want to have a more flexible way of defining which probes to load
+on session start. We could use an environment variable that (if present)
+overrides the default and only loads the probes named in the variable.
+
+Patch 1 is a cleanup and patch 2 & 3 are preparation for the feature in patch 4.
+Please review and give feedback if this approach is feasible.
+
+thanks,
+Jan
 ---
- src/bin/lttng-sessiond/modprobe.c |   24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+Harman Becker Automotive GmbH
+System Profiling & Optimizing Team
 
-diff --git a/src/bin/lttng-sessiond/modprobe.c b/src/bin/lttng-sessiond/modprobe.c
-index b84c07e..ea3fb39 100644
---- a/src/bin/lttng-sessiond/modprobe.c
-+++ b/src/bin/lttng-sessiond/modprobe.c
-@@ -25,16 +25,9 @@
- #include "modprobe.h"
- #include "kern-modules.h"
- 
--/* MUST be loaded first */
-+/* LTTng kernel tracer base modules list */
- const struct kern_modules_param kern_modules_control[] = {
--	{ "lttng-tracer", 1 },
--};
--
--/* LTTng kernel tracer modules list */
--const struct kern_modules_param kern_modules_list[] = {
--	{ "lttng-ftrace", 0 },
--	{ "lttng-kprobes", 0 },
--	{ "lttng-kretprobes", 0 },
-+	{ "lttng-tracer", 1 },	/* MUST be loaded first so keep at top */
- 	{ "lttng-lib-ring-buffer", 1 },
- 	{ "lttng-ring-buffer-client-discard", 1 },
- 	{ "lttng-ring-buffer-client-overwrite", 1 },
-@@ -43,6 +36,13 @@ const struct kern_modules_param kern_modules_list[] = {
- 	{ "lttng-ring-buffer-client-mmap-overwrite", 1 },
- 	{ "lttng-ring-buffer-metadata-mmap-client", 1 },
- 	{ "lttng-types", 0 },
-+	{ "lttng-ftrace", 0 },
-+	{ "lttng-kprobes", 0 },
-+	{ "lttng-kretprobes", 0 },
-+};
-+
-+/* LTTng kernel tracer probe modules list */
-+const struct kern_modules_param kern_modules_probes[] = {
- 	{ "lttng-probe-asoc", 0 },
- 	{ "lttng-probe-block", 0 },
- 	{ "lttng-probe-btrfs", 0 },
-@@ -130,7 +130,7 @@ void modprobe_remove_lttng_control(void)
-  */
- void modprobe_remove_lttng_data(void)
- {
--	return modprobe_remove_lttng(kern_modules_list,
-+	return modprobe_remove_lttng(kern_modules_probes,
- 				     ARRAY_SIZE(kern_modules_list));
- }
- 
-@@ -188,6 +188,6 @@ int modprobe_lttng_control(void)
-  */
- int modprobe_lttng_data(void)
- {
--	return modprobe_lttng(kern_modules_list,
--			      ARRAY_SIZE(kern_modules_list));
-+	return modprobe_lttng(kern_modules_probes,
-+			      ARRAY_SIZE(kern_modules_probes));
- }
+
+Jan Glauber (4):
+  Use common functions for module loading and unloading
+  Seperate probe modules from control modules
+  Remove required parameter from module parameters
+  Dynamic probe list support
+
+ src/bin/lttng-sessiond/kern-modules.h |    3 +-
+ src/bin/lttng-sessiond/modprobe.c     |  292 ++++++++++++++++++---------------
+ src/common/defaults.h                 |    3 +
+ src/common/utils.c                    |   10 ++
+ src/common/utils.h                    |    1 +
+ 5 files changed, 172 insertions(+), 137 deletions(-)
+
 -- 
 1.7.9.5
