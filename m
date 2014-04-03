@@ -1,19 +1,22 @@
-From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: Minor documentation issue with 2.4.0
-Date: Wed, 2 Apr 2014 10:48:02 -0400
-Message-ID: <CA+jJMxvOS8zo4msc_WMcrO9F=FkVbF4RwkueuKeL=jnjWQRHHQ__32677.3185086951$1396525931$gmane$org@mail.gmail.com>
-References: <OF651759A2.C8A68066-ONC2257CAE.00334115-C2257CAE.0033A0AF@il.ibm.com>
+From: Jan Glauber <jan.glauber@gmail.com>
+Subject: [RFC Patch Tools 1/4] Use common functions for module
+	loading and unloading
+Date: Thu,  3 Apr 2014 12:57:44 +0200
+Message-ID: <f85d40215c01ed38c43d86886e616ba826ef9436.1396521858.git.jan.glauber__40796.6829407544$1396526404$gmane$org@gmail.com>
+References: <cover.1396521858.git.jan.glauber@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qg0-f49.google.com ([209.85.192.49])
+Received: from mail-wi0-f173.google.com ([209.85.212.173])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1WVMSW-0000XY-H0
- for lttng-dev@lists.lttng.org; Wed, 02 Apr 2014 10:48:16 -0400
-Received: by mail-qg0-f49.google.com with SMTP id e89so296580qgf.22
- for <lttng-dev@lists.lttng.org>; Wed, 02 Apr 2014 07:48:02 -0700 (PDT)
-In-Reply-To: <OF651759A2.C8A68066-ONC2257CAE.00334115-C2257CAE.0033A0AF@il.ibm.com>
+ (envelope-from <jan.glauber@gmail.com>) id 1WVfMY-0007tx-3t
+ for lttng-dev@lists.lttng.org; Thu, 03 Apr 2014 06:59:16 -0400
+Received: by mail-wi0-f173.google.com with SMTP id z2so7154609wiv.6
+ for <lttng-dev@lists.lttng.org>; Thu, 03 Apr 2014 03:59:08 -0700 (PDT)
+In-Reply-To: <cover.1396521858.git.jan.glauber@gmail.com>
+In-Reply-To: <cover.1396521858.git.jan.glauber@gmail.com>
+References: <cover.1396521858.git.jan.glauber@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,97 +25,188 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Amit Margalit <AMITM@il.ibm.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Amit,
+Module loading (and unloading) is identical for control and data modules
+so use common funtions to avoid code duplication.
 
-Can you open a bug against lttng-tools on bugs.lttng.org? This way
-we'll be sure to track the change.
+Signed-off-by: Jan Glauber <jan.glauber@gmail.com>
+---
+ src/bin/lttng-sessiond/modprobe.c |  109 ++++++++++++-------------------------
+ 1 file changed, 34 insertions(+), 75 deletions(-)
 
-Thanks,
-J=E9r=E9mie
-
-On Wed, Apr 2, 2014 at 5:23 AM, Amit Margalit <AMITM@il.ibm.com> wrote:
-> Hello,
->
-> I ran a command that included an error, and noticed that 'lttng' mentions=
- -j
-> in --buffers-pid and --buffers-uid, but nowhere else:
->
-> # /usr/bin/lttng enable-channel -u
-> Error: Missing channel name.
->
-> usage: lttng enable-channel NAME[,NAME2,...] (-u | -k) [OPTIONS]
->
-> Options:
->   -h, --help               Show this help
->       --list-options       Simple listing of options
->   -s, --session NAME       Apply to session name
->   -k, --kernel             Apply to the kernel tracer
->   -u, --userspace          Apply to the user-space tracer
->
-> Channel options:
->       --discard            Discard event when buffers are full (default)
->       --overwrite          Flight recorder mode
->       --subbuf-size SIZE   Subbuffer size in bytes {+k,+M,+G}
->                                (default UST uid: 131072, UST pid: 4096,
-> kernel: 262144, metadata: 4096)
->                                Rounded up to the next power of 2.
->       --num-subbuf NUM     Number of subbufers
->                                (default UST uid: 4, UST pid: 4, kernel: 4,
-> metadata: 2)
->                                Rounded up to the next power of 2.
->       --switch-timer USEC  Switch timer interval in usec
->                                (default UST uid: 0, UST pid: 0, kernel: 0,
-> metadata: 0)
->       --read-timer USEC    Read timer interval in usec.
->                                (default UST uid: 0, UST pid: 0, kernel:
-> 200000, metadata: 0)
->       --output TYPE        Channel output type (Values: mmap, splice)
->                                (default UST uid: mmap, UST pid: mmap,
-> kernel: splice, metadata: mmap)
->       --buffers-uid        Use per UID buffer (-u/-j only)
->       --buffers-pid        Use per PID buffer (-u/-j only)
->       --buffers-global     Use shared buffer for the whole system (-k onl=
-y)
->   -C, --tracefile-size SIZE
->                            Maximum size of each tracefile within a stream
-> (in bytes). 0 means unlimited.
->                                (default: 0)
->   -W, --tracefile-count COUNT
->                            Used in conjunction with -C option, this will
-> limit the number
->                            of files created to the specified count. 0 mea=
-ns
-> unlimited.
->                                (default: 0)
->
-> Error: Command error
->
-> You can see these 2 lines:
->
->       --buffers-uid        Use per UID buffer (-u/-j only)
->       --buffers-pid        Use per PID buffer (-u/-j only)
->
-> But -j is not explained above.
->
-> Amit Margalit
-> IBM XIV - Storage Reinvented
-> XIV-NAS Development Team
-> Tel. 03-689-7774
-> Fax. 03-689-7230
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
-
-
-
--- =
-
-J=E9r=E9mie Galarneau
-EfficiOS Inc.
-http://www.efficios.com
+diff --git a/src/bin/lttng-sessiond/modprobe.c b/src/bin/lttng-sessiond/modprobe.c
+index 92563b0..b84c07e 100644
+--- a/src/bin/lttng-sessiond/modprobe.c
++++ b/src/bin/lttng-sessiond/modprobe.c
+@@ -82,18 +82,16 @@ const struct kern_modules_param kern_modules_list[] = {
+ 	{ "lttng-probe-writeback", 0 },
+ };
+ 
+-/*
+- * Remove control kernel module(s) in reverse load order.
+- */
+-void modprobe_remove_lttng_control(void)
++void modprobe_remove_lttng(const struct kern_modules_param *modules,
++			   int entries)
+ {
+ 	int ret = 0, i;
+ 	char modprobe[256];
+ 
+-	for (i = ARRAY_SIZE(kern_modules_control) - 1; i >= 0; i--) {
++	for (i = entries - 1; i >= 0; i--) {
+ 		ret = snprintf(modprobe, sizeof(modprobe),
+ 				"/sbin/modprobe -r -q %s",
+-				kern_modules_control[i].name);
++				modules[i].name);
+ 		if (ret < 0) {
+ 			PERROR("snprintf modprobe -r");
+ 			goto error;
+@@ -115,6 +113,16 @@ void modprobe_remove_lttng_control(void)
+ 
+ error:
+ 	return;
++
++}
++
++/*
++ * Remove control kernel module(s) in reverse load order.
++ */
++void modprobe_remove_lttng_control(void)
++{
++	return modprobe_remove_lttng(kern_modules_control,
++				     ARRAY_SIZE(kern_modules_control));
+ }
+ 
+ /*
+@@ -122,34 +130,8 @@ error:
+  */
+ void modprobe_remove_lttng_data(void)
+ {
+-	int ret = 0, i;
+-	char modprobe[256];
+-
+-	for (i = ARRAY_SIZE(kern_modules_list) - 1; i >= 0; i--) {
+-		ret = snprintf(modprobe, sizeof(modprobe),
+-				"/sbin/modprobe -r -q %s",
+-				kern_modules_list[i].name);
+-		if (ret < 0) {
+-			PERROR("snprintf modprobe -r");
+-			goto error;
+-		}
+-		modprobe[sizeof(modprobe) - 1] = '\0';
+-		ret = system(modprobe);
+-		if (ret == -1) {
+-			ERR("Unable to launch modprobe -r for module %s",
+-					kern_modules_list[i].name);
+-		} else if (kern_modules_list[i].required
+-				&& WEXITSTATUS(ret) != 0) {
+-			ERR("Unable to remove module %s",
+-					kern_modules_list[i].name);
+-		} else {
+-			DBG("Modprobe removal successful %s",
+-					kern_modules_list[i].name);
+-		}
+-	}
+-
+-error:
+-	return;
++	return modprobe_remove_lttng(kern_modules_list,
++				     ARRAY_SIZE(kern_modules_list));
+ }
+ 
+ /*
+@@ -161,19 +143,16 @@ void modprobe_remove_lttng_all(void)
+ 	modprobe_remove_lttng_control();
+ }
+ 
+-/*
+- * Load control kernel module(s).
+- */
+-int modprobe_lttng_control(void)
++static int modprobe_lttng(const struct kern_modules_param *modules, int entries)
+ {
+ 	int ret = 0, i;
+ 	char modprobe[256];
+ 
+-	for (i = 0; i < ARRAY_SIZE(kern_modules_control); i++) {
++	for (i = 0; i < entries; i++) {
+ 		ret = snprintf(modprobe, sizeof(modprobe),
+ 				"/sbin/modprobe %s%s",
+-				kern_modules_control[i].required ? "" : "-q ",
+-				kern_modules_control[i].name);
++				modules[i].required ? "" : "-q ",
++				modules[i].name);
+ 		if (ret < 0) {
+ 			PERROR("snprintf modprobe");
+ 			goto error;
+@@ -182,14 +161,13 @@ int modprobe_lttng_control(void)
+ 		ret = system(modprobe);
+ 		if (ret == -1) {
+ 			ERR("Unable to launch modprobe for module %s",
+-					kern_modules_control[i].name);
+-		} else if (kern_modules_control[i].required
+-				&& WEXITSTATUS(ret) != 0) {
++					modules[i].name);
++		} else if (modules[i].required && WEXITSTATUS(ret) != 0) {
+ 			ERR("Unable to load module %s",
+-					kern_modules_control[i].name);
++					modules[i].name);
+ 		} else {
+ 			DBG("Modprobe successfully %s",
+-					kern_modules_control[i].name);
++					modules[i].name);
+ 		}
+ 	}
+ 
+@@ -198,37 +176,18 @@ error:
+ }
+ 
+ /*
++ * Load control kernel module(s).
++ */
++int modprobe_lttng_control(void)
++{
++	return modprobe_lttng(kern_modules_control,
++			      ARRAY_SIZE(kern_modules_control));
++}
++/*
+  * Load data kernel module(s).
+  */
+ int modprobe_lttng_data(void)
+ {
+-	int ret = 0, i;
+-	char modprobe[256];
+-
+-	for (i = 0; i < ARRAY_SIZE(kern_modules_list); i++) {
+-		ret = snprintf(modprobe, sizeof(modprobe),
+-				"/sbin/modprobe %s%s",
+-				kern_modules_list[i].required ? "" : "-q ",
+-				kern_modules_list[i].name);
+-		if (ret < 0) {
+-			PERROR("snprintf modprobe");
+-			goto error;
+-		}
+-		modprobe[sizeof(modprobe) - 1] = '\0';
+-		ret = system(modprobe);
+-		if (ret == -1) {
+-			ERR("Unable to launch modprobe for module %s",
+-					kern_modules_list[i].name);
+-		} else if (kern_modules_list[i].required
+-				&& WEXITSTATUS(ret) != 0) {
+-			ERR("Unable to load module %s",
+-					kern_modules_list[i].name);
+-		} else {
+-			DBG("Modprobe successfully %s",
+-					kern_modules_list[i].name);
+-		}
+-	}
+-
+-error:
+-	return ret;
++	return modprobe_lttng(kern_modules_list,
++			      ARRAY_SIZE(kern_modules_list));
+ }
+-- 
+1.7.9.5
