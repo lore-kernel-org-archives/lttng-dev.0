@@ -1,21 +1,40 @@
-From: Jan Glauber <jan.glauber@gmail.com>
-Subject: [RFC Patch Tools 4/4] Dynamic probe list support
-Date: Thu,  3 Apr 2014 12:57:47 +0200
-Message-ID: <de183aafcb318b7088e7dd0d1780feae58f1e03a.1396521858.git.jan.glauber__9990.65490109405$1396530013$gmane$org@gmail.com>
-References: <cover.1396521858.git.jan.glauber@gmail.com>
+From: Amit Margalit <AMITM@il.ibm.com>
+Subject: Re: Problem running lttng enable-channel shortly
+ after	lttng create
+Date: Thu, 3 Apr 2014 15:10:19 +0300
+Message-ID: <OFF13A0F4F.5B371440-ONC2257CAF.0042DEFC-C2257CAF.0042E1CD__45169.820104684$1396532720$gmane$org@il.ibm.com>
+References: <OFBB2685C6.309D33C4-ONC2257CAE.0034A252-C2257CAE.003C2323@il.ibm.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1909669122=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wi0-f180.google.com ([209.85.212.180])
+Received: from e06smtp15.uk.ibm.com ([195.75.94.111])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jan.glauber@gmail.com>) id 1WVfMq-0007vK-30
- for lttng-dev@lists.lttng.org; Thu, 03 Apr 2014 06:59:33 -0400
-Received: by mail-wi0-f180.google.com with SMTP id q5so2243943wiv.7
- for <lttng-dev@lists.lttng.org>; Thu, 03 Apr 2014 03:59:26 -0700 (PDT)
-In-Reply-To: <cover.1396521858.git.jan.glauber@gmail.com>
-In-Reply-To: <cover.1396521858.git.jan.glauber@gmail.com>
-References: <cover.1396521858.git.jan.glauber@gmail.com>
+ (envelope-from <amitm@il.ibm.com>) id 1WVgTg-0008TF-GP
+ for lttng-dev@lists.lttng.org; Thu, 03 Apr 2014 08:10:42 -0400
+Received: from /spool/local
+ by e06smtp15.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only!
+ Violators will be prosecuted
+ for <lttng-dev@lists.lttng.org> from <amitm@il.ibm.com>;
+ Thu, 3 Apr 2014 13:10:34 +0100
+Received: from b06cxnps4075.portsmouth.uk.ibm.com
+ (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+ by d06dlp01.portsmouth.uk.ibm.com (Postfix) with ESMTP id 1083917D8047
+ for <lttng-dev@lists.lttng.org>; Thu,  3 Apr 2014 13:11:21 +0100 (BST)
+Received: from d06av06.portsmouth.uk.ibm.com (d06av06.portsmouth.uk.ibm.com
+ [9.149.37.217])
+ by b06cxnps4075.portsmouth.uk.ibm.com (8.13.8/8.13.8/NCO v10.0) with ESMTP id
+ s33CAJuU64618724
+ for <lttng-dev@lists.lttng.org>; Thu, 3 Apr 2014 12:10:19 GMT
+Received: from d06av06.portsmouth.uk.ibm.com (localhost [127.0.0.1])
+ by d06av06.portsmouth.uk.ibm.com (8.14.4/8.14.4/NCO v10.0 AVout) with ESMTP id
+ s33DAVFn000759
+ for <lttng-dev@lists.lttng.org>; Thu, 3 Apr 2014 07:10:31 -0600
+Received: from d06ml311.portsmouth.uk.ibm.com (d06ml311.portsmouth.uk.ibm.com
+ [9.149.104.181])
+ by d06av06.portsmouth.uk.ibm.com (8.14.4/8.14.4/NCO v10.0 AVin) with ESMTP id
+ s33DAVYT000756
+ for <lttng-dev@lists.lttng.org>; Thu, 3 Apr 2014 07:10:31 -0600
+In-Reply-To: <OFBB2685C6.309D33C4-ONC2257CAE.0034A252-C2257CAE.003C2323@il.ibm.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -24,239 +43,215 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Amit Margalit <AMITM@il.ibm.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Create a dynamic probe list if the LTTNG_PROBE_LIST environment variable
-is set and use it to load these probes. If the environment variable is
-not set all probes are loaded so the default behaviour is not changed.
+This is a multipart message in MIME format.
+--===============1909669122==
+Content-Type: multipart/alternative; boundary="=_alternative 0042E182C2257CAF_="
 
-Signed-off-by: Jan Glauber <jan.glauber@gmail.com>
----
- src/bin/lttng-sessiond/kern-modules.h |    2 +-
- src/bin/lttng-sessiond/modprobe.c     |   78 ++++++++++++++++++++++++++-------
- src/common/defaults.h                 |    3 ++
- src/common/utils.c                    |   10 +++++
- src/common/utils.h                    |    1 +
- 5 files changed, 77 insertions(+), 17 deletions(-)
+This is a multipart message in MIME format.
+--=_alternative 0042E182C2257CAF_=
+Content-Type: text/plain; charset="US-ASCII"
 
-diff --git a/src/bin/lttng-sessiond/kern-modules.h b/src/bin/lttng-sessiond/kern-modules.h
-index ca09fc3..26f4457 100644
---- a/src/bin/lttng-sessiond/kern-modules.h
-+++ b/src/bin/lttng-sessiond/kern-modules.h
-@@ -28,7 +28,7 @@
- #define KERN_MODULES_MINOR         0
- 
- struct kern_modules_param {
--	const char *name;
-+	char *name;
- };
- 
- #endif /* _KERN_MODULES_H */
-diff --git a/src/bin/lttng-sessiond/modprobe.c b/src/bin/lttng-sessiond/modprobe.c
-index 79a01ea..75e33e4 100644
---- a/src/bin/lttng-sessiond/modprobe.c
-+++ b/src/bin/lttng-sessiond/modprobe.c
-@@ -21,6 +21,7 @@
- #include <sys/wait.h>
- 
- #include <common/common.h>
-+#include <common/utils.h>
- 
- #include "modprobe.h"
- #include "kern-modules.h"
-@@ -29,7 +30,7 @@
- #define LTTNG_MOD_OPTIONAL	0
- 
- /* LTTng kernel tracer mandatory core modules list */
--const struct kern_modules_param kern_modules_control_core[] = {
-+struct kern_modules_param kern_modules_control_core[] = {
- 	{ "lttng-tracer" },	/* MUST be loaded first so keep at top */
- 	{ "lttng-lib-ring-buffer" },
- 	{ "lttng-ring-buffer-client-discard" },
-@@ -41,7 +42,7 @@ const struct kern_modules_param kern_modules_control_core[] = {
- };
- 
- /* LTTng kernel tracer optional base modules list */
--const struct kern_modules_param kern_modules_control_opt[] = {
-+struct kern_modules_param kern_modules_control_opt[] = {
- 	{ "lttng-types" },
- 	{ "lttng-ftrace" },
- 	{ "lttng-kprobes" },
-@@ -49,7 +50,7 @@ const struct kern_modules_param kern_modules_control_opt[] = {
- };
- 
- /* LTTng kernel tracer probe modules list */
--const struct kern_modules_param kern_modules_probes[] = {
-+struct kern_modules_param kern_modules_probes_default[] = {
- 	{ "lttng-probe-asoc" },
- 	{ "lttng-probe-block" },
- 	{ "lttng-probe-btrfs" },
-@@ -89,6 +90,10 @@ const struct kern_modules_param kern_modules_probes[] = {
- 	{ "lttng-probe-writeback" },
- };
- 
-+/* dynamic probe modules list */
-+static struct kern_modules_param *probes;
-+static int nr_probes;
-+
- void modprobe_remove_lttng(const struct kern_modules_param *modules,
- 			   int entries, int required)
- {
-@@ -115,6 +120,8 @@ void modprobe_remove_lttng(const struct kern_modules_param *modules,
- 			DBG("Modprobe removal successful %s",
- 					modules[i].name);
- 		}
-+		if (probes)
-+			free(probes[i].name);
- 	}
- }
- 
-@@ -124,11 +131,11 @@ void modprobe_remove_lttng(const struct kern_modules_param *modules,
- void modprobe_remove_lttng_control(void)
- {
- 	modprobe_remove_lttng(kern_modules_control_opt,
--				    ARRAY_SIZE(kern_modules_control_opt),
--				    LTTNG_MOD_OPTIONAL);
-+			      ARRAY_SIZE(kern_modules_control_opt),
-+			      LTTNG_MOD_OPTIONAL);
- 	modprobe_remove_lttng(kern_modules_control_core,
--				     ARRAY_SIZE(kern_modules_control_core),
--				     LTTNG_MOD_REQUIRED);
-+			      ARRAY_SIZE(kern_modules_control_core),
-+			      LTTNG_MOD_REQUIRED);
- }
- 
- /*
-@@ -136,9 +143,14 @@ void modprobe_remove_lttng_control(void)
-  */
- void modprobe_remove_lttng_data(void)
- {
--	return modprobe_remove_lttng(kern_modules_probes,
--				     ARRAY_SIZE(kern_modules_probes),
--				     LTTNG_MOD_OPTIONAL);
-+	if (probes) {
-+		modprobe_remove_lttng(probes, nr_probes, LTTNG_MOD_OPTIONAL);
-+		free(probes);
-+		probes = NULL;
-+	} else
-+		modprobe_remove_lttng(kern_modules_probes_default,
-+				      ARRAY_SIZE(kern_modules_probes_default),
-+				      LTTNG_MOD_OPTIONAL);
- }
- 
- /*
-@@ -150,7 +162,7 @@ void modprobe_remove_lttng_all(void)
- 	modprobe_remove_lttng_control();
- }
- 
--static int modprobe_lttng(const struct kern_modules_param *modules,
-+static int modprobe_lttng(struct kern_modules_param *modules,
- 			  int entries, int required)
- {
- 	int ret = 0, i;
-@@ -194,8 +206,8 @@ int modprobe_lttng_control(void)
- 	if (ret != 0)
- 		return ret;
- 	ret = modprobe_lttng(kern_modules_control_opt,
--			      ARRAY_SIZE(kern_modules_control_opt),
--			      LTTNG_MOD_OPTIONAL);
-+			     ARRAY_SIZE(kern_modules_control_opt),
-+			     LTTNG_MOD_OPTIONAL);
- 	return ret;
- }
- 
-@@ -204,7 +216,41 @@ int modprobe_lttng_control(void)
-  */
- int modprobe_lttng_data(void)
- {
--	return modprobe_lttng(kern_modules_probes,
--			      ARRAY_SIZE(kern_modules_probes),
--			      LTTNG_MOD_OPTIONAL);
-+	int entries = ARRAY_SIZE(kern_modules_probes_default);
-+	char *list = utils_get_probe_list();
-+	char *next;
-+	int i;
-+
-+	/* the default is to load ALL probes */
-+	if (!list)
-+		return modprobe_lttng(kern_modules_probes_default, entries,
-+				      LTTNG_MOD_OPTIONAL);
-+
-+	/*
-+	 * A probe list is available, so use it.
-+	 * The number of probes is limited by the number of probes in the
-+	 * default list.
-+	 */
-+	probes = malloc(sizeof(struct kern_modules_param *) * entries);
-+	if (!probes) {
-+		PERROR("malloc probe list");
-+		return -ENOMEM;
-+	}
-+	for (i = 0; i < entries; i++) {
-+		next = strtok(list, ":");
-+		if (!next)
-+			goto out;
-+		list = NULL;
-+
-+		/* length 13 is "lttng-probe-" + \0 */
-+		probes[i].name = malloc(strlen(next) + 13);
-+		if (!probes[i].name) {
-+			PERROR("malloc probe list");
-+			return -ENOMEM;
-+		}
-+		sprintf(probes[i].name, "lttng-probe-%s", next);
-+	}
-+out:
-+	nr_probes = i;
-+	return modprobe_lttng(probes, nr_probes, LTTNG_MOD_OPTIONAL);
- }
-diff --git a/src/common/defaults.h b/src/common/defaults.h
-index 7acabf1..6892efd 100644
---- a/src/common/defaults.h
-+++ b/src/common/defaults.h
-@@ -90,6 +90,9 @@
- #define DEFAULT_LTTNG_SESSIOND_PIDFILE          "lttng-sessiond.pid"
- #define DEFAULT_LTTNG_SESSIOND_JULPORT_FILE     "jul.port"
- 
-+/* Default probe list */
-+#define DEFAULT_LTTNG_PROBE_LIST		"LTTNG_PROBE_LIST"
-+
- /* Default unix socket path */
- #define DEFAULT_GLOBAL_CLIENT_UNIX_SOCK         DEFAULT_LTTNG_RUNDIR "/client-lttng-sessiond"
- #define DEFAULT_HOME_CLIENT_UNIX_SOCK           DEFAULT_LTTNG_HOME_RUNDIR "/client-lttng-sessiond"
-diff --git a/src/common/utils.c b/src/common/utils.c
-index 31596dd..12edd2c 100644
---- a/src/common/utils.c
-+++ b/src/common/utils.c
-@@ -896,6 +896,16 @@ end:
- }
- 
- /*
-+ * Obtain the value of LTTNG_PROBE_LIST environment variable, if exists.
-+ * Otherwise returns an empty string.
-+ */
-+LTTNG_HIDDEN
-+char *utils_get_probe_list(void)
-+{
-+	return getenv(DEFAULT_LTTNG_PROBE_LIST);
-+}
-+
-+/*
-  * With the given format, fill dst with the time of len maximum siz.
-  *
-  * Return amount of bytes set in the buffer or else 0 on error.
-diff --git a/src/common/utils.h b/src/common/utils.h
-index 63290a7..4f61575 100644
---- a/src/common/utils.h
-+++ b/src/common/utils.h
-@@ -47,6 +47,7 @@ int utils_parse_size_suffix(char *str, uint64_t *size);
- int utils_get_count_order_u32(uint32_t x);
- char *utils_get_home_dir(void);
- char *utils_get_user_home_dir(uid_t uid);
-+char *utils_get_probe_list(void);
- size_t utils_get_current_time_str(const char *format, char *dst, size_t len);
- gid_t utils_get_group_id(const char *name);
- char *utils_generate_optstring(const struct option *long_options,
--- 
-1.7.9.5
+Bump...
+
+Amit Margalit
+IBM XIV - Storage Reinvented
+XIV-NAS Development Team
+Tel. 03-689-7774
+Fax. 03-689-7230
+
+
+
+From:   Amit Margalit/Israel/IBM@IBMIL
+To:     lttng-dev <lttng-dev@lists.lttng.org>
+Date:   04/02/2014 01:57 PM
+Subject:        [lttng-dev] Problem running lttng enable-channel shortly 
+after   lttng create
+
+
+
+Hello, 
+
+I keep getting the following error from lttng enable-channel: 
+
+libust[2984/2986]: Error: Timed out waiting for lttng-sessiond (in 
+lttng_ust_init() at lttng-ust-comm.c:1444) 
+
+The scenario is quite simple - during boot of the system, we create a 
+session, enable a channel, etc., like this: 
+
+# /usr/bin/lttng-sessiond --no-kernel -b 
+Warning: No tracing group detected 
+# /usr/bin/lttng create nextra -o /local/traces/lttng/20140402123725 
+Session nextra created. 
+Traces will be written in /local/traces/lttng/20140402123725 
+# /usr/bin/lttng enable-channel channel0 -u --tracefile-size 67108864 
+--tracefile-count 40 --buffers-uid --switch-timer 1000000 --num-subbuf 16 
+--subbuf-size 262144 
+libust[2984/2986]: Error: Timed out waiting for lttng-sessiond (in 
+lttng_ust_init() at lttng-ust-comm.c:1444) 
+Warning: No tracing group detected 
+
+The PID 2984 belongs to the lttng-consumerd. At that point in time I see 
+the following in syslog: 
+
+2014/04/02 12:38:03.370576 kernel   error    nextra-6663235-module-1  [ 
+56.376155] proc lttng-sessiond with pid 632 goes to delayed retry in 
+epoll_wait(): start jiffies 4294904844, stop jiffies=4294906390 (+1546), 
+expected final stop jiffies=9223372041149680651 (+9223372036854775807), 
+next stop jiffies=9223372041149682197 (+9223372036854775807) 
+2014/04/02 12:38:03.399245 kernel   error    nextra-6663235-module-1  [ 
+56.405166] proc lttng-sessiond with pid 632 goes to delayed retry in 
+epoll_wait(): start jiffies 4294904844, stop jiffies=4294906397 (+1553), 
+expected final stop jiffies=9223372041149680651 (+9223372036854775807), 
+next stop jiffies=9223372041149682204 (+9223372036854775807) 
+2014/04/02 12:38:03.405700 kernel   error    nextra-6663235-module-1  [ 
+56.411791] proc lttng-sessiond with pid 632 goes to delayed retry in 
+epoll_wait(): start jiffies 4294904844, stop jiffies=4294906398 (+1554), 
+expected final stop jiffies=9223372041149680651 (+9223372036854775807), 
+next stop jiffies=9223372041149682205 (+9223372036854775807) 
+
+And finally, the command succeeds: 
+
+UST channel channel0 enabled for session nextra 
+
+My guess is that the boot sequence is loading some traced application 
+before the channel is enabled, and the consumerd is started, which under 
+heavy system load (exists during initial boot time) times out waiting for 
+the sessiond. If that was the case, I could try to increase the timeout 
+time, but that also delays my booting, which I cannot afford to do. 
+
+Suggestions? 
+
+
+Amit Margalit 
+IBM XIV - Storage Reinvented 
+XIV-NAS Development Team 
+Tel. 03-689-7774 
+Fax. 03-689-7230_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+
+--=_alternative 0042E182C2257CAF_=
+Content-Type: text/html; charset="US-ASCII"
+
+<font size=2 face="sans-serif">Bump...</font>
+<br>
+<br><font size=2 color=#000080 face="sans-serif">Amit Margalit</font>
+<br><font size=2 color=#808000 face="sans-serif">IBM XIV </font><font size=2 face="sans-serif">-
+<i>Storage Reinvented</i></font>
+<br><font size=2 face="sans-serif">XIV-NAS Development Team</font>
+<br><font size=2 face="sans-serif">Tel. 03</font><font size=2 face="Arial">-689-7774</font>
+<br><font size=2 face="Arial">Fax. 03-689-7230</font>
+<br>
+<br>
+<br>
+<br><font size=1 color=#5f5f5f face="sans-serif">From: &nbsp; &nbsp; &nbsp;
+&nbsp;</font><font size=1 face="sans-serif">Amit Margalit/Israel/IBM@IBMIL</font>
+<br><font size=1 color=#5f5f5f face="sans-serif">To: &nbsp; &nbsp; &nbsp;
+&nbsp;</font><font size=1 face="sans-serif">lttng-dev &lt;lttng-dev@lists.lttng.org&gt;</font>
+<br><font size=1 color=#5f5f5f face="sans-serif">Date: &nbsp; &nbsp; &nbsp;
+&nbsp;</font><font size=1 face="sans-serif">04/02/2014 01:57 PM</font>
+<br><font size=1 color=#5f5f5f face="sans-serif">Subject: &nbsp; &nbsp;
+&nbsp; &nbsp;</font><font size=1 face="sans-serif">[lttng-dev]
+Problem running lttng enable-channel shortly after &nbsp; &nbsp; &nbsp;
+&nbsp;lttng create</font>
+<br>
+<hr noshade>
+<br>
+<br>
+<br><font size=2 face="sans-serif">Hello,</font><font size=3> <br>
+</font><font size=2 face="sans-serif"><br>
+I keep getting the following error from lttng enable-channel:</font><font size=3>
+<br>
+</font><tt><font size=2><br>
+libust[2984/2986]: Error: Timed out waiting for lttng-sessiond (in lttng_ust_init()
+at lttng-ust-comm.c:1444)</font></tt><font size=3> <br>
+</font><font size=2 face="sans-serif"><br>
+The scenario is quite simple - during boot of the system, we create a session,
+enable a channel, etc., like this:</font><font size=3> <br>
+</font><tt><font size=2><br>
+# /usr/bin/lttng-sessiond --no-kernel -b</font></tt><font size=3> </font><tt><font size=2><br>
+Warning: No tracing group detected</font></tt><font size=3> </font><tt><font size=2><br>
+# /usr/bin/lttng create nextra -o /local/traces/lttng/20140402123725</font></tt><font size=3>
+</font><tt><font size=2><br>
+Session nextra created.</font></tt><font size=3> </font><tt><font size=2><br>
+Traces will be written in /local/traces/lttng/20140402123725</font></tt><font size=3>
+</font><tt><font size=2><br>
+# /usr/bin/lttng enable-channel channel0 -u --tracefile-size 67108864 --tracefile-count
+40 --buffers-uid --switch-timer 1000000 --num-subbuf 16 --subbuf-size 262144</font></tt><font size=3>
+</font><tt><font size=2><br>
+libust[2984/2986]: Error: Timed out waiting for lttng-sessiond (in lttng_ust_init()
+at lttng-ust-comm.c:1444)</font></tt><font size=3> </font><tt><font size=2><br>
+Warning: No tracing group detected</font></tt><font size=3> <br>
+</font><font size=2 face="sans-serif"><br>
+The PID </font><tt><font size=2>2984</font></tt><font size=2 face="sans-serif">
+belongs to the lttng-consumerd. At that point in time I see the following
+in syslog:</font><font size=3> <br>
+</font><font size=2 face="sans-serif"><br>
+2014/04/02 12:38:03.370576 kernel &nbsp; error &nbsp; &nbsp;nextra-6663235-module-1
+&nbsp;[ &nbsp; 56.376155] proc lttng-sessiond with pid 632 goes to delayed
+retry in epoll_wait(): start jiffies 4294904844, stop jiffies=4294906390
+(+1546), expected final stop jiffies=9223372041149680651 (+9223372036854775807),
+next stop jiffies=9223372041149682197 (+9223372036854775807)</font><font size=3>
+</font><font size=2 face="sans-serif"><br>
+2014/04/02 12:38:03.399245 kernel &nbsp; error &nbsp; &nbsp;nextra-6663235-module-1
+&nbsp;[ &nbsp; 56.405166] proc lttng-sessiond with pid 632 goes to delayed
+retry in epoll_wait(): start jiffies 4294904844, stop jiffies=4294906397
+(+1553), expected final stop jiffies=9223372041149680651 (+9223372036854775807),
+next stop jiffies=9223372041149682204 (+9223372036854775807)</font><font size=3>
+</font><font size=2 face="sans-serif"><br>
+2014/04/02 12:38:03.405700 kernel &nbsp; error &nbsp; &nbsp;nextra-6663235-module-1
+&nbsp;[ &nbsp; 56.411791] proc lttng-sessiond with pid 632 goes to delayed
+retry in epoll_wait(): start jiffies 4294904844, stop jiffies=4294906398
+(+1554), expected final stop jiffies=9223372041149680651 (+9223372036854775807),
+next stop jiffies=9223372041149682205 (+9223372036854775807)</font><font size=3>
+<br>
+</font><font size=2 face="sans-serif"><br>
+And finally, the command succeeds:</font><font size=3> <br>
+</font><tt><font size=2><br>
+UST channel channel0 enabled for session nextra</font></tt><font size=3>
+<br>
+</font><font size=2 face="sans-serif"><br>
+My guess is that the boot sequence is loading some traced application before
+the channel is enabled, and the consumerd is started, which under heavy
+system load (exists during initial boot time) times out waiting for the
+sessiond. If that was the case, I could try to increase the timeout time,
+but that also delays my booting, which I cannot afford to do.</font><font size=3>
+<br>
+</font><font size=2 face="sans-serif"><br>
+Suggestions?</font><font size=3> <br>
+<br>
+</font><font size=2 color=#000080 face="sans-serif"><br>
+Amit Margalit</font><font size=3> </font><font size=2 color=#808000 face="sans-serif"><br>
+IBM XIV </font><font size=2 face="sans-serif">- <i>Storage Reinvented</i></font><font size=3>
+</font><font size=2 face="sans-serif"><br>
+XIV-NAS Development Team</font><font size=3> </font><font size=2 face="sans-serif"><br>
+Tel. 03</font><font size=2 face="Arial">-689-7774</font><font size=3> </font><font size=2 face="Arial"><br>
+Fax. 03-689-7230</font><tt><font size=2>_______________________________________________<br>
+lttng-dev mailing list<br>
+lttng-dev@lists.lttng.org<br>
+</font></tt><a href="http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev"><tt><font size=2>http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</font></tt></a><tt><font size=2><br>
+</font></tt>
+<br>
+--=_alternative 0042E182C2257CAF_=--
+
+
+
+--===============1909669122==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1909669122==--
