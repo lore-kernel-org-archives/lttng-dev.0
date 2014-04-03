@@ -1,16 +1,21 @@
-From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Subject: Re: instrumenting shared library
-Date: Thu, 3 Apr 2014 16:05:17 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD35992F74__4995.06235723874$1396541189$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+From: Wade Farnsworth <wade_farnsworth@mentor.com>
+Subject: [PATCH v2 lttng-modules] Add V4L2 instrumentation
+Date: Thu, 3 Apr 2014 10:13:04 -0700
+Message-ID: <533D96A0.3070602__13463.6766546921$1396545311$gmane$org@mentor.com>
+References: <5335D6D8.3060005@mentor.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
+Received: from relay1.mentorg.com ([192.94.38.131])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1WVk8p-0001fO-Es
- for lttng-dev@lists.lttng.org; Thu, 03 Apr 2014 12:05:29 -0400
-Content-Language: fr-FR
+ (envelope-from <wade_farnsworth@mentor.com>) id 1WVlD6-00026G-4M
+ for lttng-dev@lists.lttng.org; Thu, 03 Apr 2014 13:13:58 -0400
+Received: from svr-orw-fem-01.mgc.mentorg.com ([147.34.98.93])
+ by relay1.mentorg.com with esmtp
+ id 1WVlD0-00029A-4d from wade_farnsworth@mentor.com
+ for lttng-dev@lists.lttng.org; Thu, 03 Apr 2014 10:13:46 -0700
+In-Reply-To: <5335D6D8.3060005@mentor.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,134 +24,419 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
-Cc: Anand Neeli <anand.neeli@gmail.com>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-----------------------------------------------------------------------
-Date: Thu, 3 Apr 2014 16:55:38 +0530
-From: Anand Neeli <anand.neeli@gmail.com>
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+Add instrumentation for the V4L2 tracepoints that first appeared in
+Linux v3.14 (commit 2d01237389dc64b37745ce87e64d6808b6eed582 in Linus's
+tree).
 
-> I have a library which is instrumented and tracepoints are added. And I
-> have 2 binary's (or daemons) which try to include this library. (one bina=
-ry
-> has instrumented code with tracepoints and other binary doesn't use
-> tracing)
->
-> I found that i need to instrument the daemon which includes the
-> instrumented library for the code to compile.
->
-> Can't I have a daemon (without tracing functionality) which can include an
-> instrumented library (i don't want to use tracing functionality in this
-> case)
->
-> I'm only able to build if both library and daemon which includes it are
-> instrumented.
->
-> Can anyone please give me more details on how to do this?
-> This is useful for huge code bases where you can selectively add tracing
-> support to few libraries or daemons.
->
-> Anand Neeli
+Signed-off-by: Wade Farnsworth <wade_farnsworth@mentor.com>
+---
 
-   It can be done.  An uninstrumented app can rely on an instrumented share=
-d object; whether the latter produces lttng events then depends on whether =
-or not the tracepoint provider shared object is loaded when the app is invo=
-ked (using LD_PRELOAD).
+v2: Fixed compiler warning '"V4L2_TRACE_EVENT" redefined'
 
-   Here is sample_neeli.c:
-#####
-#include <stdio.h> //For printf
-#include <unistd.h>
+ instrumentation/events/lttng-module/v4l2.h | 157 +++++++++++++++++++++++++++++
+ instrumentation/events/mainline/v4l2.h     | 157 +++++++++++++++++++++++++++++
+ probes/Makefile                            |   6 ++
+ probes/lttng-probe-v4l2.c                  |  44 ++++++++
+ 4 files changed, 364 insertions(+)
+ create mode 100644 instrumentation/events/lttng-module/v4l2.h
+ create mode 100644 instrumentation/events/mainline/v4l2.h
+ create mode 100644 probes/lttng-probe-v4l2.c
 
-#include "cobject.h"
-int main(int argc, char **argv)
-{
-	int i =3D 0;
-	char themessage[20]; //Can hold up to "Hello World 9999999\0"
-
-	fprintf(stderr, "sample_neeli starting\n");
-	for (i =3D 0; i < 10000; i++) {
-		//We either prepare themessage in this module, or rely on an
-		//external shared object
-		cobject_message(themessage, i);
-		usleep(1);
-	}
-	fprintf(stderr, "sample_neeli done\n");
-	return 0;
-}
-#####
-cobject.c:
-#####
-#include <stdio.h> //For printf
-#include <unistd.h>
-
-#include "tp.h"
-
-void cobject_message(char *themessage, int i)
-{
-	tracepoint(sample_component, event, "cobject_message");
-	sprintf(themessage, "CObject %u", i);
-}
-#####
-cobject.h:
-#####
-extern void cobject_message(char *themessage, int i);
-#####
-The tracepoint provider code should be easy to guess.
-
-The relevant Makefile fragments:
-#####
-CC =3D gcc
-LIBDL =3D -ldl # On Linux
-#LIBDL =3D -lc # On BSD
-LOCAL_CPPFLAGS +=3D -I. $(AM_CPPFLAGS)
-LDFLAGS +=3D -L/usr/local/lib $(AM_LDFLAGS)
-SOFLAGS =3D -fPIC
-TP_DEFINE =3D -D TRACEPOINT_DEFINE
-TP_DEFINE_DYNAMIC =3D $(TP_DEFINE) -D TRACEPOINT_PROBE_DYNAMIC_LINKAGE
-SOVERSION_MAJOR =3D 1
-SOVERSION_MINOR =3D 0
-
-libcobject.so: libcobject.o
-	@echo "~~~~~~Packaging $@:"
-	$(CC) -shared -Wl,-soname,$@.$(SOVERSION_MAJOR) -Wl,-no-as-needed \
-	   -o $@.$(SOVERSION_MAJOR).$(SOVERSION_MINOR) $^
-	ln -sf $@.$(SOVERSION_MAJOR).$(SOVERSION_MINOR) $@.$(SOVERSION_MAJOR)
-	ln -sf $@.$(SOVERSION_MAJOR) $@
-
-libcobject.o: cobject.c cobject.h tp.h
-	@echo "~~~~~~Compiling $@:"
-	$(CC) $(CPPFLAGS) $(LOCAL_CPPFLAGS) $(SOFLAGS) $(TP_DEFINE_DYNAMIC) \
-	   -c -o $@ $<
-
-neeli_dynamic_lib:: neeli_dynamic_lib.o
-	@echo "~~~~~~Linking sample_$@:"
-	$(CC) -Wl,-no-as-needed -o $@ -L. -lcobject $^ $(LDFLAGS) \
-	   $(LIBDL) -Wl,-rpath,'$$ORIGIN',--enable-new-dtags
-	@echo "   Use '[LD_PRELOAD=3D./libtp.so] ./$@' to run $@"
-
-neeli_dynamic_lib.o: sample_neeli.c cobject.h
-	@echo "~~~~~~Compiling $@:"
-	$(CC) $(CPPFLAGS) $(LOCAL_CPPFLAGS) -c -o $@ $<
-#####
-
-   Running './neeli_dynamic_lib' yields no events.  Running 'LD_PRELOAD=3D.=
-/libtp.so ./neeli_dynamic_lib' yields the libcobject.so events.
-
-Daniel U. Thibault
-Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
-ntermeasures (SPC)
-Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
-Cyber Security (MCCS)
-R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
- Canada - Valcartier (DRDC Valcartier)
-2459 route de la Bravoure
-Qu=E9bec QC  G3J 1X5
-CANADA
-Vox : (418) 844-4000 x4245
-Fax : (418) 844-4538
-NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-Gouvernement du Canada | Government of Canada
-<http://www.valcartier.drdc-rddc.gc.ca/>
+diff --git a/instrumentation/events/lttng-module/v4l2.h b/instrumentation/events/lttng-module/v4l2.h
+new file mode 100644
+index 0000000..b5a5d81
+--- /dev/null
++++ b/instrumentation/events/lttng-module/v4l2.h
+@@ -0,0 +1,157 @@
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM v4l2
++
++#if !defined(_TRACE_V4L2_H) || defined(TRACE_HEADER_MULTI_READ)
++#define _TRACE_V4L2_H
++
++#include <linux/tracepoint.h>
++
++#define show_type(type)							       \
++	__print_symbolic(type,						       \
++		{ V4L2_BUF_TYPE_VIDEO_CAPTURE,	      "VIDEO_CAPTURE" },       \
++		{ V4L2_BUF_TYPE_VIDEO_OUTPUT,	      "VIDEO_OUTPUT" },	       \
++		{ V4L2_BUF_TYPE_VIDEO_OVERLAY,	      "VIDEO_OVERLAY" },       \
++		{ V4L2_BUF_TYPE_VBI_CAPTURE,	      "VBI_CAPTURE" },	       \
++		{ V4L2_BUF_TYPE_VBI_OUTPUT,	      "VBI_OUTPUT" },	       \
++		{ V4L2_BUF_TYPE_SLICED_VBI_CAPTURE,   "SLICED_VBI_CAPTURE" },  \
++		{ V4L2_BUF_TYPE_SLICED_VBI_OUTPUT,    "SLICED_VBI_OUTPUT" },   \
++		{ V4L2_BUF_TYPE_VIDEO_OUTPUT_OVERLAY, "VIDEO_OUTPUT_OVERLAY" },\
++		{ V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE, "VIDEO_CAPTURE_MPLANE" },\
++		{ V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,  "VIDEO_OUTPUT_MPLANE" }, \
++		{ V4L2_BUF_TYPE_PRIVATE,	      "PRIVATE" })
++
++#define show_field(field)						\
++	__print_symbolic(field,						\
++		{ V4L2_FIELD_ANY,		"ANY" },		\
++		{ V4L2_FIELD_NONE,		"NONE" },		\
++		{ V4L2_FIELD_TOP,		"TOP" },		\
++		{ V4L2_FIELD_BOTTOM,		"BOTTOM" },		\
++		{ V4L2_FIELD_INTERLACED,	"INTERLACED" },		\
++		{ V4L2_FIELD_SEQ_TB,		"SEQ_TB" },		\
++		{ V4L2_FIELD_SEQ_BT,		"SEQ_BT" },		\
++		{ V4L2_FIELD_ALTERNATE,		"ALTERNATE" },		\
++		{ V4L2_FIELD_INTERLACED_TB,	"INTERLACED_TB" },      \
++		{ V4L2_FIELD_INTERLACED_BT,	"INTERLACED_BT" })
++
++#define show_timecode_type(type)					\
++	__print_symbolic(type,						\
++		{ V4L2_TC_TYPE_24FPS,		"24FPS" },		\
++		{ V4L2_TC_TYPE_25FPS,		"25FPS" },		\
++		{ V4L2_TC_TYPE_30FPS,		"30FPS" },		\
++		{ V4L2_TC_TYPE_50FPS,		"50FPS" },		\
++		{ V4L2_TC_TYPE_60FPS,		"60FPS" })
++
++#define show_flags(flags)						      \
++	__print_flags(flags, "|",					      \
++		{ V4L2_BUF_FLAG_MAPPED,		     "MAPPED" },	      \
++		{ V4L2_BUF_FLAG_QUEUED,		     "QUEUED" },	      \
++		{ V4L2_BUF_FLAG_DONE,		     "DONE" },		      \
++		{ V4L2_BUF_FLAG_KEYFRAME,	     "KEYFRAME" },	      \
++		{ V4L2_BUF_FLAG_PFRAME,		     "PFRAME" },	      \
++		{ V4L2_BUF_FLAG_BFRAME,		     "BFRAME" },	      \
++		{ V4L2_BUF_FLAG_ERROR,		     "ERROR" },		      \
++		{ V4L2_BUF_FLAG_TIMECODE,	     "TIMECODE" },	      \
++		{ V4L2_BUF_FLAG_PREPARED,	     "PREPARED" },	      \
++		{ V4L2_BUF_FLAG_NO_CACHE_INVALIDATE, "NO_CACHE_INVALIDATE" }, \
++		{ V4L2_BUF_FLAG_NO_CACHE_CLEAN,	     "NO_CACHE_CLEAN" },      \
++		{ V4L2_BUF_FLAG_TIMESTAMP_MASK,	     "TIMESTAMP_MASK" },      \
++		{ V4L2_BUF_FLAG_TIMESTAMP_UNKNOWN,   "TIMESTAMP_UNKNOWN" },   \
++		{ V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC, "TIMESTAMP_MONOTONIC" }, \
++		{ V4L2_BUF_FLAG_TIMESTAMP_COPY,	     "TIMESTAMP_COPY" })
++
++#define show_timecode_flags(flags)					  \
++	__print_flags(flags, "|",					  \
++		{ V4L2_TC_FLAG_DROPFRAME,       "DROPFRAME" },		  \
++		{ V4L2_TC_FLAG_COLORFRAME,      "COLORFRAME" },		  \
++		{ V4L2_TC_USERBITS_USERDEFINED,	"USERBITS_USERDEFINED" }, \
++		{ V4L2_TC_USERBITS_8BITCHARS,	"USERBITS_8BITCHARS" })
++
++#define LTTNG_V4L2_TRACE_EVENT(event_name)				\
++	TRACE_EVENT(event_name,						\
++		TP_PROTO(int minor, struct v4l2_buffer *buf),		\
++									\
++		TP_ARGS(minor, buf),					\
++									\
++		TP_STRUCT__entry(					\
++			__field(int, minor)				\
++			__field(u32, index)				\
++			__field(u32, type)				\
++			__field(u32, bytesused)				\
++			__field(u32, flags)				\
++			__field(u32, field)				\
++			__field(s64, timestamp)				\
++			__field(u32, timecode_type)			\
++			__field(u32, timecode_flags)			\
++			__field(u8, timecode_frames)			\
++			__field(u8, timecode_seconds)			\
++			__field(u8, timecode_minutes)			\
++			__field(u8, timecode_hours)			\
++			__field(u8, timecode_userbits0)			\
++			__field(u8, timecode_userbits1)			\
++			__field(u8, timecode_userbits2)			\
++			__field(u8, timecode_userbits3)			\
++			__field(u32, sequence)				\
++		),							\
++									\
++		TP_fast_assign(						\
++			tp_assign(minor, minor);			\
++			tp_assign(index, buf->index);			\
++			tp_assign(type, buf->type);			\
++			tp_assign(bytesused, buf->bytesused);		\
++			tp_assign(flags, buf->flags);			\
++			tp_assign(field, buf->field);			\
++			tp_assign(timestamp,				\
++				timeval_to_ns(&buf->timestamp));	\
++			tp_assign(timecode_type, buf->timecode.type);	\
++			tp_assign(timecode_flags, buf->timecode.flags);	\
++			tp_assign(timecode_frames,			\
++				buf->timecode.frames);			\
++			tp_assign(timecode_seconds,			\
++				buf->timecode.seconds);			\
++			tp_assign(timecode_minutes,			\
++				buf->timecode.minutes);			\
++			tp_assign(timecode_hours, buf->timecode.hours);	\
++			tp_assign(timecode_userbits0,			\
++				buf->timecode.userbits[0]);		\
++			tp_assign(timecode_userbits1,			\
++				buf->timecode.userbits[1]);		\
++			tp_assign(timecode_userbits2,			\
++				buf->timecode.userbits[2]);		\
++			tp_assign(timecode_userbits3,			\
++				buf->timecode.userbits[3]);		\
++			tp_assign(sequence, buf->sequence);		\
++		),							\
++									\
++		TP_printk("minor = %d, index = %u, type = %s, "		\
++			  "bytesused = %u, flags = %s, "		\
++			  "field = %s, timestamp = %llu, timecode = { "	\
++			  "type = %s, flags = %s, frames = %u, "	\
++			  "seconds = %u, minutes = %u, hours = %u, "	\
++			  "userbits = { %u %u %u %u } }, "		\
++			  "sequence = %u", __entry->minor,		\
++			  __entry->index, show_type(__entry->type),	\
++			  __entry->bytesused,				\
++			  show_flags(__entry->flags),			\
++			  show_field(__entry->field),			\
++			  __entry->timestamp,				\
++			  show_timecode_type(__entry->timecode_type),	\
++			  show_timecode_flags(__entry->timecode_flags),	\
++			  __entry->timecode_frames,			\
++			  __entry->timecode_seconds,			\
++			  __entry->timecode_minutes,			\
++			  __entry->timecode_hours,			\
++			  __entry->timecode_userbits0,			\
++			  __entry->timecode_userbits1,			\
++			  __entry->timecode_userbits2,			\
++			  __entry->timecode_userbits3,			\
++			  __entry->sequence				\
++		)							\
++	)
++
++LTTNG_V4L2_TRACE_EVENT(v4l2_dqbuf)
++LTTNG_V4L2_TRACE_EVENT(v4l2_qbuf)
++
++#endif /* if !defined(_TRACE_V4L2_H) || defined(TRACE_HEADER_MULTI_READ) */
++
++/* This part must be outside protection */
++#include "../../../probes/define_trace.h"
+diff --git a/instrumentation/events/mainline/v4l2.h b/instrumentation/events/mainline/v4l2.h
+new file mode 100644
+index 0000000..ef94eca
+--- /dev/null
++++ b/instrumentation/events/mainline/v4l2.h
+@@ -0,0 +1,157 @@
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM v4l2
++
++#if !defined(_TRACE_V4L2_H) || defined(TRACE_HEADER_MULTI_READ)
++#define _TRACE_V4L2_H
++
++#include <linux/tracepoint.h>
++
++#define show_type(type)							       \
++	__print_symbolic(type,						       \
++		{ V4L2_BUF_TYPE_VIDEO_CAPTURE,	      "VIDEO_CAPTURE" },       \
++		{ V4L2_BUF_TYPE_VIDEO_OUTPUT,	      "VIDEO_OUTPUT" },	       \
++		{ V4L2_BUF_TYPE_VIDEO_OVERLAY,	      "VIDEO_OVERLAY" },       \
++		{ V4L2_BUF_TYPE_VBI_CAPTURE,	      "VBI_CAPTURE" },	       \
++		{ V4L2_BUF_TYPE_VBI_OUTPUT,	      "VBI_OUTPUT" },	       \
++		{ V4L2_BUF_TYPE_SLICED_VBI_CAPTURE,   "SLICED_VBI_CAPTURE" },  \
++		{ V4L2_BUF_TYPE_SLICED_VBI_OUTPUT,    "SLICED_VBI_OUTPUT" },   \
++		{ V4L2_BUF_TYPE_VIDEO_OUTPUT_OVERLAY, "VIDEO_OUTPUT_OVERLAY" },\
++		{ V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE, "VIDEO_CAPTURE_MPLANE" },\
++		{ V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,  "VIDEO_OUTPUT_MPLANE" }, \
++		{ V4L2_BUF_TYPE_PRIVATE,	      "PRIVATE" })
++
++#define show_field(field)						\
++	__print_symbolic(field,						\
++		{ V4L2_FIELD_ANY,		"ANY" },		\
++		{ V4L2_FIELD_NONE,		"NONE" },		\
++		{ V4L2_FIELD_TOP,		"TOP" },		\
++		{ V4L2_FIELD_BOTTOM,		"BOTTOM" },		\
++		{ V4L2_FIELD_INTERLACED,	"INTERLACED" },		\
++		{ V4L2_FIELD_SEQ_TB,		"SEQ_TB" },		\
++		{ V4L2_FIELD_SEQ_BT,		"SEQ_BT" },		\
++		{ V4L2_FIELD_ALTERNATE,		"ALTERNATE" },		\
++		{ V4L2_FIELD_INTERLACED_TB,	"INTERLACED_TB" },      \
++		{ V4L2_FIELD_INTERLACED_BT,	"INTERLACED_BT" })
++
++#define show_timecode_type(type)					\
++	__print_symbolic(type,						\
++		{ V4L2_TC_TYPE_24FPS,		"24FPS" },		\
++		{ V4L2_TC_TYPE_25FPS,		"25FPS" },		\
++		{ V4L2_TC_TYPE_30FPS,		"30FPS" },		\
++		{ V4L2_TC_TYPE_50FPS,		"50FPS" },		\
++		{ V4L2_TC_TYPE_60FPS,		"60FPS" })
++
++#define show_flags(flags)						      \
++	__print_flags(flags, "|",					      \
++		{ V4L2_BUF_FLAG_MAPPED,		     "MAPPED" },	      \
++		{ V4L2_BUF_FLAG_QUEUED,		     "QUEUED" },	      \
++		{ V4L2_BUF_FLAG_DONE,		     "DONE" },		      \
++		{ V4L2_BUF_FLAG_KEYFRAME,	     "KEYFRAME" },	      \
++		{ V4L2_BUF_FLAG_PFRAME,		     "PFRAME" },	      \
++		{ V4L2_BUF_FLAG_BFRAME,		     "BFRAME" },	      \
++		{ V4L2_BUF_FLAG_ERROR,		     "ERROR" },		      \
++		{ V4L2_BUF_FLAG_TIMECODE,	     "TIMECODE" },	      \
++		{ V4L2_BUF_FLAG_PREPARED,	     "PREPARED" },	      \
++		{ V4L2_BUF_FLAG_NO_CACHE_INVALIDATE, "NO_CACHE_INVALIDATE" }, \
++		{ V4L2_BUF_FLAG_NO_CACHE_CLEAN,	     "NO_CACHE_CLEAN" },      \
++		{ V4L2_BUF_FLAG_TIMESTAMP_MASK,	     "TIMESTAMP_MASK" },      \
++		{ V4L2_BUF_FLAG_TIMESTAMP_UNKNOWN,   "TIMESTAMP_UNKNOWN" },   \
++		{ V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC, "TIMESTAMP_MONOTONIC" }, \
++		{ V4L2_BUF_FLAG_TIMESTAMP_COPY,	     "TIMESTAMP_COPY" })
++
++#define show_timecode_flags(flags)					  \
++	__print_flags(flags, "|",					  \
++		{ V4L2_TC_FLAG_DROPFRAME,       "DROPFRAME" },		  \
++		{ V4L2_TC_FLAG_COLORFRAME,      "COLORFRAME" },		  \
++		{ V4L2_TC_USERBITS_USERDEFINED,	"USERBITS_USERDEFINED" }, \
++		{ V4L2_TC_USERBITS_8BITCHARS,	"USERBITS_8BITCHARS" })
++
++#define V4L2_TRACE_EVENT(event_name)					\
++	TRACE_EVENT(event_name,						\
++		TP_PROTO(int minor, struct v4l2_buffer *buf),		\
++									\
++		TP_ARGS(minor, buf),					\
++									\
++		TP_STRUCT__entry(					\
++			__field(int, minor)				\
++			__field(u32, index)				\
++			__field(u32, type)				\
++			__field(u32, bytesused)				\
++			__field(u32, flags)				\
++			__field(u32, field)				\
++			__field(s64, timestamp)				\
++			__field(u32, timecode_type)			\
++			__field(u32, timecode_flags)			\
++			__field(u8, timecode_frames)			\
++			__field(u8, timecode_seconds)			\
++			__field(u8, timecode_minutes)			\
++			__field(u8, timecode_hours)			\
++			__field(u8, timecode_userbits0)			\
++			__field(u8, timecode_userbits1)			\
++			__field(u8, timecode_userbits2)			\
++			__field(u8, timecode_userbits3)			\
++			__field(u32, sequence)				\
++		),							\
++									\
++		TP_fast_assign(						\
++			__entry->minor = minor;				\
++			__entry->index = buf->index;			\
++			__entry->type = buf->type;			\
++			__entry->bytesused = buf->bytesused;		\
++			__entry->flags = buf->flags;			\
++			__entry->field = buf->field;			\
++			__entry->timestamp =				\
++				timeval_to_ns(&buf->timestamp);		\
++			__entry->timecode_type = buf->timecode.type;	\
++			__entry->timecode_flags = buf->timecode.flags;	\
++			__entry->timecode_frames =			\
++				buf->timecode.frames;			\
++			__entry->timecode_seconds =			\
++				buf->timecode.seconds;			\
++			__entry->timecode_minutes =			\
++				buf->timecode.minutes;			\
++			__entry->timecode_hours = buf->timecode.hours;	\
++			__entry->timecode_userbits0 =			\
++				buf->timecode.userbits[0];		\
++			__entry->timecode_userbits1 =			\
++				buf->timecode.userbits[1];		\
++			__entry->timecode_userbits2 =			\
++				buf->timecode.userbits[2];		\
++			__entry->timecode_userbits3 =			\
++				buf->timecode.userbits[3];		\
++			__entry->sequence = buf->sequence;		\
++		),							\
++									\
++		TP_printk("minor = %d, index = %u, type = %s, "		\
++			  "bytesused = %u, flags = %s, "		\
++			  "field = %s, timestamp = %llu, timecode = { "	\
++			  "type = %s, flags = %s, frames = %u, "	\
++			  "seconds = %u, minutes = %u, hours = %u, "	\
++			  "userbits = { %u %u %u %u } }, "		\
++			  "sequence = %u", __entry->minor,		\
++			  __entry->index, show_type(__entry->type),	\
++			  __entry->bytesused,				\
++			  show_flags(__entry->flags),			\
++			  show_field(__entry->field),			\
++			  __entry->timestamp,				\
++			  show_timecode_type(__entry->timecode_type),	\
++			  show_timecode_flags(__entry->timecode_flags),	\
++			  __entry->timecode_frames,			\
++			  __entry->timecode_seconds,			\
++			  __entry->timecode_minutes,			\
++			  __entry->timecode_hours,			\
++			  __entry->timecode_userbits0,			\
++			  __entry->timecode_userbits1,			\
++			  __entry->timecode_userbits2,			\
++			  __entry->timecode_userbits3,			\
++			  __entry->sequence				\
++		)							\
++	)
++
++V4L2_TRACE_EVENT(v4l2_dqbuf);
++V4L2_TRACE_EVENT(v4l2_qbuf);
++
++#endif /* if !defined(_TRACE_V4L2_H) || defined(TRACE_HEADER_MULTI_READ) */
++
++/* This part must be outside protection */
++#include <trace/define_trace.h>
+diff --git a/probes/Makefile b/probes/Makefile
+index 63ca7ba..f98f2c5 100644
+--- a/probes/Makefile
++++ b/probes/Makefile
+@@ -197,6 +197,12 @@ obj-m +=  $(shell \
+ 		echo "lttng-probe-sunrpc.o" ; fi;)
+ endif
+ 
++ifneq ($(CONFIG_VIDEO_V4L2),)
++obj-m += $(shell \
++	if [ $(VERSION) -ge 3 -a $(PATCHLEVEL) -ge 14 ] ; then \
++		echo "lttng-probe-v4l2.o" ; fi;)
++endif
++
+ obj-m += lttng-probe-workqueue.o
+ 
+ ifneq ($(CONFIG_KALLSYMS_ALL),)
+diff --git a/probes/lttng-probe-v4l2.c b/probes/lttng-probe-v4l2.c
+new file mode 100644
+index 0000000..709ccb2
+--- /dev/null
++++ b/probes/lttng-probe-v4l2.c
+@@ -0,0 +1,44 @@
++/*
++ * probes/lttng-probe-v4l2.c
++ *
++ * LTTng v4l2 probes.
++ *
++ * Copyright (C) 2010-2012 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
++ * Copyright (C) 2012,2013 Mentor Graphics Corp.
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; only
++ * version 2.1 of the License.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
++ */
++
++#include <linux/module.h>
++#include <linux/videodev2.h>
++
++/*
++ * Create the tracepoint static inlines from the kernel to validate that our
++ * trace event macros match the kernel we run on.
++ */
++#include <trace/events/v4l2.h>
++
++/*
++ * Create LTTng tracepoint probes.
++ */
++#define LTTNG_PACKAGE_BUILD
++#define CREATE_TRACE_POINTS
++#define TRACE_INCLUDE_PATH ../instrumentation/events/lttng-module
++
++#include "../instrumentation/events/lttng-module/v4l2.h"
++
++MODULE_LICENSE("GPL and additional rights");
++MODULE_AUTHOR("Wade Farnsworth <wade_farnsworth@mentor.com>");
++MODULE_DESCRIPTION("LTTng v4l2 probes");
+-- 
+1.9.0
