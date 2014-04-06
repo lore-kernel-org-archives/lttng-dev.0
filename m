@@ -1,22 +1,23 @@
 From: Jonathan Rajotte <jonathan.r.julien@gmail.com>
-Subject: [MI RFC 1/3] Mi: mi backend + mi for command version
-Date: Sun, 6 Apr 2014 15:30:32 -0400
-Message-ID: <20140406193032.GA24869__35197.6567334079$1396812718$gmane$org@psrcode-MS-7693>
+Subject: [MI RFC 2/3] Mi: support for command list
+Date: Sun, 6 Apr 2014 15:30:57 -0400
+Message-ID: <20140406193057.GA25250__721.443180418824$1396812885$gmane$org@psrcode-MS-7693>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="6TrnltStXW4iwmi0"
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qa0-f44.google.com ([209.85.216.44])
+Received: from mail-qg0-f43.google.com ([209.85.192.43])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jonathan.r.julien@gmail.com>) id 1WWsm8-0001kg-Da
- for lttng-dev@lists.lttng.org; Sun, 06 Apr 2014 15:30:47 -0400
-Received: by mail-qa0-f44.google.com with SMTP id hw13so2816750qab.3
- for <lttng-dev@lists.lttng.org>; Sun, 06 Apr 2014 12:30:35 -0700 (PDT)
+ (envelope-from <jonathan.r.julien@gmail.com>) id 1WWsmX-0001l3-9v
+ for lttng-dev@lists.lttng.org; Sun, 06 Apr 2014 15:31:09 -0400
+Received: by mail-qg0-f43.google.com with SMTP id f51so5368679qge.16
+ for <lttng-dev@lists.lttng.org>; Sun, 06 Apr 2014 12:30:59 -0700 (PDT)
 Received: from psrcode-MS-7693 (cable-28.246.173-253.electronicbox.net.
  [173.246.28.253])
- by mx.google.com with ESMTPSA id e69sm20120998qgf.17.2014.04.06.12.30.33
+ by mx.google.com with ESMTPSA id n7sm29831092qav.31.2014.04.06.12.30.58
  for <lttng-dev@lists.lttng.org>
  (version=TLSv1.2 cipher=RC4-SHA bits=128/128);
- Sun, 06 Apr 2014 12:30:34 -0700 (PDT)
+ Sun, 06 Apr 2014 12:30:59 -0700 (PDT)
 Content-Disposition: inline
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -29,1436 +30,2178 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-
---6TrnltStXW4iwmi0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-X-MIME-Autoconverted: from 8bit to quoted-printable by smtp.polymtl.ca id s36JV93l004673
-
-Hi,
-
-These patches add machine interface functionality to command version and =
-list.
-At the same time they procure a base architecture of the machine
-interface.
-
-The first patch cover the version command and add the base for the
-machine interface.(mostly the same as last week mi patch)
-p.s: David if you want to pull this one [1].
-
-The second patch provide full machine interface functionality to the list
-command. You will find attached a little script that demonstrate the mi
-functionality of list. The script need a root sessiond and need to be
-at the base of lttng-tool directory. Outputs will be generated in
-./mi_test_output/ .
-
-The third patch provide an xsd to validate the mi output of list and
-version command.
-
-Voil=E0!
-
-Jonathan
-
-[1] https://github.com/PSRCode/lttng-tools-dev/commits/list_release
-    commit: add4aa1a79247749cb823ec68ab1067beda937d0
---Patch--
-
-The machine interface option is now available for version.
-Other commands will shortly follow.
-Mi backend is expected to grow with addition of mi support
-to other commands.
-
-How to use:
-	lttng --mi <mi_output_type> <command>
-
-This syntax will be the same for all commands.
-Currently *only xml is supported as machine interface output.*
-
-As for errors handling, if an error/warning occurs while using mi it will=
- be
-reported on stderr as normal. The integrity of the mi output cannot be
-guaranteed if an error/warning occurs.
-The error output format is consistent and easy for a machine client to pa=
-rse.
-Thus no mi output format is required for error output.
-
-Example:
-	lttng --mi xml version
-Output:
-<?xml version=3D"1.0" encoding=3D"UTF-8"?>
-  <command>
-    <name>version</name>
-    <output>
-      <string>2.4.0-rc2</string>
-      <major>2</major>
-      <minor>4</minor>
-      <patchLevel>0</patchLevel>
-      <name>=C9poque Opaque</name>
-      <description>The =C9poque Opaque is a black IPA from Trou du Diable
-      brewery. The nose is eerily reminiscent of the coffee crisp candy f=
-rom
-      of our childhood. These strong mocha accents are present on the pal=
-ate,
-      which are quickly subdued by Japanese and Australian hops leading t=
-o a
-      final state of satisfaction enjoyable for any fan of bitter
-      beer.</description>
-      <url>http://lttng.org</url>
-      <license>lttng is free software and under the GPL license and part
-      LGPL</license>
-  </output>
-</command>
-
-Signed-off-by: Olivier Cotte <olivier.cotte@polymtl.ca>
 Signed-off-by: Jonathan Rajotte <jonathan.r.julien@gmail.com>
 ---
- include/lttng/lttng-error.h               |   6 +-
- include/lttng/lttng.h                     |   5 +
- src/bin/lttng-consumerd/lttng-consumerd.c |   2 +
- src/bin/lttng/commands/add_context.c      |   7 +
- src/bin/lttng/commands/calibrate.c        |   7 +
- src/bin/lttng/commands/create.c           |   7 +
- src/bin/lttng/commands/destroy.c          |   7 +
- src/bin/lttng/commands/disable_channels.c |   7 +
- src/bin/lttng/commands/disable_events.c   |   7 +
- src/bin/lttng/commands/enable_channels.c  |   7 +
- src/bin/lttng/commands/enable_events.c    |   7 +
- src/bin/lttng/commands/list.c             |   7 +
- src/bin/lttng/commands/load.c             |   7 +
- src/bin/lttng/commands/save.c             |   7 +
- src/bin/lttng/commands/set_session.c      |   7 +
- src/bin/lttng/commands/snapshot.c         |   7 +
- src/bin/lttng/commands/start.c            |   7 +
- src/bin/lttng/commands/stop.c             |   7 +
- src/bin/lttng/commands/version.c          |  88 ++++++++-
- src/bin/lttng/commands/view.c             |   4 +
- src/bin/lttng/lttng.c                     |  32 +++-
- src/common/Makefile.am                    |   5 +-
- src/common/error.h                        |  11 +-
- src/common/mi-lttng.c                     | 284 ++++++++++++++++++++++++=
-++++++
- src/common/mi-lttng.h                     | 230 ++++++++++++++++++++++++
- src/lib/lttng-ctl/lttng-ctl.c             |   1 +
- tests/unit/ini_config/ini_config.c        |   1 +
- tests/unit/test_kernel_data.c             |   1 +
- tests/unit/test_session.c                 |   1 +
- tests/unit/test_uri.c                     |   1 +
- tests/unit/test_ust_data.c                |   1 +
- tests/unit/test_utils_expand_path.c       |   1 +
- tests/unit/test_utils_parse_size_suffix.c |   1 +
- 33 files changed, 769 insertions(+), 11 deletions(-)
- create mode 100644 src/common/mi-lttng.c
- create mode 100644 src/common/mi-lttng.h
+ src/bin/lttng/commands/list.c | 888 ++++++++++++++++++++++++++++++++++++------
+ src/common/mi-lttng.c         | 685 +++++++++++++++++++++++++++++++-
+ src/common/mi-lttng.h         | 299 +++++++++++++-
+ 3 files changed, 1735 insertions(+), 137 deletions(-)
 
-diff --git a/include/lttng/lttng-error.h b/include/lttng/lttng-error.h
-index 06baa04..1594ba9 100644
---- a/include/lttng/lttng-error.h
-+++ b/include/lttng/lttng-error.h
-@@ -120,9 +120,9 @@ enum lttng_error_code {
- 	LTTNG_ERR_LOAD_INVALID_CONFIG    =3D 87,  /* Invalid session configurat=
-ion */
- 	LTTNG_ERR_LOAD_IO_FAIL           =3D 88,  /* IO error while reading a s=
-ession configuration */
- 	LTTNG_ERR_LOAD_SESSION_NOENT     =3D 89,  /* Session file not found */
--	/* 90 */
--	/* 91 */
--	/* 92 */
-+	LTTNG_ERR_MI_OUTPUT_TYPE         =3D 90, /* Invalid MI output format */
-+	LTTNG_ERR_MI_IO_FAIL             =3D 91, /* IO error while writing mach=
-ine interface output */
-+	LTTNG_ERR_MI_NOT_IMPLEMENTED     =3D 92, /* Mi feature not implemented =
-*/
- 	/* 93 */
- 	/* 94 */
- 	/* 95 */
-diff --git a/include/lttng/lttng.h b/include/lttng/lttng.h
-index f0be224..9449161 100644
---- a/include/lttng/lttng.h
-+++ b/include/lttng/lttng.h
-@@ -170,6 +170,11 @@ enum lttng_buffer_type {
- 	LTTNG_BUFFER_GLOBAL,	/* Only supported by the Kernel. */
- };
-=20
-+/* Machine interface output type */
-+enum lttng_mi_output_type {
-+	LTTNG_MI_XML                          =3D 1 /* XML output */
-+};
-+
- /*
-  * The structures should be initialized to zero before use.
-  */
-diff --git a/src/bin/lttng-consumerd/lttng-consumerd.c b/src/bin/lttng-co=
-nsumerd/lttng-consumerd.c
-index e226ebc..0ce163e 100644
---- a/src/bin/lttng-consumerd/lttng-consumerd.c
-+++ b/src/bin/lttng-consumerd/lttng-consumerd.c
-@@ -65,6 +65,8 @@ static int sigintcount =3D 0;
- /* Argument variables */
- int lttng_opt_quiet;    /* not static in error.h */
- int lttng_opt_verbose;  /* not static in error.h */
-+int lttng_opt_mi;       /* not static in error.h */
-+
- static int opt_daemon;
- static const char *progname;
- static char command_sock_path[PATH_MAX]; /* Global command socket path *=
-/
-diff --git a/src/bin/lttng/commands/add_context.c b/src/bin/lttng/command=
-s/add_context.c
-index 6483c98..2eb0e90 100644
---- a/src/bin/lttng/commands/add_context.c
-+++ b/src/bin/lttng/commands/add_context.c
-@@ -446,6 +446,13 @@ int cmd_add_context(int argc, const char **argv)
- 		goto end;
- 	}
-=20
-+	/* TODO: mi support */
-+	if (lttng_opt_mi) {
-+		ret =3D -LTTNG_ERR_MI_NOT_IMPLEMENTED;
-+		ERR("mi option not supported");
-+		goto end;
-+	}
-+
- 	pc =3D poptGetContext(NULL, argc, argv, long_options, 0);
- 	poptReadDefaultConfig(pc, 0);
-=20
-diff --git a/src/bin/lttng/commands/calibrate.c b/src/bin/lttng/commands/=
-calibrate.c
-index 092632c..7d4de29 100644
---- a/src/bin/lttng/commands/calibrate.c
-+++ b/src/bin/lttng/commands/calibrate.c
-@@ -133,6 +133,13 @@ static int calibrate_lttng(void)
- 		goto error;
- 	}
-=20
-+	/* TODO: mi support */
-+	if (lttng_opt_mi) {
-+		ret =3D -LTTNG_ERR_MI_NOT_IMPLEMENTED;
-+		ERR("mi option not supported");
-+		goto error;
-+	}
-+
- 	handle =3D lttng_create_handle(NULL, &dom);
- 	if (handle =3D=3D NULL) {
- 		ret =3D CMD_ERROR;
-diff --git a/src/bin/lttng/commands/create.c b/src/bin/lttng/commands/cre=
-ate.c
-index e02b141..c43ce59 100644
---- a/src/bin/lttng/commands/create.c
-+++ b/src/bin/lttng/commands/create.c
-@@ -515,6 +515,13 @@ int cmd_create(int argc, const char **argv)
- 		}
- 	}
-=20
-+	/* TODO: mi support */
-+	if (lttng_opt_mi) {
-+		ret =3D -LTTNG_ERR_MI_NOT_IMPLEMENTED;
-+		ERR("mi option not supported");
-+		goto end;
-+	}
-+
- 	if (opt_no_consumer) {
- 		MSG("The option --no-consumer is obsolete. Use --no-output now.");
- 		ret =3D CMD_WARNING;
-diff --git a/src/bin/lttng/commands/destroy.c b/src/bin/lttng/commands/de=
-stroy.c
-index 3fb5fb2..26548b9 100644
---- a/src/bin/lttng/commands/destroy.c
-+++ b/src/bin/lttng/commands/destroy.c
-@@ -148,6 +148,13 @@ int cmd_destroy(int argc, const char **argv)
- 		goto end;
- 	}
-=20
-+	/* TODO: mi support */
-+	if (lttng_opt_mi) {
-+		ret =3D -LTTNG_ERR_MI_NOT_IMPLEMENTED;
-+		ERR("mi option not supported");
-+		goto end;
-+	}
-+
- 	/* Ignore session name in case all sessions are to be destroyed */
- 	if (opt_destroy_all) {
- 		ret =3D destroy_all_sessions();
-diff --git a/src/bin/lttng/commands/disable_channels.c b/src/bin/lttng/co=
-mmands/disable_channels.c
-index 1aa3916..da53d25 100644
---- a/src/bin/lttng/commands/disable_channels.c
-+++ b/src/bin/lttng/commands/disable_channels.c
-@@ -167,6 +167,13 @@ int cmd_disable_channels(int argc, const char **argv=
-)
- 		}
- 	}
-=20
-+	/* TODO: mi support */
-+	if (lttng_opt_mi) {
-+		ret =3D -LTTNG_ERR_MI_NOT_IMPLEMENTED;
-+		ERR("mi option not supported");
-+		goto end;
-+	}
-+
- 	opt_channels =3D (char*) poptGetArg(pc);
- 	if (opt_channels =3D=3D NULL) {
- 		ERR("Missing channel name(s).\n");
-diff --git a/src/bin/lttng/commands/disable_events.c b/src/bin/lttng/comm=
-ands/disable_events.c
-index e712343..fb96b80 100644
---- a/src/bin/lttng/commands/disable_events.c
-+++ b/src/bin/lttng/commands/disable_events.c
-@@ -212,6 +212,13 @@ int cmd_disable_events(int argc, const char **argv)
- 		}
- 	}
-=20
-+	/* TODO: mi support */
-+	if (lttng_opt_mi) {
-+		ret =3D -LTTNG_ERR_MI_NOT_IMPLEMENTED;
-+		ERR("mi option not supported");
-+		goto end;
-+	}
-+
- 	opt_event_list =3D (char*) poptGetArg(pc);
- 	if (opt_event_list =3D=3D NULL && opt_disable_all =3D=3D 0) {
- 		ERR("Missing event name(s).\n");
-diff --git a/src/bin/lttng/commands/enable_channels.c b/src/bin/lttng/com=
-mands/enable_channels.c
-index 55fbae6..8ea405e 100644
---- a/src/bin/lttng/commands/enable_channels.c
-+++ b/src/bin/lttng/commands/enable_channels.c
-@@ -327,6 +327,13 @@ int cmd_enable_channels(int argc, const char **argv)
- 	pc =3D poptGetContext(NULL, argc, argv, long_options, 0);
- 	poptReadDefaultConfig(pc, 0);
-=20
-+	/* TODO: mi support */
-+	if (lttng_opt_mi) {
-+		ret =3D -LTTNG_ERR_MI_NOT_IMPLEMENTED;
-+		ERR("mi option not supported");
-+		goto end;
-+	}
-+
- 	while ((opt =3D poptGetNextOpt(pc)) !=3D -1) {
- 		switch (opt) {
- 		case OPT_HELP:
-diff --git a/src/bin/lttng/commands/enable_events.c b/src/bin/lttng/comma=
-nds/enable_events.c
-index bd2d997..8c7a73e 100644
---- a/src/bin/lttng/commands/enable_events.c
-+++ b/src/bin/lttng/commands/enable_events.c
-@@ -968,6 +968,13 @@ int cmd_enable_events(int argc, const char **argv)
- 	pc =3D poptGetContext(NULL, argc, argv, long_options, 0);
- 	poptReadDefaultConfig(pc, 0);
-=20
-+	/* TODO: mi support */
-+	if (lttng_opt_mi) {
-+		ret =3D -LTTNG_ERR_MI_NOT_IMPLEMENTED;
-+		ERR("mi option not supported");
-+		goto end;
-+	}
-+
- 	/* Default event type */
- 	opt_event_type =3D LTTNG_EVENT_ALL;
-=20
-diff --git a/src/bin/lttng/commands/list.c b/src/bin/lttng/commands/list.=
-c
-index f69b3ba..bbd674c 100644
+diff --git a/src/bin/lttng/commands/list.c b/src/bin/lttng/commands/list.c
+index bbd674c..a0d0e4c 100644
 --- a/src/bin/lttng/commands/list.c
 +++ b/src/bin/lttng/commands/list.c
-@@ -850,6 +850,13 @@ int cmd_list(int argc, const char **argv)
- 	pc =3D poptGetContext(NULL, argc, argv, long_options, 0);
- 	poptReadDefaultConfig(pc, 0);
-=20
-+	/* TODO: mi support */
-+	if (lttng_opt_mi) {
-+		ret =3D -LTTNG_ERR_MI_NOT_IMPLEMENTED;
-+		ERR("mi option not supported");
-+		goto end;
-+	}
-+
- 	while ((opt =3D poptGetNextOpt(pc)) !=3D -1) {
- 		switch (opt) {
- 		case OPT_HELP:
-diff --git a/src/bin/lttng/commands/load.c b/src/bin/lttng/commands/load.=
-c
-index e732baa..2cfc698 100644
---- a/src/bin/lttng/commands/load.c
-+++ b/src/bin/lttng/commands/load.c
-@@ -77,6 +77,13 @@ int cmd_load(int argc, const char **argv)
- 	pc =3D poptGetContext(NULL, argc, argv, load_opts, 0);
- 	poptReadDefaultConfig(pc, 0);
-=20
-+	/* TODO: mi support */
-+	if (lttng_opt_mi) {
-+		ret =3D -LTTNG_ERR_MI_NOT_IMPLEMENTED;
-+		ERR("mi option not supported");
-+		goto end;
-+	}
-+
- 	while ((opt =3D poptGetNextOpt(pc)) !=3D -1) {
- 		switch (opt) {
- 		case OPT_HELP:
-diff --git a/src/bin/lttng/commands/save.c b/src/bin/lttng/commands/save.=
-c
-index e8a4565..1aeb9f2 100644
---- a/src/bin/lttng/commands/save.c
-+++ b/src/bin/lttng/commands/save.c
-@@ -73,6 +73,13 @@ int cmd_save(int argc, const char **argv)
- 	pc =3D poptGetContext(NULL, argc, argv, save_opts, 0);
- 	poptReadDefaultConfig(pc, 0);
-=20
-+	/* TODO: mi support */
-+	if (lttng_opt_mi) {
-+		ret =3D -LTTNG_ERR_MI_NOT_IMPLEMENTED;
-+		ERR("mi option not supported");
-+		goto end;
-+	}
-+
- 	while ((opt =3D poptGetNextOpt(pc)) !=3D -1) {
- 		switch (opt) {
- 		case OPT_HELP:
-diff --git a/src/bin/lttng/commands/set_session.c b/src/bin/lttng/command=
-s/set_session.c
-index 4238016..54320df 100644
---- a/src/bin/lttng/commands/set_session.c
-+++ b/src/bin/lttng/commands/set_session.c
-@@ -92,6 +92,13 @@ int cmd_set_session(int argc, const char **argv)
- 	pc =3D poptGetContext(NULL, argc, argv, long_options, 0);
- 	poptReadDefaultConfig(pc, 0);
-=20
-+	/* TODO: mi support */
-+	if (lttng_opt_mi) {
-+		ret =3D -LTTNG_ERR_MI_NOT_IMPLEMENTED;
-+		ERR("mi option not supported");
-+		goto end;
-+	}
-+
- 	while ((opt =3D poptGetNextOpt(pc)) !=3D -1) {
- 		switch (opt) {
- 		case OPT_HELP:
-diff --git a/src/bin/lttng/commands/snapshot.c b/src/bin/lttng/commands/s=
-napshot.c
-index c704eee..21b5a05 100644
---- a/src/bin/lttng/commands/snapshot.c
-+++ b/src/bin/lttng/commands/snapshot.c
-@@ -446,6 +446,13 @@ int cmd_snapshot(int argc, const char **argv)
- 	pc =3D poptGetContext(NULL, argc, argv, snapshot_opts, 0);
- 	poptReadDefaultConfig(pc, 0);
-=20
-+	/* TODO: mi support */
-+	if (lttng_opt_mi) {
-+		ret =3D -LTTNG_ERR_MI_NOT_IMPLEMENTED;
-+		ERR("mi option not supported");
-+		goto end;
-+	}
-+
- 	while ((opt =3D poptGetNextOpt(pc)) !=3D -1) {
- 		switch (opt) {
- 		case OPT_HELP:
-diff --git a/src/bin/lttng/commands/start.c b/src/bin/lttng/commands/star=
-t.c
-index 82122cc..82b3f5f 100644
---- a/src/bin/lttng/commands/start.c
-+++ b/src/bin/lttng/commands/start.c
-@@ -118,6 +118,13 @@ int cmd_start(int argc, const char **argv)
- 	pc =3D poptGetContext(NULL, argc, argv, long_options, 0);
- 	poptReadDefaultConfig(pc, 0);
-=20
-+	/* TODO: mi support */
-+	if (lttng_opt_mi) {
-+		ret =3D -LTTNG_ERR_MI_NOT_IMPLEMENTED;
-+		ERR("mi option not supported");
-+		goto end;
-+	}
-+
- 	while ((opt =3D poptGetNextOpt(pc)) !=3D -1) {
- 		switch (opt) {
- 		case OPT_HELP:
-diff --git a/src/bin/lttng/commands/stop.c b/src/bin/lttng/commands/stop.=
-c
-index 60a1dac..5de96d8 100644
---- a/src/bin/lttng/commands/stop.c
-+++ b/src/bin/lttng/commands/stop.c
-@@ -122,6 +122,13 @@ int cmd_stop(int argc, const char **argv)
- 	pc =3D poptGetContext(NULL, argc, argv, long_options, 0);
- 	poptReadDefaultConfig(pc, 0);
-=20
-+	/* TODO: mi support */
-+	if (lttng_opt_mi) {
-+		ret =3D -LTTNG_ERR_MI_NOT_IMPLEMENTED;
-+		ERR("mi option not supported");
-+		goto end;
-+	}
-+
- 	while ((opt =3D poptGetNextOpt(pc)) !=3D -1) {
- 		switch (opt) {
- 		case OPT_HELP:
-diff --git a/src/bin/lttng/commands/version.c b/src/bin/lttng/commands/ve=
-rsion.c
-index 7f69de3..5c7ebbf 100644
---- a/src/bin/lttng/commands/version.c
-+++ b/src/bin/lttng/commands/version.c
-@@ -25,6 +25,8 @@
- #include <unistd.h>
- #include <config.h>
-=20
+@@ -23,6 +23,8 @@
+ #include <string.h>
+ #include <assert.h>
+ 
 +#include <common/mi-lttng.h>
 +
  #include "../command.h"
-=20
- enum {
-@@ -32,6 +34,8 @@ enum {
- 	OPT_LIST_OPTIONS,
+ 
+ static int opt_userspace;
+@@ -48,6 +50,7 @@ enum {
  };
-=20
-+static const char *lttng_license =3D "lttng is free software and under t=
-he GPL license and part LGPL";
-+
- static struct poptOption long_options[] =3D {
+ 
+ static struct lttng_handle *handle;
++static struct mi_writer *writer;
+ 
+ static struct poptOption long_options[] = {
  	/* longName, shortName, argInfo, argPtr, value, descrip, argDesc */
- 	{"help",      'h', POPT_ARG_NONE, 0, OPT_HELP, 0, 0},
-@@ -53,6 +57,78 @@ static void usage(FILE *ofp)
+@@ -148,89 +151,6 @@ static const char *snapshot_string(int value)
+ 	}
  }
-=20
+ 
+-static
+-const char *enabled_string(int value)
+-{
+-	switch (value) {
+-	case 0:	return " [disabled]";
+-	case 1: return " [enabled]";
+-	case -1: return "";
+-	default: return NULL;
+-	}
+-}
+-
+-static
+-const char *filter_string(int value)
+-{
+-	switch (value) {
+-	case 1:	return " [with filter]";
+-	default: return "";
+-	}
+-}
+-
+-static
+-const char *exclusion_string(int value)
+-{
+-	switch (value) {
+-	case 1: return " [has exclusions]";
+-	default: return "";
+-	}
+-}
+-
+-static const char *loglevel_string(int value)
+-{
+-	switch (value) {
+-	case -1:
+-		return "";
+-	case LTTNG_LOGLEVEL_EMERG:
+-		return "TRACE_EMERG";
+-	case LTTNG_LOGLEVEL_ALERT:
+-		return "TRACE_ALERT";
+-	case LTTNG_LOGLEVEL_CRIT:
+-		return "TRACE_CRIT";
+-	case LTTNG_LOGLEVEL_ERR:
+-		return "TRACE_ERR";
+-	case LTTNG_LOGLEVEL_WARNING:
+-		return "TRACE_WARNING";
+-	case LTTNG_LOGLEVEL_NOTICE:
+-		return "TRACE_NOTICE";
+-	case LTTNG_LOGLEVEL_INFO:
+-		return "TRACE_INFO";
+-	case LTTNG_LOGLEVEL_DEBUG_SYSTEM:
+-		return "TRACE_DEBUG_SYSTEM";
+-	case LTTNG_LOGLEVEL_DEBUG_PROGRAM:
+-		return "TRACE_DEBUG_PROGRAM";
+-	case LTTNG_LOGLEVEL_DEBUG_PROCESS:
+-		return "TRACE_DEBUG_PROCESS";
+-	case LTTNG_LOGLEVEL_DEBUG_MODULE:
+-		return "TRACE_DEBUG_MODULE";
+-	case LTTNG_LOGLEVEL_DEBUG_UNIT:
+-		return "TRACE_DEBUG_UNIT";
+-	case LTTNG_LOGLEVEL_DEBUG_FUNCTION:
+-		return "TRACE_DEBUG_FUNCTION";
+-	case LTTNG_LOGLEVEL_DEBUG_LINE:
+-		return "TRACE_DEBUG_LINE";
+-	case LTTNG_LOGLEVEL_DEBUG:
+-		return "TRACE_DEBUG";
+-	default:
+-		return "<<UNKNOWN>>";
+-	}
+-}
+-
+-static const char *logleveltype_string(enum lttng_loglevel_type value)
+-{
+-	switch (value) {
+-	case LTTNG_EVENT_LOGLEVEL_ALL:
+-		return ":";
+-	case LTTNG_EVENT_LOGLEVEL_RANGE:
+-		return " <=";
+-	case LTTNG_EVENT_LOGLEVEL_SINGLE:
+-		return " ==";
+-	default:
+-		return " <<TYPE UNKN>>";
+-	}
+-}
+-
  /*
-+ *  create_version
+  * Pretty print single event.
+  */
+@@ -446,6 +366,118 @@ error:
+ }
+ 
+ /*
++ * Machine interface
++ * Ask session daemon for all user space tracepoints available and print them
++ *
++ * print_domain 0-> do not print domains and domain element
++ *                  (used when mi_list_jul_ust_events is nested under a domain)
++ *              else print the domains and domain element
 + */
-+static void create_version(struct mi_lttng_version *version)
++static int mi_list_jul_ust_events(enum lttng_domain_type type, int print_domain)
 +{
-+	strncpy(version->version, VERSION, NAME_MAX);
-+	version->version_major =3D VERSION_MAJOR;
-+	version->version_minor =3D VERSION_MINOR;
-+	version->version_patchlevel =3D VERSION_PATCHLEVEL;
-+	strncpy(version->version_name, VERSION_NAME, NAME_MAX);
-+	strncpy(version->package_url, PACKAGE_URL, NAME_MAX);
-+}
++	int ret, i, size;
++	struct lttng_domain domain;
++	struct lttng_handle *handle;
++	struct lttng_event *event_list;
++	pid_t cur_pid = 0;
++	char *cmdline = NULL;
++	int pid_element_open = 0;
 +
-+/*
-+ *  print_mi
-+ */
-+static int print_mi()
-+{
-+	int ret;
-+	struct mi_writer *writer =3D NULL;
-+	struct mi_lttng_version version;
++	memset(&domain, 0, sizeof(domain));
 +
-+	create_version(&version);
++	domain.type = type;
 +
-+	writer =3D mi_lttng_writer_create(fileno(stdout), lttng_opt_mi);
-+
-+	if (!writer) {
-+		ret =3D -LTTNG_ERR_NOMEM;
++	handle = lttng_create_handle(NULL, &domain);
++	if (handle == NULL) {
++		ret = -LTTNG_ERR_NOMEM;
 +		goto end;
 +	}
 +
-+	/* Open the command element */
-+	ret =3D mi_lttng_writer_command_open(writer,
-+			mi_lttng_element_command_version);
++	size = lttng_list_tracepoints(handle, &event_list);
++	if (size < 0) {
++		if (LTTNG_DOMAIN_UST) {
++			ERR("Unable to list UST events: %s", lttng_strerror(size));
++		} else if (LTTNG_DOMAIN_JUL) {
++			ERR("Unable to list JUL events: %s", lttng_strerror(size));
++		}
++		lttng_destroy_handle(handle);
++		return size;
++	}
++
++	if (print_domain) {
++		/* Open domains element */
++		ret = mi_lttng_domains_open(writer);
++		if (ret) {
++			goto end;
++		}
++
++		/* Write domain */
++		ret = mi_lttng_domain(writer, &domain, 1);
++		if (ret) {
++			goto end;
++		}
++	}
++
++	/* Open pids element */
++	ret = mi_lttng_pids_open(writer);
++	if (ret) {
++		goto end;
++	}
++
++	for (i = 0; i < size; i++) {
++		if (cur_pid != event_list[i].pid) {
++			if (pid_element_open) {
++				/* Close the previous envents and  pid element */
++				ret = mi_lttng_close_multi_element(writer, 2);
++				if (ret) {
++					goto end;
++				}
++				pid_element_open = !pid_element_open;
++			}
++
++			cur_pid = event_list[i].pid;
++			cmdline = get_cmdline_by_pid(cur_pid);
++
++			if (!pid_element_open) {
++				/* Open and write a pid elemen */
++				ret = mi_lttng_pid(writer, cur_pid, cmdline, 1);
++				if (ret) {
++					goto end;
++				}
++
++				/* Open events element */
++				ret = mi_lttng_events_open(writer);
++				if (ret) {
++					goto end;
++				}
++
++				pid_element_open = !pid_element_open;
++			}
++			free(cmdline);
++		}
++
++		/* Write an event */
++		ret = mi_lttng_event(writer, &event_list[i], 0);
++		if (ret) {
++			goto end;
++		}
++	}
++
++
++	/* Close pids */
++	ret = mi_lttng_writer_close_element(writer);
++
++	if (print_domain) {
++		/* Close domain, domains */
++		ret = mi_lttng_close_multi_element(writer, 2);
++	}
++end:
++	free(event_list);
++	lttng_destroy_handle(handle);
++	return ret;
++}
++
++/*
+  * Ask session daemon for all user space tracepoint fields available.
+  */
+ static int list_ust_event_fields(void)
+@@ -514,6 +546,144 @@ error:
+ }
+ 
+ /*
++ * Machine interface
++ * List all ust event with their fields
++ */
++static int mi_list_ust_event_fields(void)
++{
++	int ret, i, size;
++	struct lttng_domain domain;
++	struct lttng_handle *handle;
++	struct lttng_event_field *event_field_list;
++	pid_t cur_pid = 0;
++	char *cmdline = NULL;
++	int pid_element_open = 0;
++	int event_element_open = 0;
++
++	struct lttng_event cur_event;
++
++	memset(&domain, 0, sizeof(domain));
++	memset(&cur_event, 0, sizeof(cur_event));
++
++	domain.type = LTTNG_DOMAIN_UST;
++
++	handle = lttng_create_handle(NULL, &domain);
++	if (handle == NULL) {
++		ret = -LTTNG_ERR_NOMEM;
++		goto end;
++	}
++
++	size = lttng_list_tracepoint_fields(handle, &event_field_list);
++	if (size < 0) {
++		ERR("Unable to list UST event fields: %s", lttng_strerror(size));
++		lttng_destroy_handle(handle);
++		return size;
++	}
++
++	/* Open domains element */
++	ret = mi_lttng_domains_open(writer);
++	if (ret) {
++		goto end;
++	}
++
++	/* Write domain */
++	ret = mi_lttng_domain(writer, &domain, 1);
++
++	/* Open pids element */
++	ret = mi_lttng_pids_open(writer);
++	if (ret) {
++		goto end;
++	}
++
++
++	for (i = 0; i < size; i++) {
++		if (cur_pid != event_field_list[i].event.pid) {
++			if (pid_element_open) {
++				if (event_element_open) {
++					/* Close the previous fields element
++					 * and the previous event
++					 */
++					ret = mi_lttng_close_multi_element(writer, 2);
++					if (ret) {
++						goto end;
++					}
++					event_element_open = !event_element_open ;
++				}
++				/* Close the previous events, pid element */
++				ret = mi_lttng_close_multi_element(writer, 2);
++				if (ret) {
++					goto end;
++				}
++				pid_element_open = !pid_element_open;
++			}
++
++			cur_pid = event_field_list[i].event.pid;
++			cmdline = get_cmdline_by_pid(cur_pid);
++			if (!pid_element_open) {
++				/* Open and write a pid elemen */
++				ret = mi_lttng_pid(writer, cur_pid, cmdline, 1);
++				if (ret) {
++					goto end;
++				}
++
++				/* Open events element */
++				ret = mi_lttng_events_open(writer);
++				if (ret) {
++					goto end;
++				}
++				pid_element_open = !pid_element_open;
++			}
++			free(cmdline);
++			/* Wipe current event since we are about to print a new PID. */
++			memset(&cur_event, 0, sizeof(cur_event));
++		}
++
++		if (strcmp(cur_event.name, event_field_list[i].event.name) != 0) {
++			if (event_element_open) {
++				/* Close the previous fields element and the previous event */
++				ret = mi_lttng_close_multi_element(writer, 2);
++				if (ret) {
++					goto end;
++				}
++				event_element_open = !event_element_open ;
++			}
++
++			memcpy(&cur_event, &event_field_list[i].event,
++					sizeof(cur_event));
++
++			if (!event_element_open) {
++				/* Open and write the event */
++				ret = mi_lttng_event(writer, &cur_event, 1);
++				if (ret) {
++					goto end;
++				}
++
++				/* Open a fields element */
++				ret = mi_lttng_event_fields_open(writer);
++				if (ret) {
++					goto end;
++				}
++				event_element_open = !event_element_open ;
++			}
++		}
++
++		/* Print the event_field */
++		ret = mi_lttng_event_field(writer, &event_field_list[i]);
++		if (ret) {
++			goto end;
++		}
++	}
++
++	/* Close pids, domain, domains */
++	ret = mi_lttng_close_multi_element(writer, 3);
++
++end:
++	free(event_field_list);
++	lttng_destroy_handle(handle);
++	return ret;
++}
++
++/*
+  * Ask for all trace events in the kernel and pretty print them.
+  */
+ static int list_kernel_events(void)
+@@ -560,6 +730,71 @@ error:
+ }
+ 
+ /*
++ * Machine interface
++ * Ask for all trace events in the kernel
++ */
++static int mi_list_kernel_events(void)
++{
++	int ret, i, size;
++	struct lttng_domain domain;
++	struct lttng_handle *handle;
++	struct lttng_event *event_list;
++
++	memset(&domain, 0, sizeof(domain));
++
++	domain.type = LTTNG_DOMAIN_KERNEL;
++
++	handle = lttng_create_handle(NULL, &domain);
++	if (handle == NULL) {
++		ret = -LTTNG_ERR_NOMEM;
++		goto end;
++	}
++
++	size = lttng_list_tracepoints(handle, &event_list);
++	if (size < 0) {
++		ERR("Unable to list kernel events: %s", lttng_strerror(size));
++		lttng_destroy_handle(handle);
++		return size;
++	}
++
++	/* Open domains element */
++	ret = mi_lttng_domains_open(writer);
++	if (ret) {
++		goto end;
++	}
++
++	/* Write domain */
++	ret = mi_lttng_domain(writer, &domain, 1);
++	if (ret) {
++		goto end;
++	}
++
++	/* Open events */
++	ret = mi_lttng_events_open(writer);
++	if (ret) {
++		goto end;
++	}
++
++	for (i = 0; i < size; i++) {
++		mi_lttng_event(writer, &event_list[i], 0);
++		if (ret) {
++			goto end;
++		}
++	}
++
++	/* close events, domain and domains */
++	ret = mi_lttng_close_multi_element(writer, 3);
++	if (ret) {
++		goto end;
++	}
++
++end:
++	free(event_list);
++	lttng_destroy_handle(handle);
++	return ret;
++}
++
++/*
+  * List JUL events for a specific session using the handle.
+  *
+  * Return CMD_SUCCESS on success else a negative value.
+@@ -598,6 +833,43 @@ error:
+ }
+ 
+ /*
++ * Machine Interface
++ * List JUL events for a specific session using the handle.
++ */
++static int mi_list_session_jul_events(void)
++{
++	int ret, count, i;
++	struct lttng_event *events = NULL;
++
++	count = lttng_list_events(handle, "", &events);
++	if (count < 0) {
++		ret = count;
++		ERR("%s", lttng_strerror(ret));
++		goto end;
++	}
++
++	/* Open events element */
++	ret = mi_lttng_events_open(writer);
++	if (ret) {
++		goto end;
++	}
++
++	for (i = 0; i < count; i++) {
++		ret = mi_lttng_event(writer, &events[i], 0);
++		if (ret) {
++			goto end;
++		}
++	}
++
++	/* Close events element */
++	ret = mi_lttng_writer_close_element(writer);
++
++end:
++	free(events);
++	return ret;
++}
++
++/*
+  * List events of channel of session and domain.
+  */
+ static int list_events(const char *channel_name)
+@@ -633,6 +905,43 @@ error:
+ }
+ 
+ /*
++ * Machine interface
++ * List events of channel of session and domain.
++ */
++static int mi_list_events(const char *channel_name)
++{
++	int ret, count, i;
++	struct lttng_event *events = NULL;
++
++	count = lttng_list_events(handle, channel_name, &events);
++	if (count < 0) {
++		ret = count;
++		ERR("%s", lttng_strerror(ret));
++		goto end;
++	}
++
++	/* Open events element */
++	ret = mi_lttng_events_open(writer);
++	if (ret) {
++		goto end;
++	}
++
++	for (i = 0; i < count; i++) {
++		ret = mi_lttng_event(writer, &events[i], 0);
++		if (ret) {
++			goto end;
++		}
++	}
++
++	/* Close events element */
++	ret = mi_lttng_writer_close_element(writer);
++
++end:
++	free(events);
++	return ret;
++}
++
++/*
+  * Pretty print channel
+  */
+ static void print_channel(struct lttng_channel *channel)
+@@ -724,13 +1033,92 @@ error_channels:
+ }
+ 
+ /*
++ * Machine interface
++ * List channel(s) of session and domain.
++ *
++ * If channel_name is NULL, all channels are listed.
++ */
++static int mi_list_channels(const char *channel_name)
++{
++	int count, i, ret;
++	unsigned int chan_found = 0;
++	struct lttng_channel *channels = NULL;
++
++	count = lttng_list_channels(handle, &channels);
++	if (count < 0) {
++		switch (-count) {
++		case LTTNG_ERR_KERN_CHAN_NOT_FOUND:
++			/* When printing mi this is not an error
++			 * but an empty channels element */
++			count = 0;
++			break;
++		default:
++			/* We had a real error */
++			ret = count;
++			ERR("%s", lttng_strerror(ret));
++			goto error_channels;
++			break;
++		}
++	}
++
++	/* Open channels element */
++	ret = mi_lttng_channels_open(writer);
 +	if (ret) {
 +		goto error;
 +	}
 +
-+	/* Beginning of output */
-+	ret =3D mi_lttng_writer_open_element(writer,
-+			mi_lttng_element_command_output);
++	for (i = 0; i < count; i++) {
++		if (channel_name != NULL) {
++			if (strncmp(channels[i].name, channel_name, NAME_MAX) == 0) {
++				chan_found = 1;
++			} else {
++				continue;
++			}
++		}
++
++		/* Write channel element  and leave it open */
++		ret = mi_lttng_channel(writer, &channels[i], 1);
++
++		/* Listing events per channel */
++		ret = mi_list_events(channels[i].name);
++		if (ret) {
++			goto error;
++		}
++
++		/* Closing the channel element we opened earlier */
++		ret = mi_lttng_writer_close_element(writer);
++		if (ret) {
++			goto error;
++		}
++
++		if (chan_found) {
++			break;
++		}
++	}
++
++	/* Close channels element */
++	ret = mi_lttng_writer_close_element(writer);
 +	if (ret) {
 +		goto error;
 +	}
 +
-+	/* Print the machine interface of version */
-+	ret =3D mi_lttng_version(writer, &version,
-+			VERSION_DESCRIPTION, lttng_license);
-+	if (ret) {
-+		goto error;
-+	}
-+
-+	/* Close the output element */
-+	ret =3D mi_lttng_writer_close_element(writer);
-+	if (ret) {
-+		goto error;
-+	}
-+
-+	/* Close the command  */
-+	ret =3D mi_lttng_writer_command_close(writer);
 +
 +error:
-+	/* Cleanup */
-+	if (writer && mi_lttng_writer_destroy(writer)) {
-+		/* Preserve original error code */
-+		ret =3D ret ? ret : LTTNG_ERR_MI_IO_FAIL;
-+	}
++	free(channels);
 +
-+end:
++error_channels:
 +	return ret;
 +}
 +
 +/*
-  *  cmd_version
+  * List available tracing session. List only basic information.
+  *
+  * If session_name is NULL, all sessions are listed.
   */
- int cmd_version(int argc, const char **argv)
-@@ -78,10 +154,14 @@ int cmd_version(int argc, const char **argv)
+ static int list_sessions(const char *session_name)
+ {
+-	int ret, count, i;
++	int ret = CMD_SUCCESS;
++	int count, i;
+ 	unsigned int session_found = 0;
+ 	struct lttng_session *sessions;
+ 
+@@ -749,25 +1137,25 @@ static int list_sessions(const char *session_name)
+ 		MSG("Available tracing sessions:");
+ 	}
+ 
++
+ 	for (i = 0; i < count; i++) {
+ 		if (session_name != NULL) {
+ 			if (strncmp(sessions[i].name, session_name, NAME_MAX) == 0) {
+ 				session_found = 1;
+-				MSG("Tracing session %s: [%s%s]", session_name,
+-						active_string(sessions[i].enabled),
+-						snapshot_string(sessions[i].snapshot_mode));
+-				MSG("%sTrace path: %s\n", indent4, sessions[i].path);
++					MSG("Tracing session %s: [%s%s]", session_name,
++							active_string(sessions[i].enabled),
++							snapshot_string(sessions[i].snapshot_mode));
++					MSG("%sTrace path: %s\n", indent4, sessions[i].path);
+ 				break;
+ 			}
+ 		} else {
+-			MSG("  %d) %s (%s) [%s%s]", i + 1, sessions[i].name, sessions[i].path,
+-					active_string(sessions[i].enabled),
+-					snapshot_string(sessions[i].snapshot_mode));
++				MSG("  %d) %s (%s) [%s%s]", i + 1,
++						sessions[i].name, sessions[i].path,
++						active_string(sessions[i].enabled),
++						snapshot_string(sessions[i].snapshot_mode));
  		}
  	}
-=20
--	MSG("lttng version " VERSION " - " VERSION_NAME);
--	MSG("\n" VERSION_DESCRIPTION "\n");
--	MSG("Web site: http://lttng.org");
--	MSG("\nlttng is free software and under the GPL license and part LGPL")=
-;
-+	if (lttng_opt_mi) {
-+		ret =3D print_mi();
-+	} else {
-+		MSG("lttng version " VERSION " - " VERSION_NAME);
-+		MSG("\n" VERSION_DESCRIPTION "\n");
-+		MSG("Web site: http://lttng.org");
-+		MSG("\n%s", lttng_license);
-+	}
-=20
+ 
+-	free(sessions);
+-
+ 	if (!session_found && session_name != NULL) {
+ 		ERR("Session '%s' not found", session_name);
+ 		ret = CMD_ERROR;
+@@ -778,10 +1166,97 @@ static int list_sessions(const char *session_name)
+ 		MSG("\nUse lttng list <session_name> for more details");
+ 	}
+ 
++error:
++	free(sessions);
  end:
- 	poptFreeContext(pc);
-diff --git a/src/bin/lttng/commands/view.c b/src/bin/lttng/commands/view.=
-c
-index adedf29..dcd4d66 100644
---- a/src/bin/lttng/commands/view.c
-+++ b/src/bin/lttng/commands/view.c
-@@ -445,6 +445,10 @@ int cmd_view(int argc, const char **argv)
- 	pc =3D poptGetContext(NULL, argc, argv, long_options, 0);
- 	poptReadDefaultConfig(pc, 0);
-=20
-+	if (lttng_opt_mi) {
-+		WARN("mi does not apply to view command");
+-	return CMD_SUCCESS;
++	return ret;
++}
+ 
+-error:
++/*
++ * Machine interface
++ * Find the session with session_name as name
++ * and print his informations.
++ */
++static int mi_list_session(const char *session_name)
++{
++	int ret, count, i;
++	struct lttng_session *sessions;
++	unsigned int session_found = 0;
++
++	count = lttng_list_sessions(&sessions);
++	if (count < 0) {
++		ret = count;
++		ERR("%s", lttng_strerror(ret));
++		goto end;
 +	}
 +
- 	while ((opt =3D poptGetNextOpt(pc)) !=3D -1) {
++	if (session_name == NULL) {
++		ret = -LTTNG_ERR_SESS_NOT_FOUND;
++		goto end;
++	}
++
++	for (i = 0; i < count; i++) {
++			if (strncmp(sessions[i].name, session_name, NAME_MAX) == 0) {
++				/* We need to left it unclosed to append other informations
++				 * like domain, channel, events etc.*/
++				session_found = 1;
++				ret = mi_lttng_session(writer, &sessions[i], 1);
++				if (ret) {
++					goto end;
++				}
++				break;
++			}
++	}
++
++	if (!session_found) {
++		ERR("Session not found");
++		ret = -LTTNG_ERR_SESS_NOT_FOUND;
++		goto end;
++	}
++
++end:
++	free(sessions);
++	return ret;
++}
++
++/*
++ * Machine interface
++ * List all availables session
++ */
++static int mi_list_sessions()
++{
++	int ret, count, i;
++	struct lttng_session *sessions;
++
++	count = lttng_list_sessions(&sessions);
++	if (count < 0) {
++		ret = count;
++		ERR("%s", lttng_strerror(ret));
++		goto end;
++	}
++
++	/* Opening sessions element */
++	ret = mi_lttng_sessions_open(writer);
++	if (ret) {
++		goto end;
++	}
++
++	/* Listing sessions */
++	for (i = 0; i < count; i++) {
++		ret = mi_lttng_session(writer, &sessions[i], 0);
++		if (ret) {
++			goto end;
++		}
++	}
++
++	/* Closing sessions element */
++	ret = mi_lttng_writer_close_element(writer);
++	if (ret) {
++		goto end;
++	}
++
++end:
++	free(sessions);
+ 	return ret;
+ }
+ 
+@@ -829,6 +1304,39 @@ error:
+ }
+ 
+ /*
++ * Machine Interface
++ * list available domain(s) for a session.
++ */
++static int mi_list_domains(const char *session_name)
++{
++	int i, count, ret;
++	struct lttng_domain *domains = NULL;
++
++	/* Open domains element */
++	ret = mi_lttng_domains_open(writer);
++	if (ret) {
++		goto end;
++	}
++
++	count = lttng_list_domains(session_name, &domains);
++	if (count < 0) {
++		ret = count;
++		ERR("%s", lttng_strerror(ret));
++		goto end;
++	}
++
++	for (i = 0; i < count; i++) {
++		ret = mi_lttng_domain(writer, &domains[i] , 0);
++	}
++
++	/* Closing domains element */
++	ret = mi_lttng_writer_close_element(writer);
++end:
++	free(domains);
++	return ret;
++}
++
++/*
+  * The 'list <options>' first level command
+  */
+ int cmd_list(int argc, const char **argv)
+@@ -850,13 +1358,6 @@ int cmd_list(int argc, const char **argv)
+ 	pc = poptGetContext(NULL, argc, argv, long_options, 0);
+ 	poptReadDefaultConfig(pc, 0);
+ 
+-	/* TODO: mi support */
+-	if (lttng_opt_mi) {
+-		ret = -LTTNG_ERR_MI_NOT_IMPLEMENTED;
+-		ERR("mi option not supported");
+-		goto end;
+-	}
+-
+ 	while ((opt = poptGetNextOpt(pc)) != -1) {
  		switch (opt) {
  		case OPT_HELP:
-diff --git a/src/bin/lttng/lttng.c b/src/bin/lttng/lttng.c
-index bc7577d..4510057 100644
---- a/src/bin/lttng/lttng.c
-+++ b/src/bin/lttng/lttng.c
-@@ -55,6 +55,7 @@ static struct option long_options[] =3D {
- 	{"group",            1, NULL, 'g'},
- 	{"verbose",          0, NULL, 'v'},
- 	{"quiet",            0, NULL, 'q'},
-+	{"mi",               1, NULL, 'm'},
- 	{"no-sessiond",      0, NULL, 'n'},
- 	{"sessiond-path",    1, NULL, OPT_SESSION_PATH},
- 	{"relayd-path",      1, NULL, OPT_RELAYD_PATH},
-@@ -99,6 +100,8 @@ static void usage(FILE *ofp)
- 	fprintf(ofp, "      --list-commands        Simple listing of lttng comm=
-ands\n");
- 	fprintf(ofp, "  -v, --verbose              Increase verbosity\n");
- 	fprintf(ofp, "  -q, --quiet                Quiet mode\n");
-+	fprintf(ofp, "  -m, --mi TYPE              Machine Interface mode.\n");
-+	fprintf(ofp, "                                 Type: xml\n");
- 	fprintf(ofp, "  -g, --group NAME           Unix tracing group name. (de=
-fault: tracing)\n");
- 	fprintf(ofp, "  -n, --no-sessiond          Don't spawn a session daemon=
-\n");
- 	fprintf(ofp, "      --sessiond-path PATH   Session daemon full path\n")=
-;
-@@ -136,6 +139,26 @@ static void version(FILE *ofp)
- }
-=20
- /*
-+ * mi_output_type
-+ *
-+ * Find the MI output type enum from a string
-+ * This function is for the support of
-+ * new output language.
-+ */
-+static int mi_output_type(const char *output_type)
-+{
-+	int ret =3D 0;
-+	if (!strncasecmp("xml", output_type, 3)) {
-+		ret =3D LTTNG_MI_XML;
-+	} else {
-+		/* Invalid output format */
-+		ERR("MI output format not supported");
-+		ret =3D -LTTNG_ERR_MI_OUTPUT_TYPE;
-+	}
-+	return ret;
-+}
-+
-+/*
-  *  list_options
-  *
-  *  List options line by line. This is mostly for bash auto completion a=
-nd to
-@@ -426,7 +449,7 @@ static int parse_args(int argc, char **argv)
- 		clean_exit(EXIT_FAILURE);
+@@ -875,6 +1376,29 @@ int cmd_list(int argc, const char **argv)
+ 		}
  	}
-=20
--	while ((opt =3D getopt_long(argc, argv, "+Vhnvqg:", long_options, NULL)=
-) !=3D -1) {
-+	while ((opt =3D getopt_long(argc, argv, "+Vhnvqg:m:", long_options, NUL=
-L)) !=3D -1) {
- 		switch (opt) {
- 		case 'V':
- 			version(stdout);
-@@ -442,6 +465,13 @@ static int parse_args(int argc, char **argv)
- 		case 'q':
- 			lttng_opt_quiet =3D 1;
- 			break;
-+		case 'm':
-+			lttng_opt_mi =3D mi_output_type(optarg);
-+			if (lttng_opt_mi < 0) {
-+				ret =3D lttng_opt_mi;
-+				goto error;
-+			}
-+			break;
- 		case 'g':
- 			lttng_set_tracing_group(optarg);
- 			break;
-diff --git a/src/common/Makefile.am b/src/common/Makefile.am
-index 1a764ae..dffab06 100644
---- a/src/common/Makefile.am
-+++ b/src/common/Makefile.am
-@@ -16,8 +16,11 @@ noinst_LTLIBRARIES =3D libcommon.la
- libcommon_la_SOURCES =3D error.h error.c utils.c utils.h runas.c runas.h=
- \
-                        common.h futex.c futex.h uri.c uri.h defaults.c \
-                        pipe.c pipe.h readwrite.c readwrite.h \
-+                       mi-lttng.h mi-lttng.c \
-                        daemonize.c daemonize.h
--libcommon_la_LIBADD =3D -luuid
-+libcommon_la_LIBADD =3D \
-+		-luuid \
-+		$(top_builddir)/src/common/config/libconfig.la
-=20
- # Consumer library
- noinst_LTLIBRARIES +=3D libconsumer.la
-diff --git a/src/common/error.h b/src/common/error.h
-index f8c0a1d..4e096b3 100644
---- a/src/common/error.h
-+++ b/src/common/error.h
-@@ -36,6 +36,7 @@
-=20
- extern int lttng_opt_quiet;
- extern int lttng_opt_verbose;
-+extern int lttng_opt_mi;
-=20
- /* Error type. */
- #define PRINT_ERR   0x1
-@@ -48,12 +49,18 @@ extern int lttng_opt_verbose;
-=20
- /*
-  * Macro for printing message depending on command line option and verbo=
-sity.
-+ *
-+ * Machine interface:
-+ * We use lttng_opt_mi to suppress all normal msg to stdout. We don't
-+ * want any nested msg to show up when printing mi to stdout(if it's the=
- case).
-+ * All warnings and errors should be printed to stderr as normal.
-  */
- #define __lttng_print(type, fmt, args...)                           \
- 	do {                                                            \
--		if (lttng_opt_quiet =3D=3D 0 && type =3D=3D PRINT_MSG) {            \
-+		if (lttng_opt_quiet =3D=3D 0 && lttng_opt_mi =3D=3D 0 &&            \
-+				type =3D=3D PRINT_MSG) {                                \
- 			fprintf(stdout, fmt, ## args);                          \
--		} else if (lttng_opt_quiet =3D=3D 0 &&                          \
-+		} else if (lttng_opt_quiet =3D=3D 0 && lttng_opt_mi =3D=3D 0 &&     \
- 				(((type & PRINT_DBG) && lttng_opt_verbose =3D=3D 1) ||  \
- 				((type & (PRINT_DBG | PRINT_DBG2)) &&               \
- 					lttng_opt_verbose =3D=3D 2) ||                      \
-diff --git a/src/common/mi-lttng.c b/src/common/mi-lttng.c
-new file mode 100644
-index 0000000..bbec2c5
---- /dev/null
-+++ b/src/common/mi-lttng.c
-@@ -0,0 +1,284 @@
-+/*
-+ * Copyright (C) 2014   - Jonathan Rajotte <jonathan.r.julien@gmail.com>
-+ *                      - Olivier Cotte <olivier.cotte@polymtl.ca>
-+ *
-+ * This program is free software; you can redistribute it and/or modify =
-it
-+ * under the terms of the GNU General Public License, version 2 only, as
-+ * published by the Free Software Foundation.
-+ *
-+ * This program is distributed in the hope that it will be useful, but W=
-ITHOUT
-+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License =
-for
-+ * more details.
-+ *
-+ * You should have received a copy of the GNU General Public License alo=
-ng with
-+ * this program; if not, write to the Free Software Foundation, Inc., 51
-+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-+ */
-+
-+#include <include/config.h>
-+#include <common/config/config.h>
-+#include "mi-lttng.h"
-+
-+/* Strings related to command */
-+const char * const mi_lttng_element_command =3D "command";
-+const char * const mi_lttng_element_command_version =3D "version";
-+const char * const mi_lttng_element_command_list =3D "list";
-+const char * const mi_lttng_element_command_name =3D "name";
-+const char * const mi_lttng_element_command_output =3D "output";
-+
-+/* Strings related to command: version */
-+const char * const mi_lttng_element_version =3D "version";
-+const char * const mi_lttng_element_version_str =3D "string";
-+const char * const mi_lttng_element_version_web =3D "url";
-+const char * const mi_lttng_element_version_major =3D "major";
-+const char * const mi_lttng_element_version_minor =3D "minor";
-+const char * const mi_lttng_element_version_license =3D "license";
-+const char * const mi_lttng_element_version_patch_level =3D "patchLevel"=
-;
-+const char * const mi_lttng_element_version_description =3D "description=
-";
-+
-+LTTNG_HIDDEN
-+struct mi_writer *mi_lttng_writer_create(int fd_output, int mi_output_ty=
-pe)
-+{
-+	struct mi_writer *mi_writer;
-+
-+	mi_writer =3D zmalloc(sizeof(struct mi_writer));
-+	if (!mi_writer) {
-+		PERROR("zmalloc mi_writer_create");
-+		goto end;
-+	}
-+	if (mi_output_type =3D=3D LTTNG_MI_XML) {
-+		mi_writer->writer =3D config_writer_create(fd_output);
-+		if (!mi_writer->writer) {
-+			goto err_destroy;
+ 
++	/* Mi check */
++	if (lttng_opt_mi) {
++		writer = mi_lttng_writer_create(fileno(stdout), lttng_opt_mi);
++		if (!writer) {
++			ret = -LTTNG_ERR_NOMEM;
++			goto end;
 +		}
-+		mi_writer->type =3D LTTNG_MI_XML;
-+	} else {
-+		goto err_destroy;
++
++		/* Open command element */
++		ret = mi_lttng_writer_command_open(writer,
++				mi_lttng_element_command_list);
++		if (ret) {
++			goto end;
++		}
++
++		/* Open output element */
++		ret = mi_lttng_writer_open_element(writer,
++				mi_lttng_element_command_output);
++		if (ret) {
++			goto end;
++		}
 +	}
 +
-+end:
-+	return mi_writer;
+ 	/* Get session name (trailing argument) */
+ 	session_name = poptGetArg(pc);
+ 	DBG2("Session name: %s", session_name);
+@@ -899,53 +1423,111 @@ int cmd_list(int argc, const char **argv)
+ 
+ 	if (session_name == NULL) {
+ 		if (!opt_kernel && !opt_userspace && !opt_jul) {
+-			ret = list_sessions(NULL);
+-			if (ret != 0) {
++			if (lttng_opt_mi) {
++				ret = mi_list_sessions();
++			} else {
++				ret = list_sessions(NULL);
++			}
++			if (ret) {
+ 				goto end;
+ 			}
+ 		}
+ 		if (opt_kernel) {
+-			ret = list_kernel_events();
+-			if (ret < 0) {
+-				ret = CMD_ERROR;
++			if (lttng_opt_mi) {
++				ret = mi_list_kernel_events();
++			} else {
++				ret = list_kernel_events();
++			}
++			if (ret) {
+ 				goto end;
+ 			}
+ 		}
+ 		if (opt_userspace) {
+ 			if (opt_fields) {
+-				ret = list_ust_event_fields();
++				if (lttng_opt_mi) {
++					ret = mi_list_ust_event_fields();
++				} else {
++					ret = list_ust_event_fields();
++				}
+ 			} else {
+-				ret = list_ust_events();
++				if (lttng_opt_mi) {
++					ret = mi_list_jul_ust_events(LTTNG_DOMAIN_UST, 1);
++				} else {
++					ret = list_ust_events();
++				}
+ 			}
+-			if (ret < 0) {
+-				ret = CMD_ERROR;
++			if (ret) {
+ 				goto end;
+ 			}
+ 		}
+ 		if (opt_jul) {
+-			ret = list_jul_events();
+-			if (ret < 0) {
+-				ret = CMD_ERROR;
++			if (lttng_opt_mi) {
++				ret = mi_list_jul_ust_events(LTTNG_DOMAIN_JUL, 1);
++			} else {
++				ret = list_jul_events();
++			}
++			if (ret) {
+ 				goto end;
+ 			}
+ 		}
+ 	} else {
+ 		/* List session attributes */
+-		ret = list_sessions(session_name);
+-		if (ret != 0) {
++		if (lttng_opt_mi) {
++			/* Open element sessions
++			 * Present for xml consistency */
++			ret = mi_lttng_sessions_open(writer);
++			if (ret) {
++				goto end;
++			}
 +
-+err_destroy:
-+	free(mi_writer);
-+	return NULL;
++			/* MI: the ouptut of list_sessions is an unclosed session element */
++			ret = mi_list_session(session_name);
++		} else {
++			ret = list_sessions(session_name);
++		}
++		if (ret) {
+ 			goto end;
+ 		}
+ 
+ 		/* Domain listing */
+ 		if (opt_domain) {
+-			ret = list_domains(session_name);
++			if (lttng_opt_mi) {
++				ret = mi_list_domains(session_name);
++			} else {
++				ret = list_domains(session_name);
++			}
+ 			goto end;
+ 		}
+ 
++		/* Channel listing */
+ 		if (opt_kernel || opt_userspace) {
+-			/* Channel listing */
+-			ret = list_channels(opt_channel);
+-			if (ret < 0) {
++			if (lttng_opt_mi) {
++				/* Add of domains and domain element for xml
++				 * consistency and validation
++				 */
++				ret = mi_lttng_domains_open(writer);
++				if (ret) {
++					goto end;
++				}
++
++				/* Open domain and leave it open for
++				 * nested channels printing */
++				ret = mi_lttng_domain(writer, &domain, 1);
++				if (ret) {
++					goto end;
++				}
++
++				ret = mi_list_channels(opt_channel);
++				if (ret) {
++					goto end;
++				}
++
++				/* Close domain and domain element */
++				ret = mi_lttng_close_multi_element(writer, 2);
++			} else {
++				ret = list_channels(opt_channel);
++			}
++			if (ret) {
+ 				goto end;
+ 			}
+ 		} else {
+@@ -959,6 +1541,13 @@ int cmd_list(int argc, const char **argv)
+ 				goto end;
+ 			}
+ 
++			if (lttng_opt_mi) {
++				ret = mi_lttng_domains_open(writer);
++				if (ret) {
++					goto end;
++				}
++			}
++
+ 			for (i = 0; i < nb_domain; i++) {
+ 				switch (domains[i].type) {
+ 				case LTTNG_DOMAIN_KERNEL:
+@@ -978,6 +1567,13 @@ int cmd_list(int argc, const char **argv)
+ 					break;
+ 				}
+ 
++				if (lttng_opt_mi) {
++					ret = mi_lttng_domain(writer, &domains[i], 1);
++					if (ret) {
++						goto end;
++					}
++				}
++
+ 				/* Clean handle before creating a new one */
+ 				if (handle) {
+ 					lttng_destroy_handle(handle);
+@@ -990,22 +1586,66 @@ int cmd_list(int argc, const char **argv)
+ 				}
+ 
+ 				if (domains[i].type == LTTNG_DOMAIN_JUL) {
+-					ret = list_session_jul_events();
+-					if (ret < 0) {
++					if (lttng_opt_mi) {
++						ret = mi_list_session_jul_events();
++					} else {
++						ret = list_session_jul_events();
++					}
++					if (ret) {
+ 						goto end;
+ 					}
+ 					continue;
+ 				}
+ 
+-				ret = list_channels(opt_channel);
+-				if (ret < 0) {
++				if (lttng_opt_mi) {
++					ret = mi_list_channels(opt_channel);
++				} else {
++					ret = list_channels(opt_channel);
++				}
++				if (ret) {
++					goto end;
++				}
++
++				if (lttng_opt_mi) {
++					/* Close domain element */
++					ret = mi_lttng_writer_close_element(writer);
++					if (ret) {
++						goto end;
++					}
++				}
++
++			}
++			if (lttng_opt_mi) {
++				/* Close the domains, session and sessions element */
++				ret = mi_lttng_close_multi_element(writer, 3);
++				if (ret) {
+ 					goto end;
+ 				}
+ 			}
+ 		}
+ 	}
+ 
++	/* Mi closing */
++	if (lttng_opt_mi) {
++		/* Close  output element */
++		ret = mi_lttng_writer_close_element(writer);
++		if (ret) {
++			goto end;
++		}
++
++		/* Command element close */
++		ret = mi_lttng_writer_command_close(writer);
++		if (ret) {
++			goto end;
++		}
++	}
+ end:
++	/* Mi clean-up */
++	if (writer && mi_lttng_writer_destroy(writer)) {
++		/* Preserve original error code */
++		ret = ret ? ret : LTTNG_ERR_MI_IO_FAIL;
++	}
++
+ 	free(domains);
+ 	if (handle) {
+ 		lttng_destroy_handle(handle);
+diff --git a/src/common/mi-lttng.c b/src/common/mi-lttng.c
+index bbec2c5..19af444 100644
+--- a/src/common/mi-lttng.c
++++ b/src/common/mi-lttng.c
+@@ -16,10 +16,13 @@
+  * Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+  */
+ 
++
+ #include <include/config.h>
+ #include <common/config/config.h>
+ #include "mi-lttng.h"
+ 
++#include <assert.h>
++
+ /* Strings related to command */
+ const char * const mi_lttng_element_command = "command";
+ const char * const mi_lttng_element_command_version = "version";
+@@ -37,6 +40,159 @@ const char * const mi_lttng_element_version_license = "license";
+ const char * const mi_lttng_element_version_patch_level = "patchLevel";
+ const char * const mi_lttng_element_version_description = "description";
+ 
++/* Strings related to pid */
++const char * const mi_lttng_element_pids = "pids";
++const char * const mi_lttng_element_pid = "pid";
++const char * const mi_lttng_element_pid_id = "id";
++
++/* String related to a lttng_event_field */
++const char * const mi_lttng_element_event_field = "event_field";
++const char * const mi_lttng_element_event_fields = "event_fields";
++
++/* General elements of mi_lttng */
++const char * const mi_lttng_element_type_other = "OTHER";
++const char * const mi_lttng_element_type_integer = "INTEGER";
++const char * const mi_lttng_element_type_enum = "ENUM";
++const char * const mi_lttng_element_type_float = "FLOAT";
++const char * const mi_lttng_element_type_string = "STRING";
++const char * const mi_lttng_element_nowrite = "nowrite";
++
++const char * const mi_lttng_element_empty = "";
++
++const char *enabled_string(int value)
++{
++	switch (value) {
++	case 0:	return " [disabled]";
++	case 1: return " [enabled]";
++	case -1: return "";
++	default: return NULL;
++	}
 +}
 +
-+LTTNG_HIDDEN
-+int mi_lttng_writer_destroy(struct mi_writer *writer)
++const char *filter_string(int value)
 +{
-+	int ret;
++	switch (value) {
++	case 1:	return " [with filter]";
++	default: return "";
++	}
++}
 +
-+	if (!writer) {
-+		ret =3D -EINVAL;
++const char *exclusion_string(int value)
++{
++	switch (value) {
++	case 1: return " [has exclusions]";
++	default: return "";
++	}
++}
++
++const char *loglevel_string(int value)
++{
++	switch (value) {
++	case -1:
++		return "";
++	case LTTNG_LOGLEVEL_EMERG:
++		return "TRACE_EMERG";
++	case LTTNG_LOGLEVEL_ALERT:
++		return "TRACE_ALERT";
++	case LTTNG_LOGLEVEL_CRIT:
++		return "TRACE_CRIT";
++	case LTTNG_LOGLEVEL_ERR:
++		return "TRACE_ERR";
++	case LTTNG_LOGLEVEL_WARNING:
++		return "TRACE_WARNING";
++	case LTTNG_LOGLEVEL_NOTICE:
++		return "TRACE_NOTICE";
++	case LTTNG_LOGLEVEL_INFO:
++		return "TRACE_INFO";
++	case LTTNG_LOGLEVEL_DEBUG_SYSTEM:
++		return "TRACE_DEBUG_SYSTEM";
++	case LTTNG_LOGLEVEL_DEBUG_PROGRAM:
++		return "TRACE_DEBUG_PROGRAM";
++	case LTTNG_LOGLEVEL_DEBUG_PROCESS:
++		return "TRACE_DEBUG_PROCESS";
++	case LTTNG_LOGLEVEL_DEBUG_MODULE:
++		return "TRACE_DEBUG_MODULE";
++	case LTTNG_LOGLEVEL_DEBUG_UNIT:
++		return "TRACE_DEBUG_UNIT";
++	case LTTNG_LOGLEVEL_DEBUG_FUNCTION:
++		return "TRACE_DEBUG_FUNCTION";
++	case LTTNG_LOGLEVEL_DEBUG_LINE:
++		return "TRACE_DEBUG_LINE";
++	case LTTNG_LOGLEVEL_DEBUG:
++		return "TRACE_DEBUG";
++	default:
++		return "UNKNOWN";
++	}
++}
++
++const char *logleveltype_string(enum lttng_loglevel_type value)
++{
++	switch (value) {
++	case LTTNG_EVENT_LOGLEVEL_ALL:
++		return ":";
++	case LTTNG_EVENT_LOGLEVEL_RANGE:
++		return " <=";
++	case LTTNG_EVENT_LOGLEVEL_SINGLE:
++		return " ==";
++	default:
++		return " TYPE UNKN";
++	}
++}
++
++const char *eventtype_string(enum lttng_event_type value)
++{
++	switch (value) {
++	case LTTNG_EVENT_ALL:
++		return config_event_type_all;
++		break;
++	case LTTNG_EVENT_TRACEPOINT:
++		return config_event_type_tracepoint;
++		break;
++	case LTTNG_EVENT_PROBE:
++		return config_event_type_probe;
++		break;
++	case LTTNG_EVENT_FUNCTION:
++		return config_event_type_function;
++		break;
++	case LTTNG_EVENT_FUNCTION_ENTRY:
++		return config_event_type_function_entry;
++		break;
++	case LTTNG_EVENT_SYSCALL:
++		return config_event_type_syscall;
++		break;
++	case LTTNG_EVENT_NOOP:
++		return config_event_type_noop;
++		break;
++	default:
++		return mi_lttng_element_empty;
++		break;
++	}
++}
++
++const char *eventfieldtype_string(enum lttng_event_field_type val)
++{
++	const char *ret;
++
++	switch (val) {
++	case(LTTNG_EVENT_FIELD_INTEGER):
++		ret = mi_lttng_element_type_integer;
++		break;
++	case(LTTNG_EVENT_FIELD_ENUM):
++		ret = mi_lttng_element_type_enum;
++		break;
++	case(LTTNG_EVENT_FIELD_FLOAT):
++		ret = mi_lttng_element_type_float;
++		break;
++	case(LTTNG_EVENT_FIELD_STRING):
++		ret = mi_lttng_element_type_string;
++		break;
++	default:
++		ret = mi_lttng_element_type_other;
++		break;
++	}
++	return ret;
++}
++
+ LTTNG_HIDDEN
+ struct mi_writer *mi_lttng_writer_create(int fd_output, int mi_output_type)
+ {
+@@ -119,6 +275,25 @@ int mi_lttng_writer_close_element(struct mi_writer *writer)
+ }
+ 
+ LTTNG_HIDDEN
++int mi_lttng_close_multi_element(struct mi_writer *writer,
++		unsigned int nb_element)
++{
++	int ret, i;
++	if (nb_element < 1) {
++		ret = 0;
 +		goto end;
 +	}
-+
-+	ret =3D config_writer_destroy(writer->writer);
-+	if (ret < 0) {
-+		goto end;
++	for (i = 0; i < nb_element; i++) {
++		ret = mi_lttng_writer_close_element(writer);
++		if (ret) {
++			goto end;
++		}
 +	}
-+
-+	free(writer);
 +end:
 +	return ret;
 +}
 +
 +LTTNG_HIDDEN
-+int mi_lttng_writer_command_open(struct mi_writer *writer, const char *c=
-ommand)
+ int mi_lttng_writer_write_element_unsigned_int(struct mi_writer *writer,
+ 		const char *element_name, uint64_t value)
+ {
+@@ -226,12 +401,20 @@ end:
+ }
+ 
+ LTTNG_HIDDEN
++int mi_lttng_sessions_open(struct mi_writer *writer)
 +{
-+	int ret;
-+	ret =3D mi_lttng_writer_open_element(writer, mi_lttng_element_command);
++	return mi_lttng_writer_open_element(writer, config_element_sessions);
++}
++
++LTTNG_HIDDEN
+ int mi_lttng_session(struct mi_writer *writer,
+ 		struct lttng_session *session, int is_open)
+ {
+ 	int ret;
+ 
+-	/* open sessions element */
++	assert(session);
++
++	/* Open sessions element */
+ 	ret = mi_lttng_writer_open_element(writer,
+ 			config_element_session);
+ 	if (ret) {
+@@ -245,28 +428,28 @@ int mi_lttng_session(struct mi_writer *writer,
+ 		goto end;
+ 	}
+ 
+-	/* path */
++	/* Path */
+ 	ret = mi_lttng_writer_write_element_string(writer,
+ 			config_element_path, session->path);
+ 	if (ret) {
+ 		goto end;
+ 	}
+ 
+-	/* enabled ? */
+-	ret = mi_lttng_writer_write_element_unsigned_int(writer,
++	/* Enabled ? */
++	ret = mi_lttng_writer_write_element_bool(writer,
+ 			config_element_enabled, session->enabled);
+ 	if (ret) {
+ 		goto end;
+ 	}
+ 
+-	/* snapshot mode */
++	/* Snapshot mode */
+ 	ret = mi_lttng_writer_write_element_unsigned_int(writer,
+ 			config_element_snapshot_mode, session->snapshot_mode);
+ 	if (ret) {
+ 		goto end;
+ 	}
+ 
+-	/* live timer interval in usec */
++	/* Live timer interval in usec */
+ 	ret = mi_lttng_writer_write_element_unsigned_int(writer,
+ 			config_element_live_timer_interval,
+ 			session->live_timer_interval);
+@@ -282,3 +465,493 @@ end:
+ 	return ret;
+ 
+ }
++
++LTTNG_HIDDEN
++int mi_lttng_domains_open(struct mi_writer *writer)
++{
++	return mi_lttng_writer_open_element(writer, config_element_domains);
++}
++
++LTTNG_HIDDEN
++int mi_lttng_domain(struct mi_writer *writer,
++		struct lttng_domain *domain, int is_open)
++{
++	int ret = 0;
++	const char *str_domain;
++	const char *str_buffer;
++
++	assert(domain);
++
++	/* Open domain element */
++	ret = mi_lttng_writer_open_element(writer, config_element_domain);
 +	if (ret) {
 +		goto end;
 +	}
-+	ret =3D mi_lttng_writer_write_element_string(writer,
-+			mi_lttng_element_command_name, command);
++
++	/* Type
++	 * Note: This is a *duplicate* of get_domain_str from bin/lttng/utils.c
++	 */
++	switch (domain->type) {
++	case LTTNG_DOMAIN_KERNEL:
++		str_domain = config_domain_type_kernel;
++		break;
++	case LTTNG_DOMAIN_UST:
++		str_domain = config_domain_type_ust;
++		break;
++	case LTTNG_DOMAIN_JUL:
++		str_domain = config_domain_type_jul;
++		break;
++	default:
++		/* Should not have an unknown domain */
++		assert(0);
++	}
++
++	ret = mi_lttng_writer_write_element_string(writer, config_element_type,
++			str_domain);
++	if (ret) {
++		goto end;
++	}
++
++	/* Buffer Type */
++	switch (domain->buf_type) {
++	case LTTNG_BUFFER_PER_PID:
++		str_buffer = config_buffer_type_per_pid;
++		break;
++	case LTTNG_BUFFER_PER_UID:
++		str_buffer = config_buffer_type_per_uid;
++		break;
++	case LTTNG_BUFFER_GLOBAL:
++		str_buffer = config_buffer_type_global;
++		break;
++	default:
++		/* Shoul not have an unknow buffer type */
++		assert(0);
++	}
++
++	ret = mi_lttng_writer_write_element_string(writer,
++			config_element_buffer_type, str_buffer);
++	if (ret) {
++		goto end;
++	}
++
++	/* TODO: attr... not sure how to use the union.... */
++
++	if (!is_open) {
++		/* Closing domain element */
++		ret = mi_lttng_writer_close_element(writer);
++	}
++
 +end:
 +	return ret;
++
 +}
 +
 +LTTNG_HIDDEN
-+int mi_lttng_writer_command_close(struct mi_writer *writer)
++int mi_lttng_channels_open(struct mi_writer *writer)
 +{
-+	return mi_lttng_writer_close_element(writer);
++	return mi_lttng_writer_open_element(writer, config_element_channels);
 +}
 +
 +LTTNG_HIDDEN
-+int mi_lttng_writer_open_element(struct mi_writer *writer,
-+		const char *element_name)
++int mi_lttng_channel(struct mi_writer *writer,
++		struct lttng_channel *channel, int is_open)
 +{
-+	return config_writer_open_element(writer->writer, element_name);
-+}
++	int ret = 0;
 +
-+LTTNG_HIDDEN
-+int mi_lttng_writer_close_element(struct mi_writer *writer)
-+{
-+	return config_writer_close_element(writer->writer);
-+}
++	assert(channel);
 +
-+LTTNG_HIDDEN
-+int mi_lttng_writer_write_element_unsigned_int(struct mi_writer *writer,
-+		const char *element_name, uint64_t value)
-+{
-+	return config_writer_write_element_unsigned_int(writer->writer,
-+			element_name, value);
-+}
-+
-+LTTNG_HIDDEN
-+int mi_lttng_writer_write_element_signed_int(struct mi_writer *writer,
-+		const char *element_name, int64_t value)
-+{
-+	return config_writer_write_element_signed_int(writer->writer,
-+			element_name, value);
-+}
-+
-+LTTNG_HIDDEN
-+int mi_lttng_writer_write_element_bool(struct mi_writer *writer,
-+		const char *element_name, int value)
-+{
-+	return config_writer_write_element_bool(writer->writer,
-+			element_name, value);
-+}
-+
-+LTTNG_HIDDEN
-+int mi_lttng_writer_write_element_string(struct mi_writer *writer,
-+		const char *element_name, const char *value)
-+{
-+	return config_writer_write_element_string(writer->writer,
-+			element_name, value);
-+}
-+
-+LTTNG_HIDDEN
-+int mi_lttng_version(struct mi_writer *writer, struct mi_lttng_version *=
-version,
-+	const char *lttng_description, const char *lttng_license)
-+{
-+	int ret;
-+
-+	/* Open version */
-+	ret =3D mi_lttng_writer_open_element(writer, mi_lttng_element_version);
++	/* Opening channel element */
++	ret = mi_lttng_writer_open_element(writer, config_element_channel);
++	if (ret) {
++		goto end;
++	}
++	/* Name */
++	ret = mi_lttng_writer_write_element_string(writer, config_element_name,
++			channel->name);
 +	if (ret) {
 +		goto end;
 +	}
 +
-+	/* Version string (contain info like rc etc.) */
-+	ret =3D mi_lttng_writer_write_element_string(writer,
-+			mi_lttng_element_version_str, VERSION);
++	/* Enabled ? */
++	ret = mi_lttng_writer_write_element_bool(writer,
++			config_element_enabled, channel->enabled);
 +	if (ret) {
 +		goto end;
 +	}
 +
-+	/* Major version number */
-+	ret =3D mi_lttng_writer_write_element_unsigned_int(writer,
-+			mi_lttng_element_version_major, version->version_major);
-+	if (ret) {
-+		goto end;
-+	}
-+
-+	/* Minor version number */
-+	ret =3D mi_lttng_writer_write_element_unsigned_int(writer,
-+			mi_lttng_element_version_minor, version->version_minor);
-+	if (ret) {
-+		goto end;
-+	}
-+
-+	/* Patch number */
-+	ret =3D mi_lttng_writer_write_element_unsigned_int(writer,
-+			mi_lttng_element_version_patch_level, version->version_patchlevel);
-+	if (ret) {
-+		goto end;
-+	}
-+
-+	/* Name of the version */
-+	ret =3D mi_lttng_writer_write_element_string(writer,
-+			config_element_name, version->version_name);
-+	if (ret) {
-+		goto end;
-+	}
-+
-+	/* Description mostly related to beer... */
-+	ret =3D mi_lttng_writer_write_element_string(writer,
-+			mi_lttng_element_version_description, lttng_description);
-+	if (ret) {
-+		goto end;
-+	}
-+
-+	/* url */
-+	ret =3D mi_lttng_writer_write_element_string(writer,
-+			mi_lttng_element_version_web, version->package_url);
-+	if (ret) {
-+		goto end;
-+	}
-+
-+	/* License: free as in free beer...no...*speech* */
-+	ret =3D mi_lttng_writer_write_element_string(writer,
-+			mi_lttng_element_version_license, lttng_license);
-+	if (ret) {
-+		goto end;
-+	}
-+
-+	/* Close version element */
-+	ret =3D mi_lttng_writer_close_element(writer);
-+
-+end:
-+	return ret;
-+}
-+
-+LTTNG_HIDDEN
-+int mi_lttng_session(struct mi_writer *writer,
-+		struct lttng_session *session, int is_open)
-+{
-+	int ret;
-+
-+	/* open sessions element */
-+	ret =3D mi_lttng_writer_open_element(writer,
-+			config_element_session);
-+	if (ret) {
-+		goto end;
-+	}
-+
-+	/* Name of the session */
-+	ret =3D mi_lttng_writer_write_element_string(writer,
-+			config_element_name, session->name);
-+	if (ret) {
-+		goto end;
-+	}
-+
-+	/* path */
-+	ret =3D mi_lttng_writer_write_element_string(writer,
-+			config_element_path, session->path);
-+	if (ret) {
-+		goto end;
-+	}
-+
-+	/* enabled ? */
-+	ret =3D mi_lttng_writer_write_element_unsigned_int(writer,
-+			config_element_enabled, session->enabled);
-+	if (ret) {
-+		goto end;
-+	}
-+
-+	/* snapshot mode */
-+	ret =3D mi_lttng_writer_write_element_unsigned_int(writer,
-+			config_element_snapshot_mode, session->snapshot_mode);
-+	if (ret) {
-+		goto end;
-+	}
-+
-+	/* live timer interval in usec */
-+	ret =3D mi_lttng_writer_write_element_unsigned_int(writer,
-+			config_element_live_timer_interval,
-+			session->live_timer_interval);
++	/* Attribute */
++	ret = mi_lttng_channel_attr(writer, &channel->attr);
 +	if (ret) {
 +		goto end;
 +	}
 +
 +	if (!is_open) {
-+		/* Closing session element */
-+		ret =3D mi_lttng_writer_close_element(writer);
++		/* Closing channel element */
++		ret = mi_lttng_writer_close_element(writer);
++		if (ret) {
++			goto end;
++		}
++	}
++end:
++	return ret;
++}
++
++LTTNG_HIDDEN
++int mi_lttng_channel_attr(struct mi_writer *writer,
++		struct lttng_channel_attr *attr)
++{
++	int ret = 0;
++
++	assert(attr);
++
++	/* Opening Attributes */
++	ret = mi_lttng_writer_open_element(writer, config_element_attributes);
++	if (ret) {
++		goto end;
++	}
++
++	/* Overwrite */
++	ret = mi_lttng_writer_write_element_string(writer,
++		config_element_overwrite_mode,
++		attr->overwrite ? config_overwrite_mode_overwrite :
++			config_overwrite_mode_discard);
++	if (ret) {
++		goto end;
++	}
++
++	/* Sub buffer size in byte */
++	ret = mi_lttng_writer_write_element_unsigned_int(writer,
++		config_element_subbuf_size, attr->subbuf_size);
++	if (ret) {
++		goto end;
++	}
++
++	/* Number of sub buffer (power of two) */
++	ret = mi_lttng_writer_write_element_unsigned_int(writer,
++		config_element_num_subbuf,
++		attr->num_subbuf);
++	if (ret) {
++		goto end;
++	}
++
++	/* Switch timer interval in usec */
++	ret = mi_lttng_writer_write_element_unsigned_int(writer,
++		config_element_switch_timer_interval,
++		attr->switch_timer_interval);
++	if (ret) {
++		goto end;
++	}
++
++	/* Read timer interval in usec */
++	ret = mi_lttng_writer_write_element_unsigned_int(writer,
++		config_element_read_timer_interval,
++		attr->read_timer_interval);
++	if (ret) {
++		goto end;
++	}
++
++	/* Event output */
++	ret = mi_lttng_writer_write_element_string(writer,
++		config_element_output_type,
++		attr->output == LTTNG_EVENT_SPLICE ?
++		config_output_type_splice : config_output_type_mmap);
++	if (ret) {
++		goto end;
++	}
++
++	/* Tracefile size in bytes */
++	ret = mi_lttng_writer_write_element_unsigned_int(writer,
++		config_element_tracefile_size, attr->tracefile_size);
++	if (ret) {
++		goto end;
++	}
++
++	/* Count of tracefiles */
++	ret = mi_lttng_writer_write_element_unsigned_int(writer,
++		config_element_tracefile_count,
++		attr->tracefile_count);
++	if (ret) {
++		goto end;
++	}
++
++	/* Live timer interval in usec*/
++	ret = mi_lttng_writer_write_element_unsigned_int(writer,
++		config_element_live_timer_interval,
++		attr->live_timer_interval);
++	if (ret) {
++		goto end;
++	}
++
++	/* Closing attributes */
++	ret = mi_lttng_writer_close_element(writer);
++	if (ret) {
++		goto end;
 +	}
 +end:
 +	return ret;
 +
 +}
++
++LTTNG_HIDDEN
++int mi_lttng_event_common_attributes(struct mi_writer *writer,
++		struct lttng_event *event)
++{
++	int ret;
++
++	/* Open event element */
++	ret = mi_lttng_writer_open_element(writer, config_element_event);
++	if (ret) {
++		goto end;
++	}
++
++	/* event name */
++	ret = mi_lttng_writer_write_element_string(writer,
++			config_element_name, event->name);
++	if (ret) {
++		goto end;
++	}
++
++	/* event type */
++	ret = mi_lttng_writer_write_element_string(writer,
++			config_element_type, eventtype_string(event->type));
++	if (ret) {
++		goto end;
++	}
++
++	/* is event enabled */
++	ret = mi_lttng_writer_write_element_string(writer,
++			config_element_enabled, enabled_string(event->enabled));
++	if (ret) {
++		goto end;
++	}
++
++	/* event filter */
++	ret = mi_lttng_writer_write_element_string(writer,
++			config_element_filter, filter_string(event->filter));
++
++end:
++	return ret;
++}
++
++LTTNG_HIDDEN
++int mi_lttng_event_tracepoint_loglevel(struct mi_writer *writer,
++		struct lttng_event *event)
++{
++	int ret;
++
++	/* event loglevel */
++	ret = mi_lttng_writer_write_element_string(writer,
++			config_element_loglevel, loglevel_string(event->loglevel));
++	if (ret) {
++		goto end;
++	}
++
++	/* event exclusion filter */
++	ret = mi_lttng_writer_write_element_string(writer,
++			config_element_exclusion, exclusion_string(event->exclusion));
++	if (ret) {
++		goto end;
++	}
++
++end:
++	return ret;
++}
++
++LTTNG_HIDDEN
++int mi_lttng_event_tracepoint_no_loglevel(struct mi_writer *writer,
++		struct lttng_event *event)
++{
++	/* event exclusion filter */
++	return mi_lttng_writer_write_element_string(writer,
++			config_element_exclusion, exclusion_string(event->exclusion));
++}
++
++LTTNG_HIDDEN
++int mi_lttng_event_function_probe(struct mi_writer *writer,
++		struct lttng_event *event)
++{
++	int ret;
++
++	if (event->attr.probe.addr != 0) {
++		/* event probe address */
++		ret = mi_lttng_writer_write_element_unsigned_int(writer,
++				config_element_address, event->attr.probe.addr);
++		if (ret) {
++			goto end;
++		}
++	} else {
++		/* event probe offset */
++		ret = mi_lttng_writer_write_element_unsigned_int(writer,
++				config_element_offset, event->attr.probe.offset);
++		if (ret) {
++			goto end;
++		}
++
++		/* event probe symbol_name */
++		ret = mi_lttng_writer_write_element_string(writer,
++				config_element_symbol_name, event->attr.probe.symbol_name);
++		if (ret) {
++			goto end;
++		}
++	}
++end:
++	return ret;
++}
++
++LTTNG_HIDDEN
++int mi_lttng_event_function_entry(struct mi_writer *writer,
++		struct lttng_event *event)
++{
++	/* event probe symbol_name */
++	return mi_lttng_writer_write_element_string(writer,
++			config_element_symbol_name, event->attr.ftrace.symbol_name);
++}
++
++LTTNG_HIDDEN
++int mi_lttng_events_open(struct mi_writer *writer)
++{
++	return mi_lttng_writer_open_element(writer, config_element_events);
++}
++
++LTTNG_HIDDEN
++int mi_lttng_event(struct mi_writer *writer,
++		struct lttng_event *event, int is_open)
++{
++	int ret;
++
++	ret = mi_lttng_event_common_attributes(writer, event);
++	if (ret) {
++		goto end;
++	}
++
++	switch (event->type) {
++	case LTTNG_EVENT_ALL:
++		/* We should never have "all" events in list. */
++		assert(0);
++		break;
++	case LTTNG_EVENT_TRACEPOINT:
++	{
++		if (event->loglevel != -1) {
++			ret = mi_lttng_event_tracepoint_loglevel(writer, event);
++		} else {
++			ret = mi_lttng_event_tracepoint_no_loglevel(writer, event);
++		}
++		break;
++	}
++	case LTTNG_EVENT_PROBE:
++		ret = mi_lttng_event_function_probe(writer, event);
++		break;
++	case LTTNG_EVENT_FUNCTION_ENTRY:
++		ret = mi_lttng_event_function_entry(writer, event);
++		break;
++	default:
++		break;
++	}
++
++	if (!is_open) {
++		ret = mi_lttng_writer_close_element(writer);
++	}
++
++end:
++	return ret;
++}
++
++LTTNG_HIDDEN
++int mi_lttng_pids_open(struct mi_writer *writer)
++{
++	return mi_lttng_writer_open_element(writer, mi_lttng_element_pids);
++}
++
++LTTNG_HIDDEN
++int mi_lttng_pid(struct mi_writer *writer, pid_t pid , const char *cmdline,
++		int is_open)
++{
++	int ret;
++
++	/* Open element pid */
++	ret = mi_lttng_writer_open_element(writer, mi_lttng_element_pid);
++	if (ret) {
++		goto end;
++	}
++
++	/* Writing pid number */
++	ret = mi_lttng_writer_write_element_signed_int(writer,
++			mi_lttng_element_pid_id, (int)pid);
++	if (ret) {
++		goto end;
++	}
++
++	/* Writing name of the process */
++	ret = mi_lttng_writer_write_element_string(writer, config_element_name,
++			cmdline);
++	if (ret) {
++		goto end;
++	}
++
++	if (!is_open) {
++		/* Closing Pid */
++		ret = mi_lttng_writer_close_element(writer);
++	}
++
++end:
++	return ret;
++}
++
++LTTNG_HIDDEN
++int mi_lttng_event_fields_open(struct mi_writer *writer)
++{
++	return mi_lttng_writer_open_element(writer, mi_lttng_element_event_fields);
++}
++
++LTTNG_HIDDEN
++int mi_lttng_event_field(struct mi_writer *writer,
++		struct lttng_event_field *field)
++{
++	int ret;
++
++	if (!field->field_name[0]) {
++		/* To Review: not sure if legal david ?
++		 * how should this be handle ?
++		 */
++		ret = 0;
++		goto end;
++	}
++
++	/* Open field */
++	ret = mi_lttng_writer_open_element(writer, mi_lttng_element_event_field);
++	if (ret) {
++		goto end;
++	}
++
++	if (!field->field_name[0]) {
++		goto close;
++	}
++
++	/* Name */
++	ret = mi_lttng_writer_write_element_string(writer, config_element_name,
++			field->field_name);
++	if (ret) {
++		goto end;
++	}
++
++	/* Type */
++	ret = mi_lttng_writer_write_element_string(writer, config_element_type,
++			eventfieldtype_string(field->type));
++	if (ret) {
++		goto end;
++	}
++
++	/* nowrite  */
++	ret = mi_lttng_writer_write_element_signed_int(writer,
++			mi_lttng_element_nowrite, field->nowrite);
++	if (ret) {
++		goto end;
++	}
++
++close:
++	/* Close field element */
++	ret = mi_lttng_writer_close_element(writer);
++
++end:
++	return ret;
++}
 diff --git a/src/common/mi-lttng.h b/src/common/mi-lttng.h
-new file mode 100644
-index 0000000..69ec0f5
---- /dev/null
+index 69ec0f5..33b5547 100644
+--- a/src/common/mi-lttng.h
 +++ b/src/common/mi-lttng.h
-@@ -0,0 +1,230 @@
-+/*
-+ * Copyright (C) 2014   - Jonathan Rajotte <jonathan.r.julien@gmail.com>
-+ *                      - Olivier Cotte <olivier.cotte@polymtl.ca>
-+ *
-+ * This program is free software; you can redistribute it and/or modify =
-it
-+ * under the terms of the GNU General Public License, version 2 only, as
-+ * published by the Free Software Foundation.
-+ *
-+ * This program is distributed in the hope that it will be useful, but W=
-ITHOUT
-+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License =
-for
-+ * more details.
-+ *
-+ * You should have received a copy of the GNU General Public License alo=
-ng with
-+ * this program; if not, write to the Free Software Foundation, Inc., 51
-+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-+ */
+@@ -63,6 +63,31 @@ const char * const mi_lttng_element_version_license;
+ const char * const mi_lttng_element_version_patch_level;
+ const char * const mi_lttng_element_version_description;
+ 
++/* String related to a lttng_event_field */
++const char * const mi_lttng_element_event_field;
++const char * const mi_lttng_element_event_fields;
 +
-+#ifndef _MI_LTTNG_H
-+#define _MI_LTTNG_H
++/* Strings related to pid */
++const char * const mi_lttng_element_pids;
++const char * const mi_lttng_element_pid;
++const char * const mi_lttng_element_pid_id;
 +
-+#include <common/error.h>
-+#include <common/macros.h>
-+#include <common/config/config.h>
++/* General element of mi_lttng */
++const char * const mi_lttng_element_type_other;
++const char * const mi_lttng_element_type_integer;
++const char * const mi_lttng_element_type_enum;
++const char * const mi_lttng_element_type_float;
++const char * const mi_lttng_element_type_string;
++const char * const mi_lttng_element_nowrite;
 +
-+#include <lttng/lttng.h>
++/* Utility string function  */
++const char *enabled_string(int value);
++const char *filter_string(int value);
++const char *exclusion_string(int value);
++const char *loglevel_string(int value);
++const char *logleveltype_string(enum lttng_loglevel_type value);
++const char *eventfieldtype_string(enum lttng_event_field_type value);
 +
-+#include <stdint.h>
-+
-+
-+/* Instance of a machine interface writer. */
-+struct mi_writer {
-+	struct config_writer *writer;
-+	enum lttng_mi_output_type type;
-+};
-+
-+/*
-+ * Version information for the machine interface.
-+ */
-+struct mi_lttng_version {
-+	char version[NAME_MAX]; /* Version number of package */
-+	uint32_t version_major; /* LTTng-Tools major version number */
-+	uint32_t version_minor; /* LTTng-Tools minor version number */
-+	uint32_t version_patchlevel; /* LTTng-Tools patchlevel version number *=
-/
-+	char version_name[NAME_MAX];
-+	char package_url[NAME_MAX]; /* Define to the home page for this package=
-. */
-+};
-+
-+/* Strings related to command */
-+const char * const mi_lttng_element_command;
-+const char * const mi_lttng_element_command_version;
-+const char * const mi_lttng_element_command_list;
-+const char * const mi_lttng_element_command_name;
-+const char * const mi_lttng_element_command_output;
-+
-+/* Strings related to command: version */
-+const char * const mi_lttng_element_version;
-+const char * const mi_lttng_element_version_str;
-+const char * const mi_lttng_element_version_web;
-+const char * const mi_lttng_element_version_major;
-+const char * const mi_lttng_element_version_minor;
-+const char * const mi_lttng_element_version_license;
-+const char * const mi_lttng_element_version_patch_level;
-+const char * const mi_lttng_element_version_description;
-+
-+/*
-+ * Create an instance of a machine interface writer.
-+ *
-+ * fd_output File to which the XML content must be written. The file wil=
-l be
-+ * closed once the mi_writer has been destroyed.
-+ *
-+ * Returns an instance of a machine interface writer on success, NULL on
-+ * error.
-+ */
-+struct mi_writer *mi_lttng_writer_create(int fd_output, int mi_output_ty=
-pe);
-+
-+/*
-+ * Destroy an instance of a machine interface writer.
+ /*
+  * Create an instance of a machine interface writer.
+  *
+@@ -130,6 +155,19 @@ int mi_lttng_writer_open_element(struct mi_writer *writer,
+ int mi_lttng_writer_close_element(struct mi_writer *writer);
+ 
+ /*
++ * Close multiple element .
 + *
 + * writer An instance of a machine interface writer.
 + *
-+ * Returns zero if the XML document could be closed cleanly. Negative va=
-lues
-+ * indicate an error.
-+ */
-+int mi_lttng_writer_destroy(struct mi_writer *writer);
-+
-+/*
-+ * Open a command tag and add it's name node.
-+ *
-+ * writer An instance of a machine interface writer.
-+ *
-+ * command The command name.
++ * nb_element
 + *
 + * Returns zero if the XML document could be closed cleanly.
 + * Negative values indicate an error.
 + */
-+int mi_lttng_writer_command_open(struct mi_writer *writer, const char *c=
-ommand);
++int mi_lttng_close_multi_element(struct mi_writer *writer,
++		unsigned int nb_element);
 +
 +/*
-+ * Close a command tag.
-+ *
-+ * writer An instance of a machine interface writer.
-+ *
-+ * Returns zero if the XML document could be closed cleanly.
-+ * Negative values indicate an error.
-+ */
-+int mi_lttng_writer_command_close(struct mi_writer *writer);
-+
-+/*
-+ * Open an element tag.
-+ *
-+ * writer An instance of a machine interface writer.
-+ *
-+ * element_name Element tag name.
-+ *
-+ * Returns zero if the XML document could be closed cleanly.
-+ * Negative values indicate an error.
-+ */
-+int mi_lttng_writer_open_element(struct mi_writer *writer,
-+		const char *element_name);
-+
-+/*
-+ * Close the current element tag.
-+ *
-+ * writer An instance of a machine interface writer.
-+ *
-+ * Returns zero if the XML document could be closed cleanly.
-+ * Negative values indicate an error.
-+ */
-+int mi_lttng_writer_close_element(struct mi_writer *writer);
-+
-+/*
-+ * Write an element of type unsigned int.
-+ *
-+ * writer An instance of a machine interface writer.
-+ *
-+ * element_name Element name.
-+ *
-+ * value Unsigned int value of the element
-+ *
-+ * Returns zero if the element's value could be written.
-+ * Negative values indicate an error.
-+ */
-+int mi_lttng_writer_write_element_unsigned_int(struct mi_writer *writer,
-+		const char *element_name, uint64_t value);
-+
-+/*
-+ * Write an element of type signed int.
-+ *
-+ * writer An instance of a machine interface writer.
-+ *
-+ * element_name Element name.
-+ *
-+ * value Signed int value of the element
-+ *
-+ * Returns zero if the element's value could be written.
-+ * Negative values indicate an error.
-+ */
-+int mi_lttng_writer_write_element_signed_int(struct mi_writer *writer,
-+		const char *element_name, int64_t value);
-+
-+/*
-+ * Write an element of type boolean.
-+ *
-+ * writer An instance of a machine interface writer.
-+ *
-+ * element_name Element name.
-+ *
-+ * value Boolean value of the element
-+ *
-+ * Returns zero if the element's value could be written.
-+ * Negative values indicate an error.
-+ */
-+int mi_lttng_writer_write_element_bool(struct mi_writer *writer,
-+		const char *element_name, int value);
-+
-+/*
-+ * Write an element of type string.
-+ *
-+ * writer An instance of a machine interface writer.
-+ *
-+ * element_name Element name.
-+ *
-+ * value String value of the element
-+ *
-+ * Returns zero if the element's value could be written.
-+ * Negative values indicate an error.
-+ */
-+int mi_lttng_writer_write_element_string(struct mi_writer *writer,
-+		const char *element_name, const char *value);
-+
-+/*
-+ * Machine interface of struct version.
-+ *
-+ * writer An instance of a machine interface writer.
-+ *
-+ * version Version struct.
-+ *
-+ * lttng_description String value of the version description.
-+ *
-+ * lttng_license String value of the version license.
-+ *
-+ * Returns zero if the element's value could be written.
-+ * Negative values indicate an error.
-+ */
-+int mi_lttng_version(struct mi_writer *writer, struct mi_lttng_version *=
-version,
-+		const char *lttng_description, const char *lttng_license);
-+
-+/*
-+ * Machine interface of struct session.
+  * Write an element of type unsigned int.
+  *
+  * writer An instance of a machine interface writer.
+@@ -207,24 +245,271 @@ int mi_lttng_version(struct mi_writer *writer, struct mi_lttng_version *version,
+ 		const char *lttng_description, const char *lttng_license);
+ 
+ /*
++ * Machine interface: open a sessions element.
 + *
 + * writer An instance of a machine interface writer
 + *
-+ * session An instance of a session
++ * Returns zero if the element's value could be written.
++ * Negative values indicate an error.
++ */
++int mi_lttng_sessions_open(struct mi_writer *writer);
++
++/*
+  * Machine interface of struct session.
+  *
+  * writer An instance of a machine interface writer
+  *
+  * session An instance of a session
+  *
+- * isOpen Define if we close the session element
+- *        This should be use carefully and the client
+- *        need to close the session element.
+- *        Use case: nested addition information on a session
++ * is_open Define if we close the session element
++ *         This should be used carefully and the client
++ *         need to close the session element.
++ *         Use case: nested addtionnal information on a session
+  *                  ex: domain,channel event.
+- *        0-> False
+- *        1-> True
++ *         0-> False
++ *         1-> True
+  *
+  * Returns zero if the element's value could be written.
+  * Negative values indicate an error.
+  */
+ int mi_lttng_session(struct mi_writer *writer,
+-		struct lttng_session *session, int isOpen);
++		struct lttng_session *session, int is_open);
++
++/*
++ * Machine interface: open a domains element.
 + *
-+ * isOpen Define if we close the session element
-+ *        This should be use carefully and the client
-+ *        need to close the session element.
-+ *        Use case: nested addition information on a session
-+ *                  ex: domain,channel event.
-+ *        0-> False
-+ *        1-> True
++ * writer An instance of a machine interface writer
 + *
 + * Returns zero if the element's value could be written.
 + * Negative values indicate an error.
 + */
-+int mi_lttng_session(struct mi_writer *writer,
-+		struct lttng_session *session, int isOpen);
++int mi_lttng_domains_open(struct mi_writer *writer);
 +
-+#endif /* _MI_LTTNG_H */
-diff --git a/src/lib/lttng-ctl/lttng-ctl.c b/src/lib/lttng-ctl/lttng-ctl.=
-c
-index 100e587..7dd9828 100644
---- a/src/lib/lttng-ctl/lttng-ctl.c
-+++ b/src/lib/lttng-ctl/lttng-ctl.c
-@@ -74,6 +74,7 @@ static int connected;
-  */
- int lttng_opt_quiet;
- int lttng_opt_verbose;
-+int lttng_opt_mi;
-=20
- /*
-  * Copy string from src to dst and enforce null terminated byte.
-diff --git a/tests/unit/ini_config/ini_config.c b/tests/unit/ini_config/i=
-ni_config.c
-index 38fe5f4..29935ef 100644
---- a/tests/unit/ini_config/ini_config.c
-+++ b/tests/unit/ini_config/ini_config.c
-@@ -31,6 +31,7 @@ struct state {
-=20
- int lttng_opt_quiet =3D 1;
- int lttng_opt_verbose =3D 0;
-+int lttng_opt_mi;
-=20
- int entry_handler(const struct config_entry *entry,
- 		struct state *state)
-diff --git a/tests/unit/test_kernel_data.c b/tests/unit/test_kernel_data.=
-c
-index e2182e9..2639be4 100644
---- a/tests/unit/test_kernel_data.c
-+++ b/tests/unit/test_kernel_data.c
-@@ -38,6 +38,7 @@
- /* For error.h */
- int lttng_opt_quiet =3D 1;
- int lttng_opt_verbose;
-+int lttng_opt_mi;
-=20
- int ust_consumerd32_fd;
- int ust_consumerd64_fd;
-diff --git a/tests/unit/test_session.c b/tests/unit/test_session.c
-index a0e84e9..4f90c33 100644
---- a/tests/unit/test_session.c
-+++ b/tests/unit/test_session.c
-@@ -46,6 +46,7 @@ static struct ltt_session_list *session_list;
- /* For error.h */
- int lttng_opt_quiet =3D 1;
- int lttng_opt_verbose =3D 0;
-+int lttng_opt_mi;
-=20
- int ust_consumerd32_fd;
- int ust_consumerd64_fd;
-diff --git a/tests/unit/test_uri.c b/tests/unit/test_uri.c
-index 7cac95d..432e2b3 100644
---- a/tests/unit/test_uri.c
-+++ b/tests/unit/test_uri.c
-@@ -25,6 +25,7 @@
- /* For error.h */
- int lttng_opt_quiet =3D 1;
- int lttng_opt_verbose =3D 3;
-+int lttng_opt_mi;
-=20
- /* Number of TAP tests in this file */
- #define NUM_TESTS 11
-diff --git a/tests/unit/test_ust_data.c b/tests/unit/test_ust_data.c
-index 150d5da..dd00089 100644
---- a/tests/unit/test_ust_data.c
-+++ b/tests/unit/test_ust_data.c
-@@ -44,6 +44,7 @@
- /* For error.h */
- int lttng_opt_quiet =3D 1;
- int lttng_opt_verbose;
-+int lttng_opt_mi;
-=20
- int ust_consumerd32_fd;
- int ust_consumerd64_fd;
-diff --git a/tests/unit/test_utils_expand_path.c b/tests/unit/test_utils_=
-expand_path.c
-index fe709ac..f863b5d 100644
---- a/tests/unit/test_utils_expand_path.c
-+++ b/tests/unit/test_utils_expand_path.c
-@@ -31,6 +31,7 @@
- /* For error.h */
- int lttng_opt_quiet =3D 1;
- int lttng_opt_verbose =3D 3;
-+int lttng_opt_mi;
-=20
- struct valid_test_input {
- 	char *input;
-diff --git a/tests/unit/test_utils_parse_size_suffix.c b/tests/unit/test_=
-utils_parse_size_suffix.c
-index 990aa1b..f81278d 100644
---- a/tests/unit/test_utils_parse_size_suffix.c
-+++ b/tests/unit/test_utils_parse_size_suffix.c
-@@ -26,6 +26,7 @@
- /* For error.h */
- int lttng_opt_quiet =3D 1;
- int lttng_opt_verbose =3D 3;
-+int lttng_opt_mi;
-=20
- struct valid_test_input {
- 	char *input;
---=20
++/*
++ * Machine interface of struct domain.
++ *
++ * writer An instance of a machine interface writer
++ *
++ * domain An instance of a domain
++ *
++ * is_open Define if we close the domain element
++ *         This should be used carefully and the client
++ *         need to close the domain element.
++ *         Use case: nested addition information on a domain
++ *                  ex: channel event.
++ *         0-> False
++ *         1-> True
++ *
++ * Returns zero if the element's value could be written.
++ * Negative values indicate an error.
++ */
++int mi_lttng_domain(struct mi_writer *writer,
++		struct lttng_domain *domain, int is_open);
++
++/*
++ * Machine interface: open a channels element.
++ *
++ * writer An instance of a machine interface writer
++ *
++ * Returns zero if the element's value could be written.
++ * Negative values indicate an error.
++ */
++int mi_lttng_channels_open(struct mi_writer *writer);
++
++/*
++ * Machine interface of struct channel.
++ *
++ * writer An instance of a machine interface writer
++ *
++ * channel An instance of a channel
++ *
++ * is_open Define if we close the channel element
++ *         This should be used carefully and the client
++ *         need to close the channel element.
++ *         Use case: nested addition information on a domain
++ *                  ex: channel event.
++ *         0-> False
++ *         1-> True
++ *
++ * Returns zero if the element's value could be written.
++ * Negative values indicate an error.
++ */
++int mi_lttng_channel(struct mi_writer *writer,
++		struct lttng_channel *channel, int is_open);
++
++/*
++ * Machine interface of struct channel_attr.
++ *
++ * writer An instance of a machine interface writer
++ *
++ * attr An instance of a channel_attr struct
++ *
++ * Returns zero if the element's value could be written.
++ * Negative values indicate an error.
++ */
++int mi_lttng_channel_attr(struct mi_writer *writer,
++		struct lttng_channel_attr *attr);
++
++/*
++* Machine interface for event common attribute.
++*
++* writer An instance of a mi writer.
++*
++* event single trace event.
++*
++* The common attribute are:
++* - mi event element
++* - event name
++* - event type
++* - enabled tag
++* - event filter
++*
++* Returns zero if the element's value could be written.
++* Negative values indicate an error.
++*/
++int mi_lttng_event_common_attributes(struct mi_writer *writer,
++		struct lttng_event *event);
++
++/*
++ * Machine interface for kernel tracepoint event with a loglevel.
++ *
++ * writer An instance of a mi writer.
++ *
++ * event single trace event.
++ *
++ * Returns zero if the element's value could be written.
++ * Negative values indicate an error.
++ */
++int mi_lttng_event_tracepoint_loglevel(struct mi_writer *writer,
++		struct lttng_event *event);
++
++/*
++ * Machine interface for kernel tracepoint event with no loglevel.
++ *
++ * writer An instance of a mi writer.
++ *
++ * event single trace event.
++ *
++ * Returns zero if the element's value could be written.
++ * Negative values indicate an error.
++ */
++int mi_lttng_event_tracepoint_no_loglevel(struct mi_writer *writer,
++		struct lttng_event *event);
++
++/*
++ * Machine interface for kernel function and probe event.
++ *
++ * writer An instance of a mi writer.
++ *
++ * event single trace event.
++ *
++ * Returns zero if the element's value could be written.
++ * Negative values indicate an error.
++ */
++int mi_lttng_event_function_probe(struct mi_writer *writer,
++		struct lttng_event *event);
++
++/*
++ * Machine interface for kernel function entry event.
++ *
++ * writer An instance of a mi writer.
++ *
++ * event single trace event.
++ *
++ * Returns zero if the element's value could be written.
++ * Negative values indicate an error.
++ */
++int mi_lttng_event_function_entry(struct mi_writer *writer,
++		struct lttng_event *event);
++
++/*
++ * Machine interface: open an events element.
++ *
++ * writer An instance of a machine interface writer
++ *
++ * Returns zero if the element's value could be written.
++ * Negative values indicate an error.
++ */
++int mi_lttng_events_open(struct mi_writer *writer);
++
++/*
++ * Machine interface for printing an event.
++ * The trace event type currently supported are:
++ *  TRACEPOINT,
++ *  PROBE,
++ *  FUNCTION,
++ *  FUNCTION_ENTRY,
++ *  SYSCALL
++ *
++ * writer An instance of a mi writer.
++ *
++ * event single trace event.
++ *
++ * is_open Define if we close the event element
++ *         This should be used carefully and the client
++ *         need to close the event element.
++ *         Use case: nested additional information
++ *         0-> False
++ *         1-> True
++ *
++ * Returns zero if the element's value could be written.
++ * Negative values indicate an error.
++ */
++int mi_lttng_event(struct mi_writer *writer, struct lttng_event *event,
++		int is_open);
++
++/*
++ * Machine interface for struct lttng_event_field .
++ *
++ * writer An instance of a mi writer.
++ *
++ * field An event_field instance.
++ *
++ * Returns zero if the element's value could be written.
++ * Negative values indicate an error.
++ */
++int mi_lttng_event_field(struct mi_writer *writer,
++		struct lttng_event_field *field);
++
++/*
++ * Machine interface: open a event_fields element.
++ *
++ * writer An instance of a machine interface writer
++ *
++ * Returns zero if the element's value could be written.
++ * Negative values indicate an error.
++ */
++int mi_lttng_event_fields_open(struct mi_writer *writer);
++
++/*
++ * Machine interface: open a pids element.
++ *
++ * writer An instance of a machine interface writer
++ *
++ * Returns zero if the element's value could be written.
++ * Negative values indicate an error.
++ */
++int mi_lttng_pids_open(struct mi_writer *writer);
++
++/*
++ * Machine interface of a pid.
++ *
++ * writer An instance of a machine interface writer
++ *
++ * pid A pid
++ *
++ * is_open Define if we close the pid element
++ *         This should be used carefully and the client
++ *         need to close the pid element.
++ *         Use case: nested addition information on a domain
++ *                  ex: channel event.
++ *         0-> False
++ *         1-> True
++ *
++ * Returns zero if the element's value could be written.
++ * Negative values indicate an error.
++ */
++int mi_lttng_pid(struct mi_writer *writer, pid_t pid , const char *cmdline,
++		int is_open);
+ 
+ #endif /* _MI_LTTNG_H */
+-- 
 1.8.3.2
-
-
---6TrnltStXW4iwmi0
-Content-Type: application/x-sh
-Content-Disposition: attachment; filename="run_mi_test.sh"
-Content-Transfer-Encoding: quoted-printable
-
- #!/bin/bash=0A=0A mkdir ./mi_test_output=0A=0A ./src/bin/lttng/lttng creat=
-e hell=0A ./src/bin/lttng/lttng create heaven=0A=0A ./src/bin/lttng/lttng -=
--mi xml list > ./mi_test_output/mi_test_list.xml=0A ./src/bin/lttng/lttng -=
--mi xml list -k > ./mi_test_output/mi_test_list-k.xml=0A ./src/bin/lttng/lt=
-tng --mi xml list -u > ./mi_test_output/mi_test_list-u.xml=0A ./src/bin/ltt=
-ng/lttng --mi xml list -u -f > ./mi_test_output/mi_test_list-u-f.xml=0A ./s=
-rc/bin/lttng/lttng --mi xml list -j > ./mi_test_output/mi_test_list-j.xml=
-=0A=0A ./src/bin/lttng/lttng enable-channel jesus -k -s hell=0A ./src/bin/l=
-ttng/lttng enable-channel lucifer -k -s heaven=0A ./src/bin/lttng/lttng ena=
-ble-channel dieu -u -s hell=0A ./src/bin/lttng/lttng enable-channel MD -u -=
-s heaven=0A ./src/bin/lttng/lttng enable-channel PSR -u -s hell=0A ./src/bi=
-n/lttng/lttng enable-channel GB -u -s heaven=0A=0A ./src/bin/lttng/lttng en=
-able-event -s hell -c jesus -k -a=0A ./src/bin/lttng/lttng enable-event -s =
-heaven -c lucifer -k -a=0A=0A ./src/bin/lttng/lttng enable-event -s hell -c=
- dieu -u -a=0A ./src/bin/lttng/lttng enable-event -s heaven -c MD -u -a=0A=
-=0A ./src/bin/lttng/lttng enable-event -j hello -s hell -c dieu=0A ./src/bi=
-n/lttng/lttng enable-event -j global -s heaven -c MD=0A ./src/bin/lttng/ltt=
-ng enable-event -s hell -c dieu -j -a=0A ./src/bin/lttng/lttng enable-event=
- -s heaven -c MD -j -a=0A=0A ./src/bin/lttng/lttng --mi xml list hell > ./m=
-i_test_output/mi_test_listHell.xml=0A ./src/bin/lttng/lttng --mi xml list h=
-eaven > ./mi_test_output/mi_test_listHeaven.xml=0A ./src/bin/lttng/lttng --=
-mi xml list hell -d > ./mi_test_output/mi_test_listHell-d.xml=0A ./src/bin/=
-lttng/lttng --mi xml list heaven -d > ./mi_test_output/mi_test_listHeaven-d=
-=2Exml=0A ./src/bin/lttng/lttng --mi xml list hell -u > ./mi_test_output/mi=
-_test_listHell-u.xml=0A ./src/bin/lttng/lttng --mi xml list hell -k > ./mi_=
-test_output/mi_test_listHell-k.xml=0A ./src/bin/lttng/lttng --mi xml list h=
-eaven -u > ./mi_test_output/mi_test_listHeaven-u.xml=0A ./src/bin/lttng/ltt=
-ng --mi xml list heaven -k > ./mi_test_output/mi_test_listHeaven-k.xml=0A .=
-/src/bin/lttng/lttng --mi xml list hell -c jesus > ./mi_test_output/mi_test=
-_listHell-c-jesus.xml=0A ./src/bin/lttng/lttng --mi xml list heaven -c luci=
-fer > ./mi_test_output/mi_test_listHeaven-c-lucifer.xml=0A ./src/bin/lttng/=
-lttng --mi xml list hell -c dieu > ./mi_test_output/mi_test_listHell-c-dieu=
-=2Exml=0A ./src/bin/lttng/lttng --mi xml list heaven -c MD > ./mi_test_outp=
-ut/mi_test_listHeaven-c-MD.xml=0A=0A=0A=0A ./src/bin/lttng/lttng destroy -a=
-=0A=0A
---6TrnltStXW4iwmi0
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Disposition: inline
-Content-Transfer-Encoding: 7bit
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---6TrnltStXW4iwmi0--
