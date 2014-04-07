@@ -1,102 +1,66 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH 1/1] Disable liblttng-ust-dl if dlinfo is
- not	available in C library.
-Date: Mon, 7 Apr 2014 20:42:25 +0000 (UTC)
-Message-ID: <794709247.8287.1396903345152.JavaMail.zimbra__1375.05906536735$1396903422$gmane$org@efficios.com>
+From: Romain Naour <romain.naour-oid7hba3+9NWj0EZb7rXcA@public.gmane.org>
+Subject: Re: [lttng-dev] [PATCH 1/1] Disable liblttng-ust-dl if
+ dlinfo is not	available in C library.
+Date: Mon, 07 Apr 2014 22:46:10 +0200
+Message-ID: <53430E92.9060401@openwide.fr>
 References: <1396818161-20204-1-git-send-email-romain.naour@openwide.fr>
+ <794709247.8287.1396903345152.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
- by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1WXGNF-0002Hh-29
- for lttng-dev@lists.lttng.org; Mon, 07 Apr 2014 16:42:39 -0400
-In-Reply-To: <1396818161-20204-1-git-send-email-romain.naour@openwide.fr>
-List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Romain Naour <romain.naour@openwide.fr>
-Cc: lttng-dev@lists.lttng.org
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Transfer-Encoding: base64
+Return-path: <buildroot-bounces-9GAsQqxh4YTR7s880joybQ@public.gmane.org>
+In-Reply-To: <794709247.8287.1396903345152.JavaMail.zimbra-vg+e7yoeK/dWk0Htik3J/w@public.gmane.org>
+List-Unsubscribe: <http://lists.busybox.net/mailman/options/buildroot>,
+ <mailto:buildroot-request-9GAsQqxh4YTR7s880joybQ@public.gmane.org?subject=unsubscribe>
+List-Archive: <http://lists.busybox.net/pipermail/buildroot>
+List-Post: <mailto:buildroot-9GAsQqxh4YTR7s880joybQ@public.gmane.org>
+List-Help: <mailto:buildroot-request-9GAsQqxh4YTR7s880joybQ@public.gmane.org?subject=help>
+List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
+ <mailto:buildroot-request-9GAsQqxh4YTR7s880joybQ@public.gmane.org?subject=subscribe>
+Errors-To: buildroot-bounces-9GAsQqxh4YTR7s880joybQ@public.gmane.org
+Sender: buildroot-bounces-9GAsQqxh4YTR7s880joybQ@public.gmane.org
+To: Mathieu Desnoyers <mathieu.desnoyers-vg+e7yoeK/dWk0Htik3J/w@public.gmane.org>
+Cc: buildroot <buildroot-9GAsQqxh4YTR7s880joybQ@public.gmane.org>, lttng-dev-bnB2LGs2QVJ+nrgayQ7rhA@public.gmane.org, "Yann E. MORIN" <yann.morin.1998-GANU6spQydw@public.gmane.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Merged into master and stable-2.4, thanks!
-
-Mathieu
-
------ Original Message -----
-> From: "Romain Naour" <romain.naour@openwide.fr>
-> To: lttng-dev@lists.lttng.org
-> Cc: "Romain Naour" <romain.naour@openwide.fr>
-> Sent: Sunday, April 6, 2014 5:02:41 PM
-> Subject: [lttng-dev] [PATCH 1/1] Disable liblttng-ust-dl if dlinfo is not	available in C library.
-> 
-> According to uClibc commit [1], dlinfo is not available.
-> To be able to use LTTng UST with uClibc, we need to disable
-> the Dynamic Linker Tracing functionality [2].
-> 
-> [1]
-> http://git.uclibc.org/uClibc/commit/?id=f3c9dc499c5c787ddd8c4320f2d44d2ae6e40c22
-> [2] http://lists.lttng.org/pipermail/lttng-dev/2014-February/022423.html
-> 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> ---
->  Makefile.am  | 5 ++++-
->  configure.ac | 3 +++
->  2 files changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Makefile.am b/Makefile.am
-> index b79d2dd..c907ff1 100644
-> --- a/Makefile.am
-> +++ b/Makefile.am
-> @@ -4,11 +4,14 @@ SUBDIRS = . include snprintf libringbuffer
-> liblttng-ust-comm \
->  		liblttng-ust \
->  		liblttng-ust-ctl \
->  		liblttng-ust-fork \
-> -		liblttng-ust-dl \
->  		liblttng-ust-libc-wrapper \
->  		liblttng-ust-cyg-profile \
->  		tools
->  
-> +if HAVE_DLINFO
-> +SUBDIRS += liblttng-ust-dl
-> +endif
-> +
->  if BUILD_JNI_INTERFACE
->  SUBDIRS += liblttng-ust-java liblttng-ust-jul
->  endif
-> diff --git a/configure.ac b/configure.ac
-> index b04d4e3..de6300e 100644
-> --- a/configure.ac
-> +++ b/configure.ac
-> @@ -146,6 +146,9 @@ AC_C_INLINE
->  AC_FUNC_MALLOC
->  AC_CHECK_FUNCS([gettimeofday munmap socket strerror strtol sched_getcpu
->  sysconf])
->  
-> +AC_CHECK_FUNCS([dlinfo])
-> +AM_CONDITIONAL([HAVE_DLINFO], [test "${ac_cv_func_dlinfo}" = "yes"])
-> +
->  CFLAGS="-Wall $CFLAGS"
->  
->  # URCU
-> --
-> 1.9.0
-> 
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> 
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+SGkgTWF0aGlldSwKCkxlIDA3LzA0LzIwMTQgMjI6NDIsIE1hdGhpZXUgRGVzbm95ZXJzIGEgw6lj
+cml0IDoKPiBNZXJnZWQgaW50byBtYXN0ZXIgYW5kIHN0YWJsZS0yLjQsIHRoYW5rcyEKPgo+IE1h
+dGhpZXUKWW91J3JlIHdlbGNvbWUuCgpCZXN0IHJlZ2FyZHMsClJvbWFpbiBOYW91cgoKPgo+IC0t
+LS0tIE9yaWdpbmFsIE1lc3NhZ2UgLS0tLS0KPj4gRnJvbTogIlJvbWFpbiBOYW91ciIgPHJvbWFp
+bi5uYW91ckBvcGVud2lkZS5mcj4KPj4gVG86IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPj4g
+Q2M6ICJSb21haW4gTmFvdXIiIDxyb21haW4ubmFvdXJAb3BlbndpZGUuZnI+Cj4+IFNlbnQ6IFN1
+bmRheSwgQXByaWwgNiwgMjAxNCA1OjAyOjQxIFBNCj4+IFN1YmplY3Q6IFtsdHRuZy1kZXZdIFtQ
+QVRDSCAxLzFdIERpc2FibGUgbGlibHR0bmctdXN0LWRsIGlmIGRsaW5mbyBpcyBub3QJYXZhaWxh
+YmxlIGluIEMgbGlicmFyeS4KPj4KPj4gQWNjb3JkaW5nIHRvIHVDbGliYyBjb21taXQgWzFdLCBk
+bGluZm8gaXMgbm90IGF2YWlsYWJsZS4KPj4gVG8gYmUgYWJsZSB0byB1c2UgTFRUbmcgVVNUIHdp
+dGggdUNsaWJjLCB3ZSBuZWVkIHRvIGRpc2FibGUKPj4gdGhlIER5bmFtaWMgTGlua2VyIFRyYWNp
+bmcgZnVuY3Rpb25hbGl0eSBbMl0uCj4+Cj4+IFsxXQo+PiBodHRwOi8vZ2l0LnVjbGliYy5vcmcv
+dUNsaWJjL2NvbW1pdC8/aWQ9ZjNjOWRjNDk5YzVjNzg3ZGRkOGM0MzIwZjJkNDRkMmFlNmU0MGMy
+Mgo+PiBbMl0gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9waXBlcm1haWwvbHR0bmctZGV2LzIwMTQt
+RmVicnVhcnkvMDIyNDIzLmh0bWwKPj4KPj4gU2lnbmVkLW9mZi1ieTogUm9tYWluIE5hb3VyIDxy
+b21haW4ubmFvdXJAb3BlbndpZGUuZnI+Cj4+IC0tLQo+PiAgIE1ha2VmaWxlLmFtICB8IDUgKysr
+Ky0KPj4gICBjb25maWd1cmUuYWMgfCAzICsrKwo+PiAgIDIgZmlsZXMgY2hhbmdlZCwgNyBpbnNl
+cnRpb25zKCspLCAxIGRlbGV0aW9uKC0pCj4+Cj4+IGRpZmYgLS1naXQgYS9NYWtlZmlsZS5hbSBi
+L01ha2VmaWxlLmFtCj4+IGluZGV4IGI3OWQyZGQuLmM5MDdmZjEgMTAwNjQ0Cj4+IC0tLSBhL01h
+a2VmaWxlLmFtCj4+ICsrKyBiL01ha2VmaWxlLmFtCj4+IEBAIC00LDExICs0LDE0IEBAIFNVQkRJ
+UlMgPSAuIGluY2x1ZGUgc25wcmludGYgbGlicmluZ2J1ZmZlcgo+PiBsaWJsdHRuZy11c3QtY29t
+bSBcCj4+ICAgCQlsaWJsdHRuZy11c3QgXAo+PiAgIAkJbGlibHR0bmctdXN0LWN0bCBcCj4+ICAg
+CQlsaWJsdHRuZy11c3QtZm9yayBcCj4+IC0JCWxpYmx0dG5nLXVzdC1kbCBcCj4+ICAgCQlsaWJs
+dHRuZy11c3QtbGliYy13cmFwcGVyIFwKPj4gICAJCWxpYmx0dG5nLXVzdC1jeWctcHJvZmlsZSBc
+Cj4+ICAgCQl0b29scwo+PiAgIAo+PiAraWYgSEFWRV9ETElORk8KPj4gK1NVQkRJUlMgKz0gbGli
+bHR0bmctdXN0LWRsCj4+ICtlbmRpZgo+PiArCj4+ICAgaWYgQlVJTERfSk5JX0lOVEVSRkFDRQo+
+PiAgIFNVQkRJUlMgKz0gbGlibHR0bmctdXN0LWphdmEgbGlibHR0bmctdXN0LWp1bAo+PiAgIGVu
+ZGlmCj4+IGRpZmYgLS1naXQgYS9jb25maWd1cmUuYWMgYi9jb25maWd1cmUuYWMKPj4gaW5kZXgg
+YjA0ZDRlMy4uZGU2MzAwZSAxMDA2NDQKPj4gLS0tIGEvY29uZmlndXJlLmFjCj4+ICsrKyBiL2Nv
+bmZpZ3VyZS5hYwo+PiBAQCAtMTQ2LDYgKzE0Niw5IEBAIEFDX0NfSU5MSU5FCj4+ICAgQUNfRlVO
+Q19NQUxMT0MKPj4gICBBQ19DSEVDS19GVU5DUyhbZ2V0dGltZW9mZGF5IG11bm1hcCBzb2NrZXQg
+c3RyZXJyb3Igc3RydG9sIHNjaGVkX2dldGNwdQo+PiAgIHN5c2NvbmZdKQo+PiAgIAo+PiArQUNf
+Q0hFQ0tfRlVOQ1MoW2RsaW5mb10pCj4+ICtBTV9DT05ESVRJT05BTChbSEFWRV9ETElORk9dLCBb
+dGVzdCAiJHthY19jdl9mdW5jX2RsaW5mb30iID0gInllcyJdKQo+PiArCj4+ICAgQ0ZMQUdTPSIt
+V2FsbCAkQ0ZMQUdTIgo+PiAgIAo+PiAgICMgVVJDVQo+PiAtLQo+PiAxLjkuMAo+Pgo+Pgo+PiBf
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+PiBsdHRuZy1k
+ZXYgbWFpbGluZyBsaXN0Cj4+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPj4gaHR0cDovL2xp
+c3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cj4+CgpfX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFp
+bGluZyBsaXN0CmJ1aWxkcm9vdEBidXN5Ym94Lm5ldApodHRwOi8vbGlzdHMuYnVzeWJveC5uZXQv
+bWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3Q=
