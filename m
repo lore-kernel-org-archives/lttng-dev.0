@@ -1,21 +1,18 @@
 From: Jan Glauber <jan.glauber@gmail.com>
 Subject: Re: lttng-ust cross compile broken for demo-tracef
-Date: Mon, 7 Apr 2014 16:29:48 +0200
-Message-ID: <CAEiAFz3WC7tp4PRdOXE991reuNDm+qc86ughb8JrOw8R=whoKA__27695.9892515608$1396881068$gmane$org@mail.gmail.com>
-References: <20140407114320.GA25948@hal>
- <CA+jJMxuPEipdetRy4ETyJ=LPARUOZq8a+dTKzP_esDS8zuonKQ@mail.gmail.com>
- <CAEiAFz2ugQhoA6RO7NbxAPNcii6tvc-qQoM9CaqDDW5LPSNT7w@mail.gmail.com>
- <CA+jJMxtjWp-a1smz_hwZEVL70HQ6pKj2JXKXnUgxzg3QVR0HKA@mail.gmail.com>
+Date: Mon, 7 Apr 2014 16:33:32 +0200
+Message-ID: <CAEiAFz0dO8r44buhHmKTy3Y_Jc_5P1aJL1KyGVZi6c2o+5PwvQ__41237.0686223314$1396881265$gmane$org@mail.gmail.com>
+References: <48CF5AC71E61DB46B70D0F388054EFFD35993695@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0511638764=="
+Content-Type: multipart/mixed; boundary="===============0230057235=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qg0-f48.google.com ([209.85.192.48])
+Received: from mail-qg0-f47.google.com ([209.85.192.47])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jan.glauber@gmail.com>) id 1WXAYc-0008NS-9K
- for lttng-dev@lists.lttng.org; Mon, 07 Apr 2014 10:30:00 -0400
-Received: by mail-qg0-f48.google.com with SMTP id i50so808341qgf.35
- for <lttng-dev@lists.lttng.org>; Mon, 07 Apr 2014 07:29:49 -0700 (PDT)
-In-Reply-To: <CA+jJMxtjWp-a1smz_hwZEVL70HQ6pKj2JXKXnUgxzg3QVR0HKA@mail.gmail.com>
+ (envelope-from <jan.glauber@gmail.com>) id 1WXAcE-0008Qg-8m
+ for lttng-dev@lists.lttng.org; Mon, 07 Apr 2014 10:33:42 -0400
+Received: by mail-qg0-f47.google.com with SMTP id i50so793667qgf.6
+ for <lttng-dev@lists.lttng.org>; Mon, 07 Apr 2014 07:33:32 -0700 (PDT)
+In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD35993695@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -24,360 +21,165 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0511638764==
-Content-Type: multipart/alternative; boundary=001a11c1241e22dcc104f674b3c2
+--===============0230057235==
+Content-Type: multipart/alternative; boundary=001a1134f2be7bd9b904f674c089
 
---001a11c1241e22dcc104f674b3c2
+--001a1134f2be7bd9b904f674c089
 Content-Type: text/plain; charset=ISO-8859-1
 Content-Transfer-Encoding: quoted-printable
 
-Yes:
-$ which arm-linux-gnueabihf-gcc
-/usr/bin/arm-linux-gnueabihf-gcc
+Hi Daniel,
 
-IIRC the examples have not been build by default in the past, right?
+you're right, the demo-tracef has in the Makefile:
+CC =3D gcc
+which should be fixed like J=E9r=E9mie said. With that change demo-tracef
+compiles but I run into the python error.
+
+--Jan
 
 
-2014-04-07 16:20 GMT+02:00 J=E9r=E9mie Galarneau <jeremie.galarneau@efficio=
-s.com
+2014-04-07 16:15 GMT+02:00 Thibault, Daniel <Daniel.Thibault@drdc-rddc.gc.c=
+a
 >:
 
-> On Mon, Apr 7, 2014 at 10:10 AM, Jan Glauber <jan.glauber@gmail.com>
-> wrote:
-> > Sure, it looks like there is a problem with python in lttng-get-tp:
+> ----------------------------------------------------------------------
+> > Date: Mon, 7 Apr 2014 13:43:21 +0200
+> > From: Jan Glauber <jan.glauber@gmail.com>
+> >
+> > I get a compile error with current git head of lttng-ust if I
+> cross-compile (bitbake):
 > >
 > > | make[4]: Entering directory
-> >
-> `/home/jang/temp/p4/JGlauber_hal_share/poky/build/tmp/work/armv7ahf-vfp-n=
-eon-elina-linux-gnueabi/lttng-ust-2.4-r0/git/doc/examples/gen-tp'
-> > | ../../../tools/lttng-gen-tp -o sample_tracepoint.c
-> sample_tracepoint.tp
-> > |
-> >
-> CPPFLAGS=3D"-isystem/home/jang/temp/p4/JGlauber_hal_share/poky/../toolcha=
-in//arm-linux-gnueabihf/include
-> >
-> -isystem/home/jang/temp/p4/JGlauber_hal_share/poky/../toolchain//arm-linu=
-x-gnueabihf/include
-> > -I../../../include/ -I../../../include/" \
-> > |       CFLAGS=3D"-Wall
-> >
-> -isystem/home/jang/temp/p4/JGlauber_hal_share/poky/../toolchain//arm-linu=
-x-gnueabihf/include
-> > -O2 -pipe -g -feliminate-unused-debug-types -fno-omit-frame-pointer -Wa=
-ll
-> >
-> -isystem/home/jang/temp/p4/JGlauber_hal_share/poky/../toolchain//arm-linu=
-x-gnueabihf/include
-> > -O2 -pipe -g -feliminate-unused-debug-types -fno-omit-frame-pointer" \
-> > |
-> >
-> LDFLAGS=3D"-L/home/jang/temp/p4/JGlauber_hal_share/poky/../toolchain//arm=
--linux-gnueabihf/lib
-> >
-> -Wl,-rpath-link,/home/jang/temp/p4/JGlauber_hal_share/poky/../toolchain//=
-arm-linux-gnueabihf/lib
-> > -Wl,-O1 -Wl,--hash-style=3Dgnu
-> >
-> -L/home/jang/temp/p4/JGlauber_hal_share/poky/../toolchain//arm-linux-gnue=
-abihf/lib
-> >
-> -Wl,-rpath-link,/home/jang/temp/p4/JGlauber_hal_share/poky/../toolchain//=
-arm-linux-gnueabihf/lib
-> > -Wl,-O1 -Wl,--hash-style=3Dgnu -L../../../liblttng-ust/.libs/
-> >
-> -Wl,-rpath=3D"/home/jang/temp/p4/JGlauber_hal_share/poky/build/tmp/work/a=
-rmv7ahf-vfp-neon-elina-linux-gnueabi/lttng-ust-2.4-r0/git/doc/examples/../.=
-./liblttng-ust/.libs/""
-> > \
-> > |       CC=3D"arm-linux-gnueabihf-gcc  -march=3Darmv7-a     -mthumb-int=
-erwork
-> > -mfloat-abi=3Dhard -mfpu=3Dneon -mtune=3Dcortex-a15
-> >
-> --sysroot=3D/home/jang/temp/p4/JGlauber_hal_share/poky/build/tmp/sysroots=
-/omap5"
-> > \
-> > |       ../../../tools/lttng-gen-tp -o sample_tracepoint.o
-> > sample_tracepoint.tp
-> > | Invalid CC environment variable
->
-> Okay, this means that subprocess.call(cc, ...) (lttng-gen-tp:108)
-> fails while trying to run your CC variable. Is arm-linux-gnueabihf-gcc
-> in your PATH?
->
-> J=E9r=E9mie
->
-> > | Traceback (most recent call last):
-> > |   File "../../../tools/lttng-gen-tp", line 315, in <module>
-> > |     sys.exit(main())
-> > |   File "../../../tools/lttng-gen-tp", line 309, in main
-> > |     dotobj.write()
-> > |   File "../../../tools/lttng-gen-tp", line 132, in write
-> > |     raise RuntimeError("No C Compiler detected")
-> > | RuntimeError: No C Compiler detected
-> > | make[4]: *** [sample_tracepoint.o] Error 1
-> > | rm sample_tracepoint.c
-> > | make[4]: Leaving directory
-> >
-> `/home/jang/temp/p4/JGlauber_hal_share/poky/build/tmp/work/armv7ahf-vfp-n=
-eon-elina-linux-gnueabi/lttng-ust-2.4-r0/git/doc/examples/gen-tp'
-> > | make[3]: *** [all-local] Error 1
-> >
-> > --Jan
-> >
-> >
-> > 2014-04-07 15:57 GMT+02:00 J=E9r=E9mie Galarneau
-> > <jeremie.galarneau@efficios.com>:
-> >
-> >> Hi Jan,
-> >>
-> >> Can you post the errors you get if you set the "CC=3Dgcc" line in
-> >> demo-tracef/Makefile by
-> >>
-> >> ifdef AM_CC
-> >>     CC =3D $(AM_CC)
-> >> endif
-> >>
-> >> Regards,
-> >> J=E9r=E9mie
-> >>
-> >> On Mon, Apr 7, 2014 at 7:43 AM, Jan Glauber <jan.glauber@gmail.com>
-> wrote:
-> >> > Hi list,
-> >> >
-> >> > I get a compile error with current git head of lttng-ust if I
-> >> > cross-compile (bitbake):
-> >> >
-> >> > | make[4]: Entering directory
-> >> >
 > `/home/jang/temp/p4/JGlauber_hal_share/poky/build/tmp/work/armv7ahf-vfp-n=
 eon-elina-linux-gnueabi/lttng-ust-2.4-r0/git/doc/examples/demo-tracef'
-> >> > | arm-linux-gnueabihf-gcc  -march=3Darmv7-a     -mthumb-interwork
-> >> > -mfloat-abi=3Dhard -mfpu=3Dneon -mtune=3Dcortex-a15
-> >> >
-> --sysroot=3D/home/jang/temp/p4/JGlauber_hal_share/poky/build/tmp/sysroots=
-/omap5
-> >> > -L/home/jang/te
-> >> > |               -o demo-tracef demo-tracef.o -ldl -llttng-ust
-> >> > | demo-tracef.o: file not recognized: File format not recognized
-> >> > | collect2: error: ld returned 1 exit status
-> >> > | make[4]: *** [demo-tracef] Error 1
-> >> >
-> >> > Looks like the demo-tracef Makefile sets CC hard to gcc. But if I fi=
-x
-> >> > this I get more
-> >> > errors which I don't undertand. Am I the only one running into this?
-> >> >
-> >> > thx, Jan
-> >> > ---
-> >> > Harman Becker Automotive GmbH
-> >> > System Profiling & Optimizing Team
-> >> >
-> >> > _______________________________________________
-> >> > lttng-dev mailing list
-> >> > lttng-dev@lists.lttng.org
-> >> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> >>
-> >>
-> >>
-> >> --
-> >> J=E9r=E9mie Galarneau
-> >> EfficiOS Inc.
-> >> http://www.efficios.com
+> > | arm-linux-gnueabihf-gcc  -march=3Darmv7-a     -mthumb-interwork
+> -mfloat-abi=3Dhard -mfpu=3Dneon -mtune=3Dcortex-a15 \
+> > |
+>  --sysroot=3D/home/jang/temp/p4/JGlauber_hal_share/poky/build/tmp/sysroot=
+s/omap5
+> -L/home/jang/te \
+> > |                -o demo-tracef demo-tracef.o -ldl -llttng-ust
+> > | demo-tracef.o: file not recognized: File format not recognized
+> > | collect2: error: ld returned 1 exit status
+> > | make[4]: *** [demo-tracef] Error 1
 > >
+> > Looks like the demo-tracef Makefile sets CC hard to gcc. But if I fix
+> this I get more
+> > errors which I don't undertand. Am I the only one running into this?
 > >
+> > Harman Becker Automotive GmbH
+> > System Profiling & Optimizing Team
 >
+>    The " demo-tracef.o: file not recognized: File format not recognized"
+> is a dead giveaway that you are in a mixed-bitness context.  The linker i=
+s
+> in 64-bit mode while demo-tracef.o was compiled in 32-bit mode, or
+> vice-versa.  Or it could be byte sex.  Clearly, the linker call is not
+> using the same config that was used to create demo-tracef.o.  (My apologi=
+es
+> if this seems obvious to you; I'm not familiar with bitbake)
 >
->
-> --
-> J=E9r=E9mie Galarneau
-> EfficiOS Inc.
-> http://www.efficios.com
+> Daniel U. Thibault
+> Protection des syst=E8mes et contremesures (PSC) | Systems Protection &
+> Countermeasures (SPC)
+> Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critica=
+l
+> Cyber Security (MCCS)
+> R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R=
+&D
+> Canada - Valcartier (DRDC Valcartier)
+> 2459 route de la Bravoure
+> Qu=E9bec QC  G3J 1X5
+> CANADA
+> Vox : (418) 844-4000 x4245
+> Fax : (418) 844-4538
+> NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+> Gouvernement du Canada | Government of Canada
+> <http://www.valcartier.drdc-rddc.gc.ca/>
 >
 
---001a11c1241e22dcc104f674b3c2
+--001a1134f2be7bd9b904f674c089
 Content-Type: text/html; charset=ISO-8859-1
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr"><div><div>Yes:<br>$ which arm-linux-gnueabihf-gcc<br>/usr/=
-bin/arm-linux-gnueabihf-gcc<br><br></div>IIRC the examples have not been bu=
-ild by default in the past, right?<br></div></div><div class=3D"gmail_extra=
-">
-<br><br><div class=3D"gmail_quote">2014-04-07 16:20 GMT+02:00 J=E9r=E9mie G=
-alarneau <span dir=3D"ltr">&lt;<a href=3D"mailto:jeremie.galarneau@efficios=
-.com" target=3D"_blank">jeremie.galarneau@efficios.com</a>&gt;</span>:<br><=
-blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px=
- #ccc solid;padding-left:1ex">
-<div class=3D"HOEnZb"><div class=3D"h5">On Mon, Apr 7, 2014 at 10:10 AM, Ja=
-n Glauber &lt;<a href=3D"mailto:jan.glauber@gmail.com">jan.glauber@gmail.co=
-m</a>&gt; wrote:<br>
-&gt; Sure, it looks like there is a problem with python in lttng-get-tp:<br=
->
+<div dir=3D"ltr"><div><div><div>Hi Daniel,<br><br></div>you&#39;re right, t=
+he demo-tracef has in the Makefile:<br>CC =3D gcc<br></div>which should be =
+fixed like J=E9r=E9mie said. With that change demo-tracef compiles but I ru=
+n into the python error.<br>
+<br></div>--Jan<br></div><div class=3D"gmail_extra"><br><br><div class=3D"g=
+mail_quote">2014-04-07 16:15 GMT+02:00 Thibault, Daniel <span dir=3D"ltr">&=
+lt;<a href=3D"mailto:Daniel.Thibault@drdc-rddc.gc.ca" target=3D"_blank">Dan=
+iel.Thibault@drdc-rddc.gc.ca</a>&gt;</span>:<br>
+<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
+x #ccc solid;padding-left:1ex">--------------------------------------------=
+--------------------------<br>
+&gt; Date: Mon, 7 Apr 2014 13:43:21 +0200<br>
+&gt; From: Jan Glauber &lt;<a href=3D"mailto:jan.glauber@gmail.com">jan.gla=
+uber@gmail.com</a>&gt;<br>
+<div class=3D"">&gt;<br>
+&gt; I get a compile error with current git head of lttng-ust if I cross-co=
+mpile (bitbake):<br>
 &gt;<br>
-&gt; | make[4]: Entering directory<br>
-&gt; `/home/jang/temp/p4/JGlauber_hal_share/poky/build/tmp/work/armv7ahf-vf=
-p-neon-elina-linux-gnueabi/lttng-ust-2.4-r0/git/doc/examples/gen-tp&#39;<br=
->
-&gt; | ../../../tools/lttng-gen-tp -o sample_tracepoint.c <a href=3D"http:/=
-/sample_tracepoint.tp" target=3D"_blank">sample_tracepoint.tp</a><br>
-&gt; |<br>
-&gt; CPPFLAGS=3D&quot;-isystem/home/jang/temp/p4/JGlauber_hal_share/poky/..=
-/toolchain//arm-linux-gnueabihf/include<br>
-&gt; -isystem/home/jang/temp/p4/JGlauber_hal_share/poky/../toolchain//arm-l=
-inux-gnueabihf/include<br>
-&gt; -I../../../include/ -I../../../include/&quot; \<br>
-&gt; | =A0 =A0 =A0 CFLAGS=3D&quot;-Wall<br>
-&gt; -isystem/home/jang/temp/p4/JGlauber_hal_share/poky/../toolchain//arm-l=
-inux-gnueabihf/include<br>
-&gt; -O2 -pipe -g -feliminate-unused-debug-types -fno-omit-frame-pointer -W=
-all<br>
-&gt; -isystem/home/jang/temp/p4/JGlauber_hal_share/poky/../toolchain//arm-l=
-inux-gnueabihf/include<br>
-&gt; -O2 -pipe -g -feliminate-unused-debug-types -fno-omit-frame-pointer&qu=
-ot; \<br>
-&gt; |<br>
-&gt; LDFLAGS=3D&quot;-L/home/jang/temp/p4/JGlauber_hal_share/poky/../toolch=
-ain//arm-linux-gnueabihf/lib<br>
-&gt; -Wl,-rpath-link,/home/jang/temp/p4/JGlauber_hal_share/poky/../toolchai=
-n//arm-linux-gnueabihf/lib<br>
-&gt; -Wl,-O1 -Wl,--hash-style=3Dgnu<br>
-&gt; -L/home/jang/temp/p4/JGlauber_hal_share/poky/../toolchain//arm-linux-g=
-nueabihf/lib<br>
-&gt; -Wl,-rpath-link,/home/jang/temp/p4/JGlauber_hal_share/poky/../toolchai=
-n//arm-linux-gnueabihf/lib<br>
-&gt; -Wl,-O1 -Wl,--hash-style=3Dgnu -L../../../liblttng-ust/.libs/<br>
-&gt; -Wl,-rpath=3D&quot;/home/jang/temp/p4/JGlauber_hal_share/poky/build/tm=
-p/work/armv7ahf-vfp-neon-elina-linux-gnueabi/lttng-ust-2.4-r0/git/doc/examp=
-les/../../liblttng-ust/.libs/&quot;&quot;<br>
-&gt; \<br>
-&gt; | =A0 =A0 =A0 CC=3D&quot;arm-linux-gnueabihf-gcc =A0-march=3Darmv7-a =
-=A0 =A0 -mthumb-interwork<br>
-&gt; -mfloat-abi=3Dhard -mfpu=3Dneon -mtune=3Dcortex-a15<br>
-&gt; --sysroot=3D/home/jang/temp/p4/JGlauber_hal_share/poky/build/tmp/sysro=
-ots/omap5&quot;<br>
-&gt; \<br>
-&gt; | =A0 =A0 =A0 ../../../tools/lttng-gen-tp -o sample_tracepoint.o<br>
-&gt; <a href=3D"http://sample_tracepoint.tp" target=3D"_blank">sample_trace=
-point.tp</a><br>
-&gt; | Invalid CC environment variable<br>
+&gt; | make[4]: Entering directory `/home/jang/temp/p4/JGlauber_hal_share/p=
+oky/build/tmp/work/armv7ahf-vfp-neon-elina-linux-gnueabi/lttng-ust-2.4-r0/g=
+it/doc/examples/demo-tracef&#39;<br>
+&gt; | arm-linux-gnueabihf-gcc =A0-march=3Darmv7-a =A0 =A0 -mthumb-interwor=
+k -mfloat-abi=3Dhard -mfpu=3Dneon -mtune=3Dcortex-a15 \<br>
+&gt; | =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0--sysroot=3D/home/jang/temp/p4/JGlaub=
+er_hal_share/poky/build/tmp/sysroots/omap5 -L/home/jang/te \<br>
+&gt; | =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0-o demo-tracef demo-tracef.o -ldl -ll=
+ttng-ust<br>
+&gt; | demo-tracef.o: file not recognized: File format not recognized<br>
+&gt; | collect2: error: ld returned 1 exit status<br>
+&gt; | make[4]: *** [demo-tracef] Error 1<br>
+&gt;<br>
+&gt; Looks like the demo-tracef Makefile sets CC hard to gcc. But if I fix =
+this I get more<br>
+&gt; errors which I don&#39;t undertand. Am I the only one running into thi=
+s?<br>
+&gt;<br>
+</div><div class=3D"">&gt; Harman Becker Automotive GmbH<br>
+&gt; System Profiling &amp; Optimizing Team<br>
 <br>
-</div></div>Okay, this means that subprocess.call(cc, ...) (lttng-gen-tp:10=
-8)<br>
-fails while trying to run your CC variable. Is arm-linux-gnueabihf-gcc<br>
-in your PATH?<br>
-<span class=3D"HOEnZb"><font color=3D"#888888"><br>
-J=E9r=E9mie<br>
-</font></span><div class=3D"HOEnZb"><div class=3D"h5"><br>
-&gt; | Traceback (most recent call last):<br>
-&gt; | =A0 File &quot;../../../tools/lttng-gen-tp&quot;, line 315, in &lt;m=
-odule&gt;<br>
-&gt; | =A0 =A0 sys.exit(main())<br>
-&gt; | =A0 File &quot;../../../tools/lttng-gen-tp&quot;, line 309, in main<=
-br>
-&gt; | =A0 =A0 dotobj.write()<br>
-&gt; | =A0 File &quot;../../../tools/lttng-gen-tp&quot;, line 132, in write=
-<br>
-&gt; | =A0 =A0 raise RuntimeError(&quot;No C Compiler detected&quot;)<br>
-&gt; | RuntimeError: No C Compiler detected<br>
-&gt; | make[4]: *** [sample_tracepoint.o] Error 1<br>
-&gt; | rm sample_tracepoint.c<br>
-&gt; | make[4]: Leaving directory<br>
-&gt; `/home/jang/temp/p4/JGlauber_hal_share/poky/build/tmp/work/armv7ahf-vf=
-p-neon-elina-linux-gnueabi/lttng-ust-2.4-r0/git/doc/examples/gen-tp&#39;<br=
->
-&gt; | make[3]: *** [all-local] Error 1<br>
-&gt;<br>
-&gt; --Jan<br>
-&gt;<br>
-&gt;<br>
-&gt; 2014-04-07 15:57 GMT+02:00 J=E9r=E9mie Galarneau<br>
-&gt; &lt;<a href=3D"mailto:jeremie.galarneau@efficios.com">jeremie.galarnea=
-u@efficios.com</a>&gt;:<br>
-&gt;<br>
-&gt;&gt; Hi Jan,<br>
-&gt;&gt;<br>
-&gt;&gt; Can you post the errors you get if you set the &quot;CC=3Dgcc&quot=
-; line in<br>
-&gt;&gt; demo-tracef/Makefile by<br>
-&gt;&gt;<br>
-&gt;&gt; ifdef AM_CC<br>
-&gt;&gt; =A0 =A0 CC =3D $(AM_CC)<br>
-&gt;&gt; endif<br>
-&gt;&gt;<br>
-&gt;&gt; Regards,<br>
-&gt;&gt; J=E9r=E9mie<br>
-&gt;&gt;<br>
-&gt;&gt; On Mon, Apr 7, 2014 at 7:43 AM, Jan Glauber &lt;<a href=3D"mailto:=
-jan.glauber@gmail.com">jan.glauber@gmail.com</a>&gt; wrote:<br>
-&gt;&gt; &gt; Hi list,<br>
-&gt;&gt; &gt;<br>
-&gt;&gt; &gt; I get a compile error with current git head of lttng-ust if I=
-<br>
-&gt;&gt; &gt; cross-compile (bitbake):<br>
-&gt;&gt; &gt;<br>
-&gt;&gt; &gt; | make[4]: Entering directory<br>
-&gt;&gt; &gt; `/home/jang/temp/p4/JGlauber_hal_share/poky/build/tmp/work/ar=
-mv7ahf-vfp-neon-elina-linux-gnueabi/lttng-ust-2.4-r0/git/doc/examples/demo-=
-tracef&#39;<br>
-&gt;&gt; &gt; | arm-linux-gnueabihf-gcc =A0-march=3Darmv7-a =A0 =A0 -mthumb=
--interwork<br>
-&gt;&gt; &gt; -mfloat-abi=3Dhard -mfpu=3Dneon -mtune=3Dcortex-a15<br>
-&gt;&gt; &gt; --sysroot=3D/home/jang/temp/p4/JGlauber_hal_share/poky/build/=
-tmp/sysroots/omap5<br>
-&gt;&gt; &gt; -L/home/jang/te<br>
-&gt;&gt; &gt; | =A0 =A0 =A0 =A0 =A0 =A0 =A0 -o demo-tracef demo-tracef.o -l=
-dl -llttng-ust<br>
-&gt;&gt; &gt; | demo-tracef.o: file not recognized: File format not recogni=
-zed<br>
-&gt;&gt; &gt; | collect2: error: ld returned 1 exit status<br>
-&gt;&gt; &gt; | make[4]: *** [demo-tracef] Error 1<br>
-&gt;&gt; &gt;<br>
-&gt;&gt; &gt; Looks like the demo-tracef Makefile sets CC hard to gcc. But =
-if I fix<br>
-&gt;&gt; &gt; this I get more<br>
-&gt;&gt; &gt; errors which I don&#39;t undertand. Am I the only one running=
- into this?<br>
-&gt;&gt; &gt;<br>
-&gt;&gt; &gt; thx, Jan<br>
-&gt;&gt; &gt; ---<br>
-&gt;&gt; &gt; Harman Becker Automotive GmbH<br>
-&gt;&gt; &gt; System Profiling &amp; Optimizing Team<br>
-&gt;&gt; &gt;<br>
-&gt;&gt; &gt; _______________________________________________<br>
-&gt;&gt; &gt; lttng-dev mailing list<br>
-&gt;&gt; &gt; <a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.=
-lttng.org</a><br>
-&gt;&gt; &gt; <a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lt=
-tng-dev" target=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/=
-lttng-dev</a><br>
-&gt;&gt;<br>
-&gt;&gt;<br>
-&gt;&gt;<br>
-&gt;&gt; --<br>
-&gt;&gt; J=E9r=E9mie Galarneau<br>
-&gt;&gt; EfficiOS Inc.<br>
-&gt;&gt; <a href=3D"http://www.efficios.com" target=3D"_blank">http://www.e=
-fficios.com</a><br>
-&gt;<br>
-&gt;<br>
-<br>
-<br>
-<br>
---<br>
-J=E9r=E9mie Galarneau<br>
-EfficiOS Inc.<br>
-<a href=3D"http://www.efficios.com" target=3D"_blank">http://www.efficios.c=
-om</a><br>
-</div></div></blockquote></div><br></div>
+</div>=A0 =A0The &quot; demo-tracef.o: file not recognized: File format not=
+ recognized&quot; is a dead giveaway that you are in a mixed-bitness contex=
+t. =A0The linker is in 64-bit mode while demo-tracef.o was compiled in 32-b=
+it mode, or vice-versa. =A0Or it could be byte sex. =A0Clearly, the linker =
+call is not using the same config that was used to create demo-tracef.o. =
+=A0(My apologies if this seems obvious to you; I&#39;m not familiar with bi=
+tbake)<br>
 
---001a11c1241e22dcc104f674b3c2--
+<br>
+Daniel U. Thibault<br>
+Protection des syst=E8mes et contremesures (PSC) | Systems Protection &amp;=
+ Countermeasures (SPC)<br>
+Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
+Cyber Security (MCCS)<br>
+R &amp; D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence=
+ R&amp;D Canada - Valcartier (DRDC Valcartier)<br>
+2459 route de la Bravoure<br>
+Qu=E9bec QC =A0G3J 1X5<br>
+CANADA<br>
+Vox : <a href=3D"tel:%28418%29%20844-4000%20x4245" value=3D"+14188444000">(=
+418) 844-4000 x4245</a><br>
+Fax : <a href=3D"tel:%28418%29%20844-4538" value=3D"+14188444538">(418) 844=
+-4538</a><br>
+NAC : 918V QSDJ &lt;<a href=3D"http://www.travelgis.com/map.asp?addr=3D918V=
+%20QSDJ" target=3D"_blank">http://www.travelgis.com/map.asp?addr=3D918V%20Q=
+SDJ</a>&gt;<br>
+Gouvernement du Canada | Government of Canada<br>
+&lt;<a href=3D"http://www.valcartier.drdc-rddc.gc.ca/" target=3D"_blank">ht=
+tp://www.valcartier.drdc-rddc.gc.ca/</a>&gt;<br>
+</blockquote></div><br></div>
+
+--001a1134f2be7bd9b904f674c089--
 
 
---===============0511638764==
+--===============0230057235==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Disposition: inline
@@ -388,4 +190,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============0511638764==--
+--===============0230057235==--
