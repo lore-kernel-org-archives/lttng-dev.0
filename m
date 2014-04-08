@@ -1,19 +1,18 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-ust] Fix: .split() the CC environment
- variable in lttng-gen-tp
-Date: Tue, 8 Apr 2014 17:39:06 +0000 (UTC)
-Message-ID: <1235150978.20.1396978746115.JavaMail.zimbra__6312.03905581987$1396978817$gmane$org@efficios.com>
-References: <20140408085021.GA3326@hal>
- <1396970903-17438-1-git-send-email-jeremie.galarneau@efficios.com>
+From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: [PATCH lttng-ust] Fix: Use $AM_CC when it is defined
+ instead of gcc in demo-tracef
+Date: Tue, 8 Apr 2014 14:29:48 -0400
+Message-ID: <CA+jJMxvV8rA+Yi3KhBr1iRyJDQp+BKT+xpUGihjwwTyuUGWLCg__32971.5748820037$1396981855$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-qa0-f45.google.com ([209.85.216.45])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1WXZzO-0001pw-5s
- for lttng-dev@lists.lttng.org; Tue, 08 Apr 2014 13:39:19 -0400
-In-Reply-To: <1396970903-17438-1-git-send-email-jeremie.galarneau@efficios.com>
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1WXamP-0002An-MH
+ for lttng-dev@lists.lttng.org; Tue, 08 Apr 2014 14:29:59 -0400
+Received: by mail-qa0-f45.google.com with SMTP id cm18so677061qab.4
+ for <lttng-dev@lists.lttng.org>; Tue, 08 Apr 2014 11:29:48 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,35 +21,30 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?utf-8?B?SsOpcsOpbWll?= Galarneau <jeremie.galarneau@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-bWVyZ2VkLCB0aGFua3MhCgpNYXRoaWV1CgotLS0tLSBPcmlnaW5hbCBNZXNzYWdlIC0tLS0tCj4g
-RnJvbTogIkrDqXLDqW1pZSBHYWxhcm5lYXUiIDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5j
-b20+Cj4gVG86IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBDYzogIm1hdGhpZXUgZGVzbm95
-ZXJzIiA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPiwgImphbiBnbGF1YmVyIiA8amFu
-LmdsYXViZXJAZ21haWwuY29tPiwgIkrDqXLDqW1pZSBHYWxhcm5lYXUiCj4gPGplcmVtaWUuZ2Fs
-YXJuZWF1QGVmZmljaW9zLmNvbT4KPiBTZW50OiBUdWVzZGF5LCBBcHJpbCA4LCAyMDE0IDExOjI4
-OjIzIEFNCj4gU3ViamVjdDogW1BBVENIIGx0dG5nLXVzdF0gRml4OiAuc3BsaXQoKSB0aGUgQ0Mg
-ZW52aXJvbm1lbnQgdmFyaWFibGUgaW4gbHR0bmctZ2VuLXRwCj4gCj4gVGhlIENDIHZhcmlhYmxl
-IG1pZ2h0IGNvbnRhaW4gY29tbWFuZCBsaW5lIGFyZ3VtZW50cyB3aGljaCBsdHRuZy1nZW4tdHAK
-PiBjdXJyZW50bHkgZG9lcyBub3QgaGFuZGxlLiBUaGlzIGZpeCBlbnN1cmVzIHRoYXQgdGhlIGFy
-Z3VtZW50cyBhcmUKPiBwcm9wZXJseSBwYXNzZWQgb24gdG8gdGhlIGNvbXBpbGVyIGJpbmFyeSBh
-cyBpZiBhIG5vcm1hbCBNYWtlZmlsZQo+IHdhcyB1c2VkLgo+IAo+IFNpZ25lZC1vZmYtYnk6IErD
-qXLDqW1pZSBHYWxhcm5lYXUgPGplcmVtaWUuZ2FsYXJuZWF1QGVmZmljaW9zLmNvbT4KPiAtLS0K
-PiAgdG9vbHMvbHR0bmctZ2VuLXRwIHwgMiArLQo+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRp
-b24oKyksIDEgZGVsZXRpb24oLSkKPiAKPiBkaWZmIC0tZ2l0IGEvdG9vbHMvbHR0bmctZ2VuLXRw
-IGIvdG9vbHMvbHR0bmctZ2VuLXRwCj4gaW5kZXggYTNhMDFmMi4uYjYyY2Q5OSAxMDA3NTUKPiAt
-LS0gYS90b29scy9sdHRuZy1nZW4tdHAKPiArKysgYi90b29scy9sdHRuZy1nZW4tdHAKPiBAQCAt
-OTQsNyArOTQsNyBAQCBjbGFzcyBPYmpGaWxlOgo+ICAgICAgICAgIGlmICdDQycgaW4gb3MuZW52
-aXJvbjoKPiAgICAgICAgICAgICAgY2MgPSBvcy5lbnZpcm9uWydDQyddCj4gICAgICAgICAgICAg
-IHRyeToKPiAtICAgICAgICAgICAgICAgIHN1YnByb2Nlc3MuY2FsbChjYywKPiArICAgICAgICAg
-ICAgICAgIHN1YnByb2Nlc3MuY2FsbChjYy5zcGxpdCgpLAo+ICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgIHN0ZG91dD1zdWJwcm9jZXNzLlBJUEUsCj4gICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgc3RkZXJyPXN1YnByb2Nlc3MuUElQRSkKPiAgICAgICAgICAgICAgZXhj
-ZXB0IE9TRXJyb3IgYXMgbXNnOgo+IC0tCj4gMS45LjEKPiAKPiAKCi0tIApNYXRoaWV1IERlc25v
-eWVycwpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCgpfX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0
-Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmlu
-L21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+Signed-off-by: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
+---
+ doc/examples/demo-tracef/Makefile | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/doc/examples/demo-tracef/Makefile
+b/doc/examples/demo-tracef/Makefile
+index 644acdc..40e9a58 100644
+--- a/doc/examples/demo-tracef/Makefile
++++ b/doc/examples/demo-tracef/Makefile
+@@ -15,7 +15,10 @@
+ #
+ # This makefile is purposefully kept simple to support GNU and BSD make.
+
+-CC =3D gcc
++ifdef AM_CC
++       CC =3D $(AM_CC)
++endif
++
+ LIBS =3D -ldl -llttng-ust        # On Linux
+ #LIBS =3D -lc    # On BSD
+ LOCAL_CPPFLAGS +=3D -I.
+--
+1.9.1
