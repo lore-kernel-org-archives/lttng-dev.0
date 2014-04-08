@@ -1,34 +1,20 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] LTTng modules 2.4.1
-Date: Tue, 8 Apr 2014 19:10:39 +0000 (UTC)
-Message-ID: <2111457467.873.1396984239674.JavaMail.zimbra__7643.44133572212$1396984420$gmane$org@efficios.com>
-References: <859398624.872.1396984232434.JavaMail.zimbra@efficios.com>
+From: =?ISO-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: Problem running lttng enable-channel shortly after
+ lttng create
+Date: Tue, 8 Apr 2014 15:12:57 -0400
+Message-ID: <CA+jJMxu9c4M2snnrJvB_kK5beFWri+bQy9NgnuxDJ_wFQLCr0g__33028.6431745209$1396984537$gmane$org@mail.gmail.com>
+References: <OFBB2685C6.309D33C4-ONC2257CAE.0034A252-C2257CAE.003C2323@il.ibm.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-qa0-f43.google.com ([209.85.216.43])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1WXbQ5-0002Sw-7s
- for lttng-dev@lists.lttng.org; Tue, 08 Apr 2014 15:10:58 -0400
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 823F93402AE
- for <lttng-dev@lists.lttng.org>; Tue,  8 Apr 2014 19:10:46 +0000 (UTC)
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id P1tF-cCh7DiT for <lttng-dev@lists.lttng.org>;
- Tue,  8 Apr 2014 19:10:41 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id C932F3402AF
- for <lttng-dev@lists.lttng.org>; Tue,  8 Apr 2014 19:10:40 +0000 (UTC)
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id kHPh9K-VefAb for <lttng-dev@lists.lttng.org>;
- Tue,  8 Apr 2014 19:10:40 +0000 (UTC)
-Received: from evm-mail-1.efficios.com (evm-mail-1.efficios.com [78.47.125.74])
- by mail.efficios.com (Postfix) with ESMTP id 62FC43402AE
- for <lttng-dev@lists.lttng.org>; Tue,  8 Apr 2014 19:10:40 +0000 (UTC)
-In-Reply-To: <859398624.872.1396984232434.JavaMail.zimbra@efficios.com>
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1WXbSB-0002VK-0h
+ for lttng-dev@lists.lttng.org; Tue, 08 Apr 2014 15:13:08 -0400
+Received: by mail-qa0-f43.google.com with SMTP id j15so1440734qaq.30
+ for <lttng-dev@lists.lttng.org>; Tue, 08 Apr 2014 12:12:57 -0700 (PDT)
+In-Reply-To: <OFBB2685C6.309D33C4-ONC2257CAE.0034A252-C2257CAE.003C2323@il.ibm.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -37,27 +23,96 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Amit Margalit <AMITM@il.ibm.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-The LTTng modules provide Linux kernel tracing capability to the LTTng
-2.x tracer toolset.
+On Wed, Apr 2, 2014 at 6:56 AM, Amit Margalit <AMITM@il.ibm.com> wrote:
+> Hello,
+>
+> I keep getting the following error from lttng enable-channel:
+>
+> libust[2984/2986]: Error: Timed out waiting for lttng-sessiond (in
+> lttng_ust_init() at lttng-ust-comm.c:1444)
+>
+> The scenario is quite simple - during boot of the system, we create a
+> session, enable a channel, etc., like this:
+>
+> # /usr/bin/lttng-sessiond --no-kernel -b
+> Warning: No tracing group detected
+> # /usr/bin/lttng create nextra -o /local/traces/lttng/20140402123725
+> Session nextra created.
+> Traces will be written in /local/traces/lttng/20140402123725
+> # /usr/bin/lttng enable-channel channel0 -u --tracefile-size 67108864
+> --tracefile-count 40 --buffers-uid --switch-timer 1000000 --num-subbuf 16
+> --subbuf-size 262144
+> libust[2984/2986]: Error: Timed out waiting for lttng-sessiond (in
+> lttng_ust_init() at lttng-ust-comm.c:1444)
+> Warning: No tracing group detected
+>
+> The PID 2984 belongs to the lttng-consumerd. At that point in time I see =
+the
+> following in syslog:
+>
+> 2014/04/02 12:38:03.370576 kernel   error    nextra-6663235-module-1  [
+> 56.376155] proc lttng-sessiond with pid 632 goes to delayed retry in
+> epoll_wait(): start jiffies 4294904844, stop jiffies=3D4294906390 (+1546),
+> expected final stop jiffies=3D9223372041149680651 (+9223372036854775807),=
+ next
+> stop jiffies=3D9223372041149682197 (+9223372036854775807)
+> 2014/04/02 12:38:03.399245 kernel   error    nextra-6663235-module-1  [
+> 56.405166] proc lttng-sessiond with pid 632 goes to delayed retry in
+> epoll_wait(): start jiffies 4294904844, stop jiffies=3D4294906397 (+1553),
+> expected final stop jiffies=3D9223372041149680651 (+9223372036854775807),=
+ next
+> stop jiffies=3D9223372041149682204 (+9223372036854775807)
+> 2014/04/02 12:38:03.405700 kernel   error    nextra-6663235-module-1  [
+> 56.411791] proc lttng-sessiond with pid 632 goes to delayed retry in
+> epoll_wait(): start jiffies 4294904844, stop jiffies=3D4294906398 (+1554),
+> expected final stop jiffies=3D9223372041149680651 (+9223372036854775807),=
+ next
+> stop jiffies=3D9223372041149682205 (+9223372036854775807)
+>
+> And finally, the command succeeds:
+>
+> UST channel channel0 enabled for session nextra
+>
+> My guess is that the boot sequence is loading some traced application bef=
+ore
+> the channel is enabled, and the consumerd is started, which under heavy
+> system load (exists during initial boot time) times out waiting for the
+> sessiond. If that was the case, I could try to increase the timeout time,
+> but that also delays my booting, which I cannot afford to do.
+>
+> Suggestions?
+>
 
-Changelog:
-2014-04-08 LTTng modules 2.4.1
-        * Fix: rcu instrumentation: add const qualifier to char pointers
-        * Fix: add missing module version information
-        * Fix: block instrumentation: < 3.14 don't have bi_iter
-        * Fix: update btrfs instrumentation to kernel 3.14
-        * Fix: update block layer instrumentation to kernel 3.14
-        * Fix file permissions for lttng-statedump-impl.c
+How many apps are trying to register to the session daemon at that
+moment? Also, can you give us an idea of the system on which this is
+running?
 
-Project website: http://lttng.org
-Download link: http://lttng.org/download
-(please refer to the README files for installation instructions and
-lttng-tools doc/quickstart.txt for usage information)
+By the way, bumping your own thread after ~24 hours is generally
+considered rude and won't get you more answers...
 
--- 
-Mathieu Desnoyers
+Regards,
+J=E9r=E9mie
+
+>
+> Amit Margalit
+> IBM XIV - Storage Reinvented
+> XIV-NAS Development Team
+> Tel. 03-689-7774
+> Fax. 03-689-7230
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>
+
+
+
+-- =
+
+J=E9r=E9mie Galarneau
 EfficiOS Inc.
 http://www.efficios.com
