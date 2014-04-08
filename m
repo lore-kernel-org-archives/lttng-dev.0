@@ -1,25 +1,38 @@
-From: Jan Glauber <jan.glauber@gmail.com>
-Subject: Re: lttng-ust cross compile broken for demo-tracef
-Date: Tue, 8 Apr 2014 10:50:22 +0200
-Message-ID: <20140408085021.GA3326__45812.4289442368$1396947155$gmane$org@hal>
-References: <20140407114320.GA25948@hal>
- <CA+jJMxuPEipdetRy4ETyJ=LPARUOZq8a+dTKzP_esDS8zuonKQ@mail.gmail.com>
- <CAEiAFz2ugQhoA6RO7NbxAPNcii6tvc-qQoM9CaqDDW5LPSNT7w@mail.gmail.com>
- <CA+jJMxtjWp-a1smz_hwZEVL70HQ6pKj2JXKXnUgxzg3QVR0HKA@mail.gmail.com>
- <CAEiAFz3WC7tp4PRdOXE991reuNDm+qc86ughb8JrOw8R=whoKA@mail.gmail.com>
- <CA+jJMxuaxABSCf7iWJNS2==B8nQAB8VSPhRSojMeSEesWzx0xA@mail.gmail.com>
+From: Amit Margalit <AMITM@il.ibm.com>
+Subject: [Babeltrace][RFC Patch][1/1] Add
+ bt_ctf_get_decl_event_id() to obtain the event ID from the declaration
+Date: Tue, 8 Apr 2014 16:02:37 +0300
+Message-ID: <OF9D8E0B6C.51939645-ONC2257CB4.00471398-C2257CB4.0047AC03__3069.47582071206$1396962233$gmane$org@il.ibm.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/mixed; boundary="=_mixed 0047ABB3C2257CB4_="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ee0-f44.google.com ([74.125.83.44])
+Received: from e06smtp15.uk.ibm.com ([195.75.94.111])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jan.glauber@gmail.com>) id 1WXRkl-0006ho-UH
- for lttng-dev@lists.lttng.org; Tue, 08 Apr 2014 04:51:37 -0400
-Received: by mail-ee0-f44.google.com with SMTP id e49so411774eek.3
- for <lttng-dev@lists.lttng.org>; Tue, 08 Apr 2014 01:51:29 -0700 (PDT)
-Content-Disposition: inline
-In-Reply-To: <CA+jJMxuaxABSCf7iWJNS2==B8nQAB8VSPhRSojMeSEesWzx0xA@mail.gmail.com>
+ (envelope-from <amitm@il.ibm.com>) id 1WXVg3-0008Ng-NE
+ for lttng-dev@lists.lttng.org; Tue, 08 Apr 2014 09:03:00 -0400
+Received: from /spool/local
+ by e06smtp15.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only!
+ Violators will be prosecuted
+ for <lttng-dev@lists.lttng.org> from <amitm@il.ibm.com>;
+ Tue, 8 Apr 2014 14:02:53 +0100
+Received: from b06cxnps4074.portsmouth.uk.ibm.com
+ (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+ by d06dlp03.portsmouth.uk.ibm.com (Postfix) with ESMTP id C63DC1B0805F
+ for <lttng-dev@lists.lttng.org>; Tue,  8 Apr 2014 14:02:48 +0100 (BST)
+Received: from d06av01.portsmouth.uk.ibm.com (d06av01.portsmouth.uk.ibm.com
+ [9.149.37.212])
+ by b06cxnps4074.portsmouth.uk.ibm.com (8.13.8/8.13.8/NCO v10.0) with ESMTP id
+ s38D2cwd46268438
+ for <lttng-dev@lists.lttng.org>; Tue, 8 Apr 2014 13:02:38 GMT
+Received: from d06av01.portsmouth.uk.ibm.com (localhost [127.0.0.1])
+ by d06av01.portsmouth.uk.ibm.com (8.14.4/8.14.4/NCO v10.0 AVout) with ESMTP id
+ s38D2nPc012131
+ for <lttng-dev@lists.lttng.org>; Tue, 8 Apr 2014 07:02:49 -0600
+Received: from d06ml311.portsmouth.uk.ibm.com (d06ml311.portsmouth.uk.ibm.com
+ [9.149.104.181])
+ by d06av01.portsmouth.uk.ibm.com (8.14.4/8.14.4/NCO v10.0 AVin) with ESMTP id
+ s38D2mDK012099
+ for <lttng-dev@lists.lttng.org>; Tue, 8 Apr 2014 07:02:48 -0600
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -28,224 +41,133 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-On Mon, Apr 07, 2014 at 12:32:18PM -0400, J=E9r=E9mie Galarneau wrote:
-> On Mon, Apr 7, 2014 at 10:29 AM, Jan Glauber <jan.glauber@gmail.com> wrot=
-e:
-> > Yes:
-> > $ which arm-linux-gnueabihf-gcc
-> > /usr/bin/arm-linux-gnueabihf-gcc
-> >
-> > IIRC the examples have not been build by default in the past, right?
-> =
+--=_mixed 0047ABB3C2257CB4_=
+Content-Type: multipart/alternative; boundary="=_alternative 0047ABB3C2257CB4_="
 
-> They have been for around a year. I think I found the issue:
-> lttng-gen-tp doesn't expect the CC variable to contain command line
-> arguments.
 
-I've been on version 2.2.
- =
+--=_alternative 0047ABB3C2257CB4_=
+Content-Type: text/plain; charset="US-ASCII"
 
-> Can you apply and test the following diff?
+Hello all,
 
-Yes, that fixes the issue!
+This patch adds an API to obtain the event ID given a bt_ctf_event_decl 
+pointer. This is useful after using bt_ctf_get_event_decl_list() to obtain 
+the list of events that exist in a trace that was just opened.
 
-Many thanks,
-Jan
+I have tried to make relevant additions to babeltrace.i.in in the Python 
+bindings, as best I could, but have not tested these because I am not 
+using the Python bindings anymore.
 
-> diff --git a/tools/lttng-gen-tp b/tools/lttng-gen-tp
-> index a3a01f2..b62cd99 100755
-> --- a/tools/lttng-gen-tp
-> +++ b/tools/lttng-gen-tp
-> @@ -94,7 +94,7 @@ class ObjFile:
->          if 'CC' in os.environ:
->              cc =3D os.environ['CC']
->              try:
-> -                subprocess.call(cc,
-> +                subprocess.call(cc.split(),
->                                  stdout=3Dsubprocess.PIPE,
->                                  stderr=3Dsubprocess.PIPE)
->              except OSError as msg:
-> =
 
-> =
 
-> Thanks,
-> J=E9r=E9mie
-> =
+Amit Margalit
+IBM XIV - Storage Reinvented
+XIV-NAS Development Team
+Tel. 03-689-7774
+Fax. 03-689-7230
+--=_alternative 0047ABB3C2257CB4_=
+Content-Type: text/html; charset="US-ASCII"
 
-> >
-> >
-> > 2014-04-07 16:20 GMT+02:00 J=E9r=E9mie Galarneau
-> > <jeremie.galarneau@efficios.com>:
-> >
-> >> On Mon, Apr 7, 2014 at 10:10 AM, Jan Glauber <jan.glauber@gmail.com>
-> >> wrote:
-> >> > Sure, it looks like there is a problem with python in lttng-get-tp:
-> >> >
-> >> > | make[4]: Entering directory
-> >> >
-> >> > `/home/jang/temp/p4/JGlauber_hal_share/poky/build/tmp/work/armv7ahf-=
-vfp-neon-elina-linux-gnueabi/lttng-ust-2.4-r0/git/doc/examples/gen-tp'
-> >> > | ../../../tools/lttng-gen-tp -o sample_tracepoint.c
-> >> > sample_tracepoint.tp
-> >> > |
-> >> >
-> >> > CPPFLAGS=3D"-isystem/home/jang/temp/p4/JGlauber_hal_share/poky/../to=
-olchain//arm-linux-gnueabihf/include
-> >> >
-> >> > -isystem/home/jang/temp/p4/JGlauber_hal_share/poky/../toolchain//arm=
--linux-gnueabihf/include
-> >> > -I../../../include/ -I../../../include/" \
-> >> > |       CFLAGS=3D"-Wall
-> >> >
-> >> > -isystem/home/jang/temp/p4/JGlauber_hal_share/poky/../toolchain//arm=
--linux-gnueabihf/include
-> >> > -O2 -pipe -g -feliminate-unused-debug-types -fno-omit-frame-pointer
-> >> > -Wall
-> >> >
-> >> > -isystem/home/jang/temp/p4/JGlauber_hal_share/poky/../toolchain//arm=
--linux-gnueabihf/include
-> >> > -O2 -pipe -g -feliminate-unused-debug-types -fno-omit-frame-pointer"=
- \
-> >> > |
-> >> >
-> >> > LDFLAGS=3D"-L/home/jang/temp/p4/JGlauber_hal_share/poky/../toolchain=
-//arm-linux-gnueabihf/lib
-> >> >
-> >> > -Wl,-rpath-link,/home/jang/temp/p4/JGlauber_hal_share/poky/../toolch=
-ain//arm-linux-gnueabihf/lib
-> >> > -Wl,-O1 -Wl,--hash-style=3Dgnu
-> >> >
-> >> > -L/home/jang/temp/p4/JGlauber_hal_share/poky/../toolchain//arm-linux=
--gnueabihf/lib
-> >> >
-> >> > -Wl,-rpath-link,/home/jang/temp/p4/JGlauber_hal_share/poky/../toolch=
-ain//arm-linux-gnueabihf/lib
-> >> > -Wl,-O1 -Wl,--hash-style=3Dgnu -L../../../liblttng-ust/.libs/
-> >> >
-> >> > -Wl,-rpath=3D"/home/jang/temp/p4/JGlauber_hal_share/poky/build/tmp/w=
-ork/armv7ahf-vfp-neon-elina-linux-gnueabi/lttng-ust-2.4-r0/git/doc/examples=
-/../../liblttng-ust/.libs/""
-> >> > \
-> >> > |       CC=3D"arm-linux-gnueabihf-gcc  -march=3Darmv7-a
-> >> > -mthumb-interwork
-> >> > -mfloat-abi=3Dhard -mfpu=3Dneon -mtune=3Dcortex-a15
-> >> >
-> >> > --sysroot=3D/home/jang/temp/p4/JGlauber_hal_share/poky/build/tmp/sys=
-roots/omap5"
-> >> > \
-> >> > |       ../../../tools/lttng-gen-tp -o sample_tracepoint.o
-> >> > sample_tracepoint.tp
-> >> > | Invalid CC environment variable
-> >>
-> >> Okay, this means that subprocess.call(cc, ...) (lttng-gen-tp:108)
-> >> fails while trying to run your CC variable. Is arm-linux-gnueabihf-gcc
-> >> in your PATH?
-> >>
-> >> J=E9r=E9mie
-> >>
-> >> > | Traceback (most recent call last):
-> >> > |   File "../../../tools/lttng-gen-tp", line 315, in <module>
-> >> > |     sys.exit(main())
-> >> > |   File "../../../tools/lttng-gen-tp", line 309, in main
-> >> > |     dotobj.write()
-> >> > |   File "../../../tools/lttng-gen-tp", line 132, in write
-> >> > |     raise RuntimeError("No C Compiler detected")
-> >> > | RuntimeError: No C Compiler detected
-> >> > | make[4]: *** [sample_tracepoint.o] Error 1
-> >> > | rm sample_tracepoint.c
-> >> > | make[4]: Leaving directory
-> >> >
-> >> > `/home/jang/temp/p4/JGlauber_hal_share/poky/build/tmp/work/armv7ahf-=
-vfp-neon-elina-linux-gnueabi/lttng-ust-2.4-r0/git/doc/examples/gen-tp'
-> >> > | make[3]: *** [all-local] Error 1
-> >> >
-> >> > --Jan
-> >> >
-> >> >
-> >> > 2014-04-07 15:57 GMT+02:00 J=E9r=E9mie Galarneau
-> >> > <jeremie.galarneau@efficios.com>:
-> >> >
-> >> >> Hi Jan,
-> >> >>
-> >> >> Can you post the errors you get if you set the "CC=3Dgcc" line in
-> >> >> demo-tracef/Makefile by
-> >> >>
-> >> >> ifdef AM_CC
-> >> >>     CC =3D $(AM_CC)
-> >> >> endif
-> >> >>
-> >> >> Regards,
-> >> >> J=E9r=E9mie
-> >> >>
-> >> >> On Mon, Apr 7, 2014 at 7:43 AM, Jan Glauber <jan.glauber@gmail.com>
-> >> >> wrote:
-> >> >> > Hi list,
-> >> >> >
-> >> >> > I get a compile error with current git head of lttng-ust if I
-> >> >> > cross-compile (bitbake):
-> >> >> >
-> >> >> > | make[4]: Entering directory
-> >> >> >
-> >> >> > `/home/jang/temp/p4/JGlauber_hal_share/poky/build/tmp/work/armv7a=
-hf-vfp-neon-elina-linux-gnueabi/lttng-ust-2.4-r0/git/doc/examples/demo-trac=
-ef'
-> >> >> > | arm-linux-gnueabihf-gcc  -march=3Darmv7-a     -mthumb-interwork
-> >> >> > -mfloat-abi=3Dhard -mfpu=3Dneon -mtune=3Dcortex-a15
-> >> >> >
-> >> >> > --sysroot=3D/home/jang/temp/p4/JGlauber_hal_share/poky/build/tmp/=
-sysroots/omap5
-> >> >> > -L/home/jang/te
-> >> >> > |               -o demo-tracef demo-tracef.o -ldl -llttng-ust
-> >> >> > | demo-tracef.o: file not recognized: File format not recognized
-> >> >> > | collect2: error: ld returned 1 exit status
-> >> >> > | make[4]: *** [demo-tracef] Error 1
-> >> >> >
-> >> >> > Looks like the demo-tracef Makefile sets CC hard to gcc. But if I=
- fix
-> >> >> > this I get more
-> >> >> > errors which I don't undertand. Am I the only one running into th=
-is?
-> >> >> >
-> >> >> > thx, Jan
-> >> >> > ---
-> >> >> > Harman Becker Automotive GmbH
-> >> >> > System Profiling & Optimizing Team
-> >> >> >
-> >> >> > _______________________________________________
-> >> >> > lttng-dev mailing list
-> >> >> > lttng-dev@lists.lttng.org
-> >> >> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> >> >>
-> >> >>
-> >> >>
-> >> >> --
-> >> >> J=E9r=E9mie Galarneau
-> >> >> EfficiOS Inc.
-> >> >> http://www.efficios.com
-> >> >
-> >> >
-> >>
-> >>
-> >>
-> >> --
-> >> J=E9r=E9mie Galarneau
-> >> EfficiOS Inc.
-> >> http://www.efficios.com
-> >
-> >
-> =
+<font size=2 face="sans-serif">Hello all,</font>
+<br>
+<br><font size=2 face="sans-serif">This patch adds an API to obtain the
+event ID given a bt_ctf_event_decl pointer. This is useful after using
+</font><font size=2 face="Monospace">bt_ctf_get_event_decl_list</font><font size=2 face="sans-serif">()
+to obtain the list of events that exist in a trace that was just opened.</font>
+<br>
+<br><font size=2 face="sans-serif">I have tried to make relevant additions
+to babeltrace.i.in in the Python bindings, as best I could, but have not
+tested these because I am not using the Python bindings anymore.</font>
+<br>
+<br>
+<br>
+<br><font size=2 color=#000080 face="sans-serif">Amit Margalit</font>
+<br><font size=2 color=#808000 face="sans-serif">IBM XIV </font><font size=2 face="sans-serif">-
+<i>Storage Reinvented</i></font>
+<br><font size=2 face="sans-serif">XIV-NAS Development Team</font>
+<br><font size=2 face="sans-serif">Tel. 03</font><font size=2 face="Arial">-689-7774</font>
+<br><font size=2 face="Arial">Fax. 03-689-7230</font>
+--=_alternative 0047ABB3C2257CB4_=--
 
-> =
+--=_mixed 0047ABB3C2257CB4_=
+Content-Type: application/octet-stream; name="0001-Added-bt_ctf_get_decl_event_id-API-function.patch"
+Content-Disposition: attachment; filename="0001-Added-bt_ctf_get_decl_event_id-API-function.patch"
+Content-Transfer-Encoding: base64
 
-> =
+RnJvbSBiNWEyMDM0ZDg1YzMzYmQyNTJiOGY3NzQxMGFlZWE3ZThhMDg4YTk5IE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBBbWl0IE1hcmdhbGl0IDxhbWl0bUBpbC5pYm0uY29tPgpEYXRl
+OiBUdWUsIDggQXByIDIwMTQgMTA6NTE6MDAgKzAzMDAKU3ViamVjdDogW1BBVENIXSBBZGRlZCBi
+dF9jdGZfZ2V0X2RlY2xfZXZlbnRfaWQoKSBBUEkgZnVuY3Rpb24uCgpTaWduZWQtT2ZmLUJ5OiBB
+bWl0IE1hcmdhbGl0IDxhbWl0bUBpbC5pYm0uY29tPgotLS0KIGJpbmRpbmdzL3B5dGhvbi9iYWJl
+bHRyYWNlLmkuaW4gfCA4ICsrKysrKysrCiBmb3JtYXRzL2N0Zi9ldmVudHMuYyAgICAgICAgICAg
+IHwgOCArKysrKysrKwogaW5jbHVkZS9iYWJlbHRyYWNlL2N0Zi9ldmVudHMuaCB8IDUgKysrKysK
+IDMgZmlsZXMgY2hhbmdlZCwgMjEgaW5zZXJ0aW9ucygrKQoKZGlmZiAtLWdpdCBhL2JpbmRpbmdz
+L3B5dGhvbi9iYWJlbHRyYWNlLmkuaW4gYi9iaW5kaW5ncy9weXRob24vYmFiZWx0cmFjZS5pLmlu
+CmluZGV4IDI5NDE3N2YuLmNjM2VkNmYgMTAwNjQ0Ci0tLSBhL2JpbmRpbmdzL3B5dGhvbi9iYWJl
+bHRyYWNlLmkuaW4KKysrIGIvYmluZGluZ3MvcHl0aG9uL2JhYmVsdHJhY2UuaS5pbgpAQCAtNTA5
+LDYgKzUwOSw4IEBAIHN0cnVjdCBidF9jdGZfZXZlbnQgKmJ0X2N0Zl9pdGVyX3JlYWRfZXZlbnQo
+c3RydWN0IGJ0X2N0Zl9pdGVyICppdGVyKTsKICVyZW5hbWUoIl9idF9jdGZfZmllbGRfZ2V0X2Vy
+cm9yIikgYnRfY3RmX2ZpZWxkX2dldF9lcnJvcih2b2lkKTsKICVyZW5hbWUoIl9idF9jdGZfZ2V0
+X2RlY2xfZXZlbnRfbmFtZSIpIGJ0X2N0Zl9nZXRfZGVjbF9ldmVudF9uYW1lKGNvbnN0IHN0cnVj
+dAogCQlidF9jdGZfZXZlbnRfZGVjbCAqZXZlbnQpOworJXJlbmFtZSgiX2J0X2N0Zl9nZXRfZGVj
+bF9ldmVudF9pZCIpIGJ0X2N0Zl9nZXRfZGVjbF9ldmVudF9pZChjb25zdCBzdHJ1Y3QKKwkJYnRf
+Y3RmX2V2ZW50X2RlY2wgKmV2ZW50KTsKICVyZW5hbWUoIl9idF9jdGZfZ2V0X2RlY2xfZmllbGRf
+bmFtZSIpIGJ0X2N0Zl9nZXRfZGVjbF9maWVsZF9uYW1lKAogCQljb25zdCBzdHJ1Y3QgYnRfY3Rm
+X2ZpZWxkX2RlY2wgKmZpZWxkKTsKICVyZW5hbWUoIl9idF9jdGZfZ2V0X2RlY2xfZnJvbV9kZWYi
+KSBidF9jdGZfZ2V0X2RlY2xfZnJvbV9kZWYoCkBAIC01NTEsNiArNTUzLDcgQEAgZG91YmxlIGJ0
+X2N0Zl9nZXRfZmxvYXQoY29uc3Qgc3RydWN0IGJ0X2RlZmluaXRpb24gKmZpZWxkKTsKIGNvbnN0
+IHN0cnVjdCBidF9kZWZpbml0aW9uICpidF9jdGZfZ2V0X3ZhcmlhbnQoY29uc3Qgc3RydWN0IGJ0
+X2RlZmluaXRpb24gKmZpZWxkKTsKIGludCBidF9jdGZfZmllbGRfZ2V0X2Vycm9yKHZvaWQpOwog
+Y29uc3QgY2hhciAqYnRfY3RmX2dldF9kZWNsX2V2ZW50X25hbWUoY29uc3Qgc3RydWN0IGJ0X2N0
+Zl9ldmVudF9kZWNsICpldmVudCk7Cit1aW50NjRfdCBidF9jdGZfZ2V0X2RlY2xfZXZlbnRfaWQo
+Y29uc3Qgc3RydWN0IGJ0X2N0Zl9ldmVudF9kZWNsICpldmVudCk7CiBjb25zdCBjaGFyICpidF9j
+dGZfZ2V0X2RlY2xfZmllbGRfbmFtZShjb25zdCBzdHJ1Y3QgYnRfY3RmX2ZpZWxkX2RlY2wgKmZp
+ZWxkKTsKIGNvbnN0IHN0cnVjdCBidF9kZWNsYXJhdGlvbiAqYnRfY3RmX2dldF9kZWNsX2Zyb21f
+ZGVmKGNvbnN0IHN0cnVjdCBidF9kZWZpbml0aW9uICpmaWVsZCk7CiBjb25zdCBzdHJ1Y3QgYnRf
+ZGVjbGFyYXRpb24gKmJ0X2N0Zl9nZXRfZGVjbF9mcm9tX2ZpZWxkX2RlY2woY29uc3Qgc3RydWN0
+IGJ0X2N0Zl9maWVsZF9kZWNsICpmaWVsZCk7CkBAIC04MTQsNiArODE3LDExIEBAIGNsYXNzIEV2
+ZW50RGVjbGFyYXRpb24ob2JqZWN0KToKIAkJcmV0dXJuIF9idF9jdGZfZ2V0X2RlY2xfZXZlbnRf
+bmFtZShzZWxmLl9lZCkKIAogCUBwcm9wZXJ0eQorCWRlZiBpZChzZWxmKToKKwkJIiIiUmV0dXJu
+IHRoZSBldmVudC1JRCBvZiB0aGUgZXZlbnQgb3IgKHVpbnQ2NF90KX4wIG9uIGVycm9yIiIiCisJ
+CXJldHVybiBfYnRfY3RmX2dldF9kZWNsX2V2ZW50X2lkKHNlbGYuX2VkKQorCisJQHByb3BlcnR5
+CiAJZGVmIGZpZWxkcyhzZWxmKToKIAkJIiIiCiAJCUdlbmVyYXRvciByZXR1cm5pbmcgYWxsIEZp
+ZWxkRGVjbGFyYXRpb25zIG9mIGFuIGV2ZW50LCBnb2luZyB0aHJvdWdoCmRpZmYgLS1naXQgYS9m
+b3JtYXRzL2N0Zi9ldmVudHMuYyBiL2Zvcm1hdHMvY3RmL2V2ZW50cy5jCmluZGV4IDgxNzQyOTMu
+LjY5OGM1ZjMgMTAwNjQ0Ci0tLSBhL2Zvcm1hdHMvY3RmL2V2ZW50cy5jCisrKyBiL2Zvcm1hdHMv
+Y3RmL2V2ZW50cy5jCkBAIC03MTIsNiArNzEyLDE0IEBAIGNvbnN0IGNoYXIgKmJ0X2N0Zl9nZXRf
+ZGVjbF9ldmVudF9uYW1lKGNvbnN0IHN0cnVjdCBidF9jdGZfZXZlbnRfZGVjbCAqZXZlbnQpCiAJ
+cmV0dXJuIGdfcXVhcmtfdG9fc3RyaW5nKGV2ZW50LT5wYXJlbnQubmFtZSk7CiB9CiAKK3VpbnQ2
+NF90IGJ0X2N0Zl9nZXRfZGVjbF9ldmVudF9pZChjb25zdCBzdHJ1Y3QgYnRfY3RmX2V2ZW50X2Rl
+Y2wgKmV2ZW50KQoreworCWlmICghZXZlbnQpCisJCXJldHVybiAodWludDY0X3QpKH4wKTsKKwor
+CXJldHVybiBldmVudC0+cGFyZW50LmlkOworfQorCiBpbnQgYnRfY3RmX2dldF9kZWNsX2ZpZWxk
+cyhzdHJ1Y3QgYnRfY3RmX2V2ZW50X2RlY2wgKmV2ZW50X2RlY2wsCiAJCWVudW0gYnRfY3RmX3Nj
+b3BlIHNjb3BlLAogCQlzdHJ1Y3QgYnRfY3RmX2ZpZWxkX2RlY2wgY29uc3QgKiBjb25zdCAqKmxp
+c3QsCmRpZmYgLS1naXQgYS9pbmNsdWRlL2JhYmVsdHJhY2UvY3RmL2V2ZW50cy5oIGIvaW5jbHVk
+ZS9iYWJlbHRyYWNlL2N0Zi9ldmVudHMuaAppbmRleCBjODFkODg1Li4zOTk1YzUwIDEwMDY0NAot
+LS0gYS9pbmNsdWRlL2JhYmVsdHJhY2UvY3RmL2V2ZW50cy5oCisrKyBiL2luY2x1ZGUvYmFiZWx0
+cmFjZS9jdGYvZXZlbnRzLmgKQEAgLTI3MSw2ICsyNzEsMTEgQEAgaW50IGJ0X2N0Zl9nZXRfZXZl
+bnRfZGVjbF9saXN0KGludCBoYW5kbGVfaWQsIHN0cnVjdCBidF9jb250ZXh0ICpjdHgsCiBjb25z
+dCBjaGFyICpidF9jdGZfZ2V0X2RlY2xfZXZlbnRfbmFtZShjb25zdCBzdHJ1Y3QgYnRfY3RmX2V2
+ZW50X2RlY2wgKmV2ZW50KTsKIAogLyoKKyAqIGJ0X2N0Zl9nZXRfZGVjbF9ldmVudF9pZDogcmV0
+dXJuIHRoZSBldmVudC1JRCBvZiB0aGUgZXZlbnQgb3IgKHVpbnQ2NF90KSh+MCkgb24gZXJyb3IK
+KyAqLwordWludDY0X3QgYnRfY3RmX2dldF9kZWNsX2V2ZW50X2lkKGNvbnN0IHN0cnVjdCBidF9j
+dGZfZXZlbnRfZGVjbCAqZXZlbnQpOworCisvKgogICogYnRfY3RmX2dldF9kZWNsX2ZpZWxkczog
+Z2V0IGFsbCBmaWVsZCBkZWNsYXJhdGlvbnMgaW4gYSBzY29wZSBvZiBhbiBldmVudAogICoKICAq
+IFRoZSBsaXN0IGFycmF5IGlzIHBvaW50ZWQgdG8gdGhlIGFycmF5IG9mIGZpZWxkIGRlY2xhcmF0
+aW9uLgotLSAKMS45LjEKCg==
 
-> -- =
+--=_mixed 0047ABB3C2257CB4_=
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-> J=E9r=E9mie Galarneau
-> EfficiOS Inc.
-> http://www.efficios.com
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--=_mixed 0047ABB3C2257CB4_=--
