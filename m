@@ -1,65 +1,56 @@
-From: "Yann E. MORIN" <yann.morin.1998-GANU6spQydw@public.gmane.org>
-Subject: Re: [lttng-dev] [PATCH 1/1] Disable liblttng-ust-dl if
- dlinfo is not available in C library.
-Date: Tue, 8 Apr 2014 19:24:42 +0200
-Message-ID: <20140408172442.GB3199@free.fr>
-References: <1396818161-20204-1-git-send-email-romain.naour@openwide.fr>
- <794709247.8287.1396903345152.JavaMail.zimbra@efficios.com>
- <53430E92.9060401@openwide.fr>
- <CAFXXi0kAZJDD7ygqs493ZPvJHMpkeuMTDvxHqMg9B722pJHHxQ@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH lttng-ust] Fix: .split() the CC environment
+ variable in lttng-gen-tp
+Date: Tue, 8 Apr 2014 17:39:06 +0000 (UTC)
+Message-ID: <1235150978.20.1396978746115.JavaMail.zimbra__6312.03905581987$1396978817$gmane$org@efficios.com>
+References: <20140408085021.GA3326@hal>
+ <1396970903-17438-1-git-send-email-jeremie.galarneau@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Return-path: <buildroot-bounces-9GAsQqxh4YTR7s880joybQ@public.gmane.org>
-Content-Disposition: inline
-In-Reply-To: <CAFXXi0kAZJDD7ygqs493ZPvJHMpkeuMTDvxHqMg9B722pJHHxQ-JsoAwUIsXosN+BqQ9rBEUg@public.gmane.org>
-List-Unsubscribe: <http://lists.busybox.net/mailman/options/buildroot>,
- <mailto:buildroot-request-9GAsQqxh4YTR7s880joybQ@public.gmane.org?subject=unsubscribe>
-List-Archive: <http://lists.busybox.net/pipermail/buildroot>
-List-Post: <mailto:buildroot-9GAsQqxh4YTR7s880joybQ@public.gmane.org>
-List-Help: <mailto:buildroot-request-9GAsQqxh4YTR7s880joybQ@public.gmane.org?subject=help>
-List-Subscribe: <http://lists.busybox.net/mailman/listinfo/buildroot>,
- <mailto:buildroot-request-9GAsQqxh4YTR7s880joybQ@public.gmane.org?subject=subscribe>
-Errors-To: buildroot-bounces-9GAsQqxh4YTR7s880joybQ@public.gmane.org
-Sender: buildroot-bounces-9GAsQqxh4YTR7s880joybQ@public.gmane.org
-To: Simon Marchi <simon.marchi-scC8bbJcJLCw5LPnMra/2Q@public.gmane.org>
-Cc: buildroot <buildroot-9GAsQqxh4YTR7s880joybQ@public.gmane.org>, "lttng-dev-bnB2LGs2QVJ+nrgayQ7rhA@public.gmane.org" <lttng-dev-bnB2LGs2QVJ+nrgayQ7rhA@public.gmane.org>, Mathieu Desnoyers <mathieu.desnoyers-vg+e7yoeK/dWk0Htik3J/w@public.gmane.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail.efficios.com ([78.47.125.74])
+ by ltt.polymtl.ca with esmtp (Exim 4.80)
+ (envelope-from <compudj@efficios.com>) id 1WXZzO-0001pw-5s
+ for lttng-dev@lists.lttng.org; Tue, 08 Apr 2014 13:39:19 -0400
+In-Reply-To: <1396970903-17438-1-git-send-email-jeremie.galarneau@efficios.com>
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+To: =?utf-8?B?SsOpcsOpbWll?= Galarneau <jeremie.galarneau@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Simon, All,
-
-On 2014-04-08 13:03 -0400, Simon Marchi spake thusly:
-> Hi Romain,
-> 
-> It seems like with that commit, dlinfo is not found even on a glibc
-> based system, where it is present.
-> 
-> See https://bugs.lttng.org/issues/778
-> 
-> Do you have a suggestion to fix that ?
-
-I think we should use AC_CHECK_DECL instead of AC_CHECK_FUNCS.
-
-dlinfo is in dlfcn.h so we need a check that allows us to include that
-header, and we must check for that header first, of course. So, maybe
-something like (completely untested, directly written in the mail):
-
-    AC_CHECK_HEADER([dlfcn.h])
-    AS_IF([test "${ac_cv_header_dlfcn_h}" = "yes"],
-          [AC_CHECK_DECL([dlinfo],,,[dlfcn.h])],
-          [ac_cv_have_decl_dlinfo="no"])
-    AM_CONDITIONAL([HAVE_DLINFO], [test "${ac_cv_have_decl_dlinfo}" = "yes"])
-
-But I'm no expert in autoconf, so the actual solution may be slightly
-different.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+bWVyZ2VkLCB0aGFua3MhCgpNYXRoaWV1CgotLS0tLSBPcmlnaW5hbCBNZXNzYWdlIC0tLS0tCj4g
+RnJvbTogIkrDqXLDqW1pZSBHYWxhcm5lYXUiIDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5j
+b20+Cj4gVG86IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBDYzogIm1hdGhpZXUgZGVzbm95
+ZXJzIiA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPiwgImphbiBnbGF1YmVyIiA8amFu
+LmdsYXViZXJAZ21haWwuY29tPiwgIkrDqXLDqW1pZSBHYWxhcm5lYXUiCj4gPGplcmVtaWUuZ2Fs
+YXJuZWF1QGVmZmljaW9zLmNvbT4KPiBTZW50OiBUdWVzZGF5LCBBcHJpbCA4LCAyMDE0IDExOjI4
+OjIzIEFNCj4gU3ViamVjdDogW1BBVENIIGx0dG5nLXVzdF0gRml4OiAuc3BsaXQoKSB0aGUgQ0Mg
+ZW52aXJvbm1lbnQgdmFyaWFibGUgaW4gbHR0bmctZ2VuLXRwCj4gCj4gVGhlIENDIHZhcmlhYmxl
+IG1pZ2h0IGNvbnRhaW4gY29tbWFuZCBsaW5lIGFyZ3VtZW50cyB3aGljaCBsdHRuZy1nZW4tdHAK
+PiBjdXJyZW50bHkgZG9lcyBub3QgaGFuZGxlLiBUaGlzIGZpeCBlbnN1cmVzIHRoYXQgdGhlIGFy
+Z3VtZW50cyBhcmUKPiBwcm9wZXJseSBwYXNzZWQgb24gdG8gdGhlIGNvbXBpbGVyIGJpbmFyeSBh
+cyBpZiBhIG5vcm1hbCBNYWtlZmlsZQo+IHdhcyB1c2VkLgo+IAo+IFNpZ25lZC1vZmYtYnk6IErD
+qXLDqW1pZSBHYWxhcm5lYXUgPGplcmVtaWUuZ2FsYXJuZWF1QGVmZmljaW9zLmNvbT4KPiAtLS0K
+PiAgdG9vbHMvbHR0bmctZ2VuLXRwIHwgMiArLQo+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRp
+b24oKyksIDEgZGVsZXRpb24oLSkKPiAKPiBkaWZmIC0tZ2l0IGEvdG9vbHMvbHR0bmctZ2VuLXRw
+IGIvdG9vbHMvbHR0bmctZ2VuLXRwCj4gaW5kZXggYTNhMDFmMi4uYjYyY2Q5OSAxMDA3NTUKPiAt
+LS0gYS90b29scy9sdHRuZy1nZW4tdHAKPiArKysgYi90b29scy9sdHRuZy1nZW4tdHAKPiBAQCAt
+OTQsNyArOTQsNyBAQCBjbGFzcyBPYmpGaWxlOgo+ICAgICAgICAgIGlmICdDQycgaW4gb3MuZW52
+aXJvbjoKPiAgICAgICAgICAgICAgY2MgPSBvcy5lbnZpcm9uWydDQyddCj4gICAgICAgICAgICAg
+IHRyeToKPiAtICAgICAgICAgICAgICAgIHN1YnByb2Nlc3MuY2FsbChjYywKPiArICAgICAgICAg
+ICAgICAgIHN1YnByb2Nlc3MuY2FsbChjYy5zcGxpdCgpLAo+ICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIHN0ZG91dD1zdWJwcm9jZXNzLlBJUEUsCj4gICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgc3RkZXJyPXN1YnByb2Nlc3MuUElQRSkKPiAgICAgICAgICAgICAgZXhj
+ZXB0IE9TRXJyb3IgYXMgbXNnOgo+IC0tCj4gMS45LjEKPiAKPiAKCi0tIApNYXRoaWV1IERlc25v
+eWVycwpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCgpfX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0
+Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmlu
+L21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
