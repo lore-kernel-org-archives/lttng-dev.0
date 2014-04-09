@@ -1,17 +1,19 @@
-From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Subject: Re: Regarding Bug #633 - utils_parse_size_suffix
- suffers from several problems
-Date: Wed, 9 Apr 2014 13:42:39 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD35996E2C__4773.587632417$1397051041$gmane$org@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [RFC Patch Ust 1/5] Update data structures to
+ support	CTF global structures
+Date: Wed, 9 Apr 2014 15:36:37 +0000 (UTC)
+Message-ID: <953381139.1247.1397057797666.JavaMail.zimbra__44094.4402282641$1397057876$gmane$org@efficios.com>
+References: <1395845232-17669-1-git-send-email-gbastien+lttng@versatic.net>
+ <1395845232-17669-2-git-send-email-gbastien+lttng@versatic.net>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1WXsm4-0000gg-O7
- for lttng-dev@lists.lttng.org; Wed, 09 Apr 2014 09:42:50 -0400
-Content-Language: fr-FR
+ (envelope-from <compudj@efficios.com>) id 1WXuYQ-0001ME-09
+ for lttng-dev@lists.lttng.org; Wed, 09 Apr 2014 11:36:52 -0400
+In-Reply-To: <1395845232-17669-2-git-send-email-gbastien+lttng@versatic.net>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,65 +22,89 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: =?utf-8?Q?Genevi=C3=A8ve?= Bastien <gbastien+lttng@versatic.net>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-----------------------------------------------------------------------
-Date: Tue, 8 Apr 2014 22:09:36 -0700
-From: Sandeep K Chaudhary <babbusandy2006@gmail.com>
-To: David Goulet <dgoulet@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
-
-> Here is the diff for changes made to the unit test. Please have a look.
-----------------------------------------------------------------------
-
-   I would suggest these additional valid and invalid test cases:
-
-Valid:
-
-{ "00", 0 },
-{ "0k", 0 },
-{ "0K", 0 },
-{ "0M", 0 },
-{ "0G", 0 },
-{ "00k", 0 },
-{ "00K", 0 },
-{ "00M", 0 },
-{ "00G", 0 },
-{ "0x0", 0 },
-{ "0X0", 0 },
-{ "0x0k", 0 },
-{ "0X0K", 0 },
-{ "0x0M", 0 },
-{ "0X0G", 0 },
-{ "0x40C", 1036 },
-{ "0X40D", 1037 },
-{ "0X40G", 68719476736 },
-{ "0300k", 196608 },
-{ "0300K", 196608 },
-{ "030M", 25165824 },
-{ "020G", 17179869184 },
-{ "0xa0k", 163840 },
-{ "0xa0K", 163840 },
-{ "0XA0M", 167772160 },
-{ "0xA0G", 171798691840 },
-
-Invalid:
-
-" ", "x0", "0xx0", "07kK", "0xk", "0XM", "0xG", "0x0MM", "0X0GG", "0a", "0B"
-
-Daniel U. Thibault
-Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
-ntermeasures (SPC)
-Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
-Cyber Security (MCCS)
-R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
- Canada - Valcartier (DRDC Valcartier)
-2459 route de la Bravoure
-Qu=E9bec QC  G3J 1X5
-CANADA
-Vox : (418) 844-4000 x4245
-Fax : (418) 844-4538
-NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-Gouvernement du Canada | Government of Canada
-<http://www.valcartier.drdc-rddc.gc.ca/>
+LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJHZW5ldmnDqHZlIEJhc3RpZW4i
+IDxnYmFzdGllbitsdHRuZ0B2ZXJzYXRpYy5uZXQ+Cj4gVG86IGx0dG5nLWRldkBsaXN0cy5sdHRu
+Zy5vcmcKPiBTZW50OiBXZWRuZXNkYXksIE1hcmNoIDI2LCAyMDE0IDEwOjQ3OjA4IEFNCj4gU3Vi
+amVjdDogW2x0dG5nLWRldl0gW1JGQyBQYXRjaCBVc3QgMS81XSBVcGRhdGUgZGF0YSBzdHJ1Y3R1
+cmVzIHRvIHN1cHBvcnQJQ1RGIGdsb2JhbCBzdHJ1Y3R1cmVzCj4gCj4gVGhlIHN0cnVjdHVyZXMg
+bWF0Y2ggdGhvc2UgaW4gTFRUbmctdG9vbHMgdG8gc3VwcG9ydCBnbG9iYWwgc3RydWN0dXJlcy4K
+PiAKPiBUaGUgc3RydWN0IGx0dG5nX3N0cnVjdHVyZSBjb250YWlucyB0aGUgZ2xvYmFsIHR5cGVz
+IHJlcXVpcmVkIGJ5IHRoZQo+IHN0cnVjdHVyZSwgYnV0IG5vdCB1c3RjdGxfc3RydWN0dXJlIGJl
+Y2F1c2UgZ2xvYmFsIHR5cGVzIHdpbGwgYmUgZmxhdHRlbmVkCj4gaW4gdGhlIGV2ZW50IGRlc2Ny
+aXB0aW9uIHdoZW4gc2VyaWFsaXppbmcuCj4gCj4gU2lnbmVkLW9mZi1ieTogR2VuZXZpw6h2ZSBC
+YXN0aWVuIDxnYmFzdGllbitsdHRuZ0B2ZXJzYXRpYy5uZXQ+Cj4gLS0tCj4gIGluY2x1ZGUvbHR0
+bmcvdXN0LWN0bC5oICAgIHwgMTQgKysrKysrKysrKysrKysKPiAgaW5jbHVkZS9sdHRuZy91c3Qt
+ZXZlbnRzLmggfCAxNyArKysrKysrKysrKysrKysrKwo+ICAyIGZpbGVzIGNoYW5nZWQsIDMxIGlu
+c2VydGlvbnMoKykKPiAKPiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9sdHRuZy91c3QtY3RsLmggYi9p
+bmNsdWRlL2x0dG5nL3VzdC1jdGwuaAo+IGluZGV4IGJhM2EyNzEuLjcwODUwMWQgMTAwNjQ0Cj4g
+LS0tIGEvaW5jbHVkZS9sdHRuZy91c3QtY3RsLmgKPiArKysgYi9pbmNsdWRlL2x0dG5nL3VzdC1j
+dGwuaAo+IEBAIC0yNjUsNiArMjY1LDcgQEAgZW51bSB1c3RjdGxfYWJzdHJhY3RfdHlwZXMgewo+
+ICAJdXN0Y3RsX2F0eXBlX3NlcXVlbmNlLAo+ICAJdXN0Y3RsX2F0eXBlX3N0cmluZywKPiAgCXVz
+dGN0bF9hdHlwZV9mbG9hdCwKPiArCXVzdGN0bF9hdHlwZV9zdHJ1Y3R1cmUsCj4gIAlOUl9VU1RD
+VExfQUJTVFJBQ1RfVFlQRVMsCj4gIH07Cj4gIAo+IEBAIC0zMzUsNiArMzM2LDkgQEAgc3RydWN0
+IHVzdGN0bF90eXBlIHsKPiAgCQkJc3RydWN0IHVzdGN0bF9iYXNpY190eXBlIGxlbmd0aF90eXBl
+Owo+ICAJCQlzdHJ1Y3QgdXN0Y3RsX2Jhc2ljX3R5cGUgZWxlbV90eXBlOwo+ICAJCX0gc2VxdWVu
+Y2U7Cj4gKwkJc3RydWN0IHsKPiArCQkJY2hhciBuYW1lW0xUVE5HX1VTVF9TWU1fTkFNRV9MRU5d
+Owo+ICsJCX0gc3RydWN0dXJlOwo+ICAJCWNoYXIgcGFkZGluZ1tVU1RDVExfVVNUX1RZUEVfUEFE
+RElOR107Cj4gIAl9IHU7Cj4gIH0gTFRUTkdfUEFDS0VEOwo+IEBAIC0zNDgsOSArMzUyLDE4IEBA
+IHN0cnVjdCB1c3RjdGxfZW51bSB7Cj4gIAljaGFyIHBhZGRpbmdbVVNUQ1RMX1VTVF9FTlVNX1RZ
+UEVfUEFERElOR107Cj4gIH0gTFRUTkdfUEFDS0VEOwo+ICAKPiArI2RlZmluZSBVU1RDVExfVVNU
+X1NUUlVDVF9UWVBFX1BBRERJTkcJMzY4Cgp3aHkgMzY4IGJ5dGVzIG9mIHBhZGRpbmcgPyBXaGF0
+J3Mgc28gbGFyZ2UgdGhhdCB3ZSBjb3VsZCBoYXZlIHRvCmFkZCB0byB0aGlzIHN0cnVjdHVyZSA/
+CgpNb3Jlb3ZlciwgbXkgb3RoZXIgd29ycnkgaXMgdGhlICJjb25zdCBjaGFyICoiIHdlJ3JlIGFk
+ZGluZyBmb3IKZW51bXMgYW5kIHN0cnVjdHVyZXMuIEknbSBjb25jZXJuZWQgdGhhdCB3aGVuIHdl
+IGV2ZW50dWFsbHkgY2hvb3NlCnRvIGR5bmFtaWNhbGx5IGFsbG9jYXRlIHRob3NlICh3aGVuIHdl
+IHN1cHBvcnQgZHluYW1pYyBwcm9iZXMpLCB3ZQp3aWxsIGhhdmUgdG8gZG8gdWdseSBjYXN0IHRv
+IHJlbW92ZSB0aGUgImNvbnN0Ii4KClRob3VnaHRzID8KClRoYW5rcywKCk1hdGhpZXUKCj4gK3N0
+cnVjdCB1c3RjdGxfc3RydWN0dXJlIHsKPiArCWNoYXIgbmFtZVtMVFROR19VU1RfU1lNX05BTUVf
+TEVOXTsKPiArCXNpemVfdCBucl9maWVsZHM7Cj4gKwlzdHJ1Y3QgdXN0Y3RsX2ZpZWxkICpmaWVs
+ZHM7Cj4gKwljaGFyIHBhZGRpbmdbVVNUQ1RMX1VTVF9TVFJVQ1RfVFlQRV9QQURESU5HXTsKPiAr
+fTsKPiArCj4gIC8qIENURiBjYXRlZ29yaWVzIGZvciBnbG9iYWwgdHlwZXMgZGVjbGFyZWQgb3V0
+c2lkZSBldmVudCBkZXNjcmlwdGlvbnMgKi8KPiAgZW51bSB1c3RjdGxfZ2xvYmFsX3R5cGVfY2F0
+ZWdvcmllcyB7Cj4gIAl1c3RjdGxfbXR5cGVfZW51bSwKPiArCXVzdGN0bF9tdHlwZV9zdHJ1Y3R1
+cmUsCj4gIAlOUl9VU1RDVExfR0xPQkFMX1RZUEVTLAo+ICB9Owo+ICAKPiBAQCAtMzU5LDYgKzM3
+Miw3IEBAIHN0cnVjdCB1c3RjdGxfZ2xvYmFsX3R5cGVfZGVjbCB7Cj4gIAl1aW50MzJfdCBtdHlw
+ZTsKPiAgCXVuaW9uIHsKPiAgCQlzdHJ1Y3QgdXN0Y3RsX2VudW0gY3RmX2VudW07Cj4gKwkJc3Ry
+dWN0IHVzdGN0bF9zdHJ1Y3R1cmUgY3RmX3N0cnVjdHVyZTsKPiAgCQljaGFyIHBhZGRpbmdbVVNU
+Q1RMX1VTVF9HTE9CQUxfVFlQRV9ERUNMX1BBRERJTkddOwo+ICAJfSB1Owo+ICB9IExUVE5HX1BB
+Q0tFRDsKPiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9sdHRuZy91c3QtZXZlbnRzLmggYi9pbmNsdWRl
+L2x0dG5nL3VzdC1ldmVudHMuaAo+IGluZGV4IDZmMTFlODQuLjg5MTU1YWUgMTAwNjQ0Cj4gLS0t
+IGEvaW5jbHVkZS9sdHRuZy91c3QtZXZlbnRzLmgKPiArKysgYi9pbmNsdWRlL2x0dG5nL3VzdC1l
+dmVudHMuaAo+IEBAIC04Miw2ICs4Miw3IEBAIGVudW0gbHR0bmdfYWJzdHJhY3RfdHlwZXMgewo+
+ICAJYXR5cGVfc2VxdWVuY2UsCj4gIAlhdHlwZV9zdHJpbmcsCj4gIAlhdHlwZV9mbG9hdCwKPiAr
+CWF0eXBlX3N0cnVjdHVyZSwKPiAgCU5SX0FCU1RSQUNUX1RZUEVTLAo+ICB9Owo+ICAKPiBAQCAt
+OTYsNiArOTcsNyBAQCBlbnVtIGx0dG5nX3N0cmluZ19lbmNvZGluZ3Mgewo+ICAvKiBDVEYgY2F0
+ZWdvcmllcyBmb3IgZ2xvYmFsIHR5cGVzIGRlY2xhcmVkIG91dHNpZGUgZXZlbnQgZGVzY3JpcHRp
+b25zICovCj4gIGVudW0gbHR0bmdfZ2xvYmFsX3R5cGVfY2F0ZWdvcmllcyB7Cj4gIAltdHlwZV9l
+bnVtLAo+ICsJbXR5cGVfc3RydWN0dXJlLAo+ICAJTlJfR0xPQkFMX1RZUEVTLAo+ICB9Owo+ICAK
+PiBAQCAtMjA3LDYgKzIwOSw5IEBAIHN0cnVjdCBsdHRuZ190eXBlIHsKPiAgCQkJc3RydWN0IGx0
+dG5nX2Jhc2ljX3R5cGUgbGVuZ3RoX3R5cGU7Cj4gIAkJCXN0cnVjdCBsdHRuZ19iYXNpY190eXBl
+IGVsZW1fdHlwZTsKPiAgCQl9IHNlcXVlbmNlOwo+ICsJCXN0cnVjdCB7Cj4gKwkJCWNvbnN0IGNo
+YXIgKm5hbWU7Cj4gKwkJfSBzdHJ1Y3R1cmU7Cj4gIAkJY2hhciBwYWRkaW5nW0xUVE5HX1VTVF9U
+WVBFX1BBRERJTkddOwo+ICAJfSB1Owo+ICB9Owo+IEBAIC0yMjAsMTIgKzIyNSwyNCBAQCBzdHJ1
+Y3QgbHR0bmdfZW51bSB7Cj4gIAljaGFyIHBhZGRpbmdbTFRUTkdfVVNUX0VOVU1fVFlQRV9QQURE
+SU5HXTsKPiAgfTsKPiAgCj4gKyNkZWZpbmUgTFRUTkdfVVNUX1NUUlVDVF9UWVBFX1BBRERJTkcg
+MjAKPiArc3RydWN0IGx0dG5nX3N0cnVjdHVyZSB7Cj4gKwljb25zdCBjaGFyICpuYW1lOwo+ICsJ
+c2l6ZV90IG5yX2ZpZWxkczsKPiArCWNvbnN0IHN0cnVjdCBsdHRuZ19ldmVudF9maWVsZCAqZmll
+bGRzOwo+ICsJLyogR2xvYmFsIHR5cGVzIHJlcXVpcmVkIGJ5IHRoaXMgc3RydWN0dXJlLiAqLwo+
+ICsJdW5zaWduZWQgaW50IG5yX2dsb2JhbF90eXBlX2RlY2w7Cj4gKwljb25zdCBzdHJ1Y3QgbHR0
+bmdfZ2xvYmFsX3R5cGVfZGVjbCAqZ2xvYmFsX3R5cGVfZGVjbDsKPiArCWNoYXIgcGFkZGluZ1tM
+VFROR19VU1RfU1RSVUNUX1RZUEVfUEFERElOR107Cj4gK307Cj4gKwo+ICAjZGVmaW5lIExUVE5H
+X1VTVF9HTE9CQUxfVFlQRVNfUEFERElORwk2MAo+ICBzdHJ1Y3QgbHR0bmdfZ2xvYmFsX3R5cGVf
+ZGVjbCB7Cj4gIAllbnVtIGx0dG5nX2dsb2JhbF90eXBlX2NhdGVnb3JpZXMgbXR5cGU7Cj4gIAl1
+bnNpZ25lZCBpbnQgbm93cml0ZTsgLyogaW5oZXJpdGVkIGZyb20gdGhlIGZpZWxkIHVzaW5nIGl0
+ICovCj4gIAl1bmlvbiB7Cj4gIAkJY29uc3Qgc3RydWN0IGx0dG5nX2VudW0gKmN0Zl9lbnVtOwo+
+ICsJCWNvbnN0IHN0cnVjdCBsdHRuZ19zdHJ1Y3R1cmUgKmN0Zl9zdHJ1Y3R1cmU7Cj4gIAkJY2hh
+ciBwYWRkaW5nW0xUVE5HX1VTVF9HTE9CQUxfVFlQRVNfUEFERElOR107Cj4gIAl9IHU7Cj4gIH07
+Cj4gLS0KPiAxLjkuMQo+IAo+IAo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fCj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+IGx0dG5nLWRldkBsaXN0cy5s
+dHRuZy5vcmcKPiBodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5m
+by9sdHRuZy1kZXYKPiAKCi0tIApNYXRoaWV1IERlc25veWVycwpFZmZpY2lPUyBJbmMuCmh0dHA6
+Ly93d3cuZWZmaWNpb3MuY29tCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5v
+cmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmct
+ZGV2Cg==
