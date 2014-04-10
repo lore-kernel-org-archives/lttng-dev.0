@@ -1,38 +1,17 @@
-From: Amit Margalit <AMITM@il.ibm.com>
-Subject: Babeltrace API question - how can I quickly return to
- rhe first event in the current packet?
-Date: Thu, 10 Apr 2014 21:54:03 +0300
-Message-ID: <OFA9051451.B0DAB9A8-ONC2257CB6.0067476D-C2257CB6.0067D884__45215.7494881705$1397156129$gmane$org@il.ibm.com>
+From: David Goulet <dgoulet@efficios.com>
+Subject: Re: [PATCH lttng-tools] Insert V4L2 instrumentation
+ module on session start
+Date: Thu, 10 Apr 2014 15:32:16 -0400
+Message-ID: <20140410193216.GA28773__7761.16527054018$1397158418$gmane$org@dalia>
+References: <5335D717.6080808@mentor.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0802206847=="
+Content-Type: multipart/mixed; boundary="===============0772215757=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from e06smtp16.uk.ibm.com ([195.75.94.112])
+Received: from smtp.ini-tech.com ([144.76.53.219])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <amitm@il.ibm.com>) id 1WYK7D-0003B5-0o
- for lttng-dev@lists.lttng.org; Thu, 10 Apr 2014 14:54:28 -0400
-Received: from /spool/local
- by e06smtp16.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only!
- Violators will be prosecuted
- for <lttng-dev@lists.lttng.org> from <amitm@il.ibm.com>;
- Thu, 10 Apr 2014 19:54:17 +0100
-Received: from b06cxnps3074.portsmouth.uk.ibm.com
- (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
- by d06dlp02.portsmouth.uk.ibm.com (Postfix) with ESMTP id 74DCD2190046
- for <lttng-dev@lists.lttng.org>; Thu, 10 Apr 2014 19:54:07 +0100 (BST)
-Received: from d06av08.portsmouth.uk.ibm.com (d06av08.portsmouth.uk.ibm.com
- [9.149.37.249])
- by b06cxnps3074.portsmouth.uk.ibm.com (8.13.8/8.13.8/NCO v10.0) with ESMTP id
- s3AIsA3K2752804
- for <lttng-dev@lists.lttng.org>; Thu, 10 Apr 2014 18:54:10 GMT
-Received: from d06av08.portsmouth.uk.ibm.com (localhost [127.0.0.1])
- by d06av08.portsmouth.uk.ibm.com (8.14.4/8.14.4/NCO v10.0 AVout) with ESMTP id
- s3AIsDrX030366
- for <lttng-dev@lists.lttng.org>; Thu, 10 Apr 2014 12:54:13 -0600
-Received: from d06ml311.portsmouth.uk.ibm.com (d06ml311.portsmouth.uk.ibm.com
- [9.149.104.181])
- by d06av08.portsmouth.uk.ibm.com (8.14.4/8.14.4/NCO v10.0 AVin) with ESMTP id
- s3AIsDnh030358
- for <lttng-dev@lists.lttng.org>; Thu, 10 Apr 2014 12:54:13 -0600
+ (envelope-from <dgoulet@efficios.com>) id 1WYKi4-0003PG-1e
+ for lttng-dev@lists.lttng.org; Thu, 10 Apr 2014 15:32:33 -0400
+In-Reply-To: <5335D717.6080808@mentor.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -41,76 +20,77 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev <lttng-dev@lists.lttng.org>
+To: Wade Farnsworth <wade_farnsworth@mentor.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-This is a multipart message in MIME format.
---===============0802206847==
-Content-Type: multipart/alternative; boundary="=_alternative 0067D81FC2257CB6_="
 
-This is a multipart message in MIME format.
---=_alternative 0067D81FC2257CB6_=
-Content-Type: text/plain; charset="US-ASCII"
-
-Hello,
-
-I am trying to implement a wrapper to libbabeltrace.so, to provide 
-backward iteration capability.
-
-I've already implemented a binary search in lib/iterator.c, in 
-seek_file_stream_by_timestamp() - which helps a lot when doing any kind of 
-seek. I intend to donate this patch, pretty soon.
-
-However, it seems that the greatest benefit would come from checking 
-whether the current event is not the first in its packet, returning 
-quickly to the first event in the packet, and then iterating forward until 
-we find the event preceding the current one.
-
-Could someone suggest how I would implement such functionality in 
-libbabeltrace? I'd be very happy to perform the implementation and donate 
-the results, along with performance data.
-
-Thanks,
-
-Amit Margalit
-IBM XIV - Storage Reinvented
-XIV-NAS Development Team
-Tel. 03-689-7774
-Fax. 03-689-7230
---=_alternative 0067D81FC2257CB6_=
-Content-Type: text/html; charset="US-ASCII"
-
-<font size=2 face="sans-serif">Hello,</font>
-<br>
-<br><font size=2 face="sans-serif">I am trying to implement a wrapper to
-libbabeltrace.so, to provide backward iteration capability.</font>
-<br>
-<br><font size=2 face="sans-serif">I've already implemented a binary search
-in lib/iterator.c, in seek_file_stream_by_timestamp() - which helps a lot
-when doing any kind of seek. I intend to donate this patch, pretty soon.</font>
-<br>
-<br><font size=2 face="sans-serif">However, it seems that the greatest
-benefit would come from checking whether the current event is not the first
-in its packet, returning quickly to the first event in the packet, and
-then iterating forward until we find the event preceding the current one.</font>
-<br>
-<br><font size=2 face="sans-serif">Could someone suggest how I would implement
-such functionality in libbabeltrace? I'd be very happy to perform the implementation
-and donate the results, along with performance data.</font>
-<br>
-<br><font size=2 face="sans-serif">Thanks,</font>
-<br>
-<br><font size=2 color=#000080 face="sans-serif">Amit Margalit</font>
-<br><font size=2 color=#808000 face="sans-serif">IBM XIV </font><font size=2 face="sans-serif">-
-<i>Storage Reinvented</i></font>
-<br><font size=2 face="sans-serif">XIV-NAS Development Team</font>
-<br><font size=2 face="sans-serif">Tel. 03</font><font size=2 face="Arial">-689-7774</font>
-<br><font size=2 face="Arial">Fax. 03-689-7230</font>
---=_alternative 0067D81FC2257CB6_=--
+--===============0772215757==
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="k+w/mQv8wyuph6w0"
+Content-Disposition: inline
 
 
+--k+w/mQv8wyuph6w0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
---===============0802206847==
+Merged!
+
+On 28 Mar (13:09:59), Wade Farnsworth wrote:
+> Requires V4L2 instrumentation patch for lttng-modules.
+>=20
+> Signed-off-by: Wade Farnsworth <wade_farnsworth@mentor.com>
+> ---
+>  src/bin/lttng-sessiond/modprobe.c | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/src/bin/lttng-sessiond/modprobe.c b/src/bin/lttng-sessiond/m=
+odprobe.c
+> index 92563b0..4ef4d4c 100644
+> --- a/src/bin/lttng-sessiond/modprobe.c
+> +++ b/src/bin/lttng-sessiond/modprobe.c
+> @@ -78,6 +78,7 @@ const struct kern_modules_param kern_modules_list[] =3D=
+ {
+>  	{ "lttng-probe-timer", 0 },
+>  	{ "lttng-probe-udp", 0 },
+>  	{ "lttng-probe-vmscan", 0 },
+> +	{ "lttng-probe-v4l2", 0 },
+>  	{ "lttng-probe-workqueue", 0 },
+>  	{ "lttng-probe-writeback", 0 },
+>  };
+> --=20
+> 1.9.0
+>=20
+>=20
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--k+w/mQv8wyuph6w0
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQF8BAEBAgBmBQJTRvHAXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
+ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
+MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I029pwIAIsFPHHN5Z3NNpDcEMJVQlGx
+ygRk6fGPtH222KBT2w2t0IQ2rBdfGUCu9absDjxYZgHTKOUBX4srtn+eZ9vQELWF
+upds42elKjIpry96JBW/tO/ZLiJn0f/ciLUR4BwBJV8/CPlgUDl4cniRi4FnzLBL
+H5K2K/6n6+9T4Vk1bqEd7rOoyxfSE93CZJQIBM+RoE/sIqJbLwlTKpfcNvnGbxOh
+Eq39MuXGgZn77g51nEz3xQyUgk9DiarMOKulIXps75ae+FxXIwHABMK/xAU4Dc5m
+/VtK8nk8EhxlqgaLA0n6e5pcX4kaYyNUffe3o1TaagKzANI0XOTlbsnnGQr4K/s=
+=YTC+
+-----END PGP SIGNATURE-----
+
+--k+w/mQv8wyuph6w0--
+
+
+--===============0772215757==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -121,4 +101,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============0802206847==--
+--===============0772215757==--
