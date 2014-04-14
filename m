@@ -1,22 +1,17 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [Patch lttng-modules v2] ARM: Resolve sys_unknown
-	system calls
-Date: Mon, 14 Apr 2014 13:53:47 +0000 (UTC)
-Message-ID: <1832763224.1125.1397483627230.JavaMail.zimbra__19398.0017015294$1397483712$gmane$org@efficios.com>
-References: <1397218426-782-1-git-send-email-jan.glauber@gmail.com>
- <348156896.34.1397230762859.JavaMail.zimbra@efficios.com>
- <20140414085656.GA32190@hal>
- <169220169.996.1397479301759.JavaMail.zimbra@efficios.com>
- <20140414133155.GA2531@hal>
+From: David Goulet <dgoulet@efficios.com>
+Subject: Re: [PATCH lttng-tools 1/2] Override the session.xsd
+ path with an environment variable
+Date: Mon, 14 Apr 2014 10:34:58 -0400
+Message-ID: <20140414143458.GC9369__25431.1212142513$1397486178$gmane$org@thessa>
+References: <1397188683-25626-1-git-send-email-jeremie.galarneau@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1964568707=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from smtp.ini-tech.com ([144.76.53.219])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1WZhKc-0001Cj-V5
- for lttng-dev@lists.lttng.org; Mon, 14 Apr 2014 09:54:01 -0400
-In-Reply-To: <20140414133155.GA2531@hal>
+ (envelope-from <dgoulet@efficios.com>) id 1WZhyZ-0001TN-Mx
+ for lttng-dev@lists.lttng.org; Mon, 14 Apr 2014 10:35:17 -0400
+In-Reply-To: <1397188683-25626-1-git-send-email-jeremie.galarneau@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -25,457 +20,160 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Jan Glauber <jan.glauber@gmail.com>
+To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
------ Original Message -----
-> From: "Jan Glauber" <jan.glauber@gmail.com>
-> To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-> Cc: lttng-dev@lists.lttng.org
-> Sent: Monday, April 14, 2014 9:31:58 AM
-> Subject: Re: [Patch lttng-modules v2] ARM: Resolve sys_unknown system calls
-> 
-> On Mon, Apr 14, 2014 at 12:41:41PM +0000, Mathieu Desnoyers wrote:
-> > ----- Original Message -----
-> > > From: "Jan Glauber" <jan.glauber@gmail.com>
-> > > To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-> > > Cc: lttng-dev@lists.lttng.org
-> > > Sent: Monday, April 14, 2014 4:56:56 AM
-> > > Subject: [Patch lttng-modules v2] ARM: Resolve sys_unknown system calls
-> > > 
-> > > [Patch lttng-modules v2] ARM: Resolve sys_unknown system calls
-> > > 
-> > > The LTTng system call extractor relies on kallsyms.
-> > 
-> > How is the fact that the lttng syscall extractor relies on kallsyms
-> > relevant here ?
-> 
-> Because these "unknown" system calls are not described in between
-> __start_syscalls_metadata and __stop_syscalls_metadata? I didn't dig
-> to deep but I thought thats the reason LTTng system call extractor
-> does not find these system calls. If I look for instance for sys_recv
-> in my System.map:
-> 
-> $ grep  __p_syscall_meta__recv System.map
-> c069404c t __p_syscall_meta__recvmmsg
-> c0694050 t __p_syscall_meta__recvmsg
-> c0694068 t __p_syscall_meta__recvfrom
-> 
-> its not there. But I've not looked what creates the system call meta data
-> entries, maybe its something different than the SYSCALL_DEFINE.
-> 
-> > > Not every system
-> > > call is defined in the kernel with SYSCALL_DEFINE, so some system calls
-> > > are missing in kallsyms and shown as sys_unknown by LTTng.
-> > 
-> > This is inaccurate. LTTng syscall extractor only uses kallsyms to get the
-> > __start_syscalls_metadata and __stop_syscalls_metadata symbols.
-> > 
-> > What is true here is that indeed, not every system call is defined using
-> > SYSCALL_DEFINE.
-> > 
-> > > Manually
-> > > add these system calls in the override files for ARM:
-> > > 
-> > > - sys_recv
-> > > - sys_sigreturn
-> > > - sys_rt_sigreturn
-> > > - sys_pread64
-> > > - sys_prwite64
-> > > - sys_vfork
-> > > - sys_ftruncate64
-> > > - sys_fstatfs64
-> > > - sys_fallocate
-> > 
-> > The LTTng system call extractor (linux-link-trace-syscalls-as-data.patch
-> > and lttng-syscalls-extractor.c) output the system call details on the
-> > console. On ARM, this was used to initially generate
-> > arm-32-syscalls-3.4.25.
-> > If we look into your patch, we see that you are adding system calls to it.
-> > However, I doubt you generated your system call list from a 3.4.25 kernel.
-> > The file name should match the kernel from with the system call list has
-> > been generated, and should not be updated by hand.
-> 
-> I'm still using the 3.4.25 kernel but I've added the unknown system calls
-> manually to the arm-32-syscalls-3.4.25 file because I then could use
-> the script to generate the defines. If you don't like these system calls
-> added to the arm-32-syscalls-3.4.25 file I can also remove them, but I don't
-> see the point since this file is incomplete because of the imperfect
-> detection mechanism.
 
-The real fix would be to submit changes to the upstream Linux kernel to
-implement the last system calls with SYSCALL_DEFINE.
+--===============1964568707==
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="kVXhAStRUZ/+rrGn"
+Content-Disposition: inline
 
-I don't want to start mixing generated files with hand-editing, because it
-makes review and updates following upstream much more difficult.
 
-> 
-> > Have you tried running the system call extractor on a more recent kernel
-> > to see if some of the unknown system calls have been defined with
-> > SYSCALL_DEFINE since 3.4.25 ? If they appeared in a more recent kernel,
-> > then there is no need to define them as overrides, just provide a new
-> > arm-*-syscalls-3.x.x description file generated by the lttng syscall
-> > extractor, and use lttng-syscalls-generate-headers.sh to regenerate
-> > syscall instrumentation headers. Overrides are only for the entries
-> > that are still missing from the arm-*-syscalls-3.x.x description file.
-> 
-> No. I'm currently stuck with that kernel version and I doubt the system call
-> extractor wont find a system call like sys_recv on a newer kernel.
+--kVXhAStRUZ/+rrGn
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Indeed, sys_recv, sys_sigreturn, sys_rt_sigreturn are still not defined with
-SYSCALL_DEFINE. However, on a current 3.15-rc1 kernel, we find:
+On 10 Apr (23:58:02), J=E9r=E9mie Galarneau wrote:
+> The LTTNG_SESSION_CONFIG_XSD_PATH environment variable can be used
+> to specify a path which contains the session configuration schema.
+> This will allow save-load tests to be ran without installing
+> the XSD on the system.
+>=20
+> Signed-off-by: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
+> ---
+>  src/common/config/config.c | 37 ++++++++++++++++++++++++++++++++++++-
+>  src/common/defaults.h      |  6 +++---
+>  2 files changed, 39 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/src/common/config/config.c b/src/common/config/config.c
+> index e61791b..143e6f0 100644
+> --- a/src/common/config/config.c
+> +++ b/src/common/config/config.c
+> @@ -569,12 +569,46 @@ void fini_session_config_validation_ctx(
+>  }
+> =20
+>  static
+> +char *get_session_config_xsd_path()
+> +{
+> +	char *xsd_path;
+> +	const char *base_path =3D getenv(DEFAULT_SESSION_CONFIG_XSD_PATH_ENV);
+> +	size_t base_path_len;
+> +
+> +	if (!base_path) {
+> +		base_path =3D DEFAULT_SESSION_CONFIG_XSD_PATH;
+> +	}
+> +
+> +	base_path_len =3D strlen(base_path);
+> +	xsd_path =3D malloc(base_path_len +
+> +		sizeof(DEFAULT_SESSION_CONFIG_XSD_FILENAME) + 1);
+> +	if (!xsd_path) {
+> +		goto end;
+> +	}
+> +
+> +	strcpy(xsd_path, base_path);
 
-fs/read_write.c:SYSCALL_DEFINE4(pread64, ....
-fs/read_write.c:SYSCALL_DEFINE4(pwrite64, ...
-kernel/fork.c:SYSCALL_DEFINE0(vfork)
-fs/open.c:SYSCALL_DEFINE2(ftruncate64, unsigned int, fd, loff_t, length)
-fs/statfs.c:SYSCALL_DEFINE3(fstatfs64, unsigned int, fd, size_t, sz, struct statfs64 __user *, buf)
-fs/open.c:SYSCALL_DEFINE4(fallocate, int, fd, int, mode, loff_t, offset, loff_t, len)
+strncpy() please, I won't accept patches with dangerous libc calls that
+should burn in HELL! :P
 
-The overrides should be limited to the system calls unavailable in the
-current kernel version. Please run the system call extractor on a newer
-kernel, so we can get some of the missing definitions, and then only
-provide overrides for the missing ones. Each override we add means
-an extra maintenance burden for each architecture, which we want to
-keep minimal.
+> +	if (xsd_path[base_path_len - 1] !=3D '/') {
+> +		xsd_path[base_path_len++] =3D '/';
+> +	}
+> +
+> +	strcpy(xsd_path + base_path_len, DEFAULT_SESSION_CONFIG_XSD_FILENAME);
 
-Thanks,
+Same.
 
-Mathieu
+Cheers!
+David
 
-> 
-> Regards, Jan
-> 
-> > Thanks,
-> > 
-> > Mathieu
-> > 
-> > 
-> > > 
-> > > Signed-off-by: Jan Glauber <jan.glauber@gmail.com>
-> > > ---
-> > >  .../syscalls/3.4.25/arm-32-syscalls-3.4.25         |    9 +++
-> > >  .../arm-32-syscalls-3.4.25_integers_override.h     |   25 +++++++-
-> > >  .../arm-32-syscalls-3.4.25_pointers_override.h     |   66
-> > >  ++++++++++++++++++--
-> > >  3 files changed, 93 insertions(+), 7 deletions(-)
-> > > 
-> > > diff --git a/instrumentation/syscalls/3.4.25/arm-32-syscalls-3.4.25
-> > > b/instrumentation/syscalls/3.4.25/arm-32-syscalls-3.4.25
-> > > index 65c3973..824c879 100644
-> > > --- a/instrumentation/syscalls/3.4.25/arm-32-syscalls-3.4.25
-> > > +++ b/instrumentation/syscalls/3.4.25/arm-32-syscalls-3.4.25
-> > > @@ -80,6 +80,7 @@ syscall sys_wait4 nr 114 nbargs 4 types: (pid_t, int *,
-> > > int, struct rusage *) ar
-> > >  syscall sys_swapoff nr 115 nbargs 1 types: (const char *) args:
-> > >  (specialfile)
-> > >  syscall sys_sysinfo nr 116 nbargs 1 types: (struct sysinfo *) args:
-> > >  (info)
-> > >  syscall sys_fsync nr 118 nbargs 1 types: (unsigned int) args: (fd)
-> > > +syscall sys_sigreturn nr 119 nbargs 1 types: (struct pt_regs *) args:
-> > > (regs)
-> > >  syscall sys_setdomainname nr 121 nbargs 2 types: (char *, int) args:
-> > >  (name,
-> > >  len)
-> > >  syscall sys_newuname nr 122 nbargs 1 types: (struct new_utsname *) args:
-> > >  (name)
-> > >  syscall sys_adjtimex nr 124 nbargs 1 types: (struct timex *) args:
-> > >  (txc_p)
-> > > @@ -125,18 +126,23 @@ syscall sys_poll nr 168 nbargs 3 types: (struct
-> > > pollfd
-> > > *, unsigned int, int) arg
-> > >  syscall sys_setresgid16 nr 170 nbargs 3 types: (old_gid_t, old_gid_t,
-> > >  old_gid_t) args: (rgid, egid, sgid)
-> > >  syscall sys_getresgid16 nr 171 nbargs 3 types: (old_gid_t *, old_gid_t
-> > >  *,
-> > >  old_gid_t *) args: (rgid, egid, sgid)
-> > >  syscall sys_prctl nr 172 nbargs 5 types: (int, unsigned long, unsigned
-> > >  long,
-> > >  unsigned long, unsigned long) args: (option, arg2, arg3, arg4, arg5)
-> > > +syscall sys_rt_sigreturn nr 173 nbargs 1 types: (struct pt_regs *) args:
-> > > (regs)
-> > >  syscall sys_rt_sigaction nr 174 nbargs 4 types: (int, const struct
-> > >  sigaction
-> > >  *, struct sigaction *, size_t) args: (sig, act, oact, sigsetsize)
-> > >  syscall sys_rt_sigprocmask nr 175 nbargs 4 types: (int, sigset_t *,
-> > >  sigset_t
-> > >  *, size_t) args: (how, nset, oset, sigsetsize)
-> > >  syscall sys_rt_sigpending nr 176 nbargs 2 types: (sigset_t *, size_t)
-> > >  args:
-> > >  (set, sigsetsize)
-> > >  syscall sys_rt_sigtimedwait nr 177 nbargs 4 types: (const sigset_t *,
-> > >  siginfo_t *, const struct timespec *, size_t) args: (uthese, uinfo, uts,
-> > >  sigsetsize)
-> > >  syscall sys_rt_sigqueueinfo nr 178 nbargs 3 types: (pid_t, int,
-> > >  siginfo_t *)
-> > >  args: (pid, sig, uinfo)
-> > >  syscall sys_rt_sigsuspend nr 179 nbargs 2 types: (sigset_t *, size_t)
-> > >  args:
-> > >  (unewset, sigsetsize)
-> > > +syscall sys_pread64 nr 180 nbargs 4 types: (unsigned int, const char *,
-> > > size_t, loff_t) args: (fd, buf, count, pos)
-> > > +syscall sys_pwrite64 nr 181 nbargs 4 types: (unsigned int, const char *,
-> > > size_t, loff_t) args: (fd, buf, count, pos)
-> > >  syscall sys_chown16 nr 182 nbargs 3 types: (const char *, old_uid_t,
-> > >  old_gid_t) args: (filename, user, group)
-> > >  syscall sys_getcwd nr 183 nbargs 2 types: (char *, unsigned long) args:
-> > >  (buf, size)
-> > >  syscall sys_capget nr 184 nbargs 2 types: (cap_user_header_t,
-> > >  cap_user_data_t) args: (header, dataptr)
-> > >  syscall sys_capset nr 185 nbargs 2 types: (cap_user_header_t, const
-> > >  cap_user_data_t) args: (header, data)
-> > >  syscall sys_sendfile nr 187 nbargs 4 types: (int, int, off_t *, size_t)
-> > >  args: (out_fd, in_fd, offset, count)
-> > > +syscall sys_vfork nr 190 nbargs 0 types: () args: ()
-> > >  syscall sys_getrlimit nr 191 nbargs 2 types: (unsigned int, struct
-> > >  rlimit *)
-> > >  args: (resource, rlim)
-> > > +syscall sys_ftruncate64 nr 194 nbargs 2 types: (unsigned int, loff_t)
-> > > args:
-> > > (fd, length)
-> > >  syscall sys_stat64 nr 195 nbargs 2 types: (const char *, struct stat64
-> > >  *)
-> > >  args: (filename, statbuf)
-> > >  syscall sys_lstat64 nr 196 nbargs 2 types: (const char *, struct stat64
-> > >  *)
-> > >  args: (filename, statbuf)
-> > >  syscall sys_fstat64 nr 197 nbargs 2 types: (unsigned long, struct stat64
-> > >  *)
-> > >  args: (fd, statbuf)
-> > > @@ -202,6 +208,7 @@ syscall sys_clock_settime nr 262 nbargs 2 types:
-> > > (const
-> > > clockid_t, const struct
-> > >  syscall sys_clock_gettime nr 263 nbargs 2 types: (const clockid_t,
-> > >  struct
-> > >  timespec *) args: (which_clock, tp)
-> > >  syscall sys_clock_getres nr 264 nbargs 2 types: (const clockid_t, struct
-> > >  timespec *) args: (which_clock, tp)
-> > >  syscall sys_clock_nanosleep nr 265 nbargs 4 types: (const clockid_t,
-> > >  int,
-> > >  const struct timespec *, struct timespec *) args: (which_clock, flags,
-> > >  rqtp, rmtp)
-> > > +syscall sys_fstatfs64 nr 267 nbargs 3 types: (unsigned int, size_t,
-> > > struct
-> > > statfs64 *) args: (fd, sz, buf)
-> > >  syscall sys_tgkill nr 268 nbargs 3 types: (pid_t, pid_t, int) args:
-> > >  (tgid,
-> > >  pid, sig)
-> > >  syscall sys_utimes nr 269 nbargs 2 types: (char *, struct timeval *)
-> > >  args:
-> > >  (filename, utimes)
-> > >  syscall sys_mq_open nr 274 nbargs 4 types: (const char *, int, umode_t,
-> > >  struct mq_attr *) args: (u_name, oflag, mode, u_attr)
-> > > @@ -221,6 +228,7 @@ syscall sys_getpeername nr 287 nbargs 3 types: (int,
-> > > struct sockaddr *, int *) a
-> > >  syscall sys_socketpair nr 288 nbargs 4 types: (int, int, int, int *)
-> > >  args:
-> > >  (family, type, protocol, usockvec)
-> > >  syscall sys_send nr 289 nbargs 4 types: (int, void *, size_t, unsigned)
-> > >  args: (fd, buff, len, flags)
-> > >  syscall sys_sendto nr 290 nbargs 6 types: (int, void *, size_t,
-> > >  unsigned,
-> > >  struct sockaddr *, int) args: (fd, buff, len, flags, addr, addr_len)
-> > > +syscall sys_recv nr 291 nbargs 6 types: (int, void *, size_t, unsigned,
-> > > struct sockaddr *, int *) args: (fd, ubuf, size, flags, addr, addr_len)
-> > >  syscall sys_recvfrom nr 292 nbargs 6 types: (int, void *, size_t,
-> > >  unsigned,
-> > >  struct sockaddr *, int *) args: (fd, ubuf, size, flags, addr, addr_len)
-> > >  syscall sys_shutdown nr 293 nbargs 2 types: (int, int) args: (fd, how)
-> > >  syscall sys_setsockopt nr 294 nbargs 5 types: (int, int, int, char *,
-> > >  int)
-> > >  args: (fd, level, optname, optval, optlen)
-> > > @@ -273,6 +281,7 @@ syscall sys_utimensat nr 348 nbargs 4 types: (int,
-> > > const
-> > > char *, struct timespec
-> > >  syscall sys_signalfd nr 349 nbargs 3 types: (int, sigset_t *, size_t)
-> > >  args:
-> > >  (ufd, user_mask, sizemask)
-> > >  syscall sys_timerfd_create nr 350 nbargs 2 types: (int, int) args:
-> > >  (clockid,
-> > >  flags)
-> > >  syscall sys_eventfd nr 351 nbargs 1 types: (unsigned int) args: (count)
-> > > +syscall sys_fallocate nr 352 nbargs 4 types: (int, int, loff_t, loff_t)
-> > > args: (fd, mode, offset, len)
-> > >  syscall sys_timerfd_settime nr 353 nbargs 4 types: (int, int, const
-> > >  struct
-> > >  itimerspec *, struct itimerspec *) args: (ufd, flags, utmr, otmr)
-> > >  syscall sys_timerfd_gettime nr 354 nbargs 2 types: (int, struct
-> > >  itimerspec
-> > >  *) args: (ufd, otmr)
-> > >  syscall sys_signalfd4 nr 355 nbargs 4 types: (int, sigset_t *, size_t,
-> > >  int)
-> > >  args: (ufd, user_mask, sizemask, flags)
-> > > diff --git
-> > > a/instrumentation/syscalls/headers/arm-32-syscalls-3.4.25_integers_override.h
-> > > b/instrumentation/syscalls/headers/arm-32-syscalls-3.4.25_integers_override.h
-> > > index 895370f..14c78bc 100644
-> > > ---
-> > > a/instrumentation/syscalls/headers/arm-32-syscalls-3.4.25_integers_override.h
-> > > +++
-> > > b/instrumentation/syscalls/headers/arm-32-syscalls-3.4.25_integers_override.h
-> > > @@ -37,15 +37,38 @@ SC_TRACE_EVENT(sys_sync_file_range2,
-> > >  	TP_printk()
-> > >  )
-> > >  
-> > > +SC_DEFINE_EVENT_NOARGS(syscalls_noargs, sys_vfork)
-> > > +
-> > > +SC_TRACE_EVENT(sys_ftruncate64,
-> > > +	TP_PROTO(unsigned int fd, loff_t length),
-> > > +	TP_ARGS(fd, length),
-> > > +	TP_STRUCT__entry(__field(unsigned int, fd) __field(loff_t, length)),
-> > > +	TP_fast_assign(tp_assign(fd, fd) tp_assign(length, length)),
-> > > +	TP_printk()
-> > > +)
-> > > +
-> > > +SC_TRACE_EVENT(sys_fallocate,
-> > > +	TP_PROTO(int fd, int mode, loff_t offset, loff_t len),
-> > > +	TP_ARGS(fd, mode, offset, len),
-> > > +	TP_STRUCT__entry(__field(int, fd) __field(int, mode) __field(loff_t,
-> > > offset) __field(loff_t, len)),
-> > > +	TP_fast_assign(tp_assign(fd, fd) tp_assign(mode, mode)
-> > > tp_assign(offset,
-> > > offset) tp_assign(len, len)),
-> > > +	TP_printk()
-> > > +)
-> > > +
-> > >  #else	/* CREATE_SYSCALL_TABLE */
-> > >  
-> > >  #define OVVERRIDE_TABLE_32_sys_mmap
-> > >  TRACE_SYSCALL_TABLE(sys_mmap, sys_mmap, 90, 6)
-> > > -
-> > > +#define OVERRIDE_TABLE_32_sys_vfork
-> > > +TRACE_SYSCALL_TABLE(syscalls_noargs, sys_vfork, 190, 0)
-> > > +#define OVERRIDE_TABLE_32_sys_ftruncate64
-> > > +TRACE_SYSCALL_TABLE(sys_ftruncate64, sys_ftruncate64, 194, 2)
-> > >  #define OVERRIDE_TABLE_32_sys_arm_fadvise64_64
-> > >  TRACE_SYSCALL_TABLE(sys_arm_fadvise64_64, sys_arm_fadvise64_64, 270, 4)
-> > >  #define OVERRIDE_TABLE_32_sys_sync_file_range2
-> > >  TRACE_SYSCALL_TABLE(sys_sync_file_range2, sys_sync_file_range2, 341, 4)
-> > > +#define OVERRIDE_TABLE_32_sys_fallocate
-> > > +TRACE_SYSCALL_TABLE(sys_fallocate, sys_fallocate, 352, 4)
-> > >  
-> > >  #endif /* CREATE_SYSCALL_TABLE */
-> > >  
-> > > diff --git
-> > > a/instrumentation/syscalls/headers/arm-32-syscalls-3.4.25_pointers_override.h
-> > > b/instrumentation/syscalls/headers/arm-32-syscalls-3.4.25_pointers_override.h
-> > > index 65131bb..7ed7429 100644
-> > > ---
-> > > a/instrumentation/syscalls/headers/arm-32-syscalls-3.4.25_pointers_override.h
-> > > +++
-> > > b/instrumentation/syscalls/headers/arm-32-syscalls-3.4.25_pointers_override.h
-> > > @@ -1,7 +1,3 @@
-> > > -
-> > > -#define OVERRIDE_TABLE_32_sys_mmap2
-> > > -
-> > > -
-> > >  #ifndef CREATE_SYSCALL_TABLE
-> > >  
-> > >  SC_TRACE_EVENT(sys_mmap2,
-> > > @@ -25,15 +21,73 @@ SC_TRACE_EVENT(sys_mmap2,
-> > >  	TP_printk()
-> > >  )
-> > >  
-> > > +SC_TRACE_EVENT(sys_sigreturn,
-> > > +	TP_PROTO(struct pt_regs * regs),
-> > > +	TP_ARGS(regs),
-> > > +	TP_STRUCT__entry(__field_hex(struct pt_regs *, regs)),
-> > > +	TP_fast_assign(tp_assign(regs, regs)),
-> > > +	TP_printk()
-> > > +)
-> > > +
-> > > +SC_TRACE_EVENT(sys_rt_sigreturn,
-> > > +	TP_PROTO(struct pt_regs * regs),
-> > > +	TP_ARGS(regs),
-> > > +	TP_STRUCT__entry(__field_hex(struct pt_regs *, regs)),
-> > > +	TP_fast_assign(tp_assign(regs, regs)),
-> > > +	TP_printk()
-> > > +)
-> > > +
-> > > +SC_TRACE_EVENT(sys_fstatfs64,
-> > > +	TP_PROTO(unsigned int fd, size_t sz, struct statfs64 * buf),
-> > > +	TP_ARGS(fd, sz, buf),
-> > > +	TP_STRUCT__entry(__field(unsigned int, fd) __field(size_t, sz)
-> > > __field_hex(struct statfs64 *, buf)),
-> > > +	TP_fast_assign(tp_assign(fd, fd) tp_assign(sz, sz) tp_assign(buf,
-> > > buf)),
-> > > +	TP_printk()
-> > > +)
-> > > +
-> > > +SC_TRACE_EVENT(sys_pread64,
-> > > +	TP_PROTO(unsigned int fd, const char * buf, size_t count, loff_t pos),
-> > > +	TP_ARGS(fd, buf, count, pos),
-> > > +	TP_STRUCT__entry(__field(unsigned int, fd) __field_hex(const char *,
-> > > buf)
-> > > __field(size_t, count) __field(loff_t, pos)),
-> > > +	TP_fast_assign(tp_assign(fd, fd) tp_assign(buf, buf) tp_assign(count,
-> > > count) tp_assign(pos, pos)),
-> > > +	TP_printk()
-> > > +)
-> > > +
-> > > +SC_TRACE_EVENT(sys_pwrite64,
-> > > +	TP_PROTO(unsigned int fd, const char * buf, size_t count, loff_t pos),
-> > > +	TP_ARGS(fd, buf, count, pos),
-> > > +	TP_STRUCT__entry(__field(unsigned int, fd) __field_hex(const char *,
-> > > buf)
-> > > __field(size_t, count) __field(loff_t, pos)),
-> > > +	TP_fast_assign(tp_assign(fd, fd) tp_assign(buf, buf) tp_assign(count,
-> > > count) tp_assign(pos, pos)),
-> > > +	TP_printk()
-> > > +)
-> > > +
-> > > +SC_TRACE_EVENT(sys_recv,
-> > > +	TP_PROTO(int fd, void * ubuf, size_t size, unsigned flags, struct
-> > > sockaddr
-> > > * addr, int * addr_len),
-> > > +	TP_ARGS(fd, ubuf, size, flags, addr, addr_len),
-> > > +	TP_STRUCT__entry(__field(int, fd) __field_hex(void *, ubuf)
-> > > __field(size_t,
-> > > size) __field(unsigned, flags) __field_hex(struct sockaddr *, addr)
-> > > __field_hex(int *, addr_len)),
-> > > +	TP_fast_assign(tp_assign(fd, fd) tp_assign(ubuf, ubuf) tp_assign(size,
-> > > size) tp_assign(flags, flags) tp_assign(addr, addr) tp_assign(addr_len,
-> > > addr_len)),
-> > > +	TP_printk()
-> > > +)
-> > > +
-> > >  #else	/* CREATE_SYSCALL_TABLE */
-> > >  
-> > >  #define OVERRIDE_TABLE_32_sys_execve
-> > >  TRACE_SYSCALL_TABLE(sys_execve, sys_execve, 11, 3)
-> > > +#define OVERRIDE_TABLE_32_sys_sigreturn
-> > > +TRACE_SYSCALL_TABLE(sys_sigreturn, sys_sigreturn, 119, 1)
-> > >  #define OVERRIDE_TABLE_32_sys_clone
-> > >  TRACE_SYSCALL_TABLE(sys_clone, sys_clone, 120, 5)
-> > > +#define OVERRIDE_TABLE_32_sys_rt_sigreturn
-> > > +TRACE_SYSCALL_TABLE(sys_rt_sigreturn, sys_rt_sigreturn, 173, 1)
-> > > +#define OVERRIDE_TABLE_32_sys_pread64
-> > > +TRACE_SYSCALL_TABLE(sys_pread64, sys_pread64, 180, 4)
-> > > +#define OVERRIDE_TABLE_32_sys_pwrite64
-> > > +TRACE_SYSCALL_TABLE(sys_pwrite64, sys_pwrite64, 181, 4)
-> > >  #define OVERRIDE_TABLE_32_sys_mmap2
-> > >  TRACE_SYSCALL_TABLE(sys_mmap2, sys_mmap2, 192, 6)
-> > > +#define OVERRIDE_TABLE_32_sys_fstatfs64
-> > > +TRACE_SYSCALL_TABLE(sys_fstatfs64, sys_fstatfs64, 267, 3)
-> > > +#define OVERRIDE_TABLE_32_sys_recv
-> > > +TRACE_SYSCALL_TABLE(sys_recv, sys_recv, 291, 6)
-> > >  
-> > >  #endif /* CREATE_SYSCALL_TABLE */
-> > > -
-> > > -
-> > > --
-> > > 1.7.9.5
-> > > 
-> > > 
-> > 
-> > --
-> > Mathieu Desnoyers
-> > EfficiOS Inc.
-> > http://www.efficios.com
-> 
+> +end:
+> +	return xsd_path;
+> +}
+> +
+> +static
+>  int init_session_config_validation_ctx(
+>  	struct session_config_validation_ctx *ctx)
+>  {
+>  	int ret;
+> +	char *xsd_path =3D get_session_config_xsd_path();
+> +
+> +	if (!xsd_path) {
+> +		ret =3D -LTTNG_ERR_NOMEM;
+> +		goto end;
+> +	}
+> =20
+> -	ctx->parser_ctx =3D xmlSchemaNewParserCtxt(DEFAULT_SESSION_CONFIG_XSD_P=
+ATH);
+> +	ctx->parser_ctx =3D xmlSchemaNewParserCtxt(xsd_path);
+>  	if (!ctx->parser_ctx) {
+>  		ERR("XSD parser context creation failed");
+>  		ret =3D -LTTNG_ERR_LOAD_INVALID_CONFIG;
+> @@ -606,6 +640,7 @@ end:
+>  		fini_session_config_validation_ctx(ctx);
+>  	}
+> =20
+> +	free(xsd_path);
+>  	return ret;
+>  }
+> =20
+> diff --git a/src/common/defaults.h b/src/common/defaults.h
+> index 7acabf1..de61064 100644
+> --- a/src/common/defaults.h
+> +++ b/src/common/defaults.h
+> @@ -125,9 +125,9 @@
+>  #define DEFAULT_SESSION_SYSTEM_CONFIGPATH       DEFAULT_SYSTEM_CONFIGPAT=
+H "/" \
+>  	DEFAULT_SESSION_PATH
+>  #define DEFAULT_SESSION_CONFIG_FILE_EXTENSION   ".lttng"
+> -#define DEFAULT_SESSION_CONFIG_XSD_PATH         CONFIG_LTTNG_SYSTEM_DATA=
+DIR \
+> -	"/xml/lttng/session.xsd"
+> -
+> +#define DEFAULT_SESSION_CONFIG_XSD_FILENAME     "session.xsd"
+> +#define DEFAULT_SESSION_CONFIG_XSD_PATH         CONFIG_LTTNG_SYSTEM_DATA=
+DIR "/xml/lttng/"
+> +#define DEFAULT_SESSION_CONFIG_XSD_PATH_ENV     "LTTNG_SESSION_CONFIG_XS=
+D_PATH"
+> =20
+>  #define DEFAULT_GLOBAL_APPS_UNIX_SOCK \
+>  	DEFAULT_LTTNG_RUNDIR "/" LTTNG_UST_SOCK_FILENAME
+> --=20
+> 1.9.2
+>=20
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+--kVXhAStRUZ/+rrGn
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQF8BAEBAgBmBQJTS/ISXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
+ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
+MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I023jsH/38ymEO0bRSerhI+Da8gmO5L
+ayKzXW8CLgIw9OhTHZVDlW26M+lyS0+kTPMJQkekhCBoAOyCD93TE3huPZpH2NOx
+x2nLNq5s3suL1KkSgVvsrvPPFSIsM0SysNEafjbAnqZsjAidLTtbaGvLwo3g25xV
+Eaj2793d5xNxWsviyrFpjwnvcbj+NAYJ9VssQt7PTTlXTqZHvK1nc40C4C2wiyI/
+lUomPtHcP0mFwDRvYRCknbTU2XAQa60jRgr9OAR21VWPrC2t+Mell3wDBEhEnBuK
+IfHsVjTr702XLDmFD8spAe6ELkZLCMWEmc1mdQ5niiGjjAikRccQj8UfgV9TdVk=
+=uG4/
+-----END PGP SIGNATURE-----
+
+--kVXhAStRUZ/+rrGn--
+
+
+--===============1964568707==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1964568707==--
