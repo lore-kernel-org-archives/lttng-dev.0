@@ -1,17 +1,25 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: Re: [PATCH] Fix: XML declaration must be at beginning
-	of XSD file
-Date: Mon, 14 Apr 2014 10:38:57 -0400
-Message-ID: <20140414143857.GD9369__24467.9670468487$1397486418$gmane$org@thessa>
-References: <1397164599-28503-1-git-send-email-christian.babeux@efficios.com>
+From: Jonathan Rajotte <jonathan.r.julien@gmail.com>
+Subject: [PATCH lttng-tools] Fix: replace 1 for true in libxml
+	checking
+Date: Mon, 14 Apr 2014 10:42:38 -0400
+Message-ID: <20140414144238.GA14396__37084.1366159313$1397486624$gmane$org@psrcode-MS-7693>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0657749875=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([144.76.53.219])
+Received: from mail-qg0-f52.google.com ([209.85.192.52])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <dgoulet@efficios.com>) id 1WZi2P-0001Wl-Jb
- for lttng-dev@lists.lttng.org; Mon, 14 Apr 2014 10:39:15 -0400
-In-Reply-To: <1397164599-28503-1-git-send-email-christian.babeux@efficios.com>
+ (envelope-from <jonathan.r.julien@gmail.com>) id 1WZi5p-0001ZF-3M
+ for lttng-dev@lists.lttng.org; Mon, 14 Apr 2014 10:42:46 -0400
+Received: by mail-qg0-f52.google.com with SMTP id q107so8418087qgd.11
+ for <lttng-dev@lists.lttng.org>; Mon, 14 Apr 2014 07:42:35 -0700 (PDT)
+Received: from psrcode-MS-7693 (cable-28.246.173-253.electronicbox.net.
+ [173.246.28.253])
+ by mx.google.com with ESMTPSA id x5sm31693326qaj.9.2014.04.14.07.42.34
+ for <lttng-dev@lists.lttng.org>
+ (version=TLSv1.2 cipher=RC4-SHA bits=128/128);
+ Mon, 14 Apr 2014 07:42:35 -0700 (PDT)
+Content-Disposition: inline
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,88 +28,30 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Christian Babeux <christian.babeux@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
+Initial bug on ./configure:
+checking for libxml - version >= 2.7.6... yes (version 2.9.1)
+./configure: line 5137: 1: command not found
 
---===============0657749875==
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="EY/WZ/HvNxOox07X"
-Content-Disposition: inline
+Signed-off-by: Jonathan Rajotte <jonathan.r.julien@gmail.com>
+---
+ configure.ac | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
---EY/WZ/HvNxOox07X
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Merged!
-
-David
-
-On 10 Apr (17:16:39), Christian Babeux wrote:
-> Move down license information to fix the parser error :
-> XML declaration allowed only at the start of the document
->=20
-> Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
-> ---
->  src/common/config/session.xsd | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/src/common/config/session.xsd b/src/common/config/session.xsd
-> index 910f070..7c3e9d8 100644
-> --- a/src/common/config/session.xsd
-> +++ b/src/common/config/session.xsd
-> @@ -1,3 +1,4 @@
-> +<?xml version=3D"1.0" encoding=3D"UTF-8"?>
->  <!--
->  Copyright (c) 2014 - J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.c=
-om>
-> =20
-> @@ -19,7 +20,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OT=
-HERWISE, ARISING FROM,
->  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
->  THE SOFTWARE.
->  -->
-> -<?xml version=3D"1.0" encoding=3D"UTF-8"?>
->  <xs:schema xmlns:xs=3D"http://www.w3.org/2001/XMLSchema"
->  elementFormDefault=3D"qualified" version=3D"2.5">
-> =20
-> --=20
-> 1.8.5.2
->=20
-
---EY/WZ/HvNxOox07X
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iQF8BAEBAgBmBQJTS/MBXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
-ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
-MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02+TQIALcaXbTpTbEBwo8FVTq2ru70
-4h+VmNZTNAa6YyUGrhuXRqOM4NxKJAQtH6UADZPNJZTNie+5D2P+chyfR7zyRZXc
-0LWxgJI6g9k3z7vTCI8o1VSKGtUDTQJ1zCj5vLESuSxZQohAMLRqpQmB4BPyGi+i
-hcx8olQL1UMBv6uCu87im4XzvE6dRm96tTqEePmPhnwvMd1EZgmoJh2bOgVNKISX
-u5DbHtswysS8NIVfwNuaC7cTYXySLNnx42TMp2r2YJaLrS9JMy6hSKgdhbCj23yb
-2TTekVFJFQvavCfJ+J4dPoS+13fWGj6/9+xab33Q1ceKnlY1m/6QcTr+FVcIhhY=
-=xvt/
------END PGP SIGNATURE-----
-
---EY/WZ/HvNxOox07X--
-
-
---===============0657749875==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Disposition: inline
-Content-Transfer-Encoding: 7bit
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0657749875==--
+diff --git a/configure.ac b/configure.ac
+index 54f82cf..a8fd7f7 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -147,7 +147,7 @@ AC_CHECK_LIB([popt], [poptGetContext], [],
+ 	[AC_MSG_ERROR([Cannot find libpopt. Use [LDFLAGS]=-Ldir to specify its location.])]
+ )
+ 
+-AM_PATH_XML2(2.7.6, 1, AC_MSG_ERROR(No supported version of libxml2 found.))
++AM_PATH_XML2(2.7.6, true, AC_MSG_ERROR(No supported version of libxml2 found.))
+ 
+ # Check for libuuid
+ AC_CHECK_LIB([uuid], [uuid_generate],
+-- 
+1.8.3.2
