@@ -1,17 +1,22 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: Re: [PATCH lttng-tools] Fix: replace 1 for true in
- libxml checking
-Date: Mon, 14 Apr 2014 10:50:08 -0400
-Message-ID: <20140414145008.GB431__38387.0480269708$1397487074$gmane$org@thessa>
-References: <20140414144238.GA14396@psrcode-MS-7693>
+From: Keir Fraser <keir@cohodata.com>
+Subject: [PATCH liburcu] Fix pthread_atfork() behaviour
+Date: Mon, 14 Apr 2014 14:31:57 +0100
+Message-ID: <534BE34D.6040304__42638.7824853466$1397488843$gmane$org@cohodata.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1743476947=="
+Content-Type: multipart/mixed; boundary="------------070001000304040202010108"
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([144.76.53.219])
+Received: from mail-wi0-f182.google.com ([209.85.212.182])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <dgoulet@efficios.com>) id 1WZiDE-0001fg-M6
- for lttng-dev@lists.lttng.org; Mon, 14 Apr 2014 10:50:26 -0400
-In-Reply-To: <20140414144238.GA14396@psrcode-MS-7693>
+ (envelope-from <keir@cohodata.com>) id 1WZgzX-00013b-OW
+ for lttng-dev@lists.lttng.org; Mon, 14 Apr 2014 09:32:13 -0400
+Received: by mail-wi0-f182.google.com with SMTP id d1so4021863wiv.3
+ for <lttng-dev@lists.lttng.org>; Mon, 14 Apr 2014 06:32:01 -0700 (PDT)
+Received: from unknown-a8:20:66:16:48:c7.home
+ (host86-149-186-214.range86-149.btcentralplus.com. [86.149.186.214])
+ by mx.google.com with ESMTPSA id ft8sm6392500wib.13.2014.04.14.06.31.59
+ for <lttng-dev@lists.lttng.org>
+ (version=TLSv1 cipher=ECDHE-RSA-RC4-SHA bits=128/128);
+ Mon, 14 Apr 2014 06:31:59 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,81 +25,138 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Jonathan Rajotte <jonathan.r.julien@gmail.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
+This is a multi-part message in MIME format.
+--------------070001000304040202010108
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
 
---===============1743476947==
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="IiVenqGWf+H9Y6IX"
-Content-Disposition: inline
+In the process of integrating liburcu into a multi-threaded codebase 
+with fork()s I found a couple of problems with liburcu that I could not 
+work around without fixing the library. Hence I present the two required 
+fixes here (as attachments, sorry!) with some background info about them.
+
+After fork() the child process has no pthreads but the one that called 
+fork(). Unfortunately call_rcu_after_fork_child() does not update URCU's 
+thread registry to reflect this -- if fork() is called with any threads 
+registered with URCU then the child process will inherit a corrupted 
+registry containing a linked list through per-thread TLS state which is 
+no longer valid allocated memory. Crash or hang soon after is the 
+result. Patch 1 therefore simply clears the registry list in the child 
+process. Caveats here are that (a) the calling thread cannot be 
+registered (it must unregister/re-register itself in the atfork 
+handlers); and (b) some flavours of URCU may have more complex 
+registries than a simple linked list and so this patch may not be 
+sufficient for those. I only tested the memb/mb flavour myself.
+
+A second problem is that although call_rcu threads are paused across 
+fork(), the handshaking PAUSED flag is not cleared when their execution 
+resumes. Hence a second fork() invocation in the original parent process 
+will not spin-wait for call_rcu threads to quiesce (as the atfork 
+handler will observe all PAUSED flags already set). Patch 2 fixes this 
+with the appropriate clearing handshake on resume, post-fork.
+
+Please feel free to modify or rewrite these patches, or solve the 
+described problems in a different way, as you see fit! Cc me on replies 
+as I am not a subscriber to this list.
+
+  Regards,
+  Keir Fraser
+
+--------------070001000304040202010108
+Content-Type: text/plain; x-mac-type="0"; x-mac-creator="0";
+ name="1-zap-thread-registry.patch"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="1-zap-thread-registry.patch"
+
+From 3044b160c9e5614787db5891fb0ded8a4a1ed108 Mon Sep 17 00:00:00 2001
+From: Keir Fraser <keir@cohodata.com>
+Date: Mon, 7 Apr 2014 14:20:33 +0100
+Subject: [PATCH 1/2] Clean the thread registry in the child of a fork.
+ No threads are registered there, and the registry is a linked list through
+ non-existent per-thread state.
+
+The caller of the pthread_atfork() handlers must not be an RCU-registered thread.
+
+Signed-off-by: Keir Fraser <keir@cohodata.com>
+---
+ urcu-call-rcu-impl.h | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/urcu-call-rcu-impl.h b/urcu-call-rcu-impl.h
+index 10c4f3e..a050d41 100644
+--- a/urcu-call-rcu-impl.h
++++ b/urcu-call-rcu-impl.h
+@@ -887,6 +887,9 @@ void call_rcu_after_fork_child(void)
+ 	/* Release the mutex. */
+ 	call_rcu_unlock(&call_rcu_mutex);
+ 
++	/* No RCU-registered threads at this point. Clean the registry. */
++	CDS_INIT_LIST_HEAD(&registry);
++
+ 	/* Do nothing when call_rcu() has not been used */
+ 	if (cds_list_empty(&call_rcu_data_list))
+ 		return;
+-- 
+1.8.3.2
 
 
---IiVenqGWf+H9Y6IX
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+--------------070001000304040202010108
+Content-Type: text/plain; x-mac-type="0"; x-mac-creator="0";
+ name="2-clear-paused-flag.patch"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="2-clear-paused-flag.patch"
 
-Merged!
+From 7722952d181132856d71c929f5395e62a05f5c0c Mon Sep 17 00:00:00 2001
+From: Keir <keir@cohodata.com>
+Date: Mon, 7 Apr 2014 14:28:52 +0100
+Subject: [PATCH 2/2] call_rcu threads should clear their PAUSED flag
+ when they unpause.
 
-On 14 Apr (10:42:38), Jonathan Rajotte wrote:
-> Initial bug on ./configure:
-> checking for libxml - version >=3D 2.7.6... yes (version 2.9.1)
-> ./configure: line 5137: 1: command not found
->=20
-> Signed-off-by: Jonathan Rajotte <jonathan.r.julien@gmail.com>
-> ---
->  configure.ac | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/configure.ac b/configure.ac
-> index 54f82cf..a8fd7f7 100644
-> --- a/configure.ac
-> +++ b/configure.ac
-> @@ -147,7 +147,7 @@ AC_CHECK_LIB([popt], [poptGetContext], [],
->  	[AC_MSG_ERROR([Cannot find libpopt. Use [LDFLAGS]=3D-Ldir to specify it=
-s location.])]
->  )
-> =20
-> -AM_PATH_XML2(2.7.6, 1, AC_MSG_ERROR(No supported version of libxml2 foun=
-d.))
-> +AM_PATH_XML2(2.7.6, true, AC_MSG_ERROR(No supported version of libxml2 f=
-ound.))
-> =20
->  # Check for libuuid
->  AC_CHECK_LIB([uuid], [uuid_generate],
-> --=20
-> 1.8.3.2
->=20
->=20
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+And call_rcu_after_fork_parent should spin-wait on this.
 
---IiVenqGWf+H9Y6IX
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
+Otherwise a second fork in the parent will see the PAUSED flags
+already set and call_rcu_before_fork will not correctly wait for the
+call_rcu threads to quiesce on this second occasion.
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
+Signed-off-by: Keir Fraser <keir@cohodata.com>
+---
+ urcu-call-rcu-impl.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-iQF8BAEBAgBmBQJTS/WgXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
-ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
-MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I0235kIAKm3qDuD7s/Qxg0o+cgST8yT
-Ff1Z46g+UY8SXY4C8mfFNWF2JuOIhtBKmB2QZMgUuSrCZB60GAtgwId2fLV9iGar
-iia+FTAofoXOQIHHhkLKGr8z/Ez/HCQ4+Uj3afneYnS5bVQ0eBOiya6O2UG96tI6
-HLKfoT4zIKHhrwwxo6ksq1FHeTGMPwlhy/HpyOoevmvbvFlJiQv7sy3eW98tFClz
-2Nbp0cMjf7eW+7Tp3tB0DyZjxITjJhXDScyiGzdurb+3VOG0Qv1cOIZfRMblWu8W
-FLYbUyESXvOig3E0Tx5d6SfSRIbvyKD16CNH/CE2VLZf+HOaq7X+a/AeW7y2VWY=
-=/EPf
------END PGP SIGNATURE-----
-
---IiVenqGWf+H9Y6IX--
+diff --git a/urcu-call-rcu-impl.h b/urcu-call-rcu-impl.h
+index a050d41..5c25a75 100644
+--- a/urcu-call-rcu-impl.h
++++ b/urcu-call-rcu-impl.h
+@@ -308,6 +308,8 @@ static void *call_rcu_thread(void *arg)
+ 			uatomic_or(&crdp->flags, URCU_CALL_RCU_PAUSED);
+ 			while ((uatomic_read(&crdp->flags) & URCU_CALL_RCU_PAUSE) != 0)
+ 				poll(NULL, 0, 1);
++			uatomic_and(&crdp->flags, ~URCU_CALL_RCU_PAUSED);
++			cmm_smp_mb__after_uatomic_and();
+ 			rcu_register_thread();
+ 		}
+ 
+@@ -872,6 +874,10 @@ void call_rcu_after_fork_parent(void)
+ 
+ 	cds_list_for_each_entry(crdp, &call_rcu_data_list, list)
+ 		uatomic_and(&crdp->flags, ~URCU_CALL_RCU_PAUSE);
++	cds_list_for_each_entry(crdp, &call_rcu_data_list, list) {
++		while ((uatomic_read(&crdp->flags) & URCU_CALL_RCU_PAUSED) != 0)
++			poll(NULL, 0, 1);
++	}
+ 	call_rcu_unlock(&call_rcu_mutex);
+ }
+ 
+-- 
+1.8.3.2
 
 
---===============1743476947==
+--------------070001000304040202010108
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -105,4 +167,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============1743476947==--
+--------------070001000304040202010108--
