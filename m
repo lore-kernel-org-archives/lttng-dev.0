@@ -1,20 +1,21 @@
-From: "Kumari, Shilpa (HPSD/VDU/Avatar)" <shilpakumari.pv@hp.com>
-Subject: Need help on LTTNG
-Date: Tue, 15 Apr 2014 05:27:47 +0000
-Message-ID: <4506BB291C8828478C1C5CA492972AB01C129FB5__39181.070138193$1397573624$gmane$org@G6W2500.americas.hpqcorp.net>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: [PATCH lttng-tools] Better error reporting when a
+ snapshot record size is too small
+Date: Tue, 15 Apr 2014 11:14:18 -0400
+Message-ID: <CA+jJMxsHrHiMGm2Vi5mm5D=AY4OnexSd8V-MUxe65FpVNJ7fXQ__9235.67791837758$1397574935$gmane$org@mail.gmail.com>
+References: <1397572329-7168-1-git-send-email-jeremie.galarneau@efficios.com>
+ <20140415144408.GB7829@thessa>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0128027747=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from g6t1524.atlanta.hp.com ([15.193.200.67])
+Received: from mail-qa0-f47.google.com ([209.85.216.47])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <shilpakumari.pv@hp.com>) id 1WZvvY-0006sN-3J
- for lttng-dev@lists.lttng.org; Tue, 15 Apr 2014 01:29:06 -0400
-Received: from G6W4001.americas.hpqcorp.net (g6w4001.atlanta.hp.com
- [16.205.80.210]) (using TLSv1 with cipher AES128-SHA (128/128 bits))
- (No client certificate requested)
- by g6t1524.atlanta.hp.com (Postfix) with ESMTPS id C018F173
- for <lttng-dev@lists.lttng.org>; Tue, 15 Apr 2014 05:28:54 +0000 (UTC)
-Content-Language: en-US
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1Wa544-000203-JM
+ for lttng-dev@lists.lttng.org; Tue, 15 Apr 2014 11:14:30 -0400
+Received: by mail-qa0-f47.google.com with SMTP id m5so7361860qaj.6
+ for <lttng-dev@lists.lttng.org>; Tue, 15 Apr 2014 08:14:19 -0700 (PDT)
+In-Reply-To: <20140415144408.GB7829@thessa>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,233 +24,114 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
-Cc: "Kumari, Shilpa (HPSD/VDU/Avatar)" <shilpakumari.pv@hp.com>
+To: David Goulet <dgoulet@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0128027747==
-Content-Language: en-US
-Content-Type: multipart/alternative;
-	boundary="_000_4506BB291C8828478C1C5CA492972AB01C129FB5G6W2500americas_"
-
---_000_4506BB291C8828478C1C5CA492972AB01C129FB5G6W2500americas_
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-
-Hello,
-
-I am trying to use LTTNG on centos (2.6.32). I have applied the given patch=
- and rebuilt a kernel.
-Still I am unable to build the lltng-modules.
-
-[root@million lttng-modules-2.4.0]# uname -r
-2.6.32-431.5.1.el6.hpsp.centos.LTTNG.18852.x86_64
-
-Below is the compiler error I am getting,
-
-[root@million lttng-modules-2.4.0]# make
-make -C /lib/modules/2.6.32-431.5.1.el6.hpsp.centos.LTTNG.18852.x86_64/buil=
-d M=3D/root/LTTNG/lttng-modules-2.4.0 modules
-make[1]: Entering directory `/usr/src/kernels/2.6.32-431.5.1.el6.hpsp.cento=
-s.LTTNG.18852.x86_64'
-  CC [M]  /root/LTTNG/lttng-modules-2.4.0/lttng-ring-buffer-client-discard.=
-o
-  CC [M]  /root/LTTNG/lttng-modules-2.4.0/lttng-ring-buffer-client-overwrit=
-e.o
-  CC [M]  /root/LTTNG/lttng-modules-2.4.0/lttng-ring-buffer-metadata-client=
-.o
-  CC [M]  /root/LTTNG/lttng-modules-2.4.0/lttng-ring-buffer-client-mmap-dis=
-card.o
-  CC [M]  /root/LTTNG/lttng-modules-2.4.0/lttng-ring-buffer-client-mmap-ove=
-rwrite.o
-  CC [M]  /root/LTTNG/lttng-modules-2.4.0/lttng-ring-buffer-metadata-mmap-c=
-lient.o
-  CC [M]  /root/LTTNG/lttng-modules-2.4.0/lttng-statedump-impl.o
-In file included from /root/LTTNG/lttng-modules-2.4.0/lttng-statedump-impl.=
-c:55:
-/root/LTTNG/lttng-modules-2.4.0/wrapper/tracepoint.h: In function =E2wrappe=
-r_lttng_fixup_sig=E2:
-/root/LTTNG/lttng-modules-2.4.0/wrapper/tracepoint.h:76: error: =E2struct m=
-odule=E2 has no member named =E2sig_ok=E2
-make[2]: *** [/root/LTTNG/lttng-modules-2.4.0/lttng-statedump-impl.o] Error=
- 1
-make[1]: *** [_module_/root/LTTNG/lttng-modules-2.4.0] Error 2
-make[1]: Leaving directory `/usr/src/kernels/2.6.32-431.5.1.el6.hpsp.centos=
-.LTTNG.18852.x86_64'
-make: *** [default] Error 2
-[root@million lttng-modules-2.4.0]#
-
-Patches provided In lttng-modules/linux-patches/
-backport-kallsym-sym-2.6.32.patch               <-- got easily applied with=
- patch command
-backport-splice-sym-2.6.32-34.patch             <-- got easily applied with=
- patch command
-backport-tracepoint-data-2.6.32-33.patch     <--  Conflicts were found, and=
- I manually edited tracepoint.h file.
-
-Kernel was built by disabling "CONFIG_MODULE_SIG".
-
-Could you please kindly guide me on this issue. Appreciate your help very m=
-uch.
-Please do let me know, if I need to provide any more info on this.
-
-
-Thanks and regards,
-Shilpa Kumari.P.V
-
-
---_000_4506BB291C8828478C1C5CA492972AB01C129FB5G6W2500americas_
-Content-Type: text/html; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-
-<html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-micr=
-osoft-com:office:office" xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
-xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http:=
-//www.w3.org/TR/REC-html40">
-<head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Diso-8859-=
-1">
-<meta name=3D"Generator" content=3D"Microsoft Word 12 (filtered medium)">
-<style><!--
-/* Font Definitions */
-@font-face
-	{font-family:Wingdings;
-	panose-1:5 0 0 0 0 0 0 0 0 0;}
-@font-face
-	{font-family:"Cambria Math";
-	panose-1:2 4 5 3 5 4 6 3 2 4;}
-@font-face
-	{font-family:Calibri;
-	panose-1:2 15 5 2 2 2 4 3 2 4;}
-/* Style Definitions */
-p.MsoNormal, li.MsoNormal, div.MsoNormal
-	{margin:0in;
-	margin-bottom:.0001pt;
-	font-size:11.0pt;
-	font-family:"Calibri","sans-serif";}
-a:link, span.MsoHyperlink
-	{mso-style-priority:99;
-	color:blue;
-	text-decoration:underline;}
-a:visited, span.MsoHyperlinkFollowed
-	{mso-style-priority:99;
-	color:purple;
-	text-decoration:underline;}
-span.EmailStyle17
-	{mso-style-type:personal-compose;
-	font-family:"Calibri","sans-serif";
-	color:windowtext;}
-.MsoChpDefault
-	{mso-style-type:export-only;}
-@page WordSection1
-	{size:8.5in 11.0in;
-	margin:1.0in 1.0in 1.0in 1.0in;}
-div.WordSection1
-	{page:WordSection1;}
---></style><!--[if gte mso 9]><xml>
-<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
-</xml><![endif]--><!--[if gte mso 9]><xml>
-<o:shapelayout v:ext=3D"edit">
-<o:idmap v:ext=3D"edit" data=3D"1" />
-</o:shapelayout></xml><![endif]-->
-</head>
-<body lang=3D"EN-US" link=3D"blue" vlink=3D"purple">
-<div class=3D"WordSection1">
-<p class=3D"MsoNormal">Hello,<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">I am trying to use LTTNG on centos (2.6.32). I have =
-applied the given patch and rebuilt a kernel.<o:p></o:p></p>
-<p class=3D"MsoNormal">Still I am unable to build the lltng-modules.<o:p></=
-o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">[root@million lttng-modules-2.4.0]# uname -r<o:p></o=
-:p></p>
-<p class=3D"MsoNormal"><b>2.6.32-431.5.1.el6.hpsp.centos.LTTNG.18852.x86_64=
-<o:p></o:p></b></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">Below is the compiler error I am getting,<o:p></o:p>=
-</p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">[root@million lttng-modules-2.4.0]# make<o:p></o:p><=
-/p>
-<p class=3D"MsoNormal">make -C /lib/modules/2.6.32-431.5.1.el6.hpsp.centos.=
-LTTNG.18852.x86_64/build M=3D/root/LTTNG/lttng-modules-2.4.0 modules<o:p></=
-o:p></p>
-<p class=3D"MsoNormal">make[1]: Entering directory `/usr/src/kernels/2.6.32=
--431.5.1.el6.hpsp.centos.LTTNG.18852.x86_64'<o:p></o:p></p>
-<p class=3D"MsoNormal">&nbsp; CC [M]&nbsp; /root/LTTNG/lttng-modules-2.4.0/=
-lttng-ring-buffer-client-discard.o<o:p></o:p></p>
-<p class=3D"MsoNormal">&nbsp; CC [M]&nbsp; /root/LTTNG/lttng-modules-2.4.0/=
-lttng-ring-buffer-client-overwrite.o<o:p></o:p></p>
-<p class=3D"MsoNormal">&nbsp; CC [M]&nbsp; /root/LTTNG/lttng-modules-2.4.0/=
-lttng-ring-buffer-metadata-client.o<o:p></o:p></p>
-<p class=3D"MsoNormal">&nbsp; CC [M]&nbsp; /root/LTTNG/lttng-modules-2.4.0/=
-lttng-ring-buffer-client-mmap-discard.o<o:p></o:p></p>
-<p class=3D"MsoNormal">&nbsp; CC [M]&nbsp; /root/LTTNG/lttng-modules-2.4.0/=
-lttng-ring-buffer-client-mmap-overwrite.o<o:p></o:p></p>
-<p class=3D"MsoNormal">&nbsp; CC [M]&nbsp; /root/LTTNG/lttng-modules-2.4.0/=
-lttng-ring-buffer-metadata-mmap-client.o<o:p></o:p></p>
-<p class=3D"MsoNormal">&nbsp; CC [M]&nbsp; /root/LTTNG/lttng-modules-2.4.0/=
-lttng-statedump-impl.o<o:p></o:p></p>
-<p class=3D"MsoNormal">In file included from /root/LTTNG/lttng-modules-2.4.=
-0/lttng-statedump-impl.c:55:<o:p></o:p></p>
-<p class=3D"MsoNormal">/root/LTTNG/lttng-modules-2.4.0/wrapper/tracepoint.h=
-: In function =E2wrapper_lttng_fixup_sig=E2:<o:p></o:p></p>
-<p class=3D"MsoNormal">/root/LTTNG/lttng-modules-2.4.0/wrapper/tracepoint.h=
-:76: error:
-<b>=E2struct module=E2 has no member named =E2sig_ok=E2</b><o:p></o:p></p>
-<p class=3D"MsoNormal">make[2]: *** [/root/LTTNG/lttng-modules-2.4.0/lttng-=
-statedump-impl.o] Error 1<o:p></o:p></p>
-<p class=3D"MsoNormal">make[1]: *** [_module_/root/LTTNG/lttng-modules-2.4.=
-0] Error 2<o:p></o:p></p>
-<p class=3D"MsoNormal">make[1]: Leaving directory `/usr/src/kernels/2.6.32-=
-431.5.1.el6.hpsp.centos.LTTNG.18852.x86_64'<o:p></o:p></p>
-<p class=3D"MsoNormal">make: *** [default] Error 2<o:p></o:p></p>
-<p class=3D"MsoNormal">[root@million lttng-modules-2.4.0]#<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">Patches provided In lttng-modules/linux-patches/<o:p=
-></o:p></p>
-<p class=3D"MsoNormal">backport-kallsym-sym-2.6.32.patch &nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span sty=
-le=3D"font-family:Wingdings">=DF</span> got easily applied with patch comma=
-nd<o:p></o:p></p>
-<p class=3D"MsoNormal">backport-splice-sym-2.6.32-34.patch &nbsp;&nbsp;&nbs=
-p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style=3D"font=
--family:Wingdings">=DF</span> got easily applied with patch command<o:p></o=
-:p></p>
-<p class=3D"MsoNormal">backport-tracepoint-data-2.6.32-33.patch&nbsp;&nbsp;=
-&nbsp; &nbsp;<span style=3D"font-family:Wingdings">=DF</span> &nbsp;Conflic=
-ts were found, and I manually edited tracepoint.h file.<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">Kernel was built by disabling &#8220;CONFIG_MODULE_S=
-IG&#8221;. &nbsp;<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">Could you please kindly guide me on this issue. Appr=
-eciate your help very much.<o:p></o:p></p>
-<p class=3D"MsoNormal">Please do let me know, if I need to provide any more=
- info on this.
-<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">Thanks and regards,<o:p></o:p></p>
-<p class=3D"MsoNormal">Shilpa Kumari.P.V<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-</div>
-</body>
-</html>
-
---_000_4506BB291C8828478C1C5CA492972AB01C129FB5G6W2500americas_--
-
-
---===============0128027747==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0128027747==--
+T24gVHVlLCBBcHIgMTUsIDIwMTQgYXQgMTA6NDQgQU0sIERhdmlkIEdvdWxldCA8ZGdvdWxldEBl
+ZmZpY2lvcy5jb20+IHdyb3RlOgo+IE9uIDE1IEFwciAoMTA6MzI6MDkpLCBKw6lyw6ltaWUgR2Fs
+YXJuZWF1IHdyb3RlOgo+PiBQcmludCBhbiBlcnJvciBtZXNzYWdlIHdoZW4gYSBzbmFwc2hvdCBy
+ZWNvcmQgaXMgbWFkZSB3aXRoIGEKPj4gbWF4IHNpemUgc21hbGxlciB0aGFuIHRoZSBzdWJidWZm
+ZXJzLiBUaGlzIGxpbWl0YXRpb24gaXMgbm93Cj4+IGRvY3VtZW50ZWQgaW4gdGhlIG1hbiBwYWdl
+Lgo+Cj4gV2h5IGlzIHRoaXMgbm90IGRvbmUgb24gdGhlIHNlc3Npb24gZGFlbW9uIHNpZGU/IExp
+a2UgIk9oIHlvdSBwcm92aWRlZAo+IG1lIHdpdGggYSB3cm9uZyBtYXggc2l6ZSIgdHlwZSBvZiBl
+cnJvciBtZXNzYWdlLgo+Cj4gQmVjYXVzZSBoZXJlIHRoaXMgZml4ZXMgdGhlIGlzc3VlIG9ubHkg
+b24gdGhlIGNvbW1hbmQgbGluZSBzaWRlIGJ1dCBhCj4gdXNlciB1c2luZyB0aGUgQVBJIHdvdWxk
+IHN0aWxsIGZhaWwgc29tZWhvdyBzaWxlbnRseSBvciAuLi4gPwo+CgpUaGUgQVBJIGNhbGwgY291
+bGQgcmV0dXJuIHNvbWV0aGluZyBsaWtlCi1MVFROR19FUlJfU05BUFNIT1RfVE9PX1NNQUxMLi4u
+IEl0IHN1cmUgd291bGQgYmUgYmV0dGVyIHRoYW4gd2hhdCB3ZQpoYXZlIG5vdyAoYSBEQkczKC4u
+LikgbWVzc2FnZSBvbiB0aGUgc2Vzc2lvbmQgc2lkZSkuCgo+IE5vdCB0aGF0IEkgZG9uJ3QgbGlr
+ZSB0aGUgYXBwcm9hY2ggaGVyZSBidXQgSSBqdXN0IG5lZWQgdG8ga25vdyBpZiB0aGVyZQo+IGlz
+IGEgc3BlY2lmaWMgcmVhc29uIGl0J3MgZG9uZSBvbiB0aGUgbHR0bmcgY2xpZW50IHNpZGUgb25s
+eS4gVGhpcyBwYXRjaAo+IGFkZHMgdHdvIGNhbGxzIHRoYXQgY2FuIGV4Y2hhbmdlIHF1aXRlIGEg
+Yml0IG9mIGRhdGEgd2l0aCB0aGUgc2Vzc2lvbmQKPiAobGlzdCBkb21haW5zIGFuZCBjaGFubmVs
+cykgc28gdW5sZXNzIHRoZXJlIGlzIG5vIG90aGVyIHdheSwgSSB3b3VsZCBnbwo+IGZvciBhIHNl
+c3Npb25kIHNpZGUgdmFsaWRhdGlvbiBpbnN0ZWFkLgo+CgpXZWxsLCBJIHRoaW5rIGNsaWVudHMg
+d2lsbCBlbmQgdXAgaW1wbGVtZW50aW5nIHRoZSBzYW1lIGxvZ2ljCmFueXdheS4uLiBJZiB0aGUg
+cmVjb3JkIGNhbGwgZmFpbHMgYmVjYXVzZSB0aGUgbWF4IHNpemUgaXMgdG9vIHNtYWxsLApBUEkg
+dXNlcnMgd2lsbCBxdWVyeSB0aGUgc2Vzc2lvbmQgdG8ga25vdyB3aGF0IHNpemUgd291bGQgZml0
+LgpJZGVhbGx5LCB0aGUgbHR0bmcgY2xpZW50IHdpbGwgYWxzbyByZXBvcnQgdGhlIHNtYWxsZXN0
+IHN1aXRhYmxlIHNpemUKaW4gdGhlIGVycm9yIG1lc3NhZ2UgKGxpa2UgaXQgZG9lcyBpbiBteSBw
+YXRjaCkuCgpJIHVuZGVyc3RhbmQgeW91ciBjb25jZXJuIGFib3V0IGRhdGEgZXhjaGFuZ2VzIGRl
+bGF5aW5nIHRoZSBzbmFwc2hvdCwKdGhvdWdoLiBXaGF0IEknZCBwcm9wb3NlIGlzIHRvIHJlcG9y
+dCB0aGUgbmV3IC1MVFROR19FUlJfU05BUFNIT1RfLi4uCmNvZGUgZnJvbSB0aGUgQVBJLCBhbmQg
+aGF2ZSB0aGUgY2xpZW50IHJlcG9ydCB0aGUgc21hbGxlc3Qgc2l6ZQpwb3NzaWJsZSBzaXplIHRv
+IHRoZSB1c2VyIHVzaW5nIGdldF9sYXJnZXN0X3N1YmJ1ZigpIHdoZW4gc3VjaCBhbgplcnJvciBv
+Y2N1cnMuIFdoYXQgZG8geW91IHRoaW5rPwoKVGhhbmtzLApKw6lyw6ltaWUKCj4gQ2hlZXJzIQo+
+IERhdmlkCj4KPj4KPj4gU2lnbmVkLW9mZi1ieTogSsOpcsOpbWllIEdhbGFybmVhdSA8amVyZW1p
+ZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29tPgo+PiAtLS0KPj4gIGRvYy9tYW4vbHR0bmcuMSAgICAg
+ICAgICAgICAgICAgICB8ICA0ICsrLQo+PiAgc3JjL2Jpbi9sdHRuZy9jb21tYW5kcy9zbmFwc2hv
+dC5jIHwgNTkgKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrCj4+ICAyIGZp
+bGVzIGNoYW5nZWQsIDYyIGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkKPj4KPj4gZGlmZiAt
+LWdpdCBhL2RvYy9tYW4vbHR0bmcuMSBiL2RvYy9tYW4vbHR0bmcuMQo+PiBpbmRleCA5NzJmNzFj
+Li5iZjFiNjdlIDEwMDY0NAo+PiAtLS0gYS9kb2MvbWFuL2x0dG5nLjEKPj4gKysrIGIvZG9jL21h
+bi9sdHRuZy4xCj4+IEBAIC03ODcsNyArNzg3LDkgQEAgTGlzdCB0aGUgb3V0cHV0IG9mIGEgc2Vz
+c2lvbi4gQXR0cmlidXRlcyBvZiB0aGUgb3V0cHV0IGFyZSBwcmludGVkLgo+PiAgU25hcHNob3Qg
+YSBzZXNzaW9uJ3MgYnVmZmVyKHMpIGZvciBhbGwgZG9tYWlucy4gSWYgYW4gVVJMIGlzIHNwZWNp
+ZmllZCwgaXQgaXMKPj4gIHVzZWQgaW5zdGVhZCBvZiBhIHByZXZpb3VzbHkgYWRkZWQgb3V0cHV0
+LiBTcGVjaWZ5aW5nIG9ubHkgYSBuYW1lIG9yL2FuZCBhIG1heAo+PiAgc2l6ZSB3aWxsIG92ZXJy
+aWRlIHRoZSBjdXJyZW50IG91dHB1dCB2YWx1ZXMuIEZvciBpbnN0YW5jZSwgeW91IGNhbiByZWNv
+cmQgYQo+PiAtc25hcHNob3Qgd2l0aCBhIGN1c3RvbSBtYXhpbXVtIHNpemUgb3Igd2l0aCBhIGRp
+ZmZlcmVudCBuYW1lLgo+PiArc25hcHNob3Qgd2l0aCBhIGN1c3RvbSBtYXhpbXVtIHNpemUgb3Ig
+d2l0aCBhIGRpZmZlcmVudCBuYW1lLiBIb3dldmVyLCB0aGUKPj4gK21heCBzaXplIG11c3QgYmUg
+aGlnaCBlbm91Z2ggdG8gY29udGFpbiBhIGNvbXBsZXRlIHN1YmJ1ZmZlci4gU2VlIHRoZQo+PiAr
+LS1zdWJidWYtc2l6ZSBzd2l0Y2ggZm9yIGRlZmF1bHQgc3ViYnVmZmVyIHNpemVzLgo+Pgo+PiAg
+Lm5mCj4+ICAkIGx0dG5nIHNuYXBzaG90IGFkZC1vdXRwdXQgLW4gbXlzbmFwc2hvdCBmaWxlOi8v
+L2RhdGEvc25hcHNob3QKPj4gZGlmZiAtLWdpdCBhL3NyYy9iaW4vbHR0bmcvY29tbWFuZHMvc25h
+cHNob3QuYyBiL3NyYy9iaW4vbHR0bmcvY29tbWFuZHMvc25hcHNob3QuYwo+PiBpbmRleCBjNzA0
+ZWVlLi43ZmRhOTQ5IDEwMDY0NAo+PiAtLS0gYS9zcmMvYmluL2x0dG5nL2NvbW1hbmRzL3NuYXBz
+aG90LmMKPj4gKysrIGIvc3JjL2Jpbi9sdHRuZy9jb21tYW5kcy9zbmFwc2hvdC5jCj4+IEBAIC0x
+MjUsNiArMTI1LDU2IEBAIHN0YXRpYyBpbnQgY291bnRfYXJndW1lbnRzKGNvbnN0IGNoYXIgKiph
+cmd2KQo+PiAgICAgICByZXR1cm4gaTsKPj4gIH0KPj4KPj4gK3N0YXRpYyB1aW50NjRfdCBnZXRf
+bGFyZ2VzdF9zdWJidWYoKQo+PiArewo+PiArICAgICBpbnQgZG9tYWluX2NvdW50Owo+PiArICAg
+ICBpbnQgY2hhbm5lbF9jb3VudDsKPj4gKyAgICAgaW50IGRvbWFpbl9pZHg7Cj4+ICsgICAgIGlu
+dCBjaGFubmVsX2lkeDsKPj4gKyAgICAgc3RydWN0IGx0dG5nX2RvbWFpbiAqZG9tYWluczsKPj4g
+KyAgICAgdWludDY0X3QgbGFyZ2VzdF9zdWJidWYgPSAwOwo+PiArCj4+ICsgICAgIGRvbWFpbl9j
+b3VudCA9IGx0dG5nX2xpc3RfZG9tYWlucyhjdXJyZW50X3Nlc3Npb25fbmFtZSwgJmRvbWFpbnMp
+Owo+PiArICAgICBpZiAoZG9tYWluX2NvdW50IDwgMCkgewo+PiArICAgICAgICAgICAgIEVSUigi
+VW5hYmxlIHRvIGxpc3Qgc2Vzc2lvbiAlcydzIGRvbWFpbnMiLAo+PiArICAgICAgICAgICAgICAg
+ICAgICAgY3VycmVudF9zZXNzaW9uX25hbWUpOwo+PiArICAgICAgICAgICAgIGdvdG8gZW5kOwo+
+PiArICAgICB9Cj4+ICsKPj4gKyAgICAgZm9yIChkb21haW5faWR4ID0gMDsgZG9tYWluX2lkeCA8
+IGRvbWFpbl9jb3VudDsgZG9tYWluX2lkeCsrKSB7Cj4+ICsgICAgICAgICAgICAgc3RydWN0IGx0
+dG5nX2NoYW5uZWwgKmNoYW5uZWxzOwo+PiArICAgICAgICAgICAgIHN0cnVjdCBsdHRuZ19oYW5k
+bGUgKmhhbmRsZSA9IGx0dG5nX2NyZWF0ZV9oYW5kbGUoCj4+ICsgICAgICAgICAgICAgICAgICAg
+ICBjdXJyZW50X3Nlc3Npb25fbmFtZSwgJmRvbWFpbnNbZG9tYWluX2lkeF0pOwo+PiArCj4+ICsg
+ICAgICAgICAgICAgaWYgKCFoYW5kbGUpIHsKPj4gKyAgICAgICAgICAgICAgICAgICAgIEVSUigi
+VW5hYmxlIHRvIGNyZWF0ZSBoYW5kbGUgZm9yIHNlc3Npb24gJXMiLAo+PiArICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICBjdXJyZW50X3Nlc3Npb25fbmFtZSk7Cj4+ICsgICAgICAgICAgICAg
+ICAgICAgICBnb3RvIGVuZDsKPj4gKyAgICAgICAgICAgICB9Cj4+ICsKPj4gKyAgICAgICAgICAg
+ICBjaGFubmVsX2NvdW50ID0gbHR0bmdfbGlzdF9jaGFubmVscyhoYW5kbGUsICZjaGFubmVscyk7
+Cj4+ICsgICAgICAgICAgICAgaWYgKGNoYW5uZWxfY291bnQgPCAwKSB7Cj4+ICsgICAgICAgICAg
+ICAgICAgICAgICBFUlIoIlVuYWJsZSB0byBsaXN0IGNoYW5uZWxzIGZvciBzZXNzaW9uICVzIiwK
+Pj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgY3VycmVudF9zZXNzaW9uX25hbWUpOwo+
+PiArICAgICAgICAgICAgICAgICAgICAgZ290byBlbmQ7Cj4+ICsgICAgICAgICAgICAgfQo+PiAr
+Cj4+ICsgICAgICAgICAgICAgZm9yIChjaGFubmVsX2lkeCA9IDA7IGNoYW5uZWxfaWR4IDwgY2hh
+bm5lbF9jb3VudDsKPj4gKyAgICAgICAgICAgICAgICAgICAgIGNoYW5uZWxfaWR4KyspIHsKPj4g
+KyAgICAgICAgICAgICAgICAgICAgIGlmIChjaGFubmVsc1tjaGFubmVsX2lkeF0uYXR0ci5zdWJi
+dWZfc2l6ZSA+Cj4+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGxhcmdlc3Rfc3ViYnVm
+KSB7Cj4+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGxhcmdlc3Rfc3ViYnVmID0KPj4g
+KyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBjaGFubmVsc1tjaGFubmVsX2lk
+eF0uYXR0ci5zdWJidWZfc2l6ZTsKPj4gKyAgICAgICAgICAgICAgICAgICAgIH0KPj4gKyAgICAg
+ICAgICAgICB9Cj4+ICsgICAgICAgICAgICAgZnJlZShjaGFubmVscyk7Cj4+ICsgICAgICAgICAg
+ICAgbHR0bmdfZGVzdHJveV9oYW5kbGUoaGFuZGxlKTsKPj4gKyAgICAgfQo+PiArZW5kOgo+PiAr
+ICAgICBmcmVlKGRvbWFpbnMpOwo+PiArICAgICByZXR1cm4gbGFyZ2VzdF9zdWJidWY7Cj4+ICt9
+Cj4+ICsKPj4gIC8qCj4+ICAgKiBDcmVhdGUgYSBzbmFwc2hvdCBvdXRwdXQgb2JqZWN0IGZyb20g
+YXJndW1lbnRzIHVzaW5nIHRoZSBnaXZlbiBVUkwuCj4+ICAgKgo+PiBAQCAtMTYwLDYgKzIxMCwx
+NSBAQCBzdGF0aWMgc3RydWN0IGx0dG5nX3NuYXBzaG90X291dHB1dCAqY3JlYXRlX291dHB1dF9m
+cm9tX2FyZ3MoY29uc3QgY2hhciAqdXJsKQo+PiAgICAgICB9Cj4+Cj4+ICAgICAgIGlmIChvcHRf
+bWF4X3NpemUpIHsKPj4gKyAgICAgICAgICAgICAvKiBWYWxpZGF0ZSB0aGF0IHRoZSBtYXggc2l6
+ZSBjYW4gY29udGFpbiBvbmUgc3ViYnVmZmVyLiAqLwo+PiArICAgICAgICAgICAgIHVpbnQ2NF90
+IGxhcmdlc3Rfc3ViYnVmID0gZ2V0X2xhcmdlc3Rfc3ViYnVmKCk7Cj4+ICsgICAgICAgICAgICAg
+aWYgKGxhcmdlc3Rfc3ViYnVmID09IDApIHsKPj4gKyAgICAgICAgICAgICAgICAgICAgIGdvdG8g
+ZXJyb3I7Cj4+ICsgICAgICAgICAgICAgfSBlbHNlIGlmIChsYXJnZXN0X3N1YmJ1ZiA+IG9wdF9t
+YXhfc2l6ZSkgewo+PiArICAgICAgICAgICAgICAgICAgICAgRVJSKCJTbmFwc2hvdCBzaXplIG11
+c3QgYmUgZ3JlYXRlciBvciBlcXVhbCB0byB0aGUgbGFyZ2VzdCBzdWJidWZmZXIncyBzaXplICgl
+enUpLiIsCj4+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGxhcmdlc3Rfc3ViYnVmKTsK
+Pj4gKyAgICAgICAgICAgICAgICAgICAgIGdvdG8gZXJyb3I7Cj4+ICsgICAgICAgICAgICAgfQo+
+PiAgICAgICAgICAgICAgIHJldCA9IGx0dG5nX3NuYXBzaG90X291dHB1dF9zZXRfc2l6ZShvcHRf
+bWF4X3NpemUsIG91dHB1dCk7Cj4+ICAgICAgICAgICAgICAgaWYgKHJldCA8IDApIHsKPj4gICAg
+ICAgICAgICAgICAgICAgICAgIGdvdG8gZXJyb3I7Cj4+IC0tCj4+IDEuOS4xCj4+CgoKCi0tIApK
+w6lyw6ltaWUgR2FsYXJuZWF1CkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20K
+Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRl
+diBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
