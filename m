@@ -1,26 +1,19 @@
-From: Jan Glauber <jan.glauber@gmail.com>
-Subject: Re: [Patch lttng-modules v2] ARM: Resolve sys_unknown
-	system calls
-Date: Tue, 15 Apr 2014 14:31:43 +0200
-Message-ID: <20140415123142.GA27630__27535.0185497247$1397565235$gmane$org@hal>
-References: <1397218426-782-1-git-send-email-jan.glauber@gmail.com>
- <348156896.34.1397230762859.JavaMail.zimbra@efficios.com>
- <20140414085656.GA32190@hal>
- <169220169.996.1397479301759.JavaMail.zimbra@efficios.com>
- <20140414133155.GA2531@hal>
- <1832763224.1125.1397483627230.JavaMail.zimbra@efficios.com>
+From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
+ <jeremie.galarneau@efficios.com>
+Subject: [PATCH lttng-tools] Better error reporting when a
+	snapshot record size is too small
+Date: Tue, 15 Apr 2014 10:32:09 -0400
+Message-ID: <1397572329-7168-1-git-send-email-jeremie.galarneau__27528.1655988239$1397572412$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ee0-f53.google.com ([74.125.83.53])
+Received: from mail-qc0-f169.google.com ([209.85.216.169])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jan.glauber@gmail.com>) id 1Wa2Xz-0000y2-5C
- for lttng-dev@lists.lttng.org; Tue, 15 Apr 2014 08:33:09 -0400
-Received: by mail-ee0-f53.google.com with SMTP id b57so7608662eek.26
- for <lttng-dev@lists.lttng.org>; Tue, 15 Apr 2014 05:33:01 -0700 (PDT)
-Content-Disposition: inline
-In-Reply-To: <1832763224.1125.1397483627230.JavaMail.zimbra@efficios.com>
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1Wa4PJ-0001ep-Dg
+ for lttng-dev@lists.lttng.org; Tue, 15 Apr 2014 10:32:23 -0400
+Received: by mail-qc0-f169.google.com with SMTP id i17so10532859qcy.14
+ for <lttng-dev@lists.lttng.org>; Tue, 15 Apr 2014 07:32:11 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -29,57 +22,68 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On Mon, Apr 14, 2014 at 01:53:47PM +0000, Mathieu Desnoyers wrote:
-> ----- Original Message -----
-> > From: "Jan Glauber" <jan.glauber@gmail.com>
-> > To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-> > Cc: lttng-dev@lists.lttng.org
-> > Sent: Monday, April 14, 2014 9:31:58 AM
-> > Subject: Re: [Patch lttng-modules v2] ARM: Resolve sys_unknown system calls
-> > 
-> > No. I'm currently stuck with that kernel version and I doubt the system call
-> > extractor wont find a system call like sys_recv on a newer kernel.
-> 
-> Indeed, sys_recv, sys_sigreturn, sys_rt_sigreturn are still not defined with
-> SYSCALL_DEFINE. However, on a current 3.15-rc1 kernel, we find:
-> 
-> fs/read_write.c:SYSCALL_DEFINE4(pread64, ....
-> fs/read_write.c:SYSCALL_DEFINE4(pwrite64, ...
-> kernel/fork.c:SYSCALL_DEFINE0(vfork)
-> fs/open.c:SYSCALL_DEFINE2(ftruncate64, unsigned int, fd, loff_t, length)
-> fs/statfs.c:SYSCALL_DEFINE3(fstatfs64, unsigned int, fd, size_t, sz, struct statfs64 __user *, buf)
-> fs/open.c:SYSCALL_DEFINE4(fallocate, int, fd, int, mode, loff_t, offset, loff_t, len)
-
-Found the reason why pread64 and the above system calls were not available.
-The culprit is SYSCALL_DEFINE which in contrast to SYSCALL_DEFINEx define
-(notice the x at the end) never had the meta data included.
-
-This was fixed accidently by Al Viro during 3.10 by killing SYSCALL_DEFINE
-in favor for the SYSCALL_DEFINEx variant (which adds the meta data).
-
-x86_64 knows these system calls, because the list was extracted after
-the upstream change.
-
-That leaves sys_recv and the sigreturns, I'll follow that up on lkml.
- 
-> The overrides should be limited to the system calls unavailable in the
-> current kernel version. Please run the system call extractor on a newer
-> kernel, so we can get some of the missing definitions, and then only
-> provide overrides for the missing ones. Each override we add means
-> an extra maintenance burden for each architecture, which we want to
-> keep minimal.
-
-I don't want to go through this cumbersome extractor script madness
-again and I cannot run a newer kernel anyway. If you don't want to
-take the patch I'll leave it for now.
-
-Regards, Jan
- 
-> Thanks,
-> 
-> Mathieu
-> 
+UHJpbnQgYW4gZXJyb3IgbWVzc2FnZSB3aGVuIGEgc25hcHNob3QgcmVjb3JkIGlzIG1hZGUgd2l0
+aCBhCm1heCBzaXplIHNtYWxsZXIgdGhhbiB0aGUgc3ViYnVmZmVycy4gVGhpcyBsaW1pdGF0aW9u
+IGlzIG5vdwpkb2N1bWVudGVkIGluIHRoZSBtYW4gcGFnZS4KClNpZ25lZC1vZmYtYnk6IErDqXLD
+qW1pZSBHYWxhcm5lYXUgPGplcmVtaWUuZ2FsYXJuZWF1QGVmZmljaW9zLmNvbT4KLS0tCiBkb2Mv
+bWFuL2x0dG5nLjEgICAgICAgICAgICAgICAgICAgfCAgNCArKy0KIHNyYy9iaW4vbHR0bmcvY29t
+bWFuZHMvc25hcHNob3QuYyB8IDU5ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysr
+KysrKwogMiBmaWxlcyBjaGFuZ2VkLCA2MiBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pCgpk
+aWZmIC0tZ2l0IGEvZG9jL21hbi9sdHRuZy4xIGIvZG9jL21hbi9sdHRuZy4xCmluZGV4IDk3MmY3
+MWMuLmJmMWI2N2UgMTAwNjQ0Ci0tLSBhL2RvYy9tYW4vbHR0bmcuMQorKysgYi9kb2MvbWFuL2x0
+dG5nLjEKQEAgLTc4Nyw3ICs3ODcsOSBAQCBMaXN0IHRoZSBvdXRwdXQgb2YgYSBzZXNzaW9uLiBB
+dHRyaWJ1dGVzIG9mIHRoZSBvdXRwdXQgYXJlIHByaW50ZWQuCiBTbmFwc2hvdCBhIHNlc3Npb24n
+cyBidWZmZXIocykgZm9yIGFsbCBkb21haW5zLiBJZiBhbiBVUkwgaXMgc3BlY2lmaWVkLCBpdCBp
+cwogdXNlZCBpbnN0ZWFkIG9mIGEgcHJldmlvdXNseSBhZGRlZCBvdXRwdXQuIFNwZWNpZnlpbmcg
+b25seSBhIG5hbWUgb3IvYW5kIGEgbWF4CiBzaXplIHdpbGwgb3ZlcnJpZGUgdGhlIGN1cnJlbnQg
+b3V0cHV0IHZhbHVlcy4gRm9yIGluc3RhbmNlLCB5b3UgY2FuIHJlY29yZCBhCi1zbmFwc2hvdCB3
+aXRoIGEgY3VzdG9tIG1heGltdW0gc2l6ZSBvciB3aXRoIGEgZGlmZmVyZW50IG5hbWUuCitzbmFw
+c2hvdCB3aXRoIGEgY3VzdG9tIG1heGltdW0gc2l6ZSBvciB3aXRoIGEgZGlmZmVyZW50IG5hbWUu
+IEhvd2V2ZXIsIHRoZQorbWF4IHNpemUgbXVzdCBiZSBoaWdoIGVub3VnaCB0byBjb250YWluIGEg
+Y29tcGxldGUgc3ViYnVmZmVyLiBTZWUgdGhlCistLXN1YmJ1Zi1zaXplIHN3aXRjaCBmb3IgZGVm
+YXVsdCBzdWJidWZmZXIgc2l6ZXMuCiAKIC5uZgogJCBsdHRuZyBzbmFwc2hvdCBhZGQtb3V0cHV0
+IC1uIG15c25hcHNob3QgZmlsZTovLy9kYXRhL3NuYXBzaG90CmRpZmYgLS1naXQgYS9zcmMvYmlu
+L2x0dG5nL2NvbW1hbmRzL3NuYXBzaG90LmMgYi9zcmMvYmluL2x0dG5nL2NvbW1hbmRzL3NuYXBz
+aG90LmMKaW5kZXggYzcwNGVlZS4uN2ZkYTk0OSAxMDA2NDQKLS0tIGEvc3JjL2Jpbi9sdHRuZy9j
+b21tYW5kcy9zbmFwc2hvdC5jCisrKyBiL3NyYy9iaW4vbHR0bmcvY29tbWFuZHMvc25hcHNob3Qu
+YwpAQCAtMTI1LDYgKzEyNSw1NiBAQCBzdGF0aWMgaW50IGNvdW50X2FyZ3VtZW50cyhjb25zdCBj
+aGFyICoqYXJndikKIAlyZXR1cm4gaTsKIH0KIAorc3RhdGljIHVpbnQ2NF90IGdldF9sYXJnZXN0
+X3N1YmJ1ZigpCit7CisJaW50IGRvbWFpbl9jb3VudDsKKwlpbnQgY2hhbm5lbF9jb3VudDsKKwlp
+bnQgZG9tYWluX2lkeDsKKwlpbnQgY2hhbm5lbF9pZHg7CisJc3RydWN0IGx0dG5nX2RvbWFpbiAq
+ZG9tYWluczsKKwl1aW50NjRfdCBsYXJnZXN0X3N1YmJ1ZiA9IDA7CisKKwlkb21haW5fY291bnQg
+PSBsdHRuZ19saXN0X2RvbWFpbnMoY3VycmVudF9zZXNzaW9uX25hbWUsICZkb21haW5zKTsKKwlp
+ZiAoZG9tYWluX2NvdW50IDwgMCkgeworCQlFUlIoIlVuYWJsZSB0byBsaXN0IHNlc3Npb24gJXMn
+cyBkb21haW5zIiwKKwkJCWN1cnJlbnRfc2Vzc2lvbl9uYW1lKTsKKwkJZ290byBlbmQ7CisJfQor
+CisJZm9yIChkb21haW5faWR4ID0gMDsgZG9tYWluX2lkeCA8IGRvbWFpbl9jb3VudDsgZG9tYWlu
+X2lkeCsrKSB7CisJCXN0cnVjdCBsdHRuZ19jaGFubmVsICpjaGFubmVsczsKKwkJc3RydWN0IGx0
+dG5nX2hhbmRsZSAqaGFuZGxlID0gbHR0bmdfY3JlYXRlX2hhbmRsZSgKKwkJCWN1cnJlbnRfc2Vz
+c2lvbl9uYW1lLCAmZG9tYWluc1tkb21haW5faWR4XSk7CisKKwkJaWYgKCFoYW5kbGUpIHsKKwkJ
+CUVSUigiVW5hYmxlIHRvIGNyZWF0ZSBoYW5kbGUgZm9yIHNlc3Npb24gJXMiLAorCQkJCWN1cnJl
+bnRfc2Vzc2lvbl9uYW1lKTsKKwkJCWdvdG8gZW5kOworCQl9CisKKwkJY2hhbm5lbF9jb3VudCA9
+IGx0dG5nX2xpc3RfY2hhbm5lbHMoaGFuZGxlLCAmY2hhbm5lbHMpOworCQlpZiAoY2hhbm5lbF9j
+b3VudCA8IDApIHsKKwkJCUVSUigiVW5hYmxlIHRvIGxpc3QgY2hhbm5lbHMgZm9yIHNlc3Npb24g
+JXMiLAorCQkJCWN1cnJlbnRfc2Vzc2lvbl9uYW1lKTsKKwkJCWdvdG8gZW5kOworCQl9CisKKwkJ
+Zm9yIChjaGFubmVsX2lkeCA9IDA7IGNoYW5uZWxfaWR4IDwgY2hhbm5lbF9jb3VudDsKKwkJCWNo
+YW5uZWxfaWR4KyspIHsKKwkJCWlmIChjaGFubmVsc1tjaGFubmVsX2lkeF0uYXR0ci5zdWJidWZf
+c2l6ZSA+CisJCQkJbGFyZ2VzdF9zdWJidWYpIHsKKwkJCQlsYXJnZXN0X3N1YmJ1ZiA9CisJCQkJ
+CWNoYW5uZWxzW2NoYW5uZWxfaWR4XS5hdHRyLnN1YmJ1Zl9zaXplOworCQkJfQorCQl9CisJCWZy
+ZWUoY2hhbm5lbHMpOworCQlsdHRuZ19kZXN0cm95X2hhbmRsZShoYW5kbGUpOworCX0KK2VuZDoK
+KwlmcmVlKGRvbWFpbnMpOworCXJldHVybiBsYXJnZXN0X3N1YmJ1ZjsKK30KKwogLyoKICAqIENy
+ZWF0ZSBhIHNuYXBzaG90IG91dHB1dCBvYmplY3QgZnJvbSBhcmd1bWVudHMgdXNpbmcgdGhlIGdp
+dmVuIFVSTC4KICAqCkBAIC0xNjAsNiArMjEwLDE1IEBAIHN0YXRpYyBzdHJ1Y3QgbHR0bmdfc25h
+cHNob3Rfb3V0cHV0ICpjcmVhdGVfb3V0cHV0X2Zyb21fYXJncyhjb25zdCBjaGFyICp1cmwpCiAJ
+fQogCiAJaWYgKG9wdF9tYXhfc2l6ZSkgeworCQkvKiBWYWxpZGF0ZSB0aGF0IHRoZSBtYXggc2l6
+ZSBjYW4gY29udGFpbiBvbmUgc3ViYnVmZmVyLiAqLworCQl1aW50NjRfdCBsYXJnZXN0X3N1YmJ1
+ZiA9IGdldF9sYXJnZXN0X3N1YmJ1ZigpOworCQlpZiAobGFyZ2VzdF9zdWJidWYgPT0gMCkgewor
+CQkJZ290byBlcnJvcjsKKwkJfSBlbHNlIGlmIChsYXJnZXN0X3N1YmJ1ZiA+IG9wdF9tYXhfc2l6
+ZSkgeworCQkJRVJSKCJTbmFwc2hvdCBzaXplIG11c3QgYmUgZ3JlYXRlciBvciBlcXVhbCB0byB0
+aGUgbGFyZ2VzdCBzdWJidWZmZXIncyBzaXplICglenUpLiIsCisJCQkJbGFyZ2VzdF9zdWJidWYp
+OworCQkJZ290byBlcnJvcjsKKwkJfQogCQlyZXQgPSBsdHRuZ19zbmFwc2hvdF9vdXRwdXRfc2V0
+X3NpemUob3B0X21heF9zaXplLCBvdXRwdXQpOwogCQlpZiAocmV0IDwgMCkgewogCQkJZ290byBl
+cnJvcjsKLS0gCjEuOS4xCgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3Jn
+Cmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRl
+dgo=
