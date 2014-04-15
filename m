@@ -1,21 +1,19 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+From: David Goulet <dgoulet@efficios.com>
 Subject: Re: [PATCH lttng-tools] Better error reporting when a
  snapshot record size is too small
-Date: Tue, 15 Apr 2014 11:14:18 -0400
-Message-ID: <CA+jJMxsHrHiMGm2Vi5mm5D=AY4OnexSd8V-MUxe65FpVNJ7fXQ__9235.67791837758$1397574935$gmane$org@mail.gmail.com>
+Date: Tue, 15 Apr 2014 11:16:00 -0400
+Message-ID: <20140415151600.GC7829__49751.2146867395$1397575046$gmane$org@thessa>
 References: <1397572329-7168-1-git-send-email-jeremie.galarneau@efficios.com>
  <20140415144408.GB7829@thessa>
+ <CA+jJMxsHrHiMGm2Vi5mm5D=AY4OnexSd8V-MUxe65FpVNJ7fXQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============1130847833=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qa0-f47.google.com ([209.85.216.47])
+Received: from smtp.ini-tech.com ([144.76.53.219])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1Wa544-000203-JM
- for lttng-dev@lists.lttng.org; Tue, 15 Apr 2014 11:14:30 -0400
-Received: by mail-qa0-f47.google.com with SMTP id m5so7361860qaj.6
- for <lttng-dev@lists.lttng.org>; Tue, 15 Apr 2014 08:14:19 -0700 (PDT)
-In-Reply-To: <20140415144408.GB7829@thessa>
+ (envelope-from <dgoulet@efficios.com>) id 1Wa55p-00021r-0u
+ for lttng-dev@lists.lttng.org; Tue, 15 Apr 2014 11:16:18 -0400
+In-Reply-To: <CA+jJMxsHrHiMGm2Vi5mm5D=AY4OnexSd8V-MUxe65FpVNJ7fXQ@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -24,114 +22,224 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: David Goulet <dgoulet@efficios.com>
+To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-T24gVHVlLCBBcHIgMTUsIDIwMTQgYXQgMTA6NDQgQU0sIERhdmlkIEdvdWxldCA8ZGdvdWxldEBl
-ZmZpY2lvcy5jb20+IHdyb3RlOgo+IE9uIDE1IEFwciAoMTA6MzI6MDkpLCBKw6lyw6ltaWUgR2Fs
-YXJuZWF1IHdyb3RlOgo+PiBQcmludCBhbiBlcnJvciBtZXNzYWdlIHdoZW4gYSBzbmFwc2hvdCBy
-ZWNvcmQgaXMgbWFkZSB3aXRoIGEKPj4gbWF4IHNpemUgc21hbGxlciB0aGFuIHRoZSBzdWJidWZm
-ZXJzLiBUaGlzIGxpbWl0YXRpb24gaXMgbm93Cj4+IGRvY3VtZW50ZWQgaW4gdGhlIG1hbiBwYWdl
-Lgo+Cj4gV2h5IGlzIHRoaXMgbm90IGRvbmUgb24gdGhlIHNlc3Npb24gZGFlbW9uIHNpZGU/IExp
-a2UgIk9oIHlvdSBwcm92aWRlZAo+IG1lIHdpdGggYSB3cm9uZyBtYXggc2l6ZSIgdHlwZSBvZiBl
-cnJvciBtZXNzYWdlLgo+Cj4gQmVjYXVzZSBoZXJlIHRoaXMgZml4ZXMgdGhlIGlzc3VlIG9ubHkg
-b24gdGhlIGNvbW1hbmQgbGluZSBzaWRlIGJ1dCBhCj4gdXNlciB1c2luZyB0aGUgQVBJIHdvdWxk
-IHN0aWxsIGZhaWwgc29tZWhvdyBzaWxlbnRseSBvciAuLi4gPwo+CgpUaGUgQVBJIGNhbGwgY291
-bGQgcmV0dXJuIHNvbWV0aGluZyBsaWtlCi1MVFROR19FUlJfU05BUFNIT1RfVE9PX1NNQUxMLi4u
-IEl0IHN1cmUgd291bGQgYmUgYmV0dGVyIHRoYW4gd2hhdCB3ZQpoYXZlIG5vdyAoYSBEQkczKC4u
-LikgbWVzc2FnZSBvbiB0aGUgc2Vzc2lvbmQgc2lkZSkuCgo+IE5vdCB0aGF0IEkgZG9uJ3QgbGlr
-ZSB0aGUgYXBwcm9hY2ggaGVyZSBidXQgSSBqdXN0IG5lZWQgdG8ga25vdyBpZiB0aGVyZQo+IGlz
-IGEgc3BlY2lmaWMgcmVhc29uIGl0J3MgZG9uZSBvbiB0aGUgbHR0bmcgY2xpZW50IHNpZGUgb25s
-eS4gVGhpcyBwYXRjaAo+IGFkZHMgdHdvIGNhbGxzIHRoYXQgY2FuIGV4Y2hhbmdlIHF1aXRlIGEg
-Yml0IG9mIGRhdGEgd2l0aCB0aGUgc2Vzc2lvbmQKPiAobGlzdCBkb21haW5zIGFuZCBjaGFubmVs
-cykgc28gdW5sZXNzIHRoZXJlIGlzIG5vIG90aGVyIHdheSwgSSB3b3VsZCBnbwo+IGZvciBhIHNl
-c3Npb25kIHNpZGUgdmFsaWRhdGlvbiBpbnN0ZWFkLgo+CgpXZWxsLCBJIHRoaW5rIGNsaWVudHMg
-d2lsbCBlbmQgdXAgaW1wbGVtZW50aW5nIHRoZSBzYW1lIGxvZ2ljCmFueXdheS4uLiBJZiB0aGUg
-cmVjb3JkIGNhbGwgZmFpbHMgYmVjYXVzZSB0aGUgbWF4IHNpemUgaXMgdG9vIHNtYWxsLApBUEkg
-dXNlcnMgd2lsbCBxdWVyeSB0aGUgc2Vzc2lvbmQgdG8ga25vdyB3aGF0IHNpemUgd291bGQgZml0
-LgpJZGVhbGx5LCB0aGUgbHR0bmcgY2xpZW50IHdpbGwgYWxzbyByZXBvcnQgdGhlIHNtYWxsZXN0
-IHN1aXRhYmxlIHNpemUKaW4gdGhlIGVycm9yIG1lc3NhZ2UgKGxpa2UgaXQgZG9lcyBpbiBteSBw
-YXRjaCkuCgpJIHVuZGVyc3RhbmQgeW91ciBjb25jZXJuIGFib3V0IGRhdGEgZXhjaGFuZ2VzIGRl
-bGF5aW5nIHRoZSBzbmFwc2hvdCwKdGhvdWdoLiBXaGF0IEknZCBwcm9wb3NlIGlzIHRvIHJlcG9y
-dCB0aGUgbmV3IC1MVFROR19FUlJfU05BUFNIT1RfLi4uCmNvZGUgZnJvbSB0aGUgQVBJLCBhbmQg
-aGF2ZSB0aGUgY2xpZW50IHJlcG9ydCB0aGUgc21hbGxlc3Qgc2l6ZQpwb3NzaWJsZSBzaXplIHRv
-IHRoZSB1c2VyIHVzaW5nIGdldF9sYXJnZXN0X3N1YmJ1ZigpIHdoZW4gc3VjaCBhbgplcnJvciBv
-Y2N1cnMuIFdoYXQgZG8geW91IHRoaW5rPwoKVGhhbmtzLApKw6lyw6ltaWUKCj4gQ2hlZXJzIQo+
-IERhdmlkCj4KPj4KPj4gU2lnbmVkLW9mZi1ieTogSsOpcsOpbWllIEdhbGFybmVhdSA8amVyZW1p
-ZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29tPgo+PiAtLS0KPj4gIGRvYy9tYW4vbHR0bmcuMSAgICAg
-ICAgICAgICAgICAgICB8ICA0ICsrLQo+PiAgc3JjL2Jpbi9sdHRuZy9jb21tYW5kcy9zbmFwc2hv
-dC5jIHwgNTkgKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrCj4+ICAyIGZp
-bGVzIGNoYW5nZWQsIDYyIGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkKPj4KPj4gZGlmZiAt
-LWdpdCBhL2RvYy9tYW4vbHR0bmcuMSBiL2RvYy9tYW4vbHR0bmcuMQo+PiBpbmRleCA5NzJmNzFj
-Li5iZjFiNjdlIDEwMDY0NAo+PiAtLS0gYS9kb2MvbWFuL2x0dG5nLjEKPj4gKysrIGIvZG9jL21h
-bi9sdHRuZy4xCj4+IEBAIC03ODcsNyArNzg3LDkgQEAgTGlzdCB0aGUgb3V0cHV0IG9mIGEgc2Vz
-c2lvbi4gQXR0cmlidXRlcyBvZiB0aGUgb3V0cHV0IGFyZSBwcmludGVkLgo+PiAgU25hcHNob3Qg
-YSBzZXNzaW9uJ3MgYnVmZmVyKHMpIGZvciBhbGwgZG9tYWlucy4gSWYgYW4gVVJMIGlzIHNwZWNp
-ZmllZCwgaXQgaXMKPj4gIHVzZWQgaW5zdGVhZCBvZiBhIHByZXZpb3VzbHkgYWRkZWQgb3V0cHV0
-LiBTcGVjaWZ5aW5nIG9ubHkgYSBuYW1lIG9yL2FuZCBhIG1heAo+PiAgc2l6ZSB3aWxsIG92ZXJy
-aWRlIHRoZSBjdXJyZW50IG91dHB1dCB2YWx1ZXMuIEZvciBpbnN0YW5jZSwgeW91IGNhbiByZWNv
-cmQgYQo+PiAtc25hcHNob3Qgd2l0aCBhIGN1c3RvbSBtYXhpbXVtIHNpemUgb3Igd2l0aCBhIGRp
-ZmZlcmVudCBuYW1lLgo+PiArc25hcHNob3Qgd2l0aCBhIGN1c3RvbSBtYXhpbXVtIHNpemUgb3Ig
-d2l0aCBhIGRpZmZlcmVudCBuYW1lLiBIb3dldmVyLCB0aGUKPj4gK21heCBzaXplIG11c3QgYmUg
-aGlnaCBlbm91Z2ggdG8gY29udGFpbiBhIGNvbXBsZXRlIHN1YmJ1ZmZlci4gU2VlIHRoZQo+PiAr
-LS1zdWJidWYtc2l6ZSBzd2l0Y2ggZm9yIGRlZmF1bHQgc3ViYnVmZmVyIHNpemVzLgo+Pgo+PiAg
-Lm5mCj4+ICAkIGx0dG5nIHNuYXBzaG90IGFkZC1vdXRwdXQgLW4gbXlzbmFwc2hvdCBmaWxlOi8v
-L2RhdGEvc25hcHNob3QKPj4gZGlmZiAtLWdpdCBhL3NyYy9iaW4vbHR0bmcvY29tbWFuZHMvc25h
-cHNob3QuYyBiL3NyYy9iaW4vbHR0bmcvY29tbWFuZHMvc25hcHNob3QuYwo+PiBpbmRleCBjNzA0
-ZWVlLi43ZmRhOTQ5IDEwMDY0NAo+PiAtLS0gYS9zcmMvYmluL2x0dG5nL2NvbW1hbmRzL3NuYXBz
-aG90LmMKPj4gKysrIGIvc3JjL2Jpbi9sdHRuZy9jb21tYW5kcy9zbmFwc2hvdC5jCj4+IEBAIC0x
-MjUsNiArMTI1LDU2IEBAIHN0YXRpYyBpbnQgY291bnRfYXJndW1lbnRzKGNvbnN0IGNoYXIgKiph
-cmd2KQo+PiAgICAgICByZXR1cm4gaTsKPj4gIH0KPj4KPj4gK3N0YXRpYyB1aW50NjRfdCBnZXRf
-bGFyZ2VzdF9zdWJidWYoKQo+PiArewo+PiArICAgICBpbnQgZG9tYWluX2NvdW50Owo+PiArICAg
-ICBpbnQgY2hhbm5lbF9jb3VudDsKPj4gKyAgICAgaW50IGRvbWFpbl9pZHg7Cj4+ICsgICAgIGlu
-dCBjaGFubmVsX2lkeDsKPj4gKyAgICAgc3RydWN0IGx0dG5nX2RvbWFpbiAqZG9tYWluczsKPj4g
-KyAgICAgdWludDY0X3QgbGFyZ2VzdF9zdWJidWYgPSAwOwo+PiArCj4+ICsgICAgIGRvbWFpbl9j
-b3VudCA9IGx0dG5nX2xpc3RfZG9tYWlucyhjdXJyZW50X3Nlc3Npb25fbmFtZSwgJmRvbWFpbnMp
-Owo+PiArICAgICBpZiAoZG9tYWluX2NvdW50IDwgMCkgewo+PiArICAgICAgICAgICAgIEVSUigi
-VW5hYmxlIHRvIGxpc3Qgc2Vzc2lvbiAlcydzIGRvbWFpbnMiLAo+PiArICAgICAgICAgICAgICAg
-ICAgICAgY3VycmVudF9zZXNzaW9uX25hbWUpOwo+PiArICAgICAgICAgICAgIGdvdG8gZW5kOwo+
-PiArICAgICB9Cj4+ICsKPj4gKyAgICAgZm9yIChkb21haW5faWR4ID0gMDsgZG9tYWluX2lkeCA8
-IGRvbWFpbl9jb3VudDsgZG9tYWluX2lkeCsrKSB7Cj4+ICsgICAgICAgICAgICAgc3RydWN0IGx0
-dG5nX2NoYW5uZWwgKmNoYW5uZWxzOwo+PiArICAgICAgICAgICAgIHN0cnVjdCBsdHRuZ19oYW5k
-bGUgKmhhbmRsZSA9IGx0dG5nX2NyZWF0ZV9oYW5kbGUoCj4+ICsgICAgICAgICAgICAgICAgICAg
-ICBjdXJyZW50X3Nlc3Npb25fbmFtZSwgJmRvbWFpbnNbZG9tYWluX2lkeF0pOwo+PiArCj4+ICsg
-ICAgICAgICAgICAgaWYgKCFoYW5kbGUpIHsKPj4gKyAgICAgICAgICAgICAgICAgICAgIEVSUigi
-VW5hYmxlIHRvIGNyZWF0ZSBoYW5kbGUgZm9yIHNlc3Npb24gJXMiLAo+PiArICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICBjdXJyZW50X3Nlc3Npb25fbmFtZSk7Cj4+ICsgICAgICAgICAgICAg
-ICAgICAgICBnb3RvIGVuZDsKPj4gKyAgICAgICAgICAgICB9Cj4+ICsKPj4gKyAgICAgICAgICAg
-ICBjaGFubmVsX2NvdW50ID0gbHR0bmdfbGlzdF9jaGFubmVscyhoYW5kbGUsICZjaGFubmVscyk7
-Cj4+ICsgICAgICAgICAgICAgaWYgKGNoYW5uZWxfY291bnQgPCAwKSB7Cj4+ICsgICAgICAgICAg
-ICAgICAgICAgICBFUlIoIlVuYWJsZSB0byBsaXN0IGNoYW5uZWxzIGZvciBzZXNzaW9uICVzIiwK
-Pj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgY3VycmVudF9zZXNzaW9uX25hbWUpOwo+
-PiArICAgICAgICAgICAgICAgICAgICAgZ290byBlbmQ7Cj4+ICsgICAgICAgICAgICAgfQo+PiAr
-Cj4+ICsgICAgICAgICAgICAgZm9yIChjaGFubmVsX2lkeCA9IDA7IGNoYW5uZWxfaWR4IDwgY2hh
-bm5lbF9jb3VudDsKPj4gKyAgICAgICAgICAgICAgICAgICAgIGNoYW5uZWxfaWR4KyspIHsKPj4g
-KyAgICAgICAgICAgICAgICAgICAgIGlmIChjaGFubmVsc1tjaGFubmVsX2lkeF0uYXR0ci5zdWJi
-dWZfc2l6ZSA+Cj4+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGxhcmdlc3Rfc3ViYnVm
-KSB7Cj4+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGxhcmdlc3Rfc3ViYnVmID0KPj4g
-KyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBjaGFubmVsc1tjaGFubmVsX2lk
-eF0uYXR0ci5zdWJidWZfc2l6ZTsKPj4gKyAgICAgICAgICAgICAgICAgICAgIH0KPj4gKyAgICAg
-ICAgICAgICB9Cj4+ICsgICAgICAgICAgICAgZnJlZShjaGFubmVscyk7Cj4+ICsgICAgICAgICAg
-ICAgbHR0bmdfZGVzdHJveV9oYW5kbGUoaGFuZGxlKTsKPj4gKyAgICAgfQo+PiArZW5kOgo+PiAr
-ICAgICBmcmVlKGRvbWFpbnMpOwo+PiArICAgICByZXR1cm4gbGFyZ2VzdF9zdWJidWY7Cj4+ICt9
-Cj4+ICsKPj4gIC8qCj4+ICAgKiBDcmVhdGUgYSBzbmFwc2hvdCBvdXRwdXQgb2JqZWN0IGZyb20g
-YXJndW1lbnRzIHVzaW5nIHRoZSBnaXZlbiBVUkwuCj4+ICAgKgo+PiBAQCAtMTYwLDYgKzIxMCwx
-NSBAQCBzdGF0aWMgc3RydWN0IGx0dG5nX3NuYXBzaG90X291dHB1dCAqY3JlYXRlX291dHB1dF9m
-cm9tX2FyZ3MoY29uc3QgY2hhciAqdXJsKQo+PiAgICAgICB9Cj4+Cj4+ICAgICAgIGlmIChvcHRf
-bWF4X3NpemUpIHsKPj4gKyAgICAgICAgICAgICAvKiBWYWxpZGF0ZSB0aGF0IHRoZSBtYXggc2l6
-ZSBjYW4gY29udGFpbiBvbmUgc3ViYnVmZmVyLiAqLwo+PiArICAgICAgICAgICAgIHVpbnQ2NF90
-IGxhcmdlc3Rfc3ViYnVmID0gZ2V0X2xhcmdlc3Rfc3ViYnVmKCk7Cj4+ICsgICAgICAgICAgICAg
-aWYgKGxhcmdlc3Rfc3ViYnVmID09IDApIHsKPj4gKyAgICAgICAgICAgICAgICAgICAgIGdvdG8g
-ZXJyb3I7Cj4+ICsgICAgICAgICAgICAgfSBlbHNlIGlmIChsYXJnZXN0X3N1YmJ1ZiA+IG9wdF9t
-YXhfc2l6ZSkgewo+PiArICAgICAgICAgICAgICAgICAgICAgRVJSKCJTbmFwc2hvdCBzaXplIG11
-c3QgYmUgZ3JlYXRlciBvciBlcXVhbCB0byB0aGUgbGFyZ2VzdCBzdWJidWZmZXIncyBzaXplICgl
-enUpLiIsCj4+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGxhcmdlc3Rfc3ViYnVmKTsK
-Pj4gKyAgICAgICAgICAgICAgICAgICAgIGdvdG8gZXJyb3I7Cj4+ICsgICAgICAgICAgICAgfQo+
-PiAgICAgICAgICAgICAgIHJldCA9IGx0dG5nX3NuYXBzaG90X291dHB1dF9zZXRfc2l6ZShvcHRf
-bWF4X3NpemUsIG91dHB1dCk7Cj4+ICAgICAgICAgICAgICAgaWYgKHJldCA8IDApIHsKPj4gICAg
-ICAgICAgICAgICAgICAgICAgIGdvdG8gZXJyb3I7Cj4+IC0tCj4+IDEuOS4xCj4+CgoKCi0tIApK
-w6lyw6ltaWUgR2FsYXJuZWF1CkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20K
-Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRl
-diBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============1130847833==
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="E/DnYTRukya0zdZ1"
+Content-Disposition: inline
+
+
+--E/DnYTRukya0zdZ1
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On 15 Apr (11:14:18), J=E9r=E9mie Galarneau wrote:
+> On Tue, Apr 15, 2014 at 10:44 AM, David Goulet <dgoulet@efficios.com> wro=
+te:
+> > On 15 Apr (10:32:09), J=E9r=E9mie Galarneau wrote:
+> >> Print an error message when a snapshot record is made with a
+> >> max size smaller than the subbuffers. This limitation is now
+> >> documented in the man page.
+> >
+> > Why is this not done on the session daemon side? Like "Oh you provided
+> > me with a wrong max size" type of error message.
+> >
+> > Because here this fixes the issue only on the command line side but a
+> > user using the API would still fail somehow silently or ... ?
+> >
+>=20
+> The API call could return something like
+> -LTTNG_ERR_SNAPSHOT_TOO_SMALL... It sure would be better than what we
+> have now (a DBG3(...) message on the sessiond side).
+>=20
+> > Not that I don't like the approach here but I just need to know if there
+> > is a specific reason it's done on the lttng client side only. This patch
+> > adds two calls that can exchange quite a bit of data with the sessiond
+> > (list domains and channels) so unless there is no other way, I would go
+> > for a sessiond side validation instead.
+> >
+>=20
+> Well, I think clients will end up implementing the same logic
+> anyway... If the record call fails because the max size is too small,
+> API users will query the sessiond to know what size would fit.
+> Ideally, the lttng client will also report the smallest suitable size
+> in the error message (like it does in my patch).
+>=20
+> I understand your concern about data exchanges delaying the snapshot,
+> though. What I'd propose is to report the new -LTTNG_ERR_SNAPSHOT_...
+> code from the API, and have the client report the smallest size
+> possible size to the user using get_largest_subbuf() when such an
+> error occurs. What do you think?
+
+Perfect solution for me!
+
+David
+
+>=20
+> Thanks,
+> J=E9r=E9mie
+>=20
+> > Cheers!
+> > David
+> >
+> >>
+> >> Signed-off-by: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
+> >> ---
+> >>  doc/man/lttng.1                   |  4 ++-
+> >>  src/bin/lttng/commands/snapshot.c | 59 ++++++++++++++++++++++++++++++=
++++++++++
+> >>  2 files changed, 62 insertions(+), 1 deletion(-)
+> >>
+> >> diff --git a/doc/man/lttng.1 b/doc/man/lttng.1
+> >> index 972f71c..bf1b67e 100644
+> >> --- a/doc/man/lttng.1
+> >> +++ b/doc/man/lttng.1
+> >> @@ -787,7 +787,9 @@ List the output of a session. Attributes of the ou=
+tput are printed.
+> >>  Snapshot a session's buffer(s) for all domains. If an URL is specifie=
+d, it is
+> >>  used instead of a previously added output. Specifying only a name or/=
+and a max
+> >>  size will override the current output values. For instance, you can r=
+ecord a
+> >> -snapshot with a custom maximum size or with a different name.
+> >> +snapshot with a custom maximum size or with a different name. However=
+, the
+> >> +max size must be high enough to contain a complete subbuffer. See the
+> >> +--subbuf-size switch for default subbuffer sizes.
+> >>
+> >>  .nf
+> >>  $ lttng snapshot add-output -n mysnapshot file:///data/snapshot
+> >> diff --git a/src/bin/lttng/commands/snapshot.c b/src/bin/lttng/command=
+s/snapshot.c
+> >> index c704eee..7fda949 100644
+> >> --- a/src/bin/lttng/commands/snapshot.c
+> >> +++ b/src/bin/lttng/commands/snapshot.c
+> >> @@ -125,6 +125,56 @@ static int count_arguments(const char **argv)
+> >>       return i;
+> >>  }
+> >>
+> >> +static uint64_t get_largest_subbuf()
+> >> +{
+> >> +     int domain_count;
+> >> +     int channel_count;
+> >> +     int domain_idx;
+> >> +     int channel_idx;
+> >> +     struct lttng_domain *domains;
+> >> +     uint64_t largest_subbuf =3D 0;
+> >> +
+> >> +     domain_count =3D lttng_list_domains(current_session_name, &domai=
+ns);
+> >> +     if (domain_count < 0) {
+> >> +             ERR("Unable to list session %s's domains",
+> >> +                     current_session_name);
+> >> +             goto end;
+> >> +     }
+> >> +
+> >> +     for (domain_idx =3D 0; domain_idx < domain_count; domain_idx++) {
+> >> +             struct lttng_channel *channels;
+> >> +             struct lttng_handle *handle =3D lttng_create_handle(
+> >> +                     current_session_name, &domains[domain_idx]);
+> >> +
+> >> +             if (!handle) {
+> >> +                     ERR("Unable to create handle for session %s",
+> >> +                             current_session_name);
+> >> +                     goto end;
+> >> +             }
+> >> +
+> >> +             channel_count =3D lttng_list_channels(handle, &channels);
+> >> +             if (channel_count < 0) {
+> >> +                     ERR("Unable to list channels for session %s",
+> >> +                             current_session_name);
+> >> +                     goto end;
+> >> +             }
+> >> +
+> >> +             for (channel_idx =3D 0; channel_idx < channel_count;
+> >> +                     channel_idx++) {
+> >> +                     if (channels[channel_idx].attr.subbuf_size >
+> >> +                             largest_subbuf) {
+> >> +                             largest_subbuf =3D
+> >> +                                     channels[channel_idx].attr.subbu=
+f_size;
+> >> +                     }
+> >> +             }
+> >> +             free(channels);
+> >> +             lttng_destroy_handle(handle);
+> >> +     }
+> >> +end:
+> >> +     free(domains);
+> >> +     return largest_subbuf;
+> >> +}
+> >> +
+> >>  /*
+> >>   * Create a snapshot output object from arguments using the given URL.
+> >>   *
+> >> @@ -160,6 +210,15 @@ static struct lttng_snapshot_output *create_outpu=
+t_from_args(const char *url)
+> >>       }
+> >>
+> >>       if (opt_max_size) {
+> >> +             /* Validate that the max size can contain one subbuffer.=
+ */
+> >> +             uint64_t largest_subbuf =3D get_largest_subbuf();
+> >> +             if (largest_subbuf =3D=3D 0) {
+> >> +                     goto error;
+> >> +             } else if (largest_subbuf > opt_max_size) {
+> >> +                     ERR("Snapshot size must be greater or equal to t=
+he largest subbuffer's size (%zu).",
+> >> +                             largest_subbuf);
+> >> +                     goto error;
+> >> +             }
+> >>               ret =3D lttng_snapshot_output_set_size(opt_max_size, out=
+put);
+> >>               if (ret < 0) {
+> >>                       goto error;
+> >> --
+> >> 1.9.1
+> >>
+>=20
+>=20
+>=20
+> --=20
+> J=E9r=E9mie Galarneau
+> EfficiOS Inc.
+> http://www.efficios.com
+
+--E/DnYTRukya0zdZ1
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQF8BAEBAgBmBQJTTU0wXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
+ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
+MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02ql0IAK46+cn7vrDeKO2m5hJ6Yvxi
+5q5DC+B1SBpxqIklCWkOe7ehsRABVoiu50JXYvCQ71Y5j9a9EhoVlHwWB9smon8G
+dNRS55KWzcEMheJKp1ddN6qML44St4bcS7y5bL0qXpwpqfUMWITHnxhNBl/FbJJN
+ozIv0PkIileDIhKT1/PlJz8C7gHrOWkqN/rRb4DNFP70dv/QeCiaDBK5raCL0J2O
+XqfmlMR0RsyZvKec+jexiIEqnZnMSYluuwk5drxhmyRdcSZLiSBctN6862/Px3s3
+wYx12Ntbs6qzUPlyuZkB31i1QJDm91Heza2xWwfN8toWF71/19qBqNfdundD1Hg=
+=77T2
+-----END PGP SIGNATURE-----
+
+--E/DnYTRukya0zdZ1--
+
+
+--===============1130847833==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1130847833==--
