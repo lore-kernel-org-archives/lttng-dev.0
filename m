@@ -1,18 +1,10 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: memory usage depending on number and size of
- subbuffers
-Date: Wed, 16 Apr 2014 19:17:34 +0000 (UTC)
-Message-ID: <1116524901.2718.1397675854626.JavaMail.zimbra__46386.7796505385$1397675925$gmane$org@efficios.com>
-References: <48CF5AC71E61DB46B70D0F388054EFFD3599CCCD@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+From: Jessica Foest <jessica.foest@gmail.com>
+Subject: babeltrace
+Date: Wed, 16 Apr 2014 16:31:26 -0400
+Message-ID: <CAPxN80BCJuB0u_5pk_a=aWw2gQ99eWK_cRnQ4_Kw6Sf8dEaJCg__26964.4678490751$1397680365$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============1870350413=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
- by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1WaVL3-00037j-5q
- for lttng-dev@lists.lttng.org; Wed, 16 Apr 2014 15:17:47 -0400
-In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD3599CCCD@VAL-E-01.valcartier.drdc-rddc.gc.ca>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,51 +13,48 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Daniel Thibault <Daniel.Thibault@drdc-rddc.gc.ca>, David Goulet <dgoulet@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, lttng-dev-request@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJEYW5pZWwgVGhpYmF1bHQiIDxE
-YW5pZWwuVGhpYmF1bHRAZHJkYy1yZGRjLmdjLmNhPgo+IFRvOiBsdHRuZy1kZXZAbGlzdHMubHR0
-bmcub3JnCj4gQ2M6ICJtYXRoaWV1IGRlc25veWVycyAobWF0aGlldS5kZXNub3llcnNAZWZmaWNp
-b3MuY29tKSIgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4KPiBTZW50OiBXZWRuZXNk
-YXksIEFwcmlsIDE2LCAyMDE0IDM6MTI6MjcgUE0KPiBTdWJqZWN0OiBSRTogW2x0dG5nLWRldl0g
-bWVtb3J5IHVzYWdlIGRlcGVuZGluZyBvbiBudW1iZXIgYW5kIHNpemUgb2Ygc3ViYnVmZmVycwo+
-IAo+IC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0KPiA+PiBEYXRlOiBXZWQsIDE2IEFwciAyMDE0IDE4OjIyOjQyICsw
-MjAwCj4gPj4gRnJvbTogUz9iYXN0aWVuIEJhcnRoP2w/bXkgPGJhcnRoZWxlbXlAY3JhbnMub3Jn
-Pgo+ID4+Cj4gPj4gTFRUbmcgdXNlcyBtb3JlIG1lbW9yeSB0aGFuIEkgZXhwZWN0ZWQuIE9uIHRo
-ZSBzaW1wbGUgZXhwZXJpbWVudCBiZWxvdyBvbmUKPiA+PiBjYW4gc2VlIHRoYXQgdGhlICJjYWNo
-ZWQiIG1lbW9yeSBpbmNyZWFzZXMgYnkKPiA+Pgo+ID4+IHN1YmJ1Zl9zaXplKm51bV9jcHUqKG51
-bV9zdWJidWYrMSkKPiA+Pgo+ID4+IFRoYXQncyBub3QgYSBiaWcgZGVhbCwgYnV0IEkgZGlkIG5v
-dCBleHBlY3QgdGhlICIrMSIuCj4gPj4KPiA+PiBEb2VzIHNvbWVib2R5IGtub3cgd2hlcmUgaXQg
-Y29tZXMgZnJvbT8KPiAKPiA+IERhdGU6IFdlZCwgMTYgQXByIDIwMTQgMTc6MzI6MzkgKzAwMDAg
-KFVUQykKPiA+IEZyb206IE1hdGhpZXUgRGVzbm95ZXJzIDxtYXRoaWV1LmRlc25veWVyc0BlZmZp
-Y2lvcy5jb20+Cj4gPiBJdCBpcyB0aGUgZXh0cmEgc3ViLWJ1ZmZlciBuZWVkZWQgZm9yIHJlYWRp
-bmcgYSBzdWItYnVmZmVyIHdoaWxlIHRoZQo+ID4gb3RoZXIgc3ViLWJ1ZmZlcnMgYXJlIHdyaXR0
-ZW4gaW50by4gSXQncyBuZWVkZWQgZm9yIHNuYXBzaG90dGluZwo+ID4gZGF0YSB3aGlsZSB0cmFj
-aW5nIGlzIGFjdGl2ZS4KPiA+Cj4gPiBNYXRoaWV1Cj4gCj4gICAgSWYgSSdtIG5vdCBtaXN0YWtl
-biwgdGhlICJwYXNzaW5nIHN1Yi1idWZmZXIiIGlzIHVzZWQgaW4gb3ZlcndyaXRlIG1vZGUKPiAg
-ICAoYXMgb3Bwb3NlZCB0byBkaXNjYXJkIG1vZGUpLCBub3QgZXNwZWNpYWxseSBmb3Igc25hcHNo
-b3QgbW9kZS4gIEl0IGlzIGluCj4gICAgZmFjdCBwb3NzaWJsZSB0byBydW4gaW4gc25hcHNob3Qr
-ZGlzY2FyZCBtb2RlLCBhbHRob3VnaCB0aGF0IG1heSBub3QgYmUKPiAgICB2ZXJ5IHVzZWZ1bCBp
-biBtb3N0IHVzZSBjYXNlcy4gIENhbiB5b3UgY29uZmlybSwgTWF0aGlldT8KCldoaWxlIHRoZW9y
-ZXRpY2FsbHkgcG9zc2libGUsIEknbSBub3QgZXZlbiBzdXJlIGlmIHdlIGFsbG93IGl0LCBiZWNh
-dXNlCml0J3MgcHJldHR5IG11Y2ggdXNlbGVzcy4gQnV0IEkgc3VzcGVjdCBvbmUgY291bGQgaW5k
-ZWVkIGZvcmNlIGEgY2hhbm5lbCBpbgpkaXNjYXJkIG1vZGUgZm9yIGEgc25hcHNob3Qgc2Vzc2lv
-bi4gRGF2aWQsIGNhbiB5b3UgY29uZmlybSA/CgpUaGFua3MsCgpNYXRoaWV1CgoKPiAKPiBEYW5p
-ZWwgVS4gVGhpYmF1bHQKPiBQcm90ZWN0aW9uIGRlcyBzeXN0w6htZXMgZXQgY29udHJlbWVzdXJl
-cyAoUFNDKSB8IFN5c3RlbXMgUHJvdGVjdGlvbiAmCj4gQ291bnRlcm1lYXN1cmVzIChTUEMpCj4g
-Q3liZXIgc8OpY3VyaXTDqSBwb3VyIGxlcyBtaXNzaW9ucyBlc3NlbnRpZWxsZXMgKENNRSkgfCBN
-aXNzaW9uIENyaXRpY2FsIEN5YmVyCj4gU2VjdXJpdHkgKE1DQ1MpCj4gUiAmIEQgcG91ciBsYSBk
-w6lmZW5zZSBDYW5hZGEgLSBWYWxjYXJ0aWVyIChSRERDIFZhbGNhcnRpZXIpIHwgRGVmZW5jZSBS
-JkQKPiBDYW5hZGEgLSBWYWxjYXJ0aWVyIChEUkRDIFZhbGNhcnRpZXIpCj4gMjQ1OSByb3V0ZSBk
-ZSBsYSBCcmF2b3VyZQo+IFF1w6liZWMgUUMgIEczSiAxWDUKPiBDQU5BREEKPiBWb3ggOiAoNDE4
-KSA4NDQtNDAwMCB4NDI0NQo+IEZheCA6ICg0MTgpIDg0NC00NTM4Cj4gTkFDIDogOTE4ViBRU0RK
-IDxodHRwOi8vd3d3LnRyYXZlbGdpcy5jb20vbWFwLmFzcD9hZGRyPTkxOFYlMjBRU0RKPgo+IEdv
-dXZlcm5lbWVudCBkdSBDYW5hZGEgfCBHb3Zlcm5tZW50IG9mIENhbmFkYQo+IDxodHRwOi8vd3d3
-LnZhbGNhcnRpZXIuZHJkYy1yZGRjLmdjLmNhLz4KPiAKCi0tIApNYXRoaWV1IERlc25veWVycwpF
-ZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCgpfX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5n
-LWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxt
-YW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+--===============1870350413==
+Content-Type: multipart/alternative; boundary=001a1134aa0e038c0f04f72ecd9e
+
+--001a1134aa0e038c0f04f72ecd9e
+Content-Type: text/plain; charset=UTF-8
+
+Hi all
+
+i know that the default output format of babeltrace is text .
+what are the others output format supported by babeltrace ?
+
+in my case , i need to convert the CTF log file of lttng to a CSV file ,
+did tou have any idea about how can i do it ?
+
+thanks
+
+--001a1134aa0e038c0f04f72ecd9e
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hi all<div><br></div><div>i know that the default output f=
+ormat of babeltrace is text .</div><div>what are the others output format s=
+upported by babeltrace ?</div><div><br></div><div>in my case , i need to co=
+nvert the CTF log file of lttng to a CSV file , did tou have any idea about=
+ how can i do it ?</div>
+<div><br></div><div>thanks</div></div>
+
+--001a1134aa0e038c0f04f72ecd9e--
+
+
+--===============1870350413==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1870350413==--
