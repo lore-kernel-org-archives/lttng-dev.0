@@ -1,17 +1,18 @@
-From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Subject: Re: memory usage depending on number and size of
  subbuffers
-Date: Wed, 16 Apr 2014 19:12:27 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD3599CCCD__45974.8653848239$1397675619$gmane$org@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+Date: Wed, 16 Apr 2014 19:17:34 +0000 (UTC)
+Message-ID: <1116524901.2718.1397675854626.JavaMail.zimbra__46386.7796505385$1397675925$gmane$org@efficios.com>
+References: <48CF5AC71E61DB46B70D0F388054EFFD3599CCCD@VAL-E-01.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1WaVG5-00034Q-GX
- for lttng-dev@lists.lttng.org; Wed, 16 Apr 2014 15:12:39 -0400
-Content-Language: fr-FR
+ (envelope-from <compudj@efficios.com>) id 1WaVL3-00037j-5q
+ for lttng-dev@lists.lttng.org; Wed, 16 Apr 2014 15:17:47 -0400
+In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD3599CCCD@VAL-E-01.valcartier.drdc-rddc.gc.ca>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,51 +21,51 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Daniel Thibault <Daniel.Thibault@drdc-rddc.gc.ca>, David Goulet <dgoulet@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-----------------------------------------------------------------------
->> Date: Wed, 16 Apr 2014 18:22:42 +0200
->> From: S?bastien Barth?l?my <barthelemy@crans.org>
->>
->> LTTng uses more memory than I expected. On the simple experiment below o=
-ne can see that the "cached" memory increases by
->>
->> subbuf_size*num_cpu*(num_subbuf+1)
->>
->> That's not a big deal, but I did not expect the "+1".
->>
->> Does somebody know where it comes from?
-
-> Date: Wed, 16 Apr 2014 17:32:39 +0000 (UTC)
-> From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> It is the extra sub-buffer needed for reading a sub-buffer while the =
-
-> other sub-buffers are written into. It's needed for snapshotting =
-
-> data while tracing is active. =
-
->
-> Mathieu =
-
-
-   If I'm not mistaken, the "passing sub-buffer" is used in overwrite mode =
-(as opposed to discard mode), not especially for snapshot mode.  It is in f=
-act possible to run in snapshot+discard mode, although that may not be very=
- useful in most use cases.  Can you confirm, Mathieu?
-
-Daniel U. Thibault
-Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
-ntermeasures (SPC)
-Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
-Cyber Security (MCCS)
-R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
- Canada - Valcartier (DRDC Valcartier)
-2459 route de la Bravoure
-Qu=E9bec QC  G3J 1X5
-CANADA
-Vox : (418) 844-4000 x4245
-Fax : (418) 844-4538
-NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-Gouvernement du Canada | Government of Canada
-<http://www.valcartier.drdc-rddc.gc.ca/>
+LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJEYW5pZWwgVGhpYmF1bHQiIDxE
+YW5pZWwuVGhpYmF1bHRAZHJkYy1yZGRjLmdjLmNhPgo+IFRvOiBsdHRuZy1kZXZAbGlzdHMubHR0
+bmcub3JnCj4gQ2M6ICJtYXRoaWV1IGRlc25veWVycyAobWF0aGlldS5kZXNub3llcnNAZWZmaWNp
+b3MuY29tKSIgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4KPiBTZW50OiBXZWRuZXNk
+YXksIEFwcmlsIDE2LCAyMDE0IDM6MTI6MjcgUE0KPiBTdWJqZWN0OiBSRTogW2x0dG5nLWRldl0g
+bWVtb3J5IHVzYWdlIGRlcGVuZGluZyBvbiBudW1iZXIgYW5kIHNpemUgb2Ygc3ViYnVmZmVycwo+
+IAo+IC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0KPiA+PiBEYXRlOiBXZWQsIDE2IEFwciAyMDE0IDE4OjIyOjQyICsw
+MjAwCj4gPj4gRnJvbTogUz9iYXN0aWVuIEJhcnRoP2w/bXkgPGJhcnRoZWxlbXlAY3JhbnMub3Jn
+Pgo+ID4+Cj4gPj4gTFRUbmcgdXNlcyBtb3JlIG1lbW9yeSB0aGFuIEkgZXhwZWN0ZWQuIE9uIHRo
+ZSBzaW1wbGUgZXhwZXJpbWVudCBiZWxvdyBvbmUKPiA+PiBjYW4gc2VlIHRoYXQgdGhlICJjYWNo
+ZWQiIG1lbW9yeSBpbmNyZWFzZXMgYnkKPiA+Pgo+ID4+IHN1YmJ1Zl9zaXplKm51bV9jcHUqKG51
+bV9zdWJidWYrMSkKPiA+Pgo+ID4+IFRoYXQncyBub3QgYSBiaWcgZGVhbCwgYnV0IEkgZGlkIG5v
+dCBleHBlY3QgdGhlICIrMSIuCj4gPj4KPiA+PiBEb2VzIHNvbWVib2R5IGtub3cgd2hlcmUgaXQg
+Y29tZXMgZnJvbT8KPiAKPiA+IERhdGU6IFdlZCwgMTYgQXByIDIwMTQgMTc6MzI6MzkgKzAwMDAg
+KFVUQykKPiA+IEZyb206IE1hdGhpZXUgRGVzbm95ZXJzIDxtYXRoaWV1LmRlc25veWVyc0BlZmZp
+Y2lvcy5jb20+Cj4gPiBJdCBpcyB0aGUgZXh0cmEgc3ViLWJ1ZmZlciBuZWVkZWQgZm9yIHJlYWRp
+bmcgYSBzdWItYnVmZmVyIHdoaWxlIHRoZQo+ID4gb3RoZXIgc3ViLWJ1ZmZlcnMgYXJlIHdyaXR0
+ZW4gaW50by4gSXQncyBuZWVkZWQgZm9yIHNuYXBzaG90dGluZwo+ID4gZGF0YSB3aGlsZSB0cmFj
+aW5nIGlzIGFjdGl2ZS4KPiA+Cj4gPiBNYXRoaWV1Cj4gCj4gICAgSWYgSSdtIG5vdCBtaXN0YWtl
+biwgdGhlICJwYXNzaW5nIHN1Yi1idWZmZXIiIGlzIHVzZWQgaW4gb3ZlcndyaXRlIG1vZGUKPiAg
+ICAoYXMgb3Bwb3NlZCB0byBkaXNjYXJkIG1vZGUpLCBub3QgZXNwZWNpYWxseSBmb3Igc25hcHNo
+b3QgbW9kZS4gIEl0IGlzIGluCj4gICAgZmFjdCBwb3NzaWJsZSB0byBydW4gaW4gc25hcHNob3Qr
+ZGlzY2FyZCBtb2RlLCBhbHRob3VnaCB0aGF0IG1heSBub3QgYmUKPiAgICB2ZXJ5IHVzZWZ1bCBp
+biBtb3N0IHVzZSBjYXNlcy4gIENhbiB5b3UgY29uZmlybSwgTWF0aGlldT8KCldoaWxlIHRoZW9y
+ZXRpY2FsbHkgcG9zc2libGUsIEknbSBub3QgZXZlbiBzdXJlIGlmIHdlIGFsbG93IGl0LCBiZWNh
+dXNlCml0J3MgcHJldHR5IG11Y2ggdXNlbGVzcy4gQnV0IEkgc3VzcGVjdCBvbmUgY291bGQgaW5k
+ZWVkIGZvcmNlIGEgY2hhbm5lbCBpbgpkaXNjYXJkIG1vZGUgZm9yIGEgc25hcHNob3Qgc2Vzc2lv
+bi4gRGF2aWQsIGNhbiB5b3UgY29uZmlybSA/CgpUaGFua3MsCgpNYXRoaWV1CgoKPiAKPiBEYW5p
+ZWwgVS4gVGhpYmF1bHQKPiBQcm90ZWN0aW9uIGRlcyBzeXN0w6htZXMgZXQgY29udHJlbWVzdXJl
+cyAoUFNDKSB8IFN5c3RlbXMgUHJvdGVjdGlvbiAmCj4gQ291bnRlcm1lYXN1cmVzIChTUEMpCj4g
+Q3liZXIgc8OpY3VyaXTDqSBwb3VyIGxlcyBtaXNzaW9ucyBlc3NlbnRpZWxsZXMgKENNRSkgfCBN
+aXNzaW9uIENyaXRpY2FsIEN5YmVyCj4gU2VjdXJpdHkgKE1DQ1MpCj4gUiAmIEQgcG91ciBsYSBk
+w6lmZW5zZSBDYW5hZGEgLSBWYWxjYXJ0aWVyIChSRERDIFZhbGNhcnRpZXIpIHwgRGVmZW5jZSBS
+JkQKPiBDYW5hZGEgLSBWYWxjYXJ0aWVyIChEUkRDIFZhbGNhcnRpZXIpCj4gMjQ1OSByb3V0ZSBk
+ZSBsYSBCcmF2b3VyZQo+IFF1w6liZWMgUUMgIEczSiAxWDUKPiBDQU5BREEKPiBWb3ggOiAoNDE4
+KSA4NDQtNDAwMCB4NDI0NQo+IEZheCA6ICg0MTgpIDg0NC00NTM4Cj4gTkFDIDogOTE4ViBRU0RK
+IDxodHRwOi8vd3d3LnRyYXZlbGdpcy5jb20vbWFwLmFzcD9hZGRyPTkxOFYlMjBRU0RKPgo+IEdv
+dXZlcm5lbWVudCBkdSBDYW5hZGEgfCBHb3Zlcm5tZW50IG9mIENhbmFkYQo+IDxodHRwOi8vd3d3
+LnZhbGNhcnRpZXIuZHJkYy1yZGRjLmdjLmNhLz4KPiAKCi0tIApNYXRoaWV1IERlc25veWVycwpF
+ZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCgpfX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5n
+LWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxt
+YW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
