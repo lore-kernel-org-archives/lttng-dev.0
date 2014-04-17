@@ -1,19 +1,18 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-modules] Statedump event for block
- devices
-Date: Wed, 16 Apr 2014 21:05:43 +0000 (UTC)
-Message-ID: <1071732221.2755.1397682343662.JavaMail.zimbra__13016.4486742162$1397682414$gmane$org@efficios.com>
-References: <1397681801-5991-1-git-send-email-mathieu.desnoyers@efficios.com>
- <534EEF26.5060307@efficios.com>
+Subject: Re: [PATCH 1/1] Fix: disable liblttng-ust-dl if dlinfo
+ is not available in C library
+Date: Thu, 17 Apr 2014 11:59:34 +0000 (UTC)
+Message-ID: <1830409024.3141.1397735974597.JavaMail.zimbra__38251.7196624123$1397736041$gmane$org@efficios.com>
+References: <1397080507-20411-1-git-send-email-romain.naour@openwide.fr>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1WaX1i-0003qT-E5
- for lttng-dev@lists.lttng.org; Wed, 16 Apr 2014 17:05:57 -0400
-In-Reply-To: <534EEF26.5060307@efficios.com>
+ (envelope-from <compudj@efficios.com>) id 1Wakyo-0000Zq-Ph
+ for lttng-dev@lists.lttng.org; Thu, 17 Apr 2014 07:59:50 -0400
+In-Reply-To: <1397080507-20411-1-git-send-email-romain.naour@openwide.fr>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,298 +21,92 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Julien Desfossez <jdesfossez@efficios.com>
-Cc: lttng-dev@lists.lttng.org, Houssem Daoud <houssemmh@gmail.com>
+To: Romain Naour <romain.naour@openwide.fr>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-aaand merged!
-
-Thanks,
+Merged, thanks!
 
 Mathieu
 
 ----- Original Message -----
-> From: "Julien Desfossez" <jdesfossez@efficios.com>
-> To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-> Cc: lttng-dev@lists.lttng.org, "Houssem Daoud" <houssemmh@gmail.com>
-> Sent: Wednesday, April 16, 2014 4:59:18 PM
-> Subject: Re: [lttng-dev] [PATCH lttng-modules] Statedump event for block devices
+> From: "Romain Naour" <romain.naour@openwide.fr>
+> To: lttng-dev@lists.lttng.org
+> Cc: "mathieu desnoyers" <mathieu.desnoyers@efficios.com>, "simon marchi" <simon.marchi@polymtl.ca>, "Romain Naour"
+> <romain.naour@openwide.fr>
+> Sent: Wednesday, April 9, 2014 5:55:07 PM
+> Subject: [PATCH 1/1] Fix: disable liblttng-ust-dl if dlinfo is not available in C library
 > 
-> Tested-by: Julien Desfossez <jdesfossez@efficios.com>
+> According to uClibc commit [1], dlinfo is not available in recent uClibc
+> (>0.9.33),
+> but available in older version of uClibc (<=0.9.33) whith a different
+> prototype than glibc.
 > 
-> On 14-04-16 04:56 PM, Mathieu Desnoyers wrote:
-> > From: Houssem Daoud <houssemmh@gmail.com>
-> > 
-> > [ Edited by Mathieu Desnoyers. ]
-> > Signed-off-by: Houssem Daoud <houssemmh@gmail.com>
-> > Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> > ---
-> >  README                                             |    2 +
-> >  .../events/lttng-module/lttng-statedump.h          |   16 +++
-> >  lttng-statedump-impl.c                             |   46 ++++++++
-> >  wrapper/genhd.h                                    |  113
-> >  ++++++++++++++++++++
-> >  4 files changed, 177 insertions(+)
-> >  create mode 100644 wrapper/genhd.h
-> > 
-> > diff --git a/README b/README
-> > index 9aa5b93..119bfa8 100644
-> > --- a/README
-> > +++ b/README
-> > @@ -83,6 +83,8 @@ CONFIG_KPROBES:
-> >  CONFIG_KRETPROBES:
-> >              Dynamic function entry/return probe.
-> >                 lttng enable-event -k --function ...
-> > +CONFIG_KALLSYMS_ALL:
-> > +            State dump of mapping between block device number and name.
-> >  
-> >  
-> >  * Note about Perf PMU counters support
-> > diff --git a/instrumentation/events/lttng-module/lttng-statedump.h
-> > b/instrumentation/events/lttng-module/lttng-statedump.h
-> > index e4c86d6..efd22d7 100644
-> > --- a/instrumentation/events/lttng-module/lttng-statedump.h
-> > +++ b/instrumentation/events/lttng-module/lttng-statedump.h
-> > @@ -7,6 +7,7 @@
-> >  #include <linux/tracepoint.h>
-> >  #include <linux/nsproxy.h>
-> >  #include <linux/pid_namespace.h>
-> > +#include <linux/types.h>
-> >  
-> >  TRACE_EVENT(lttng_statedump_start,
-> >  	TP_PROTO(struct lttng_session *session),
-> > @@ -141,6 +142,21 @@ TRACE_EVENT(lttng_statedump_network_interface,
-> >  	TP_printk("")
-> >  )
-> >  
-> > +TRACE_EVENT(lttng_statedump_block_device,
-> > +	TP_PROTO(struct lttng_session *session,
-> > +		dev_t dev, const char *diskname),
-> > +	TP_ARGS(session, dev, diskname),
-> > +	TP_STRUCT__entry(
-> > +		__field(dev_t, dev)
-> > +		__string(diskname, diskname)
-> > +	),
-> > +	TP_fast_assign(
-> > +		tp_assign(dev, dev)
-> > +		tp_strcpy(diskname, diskname)
-> > +	),
-> > +	TP_printk("")
-> > +)
-> > +
-> >  /* Called with desc->lock held */
-> >  TRACE_EVENT(lttng_statedump_interrupt,
-> >  	TP_PROTO(struct lttng_session *session,
-> > diff --git a/lttng-statedump-impl.c b/lttng-statedump-impl.c
-> > index 3e46ca1..e9fe829 100644
-> > --- a/lttng-statedump-impl.c
-> > +++ b/lttng-statedump-impl.c
-> > @@ -45,6 +45,7 @@
-> >  #include <linux/swap.h>
-> >  #include <linux/wait.h>
-> >  #include <linux/mutex.h>
-> > +#include <linux/device.h>
-> >  
-> >  #include "lttng-events.h"
-> >  #include "lttng-tracer.h"
-> > @@ -54,6 +55,7 @@
-> >  #include "wrapper/nsproxy.h"
-> >  #include "wrapper/irq.h"
-> >  #include "wrapper/tracepoint.h"
-> > +#include "wrapper/genhd.h"
-> >  
-> >  #ifdef CONFIG_LTTNG_HAS_LIST_IRQ
-> >  #include <linux/irq.h>
-> > @@ -65,6 +67,7 @@
-> >  #define TRACE_INCLUDE_FILE lttng-statedump
-> >  #include "instrumentation/events/lttng-module/lttng-statedump.h"
-> >  
-> > +DEFINE_TRACE(lttng_statedump_block_device);
-> >  DEFINE_TRACE(lttng_statedump_end);
-> >  DEFINE_TRACE(lttng_statedump_interrupt);
-> >  DEFINE_TRACE(lttng_statedump_file_descriptor);
-> > @@ -115,7 +118,49 @@ enum lttng_process_status {
-> >  	LTTNG_DEAD = 7,
-> >  };
-> >  
-> > +static
-> > +int lttng_enumerate_block_devices(struct lttng_session *session)
-> > +{
-> > +	struct class *ptr_block_class;
-> > +	struct device_type *ptr_disk_type;
-> > +	struct class_dev_iter iter;
-> > +	struct device *dev;
-> > +
-> > +	ptr_block_class = wrapper_get_block_class();
-> > +	if (!ptr_block_class)
-> > +		return -ENOSYS;
-> > +	ptr_disk_type = wrapper_get_disk_type();
-> > +	if (!ptr_disk_type) {
-> > +		return -ENOSYS;
-> > +	}
-> > +	class_dev_iter_init(&iter, ptr_block_class, NULL, ptr_disk_type);
-> > +	while ((dev = class_dev_iter_next(&iter))) {
-> > +		struct disk_part_iter piter;
-> > +		struct gendisk *disk = dev_to_disk(dev);
-> > +		struct hd_struct *part;
-> > +
-> > +		disk_part_iter_init(&piter, disk, DISK_PITER_INCL_PART0);
-> > +		while ((part = disk_part_iter_next(&piter))) {
-> > +			char name_buf[BDEVNAME_SIZE];
-> > +			char *p;
-> > +
-> > +			p = wrapper_disk_name(disk, part->partno, name_buf);
-> > +			if (!p) {
-> > +				disk_part_iter_exit(&piter);
-> > +				class_dev_iter_exit(&iter);
-> > +				return -ENOSYS;
-> > +			}
-> > +			trace_lttng_statedump_block_device(session,
-> > +					part_devt(part), name_buf);
-> > +		}
-> > +		disk_part_iter_exit(&piter);
-> > +	}
-> > +	class_dev_iter_exit(&iter);
-> > +	return 0;
-> > +}
-> > +
-> >  #ifdef CONFIG_INET
-> > +
-> >  static
-> >  void lttng_enumerate_device(struct lttng_session *session,
-> >  		struct net_device *dev)
-> > @@ -397,6 +442,7 @@ int do_lttng_statedump(struct lttng_session *session)
-> >  	/* FIXME lttng_enumerate_vm_maps(session); */
-> >  	lttng_list_interrupts(session);
-> >  	lttng_enumerate_network_ip_interface(session);
-> > +	lttng_enumerate_block_devices(session);
-> >  
-> >  	/* TODO lttng_dump_idt_table(session); */
-> >  	/* TODO lttng_dump_softirq_vec(session); */
-> > diff --git a/wrapper/genhd.h b/wrapper/genhd.h
-> > new file mode 100644
-> > index 0000000..5bb390b
-> > --- /dev/null
-> > +++ b/wrapper/genhd.h
-> > @@ -0,0 +1,113 @@
-> > +#ifndef _LTTNG_WRAPPER_GENHD_H
-> > +#define _LTTNG_WRAPPER_GENHD_H
-> > +
-> > +/*
-> > + * wrapper/genhd.h
-> > + *
-> > + * wrapper around block layer functions and data structures. Using
-> > + * KALLSYMS to get its address when available, else we need to have a
-> > + * kernel that exports this function to GPL modules.
-> > + *
-> > + * Copyright (C) 2011-2014 Mathieu Desnoyers
-> > <mathieu.desnoyers@efficios.com>
-> > + *
-> > + * This library is free software; you can redistribute it and/or
-> > + * modify it under the terms of the GNU Lesser General Public
-> > + * License as published by the Free Software Foundation; only
-> > + * version 2.1 of the License.
-> > + *
-> > + * This library is distributed in the hope that it will be useful,
-> > + * but WITHOUT ANY WARRANTY; without even the implied warranty of
-> > + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-> > + * Lesser General Public License for more details.
-> > + *
-> > + * You should have received a copy of the GNU Lesser General Public
-> > + * License along with this library; if not, write to the Free Software
-> > + * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-> > 02110-1301 USA
-> > + */
-> > +
-> > +#include <linux/genhd.h>
-> > +
-> > +#ifdef CONFIG_KALLSYMS
-> > +
-> > +#include <linux/kallsyms.h>
-> > +#include "kallsyms.h"
-> > +
-> > +static inline
-> > +char *wrapper_disk_name(struct gendisk *hd, int partno, char *buf)
-> > +{
-> > +	char *(*disk_name_sym)(struct gendisk *hd, int partno, char *buf);
-> > +
-> > +	disk_name_sym = (void *) kallsyms_lookup_funcptr("disk_name");
-> > +	if (disk_name_sym) {
-> > +		return disk_name_sym(hd, partno, buf);
-> > +	} else {
-> > +		printk(KERN_WARNING "LTTng: disk_name symbol lookup failed.\n");
-> > +		return NULL;
-> > +	}
-> > +}
-> > +
-> > +#else
-> > +
-> > +static inline
-> > +char *wrapper_disk_name(struct gendisk *hd, int partno, char *buf)
-> > +{
-> > +	return disk_name(hd, partno, buf);
-> > +}
-> > +
-> > +#endif
-> > +
-> > +#ifdef CONFIG_KALLSYMS_ALL
-> > +
-> > +static inline
-> > +struct class *wrapper_get_block_class(void)
-> > +{
-> > +	struct class *ptr_block_class;
-> > +
-> > +	ptr_block_class = (struct class *)
-> > kallsyms_lookup_dataptr("block_class");
-> > +	if (!ptr_block_class) {
-> > +		printk(KERN_WARNING "LTTng: block_class symbol lookup failed.\n");
-> > +		return NULL;
-> > +	}
-> > +	return ptr_block_class;
-> > +}
-> > +
-> > +static inline
-> > +struct device_type *wrapper_get_disk_type(void)
-> > +{
-> > +	struct device_type *ptr_disk_type;
-> > +
-> > +	ptr_disk_type = (struct device_type *)
-> > kallsyms_lookup_dataptr("disk_type");
-> > +	if (!ptr_disk_type) {
-> > +		printk(KERN_WARNING "LTTng: disk_type symbol lookup failed.\n");
-> > +		return NULL;
-> > +	}
-> > +	return ptr_disk_type;
-> > +}
-> > +
-> > +#else
-> > +
-> > +static inline
-> > +struct class *wrapper_get_block_class(void)
-> > +{
-> > +	/*
-> > +	 * Symbol block_class is not exported.
-> > +	 * TODO: return &block_class;
-> > +	 */
-> > +	/* Feature currently unavailable without KALLSYMS_ALL */
-> > +	return NULL;
-> > +}
-> > +
-> > +static inline
-> > +struct device_type *wrapper_get_disk_type(void)
-> > +{
-> > +	/*
-> > +	 * Symbol disk_type is not exported.
-> > +	 * TODO: return &disk_type;
-> > +	 */
-> > +	/* Feature currently unavailable without KALLSYMS_ALL */
-> > +	return NULL;
-> > +}
-> > +
-> > +#endif
-> > +
-> > +#endif /* _LTTNG_WRAPPER_GENHD_H */
-> > 
+> dlinfo used by liblttng-ust-dl require RTLD_DI_LINKMAP that is not available
+> in uClibc.
+> 
+> To be able to use LTTng UST with uClibc, we need to disable
+> the Dynamic Linker Tracing functionality [2] if RTLD_DI_LINKMAP is not
+> detected.
+> 
+> [1]
+> http://git.uclibc.org/uClibc/commit/?id=f3c9dc499c5c787ddd8c4320f2d44d2ae6e40c22
+> [2] http://lists.lttng.org/pipermail/lttng-dev/2014-February/022423.html
+> 
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> ---
+>  Makefile.am  |  5 ++++-
+>  configure.ac | 10 ++++++++++
+>  2 files changed, 14 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Makefile.am b/Makefile.am
+> index b79d2dd..c907ff1 100644
+> --- a/Makefile.am
+> +++ b/Makefile.am
+> @@ -4,11 +4,14 @@ SUBDIRS = . include snprintf libringbuffer
+> liblttng-ust-comm \
+>  		liblttng-ust \
+>  		liblttng-ust-ctl \
+>  		liblttng-ust-fork \
+> -		liblttng-ust-dl \
+>  		liblttng-ust-libc-wrapper \
+>  		liblttng-ust-cyg-profile \
+>  		tools
+>  
+> +if HAVE_DLINFO
+> +SUBDIRS += liblttng-ust-dl
+> +endif
+> +
+>  if BUILD_JNI_INTERFACE
+>  SUBDIRS += liblttng-ust-java liblttng-ust-jul
+>  endif
+> diff --git a/configure.ac b/configure.ac
+> index b04d4e3..b315d54 100644
+> --- a/configure.ac
+> +++ b/configure.ac
+> @@ -124,6 +124,16 @@ AM_CONDITIONAL([LTTNG_UST_BUILD_WITH_LIBC_DL], [test
+> "x$have_libc_dl" = "xyes"])
+>  
+>  AC_CHECK_LIB([pthread], [pthread_create])
+>  
+> +# Check for dlfcn.h
+> +AC_CHECK_HEADER([dlfcn.h])
+> +AS_IF([test "${ac_cv_header_dlfcn_h}" = "yes"],
+> +	[AC_CHECK_DECLS([RTLD_DI_LINKMAP],,,
+> +		[#define _GNU_SOURCE /* Required on Linux to get GNU extensions */
+> +		#include <dlfcn.h>])
+> +	],
+> +	[ac_cv_have_decl_RTLD_DI_LINKMAP="no"])
+> +AM_CONDITIONAL([HAVE_DLINFO], [test "${ac_cv_have_decl_RTLD_DI_LINKMAP}" =
+> "yes"])
+> +
+>  # Checks for header files.
+>  #AC_CHECK_HEADERS([fcntl.h stdint.h stdlib.h string.h sys/socket.h
+>  sys/time.h unistd.h])
+>  
+> --
+> 1.9.0
+> 
 > 
 
 -- 
