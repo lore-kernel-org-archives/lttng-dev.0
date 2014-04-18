@@ -1,18 +1,18 @@
 From: Jesper Derehag <jderehag@hotmail.com>
-Subject: [PATCH babeltrace] Added fallback for betoh/htobe if
+Subject: [PATCH v2 babeltrace] Added fallback for betoh/htobe if
 	they do not exist
-Date: Fri, 18 Apr 2014 23:48:29 +0200
-Message-ID: <1397857709-30241-1-git-send-email-jderehag__28656.8906195045$1397857800$gmane$org@hotmail.com>
+Date: Fri, 18 Apr 2014 23:55:31 +0200
+Message-ID: <1397858131-30320-1-git-send-email-jderehag__43044.1303681166$1397858201$gmane$org@hotmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-la0-f47.google.com ([209.85.215.47])
+Received: from mail-lb0-f174.google.com ([209.85.217.174])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jderehag@gmail.com>) id 1WbGeP-0003iT-Av
- for lttng-dev@lists.lttng.org; Fri, 18 Apr 2014 17:48:58 -0400
-Received: by mail-la0-f47.google.com with SMTP id pn19so1690054lab.20
- for <lttng-dev@lists.lttng.org>; Fri, 18 Apr 2014 14:48:43 -0700 (PDT)
+ (envelope-from <jderehag@gmail.com>) id 1WbGl9-0003lv-SP
+ for lttng-dev@lists.lttng.org; Fri, 18 Apr 2014 17:55:49 -0400
+Received: by mail-lb0-f174.google.com with SMTP id u14so1684135lbd.19
+ for <lttng-dev@lists.lttng.org>; Fri, 18 Apr 2014 14:55:41 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,10 +22,7 @@ List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
-Cc: Jesper Derehag <jesper.derehag@ericsson.com>
 List-Id: lttng-dev@lists.lttng.org
-
-From: Jesper Derehag <jesper.derehag@ericsson.com>
 
 For older systems endian.h may not contain the betoh/htobe macros.
 If they are missing, add them and make sure that any user of
@@ -34,6 +31,8 @@ htobe/betoh uses include/babeltrace/endian.h and not system endian.h
 Signed-off-by: Jesper Derehag <jderehag@hotmail.com>
 Tested-by: Jesper Derehag <jderehag@hotmail.com>
 ---
+Fixed the commit author email to jderehag@hotmail.com
+
  formats/lttng-live/lttng-live-comm.c |  1 +
  include/babeltrace/endian.h          | 91 +++++++++++++++++++++++++++++++++++-
  2 files changed, 91 insertions(+), 1 deletion(-)
