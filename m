@@ -1,23 +1,18 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH liburcu] Fix pthread_atfork() behaviour
-Date: Sat, 19 Apr 2014 19:37:04 +0000 (UTC)
-Message-ID: <673327125.4326.1397936224002.JavaMail.zimbra__40010.4807493792$1397936302$gmane$org@efficios.com>
-References: <534BE34D.6040304@cohodata.com>
- <1310479684.3385.1397737200900.JavaMail.zimbra@efficios.com>
- <1108103948.3414.1397738599127.JavaMail.zimbra@efficios.com>
- <268671333.3430.1397740359887.JavaMail.zimbra@efficios.com>
- <534FFE1F.7010607@cohodata.com>
- <1326569833.4069.1397837395986.JavaMail.zimbra@efficios.com>
- <5351641A.3020703@cohodata.com>
+Subject: Re: [PATCH liburcu] Fix lifetime of rcu_barrier()'s
+ completion structure
+Date: Sat, 19 Apr 2014 20:03:39 +0000 (UTC)
+Message-ID: <2068111068.4340.1397937819635.JavaMail.zimbra__21244.7718637579$1397937885$gmane$org@efficios.com>
+References: <53518741.3060906@cohodata.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed;
+ boundary="----=_Part_4338_2128032958.1397937819629"
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1Wbb4Y-0002HM-F9
- for lttng-dev@lists.lttng.org; Sat, 19 Apr 2014 15:37:16 -0400
-In-Reply-To: <5351641A.3020703@cohodata.com>
+ (envelope-from <compudj@efficios.com>) id 1WbbUI-0002Rw-Uf
+ for lttng-dev@lists.lttng.org; Sat, 19 Apr 2014 16:03:52 -0400
+In-Reply-To: <53518741.3060906@cohodata.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -30,37 +25,33 @@ To: Keir Fraser <keir@cohodata.com>
 Cc: lttng-dev@lists.lttng.org, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
 List-Id: lttng-dev@lists.lttng.org
 
+------=_Part_4338_2128032958.1397937819629
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
 ----- Original Message -----
 > From: "Keir Fraser" <keir@cohodata.com>
-> To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-> Cc: lttng-dev@lists.lttng.org, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
-> Sent: Friday, April 18, 2014 1:42:50 PM
-> Subject: Re: [lttng-dev] [PATCH liburcu] Fix pthread_atfork() behaviour
+> To: lttng-dev@lists.lttng.org
+> Cc: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
+> Sent: Friday, April 18, 2014 4:12:49 PM
+> Subject: [PATCH liburcu] Fix lifetime of rcu_barrier()'s completion structure
 > 
-[...]
+> [Another attachment, I must sort out to integrate with git send-mail]
 > 
-> Worse, while reading the rcu_barrier() code I found a more subtle bug.
 > rcu_barrier() can return as soon as completion.barrier_count==0, which
 > frees the completion struct along with the rest of its stack frame. But
 > its call_rcu callbacks may yet try to read and write completion.futex
 > via the wake_up function.
-
-Good catch! I think I've fixed this kind of problematic pattern elsewhere
-already, but clearly rcu_barrier() slipped through.
-
 > 
-> The completion struct should be calloc()ed, reference-counted, and freed
-> by the thread that decs the count to 0, imo. I will be cooking up a
-> patch to do just that.
-
-Yes, this should be a clean way to fix it.
-
+> Fix this by calloc()ing the completion struct and implementing a
+> reference count to determine when it is eventually free()d.
 > 
-> There are other places in liburcu which protect a futex variable from
-> premature freeing by the waiter polling a teardown flag, but I think
-> refcounting is nicer :)
+> This also fixes bug #787, since calloc() initialises all fields of the
+> structure to zero.
 
-Makes sense to me,
+I slightly edited your patch to use urcu_ref() and uatomic_sub_return()
+(simple style fix). Please let me know if you are OK with the attached
+patch.
 
 Thanks!
 
@@ -70,3 +61,86 @@ Mathieu
 Mathieu Desnoyers
 EfficiOS Inc.
 http://www.efficios.com
+
+------=_Part_4338_2128032958.1397937819629
+Content-Type: text/x-patch; name=fix-rcu-barrier.patch
+Content-Disposition: attachment; filename=fix-rcu-barrier.patch
+Content-Transfer-Encoding: base64
+
+Y29tbWl0IDY2ZGUxZjRlOGU2MzZlM2ZmMzI2YjQ0NDdiNzJjODJjYTc4Y2Y5OGEKQXV0aG9yOiBL
+ZWlyIEZyYXNlciA8a2VpckBjb2hvZGF0YS5jb20+CkRhdGU6ICAgU2F0IEFwciAxOSAxNTo1OTow
+MSAyMDE0IC0wNDAwCgogICAgRml4OiBEbyBub3QgZnJlZSB0aGUgcmN1X2JhcnJpZXIoKSBjb21w
+bGV0aW9uIHN0cnVjdCB1bnRpbCBhbGwgdGhyZWFkcyBhcmUgZG9uZSB3aXRoIGl0CiAgICAKICAg
+IEl0IGNhbm5vdCByZXNpZGUgb24gdGhlIHdhaXRlcidzIHN0YWNrIGFzIHJjdV9iYXJyaWVyKCkg
+bWF5IHJldHVybgogICAgYmVmb3JlIHRoZSBjYWxsX3JjdSBoYW5kbGVycyBoYXZlIGZpbmlzaGVk
+IGNoZWNraW5nIHdoZXRoZXIgaXQgbmVlZHMgYQogICAgZnV0ZXggd2FrZXVwLiBJbnN0ZWFkIHdl
+IGR5bmFtaWNhbGx5IGFsbG9jYXRlIHRoZSBzdHJ1Y3R1cmUgYW5kCiAgICBkZXRlcm1pbmUgaXRz
+IGxpZmV0aW1lIHdpdGggYSByZWZlcmVuY2UgY291bnQuCiAgICAKICAgIFNpZ25lZC1vZmYtYnk6
+IEtlaXIgRnJhc2VyIDxrZWlyQGNvaG9kYXRhLmNvbT4KICAgIFsgRWRpdCBieSBNYXRoaWV1IERl
+c25veWVyczogdXNlIHVyY3UvcmVmLmguIENsZWFudXA6IHVzZQogICAgICB1YXRvbWljX3N1Yl9y
+ZXR1cm4oKSByYXRoZXIgdGhhbiB1YXRvbWljX2FkZF9yZXR1cm4oKSB3aXRoIG5lZ2F0aXZlCiAg
+ICAgIHZhbHVlLiBdCiAgICBTaWduZWQtb2ZmLWJ5OiBNYXRoaWV1IERlc25veWVycyA8bWF0aGll
+dS5kZXNub3llcnNAZWZmaWNpb3MuY29tPgoKZGlmZiAtLWdpdCBhL3VyY3UtY2FsbC1yY3UtaW1w
+bC5oIGIvdXJjdS1jYWxsLXJjdS1pbXBsLmgKaW5kZXggZjA3NTFmNS4uYTU1YWMwOCAxMDA2NDQK
+LS0tIGEvdXJjdS1jYWxsLXJjdS1pbXBsLmgKKysrIGIvdXJjdS1jYWxsLXJjdS1pbXBsLmgKQEAg
+LTQyLDYgKzQyLDcgQEAKICNpbmNsdWRlICJ1cmN1L2xpc3QuaCIKICNpbmNsdWRlICJ1cmN1L2Z1
+dGV4LmgiCiAjaW5jbHVkZSAidXJjdS90bHMtY29tcGF0LmgiCisjaW5jbHVkZSAidXJjdS9yZWYu
+aCIKICNpbmNsdWRlICJ1cmN1LWRpZS5oIgogCiAvKiBEYXRhIHN0cnVjdHVyZSB0aGF0IGlkZW50
+aWZpZXMgYSBjYWxsX3JjdSB0aHJlYWQuICovCkBAIC02Nyw2ICs2OCw3IEBAIHN0cnVjdCBjYWxs
+X3JjdV9kYXRhIHsKIHN0cnVjdCBjYWxsX3JjdV9jb21wbGV0aW9uIHsKIAlpbnQgYmFycmllcl9j
+b3VudDsKIAlpbnQzMl90IGZ1dGV4OworCXN0cnVjdCB1cmN1X3JlZiByZWY7CiB9OwogCiBzdHJ1
+Y3QgY2FsbF9yY3VfY29tcGxldGlvbl93b3JrIHsKQEAgLTc2OSw2ICs3NzEsMTUgQEAgdm9pZCBm
+cmVlX2FsbF9jcHVfY2FsbF9yY3VfZGF0YSh2b2lkKQogfQogCiBzdGF0aWMKK3ZvaWQgZnJlZV9j
+b21wbGV0aW9uKHN0cnVjdCB1cmN1X3JlZiAqcmVmKQoreworCXN0cnVjdCBjYWxsX3JjdV9jb21w
+bGV0aW9uICpjb21wbGV0aW9uOworCisJY29tcGxldGlvbiA9IGNhYV9jb250YWluZXJfb2YocmVm
+LCBzdHJ1Y3QgY2FsbF9yY3VfY29tcGxldGlvbiwgcmVmKTsKKwlmcmVlKGNvbXBsZXRpb24pOwor
+fQorCitzdGF0aWMKIHZvaWQgX3JjdV9iYXJyaWVyX2NvbXBsZXRlKHN0cnVjdCByY3VfaGVhZCAq
+aGVhZCkKIHsKIAlzdHJ1Y3QgY2FsbF9yY3VfY29tcGxldGlvbl93b3JrICp3b3JrOwpAQCAtNzc2
+LDggKzc4Nyw5IEBAIHZvaWQgX3JjdV9iYXJyaWVyX2NvbXBsZXRlKHN0cnVjdCByY3VfaGVhZCAq
+aGVhZCkKIAogCXdvcmsgPSBjYWFfY29udGFpbmVyX29mKGhlYWQsIHN0cnVjdCBjYWxsX3JjdV9j
+b21wbGV0aW9uX3dvcmssIGhlYWQpOwogCWNvbXBsZXRpb24gPSB3b3JrLT5jb21wbGV0aW9uOwot
+CXVhdG9taWNfZGVjKCZjb21wbGV0aW9uLT5iYXJyaWVyX2NvdW50KTsKLQljYWxsX3JjdV9jb21w
+bGV0aW9uX3dha2VfdXAoY29tcGxldGlvbik7CisJaWYgKCF1YXRvbWljX3N1Yl9yZXR1cm4oJmNv
+bXBsZXRpb24tPmJhcnJpZXJfY291bnQsIDEpKQorCQljYWxsX3JjdV9jb21wbGV0aW9uX3dha2Vf
+dXAoY29tcGxldGlvbik7CisJdXJjdV9yZWZfcHV0KCZjb21wbGV0aW9uLT5yZWYsIGZyZWVfY29t
+cGxldGlvbik7CiAJZnJlZSh3b3JrKTsKIH0KIApAQCAtNzg3LDcgKzc5OSw3IEBAIHZvaWQgX3Jj
+dV9iYXJyaWVyX2NvbXBsZXRlKHN0cnVjdCByY3VfaGVhZCAqaGVhZCkKIHZvaWQgcmN1X2JhcnJp
+ZXIodm9pZCkKIHsKIAlzdHJ1Y3QgY2FsbF9yY3VfZGF0YSAqY3JkcDsKLQlzdHJ1Y3QgY2FsbF9y
+Y3VfY29tcGxldGlvbiBjb21wbGV0aW9uOworCXN0cnVjdCBjYWxsX3JjdV9jb21wbGV0aW9uICpj
+b21wbGV0aW9uOwogCWludCBjb3VudCA9IDA7CiAJaW50IHdhc19vbmxpbmU7CiAKQEAgLTgwOSwx
+MiArODIxLDE3IEBAIHZvaWQgcmN1X2JhcnJpZXIodm9pZCkKIAkJZ290byBvbmxpbmU7CiAJfQog
+CisJY29tcGxldGlvbiA9IGNhbGxvYyhzaXplb2YoKmNvbXBsZXRpb24pLCAxKTsKKwlpZiAoIWNv
+bXBsZXRpb24pCisJCXVyY3VfZGllKGVycm5vKTsKKwogCWNhbGxfcmN1X2xvY2soJmNhbGxfcmN1
+X211dGV4KTsKIAljZHNfbGlzdF9mb3JfZWFjaF9lbnRyeShjcmRwLCAmY2FsbF9yY3VfZGF0YV9s
+aXN0LCBsaXN0KQogCQljb3VudCsrOwogCi0JY29tcGxldGlvbi5iYXJyaWVyX2NvdW50ID0gY291
+bnQ7Ci0JY29tcGxldGlvbi5mdXRleCA9IDA7CisJLyogUmVmZXJlbmNlZCBieSByY3VfYmFycmll
+cigpIGFuZCBlYWNoIGNhbGxfcmN1IHRocmVhZC4gKi8KKwl1cmN1X3JlZl9zZXQoJmNvbXBsZXRp
+b24tPnJlZiwgY291bnQgKyAxKTsKKwljb21wbGV0aW9uLT5iYXJyaWVyX2NvdW50ID0gY291bnQ7
+CiAKIAljZHNfbGlzdF9mb3JfZWFjaF9lbnRyeShjcmRwLCAmY2FsbF9yY3VfZGF0YV9saXN0LCBs
+aXN0KSB7CiAJCXN0cnVjdCBjYWxsX3JjdV9jb21wbGV0aW9uX3dvcmsgKndvcms7CkBAIC04MjIs
+MjAgKzgzOSwyMyBAQCB2b2lkIHJjdV9iYXJyaWVyKHZvaWQpCiAJCXdvcmsgPSBjYWxsb2Moc2l6
+ZW9mKCp3b3JrKSwgMSk7CiAJCWlmICghd29yaykKIAkJCXVyY3VfZGllKGVycm5vKTsKLQkJd29y
+ay0+Y29tcGxldGlvbiA9ICZjb21wbGV0aW9uOworCQl3b3JrLT5jb21wbGV0aW9uID0gY29tcGxl
+dGlvbjsKIAkJX2NhbGxfcmN1KCZ3b3JrLT5oZWFkLCBfcmN1X2JhcnJpZXJfY29tcGxldGUsIGNy
+ZHApOwogCX0KIAljYWxsX3JjdV91bmxvY2soJmNhbGxfcmN1X211dGV4KTsKIAogCS8qIFdhaXQg
+Zm9yIHRoZW0gKi8KIAlmb3IgKDs7KSB7Ci0JCXVhdG9taWNfZGVjKCZjb21wbGV0aW9uLmZ1dGV4
+KTsKKwkJdWF0b21pY19kZWMoJmNvbXBsZXRpb24tPmZ1dGV4KTsKIAkJLyogRGVjcmVtZW50IGZ1
+dGV4IGJlZm9yZSByZWFkaW5nIGJhcnJpZXJfY291bnQgKi8KIAkJY21tX3NtcF9tYigpOwotCQlp
+ZiAoIXVhdG9taWNfcmVhZCgmY29tcGxldGlvbi5iYXJyaWVyX2NvdW50KSkKKwkJaWYgKCF1YXRv
+bWljX3JlYWQoJmNvbXBsZXRpb24tPmJhcnJpZXJfY291bnQpKQogCQkJYnJlYWs7Ci0JCWNhbGxf
+cmN1X2NvbXBsZXRpb25fd2FpdCgmY29tcGxldGlvbik7CisJCWNhbGxfcmN1X2NvbXBsZXRpb25f
+d2FpdChjb21wbGV0aW9uKTsKIAl9CisKKwl1cmN1X3JlZl9wdXQoJmNvbXBsZXRpb24tPnJlZiwg
+ZnJlZV9jb21wbGV0aW9uKTsKKwogb25saW5lOgogCWlmICh3YXNfb25saW5lKQogCQlyY3VfdGhy
+ZWFkX29ubGluZSgpOwo=
+------=_Part_4338_2128032958.1397937819629
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+------=_Part_4338_2128032958.1397937819629--
