@@ -1,18 +1,17 @@
-From: =?UTF-8?q?Adrien=20Verg=C3=A9?= <adrienverge@gmail.com>
-Subject: [PATCH lttng-ust] Fix linking failure when
-	cross-compiling
-Date: Fri, 25 Apr 2014 12:12:24 -0400
-Message-ID: <1398442344-15165-1-git-send-email-adrienverge__683.228069874708$1398442426$gmane$org@gmail.com>
+From: Chaitannya Mahatme <chaitannya@gmail.com>
+Subject: Getting started with lttng
+Date: Sat, 26 Apr 2014 01:08:20 +0530
+Message-ID: <CAGwPLsbDhAyyVGD-3euyHT0tahjJ9saNM_XprO34SrjOWsbMcQ__23152.3789618679$1398455091$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f169.google.com ([209.85.223.169])
+Received: from mail-lb0-f171.google.com ([209.85.217.171])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <adrienverge@gmail.com>) id 1Wdijv-0007F5-5p
- for lttng-dev@lists.lttng.org; Fri, 25 Apr 2014 12:12:40 -0400
-Received: by mail-ie0-f169.google.com with SMTP id to1so4055923ieb.0
- for <lttng-dev@lists.lttng.org>; Fri, 25 Apr 2014 09:12:33 -0700 (PDT)
+ (envelope-from <chaitannya@gmail.com>) id 1Wdlx4-0008Ib-NN
+ for lttng-dev@lists.lttng.org; Fri, 25 Apr 2014 15:38:31 -0400
+Received: by mail-lb0-f171.google.com with SMTP id u14so440021lbd.2
+ for <lttng-dev@lists.lttng.org>; Fri, 25 Apr 2014 12:38:20 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,46 +21,40 @@ List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
-Cc: =?UTF-8?q?Adrien=20Verg=C3=A9?= <adrienverge@gmail.com>
 List-Id: lttng-dev@lists.lttng.org
 
-RXhhbXBsZXMgYmluYXJpZXMgaW4gZG9jL2V4YW1wbGVzIHJlcXVpcmUgbGlicyBpbiBsaWJsdHRu
-Zy11c3QvLmxpYnMvLAphbmQgdGhvc2UgbGlicyByZXF1aXJlIG90aGVyIGxpYnMgaW4gdGhlIHNh
-bWUgZGlyZWN0b3J5LiAgRm9yIGluc3RhbmNlCmxpYmx0dG5nLXVzdC5zbyB1c2VzIGxpYmx0dG5n
-LXVzdC10cmFjZXBvaW50LnNvIHN5bWJvbHMsIHNvIHRoZSBsYXR0ZXIKaXMgbmVlZGVkIHRvIHBy
-b3Blcmx5IGxpbmsgZXhhbXBsZSBwcm9ncmFtcy4gIEN1cnJlbnRseSwgbGQgaXMgZ2l2ZW4KdGhl
-IGxpYiBkaXIgb25seSB2aWEgLXJwYXRoICh1c2VkIGZvciBsaW5raW5nIGV4ZWN1dGFibGVzIGRl
-cGVuZGVuY2llcykKYnV0IG5vdCB2aWEgLXJwYXRoLWxpbmsgKHVzZWQgZm9yIGxpbmtpbmcgbGli
-cyBkZXBlbmRlbmNpZXMpLgoKV2hlbiBjb21waWxpbmcgcmVndWxhcmx5LCB0aGlzIGRvZXMgbm90
-IHNlZW0gdG8gYmUgYSBwcm9ibGVtIChtYXliZSBsZAppcyBzbWFydCBlbm91Z2gpLiAgSG93ZXZl
-ciB3aGVuIGNyb3NzLWNvbXBpbGluZyB3aXRoIHRoZQphcm0tbGludXgtZ251ZWFiaWhmIHRvb2xj
-aGFpbiwgLXJwYXRoLWxpbmsgaXMgbmVlZGVkIG90aGVyd2lzZSBsaW5raW5nCmZhaWxzIHdpdGg6
-Cgphcm0tbGludXgtZ251ZWFiaWhmL2Jpbi9sZDogd2FybmluZzogbGlibHR0bmctdXN0LXRyYWNl
-cG9pbnQuc28uMCwgbmVlZGVkIGJ5IC4uLy4uLy4uL2xpYmx0dG5nLXVzdC8ubGlicy8vbGlibHR0
-bmctdXN0LnNvLCBub3QgZm91bmQgKHRyeSB1c2luZyAtcnBhdGggb3IgLXJwYXRoLWxpbmspCgpU
-aGlzIHBhdGNoIGFkZHMgLXJwYXRoLWxpbmsgdG8gZG9jL2V4YW1wbGVzL01ha2VmaWxlLmFtLgoK
-U2lnbmVkLW9mZi1ieTogQWRyaWVuIFZlcmfDqSA8YWRyaWVudmVyZ2VAZ21haWwuY29tPgotLS0K
-IGRvYy9leGFtcGxlcy9NYWtlZmlsZS5hbSB8IDIgKy0KIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2Vy
-dGlvbigrKSwgMSBkZWxldGlvbigtKQoKZGlmZiAtLWdpdCBhL2RvYy9leGFtcGxlcy9NYWtlZmls
-ZS5hbSBiL2RvYy9leGFtcGxlcy9NYWtlZmlsZS5hbQppbmRleCAxZmQwMDg0Li4wNjkwNTk3IDEw
-MDY0NAotLS0gYS9kb2MvZXhhbXBsZXMvTWFrZWZpbGUuYW0KKysrIGIvZG9jL2V4YW1wbGVzL01h
-a2VmaWxlLmFtCkBAIC03NSw3ICs3NSw3IEBAIGFsbC1sb2NhbDoKIAkJcmVsX2J1aWxkX3N1YmRp
-cj0iLi4vIjsgXAogCWZpOyBcCiAJZm9yIHN1YmRpciBpbiAkKFNVQkRJUlNfUFJPWFkpOyBkbyBc
-Ci0JCShjZCAkJHN1YmRpciAmJiAkKE1BS0UpIEFNX0NDPSIkKENDKSIgQU1fQ1BQRkxBR1M9IiQo
-Q1BQRkxBR1MpIC1JJCRyZWxfc3JjX3N1YmRpciQodG9wX3NyY2RpcikvaW5jbHVkZS8gLUkkJHJl
-bF9idWlsZF9zdWJkaXIkKHRvcF9idWlsZGRpcikvaW5jbHVkZS8iIEFNX0NGTEFHUz0nJChDRkxB
-R1MpJyBBTV9MREZMQUdTPSckKExERkxBR1MpIC1MLi4vLi4vLi4vbGlibHR0bmctdXN0Ly5saWJz
-LyAtV2wsLXJwYXRoPSIkKFBXRCkvLi4vLi4vbGlibHR0bmctdXN0Ly5saWJzLyInIExUVE5HX0dF
-Tl9UUF9QQVRIPSIuLi8uLi8uLi90b29scy8iICQoQU1fTUFLRUZMQUdTKSBhbGwgJiYgY2QgLi4p
-IHx8IGV4aXQgMTsgXAorCQkoY2QgJCRzdWJkaXIgJiYgJChNQUtFKSBBTV9DQz0iJChDQykiIEFN
-X0NQUEZMQUdTPSIkKENQUEZMQUdTKSAtSSQkcmVsX3NyY19zdWJkaXIkKHRvcF9zcmNkaXIpL2lu
-Y2x1ZGUvIC1JJCRyZWxfYnVpbGRfc3ViZGlyJCh0b3BfYnVpbGRkaXIpL2luY2x1ZGUvIiBBTV9D
-RkxBR1M9JyQoQ0ZMQUdTKScgQU1fTERGTEFHUz0nJChMREZMQUdTKSAtTC4uLy4uLy4uL2xpYmx0
-dG5nLXVzdC8ubGlicyAtV2wsLXJwYXRoPSIkKFBXRCkvLi4vLi4vbGlibHR0bmctdXN0Ly5saWJz
-LyIgLVdsLC1ycGF0aC1saW5rPSIkKFBXRCkvLi4vLi4vbGlibHR0bmctdXN0Ly5saWJzLyInIExU
-VE5HX0dFTl9UUF9QQVRIPSIuLi8uLi8uLi90b29scy8iICQoQU1fTUFLRUZMQUdTKSBhbGwgJiYg
-Y2QgLi4pIHx8IGV4aXQgMTsgXAogCWRvbmU7IFwKIAlpZiBbIHgiJChTVUJESVJTX0pVTCkiICE9
-IHgiIiBdOyB0aGVuIFwKIAkJZm9yIHN1YmRpciBpbiAkKFNVQkRJUlNfSlVMKTsgZG8gXAotLSAK
-MS45LjEKCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwps
-dHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xp
-c3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+Hello Everyone,
+
+I have recently  installed lttng on my machine .. (Ubuntu 12.04)
+It's a fresh instalation on vmware. Every thing runs fine expect that
+no trace information is captured. What can be the issue?
+
+lttng enable-event sched_switch,sched_process_fork -k
+lttng start
+lttng stop
+babeltrace lttng-traces/mysession-20140425-235804/
+
+There is no output here.
+
+du -h lttng-traces/mysession-20140425-235804/
+
+8.0K	lttng-traces/mysession-20140425-235804/kernel/index
+20K	lttng-traces/mysession-20140425-235804/kernel
+24K	lttng-traces/mysession-20140425-235804/
+
+o/p of uname -a
+Linux ubuntu 3.2.0-23-generic-pae #36-Ubuntu SMP Tue Apr 10 22:19:09
+UTC 2012 i686 athlon i386 GNU/Linux
+
+What can be the issue ?
+-- 
+Cheers !!!
+Chaitannya
+
+follow me on twitter http://twitter.com/chaitannya
+-- 
+I believe there's a hero in all of us who keeps us honest, gives us
+strength, makes us noble, and finally allows us to die with pride,
+even though sometimes we have to be steady, and give up the thing we
+want the most... even our dreams.
+- Spider Man 2
