@@ -1,18 +1,19 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-ust] Fix linking failure
-	when	cross-compiling
-Date: Sat, 26 Apr 2014 21:54:14 +0000 (UTC)
-Message-ID: <448215722.7969.1398549254949.JavaMail.zimbra__8663.90657979554$1398549332$gmane$org@efficios.com>
+Subject: Re: [PATCH lttng-ust] Fix linking failure when
+ cross-compiling
+Date: Sat, 26 Apr 2014 21:51:09 +0000 (UTC)
+Message-ID: <1871833747.7966.1398549069563.JavaMail.zimbra__7047.48612265593$1398549651$gmane$org@efficios.com>
 References: <1398442344-15165-1-git-send-email-adrienverge@gmail.com>
+ <1751778549.7675.1398501609681.JavaMail.zimbra@efficios.com>
+ <CANsc=4Xh67Jnuy1b9eqirHNVGERa+ugVEdzkU0Yy652a+Nw5PA@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============0186641412=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1WeAYO-0008MP-1k
- for lttng-dev@lists.lttng.org; Sat, 26 Apr 2014 17:54:37 -0400
-In-Reply-To: <1398442344-15165-1-git-send-email-adrienverge@gmail.com>
+ (envelope-from <compudj@efficios.com>) id 1WeAdk-0008R9-It
+ for lttng-dev@lists.lttng.org; Sat, 26 Apr 2014 18:00:09 -0400
+In-Reply-To: <CANsc=4Xh67Jnuy1b9eqirHNVGERa+ugVEdzkU0Yy652a+Nw5PA@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -25,55 +26,109 @@ To: Adrien =?utf-8?Q?Verg=C3=A9?= <adrienverge@gmail.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-TWVyZ2VkLCB0aGFua3MhCgpNYXRoaWV1CgotLS0tLSBPcmlnaW5hbCBNZXNzYWdlIC0tLS0tCj4g
-RnJvbTogIkFkcmllbiBWZXJnw6kiIDxhZHJpZW52ZXJnZUBnbWFpbC5jb20+Cj4gVG86IGx0dG5n
-LWRldkBsaXN0cy5sdHRuZy5vcmcKPiBDYzogIkFkcmllbiBWZXJnw6kiIDxhZHJpZW52ZXJnZUBn
-bWFpbC5jb20+Cj4gU2VudDogRnJpZGF5LCBBcHJpbCAyNSwgMjAxNCA2OjEyOjI0IFBNCj4gU3Vi
-amVjdDogW2x0dG5nLWRldl0gW1BBVENIIGx0dG5nLXVzdF0gRml4IGxpbmtpbmcgZmFpbHVyZSB3
-aGVuCWNyb3NzLWNvbXBpbGluZwo+IAo+IEV4YW1wbGVzIGJpbmFyaWVzIGluIGRvYy9leGFtcGxl
-cyByZXF1aXJlIGxpYnMgaW4gbGlibHR0bmctdXN0Ly5saWJzLywKPiBhbmQgdGhvc2UgbGlicyBy
-ZXF1aXJlIG90aGVyIGxpYnMgaW4gdGhlIHNhbWUgZGlyZWN0b3J5LiAgRm9yIGluc3RhbmNlCj4g
-bGlibHR0bmctdXN0LnNvIHVzZXMgbGlibHR0bmctdXN0LXRyYWNlcG9pbnQuc28gc3ltYm9scywg
-c28gdGhlIGxhdHRlcgo+IGlzIG5lZWRlZCB0byBwcm9wZXJseSBsaW5rIGV4YW1wbGUgcHJvZ3Jh
-bXMuICBDdXJyZW50bHksIGxkIGlzIGdpdmVuCj4gdGhlIGxpYiBkaXIgb25seSB2aWEgLXJwYXRo
-ICh1c2VkIGZvciBsaW5raW5nIGV4ZWN1dGFibGVzIGRlcGVuZGVuY2llcykKPiBidXQgbm90IHZp
-YSAtcnBhdGgtbGluayAodXNlZCBmb3IgbGlua2luZyBsaWJzIGRlcGVuZGVuY2llcykuCj4gCj4g
-V2hlbiBjb21waWxpbmcgcmVndWxhcmx5LCB0aGlzIGRvZXMgbm90IHNlZW0gdG8gYmUgYSBwcm9i
-bGVtIChtYXliZSBsZAo+IGlzIHNtYXJ0IGVub3VnaCkuICBIb3dldmVyIHdoZW4gY3Jvc3MtY29t
-cGlsaW5nIHdpdGggdGhlCj4gYXJtLWxpbnV4LWdudWVhYmloZiB0b29sY2hhaW4sIC1ycGF0aC1s
-aW5rIGlzIG5lZWRlZCBvdGhlcndpc2UgbGlua2luZwo+IGZhaWxzIHdpdGg6Cj4gCj4gYXJtLWxp
-bnV4LWdudWVhYmloZi9iaW4vbGQ6IHdhcm5pbmc6IGxpYmx0dG5nLXVzdC10cmFjZXBvaW50LnNv
-LjAsIG5lZWRlZCBieQo+IC4uLy4uLy4uL2xpYmx0dG5nLXVzdC8ubGlicy8vbGlibHR0bmctdXN0
-LnNvLCBub3QgZm91bmQgKHRyeSB1c2luZyAtcnBhdGggb3IKPiAtcnBhdGgtbGluaykKPiAKPiBU
-aGlzIHBhdGNoIGFkZHMgLXJwYXRoLWxpbmsgdG8gZG9jL2V4YW1wbGVzL01ha2VmaWxlLmFtLgo+
-IAo+IFNpZ25lZC1vZmYtYnk6IEFkcmllbiBWZXJnw6kgPGFkcmllbnZlcmdlQGdtYWlsLmNvbT4K
-PiAtLS0KPiAgZG9jL2V4YW1wbGVzL01ha2VmaWxlLmFtIHwgMiArLQo+ICAxIGZpbGUgY2hhbmdl
-ZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkKPiAKPiBkaWZmIC0tZ2l0IGEvZG9jL2V4
-YW1wbGVzL01ha2VmaWxlLmFtIGIvZG9jL2V4YW1wbGVzL01ha2VmaWxlLmFtCj4gaW5kZXggMWZk
-MDA4NC4uMDY5MDU5NyAxMDA2NDQKPiAtLS0gYS9kb2MvZXhhbXBsZXMvTWFrZWZpbGUuYW0KPiAr
-KysgYi9kb2MvZXhhbXBsZXMvTWFrZWZpbGUuYW0KPiBAQCAtNzUsNyArNzUsNyBAQCBhbGwtbG9j
-YWw6Cj4gIAkJcmVsX2J1aWxkX3N1YmRpcj0iLi4vIjsgXAo+ICAJZmk7IFwKPiAgCWZvciBzdWJk
-aXIgaW4gJChTVUJESVJTX1BST1hZKTsgZG8gXAo+IC0JCShjZCAkJHN1YmRpciAmJiAkKE1BS0Up
-IEFNX0NDPSIkKENDKSIgQU1fQ1BQRkxBR1M9IiQoQ1BQRkxBR1MpCj4gLUkkJHJlbF9zcmNfc3Vi
-ZGlyJCh0b3Bfc3JjZGlyKS9pbmNsdWRlLwo+IC1JJCRyZWxfYnVpbGRfc3ViZGlyJCh0b3BfYnVp
-bGRkaXIpL2luY2x1ZGUvIiBBTV9DRkxBR1M9JyQoQ0ZMQUdTKScKPiBBTV9MREZMQUdTPSckKExE
-RkxBR1MpIC1MLi4vLi4vLi4vbGlibHR0bmctdXN0Ly5saWJzLwo+IC1XbCwtcnBhdGg9IiQoUFdE
-KS8uLi8uLi9saWJsdHRuZy11c3QvLmxpYnMvIicKPiBMVFROR19HRU5fVFBfUEFUSD0iLi4vLi4v
-Li4vdG9vbHMvIiAkKEFNX01BS0VGTEFHUykgYWxsICYmIGNkIC4uKSB8fCBleGl0IDE7Cj4gXAo+
-ICsJCShjZCAkJHN1YmRpciAmJiAkKE1BS0UpIEFNX0NDPSIkKENDKSIgQU1fQ1BQRkxBR1M9IiQo
-Q1BQRkxBR1MpCj4gLUkkJHJlbF9zcmNfc3ViZGlyJCh0b3Bfc3JjZGlyKS9pbmNsdWRlLwo+IC1J
-JCRyZWxfYnVpbGRfc3ViZGlyJCh0b3BfYnVpbGRkaXIpL2luY2x1ZGUvIiBBTV9DRkxBR1M9JyQo
-Q0ZMQUdTKScKPiBBTV9MREZMQUdTPSckKExERkxBR1MpIC1MLi4vLi4vLi4vbGlibHR0bmctdXN0
-Ly5saWJzCj4gLVdsLC1ycGF0aD0iJChQV0QpLy4uLy4uL2xpYmx0dG5nLXVzdC8ubGlicy8iCj4g
-LVdsLC1ycGF0aC1saW5rPSIkKFBXRCkvLi4vLi4vbGlibHR0bmctdXN0Ly5saWJzLyInCj4gTFRU
-TkdfR0VOX1RQX1BBVEg9Ii4uLy4uLy4uL3Rvb2xzLyIgJChBTV9NQUtFRkxBR1MpIGFsbCAmJiBj
-ZCAuLikgfHwgZXhpdCAxOwo+IFwKPiAgCWRvbmU7IFwKPiAgCWlmIFsgeCIkKFNVQkRJUlNfSlVM
-KSIgIT0geCIiIF07IHRoZW4gXAo+ICAJCWZvciBzdWJkaXIgaW4gJChTVUJESVJTX0pVTCk7IGRv
-IFwKPiAtLQo+IDEuOS4xCj4gCj4gCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX18KPiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3Rz
-Lmx0dG5nLm9yZwo+IGh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3Rp
-bmZvL2x0dG5nLWRldgo+IAoKLS0gCk1hdGhpZXUgRGVzbm95ZXJzCkVmZmljaU9TIEluYy4KaHR0
-cDovL3d3dy5lZmZpY2lvcy5jb20KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5n
-Lm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRu
-Zy1kZXYK
+--===============0186641412==
+Content-Type: multipart/alternative;
+	boundary="----=_Part_7965_2017905253.1398549069562"
+
+------=_Part_7965_2017905253.1398549069562
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+----- Original Message -----
+
+> From: "Adrien Verg=C3=A9" <adrienverge@gmail.com>
+> To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+> Cc: lttng-dev@lists.lttng.org
+> Sent: Saturday, April 26, 2014 6:23:09 PM
+> Subject: Re: [lttng-dev] [PATCH lttng-ust] Fix linking failure when
+> cross-compiling
+
+> 2014-04-26 4:40 GMT-04:00 Mathieu Desnoyers < mathieu.desnoyers@efficios.=
+com
+> > :
+
+> > It should change much things overall, but is there any reason for
+>=20
+> > this change ?
+>=20
+
+> Actually my first plan was to remove all trailing slashes, then I changed=
+ my
+> mind to change as little code as possible. But oops... forgot one slash :=
+)
+
+> Please tell me if I should resend a v2 patch with (or without) trailing
+> slashes.
+
+I asked, because the change was not described in the=20
+changelog.=20
+
+Since it appears that removing the final slash generates=20
+a prettier path within the build (no double-slash), I'll=20
+keep it as is.=20
+
+Thanks!=20
+
+Mathieu=20
+
+> Thanks,
+
+> Adrien
+
+--=20
+Mathieu Desnoyers=20
+EfficiOS Inc.=20
+http://www.efficios.com=20
+
+------=_Part_7965_2017905253.1398549069562
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><body><div style=3D"font-family: times new roman, new york, times, se=
+rif; font-size: 12pt; color: #000000"><hr id=3D"zwchr"><blockquote style=3D=
+"border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;=
+font-weight:normal;font-style:normal;text-decoration:none;font-family:Helve=
+tica,Arial,sans-serif;font-size:12pt;"><b>From: </b>"Adrien Verg=C3=A9" &lt=
+;adrienverge@gmail.com&gt;<br><b>To: </b>"Mathieu Desnoyers" &lt;mathieu.de=
+snoyers@efficios.com&gt;<br><b>Cc: </b>lttng-dev@lists.lttng.org<br><b>Sent=
+: </b>Saturday, April 26, 2014 6:23:09 PM<br><b>Subject: </b>Re: [lttng-dev=
+] [PATCH lttng-ust] Fix linking failure when cross-compiling<br><div><br></=
+div><div dir=3D"ltr">2014-04-26 4:40 GMT-04:00 Mathieu Desnoyers <span dir=
+=3D"ltr">&lt;<a href=3D"mailto:mathieu.desnoyers@efficios.com" target=3D"_b=
+lank">mathieu.desnoyers@efficios.com</a>&gt;</span>:<br><div class=3D"gmail=
+_extra"><div class=3D"gmail_quote"><blockquote class=3D"gmail_quote" style=
+=3D"margin:0px 0px 0px 0.8ex;border-left-width:1px;border-left-color:rgb(20=
+4,204,204);border-left-style:solid;padding-left:1ex">
+It should change much things overall, but is there any reason for<br>
+this change ?<br></blockquote><div><br></div>Actually my first plan was to =
+remove all trailing slashes, then I changed my mind to change as little cod=
+e as possible. But oops... forgot one slash :)<div><br></div><div>Please te=
+ll me if I should resend a v2 patch with (or without) trailing slashes.</di=
+v></div></div></div></blockquote><div>I asked, because the change was not d=
+escribed in the<br></div><div>changelog.<br></div><div><br></div><div>Since=
+ it appears that removing the final slash generates<br></div><div>a prettie=
+r path within the build (no double-slash), I'll<br></div><div>keep it as is=
+.<br></div><div><br></div><div>Thanks!<br></div><div><br></div><div>Mathieu=
+<br></div><div><br></div><blockquote style=3D"border-left:2px solid #1010FF=
+;margin-left:5px;padding-left:5px;color:#000;font-weight:normal;font-style:=
+normal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-siz=
+e:12pt;"><div dir=3D"ltr"><div class=3D"gmail_extra"><div class=3D"gmail_qu=
+ote"><div><br></div><div>Thanks,</div><div><br></div><div>Adrien</div></div=
+></div></div></blockquote><div><br><br></div><div><br></div><div>-- <br></d=
+iv><div><span name=3D"x"></span>Mathieu Desnoyers<br>EfficiOS Inc.<br>http:=
+//www.efficios.com<span name=3D"x"></span><br></div></div></body></html>
+------=_Part_7965_2017905253.1398549069562--
+
+
+--===============0186641412==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0186641412==--
