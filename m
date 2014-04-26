@@ -1,20 +1,18 @@
-From: =?UTF-8?Q?Adrien_Verg=C3=A9?= <adrienverge@gmail.com>
-Subject: Re: [PATCH lttng-ust] Fix linking failure when
-	cross-compiling
-Date: Sat, 26 Apr 2014 12:23:09 -0400
-Message-ID: <CANsc=4Xh67Jnuy1b9eqirHNVGERa+ugVEdzkU0Yy652a+Nw5PA__8472.60322557322$1398529463$gmane$org@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH lttng-ust] Fix linking failure
+	when	cross-compiling
+Date: Sat, 26 Apr 2014 21:54:14 +0000 (UTC)
+Message-ID: <448215722.7969.1398549254949.JavaMail.zimbra__8663.90657979554$1398549332$gmane$org@efficios.com>
 References: <1398442344-15165-1-git-send-email-adrienverge@gmail.com>
- <1751778549.7675.1398501609681.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1234340483=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ve0-f171.google.com ([209.85.128.171])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <adrienverge@gmail.com>) id 1We5Nj-0006fw-5J
- for lttng-dev@lists.lttng.org; Sat, 26 Apr 2014 12:23:19 -0400
-Received: by mail-ve0-f171.google.com with SMTP id jy13so6054486veb.2
- for <lttng-dev@lists.lttng.org>; Sat, 26 Apr 2014 09:23:09 -0700 (PDT)
-In-Reply-To: <1751778549.7675.1398501609681.JavaMail.zimbra@efficios.com>
+ (envelope-from <compudj@efficios.com>) id 1WeAYO-0008MP-1k
+ for lttng-dev@lists.lttng.org; Sat, 26 Apr 2014 17:54:37 -0400
+In-Reply-To: <1398442344-15165-1-git-send-email-adrienverge@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,66 +21,59 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: Adrien =?utf-8?Q?Verg=C3=A9?= <adrienverge@gmail.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============1234340483==
-Content-Type: multipart/alternative; boundary=047d7b676da478a21704f7f47fd1
-
---047d7b676da478a21704f7f47fd1
-Content-Type: text/plain; charset=UTF-8
-
-2014-04-26 4:40 GMT-04:00 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-:
-
-> It should change much things overall, but is there any reason for
-> this change ?
->
-
-Actually my first plan was to remove all trailing slashes, then I changed
-my mind to change as little code as possible. But oops... forgot one slash
-:)
-
-Please tell me if I should resend a v2 patch with (or without) trailing
-slashes.
-
-Thanks,
-
-Adrien
-
---047d7b676da478a21704f7f47fd1
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">2014-04-26 4:40 GMT-04:00 Mathieu Desnoyers <span dir=3D"l=
-tr">&lt;<a href=3D"mailto:mathieu.desnoyers@efficios.com" target=3D"_blank"=
->mathieu.desnoyers@efficios.com</a>&gt;</span>:<br><div class=3D"gmail_extr=
-a"><div class=3D"gmail_quote">
-<blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-=
-left-width:1px;border-left-color:rgb(204,204,204);border-left-style:solid;p=
-adding-left:1ex">
-It should change much things overall, but is there any reason for<br>
-this change ?<br></blockquote><div><br></div>Actually my first plan was to =
-remove all trailing slashes, then I changed my mind to change as little cod=
-e as possible. But oops... forgot one slash :)<div><br></div><div>Please te=
-ll me if I should resend a v2 patch with (or without) trailing slashes.</di=
-v>
-<div><br></div><div>Thanks,</div><div><br></div><div>Adrien</div></div></di=
-v></div>
-
---047d7b676da478a21704f7f47fd1--
-
-
---===============1234340483==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1234340483==--
+TWVyZ2VkLCB0aGFua3MhCgpNYXRoaWV1CgotLS0tLSBPcmlnaW5hbCBNZXNzYWdlIC0tLS0tCj4g
+RnJvbTogIkFkcmllbiBWZXJnw6kiIDxhZHJpZW52ZXJnZUBnbWFpbC5jb20+Cj4gVG86IGx0dG5n
+LWRldkBsaXN0cy5sdHRuZy5vcmcKPiBDYzogIkFkcmllbiBWZXJnw6kiIDxhZHJpZW52ZXJnZUBn
+bWFpbC5jb20+Cj4gU2VudDogRnJpZGF5LCBBcHJpbCAyNSwgMjAxNCA2OjEyOjI0IFBNCj4gU3Vi
+amVjdDogW2x0dG5nLWRldl0gW1BBVENIIGx0dG5nLXVzdF0gRml4IGxpbmtpbmcgZmFpbHVyZSB3
+aGVuCWNyb3NzLWNvbXBpbGluZwo+IAo+IEV4YW1wbGVzIGJpbmFyaWVzIGluIGRvYy9leGFtcGxl
+cyByZXF1aXJlIGxpYnMgaW4gbGlibHR0bmctdXN0Ly5saWJzLywKPiBhbmQgdGhvc2UgbGlicyBy
+ZXF1aXJlIG90aGVyIGxpYnMgaW4gdGhlIHNhbWUgZGlyZWN0b3J5LiAgRm9yIGluc3RhbmNlCj4g
+bGlibHR0bmctdXN0LnNvIHVzZXMgbGlibHR0bmctdXN0LXRyYWNlcG9pbnQuc28gc3ltYm9scywg
+c28gdGhlIGxhdHRlcgo+IGlzIG5lZWRlZCB0byBwcm9wZXJseSBsaW5rIGV4YW1wbGUgcHJvZ3Jh
+bXMuICBDdXJyZW50bHksIGxkIGlzIGdpdmVuCj4gdGhlIGxpYiBkaXIgb25seSB2aWEgLXJwYXRo
+ICh1c2VkIGZvciBsaW5raW5nIGV4ZWN1dGFibGVzIGRlcGVuZGVuY2llcykKPiBidXQgbm90IHZp
+YSAtcnBhdGgtbGluayAodXNlZCBmb3IgbGlua2luZyBsaWJzIGRlcGVuZGVuY2llcykuCj4gCj4g
+V2hlbiBjb21waWxpbmcgcmVndWxhcmx5LCB0aGlzIGRvZXMgbm90IHNlZW0gdG8gYmUgYSBwcm9i
+bGVtIChtYXliZSBsZAo+IGlzIHNtYXJ0IGVub3VnaCkuICBIb3dldmVyIHdoZW4gY3Jvc3MtY29t
+cGlsaW5nIHdpdGggdGhlCj4gYXJtLWxpbnV4LWdudWVhYmloZiB0b29sY2hhaW4sIC1ycGF0aC1s
+aW5rIGlzIG5lZWRlZCBvdGhlcndpc2UgbGlua2luZwo+IGZhaWxzIHdpdGg6Cj4gCj4gYXJtLWxp
+bnV4LWdudWVhYmloZi9iaW4vbGQ6IHdhcm5pbmc6IGxpYmx0dG5nLXVzdC10cmFjZXBvaW50LnNv
+LjAsIG5lZWRlZCBieQo+IC4uLy4uLy4uL2xpYmx0dG5nLXVzdC8ubGlicy8vbGlibHR0bmctdXN0
+LnNvLCBub3QgZm91bmQgKHRyeSB1c2luZyAtcnBhdGggb3IKPiAtcnBhdGgtbGluaykKPiAKPiBU
+aGlzIHBhdGNoIGFkZHMgLXJwYXRoLWxpbmsgdG8gZG9jL2V4YW1wbGVzL01ha2VmaWxlLmFtLgo+
+IAo+IFNpZ25lZC1vZmYtYnk6IEFkcmllbiBWZXJnw6kgPGFkcmllbnZlcmdlQGdtYWlsLmNvbT4K
+PiAtLS0KPiAgZG9jL2V4YW1wbGVzL01ha2VmaWxlLmFtIHwgMiArLQo+ICAxIGZpbGUgY2hhbmdl
+ZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkKPiAKPiBkaWZmIC0tZ2l0IGEvZG9jL2V4
+YW1wbGVzL01ha2VmaWxlLmFtIGIvZG9jL2V4YW1wbGVzL01ha2VmaWxlLmFtCj4gaW5kZXggMWZk
+MDA4NC4uMDY5MDU5NyAxMDA2NDQKPiAtLS0gYS9kb2MvZXhhbXBsZXMvTWFrZWZpbGUuYW0KPiAr
+KysgYi9kb2MvZXhhbXBsZXMvTWFrZWZpbGUuYW0KPiBAQCAtNzUsNyArNzUsNyBAQCBhbGwtbG9j
+YWw6Cj4gIAkJcmVsX2J1aWxkX3N1YmRpcj0iLi4vIjsgXAo+ICAJZmk7IFwKPiAgCWZvciBzdWJk
+aXIgaW4gJChTVUJESVJTX1BST1hZKTsgZG8gXAo+IC0JCShjZCAkJHN1YmRpciAmJiAkKE1BS0Up
+IEFNX0NDPSIkKENDKSIgQU1fQ1BQRkxBR1M9IiQoQ1BQRkxBR1MpCj4gLUkkJHJlbF9zcmNfc3Vi
+ZGlyJCh0b3Bfc3JjZGlyKS9pbmNsdWRlLwo+IC1JJCRyZWxfYnVpbGRfc3ViZGlyJCh0b3BfYnVp
+bGRkaXIpL2luY2x1ZGUvIiBBTV9DRkxBR1M9JyQoQ0ZMQUdTKScKPiBBTV9MREZMQUdTPSckKExE
+RkxBR1MpIC1MLi4vLi4vLi4vbGlibHR0bmctdXN0Ly5saWJzLwo+IC1XbCwtcnBhdGg9IiQoUFdE
+KS8uLi8uLi9saWJsdHRuZy11c3QvLmxpYnMvIicKPiBMVFROR19HRU5fVFBfUEFUSD0iLi4vLi4v
+Li4vdG9vbHMvIiAkKEFNX01BS0VGTEFHUykgYWxsICYmIGNkIC4uKSB8fCBleGl0IDE7Cj4gXAo+
+ICsJCShjZCAkJHN1YmRpciAmJiAkKE1BS0UpIEFNX0NDPSIkKENDKSIgQU1fQ1BQRkxBR1M9IiQo
+Q1BQRkxBR1MpCj4gLUkkJHJlbF9zcmNfc3ViZGlyJCh0b3Bfc3JjZGlyKS9pbmNsdWRlLwo+IC1J
+JCRyZWxfYnVpbGRfc3ViZGlyJCh0b3BfYnVpbGRkaXIpL2luY2x1ZGUvIiBBTV9DRkxBR1M9JyQo
+Q0ZMQUdTKScKPiBBTV9MREZMQUdTPSckKExERkxBR1MpIC1MLi4vLi4vLi4vbGlibHR0bmctdXN0
+Ly5saWJzCj4gLVdsLC1ycGF0aD0iJChQV0QpLy4uLy4uL2xpYmx0dG5nLXVzdC8ubGlicy8iCj4g
+LVdsLC1ycGF0aC1saW5rPSIkKFBXRCkvLi4vLi4vbGlibHR0bmctdXN0Ly5saWJzLyInCj4gTFRU
+TkdfR0VOX1RQX1BBVEg9Ii4uLy4uLy4uL3Rvb2xzLyIgJChBTV9NQUtFRkxBR1MpIGFsbCAmJiBj
+ZCAuLikgfHwgZXhpdCAxOwo+IFwKPiAgCWRvbmU7IFwKPiAgCWlmIFsgeCIkKFNVQkRJUlNfSlVM
+KSIgIT0geCIiIF07IHRoZW4gXAo+ICAJCWZvciBzdWJkaXIgaW4gJChTVUJESVJTX0pVTCk7IGRv
+IFwKPiAtLQo+IDEuOS4xCj4gCj4gCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX18KPiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3Rz
+Lmx0dG5nLm9yZwo+IGh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3Rp
+bmZvL2x0dG5nLWRldgo+IAoKLS0gCk1hdGhpZXUgRGVzbm95ZXJzCkVmZmljaU9TIEluYy4KaHR0
+cDovL3d3dy5lZmZpY2lvcy5jb20KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5n
+Lm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRu
+Zy1kZXYK
