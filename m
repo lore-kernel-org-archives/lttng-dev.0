@@ -1,17 +1,18 @@
-From: Chaitannya Mahatme <chaitannya@gmail.com>
-Subject: Getting started with lttng
-Date: Sat, 26 Apr 2014 01:08:20 +0530
-Message-ID: <CAGwPLsbDhAyyVGD-3euyHT0tahjJ9saNM_XprO34SrjOWsbMcQ__23152.3789618679$1398455091$gmane$org@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH lttng-ust] Fix linking failure
+	when	cross-compiling
+Date: Sat, 26 Apr 2014 08:40:09 +0000 (UTC)
+Message-ID: <1751778549.7675.1398501609681.JavaMail.zimbra__35177.2528993481$1398501667$gmane$org@efficios.com>
+References: <1398442344-15165-1-git-send-email-adrienverge@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-lb0-f171.google.com ([209.85.217.171])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <chaitannya@gmail.com>) id 1Wdlx4-0008Ib-NN
- for lttng-dev@lists.lttng.org; Fri, 25 Apr 2014 15:38:31 -0400
-Received: by mail-lb0-f171.google.com with SMTP id u14so440021lbd.2
- for <lttng-dev@lists.lttng.org>; Fri, 25 Apr 2014 12:38:20 -0700 (PDT)
+ (envelope-from <compudj@efficios.com>) id 1Wdy9g-0003za-7D
+ for lttng-dev@lists.lttng.org; Sat, 26 Apr 2014 04:40:17 -0400
+In-Reply-To: <1398442344-15165-1-git-send-email-adrienverge@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,41 +21,63 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Adrien =?utf-8?Q?Verg=C3=A9?= <adrienverge@gmail.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hello Everyone,
-
-I have recently  installed lttng on my machine .. (Ubuntu 12.04)
-It's a fresh instalation on vmware. Every thing runs fine expect that
-no trace information is captured. What can be the issue?
-
-lttng enable-event sched_switch,sched_process_fork -k
-lttng start
-lttng stop
-babeltrace lttng-traces/mysession-20140425-235804/
-
-There is no output here.
-
-du -h lttng-traces/mysession-20140425-235804/
-
-8.0K	lttng-traces/mysession-20140425-235804/kernel/index
-20K	lttng-traces/mysession-20140425-235804/kernel
-24K	lttng-traces/mysession-20140425-235804/
-
-o/p of uname -a
-Linux ubuntu 3.2.0-23-generic-pae #36-Ubuntu SMP Tue Apr 10 22:19:09
-UTC 2012 i686 athlon i386 GNU/Linux
-
-What can be the issue ?
--- 
-Cheers !!!
-Chaitannya
-
-follow me on twitter http://twitter.com/chaitannya
--- 
-I believe there's a hero in all of us who keeps us honest, gives us
-strength, makes us noble, and finally allows us to die with pride,
-even though sometimes we have to be steady, and give up the thing we
-want the most... even our dreams.
-- Spider Man 2
+LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJBZHJpZW4gVmVyZ8OpIiA8YWRy
+aWVudmVyZ2VAZ21haWwuY29tPgo+IFRvOiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gQ2M6
+ICJBZHJpZW4gVmVyZ8OpIiA8YWRyaWVudmVyZ2VAZ21haWwuY29tPgo+IFNlbnQ6IEZyaWRheSwg
+QXByaWwgMjUsIDIwMTQgNjoxMjoyNCBQTQo+IFN1YmplY3Q6IFtsdHRuZy1kZXZdIFtQQVRDSCBs
+dHRuZy11c3RdIEZpeCBsaW5raW5nIGZhaWx1cmUgd2hlbgljcm9zcy1jb21waWxpbmcKPiAKPiBF
+eGFtcGxlcyBiaW5hcmllcyBpbiBkb2MvZXhhbXBsZXMgcmVxdWlyZSBsaWJzIGluIGxpYmx0dG5n
+LXVzdC8ubGlicy8sCj4gYW5kIHRob3NlIGxpYnMgcmVxdWlyZSBvdGhlciBsaWJzIGluIHRoZSBz
+YW1lIGRpcmVjdG9yeS4gIEZvciBpbnN0YW5jZQo+IGxpYmx0dG5nLXVzdC5zbyB1c2VzIGxpYmx0
+dG5nLXVzdC10cmFjZXBvaW50LnNvIHN5bWJvbHMsIHNvIHRoZSBsYXR0ZXIKPiBpcyBuZWVkZWQg
+dG8gcHJvcGVybHkgbGluayBleGFtcGxlIHByb2dyYW1zLiAgQ3VycmVudGx5LCBsZCBpcyBnaXZl
+bgo+IHRoZSBsaWIgZGlyIG9ubHkgdmlhIC1ycGF0aCAodXNlZCBmb3IgbGlua2luZyBleGVjdXRh
+YmxlcyBkZXBlbmRlbmNpZXMpCj4gYnV0IG5vdCB2aWEgLXJwYXRoLWxpbmsgKHVzZWQgZm9yIGxp
+bmtpbmcgbGlicyBkZXBlbmRlbmNpZXMpLgo+IAo+IFdoZW4gY29tcGlsaW5nIHJlZ3VsYXJseSwg
+dGhpcyBkb2VzIG5vdCBzZWVtIHRvIGJlIGEgcHJvYmxlbSAobWF5YmUgbGQKPiBpcyBzbWFydCBl
+bm91Z2gpLiAgSG93ZXZlciB3aGVuIGNyb3NzLWNvbXBpbGluZyB3aXRoIHRoZQo+IGFybS1saW51
+eC1nbnVlYWJpaGYgdG9vbGNoYWluLCAtcnBhdGgtbGluayBpcyBuZWVkZWQgb3RoZXJ3aXNlIGxp
+bmtpbmcKPiBmYWlscyB3aXRoOgo+IAo+IGFybS1saW51eC1nbnVlYWJpaGYvYmluL2xkOiB3YXJu
+aW5nOiBsaWJsdHRuZy11c3QtdHJhY2Vwb2ludC5zby4wLCBuZWVkZWQgYnkKPiAuLi8uLi8uLi9s
+aWJsdHRuZy11c3QvLmxpYnMvL2xpYmx0dG5nLXVzdC5zbywgbm90IGZvdW5kICh0cnkgdXNpbmcg
+LXJwYXRoIG9yCj4gLXJwYXRoLWxpbmspCj4gCj4gVGhpcyBwYXRjaCBhZGRzIC1ycGF0aC1saW5r
+IHRvIGRvYy9leGFtcGxlcy9NYWtlZmlsZS5hbS4KCkhpIEFkcmllbiwKCkkgbm90aWNlIHRoYXQg
+eW91ciBmaXgsIGluIGFkZGl0aW9uIHRvIGFkZCB0aGUgbWlzc2luZyAtcnBhdGgtbGluaywKY2hh
+bmdlczoKCi1MLi4vLi4vLi4vbGlibHR0bmctdXN0Ly5saWJzLwppbnRvCi1MLi4vLi4vLi4vbGli
+bHR0bmctdXN0Ly5saWJzCihmaW5hbCAvIHJlbW92ZWQpCgpJdCBzaG91bGQgY2hhbmdlIG11Y2gg
+dGhpbmdzIG92ZXJhbGwsIGJ1dCBpcyB0aGVyZSBhbnkgcmVhc29uIGZvcgp0aGlzIGNoYW5nZSA/
+CgpUaGFua3MsCgpNYXRoaWV1Cgo+IAo+IFNpZ25lZC1vZmYtYnk6IEFkcmllbiBWZXJnw6kgPGFk
+cmllbnZlcmdlQGdtYWlsLmNvbT4KPiAtLS0KPiAgZG9jL2V4YW1wbGVzL01ha2VmaWxlLmFtIHwg
+MiArLQo+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkKPiAK
+PiBkaWZmIC0tZ2l0IGEvZG9jL2V4YW1wbGVzL01ha2VmaWxlLmFtIGIvZG9jL2V4YW1wbGVzL01h
+a2VmaWxlLmFtCj4gaW5kZXggMWZkMDA4NC4uMDY5MDU5NyAxMDA2NDQKPiAtLS0gYS9kb2MvZXhh
+bXBsZXMvTWFrZWZpbGUuYW0KPiArKysgYi9kb2MvZXhhbXBsZXMvTWFrZWZpbGUuYW0KPiBAQCAt
+NzUsNyArNzUsNyBAQCBhbGwtbG9jYWw6Cj4gIAkJcmVsX2J1aWxkX3N1YmRpcj0iLi4vIjsgXAo+
+ICAJZmk7IFwKPiAgCWZvciBzdWJkaXIgaW4gJChTVUJESVJTX1BST1hZKTsgZG8gXAo+IC0JCShj
+ZCAkJHN1YmRpciAmJiAkKE1BS0UpIEFNX0NDPSIkKENDKSIgQU1fQ1BQRkxBR1M9IiQoQ1BQRkxB
+R1MpCj4gLUkkJHJlbF9zcmNfc3ViZGlyJCh0b3Bfc3JjZGlyKS9pbmNsdWRlLwo+IC1JJCRyZWxf
+YnVpbGRfc3ViZGlyJCh0b3BfYnVpbGRkaXIpL2luY2x1ZGUvIiBBTV9DRkxBR1M9JyQoQ0ZMQUdT
+KScKPiBBTV9MREZMQUdTPSckKExERkxBR1MpIC1MLi4vLi4vLi4vbGlibHR0bmctdXN0Ly5saWJz
+Lwo+IC1XbCwtcnBhdGg9IiQoUFdEKS8uLi8uLi9saWJsdHRuZy11c3QvLmxpYnMvIicKPiBMVFRO
+R19HRU5fVFBfUEFUSD0iLi4vLi4vLi4vdG9vbHMvIiAkKEFNX01BS0VGTEFHUykgYWxsICYmIGNk
+IC4uKSB8fCBleGl0IDE7Cj4gXAo+ICsJCShjZCAkJHN1YmRpciAmJiAkKE1BS0UpIEFNX0NDPSIk
+KENDKSIgQU1fQ1BQRkxBR1M9IiQoQ1BQRkxBR1MpCj4gLUkkJHJlbF9zcmNfc3ViZGlyJCh0b3Bf
+c3JjZGlyKS9pbmNsdWRlLwo+IC1JJCRyZWxfYnVpbGRfc3ViZGlyJCh0b3BfYnVpbGRkaXIpL2lu
+Y2x1ZGUvIiBBTV9DRkxBR1M9JyQoQ0ZMQUdTKScKPiBBTV9MREZMQUdTPSckKExERkxBR1MpIC1M
+Li4vLi4vLi4vbGlibHR0bmctdXN0Ly5saWJzCj4gLVdsLC1ycGF0aD0iJChQV0QpLy4uLy4uL2xp
+Ymx0dG5nLXVzdC8ubGlicy8iCj4gLVdsLC1ycGF0aC1saW5rPSIkKFBXRCkvLi4vLi4vbGlibHR0
+bmctdXN0Ly5saWJzLyInCj4gTFRUTkdfR0VOX1RQX1BBVEg9Ii4uLy4uLy4uL3Rvb2xzLyIgJChB
+TV9NQUtFRkxBR1MpIGFsbCAmJiBjZCAuLikgfHwgZXhpdCAxOwo+IFwKPiAgCWRvbmU7IFwKPiAg
+CWlmIFsgeCIkKFNVQkRJUlNfSlVMKSIgIT0geCIiIF07IHRoZW4gXAo+ICAJCWZvciBzdWJkaXIg
+aW4gJChTVUJESVJTX0pVTCk7IGRvIFwKPiAtLQo+IDEuOS4xCj4gCj4gCj4gX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBsdHRuZy1kZXYgbWFpbGluZyBs
+aXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IGh0dHA6Ly9saXN0cy5sdHRuZy5vcmcv
+Y2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo+IAoKLS0gCk1hdGhpZXUgRGVzbm95
+ZXJzCkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KCl9fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QK
+bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4v
+bWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
