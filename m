@@ -1,17 +1,19 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Pull request: lttng-tools UST x86 perf counters
-Date: Sun, 27 Apr 2014 11:57:52 +0000 (UTC)
-Message-ID: <421716413.8116.1398599872694.JavaMail.zimbra__37990.725253667$1398599918$gmane$org@efficios.com>
-References: <1811387346.8113.1398599757255.JavaMail.zimbra@efficios.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: Getting started with lttng
+Date: Mon, 28 Apr 2014 07:16:27 -0400
+Message-ID: <CA+jJMxvEhfGrWkRQM0RQNah2opnHs-BpPH8ynbsFzPX+bUzFUQ__6246.37001096762$1398683848$gmane$org@mail.gmail.com>
+References: <CAGwPLsbDhAyyVGD-3euyHT0tahjJ9saNM_XprO34SrjOWsbMcQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-qa0-f49.google.com ([209.85.216.49])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1WeNiX-0004gz-2U
- for lttng-dev@lists.lttng.org; Sun, 27 Apr 2014 07:58:00 -0400
-In-Reply-To: <1811387346.8113.1398599757255.JavaMail.zimbra@efficios.com>
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1WejY1-00042Z-KE
+ for lttng-dev@lists.lttng.org; Mon, 28 Apr 2014 07:16:38 -0400
+Received: by mail-qa0-f49.google.com with SMTP id dc16so2827414qab.22
+ for <lttng-dev@lists.lttng.org>; Mon, 28 Apr 2014 04:16:28 -0700 (PDT)
+In-Reply-To: <CAGwPLsbDhAyyVGD-3euyHT0tahjJ9saNM_XprO34SrjOWsbMcQ@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,31 +22,40 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: David Goulet <dgoulet@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, Julien Desfossez <jdesfossez@efficios.com>
+To: Chaitannya Mahatme <chaitannya@gmail.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi David,
-
-Please pull from:
-https://github.com/compudj/lttng-tools-dev.git
-branch: perf-counter-ust
-
-Top commit:
-commit 462125b4a2658a3c1c6c00d2be5bd2653c4ae2f6
-Author: Julien Desfossez <jdesfossez@efficios.com>
-Date:   Mon Mar 17 16:15:26 2014 -0400
-
-    Add UST perf test in make check on x86
-    
-    Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
-    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-
-Thanks!
-
-Mathieu
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+T24gRnJpLCBBcHIgMjUsIDIwMTQgYXQgMzozOCBQTSwgQ2hhaXRhbm55YSBNYWhhdG1lCjxjaGFp
+dGFubnlhQGdtYWlsLmNvbT4gd3JvdGU6Cj4gSGVsbG8gRXZlcnlvbmUsCj4KPiBJIGhhdmUgcmVj
+ZW50bHkgIGluc3RhbGxlZCBsdHRuZyBvbiBteSBtYWNoaW5lIC4uIChVYnVudHUgMTIuMDQpCj4g
+SXQncyBhIGZyZXNoIGluc3RhbGF0aW9uIG9uIHZtd2FyZS4gRXZlcnkgdGhpbmcgcnVucyBmaW5l
+IGV4cGVjdCB0aGF0Cj4gbm8gdHJhY2UgaW5mb3JtYXRpb24gaXMgY2FwdHVyZWQuIFdoYXQgY2Fu
+IGJlIHRoZSBpc3N1ZT8KCkhvdyBkaWQgeW91IGluc3RhbGwgTFRUbmc/IERpZCB5b3UgdXNlIHlv
+dXIgZGl0cmlidXRpb24ncyBwYWNrYWdlcywKdGhlIFBQQXMgb3IgYSB0YXJiYWxsPwpXaGljaCB2
+ZXJzaW9uIGFyZSB5b3UgdXNpbmc/Cgo+Cj4gbHR0bmcgZW5hYmxlLWV2ZW50IHNjaGVkX3N3aXRj
+aCxzY2hlZF9wcm9jZXNzX2ZvcmsgLWsKPiBsdHRuZyBzdGFydAo+IGx0dG5nIHN0b3AKPiBiYWJl
+bHRyYWNlIGx0dG5nLXRyYWNlcy9teXNlc3Npb24tMjAxNDA0MjUtMjM1ODA0Lwo+Cj4gVGhlcmUg
+aXMgbm8gb3V0cHV0IGhlcmUuCj4KPiBkdSAtaCBsdHRuZy10cmFjZXMvbXlzZXNzaW9uLTIwMTQw
+NDI1LTIzNTgwNC8KPgo+IDguMEsgICAgbHR0bmctdHJhY2VzL215c2Vzc2lvbi0yMDE0MDQyNS0y
+MzU4MDQva2VybmVsL2luZGV4Cj4gMjBLICAgICBsdHRuZy10cmFjZXMvbXlzZXNzaW9uLTIwMTQw
+NDI1LTIzNTgwNC9rZXJuZWwKPiAyNEsgICAgIGx0dG5nLXRyYWNlcy9teXNlc3Npb24tMjAxNDA0
+MjUtMjM1ODA0Lwo+Cj4gby9wIG9mIHVuYW1lIC1hCj4gTGludXggdWJ1bnR1IDMuMi4wLTIzLWdl
+bmVyaWMtcGFlICMzNi1VYnVudHUgU01QIFR1ZSBBcHIgMTAgMjI6MTk6MDkKPiBVVEMgMjAxMiBp
+Njg2IGF0aGxvbiBpMzg2IEdOVS9MaW51eAo+Cj4gV2hhdCBjYW4gYmUgdGhlIGlzc3VlID8KCkhv
+dyBkaWQgeW91IGNyZWF0ZSB5b3VyIHNlc3Npb24/IEFsc28sIGRvIHlvdSBoYXZlIGFuIGx0dG5n
+LXNlc3Npb25kCnJ1bm5pbmcgYXMgcm9vdD8KCkFsc28sIG1ha2Ugc3VyZSB5b3VyIHVzZXIgaXMg
+cGFydCBvZiB0aGUgdHJhY2luZyBncm91cC4KClRoYW5rcwpKw6lyw6ltaWUKCj4gLS0KPiBDaGVl
+cnMgISEhCj4gQ2hhaXRhbm55YQo+Cj4gZm9sbG93IG1lIG9uIHR3aXR0ZXIgaHR0cDovL3R3aXR0
+ZXIuY29tL2NoYWl0YW5ueWEKPiAtLQo+IEkgYmVsaWV2ZSB0aGVyZSdzIGEgaGVybyBpbiBhbGwg
+b2YgdXMgd2hvIGtlZXBzIHVzIGhvbmVzdCwgZ2l2ZXMgdXMKPiBzdHJlbmd0aCwgbWFrZXMgdXMg
+bm9ibGUsIGFuZCBmaW5hbGx5IGFsbG93cyB1cyB0byBkaWUgd2l0aCBwcmlkZSwKPiBldmVuIHRo
+b3VnaCBzb21ldGltZXMgd2UgaGF2ZSB0byBiZSBzdGVhZHksIGFuZCBnaXZlIHVwIHRoZSB0aGlu
+ZyB3ZQo+IHdhbnQgdGhlIG1vc3QuLi4gZXZlbiBvdXIgZHJlYW1zLgo+IC0gU3BpZGVyIE1hbiAy
+Cj4KPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGx0
+dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0cDov
+L2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2CgoKCi0t
+IApKw6lyw6ltaWUgR2FsYXJuZWF1CkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5j
+b20KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5n
+LWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMu
+bHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
