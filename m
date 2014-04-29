@@ -1,19 +1,17 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: Getting started with lttng
-Date: Mon, 28 Apr 2014 07:16:27 -0400
-Message-ID: <CA+jJMxvEhfGrWkRQM0RQNah2opnHs-BpPH8ynbsFzPX+bUzFUQ__6246.37001096762$1398683848$gmane$org@mail.gmail.com>
-References: <CAGwPLsbDhAyyVGD-3euyHT0tahjJ9saNM_XprO34SrjOWsbMcQ@mail.gmail.com>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Subject: Problem in userspace-rcu cds_hlist_del_rcu.c caused by
+ #define cds_hlist_for_each_entry_safe_2
+Date: Tue, 29 Apr 2014 18:59:36 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD3599E294__41305.802044417$1398798057$gmane$org@VAL-E-01.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qa0-f49.google.com ([209.85.216.49])
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1WejY1-00042Z-KE
- for lttng-dev@lists.lttng.org; Mon, 28 Apr 2014 07:16:38 -0400
-Received: by mail-qa0-f49.google.com with SMTP id dc16so2827414qab.22
- for <lttng-dev@lists.lttng.org>; Mon, 28 Apr 2014 04:16:28 -0700 (PDT)
-In-Reply-To: <CAGwPLsbDhAyyVGD-3euyHT0tahjJ9saNM_XprO34SrjOWsbMcQ@mail.gmail.com>
+ (envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1WfDFm-00066v-Er
+ for lttng-dev@lists.lttng.org; Tue, 29 Apr 2014 14:59:48 -0400
+Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,40 +20,82 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Chaitannya Mahatme <chaitannya@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-T24gRnJpLCBBcHIgMjUsIDIwMTQgYXQgMzozOCBQTSwgQ2hhaXRhbm55YSBNYWhhdG1lCjxjaGFp
-dGFubnlhQGdtYWlsLmNvbT4gd3JvdGU6Cj4gSGVsbG8gRXZlcnlvbmUsCj4KPiBJIGhhdmUgcmVj
-ZW50bHkgIGluc3RhbGxlZCBsdHRuZyBvbiBteSBtYWNoaW5lIC4uIChVYnVudHUgMTIuMDQpCj4g
-SXQncyBhIGZyZXNoIGluc3RhbGF0aW9uIG9uIHZtd2FyZS4gRXZlcnkgdGhpbmcgcnVucyBmaW5l
-IGV4cGVjdCB0aGF0Cj4gbm8gdHJhY2UgaW5mb3JtYXRpb24gaXMgY2FwdHVyZWQuIFdoYXQgY2Fu
-IGJlIHRoZSBpc3N1ZT8KCkhvdyBkaWQgeW91IGluc3RhbGwgTFRUbmc/IERpZCB5b3UgdXNlIHlv
-dXIgZGl0cmlidXRpb24ncyBwYWNrYWdlcywKdGhlIFBQQXMgb3IgYSB0YXJiYWxsPwpXaGljaCB2
-ZXJzaW9uIGFyZSB5b3UgdXNpbmc/Cgo+Cj4gbHR0bmcgZW5hYmxlLWV2ZW50IHNjaGVkX3N3aXRj
-aCxzY2hlZF9wcm9jZXNzX2ZvcmsgLWsKPiBsdHRuZyBzdGFydAo+IGx0dG5nIHN0b3AKPiBiYWJl
-bHRyYWNlIGx0dG5nLXRyYWNlcy9teXNlc3Npb24tMjAxNDA0MjUtMjM1ODA0Lwo+Cj4gVGhlcmUg
-aXMgbm8gb3V0cHV0IGhlcmUuCj4KPiBkdSAtaCBsdHRuZy10cmFjZXMvbXlzZXNzaW9uLTIwMTQw
-NDI1LTIzNTgwNC8KPgo+IDguMEsgICAgbHR0bmctdHJhY2VzL215c2Vzc2lvbi0yMDE0MDQyNS0y
-MzU4MDQva2VybmVsL2luZGV4Cj4gMjBLICAgICBsdHRuZy10cmFjZXMvbXlzZXNzaW9uLTIwMTQw
-NDI1LTIzNTgwNC9rZXJuZWwKPiAyNEsgICAgIGx0dG5nLXRyYWNlcy9teXNlc3Npb24tMjAxNDA0
-MjUtMjM1ODA0Lwo+Cj4gby9wIG9mIHVuYW1lIC1hCj4gTGludXggdWJ1bnR1IDMuMi4wLTIzLWdl
-bmVyaWMtcGFlICMzNi1VYnVudHUgU01QIFR1ZSBBcHIgMTAgMjI6MTk6MDkKPiBVVEMgMjAxMiBp
-Njg2IGF0aGxvbiBpMzg2IEdOVS9MaW51eAo+Cj4gV2hhdCBjYW4gYmUgdGhlIGlzc3VlID8KCkhv
-dyBkaWQgeW91IGNyZWF0ZSB5b3VyIHNlc3Npb24/IEFsc28sIGRvIHlvdSBoYXZlIGFuIGx0dG5n
-LXNlc3Npb25kCnJ1bm5pbmcgYXMgcm9vdD8KCkFsc28sIG1ha2Ugc3VyZSB5b3VyIHVzZXIgaXMg
-cGFydCBvZiB0aGUgdHJhY2luZyBncm91cC4KClRoYW5rcwpKw6lyw6ltaWUKCj4gLS0KPiBDaGVl
-cnMgISEhCj4gQ2hhaXRhbm55YQo+Cj4gZm9sbG93IG1lIG9uIHR3aXR0ZXIgaHR0cDovL3R3aXR0
-ZXIuY29tL2NoYWl0YW5ueWEKPiAtLQo+IEkgYmVsaWV2ZSB0aGVyZSdzIGEgaGVybyBpbiBhbGwg
-b2YgdXMgd2hvIGtlZXBzIHVzIGhvbmVzdCwgZ2l2ZXMgdXMKPiBzdHJlbmd0aCwgbWFrZXMgdXMg
-bm9ibGUsIGFuZCBmaW5hbGx5IGFsbG93cyB1cyB0byBkaWUgd2l0aCBwcmlkZSwKPiBldmVuIHRo
-b3VnaCBzb21ldGltZXMgd2UgaGF2ZSB0byBiZSBzdGVhZHksIGFuZCBnaXZlIHVwIHRoZSB0aGlu
-ZyB3ZQo+IHdhbnQgdGhlIG1vc3QuLi4gZXZlbiBvdXIgZHJlYW1zLgo+IC0gU3BpZGVyIE1hbiAy
-Cj4KPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGx0
-dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0cDov
-L2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2CgoKCi0t
-IApKw6lyw6ltaWUgR2FsYXJuZWF1CkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5j
-b20KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5n
-LWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMu
-bHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+   When compiling userspace-rcu (commit 81dd913), I get a pair of warnings =
+for /userspace-rcu/doc/examples/hlist/cds_hlist_del_rcu.c at the cds_hlist_=
+for_each_entry_safe_2 call:
+
+	cds_hlist_for_each_entry_safe_2(node, n, &mylist, node) {
+		if (node->value > 0) {
+			cds_hlist_del_rcu(&node->node);
+			/*
+			 * We can only reclaim memory after a grace
+			 * period has passed after cds_hlist_del_rcu().
+			 */
+			call_rcu(&node->rcu_head, free_node_rcu);
+		}
+	}
+
+   The warnings are:
+"attention: assignment makes pointer from integer without a cast"
+"attention: left operand of comma operator has no effect"
+
+   The #define comes from userspace-rcu/urcu/hlist.h (here re-arranged a bi=
+t):
+
+#define cds_hlist_for_each_entry_safe_2(entry, e, head, member) \
+	for (entry =3D ((head)->next =3D=3D NULL ? NULL : cds_hlist_entry((head)->=
+next, __typeof__(*entry), member)); \
+	        (entry !=3D NULL) && \
+	        (e =3D (entry->member.next =3D=3D NULL ? NULL : cds_hlist_entry(en=
+try->member.next, __typeof__(*entry), member), 1)); \
+	        entry =3D e)
+
+   The cds_hlist_del_rcu.c occurrence is the only use of cds_hlist_for_each=
+_entry_safe_2 and the problem seems to me to lie in this bit:
+
+(e =3D (entry->member.next =3D=3D NULL ? NULL : cds_hlist_entry(entry->memb=
+er.next, __typeof__(*entry), member), 1))
+
+   Because the comma operator has the lowest precedence of all operators, t=
+he statement is equivalent to:
+
+(e =3D ((entry->member.next =3D=3D NULL ? NULL : cds_hlist_entry(entry->mem=
+ber.next, __typeof__(*entry), member)), 1)) =
+
+
+   Which is in turn the same as:
+
+(e =3D 1)
+
+   Now, if the macro is using the comma to make the second part of the && t=
+est succeed regardless of the value fetched for e, then it should have been=
+ written:
+
+#define cds_hlist_for_each_entry_safe_2(entry, e, head, member) \
+	for (entry =3D ((head)->next =3D=3D NULL ? NULL : cds_hlist_entry((head)->=
+next, __typeof__(*entry), member)); \
+	        (entry !=3D NULL) && \
+	        ((e =3D (entry->member.next =3D=3D NULL ? NULL : cds_hlist_entry(e=
+ntry->member.next, __typeof__(*entry), member))), 1); \
+	        entry =3D e)
+
+   Which does compile without the warnings.
+
+Daniel U. Thibault
+Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
+ntermeasures (SPC)
+Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
+Cyber Security (MCCS)
+R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
+ Canada - Valcartier (DRDC Valcartier)
+2459 route de la Bravoure
+Qu=E9bec QC=A0 G3J 1X5
+CANADA
+Vox=A0: (418) 844-4000 x4245
+Fax=A0: (418) 844-4538
+NAC=A0: 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+Gouvernement du Canada=A0| Government of Canada
+<http://www.valcartier.drdc-rddc.gc.ca/>
