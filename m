@@ -1,17 +1,18 @@
-From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Subject: Problem in userspace-rcu cds_hlist_del_rcu.c caused by
- #define cds_hlist_for_each_entry_safe_2
-Date: Tue, 29 Apr 2014 18:59:36 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD3599E294__41305.802044417$1398798057$gmane$org@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: Problem in userspace-rcu cds_hlist_del_rcu.c caused
+ by #define cds_hlist_for_each_entry_safe_2
+Date: Tue, 29 Apr 2014 20:05:49 +0000 (UTC)
+Message-ID: <1595235240.8875.1398801949897.JavaMail.zimbra__36178.2648055398$1398802091$gmane$org@efficios.com>
+References: <48CF5AC71E61DB46B70D0F388054EFFD3599E294@VAL-E-01.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1WfDFm-00066v-Er
- for lttng-dev@lists.lttng.org; Tue, 29 Apr 2014 14:59:48 -0400
-Content-Language: fr-FR
+ (envelope-from <compudj@efficios.com>) id 1WfEHr-0006Tf-UK
+ for lttng-dev@lists.lttng.org; Tue, 29 Apr 2014 16:06:02 -0400
+In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD3599E294@VAL-E-01.valcartier.drdc-rddc.gc.ca>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,82 +21,82 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Daniel Thibault <Daniel.Thibault@drdc-rddc.gc.ca>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-   When compiling userspace-rcu (commit 81dd913), I get a pair of warnings =
-for /userspace-rcu/doc/examples/hlist/cds_hlist_del_rcu.c at the cds_hlist_=
-for_each_entry_safe_2 call:
-
-	cds_hlist_for_each_entry_safe_2(node, n, &mylist, node) {
-		if (node->value > 0) {
-			cds_hlist_del_rcu(&node->node);
-			/*
-			 * We can only reclaim memory after a grace
-			 * period has passed after cds_hlist_del_rcu().
-			 */
-			call_rcu(&node->rcu_head, free_node_rcu);
-		}
-	}
-
-   The warnings are:
-"attention: assignment makes pointer from integer without a cast"
-"attention: left operand of comma operator has no effect"
-
-   The #define comes from userspace-rcu/urcu/hlist.h (here re-arranged a bi=
-t):
-
-#define cds_hlist_for_each_entry_safe_2(entry, e, head, member) \
-	for (entry =3D ((head)->next =3D=3D NULL ? NULL : cds_hlist_entry((head)->=
-next, __typeof__(*entry), member)); \
-	        (entry !=3D NULL) && \
-	        (e =3D (entry->member.next =3D=3D NULL ? NULL : cds_hlist_entry(en=
-try->member.next, __typeof__(*entry), member), 1)); \
-	        entry =3D e)
-
-   The cds_hlist_del_rcu.c occurrence is the only use of cds_hlist_for_each=
-_entry_safe_2 and the problem seems to me to lie in this bit:
-
-(e =3D (entry->member.next =3D=3D NULL ? NULL : cds_hlist_entry(entry->memb=
-er.next, __typeof__(*entry), member), 1))
-
-   Because the comma operator has the lowest precedence of all operators, t=
-he statement is equivalent to:
-
-(e =3D ((entry->member.next =3D=3D NULL ? NULL : cds_hlist_entry(entry->mem=
-ber.next, __typeof__(*entry), member)), 1)) =
-
-
-   Which is in turn the same as:
-
-(e =3D 1)
-
-   Now, if the macro is using the comma to make the second part of the && t=
-est succeed regardless of the value fetched for e, then it should have been=
- written:
-
-#define cds_hlist_for_each_entry_safe_2(entry, e, head, member) \
-	for (entry =3D ((head)->next =3D=3D NULL ? NULL : cds_hlist_entry((head)->=
-next, __typeof__(*entry), member)); \
-	        (entry !=3D NULL) && \
-	        ((e =3D (entry->member.next =3D=3D NULL ? NULL : cds_hlist_entry(e=
-ntry->member.next, __typeof__(*entry), member))), 1); \
-	        entry =3D e)
-
-   Which does compile without the warnings.
-
-Daniel U. Thibault
-Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
-ntermeasures (SPC)
-Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
-Cyber Security (MCCS)
-R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
- Canada - Valcartier (DRDC Valcartier)
-2459 route de la Bravoure
-Qu=E9bec QC=A0 G3J 1X5
-CANADA
-Vox=A0: (418) 844-4000 x4245
-Fax=A0: (418) 844-4538
-NAC=A0: 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-Gouvernement du Canada=A0| Government of Canada
-<http://www.valcartier.drdc-rddc.gc.ca/>
+LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJEYW5pZWwgVGhpYmF1bHQiIDxE
+YW5pZWwuVGhpYmF1bHRAZHJkYy1yZGRjLmdjLmNhPgo+IFRvOiBsdHRuZy1kZXZAbGlzdHMubHR0
+bmcub3JnCj4gU2VudDogVHVlc2RheSwgQXByaWwgMjksIDIwMTQgODo1OTozNiBQTQo+IFN1Ympl
+Y3Q6IFtsdHRuZy1kZXZdIFByb2JsZW0gaW4gdXNlcnNwYWNlLXJjdSBjZHNfaGxpc3RfZGVsX3Jj
+dS5jIGNhdXNlZCBieSAjZGVmaW5lIGNkc19obGlzdF9mb3JfZWFjaF9lbnRyeV9zYWZlXzIKPiAK
+PiBXaGVuIGNvbXBpbGluZyB1c2Vyc3BhY2UtcmN1IChjb21taXQgODFkZDkxMyksIEkgZ2V0IGEg
+cGFpciBvZiB3YXJuaW5ncyBmb3IKPiAvdXNlcnNwYWNlLXJjdS9kb2MvZXhhbXBsZXMvaGxpc3Qv
+Y2RzX2hsaXN0X2RlbF9yY3UuYyBhdCB0aGUKPiBjZHNfaGxpc3RfZm9yX2VhY2hfZW50cnlfc2Fm
+ZV8yIGNhbGw6Cj4gCj4gCWNkc19obGlzdF9mb3JfZWFjaF9lbnRyeV9zYWZlXzIobm9kZSwgbiwg
+Jm15bGlzdCwgbm9kZSkgewo+IAkJaWYgKG5vZGUtPnZhbHVlID4gMCkgewo+IAkJCWNkc19obGlz
+dF9kZWxfcmN1KCZub2RlLT5ub2RlKTsKPiAJCQkvKgo+IAkJCSAqIFdlIGNhbiBvbmx5IHJlY2xh
+aW0gbWVtb3J5IGFmdGVyIGEgZ3JhY2UKPiAJCQkgKiBwZXJpb2QgaGFzIHBhc3NlZCBhZnRlciBj
+ZHNfaGxpc3RfZGVsX3JjdSgpLgo+IAkJCSAqLwo+IAkJCWNhbGxfcmN1KCZub2RlLT5yY3VfaGVh
+ZCwgZnJlZV9ub2RlX3JjdSk7Cj4gCQl9Cj4gCX0KPiAKPiAgICBUaGUgd2FybmluZ3MgYXJlOgo+
+ICJhdHRlbnRpb246IGFzc2lnbm1lbnQgbWFrZXMgcG9pbnRlciBmcm9tIGludGVnZXIgd2l0aG91
+dCBhIGNhc3QiCj4gImF0dGVudGlvbjogbGVmdCBvcGVyYW5kIG9mIGNvbW1hIG9wZXJhdG9yIGhh
+cyBubyBlZmZlY3QiCj4gCj4gICAgVGhlICNkZWZpbmUgY29tZXMgZnJvbSB1c2Vyc3BhY2UtcmN1
+L3VyY3UvaGxpc3QuaCAoaGVyZSByZS1hcnJhbmdlZCBhCj4gICAgYml0KToKPiAKPiAjZGVmaW5l
+IGNkc19obGlzdF9mb3JfZWFjaF9lbnRyeV9zYWZlXzIoZW50cnksIGUsIGhlYWQsIG1lbWJlcikg
+XAo+IAlmb3IgKGVudHJ5ID0gKChoZWFkKS0+bmV4dCA9PSBOVUxMID8gTlVMTCA6IGNkc19obGlz
+dF9lbnRyeSgoaGVhZCktPm5leHQsCj4gCV9fdHlwZW9mX18oKmVudHJ5KSwgbWVtYmVyKSk7IFwK
+PiAJICAgICAgICAoZW50cnkgIT0gTlVMTCkgJiYgXAo+IAkgICAgICAgIChlID0gKGVudHJ5LT5t
+ZW1iZXIubmV4dCA9PSBOVUxMID8gTlVMTCA6Cj4gCSAgICAgICAgY2RzX2hsaXN0X2VudHJ5KGVu
+dHJ5LT5tZW1iZXIubmV4dCwgX190eXBlb2ZfXygqZW50cnkpLCBtZW1iZXIpLAo+IAkgICAgICAg
+IDEpKTsgXAo+IAkgICAgICAgIGVudHJ5ID0gZSkKPiAKPiAgICBUaGUgY2RzX2hsaXN0X2RlbF9y
+Y3UuYyBvY2N1cnJlbmNlIGlzIHRoZSBvbmx5IHVzZSBvZgo+ICAgIGNkc19obGlzdF9mb3JfZWFj
+aF9lbnRyeV9zYWZlXzIgYW5kIHRoZSBwcm9ibGVtIHNlZW1zIHRvIG1lIHRvIGxpZSBpbgo+ICAg
+IHRoaXMgYml0Ogo+IAo+IChlID0gKGVudHJ5LT5tZW1iZXIubmV4dCA9PSBOVUxMID8gTlVMTCA6
+IGNkc19obGlzdF9lbnRyeShlbnRyeS0+bWVtYmVyLm5leHQsCj4gX190eXBlb2ZfXygqZW50cnkp
+LCBtZW1iZXIpLCAxKSkKPiAKPiAgICBCZWNhdXNlIHRoZSBjb21tYSBvcGVyYXRvciBoYXMgdGhl
+IGxvd2VzdCBwcmVjZWRlbmNlIG9mIGFsbCBvcGVyYXRvcnMsIHRoZQo+ICAgIHN0YXRlbWVudCBp
+cyBlcXVpdmFsZW50IHRvOgo+IAo+IChlID0gKChlbnRyeS0+bWVtYmVyLm5leHQgPT0gTlVMTCA/
+IE5VTEwgOgo+IGNkc19obGlzdF9lbnRyeShlbnRyeS0+bWVtYmVyLm5leHQsIF9fdHlwZW9mX18o
+KmVudHJ5KSwgbWVtYmVyKSksIDEpKQo+IAo+ICAgIFdoaWNoIGlzIGluIHR1cm4gdGhlIHNhbWUg
+YXM6Cj4gCj4gKGUgPSAxKQo+IAo+ICAgIE5vdywgaWYgdGhlIG1hY3JvIGlzIHVzaW5nIHRoZSBj
+b21tYSB0byBtYWtlIHRoZSBzZWNvbmQgcGFydCBvZiB0aGUgJiYKPiAgICB0ZXN0IHN1Y2NlZWQg
+cmVnYXJkbGVzcyBvZiB0aGUgdmFsdWUgZmV0Y2hlZCBmb3IgZSwgdGhlbiBpdCBzaG91bGQgaGF2
+ZQo+ICAgIGJlZW4gd3JpdHRlbjoKPiAKPiAjZGVmaW5lIGNkc19obGlzdF9mb3JfZWFjaF9lbnRy
+eV9zYWZlXzIoZW50cnksIGUsIGhlYWQsIG1lbWJlcikgXAo+IAlmb3IgKGVudHJ5ID0gKChoZWFk
+KS0+bmV4dCA9PSBOVUxMID8gTlVMTCA6IGNkc19obGlzdF9lbnRyeSgoaGVhZCktPm5leHQsCj4g
+CV9fdHlwZW9mX18oKmVudHJ5KSwgbWVtYmVyKSk7IFwKPiAJICAgICAgICAoZW50cnkgIT0gTlVM
+TCkgJiYgXAo+IAkgICAgICAgICgoZSA9IChlbnRyeS0+bWVtYmVyLm5leHQgPT0gTlVMTCA/IE5V
+TEwgOgo+IAkgICAgICAgIGNkc19obGlzdF9lbnRyeShlbnRyeS0+bWVtYmVyLm5leHQsIF9fdHlw
+ZW9mX18oKmVudHJ5KSwgbWVtYmVyKSkpLAo+IAkgICAgICAgIDEpOyBcCj4gCSAgICAgICAgZW50
+cnkgPSBlKQo+IAo+ICAgIFdoaWNoIGRvZXMgY29tcGlsZSB3aXRob3V0IHRoZSB3YXJuaW5ncy4K
+CkhpIERhbmllbCwKCkdvb2QgY2F0Y2ggISBGb3Igc29tZSByZWFzb24gbXkgY29tcGlsZXIgZGlk
+IG5vdCBjb21wbGFpbiBhYm91dAppdC4KCkkgcHJvcG9zZSB0byByZW1vdmUgdGhlIGV4dHJhICgo
+ZSA9IC4uLiksIDEpIGZyb20geW91ciBwcm9wb3NhbCwKdHVybmluZyB0aGUgbW9kaWZpZWQgc2Vn
+bWVudCBvZiBleHByZXNzaW9uIGludG86CgooZSA9IC4uLiwgMSkKCnNpbmNlIHRoZSBjb21tYSBv
+cGVyYXRvciBoYXMgdGhlIGxvd2VzdCBwcmVjZWRlbmNlLCB0aGUgZXh0cmEKcGFyZW50aGVzaXMg
+YXJlIHJlZHVuZGFudC4KCkZvcnR1bmF0ZWx5LCB0aGlzIGJ1ZyBvbmx5IGFmZmVjdHMgdGhlIG1h
+c3RlciBicmFuY2gsIGFuZCBub3QKc3RhYmxlIGJyYW5jaGVzLgoKSGVyZSBpcyB0aGUgZml4IGNv
+bW1pdCBpbmZvOgoKY29tbWl0IDc5ZWZkOWIzNTBlMDdhNDk5YjM2MjBkZGRlNDg2MGI4Mzc4ZmNm
+MDAKQXV0aG9yOiBNYXRoaWV1IERlc25veWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3Mu
+Y29tPgpEYXRlOiAgIFR1ZSBBcHIgMjkgMjI6MDE6NTcgMjAxNCArMDIwMAoKICAgIEZpeDogaW5j
+b3JyZWN0IHBhcmVudGhlc2lzIGluIGNkc19obGlzdF9mb3JfZWFjaF9lbnRyeV9zYWZlXzIKClRo
+YW5rcyBmb3IgcG9pbnRpbmcgaXQgb3V0IQoKTWF0aGlldQoKCj4gCj4gRGFuaWVsIFUuIFRoaWJh
+dWx0Cj4gUHJvdGVjdGlvbiBkZXMgc3lzdMOobWVzIGV0IGNvbnRyZW1lc3VyZXMgKFBTQykgfCBT
+eXN0ZW1zIFByb3RlY3Rpb24gJgo+IENvdW50ZXJtZWFzdXJlcyAoU1BDKQo+IEN5YmVyIHPDqWN1
+cml0w6kgcG91ciBsZXMgbWlzc2lvbnMgZXNzZW50aWVsbGVzIChDTUUpIHwgTWlzc2lvbiBDcml0
+aWNhbCBDeWJlcgo+IFNlY3VyaXR5IChNQ0NTKQo+IFIgJiBEIHBvdXIgbGEgZMOpZmVuc2UgQ2Fu
+YWRhIC0gVmFsY2FydGllciAoUkREQyBWYWxjYXJ0aWVyKSB8IERlZmVuY2UgUiZECj4gQ2FuYWRh
+IC0gVmFsY2FydGllciAoRFJEQyBWYWxjYXJ0aWVyKQo+IDI0NTkgcm91dGUgZGUgbGEgQnJhdm91
+cmUKPiBRdcOpYmVjIFFDwqAgRzNKIDFYNQo+IENBTkFEQQo+IFZveMKgOiAoNDE4KSA4NDQtNDAw
+MCB4NDI0NQo+IEZheMKgOiAoNDE4KSA4NDQtNDUzOAo+IE5BQ8KgOiA5MThWIFFTREogPGh0dHA6
+Ly93d3cudHJhdmVsZ2lzLmNvbS9tYXAuYXNwP2FkZHI9OTE4ViUyMFFTREo+Cj4gR291dmVybmVt
+ZW50IGR1IENhbmFkYcKgfCBHb3Zlcm5tZW50IG9mIENhbmFkYQo+IDxodHRwOi8vd3d3LnZhbGNh
+cnRpZXIuZHJkYy1yZGRjLmdjLmNhLz4KPiAKPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZA
+bGlzdHMubHR0bmcub3JnCj4gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4v
+bGlzdGluZm8vbHR0bmctZGV2Cj4gCgotLSAKTWF0aGlldSBEZXNub3llcnMKRWZmaWNpT1MgSW5j
+LgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMu
+bHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZv
+L2x0dG5nLWRldgo=
