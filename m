@@ -1,16 +1,19 @@
 From: =?UTF-8?Q?Martin_=C3=9Cnsal?= <martinunsal@gmail.com>
-Subject: Problem with UST related to dlload
-Date: Wed, 30 Apr 2014 14:21:09 -0700
-Message-ID: <CACsXv7BQ-T+6ggdM9+YPcu+hdy0Gxu6c_jxNj97AvzmDgXQ8Wg__16938.2456144833$1398892948$gmane$org@mail.gmail.com>
+Subject: Re: Problem with UST related to dlload
+Date: Wed, 30 Apr 2014 14:57:39 -0700
+Message-ID: <CACsXv7Au4yLptJnS5OayD8bqsgbi660bLbJobpczTnnWZbgx=g__31595.4534606592$1398895127$gmane$org@mail.gmail.com>
+References: <CACsXv7BQ-T+6ggdM9+YPcu+hdy0Gxu6c_jxNj97AvzmDgXQ8Wg@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1509935795=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ve0-f178.google.com ([209.85.128.178])
+Received: from mail-ve0-f177.google.com ([209.85.128.177])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <martinunsal@gmail.com>) id 1WfbwI-0006en-Qj
- for lttng-dev@lists.lttng.org; Wed, 30 Apr 2014 17:21:20 -0400
-Received: by mail-ve0-f178.google.com with SMTP id jw12so2886157veb.23
- for <lttng-dev@lists.lttng.org>; Wed, 30 Apr 2014 14:21:09 -0700 (PDT)
+ (envelope-from <martinunsal@gmail.com>) id 1WfcVd-0006rU-7I
+ for lttng-dev@lists.lttng.org; Wed, 30 Apr 2014 17:57:51 -0400
+Received: by mail-ve0-f177.google.com with SMTP id sa20so2956030veb.36
+ for <lttng-dev@lists.lttng.org>; Wed, 30 Apr 2014 14:57:39 -0700 (PDT)
+In-Reply-To: <CACsXv7BQ-T+6ggdM9+YPcu+hdy0Gxu6c_jxNj97AvzmDgXQ8Wg@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,183 +25,82 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============1509935795==
-Content-Type: multipart/alternative; boundary=001a1133fd5c8d19af04f84920c0
-
---001a1133fd5c8d19af04f84920c0
-Content-Type: text/plain; charset=UTF-8
-
-Hi LTTng folks
-
-I have a strange problem using LTTng-UST on an ARM based platform. I have
-done some diagnosis but I am running low on ideas and was hoping for help
-from the experts. I am using lttng-tools 2.2.0, lttng-ust 2.2.0, liburcu
-0.8.1. I know these are old but upgrading is easier said than done
-unfortunately. I didn't see anything related to this problem in relnotes,
-mailing list traffic, or master branch, but I could have missed something.
-
-The problem showed up when I switched from GCC 4.6.4 to 4.7.2.
-Conceptually, the situation is that I have a single executable, call it
-MyProgram, with two plugins loaded at runtime with dlopen(), lets call them
-libPlugin1.so and libPlugin2.so. There are three different LTTng-UST
-tracepoint providers, one each for the executable and the two plugins. With
-GCC 4.7.2, tracepoints in libPlugin1 stopped working. The tracepoints in
-MyProgram and in libPlugin2 continue to work correctly.
-
-I have established without a doubt that the toolchain upgrade is the cause
-of the regression.
-
-In the debugger, I confirmed that the tracepoint for libPlugin1.so is being
-executed, but __tracepoint_##provider##___##name.state is always 0 even
-when I enable the tracepoint in lttng-tools. As a result the tracepoint
-callback is not being invoked when it should be. In MyProgram and
-libPlugin2.so, the .state variable correctly reflects whether the
-tracepoint is enabled, and if the tracepoint is enabled, the tracepoint
-callback is invoked.
-
-Next I set a breakpoint in tracepoint_register_lib() and looked at
-tracepoints_start parameter.
-
-1) With GCC 4.6.4 everything is as expected:
-   a) tracepoint_register_lib() for MyProgram called with
-MyProgramProvider's __start___tracepoints_ptrs.
-   b) tracepoint_register_lib() after libPlugin1 dlopen() called with
-libPlugin1Provider's __start___tracepoints_ptrs
-   c) tracepoint_register_lib() after libPlugin2 dlopen() called with
-libPlugin2Provider's __start___tracepoint_ptrs
-
-2) With GCC 4.7.2 there is a problem:
-   a) tracepoint_register_lib() for MyProgram called with
-MyProgramProvider's __start___tracepoints_ptrs.
-   b) tracepoint_register_lib() after libPlugin1 dlopen() called with
-MyProgramProvider's __start___tracepoints_ptrs (!!!! THIS IS WRONG !!!!)
-   c) tracepoint_register_lib() after libPlugin2 dlopen() called with
-libPlugin2Provider's __start___tracepoint_ptrs
-
-I looked at the symbol table for libPlugin1.so to see if it would shed some
-light on the problem.
-
-1) With GCC 4.6.4:
-# objdump -t /usr/lib/.debug/libPlugin1.so | grep __start___tracepoints_ptrs
-00025bb0 l       *ABS* 00000000 __start___tracepoints_ptrs
-# objdump -t /usr/lib/.debug/libPlugin2.so | grep __start___tracepoints_ptrs
-00041eb4 l       *ABS* 00000000 __start___tracepoints_ptrs
-
-2) With GCC 4.7.2:
-# objdump -t /usr/lib/.debug/libPlugin1.so | grep __start___tracepoints_ptrs
-00025a90 g       __tracepoints_ptrs 00000000 __start___tracepoints_ptrs
-# objdump -t /usr/lib/.debug/libPlugin2.so | grep __start___tracepoints_ptrs
-00041eb4 g       __tracepoints_ptrs 00000000 __start___tracepoints_ptrs
-
-My hypothesis at this point is that since __start___tracepoints_ptrs
-changed from a local to a global symbol, the dynamic loader no longer knows
-how to select the correct weak symbol. I cannot explain why libPlugin2
-still loads its provider correctly, perhaps it is just getting lucky.
-
-A few questions come to mind...
-1) Have you run into a problem like this? Is there a known fix/workaround?
-2) __start____tracepoints_ptrs is declared as extern in tracepoint.h, but
-it is not defined. This appears to be some sort of undocumented linker
-magic. http://gcc.gnu.org/ml/gcc-help/2010-04/msg00120.html is the only
-reference I could find. Do you know where this behavior is documented or
-specified (if at all)?
-3) Do you know why the symbol visibility for __start___tracepoints_ptrs
-changed between 4.6.4 to 4.7.2?
-
-Thanks for any help. This is a real puzzler for me.
-
-Martin
-
---001a1133fd5c8d19af04f84920c0
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hi LTTng folks<div><br></div><div>I have a strange problem=
- using LTTng-UST on an ARM based platform. I have done some diagnosis but I=
- am running low on ideas and was hoping for help from the experts. I am usi=
-ng lttng-tools 2.2.0, lttng-ust 2.2.0, liburcu 0.8.1. I know these are old =
-but upgrading is easier said than done unfortunately. I didn&#39;t see anyt=
-hing related to this problem in relnotes, mailing list traffic, or master b=
-ranch, but I could have missed something.</div>
-<div><br></div><div>The problem showed up when I switched from GCC 4.6.4 to=
- 4.7.2. Conceptually, the situation is that I have a single executable, cal=
-l it MyProgram, with two plugins loaded at runtime with dlopen(), lets call=
- them libPlugin1.so and libPlugin2.so. There are three different LTTng-UST =
-tracepoint providers, one each for the executable and the two plugins. With=
- GCC 4.7.2, tracepoints in libPlugin1 stopped working. The tracepoints in M=
-yProgram and in libPlugin2 continue to work correctly.</div>
-<div><br></div><div>I have established without a doubt that the toolchain u=
-pgrade is the cause of the regression.</div><div><br></div><div>In the debu=
-gger, I confirmed that the tracepoint for libPlugin1.so is being executed, =
-but __tracepoint_##provider##___##name.state is always 0 even when I enable=
- the tracepoint in lttng-tools. As a result the tracepoint callback is not =
-being invoked when it should be. In MyProgram and libPlugin2.so, the .state=
- variable correctly reflects whether the tracepoint is enabled, and if the =
-tracepoint is enabled, the tracepoint callback is invoked.</div>
-<div><br></div><div>Next I set a breakpoint in tracepoint_register_lib() an=
-d looked at tracepoints_start parameter.</div><div><br></div><div>1) With G=
-CC 4.6.4 everything is as expected:</div><div>=C2=A0 =C2=A0a) tracepoint_re=
-gister_lib() for MyProgram called with MyProgramProvider&#39;s __start___tr=
-acepoints_ptrs.</div>
-<div>=C2=A0 =C2=A0b) tracepoint_register_lib() after libPlugin1 dlopen() ca=
-lled with libPlugin1Provider&#39;s __start___tracepoints_ptrs<br></div><div=
->=C2=A0 =C2=A0c) tracepoint_register_lib() after libPlugin2 dlopen() called=
- with libPlugin2Provider&#39;s __start___tracepoint_ptrs</div>
-<div><br></div><div>2) With GCC 4.7.2 there is a problem:</div><div><div>=
-=C2=A0 =C2=A0a) tracepoint_register_lib() for MyProgram called with MyProgr=
-amProvider&#39;s __start___tracepoints_ptrs.</div><div>=C2=A0 =C2=A0b) trac=
-epoint_register_lib() after libPlugin1 dlopen() called with MyProgramProvid=
-er&#39;s __start___tracepoints_ptrs (!!!! THIS IS WRONG !!!!)<br>
-</div><div><div>=C2=A0 =C2=A0c) tracepoint_register_lib() after libPlugin2 =
-dlopen() called with libPlugin2Provider&#39;s __start___tracepoint_ptrs</di=
-v></div></div><div><br></div><div>I looked at the symbol table for libPlugi=
-n1.so to see if it would shed some light on the problem.</div>
-<div><br></div><div>1) With GCC 4.6.4:</div><div># objdump -t /usr/lib/.deb=
-ug/libPlugin1.so | grep __start___tracepoints_ptrs<br></div><div><div>00025=
-bb0 l =C2=A0 =C2=A0 =C2=A0 *ABS*<span class=3D"" style=3D"white-space:pre">=
-	</span>00000000 __start___tracepoints_ptrs<br>
-</div></div><div><div># objdump -t /usr/lib/.debug/libPlugin2.so | grep __s=
-tart___tracepoints_ptrs</div><div>00041eb4 l =C2=A0 =C2=A0 =C2=A0 *ABS*<spa=
-n class=3D"" style=3D"white-space:pre">	</span>00000000 __start___tracepoin=
-ts_ptrs</div></div>
-<div><br></div><div>2) With GCC 4.7.2:</div><div><div># objdump -t /usr/lib=
-/.debug/libPlugin1.so | grep __start___tracepoints_ptrs</div></div><div><di=
-v>00025a90 g =C2=A0 =C2=A0 =C2=A0 __tracepoints_ptrs<span class=3D"" style=
-=3D"white-space:pre">	</span>00000000 __start___tracepoints_ptrs<br>
-</div></div><div><div># objdump -t /usr/lib/.debug/libPlugin2.so | grep __s=
-tart___tracepoints_ptrs</div><div>00041eb4 g =C2=A0 =C2=A0 =C2=A0 __tracepo=
-ints_ptrs<span class=3D"" style=3D"white-space:pre">	</span>00000000 __star=
-t___tracepoints_ptrs</div>
-</div><div><br></div><div>My hypothesis at this point is that since __start=
-___tracepoints_ptrs changed from a local to a global symbol, the dynamic lo=
-ader no longer knows how to select the correct weak symbol. I cannot explai=
-n why libPlugin2 still loads its provider correctly, perhaps it is just get=
-ting lucky.</div>
-<div><br></div><div>A few questions come to mind...</div><div>1) Have you r=
-un into a problem like this? Is there a known fix/workaround?</div><div>2) =
-__start____tracepoints_ptrs is declared as extern in tracepoint.h, but it i=
-s not defined. This appears to be some sort of undocumented linker magic.=
-=C2=A0<a href=3D"http://gcc.gnu.org/ml/gcc-help/2010-04/msg00120.html">http=
-://gcc.gnu.org/ml/gcc-help/2010-04/msg00120.html</a> is the only reference =
-I could find. Do you know where this behavior is documented or specified (i=
-f at all)?</div>
-<div>3) Do you know why the symbol visibility for __start___tracepoints_ptr=
-s changed between 4.6.4 to 4.7.2?</div><div><br></div><div>Thanks for any h=
-elp. This is a real puzzler for me.</div><div><br></div><div>Martin</div>
-<div><br></div></div>
-
---001a1133fd5c8d19af04f84920c0--
-
-
---===============1509935795==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1509935795==--
+SW5jaWRlbnRhbGx5IEkgYWxzbyBhc2tlZCBmb3IgaGVscCBvbiB0aGUgR05VIGxpbmtlci1zcGVj
+aWZpYyBwYXJ0CihxdWVzdGlvbiAyKSBoZXJlOgoKaHR0cDovL2djYy5nbnUub3JnL21sL2djYy1o
+ZWxwLzIwMTQtMDQvbXNnMDAxNjQuaHRtbAoKTWFydGluCgoKT24gV2VkLCBBcHIgMzAsIDIwMTQg
+YXQgMjoyMSBQTSwgTWFydGluIMOcbnNhbCA8bWFydGludW5zYWxAZ21haWwuY29tPiB3cm90ZToK
+PiBIaSBMVFRuZyBmb2xrcwo+Cj4gSSBoYXZlIGEgc3RyYW5nZSBwcm9ibGVtIHVzaW5nIExUVG5n
+LVVTVCBvbiBhbiBBUk0gYmFzZWQgcGxhdGZvcm0uIEkgaGF2ZQo+IGRvbmUgc29tZSBkaWFnbm9z
+aXMgYnV0IEkgYW0gcnVubmluZyBsb3cgb24gaWRlYXMgYW5kIHdhcyBob3BpbmcgZm9yIGhlbHAK
+PiBmcm9tIHRoZSBleHBlcnRzLiBJIGFtIHVzaW5nIGx0dG5nLXRvb2xzIDIuMi4wLCBsdHRuZy11
+c3QgMi4yLjAsIGxpYnVyY3UKPiAwLjguMS4gSSBrbm93IHRoZXNlIGFyZSBvbGQgYnV0IHVwZ3Jh
+ZGluZyBpcyBlYXNpZXIgc2FpZCB0aGFuIGRvbmUKPiB1bmZvcnR1bmF0ZWx5LiBJIGRpZG4ndCBz
+ZWUgYW55dGhpbmcgcmVsYXRlZCB0byB0aGlzIHByb2JsZW0gaW4gcmVsbm90ZXMsCj4gbWFpbGlu
+ZyBsaXN0IHRyYWZmaWMsIG9yIG1hc3RlciBicmFuY2gsIGJ1dCBJIGNvdWxkIGhhdmUgbWlzc2Vk
+IHNvbWV0aGluZy4KPgo+IFRoZSBwcm9ibGVtIHNob3dlZCB1cCB3aGVuIEkgc3dpdGNoZWQgZnJv
+bSBHQ0MgNC42LjQgdG8gNC43LjIuIENvbmNlcHR1YWxseSwKPiB0aGUgc2l0dWF0aW9uIGlzIHRo
+YXQgSSBoYXZlIGEgc2luZ2xlIGV4ZWN1dGFibGUsIGNhbGwgaXQgTXlQcm9ncmFtLCB3aXRoCj4g
+dHdvIHBsdWdpbnMgbG9hZGVkIGF0IHJ1bnRpbWUgd2l0aCBkbG9wZW4oKSwgbGV0cyBjYWxsIHRo
+ZW0gbGliUGx1Z2luMS5zbwo+IGFuZCBsaWJQbHVnaW4yLnNvLiBUaGVyZSBhcmUgdGhyZWUgZGlm
+ZmVyZW50IExUVG5nLVVTVCB0cmFjZXBvaW50IHByb3ZpZGVycywKPiBvbmUgZWFjaCBmb3IgdGhl
+IGV4ZWN1dGFibGUgYW5kIHRoZSB0d28gcGx1Z2lucy4gV2l0aCBHQ0MgNC43LjIsIHRyYWNlcG9p
+bnRzCj4gaW4gbGliUGx1Z2luMSBzdG9wcGVkIHdvcmtpbmcuIFRoZSB0cmFjZXBvaW50cyBpbiBN
+eVByb2dyYW0gYW5kIGluCj4gbGliUGx1Z2luMiBjb250aW51ZSB0byB3b3JrIGNvcnJlY3RseS4K
+Pgo+IEkgaGF2ZSBlc3RhYmxpc2hlZCB3aXRob3V0IGEgZG91YnQgdGhhdCB0aGUgdG9vbGNoYWlu
+IHVwZ3JhZGUgaXMgdGhlIGNhdXNlCj4gb2YgdGhlIHJlZ3Jlc3Npb24uCj4KPiBJbiB0aGUgZGVi
+dWdnZXIsIEkgY29uZmlybWVkIHRoYXQgdGhlIHRyYWNlcG9pbnQgZm9yIGxpYlBsdWdpbjEuc28g
+aXMgYmVpbmcKPiBleGVjdXRlZCwgYnV0IF9fdHJhY2Vwb2ludF8jI3Byb3ZpZGVyIyNfX18jI25h
+bWUuc3RhdGUgaXMgYWx3YXlzIDAgZXZlbiB3aGVuCj4gSSBlbmFibGUgdGhlIHRyYWNlcG9pbnQg
+aW4gbHR0bmctdG9vbHMuIEFzIGEgcmVzdWx0IHRoZSB0cmFjZXBvaW50IGNhbGxiYWNrCj4gaXMg
+bm90IGJlaW5nIGludm9rZWQgd2hlbiBpdCBzaG91bGQgYmUuIEluIE15UHJvZ3JhbSBhbmQgbGli
+UGx1Z2luMi5zbywgdGhlCj4gLnN0YXRlIHZhcmlhYmxlIGNvcnJlY3RseSByZWZsZWN0cyB3aGV0
+aGVyIHRoZSB0cmFjZXBvaW50IGlzIGVuYWJsZWQsIGFuZCBpZgo+IHRoZSB0cmFjZXBvaW50IGlz
+IGVuYWJsZWQsIHRoZSB0cmFjZXBvaW50IGNhbGxiYWNrIGlzIGludm9rZWQuCj4KPiBOZXh0IEkg
+c2V0IGEgYnJlYWtwb2ludCBpbiB0cmFjZXBvaW50X3JlZ2lzdGVyX2xpYigpIGFuZCBsb29rZWQg
+YXQKPiB0cmFjZXBvaW50c19zdGFydCBwYXJhbWV0ZXIuCj4KPiAxKSBXaXRoIEdDQyA0LjYuNCBl
+dmVyeXRoaW5nIGlzIGFzIGV4cGVjdGVkOgo+ICAgIGEpIHRyYWNlcG9pbnRfcmVnaXN0ZXJfbGli
+KCkgZm9yIE15UHJvZ3JhbSBjYWxsZWQgd2l0aAo+IE15UHJvZ3JhbVByb3ZpZGVyJ3MgX19zdGFy
+dF9fX3RyYWNlcG9pbnRzX3B0cnMuCj4gICAgYikgdHJhY2Vwb2ludF9yZWdpc3Rlcl9saWIoKSBh
+ZnRlciBsaWJQbHVnaW4xIGRsb3BlbigpIGNhbGxlZCB3aXRoCj4gbGliUGx1Z2luMVByb3ZpZGVy
+J3MgX19zdGFydF9fX3RyYWNlcG9pbnRzX3B0cnMKPiAgICBjKSB0cmFjZXBvaW50X3JlZ2lzdGVy
+X2xpYigpIGFmdGVyIGxpYlBsdWdpbjIgZGxvcGVuKCkgY2FsbGVkIHdpdGgKPiBsaWJQbHVnaW4y
+UHJvdmlkZXIncyBfX3N0YXJ0X19fdHJhY2Vwb2ludF9wdHJzCj4KPiAyKSBXaXRoIEdDQyA0Ljcu
+MiB0aGVyZSBpcyBhIHByb2JsZW06Cj4gICAgYSkgdHJhY2Vwb2ludF9yZWdpc3Rlcl9saWIoKSBm
+b3IgTXlQcm9ncmFtIGNhbGxlZCB3aXRoCj4gTXlQcm9ncmFtUHJvdmlkZXIncyBfX3N0YXJ0X19f
+dHJhY2Vwb2ludHNfcHRycy4KPiAgICBiKSB0cmFjZXBvaW50X3JlZ2lzdGVyX2xpYigpIGFmdGVy
+IGxpYlBsdWdpbjEgZGxvcGVuKCkgY2FsbGVkIHdpdGgKPiBNeVByb2dyYW1Qcm92aWRlcidzIF9f
+c3RhcnRfX190cmFjZXBvaW50c19wdHJzICghISEhIFRISVMgSVMgV1JPTkcgISEhISkKPiAgICBj
+KSB0cmFjZXBvaW50X3JlZ2lzdGVyX2xpYigpIGFmdGVyIGxpYlBsdWdpbjIgZGxvcGVuKCkgY2Fs
+bGVkIHdpdGgKPiBsaWJQbHVnaW4yUHJvdmlkZXIncyBfX3N0YXJ0X19fdHJhY2Vwb2ludF9wdHJz
+Cj4KPiBJIGxvb2tlZCBhdCB0aGUgc3ltYm9sIHRhYmxlIGZvciBsaWJQbHVnaW4xLnNvIHRvIHNl
+ZSBpZiBpdCB3b3VsZCBzaGVkIHNvbWUKPiBsaWdodCBvbiB0aGUgcHJvYmxlbS4KPgo+IDEpIFdp
+dGggR0NDIDQuNi40Ogo+ICMgb2JqZHVtcCAtdCAvdXNyL2xpYi8uZGVidWcvbGliUGx1Z2luMS5z
+byB8IGdyZXAgX19zdGFydF9fX3RyYWNlcG9pbnRzX3B0cnMKPiAwMDAyNWJiMCBsICAgICAgICpB
+QlMqIDAwMDAwMDAwIF9fc3RhcnRfX190cmFjZXBvaW50c19wdHJzCj4gIyBvYmpkdW1wIC10IC91
+c3IvbGliLy5kZWJ1Zy9saWJQbHVnaW4yLnNvIHwgZ3JlcCBfX3N0YXJ0X19fdHJhY2Vwb2ludHNf
+cHRycwo+IDAwMDQxZWI0IGwgICAgICAgKkFCUyogMDAwMDAwMDAgX19zdGFydF9fX3RyYWNlcG9p
+bnRzX3B0cnMKPgo+IDIpIFdpdGggR0NDIDQuNy4yOgo+ICMgb2JqZHVtcCAtdCAvdXNyL2xpYi8u
+ZGVidWcvbGliUGx1Z2luMS5zbyB8IGdyZXAgX19zdGFydF9fX3RyYWNlcG9pbnRzX3B0cnMKPiAw
+MDAyNWE5MCBnICAgICAgIF9fdHJhY2Vwb2ludHNfcHRycyAwMDAwMDAwMCBfX3N0YXJ0X19fdHJh
+Y2Vwb2ludHNfcHRycwo+ICMgb2JqZHVtcCAtdCAvdXNyL2xpYi8uZGVidWcvbGliUGx1Z2luMi5z
+byB8IGdyZXAgX19zdGFydF9fX3RyYWNlcG9pbnRzX3B0cnMKPiAwMDA0MWViNCBnICAgICAgIF9f
+dHJhY2Vwb2ludHNfcHRycyAwMDAwMDAwMCBfX3N0YXJ0X19fdHJhY2Vwb2ludHNfcHRycwo+Cj4g
+TXkgaHlwb3RoZXNpcyBhdCB0aGlzIHBvaW50IGlzIHRoYXQgc2luY2UgX19zdGFydF9fX3RyYWNl
+cG9pbnRzX3B0cnMgY2hhbmdlZAo+IGZyb20gYSBsb2NhbCB0byBhIGdsb2JhbCBzeW1ib2wsIHRo
+ZSBkeW5hbWljIGxvYWRlciBubyBsb25nZXIga25vd3MgaG93IHRvCj4gc2VsZWN0IHRoZSBjb3Jy
+ZWN0IHdlYWsgc3ltYm9sLiBJIGNhbm5vdCBleHBsYWluIHdoeSBsaWJQbHVnaW4yIHN0aWxsIGxv
+YWRzCj4gaXRzIHByb3ZpZGVyIGNvcnJlY3RseSwgcGVyaGFwcyBpdCBpcyBqdXN0IGdldHRpbmcg
+bHVja3kuCj4KPiBBIGZldyBxdWVzdGlvbnMgY29tZSB0byBtaW5kLi4uCj4gMSkgSGF2ZSB5b3Ug
+cnVuIGludG8gYSBwcm9ibGVtIGxpa2UgdGhpcz8gSXMgdGhlcmUgYSBrbm93biBmaXgvd29ya2Fy
+b3VuZD8KPiAyKSBfX3N0YXJ0X19fX3RyYWNlcG9pbnRzX3B0cnMgaXMgZGVjbGFyZWQgYXMgZXh0
+ZXJuIGluIHRyYWNlcG9pbnQuaCwgYnV0IGl0Cj4gaXMgbm90IGRlZmluZWQuIFRoaXMgYXBwZWFy
+cyB0byBiZSBzb21lIHNvcnQgb2YgdW5kb2N1bWVudGVkIGxpbmtlciBtYWdpYy4KPiBodHRwOi8v
+Z2NjLmdudS5vcmcvbWwvZ2NjLWhlbHAvMjAxMC0wNC9tc2cwMDEyMC5odG1sIGlzIHRoZSBvbmx5
+IHJlZmVyZW5jZSBJCj4gY291bGQgZmluZC4gRG8geW91IGtub3cgd2hlcmUgdGhpcyBiZWhhdmlv
+ciBpcyBkb2N1bWVudGVkIG9yIHNwZWNpZmllZCAoaWYKPiBhdCBhbGwpPwo+IDMpIERvIHlvdSBr
+bm93IHdoeSB0aGUgc3ltYm9sIHZpc2liaWxpdHkgZm9yIF9fc3RhcnRfX190cmFjZXBvaW50c19w
+dHJzCj4gY2hhbmdlZCBiZXR3ZWVuIDQuNi40IHRvIDQuNy4yPwo+Cj4gVGhhbmtzIGZvciBhbnkg
+aGVscC4gVGhpcyBpcyBhIHJlYWwgcHV6emxlciBmb3IgbWUuCj4KPiBNYXJ0aW4KPgoKX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxp
+bmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcv
+Y2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
