@@ -1,18 +1,23 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Problem in userspace-rcu cds_hlist_del_rcu.c caused
- by #define cds_hlist_for_each_entry_safe_2
-Date: Tue, 29 Apr 2014 20:05:49 +0000 (UTC)
-Message-ID: <1595235240.8875.1398801949897.JavaMail.zimbra__36178.2648055398$1398802091$gmane$org@efficios.com>
-References: <48CF5AC71E61DB46B70D0F388054EFFD3599E294@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+From: Jan Glauber <jan.glauber@gmail.com>
+Subject: Re: [RFC Patch Tools 0/4] Configurable lttng-probe
+ modules
+Date: Wed, 30 Apr 2014 14:19:20 +0200
+Message-ID: <20140430121919.GA5780__40943.7474249446$1398860455$gmane$org@hal>
+References: <cover.1396521858.git.jan.glauber@gmail.com>
+ <20140410194551.GD28773@dalia> <20140411084046.GA15028@hal>
+ <20140414184051.GD32712@thessa>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-ee0-f45.google.com ([74.125.83.45])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1WfEHr-0006Tf-UK
- for lttng-dev@lists.lttng.org; Tue, 29 Apr 2014 16:06:02 -0400
-In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD3599E294@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+ (envelope-from <jan.glauber@gmail.com>) id 1WfTUM-0003ZX-J5
+ for lttng-dev@lists.lttng.org; Wed, 30 Apr 2014 08:19:56 -0400
+Received: by mail-ee0-f45.google.com with SMTP id d17so1293599eek.18
+ for <lttng-dev@lists.lttng.org>; Wed, 30 Apr 2014 05:19:44 -0700 (PDT)
+Content-Disposition: inline
+In-Reply-To: <20140414184051.GD32712@thessa>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,82 +26,45 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Daniel Thibault <Daniel.Thibault@drdc-rddc.gc.ca>
+To: David Goulet <dgoulet@efficios.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJEYW5pZWwgVGhpYmF1bHQiIDxE
-YW5pZWwuVGhpYmF1bHRAZHJkYy1yZGRjLmdjLmNhPgo+IFRvOiBsdHRuZy1kZXZAbGlzdHMubHR0
-bmcub3JnCj4gU2VudDogVHVlc2RheSwgQXByaWwgMjksIDIwMTQgODo1OTozNiBQTQo+IFN1Ympl
-Y3Q6IFtsdHRuZy1kZXZdIFByb2JsZW0gaW4gdXNlcnNwYWNlLXJjdSBjZHNfaGxpc3RfZGVsX3Jj
-dS5jIGNhdXNlZCBieSAjZGVmaW5lIGNkc19obGlzdF9mb3JfZWFjaF9lbnRyeV9zYWZlXzIKPiAK
-PiBXaGVuIGNvbXBpbGluZyB1c2Vyc3BhY2UtcmN1IChjb21taXQgODFkZDkxMyksIEkgZ2V0IGEg
-cGFpciBvZiB3YXJuaW5ncyBmb3IKPiAvdXNlcnNwYWNlLXJjdS9kb2MvZXhhbXBsZXMvaGxpc3Qv
-Y2RzX2hsaXN0X2RlbF9yY3UuYyBhdCB0aGUKPiBjZHNfaGxpc3RfZm9yX2VhY2hfZW50cnlfc2Fm
-ZV8yIGNhbGw6Cj4gCj4gCWNkc19obGlzdF9mb3JfZWFjaF9lbnRyeV9zYWZlXzIobm9kZSwgbiwg
-Jm15bGlzdCwgbm9kZSkgewo+IAkJaWYgKG5vZGUtPnZhbHVlID4gMCkgewo+IAkJCWNkc19obGlz
-dF9kZWxfcmN1KCZub2RlLT5ub2RlKTsKPiAJCQkvKgo+IAkJCSAqIFdlIGNhbiBvbmx5IHJlY2xh
-aW0gbWVtb3J5IGFmdGVyIGEgZ3JhY2UKPiAJCQkgKiBwZXJpb2QgaGFzIHBhc3NlZCBhZnRlciBj
-ZHNfaGxpc3RfZGVsX3JjdSgpLgo+IAkJCSAqLwo+IAkJCWNhbGxfcmN1KCZub2RlLT5yY3VfaGVh
-ZCwgZnJlZV9ub2RlX3JjdSk7Cj4gCQl9Cj4gCX0KPiAKPiAgICBUaGUgd2FybmluZ3MgYXJlOgo+
-ICJhdHRlbnRpb246IGFzc2lnbm1lbnQgbWFrZXMgcG9pbnRlciBmcm9tIGludGVnZXIgd2l0aG91
-dCBhIGNhc3QiCj4gImF0dGVudGlvbjogbGVmdCBvcGVyYW5kIG9mIGNvbW1hIG9wZXJhdG9yIGhh
-cyBubyBlZmZlY3QiCj4gCj4gICAgVGhlICNkZWZpbmUgY29tZXMgZnJvbSB1c2Vyc3BhY2UtcmN1
-L3VyY3UvaGxpc3QuaCAoaGVyZSByZS1hcnJhbmdlZCBhCj4gICAgYml0KToKPiAKPiAjZGVmaW5l
-IGNkc19obGlzdF9mb3JfZWFjaF9lbnRyeV9zYWZlXzIoZW50cnksIGUsIGhlYWQsIG1lbWJlcikg
-XAo+IAlmb3IgKGVudHJ5ID0gKChoZWFkKS0+bmV4dCA9PSBOVUxMID8gTlVMTCA6IGNkc19obGlz
-dF9lbnRyeSgoaGVhZCktPm5leHQsCj4gCV9fdHlwZW9mX18oKmVudHJ5KSwgbWVtYmVyKSk7IFwK
-PiAJICAgICAgICAoZW50cnkgIT0gTlVMTCkgJiYgXAo+IAkgICAgICAgIChlID0gKGVudHJ5LT5t
-ZW1iZXIubmV4dCA9PSBOVUxMID8gTlVMTCA6Cj4gCSAgICAgICAgY2RzX2hsaXN0X2VudHJ5KGVu
-dHJ5LT5tZW1iZXIubmV4dCwgX190eXBlb2ZfXygqZW50cnkpLCBtZW1iZXIpLAo+IAkgICAgICAg
-IDEpKTsgXAo+IAkgICAgICAgIGVudHJ5ID0gZSkKPiAKPiAgICBUaGUgY2RzX2hsaXN0X2RlbF9y
-Y3UuYyBvY2N1cnJlbmNlIGlzIHRoZSBvbmx5IHVzZSBvZgo+ICAgIGNkc19obGlzdF9mb3JfZWFj
-aF9lbnRyeV9zYWZlXzIgYW5kIHRoZSBwcm9ibGVtIHNlZW1zIHRvIG1lIHRvIGxpZSBpbgo+ICAg
-IHRoaXMgYml0Ogo+IAo+IChlID0gKGVudHJ5LT5tZW1iZXIubmV4dCA9PSBOVUxMID8gTlVMTCA6
-IGNkc19obGlzdF9lbnRyeShlbnRyeS0+bWVtYmVyLm5leHQsCj4gX190eXBlb2ZfXygqZW50cnkp
-LCBtZW1iZXIpLCAxKSkKPiAKPiAgICBCZWNhdXNlIHRoZSBjb21tYSBvcGVyYXRvciBoYXMgdGhl
-IGxvd2VzdCBwcmVjZWRlbmNlIG9mIGFsbCBvcGVyYXRvcnMsIHRoZQo+ICAgIHN0YXRlbWVudCBp
-cyBlcXVpdmFsZW50IHRvOgo+IAo+IChlID0gKChlbnRyeS0+bWVtYmVyLm5leHQgPT0gTlVMTCA/
-IE5VTEwgOgo+IGNkc19obGlzdF9lbnRyeShlbnRyeS0+bWVtYmVyLm5leHQsIF9fdHlwZW9mX18o
-KmVudHJ5KSwgbWVtYmVyKSksIDEpKQo+IAo+ICAgIFdoaWNoIGlzIGluIHR1cm4gdGhlIHNhbWUg
-YXM6Cj4gCj4gKGUgPSAxKQo+IAo+ICAgIE5vdywgaWYgdGhlIG1hY3JvIGlzIHVzaW5nIHRoZSBj
-b21tYSB0byBtYWtlIHRoZSBzZWNvbmQgcGFydCBvZiB0aGUgJiYKPiAgICB0ZXN0IHN1Y2NlZWQg
-cmVnYXJkbGVzcyBvZiB0aGUgdmFsdWUgZmV0Y2hlZCBmb3IgZSwgdGhlbiBpdCBzaG91bGQgaGF2
-ZQo+ICAgIGJlZW4gd3JpdHRlbjoKPiAKPiAjZGVmaW5lIGNkc19obGlzdF9mb3JfZWFjaF9lbnRy
-eV9zYWZlXzIoZW50cnksIGUsIGhlYWQsIG1lbWJlcikgXAo+IAlmb3IgKGVudHJ5ID0gKChoZWFk
-KS0+bmV4dCA9PSBOVUxMID8gTlVMTCA6IGNkc19obGlzdF9lbnRyeSgoaGVhZCktPm5leHQsCj4g
-CV9fdHlwZW9mX18oKmVudHJ5KSwgbWVtYmVyKSk7IFwKPiAJICAgICAgICAoZW50cnkgIT0gTlVM
-TCkgJiYgXAo+IAkgICAgICAgICgoZSA9IChlbnRyeS0+bWVtYmVyLm5leHQgPT0gTlVMTCA/IE5V
-TEwgOgo+IAkgICAgICAgIGNkc19obGlzdF9lbnRyeShlbnRyeS0+bWVtYmVyLm5leHQsIF9fdHlw
-ZW9mX18oKmVudHJ5KSwgbWVtYmVyKSkpLAo+IAkgICAgICAgIDEpOyBcCj4gCSAgICAgICAgZW50
-cnkgPSBlKQo+IAo+ICAgIFdoaWNoIGRvZXMgY29tcGlsZSB3aXRob3V0IHRoZSB3YXJuaW5ncy4K
-CkhpIERhbmllbCwKCkdvb2QgY2F0Y2ggISBGb3Igc29tZSByZWFzb24gbXkgY29tcGlsZXIgZGlk
-IG5vdCBjb21wbGFpbiBhYm91dAppdC4KCkkgcHJvcG9zZSB0byByZW1vdmUgdGhlIGV4dHJhICgo
-ZSA9IC4uLiksIDEpIGZyb20geW91ciBwcm9wb3NhbCwKdHVybmluZyB0aGUgbW9kaWZpZWQgc2Vn
-bWVudCBvZiBleHByZXNzaW9uIGludG86CgooZSA9IC4uLiwgMSkKCnNpbmNlIHRoZSBjb21tYSBv
-cGVyYXRvciBoYXMgdGhlIGxvd2VzdCBwcmVjZWRlbmNlLCB0aGUgZXh0cmEKcGFyZW50aGVzaXMg
-YXJlIHJlZHVuZGFudC4KCkZvcnR1bmF0ZWx5LCB0aGlzIGJ1ZyBvbmx5IGFmZmVjdHMgdGhlIG1h
-c3RlciBicmFuY2gsIGFuZCBub3QKc3RhYmxlIGJyYW5jaGVzLgoKSGVyZSBpcyB0aGUgZml4IGNv
-bW1pdCBpbmZvOgoKY29tbWl0IDc5ZWZkOWIzNTBlMDdhNDk5YjM2MjBkZGRlNDg2MGI4Mzc4ZmNm
-MDAKQXV0aG9yOiBNYXRoaWV1IERlc25veWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3Mu
-Y29tPgpEYXRlOiAgIFR1ZSBBcHIgMjkgMjI6MDE6NTcgMjAxNCArMDIwMAoKICAgIEZpeDogaW5j
-b3JyZWN0IHBhcmVudGhlc2lzIGluIGNkc19obGlzdF9mb3JfZWFjaF9lbnRyeV9zYWZlXzIKClRo
-YW5rcyBmb3IgcG9pbnRpbmcgaXQgb3V0IQoKTWF0aGlldQoKCj4gCj4gRGFuaWVsIFUuIFRoaWJh
-dWx0Cj4gUHJvdGVjdGlvbiBkZXMgc3lzdMOobWVzIGV0IGNvbnRyZW1lc3VyZXMgKFBTQykgfCBT
-eXN0ZW1zIFByb3RlY3Rpb24gJgo+IENvdW50ZXJtZWFzdXJlcyAoU1BDKQo+IEN5YmVyIHPDqWN1
-cml0w6kgcG91ciBsZXMgbWlzc2lvbnMgZXNzZW50aWVsbGVzIChDTUUpIHwgTWlzc2lvbiBDcml0
-aWNhbCBDeWJlcgo+IFNlY3VyaXR5IChNQ0NTKQo+IFIgJiBEIHBvdXIgbGEgZMOpZmVuc2UgQ2Fu
-YWRhIC0gVmFsY2FydGllciAoUkREQyBWYWxjYXJ0aWVyKSB8IERlZmVuY2UgUiZECj4gQ2FuYWRh
-IC0gVmFsY2FydGllciAoRFJEQyBWYWxjYXJ0aWVyKQo+IDI0NTkgcm91dGUgZGUgbGEgQnJhdm91
-cmUKPiBRdcOpYmVjIFFDwqAgRzNKIDFYNQo+IENBTkFEQQo+IFZveMKgOiAoNDE4KSA4NDQtNDAw
-MCB4NDI0NQo+IEZheMKgOiAoNDE4KSA4NDQtNDUzOAo+IE5BQ8KgOiA5MThWIFFTREogPGh0dHA6
-Ly93d3cudHJhdmVsZ2lzLmNvbS9tYXAuYXNwP2FkZHI9OTE4ViUyMFFTREo+Cj4gR291dmVybmVt
-ZW50IGR1IENhbmFkYcKgfCBHb3Zlcm5tZW50IG9mIENhbmFkYQo+IDxodHRwOi8vd3d3LnZhbGNh
-cnRpZXIuZHJkYy1yZGRjLmdjLmNhLz4KPiAKPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZA
-bGlzdHMubHR0bmcub3JnCj4gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4v
-bGlzdGluZm8vbHR0bmctZGV2Cj4gCgotLSAKTWF0aGlldSBEZXNub3llcnMKRWZmaWNpT1MgSW5j
-LgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMu
-bHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZv
-L2x0dG5nLWRldgo=
+On Mon, Apr 14, 2014 at 02:40:51PM -0400, David Goulet wrote:
+> On 11 Apr (10:40:47), Jan Glauber wrote:
+> > On Thu, Apr 10, 2014 at 03:45:51PM -0400, David Goulet wrote:
+
+Hi David,
+
+sorry for my vacational late response. Some more questions...
+ 
+> As of now, you have to pass it to the daemon:
+> 
+>   -f  --config                       Load daemon configuration file
+> 
+> For 2.5, we want to have a default config. file installed in /etc/lttng/
+> and provide also documentation on it with probably a man page.
+> 
+> We went with the INI file format so in our case here I can see a simple
+> option like:
+> 
+> modules = probe1, probe2, probe3, ...
+
+For the env variable I choose an PATH-like format so currently it is:
+"probe1:probe2:...".
+Should I change this to match the config file format then?
+
+> and by default load ALL.
+> 
+> > 
+> > > Anyhow, I'm comfortable merging this and adding this env. var but an
+> > > option in the configuration file could also be awesome! :)
+
+I'm looking into this now but its not obvious to me how the config file
+should look like. If I provide an empty config file lttng seems to not
+have any config options and fails to start. So do you have an example of
+a working config file?
+
+I guess because its INI based there should be sections? Which?
+
+Jan
