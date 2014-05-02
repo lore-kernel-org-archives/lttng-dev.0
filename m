@@ -1,18 +1,17 @@
-From: Tony Jones <tonyj@suse.de>
-Subject: eclipse stand-alone viewer (RCP) packaged as RPM
-Date: Thu, 01 May 2014 15:29:29 -0700
-Message-ID: <5362CAC9.5080509__22669.0428251915$1398983450$gmane$org@suse.de>
+From: Suchakrapani Datt Sharma <suchakrapani.sharma@polymtl.ca>
+Subject: Re: eclipse stand-alone viewer (RCP) packaged as RPM
+Date: Thu, 01 May 2014 21:34:55 -0400
+Message-ID: <1398994495.5362f63fc71b9__40843.8399005265$1398994548$gmane$org@www.imp.polymtl.ca>
+References: <5362CAC9.5080509@suse.de>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from cantor2.suse.de ([195.135.220.15] helo=mx2.suse.de)
+Received: from smtp.polymtl.ca ([132.207.4.11])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <tonyj@suse.de>) id 1WfzTy-0006Tw-0m
- for lttng-dev@lists.lttng.org; Thu, 01 May 2014 18:29:40 -0400
-Received: from relay1.suse.de (charybdis-ext.suse.de [195.135.220.254])
- by mx2.suse.de (Postfix) with ESMTP id 6BCB6AB49
- for <lttng-dev@lists.lttng.org>; Thu,  1 May 2014 22:29:33 +0000 (UTC)
+ (envelope-from <suchakrapani.sharma@polymtl.ca>) id 1Wg2NM-0007Sv-NP
+ for lttng-dev@lists.lttng.org; Thu, 01 May 2014 21:34:58 -0400
+In-Reply-To: <5362CAC9.5080509@suse.de>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,11 +20,23 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Tony Jones <tonyj@suse.de>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-In case it's remotely useful to anyone else,  I beat my head against a wall for a while but was finally able to package the eclipse standalone viewer (http://lttng.org/eclipse) as an rpm using predefined tarballs rather than maven.  We needed a build that was understandable and most importantly, reproducible.  It's available at: https://build.opensuse.org/package/show/devel:tools:lttng/lttng-trace-viewer
+Hi,
 
-I still need to fix it so that the "about" version displayed matches the rpm version rather than the "rolling" version that the eclipse guys use.
+Quoting Tony Jones <tonyj@suse.de>:
 
-tony
+> In case it's remotely useful to anyone else,  I beat my head against a wall
+> for a while but was finally able to package the eclipse standalone viewer
+> (http://lttng.org/eclipse) as an rpm using predefined tarballs rather than
+> maven.  We needed a build that was understandable and most importantly,
+> reproducible.  It's available at:
+> https://build.opensuse.org/package/show/devel:tools:lttng/lttng-trace-viewer
+
+Wow cool! I was planning to do the same for Fedora. I think I shall take some
+help from your spec now :) Thanks!
+
+--
+Suchakra
