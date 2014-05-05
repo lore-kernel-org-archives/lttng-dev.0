@@ -1,22 +1,19 @@
-From: Jon Bernard <jbernard@debian.org>
-Subject: [lttng-tools] build failure on armel (debian)
-Date: Tue, 6 May 2014 11:14:03 -0400
-Message-ID: <20140506151403.GD11105__17132.9287499704$1399393886$gmane$org@helmut>
+From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
+ <jeremie.galarneau@efficios.com>
+Subject: [PATCH lttng-tools] Fix: Don't include the binary in
+	the live test's EXTRA_DIST
+Date: Mon,  5 May 2014 15:21:18 -0400
+Message-ID: <1399317678-28752-1-git-send-email-jeremie.galarneau__12743.8550153331$1399395280$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from out3-smtp.messagingengine.com ([66.111.4.27])
+Received: from mail-qg0-f43.google.com ([209.85.192.43])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jbernard@debian.org>) id 1Whh4P-0001zy-Um
- for lttng-dev@lists.lttng.org; Tue, 06 May 2014 11:14:19 -0400
-Received: from compute6.internal (compute6.nyi.mail.srv.osa [10.202.2.46])
- by gateway1.nyi.mail.srv.osa (Postfix) with ESMTP id 180102102E
- for <lttng-dev@lists.lttng.org>; Tue,  6 May 2014 11:14:03 -0400 (EDT)
-Received: from localhost (unknown [216.252.204.85])
- by mail.messagingengine.com (Postfix) with ESMTPA id 6AA42680532
- for <lttng-dev@lists.lttng.org>; Tue,  6 May 2014 11:14:03 -0400 (EDT)
-Content-Disposition: inline
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1WhOS7-0003V5-7m
+ for lttng-dev@lists.lttng.org; Mon, 05 May 2014 15:21:32 -0400
+Received: by mail-qg0-f43.google.com with SMTP id 63so2493896qgz.30
+ for <lttng-dev@lists.lttng.org>; Mon, 05 May 2014 12:21:21 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -28,44 +25,20 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hey guys,
-
-This bug=B9 was filed recently:
-
-    your package no longer builds on the armel buildds:
-    https://buildd.debian.org/status/fetch.php?pkg=3Dltt-control&arch=3Darm=
-el&ver=3D2.4.1-1&stamp=3D1397064419
-
-    >   CC       rculfhash.lo
-    > /tmp/ccBG89vh.s: Assembler messages:
-    > /tmp/ccBG89vh.s:1105: Error: selected processor does not support ARM =
-mode `dmb'
-    > /tmp/ccBG89vh.s:1286: Error: selected processor does not support ARM =
-mode `dmb'
-    > /tmp/ccBG89vh.s:3175: Error: selected processor does not support ARM =
-mode `dmb'
-    > /tmp/ccBG89vh.s:3725: Error: selected processor does not support ARM =
-mode `dmb'
-    > /tmp/ccBG89vh.s:3833: Error: selected processor does not support ARM =
-mode `dmb'
-    > /tmp/ccBG89vh.s:3994: Error: selected processor does not support ARM =
-mode `dmb'
-    > /tmp/ccBG89vh.s:4331: Error: selected processor does not support ARM =
-mode `dmb'
-    > /tmp/ccBG89vh.s:5292: Error: selected processor does not support ARM =
-mode `dmb'
-    > make[4]: *** [rculfhash.lo] Error 1
-
-The public buildd that I can use to test this is unreachable at the
-moment, but maybe a solution can be reached without further debug info?
-
-The build machine is ARMv7, which supports dmb IIUC, so I'm a bit
-puzzled on this one.
-
-Any thoughts?
-
-=B9 https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=3D745891
-
--- =
-
-Jon
+QWRkaW5nIHRoZSBiaW5hcnkgaW4gRVhUUkFfRElTVCBjYXVzZXMgdGhlICJkaXN0IiB0YXJnZXQg
+dG8gZmFpbAp3aXRoIGEgIk5vIHJ1bGUgdG8gbWFrZSB0YXJnZXQgbGlidGFwLmxhIiBlcnJvci4K
+ClNpZ25lZC1vZmYtYnk6IErDqXLDqW1pZSBHYWxhcm5lYXUgPGplcmVtaWUuZ2FsYXJuZWF1QGVm
+ZmljaW9zLmNvbT4KLS0tCiB0ZXN0cy9yZWdyZXNzaW9uL3Rvb2xzL2xpdmUvTWFrZWZpbGUuYW0g
+fCAyICstCiAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkKCmRp
+ZmYgLS1naXQgYS90ZXN0cy9yZWdyZXNzaW9uL3Rvb2xzL2xpdmUvTWFrZWZpbGUuYW0gYi90ZXN0
+cy9yZWdyZXNzaW9uL3Rvb2xzL2xpdmUvTWFrZWZpbGUuYW0KaW5kZXggZmRmOWQzYS4uMTY3Yjll
+NiAxMDA2NDQKLS0tIGEvdGVzdHMvcmVncmVzc2lvbi90b29scy9saXZlL01ha2VmaWxlLmFtCisr
+KyBiL3Rlc3RzL3JlZ3Jlc3Npb24vdG9vbHMvbGl2ZS9NYWtlZmlsZS5hbQpAQCAtMjIsNyArMjIs
+NyBAQCBMSVZFPSQodG9wX2J1aWxkZGlyKS9zcmMvYmluL2x0dG5nLXNlc3Npb25kL3Nlc3Npb24u
+byBcCiAJICQodG9wX2J1aWxkZGlyKS9zcmMvYmluL2x0dG5nLXNlc3Npb25kL3NuYXBzaG90Lm8K
+IAogbm9pbnN0X1BST0dSQU1TID0gbGl2ZV90ZXN0Ci1FWFRSQV9ESVNUID0gbGl2ZV90ZXN0IHRl
+c3Rfa2VybmVsCitFWFRSQV9ESVNUID0gdGVzdF9rZXJuZWwKIAogaWYgSEFWRV9MSUJMVFROR19V
+U1RfQ1RMCiBFWFRSQV9ESVNUICs9IHRlc3RfdXN0IHRlc3RfdXN0X3RyYWNlZmlsZV9jb3VudAot
+LSAKMS45LjIKCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+XwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDov
+L2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
