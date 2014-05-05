@@ -1,16 +1,17 @@
-From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Subject: Re: clarification on limiting the size of the trace file
-Date: Mon, 5 May 2014 16:10:06 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD3599ED94__29606.7904019312$1399398360$gmane$org@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+From: Ruslan Uvashev <ruslan.uvashev@gmail.com>
+Subject: =?utf-8?q?_=5BPATCH_lttng-tools=5D_lttng_list_shows_t?=
+	=?utf-8?q?racefile-size_and_tracefile=E2=80=93count?=
+Date: Sun, 4 May 2014 23:00:06 -0700
+Message-ID: <CACQ=--R4ux6ywUNswAw_QBrKwuhgH-0hR8jipALgGQHy0sucfw__6237.09262949905$1399398552$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/mixed; boundary="===============0487185829=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
+Received: from mail-ig0-f173.google.com ([209.85.213.173])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1WhLTE-0002Rf-7l
- for lttng-dev@lists.lttng.org; Mon, 05 May 2014 12:10:29 -0400
-Content-Language: fr-FR
+ (envelope-from <ruslan.uvashev@gmail.com>) id 1WhBwi-00074q-Kb
+ for lttng-dev@lists.lttng.org; Mon, 05 May 2014 02:00:13 -0400
+Received: by mail-ig0-f173.google.com with SMTP id hn18so4316449igb.6
+ for <lttng-dev@lists.lttng.org>; Sun, 04 May 2014 23:00:07 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,69 +20,107 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
-Cc: "Sadon, Mirit" <Mirit.Sadon@emc.com>, "Eshel,
- Ayelet" <Ayelet.Eshel@emc.com>
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-----------------------------------------------------------------------
-Date: Mon, 5 May 2014 08:24:39 +0000
-From: "Sadon, Mirit" <Mirit.Sadon@emc.com>
-Cc: "Eshel, Ayelet" <Ayelet.Eshel@emc.com>
+--===============0487185829==
+Content-Type: multipart/alternative; boundary=047d7b3a9c0adf0f2e04f8a0d7f8
 
-> I am working with the lttng trace to see how it affects are program perfo=
-rmance,
-> But if I don't limit the size of the trace file collected it fills all th=
-e space in the partition I specify.
-> What does it mean if I start the trace and limit the trace file to let sa=
-y 1GB.
-> Would the trace stop after it reaches the limit or it will continue and o=
-verride the previous collected points?
->
-> I tried by using this command when creating the channel but it didn't wor=
-k.
->
-> lttng enable-channel perf --subbuf-size 262144 -C 262144 -W 32 --num-subb=
-uf 32 -u
->
-> We are working with lttng version 2.04.
->
-> Mirit Sadon
-> EMC2
+--047d7b3a9c0adf0f2e04f8a0d7f8
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-   This feature may not have been mature with version 2.0.4; I would recomm=
-end upgrading to at least 2.3 if not 2.4.
+The lttng list <session> command gives the subbuf-size and num-subbuf
+values of each channel
+along with all their other attributes, except for their tracefile-size and
+tracefile=E2=80=93count values.
 
-   Your command sets up a single user-space channel named perf which uses a=
- 32-part buffer of total size 32*262144=3D8388608 (8 MiB).  The trace is it=
-self limited to 32 chunks of size 262144 each.  By default, user-space chan=
-nels run in discard mode.  So in this case LTTng should capture about 8 MiB=
- of events to disc, and a further 8 MiB in memory before "giving up" altoge=
-ther.
+Fixes: #642
 
-   When the trace is started the 8 MiB buffer will start filling up, and th=
-e consumer daemon will start dumping the events to the trace file.  Once th=
-e trace file saturates at 8 MiB total size, the consumer daemon will stop e=
-mptying the buffer.  The buffer will then capture another 8 MiB of events. =
- Once the buffer is full, LTTng will systematically discard new events as t=
-hey occur.
+Signed-off-by: Ruslan Uvashev <Ruslan.Uvashev@gmail.com>
+---
+ src/bin/lttng/commands/list.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-   It would be an interesting feature if the snapshot command could be used=
- at this point to dump the 8 MiB of otherwise-lost events to another trace =
-file.
+diff --git a/src/bin/lttng/commands/list.c b/src/bin/lttng/commands/list.c
+index f69b3ba..8f47cc9 100644
+--- a/src/bin/lttng/commands/list.c
++++ b/src/bin/lttng/commands/list.c
+@@ -645,6 +645,8 @@ static void print_channel(struct lttng_channel *channel=
+)
+  MSG("%snumber of subbufers: %" PRIu64, indent6, channel->attr.num_subbuf)=
+;
+  MSG("%sswitch timer interval: %u", indent6,
+channel->attr.switch_timer_interval);
+  MSG("%sread timer interval: %u", indent6,
+channel->attr.read_timer_interval);
++ MSG("%stracefile count: %" PRIu64, indent6,
+channel->attr.tracefile_count);
++ MSG("%stracefile size: %" PRIu64, indent6, channel->attr.tracefile_size);
+  switch (channel->attr.output) {
+  case LTTNG_EVENT_SPLICE:
+  MSG("%soutput: splice()", indent6);
+--=20
+1.8.3.2
 
-Daniel U. Thibault
-Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
-ntermeasures (SPC)
-Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
-Cyber Security (MCCS)
-R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
- Canada - Valcartier (DRDC Valcartier)
-2459 route de la Bravoure
-Qu=E9bec QC  G3J 1X5
-CANADA
-Vox : (418) 844-4000 x4245
-Fax : (418) 844-4538
-NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-Gouvernement du Canada | Government of Canada
-<http://www.valcartier.drdc-rddc.gc.ca/>
+
+
+-------------------------------------
+Best regards,
+Ruslan Uvashev
+
+--047d7b3a9c0adf0f2e04f8a0d7f8
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div><div>The lttng list &lt;session&gt; command gives the=
+ subbuf-size and num-subbuf values of each channel</div><div>along with all=
+ their other attributes, except for their tracefile-size and tracefile=E2=
+=80=93count values.</div>
+<div><br></div><div>Fixes: #642</div><div><br></div><div>Signed-off-by: Rus=
+lan Uvashev &lt;<a href=3D"mailto:Ruslan.Uvashev@gmail.com">Ruslan.Uvashev@=
+gmail.com</a>&gt;</div><div>---</div><div>=C2=A0src/bin/lttng/commands/list=
+.c | 2 ++</div>
+<div>=C2=A01 file changed, 2 insertions(+)</div><div><br></div><div>diff --=
+git a/src/bin/lttng/commands/list.c b/src/bin/lttng/commands/list.c</div><d=
+iv>index f69b3ba..8f47cc9 100644</div><div>--- a/src/bin/lttng/commands/lis=
+t.c</div>
+<div>+++ b/src/bin/lttng/commands/list.c</div><div>@@ -645,6 +645,8 @@ stat=
+ic void print_channel(struct lttng_channel *channel)</div><div>=C2=A0<span =
+class=3D"" style=3D"white-space:pre">	</span>MSG(&quot;%snumber of subbufer=
+s: %&quot; PRIu64, indent6, channel-&gt;attr.num_subbuf);</div>
+<div>=C2=A0<span class=3D"" style=3D"white-space:pre">	</span>MSG(&quot;%ss=
+witch timer interval: %u&quot;, indent6, channel-&gt;attr.switch_timer_inte=
+rval);</div><div>=C2=A0<span class=3D"" style=3D"white-space:pre">	</span>M=
+SG(&quot;%sread timer interval: %u&quot;, indent6, channel-&gt;attr.read_ti=
+mer_interval);</div>
+<div>+<span class=3D"" style=3D"white-space:pre">	</span>MSG(&quot;%stracef=
+ile count: %&quot; PRIu64, indent6, channel-&gt;attr.tracefile_count);</div=
+><div>+<span class=3D"" style=3D"white-space:pre">	</span>MSG(&quot;%strace=
+file size: %&quot; PRIu64, indent6, channel-&gt;attr.tracefile_size);</div>
+<div>=C2=A0<span class=3D"" style=3D"white-space:pre">	</span>switch (chann=
+el-&gt;attr.output) {</div><div>=C2=A0<span class=3D"" style=3D"white-space=
+:pre">		</span>case LTTNG_EVENT_SPLICE:</div><div>=C2=A0<span class=3D"" st=
+yle=3D"white-space:pre">			</span>MSG(&quot;%soutput: splice()&quot;, inden=
+t6);</div>
+<div>--=C2=A0</div><div>1.8.3.2</div></div><div><br></div><div><br></div><b=
+r clear=3D"all"><div><div dir=3D"ltr">-------------------------------------=
+<br>Best regards,<br>Ruslan Uvashev<div><br></div><div><br></div></div></di=
+v>
+</div>
+
+--047d7b3a9c0adf0f2e04f8a0d7f8--
+
+
+--===============0487185829==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0487185829==--
