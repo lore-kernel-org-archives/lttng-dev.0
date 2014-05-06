@@ -1,19 +1,19 @@
 From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
  <jeremie.galarneau@efficios.com>
-Subject: [PATCH lttng-tools] Fix: Out of tree build fails in
-	libconfig
-Date: Mon,  5 May 2014 10:41:46 -0400
-Message-ID: <1399300906-14530-1-git-send-email-jeremie.galarneau__16295.3683328398$1399403069$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools] Fix: session.xsd is already present
+	in dist_xml_DATA
+Date: Tue,  6 May 2014 15:27:14 -0400
+Message-ID: <1399404434-12451-1-git-send-email-jeremie.galarneau__16881.3028293245$1399407386$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qg0-f48.google.com ([209.85.192.48])
+Received: from mail-qg0-f45.google.com ([209.85.192.45])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1WhK5Z-0001pI-VE
- for lttng-dev@lists.lttng.org; Mon, 05 May 2014 10:41:59 -0400
-Received: by mail-qg0-f48.google.com with SMTP id i50so6329776qgf.7
- for <lttng-dev@lists.lttng.org>; Mon, 05 May 2014 07:41:48 -0700 (PDT)
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1Whl1O-0003OK-M3
+ for lttng-dev@lists.lttng.org; Tue, 06 May 2014 15:27:28 -0400
+Received: by mail-qg0-f45.google.com with SMTP id z60so3926428qgd.4
+ for <lttng-dev@lists.lttng.org>; Tue, 06 May 2014 12:27:17 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -25,19 +25,18 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-bGliY29uZmlnX2xhX0NQUEZMQUdTIHNob3VsZCBhbHNvIGluY2x1ZGUgdGhlIHRvcC1sZXZlbCBB
-TV9DUFBGTEFHUy4KClNpZ25lZC1vZmYtYnk6IErDqXLDqW1pZSBHYWxhcm5lYXUgPGplcmVtaWUu
-Z2FsYXJuZWF1QGVmZmljaW9zLmNvbT4KLS0tCiBzcmMvY29tbW9uL2NvbmZpZy9NYWtlZmlsZS5h
-bSB8IDIgKy0KIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQoK
-ZGlmZiAtLWdpdCBhL3NyYy9jb21tb24vY29uZmlnL01ha2VmaWxlLmFtIGIvc3JjL2NvbW1vbi9j
-b25maWcvTWFrZWZpbGUuYW0KaW5kZXggZThlYWFjYS4uMDAxNGRmZCAxMDA2NDQKLS0tIGEvc3Jj
-L2NvbW1vbi9jb25maWcvTWFrZWZpbGUuYW0KKysrIGIvc3JjL2NvbW1vbi9jb25maWcvTWFrZWZp
-bGUuYW0KQEAgLTMsNyArMyw3IEBAIEFNX0NQUEZMQUdTID0gLUkkKHRvcF9zcmNkaXIpL2luY2x1
-ZGUgLUkkKHRvcF9zcmNkaXIpL3NyYwogbm9pbnN0X0xUTElCUkFSSUVTID0gbGliY29uZmlnLmxh
-CiAKIGxpYmNvbmZpZ19sYV9TT1VSQ0VTID0gaW5pLmMgaW5pLmggY29uZmlnLmMgY29uZmlnLmgK
-LWxpYmNvbmZpZ19sYV9DUFBGTEFHUyA9ICQoWE1MX0NQUEZMQUdTKQorbGliY29uZmlnX2xhX0NQ
-UEZMQUdTID0gJChYTUxfQ1BQRkxBR1MpICQoQU1fQ1BQRkxBR1MpCiBsaWJjb25maWdfbGFfTElC
-QUREID0gJChYTUxfTElCUykKIAogeG1sZGlyID0gJChkYXRhZGlyKS94bWwvbHR0bmcKLS0gCjEu
-OS4yCgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0
-bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0
-cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+VGhlcmUgaXMgbm8gbmVlZCB0byBpbmNsdWRlIHNlc3Npb24ueHNkIGFzIHBhcnQgb2YgeG1sX0RB
+VEEgc2luY2UKZGlzdF94bWxfREFUQSB3aWxsIGFscmVhZHkgZW5zdXJlIGl0IGlzIHBhcnQgb2Yg
+dGhlIGRpc3QgdGFyZ2V0CmFuZCBpbnN0YWxsZWQuCgpTaWduZWQtb2ZmLWJ5OiBKw6lyw6ltaWUg
+R2FsYXJuZWF1IDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20+Ci0tLQogc3JjL2NvbW1v
+bi9jb25maWcvTWFrZWZpbGUuYW0gfCAxIC0KIDEgZmlsZSBjaGFuZ2VkLCAxIGRlbGV0aW9uKC0p
+CgpkaWZmIC0tZ2l0IGEvc3JjL2NvbW1vbi9jb25maWcvTWFrZWZpbGUuYW0gYi9zcmMvY29tbW9u
+L2NvbmZpZy9NYWtlZmlsZS5hbQppbmRleCBmNDExNTQ4Li5kOWQwOWYxIDEwMDY0NAotLS0gYS9z
+cmMvY29tbW9uL2NvbmZpZy9NYWtlZmlsZS5hbQorKysgYi9zcmMvY29tbW9uL2NvbmZpZy9NYWtl
+ZmlsZS5hbQpAQCAtNyw1ICs3LDQgQEAgbGliY29uZmlnX2xhX0NQUEZMQUdTID0gJChYTUxfQ1BQ
+RkxBR1MpICQoQU1fQ1BQRkxBR1MpCiBsaWJjb25maWdfbGFfTElCQUREID0gJChYTUxfTElCUykK
+IAogeG1sZGlyID0gJChkYXRhZGlyKS94bWwvbHR0bmcKLXhtbF9EQVRBID0gc2Vzc2lvbi54c2QK
+IGRpc3RfeG1sX0RBVEEgPSBzZXNzaW9uLnhzZAotLSAKMS45LjIKCgpfX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0
+dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21h
+aWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
