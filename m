@@ -1,19 +1,17 @@
-From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
- <jeremie.galarneau@efficios.com>
-Subject: [PATCH lttng-tools] Fix: Don't output to stdout from
-	lttng-ctl
-Date: Wed,  7 May 2014 14:27:45 -0400
-Message-ID: <1399487265-21097-1-git-send-email-jeremie.galarneau__42953.054191503$1399487342$gmane$org@efficios.com>
+From: David Goulet <dgoulet@efficios.com>
+Subject: Re: [PATCH lttng-tools] Fix: Don't output to stdout
+	from lttng-ctl
+Date: Wed, 7 May 2014 14:41:34 -0400
+Message-ID: <20140507184134.GF8212__19741.4033850238$1399488164$gmane$org@thessa>
+References: <1399487265-21097-1-git-send-email-jeremie.galarneau@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============0790787689=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qa0-f44.google.com ([209.85.216.44])
+Received: from smtp.ini-tech.com ([144.76.53.219])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1Wi6ZN-0007Rd-BT
- for lttng-dev@lists.lttng.org; Wed, 07 May 2014 14:27:59 -0400
-Received: by mail-qa0-f44.google.com with SMTP id j7so1403187qaq.17
- for <lttng-dev@lists.lttng.org>; Wed, 07 May 2014 11:27:47 -0700 (PDT)
+ (envelope-from <dgoulet@efficios.com>) id 1Wi6mp-0007Xy-7B
+ for lttng-dev@lists.lttng.org; Wed, 07 May 2014 14:41:52 -0400
+In-Reply-To: <1399487265-21097-1-git-send-email-jeremie.galarneau@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,47 +20,142 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-U2lnbmVkLW9mZi1ieTogSsOpcsOpbWllIEdhbGFybmVhdSA8amVyZW1pZS5nYWxhcm5lYXVAZWZm
-aWNpb3MuY29tPgotLS0KIHNyYy9iaW4vbHR0bmcvY29tbWFuZHMvc3RvcC5jIHwgMjkgKysrKysr
-KysrKysrKysrKysrKysrKysrLS0tLS0KIHNyYy9saWIvbHR0bmctY3RsL2x0dG5nLWN0bC5jIHwg
-IDcgLS0tLS0tLQogMiBmaWxlcyBjaGFuZ2VkLCAyNCBpbnNlcnRpb25zKCspLCAxMiBkZWxldGlv
-bnMoLSkKCmRpZmYgLS1naXQgYS9zcmMvYmluL2x0dG5nL2NvbW1hbmRzL3N0b3AuYyBiL3NyYy9i
-aW4vbHR0bmcvY29tbWFuZHMvc3RvcC5jCmluZGV4IDYwYTFkYWMuLmNiNDVmMTIgMTAwNjQ0Ci0t
-LSBhL3NyYy9iaW4vbHR0bmcvY29tbWFuZHMvc3RvcC5jCisrKyBiL3NyYy9iaW4vbHR0bmcvY29t
-bWFuZHMvc3RvcC5jCkBAIC03OSwxMSArNzksNyBAQCBzdGF0aWMgaW50IHN0b3BfdHJhY2luZyh2
-b2lkKQogCQlzZXNzaW9uX25hbWUgPSBvcHRfc2Vzc2lvbl9uYW1lOwogCX0KIAotCWlmIChvcHRf
-bm9fd2FpdCkgewotCQlyZXQgPSBsdHRuZ19zdG9wX3RyYWNpbmdfbm9fd2FpdChzZXNzaW9uX25h
-bWUpOwotCX0gZWxzZSB7Ci0JCXJldCA9IGx0dG5nX3N0b3BfdHJhY2luZyhzZXNzaW9uX25hbWUp
-OwotCX0KKwlyZXQgPSBsdHRuZ19zdG9wX3RyYWNpbmdfbm9fd2FpdChzZXNzaW9uX25hbWUpOwog
-CWlmIChyZXQgPCAwKSB7CiAJCXN3aXRjaCAoLXJldCkgewogCQljYXNlIExUVE5HX0VSUl9UUkFD
-RV9BTFJFQURZX1NUT1BQRUQ6CkBAIC05Niw2ICs5MiwyOSBAQCBzdGF0aWMgaW50IHN0b3BfdHJh
-Y2luZyh2b2lkKQogCQlnb3RvIGZyZWVfbmFtZTsKIAl9CiAKKwlpZiAoIW9wdF9ub193YWl0KSB7
-CisJCV9NU0coIldhaXRpbmcgZm9yIGRhdGEgYXZhaWxhYmlsaXR5Iik7CisJCWZmbHVzaChzdGRv
-dXQpOworCQlkbyB7CisJCQlyZXQgPSBsdHRuZ19kYXRhX3BlbmRpbmcoc2Vzc2lvbl9uYW1lKTsK
-KwkJCWlmIChyZXQgPCAwKSB7CisJCQkJLyogUmV0dXJuIHRoZSBkYXRhIGF2YWlsYWJsZSBjYWxs
-IGVycm9yLiAqLworCQkJCWdvdG8gZXJyb3I7CisJCQl9CisKKwkJCS8qCisJCQkgKiBEYXRhIHNs
-ZWVwIHRpbWUgYmVmb3JlIHJldHJ5aW5nIChpbiB1c2VjKS4gRG9uJ3Qgc2xlZXAgaWYgdGhlIGNh
-bGwKKwkJCSAqIHJldHVybmVkIHZhbHVlIGluZGljYXRlcyBhdmFpbGFiaWxpdHkuCisJCQkgKi8K
-KwkJCWlmIChyZXQpIHsKKwkJCQl1c2xlZXAoREVGQVVMVF9EQVRBX0FWQUlMQUJJTElUWV9XQUlU
-X1RJTUUpOworCQkJCV9NU0coIi4iKTsKKwkJCQlmZmx1c2goc3Rkb3V0KTsKKwkJCX0KKwkJfSB3
-aGlsZSAocmV0ICE9IDApOworCQlNU0coIiIpOworCX0KKwogCXJldCA9IENNRF9TVUNDRVNTOwog
-CiAJTVNHKCJUcmFjaW5nIHN0b3BwZWQgZm9yIHNlc3Npb24gJXMiLCBzZXNzaW9uX25hbWUpOwpk
-aWZmIC0tZ2l0IGEvc3JjL2xpYi9sdHRuZy1jdGwvbHR0bmctY3RsLmMgYi9zcmMvbGliL2x0dG5n
-LWN0bC9sdHRuZy1jdGwuYwppbmRleCA3NTZmZDZiLi4yNzJjNzAyIDEwMDY0NAotLS0gYS9zcmMv
-bGliL2x0dG5nLWN0bC9sdHRuZy1jdGwuYworKysgYi9zcmMvbGliL2x0dG5nLWN0bC9sdHRuZy1j
-dGwuYwpAQCAtNTc5LDkgKzU3OSw2IEBAIHN0YXRpYyBpbnQgX2x0dG5nX3N0b3BfdHJhY2luZyhj
-b25zdCBjaGFyICpzZXNzaW9uX25hbWUsIGludCB3YWl0KQogCQlnb3RvIGVuZDsKIAl9CiAKLQlf
-TVNHKCJXYWl0aW5nIGZvciBkYXRhIGF2YWlsYWJpbGl0eSIpOwotCWZmbHVzaChzdGRvdXQpOwot
-CiAJLyogQ2hlY2sgZm9yIGRhdGEgYXZhaWxhYmlsaXR5ICovCiAJZG8gewogCQlkYXRhX3JldCA9
-IGx0dG5nX2RhdGFfcGVuZGluZyhzZXNzaW9uX25hbWUpOwpAQCAtNTk3LDEzICs1OTQsOSBAQCBz
-dGF0aWMgaW50IF9sdHRuZ19zdG9wX3RyYWNpbmcoY29uc3QgY2hhciAqc2Vzc2lvbl9uYW1lLCBp
-bnQgd2FpdCkKIAkJICovCiAJCWlmIChkYXRhX3JldCkgewogCQkJdXNsZWVwKERFRkFVTFRfREFU
-QV9BVkFJTEFCSUxJVFlfV0FJVF9USU1FKTsKLQkJCV9NU0coIi4iKTsKLQkJCWZmbHVzaChzdGRv
-dXQpOwogCQl9CiAJfSB3aGlsZSAoZGF0YV9yZXQgIT0gMCk7CiAKLQlNU0coIiIpOwotCiBlbmQ6
-CiBlcnJvcjoKIAlyZXR1cm4gcmV0OwotLSAKMS45LjIKCgpfX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRl
-dkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4v
-bGlzdGluZm8vbHR0bmctZGV2Cg==
+
+--===============0790787689==
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="7cm2iqirTL37Ot+N"
+Content-Disposition: inline
+
+
+--7cm2iqirTL37Ot+N
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Merged!
+
+On 07 May (14:27:45), J=E9r=E9mie Galarneau wrote:
+> Signed-off-by: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
+> ---
+>  src/bin/lttng/commands/stop.c | 29 ++++++++++++++++++++++++-----
+>  src/lib/lttng-ctl/lttng-ctl.c |  7 -------
+>  2 files changed, 24 insertions(+), 12 deletions(-)
+>=20
+> diff --git a/src/bin/lttng/commands/stop.c b/src/bin/lttng/commands/stop.c
+> index 60a1dac..cb45f12 100644
+> --- a/src/bin/lttng/commands/stop.c
+> +++ b/src/bin/lttng/commands/stop.c
+> @@ -79,11 +79,7 @@ static int stop_tracing(void)
+>  		session_name =3D opt_session_name;
+>  	}
+> =20
+> -	if (opt_no_wait) {
+> -		ret =3D lttng_stop_tracing_no_wait(session_name);
+> -	} else {
+> -		ret =3D lttng_stop_tracing(session_name);
+> -	}
+> +	ret =3D lttng_stop_tracing_no_wait(session_name);
+>  	if (ret < 0) {
+>  		switch (-ret) {
+>  		case LTTNG_ERR_TRACE_ALREADY_STOPPED:
+> @@ -96,6 +92,29 @@ static int stop_tracing(void)
+>  		goto free_name;
+>  	}
+> =20
+> +	if (!opt_no_wait) {
+> +		_MSG("Waiting for data availability");
+> +		fflush(stdout);
+> +		do {
+> +			ret =3D lttng_data_pending(session_name);
+> +			if (ret < 0) {
+> +				/* Return the data available call error. */
+> +				goto error;
+> +			}
+> +
+> +			/*
+> +			 * Data sleep time before retrying (in usec). Don't sleep if the call
+> +			 * returned value indicates availability.
+> +			 */
+> +			if (ret) {
+> +				usleep(DEFAULT_DATA_AVAILABILITY_WAIT_TIME);
+> +				_MSG(".");
+> +				fflush(stdout);
+> +			}
+> +		} while (ret !=3D 0);
+> +		MSG("");
+> +	}
+> +
+>  	ret =3D CMD_SUCCESS;
+> =20
+>  	MSG("Tracing stopped for session %s", session_name);
+> diff --git a/src/lib/lttng-ctl/lttng-ctl.c b/src/lib/lttng-ctl/lttng-ctl.c
+> index 756fd6b..272c702 100644
+> --- a/src/lib/lttng-ctl/lttng-ctl.c
+> +++ b/src/lib/lttng-ctl/lttng-ctl.c
+> @@ -579,9 +579,6 @@ static int _lttng_stop_tracing(const char *session_na=
+me, int wait)
+>  		goto end;
+>  	}
+> =20
+> -	_MSG("Waiting for data availability");
+> -	fflush(stdout);
+> -
+>  	/* Check for data availability */
+>  	do {
+>  		data_ret =3D lttng_data_pending(session_name);
+> @@ -597,13 +594,9 @@ static int _lttng_stop_tracing(const char *session_n=
+ame, int wait)
+>  		 */
+>  		if (data_ret) {
+>  			usleep(DEFAULT_DATA_AVAILABILITY_WAIT_TIME);
+> -			_MSG(".");
+> -			fflush(stdout);
+>  		}
+>  	} while (data_ret !=3D 0);
+> =20
+> -	MSG("");
+> -
+>  end:
+>  error:
+>  	return ret;
+> --=20
+> 1.9.2
+>=20
+
+--7cm2iqirTL37Ot+N
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQF8BAEBAgBmBQJTan5eXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
+ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
+MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02FzwH/1GhzWUiAzbgfmD9xU/mm6eL
+zQ23YAIt7vxch3pcM5XtgM5JTasn7F0HIoP39DgTg1Ijxp3iAlDX3vE6BUGS+Hty
+stW9wbEaHLV/52FZziigzKcM/XkQ0AzzGiI06yJa/5bGufnjnu5X8ABYDUdz+Jar
+1U/2J8QuGkBa0OGiywjqesdXpaGa2S7AZeQF/rwS1oPaai480lNQBjocW+6d/0Ah
+9hby0I5BB+9ifqg+NPOLE3lBVZKY/5ENZVb3/cLEjk8rAHJDAjT3t/BwdL5P4jiK
+7wS6hXkPwVjnjFU1gma42AI+FBf+6IN7nPOsoyKE4msKscfk9xEdYaCsIM4BzVM=
+=d/+e
+-----END PGP SIGNATURE-----
+
+--7cm2iqirTL37Ot+N--
+
+
+--===============0790787689==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0790787689==--
