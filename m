@@ -1,19 +1,19 @@
-From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Subject: Re: clarification on limiting the size of the trace file
-Date: Wed, 7 May 2014 13:02:54 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD3599F218__15734.574935823$1399467833$gmane$org@VAL-E-01.valcartier.drdc-rddc.gc.ca>
-References: <48CF5AC71E61DB46B70D0F388054EFFD3599ED94@VAL-E-01.valcartier.drdc-rddc.gc.ca>
- <25901CD29106E944B1047FED2EADF345085836E8@MX107CL01.corp.emc.com>
+From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
+ <jeremie.galarneau@efficios.com>
+Subject: [PATCH lttng-ust] Fix: Move generated headers to the
+	BUILT_SOURCES target
+Date: Wed,  7 May 2014 11:41:46 -0400
+Message-ID: <1399477306-15692-1-git-send-email-jeremie.galarneau__45867.6032293171$1399477388$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
+Received: from mail-qc0-f175.google.com ([209.85.216.175])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1Wi1Uz-0005ao-JD
- for lttng-dev@lists.lttng.org; Wed, 07 May 2014 09:03:02 -0400
-In-Reply-To: <25901CD29106E944B1047FED2EADF345085836E8@MX107CL01.corp.emc.com>
-Content-Language: fr-FR
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1Wi3ym-0006XW-7H
+ for lttng-dev@lists.lttng.org; Wed, 07 May 2014 11:42:02 -0400
+Received: by mail-qc0-f175.google.com with SMTP id w7so1303780qcr.34
+ for <lttng-dev@lists.lttng.org>; Wed, 07 May 2014 08:41:50 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,37 +22,49 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Sadon, Mirit" <Mirit.Sadon@emc.com>, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
-Cc: "Eshel, Ayelet" <Ayelet.Eshel@emc.com>, "Mirsky,
- Ilya" <Ilya.Mirsky@emc.com>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-> > > We are working with lttng version 2.04.
-> > This feature may not have been mature with version 2.0.4; I would recom=
-mend upgrading to at least 2.3 if not 2.4.
-> Envoy=E9=A0: 7 mai 2014 01:12
-> This is what I understood should happen but in the actual run the lttng f=
-ile fills all the free space in the partition 4GB.
-> Mirit Sadon =
-
-
-   I just ran a test and in both kernel and user-space tracing modes LTTng =
-2.3 behaved precisely as expected.  I can only suggest that your problem is=
- probably due to LTTng 2.0.4 not handling the instructions correctly.  Upgr=
-ading is the solution.
-
-Daniel U. Thibault
-Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
-ntermeasures (SPC)
-Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
-Cyber Security (MCCS)
-R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
- Canada - Valcartier (DRDC Valcartier)
-2459 route de la Bravoure
-Qu=E9bec QC  G3J 1X5
-CANADA
-Vox : (418) 844-4000 x4245
-Fax : (418) 844-4538
-NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-Gouvernement du Canada | Government of Canada
-<http://www.valcartier.drdc-rddc.gc.ca/>
+VGhpcyBmaXhlcyB0aGUgb3V0IG9mIHRyZWUgYnVpbGQgd2hlbiBlbmFibGluZyBKYXZhIHN1cHBv
+cnQuIFRoZQpwcm9ibGVtIGluIHVzaW5nIGFuIExUVG5nVXN0LmMgdGFyZ2V0IGlzIHRoYXQgYXV0
+b21ha2Ugd2lsbCB0aGVuCmFzc3VtZSB0aGUgZmlsZSBpcyBnZW5lcmF0ZWQgYW5kIHRodXMgYmUg
+Zm91bmQgaW4gdGhlIGJ1aWxkZGlyLgoKVXNpbmcgdGhlIEJVSUxUX1NPVVJDRVMgdGFyZ2V0IHdp
+bGwgZW5zdXJlIHRoZQpvcmdfbHR0bmdfdXN0X0xUVG5nVXN0LmggYW5kIG9yZ19sdHRuZ191c3Rf
+anVsX0xUVG5nVXN0LmggaGVhZGVycwphcmUgZ2VuZXJhdGVkIGJlZm9yZSBMVFRuZ1VzdC5jIGlz
+IGNvbXBpbGVkLgoKVGVzdGVkLWJ5OiBEYXZpZCBHb3VsZXQgPGRnb3VsZXRAZWZmaWNpb3MuY29t
+PgpTaWduZWQtb2ZmLWJ5OiBKw6lyw6ltaWUgR2FsYXJuZWF1IDxqZXJlbWllLmdhbGFybmVhdUBl
+ZmZpY2lvcy5jb20+Ci0tLQogbGlibHR0bmctdXN0LWphdmEvTWFrZWZpbGUuYW0gfCA1ICsrLS0t
+CiBsaWJsdHRuZy11c3QtanVsL01ha2VmaWxlLmFtICB8IDUgKystLS0KIDIgZmlsZXMgY2hhbmdl
+ZCwgNCBpbnNlcnRpb25zKCspLCA2IGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL2xpYmx0dG5n
+LXVzdC1qYXZhL01ha2VmaWxlLmFtIGIvbGlibHR0bmctdXN0LWphdmEvTWFrZWZpbGUuYW0KaW5k
+ZXggMzc4NjdhNy4uNjRjNjU0YiAxMDA2NDQKLS0tIGEvbGlibHR0bmctdXN0LWphdmEvTWFrZWZp
+bGUuYW0KKysrIGIvbGlibHR0bmctdXN0LWphdmEvTWFrZWZpbGUuYW0KQEAgLTMsOCArMyw5IEBA
+IExUVE5HX0pVU1RfREVTVERJUiA9ICQoYnVpbGRkaXIpL29yZy9sdHRuZy91c3QKIAogaWYgQlVJ
+TERfSk5JX0lOVEVSRkFDRQogCi1BTV9DUFBGTEFHUyA9IC1JJCh0b3Bfc3JjZGlyKS9pbmNsdWRl
+CitBTV9DUFBGTEFHUyA9IC1JJCh0b3Bfc3JjZGlyKS9pbmNsdWRlIC1JJChidWlsZGRpcikKIAor
+QlVJTFRfU09VUkNFUyA9IG9yZ19sdHRuZ191c3RfTFRUbmdVc3QuaAogbGliX0xUTElCUkFSSUVT
+ID0gbGlibHR0bmctdXN0LWphdmEubGEKIGxpYmx0dG5nX3VzdF9qYXZhX2xhX1NPVVJDRVMgPSBM
+VFRuZ1VzdC5jIGx0dG5nX3VzdF9qYXZhLmgKIG5vZGlzdF9saWJsdHRuZ191c3RfamF2YV9sYV9T
+T1VSQ0VTID0gb3JnX2x0dG5nX3VzdF9MVFRuZ1VzdC5oCkBAIC0yNCw4ICsyNSw2IEBAIGNsZWFu
+LWxvY2FsOgogCXJtIC1mIGxpYmx0dG5nLXVzdC1qYXZhLmphcgogCXJtIC1yZiBvcmcvbHR0bmcv
+dXN0LyouY2xhc3MKIAotTFRUbmdVc3QuYzogb3JnX2x0dG5nX3VzdF9MVFRuZ1VzdC5oCi0KICQo
+TFRUTkdfSlVTVF9ERVNURElSKS9MVFRuZ1VzdC5jbGFzczogJChMVFROR19KVVNUX1NSQ0RJUikv
+TFRUbmdVc3QuamF2YQogCSQoSkNDKS9qYXZhYyAtZCAiJChidWlsZGRpcikiICIkKExUVE5HX0pV
+U1RfU1JDRElSKS9MVFRuZ1VzdC5qYXZhIgogCmRpZmYgLS1naXQgYS9saWJsdHRuZy11c3QtanVs
+L01ha2VmaWxlLmFtIGIvbGlibHR0bmctdXN0LWp1bC9NYWtlZmlsZS5hbQppbmRleCA5Yjg2Y2Fh
+Li5iYzEzYzc2IDEwMDY0NAotLS0gYS9saWJsdHRuZy11c3QtanVsL01ha2VmaWxlLmFtCisrKyBi
+L2xpYmx0dG5nLXVzdC1qdWwvTWFrZWZpbGUuYW0KQEAgLTMsOCArMyw5IEBAIExUVE5HX0pVTF9E
+RVNURElSID0gJChidWlsZGRpcikvb3JnL2x0dG5nL3VzdC9qdWwKIAogaWYgQlVJTERfSk5JX0lO
+VEVSRkFDRQogCi1BTV9DUFBGTEFHUyA9IC1JJCh0b3Bfc3JjZGlyKS9pbmNsdWRlCitBTV9DUFBG
+TEFHUyA9IC1JJCh0b3Bfc3JjZGlyKS9pbmNsdWRlIC1JJChidWlsZGRpcikKIAorQlVJTFRfU09V
+UkNFUyA9IG9yZ19sdHRuZ191c3RfanVsX0xUVG5nVXN0LmgKIGxpYl9MVExJQlJBUklFUyA9IGxp
+Ymx0dG5nLXVzdC1qdWwtam5pLmxhCiBsaWJsdHRuZ191c3RfanVsX2puaV9sYV9TT1VSQ0VTID0g
+TFRUbmdVc3QuYyBsdHRuZ191c3RfanVsLmgKIG5vZGlzdF9saWJsdHRuZ191c3RfanVsX2puaV9s
+YV9TT1VSQ0VTID0gb3JnX2x0dG5nX3VzdF9qdWxfTFRUbmdVc3QuaApAQCAtMzUsOCArMzYsNiBA
+QCBjbGVhbi1sb2NhbDoKIAlybSAtZiBsaWJsdHRuZy11c3QtanVsLmphcgogCXJtIC1mIG9yZy9s
+dHRuZy91c3QvanVsLyouY2xhc3MKIAotTFRUbmdVc3QuYzogb3JnX2x0dG5nX3VzdF9qdWxfTFRU
+bmdVc3QuaAotCiAlLmNsYXNzOiAlLmphdmEKIAkkKEpDQykvamF2YWMgLWQgIiQoYnVpbGRkaXIp
+IiAkPAogCi0tIAoxLjkuMgoKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9y
+ZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1k
+ZXYK
