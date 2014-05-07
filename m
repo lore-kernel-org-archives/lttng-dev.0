@@ -1,17 +1,18 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: Re: [PATCH lttng-tools] Fix: Don't output to stdout
-	from lttng-ctl
-Date: Wed, 7 May 2014 14:41:34 -0400
-Message-ID: <20140507184134.GF8212__19741.4033850238$1399488164$gmane$org@thessa>
-References: <1399487265-21097-1-git-send-email-jeremie.galarneau@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH lttng-ust] Fix: Move generated headers to
+ the BUILT_SOURCES target
+Date: Wed, 7 May 2014 19:57:21 +0000 (UTC)
+Message-ID: <1488225125.12744.1399492641278.JavaMail.zimbra__43801.0062127889$1399492711$gmane$org@efficios.com>
+References: <1399477306-15692-1-git-send-email-jeremie.galarneau@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0790787689=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com ([144.76.53.219])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <dgoulet@efficios.com>) id 1Wi6mp-0007Xy-7B
- for lttng-dev@lists.lttng.org; Wed, 07 May 2014 14:41:52 -0400
-In-Reply-To: <1399487265-21097-1-git-send-email-jeremie.galarneau@efficios.com>
+ (envelope-from <compudj@efficios.com>) id 1Wi7y0-0007yT-G7
+ for lttng-dev@lists.lttng.org; Wed, 07 May 2014 15:57:30 -0400
+In-Reply-To: <1399477306-15692-1-git-send-email-jeremie.galarneau@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,142 +21,60 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
+To: =?utf-8?B?SsOpcsOpbWll?= Galarneau <jeremie.galarneau@efficios.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-
---===============0790787689==
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="7cm2iqirTL37Ot+N"
-Content-Disposition: inline
-
-
---7cm2iqirTL37Ot+N
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Merged!
-
-On 07 May (14:27:45), J=E9r=E9mie Galarneau wrote:
-> Signed-off-by: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
-> ---
->  src/bin/lttng/commands/stop.c | 29 ++++++++++++++++++++++++-----
->  src/lib/lttng-ctl/lttng-ctl.c |  7 -------
->  2 files changed, 24 insertions(+), 12 deletions(-)
->=20
-> diff --git a/src/bin/lttng/commands/stop.c b/src/bin/lttng/commands/stop.c
-> index 60a1dac..cb45f12 100644
-> --- a/src/bin/lttng/commands/stop.c
-> +++ b/src/bin/lttng/commands/stop.c
-> @@ -79,11 +79,7 @@ static int stop_tracing(void)
->  		session_name =3D opt_session_name;
->  	}
-> =20
-> -	if (opt_no_wait) {
-> -		ret =3D lttng_stop_tracing_no_wait(session_name);
-> -	} else {
-> -		ret =3D lttng_stop_tracing(session_name);
-> -	}
-> +	ret =3D lttng_stop_tracing_no_wait(session_name);
->  	if (ret < 0) {
->  		switch (-ret) {
->  		case LTTNG_ERR_TRACE_ALREADY_STOPPED:
-> @@ -96,6 +92,29 @@ static int stop_tracing(void)
->  		goto free_name;
->  	}
-> =20
-> +	if (!opt_no_wait) {
-> +		_MSG("Waiting for data availability");
-> +		fflush(stdout);
-> +		do {
-> +			ret =3D lttng_data_pending(session_name);
-> +			if (ret < 0) {
-> +				/* Return the data available call error. */
-> +				goto error;
-> +			}
-> +
-> +			/*
-> +			 * Data sleep time before retrying (in usec). Don't sleep if the call
-> +			 * returned value indicates availability.
-> +			 */
-> +			if (ret) {
-> +				usleep(DEFAULT_DATA_AVAILABILITY_WAIT_TIME);
-> +				_MSG(".");
-> +				fflush(stdout);
-> +			}
-> +		} while (ret !=3D 0);
-> +		MSG("");
-> +	}
-> +
->  	ret =3D CMD_SUCCESS;
-> =20
->  	MSG("Tracing stopped for session %s", session_name);
-> diff --git a/src/lib/lttng-ctl/lttng-ctl.c b/src/lib/lttng-ctl/lttng-ctl.c
-> index 756fd6b..272c702 100644
-> --- a/src/lib/lttng-ctl/lttng-ctl.c
-> +++ b/src/lib/lttng-ctl/lttng-ctl.c
-> @@ -579,9 +579,6 @@ static int _lttng_stop_tracing(const char *session_na=
-me, int wait)
->  		goto end;
->  	}
-> =20
-> -	_MSG("Waiting for data availability");
-> -	fflush(stdout);
-> -
->  	/* Check for data availability */
->  	do {
->  		data_ret =3D lttng_data_pending(session_name);
-> @@ -597,13 +594,9 @@ static int _lttng_stop_tracing(const char *session_n=
-ame, int wait)
->  		 */
->  		if (data_ret) {
->  			usleep(DEFAULT_DATA_AVAILABILITY_WAIT_TIME);
-> -			_MSG(".");
-> -			fflush(stdout);
->  		}
->  	} while (data_ret !=3D 0);
-> =20
-> -	MSG("");
-> -
->  end:
->  error:
->  	return ret;
-> --=20
-> 1.9.2
->=20
-
---7cm2iqirTL37Ot+N
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iQF8BAEBAgBmBQJTan5eXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
-ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
-MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02FzwH/1GhzWUiAzbgfmD9xU/mm6eL
-zQ23YAIt7vxch3pcM5XtgM5JTasn7F0HIoP39DgTg1Ijxp3iAlDX3vE6BUGS+Hty
-stW9wbEaHLV/52FZziigzKcM/XkQ0AzzGiI06yJa/5bGufnjnu5X8ABYDUdz+Jar
-1U/2J8QuGkBa0OGiywjqesdXpaGa2S7AZeQF/rwS1oPaai480lNQBjocW+6d/0Ah
-9hby0I5BB+9ifqg+NPOLE3lBVZKY/5ENZVb3/cLEjk8rAHJDAjT3t/BwdL5P4jiK
-7wS6hXkPwVjnjFU1gma42AI+FBf+6IN7nPOsoyKE4msKscfk9xEdYaCsIM4BzVM=
-=d/+e
------END PGP SIGNATURE-----
-
---7cm2iqirTL37Ot+N--
-
-
---===============0790787689==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Disposition: inline
-Content-Transfer-Encoding: 7bit
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0790787689==--
+TWVyZ2VkIGludG8gbWFzdGVyIGFuZCBzdGFibGUtMi40LCB0aGFua3MhCgpNYXRoaWV1CgotLS0t
+LSBPcmlnaW5hbCBNZXNzYWdlIC0tLS0tCj4gRnJvbTogIkrDqXLDqW1pZSBHYWxhcm5lYXUiIDxq
+ZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20+Cj4gVG86IGx0dG5nLWRldkBsaXN0cy5sdHRu
+Zy5vcmcKPiBDYzogIm1hdGhpZXUgZGVzbm95ZXJzIiA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNp
+b3MuY29tPiwgIkrDqXLDqW1pZSBHYWxhcm5lYXUiIDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lv
+cy5jb20+Cj4gU2VudDogV2VkbmVzZGF5LCBNYXkgNywgMjAxNCAxMTo0MTo0NiBBTQo+IFN1Ympl
+Y3Q6IFtQQVRDSCBsdHRuZy11c3RdIEZpeDogTW92ZSBnZW5lcmF0ZWQgaGVhZGVycyB0byB0aGUg
+QlVJTFRfU09VUkNFUyB0YXJnZXQKPiAKPiBUaGlzIGZpeGVzIHRoZSBvdXQgb2YgdHJlZSBidWls
+ZCB3aGVuIGVuYWJsaW5nIEphdmEgc3VwcG9ydC4gVGhlCj4gcHJvYmxlbSBpbiB1c2luZyBhbiBM
+VFRuZ1VzdC5jIHRhcmdldCBpcyB0aGF0IGF1dG9tYWtlIHdpbGwgdGhlbgo+IGFzc3VtZSB0aGUg
+ZmlsZSBpcyBnZW5lcmF0ZWQgYW5kIHRodXMgYmUgZm91bmQgaW4gdGhlIGJ1aWxkZGlyLgo+IAo+
+IFVzaW5nIHRoZSBCVUlMVF9TT1VSQ0VTIHRhcmdldCB3aWxsIGVuc3VyZSB0aGUKPiBvcmdfbHR0
+bmdfdXN0X0xUVG5nVXN0LmggYW5kIG9yZ19sdHRuZ191c3RfanVsX0xUVG5nVXN0LmggaGVhZGVy
+cwo+IGFyZSBnZW5lcmF0ZWQgYmVmb3JlIExUVG5nVXN0LmMgaXMgY29tcGlsZWQuCj4gCj4gVGVz
+dGVkLWJ5OiBEYXZpZCBHb3VsZXQgPGRnb3VsZXRAZWZmaWNpb3MuY29tPgo+IFNpZ25lZC1vZmYt
+Ynk6IErDqXLDqW1pZSBHYWxhcm5lYXUgPGplcmVtaWUuZ2FsYXJuZWF1QGVmZmljaW9zLmNvbT4K
+PiAtLS0KPiAgbGlibHR0bmctdXN0LWphdmEvTWFrZWZpbGUuYW0gfCA1ICsrLS0tCj4gIGxpYmx0
+dG5nLXVzdC1qdWwvTWFrZWZpbGUuYW0gIHwgNSArKy0tLQo+ICAyIGZpbGVzIGNoYW5nZWQsIDQg
+aW5zZXJ0aW9ucygrKSwgNiBkZWxldGlvbnMoLSkKPiAKPiBkaWZmIC0tZ2l0IGEvbGlibHR0bmct
+dXN0LWphdmEvTWFrZWZpbGUuYW0gYi9saWJsdHRuZy11c3QtamF2YS9NYWtlZmlsZS5hbQo+IGlu
+ZGV4IDM3ODY3YTcuLjY0YzY1NGIgMTAwNjQ0Cj4gLS0tIGEvbGlibHR0bmctdXN0LWphdmEvTWFr
+ZWZpbGUuYW0KPiArKysgYi9saWJsdHRuZy11c3QtamF2YS9NYWtlZmlsZS5hbQo+IEBAIC0zLDgg
+KzMsOSBAQCBMVFROR19KVVNUX0RFU1RESVIgPSAkKGJ1aWxkZGlyKS9vcmcvbHR0bmcvdXN0Cj4g
+IAo+ICBpZiBCVUlMRF9KTklfSU5URVJGQUNFCj4gIAo+IC1BTV9DUFBGTEFHUyA9IC1JJCh0b3Bf
+c3JjZGlyKS9pbmNsdWRlCj4gK0FNX0NQUEZMQUdTID0gLUkkKHRvcF9zcmNkaXIpL2luY2x1ZGUg
+LUkkKGJ1aWxkZGlyKQo+ICAKPiArQlVJTFRfU09VUkNFUyA9IG9yZ19sdHRuZ191c3RfTFRUbmdV
+c3QuaAo+ICBsaWJfTFRMSUJSQVJJRVMgPSBsaWJsdHRuZy11c3QtamF2YS5sYQo+ICBsaWJsdHRu
+Z191c3RfamF2YV9sYV9TT1VSQ0VTID0gTFRUbmdVc3QuYyBsdHRuZ191c3RfamF2YS5oCj4gIG5v
+ZGlzdF9saWJsdHRuZ191c3RfamF2YV9sYV9TT1VSQ0VTID0gb3JnX2x0dG5nX3VzdF9MVFRuZ1Vz
+dC5oCj4gQEAgLTI0LDggKzI1LDYgQEAgY2xlYW4tbG9jYWw6Cj4gIAlybSAtZiBsaWJsdHRuZy11
+c3QtamF2YS5qYXIKPiAgCXJtIC1yZiBvcmcvbHR0bmcvdXN0LyouY2xhc3MKPiAgCj4gLUxUVG5n
+VXN0LmM6IG9yZ19sdHRuZ191c3RfTFRUbmdVc3QuaAo+IC0KPiAgJChMVFROR19KVVNUX0RFU1RE
+SVIpL0xUVG5nVXN0LmNsYXNzOiAkKExUVE5HX0pVU1RfU1JDRElSKS9MVFRuZ1VzdC5qYXZhCj4g
+IAkkKEpDQykvamF2YWMgLWQgIiQoYnVpbGRkaXIpIiAiJChMVFROR19KVVNUX1NSQ0RJUikvTFRU
+bmdVc3QuamF2YSIKPiAgCj4gZGlmZiAtLWdpdCBhL2xpYmx0dG5nLXVzdC1qdWwvTWFrZWZpbGUu
+YW0gYi9saWJsdHRuZy11c3QtanVsL01ha2VmaWxlLmFtCj4gaW5kZXggOWI4NmNhYS4uYmMxM2M3
+NiAxMDA2NDQKPiAtLS0gYS9saWJsdHRuZy11c3QtanVsL01ha2VmaWxlLmFtCj4gKysrIGIvbGli
+bHR0bmctdXN0LWp1bC9NYWtlZmlsZS5hbQo+IEBAIC0zLDggKzMsOSBAQCBMVFROR19KVUxfREVT
+VERJUiA9ICQoYnVpbGRkaXIpL29yZy9sdHRuZy91c3QvanVsCj4gIAo+ICBpZiBCVUlMRF9KTklf
+SU5URVJGQUNFCj4gIAo+IC1BTV9DUFBGTEFHUyA9IC1JJCh0b3Bfc3JjZGlyKS9pbmNsdWRlCj4g
+K0FNX0NQUEZMQUdTID0gLUkkKHRvcF9zcmNkaXIpL2luY2x1ZGUgLUkkKGJ1aWxkZGlyKQo+ICAK
+PiArQlVJTFRfU09VUkNFUyA9IG9yZ19sdHRuZ191c3RfanVsX0xUVG5nVXN0LmgKPiAgbGliX0xU
+TElCUkFSSUVTID0gbGlibHR0bmctdXN0LWp1bC1qbmkubGEKPiAgbGlibHR0bmdfdXN0X2p1bF9q
+bmlfbGFfU09VUkNFUyA9IExUVG5nVXN0LmMgbHR0bmdfdXN0X2p1bC5oCj4gIG5vZGlzdF9saWJs
+dHRuZ191c3RfanVsX2puaV9sYV9TT1VSQ0VTID0gb3JnX2x0dG5nX3VzdF9qdWxfTFRUbmdVc3Qu
+aAo+IEBAIC0zNSw4ICszNiw2IEBAIGNsZWFuLWxvY2FsOgo+ICAJcm0gLWYgbGlibHR0bmctdXN0
+LWp1bC5qYXIKPiAgCXJtIC1mIG9yZy9sdHRuZy91c3QvanVsLyouY2xhc3MKPiAgCj4gLUxUVG5n
+VXN0LmM6IG9yZ19sdHRuZ191c3RfanVsX0xUVG5nVXN0LmgKPiAtCj4gICUuY2xhc3M6ICUuamF2
+YQo+ICAJJChKQ0MpL2phdmFjIC1kICIkKGJ1aWxkZGlyKSIgJDwKPiAgCj4gLS0KPiAxLjkuMgo+
+IAo+IAoKLS0gCk1hdGhpZXUgRGVzbm95ZXJzCkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZp
+Y2lvcy5jb20KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+Cmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8v
+bGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
