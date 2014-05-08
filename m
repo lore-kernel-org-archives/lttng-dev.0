@@ -1,18 +1,18 @@
 From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
  <jeremie.galarneau@efficios.com>
-Subject: [PATCH lttng-tools] Fix: Possible out-of-bounds read
-Date: Thu,  8 May 2014 17:05:55 -0400
-Message-ID: <1399583155-32690-1-git-send-email-jeremie.galarneau__45643.0664090023$1399583235$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools] Fix: Ressource leak, missing fclose
+Date: Thu,  8 May 2014 17:06:22 -0400
+Message-ID: <1399583182-32742-1-git-send-email-jeremie.galarneau__6629.37945821813$1399583333$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qa0-f45.google.com ([209.85.216.45])
+Received: from mail-qc0-f177.google.com ([209.85.216.177])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1WiVW0-0008UG-2L
- for lttng-dev@lists.lttng.org; Thu, 08 May 2014 17:06:09 -0400
-Received: by mail-qa0-f45.google.com with SMTP id hw13so3094847qab.4
- for <lttng-dev@lists.lttng.org>; Thu, 08 May 2014 14:05:58 -0700 (PDT)
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1WiVWQ-0008Us-4P
+ for lttng-dev@lists.lttng.org; Thu, 08 May 2014 17:06:35 -0400
+Received: by mail-qc0-f177.google.com with SMTP id i17so3470004qcy.8
+ for <lttng-dev@lists.lttng.org>; Thu, 08 May 2014 14:06:24 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -24,17 +24,17 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Rml4ZXMgY292ZXJpdHkgaXNzdWUgMTE5MTc1Ny4KClNpZ25lZC1vZmYtYnk6IErDqXLDqW1pZSBH
+Rml4ZXMgY292ZXJpdHkgaXNzdWUgMTEzOTUzNi4KClNpZ25lZC1vZmYtYnk6IErDqXLDqW1pZSBH
 YWxhcm5lYXUgPGplcmVtaWUuZ2FsYXJuZWF1QGVmZmljaW9zLmNvbT4KLS0tCiBzcmMvY29tbW9u
-L2NvbmZpZy9jb25maWcuYyB8IDIgKy0KIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwg
-MSBkZWxldGlvbigtKQoKZGlmZiAtLWdpdCBhL3NyYy9jb21tb24vY29uZmlnL2NvbmZpZy5jIGIv
-c3JjL2NvbW1vbi9jb25maWcvY29uZmlnLmMKaW5kZXggYjhhMzJlNi4uZTNmZTc0YSAxMDA2NDQK
-LS0tIGEvc3JjL2NvbW1vbi9jb25maWcvY29uZmlnLmMKKysrIGIvc3JjL2NvbW1vbi9jb25maWcv
-Y29uZmlnLmMKQEAgLTI0MzYsNyArMjQzNiw3IEBAIGludCBsb2FkX3Nlc3Npb25fZnJvbV9wYXRo
-KGNvbnN0IGNoYXIgKnBhdGgsIGNvbnN0IGNoYXIgKnNlc3Npb25fbmFtZSwKIAkJCQljb250aW51
-ZTsKIAkJCX0KIAotCQkJaWYgKHBhdGhfbGVuICsgZmlsZV9uYW1lX2xlbiA+IFBBVEhfTUFYKSB7
-CisJCQlpZiAocGF0aF9sZW4gKyBmaWxlX25hbWVfbGVuID49IFBBVEhfTUFYKSB7CiAJCQkJY29u
-dGludWU7CiAJCQl9CiAKLS0gCjEuOS4yCgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMu
-bHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZv
-L2x0dG5nLWRldgo=
+L2NvbmZpZy9jb25maWcuYyB8IDEgKwogMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspCgpk
+aWZmIC0tZ2l0IGEvc3JjL2NvbW1vbi9jb25maWcvY29uZmlnLmMgYi9zcmMvY29tbW9uL2NvbmZp
+Zy9jb25maWcuYwppbmRleCBlM2ZlNzRhLi44MjlhNjQ1IDEwMDY0NAotLS0gYS9zcmMvY29tbW9u
+L2NvbmZpZy9jb25maWcuYworKysgYi9zcmMvY29tbW9uL2NvbmZpZy9jb25maWcuYwpAQCAtMjM4
+LDYgKzIzOCw3IEBAIGludCBjb25maWdfZ2V0X3NlY3Rpb25fZW50cmllcyhjb25zdCBjaGFyICpv
+dmVycmlkZV9wYXRoLCBjb25zdCBjaGFyICpzZWN0aW9uLAogCXJldCA9IGluaV9wYXJzZV9maWxl
+KGNvbmZpZ19maWxlLAogCQkJKGluaV9lbnRyeV9oYW5kbGVyKSBjb25maWdfZW50cnlfaGFuZGxl
+cl9maWx0ZXIsICh2b2lkICopICZmaWx0ZXIpOwogCisJZmNsb3NlKGNvbmZpZ19maWxlKTsKIGVu
+ZDoKIAlyZXR1cm4gcmV0OwogfQotLSAKMS45LjIKCgpfX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBs
+aXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlz
+dGluZm8vbHR0bmctZGV2Cg==
