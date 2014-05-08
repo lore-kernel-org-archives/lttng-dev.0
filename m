@@ -1,20 +1,22 @@
-From: "Sadon, Mirit" <Mirit.Sadon@emc.com>
-Subject: Re: clarification on limiting the size of the trace file
-Date: Thu, 8 May 2014 11:25:35 +0000
-Message-ID: <25901CD29106E944B1047FED2EADF3450858437E__4885.10483778573$1399563415$gmane$org@MX107CL01.corp.emc.com>
-References: <48CF5AC71E61DB46B70D0F388054EFFD3599ED94@VAL-E-01.valcartier.drdc-rddc.gc.ca>
- <25901CD29106E944B1047FED2EADF345085836E8@MX107CL01.corp.emc.com>
- <48CF5AC71E61DB46B70D0F388054EFFD3599F218@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+From: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
+Subject: Re: babeltrace
+Date: Thu, 08 May 2014 11:53:08 -0400
+Message-ID: <536BA864.10608__35941.2955389873$1399564728$gmane$org@voxpopuli.im>
+References: <CAPxN80BCJuB0u_5pk_a=aWw2gQ99eWK_cRnQ4_Kw6Sf8dEaJCg@mail.gmail.com>
+ <534FEA8C.8040504@ericsson.com>
+ <CA+jJMxum9CmGNDgkqjW3EVCokWx=f-k-iiAjEsXVfY2EjjxmMg@mail.gmail.com>
+ <CAPxN80BRHcyEsVPBAQC-xaaYwZv0Mqzik2SehaXtnrs2Wsdoow@mail.gmail.com>
+ <536B2BA4.7060107@voxpopuli.im>
+ <CAFXXi0=C3_fSHUNsGYu3xPw8oS84A=bRyeig0R714GfPsvc6=g@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mailuogwdur.emc.com ([128.221.224.79])
+Received: from ironport2-out.teksavvy.com ([206.248.154.181])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Mirit.Sadon@emc.com>) id 1WiMSc-00055Q-PS
- for lttng-dev@lists.lttng.org; Thu, 08 May 2014 07:25:59 -0400
-In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD3599F218@VAL-E-01.valcartier.drdc-rddc.gc.ca>
-Content-Language: en-US
+ (envelope-from <alexmonthy@voxpopuli.im>) id 1WiQd4-0006fa-NA
+ for lttng-dev@lists.lttng.org; Thu, 08 May 2014 11:53:03 -0400
+In-Reply-To: <CAFXXi0=C3_fSHUNsGYu3xPw8oS84A=bRyeig0R714GfPsvc6=g@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,58 +25,20 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
-Cc: "Eshel, Ayelet" <Ayelet.Eshel@emc.com>, "Mirsky,
- Ilya" <Ilya.Mirsky@emc.com>
+To: Simon Marchi <simon.marchi@polymtl.ca>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
 
-Thanks, I upgraded and this problem was fixed. =
+> To avoid doing a complete first pass of the trace, you can just
+> iterate on the event types as described in the metadata, and take note
+> of all the possible field you can find in the trace. Then, during your
+> only pass, you already know all your "columns".
 
-But I noticed something new.
+That's true. Although right now TMF doesn't have an API to ask a trace 
+"give me all the event types you have", other than just reading the 
+trace ;)
 
-When I run the "lttng list command" I get the events in different order fro=
-m two locations I installed the new version.
-Did you encounter such an issue before?
-
-Thanks
-Mirit =
-
-
------Original Message-----
-From: Thibault, Daniel [mailto:Daniel.Thibault@drdc-rddc.gc.ca] =
-
-Sent: Wednesday, May 07, 2014 4:03 PM
-To: Sadon, Mirit; lttng-dev@lists.lttng.org
-Cc: Eshel, Ayelet; Mirsky, Ilya
-Subject: RE: [lttng-dev] clarification on limiting the size of the trace fi=
-le
-
-> > > We are working with lttng version 2.04.
-> > This feature may not have been mature with version 2.0.4; I would recom=
-mend upgrading to at least 2.3 if not 2.4.
-> Envoy=E9=A0: 7 mai 2014 01:12
-> This is what I understood should happen but in the actual run the lttng f=
-ile fills all the free space in the partition 4GB.
-> Mirit Sadon
-
-   I just ran a test and in both kernel and user-space tracing modes LTTng =
-2.3 behaved precisely as expected.  I can only suggest that your problem is=
- probably due to LTTng 2.0.4 not handling the instructions correctly.  Upgr=
-ading is the solution.
-
-Daniel U. Thibault
-Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
-ntermeasures (SPC) Cyber s=E9curit=E9 pour les missions essentielles (CME) =
-| Mission Critical Cyber Security (MCCS) R & D pour la d=E9fense Canada - V=
-alcartier (RDDC Valcartier) | Defence R&D Canada - Valcartier (DRDC Valcart=
-ier)
-2459 route de la Bravoure
-Qu=E9bec QC  G3J 1X5
-CANADA
-Vox : (418) 844-4000 x4245
-Fax : (418) 844-4538
-NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-Gouvernement du Canada | Government of Canada <http://www.valcartier.drdc-r=
-ddc.gc.ca/>
+wrt CTF, it's possible to have events in the metadata that don't 
+actually show up in the trace. But that's not really a problem, at worst 
+you'd end up with empty columns.
