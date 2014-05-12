@@ -1,7 +1,7 @@
 From: Gerlando Falauto <gerlando.falauto@keymile.com>
-Subject: cross-compiling lttng-ust and python version
-Date: Mon, 12 May 2014 16:24:14 +0200
-Message-ID: <5370D98E.3010500__5291.54573237083$1399904725$gmane$org@keymile.com>
+Subject: linking C++ modules against lttng-ust libraries
+Date: Mon, 12 May 2014 16:53:54 +0200
+Message-ID: <5370E082.2060104__17720.0793209069$1399906505$gmane$org@keymile.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Content-Transfer-Encoding: 7bit
@@ -9,17 +9,8 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail-de.keymile.com ([195.8.104.250])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
  (envelope-from <prvs=0209817850=gerlando.falauto@keymile.com>)
- id 1Wjr9S-0004Fd-Sr
- for lttng-dev@lists.lttng.org; Mon, 12 May 2014 10:24:28 -0400
-Received: from frodo.de.keymile.net ([10.9.1.54]:64826
- helo=mailrelay.de.keymile.net)
- by mail-de.keymile.com with esmtp (Exim 4.76)
- (envelope-from <gerlando.falauto@keymile.com>) id 1Wjr9L-0000AV-0A
- for lttng-dev@lists.lttng.org; Mon, 12 May 2014 16:24:15 +0200
-Received: from chber1-10555x.ch.keymile.net (chber1-10555x.ch.keymile.net
- [172.31.40.82])
- by mailrelay.de.keymile.net (8.12.2/8.12.2) with ESMTP id s4CEODLf023165
- for <lttng-dev@lists.lttng.org>; Mon, 12 May 2014 16:24:13 +0200 (MEST)
+ id 1WjrcD-0004Qk-Qm
+ for lttng-dev@lists.lttng.org; Mon, 12 May 2014 10:54:11 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -33,56 +24,53 @@ List-Id: lttng-dev@lists.lttng.org
 
 Hi,
 
-I am trying to cross-compile lttng-ust for a powerpc platform.
+I am trying to link a C++ application against lttng-ust, with a simple 
+test case, and I get the following error message upon linking:
 
-I get the following error during make:
+main.cpp:109: undefined reference to `_lttng_ust_tracef(char const*, ...)'
 
-../../../tools/lttng-gen-tp -o sample_tracepoint.h sample_tracepoint.tp
-'import site' failed; use -v for traceback
-Traceback (most recent call last):
-   File "../../../tools/lttng-gen-tp", line 19, in <module>
-     from __future__ import print_function
-ImportError: No module named __future__
+where main.cpp reads:
+...
+13: #include <lttng/tracef.h>
+...
+109: tracef("my message, this integer %d", 1234);
+...
 
-I believe the wrong python version is called ("python" instead of 
-"python2.7"), as the first line of tools/gen-tp reads:
+The following seems to fix my problem:
 
-#!/usr/bin/env python
+diff --git a/include/lttng/tracef.h b/include/lttng/tracef.h
+index 16a984b..98338d8 100644
+--- a/include/lttng/tracef.h
++++ b/include/lttng/tracef.h
+@@ -23,6 +23,10 @@
+   * SOFTWARE.
+   */
 
-Notice how I explicitly set the python version in my configure script:
++#ifdef __cplusplus
++extern "C" {
++#endif
++
+  #include <lttng/lttng-ust-tracef.h>
 
-ac_cv_header_linux_perf_event_h=no PYTHON=python2.7 ./configure 
---target=powerpc-linux --host=powerpc-linux --build=i686-linux 
---with-libtool-sysroot=/opt/eldk/powerpc/sysroots/powerpc-linux 
---prefix=/usr
+  extern
+@@ -35,4 +39,8 @@ void _lttng_ust_tracef(const char *fmt, ...);
+                         _lttng_ust_tracef(fmt, ## __VA_ARGS__);         \
+         } while (0)
 
-MAKEFLAGS= && DESTDIR=/opt/eldk/powerpc/sysroots/powerpc-linux make all 
-install install-strip pkgconfigdir=/tmp pkgconfig_DATA=
++#ifdef __cplusplus
++}
++#endif
++
+  #endif /* _LTTNG_UST_TRACEF_H */
 
-Which doesn't seem to help in this case though.
-Any idea how to fix this?
+But since I've noticed in the history that this whole C guard has been 
+reworked several times lately, I have no idea whether this is a good 
+idea or not.
+Don't know if this has any relevance or anything, but both lttng-ust 
+(along with its dependencies) and my test application are being 
+cross-compiled.
 
-I temporarily tried patching
--#!/usr/bin/env python
-+#!/usr/bin/env python2.7
+Hints?
 
-which partially solves my problem; as a matter of fact, I get this new 
-error:
-
-   File "../../../tools/lttng-gen-tp", line 24, in <module>
-     import subprocess
-ImportError: No module named subprocess
-
-which is a somwhat different issue, as I'm now running python2.7 from 
-the sysroot of my cross-compiler environment (which doesn't apparently 
-have subprocess.py).
-
-$ which python2.7
-/opt/eldk/powerpc/sysroots/i686-eldk-linux/usr/bin/python2.7
-
-Any suggestions here?
-Even though it might look like the easiest solution, I'd rather not 
-install a native 2.7 (or higher) python version on my build machine.
-
-Thank you!
+Thank you,
 Gerlando
