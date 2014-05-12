@@ -1,21 +1,26 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: cross-compiling lttng-ust and python version
-Date: Mon, 12 May 2014 14:33:56 -0400
-Message-ID: <CA+jJMxs05g4DT2dg5iF4=ENqbyv=bsem2=XWoKViAvOHDJ9nQA__37028.2098338523$1399919711$gmane$org@mail.gmail.com>
-References: <5370D98E.3010500@keymile.com>
- <CA+jJMxtgFuLxCSLUNp=b7RqXsLJkvz+n+5rVZHz-1DYZRpvKdg@mail.gmail.com>
- <53710B76.4010504@keymile.com>
+From: Jessica Foest <jessica.foest@gmail.com>
+Subject: Re: babeltrace
+Date: Mon, 12 May 2014 19:24:47 -0400
+Message-ID: <CAPxN80CigEdS6x6EE1czpShX1v8cqXh4TwXfY-=_3NuyQLxkKA__18354.9571353526$1399937165$gmane$org@mail.gmail.com>
+References: <CAPxN80BCJuB0u_5pk_a=aWw2gQ99eWK_cRnQ4_Kw6Sf8dEaJCg@mail.gmail.com>
+ <534FEA8C.8040504@ericsson.com>
+ <CA+jJMxum9CmGNDgkqjW3EVCokWx=f-k-iiAjEsXVfY2EjjxmMg@mail.gmail.com>
+ <CAPxN80BRHcyEsVPBAQC-xaaYwZv0Mqzik2SehaXtnrs2Wsdoow@mail.gmail.com>
+ <536B2BA4.7060107@voxpopuli.im>
+ <CAFXXi0=C3_fSHUNsGYu3xPw8oS84A=bRyeig0R714GfPsvc6=g@mail.gmail.com>
+ <536BA864.10608@voxpopuli.im>
+ <CAPxN80DHt6nMQjL24szbZsYbkd1du97ExokjPBQX40QwuX70+w@mail.gmail.com>
+ <CAPxN80CzV2Y9XJkrqv+vzFOF40OLm1tf7Grgh+n0MOR_UuMmdg@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============1513492503=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qc0-f178.google.com ([209.85.216.178])
+Received: from mail-oa0-f41.google.com ([209.85.219.41])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1Wjv34-0005td-EM
- for lttng-dev@lists.lttng.org; Mon, 12 May 2014 14:34:08 -0400
-Received: by mail-qc0-f178.google.com with SMTP id l6so8212180qcy.23
- for <lttng-dev@lists.lttng.org>; Mon, 12 May 2014 11:33:56 -0700 (PDT)
-In-Reply-To: <53710B76.4010504@keymile.com>
+ (envelope-from <jessica.foest@gmail.com>) id 1WjzaX-0007Ph-Bf
+ for lttng-dev@lists.lttng.org; Mon, 12 May 2014 19:24:59 -0400
+Received: by mail-oa0-f41.google.com with SMTP id m1so9221802oag.0
+ for <lttng-dev@lists.lttng.org>; Mon, 12 May 2014 16:24:47 -0700 (PDT)
+In-Reply-To: <CAPxN80CzV2Y9XJkrqv+vzFOF40OLm1tf7Grgh+n0MOR_UuMmdg@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -24,74 +29,140 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Gerlando Falauto <gerlando.falauto@keymile.com>
+To: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-T24gTW9uLCBNYXkgMTIsIDIwMTQgYXQgMTo1NyBQTSwgR2VybGFuZG8gRmFsYXV0bwo8Z2VybGFu
-ZG8uZmFsYXV0b0BrZXltaWxlLmNvbT4gd3JvdGU6Cj4gSGkgSsOpcsOpbWllLAo+Cj4KPiBPbiAw
-NS8xMi8yMDE0IDA3OjMxIFBNLCBKw6lyw6ltaWUgR2FsYXJuZWF1IHdyb3RlOgo+Pgo+PiBPbiBN
-b24sIE1heSAxMiwgMjAxNCBhdCAxMDoyNCBBTSwgR2VybGFuZG8gRmFsYXV0bwo+PiA8Z2VybGFu
-ZG8uZmFsYXV0b0BrZXltaWxlLmNvbT4gd3JvdGU6Cj4+Pgo+Pj4gSGksCj4+Pgo+Pj4gSSBhbSB0
-cnlpbmcgdG8gY3Jvc3MtY29tcGlsZSBsdHRuZy11c3QgZm9yIGEgcG93ZXJwYyBwbGF0Zm9ybS4K
-Pj4+Cj4+PiBJIGdldCB0aGUgZm9sbG93aW5nIGVycm9yIGR1cmluZyBtYWtlOgo+Pj4KPj4+IC4u
-Ly4uLy4uL3Rvb2xzL2x0dG5nLWdlbi10cCAtbyBzYW1wbGVfdHJhY2Vwb2ludC5oIHNhbXBsZV90
-cmFjZXBvaW50LnRwCj4+PiAnaW1wb3J0IHNpdGUnIGZhaWxlZDsgdXNlIC12IGZvciB0cmFjZWJh
-Y2sKPj4+IFRyYWNlYmFjayAobW9zdCByZWNlbnQgY2FsbCBsYXN0KToKPj4+ICAgIEZpbGUgIi4u
-Ly4uLy4uL3Rvb2xzL2x0dG5nLWdlbi10cCIsIGxpbmUgMTksIGluIDxtb2R1bGU+Cj4+PiAgICAg
-IGZyb20gX19mdXR1cmVfXyBpbXBvcnQgcHJpbnRfZnVuY3Rpb24KPj4+IEltcG9ydEVycm9yOiBO
-byBtb2R1bGUgbmFtZWQgX19mdXR1cmVfXwo+Pj4KPj4KPj4gVGhpcyBtb2R1bGUgc2hvdWxkIGJl
-IHByZXNlbnQgaW4gUHl0aG9uIDIuNy4KPgo+PiBXaGljaCB2ZXJzaW9ucyBhcmUKPj4KPj4gaW5z
-dGFsbGVkIG9uIHlvdXIgaG9zdCBzeXN0ZW0gYW5kIG9uIHdoaWNoIGRpc3RyaWJ1dGlvbiBpcyB0
-aGlzPwo+Cj4KPiBJIG9ubHkgaGF2ZSBQeXRob24gMi42Ogo+Cj4gJCBweXRob248dGFiPgo+IHB5
-dGhvbiAgICAgICAgICAgIHB5dGhvbjIgICAgICAgICAgIHB5dGhvbjIuNiAgICAgICAgIHB5dGhv
-bjIuNi1jb25maWcKPiBweXRob24tY29uZmlnCj4KPiAkIHB5dGhvbgo+Cj4gcHl0aG9uCj4gUHl0
-aG9uIDIuNi42IChyMjY2Ojg0MjkyLCBKYW4gMjIgMjAxNCwgMDU6MDY6NDkpCj4KPiAkIGNhdCAv
-ZXRjL3JlZGhhdC1yZWxlYXNlCj4gU2NpZW50aWZpYyBMaW51eCByZWxlYXNlIDYuNSAoQ2FyYm9u
-KQo+Cj4KPj4gQ2FuIHlvdSBjb25maXJtIHRoZSBfX2Z1dHVyZV9fLnB5IGZpbGUgaXMgcHJlc2Vu
-dCB1bmRlcgo+PiAvbGliL3B5dGhvbjIuNy8gb24geW91ciBzeXN0ZW0/Cj4KPgo+IFRoZSBwb2lu
-dCBpcywgSSdtIG5vdCB1c2luZyBhIHB5dGhvbiB2ZXJzaW9uIG5hdGl2ZWx5IGluc3RhbGxlZCBv
-biBteQo+IHN5c3RlbS4gSSBoYXZlIGEgcHl0aG9uMi43IGF2YWlsYWJsZSBhcyBzb29uIGFzIEkg
-ZW50ZXIgdGhlIGVudmlyb25tZW50IGZvcgo+IGNyb3NzLWNvbXBpbGluZy4KPgo+ICQgcHl0aG9u
-Mi43Cj4gUHl0aG9uIDIuNy4zIChkZWZhdWx0LCBBdWcgIDIgMjAxMywgMjA6Mzc6MTApCj4gW0dD
-QyA0LjcuMl0gb24gbGludXgyCj4KPiAkIHdoaWNoIHB5dGhvbjIuNwo+IC9vcHQvZWxkay9wb3dl
-cnBjL3N5c3Jvb3RzL2k2ODYtZWxkay1saW51eC91c3IvYmluL3B5dGhvbjIuNwo+Cj4gYW5kIFBZ
-VEhPTj1weXRob24yLjcgaXMgd2hhdCBJIHNwZWNpZmllZCBhdCB0aGUgY29uZmlndXJlIHBoYXNl
-Cj4gKHNlZSBteSBwcmV2aW91cyBlbWFpbCBhdCB0aGUgYm90dG9tKS4KPiBCdXQgdGhpcyBkb2Vz
-bid0IHNlZW0gdG8gaGVscC4KCk1ha2Ugc3VyZSB5b3UgYWxzbyBzZXQgdGhlIFBZVEhPTlBBVEgg
-dmFyaWFibGUgdG8gc2VhcmNoIGZvciB0aGUKdGFyZ2V0J3MgUHl0aG9uIG1vZHVsZXMuCgpSZWdh
-cmRzLApKw6lyw6ltaWUKCj4KPiBUaGFuayB5b3UsCj4gR2VybGFuZG8KPgo+Cj4+IFRoYW5rcywK
-Pj4gSsOpcsOpbWllCj4+Cj4+PiBJIGJlbGlldmUgdGhlIHdyb25nIHB5dGhvbiB2ZXJzaW9uIGlz
-IGNhbGxlZCAoInB5dGhvbiIgaW5zdGVhZCBvZgo+Pj4gInB5dGhvbjIuNyIpLCBhcyB0aGUgZmly
-c3QgbGluZSBvZiB0b29scy9nZW4tdHAgcmVhZHM6Cj4+Pgo+Pj4gIyEvdXNyL2Jpbi9lbnYgcHl0
-aG9uCj4+Pgo+Pj4gTm90aWNlIGhvdyBJIGV4cGxpY2l0bHkgc2V0IHRoZSBweXRob24gdmVyc2lv
-biBpbiBteSBjb25maWd1cmUgc2NyaXB0Ogo+Pj4KPj4+IGFjX2N2X2hlYWRlcl9saW51eF9wZXJm
-X2V2ZW50X2g9bm8gUFlUSE9OPXB5dGhvbjIuNyAuL2NvbmZpZ3VyZQo+Pj4gLS10YXJnZXQ9cG93
-ZXJwYy1saW51eCAtLWhvc3Q9cG93ZXJwYy1saW51eCAtLWJ1aWxkPWk2ODYtbGludXgKPj4+IC0t
-d2l0aC1saWJ0b29sLXN5c3Jvb3Q9L29wdC9lbGRrL3Bvd2VycGMvc3lzcm9vdHMvcG93ZXJwYy1s
-aW51eAo+Pj4gLS1wcmVmaXg9L3Vzcgo+Pj4KPj4+IE1BS0VGTEFHUz0gJiYgREVTVERJUj0vb3B0
-L2VsZGsvcG93ZXJwYy9zeXNyb290cy9wb3dlcnBjLWxpbnV4IG1ha2UgYWxsCj4+PiBpbnN0YWxs
-IGluc3RhbGwtc3RyaXAgcGtnY29uZmlnZGlyPS90bXAgcGtnY29uZmlnX0RBVEE9Cj4+Pgo+Pj4g
-V2hpY2ggZG9lc24ndCBzZWVtIHRvIGhlbHAgaW4gdGhpcyBjYXNlIHRob3VnaC4KPj4+IEFueSBp
-ZGVhIGhvdyB0byBmaXggdGhpcz8KPj4+Cj4+PiBJIHRlbXBvcmFyaWx5IHRyaWVkIHBhdGNoaW5n
-Cj4+PiAtIyEvdXNyL2Jpbi9lbnYgcHl0aG9uCj4+PiArIyEvdXNyL2Jpbi9lbnYgcHl0aG9uMi43
-Cj4+Pgo+Pj4gd2hpY2ggcGFydGlhbGx5IHNvbHZlcyBteSBwcm9ibGVtOyBhcyBhIG1hdHRlciBv
-ZiBmYWN0LCBJIGdldCB0aGlzIG5ldwo+Pj4gZXJyb3I6Cj4+Pgo+Pj4gICAgRmlsZSAiLi4vLi4v
-Li4vdG9vbHMvbHR0bmctZ2VuLXRwIiwgbGluZSAyNCwgaW4gPG1vZHVsZT4KPj4+ICAgICAgaW1w
-b3J0IHN1YnByb2Nlc3MKPj4+IEltcG9ydEVycm9yOiBObyBtb2R1bGUgbmFtZWQgc3VicHJvY2Vz
-cwo+Pj4KPj4+IHdoaWNoIGlzIGEgc29td2hhdCBkaWZmZXJlbnQgaXNzdWUsIGFzIEknbSBub3cg
-cnVubmluZyBweXRob24yLjcgZnJvbSB0aGUKPj4+IHN5c3Jvb3Qgb2YgbXkgY3Jvc3MtY29tcGls
-ZXIgZW52aXJvbm1lbnQgKHdoaWNoIGRvZXNuJ3QgYXBwYXJlbnRseSBoYXZlCj4+PiBzdWJwcm9j
-ZXNzLnB5KS4KPj4+Cj4+PiAkIHdoaWNoIHB5dGhvbjIuNwo+Pj4gL29wdC9lbGRrL3Bvd2VycGMv
-c3lzcm9vdHMvaTY4Ni1lbGRrLWxpbnV4L3Vzci9iaW4vcHl0aG9uMi43Cj4+Pgo+Pj4gQW55IHN1
-Z2dlc3Rpb25zIGhlcmU/Cj4+PiBFdmVuIHRob3VnaCBpdCBtaWdodCBsb29rIGxpa2UgdGhlIGVh
-c2llc3Qgc29sdXRpb24sIEknZCByYXRoZXIgbm90Cj4+PiBpbnN0YWxsCj4+PiBhIG5hdGl2ZSAy
-LjcgKG9yIGhpZ2hlcikgcHl0aG9uIHZlcnNpb24gb24gbXkgYnVpbGQgbWFjaGluZS4KPj4+Cj4+
-PiBUaGFuayB5b3UhCj4+PiBHZXJsYW5kbwo+Pj4KPj4+IF9fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fCj4+PiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4+PiBs
-dHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4+PiBodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1i
-aW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKPj4KPj4KPj4KPj4KPgoKCgotLSAKSsOpcsOp
-bWllIEdhbGFybmVhdQpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCgpfX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFp
-bGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9y
-Zy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+--===============1513492503==
+Content-Type: multipart/alternative; boundary=047d7bd7649ed02a3e04f93c4077
+
+--047d7bd7649ed02a3e04f93c4077
+Content-Type: text/plain; charset=UTF-8
+
+Thanks for your detailed responses :)
+Actually i will begin by taking my own trace that i will configure it in
+advance ( same event type , and i will add the different event context that
+i need ) .
+It's my first time to develop with python and i don't really know the
+architecture of babeltrace , So can you help me and tell me how to proceed
+to filter my data from CTF to the output Format that i will choose ?
+I'm only interested on kernel space tracing .
+
+
+2014-05-08 17:29 GMT-04:00 Jessica Foest <jessica.foest@gmail.com>:
+
+> i work only on kernel space event .
+>
+>
+> 2014-05-08 17:10 GMT-04:00 Jessica Foest <jessica.foest@gmail.com>:
+>
+> Thanks for your detailed responses :)
+>> Actually i will begin by taking my own trace that i will configure it in
+>> advance ( same event type , and i will add the different event context that
+>> i need ) .
+>> It's my first time to develop with python and i don't really know the
+>> architecture of babeltrace , So can you help me and tell me how to proceed
+>> to filter my data from CTF to the output Format that i will choose ?
+>>
+>>
+>> 2014-05-08 11:53 GMT-04:00 Alexandre Montplaisir <alexmonthy@voxpopuli.im
+>> >:
+>>
+>>
+>>>  To avoid doing a complete first pass of the trace, you can just
+>>>> iterate on the event types as described in the metadata, and take note
+>>>> of all the possible field you can find in the trace. Then, during your
+>>>> only pass, you already know all your "columns".
+>>>>
+>>>
+>>> That's true. Although right now TMF doesn't have an API to ask a trace
+>>> "give me all the event types you have", other than just reading the trace ;)
+>>>
+>>> wrt CTF, it's possible to have events in the metadata that don't
+>>> actually show up in the trace. But that's not really a problem, at worst
+>>> you'd end up with empty columns.
+>>>
+>>
+>>
+>
+
+--047d7bd7649ed02a3e04f93c4077
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><span style=3D"font-size:13px;font-family:arial,sans-serif=
+">Thanks for your detailed responses :)</span><div style=3D"font-size:13px;=
+font-family:arial,sans-serif">Actually i will begin by taking my own trace =
+that i will configure it in advance ( same event type , and i will add the =
+different event context that i need ) .</div>
+<div style=3D"font-size:13px;font-family:arial,sans-serif">It&#39;s my firs=
+t time to develop with python and i don&#39;t really know the architecture =
+of babeltrace , So can you help me and tell me how to proceed to filter my =
+data from CTF to the output Format that i will choose ?=C2=A0</div>
+<div style=3D"font-size:13px;font-family:arial,sans-serif">I&#39;m only int=
+erested on kernel space tracing .</div></div><div class=3D"gmail_extra"><br=
+><br><div class=3D"gmail_quote">2014-05-08 17:29 GMT-04:00 Jessica Foest <s=
+pan dir=3D"ltr">&lt;<a href=3D"mailto:jessica.foest@gmail.com" target=3D"_b=
+lank">jessica.foest@gmail.com</a>&gt;</span>:<br>
+<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
+x #ccc solid;padding-left:1ex"><div dir=3D"ltr">i work only on kernel space=
+ event .</div><div class=3D"gmail_extra"><br><br><div class=3D"gmail_quote"=
+>2014-05-08 17:10 GMT-04:00 Jessica Foest <span dir=3D"ltr">&lt;<a href=3D"=
+mailto:jessica.foest@gmail.com" target=3D"_blank">jessica.foest@gmail.com</=
+a>&gt;</span>:<div>
+<div class=3D"h5"><br>
+<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
+x #ccc solid;padding-left:1ex"><div dir=3D"ltr">Thanks for your detailed re=
+sponses :)<div>Actually i will begin by taking my own trace that i will con=
+figure it in advance ( same event type , and i will add the different event=
+ context that i need ) .</div>
+
+
+<div>It&#39;s my first time to develop with python and i don&#39;t really k=
+now the architecture of babeltrace , So can you help me and tell me how to =
+proceed to filter my data from CTF to the output Format that i will choose =
+?=C2=A0</div>
+
+
+</div><div class=3D"gmail_extra"><br><br><div class=3D"gmail_quote">2014-05=
+-08 11:53 GMT-04:00 Alexandre Montplaisir <span dir=3D"ltr">&lt;<a href=3D"=
+mailto:alexmonthy@voxpopuli.im" target=3D"_blank">alexmonthy@voxpopuli.im</=
+a>&gt;</span>:<div>
+
+<div><br>
+<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
+x #ccc solid;padding-left:1ex"><div><br>
+<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
+x #ccc solid;padding-left:1ex">
+To avoid doing a complete first pass of the trace, you can just<br>
+iterate on the event types as described in the metadata, and take note<br>
+of all the possible field you can find in the trace. Then, during your<br>
+only pass, you already know all your &quot;columns&quot;.<br>
+</blockquote>
+<br></div>
+That&#39;s true. Although right now TMF doesn&#39;t have an API to ask a tr=
+ace &quot;give me all the event types you have&quot;, other than just readi=
+ng the trace ;)<br>
+<br>
+wrt CTF, it&#39;s possible to have events in the metadata that don&#39;t ac=
+tually show up in the trace. But that&#39;s not really a problem, at worst =
+you&#39;d end up with empty columns.<br>
+</blockquote></div></div></div><br></div>
+</blockquote></div></div></div><br></div>
+</blockquote></div><br></div>
+
+--047d7bd7649ed02a3e04f93c4077--
+
+
+--===============1513492503==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1513492503==--
