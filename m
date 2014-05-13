@@ -1,19 +1,19 @@
-From: Gerlando Falauto <gerlando.falauto@keymile.com>
-Subject: Re: [PATCH] tracef: add extern "C" wrapper
-Date: Tue, 13 May 2014 15:52:47 +0200
-Message-ID: <537223AF.5060403__17880.8181816295$1399989235$gmane$org@keymile.com>
-References: <1399973626-6405-1-git-send-email-gerlando.falauto@keymile.com>
- <453977100.15626.1399988508324.JavaMail.zimbra@efficios.com>
+From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
+ <jeremie.galarneau@efficios.com>
+Subject: [PATCH lttng-tools] Docs: Add load and save sections to
+	the lttng.1 man page
+Date: Tue, 13 May 2014 12:14:10 -0400
+Message-ID: <1399997650-17503-1-git-send-email-jeremie.galarneau__40018.2472113103$1399997743$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-de.keymile.com ([195.8.104.250])
+Received: from mail-ve0-f181.google.com ([209.85.128.181])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <prvs=0210a591ee=gerlando.falauto@keymile.com>)
- id 1WkD8Z-0004Jp-Us
- for lttng-dev@lists.lttng.org; Tue, 13 May 2014 09:53:03 -0400
-In-Reply-To: <453977100.15626.1399988508324.JavaMail.zimbra@efficios.com>
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1WkFLO-0005AG-PD
+ for lttng-dev@lists.lttng.org; Tue, 13 May 2014 12:14:24 -0400
+Received: by mail-ve0-f181.google.com with SMTP id pa12so723810veb.40
+ for <lttng-dev@lists.lttng.org>; Tue, 13 May 2014 09:14:13 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,79 +22,47 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
-
-On 05/13/2014 03:41 PM, Mathieu Desnoyers wrote:
-> Sorry, I missed your patch and already committed a different
-> fix. Please let me know if my fix has any issue.
->
-> We usually encompass the entire header file (except #include)
-> with extern C by the way.
-
-Yes, I figured encompassing the #include would not be a good idea, 
-that's why I changed it afterwards. But the first fix was working for me 
-just as well.
-The rest of the file is just a #define so it doesn't really make any 
-difference.
-
-It's all up to you I believe.
-
-Thank you,
-Gerlando
-
->
-> Thanks,
->
-> Mathieu
->
-> ----- Original Message -----
->> From: "Gerlando Falauto" <gerlando.falauto@keymile.com>
->> To: lttng-dev@lists.lttng.org
->> Cc: "Gerlando Falauto" <gerlando.falauto@keymile.com>
->> Sent: Tuesday, May 13, 2014 5:33:46 AM
->> Subject: [lttng-dev] [PATCH] tracef: add extern "C" wrapper
->>
->> Add an extern "C" wrapper so that tracef.h can be included
->> (and the tracef() function can be used) from C++ files, too.
->>
->> Signed-off-by: Gerlando Falauto <gerlando.falauto@keymile.com>
->> ---
->>   include/lttng/tracef.h | 8 ++++++++
->>   1 file changed, 8 insertions(+)
->>
->> diff --git a/include/lttng/tracef.h b/include/lttng/tracef.h
->> index 16a984b..45d0587 100644
->> --- a/include/lttng/tracef.h
->> +++ b/include/lttng/tracef.h
->> @@ -25,9 +25,17 @@
->>
->>   #include <lttng/lttng-ust-tracef.h>
->>
->> +#ifdef __cplusplus
->> +extern "C" {
->> +#endif
->> +
->>   extern
->>   void _lttng_ust_tracef(const char *fmt, ...);
->>
->> +#ifdef __cplusplus
->> +}
->> +#endif
->> +
->>   #define tracef(fmt, ...)						\
->>   	do {								\
->>   		STAP_PROBEV(tracepoint_lttng_ust_tracef, event, ## __VA_ARGS__); \
->> --
->> 1.8.0.1
->>
->>
->> _______________________________________________
->> lttng-dev mailing list
->> lttng-dev@lists.lttng.org
->> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->>
->
+U2lnbmVkLW9mZi1ieTogSsOpcsOpbWllIEdhbGFybmVhdSA8amVyZW1pZS5nYWxhcm5lYXVAZWZm
+aWNpb3MuY29tPgotLS0KIGRvYy9tYW4vbHR0bmcuMSB8IDYwICsrKysrKysrKysrKysrKysrKysr
+KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKwogMSBmaWxlIGNoYW5nZWQsIDYw
+IGluc2VydGlvbnMoKykKCmRpZmYgLS1naXQgYS9kb2MvbWFuL2x0dG5nLjEgYi9kb2MvbWFuL2x0
+dG5nLjEKaW5kZXggOWY5NWE4YS4uZDQ5YTViMiAxMDA2NDQKLS0tIGEvZG9jL21hbi9sdHRuZy4x
+CisrKyBiL2RvYy9tYW4vbHR0bmcuMQpAQCAtNzM2LDYgKzczNiw2MCBAQCBMaXN0IGF2YWlsYWJs
+ZSBkb21haW4ocykKIC5QUAogCiAuUFAKK1xmQmxvYWRcZlAgW09QVElPTlNdIFtOQU1FXQorLlJT
+CitMb2FkIHRyYWNpbmcgc2Vzc2lvbiBjb25maWd1cmF0aW9uCisKK0lmIE5BTUUgaXMgb21pdHRl
+ZCwgYWxsIHNlc3Npb24gY29uZmlndXJhdGlvbnMgZm91bmQgaW4gYm90aCB0aGUgdXNlcidzIHNl
+c3Npb24KK2NvbmZpZ3VyYXRpb24gZGlyZWN0b3J5IGFuZCB0aGUgc3lzdGVtIHNlc3Npb24gY29u
+ZmlndXJhdGlvbiBkaXJlY3Rvcnkgd2lsbCBiZQorbG9hZGVkLgorCisuQiBPUFRJT05TOgorCisu
+VFAKKy5CUiAiXC1oLCBcLVwtaGVscCIKK1Nob3cgc3VtbWFyeSBvZiBwb3NzaWJsZSBvcHRpb25z
+IGFuZCBjb21tYW5kcy4KKy5UUAorLkJSICJcLWEsIFwtXC1hbGwiCitMb2FkIGFsbCBzZXNzaW9u
+IGNvbmZpZ3VyYXRpb25zIChkZWZhdWx0KS4KKy5UUAorLkJSICJcLWksIFwtXC1pbnB1dC1wYXRo
+IFBBVEgiCitTcGVjaWZ5IHRoZSBpbnB1dCBwYXRoIGZvciBzZXNzaW9uIGNvbmZpZ3VyYXRpb25z
+LgorLlRQCisuQlIgIlwtZiwgLVwtZm9yY2UiCitPdmVyd3JpdGUgY3VycmVudCBzZXNzaW9uIGNv
+bmZpZ3VyYXRpb24ocykgaWYgYSBzZXNzaW9uIG9mIHRoZSBzYW1lIG5hbWUgYWxyZWFkeQorZXhp
+c3RzLgorLlJFCisuUFAKKworLlBQCitcZkJzYXZlXGZQIFtPUFRJT05TXSBbU0VTU0lPTl0KKy5S
+UworU2F2ZSB0cmFjaW5nIHNlc3Npb24gY29uZmlndXJhdGlvbgorCitJZiBTRVNTSU9OIGlzIG9t
+aXR0ZWQsIGFsbCBzZXNzaW9uIGNvbmZpZ3VyYXRpb25zIHdpbGwgYmUgc2F2ZWQgdG8KK2luZGl2
+aWR1YWwgXGZCLmx0dG5nXGZQIGZpbGVzIHVuZGVyIHRoZSB1c2VyJ3Mgc2Vzc2lvbiBjb25maWd1
+cmF0aW9uIGRpcmVjdG9yeS4KK1RoZSBkZWZhdWx0IHNlc3Npb24gY29uZmlndXJhdGlvbiBmaWxl
+IG5hbWluZyBzY2hlbWUgaXMgXGZCU0VTU0lPTi5sdHRuZ1xmUC4KKworLkIgT1BUSU9OUzoKKwor
+LlRQCisuQlIgIlwtaCwgXC1cLWhlbHAiCitTaG93IHN1bW1hcnkgb2YgcG9zc2libGUgb3B0aW9u
+cyBhbmQgY29tbWFuZHMuCisuVFAKKy5CUiAiXC1hLCBcLVwtYWxsIgorU2F2ZSBhbGwgc2Vzc2lv
+biBjb25maWd1cmF0aW9ucyAoZGVmYXVsdCkuCisuVFAKKy5CUiAiXC1vLCBcLVwtb3V0cHV0LXBh
+dGggUEFUSCIKK1NwZWNpZnkgdGhlIG91dHB1dCBwYXRoIGZvciBzZXNzaW9uIGNvbmZpZ3VyYXRp
+b25zIChkZWZhdWx0cyB0bworfi8ubHR0bmcvc2Vzc2lvbnMvKS4KKy5UUAorLkJSICJcLWYsIC1c
+LWZvcmNlIgorT3ZlcndyaXRlIHNlc3Npb24gY29uZmlndXJhdGlvbiBmaWxlcyBpZiBuYW1lcyBj
+bGFzaC4KKy5SRQorLlBQCisKKy5QUAogXGZCc2V0LXNlc3Npb25cZlAgTkFNRSBbT1BUSU9OU10K
+IC5SUwogU2V0IGN1cnJlbnQgc2Vzc2lvbiBuYW1lCkBAIC05ODAsNiArMTAzNCwxMiBAQCBBbGxv
+d3Mgb25lIHRvIHNwZWNpZnkgdGhlIGZ1bGwgc2Vzc2lvbiBkYWVtb24gYmluYXJ5IHBhdGggdG8g
+bHR0bmcgY29tbWFuZCBsaW5lCiB0b29sLiBZb3UgY2FuIGFsc28gdXNlIFwtXC1zZXNzaW9uZC1w
+YXRoIG9wdGlvbiBoYXZpbmcgdGhlIHNhbWUgZWZmZWN0LgogLlBQCiAKKy5QUAorLklQICJMVFRO
+R19TRVNTSU9OX0NPTkZJR19YU0RfUEFUSCIKK1NldCB0aGUgcGF0aCBpbiB3aGljaCB0aGUgXGZC
+c2Vzc2lvbi54c2RcZlAgc2Vzc2lvbiBjb25maWd1cmF0aW9uIHNjaGVtYSBtYXkgYmUKK2ZvdW5k
+LgorLlBQCisKIC5TSCAiU0VFIEFMU08iCiAuQlIgYmFiZWx0cmFjZSgxKSwKIC5CUiBsdHRuZy11
+c3QoMyksCi0tIAoxLjkuMgoKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9y
+ZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1k
+ZXYK
