@@ -1,18 +1,17 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: linking C++ modules against lttng-ust libraries
-Date: Tue, 13 May 2014 13:35:29 +0000 (UTC)
-Message-ID: <203118712.15609.1399988129836.JavaMail.zimbra__7301.6133778312$1399988212$gmane$org@efficios.com>
-References: <5370E082.2060104@keymile.com>
- <CA+jJMxtKdvH_Eu7OdQLuR_ekX1uqCM-fDo6ZSk6ZLXCJUHW-Tw@mail.gmail.com>
+Subject: Re: [PATCH] tracef: add extern "C" wrapper
+Date: Tue, 13 May 2014 13:41:48 +0000 (UTC)
+Message-ID: <453977100.15626.1399988508324.JavaMail.zimbra__42641.9077012271$1399988574$gmane$org@efficios.com>
+References: <1399973626-6405-1-git-send-email-gerlando.falauto@keymile.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1WkCrp-00048I-SI
- for lttng-dev@lists.lttng.org; Tue, 13 May 2014 09:35:44 -0400
-In-Reply-To: <CA+jJMxtKdvH_Eu7OdQLuR_ekX1uqCM-fDo6ZSk6ZLXCJUHW-Tw@mail.gmail.com>
+ (envelope-from <compudj@efficios.com>) id 1WkCxs-0004Ci-Lj
+ for lttng-dev@lists.lttng.org; Tue, 13 May 2014 09:41:58 -0400
+In-Reply-To: <1399973626-6405-1-git-send-email-gerlando.falauto@keymile.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -25,55 +24,64 @@ To: Gerlando Falauto <gerlando.falauto@keymile.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJKw6lyw6ltaWUgR2FsYXJuZWF1
-IiA8amVyZW1pZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29tPgo+IFRvOiAiR2VybGFuZG8gRmFsYXV0
-byIgPGdlcmxhbmRvLmZhbGF1dG9Aa2V5bWlsZS5jb20+Cj4gQ2M6IGx0dG5nLWRldkBsaXN0cy5s
-dHRuZy5vcmcKPiBTZW50OiBNb25kYXksIE1heSAxMiwgMjAxNCAxOjQzOjA2IFBNCj4gU3ViamVj
-dDogUmU6IFtsdHRuZy1kZXZdIGxpbmtpbmcgQysrIG1vZHVsZXMgYWdhaW5zdCBsdHRuZy11c3Qg
-bGlicmFyaWVzCj4gCj4gT24gTW9uLCBNYXkgMTIsIDIwMTQgYXQgMTA6NTMgQU0sIEdlcmxhbmRv
-IEZhbGF1dG8KPiA8Z2VybGFuZG8uZmFsYXV0b0BrZXltaWxlLmNvbT4gd3JvdGU6Cj4gPiBIaSwK
-PiA+Cj4gPiBJIGFtIHRyeWluZyB0byBsaW5rIGEgQysrIGFwcGxpY2F0aW9uIGFnYWluc3QgbHR0
-bmctdXN0LCB3aXRoIGEgc2ltcGxlIHRlc3QKPiA+IGNhc2UsIGFuZCBJIGdldCB0aGUgZm9sbG93
-aW5nIGVycm9yIG1lc3NhZ2UgdXBvbiBsaW5raW5nOgo+ID4KPiA+IG1haW4uY3BwOjEwOTogdW5k
-ZWZpbmVkIHJlZmVyZW5jZSB0byBgX2x0dG5nX3VzdF90cmFjZWYoY2hhciBjb25zdCosIC4uLikn
-Cj4gPgo+ID4gd2hlcmUgbWFpbi5jcHAgcmVhZHM6Cj4gPiAuLi4KPiA+IDEzOiAjaW5jbHVkZSA8
-bHR0bmcvdHJhY2VmLmg+Cj4gPiAuLi4KPiA+IDEwOTogdHJhY2VmKCJteSBtZXNzYWdlLCB0aGlz
-IGludGVnZXIgJWQiLCAxMjM0KTsKPiA+IC4uLgo+ID4KPiA+IFRoZSBmb2xsb3dpbmcgc2VlbXMg
-dG8gZml4IG15IHByb2JsZW06Cj4gPgo+ID4gZGlmZiAtLWdpdCBhL2luY2x1ZGUvbHR0bmcvdHJh
-Y2VmLmggYi9pbmNsdWRlL2x0dG5nL3RyYWNlZi5oCj4gPiBpbmRleCAxNmE5ODRiLi45ODMzOGQ4
-IDEwMDY0NAo+ID4gLS0tIGEvaW5jbHVkZS9sdHRuZy90cmFjZWYuaAo+ID4gKysrIGIvaW5jbHVk
-ZS9sdHRuZy90cmFjZWYuaAo+ID4gQEAgLTIzLDYgKzIzLDEwIEBACj4gPiAgICogU09GVFdBUkUu
-Cj4gPiAgICovCj4gPgo+ID4gKyNpZmRlZiBfX2NwbHVzcGx1cwo+ID4gK2V4dGVybiAiQyIgewo+
-ID4gKyNlbmRpZgo+ID4gKwo+ID4gICNpbmNsdWRlIDxsdHRuZy9sdHRuZy11c3QtdHJhY2VmLmg+
-Cj4gPgo+ID4gIGV4dGVybgo+ID4gQEAgLTM1LDQgKzM5LDggQEAgdm9pZCBfbHR0bmdfdXN0X3Ry
-YWNlZihjb25zdCBjaGFyICpmbXQsIC4uLik7Cj4gPiAgICAgICAgICAgICAgICAgICAgICAgICBf
-bHR0bmdfdXN0X3RyYWNlZihmbXQsICMjIF9fVkFfQVJHU19fKTsgICAgICAgICBcCj4gPiAgICAg
-ICAgIH0gd2hpbGUgKDApCj4gPgo+ID4gKyNpZmRlZiBfX2NwbHVzcGx1cwo+ID4gK30KPiA+ICsj
-ZW5kaWYKPiA+ICsKPiA+ICAjZW5kaWYgLyogX0xUVE5HX1VTVF9UUkFDRUZfSCAqLwo+ID4KPiA+
-IEJ1dCBzaW5jZSBJJ3ZlIG5vdGljZWQgaW4gdGhlIGhpc3RvcnkgdGhhdCB0aGlzIHdob2xlIEMg
-Z3VhcmQgaGFzIGJlZW4KPiA+IHJld29ya2VkIHNldmVyYWwgdGltZXMgbGF0ZWx5LCBJIGhhdmUg
-bm8gaWRlYSB3aGV0aGVyIHRoaXMgaXMgYSBnb29kIGlkZWEKPiA+IG9yCj4gPiBub3QuCj4gPiBE
-b24ndCBrbm93IGlmIHRoaXMgaGFzIGFueSByZWxldmFuY2Ugb3IgYW55dGhpbmcsIGJ1dCBib3Ro
-IGx0dG5nLXVzdCAoYWxvbmcKPiA+IHdpdGggaXRzIGRlcGVuZGVuY2llcykgYW5kIG15IHRlc3Qg
-YXBwbGljYXRpb24gYXJlIGJlaW5nIGNyb3NzLWNvbXBpbGVkLgo+ID4KPiA+IEhpbnRzPwo+ID4K
-PiAKPiBJbmRlZWQsIHRoYXQgZmlsZSBzZWVtcyB0byBiZSBtaXNzaW5nIGd1YXJkcy4gWW91ciBi
-ZXN0IGJldCB3b3VsZCBiZQo+IHRvIHN1Ym1pdCBhIHBhdGNoIG9yIG9wZW4gYSBidWcgYWdhaW5z
-dCBsdHRuZy11c3Qgb24gYnVncy5sdHRuZy5vcmcuCgpGaXggcHVzaGVkIGludG8gbWFzdGVyLCBw
-bGVhc2UgY29uZmlybSB0aGF0IGl0IGZpeGVzIHlvdXIgaXNzdWU6Cgpjb21taXQgODY2ZjI3Njdm
-NjcxZmZiYmZmMmMwNTExOTY0ZjVhOWE2NjM1ODE4NApBdXRob3I6IE1hdGhpZXUgRGVzbm95ZXJz
-IDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+CkRhdGU6ICAgVHVlIE1heSAxMyAwOToz
-NDowMyAyMDE0IC0wNDAwCgogICAgRml4OiB0cmFjZWYuaDogYWRkIG1pc3NpbmcgYysrIGd1YXJk
-CiAgICAKICAgIFNpZ25lZC1vZmYtYnk6IE1hdGhpZXUgRGVzbm95ZXJzIDxtYXRoaWV1LmRlc25v
-eWVyc0BlZmZpY2lvcy5jb20+CgpUaGFua3MsCgpNYXRoaWV1CgoKPiAKPiBUaGFua3MsCj4gSsOp
-csOpbWllCj4gCj4gPiBUaGFuayB5b3UsCj4gPiBHZXJsYW5kbwo+ID4KPiA+IF9fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gPiBsdHRuZy1kZXYgbWFpbGlu
-ZyBsaXN0Cj4gPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gPiBodHRwOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKPiAKPiAKPiAKPiAtLQo+
-IErDqXLDqW1pZSBHYWxhcm5lYXUKPiBFZmZpY2lPUyBJbmMuCj4gaHR0cDovL3d3dy5lZmZpY2lv
-cy5jb20KPiAKPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-Xwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4g
-aHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2
-Cj4gCgotLSAKTWF0aGlldSBEZXNub3llcnMKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmlj
-aW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
-bHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9s
-aXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+Sorry, I missed your patch and already committed a different
+fix. Please let me know if my fix has any issue.
+
+We usually encompass the entire header file (except #include)
+with extern C by the way.
+
+Thanks,
+
+Mathieu
+
+----- Original Message -----
+> From: "Gerlando Falauto" <gerlando.falauto@keymile.com>
+> To: lttng-dev@lists.lttng.org
+> Cc: "Gerlando Falauto" <gerlando.falauto@keymile.com>
+> Sent: Tuesday, May 13, 2014 5:33:46 AM
+> Subject: [lttng-dev] [PATCH] tracef: add extern "C" wrapper
+> 
+> Add an extern "C" wrapper so that tracef.h can be included
+> (and the tracef() function can be used) from C++ files, too.
+> 
+> Signed-off-by: Gerlando Falauto <gerlando.falauto@keymile.com>
+> ---
+>  include/lttng/tracef.h | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/include/lttng/tracef.h b/include/lttng/tracef.h
+> index 16a984b..45d0587 100644
+> --- a/include/lttng/tracef.h
+> +++ b/include/lttng/tracef.h
+> @@ -25,9 +25,17 @@
+>  
+>  #include <lttng/lttng-ust-tracef.h>
+>  
+> +#ifdef __cplusplus
+> +extern "C" {
+> +#endif
+> +
+>  extern
+>  void _lttng_ust_tracef(const char *fmt, ...);
+>  
+> +#ifdef __cplusplus
+> +}
+> +#endif
+> +
+>  #define tracef(fmt, ...)						\
+>  	do {								\
+>  		STAP_PROBEV(tracepoint_lttng_ust_tracef, event, ## __VA_ARGS__); \
+> --
+> 1.8.0.1
+> 
+> 
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> 
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
