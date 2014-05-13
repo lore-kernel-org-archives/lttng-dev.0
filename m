@@ -1,17 +1,17 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH] tracef: add extern "C" wrapper
-Date: Tue, 13 May 2014 13:41:48 +0000 (UTC)
-Message-ID: <453977100.15626.1399988508324.JavaMail.zimbra__42641.9077012271$1399988574$gmane$org@efficios.com>
-References: <1399973626-6405-1-git-send-email-gerlando.falauto@keymile.com>
+Subject: Re: [lttng-tools] build failure on armel (debian)
+Date: Tue, 13 May 2014 13:46:45 +0000 (UTC)
+Message-ID: <1792077382.15631.1399988805202.JavaMail.zimbra__38380.8253486224$1399988874$gmane$org@efficios.com>
+References: <20140506151403.GD11105@helmut>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1WkCxs-0004Ci-Lj
- for lttng-dev@lists.lttng.org; Tue, 13 May 2014 09:41:58 -0400
-In-Reply-To: <1399973626-6405-1-git-send-email-gerlando.falauto@keymile.com>
+ (envelope-from <compudj@efficios.com>) id 1WkD2h-0004GD-Qh
+ for lttng-dev@lists.lttng.org; Tue, 13 May 2014 09:47:00 -0400
+In-Reply-To: <20140506151403.GD11105@helmut>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,68 +20,50 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Gerlando Falauto <gerlando.falauto@keymile.com>
+To: Jon Bernard <jbernard@debian.org>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Sorry, I missed your patch and already committed a different
-fix. Please let me know if my fix has any issue.
-
-We usually encompass the entire header file (except #include)
-with extern C by the way.
-
-Thanks,
-
-Mathieu
-
------ Original Message -----
-> From: "Gerlando Falauto" <gerlando.falauto@keymile.com>
-> To: lttng-dev@lists.lttng.org
-> Cc: "Gerlando Falauto" <gerlando.falauto@keymile.com>
-> Sent: Tuesday, May 13, 2014 5:33:46 AM
-> Subject: [lttng-dev] [PATCH] tracef: add extern "C" wrapper
-> 
-> Add an extern "C" wrapper so that tracef.h can be included
-> (and the tracef() function can be used) from C++ files, too.
-> 
-> Signed-off-by: Gerlando Falauto <gerlando.falauto@keymile.com>
-> ---
->  include/lttng/tracef.h | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/include/lttng/tracef.h b/include/lttng/tracef.h
-> index 16a984b..45d0587 100644
-> --- a/include/lttng/tracef.h
-> +++ b/include/lttng/tracef.h
-> @@ -25,9 +25,17 @@
->  
->  #include <lttng/lttng-ust-tracef.h>
->  
-> +#ifdef __cplusplus
-> +extern "C" {
-> +#endif
-> +
->  extern
->  void _lttng_ust_tracef(const char *fmt, ...);
->  
-> +#ifdef __cplusplus
-> +}
-> +#endif
-> +
->  #define tracef(fmt, ...)						\
->  	do {								\
->  		STAP_PROBEV(tracepoint_lttng_ust_tracef, event, ## __VA_ARGS__); \
-> --
-> 1.8.0.1
-> 
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> 
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJKb24gQmVybmFyZCIgPGpiZXJu
+YXJkQGRlYmlhbi5vcmc+Cj4gVG86IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBTZW50OiBU
+dWVzZGF5LCBNYXkgNiwgMjAxNCAxMToxNDowMyBBTQo+IFN1YmplY3Q6IFtsdHRuZy1kZXZdIFts
+dHRuZy10b29sc10gYnVpbGQgZmFpbHVyZSBvbiBhcm1lbCAoZGViaWFuKQo+IAo+IEhleSBndXlz
+LAo+IAo+IFRoaXMgYnVnwrkgd2FzIGZpbGVkIHJlY2VudGx5Ogo+IAo+ICAgICB5b3VyIHBhY2th
+Z2Ugbm8gbG9uZ2VyIGJ1aWxkcyBvbiB0aGUgYXJtZWwgYnVpbGRkczoKPiAgICAgaHR0cHM6Ly9i
+dWlsZGQuZGViaWFuLm9yZy9zdGF0dXMvZmV0Y2gucGhwP3BrZz1sdHQtY29udHJvbCZhcmNoPWFy
+bWVsJnZlcj0yLjQuMS0xJnN0YW1wPTEzOTcwNjQ0MTkKPiAKPiAgICAgPiAgIENDICAgICAgIHJj
+dWxmaGFzaC5sbwo+ICAgICA+IC90bXAvY2NCRzg5dmguczogQXNzZW1ibGVyIG1lc3NhZ2VzOgo+
+ICAgICA+IC90bXAvY2NCRzg5dmguczoxMTA1OiBFcnJvcjogc2VsZWN0ZWQgcHJvY2Vzc29yIGRv
+ZXMgbm90IHN1cHBvcnQgQVJNCj4gICAgID4gbW9kZSBgZG1iJwo+ICAgICA+IC90bXAvY2NCRzg5
+dmguczoxMjg2OiBFcnJvcjogc2VsZWN0ZWQgcHJvY2Vzc29yIGRvZXMgbm90IHN1cHBvcnQgQVJN
+Cj4gICAgID4gbW9kZSBgZG1iJwo+ICAgICA+IC90bXAvY2NCRzg5dmguczozMTc1OiBFcnJvcjog
+c2VsZWN0ZWQgcHJvY2Vzc29yIGRvZXMgbm90IHN1cHBvcnQgQVJNCj4gICAgID4gbW9kZSBgZG1i
+Jwo+ICAgICA+IC90bXAvY2NCRzg5dmguczozNzI1OiBFcnJvcjogc2VsZWN0ZWQgcHJvY2Vzc29y
+IGRvZXMgbm90IHN1cHBvcnQgQVJNCj4gICAgID4gbW9kZSBgZG1iJwo+ICAgICA+IC90bXAvY2NC
+Rzg5dmguczozODMzOiBFcnJvcjogc2VsZWN0ZWQgcHJvY2Vzc29yIGRvZXMgbm90IHN1cHBvcnQg
+QVJNCj4gICAgID4gbW9kZSBgZG1iJwo+ICAgICA+IC90bXAvY2NCRzg5dmguczozOTk0OiBFcnJv
+cjogc2VsZWN0ZWQgcHJvY2Vzc29yIGRvZXMgbm90IHN1cHBvcnQgQVJNCj4gICAgID4gbW9kZSBg
+ZG1iJwo+ICAgICA+IC90bXAvY2NCRzg5dmguczo0MzMxOiBFcnJvcjogc2VsZWN0ZWQgcHJvY2Vz
+c29yIGRvZXMgbm90IHN1cHBvcnQgQVJNCj4gICAgID4gbW9kZSBgZG1iJwo+ICAgICA+IC90bXAv
+Y2NCRzg5dmguczo1MjkyOiBFcnJvcjogc2VsZWN0ZWQgcHJvY2Vzc29yIGRvZXMgbm90IHN1cHBv
+cnQgQVJNCj4gICAgID4gbW9kZSBgZG1iJwo+ICAgICA+IG1ha2VbNF06ICoqKiBbcmN1bGZoYXNo
+LmxvXSBFcnJvciAxCj4gCj4gVGhlIHB1YmxpYyBidWlsZGQgdGhhdCBJIGNhbiB1c2UgdG8gdGVz
+dCB0aGlzIGlzIHVucmVhY2hhYmxlIGF0IHRoZQo+IG1vbWVudCwgYnV0IG1heWJlIGEgc29sdXRp
+b24gY2FuIGJlIHJlYWNoZWQgd2l0aG91dCBmdXJ0aGVyIGRlYnVnIGluZm8/Cj4gCj4gVGhlIGJ1
+aWxkIG1hY2hpbmUgaXMgQVJNdjcsIHdoaWNoIHN1cHBvcnRzIGRtYiBJSVVDLCBzbyBJJ20gYSBi
+aXQKPiBwdXp6bGVkIG9uIHRoaXMgb25lLgo+IAo+IEFueSB0aG91Z2h0cz8KClBlcmhhcHMgdGhl
+IGJ1aWxkIGl0c2VsZiBoYXMgYmVlbiBjaGFuZ2VkIHRvIHRhcmdldCBBUk12NiA/CgpTdGFydGlu
+ZyB3aXRoIEFSTXY3LCBkbWIgc2hvdWxkIGJlIHRoZXJlLgoKRm9yIEFSTXY2IHN1cHBvcnQgKGFu
+ZCBsZXNzKSwgdGhlIExpbnV4IGtlcm5lbCBwcm92aWRlcwphIHZEU08gcGFnZSBpbXBsZW1lbnRp
+bmcgX19rdXNlcl9tZW1vcnlfYmFycmllci4gSWYgeW91CnJlYWxseSBuZWVkIHRvIGJ1aWxkIGZv
+ciBBUk12NiwgdGhpcyBtaWdodCBiZSBzb21ldGhpbmcKdG8gbG9vayBpbnRvLgoKSSBndWVzcyB3
+ZSdsbCBuZWVkIG1vcmUgaW5mb3JtYXRpb24gYWJvdXQgeW91ciBidWlsZAp0YXJnZXQuCgpUaGFu
+a3MsCgpNYXRoaWV1Cgo+IAo+IMK5IGh0dHBzOi8vYnVncy5kZWJpYW4ub3JnL2NnaS1iaW4vYnVn
+cmVwb3J0LmNnaT9idWc9NzQ1ODkxCj4gCj4gLS0KPiBKb24KPiAKPiBfX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QK
+PiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2kt
+YmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cj4gCgotLSAKTWF0aGlldSBEZXNub3llcnMK
+RWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRu
+Zy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWls
+bWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
