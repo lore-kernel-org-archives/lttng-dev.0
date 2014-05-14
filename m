@@ -1,19 +1,17 @@
-From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
- <jeremie.galarneau@efficios.com>
-Subject: [PATCH lttng-tools] Fix: Tests should set the
-	LTTNG_SESSION_CONFIG_XSD_PATH variable
-Date: Wed, 14 May 2014 16:52:22 -0400
-Message-ID: <1400100742-18018-1-git-send-email-jeremie.galarneau__41967.8309037865$1400100809$gmane$org@efficios.com>
+From: David Goulet <dgoulet@efficios.com>
+Subject: Re: [PATCH lttng-tools] Fix: Tests should set the
+ LTTNG_SESSION_CONFIG_XSD_PATH variable
+Date: Wed, 14 May 2014 16:53:29 -0400
+Message-ID: <20140514205329.GA6612__13432.4553459466$1400100921$gmane$org@dalia>
+References: <1400100742-18018-1-git-send-email-jeremie.galarneau@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============2120277903=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ig0-f169.google.com ([209.85.213.169])
- by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1WkgAB-0004HZ-L0
- for lttng-dev@lists.lttng.org; Wed, 14 May 2014 16:52:37 -0400
-Received: by mail-ig0-f169.google.com with SMTP id hl10so7652507igb.4
- for <lttng-dev@lists.lttng.org>; Wed, 14 May 2014 13:52:26 -0700 (PDT)
+Received: from ns236805.ip-192-99-35.net ([192.99.35.19]
+ helo=smtp.ini-tech.com) by ltt.polymtl.ca with esmtp (Exim 4.80)
+ (envelope-from <dgoulet@efficios.com>) id 1WkgBH-0004JF-3w
+ for lttng-dev@lists.lttng.org; Wed, 14 May 2014 16:53:44 -0400
+In-Reply-To: <1400100742-18018-1-git-send-email-jeremie.galarneau@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,24 +20,82 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-VGVzdHMgc2hvdWxkIHNldCB0aGUgTFRUTkdfU0VTU0lPTl9DT05GSUdfWFNEX1BBVEggZW52aXJv
-bm1lbnQKdmFyaWFibGUgdG8gdXNlIHRoZSBpbi10cmVlIHNlc3Npb24gY29uZmlndXJhdGlvbiBz
-Y2hlbWEuCgpTaWduZWQtb2ZmLWJ5OiBKw6lyw6ltaWUgR2FsYXJuZWF1IDxqZXJlbWllLmdhbGFy
-bmVhdUBlZmZpY2lvcy5jb20+Ci0tLQogdGVzdHMvdXRpbHMvdXRpbHMuc2ggfCAyICsrCiAxIGZp
-bGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspCgpkaWZmIC0tZ2l0IGEvdGVzdHMvdXRpbHMvdXRp
-bHMuc2ggYi90ZXN0cy91dGlscy91dGlscy5zaAppbmRleCBhMWEyNmQ5Li4yODBjYzQwIDEwMDY0
-NAotLS0gYS90ZXN0cy91dGlscy91dGlscy5zaAorKysgYi90ZXN0cy91dGlscy91dGlscy5zaApA
-QCAtMTY2LDYgKzE2Niw4IEBAIGZ1bmN0aW9uIHN0YXJ0X2x0dG5nX3Nlc3Npb25kKCkKIAlmaQog
-CiAJRElSPSQocmVhZGxpbmsgLWYgJFRFU1RESVIpCisJOiAke0xUVE5HX1NFU1NJT05fQ09ORklH
-X1hTRF9QQVRIPSR7RElSfS8uLi9zcmMvY29tbW9uL2NvbmZpZy99CisJZXhwb3J0IExUVE5HX1NF
-U1NJT05fQ09ORklHX1hTRF9QQVRICiAKIAlpZiBbIC16ICQocGlkb2YgbHQtJFNFU1NJT05EX0JJ
-TikgXTsgdGhlbgogCQkkRElSLy4uL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvJFNFU1NJT05EX0JJ
-TiAtLWJhY2tncm91bmQgLS1jb25zdW1lcmQzMi1wYXRoPSIkRElSLy4uL3NyYy9iaW4vbHR0bmct
-Y29uc3VtZXJkL2x0dG5nLWNvbnN1bWVyZCIgLS1jb25zdW1lcmQ2NC1wYXRoPSIkRElSLy4uL3Ny
-Yy9iaW4vbHR0bmctY29uc3VtZXJkL2x0dG5nLWNvbnN1bWVyZCIKLS0gCjEuOS4yCgoKX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxp
-bmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcv
-Y2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+
+--===============2120277903==
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="rwEMma7ioTxnRzrJ"
+Content-Disposition: inline
+
+
+--rwEMma7ioTxnRzrJ
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Merged!
+
+On 14 May (16:52:22), J=E9r=E9mie Galarneau wrote:
+> Tests should set the LTTNG_SESSION_CONFIG_XSD_PATH environment
+> variable to use the in-tree session configuration schema.
+>=20
+> Signed-off-by: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
+> ---
+>  tests/utils/utils.sh | 2 ++
+>  1 file changed, 2 insertions(+)
+>=20
+> diff --git a/tests/utils/utils.sh b/tests/utils/utils.sh
+> index a1a26d9..280cc40 100644
+> --- a/tests/utils/utils.sh
+> +++ b/tests/utils/utils.sh
+> @@ -166,6 +166,8 @@ function start_lttng_sessiond()
+>  	fi
+> =20
+>  	DIR=3D$(readlink -f $TESTDIR)
+> +	: ${LTTNG_SESSION_CONFIG_XSD_PATH=3D${DIR}/../src/common/config/}
+> +	export LTTNG_SESSION_CONFIG_XSD_PATH
+> =20
+>  	if [ -z $(pidof lt-$SESSIOND_BIN) ]; then
+>  		$DIR/../src/bin/lttng-sessiond/$SESSIOND_BIN --background --consumerd3=
+2-path=3D"$DIR/../src/bin/lttng-consumerd/lttng-consumerd" --consumerd64-pa=
+th=3D"$DIR/../src/bin/lttng-consumerd/lttng-consumerd"
+> --=20
+> 1.9.2
+>=20
+
+--rwEMma7ioTxnRzrJ
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQF8BAEBAgBmBQJTc9fJXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
+ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
+MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02IuIIAISO6zP6ITxhEbEBZcApZurO
+tBpugcvo9zu5l7WdfqkmdGKdHyPwZzEmbAq6QJljHXW6JzvYHdJTnCfdtFqFKM+l
+DDZmFbSq8pmRO4emAqxlPHit1IZk32KAWN6We+2Wi2qeivc9XoeTstLFrGDTp+a/
+zZUj+urz6G40TrkAdgIzvuEQvRl+MeXc8l6iExZduyVL/uyq3ozBY05Aq1d95a/D
+QqrO45e12wc4Ow2u2gkKOkv6hKaVFg7YM3TVfY9rsYy5bRIh3iGb0fiCE+scayXA
+5vKMXxmr7mrXwAyQDlYf933xoqHyYSXrPXBIDyy8QvYU1HqAyuQtva8rI7yw0s0=
+=CQW6
+-----END PGP SIGNATURE-----
+
+--rwEMma7ioTxnRzrJ--
+
+
+--===============2120277903==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============2120277903==--
