@@ -1,20 +1,17 @@
-From: Gerlando Falauto <gerlando.falauto@keymile.com>
-Subject: Re: [PATCH lttng-ust] Fix: Corrected python version
- assumptions in lttng-gen-tp
-Date: Wed, 14 May 2014 16:22:21 +0200
-Message-ID: <53737C1D.4040905__1897.23055013946$1400077420$gmane$org@keymile.com>
-References: <1395671384-24750-1-git-send-email-jderehag@hotmail.com>	<654526496.119.1395756962956.JavaMail.zimbra@efficios.com>	<DUB123-W18FF6C4DAEAEC5A2346C92DD650@phx.gbl>	<5371DA05.60005@keymile.com>
- <CA+jJMxu9F8Juw7K6FQ323swHUJvtH0WH+HMC+2cVVE+_qS1eHA@mail.gmail.com>
+From: Jan Glauber <jan.glauber@gmail.com>
+Subject: [PATCH lttng-tools v3 0/4] Dynamic probe list support
+Date: Wed, 14 May 2014 16:26:28 +0200
+Message-ID: <cover.1400077421.git.jan.glauber__18213.5816933171$1400077708$gmane$org@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-de.keymile.com ([195.8.104.250])
+Received: from mail-ee0-f44.google.com ([74.125.83.44])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <prvs=0211cb4cf8=gerlando.falauto@keymile.com>)
- id 1Wka4j-0001YX-Tr
- for lttng-dev@lists.lttng.org; Wed, 14 May 2014 10:22:36 -0400
-In-Reply-To: <CA+jJMxu9F8Juw7K6FQ323swHUJvtH0WH+HMC+2cVVE+_qS1eHA@mail.gmail.com>
+ (envelope-from <jan.glauber@gmail.com>) id 1Wka9c-0001bx-8K
+ for lttng-dev@lists.lttng.org; Wed, 14 May 2014 10:27:37 -0400
+Received: by mail-ee0-f44.google.com with SMTP id c41so1435992eek.17
+ for <lttng-dev@lists.lttng.org>; Wed, 14 May 2014 07:27:26 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,89 +20,30 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?UTF-8?B?SsOpcsOpbWllIEdhbGFybmVhdQ==?= <jeremie.galarneau@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: dgoulet@efficios.com
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-SGksCgpPbiAwNS8xMy8yMDE0IDA4OjU1IFBNLCBKw6lyw6ltaWUgR2FsYXJuZWF1IHdyb3RlOgo+
-IE9uIFR1ZSwgTWF5IDEzLCAyMDE0IGF0IDQ6MzggQU0sIEdlcmxhbmRvIEZhbGF1dG8KPiA8Z2Vy
-bGFuZG8uZmFsYXV0b0BrZXltaWxlLmNvbT4gd3JvdGU6Cj4+IEhpIEplc3BlciwKPj4KPj4gWy4u
-Ll0KPj4KPj4+IEkgKnRob3VnaHQqIEkgd2FzIHJ1bm5pbmcgb24gcHl0aG9uMi43IGJ1dCBhcyBp
-dCB0dXJucyBvdXQgSSB3YXMgbm90Lgo+Pj4KPj4+IFdoZW4gcmVzb2x2aW5nICJweXRob24iIEkg
-Z2V0IHB5dGhvbjIuNyBidXQgd2hlbiBJIGNoZWNrIHRoZSBleHBsaWNpdAo+Pj4gdmVyc2lvbiBs
-YXlpbmcgYXQgL3Vzci9iaW4vcHl0aG9uIGl0cyBhY3R1YWxseSBhIDIuNCB2ZXJzaW9uIHNvIG5v
-IHdvbmRlciBpdAo+Pj4gd2FzIGZhaWxpbmcuCj4+Pgo+Pj4gQ2hlY2tpbmcgdGhlIFBFUCBmb3Ig
-d2hlbiAiZXhjZXB0IFhYIGFzIHl5IiB3YXMgaW50cm9kdWNlZCBwb2ludHMgdG8gdGhhdAo+Pj4g
-aXQgd2FzIGludHJvZHVjZWQgaW4gcHl0aG9uIDIuNiBzbyBlbnRpcmVseSBteSBtaXN0YWtlLgo+
-Pj4gUmVyYW4gaXQgbm93IHdpdGggdGhlIGEgMi43IHZlcnNpb24gYW5kIGl0IHdvcmtzIGFzIGlu
-dGVuZGVkLgo+Pj4KPj4+IEhvd2V2ZXIsIEkgc3RpbGwgdGhpbmsgeW91IHNob3VsZCBydW4gaXQg
-dGhyb3VnaCBlbnYgYXMgcHJvcG9zZWQgaW4gdGhlCj4+PiBwYXRjaCBhbmQgbm90IHVzZSB0aGUg
-ZXhwbGljaXQgcGF0aCB0byBweXRob24uCj4+Cj4+Cj4+IEkgc3RpbGwgaGF2ZSBzb21lIGlzc3Vl
-cywgZXZlbiB3aXRoIHRoaXMgY2hhbmdlLgo+PiBBcyBhIG1hdHRlciBvZiBmYWN0LCBteSBkZWZh
-dWx0IHB5dGhvbiBpbnN0YWxsYXRpb24gd291bGQgYmUgYSBweXRob24yLjY6Cj4+Cj4+ICQgcHl0
-aG9uCj4+Cj4+IHB5dGhvbgo+PiBQeXRob24gMi42LjYgKHIyNjY6ODQyOTIsIEphbiAyMiAyMDE0
-LCAwNTowNjo0OSkKPj4KPj4gSSdtIGhvd2V2ZXIgY3Jvc3MtY29tcGlsaW5nLCBzbyBJIHNwZWNp
-ZnkgYSBzeXNyb290IGFuZCBJIGV4cGxpY2l0bHkgc2V0IHRoZQo+PiBweXRob24gdmVyc2lvbiBp
-biBteSBjb25maWd1cmUgc2NyaXB0Ogo+Pgo+PiAkIC4gL29wdC9lbGRrL2VsZGtfaW5pdCBwcGNf
-Nnh4ICMgc2V0IHRoZSBlbnYgZm9yIGNyb3NzLWNvbXBpbGluZwo+Pgo+PiAkIHB5dGhvbjIuNwo+
-PiBQeXRob24gMi43LjMgKGRlZmF1bHQsIEF1ZyAgMiAyMDEzLCAyMDozNzoxMCkKPj4gW0dDQyA0
-LjcuMl0gb24gbGludXgyCj4+Cj4+ICQgd2hpY2ggcHl0aG9uMi43Cj4+IC9vcHQvZWxkay9wb3dl
-cnBjL3N5c3Jvb3RzL2k2ODYtZWxkay1saW51eC91c3IvYmluL3B5dGhvbjIuNwo+Pgo+PiAkIGFj
-X2N2X2hlYWRlcl9saW51eF9wZXJmX2V2ZW50X2g9bm8gUFlUSE9OPXB5dGhvbjIuNyAuL2NvbmZp
-Z3VyZQo+PiAtLXRhcmdldD1wb3dlcnBjLWxpbnV4IC0taG9zdD1wb3dlcnBjLWxpbnV4IC0tYnVp
-bGQ9aTY4Ni1saW51eAo+PiAtLXdpdGgtbGlidG9vbC1zeXNyb290PS9vcHQvZWxkay9wb3dlcnBj
-L3N5c3Jvb3RzL3Bvd2VycGMtbGludXgKPj4gLS1wcmVmaXg9L3Vzcgo+Pgo+PiAkIE1BS0VGTEFH
-Uz0gJiYgREVTVERJUj0vb3B0L2VsZGsvcG93ZXJwYy9zeXNyb290cy9wb3dlcnBjLWxpbnV4IG1h
-a2UgYWxsCj4+IGluc3RhbGwgaW5zdGFsbC1zdHJpcCBwa2djb25maWdkaXI9L3RtcCBwa2djb25m
-aWdfREFUQT0KPj4KPj4gVGhpcyBkb2Vzbid0IGhvd2V2ZXIgaGVscCwgYXMgdGhlIHNjcmlwdCB3
-aWxsIGNhbGwgInB5dGhvbiIgZnJvbSB0aGUgY3VycmVudAo+PiBlbnZpcm9ubWVudCAodGhlcmVi
-eSBpZ25vcmluZyB0aGUgUFlUSE9OPSB2YWx1ZSB1c2VkIGJ5IHRoZSBjb25maWd1cmUgc2NyaXB0
-Cj4+IHdoZW4gY2hlY2tpbmcgZm9yIHB5dGhvbiB2ZXJzaW9uKS4KPj4KPj4gU28gcGVyaGFwcyBh
-IHNvbHV0aW9uIHdvdWxkIGJlIHRvIGNoYW5nZSB0aGUgY29uZmlndXJlIHNjcmlwdCAob3Igd2hh
-dGV2ZXIKPj4gaXQgY29tZXMgZnJvbSBieSBtZWFucyBvZiBhdXRvY29uZmlnL2F1dG9tYWtlKSBz
-byB0byBjcmVhdGUgYSAicHl0aG9uIgo+PiBzeW1saW5rIGluIHRoZSB3b3JraW5nIGRpcmVjdG9y
-eSAodG8gdGhlIHZlcnNpb24gc2VsZWN0ZWQvZGV0ZWN0ZWQpIGFuZCB0aGVuCj4+IGFkZCBpdCB0
-byB0aGUgcGF0aCAoKikuCj4+Cj4+IEkgZ3Vlc3MgYSBxdWljay1hbmQtZGlydHkgYWx0ZXJuYXRp
-dmUgY291bGQgYmUgdG8gY2hhbmdlIHRoZSBtYWtlZmlsZSBzbyB0bwo+PiB1c2UgdGhlICJQWVRI
-T04iIGVudmlyb25tZW50IHZhcmlhYmxlIHRvIGV4cGxpY3RseSBzZXQgd2hhdCBpbnRlcnByZXRl
-ciB0bwo+PiB1c2UgLS0gYnV0IHRoYXQgd291bGQgZGVmZWF0IHRoZSB3aG9sZSBwdXJwb3NlIG9m
-IHRoZSBzaGViYW5nIHNvIEkgYmVsaWV2ZQo+PiBpdCdzIGEgdmVyeSBiYWQgaWRlYToKPj4KPj4g
-LS0tIGEvZG9jL2V4YW1wbGVzL2dlbi10cC9NYWtlZmlsZQo+PiArKysgYi9kb2MvZXhhbXBsZXMv
-Z2VuLXRwL01ha2VmaWxlCj4+IEBAIC00Niw3ICs0Niw3IEBAIHNhbXBsZS5vOiBzYW1wbGUuYyBz
-YW1wbGVfdHJhY2Vwb2ludC5oCj4+ICAgICAgICAgIENGTEFHUz0iJChDRkxBR1MpICQoQU1fQ0ZM
-QUdTKSIgXAo+PiAgICAgICAgICBMREZMQUdTPSIkKExERkxBR1MpICQoQU1fTERGTEFHUykiIFwK
-Pj4gICAgICAgICAgQ0M9IiQoQ0MpIiBcCj4+IC0gICAgICAgJChMVFROR19HRU5fVFBfUEFUSCls
-dHRuZy1nZW4tdHAgLW8gJEAgJDwKPj4gKyAgICAgICAkKFBZVEhPTikgJChMVFROR19HRU5fVFBf
-UEFUSClsdHRuZy1nZW4tdHAgLW8gJEAgJDwKPj4KPj4gICAjIFRoZSBmb2xsb3dpbmcgcnVsZSBj
-YW4gYmUgdXNlZCB0byBnZW5lcmF0ZSBhbGwgZmlsZXMgaW5zdGVhZCBvZiBoYXZpbmcKPj4gb25l
-Cj4+ICAgIyBmb3IgZWFjaCBmaWxlIHR5cGUuIE5vdGUgdGhhdCB0aGUgc2FtcGxlLm8gaGFzIGEg
-ZGVwZW5kZW5jeSBvbiB0aGUKPj4gQEAgLTU1LDEwICs1NSwxMCBAQCBzYW1wbGUubzogc2FtcGxl
-LmMgc2FtcGxlX3RyYWNlcG9pbnQuaAo+PiAgICMgICAgICBsdHRuZy1nZW4tdHAgJDwKPj4KPj4g
-ICAlLmg6ICUudHAKPj4gLSAgICAgICAkKExUVE5HX0dFTl9UUF9QQVRIKWx0dG5nLWdlbi10cCAt
-byAkQCAkPAo+PiArICAgICAgICQoUFlUSE9OKSAkKExUVE5HX0dFTl9UUF9QQVRIKWx0dG5nLWdl
-bi10cCAtbyAkQCAkPAo+Pgo+PiAgICUuYzogJS50cAo+PiAtICAgICAgICQoTFRUTkdfR0VOX1RQ
-X1BBVEgpbHR0bmctZ2VuLXRwIC1vICRAICQ8Cj4+ICsgICAgICAgJChQWVRIT04pICQoTFRUTkdf
-R0VOX1RQX1BBVEgpbHR0bmctZ2VuLXRwIC1vICRAICQ8Cj4+Cj4+ICAgLlBIT05ZOiBjbGVhbgo+
-PiAgIGNsZWFuOgo+Pgo+Pgo+PiBXaGF0IGRvIHlvdSB0aGluaz8KPj4KPgo+IEkgYWdyZWUgdGhh
-dCB0aGlzIGlzIG5vdCB0aGUgcHJvcGVyIGZpeC4uLgo+Cj4gTm90ZSB0aGF0IHRoaXMgc2NyaXB0
-IGlzIG5vdCByZXF1aXJlZCB0byBidWlsZCBsdHRuZy11c3QuIEl0IHdpbGwgbm90Cj4gYmUgdXNl
-ZCBkdXJpbmcgdGhlIGJ1aWxkIHByb2Nlc3MgaWYgeW91ciBob3N0IGRvZXNuJ3QgaGF2ZSBhIHN1
-aXRhYmxlCj4gUHl0aG9uIHZlcnNpb24gaW5zdGFsbGVkOwoKVWhtLCB0aGF0J3Mgbm90IGVudGly
-ZWx5IGNvcnJlY3QuIFVuZm9ydHVuYXRlbHksIHRoZSBjb25maWd1cmUgc2NyaXB0IAp3aWxsIGlu
-ZGVlZCB0cnkgZGV0ZWN0IGEgc3VpdGFibGUgcHl0aG9uIHZlcnNpb247IGhvd2V2ZXIsIHRoYXQg
-ZG9lc24ndCAKbWVhbiBpdCB3aWxsIHVzZSBUSEFUIHZlcnNpb24gKGluIG15IGNhc2UsIHRoZSBv
-bmUgcmVhY2hhYmxlIHRocm91Z2ggCiJweXRob24yLjciKSB3aGVuIG5lZWRlZCAoYW5kIHRoYXQn
-cyB0aGUgd2hvbGUgcG9pbnQgb2YgbXkgZW1haWwhKS4KSSBhbHNvIHRyaWVkIGVuZm9yY2luZyBk
-ZXRlY3Rpb24gb2YgYW4gb2xkZXIgdmVyc2lvbiAoc28gdG8gZGlzYWJsZSAKYnVpbGRpbmcgb2Yg
-dGhlIGV4YW1wbGVzKSBieSB1c2luZyBQWVRIT049cHl0aG9uIGJlZm9yZSAuL2NvbmZpZ3VyZSBi
-dXQgCkkgZ2V0OgoKY2hlY2tpbmcgd2hldGhlciBweXRob24gdmVyc2lvbiBpcyA+PSAyLjcuLi4g
-bm8KY29uZmlndXJlOiBlcnJvcjogUHl0aG9uIGludGVycHJldGVyIGlzIHRvbyBvbGQKClNvbWUg
-b3RoZXIgYXR0ZW1wdHMgd2l0aCBhbV8qIGFuZCBhY18qIHZhcmlhYmxlcyBsZWQgdG8gc2ltaWxh
-ciByZXN1bHRzLgpJbiB0aGUgZW5kIEkgc2V0dGxlZCBmb3IKCmFtX2N2X3BhdGhsZXNzX1BZVEhP
-Tj1ub25lIC4vY29uZmlndXJlCgp3aGljaCBhdCBsZWFzdCBsZXRzIG1lIGNvbnRpbnVlIGFuZCBk
-aXNhYmxlIEJVSUxEX0dFTl9UUF9FWEFNUExFUyAKd2l0aG91dCB0b3VjaGluZyB0aGUgY29kZS4K
-CiA+IGl0IGlzIG9ubHkgdXNlZCB0byBidWlsZCBvbmUgb2YgdGhlCj4gZXhhbXBsZXMuCgpJbmRl
-ZWQuCgo+Cj4gUmVnYXJkcywKPiBKw6lyw6ltaWUKClRoYW5rIHlvdSEKR2VybGFuZG8KCgpfX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFp
-bGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9y
-Zy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+Hi David,
+
+here are the rebased patches (onto 88564da). There are no functional
+changes to the previous version.
+
+Jan Glauber (4):
+  Use common functions for module loading and unloading
+  Seperate probe modules from control modules
+  Remove required parameter from module parameters
+  Configurable kernel module probes support
+
+ doc/man/lttng-sessiond.8              |    7 +
+ src/bin/lttng-sessiond/kern-modules.h |    3 +-
+ src/bin/lttng-sessiond/main.c         |    5 +
+ src/bin/lttng-sessiond/modprobe.c     |  307 ++++++++++++++++++---------------
+ src/bin/lttng-sessiond/modprobe.h     |    2 +
+ src/common/defaults.h                 |    3 +
+ src/common/utils.c                    |   10 ++
+ src/common/utils.h                    |    1 +
+ 8 files changed, 200 insertions(+), 138 deletions(-)
+
+-- 
+1.7.9.5
