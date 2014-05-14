@@ -1,28 +1,21 @@
-From: Jessica Foest <jessica.foest@gmail.com>
-Subject: Re: babeltrace
-Date: Tue, 13 May 2014 15:27:44 -0400
-Message-ID: <CAPxN80Dv4oPhVT=xVNQ0i5b37as4U_i42Xogpp-tCFpBq4WkBg__16160.6568879963$1400009332$gmane$org@mail.gmail.com>
-References: <CAPxN80BCJuB0u_5pk_a=aWw2gQ99eWK_cRnQ4_Kw6Sf8dEaJCg@mail.gmail.com>
- <534FEA8C.8040504@ericsson.com>
- <CA+jJMxum9CmGNDgkqjW3EVCokWx=f-k-iiAjEsXVfY2EjjxmMg@mail.gmail.com>
- <CAPxN80BRHcyEsVPBAQC-xaaYwZv0Mqzik2SehaXtnrs2Wsdoow@mail.gmail.com>
- <536B2BA4.7060107@voxpopuli.im>
- <CAFXXi0=C3_fSHUNsGYu3xPw8oS84A=bRyeig0R714GfPsvc6=g@mail.gmail.com>
- <536BA864.10608@voxpopuli.im>
- <CAPxN80DHt6nMQjL24szbZsYbkd1du97ExokjPBQX40QwuX70+w@mail.gmail.com>
- <CAPxN80CzV2Y9XJkrqv+vzFOF40OLm1tf7Grgh+n0MOR_UuMmdg@mail.gmail.com>
- <CAPxN80CigEdS6x6EE1czpShX1v8cqXh4TwXfY-=_3NuyQLxkKA@mail.gmail.com>
- <CA+jJMxvvhQsQsuN_AbR9_+Zf3qGTkJK7e9y0fwTbiVES_W0Wzg@mail.gmail.com>
+From: Jan Glauber <jan.glauber@gmail.com>
+Subject: Re: [RFC Patch Tools 3/4] Remove required parameter
+ from module parameters
+Date: Wed, 14 May 2014 14:54:11 +0200
+Message-ID: <CAEiAFz0hwuNppkN7tMwKOMBjE03MOxTaYhJiQNp70FXQTY_czw__48637.0589620948$1400072130$gmane$org@mail.gmail.com>
+References: <cover.1396521858.git.jan.glauber@gmail.com>
+ <5a25b2f118fe3069a12e292b380031364f3e9a68.1396521858.git.jan.glauber@gmail.com>
+ <20140513174750.GH7414@thessa>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1259833156=="
+Content-Type: multipart/mixed; boundary="===============1040685172=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ob0-f172.google.com ([209.85.214.172])
+Received: from mail-qg0-f45.google.com ([209.85.192.45])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jessica.foest@gmail.com>) id 1WkIMf-0006OC-UQ
- for lttng-dev@lists.lttng.org; Tue, 13 May 2014 15:27:55 -0400
-Received: by mail-ob0-f172.google.com with SMTP id wp18so958065obc.31
- for <lttng-dev@lists.lttng.org>; Tue, 13 May 2014 12:27:44 -0700 (PDT)
-In-Reply-To: <CA+jJMxvvhQsQsuN_AbR9_+Zf3qGTkJK7e9y0fwTbiVES_W0Wzg@mail.gmail.com>
+ (envelope-from <jan.glauber@gmail.com>) id 1WkYhN-00048R-0E
+ for lttng-dev@lists.lttng.org; Wed, 14 May 2014 08:54:23 -0400
+Received: by mail-qg0-f45.google.com with SMTP id z60so2700796qgd.32
+ for <lttng-dev@lists.lttng.org>; Wed, 14 May 2014 05:54:11 -0700 (PDT)
+In-Reply-To: <20140513174750.GH7414@thessa>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -31,232 +24,759 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+To: David Goulet <dgoulet@efficios.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============1259833156==
-Content-Type: multipart/alternative; boundary=001a1134a210e2d01004f94d0e07
+--===============1040685172==
+Content-Type: multipart/alternative; boundary=001a11346b544926dc04f95bada8
 
---001a1134a210e2d01004f94d0e07
+--001a11346b544926dc04f95bada8
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
 
-Thanks a lot J=C3=A9r=C3=A9mie :)
+Hi David,
+OK, I'll rebase onto upstream master and resend the whole series.
 
 
-2014-05-13 14:48 GMT-04:00 J=C3=A9r=C3=A9mie Galarneau <jeremie.galarneau@e=
-fficios.com
->:
+thanks, Jan
 
-> Hi Jessica,
+
+2014-05-13 19:47 GMT+02:00 David Goulet <dgoulet@efficios.com>:
+
+> Hi Jan,
 >
-> I suggest you start by looking at this example in Babeltrace's
-> tree[1]. These will show you how to read a CTF trace's events from a
-> Python script.
+> I was merging those for 2.5 but this one (3/4) does not apply. I tried
+> to play with it but I can't make it work.
 >
-> As for formatting the events as CSV, there is a section dedicated to
-> this topic in Python's documentation [2].
+> The only thing that has changed is that we've added a module lately but
+> even by modifying your patch to add that module, it still does not
+> apply.
 >
-> Regards,
-> J=C3=A9r=C3=A9mie
+> Do you think you can simply rebase those on upstream master and send it
+> back to me? (You can also send me a branch, I'm fine with emails or
+> branch).
 >
-> [1]
-> https://bugs.lttng.org/projects/babeltrace/repository/revisions/master/en=
-try/bindings/python/examples/example-api-test.py
-> [2] https://docs.python.org/3.4/library/csv.html
+> Big thanks!
+> David
 >
-> On Mon, May 12, 2014 at 7:24 PM, Jessica Foest <jessica.foest@gmail.com>
-> wrote:
-> > Thanks for your detailed responses :)
-> > Actually i will begin by taking my own trace that i will configure it i=
-n
-> > advance ( same event type , and i will add the different event context
-> that
-> > i need ) .
-> > It's my first time to develop with python and i don't really know the
-> > architecture of babeltrace , So can you help me and tell me how to
-> proceed
-> > to filter my data from CTF to the output Format that i will choose ?
-> > I'm only interested on kernel space tracing .
+> On 03 Apr (12:57:46), Jan Glauber wrote:
+> > Remove the per module required parameter by adding another list
+> > for optional core modules, so we have:
+> >
+> > - required core modules
+> > - optional core modules
+> > - optional probe modules
+> >
+> > Signed-off-by: Jan Glauber <jan.glauber@gmail.com>
+> > ---
+> >  src/bin/lttng-sessiond/kern-modules.h |    1 -
+> >  src/bin/lttng-sessiond/modprobe.c     |  167
+> ++++++++++++++++++---------------
+> >  2 files changed, 92 insertions(+), 76 deletions(-)
+> >
+> > diff --git a/src/bin/lttng-sessiond/kern-modules.h
+> b/src/bin/lttng-sessiond/kern-modules.h
+> > index 7ce8b0b..ca09fc3 100644
+> > --- a/src/bin/lttng-sessiond/kern-modules.h
+> > +++ b/src/bin/lttng-sessiond/kern-modules.h
+> > @@ -29,7 +29,6 @@
+> >
+> >  struct kern_modules_param {
+> >       const char *name;
+> > -     int required;
+> >  };
+> >
+> >  #endif /* _KERN_MODULES_H */
+> > diff --git a/src/bin/lttng-sessiond/modprobe.c
+> b/src/bin/lttng-sessiond/modprobe.c
+> > index ea3fb39..79a01ea 100644
+> > --- a/src/bin/lttng-sessiond/modprobe.c
+> > +++ b/src/bin/lttng-sessiond/modprobe.c
+> > @@ -25,65 +25,72 @@
+> >  #include "modprobe.h"
+> >  #include "kern-modules.h"
+> >
+> > -/* LTTng kernel tracer base modules list */
+> > -const struct kern_modules_param kern_modules_control[] = {
+> > -     { "lttng-tracer", 1 },  /* MUST be loaded first so keep at top */
+> > -     { "lttng-lib-ring-buffer", 1 },
+> > -     { "lttng-ring-buffer-client-discard", 1 },
+> > -     { "lttng-ring-buffer-client-overwrite", 1 },
+> > -     { "lttng-ring-buffer-metadata-client", 1 },
+> > -     { "lttng-ring-buffer-client-mmap-discard", 1 },
+> > -     { "lttng-ring-buffer-client-mmap-overwrite", 1 },
+> > -     { "lttng-ring-buffer-metadata-mmap-client", 1 },
+> > -     { "lttng-types", 0 },
+> > -     { "lttng-ftrace", 0 },
+> > -     { "lttng-kprobes", 0 },
+> > -     { "lttng-kretprobes", 0 },
+> > +#define LTTNG_MOD_REQUIRED   1
+> > +#define LTTNG_MOD_OPTIONAL   0
+> > +
+> > +/* LTTng kernel tracer mandatory core modules list */
+> > +const struct kern_modules_param kern_modules_control_core[] = {
+> > +     { "lttng-tracer" },     /* MUST be loaded first so keep at top */
+> > +     { "lttng-lib-ring-buffer" },
+> > +     { "lttng-ring-buffer-client-discard" },
+> > +     { "lttng-ring-buffer-client-overwrite" },
+> > +     { "lttng-ring-buffer-metadata-client" },
+> > +     { "lttng-ring-buffer-client-mmap-discard" },
+> > +     { "lttng-ring-buffer-client-mmap-overwrite" },
+> > +     { "lttng-ring-buffer-metadata-mmap-client" },
+> > +};
+> > +
+> > +/* LTTng kernel tracer optional base modules list */
+> > +const struct kern_modules_param kern_modules_control_opt[] = {
+> > +     { "lttng-types" },
+> > +     { "lttng-ftrace" },
+> > +     { "lttng-kprobes" },
+> > +     { "lttng-kretprobes" },
+> >  };
+> >
+> >  /* LTTng kernel tracer probe modules list */
+> >  const struct kern_modules_param kern_modules_probes[] = {
+> > -     { "lttng-probe-asoc", 0 },
+> > -     { "lttng-probe-block", 0 },
+> > -     { "lttng-probe-btrfs", 0 },
+> > -     { "lttng-probe-compaction", 0 },
+> > -     { "lttng-probe-ext3", 0 },
+> > -     { "lttng-probe-ext4", 0 },
+> > -     { "lttng-probe-gpio", 0 },
+> > -     { "lttng-probe-irq", 0 },
+> > -     { "lttng-probe-jbd", 0 },
+> > -     { "lttng-probe-jbd2", 0 },
+> > -     { "lttng-probe-kmem", 0 },
+> > -     { "lttng-probe-kvm", 0 },
+> > -     { "lttng-probe-kvm-x86", 0 },
+> > -     { "lttng-probe-kvm-x86-mmu", 0 },
+> > -     { "lttng-probe-lock", 0 },
+> > -     { "lttng-probe-module", 0 },
+> > -     { "lttng-probe-napi", 0 },
+> > -     { "lttng-probe-net", 0 },
+> > -     { "lttng-probe-power", 0 },
+> > -     { "lttng-probe-printk", 0 },
+> > -     { "lttng-probe-random", 0 },
+> > -     { "lttng-probe-rcu", 0 },
+> > -     { "lttng-probe-regmap", 0 },
+> > -     { "lttng-probe-regulator", 0 },
+> > -     { "lttng-probe-rpm", 0 },
+> > -     { "lttng-probe-sched", 0 },
+> > -     { "lttng-probe-scsi", 0 },
+> > -     { "lttng-probe-signal", 0 },
+> > -     { "lttng-probe-skb", 0 },
+> > -     { "lttng-probe-sock", 0 },
+> > -     { "lttng-probe-statedump", 0 },
+> > -     { "lttng-probe-sunrpc", 0 },
+> > -     { "lttng-probe-timer", 0 },
+> > -     { "lttng-probe-udp", 0 },
+> > -     { "lttng-probe-vmscan", 0 },
+> > -     { "lttng-probe-workqueue", 0 },
+> > -     { "lttng-probe-writeback", 0 },
+> > +     { "lttng-probe-asoc" },
+> > +     { "lttng-probe-block" },
+> > +     { "lttng-probe-btrfs" },
+> > +     { "lttng-probe-compaction" },
+> > +     { "lttng-probe-ext3" },
+> > +     { "lttng-probe-ext4" },
+> > +     { "lttng-probe-gpio" },
+> > +     { "lttng-probe-irq" },
+> > +     { "lttng-probe-jbd" },
+> > +     { "lttng-probe-jbd2" },
+> > +     { "lttng-probe-kmem" },
+> > +     { "lttng-probe-kvm" },
+> > +     { "lttng-probe-kvm-x86" },
+> > +     { "lttng-probe-kvm-x86-mmu" },
+> > +     { "lttng-probe-lock" },
+> > +     { "lttng-probe-module" },
+> > +     { "lttng-probe-napi" },
+> > +     { "lttng-probe-net" },
+> > +     { "lttng-probe-power" },
+> > +     { "lttng-probe-printk" },
+> > +     { "lttng-probe-random" },
+> > +     { "lttng-probe-rcu" },
+> > +     { "lttng-probe-regmap" },
+> > +     { "lttng-probe-regulator" },
+> > +     { "lttng-probe-rpm" },
+> > +     { "lttng-probe-sched" },
+> > +     { "lttng-probe-scsi" },
+> > +     { "lttng-probe-signal" },
+> > +     { "lttng-probe-skb" },
+> > +     { "lttng-probe-sock" },
+> > +     { "lttng-probe-statedump" },
+> > +     { "lttng-probe-sunrpc" },
+> > +     { "lttng-probe-timer" },
+> > +     { "lttng-probe-udp" },
+> > +     { "lttng-probe-vmscan" },
+> > +     { "lttng-probe-workqueue" },
+> > +     { "lttng-probe-writeback" },
+> >  };
+> >
+> >  void modprobe_remove_lttng(const struct kern_modules_param *modules,
+> > -                        int entries)
+> > +                        int entries, int required)
+> >  {
+> >       int ret = 0, i;
+> >       char modprobe[256];
+> > @@ -94,26 +101,21 @@ void modprobe_remove_lttng(const struct
+> kern_modules_param *modules,
+> >                               modules[i].name);
+> >               if (ret < 0) {
+> >                       PERROR("snprintf modprobe -r");
+> > -                     goto error;
+> > +                     return;
+> >               }
+> >               modprobe[sizeof(modprobe) - 1] = '\0';
+> >               ret = system(modprobe);
+> >               if (ret == -1) {
+> >                       ERR("Unable to launch modprobe -r for module %s",
+> > -                                     kern_modules_control[i].name);
+> > -             } else if (kern_modules_control[i].required
+> > -                             && WEXITSTATUS(ret) != 0) {
+> > +                                     modules[i].name);
+> > +             } else if (required && WEXITSTATUS(ret) != 0) {
+> >                       ERR("Unable to remove module %s",
+> > -                                     kern_modules_control[i].name);
+> > +                                     modules[i].name);
+> >               } else {
+> >                       DBG("Modprobe removal successful %s",
+> > -                                     kern_modules_control[i].name);
+> > +                                     modules[i].name);
+> >               }
+> >       }
+> > -
+> > -error:
+> > -     return;
+> > -
+> >  }
+> >
+> >  /*
+> > @@ -121,8 +123,12 @@ error:
+> >   */
+> >  void modprobe_remove_lttng_control(void)
+> >  {
+> > -     return modprobe_remove_lttng(kern_modules_control,
+> > -                                  ARRAY_SIZE(kern_modules_control));
+> > +     modprobe_remove_lttng(kern_modules_control_opt,
+> > +                                 ARRAY_SIZE(kern_modules_control_opt),
+> > +                                 LTTNG_MOD_OPTIONAL);
+> > +     modprobe_remove_lttng(kern_modules_control_core,
+> > +                                  ARRAY_SIZE(kern_modules_control_core),
+> > +                                  LTTNG_MOD_REQUIRED);
+> >  }
+> >
+> >  /*
+> > @@ -131,7 +137,8 @@ void modprobe_remove_lttng_control(void)
+> >  void modprobe_remove_lttng_data(void)
+> >  {
+> >       return modprobe_remove_lttng(kern_modules_probes,
+> > -                                  ARRAY_SIZE(kern_modules_list));
+> > +                                  ARRAY_SIZE(kern_modules_probes),
+> > +                                  LTTNG_MOD_OPTIONAL);
+> >  }
+> >
+> >  /*
+> > @@ -143,7 +150,8 @@ void modprobe_remove_lttng_all(void)
+> >       modprobe_remove_lttng_control();
+> >  }
+> >
+> > -static int modprobe_lttng(const struct kern_modules_param *modules, int
+> entries)
+> > +static int modprobe_lttng(const struct kern_modules_param *modules,
+> > +                       int entries, int required)
+> >  {
+> >       int ret = 0, i;
+> >       char modprobe[256];
+> > @@ -151,7 +159,7 @@ static int modprobe_lttng(const struct
+> kern_modules_param *modules, int entries)
+> >       for (i = 0; i < entries; i++) {
+> >               ret = snprintf(modprobe, sizeof(modprobe),
+> >                               "/sbin/modprobe %s%s",
+> > -                             modules[i].required ? "" : "-q ",
+> > +                             required ? "" : "-q ",
+> >                               modules[i].name);
+> >               if (ret < 0) {
+> >                       PERROR("snprintf modprobe");
+> > @@ -162,12 +170,10 @@ static int modprobe_lttng(const struct
+> kern_modules_param *modules, int entries)
+> >               if (ret == -1) {
+> >                       ERR("Unable to launch modprobe for module %s",
+> >                                       modules[i].name);
+> > -             } else if (modules[i].required && WEXITSTATUS(ret) != 0) {
+> > -                     ERR("Unable to load module %s",
+> > -                                     modules[i].name);
+> > +             } else if (required && WEXITSTATUS(ret) != 0) {
+> > +                     ERR("Unable to load module %s", modules[i].name);
+> >               } else {
+> > -                     DBG("Modprobe successfully %s",
+> > -                                     modules[i].name);
+> > +                     DBG("Modprobe successfully %s", modules[i].name);
+> >               }
+> >       }
+> >
+> > @@ -180,14 +186,25 @@ error:
+> >   */
+> >  int modprobe_lttng_control(void)
+> >  {
+> > -     return modprobe_lttng(kern_modules_control,
+> > -                           ARRAY_SIZE(kern_modules_control));
+> > +     int ret;
+> > +
+> > +     ret = modprobe_lttng(kern_modules_control_core,
+> > +                          ARRAY_SIZE(kern_modules_control_core),
+> > +                          LTTNG_MOD_REQUIRED);
+> > +     if (ret != 0)
+> > +             return ret;
+> > +     ret = modprobe_lttng(kern_modules_control_opt,
+> > +                           ARRAY_SIZE(kern_modules_control_opt),
+> > +                           LTTNG_MOD_OPTIONAL);
+> > +     return ret;
+> >  }
+> > +
+> >  /*
+> >   * Load data kernel module(s).
+> >   */
+> >  int modprobe_lttng_data(void)
+> >  {
+> >       return modprobe_lttng(kern_modules_probes,
+> > -                           ARRAY_SIZE(kern_modules_probes));
+> > +                           ARRAY_SIZE(kern_modules_probes),
+> > +                           LTTNG_MOD_OPTIONAL);
+> >  }
+> > --
+> > 1.7.9.5
 > >
 > >
-> > 2014-05-08 17:29 GMT-04:00 Jessica Foest <jessica.foest@gmail.com>:
-> >
-> >> i work only on kernel space event .
-> >>
-> >>
-> >> 2014-05-08 17:10 GMT-04:00 Jessica Foest <jessica.foest@gmail.com>:
-> >>
-> >>> Thanks for your detailed responses :)
-> >>> Actually i will begin by taking my own trace that i will configure it
-> in
-> >>> advance ( same event type , and i will add the different event contex=
-t
-> that
-> >>> i need ) .
-> >>> It's my first time to develop with python and i don't really know the
-> >>> architecture of babeltrace , So can you help me and tell me how to
-> proceed
-> >>> to filter my data from CTF to the output Format that i will choose ?
-> >>>
-> >>>
-> >>> 2014-05-08 11:53 GMT-04:00 Alexandre Montplaisir
-> >>> <alexmonthy@voxpopuli.im>:
-> >>>
-> >>>>
-> >>>>> To avoid doing a complete first pass of the trace, you can just
-> >>>>> iterate on the event types as described in the metadata, and take
-> note
-> >>>>> of all the possible field you can find in the trace. Then, during
-> your
-> >>>>> only pass, you already know all your "columns".
-> >>>>
-> >>>>
-> >>>> That's true. Although right now TMF doesn't have an API to ask a tra=
-ce
-> >>>> "give me all the event types you have", other than just reading the
-> trace ;)
-> >>>>
-> >>>> wrt CTF, it's possible to have events in the metadata that don't
-> >>>> actually show up in the trace. But that's not really a problem, at
-> worst
-> >>>> you'd end up with empty columns.
-> >>>
-> >>>
-> >>
-> >
->
->
->
-> --
-> J=C3=A9r=C3=A9mie Galarneau
-> EfficiOS Inc.
-> http://www.efficios.com
+> > _______________________________________________
+> > lttng-dev mailing list
+> > lttng-dev@lists.lttng.org
+> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 >
 
---001a1134a210e2d01004f94d0e07
+--001a11346b544926dc04f95bada8
 Content-Type: text/html; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr">Thanks a lot J=C3=A9r=C3=A9mie :)</div><div class=3D"gmail=
-_extra"><br><br><div class=3D"gmail_quote">2014-05-13 14:48 GMT-04:00 J=C3=
-=A9r=C3=A9mie Galarneau <span dir=3D"ltr">&lt;<a href=3D"mailto:jeremie.gal=
-arneau@efficios.com" target=3D"_blank">jeremie.galarneau@efficios.com</a>&g=
-t;</span>:<br>
-<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
-x #ccc solid;padding-left:1ex">Hi Jessica,<br>
-<br>
-I suggest you start by looking at this example in Babeltrace&#39;s<br>
-tree[1]. These will show you how to read a CTF trace&#39;s events from a<br=
+<div dir=3D"ltr"><div><div>Hi David,<br></div>OK, I&#39;ll rebase onto upst=
+ream master and resend the whole series.<br><br><br></div>thanks, Jan<br></=
+div><div class=3D"gmail_extra"><br><br><div class=3D"gmail_quote">2014-05-1=
+3 19:47 GMT+02:00 David Goulet <span dir=3D"ltr">&lt;<a href=3D"mailto:dgou=
+let@efficios.com" target=3D"_blank">dgoulet@efficios.com</a>&gt;</span>:<br=
 >
-Python script.<br>
+<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
+x #ccc solid;padding-left:1ex">Hi Jan,<br>
 <br>
-As for formatting the events as CSV, there is a section dedicated to<br>
-this topic in Python&#39;s documentation [2].<br>
+I was merging those for 2.5 but this one (3/4) does not apply. I tried<br>
+to play with it but I can&#39;t make it work.<br>
 <br>
-Regards,<br>
-J=C3=A9r=C3=A9mie<br>
+The only thing that has changed is that we&#39;ve added a module lately but=
 <br>
-[1] <a href=3D"https://bugs.lttng.org/projects/babeltrace/repository/revisi=
-ons/master/entry/bindings/python/examples/example-api-test.py" target=3D"_b=
-lank">https://bugs.lttng.org/projects/babeltrace/repository/revisions/maste=
-r/entry/bindings/python/examples/example-api-test.py</a><br>
-
-[2] <a href=3D"https://docs.python.org/3.4/library/csv.html" target=3D"_bla=
-nk">https://docs.python.org/3.4/library/csv.html</a><br>
-<div class=3D"HOEnZb"><div class=3D"h5"><br>
-On Mon, May 12, 2014 at 7:24 PM, Jessica Foest &lt;<a href=3D"mailto:jessic=
-a.foest@gmail.com">jessica.foest@gmail.com</a>&gt; wrote:<br>
-&gt; Thanks for your detailed responses :)<br>
-&gt; Actually i will begin by taking my own trace that i will configure it =
-in<br>
-&gt; advance ( same event type , and i will add the different event context=
- that<br>
-&gt; i need ) .<br>
-&gt; It&#39;s my first time to develop with python and i don&#39;t really k=
-now the<br>
-&gt; architecture of babeltrace , So can you help me and tell me how to pro=
-ceed<br>
-&gt; to filter my data from CTF to the output Format that i will choose ?<b=
+even by modifying your patch to add that module, it still does not<br>
+apply.<br>
+<br>
+Do you think you can simply rebase those on upstream master and send it<br>
+back to me? (You can also send me a branch, I&#39;m fine with emails or<br>
+branch).<br>
+<br>
+Big thanks!<br>
+David<br>
+<div><div class=3D"h5"><br>
+On 03 Apr (12:57:46), Jan Glauber wrote:<br>
+&gt; Remove the per module required parameter by adding another list<br>
+&gt; for optional core modules, so we have:<br>
+&gt;<br>
+&gt; - required core modules<br>
+&gt; - optional core modules<br>
+&gt; - optional probe modules<br>
+&gt;<br>
+&gt; Signed-off-by: Jan Glauber &lt;<a href=3D"mailto:jan.glauber@gmail.com=
+">jan.glauber@gmail.com</a>&gt;<br>
+&gt; ---<br>
+&gt; =C2=A0src/bin/lttng-sessiond/kern-modules.h | =C2=A0 =C2=A01 -<br>
+&gt; =C2=A0src/bin/lttng-sessiond/modprobe.c =C2=A0 =C2=A0 | =C2=A0167 ++++=
+++++++++++++++---------------<br>
+&gt; =C2=A02 files changed, 92 insertions(+), 76 deletions(-)<br>
+&gt;<br>
+&gt; diff --git a/src/bin/lttng-sessiond/kern-modules.h b/src/bin/lttng-ses=
+siond/kern-modules.h<br>
+&gt; index 7ce8b0b..ca09fc3 100644<br>
+&gt; --- a/src/bin/lttng-sessiond/kern-modules.h<br>
+&gt; +++ b/src/bin/lttng-sessiond/kern-modules.h<br>
+&gt; @@ -29,7 +29,6 @@<br>
+&gt;<br>
+&gt; =C2=A0struct kern_modules_param {<br>
+&gt; =C2=A0 =C2=A0 =C2=A0 const char *name;<br>
+&gt; - =C2=A0 =C2=A0 int required;<br>
+&gt; =C2=A0};<br>
+&gt;<br>
+&gt; =C2=A0#endif /* _KERN_MODULES_H */<br>
+&gt; diff --git a/src/bin/lttng-sessiond/modprobe.c b/src/bin/lttng-session=
+d/modprobe.c<br>
+&gt; index ea3fb39..79a01ea 100644<br>
+&gt; --- a/src/bin/lttng-sessiond/modprobe.c<br>
+&gt; +++ b/src/bin/lttng-sessiond/modprobe.c<br>
+&gt; @@ -25,65 +25,72 @@<br>
+&gt; =C2=A0#include &quot;modprobe.h&quot;<br>
+&gt; =C2=A0#include &quot;kern-modules.h&quot;<br>
+&gt;<br>
+&gt; -/* LTTng kernel tracer base modules list */<br>
+&gt; -const struct kern_modules_param kern_modules_control[] =3D {<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-tracer&quot;, 1 }, =C2=A0/* MUST be load=
+ed first so keep at top */<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-lib-ring-buffer&quot;, 1 },<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-ring-buffer-client-discard&quot;, 1 },<b=
 r>
-&gt; I&#39;m only interested on kernel space tracing .<br>
-&gt;<br>
-&gt;<br>
-&gt; 2014-05-08 17:29 GMT-04:00 Jessica Foest &lt;<a href=3D"mailto:jessica=
-.foest@gmail.com">jessica.foest@gmail.com</a>&gt;:<br>
-&gt;<br>
-&gt;&gt; i work only on kernel space event .<br>
-&gt;&gt;<br>
-&gt;&gt;<br>
-&gt;&gt; 2014-05-08 17:10 GMT-04:00 Jessica Foest &lt;<a href=3D"mailto:jes=
-sica.foest@gmail.com">jessica.foest@gmail.com</a>&gt;:<br>
-&gt;&gt;<br>
-&gt;&gt;&gt; Thanks for your detailed responses :)<br>
-&gt;&gt;&gt; Actually i will begin by taking my own trace that i will confi=
-gure it in<br>
-&gt;&gt;&gt; advance ( same event type , and i will add the different event=
- context that<br>
-&gt;&gt;&gt; i need ) .<br>
-&gt;&gt;&gt; It&#39;s my first time to develop with python and i don&#39;t =
-really know the<br>
-&gt;&gt;&gt; architecture of babeltrace , So can you help me and tell me ho=
-w to proceed<br>
-&gt;&gt;&gt; to filter my data from CTF to the output Format that i will ch=
-oose ?<br>
-&gt;&gt;&gt;<br>
-&gt;&gt;&gt;<br>
-&gt;&gt;&gt; 2014-05-08 11:53 GMT-04:00 Alexandre Montplaisir<br>
-&gt;&gt;&gt; &lt;<a href=3D"mailto:alexmonthy@voxpopuli.im">alexmonthy@voxp=
-opuli.im</a>&gt;:<br>
-&gt;&gt;&gt;<br>
-&gt;&gt;&gt;&gt;<br>
-&gt;&gt;&gt;&gt;&gt; To avoid doing a complete first pass of the trace, you=
- can just<br>
-&gt;&gt;&gt;&gt;&gt; iterate on the event types as described in the metadat=
-a, and take note<br>
-&gt;&gt;&gt;&gt;&gt; of all the possible field you can find in the trace. T=
-hen, during your<br>
-&gt;&gt;&gt;&gt;&gt; only pass, you already know all your &quot;columns&quo=
-t;.<br>
-&gt;&gt;&gt;&gt;<br>
-&gt;&gt;&gt;&gt;<br>
-&gt;&gt;&gt;&gt; That&#39;s true. Although right now TMF doesn&#39;t have a=
-n API to ask a trace<br>
-&gt;&gt;&gt;&gt; &quot;give me all the event types you have&quot;, other th=
-an just reading the trace ;)<br>
-&gt;&gt;&gt;&gt;<br>
-&gt;&gt;&gt;&gt; wrt CTF, it&#39;s possible to have events in the metadata =
-that don&#39;t<br>
-&gt;&gt;&gt;&gt; actually show up in the trace. But that&#39;s not really a=
- problem, at worst<br>
-&gt;&gt;&gt;&gt; you&#39;d end up with empty columns.<br>
-&gt;&gt;&gt;<br>
-&gt;&gt;&gt;<br>
-&gt;&gt;<br>
-&gt;<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-ring-buffer-client-overwrite&quot;, 1 },=
 <br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-ring-buffer-metadata-client&quot;, 1 },<=
+br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-ring-buffer-client-mmap-discard&quot;, 1=
+ },<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-ring-buffer-client-mmap-overwrite&quot;,=
+ 1 },<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-ring-buffer-metadata-mmap-client&quot;, =
+1 },<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-types&quot;, 0 },<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-ftrace&quot;, 0 },<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-kprobes&quot;, 0 },<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-kretprobes&quot;, 0 },<br>
+&gt; +#define LTTNG_MOD_REQUIRED =C2=A0 1<br>
+&gt; +#define LTTNG_MOD_OPTIONAL =C2=A0 0<br>
+&gt; +<br>
+&gt; +/* LTTng kernel tracer mandatory core modules list */<br>
+&gt; +const struct kern_modules_param kern_modules_control_core[] =3D {<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-tracer&quot; }, =C2=A0 =C2=A0 /* MUST be=
+ loaded first so keep at top */<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-lib-ring-buffer&quot; },<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-ring-buffer-client-discard&quot; },<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-ring-buffer-client-overwrite&quot; },<br=
+>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-ring-buffer-metadata-client&quot; },<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-ring-buffer-client-mmap-discard&quot; },=
 <br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-ring-buffer-client-mmap-overwrite&quot; =
+},<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-ring-buffer-metadata-mmap-client&quot; }=
+,<br>
+&gt; +};<br>
+&gt; +<br>
+&gt; +/* LTTng kernel tracer optional base modules list */<br>
+&gt; +const struct kern_modules_param kern_modules_control_opt[] =3D {<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-types&quot; },<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-ftrace&quot; },<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-kprobes&quot; },<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-kretprobes&quot; },<br>
+&gt; =C2=A0};<br>
+&gt;<br>
+&gt; =C2=A0/* LTTng kernel tracer probe modules list */<br>
+&gt; =C2=A0const struct kern_modules_param kern_modules_probes[] =3D {<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-probe-asoc&quot;, 0 },<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-probe-block&quot;, 0 },<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-probe-btrfs&quot;, 0 },<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-probe-compaction&quot;, 0 },<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-probe-ext3&quot;, 0 },<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-probe-ext4&quot;, 0 },<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-probe-gpio&quot;, 0 },<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-probe-irq&quot;, 0 },<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-probe-jbd&quot;, 0 },<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-probe-jbd2&quot;, 0 },<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-probe-kmem&quot;, 0 },<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-probe-kvm&quot;, 0 },<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-probe-kvm-x86&quot;, 0 },<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-probe-kvm-x86-mmu&quot;, 0 },<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-probe-lock&quot;, 0 },<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-probe-module&quot;, 0 },<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-probe-napi&quot;, 0 },<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-probe-net&quot;, 0 },<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-probe-power&quot;, 0 },<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-probe-printk&quot;, 0 },<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-probe-random&quot;, 0 },<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-probe-rcu&quot;, 0 },<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-probe-regmap&quot;, 0 },<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-probe-regulator&quot;, 0 },<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-probe-rpm&quot;, 0 },<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-probe-sched&quot;, 0 },<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-probe-scsi&quot;, 0 },<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-probe-signal&quot;, 0 },<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-probe-skb&quot;, 0 },<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-probe-sock&quot;, 0 },<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-probe-statedump&quot;, 0 },<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-probe-sunrpc&quot;, 0 },<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-probe-timer&quot;, 0 },<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-probe-udp&quot;, 0 },<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-probe-vmscan&quot;, 0 },<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-probe-workqueue&quot;, 0 },<br>
+&gt; - =C2=A0 =C2=A0 { &quot;lttng-probe-writeback&quot;, 0 },<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-probe-asoc&quot; },<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-probe-block&quot; },<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-probe-btrfs&quot; },<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-probe-compaction&quot; },<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-probe-ext3&quot; },<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-probe-ext4&quot; },<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-probe-gpio&quot; },<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-probe-irq&quot; },<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-probe-jbd&quot; },<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-probe-jbd2&quot; },<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-probe-kmem&quot; },<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-probe-kvm&quot; },<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-probe-kvm-x86&quot; },<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-probe-kvm-x86-mmu&quot; },<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-probe-lock&quot; },<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-probe-module&quot; },<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-probe-napi&quot; },<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-probe-net&quot; },<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-probe-power&quot; },<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-probe-printk&quot; },<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-probe-random&quot; },<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-probe-rcu&quot; },<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-probe-regmap&quot; },<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-probe-regulator&quot; },<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-probe-rpm&quot; },<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-probe-sched&quot; },<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-probe-scsi&quot; },<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-probe-signal&quot; },<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-probe-skb&quot; },<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-probe-sock&quot; },<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-probe-statedump&quot; },<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-probe-sunrpc&quot; },<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-probe-timer&quot; },<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-probe-udp&quot; },<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-probe-vmscan&quot; },<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-probe-workqueue&quot; },<br>
+&gt; + =C2=A0 =C2=A0 { &quot;lttng-probe-writeback&quot; },<br>
+&gt; =C2=A0};<br>
+&gt;<br>
+&gt; =C2=A0void modprobe_remove_lttng(const struct kern_modules_param *modu=
+les,<br>
+&gt; - =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0int entries)<br>
+&gt; + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0int entries, int required)<br>
+&gt; =C2=A0{<br>
+&gt; =C2=A0 =C2=A0 =C2=A0 int ret =3D 0, i;<br>
+&gt; =C2=A0 =C2=A0 =C2=A0 char modprobe[256];<br>
+&gt; @@ -94,26 +101,21 @@ void modprobe_remove_lttng(const struct kern_modu=
+les_param *modules,<br>
+&gt; =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 modules[i].name);<br>
+&gt; =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 if (ret &lt; 0) {<br>
+&gt; =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 PERROR(&quot;snprintf modprobe -r&quot;);<br>
+&gt; - =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 goto error;<br>
+&gt; + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 return;<br>
+&gt; =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 }<br>
+&gt; =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 modprobe[sizeof(modpr=
+obe) - 1] =3D &#39;\0&#39;;<br>
+&gt; =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 ret =3D system(modpro=
+be);<br>
+&gt; =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 if (ret =3D=3D -1) {<=
+br>
+&gt; =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 ERR(&quot;Unable to launch modprobe -r for module %s&quot;,<br>
+&gt; - =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 kern_modules_co=
+ntrol[i].name);<br>
+&gt; - =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 } else if (kern_modules_co=
+ntrol[i].required<br>
+&gt; - =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &amp;&amp; WEXITSTATUS(ret) !=3D 0) {<br>
+&gt; + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 modules[i].name=
+);<br>
+&gt; + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 } else if (required &amp;&=
+amp; WEXITSTATUS(ret) !=3D 0) {<br>
+&gt; =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 ERR(&quot;Unable to remove module %s&quot;,<br>
+&gt; - =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 kern_modules_co=
+ntrol[i].name);<br>
+&gt; + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 modules[i].name=
+);<br>
+&gt; =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 } else {<br>
+&gt; =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 DBG(&quot;Modprobe removal successful %s&quot;,<br>
+&gt; - =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 kern_modules_co=
+ntrol[i].name);<br>
+&gt; + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 modules[i].name=
+);<br>
+&gt; =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 }<br>
+&gt; =C2=A0 =C2=A0 =C2=A0 }<br>
+&gt; -<br>
+&gt; -error:<br>
+&gt; - =C2=A0 =C2=A0 return;<br>
+&gt; -<br>
+&gt; =C2=A0}<br>
+&gt;<br>
+&gt; =C2=A0/*<br>
+&gt; @@ -121,8 +123,12 @@ error:<br>
+&gt; =C2=A0 */<br>
+&gt; =C2=A0void modprobe_remove_lttng_control(void)<br>
+&gt; =C2=A0{<br>
+&gt; - =C2=A0 =C2=A0 return modprobe_remove_lttng(kern_modules_control,<br>
+&gt; - =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0ARRAY_SIZE(kern_modules=
+_control));<br>
+&gt; + =C2=A0 =C2=A0 modprobe_remove_lttng(kern_modules_control_opt,<br>
+&gt; + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 ARRAY_SIZE(kern_modules_contr=
+ol_opt),<br>
+&gt; + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 LTTNG_MOD_OPTIONAL);<br>
+&gt; + =C2=A0 =C2=A0 modprobe_remove_lttng(kern_modules_control_core,<br>
+&gt; + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0ARRAY_SIZE(kern_modules=
+_control_core),<br>
+&gt; + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0LTTNG_MOD_REQUIRED);<br=
+>
+&gt; =C2=A0}<br>
+&gt;<br>
+&gt; =C2=A0/*<br>
+&gt; @@ -131,7 +137,8 @@ void modprobe_remove_lttng_control(void)<br>
+&gt; =C2=A0void modprobe_remove_lttng_data(void)<br>
+&gt; =C2=A0{<br>
+&gt; =C2=A0 =C2=A0 =C2=A0 return modprobe_remove_lttng(kern_modules_probes,=
 <br>
-</div></div><div class=3D"HOEnZb"><div class=3D"h5">--<br>
-J=C3=A9r=C3=A9mie Galarneau<br>
-EfficiOS Inc.<br>
-<a href=3D"http://www.efficios.com" target=3D"_blank">http://www.efficios.c=
-om</a><br>
-</div></div></blockquote></div><br></div>
+&gt; - =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0ARRAY_SIZE(kern_modules=
+_list));<br>
+&gt; + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0ARRAY_SIZE(kern_modules=
+_probes),<br>
+&gt; + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0LTTNG_MOD_OPTIONAL);<br=
+>
+&gt; =C2=A0}<br>
+&gt;<br>
+&gt; =C2=A0/*<br>
+&gt; @@ -143,7 +150,8 @@ void modprobe_remove_lttng_all(void)<br>
+&gt; =C2=A0 =C2=A0 =C2=A0 modprobe_remove_lttng_control();<br>
+&gt; =C2=A0}<br>
+&gt;<br>
+&gt; -static int modprobe_lttng(const struct kern_modules_param *modules, i=
+nt entries)<br>
+&gt; +static int modprobe_lttng(const struct kern_modules_param *modules,<b=
+r>
+&gt; + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 int entries, int required)<br>
+&gt; =C2=A0{<br>
+&gt; =C2=A0 =C2=A0 =C2=A0 int ret =3D 0, i;<br>
+&gt; =C2=A0 =C2=A0 =C2=A0 char modprobe[256];<br>
+&gt; @@ -151,7 +159,7 @@ static int modprobe_lttng(const struct kern_module=
+s_param *modules, int entries)<br>
+&gt; =C2=A0 =C2=A0 =C2=A0 for (i =3D 0; i &lt; entries; i++) {<br>
+&gt; =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 ret =3D snprintf(modp=
+robe, sizeof(modprobe),<br>
+&gt; =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &quot;/sbin/modprobe %s%s&quot;,<br>
+&gt; - =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 modules[i].required ? &quot;&quot; : &quot;=
+-q &quot;,<br>
+&gt; + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 required ? &quot;&quot; : &quot;-q &quot;,<=
+br>
+&gt; =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 modules[i].name);<br>
+&gt; =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 if (ret &lt; 0) {<br>
+&gt; =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 PERROR(&quot;snprintf modprobe&quot;);<br>
+&gt; @@ -162,12 +170,10 @@ static int modprobe_lttng(const struct kern_modu=
+les_param *modules, int entries)<br>
+&gt; =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 if (ret =3D=3D -1) {<=
+br>
+&gt; =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 ERR(&quot;Unable to launch modprobe for module %s&quot;,<br>
+&gt; =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 modules[i].n=
+ame);<br>
+&gt; - =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 } else if (modules[i].requ=
+ired &amp;&amp; WEXITSTATUS(ret) !=3D 0) {<br>
+&gt; - =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 ERR(&quot;Unable to load module %s&quot;,<br>
+&gt; - =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 modules[i].name=
+);<br>
+&gt; + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 } else if (required &amp;&=
+amp; WEXITSTATUS(ret) !=3D 0) {<br>
+&gt; + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 ERR(&quot;Unable to load module %s&quot;, modules[i].name);<br>
+&gt; =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 } else {<br>
+&gt; - =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 DBG(&quot;Modprobe successfully %s&quot;,<br>
+&gt; - =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 modules[i].name=
+);<br>
+&gt; + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 DBG(&quot;Modprobe successfully %s&quot;, modules[i].name);<br>
+&gt; =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 }<br>
+&gt; =C2=A0 =C2=A0 =C2=A0 }<br>
+&gt;<br>
+&gt; @@ -180,14 +186,25 @@ error:<br>
+&gt; =C2=A0 */<br>
+&gt; =C2=A0int modprobe_lttng_control(void)<br>
+&gt; =C2=A0{<br>
+&gt; - =C2=A0 =C2=A0 return modprobe_lttng(kern_modules_control,<br>
+&gt; - =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 ARRAY_SIZE(kern_modules_control));<br>
+&gt; + =C2=A0 =C2=A0 int ret;<br>
+&gt; +<br>
+&gt; + =C2=A0 =C2=A0 ret =3D modprobe_lttng(kern_modules_control_core,<br>
+&gt; + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0ARRAY_SIZE(kern_modules_control_core),<br>
+&gt; + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0LTTNG_MOD_REQUIRED);<br>
+&gt; + =C2=A0 =C2=A0 if (ret !=3D 0)<br>
+&gt; + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 return ret;<br>
+&gt; + =C2=A0 =C2=A0 ret =3D modprobe_lttng(kern_modules_control_opt,<br>
+&gt; + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 ARRAY_SIZE(kern_modules_control_opt),<br>
+&gt; + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 LTTNG_MOD_OPTIONAL);<br>
+&gt; + =C2=A0 =C2=A0 return ret;<br>
+&gt; =C2=A0}<br>
+&gt; +<br>
+&gt; =C2=A0/*<br>
+&gt; =C2=A0 * Load data kernel module(s).<br>
+&gt; =C2=A0 */<br>
+&gt; =C2=A0int modprobe_lttng_data(void)<br>
+&gt; =C2=A0{<br>
+&gt; =C2=A0 =C2=A0 =C2=A0 return modprobe_lttng(kern_modules_probes,<br>
+&gt; - =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 ARRAY_SIZE(kern_modules_probes));<br>
+&gt; + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 ARRAY_SIZE(kern_modules_probes),<br>
+&gt; + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 LTTNG_MOD_OPTIONAL);<br>
+&gt; =C2=A0}<br>
+&gt; --<br>
+&gt; 1.7.9.5<br>
+&gt;<br>
+&gt;<br>
+</div></div>&gt; _______________________________________________<br>
+&gt; lttng-dev mailing list<br>
+&gt; <a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org=
+</a><br>
+&gt; <a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" =
+target=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev=
+</a><br>
+</blockquote></div><br></div>
 
---001a1134a210e2d01004f94d0e07--
+--001a11346b544926dc04f95bada8--
 
 
---===============1259833156==
+--===============1040685172==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
-Content-Disposition: inline
 Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============1259833156==--
+--===============1040685172==--
