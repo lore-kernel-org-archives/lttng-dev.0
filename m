@@ -1,50 +1,48 @@
-From: Gerlando Falauto <gerlando.falauto@keymile.com>
-Subject: Re: compile lttng get gcc compile error
-Date: Wed, 14 May 2014 16:52:49 +0200
-Message-ID: <53738341.4030706@keymile.com>
-References: <CANudz+u_d54BtB9Fk3Vdtb8B7im_WMbK20jg_zUGeJ3wEPECMg@mail.gmail.com>	<CAH6eHdSvfWjiZCLUNHaftnwjp_L56uSPwA=hTHpLAwiPhunfsA@mail.gmail.com> <CANudz+tzfc0cjBh=7Jm4TPvm7h33oyPaZdVGBjeuOrzgM8gimQ@mail.gmail.com>
+From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
+ <jeremie.galarneau@efficios.com>
+Subject: [PATCH lttng-tools] Fix: Copy-pasted PERROR messages
+	may be misleading
+Date: Wed, 14 May 2014 11:32:10 -0400
+Message-ID: <1400081530-2950-1-git-send-email-jeremie.galarneau__5150.74582440338$1400081591$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-1; format=flowed
-Content-Transfer-Encoding: 7bit
-Return-path: <gcc-help-return-55266-gcc-help=m.gmane.org@gcc.gnu.org>
-List-Unsubscribe: <mailto:gcc-help-unsubscribe-gcc-help=m.gmane.org@gcc.gnu.org>
-List-Archive: <http://gcc.gnu.org/ml/gcc-help/>
-List-Post: <mailto:gcc-help@gcc.gnu.org>
-List-Help: <mailto:gcc-help-help@gcc.gnu.org>
-Sender: gcc-help-owner@gcc.gnu.org
-In-Reply-To: <CANudz+tzfc0cjBh=7Jm4TPvm7h33oyPaZdVGBjeuOrzgM8gimQ@mail.gmail.com>
-To: loody <miloody@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, gcc-help <gcc-help@gcc.gnu.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail-ig0-f180.google.com ([209.85.213.180])
+ by ltt.polymtl.ca with esmtp (Exim 4.80)
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1WkbAI-00029R-TU
+ for lttng-dev@lists.lttng.org; Wed, 14 May 2014 11:32:21 -0400
+Received: by mail-ig0-f180.google.com with SMTP id c1so1925045igq.13
+ for <lttng-dev@lists.lttng.org>; Wed, 14 May 2014 08:32:13 -0700 (PDT)
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi loody,
-[originally posted to gcc-help, cross-posting to lttng-dev]
-
-On 03/27/2014 01:37 PM, loody wrote:
-> hi Jonathan:
->
-> 2014-03-27 18:43 GMT+08:00 Jonathan Wakely <jwakely.gcc@gmail.com>:
->> On 27 March 2014 10:32, loody wrote:
->>> hi all
->>> when I try to cross-compile lttng-tool for arm.
->>> I get below message
->>>
->>>    CC     kernel-consumer.lo
->>> kernel-consumer.c: In function 'lttng_kconsumer_snapshot_channel':
->>> kernel-consumer.c:324:1: internal compiler error: in gen_movsi, at
->>> config/arm/arm.md:5680
->>>
->>> my gcc version is 4.7.4
->>
->> I think this is http://gcc.gnu.org/PR58595 which will be fixed in GCC 4.9.0
-> is there any patch I can use to fix this issue before waiting 4.9.0 release?
-> or is there method I can avoid this compile happen if I rewrite the source?
->
-> thanks a lot,
->
-
-Did you ever find a workaround for such an issue? Perhaps by refactoring 
-the code within lttng_kconsumer_snapshot_channel()?
-
-Thank you!
-Gerlando
+U29tZSBQRVJST1JzIGluIGx0dG5nLXNlc3Npb25kJ3MgcHRocmVhZF9jcmVhdGUncyBlcnJvciBo
+YW5kbGluZwpjb2RlIGluZGljYXRlIHRoZSB3cm9uZyB0aHJlYWQgbmFtZSB3aGljaCBtYXkgYmUg
+bWlzbGVhZGluZwpkdXJpbmcgZGVidWdnaW5nLgoKU2lnbmVkLW9mZi1ieTogSsOpcsOpbWllIEdh
+bGFybmVhdSA8amVyZW1pZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29tPgotLS0KIHNyYy9iaW4vbHR0
+bmctc2Vzc2lvbmQvbWFpbi5jIHwgNCArKy0tCiAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25z
+KCspLCAyIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQv
+bWFpbi5jIGIvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9tYWluLmMKaW5kZXggM2E4YTFiMi4uM2Zj
+MjU2NSAxMDA2NDQKLS0tIGEvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9tYWluLmMKKysrIGIvc3Jj
+L2Jpbi9sdHRuZy1zZXNzaW9uZC9tYWluLmMKQEAgLTUxOTAsNyArNTE5MCw3IEBAIGludCBtYWlu
+KGludCBhcmdjLCBjaGFyICoqYXJndikKIAlyZXQgPSBwdGhyZWFkX2NyZWF0ZSgmYXBwc19ub3Rp
+ZnlfdGhyZWFkLCBOVUxMLAogCQkJdXN0X3RocmVhZF9tYW5hZ2Vfbm90aWZ5LCAodm9pZCAqKSBO
+VUxMKTsKIAlpZiAocmV0ICE9IDApIHsKLQkJUEVSUk9SKCJwdGhyZWFkX2NyZWF0ZSBhcHBzIik7
+CisJCVBFUlJPUigicHRocmVhZF9jcmVhdGUgbm90aWZ5Iik7CiAJCWdvdG8gZXhpdF9hcHBzX25v
+dGlmeTsKIAl9CiAKQEAgLTUxOTgsNyArNTE5OCw3IEBAIGludCBtYWluKGludCBhcmdjLCBjaGFy
+ICoqYXJndikKIAlyZXQgPSBwdGhyZWFkX2NyZWF0ZSgmanVsX3JlZ190aHJlYWQsIE5VTEwsCiAJ
+CQlqdWxfdGhyZWFkX21hbmFnZV9yZWdpc3RyYXRpb24sICh2b2lkICopIE5VTEwpOwogCWlmIChy
+ZXQgIT0gMCkgewotCQlQRVJST1IoInB0aHJlYWRfY3JlYXRlIGFwcHMiKTsKKwkJUEVSUk9SKCJw
+dGhyZWFkX2NyZWF0ZSBKVUwiKTsKIAkJZ290byBleGl0X2p1bF9yZWc7CiAJfQogCi0tIAoxLjku
+MgoKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5n
+LWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMu
+bHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
