@@ -1,20 +1,20 @@
-From: <rongqing.li@windriver.com>
-Subject: [PATCH] FIX: Align buffers on 4 bytes for 64bit access
-Date: Thu, 15 May 2014 16:57:30 +0800
-Message-ID: <1400144250-26852-1-git-send-email-rongqing.li__27272.7630603642$1400160531$gmane$org@windriver.com>
+From: Simon Marchi <simon.marchi@polymtl.ca>
+Subject: Re: [PATCH] FIX: Align buffers on 4 bytes for 64bit
+	access
+Date: Thu, 15 May 2014 09:34:18 -0400
+Message-ID: <CAFXXi0=j4LmhAEpGcr1gByatjk12Pgh_WOH7ZkvGkBTYk8zLHQ__1868.62843479521$1400162835$gmane$org@mail.gmail.com>
+References: <1400144250-26852-1-git-send-email-rongqing.li@windriver.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.windriver.com ([147.11.1.11])
+Received: from mail-ie0-f172.google.com ([209.85.223.172])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Rongqing.Li@windriver.com>) id 1WkrTs-00005L-Re
- for lttng-dev@lists.lttng.org; Thu, 15 May 2014 04:57:37 -0400
-Received: from ALA-HCB.corp.ad.wrs.com (ala-hcb.corp.ad.wrs.com
- [147.11.189.41])
- by mail.windriver.com (8.14.5/8.14.5) with ESMTP id s4F8vVqF023128
- (version=TLSv1/SSLv3 cipher=AES128-SHA bits=128 verify=FAIL)
- for <lttng-dev@lists.lttng.org>; Thu, 15 May 2014 01:57:31 -0700 (PDT)
+ (envelope-from <thundersim@gmail.com>) id 1WkvoE-00020H-T0
+ for lttng-dev@lists.lttng.org; Thu, 15 May 2014 09:34:55 -0400
+Received: by mail-ie0-f172.google.com with SMTP id as1so1001931iec.31
+ for <lttng-dev@lists.lttng.org>; Thu, 15 May 2014 06:34:49 -0700 (PDT)
+In-Reply-To: <1400144250-26852-1-git-send-email-rongqing.li@windriver.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,21 +23,28 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: rongqing.li@windriver.com
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-RnJvbTogRnJlZHJpayBNYXJrc3Ryw7ZtIDxmcmVkcmlrLm1hcmtzdHJvbUBnbWFpbC5jb20+CgpT
-aWduZWQtb2ZmLWJ5OiBGcmVkcmlrIE1hcmtzdHLmnpptIDxmcmVkcmlrLm1hcmtzdHJvbUBnbWFp
-bC5jb20+Ci0tLQogZm9ybWF0cy9jdGYvbWV0YWRhdGEvb2Jqc3RhY2suYyB8ICAgIDIgKysKIDEg
-ZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKykKCmRpZmYgLS1naXQgYS9mb3JtYXRzL2N0Zi9t
-ZXRhZGF0YS9vYmpzdGFjay5jIGIvZm9ybWF0cy9jdGYvbWV0YWRhdGEvb2Jqc3RhY2suYwppbmRl
-eCA5ZTI2NGE0Li45NjQzYjliIDEwMDY0NAotLS0gYS9mb3JtYXRzL2N0Zi9tZXRhZGF0YS9vYmpz
-dGFjay5jCisrKyBiL2Zvcm1hdHMvY3RmL21ldGFkYXRhL29ianN0YWNrLmMKQEAgLTExOCw2ICsx
-MTgsOCBAQCB2b2lkICpvYmpzdGFja19hbGxvYyhzdHJ1Y3Qgb2Jqc3RhY2sgKm9ianN0YWNrLCBz
-aXplX3QgbGVuKQogCXN0cnVjdCBvYmpzdGFja19ub2RlICpsYXN0X25vZGU7CiAJdm9pZCAqcDsK
-IAorCWxlbiA9IChsZW4gKyAzKSAmIH4zOworCiAJLyogR2V0IGxhc3Qgbm9kZSAqLwogCWxhc3Rf
-bm9kZSA9IGJ0X2xpc3RfZW50cnkob2Jqc3RhY2stPmhlYWQucHJldiwKIAkJCXN0cnVjdCBvYmpz
-dGFja19ub2RlLCBub2RlKTsKLS0gCjEuNy4xMC40CgoKX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZA
-bGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xp
-c3RpbmZvL2x0dG5nLWRldgo=
+SSBzdWdnZXN0IGFkZGluZyBhIGNvbW1lbnQgYWJvdmUgdGhhdCBsaW5lIGV4cGxhaW5pbmcgd2hh
+dCBpdCBkb2VzLgoKT24gMTUgTWF5IDIwMTQgMDQ6NTcsICA8cm9uZ3FpbmcubGlAd2luZHJpdmVy
+LmNvbT4gd3JvdGU6Cj4gRnJvbTogRnJlZHJpayBNYXJrc3Ryw7ZtIDxmcmVkcmlrLm1hcmtzdHJv
+bUBnbWFpbC5jb20+Cj4KPiBTaWduZWQtb2ZmLWJ5OiBGcmVkcmlrIE1hcmtzdHLmnpptIDxmcmVk
+cmlrLm1hcmtzdHJvbUBnbWFpbC5jb20+Cj4gLS0tCj4gIGZvcm1hdHMvY3RmL21ldGFkYXRhL29i
+anN0YWNrLmMgfCAgICAyICsrCj4gIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKykKPgo+
+IGRpZmYgLS1naXQgYS9mb3JtYXRzL2N0Zi9tZXRhZGF0YS9vYmpzdGFjay5jIGIvZm9ybWF0cy9j
+dGYvbWV0YWRhdGEvb2Jqc3RhY2suYwo+IGluZGV4IDllMjY0YTQuLjk2NDNiOWIgMTAwNjQ0Cj4g
+LS0tIGEvZm9ybWF0cy9jdGYvbWV0YWRhdGEvb2Jqc3RhY2suYwo+ICsrKyBiL2Zvcm1hdHMvY3Rm
+L21ldGFkYXRhL29ianN0YWNrLmMKPiBAQCAtMTE4LDYgKzExOCw4IEBAIHZvaWQgKm9ianN0YWNr
+X2FsbG9jKHN0cnVjdCBvYmpzdGFjayAqb2Jqc3RhY2ssIHNpemVfdCBsZW4pCj4gICAgICAgICBz
+dHJ1Y3Qgb2Jqc3RhY2tfbm9kZSAqbGFzdF9ub2RlOwo+ICAgICAgICAgdm9pZCAqcDsKPgo+ICsg
+ICAgICAgbGVuID0gKGxlbiArIDMpICYgfjM7Cj4gKwo+ICAgICAgICAgLyogR2V0IGxhc3Qgbm9k
+ZSAqLwo+ICAgICAgICAgbGFzdF9ub2RlID0gYnRfbGlzdF9lbnRyeShvYmpzdGFjay0+aGVhZC5w
+cmV2LAo+ICAgICAgICAgICAgICAgICAgICAgICAgIHN0cnVjdCBvYmpzdGFja19ub2RlLCBub2Rl
+KTsKPiAtLQo+IDEuNy4xMC40Cj4KPgo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fCj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+IGx0dG5nLWRldkBsaXN0
+cy5sdHRuZy5vcmcKPiBodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0
+aW5mby9sdHRuZy1kZXYKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpo
+dHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
