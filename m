@@ -1,17 +1,20 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: Re: [PATCH lttng-tools] Fix: Tests should set the
- LTTNG_SESSION_CONFIG_XSD_PATH variable
-Date: Wed, 14 May 2014 16:53:29 -0400
-Message-ID: <20140514205329.GA6612__13432.4553459466$1400100921$gmane$org@dalia>
-References: <1400100742-18018-1-git-send-email-jeremie.galarneau@efficios.com>
+From: Jan Glauber <jan.glauber@gmail.com>
+Subject: Re: [PATCH lttng-tools v3 0/4] Dynamic probe list
+	support
+Date: Thu, 15 May 2014 08:31:25 +0200
+Message-ID: <CAEiAFz1-Lp9dq_TSTy7VekK6pbMiNkLFPm_OG9QR5=nJdRqU6w__18833.765658974$1400135540$gmane$org@mail.gmail.com>
+References: <cover.1400077421.git.jan.glauber@gmail.com>
+ <20140514204730.GD15072@dalia>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2120277903=="
+Content-Type: multipart/mixed; boundary="===============1309077306=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from ns236805.ip-192-99-35.net ([192.99.35.19]
- helo=smtp.ini-tech.com) by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <dgoulet@efficios.com>) id 1WkgBH-0004JF-3w
- for lttng-dev@lists.lttng.org; Wed, 14 May 2014 16:53:44 -0400
-In-Reply-To: <1400100742-18018-1-git-send-email-jeremie.galarneau@efficios.com>
+Received: from mail-qg0-f47.google.com ([209.85.192.47])
+ by ltt.polymtl.ca with esmtp (Exim 4.80)
+ (envelope-from <jan.glauber@gmail.com>) id 1WkpCV-0007hJ-Bd
+ for lttng-dev@lists.lttng.org; Thu, 15 May 2014 02:31:35 -0400
+Received: by mail-qg0-f47.google.com with SMTP id j107so996246qga.20
+ for <lttng-dev@lists.lttng.org>; Wed, 14 May 2014 23:31:25 -0700 (PDT)
+In-Reply-To: <20140514204730.GD15072@dalia>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,82 +23,162 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: David Goulet <dgoulet@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
+--===============1309077306==
+Content-Type: multipart/alternative; boundary=089e01537222442b1404f96a72d7
 
---===============2120277903==
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="rwEMma7ioTxnRzrJ"
-Content-Disposition: inline
+--089e01537222442b1404f96a72d7
+Content-Type: text/plain; charset=UTF-8
+
+Thanks David! I've had the impression that LTTng follows kernel coding
+style but it diverts on the if/else case.
+Personaly I don't buy the {} is better argument, but I'll try to remember
+your preference :)
+
+If you could help me a bit with the config file syntax I'll be happy to add
+support for it.
+What would help me is a working example with all the required values. As I
+said
+an empty config file did not work for me, so there seems to be some
+required options and I was not able to
+figure them out.
+
+Cheers,
+Jan
 
 
---rwEMma7ioTxnRzrJ
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+2014-05-14 22:47 GMT+02:00 David Goulet <dgoulet@efficios.com>:
+
+> Merged!
+>
+> I merged it with some minor syntax fixes mostly in modprobe.c. There is
+> one thing I don't accept at all is if/else without {}. Remember the goto
+> fail; bug :).
+>
+> Anyhow, I fixed them to fit my OCD if/else issue. ;)
+>
+> Big thanks for that, this is really great! I would love to improve that
+> with support in the "lttng" command line that could take a list and
+> spawn the sessiond with it. Also, the configuration file coming in 2.5
+> (currently in master).
+>
+> Cheers!
+> David
+>
+> On 14 May (16:26:28), Jan Glauber wrote:
+> > Hi David,
+> >
+> > here are the rebased patches (onto 88564da). There are no functional
+> > changes to the previous version.
+> >
+> > Jan Glauber (4):
+> >   Use common functions for module loading and unloading
+> >   Seperate probe modules from control modules
+> >   Remove required parameter from module parameters
+> >   Configurable kernel module probes support
+> >
+> >  doc/man/lttng-sessiond.8              |    7 +
+> >  src/bin/lttng-sessiond/kern-modules.h |    3 +-
+> >  src/bin/lttng-sessiond/main.c         |    5 +
+> >  src/bin/lttng-sessiond/modprobe.c     |  307
+> ++++++++++++++++++---------------
+> >  src/bin/lttng-sessiond/modprobe.h     |    2 +
+> >  src/common/defaults.h                 |    3 +
+> >  src/common/utils.c                    |   10 ++
+> >  src/common/utils.h                    |    1 +
+> >  8 files changed, 200 insertions(+), 138 deletions(-)
+> >
+> > --
+> > 1.7.9.5
+> >
+>
+
+--089e01537222442b1404f96a72d7
+Content-Type: text/html; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-Merged!
+<div dir=3D"ltr"><div><div><div><div><div><div>Thanks David! I&#39;ve had t=
+he impression that LTTng follows kernel coding style but it diverts on the =
+if/else case.<br></div>Personaly I don&#39;t buy the {} is better argument,=
+ but I&#39;ll try to remember your preference :)<br>
+<br></div>If you could help me a bit with the config file syntax I&#39;ll b=
+e happy to add support for it.<br></div>What would help me is a working exa=
+mple with all the required values. As I said<br></div>an empty config file =
+did not work for me, so there seems to be some required options and I was n=
+ot able to<br>
+</div>figure them out.<br><br></div>Cheers,<br>Jan<br></div><div class=3D"g=
+mail_extra"><br><br><div class=3D"gmail_quote">2014-05-14 22:47 GMT+02:00 D=
+avid Goulet <span dir=3D"ltr">&lt;<a href=3D"mailto:dgoulet@efficios.com" t=
+arget=3D"_blank">dgoulet@efficios.com</a>&gt;</span>:<br>
+<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
+x #ccc solid;padding-left:1ex">Merged!<br>
+<br>
+I merged it with some minor syntax fixes mostly in modprobe.c. There is<br>
+one thing I don&#39;t accept at all is if/else without {}. Remember the got=
+o<br>
+fail; bug :).<br>
+<br>
+Anyhow, I fixed them to fit my OCD if/else issue. ;)<br>
+<br>
+Big thanks for that, this is really great! I would love to improve that<br>
+with support in the &quot;lttng&quot; command line that could take a list a=
+nd<br>
+spawn the sessiond with it. Also, the configuration file coming in 2.5<br>
+(currently in master).<br>
+<br>
+Cheers!<br>
+<span class=3D"HOEnZb"><font color=3D"#888888">David<br>
+</font></span><div class=3D"HOEnZb"><div class=3D"h5"><br>
+On 14 May (16:26:28), Jan Glauber wrote:<br>
+&gt; Hi David,<br>
+&gt;<br>
+&gt; here are the rebased patches (onto 88564da). There are no functional<b=
+r>
+&gt; changes to the previous version.<br>
+&gt;<br>
+&gt; Jan Glauber (4):<br>
+&gt; =C2=A0 Use common functions for module loading and unloading<br>
+&gt; =C2=A0 Seperate probe modules from control modules<br>
+&gt; =C2=A0 Remove required parameter from module parameters<br>
+&gt; =C2=A0 Configurable kernel module probes support<br>
+&gt;<br>
+&gt; =C2=A0doc/man/lttng-sessiond.8 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0| =C2=A0 =C2=A07 +<br>
+&gt; =C2=A0src/bin/lttng-sessiond/kern-modules.h | =C2=A0 =C2=A03 +-<br>
+&gt; =C2=A0src/bin/lttng-sessiond/main.c =C2=A0 =C2=A0 =C2=A0 =C2=A0 | =C2=
+=A0 =C2=A05 +<br>
+&gt; =C2=A0src/bin/lttng-sessiond/modprobe.c =C2=A0 =C2=A0 | =C2=A0307 ++++=
+++++++++++++++---------------<br>
+&gt; =C2=A0src/bin/lttng-sessiond/modprobe.h =C2=A0 =C2=A0 | =C2=A0 =C2=A02=
+ +<br>
+&gt; =C2=A0src/common/defaults.h =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 | =C2=A0 =C2=A03 +<br>
+&gt; =C2=A0src/common/utils.c =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0| =C2=A0 10 ++<br>
+&gt; =C2=A0src/common/utils.h =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0| =C2=A0 =C2=A01 +<br>
+&gt; =C2=A08 files changed, 200 insertions(+), 138 deletions(-)<br>
+&gt;<br>
+&gt; --<br>
+&gt; 1.7.9.5<br>
+&gt;<br>
+</div></div></blockquote></div><br></div>
 
-On 14 May (16:52:22), J=E9r=E9mie Galarneau wrote:
-> Tests should set the LTTNG_SESSION_CONFIG_XSD_PATH environment
-> variable to use the in-tree session configuration schema.
->=20
-> Signed-off-by: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
-> ---
->  tests/utils/utils.sh | 2 ++
->  1 file changed, 2 insertions(+)
->=20
-> diff --git a/tests/utils/utils.sh b/tests/utils/utils.sh
-> index a1a26d9..280cc40 100644
-> --- a/tests/utils/utils.sh
-> +++ b/tests/utils/utils.sh
-> @@ -166,6 +166,8 @@ function start_lttng_sessiond()
->  	fi
-> =20
->  	DIR=3D$(readlink -f $TESTDIR)
-> +	: ${LTTNG_SESSION_CONFIG_XSD_PATH=3D${DIR}/../src/common/config/}
-> +	export LTTNG_SESSION_CONFIG_XSD_PATH
-> =20
->  	if [ -z $(pidof lt-$SESSIOND_BIN) ]; then
->  		$DIR/../src/bin/lttng-sessiond/$SESSIOND_BIN --background --consumerd3=
-2-path=3D"$DIR/../src/bin/lttng-consumerd/lttng-consumerd" --consumerd64-pa=
-th=3D"$DIR/../src/bin/lttng-consumerd/lttng-consumerd"
-> --=20
-> 1.9.2
->=20
-
---rwEMma7ioTxnRzrJ
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iQF8BAEBAgBmBQJTc9fJXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
-ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
-MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02IuIIAISO6zP6ITxhEbEBZcApZurO
-tBpugcvo9zu5l7WdfqkmdGKdHyPwZzEmbAq6QJljHXW6JzvYHdJTnCfdtFqFKM+l
-DDZmFbSq8pmRO4emAqxlPHit1IZk32KAWN6We+2Wi2qeivc9XoeTstLFrGDTp+a/
-zZUj+urz6G40TrkAdgIzvuEQvRl+MeXc8l6iExZduyVL/uyq3ozBY05Aq1d95a/D
-QqrO45e12wc4Ow2u2gkKOkv6hKaVFg7YM3TVfY9rsYy5bRIh3iGb0fiCE+scayXA
-5vKMXxmr7mrXwAyQDlYf933xoqHyYSXrPXBIDyy8QvYU1HqAyuQtva8rI7yw0s0=
-=CQW6
------END PGP SIGNATURE-----
-
---rwEMma7ioTxnRzrJ--
+--089e01537222442b1404f96a72d7--
 
 
---===============2120277903==
+--===============1309077306==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
-Content-Disposition: inline
 Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============2120277903==--
+--===============1309077306==--
