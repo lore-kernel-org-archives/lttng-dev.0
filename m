@@ -1,19 +1,27 @@
-From: Rongqing Li <rongqing.li@windriver.com>
-Subject: Re: [PATCH] FIX: Align buffers on 4 bytes for 64bit
-	access
-Date: Fri, 16 May 2014 09:29:57 +0800
-Message-ID: <53756A15.9080208__43205.4579876878$1400205690$gmane$org@windriver.com>
-References: <1400144250-26852-1-git-send-email-rongqing.li@windriver.com>
- <CA+jJMxt=fh0FW7VNmpnZwrZ9JtBhAAGuJKbrxDrEKt+nSw95FQ@mail.gmail.com>
+From: Gerlando Falauto <gerlando.falauto@keymile.com>
+Subject: Re: lttng-ust missing tracepoints
+Date: Fri, 16 May 2014 10:14:37 +0200
+Message-ID: <5375C8ED.6000909__25469.9979829185$1400228140$gmane$org@keymile.com>
+References: <5374FBDE.6030305@keymile.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.windriver.com ([147.11.1.11])
+Received: from mail-de.keymile.com ([195.8.104.250])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Rongqing.Li@windriver.com>) id 1Wl6yL-00065k-QD
- for lttng-dev@lists.lttng.org; Thu, 15 May 2014 21:30:07 -0400
-In-Reply-To: <CA+jJMxt=fh0FW7VNmpnZwrZ9JtBhAAGuJKbrxDrEKt+nSw95FQ@mail.gmail.com>
+ (envelope-from <prvs=0213a97ac1=gerlando.falauto@keymile.com>)
+ id 1WlDHz-00006w-GH
+ for lttng-dev@lists.lttng.org; Fri, 16 May 2014 04:14:50 -0400
+Received: from frodo.de.keymile.net ([10.9.1.54]:47735
+ helo=mailrelay.de.keymile.net)
+ by mail-de.keymile.com with esmtp (Exim 4.76)
+ (envelope-from <gerlando.falauto@keymile.com>) id 1WlDHr-0001Mn-0P
+ for lttng-dev@lists.lttng.org; Fri, 16 May 2014 10:14:39 +0200
+Received: from chber1-10555x.ch.keymile.net (chber1-10555x.ch.keymile.net
+ [172.31.40.82])
+ by mailrelay.de.keymile.net (8.12.2/8.12.2) with ESMTP id s4G8EbLf001713
+ for <lttng-dev@lists.lttng.org>; Fri, 16 May 2014 10:14:38 +0200 (MEST)
+In-Reply-To: <5374FBDE.6030305@keymile.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,42 +30,27 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?UTF-8?B?SsOpcsOpbWllIEdhbGFybmVhdQ==?= <jeremie.galarneau@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-CgpPbiAwNS8xNi8yMDE0IDAzOjM2IEFNLCBKw6lyw6ltaWUgR2FsYXJuZWF1IHdyb3RlOgo+IE9u
-IFRodSwgTWF5IDE1LCAyMDE0IGF0IDQ6NTcgQU0sICA8cm9uZ3FpbmcubGlAd2luZHJpdmVyLmNv
-bT4gd3JvdGU6Cj4+IEZyb206IEZyZWRyaWsgTWFya3N0csO2bSA8ZnJlZHJpay5tYXJrc3Ryb21A
-Z21haWwuY29tPgo+Pgo+PiBTaWduZWQtb2ZmLWJ5OiBGcmVkcmlrIE1hcmtzdHLmnpptIDxmcmVk
-cmlrLm1hcmtzdHJvbUBnbWFpbC5jb20+Cj4+IC0tLQo+PiAgIGZvcm1hdHMvY3RmL21ldGFkYXRh
-L29ianN0YWNrLmMgfCAgICAyICsrCj4+ICAgMSBmaWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygr
-KQo+Pgo+PiBkaWZmIC0tZ2l0IGEvZm9ybWF0cy9jdGYvbWV0YWRhdGEvb2Jqc3RhY2suYyBiL2Zv
-cm1hdHMvY3RmL21ldGFkYXRhL29ianN0YWNrLmMKPj4gaW5kZXggOWUyNjRhNC4uOTY0M2I5YiAx
-MDA2NDQKPj4gLS0tIGEvZm9ybWF0cy9jdGYvbWV0YWRhdGEvb2Jqc3RhY2suYwo+PiArKysgYi9m
-b3JtYXRzL2N0Zi9tZXRhZGF0YS9vYmpzdGFjay5jCj4+IEBAIC0xMTgsNiArMTE4LDggQEAgdm9p
-ZCAqb2Jqc3RhY2tfYWxsb2Moc3RydWN0IG9ianN0YWNrICpvYmpzdGFjaywgc2l6ZV90IGxlbikK
-Pj4gICAgICAgICAgc3RydWN0IG9ianN0YWNrX25vZGUgKmxhc3Rfbm9kZTsKPj4gICAgICAgICAg
-dm9pZCAqcDsKPj4KPj4gKyAgICAgICBsZW4gPSAobGVuICsgMykgJiB+MzsKPgo+IFBsZWFzZSB1
-c2UgdGhlICJBTElHTiIgbWFjcm8gZGVmaW5lZCBpbiBpbmNsdWRlL2JhYmVsdHJhY2UvYWxpZ24u
-aC4KPiBsZW4gPSBBTElHTihsZW4sIHNpemVvZih1bnNpZ25lZCBsb25nKSkKPgoKCkhpIEdhbGFy
-bmVhdToKCkkgdGhpbmsgaXQgaXMgbW9yZSBleHBsaWNpdCB0byBtYWtlIHRoZSBhZGRyZXNzLHdo
-aWNoIGlzIGFsbG9jYXRlZApieSBvYmpzdGFja19hbGxvYywgdG8gYWxpZ24gdGhlIHNpemVvZih2
-b2lkKiksIG5vdCBzaXplb2YobG9uZyk7CnRob3VnaCB0aGUgc2l6ZSBvZiB2b2lkKiBhbmQgbG9u
-ZyBhcmUgc2FtZS4KCmRvIHlvdSBhZ3JlZT8KCgotUm95Cgo+IEFsc28sIHRoZSAiZGF0YSIgbWVt
-YmVyIGluIHN0cnVjdCBvYmpzdGFja19ub2RlIHNob3VsZCBiZSBhbGlnbmVkLgo+Cj4gc3RydWN0
-IG9ianN0YWNrX25vZGUgewo+ICAgIHN0cnVjdCBidF9saXN0X2hlYWQgbm9kZTsKPiAgICBzaXpl
-X3QgbGVuOwo+ICAgIHNpemVfdCB1c2VkX2xlbjsKPiAgICBjaGFyIF9fYXR0cmlidXRlX18gKChh
-bGlnbmVkIChzaXplb2YodW5zaWduZWQgbG9uZykpKSkgZGF0YVtdOwo+IH07Cj4KPiBUaGFua3Mg
-Zm9yIGJyaW5naW5nIHRoZSBwcm9ibGVtIHRvIG91ciBhdHRlbnRpb24hIEknbGwgd2FpdCBmb3Ig
-YSB2Mi4KPgo+IFJlZ2FyZHMsCj4gSsOpcsOpbWllCj4KPj4gKwo+PiAgICAgICAgICAvKiBHZXQg
-bGFzdCBub2RlICovCj4+ICAgICAgICAgIGxhc3Rfbm9kZSA9IGJ0X2xpc3RfZW50cnkob2Jqc3Rh
-Y2stPmhlYWQucHJldiwKPj4gICAgICAgICAgICAgICAgICAgICAgICAgIHN0cnVjdCBvYmpzdGFj
-a19ub2RlLCBub2RlKTsKPj4gLS0KPj4gMS43LjEwLjQKPj4KPj4KPj4gX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPj4gbHR0bmctZGV2IG1haWxpbmcgbGlz
-dAo+PiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4+IGh0dHA6Ly9saXN0cy5sdHRuZy5vcmcv
-Y2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo+Cj4KPgoKLS0gCkJlc3QgUmVhZ3Jk
-cywKUm95IHwgUm9uZ1FpbmcgTGkKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5n
-Lm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRu
-Zy1kZXYK
+Hi,
+
+following up on my own mail:
+
+On 05/15/2014 07:39 PM, Gerlando Falauto wrote:
+[...]
+
+> If I put an additional tracef() call exactly where my tracepoint is
+> located, this gets traced without a problem. So the infrastructure
+> should be all working in my opinion.
+
+I repeated my test by compiling the same tracepoint provider directly on 
+the target, and linking it to a no-brainer main(), whose body simply 
+calls tracepoint() and tracef(). And I now get the opposite result!
+
+Now tracepoint() requests are perfectly recorded, whereas tracef() is 
+nowhere to be seen.
+
+Any hints?
+Thank you!
+Gerlando
