@@ -1,27 +1,16 @@
-From: Gerlando Falauto <gerlando.falauto@keymile.com>
-Subject: Re: lttng-ust missing tracepoints
-Date: Fri, 16 May 2014 10:14:37 +0200
-Message-ID: <5375C8ED.6000909__25469.9979829185$1400228140$gmane$org@keymile.com>
-References: <5374FBDE.6030305@keymile.com>
+From: <rongqing.li@windriver.com>
+Subject: [PATCH v2] Fix: Align buffers from objstack_alloc on
+	sizeof(void *)
+Date: Fri, 16 May 2014 10:10:38 +0800
+Message-ID: <1400206238-11343-1-git-send-email-rongqing.li__10508.1047899604$1400248227$gmane$org@windriver.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-de.keymile.com ([195.8.104.250])
+Received: from mail.windriver.com ([147.11.1.11])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <prvs=0213a97ac1=gerlando.falauto@keymile.com>)
- id 1WlDHz-00006w-GH
- for lttng-dev@lists.lttng.org; Fri, 16 May 2014 04:14:50 -0400
-Received: from frodo.de.keymile.net ([10.9.1.54]:47735
- helo=mailrelay.de.keymile.net)
- by mail-de.keymile.com with esmtp (Exim 4.76)
- (envelope-from <gerlando.falauto@keymile.com>) id 1WlDHr-0001Mn-0P
- for lttng-dev@lists.lttng.org; Fri, 16 May 2014 10:14:39 +0200
-Received: from chber1-10555x.ch.keymile.net (chber1-10555x.ch.keymile.net
- [172.31.40.82])
- by mailrelay.de.keymile.net (8.12.2/8.12.2) with ESMTP id s4G8EbLf001713
- for <lttng-dev@lists.lttng.org>; Fri, 16 May 2014 10:14:38 +0200 (MEST)
-In-Reply-To: <5374FBDE.6030305@keymile.com>
+ (envelope-from <Rongqing.Li@windriver.com>) id 1Wl7bi-0006OZ-JS
+ for lttng-dev@lists.lttng.org; Thu, 15 May 2014 22:10:49 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -30,27 +19,29 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: jeremie.galarneau@efficios.com, lttng-dev@lists.lttng.org, mathieu.desnoyers@efficios.com, simon.marchi@polymtl.ca
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
-
-following up on my own mail:
-
-On 05/15/2014 07:39 PM, Gerlando Falauto wrote:
-[...]
-
-> If I put an additional tracef() call exactly where my tracepoint is
-> located, this gets traced without a problem. So the infrastructure
-> should be all working in my opinion.
-
-I repeated my test by compiling the same tracepoint provider directly on 
-the target, and linking it to a no-brainer main(), whose body simply 
-calls tracepoint() and tracef(). And I now get the opposite result!
-
-Now tracepoint() requests are perfectly recorded, whereas tracef() is 
-nowhere to be seen.
-
-Any hints?
-Thank you!
-Gerlando
+RnJvbTogRnJlZHJpayBNYXJrc3Ryw7ZtIDxmcmVkcmlrLm1hcmtzdHJvbUBnbWFpbC5jb20+CgpU
+aGUgYnVmZmVycyBmcm9tIG9ianN0YWNrX2FsbG9jIHdpbGwgc3RvcmUgdGhlIHBvaW50ZXIsIHNv
+IGl0IG11c3QKYmUgYWxpZ25lZCBvbiBwb2ludGVyLCBvciBlbHNlIGl0IHdpbGwgY2F1c2UgaXNz
+dWUgb24gdGhlIGNwdQp3aGljaCBkb2VzIG5vdCBzdXBwb3J0IHVuYWxpZ25lZCBhZGRyZXNzZXMg
+YWNjZXNzCgpTaWduZWQtb2ZmLWJ5OiBGcmVkcmlrIE1hcmtzdHJvbSA8ZnJlZHJpay5tYXJrc3Ry
+b21AZ21haWwuY29tPgpTaWduZWQtb2ZmLWJ5OiBSb3kgTGkgPHJvbmdxaW5nLmxpQHdpbmRyaXZl
+ci5jb20+Ci0tLQogZm9ybWF0cy9jdGYvbWV0YWRhdGEvb2Jqc3RhY2suYyB8ICAgIDQgKysrLQog
+MSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQoKZGlmZiAtLWdp
+dCBhL2Zvcm1hdHMvY3RmL21ldGFkYXRhL29ianN0YWNrLmMgYi9mb3JtYXRzL2N0Zi9tZXRhZGF0
+YS9vYmpzdGFjay5jCmluZGV4IDllMjY0YTQuLjBlN2QwNGUgMTAwNjQ0Ci0tLSBhL2Zvcm1hdHMv
+Y3RmL21ldGFkYXRhL29ianN0YWNrLmMKKysrIGIvZm9ybWF0cy9jdGYvbWV0YWRhdGEvb2Jqc3Rh
+Y2suYwpAQCAtMzksNyArMzksNyBAQCBzdHJ1Y3Qgb2Jqc3RhY2tfbm9kZSB7CiAJc3RydWN0IGJ0
+X2xpc3RfaGVhZCBub2RlOwogCXNpemVfdCBsZW47CiAJc2l6ZV90IHVzZWRfbGVuOwotCWNoYXIg
+ZGF0YVtdOworCWNoYXIgX19hdHRyaWJ1dGVfXyAoKGFsaWduZWQgKHNpemVvZih2b2lkICopKSkp
+IGRhdGFbXTsKIH07CiAKIEJUX0hJRERFTgpAQCAtMTE4LDYgKzExOCw4IEBAIHZvaWQgKm9ianN0
+YWNrX2FsbG9jKHN0cnVjdCBvYmpzdGFjayAqb2Jqc3RhY2ssIHNpemVfdCBsZW4pCiAJc3RydWN0
+IG9ianN0YWNrX25vZGUgKmxhc3Rfbm9kZTsKIAl2b2lkICpwOwogCisJbGVuID0gQUxJR04obGVu
+LCBzaXplb2Yodm9pZCAqKSk7CisKIAkvKiBHZXQgbGFzdCBub2RlICovCiAJbGFzdF9ub2RlID0g
+YnRfbGlzdF9lbnRyeShvYmpzdGFjay0+aGVhZC5wcmV2LAogCQkJc3RydWN0IG9ianN0YWNrX25v
+ZGUsIG5vZGUpOwotLSAKMS43LjEwLjQKCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5s
+dHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8v
+bHR0bmctZGV2Cg==
