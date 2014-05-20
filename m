@@ -1,17 +1,17 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Progress on base address outstanding issues
-Date: Tue, 20 May 2014 19:32:58 +0000 (UTC)
-Message-ID: <66971283.20283.1400614378328.JavaMail.zimbra__42733.2490952269$1400614438$gmane$org@efficios.com>
-References: <1427416865.20129.1400596365814.JavaMail.zimbra@efficios.com>
+From: Philippe Proulx <eeppeliteloop@gmail.com>
+Subject: libbabeltrace: getting CTF sequence length?
+Date: Tue, 20 May 2014 16:37:11 -0400
+Message-ID: <CAB4xu_1n75_qATZ=Li19VnzGghojAOOQv+U4z9x+qVWHU154vg__11314.2648748637$1400618336$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-la0-f53.google.com ([209.85.215.53])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1WmpmY-0003VC-Gn
- for lttng-dev@lists.lttng.org; Tue, 20 May 2014 15:33:08 -0400
-In-Reply-To: <1427416865.20129.1400596365814.JavaMail.zimbra@efficios.com>
+ (envelope-from <eeppeliteloop@gmail.com>) id 1WmqnF-0003sG-91
+ for lttng-dev@lists.lttng.org; Tue, 20 May 2014 16:37:53 -0400
+Received: by mail-la0-f53.google.com with SMTP id ec20so866813lab.12
+ for <lttng-dev@lists.lttng.org>; Tue, 20 May 2014 13:37:43 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,27 +20,30 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Paul Woegerer <paul_woegerer@mentor.com>, Hollis Blanchard <hollis_blanchard@mentor.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
+Hello,
 
-We are currently revisiting the open issues before the
-2.5 release cycle, and we are wondering if there has been
-any progress on bug http://bugs.lttng.org/issues/745 ?
+I'm using libbabeltrace in C++. I would like to know if there's an
+equivalent of bt_ctf_get_array_len() for sequences. I tried using
+bt_ctf_get_field_list() but the reported count was 10, whereas the
+sequence length was really 6 (as shown by the babeltrace tool),
+leading to a segfault when accessing the 7th element.
 
-This feature is currently "experimental", but buggy
-(triggers deadlocks). Until we have a fix for this, it will
-stay experimental, and if there is no further progress on
-this front, we will mark it for removal for the 2.6 release
-cycle (around August 2014).
+Looking at the Python binding, I see that this is used:
 
-Thank you,
+    container_of(field, struct definition_sequence, p);
 
-Mathieu
+followed by bt_sequence_len(). However, struct definition_sequence,
+bt_sequence_len() (and bt_sequence_index()) are not available in
+the API.
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+So what would be your way to read sequence items? Do you have
+an example using strictly what's available in /usr/include/babeltrace?
+
+I'm using the latest Git master on Arch Linux.
+
+Thank you!
+
+Philippe Proulx
