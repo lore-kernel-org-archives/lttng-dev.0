@@ -1,18 +1,27 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH v2] Fix: alignment problems on targets not
- supporting unaligned access.
-Date: Fri, 16 May 2014 17:58:52 +0000 (UTC)
-Message-ID: <1127916280.19236.1400263132695.JavaMail.zimbra__21833.7864651859$1400263210$gmane$org@efficios.com>
-References: <1400202607-10904-1-git-send-email-rongqing.li@windriver.com>
+From: Gerlando Falauto <gerlando.falauto@keymile.com>
+Subject: linking of tracepoint probes
+Date: Tue, 20 May 2014 18:09:00 +0200
+Message-ID: <537B7E1C.3080802__35057.3630109013$1400602228$gmane$org@keymile.com>
+References: <5374FBDE.6030305@keymile.com> <5375C8ED.6000909@keymile.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-de.keymile.com ([195.8.104.250])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1WlMPL-0003gt-3L
- for lttng-dev@lists.lttng.org; Fri, 16 May 2014 13:59:05 -0400
-In-Reply-To: <1400202607-10904-1-git-send-email-rongqing.li@windriver.com>
+ (envelope-from <prvs=021750aae6=gerlando.falauto@keymile.com>)
+ id 1WmmbF-0002HY-Kv
+ for lttng-dev@lists.lttng.org; Tue, 20 May 2014 12:09:15 -0400
+Received: from frodo.de.keymile.net ([10.9.1.54]:56683
+ helo=mailrelay.de.keymile.net)
+ by mail-de.keymile.com with esmtp (Exim 4.76)
+ (envelope-from <gerlando.falauto@keymile.com>) id 1Wmmb7-0005Kv-1d
+ for lttng-dev@lists.lttng.org; Tue, 20 May 2014 18:09:01 +0200
+Received: from chber1-10555x.ch.keymile.net (chber1-10555x.ch.keymile.net
+ [172.31.40.82])
+ by mailrelay.de.keymile.net (8.12.2/8.12.2) with ESMTP id s4KG90Lf029755
+ for <lttng-dev@lists.lttng.org>; Tue, 20 May 2014 18:09:00 +0200 (MEST)
+In-Reply-To: <5375C8ED.6000909@keymile.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,49 +30,55 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: rongqing li <rongqing.li@windriver.com>, dgoulet@efficios.com
-Cc: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-RGF2aWQsIGp1c3QgaW4gY2FzZSB5b3UgbWlzc2VkIHRoaXMgb25lLCBpdCdzIGZvciB0b29scy4K
-CihpdCBsYWNrcyB0aGUgdXN1YWwgW1BBVENIIGx0dG5nLXRvb2xzXSBoZWFkZXIgcHJlZml4KQoK
-VGhhbmtzLAoKTWF0aGlldQoKLS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJy
-b25ncWluZyBsaSIgPHJvbmdxaW5nLmxpQHdpbmRyaXZlci5jb20+Cj4gVG86IGx0dG5nLWRldkBs
-aXN0cy5sdHRuZy5vcmcsICJtYXRoaWV1IGRlc25veWVycyIgPG1hdGhpZXUuZGVzbm95ZXJzQGVm
-ZmljaW9zLmNvbT4KPiBDYzogZGdvdWxldEBlZmZpY2lvcy5jb20KPiBTZW50OiBUaHVyc2RheSwg
-TWF5IDE1LCAyMDE0IDk6MTA6MDcgUE0KPiBTdWJqZWN0OiBbUEFUQ0ggdjJdIEZpeDogYWxpZ25t
-ZW50IHByb2JsZW1zIG9uIHRhcmdldHMgbm90IHN1cHBvcnRpbmcgdW5hbGlnbmVkIGFjY2Vzcy4K
-PiAKPiBGcm9tOiBGcmVkcmlrIE1hcmtzdHLDtm0gPGZyZWRyaWsubWFya3N0cm9tQGdtYWlsLmNv
-bT4KPiAKPiBBY2Nlc3NpbmcgZmxvYXRzLCBkb3VibGVzIGFuZCA2NCBiaXQgaW50IGF0IHVuYWxp
-Z25lZCBhZGRyZXNzZXMgaXMgbm90Cj4gc3VwcG9ydGVkIG9uIGFsbCBjb25maWd1cmF0aW9ucyBv
-ZiBhcm0gcHJvY2Vzc29ycyBhbmQgaWYgaXQgaXMgaXQncwo+IGVtdWxhdGVkIGFuZCBzbG93LiBU
-aGlzIHBhdGNoIHJlcGxhY2VzIGRpcmVjdCBhc3NpZ25tZW50cyB3aXRoIG1lbWNweS4KPiAKPiBT
-aWduZWQtb2ZmLWJ5OiBGcmVkcmlrIE1hcmtzdHLDtm0gPGZyZWRyaWsubWFya3N0cm9tQGdtYWls
-LmNvbT4KPiBTaWduZWQtb2ZmLWJ5OiBSb3kgTGkgPHJvbmdxaW5nLmxpQHdpbmRyaXZlci5jb20+
-Cj4gQWNrZWQtYnk6IE1hdGhpZXUgRGVzbm95ZXJzIDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lv
-cy5jb20+Cj4gLS0tCj4gIHNyYy9saWIvbHR0bmctY3RsL2ZpbHRlci9maWx0ZXItdmlzaXRvci1n
-ZW5lcmF0ZS1ieXRlY29kZS5jIHwgICAgNCArKy0tCj4gIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2Vy
-dGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCj4gCj4gZGlmZiAtLWdpdCBhL3NyYy9saWIvbHR0bmct
-Y3RsL2ZpbHRlci9maWx0ZXItdmlzaXRvci1nZW5lcmF0ZS1ieXRlY29kZS5jCj4gYi9zcmMvbGli
-L2x0dG5nLWN0bC9maWx0ZXIvZmlsdGVyLXZpc2l0b3ItZ2VuZXJhdGUtYnl0ZWNvZGUuYwo+IGlu
-ZGV4IDc2MmQ2MDQuLjhjNmRjOTYgMTAwNjQ0Cj4gLS0tIGEvc3JjL2xpYi9sdHRuZy1jdGwvZmls
-dGVyL2ZpbHRlci12aXNpdG9yLWdlbmVyYXRlLWJ5dGVjb2RlLmMKPiArKysgYi9zcmMvbGliL2x0
-dG5nLWN0bC9maWx0ZXIvZmlsdGVyLXZpc2l0b3ItZ2VuZXJhdGUtYnl0ZWNvZGUuYwo+IEBAIC0y
-MjIsNyArMjIyLDcgQEAgaW50IHZpc2l0X25vZGVfbG9hZChzdHJ1Y3QgZmlsdGVyX3BhcnNlcl9j
-dHggKmN0eCwgc3RydWN0Cj4gaXJfb3AgKm5vZGUpCj4gIAkJaWYgKCFpbnNuKQo+ICAJCQlyZXR1
-cm4gLUVOT01FTTsKPiAgCQlpbnNuLT5vcCA9IEZJTFRFUl9PUF9MT0FEX1M2NDsKPiAtCQkqKGlu
-dDY0X3QgKikgaW5zbi0+ZGF0YSA9IG5vZGUtPnUubG9hZC51Lm51bTsKPiArCQltZW1jcHkoaW5z
-bi0+ZGF0YSwgJm5vZGUtPnUubG9hZC51Lm51bSwgc2l6ZW9mKGludDY0X3QpKTsKPiAgCQlyZXQg
-PSBieXRlY29kZV9wdXNoKCZjdHgtPmJ5dGVjb2RlLCBpbnNuLCAxLCBpbnNuX2xlbik7Cj4gIAkJ
-ZnJlZShpbnNuKTsKPiAgCQlyZXR1cm4gcmV0Owo+IEBAIC0yMzcsNyArMjM3LDcgQEAgaW50IHZp
-c2l0X25vZGVfbG9hZChzdHJ1Y3QgZmlsdGVyX3BhcnNlcl9jdHggKmN0eCwgc3RydWN0Cj4gaXJf
-b3AgKm5vZGUpCj4gIAkJaWYgKCFpbnNuKQo+ICAJCQlyZXR1cm4gLUVOT01FTTsKPiAgCQlpbnNu
-LT5vcCA9IEZJTFRFUl9PUF9MT0FEX0RPVUJMRTsKPiAtCQkqKGRvdWJsZSAqKSBpbnNuLT5kYXRh
-ID0gbm9kZS0+dS5sb2FkLnUuZmx0Owo+ICsJCW1lbWNweShpbnNuLT5kYXRhLCAmbm9kZS0+dS5s
-b2FkLnUuZmx0LCBzaXplb2YoZG91YmxlKSk7Cj4gIAkJcmV0ID0gYnl0ZWNvZGVfcHVzaCgmY3R4
-LT5ieXRlY29kZSwgaW5zbiwgMSwgaW5zbl9sZW4pOwo+ICAJCWZyZWUoaW5zbik7Cj4gIAkJcmV0
-dXJuIHJldDsKPiAtLQo+IDEuNy4xMC40Cj4gCj4gCgotLSAKTWF0aGlldSBEZXNub3llcnMKRWZm
-aWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1k
-ZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFu
-L2xpc3RpbmZvL2x0dG5nLWRldgo=
+Hi,
+
+I played a bit more and came to the following conclusion:
+
+- if I compile the application statically (so the tracepoint calls as 
+well as their providers are linked with the main executable), 
+tracepoints work but tracef() doesn't
+
+- if I compile and link the tracepoints, as well as the tracepoint 
+calls, within a shared library, tracef() works but the tracepoint doesn't
+
+- if I change the above setting and recompile without cleaning first, I 
+end up with the following message:
+
+LTTng-UST: Error (-17) while registering tracepoint probe. Duplicate 
+registration of tracepoint probes having the same name is not allowed.
+Aborted
+
+So this means I'm doing something wrong with linking and/or libraries.
+As if I had the same symbol defined in two different places and one 
+would win over the other according to how I'm compiling.
+Since I really have no clue how this whole machinery works, could 
+someone please shed some light on this topic?
+
+Thank you!
+Gerlando
+
+On 05/16/2014 10:14 AM, Gerlando Falauto wrote:
+> Hi,
+>
+> following up on my own mail:
+>
+> On 05/15/2014 07:39 PM, Gerlando Falauto wrote:
+> [...]
+>
+>> If I put an additional tracef() call exactly where my tracepoint is
+>> located, this gets traced without a problem. So the infrastructure
+>> should be all working in my opinion.
+>
+> I repeated my test by compiling the same tracepoint provider directly on
+> the target, and linking it to a no-brainer main(), whose body simply
+> calls tracepoint() and tracef(). And I now get the opposite result!
+>
+> Now tracepoint() requests are perfectly recorded, whereas tracef() is
+> nowhere to be seen.
+>
+> Any hints?
+> Thank you!
+> Gerlando
