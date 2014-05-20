@@ -1,19 +1,17 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: libbabeltrace: getting CTF sequence length?
-Date: Tue, 20 May 2014 16:50:20 -0400
-Message-ID: <CA+jJMxsS1P4ra7m_UcTy5k_ddGDea-ZzPf9wBR245_UEmHHKRg__47393.6008093462$1400619099$gmane$org@mail.gmail.com>
-References: <CAB4xu_1n75_qATZ=Li19VnzGghojAOOQv+U4z9x+qVWHU154vg@mail.gmail.com>
+From: =?ISO-8859-1?Q?Marc-Andr=E9_Laperle?= <marc-andre.laperle@ericsson.com>
+Subject: Re: Progress on base address outstanding issues
+Date: Tue, 20 May 2014 16:57:06 -0400
+Message-ID: <537BC1A2.6020409__28337.0876023129$1400619499$gmane$org@ericsson.com>
+References: <66971283.20283.1400614378328.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qc0-f177.google.com ([209.85.216.177])
+Received: from usevmg21.ericsson.net ([198.24.6.65])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1WmqzS-0003z3-KM
- for lttng-dev@lists.lttng.org; Tue, 20 May 2014 16:50:34 -0400
-Received: by mail-qc0-f177.google.com with SMTP id i17so1669229qcy.8
- for <lttng-dev@lists.lttng.org>; Tue, 20 May 2014 13:50:21 -0700 (PDT)
-In-Reply-To: <CAB4xu_1n75_qATZ=Li19VnzGghojAOOQv+U4z9x+qVWHU154vg@mail.gmail.com>
+ (envelope-from <marc-andre.laperle@ericsson.com>) id 1Wmr62-00042U-9i
+ for lttng-dev@lists.lttng.org; Tue, 20 May 2014 16:57:20 -0400
+In-Reply-To: <66971283.20283.1400614378328.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,33 +20,34 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Philippe Proulx <eeppeliteloop@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-T24gVHVlLCBNYXkgMjAsIDIwMTQgYXQgNDozNyBQTSwgUGhpbGlwcGUgUHJvdWx4CjxlZXBwZWxp
-dGVsb29wQGdtYWlsLmNvbT4gd3JvdGU6Cj4gSGVsbG8sCj4KPiBJJ20gdXNpbmcgbGliYmFiZWx0
-cmFjZSBpbiBDKysuIEkgd291bGQgbGlrZSB0byBrbm93IGlmIHRoZXJlJ3MgYW4KPiBlcXVpdmFs
-ZW50IG9mIGJ0X2N0Zl9nZXRfYXJyYXlfbGVuKCkgZm9yIHNlcXVlbmNlcy4gSSB0cmllZCB1c2lu
-Zwo+IGJ0X2N0Zl9nZXRfZmllbGRfbGlzdCgpIGJ1dCB0aGUgcmVwb3J0ZWQgY291bnQgd2FzIDEw
-LCB3aGVyZWFzIHRoZQo+IHNlcXVlbmNlIGxlbmd0aCB3YXMgcmVhbGx5IDYgKGFzIHNob3duIGJ5
-IHRoZSBiYWJlbHRyYWNlIHRvb2wpLAo+IGxlYWRpbmcgdG8gYSBzZWdmYXVsdCB3aGVuIGFjY2Vz
-c2luZyB0aGUgN3RoIGVsZW1lbnQuCj4KPiBMb29raW5nIGF0IHRoZSBQeXRob24gYmluZGluZywg
-SSBzZWUgdGhhdCB0aGlzIGlzIHVzZWQ6Cj4KPiAgICAgY29udGFpbmVyX29mKGZpZWxkLCBzdHJ1
-Y3QgZGVmaW5pdGlvbl9zZXF1ZW5jZSwgcCk7Cj4KPiBmb2xsb3dlZCBieSBidF9zZXF1ZW5jZV9s
-ZW4oKS4gSG93ZXZlciwgc3RydWN0IGRlZmluaXRpb25fc2VxdWVuY2UsCj4gYnRfc2VxdWVuY2Vf
-bGVuKCkgKGFuZCBidF9zZXF1ZW5jZV9pbmRleCgpKSBhcmUgbm90IGF2YWlsYWJsZSBpbgo+IHRo
-ZSBBUEkuCj4KPiBTbyB3aGF0IHdvdWxkIGJlIHlvdXIgd2F5IHRvIHJlYWQgc2VxdWVuY2UgaXRl
-bXM/IERvIHlvdSBoYXZlCj4gYW4gZXhhbXBsZSB1c2luZyBzdHJpY3RseSB3aGF0J3MgYXZhaWxh
-YmxlIGluIC91c3IvaW5jbHVkZS9iYWJlbHRyYWNlPwo+CgpidF9jdGZfZ2V0X2ZpZWxkX2xpc3Qg
-Y2FuIGJlIHVzZWQgdG8gZ2V0IHRoZSBudW1iZXIgb2YgZWxlbWVudHMsIGFsb25nCndpdGggYSBw
-b2ludGVyIHRvIHRoZSBlbGVtZW50cyAodmlhIHRoZSBvdXRwdXQgcGFyYW1ldGVycykuCgpSZWdh
-cmRzLApKw6lyw6ltaWUKCj4gSSdtIHVzaW5nIHRoZSBsYXRlc3QgR2l0IG1hc3RlciBvbiBBcmNo
-IExpbnV4Lgo+Cj4gVGhhbmsgeW91IQo+Cj4gUGhpbGlwcGUgUHJvdWx4Cj4KPiBfX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5n
-IGxpc3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0cDovL2xpc3RzLmx0dG5nLm9y
-Zy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2CgoKCi0tIApKw6lyw6ltaWUgR2Fs
-YXJuZWF1CkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KCl9fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxp
-c3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1i
-aW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+Hi Mathieu,
+
+I actually just started to use this feature in TMF so that we can handle
+libraries properly when showing call stacks (cygprofile). Hopefully this
+won't be removed :) Maybe I could look into the issue in a few weeks but
+it's likely that someone with better knowledge of LTTng's internals
+would come up with a fix much faster.
+
+Regards,
+Marc-Andre
+
+On 14-05-20 03:32 PM, Mathieu Desnoyers wrote:
+> Hi,
+>
+> We are currently revisiting the open issues before the
+> 2.5 release cycle, and we are wondering if there has been
+> any progress on bug http://bugs.lttng.org/issues/745 ?
+>
+> This feature is currently "experimental", but buggy
+> (triggers deadlocks). Until we have a fix for this, it will
+> stay experimental, and if there is no further progress on
+> this front, we will mark it for removal for the 2.6 release
+> cycle (around August 2014).
+>
+> Thank you,
+>
+> Mathieu
+>
