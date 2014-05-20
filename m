@@ -1,27 +1,20 @@
-From: Gerlando Falauto <gerlando.falauto@keymile.com>
-Subject: linking of tracepoint probes
-Date: Tue, 20 May 2014 18:09:00 +0200
-Message-ID: <537B7E1C.3080802__35057.3630109013$1400602228$gmane$org@keymile.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: linking of tracepoint probes
+Date: Tue, 20 May 2014 12:34:36 -0400
+Message-ID: <CA+jJMxvvU-2Scbvop5hoHqo9cUS_=FsnnVc1us8K6vzNOenL0w__13612.5031546273$1400603773$gmane$org@mail.gmail.com>
 References: <5374FBDE.6030305@keymile.com> <5375C8ED.6000909@keymile.com>
+ <537B7E1C.3080802@keymile.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-de.keymile.com ([195.8.104.250])
+Received: from mail-qg0-f46.google.com ([209.85.192.46])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <prvs=021750aae6=gerlando.falauto@keymile.com>)
- id 1WmmbF-0002HY-Kv
- for lttng-dev@lists.lttng.org; Tue, 20 May 2014 12:09:15 -0400
-Received: from frodo.de.keymile.net ([10.9.1.54]:56683
- helo=mailrelay.de.keymile.net)
- by mail-de.keymile.com with esmtp (Exim 4.76)
- (envelope-from <gerlando.falauto@keymile.com>) id 1Wmmb7-0005Kv-1d
- for lttng-dev@lists.lttng.org; Tue, 20 May 2014 18:09:01 +0200
-Received: from chber1-10555x.ch.keymile.net (chber1-10555x.ch.keymile.net
- [172.31.40.82])
- by mailrelay.de.keymile.net (8.12.2/8.12.2) with ESMTP id s4KG90Lf029755
- for <lttng-dev@lists.lttng.org>; Tue, 20 May 2014 18:09:00 +0200 (MEST)
-In-Reply-To: <5375C8ED.6000909@keymile.com>
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1Wmmzx-0002RL-U8
+ for lttng-dev@lists.lttng.org; Tue, 20 May 2014 12:34:47 -0400
+Received: by mail-qg0-f46.google.com with SMTP id q108so1134191qgd.33
+ for <lttng-dev@lists.lttng.org>; Tue, 20 May 2014 09:34:36 -0700 (PDT)
+In-Reply-To: <537B7E1C.3080802@keymile.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -30,55 +23,48 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Gerlando Falauto <gerlando.falauto@keymile.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
-
-I played a bit more and came to the following conclusion:
-
-- if I compile the application statically (so the tracepoint calls as 
-well as their providers are linked with the main executable), 
-tracepoints work but tracef() doesn't
-
-- if I compile and link the tracepoints, as well as the tracepoint 
-calls, within a shared library, tracef() works but the tracepoint doesn't
-
-- if I change the above setting and recompile without cleaning first, I 
-end up with the following message:
-
-LTTng-UST: Error (-17) while registering tracepoint probe. Duplicate 
-registration of tracepoint probes having the same name is not allowed.
-Aborted
-
-So this means I'm doing something wrong with linking and/or libraries.
-As if I had the same symbol defined in two different places and one 
-would win over the other according to how I'm compiling.
-Since I really have no clue how this whole machinery works, could 
-someone please shed some light on this topic?
-
-Thank you!
-Gerlando
-
-On 05/16/2014 10:14 AM, Gerlando Falauto wrote:
-> Hi,
->
-> following up on my own mail:
->
-> On 05/15/2014 07:39 PM, Gerlando Falauto wrote:
-> [...]
->
->> If I put an additional tracef() call exactly where my tracepoint is
->> located, this gets traced without a problem. So the infrastructure
->> should be all working in my opinion.
->
-> I repeated my test by compiling the same tracepoint provider directly on
-> the target, and linking it to a no-brainer main(), whose body simply
-> calls tracepoint() and tracef(). And I now get the opposite result!
->
-> Now tracepoint() requests are perfectly recorded, whereas tracef() is
-> nowhere to be seen.
->
-> Any hints?
-> Thank you!
-> Gerlando
+T24gVHVlLCBNYXkgMjAsIDIwMTQgYXQgMTI6MDkgUE0sIEdlcmxhbmRvIEZhbGF1dG8KPGdlcmxh
+bmRvLmZhbGF1dG9Aa2V5bWlsZS5jb20+IHdyb3RlOgo+IEhpLAo+Cj4gSSBwbGF5ZWQgYSBiaXQg
+bW9yZSBhbmQgY2FtZSB0byB0aGUgZm9sbG93aW5nIGNvbmNsdXNpb246Cj4KPiAtIGlmIEkgY29t
+cGlsZSB0aGUgYXBwbGljYXRpb24gc3RhdGljYWxseSAoc28gdGhlIHRyYWNlcG9pbnQgY2FsbHMg
+YXMgd2VsbAo+IGFzIHRoZWlyIHByb3ZpZGVycyBhcmUgbGlua2VkIHdpdGggdGhlIG1haW4gZXhl
+Y3V0YWJsZSksIHRyYWNlcG9pbnRzIHdvcmsKPiBidXQgdHJhY2VmKCkgZG9lc24ndAo+CgpZb3Ug
+bmVlZCB0byBlbmFibGUgdGhlIERFQlVHIGxvZyBsZXZlbC4gU2VlIHRoZSBVU0FHRSBXSVRIIFRS
+QUNFRgpzZWN0aW9uIG9mIHRoZSBsdHRuZy11c3QgbWFuIHBhZ2UuCgpKw6lyw6ltaWUKCj4gLSBp
+ZiBJIGNvbXBpbGUgYW5kIGxpbmsgdGhlIHRyYWNlcG9pbnRzLCBhcyB3ZWxsIGFzIHRoZSB0cmFj
+ZXBvaW50IGNhbGxzLAo+IHdpdGhpbiBhIHNoYXJlZCBsaWJyYXJ5LCB0cmFjZWYoKSB3b3JrcyBi
+dXQgdGhlIHRyYWNlcG9pbnQgZG9lc24ndAo+Cj4gLSBpZiBJIGNoYW5nZSB0aGUgYWJvdmUgc2V0
+dGluZyBhbmQgcmVjb21waWxlIHdpdGhvdXQgY2xlYW5pbmcgZmlyc3QsIEkgZW5kCj4gdXAgd2l0
+aCB0aGUgZm9sbG93aW5nIG1lc3NhZ2U6Cj4KPiBMVFRuZy1VU1Q6IEVycm9yICgtMTcpIHdoaWxl
+IHJlZ2lzdGVyaW5nIHRyYWNlcG9pbnQgcHJvYmUuIER1cGxpY2F0ZQo+IHJlZ2lzdHJhdGlvbiBv
+ZiB0cmFjZXBvaW50IHByb2JlcyBoYXZpbmcgdGhlIHNhbWUgbmFtZSBpcyBub3QgYWxsb3dlZC4K
+PiBBYm9ydGVkCj4KPiBTbyB0aGlzIG1lYW5zIEknbSBkb2luZyBzb21ldGhpbmcgd3Jvbmcgd2l0
+aCBsaW5raW5nIGFuZC9vciBsaWJyYXJpZXMuCj4gQXMgaWYgSSBoYWQgdGhlIHNhbWUgc3ltYm9s
+IGRlZmluZWQgaW4gdHdvIGRpZmZlcmVudCBwbGFjZXMgYW5kIG9uZSB3b3VsZAo+IHdpbiBvdmVy
+IHRoZSBvdGhlciBhY2NvcmRpbmcgdG8gaG93IEknbSBjb21waWxpbmcuCj4gU2luY2UgSSByZWFs
+bHkgaGF2ZSBubyBjbHVlIGhvdyB0aGlzIHdob2xlIG1hY2hpbmVyeSB3b3JrcywgY291bGQgc29t
+ZW9uZQo+IHBsZWFzZSBzaGVkIHNvbWUgbGlnaHQgb24gdGhpcyB0b3BpYz8KPgo+IFRoYW5rIHlv
+dSEKPiBHZXJsYW5kbwo+Cj4gT24gMDUvMTYvMjAxNCAxMDoxNCBBTSwgR2VybGFuZG8gRmFsYXV0
+byB3cm90ZToKPj4KPj4gSGksCj4+Cj4+IGZvbGxvd2luZyB1cCBvbiBteSBvd24gbWFpbDoKPj4K
+Pj4gT24gMDUvMTUvMjAxNCAwNzozOSBQTSwgR2VybGFuZG8gRmFsYXV0byB3cm90ZToKPj4gWy4u
+Ll0KPj4KPj4+IElmIEkgcHV0IGFuIGFkZGl0aW9uYWwgdHJhY2VmKCkgY2FsbCBleGFjdGx5IHdo
+ZXJlIG15IHRyYWNlcG9pbnQgaXMKPj4+IGxvY2F0ZWQsIHRoaXMgZ2V0cyB0cmFjZWQgd2l0aG91
+dCBhIHByb2JsZW0uIFNvIHRoZSBpbmZyYXN0cnVjdHVyZQo+Pj4gc2hvdWxkIGJlIGFsbCB3b3Jr
+aW5nIGluIG15IG9waW5pb24uCj4+Cj4+Cj4+IEkgcmVwZWF0ZWQgbXkgdGVzdCBieSBjb21waWxp
+bmcgdGhlIHNhbWUgdHJhY2Vwb2ludCBwcm92aWRlciBkaXJlY3RseSBvbgo+PiB0aGUgdGFyZ2V0
+LCBhbmQgbGlua2luZyBpdCB0byBhIG5vLWJyYWluZXIgbWFpbigpLCB3aG9zZSBib2R5IHNpbXBs
+eQo+PiBjYWxscyB0cmFjZXBvaW50KCkgYW5kIHRyYWNlZigpLiBBbmQgSSBub3cgZ2V0IHRoZSBv
+cHBvc2l0ZSByZXN1bHQhCj4+Cj4+IE5vdyB0cmFjZXBvaW50KCkgcmVxdWVzdHMgYXJlIHBlcmZl
+Y3RseSByZWNvcmRlZCwgd2hlcmVhcyB0cmFjZWYoKSBpcwo+PiBub3doZXJlIHRvIGJlIHNlZW4u
+Cj4+Cj4+IEFueSBoaW50cz8KPj4gVGhhbmsgeW91IQo+PiBHZXJsYW5kbwo+Cj4KPgo+IF9fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gbHR0bmctZGV2IG1h
+aWxpbmcgbGlzdAo+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBodHRwOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKCgoKLS0gCkrDqXLDqW1p
+ZSBHYWxhcm5lYXUKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxp
+bmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcv
+Y2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
