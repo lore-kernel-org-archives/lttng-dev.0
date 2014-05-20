@@ -1,19 +1,17 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [lttng-tools] build failure on armel (debian)
-Date: Tue, 20 May 2014 19:30:07 +0000 (UTC)
-Message-ID: <1404346093.20266.1400614207003.JavaMail.zimbra__48062.6287674115$1400614277$gmane$org@efficios.com>
-References: <20140506151403.GD11105@helmut>
- <1792077382.15631.1399988805202.JavaMail.zimbra@efficios.com>
- <20140520191557.GA5951@helmut>
+Subject: Progress on base address outstanding issues
+Date: Tue, 20 May 2014 19:32:58 +0000 (UTC)
+Message-ID: <66971283.20283.1400614378328.JavaMail.zimbra__42733.2490952269$1400614438$gmane$org@efficios.com>
+References: <1427416865.20129.1400596365814.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1Wmpjr-0003Rz-3w
- for lttng-dev@lists.lttng.org; Tue, 20 May 2014 15:30:23 -0400
-In-Reply-To: <20140520191557.GA5951@helmut>
+ (envelope-from <compudj@efficios.com>) id 1WmpmY-0003VC-Gn
+ for lttng-dev@lists.lttng.org; Tue, 20 May 2014 15:33:08 -0400
+In-Reply-To: <1427416865.20129.1400596365814.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,74 +20,27 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Jon Bernard <jbernard@debian.org>
-Cc: lttng-dev@lists.lttng.org
+To: Paul Woegerer <paul_woegerer@mentor.com>, Hollis Blanchard <hollis_blanchard@mentor.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-VGhpcyBpcyB2ZXJ5IGxpa2VseSBjYXVzZWQgYnkgYSBjb25maWd1cmF0aW9uIGlzc3VlIHdpdGgg
-eW91cgp1c2Vyc3BhY2UgUkNVIGxpYnJhcnksIG9yIGJ5IGEgY29uZmlndXJhdGlvbiBpc3N1ZSB3
-aXRoIHlvdXIKbHR0bmctdG9vbHMgKGF0IHRoZSB2ZXJ5IGxlYXN0LCBhIGRpc2NyZXBhbmN5IGJl
-dHdlZW4gdGhlIHR3bykuCgpJZiB3ZSBsb29rIGF0IHVyY3U6Cgp1cmN1L2FyY2gvYXJtLmg6Cgoj
-aWZkZWYgQ09ORklHX1JDVV9BUk1fSEFWRV9ETUIKI2RlZmluZSBjbW1fbWIoKSAgICAgICAgX19h
-c21fXyBfX3ZvbGF0aWxlX18gKCJkbWIiOjo6Im1lbW9yeSIpCiNkZWZpbmUgY21tX3JtYigpICAg
-ICAgIF9fYXNtX18gX192b2xhdGlsZV9fICgiZG1iIjo6OiJtZW1vcnkiKQojZGVmaW5lIGNtbV93
-bWIoKSAgICAgICBfX2FzbV9fIF9fdm9sYXRpbGVfXyAoImRtYiI6OjoibWVtb3J5IikKI2VuZGlm
-IC8qIENPTkZJR19SQ1VfQVJNX0hBVkVfRE1CICovCgp5b3UgcHJvYmFibHkgaGF2ZSB0aGlzIGNv
-bmZpZyBvcHRpb24gZGVmaW5lZCBieSB0aGUgY29uZmlnLmgKZ2VuZXJhdGVkIGJ5IHVyY3UuIFRo
-aXMgaXMgcHJvYmFibHkgYSBkaXNjcmVwYW5jeSBiZXR3ZWVuIHlvdXIKdXJjdSBjb25maWd1cmF0
-aW9uIGFuZCB0aGUgY29tcGlsZXIgdGFyZ2V0IHVzZWQgd2hlbiBidWlsZGluZwpsdHRuZy10b29s
-cy4KClRob3VnaHRzID8KClRoYW5rcywKCk1hdGhpZXUKCi0tLS0tIE9yaWdpbmFsIE1lc3NhZ2Ug
-LS0tLS0KPiBGcm9tOiAiSm9uIEJlcm5hcmQiIDxqYmVybmFyZEBkZWJpYW4ub3JnPgo+IFRvOiAi
-TWF0aGlldSBEZXNub3llcnMiIDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+Cj4gQ2M6
-IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBTZW50OiBUdWVzZGF5LCBNYXkgMjAsIDIwMTQg
-MzoxNTo1NyBQTQo+IFN1YmplY3Q6IFJlOiBbbHR0bmctZGV2XSBbbHR0bmctdG9vbHNdIGJ1aWxk
-IGZhaWx1cmUgb24gYXJtZWwgKGRlYmlhbikKPiAKPiAqIE1hdGhpZXUgRGVzbm95ZXJzIDxtYXRo
-aWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+IHdyb3RlOgo+ID4gLS0tLS0gT3JpZ2luYWwgTWVz
-c2FnZSAtLS0tLQo+ID4gPiBGcm9tOiAiSm9uIEJlcm5hcmQiIDxqYmVybmFyZEBkZWJpYW4ub3Jn
-Pgo+ID4gPiBUbzogbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+ID4gPiBTZW50OiBUdWVzZGF5
-LCBNYXkgNiwgMjAxNCAxMToxNDowMyBBTQo+ID4gPiBTdWJqZWN0OiBbbHR0bmctZGV2XSBbbHR0
-bmctdG9vbHNdIGJ1aWxkIGZhaWx1cmUgb24gYXJtZWwgKGRlYmlhbikKPiA+ID4gCj4gPiA+IEhl
-eSBndXlzLAo+ID4gPiAKPiA+ID4gVGhpcyBidWfCuSB3YXMgZmlsZWQgcmVjZW50bHk6Cj4gPiA+
-IAo+ID4gPiAgICAgeW91ciBwYWNrYWdlIG5vIGxvbmdlciBidWlsZHMgb24gdGhlIGFybWVsIGJ1
-aWxkZHM6Cj4gPiA+ICAgICBodHRwczovL2J1aWxkZC5kZWJpYW4ub3JnL3N0YXR1cy9mZXRjaC5w
-aHA/cGtnPWx0dC1jb250cm9sJmFyY2g9YXJtZWwmdmVyPTIuNC4xLTEmc3RhbXA9MTM5NzA2NDQx
-OQo+ID4gPiAKPiA+ID4gICAgID4gICBDQyAgICAgICByY3VsZmhhc2gubG8KPiA+ID4gICAgID4g
-L3RtcC9jY0JHODl2aC5zOiBBc3NlbWJsZXIgbWVzc2FnZXM6Cj4gPiA+ICAgICA+IC90bXAvY2NC
-Rzg5dmguczoxMTA1OiBFcnJvcjogc2VsZWN0ZWQgcHJvY2Vzc29yIGRvZXMgbm90IHN1cHBvcnQK
-PiA+ID4gICAgID4gQVJNCj4gPiA+ICAgICA+IG1vZGUgYGRtYicKPiA+ID4gICAgID4gL3RtcC9j
-Y0JHODl2aC5zOjEyODY6IEVycm9yOiBzZWxlY3RlZCBwcm9jZXNzb3IgZG9lcyBub3Qgc3VwcG9y
-dAo+ID4gPiAgICAgPiBBUk0KPiA+ID4gICAgID4gbW9kZSBgZG1iJwo+ID4gPiAgICAgPiAvdG1w
-L2NjQkc4OXZoLnM6MzE3NTogRXJyb3I6IHNlbGVjdGVkIHByb2Nlc3NvciBkb2VzIG5vdCBzdXBw
-b3J0Cj4gPiA+ICAgICA+IEFSTQo+ID4gPiAgICAgPiBtb2RlIGBkbWInCj4gPiA+ICAgICA+IC90
-bXAvY2NCRzg5dmguczozNzI1OiBFcnJvcjogc2VsZWN0ZWQgcHJvY2Vzc29yIGRvZXMgbm90IHN1
-cHBvcnQKPiA+ID4gICAgID4gQVJNCj4gPiA+ICAgICA+IG1vZGUgYGRtYicKPiA+ID4gICAgID4g
-L3RtcC9jY0JHODl2aC5zOjM4MzM6IEVycm9yOiBzZWxlY3RlZCBwcm9jZXNzb3IgZG9lcyBub3Qg
-c3VwcG9ydAo+ID4gPiAgICAgPiBBUk0KPiA+ID4gICAgID4gbW9kZSBgZG1iJwo+ID4gPiAgICAg
-PiAvdG1wL2NjQkc4OXZoLnM6Mzk5NDogRXJyb3I6IHNlbGVjdGVkIHByb2Nlc3NvciBkb2VzIG5v
-dCBzdXBwb3J0Cj4gPiA+ICAgICA+IEFSTQo+ID4gPiAgICAgPiBtb2RlIGBkbWInCj4gPiA+ICAg
-ICA+IC90bXAvY2NCRzg5dmguczo0MzMxOiBFcnJvcjogc2VsZWN0ZWQgcHJvY2Vzc29yIGRvZXMg
-bm90IHN1cHBvcnQKPiA+ID4gICAgID4gQVJNCj4gPiA+ICAgICA+IG1vZGUgYGRtYicKPiA+ID4g
-ICAgID4gL3RtcC9jY0JHODl2aC5zOjUyOTI6IEVycm9yOiBzZWxlY3RlZCBwcm9jZXNzb3IgZG9l
-cyBub3Qgc3VwcG9ydAo+ID4gPiAgICAgPiBBUk0KPiA+ID4gICAgID4gbW9kZSBgZG1iJwo+ID4g
-PiAgICAgPiBtYWtlWzRdOiAqKiogW3JjdWxmaGFzaC5sb10gRXJyb3IgMQo+ID4gPiAKPiA+ID4g
-VGhlIHB1YmxpYyBidWlsZGQgdGhhdCBJIGNhbiB1c2UgdG8gdGVzdCB0aGlzIGlzIHVucmVhY2hh
-YmxlIGF0IHRoZQo+ID4gPiBtb21lbnQsIGJ1dCBtYXliZSBhIHNvbHV0aW9uIGNhbiBiZSByZWFj
-aGVkIHdpdGhvdXQgZnVydGhlciBkZWJ1ZyBpbmZvPwo+ID4gPiAKPiA+ID4gVGhlIGJ1aWxkIG1h
-Y2hpbmUgaXMgQVJNdjcsIHdoaWNoIHN1cHBvcnRzIGRtYiBJSVVDLCBzbyBJJ20gYSBiaXQKPiA+
-ID4gcHV6emxlZCBvbiB0aGlzIG9uZS4KPiA+ID4gCj4gPiA+IEFueSB0aG91Z2h0cz8KPiA+IAo+
-ID4gUGVyaGFwcyB0aGUgYnVpbGQgaXRzZWxmIGhhcyBiZWVuIGNoYW5nZWQgdG8gdGFyZ2V0IEFS
-TXY2ID8KPiA+IAo+ID4gU3RhcnRpbmcgd2l0aCBBUk12NywgZG1iIHNob3VsZCBiZSB0aGVyZS4K
-PiA+IAo+ID4gRm9yIEFSTXY2IHN1cHBvcnQgKGFuZCBsZXNzKSwgdGhlIExpbnV4IGtlcm5lbCBw
-cm92aWRlcwo+ID4gYSB2RFNPIHBhZ2UgaW1wbGVtZW50aW5nIF9fa3VzZXJfbWVtb3J5X2JhcnJp
-ZXIuIElmIHlvdQo+ID4gcmVhbGx5IG5lZWQgdG8gYnVpbGQgZm9yIEFSTXY2LCB0aGlzIG1pZ2h0
-IGJlIHNvbWV0aGluZwo+ID4gdG8gbG9vayBpbnRvLgo+ID4gCj4gPiBJIGd1ZXNzIHdlJ2xsIG5l
-ZWQgbW9yZSBpbmZvcm1hdGlvbiBhYm91dCB5b3VyIGJ1aWxkCj4gPiB0YXJnZXQuCj4gCj4gSGVy
-ZSBpcyBhIGZ1bGwgYnVpbGQgbG9nOiBodHRwOi8vc3BydW5nZS51cy9GSUplCj4gCj4gQnVpbGQg
-b2NjdXJyZWQgb24gdGhpcyBtYWNoaW5lOgo+IAo+ICAgICBMaW51eCBhYmVsIDMuMTMtMS1hcm1t
-cC1scGFlICM0IFNNUCBUaHUgTWFyIDI3IDE2OjU2OjE3IFVUQyAyMDE0IGFybXY3bAo+ICAgICBH
-TlUvTGludXgKPiAKPiBJcyB0aGVyZSBhbnl0aGluZyBlbHNlIEkgc2hvdWxkIGluY2x1ZGU/Cj4g
-Cj4gLS0KPiBKb24KPiAKCi0tIApNYXRoaWV1IERlc25veWVycwpFZmZpY2lPUyBJbmMuCmh0dHA6
-Ly93d3cuZWZmaWNpb3MuY29tCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5v
-cmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmct
-ZGV2Cg==
+Hi,
+
+We are currently revisiting the open issues before the
+2.5 release cycle, and we are wondering if there has been
+any progress on bug http://bugs.lttng.org/issues/745 ?
+
+This feature is currently "experimental", but buggy
+(triggers deadlocks). Until we have a fix for this, it will
+stay experimental, and if there is no further progress on
+this front, we will mark it for removal for the 2.6 release
+cycle (around August 2014).
+
+Thank you,
+
+Mathieu
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
