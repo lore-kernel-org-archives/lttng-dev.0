@@ -1,21 +1,19 @@
-From: Simon Marchi <simon.marchi@polymtl.ca>
-Subject: Re: libbabeltrace: getting CTF sequence length?
-Date: Wed, 21 May 2014 07:51:34 -0400
-Message-ID: <CAFXXi0=ZJ1v1g5KVrVpx942Dr+DkwWS11XKK4oHrSqi1Tru9xQ__49486.0878251076$1400673190$gmane$org@mail.gmail.com>
-References: <CAB4xu_1n75_qATZ=Li19VnzGghojAOOQv+U4z9x+qVWHU154vg@mail.gmail.com>
- <CA+jJMxsS1P4ra7m_UcTy5k_ddGDea-ZzPf9wBR245_UEmHHKRg@mail.gmail.com>
- <CAB4xu_0D-_n4g-iKumf4eakzgj6SOjT_TLUy+djiBN+zy1XF_g@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [PATCH lttng-tools] Documentation: document tracefile
+	max size discarded event limitation
+Date: Wed, 21 May 2014 12:10:24 -0400
+Message-ID: <1400688624-28565-1-git-send-email-mathieu.desnoyers__14579.3337528177$1400688731$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f176.google.com ([209.85.223.176])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <thundersim@gmail.com>) id 1Wn545-0000u1-U1
- for lttng-dev@lists.lttng.org; Wed, 21 May 2014 07:52:11 -0400
-Received: by mail-ie0-f176.google.com with SMTP id rl12so1822216iec.35
- for <lttng-dev@lists.lttng.org>; Wed, 21 May 2014 04:52:04 -0700 (PDT)
-In-Reply-To: <CAB4xu_0D-_n4g-iKumf4eakzgj6SOjT_TLUy+djiBN+zy1XF_g@mail.gmail.com>
+ (envelope-from <mathieu.desnoyers@efficios.com>) id 1Wn96M-0002Tv-RX
+ for lttng-dev@lists.lttng.org; Wed, 21 May 2014 12:10:52 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 4A968340108
+ for <lttng-dev@lists.lttng.org>; Wed, 21 May 2014 16:10:46 +0000 (UTC)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -24,148 +22,42 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Philippe Proulx <eeppeliteloop@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: David Goulet <dgoulet@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-T24gMjAgTWF5IDIwMTQgMjM6MDMsIFBoaWxpcHBlIFByb3VseCA8ZWVwcGVsaXRlbG9vcEBnbWFp
-bC5jb20+IHdyb3RlOgo+IE9uIFR1ZSwgTWF5IDIwLCAyMDE0IGF0IDQ6NTAgUE0sIErDqXLDqW1p
-ZSBHYWxhcm5lYXUKPiA8amVyZW1pZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29tPiB3cm90ZToKPj4g
-T24gVHVlLCBNYXkgMjAsIDIwMTQgYXQgNDozNyBQTSwgUGhpbGlwcGUgUHJvdWx4Cj4+IDxlZXBw
-ZWxpdGVsb29wQGdtYWlsLmNvbT4gd3JvdGU6Cj4+PiBIZWxsbywKPj4+Cj4+PiBJJ20gdXNpbmcg
-bGliYmFiZWx0cmFjZSBpbiBDKysuIEkgd291bGQgbGlrZSB0byBrbm93IGlmIHRoZXJlJ3MgYW4K
-Pj4+IGVxdWl2YWxlbnQgb2YgYnRfY3RmX2dldF9hcnJheV9sZW4oKSBmb3Igc2VxdWVuY2VzLiBJ
-IHRyaWVkIHVzaW5nCj4+PiBidF9jdGZfZ2V0X2ZpZWxkX2xpc3QoKSBidXQgdGhlIHJlcG9ydGVk
-IGNvdW50IHdhcyAxMCwgd2hlcmVhcyB0aGUKPj4+IHNlcXVlbmNlIGxlbmd0aCB3YXMgcmVhbGx5
-IDYgKGFzIHNob3duIGJ5IHRoZSBiYWJlbHRyYWNlIHRvb2wpLAo+Pj4gbGVhZGluZyB0byBhIHNl
-Z2ZhdWx0IHdoZW4gYWNjZXNzaW5nIHRoZSA3dGggZWxlbWVudC4KPj4+Cj4+PiBMb29raW5nIGF0
-IHRoZSBQeXRob24gYmluZGluZywgSSBzZWUgdGhhdCB0aGlzIGlzIHVzZWQ6Cj4+Pgo+Pj4gICAg
-IGNvbnRhaW5lcl9vZihmaWVsZCwgc3RydWN0IGRlZmluaXRpb25fc2VxdWVuY2UsIHApOwo+Pj4K
-Pj4+IGZvbGxvd2VkIGJ5IGJ0X3NlcXVlbmNlX2xlbigpLiBIb3dldmVyLCBzdHJ1Y3QgZGVmaW5p
-dGlvbl9zZXF1ZW5jZSwKPj4+IGJ0X3NlcXVlbmNlX2xlbigpIChhbmQgYnRfc2VxdWVuY2VfaW5k
-ZXgoKSkgYXJlIG5vdCBhdmFpbGFibGUgaW4KPj4+IHRoZSBBUEkuCj4+Pgo+Pj4gU28gd2hhdCB3
-b3VsZCBiZSB5b3VyIHdheSB0byByZWFkIHNlcXVlbmNlIGl0ZW1zPyBEbyB5b3UgaGF2ZQo+Pj4g
-YW4gZXhhbXBsZSB1c2luZyBzdHJpY3RseSB3aGF0J3MgYXZhaWxhYmxlIGluIC91c3IvaW5jbHVk
-ZS9iYWJlbHRyYWNlPwo+Pj4KPj4KPj4gYnRfY3RmX2dldF9maWVsZF9saXN0IGNhbiBiZSB1c2Vk
-IHRvIGdldCB0aGUgbnVtYmVyIG9mIGVsZW1lbnRzLCBhbG9uZwo+PiB3aXRoIGEgcG9pbnRlciB0
-byB0aGUgZWxlbWVudHMgKHZpYSB0aGUgb3V0cHV0IHBhcmFtZXRlcnMpLgo+Pgo+Cj4gSsOpcsOp
-bWllLAo+Cj4gY29uc2lkZXIgdGhpcyB0ZXN0IEkganVzdCB3cm90ZToKPgo+ICAgICAjaW5jbHVk
-ZSA8c3RkbGliLmg+Cj4gICAgICNpbmNsdWRlIDxzdGRpby5oPgo+Cj4gICAgICNpbmNsdWRlIDxi
-YWJlbHRyYWNlL2JhYmVsdHJhY2UuaD4KPiAgICAgI2luY2x1ZGUgPGJhYmVsdHJhY2UvY3RmL2V2
-ZW50cy5oPgo+ICAgICAjaW5jbHVkZSA8YmFiZWx0cmFjZS9jdGYvaXRlcmF0b3IuaD4KPgo+ICAg
-ICBpbnQgbWFpbihpbnQgYXJnYywgY2hhciogYXJndltdKQo+ICAgICB7Cj4gICAgICAgICBzdHJ1
-Y3QgYnRfY29udGV4dCogYnRfY29udGV4dDsKPiAgICAgICAgIHN0cnVjdCBidF9jdGZfaXRlciog
-YnRfY3RmX2l0ZXI7Cj4gICAgICAgICBjb25zdCBjaGFyKiB0cmFjZV9wYXRoID0gYXJndlsxXTsK
-PiAgICAgICAgIHN0cnVjdCBidF9pdGVyX3BvcyBiZWdpbl9wb3M7Cj4gICAgICAgICBzdHJ1Y3Qg
-YnRfY3RmX2V2ZW50KiBidF9ldmVudDsKPiAgICAgICAgIGNvbnN0IHN0cnVjdCBidF9kZWZpbml0
-aW9uKiBmaWVsZHNfZGVmOwo+ICAgICAgICAgY29uc3Qgc3RydWN0IGJ0X2RlY2xhcmF0aW9uKiBm
-aWVsZHNfZGVjbDsKPiAgICAgICAgIGNvbnN0IHN0cnVjdCBidF9kZWZpbml0aW9uKiBmaWVsZF9k
-ZWY7Cj4gICAgICAgICBjb25zdCBzdHJ1Y3QgYnRfZGVjbGFyYXRpb24qIGZpZWxkX2RlY2w7Cj4g
-ICAgICAgICB1bnNpZ25lZCBpbnQgZmllbGRzX2NvdW50LCBzZXFfaXRlbXNfY291bnQ7Cj4gICAg
-ICAgICBzdHJ1Y3QgYnRfZGVmaW5pdGlvbiBjb25zdCogY29uc3QqIGZpZWxkc19saXN0Owo+ICAg
-ICAgICAgc3RydWN0IGJ0X2RlZmluaXRpb24gY29uc3QqIGNvbnN0KiBzZXFfaXRlbXNfbGlzdDsK
-PiAgICAgICAgIGludCByZXQ7Cj4gICAgICAgICB1bnNpZ25lZCBpbnQgeCwgeTsKPiAgICAgICAg
-IHVuc2lnbmVkIGludCBwb3MgPSAxOwo+ICAgICAgICAgaW50IGVyciA9IDA7Cj4KPiAgICAgICAg
-IGJ0X2NvbnRleHQgPSBidF9jb250ZXh0X2NyZWF0ZSgpOwo+ICAgICAgICAgYnRfY29udGV4dF9h
-ZGRfdHJhY2UoYnRfY29udGV4dCwgdHJhY2VfcGF0aCwgImN0ZiIsCj4gICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICBOVUxMLCBOVUxMLCBOVUxMKTsKPgo+ICAgICAgICAgYmVnaW5fcG9zLnR5
-cGUgPSBCVF9TRUVLX0JFR0lOOwo+ICAgICAgICAgYmVnaW5fcG9zLnUuc2Vla190aW1lID0gMDsK
-Pgo+ICAgICAgICAgYnRfY3RmX2l0ZXIgPSBidF9jdGZfaXRlcl9jcmVhdGUoYnRfY29udGV4dCwg
-JmJlZ2luX3BvcywgTlVMTCk7Cj4KPiAgICAgICAgIHdoaWxlIChidF9ldmVudCA9IGJ0X2N0Zl9p
-dGVyX3JlYWRfZXZlbnQoYnRfY3RmX2l0ZXIpKSB7Cj4gICAgICAgICAgICAgZmllbGRzX2RlZiA9
-IGJ0X2N0Zl9nZXRfdG9wX2xldmVsX3Njb3BlKGJ0X2V2ZW50LCBCVF9FVkVOVF9GSUVMRFMpOwo+
-Cj4gICAgICAgICAgICAgaWYgKCFmaWVsZHNfZGVmKSB7Cj4gICAgICAgICAgICAgICAgIGdvdG8g
-bmV4dF9ldmVudDsKPiAgICAgICAgICAgICB9Cj4KPiAgICAgICAgICAgICBmaWVsZHNfZGVjbCA9
-IGJ0X2N0Zl9nZXRfZGVjbF9mcm9tX2RlZihmaWVsZHNfZGVmKTsKPgo+ICAgICAgICAgICAgIGlm
-IChidF9jdGZfZmllbGRfdHlwZShmaWVsZHNfZGVjbCkgIT0gQ1RGX1RZUEVfU1RSVUNUKSB7Cj4g
-ICAgICAgICAgICAgICAgIGdvdG8gbmV4dF9ldmVudDsKPiAgICAgICAgICAgICB9Cj4KPiAgICAg
-ICAgICAgICByZXQgPSBidF9jdGZfZ2V0X2ZpZWxkX2xpc3QoYnRfZXZlbnQsIGZpZWxkc19kZWYs
-ICZmaWVsZHNfbGlzdCwKPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-JmZpZWxkc19jb3VudCk7Cj4KPiAgICAgICAgICAgICBpZiAocmV0IDwgMCkgewo+ICAgICAgICAg
-ICAgICAgICBnb3RvIG5leHRfZXZlbnQ7Cj4gICAgICAgICAgICAgfQo+Cj4gICAgICAgICAgICAg
-Zm9yICh4ID0gMDsgeCA8IGZpZWxkc19jb3VudDsgKyt4KSB7Cj4gICAgICAgICAgICAgICAgIGZp
-ZWxkX2RlZiA9IGZpZWxkc19saXN0W3hdOwo+Cj4gICAgICAgICAgICAgICAgIGlmICghZmllbGRf
-ZGVmKSB7Cj4gICAgICAgICAgICAgICAgICAgICBwcmludGYoImZpZWxkIGVsZW1lbnQgZXJyb3Jc
-biIpOwo+ICAgICAgICAgICAgICAgICAgICAgZ290byBlbmQ7Cj4gICAgICAgICAgICAgICAgIH0K
-Pgo+ICAgICAgICAgICAgICAgICBmaWVsZF9kZWNsID0gYnRfY3RmX2dldF9kZWNsX2Zyb21fZGVm
-KGZpZWxkX2RlZik7Cj4KPiAgICAgICAgICAgICAgICAgaWYgKGJ0X2N0Zl9maWVsZF90eXBlKGZp
-ZWxkX2RlY2wpID09IENURl9UWVBFX1NFUVVFTkNFKSB7Cj4gICAgICAgICAgICAgICAgICAgICBy
-ZXQgPSBidF9jdGZfZ2V0X2ZpZWxkX2xpc3QoYnRfZXZlbnQsIGZpZWxkX2RlZiwKPiAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAmc2VxX2l0ZW1zX2xpc3Qs
-Cj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgJnNlcV9p
-dGVtc19jb3VudCk7Cj4KPiAgICAgICAgICAgICAgICAgICAgIGlmIChyZXQgPCAwKSB7Cj4gICAg
-ICAgICAgICAgICAgICAgICAgICAgLyogSSBndWVzcyB0aGlzIG1lYW5zIGEgY291bnQgb2YgMD8g
-YmVjYXVzZQo+ICAgICAgICAgICAgICAgICAgICAgICAgICAqIGl0IGRvZXMgaGFwcGVuLgo+ICAg
-ICAgICAgICAgICAgICAgICAgICAgICAqLwo+ICAgICAgICAgICAgICAgICAgICAgICAgIGdvdG8g
-bmV4dF9ldmVudDsKPiAgICAgICAgICAgICAgICAgICAgIH0KPgo+ICAgICAgICAgICAgICAgICAg
-ICAgZm9yICh5ID0gMDsgeSA8IHNlcV9pdGVtc19jb3VudDsgKyt5KSB7Cj4gICAgICAgICAgICAg
-ICAgICAgICAgICAgaWYgKCFzZXFfaXRlbXNfbGlzdFt5XSkgewo+ICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICBwcmludGYoImVycm9yIHVzaW5nIHNlcV9pdGVtc19saXN0W3ldXG4iKTsKPiAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgZXJyID0gMTsKPiAgICAgICAgICAgICAgICAgICAg
-ICAgICB9Cj4KPiAgICAgICAgICAgICAgICAgICAgICAgICBpZiAoIWJ0X2N0Zl9nZXRfaW5kZXgo
-YnRfZXZlbnQsIGZpZWxkX2RlZiwgeSkpIHsKPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-cHJpbnRmKCJlcnJvciB1c2luZyBidF9jdGZfZ2V0X2luZGV4KClcbiIpOwo+ICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICBlcnIgPSAxOwo+ICAgICAgICAgICAgICAgICAgICAgICAgIH0KPgo+
-ICAgICAgICAgICAgICAgICAgICAgICAgIGlmIChlcnIpIHsKPiAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgcHJpbnRmKCIgIGV2ZW50OiAlc1xuIiwKPiBidF9jdGZfZXZlbnRfbmFtZShidF9l
-dmVudCkpOwo+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICBwcmludGYoIiAgcG9zaXRpb246
-ICV1XG4iLCBwb3MpOwo+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICBwcmludGYoIiAgZmll
-bGQ6ICVzXG4iLAo+IGJ0X2N0Zl9maWVsZF9uYW1lKGZpZWxkX2RlZikpOwo+ICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICBwcmludGYoIiAgY291bnQ6ICV1XG4iLCBzZXFfaXRlbXNfY291bnQp
-Owo+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICBnb3RvIGVuZDsKPiAgICAgICAgICAgICAg
-ICAgICAgICAgICB9Cj4gICAgICAgICAgICAgICAgICAgICB9Cj4gICAgICAgICAgICAgICAgIH0K
-PiAgICAgICAgICAgICB9Cj4KPiAgICAgbmV4dF9ldmVudDoKPiAgICAgICAgICAgICBpZiAoYnRf
-aXRlcl9uZXh0KGJ0X2N0Zl9nZXRfaXRlcihidF9jdGZfaXRlcikpIDwgMCkgewo+ICAgICAgICAg
-ICAgICAgICBicmVhazsKPiAgICAgICAgICAgICB9Cj4KPiAgICAgICAgICAgICArK3BvczsKPiAg
-ICAgICAgIH0KPgo+ICAgICBlbmQ6Cj4gICAgICAgICBidF9jdGZfaXRlcl9kZXN0cm95KGJ0X2N0
-Zl9pdGVyKTsKPiAgICAgICAgIGJ0X2NvbnRleHRfcHV0KGJ0X2NvbnRleHQpOwo+Cj4gICAgICAg
-ICByZXR1cm4gMDsKPiAgICAgfQo+Cj4gUnVubmluZyBpdCB3aXRoIHRoaXMgdHJhY2UgPGh0dHA6
-Ly8weDNiLm9yZy9iYnQvYmJ0LnRnej4sIEkgZ2V0IHRoaXM6Cj4KPiAgICAgZXJyb3IgdXNpbmcg
-YnRfY3RmX2dldF9pbmRleCgpCj4gICAgICAgZXZlbnQ6IHNjc2lfZGlzcGF0Y2hfY21kX3N0YXJ0
-Cj4gICAgICAgcG9zaXRpb246IDQ2NjI3Cj4gICAgICAgZmllbGQ6IGNtbmQKPiAgICAgICBjb3Vu
-dDogMTAKPgo+IFNvLi4uIHRoZSBjb3VudCBpcyAxMCwgYW5kIHRoZXJlJ3Mgc3R1ZmYgaW4gc2Vx
-X2l0ZW1zX2xpc3RbNl0gdG8KPiBzZXFfaXRlbXNfbGlzdFs5XQo+IHdoaWNoIGlzIG5vdCBOVUxM
-LCB5ZXQgYnRfY3RmX2dldF9pbmRleCgpIGNvbXBsYWlucyBhdCBlbGVtZW50IDYgKG5vdCB3cml0
-dGVuCj4gaW4gdGhlIHJlc3VsdHMgaGVyZSwgYnV0IEkga25vdyBpdCkuCj4KPiBXaHkgaXMgdGhl
-IGNvdW50IDEwIGlmIG9ubHkgNiBlbGVtZW50cyBhcmUgZ29vZD8gVGhlIGJhYmVsdHJhY2UgdG9v
-bCBrbm93cyB0aGlzCj4gdG9vOgo+Cj4gICAgICQgYmFiZWx0cmFjZSAtaSBjdGYga2VybmVsIDI+
-L2Rldi9udWxsIHwgc2VkIC1uIDQ2NjI3cAo+ICAgICBbMjE6NDA6MDAuMjgxMjY5OTkyXSAoKzAu
-MDAwMDAzNzQxKSBlZXBwZGVzawo+IHNjc2lfZGlzcGF0Y2hfY21kX3N0YXJ0OiB7IGNwdV9pZCA9
-IDAgfSwgeyBob3N0X25vID0gMTAsIGNoYW5uZWwgPSAwLAo+IGlkID0gMCwgbHVuID0gMCwgb3Bj
-b2RlID0gMCwgY21kX2xlbiA9IDYsIGRhdGFfc2dsZW4gPSAwLCBwcm90X3NnbGVuID0KPiAwLCBw
-cm90X29wID0gMCwgX2NtbmRfbGVuZ3RoID0gNiwgY21uZCA9IFsgWzBdID0gMHgwLCBbMV0gPSAw
-eDAsIFsyXSA9Cj4gMHgwLCBbM10gPSAweDAsIFs0XSA9IDB4MCwgWzVdID0gMHgwIF0gfQo+Cj4g
-U2VlLCBjbWRfbGVuIGlzIDYgYW5kIHdlIHNlZSA2IGVsZW1lbnRzIGluIHRoZSBjbW5kIGZpZWxk
-Lgo+Cj4gTXkgcXVlc3Rpb24gaXMgc3RpbGw6IHdoZXJlIGRvIEkgZ2V0IHRoaXMgNiBmcm9tPwo+
-Cj4gVGhhbmtzLAo+IFBoaWwKCkhlcmUgaXMgd2hhdCBJIHRoaW5rIGhhcHBlbnM6CgpGb3IgZWFj
-aCBzZXF1ZW5jZSBkZWZpbml0aW9uLCBCVCBhbGxvY2F0ZXMgYSBmaWVsZCBsaXN0IHRoYXQgb25s
-eQpncm93cy4gSWYgaXQgZmlyc3QgZW5jb3VudGVycyBhbiBldmVudCB3aXRoIHRoaXMgc2VxdWVu
-Y2Ugd2hlcmUgaXQKY29udGFpbnMgNiBldmVudHMsIGl0IHdpbGwgYWxsb2NhdGUgYW4gYXJyYXkg
-b2YgNiBmaWVsZHMuIFRoZW4sIHdoZW4KaXQgZW5jb3VudGVycyBhbiBldmVudCB3aGVyZSB0aGUg
-c2VxdWVuY2UgaGFzIDEwIGV2ZW50cywgdGhlIGJ1ZmZlciBpcwpncm93biB0byAxMCBmaWVsZHMu
-IFRoaXMgaGFwcGVucyBpbiBidF9zZXF1ZW5jZV9ydywgaW4KdHlwZXMvc2VxdWVuY2UuYy4gSWYs
-IGxhdGVyLCBhbiBldmVudCB3aXRoIGEgc2VxdWVuY2Ugb2YgNiBlbGVtZW50cyBpcwpyZWFkLCBv
-bmx5IHRoZSBmaXJzdCA2IHNsb3RzIG9mIHRoZSBmaWVsZHMgYXJyYXkgd2lsbCBiZSB1c2VkLgpU
-aGVyZWZvcmUsIHlvdSAob3IgdGhlIGxpYnJhcnkpIHNob3VsZCBhbHdheXMgcmVmZXIgdG8gdGhl
-IGludGVnZXIKZGVmaW5pdGlvbiB0byBrbm93IHRoZSByZWFsIGNvdW50IG9mIGV2ZW50cyBpbiB0
-aGUgc2VxdWVuY2UsIGFuZCBOT1QKdG8gdGhlIGFsbG9jYXRlZCBhcnJheSBsZW5ndGguCgpUaGVy
-ZSBpcyBldmVuIGEgbmljZSBjb21tZW50IGFib3V0IHRoYXQgaW4gYnRfc2VxdWVuY2Vfcnc6Cgog
-ICAgICAgIC8qCiAgICAgICAgICogWWVzLCBsYXJnZSBzZXF1ZW5jZXMgY291bGQgYmUgX3BhaW5m
-dWxseSBzbG93XyB0byBwYXJzZSBkdWUKICAgICAgICAgKiB0byBtZW1vcnkgYWxsb2NhdGlvbiBm
-b3IgZWFjaCBldmVudCByZWFkLiBBdCBsZWFzdCwgbmV2ZXIKICAgICAgICAgKiBzaHJpbmsgdGhl
-IHNlcXVlbmNlLiBOb3RlOiB0aGUgc2VxdWVuY2UgR0FycmF5IGxlbiBzaG91bGQKICAgICAgICAg
-KiBuZXZlciBiZSB1c2VkIGFzIGluZGljYXRvciBvZiB0aGUgY3VycmVudCBzZXF1ZW5jZSBsZW5n
-dGguCiAgICAgICAgICogT25lIHNob3VsZCBhbHdheXMgbG9vayBhdCB0aGUgc2VxdWVuY2UtPmxl
-bi0+dmFsdWUuX3Vuc2lnbmVkCiAgICAgICAgICogdmFsdWUgZm9yIHRoYXQuCiAgICAgICAgICov
-CgpidF9jdGZfZ2V0X2ZpZWxkX2xpc3QgaG93ZXZlciwgcmV0dXJucyB5b3UgdGhlIGxlbmd0aCBv
-ZiB0aGUgYXJyYXk6CgogICAgICAgICpsaXN0ID0gKHN0cnVjdCBidF9kZWZpbml0aW9uIGNvbnN0
-KiBjb25zdCopIGRlZl9zZXF1ZW5jZS0+ZWxlbXMtPnBkYXRhOwogICAgICAgICpjb3VudCA9IGRl
-Zl9zZXF1ZW5jZS0+ZWxlbXMtPmxlbjsKCkNoYW5naW5nIHRoYXQgdG8gZ2V0IHRoZSBhY3R1YWwg
-bGVuZ3RoIG9mIHRoZSBzZXF1ZW5jZSBtYWtlcyB5b3VyCmV4YW1wbGUgd29yayAoc2VlIHBhdGNo
-IGluIFsxXSkuIFRoYXQgd291bGQgYmUgYSBidWcgaW4gYmFiZWx0cmFjZSwKdW5sZXNzIHRoZSBp
-bnRlbnQgb2YgdGhlIGJ0X2N0Zl9nZXRfZmllbGRfbGlzdCBpcyBhY3R1YWxseSB0byByZXR1cm4K
-YWxsIHRoZSBhbGxvY2F0ZWQgZmllbGRzLCBidXQgSSBkb24ndCBzZWUgYW55IHJlYXNvbiB0byBk
-byB0aGF0LgoKWzFdIGh0dHA6Ly9wYXN0ZS51YnVudHUuY29tLzc0OTcwNzIvCgpfX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBs
-aXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2kt
-YmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+CC: David Goulet <dgoulet@efficios.com>
+---
+ doc/man/lttng.1                          |    2 ++
+ src/bin/lttng/commands/enable_channels.c |    2 ++
+ 2 files changed, 4 insertions(+)
+
+diff --git a/doc/man/lttng.1 b/doc/man/lttng.1
+index ef73b06..42105c5 100644
+--- a/doc/man/lttng.1
++++ b/doc/man/lttng.1
+@@ -442,6 +442,8 @@ Use shared buffer for the whole system (\-k only)
+ .BR "\-C, \-\-tracefile-size SIZE"
+ Maximum size of each tracefile within a stream (in bytes).
+ 0 means unlimited. (default: 0)
++Note: traces generated with this option may inaccurately report
++discarded events as per CTF 1.8.
+ .TP
+ .BR "\-W, \-\-tracefile-count COUNT"
+ Used in conjunction with \-C option, this will limit the number of files
+diff --git a/src/bin/lttng/commands/enable_channels.c b/src/bin/lttng/commands/enable_channels.c
+index 55fbae6..4a1de2c 100644
+--- a/src/bin/lttng/commands/enable_channels.c
++++ b/src/bin/lttng/commands/enable_channels.c
+@@ -136,6 +136,8 @@ static void usage(FILE *ofp)
+ 	fprintf(ofp, "  -C, --tracefile-size SIZE\n");
+ 	fprintf(ofp, "                           Maximum size of each tracefile within a stream (in bytes). 0 means unlimited.\n");
+ 	fprintf(ofp, "                               (default: %u)\n", DEFAULT_CHANNEL_TRACEFILE_SIZE);
++	fprintf(ofp, "                           Note: traces generated with this option may inaccurately report\n");
++	fprintf(ofp, "                           discarded events as per CTF 1.8.\n");
+ 	fprintf(ofp, "  -W, --tracefile-count COUNT\n");
+ 	fprintf(ofp, "                           Used in conjunction with -C option, this will limit the number\n");
+ 	fprintf(ofp, "                           of files created to the specified count. 0 means unlimited.\n");
+-- 
+1.7.10.4
