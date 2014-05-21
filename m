@@ -1,17 +1,15 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: Re: [PATCH lttng-tools] Documentation: document
- tracefile max size discarded event limitation
-Date: Wed, 21 May 2014 16:06:52 -0400
-Message-ID: <20140521200652.GC7252__13786.6189623766$1400702901$gmane$org@thessa>
-References: <1400688624-28565-1-git-send-email-mathieu.desnoyers@efficios.com>
+From: Julien Desfossez <jdesfossez@efficios.com>
+Subject: [MODULES RFC PATCH] Add PID field to block_* events
+Date: Wed, 21 May 2014 17:29:15 -0400
+Message-ID: <1400707755-17355-1-git-send-email-jdesfossez__35495.2259491712$1400707845$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1208746576=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from albert.ini-tech.com ([192.99.35.19] helo=smtp.ini-tech.com)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <dgoulet@efficios.com>) id 1WnCn0-0003oX-Pj
- for lttng-dev@lists.lttng.org; Wed, 21 May 2014 16:07:08 -0400
-In-Reply-To: <1400688624-28565-1-git-send-email-mathieu.desnoyers@efficios.com>
+ (envelope-from <jdesfossez@efficios.com>) id 1WnE4o-0004HZ-NO
+ for lttng-dev@lists.lttng.org; Wed, 21 May 2014 17:29:36 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,99 +18,281 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: mathieu.desnoyers@efficios.com
+Cc: lttng-dev@lists.lttng.org, Julien Desfossez <jdesfossez@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
+Most of the block events have the "comm" field, but we have no way to
+match a block event to a certain PID which makes performing accurate
+per-process analyses difficult.
 
---===============1208746576==
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="E/DnYTRukya0zdZ1"
-Content-Disposition: inline
+Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
+---
+ instrumentation/events/lttng-module/block.h | 56 ++++++++++++++++++++---------
+ 1 file changed, 40 insertions(+), 16 deletions(-)
 
-
---E/DnYTRukya0zdZ1
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Merged
-
-On 21 May (12:10:24), Mathieu Desnoyers wrote:
-> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> CC: David Goulet <dgoulet@efficios.com>
-> ---
->  doc/man/lttng.1                          |    2 ++
->  src/bin/lttng/commands/enable_channels.c |    2 ++
->  2 files changed, 4 insertions(+)
->=20
-> diff --git a/doc/man/lttng.1 b/doc/man/lttng.1
-> index ef73b06..42105c5 100644
-> --- a/doc/man/lttng.1
-> +++ b/doc/man/lttng.1
-> @@ -442,6 +442,8 @@ Use shared buffer for the whole system (\-k only)
->  .BR "\-C, \-\-tracefile-size SIZE"
->  Maximum size of each tracefile within a stream (in bytes).
->  0 means unlimited. (default: 0)
-> +Note: traces generated with this option may inaccurately report
-> +discarded events as per CTF 1.8.
->  .TP
->  .BR "\-W, \-\-tracefile-count COUNT"
->  Used in conjunction with \-C option, this will limit the number of files
-> diff --git a/src/bin/lttng/commands/enable_channels.c b/src/bin/lttng/com=
-mands/enable_channels.c
-> index 55fbae6..4a1de2c 100644
-> --- a/src/bin/lttng/commands/enable_channels.c
-> +++ b/src/bin/lttng/commands/enable_channels.c
-> @@ -136,6 +136,8 @@ static void usage(FILE *ofp)
->  	fprintf(ofp, "  -C, --tracefile-size SIZE\n");
->  	fprintf(ofp, "                           Maximum size of each tracefile=
- within a stream (in bytes). 0 means unlimited.\n");
->  	fprintf(ofp, "                               (default: %u)\n", DEFAULT_=
-CHANNEL_TRACEFILE_SIZE);
-> +	fprintf(ofp, "                           Note: traces generated with th=
-is option may inaccurately report\n");
-> +	fprintf(ofp, "                           discarded events as per CTF 1.=
-8.\n");
->  	fprintf(ofp, "  -W, --tracefile-count COUNT\n");
->  	fprintf(ofp, "                           Used in conjunction with -C op=
-tion, this will limit the number\n");
->  	fprintf(ofp, "                           of files created to the specif=
-ied count. 0 means unlimited.\n");
-> --=20
-> 1.7.10.4
->=20
-
---E/DnYTRukya0zdZ1
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iQF8BAEBAgBmBQJTfQdcXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
-ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
-MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02gNYH/0OqhuwbRJ9ZFHEznAJAiNva
-a30K3sjODVd11AupVi/drGg91CuDNW3eUO3/ZMAHjsjlP9uZZ8lYX15uFGnZoBIS
-BtyMkOCPM4OsTqJ75Io2gTTbHMa7fIAA/VOuTXY/osgoBBDBpG3Lqac8AuxBuGZ0
-BwbvW7ouI2mGExPFbEvI74ytot+rbYauvNrnic8uiXTvhAQjSNFZqWsZx7pqjYwr
-8eQ8iW32vJmCTlWL0WLGGv91dCQ2H0adK/MYsRseo1JZCgyUT2nWHtO6ZTdNNJgo
-mXnffEYP27NHU8m5RoQzN8KK4+40WRxvsIUWSiXU4Ma1oKQ8DXWWv32513JpTzY=
-=0p1p
------END PGP SIGNATURE-----
-
---E/DnYTRukya0zdZ1--
-
-
---===============1208746576==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1208746576==--
+diff --git a/instrumentation/events/lttng-module/block.h b/instrumentation/events/lttng-module/block.h
+index e3e6b4c..d983db2 100644
+--- a/instrumentation/events/lttng-module/block.h
++++ b/instrumentation/events/lttng-module/block.h
+@@ -305,6 +305,7 @@ DECLARE_EVENT_CLASS(block_rq,
+ 		__field(  unsigned int,	nr_sector		)
+ 		__field(  unsigned int,	bytes			)
+ 		__field(  unsigned int,	rwbs			)
++		__field(  pid_t,	pid			)
+ 		__array_text(  char,         comm,   TASK_COMM_LEN   )
+ 		__dynamic_array_hex( unsigned char,	cmd,
+ 			(rq->cmd_type == REQ_TYPE_BLOCK_PC) ?
+@@ -323,16 +324,17 @@ DECLARE_EVENT_CLASS(block_rq,
+ 		tp_memcpy_dyn(cmd, (rq->cmd_type == REQ_TYPE_BLOCK_PC) ?
+ 					rq->cmd : NULL)
+ 		tp_memcpy(comm, current->comm, TASK_COMM_LEN)
++		tp_assign(pid, current->pid)
+ 	),
+ 
+-	TP_printk("%d,%d %s %u (%s) %llu + %u [%s]",
++	TP_printk("%d,%d %s %u (%s) %llu + %u [%s] %d",
+ 		  MAJOR(__entry->dev), MINOR(__entry->dev),
+ 		  __print_rwbs_flags(__entry->rwbs),
+ 		  __entry->bytes,
+ 		  __blk_dump_cmd(__get_dynamic_array(cmd),
+ 				 __get_dynamic_array_len(cmd)),
+ 		  (unsigned long long)__entry->sector,
+-		  __entry->nr_sector, __entry->comm)
++		  __entry->nr_sector, __entry->comm, __entry->pid)
+ )
+ 
+ /**
+@@ -389,6 +391,7 @@ TRACE_EVENT(block_bio_bounce,
+ 		__field( sector_t,	sector			)
+ 		__field( unsigned int,	nr_sector		)
+ 		__field( unsigned int,	rwbs			)
++		__field( pid_t,		pid			)
+ 		__array_text( char,		comm,	TASK_COMM_LEN	)
+ 	),
+ 
+@@ -400,6 +403,7 @@ TRACE_EVENT(block_bio_bounce,
+ 		tp_assign(nr_sector, bio_sectors(bio))
+ 		blk_fill_rwbs(rwbs, bio->bi_rw, bio->bi_iter.bi_size)
+ 		tp_memcpy(comm, current->comm, TASK_COMM_LEN)
++		tp_assign(pid, current->pid)
+ #else /* #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,14,0)) */
+ 		tp_assign(dev, bio->bi_bdev ?
+ 					  bio->bi_bdev->bd_dev : 0)
+@@ -407,14 +411,15 @@ TRACE_EVENT(block_bio_bounce,
+ 		tp_assign(nr_sector, bio->bi_size >> 9)
+ 		blk_fill_rwbs(rwbs, bio->bi_rw, bio->bi_size)
+ 		tp_memcpy(comm, current->comm, TASK_COMM_LEN)
++		tp_assign(pid, current->pid)
+ #endif /* #else #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,14,0)) */
+ 	),
+ 
+-	TP_printk("%d,%d %s %llu + %u [%s]",
++	TP_printk("%d,%d %s %llu + %u [%s] %d",
+ 		  MAJOR(__entry->dev), MINOR(__entry->dev),
+ 		  __print_rwbs_flags(__entry->rwbs),
+ 		  (unsigned long long)__entry->sector,
+-		  __entry->nr_sector, __entry->comm)
++		  __entry->nr_sector, __entry->comm, __entry->pid)
+ )
+ 
+ /**
+@@ -485,6 +490,7 @@ DECLARE_EVENT_CLASS(block_bio_merge,
+ 		__field( sector_t,	sector			)
+ 		__field( unsigned int,	nr_sector		)
+ 		__field( unsigned int,	rwbs			)
++		__field( pid_t,		pid			)
+ 		__array_text( char,		comm,	TASK_COMM_LEN	)
+ 	),
+ 
+@@ -495,20 +501,22 @@ DECLARE_EVENT_CLASS(block_bio_merge,
+ 		tp_assign(nr_sector, bio_sectors(bio))
+ 		blk_fill_rwbs(rwbs, bio->bi_rw, bio->bi_iter.bi_size)
+ 		tp_memcpy(comm, current->comm, TASK_COMM_LEN)
++		tp_assign(pid, current->pid)
+ #else /* #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,14,0)) */
+ 		tp_assign(dev, bio->bi_bdev->bd_dev)
+ 		tp_assign(sector, bio->bi_sector)
+ 		tp_assign(nr_sector, bio->bi_size >> 9)
+ 		blk_fill_rwbs(rwbs, bio->bi_rw, bio->bi_size)
+ 		tp_memcpy(comm, current->comm, TASK_COMM_LEN)
++		tp_assign(pid, current->pid)
+ #endif /* #else #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,14,0)) */
+ 	),
+ 
+-	TP_printk("%d,%d %s %llu + %u [%s]",
++	TP_printk("%d,%d %s %llu + %u [%s] %d",
+ 		  MAJOR(__entry->dev), MINOR(__entry->dev),
+ 		  __print_rwbs_flags(__entry->rwbs),
+ 		  (unsigned long long)__entry->sector,
+-		  __entry->nr_sector, __entry->comm)
++		  __entry->nr_sector, __entry->comm, __entry->pid)
+ )
+ 
+ /**
+@@ -559,6 +567,7 @@ TRACE_EVENT(block_bio_queue,
+ 		__field( sector_t,	sector			)
+ 		__field( unsigned int,	nr_sector		)
+ 		__field( unsigned int,	rwbs			)
++		__field( pid_t,		pid			)
+ 		__array_text( char,		comm,	TASK_COMM_LEN	)
+ 	),
+ 
+@@ -569,19 +578,21 @@ TRACE_EVENT(block_bio_queue,
+ 		tp_assign(nr_sector, bio_sectors(bio))
+ 		blk_fill_rwbs(rwbs, bio->bi_rw, bio->bi_iter.bi_size)
+ 		tp_memcpy(comm, current->comm, TASK_COMM_LEN)
++		tp_assign(pid, current->pid)
+ #else /* #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,14,0)) */
+ 		tp_assign(dev, bio->bi_bdev->bd_dev)
+ 		tp_assign(sector, bio->bi_sector)
+ 		tp_assign(nr_sector, bio->bi_size >> 9)
+ 		blk_fill_rwbs(rwbs, bio->bi_rw, bio->bi_size)
+ 		tp_memcpy(comm, current->comm, TASK_COMM_LEN)
++		tp_assign(pid, current->pid)
+ #endif /* #else #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,14,0)) */
+ 	),
+ 
+-	TP_printk("%d,%d %s %llu + %u [%s]",
++	TP_printk("%d,%d %s %llu + %u [%s] %d",
+ 		  MAJOR(__entry->dev), MINOR(__entry->dev), __entry->rwbs,
+ 		  (unsigned long long)__entry->sector,
+-		  __entry->nr_sector, __entry->comm)
++		  __entry->nr_sector, __entry->comm, __entry->pid)
+ )
+ #else
+ DECLARE_EVENT_CLASS(block_bio,
+@@ -595,6 +606,7 @@ DECLARE_EVENT_CLASS(block_bio,
+ 		__field( sector_t,	sector			)
+ 		__field( unsigned int,	nr_sector		)
+ 		__field( unsigned int,	rwbs			)
++		__field( pid_t,		pid			)
+ 		__array_text( char,		comm,	TASK_COMM_LEN	)
+ 	),
+ 
+@@ -604,13 +616,14 @@ DECLARE_EVENT_CLASS(block_bio,
+ 		tp_assign(nr_sector, bio->bi_size >> 9)
+ 		blk_fill_rwbs(rwbs, bio->bi_rw, bio->bi_size)
+ 		tp_memcpy(comm, current->comm, TASK_COMM_LEN)
++		tp_assign(pid, current->pid)
+ 	),
+ 
+-	TP_printk("%d,%d %s %llu + %u [%s]",
++	TP_printk("%d,%d %s %llu + %u [%s] %d",
+ 		  MAJOR(__entry->dev), MINOR(__entry->dev),
+ 		  __print_rwbs_flags(__entry->rwbs),
+ 		  (unsigned long long)__entry->sector,
+-		  __entry->nr_sector, __entry->comm)
++		  __entry->nr_sector, __entry->comm, __entry->pid)
+ )
+ 
+ /**
+@@ -669,6 +682,7 @@ DECLARE_EVENT_CLASS(block_get_rq,
+ 		__field( sector_t,	sector			)
+ 		__field( unsigned int,	nr_sector		)
+ 		__field( unsigned int,	rwbs			)
++		__field( pid_t,		pid			)
+ 		__array_text( char,		comm,	TASK_COMM_LEN	)
+         ),
+ 
+@@ -680,6 +694,7 @@ DECLARE_EVENT_CLASS(block_get_rq,
+ 		blk_fill_rwbs(rwbs, bio ? bio->bi_rw : 0,
+ 			      bio ? bio_sectors(bio) : 0)
+ 		tp_memcpy(comm, current->comm, TASK_COMM_LEN)
++		tp_assign(pid, current->pid)
+ #else /* #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,14,0)) */
+ 		tp_assign(dev, bio ? bio->bi_bdev->bd_dev : 0)
+ 		tp_assign(sector, bio ? bio->bi_sector : 0)
+@@ -687,14 +702,15 @@ DECLARE_EVENT_CLASS(block_get_rq,
+ 		blk_fill_rwbs(rwbs, bio ? bio->bi_rw : 0,
+ 			      bio ? bio->bi_size >> 9 : 0)
+ 		tp_memcpy(comm, current->comm, TASK_COMM_LEN)
++		tp_assign(pid, current->pid)
+ #endif /* #else #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,14,0)) */
+         ),
+ 
+-	TP_printk("%d,%d %s %llu + %u [%s]",
++	TP_printk("%d,%d %s %llu + %u [%s] %d",
+ 		  MAJOR(__entry->dev), MINOR(__entry->dev),
+ 		  __print_rwbs_flags(__entry->rwbs),
+ 		  (unsigned long long)__entry->sector,
+-		  __entry->nr_sector, __entry->comm)
++		  __entry->nr_sector, __entry->comm, __entry->pid)
+ )
+ 
+ /**
+@@ -746,14 +762,16 @@ TRACE_EVENT(block_plug,
+ 	TP_ARGS(q),
+ 
+ 	TP_STRUCT__entry(
++		__field( pid_t,		pid			)
+ 		__array_text( char,		comm,	TASK_COMM_LEN	)
+ 	),
+ 
+ 	TP_fast_assign(
+ 		tp_memcpy(comm, current->comm, TASK_COMM_LEN)
++		tp_assign(pid, current->pid)
+ 	),
+ 
+-	TP_printk("[%s]", __entry->comm)
++	TP_printk("[%s] %d", __entry->comm, __entry->pid)
+ )
+ 
+ DECLARE_EVENT_CLASS(block_unplug,
+@@ -770,6 +788,7 @@ DECLARE_EVENT_CLASS(block_unplug,
+ 
+ 	TP_STRUCT__entry(
+ 		__field( int,		nr_rq			)
++		__field( pid_t,		pid			)
+ 		__array_text( char,		comm,	TASK_COMM_LEN	)
+ 	),
+ 
+@@ -780,9 +799,11 @@ DECLARE_EVENT_CLASS(block_unplug,
+ 		tp_assign(nr_rq, q->rq.count[READ] + q->rq.count[WRITE])
+ #endif
+ 		tp_memcpy(comm, current->comm, TASK_COMM_LEN)
++		tp_assign(pid, current->pid)
+ 	),
+ 
+-	TP_printk("[%s] %d", __entry->comm, __entry->nr_rq)
++	TP_printk("[%s] %d %d", __entry->comm, , __entry->pid,
++			__entry->nr_rq)
+ )
+ 
+ #if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,39))
+@@ -850,6 +871,7 @@ TRACE_EVENT(block_split,
+ 		__field( sector_t,	sector				)
+ 		__field( sector_t,	new_sector			)
+ 		__field( unsigned int,	rwbs		)
++		__field( pid_t,		pid			)
+ 		__array_text( char,		comm,		TASK_COMM_LEN	)
+ 	),
+ 
+@@ -860,21 +882,23 @@ TRACE_EVENT(block_split,
+ 		tp_assign(new_sector, new_sector)
+ 		blk_fill_rwbs(rwbs, bio->bi_rw, bio->bi_iter.bi_size)
+ 		tp_memcpy(comm, current->comm, TASK_COMM_LEN)
++		tp_assign(pid, current->pid)
+ #else /* #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,14,0)) */
+ 		tp_assign(dev, bio->bi_bdev->bd_dev)
+ 		tp_assign(sector, bio->bi_sector)
+ 		tp_assign(new_sector, new_sector)
+ 		blk_fill_rwbs(rwbs, bio->bi_rw, bio->bi_size)
+ 		tp_memcpy(comm, current->comm, TASK_COMM_LEN)
++		tp_assign(pid, current->pid)
+ #endif /* #else #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,14,0)) */
+ 	),
+ 
+-	TP_printk("%d,%d %s %llu / %llu [%s]",
++	TP_printk("%d,%d %s %llu / %llu [%s] %d",
+ 		  MAJOR(__entry->dev), MINOR(__entry->dev),
+ 		  __print_rwbs_flags(__entry->rwbs),
+ 		  (unsigned long long)__entry->sector,
+ 		  (unsigned long long)__entry->new_sector,
+-		  __entry->comm)
++		  __entry->comm, __entry->pid)
+ )
+ 
+ /**
+-- 
+1.9.1
