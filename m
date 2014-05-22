@@ -1,18 +1,19 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-tools] Documentation: document
- tracefile max size discarded event limitation
-Date: Thu, 22 May 2014 13:35:12 +0000 (UTC)
-Message-ID: <126483794.21654.1400765712145.JavaMail.zimbra__41168.6522224501$1400765784$gmane$org@efficios.com>
-References: <48CF5AC71E61DB46B70D0F388054EFFD359ADD47@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+From: Julien Desfossez <jdesfossez@efficios.com>
+Subject: Re: [MODULES RFC PATCH] Add PID field to block_* events
+Date: Thu, 22 May 2014 10:29:15 -0400
+Message-ID: <537E09BB.7000808__36046.5295533233$1400769038$gmane$org@efficios.com>
+References: <1400707755-17355-1-git-send-email-jdesfossez@efficios.com>
+ <779054188.21437.1400709697119.JavaMail.zimbra@efficios.com>
+ <537E00AA.50804@kernel.dk>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from fukushima.klipix.org ([85.12.144.25])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1WnT9P-0001q1-MQ
- for lttng-dev@lists.lttng.org; Thu, 22 May 2014 09:35:23 -0400
-In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD359ADD47@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+ (envelope-from <jdesfossez@efficios.com>) id 1WnTzo-0002AB-UN
+ for lttng-dev@lists.lttng.org; Thu, 22 May 2014 10:29:30 -0400
+In-Reply-To: <537E00AA.50804@kernel.dk>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,55 +22,50 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Daniel Thibault <Daniel.Thibault@drdc-rddc.gc.ca>, David Goulet <dgoulet@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: Jens Axboe <axboe@kernel.dk>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev@lists.lttng.org, Steven Rostedt <rostedt@goodmis.org>
 List-Id: lttng-dev@lists.lttng.org
 
-LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJEYW5pZWwgVGhpYmF1bHQiIDxE
-YW5pZWwuVGhpYmF1bHRAZHJkYy1yZGRjLmdjLmNhPgo+IFRvOiBsdHRuZy1kZXZAbGlzdHMubHR0
-bmcub3JnCj4gQ2M6ICJNYXRoaWV1IERlc25veWVycyIgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmlj
-aW9zLmNvbT4sICJEYXZpZCBHb3VsZXQiIDxkZ291bGV0QGVmZmljaW9zLmNvbT4KPiBTZW50OiBU
-aHVyc2RheSwgTWF5IDIyLCAyMDE0IDk6MDE6MjAgQU0KPiBTdWJqZWN0OiBSRTogIFtsdHRuZy1k
-ZXZdIFtQQVRDSCBsdHRuZy10b29sc10gRG9jdW1lbnRhdGlvbjogZG9jdW1lbnQgdHJhY2VmaWxl
-IG1heCBzaXplIGRpc2NhcmRlZCBldmVudCBsaW1pdGF0aW9uCj4gCj4gLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQo+
-IERhdGU6IFdlZCwgMjEgTWF5IDIwMTQgMTI6MTA6MjQgLTA0MDAKPiBGcm9tOiBNYXRoaWV1IERl
-c25veWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPgo+IFRvOiBEYXZpZCBHb3Vs
-ZXQgPGRnb3VsZXRAZWZmaWNpb3MuY29tPgo+IAo+IGRpZmYgLS1naXQgYS9kb2MvbWFuL2x0dG5n
-LjEgYi9kb2MvbWFuL2x0dG5nLjEKPiBpbmRleCA1NWZiYWU2Li40YTFkZTJjIDEwMDY0NAo+IC0t
-LSBhL3NyYy9iaW4vbHR0bmcvY29tbWFuZHMvZW5hYmxlX2NoYW5uZWxzLmMKPiArKysgYi9zcmMv
-YmluL2x0dG5nL2NvbW1hbmRzL2VuYWJsZV9jaGFubmVscy5jCj4gQEAgLTEzNiw2ICsxMzYsOCBA
-QCBzdGF0aWMgdm9pZCB1c2FnZShGSUxFICpvZnApCj4gIAlmcHJpbnRmKG9mcCwgIiAgLUMsIC0t
-dHJhY2VmaWxlLXNpemUgU0laRVxuIik7Cj4gIAlmcHJpbnRmKG9mcCwgIiAgICAgICAgICAgICAg
-ICAgICAgICAgICAgIE1heGltdW0gc2l6ZSBvZiBlYWNoIHRyYWNlZmlsZQo+ICAJd2l0aGluIGEg
-c3RyZWFtIChpbiBieXRlcykuIDAgbWVhbnMgdW5saW1pdGVkLlxuIik7Cj4gIAlmcHJpbnRmKG9m
-cCwgIiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAoZGVmYXVsdDogJXUpXG4iLAo+ICAJ
-REVGQVVMVF9DSEFOTkVMX1RSQUNFRklMRV9TSVpFKTsKPiArCWZwcmludGYob2ZwLCAiICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgTm90ZTogdHJhY2VzIGdlbmVyYXRlZCB3aXRoIHRoaXMKPiBv
-cHRpb24gbWF5IGluYWNjdXJhdGVseSByZXBvcnRcbiIpOwo+ICsJZnByaW50ZihvZnAsICIgICAg
-ICAgICAgICAgICAgICAgICAgICAgICBkaXNjYXJkZWQgZXZlbnRzIGFzIHBlciBDVEYKPiAxLjgu
-XG4iKTsKPiAgCWZwcmludGYob2ZwLCAiICAtVywgLS10cmFjZWZpbGUtY291bnQgQ09VTlRcbiIp
-Owo+ICAJZnByaW50ZihvZnAsICIgICAgICAgICAgICAgICAgICAgICAgICAgICBVc2VkIGluIGNv
-bmp1bmN0aW9uIHdpdGggLUMKPiAgCW9wdGlvbiwgdGhpcyB3aWxsIGxpbWl0IHRoZSBudW1iZXJc
-biIpOwo+ICAJZnByaW50ZihvZnAsICIgICAgICAgICAgICAgICAgICAgICAgICAgICBvZiBmaWxl
-cyBjcmVhdGVkIHRvIHRoZSBzcGVjaWZpZWQKPiAgCWNvdW50LiAwIG1lYW5zIHVubGltaXRlZC5c
-biIpOwo+IC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0KPiAKPiAgICAiYXMgcGVyIENURiAxLjgiIGxlYXZlcyB0aGUg
-aW1wcmVzc2lvbiB0aGF0IHRoZSBtaXNyZXBvcnRpbmcgaXMKPiAgICAibWFuZGF0ZWQiLiAgSSBz
-dXNwZWN0IHRoaXMgaXMgbm90IHdoYXQgaXMgbWVhbnQgaGVyZS4gIE1heWJlICJhcyBvZiIKPiAg
-ICBpbnN0ZWFkIG9mICJhcyBwZXIiPwoKWWVzLiBEYXZpZCBjYW4geW91IGZpeCA/CgpUaGFua3Ms
-CgpNYXRoaWV1Cgo+IAo+IERhbmllbCBVLiBUaGliYXVsdAo+IFByb3RlY3Rpb24gZGVzIHN5c3TD
-qG1lcyBldCBjb250cmVtZXN1cmVzIChQU0MpIHwgU3lzdGVtcyBQcm90ZWN0aW9uICYKPiBDb3Vu
-dGVybWVhc3VyZXMgKFNQQykKPiBDeWJlciBzw6ljdXJpdMOpIHBvdXIgbGVzIG1pc3Npb25zIGVz
-c2VudGllbGxlcyAoQ01FKSB8IE1pc3Npb24gQ3JpdGljYWwgQ3liZXIKPiBTZWN1cml0eSAoTUND
-UykKPiBSICYgRCBwb3VyIGxhIGTDqWZlbnNlIENhbmFkYSAtIFZhbGNhcnRpZXIgKFJEREMgVmFs
-Y2FydGllcikgfCBEZWZlbmNlIFImRAo+IENhbmFkYSAtIFZhbGNhcnRpZXIgKERSREMgVmFsY2Fy
-dGllcikKPiAyNDU5IHJvdXRlIGRlIGxhIEJyYXZvdXJlCj4gUXXDqWJlYyBRQyAgRzNKIDFYNQo+
-IENBTkFEQQo+IFZveCA6ICg0MTgpIDg0NC00MDAwIHg0MjQ1Cj4gRmF4IDogKDQxOCkgODQ0LTQ1
-MzgKPiBOQUMgOiA5MThWIFFTREogPGh0dHA6Ly93d3cudHJhdmVsZ2lzLmNvbS9tYXAuYXNwP2Fk
-ZHI9OTE4ViUyMFFTREo+Cj4gR291dmVybmVtZW50IGR1IENhbmFkYSB8IEdvdmVybm1lbnQgb2Yg
-Q2FuYWRhCj4gPGh0dHA6Ly93d3cudmFsY2FydGllci5kcmRjLXJkZGMuZ2MuY2EvPgo+IAoKLS0g
-Ck1hdGhpZXUgRGVzbm95ZXJzCkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20K
-Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRl
-diBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+On 14-05-22 09:50 AM, Jens Axboe wrote:
+> On 2014-05-21 16:01, Mathieu Desnoyers wrote:
+>> CCing Jens Axboe, who really know better than I do about the block
+>> layer! Also adding Steven, since he maintains the Linux upstream block
+>> layer instrumentation (closely matching the lttng-modules version).
+> 
+> The blktrace parts are still maintained by me, actually not sure why it
+> moved location.
+> 
+>> ----- Original Message -----
+>>> From: "Julien Desfossez" <jdesfossez@efficios.com>
+>>> To: "mathieu desnoyers" <mathieu.desnoyers@efficios.com>
+>>> Cc: lttng-dev@lists.lttng.org, "Julien Desfossez"
+>>> <jdesfossez@efficios.com>
+>>> Sent: Wednesday, May 21, 2014 5:29:15 PM
+>>> Subject: [MODULES RFC PATCH] Add PID field to block_* events
+>>>
+>>> Most of the block events have the "comm" field, but we have no way to
+>>> match a block event to a certain PID which makes performing accurate
+>>> per-process analyses difficult.
+>>
+>> Color me clueless, but isn't the block I/O activity independent of
+>> the PID which triggers the I/O (e.g. issuing the read(), write(),
+>> (and so on) system calls) for read ahead, writeback kernel thread
+>> activity ? Or perhaps are those just rare special case, and for
+>> the usual case we can use the current PID in which the block layer
+>> tracepoints are hit as indicator of which PID triggered the I/O ?
+> 
+> It's usually only disconnected for the case of async writes. But even
+> for that case, it's interesting to see who is submitting the IO.
+> blktrace already issues a pid note, though, for every new process that
+> does IO. So what problem are we trying to solve here? The case of
+> multiple threads with the same ->comm?
+
+Yes, exactly.
+My original intent was to link the system calls to actual block requests
+and identify the requests that hit the cache. But since the link between
+these events is not obvious, I'm thinking of computing a per-thread
+disk/cache hit ratio.
+
+Thanks,
+
+Julien
