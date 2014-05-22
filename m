@@ -1,17 +1,18 @@
-From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Subject: Re: [PATCH lttng-tools] Documentation: document
  tracefile max size discarded event limitation
-Date: Thu, 22 May 2014 13:01:20 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD359ADD47__16546.6593033218$1400763732$gmane$org@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+Date: Thu, 22 May 2014 13:35:12 +0000 (UTC)
+Message-ID: <126483794.21654.1400765712145.JavaMail.zimbra__41168.6522224501$1400765784$gmane$org@efficios.com>
+References: <48CF5AC71E61DB46B70D0F388054EFFD359ADD47@VAL-E-01.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1WnScg-0001bx-5e
- for lttng-dev@lists.lttng.org; Thu, 22 May 2014 09:01:28 -0400
-Content-Language: fr-FR
+ (envelope-from <compudj@efficios.com>) id 1WnT9P-0001q1-MQ
+ for lttng-dev@lists.lttng.org; Thu, 22 May 2014 09:35:23 -0400
+In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD359ADD47@VAL-E-01.valcartier.drdc-rddc.gc.ca>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,51 +21,55 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Daniel Thibault <Daniel.Thibault@drdc-rddc.gc.ca>, David Goulet <dgoulet@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-----------------------------------------------------------------------
-Date: Wed, 21 May 2014 12:10:24 -0400
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To: David Goulet <dgoulet@efficios.com>
-
-diff --git a/doc/man/lttng.1 b/doc/man/lttng.1
-index 55fbae6..4a1de2c 100644
---- a/src/bin/lttng/commands/enable_channels.c
-+++ b/src/bin/lttng/commands/enable_channels.c
-@@ -136,6 +136,8 @@ static void usage(FILE *ofp)
- 	fprintf(ofp, "  -C, --tracefile-size SIZE\n");
- 	fprintf(ofp, "                           Maximum size of each tracefile w=
-ithin a stream (in bytes). 0 means unlimited.\n");
- 	fprintf(ofp, "                               (default: %u)\n", DEFAULT_CH=
-ANNEL_TRACEFILE_SIZE);
-+	fprintf(ofp, "                           Note: traces generated with this=
- option may inaccurately report\n");
-+	fprintf(ofp, "                           discarded events as per CTF 1.8.=
-\n");
- 	fprintf(ofp, "  -W, --tracefile-count COUNT\n");
- 	fprintf(ofp, "                           Used in conjunction with -C opti=
-on, this will limit the number\n");
- 	fprintf(ofp, "                           of files created to the specifie=
-d count. 0 means unlimited.\n");
-----------------------------------------------------------------------
-
-   "as per CTF 1.8" leaves the impression that the misreporting is "mandate=
-d".  I suspect this is not what is meant here.  Maybe "as of" instead of "a=
-s per"?
-
-Daniel U. Thibault
-Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
-ntermeasures (SPC)
-Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
-Cyber Security (MCCS)
-R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
- Canada - Valcartier (DRDC Valcartier)
-2459 route de la Bravoure
-Qu=E9bec QC  G3J 1X5
-CANADA
-Vox : (418) 844-4000 x4245
-Fax : (418) 844-4538
-NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-Gouvernement du Canada | Government of Canada
-<http://www.valcartier.drdc-rddc.gc.ca/>
+LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJEYW5pZWwgVGhpYmF1bHQiIDxE
+YW5pZWwuVGhpYmF1bHRAZHJkYy1yZGRjLmdjLmNhPgo+IFRvOiBsdHRuZy1kZXZAbGlzdHMubHR0
+bmcub3JnCj4gQ2M6ICJNYXRoaWV1IERlc25veWVycyIgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmlj
+aW9zLmNvbT4sICJEYXZpZCBHb3VsZXQiIDxkZ291bGV0QGVmZmljaW9zLmNvbT4KPiBTZW50OiBU
+aHVyc2RheSwgTWF5IDIyLCAyMDE0IDk6MDE6MjAgQU0KPiBTdWJqZWN0OiBSRTogIFtsdHRuZy1k
+ZXZdIFtQQVRDSCBsdHRuZy10b29sc10gRG9jdW1lbnRhdGlvbjogZG9jdW1lbnQgdHJhY2VmaWxl
+IG1heCBzaXplIGRpc2NhcmRlZCBldmVudCBsaW1pdGF0aW9uCj4gCj4gLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQo+
+IERhdGU6IFdlZCwgMjEgTWF5IDIwMTQgMTI6MTA6MjQgLTA0MDAKPiBGcm9tOiBNYXRoaWV1IERl
+c25veWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPgo+IFRvOiBEYXZpZCBHb3Vs
+ZXQgPGRnb3VsZXRAZWZmaWNpb3MuY29tPgo+IAo+IGRpZmYgLS1naXQgYS9kb2MvbWFuL2x0dG5n
+LjEgYi9kb2MvbWFuL2x0dG5nLjEKPiBpbmRleCA1NWZiYWU2Li40YTFkZTJjIDEwMDY0NAo+IC0t
+LSBhL3NyYy9iaW4vbHR0bmcvY29tbWFuZHMvZW5hYmxlX2NoYW5uZWxzLmMKPiArKysgYi9zcmMv
+YmluL2x0dG5nL2NvbW1hbmRzL2VuYWJsZV9jaGFubmVscy5jCj4gQEAgLTEzNiw2ICsxMzYsOCBA
+QCBzdGF0aWMgdm9pZCB1c2FnZShGSUxFICpvZnApCj4gIAlmcHJpbnRmKG9mcCwgIiAgLUMsIC0t
+dHJhY2VmaWxlLXNpemUgU0laRVxuIik7Cj4gIAlmcHJpbnRmKG9mcCwgIiAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIE1heGltdW0gc2l6ZSBvZiBlYWNoIHRyYWNlZmlsZQo+ICAJd2l0aGluIGEg
+c3RyZWFtIChpbiBieXRlcykuIDAgbWVhbnMgdW5saW1pdGVkLlxuIik7Cj4gIAlmcHJpbnRmKG9m
+cCwgIiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAoZGVmYXVsdDogJXUpXG4iLAo+ICAJ
+REVGQVVMVF9DSEFOTkVMX1RSQUNFRklMRV9TSVpFKTsKPiArCWZwcmludGYob2ZwLCAiICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgTm90ZTogdHJhY2VzIGdlbmVyYXRlZCB3aXRoIHRoaXMKPiBv
+cHRpb24gbWF5IGluYWNjdXJhdGVseSByZXBvcnRcbiIpOwo+ICsJZnByaW50ZihvZnAsICIgICAg
+ICAgICAgICAgICAgICAgICAgICAgICBkaXNjYXJkZWQgZXZlbnRzIGFzIHBlciBDVEYKPiAxLjgu
+XG4iKTsKPiAgCWZwcmludGYob2ZwLCAiICAtVywgLS10cmFjZWZpbGUtY291bnQgQ09VTlRcbiIp
+Owo+ICAJZnByaW50ZihvZnAsICIgICAgICAgICAgICAgICAgICAgICAgICAgICBVc2VkIGluIGNv
+bmp1bmN0aW9uIHdpdGggLUMKPiAgCW9wdGlvbiwgdGhpcyB3aWxsIGxpbWl0IHRoZSBudW1iZXJc
+biIpOwo+ICAJZnByaW50ZihvZnAsICIgICAgICAgICAgICAgICAgICAgICAgICAgICBvZiBmaWxl
+cyBjcmVhdGVkIHRvIHRoZSBzcGVjaWZpZWQKPiAgCWNvdW50LiAwIG1lYW5zIHVubGltaXRlZC5c
+biIpOwo+IC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0KPiAKPiAgICAiYXMgcGVyIENURiAxLjgiIGxlYXZlcyB0aGUg
+aW1wcmVzc2lvbiB0aGF0IHRoZSBtaXNyZXBvcnRpbmcgaXMKPiAgICAibWFuZGF0ZWQiLiAgSSBz
+dXNwZWN0IHRoaXMgaXMgbm90IHdoYXQgaXMgbWVhbnQgaGVyZS4gIE1heWJlICJhcyBvZiIKPiAg
+ICBpbnN0ZWFkIG9mICJhcyBwZXIiPwoKWWVzLiBEYXZpZCBjYW4geW91IGZpeCA/CgpUaGFua3Ms
+CgpNYXRoaWV1Cgo+IAo+IERhbmllbCBVLiBUaGliYXVsdAo+IFByb3RlY3Rpb24gZGVzIHN5c3TD
+qG1lcyBldCBjb250cmVtZXN1cmVzIChQU0MpIHwgU3lzdGVtcyBQcm90ZWN0aW9uICYKPiBDb3Vu
+dGVybWVhc3VyZXMgKFNQQykKPiBDeWJlciBzw6ljdXJpdMOpIHBvdXIgbGVzIG1pc3Npb25zIGVz
+c2VudGllbGxlcyAoQ01FKSB8IE1pc3Npb24gQ3JpdGljYWwgQ3liZXIKPiBTZWN1cml0eSAoTUND
+UykKPiBSICYgRCBwb3VyIGxhIGTDqWZlbnNlIENhbmFkYSAtIFZhbGNhcnRpZXIgKFJEREMgVmFs
+Y2FydGllcikgfCBEZWZlbmNlIFImRAo+IENhbmFkYSAtIFZhbGNhcnRpZXIgKERSREMgVmFsY2Fy
+dGllcikKPiAyNDU5IHJvdXRlIGRlIGxhIEJyYXZvdXJlCj4gUXXDqWJlYyBRQyAgRzNKIDFYNQo+
+IENBTkFEQQo+IFZveCA6ICg0MTgpIDg0NC00MDAwIHg0MjQ1Cj4gRmF4IDogKDQxOCkgODQ0LTQ1
+MzgKPiBOQUMgOiA5MThWIFFTREogPGh0dHA6Ly93d3cudHJhdmVsZ2lzLmNvbS9tYXAuYXNwP2Fk
+ZHI9OTE4ViUyMFFTREo+Cj4gR291dmVybmVtZW50IGR1IENhbmFkYSB8IEdvdmVybm1lbnQgb2Yg
+Q2FuYWRhCj4gPGh0dHA6Ly93d3cudmFsY2FydGllci5kcmRjLXJkZGMuZ2MuY2EvPgo+IAoKLS0g
+Ck1hdGhpZXUgRGVzbm95ZXJzCkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20K
+Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRl
+diBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
