@@ -1,17 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Debian specific userspace RCU configure override
-Date: Fri, 23 May 2014 13:59:27 +0000 (UTC)
-Message-ID: <247206510.22055.1400853567137.JavaMail.zimbra__7440.34294407374$1400853625$gmane$org@efficios.com>
-References: <30703453.22036.1400852842509.JavaMail.zimbra@efficios.com>
+From: John Kelly <jfkelly07@gmail.com>
+Subject: llntg on a PPC, Kernel 3.3.8; Only getting syscalls
+Date: Fri, 23 May 2014 08:52:57 -0600
+Message-ID: <CAFp0A9S=nfDdrhd7eHdAR+LjC8yeG4fNh-qcCAF1EdEGrSqysQ__8648.13476005129$1400856848$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0121730451=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-ie0-f172.google.com ([209.85.223.172])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1Wnq0Q-000257-Tn
- for lttng-dev@lists.lttng.org; Fri, 23 May 2014 09:59:36 -0400
-In-Reply-To: <30703453.22036.1400852842509.JavaMail.zimbra@efficios.com>
+ (envelope-from <jfkelly07@gmail.com>) id 1WnqqF-0002PB-H0
+ for lttng-dev@lists.lttng.org; Fri, 23 May 2014 10:53:09 -0400
+Received: by mail-ie0-f172.google.com with SMTP id tp5so5177839ieb.17
+ for <lttng-dev@lists.lttng.org>; Fri, 23 May 2014 07:52:58 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,58 +19,73 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?utf-8?Q?Ond=C5=99ej_Sur=C3=BD?= <ondrej@debian.org>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, Michael Jeanson <mjeanson@efficios.com>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
+--===============0121730451==
+Content-Type: multipart/alternative; boundary=001a11c2c13aa0f9a804fa12626d
 
-I recently stumbled on this patch:
+--001a11c2c13aa0f9a804fa12626d
+Content-Type: text/plain; charset=UTF-8
 
-http://sprunge.us/jYcJ
+Hi all,
 
-It overrides the generated config.h to ensure the
-"dmb" instruction is not used.
+I'm debugging a performance issue on a PPC OpenWrt distribution, running
+linux 3.3.8, and I've trying to debug it with a build of the lttng software
+off the master branches.  I made a slight modification to get a
+cross-compile working (renaming compat/{fcntl,poll,uuid}.h to prevent
+recursive inclusions), and that source works fine for an x86 target on
+kernel 3.4.46.
 
-However, the proper checks seems to be in place within
-configure.ac to automatically detect whether to use dmb
-or not:
+ I've got it capturing syscalls, but nothing else.  All the drivers load
+OK.  I have every tracer and probe I can find turned on:
 
-# ARM-specific checks
-AS_IF([test "x$ARCHTYPE" = "xarm"],[
-        AC_MSG_CHECKING([for dmb instruction])
-        AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
-                                int main()
-                                {
-                                        asm volatile("dmb":::"memory");
-                                        return 0;
-                                }
-                ]])
-        ],[
-                AC_MSG_RESULT([yes])
-                AC_DEFINE([CONFIG_RCU_ARM_HAVE_DMB], [1])
-        ],[
-                AC_MSG_RESULT([no])
-        ])
-])
+CONFIG_KPROBES=y
+CONFIG_KRETPROBES=y
+CONFIG_HAVE_KPROBES=y
+CONFIG_HAVE_KRETPROBES=y
+CONFIG_NET_TCPPROBE=m
+CONFIG_TRACEPOINTS=y
+CONFIG_HAVE_SYSCALL_TRACEPOINTS=y
+CONFIG_KALLSYMS=y
+CONFIG_KALLSYMS_ALL=y
 
-My thinking here is that perhaps inappropriate compiler flags
-are used when the compiler is invoked from within "configure",
-which leads it to think that it targets an ARMv7+ with dmb.
-The Debian "armel" architecture AFAIU needs to target older
-ARM architectures.
 
-It would be much better to fix the compiler flags passed to
-configure and let urcu autodetection do what it is intended
-to do rather than override the generated file.
+Can anybody give me some hints as to where to look?
 
-Thoughts ?
+--001a11c2c13aa0f9a804fa12626d
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Thanks,
+<div dir=3D"ltr">Hi all,<div><br></div><div>I&#39;m debugging a performance=
+ issue on a PPC OpenWrt distribution, running linux 3.3.8, and I&#39;ve try=
+ing to debug it with a build of the lttng software off the master branches.=
+ =C2=A0I made a slight modification to get a cross-compile working (renamin=
+g compat/{fcntl,poll,uuid}.h to prevent recursive inclusions), and that sou=
+rce works fine for an x86 target on kernel 3.4.46.</div>
+<div><br></div><div>=C2=A0I&#39;ve got it capturing syscalls, but nothing e=
+lse. =C2=A0All the drivers load OK. =C2=A0I have every tracer and probe I c=
+an find turned on:</div><div><br></div><div>CONFIG_KPROBES=3Dy</div><div>CO=
+NFIG_KRETPROBES=3Dy</div>
+<div>CONFIG_HAVE_KPROBES=3Dy</div><div>CONFIG_HAVE_KRETPROBES=3Dy</div><div=
+>CONFIG_NET_TCPPROBE=3Dm</div><div><div>CONFIG_TRACEPOINTS=3Dy</div><div>CO=
+NFIG_HAVE_SYSCALL_TRACEPOINTS=3Dy</div></div><div><div>CONFIG_KALLSYMS=3Dy<=
+/div><div>
+CONFIG_KALLSYMS_ALL=3Dy</div></div><div><br></div><div><br></div><div>Can a=
+nybody give me some hints as to where to look?</div></div>
 
-Mathieu
+--001a11c2c13aa0f9a804fa12626d--
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+
+--===============0121730451==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0121730451==--
