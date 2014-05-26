@@ -1,22 +1,17 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Debian specific userspace RCU configure override
-Date: Sun, 25 May 2014 00:59:33 +0000 (UTC)
-Message-ID: <1851915699.22366.1400979572920.JavaMail.zimbra__9322.54757867685$1400979649$gmane$org@efficios.com>
-References: <30703453.22036.1400852842509.JavaMail.zimbra@efficios.com>
- <247206510.22055.1400853567137.JavaMail.zimbra@efficios.com>
- <20140523222124.GA25594@helmut>
- <97D83BC6-DF7B-4A23-A0DA-22EBEF7E7A62@sury.org>
- <400506412.22279.1400936702676.JavaMail.zimbra@efficios.com>
- <20140524145555.GA1466@helmut>
+From: Randy Wijnants <randy@tty32.org>
+Subject: [documentation] Drawing: LTTng architecture in relation
+ to the commandline / buffer options
+Date: Mon, 26 May 2014 11:27:35 +0200
+Message-ID: <CANq1AQoL-r8ohG59hHDVsePu=YMyVBrNHPJj1Sm+P6c5USYi+A__48542.6680338152$1401116274$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============0495203977=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-qg0-f44.google.com ([209.85.192.44])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1WoMmq-00059h-Ic
- for lttng-dev@lists.lttng.org; Sat, 24 May 2014 20:59:46 -0400
-In-Reply-To: <20140524145555.GA1466@helmut>
+ (envelope-from <randy@tty32.org>) id 1WorC1-0007RY-2z
+ for lttng-dev@lists.lttng.org; Mon, 26 May 2014 05:27:43 -0400
+Received: by mail-qg0-f44.google.com with SMTP id i50so11562055qgf.17
+ for <lttng-dev@lists.lttng.org>; Mon, 26 May 2014 02:27:35 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -25,54 +20,72 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Jon Bernard <jbernard@debian.org>
-Cc: =?utf-8?Q?Ond=C5=99ej_Sur=C3=BD?= <ondrej@sury.org>, lttng-dev <lttng-dev@lists.lttng.org>, =?utf-8?Q?Ond=C5=99ej_Sur=C3=BD?= <ondrej@debian.org>, Michael Jeanson <mjeanson@efficios.com>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJKb24gQmVybmFyZCIgPGpiZXJu
-YXJkQGRlYmlhbi5vcmc+Cj4gVG86ICJNYXRoaWV1IERlc25veWVycyIgPG1hdGhpZXUuZGVzbm95
-ZXJzQGVmZmljaW9zLmNvbT4KPiBDYzogIk9uZMWZZWogU3Vyw70iIDxvbmRyZWpAc3VyeS5vcmc+
-LCAiT25kxZllaiBTdXLDvSIgPG9uZHJlakBkZWJpYW4ub3JnPiwgIk1pY2hhZWwgSmVhbnNvbiIg
-PG1qZWFuc29uQGVmZmljaW9zLmNvbT4sCj4gImx0dG5nLWRldiIgPGx0dG5nLWRldkBsaXN0cy5s
-dHRuZy5vcmc+Cj4gU2VudDogU2F0dXJkYXksIE1heSAyNCwgMjAxNCAxMDo1NTo1NSBBTQo+IFN1
-YmplY3Q6IFJlOiBEZWJpYW4gc3BlY2lmaWMgdXNlcnNwYWNlIFJDVSBjb25maWd1cmUgb3ZlcnJp
-ZGUKPiAKPiAqIE1hdGhpZXUgRGVzbm95ZXJzIDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5j
-b20+IHdyb3RlOgo+ID4gSW4gb3JkZXIgdG8gdW5kZXJzdGFuZCB3aGF0IGlzIGhhcHBlbmluZyBo
-ZXJlLCBjYW4gd2UgaGF2ZSBhIGNvcHkKPiA+IG9mIGNvbmZpZy5sb2cgb2YgYm90aCB1c2Vyc3Bh
-Y2UgUkNVIGFuZCBsdHQtY29udHJvbCwgYXMgd2VsbCBhcyB0aGUgb3V0cHV0Cj4gPiBvZiBpbnZv
-Y2F0aW9uIG9mIGNvbmZpZ3VyZSwgYW5kIG91dHB1dCBvZiBtYWtlIFY9MSA/Cj4gCj4gTG9nIGF0
-dGFjaGVkLgo+IAoKSWYgd2UgY29tcGFyZToKCnVyY3UgY29uZmlnLmxvZyByZWxldmFudCBzbmlw
-cGV0czoKCnVyY3UgY29uZmlndXJlIGludm9jYXRpb246CgouL2NvbmZpZ3VyZSAtLXByZWZpeD0v
-dXNyIENGTEFHUz0tZyAtTzIgLWZzdGFjay1wcm90ZWN0b3IgLS1wYXJhbT1zc3AtYnVmZmVyLXNp
-emU9NCAtV2Zvcm1hdCAtV2Vycm9yPWZvcm1hdC1zZWN1cml0eSBDUFBGTEFHUz0tRF9GT1JUSUZZ
-X1NPVVJDRT0yIENYWEZMQUdTPS1nIC1PMiAtZnN0YWNrLXByb3RlY3RvciAtLXBhcmFtPXNzcC1i
-dWZmZXItc2l6ZT00IC1XZm9ybWF0IC1XZXJyb3I9Zm9ybWF0LXNlY3VyaXR5IEZDRkxBR1M9LWcg
-LU8yIC1mc3RhY2stcHJvdGVjdG9yIC0tcGFyYW09c3NwLWJ1ZmZlci1zaXplPTQgRkZMQUdTPS1n
-IC1PMiAtZnN0YWNrLXByb3RlY3RvciAtLXBhcmFtPXNzcC1idWZmZXItc2l6ZT00IEdDSkZMQUdT
-PS1nIC1PMiAtZnN0YWNrLXByb3RlY3RvciAtLXBhcmFtPXNzcC1idWZmZXItc2l6ZT00IExERkxB
-R1M9LVdsLC16LHJlbHJvIE9CSkNGTEFHUz0tZyAtTzIgLWZzdGFjay1wcm90ZWN0b3IgLS1wYXJh
-bT1zc3AtYnVmZmVyLXNpemU9NCAtV2Zvcm1hdCAtV2Vycm9yPWZvcm1hdC1zZWN1cml0eSBPQkpD
-WFhGTEFHUz0tZyAtTzIgLWZzdGFjay1wcm90ZWN0b3IgLS1wYXJhbT1zc3AtYnVmZmVyLXNpemU9
-NCAtV2Zvcm1hdCAtV2Vycm9yPWZvcm1hdC1zZWN1cml0eQoKdXJjdToKCmNvbmZpZ3VyZToyMzIz
-OiBjaGVja2luZyBidWlsZCBzeXN0ZW0gdHlwZQpjb25maWd1cmU6MjMzNzogcmVzdWx0OiBhcm12
-N2wtdW5rbm93bi1saW51eC1nbnVlYWJpCmNvbmZpZ3VyZToyMzU3OiBjaGVja2luZyBob3N0IHN5
-c3RlbSB0eXBlCmNvbmZpZ3VyZToyMzcwOiByZXN1bHQ6IGFybXY3bC11bmtub3duLWxpbnV4LWdu
-dWVhYmkKY29uZmlndXJlOjIzOTA6IGNoZWNraW5nIHRhcmdldCBzeXN0ZW0gdHlwZQpjb25maWd1
-cmU6MjQwMzogcmVzdWx0OiBhcm12N2wtdW5rbm93bi1saW51eC1nbnVlYWJpCgpsdHRuZy10b29s
-cyBjb25maWd1cmUgaW52b2NhdGlvbjoKCi4vY29uZmlndXJlIC0tYnVpbGQ9YXJtLWxpbnV4LWdu
-dWVhYmkgLS1wcmVmaXg9L3VzciAtLWluY2x1ZGVkaXI9JHtwcmVmaXh9L2luY2x1ZGUgLS1tYW5k
-aXI9JHtwcmVmaXh9L3NoYXJlL21hbiAtLWluZm9kaXI9JHtwcmVmaXh9L3NoYXJlL2luZm8gLS1z
-eXNjb25mZGlyPS9ldGMgLS1sb2NhbHN0YXRlZGlyPS92YXIgLS1saWJkaXI9JHtwcmVmaXh9L2xp
-Yi9hcm0tbGludXgtZ251ZWFiaSAtLWxpYmV4ZWNkaXI9JHtwcmVmaXh9L2xpYi9hcm0tbGludXgt
-Z251ZWFiaSAtLWRpc2FibGUtbWFpbnRhaW5lci1tb2RlIC0tZGlzYWJsZS1kZXBlbmRlbmN5LXRy
-YWNraW5nCgpsdHRuZy10b29sczoKCmNvbmZpZ3VyZToyNDE2OiBjaGVja2luZyBidWlsZCBzeXN0
-ZW0gdHlwZQpjb25maWd1cmU6MjQzMDogcmVzdWx0OiBhcm0tdW5rbm93bi1saW51eC1nbnVlYWJp
-CmNvbmZpZ3VyZToyNDUwOiBjaGVja2luZyBob3N0IHN5c3RlbSB0eXBlCmNvbmZpZ3VyZToyNDYz
-OiByZXN1bHQ6IGFybS11bmtub3duLWxpbnV4LWdudWVhYmkKY29uZmlndXJlOjI0ODM6IGNoZWNr
-aW5nIHRhcmdldCBzeXN0ZW0gdHlwZQpjb25maWd1cmU6MjQ5NjogcmVzdWx0OiBhcm0tdW5rbm93
-bi1saW51eC1nbnVlYWJpCgpXaHkgYXJlIGVhY2ggcGFja2FnZSBjb21waWxlZCBhZ2FpbnN0IGNv
-bXBsZXRlbHkgZGlmZmVyZW50CnRhcmdldHMgPwoKVGhhbmtzLAoKTWF0aGlldQoKCj4gLS0KPiBK
-b24KPiAKCi0tIApNYXRoaWV1IERlc25veWVycwpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZm
-aWNpb3MuY29tCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-XwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDov
-L2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+--===============0495203977==
+Content-Type: multipart/alternative; boundary=e89a8f83a9dd88a71b04fa4a303d
+
+--e89a8f83a9dd88a71b04fa4a303d
+Content-Type: text/plain; charset=UTF-8
+
+Hi!
+
+I've drawn the LTTng architecture in relation to the commandline / buffer
+options.
+It would be nice if it would be used on the lttng website (if you find it
+usefull ofcourse).
+I'm using this for a presentation at our company to explain more in-depth
+lttng configuration details.
+
+Originally posted on IRC. As suggested by Compudj i've released it under CC
+license.
+
+Let me know what you think of it or if you have suggestions / improvements
+:)
+I can also provide SVG image, or push it to the repo?
+
+http://tty32.org/Logging%20configuration2.png
+
+Greetings,
+Randy Wijnants.
+"The good part about UDP jokes is that i don't have to worry if you get it
+or not"
+
+--e89a8f83a9dd88a71b04fa4a303d
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div>Hi!</div><div><br></div><div>I&#39;ve drawn the LTTng=
+ architecture in relation to the commandline / buffer options.=C2=A0<br></d=
+iv><div>It would be nice if it would be used on the lttng website (if you f=
+ind it usefull ofcourse).<br>
+</div><div><div><div>I&#39;m using this for a presentation at our company t=
+o explain more in-depth lttng configuration details.</div></div><div><br></=
+div><div>Originally posted on IRC. As suggested by=C2=A0Compudj i&#39;ve re=
+leased it under CC license.</div>
+<div><br></div><div>Let me know what you think of it or if you have suggest=
+ions / improvements :)<br></div><div>I can also provide SVG image, or push =
+it to the repo?</div><div><br></div><div><a href=3D"http://tty32.org/Loggin=
+g%20configuration2.png">http://tty32.org/Logging%20configuration2.png</a></=
+div>
+<div><br></div><div><div><div dir=3D"ltr"><div>Greetings,</div><div>Randy W=
+ijnants.<br></div><div>&quot;The good part about UDP jokes is that i don&#3=
+9;t have to worry if you get it or not&quot;<br></div></div></div>
+</div></div></div>
+
+--e89a8f83a9dd88a71b04fa4a303d--
+
+
+--===============0495203977==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0495203977==--
