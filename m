@@ -1,21 +1,19 @@
-From: Gerlando Falauto <gerlando.falauto@keymile.com>
-Subject: Re: Problem with UST related to dlload
-Date: Tue, 27 May 2014 18:04:23 +0200
-Message-ID: <5384B787.8070009__27364.0654668727$1401206761$gmane$org@keymile.com>
-References: <CACsXv7BQ-T+6ggdM9+YPcu+hdy0Gxu6c_jxNj97AvzmDgXQ8Wg@mail.gmail.com>
- <CACsXv7Au4yLptJnS5OayD8bqsgbi660bLbJobpczTnnWZbgx=g@mail.gmail.com>
- <53847D18.3060203@keymile.com> <5384A1F4.6080108@mentor.com>
- <5384A409.4090107@keymile.com> <5384A801.8040900@mentor.com>
+From: Randy Wijnants <dev@tty32.org>
+Subject: Re: [documentation] Drawing: LTTng trace session in
+ relation to commandline options
+Date: Tue, 27 May 2014 19:40:30 +0200
+Message-ID: <CANq1AQqq5j7165a3sQkcVvidd0DsX+4C17DApiF5uD0OS=k+tg__37886.9311688051$1401212511$gmane$org@mail.gmail.com>
+References: <48CF5AC71E61DB46B70D0F388054EFFD359AE808@VAL-E-01.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============1374221743=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-de.keymile.com ([195.8.104.250])
+Received: from mail-qg0-f53.google.com ([209.85.192.53])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <prvs=0224e9002a=gerlando.falauto@keymile.com>)
- id 1WpJrd-0001x8-Vr
- for lttng-dev@lists.lttng.org; Tue, 27 May 2014 12:04:42 -0400
-In-Reply-To: <5384A801.8040900@mentor.com>
+ (envelope-from <randy@tty32.org>) id 1WpLMa-0002X3-4K
+ for lttng-dev@lists.lttng.org; Tue, 27 May 2014 13:40:45 -0400
+Received: by mail-qg0-f53.google.com with SMTP id f51so14262341qge.26
+ for <lttng-dev@lists.lttng.org>; Tue, 27 May 2014 10:40:30 -0700 (PDT)
+In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD359AE808@VAL-E-01.valcartier.drdc-rddc.gc.ca>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -24,262 +22,302 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Woegerer, Paul" <Paul_Woegerer@mentor.com>, =?UTF-8?B?TWFydGluIMOcbnM=?= =?UTF-8?B?YWw=?= <martinunsal@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, "Thibault,
- Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+Cc: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
 List-Id: lttng-dev@lists.lttng.org
 
-SGkgUGF1bCwKCnRoYW5rcyBmb3IgeW91ciBleHBsYW5hdGlvbiwgYnV0IEknbSBtb3JlIHB1enps
-ZWQgdGhhbiBldmVyLgpJJ20gZGVmaW5pdGVseSBsYWNraW5nIHRoZSBhcHByb3ByaWF0ZSBiYWNr
-Z3JvdW5kIGluIGJvdGggdGVybWlub2xvZ3kgCmFuZCBpbnRlcm5hbHMsIHNvIEkgdHJpZWQgdG8g
-ZmlndXJlIG91dCBob3cgdGhlIHdob2xlIG1hZ2ljIHdvcmtzIGJ5IAplbXBpcmljYWwgdGVzdGlu
-Zy4KCk5vdywgd2hlbiB5b3Ugc2F5OgoKID4gVGhlIHJlYXNvbiBpcyB0aGF0IHlvdSBjYW4gaGF2
-ZSB0aGUgc2FtZSB0cmFjZXBvaW50IHByb3ZpZGVyIGJlIFVTRUQgaW4KID4gc2V2ZXJhbCBjb21w
-aWxhdGlvbiB1bml0cyB0aGF0IHdpbGwgYWxsIGJlY29tZSBwYXJ0IG9mIG9uZSBhbmQgdGhlIHNh
-bWUKID4gc2hhcmVkIG9iamVjdCAob3IgZXhlY3V0YWJsZSkuCiA+CiA+IFRoZW4gYWxsIHRob3Nl
-IF9fc3RhcnQvc3RvcF9fX3RyYWNlcG9pbnRzX3B0cnMgcmVmZXJlbmNlcyBpbiBkaWZmZXJlbnQK
-ID4gY29tcGlsYXRpb24gdW5pdHMgc2hvdWxkIHJlZmVyIHRvIHRoZSBzYW1lCiA+IF9fc3RhcnQv
-c3RvcF9fX3RyYWNlcG9pbnRzX3B0cnMgZGVmaW5pdGlvbnMgZm9yIHRoZSBzaGFyZWQgb2JqZWN0
-IChvcgogPiBleGVjdXRhYmxlKSB0aGV5IGFyZSBwYXJ0IG9mLiBUaGlzIGlzIHJlcXVpcmVkIGJl
-Y2F1c2UgdGhlCiA+IGluaXRpYWxpemF0aW9uIG9mIHRoZSB0cmFjZXBvaW50cyB3aWxsIG9ubHkg
-aGFwcGVuIG9uY2UgcGVyIHNoYXJlZAogPiBvYmplY3QgKG9yIGV4ZWN1dGFibGUpIHdpdGggdGhl
-IHN0YXRpYyBjdG9yIG1lY2hhbmlzbSBhbHNvIGRlZmluZWQgaW4KID4gdHJhY2Vwb2ludC5oCgpX
-aG8ncyByZXNwb25zaWJsZSBmb3IgaW5pdGlhbGl6YXRpbmcgdGhlIHRyYWNlcG9pbnRzPyBJc24n
-dCBpdCB0aGUgClBST1ZJREVSLCBpbnN0ZWFkIG9mIHRoZSB1c2VyPwoKSGVyZSdzIHdoYXQgSSB1
-bmRlcnN0b29kIChvciByYXRoZXIsIHNwZWN1bGF0ZWQhKSwgc28gcGxlYXNlIHBvaW50IG91dCAK
-d2hlcmUgbXkgdW5kZXJzdGFuZGluZyBmYWxscyBzaG9ydC4KClRyYWNlcG9pbnQgcHJvdmlkZXJz
-ICh3aGVyZSBUUkFDRVBPSU5UX0RFRklORSBpcyBkZWZpbmVkKSBhcmUgd2hhdCAKYWN0dWFsbHkg
-aW1wbGVtZW50IHRyYWNlcG9pbnRzLiBZb3UgY2FuIGhhdmUgbXVsdGlwbGUgc291cmNlIGZpbGVz
-LCBlYWNoIApkZWZpbmluZyBvbmUgb3IgbW9yZSB0cmFjZXBvaW50cy4gU28gaW4gdGhlIGVuZCBl
-YWNoIG9iamVjdCBmaWxlIHdpbGwgCmNvbnRhaW4gb25lIG9yIG1vcmUgdHJhY2Vwb2ludCBwb2lu
-dGVycyB3aXRoaW4gaXRzICJfX3RyYWNlcG9pbnRzX3B0cnMiIApzZWN0aW9uIChjb3VydGVzeSBv
-ZiB0aGUgY29tcGlsZXIpLiBXaGVuIGxpbmtpbmcgKGUuZy4gdG93YXJkcyBhIHNoYXJlZCAKb2Jq
-ZWN0KSwgYSBzaW5nbGUgc2VjdGlvbiBfX3RyYWNlcG9pbnRzX3B0cnMgaW4gdGhlIG91dHB1dCBF
-TEYgYmluYXJ5IAp3aWxsIG1lcmdlIGFsbCB0aGUgc2VjdGlvbnMgb2YgdGhlIGFib3ZlIG9iamVj
-dHMsIGFuZCBob2xkIGFsbCB0aGUgCnBvaW50ZXJzIGFzIGEgY29udGlndW91cyBhcnJheS4gVGhp
-cyB0aW1lLCBjb3VydGVzeSBvZiB0aGUgbGlua2VyLCB3aG8gCmFsc28gYXV0b21hZ2ljYWxseSBk
-ZWZpbmVzIF9fc3RhcnRfX190cmFjZXBvaW50c19wdHJzIC8gCl9fc3RvcF9fX3RyYWNlcG9pbnRz
-X3B0cnMgc3ltYm9scyB0byBob2xkIHBvaW50ZXJzIHRvIHRoZSBiZWdpbm5pbmcgYW5kIAplbmQg
-cGFydHMgb2YgdGhlIHNlY3Rpb24uCgpFYWNoIG9iamVjdCBmaWxlIHdpbGwgY29udGFpbiBpdHMg
-b3duIF9fdHJhY2Vwb2ludHNfX3B0cnNfaW5pdCgpIApjb25zdHJ1Y3RvciwgcmVzcG9uc2libGUg
-Zm9yIHJlZ2lzdGVyaW5nIEFMTCB0aGUgdHJhY2Vwb2ludHMgaXQgCnByb3ZpZGVzLiBBY3R1YWxs
-eSwgd2Ugd2FudCBvbmx5IE9ORSBjb25zdHJ1Y3RvciBwZXIgc2hhcmVkIG9iamVjdCB0byAKcmVn
-aXN0ZXIgYWxsIHRoZSB0cmFjZXBvaW50IHBvaW50ZXJzIHByb3ZpZGVkIGJ5IHRoZSB3aG9sZSBz
-aGFyZWQgb2JqZWN0IAooY29udGFpbmVkIHdpdGhpbiBfX3N0YXJ0X19fdHJhY2Vwb2ludHNfcHRy
-cy9fX3N0b3BfX190cmFjZXBvaW50c19wdHJzKS4gClRoaXMgaXMgd2hlcmUsIGZvciBpbnN0YW5j
-ZSwgX190cmFjZXBvaW50X3B0cnNfcmVnaXN0ZXJlZCBjb21lcyBpbnRvIApwbGF5LiBNdWx0aXBs
-ZSBpbnZvY2F0aW9ucyBvZiB0aGUgY29uc3RydWN0b3IgKG9uZSBwZXIgb2JqZWN0IGZpbGUpIApz
-aG91bGQgYmUgYXZvaWRlZCBhbmQgb25seSB0aGUgZmlyc3Qgb25lIG5lZWRzIHRvIGJlIHBlcmZv
-cm1lZC4gQW5kIHRoaXMgCmlzIHdoeSBfX3RyYWNlcG9pbnRfcHRyc19yZWdpc3RlcmVkIG5lZWRz
-IHRvIGJlIHdlYWsgKG11bHRpcGxlIHNvdXJjZSAKZmlsZXMgY291bGQgbGVhZCB0byBtdWx0aXBs
-ZSBkZWZpbml0aW9ucyAtLSB3ZSB3YW50IG9uZSBhbmQgb25seSBvbmUgcGVyIApzaGFyZWQgb2Jq
-ZWN0KSAqQU5EKiBoaWRkZW4gKGVhY2ggc2hhcmVkIG9iamVjdCBzaG91bGQgaGF2ZSBpdHMgb3du
-IGNvcHkpLgpJZiBJIHJlbW92ZSB0aGUgd2VhayBhdHRyaWJ1dGUgZnJvbSBfX3RyYWNlcG9pbnRf
-cHRyc19yZWdpc3RlcmVkLCB0aGUgCmxpbmtlciBzdGFydHMgc2NyZWFtaW5nIGFzIHNvb24gYXMg
-SSBjb21waWxlIG9uZSBvZiB0aGUgZXhhbXBsZXMuCgpPbiB0aGUgb3RoZXIgaGFuZCwgX19zdGFy
-dF9fX3RyYWNlcG9pbnRzX3B0cnMvX19zdG9wX19fdHJhY2Vwb2ludHNfcHRycyAKYXJlIGdlbmVy
-YXRlZCBieSB0aGUgbGlua2VyIChvciBzbyBJIHdhbnQgdG8gYmVsaWV2ZSEpIHNvIG9ubHkgb25l
-IAppbnN0YW5jZSBpcyBlbWl0dGVkLgpLZWVwaW5nIHRoZW0gaGlkZGVuIHByZXZlbnRzIHRoZSBu
-YW1lIGNsYXNoIGR1cmluZyBkeW5hbWljIGxpbmtpbmcsIGFzIAp0aGUgc3ltYm9sIHdpbGwgbm90
-IGJlIHZpc2libGUgZnJvbSBvdGhlciBzaGFyZWQgb2JqZWN0cyBvciBiaW5hcmllcy4KQnV0IEkg
-ZG9uJ3Qgc2VlIHdoeSB0aGV5IHNob3VsZCBhbHNvIGJlIHdlYWsuCgpBcyBhIG1hdHRlciBvZiBm
-YWN0LCByZW1vdmluZyB0aGUgd2VhayBhdHRyaWJ1dGUgc2VlbXMgdG8gZml4IG15IHByb2JsZW0g
-CihhcyBmYXIgYXMgSSBjb3VsZCB0ZXN0KS4KV2hhdCBhbSBJIG1pc3Npbmc/CgpUaGFuayB5b3Ug
-YWdhaW4gZm9yIHlvdXIgcGF0aWVuY2UsCkdlcmxhbmRvCgpPbiAwNS8yNy8yMDE0IDA0OjU4IFBN
-LCBXb2VnZXJlciwgUGF1bCB3cm90ZToKPiBPbiAwNS8yNy8yMDE0IDA0OjQxIFBNLCBHZXJsYW5k
-byBGYWxhdXRvIHdyb3RlOgo+PiBIaSBQYXVsLAo+Pgo+PiB0aGFuayB5b3UgdmVyeSBtdWNoIGZv
-ciBzaGFyaW5nIHRoaXMuCj4+Cj4+IEkgaGFkIGluIHRoZSBtZWFudGltZSBydW4gaW50byB0aGUg
-c2FtZSBzdWdnZXN0aW9uIGJ5Cj4+IEhlbnJpayBXYWxsaW4gb24gYSB0aHJlYWQgb3BlbmVkIGJ5
-IE1hcnRpbgo+PiAoaHR0cHM6Ly9nY2MuZ251Lm9yZy9tbC9nY2MtaGVscC8yMDE0LTA1L21zZzAw
-MDI4Lmh0bWwpLgo+PiBGdXJ0aGVyIHVwZGF0ZXMgZnJvbSBNYXJ0aW4gYWxzbyBzdWdnZXN0IHRo
-ZSBpc3N1ZSBpcyByYXRoZXIgcmVsYXRlZCB0bwo+PiB0aGUgT3BlbkVtYmVkZGVkIHRvb2xjaGFp
-bi4KPj4KPj4gSSB3YXMgYWJvdXQgdG8gcG9zdCB0aGUgIm9wcG9zaXRlIiBvZiB5b3VyIHBhdGNo
-LCBhcyBJIGRvbid0IHNlZSB0aGUKPj4gbmVlZCB0byBoYXZlIHRob3NlIHN5bWJvbHMgYXMgd2Vh
-ayBpbnN0ZWFkLiBJbiB0aGUgZW5kLCBkb2Vzbid0IHdlYWsKPj4gb25seSBhbGxvdyBmb3IgYSBm
-dXJ0aGVyIHJlLWRlZmluaXRpb24/IEluIHRoaXMgY2FzZSB3ZSdyZSBvbmx5Cj4+IGRlY2xhcmlu
-ZyBpdCBhcyBleHRlcm4sIGFyZW4ndCB3ZT8KPj4gRGVmaW5pdGlvbiBhY3R1YWxseSBoYXBwZW5z
-IGJ5IG1hZ2ljLCBhcyBmYXIgYXMgSSBjYW4gdGVsbC4KPj4gQnV0IHBsZWFzZSBjb3JyZWN0IG1l
-IGlmIEkgZ290IGl0IGFsbCB3cm9uZy4KPgo+IEl0J3MgbW9yZSBjb21wbGljYXRlZC4KPgo+IFlv
-dSBhYnNvbHV0ZWx5IG5lZWQgdGhvc2Ugc3ltYm9sIHRvIGJlIGRlY2xhcmVkIGFzOgo+Cj4gICAg
-ICAud2VhayAgIF9fc3RhcnRfX190cmFjZXBvaW50c19wdHJzCj4gICAgICAud2VhayAgIF9fc3Rv
-cF9fX3RyYWNlcG9pbnRzX3B0cnMKPgo+ICphbmQqCj4KPiAgICAgIC5oaWRkZW4gX19zdGFydF9f
-X3RyYWNlcG9pbnRzX3B0cnMKPiAgICAgIC5oaWRkZW4gX19zdG9wX19fdHJhY2Vwb2ludHNfcHRy
-cwo+Cj4gVGhlIHJlYXNvbiBpcyB0aGF0IHlvdSBjYW4gaGF2ZSB0aGUgc2FtZSB0cmFjZXBvaW50
-IHByb3ZpZGVyIGJlIFVTRUQgaW4KPiBzZXZlcmFsIGNvbXBpbGF0aW9uIHVuaXRzIHRoYXQgd2ls
-bCBhbGwgYmVjb21lIHBhcnQgb2Ygb25lIGFuZCB0aGUgc2FtZQo+IHNoYXJlZCBvYmplY3QgKG9y
-IGV4ZWN1dGFibGUpLgo+Cj4gVGhlbiBhbGwgdGhvc2UgX19zdGFydC9zdG9wX19fdHJhY2Vwb2lu
-dHNfcHRycyByZWZlcmVuY2VzIGluIGRpZmZlcmVudAo+IGNvbXBpbGF0aW9uIHVuaXRzIHNob3Vs
-ZCByZWZlciB0byB0aGUgc2FtZQo+IF9fc3RhcnQvc3RvcF9fX3RyYWNlcG9pbnRzX3B0cnMgZGVm
-aW5pdGlvbnMgZm9yIHRoZSBzaGFyZWQgb2JqZWN0IChvcgo+IGV4ZWN1dGFibGUpIHRoZXkgYXJl
-IHBhcnQgb2YuIFRoaXMgaXMgcmVxdWlyZWQgYmVjYXVzZSB0aGUKPiBpbml0aWFsaXphdGlvbiBv
-ZiB0aGUgdHJhY2Vwb2ludHMgd2lsbCBvbmx5IGhhcHBlbiBvbmNlIHBlciBzaGFyZWQKPiBvYmpl
-Y3QgKG9yIGV4ZWN1dGFibGUpIHdpdGggdGhlIHN0YXRpYyBjdG9yIG1lY2hhbmlzbSBhbHNvIGRl
-ZmluZWQgaW4KPiB0cmFjZXBvaW50LmgKPgo+IEhUSCwKPiBQYXVsCj4KPj4KPj4gVGhhbmsgeW91
-LAo+PiBHZXJsYW5kbwo+Pgo+PiBPbiAwNS8yNy8yMDE0IDA0OjMyIFBNLCBXb2VnZXJlciwgUGF1
-bCB3cm90ZToKPj4+IEhpIE1hcnRpbiwgSGkgR2VybGFuZG8sCj4+Pgo+Pj4gdGhpcyBzb3VuZHMg
-YSBsb3QgbGlrZSB0aGUgY29tcGlsZXIgYnVnIEkgZm91bmQgcmVjZW50bHkgaW4gWW9jdG8gMS42
-Cj4+PiAocmVwcm9kdWNpYmxlIG9uIEFSTSwgeDg2IGFuZCBQUEMpCj4+Pgo+Pj4gVGhlIHByb2Js
-ZW0gaW4gbXkgY2FzZSBpcyB0aGF0IHRoZSBZb2N0byBnZW5lcmF0ZWQgR0NDIGNyb3NzLWNvbXBp
-bGVyCj4+PiB0cmFuc2xhdGVzOgo+Pj4KPj4+IGV4dGVybiBzdHJ1Y3QgdHJhY2Vwb2ludCAqIGNv
-bnN0IF9fc3RhcnRfX190cmFjZXBvaW50c19wdHJzW10KPj4+ICAgICAgIF9fYXR0cmlidXRlX18o
-KHdlYWssIHZpc2liaWxpdHkoImhpZGRlbiIpKSk7Cj4+PiBleHRlcm4gc3RydWN0IHRyYWNlcG9p
-bnQgKiBjb25zdCBfX3N0b3BfX190cmFjZXBvaW50c19wdHJzW10KPj4+ICAgICAgIF9fYXR0cmli
-dXRlX18oKHdlYWssIHZpc2liaWxpdHkoImhpZGRlbiIpKSk7Cj4+Pgo+Pj4gaW5jb3JyZWN0bHkg
-dG8gYXNzZW1ibHkuIEZvciB0aGVzZSBzeW1ib2xzIHRoYXQgYXJlIGRlY2xhcmVkIHdpdGgKPj4+
-Cj4+PiBfX2F0dHJpYnV0ZV9fKCh3ZWFrLCB2aXNpYmlsaXR5KCJoaWRkZW4iKSkpOwo+Pj4KPj4+
-IHRoYXQgYXJlIGFsc28gZGVmaW5lZCB0byBiZSBleHRlcm5hbCwgaW4gdGhlIGFzc2VtYmx5IHRo
-ZSBmb2xsb3dpbmcKPj4+IGxpbmVzIGFyZSBtaXNzaW5nOgo+Pj4KPj4+IC5oaWRkZW4gX19zdG9w
-X19fdHJhY2Vwb2ludHNfcHRycwo+Pj4gLmhpZGRlbiBfX3N0YXJ0X19fdHJhY2Vwb2ludHNfcHRy
-cwo+Pj4KPj4+IFRoaXMgY2F1c2VzIF9fc3RvcF9fX3RyYWNlcG9pbnRzX3B0cnMgYW5kIF9fc3Rh
-cnRfX190cmFjZXBvaW50c19wdHJzCj4+PiB0byBiZSBmdXJ0aGVyIHRyZWF0ZWQgYXMgb3JkaW5h
-cnkgd2VhayBzeW1ib2xzIGluc3RlYWQgb2YKPj4+IHBlci1zaGFyZWQtb2JqZWN0IHdlYWsgc3lt
-Ym9scy4KPj4+IFRoYXQgZnVydGhlciB3aWxsIGNhdXNlICB0aGUgbGlua2VyIHRvIHJlc29sdmUg
-YW55IHN1Y2ggc3ltYm9scyB3aXRoCj4+PiB0aGUgZmlyc3QgZGVmaW5pdGlvbiBvZiB0aG9zZSBz
-eW1ib2xzIHRoYXQgaXQgY2FuIHNlZSAoaXQgd2lsbCBub3QKPj4+IGNvbnN0cmFpbiBpdHNlbGYg
-dG8gb25seSBjb25zaWRlciBkZWZpbml0aW9ucyBmcm9tIHdpdGhpbiB0aGUgc2FtZQo+Pj4gc2hh
-cmVkIG9iamVjdCkuIFRoZSBuZXQgcmVzdWx0IGlzIHRoYXQgb25seSBvbmUgdHJhY2Vwb2ludCBw
-cm92aWRlcgo+Pj4gZ2V0cyBhY3RpdmF0ZWQgKHRoZSBmaXJzdCBvbmUgdGhlIGxpbmtlciBzZWVz
-KSBpbnN0ZWFkIG9mIGFsbCB0aGUKPj4+IHRyYWNlcG9pbnQgcHJvdmlkZXJzIHVzZWQgaW4gdmFy
-aW91cyBzb3VyY2UgZmlsZXMuCj4+Pgo+Pj4gVG8gZml4IHRoaXMgSSB1c2UgdGhlIGZvbGxvd2lu
-ZyBsdHRuZy11c3Qgd29ya2Fyb3VuZCAoZm9yIG5vdyk6Cj4+Pgo+Pj4gZGlmZiAtLWdpdCBhL2lu
-Y2x1ZGUvbHR0bmcvdHJhY2Vwb2ludC5oIGIvaW5jbHVkZS9sdHRuZy90cmFjZXBvaW50LmgKPj4+
-IGluZGV4IDY2ZTJhYmQuLjUwY2VmMjYgMTAwNjQ0Cj4+PiAtLS0gYS9pbmNsdWRlL2x0dG5nL3Ry
-YWNlcG9pbnQuaAo+Pj4gKysrIGIvaW5jbHVkZS9sdHRuZy90cmFjZXBvaW50LmgKPj4+IEBAIC0z
-MTMsOSArMzEzLDExIEBAIF9fdHJhY2Vwb2ludHNfX2Rlc3Ryb3kodm9pZCkKPj4+ICAgICAqIChv
-ciBmb3IgdGhlIHdob2xlIG1haW4gcHJvZ3JhbSkuCj4+PiAgICAgKi8KPj4+ICAgIGV4dGVybiBz
-dHJ1Y3QgdHJhY2Vwb2ludCAqIGNvbnN0IF9fc3RhcnRfX190cmFjZXBvaW50c19wdHJzW10KPj4+
-IC0gICAgICAgX19hdHRyaWJ1dGVfXygod2VhaywgdmlzaWJpbGl0eSgiaGlkZGVuIikpKTsKPj4+
-ICsgICAgICAgX19hdHRyaWJ1dGVfXygod2VhaykpOwo+Pj4gK2FzbSgiLmhpZGRlbiBfX3N0YXJ0
-X19fdHJhY2Vwb2ludHNfcHRycyIpOwo+Pj4gICAgZXh0ZXJuIHN0cnVjdCB0cmFjZXBvaW50ICog
-Y29uc3QgX19zdG9wX19fdHJhY2Vwb2ludHNfcHRyc1tdCj4+PiAtICAgICAgIF9fYXR0cmlidXRl
-X18oKHdlYWssIHZpc2liaWxpdHkoImhpZGRlbiIpKSk7Cj4+PiArICAgICAgIF9fYXR0cmlidXRl
-X18oKHdlYWspKTsKPj4+ICthc20oIi5oaWRkZW4gX19zdG9wX19fdHJhY2Vwb2ludHNfcHRycyIp
-Owo+Pj4KPj4+ICAgIC8qCj4+PiAgICAgKiBXaGVuIFRSQUNFUE9JTlRfUFJPQkVfRFlOQU1JQ19M
-SU5LQUdFIGlzIGRlZmluZWQsIHdlIGRvIG5vdCBlbWl0IGEKPj4+Cj4+Pgo+Pj4gTm90ZSB0aGF0
-IHRoaXMgaXNzdWUgaXMgbm90IHJlcHJvZHVjaWJsZSB3aXRoIG15IEdDQyBvbiBob3N0Ogo+Pj4g
-Z2NjIHZlcnNpb24gNC44LjEgMjAxMzA5MDkgW2djYy00XzgtYnJhbmNoIHJldmlzaW9uIDIwMjM4
-OF0gKFNVU0UgTGludXgpCj4+PiBhbmQgYWxzbyBub3Qgd2l0aCB0aGUgbGF0ZXN0IENvZGViZW5j
-aCAyMDE0LjA1IEFSTS1MaW51eCBjcm9zcy10b29sY2hhaW4uCj4+Pgo+Pj4gLS0KPj4+IEJlc3Qs
-Cj4+PiBQYXVsCj4+Pgo+Pj4gT24gMDUvMjcvMjAxNCAwMTo1NSBQTSwgR2VybGFuZG8gRmFsYXV0
-byB3cm90ZToKPj4+PiBIaSBNYXJ0aW4sCj4+Pj4KPj4+PiBJIGhhdmUgYmVlbiBzdHJ1Z2dsaW5n
-IGZvciBhIHdoaWxlIHdpdGggdGhpcyBpc3N1ZSAoc2VlIHRoZSB3aG9sZQo+Pj4+IHRocmVhZCk6
-Cj4+Pj4KPj4+PiBodHRwOi8vbGlzdHMubHR0bmcub3JnL3BpcGVybWFpbC9sdHRuZy1kZXYvMjAx
-NC1NYXkvMDIzMDM1Lmh0bWwKPj4+Pgo+Pj4+IGFuZCBsYW5kZWQgb24gdGhlIHNhbWUgY29uY2x1
-c2lvbnMgYXMgeW91cnMgKGZvdW5kIHlvdXIgbWVzc2FnZSBieQo+Pj4+IHNlYXJjaGluZyBmb3Ig
-X19zdGFydF9fX3RyYWNlcG9pbnRzX3B0ciEpLgo+Pj4+IFNvIGF0IGxlYXN0IHlvdSdyZSBub3Qg
-YWxvbmUhCj4+Pj4KPj4+PiBTbywgZGlkIHlvdSBldmVyIG1hbmFnZSB0byBnZXQgYW55IG9mIHlv
-dXIgcXVlc3Rpb25zIGFuc3dlcmVkOgo+Pj4+Cj4+Pj4+PiAxKSBIYXZlIHlvdSBydW4gaW50byBh
-IHByb2JsZW0gbGlrZSB0aGlzPyBJcyB0aGVyZSBhIGtub3duCj4+Pj4gZml4L3dvcmthcm91bmQ/
-Cj4+Pj4+PiAyKSBfX3N0YXJ0X19fX3RyYWNlcG9pbnRzX3B0cnMgaXMgZGVjbGFyZWQgYXMgZXh0
-ZXJuIGluIHRyYWNlcG9pbnQuaCwKPj4+PiBidXQgaXQKPj4+Pj4+IGlzIG5vdCBkZWZpbmVkLiBU
-aGlzIGFwcGVhcnMgdG8gYmUgc29tZSBzb3J0IG9mIHVuZG9jdW1lbnRlZCBsaW5rZXIKPj4+PiBt
-YWdpYy4KPj4+Pj4+IGh0dHA6Ly9nY2MuZ251Lm9yZy9tbC9nY2MtaGVscC8yMDEwLTA0L21zZzAw
-MTIwLmh0bWwgaXMgdGhlIG9ubHkKPj4+PiByZWZlcmVuY2UgSQo+Pj4+Pj4gY291bGQgZmluZC4g
-RG8geW91IGtub3cgd2hlcmUgdGhpcyBiZWhhdmlvciBpcyBkb2N1bWVudGVkIG9yCj4+Pj4gc3Bl
-Y2lmaWVkIChpZgo+Pj4+Pj4gYXQgYWxsKT8KPj4+Pj4+IDMpIERvIHlvdSBrbm93IHdoeSB0aGUg
-c3ltYm9sIHZpc2liaWxpdHkgZm9yCj4+Pj4+PiBfX3N0YXJ0X19fdHJhY2Vwb2ludHNfcHRycwo+
-Pj4+Pj4gY2hhbmdlZCBiZXR3ZWVuIDQuNi40IHRvIDQuNy4yPwo+Pj4+Cj4+Pj4gVGhhbmsgeW91
-IHNvIG11Y2ghCj4+Pj4gR2VybGFuZG8KPj4+Pgo+Pj4+IEJUVywgSSdtIGFsc28gcnVubmluZyBH
-Q0MgNC43LjIgKGx0dG5nLXVzdCBpcyBjcm9zcy1jb21waWxlZCwgdGhlIHRlc3QKPj4+PiBhcHBs
-aWNhdGlvbiBpcyBuYXRpdmVseSBjb21waWxlZCkuCj4+Pj4KPj4+PiBPbiBhbiB4ODZfNjQgaG9z
-dCBydW5uaW5nIGVpdGhlciBHQ0MgNC40LjYgb3IgNC40LjcsIHRoZSBpc3N1ZSBpcyBub3QKPj4+
-PiBvYnNlcnZlZC4KPj4+Pgo+Pj4+Cj4+Pj4gT24gMDQvMzAvMjAxNCAxMTo1NyBQTSwgTWFydGlu
-IMOcbnNhbCB3cm90ZToKPj4+Pj4gSW5jaWRlbnRhbGx5IEkgYWxzbyBhc2tlZCBmb3IgaGVscCBv
-biB0aGUgR05VIGxpbmtlci1zcGVjaWZpYyBwYXJ0Cj4+Pj4+IChxdWVzdGlvbiAyKSBoZXJlOgo+
-Pj4+Pgo+Pj4+PiBodHRwOi8vZ2NjLmdudS5vcmcvbWwvZ2NjLWhlbHAvMjAxNC0wNC9tc2cwMDE2
-NC5odG1sCj4+Pj4+Cj4+Pj4+IE1hcnRpbgo+Pj4+Pgo+Pj4+Pgo+Pj4+PiBPbiBXZWQsIEFwciAz
-MCwgMjAxNCBhdCAyOjIxIFBNLCBNYXJ0aW4gw5xuc2FsIDxtYXJ0aW51bnNhbEBnbWFpbC5jb20+
-Cj4+Pj4+IHdyb3RlOgo+Pj4+Pj4gSGkgTFRUbmcgZm9sa3MKPj4+Pj4+Cj4+Pj4+PiBJIGhhdmUg
-YSBzdHJhbmdlIHByb2JsZW0gdXNpbmcgTFRUbmctVVNUIG9uIGFuIEFSTSBiYXNlZCBwbGF0Zm9y
-bS4gSQo+Pj4+Pj4gaGF2ZQo+Pj4+Pj4gZG9uZSBzb21lIGRpYWdub3NpcyBidXQgSSBhbSBydW5u
-aW5nIGxvdyBvbiBpZGVhcyBhbmQgd2FzIGhvcGluZyBmb3IKPj4+Pj4+IGhlbHAKPj4+Pj4+IGZy
-b20gdGhlIGV4cGVydHMuIEkgYW0gdXNpbmcgbHR0bmctdG9vbHMgMi4yLjAsIGx0dG5nLXVzdCAy
-LjIuMCwKPj4+Pj4+IGxpYnVyY3UKPj4+Pj4+IDAuOC4xLiBJIGtub3cgdGhlc2UgYXJlIG9sZCBi
-dXQgdXBncmFkaW5nIGlzIGVhc2llciBzYWlkIHRoYW4gZG9uZQo+Pj4+Pj4gdW5mb3J0dW5hdGVs
-eS4gSSBkaWRuJ3Qgc2VlIGFueXRoaW5nIHJlbGF0ZWQgdG8gdGhpcyBwcm9ibGVtIGluCj4+Pj4+
-PiByZWxub3RlcywKPj4+Pj4+IG1haWxpbmcgbGlzdCB0cmFmZmljLCBvciBtYXN0ZXIgYnJhbmNo
-LCBidXQgSSBjb3VsZCBoYXZlIG1pc3NlZAo+Pj4+Pj4gc29tZXRoaW5nLgo+Pj4+Pj4KPj4+Pj4+
-IFRoZSBwcm9ibGVtIHNob3dlZCB1cCB3aGVuIEkgc3dpdGNoZWQgZnJvbSBHQ0MgNC42LjQgdG8g
-NC43LjIuCj4+Pj4+PiBDb25jZXB0dWFsbHksCj4+Pj4+PiB0aGUgc2l0dWF0aW9uIGlzIHRoYXQg
-SSBoYXZlIGEgc2luZ2xlIGV4ZWN1dGFibGUsIGNhbGwgaXQgTXlQcm9ncmFtLAo+Pj4+Pj4gd2l0
-aAo+Pj4+Pj4gdHdvIHBsdWdpbnMgbG9hZGVkIGF0IHJ1bnRpbWUgd2l0aCBkbG9wZW4oKSwgbGV0
-cyBjYWxsIHRoZW0KPj4+Pj4+IGxpYlBsdWdpbjEuc28KPj4+Pj4+IGFuZCBsaWJQbHVnaW4yLnNv
-LiBUaGVyZSBhcmUgdGhyZWUgZGlmZmVyZW50IExUVG5nLVVTVCB0cmFjZXBvaW50Cj4+Pj4+PiBw
-cm92aWRlcnMsCj4+Pj4+PiBvbmUgZWFjaCBmb3IgdGhlIGV4ZWN1dGFibGUgYW5kIHRoZSB0d28g
-cGx1Z2lucy4gV2l0aCBHQ0MgNC43LjIsCj4+Pj4+PiB0cmFjZXBvaW50cwo+Pj4+Pj4gaW4gbGli
-UGx1Z2luMSBzdG9wcGVkIHdvcmtpbmcuIFRoZSB0cmFjZXBvaW50cyBpbiBNeVByb2dyYW0gYW5k
-IGluCj4+Pj4+PiBsaWJQbHVnaW4yIGNvbnRpbnVlIHRvIHdvcmsgY29ycmVjdGx5Lgo+Pj4+Pj4K
-Pj4+Pj4+IEkgaGF2ZSBlc3RhYmxpc2hlZCB3aXRob3V0IGEgZG91YnQgdGhhdCB0aGUgdG9vbGNo
-YWluIHVwZ3JhZGUgaXMgdGhlCj4+Pj4+PiBjYXVzZQo+Pj4+Pj4gb2YgdGhlIHJlZ3Jlc3Npb24u
-Cj4+Pj4+Pgo+Pj4+Pj4gSW4gdGhlIGRlYnVnZ2VyLCBJIGNvbmZpcm1lZCB0aGF0IHRoZSB0cmFj
-ZXBvaW50IGZvciBsaWJQbHVnaW4xLnNvIGlzCj4+Pj4+PiBiZWluZwo+Pj4+Pj4gZXhlY3V0ZWQs
-IGJ1dCBfX3RyYWNlcG9pbnRfIyNwcm92aWRlciMjX19fIyNuYW1lLnN0YXRlIGlzIGFsd2F5cyAw
-Cj4+Pj4+PiBldmVuIHdoZW4KPj4+Pj4+IEkgZW5hYmxlIHRoZSB0cmFjZXBvaW50IGluIGx0dG5n
-LXRvb2xzLiBBcyBhIHJlc3VsdCB0aGUgdHJhY2Vwb2ludAo+Pj4+Pj4gY2FsbGJhY2sKPj4+Pj4+
-IGlzIG5vdCBiZWluZyBpbnZva2VkIHdoZW4gaXQgc2hvdWxkIGJlLiBJbiBNeVByb2dyYW0gYW5k
-Cj4+Pj4+PiBsaWJQbHVnaW4yLnNvLCB0aGUKPj4+Pj4+IC5zdGF0ZSB2YXJpYWJsZSBjb3JyZWN0
-bHkgcmVmbGVjdHMgd2hldGhlciB0aGUgdHJhY2Vwb2ludCBpcyBlbmFibGVkLAo+Pj4+Pj4gYW5k
-IGlmCj4+Pj4+PiB0aGUgdHJhY2Vwb2ludCBpcyBlbmFibGVkLCB0aGUgdHJhY2Vwb2ludCBjYWxs
-YmFjayBpcyBpbnZva2VkLgo+Pj4+Pj4KPj4+Pj4+IE5leHQgSSBzZXQgYSBicmVha3BvaW50IGlu
-IHRyYWNlcG9pbnRfcmVnaXN0ZXJfbGliKCkgYW5kIGxvb2tlZCBhdAo+Pj4+Pj4gdHJhY2Vwb2lu
-dHNfc3RhcnQgcGFyYW1ldGVyLgo+Pj4+Pj4KPj4+Pj4+IDEpIFdpdGggR0NDIDQuNi40IGV2ZXJ5
-dGhpbmcgaXMgYXMgZXhwZWN0ZWQ6Cj4+Pj4+PiAgICAgICBhKSB0cmFjZXBvaW50X3JlZ2lzdGVy
-X2xpYigpIGZvciBNeVByb2dyYW0gY2FsbGVkIHdpdGgKPj4+Pj4+IE15UHJvZ3JhbVByb3ZpZGVy
-J3MgX19zdGFydF9fX3RyYWNlcG9pbnRzX3B0cnMuCj4+Pj4+PiAgICAgICBiKSB0cmFjZXBvaW50
-X3JlZ2lzdGVyX2xpYigpIGFmdGVyIGxpYlBsdWdpbjEgZGxvcGVuKCkgY2FsbGVkCj4+Pj4+PiB3
-aXRoCj4+Pj4+PiBsaWJQbHVnaW4xUHJvdmlkZXIncyBfX3N0YXJ0X19fdHJhY2Vwb2ludHNfcHRy
-cwo+Pj4+Pj4gICAgICAgYykgdHJhY2Vwb2ludF9yZWdpc3Rlcl9saWIoKSBhZnRlciBsaWJQbHVn
-aW4yIGRsb3BlbigpIGNhbGxlZAo+Pj4+Pj4gd2l0aAo+Pj4+Pj4gbGliUGx1Z2luMlByb3ZpZGVy
-J3MgX19zdGFydF9fX3RyYWNlcG9pbnRfcHRycwo+Pj4+Pj4KPj4+Pj4+IDIpIFdpdGggR0NDIDQu
-Ny4yIHRoZXJlIGlzIGEgcHJvYmxlbToKPj4+Pj4+ICAgICAgIGEpIHRyYWNlcG9pbnRfcmVnaXN0
-ZXJfbGliKCkgZm9yIE15UHJvZ3JhbSBjYWxsZWQgd2l0aAo+Pj4+Pj4gTXlQcm9ncmFtUHJvdmlk
-ZXIncyBfX3N0YXJ0X19fdHJhY2Vwb2ludHNfcHRycy4KPj4+Pj4+ICAgICAgIGIpIHRyYWNlcG9p
-bnRfcmVnaXN0ZXJfbGliKCkgYWZ0ZXIgbGliUGx1Z2luMSBkbG9wZW4oKSBjYWxsZWQKPj4+Pj4+
-IHdpdGgKPj4+Pj4+IE15UHJvZ3JhbVByb3ZpZGVyJ3MgX19zdGFydF9fX3RyYWNlcG9pbnRzX3B0
-cnMgKCEhISEgVEhJUyBJUyBXUk9ORwo+Pj4+Pj4gISEhISkKPj4+Pj4+ICAgICAgIGMpIHRyYWNl
-cG9pbnRfcmVnaXN0ZXJfbGliKCkgYWZ0ZXIgbGliUGx1Z2luMiBkbG9wZW4oKSBjYWxsZWQKPj4+
-Pj4+IHdpdGgKPj4+Pj4+IGxpYlBsdWdpbjJQcm92aWRlcidzIF9fc3RhcnRfX190cmFjZXBvaW50
-X3B0cnMKPj4+Pj4+Cj4+Pj4+PiBJIGxvb2tlZCBhdCB0aGUgc3ltYm9sIHRhYmxlIGZvciBsaWJQ
-bHVnaW4xLnNvIHRvIHNlZSBpZiBpdCB3b3VsZAo+Pj4+Pj4gc2hlZCBzb21lCj4+Pj4+PiBsaWdo
-dCBvbiB0aGUgcHJvYmxlbS4KPj4+Pj4+Cj4+Pj4+PiAxKSBXaXRoIEdDQyA0LjYuNDoKPj4+Pj4+
-ICMgb2JqZHVtcCAtdCAvdXNyL2xpYi8uZGVidWcvbGliUGx1Z2luMS5zbyB8IGdyZXAKPj4+Pj4+
-IF9fc3RhcnRfX190cmFjZXBvaW50c19wdHJzCj4+Pj4+PiAwMDAyNWJiMCBsICAgICAgICpBQlMq
-IDAwMDAwMDAwIF9fc3RhcnRfX190cmFjZXBvaW50c19wdHJzCj4+Pj4+PiAjIG9iamR1bXAgLXQg
-L3Vzci9saWIvLmRlYnVnL2xpYlBsdWdpbjIuc28gfCBncmVwCj4+Pj4+PiBfX3N0YXJ0X19fdHJh
-Y2Vwb2ludHNfcHRycwo+Pj4+Pj4gMDAwNDFlYjQgbCAgICAgICAqQUJTKiAwMDAwMDAwMCBfX3N0
-YXJ0X19fdHJhY2Vwb2ludHNfcHRycwo+Pj4+Pj4KPj4+Pj4+IDIpIFdpdGggR0NDIDQuNy4yOgo+
-Pj4+Pj4gIyBvYmpkdW1wIC10IC91c3IvbGliLy5kZWJ1Zy9saWJQbHVnaW4xLnNvIHwgZ3JlcAo+
-Pj4+Pj4gX19zdGFydF9fX3RyYWNlcG9pbnRzX3B0cnMKPj4+Pj4+IDAwMDI1YTkwIGcgICAgICAg
-X190cmFjZXBvaW50c19wdHJzIDAwMDAwMDAwCj4+Pj4+PiBfX3N0YXJ0X19fdHJhY2Vwb2ludHNf
-cHRycwo+Pj4+Pj4gIyBvYmpkdW1wIC10IC91c3IvbGliLy5kZWJ1Zy9saWJQbHVnaW4yLnNvIHwg
-Z3JlcAo+Pj4+Pj4gX19zdGFydF9fX3RyYWNlcG9pbnRzX3B0cnMKPj4+Pj4+IDAwMDQxZWI0IGcg
-ICAgICAgX190cmFjZXBvaW50c19wdHJzIDAwMDAwMDAwCj4+Pj4+PiBfX3N0YXJ0X19fdHJhY2Vw
-b2ludHNfcHRycwo+Pj4+Pj4KPj4+Pj4+IE15IGh5cG90aGVzaXMgYXQgdGhpcyBwb2ludCBpcyB0
-aGF0IHNpbmNlIF9fc3RhcnRfX190cmFjZXBvaW50c19wdHJzCj4+Pj4+PiBjaGFuZ2VkCj4+Pj4+
-PiBmcm9tIGEgbG9jYWwgdG8gYSBnbG9iYWwgc3ltYm9sLCB0aGUgZHluYW1pYyBsb2FkZXIgbm8g
-bG9uZ2VyIGtub3dzCj4+Pj4+PiBob3cgdG8KPj4+Pj4+IHNlbGVjdCB0aGUgY29ycmVjdCB3ZWFr
-IHN5bWJvbC4gSSBjYW5ub3QgZXhwbGFpbiB3aHkgbGliUGx1Z2luMiBzdGlsbAo+Pj4+Pj4gbG9h
-ZHMKPj4+Pj4+IGl0cyBwcm92aWRlciBjb3JyZWN0bHksIHBlcmhhcHMgaXQgaXMganVzdCBnZXR0
-aW5nIGx1Y2t5Lgo+Pj4+Pj4KPj4+Pj4+IEEgZmV3IHF1ZXN0aW9ucyBjb21lIHRvIG1pbmQuLi4K
-Pj4+Pj4+IDEpIEhhdmUgeW91IHJ1biBpbnRvIGEgcHJvYmxlbSBsaWtlIHRoaXM/IElzIHRoZXJl
-IGEga25vd24KPj4+Pj4+IGZpeC93b3JrYXJvdW5kPwo+Pj4+Pj4gMikgX19zdGFydF9fX190cmFj
-ZXBvaW50c19wdHJzIGlzIGRlY2xhcmVkIGFzIGV4dGVybiBpbiB0cmFjZXBvaW50LmgsCj4+Pj4+
-PiBidXQgaXQKPj4+Pj4+IGlzIG5vdCBkZWZpbmVkLiBUaGlzIGFwcGVhcnMgdG8gYmUgc29tZSBz
-b3J0IG9mIHVuZG9jdW1lbnRlZCBsaW5rZXIKPj4+Pj4+IG1hZ2ljLgo+Pj4+Pj4gaHR0cDovL2dj
-Yy5nbnUub3JnL21sL2djYy1oZWxwLzIwMTAtMDQvbXNnMDAxMjAuaHRtbCBpcyB0aGUgb25seQo+
-Pj4+Pj4gcmVmZXJlbmNlIEkKPj4+Pj4+IGNvdWxkIGZpbmQuIERvIHlvdSBrbm93IHdoZXJlIHRo
-aXMgYmVoYXZpb3IgaXMgZG9jdW1lbnRlZCBvcgo+Pj4+Pj4gc3BlY2lmaWVkIChpZgo+Pj4+Pj4g
-YXQgYWxsKT8KPj4+Pj4+IDMpIERvIHlvdSBrbm93IHdoeSB0aGUgc3ltYm9sIHZpc2liaWxpdHkg
-Zm9yCj4+Pj4+PiBfX3N0YXJ0X19fdHJhY2Vwb2ludHNfcHRycwo+Pj4+Pj4gY2hhbmdlZCBiZXR3
-ZWVuIDQuNi40IHRvIDQuNy4yPwo+Pj4+Pj4KPj4+Pj4+IFRoYW5rcyBmb3IgYW55IGhlbHAuIFRo
-aXMgaXMgYSByZWFsIHB1enpsZXIgZm9yIG1lLgo+Pj4+Pj4KPj4+Pj4+IE1hcnRpbgo+Pj4+Pj4K
-Pj4+Pj4KPj4+Pj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X18KPj4+Pj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+Pj4+PiBsdHRuZy1kZXZAbGlzdHMubHR0
-bmcub3JnCj4+Pj4+IGh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3Rp
-bmZvL2x0dG5nLWRldgo+Pj4+Pgo+Pj4+Cj4+Pj4KPj4+PiBfX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fXwo+Pj4+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPj4+
-PiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4+Pj4gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9j
-Z2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cj4+Pgo+Pj4KPj4KPgo+CgoKX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxp
-bmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcv
-Y2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+--===============1374221743==
+Content-Type: multipart/alternative; boundary=089e014953ec2e23a004fa65311c
+
+--089e014953ec2e23a004fa65311c
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+Excelent! Used all of your improved syntaxes. Simplified /
+restructured enable-event a
+bit so that this is more readable in the drawing.
+
+Also added lttng relayd / snapshot syntaxes.
+
+Changed "Kernelspace specific" into "Kernel specific".
+
+Added footnotes.
+
+Excuse me for the SVG problem. I created this in google docs. I didn't
+assume google's way of exporting SVGs was so poor, i have the same issue
+using inkscape.
+If i have time i will migrate it manually to inkscape. That might indeed
+explain the misalignment issue you described.
+
+Let me know what you think : )
+
+http://tty32.org/Trace%20session.png
+
+
+Greetings,
+Randy Wijnants.
+"The good part about UDP jokes is that i don't have to worry if you get it
+or not"
+
+
+On 27 May 2014 17:19, Thibault, Daniel <Daniel.Thibault@drdc-rddc.gc.ca>wro=
+te:
+
+> ----------------------------------------------------------------------
+> Date: Tue, 27 May 2014 13:34:20 +0200
+> From: Randy Wijnants <dev@tty32.org>
+>
+> > In addition to the LTTng architecture diagram, I've drawn a diagram tha=
+t
+> shows the relation between the command line options and how to configure =
+a
+> trace session.
+> > I hope it proves to be useful, if you have any suggestions let me know!
+> >
+> > Originally posted on IRC. As suggested by Compudj i've released it unde=
+r
+> CC license.
+> >
+> > http://tty32.org/Trace%20session.png
+> > http://tty32.org/Trace%20session.svg
+> >
+> > Randy Wijnants.
+> ----------------------------------------------------------------------
+>
+>    Neither the png nor svg versions line up correctly the text and
+> coloured boxes with each other.  This may be a local rendering issue.  At
+> least the svg version has a proper white background (my png renders with =
+a
+> very dark grey background, making it very hard to make out some of the
+> text).  However, the svg version is unusable because none of the text is
+> text: everything is svg:path with opaque d attributes (this may explain t=
+he
+> alignment problems).
+>
+>    Here are improved (more accurate) expressions for the various command
+> syntaxes:
+>
+> $ lttng create [NAME] [--ctrl-url URL --data-url URL | --output PATH |
+> --set-url URL | --no-output] [--snapshot]
+>    (the ctrl-url etc. options are in pre-emption order)
+>
+> $ lttng enable-channel (-k | -u) [--session NAME] NAME[,NAME2,...]
+> [--discard | --overwrite] [--subbuf-size SIZE] [--num-subbuf NUM]
+> [--switch-timer USEC] [--read-timer USEC] \
+>
+>                                       [--output (mmap | splice)]
+> [--buffers-uid | --buffers-pid | --buffers-global] [--tracefile-size SIZE
+> [--tracefile-count COUNT]]
+>
+> $ lttng enable-event (-k | -u) [--session NAME] [--channel NAME] (--all
+> [--tracepoint | --syscall] | \
+>                                             NAME[,NAME2,...] [--tracepoin=
+t
+> [(--loglevel | --loglevel-only) LOGLEVEL] [--filter 'EXPRESSION'] |
+> (--probe | --function) (addr | symbol | symbol+offset)])
+>
+> $ lttng add-context (-k | -u) [--session NAME] [--channel NAME] (--type
+> TYPE)+
+>
+> $ lttng list (-k | -u)
+>    (not the full syntax, but rather the syntax that will get just a list
+> of event names)
+>
+> $ lttng add-context --help
+>    (the only one that doesn't change!)
+>
+>    Change "Kernelspace specific" into "Kernel specific".
+>
+>    Add footnotes:
+> * --session NAME defaults to the current session
+> * --channel NAME in the enable-event case defaults to 'channel0', but onl=
+y
+> if the domain is virgin
+> * --channel NAME in the add-context case defaults to all channels
+>
+> Daniel U. Thibault
+> Protection des syst=C3=A8mes et contremesures (PSC) | Systems Protection =
+&
+> Countermeasures (SPC)
+> Cyber s=C3=A9curit=C3=A9 pour les missions essentielles (CME) | Mission C=
+ritical
+> Cyber Security (MCCS)
+> R & D pour la d=C3=A9fense Canada - Valcartier (RDDC Valcartier) | Defenc=
+e R&D
+> Canada - Valcartier (DRDC Valcartier)
+> 2459 route de la Bravoure
+> Qu=C3=A9bec QC  G3J 1X5
+> CANADA
+> Vox : (418) 844-4000 x4245
+> Fax : (418) 844-4538
+> NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+> Gouvernement du Canada | Government of Canada
+> <http://www.valcartier.drdc-rddc.gc.ca/>
+>
+
+--089e014953ec2e23a004fa65311c
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Excelent! Used all of your improved syntaxes. Simplified /=
+ restructured=C2=A0<span style=3D"font-family:arial,sans-serif;font-size:13=
+px">enable-event=C2=A0a bit so that this is more readable in the drawing.</=
+span><div><font face=3D"arial, sans-serif"><br>
+
+</font></div><div><font face=3D"arial, sans-serif">Also added lttng relayd =
+/ snapshot syntaxes.</font></div><div><font face=3D"arial, sans-serif"><br>=
+</font></div><div><span style=3D"font-family:arial,sans-serif;font-size:13p=
+x">Changed &quot;Kernelspace specific&quot; into &quot;Kernel specific&quot=
+;.</span><br>
+
+</div><div><span style=3D"font-family:arial,sans-serif;font-size:13px"><br>=
+</span></div><div><span style=3D"font-family:arial,sans-serif;font-size:13p=
+x">Added footnotes.</span></div><div><span style=3D"font-family:arial,sans-=
+serif;font-size:13px"><br>
+
+</span></div><div><span style=3D"font-family:arial,sans-serif;font-size:13p=
+x">Excuse me for the SVG problem. I created this in google docs. I didn&#39=
+;t assume google&#39;s way of exporting SVGs was so poor, i have the same i=
+ssue using inkscape.</span></div>
+
+<div><span style=3D"font-family:arial,sans-serif;font-size:13px">If i have =
+time i will migrate it manually to inkscape. That might indeed explain the =
+misalignment issue you described.</span></div><div><span style=3D"font-fami=
+ly:arial,sans-serif;font-size:13px"><br>
+
+</span></div><div><span style=3D"font-family:arial,sans-serif;font-size:13p=
+x">Let me know what you think : )</span></div><div><span style=3D"font-fami=
+ly:arial,sans-serif;font-size:13px"><br></span></div><div><a href=3D"http:/=
+/tty32.org/Trace%20session.png" style=3D"font-family:arial,sans-serif;font-=
+size:13px" target=3D"_blank">http://tty32.org/Trace%20session.png</a><span =
+style=3D"font-family:arial,sans-serif;font-size:13px"><br>
+
+</span></div><div><div><br></div></div><div class=3D"gmail_extra"><br clear=
+=3D"all"><div><div dir=3D"ltr"><div>Greetings,</div><div>Randy Wijnants.<br=
+></div><div>&quot;The good part about UDP jokes is that i don&#39;t have to=
+ worry if you get it or not&quot;</div>
+
+</div></div>
+<br><br><div class=3D"gmail_quote">On 27 May 2014 17:19, Thibault, Daniel <=
+span dir=3D"ltr">&lt;<a href=3D"mailto:Daniel.Thibault@drdc-rddc.gc.ca" tar=
+get=3D"_blank">Daniel.Thibault@drdc-rddc.gc.ca</a>&gt;</span> wrote:<br><bl=
+ockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #=
+ccc solid;padding-left:1ex">
+
+----------------------------------------------------------------------<br>
+Date: Tue, 27 May 2014 13:34:20 +0200<br>
+From: Randy Wijnants &lt;<a href=3D"mailto:dev@tty32.org" target=3D"_blank"=
+>dev@tty32.org</a>&gt;<br>
+<br>
+&gt; In addition to the LTTng architecture diagram, I&#39;ve drawn a diagra=
+m that shows the relation between the command line options and how to confi=
+gure a trace session.<br>
+<div>&gt; I hope it proves to be useful, if you have any suggestions let me=
+ know!<br>
+&gt;<br>
+&gt; Originally posted on IRC. As suggested by Compudj i&#39;ve released it=
+ under CC license.<br>
+&gt;<br>
+&gt; <a href=3D"http://tty32.org/Trace%20session.png" target=3D"_blank">htt=
+p://tty32.org/Trace%20session.png</a><br>
+&gt; <a href=3D"http://tty32.org/Trace%20session.svg" target=3D"_blank">htt=
+p://tty32.org/Trace%20session.svg</a><br>
+&gt;<br>
+</div>&gt; Randy Wijnants.<br>
+----------------------------------------------------------------------<br>
+<br>
+=C2=A0 =C2=A0Neither the png nor svg versions line up correctly the text an=
+d coloured boxes with each other. =C2=A0This may be a local rendering issue=
+. =C2=A0At least the svg version has a proper white background (my png rend=
+ers with a very dark grey background, making it very hard to make out some =
+of the text). =C2=A0However, the svg version is unusable because none of th=
+e text is text: everything is svg:path with opaque d attributes (this may e=
+xplain the alignment problems).<br>
+
+
+<br>
+=C2=A0 =C2=A0Here are improved (more accurate) expressions for the various =
+command syntaxes:<br>
+<br>
+$ lttng create [NAME] [--ctrl-url URL --data-url URL | --output PATH | --se=
+t-url URL | --no-output] [--snapshot]<br>
+=C2=A0 =C2=A0(the ctrl-url etc. options are in pre-emption order)<br>
+<br>
+$ lttng enable-channel (-k | -u) [--session NAME] NAME[,NAME2,...] [--disca=
+rd | --overwrite] [--subbuf-size SIZE] [--num-subbuf NUM] [--switch-timer U=
+SEC] [--read-timer USEC] \<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 [--output (mmap | splice)] [--buffers-uid | --buff=
+ers-pid | --buffers-global] [--tracefile-size SIZE [--tracefile-count COUNT=
+]]<br>
+
+
+<br>
+$ lttng enable-event (-k | -u) [--session NAME] [--channel NAME] (--all [--=
+tracepoint | --syscall] | \<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 NAME[,NAME2,...] [--tracepoint [(--loglevel | --loglevel-only) LOGLE=
+VEL] [--filter &#39;EXPRESSION&#39;] | (--probe | --function) (addr | symbo=
+l | symbol+offset)])<br>
+<br>
+$ lttng add-context (-k | -u) [--session NAME] [--channel NAME] (--type TYP=
+E)+<br>
+<br>
+$ lttng list (-k | -u)<br>
+=C2=A0 =C2=A0(not the full syntax, but rather the syntax that will get just=
+ a list of event names)<br>
+<br>
+$ lttng add-context --help<br>
+=C2=A0 =C2=A0(the only one that doesn&#39;t change!)<br>
+<br>
+=C2=A0 =C2=A0Change &quot;Kernelspace specific&quot; into &quot;Kernel spec=
+ific&quot;.<br>
+<br>
+=C2=A0 =C2=A0Add footnotes:<br>
+* --session NAME defaults to the current session<br>
+* --channel NAME in the enable-event case defaults to &#39;channel0&#39;, b=
+ut only if the domain is virgin<br>
+* --channel NAME in the add-context case defaults to all channels<br>
+<br>
+Daniel U. Thibault<br>
+Protection des syst=C3=A8mes et contremesures (PSC) | Systems Protection &a=
+mp; Countermeasures (SPC)<br>
+Cyber s=C3=A9curit=C3=A9 pour les missions essentielles (CME) | Mission Cri=
+tical Cyber Security (MCCS)<br>
+R &amp; D pour la d=C3=A9fense Canada - Valcartier (RDDC Valcartier) | Defe=
+nce R&amp;D Canada - Valcartier (DRDC Valcartier)<br>
+2459 route de la Bravoure<br>
+Qu=C3=A9bec QC =C2=A0G3J 1X5<br>
+CANADA<br>
+Vox : <a href=3D"tel:%28418%29%20844-4000%20x4245" value=3D"+14188444000" t=
+arget=3D"_blank">(418) 844-4000 x4245</a><br>
+Fax : <a href=3D"tel:%28418%29%20844-4538" value=3D"+14188444538" target=3D=
+"_blank">(418) 844-4538</a><br>
+NAC : 918V QSDJ &lt;<a href=3D"http://www.travelgis.com/map.asp?addr=3D918V=
+%20QSDJ" target=3D"_blank">http://www.travelgis.com/map.asp?addr=3D918V%20Q=
+SDJ</a>&gt;<br>
+Gouvernement du Canada | Government of Canada<br>
+&lt;<a href=3D"http://www.valcartier.drdc-rddc.gc.ca/" target=3D"_blank">ht=
+tp://www.valcartier.drdc-rddc.gc.ca/</a>&gt;<br>
+</blockquote></div><br></div></div>
+
+--089e014953ec2e23a004fa65311c--
+
+
+--===============1374221743==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1374221743==--
