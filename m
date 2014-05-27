@@ -1,19 +1,24 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH 1/2] Implement tracef test application
-	"gen-ust-tracef"
-Date: Tue, 27 May 2014 16:25:25 -0400
-Message-ID: <1401222326-29474-1-git-send-email-mathieu.desnoyers__18756.6723245711$1401222772$gmane$org@efficios.com>
+Subject: Re: Debian specific userspace RCU configure override
+Date: Tue, 27 May 2014 20:36:34 +0000 (UTC)
+Message-ID: <1220472134.23571.1401222994845.JavaMail.zimbra__13654.9504859888$1401223065$gmane$org@efficios.com>
+References: <30703453.22036.1400852842509.JavaMail.zimbra@efficios.com>
+ <20140523222124.GA25594@helmut>
+ <97D83BC6-DF7B-4A23-A0DA-22EBEF7E7A62@sury.org>
+ <400506412.22279.1400936702676.JavaMail.zimbra@efficios.com>
+ <20140524145555.GA1466@helmut>
+ <1851915699.22366.1400979572920.JavaMail.zimbra@efficios.com>
+ <1401182846.16183.121907449.6882165F@webmail.messagingengine.com>
+ <20140527201848.GA27628@helmut>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <mathieu.desnoyers@efficios.com>) id 1WpO0U-0003dH-7p
- for lttng-dev@lists.lttng.org; Tue, 27 May 2014 16:30:06 -0400
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 2316634023D
- for <lttng-dev@lists.lttng.org>; Tue, 27 May 2014 20:29:58 +0000 (UTC)
+ (envelope-from <compudj@efficios.com>) id 1WpO6v-0003jP-Va
+ for lttng-dev@lists.lttng.org; Tue, 27 May 2014 16:36:43 -0400
+In-Reply-To: <20140527201848.GA27628@helmut>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,149 +27,40 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: David Goulet <dgoulet@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: Jon Bernard <jbernard@debian.org>
+Cc: =?utf-8?Q?Ond=C5=99ej_Sur=C3=BD?= <ondrej@sury.org>, lttng-dev <lttng-dev@lists.lttng.org>, Michael Jeanson <mjeanson@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
----
- configure.ac                                       |    1 +
- tests/utils/testapp/Makefile.am                    |    2 +-
- tests/utils/testapp/gen-ust-tracef/Makefile.am     |   15 ++++
- .../utils/testapp/gen-ust-tracef/gen-ust-tracef.c  |   83 ++++++++++++++++++++
- 4 files changed, 100 insertions(+), 1 deletion(-)
- create mode 100644 tests/utils/testapp/gen-ust-tracef/Makefile.am
- create mode 100644 tests/utils/testapp/gen-ust-tracef/gen-ust-tracef.c
-
-diff --git a/configure.ac b/configure.ac
-index 5c5562e..cea504b 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -444,6 +444,7 @@ AC_CONFIG_FILES([
- 	tests/utils/testapp/Makefile
- 	tests/utils/testapp/gen-ust-events/Makefile
- 	tests/utils/testapp/gen-ust-nevents/Makefile
-+	tests/utils/testapp/gen-ust-tracef/Makefile
- ])
- 
- AC_OUTPUT
-diff --git a/tests/utils/testapp/Makefile.am b/tests/utils/testapp/Makefile.am
-index be2758d..0341de4 100644
---- a/tests/utils/testapp/Makefile.am
-+++ b/tests/utils/testapp/Makefile.am
-@@ -1,2 +1,2 @@
--SUBDIRS = gen-ust-events gen-ust-nevents
-+SUBDIRS = gen-ust-events gen-ust-nevents gen-ust-tracef
- 
-diff --git a/tests/utils/testapp/gen-ust-tracef/Makefile.am b/tests/utils/testapp/gen-ust-tracef/Makefile.am
-new file mode 100644
-index 0000000..4385b40
---- /dev/null
-+++ b/tests/utils/testapp/gen-ust-tracef/Makefile.am
-@@ -0,0 +1,15 @@
-+AM_CFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src -I$(srcdir) -O2 -g
-+AM_LDFLAGS =
-+
-+if LTTNG_TOOLS_BUILD_WITH_LIBDL
-+AM_LDFLAGS += -ldl
-+endif
-+if LTTNG_TOOLS_BUILD_WITH_LIBC_DL
-+AM_LDFLAGS += -lc
-+endif
-+
-+if HAVE_LIBLTTNG_UST_CTL
-+noinst_PROGRAMS = gen-ust-tracef
-+gen_ust_tracef_SOURCES = gen-ust-tracef.c
-+gen_ust_tracef_LDADD = -llttng-ust
-+endif
-diff --git a/tests/utils/testapp/gen-ust-tracef/gen-ust-tracef.c b/tests/utils/testapp/gen-ust-tracef/gen-ust-tracef.c
-new file mode 100644
-index 0000000..1c3493d
---- /dev/null
-+++ b/tests/utils/testapp/gen-ust-tracef/gen-ust-tracef.c
-@@ -0,0 +1,83 @@
-+/*
-+ * Copyright (C) - 2012 David Goulet <dgoulet@efficios.com>
-+ * Copyright (C) - 2014 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-+ *
-+ * This library is free software; you can redistribute it and/or modify it
-+ * under the terms of the GNU Lesser General Public License as published by the
-+ * Free Software Foundation; version 2.1 of the License.
-+ *
-+ * This library is distributed in the hope that it will be useful, but WITHOUT
-+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
-+ * for more details.
-+ *
-+ * You should have received a copy of the GNU Lesser General Public License
-+ * along with this library; if not, write to the Free Software Foundation,
-+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
-+ */
-+
-+#include <assert.h>
-+#include <fcntl.h>
-+#include <stdarg.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/mman.h>
-+#include <sys/stat.h>
-+#include <sys/types.h>
-+#include <unistd.h>
-+
-+#include <lttng/tracef.h>
-+
-+const char *str = "test string";
-+
-+void create_file(const char *path)
-+{
-+	int ret;
-+
-+	assert(path);
-+
-+	ret = creat(path, S_IRWXU);
-+	if (ret < 0) {
-+		fprintf(stderr, "Failed to create file %s\n", path);
-+		return;
-+	}
-+
-+	(void) close(ret);
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	int i;
-+	unsigned int nr_iter = 100;
-+	useconds_t nr_usec = 0;
-+	char *tmp_file_path = NULL;
-+
-+	if (argc >= 2) {
-+		nr_iter = atoi(argv[1]);
-+	}
-+
-+	if (argc >= 3) {
-+		/* By default, don't wait unless user specifies. */
-+		nr_usec = atoi(argv[2]);
-+	}
-+
-+	if (argc >= 4) {
-+		tmp_file_path = argv[3];
-+	}
-+
-+	for (i = 0; i < nr_iter; i++) {
-+		tracef("Test message %d with string \"%s\"", i, str);
-+
-+		/*
-+		 * First loop we create the file if asked to indicate
-+		 * that at least one tracepoint has been hit.
-+		 */
-+		if (i == 0 && tmp_file_path) {
-+			create_file(tmp_file_path);
-+		}
-+		usleep(nr_usec);
-+	}
-+
-+	return 0;
-+}
--- 
-1.7.10.4
+LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJKb24gQmVybmFyZCIgPGpiZXJu
+YXJkQGRlYmlhbi5vcmc+Cj4gVG86ICJPbmTFmWVqIFN1csO9IiA8b25kcmVqQHN1cnkub3JnPgo+
+IENjOiAiTWF0aGlldSBEZXNub3llcnMiIDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+
+LCAiTWljaGFlbCBKZWFuc29uIiA8bWplYW5zb25AZWZmaWNpb3MuY29tPiwgImx0dG5nLWRldiIK
+PiA8bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZz4KPiBTZW50OiBUdWVzZGF5LCBNYXkgMjcsIDIw
+MTQgNDoxODo0OCBQTQo+IFN1YmplY3Q6IFJlOiBEZWJpYW4gc3BlY2lmaWMgdXNlcnNwYWNlIFJD
+VSBjb25maWd1cmUgb3ZlcnJpZGUKPiAKPiAqIE9uZMWZZWogU3Vyw70gPG9uZHJlakBzdXJ5Lm9y
+Zz4gd3JvdGU6Cj4gPiBPbiBTdW4sIE1heSAyNSwgMjAxNCwgYXQgMjo1OSwgTWF0aGlldSBEZXNu
+b3llcnMgd3JvdGU6Cj4gPiA+IFdoeSBhcmUgZWFjaCBwYWNrYWdlIGNvbXBpbGVkIGFnYWluc3Qg
+Y29tcGxldGVseSBkaWZmZXJlbnQgdGFyZ2V0cyA/Cj4gPiAKPiA+IHVyY3UgaW52b2tlcyAuL2Nv
+bmZpZ3VyZSBtYW51YWxseSB3aGlsZSBsdHQtY29udHJvbCB1c2VzCj4gPiBkaF9hdXRvX2NvbmZp
+Z3VyZSB3cmFwcGVyIGFuZCB0aGF0IG1ha2VzIHRoZSBkaWZmZXJlbmNlCj4gCj4gVGhpcyBpcyBj
+b3JyZWN0LiAgV2hlbiBJIGZpcnN0IHNhdyB0aGUgZGlmZmVyZW5jZSwgSSBhc3N1bWVkIHRoZXkg
+d291bGQKPiBib3RoIGludm9rZSBjb25maWd1cmUgaW4gYSB3YXkgdGhhdCB3b3VsZG4ndCBlZmZl
+Y3QgdGhlIHRhcmdldC4gIEJ1dCBub3cKPiBJIHJlbWVtYmVyIGhhdmluZyBhIHNpbWlsYXIgcHJv
+YmxlbSBvbiBzcGFyYyAod2hpY2ggaXMgd2h5IHVyY3UgaW5jbHVkZXMKPiB0aGlzIG92ZXJyaWRl
+KSB3aGVyZSB0aGUgdGFyZ2V0IGRpc2NvdmVyeSB3YXMgbm90IGNvcnJlY3QuCj4gCj4gSXQgbG9v
+a3MgdG8gbWUgbGlrZSBhIGJ1ZyByZWxhdGVkIHRvIGRlYmhlbHBlciAod2hpY2ggcHJvdmlkZXMK
+PiBkaF9hdXRvX2NvbmZpZ3VyZSkuICBGb3Igbm93LCBJIHRoaW5rIHRoaXMgb3ZlcnJpZGUgYXBw
+bGllZCB0bwo+IGx0dG5nLXRvb2xzIHdpbGwgY29ycmVjdGx5IGZpeCB0aGUgYnVpbGQgd2l0aG91
+dCBkaXNhYmxpbmcgZG1iLiAgSSB3aWxsCj4gbGV0IHRoZSBleGlzdGluZyB0cmFuc2l0aW9uIGlu
+dG8gdGVzdGluZyBjb21wbGV0ZSBhbmQgdGhlbiBzdWJtaXQgbmV3Cj4gcGFja2FnZXMuCgpUaGUg
+YmlnIHF1ZXN0aW9uIGhlcmU6IGlzIGl0IE9LIHRvIGdlbmVyYXRlICJkbWIiIGluc3RydWN0aW9u
+ID8gSWYgdGhlCmludGVudCBvZiB0aGlzIGFyY2hpdGVjdHVyZSBzdXBwb3J0IGlzIHRvIGNvdmVy
+IGVhcmxpZXItdGhhbi1hcm12NyBBUk0KcHJvY2Vzc29ycywgdGhlbiAiZG1iIiBzaG91bGQgbm90
+IGJlIGV4cGxpY2l0bHkgZ2VuZXJhdGVkLCBhbmQgdGhlcmVmb3JlClVSQ1UgY29uZmlndXJhdGlv
+biB3b3VsZCBuZWVkIGZpeGluZy4gSWYgdGhlIGludGVudCBvZiB0aGlzIERlYmlhbiBhcmNoCmlz
+IHRvIGNvdmVyIG9ubHkgQVJNdjcgYW5kIGJldHRlciwgdGhlbiBpdCdzIGx0dG5nLXRvb2xzIHRo
+YXQgbmVlZHMKZml4aW5nLgoKVGhvdWdodHMgPwoKVGhhbmtzLAoKTWF0aGlldQoKPiAKPiAtLQo+
+IEpvbgo+IAoKLS0gCk1hdGhpZXUgRGVzbm95ZXJzCkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5l
+ZmZpY2lvcy5jb20KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRw
+Oi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
