@@ -1,20 +1,19 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH 2/2] Implement test_event_tracef
-Date: Tue, 27 May 2014 16:25:26 -0400
-Message-ID: <1401222326-29474-2-git-send-email-mathieu.desnoyers__8049.63079649514$1401222665$gmane$org@efficios.com>
-References: <1401222326-29474-1-git-send-email-mathieu.desnoyers@efficios.com>
+Subject: [PATCH 1/2] Implement tracef test application
+	"gen-ust-tracef"
+Date: Tue, 27 May 2014 16:25:25 -0400
+Message-ID: <1401222326-29474-1-git-send-email-mathieu.desnoyers__18756.6723245711$1401222772$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <mathieu.desnoyers@efficios.com>) id 1WpO0W-0003dI-E7
+ (envelope-from <mathieu.desnoyers@efficios.com>) id 1WpO0U-0003dH-7p
  for lttng-dev@lists.lttng.org; Tue, 27 May 2014 16:30:06 -0400
 Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 599A034023C
- for <lttng-dev@lists.lttng.org>; Tue, 27 May 2014 20:30:00 +0000 (UTC)
-In-Reply-To: <1401222326-29474-1-git-send-email-mathieu.desnoyers@efficios.com>
+ by mail.efficios.com (Postfix) with ESMTP id 2316634023D
+ for <lttng-dev@lists.lttng.org>; Tue, 27 May 2014 20:29:58 +0000 (UTC)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -29,124 +28,143 @@ List-Id: lttng-dev@lists.lttng.org
 
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- tests/fast_regression                  |    1 +
- tests/long_regression                  |    1 +
- tests/regression/ust/Makefile.am       |    2 +-
- tests/regression/ust/test_event_tracef |   72 ++++++++++++++++++++++++++++++++
- 4 files changed, 75 insertions(+), 1 deletion(-)
- create mode 100755 tests/regression/ust/test_event_tracef
+ configure.ac                                       |    1 +
+ tests/utils/testapp/Makefile.am                    |    2 +-
+ tests/utils/testapp/gen-ust-tracef/Makefile.am     |   15 ++++
+ .../utils/testapp/gen-ust-tracef/gen-ust-tracef.c  |   83 ++++++++++++++++++++
+ 4 files changed, 100 insertions(+), 1 deletion(-)
+ create mode 100644 tests/utils/testapp/gen-ust-tracef/Makefile.am
+ create mode 100644 tests/utils/testapp/gen-ust-tracef/gen-ust-tracef.c
 
-diff --git a/tests/fast_regression b/tests/fast_regression
-index 6ab2607..a3c2fe9 100644
---- a/tests/fast_regression
-+++ b/tests/fast_regression
-@@ -20,5 +20,6 @@ regression/ust/nprocesses/test_nprocesses
- regression/ust/overlap/test_overlap
- regression/ust/java-jul/test_java_jul
- regression/ust/test_event_basic
-+regression/ust/test_event_tracef
- regression/ust/test_event_wildcard
- regression/ust/test_event_perf
-diff --git a/tests/long_regression b/tests/long_regression
-index ab4339d..1fa8514 100644
---- a/tests/long_regression
-+++ b/tests/long_regression
-@@ -16,4 +16,5 @@ regression/ust/multi-session/test_multi_session
- regression/ust/nprocesses/test_nprocesses
- regression/ust/overlap/test_overlap
- regression/ust/test_event_basic
-+regression/ust/test_event_tracef
- regression/ust/test_event_wildcard
-diff --git a/tests/regression/ust/Makefile.am b/tests/regression/ust/Makefile.am
-index a4e3455..a95a605 100644
---- a/tests/regression/ust/Makefile.am
-+++ b/tests/regression/ust/Makefile.am
-@@ -3,7 +3,7 @@ SUBDIRS = nprocesses high-throughput low-throughput before-after multi-session \
- 		overlap buffers-pid linking daemon exit-fast fork libc-wrapper \
- 		periodical-metadata-flush java-jul
+diff --git a/configure.ac b/configure.ac
+index 5c5562e..cea504b 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -444,6 +444,7 @@ AC_CONFIG_FILES([
+ 	tests/utils/testapp/Makefile
+ 	tests/utils/testapp/gen-ust-events/Makefile
+ 	tests/utils/testapp/gen-ust-nevents/Makefile
++	tests/utils/testapp/gen-ust-tracef/Makefile
+ ])
  
--EXTRA_DIST = test_event_basic test_event_wildcard
-+EXTRA_DIST = test_event_basic test_event_wildcard test_event_tracef
+ AC_OUTPUT
+diff --git a/tests/utils/testapp/Makefile.am b/tests/utils/testapp/Makefile.am
+index be2758d..0341de4 100644
+--- a/tests/utils/testapp/Makefile.am
++++ b/tests/utils/testapp/Makefile.am
+@@ -1,2 +1,2 @@
+-SUBDIRS = gen-ust-events gen-ust-nevents
++SUBDIRS = gen-ust-events gen-ust-nevents gen-ust-tracef
  
- all-local:
- 	@if [ x"$(srcdir)" != x"$(builddir)" ]; then \
-diff --git a/tests/regression/ust/test_event_tracef b/tests/regression/ust/test_event_tracef
-new file mode 100755
-index 0000000..66528d1
+diff --git a/tests/utils/testapp/gen-ust-tracef/Makefile.am b/tests/utils/testapp/gen-ust-tracef/Makefile.am
+new file mode 100644
+index 0000000..4385b40
 --- /dev/null
-+++ b/tests/regression/ust/test_event_tracef
-@@ -0,0 +1,72 @@
-+#!/bin/bash
-+#
-+# Copyright (C) - 2013 Christian Babeux <christian.babeux@efficios.com>
-+# Copyright (C) - 2014 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-+#
-+# This program is free software; you can redistribute it and/or modify it
-+# under the terms of the GNU General Public License, version 2 only, as
-+# published by the Free Software Foundation.
-+#
-+# This program is distributed in the hope that it will be useful, but WITHOUT
-+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-+# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
-+# more details.
-+#
-+# You should have received a copy of the GNU General Public License along with
-+# this program; if not, write to the Free Software Foundation, Inc., 51
-+# Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
++++ b/tests/utils/testapp/gen-ust-tracef/Makefile.am
+@@ -0,0 +1,15 @@
++AM_CFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src -I$(srcdir) -O2 -g
++AM_LDFLAGS =
 +
-+TEST_DESC="UST tracer - tracef events"
++if LTTNG_TOOLS_BUILD_WITH_LIBDL
++AM_LDFLAGS += -ldl
++endif
++if LTTNG_TOOLS_BUILD_WITH_LIBC_DL
++AM_LDFLAGS += -lc
++endif
 +
-+CURDIR=$(dirname $0)/
-+TESTDIR=$CURDIR/../..
-+LTTNG_BIN="lttng"
-+TESTAPP_PATH="$TESTDIR/utils/testapp"
-+TESTAPP_NAME="gen-ust-tracef"
-+TESTAPP_BIN="$TESTAPP_PATH/$TESTAPP_NAME/$TESTAPP_NAME"
-+SESSION_NAME="tracef"
-+EVENT_NAME="lttng_ust_tracef:event"
-+NUM_TESTS=9
-+NR_ITER=100
++if HAVE_LIBLTTNG_UST_CTL
++noinst_PROGRAMS = gen-ust-tracef
++gen_ust_tracef_SOURCES = gen-ust-tracef.c
++gen_ust_tracef_LDADD = -llttng-ust
++endif
+diff --git a/tests/utils/testapp/gen-ust-tracef/gen-ust-tracef.c b/tests/utils/testapp/gen-ust-tracef/gen-ust-tracef.c
+new file mode 100644
+index 0000000..1c3493d
+--- /dev/null
++++ b/tests/utils/testapp/gen-ust-tracef/gen-ust-tracef.c
+@@ -0,0 +1,83 @@
++/*
++ * Copyright (C) - 2012 David Goulet <dgoulet@efficios.com>
++ * Copyright (C) - 2014 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
++ *
++ * This library is free software; you can redistribute it and/or modify it
++ * under the terms of the GNU Lesser General Public License as published by the
++ * Free Software Foundation; version 2.1 of the License.
++ *
++ * This library is distributed in the hope that it will be useful, but WITHOUT
++ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
++ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
++ * for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public License
++ * along with this library; if not, write to the Free Software Foundation,
++ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
++ */
 +
-+source $TESTDIR/utils/utils.sh
++#include <assert.h>
++#include <fcntl.h>
++#include <stdarg.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/mman.h>
++#include <sys/stat.h>
++#include <sys/types.h>
++#include <unistd.h>
 +
-+if [ ! -x "$TESTAPP_BIN" ]; then
-+	BAIL_OUT "No UST nevents binary detected."
-+fi
++#include <lttng/tracef.h>
 +
-+function test_event_tracef()
++const char *str = "test string";
++
++void create_file(const char *path)
 +{
-+	create_lttng_session $SESSION_NAME $TRACE_PATH
-+	enable_ust_lttng_event $SESSION_NAME $EVENT_NAME
-+	start_lttng_tracing $SESSION_NAME
++	int ret;
 +
-+	$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT
-+	ok $? "Traced application stopped."
++	assert(path);
 +
-+	stop_lttng_tracing $SESSION_NAME
-+	destroy_lttng_session $SESSION_NAME
++	ret = creat(path, S_IRWXU);
++	if (ret < 0) {
++		fprintf(stderr, "Failed to create file %s\n", path);
++		return;
++	}
 +
-+	trace_matches $EVENT_NAME $NR_ITER $TRACE_PATH
-+
-+	return $?
++	(void) close(ret);
 +}
 +
-+# MUST set TESTDIR before calling those functions
-+plan_tests $NUM_TESTS
++int main(int argc, char **argv)
++{
++	int i;
++	unsigned int nr_iter = 100;
++	useconds_t nr_usec = 0;
++	char *tmp_file_path = NULL;
 +
-+print_test_banner "$TEST_DESC"
++	if (argc >= 2) {
++		nr_iter = atoi(argv[1]);
++	}
 +
-+start_lttng_sessiond
++	if (argc >= 3) {
++		/* By default, don't wait unless user specifies. */
++		nr_usec = atoi(argv[2]);
++	}
 +
-+TRACE_PATH=$(mktemp -d)
-+test_event_tracef
-+out=$?
-+if [ $out -ne 0 ]; then
-+	stop_lttng_sessiond
-+	exit $out
-+fi
++	if (argc >= 4) {
++		tmp_file_path = argv[3];
++	}
 +
-+stop_lttng_sessiond
++	for (i = 0; i < nr_iter; i++) {
++		tracef("Test message %d with string \"%s\"", i, str);
 +
-+rm -rf $TRACE_PATH
++		/*
++		 * First loop we create the file if asked to indicate
++		 * that at least one tracepoint has been hit.
++		 */
++		if (i == 0 && tmp_file_path) {
++			create_file(tmp_file_path);
++		}
++		usleep(nr_usec);
++	}
++
++	return 0;
++}
 -- 
 1.7.10.4
