@@ -1,19 +1,17 @@
-From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Subject: Re: [documentation] Drawing: LTTng architecture in
- relation to the commandline / buffer options
-Date: Wed, 28 May 2014 13:12:35 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD359AEA4B__6284.29963621802$1401282817$gmane$org@VAL-E-01.valcartier.drdc-rddc.gc.ca>
-References: <48CF5AC71E61DB46B70D0F388054EFFD359AE5D5@VAL-E-01.valcartier.drdc-rddc.gc.ca><CANq1AQoMPSEVyN0JxM-JWYcaaW=kyuOHUhgC03zMxdTnxroO-g@mail.gmail.com><48CF5AC71E61DB46B70D0F388054EFFD359AE7A9@VAL-E-01.valcartier.drdc-rddc.gc.ca>
- <CANq1AQru_Wxgcp3dXFmCjgerVYL6fh7qcgeiqRpGBNzW8R-NiA@mail.gmail.com>
+From: David Goulet <dgoulet@efficios.com>
+Subject: Re: [PATCH v2] Fix: alignment problems on targets not
+ supporting unaligned access.
+Date: Wed, 28 May 2014 09:39:49 -0400
+Message-ID: <20140528133949.GA7798__29322.04162139$1401284461$gmane$org@thessa>
+References: <1400202607-10904-1-git-send-email-rongqing.li@windriver.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1034123438=="
+Content-Type: multipart/mixed; boundary="===============1666580799=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
+Received: from albert.ini-tech.com ([192.99.35.19] helo=smtp.ini-tech.com)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1Wpder-0001RL-4D
- for lttng-dev@lists.lttng.org; Wed, 28 May 2014 09:12:46 -0400
-In-Reply-To: <CANq1AQru_Wxgcp3dXFmCjgerVYL6fh7qcgeiqRpGBNzW8R-NiA@mail.gmail.com>
-Content-Language: fr-FR
+ (envelope-from <dgoulet@efficios.com>) id 1Wpe5H-0001c2-Sq
+ for lttng-dev@lists.lttng.org; Wed, 28 May 2014 09:40:05 -0400
+In-Reply-To: <1400202607-10904-1-git-send-email-rongqing.li@windriver.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,161 +20,92 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Randy Wijnants <randy@tty32.org>, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: rongqing.li@windriver.com
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============1034123438==
-Content-Language: fr-FR
-Content-Type: multipart/alternative;
-	boundary="_000_48CF5AC71E61DB46B70D0F388054EFFD359AEA4BVALE01valcartie_"
 
---_000_48CF5AC71E61DB46B70D0F388054EFFD359AEA4BVALE01valcartie_
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-
-RW52b3nDqSA6IDI4IG1haSAyMDE0IDA3OjUwDQoNCj4gaHR0cDovL3R0eTMyLm9yZy9Mb2dnaW5n
-JTIwY29uZmlndXJhdGlvbjIucG5nPC0tRVNGU0VDRVYtVFkzMDExLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLT4NCj4gaHR0cDovL3R0eTMyLm9yZy9Mb2dnaW5nJTIwY29uZmlndXJhdGlvbjIu
-c3ZnPC0tRVNGU0VDRVYtVFkzMDExLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLT4NCg0KICAg
-Tm90IHN1cmUgd2hlcmUgdGhlIOKAmHN0cmVhbWluZyBzb2NrZXTigJkgZml0cyBpbiB0aGlzIHBp
-Y3R1cmUsIHRob3VnaC4gIFNpbXBsZXN0IHNvbHV0aW9uIHdvdWxkIGJlIHRvIHJlbW92ZSBpdCBm
-cm9tIHRoZSBkaWFncmFtIChzaW5jZSBubyBvdGhlciBzb2NrZXRzIGFyZSBzaG93biBhbnl3YXkp
-Lg0KRGFuaWVsIFUuIFRoaWJhdWx0DQpQcm90ZWN0aW9uIGRlcyBzeXN0w6htZXMgZXQgY29udHJl
-bWVzdXJlcyAoUFNDKSB8IFN5c3RlbXMgUHJvdGVjdGlvbiAmIENvdW50ZXJtZWFzdXJlcyAoU1BD
-KQ0KQ3liZXIgc8OpY3VyaXTDqSBwb3VyIGxlcyBtaXNzaW9ucyBlc3NlbnRpZWxsZXMgKENNRSkg
-fCBNaXNzaW9uIENyaXRpY2FsIEN5YmVyIFNlY3VyaXR5IChNQ0NTKQ0KUiAmIEQgcG91ciBsYSBk
-w6lmZW5zZSBDYW5hZGEgLSBWYWxjYXJ0aWVyIChSRERDIFZhbGNhcnRpZXIpIHwgRGVmZW5jZSBS
-JkQgQ2FuYWRhIC0gVmFsY2FydGllciAoRFJEQyBWYWxjYXJ0aWVyKQ0KMjQ1OSByb3V0ZSBkZSBs
-YSBCcmF2b3VyZQ0KUXXDqWJlYyBRQyAgRzNKIDFYNQ0KQ0FOQURBDQpWb3ggOiAoNDE4KSA4NDQt
-NDAwMCB4NDI0NTwtLUVTRlNFQ0VWLVRZMzAxMS0tLS0tLS0tLS0tLS0tLT4NCkZheCA6ICg0MTgp
-IDg0NC00NTM4PC0tRVNGU0VDRVYtVFkzMDExLS0tLS0tLT4NCk5BQyA6IDkxOFYgUVNESjwtLUVT
-RlNFQ0VWLVRZMzAxMS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tPiA8aHR0cDovL3d3
-dy50cmF2ZWxnaXMuY29tL21hcC5hc3A/YWRkcj05MThWJTIwUVNESjwtLUVTRlNFQ0VWLVRZMzAx
-MS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tPj4NCkdvdXZlcm5lbWVudCBkdSBDYW5h
-ZGEgfCBHb3Zlcm5tZW50IG9mIENhbmFkYQ0KPGh0dHA6Ly93d3cudmFsY2FydGllci5kcmRjLXJk
-ZGMuZ2MuY2EvPC0tRVNGU0VDRVYtVFkzMDExLS0tLS0tLS0tLS0tLS0tLS0tLS0tPj4NCg==
-
---_000_48CF5AC71E61DB46B70D0F388054EFFD359AEA4BVALE01valcartie_
-Content-Type: text/html; charset="utf-8"
-Content-Transfer-Encoding: base64
-
-PGh0bWwgeG1sbnM6dj0idXJuOnNjaGVtYXMtbWljcm9zb2Z0LWNvbTp2bWwiIHhtbG5zOm89InVy
-bjpzY2hlbWFzLW1pY3Jvc29mdC1jb206b2ZmaWNlOm9mZmljZSIgeG1sbnM6dz0idXJuOnNjaGVt
-YXMtbWljcm9zb2Z0LWNvbTpvZmZpY2U6d29yZCIgeG1sbnM6bT0iaHR0cDovL3NjaGVtYXMubWlj
-cm9zb2Z0LmNvbS9vZmZpY2UvMjAwNC8xMi9vbW1sIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcv
-VFIvUkVDLWh0bWw0MCI+DQo8aGVhZD4NCjxtZXRhIGh0dHAtZXF1aXY9IkNvbnRlbnQtVHlwZSIg
-Y29udGVudD0idGV4dC9odG1sOyBjaGFyc2V0PXV0Zi04Ij4NCjxtZXRhIG5hbWU9IkdlbmVyYXRv
-ciIgY29udGVudD0iTWljcm9zb2Z0IFdvcmQgMTQgKGZpbHRlcmVkIG1lZGl1bSkiPg0KPHN0eWxl
-PjwhLS0NCi8qIEZvbnQgRGVmaW5pdGlvbnMgKi8NCkBmb250LWZhY2UNCgl7Zm9udC1mYW1pbHk6
-IkNhbWJyaWEgTWF0aCI7DQoJcGFub3NlLTE6MiA0IDUgMyA1IDQgNiAzIDIgNDt9DQpAZm9udC1m
-YWNlDQoJe2ZvbnQtZmFtaWx5OkNhbGlicmk7DQoJcGFub3NlLTE6MiAxNSA1IDIgMiAyIDQgMyAy
-IDQ7fQ0KQGZvbnQtZmFjZQ0KCXtmb250LWZhbWlseTpUYWhvbWE7DQoJcGFub3NlLTE6MiAxMSA2
-IDQgMyA1IDQgNCAyIDQ7fQ0KQGZvbnQtZmFjZQ0KCXtmb250LWZhbWlseTpDb25zb2xhczsNCglw
-YW5vc2UtMToyIDExIDYgOSAyIDIgNCAzIDIgNDt9DQovKiBTdHlsZSBEZWZpbml0aW9ucyAqLw0K
-cC5Nc29Ob3JtYWwsIGxpLk1zb05vcm1hbCwgZGl2Lk1zb05vcm1hbA0KCXttYXJnaW46MGNtOw0K
-CW1hcmdpbi1ib3R0b206LjAwMDFwdDsNCglmb250LXNpemU6MTIuMHB0Ow0KCWZvbnQtZmFtaWx5
-OiJUaW1lcyBOZXcgUm9tYW4iLCJzZXJpZiI7fQ0KYTpsaW5rLCBzcGFuLk1zb0h5cGVybGluaw0K
-CXttc28tc3R5bGUtcHJpb3JpdHk6OTk7DQoJY29sb3I6Ymx1ZTsNCgl0ZXh0LWRlY29yYXRpb246
-dW5kZXJsaW5lO30NCmE6dmlzaXRlZCwgc3Bhbi5Nc29IeXBlcmxpbmtGb2xsb3dlZA0KCXttc28t
-c3R5bGUtcHJpb3JpdHk6OTk7DQoJY29sb3I6cHVycGxlOw0KCXRleHQtZGVjb3JhdGlvbjp1bmRl
-cmxpbmU7fQ0KcC5Nc29BY2V0YXRlLCBsaS5Nc29BY2V0YXRlLCBkaXYuTXNvQWNldGF0ZQ0KCXtt
-c28tc3R5bGUtcHJpb3JpdHk6OTk7DQoJbXNvLXN0eWxlLWxpbms6IlRleHRlIGRlIGJ1bGxlcyBD
-YXIiOw0KCW1hcmdpbjowY207DQoJbWFyZ2luLWJvdHRvbTouMDAwMXB0Ow0KCWZvbnQtc2l6ZTo4
-LjBwdDsNCglmb250LWZhbWlseToiVGFob21hIiwic2Fucy1zZXJpZiI7fQ0KcC5Nc29MaXN0UGFy
-YWdyYXBoLCBsaS5Nc29MaXN0UGFyYWdyYXBoLCBkaXYuTXNvTGlzdFBhcmFncmFwaA0KCXttc28t
-c3R5bGUtcHJpb3JpdHk6MzQ7DQoJbWFyZ2luLXRvcDowY207DQoJbWFyZ2luLXJpZ2h0OjBjbTsN
-CgltYXJnaW4tYm90dG9tOjBjbTsNCgltYXJnaW4tbGVmdDozNi4wcHQ7DQoJbWFyZ2luLWJvdHRv
-bTouMDAwMXB0Ow0KCWZvbnQtc2l6ZToxMi4wcHQ7DQoJZm9udC1mYW1pbHk6IlRpbWVzIE5ldyBS
-b21hbiIsInNlcmlmIjt9DQpzcGFuLkVtYWlsU3R5bGUxNw0KCXttc28tc3R5bGUtdHlwZTpwZXJz
-b25hbC1yZXBseTsNCglmb250LWZhbWlseToiQ2FsaWJyaSIsInNhbnMtc2VyaWYiOw0KCWNvbG9y
-OiMxRjQ5N0Q7fQ0Kc3Bhbi5UZXh0ZWRlYnVsbGVzQ2FyDQoJe21zby1zdHlsZS1uYW1lOiJUZXh0
-ZSBkZSBidWxsZXMgQ2FyIjsNCgltc28tc3R5bGUtcHJpb3JpdHk6OTk7DQoJbXNvLXN0eWxlLWxp
-bms6IlRleHRlIGRlIGJ1bGxlcyI7DQoJZm9udC1mYW1pbHk6IlRhaG9tYSIsInNhbnMtc2VyaWYi
-Ow0KCW1zby1mYXJlYXN0LWxhbmd1YWdlOkZSLUNBO30NCi5Nc29DaHBEZWZhdWx0DQoJe21zby1z
-dHlsZS10eXBlOmV4cG9ydC1vbmx5Ow0KCWZvbnQtZmFtaWx5OiJDYWxpYnJpIiwic2Fucy1zZXJp
-ZiI7DQoJbXNvLWZhcmVhc3QtbGFuZ3VhZ2U6RU4tVVM7fQ0KQHBhZ2UgV29yZFNlY3Rpb24xDQoJ
-e3NpemU6NjEyLjBwdCA3OTIuMHB0Ow0KCW1hcmdpbjo3Mi4wcHQgOTAuMHB0IDcyLjBwdCA5MC4w
-cHQ7fQ0KZGl2LldvcmRTZWN0aW9uMQ0KCXtwYWdlOldvcmRTZWN0aW9uMTt9DQotLT48L3N0eWxl
-PjwhLS1baWYgZ3RlIG1zbyA5XT48eG1sPg0KPG86c2hhcGVkZWZhdWx0cyB2OmV4dD0iZWRpdCIg
-c3BpZG1heD0iMTAyNiIgLz4NCjwveG1sPjwhW2VuZGlmXS0tPjwhLS1baWYgZ3RlIG1zbyA5XT48
-eG1sPg0KPG86c2hhcGVsYXlvdXQgdjpleHQ9ImVkaXQiPg0KPG86aWRtYXAgdjpleHQ9ImVkaXQi
-IGRhdGE9IjEiIC8+DQo8L286c2hhcGVsYXlvdXQ+PC94bWw+PCFbZW5kaWZdLS0+DQo8L2hlYWQ+
-DQo8Ym9keSBsYW5nPSJGUi1DQSIgbGluaz0iYmx1ZSIgdmxpbms9InB1cnBsZSI+DQo8ZGl2IGNs
-YXNzPSJXb3JkU2VjdGlvbjEiPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PGI+PHNwYW4gbGFuZz0i
-RlIiIHN0eWxlPSJmb250LXNpemU6MTAuMHB0O2ZvbnQtZmFtaWx5OiZxdW90O1RhaG9tYSZxdW90
-OywmcXVvdDtzYW5zLXNlcmlmJnF1b3Q7Ij5FbnZvecOpJm5ic3A7Ojwvc3Bhbj48L2I+PHNwYW4g
-bGFuZz0iRlIiIHN0eWxlPSJmb250LXNpemU6MTAuMHB0O2ZvbnQtZmFtaWx5OiZxdW90O1RhaG9t
-YSZxdW90OywmcXVvdDtzYW5zLXNlcmlmJnF1b3Q7Ij4gMjggbWFpIDIwMTQgMDc6NTA8YnI+DQo8
-YnI+DQo8bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8ZGl2Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+
-PHNwYW4gc3R5bGU9ImNvbG9yOiMxRjQ5N0QiPiZndDsgPC9zcGFuPjxhIGhyZWY9Ii0tRVNGU0VD
-RVYtVFkzMDExLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSI+aHR0cDovL3R0eTMyLm9yZy9M
-b2dnaW5nJTIwY29uZmlndXJhdGlvbjIucG5nPC9hPjxvOnA+PC9vOnA+PC9wPg0KPGRpdj4NCjxw
-IGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJjb2xvcjojMUY0OTdEIj4mZ3Q7IDwvc3Bh
-bj48YSBocmVmPSItLUVTRlNFQ0VWLVRZMzAxMS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0i
-Pmh0dHA6Ly90dHkzMi5vcmcvTG9nZ2luZyUyMGNvbmZpZ3VyYXRpb24yLnN2ZzwvYT48c3BhbiBz
-dHlsZT0iY29sb3I6IzFGNDk3RCI+PG86cD48L286cD48L3NwYW4+PC9wPg0KPHAgY2xhc3M9Ik1z
-b05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxMS4wcHQ7Zm9udC1mYW1pbHk6JnF1b3Q7
-Q2FsaWJyaSZxdW90OywmcXVvdDtzYW5zLXNlcmlmJnF1b3Q7O2NvbG9yOiMxRjQ5N0QiPjxvOnA+
-Jm5ic3A7PC9vOnA+PC9zcGFuPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIGxhbmc9
-IkVOLUNBIiBzdHlsZT0iZm9udC1zaXplOjExLjBwdDtmb250LWZhbWlseTomcXVvdDtDYWxpYnJp
-JnF1b3Q7LCZxdW90O3NhbnMtc2VyaWYmcXVvdDs7Y29sb3I6IzFGNDk3RCI+Jm5ic3A7Jm5ic3A7
-IE5vdCBzdXJlIHdoZXJlIHRoZSDigJhzdHJlYW1pbmcgc29ja2V04oCZIGZpdHMgaW4gdGhpcyBw
-aWN0dXJlLCB0aG91Z2guJm5ic3A7IFNpbXBsZXN0IHNvbHV0aW9uIHdvdWxkIGJlIHRvIHJlbW92
-ZSBpdCBmcm9tIHRoZSBkaWFncmFtIChzaW5jZSBubyBvdGhlcg0KIHNvY2tldHMgYXJlIHNob3du
-IGFueXdheSkuPG86cD48L286cD48L3NwYW4+PC9wPg0KPC9kaXY+DQo8L2Rpdj4NCjxkaXY+DQo8
-ZGl2Pg0KPGRpdj4NCjxkaXY+DQo8ZGl2Pg0KPGRpdj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9y
-bWFsIiBzdHlsZT0ibXNvLW1hcmdpbi10b3AtYWx0OmF1dG87bXNvLW1hcmdpbi1ib3R0b20tYWx0
-OmF1dG8iPjxzcGFuIHN0eWxlPSJmb250LXNpemU6MTEuMHB0O2ZvbnQtZmFtaWx5OkNvbnNvbGFz
-O2NvbG9yOiMxRjQ5N0QiPkRhbmllbCBVLiBUaGliYXVsdDxicj4NClByb3RlY3Rpb24gZGVzIHN5
-c3TDqG1lcyBldCBjb250cmVtZXN1cmVzIChQU0MpIHwgU3lzdGVtcyBQcm90ZWN0aW9uICZhbXA7
-IENvdW50ZXJtZWFzdXJlcyAoU1BDKTxicj4NCkN5YmVyIHPDqWN1cml0w6kgcG91ciBsZXMgbWlz
-c2lvbnMgZXNzZW50aWVsbGVzIChDTUUpIHwgTWlzc2lvbiBDcml0aWNhbCBDeWJlciBTZWN1cml0
-eSAoTUNDUyk8YnI+DQpSICZhbXA7IEQgcG91ciBsYSBkw6lmZW5zZSBDYW5hZGEgLSBWYWxjYXJ0
-aWVyIChSRERDIFZhbGNhcnRpZXIpIHwgRGVmZW5jZSBSJmFtcDtEIENhbmFkYSAtIFZhbGNhcnRp
-ZXIgKERSREMgVmFsY2FydGllcik8YnI+DQoyNDU5IHJvdXRlIGRlIGxhIEJyYXZvdXJlPGJyPg0K
-UXXDqWJlYyBRQyZuYnNwOyBHM0ogMVg1PGJyPg0KQ0FOQURBPGJyPg0KVm94PC9zcGFuPjxzcGFu
-IHN0eWxlPSJmb250LXNpemU6MTAuNXB0O2ZvbnQtZmFtaWx5OkNvbnNvbGFzO2NvbG9yOiMxRjQ5
-N0QiPiZuYnNwOzwvc3Bhbj48c3BhbiBzdHlsZT0iZm9udC1zaXplOjExLjBwdDtmb250LWZhbWls
-eTpDb25zb2xhcztjb2xvcjojMUY0OTdEIj46DQo8YSBocmVmPSItLUVTRlNFQ0VWLVRZMzAxMS0t
-LS0tLS0tLS0tLS0tLSIgdGFyZ2V0PSJfYmxhbmsiPig0MTgpIDg0NC00MDAwIHg0MjQ1PC9hPjxi
-cj4NCkZheDwvc3Bhbj48c3BhbiBzdHlsZT0iZm9udC1zaXplOjEwLjVwdDtmb250LWZhbWlseTpD
-b25zb2xhcztjb2xvcjojMUY0OTdEIj4mbmJzcDs8L3NwYW4+PHNwYW4gc3R5bGU9ImZvbnQtc2l6
-ZToxMS4wcHQ7Zm9udC1mYW1pbHk6Q29uc29sYXM7Y29sb3I6IzFGNDk3RCI+Og0KPGEgaHJlZj0i
-LS1FU0ZTRUNFVi1UWTMwMTEtLS0tLS0tIiB0YXJnZXQ9Il9ibGFuayI+KDQxOCkgODQ0LTQ1Mzg8
-L2E+PGJyPg0KTkFDJm5ic3A7OiA8L3NwYW4+PHNwYW4gbGFuZz0iRU4tQ0EiIHN0eWxlPSJmb250
-LXNpemU6MTEuMHB0O2ZvbnQtZmFtaWx5OiZxdW90O0NhbGlicmkmcXVvdDssJnF1b3Q7c2Fucy1z
-ZXJpZiZxdW90Oztjb2xvcjojMUY0OTdEIj48YSBocmVmPSItLUVTRlNFQ0VWLVRZMzAxMS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tIiB0YXJnZXQ9Il9ibGFuayI+PHNwYW4gbGFuZz0i
-RlItQ0EiIHN0eWxlPSJmb250LXNpemU6MTAuMHB0O2ZvbnQtZmFtaWx5OiZxdW90O0NvdXJpZXIg
-TmV3JnF1b3Q7Ij45MThWDQogUVNESjwvc3Bhbj48L2E+PC9zcGFuPjxzcGFuIGxhbmc9IkVOLUNB
-IiBzdHlsZT0iZm9udC1zaXplOjExLjBwdDtmb250LWZhbWlseTomcXVvdDtDYWxpYnJpJnF1b3Q7
-LCZxdW90O3NhbnMtc2VyaWYmcXVvdDs7Y29sb3I6IzFGNDk3RCI+DQo8L3NwYW4+PHNwYW4gc3R5
-bGU9ImZvbnQtc2l6ZToxMS4wcHQ7Zm9udC1mYW1pbHk6JnF1b3Q7Q2FsaWJyaSZxdW90OywmcXVv
-dDtzYW5zLXNlcmlmJnF1b3Q7O2NvbG9yOiMxRjQ5N0QiPiZsdDs8L3NwYW4+PHU+PHNwYW4gc3R5
-bGU9ImZvbnQtc2l6ZToxMC4wcHQ7Zm9udC1mYW1pbHk6JnF1b3Q7Q291cmllciBOZXcmcXVvdDs7
-Y29sb3I6Ymx1ZSI+PGEgaHJlZj0iLS1FU0ZTRUNFVi1UWTMwMTEtLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLSIgdGFyZ2V0PSJfYmxhbmsiPmh0dHA6Ly93d3cudHJhdmVsZ2lzLmNvbS9t
-YXAuYXNwP2FkZHI9OTE4ViUyMFFTREo8L2E+PC9zcGFuPjwvdT48c3BhbiBzdHlsZT0iZm9udC1z
-aXplOjExLjBwdDtmb250LWZhbWlseTomcXVvdDtDYWxpYnJpJnF1b3Q7LCZxdW90O3NhbnMtc2Vy
-aWYmcXVvdDs7Y29sb3I6IzFGNDk3RCI+Jmd0Ozxicj4NCjwvc3Bhbj48c3BhbiBzdHlsZT0iZm9u
-dC1zaXplOjExLjBwdDtmb250LWZhbWlseTpDb25zb2xhcztjb2xvcjojMUY0OTdEIj5Hb3V2ZXJu
-ZW1lbnQgZHUgQ2FuYWRhJm5ic3A7fCBHb3Zlcm5tZW50IG9mIENhbmFkYTxicj4NCjwvc3Bhbj48
-c3BhbiBzdHlsZT0iZm9udC1zaXplOjExLjBwdDtmb250LWZhbWlseTomcXVvdDtDYWxpYnJpJnF1
-b3Q7LCZxdW90O3NhbnMtc2VyaWYmcXVvdDs7Y29sb3I6IzFGNDk3RCI+Jmx0Ozwvc3Bhbj48c3Bh
-biBsYW5nPSJFTi1DQSIgc3R5bGU9ImZvbnQtc2l6ZToxMC4wcHQ7Zm9udC1mYW1pbHk6JnF1b3Q7
-Q291cmllciBOZXcmcXVvdDs7Y29sb3I6Ymx1ZSI+PGEgaHJlZj0iLS1FU0ZTRUNFVi1UWTMwMTEt
-LS0tLS0tLS0tLS0tLS0tLS0tLS0iIHRhcmdldD0iX2JsYW5rIj48c3BhbiBsYW5nPSJGUi1DQSI+
-aHR0cDovL3d3dy52YWxjYXJ0aWVyLmRyZGMtcmRkYy5nYy5jYS88L3NwYW4+PC9hPjwvc3Bhbj48
-c3BhbiBzdHlsZT0iZm9udC1zaXplOjExLjBwdDtmb250LWZhbWlseTomcXVvdDtDYWxpYnJpJnF1
-b3Q7LCZxdW90O3NhbnMtc2VyaWYmcXVvdDs7Y29sb3I6IzFGNDk3RCI+Jmd0Ozwvc3Bhbj48c3Bh
-biBzdHlsZT0iY29sb3I6IzFGNDk3RCI+PG86cD48L286cD48L3NwYW4+PC9wPg0KPC9kaXY+DQo8
-L2Rpdj4NCjwvZGl2Pg0KPC9kaXY+DQo8L2Rpdj4NCjwvZGl2Pg0KPC9kaXY+DQo8L2Rpdj4NCjwv
-Ym9keT4NCjwvaHRtbD4NCg==
-
---_000_48CF5AC71E61DB46B70D0F388054EFFD359AEA4BVALE01valcartie_--
+--===============1666580799==
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="J/dobhs11T7y2rNN"
+Content-Disposition: inline
 
 
---===============1034123438==
+--J/dobhs11T7y2rNN
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Merged!
+
+Thanks
+David
+
+On 16 May (09:10:07), rongqing.li@windriver.com wrote:
+> From: Fredrik Markstr=F6m <fredrik.markstrom@gmail.com>
+>=20
+> Accessing floats, doubles and 64 bit int at unaligned addresses is not
+> supported on all configurations of arm processors and if it is it's
+> emulated and slow. This patch replaces direct assignments with memcpy.
+>=20
+> Signed-off-by: Fredrik Markstr=F6m <fredrik.markstrom@gmail.com>
+> Signed-off-by: Roy Li <rongqing.li@windriver.com>
+> Acked-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> ---
+>  src/lib/lttng-ctl/filter/filter-visitor-generate-bytecode.c |    4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/src/lib/lttng-ctl/filter/filter-visitor-generate-bytecode.c =
+b/src/lib/lttng-ctl/filter/filter-visitor-generate-bytecode.c
+> index 762d604..8c6dc96 100644
+> --- a/src/lib/lttng-ctl/filter/filter-visitor-generate-bytecode.c
+> +++ b/src/lib/lttng-ctl/filter/filter-visitor-generate-bytecode.c
+> @@ -222,7 +222,7 @@ int visit_node_load(struct filter_parser_ctx *ctx, st=
+ruct ir_op *node)
+>  		if (!insn)
+>  			return -ENOMEM;
+>  		insn->op =3D FILTER_OP_LOAD_S64;
+> -		*(int64_t *) insn->data =3D node->u.load.u.num;
+> +		memcpy(insn->data, &node->u.load.u.num, sizeof(int64_t));
+>  		ret =3D bytecode_push(&ctx->bytecode, insn, 1, insn_len);
+>  		free(insn);
+>  		return ret;
+> @@ -237,7 +237,7 @@ int visit_node_load(struct filter_parser_ctx *ctx, st=
+ruct ir_op *node)
+>  		if (!insn)
+>  			return -ENOMEM;
+>  		insn->op =3D FILTER_OP_LOAD_DOUBLE;
+> -		*(double *) insn->data =3D node->u.load.u.flt;
+> +		memcpy(insn->data, &node->u.load.u.flt, sizeof(double));
+>  		ret =3D bytecode_push(&ctx->bytecode, insn, 1, insn_len);
+>  		free(insn);
+>  		return ret;
+> --=20
+> 1.7.10.4
+>=20
+
+--J/dobhs11T7y2rNN
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQF8BAEBAgBmBQJTheclXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
+ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
+MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02vQ8IAIgWZlUCX8bPFO4Jdf6d0KoB
+rmeDKeQAeORcXLy/3AsAd3gLCfjLtOnXr3JErFACaoouXgbU+eKXadhlbnhswmm/
+tqAu9lE4cZdx2vZ6d8RkoyfJSyojIKYtYaYyXmziiRUaZgXztpPFxOJug2aiDYF+
+sAwvMiCdmanlVrEq5NxloK525b0KQ9PLocnwjA6V4YzN88mwSK0mj8C2+6afmzrn
+BW5YTwOYG+b5H/bXRp2isXkrCH2C32YTVq5BsMCE0IKPlL3irnRrdDz6QSZQbcBI
+ELa28dpbxB2E+JK6ZLKy/5xLRIIUxYcgvdrL1f216nMz91kG7JfxV8kP+Snbri0=
+=FswZ
+-----END PGP SIGNATURE-----
+
+--J/dobhs11T7y2rNN--
+
+
+--===============1666580799==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Disposition: inline
@@ -187,4 +116,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============1034123438==--
+--===============1666580799==--
