@@ -1,17 +1,19 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: Re: [PATCH v2] Fix: alignment problems on targets not
- supporting unaligned access.
-Date: Wed, 28 May 2014 09:39:49 -0400
-Message-ID: <20140528133949.GA7798__29322.04162139$1401284461$gmane$org@thessa>
-References: <1400202607-10904-1-git-send-email-rongqing.li@windriver.com>
+From: "Woegerer, Paul" <Paul_Woegerer@mentor.com>
+Subject: Re: Problem with UST related to dlload
+Date: Wed, 28 May 2014 16:14:53 +0200
+Message-ID: <5385EF5D.5040008__30983.4872292869$1401286569$gmane$org@mentor.com>
+References: <CACsXv7BQ-T+6ggdM9+YPcu+hdy0Gxu6c_jxNj97AvzmDgXQ8Wg@mail.gmail.com>	<CACsXv7Au4yLptJnS5OayD8bqsgbi660bLbJobpczTnnWZbgx=g@mail.gmail.com>	<53847D18.3060203@keymile.com>	<5384A1F4.6080108@mentor.com>	<5384A409.4090107@keymile.com>	<5384A801.8040900@mentor.com>	<5384B787.8070009@keymile.com>
+ <CACsXv7DV1OCXc9SV9SZp81B2uXoC-iBoH+VfwT6VpoXWc0+Wng@mail.gmail.com>
+ <5385BCA9.5040207@mentor.com> <5385DEEA.50603@keymile.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1666580799=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from albert.ini-tech.com ([192.99.35.19] helo=smtp.ini-tech.com)
+Received: from relay1.mentorg.com ([192.94.38.131])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <dgoulet@efficios.com>) id 1Wpe5H-0001c2-Sq
- for lttng-dev@lists.lttng.org; Wed, 28 May 2014 09:40:05 -0400
-In-Reply-To: <1400202607-10904-1-git-send-email-rongqing.li@windriver.com>
+ (envelope-from <Paul_Woegerer@mentor.com>) id 1WpedD-0001pj-Qz
+ for lttng-dev@lists.lttng.org; Wed, 28 May 2014 10:15:09 -0400
+In-Reply-To: <5385DEEA.50603@keymile.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,100 +22,42 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: rongqing.li@windriver.com
-Cc: lttng-dev@lists.lttng.org
+To: Gerlando Falauto <gerlando.falauto@keymile.com>, =?UTF-8?B?TWFydGluIMOc?= =?UTF-8?B?bnNhbA==?= <martinunsal@gmail.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, "Thibault,
+ Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
 List-Id: lttng-dev@lists.lttng.org
 
+On 05/28/2014 03:04 PM, Gerlando Falauto wrote:
+> So the hidden symbols are *NOT* weak at all (at least with my buggy
+> compiler). They are just automagically defined by the linker.
 
---===============1666580799==
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="J/dobhs11T7y2rNN"
-Content-Disposition: inline
+I wrote "weak, in the sense that it can be linked without providing a
+definition somewhere".
+See: http://en.wikipedia.org/wiki/Weak_symbol "... When linking a binary
+executable, a weakly declared symbol does not need a definition. ...."
 
+> As a matter of fact, I don't think they should have ever been weak in
+> the first place. We *WANT* those symbols to exist and be well-defined,
+> and we should make sure the linker complies with this requirement, as
+> this is crucial to the correct behaviour of lttng-ust.
+> If we generate an inconsistency like the above and keep the weak
+> attribute, we would end up with code which compiles perfectly but
+> still will not work!
+>
+> BTW, the only reference I could find to how and why ldd defines those
+> symbols for section __start__/__stop__ is [1], which admittedly
+> states:  "I couldn't find any formal documentation for this feature,
+> only a few obscure mailing list references". :-(
 
---J/dobhs11T7y2rNN
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+https://sourceware.org/binutils/docs-2.24/ld/Orphan-Sections.html#Orphan-Sections
 
-Merged!
+"If an orphaned section's name is representable as a C identifier then
+the linker will automatically see PROVIDE
+<https://sourceware.org/binutils/docs-2.24/ld/PROVIDE.html#PROVIDE> two
+symbols: __start_SECNAME and __stop_SECNAME, where SECNAME is the name
+of the section. These indicate the start address and end address of the
+orphaned section respectively."
 
-Thanks
-David
-
-On 16 May (09:10:07), rongqing.li@windriver.com wrote:
-> From: Fredrik Markstr=F6m <fredrik.markstrom@gmail.com>
->=20
-> Accessing floats, doubles and 64 bit int at unaligned addresses is not
-> supported on all configurations of arm processors and if it is it's
-> emulated and slow. This patch replaces direct assignments with memcpy.
->=20
-> Signed-off-by: Fredrik Markstr=F6m <fredrik.markstrom@gmail.com>
-> Signed-off-by: Roy Li <rongqing.li@windriver.com>
-> Acked-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> ---
->  src/lib/lttng-ctl/filter/filter-visitor-generate-bytecode.c |    4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/src/lib/lttng-ctl/filter/filter-visitor-generate-bytecode.c =
-b/src/lib/lttng-ctl/filter/filter-visitor-generate-bytecode.c
-> index 762d604..8c6dc96 100644
-> --- a/src/lib/lttng-ctl/filter/filter-visitor-generate-bytecode.c
-> +++ b/src/lib/lttng-ctl/filter/filter-visitor-generate-bytecode.c
-> @@ -222,7 +222,7 @@ int visit_node_load(struct filter_parser_ctx *ctx, st=
-ruct ir_op *node)
->  		if (!insn)
->  			return -ENOMEM;
->  		insn->op =3D FILTER_OP_LOAD_S64;
-> -		*(int64_t *) insn->data =3D node->u.load.u.num;
-> +		memcpy(insn->data, &node->u.load.u.num, sizeof(int64_t));
->  		ret =3D bytecode_push(&ctx->bytecode, insn, 1, insn_len);
->  		free(insn);
->  		return ret;
-> @@ -237,7 +237,7 @@ int visit_node_load(struct filter_parser_ctx *ctx, st=
-ruct ir_op *node)
->  		if (!insn)
->  			return -ENOMEM;
->  		insn->op =3D FILTER_OP_LOAD_DOUBLE;
-> -		*(double *) insn->data =3D node->u.load.u.flt;
-> +		memcpy(insn->data, &node->u.load.u.flt, sizeof(double));
->  		ret =3D bytecode_push(&ctx->bytecode, insn, 1, insn_len);
->  		free(insn);
->  		return ret;
-> --=20
-> 1.7.10.4
->=20
-
---J/dobhs11T7y2rNN
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iQF8BAEBAgBmBQJTheclXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
-ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
-MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02vQ8IAIgWZlUCX8bPFO4Jdf6d0KoB
-rmeDKeQAeORcXLy/3AsAd3gLCfjLtOnXr3JErFACaoouXgbU+eKXadhlbnhswmm/
-tqAu9lE4cZdx2vZ6d8RkoyfJSyojIKYtYaYyXmziiRUaZgXztpPFxOJug2aiDYF+
-sAwvMiCdmanlVrEq5NxloK525b0KQ9PLocnwjA6V4YzN88mwSK0mj8C2+6afmzrn
-BW5YTwOYG+b5H/bXRp2isXkrCH2C32YTVq5BsMCE0IKPlL3irnRrdDz6QSZQbcBI
-ELa28dpbxB2E+JK6ZLKy/5xLRIIUxYcgvdrL1f216nMz91kG7JfxV8kP+Snbri0=
-=FswZ
------END PGP SIGNATURE-----
-
---J/dobhs11T7y2rNN--
-
-
---===============1666580799==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Disposition: inline
-Content-Transfer-Encoding: 7bit
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1666580799==--
+--
+Best,
+Paul
