@@ -1,18 +1,17 @@
-From: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
-Subject: Re: Support for Linux 3.15 in lttng-modules 2.4 ?
-Date: Wed, 28 May 2014 17:19:58 -0400
-Message-ID: <538652FE.1010109__34829.2902498089$1401312067$gmane$org@voxpopuli.im>
-References: <537DF25C.40500@voxpopuli.im>
- <2064406121.24244.1401292317212.JavaMail.zimbra@efficios.com>
+From: Gerlando Falauto <gerlando.falauto@keymile.com>
+Subject: [PATCH lttng-ust] Fix: remove weak attribute from
+	__start___tracepoints_ptrs and __stop___tracepoints_ptrs
+Date: Thu, 29 May 2014 01:05:52 +0200
+Message-ID: <1401318352-9154-1-git-send-email-gerlando.falauto__47944.8634003804$1401318437$gmane$org@keymile.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from ironport2-out.teksavvy.com ([206.248.154.181])
+Received: from mail-de.keymile.com ([195.8.104.250])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <alexmonthy@voxpopuli.im>) id 1WplGW-0004hb-Ci
- for lttng-dev@lists.lttng.org; Wed, 28 May 2014 17:20:09 -0400
-In-Reply-To: <2064406121.24244.1401292317212.JavaMail.zimbra@efficios.com>
+ (envelope-from <prvs=02251e696b=gerlando.falauto@keymile.com>)
+ id 1WpmvC-0005Ie-WB
+ for lttng-dev@lists.lttng.org; Wed, 28 May 2014 19:06:16 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,27 +20,59 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
+Cc: Gerlando Falauto <gerlando.falauto@keymile.com>
 List-Id: lttng-dev@lists.lttng.org
 
-On 14-05-28 11:51 AM, Mathieu Desnoyers wrote:
->
-> Hi Alexandre,
->
-> Since there has been an important tracepoint module API change between 3.14
-> and 3.15 in the Linux kernel, supporting 3.15 falls into the "new feature"
-> category, so we don't plan to backport it to stable 2.4.
->
-> lttng-modules 2.5.0 (currently at RC1) is what you need there.
->
-> Thanks!
->
-> Mathieu
-
-Good to know, thanks!
-
-Glad to see 2.5 came out so quickly then :)
-
-Cheers,
-Alex
+U29tZSBPcGVuRW1iZWRkZWQgR0NDIHJlbGVhc2VzIChuYW1lbHkgNC43LjIpIGluY29ycmVjdGx5
+IGVtaXQgdGhvc2UKc3ltYm9scyB3aXRoIGRlZmF1bHQgdmlzaWJpbGl0eSBpZiBib3RoIHdlYWsg
+YW5kIGhpZGRlbiBhdHRyaWJ1dGVzCmFyZSB1c2VkLgpXaGVuIHRyYWNlcG9pbnRzIGFyZSBkaXN0
+cmlidXRlZCBhbW9uZyB0aGUgbWFpbiBhcHBsaWNhdGlvbiBhbmQgb25lIG9yCnNldmVyYWwgc2hh
+cmVkIG9iamVjdHMgKGUuZy4gbHR0bmdfdXN0X3RyYWNlZjpldmVudCBpbiBsaWJsdHRuZy11c3Qu
+c28KQU5EIHlvdXIgb3duIHRyYWNlcG9pbnQgcHJvdmlkZXIsIHN0YXRpY2FsbHkgb3IgZHluYW1p
+Y2FsbHkgbGlua2VkKSwKdGhpcyByZXN1bHRzIGluIGEgc3VidGxlIG5hbWUgY2xhc2ggYXQgcnVu
+dGltZSwgY2F1c2luZyBvbmx5IHRoZQp0cmFjZXBvaW50cyBmcm9tIG9uZSBwYXJ0aWN1bGFyIGJp
+bmFyeSB0byBiZSBhY3RpdmUsIHNpbGVudGx5IGJyZWFraW5nCmFsbCBvdGhlcnMuClRoZXNlIHN5
+bWJvbHMgYXJlIGluZGVlZCBvbmx5IGRlY2xhcmVkIGFuZCBuZWVkIG5vdCBiZSBkZWZpbmVkIChj
+b250cmFyeQp0byBfX3RyYWNlcG9pbnRfcmVnaXN0ZXJlZCBhbmQgZnJpZW5kcyksIGFzIHRoZXkg
+YXJlIGF1dG9tYXRpY2FsbHkKUFJPVklERS1kIGJ5IHRoZSBsaW5rZXIgYXMgcG9pbnRlcnMgdG8g
+dGhlICJfdHJhY2Vwb2ludF9wdHJzIiBvcnBoYW5lZCBzZWN0aW9uLgoKU28gZXZlbiB0aG91Z2gg
+dGhlIGlzc3VlIGlzIG9ubHkgb2JzZXJ2ZWQgd2l0aCBhIGJ1Z2d5IGNvbXBpbGVyLCByZW1vdmlu
+Zwp0aGUgd2VhayBhdHRyaWJ1dGUgYWxzbyBlbmZvcmNlcyB0aGUgY29ycmVjdCBzdHJvbmcgbGlu
+a2luZyB0byB0aGUgc3ltYm9scwpwcm92aWRlZCBieSB0aGUgbGlua2VyICh3aGljaCB3b3VsZCBv
+dGhlcndpc2UsIGJ5IHdlYWsgc2VtYW50aWNzLCBkZWZhdWx0CnRvIGEgdmFsdWUgb2YgYWxsLXpl
+cm9lcykuCgpSZWZlcmVuY2VzOiBodHRwczovL2djYy5nbnUub3JnL21sL2djYy1oZWxwLzIwMTQt
+MDUvbXNnMDAwMDUuaHRtbApSZWZlcmVuY2VzOiBodHRwOi8vbGlzdHMubHR0bmcub3JnL3BpcGVy
+bWFpbC9sdHRuZy1kZXYvMjAxNC1NYXkvMDIzMDkwLmh0bWwKUmVwb3J0ZWQtYnk6IE1hcnRpbiDD
+nG5zYWwgPG1hcnRpbnVuc2FsQGdtYWlsLmNvbT4KVGhhbmtzLXRvOiBIZW5yaWsgV2FsbGluIDxo
+ZW5yaWt3YWxsaW43MkBnbWFpbC5jb20+CkNjOiBQYXVsIFdvZWdlcmVyIDxQYXVsX1dvZWdlcmVy
+QG1lbnRvci5jb20+ClNpZ25lZC1vZmYtYnk6IEdlcmxhbmRvIEZhbGF1dG8gPGdlcmxhbmRvLmZh
+bGF1dG9Aa2V5bWlsZS5jb20+Ci0tLQogaW5jbHVkZS9sdHRuZy90cmFjZXBvaW50LmggfCAxNSAr
+KysrKysrKysrLS0tLS0KIDEgZmlsZSBjaGFuZ2VkLCAxMCBpbnNlcnRpb25zKCspLCA1IGRlbGV0
+aW9ucygtKQoKZGlmZiAtLWdpdCBhL2luY2x1ZGUvbHR0bmcvdHJhY2Vwb2ludC5oIGIvaW5jbHVk
+ZS9sdHRuZy90cmFjZXBvaW50LmgKaW5kZXggYzVhMDlkOC4uMjI5ZWE3MiAxMDA2NDQKLS0tIGEv
+aW5jbHVkZS9sdHRuZy90cmFjZXBvaW50LmgKKysrIGIvaW5jbHVkZS9sdHRuZy90cmFjZXBvaW50
+LmgKQEAgLTMwOCwxNCArMzA4LDE5IEBAIF9fdHJhY2Vwb2ludHNfX2Rlc3Ryb3kodm9pZCkKICNp
+ZmRlZiBUUkFDRVBPSU5UX0RFRklORQogCiAvKgotICogVGhlc2Ugd2VhayBzeW1ib2xzLCB0aGUg
+Y29uc3RydWN0b3IsIGFuZCBkZXN0cnVjdG9yIHRha2UgY2FyZSBvZgotICogcmVnaXN0ZXJpbmcg
+b25seSBfb25lXyBpbnN0YW5jZSBvZiB0aGUgdHJhY2Vwb2ludHMgcGVyIHNoYXJlZC1vamJlY3QK
+LSAqIChvciBmb3IgdGhlIHdob2xlIG1haW4gcHJvZ3JhbSkuCisgKiBUaGVzZSBzdHJvbmcgaGlk
+ZGVuIHN5bWJvbHMgYXJlIGF1dG9tYXRpY2FsbHkgcHJvdmlkZWQgYnkgdGhlIGxpbmtlcgorICog
+Zm9yIGVhY2ggc2hhcmVkLW9iamVjdCAob3IgZm9yIHRoZSB3aG9sZSBtYWluIHByb2dyYW0pIGFz
+IHBvaW50ZXJzCisgKiB0byB0aGUgb3JwaGFuZWQgc2VjdGlvbiAiX3RyYWNlcG9pbnRzX3B0cnMi
+IGFuZCBtdXN0IG5vdCBiZSB2aXNpYmxlCisgKiBmcm9tIG90aGVyIHNoYXJlZCBvYmplY3RzIHRv
+IGF2b2lkIG5hbWUgY2xhc2hlcyBhdCBydW50aW1lIHdoaWNoIHdvdWxkCisgKiBzaWxlbnRseSBl
+bmFibGUgb25seSB0aGUgdHJhY2Vwb2ludHMgZnJvbSB0aGUgb2JqZWN0IGxvYWRlZCBmaXJzdC4K
+KyAqIE5PVElDRTogU29tZSBPcGVuRW1iZWRkZWQgR0NDIHJlbGVhc2VzIChuYW1lbHkgNC43LjIp
+IGluY29ycmVjdGx5CisgKiBlbWl0IHRob3NlIHN5bWJvbHMgd2l0aCBkZWZhdWx0IHZpc2liaWxp
+dHkgaWYgYm90aCB3ZWFrIGFuZCBoaWRkZW4KKyAqIGFyZSB1c2VkLgogICovCiBleHRlcm4gc3Ry
+dWN0IHRyYWNlcG9pbnQgKiBjb25zdCBfX3N0YXJ0X19fdHJhY2Vwb2ludHNfcHRyc1tdCi0JX19h
+dHRyaWJ1dGVfXygod2VhaywgdmlzaWJpbGl0eSgiaGlkZGVuIikpKTsKKwlfX2F0dHJpYnV0ZV9f
+KCh2aXNpYmlsaXR5KCJoaWRkZW4iKSkpOwogZXh0ZXJuIHN0cnVjdCB0cmFjZXBvaW50ICogY29u
+c3QgX19zdG9wX19fdHJhY2Vwb2ludHNfcHRyc1tdCi0JX19hdHRyaWJ1dGVfXygod2Vhaywgdmlz
+aWJpbGl0eSgiaGlkZGVuIikpKTsKKwlfX2F0dHJpYnV0ZV9fKCh2aXNpYmlsaXR5KCJoaWRkZW4i
+KSkpOwogCiAvKgogICogV2hlbiBUUkFDRVBPSU5UX1BST0JFX0RZTkFNSUNfTElOS0FHRSBpcyBk
+ZWZpbmVkLCB3ZSBkbyBub3QgZW1pdCBhCi0tIAoxLjguMC4xCgoKX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRu
+Zy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWls
+bWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
