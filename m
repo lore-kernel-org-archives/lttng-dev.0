@@ -1,17 +1,24 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Support for Linux 3.15 in lttng-modules 2.4 ?
-Date: Wed, 28 May 2014 15:51:57 +0000 (UTC)
-Message-ID: <2064406121.24244.1401292317212.JavaMail.zimbra__39507.8512527563$1401292387$gmane$org@efficios.com>
-References: <537DF25C.40500@voxpopuli.im>
+Subject: Re: Debian specific userspace RCU configure override
+Date: Wed, 28 May 2014 17:04:35 +0000 (UTC)
+Message-ID: <1529830880.24314.1401296675360.JavaMail.zimbra__15298.8306865611$1401296757$gmane$org@efficios.com>
+References: <30703453.22036.1400852842509.JavaMail.zimbra@efficios.com>
+ <400506412.22279.1400936702676.JavaMail.zimbra@efficios.com>
+ <20140524145555.GA1466@helmut>
+ <1851915699.22366.1400979572920.JavaMail.zimbra@efficios.com>
+ <1401182846.16183.121907449.6882165F@webmail.messagingengine.com>
+ <20140527201848.GA27628@helmut>
+ <1220472134.23571.1401222994845.JavaMail.zimbra@efficios.com>
+ <20140528011827.GA6924@helmut>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1Wpg93-0002eA-AM
- for lttng-dev@lists.lttng.org; Wed, 28 May 2014 11:52:06 -0400
-In-Reply-To: <537DF25C.40500@voxpopuli.im>
+ (envelope-from <compudj@efficios.com>) id 1WphHK-000380-CL
+ for lttng-dev@lists.lttng.org; Wed, 28 May 2014 13:04:44 -0400
+In-Reply-To: <20140528011827.GA6924@helmut>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,52 +27,84 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
-Cc: lttng-dev@lists.lttng.org
+To: Jon Bernard <jbernard@debian.org>
+Cc: =?utf-8?Q?Ond=C5=99ej_Sur=C3=BD?= <ondrej@sury.org>, lttng-dev <lttng-dev@lists.lttng.org>, Michael Jeanson <mjeanson@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
------ Original Message -----
-> From: "Alexandre Montplaisir" <alexmonthy@voxpopuli.im>
-> To: lttng-dev@lists.lttng.org
-> Sent: Thursday, May 22, 2014 8:49:32 AM
-> Subject: [lttng-dev] Support for Linux 3.15 in lttng-modules 2.4 ?
-> 
-> Hi,
-> 
-> I noticed that lttng-modules 2.4 fails to compile on kernel 3.15.
-> However, there are some commits in the master branch to support 3.15.
-> Indeed, building git master on kernel 3.15 works fine.
-> 
-> Ubuntu 14.10 is currently tracking kernel 3.15, which causes the
-> lttng-module package (based on 2.4) to fail building.
-> See https://bugs.launchpad.net/ubuntu/+source/lttng-modules/+bug/1321543
-> 
-> Is it planned to backport the 3.15 support to the stable-2.4 branch?
-
-Hi Alexandre,
-
-Since there has been an important tracepoint module API change between 3.14
-and 3.15 in the Linux kernel, supporting 3.15 falls into the "new feature"
-category, so we don't plan to backport it to stable 2.4.
-
-lttng-modules 2.5.0 (currently at RC1) is what you need there.
-
-Thanks!
-
-Mathieu
-
-> 
-> 
-> Thanks,
-> Alex
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> 
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJKb24gQmVybmFyZCIgPGpiZXJu
+YXJkQGRlYmlhbi5vcmc+Cj4gVG86ICJNYXRoaWV1IERlc25veWVycyIgPG1hdGhpZXUuZGVzbm95
+ZXJzQGVmZmljaW9zLmNvbT4KPiBDYzogIk9uZMWZZWogU3Vyw70iIDxvbmRyZWpAc3VyeS5vcmc+
+LCAiTWljaGFlbCBKZWFuc29uIiA8bWplYW5zb25AZWZmaWNpb3MuY29tPiwgImx0dG5nLWRldiIK
+PiA8bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZz4KPiBTZW50OiBUdWVzZGF5LCBNYXkgMjcsIDIw
+MTQgOToxODoyNyBQTQo+IFN1YmplY3Q6IFJlOiBEZWJpYW4gc3BlY2lmaWMgdXNlcnNwYWNlIFJD
+VSBjb25maWd1cmUgb3ZlcnJpZGUKPiAKPiAqIE1hdGhpZXUgRGVzbm95ZXJzIDxtYXRoaWV1LmRl
+c25veWVyc0BlZmZpY2lvcy5jb20+IHdyb3RlOgo+ID4gLS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAt
+LS0tLQo+ID4gPiBGcm9tOiAiSm9uIEJlcm5hcmQiIDxqYmVybmFyZEBkZWJpYW4ub3JnPgo+ID4g
+PiBUbzogIk9uZMWZZWogU3Vyw70iIDxvbmRyZWpAc3VyeS5vcmc+Cj4gPiA+IENjOiAiTWF0aGll
+dSBEZXNub3llcnMiIDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+LCAiTWljaGFlbAo+
+ID4gPiBKZWFuc29uIiA8bWplYW5zb25AZWZmaWNpb3MuY29tPiwgImx0dG5nLWRldiIKPiA+ID4g
+PGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmc+Cj4gPiA+IFNlbnQ6IFR1ZXNkYXksIE1heSAyNywg
+MjAxNCA0OjE4OjQ4IFBNCj4gPiA+IFN1YmplY3Q6IFJlOiBEZWJpYW4gc3BlY2lmaWMgdXNlcnNw
+YWNlIFJDVSBjb25maWd1cmUgb3ZlcnJpZGUKPiA+ID4gCj4gPiA+ICogT25kxZllaiBTdXLDvSA8
+b25kcmVqQHN1cnkub3JnPiB3cm90ZToKPiA+ID4gPiBPbiBTdW4sIE1heSAyNSwgMjAxNCwgYXQg
+Mjo1OSwgTWF0aGlldSBEZXNub3llcnMgd3JvdGU6Cj4gPiA+ID4gPiBXaHkgYXJlIGVhY2ggcGFj
+a2FnZSBjb21waWxlZCBhZ2FpbnN0IGNvbXBsZXRlbHkgZGlmZmVyZW50IHRhcmdldHMgPwo+ID4g
+PiA+IAo+ID4gPiA+IHVyY3UgaW52b2tlcyAuL2NvbmZpZ3VyZSBtYW51YWxseSB3aGlsZSBsdHQt
+Y29udHJvbCB1c2VzCj4gPiA+ID4gZGhfYXV0b19jb25maWd1cmUgd3JhcHBlciBhbmQgdGhhdCBt
+YWtlcyB0aGUgZGlmZmVyZW5jZQo+ID4gPiAKPiA+ID4gVGhpcyBpcyBjb3JyZWN0LiAgV2hlbiBJ
+IGZpcnN0IHNhdyB0aGUgZGlmZmVyZW5jZSwgSSBhc3N1bWVkIHRoZXkgd291bGQKPiA+ID4gYm90
+aCBpbnZva2UgY29uZmlndXJlIGluIGEgd2F5IHRoYXQgd291bGRuJ3QgZWZmZWN0IHRoZSB0YXJn
+ZXQuICBCdXQgbm93Cj4gPiA+IEkgcmVtZW1iZXIgaGF2aW5nIGEgc2ltaWxhciBwcm9ibGVtIG9u
+IHNwYXJjICh3aGljaCBpcyB3aHkgdXJjdSBpbmNsdWRlcwo+ID4gPiB0aGlzIG92ZXJyaWRlKSB3
+aGVyZSB0aGUgdGFyZ2V0IGRpc2NvdmVyeSB3YXMgbm90IGNvcnJlY3QuCj4gPiA+IAo+ID4gPiBJ
+dCBsb29rcyB0byBtZSBsaWtlIGEgYnVnIHJlbGF0ZWQgdG8gZGViaGVscGVyICh3aGljaCBwcm92
+aWRlcwo+ID4gPiBkaF9hdXRvX2NvbmZpZ3VyZSkuICBGb3Igbm93LCBJIHRoaW5rIHRoaXMgb3Zl
+cnJpZGUgYXBwbGllZCB0bwo+ID4gPiBsdHRuZy10b29scyB3aWxsIGNvcnJlY3RseSBmaXggdGhl
+IGJ1aWxkIHdpdGhvdXQgZGlzYWJsaW5nIGRtYi4gIEkgd2lsbAo+ID4gPiBsZXQgdGhlIGV4aXN0
+aW5nIHRyYW5zaXRpb24gaW50byB0ZXN0aW5nIGNvbXBsZXRlIGFuZCB0aGVuIHN1Ym1pdCBuZXcK
+PiA+ID4gcGFja2FnZXMuCj4gPiAKPiA+IFRoZSBiaWcgcXVlc3Rpb24gaGVyZTogaXMgaXQgT0sg
+dG8gZ2VuZXJhdGUgImRtYiIgaW5zdHJ1Y3Rpb24gPyBJZiB0aGUKPiA+IGludGVudCBvZiB0aGlz
+IGFyY2hpdGVjdHVyZSBzdXBwb3J0IGlzIHRvIGNvdmVyIGVhcmxpZXItdGhhbi1hcm12NyBBUk0K
+PiA+IHByb2Nlc3NvcnMsIHRoZW4gImRtYiIgc2hvdWxkIG5vdCBiZSBleHBsaWNpdGx5IGdlbmVy
+YXRlZCwgYW5kIHRoZXJlZm9yZQo+ID4gVVJDVSBjb25maWd1cmF0aW9uIHdvdWxkIG5lZWQgZml4
+aW5nLiBJZiB0aGUgaW50ZW50IG9mIHRoaXMgRGViaWFuIGFyY2gKPiA+IGlzIHRvIGNvdmVyIG9u
+bHkgQVJNdjcgYW5kIGJldHRlciwgdGhlbiBpdCdzIGx0dG5nLXRvb2xzIHRoYXQgbmVlZHMKPiA+
+IGZpeGluZy4KPiAKPiBTbyBteSBhc3N1bXB0aW9uIHdhcyB3cm9uZywgZGViaWFuIGFybWVsIHRh
+cmdldHMgYXJtdjR0IChhcm1oZiB0YXJnZXRzCj4gdjcpLiAgVGhlIGJ1aWxkIG1hY2hpbmVzIGhh
+cHBlbiB0byBiZSBydW5uaW5nIGEgdjcga2VybmVsLCBidXQgdGhlIGJ1aWxkCj4gbXVzdCBob25v
+ciB0aGUgdGFyZ2V0IHdoaWNoIGlzICdhcm0tdW5rbm93bi1saW51eC1nbnVlYWJpJyBpbiB0aGlz
+IGNhc2UKPiAoaW1wbHlpbmcgbm8gZG1iIGluc3RydWN0aW9ucykuCj4gCj4gU28sIGx0dG5nLXRv
+b2xzICh3aGljaCB1c2VzIHRoZSBkaCB3cmFwcGVyKSBpcyBjb3JyZWN0bHkgZGV0ZWN0aW5nIHRo
+ZQo+IGJ1aWxkIHRhcmdldC4gIFRoaXMgaXMgYmVjYXVzZSBpdCdzIGNhbGxpbmcgYXV0b3JlY29u
+ZiBhbmQgcGFzc2luZwo+IGFkZGl0aW9uYWwgJy0tYnVpbGQnIGFuZCAnLS1ob3N0JyBwYXJhbWV0
+ZXJzIHRvIC4vY29uZmlndXJlLiAgSWYKPiBJIGNoYW5nZSBsaWJ1cmN1IHRvIHVzZSB0aGlzIHdy
+YXBwZXIgYnkgcmVtb3ZpbmcgdGhlIGV4cGxpY2l0IGNvbmZpZ3VyZQo+IG92ZXJyaWRlLCBpdCB0
+b28gZGV0ZWN0cyB0aGUgY29ycmVjdCBidWlsZCB0YXJnZXQgYW5kIGRpc2FibGVzIGRtYgo+IGlu
+c3RydWN0aW9ucyBhcyBpdCBzaG91bGQuCj4gCj4gU28gdHdvIHRoaW5ncyBjb21lIHRvIG1pbmQ6
+Cj4gCj4gICAxLiAgVGVjaG5pY2FsbHksIHVwc3RyZWFtIGRvZXNuJ3QgbmVlZCB0byBkbyBhbnl0
+aGluZyBmb3IgdGhpcyBjaGFuZ2UKPiAgICAgICB0byBjb3JyZWN0bHkgcmVzb2x2ZSB0aGUgZXhp
+c3RpbmcgaXNzdWVzIGluIERlYmlhbi4gIEJ1dCBpdCBkb2VzCj4gICAgICAgbWVhbiB0aGF0IG5v
+bi1kZWJpYW4gYXJtIGJ1aWxkcyBtYXkgZGlzY292ZXIgYW4gaW5jb3JyZWN0IGJ1aWxkCj4gICAg
+ICAgdGFyZ2V0IGFuZCBwcm9kdWNlIGluY29tcGF0aWJsZSBvYmplY3QgY29kZSBpZiB0aGUgdXNl
+ciBkb2Vzbid0Cj4gICAgICAgcmVnZW5lcmF0ZSB0aGUgYnVpbGQgc3lzdGVtIGZpbGVzIGFuZCBj
+YWxsIGNvbmZpZ3VyZSBpbiBhIHNpbWlsYXIKPiAgICAgICB3YXkuICBQZXJzb25hbGx5LCBJIHdv
+dWxkIGxpa2UgdG8gc2VlIHRoaXMgZml4ZWQgZm9yIGV2ZXJ5b25lLCBzbwo+ICAgICAgIGEgZml4
+IHRvIGJvdGggdXJjdSBhbmQgbHR0bmctdG9vbHMgY29uZmlndXJlIHNjcmlwdHMgc2VlbXMKPiAg
+ICAgICBhcHByb3ByaWF0ZS4gIEknbSBtb3JlIHRoYW4gaGFwcHkgdG8gdGVzdCBhbnkgcGF0Y2hl
+cyBvbiB0aGUKPiAgICAgICByZXNvdXJjZXMgdG8gd2hpY2ggSSBoYXZlIGFjY2Vzcy4KCkknbSBh
+ZnJhaWQgSSBkb24ndCB1bmRlcnN0YW5kIHdoYXQgd291bGQgbmVlZCBmaXhpbmcgaW4gdXBzdHJl
+YW0gdXJjdQphbmQgbHR0bmctdG9vbHMuIElmIHR3byBwYWNrYWdlcyBhcmUgYnVpbHQgZm9yIGRp
+ZmZlcmVudCBhcmNoaXRlY3R1cmVzCihvbGRlciBBUk0gdnMgQVJNdjcrKSwgSSBkb24ndCBzZWUg
+aG93IGFueW9uZSB3b3VsZCBleHBlY3QgdGhhdCBib3RoCnBhY2thZ2VzIHdvdWxkIGJlIGNvbXBh
+dGlibGUuCgo+IAo+ICAgMi4gIFVzaW5nIHRoZSBkaCB3cmFwcGVyIGlzIGNvbnNpZGVyZWQgYmVz
+dC1wcmFjdGljZSwgc28gbGlidXJjdQo+ICAgICAgIHNob3VsZCBiZSBjb25mb3JtaW5nIHRvIHRo
+aXMuICBJIG5lZWQgdG8gcmUtdGVzdCB0aGUgY2hhbmdlIG9uCj4gICAgICAgc3BhcmMgYW5kIG1h
+a2Ugc3VyZSBJJ20gbm90IGluIGEgd29ybGQgb2YgaHVydC4KClRoZSBpc3N1ZSBoZXJlIHNlZW1z
+IHRvIGJlIGNhdXNlZCBieSB0aGUgc3BhcmMgYnVpbGQgb2YgdXJjdS4gUGVyaGFwcwp0aGUgb3Zl
+cnJpZGUgY291bGQgYmUgZG9uZSBvbmx5IGZvciBzcGFyYyA/IEl0IGlzIGEgYml0IHNwZWNpYWwg
+KHNlZQp1cmN1IFJFQURNRSBmaWxlIGZvciBkZXRhaWxzKS4KClRob3VnaHRzID8KClRoYW5rcywK
+Ck1hdGhpZXUKCj4gCj4gVGhvdWdodHM/Cj4gCj4gLS0KPiBKb24KPiAKCi0tIApNYXRoaWV1IERl
+c25veWVycwpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCgpfX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBs
+aXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2kt
+YmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
