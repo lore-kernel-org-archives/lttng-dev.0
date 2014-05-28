@@ -1,26 +1,18 @@
-From: Jon Bernard <jbernard@debian.org>
-Subject: Re: Debian specific userspace RCU configure override
-Date: Wed, 28 May 2014 14:10:50 -0400
-Message-ID: <20140528181050.GA29467__9168.60956135697$1401300731$gmane$org@helmut>
-References: <30703453.22036.1400852842509.JavaMail.zimbra@efficios.com>
- <400506412.22279.1400936702676.JavaMail.zimbra@efficios.com>
- <20140524145555.GA1466@helmut>
- <1851915699.22366.1400979572920.JavaMail.zimbra@efficios.com>
- <1401182846.16183.121907449.6882165F@webmail.messagingengine.com>
- <20140527201848.GA27628@helmut>
- <1220472134.23571.1401222994845.JavaMail.zimbra@efficios.com>
- <20140528011827.GA6924@helmut>
- <1529830880.24314.1401296675360.JavaMail.zimbra@efficios.com>
+From: Divya Vyas <dvyas@mvista.com>
+Subject: Fwd: LTTng dynamic probes
+Date: Wed, 28 May 2014 16:46:58 +0530
+Message-ID: <CA+=dQ-_YezhjRcG8fWY4qVKDcZYzXcwWbX7xWBRpm6=bVTW+OQ__28227.8367820711$1401303634$gmane$org@mail.gmail.com>
+References: <CA+=dQ-__Etr0tOW2gS4VN4Q7SSQGf6NOuHkOMuvR=mYPozxuDw@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============1458166358=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from out1-smtp.messagingengine.com ([66.111.4.25])
+Received: from mail-qg0-f52.google.com ([209.85.192.52])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jbernard@debian.org>) id 1WpiJU-0003XU-MG
- for lttng-dev@lists.lttng.org; Wed, 28 May 2014 14:11:02 -0400
-Content-Disposition: inline
-In-Reply-To: <1529830880.24314.1401296675360.JavaMail.zimbra@efficios.com>
+ (envelope-from <dvyas@mvista.com>) id 1WpbrH-0000d1-Qc
+ for lttng-dev@lists.lttng.org; Wed, 28 May 2014 07:17:24 -0400
+Received: by mail-qg0-f52.google.com with SMTP id a108so17099820qge.39
+ for <lttng-dev@lists.lttng.org>; Wed, 28 May 2014 04:17:18 -0700 (PDT)
+In-Reply-To: <CA+=dQ-__Etr0tOW2gS4VN4Q7SSQGf6NOuHkOMuvR=mYPozxuDw@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -29,98 +21,56 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: =?utf-8?B?T25kxZllaiBTdXLDvQ==?= <ondrej@sury.org>, lttng-dev <lttng-dev@lists.lttng.org>, Michael Jeanson <mjeanson@efficios.com>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-KiBNYXRoaWV1IERlc25veWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPiB3cm90
-ZToKPiAtLS0tLSBPcmlnaW5hbCBNZXNzYWdlIC0tLS0tCj4gPiBGcm9tOiAiSm9uIEJlcm5hcmQi
-IDxqYmVybmFyZEBkZWJpYW4ub3JnPgo+ID4gVG86ICJNYXRoaWV1IERlc25veWVycyIgPG1hdGhp
-ZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4KPiA+IENjOiAiT25kxZllaiBTdXLDvSIgPG9uZHJl
-akBzdXJ5Lm9yZz4sICJNaWNoYWVsIEplYW5zb24iIDxtamVhbnNvbkBlZmZpY2lvcy5jb20+LCAi
-bHR0bmctZGV2Igo+ID4gPGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmc+Cj4gPiBTZW50OiBUdWVz
-ZGF5LCBNYXkgMjcsIDIwMTQgOToxODoyNyBQTQo+ID4gU3ViamVjdDogUmU6IERlYmlhbiBzcGVj
-aWZpYyB1c2Vyc3BhY2UgUkNVIGNvbmZpZ3VyZSBvdmVycmlkZQo+ID4gCj4gPiAqIE1hdGhpZXUg
-RGVzbm95ZXJzIDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+IHdyb3RlOgo+ID4gPiAt
-LS0tLSBPcmlnaW5hbCBNZXNzYWdlIC0tLS0tCj4gPiA+ID4gRnJvbTogIkpvbiBCZXJuYXJkIiA8
-amJlcm5hcmRAZGViaWFuLm9yZz4KPiA+ID4gPiBUbzogIk9uZMWZZWogU3Vyw70iIDxvbmRyZWpA
-c3VyeS5vcmc+Cj4gPiA+ID4gQ2M6ICJNYXRoaWV1IERlc25veWVycyIgPG1hdGhpZXUuZGVzbm95
-ZXJzQGVmZmljaW9zLmNvbT4sICJNaWNoYWVsCj4gPiA+ID4gSmVhbnNvbiIgPG1qZWFuc29uQGVm
-ZmljaW9zLmNvbT4sICJsdHRuZy1kZXYiCj4gPiA+ID4gPGx0dG5nLWRldkBsaXN0cy5sdHRuZy5v
-cmc+Cj4gPiA+ID4gU2VudDogVHVlc2RheSwgTWF5IDI3LCAyMDE0IDQ6MTg6NDggUE0KPiA+ID4g
-PiBTdWJqZWN0OiBSZTogRGViaWFuIHNwZWNpZmljIHVzZXJzcGFjZSBSQ1UgY29uZmlndXJlIG92
-ZXJyaWRlCj4gPiA+ID4gCj4gPiA+ID4gKiBPbmTFmWVqIFN1csO9IDxvbmRyZWpAc3VyeS5vcmc+
-IHdyb3RlOgo+ID4gPiA+ID4gT24gU3VuLCBNYXkgMjUsIDIwMTQsIGF0IDI6NTksIE1hdGhpZXUg
-RGVzbm95ZXJzIHdyb3RlOgo+ID4gPiA+ID4gPiBXaHkgYXJlIGVhY2ggcGFja2FnZSBjb21waWxl
-ZCBhZ2FpbnN0IGNvbXBsZXRlbHkgZGlmZmVyZW50IHRhcmdldHMgPwo+ID4gPiA+ID4gCj4gPiA+
-ID4gPiB1cmN1IGludm9rZXMgLi9jb25maWd1cmUgbWFudWFsbHkgd2hpbGUgbHR0LWNvbnRyb2wg
-dXNlcwo+ID4gPiA+ID4gZGhfYXV0b19jb25maWd1cmUgd3JhcHBlciBhbmQgdGhhdCBtYWtlcyB0
-aGUgZGlmZmVyZW5jZQo+ID4gPiA+IAo+ID4gPiA+IFRoaXMgaXMgY29ycmVjdC4gIFdoZW4gSSBm
-aXJzdCBzYXcgdGhlIGRpZmZlcmVuY2UsIEkgYXNzdW1lZCB0aGV5IHdvdWxkCj4gPiA+ID4gYm90
-aCBpbnZva2UgY29uZmlndXJlIGluIGEgd2F5IHRoYXQgd291bGRuJ3QgZWZmZWN0IHRoZSB0YXJn
-ZXQuICBCdXQgbm93Cj4gPiA+ID4gSSByZW1lbWJlciBoYXZpbmcgYSBzaW1pbGFyIHByb2JsZW0g
-b24gc3BhcmMgKHdoaWNoIGlzIHdoeSB1cmN1IGluY2x1ZGVzCj4gPiA+ID4gdGhpcyBvdmVycmlk
-ZSkgd2hlcmUgdGhlIHRhcmdldCBkaXNjb3Zlcnkgd2FzIG5vdCBjb3JyZWN0Lgo+ID4gPiA+IAo+
-ID4gPiA+IEl0IGxvb2tzIHRvIG1lIGxpa2UgYSBidWcgcmVsYXRlZCB0byBkZWJoZWxwZXIgKHdo
-aWNoIHByb3ZpZGVzCj4gPiA+ID4gZGhfYXV0b19jb25maWd1cmUpLiAgRm9yIG5vdywgSSB0aGlu
-ayB0aGlzIG92ZXJyaWRlIGFwcGxpZWQgdG8KPiA+ID4gPiBsdHRuZy10b29scyB3aWxsIGNvcnJl
-Y3RseSBmaXggdGhlIGJ1aWxkIHdpdGhvdXQgZGlzYWJsaW5nIGRtYi4gIEkgd2lsbAo+ID4gPiA+
-IGxldCB0aGUgZXhpc3RpbmcgdHJhbnNpdGlvbiBpbnRvIHRlc3RpbmcgY29tcGxldGUgYW5kIHRo
-ZW4gc3VibWl0IG5ldwo+ID4gPiA+IHBhY2thZ2VzLgo+ID4gPiAKPiA+ID4gVGhlIGJpZyBxdWVz
-dGlvbiBoZXJlOiBpcyBpdCBPSyB0byBnZW5lcmF0ZSAiZG1iIiBpbnN0cnVjdGlvbiA/IElmIHRo
-ZQo+ID4gPiBpbnRlbnQgb2YgdGhpcyBhcmNoaXRlY3R1cmUgc3VwcG9ydCBpcyB0byBjb3ZlciBl
-YXJsaWVyLXRoYW4tYXJtdjcgQVJNCj4gPiA+IHByb2Nlc3NvcnMsIHRoZW4gImRtYiIgc2hvdWxk
-IG5vdCBiZSBleHBsaWNpdGx5IGdlbmVyYXRlZCwgYW5kIHRoZXJlZm9yZQo+ID4gPiBVUkNVIGNv
-bmZpZ3VyYXRpb24gd291bGQgbmVlZCBmaXhpbmcuIElmIHRoZSBpbnRlbnQgb2YgdGhpcyBEZWJp
-YW4gYXJjaAo+ID4gPiBpcyB0byBjb3ZlciBvbmx5IEFSTXY3IGFuZCBiZXR0ZXIsIHRoZW4gaXQn
-cyBsdHRuZy10b29scyB0aGF0IG5lZWRzCj4gPiA+IGZpeGluZy4KPiA+IAo+ID4gU28gbXkgYXNz
-dW1wdGlvbiB3YXMgd3JvbmcsIGRlYmlhbiBhcm1lbCB0YXJnZXRzIGFybXY0dCAoYXJtaGYgdGFy
-Z2V0cwo+ID4gdjcpLiAgVGhlIGJ1aWxkIG1hY2hpbmVzIGhhcHBlbiB0byBiZSBydW5uaW5nIGEg
-djcga2VybmVsLCBidXQgdGhlIGJ1aWxkCj4gPiBtdXN0IGhvbm9yIHRoZSB0YXJnZXQgd2hpY2gg
-aXMgJ2FybS11bmtub3duLWxpbnV4LWdudWVhYmknIGluIHRoaXMgY2FzZQo+ID4gKGltcGx5aW5n
-IG5vIGRtYiBpbnN0cnVjdGlvbnMpLgo+ID4gCj4gPiBTbywgbHR0bmctdG9vbHMgKHdoaWNoIHVz
-ZXMgdGhlIGRoIHdyYXBwZXIpIGlzIGNvcnJlY3RseSBkZXRlY3RpbmcgdGhlCj4gPiBidWlsZCB0
-YXJnZXQuICBUaGlzIGlzIGJlY2F1c2UgaXQncyBjYWxsaW5nIGF1dG9yZWNvbmYgYW5kIHBhc3Np
-bmcKPiA+IGFkZGl0aW9uYWwgJy0tYnVpbGQnIGFuZCAnLS1ob3N0JyBwYXJhbWV0ZXJzIHRvIC4v
-Y29uZmlndXJlLiAgSWYKPiA+IEkgY2hhbmdlIGxpYnVyY3UgdG8gdXNlIHRoaXMgd3JhcHBlciBi
-eSByZW1vdmluZyB0aGUgZXhwbGljaXQgY29uZmlndXJlCj4gPiBvdmVycmlkZSwgaXQgdG9vIGRl
-dGVjdHMgdGhlIGNvcnJlY3QgYnVpbGQgdGFyZ2V0IGFuZCBkaXNhYmxlcyBkbWIKPiA+IGluc3Ry
-dWN0aW9ucyBhcyBpdCBzaG91bGQuCj4gPiAKPiA+IFNvIHR3byB0aGluZ3MgY29tZSB0byBtaW5k
-Ogo+ID4gCj4gPiAgIDEuICBUZWNobmljYWxseSwgdXBzdHJlYW0gZG9lc24ndCBuZWVkIHRvIGRv
-IGFueXRoaW5nIGZvciB0aGlzIGNoYW5nZQo+ID4gICAgICAgdG8gY29ycmVjdGx5IHJlc29sdmUg
-dGhlIGV4aXN0aW5nIGlzc3VlcyBpbiBEZWJpYW4uICBCdXQgaXQgZG9lcwo+ID4gICAgICAgbWVh
-biB0aGF0IG5vbi1kZWJpYW4gYXJtIGJ1aWxkcyBtYXkgZGlzY292ZXIgYW4gaW5jb3JyZWN0IGJ1
-aWxkCj4gPiAgICAgICB0YXJnZXQgYW5kIHByb2R1Y2UgaW5jb21wYXRpYmxlIG9iamVjdCBjb2Rl
-IGlmIHRoZSB1c2VyIGRvZXNuJ3QKPiA+ICAgICAgIHJlZ2VuZXJhdGUgdGhlIGJ1aWxkIHN5c3Rl
-bSBmaWxlcyBhbmQgY2FsbCBjb25maWd1cmUgaW4gYSBzaW1pbGFyCj4gPiAgICAgICB3YXkuICBQ
-ZXJzb25hbGx5LCBJIHdvdWxkIGxpa2UgdG8gc2VlIHRoaXMgZml4ZWQgZm9yIGV2ZXJ5b25lLCBz
-bwo+ID4gICAgICAgYSBmaXggdG8gYm90aCB1cmN1IGFuZCBsdHRuZy10b29scyBjb25maWd1cmUg
-c2NyaXB0cyBzZWVtcwo+ID4gICAgICAgYXBwcm9wcmlhdGUuICBJJ20gbW9yZSB0aGFuIGhhcHB5
-IHRvIHRlc3QgYW55IHBhdGNoZXMgb24gdGhlCj4gPiAgICAgICByZXNvdXJjZXMgdG8gd2hpY2gg
-SSBoYXZlIGFjY2Vzcy4KPiAKPiBJJ20gYWZyYWlkIEkgZG9uJ3QgdW5kZXJzdGFuZCB3aGF0IHdv
-dWxkIG5lZWQgZml4aW5nIGluIHVwc3RyZWFtIHVyY3UKPiBhbmQgbHR0bmctdG9vbHMuIElmIHR3
-byBwYWNrYWdlcyBhcmUgYnVpbHQgZm9yIGRpZmZlcmVudCBhcmNoaXRlY3R1cmVzCj4gKG9sZGVy
-IEFSTSB2cyBBUk12NyspLCBJIGRvbid0IHNlZSBob3cgYW55b25lIHdvdWxkIGV4cGVjdCB0aGF0
-IGJvdGgKPiBwYWNrYWdlcyB3b3VsZCBiZSBjb21wYXRpYmxlLgoKQXMgSSBjdXJyZW50bHkgdW5k
-ZXJzdGFuZCwgdGhlIGRlYmlhbiBidWlsZCBwcm9ibGVtIGlzIHRoYXQgYWx0aG91Z2ggdGhlCnBh
-Y2thZ2UgaXMgY29tcGlsZWQgb24gYXJtdjcgaGFyZHdhcmUsIGl0IGlzIGV4cGVjdGVkIHRvIHRh
-cmdldCBhcm12NHQuCkFuZCB0aGlzIGlzIG5vdCBjb3JyZWN0bHkgZGV0ZWN0ZWQgYXQgY29uZmln
-dXJlLXRpbWUuICBUaGUgZm9sa3Mgb24KI2RlYmlhbi1hcm0gc3VnZ2VzdGVkIHRoYXQgdGhpcyBj
-b3VsZCBiZSBzb2x2ZWQgaW4gY29uZmlndXJlLmFjLiAgSSBjYW4KZXhwbGljaXRseSBwYXNzICct
-LWJ1aWxkIDx0YXJnZXQ+JyB0byAuL2NvbmZpZ3VyZSB0byBnZXQgYXJvdW5kIHRoaXMsCmJ1dCBh
-cm0gdXNlcnMgdGhhdCBidWlsZCBmcm9tIHNvdXJjZSB3aWxsIG5lZWQgdG8gcmVtZW1iZXIgdGhp
-cy4KCkFsc28sIHRoaXMgYnVnIFsxXSB3YXMganVzdCBmaWxlZCB3aGljaCBpcyByZWxhdGVkLCBJ
-J20gY3VyaW91cyBvZiB5b3VyCnRob3VnaHRzIG9uIHRoaXMuCgpbMV0gaHR0cHM6Ly9idWdzLmRl
-Ymlhbi5vcmcvY2dpLWJpbi9idWdyZXBvcnQuY2dpP2J1Zz03NDk1ODYKCj4gPiAKPiA+ICAgMi4g
-IFVzaW5nIHRoZSBkaCB3cmFwcGVyIGlzIGNvbnNpZGVyZWQgYmVzdC1wcmFjdGljZSwgc28gbGli
-dXJjdQo+ID4gICAgICAgc2hvdWxkIGJlIGNvbmZvcm1pbmcgdG8gdGhpcy4gIEkgbmVlZCB0byBy
-ZS10ZXN0IHRoZSBjaGFuZ2Ugb24KPiA+ICAgICAgIHNwYXJjIGFuZCBtYWtlIHN1cmUgSSdtIG5v
-dCBpbiBhIHdvcmxkIG9mIGh1cnQuCj4gCj4gVGhlIGlzc3VlIGhlcmUgc2VlbXMgdG8gYmUgY2F1
-c2VkIGJ5IHRoZSBzcGFyYyBidWlsZCBvZiB1cmN1LiBQZXJoYXBzCj4gdGhlIG92ZXJyaWRlIGNv
-dWxkIGJlIGRvbmUgb25seSBmb3Igc3BhcmMgPyBJdCBpcyBhIGJpdCBzcGVjaWFsIChzZWUKPiB1
-cmN1IFJFQURNRSBmaWxlIGZvciBkZXRhaWxzKS4KCkFncmVlZCwgSSdsbCByZXZpc2l0IHNwYXJj
-IGFuZCBzZWUgd2hlcmUgdGhpbmdzIHN0YW5kIGFmdGVyIGEgY29uc2Vuc3VzCmlzIHJlYWNoZWQg
-b24gdGhlIG90aGVyIHRvcGljcy4KCkNoZWVycywKCi0tIApKb24KCl9fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0
-bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFp
-bG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+--===============1458166358==
+Content-Type: multipart/alternative; boundary=047d7bdca46691b72704fa73f459
+
+--047d7bdca46691b72704fa73f459
+Content-Type: text/plain; charset=UTF-8
+
+Hi,
+
+I am a user of LTTng . Actually I need to give a demo of LTTng dynamic
+probes . For that I need a real world examples for network analysis. I
+inserted --probe for netif_receive_skb for ping command . I am able to get
+only netif_receive_skb.
+
+I want to demonstrate user that How useful this tool is . So for that I
+need a real world problem .
+
+Can you give me some idea?
+
+--047d7bdca46691b72704fa73f459
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div class=3D"gmail_quote"><br><div dir=3D"ltr">Hi,<div><b=
+r></div><div>I am a user of LTTng . Actually I need to give a demo of LTTng=
+ dynamic probes . For that I need a real world examples for network analysi=
+s. I inserted --probe for netif_receive_skb for ping command . I am able to=
+ get only netif_receive_skb.=C2=A0</div>
+
+
+
+<div><br></div><div>I want to demonstrate user that How useful this tool is=
+ . So for that I need a real world problem .</div><div><br></div><div>Can y=
+ou give me some idea?</div><div><br></div><div><br></div></div>
+</div><br></div>
+
+--047d7bdca46691b72704fa73f459--
+
+
+--===============1458166358==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1458166358==--
