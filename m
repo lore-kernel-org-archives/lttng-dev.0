@@ -1,21 +1,34 @@
-From: Gerlando Falauto <gerlando.falauto@keymile.com>
-Subject: Re: Problem with UST related to dlload
-Date: Wed, 28 May 2014 16:30:11 +0200
-Message-ID: <5385F2F3.1090003__32098.3044723564$1401287484$gmane$org@keymile.com>
-References: <CACsXv7BQ-T+6ggdM9+YPcu+hdy0Gxu6c_jxNj97AvzmDgXQ8Wg@mail.gmail.com>	<CACsXv7Au4yLptJnS5OayD8bqsgbi660bLbJobpczTnnWZbgx=g@mail.gmail.com>	<53847D18.3060203@keymile.com>	<5384A1F4.6080108@mentor.com>	<5384A409.4090107@keymile.com>	<5384A801.8040900@mentor.com>	<5384B787.8070009@keymile.com>
- <CACsXv7DV1OCXc9SV9SZp81B2uXoC-iBoH+VfwT6VpoXWc0+Wng@mail.gmail.com>
- <5385BCA9.5040207@mentor.com> <5385DEEA.50603@keymile.com>
- <5385EF5D.5040008@mentor.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [RELEASE] LTTng-UST 2.5.0-rc1
+Date: Wed, 28 May 2014 14:39:01 +0000 (UTC)
+Message-ID: <1702597628.24158.1401287941354.JavaMail.zimbra__3524.89136062122$1401288011$gmane$org@efficios.com>
+References: <370500491.24148.1401287633963.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-de.keymile.com ([195.8.104.250])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <prvs=02251e696b=gerlando.falauto@keymile.com>)
- id 1Wperz-0001xy-TV
- for lttng-dev@lists.lttng.org; Wed, 28 May 2014 10:30:25 -0400
-In-Reply-To: <5385EF5D.5040008@mentor.com>
+ (envelope-from <compudj@efficios.com>) id 1Wpf0T-00022g-Ef
+ for lttng-dev@lists.lttng.org; Wed, 28 May 2014 10:39:11 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id C7037340272
+ for <lttng-dev@lists.lttng.org>; Wed, 28 May 2014 14:39:04 +0000 (UTC)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+ with ESMTP id do3IpVQNfn50 for <lttng-dev@lists.lttng.org>;
+ Wed, 28 May 2014 14:39:01 +0000 (UTC)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id C303534011B
+ for <lttng-dev@lists.lttng.org>; Wed, 28 May 2014 14:39:01 +0000 (UTC)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+ with ESMTP id A-WZtfgWeMRh for <lttng-dev@lists.lttng.org>;
+ Wed, 28 May 2014 14:39:01 +0000 (UTC)
+Received: from evm-mail-1.efficios.com (evm-mail-1.efficios.com [78.47.125.74])
+ by mail.efficios.com (Postfix) with ESMTP id 99FF93400D3
+ for <lttng-dev@lists.lttng.org>; Wed, 28 May 2014 14:39:01 +0000 (UTC)
+In-Reply-To: <370500491.24148.1401287633963.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -24,64 +37,74 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Woegerer, Paul" <Paul_Woegerer@mentor.com>, =?UTF-8?B?TWFydGluIMOcbnM=?= =?UTF-8?B?YWw=?= <martinunsal@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, "Thibault,
- Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Paul,
-
-On 05/28/2014 04:14 PM, Woegerer, Paul wrote:
-> On 05/28/2014 03:04 PM, Gerlando Falauto wrote:
->> So the hidden symbols are *NOT* weak at all (at least with my buggy
->> compiler). They are just automagically defined by the linker.
->
-> I wrote "weak, in the sense that it can be linked without providing a
-> definition somewhere".
-> See: http://en.wikipedia.org/wiki/Weak_symbol "... When linking a binary
-> executable, a weakly declared symbol does not need a definition. ...."
-
-I agree with you. My initial understanding of weak symbol was probably 
-wrong. I was not aware of the optional definition part, where in case of 
-a missing definition the symbol assumes a value of all-zeroes.
-But that was clear to me already when I wrote my previous mail.
-
-Still, I don't get your point.
-In our context, what would be the point of having those symbols as weak?
-This would mean we could have zero, one or more definitions for it.
-Don't we instead want exactly _one_ definition (per shared object), the 
-one PROVIDEd by the linker when emitting the output file?
-
->> As a matter of fact, I don't think they should have ever been weak in
->> the first place. We *WANT* those symbols to exist and be well-defined,
->> and we should make sure the linker complies with this requirement, as
->> this is crucial to the correct behaviour of lttng-ust.
->> If we generate an inconsistency like the above and keep the weak
->> attribute, we would end up with code which compiles perfectly but
->> still will not work!
->>
->> BTW, the only reference I could find to how and why ldd defines those
->> symbols for section __start__/__stop__ is [1], which admittedly
->> states:  "I couldn't find any formal documentation for this feature,
->> only a few obscure mailing list references". :-(
->
-> https://sourceware.org/binutils/docs-2.24/ld/Orphan-Sections.html#Orphan-Sections
->
-> "If an orphaned section's name is representable as a C identifier then
-> the linker will automatically see PROVIDE
-> <https://sourceware.org/binutils/docs-2.24/ld/PROVIDE.html#PROVIDE> two
-> symbols: __start_SECNAME and __stop_SECNAME, where SECNAME is the name
-> of the section. These indicate the start address and end address of the
-> orphaned section respectively."
-
-Wonderful, thanks for sharing this! [Actually, yes, linker's ld, not ldd 
--- my mistake!]
-
-Thanks again!
-Gerlando
-
->
-> --
-> Best,
-> Paul
->
+TFRUbmctVVNULCB0aGUgTGludXggVHJhY2UgVG9vbGtpdCBOZXh0IEdlbmVyYXRpb24gVXNlcnNw
+YWNlIFRyYWNlciwgaXMKcG9ydCBvZiB0aGUgbG93LW92ZXJoZWFkIHRyYWNpbmcgY2FwYWJpbGl0
+aWVzIG9mIHRoZSBMVFRuZyBrZXJuZWwgdHJhY2VyCnRvIHVzZXItc3BhY2UuIFRoZSBsaWJyYXJ5
+ICJsaWJsdHRuZy11c3QiIGVuYWJsZXMgdHJhY2luZyBvZgphcHBsaWNhdGlvbnMgYW5kIGxpYnJh
+cmllcy4KCk5ldyBhbmQgbm90ZXdvcnRoeToKCi0gTmV3IHRyYWNlZigpIGluc3RydW1lbnRhdGlv
+biBmYWNpbGl0eS4gRXhjZXJwdCBmcm9tIGx0dG5nLXVzdCgzKSBtYW4gcGFnZToKClVTQUdFIFdJ
+VEggVFJBQ0VGCgogICAgICAgVGhlIHNpbXBsZXN0IHdheSB0byBhZGQgaW5zdHJ1bWVudGF0aW9u
+IHRvIHlvdXIgIGNvZGUgIGlzICBieSAgZmFyICB0aGUKICAgICAgIHRyYWNlZigpIEFQSS4gVG8g
+ZG8gaXQsIGluIGEgbnV0c2hlbGw6CgogICAgICAgMSkgI2luY2x1ZGUgPGx0dG5nL3RyYWNlZi5o
+PgoKICAgICAgIDIpIC8qIGluIHlvdXIgY29kZSwgdXNlIGxpa2UgYSBwcmludGYgKi8KICAgICAg
+ICAgIHRyYWNlZigibXkgbWVzc2FnZSwgdGhpcyBpbnRlZ2VyICVkIiwgMTIzNCk7CgogICAgICAg
+MykgTGluayB5b3VyIHByb2dyYW0gYWdhaW5zdCBsaWJsdHRuZy11c3Quc28uCgogICAgICAgNCkg
+RW5hYmxlICBVU1QgZXZlbnRzIHdoZW4gdHJhY2luZyB3aXRoIHRoZSBmb2xsb3dpbmcgc2VxdWVu
+Y2Ugb2YgY29tbWFuZHMKICAgICAgICAgIGZyb20gbHR0bmctdG9vbHM6CgogICAgICAgICAgbHR0
+bmcgY3JlYXRlCiAgICAgICAgICBsdHRuZyBlbmFibGUtZXZlbnQgLXUgLWEKICAgICAgICAgIGx0
+dG5nIHN0YXJ0CiAgICAgICAgICBbLi4uIHJ1biB5b3VyIHByb2dyYW0gLi4uXQogICAgICAgICAg
+bHR0bmcgc3RvcAogICAgICAgICAgbHR0bmcgdmlldwoKICAgICAgIFRoYXQncyBpdCEKCiAgICAg
+ICBJZiB5b3Ugd2FudCB0byBoYXZlIG1vcmUgZmxleGliaWxpdHkgYW5kIGNvbnRyb2wgb24gIHRo
+ZSAgZXZlbnQgIG5hbWVzLAogICAgICAgcGF5bG9hZCAgdHlwaW5nLCAgZXRjLCAgeW91ICBjYW4g
+Y29udGludWUgcmVhZGluZyBvbiBhbmQgdXNlIHRoZSB0cmFjZeKAkAogICAgICAgcG9pbnRzIGJl
+bG93LiAidHJhY2VmKCkiIGlzIHRoZXJlIGZvciBxdWljayBhbmQgZGlydHkgYWQgaG9jIGluc3Ry
+dW1lbuKAkAogICAgICAgdGF0aW9uLCB3aGVyZWFzIHRyYWNlcG9pbnQuaCBpcyBtZWFudCBmb3Ig
+dGhvcm91Z2ggaW5zdHJ1bWVudGF0aW9uIG9mIGEKICAgICAgIGNvZGUgYmFzZSB0byBiZSBpbnRl
+Z3JhdGVkIHdpdGggYW4gdXBzdHJlYW0gcHJvamVjdC4KCi0gUGVyZiBQTVUgY291bnRlcnMgc3Vw
+cG9ydCBmcm9tIHVzZXItc3BhY2Ugb24geDg2LgoKRGV0YWlsZWQgY2hhbmdlbG9nOgoyMDE0LTA1
+LTI4IChJbnRlcm5hdGlvbmFsIEhhbWJ1cmdlciBEYXkpIGx0dG5nLXVzdCAyLjUuMC1yYzEKICAg
+ICAgICAqIEZpeDogb3V0IG9mIHRyZWUgYnVpbGQgZm9yIGxpYiBKYXZhIGFuZCBKVUwKICAgICAg
+ICAqIEZpeDogZGVmYXVsdCBsb2dsZXZlbCBpcyBERUJVRwogICAgICAgICogRml4OiByZWZ1c2Ug
+b3ZlcndyaXRlIG1vZGUgYnVmZmVycyB3aXRoIGxlc3MgdGhhbiB0d28gc3ViYnVmZmVycwogICAg
+ICAgICogRml4OiB0cmFjZWYuaDogYWRkIG1pc3NpbmcgYysrIGd1YXJkCiAgICAgICAgKiBGaXg6
+IHJlbW92ZSBKVUwgbG9nbGV2ZWwgZmlsdGVyaW5nIGZyb20gdGhlIGFnZW50CiAgICAgICAgKiBG
+aXg6IGNsZWFudXAgSlVMIGFnZW50IHN0YXRlIG9uIHNlc3Npb25kIGRpc2Nvbm5lY3QKICAgICAg
+ICAqIEZpeDogTW92ZSBnZW5lcmF0ZWQgaGVhZGVycyB0byB0aGUgQlVJTFRfU09VUkNFUyB0YXJn
+ZXQKICAgICAgICAqIEZpeDogcGVyZiB1c3Q6IGNoZWNrIGNsb3NlIHJldHVybiB2YWx1ZQogICAg
+ICAgICogQ2xlYW51cDogd29yay1hcm91bmQgbWlzc2luZyBpbmV0Lmggc3RydWN0IG1tc2doZHIg
+ZndkIGRlY2xhcmF0aW9uCiAgICAgICAgKiBJbXBsZW1lbnQgTFRUbmctVVNUIHBlcmYgY291bnRl
+cnMgc3VwcG9ydCBvbiB4ODYKICAgICAgICAqIEZpeCBsaW5raW5nIGZhaWx1cmUgd2hlbiBjcm9z
+cy1jb21waWxpbmcKICAgICAgICAqIEZpeDogZGlzYWJsZSBsaWJsdHRuZy11c3QtZGwgaWYgZGxp
+bmZvIGlzIG5vdCBhdmFpbGFibGUgaW4gQyBsaWJyYXJ5CiAgICAgICAgKiBGaXg6IHBhc3MgcHJv
+cGVyIGFyZ3Mgd2hlbiB3cml0aW5nIGNvbW1pdCBjb3VudGVyCiAgICAgICAgKiBGaXg6IHBhZCBz
+dHJpbmdzIHRoYXQgYXJlIG1vZGlmaWVkIGNvbmN1cnJlbnRseSB3aXRoIHRyYWNpbmcKICAgICAg
+ICAqIEZpeDogVXNlICRBTV9DQyB3aGVuIGl0IGlzIGRlZmluZWQgaW5zdGVhZCBvZiBnY2MgaW4g
+ZGVtby10cmFjZWYKICAgICAgICAqIFJldmVydCAiRml4OiBkaXNhYmxlIGxpYmx0dG5nLXVzdC1k
+bCBpZiBkbGluZm8gaXMgbm90IGF2YWlsYWJsZSBpbiBDIGxpYnJhcnkiCiAgICAgICAgKiBGaXg6
+IC5zcGxpdCgpIHRoZSBDQyBlbnZpcm9ubWVudCB2YXJpYWJsZSBpbiBsdHRuZy1nZW4tdHAKICAg
+ICAgICAqIEZpeDogZGlzYWJsZSBsaWJsdHRuZy11c3QtZGwgaWYgZGxpbmZvIGlzIG5vdCBhdmFp
+bGFibGUgaW4gQyBsaWJyYXJ5CiAgICAgICAgKiBGaXg6IHB5dGhvbiBpbnZvY2F0aW9uIHRocm91
+Z2ggZW52CiAgICAgICAgKiBDaGFuZ2UgZGVmYXVsdCBsb2dsZXZlbCB0byBUUkFDRV9ERUJVR19M
+SU5FCiAgICAgICAgKiBGaXg6IE92ZXJyaWRlIEFNX1BBVEhfUFlUSE9OJ3MgZGVmYXVsdCBhY3Rp
+b24taWYtbm90LWZvdW5kCiAgICAgICAgKiBGaXg6IGRvbid0IGFjY2VwdCBjb25maWd1cmUgLS1k
+aXNhYmxlLXNoYXJlZAogICAgICAgICogRml4OiBjb25maWd1cmUuYWM6IGFkZCBtaXNzaW5nIHJl
+c3VsdCB0byBhbGlnbm1lbnQgcmVxLiBjaGVjawogICAgICAgICogRml4OiBtYWxsb2Mgd3JhcHBl
+cjogaW5maW5pdGUgcmVjdXJzaW9uIHdpdGggY29tcGF0IFRMUwogICAgICAgICogRml4OiBsdHRu
+Zy11c3QgbmVlZHMgLWxkbCBmb3IgdHJhY2VmKCkKICAgICAgICAqIEZpeDogdHlwbyBpbiBsdHRu
+Zy11c3QuMwogICAgICAgICogRml4OiBsaWJsdHRuZy11c3QtbGliYy13cmFwcGVyIHJlY3Vyc2l2
+ZSB1c2Ugb2YgY2FsbG9jCiAgICAgICAgKiBGaXg6IGFkZCBkZW1vLXRyYWNlZiB0byBkaXN0IHRh
+cmJhbGwKICAgICAgICAqIEZpeDogYWRkIG1pc3NpbmcgaGVhZGVyIGZpbGVzIGZvciB0cmFjZWYK
+ICAgICAgICAqIEltcGxlbWVudCB0cmFjZWYoKSBpbnN0cnVtZW50YXRpb24gQVBJCiAgICAgICAg
+KiBBZGQgJ3VudXNlZCcgYXR0cmlidXRlIHRvIHRyYWNlcG9pbnQgY2FsbGJhY2sKICAgICAgICAq
+IFVzZSBhdXRvY29uZiBBTV9NQUlOVEFJTkVSX01PREUKICAgICAgICAqIEZpeDogbWlzbWF0Y2gg
+YmV0d2VlbiBjb2RlIGFuZCBjb21tZW50cwogICAgICAgICogRml4OiBpbmNvcnJlY3QgdXJjdSBn
+aXQgVVJMIGluIFJFQURNRQoKUHJvamVjdCB3ZWJzaXRlOiBodHRwOi8vbHR0bmcub3JnCkRvd25s
+b2FkIGxpbms6IGh0dHA6Ly9sdHRuZy5vcmcvZG93bmxvYWQKKHBsZWFzZSByZWZlciB0byB0aGUg
+UkVBRE1FIGZpbGUgZm9yIGluc3RhbGxhdGlvbiBpbnN0cnVjdGlvbnMpCgotLSAKTWF0aGlldSBE
+ZXNub3llcnMKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcg
+bGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dp
+LWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
