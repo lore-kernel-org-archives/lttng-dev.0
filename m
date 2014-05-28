@@ -1,34 +1,34 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] LTTng-UST 2.5.0-rc1
-Date: Wed, 28 May 2014 14:39:01 +0000 (UTC)
-Message-ID: <1702597628.24158.1401287941354.JavaMail.zimbra__3524.89136062122$1401288011$gmane$org@efficios.com>
-References: <370500491.24148.1401287633963.JavaMail.zimbra@efficios.com>
+Subject: [RELEASE] LTTng modules 2.5.0-rc1
+Date: Wed, 28 May 2014 14:46:48 +0000 (UTC)
+Message-ID: <1770950142.24180.1401288408233.JavaMail.zimbra__26026.9864149906$1401288470$gmane$org@efficios.com>
+References: <1561093639.24160.1401287991633.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1Wpf0T-00022g-Ef
- for lttng-dev@lists.lttng.org; Wed, 28 May 2014 10:39:11 -0400
+ (envelope-from <compudj@efficios.com>) id 1Wpf7z-000279-CK
+ for lttng-dev@lists.lttng.org; Wed, 28 May 2014 10:46:57 -0400
 Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id C7037340272
- for <lttng-dev@lists.lttng.org>; Wed, 28 May 2014 14:39:04 +0000 (UTC)
+ by mail.efficios.com (Postfix) with ESMTP id 4484D34011B
+ for <lttng-dev@lists.lttng.org>; Wed, 28 May 2014 14:46:51 +0000 (UTC)
 Received: from mail.efficios.com ([127.0.0.1])
  by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id do3IpVQNfn50 for <lttng-dev@lists.lttng.org>;
- Wed, 28 May 2014 14:39:01 +0000 (UTC)
+ with ESMTP id fISxzhqiGtt4 for <lttng-dev@lists.lttng.org>;
+ Wed, 28 May 2014 14:46:48 +0000 (UTC)
 Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id C303534011B
- for <lttng-dev@lists.lttng.org>; Wed, 28 May 2014 14:39:01 +0000 (UTC)
+ by mail.efficios.com (Postfix) with ESMTP id 9823A340274
+ for <lttng-dev@lists.lttng.org>; Wed, 28 May 2014 14:46:48 +0000 (UTC)
 Received: from mail.efficios.com ([127.0.0.1])
  by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id A-WZtfgWeMRh for <lttng-dev@lists.lttng.org>;
- Wed, 28 May 2014 14:39:01 +0000 (UTC)
+ with ESMTP id jLCL-yIMaP-e for <lttng-dev@lists.lttng.org>;
+ Wed, 28 May 2014 14:46:48 +0000 (UTC)
 Received: from evm-mail-1.efficios.com (evm-mail-1.efficios.com [78.47.125.74])
- by mail.efficios.com (Postfix) with ESMTP id 99FF93400D3
- for <lttng-dev@lists.lttng.org>; Wed, 28 May 2014 14:39:01 +0000 (UTC)
-In-Reply-To: <370500491.24148.1401287633963.JavaMail.zimbra@efficios.com>
+ by mail.efficios.com (Postfix) with ESMTP id 6260934011B
+ for <lttng-dev@lists.lttng.org>; Wed, 28 May 2014 14:46:48 +0000 (UTC)
+In-Reply-To: <1561093639.24160.1401287991633.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -40,71 +40,91 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-TFRUbmctVVNULCB0aGUgTGludXggVHJhY2UgVG9vbGtpdCBOZXh0IEdlbmVyYXRpb24gVXNlcnNw
-YWNlIFRyYWNlciwgaXMKcG9ydCBvZiB0aGUgbG93LW92ZXJoZWFkIHRyYWNpbmcgY2FwYWJpbGl0
-aWVzIG9mIHRoZSBMVFRuZyBrZXJuZWwgdHJhY2VyCnRvIHVzZXItc3BhY2UuIFRoZSBsaWJyYXJ5
-ICJsaWJsdHRuZy11c3QiIGVuYWJsZXMgdHJhY2luZyBvZgphcHBsaWNhdGlvbnMgYW5kIGxpYnJh
-cmllcy4KCk5ldyBhbmQgbm90ZXdvcnRoeToKCi0gTmV3IHRyYWNlZigpIGluc3RydW1lbnRhdGlv
-biBmYWNpbGl0eS4gRXhjZXJwdCBmcm9tIGx0dG5nLXVzdCgzKSBtYW4gcGFnZToKClVTQUdFIFdJ
-VEggVFJBQ0VGCgogICAgICAgVGhlIHNpbXBsZXN0IHdheSB0byBhZGQgaW5zdHJ1bWVudGF0aW9u
-IHRvIHlvdXIgIGNvZGUgIGlzICBieSAgZmFyICB0aGUKICAgICAgIHRyYWNlZigpIEFQSS4gVG8g
-ZG8gaXQsIGluIGEgbnV0c2hlbGw6CgogICAgICAgMSkgI2luY2x1ZGUgPGx0dG5nL3RyYWNlZi5o
-PgoKICAgICAgIDIpIC8qIGluIHlvdXIgY29kZSwgdXNlIGxpa2UgYSBwcmludGYgKi8KICAgICAg
-ICAgIHRyYWNlZigibXkgbWVzc2FnZSwgdGhpcyBpbnRlZ2VyICVkIiwgMTIzNCk7CgogICAgICAg
-MykgTGluayB5b3VyIHByb2dyYW0gYWdhaW5zdCBsaWJsdHRuZy11c3Quc28uCgogICAgICAgNCkg
-RW5hYmxlICBVU1QgZXZlbnRzIHdoZW4gdHJhY2luZyB3aXRoIHRoZSBmb2xsb3dpbmcgc2VxdWVu
-Y2Ugb2YgY29tbWFuZHMKICAgICAgICAgIGZyb20gbHR0bmctdG9vbHM6CgogICAgICAgICAgbHR0
-bmcgY3JlYXRlCiAgICAgICAgICBsdHRuZyBlbmFibGUtZXZlbnQgLXUgLWEKICAgICAgICAgIGx0
-dG5nIHN0YXJ0CiAgICAgICAgICBbLi4uIHJ1biB5b3VyIHByb2dyYW0gLi4uXQogICAgICAgICAg
-bHR0bmcgc3RvcAogICAgICAgICAgbHR0bmcgdmlldwoKICAgICAgIFRoYXQncyBpdCEKCiAgICAg
-ICBJZiB5b3Ugd2FudCB0byBoYXZlIG1vcmUgZmxleGliaWxpdHkgYW5kIGNvbnRyb2wgb24gIHRo
-ZSAgZXZlbnQgIG5hbWVzLAogICAgICAgcGF5bG9hZCAgdHlwaW5nLCAgZXRjLCAgeW91ICBjYW4g
-Y29udGludWUgcmVhZGluZyBvbiBhbmQgdXNlIHRoZSB0cmFjZeKAkAogICAgICAgcG9pbnRzIGJl
-bG93LiAidHJhY2VmKCkiIGlzIHRoZXJlIGZvciBxdWljayBhbmQgZGlydHkgYWQgaG9jIGluc3Ry
-dW1lbuKAkAogICAgICAgdGF0aW9uLCB3aGVyZWFzIHRyYWNlcG9pbnQuaCBpcyBtZWFudCBmb3Ig
-dGhvcm91Z2ggaW5zdHJ1bWVudGF0aW9uIG9mIGEKICAgICAgIGNvZGUgYmFzZSB0byBiZSBpbnRl
-Z3JhdGVkIHdpdGggYW4gdXBzdHJlYW0gcHJvamVjdC4KCi0gUGVyZiBQTVUgY291bnRlcnMgc3Vw
-cG9ydCBmcm9tIHVzZXItc3BhY2Ugb24geDg2LgoKRGV0YWlsZWQgY2hhbmdlbG9nOgoyMDE0LTA1
-LTI4IChJbnRlcm5hdGlvbmFsIEhhbWJ1cmdlciBEYXkpIGx0dG5nLXVzdCAyLjUuMC1yYzEKICAg
-ICAgICAqIEZpeDogb3V0IG9mIHRyZWUgYnVpbGQgZm9yIGxpYiBKYXZhIGFuZCBKVUwKICAgICAg
-ICAqIEZpeDogZGVmYXVsdCBsb2dsZXZlbCBpcyBERUJVRwogICAgICAgICogRml4OiByZWZ1c2Ug
-b3ZlcndyaXRlIG1vZGUgYnVmZmVycyB3aXRoIGxlc3MgdGhhbiB0d28gc3ViYnVmZmVycwogICAg
-ICAgICogRml4OiB0cmFjZWYuaDogYWRkIG1pc3NpbmcgYysrIGd1YXJkCiAgICAgICAgKiBGaXg6
-IHJlbW92ZSBKVUwgbG9nbGV2ZWwgZmlsdGVyaW5nIGZyb20gdGhlIGFnZW50CiAgICAgICAgKiBG
-aXg6IGNsZWFudXAgSlVMIGFnZW50IHN0YXRlIG9uIHNlc3Npb25kIGRpc2Nvbm5lY3QKICAgICAg
-ICAqIEZpeDogTW92ZSBnZW5lcmF0ZWQgaGVhZGVycyB0byB0aGUgQlVJTFRfU09VUkNFUyB0YXJn
-ZXQKICAgICAgICAqIEZpeDogcGVyZiB1c3Q6IGNoZWNrIGNsb3NlIHJldHVybiB2YWx1ZQogICAg
-ICAgICogQ2xlYW51cDogd29yay1hcm91bmQgbWlzc2luZyBpbmV0Lmggc3RydWN0IG1tc2doZHIg
-ZndkIGRlY2xhcmF0aW9uCiAgICAgICAgKiBJbXBsZW1lbnQgTFRUbmctVVNUIHBlcmYgY291bnRl
-cnMgc3VwcG9ydCBvbiB4ODYKICAgICAgICAqIEZpeCBsaW5raW5nIGZhaWx1cmUgd2hlbiBjcm9z
-cy1jb21waWxpbmcKICAgICAgICAqIEZpeDogZGlzYWJsZSBsaWJsdHRuZy11c3QtZGwgaWYgZGxp
-bmZvIGlzIG5vdCBhdmFpbGFibGUgaW4gQyBsaWJyYXJ5CiAgICAgICAgKiBGaXg6IHBhc3MgcHJv
-cGVyIGFyZ3Mgd2hlbiB3cml0aW5nIGNvbW1pdCBjb3VudGVyCiAgICAgICAgKiBGaXg6IHBhZCBz
-dHJpbmdzIHRoYXQgYXJlIG1vZGlmaWVkIGNvbmN1cnJlbnRseSB3aXRoIHRyYWNpbmcKICAgICAg
-ICAqIEZpeDogVXNlICRBTV9DQyB3aGVuIGl0IGlzIGRlZmluZWQgaW5zdGVhZCBvZiBnY2MgaW4g
-ZGVtby10cmFjZWYKICAgICAgICAqIFJldmVydCAiRml4OiBkaXNhYmxlIGxpYmx0dG5nLXVzdC1k
-bCBpZiBkbGluZm8gaXMgbm90IGF2YWlsYWJsZSBpbiBDIGxpYnJhcnkiCiAgICAgICAgKiBGaXg6
-IC5zcGxpdCgpIHRoZSBDQyBlbnZpcm9ubWVudCB2YXJpYWJsZSBpbiBsdHRuZy1nZW4tdHAKICAg
-ICAgICAqIEZpeDogZGlzYWJsZSBsaWJsdHRuZy11c3QtZGwgaWYgZGxpbmZvIGlzIG5vdCBhdmFp
-bGFibGUgaW4gQyBsaWJyYXJ5CiAgICAgICAgKiBGaXg6IHB5dGhvbiBpbnZvY2F0aW9uIHRocm91
-Z2ggZW52CiAgICAgICAgKiBDaGFuZ2UgZGVmYXVsdCBsb2dsZXZlbCB0byBUUkFDRV9ERUJVR19M
-SU5FCiAgICAgICAgKiBGaXg6IE92ZXJyaWRlIEFNX1BBVEhfUFlUSE9OJ3MgZGVmYXVsdCBhY3Rp
-b24taWYtbm90LWZvdW5kCiAgICAgICAgKiBGaXg6IGRvbid0IGFjY2VwdCBjb25maWd1cmUgLS1k
-aXNhYmxlLXNoYXJlZAogICAgICAgICogRml4OiBjb25maWd1cmUuYWM6IGFkZCBtaXNzaW5nIHJl
-c3VsdCB0byBhbGlnbm1lbnQgcmVxLiBjaGVjawogICAgICAgICogRml4OiBtYWxsb2Mgd3JhcHBl
-cjogaW5maW5pdGUgcmVjdXJzaW9uIHdpdGggY29tcGF0IFRMUwogICAgICAgICogRml4OiBsdHRu
-Zy11c3QgbmVlZHMgLWxkbCBmb3IgdHJhY2VmKCkKICAgICAgICAqIEZpeDogdHlwbyBpbiBsdHRu
-Zy11c3QuMwogICAgICAgICogRml4OiBsaWJsdHRuZy11c3QtbGliYy13cmFwcGVyIHJlY3Vyc2l2
-ZSB1c2Ugb2YgY2FsbG9jCiAgICAgICAgKiBGaXg6IGFkZCBkZW1vLXRyYWNlZiB0byBkaXN0IHRh
-cmJhbGwKICAgICAgICAqIEZpeDogYWRkIG1pc3NpbmcgaGVhZGVyIGZpbGVzIGZvciB0cmFjZWYK
-ICAgICAgICAqIEltcGxlbWVudCB0cmFjZWYoKSBpbnN0cnVtZW50YXRpb24gQVBJCiAgICAgICAg
-KiBBZGQgJ3VudXNlZCcgYXR0cmlidXRlIHRvIHRyYWNlcG9pbnQgY2FsbGJhY2sKICAgICAgICAq
-IFVzZSBhdXRvY29uZiBBTV9NQUlOVEFJTkVSX01PREUKICAgICAgICAqIEZpeDogbWlzbWF0Y2gg
-YmV0d2VlbiBjb2RlIGFuZCBjb21tZW50cwogICAgICAgICogRml4OiBpbmNvcnJlY3QgdXJjdSBn
-aXQgVVJMIGluIFJFQURNRQoKUHJvamVjdCB3ZWJzaXRlOiBodHRwOi8vbHR0bmcub3JnCkRvd25s
-b2FkIGxpbms6IGh0dHA6Ly9sdHRuZy5vcmcvZG93bmxvYWQKKHBsZWFzZSByZWZlciB0byB0aGUg
-UkVBRE1FIGZpbGUgZm9yIGluc3RhbGxhdGlvbiBpbnN0cnVjdGlvbnMpCgotLSAKTWF0aGlldSBE
-ZXNub3llcnMKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcg
-bGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dp
-LWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+The LTTng modules provide Linux kernel tracing capability to the LTTng
+2.x tracer toolset.
+
+New and noteworthy:
+
+- State dump of block devices,
+- State dump of file descriptor flags and modes,
+- 3.15 Linux kernel support,
+- v4lv2 instrumentation support,
+- MIPS32 system call tracing,
+- New /proc/lttng-logger ABI.
+
+How to use the new /proc/lttng-logger ABI:
+
+From the command line (for instance):
+
+Start lttng-sessiond as root,
+
+# lttng-sessiond
+
+Start tracing from root or from a user belonging to the
+"tracing" group:
+
+% lttng create
+% lttng enable-event -k lttng-logger
+
+Write event payload data to /proc/lttng-logger (from any user,
+does not need to be in any group):
+
+% echo -n "Some message" > /proc/lttng-logger
+
+% Stop tracing, view trace
+
+% lttng stop
+% lttng view
+
+You should see:
+
+[10:44:24.810273367] (+?.?????????) thinkos lttng_logger: { cpu_id = 3 }, { _msg_length = 12, msg = "Some message" }
+
+It is a quick and easy way to trace some events from user-space through
+the kernel tracer. It is much more basic than UST: lttng-logger is slower
+(involves system call round-trip to the kernel) and only supports
+logging strings. But it's very quick and easy to use, especially from
+scripts.
+
+
+Detailed changelog:
+
+2014-05-28 (International Hamburger Day) LTTng modules 2.5.0-rc1
+        * Add TID field to some block_* events
+        * Fix: refuse overwrite mode buffers with less than two subbuffers
+        * Fix: lttng modules system call generation script
+        * Dump FD flags and mode on state dump
+        * Fix: incorrect rwbs field type in block_bio_queue
+        * Fix: blktrace instrumentation for v3.2.58+ stable branch
+        * Fix: pass proper args when writing commit counter
+        * Cleanup: lib ringbuffer: pagecpy has unsigned semantic
+        * Fix: allow racy tracepoint string input from kernel and userspace
+        * Statedump event for block devices
+        * Fix: update v4l2 instrumentation to 3.15 kernel
+        * Fix: ext4 update instrumentation to 3.15 kernel
+        * Fix: update block instrumentation to 3.15 kernel
+        * Fix: module instrumentation: update to 3.15 kernel
+        * Adapt to 3.15 tracepoint API
+        * Kernel 3.15 don't define map unmap for pipe
+        * Fix: add missing module version in v4l2 probe
+        * Add V4L2 instrumentation
+        * Fix: rcu instrumentation: add const qualifier to char pointers
+        * Fix: add missing module version information
+        * Use kernel 3.13 syscall tables for MIPS32
+        * Add MIPS32 syscalls extracted from a 3.13 kernel
+        * Fix: block instrumentation: < 3.14 don't have bi_iter
+        * Fix: update btrfs instrumentation to kernel 3.14
+        * Fix: update block layer instrumentation to kernel 3.14
+        * Fix: remove __exit annotation
+        * Fix file permissions for lttng-statedump-impl.c
+        * LTTng logger ABI
+
+Project website: http://lttng.org
+Download link: http://lttng.org/download
+(please refer to the README files for installation instructions and
+lttng-tools doc/quickstart.txt for usage information)
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
