@@ -1,16 +1,16 @@
-From: Divya Vyas <dvyas@mvista.com>
-Subject: Dynamic probes use case
-Date: Thu, 29 May 2014 10:36:02 +0530
-Message-ID: <CA+=dQ-8hm5kMtq2yXyjiL5qPbZSjZ4N1EGXAwZYozEw6et4ZXA__37266.41016915$1401340053$gmane$org@mail.gmail.com>
+From: Hongbo Zhang <hongbo.zhang@linaro.org>
+Subject: Does LTTng UST support ARM?
+Date: Thu, 29 May 2014 16:10:42 +0800
+Message-ID: <CAOhR-w31w=er_PfYtGk-QaC+S+iHPgxNH_11iJmKgO6_Bb=Zqw__33979.2103892707$1401351098$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1069605953=="
+Content-Type: multipart/mixed; boundary="===============0274444495=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qg0-f54.google.com ([209.85.192.54])
+Received: from mail-vc0-f178.google.com ([209.85.220.178])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <dvyas@mvista.com>) id 1WpsXs-0007OH-Gn
- for lttng-dev@lists.lttng.org; Thu, 29 May 2014 01:06:33 -0400
-Received: by mail-qg0-f54.google.com with SMTP id q108so20996424qgd.13
- for <lttng-dev@lists.lttng.org>; Wed, 28 May 2014 22:06:22 -0700 (PDT)
+ (envelope-from <hongbo.zhang@linaro.org>) id 1WpvQG-0008NW-I7
+ for lttng-dev@lists.lttng.org; Thu, 29 May 2014 04:10:49 -0400
+Received: by mail-vc0-f178.google.com with SMTP id ij19so10205483vcb.23
+ for <lttng-dev@lists.lttng.org>; Thu, 29 May 2014 01:10:43 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,45 +19,37 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============1069605953==
-Content-Type: multipart/alternative; boundary=001a11c12228df866604fa82e324
+--===============0274444495==
+Content-Type: multipart/alternative; boundary=bcaec50166b320123204fa857728
 
---001a11c12228df866604fa82e324
+--bcaec50166b320123204fa857728
 Content-Type: text/plain; charset=UTF-8
 
-Hi ,
+Hi all,
+I got info that LTTng UST didn't support ARM platform, does anybody know if
+there is any update about this? LTTng UST still doesn't support ARM
+nowadays?
+I can compile and install userspace-rcu and lttng-ust, but cannot get trace
+result.
+Thanks.
 
-I need to give a demo of LTTng dynamic probes . For that I need a real
-world examples for network analysis. I need to show that how dynamic probes
-are benificial for network analysis.
-
-Some real world example like packet drop, buffer overflow. I need some
-sample application which creates these problem and I detect through LTTng
-dynamic probes and view in trace viewer.
-
-Can you give me some idea?
-
---001a11c12228df866604fa82e324
+--bcaec50166b320123204fa857728
 Content-Type: text/html; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr">Hi ,<br><div><br></div><div>I need to give a demo of LTTng=
- dynamic=20
-probes . For that I need a real world examples for network analysis. I=20
-need to show that how dynamic probes are benificial for network analysis. <=
-br></div><div><br></div><div>Some real world example like packet drop, buff=
-er overflow. I need some sample application which creates these problem and=
- I detect through LTTng dynamic probes and view in trace viewer.<br>
+<div dir=3D"ltr">Hi all,<div>I got info that LTTng UST didn&#39;t support A=
+RM platform, does anybody know if there is any update about this? LTTng UST=
+ still doesn&#39;t support ARM nowadays?</div><div>I can compile and instal=
+l userspace-rcu and lttng-ust, but cannot get trace result.</div>
+<div>Thanks.</div></div>
 
-</div><div><br></div><div>Can you give me some idea?</div></div>
-
---001a11c12228df866604fa82e324--
+--bcaec50166b320123204fa857728--
 
 
---===============1069605953==
+--===============0274444495==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -68,4 +60,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============1069605953==--
+--===============0274444495==--
