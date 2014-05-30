@@ -1,19 +1,19 @@
-From: Hongbo Zhang <hongbo.zhang@linaro.org>
-Subject: Re: Does LTTng UST support ARM?
-Date: Fri, 30 May 2014 16:53:54 +0800
-Message-ID: <CAOhR-w3+L+MKzr1vYoC4JhN7kD1RS6xZVGkrHNphe2TdrjPS=Q__24440.7873055481$1401440113$gmane$org@mail.gmail.com>
-References: <CAOhR-w31w=er_PfYtGk-QaC+S+iHPgxNH_11iJmKgO6_Bb=Zqw@mail.gmail.com>
- <CAEiAFz23qbrc7GHwHFVWk3Xi3YAzLZtNKaFTb0tbdhX-fTtjMA@mail.gmail.com>
+From: Julien Desfossez <jdesfossez@efficios.com>
+Subject: LTTng 2.5 save/load feature feedback
+Date: Fri, 30 May 2014 11:54:02 -0400
+Message-ID: <5388A99A.9000506__38217.3802507625$1401465319$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1920608538=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-vc0-f178.google.com ([209.85.220.178])
+Received: from fukushima.klipix.org ([85.12.144.25])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <hongbo.zhang@linaro.org>) id 1WqIZc-0008Jk-IC
- for lttng-dev@lists.lttng.org; Fri, 30 May 2014 04:54:05 -0400
-Received: by mail-vc0-f178.google.com with SMTP id ij19so1742161vcb.37
- for <lttng-dev@lists.lttng.org>; Fri, 30 May 2014 01:53:55 -0700 (PDT)
-In-Reply-To: <CAEiAFz23qbrc7GHwHFVWk3Xi3YAzLZtNKaFTb0tbdhX-fTtjMA@mail.gmail.com>
+ (envelope-from <jdesfossez@efficios.com>) id 1WqP8F-0002Sd-WF
+ for lttng-dev@lists.lttng.org; Fri, 30 May 2014 11:54:17 -0400
+Received: from [10.123.45.140] (184-94-60-62.dedicated.allstream.net
+ [184.94.60.62])
+ by fukushima.klipix.org (Postfix) with ESMTPSA id A3CA3460071
+ for <lttng-dev@lists.lttng.org>; Fri, 30 May 2014 17:54:03 +0200 (CEST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,120 +22,72 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Jan Glauber <jan.glauber@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============1920608538==
-Content-Type: multipart/alternative; boundary=001a11335a8e766ce704fa9a2f5e
+Hi,
 
---001a11335a8e766ce704fa9a2f5e
-Content-Type: text/plain; charset=UTF-8
+I recently tried the new save/load feature and I have some feedback I'd
+like to share.
 
-Thank you Jan.
-Encouraged by the truth that LTTng UST does work on ARM, I paid more
-efforts and run it on my ARM board at last.
+My understanding was that I could create some kind of profile for
+complex tracing setups. Lttngtop is a good example, because we have a
+specific set of events and contexts to enable (to avoid doing -k -a).
+So as my normal user (part of the tracing group and with a sessiond
+started as root), I created a typical lttngtop session like that :
 
-I am using a Ubuntu on my board, and I installed lttng-ust and
-userspace-rcu from source codes, but installed lttng-tools by apt-get
-command(the babeltrace was also included I think), the reason I failed to
-trace the lttng-tools from apt-get doesn't work and even doesn't give any
-suggestive output.
-Then I re-installed lttng-tools and babeltrace from source codes again,
-then everything works :)
+lttng create lttngtop
+lttng enable-event -k
+lttng_statedump_start,lttng_statedump_end,lttng_statedump_process_state,lttng_statedump_file_descriptor,lttng_statedump_vm_map,lttng_statedump_network_interface,lttng_statedump_interrupt,sched_process_free,sched_switch,sched_process_fork
+-s lttngtop
+lttng enable-event -k --syscall -a -s lttngtop
+lttng add-context -k -t pid -t procname -t tid -t ppid -t
+perf:cache-misses -t perf:major-faults -t perf:branch-load-misses -s
+lttngtop
+lttng save lttngtop
 
+I then destroyed the session and did
+lttng load lttngtop
 
+Everything went fine (except for the already known bug of all the
+contexts information not recorded in the XML file). As expected, the XML
+file was saved in ~/.lttng/sessions/lttngtop.lttng.
 
-On 29 May 2014 18:19, Jan Glauber <jan.glauber@gmail.com> wrote:
+What surprised me was to see this message when later on I started
+manually a lttng-sessiond as my user (after it had been killed) :
+Error: Failed to load session lttngtop: Tracing the kernel requires a
+root lttng-sessiond daemon, as well as "tracing" group membership or
+root user ID for the lttng client.
+Error: Session load failed: Tracing the kernel requires a root
+lttng-sessiond daemon, as well as "tracing" group membership or root
+user ID for the lttng client.
 
-> Hi Hongbo,
-> I'm using LTTng UST on ARM, so the statement that it does not support the
-> ARM platform is certainly wrong.
->
-> I don't know why you don't get trace results, can you provide some more
-> details about your setup (LTTng versions, commands you are using, console
-> output,...)
->
-> Regards, Jan
->
->
-> 2014-05-29 10:10 GMT+02:00 Hongbo Zhang <hongbo.zhang@linaro.org>:
->
->> Hi all,
->> I got info that LTTng UST didn't support ARM platform, does anybody know
->> if there is any update about this? LTTng UST still doesn't support ARM
->> nowadays?
->> I can compile and install userspace-rcu and lttng-ust, but cannot get
->> trace result.
->> Thanks.
->>
->> _______________________________________________
->> lttng-dev mailing list
->> lttng-dev@lists.lttng.org
->> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->>
->>
->
+I did not expect that the saved sessions would try to auto load when the
+sessiond was starting. I did not try with system-wide sessions, but
+that's the same, I don't really expect that all sessions to be
+automatically loaded on startup. I think a sysadmin (or even the lttng
+installer) could make some tracing profiles available to the users in
+there so that they can use them when needed.
+Also, the fact that a user sessiond tries to load a session that clearly
+requires a root sessiond is kind of confusing.
 
---001a11335a8e766ce704fa9a2f5e
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+I can see the value of having auto-loaded sessions, but I think it
+should be configurable, either directly in the XML (just like to
+"started" option) or with sessions saved in a different path (for
+example ~/.lttng/auto-sessions/). Also, I think that our users are never
+really spawning manually a sessiond, so maybe the "lttng load -a" is
+more suited for the auto-loading process.
 
-<div dir=3D"ltr">Thank you Jan.<div>Encouraged by the truth that LTTng UST =
-does work on ARM, I paid more efforts and run it on my ARM board at last.</=
-div><div><br></div><div>I am using a Ubuntu on my board, and I installed lt=
-tng-ust and userspace-rcu from source codes, but installed lttng-tools by a=
-pt-get command(the babeltrace was also included I think), the reason I fail=
-ed to trace the lttng-tools from apt-get doesn&#39;t work and even doesn&#3=
-9;t give any suggestive output.</div>
-<div>Then I re-installed lttng-tools and babeltrace from source codes again=
-, then everything works :)</div><div><br></div></div><div class=3D"gmail_ex=
-tra"><br><br><div class=3D"gmail_quote">On 29 May 2014 18:19, Jan Glauber <=
-span dir=3D"ltr">&lt;<a href=3D"mailto:jan.glauber@gmail.com" target=3D"_bl=
-ank">jan.glauber@gmail.com</a>&gt;</span> wrote:<br>
-<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
-x #ccc solid;padding-left:1ex"><div dir=3D"ltr"><div><div><div><div>Hi Hong=
-bo,<br></div>I&#39;m using LTTng UST on ARM, so the statement that it does =
-not support the ARM platform is certainly wrong.<br>
-</div><br></div>I don&#39;t know why you don&#39;t get trace results, can y=
-ou provide some more details about your setup (LTTng versions, commands you=
- are using, console output,...)<br>
-<br></div>Regards, Jan<br></div><div class=3D"gmail_extra"><br><br><div cla=
-ss=3D"gmail_quote">2014-05-29 10:10 GMT+02:00 Hongbo Zhang <span dir=3D"ltr=
-">&lt;<a href=3D"mailto:hongbo.zhang@linaro.org" target=3D"_blank">hongbo.z=
-hang@linaro.org</a>&gt;</span>:<br>
+So we could maybe add an option to the "lttng save" command that allows
+the user to specify if the session should be auto-loaded. With that in
+mind, should the users part of the tracing group allowed to save
+auto-loading kernel sessions in the system-wide tracing directory, or
+will they have to ask an admin to manually install their profile ?
 
-<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
-x #ccc solid;padding-left:1ex"><div><div class=3D"h5"><div dir=3D"ltr">Hi a=
-ll,<div>I got info that LTTng UST didn&#39;t support ARM platform, does any=
-body know if there is any update about this? LTTng UST still doesn&#39;t su=
-pport ARM nowadays?</div>
+I apologize for not providing this kind of feedback when the RFC was
+posted here, I just realized these usability details when I actually
+experimented the feature.
 
-<div>I can compile and install userspace-rcu and lttng-ust, but cannot get =
-trace result.</div>
-<div>Thanks.</div></div>
-<br></div></div>_______________________________________________<br>
-lttng-dev mailing list<br>
-<a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-dev@li=
-sts.lttng.org</a><br>
-<a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" targe=
-t=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><=
-br>
-<br></blockquote></div><br></div>
-</blockquote></div><br></div>
+Thanks,
 
---001a11335a8e766ce704fa9a2f5e--
-
-
---===============1920608538==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1920608538==--
+Julien
