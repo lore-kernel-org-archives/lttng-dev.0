@@ -1,16 +1,22 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: Re: LTTng 2.5 save/load feature feedback
-Date: Mon, 2 Jun 2014 11:50:27 -0400
-Message-ID: <20140602155027.GB7936__45197.0877628357$1401724296$gmane$org@thessa>
-References: <5388A99A.9000506@efficios.com>
+From: Gerlando Falauto <gerlando.falauto@keymile.com>
+Subject: Re: lttng-ust under the hood
+Date: Mon, 02 Jun 2014 18:21:31 +0200
+Message-ID: <538CA48B.9010306__17917.7986611196$1401726214$gmane$org@keymile.com>
+References: <48CF5AC71E61DB46B70D0F388054EFFD359ADFFC@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+ <537F72B9.9030904@keymile.com>	
+ <48CF5AC71E61DB46B70D0F388054EFFD359AE58F@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+ <538C95B0.3050208@keymile.com>
+ <48CF5AC71E61DB46B70D0F388054EFFD359AF293@VAL-E-01.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2035357367=="
+Content-Type: text/plain; charset="iso-8859-1"; Format="flowed"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from albert.ini-tech.com ([192.99.35.19] helo=smtp.ini-tech.com)
+Received: from mail-de.keymile.com ([195.8.104.250])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <dgoulet@efficios.com>) id 1WrUVO-00005A-Ix
- for lttng-dev@lists.lttng.org; Mon, 02 Jun 2014 11:50:40 -0400
-In-Reply-To: <5388A99A.9000506@efficios.com>
+ (envelope-from <prvs=02308459c1=gerlando.falauto@keymile.com>)
+ id 1WrUzV-0000Ir-Pu
+ for lttng-dev@lists.lttng.org; Mon, 02 Jun 2014 12:21:48 -0400
+In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD359AF293@VAL-E-01.valcartier.drdc-rddc.gc.ca>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,156 +25,136 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Julien Desfossez <jdesfossez@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
+Hi Daniel,
 
---===============2035357367==
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="hQiwHBbRI9kgIhsi"
-Content-Disposition: inline
+On 06/02/2014 05:39 PM, Thibault, Daniel wrote:
+> -----Message d'origine-----
+> De : Gerlando Falauto [mailto:gerlando.falauto@keymile.com]
+> Envoy=E9 : 2 juin 2014 11:18
+>
+>> Thank you very much for your examples and explanations.
+>> I'm slowly starting to understand.
+>> I believe with optional linking (whereas your *USERS* need to #define bo=
+th TRACEPOINT_DEFINE and TRACEPOINT_PROBE_DYNAMIC_LINKAGE), even the depend=
+ency to liblttng-ust.so and (consequently) liblttng-ust-tracepoint.so is dr=
+opped.
+>> This means you only need to add -ldl to your application's LDFLAGS, and =
+the two binaries liblttng-ust.so and liblttng-ust-tracepoint.so need not be=
+ copied to the target's rootfs.
+>> Is that right?
+>
+>     Yes, in the sense that libtp.so need not be present on the 'target ro=
+otfs' for the instrumented application to run.  But if you want the instrum=
+ented application to be traced, libtp.so must be present on the target file=
+ system (so the application can find it).
 
+In this case (optional linking), the application won't even look for it =
 
---hQiwHBbRI9kgIhsi
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+-- you need to manually feed it through LD_PRELOAD libtp.so, right?
 
-On 30 May (11:54:02), Julien Desfossez wrote:
-> Hi,
->=20
-> I recently tried the new save/load feature and I have some feedback I'd
-> like to share.
->=20
-> My understanding was that I could create some kind of profile for
-> complex tracing setups. Lttngtop is a good example, because we have a
-> specific set of events and contexts to enable (to avoid doing -k -a).
-> So as my normal user (part of the tracing group and with a sessiond
-> started as root), I created a typical lttngtop session like that :
->=20
-> lttng create lttngtop
-> lttng enable-event -k
-> lttng_statedump_start,lttng_statedump_end,lttng_statedump_process_state,l=
-ttng_statedump_file_descriptor,lttng_statedump_vm_map,lttng_statedump_netwo=
-rk_interface,lttng_statedump_interrupt,sched_process_free,sched_switch,sche=
-d_process_fork
-> -s lttngtop
-> lttng enable-event -k --syscall -a -s lttngtop
-> lttng add-context -k -t pid -t procname -t tid -t ppid -t
-> perf:cache-misses -t perf:major-faults -t perf:branch-load-misses -s
-> lttngtop
-> lttng save lttngtop
->=20
-> I then destroyed the session and did
-> lttng load lttngtop
->=20
-> Everything went fine (except for the already known bug of all the
-> contexts information not recorded in the XML file). As expected, the XML
-> file was saved in ~/.lttng/sessions/lttngtop.lttng.
->=20
-> What surprised me was to see this message when later on I started
-> manually a lttng-sessiond as my user (after it had been killed) :
-> Error: Failed to load session lttngtop: Tracing the kernel requires a
-> root lttng-sessiond daemon, as well as "tracing" group membership or
-> root user ID for the lttng client.
-> Error: Session load failed: Tracing the kernel requires a root
-> lttng-sessiond daemon, as well as "tracing" group membership or root
-> user ID for the lttng client.
->=20
-> I did not expect that the saved sessions would try to auto load when the
-> sessiond was starting. I did not try with system-wide sessions, but
-> that's the same, I don't really expect that all sessions to be
-> automatically loaded on startup. I think a sysadmin (or even the lttng
-> installer) could make some tracing profiles available to the users in
-> there so that they can use them when needed.
-> Also, the fact that a user sessiond tries to load a session that clearly
-> requires a root sessiond is kind of confusing.
->=20
-> I can see the value of having auto-loaded sessions, but I think it
-> should be configurable, either directly in the XML (just like to
-> "started" option) or with sessions saved in a different path (for
-> example ~/.lttng/auto-sessions/). Also, I think that our users are never
-> really spawning manually a sessiond, so maybe the "lttng load -a" is
-> more suited for the auto-loading process.
+>> However, I get the impression that such a feature is not available for
+>> tracef() (meaning, if you're using tracef(), there's no way you can opti=
+onally link to it -- the above shared objects need to be present on the tar=
+get's filesystem).
+>> Is my understanding right? If so, is there are reason for it?
+>
+>     I can't speak about tracef(): this is a more recent feature whereas I=
+ feature-froze LTTng at 2.3.0-1 in order to complete the documentation proj=
+ect.  I will be moving on to 2.4 and 2.5 in the near future, but for now so=
+meone else will have to act as tracef()'s advocate.  I would presume it wor=
+ks the same way as tracepoint(), in the sense that the instrumented applica=
+tion remains runnable even when the tracepoint provider shared object can't=
+ eb found.
 
-I agree with you on the auto load issue and that we might want to have
-something like that (=E0 la Apache):
+Almost. I believe there's still some hard depedency on =
 
-~/.lttng/sessions/auto/
+_lttng_ust_tracef(), which is defined within tracef.c and therefore ends =
 
-Have symlink/copy of the session file that you want loaded automatically
-in that directory.
+up within liblttng-ust.so.
 
->=20
-> So we could maybe add an option to the "lttng save" command that allows
-> the user to specify if the session should be auto-loaded.
+However, moving its definition (as static inline) to tracef.h seems to =
 
-Yes. Maybe a long --auto or -A ?
+do the trick.
+This way (i.e. defining TRACEPOINT_DEFINE and =
 
-> With that in mind, should the users part of the tracing group allowed
-> to save auto-loading kernel sessions in the system-wide tracing
-> directory, or will they have to ask an admin to manually install their
-> profile ?
+TRACEPOINT_PROBE_DYNAMIC_LINKAGE within my application) I end up with an =
 
-I would say yes here because one can create a kernel session like you do
-with lttngtop, a lot of events/contexts then save it in let say a lttng
-session template repository or feed it to an other session daemon on an
-other system.
+application which
+a) does nothing when called normally
+b) correctly creates tracef() events when invoked with =
 
-One thing we could do is to be more clever during the load and return an
-error directly in the liblttng-ctl instead of the round trip to the
-session daemon.
+LD_PRELOAD=3Dliblttng-ust.so
 
-If we agree on the above, opening issues on bugs.lttng.org would be the
-next step so we can fix these for 2.5 stable.
+I believe, that's reasonable behavior, isn't it?
 
-Cheers!
-David
+>
+>> What I'm looking for is some way to instrument the code without touching=
+ the target filesystem unless needed.
+>>
+>> I believe this is probably against the whole idea of tracing (where you =
+want tracing to ALWAYS be available, given its negligible overhead, as per =
+Murphy's Law the moment it'll prove most valuable is when you least expect =
+it to), still...
+>
+>     Modifying the target file system is unavoidable, I'd think.  The appl=
+ications need to be instrumented (that's one modification), and there must =
+be support for tracing on the target: the session daemon and consumer daemo=
+n must be installed (you can omit installing the LTTng kernel modules if yo=
+u only need to trace user-space) and run, and the instrumented applications=
+' tracepoint provider must be present, either in the apps themselves (stati=
+c linking) or as a shared object.  You can at least avoid storing the trace=
+ itself on the target file system, by exporting the trace data over the wir=
+e.
 
->=20
-> I apologize for not providing this kind of feedback when the RFC was
-> posted here, I just realized these usability details when I actually
-> experimented the feature.
->=20
-> Thanks,
->=20
-> Julien
->=20
-> _______________________________________________ lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+Yes, of course you need to have those libraries if you want to enable =
 
---hQiwHBbRI9kgIhsi
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
+tracing. It'd also be nice, if you don't need tracing (for whatever =
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
+reason) to be able to omit them, while keeping your application's binary =
 
-iQF8BAEBAgBmBQJTjJ1DXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
-ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
-MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02X0sH/jxf4xRxn3tE1P2F0FypwnS1
-YEeHGcO1W3qzvm8APEovbhSa+ViypOWT8SlBTEnebgvwmu9NurGA3HKqjbECO+5T
-SjU+oiBGb7FF5vaCIIJ745gfUjf0eM2gDnjPTWFLnIsCg2UGyGt3iZpS5/Y/jyah
-rMvcxuYn7RHn/PsFVOghA3qqEBrAI2b51m7p/9n2HgyNmeEqSVUVeMnS7V6NyJth
-eoAbOm/J272HOdW45VVSdzjpefiZszK/qGsWqmIs0+uaY3FZ62oLSQ7NyxHG7I9x
-EsaEkQbG4+etHBLAsVaA8w/IHF8UH11FcFwTEcnehaR3mAvG6To3bBPqYt5xBsE=
-=4B7u
------END PGP SIGNATURE-----
+identical.
+I assume the only conceivable reason would be to save some (though =
 
---hQiwHBbRI9kgIhsi--
+negligible) footprint on the target filesystem. I also understand that =
 
+once the application is instrumented, unless the event is enabled, the =
 
---===============2035357367==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+execution overhead per tracepoint is the exactly same (i.e. a missed =
 
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+branch), regardless of whether the tracepoint provider library is loaded =
 
---===============2035357367==--
+or not.
+In other words, using optional (dynamic) linking won't make your =
+
+application run any faster. It will only save you a few Kbytes footprint =
+
+on your target (liblttng-ust.so, liblttng-ust-tracepoint.so, =
+
+libmytracepoint.so). Right?
+
+Thanks *A LOT* once again!
+Gerlando
+
+>
+>> Thanks a lot!
+>> Gerlando
+>
+> Daniel U. Thibault
+> Protection des syst=E8mes et contremesures (PSC) | Systems Protection & C=
+ountermeasures (SPC)
+> Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critica=
+l Cyber Security (MCCS)
+> R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R=
+&D Canada - Valcartier (DRDC Valcartier)
+> 2459 route de la Bravoure
+> Qu=E9bec QC  G3J 1X5
+> CANADA
+> Vox : (418) 844-4000 x4245
+> Fax : (418) 844-4538
+> NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+> Gouvernement du Canada | Government of Canada
+> <http://www.valcartier.drdc-rddc.gc.ca/>
+>
