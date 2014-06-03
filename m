@@ -1,22 +1,17 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [RFC PATCH babeltrace] ctf-writer: Add support for
- the cpu_id field
-Date: Tue, 3 Jun 2014 10:23:59 -0400
-Message-ID: <CA+jJMxsAb+jsjLdRtBgedjrtW9Onp9yxKXSAbb-r+04uWko+Fg__49750.974684912$1401805517$gmane$org@mail.gmail.com>
-References: <1401178102-9731-1-git-send-email-bigeasy@linutronix.de>
- <CA+jJMxt4+T0iLx0EJHJz9Fm1oSxiJ6B1oOuwQ+BsQaLCBT_bxQ@mail.gmail.com>
- <538D7BCC.7080800@linutronix.de>
+From: Julien Desfossez <jdesfossez@efficios.com>
+Subject: Re: kvm_entry dynamic probes
+Date: Tue, 03 Jun 2014 10:49:48 -0400
+Message-ID: <538DE08C.3020101__30959.0937024497$1401807059$gmane$org@efficios.com>
+References: <CA+=dQ-_v7N4DwNmaEFuLMZQ2pdQAYtdvLEDpwk8mZ5pHTy-PPw@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qa0-f42.google.com ([209.85.216.42])
+Received: from fukushima.klipix.org ([85.12.144.25])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1WrpdF-00086Q-1C
- for lttng-dev@lists.lttng.org; Tue, 03 Jun 2014 10:24:10 -0400
-Received: by mail-qa0-f42.google.com with SMTP id j5so5001980qaq.15
- for <lttng-dev@lists.lttng.org>; Tue, 03 Jun 2014 07:23:59 -0700 (PDT)
-In-Reply-To: <538D7BCC.7080800@linutronix.de>
+ (envelope-from <jdesfossez@efficios.com>) id 1Wrq2I-0008Gn-8X
+ for lttng-dev@lists.lttng.org; Tue, 03 Jun 2014 10:50:03 -0400
+In-Reply-To: <CA+=dQ-_v7N4DwNmaEFuLMZQ2pdQAYtdvLEDpwk8mZ5pHTy-PPw@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -25,57 +20,33 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Julien Desfossez <jdesfossez@efficios.com>
+To: Divya Vyas <dvyas@mvista.com>, lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-T24gVHVlLCBKdW4gMywgMjAxNCBhdCAzOjM5IEFNLCBTZWJhc3RpYW4gQW5kcnplaiBTaWV3aW9y
-CjxiaWdlYXN5QGxpbnV0cm9uaXguZGU+IHdyb3RlOgo+IE9uIDA2LzAyLzIwMTQgMDc6MDggUE0s
-IErDqXLDqW1pZSBHYWxhcm5lYXUgd3JvdGU6Cj4+IEhpIFNlYmFzdGlhbiwKPgo+IEhpIErDqXLD
-qW1pZSwKPgo+PiBJJ2QgcHJlZmVyIHdlIHByb3ZpZGUgYSBnZW5lcmljIHdheSBvZiBhZGRpbmcg
-ZmllbGRzIHRvIHRoZSBwYWNrZXQKPj4gY29udGV4dC4gU29tZXRoaW5nIGFraW4gdG8gd2hhdCdz
-IHByb3ZpZGVkIGZvciBzdHJ1Y3R1cmVzIHdoaWNoIHdvdWxkCj4+IGxldCB1c2VycyBkZWZpbmUg
-YXJiaXRyYXJ5IHBhY2tldCBjb250ZXh0IGZpZWxkcy4KPj4KPj4gSSBwcm9wb3NlIGFkZGluZwo+
-Pgo+PiBpbnQgYnRfY3RmX3N0cmVhbV9jbGFzc19hZGRfcGFja2V0X2NvbnRleHRfZmllbGQoY29u
-c3QgY2hhcgo+PiAqZmllbGRfbmFtZSwgc3RydWN0IGJ0X2N0Zl9maWVsZF90eXBlICpmaWVsZF90
-eXBlKTsKPj4KPj4gYW5kCj4+Cj4+IHN0cnVjdCBidF9jdGZfZmllbGQgKmJ0X2N0Zl9zdHJlYW1f
-Z2V0X3BhY2tldF9jb250ZXh0X2ZpZWxkKGNvbnN0IGNoYXIKPj4gKmZpZWxkX25hbWUpOwo+Pgo+
-PiBJJ20gb3BlbiB0byBiZXR0ZXIgbmFtaW5nIHN1Z2dlc3Rpb25zLCBidXQgaG9wZWZ1bGx5IEkn
-bSBnZXR0aW5nIHRoZQo+PiBmdW5jdGlvbmFsaXR5IGFjcm9zcy4KPj4KPj4gVGhvdWdodHM/Cj4g
-TG9va3MgbGlrZSBhIGZldyBsaW5lcyBtb3JlIHRoYW4gd2hhdCBJIGhvcGVkIGZvci4gTGV0IG1l
-IHRyeSB5b3VyIHdheS4KPiBTbyB3aGF0IHlvdSBzdWdnZXN0IGlzIHNvbWV0aGluZyBsaWtlIHRo
-YXQ6Cj4KPiAtLS0KPiBzdHJ1Y3QgYnRfY3RmX2ZpZWxkX3R5cGUgKmNwdV9udW07Cj4KPiBjcHVf
-bnVtID0gYnRfY3RmX2ZpZWxkX3R5cGVfaW50ZWdlcl9jcmVhdGUoMzEpOwo+Cj4gYnRfY3RmX2Zp
-ZWxkX3NpZ25lZF9pbnRlZ2VyX3NldF92YWx1ZShjcHVfbnVtLCAyKTsKPiBidF9jdGZfc3RyZWFt
-X2NsYXNzX2FkZF9wYWNrZXRfY29udGV4dF9maWVsZCgiY3B1IiwgY3B1X251bSk7Cj4KCk1vcmUg
-bGlrZQoKLyogQ3JlYXRlIGFuZCBpbml0IGEgc3RyZWFtIGNsYXNzLi4uICovCnN0cnVjdCBidF9j
-dGZfc3RyZWFtX2NsYXNzICpzdHJlYW1fY2xhc3MgPSAuLi4uOwpzdHJ1Y3QgYnRfY3RmX2ZpZWxk
-X3R5cGUgKmNwdV9pZF90eXBlOwoKLyogQWRkIGEgY3B1X2lkIGZpZWxkIHRvIHRoZSBwYWNrZXRf
-Y29udGV4dCAqLwpjcHVfaWRfdHlwZSA9IGJ0X2N0Zl9maWVsZF90eXBlX2ludGVnZXJfY3JlYXRl
-KDMyKTsKYnRfY3RmX3N0cmVhbV9jbGFzc19hZGRfcGFja2V0X2NvbnRleHRfZmllbGQoImNwdV9p
-ZCIsIGNwdV9pZF90eXBlKTsKCi8qIEluc3RhbnRpYXRlIGEgc3RyZWFtICovCnN0cnVjdCBidF9j
-dGZfc3RyZWFtICpzdHJlYW0gPSBidF9jdGZfd3JpdGVyX2NyZWF0ZV9zdHJlYW0od3JpdGVyLApz
-dHJlYW1fY2xhc3MpOwoKLyogUG9wdWxhdGUgcGFja2V0IGNvbnRleHQgZmllbGRzICovCnN0cnVj
-dCBidF9jdGZfZmllbGQgKmNwdV9pZF9maWVsZCA9CmJ0X2N0Zl9zdHJlYW1fZ2V0X3BhY2tldF9j
-b250ZXh0KHN0cmVhbSwgImNwdV9pZCIpOwpidF9jdGZfZmllbGRfc2lnbmVkX2ludGVnZXJfc2V0
-X3ZhbHVlKGNwdV9pZF9maWVsZCwgMik7CmJ0X2N0Zl9maWVsZF9wdXQoY3B1X2lkX2ZpZWxkKTsK
-Li4uCgpUaGUgcGFja2V0X2NvbnRleHQgdmFsdWVzIHdpbGwgYmUgd3JpdHRlbiB3aGVuIGEgZmx1
-c2ggaXMgY2FsbGVkLiBUaGUKZmx1c2ggY2FsbCBzaG91bGQgZmFpbCBpZiBhIHBhY2tldF9jb250
-ZXh0IHZhbHVlIGhhcyBub3QgYmVlbiBzZXQuCgpBZGRpbmcgcGFja2V0X2NvbnRleHQgZmllbGRz
-IHNob3VsZCBmYWlsIGlmIGEgc3RyZWFtIG9mIHRoaXMgY2xhc3MgaGFzCmFscmVhZHkgYmVlbiBp
-bnN0YW50aWF0ZWQuCgo+IC0tLQo+Cj4gYW5kIHRoZW4gSSB0cnkgdG8gY2hhbmdlIHRoZSBDUFUg
-bnVtYmVyIEkgaGF2ZSB0bwo+IGJ0X2N0Zl9maWVsZF9zaWduZWRfaW50ZWdlcl9zZXRfdmFsdWUo
-KSArIGZsdXNoIGxpa2UgSSBkaWQgYmVmb3JlLAo+IHJpZ2h0Pwo+IEZvciB0aGF0IHRvIHdvcmsg
-SSB3b3VsZCBoYXZlIHRvIGtlZXAgYW4gYXJyYXkgb2YgZXZlcnl0aGluZyB0aGF0IGNhbWUKPiB2
-aWEgYnRfY3RmX3N0cmVhbV9jbGFzc19hZGRfcGFja2V0X2NvbnRleHRfZmllbGQoKSBhbmQgYXR0
-YWNoIHRvIHN0cnVjdAo+IGJ0X2N0Zl9zdHJlYW0gIHNvIEkgaGF2ZSB0aG9zZSBmaWVsZHMgaW4g
-aW5pdF9wYWNrZXRfY29udGV4dCgpLgo+Cj4gSXMgdGhpcyB3aGF0IHlvdSBoYWQgaW4gbWluZD8K
-ClByZXR0eSBtdWNoLgoKVGhlIHN0cmVhbV9jbGFzcyBzaG91bGQgY29udGFpbiBhbiBhcnJheSBv
-ZiBmaWVsZCBuYW1lcyBhbmQgZmllbGQKdHlwZXMgYmVsb25naW5nIHRvIHRoZSBwYWNrZXRfY29u
-dGV4dCB3aGVyZWFzIHRoZSBzdHJlYW0gc2hvdWxkCmNvbnRhaW4gYW4gYXJyYXkgb2YgZmllbGQg
-bmFtZXMgYW5kIGZpZWxkcy4KClJlZ2FyZHMsCkrDqXLDqW1pZQoKPgo+Pgo+PiBKw6lyw6ltaWUK
-Pgo+IFNlYmFzdGlhbgoKCgotLSAKSsOpcsOpbWllIEdhbGFybmVhdQpFZmZpY2lPUyBJbmMuCmh0
-dHA6Ly93d3cuZWZmaWNpb3MuY29tCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRu
-Zy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0
-bmctZGV2Cg==
+Hi,
+
+On 14-06-02 05:29 AM, Divya Vyas wrote:
+> Hi,
+> 
+> I am getting this error while adding dynamic probe to kvm_entry
+> 
+> Command to change state of events failed
+> Command failed! Command:  lttng enable-event entry -k  -s probes
+> --function kvm_entry
+> Return Value: 4
+> Error: Event entry: Enable kernel event failed (channel channel0,
+> session probes)
+> Warning: Some command(s) went wrong
+> 
+> while same I did for kvm_exit and it works . I am using lttng 2.3.1
+
+The kvm_entry function does not exist in the kernel because it is arch
+dependant. You can use vcpu_enter_guest on x86 or
+kvm_arch_vcpu_ioctl_run on arm to have what you are looking for.
+
+I grepped "trace_kvm_entry" in the kernel source tree to find this
+information.
+
+I hope this helps,
+
+Julien
