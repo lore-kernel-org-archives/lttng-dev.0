@@ -1,17 +1,16 @@
-From: Julien Desfossez <jdesfossez@efficios.com>
-Subject: Re: kvm_entry dynamic probes
-Date: Tue, 03 Jun 2014 10:49:48 -0400
-Message-ID: <538DE08C.3020101__30959.0937024497$1401807059$gmane$org@efficios.com>
-References: <CA+=dQ-_v7N4DwNmaEFuLMZQ2pdQAYtdvLEDpwk8mZ5pHTy-PPw@mail.gmail.com>
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: [RFC] perf to ctf converter
+Date: Tue, 3 Jun 2014 18:36:40 +0200
+Message-ID: <20140603163640.GA16279__40150.4565649249$1401813523$gmane$org@linutronix.de>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fukushima.klipix.org ([85.12.144.25])
+Received: from www.linutronix.de ([62.245.132.108] helo=Galois.linutronix.de)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jdesfossez@efficios.com>) id 1Wrq2I-0008Gn-8X
- for lttng-dev@lists.lttng.org; Tue, 03 Jun 2014 10:50:03 -0400
-In-Reply-To: <CA+=dQ-_v7N4DwNmaEFuLMZQ2pdQAYtdvLEDpwk8mZ5pHTy-PPw@mail.gmail.com>
+ (envelope-from <bigeasy@linutronix.de>) id 1Wrrhg-0000Sy-DO
+ for lttng-dev@lists.lttng.org; Tue, 03 Jun 2014 12:36:54 -0400
+Content-Disposition: inline
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,33 +19,250 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Divya Vyas <dvyas@mvista.com>, lttng-dev@lists.lttng.org
+To: linux-kernel@vger.kernel.org, lttng-dev@lists.lttng.org
+Cc: tzanussi@gmail.com, Jiri Olsa <jolsa@redhat.com>, acme@kernel.org, namhyung.kim@lge.com
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
+I've been playing with python bindings of perf and babeltrace and came
+up with a way to covert the perf trace into the CTF format. It supports
+both ftrace events (perf record -e raw_syscalls:* w) and perf counters
+(perf record -e cache-misses w).
 
-On 14-06-02 05:29 AM, Divya Vyas wrote:
-> Hi,
-> 
-> I am getting this error while adding dynamic probe to kvm_entry
-> 
-> Command to change state of events failed
-> Command failed! Command:  lttng enable-event entry -k  -s probes
-> --function kvm_entry
-> Return Value: 4
-> Error: Event entry: Enable kernel event failed (channel channel0,
-> session probes)
-> Warning: Some command(s) went wrong
-> 
-> while same I did for kvm_exit and it works . I am using lttng 2.3.1
+The recorded trace is first read via the "perf script" interface and
+saved as python pickle. In a second step the pickled-data is converted
+into a CTF file format. 
 
-The kvm_entry function does not exist in the kernel because it is arch
-dependant. You can use vcpu_enter_guest on x86 or
-kvm_arch_vcpu_ioctl_run on arm to have what you are looking for.
+The perf part requires
+    "perf script: move the number processing into its own function"
+    "perf script: handle the num array type in python properly"
+    https://lkml.org/lkml/2014/5/27/434
 
-I grepped "trace_kvm_entry" in the kernel source tree to find this
-information.
+for array support and
+    "perf script: pass more arguments to the python event handler"
+    https://lkml.org/lkml/2014/5/30/392
 
-I hope this helps,
+for more data while reading the "events" traces. The latter will be
+probably replaced by https://lkml.org/lkml/2014/4/3/217.
+Babeltrace needs only
+    "ctf-writer: Add support for the cpu_id field"
+    https://www.mail-archive.com/lttng-dev@lists.lttng.org/msg06057.html
 
-Julien
+for the assignment of the CPU number.
+
+The pickle step is nice because I see all type of events before I
+start writing the CTF trace and can create the necessary objects. On
+the other hand it eats a lot of memory for huge traces so I will try to
+replace it with something that saves the data in a streaming like
+fashion.
+The other limitation is that babeltrace doesn't seem to work with
+python2 while perf doesn't compile against python3.
+
+What I haven't figured out yet is how to pass to the meta environment
+informations that is displayed by "perf script --header-only -I" and if
+that information is really important. Probably an optional python
+callback will do it.
+
+The required steps:
+|   perf record -e raw_syscalls:* w
+|   perf script -s ./to-pickle.py
+|   ./ctf_writer
+
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+
+diff -pruN a/ctf_writer.py b/ctf_writer.py
+--- a/ctf_writer.py	1970-01-01 01:00:00.000000000 +0100
++++ b/ctf_writer.py	2014-06-03 17:23:53.852207400 +0200
+@@ -0,0 +1,132 @@
++#!/usr/bin/env python3
++# ctf_writer.py
++#
++
++from babeltrace import *
++import pickle
++
++trace_file = "ctf-data.pickle"
++trace_path = "ctf-out"
++
++print("Writing trace at %s from %s" %(trace_path, trace_file))
++
++trace = pickle.load(open(trace_file, "rb"))
++
++writer = CTFWriter.Writer(trace_path)
++
++clock = CTFWriter.Clock("monotonic")
++clock.description = "Monotonic Clock"
++clock.offset = 0 # XXX
++
++writer.add_clock(clock)
++writer.add_environment_field("hostname", "bach")
++writer.add_environment_field("domain", "kernel")
++writer.add_environment_field("sysname", "Linux")
++writer.add_environment_field("kernel_release", "3.6.0") # XXX
++writer.add_environment_field("kernel_version", "#8 SMP Fri May 23 15:29:41 CEST 2014") # XXX
++writer.add_environment_field("tracer_name", "perf")
++writer.add_environment_field("tracer_major", "2")
++writer.add_environment_field("tracer_minor", "4")
++writer.add_environment_field("tracer_patchlevel", "0")
++
++stream_class = CTFWriter.StreamClass("stream")
++stream_class.clock = clock
++
++# certain file types may be 32bit or 64bit. Even the first event we find and
++# build our type might pass NULL which would mean 32bit. The second event
++# might pass a 64bit.
++# For now we default hex to u64 for array, have a list of hex u64 and everything
++# else is s32.
++list_type_h_uint64 = [ "addr" ]
++
++int32_type = CTFWriter.IntegerFieldDeclaration(32)
++int32_type.signed = True
++
++uint64_type = CTFWriter.IntegerFieldDeclaration(64)
++uint64_type.signed = False
++
++hex_uint64_type = CTFWriter.IntegerFieldDeclaration(64)
++hex_uint64_type.signed = False
++hex_uint64_type.base = 16
++
++string_type = CTFWriter.StringFieldDeclaration()
++
++events = {}
++last_cpu = -1
++
++list_ev_entry_ignore = [ "common_s", "common_ns", "common_cpu" ]
++
++# First create all possible event class-es
++for entry in trace:
++    event_name = entry[0]
++    event_record = entry[1]
++
++    try:
++        event_class = events[event_name]
++    except:
++        event_class = CTFWriter.EventClass(event_name);
++        for ev_entry in sorted(event_record):
++            if ev_entry in list_ev_entry_ignore:
++                continue
++            val = event_record[ev_entry]
++            if isinstance(val, int):
++                if ev_entry in list_type_h_uint64:
++                    event_class.add_field(hex_uint64_type, ev_entry)
++                else:
++                    event_class.add_field(int32_type, ev_entry)
++            elif isinstance(val, str):
++                event_class.add_field(string_type, ev_entry)
++            elif isinstance(val, list):
++                array_type = CTFWriter.ArrayFieldDeclaration(hex_uint64_type, len(val))
++                event_class.add_field(array_type, ev_entry)
++            else:
++                print("Unknown type in trace: %s" %(type(event_record[ev_entry])))
++                raise Exception("Unknown type in trace.")
++
++        # Add complete class with all event members.
++        print("New event type: %s" %(event_name))
++        stream_class.add_event_class(event_class)
++        events[event_name] = event_class
++
++print("Event types complete")
++stream = writer.create_stream(stream_class)
++
++# Step two, fill it with data
++for entry in trace:
++    event_name = entry[0]
++    event_record = entry[1]
++
++    ts = int((int(event_record["common_s"]) * 1e9 + int(event_record["common_ns"])))
++
++    event_class = events[event_name]
++    event = CTFWriter.Event(event_class)
++
++    clock.time = ts
++
++    for ev_entry in event_record:
++        if ev_entry in list_ev_entry_ignore:
++            continue
++
++        field = event.payload(ev_entry)
++        val = event_record[ev_entry]
++        if isinstance(val, int):
++            field.value = int(val)
++        elif isinstance(val, str):
++            field.value = val
++        elif isinstance(val, list):
++            for i in range(len(val)):
++                a_idx = field.field(i)
++                a_idx.value = int(val[i])
++        else:
++            print("Unexpected entry type: %s" %(type(val)))
++            raise Exception("Unexpected type in trace.")
++
++    stream.append_event(event)
++    cur_cpu = int(event_record["common_cpu"])
++    if cur_cpu != last_cpu:
++        stream.append_cpu_id(cur_cpu)
++        last_cpu = cur_cpu
++        stream.flush()
++
++stream.flush()
++print("Done.")
+diff -pruN a/to-pickle.py b/to-pickle.py
+--- a/to-pickle.py	1970-01-01 01:00:00.000000000 +0100
++++ b/to-pickle.py	2014-06-03 17:23:53.864208292 +0200
+@@ -0,0 +1,57 @@
++# perf script event handlers, generated by perf script -g python
++# Licensed under the terms of the GNU GPL License version 2
++
++import os
++import sys
++import cPickle as pickle
++
++sys.path.append(os.environ['PERF_EXEC_PATH'] + \
++	'/scripts/python/Perf-Trace-Util/lib/Perf/Trace')
++
++from perf_trace_context import *
++from Core import *
++
++trace = []
++
++def trace_begin():
++    pass
++
++def trace_end():
++    pickle.dump(trace, open("ctf-data.pickle", "wb"))
++    print "Dump complete"
++
++def trace_unhandled(event_name, context, event_fields_dict):
++    entry = []
++    entry.append(str(event_name))
++    entry.append(event_fields_dict.copy())
++    trace.append(entry)
++
++def process_event(event_fields_dict):
++    entry = []
++    entry.append(str(event_fields_dict["ev_name"]))
++    fields = {}
++    fields["common_s"] = event_fields_dict["s"]
++    fields["common_ns"] = event_fields_dict["ns"]
++    fields["common_comm"] = event_fields_dict["comm"]
++    fields["common_pid"] = event_fields_dict["pid"]
++    fields["addr"] = event_fields_dict["addr"]
++
++    dso = ""
++    symbol = ""
++    try:
++        dso = event_fields_dict["dso"]
++    except:
++        pass
++    try:
++        symbol = event_fields_dict["symbol"]
++    except:
++        pass
++
++    fields["symbol"] = symbol
++    fields["dso"] = dso
++
++    # no CPU entry
++    fields["common_cpu"] = 0
++
++    entry.append(fields)
++    trace.append(entry)
