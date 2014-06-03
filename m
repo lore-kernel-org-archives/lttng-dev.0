@@ -1,24 +1,17 @@
-From: =?UTF-8?B?UmFwaGHDq2wgQmVhbW9udGU=?= <raphael.beamonte@gmail.com>
-Subject: [lttng-tools PATCH] Add bzr revno to the version if in
-	a bzr repository
-Date: Tue, 03 Jun 2014 13:43:52 -0400
-Message-ID: <538E0958.20007__2739.20249096609$1401817496$gmane$org@gmail.com>
+From: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
+Subject: Re: [PATCH] Add bzr revno to the version if in a bzr
+ repository
+Date: Tue, 03 Jun 2014 14:20:52 -0400
+Message-ID: <538E1204.6080304__13886.7227281027$1401819708$gmane$org@voxpopuli.im>
 References: <edd264d153b5ab8dbb2cad9bbc63d05d1ae0cc09.1401817136.git.raphael.beamonte@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ig0-f174.google.com ([209.85.213.174])
+Received: from ironport2-out.teksavvy.com ([206.248.154.181])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <raphael.beamonte@gmail.com>) id 1Wrskh-0000vF-IG
- for lttng-dev@lists.lttng.org; Tue, 03 Jun 2014 13:44:04 -0400
-Received: by mail-ig0-f174.google.com with SMTP id h3so5194723igd.7
- for <lttng-dev@lists.lttng.org>; Tue, 03 Jun 2014 10:43:54 -0700 (PDT)
-Received: from duck.sbird.org (station9.dorsal.polymtl.ca. [132.207.72.15])
- by mx.google.com with ESMTPSA id y15sm3858052igy.2.2014.06.03.10.43.53
- for <lttng-dev@lists.lttng.org>
- (version=TLSv1 cipher=ECDHE-RSA-RC4-SHA bits=128/128);
- Tue, 03 Jun 2014 10:43:53 -0700 (PDT)
+ (envelope-from <alexmonthy@voxpopuli.im>) id 1WrtKL-00019p-TS
+ for lttng-dev@lists.lttng.org; Tue, 03 Jun 2014 14:20:55 -0400
 In-Reply-To: <edd264d153b5ab8dbb2cad9bbc63d05d1ae0cc09.1401817136.git.raphael.beamonte@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -28,7 +21,39 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: =?UTF-8?B?UmFwaGHDq2wgQmVhbW9udGU=?= <raphael.beamonte@gmail.com>, lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Sorry, forgot the "lttng-tools" tag.
+SnVzdCB0byBnaXZlIHNvbWUgY29udGV4dCwgd2UgaGFkIGEgcHJvYmxlbSB3aXRoIHRoZSBVYnVu
+dHUgUFBBIApwYWNrYWdlcywgd2hlcmUgdGhlIHZlcnNpb24gaW4gdmVyc2lvbi5oIHdvdWxkIG5v
+dCBnZXQgc2V0IHRvIGFueXRoaW5nLCAKYW5kIHRoZSByZXN1bHRpbmcgYmluYXJ5IHdvdWxkbid0
+IHJlcG9ydCBhIHZlcnNpb24gbnVtYmVyIHdoZW4gZG9pbmcgCmx0dG5nIC0tdmVyc2lvbi4KClR1
+cm5lZCBvdXQgaXQncyBiZWNhdXNlIExhdW5jaHBhZCBpbXBvcnRzIGV2ZXJ5dGhpbmcgdG8gYnpy
+IGJyYW5jaGVzLCAKd2hpY2ggc2NydWJzIHRoZSAuZ2l0IGRpcmVjdG9yeSwgYW5kIGJ1aWxkcyB0
+aGUgcGFja2FnZSBmcm9tIHRoYXQuIFNvIAp0aGUgLmdpdCBkaXJlY3Rvcnkgd2FzIG5vdCBhdmFp
+bGFibGUgd2hlbiBidWlsZGluZy4gV2hpY2ggY2F1c2VkIHRoZSAKZW1wdHkgdmVyc2lvbi5oIChp
+dCdzIGVhc3kgdG8gcmVwcm9kdWNlIGxvY2FsbHksIGp1c3QgZGVsZXRlIHRoZSAuZ2l0IApkaXJl
+Y3RvcnkgdGhlbiBidWlsZCkuCgpJIHRlc3RlZCB0aGlzIHBhdGNoLCBhbmQgaXQgd29ya3Mgd2Vs
+bCB3aGVuIGJ1aWxkaW5nIGZyb20gdGhlIGJ6ciAKYnJhbmNoLiBOaWNlIHdvcmshCgpIb3dldmVy
+LCBzaG91bGQgd2UgYWxzbyBoYW5kbGUgdGhlIGNhc2Ugd2hlcmUgdGhlcmUgaXMgbmVpdGhlciBh
+IC5naXQgb3IgCi5ienIgZGlyZWN0b3J5LCBhbmQgb25seSB1c2UgdGhlIHZlcnNpb24gZnJvbSBj
+b25maWd1cmUuYWM/CgoKQ2hlZXJzLApBbGV4YW5kcmUKCgoKT24gMDYvMDMvMjAxNCAwMTo0MCBQ
+TSwgUmFwaGHDq2wgQmVhbW9udGUgd3JvdGU6Cj4gU2lnbmVkLW9mZi1ieTogUmFwaGHDq2wgQmVh
+bW9udGUgPHJhcGhhZWwuYmVhbW9udGVAZ21haWwuY29tPgo+IC0tLQo+ICAgaW5jbHVkZS9NYWtl
+ZmlsZS5hbSB8IDggKysrKysrKy0KPiAgIDEgZmlsZSBjaGFuZ2VkLCA3IGluc2VydGlvbnMoKyks
+IDEgZGVsZXRpb24oLSkKPgo+IGRpZmYgLS1naXQgYS9pbmNsdWRlL01ha2VmaWxlLmFtIGIvaW5j
+bHVkZS9NYWtlZmlsZS5hbQo+IGluZGV4IDM4NmM1YmEuLmE2NzczMzEgMTAwNjQ0Cj4gLS0tIGEv
+aW5jbHVkZS9NYWtlZmlsZS5hbQo+ICsrKyBiL2luY2x1ZGUvTWFrZWZpbGUuYW0KPiBAQCAtMTgs
+NyArMTgsMTMgQEAgdmVyc2lvbi5oOgo+ICAgCQkjIwo+ICAgCQlnaXRfYnJhbmNoPSIkJChnaXQg
+ZGVzY3JpYmUgLS1hbGwgMj4vZGV2L251bGwpIjsgXAo+ICAgCQlpZiBbIC16ICIkJHtnaXRfYnJh
+bmNofSIgXTsgdGhlbiBcCj4gLQkJCWdpdF92ZXJzaW9uPSIiOyBcCj4gKwkJCSMjIElmIHdlIGFy
+ZSBub3QgaW4gYSBnaXQgcmVwb3NpdG9yeSwgd2UgY2FuIHRyeSBienIKPiArCQkJYnpyX3ZlcnNp
+b249IiQkKGJ6ciBsb2cgLVMgLWwxIDI+L2Rldi9udWxsIHwgaGVhZCAtbjEgfCBjdXQgLWQnICcg
+LWYyKSI7IFwKPiArCQkJaWYgWyAtbiAiJCR7YnpyX3ZlcnNpb259IiBdOyB0aGVuIFwKPiArCQkJ
+CWdpdF92ZXJzaW9uPSJcIiBWRVJTSU9OIFwiLWJ6ciQke2J6cl92ZXJzaW9ufSI7IFwKPiArCQkJ
+ZWxzZSBcCj4gKwkJCQlnaXRfdmVyc2lvbj0iIjsgXAo+ICsJCQlmaTsgXAo+ICAgCQllbHNlIFwK
+PiAgIAkJCWdpdF9kZXNjcmliZT0iJCQoZ2l0IGRlc2NyaWJlKSI7IFwKPiAgIAkJCWlmIFsgIiQk
+e2dpdF9icmFuY2h9IiA9PSAiJCR7Z2l0X2Rlc2NyaWJlfSIgXSB8fCBcCgoKX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlz
+dApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJp
+bi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
